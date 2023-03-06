@@ -204,6 +204,9 @@ class customModel extends model
                 ksort($menuOrder);
                 foreach($menuOrder as $name)
                 {
+                    /* If menu is removed, delete the menuOrder. */
+                    if(!isset($allMenu->$name)) continue;
+
                     $item = new stdclass();
                     $item->name   = $name;
                     $item->hidden = false;
@@ -840,7 +843,7 @@ class customModel extends model
                     if(!isset($disabledFeatures['scrum'])) $disabledFeatures['scrum'] = array();
                     $disabledFeatures['scrum'][] = $feature;
                 }
-                elseif($feature == 'waterfall')
+                elseif(in_array($feature, array('waterfall', 'waterfallplus')))
                 {
                     $disabledFeatures[] = 'project' . ucfirst($feature);
                 }
@@ -955,13 +958,20 @@ class customModel extends model
             foreach($this->config->custom->dataFeatures as $feature)
             {
                 $function = 'has' . ucfirst($feature) . 'Data';
-                if(!$this->$function()) $disabledFeatures .= "$feature,";
+                if(!$this->$function())
+                {
+                    $disabledFeatures .= "$feature,";
+                    if(strpos($feature, 'scrum') === 0) $disabledFeatures .= 'agileplus' . substr($feature, 5) . ',';
+                }
             }
-            $disabledFeatures .= 'scrumMeasrecord,productTrack,productRoadmap';
+            $disabledFeatures .= 'scrumMeasrecord,agileplusMeasrecord,productTrack,productRoadmap';
         }
 
         $disabledFeatures = rtrim($disabledFeatures, ',');
         $this->loadModel('setting')->setItem('system.common.disabledFeatures', $disabledFeatures);
+
+        $URAndSR = strpos(",$disabledFeatures,", ',productUR,') === false ? 1 : 0;
+        $this->setting->setItem('system.custom.URAndSR', $URAndSR);
 
         $this->processMeasrecordCron();
     }
@@ -986,6 +996,17 @@ class customModel extends model
     public function hasWaterfallData()
     {
         return $this->dao->select('*')->from(TABLE_PROJECT)->where('model')->eq('waterfall')->andWhere('deleted')->eq('0')->count();
+    }
+
+    /**
+     * Check for waterfallplus project data.
+     *
+     * @access public
+     * @return int
+     */
+    public function hasWaterfallplusData()
+    {
+        return $this->dao->select('*')->from(TABLE_PROJECT)->where('model')->eq('waterfallplus')->andWhere('deleted')->eq('0')->count();
     }
 
     /**
@@ -1123,12 +1144,15 @@ class customModel extends model
         $disabledFeatures = $this->setting->getItem('owner=system&module=common&section=&key=disabledFeatures');
         $disabledFeatures = $disabledFeatures . ',' . $closedFeatures;
 
-        $hasWaterfall           = strpos(",{$disabledFeatures},",  ',waterfall,')           === false;
-        $hasScrumMeasrecord     = strpos(",{$disabledFeatures},",  ',scrumMeasrecord,')     === false;
-        $hasWaterfallMeasrecord = (strpos(",{$disabledFeatures},", ',waterfallMeasrecord,') === false and $hasWaterfall);
+        $hasWaterfall               = strpos(",{$disabledFeatures},",  ',waterfall,')           === false;
+        $hasWaterfallPlus           = strpos(",{$disabledFeatures},",  ',waterfallplus,')       === false;
+        $hasScrumMeasrecord         = strpos(",{$disabledFeatures},",  ',scrumMeasrecord,')     === false;
+        $hasAgilePlusMeasrecord     = strpos(",{$disabledFeatures},",  ',agileMeasrecord,')     === false;
+        $hasWaterfallMeasrecord     = (strpos(",{$disabledFeatures},", ',waterfallMeasrecord,') === false and $hasWaterfall);
+        $hasWaterfallPlusMeasrecord = (strpos(",{$disabledFeatures},", ',waterfallplusMeasrecord,') === false and $hasWaterfallPlus);
 
         $cronStatus = 'normal';
-        if(!$hasScrumMeasrecord and !$hasWaterfallMeasrecord) $cronStatus = 'stop';
+        if(!$hasScrumMeasrecord and !$hasAgilePlusMeasrecord and !$hasWaterfallMeasrecord and $hasWaterfallPlusMeasrecord) $cronStatus = 'stop';
 
         $this->loadModel('cron');
         $cron = $this->dao->select('id,status')->from(TABLE_CRON)->where('command')->like('%methodName=initCrontabQueue')->fetch();

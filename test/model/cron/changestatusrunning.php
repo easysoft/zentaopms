@@ -18,8 +18,7 @@ pid=1
 
 $cron     = new cronTest();
 $cronID   = 4;
-$lastTime = '0000-00-00 00:00:00';
-$result   = $cron->changeStatusRunningTest($cronID, $lastTime);
+$result   = $cron->changeStatusRunningTest($cronID);
 $cronInfo = $tester->cron->getById($cronID);
 
 r($result)   && p()         && e('1');       // 更新之后查看返回值是否是1

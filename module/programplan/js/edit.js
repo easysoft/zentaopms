@@ -2,7 +2,7 @@ function changeParentStage(stageID)
 {
     $.get(createLink('programplan', 'ajaxGetAttribute', 'stageID=' + stageID + '&attribute=' + plan.attribute), function(attribute)
     {
-        $('#attributeType td').html(attribute);
+        $('#attributeType td:first').html(attribute);
         $("#attribute" + "_chosen").remove();
         $("#attribute").next('.picker').remove();
         $("#attribute").chosen();
@@ -57,4 +57,6 @@ $(function()
             if(!result) return false;
         }
     })
+
+    $('[data-toggle="popover"]').popover();
 })

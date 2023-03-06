@@ -227,7 +227,7 @@ $config->openMethods[] = 'doc.createbasicinfo';
 $config->openMethods[] = 'project.createguide';
 $config->openMethods[] = 'task.editteam';
 $config->openMethods[] = 'feedback.mergeproductmodule';
-$config->openMethods[] = 'zanode.nodeList';
+$config->openMethods[] = 'zanode.nodelist';
 $config->openMethods[] = 'action.restoreStages';
 
 $config->openModules = array();
@@ -407,6 +407,7 @@ $config->objectTables['apistruct']    = TABLE_APISTRUCT;
 $config->objectTables['repo']         = TABLE_REPO;
 $config->objectTables['dataview']     = TABLE_DATAVIEW;
 $config->objectTables['zahost']       = TABLE_ZAHOST;
+$config->objectTables['zanode']       = TABLE_ZAHOST;
 $config->objectTables['automation']   = TABLE_AUTOMATION;
 $config->objectTables['stepResult']   = TABLE_TESTRUN;
 
@@ -418,9 +419,11 @@ $config->pipelineTypeList = array('gitlab', 'gogs', 'gitea', 'jenkins', 'sonarqu
 
 /* Program privs.*/
 $config->programPriv = new stdclass();
-$config->programPriv->noSprint  = array('task', 'story', 'tree', 'project', 'execution', 'build', 'bug', 'testcase', 'testreport', 'doc', 'repo', 'stakeholder', 'projectrelease', 'requirement');
-$config->programPriv->scrum     = array('story', 'requirement', 'productplan', 'tree', 'projectplan', 'projectstory', 'projectrelease', 'project', 'execution', 'build', 'bug', 'testcase', 'testreport', 'doc', 'repo', 'meeting', 'stakeholder', 'testtask');
-$config->programPriv->waterfall = array_merge($config->programPriv->scrum, array('workestimation', 'durationestimation', 'budget', 'programplan', 'review', 'reviewissue', 'weekly', 'cm', 'milestone', 'design', 'issue', 'risk', 'opportunity', 'measrecord', 'auditplan', 'trainplan', 'gapanalysis', 'pssp', 'researchplan', 'researchreport'));
+$config->programPriv->noSprint      = array('task', 'story', 'tree', 'project', 'execution', 'build', 'bug', 'testcase', 'testreport', 'doc', 'repo', 'stakeholder', 'projectrelease', 'requirement');
+$config->programPriv->scrum         = array('story', 'requirement', 'productplan', 'tree', 'projectplan', 'projectstory', 'projectrelease', 'project', 'execution', 'build', 'bug', 'testcase', 'testreport', 'doc', 'repo', 'meeting', 'stakeholder', 'testtask');
+$config->programPriv->waterfall     = array_merge($config->programPriv->scrum, array('workestimation', 'durationestimation', 'budget', 'programplan', 'review', 'reviewissue', 'weekly', 'cm', 'milestone', 'design', 'issue', 'risk', 'opportunity', 'measrecord', 'auditplan', 'trainplan', 'gapanalysis', 'pssp', 'researchplan', 'researchreport'));
+$config->programPriv->agileplus     = $config->programPriv->scrum;
+$config->programPriv->waterfallplus = $config->programPriv->waterfall;
 
 $config->waterfallModules = array('workestimation', 'durationestimation', 'budget', 'programplan', 'review', 'reviewissue', 'weekly', 'cm', 'milestone', 'design', 'opportunity', 'auditplan', 'trainplan', 'gapanalysis', 'pssp', 'researchplan', 'researchreport');
 
@@ -430,9 +433,11 @@ $config->maxPriValue  = '256';
 $config->importWhiteList = array('user', 'task', 'story', 'bug', 'testcase', 'feedback', 'ticket');
 
 $config->featureGroup = new stdclass();
-$config->featureGroup->my        = array('score');
-$config->featureGroup->product   = array('roadmap', 'track', 'UR');
-$config->featureGroup->scrum     = array();
-$config->featureGroup->waterfall = array();
-$config->featureGroup->assetlib  = array();
-$config->featureGroup->other     = array('devops', 'kanban');
+$config->featureGroup->my            = array('score');
+$config->featureGroup->product       = array('roadmap', 'track', 'UR');
+$config->featureGroup->scrum         = array();
+$config->featureGroup->waterfall     = array();
+$config->featureGroup->agileplus     = array();
+$config->featureGroup->waterfallplus = array();
+$config->featureGroup->assetlib      = array();
+$config->featureGroup->other         = array('devops', 'kanban');

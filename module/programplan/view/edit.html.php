@@ -36,7 +36,7 @@
             <th class='w-100px'><?php echo $lang->programplan->name;?> </th>
             <td colspan='2'><?php echo html::input('name', $plan->name, "class='form-control'");?></td>
           </tr>
-          <?php if(!isset($config->setCode) or $config->setCode == 1):?>
+          <?php if(isset($config->setCode) and $config->setCode == 1):?>
           <tr>
             <th class='w-100px'><?php echo $lang->execution->code;?> </th>
             <td class='required' colspan='2'><?php echo html::input('code', $plan->code, "class='form-control'");?></td>
@@ -46,6 +46,7 @@
             <th><?php echo $lang->programplan->PM;?> </th>
             <td colspan='2'><?php echo html::select('PM', $PMUsers, '', "class='form-control picker-select'");?></td>
           </tr>
+          <?php if(isset($config->setPercent) and $config->setPercent == 1):?>
           <tr>
             <th><?php echo $lang->programplan->percent;?> </th>
             <td colspan='2'>
@@ -55,10 +56,14 @@
               </div>
             </td>
           </tr>
+          <?php endif;?>
           <tr id="attributeType">
             <th><?php echo $lang->programplan->attribute;?></th>
             <td colspan='2'>
               <?php echo $enableOptionalAttr ? html::select('attribute', $lang->stage->typeList, $plan->attribute, "class='form-control'") : zget($lang->stage->typeList, $plan->attribute);?>
+            </td>
+            <td>
+              <icon class='icon icon-help' data-toggle='popover' data-trigger='focus hover' data-placement='right' data-tip-class='text-muted popover-sm' data-content="<?php echo $lang->execution->typeTip;?>"></icon>
             </td>
           </tr>
           <?php if($plan->setMilestone):?>

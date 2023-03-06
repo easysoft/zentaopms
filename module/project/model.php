@@ -438,6 +438,8 @@ class projectModel extends model
         foreach($projectList as $projectID => $stageList)
         {
             $progress = 0;
+            $projectConsumed = 0;
+            $projectLeft     = 0;
             foreach($stageList as $stageID => $stage)
             {
                 if($stage->project != $projectID) continue;
@@ -445,10 +447,13 @@ class projectModel extends model
                 $stageTotalConsumed = isset($totalHour[$projectID][$stageID]) ? $totalHour[$projectID][$stageID]->totalConsumed : 0;
                 $stageTotalLeft     = isset($totalHour[$projectID][$stageID]) ? round($totalHour[$projectID][$stageID]->totalLeft, 1) : 0;
 
-                $stageProgress = ($stageTotalConsumed + $stageTotalLeft) ? floor($stageTotalConsumed / ($stageTotalConsumed + $stageTotalLeft) * 1000) / 1000 * 100 : 0;
+                $projectConsumed += $stageTotalConsumed;
+                $projectLeft     += $stageTotalLeft;
 
-                $progress += $stageProgress * ($stage->percent / 100);
             }
+
+            $progress += ($projectConsumed + $projectLeft) == 0 ? 0 : floor($projectConsumed / ($projectConsumed + $projectLeft) * 1000) / 1000 * 100;
+
             $progressList[$projectID] = $progress;
         }
 
@@ -818,13 +823,13 @@ class projectModel extends model
     /**
      * Get project pairs by programID.
      *
-     * @param  int    $programID
-     * @param  status $status    all|wait|doing|suspended|closed|noclosed
-     * @param  bool   $isQueryAll
-     * @param  string $orderBy
-     * @param  string $excludedModel
-     * @param  string $model
-     * @param  string $param multiple|product
+     * @param  int          $programID
+     * @param  status       $status    all|wait|doing|suspended|closed|noclosed
+     * @param  bool         $isQueryAll
+     * @param  string       $orderBy
+     * @param  string       $excludedModel
+     * @param  string|array $model
+     * @param  string       $param multiple|product
      * @access public
      * @return object
      */
@@ -839,7 +844,7 @@ class projectModel extends model
             ->beginIF($programID === 0)->andWhere('parent')->eq(0)->fi()
             ->beginIF($status != 'all' and $status != 'noclosed')->andWhere('status')->eq($status)->fi()
             ->beginIF($excludedModel)->andWhere('model')->ne($excludedModel)->fi()
-            ->beginIF($model)->andWhere('model')->eq($model)->fi()
+            ->beginIF($model)->andWhere('model')->in($model)->fi()
             ->beginIF(strpos($param, 'multiple') !== false)->andWhere('multiple')->eq(1)->fi()
             ->beginIF(strpos($param, 'product') !== false)->andWhere('hasProduct')->eq(1)->fi()
             ->beginIF($status == 'noclosed')->andWhere('status')->ne('closed')->fi()
@@ -1023,7 +1028,7 @@ class projectModel extends model
         $programPairs += $this->loadModel('program')->getPairs();
         $this->config->project->search['params']['parent']['values'] = $programPairs;
 
-        if(isset($this->config->setCode) and $this->config->setCode == 0) unset($this->config->project->search['fields']['code'], $this->config->project->search['params']['code']);
+        if(!isset($this->config->setCode) or $this->config->setCode == 0) unset($this->config->project->search['fields']['code'], $this->config->project->search['params']['code']);
         if($this->config->systemMode == 'light') unset($this->config->project->search['fields']['parent'], $this->config->project->search['params']['parent']);
 
         $this->loadModel('search')->setSearchParams($this->config->project->search);
@@ -1090,12 +1095,15 @@ class projectModel extends model
     {
         if(defined('TUTORIAL')) return $this->loadModel('tutorial')->getProjectPairs();
 
+        if($model == 'agileplus')     $model = array('scrum', 'agileplus');
+        if($model == 'waterfallplus') $model = array('waterfall', 'waterfallplus');
+
         $projects = $this->dao->select('id, name, path')->from(TABLE_PROJECT)
             ->where('type')->eq('project')
             ->andWhere('deleted')->eq('0')
             ->beginIF($programID)->andWhere('parent')->eq($programID)->fi()
             ->beginIF($this->config->vision)->andWhere('vision')->eq($this->config->vision)->fi()
-            ->beginIF($model != 'all')->andWhere('model')->eq($model)->fi()
+            ->beginIF($model != 'all')->andWhere('model')->in($model)->fi()
             ->beginIF(strpos($param, 'noclosed') !== false)->andWhere('status')->ne('closed')->fi()
             ->beginIF(strpos($param, 'multiple') !== false)->andWhere('multiple')->eq('1')->fi()
             ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->projects)->fi()
@@ -1236,18 +1244,19 @@ class projectModel extends model
             ->setIF($this->post->delta == 999, 'days', 0)
             ->setIF($this->post->acl   == 'open', 'whitelist', '')
             ->setIF(!isset($_POST['whitelist']), 'whitelist', '')
-            ->setDefault('multiple', '1')
+            ->setIF(!isset($_POST['multiple']), 'multiple', '1')
             ->setDefault('openedBy', $this->app->user->account)
             ->setDefault('openedDate', helper::now())
             ->setDefault('team', $this->post->name)
             ->setDefault('lastEditedBy', $this->app->user->account)
             ->setDefault('lastEditedDate', helper::now())
+            ->setDefault('days', '0')
             ->add('type', 'project')
             ->join('whitelist', ',')
             ->stripTags($this->config->project->editor->create['id'], $this->config->allowedTags)
             ->remove('products,branch,plans,delta,newProduct,productName,future,contactListMenu,teamMembers')
             ->get();
-        if(isset($this->config->setCode) and $this->config->setCode == 0) unset($project->code);
+        if(!isset($this->config->setCode) or $this->config->setCode == 0) unset($project->code);
 
         /* Lean mode relation defaultProgram. */
         if($this->config->systemMode == 'light') $project->parent = $this->config->global->defaultProgram;
@@ -1337,12 +1346,6 @@ class projectModel extends model
 
         $requiredFields = $this->config->project->create->requiredFields;
         if($this->post->delta == 999) $requiredFields = trim(str_replace(',end,', ',', ",{$requiredFields},"), ',');
-
-        /* Redefines the language entries for the fields in the project table. */
-        foreach(explode(',', $requiredFields) as $field)
-        {
-            if(isset($this->lang->project->$field)) $this->lang->project->$field = $this->lang->project->$field;
-        }
 
         $this->lang->error->unique = $this->lang->error->repeat;
         $project = $this->loadModel('file')->processImgURL($project, $this->config->project->editor->create['id'], $this->post->uid);
@@ -1438,6 +1441,7 @@ class projectModel extends model
 
                 $this->dao->insert(TABLE_PRODUCT)->data($product)->exec();
                 $productID = $this->dao->lastInsertId();
+                if(!$project->hasProduct) $this->loadModel('personnel')->updateWhitelist($whitelist, 'product', $productID);
                 $this->loadModel('action')->create('product', $productID, 'opened');
                 $this->dao->update(TABLE_PRODUCT)->set('`order`')->eq($productID * 5)->where('id')->eq($productID)->exec();
                 if($product->acl != 'open') $this->loadModel('user')->updateUserView($productID, 'product');
@@ -1517,7 +1521,6 @@ class projectModel extends model
             ->setDefault('team', $this->post->name)
             ->setDefault('lastEditedBy', $this->app->user->account)
             ->setDefault('lastEditedDate', helper::now())
-            ->setDefault('parent', 0)
             ->setIF($this->post->delta == 999, 'end', LONG_TIME)
             ->setIF($this->post->delta == 999, 'days', 0)
             ->setIF($this->post->begin == '0000-00-00', 'begin', '')
@@ -1529,6 +1532,8 @@ class projectModel extends model
             ->stripTags($this->config->project->editor->edit['id'], $this->config->allowedTags)
             ->remove('products,branch,plans,delta,future,contactListMenu,teamMembers')
             ->get();
+
+        if(!isset($project->parent)) $project->parent = $oldProject->parent;
 
         $executionsCount = $this->dao->select('COUNT(*) as count')->from(TABLE_PROJECT)->where('project')->eq($project->id)->andWhere('deleted')->eq('0')->fetch('count');
 
@@ -1580,12 +1585,6 @@ class projectModel extends model
 
         $requiredFields = $this->config->project->edit->requiredFields;
         if($this->post->delta == 999) $requiredFields = trim(str_replace(',end,', ',', ",{$requiredFields},"), ',');
-
-        /* Redefines the language entries for the fields in the project table. */
-        foreach(explode(',', $requiredFields) as $field)
-        {
-            if(isset($this->lang->project->$field)) $this->lang->project->$field = $this->lang->project->$field;
-        }
 
         $this->lang->error->unique = $this->lang->error->repeat;
         $this->dao->update(TABLE_PROJECT)->data($project)
@@ -1653,6 +1652,7 @@ class projectModel extends model
 
             $whitelist = explode(',', $project->whitelist);
             $this->loadModel('personnel')->updateWhitelist($whitelist, 'project', $projectID);
+            if(!$oldProject->hasProduct) $this->loadModel('personnel')->updateWhitelist($whitelist, 'product', current($linkedProducts));
             if($project->acl != 'open')
             {
                 $this->loadModel('user')->updateUserView($projectID, 'project');
@@ -2196,7 +2196,12 @@ class projectModel extends model
         $changedAccounts = array_unique($changedAccounts);
 
         $childSprints   = $this->dao->select('id')->from(TABLE_PROJECT)->where('project')->eq($projectID)->andWhere('type')->in('stage,sprint')->andWhere('deleted')->eq('0')->fetchPairs();
-        $linkedProducts = $this->loadModel('product')->getProductPairsByProject($projectID);
+        $linkedProducts = $this->dao->select("t2.id")->from(TABLE_PROJECTPRODUCT)->alias('t1')
+            ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product = t2.id')
+            ->where('t2.deleted')->eq(0)
+            ->andWhere('t1.project')->eq($projectID)
+            ->andWhere('t2.vision')->eq($this->config->vision)
+            ->fetchPairs();
 
         $this->loadModel('user')->updateUserView(array($projectID), 'project', $changedAccounts);
         if(!empty($childSprints))   $this->user->updateUserView($childSprints, 'sprint', $changedAccounts);
@@ -2621,7 +2626,7 @@ class projectModel extends model
         $this->loadModel('program');
 
         $projects   = $this->program->getProjectStats(0, 'all', 0, 'order_asc');
-        $executions = $this->loadModel('execution')->getStatData(0, 'doing');
+        $executions = $this->loadModel('execution')->getStatData(0, 'doing', 0, 0, false, 'hasParentName|skipParent');
 
         $doingExecutions  = array();
         $latestExecutions = array();
@@ -2706,6 +2711,13 @@ class projectModel extends model
             ->andWhere('deleted')->eq(0)
             ->fetchGroup('execution', 'id');
 
+        $projects = $this->dao->select('t1.id,t2.model')
+            ->from(TABLE_PROJECT)->alias('t1')
+            ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project=t2.id')
+            ->where('t1.deleted')->eq('0')
+            ->andWhere('t1.id')->in(array_keys($executions))
+            ->fetchPairs();
+
         /* Compute totalEstimate, totalConsumed, totalLeft. */
         foreach($tasks as $executionID => $executionTasks)
         {
@@ -2718,7 +2730,7 @@ class projectModel extends model
             }
             $hours[$executionID] = $hour;
 
-            if(isset($executions[$executionID]) and $executions[$executionID]->type == 'stage' and $executions[$executionID]->grade > 1)
+            if(isset($executions[$executionID]) and $executions[$executionID]->grade > 1 and isset($projects[$executionID]) and ($projects[$executionID] == 'waterfall' or $projects[$executionID] == 'waterfallplus'))
             {
                 $stageParents = $this->dao->select('id')->from(TABLE_EXECUTION)->where('id')->in(trim($executions[$executionID]->path, ','))->andWhere('type')->eq('stage')->andWhere('id')->ne($executions[$executionID]->id)->orderBy('grade')->fetchPairs();
                 foreach($stageParents as $stageParent)

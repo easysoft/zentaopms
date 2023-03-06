@@ -45,18 +45,24 @@
   <div class='main-header'>
     <?php if(!empty($planID) and $project->model == 'waterfallplus'):?>
     <div class="pull-left">
-      <div class='btn-group'>
-        <a href='javascript:;' class='btn btn-link btn-limit' data-toggle='dropdown'><span class='text' title='<?php echo zget($lang->programplan->typeList, $executionType);?>'><?php echo zget($lang->programplan->typeList, $executionType);?></span> <span class='caret'></span></a>
-        <ul class='dropdown-menu' style='max-height:240px; max-width: 300px; overflow-y:auto'>
-          <?php
+      <div class='methodTitle'><strong><?php echo $lang->programplan->subPlanManage . ':'?></strong></div>
+      <div class='type-list-radio'>
+      <?php
+      if(count($lang->programplan->typeList) > 1)
+      {
           foreach($lang->programplan->typeList as $key => $value)
           {
-              $class = $executionType == $key ? 'class="active"' : '';
-              echo "<li $class>" . html::a($this->createLink('programplan', 'create', "projectID=$project->id&productID=$productID&planID=$planID&type=$key"), $value) . "</li>";
+              $label = "<label class='radio-inline'><input type='radio' name='executionType' value='{$key}'" . ($key == $executionType ? " checked='checked'" : '') . ">{$value}</label>";
+              echo html::a($this->createLink('programplan', 'create', "projectID=$project->id&productID=$productID&planID=$planID&type=$key"), $label);
           }
-          ?>
-        </ul>
+      }
+      else
+      {
+          echo zget($lang->programplan->typeList, $executionType);
+      }
+      ?>
       </div>
+      <div class='methodTip'><icon class='icon icon-help' data-toggle='popover' data-trigger='focus hover' data-placement='right' data-tip-class='text-muted popover-sm' data-content="<?php echo $lang->programplan->methodTip;?>"></icon></div>
     </div>
     <?php endif;?>
     <div class="btn-toolbar pull-right">
@@ -76,7 +82,7 @@
           <tr class='text-center'>
             <th class='c-type<?php echo $typeClass;?> required'><?php echo $lang->execution->method;?></th>
             <th class='c-name required'><?php echo $executionType == 'stage' ? $name : $lang->nameAB;?></th>
-            <?php if(!isset($config->setCode) or $config->setCode == 1):?>
+            <?php if(isset($config->setCode) and $config->setCode == 1):?>
             <th class='c-code required'><?php echo $executionType == 'stage' ? $lang->execution->code : $lang->code;?></th>
             <?php endif;?>
             <th class='c-pm <?php echo zget($visibleFields, 'PM', ' hidden') . zget($requiredFields, 'PM', '', ' required');?>'><?php echo $executionType == 'stage' ? $lang->programplan->PM : $lang->programplan->PMAB;?></th>
@@ -106,7 +112,7 @@
             <?php foreach($stages as $stage):?>
             <tr>
               <td><input type='text' name='names[<?php echo $i;?>]' id='names<?php echo $i;?>' value='<?php echo $stage->name;?>' class='form-control' /></td>
-              <?php if(!isset($config->setCode) or $config->setCode == 1):?>
+              <?php if(isset($config->setCode) and $config->setCode == 1):?>
               <td><?php echo html::input("codes[$i]", isset($stage->code) ? $stage->code : '', "class='form-control'");?></td>
               <?php endif;?>
               <td <?php echo zget($visibleFields, 'PM', ' hidden') . zget($requiredFields, 'PM', '', ' required');?>><?php echo html::select("PM[$i]", $PMUsers, '', "class='form-control picker-select'");?></td>
@@ -140,9 +146,9 @@
             <?php $disabled = isset($plan->setMilestone) ? '' : "disabled='disabled'"?>
             <?php echo html::hidden("planIDList[$i]", $plan->id);?>
             <tr>
-              <td class='<?php echo $typeClass;?>'><?php echo html::select("type[$i]", $lang->execution->typeList, $plan->type, "class='form-control chosen'");?></td>
+              <td class='<?php echo $typeClass . ' text-center ' .zget($lang->execution->typeList, $plan->type);?>'><?php echo zget($lang->execution->typeList, $plan->type);?></td>
               <td><input type='text' name="names[<?php echo $i;?>]" id='names<?php echo $i;?>' value='<?php echo $plan->name;?>' class='form-control' /></td>
-              <?php if(!isset($config->setCode) or $config->setCode == 1):?>
+              <?php if(isset($config->setCode) and $config->setCode == 1):?>
               <td><?php echo html::input("codes[$i]", $plan->code, "class='form-control'");?></td>
               <?php endif;?>
               <td <?php echo zget($visibleFields, 'PM', ' hidden') . zget($requiredFields, 'PM', '', ' required');?>><?php echo html::select("PM[$i]", $PMUsers, $plan->PM, "class='form-control picker-select'");?></td>
@@ -178,7 +184,7 @@
           <tr class='addedItem'>
             <td class='<?php echo $typeClass;?>'><?php echo html::select("type[$i]", $lang->execution->typeList, '', "class='form-control chosen'");?></td>
             <td><input type='text' name='names[<?php echo $i;?>]' id='names<?php echo $i;?>' value='' class='form-control' /></td>
-            <?php if(!isset($config->setCode) or $config->setCode == 1):?>
+            <?php if(isset($config->setCode) and $config->setCode == 1):?>
             <td><?php echo html::input("codes[$i]", '', "class='form-control'");?></td>
             <?php endif;?>
             <td <?php echo zget($visibleFields, 'PM', ' hidden') . zget($requiredFields, 'PM', '', ' required');?>><?php echo html::select("PM[$i]", $PMUsers, '', "class='form-control picker-select'");?></td>
@@ -225,7 +231,7 @@
     <tr id='addItem' class='hidden'>
       <td class='<?php echo $typeClass;?>'><?php echo html::select("type[$i]", $lang->execution->typeList, '', "class='form-control chosen'");?></td>
       <td><input type='text' name='<?php echo "names[$i]";?>' id='names<?php echo $i;?>' class='form-control' /></td>
-      <?php if(!isset($config->setCode) or $config->setCode == 1):?>
+      <?php if(isset($config->setCode) and $config->setCode == 1):?>
       <td><?php echo html::input("codes[$i]", '', "class='form-control'");?></td>
       <?php endif;?>
       <td <?php echo zget($visibleFields, 'PM', ' hidden') . zget($requiredFields, 'PM', '', ' required');?>><?php echo html::select("PM[$i]", $PMUsers, '', "class='form-control' id='PM$i'");?></td>

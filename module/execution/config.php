@@ -31,10 +31,10 @@ $config->execution->edit->requiredFields    = 'name,code,begin,end';
 $config->execution->start->requiredFields   = 'realBegan';
 $config->execution->close->requiredFields   = 'realEnd';
 
-$config->execution->customBatchEditFields = 'days,type,teamname,status,desc,PO,QD,PM,RD';
+$config->execution->customBatchEditFields = 'days,type,teamname,desc,PO,QD,PM,RD';
 
 $config->execution->custom = new stdclass();
-$config->execution->custom->batchEditFields = 'days,status,PM';
+$config->execution->custom->batchEditFields = 'days,PM';
 
 $config->execution->editor = new stdclass();
 $config->execution->editor->create   = array('id' => 'desc',    'tools' => 'simpleTools');
@@ -176,7 +176,7 @@ $config->execution->gantt->linkType['end']['end']     = 2;
 $config->execution->gantt->linkType['begin']['end']   = 3;
 
 $config->execution->datatable = new stdclass();
-if(!isset($config->setCode) or $config->setCode == 1)
+if(isset($config->setCode) and $config->setCode == 1)
 {
     $config->execution->datatable->defaultField = array('id', 'name', 'code', 'project', 'PM', 'status', 'progress', 'openedDate', 'begin', 'end', 'estimate', 'consumed', 'left', 'burn');
 }
@@ -201,7 +201,7 @@ $config->execution->datatable->fieldList['name']['nestedToggle'] = true;
 $config->execution->datatable->fieldList['name']['iconRender']   = true;
 $config->execution->datatable->fieldList['name']['required']     = 'yes';
 
-if(!isset($config->setCode) or $config->setCode == 1)
+if(isset($config->setCode) and $config->setCode == 1)
 {
     $config->execution->datatable->fieldList['code']['title']    = 'execCode';
     $config->execution->datatable->fieldList['code']['width']    = '180';
@@ -223,7 +223,7 @@ $config->execution->datatable->fieldList['status']['required'] = 'no';
 $config->execution->datatable->fieldList['status']['fixed']    = 'no';
 
 $config->execution->datatable->fieldList['PM']['title']    = 'owner';
-$config->execution->datatable->fieldList['PM']['width']    = '70';
+$config->execution->datatable->fieldList['PM']['width']    = '90';
 $config->execution->datatable->fieldList['PM']['required'] = 'no';
 $config->execution->datatable->fieldList['PM']['fixed']    = 'no';
 

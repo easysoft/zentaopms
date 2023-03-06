@@ -279,7 +279,7 @@ if($isCustomExport)
             </tr>
             <tr>
               <th><?php echo $lang->file->extension;?></th>
-              <td><?php echo html::select('fileType', $lang->exportFileTypeList, '', 'onchange=switchEncode(this.value) class="form-control chosen"');?></td>
+              <td><?php echo html::select('fileType', $lang->exportFileTypeList, '', 'onchange=switchEncode(this.value) class="form-control chosen" data-drop_direction="down"');?></td>
             </tr>
             <tr>
               <th><?php echo $lang->file->encoding;?></th>

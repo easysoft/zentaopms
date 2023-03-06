@@ -61,17 +61,18 @@ $lang->admin->info->account = "您的禅道社区账户为%s。";
 $lang->admin->info->log     = '超出存天数的日志会被删除，需要开启计划任务。';
 
 $lang->admin->notice = new stdclass();
-$lang->admin->notice->register = "友情提示：您还未在禅道社区(www.zentao.net)登记，%s进行登记，以及时获得禅道最新信息。";
+$lang->admin->notice->register = "可%s禅道社区 www.zentao.net，及时获得禅道最新信息。";
 $lang->admin->notice->ignore   = "不再提示";
 $lang->admin->notice->int      = "『%s』应当是正整数。";
 
 $lang->admin->registerNotice = new stdclass();
-$lang->admin->registerNotice->common     = '注册新帐号绑定';
+$lang->admin->registerNotice->common     = '注册新帐号';
 $lang->admin->registerNotice->caption    = '禅道社区登记';
 $lang->admin->registerNotice->click      = '点击此处';
 $lang->admin->registerNotice->lblAccount = '请设置您的用户名，英文字母和数字的组合，三位以上。';
 $lang->admin->registerNotice->lblPasswd  = '请设置您的密码。数字和字母的组合，六位以上。';
 $lang->admin->registerNotice->submit     = '登记';
+$lang->admin->registerNotice->submitHere = '在此登记';
 $lang->admin->registerNotice->bind       = "绑定已有帐号";
 $lang->admin->registerNotice->success    = "登记账户成功";
 
@@ -86,9 +87,11 @@ $lang->admin->setModule->opened         = '已开启';
 $lang->admin->setModule->closed         = '已关闭';
 
 $lang->admin->setModule->my             = '地盘';
-$lang->admin->setModule->product        = '产品';
-$lang->admin->setModule->scrum          = '敏捷项目';
-$lang->admin->setModule->waterfall      = '瀑布项目';
+$lang->admin->setModule->product        = $lang->productCommon;
+$lang->admin->setModule->scrum          = '敏捷' . $lang->projectCommon;
+$lang->admin->setModule->waterfall      = '瀑布' . $lang->projectCommon;
+$lang->admin->setModule->agileplus      = '融合敏捷' . $lang->projectCommon;
+$lang->admin->setModule->waterfallplus  = '融合瀑布' . $lang->projectCommon;
 $lang->admin->setModule->assetlib       = '资产库';
 $lang->admin->setModule->other          = '通用功能';
 
@@ -183,6 +186,7 @@ $lang->admin->updateDynamics   = '更新动态';
 $lang->admin->updatePatch      = '补丁更新';
 $lang->admin->upgradeRecommend = '推荐升级';
 $lang->admin->zentaoUsed       = '您已使用禅道';
+$lang->admin->noPriv           = '您没有访问该区块的权限。';
 
 $lang->admin->openTag = '禅道';
 $lang->admin->bizTag  = '禅道企业版';

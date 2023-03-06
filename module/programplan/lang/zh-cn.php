@@ -20,6 +20,7 @@ $lang->programplan->delete        = '删除阶段';
 $lang->programplan->close         = '关闭阶段';
 $lang->programplan->activate      = '激活阶段';
 $lang->programplan->createSubPlan = '创建子阶段';
+$lang->programplan->subPlanManage = '子阶段的管理方法';
 
 $lang->programplan->parent           = '父阶段';
 $lang->programplan->emptyParent      = '无';
@@ -72,6 +73,7 @@ $lang->programplan->emptyBegin       = '『计划开始』日期不能为空';
 $lang->programplan->emptyEnd         = '『计划完成』日期不能为空';
 $lang->programplan->checkBegin       = '『计划开始』应当为合法的日期';
 $lang->programplan->checkEnd         = '『计划完成』应当为合法的日期';
+$lang->programplan->methodTip        = '您可以在该阶段下选择继续创建阶段或创建迭代/看板进行工作。迭代/看板不支持继续拆分。';
 
 $lang->programplan->milestoneList[1] = '是';
 $lang->programplan->milestoneList[0] = '否';
@@ -82,7 +84,7 @@ $lang->programplan->delayList[0] = '否';
 
 $lang->programplan->typeList = array();
 $lang->programplan->typeList['stage']     = '阶段';
-$lang->programplan->typeList['agileplus'] = '迭代/看板';
+$lang->programplan->typeList['agileplus'] = $lang->executionCommon . '/看板';
 
 $lang->programplan->noData            = '暂无数据。';
 $lang->programplan->children          = '二级计划';
@@ -110,15 +112,17 @@ $lang->programplan->ganttCustom['delayDays']    = '延期天数';
 $lang->programplan->error                  = new stdclass();
 $lang->programplan->error->percentNumber   = '"工作量占比"必须为数字';
 $lang->programplan->error->planFinishSmall = '"计划完成时间"必须大于"计划开始时间"';
-$lang->programplan->error->percentOver     = '工作量占比累计不应当超过100%';
+$lang->programplan->error->percentOver     = '相同父阶段的子阶段工作量占比之和不超过100%';
 $lang->programplan->error->createdTask     = '已分解任务，不可添加子阶段';
 $lang->programplan->error->parentWorkload  = '子阶段的工作量之和不能大于父阶段的工作量:%s';
-$lang->programplan->error->parentDuration  = '子阶段计划开始、计划完成不能超过父阶段';
+$lang->programplan->error->letterParent    = "子阶段计划开始不能超过父阶段的计划开始时间 %s";
+$lang->programplan->error->greaterParent   = "子阶段计划完成不能超过父阶段的计划完成时间 %s";
 $lang->programplan->error->sameName        = '阶段名称不能相同！';
 $lang->programplan->error->sameCode        = '阶段代号不能相同！';
 $lang->programplan->error->taskDrag        = '%s的任务不可以拖动';
 $lang->programplan->error->planDrag        = '%s的阶段不可以拖动';
-$lang->programplan->error->notStage        = '迭代/看板不支持创建子阶段';
+$lang->programplan->error->notStage        = $lang->executionCommon . '/看板不支持创建子阶段';
+$lang->programplan->error->sameType        = '父阶段类型为"%s"，阶段类型需与父阶段一致';
 
 $lang->programplan->ganttBrowseType['gantt']       = '按阶段分组';
 $lang->programplan->ganttBrowseType['assignedTo']  = '按指派给分组';

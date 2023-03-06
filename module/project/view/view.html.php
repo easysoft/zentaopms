@@ -114,12 +114,14 @@
       <div class="col-sm-12">
         <div class="cell">
           <div class="detail">
-            <?php $hiddenCode = (isset($config->setCode) and $config->setCode == 0) ? 'hidden' : '';?>
+            <?php $hiddenCode = (!isset($config->setCode) or $config->setCode == 0) ? 'hidden' : '';?>
             <h2 class="detail-title"><span class="label-id"><?php echo $project->id;?></span> <span class="label label-light label-outline <?php echo $hiddenCode;?>"><?php echo $project->code;?></span> <?php echo $project->name;?></h2>
             <div class="detail-content article-content">
               <div><span class="text-limit hidden" data-limit-size="40"><?php echo $project->desc;?></span><a class="text-primary text-limit-toggle small" data-text-expand="<?php echo $lang->expand;?>"  data-text-collapse="<?php echo $lang->collapse;?>"></a></div>
               <p>
+                <?php if($config->vision == 'rnd'):?>
                 <span class="label label-primary label-outline"><?php echo zget($lang->project->projectTypeList, $project->hasProduct);?></span>
+                <?php endif; ?>
                 <?php if($project->deleted):?>
                 <span class='label label-danger label-outline'><?php echo $lang->project->deleted;?></span>
                 <?php endif; ?>
@@ -224,7 +226,7 @@
                     <th><?php echo $lang->execution->totalEstimate;?></th>
                     <td><?php echo (float)$workhour->totalEstimate . $lang->execution->workHour;?></td>
                     <th><?php echo $lang->execution->totalDays;?></th>
-                    <td><?php echo $project->days;?></td>
+                    <td><?php echo (float)$project->days . $lang->execution->day;?></td>
                   </tr>
                   <tr>
                     <th><?php echo $lang->execution->totalConsumed;?></th>

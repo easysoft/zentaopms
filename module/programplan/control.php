@@ -205,13 +205,14 @@ class programplan extends control
                 if(strpos(",{$this->config->programplan->$customCreateFields},", ",{$field},") !== false) $visibleFields[$field] = '';
             }
         }
+        if(empty($this->config->setPercent)) unset($visibleFields['percent'], $requiredFields['percent']);
 
         if($executionType != 'stage') unset($this->lang->execution->typeList[''], $this->lang->execution->typeList['stage']);
 
         $this->view->productList        = $productList;
         $this->view->project            = $project;
         $this->view->productID          = $productID ? $productID : key($productList);
-        $this->view->stages             = empty($planID) ? $this->loadModel('stage')->getStages('id_asc') : array();
+        $this->view->stages             = empty($planID) ? $this->loadModel('stage')->getStages('id_asc', 0, $project->model) : array();
         $this->view->programPlan        = $programPlan;
         $this->view->plans              = empty($executions) ? $plans : $executions;
         $this->view->planID             = $planID;

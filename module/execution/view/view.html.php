@@ -269,7 +269,7 @@
         <div class="col-sm-12">
           <div class="cell">
             <div class="detail">
-              <?php $hiddenCode = (isset($config->setCode) and $config->setCode == 0) ? 'hidden' : '';?>
+              <?php $hiddenCode = (!isset($config->setCode) or $config->setCode == 0) ? 'hidden' : '';?>
               <h2 class="detail-title"><span class="label-id"><?php echo $execution->id;?></span> <span class="label label-light label-outline <?php echo $hiddenCode;?>"><?php echo $execution->code;?></span> <?php echo $execution->name;?></h2>
               <div class="detail-content article-content">
                 <div><span class="text-limit hidden" data-limit-size="40"><?php echo $execution->desc;?></span><a class="text-primary text-limit-toggle small" data-text-expand="<?php echo $lang->expand;?>"  data-text-collapse="<?php echo $lang->collapse;?>"></a></div>
@@ -277,7 +277,7 @@
                   <?php if($execution->deleted):?>
                   <span class='label label-danger label-outline'><?php echo $lang->execution->deleted;?></span>
                   <?php endif;?>
-                  <?php if(!empty($execution->lifetime) and $execution->type != 'kanban'):?>
+                  <?php if(!empty($execution->lifetime) and $execution->type != 'kanban' and $project->model != 'waterfall' and  $project->model != 'waterfallplus'):?>
                   <span class="label label-primary label-outline"><?php echo zget($lang->execution->lifeTimeList, $execution->lifetime);?></span>
                   <?php endif;?>
                   <?php if(isset($execution->delay)):?>
@@ -345,7 +345,7 @@
               </div>
             </div>
             <?php endif;?>
-            <?php if($execution->projectInfo->hasProduct or $execution->projectInfo->model == 'scrum'):?>
+            <?php if(!(strpos($execution->projectInfo->model, 'waterfall') !== false and (empty($execution->projectInfo->hasProduct) or in_array($execution->attribute, array('request', 'review'))))):?>
             <div class="detail">
               <div class="detail-title"><strong><?php echo $lang->execution->linkPlan;?></strong></div>
               <div class="detail-content">
@@ -398,7 +398,7 @@
                       <th><?php echo $lang->execution->totalEstimate;?></th>
                       <td><?php echo (float)$execution->totalEstimate . $lang->execution->workHour;?></td>
                       <th><?php echo $lang->execution->totalDays;?></th>
-                      <td><?php echo $execution->days;?></td>
+                      <td><?php echo (float)$execution->days . $lang->execution->day;?></td>
                     </tr>
                     <tr>
                       <th><?php echo $lang->execution->totalConsumed;?></th>
@@ -420,14 +420,13 @@
                 <table class="table table-data data-basic">
                   <tbody>
                     <tr>
-                      <?php if($execution->lifetime == 'ops' or in_array($execution->attribute, array('request', 'review'))):?>
-                      <th><?php echo $lang->task->common;?></th>
-                      <td><?php echo $statData->taskCount;?></td>
-                      <?php else:?>
+                      <?php if($features['story']):?>
                       <th><?php echo $lang->story->common;?></th>
                       <td><?php echo $statData->storyCount;?></td>
+                      <?php endif;?>
                       <th><?php echo $lang->task->common;?></th>
                       <td><?php echo $statData->taskCount;?></td>
+                      <?php if($features['qa']):?>
                       <th><?php echo $lang->bug->common;?></th>
                       <td><?php echo $statData->bugCount;?></td>
                       <?php endif;?>

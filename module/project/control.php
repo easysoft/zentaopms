@@ -68,7 +68,7 @@ class project extends control
                 $fields[$fieldName] = zget($projectLang, $fieldName);
                 unset($fields[$key]);
             }
-            if(isset($this->config->setCode) and empty($this->config->setCode)) unset($fields['code']);
+            if(!isset($this->config->setCode) or empty($this->config->setCode)) unset($fields['code']);
 
             if(isset($fields['hasProduct'])) $fields['hasProduct'] = $projectLang->type;
 
@@ -84,7 +84,6 @@ class project extends control
                 $project->PM         = zget($users, $project->PM);
                 $project->status     = $this->processStatus('project', $project);
                 $project->model      = zget($projectLang->modelList, $project->model);
-                $project->budget     = $project->budget . zget($projectLang->unitList, $project->budgetUnit);
                 $project->budget     = $project->budget != 0 ? $project->budget . zget($projectLang->unitList, $project->budgetUnit) : $this->lang->project->future;
                 $project->parent     = $project->parentName;
                 $project->hasProduct = zget($projectLang->projectTypeList, $project->hasProduct);
@@ -167,10 +166,16 @@ class project extends control
     public function ajaxGetCopyProjects()
     {
         $data = fixer::input('post')->get();
+
+        $model = $data->model;
+        if($data->model == 'agileplus')     $model = array('scrum', 'agileplus');
+        if($data->model == 'waterfallplus') $model = array('waterfall', 'waterfallplus');
+
         $projectPairs = $this->dao->select('id, name')->from(TABLE_PROJECT)
             ->where('type')->eq('project')
             ->andWhere('deleted')->eq(0)
             ->andWhere('vision')->eq($this->config->vision)
+            ->andWhere('model')->in($model)
             ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->projects)->fi()
             ->beginIF(trim($data->name))->andWhere('name')->like("%$data->name%")->fi()
             ->fetchPairs();
@@ -545,13 +550,13 @@ class project extends control
             }
         }
 
+        $extra = str_replace(array(',', ' '), array('&', ''), $extra);
+        parse_str($extra, $output);
+
         if($this->app->tab == 'program' and $programID)                   $this->loadModel('program')->setMenu($programID);
         if($this->app->tab == 'product' and !empty($output['productID'])) $this->loadModel('product')->setMenu($output['productID']);
         if($this->app->tab == 'doc') unset($this->lang->doc->menu->project['subMenu']);
         $this->session->set('projectModel', $model);
-
-        $extra = str_replace(array(',', ' '), array('&', ''), $extra);
-        parse_str($extra, $output);
 
         $name          = '';
         $code          = '';
@@ -578,7 +583,6 @@ class project extends control
             $multiple    = $copyProject->multiple;
             $hasProduct  = $copyProject->hasProduct;
             $programID   = $copyProject->parent;
-            $model       = $copyProject->model;
             $products    = $this->product->getProducts($copyProjectID);
 
             if(!$copyProject->hasProduct) $shadow = 1;
@@ -1103,19 +1107,30 @@ class project extends control
             if(!empty($execution->tasks) or !empty($execution->children)) $showToggleIcon = true;
         }
 
-        $this->view->executionStats = $executionStats;
-        $this->view->showToggleIcon = $showToggleIcon;
-        $this->view->productList    = $this->loadModel('product')->getProductPairsByProject($projectID, 'all', '', false);
-        $this->view->productID      = $productID;
-        $this->view->product        = $this->product->getByID($productID);
-        $this->view->projectID      = $projectID;
-        $this->view->project        = $project;
-        $this->view->projects       = $projects;
-        $this->view->pager          = $pager;
-        $this->view->orderBy        = $orderBy;
-        $this->view->users          = $this->loadModel('user')->getPairs('noletter');
-        $this->view->status         = $status;
-        $this->view->isStage        = (isset($project->model) and ($project->model == 'waterfall' or $project->model == 'waterfallplus')) ? true : false;
+        $changeStatusHtml  = "<div class='btn-group dropup'>";
+        $changeStatusHtml .= "<button data-toggle='dropdown' type='button' class='btn'>{$this->lang->statusAB} <span class='caret'></span></button>";
+        $changeStatusHtml .= "<div class='dropdown-menu search-list'><div class='list-group'>";
+        foreach($this->lang->execution->statusList as $statusAB => $statusText)
+        {
+            $actionLink        = $this->createLink('execution', 'batchChangeStatus', "status=$statusAB&projectID=$projectID");
+            $changeStatusHtml .= html::a('#', $statusText, '', "onclick=\"setFormAction('$actionLink', 'hiddenwin', '#executionForm')\" onmouseover=\"setBadgeStyle(this, true);\" onmouseout=\"setBadgeStyle(this, false)\"");
+        }
+        $changeStatusHtml .= "</div></div></div>";
+
+        $this->view->executionStats   = $executionStats;
+        $this->view->showToggleIcon   = $showToggleIcon;
+        $this->view->productList      = $this->loadModel('product')->getProductPairsByProject($projectID, 'all', '', false);
+        $this->view->productID        = $productID;
+        $this->view->product          = $this->product->getByID($productID);
+        $this->view->projectID        = $projectID;
+        $this->view->project          = $project;
+        $this->view->projects         = $projects;
+        $this->view->pager            = $pager;
+        $this->view->orderBy          = $orderBy;
+        $this->view->users            = $this->loadModel('user')->getPairs('noletter');
+        $this->view->status           = $status;
+        $this->view->isStage          = (isset($project->model) and ($project->model == 'waterfall' or $project->model == 'waterfallplus')) ? true : false;
+        $this->view->changeStatusHtml = common::hasPriv('execution', 'batchChangeStatus') ? $changeStatusHtml : '';
 
         $this->display();
     }
@@ -1302,6 +1317,7 @@ class project extends control
      * @param  string|int $branch
      * @param  string     $browseType
      * @param  int        $param
+     * @param  string     $caseType
      * @param  string     $orderBy
      * @param  int        $recTotal
      * @param  int        $recPerPage
@@ -1309,7 +1325,7 @@ class project extends control
      * @access public
      * @return void
      */
-    public function testcase($projectID = 0, $productID = 0, $branch = 'all', $browseType = 'all', $param = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function testcase($projectID = 0, $productID = 0, $branch = 'all', $browseType = 'all', $param = 0, $caseType = '', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         $this->loadModel('product');
         $this->session->set('bugList', $this->app->getURI(true), 'project');
@@ -1322,7 +1338,7 @@ class project extends control
         $hasProduct = $this->dao->findByID($projectID)->from(TABLE_PROJECT)->fetch('hasProduct');
         if($hasProduct) $this->lang->modulePageNav = $this->product->select($products, $productID, 'project', 'testcase', $extra, $branch);
 
-        echo $this->fetch('testcase', 'browse', "productID=$productID&branch=$branch&browseType=$browseType&param=$param&caseType=&orderBy=$orderBy&recTotal=$orderBy&recPerPage=$recPerPage&pageID=$pageID&projectID=$projectID");
+        echo $this->fetch('testcase', 'browse', "productID=$productID&branch=$branch&browseType=$browseType&param=$param&caseType=&orderBy=$orderBy&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID&projectID=$projectID");
     }
 
     /**

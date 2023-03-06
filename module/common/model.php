@@ -156,10 +156,8 @@ class commonModel extends model
             $this->loadModel('action')->create('execution', $parentExecutionID, 'syncexecutionbychild');
         }
 
-        if($execution->type == 'stage')
-        {
-            $this->loadModel('programplan')->computeProgress($execution->id);
-        }
+        $project = $this->loadModel('project')->getByID($execution->project);
+        if($project->model == 'waterfall' or $project->model == 'waterfallplus') $this->loadModel('programplan')->computeProgress($execution->id);
 
         return $parentExecution;
     }
@@ -1791,7 +1789,12 @@ EOD;
         $executionPairs = array();
         $userCondition  = !$app->user->admin ? " AND `id` " . helper::dbIN($app->user->view->sprints) : '';
         $orderBy        = $object->type == 'stage' ? 'ORDER BY `id` ASC' : 'ORDER BY `id` DESC';
-        $executionList  = $app->dbh->query("SELECT id,name,parent FROM " . TABLE_EXECUTION . " WHERE `project` = '{$object->project}' AND `deleted` = '0' $userCondition $orderBy")->fetchAll();
+
+        $executionList  = $app->dbh->query("SELECT id,name,parent,project FROM " . TABLE_EXECUTION . " WHERE `project` = '{$object->project}' AND `deleted` = '0' $userCondition $orderBy")->fetchAll();
+        $executions     = array();
+        foreach($executionList as $execution) $executions[$execution->id] = $execution;
+
+        $executionList = $app->control->loadModel('execution')->resetExecutionSorts($executions);
         foreach($executionList as $execution)
         {
             if(isset($executionPairs[$execution->parent])) unset($executionPairs[$execution->parent]);

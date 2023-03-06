@@ -16,6 +16,7 @@ $lang->zahost->browseNode     = 'ZAnode Browse';
 $lang->zahost->deleted        = "Deleted";
 $lang->zahost->copy           = 'Click to copy';
 $lang->zahost->copied         = 'Copy successful';
+$lang->zahost->baseInfo       = 'Basic information';
 
 $lang->zahost->name        = 'Name';
 $lang->zahost->IP          = 'Extranet Address';
@@ -92,7 +93,7 @@ $lang->zahost->image->statusList['created']       = 'Inprogress';
 $lang->zahost->image->statusList['canceled']      = 'Not Downloaded';
 $lang->zahost->image->statusList['inprogress']    = 'Inprogress';
 $lang->zahost->image->statusList['pending']       = 'Waiting for download';
-$lang->zahost->image->statusList['completed']     = 'Completed';
+$lang->zahost->image->statusList['completed']     = 'Usable';
 $lang->zahost->image->statusList['failed']        = 'Failed';
 
 $lang->zahost->image->imageEmpty            = 'No Image';

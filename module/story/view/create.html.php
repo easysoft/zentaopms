@@ -112,11 +112,13 @@ foreach(explode(',', $config->story->create->requiredFields) as $field)
                 </div>
               </div>
             </td>
+            <?php if(count($branches) > 1):?>
             <td class="table-col c-actions text-left w-60px">
               <div>
                 <a href='javascript:;' onclick='addBranchesBox(this)' class='btn btn-link' title='<?php echo sprintf($lang->story->addBranch, $lang->product->branchName[$product->type])?>'><i class='icon-plus'></i></a>
               </div>
             </td>
+            <?php endif;?>
           </tr>
           <tr class='hidden' >
             <th></th>

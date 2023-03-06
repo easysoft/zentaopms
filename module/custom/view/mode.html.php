@@ -36,19 +36,19 @@
             <td class='text-center'><?php echo $lang->custom->modeIntroductionList['ALM'];?></td>
           </tr>
           <?php foreach($disabledFeatures as $feature):?>
-          <?php if(is_array($feature) && empty($disabledScrumFeatures)) continue;?>
+          <?php if(is_array($feature) and empty($disabledScrumFeatures)) continue;?>
           <tr class='text-center'>
-            <td class='text-left'><?php echo (is_array($feature) && !empty($disabledScrumFeatures)) ? sprintf($this->lang->custom->scrum->common, implode($lang->comma, $disabledScrumFeatures)) : $this->lang->custom->features[$feature];?></td>
-            <td><i class='icon text-red icon-close'></i></td>
+            <td class='text-left'><?php echo (is_array($feature) and !empty($disabledScrumFeatures)) ? sprintf($this->lang->custom->scrum->common, implode($lang->comma, $disabledScrumFeatures)) : $this->lang->custom->features[$feature];?></td>
+            <td><i class='icon text-red icon-ban-circle'></i></td>
             <td><i class='icon text-success icon-check'></i></td>
           </tr>
           <?php endforeach;?>
 
           <?php foreach($config->custom->allFeatures as $feature):?>
           <?php if(in_array($feature, $disabledFeatures)) continue;?>
-          <?php if($feature == 'scrumDetail' && empty($enabledScrumFeatures)) continue;?>
+          <?php if($feature == 'scrumDetail' and empty($enabledScrumFeatures)) continue;?>
           <tr class='text-center'>
-            <td class='text-left'><?php echo ($feature == 'scrumDetail' && !empty($enabledScrumFeatures)) ? sprintf($this->lang->custom->scrum->common, implode($lang->comma, $enabledScrumFeatures)) : $this->lang->custom->features[$feature];?></td>
+            <td class='text-left'><?php echo ($feature == 'scrumDetail' and !empty($enabledScrumFeatures)) ? sprintf($this->lang->custom->scrum->common, implode($lang->comma, $enabledScrumFeatures)) : $this->lang->custom->features[$feature];?></td>
             <td><i class='icon text-success icon-check'></i></td>
             <td><i class='icon text-success icon-check'></i></td>
           </tr>

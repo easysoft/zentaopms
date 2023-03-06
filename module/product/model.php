@@ -1443,11 +1443,11 @@ class productModel extends model
         $hasWaterfall = false;
         foreach($projects as $project)
         {
-            if($project->model == 'waterfall') $hasWaterfall = true;
+            if(in_array($project->model, array('waterfall', 'waterfallplus'))) $hasWaterfall = true;
         }
         $orderBy = $hasWaterfall ? 't2.begin_asc,t2.id_asc' : 't2.begin_desc,t2.id_desc';
 
-        $executions = $this->dao->select('t2.id,t2.name,t2.grade,t2.path,t2.parent,t2.attribute,t2.multiple,t3.name as projectName')->from(TABLE_PROJECTPRODUCT)->alias('t1')
+        $executions = $this->dao->select('t2.id,t2.name,t2.project,t2.grade,t2.path,t2.parent,t2.attribute,t2.multiple,t3.name as projectName')->from(TABLE_PROJECTPRODUCT)->alias('t1')
             ->leftJoin(TABLE_EXECUTION)->alias('t2')->on('t1.project = t2.id')
             ->leftJoin(TABLE_PROJECT)->alias('t3')->on('t2.project = t3.id')
             ->where('t1.product')->eq($productID)
@@ -1464,10 +1464,9 @@ class productModel extends model
         /* Only show leaf executions. */
         $allExecutions = $this->dao->select('id,name,attribute,parent')->from(TABLE_EXECUTION)->where('type')->notin(array('program', 'project'))->fetchAll('id');
         $parents = array();
-        foreach($allExecutions as $exec)
-        {
-            $parents[$exec->parent] = true;
-        }
+        foreach($allExecutions as $exec) $parents[$exec->parent] = true;
+
+        if($projectID) $executions = $this->loadModel('execution')->resetExecutionSorts($executions);
 
         $executionPairs = array('0' => '');
         foreach($executions as $execID=> $execution)
@@ -1535,8 +1534,11 @@ class productModel extends model
             }
         }
 
+        if($projectID) $executions = $this->loadModel('execution')->resetExecutionSorts($executions);
         foreach($executions as $execution)
         {
+            if(strpos($mode, 'stagefilter') !== false and in_array($execution->attribute, array('request', 'design', 'review'))) continue;
+
             if(isset($execution->children))
             {
                 $executionPairs = $executionPairs + $execution->children;
@@ -1544,7 +1546,6 @@ class productModel extends model
             }
 
             /* Some stage of waterfall not need.*/
-            if(strpos($mode, 'stagefilter') !== false and in_array($execution->attribute, array('request', 'design', 'review'))) continue;
             if(isset($projectPairs[$execution->project])) $executionPairs[$execution->id] = $projectPairs[$execution->project] . '/' . $execution->name;
         }
 

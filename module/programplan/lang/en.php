@@ -20,6 +20,7 @@ $lang->programplan->delete        = 'Delete Stage';
 $lang->programplan->close         = 'Close Stage';
 $lang->programplan->activate      = 'Activate Stage';
 $lang->programplan->createSubPlan = 'Create Sub Stage';
+$lang->programplan->subPlanManage = 'Sub-stages management';
 
 $lang->programplan->parent           = 'Parent Stage';
 $lang->programplan->emptyParent      = 'N/A';
@@ -72,6 +73,7 @@ $lang->programplan->emptyBegin       = '『Begin』should not be blank';
 $lang->programplan->emptyEnd         = '『End』should not be blank';
 $lang->programplan->checkBegin       = '『Begin』should be valid date';
 $lang->programplan->checkEnd         = '『End』should be valid date';
+$lang->programplan->methodTip        = "You can choose to continue creating stages or Iterations/Kanban for work in this stage. It's not supported to further split the Iteration/Kanban.";
 
 $lang->programplan->milestoneList[1] = 'Yes';
 $lang->programplan->milestoneList[0] = 'No';
@@ -82,7 +84,7 @@ $lang->programplan->delayList[0] = 'No';
 
 $lang->programplan->typeList = array();
 $lang->programplan->typeList['stage']     = 'Stage';
-$lang->programplan->typeList['agileplus'] = 'Sprint/Kanban';
+$lang->programplan->typeList['agileplus'] = $lang->executionCommon . '/Kanban';
 
 $lang->programplan->noData            = 'No Data';
 $lang->programplan->children          = 'Sub Plan';
@@ -110,15 +112,17 @@ $lang->programplan->ganttCustom['delayDays']    = 'Delay days';
 $lang->programplan->error                  = new stdclass();
 $lang->programplan->error->percentNumber   = '"Workload %" must be digits.';
 $lang->programplan->error->planFinishSmall = 'The "End" date must be > the "Begin" date.';
-$lang->programplan->error->percentOver     = 'The sum of "Workload %" cannot exceed 100%.';
+$lang->programplan->error->percentOver     = 'The sum of "Workload %" cannot exceed 100% of one stage.';
 $lang->programplan->error->createdTask     = 'The task is decomposed. Sub stages cannot be added.';
 $lang->programplan->error->parentWorkload  = 'The sum of the workload in the sub stage cannot be > that in the parent stage: %s.';
-$lang->programplan->error->parentDuration  = 'The planned start and planned completion of the child phase cannot exceed the parent phase.';
+$lang->programplan->error->letterParent    = "The planned start of the child stage cannot be less than the begin of parent stage: %s.";
+$lang->programplan->error->greaterParent   = "The planned end of the child stage cannot be greater the end of parent stage: %s";
 $lang->programplan->error->sameName        = 'Stage name cannot be the same!';
 $lang->programplan->error->sameCode        = 'Stage code cannot be the same!';
 $lang->programplan->error->taskDrag        = 'The %s task cannot be dragged';
 $lang->programplan->error->planDrag        = 'The %s stage cannot be dragged';
-$lang->programplan->error->notStage        = 'Sprint/Kanban cannot create a sub stage.';
+$lang->programplan->error->notStage        = $lang->executionCommon . '/Kanban cannot create a sub stage.';
+$lang->programplan->error->sameType        = 'Type of the stage must be as same as parent: "%s"';
 
 $lang->programplan->ganttBrowseType['gantt']       = 'Group by Stage';
 $lang->programplan->ganttBrowseType['assignedTo']  = 'Group by AssignedTo';

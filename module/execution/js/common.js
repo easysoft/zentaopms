@@ -177,16 +177,16 @@ function loadBranches(product)
             disableSelectedProduct();
         }
 
-        var branch = $('#branch' + index);
-        loadPlans(product, branch);
-
-        if(typeof isWaterfall != 'undefined' && isWaterfall == true)
+        if(typeof isStage != 'undefined' && isStage == true)
         {
             $tableRow.find("select[name^='branch'] option").attr('selected', 'selected');
             $tableRow.find("select[name^='branch']").trigger('chosen:updated');
             $tableRow.find("div[id^='branch']").addClass('chosen-disabled');
         }
     });
+
+    var branch = $('#branch' + index);
+    loadPlans(product, branch);
 }
 
 /**
@@ -284,4 +284,33 @@ $(function()
 function setCardCount(heightType)
 {
     heightType != 'custom' ? $('#cardBox').addClass('hidden') : $('#cardBox').removeClass('hidden');
+}
+
+/**
+ * Hide plan box by stage's attribute.
+ *
+ * @param  string    attribute
+ * @access public
+ * @return void
+ */
+function hidePlanBox(attribute)
+{
+    if(attribute == 'request' || attribute == 'review')
+    {
+        $('.productsBox .planBox').addClass('hide');
+        $('.productsBox .planBox select').attr('disabled', 'disabled');
+        $('#productTitle').text(manageProductsLang);
+
+        $('#plansBox').closest('tr').addClass('hide');
+        $('#plansBox').attr('disabled', 'disabled');
+    }
+    else
+    {
+        $('.productsBox .planBox').removeClass('hide');
+        $('.productsBox .planBox select').attr('disabled', '');
+        $('#productTitle').text(manageProductPlanLang);
+
+        $('#plansBox').closest('tr').removeClass('hide');
+        $('#plansBox').attr('disabled', '');
+    }
 }

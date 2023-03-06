@@ -215,7 +215,7 @@ $('.c-group').change(function()
 {
     $('.c-group').show();
 
-    var type  = $('#type').val();
+    var type  = $('#type').val() ? $('#type').val() : browseType;
     var group = $('#group').val();
     var link  = createLink('execution', 'kanban', 'executionID=' + executionID + '&type=' + type + '&orderBy=id_asc' + '&groupBy=' + group);
     location.href = link;

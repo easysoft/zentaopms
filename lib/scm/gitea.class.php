@@ -218,8 +218,8 @@ class Gitea
         $path  = ltrim($path, DIRECTORY_SEPARATOR);
         $count = $count == 0 ? '' : "-n $count";
         /* compatible with svn. */
-        if($fromRevision == 'HEAD' and $this->branch) $fromRevision = $this->branch;
-        if($toRevision   == 'HEAD' and $this->branch) $toRevision   = $this->branch;
+        if($fromRevision === 'HEAD' and $this->branch) $fromRevision = $this->branch;
+        if($toRevision   === 'HEAD' and $this->branch) $toRevision   = $this->branch;
         if($fromRevision === $toRevision)
         {
             $logs = array();
@@ -748,14 +748,12 @@ class Gitea
         $list = execCmd($cmd . ' 2>&1', 'array', $result);
         if($result) return array();
 
-        $infos   = array();
         foreach($list as $entry)
         {
             list($mod, $kind, $revision, $size, $name) = preg_split('/[\t ]+/', $entry);
 
             /* Get commit info. */
             $pathName = ltrim($path . DIRECTORY_SEPARATOR . $name, DIRECTORY_SEPARATOR);
-            $info->kind     = $kind == 'tree' ? 'dir' : 'file';
             if($kind == 'tree')
             {
                 $this->getAllFiles($pathName, $revision, $lists);

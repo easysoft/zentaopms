@@ -22,6 +22,11 @@
       </div>
       <form method='post' target='hiddenwin' id='ajaxForm' class="load-indicator main-form form-ajax">
         <table class='table table-form'>
+          <tr class='hidden'>
+            <th><?php echo $lang->zahost->type;?></th>
+            <td><?php echo html::select('type', $lang->zanode->typeList, 'virtual', "class='form-control chosen' onchange='zahostType()'")?></td>
+            <td></td>
+          </tr>
           <tr>
             <th><?php echo $lang->zanode->hostName;?></th>
             <td><?php echo html::select('parent', $hostPairs, $hostID, "class='form-control chosen'")?></td>
@@ -30,6 +35,10 @@
           <tr>
             <th class='w-120px'><?php echo $lang->zanode->name;?></th>
             <td class='p-25f'><?php echo html::input('name', '', "class='form-control' placeholder=\"{$lang->zanode->nameValid}\"");?></td>
+          </tr>
+          <tr class='hidden'>
+            <th class='w-120px'><?php echo $lang->zahost->IP;?></th>
+            <td class='p-25f required'><?php echo html::input('extranet', '', "class='form-control'");?></td>
           </tr>
           <tr>
             <th><?php echo $lang->zanode->image;?></th>
@@ -61,7 +70,10 @@
           </tr>
           <tr>
             <th><?php echo $lang->zanode->osName;?></th>
-            <td><?php echo html::input('osName', '', "class='form-control' readonly='readonly'")?></td>
+            <td>
+              <?php echo html::input('osName', '', "class='form-control' readonly='readonly'")?>
+              <?php echo html::input('osNamePhysics', '', "class='form-control hidden'")?>
+            </td>
           </tr>
           <tr>
             <th><?php echo $lang->zanode->desc ?></th>

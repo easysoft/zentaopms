@@ -41,7 +41,6 @@
   $PM       = $from == 'execution' ? 'execPM'   : 'PM';
   $type     = $from == 'execution' ? 'execType' : 'type';
   $desc     = $from == 'execution' ? 'execDesc' : 'desc';
-  $status   = $from == 'execution' ? 'execStatus' : 'status';
   ?>
   <form class='main-form form-ajax' method='post' id='executionForm' action='<?php echo inLink('batchEdit');?>'>
     <div class="table-responsive">
@@ -56,15 +55,20 @@
             <th class='c-method'><?php echo $lang->execution->method;?></th>
             <?php endif;?>
             <th class='required <?php echo $minWidth?>' style="width:100%"><?php echo $lang->execution->$name;?></th>
-            <?php if(!isset($config->setCode) or $config->setCode == 1):?>
+            <?php if(isset($config->setCode) and $config->setCode == 1):?>
             <th class='c-code required'><?php echo $lang->execution->$code;?></th>
             <?php endif;?>
             <th class='c-user<?php echo zget($visibleFields, 'PM',       ' hidden') . zget($requiredFields, 'PM',     '', ' required');?>'><?php echo $lang->execution->$PM;?></th>
             <th class='c-user<?php echo zget($visibleFields, 'PO',       ' hidden') . zget($requiredFields, 'PO',     '', ' required');?>'><?php echo $lang->execution->PO;?></th>
             <th class='c-user<?php echo zget($visibleFields, 'QD',       ' hidden') . zget($requiredFields, 'QD',     '', ' required');?>'><?php echo $lang->execution->QD;?></th>
             <th class='c-user<?php echo zget($visibleFields, 'RD',       ' hidden') . zget($requiredFields, 'RD',     '', ' required');?>'><?php echo $lang->execution->RD;?></th>
-            <th class='c-type<?php echo zget($visibleFields, 'type',     ' hidden') . zget($requiredFields, 'type',   '', ' required');?>'><?php echo $lang->execution->$type;?></th>
-            <th class='c-status<?php echo zget($visibleFields, 'status', ' hidden') . zget($requiredFields, 'status', '', ' required');?>'><?php echo $lang->execution->$status;?></th>
+            <th class='c-type<?php echo zget($visibleFields, 'type',     ' hidden') . zget($requiredFields, 'type',   '', ' required');?>'>
+              <?php echo $lang->execution->$type;?>
+              <?php if($this->app->tab == 'execution' or (isset($project) and ($project->model == 'waterfall' or $project->model == 'waterfallplus'))):?>
+              <?php $typeTip = $this->app->tab == 'execution' ? $lang->execution->waterfallTip . lcfirst($lang->execution->typeTip) : $lang->execution->typeTip;?>
+              <icon class='icon icon-help' data-toggle='popover' data-trigger='focus hover' data-placement='right' data-tip-class='text-muted popover-sm' data-content="<?php echo $typeTip;?>"></icon>
+              <?php endif;?>
+            </th>
             <th class='c-date required'><?php echo $lang->execution->begin;?></th>
             <th class='c-date required'><?php echo $lang->execution->end;?></th>
             <th class='c-desc <?php echo zget($visibleFields, 'desc', ' hidden') . zget($requiredFields, 'desc', '', ' required');?>'><?php echo $lang->execution->$desc;?></th>
@@ -93,7 +97,7 @@
             <td title='<?php echo zget($lang->execution->typeList, $executions[$executionID]->type);?>'><?php echo zget($lang->execution->typeList, $executions[$executionID]->type);?></td>
             <?php endif;?>
             <td title='<?php echo $executions[$executionID]->name?>'><?php echo html::input("names[$executionID]", $executions[$executionID]->name, "class='form-control' id='names{$executionID}'");?></td>
-            <?php if(!isset($config->setCode) or $config->setCode == 1):?>
+            <?php if(isset($config->setCode) and $config->setCode == 1):?>
             <td><?php echo html::input("codes[$executionID]", $executions[$executionID]->code, "id='codes{$executionID}' class='form-control'");?></td>
             <?php endif;?>
             <td class='text-left<?php echo zget($visibleFields, 'PM', ' hidden')?>' style='overflow:visible'><?php echo html::select("PMs[$executionID]", $pmUsers, $executions[$executionID]->PM, "class='form-control picker-select'");?></td>
@@ -101,13 +105,12 @@
             <td class='text-left<?php echo zget($visibleFields, 'QD', ' hidden')?>' style='overflow:visible'><?php echo html::select("QDs[$executionID]", $qdUsers, $executions[$executionID]->QD, "class='form-control picker-select'");?></td>
             <td class='text-left<?php echo zget($visibleFields, 'RD', ' hidden')?>' style='overflow:visible'><?php echo html::select("RDs[$executionID]", $rdUsers, $executions[$executionID]->RD, "class='form-control picker-select'");?></td>
             <td class='<?php echo zget($visibleFields, 'type', 'hidden')?>'>
-              <?php if($executions[$executionID]->type == 'stage'):?>
+              <?php if(isset($projects[$execution->project]) and ($projects[$execution->project]->model == 'waterfall' or $projects[$execution->project]->model == 'waterfallplus')):?>
               <?php echo html::select("attributes[$executionID]", $lang->stage->typeList, $executions[$executionID]->attribute, 'class=form-control');?>
               <?php else:?>
               <?php echo html::select("lifetimes[$executionID]", $lang->execution->lifeTimeList, $executions[$executionID]->lifetime, 'class=form-control');?>
               <?php endif;?>
             </td>
-            <td class='<?php echo zget($visibleFields, 'status', 'hidden')?>'><?php echo html::select("statuses[$executionID]", $lang->execution->statusList, $executions[$executionID]->status, 'class=form-control');?></td>
             <td><?php echo html::input("begins[$executionID]", $executions[$executionID]->begin, "id='begins{$executionID}' class='form-control form-date' onchange='computeWorkDays(this.id)'");?></td>
             <td><?php echo html::input("ends[$executionID]", $executions[$executionID]->end, "id='ends{$executionID}' class='form-control form-date' onchange='computeWorkDays(this.id)'");?></td>
             <td class='<?php echo zget($visibleFields, 'desc', 'hidden')?>'><?php echo html::textarea("descs[$executionID]", $executions[$executionID]->desc, "rows='1' class='form-control autosize'");?></td>

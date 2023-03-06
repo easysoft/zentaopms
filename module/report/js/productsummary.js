@@ -6,8 +6,5 @@ $('#conditions input:checkbox').change(function()
         if($(this).prop('checked')) conditions += $(this).val() + ',';
     })
     conditions = conditions.substring(0, conditions.length - 1);
-
-    var params = window.btoa('conditions=' + conditions);
-    var link = createLink('report', 'preview', 'dimension=' + dimension + '&group=' + group + '&module=report&method=productSummary&params=' + params);
-    location.href = link;
+    location.href = createLink('report', 'productSummary', 'conditions=' + conditions);
 })

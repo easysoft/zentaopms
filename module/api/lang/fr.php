@@ -9,7 +9,6 @@
  * @version     $Id: English.php 824 2010-05-02 15:32:06Z wwccss $
  * @link        http://www.zentao.net
  */
-$lang->api = new stdclass();
 $lang->api->common   = 'API';
 $lang->api->getModel = 'Super Model API';
 $lang->api->sql      = 'SQL Query API';

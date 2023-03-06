@@ -599,7 +599,7 @@ class repo extends control
         }
 
         /* Refresh repo. */
-        if($refresh) $this->repo->updateCommit($repoID, $originBranchID);
+        if($refresh) $this->repo->updateCommit($repoID, $objectID, $originBranchID);
 
         /* Get files info. */
         $infos = $this->repo->getFileCommits($repo, $branchID, $path);
@@ -1372,7 +1372,7 @@ class repo extends control
                 $content  = file($logFile);
                 $lastLine = $content[count($content) - 1];
 
-                if(!strpos($lastLine, 'done'))
+                if(strpos($lastLine, 'done') === false)
                 {
                     if(strpos($lastLine, 'empty repository') !== false)
                     {

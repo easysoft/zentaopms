@@ -22,7 +22,9 @@
 <?php js::set('requiredFields', $config->task->create->requiredFields);?>
 <?php js::set('estimateNotEmpty', sprintf($lang->error->gt, $lang->task->estimate, '0'))?>
 <?php js::set('lifetime', $execution->lifetime);?>
+<?php js::set('attribute', $execution->attribute);?>
 <?php js::set('lifetimeList', $lifetimeList);?>
+<?php js::set('attributeList', $attributeList);?>
 <?php js::set('hasProduct', $execution->hasProduct);?>
 <?php
 $requiredFields = array();
@@ -108,7 +110,7 @@ foreach(explode(',', $config->task->create->requiredFields) as $field)
           <td><?php echo html::hidden('status', 'wait');?></td>
         </tr>
         <?php $this->printExtendFields('', 'table', 'columns=3');?>
-        <?php $hiddenStory = (strpos(",$showFields,", ',story,') !== false and $execution->lifetime != 'ops') ? '' : 'hidden'?>
+        <?php $hiddenStory = (strpos(",$showFields,", ',story,') !== false and $features['story']) ? '' : 'hidden'?>
         <tr class="<?php echo $hiddenStory?> storyBox">
           <th><?php echo $lang->task->story;?></th>
           <td colspan='3'>
@@ -127,7 +129,7 @@ foreach(explode(',', $config->task->create->requiredFields) as $field)
             </div>
           </td>
         </tr>
-        <?php if($execution->lifetime != 'ops'):?>
+        <?php if($execution->lifetime != 'ops' and !in_array($execution->attribute, array('request', 'review'))):?>
         <tr id='testStoryBox' class='hidden'>
           <th><?php echo $lang->task->selectTestStory;?></th>
           <td colspan='3'>

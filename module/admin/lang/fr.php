@@ -66,12 +66,13 @@ $lang->admin->notice->ignore   = "Ignorer";
 $lang->admin->notice->int      = "『 %s 』 devrait être un entier positif.";
 
 $lang->admin->registerNotice = new stdclass();
-$lang->admin->registerNotice->common     = 'Connectez-vous avec votre nouveau compte';
+$lang->admin->registerNotice->common     = 'Register Account';
 $lang->admin->registerNotice->caption    = "S'enregistrer sur la communauté Zentao";
 $lang->admin->registerNotice->click      = "S'enregistrer ici";
 $lang->admin->registerNotice->lblAccount = '>= 3 lettres et chiffres';
 $lang->admin->registerNotice->lblPasswd  = '>= 6 lettres et chiffres';
 $lang->admin->registerNotice->submit     = "S'enregistrer";
+$lang->admin->registerNotice->submitHere = "S'enregistrer here";
 $lang->admin->registerNotice->bind       = "S'associer à un compte existant";
 $lang->admin->registerNotice->success    = "Vous êtes enregistré !";
 
@@ -86,9 +87,11 @@ $lang->admin->setModule->opened         = 'Opened';
 $lang->admin->setModule->closed         = 'Closed';
 
 $lang->admin->setModule->my             = 'My';
-$lang->admin->setModule->product        = 'Product';
-$lang->admin->setModule->scrum          = 'Scrum Project';
-$lang->admin->setModule->waterfall      = 'Waterfall Project';
+$lang->admin->setModule->product        = $lang->productCommon;
+$lang->admin->setModule->scrum          = 'Scrum ' . $lang->projectCommon;
+$lang->admin->setModule->waterfall      = 'Waterfall ' . $lang->projectCommon;
+$lang->admin->setModule->agileplus      = 'Agile + ' . $lang->projectCommon;
+$lang->admin->setModule->waterfallplus  = 'Waterfall + ' . $lang->projectCommon;
 $lang->admin->setModule->assetlib       = 'Assetlib';
 $lang->admin->setModule->other          = 'Other';
 
@@ -183,6 +186,7 @@ $lang->admin->updateDynamics   = 'Dynamics';
 $lang->admin->updatePatch      = 'Patch';
 $lang->admin->upgradeRecommend = 'Recommend Upgrade';
 $lang->admin->zentaoUsed       = 'You have used ZenTao';
+$lang->admin->noPriv           = 'You have no permission to visit this block.';
 
 $lang->admin->openTag = 'ZenTao Opensource ';
 $lang->admin->bizTag  = 'ZenTao Biz ';

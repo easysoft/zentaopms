@@ -107,6 +107,18 @@ $(function()
     });
 
     $(document).on('change', "select[id^='branch']", disableSelectedBranch);
+
+    if($('.disabledBranch').length > 0)
+    {
+        $('.disabledBranch div[id^="branch"]').addClass('chosen-disabled');
+    }
+
+    $('[data-toggle="popover"]').popover();
+
+    if(isWaterfall)
+    {
+        hidePlanBox(executionAttr);
+    }
 })
 var lastProjectID = $("#project").val();
 

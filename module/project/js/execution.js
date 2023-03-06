@@ -217,19 +217,16 @@ function showEditCheckbox(show)
 
             $tr.find('td:first').prepend("<div class='checkbox-primary'><input type='checkbox' name='executionIDList[]' value='" + executionID + "' id='executionIDList" + executionID + "'/><label for='executionIDList" + executionID + "'></lable></div>");
             $tr.find('td:first').find('.checkbox-primary').css('margin-left', marginLeft).css('width', '14');
-            $tr.find('td:first').find('span.table-nest-icon').css('margin-left', '0');
         }
         else
         {
-            var marginLeft = $tr.find('td:first').find('.checkbox-primary').css('margin-left');
-            $tr.find('td:first').find('span.table-nest-icon').css('margin-left', marginLeft);
             $tr.find('td:first').find('[name^="executionIDList"]').parent().remove();
         }
     });
     if(show)
     {
         $('.table-nest-title').prepend("<div class='checkbox-primary check-all'><input type='checkbox' class='checkAll' /><label></label></div>").addClass('table-nest-title-edit');
-        var tableFooter = "<div class='editCheckbox'><div class='checkbox-primary check-all'><input type='checkbox' id='checkAll' class='checkAll' /><label>" + selectAll + "</label></div><div class='table-actions btn-toolbar'><button type='submit' class='btn'>" + edit + "</button></div></div>";
+        var tableFooter = "<div class='editCheckbox'><div class='checkbox-primary check-all'><input type='checkbox' id='checkAll' class='checkAll' /><label>" + selectAll + "</label></div><div class='table-actions btn-toolbar'><button type='submit' class='btn'>" + edit + "</button>" + changeStatusHtml + "</div></div>";
         $('#executionForm').attr('action', createLink('execution', 'batchEdit'));
         $('.table-footer').prepend(tableFooter).show();
         $('body').scroll();
@@ -240,5 +237,26 @@ function showEditCheckbox(show)
         $('#executionForm').find('.editCheckbox').remove();
         if($('#executionForm .pager').length == 0) $('.table-footer').hide();
         $('#executionForm').removeAttr('action');
+    }
+}
+
+/**
+ * Set the color of the badge to white.
+ *
+ * @param  object  obj
+ * @param  bool    isShow
+ * @access public
+ * @return void
+ */
+function setBadgeStyle(obj, isShow)
+{
+    var $label = $(obj);
+    if(isShow == true)
+    {
+        $label.find('.label-badge').css({"color":"#fff", "border-color":"#fff"});
+    }
+    else
+    {
+        $label.find('.label-badge').css({"color":"#838a9d", "border-color":"#838a9d"});
     }
 }

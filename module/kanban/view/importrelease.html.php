@@ -51,7 +51,7 @@
       <tbody>
         <?php foreach($releases2Imported as $release):?>
         <?php $i = 1;?>
-        <?php $rowspan = empty(count($release->builds)) ? 1 : count($release->builds);?>
+        <?php $rowspan = !count($release->builds) ? 1 : count($release->builds);?>
         <tr>
           <td rowspan="<?php echo $rowspan;?>" class='c-id'>
             <div class="checkbox-primary">

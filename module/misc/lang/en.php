@@ -21,7 +21,7 @@ $lang->misc->zentao->labels['about']   = 'About ZenTao';
 $lang->misc->zentao->labels['support'] = 'Tech Support';
 $lang->misc->zentao->labels['cowin']   = 'Help Us';
 $lang->misc->zentao->labels['service'] = 'Service';
-$lang->misc->zentao->labels['others']  = 'From EasyCorp';
+$lang->misc->zentao->labels['others']  = 'From ZenTao Software';
 
 $lang->misc->zentao->icons['about']   = 'group';
 $lang->misc->zentao->icons['support'] = 'question-sign';
@@ -59,7 +59,7 @@ $lang->misc->zentao->others['meshiot' ] = "<img src='{$config->webRoot}theme/def
 
 $lang->misc->mobile      = "Mobile Access";
 $lang->misc->noGDLib     = "Please visit <strong>%s</strong> in the browser of your phone.";
-$lang->misc->copyright   = "&copy; 2009 - " . date('Y') . " <a href='https://easycorp.ltd/' target='_blank'>EasyCorp</a> Email <a href='mailto:Renee@easycorp.ltd'>Renee@easycorp.ltd</a>";
+$lang->misc->copyright   = "&copy; 2009 - " . date('Y') . " <a href='https://easycorp.ltd/' target='_blank'>ZenTao Software</a> Email <a href='mailto:Renee@easycorp.ltd'>Renee@easycorp.ltd</a>";
 $lang->misc->checkTable  = "Check Data Table";
 $lang->misc->needRepair  = "Repair Table";
 $lang->misc->repairTable = "Database table might be damaged due to power outage. Please check and repair!";
@@ -103,6 +103,8 @@ $lang->misc->feature->themeDesc      = '<p>ZenTao 15.0+ a new "Youth Blue" theme
 $lang->misc->feature->visionsDesc    = "<p>The concept of interface has been added since 16.5. Users can deal with R&D affairs in <span style='color: #0c60e1'>[Full Feature Interface]</span> and daily office affairs in <span style='color: #0c60e1'>[Operation Management Interface]</span>.</p><p>You can view the current interface on the avatar, and click the name of the interface to view and switch other interfaces.</p>";
 $lang->misc->feature->visionsImage   = 'theme/default/images/main/visions_en.png';
 
+/* Release Date. */
+$lang->misc->releaseDate['18.2']        = '2023-02-27';
 $lang->misc->releaseDate['18.1']        = '2023-02-08';
 $lang->misc->releaseDate['18.0']        = '2023-01-03';
 $lang->misc->releaseDate['18.0.beta3']  = '2022-12-26';
@@ -197,6 +199,8 @@ $lang->misc->releaseDate['7.2.stable']  = '2015-05-22';
 $lang->misc->releaseDate['7.1.stable']  = '2015-03-07';
 $lang->misc->releaseDate['6.3.stable']  = '2014-11-07';
 
+/* Release Detail. */
+$lang->misc->feature->all['18.2'][]       = array('title' => 'Agile Plus and Waterfall Plus management models are newly added. Support for unlimited splitting of waterfall project stages. The UI of Admin is completely upgraded and redesigned. Fix bugs.', 'desc' => '');
 $lang->misc->feature->all['18.1'][]       = array('title' => 'The automation testing solution interaction is optimized, while a new snapshot management function is newly added. ZenTao IM implemented online collaboration of PPT documents.Fix bugs.', 'desc' => '');
 $lang->misc->feature->all['18.0'][]       = array('title' => "Automated test solutions are proposed. Work order related functions are added to the Operation Management Interface. Approval workflow support for adding all types of notifications. And at the same time, we have further improved the earned value calculation rules.", 'desc' => '');
 $lang->misc->feature->all['18.0.beta3'][] = array('title' => "The module Statistic is upgraded to BI, with 5 built-in large screens of macro management dimensions.", 'desc' => '');

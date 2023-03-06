@@ -96,7 +96,7 @@ class helper extends baseHelper
         }
         else
         {
-            if($feature == 'scrum' or $feature == 'waterfall') return strpos(",$config->disabledFeatures,", ",{$feature},") === false;
+            if(in_array($feature, array('scrum', 'waterfall', 'agileplus', 'waterfallplus'))) return strpos(",$config->disabledFeatures,", ",{$feature},") === false;
 
             $hasFeature       = false;
             $canConfigFeature = false;
@@ -107,7 +107,7 @@ class helper extends baseHelper
                     if($feature == $group or $feature == $module)
                     {
                         $canConfigFeature = true;
-                        if($group == 'scrum' or $group == 'waterfall')
+                        if(in_array($group, array('scrum', 'waterfall', 'agileplus', 'waterfallplus')))
                         {
                             if(helper::hasFeature("{$group}") and helper::hasFeature("{$group}_{$module}")) $hasFeature = true;
                         }
@@ -339,12 +339,12 @@ class helper extends baseHelper
             $dateInterval->hour    = $interval->format('%H');
             $dateInterval->minute  = $interval->format('%i');
             $dateInterval->secound = $interval->format('%s');
-            $dateInterval->year    = trim($dateInterval->year, '0');
-            $dateInterval->month   = trim($dateInterval->month, '0');
-            $dateInterval->day     = trim($dateInterval->day, '0');
-            $dateInterval->hour    = trim($dateInterval->hour, '0');
-            $dateInterval->minute  = trim($dateInterval->minute, '0');
-            $dateInterval->secound = trim($dateInterval->secound, '0');
+            $dateInterval->year    = $dateInterval->year == '00' ? 0 : ltrim($dateInterval->year, '0');
+            $dateInterval->month   = $dateInterval->month == '00' ? 0 : ltrim($dateInterval->month, '0');
+            $dateInterval->day     = $dateInterval->day == '00' ? 0 : ltrim($dateInterval->day, '0');
+            $dateInterval->hour    = $dateInterval->hour == '00' ? 0 : ltrim($dateInterval->hour, '0');
+            $dateInterval->minute  = $dateInterval->minute == '00' ? 0 : ltrim($dateInterval->minute, '0');
+            $dateInterval->secound = $dateInterval->secound == '00' ? 0 : ltrim($dateInterval->secound, '0');
         }
         return $dateInterval;
     }

@@ -66,12 +66,13 @@ $lang->admin->notice->ignore   = "Ignore";
 $lang->admin->notice->int      = "『%s』should be a positive integer.";
 
 $lang->admin->registerNotice = new stdclass();
-$lang->admin->registerNotice->common     = 'Bind Account';
+$lang->admin->registerNotice->common     = 'Register Account';
 $lang->admin->registerNotice->caption    = 'ZenTao Community Signup';
 $lang->admin->registerNotice->click      = 'Sign Up';
 $lang->admin->registerNotice->lblAccount = '>= 3 letters and numbers';
 $lang->admin->registerNotice->lblPasswd  = '>= 6 letters and numbers';
 $lang->admin->registerNotice->submit     = 'Submit';
+$lang->admin->registerNotice->submitHere = 'RegistierenHere';
 $lang->admin->registerNotice->bind       = "Bind Exsiting Account";
 $lang->admin->registerNotice->success    = "You have signed up!";
 
@@ -86,9 +87,11 @@ $lang->admin->setModule->opened         = 'Opened';
 $lang->admin->setModule->closed         = 'Closed';
 
 $lang->admin->setModule->my             = 'My';
-$lang->admin->setModule->product        = 'Product';
-$lang->admin->setModule->scrum          = 'Scrum Project';
-$lang->admin->setModule->waterfall      = 'Waterfall Project';
+$lang->admin->setModule->product        = $lang->productCommon;
+$lang->admin->setModule->scrum          = 'Scrum ' . $lang->projectCommon;
+$lang->admin->setModule->waterfall      = 'Waterfall ' . $lang->projectCommon;
+$lang->admin->setModule->agileplus      = 'Agile + ' . $lang->projectCommon;
+$lang->admin->setModule->waterfallplus  = 'Waterfall + ' . $lang->projectCommon;
 $lang->admin->setModule->assetlib       = 'Assetlib';
 $lang->admin->setModule->other          = 'Other';
 
@@ -183,6 +186,7 @@ $lang->admin->updateDynamics   = 'Dynamics';
 $lang->admin->updatePatch      = 'Patch';
 $lang->admin->upgradeRecommend = 'Recommend Upgrade';
 $lang->admin->zentaoUsed       = 'You have used ZenTao';
+$lang->admin->noPriv           = 'You have no permission to visit this block.';
 
 $lang->admin->openTag = 'ZenTao Opensource ';
 $lang->admin->bizTag  = 'ZenTao Biz ';

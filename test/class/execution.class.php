@@ -322,6 +322,127 @@ class executionTest
     }
 
     /**
+     * function batchChangeStatus test by execution
+     *
+     * @param  array   $executionIdList
+     * @param  string  $status
+     * @access public
+     * @return array
+     */
+    public function batchChangeStatusObject($executionIdList = '', $status = '')
+    {
+        $result = $this->executionModel->batchChangeStatus($executionIdList, $status);
+
+        if(dao::isError())
+        {
+            return dao::getError();
+        }
+        else
+        {
+            return empty($result) ? 'empty' : $result;
+        }
+    }
+
+    /**
+     * function changeStatus2Wait test by execution
+     *
+     * @param  int    $executionID
+     * @access public
+     * @return string|array
+     */
+    public function changeStatus2WaitObject($executionID)
+    {
+        global $tester;
+
+        $tester->loadModel('programplan');
+        $selfAndChildrenList = $tester->programplan->getSelfAndChildrenList($executionID);
+        $siblingStages       = $tester->programplan->getSiblings($executionID);
+
+        $selfAndChildren = $selfAndChildrenList[$executionID];
+        $execution       = $selfAndChildren[$executionID];
+        $executionType   = $execution->type;
+
+        $siblingList = array();
+        if($executionType == 'stage') $siblingList = $siblingStages[$executionID];
+
+        $result = $this->executionModel->changeStatus2Wait($executionID, $selfAndChildren, $siblingList);
+
+        if(dao::isError())
+        {
+            return dao::getError();
+        }
+        else
+        {
+            return (empty($result) or $result == "'',") ? 'empty' : $result;
+        }
+    }
+
+    /**
+     * function changeStatus2Doing test by execution
+     *
+     * @param  int    $executionID
+     * @access public
+     * @return bool|array
+     */
+    public function changeStatus2DoingObject($executionID)
+    {
+        global $tester;
+
+        $tester->loadModel('programplan');
+        $selfAndChildrenList = $tester->programplan->getSelfAndChildrenList($executionID);
+
+        $selfAndChildren = $selfAndChildrenList[$executionID];
+        $execution       = $selfAndChildren[$executionID];
+        $executionType   = $execution->type;
+
+        $this->executionModel->changeStatus2Doing($executionID, $selfAndChildren);
+
+        if(dao::isError())
+        {
+            return dao::getError();
+        }
+        else
+        {
+            return true;
+        }
+    }
+
+    /**
+     * function changeStatus2Inactived test by execution
+     *
+     * @param  int         $executionID
+     * @param  string      $status       suspended|closed
+     * @access public
+     * @return bool|array
+     */
+    public function changeStatus2InactivedObject($executionID, $status)
+    {
+        global $tester;
+
+        $tester->loadModel('programplan');
+        $selfAndChildrenList = $tester->programplan->getSelfAndChildrenList($executionID);
+        $siblingStages       = $tester->programplan->getSiblings($executionID);
+
+        $selfAndChildren = $selfAndChildrenList[$executionID];
+        $execution       = $selfAndChildren[$executionID];
+        $executionType   = $execution->type;
+
+        $siblingList = array();
+        if($executionType == 'stage') $siblingList = $siblingStages[$executionID];
+
+        $result = $this->executionModel->changeStatus2Inactived($executionID, $status, $selfAndChildren, $siblingList);
+
+        if(dao::isError())
+        {
+            return dao::getError();
+        }
+        else
+        {
+            return (empty($result) or $result == "'',") ? 'empty' : $result;
+        }
+    }
+
+    /**
      * function start test by execution
      *
      * @param  string $executionID
@@ -2491,34 +2612,6 @@ class executionTest
     }
 
     /**
-     * Test Get lifetime by id list.
-     *
-     * @param array $idList
-     * @access public
-     * @return void
-     */
-    public function getLifetimeByIdListTest($idList = '')
-    {
-        $result = $this->executionModel->getLifetimeByIdList($idList);
-
-        if(dao::isError())
-        {
-            $error = dao::getError();
-            return $error;
-        }
-        else
-        {
-            if(!$result) return 'empty';
-
-            foreach($result as $id => $lifetime)
-            {
-                if(!$lifetime) $result[$id] = 'emptyLifetime';
-            }
-            return $result;
-        }
-    }
-
-    /**
      * Test Update user view of execution and it's product.
      *
      * @param int    $executionID
@@ -2833,5 +2926,57 @@ class executionTest
             ->where('execution')->eq((int)$executionID)
             ->andWhere('date')->eq($date)
             ->orderBy('date DESC, id asc')->fetchGroup('name', 'date');
+    }
+
+    /**
+     * Test build execution object by status.
+     *
+     * @param  string $status
+     * @access public
+     * @return object
+     */
+    public function buildExecutionByStatusTest($status)
+    {
+        return $this->executionModel->buildExecutionByStatus($status);
+    }
+
+    /**
+     * Reset execution sorts.
+     *
+     * @param  int    $projectID
+     * @param  string $type noParent
+     * @access public
+     * @return string
+     */
+    public function resetExecutionSortsTest($projectID, $type = '')
+    {
+        $executions           = array();
+        $executionIDList      = '';
+        $firstGradeExecutions = array();
+        if($projectID)
+        {
+            $executions = $this->executionModel->dao->select('*')->from(TABLE_EXECUTION)
+                ->where('deleted')->eq(0)
+                ->andWhere('project')->eq($projectID)
+                ->andWhere('type')->in('sprint,stage,kanban')
+                ->orderBy('order_asc')
+                ->fetchAll('id');
+
+            if($type == 'hasParent')
+            {
+                foreach($executions as $execution)
+                {
+                    if($execution->grade == 1) $firstGradeExecutions[$execution->id] = $execution->id;
+                }
+            }
+        }
+
+        $executions = $this->executionModel->resetExecutionSorts($executions, $firstGradeExecutions);
+        if(!empty($executions))
+        {
+            $executionIDList = array_keys($executions);
+            $executionIDList = implode(',', $executionIDList);
+        }
+        return $executionIDList;
     }
 }

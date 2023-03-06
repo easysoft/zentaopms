@@ -240,6 +240,7 @@ $lang->project->methodOrder[190] = 'manageRepo';
 
 $lang->resource->projectbuild = new stdclass();
 $lang->resource->projectbuild->browse           = 'browse';
+$lang->resource->projectbuild->create           = 'create';
 $lang->resource->projectbuild->edit             = 'edit';
 $lang->resource->projectbuild->view             = 'view';
 $lang->resource->projectbuild->delete           = 'delete';
@@ -251,6 +252,7 @@ $lang->resource->projectbuild->unlinkBug        = 'unlinkBug';
 $lang->resource->projectbuild->batchUnlinkBug   = 'batchUnlinkBug';
 
 $lang->projectbuild->methodOrder[5]  = 'browse';
+$lang->projectbuild->methodOrder[10] = 'create';
 $lang->projectbuild->methodOrder[15] = 'edit';
 $lang->projectbuild->methodOrder[20] = 'view';
 $lang->projectbuild->methodOrder[25] = 'delete';
@@ -399,6 +401,7 @@ $lang->resource->stage->batchCreate = 'batchCreate';
 $lang->resource->stage->edit        = 'edit';
 $lang->resource->stage->setType     = 'setType';
 $lang->resource->stage->delete      = 'delete';
+$lang->resource->stage->plusBrowse  = 'plusBrowse';
 
 $lang->stage->methodOrder[5]  = 'browse';
 $lang->stage->methodOrder[10] = 'create';
@@ -406,6 +409,7 @@ $lang->stage->methodOrder[15] = 'batchCreate';
 $lang->stage->methodOrder[20] = 'edit';
 $lang->stage->methodOrder[25] = 'setType';
 $lang->stage->methodOrder[30] = 'delete';
+$lang->stage->methodOrder[35] = 'plusBrowse';
 
 /* Program. */
 $lang->resource->program = new stdclass();
@@ -802,6 +806,7 @@ $lang->resource->execution->browse            = 'browse';
 $lang->resource->execution->create            = 'createExec';
 $lang->resource->execution->edit              = 'editAction';
 $lang->resource->execution->batchedit         = 'batchEditAction';
+$lang->resource->execution->batchchangestatus = 'batchChangeStatus';
 $lang->resource->execution->start             = 'startAction';
 $lang->resource->execution->activate          = 'activateAction';
 $lang->resource->execution->putoff            = 'delayAction';
@@ -860,6 +865,7 @@ $lang->execution->methodOrder[10]  = 'browse';
 $lang->execution->methodOrder[15]  = 'create';
 $lang->execution->methodOrder[20]  = 'edit';
 $lang->execution->methodOrder[25]  = 'batchedit';
+$lang->execution->methodOrder[27]  = 'batchchangestatus';
 $lang->execution->methodOrder[30]  = 'start';
 $lang->execution->methodOrder[35]  = 'activate';
 $lang->execution->methodOrder[40]  = 'putoff';
@@ -1438,6 +1444,8 @@ $lang->resource->custom->setDefaultConcept  = 'setDefaultConcept';
 $lang->resource->custom->deleteStoryConcept = 'deleteStoryConcept';
 $lang->resource->custom->kanban             = 'kanban';
 $lang->resource->custom->code               = 'code';
+$lang->resource->custom->hours              = 'hours';
+$lang->resource->custom->percent            = 'percent';
 
 $lang->custom->methodOrder[5]  = 'index';
 $lang->custom->methodOrder[10] = 'set';
@@ -1455,6 +1463,8 @@ $lang->custom->methodOrder[65] = 'setDefaultConcept';
 $lang->custom->methodOrder[70] = 'deleteStoryConcept';
 $lang->custom->methodOrder[75] = 'kanban';
 $lang->custom->methodOrder[80] = 'code';
+$lang->custom->methodOrder[85] = 'hours';
+$lang->custom->methodOrder[90] = 'percent';
 
 $lang->resource->datatable = new stdclass();
 $lang->resource->datatable->setGlobal = 'setGlobal';
@@ -1759,7 +1769,6 @@ $lang->screen->methodOrder[5]  = 'view';
 /* Report. */
 $lang->resource->report = new stdclass();
 $lang->resource->report->index            = 'index';
-$lang->resource->report->preview          = 'preview';
 $lang->resource->report->projectDeviation = 'projectDeviation';
 $lang->resource->report->productSummary   = 'productSummary';
 $lang->resource->report->bugCreate        = 'bugCreate';
@@ -1769,14 +1778,13 @@ $lang->resource->report->annualData       = 'annual';
 $lang->resource->report->allAnnualData    = 'viewEveryoneAnnual';
 
 $lang->report->methodOrder[0]  = 'index';
-$lang->report->methodOrder[5]  = 'preview';
-$lang->report->methodOrder[10] = 'projectDeviation';
-$lang->report->methodOrder[15] = 'productSummary';
-$lang->report->methodOrder[20] = 'bugCreate';
-$lang->report->methodOrder[25] = 'bugAssign';
-$lang->report->methodOrder[30] = 'workload';
-$lang->report->methodOrder[35] = 'annual';
-$lang->report->methodOrder[40] = 'allAnnualData';
+$lang->report->methodOrder[5]  = 'projectDeviation';
+$lang->report->methodOrder[10] = 'productSummary';
+$lang->report->methodOrder[15] = 'bugCreate';
+$lang->report->methodOrder[20] = 'bugAssign';
+$lang->report->methodOrder[25] = 'workload';
+$lang->report->methodOrder[30] = 'annual';
+$lang->report->methodOrder[35] = 'allAnnualData';
 
 /* Search. */
 $lang->resource->search = new stdclass();
@@ -2015,15 +2023,15 @@ if(!$inUpgrade)
         unset($lang->resource->program);
         unset($lang->resource->project->programTitle);
     }
-    if(!helper::hasFeature('waterfall'))
+    if(!helper::hasFeature('waterfall') and !helper::hasFeature('waterfallplus'))
     {
         unset($lang->resource->design);
         unset($lang->resource->programplan);
         unset($lang->resource->stage);
     }
-    if(!helper::hasFeature('product_track'))    unset($lang->resource->product->track);
-    if(!helper::hasFeature('product_roadmap'))  unset($lang->resource->product->roadmap);
-    if(!helper::hasFeature('waterfall_track'))  unset($lang->resource->projectstory->track);
+    if(!helper::hasFeature('product_track')) unset($lang->resource->product->track);
+    if(!helper::hasFeature('product_roadmap')) unset($lang->resource->product->roadmap);
+    if(!helper::hasFeature('waterfall_track') and !helper::hasFeature('waterfallplus_track'))  unset($lang->resource->projectstory->track);
     if(!helper::hasFeature('devops'))
     {
         unset($lang->resource->repo);

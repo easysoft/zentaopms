@@ -66,12 +66,13 @@ $lang->admin->notice->ignore   = "Ignorieren";
 $lang->admin->notice->int      = "『%s』sollte eine positive Zahl sein.";
 
 $lang->admin->registerNotice = new stdclass();
-$lang->admin->registerNotice->common     = 'Verbinde neues Konto';
+$lang->admin->registerNotice->common     = 'Register Account';
 $lang->admin->registerNotice->caption    = 'In der Zentao Community registieren';
 $lang->admin->registerNotice->click      = 'Bitte registieren Sie sich hier';
 $lang->admin->registerNotice->lblAccount = 'mindestens 3 Zeichen bitte; mit Buchsten und Ziffern.';
 $lang->admin->registerNotice->lblPasswd  = 'mindestens 6 Zeichen bitte; mit Buchsten und Ziffern.';
 $lang->admin->registerNotice->submit     = 'Registieren';
+$lang->admin->registerNotice->submitHere = 'RegistierenHere';
 $lang->admin->registerNotice->bind       = "Verbinde bestehendes Konto";
 $lang->admin->registerNotice->success    = "Sie haben sich erfolgreich registriert!";
 
@@ -86,9 +87,11 @@ $lang->admin->setModule->opened         = 'Opened';
 $lang->admin->setModule->closed         = 'Closed';
 
 $lang->admin->setModule->my             = 'My';
-$lang->admin->setModule->product        = 'Product';
-$lang->admin->setModule->scrum          = 'Scrum Project';
-$lang->admin->setModule->waterfall      = 'Waterfall Project';
+$lang->admin->setModule->product        = $lang->productCommon;
+$lang->admin->setModule->scrum          = 'Scrum ' . $lang->projectCommon;
+$lang->admin->setModule->waterfall      = 'Waterfall ' . $lang->projectCommon;
+$lang->admin->setModule->agileplus      = 'Agile + ' . $lang->projectCommon;
+$lang->admin->setModule->waterfallplus  = 'Waterfall + ' . $lang->projectCommon;
 $lang->admin->setModule->assetlib       = 'Assetlib';
 $lang->admin->setModule->other          = 'Other';
 
@@ -183,6 +186,7 @@ $lang->admin->updateDynamics   = 'Dynamics';
 $lang->admin->updatePatch      = 'Patch';
 $lang->admin->upgradeRecommend = 'Recommend Upgrade';
 $lang->admin->zentaoUsed       = 'You have used ZenTao';
+$lang->admin->noPriv           = 'You have no permission to visit this block.';
 
 $lang->admin->openTag = 'ZenTao Opensource ';
 $lang->admin->bizTag  = 'ZenTao Biz ';

@@ -3,45 +3,46 @@ global $config;
 $lang->admin->menuList = new stdclass();
 $lang->admin->menuList->system['name']  = $lang->admin->menuSetting['system']['name'];
 $lang->admin->menuList->system['desc']  = $lang->admin->menuSetting['system']['desc'];
-$lang->admin->menuList->system['order'] = 1;
-
-$lang->admin->menuList->user['name']  = $lang->admin->menuSetting['user']['name'];
-$lang->admin->menuList->user['desc']  = $lang->admin->menuSetting['user']['desc'];
-$lang->admin->menuList->user['order'] = 2;
+$lang->admin->menuList->system['order'] = 5;
 
 $lang->admin->menuList->switch['name']  = $lang->admin->menuSetting['switch']['name'];
 $lang->admin->menuList->switch['desc']  = $lang->admin->menuSetting['switch']['desc'];
-$lang->admin->menuList->switch['order'] = 3;
+$lang->admin->menuList->switch['link']  = 'admin|setmodule';
+$lang->admin->menuList->switch['order'] = 10;
+
+$lang->admin->menuList->company['name']  = $lang->admin->menuSetting['user']['name'];
+$lang->admin->menuList->company['desc']  = $lang->admin->menuSetting['user']['desc'];
+$lang->admin->menuList->company['order'] = 15;
 
 $lang->admin->menuList->model['name']  = $lang->admin->menuSetting['model']['name'];
 $lang->admin->menuList->model['desc']  = $lang->admin->menuSetting['model']['desc'];
-$lang->admin->menuList->model['order'] = 4;
+$lang->admin->menuList->model['order'] = 20;
 
 $lang->admin->menuList->feature['name']  = $lang->admin->menuSetting['feature']['name'];
 $lang->admin->menuList->feature['desc']  = $lang->admin->menuSetting['feature']['desc'];
-$lang->admin->menuList->feature['order'] = 5;
+$lang->admin->menuList->feature['order'] = 25;
 
 $lang->admin->menuList->template['name']  = $lang->admin->menuSetting['template']['name'];
 $lang->admin->menuList->template['desc']  = $lang->admin->menuSetting['template']['desc'];
-$lang->admin->menuList->template['order'] = 6;
+$lang->admin->menuList->template['order'] = 30;
 
 $lang->admin->menuList->message['name']  = $lang->admin->menuSetting['message']['name'];
 $lang->admin->menuList->message['desc']  = $lang->admin->menuSetting['message']['desc'];
-$lang->admin->menuList->message['order'] = 7;
+$lang->admin->menuList->message['order'] = 35;
 
 $lang->admin->menuList->extension['name']  = $lang->admin->menuSetting['extension']['name'];
 $lang->admin->menuList->extension['desc']  = $lang->admin->menuSetting['extension']['desc'];
 $lang->admin->menuList->extension['link']  = 'extension|browse';
-$lang->admin->menuList->extension['order'] = 8;
+$lang->admin->menuList->extension['order'] = 40;
 
 $lang->admin->menuList->dev['name']  = $lang->admin->menuSetting['dev']['name'];
 $lang->admin->menuList->dev['desc']  = $lang->admin->menuSetting['dev']['desc'];
-$lang->admin->menuList->dev['order'] = 9;
+$lang->admin->menuList->dev['order'] = 45;
 
 $lang->admin->menuList->convert['name']  = $lang->admin->menuSetting['convert']['name'];
 $lang->admin->menuList->convert['desc']  = $lang->admin->menuSetting['convert']['desc'];
 $lang->admin->menuList->convert['link']  = 'convert|convertjira';
-$lang->admin->menuList->convert['order'] = 10;
+$lang->admin->menuList->convert['order'] = 50;
 
 $lang->admin->menuList->system['subMenu']['mode']        = array('link' => "{$lang->custom->mode}|custom|mode|");
 $lang->admin->menuList->system['subMenu']['backup']      = array('link' => "{$lang->backup->common}|backup|index|");
@@ -63,38 +64,45 @@ $lang->admin->menuList->system['menuOrder']['50'] = 'tableengine';
 
 $lang->admin->menuList->system['dividerMenu'] = ',safe,';
 
-$lang->admin->menuList->user['subMenu']['dept']  = array('link' => "{$lang->dept->common}|dept|browse|", 'subModule' => 'dept');
-$lang->admin->menuList->user['subMenu']['user']  = array('link' => "{$lang->user->common}|company|browse|", 'subModule' => 'user');
-$lang->admin->menuList->user['subMenu']['group'] = array('link' => "{$lang->priv}|group|browse|", 'subModule' => 'group');
+$lang->admin->menuList->company['subMenu']['dept']       = array('link' => "{$lang->dept->common}|dept|browse|", 'subModule' => 'dept');
+$lang->admin->menuList->company['subMenu']['browseUser'] = array('link' => "{$lang->user->common}|company|browse|", 'subModule' => 'user,tutorial');
+$lang->admin->menuList->company['subMenu']['group']      = array('link' => "{$lang->priv}|group|browse|", 'subModule' => 'group');
 
-$lang->admin->menuList->user['menuOrder']['5']  = 'dept';
-$lang->admin->menuList->user['menuOrder']['10'] = 'user';
-$lang->admin->menuList->user['menuOrder']['15'] = 'group';
+$lang->admin->menuList->company['menuOrder']['5']  = 'dept';
+$lang->admin->menuList->company['menuOrder']['10'] = 'browseUser';
+$lang->admin->menuList->company['menuOrder']['15'] = 'group';
 
-$lang->admin->menuList->switch['subMenu']['setmodule'] = array('link' => "{$lang->admin->module}|admin|setmodule|");
-
-$lang->admin->menuList->switch['menuOrder']['5'] = 'setmodule';
-
-$lang->admin->menuList->model['subMenu']['common']    = array('link' => "{$lang->globalSetting}|custom|required|module=project", 'subModule' => 'custom,subject,holiday');
-$lang->admin->menuList->model['subMenu']['scrum']     = array('link' => "{$lang->scrumModel}|auditcl|scrumbrowse|", 'subModule' => 'auditcl');
-$lang->admin->menuList->model['subMenu']['waterfall'] = array('link' => "{$lang->waterfallModel}|stage|settype|", 'subModule' => 'stage');
+$lang->admin->menuList->model['subMenu']['common']        = array('link' => "{$lang->globalSetting}|custom|required|module=project", 'subModule' => 'custom,subject,holiday,stage', 'exclude' => 'stage-browse,stage-plusbrowse,stage-create,stage-edit,stage-batchcreate');
+$lang->admin->menuList->model['subMenu']['scrum']         = array('link' => "{$lang->scrumModel}|auditcl|scrumbrowse|", 'subModule' => 'auditcl');
+$lang->admin->menuList->model['subMenu']['waterfall']     = array('link' => "{$lang->waterfallModel}|stage|browse|", 'subModule' => 'stage', 'exclude' => 'stage-settype,stage-plusbrowse');
+$lang->admin->menuList->model['subMenu']['agileplus']     = array('link' => "{$lang->agilePlusModel}|auditcl|agileplusbrowse|", 'subModule' => 'auditcl');
+$lang->admin->menuList->model['subMenu']['waterfallplus'] = array('link' => "{$lang->waterfallPlusModel}|stage|plusbrowse|", 'subModule' => 'stage', 'exclude' => 'stage-settype,stage-browse');
 
 $lang->admin->menuList->model['menuOrder']['5']  = 'common';
 $lang->admin->menuList->model['menuOrder']['10'] = 'scrum';
 $lang->admin->menuList->model['menuOrder']['15'] = 'waterfall';
+$lang->admin->menuList->model['menuOrder']['20'] = 'agileplus';
+$lang->admin->menuList->model['menuOrder']['25'] = 'waterfallplus';
 
-$lang->admin->menuList->model['tabMenu']['common']['project']  = array('link' => "{$lang->project->common}|custom|required|module=project", 'alias' => 'set', 'exclude' => 'custom', 'links' => array('custom|set|'));
-$lang->admin->menuList->model['tabMenu']['common']['build']    = array('link' => "{$lang->build->common}|custom|required|module=build", 'alias' => 'set', 'exclude' => 'custom');
-$lang->admin->menuList->model['tabMenu']['common']['flow']     = array('link' => "{$lang->custom->flow}|custom|flow|", 'divider' => true);
-$lang->admin->menuList->model['tabMenu']['common']['code']     = array('link' => "{$lang->code}|custom|code|");
-$lang->admin->menuList->model['tabMenu']['common']['hours']    = array('link' => "{$lang->workingHour}|custom|hours|", 'subModule' => 'holiday', 'links' => array('holiday|browse|'));
-$lang->admin->menuList->model['tabMenu']['waterfall']['stage'] = array('link' => "{$lang->stage->common}|stage|settype|", 'subModule' => 'stage', 'links' => array('stage|browse|'));
-$lang->admin->menuList->model['tabMenu']['menuOrder']['common']['5']    = 'project';
-$lang->admin->menuList->model['tabMenu']['menuOrder']['common']['10']   = 'build';
-$lang->admin->menuList->model['tabMenu']['menuOrder']['common']['35']   = 'flow';
-$lang->admin->menuList->model['tabMenu']['menuOrder']['common']['40']   = 'code';
-$lang->admin->menuList->model['tabMenu']['menuOrder']['common']['45']   = 'hours';
-$lang->admin->menuList->model['tabMenu']['menuOrder']['waterfall']['5'] = 'stage';
+$lang->admin->menuList->model['tabMenu']['common']['project']      = array('link' => "{$lang->project->common}|custom|required|module=project", 'alias' => 'set', 'exclude' => 'custom', 'links' => array('custom|set|module=project&field=unitList'));
+if(helper::hasFeature('waterfall') or helper::hasFeature('waterfallplus')) $lang->admin->menuList->model['tabMenu']['common']['stage'] = array('link' => "{$lang->stage->type}|stage|settype|", 'subModule' => 'stage');
+$lang->admin->menuList->model['tabMenu']['common']['build']        = array('link' => "{$lang->build->common}|custom|required|module=build", 'alias' => 'set', 'exclude' => 'custom');
+$lang->admin->menuList->model['tabMenu']['common']['flow']         = array('link' => "{$lang->custom->flow}|custom|flow|", 'divider' => true);
+$lang->admin->menuList->model['tabMenu']['common']['code']         = array('link' => "{$lang->code}|custom|code|");
+
+$lang->admin->menuList->model['tabMenu']['common']['percent']      = array('link' => "{$lang->stage->percent}|custom|percent|");
+$lang->admin->menuList->model['tabMenu']['common']['hours']        = array('link' => "{$lang->workingHour}|custom|hours|", 'subModule' => 'holiday', 'links' => array('holiday|browse|', 'custom|hours|'));
+if(helper::hasFeature('waterfall')) $lang->admin->menuList->model['tabMenu']['waterfall']['stage'] = array('link' => "{$lang->stage->list}|stage|browse|", 'subModule' => 'stage', 'exclude' => 'stage-plusbrowse');
+if(helper::hasFeature('waterfallplus')) $lang->admin->menuList->model['tabMenu']['waterfallplus']['stage'] = array('link' => "{$lang->stage->list}|stage|plusbrowse|", 'subModule' => 'stage', 'exclude' => 'stage-browse');
+$lang->admin->menuList->model['tabMenu']['menuOrder']['common']['5']        = 'project';
+if(helper::hasFeature('waterfall') or helper::hasFeature('waterfallplus')) $lang->admin->menuList->model['tabMenu']['menuOrder']['common']['7']        = 'stage';
+$lang->admin->menuList->model['tabMenu']['menuOrder']['common']['10']       = 'build';
+$lang->admin->menuList->model['tabMenu']['menuOrder']['common']['35']       = 'flow';
+$lang->admin->menuList->model['tabMenu']['menuOrder']['common']['40']       = 'code';
+$lang->admin->menuList->model['tabMenu']['menuOrder']['common']['43']       = 'percent';
+$lang->admin->menuList->model['tabMenu']['menuOrder']['common']['45']       = 'hours';
+if(helper::hasFeature('waterfall')) $lang->admin->menuList->model['tabMenu']['menuOrder']['waterfall']['5']     = 'stage';
+if(helper::hasFeature('waterfallplus')) $lang->admin->menuList->model['tabMenu']['menuOrder']['waterfallplus']['5'] = 'stage';
 
 $lang->admin->menuList->feature['subMenu']['my']          = array('link' => "{$lang->my->common}|custom|set|module=todo&field=priList", 'exclude' => 'set,required');
 $lang->admin->menuList->feature['subMenu']['product']     = array('link' => "{$lang->productCommon}|custom|required|module=product", 'exclude' => 'set,required', 'alias' => 'browsestoryconcept,product');
@@ -157,7 +165,7 @@ $lang->admin->menuList->message['menuOrder']['10'] = 'webhook';
 $lang->admin->menuList->message['menuOrder']['20'] = 'browser';
 $lang->admin->menuList->message['menuOrder']['25'] = 'setting';
 
-$lang->admin->menuList->dev['subMenu']['api']    = array('link' => "API|dev|api|module=index");
+$lang->admin->menuList->dev['subMenu']['api']    = array('link' => "{$lang->api->doc}|dev|api|module=index");
 $lang->admin->menuList->dev['subMenu']['db']     = array('link' => "{$lang->database}|dev|db|table=" . trim(TABLE_EFFORT, '`'));
 $lang->admin->menuList->dev['subMenu']['editor'] = array('link' => "{$lang->editor}|dev|editor|");
 $lang->admin->menuList->dev['subMenu']['entry']  = array('link' => "{$lang->admin->entry}|entry|browse|", 'subModule' => 'entry');
@@ -167,15 +175,28 @@ $lang->admin->menuList->dev['menuOrder']['10'] = 'db';
 $lang->admin->menuList->dev['menuOrder']['15'] = 'editor';
 $lang->admin->menuList->dev['menuOrder']['20'] = 'entry';
 
-if($config->edition != 'max') unset($lang->admin->menuList->model['subMenu']['scrum'], $lang->admin->menuList->model['menuOrder']['10'], $lang->admin->menuList->template);
+if($config->edition != 'max')
+{
+    unset($lang->admin->menuList->model['subMenu']['scrum']);
+    unset($lang->admin->menuList->model['subMenu']['agileplus']);
+    unset($lang->admin->menuList->model['menuOrder']['10']);
+    unset($lang->admin->menuList->model['menuOrder']['20']);
+    unset($lang->admin->menuList->template);
+}
 if(!helper::hasFeature('waterfall'))
 {
     unset($lang->admin->menuList->model['subMenu']['waterfall']);
     unset($lang->admin->menuList->model['menuOrder']['15']);
 }
-if($config->edition == 'max' and !helper::hasFeature('scrum_auditplan'))
+if(!helper::hasFeature('waterfallplus'))
 {
-    if(!helper::hasFeature('scrum_process')) unset($lang->admin->menuList->model['subMenu']['scrum'], $lang->admin->menuList->model['menuOrder']['10']);
+    unset($lang->admin->menuList->model['subMenu']['waterfallplus']);
+    unset($lang->admin->menuList->model['menuOrder']['25']);
+}
+if($config->edition == 'max')
+{
+    if(!helper::hasFeature('scrum_auditplan') and !helper::hasFeature('scrum_process')) unset($lang->admin->menuList->model['subMenu']['scrum'], $lang->admin->menuList->model['menuOrder']['10']);
+    if(!helper::hasFeature('agileplus_auditplan') and !helper::hasFeature('agileplus_process')) unset($lang->admin->menuList->model['subMenu']['agileplus'], $lang->admin->menuList->model['menuOrder']['20']);
 }
 
 if($config->vision == 'lite')
@@ -189,8 +210,12 @@ if($config->vision == 'lite')
 
     unset($lang->admin->menuList->model['subMenu']['scrum']);
     unset($lang->admin->menuList->model['subMenu']['waterfall']);
+    unset($lang->admin->menuList->model['subMenu']['agileplus']);
+    unset($lang->admin->menuList->model['subMenu']['waterfallplus']);
     unset($lang->admin->menuList->model['menuOrder']['10']);
     unset($lang->admin->menuList->model['menuOrder']['15']);
+    unset($lang->admin->menuList->model['menuOrder']['20']);
+    unset($lang->admin->menuList->model['menuOrder']['25']);
 
     unset($lang->admin->menuList->feature['subMenu']['product']);
     unset($lang->admin->menuList->feature['subMenu']['execution']);

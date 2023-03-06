@@ -489,7 +489,7 @@ class actionModel extends model
             elseif($actionName == 'importedcard')
             {
                 $title = $this->dao->select('name')->from(TABLE_KANBAN)->where('id')->eq($action->extra)->fetch('name');
-                if($title) $action->extra = common::hasPriv('kanban', 'view') ? html::a(helper::createLink('kanban', 'view', "kanbanID=$action->extra"), "#$action->extra " . $title) : "#$action->extra " . $title;
+                if($title) $action->extra = (common::hasPriv('kanban', 'view') and !isonlybody()) ? html::a(helper::createLink('kanban', 'view', "kanbanID=$action->extra"), "#$action->extra " . $title) : "#$action->extra " . $title;
             }
             elseif($actionName == 'createchildren')
             {
@@ -938,6 +938,8 @@ class actionModel extends model
             }
             else
             {
+                if($actionType == 'restoredsnapshot' && in_array($action->objectType, array('vm', 'zanode')) && $value == 'defaultSnap') $value = $this->lang->$objectType->snapshot->defaultSnapName;
+                
                 $desc = str_replace('$' . $key, $value, $desc);
             }
         }

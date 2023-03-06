@@ -1,5 +1,40 @@
 $(function()
 {
+    if(attribute == 'request' || attribute == 'review')
+    {
+        $('#story').closest('tr').hide();
+        $("input[name='after'][value='toStoryList']").parent().hide();
+        $("input[name='after'][value='continueAdding']").parent().hide();
+        $("input[name='after'][value='toTaskList']").prop('checked', true);
+        $("input[name='after'][value='toTaskList']").parent().css('margin-left', '0px');
+    }
+
+    execAttribute = attribute;
+    $('#execution').change(function()
+    {
+        link = createLink('execution', 'ajaxGetAttribute', "executionID=" + $('#execution').val());
+        $.get(link, function(attribute)
+        {
+            execAttribute = attribute;
+            if(attribute == 'request' || attribute == 'review')
+            {
+                $('#story').closest('tr').hide();
+                $("input[name='after'][value='toStoryList']").parent().hide();
+                $("input[name='after'][value='continueAdding']").parent().hide();
+                $("input[name='after'][value='toTaskList']").prop('checked', true);
+                $("input[name='after'][value='toTaskList']").parent().css('margin-left', '0px');
+            }
+            else
+            {
+                $('#story').closest('tr').show();
+                $("input[name='after'][value='toStoryList']").parent().show();
+                $("input[name='after'][value='continueAdding']").parent().show();
+                $("input[name='after'][value='continueAdding']").prop('checked', true);
+                $("input[name='after'][value='toTaskList']").parent().css('margin-left', '10px');
+            }
+        });
+    })
+
     $('#customField').click(function()
     {
         hiddenRequireFields();
@@ -63,14 +98,16 @@ function showTeamMenu()
 function loadAll(executionID)
 {
     lifetime      = lifetimeList[executionID];
+    attribute     = attributeList[executionID];
     var fieldList = showFields + ',';
-    if(lifetime == 'ops')
+    if(lifetime == 'ops' || attribute == 'request' || attribute == 'review')
     {
-        $('.storyBox').addClass('hidden');
+        $('.storyBox,#selectTestStoryBox,#testStoryBox').addClass('hidden');
     }
     else if(fieldList.indexOf('story') >= 0)
     {
-        $('.storyBox').removeClass('hidden');
+        $('.storyBox,#selectTestStoryBox').removeClass('hidden');
+        if($('#selectTestStory').prop('checked')) $('#testStoryBox').removeClass('hidden');
     }
 
     loadModuleMenu(executionID);
@@ -377,6 +414,9 @@ function toggleSelectTestStory()
         $('.colorpicker').css('right', '0');
         $('#dataform .table-form>tbody>tr>th').css('width', '130px');
         $('[lang^="zh-"] #dataform .table-form>tbody>tr>th').css('width', '120px');
+
+        $('[name^=multiple]').attr('checked', false);
+        showTeamMenu();
     }
     else
     {
@@ -504,9 +544,10 @@ $(document).ready(function()
         var value = $select.val();
         $selector.find('.pri-text').html('<span class="label-pri label-pri-' + value + '" title="' + value + '">' + value + '</span>');
     });
+
     $('#type').change(function()
     {
-        if(lifetime != 'ops')
+        if(lifetime != 'ops' && attribute != 'request' && attribute != 'review')
         {
             $('#selectTestStoryBox').toggleClass('hidden', $(this).val() != 'test');
             toggleSelectTestStory();
@@ -578,7 +619,7 @@ $(document).on('click', '#testStory_chosen', function()
 
 $('#modalTeam tfoot .btn').click(function()
 {
-    var team  = '';
+    var team  = [];
     var time  = 0;
     var error = false;
     var mode  = $('[name="mode"]').val();
@@ -589,7 +630,7 @@ $('#modalTeam tfoot .btn').click(function()
 
         var tr      = $(this).closest('tr');
         var account = $(this).find('option:selected').text();
-        team += ' ' + account;
+        if(!team.includes(account)) team.push(account);
 
         estimate = parseFloat($(this).parents('td').next('td').find('[name^=teamEstimate]').val());
         if(!isNaN(estimate) && estimate > 0) time += estimate;
@@ -602,8 +643,7 @@ $('#modalTeam tfoot .btn').click(function()
     });
 
     if(error) return false;
-    var teamList = team.split(" ");
-    if(teamList.length <= 2)
+    if(team.length < 2)
     {
         bootbox.alert(teamMemberError);
         return false;

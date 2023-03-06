@@ -22,7 +22,9 @@
         <tr>
           <th class='c-id'><?php echo $lang->stage->id;?></th>
           <th class='required'><?php echo $lang->stage->name;?></th>
+          <?php if(isset($config->setPercent) and $config->setPercent == 1):?>
           <th class='c-percent required'><?php echo $lang->stage->percent;?></th>
+          <?php endif;?>
           <th class='c-type required'><?php echo $lang->stage->type;?></th>
         </tr>
       </thead>
@@ -31,7 +33,9 @@
         <tr>
           <td><?php echo $i;?></td>
           <td><?php echo html::input("name[$i]", '',  "class='form-control'");?></td>
+          <?php if(isset($config->setPercent) and $config->setPercent == 1):?>
           <td><?php echo html::input("percent[$i]", '',  "class='form-control'");?></td>
+          <?php endif;?>
           <td><?php echo html::select("type[$i]", array('' => '') + $lang->stage->typeList, '',  "class='form-control chosen'");?></td>
         </tr>
         <?php endfor;?>

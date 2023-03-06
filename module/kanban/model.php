@@ -927,6 +927,7 @@ class kanbanModel extends model
         $laneGroup    = $this->getLaneGroupByRegions($regionIDList, $browseType);
         $columnGroup  = $this->getRDColumnGroupByRegions($regionIDList, array_keys($laneGroup));
         $cardGroup    = $this->getCardGroupByExecution($executionID, $browseType, $orderBy, $searchValue);
+        $execution    = $this->loadModel('execution')->getByID($executionID);
 
         foreach($regions as $regionID => $regionName)
         {
@@ -943,6 +944,8 @@ class kanbanModel extends model
 
                 foreach($lanes as $key => $lane)
                 {
+                    if(in_array($execution->attribute, array('request', 'design', 'review')) and $lane->type == 'bug') continue 2;
+                    if(in_array($execution->attribute, array('request', 'review')) and $lane->type == 'story') continue 2;
                     $this->refreshCards($lane);
                     $lane->items           = isset($cardGroup[$lane->id]) ? $cardGroup[$lane->id] : array();
                     $lane->defaultCardType = $lane->type;

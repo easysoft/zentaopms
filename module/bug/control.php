@@ -636,7 +636,7 @@ class bug extends control
 
         /* Get executions. */
         $executions = array(0 => '');
-        if(isset($projects[$projectID])) $executions += $this->product->getExecutionPairsByProduct($productID, $branch ? "0,$branch" : 0, 'id_desc', $projectID, !$projectID ? 'multiple' : '');
+        if(isset($projects[$projectID])) $executions += $this->product->getExecutionPairsByProduct($productID, $branch ? "0,$branch" : 0, 'id_desc', $projectID, !$projectID ? 'multiple|stagefilter' : 'stagefilter');
         $execution  = $executionID ? $this->loadModel('execution')->getByID($executionID) : '';
         $executions = isset($executions[$executionID]) ? $executions : $executions + array($executionID => $execution->name);
 
@@ -859,7 +859,7 @@ class bug extends control
         $this->view->users            = $this->user->getPairs('devfirst|noclosed');
         $this->view->projects         = array('' => '') + $this->product->getProjectPairsByProduct($productID, $branch ? "0,$branch" : 0, 'id_desc', $projectID);
         $this->view->projectID        = $projectID;
-        $this->view->executions       = array('' => '') + $this->product->getExecutionPairsByProduct($productID, $branch ? "0,$branch" : 0, 'id_desc', $projectID, 'multiple');
+        $this->view->executions       = array('' => '') + $this->product->getExecutionPairsByProduct($productID, $branch ? "0,$branch" : 0, 'id_desc', $projectID, 'multiple,stagefilter');
         $this->view->executionID      = $executionID;
         $this->view->moduleOptionMenu = $this->tree->getOptionMenu($productID, $viewType = 'bug', $startModuleID = 0, $branch === 'all' ? 0 : $branch);
         $this->view->moduleID         = $moduleID;
@@ -1165,6 +1165,9 @@ class bug extends control
         $productBugs = $this->bug->getProductBugPairs($productID, $branch);
         unset($productBugs[$bugID]);
 
+        $executions = array(0 => '') + $this->product->getExecutionPairsByProduct($bug->product, $bug->branch, 'id_desc', $bug->project);
+        if(!empty($bug->execution) and empty($executions[$bug->execution])) $executions[$execution->id] = $execution->name;
+
         if($product->shadow) $this->view->project = $this->loadModel('project')->getByShadowProduct($bug->product);
 
         $this->view->bug                   = $bug;
@@ -1177,7 +1180,7 @@ class bug extends control
         $this->view->projectExecutionPairs = $this->loadModel('project')->getProjectExecutionPairs();
         $this->view->moduleOptionMenu      = $moduleOptionMenu;
         $this->view->currentModuleID       = $currentModuleID;
-        $this->view->executions            = array(0 => '') + $this->product->getExecutionPairsByProduct($bug->product, $bug->branch, 'id_desc', $bug->project);
+        $this->view->executions            = $executions;
         $this->view->stories               = $bug->execution ? $this->story->getExecutionStoryPairs($bug->execution) : $this->story->getProductStoryPairs($bug->product, $bug->branch, 0, 'all', 'id_desc', 0, 'full', 'story', false);
         $this->view->branchOption          = $branchOption;
         $this->view->branchTagOption       = $branchTagOption;
@@ -1398,7 +1401,7 @@ class bug extends control
         }
 
         /* Set users. */
-        $users = $this->user->getPairs('devfirst', '', $this->config->maxCount);
+        $users = $this->user->getPairs('devfirst');
         $users = array('' => '', 'ditto' => $this->lang->bug->ditto) + $users;
 
         /* Assign. */

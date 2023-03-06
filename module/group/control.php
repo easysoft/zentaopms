@@ -236,7 +236,7 @@ class group extends control
             }
 
             $this->lang->custom->common = $this->lang->group->config;
-            if($this->config->edition == 'max' and $this->config->vision == 'rnd' and (!$menu or $menu == 'admin')) $this->lang->baseline->common = $this->lang->group->docTemplate;
+            if($this->config->edition == 'max' and $this->config->vision == 'rnd' and isset($this->lang->baseline)) $this->lang->baseline->common = $this->lang->group->docTemplate;
 
             $this->view->group      = $group;
             $this->view->changelogs = ',' . join(',', $changelog) . ',';
@@ -254,9 +254,9 @@ class group extends control
             foreach($this->lang->resource as $module => $moduleActions)
             {
                 $modules[$module] = $this->lang->$module->common;
-                foreach($moduleActions as $action)
+                foreach($moduleActions as $key => $action)
                 {
-                    $actions[$module][$action] = $this->lang->$module->$action;
+                    $actions[$module][$key] = $this->lang->$module->$action;
                 }
             }
             $this->view->groups  = $this->group->getPairs();

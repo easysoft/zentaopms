@@ -53,12 +53,15 @@ class zanodemodel extends model
      */
     public function create()
     {
-        $data = fixer::input('post')->get();
+        $data = fixer::input('post')
+            ->setIF($this->post->type == 'physics', 'parent', 0)
+            ->setIF($this->post->type == 'physics', 'osName', $this->post->osNamePhysics)
+            ->remove('osNamePhysics')
+            ->get();
 
         /* Batch check fields. */
-        $data->type = 'node';
         $this->dao->update(TABLE_ZAHOST)->data($data)
-            ->batchCheck($this->config->zanode->create->requiredFields, 'notempty');
+            ->batchCheck($data->type == 'node' ? $this->config->zanode->create->requiredFields : $this->config->zanode->create->physicsRequiredFields, 'notempty');
 
         if(dao::isError()) return false;
 
@@ -69,47 +72,60 @@ class zanodemodel extends model
         }
 
         /* If name already exists return error. */
-        $node = $this->dao->select('*')->from(TABLE_ZAHOST)->where('name')->eq($data->name)->andWhere('type')->eq('node')->fetch();
+        $node = $this->dao->select('*')->from(TABLE_ZAHOST)->where('name')->eq($data->name)->andWhere('type')->in('node,physics')->fetch();
         if($node) return dao::$errors[] = $this->lang->zanode->nameUnique;
 
-        /* Get image. */
-        $image = $this->getImageByID($data->image);
-
-        /* Get host info. */
-        $host = $this->getHostByID($data->parent);
-
-        /* Prepare create params. */
-        $agnetUrl = 'http://' . $host->extranet . ':' . $host->zap;
-        $param    = array(
-            'os'           => $image->osName,
-            'path'         => $image->path,
-            'name'         => $data->name,
-            'cpu'          => (int)$data->cpuCores,
-            'disk'         => (int)$data->diskSize,
-            'memory'       => (int)$data->memory,
-        );
-
-        $result = json_decode(commonModel::http($agnetUrl . static::KVM_CREATE_PATH, json_encode($param), null, array("Authorization:$host->tokenSN")));
-
-        if(empty($result))
+        if($data->type == 'physics')
         {
-            dao::$errors[] = $this->lang->zanode->notFoundAgent;
-            return false;
+            $ping = $this->loadModel('zahost')->checkAddress($data->extranet);
+            if(!$ping)
+            {
+                dao::$errors[] = $this->lang->zanode->netError;
+                return false;
+            }
         }
-        if($result->code != 'success')
+        else
         {
-            dao::$errors[] = $this->lang->zanode->createVmFail;
-            return false;
+            /* Get image. */
+            $image = $this->getImageByID($data->image);
+
+            /* Get host info. */
+            $host = $this->getHostByID($data->parent);
+
+            /* Prepare create params. */
+            $agnetUrl = 'http://' . $host->extranet . ':' . $host->zap;
+            $param    = array(
+                'os'           => $image->osName,
+                'path'         => $image->path,
+                'name'         => $data->name,
+                'cpu'          => (int)$data->cpuCores,
+                'disk'         => (int)$data->diskSize,
+                'memory'       => (int)$data->memory,
+            );
+
+            $result = json_decode(commonModel::http($agnetUrl . static::KVM_CREATE_PATH, json_encode($param), null, array("Authorization:$host->tokenSN")));
+
+            if(empty($result))
+            {
+                dao::$errors[] = $this->lang->zanode->notFoundAgent;
+                return false;
+            }
+            if($result->code != 'success')
+            {
+                dao::$errors[] = $this->lang->zanode->createVmFail;
+                return false;
+            }
+
+            /* Prepare create ZenAgent Node data. */
+            $data->image       = $data->image;
+            $data->parent      = $host->id;
+            $data->mac         = $result->data->mac;
+            $data->vnc         = (int)$result->data->vnc;
         }
 
-        /* Prepare create ZenAgent Node data. */
-        $data->image       = $data->image;
-        $data->parent      = $host->id;
-        $data->mac         = $result->data->mac;
         $data->status      = static::STATUS_RUNNING;
         $data->createdBy   = $this->app->user->account;
         $data->createdDate = helper::now();
-        $data->vnc         = (int)$result->data->vnc;
 
         /* Save ZenAgent Node. */
         $this->dao->insert(TABLE_ZAHOST)->data($data)->autoCheck()->exec();
@@ -223,6 +239,53 @@ class zanodemodel extends model
         if(!empty($result) and $result->code == 'success')
         {
             $this->loadModel('action')->create('zanode', $zanodeID, 'createdSnapshot', '', $data->name);
+            return $newID;
+        }
+
+        $this->dao->delete()->from(TABLE_IMAGE)->where('id')->eq($newID)->exec();
+        dao::$errors[] = (!empty($result) and !empty($result->msg)) ? $result->msg : $this->app->lang->fail;
+        return false;
+    }
+
+    public function createDefaultSnapshot($zanodeID = 0)
+    {
+        $node  = $this->getNodeByID($zanodeID);
+        if($node->status != 'running') dao::$errors['name'] = $this->lang->zanode->apiError['notRunning'];
+        if(dao::isError()) return false;
+
+        $newSnapshot = new stdClass();
+        $newSnapshot->host        = $node->id;
+        $newSnapshot->name        = "defaultSnap";
+        $newSnapshot->desc        = "";
+        $newSnapshot->status      = 'creating';
+        $newSnapshot->osName      = $node->osName;
+        $newSnapshot->from        = 'snapshot';
+        $newSnapshot->createdBy   = 'system';
+        $newSnapshot->createdDate = helper::now();
+
+        $this->dao->insert(TABLE_IMAGE)
+            ->data($newSnapshot)
+            ->autoCheck()
+            ->exec();
+
+        if(dao::isError()) return false;
+
+        $newID = $this->dao->lastInsertID();
+
+        /* Prepare create params. */
+        $agnetUrl = 'http://' . $node->ip . ':' . $node->hzap;
+        $param    = array(array(
+            'name'    => $newSnapshot->name,
+            'task'    => $newID,
+            'type'    => 'createSnap',
+            'vm'      => $node->name
+        ));
+
+        $result = json_decode(commonModel::http($agnetUrl . static::SNAPSHOT_CREATE_PATH, json_encode($param,JSON_NUMERIC_CHECK), null, array("Authorization:$node->tokenSN")));
+
+
+        if(!empty($result) and $result->code == 'success')
+        {
             return $newID;
         }
 
@@ -507,11 +570,11 @@ class zanodemodel extends model
             $query = str_replace('`hostID`', 't2.`id`', $query);
         }
 
-        $list = $this->dao->select('t1.*, t2.name as hostName, t2.extranet,t3.osName')->from(TABLE_ZAHOST)->alias('t1')
+        $list = $this->dao->select("t1.*, t2.name as hostName, if(t1.type='node', t2.extranet, t1.extranet) extranet,if(t1.type='node', t3.osName, t1.osName) osName")->from(TABLE_ZAHOST)->alias('t1')
             ->leftJoin(TABLE_ZAHOST)->alias('t2')->on('t1.parent = t2.id')
             ->leftJoin(TABLE_IMAGE)->alias('t3')->on('t3.id = t1.image')
             ->where('t1.deleted')->eq(0)
-            ->andWhere("t1.type")->eq("node")
+            ->andWhere("((t1.type = 'node' and t2.type = 'zahost') or t1.type = 'physics')")
             ->beginIF($query)->andWhere($query)->fi()
             ->orderBy($orderBy)
             ->page($pager)
@@ -723,14 +786,14 @@ class zanodemodel extends model
      */
     public function getNodeByID($id)
     {
-        $node = $this->dao->select('t1.*, t2.name as hostName, t2.extranet as ip,t2.zap as hzap,t3.osName, t2.tokenSN as tokenSN, t2.secret as secret')->from(TABLE_ZAHOST)
+        $node = $this->dao->select("t1.*, t2.name as hostName, t2.extranet as ip,t2.zap as hzap,if(t1.type='node', t3.osName, t1.osName) osName, t2.tokenSN as tokenSN, t2.secret as secret")->from(TABLE_ZAHOST)
             ->alias('t1')
             ->leftJoin(TABLE_ZAHOST)->alias('t2')->on('t1.parent = t2.id')
             ->leftJoin(TABLE_IMAGE)->alias('t3')->on('t3.id = t1.image')
             ->where('t1.id')->eq($id)
             ->fetch();
 
-        $host = $this->loadModel("zahost")->getByID($node->parent);
+        $host = $this->loadModel("zahost")->getByID($node->type == 'node' ? $node->parent : $node->id);
         if($node->status == 'running' || $node->status == 'ready')
         {
             if(empty($host) || $host->status != 'online')
@@ -756,7 +819,6 @@ class zanodemodel extends model
     {
         $node = $this->dao->select('*')->from(TABLE_ZAHOST)
             ->where('mac')->eq($mac)
-            ->andWhere("type")->eq('node')
             ->fetch();
 
         $host = $this->loadModel("zahost")->getByID($node->parent);

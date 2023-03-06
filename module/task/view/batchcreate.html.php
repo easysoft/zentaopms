@@ -75,7 +75,7 @@ $colspan = count($visibleFields) + 3;
             <th class='c-module'><?php echo $lang->kanbancard->region;?></th>
             <th class='c-module'><?php echo $lang->kanbancard->lane;?></th>
             <?php endif;?>
-            <th class='c-type required'><?php echo $lang->typeAB;?></span></th>
+            <th class='c-type required'><?php echo $lang->task->type;?></span></th>
             <th class='c-assigned<?php echo zget($visibleFields, 'assignedTo', ' hidden') . zget($requiredFields, 'assignedTo', '', ' required');?> assignedToBox'><?php echo $lang->task->assignedTo;?></th>
             <th class='c-estimate<?php  echo zget($visibleFields, 'estimate', ' hidden') . zget($requiredFields, 'estimate', '', ' required');?> estimateBox'><?php echo $lang->task->estimateAB;?></th>
             <th class='c-date<?php echo zget($visibleFields, 'estStarted', ' hidden') . zget($requiredFields, 'estStarted', '', ' required');?> estStartedBox'><?php echo $lang->task->estStarted;?></th>

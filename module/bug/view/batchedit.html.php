@@ -74,9 +74,6 @@
         </thead>
         <tbody>
           <?php foreach($bugs as $bugID => $bug):?>
-          <?php
-          if(!empty($this->config->user->moreLink)) $this->config->moreLinks["assignedTos[$bugID]"] = $this->config->user->moreLink;
-          ?>
           <tr>
             <td><?php echo $bugID . html::hidden("bugIDList[$bugID]", $bugID);?></td>
             <td <?php echo zget($visibleFields, 'type', "class='hidden'")?>><?php echo html::select("types[$bugID]", $typeList, $bug->type, 'class=form-control');?></td>

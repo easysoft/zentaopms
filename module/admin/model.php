@@ -269,13 +269,13 @@ class adminModel extends model
         $this->setSwitcher($menuKey);
         if(isset($this->lang->admin->menuList->$menuKey))
         {
-            if(isset($this->lang->admin->menuList->$menuKey['subMenu']))
+            if(isset($this->lang->admin->menuList->{$menuKey}['subMenu']))
             {
                 $moduleName = $this->app->rawModule;
                 $methodName = $this->app->rawMethod;
                 $firstParam = $this->app->rawParams ? reset($this->app->rawParams) : '';
 
-                foreach($this->lang->admin->menuList->$menuKey['subMenu'] as $subMenuKey => $subMenu)
+                foreach($this->lang->admin->menuList->{$menuKey}['subMenu'] as $subMenuKey => $subMenu)
                 {
                     $subModule = '';
                     if($moduleName == 'custom' and strpos(',required,set,', $methodName) !== false)
@@ -285,25 +285,25 @@ class adminModel extends model
                     }
 
                     if(!empty($subModule)) $subMenu['subModule'] = $subModule;
-                    if(isset($this->lang->admin->menuList->$menuKey['tabMenu'][$subMenuKey]))
+                    if(isset($this->lang->admin->menuList->{$menuKey}['tabMenu'][$subMenuKey]))
                     {
                         if(!empty($subModule))
                         {
-                            $this->lang->admin->menuList->$menuKey['tabMenu'][$subMenuKey][$firstParam]['subModule'] = $subModule;
-                            unset($this->lang->admin->menuList->$menuKey['tabMenu'][$subMenuKey][$firstParam]['exclude']);
+                            $this->lang->admin->menuList->{$menuKey}['tabMenu'][$subMenuKey][$firstParam]['subModule'] = $subModule;
+                            unset($this->lang->admin->menuList->{$menuKey}['tabMenu'][$subMenuKey][$firstParam]['exclude']);
                         }
-                        $subMenu['subMenu'] = $this->lang->admin->menuList->$menuKey['tabMenu'][$subMenuKey];
+                        $subMenu['subMenu'] = $this->lang->admin->menuList->{$menuKey}['tabMenu'][$subMenuKey];
                     }
-                    if(isset($this->lang->admin->menuList->$menuKey['tabMenu']['menuOrder'][$subMenuKey]))   $subMenu['menuOrder']   = $this->lang->admin->menuList->$menuKey['tabMenu']['menuOrder'][$subMenuKey];
-                    if(isset($this->lang->admin->menuList->$menuKey['tabMenu']['dividerMenu'][$subMenuKey])) $subMenu['dividerMenu'] = $this->lang->admin->menuList->$menuKey['tabMenu']['dividerMenu'][$subMenuKey];
+                    if(isset($this->lang->admin->menuList->{$menuKey}['tabMenu']['menuOrder'][$subMenuKey]))   $subMenu['menuOrder']   = $this->lang->admin->menuList->{$menuKey}['tabMenu']['menuOrder'][$subMenuKey];
+                    if(isset($this->lang->admin->menuList->{$menuKey}['tabMenu']['dividerMenu'][$subMenuKey])) $subMenu['dividerMenu'] = $this->lang->admin->menuList->{$menuKey}['tabMenu']['dividerMenu'][$subMenuKey];
 
                     $this->lang->admin->menu->$subMenuKey = $subMenu;
                 }
             }
 
-            if(isset($this->lang->admin->menuList->$menuKey['menuOrder']))   $this->lang->admin->menuOrder   = $this->lang->admin->menuList->$menuKey['menuOrder'];
-            if(isset($this->lang->admin->menuList->$menuKey['dividerMenu'])) $this->lang->admin->dividerMenu = $this->lang->admin->menuList->$menuKey['dividerMenu'];
-            if(isset($this->lang->admin->menuList->$menuKey['tabMenu']))     $this->lang->admin->tabMenu     = $this->lang->admin->menuList->$menuKey['tabMenu'];
+            if(isset($this->lang->admin->menuList->{$menuKey}['menuOrder']))   $this->lang->admin->menuOrder   = $this->lang->admin->menuList->{$menuKey}['menuOrder'];
+            if(isset($this->lang->admin->menuList->{$menuKey}['dividerMenu'])) $this->lang->admin->dividerMenu = $this->lang->admin->menuList->{$menuKey}['dividerMenu'];
+            if(isset($this->lang->admin->menuList->{$menuKey}['tabMenu']))     $this->lang->admin->tabMenu     = $this->lang->admin->menuList->{$menuKey}['tabMenu'];
         }
     }
 
@@ -506,7 +506,7 @@ class adminModel extends model
     }
 
     /**
-     * Get extensions from zentao.net.
+     * Set extensions from zentao.net.
      *
      * @param  string $type plugin|patch
      * @param  int    $limit
@@ -514,41 +514,22 @@ class adminModel extends model
      * @access public
      * @return array
      */
-    public function getExtensionsByAPI($type = 'plugin', $limit = 6, $hasInternet = true)
+    public function setExtensionsByAPI($type = 'plugin', $limit = 5)
     {
-        if($hasInternet)
+        $searchType = $type == 'plugin' ? 'byModule,offcial' : 'byModule';
+        $param      = $type == 'plugin' ? '' : 'MTIxOA==';
+        $extensions = $this->loadModel('extension')->getExtensionsByAPI($searchType, $param, 0, $limit);
+        $extensions = isset($extensions->extensions) ? (array)$extensions->extensions : array();
+        $plugins    = array();
+        foreach($extensions as $extension)
         {
-            $searchType = $type == 'plugin' ? 'byUpdatedTime,offcial' : 'byModule';
-            $param      = $type == 'plugin' ? '' : 'MTIxOA==';
-            $extensions = $this->loadModel('extension')->getExtensionsByAPI($searchType, $param, 0, $limit);
-            $plugins    = isset($extensions->extensions) ? (array)$extensions->extensions : array();
-            foreach($plugins as $id => $plugin)
-            {
-                $plugin->viewLink = str_replace(array('info', 'client'), '', $plugin->viewLink);
-                if($type == 'patch' and !isset($plugin->compatibleRelease)) unset($plugins[$id]);
-            }
-        }
-        else
-        {
-            if($this->config->edition == 'open')
-            {
-                $plugins = array(
-                    $this->config->admin->plugins[27],
-                    $this->config->admin->plugins[26],
-                    $this->config->admin->plugins[30]
-                );
-            }
-            else
-            {
-                $plugins = array(
-                    $this->config->admin->plugins[198],
-                    $this->config->admin->plugins[194],
-                    $this->config->admin->plugins[203]
-                );
-            }
+            if($type == 'patch' and !isset($extension->compatibleRelease)) continue;
+
+            $extension->viewLink = str_replace(array('info', 'client'), '', $extension->viewLink);
+            $plugins[] = $extension;
         }
 
-        return $plugins;
+        return $this->loadModel('block')->setZentaoData($type, $plugins);
     }
 
     /**
@@ -572,13 +553,13 @@ class adminModel extends model
     }
 
     /**
-     * Get public class from zentao.net.
+     * Set public class from zentao.net.
      *
      * @param  int    $limit
      * @access public
-     * @return array
+     * @return void
      */
-    public function getPublicClassByAPI($limit = 2)
+    public function setPublicClassByAPI($limit = 3)
     {
         $apiURL  = $this->config->admin->videoAPIURL;
         $data    = $this->fetchAPI($apiURL);
@@ -596,24 +577,25 @@ class adminModel extends model
             $publicClass[$index]->viewLink = $this->config->admin->apiRoot . '/publicclass/' . ($course->alias ? "{$course->alias}-" : '') . "{$course->id}.html";
             $index ++;
         }
-        return $publicClass;
+
+        return $this->loadModel('block')->setZentaoData('publicclass', $publicClass);
     }
 
     /**
-     * Get dynamics by API.
+     * Set dynamics by API.
      *
      * @param  int    $limit
      * @access public
-     * @return array
+     * @return void
      */
-    public function getDynamicsByAPI($limit = 2)
+    public function setDynamicsByAPI($limit = 2)
     {
         $apiURL   = $this->config->admin->downloadAPIURL;
         $data     = $this->fetchAPI($apiURL);
         $articles = $data->articles;
 
-        $index     = 1;
-        $downloads = array();
+        $index = 1;
+        $news  = array();
         foreach($articles as $article)
         {
             if($index > $limit) break;
@@ -622,14 +604,15 @@ class adminModel extends model
             if(!isset($this->lang->admin->$tagKey)) break;
             if(!preg_match("/{$this->lang->admin->$tagKey}\d/", $article->title)) continue;
 
-            $downloads[$index] = new stdClass();
-            $downloads[$index]->id        = $article->id;
-            $downloads[$index]->title     = $article->title;
-            $downloads[$index]->addedDate = $article->addedDate;
-            $downloads[$index]->link      = $this->config->admin->apiRoot . "/download/{$article->alias}-{$article->id}.html";
+            $news[$index] = new stdClass();
+            $news[$index]->id        = $article->id;
+            $news[$index]->title     = $article->title;
+            $news[$index]->addedDate = $article->addedDate;
+            $news[$index]->link      = $this->config->admin->apiRoot . "/download/{$article->alias}-{$article->id}.html";
             $index ++;
         }
-        return $downloads;
+
+        return $this->loadModel('block')->setZentaoData('news', $news);
     }
 
     /**
@@ -640,10 +623,11 @@ class adminModel extends model
      */
     public function checkInternet()
     {
-        $curl = curl_init();
+        $timeout = 3;
+        $curl    = curl_init();
         curl_setopt($curl, CURLOPT_URL, $this->config->admin->apiSite);
-        curl_setopt($curl, CURLOPT_TIMEOUT_MS, 1000);
-        curl_setopt($curl, CURLOPT_CONNECTTIMEOUT_MS, 1000);
+        curl_setopt($curl, CURLOPT_TIMEOUT, $timeout);
+        curl_setopt($curl, CURLOPT_CONNECTTIMEOUT, $timeout);
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, TRUE);
         curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, FALSE);
         curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, FALSE);
@@ -669,5 +653,59 @@ class adminModel extends model
             ->fetch('date');
 
         return helper::getDateInterval($firstUseDate);
+    }
+
+    /**
+     * Get zentao.net data.
+     *
+     * @access public
+     * @return object
+     */
+    public function getZentaoData()
+    {
+        $zentaoData = $this->loadModel('block')->getZentaoData();
+
+        $data = new stdclass();
+        $data->hasData = true;
+
+        $news        = array();
+        $publicclass = array();
+        $plugins     = array();
+        $patches     = array();
+        if(empty($zentaoData))
+        {
+            $data->hasData = false;
+            if($this->config->edition == 'open')
+            {
+                $plugins = array(
+                    $this->config->admin->plugins[27],
+                    $this->config->admin->plugins[26],
+                    $this->config->admin->plugins[30]
+                );
+            }
+            else
+            {
+                $plugins = array(
+                    $this->config->admin->plugins[198],
+                    $this->config->admin->plugins[194],
+                    $this->config->admin->plugins[203]
+                );
+            }
+        }
+        else
+        {
+            $news        = json_decode($zentaoData['news']);
+            $publicclass = json_decode($zentaoData['publicclass']);
+            $plugins     = json_decode($zentaoData['plugin']);
+            $patches     = json_decode($zentaoData['patch']);
+            if(common::checkNotCN()) array_pop($plugins);
+        }
+
+        $data->news        = $news;
+        $data->publicclass = $publicclass;
+        $data->plugins     = $plugins;
+        $data->patches     = $patches;
+
+        return $data;
     }
 }

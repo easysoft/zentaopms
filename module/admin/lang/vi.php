@@ -52,6 +52,7 @@ $lang->admin->registerNotice->click      = 'Đăng ký';
 $lang->admin->registerNotice->lblAccount = '>= 3 chữ và số';
 $lang->admin->registerNotice->lblPasswd  = '>= 6 chữ và số';
 $lang->admin->registerNotice->submit     = 'Gửi';
+$lang->admin->registerNotice->submitHere = 'submitHere';
 $lang->admin->registerNotice->bind       = "Kết nối với tài khoản đang tồn tại";
 $lang->admin->registerNotice->success    = "Bạn đã đăng ký!";
 

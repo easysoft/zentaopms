@@ -17,7 +17,7 @@
       <div class='nav list-group tab-menu'>
         <a href="#hoursContent" data-toggle="tab" class="hours <?php if($type == 'hours') echo 'active'?>"><?php echo $lang->custom->setHours;?></a>
         <a href="#weekendContent" data-toggle="tab" class="weekend <?php if($type == 'weekend') echo 'active'?>"><?php echo $lang->custom->setWeekend;?></a>
-        <?php echo html::a($this->createLink('holiday', 'browse'), $lang->custom->setHoliday);?>
+        <?php if(common::hasPriv('holiday', 'browse')) echo html::a($this->createLink('holiday', 'browse'), $lang->custom->setHoliday);?>
       </div>
     </div>
   </div>

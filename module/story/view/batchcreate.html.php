@@ -46,7 +46,7 @@
   }
   unset($visibleFields['module']);
   ?>
-  <form method='post' class='load-indicator main-form' enctype='multipart/form-data' target='hiddenwin' id="batchCreateForm">
+  <form method='post' class='load-indicator main-form form-ajax' enctype='multipart/form-data' id="batchCreateForm">
     <div class="table-responsive">
       <table class="table table-form">
         <thead>

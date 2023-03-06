@@ -198,6 +198,8 @@ class my extends control
             $meetingCount = $pager->recTotal;
         }
 
+        if($this->app->viewType != 'json')
+        {
 echo <<<EOF
 <script>
 var taskCount     = $taskCount;
@@ -227,6 +229,7 @@ if(isMax !== 0)
 }
 </script>
 EOF;
+        }
     }
 
     /**
@@ -834,13 +837,20 @@ EOF;
         $this->app->loadClass('pager', $static = true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
-        $this->view->title      = $this->lang->my->common . $this->lang->colon . $this->lang->my->execution;
-        $this->view->position[] = $this->lang->my->execution;
-        $this->view->tabID      = 'project';
-        $this->view->executions = $this->user->getObjects($this->app->user->account, 'execution', $type, $orderBy, $pager);
-        $this->view->type       = $type;
-        $this->view->pager      = $pager;
-        $this->view->mode       = 'execution';
+        $executions  = $this->user->getObjects($this->app->user->account, 'execution', $type, $orderBy, $pager);
+        $parentGroup = $this->dao->select('parent, id')->from(TABLE_PROJECT)
+            ->where('parent')->in(array_keys($executions))
+            ->andWhere('type')->in('stage,kanban,sprint')
+            ->fetchGroup('parent', 'id');
+
+        $this->view->title       = $this->lang->my->common . $this->lang->colon . $this->lang->my->execution;
+        $this->view->position[]  = $this->lang->my->execution;
+        $this->view->tabID       = 'project';
+        $this->view->executions  = $executions;
+        $this->view->parentGroup = $parentGroup;
+        $this->view->type        = $type;
+        $this->view->pager       = $pager;
+        $this->view->mode        = 'execution';
 
         $this->display();
     }

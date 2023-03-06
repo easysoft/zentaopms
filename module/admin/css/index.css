@@ -20,6 +20,8 @@
 .font-20 {font-size: 20px;}
 .font-24 {font-size: 24px;}
 .radius-4 {border-radius: 4px;}
+.white-nowrap {white-space: nowrap;}
+.w-full {width: 100%;}
 
 #notice {margin: -20px -20px 20px; padding: 20px;}
 #zentaoLinks {margin-top: 20px;}
@@ -39,9 +41,13 @@
 .settings-list > .setting-box > button.btn {padding: 5px 10px; height: 100%; width: 100%; display: flex; flex-direction: column; justify-content: space-between; cursor: pointer; white-space: unset; text-align: unset; border: 1px solid rgba(227, 228, 233, 0.6)}
 .settings-list > .setting-box > .btn:hover {background: unset;}
 .settings-list > .setting-box > .btn[disabled] {cursor: not-allowed; pointer-events: unset;}
-.settings-list > .setting-box > .btn[disabled] > a {pointer-events: none;}
+.settings-list > .setting-box > .btn[disabled] > a,
+.settings-list > .setting-box > .btn[disabled] a.setting-help,
+.settings-list > .setting-box > .btn[disabled] p.setting-desc {pointer-events: none;}
+.settings-list > .setting-box > .btn > h4 {padding-right: 5px;}
+.settings-list > .setting-box > .btn > h4  > div {gap: 3px;}
 .settings-list > .setting-box > .btn > h4 > img {padding-right: 8px; padding-bottom: 3px; width: 32px; height: 27px;}
-.settings-list > .setting-box > .btn > .setting-desc {padding-bottom: 16px; color: #5E626D; line-height: 25px; height: 50px;}
+.settings-list > .setting-box > .btn > .setting-desc {padding-bottom: 16px; line-height: 25px; height: 50px; overflow: hidden;}
 .settings-list.lite-setting > .setting-box {flex: 1 1 30%;}
 
 .plugin-list {display: flex; flex-wrap: wrap; padding: 12px 4px 4px 4px;}
@@ -56,10 +62,12 @@
 
 .official {justify-content: center;}
 .official > .panel-title {position: absolute; top: 0px;}
-.official-img {background-image: url('/static/images/wechat.jpg'); background-repeat: no-repeat; background-size: contain; flex: 1 1 30%; aspect-ratio: 1 / 1; background-position: center;}
-.official-content {flex: 0 0 60%; display: flex; flex-direction: column; justify-content: center; padding-left: 10px;}
+.official-img {background-image: url('static/images/wechat.jpg'); background-repeat: no-repeat; background-size: contain; flex: 1 1 30%; aspect-ratio: 1 / 1; background-position: center;}
+.official-content {flex: 0 0 60%; display: flex; flex-direction: column; padding-left: 10px; padding-top: 15px;}
 .official-content > .content {color: #838A9D; font-size: 12px; line-height: 22px; padding-top: 6px;}
 .official-content > .title {color: #313C52; font-size: 13px; line-height: 14px;}
+.panel-link {color: #313c52; padding-left: 10px; font-size: 13px;}
+.panel-link > a {border-bottom: 1px solid;}
 
 .classList > .classItem {flex: 1 1 30%; margin: 5px 5px 16px 5px; border: 1px solid rgba(227, 228, 233, 0.6); border-radius: 4px; padding-bottom: 5px; align-items: center;}
 .classItem > .imgBack {flex: 1 1 50%;}
@@ -69,13 +77,15 @@
 .panel.publicClass {padding: 0 10px;}
 .icon.follow-us {font-size: 20px; padding-left: 10px;}
 
-.setting-help {width: 45px; color: #9EA3B0; padding-top: 15px;}
+.setting-help {color: #9EA3B0; padding-left: 5px;}
+.setting-help > a {font-size: 15px;}
 [lang^='zh'] .setting-help {padding-top: 0;}
 .pointer-none {pointer-events: none;}
 
 /* css for without internet */
 .main.without-internet {display: flex; flex-wrap: wrap;}
 .main.without-internet > .plug.panel {flex: 1 1 60%; margin-bottom: unset; margin-right: 16px;}
+.main.without-internet > .bottom {flex: 1 1 30%;}
 .main.without-internet > .bottom > .official.panel {margin-right: unset;}
 .main.without-internet > .bottom > .official.panel > .main-panel {flex-direction: row-reverse;}
 
@@ -84,7 +94,7 @@
 .time-block {background: #EDEEF2; padding:2px 4px; border-radius: 4px; color: #0B0F18; font-size: 15px; margin: 0 4px;}
 .dynamic-block {height: 74px; padding: 12px 16px; display: flex; justify-content: space-between; position: relative; line-height: 20px; border-top: 1px solid #E3E4E9;}
 .dynamic-content {height: 50px; line-height: 25px; overflow: hidden;}
-.dynamic-time {white-space: nowrap; position: absolute; right: 12px; bottom: 10px; padding-right: 12px; background: white; color: #5E626D;}
+.dynamic-time {white-space: nowrap; position: absolute; right: 12px; bottom: 12px; padding-left: 10px; padding-right: 12px; background: white; color: #5E626D;}
 .time-count {letter-spacing: 1px;}
 
 .patch-block {padding: 10px 16px 12px; line-height: 20px; border-top: 1px solid #E3E4E9;}

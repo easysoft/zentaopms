@@ -112,6 +112,7 @@ class buildModel extends model
                 $buildQuery = str_replace($field, "t1." . $field, $buildQuery);
             }
         }
+        if(strpos($this->session->projectBuildQuery, 'execution') !== false) $buildQuery = str_replace('`execution`', 't2.`id`', $buildQuery);
 
         return $this->getProjectBuilds($projectID, 'bysearch', $buildQuery);
     }
@@ -478,11 +479,13 @@ class buildModel extends model
      */
     public function update($buildID)
     {
-        $buildID  = (int)$buildID;
-        $oldBuild = $this->dao->select('*')->from(TABLE_BUILD)->where('id')->eq($buildID)->fetch();
-        $build    = fixer::input('post')->stripTags($this->config->build->editor->edit['id'], $this->config->allowedTags)
+        $buildID    = (int)$buildID;
+        $oldBuild   = $this->dao->select('*')->from(TABLE_BUILD)->where('id')->eq($buildID)->fetch();
+        $newProduct = $this->dao->select('id,type')->from(TABLE_PRODUCT)->where('id')->eq($_POST['product'])->fetchPairs();
+        $branch     = (!isset($_POST['branch']) or $newProduct == 'normal') ? 0 : $oldBuild->branch;
+        $build      = fixer::input('post')->stripTags($this->config->build->editor->edit['id'], $this->config->allowedTags)
             ->add('id', $buildID)
-            ->setIF(!isset($_POST['branch']), 'branch', $oldBuild->branch)
+            ->setDefault('branch', $branch)
             ->setDefault('product', $oldBuild->product)
             ->setDefault('builds', '')
             ->cleanInt('product,execution')

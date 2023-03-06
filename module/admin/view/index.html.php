@@ -19,11 +19,16 @@
       <div class="settings-list <?php if($config->vision == 'lite') echo 'lite-setting';?>">
         <?php foreach($lang->admin->menuList as $menuKey => $menu):?>
         <?php if($config->vision == 'lite' and !in_array($menuKey, $config->admin->liteMenuList)) continue;?>
-        <div class="setting-box">
+        <div class="setting-box" <?php if($menu['disabled']) echo "title={$lang->admin->noPriv}";?> data-id="<?php echo $menuKey;?>">
           <button class="btn shadow-primary-hover" <?php if($menu['disabled']) echo 'disabled';?> data-link='<?php echo $menu['link'];?>'>
-            <h4><img src="/static/svg/admin-<?php echo $menuKey;?>.svg"/><?php echo $menu['name'];?></h4>
+            <h4 class="flex align-center w-full">
+              <div class="flex align-center">
+                <img src="static/svg/admin-<?php echo $menuKey;?>.svg"/>
+                <?php echo $menu['name'];?>
+              </div>
+              <?php echo html::a($config->admin->helpURL[$menuKey], "<i title='{$lang->help}' class='icon icon-help'></i> ", '_blank', 'class="text-muted setting-help"');?>
+            </h4>
             <p class="text-muted setting-desc" title="<?php echo $menu['desc'];?>"><?php echo $menu['desc'];?></p>
-            <?php echo html::a($config->admin->helpURL[$menuKey], "<i class='icon icon-help'></i> {$lang->help}", '_blank', 'class="text-muted setting-help"');?>
           </button>
         </div>
         <?php endforeach;?>
@@ -40,9 +45,9 @@
         <?php foreach($plugins as $plugin):?>
         <?php $pluginDesc = preg_replace('/[[:cntrl:]]/mu', '', strip_tags($plugin->abstract));?>
         <div class="plugin-item shadow-primary-hover" data-link='<?php echo $plugin->viewLink;?>'>
-          <a href="<?php echo $plugin->viewLink;?>" class='ext-download' target='_blank'><i class='icon icon-download-alt text-primary bg-primary-100 pd-3'></i></a>
+          <span class='ext-download'><i class='icon icon-download-alt text-primary bg-primary-100 pd-3'></i></span>
           <h4 class="plug-title" title="<?php echo $plugin->name;?>"><?php echo $plugin->name;?></h4>
-          <p class='extension-desc' title="<?php echo $pluginDesc;?>"><?php echo $pluginDesc;?></p>
+          <p class='extension-desc text-muted' title="<?php echo $pluginDesc;?>"><?php echo $pluginDesc;?></p>
         </div>
         <?php endforeach;?>
       </div>
@@ -53,19 +58,22 @@
       <div class="flex bottom">
         <div class="panel official">
           <div class="panel-title"><?php echo $lang->admin->officialAccount?></div>
-	  <div class="flex main-panel">
-	    <div class="official-img"></div>
-	    <div class="official-content">
-            <div class="title">
-              <?php echo $lang->admin->followUs?>
-              <?php if(!$hasInternet):?>
-              <i class="icon follow-us icon-arrow-right text-primary"></i>
-              <?php endif;?>
+          <div class="flex main-panel">
+            <div class="official-img"></div>
+            <div class="official-content">
+              <div class="title">
+                <?php echo $lang->admin->followUs?>
+                <?php if(!$hasInternet):?>
+                <i class="icon follow-us icon-arrow-right text-primary"></i>
+                <?php endif;?>
               </div>
-            <div class="content"> <?php echo $lang->admin->followUsContent?></div>
-          </div>
+              <div class="content"> <?php echo $lang->admin->followUsContent?></div>
+            </div>
+            </div>
+            <?php if(!$bind and !$ignore and $hasInternet and common::hasPriv('admin', 'register')):?>
+              <div class="panel-link"> <?php echo sprintf($lang->admin->notice->register, html::a(inlink('register'), $lang->admin->registerNotice->submitHere, '', 'class="text-primary"'));?></div>
+            <?php endif;?>
         </div>
-      </div>
       <?php if($publicClass):?>
       <div class="panel publicClass">
         <div class="panel-title">
@@ -75,7 +83,7 @@
         <div class="classList flex">
           <?php foreach($publicClass as $class):?>
           <a class="classItem shadow-primary-hover" href='<?php echo $class->viewLink;?>' target='_blank'>
-	    <div class="imgBack">
+	      <div class="imgBack">
               <div class="classImg" style="background-image: url('<?php echo $class->image;?>');"></div>
             </div>
             <div class="classContent"><?php echo $class->name;?></div>
@@ -110,7 +118,7 @@
       </div>
       <?php foreach($dynamics as $dynamic):?>
       <div class="dynamic-block">
-        <div class="dynamic-content"><i class="icon icon-horn text-primary pr-4 font-20"></i><?php echo html::a($dynamic->link, $dynamic->title, '_blank');?></div>
+        <div class="dynamic-content" title=<?php echo $dynamic->title ?>><i class="icon icon-horn text-primary pr-4 font-20"></i><?php echo html::a($dynamic->link, $dynamic->title, '_blank');?></div>
         <div class="dynamic-time"><?php echo substr($dynamic->addedDate, 0, 10);?></div>
       </div>
       <?php endforeach;?>

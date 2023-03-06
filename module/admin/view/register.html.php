@@ -23,7 +23,7 @@
   </div>
 </div>
 <div id='mainContent' class='main-row'>
-  <div class='col-md-6'>
+  <div <?php if(common::hasPriv('admin', 'bind')) echo "class='col-md-6'";?>>
     <div class='panel'>
       <div class='panel-heading'><strong><?php echo $lang->admin->registerNotice->common?></strong></div>
       <form class='mw-600px' method="post" target="hiddenwin">
@@ -94,6 +94,7 @@
       </form>
     </div>
   </div>
+  <?php if(common::hasPriv('admin', 'bind')):?>
   <div class='col-md-6'>
     <div class='panel'>
       <div class='panel-heading'><strong><?php echo $lang->admin->registerNotice->bind?></strong></div>
@@ -118,6 +119,7 @@
       </form>
     </div>
   </div>
+  <?php endif;?>
 </div>
 <script>
 $(function()

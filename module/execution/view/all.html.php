@@ -15,7 +15,7 @@
 js::import($jsRoot . 'dtable/min.js');
 css::import($jsRoot . 'dtable/min.css');
 
-$cols       = $this->execution->generateCol();
+$cols       = $this->execution->generateCol($orderBy);
 $executions = $this->execution->generateRow($executionStats, $users, $productID);
 
 $sortLink = $this->createLink('execution', 'all', "status=$status&orderBy={orderBy}&productID=$productID&param=$param&recTotal=$pager->recTotal&recPerPage=$pager->recPerPage&pageID=$pager->pageID");
@@ -32,6 +32,7 @@ js::set('isCNLang', !$this->loadModel('common')->checkNotCN());
 ?>
 
 <?php $canBatchEdit = common::hasPriv('execution', 'batchEdit');?>
+<?php $canBatchChangeStatus = common::hasPriv('execution', 'batchChangeStatus');?>
 <div id='mainMenu' class='clearfix'>
   <div class='btn-toolBar pull-left'>
     <?php if($from == 'project'):?>
@@ -80,7 +81,7 @@ js::set('isCNLang', !$this->loadModel('common')->checkNotCN());
     </p>
   </div>
   <?php else:?>
-  <form class='main-table' id='' method='post' action='<?php echo inLink('batchEdit');?>'>
+  <form class='main-table' id='executionForm' method='post'>
     <div class="table-header fixed-right">
       <nav class="btn-toolbar pull-right setting"></nav>
     </div>
@@ -92,7 +93,21 @@ js::set('isCNLang', !$this->loadModel('common')->checkNotCN());
         {
             $actionLink = $this->createLink('project', 'batchEdit');
             $misc       = "id='batchEditBtn'";
-            echo html::commonButton($lang->edit, $misc); 
+            echo html::commonButton($lang->edit, $misc);
+        }
+        if($canBatchChangeStatus)
+        {
+            $changeStatusHtml  = "<div class='btn-group dropup'>";
+            $changeStatusHtml .= "<button data-toggle='dropdown' type='button' class='btn'>{$this->lang->statusAB} <span class='caret'></span></button>";
+            $changeStatusHtml .= "<div class='dropdown-menu search-list'><div class='list-group'>";
+            foreach($this->lang->execution->statusList as $status => $statusText)
+            {
+                $actionLink        = $this->createLink('execution', 'batchChangeStatus', "status=$status");
+                $changeStatusHtml .= html::a('#', $statusText, '', "class='statusLink' data-link='$actionLink'  onmouseover=\"setBadgeStyle(this, true);\" onmouseout=\"setBadgeStyle(this, false)\"");
+            }
+            $changeStatusHtml .= "</div></div></div>";
+
+            echo $changeStatusHtml;
         }
         ?>
       </div>
@@ -102,16 +117,42 @@ js::set('isCNLang', !$this->loadModel('common')->checkNotCN());
   <script>
   cols = JSON.parse(cols);
   data = JSON.parse(data);
-  const options = {
-      height: 'auto',
+  const options =
+  {
       striped: true,
       plugins: ['nested', 'checkable'],
       checkOnClickRow: true,
       sortLink: createSortLink,
       cols: cols,
       data: data,
+      footer: false,
+      responsive: true,
       onCheckChange: toggleActions,
+      height: function(height)
+      {
+          return Math.min($(window).height() - $('#header').outerHeight() - $('#mainMenu').outerHeight() - $('.table-footer').outerHeight() - 30, height);
+      },
+      onRenderCell: function(result, info)
+      {
+          if(info.col.name === 'burn' && Array.isArray(info.row.data.burns) && info.row.data.burns.length)
+          {
+              tryRenderSparkline();
+              return [{html: '<span class="sparkline pending text-left no-padding" values="' + info.row.data.burns.join(',') + '"></span>'}];
+          }
+          return result;
+      }
   };
+
+  function renderSparkline()
+  {
+      $('#myTable .dtable-rows .sparkline.pending').removeClass('pending').sparkline();
+  }
+
+  function tryRenderSparkline()
+  {
+      if(window.renderingSparkline) clearTimeout(window.renderingSparkline);
+      window.renderingSparkline = setTimeout(renderSparkline, 200);
+  }
 
   function createSortLink(col)
   {
@@ -145,19 +186,12 @@ js::set('isCNLang', !$this->loadModel('common')->checkNotCN());
 
   $('#batchEditBtn').click(function()
   {
-      var batchEditLink = createLink('execution', 'batchEdit');
-      var tempform      = document.createElement("form");
-      tempform.action   = batchEditLink;
-      tempform.method   = "post";
-      tempform.style.display = "none";
+      buildForm(createLink('execution', 'batchEdit'));
+  })
 
-      var opt   = document.createElement("input");
-      opt.name  = 'executionIDList';
-      opt.value = checkItems;
-
-      tempform.appendChild(opt);
-      document.body.appendChild(tempform);
-      tempform.submit();
+  $('.statusLink').click(function()
+  {
+      buildForm($(this).data('link'), 'hiddenwin');
   })
   </script>
   <?php endif;?>

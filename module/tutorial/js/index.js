@@ -360,7 +360,8 @@ $(function()
             else
             {
                 var menuModule = task.nav.menuModule || task.nav['module'];
-                var $navbar = $$('#navbar');
+                var $navbar    = $$('#navbar');
+                if(task.nav.app == 'admin') $navbar = $$('.settings-list');
                 var $navbarItem = $navbar.find('[data-id="' + menuModule + '"]');
                 var targetPageTip = lang.targetPageTip.replace('%s', task.nav.targetPageName || lang.target);
                 if($navbarItem.length && !$navbarItem.hasClass('active'))
@@ -408,6 +409,7 @@ $(function()
                     else
                     {
                         var $modulemenu = $$('#subNavbar');
+                        if(task.nav.app == 'admin') $modulemenu = $$('#navbar');
                         var $modulemenuItem = $modulemenu.find('[data-id="' + task.nav.menu + '"]');
                         if($modulemenuItem.length && !$modulemenuItem.hasClass('active'))
                         {
