@@ -3041,6 +3041,14 @@ EOD;
             }
             if($productsStatus[$object->product] == 'closed') return false;
         }
+        elseif(!empty($object->product) and is_string($object->product) and empty($config->CRProduct))
+        {
+            $products      = array(0) + explode(',', $object->product);
+            $products      = $app->control->loadModel('product')->getByIdList($products);
+            $productStatus = array();
+            foreach($products as $product) $productStatus[$product->status] = 1;
+            if(!empty($productStatus['closed']) and count($productStatus) == 1) return false;
+        }
 
         /* Check the execution is closed. */
         $productModuleList = array('story', 'bug', 'testtask');

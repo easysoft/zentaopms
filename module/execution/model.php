@@ -386,6 +386,8 @@ class executionModel extends model
 
         if($project->model == 'waterfall' or $project->model == 'waterfallplus')
         {
+            $_POST['products'] = array_filter($_POST['products']);
+            if(empty($_POST['products'])) dao::$errors['products0'] = $this->lang->project->errorNoProducts;
             $this->checkWorkload('create', $_POST['percent'], $project);
             if(dao::isError()) return false;
         }
@@ -1883,7 +1885,7 @@ class executionModel extends model
             ->page($pager, 't1.id')
             ->fetchAll('id');
 
-        if(empty($productID) and !empty($executions)) $projectProductIdList = $this->dao->select('project, product')->from(TABLE_PROJECTPRODUCT)->where('project')->in(array_keys($executions))->fetchPairs();
+        if(empty($productID) and !empty($executions)) $projectProductIdList = $this->dao->select('project, GROUP_CONCAT(product) as product')->from(TABLE_PROJECTPRODUCT)->where('project')->in(array_keys($executions))->groupBy('project')->fetchPairs();
 
         $hours = $this->loadModel('project')->computerProgress($executions);
         $burns = $this->getBurnData($executions);
