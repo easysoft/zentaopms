@@ -302,7 +302,7 @@ $lang->project->featureBar['testcase']['all']         = '所有';
 $lang->project->featureBar['testcase']['wait']        = '待评审';
 $lang->project->featureBar['testcase']['needconfirm'] = "需求变动";
 $lang->project->featureBar['testcase']['group']       = '分组查看';
-$lang->project->featureBar['testcase']['zerocase']    = "零用例需求";
+$lang->project->featureBar['testcase']['zerocase']    = "零用例{$lang->SRCommon}";
 $lang->project->featureBar['testcase']['suite']       = '套件';
 $lang->project->featureBar['testcase']['autocase']    = '自动化';
 

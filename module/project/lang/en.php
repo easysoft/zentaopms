@@ -302,7 +302,7 @@ $lang->project->featureBar['testcase']['all']         = 'All';
 $lang->project->featureBar['testcase']['wait']        = 'Waiting';
 $lang->project->featureBar['testcase']['needconfirm'] = "Story Changed";
 $lang->project->featureBar['testcase']['group']       = 'Group View';
-$lang->project->featureBar['testcase']['zerocase']    = "Zero Case Story";
+$lang->project->featureBar['testcase']['zerocase']    = "Zero Case {$lang->SRCommon}";
 $lang->project->featureBar['testcase']['suite']       = 'Suite';
 $lang->project->featureBar['testcase']['autocase']    = 'Automated';
 

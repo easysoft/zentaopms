@@ -295,3 +295,6 @@ if(!helper::hasFeature('meeting'))      $config->dev->skipMenus['execution']['me
 $config->dev->liteTagMethod['my-contribute'] = 'contribute_task';
 
 $config->dev->onlyMainMenu = array('kanban');
+
+$config->dev->skipTags['project-testcase'] = array('suite', 'autocase');
+$config->dev->skipTags['testcase-browse']  = array('casetype', 'suite', 'autocase');

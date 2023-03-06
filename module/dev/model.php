@@ -448,6 +448,7 @@ class devModel extends model
 
             foreach($featureBars as $feature => $featureName)
             {
+                if(isset($this->config->dev->skipTags["$module-$method"]) and in_array($feature, $this->config->dev->skipTags["$module-$method"])) continue;
                 $moreSelectsTags = isset($defaultLang->{$module}->moreSelects[$method][$feature]) ? $defaultLang->{$module}->moreSelects[$method][$feature] : '';
                 if($moreSelectsTags)
                 {
