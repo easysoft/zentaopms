@@ -209,6 +209,7 @@ $lang->stage->type        = 'Stage Type';
 $lang->stage->list        = 'Stage List';
 $lang->stage->percent     = 'Workload Ratio';
 $lang->execution->list    = "{$lang->executionCommon} List";
+$lang->execution->CFD     = "Cumulative Flow Diagrams";
 $lang->kanban->common     = 'Kanban';
 $lang->backup->common     = 'Backup';
 $lang->action->trash      = 'Recycle';

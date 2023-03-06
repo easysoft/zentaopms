@@ -2899,7 +2899,7 @@ class projectModel extends model
             $executionID = $this->dao->select('id')->from(TABLE_EXECUTION)
                 ->where('project')->eq($projectID)
                 ->andWhere('multiple')->eq('0')
-                ->andWhere('type')->eq('sprint')
+                ->andWhere('type')->in('kanban,sprint')
                 ->andWhere('deleted')->eq('0')
                 ->fetch('id');
         }
