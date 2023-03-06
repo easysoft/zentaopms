@@ -15,7 +15,7 @@ $lang->my->myTestCase      = 'My Cases';
 $lang->my->story           = 'My Stories';
 $lang->my->doc             = "My Docs";
 $lang->my->createProgram   = 'Create Program';
-$lang->my->project         = "My Projects";
+$lang->my->project         = "My {$lang->projectCommon}s";
 $lang->my->execution       = "My {$lang->executionCommon}s";
 $lang->my->audit           = 'Review';
 $lang->my->issue           = 'My Issues';
@@ -58,7 +58,7 @@ $lang->my->dynamicAction    = 'Dynamic';
 $lang->my->myExecutions = "My Executions";
 $lang->my->name         = 'Name';
 $lang->my->code         = 'Code';
-$lang->my->projects     = 'Projects';
+$lang->my->projects     = "{$lang->projectCommon}s";
 $lang->my->executions   = 'Executions';
 
 $lang->my->taskMenu = new stdclass();
@@ -96,27 +96,27 @@ $lang->my->form->lblContact = 'Contact Info';
 $lang->my->form->lblAccount = 'Account Info';
 
 $lang->my->programLink   = 'Program Default Page';
-$lang->my->productLink   = 'Product Default Page';
-$lang->my->projectLink   = 'Project Default Page';
+$lang->my->productLink   = $lang->productCommon . ' Default Page';
+$lang->my->projectLink   = $lang->projectCommon . ' Default Page';
 $lang->my->executionLink = 'Execution Default Page';
 
 $lang->my->programLinkList = array();
 $lang->my->programLinkList['program-browse']  = 'Project Set List/View all project sets';
 $lang->my->programLinkList['program-kanban']  = 'Project Set Kanban/You can visually view the progress of all project sets';
-$lang->my->programLinkList['program-project'] = 'Project list of the most recent project set/You can view all items under the current project set';
+$lang->my->programLinkList['program-project'] = "{$lang->projectCommon} list of the most recent {$lang->projectCommon} set/You can view all items under the current {$lang->projectCommon} set";
 
 $lang->my->productLinkList = array();
-$lang->my->productLinkList['product-all']       = 'Product List/Can view all products';
-$lang->my->productLinkList['product-kanban']    = 'Product Kanban/You can visually view the progress of all products';
-$lang->my->productLinkList['product-index']     = 'All product dashboards/You can view the statistics of all products';
-$lang->my->productLinkList['product-dashboard'] = 'Last product dashboard/You can view the current product overview';
-$lang->my->productLinkList['product-browse']    = 'Demand list of the latest product/You can view the demand information under the current product';
+$lang->my->productLinkList['product-all']       = "{$lang->productCommon} List/Can view all {$lang->productCommon}s";
+$lang->my->productLinkList['product-kanban']    = "{$lang->productCommon} Kanban/You can visually view the progress of all {$lang->productCommon}s";
+$lang->my->productLinkList['product-index']     = "All {$lang->productCommon} dashboards/You can view the statistics of all {$lang->productCommon}s";
+$lang->my->productLinkList['product-dashboard'] = "Last {$lang->productCommon} dashboard/You can view the current {$lang->productCommon} overview";
+$lang->my->productLinkList['product-browse']    = "Demand list of the latest {$lang->productCommon}/You can view the demand information under the current {$lang->productCommon}";
 
 $lang->my->projectLinkList = array();
-$lang->my->projectLinkList['project-browse']    = 'Project List/Can view all items';
-$lang->my->projectLinkList['project-kanban']    = 'Project Kanban/The project board can visually view the progress of all projects';
-$lang->my->projectLinkList['project-execution'] = 'All execution lists under the project/View all execution information';
-$lang->my->projectLinkList['project-index']     = 'Recent Project Dashboard/You can view the current project overview';
+$lang->my->projectLinkList['project-browse']    = "{$lang->projectCommon} List/Can view all items";
+$lang->my->projectLinkList['project-kanban']    = "{$lang->projectCommon} Kanban/The {$lang->projectCommon} board can visually view the progress of all {$lang->projectCommon}s";
+$lang->my->projectLinkList['project-execution'] = "All execution lists under the {$lang->projectCommon}/View all execution information";
+$lang->my->projectLinkList['project-index']     = "Recent Project Dashboard/You can view the current {$lang->projectCommon} overview";
 
 $lang->my->executionLinkList = array();
 $lang->my->executionLinkList['execution-all']             = 'Execution list/You can view all executions';
