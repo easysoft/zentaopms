@@ -17,7 +17,7 @@ $lang->bug->branch           = 'Branch/Platform';
 $lang->bug->productplan      = 'Plan';
 $lang->bug->module           = 'Module';
 $lang->bug->moduleAB         = 'Module';
-$lang->bug->project          = 'Project';
+$lang->bug->project          = $lang->projectCommon;
 $lang->bug->execution        = $lang->execution->common;
 $lang->bug->kanban           = 'Kanban';
 $lang->bug->story            = 'Story';
@@ -95,9 +95,9 @@ $lang->bug->toCase           = 'To Case';
 $lang->bug->colorTag         = 'Color';
 $lang->bug->fixedRate        = 'Fixed Rate';
 $lang->bug->noticefeedbackBy = 'NoticeFeedbackBy';
-$lang->bug->selectProjects   = 'Select Projects';
+$lang->bug->selectProjects   = "Select {$lang->projectCommon}s";
 $lang->bug->nextStep         = 'Next Step';
-$lang->bug->noProject        = 'Haven’t chosen a project yet.';
+$lang->bug->noProject        = "Haven’t chosen a {$lang->projectCommon} yet.";
 $lang->bug->noExecution      = 'Haven’t chosen a ' . strtolower($lang->execution->common) . ' yet.';
 
 /* Method list. */
@@ -192,8 +192,8 @@ global $config;
 /* Legend list. */
 $lang->bug->legendBasicInfo             = 'Basic Info';
 $lang->bug->legendAttatch               = 'Files';
-$lang->bug->legendPRJExecStoryTask      = 'Project/' . $lang->executionCommon . '/Story/Task';
-$lang->bug->legendExecStoryTask         = 'Porject/Story/Task';
+$lang->bug->legendPRJExecStoryTask      = "{$lang->SRCommon}/{$lang->executionCommon}/Story/Task";
+$lang->bug->legendExecStoryTask         = "{$lang->SRCommon}/Story/Task";
 $lang->bug->lblTypeAndSeverity          = 'Type/Severity';
 $lang->bug->lblSystemBrowserAndHardware = 'System/Browser';
 $lang->bug->legendSteps                 = 'Repro Steps';
