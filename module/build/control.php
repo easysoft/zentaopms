@@ -66,6 +66,7 @@ class build extends control
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink('build', 'view', "buildID=$buildID") . "#app={$this->app->tab}"));
         }
 
+        $status = empty($this->config->CRProduct) ? 'noclosed' : '';
         $this->loadModel('product');
         $this->loadModel('project');
         /* Set menu. */
@@ -74,7 +75,7 @@ class build extends control
             $this->project->setMenu($projectID);
             $executions    = $this->execution->getPairs($projectID, 'all', 'stagefilter|leaf|order_asc');
             $executionID   = empty($executionID) ? key($executions) : $executionID;
-            $productGroups = $executionID ? $this->product->getProducts($executionID) : array();
+            $productGroups = $executionID ? $this->product->getProducts($executionID, $status) : array();
             $branchGroups  = $executionID ? $this->project->getBranchesByProject($executionID) : array();
             $this->session->set('project', $projectID);
         }
@@ -83,7 +84,7 @@ class build extends control
             $execution     = $this->execution->getByID($executionID);
             $executions    = $this->execution->getPairs($execution->project, 'all', 'stagefilter|leaf|order_asc');
             $projectID     = $execution->project;
-            $productGroups = $this->product->getProducts($executionID);
+            $productGroups = $this->product->getProducts($executionID, $status);
             $branchGroups  = $this->project->getBranchesByProject($executionID);
             $this->execution->setMenu($executionID);
             $this->session->set('project', $execution->project);
@@ -93,7 +94,7 @@ class build extends control
             $execution     = $this->execution->getByID($executionID);
             $projectID     = $execution ? $execution->project : 0;
             $executions    = $this->execution->getPairs($projectID, 'all', 'stagefilter|leaf');
-            $productGroups = $this->product->getProducts($executionID);
+            $productGroups = $this->product->getProducts($executionID, $status);
             $branchGroups  = $this->project->getBranchesByProject($executionID);
         }
 
@@ -171,14 +172,15 @@ class build extends control
         if($this->app->tab == 'execution') $this->execution->setMenu($build->execution);
 
         $builds = array();
+        $status = empty($this->config->CRProduct) ? 'noclosed' : '';
         if($build->execution)
         {
-            $productGroups = $this->product->getProducts($build->execution);
+            $productGroups = $this->product->getProducts($build->execution, $status);
             $branches      = $this->loadModel('branch')->getList($build->product, $build->execution, 'all');
         }
         else
         {
-            $productGroups = $this->product->getProducts($build->project);
+            $productGroups = $this->product->getProducts($build->project, $status);
             $branches      = $this->loadModel('branch')->getList($build->product, $build->project, 'all');
             $builds        = $this->build->getBuildPairs($build->product, 'all', 'noempty,notrunk,singled,separate', $build->project, 'project', $build->builds, false);
         }

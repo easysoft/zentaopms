@@ -89,15 +89,17 @@ if(helper::hasFeature('waterfall') or helper::hasFeature('waterfallplus')) $lang
 $lang->admin->menuList->model['tabMenu']['common']['build']        = array('link' => "{$lang->build->common}|custom|required|module=build", 'alias' => 'set', 'exclude' => 'custom');
 $lang->admin->menuList->model['tabMenu']['common']['flow']         = array('link' => "{$lang->custom->flow}|custom|flow|", 'divider' => true);
 $lang->admin->menuList->model['tabMenu']['common']['code']         = array('link' => "{$lang->code}|custom|code|");
+
+$lang->admin->menuList->model['tabMenu']['common']['percent']      = array('link' => "{$lang->stage->percent}|custom|percent|");
 $lang->admin->menuList->model['tabMenu']['common']['hours']        = array('link' => "{$lang->workingHour}|custom|hours|", 'subModule' => 'holiday', 'links' => array('holiday|browse|', 'custom|hours|'));
 if(helper::hasFeature('waterfall')) $lang->admin->menuList->model['tabMenu']['waterfall']['stage'] = array('link' => "{$lang->stage->list}|stage|browse|", 'subModule' => 'stage', 'exclude' => 'stage-plusbrowse');
 if(helper::hasFeature('waterfallplus')) $lang->admin->menuList->model['tabMenu']['waterfallplus']['stage'] = array('link' => "{$lang->stage->list}|stage|plusbrowse|", 'subModule' => 'stage', 'exclude' => 'stage-browse');
-
 $lang->admin->menuList->model['tabMenu']['menuOrder']['common']['5']        = 'project';
 if(helper::hasFeature('waterfall') or helper::hasFeature('waterfallplus')) $lang->admin->menuList->model['tabMenu']['menuOrder']['common']['7']        = 'stage';
 $lang->admin->menuList->model['tabMenu']['menuOrder']['common']['10']       = 'build';
 $lang->admin->menuList->model['tabMenu']['menuOrder']['common']['35']       = 'flow';
 $lang->admin->menuList->model['tabMenu']['menuOrder']['common']['40']       = 'code';
+$lang->admin->menuList->model['tabMenu']['menuOrder']['common']['43']       = 'percent';
 $lang->admin->menuList->model['tabMenu']['menuOrder']['common']['45']       = 'hours';
 if(helper::hasFeature('waterfall')) $lang->admin->menuList->model['tabMenu']['menuOrder']['waterfall']['5']     = 'stage';
 if(helper::hasFeature('waterfallplus')) $lang->admin->menuList->model['tabMenu']['menuOrder']['waterfallplus']['5'] = 'stage';

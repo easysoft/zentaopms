@@ -25,15 +25,17 @@
             <td></td>
             <td></td>
           </tr>
+          <?php if(isset($config->setPercent) and $config->setPercent == 1):?>
           <tr>
             <th><?php echo $lang->stage->percent;?></th>
             <td>
               <div class='input-group'>
                 <?php echo html::input('percent', '', "class='form-control'");?>
-                <span class='input-group-addon'>%</span> 
+                <span class='input-group-addon'>%</span>
               </div>
             </td>
           </tr>
+          <?php endif;?>
           <tr>
             <th><?php echo $lang->stage->type;?></th>
             <td><?php echo html::select('type', $lang->stage->typeList, '',  "class='form-control chosen'");?></td>

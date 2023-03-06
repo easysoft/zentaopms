@@ -1446,6 +1446,7 @@ $lang->resource->custom->deleteStoryConcept = 'deleteStoryConcept';
 $lang->resource->custom->kanban             = 'kanban';
 $lang->resource->custom->code               = 'code';
 $lang->resource->custom->hours              = 'hours';
+$lang->resource->custom->percent            = 'percent';
 
 $lang->custom->methodOrder[5]  = 'index';
 $lang->custom->methodOrder[10] = 'set';
@@ -1464,6 +1465,7 @@ $lang->custom->methodOrder[70] = 'deleteStoryConcept';
 $lang->custom->methodOrder[75] = 'kanban';
 $lang->custom->methodOrder[80] = 'code';
 $lang->custom->methodOrder[85] = 'hours';
+$lang->custom->methodOrder[90] = 'percent';
 
 $lang->resource->datatable = new stdclass();
 $lang->resource->datatable->setGlobal = 'setGlobal';
