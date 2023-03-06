@@ -281,6 +281,13 @@ $lang->project->featureBar['browse']['doing']     = 'Doing';
 $lang->project->featureBar['browse']['suspended'] = 'Suspended';
 $lang->project->featureBar['browse']['closed']    = 'Closed';
 
+$lang->project->featureBar['index']['all']       = 'All';
+$lang->project->featureBar['index']['undone']    = 'Unfinished';
+$lang->project->featureBar['index']['wait']      = 'Waiting';
+$lang->project->featureBar['index']['doing']     = 'Doing';
+$lang->project->featureBar['index']['suspended'] = 'Suspended';
+$lang->project->featureBar['index']['closed']    = 'Closed';
+
 $lang->project->featureBar['execution']['all']       = 'All';
 $lang->project->featureBar['execution']['undone']    = 'Unfinished';
 $lang->project->featureBar['execution']['wait']      = 'Waiting';

@@ -281,6 +281,13 @@ $lang->project->featureBar['browse']['doing']     = 'En Cours';
 $lang->project->featureBar['browse']['suspended'] = 'Suspendues';
 $lang->project->featureBar['browse']['closed']    = 'Fermées';
 
+$lang->project->featureBar['index']['all']       = 'All';
+$lang->project->featureBar['index']['undone']    = 'Unfinished';
+$lang->project->featureBar['index']['wait']      = 'Waiting';
+$lang->project->featureBar['index']['doing']     = 'Doing';
+$lang->project->featureBar['index']['suspended'] = 'Suspended';
+$lang->project->featureBar['index']['closed']    = 'Closed';
+
 $lang->project->featureBar['execution']['all']       = "Tous les {$lang->executionCommon}s";
 $lang->project->featureBar['execution']['undone']    = 'Non Terminé';
 $lang->project->featureBar['execution']['wait']      = 'En attente';

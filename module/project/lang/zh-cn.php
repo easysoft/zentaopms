@@ -281,6 +281,13 @@ $lang->project->featureBar['browse']['doing']     = '进行中';
 $lang->project->featureBar['browse']['suspended'] = '已挂起';
 $lang->project->featureBar['browse']['closed']    = '已关闭';
 
+$lang->project->featureBar['index']['all']       = '全部';
+$lang->project->featureBar['index']['undone']    = '未完成';
+$lang->project->featureBar['index']['wait']      = '未开始';
+$lang->project->featureBar['index']['doing']     = '进行中';
+$lang->project->featureBar['index']['suspended'] = '已挂起';
+$lang->project->featureBar['index']['closed']    = '已关闭';
+
 $lang->project->featureBar['execution']['all']       = '全部';
 $lang->project->featureBar['execution']['undone']    = '未完成';
 $lang->project->featureBar['execution']['wait']      = '未开始';
@@ -410,8 +417,7 @@ $lang->project->copyProject->daysTips           = '『可用工作日』应当�
 
 $lang->project->linkBranchStoryByPlanTips = "项目按计划关联需求时，只导入本项目所关联%s的激活状态的需求。";
 $lang->project->linkNormalStoryByPlanTips = "项目按计划关联需求时，只导入激活状态的需求。";
-
-$lang->project->cannotManageProducts = "该项目为项目型项目，不能关联产品。";
+$lang->project->cannotManageProducts      = "该项目为项目型项目，不能关联产品。";
 
 $lang->project->featureBar['dynamic']['all']       = '全部';
 $lang->project->featureBar['dynamic']['today']     = '今天';
