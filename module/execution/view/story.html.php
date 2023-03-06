@@ -62,7 +62,7 @@
     </div>
   </div>
   <div class="btn-toolbar pull-left">
-    <?php foreach($lang->story->featureBar['browse'] as $featureType => $label):?>
+    <?php foreach($lang->execution->featureBar['story'] as $featureType => $label):?>
     <?php $active = $type == $featureType ? 'btn-active-text' : '';?>
     <?php $label  = "<span class='text'>$label</span>";?>
     <?php if($type == $featureType) $label .= " <span class='label label-light label-badge'>{$pager->recTotal}</span>";?>

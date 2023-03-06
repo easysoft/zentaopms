@@ -94,3 +94,5 @@ $lang->testreport->bugSummary = <<<EOD
 用例执行产生<strong>%s</strong>个Bug <a data-toggle='tooltip' class='text-warning' title='{$lang->testreport->fromCaseBugTip}'><i class='icon-help'></i></a>。
 有效Bug率（方案为已解决或延期 / 状态为已解决或已关闭）：<strong>%s</strong>，用例发现Bug率（用例创建的Bug / 发现Bug数）：<strong>%s</strong>
 EOD;
+
+$lang->testreport->featureBar['browse']['browse'] = '报告列表';

@@ -26,10 +26,12 @@
     <?php endif;?>
     <?php $total = 0;?>
     <?php foreach($tasks as $productTasks) $total += count($productTasks);?>
+    <?php foreach($this->lang->execution->featureBar['testtask'] as $label):?>
     <a href='' class='btn btn-link btn-active-text'>
-      <span class='text'><?php echo $lang->testtask->browse;?></span>
+      <span class='text'><?php echo $label;?></span>
       <span class="label label-light label-badge"><?php echo $total;?></span>
     </a>
+    <?php endforeach;?>
   </div>
   <div class="btn-toolbar pull-right">
     <?php if(common::canModify('execution', $execution)):?>

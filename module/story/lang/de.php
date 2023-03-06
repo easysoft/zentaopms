@@ -485,8 +485,8 @@ $lang->story->subDivideTip['notWait']    = 'The Story has been %s and cannot be 
 $lang->story->subDivideTip['notActive']  = "The %s is not active and cannot be subdivided.";
 $lang->story->subDivideTip['twinsSplit'] = 'The Twins Story cannot be subdivided.';
 
-$lang->story->featureBar['browse']['all']      = $lang->all;
-$lang->story->featureBar['browse']['unclosed'] = $lang->story->unclosed;
+$lang->story->featureBar['browse']['all']       = $lang->all;
+$lang->story->featureBar['browse']['unclosed']  = $lang->story->unclosed;
 $lang->story->featureBar['browse']['draft']     = $lang->story->statusList['draft'];
 $lang->story->featureBar['browse']['reviewing'] = $lang->story->statusList['reviewing'];
 

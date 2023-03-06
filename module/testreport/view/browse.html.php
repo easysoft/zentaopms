@@ -14,10 +14,12 @@
 <?php if($config->global->flow == 'full'):?>
 <div id='mainMenu' class='clearfix'>
   <div class='pull-left btn-toolbar'>
+    <?php foreach($this->lang->{$app->rawModule}->featureBar[$app->rawMethod] as $label):?>
     <span class='btn btn-link btn-active-text'>
-      <span class='text'><?php echo $lang->testreport->browse;?></span>
+      <span class='text'><?php echo $label;?></span>
       <span class="label label-light label-badge"><?php echo $pager->recTotal;?></span>
     </span>
+    <?php endforeach;?>
   </div>
   <div class='pull-right btn-toolbar'>
     <?php if($objectType == 'product' and $canBeChanged) common::printLink('testreport', 'create', "objectID=0&objectType=testtask&productID=$objectID", "<i class='icon icon-plus'></i> " . $lang->testreport->create, '', "class='btn btn-primary'");?>
