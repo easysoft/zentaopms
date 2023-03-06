@@ -1693,6 +1693,7 @@ $lang->resource->group->manageView         = 'manageView';
 $lang->resource->group->managePriv         = 'managePriv';
 $lang->resource->group->manageMember       = 'manageMember';
 $lang->resource->group->manageProjectAdmin = 'manageProjectAdmin';
+$lang->resource->group->permissionedit     = 'permissionedit';
 
 $lang->group->methodOrder[5]  = 'browse';
 $lang->group->methodOrder[10] = 'create';

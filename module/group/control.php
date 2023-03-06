@@ -380,4 +380,15 @@ class group extends control
             return print(js::locate($this->createLink('group', 'browse'), 'parent'));
         }
     }
+
+   /**
+     * edit permission.
+     *
+     * @access public
+     * @return void
+     */
+    public function permissionedit()
+    {
+        $this->display();
+    }
 }

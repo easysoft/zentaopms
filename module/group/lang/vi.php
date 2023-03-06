@@ -22,6 +22,7 @@ $lang->group->managePrivByModule = 'Quản lý Privileges by Module';
 $lang->group->byModuleTips       = '<span class="tips">(Press Shift/Ctrl to Multi-select)</span>';
 $lang->group->manageMember       = 'Quản lý Members';
 $lang->group->manageProjectAdmin = 'Manage Program Admins';
+$lang->group->permissionedit     = 'Permission Edit';
 $lang->group->confirmDelete      = 'Bạn có muốn xóa người dùng này group?';
 $lang->group->successSaved       = 'Đã lưu.';
 $lang->group->errorNotSaved      = 'Thất bại.  Vui lòng select actions and groups.';
