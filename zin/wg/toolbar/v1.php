@@ -7,10 +7,13 @@ class toolbar extends wg
 
     protected function onBuildItem($item)
     {
-        if (isset($item['type']) && $item['type'] === 'divider') return div()->addClass('toolbar-divider');
+        $item = ($item instanceof item) ? $item : (item(set($item)));
+        $type = $item->prop('type');
 
-        if(!($item instanceof item)) $item = item(set($item));
-        return btn(
+        if($type === 'divider') return div(setClass('toolbar-divider'));
+
+        return btn
+        (
             setClass('toolbar-item'),
             inherit($item)
         );
@@ -19,7 +22,8 @@ class toolbar extends wg
     protected function build()
     {
         $items = $this->prop('items');
-        return div(
+        return div
+        (
             setClass('toolbar'),
             set($this->props->skip(array_keys(static::getDefinedProps()))),
             is_array($items) ? array_map(array($this, 'onBuildItem'), $items) : null,
