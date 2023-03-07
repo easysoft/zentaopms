@@ -121,6 +121,7 @@ $lang->install->chmodLinux   = '需要修改目录 "%s" 的权限。<br />命令
 
 $lang->install->timezone       = '时区设置';
 $lang->install->defaultLang    = '默认语言';
+$lang->install->dbDriver       = 'Database Driver';
 $lang->install->dbHost         = '数据库服务器';
 $lang->install->dbHostNote     = '如果127.0.0.1无法访问，尝试使用localhost';
 $lang->install->dbPort         = '服务器端口';
@@ -132,6 +133,11 @@ $lang->install->dbPrefix       = '建表使用的前缀';
 $lang->install->clearDB        = '清空现有数据';
 $lang->install->importDemoData = '导入demo数据';
 $lang->install->working        = '工作方式';
+
+$lang->install->dbDriverList = array();
+$lang->install->dbDriverList['mysql'] = 'MySQL';
+$lang->install->dbDriverList['pgsql'] = 'PostgreSQL';
+$lang->install->dbDriverList['dm']    = '达梦';
 
 $lang->install->requestTypes['GET']       = '普通方式';
 $lang->install->requestTypes['PATH_INFO'] = '静态友好方式';

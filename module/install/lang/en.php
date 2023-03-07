@@ -121,6 +121,7 @@ $lang->install->chmodLinux   = ' "%s" permison has to be changed.<br /> Run <cod
 
 $lang->install->timezone       = 'Set Timezone';
 $lang->install->defaultLang    = 'Default Language';
+$lang->install->dbDriver       = 'Database Driver';
 $lang->install->dbHost         = 'Database Host';
 $lang->install->dbHostNote     = 'If 127.0.0.1 is not accessible, try localhost.';
 $lang->install->dbPort         = 'Host Port';
@@ -132,6 +133,11 @@ $lang->install->dbPrefix       = 'Table Prefix';
 $lang->install->clearDB        = 'Clean up existing data';
 $lang->install->importDemoData = 'Import Demo Data';
 $lang->install->working        = 'Operation Mode';
+
+$lang->install->dbDriverList = array();
+$lang->install->dbDriverList['mysql'] = 'MySQL';
+$lang->install->dbDriverList['pgsql'] = 'PostgreSQL';
+$lang->install->dbDriverList['dm']    = 'DM8';
 
 $lang->install->requestTypes['GET']       = 'GET';
 $lang->install->requestTypes['PATH_INFO'] = 'PATH_INFO';

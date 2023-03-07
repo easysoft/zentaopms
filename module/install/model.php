@@ -294,20 +294,20 @@ class installModel extends model
             return $return;
         }
 
-        /* Get mysql version. */
-        $version = $this->getMysqlVersion();
+        /* Get database version. */
+        $version = $this->getDatabaseVersion();
 
         /* If database no exits, try create it. */
-        if(!$this->dbExists())
+        if(!$this->dbh->dbExists())
         {
-            if(!$this->createDB($version))
+            if(!$this->dbh->createDB($version))
             {
                 $return->result = 'fail';
                 $return->error  = $this->lang->install->errorCreateDB;
                 return $return;
             }
         }
-        elseif($this->tableExits() and $this->post->clearDB == false)
+        elseif($this->dbh->tableExits(TABLE_CONFIG) and $this->post->clearDB == false)
         {
             $return->result = 'fail';
             $return->error  = $this->lang->install->errorTableExists;
@@ -333,6 +333,7 @@ class installModel extends model
      */
     public function setDBParam()
     {
+        $this->config->db->driver   = $this->post->dbDriver;
         $this->config->db->host     = $this->post->dbHost;
         $this->config->db->name     = $this->post->dbName;
         $this->config->db->user     = $this->post->dbUser;
@@ -350,15 +351,9 @@ class installModel extends model
      */
     public function connectDB()
     {
-        $dsn = "mysql:host={$this->config->db->host}; port={$this->config->db->port}";
         try
         {
-            $dbh = new PDO($dsn, $this->config->db->user, $this->config->db->password);
-            $dbh->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_OBJ);
-            $dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-            $dbh->exec("SET NAMES {$this->config->db->encoding}");
-            if(isset($this->config->db->strictMode) and $this->config->db->strictMode == false) $dbh->exec("SET @@sql_mode= ''");
-            return $dbh;
+            return new dbh($this->config->db);
         }
         catch (PDOException $exception)
         {
@@ -367,55 +362,18 @@ class installModel extends model
     }
 
     /**
-     * Check db exits or not.
-     *
-     * @access public
-     * @return bool
-     */
-    public function dbExists()
-    {
-        $sql = "SHOW DATABASES like '{$this->config->db->name}'";
-        return $this->dbh->query($sql)->fetch();
-    }
-
-    /**
-     * Check table exits or not.
-     *
-     * @access public
-     * @return void
-     */
-    public function tableExits()
-    {
-        $configTable = str_replace('`', "'", TABLE_CONFIG);
-        $sql = "SHOW TABLES FROM {$this->config->db->name} like $configTable";
-        return $this->dbh->query($sql)->fetch();
-    }
-
-    /**
-     * Get mysql version.
+     * Get database version.
      *
      * @access public
      * @return string
      */
-    public function getMysqlVersion()
+    public function getDatabaseVersion()
     {
+        if($this->config->db->driver != 'mysql') return 0;
+
         $sql = "SELECT VERSION() AS version";
         $result = $this->dbh->query($sql)->fetch();
         return substr($result->version, 0, 3);
-    }
-
-    /**
-     * Create database.
-     *
-     * @param  string    $version
-     * @access public
-     * @return bool
-     */
-    public function createDB($version)
-    {
-        $sql = "CREATE DATABASE `{$this->config->db->name}`";
-        if($version > 4.1) $sql .= " DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci";
-        return $this->dbh->query($sql);
     }
 
     /**
@@ -430,7 +388,7 @@ class installModel extends model
         /* Add exception handling to ensure that all SQL is executed successfully. */
         try
         {
-            $this->dbh->exec("USE {$this->config->db->name}");
+            $this->dbh->useDB($this->config->db->name);
 
             $dbFile = $this->app->getAppRoot() . 'db' . DS . 'zentao.sql';
             $tables = explode(';', file_get_contents($dbFile));

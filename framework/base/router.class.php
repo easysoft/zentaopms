@@ -391,6 +391,7 @@ class baseRouter
 
         $this->loadClass('front',  $static = true);
         $this->loadClass('filter', $static = true);
+        $this->loadClass('dbh',    $static = true);
         $this->loadClass('dao',    $static = true);
         $this->loadClass('mobile', $static = true);
 
@@ -2747,15 +2748,11 @@ class baseRouter
     {
         if(!isset($params->driver)) self::triggerError('no pdo driver defined, it should be mysql or sqlite', __FILE__, __LINE__, $exit = true);
         if(!isset($params->user)) return false;
-        if($params->driver == 'mysql')
-        {
-            $dsn = "mysql:host={$params->host}; port={$params->port}; dbname={$params->name}";
-        }
         try
         {
             $dbPassword = helper::decryptPassword($params->password);
 
-            $dbh = new PDO($dsn, $params->user, $dbPassword, array(PDO::ATTR_PERSISTENT => $params->persistant));
+            $dbh = new dbh($params);
             $dbh->exec("SET NAMES {$params->encoding}");
 
             /*
