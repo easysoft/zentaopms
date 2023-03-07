@@ -5,7 +5,7 @@ require_once dirname(__DIR__) . DS . 'icon' . DS . 'v1.php';
 
 class btn extends wg
 {
-    static $defineProps = 'icon?:string, text?:string, square?:bool, disabled?:bool, active?:bool, url?:string, target?:string, size?:string|number, trailingIcon?:string, caret?:string|bool, hint?:string, btnType?:string';
+    static $defineProps = 'icon?:string, text?:string, square?:bool, disabled?:bool, active?:bool, url?:string, target?:string, size?:string|number, trailingIcon?:string, caret?:string|bool, hint?:string, type?:string';
 
     public function onAddChild($child)
     {
@@ -28,15 +28,15 @@ class btn extends wg
 
         if(empty($url))
         {
-            // $props['type']        = $this->prop('btnType');
-            $props['data-url']    = $url;
-            $props['data-target'] = $target;
+            $props['type'] = $this->prop('type', 'button');
+            if(!isset($props['data-url'])) $props['data-url']    = $url;
+            if(!isset($props['data-target'])) $props['data-target'] = $target;
         }
         else
         {
             $props['tagName'] = 'a';
-            $props['href'] = $url;
-            $props['target'] = $target;
+            if(!isset($props['href']))   $props['href'] = $url;
+            if(!isset($props['target'])) $props['target'] = $target;
         }
         $props['title'] = $this->prop('hint');
 
