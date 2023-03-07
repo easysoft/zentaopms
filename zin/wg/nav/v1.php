@@ -22,7 +22,7 @@ class nav extends wg
     protected function build()
     {
         $items = $this->prop('items');
-        return h::nav
+        return h::menu
         (
             setClass('nav'),
             set($this->props->skip(array_keys(static::getDefinedProps()))),

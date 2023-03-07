@@ -1,9 +1,11 @@
 <?php
 namespace zin;
 
+require_once dirname(__DIR__) . DS . 'btn' . DS . 'v1.php';
+
 class toolbar extends wg
 {
-    protected static $defineProps = 'items?:array';
+    protected static $defineProps = 'items?:array, btnClass?:string, btnProps?: array';
 
     public function onBuildItem($item)
     {
@@ -12,9 +14,11 @@ class toolbar extends wg
 
         if($type === 'divider') return div(setClass('toolbar-divider'));
 
-        return btn
+        list($btnClass, $btnProps) = $this->prop(array('btnClass', 'btnProps'));
+        return new btn
         (
-            setClass('toolbar-item'),
+            setClass('toolbar-item', $btnClass),
+            is_array($btnProps) ? set($btnProps) : NULL,
             inherit($item)
         );
     }

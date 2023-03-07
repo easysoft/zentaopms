@@ -46,7 +46,7 @@ class btn extends wg
         $trailingIcon  = $this->prop('trailingIcon');
         $square        = $this->prop('square');
         $isEmptyText   = empty($text);
-        $onlyCaret     = $isEmptyText && empty($icon) && empty($trailingIcon);
+        $onlyCaret     = $isEmptyText && !empty($caret) && empty($icon) && empty($trailingIcon);
 
         $classList = array
         (
