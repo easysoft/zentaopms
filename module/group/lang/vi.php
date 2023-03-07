@@ -39,6 +39,7 @@ $lang->group->noneProject        = "No Project";
 $lang->group->addPriv            = 'Add Priv';
 $lang->group->servicePrivPackage = 'Service Priv Package';
 $lang->group->batchSetDependency = 'Batch Set Dependency';
+$lang->group->add                = 'Add';
 
 $lang->group->id      = 'ID';
 $lang->group->name    = 'Nhóm';

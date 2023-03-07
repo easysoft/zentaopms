@@ -53,6 +53,7 @@ $lang->group->addPriv            = 'Add Priv';
 $lang->group->managePrivPackage  = 'Manage Priv Package';
 $lang->group->batchSetDependency = 'Batch Set Dependency';
 $lang->group->createPrivPackage  = 'Create Priv Package';
+$lang->group->add                = 'Add';
 
 $lang->group->id       = 'ID';
 $lang->group->name     = 'Groupe';

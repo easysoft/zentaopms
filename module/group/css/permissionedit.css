@@ -1,1 +1,12 @@
+.mt-m {margin-top: 16px;}
+
 .flex-space-center {display: flex; justify-content: space-between; align-items: center;}
+#mainContent {display: flex; gap: 16px;}
+#mainContent > .main {flex: 1 1 75%;}
+#mainContent > .side {flex: 1 1 25%;}
+
+.priv-panel {background: #fff; padding: 10px; box-shadow: 0 1px 1px rgb(0 0 0 / 5%), 0 2px 6px 0 rgb(0 0 0 / 5%);}
+.priv-panel > .panel-content > .panel-list {display: flex; flex-wrap: wrap; padding-left: 16px;}
+.priv-panel > .panel-content > button {margin-top: 20px;}
+.panel-list > .priv-item {flex: 1 1 50%;}
+

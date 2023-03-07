@@ -53,6 +53,7 @@ $lang->group->addPriv            = '新增权限';
 $lang->group->managePrivPackage  = '维护权限包';
 $lang->group->batchSetDependency = '批量设置依赖';
 $lang->group->createPrivPackage  = '新增权限包';
+$lang->group->add                = '添加';
 
 $lang->group->id       = '编号';
 $lang->group->name     = '分组名称';
