@@ -427,10 +427,10 @@ $lang->bug->featureBar['browse']['unresolved']   = $lang->bug->unResolved;
 $lang->bug->featureBar['browse']['more']         = $lang->more;
 
 
-$lang->bug->moreSelects['unconfirmed']   = $lang->bug->unconfirmed;
-$lang->bug->moreSelects['assigntonull']  = $lang->bug->assignToNull;
-$lang->bug->moreSelects['longlifebugs']  = $lang->bug->longLifeBugs;
-$lang->bug->moreSelects['toclosed']      = $lang->bug->toClosed;
-$lang->bug->moreSelects['postponedbugs'] = $lang->bug->postponedBugs;
-$lang->bug->moreSelects['overduebugs']   = $lang->bug->overdueBugs;
-$lang->bug->moreSelects['needconfirm']   = $lang->bug->needConfirm;
+$lang->bug->moreSelects['browse']['more']['unconfirmed']   = $lang->bug->unconfirmed;
+$lang->bug->moreSelects['browse']['more']['assigntonull']  = $lang->bug->assignToNull;
+$lang->bug->moreSelects['browse']['more']['longlifebugs']  = $lang->bug->longLifeBugs;
+$lang->bug->moreSelects['browse']['more']['toclosed']      = $lang->bug->toClosed;
+$lang->bug->moreSelects['browse']['more']['postponedbugs'] = $lang->bug->postponedBugs;
+$lang->bug->moreSelects['browse']['more']['overduebugs']   = $lang->bug->overdueBugs;
+$lang->bug->moreSelects['browse']['more']['needconfirm']   = $lang->bug->needConfirm;
