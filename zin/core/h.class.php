@@ -46,6 +46,11 @@ class h extends wg
         return $data;
     }
 
+    public function type()
+    {
+        return $this->getTagName();
+    }
+
     protected function getPropsStr()
     {
         $skipProps   = array_keys(static::getDefinedProps());

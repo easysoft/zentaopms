@@ -284,6 +284,14 @@ class wg
         return $this;
     }
 
+    public function hasProp()
+    {
+        $names = func_get_args();
+        if(empty($names)) return false;
+        foreach ($names as $name) if(!$this->props->has($name)) return false;
+        return true;
+    }
+
     public function setDefaultProps($props)
     {
         if(!is_array($props) || empty($props)) return;
@@ -298,6 +306,11 @@ class wg
     public function type()
     {
         return get_called_class();
+    }
+
+    public function id()
+    {
+        return $this->prop('id');
     }
 
     protected function onCreated() {}
@@ -319,6 +332,10 @@ class wg
                 if($child instanceof wg || (is_object($child) && method_exists($child, 'toJsonData')))
                 {
                     $value[$index] = $child->toJsonData();
+                }
+                elseif(isHtml($child))
+                {
+                    $value[$index] = $child->data;
                 }
             }
             if($key === 'children')
@@ -356,10 +373,8 @@ class wg
 
     private static $gidSeed = 0;
 
-    public static function getBlockNameForWg($wgType)
+    public static function wgBlockMap()
     {
-        if($wgType instanceof wg) $wgType = $wgType->type();
-
         $wgName = get_called_class();
         if(!isset(wg::$wgToBlockMap[$wgName]))
         {
@@ -376,12 +391,20 @@ class wg
             }
             wg::$wgToBlockMap[$wgName] = $wgBlockMap;
         }
-        return isset(wg::$wgToBlockMap[$wgName][$wgType]) ? wg::$wgToBlockMap[$wgName][$wgType] : NULL;
+        return wg::$wgToBlockMap[$wgName];
     }
 
-    public static function nextGid()
+    public static function getBlockNameForWg($wg)
     {
-        return str_replace('\\', '_', get_called_class()) . '_' . ++static::$gidSeed;
+        $wgType = ($wg instanceof wg) ? $wg->type() : $wg;
+        $wgBlockMap = static::wgBlockMap();
+        if(strpos($wgType, 'zin\\') === 0) $wgType = substr($wgType, 4);
+        return isset($wgBlockMap[$wgType]) ? $wgBlockMap[$wgType] : NULL;
+    }
+
+    public static function nextGid($type = NULL)
+    {
+        return str_replace('\\', '_', empty($type) ? get_called_class() : $type) . '_' . ++static::$gidSeed;
     }
 
     protected static function getDefinedProps($name = NULL)
