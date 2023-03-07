@@ -126,6 +126,8 @@ class execution extends control
 
         if(!isset($_SESSION['limitedExecutions'])) $this->execution->getLimitedExecution();
 
+	if($executionID) $this->session->set("storyList",$this->createLink("execution","story","&executionID=".$executionID));
+
         /* Set browse type. */
         $browseType = strtolower($status);
 
