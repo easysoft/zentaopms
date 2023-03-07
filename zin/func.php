@@ -42,6 +42,9 @@ function formgrid()    {return createWg('formgrid', func_get_args());}
 function formrow()     {return createWg('formrow', func_get_args());}
 function forminput()   {return createWg('forminput', func_get_args());}
 function dropdown()    {return createWg('dropdown', func_get_args());}
+function header()      {return createWg('header', func_get_args());}
+function heading()     {return createWg('heading', func_get_args());}
+function navbar()      {return createWg('navbar', func_get_args());}
 function pageheader()  {return createWg('pageheader', func_get_args());}
 function pageheading() {return createWg('pageheading', func_get_args());}
 function pagenavbar()  {return createWg('pagenavbar', func_get_args());}
