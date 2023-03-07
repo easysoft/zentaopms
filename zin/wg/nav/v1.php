@@ -9,10 +9,10 @@ class nav extends wg
 
     public function onBuildItem($item)
     {
-        return actionItem
+        return new actionItem
         (
             set('name', 'nav'),
-            inherit($item instanceof item ? $item : (item(set($item))))
+            $item instanceof item ? inherit($item) : set($item)
         );
     }
 
