@@ -18,7 +18,7 @@
   </div>
   <div class="btn-toolbar">
     <div class="btn-group">
-    <?php echo html::a($this->createLink('', '', '', '', false), '<i class="icon icon-cards-view"></i>', '', 'class="btn btn-icon text-primary"');?>
+    <?php echo html::a($this->createLink('', '', '', '', false), '<i class="icon icon-cards-view"></i>', '', 'class="btn btn-icon"');?>
     <?php echo html::a($this->createLink('', '', '', '', false), '<i class="icon icon-list"></i>', '', 'class="btn btn-icon text-primary"');?>
     </div>
     <a href="#" class="btn btn-primary"><?php echo $lang->group->addPriv?></a>
