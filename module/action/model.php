@@ -482,9 +482,18 @@ class actionModel extends model
                 if($name) $action->extra = common::hasPriv('testtask', 'view') ? html::a(helper::createLink('testtask', 'view', "taskID=$action->extra"), $name) : $name;
             }
             elseif(strpos('feedback,ticket', $action->objectType) === false and $actionName == 'tostory')
-            {
-                $title = $this->dao->select('title')->from(TABLE_STORY)->where('id')->eq($action->extra)->fetch('title');
-                if($title) $action->extra = common::hasPriv('story', 'view') ? html::a(helper::createLink('story', 'view', "storyID=$action->extra"), "#$action->extra " . $title) : "#$action->extra " . $title;
+	    {
+		$projectID = 0;
+		$productShadow = $this->dao->select('*')->from(TABLE_PRODUCT)->where('id')->in($action->product)->fetch('shadow');
+		$title = $this->dao->select('title')->from(TABLE_STORY)->where('id')->eq($action->extra)->fetch('title');
+		$defaultExtra = "#$action->extra ".$title;
+		if($productShadow === "1")
+		{
+		    $projectID = $this->dao->select('project')->from(TABLE_PROJECTPRODUCT)->where('product')->in($action->product)->fetch('project');
+		    if($title) $action->extra = common::hasPriv('projectstory','story') && $projectID ? html::a(helper::createLink('projectstory','story',"projectID=$projectID"),"#$action->extra ".$title) : $defaultExtra;
+		}else{
+		    if($title) $action->extra = common::hasPriv('story', 'view') ?  html::a(helper::createLink('story', 'view', "storyID=$action->extra"), "#$action->extra " . $title) : $defaultExtra;
+		}
             }
             elseif($actionName == 'importedcard')
             {
