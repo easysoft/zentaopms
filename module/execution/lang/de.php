@@ -524,7 +524,16 @@ $lang->execution->featureBar['task']['assignedtome'] = $lang->execution->assigne
 $lang->execution->featureBar['task']['myinvolved']   = $lang->execution->myInvolved;
 $lang->execution->featureBar['task']['assignedbyme'] = $lang->execution->assignedByMe;
 $lang->execution->featureBar['task']['needconfirm']  = 'Story geändert';
-$lang->execution->featureBar['task']['status']       = $lang->execution->statusSelects[''];
+$lang->execution->featureBar['task']['status']       = $lang->more;
+
+$lang->execution->moreSelects['task']['status']['wait']         = 'Waiting';
+$lang->execution->moreSelects['task']['status']['doing']        = 'Doing';
+$lang->execution->moreSelects['task']['status']['undone']       = 'Unfinished';
+$lang->execution->moreSelects['task']['status']['finishedbyme'] = 'FinishedByMe';
+$lang->execution->moreSelects['task']['status']['done']         = 'Done';
+$lang->execution->moreSelects['task']['status']['closed']       = 'Closed';
+$lang->execution->moreSelects['task']['status']['cancel']       = 'Cancelled';
+$lang->execution->moreSelects['task']['status']['delayed']      = 'Delayed';
 
 $lang->execution->featureBar['all']['all']       = $lang->execution->all;
 $lang->execution->featureBar['all']['undone']    = $lang->execution->undone;

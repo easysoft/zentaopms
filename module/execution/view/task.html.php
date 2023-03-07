@@ -86,14 +86,15 @@ body {margin-bottom: 25px;}
             $taskBrowseType = isset($status) ? $this->session->taskBrowseType : '';
             $current        = $menuItem->text;
             $active         = '';
-            if(isset($lang->execution->statusSelects[$taskBrowseType]))
+            $statusSelects  = isset($lang->execution->moreSelects['task']['status']) ? $lang->execution->moreSelects['task']['status'] : array();
+            if(isset($statusSelects[$taskBrowseType]))
             {
-                $current = "<span class='text'>{$lang->execution->statusSelects[$taskBrowseType]}</span> <span class='label label-light label-badge'>{$pager->recTotal}</span>";
+                $current = "<span class='text'>{$statusSelects[$taskBrowseType]}</span> <span class='label label-light label-badge'>{$pager->recTotal}</span>";
                 $active  = 'btn-active-text';
             }
             echo html::a('javascript:;', $current . " <span class='caret'></span>", '', "data-toggle='dropdown' class='btn btn-link $active'");
             echo "<ul class='dropdown-menu'>";
-            foreach($lang->execution->statusSelects as $key => $value)
+            foreach($statusSelects as $key => $value)
             {
                 if($key == '') continue;
                 echo '<li' . ($key == $taskBrowseType ? " class='active'" : '') . '>';

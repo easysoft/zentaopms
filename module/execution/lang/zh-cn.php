@@ -524,7 +524,16 @@ $lang->execution->featureBar['task']['assignedtome'] = $lang->execution->assigne
 $lang->execution->featureBar['task']['myinvolved']   = $lang->execution->myInvolved;
 $lang->execution->featureBar['task']['assignedbyme'] = $lang->execution->assignedByMe;
 $lang->execution->featureBar['task']['needconfirm']  = "{$lang->SRCommon}变更";
-$lang->execution->featureBar['task']['status']       = $lang->execution->statusSelects[''];
+$lang->execution->featureBar['task']['status']       = $lang->more;
+
+$lang->execution->moreSelects['task']['status']['wait']         = '未开始';
+$lang->execution->moreSelects['task']['status']['doing']        = '进行中';
+$lang->execution->moreSelects['task']['status']['undone']       = '未完成';
+$lang->execution->moreSelects['task']['status']['finishedbyme'] = '我完成';
+$lang->execution->moreSelects['task']['status']['done']         = '已完成';
+$lang->execution->moreSelects['task']['status']['closed']       = '已关闭';
+$lang->execution->moreSelects['task']['status']['cancel']       = '已取消';
+$lang->execution->moreSelects['task']['status']['delayed']      = '已延期';
 
 $lang->execution->featureBar['all']['all']       = '全部';
 $lang->execution->featureBar['all']['undone']    = $lang->execution->undone;
