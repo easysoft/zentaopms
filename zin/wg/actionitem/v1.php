@@ -30,7 +30,6 @@ class actionItem extends wg
     protected function buildDropdownItem()
     {
         $dropdown = new dropdown($this->props->skip('tagName,type,name,outerTag,outerProps'),  $this->children());
-        \a($dropdown);
         return $dropdown;
     }
 
