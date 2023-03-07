@@ -2502,6 +2502,13 @@ class projectModel extends model
                 $this->dao->update(TABLE_PROJECT)->set('division')->eq('1')->where('id')->eq((int)$projectID)->exec();
                 $this->dao->update(TABLE_EXECUTION)->set('division')->eq('1')->where('project')->eq((int)$projectID)->exec();
             }
+
+            $project = $this->getByID($projectID);
+            if(!empty($project) and ($project->model == 'waterfall' or $project->model == 'waterfallplus') and empty($project->division) and !empty($executions))
+            {
+                $this->loadModel('execution');
+                foreach($executions as $executionID) $this->execution->updateProducts($executionID);
+            }
         }
 
         $oldProductKeys = array_keys($oldProjectProducts);
