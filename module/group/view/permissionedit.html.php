@@ -22,7 +22,7 @@
     <?php echo html::a($this->createLink('', '', '', '', false), '<i class="icon icon-cards-view"></i>', '', 'class="btn"');?>
     </div>
     <a href="#" class="btn btn-primary"><?php echo $lang->group->addPriv?></a>
-    <a href="#" class="btn btn-primary"><?php echo $lang->group->servicePrivPackage?></a>
+    <?php if(common::hasPriv('group', 'managePrivPackage')) echo html::a($this->createLink('group', 'managePrivPackage', ''), $lang->group->managePrivPackage, '', 'class="btn btn-primary"');?>
     <a href="#" class="btn btn-primary"><?php echo $lang->group->batchSetDependency?></a>
   </div>
 </div>

@@ -392,4 +392,28 @@ class group extends control
         $this->view->title = $this->lang->group->permissionedit;
         $this->display();
     }
+
+    /**
+     * Manage privilege packages.
+     *
+     * @access public
+     * @return void
+     */
+    public function managePrivPackage()
+    {
+        $this->view->title = $this->lang->group->managePrivPackage;
+        $this->display();
+    }
+
+    /**
+     * Create a privilege package.
+     *
+     * @access public
+     * @return void
+     */
+    public function createPrivPackage()
+    {
+        $this->view->title = $this->lang->group->createPrivPackage;
+        $this->display();
+    }
 }
