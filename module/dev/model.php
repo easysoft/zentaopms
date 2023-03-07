@@ -621,17 +621,7 @@ class devModel extends model
         if($menu == 'project')
         {
             $menusPinYin = common::convert2Pinyin($this->lang->dev->projectMenu);
-            foreach($this->config->dev->projectMenus as $subMenuKey)
-            {
-                $subMenu = new stdClass();
-                $subMenu->title  = $this->lang->dev->projectMenu[$subMenuKey];
-                $subMenu->key    = zget($menusPinYin, $this->lang->dev->projectMenu[$subMenuKey], '');
-                $subMenu->module = $subMenuKey;
-                $subMenu->method = '';
-                $subMenu->active = ($module == $subMenuKey and $method == '') ? 1 : 0;
-
-                $menus[] = $subMenu;
-            }
+            foreach($this->config->dev->projectMenus as $subMenuKey) $menus[] = $this->getMenuObject($this->lang->dev->projectMenu[$subMenuKey], $subMenuKey, '', ($module == $subMenuKey and $method == ''), $menusPinYin);
         }
 
         return $menus;
@@ -658,14 +648,7 @@ class devModel extends model
         {
             if(!isset($this->lang->$menu->menu->{$menuKey}['subMenu']) or (is_object($this->lang->$menu->menu->{$menuKey}['subMenu']) and !get_object_vars($this->lang->$menu->menu->{$menuKey}['subMenu']))) continue;
 
-            $subMenu = new stdClass();
-            $subMenu->title  = $menuName;
-            $subMenu->key    = zget($menusPinYin, $menuName, '');
-            $subMenu->module = $menu;
-            $subMenu->method = $menuKey;
-            $subMenu->active = ($method == $menuKey and $module == $menu) ? 1 : 0;
-
-            $menus[] = $subMenu;
+            $menus[] = $this->getMenuObject($menuName, $menu, $menuKey, ($module == $menu and $method == $menuKey), $menusPinYin);
         }
 
         return $menus;
@@ -710,16 +693,9 @@ class devModel extends model
                     list($thisModule, $thisMethod) = $this->config->dev->linkMethods[$module]["{$thisModule}-{$thisMethod}"];
                 }
 
-                $titleList[]  = $label;
+                $subMenu      = $this->getMenuObject($label, $thisModule, $thisMethod, ($methodName == $thisMethod and $moduleName == $thisModule));
+                $titleList[]  = $subMenu->title;
                 $tagMethods[] = $thisMethod;
-
-                $subMenu = new stdclass();
-                $subMenu->title    = isset($this->lang->dev->replaceLable["$thisModule-$thisMethod"]) ? $this->lang->dev->replaceLable["$thisModule-$thisMethod"] : $label;
-                $subMenu->key      = '';
-                $subMenu->module   = $thisModule;
-                $subMenu->method   = $thisMethod;
-                $subMenu->active   = ($methodName == $thisMethod and $moduleName == $thisModule) ? 1 : 0;
-                $subMenu->children = array();
 
                 $this->app->loadLang($thisModule);
                 $hasFeatureBar = false;
@@ -764,13 +740,8 @@ class devModel extends model
                                     $titleList[]  = $label;
                                     $tagMethods[] = $thisMethod;
 
-                                    $thirdMenu = new stdClass();
-                                    $thirdMenu->title  = $label;
-                                    $thirdMenu->key    = '';
-                                    $thirdMenu->module = $moduleKey;
-                                    $thirdMenu->method = "{$thisMethod}_{$subMenuKey}";
-                                    $thirdMenu->active = ($methodName == $thirdMenu->method and $moduleName == $moduleKey) ? 1 : 0;
-
+                                    $methodKey = "{$thisMethod}_{$subMenuKey}";
+                                    $thirdMenu = $this->getMenuObject($label, $moduleKey, $methodKey, ($methodName == $methodKey and $moduleName == $moduleKey));
                                     $subMenu->active     = 0;
                                     $subMenu->children[] = $thirdMenu;
                                     $hasFeatureBar = true;
@@ -786,14 +757,7 @@ class devModel extends model
                                     $titleList[]  = $label;
                                     $tagMethods[] = $thisMethod;
 
-                                    $subMenu = new stdClass();
-                                    $subMenu->title  = $label;
-                                    $subMenu->key      = '';
-                                    $subMenu->module   = $moduleKey;
-                                    $subMenu->method   = $thisMethod;
-                                    $subMenu->active   = ($methodName == $thisMethod and $moduleName == $moduleKey) ? 1 : 0;
-                                    $subMenu->children = array();
-
+                                    $subMenu = $this->getMenuObject($label, $moduleKey, $thisMethod, ($methodName == $thisMethod and $moduleName == $moduleKey));
                                     $menus["$moduleKey-$thisMethod"] = $subMenu;
                                     $hasFeatureBar = false;
                                 }
@@ -818,15 +782,7 @@ class devModel extends model
                 $titleList[]  = $label;
                 $tagMethods[] = $method;
 
-                $subMenu = new stdClass();
-                $subMenu->title    = $label;
-                $subMenu->key      = '';
-                $subMenu->module   = $module;
-                $subMenu->method   = $method;
-                $subMenu->active   = ($methodName == $method and $moduleName == $module) ? 1 : 0;
-                $subMenu->children = array();
-
-                $menus[] = $subMenu;
+                $menus[] = $this->getMenuObject($label, $module, $method, ($methodName == $method and $moduleName == $module));
             }
         }
 
@@ -865,16 +821,10 @@ class devModel extends model
         }
 
         $mainNav       = $this->getLinkTitle($mainNav);
-        $maimNavPinYin = common::convert2Pinyin($mainNav);
+        $mainNavPinYin = common::convert2Pinyin($mainNav);
         foreach($mainNav as $menuKey => $menu)
         {
-            $menuItem = new stdclass();
-            $menuItem->title    = $menu;
-            $menuItem->module   = $menuKey;
-            $menuItem->method   = '';
-            $menuItem->active   = ($module == $menuKey and $method == '') ? 1 : 0;
-            $menuItem->key      = zget($maimNavPinYin, $menu, '');
-            $menuItem->children = array();
+            $menuItem = $this->getMenuObject($menu, $menuKey, '', ($module == $menuKey and $method == ''), $mainNavPinYin);
 
             $childFunc = 'get' . ucfirst($type) . 'Menus';
             if($type == 'tag' and in_array($menuKey, $this->config->dev->projectMenus))
@@ -1052,5 +1002,28 @@ class devModel extends model
 
             $_POST = $post;
         }
+    }
+
+    /**
+     * Get tree menu object.
+     *
+     * @param  string $label
+     * @param  string $module
+     * @param  string $method
+     * @param  bool   $active
+     * @param  array  $titlePinYin
+     * @access public
+     * @return object
+     */
+    public function getMenuObject($label, $module, $method, $active = false, $titlePinYin = array())
+    {
+        $menu = new stdclass();
+        $menu->title    = isset($this->lang->dev->replaceLable["$module-$method"]) ? $this->lang->dev->replaceLable["$module-$method"] : $label;
+        $menu->key      = zget($titlePinYin, $menu->title, '');
+        $menu->module   = $module;
+        $menu->method   = $method;
+        $menu->active   = (int)$active;
+        $menu->children = array();
+        return $menu;
     }
 }
