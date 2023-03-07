@@ -670,10 +670,12 @@ class devModel extends model
 
         $titleList  = array();
         $tagMethods = array();
+
         /* Convenience secondary menu. */
         foreach(array('homeMenu', 'menu') as $menu)
         {
             if(!isset($this->lang->$module->$menu)) continue;
+            /* Sort menu. */
             $menuList = $this->lang->$module->$menu;
             if($menu == 'menu' and isset($this->lang->$module->menuOrder))
             {
@@ -681,13 +683,15 @@ class devModel extends model
                 $menuList = $this->sortMenus($menuList);
             }
 
+            /* Construct menu tree. */
             foreach($menuList as $menuKey => $menuValue)
             {
-                if(is_array($menuValue) and !isset($menuValue['link'])) continue;
-                $link = is_array($menuValue) ? $menuValue['link'] : $menuValue;
-                if(strpos($link, '|') === false) continue;
-                list($label, $thisModule, $thisMethod) = explode('|', $link);
+                $link = $this->getLinkParams($menuValue);
+                if(!$link) continue;
 
+                list($label, $thisModule, $thisMethod) = $link;
+
+                /* Replace menu params. */
                 if(isset($this->config->dev->linkMethods[$module]["{$thisModule}-{$thisMethod}"]))
                 {
                     list($thisModule, $thisMethod) = $this->config->dev->linkMethods[$module]["{$thisModule}-{$thisMethod}"];
@@ -697,6 +701,7 @@ class devModel extends model
                 $titleList[]  = $subMenu->title;
                 $tagMethods[] = $thisMethod;
 
+                /* Set three-level menu.  */
                 $this->app->loadLang($thisModule);
                 $hasFeatureBar = false;
                 if(isset($this->lang->$thisModule->featureBar[$thisMethod])) $hasFeatureBar = true;
@@ -712,12 +717,14 @@ class devModel extends model
                             $menuValue[$menu]->menuOrder = $menuValue['menuOrder'];
                             $menuValue[$menu] = $this->sortMenus($menuValue[$menu]);
                         }
+
                         foreach($menuValue[$menu] as $subMenuKey => $subMenuValue)
                         {
-                            if(is_array($subMenuValue) and !isset($subMenuValue['link'])) continue;
-                            $link = is_array($subMenuValue) ? $subMenuValue['link'] : $subMenuValue;
-                            if(strpos($link, '|') === false) continue;
-                            list($label, $thisModule, $thisMethod) = explode('|', $link);
+                            $link = $this->getLinkParams($subMenuValue);
+                            if(!$link) continue;
+
+                            list($label, $thisModule, $thisMethod) = $link;
+
                             if($label == '@branch@') $label = $this->lang->dev->branch;
 
                             /* Get the three-level menu under the drop mene . */
@@ -735,18 +742,8 @@ class devModel extends model
                                 }
 
                                 $this->app->loadLang($moduleKey);
-                                if(isset($this->lang->$moduleKey->featureBar[$menuKey][$subMenuKey]))
-                                {
-                                    $titleList[]  = $label;
-                                    $tagMethods[] = $thisMethod;
-
-                                    $methodKey = "{$thisMethod}_{$subMenuKey}";
-                                    $thirdMenu = $this->getMenuObject($label, $moduleKey, $methodKey, ($methodName == $methodKey and $moduleName == $moduleKey));
-                                    $subMenu->active     = 0;
-                                    $subMenu->children[] = $thirdMenu;
-                                    $hasFeatureBar = true;
-                                }
-                                elseif(isset($this->lang->$moduleKey->featureBar[$thisMethod]))
+                                /* Replace secondary menu. */
+                                if(isset($this->lang->$moduleKey->featureBar[$thisMethod]))
                                 {
                                     if(is_array($this->lang->$moduleKey->featureBar[$thisMethod]))
                                     {
@@ -761,6 +758,17 @@ class devModel extends model
                                     $menus["$moduleKey-$thisMethod"] = $subMenu;
                                     $hasFeatureBar = false;
                                 }
+
+                                /* Construct secondary menu subitems. */
+                                if(isset($this->lang->$moduleKey->featureBar[$menuKey][$subMenuKey]))
+                                {
+                                    $titleList[]  = $label;
+                                    $tagMethods[] = $thisMethod;
+
+                                    $methodKey = "{$thisMethod}_{$subMenuKey}";
+                                    $subMenu->children[] = $this->getMenuObject($label, $moduleKey, $methodKey, ($methodName == $methodKey and $moduleName == $moduleKey));
+                                    $hasFeatureBar = true;
+                                }
                             }
                         }
                     }
@@ -770,6 +778,7 @@ class devModel extends model
             }
         }
 
+        /* Merge other feature bar menu tree. */
         $this->app->loadLang($module);
         if(isset($this->lang->$module->featureBar))
         {
@@ -777,12 +786,10 @@ class devModel extends model
             {
                 if(in_array($method, $tagMethods)) continue;
 
-                $label = zget($this->lang->$module, $method, $this->lang->$module->common);
-
+                $label        = zget($this->lang->$module, $method, $this->lang->$module->common);
                 $titleList[]  = $label;
                 $tagMethods[] = $method;
-
-                $menus[] = $this->getMenuObject($label, $module, $method, ($methodName == $method and $moduleName == $module));
+                $menus[]      = $this->getMenuObject($label, $module, $method, ($methodName == $method and $moduleName == $module));
             }
         }
 
@@ -809,6 +816,7 @@ class devModel extends model
         $mainNav = $type == 'second' ? $this->lang->mainNav : array();
         if($type != 'second')
         {
+            /* Set main nav list. */
             foreach($this->lang->mainNav as $menuKey => $menu)
             {
                 if($menuKey == 'project')
@@ -820,6 +828,7 @@ class devModel extends model
             }
         }
 
+        /* Get menu tree by menu setting. */
         $mainNav       = $this->getLinkTitle($mainNav);
         $mainNavPinYin = common::convert2Pinyin($mainNav);
         foreach($mainNav as $menuKey => $menu)
@@ -827,7 +836,7 @@ class devModel extends model
             $menuItem = $this->getMenuObject($menu, $menuKey, '', ($module == $menuKey and $method == ''), $mainNavPinYin);
 
             $childFunc = 'get' . ucfirst($type) . 'Menus';
-            if($type == 'tag' and in_array($menuKey, $this->config->dev->projectMenus))
+            if($type == 'tag1' and in_array($menuKey, $this->config->dev->projectMenus))
             {
                 if($menuKey != 'project') continue;
                 foreach($this->config->dev->projectMenus as $projectModule)
@@ -893,6 +902,27 @@ class devModel extends model
         }
 
         return $linksTitle;
+    }
+
+    /**
+     * Get link params.
+     *
+     * @param  string $link
+     * @access public
+     * @return array|bool
+     */
+    public function getLinkParams($link)
+    {
+        if(is_array($link))
+        {
+            if(!isset($link['link'])) return false;
+
+            $link = $link['link'];
+        }
+
+        if(strpos($link, '|') === false) return false;
+
+        return  explode('|', $link);
     }
 
     /**
