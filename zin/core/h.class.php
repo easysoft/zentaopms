@@ -39,7 +39,7 @@ class h extends wg
         return array($this->buildTagBegin(), parent::build(), $this->buildTagEnd());
     }
 
-    protected function toJsonData()
+    public function toJsonData()
     {
         $data = parent::toJsonData();
         $data['type'] = 'h:' . $this->getTagName();

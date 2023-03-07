@@ -315,7 +315,7 @@ class wg
 
     protected function onCreated() {}
 
-    protected function toJsonData()
+    public function toJsonData()
     {
         $data = array();
         $data['gid'] = $this->gid;
