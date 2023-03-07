@@ -939,7 +939,7 @@ class actionModel extends model
             else
             {
                 if($actionType == 'restoredsnapshot' && in_array($action->objectType, array('vm', 'zanode')) && $value == 'defaultSnap') $value = $this->lang->$objectType->snapshot->defaultSnapName;
-                
+
                 $desc = str_replace('$' . $key, $value, $desc);
             }
         }
@@ -1655,6 +1655,10 @@ class actionModel extends model
         {
             if($action->project)   $action->objectLink = common::hasPriv('project', 'team')   ? helper::createLink('project',   'team', 'projectID=' . $action->project) : '';
             if($action->execution) $action->objectLink = common::hasPriv('execution', 'team') ? helper::createLink('execution', 'team', 'executionID=' . $action->execution) : '';
+        }
+        elseif($action->objectType == 'privpackage' and common::hasPriv('group', 'managePrivPackage'))
+        {
+            $action->objectLink = helper::createLink('group', 'managePrivPackage');
         }
 
         if($action->objectType == 'stakeholder' and $action->project == 0) $action->objectLink = '';

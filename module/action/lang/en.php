@@ -156,6 +156,7 @@ $lang->action->objectTypes['stage']            = 'Stage';
 $lang->action->objectTypes['patch']            = 'Patch';
 $lang->action->objectTypes['repo']             = 'Repo';
 $lang->action->objectTypes['dataview']         = 'Data View';
+$lang->action->objectTypes['privpackage']      = 'Priv Package';
 
 /* Used to describe operation history. */
 $lang->action->desc = new stdclass();

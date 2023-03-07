@@ -50,10 +50,12 @@ $lang->group->noGroup            = 'Aucun groupe';
 $lang->group->repeat             = "『%s』『%s』exists.Please adjust it and try again.";
 $lang->group->noneProject        = 'No Project';
 $lang->group->addPriv            = 'Add Priv';
-$lang->group->managePrivPackage  = 'Manage Priv Package';
-$lang->group->batchSetDependency = 'Batch Set Dependency';
-$lang->group->createPrivPackage  = 'Create Priv Package';
 $lang->group->add                = 'Add';
+$lang->group->batchSetDependency = 'Batch Set Dependency';
+$lang->group->managePrivPackage  = 'Manage Priv Package';
+$lang->group->createPrivPackage  = 'Create Priv Package';
+$lang->group->editPrivPackage    = 'Edit Priv Package';
+$lang->group->deletePrivPackage  = 'Delete Priv Package';
 
 $lang->group->id       = 'ID';
 $lang->group->name     = 'Groupe';

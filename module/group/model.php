@@ -766,6 +766,41 @@ class groupModel extends model
     {
         $package = fixer::input('post')->get();
         $this->dao->insert(TABLE_PRIVPACKAGE)->data($package)->batchCheck($this->config->privPackage->create->requiredFields, 'notempty')->exec();
-        return $this->dao->lastInsertId();
+        $packageID = $this->dao->lastInsertId();
+        $this->loadModel('action')->create('privpackage', $packageID, 'Opened');
+        return $packageID;
+    }
+
+    /**
+     * Update a privilege package.
+     *
+     * @param  int    $packageID
+     * @access public
+     * @return bool
+     */
+    public function updatePrivPackage($packageID)
+    {
+        $oldPackage = $this->getPrivPackageByID($packageID);
+
+        $package = fixer::input('post')->get();
+        $this->dao->update(TABLE_PRIVPACKAGE)->data($package)->batchCheck($this->config->privPackage->update->requiredFields, 'notempty')->where('id')->eq($packageID)->exec();
+        if(dao::isError()) return false;
+
+        $package = $this->getPrivPackageByID($packageID);
+        $changes = common::createChanges($oldPackage, $package);
+
+        return $changes;
+    }
+
+    /**
+     * Ge priv package by ID.
+     *
+     * @param  int    $packageID
+     * @access public
+     * @return void
+     */
+    public function getPrivPackageByID($packageID)
+    {
+        return $this->dao->findById($packageID)->from(TABLE_PRIVPACKAGE)->fetch();
     }
 }

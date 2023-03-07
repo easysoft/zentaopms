@@ -421,7 +421,35 @@ class group extends control
         }
 
         $this->view->title   = $this->lang->group->createPrivPackage;
-        $this->view->modules = array();
+        $this->view->modules = array(0,1);
+        $this->display();
+    }
+
+    /**
+     * Edit a privilege package.
+     *
+     * @access public
+     * @return void
+     */
+    public function editPrivPackage($privPackageID)
+    {
+        if(!empty($_POST))
+        {
+            $changes = $this->group->updatePrivPackage($privPackageID);
+            if($changes)
+            {
+                $actionID = $this->loadModel('action')->create('privpackage', $privPackageID, 'Edited');
+                $this->action->logHistory($actionID, $changes);
+            }
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
+        }
+
+        $this->view->title       = $this->lang->group->editPrivPackage;
+        $this->view->privPackage = $this->group->getPrivPackageByID($privPackageID);
+        $this->view->modules     = array(0,1);
+        $this->view->actions     = $this->loadModel('action')->getList('privpackage', $privPackageID);
+        $this->view->users       = $this->loadModel('user')->getPairs();
         $this->display();
     }
 }

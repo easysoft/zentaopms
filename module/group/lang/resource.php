@@ -1694,6 +1694,10 @@ $lang->resource->group->managePriv         = 'managePriv';
 $lang->resource->group->manageMember       = 'manageMember';
 $lang->resource->group->manageProjectAdmin = 'manageProjectAdmin';
 $lang->resource->group->permissionedit     = 'permissionedit';
+$lang->resource->group->managePrivPackage  = 'managePrivPackage';
+$lang->resource->group->createPrivPackage  = 'createPrivPackage';
+$lang->resource->group->editPrivPackage    = 'editPrivPackage';
+$lang->resource->group->deletePrivPackage  = 'deletePrivPackage';
 
 $lang->group->methodOrder[5]  = 'browse';
 $lang->group->methodOrder[10] = 'create';

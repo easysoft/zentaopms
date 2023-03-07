@@ -51,6 +51,7 @@ $config->action->objectNameFields['repo']         = 'name';
 $config->action->objectNameFields['dataview']     = 'name';
 $config->action->objectNameFields['zahost']       = 'name';
 $config->action->objectNameFields['zanode']       = 'name';
+$config->action->objectNameFields['privpackage']  = 'name';
 
 $config->action->commonImgSize = 870;
 
