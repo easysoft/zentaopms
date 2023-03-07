@@ -836,7 +836,7 @@ class devModel extends model
             $menuItem = $this->getMenuObject($menu, $menuKey, '', ($module == $menuKey and $method == ''), $mainNavPinYin);
 
             $childFunc = 'get' . ucfirst($type) . 'Menus';
-            if($type == 'tag1' and in_array($menuKey, $this->config->dev->projectMenus))
+            if($type == 'tag' and in_array($menuKey, $this->config->dev->projectMenus))
             {
                 if($menuKey != 'project') continue;
                 foreach($this->config->dev->projectMenus as $projectModule)

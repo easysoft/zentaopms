@@ -3,7 +3,7 @@ $lang->transfer = new stdclass();
 
 $lang->transfer->reservedWord['id']        = '编号';
 $lang->transfer->reservedWord['type']      = '类型';
-$lang->transfer->reservedWord['project']   = "所属项目{$lang->projectCommon}";
+$lang->transfer->reservedWord['project']   = "所属{$lang->projectCommon}";
 $lang->transfer->reservedWord['execution'] = '所属执行';
 $lang->transfer->reservedWord['product']   = "所属{$lang->productCommon}";
 $lang->transfer->reservedWord['code']      = '代号';

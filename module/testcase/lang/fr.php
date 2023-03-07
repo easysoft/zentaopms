@@ -11,8 +11,8 @@
  */
 $lang->testcase->id               = 'ID';
 $lang->testcase->product          = $lang->productCommon;
-$lang->testcase->project          = 'Project';
-$lang->testcase->execution        = 'Execution';
+$lang->testcase->project          = $lang->projectCommon;
+$lang->testcase->execution        = $lang->executionCommon;
 $lang->testcase->linkStory        = 'linkStory';
 $lang->testcase->module           = 'Module';
 $lang->testcase->auto             = 'Test Automation Cases';
@@ -253,10 +253,10 @@ $lang->testcase->selectLibAB   = 'Sélectionner Library';
 $lang->testcase->action = new stdclass();
 $lang->testcase->action->fromlib               = array('main' => '$date, importé par <strong>$actor</strong> depuis <strong>$extra</strong>.');
 $lang->testcase->action->reviewed              = array('main' => '$date, enregistré par <strong>$actor</strong> et le résultat de validation est <strong>$extra</strong>.', 'extra' => 'reviewResultList');
-$lang->testcase->action->linked2project        = array('main' => '$date, 由 <strong>$actor</strong> 关联到项目 <strong>$extra</strong>。');
-$lang->testcase->action->unlinkedfromproject   = array('main' => '$date, 由 <strong>$actor</strong> 从项目 <strong>$extra</strong> 移除。');
-$lang->testcase->action->linked2execution      = array('main' => '$date, 由 <strong>$actor</strong> 关联到' . $lang->executionCommon . ' <strong>$extra</strong>。');
-$lang->testcase->action->unlinkedfromexecution = array('main' => '$date, 由 <strong>$actor</strong> 从' . $lang->executionCommon . ' <strong>$extra</strong> 移除。');
+$lang->testcase->action->linked2project        = array('main' => '$date, linked ' . $lang->projectCommon . ' by <strong>$actor</strong> to <strong>$extra</strong>.');
+$lang->testcase->action->unlinkedfromproject   = array('main' => '$date, removed by <strong>$actor</strong> from <strong>$extra</strong>.');
+$lang->testcase->action->linked2execution      = array('main' => '$date, linked ' . $lang->executionCommon . ' by  <strong>$actor</strong> to <strong>$extra</strong>.');
+$lang->testcase->action->unlinkedfromexecution = array('main' => '$date, removed by <strong>$actor</strong> from <strong>$extra</strong>.');
 
 $lang->testcase->featureBar['browse']['casetype']    = $lang->testcase->caseType;
 $lang->testcase->featureBar['browse']['all']         = $lang->testcase->allCases;
