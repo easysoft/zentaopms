@@ -139,7 +139,7 @@ class screenModel extends model
         $components = array();
         foreach($componentList as $component)
         {
-            $components[] = $this->buildComponent($component);
+            if($component) $components[] = $this->buildComponent($component);
         }
 
         return $components;
@@ -158,7 +158,7 @@ class screenModel extends model
         if(isset($component->sourceID) and $component->sourceID) return $this->buildChart($component);
         if(isset($component->key) and $component->key === 'Select') return $this->buildSelect($component);
 
-        if(!$component->isGroup) return $this->setComponentDefaults($component);
+        if(empty($component->isGroup)) return $this->setComponentDefaults($component);
 
         $component->groupList = $this->buildComponentList($component->groupList);
         return $this->buildGroup($component);
