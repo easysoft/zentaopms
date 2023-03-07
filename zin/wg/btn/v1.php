@@ -57,7 +57,7 @@ class btn extends wg
         );
 
         $size = $this->prop('size');
-        if(!empty($size)) $classList[] = "size-$size";
+        if(!empty($size)) $classList["size-$size"] = true;
 
         $children      = array();
         if(!empty($icon)) $children[] = new icon($icon);
