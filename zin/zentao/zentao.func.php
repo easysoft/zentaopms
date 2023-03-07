@@ -1,20 +1,16 @@
 <?php
 namespace zin;
 
-class helper
+class helper extends \helper
 {
-    public static function __callStatic($prop, $args)
-    {
-        return call_user_func_array(array('\helper', $prop), $args);
-    }
 }
 
-class commonModel
+class commonModel extends \commonModel
 {
-    public static function __callStatic($prop, $args)
-    {
-        return call_user_func_array(array('\commonModel', $prop), $args);
-    }
+}
+
+class common extends \commonModel
+{
 }
 
 function createLink($moduleName, $methodName = 'index', $vars = '', $viewType = 'json')
