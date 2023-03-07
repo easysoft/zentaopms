@@ -93,7 +93,7 @@ page
         (
             set('text', $lang->{$app->tab}->common),
             set('icon', $app->tab),
-            set('url', \helper::createLink($app->tab, 'browse')),
+            set('url', \helper::createLink($app->tab, 'browse'))
         ),
         pagenavbar
         (

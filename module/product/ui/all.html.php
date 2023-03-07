@@ -24,7 +24,8 @@ foreach($cols as $idx => $col)
     if($col['name'] == 'name')
     {
         unset($cols[$idx]['width']);
-        $cols[$idx]['minWidth'] = 200;
+        $cols[$idx]['minWidth']     = 200;
+        $cols[$idx]['nestedToggle'] = true;
     }
 
     if($col['name'] != 'actions') continue;
@@ -327,19 +328,30 @@ $jsSearch = <<<JSSEARCH
         });
     }
 
-    const ajaxForm = new AjaxForm('#saveForm', {
-        rules: {
-            name: {
-                required: true,
-                errMsg: '请输入登录名',
-            },
-            password: {
-                required: true,
-                errMsg: '请输入密码',
-            },
-        },
-    });
-;
+    zui.create(
+        "AjaxForm",
+        "#saveForm",
+        {
+            "js-render":true,
+            "rules":
+            {
+                "title":
+                {
+                    "required":true,
+                    "errMsg":"请输入保存条件名"
+                },
+                "onLoad": function(e) {
+                    console.log(">>>", e);
+                },
+                "onError": function(e) {
+                    console.log('onError>>>', e);
+                },
+                headers: {
+                    'Content-type': 'application/json; charset=UTF-8'
+                }
+            }
+        }
+    );
 JSSEARCH;
 
 page
@@ -405,9 +417,13 @@ page
     modal
     (
         setId('saveModal'),
+        set('type', 'none'),
         form
         (
             setId('saveForm'),
+            setClass('validation form-group'),
+            set('action', \helper::createLink('search', 'saveQuery', 'product')),
+            set('method', 'POST'),
             div
             (
                 setClass('flex flex-row justify-between'),

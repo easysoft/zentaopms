@@ -420,7 +420,13 @@ class project extends control
         $this->view->showBatchEdit  = $this->cookie->showProjectBatchEdit;
         $this->view->allProjectsNum = $this->loadModel('program')->getProjectStats($programID, 'all');
 
-        $this->display();
+        if(isset($_GET['o']))
+        {
+            $this->display();
+            return;
+        }
+
+        $this->render();
     }
 
     /**
