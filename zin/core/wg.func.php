@@ -90,3 +90,16 @@ function inherit($item)
     if(!($item instanceof wg)) $item = new wg($item);
     return array(set($item->props), $item->children());
 }
+
+function divorce($item)
+{
+    if($item instanceof wg)
+    {
+        $item->parent = NULL;
+    }
+    else if(is_array($item))
+    {
+        foreach($item as $i) divorce($i);
+    }
+    return $item;
+}
