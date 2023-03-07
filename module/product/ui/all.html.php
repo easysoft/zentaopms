@@ -1,23 +1,6 @@
 <?php
 namespace zin;
 
-\commonModel::setMainMenu();
-
-$navItems = array();
-foreach(\customModel::getMainMenu() as $menuItem)
-{
-  $navItems[] = array(
-    'text'   => $menuItem->text,
-    'url'    => \commonModel::createMenuLink($menuItem, $app->tab),
-    'active' => $menuItem->order === 1,
-  );
-}
-
-/* Generate dropdown menus. */
-$userMenu         = \commonModel::printUserBarZin();
-$globalCreateMenu = \commonModel::printCreateListZin();
-$switcherMenu     = \commonModel::printVisionSwitcherZin();
-
 $cols = array_values($config->product->all->dtable->fieldList);
 foreach($cols as $idx => $col)
 {
@@ -356,42 +339,7 @@ JSSEARCH;
 
 page
 (
-    set('title', $title),
-    dropdown
-    (
-        setId('userMenu'),
-        set('items', $userMenu)
-    ),
-    dropdown
-    (
-        setId('globalCreateMenu'),
-        set('items', $globalCreateMenu)
-    ),
-    dropdown
-    (
-        setId('switcherMenu'),
-        set('items', $switcherMenu)
-    ),
-    pageheader
-    (
-        pageheading
-        (
-            set('text', $lang->{$app->tab}->common),
-            set('icon', $app->tab),
-            set('url', createLink($app->tab, 'browse')),
-        ),
-        pagenavbar
-        (
-            setId('navbar'),
-            set('items', $navItems)
-        ),
-        pagetoolbar
-        (
-            set('create',   array('href'=>'#globalCreateMenu')),
-            set('switcher', array('href'=>'#switcherMenu', 'text' => $lang->visionList[$app->config->vision])),
-            block('avatar', avatar(set('name', $app->user->account), set('avatar', $app->user->avatar), set('trigger', '#userMenu')))
-        )
-    ),
+    header(),
     pagemain
     (
         mainmenu
