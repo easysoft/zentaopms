@@ -356,6 +356,11 @@ define('TABLE_DATASET',   '`' . $config->db->prefix . 'dataset`');
 define('TABLE_DATAVIEW',  '`' . $config->db->prefix . 'dataview`');
 define('TABLE_DIMENSION', '`' . $config->db->prefix . 'dimension`');
 
+define('TABLE_PRIV',         '`' . $config->db->prefix . 'priv`');
+define('TABLE_PRIVLANG',     '`' . $config->db->prefix . 'privlang`');
+define('TABLE_PRIVPACKAGE',  '`' . $config->db->prefix . 'privpackage`');
+define('TABLE_PRIVRELATION', '`' . $config->db->prefix . 'privrelation`');
+
 $config->objectTables['product']      = TABLE_PRODUCT;
 $config->objectTables['productplan']  = TABLE_PRODUCTPLAN;
 $config->objectTables['story']        = TABLE_STORY;
@@ -409,6 +414,10 @@ $config->objectTables['zahost']       = TABLE_ZAHOST;
 $config->objectTables['zanode']       = TABLE_ZAHOST;
 $config->objectTables['automation']   = TABLE_AUTOMATION;
 $config->objectTables['stepResult']   = TABLE_TESTRUN;
+$config->objectTables['priv']         = TABLE_PRIV;
+$config->objectTables['privlang']     = TABLE_PRIVLANG;
+$config->objectTables['privpackage']  = TABLE_PRIVPACKAGE;
+$config->objectTables['privrelation'] = TABLE_PRIVRELATION;
 
 $config->newFeatures      = array('introduction', 'tutorial', 'youngBlueTheme', 'visions');
 $config->disabledFeatures = '';
