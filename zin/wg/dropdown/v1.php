@@ -6,7 +6,7 @@ require_once dirname(__DIR__) . DS . 'btn' . DS . 'v1.php';
 
 class dropdown extends wg
 {
-    static $defineProps = 'items?:array, placement?:string, strategy?:string, offset?: number, flip?: bool, subMenuTrigger?: string, arrow?: string, trigger?: string, menuProps?: array, target?: string';
+    static $defineProps = 'items?:array, placement?:string, strategy?:string, offset?: number, flip?: bool, subMenuTrigger?: string, arrow?: string, trigger?: string, menuProps?: array, target?: string, id?: string';
 
     static $defineBlocks = array
     (
@@ -17,7 +17,7 @@ class dropdown extends wg
 
     protected function build()
     {
-        list($items, $placement, $strategy, $offset, $flip, $subMenuTrigger, $arrow, $trigger, $menuProps, $target) = $this->prop(array('items', 'placement', 'strategy', 'offset', 'flip', 'subMenuTrigger', 'arrow', 'trigger', 'menuProps', 'target'));
+        list($items, $placement, $strategy, $offset, $flip, $subMenuTrigger, $arrow, $trigger, $menuProps, $target, $id) = $this->prop(array('items', 'placement', 'strategy', 'offset', 'flip', 'subMenuTrigger', 'arrow', 'trigger', 'menuProps', 'target', 'id'));
 
         $triggerBlock = $this->block('trigger');
         $menu         = $this->block('menu');
@@ -38,13 +38,17 @@ class dropdown extends wg
             $menu = $menu[0];
         }
 
-        if(empty($target) && $menu instanceof wg)
+        if($menu instanceof wg)
         {
-            $target = $menu->id();
+            if(!empty($id)) $menu->setProp('id', $id);
             if(empty($target))
             {
-                $target = $menu->gid;
-                $menu->setProp('id', $target);
+                $target = $menu->id();
+                if(empty($target))
+                {
+                    $target = $menu->gid;
+                    $menu->setProp('id', $target);
+                }
             }
         }
 
