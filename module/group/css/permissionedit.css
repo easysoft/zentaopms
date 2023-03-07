@@ -11,3 +11,4 @@
 
 /* tree */
 .tree ul > li {display: inline-block; width: 50%;}
+.priv-item > .icon {padding-left: 5px;}
