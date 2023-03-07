@@ -816,11 +816,17 @@ class groupModel extends model
         $resource = json_decode(json_encode($this->lang->resource), true);
         $this->dao->delete()->from(TABLE_PRIVLANG)->exec();
 
+        $views = array();
+        $this->loadModel('setting');
         foreach($resource as $moduleName => $methods)
         {
-            $order = 1;
+            $groupKey    = $moduleName;
+            $view        = isset($this->lang->navGroup->{$groupKey}) ? $this->lang->navGroup->{$groupKey} : $moduleName;
+            $viewModules = array();
+            $order       = 1;
             foreach($methods as $methodName => $methodLang)
             {
+                $viewModules[] = $methodName;
                 $priv = new stdclass();
                 $priv->moduleName = $moduleName;
                 $priv->methodName = $methodName;
@@ -847,7 +853,14 @@ class groupModel extends model
                     }
                 }
             }
+            $viewModules = implode(',', $viewModules);
+            $views[$view] = empty($views[$view]) ? $viewModules : "{$views[$view]},{$viewModules}";
         }
+
+        foreach($views as $viewName => $view) $this->setting->setItem("system.priv.{$viewName}Modules", $view);
+
+        $views = array_keys($views);
+        $this->setting->setItem("system.priv.views", implode(',', $views));
 
         if(!dao::isError()) return true;
     }
