@@ -50,7 +50,6 @@ class btn extends wg
 
         $classList = array
         (
-            'btn',
             'disabled' => $this->prop('disabled'),
             'active' => $this->prop('active'),
             'btn-caret' => $onlyCaret,
@@ -69,6 +68,12 @@ class btn extends wg
         if(!empty($trailingIcon)) $children[] = new icon($trailingIcon);
         if(!empty($caret))        $children[] = h::span(setClass(is_string($caret) ? "caret-$caret" : 'caret'));
 
-        return h::button(set($props), setClass($classList), $children);
+        return h::button
+        (
+            setClass('btn'),
+            set($props),
+            setClass($classList),
+            $children
+        );
     }
 }
