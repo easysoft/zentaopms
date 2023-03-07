@@ -166,7 +166,7 @@ $lang->bug->openedByMeAB   = 'ReportedByMe';
 $lang->bug->resolvedByMeAB = 'ResolvedByMe';
 
 $lang->bug->ditto          = 'Ditto';
-$lang->bug->dittoNotice    = 'This bug is not linked to the same product as the last one is!';
+$lang->bug->dittoNotice    = "This bug is not linked to the same {$lang->productCommon} as the last one is!";
 $lang->bug->noAssigned     = 'Unassigned';
 $lang->bug->noBug          = 'No bugs yet.';
 $lang->bug->noModule       = '<div>You have no modules.</div><div>Manage now</div>';

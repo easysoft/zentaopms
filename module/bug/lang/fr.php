@@ -166,7 +166,7 @@ $lang->bug->openedByMeAB   = 'Signalés par Moi';
 $lang->bug->resolvedByMeAB = 'Résolus par Moi';
 
 $lang->bug->ditto          = 'Idem';
-$lang->bug->dittoNotice    = "Ce bug n'est pas lié au même product que le précédent !";
+$lang->bug->dittoNotice    = 'This bug is not linked to the same product as the last one!';
 $lang->bug->noAssigned     = 'Non affectés';
 $lang->bug->noBug          = "Pas de bug pour l'instant. Bravo !";
 $lang->bug->noModule       = "<div>Vous n'avez pas de modules.</div><div>Gérer Modules maintenant</div>";

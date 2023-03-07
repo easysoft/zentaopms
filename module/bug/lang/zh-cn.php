@@ -166,7 +166,7 @@ $lang->bug->openedByMeAB   = '由我创建';
 $lang->bug->resolvedByMeAB = '由我解决';
 
 $lang->bug->ditto          = '同上';
-$lang->bug->dittoNotice    = '该bug与上一bug不属于同一产品！';
+$lang->bug->dittoNotice    = "该bug与上一bug不属于同一{$lang->productCommon}！";
 $lang->bug->noAssigned     = '未指派';
 $lang->bug->noBug          = '暂时没有Bug。';
 $lang->bug->noModule       = '<div>您现在还没有模块信息</div><div>请维护测试模块</div>';
