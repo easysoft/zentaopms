@@ -71,6 +71,12 @@ $lang->group->other    = 'Others';
 $lang->group->all      = 'All Privileges';
 $lang->group->config   = 'Config';
 
+if(!isset($lang->privPackage)) $lang->privPackage = new stdclass();
+$lang->privPackage->id     = 'ID';
+$lang->privPackage->name   = 'Priv Package Name';
+$lang->privPackage->module = 'Module';
+$lang->privPackage->desc   = 'Priv Package Desc';
+
 $lang->group->copyOptions['copyPriv'] = 'Copy Privileges';
 $lang->group->copyOptions['copyUser'] = 'Copy Users';
 

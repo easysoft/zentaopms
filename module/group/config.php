@@ -11,3 +11,9 @@ $config->group->acl->objectTypes['programs'] = 'program';
 $config->group->acl->objectTypes['projects'] = 'project';
 $config->group->acl->objectTypes['products'] = 'product';
 $config->group->acl->objectTypes['sprints']  = 'sprint';
+
+$config->privPackage = new stdclass();
+$config->privPackage->create = new stdclass();
+$config->privPackage->edit   = new stdclass();
+$config->privPackage->create->requiredFields = 'name,module';
+$config->privPackage->edit->requiredFields   = 'name,module';

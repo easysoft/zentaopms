@@ -71,6 +71,12 @@ $lang->group->other    = '其他模块';
 $lang->group->all      = '所有权限';
 $lang->group->config   = '配置';
 
+if(!isset($lang->privpackage)) $lang->privpackage = new stdclass();
+$lang->privpackage->id     = '编号';
+$lang->privpackage->name   = '权限包名称';
+$lang->privpackage->module = '所属模块';
+$lang->privpackage->desc   = '权限包说明';
+
 $lang->group->copyOptions['copyPriv'] = '复制权限';
 $lang->group->copyOptions['copyUser'] = '复制用户';
 

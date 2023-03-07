@@ -413,7 +413,15 @@ class group extends control
      */
     public function createPrivPackage()
     {
-        $this->view->title = $this->lang->group->createPrivPackage;
+        if(!empty($_POST))
+        {
+            $packageID = $this->group->createPrivPackage();
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
+        }
+
+        $this->view->title   = $this->lang->group->createPrivPackage;
+        $this->view->modules = array();
         $this->display();
     }
 }

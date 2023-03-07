@@ -20,7 +20,7 @@
     </div>
   </div>
   <div class="btn-toolbar pull-right">
-    <?php if(common::hasPriv('group', 'createPrivPackage')) echo html::a($this->createLink('group', 'createPrivPackage', '', '', true), $lang->group->createPrivPackage, '', 'class="btn btn-primary iframe"');?>
+    <?php if(common::hasPriv('group', 'createPrivPackage')) echo html::a($this->createLink('group', 'createPrivPackage', '', '', true), $lang->group->createPrivPackage, '', 'class="btn btn-primary iframe" data-width="500"');?>
   </div>
 </div>
 <div id='mainContent' class='main-table'>

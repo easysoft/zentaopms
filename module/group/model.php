@@ -755,4 +755,17 @@ class groupModel extends model
 
         return true;
     }
+
+    /**
+     * Create a privilege package.
+     *
+     * @access public
+     * @return bool
+     */
+    public function createPrivPackage()
+    {
+        $package = fixer::input('post')->get();
+        $this->dao->insert(TABLE_PRIVPACKAGE)->data($package)->batchCheck($this->config->privPackage->create->requiredFields, 'notempty')->exec();
+        return $this->dao->lastInsertId();
+    }
 }
