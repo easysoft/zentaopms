@@ -3,15 +3,16 @@ namespace zin;
 
 class icon extends wg
 {
-    protected static $defineProps = 'name:string';
+    protected static $defineProps = 'name:string, size?:string|number';
 
     protected function build()
     {
-        $iconName = $this->props->get('name', '');
+        list($name, $size) = $this->prop(array('name', 'size'));
         return h::i
         (
-            setClass("icon icon-$iconName"),
-            set($this->props->skip('name')),
+            setClass('icon', empty($name) ? NULL : "icon-$name"),
+            is_numeric($size) ? setStyle('font-size', "{$size}px") : (is_string($size) ? setClass("size-$size") : NULL),
+            set($this->props->skip(array_keys(icon::getDefinedProps()))),
             $this->children()
         );
     }
