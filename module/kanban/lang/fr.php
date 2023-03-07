@@ -86,7 +86,7 @@ $lang->kanban->importBuild         = 'Build';
 $lang->kanban->importTicket        = 'Ticket';
 $lang->kanban->allKanban           = 'All Kanban';
 $lang->kanban->allProjects         = "All {$lang->projectCommon}s";
-$lang->kanban->allProducts         = 'All Products';
+$lang->kanban->allProducts         = "All {$lang->productCommon}s";
 $lang->kanban->mine                = 'Mine';
 $lang->kanban->alignment           = 'Alignment';
 $lang->kanban->allUsers            = 'Charger Tous';
@@ -127,7 +127,7 @@ $lang->kanban->confirmDeleteKanban = 'Do you want to delete this Kanban?';
 $lang->kanban->cardCountTip        = 'Please enter the number of cards';
 
 $lang->kanban->selectedKanban  = 'Please select Kanban';
-$lang->kanban->selectedProduct = 'Please select Product';
+$lang->kanban->selectedProduct = "Please select {$lang->productCommon}";
 $lang->kanban->selectedProject = 'Please select ' . $lang->projectCommon;
 $lang->kanban->selectedLane    = 'Target Lane';
 
