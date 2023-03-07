@@ -3,9 +3,9 @@ $lang->transfer = new stdclass();
 
 $lang->transfer->reservedWord['id']        = 'ID';
 $lang->transfer->reservedWord['type']      = 'Type';
-$lang->transfer->reservedWord['project']   = 'Project';
+$lang->transfer->reservedWord['project']   = $lang->projectCommon;
 $lang->transfer->reservedWord['execution'] = 'Execution';
-$lang->transfer->reservedWord['product']   = 'Project';
+$lang->transfer->reservedWord['product']   = $lang->productCommon;
 $lang->transfer->reservedWord['code']      = 'CODE';
 $lang->transfer->reservedWord['name']      = 'Name';
 $lang->transfer->reservedWord['title']     = 'Title';

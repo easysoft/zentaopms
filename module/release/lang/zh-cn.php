@@ -33,7 +33,7 @@ $lang->release->errorDate          = '发布日期不能大于今天。';
 $lang->release->basicInfo = '基本信息';
 
 $lang->release->id             = 'ID';
-$lang->release->product        = '所属产品';
+$lang->release->product        = "所属{$lang->productCommon}";
 $lang->release->branch         = '平台/分支';
 $lang->release->project        = '所属项目';
 $lang->release->build          = '版本';
