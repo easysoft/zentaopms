@@ -685,7 +685,8 @@ class devModel extends model
         $menus = array();
         if($this->config->vision == 'lite' and $module == 'execution') return $menus;
 
-        $titleList = array();
+        $titleList  = array();
+        $tagMethods = array();
         /* Convenience secondary menu. */
         foreach(array('homeMenu', 'menu') as $menu)
         {
@@ -709,7 +710,8 @@ class devModel extends model
                     list($thisModule, $thisMethod) = $this->config->dev->linkMethods[$module]["{$thisModule}-{$thisMethod}"];
                 }
 
-                $titleList[] = $label;
+                $titleList[]  = $label;
+                $tagMethods[] = $thisMethod;
 
                 $subMenu = new stdclass();
                 $subMenu->title    = isset($this->lang->dev->replaceLable["$thisModule-$thisMethod"]) ? $this->lang->dev->replaceLable["$thisModule-$thisMethod"] : $label;
@@ -759,7 +761,8 @@ class devModel extends model
                                 $this->app->loadLang($moduleKey);
                                 if(isset($this->lang->$moduleKey->featureBar[$menuKey][$subMenuKey]))
                                 {
-                                    $titleList[] = $label;
+                                    $titleList[]  = $label;
+                                    $tagMethods[] = $thisMethod;
 
                                     $thirdMenu = new stdClass();
                                     $thirdMenu->title  = $label;
@@ -780,7 +783,8 @@ class devModel extends model
                                         if(is_array($this->lang->$moduleKey->featureBar[$thisMethod][$arrayKey])) continue;
                                     }
 
-                                    $titleList[] = $label;
+                                    $titleList[]  = $label;
+                                    $tagMethods[] = $thisMethod;
 
                                     $subMenu = new stdClass();
                                     $subMenu->title  = $label;
@@ -802,21 +806,28 @@ class devModel extends model
             }
         }
 
-        if(in_array($module, $this->config->dev->onlyMainMenu))
+        $this->app->loadLang($module);
+        if(isset($this->lang->$module->featureBar))
         {
-            $mainNav = strip_tags($this->lang->mainNav->$module);
-            list($label, $thisModule, $thisMethod) = explode('|', $mainNav);
-            $titleList[] = $label;
+            foreach($this->lang->$module->featureBar as $method => $tags)
+            {
+                if(in_array($method, $tagMethods)) continue;
 
-            $subMenu = new stdClass();
-            $subMenu->title    = $label;
-            $subMenu->key      = '';
-            $subMenu->module   = $thisModule;
-            $subMenu->method   = $thisMethod;
-            $subMenu->active   = ($methodName == $thisMethod and $moduleName == $thisModule) ? 1 : 0;
-            $subMenu->children = array();
+                $label = zget($this->lang->$module, $method, $this->lang->$module->common);
 
-            $menus[] = $subMenu;
+                $titleList[]  = $label;
+                $tagMethods[] = $method;
+
+                $subMenu = new stdClass();
+                $subMenu->title    = $label;
+                $subMenu->key      = '';
+                $subMenu->module   = $module;
+                $subMenu->method   = $method;
+                $subMenu->active   = ($methodName == $method and $moduleName == $module) ? 1 : 0;
+                $subMenu->children = array();
+
+                $menus[] = $subMenu;
+            }
         }
 
         $titlePinYin = common::convert2Pinyin($titleList);
