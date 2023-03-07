@@ -44,11 +44,13 @@ class actionItem extends wg
         $methodName = "build{$type}Item";
         if(method_exists($this, $methodName)) return $this->$methodName();
 
-        list($tagName, $icon, $text, $trailingIcon) = $this->prop(array('tagName', 'icon', 'text', 'trailingIcon'));
+        list($tagName, $icon, $text, $trailingIcon, $url, $target, $active, $disabled) = $this->prop(array('tagName', 'icon', 'text', 'trailingIcon', 'url', 'target', 'active', 'disabled'));
 
         return h::create
         (
             $tagName,
+            set($tagName === 'a' ? array('href' => $url, 'target' => $target) : array('data-url' => $url, 'data-target' => $target)),
+            setClass(array('active' => $active, 'disabled' => $disabled)),
             set($this->props->skip(array_keys(actionItem::getDefinedProps()))),
             $icon ? icon($icon) : NULL,
             $text,
@@ -59,14 +61,12 @@ class actionItem extends wg
 
     protected function build()
     {
-        list($name, $type, $outerTag, $tagName, $url, $target, $active, $disabled, $outerProps) = $this->prop(array('name', 'type', 'outerTag', 'tagName', 'url', 'target', 'active', 'disabled', 'outerProps'));
+        list($name, $type, $outerTag, $outerProps) = $this->prop(array('name', 'type', 'outerTag', 'outerProps'));
 
         return h::create
         (
             $outerTag,
-            set($tagName === 'a' ? array('href' => $url, 'target' => $target) : array('data-url' => $url, 'data-target' => $target)),
             setClass("$name-$type"),
-            setClass(array('active' => $active, 'disabled' => $disabled)),
             set($outerProps),
             $this->buildItem()
         );
