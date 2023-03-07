@@ -1,7 +1,7 @@
 <?php
 /* Field. */
 $lang->projectstory->project = "{$lang->projectCommon} ID";
-$lang->projectstory->product = "Product ID";
+$lang->projectstory->product = "{$lang->productCommon} ID";
 $lang->projectstory->story   = "{$lang->SRCommon} List";
 $lang->projectstory->version = "Version";
 $lang->projectstory->order   = "Order";
