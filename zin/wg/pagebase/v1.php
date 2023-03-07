@@ -46,7 +46,7 @@ class pagebase extends wg
             (
                 set($this->prop('bodyProps')),
                 parent::build(),
-                $config->debug ? h::js('window.zin = ' . json_encode(array('page' => $this->toJsonData(), 'definedProps' => wg::$definedPropsMap)) . ';console.log("zin", window.zin)') : null
+                $config->debug ? h::js('window.zin = ' . json_encode(array('page' => $this->toJsonData(), 'definedProps' => wg::$definedPropsMap, 'wgBlockMap' => wg::$wgToBlockMap)) . ';console.log("zin", window.zin)') : null
             )
         );
     }
