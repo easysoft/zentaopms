@@ -49,6 +49,9 @@ $lang->group->allCheck           = '全部';
 $lang->group->noGroup            = '暂时没有分组。';
 $lang->group->repeat             = "『%s』已经有『%s』这条记录了，请调整后再试。";
 $lang->group->noneProject        = '暂时没有项目';
+$lang->group->addPriv            = '新增权限';
+$lang->group->servicePrivPackage = '维护权限包';
+$lang->group->batchSetDependency = '批量设置依赖';
 
 $lang->group->id       = '编号';
 $lang->group->name     = '分组名称';

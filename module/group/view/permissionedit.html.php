@@ -11,9 +11,20 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
-<div class='btn-toolbar pull-right'>
-   <?php echo html::backButton($lang->logout, '', 'btn-primary');?>
-</div>
+<div id="mainMenu" class='flex-space-center'>
+  <div class="btn-toobar">
+    <?php echo html::backButton('<i class="icon icon-angle-left"></i>' . $lang->goback, '', '');?>
+    <a href="#" class="btn btn-link btn-active-text">所有权限</a>
+  </div>
+  <div class="btn-toolbar">
+    <div class="btn-group">
+    <?php echo html::a($this->createLink('', '', '', '', false), '<i class="icon icon-list"></i>', '', 'class="btn"');?>
+    <?php echo html::a($this->createLink('', '', '', '', false), '<i class="icon icon-cards-view"></i>', '', 'class="btn"');?>
+    </div>
+    <a href="#" class="btn btn-primary"><?php echo $lang->group->addPriv?></a>
+    <a href="#" class="btn btn-primary"><?php echo $lang->group->servicePrivPackage?></a>
+    <a href="#" class="btn btn-primary"><?php echo $lang->group->batchSetDependency?></a>
+  </div>
 </div>
 <div id='mainContent' class='main-table'>
 </div>
