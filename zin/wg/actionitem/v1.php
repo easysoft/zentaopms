@@ -6,7 +6,7 @@ require_once dirname(__DIR__) . DS . 'dropdown' . DS . 'v1.php';
 
 class actionItem extends wg
 {
-    static $defineProps = 'name:string="action", type:string="item", outerTag:string="li", tagName:string="a", icon?:string, text?:string, url?:string, target?:string, active?:bool, disabled?:bool, trailingIcon?:string, outerProps?:array';
+    static $defineProps = 'name:string="action", type:string="item", outerTag:string="li", tagName:string="a", icon?:string, text?:string, url?:string, target?:string, active?:bool, disabled?:bool, trailingIcon?:string, outerProps?:array, outerClass?: string';
 
     protected function buildDividerItem()
     {
@@ -61,12 +61,12 @@ class actionItem extends wg
 
     protected function build()
     {
-        list($name, $type, $outerTag, $outerProps) = $this->prop(array('name', 'type', 'outerTag', 'outerProps'));
+        list($name, $type, $outerTag, $outerProps, $outerClass) = $this->prop(array('name', 'type', 'outerTag', 'outerProps', 'outerClass'));
 
         return h::create
         (
             $outerTag,
-            setClass("$name-$type"),
+            setClass("$name-$type", $outerClass),
             set($outerProps),
             $this->buildItem()
         );

@@ -9,9 +9,13 @@ class toolbar extends wg
 
     public function onBuildItem($item)
     {
-        $item = ($item instanceof item) ? $item : (item(set($item)));
-        $type = $item->prop('type');
+        if(!($item instanceof item))
+        {
+            if($item instanceof wg) return $item;
+            $item = item(set($item));
+        }
 
+        $type = $item->prop('type');
         if($type === 'divider') return div(setClass('toolbar-divider'));
 
         list($btnClass, $btnProps) = $this->prop(array('btnClass', 'btnProps'));
