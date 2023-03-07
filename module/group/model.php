@@ -803,4 +803,52 @@ class groupModel extends model
     {
         return $this->dao->findById($packageID)->from(TABLE_PRIVPACKAGE)->fetch();
     }
+
+    /**
+     * Init Privs.
+     *
+     * @access public
+     * @return void
+     */
+    public function initPrivs()
+    {
+        $this->sortResource();
+        $resource = json_decode(json_encode($this->lang->resource), true);
+        $this->dao->delete()->from(TABLE_PRIVLANG)->exec();
+
+        foreach($resource as $moduleName => $methods)
+        {
+            $order = 1;
+            foreach($methods as $methodName => $methodLang)
+            {
+                $priv = new stdclass();
+                $priv->moduleName = $moduleName;
+                $priv->methodName = $methodName;
+                $priv->module     = $moduleName;
+                $priv->package    = 0;
+                $priv->order      = $order * 5;
+                $order ++;
+
+                $this->dao->replace(TABLE_PRIV)->data($priv)->exec();
+                if(!dao::isError())
+                {
+                    $privID = $this->dao->lastInsertId();
+
+                    $this->app->loadLang($moduleName);
+                    foreach($this->config->langs as $lang => $langValue)
+                    {
+                        if($lang != 'zh-cn') continue;
+                        $privLang = new stdclass();
+                        $privLang->priv = $privID;
+                        $privLang->lang = $lang;
+                        $privLang->name = isset($this->lang->{$moduleName}->{$methodLang}) ? $this->lang->{$moduleName}->{$methodLang} : "{$moduleName}-{$methodLang}";
+                        $privLang->desc = '';
+                        $this->dao->replace(TABLE_PRIVLANG)->data($privLang)->exec();
+                    }
+                }
+            }
+        }
+
+        if(!dao::isError()) return true;
+    }
 }
