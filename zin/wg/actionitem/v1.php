@@ -2,6 +2,7 @@
 namespace zin;
 
 require_once dirname(__DIR__) . DS . 'btn' . DS . 'v1.php';
+require_once dirname(__DIR__) . DS . 'dropdown' . DS . 'v1.php';
 
 class actionItem extends wg
 {
@@ -26,9 +27,16 @@ class actionItem extends wg
         );
     }
 
+    protected function buildDropdownItem()
+    {
+        $dropdown = new dropdown($this->props->skip('tagName,type,name,outerTag,outerProps'),  $this->children());
+        \a($dropdown);
+        return $dropdown;
+    }
+
     protected function buildBtnItem()
     {
-        return new btn($this->props->skip('tagName,type,name,outerTag,outerProps'));
+        return new btn($this->props->skip('tagName,type,name,outerTag,outerProps'), $this->children());
     }
 
     protected function buildItem()
