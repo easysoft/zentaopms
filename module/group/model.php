@@ -788,6 +788,11 @@ class groupModel extends model
         $oldPackage = $this->getPrivPackageByID($packageID);
 
         $package = fixer::input('post')->get();
+        if($oldPackage->module != $package->module)
+        {
+            $packages = $this->getPrivPackagesByModule($package->module);
+            $package->order = (count($packages) + 1) * 5;
+        }
         $this->dao->update(TABLE_PRIVPACKAGE)->data($package)->batchCheck($this->config->privPackage->update->requiredFields, 'notempty')->where('id')->eq($packageID)->exec();
         if(dao::isError()) return false;
 
