@@ -8,7 +8,7 @@
      */
     function handleSaveFormDraft()
     {
-        if(config.currentMethod === 'login') return;
+        if(config.currentMethod === 'login' || config.currentMethod.indexOf('edit') != -1) return;
         setTimeout(function() {
             var form = $('.table-form').parent();
             if(form.length)
@@ -112,7 +112,7 @@
                      $.zui.store.set(formDataID, $(form).serializeArray());
                  }).on('success.form.zui', function(event, res)
                  {
-                     if(res.result === 'fail' || res.status === 'fail') $.zui.store.remove(formDataID);
+                     if(res.result === 'success' || res.status === 'success') $.zui.store.remove(formDataID);
                  })  
              }   
          }, 500);
