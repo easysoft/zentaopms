@@ -793,7 +793,7 @@ class groupModel extends model
     }
 
     /**
-     * Ge priv package by ID.
+     * Get priv package by ID.
      *
      * @param  int    $packageID
      * @access public
@@ -802,6 +802,18 @@ class groupModel extends model
     public function getPrivPackageByID($packageID)
     {
         return $this->dao->findById($packageID)->from(TABLE_PRIVPACKAGE)->fetch();
+    }
+
+    /**
+     * Get priv packages by module.
+     *
+     * @param  string $module
+     * @access public
+     * @return void
+     */
+    public function getPrivPackagesByModule($module)
+    {
+        return $this->dao->select('*')->from(TABLE_PRIVPACKAGE)->where('module')->eq($module)->fetchAll('id');
     }
 
     /**
@@ -815,9 +827,9 @@ class groupModel extends model
     {
         $this->loadModel('setting');
 
+        $tree  = array();
         $views = empty($viewName) ? $this->setting->getItem("owner=system&module=priv&key=views") : $viewName;
         $views = explode(',', $views);
-
         $modules = array();
         foreach($views as $view)
         {
@@ -834,6 +846,65 @@ class groupModel extends model
         }
 
         return $modules;
+    }
+
+    /**
+     * Get priv package tree list.
+     *
+     * @access public
+     * @return void
+     */
+    public function getPrivPackageTreeList()
+    {
+        $this->loadModel('setting');
+
+        $views = empty($viewName) ? $this->setting->getItem("owner=system&module=priv&key=views") : $viewName;
+        $views = explode(',', $views);
+
+        $modules = array();
+        foreach($views as $viewIndex => $view)
+        {
+            $this->app->loadLang($view);
+            $viewID           = $view . 'View';
+            $treeView         = new stdclass();
+            $treeView->id    = $viewID;
+            $treeView->name  = $this->lang->{$view}->common;
+            $treeView->path  = ",{$viewID},";
+            $treeView->grade = 1;
+            $treeView->order = $viewIndex;
+            $tree[$viewID]   = $treeView;
+
+            $viewModules = $this->setting->getItem("owner=system&module=priv&key={$view}Modules");
+            if(empty($viewModules)) continue;
+
+            $viewModules = explode(',', $viewModules);
+            foreach($viewModules as $moduleIndex => $module)
+            {
+                $this->app->loadLang($module);
+
+                $treeModule        = new stdclass();
+                $treeModule->id    = $module;
+                $treeModule->name  = $this->lang->{$module}->common;
+                $treeModule->path  = ",{$viewID},{$module},";
+                $treeModule->grade = 2;
+                $treeModule->order = $moduleIndex;
+                $tree[$module]     = $treeModule;
+
+                $packages = $this->getPrivPackagesByModule($module);
+                foreach($packages as $packageID => $package)
+                {
+                    $treePackage = new stdclass();
+                    $treePackage->id    = $packageID;
+                    $treePackage->name  = $package->name;
+                    $treePackage->path  = ",{$viewID},{$module},{$packageID},";
+                    $treePackage->grade = 3;
+                    $treePackage->order = $package->order;
+                    $tree[$packageID]   = $treePackage;
+                }
+            }
+        }
+
+        return $tree;
     }
 
     /**

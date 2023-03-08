@@ -401,7 +401,8 @@ class group extends control
      */
     public function managePrivPackage()
     {
-        $this->view->title = $this->lang->group->managePrivPackage;
+        $this->view->title            = $this->lang->group->managePrivPackage;
+        $this->view->packagesTreeList = $this->group->getPrivPackageTreeList();
         $this->display();
     }
 
