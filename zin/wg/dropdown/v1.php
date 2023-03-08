@@ -6,7 +6,7 @@ require_once dirname(__DIR__) . DS . 'btn' . DS . 'v1.php';
 
 class dropdown extends wg
 {
-    static $defineProps = 'items?:array, placement?:string, strategy?:string, offset?: number, flip?: bool, subMenuTrigger?: string, arrow?: string, trigger?: string, menuProps?: array, target?: string, id?: string';
+    static $defineProps = 'items?:array, placement?:string, strategy?:string, offset?: number, flip?: bool, subMenuTrigger?: string, arrow?: string, trigger?: string, menuProps?: array, target?: string, id?: string, menuClass?: string, hasIcons?: bool';
 
     static $defineBlocks = array
     (
@@ -17,7 +17,7 @@ class dropdown extends wg
 
     protected function build()
     {
-        list($items, $placement, $strategy, $offset, $flip, $subMenuTrigger, $arrow, $trigger, $menuProps, $target, $id) = $this->prop(array('items', 'placement', 'strategy', 'offset', 'flip', 'subMenuTrigger', 'arrow', 'trigger', 'menuProps', 'target', 'id'));
+        list($items, $placement, $strategy, $offset, $flip, $subMenuTrigger, $arrow, $trigger, $menuProps, $target, $id, $menuClass, $hasIcons) = $this->prop(array('items', 'placement', 'strategy', 'offset', 'flip', 'subMenuTrigger', 'arrow', 'trigger', 'menuProps', 'target', 'id', 'menuClass', 'hasIcons'));
 
         $triggerBlock = $this->block('trigger');
         $menu         = $this->block('menu');
@@ -28,10 +28,35 @@ class dropdown extends wg
             $menu = new menu
             (
                 setClass('dropdown-menu'),
-                set($menuProps),
                 set::items($items),
                 divorce($itemsList),
             );
+
+            if($hasIcons === NULL)
+            {
+                if(is_array($items))
+                {
+                    foreach($items as $item)
+                    {
+                        if((is_array($item) and isset($item['icon'])) || (($item instanceof wg) && $item->hasProp('icon')))
+                        {
+                            $hasIcons = true;
+                            break;
+                        }
+                    }
+                }
+                if(!$hasIcons)
+                {
+                    foreach($itemsList as $item)
+                    {
+                        if(($item instanceof wg) && $item->hasProp('icon'))
+                        {
+                            $hasIcons = true;
+                            break;
+                        }
+                    }
+                }
+            }
         }
         elseif(is_array($menu))
         {
@@ -40,6 +65,10 @@ class dropdown extends wg
 
         if($menu instanceof wg)
         {
+            $menu->setProp($menuProps);
+            $menu->setProp('class', $menuClass);
+            if($hasIcons) $menu->setProp('class', 'has-icons');
+
             if(!empty($id)) $menu->setProp('id', $id);
             if(empty($target))
             {

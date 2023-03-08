@@ -17,11 +17,11 @@ class actionItem extends wg
     {
         list($icon, $text, $trailingIcon) = $this->prop(array('icon', 'text', 'trailingIcon'));
 
-        return h::span
+        return h::div
         (
-            set($text),
             set($this->props->skip(array_keys(actionItem::getDefinedProps()))),
             $icon ? icon($icon) : NULL,
+            empty($text) ? NULL : span($text, setClass('text')),
             $this->children(),
             $trailingIcon ? icon($trailingIcon) : NULL,
         );

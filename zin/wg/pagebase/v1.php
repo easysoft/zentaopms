@@ -9,9 +9,21 @@ class pagebase extends wg
 
     static $defaultProps = array('zui' => false, 'display' => true, 'metas' => array('<meta charset="utf-8">', '<meta http-equiv="X-UA-Compatible" content="IE=edge">', '<meta name="viewport" content="width=device-width, initial-scale=1">', '<meta name="renderer" content="webkit">'));
 
+    static $defineBlocks = array('head' => array());
+
     protected function created()
     {
         if($this->prop('display')) $this->display();
+    }
+
+    protected function buildHead()
+    {
+        return $this->block('head');
+    }
+
+    protected function buildBody()
+    {
+        return $this->children();
     }
 
     protected function build()
@@ -40,12 +52,12 @@ class pagebase extends wg
                         'return Component ? new Component(element, options) : null;',
                     '};'
                 ) : null,
-                $this->block('head'),
+                $this->buildHead()
             ),
             h::body
             (
                 set($this->prop('bodyProps')),
-                parent::build(),
+                $this->buildBody(),
                 $config->debug ? h::js('window.zin = ' . json_encode(array('page' => $this->toJsonData(), 'definedProps' => wg::$definedPropsMap, 'wgBlockMap' => wg::$wgToBlockMap)) . ';console.log("zin", window.zin)') : null
             )
         );
