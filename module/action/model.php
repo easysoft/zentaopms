@@ -485,11 +485,11 @@ class actionModel extends model
 	    {
 		$productShadow = $this->dao->select('*')->from(TABLE_PRODUCT)->where('id')->in($action->product)->fetch('shadow');
 		$title = $this->dao->select('title')->from(TABLE_STORY)->where('id')->eq($action->extra)->fetch('title');
-		$defaultExtra = "#$action->extra ".$title;
+		$defaultExtra = "#$action->extra ". $title;
 		if($productShadow === "1")
 		{
 		    $projectID = $this->dao->select('project')->from(TABLE_PROJECTPRODUCT)->where('product')->in($action->product)->fetch('project');
-		    if($title) $action->extra = common::hasPriv('projectstory','story') && $projectID ? html::a(helper::createLink('projectstory','story',"projectID=$projectID"),$defaultExtra) : $defaultExtra;
+		    if($title) $action->extra = common::hasPriv('projectstory', 'story') && $projectID ? html::a(helper::createLink('projectstory', 'story', "projectID=$projectID"), $defaultExtra) : $defaultExtra;
 		}
 		else
 		{
