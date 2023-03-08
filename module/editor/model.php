@@ -14,6 +14,7 @@ class editorModel extends model
     /**
      * Get module files, contain control's methods and model's method but except ext.
      *
+     * @param  string    $moduleName
      * @access public
      * @return array
      */
@@ -45,9 +46,9 @@ class editorModel extends model
     /**
      * Get extension files.
      *
-     * @param  int    $extPath
+     * @param  string    $moduleName
      * @access public
-     * @return void
+     * @return array
      */
     public function getExtensionFiles($moduleName)
     {
@@ -68,9 +69,22 @@ class editorModel extends model
                 {
                     foreach(glob($extensionFullDir . '*') as $extensionFullFile)
                     {
-                        $fileName = basename($extensionFullFile);
-                        if($fileName == 'index.html') continue;
-                        $extensionList[$extType][$extensionFullDir][$extensionFullFile] = $fileName;
+                        if($ext == 'model' and is_dir($extensionFullFile))
+                        {
+                            $extModelDir = $extensionFullFile;
+                            foreach(glob($extModelDir . '/*') as $extModelFile)
+                            {
+                                $fileName = basename($extModelFile);
+                                if($fileName == 'index.html') continue;
+                                $extensionList[$extType][$extensionFullDir][$extensionFullFile][$extModelFile] = $fileName;
+                            }
+                        }
+                        else
+                        {
+                            $fileName = basename($extensionFullFile);
+                            if($fileName == 'index.html') continue;
+                            $extensionList[$extType][$extensionFullDir][$extensionFullFile] = $fileName;
+                        }
                     }
                 }
             }
@@ -135,9 +149,10 @@ class editorModel extends model
     /**
      * Print tree from module files.
      *
-     * @param  int    $files
+     * @param  array    $files
+     * @param  bool     $isRoot
      * @access public
-     * @return void
+     * @return string
      */
     public function printTree($files, $isRoot = true)
     {
@@ -195,12 +210,22 @@ class editorModel extends model
 
         if(strpos($filePath, DS . 'ext' . DS) !== false)
         {
-            switch($fileName)
+            $parentName = basename(dirname($filePath));
+            if($fileName == 'lang' or $fileName == 'js' or $fileName == 'css')
             {
-            case 'lang': $tree .= $file; break;
-            case 'js':   $tree .= "$file " . html::a($this->getExtendLink($filePath, "newJS"), $this->lang->editor->newExtend, 'editWin'); break;
-            case 'css':  $tree .= "$file " . html::a($this->getExtendLink($filePath, "newCSS"), $this->lang->editor->newExtend, 'editWin'); break;
-            default:     $tree .= "$file " . html::a($this->getExtendLink($filePath, "newExtend"), $this->lang->editor->newExtend, 'editWin');
+                $tree .= $file;
+            }
+            elseif($parentName == 'js')
+            {
+                $tree .= "$file " . html::a($this->getExtendLink($filePath, "newJS"), $this->lang->editor->newExtend, 'editWin');
+            }
+            elseif($parentName == 'css')
+            {
+                $tree .= "$file " . html::a($this->getExtendLink($filePath, "newCSS"), $this->lang->editor->newExtend, 'editWin');
+            }
+            else
+            {
+                $tree .= "$file " . html::a($this->getExtendLink($filePath, "newExtend"), $this->lang->editor->newExtend, 'editWin');
             }
         }
         elseif($fileName == 'model.php')
@@ -468,10 +493,23 @@ EOD;
     {
         $fileExtension  = 'php';
         $sourceFileName = basename($filePath);
-        if(strpos($sourceFileName, '.') !== false) $fileExtension = substr($sourceFileName, strpos($sourceFileName, '.') + 1);
+        if(strrpos($sourceFileName, '.') !== false) $fileExtension = substr($sourceFileName, strrpos($sourceFileName, '.') + 1);
 
         $fileName   = empty($_POST['fileName']) ? '' : trim($this->post->fileName);
         $moduleName = $this->getClassNameByPath($filePath);
+
+        $methodName = '';
+        if(strtolower($action) == 'newjs')
+        {
+            if($fileExtension != 'js') $fileExtension = 'js';
+            $methodName = basename($filePath);
+        }
+        if(strtolower($action) == 'newcss')
+        {
+            if($fileExtension != 'css') $fileExtension = 'css';
+            $methodName = basename($filePath);
+        }
+
         $extPath    = $this->app->getExtensionRoot() . 'custom' . DS . $moduleName . DS . 'ext' . DS;
         if($fileName and (strpos($fileName, '.' . $fileExtension) !== (strlen($fileName) - strlen($fileExtension) - 1))) $fileName .= '.' . $fileExtension;
         switch($action)
@@ -499,8 +537,8 @@ EOD;
             if($action == 'method') return $extPath . basename($filePath, ".{$fileExtension}") . DS . $fileName;
             if($action == 'extend') return $filePath . DS . $fileName;
             if($action == 'config') return $extPath . 'config' . DS . $fileName;
-            if($action == 'js')     return $extPath . 'js' . DS . basename($fileName, ".{$fileExtension}") . DS . $fileName;
-            if($action == 'css')    return $extPath . 'css' . DS . basename($fileName, ".{$fileExtension}") . DS . $fileName;
+            if($action == 'js')     return $extPath . 'js'  . DS . $methodName . DS . $fileName;
+            if($action == 'css')    return $extPath . 'css' . DS . $methodName . DS . $fileName;
             return $extPath . 'lang' . DS . str_replace('_', '-', $action) . DS . $fileName;
         }
     }

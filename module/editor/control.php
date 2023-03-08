@@ -114,6 +114,8 @@ class editor extends control
 
             $fileName  = basename($filePath);
             if(strpos($fileName, '.') !== false) $extension = substr($fileName, strpos($fileName, '.') + 1);
+            if(strtolower($action) == 'newjs')  $extension = 'js';
+            if(strtolower($action) == 'newcss') $extension = 'css';
         }
         $this->view->fileContent   = $fileContent;
         $this->view->filePath      = $filePath;
