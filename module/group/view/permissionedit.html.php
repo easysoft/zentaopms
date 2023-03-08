@@ -32,12 +32,150 @@
       <table class='table table-hover table-striped table-bordered' id='privList'>
         <thead>
           <tr class="text-center permission-head">
-            <th class="flex-title">模块</th>
-            <th class="flex-title">权限包</th>
+            <th class="flex-sm">模块</th>
+            <th class="flex-sm">权限包</th>
             <th class="flex-content">权限</th>
           </tr>
         </thead>
         <tbody>
+          <tr class="permission-row">
+            <td class="flex-sm text-right"> 首页 </td>
+            <td class="flex-sm text-right"> 首页 </td>
+            <td class="flex-content">
+              <div class="group-item">
+                <div class="checkbox-primary">
+                  <input type="checkbox" name="actions[my][]" value="index" checked="checked" title="地盘仪表盘" id="actions[my]index"></input>
+                  <label for="actions[my]index"> 地盘仪表盘 </label>
+                </div>
+              </div>
+            </td>
+          </tr>
+          <tr class="permission-row">
+            <td class="flex-sm text-right"> 地盘 </td>
+            <td class="flex-sm text-right"> 地盘</td>
+            <td class="flex-content sorter-group">
+              <div class="group-item">
+                <div class="checkbox-primary">
+                  <input type="checkbox" name="actions[my][]" value="index" checked="checked" title="地盘仪表盘" id="actions[my]index"></input>
+                  <label for="actions[my]index"> 地盘仪表盘0 </label>
+                </div>
+              </div> 
+              <div class="group-item">
+                <div class="checkbox-primary">
+                  <input type="checkbox" name="actions[my][]" value="index" checked="checked" title="地盘仪表盘" id="actions[my]index"></input>
+                  <label for="actions[my]index"> 地盘仪表盘1 </label>
+                </div>
+              </div> 
+              <div class="group-item">
+                <div class="checkbox-primary">
+                  <input type="checkbox" name="actions[my][]" value="index" checked="checked" title="地盘仪表盘" id="actions[my]index"></input>
+                  <label for="actions[my]index"> 地盘仪表盘2 </label>
+                </div>
+              </div> 
+              <div class="group-item">
+                <div class="checkbox-primary">
+                  <input type="checkbox" name="actions[my][]" value="index" checked="checked" title="地盘仪表盘" id="actions[my]index"></input>
+                  <label for="actions[my]index"> 地盘仪表盘3 </label>
+                </div>
+              </div> 
+              <div class="group-item">
+                <div class="checkbox-primary">
+                  <input type="checkbox" name="actions[my][]" value="index" checked="checked" title="地盘仪表盘" id="actions[my]index"></input>
+                  <label for="actions[my]index"> 地盘仪表盘4 </label>
+                </div>
+              </div> 
+              <div class="group-item">
+                <div class="checkbox-primary">
+                  <input type="checkbox" name="actions[my][]" value="index" checked="checked" title="地盘仪表盘" id="actions[my]index"></input>
+                  <label for="actions[my]index"> 地盘仪表盘5 </label>
+                </div>
+              </div> 
+              <div class="group-item">
+                <div class="checkbox-primary">
+                  <input type="checkbox" name="actions[my][]" value="index" checked="checked" title="地盘仪表盘" id="actions[my]index"></input>
+                  <label for="actions[my]index"> 地盘仪表盘6 </label>
+                </div>
+              </div> 
+              <div class="group-item">
+                <div class="checkbox-primary">
+                  <input type="checkbox" name="actions[my][]" value="index" checked="checked" title="地盘仪表盘" id="actions[my]index"></input>
+                  <label for="actions[my]index"> 地盘仪表盘7 </label>
+                </div>
+              </div> 
+              <div class="group-item">
+                <div class="checkbox-primary">
+                  <input type="checkbox" name="actions[my][]" value="index" checked="checked" title="地盘仪表盘" id="actions[my]index"></input>
+                  <label for="actions[my]index"> 地盘仪表盘8 </label>
+                </div>
+              </div> 
+              <div class="group-item">
+                <div class="checkbox-primary">
+                  <input type="checkbox" name="actions[my][]" value="index" checked="checked" title="地盘仪表盘" id="actions[my]index"></input>
+                  <label for="actions[my]index"> 地盘仪表盘9 </label>
+                </div>
+              </div> 
+              <div class="group-item">
+                <div class="checkbox-primary">
+                  <input type="checkbox" name="actions[my][]" value="index" checked="checked" title="地盘仪表盘" id="actions[my]index"></input>
+                  <label for="actions[my]index"> 地盘仪表盘10 </label>
+                </div>
+              </div> 
+              <div class="group-item">
+                <div class="checkbox-primary">
+                  <input type="checkbox" name="actions[my][]" value="index" checked="checked" title="地盘仪表盘" id="actions[my]index"></input>
+                  <label for="actions[my]index"> 地盘仪表盘 </label>
+                </div>
+              </div> 
+              <div class="group-item">
+                <div class="checkbox-primary">
+                  <input type="checkbox" name="actions[my][]" value="index" checked="checked" title="地盘仪表盘" id="actions[my]index"></input>
+                  <label for="actions[my]index"> 地盘仪表盘 </label>
+                </div>
+              </div> 
+              <div class="group-item">
+                <div class="checkbox-primary">
+                  <input type="checkbox" name="actions[my][]" value="index" checked="checked" title="地盘仪表盘" id="actions[my]index"></input>
+                  <label for="actions[my]index"> 地盘仪表盘 </label>
+                </div>
+              </div> 
+              <div class="group-item">
+                <div class="checkbox-primary">
+                  <input type="checkbox" name="actions[my][]" value="index" checked="checked" title="地盘仪表盘" id="actions[my]index"></input>
+                  <label for="actions[my]index"> 地盘仪表盘 </label>
+                </div>
+              </div> 
+              <div class="group-item">
+                <div class="checkbox-primary">
+                  <input type="checkbox" name="actions[my][]" value="index" checked="checked" title="地盘仪表盘" id="actions[my]index"></input>
+                  <label for="actions[my]index"> 地盘仪表盘 </label>
+                </div>
+              </div> 
+              <div class="group-item">
+                <div class="checkbox-primary">
+                  <input type="checkbox" name="actions[my][]" value="index" checked="checked" title="地盘仪表盘" id="actions[my]index"></input>
+                  <label for="actions[my]index"> 地盘仪表盘 </label>
+                </div>
+              </div> 
+              <div class="group-item">
+                <div class="checkbox-primary">
+                  <input type="checkbox" name="actions[my][]" value="index" checked="checked" title="地盘仪表盘" id="actions[my]index"></input>
+                  <label for="actions[my]index"> 地盘仪表盘 </label>
+                </div>
+              </div> 
+              <div class="group-item">
+                <div class="checkbox-primary">
+                  <input type="checkbox" name="actions[my][]" value="index" checked="checked" title="地盘仪表盘" id="actions[my]index"></input>
+                  <label for="actions[my]index"> 地盘仪表盘 </label>
+                </div>
+              </div> 
+              <div class="group-item">
+                <div class="checkbox-primary">
+                  <input type="checkbox" name="actions[my][]" value="index" checked="checked" title="地盘仪表盘" id="actions[my]index"></input>
+                  <label for="actions[my]index"> 地盘仪表盘 </label>
+                </div>
+              </div> 
+            </td>
+          </tr>
         </tbody>
       </table>
     </form>
