@@ -184,6 +184,11 @@ class wg
         return isset($this->blocks[$name]) ? $this->blocks[$name] : array();
     }
 
+    public function hasBlock($name)
+    {
+        return isset($this->blocks[$name]);
+    }
+
     /**
      * Apply directive
      * @param object $directive
@@ -441,7 +446,7 @@ class wg
                     if(is_array(static::$defaultProps) && isset(static::$defaultProps[$name]))
                     {
                         $value['default'] = static::$defaultProps[$name];
-                        $props[$name]    = $value;
+                        $props[$name]     = $value;
                     }
                 }
             }
@@ -461,7 +466,7 @@ class wg
                 $value = trim($value);
                 if(strpos($value, ':') === false)
                 {
-                    $name = $value;
+                    $name  = $value;
                     $value = '';
                 }
                 else
@@ -471,7 +476,7 @@ class wg
                 $name = trim($name);
                 if($name[strlen($name) - 1] === '?')
                 {
-                    $name = substr($name, 0, strlen($name) - 1);
+                    $name     = substr($name, 0, strlen($name) - 1);
                     $optional = true;
                 }
             }
@@ -486,7 +491,7 @@ class wg
             {
                 if(strpos($value, '=') === false)
                 {
-                    $type = $value;
+                    $type    = $value;
                     $default = NULL;
                 }
                 else
@@ -498,12 +503,16 @@ class wg
                 if(is_string($default)) $default = json_decode(trim($default));
             }
 
-            if(is_array(static::$defaultProps) && isset(static::$defaultProps[$name]))
-            {
-                $default = static::$defaultProps[$name];
-            }
-
             $props[$name] = array('type' => empty($type) ? 'mixed' : $type, 'default' => $default, 'optional' => $default !== NULL || $optional);
+        }
+
+        if(static::$defaultProps && (!$parentClass || static::$defaultProps !== $parentClass::$defaultProps))
+        {
+            foreach(static::$defaultProps as $name => $value)
+            {
+                if(!isset($props[$name])) continue;
+                $props[$name]['default'] = $value;
+            }
         }
         return $props;
     }
