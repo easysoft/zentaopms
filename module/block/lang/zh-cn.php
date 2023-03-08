@@ -142,7 +142,7 @@ $lang->block->default['waterfall']['project']['6']['source'] = 'project';
 
 $lang->block->default['waterfallplus'] = $lang->block->default['waterfall'];
 
-$lang->block->default['scrum']['project']['1']['title'] =  '项目概况';
+$lang->block->default['scrum']['project']['1']['title'] = $lang->projectCommon . '概况';
 $lang->block->default['scrum']['project']['1']['block'] = 'scrumoverview';
 $lang->block->default['scrum']['project']['1']['grid']  = 8;
 
