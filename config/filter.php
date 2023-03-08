@@ -180,6 +180,7 @@ $filter->projectplan->browse      = new stdclass();
 $filter->kanban->space            = new stdclass();
 $filter->execution->kanban        = new stdclass();
 $filter->execution->all           = new stdclass();
+$filter->group->editmanagepriv    = new stdclass();
 
 $filter->index->index->get['open'] = 'reg::base64';
 
@@ -451,3 +452,5 @@ $filter->tree->browse->cookie['preProductID'] = 'int';
 $filter->tree->browse->cookie['preBranch']    = 'reg::word';
 
 $filter->kanban->space->cookie['showClosed'] = 'code';
+
+$filter->group->editmanagepriv->cookie['managePrivEditType'] = 'string';

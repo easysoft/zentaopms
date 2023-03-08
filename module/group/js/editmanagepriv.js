@@ -64,4 +64,11 @@ $(function()
     initDependTree(data);
     $('li.has-list > ul').addClass("menu-active-primary menu-hover-primary");
     $('.sorter-group').sortable();
+
+    $('.btn-switch').on('click', function()
+    {
+        $.cookie('managePrivEditType', $(this).data('type'), {expires: config.cookieLife, path: config.webRoot});
+        location.href = location.href;
+    });
 });
+
