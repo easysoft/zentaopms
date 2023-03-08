@@ -802,6 +802,13 @@ class groupModel extends model
         return $changes;
     }
 
+    public function deletePrivPackage($packageID)
+    {
+        $this->dao->delete()->from(TABLE_PRIVPACKAGE)->where('id')->eq($packageID)->exec();
+        if(dao::isError()) return false;
+        $this->dao->update(TABLE_PRIV)->set('package')->eq(0)->where('package')->eq($packageID)->exec();
+    }
+
     /**
      * Get priv package by ID.
      *

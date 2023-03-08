@@ -25,6 +25,7 @@ $lang->group->manageMember       = 'Manage Members';
 $lang->group->manageProjectAdmin = 'Manage Program Admins';
 $lang->group->permissionedit     = 'Permission Edit';
 $lang->group->confirmDelete      = "Do you want to delete '%s'?";
+$lang->group->confirmDeleteAB    = 'Do you want to delete this?';
 $lang->group->successSaved       = 'Saved.';
 $lang->group->errorNotSaved      = 'Failed. Please select actions and groups.';
 $lang->group->viewList           = 'Access Sight';

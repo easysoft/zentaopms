@@ -42,8 +42,12 @@
         <tr <?php echo "data-id='$package->id' data-order='$package->order' data-parent='$package->parent' data-level='$package->grade' data-nest-parent='$package->parent' data-nest-path='$package->path'"?>>
           <td class='text-left has-prefix' title='<?php echo $package->name?>'><?php echo $package->name?></td>
           <td class='text-left' title='<?php echo $package->desc?>'><?php echo $package->desc?></td>
-          <td></td>
+          <td><?php if(common::hasPriv('group', 'privPackageSort')) echo '<a class="sort-handler"><i class="icon-move"></i></a>';?></td>
           <td class='c-actions'>
+            <?php
+            if(common::hasPriv('group', 'editPrivPackage') and $package->grade == 3) common::printIcon('group', 'editPrivPackage', "packageID=$package->id", '', 'list', 'edit', '', 'iframe', true);
+            if(common::hasPriv('group', 'deletePrivPackage') and $package->grade == 3) common::printIcon('group', 'deletePrivPackage', "packageID=$package->id", '', 'list', 'trash', 'hiddenwin');
+            ?>
           </td>
         </tr>
         <?php endforeach;?>

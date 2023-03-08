@@ -453,4 +453,27 @@ class group extends control
         $this->view->users       = $this->loadModel('user')->getPairs();
         $this->display();
     }
+
+    /**
+     * Delete a priv package.
+     *
+     * @param  int    $privPackageID
+     * @access public
+     * @return void
+     */
+    public function deletePrivPackage($privPackageID, $confirm = 'no')
+    {
+        if($confirm == 'no')
+        {
+            return print(js::confirm($this->lang->group->confirmDeleteAB, $this->createLink('group', 'deletePrivPackage', "privPackageID=$privPackageID&confirm=yes")));
+        }
+        else
+        {
+            $this->group->deletePrivPackage($privPackageID);
+            if(!dao::isError()) $this->loadModel('action')->create('privpackage', $privPackageID, 'deleted');
+
+            return print(js::reload('parent'));
+        }
+
+    }
 }

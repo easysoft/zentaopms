@@ -25,6 +25,7 @@ $lang->group->manageMember       = '成员维护';
 $lang->group->manageProjectAdmin = '维护项目管理员';
 $lang->group->permissionedit     = '维护权限';
 $lang->group->confirmDelete      = '您确定删除“%s”用户分组吗？';
+$lang->group->confirmDeleteAB    = '您确定删除吗？';
 $lang->group->successSaved       = '成功保存';
 $lang->group->errorNotSaved      = '没有保存，请确认选择了权限数据。';
 $lang->group->viewList           = '可访问视图';
