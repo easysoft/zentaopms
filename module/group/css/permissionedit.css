@@ -9,6 +9,11 @@
 .priv-panel > .panel-content {height: calc(50vh - 165px); overflow-y: auto; min-height: 140px;}
 .priv-panel > .panel-bottom {padding-top: 20px;}
 
+/* permission-table */
+.permission-head {padding-right: 20px; display: flex;}
+.permission-head > .flex-title {flex: 1 1 15%;}
+.permission-head > .flex-content {flex: 1 1 70%;}
+
 /* tree */
 .tree ul > li {display: inline-block; width: 50%;}
 .priv-item > .icon {padding-left: 5px;}

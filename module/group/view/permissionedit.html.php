@@ -31,12 +31,14 @@
     <form class="load-indicator main-form form-ajax" id="permissionEditForm" method="post" target='hiddenwin'>
       <table class='table table-hover table-striped table-bordered' id='privList'>
         <thead>
-          <tr class="text-center">
-            <th class="thWidth">模块</th>
-            <th class="thWidth">权限包</th>
-            <th colspan="2">权限</th>
+          <tr class="text-center permission-head">
+            <th class="flex-title">模块</th>
+            <th class="flex-title">权限包</th>
+            <th class="flex-content">权限</th>
           </tr>
         </thead>
+        <tbody>
+        </tbody>
       </table>
     </form>
   </div>
