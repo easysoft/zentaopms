@@ -554,10 +554,6 @@ $lang->execution->featureBar['story']['reviewing'] = '评审中';
 
 $lang->execution->featureBar['testcase']['all'] = '全部';
 
-$lang->execution->featureBar['testtask']['browse'] = '测试单列表';
-
-$lang->execution->featureBar['testreport']['browse'] = '报告列表';
-
 $lang->execution->myExecutions = '我参与的';
 $lang->execution->doingProject = "进行中的{$lang->projectCommon}";
 

@@ -554,10 +554,6 @@ $lang->execution->featureBar['story']['reviewing'] = 'Reviewing';
 
 $lang->execution->featureBar['testcase']['all'] = 'All';
 
-$lang->execution->featureBar['testtask']['browse'] = 'Test Request';
-
-$lang->execution->featureBar['testreport']['browse'] = 'Testing Reports';
-
 $lang->execution->myExecutions = 'Ich bin beteiligt.';
 $lang->execution->doingProject = "Ongoing {$lang->projectCommon}s";
 
