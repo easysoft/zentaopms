@@ -382,14 +382,15 @@ class group extends control
     }
 
    /**
-     * edit permission.
+     * edit manage priv.
      *
      * @access public
      * @return void
      */
-    public function permissionedit()
+    public function editManagePriv()
     {
-        $this->view->title = $this->lang->group->permissionedit;
+        $this->view->title       = $this->lang->group->permissionedit;
+        $this->view->projectType = 'bylist';
         $this->display();
     }
 
