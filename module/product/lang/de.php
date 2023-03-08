@@ -53,7 +53,7 @@ $lang->product->plans       = 'Plan';
 $lang->product->releases    = 'Release';
 $lang->product->docs        = 'Dok';
 $lang->product->bugs        = 'Verknüpfte Bugs';
-$lang->product->projects    = "Linked Project";
+$lang->product->projects    = "Linked {$lang->projectCommon}";
 $lang->product->executions  = "Verknüpfte {$lang->execution->common}";
 $lang->product->cases       = 'Fälle';
 $lang->product->builds      = 'Builds';
@@ -158,9 +158,9 @@ $lang->product->viewByUser     = 'By User';
 $lang->product->assignedByMe   = 'AssignedByMe';
 
 /* Product Kanban. */
-$lang->product->myProduct             = 'Products Ownedbyme';
-$lang->product->otherProduct          = 'Other Products';
-$lang->product->unclosedProduct       = 'Open Products';
+$lang->product->myProduct             = "{$lang->productCommon}s Ownedbyme";
+$lang->product->otherProduct          = "Other {$lang->productCommon}s";
+$lang->product->unclosedProduct       = "Open {$lang->productCommon}s";
 $lang->product->unexpiredPlan         = 'Unexpired Plans';
 $lang->product->doing                 = 'Doing';
 $lang->product->doingProject          = "Ongoing {$lang->projectCommon}s";

@@ -60,7 +60,7 @@ $lang->program->browse                  = 'Programs';
 $lang->program->kanbanAction            = 'Kanban';
 $lang->program->view                    = 'Program Detail';
 $lang->program->copy                    = 'Copy Program';
-$lang->program->product                 = 'Products';
+$lang->program->product                 = "{$lang->productCommon}s";
 $lang->program->project                 = "Program {$lang->projectCommon} List";
 $lang->program->all                     = 'All Programs';
 $lang->program->start                   = 'Start';
@@ -100,7 +100,7 @@ $lang->program->stakeholderTypeList['outside'] = 'Outside';
 
 $lang->program->noProgram          = 'No program.';
 $lang->program->showClosed         = 'Closed';
-$lang->program->tips               = "If a parent program is selected, the products under the parent program can be associated. If no program is selected for the {$lang->projectCommon}, a product with the same name as the {$lang->projectCommon} is created and associated with the {$lang->projectCommon} by default.";
+$lang->program->tips               = "If a parent program is selected, the {$lang->productCommon}s under the parent program can be associated. If no program is selected for the {$lang->projectCommon}, a {$lang->productCommon} with the same name as the {$lang->projectCommon} is created and associated with the {$lang->projectCommon} by default.";
 $lang->program->confirmBatchUnlink = "Do you want to batch unlink these stakeholders?";
 $lang->program->beginLetterParent  = 'The start date of the program is less than the start date of the parent program:';
 $lang->program->endGreaterParent   = 'The finish date of the program is greater than the finish date of the parent program:';
@@ -110,7 +110,7 @@ $lang->program->endLetterChild     = "The finish date of the program is less tha
 $lang->program->dateExceedChild    = "The start and finish date of the program no longer include the date scope of the subprogram or {$lang->projectCommon}:";
 $lang->program->closeErrorMessage  = "There are subprograms or {$lang->projectCommon}s that are not closed";
 $lang->program->hasChildren        = "The program has a child program or the {$lang->projectCommon} exists and can not be deleted.";
-$lang->program->hasProduct         = 'The program has products exist and can not be deleted.';
+$lang->program->hasProduct         = "The program has {$lang->productCommon}s exist and can not be deleted.";
 $lang->program->confirmDelete      = 'Do you want to delete the \"%s\" Program?';
 $lang->program->confirmUnlink      = 'Do you want to remove the Stakeholder?';
 $lang->program->readjustTime       = 'Change the program begin&end date.';
@@ -125,7 +125,7 @@ $lang->program->endList[186] = 'Half year';
 $lang->program->endList[365] = 'One year';
 $lang->program->endList[999] = 'Longtime';
 
-$lang->program->aclList['private'] = "Private (accessible to project portfolio holders and stakeholders, stakeholders can follow up maintenance)";
+$lang->program->aclList['private'] = "Private (accessible to {$lang->projectCommon} portfolio holders and stakeholders, stakeholders can follow up maintenance)";
 $lang->program->aclList['open']    = "Default(user who can visit the program can access it)";
 
 $lang->program->subAclList['private'] = "Private (accessible to this program set leader and stakeholders, stakeholders can follow up maintenance)";
@@ -167,7 +167,7 @@ $lang->program->kanban->common             = 'Program Kanban';
 $lang->program->kanban->typeList['my']     = 'My Programs';
 $lang->program->kanban->typeList['others'] = 'Others';
 
-$lang->program->kanban->openProducts    = 'Open Products';
+$lang->program->kanban->openProducts    = "Open {$lang->productCommon}s";
 $lang->program->kanban->unexpiredPlans  = 'Unexpired Plans';
 $lang->program->kanban->waitingProjects = "Waiting {$lang->projectCommon}s";
 $lang->program->kanban->doingProjects   = "Ongoing {$lang->projectCommon}s";

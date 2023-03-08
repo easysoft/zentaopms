@@ -158,9 +158,9 @@ $lang->product->viewByUser     = 'Par Utilisateur';
 $lang->product->assignedByMe   = 'AssignedByMe';
 
 /* Product Kanban. */
-$lang->product->myProduct             = 'Products Ownedbyme';
-$lang->product->otherProduct          = 'Other Products';
-$lang->product->unclosedProduct       = 'Open Products';
+$lang->product->myProduct             = "{$lang->productCommon}s Ownedbyme";
+$lang->product->otherProduct          = "Other {$lang->productCommon}s";
+$lang->product->unclosedProduct       = "Open {$lang->productCommon}s";
 $lang->product->unexpiredPlan         = 'Unexpired Plans';
 $lang->product->doing                 = 'Doing';
 $lang->product->doingProject          = "Ongoing {$lang->projectCommon}s";
