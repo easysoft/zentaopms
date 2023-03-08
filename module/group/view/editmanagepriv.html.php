@@ -1,12 +1,12 @@
 <?php
 /**
- * The permissionedit view file of group module of ZenTaoPMS.
+ * The editManagePriv view file of group module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Feilong Guo <guofeilong@cnezsoft.com>
  * @package     group
- * @version     permissionedit.html.php 4769 2023-03-07 07:24:21Z guofeilong $
+ * @version     $id editManagePriv.html.php 4769 2023-03-07 07:24:21Z guofeilong $
  * @link        http://www.zentao.net
  */
 ?>
@@ -18,8 +18,8 @@
   </div>
   <div class="btn-toolbar">
     <div class="btn-group">
-    <?php echo html::a($this->createLink('', '', '', '', false), '<i class="icon icon-cards-view"></i>', '', 'class="btn btn-icon"');?>
-    <?php echo html::a($this->createLink('', '', '', '', false), '<i class="icon icon-list"></i>', '', 'class="btn btn-icon text-primary"');?>
+      <a href="#" data-type="bycard" class="btn btn-icon btn-switch <?php if($editType == 'bycard') echo 'text-primary' ?>"><i class="icon icon-cards-view"></i></a>
+      <a href="#" data-type="bylist" class="btn btn-icon btn-switch <?php if($editType == 'bylist') echo 'text-primary' ?>"><i class="icon icon-list"></i></a>
     </div>
     <a href="#" class="btn btn-primary"><?php echo $lang->group->addPriv?></a>
     <?php if(common::hasPriv('group', 'managePrivPackage')) echo html::a($this->createLink('group', 'managePrivPackage', ''), $lang->group->managePrivPackage, '', 'class="btn btn-primary"');?>
@@ -28,17 +28,16 @@
 </div>
 <div id='mainContent'>
   <div class="main main-content">
-    <form class="load-indicator main-form form-ajax" id="permissionEditForm" method="post" target='hiddenwin'>
-      <table class='table table-hover table-striped table-bordered' id='privList'>
-        <thead>
-          <tr class="text-center">
-            <th class="thWidth">模块</th>
-            <th class="thWidth">权限包</th>
-            <th colspan="2">权限</th>
-          </tr>
-        </thead>
-      </table>
-    </form>
+  <?php
+  if($editType == 'bycard')
+  {
+      include 'editmanageprivbycard.html.php';
+  }
+  else
+  {
+      include 'editmanageprivbylist.html.php';
+  }?>
+
   </div>
   <div class="side">
     <div class="priv-panel">

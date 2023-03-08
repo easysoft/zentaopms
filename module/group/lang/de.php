@@ -23,8 +23,9 @@ $lang->group->byModuleTips       = '<span class="tips">(SHIFT/STRG für Multi-Se
 $lang->group->allTips            = 'After checking this option, the administrator can manage all objects in the system, including objects created later.';
 $lang->group->manageMember       = 'Mitglieder';
 $lang->group->manageProjectAdmin = 'Manage Program Admins';
-$lang->group->permissionedit     = 'Permission Edit';
+$lang->group->editManagePriv     = 'Permission Edit';
 $lang->group->confirmDelete      = "Do you want to delete '%s'?";
+$lang->group->confirmDeleteAB    = 'Do you want to delete this?';
 $lang->group->successSaved       = 'Gespeichert!';
 $lang->group->errorNotSaved      = 'Fehlgeschlagen. Bitte aktion und Gruppe wählen.';
 $lang->group->viewList           = 'Anzeige ist zulässig.';
@@ -78,6 +79,7 @@ $lang->group->all      = 'Alle';
 $lang->group->config   = 'Config';
 
 if(!isset($lang->privPackage)) $lang->privPackage = new stdclass();
+$lang->privpackage->common = 'Priv Package';
 $lang->privPackage->id     = 'ID';
 $lang->privPackage->name   = 'Priv Package Name';
 $lang->privPackage->module = 'Module';

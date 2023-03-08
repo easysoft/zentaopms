@@ -1,0 +1,4 @@
+.has-prefix {position: relative; display: flex; align-items: center;}
+.c-name {min-width: 200px;}
+.c-desc {min-width: 200px;}
+.c-order {width: 50px;}

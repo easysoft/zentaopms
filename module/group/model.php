@@ -774,6 +774,11 @@ class groupModel extends model
     public function createPrivPackage()
     {
         $package = fixer::input('post')->get();
+        if(isset($package->module))
+        {
+            $packages = $this->getPrivPackagesByModule($package->module);
+            $package->order = (count($packages) + 1) * 5;
+        }
         $this->dao->insert(TABLE_PRIVPACKAGE)->data($package)->batchCheck($this->config->privPackage->create->requiredFields, 'notempty')->exec();
         $packageID = $this->dao->lastInsertId();
         $this->loadModel('action')->create('privpackage', $packageID, 'Opened');
@@ -792,6 +797,11 @@ class groupModel extends model
         $oldPackage = $this->getPrivPackageByID($packageID);
 
         $package = fixer::input('post')->get();
+        if($oldPackage->module != $package->module)
+        {
+            $packages = $this->getPrivPackagesByModule($package->module);
+            $package->order = (count($packages) + 1) * 5;
+        }
         $this->dao->update(TABLE_PRIVPACKAGE)->data($package)->batchCheck($this->config->privPackage->update->requiredFields, 'notempty')->where('id')->eq($packageID)->exec();
         if(dao::isError()) return false;
 
@@ -801,8 +811,15 @@ class groupModel extends model
         return $changes;
     }
 
+    public function deletePrivPackage($packageID)
+    {
+        $this->dao->delete()->from(TABLE_PRIVPACKAGE)->where('id')->eq($packageID)->exec();
+        if(dao::isError()) return false;
+        $this->dao->update(TABLE_PRIV)->set('package')->eq(0)->where('package')->eq($packageID)->exec();
+    }
+
     /**
-     * Ge priv package by ID.
+     * Get priv package by ID.
      *
      * @param  int    $packageID
      * @access public
@@ -811,6 +828,115 @@ class groupModel extends model
     public function getPrivPackageByID($packageID)
     {
         return $this->dao->findById($packageID)->from(TABLE_PRIVPACKAGE)->fetch();
+    }
+
+    /**
+     * Get priv packages by module.
+     *
+     * @param  string $module
+     * @access public
+     * @return void
+     */
+    public function getPrivPackagesByModule($module)
+    {
+        return $this->dao->select('*')->from(TABLE_PRIVPACKAGE)->where('module')->eq($module)->fetchAll('id');
+    }
+
+    /**
+     * Get priv modules.
+     *
+     * @param  string $viewName
+     * @access public
+     * @return array
+     */
+    public function getPrivModules($viewName = '')
+    {
+        $this->loadModel('setting');
+
+        $tree  = array();
+        $views = empty($viewName) ? $this->setting->getItem("owner=system&module=priv&key=views") : $viewName;
+        $views = explode(',', $views);
+        $modules = array();
+        foreach($views as $view)
+        {
+            $viewModules = $this->setting->getItem("owner=system&module=priv&key={$view}Modules");
+            if(empty($viewModules)) continue;
+
+            $viewModules = explode(',', $viewModules);
+            foreach($viewModules as $index => $module)
+            {
+                $this->app->loadLang($module);
+                $modules[$module] = $this->lang->{$view}->common . '/' . $this->lang->{$module}->common;
+                unset($viewModules[$index]);
+            }
+        }
+
+        return $modules;
+    }
+
+    /**
+     * Get priv package tree list.
+     *
+     * @access public
+     * @return void
+     */
+    public function getPrivPackageTreeList()
+    {
+        $this->loadModel('setting');
+
+        $views = empty($viewName) ? $this->setting->getItem("owner=system&module=priv&key=views") : $viewName;
+        $views = explode(',', $views);
+
+        $modules = array();
+        foreach($views as $viewIndex => $view)
+        {
+            $this->app->loadLang($view);
+            $viewID           = $view . 'View';
+            $treeView         = new stdclass();
+            $treeView->id     = $viewID;
+            $treeView->name   = $this->lang->{$view}->common;
+            $treeView->parent = 0;
+            $treeView->path   = ",{$viewID},";
+            $treeView->grade  = 1;
+            $treeView->order  = $viewIndex;
+            $treeView->desc   = '';
+            $tree[$viewID]    = $treeView;
+
+            $viewModules = $this->setting->getItem("owner=system&module=priv&key={$view}Modules");
+            if(empty($viewModules)) continue;
+
+            $viewModules = explode(',', $viewModules);
+            foreach($viewModules as $moduleIndex => $module)
+            {
+                $this->app->loadLang($module);
+
+                $treeModule         = new stdclass();
+                $treeModule->id     = $module;
+                $treeModule->name   = $this->lang->{$module}->common;
+                $treeModule->parent = $viewID;
+                $treeModule->path   = ",{$viewID},{$module},";
+                $treeModule->grade  = 2;
+                $treeModule->order  = $moduleIndex;
+                $treeModule->desc   = '';
+                $tree[$module]      = $treeModule;
+
+                $packages = $this->getPrivPackagesByModule($module);
+                foreach($packages as $packageID => $package)
+                {
+                    $treePackage = new stdclass();
+                    $treePackage->id     = $packageID;
+                    $treePackage->name   = $package->name;
+                    $treePackage->parent = $module;
+                    $treePackage->path   = ",{$viewID},{$module},{$packageID},";
+                    $treePackage->grade  = 3;
+                    $treePackage->desc   = $package->desc;
+                    $treePackage->order  = $package->order;
+                    $tree[$packageID]    = $treePackage;
+                }
+            }
+        }
+
+        return $tree;
     }
 
     /**
@@ -824,18 +950,20 @@ class groupModel extends model
         $this->sortResource();
         $resource = json_decode(json_encode($this->lang->resource), true);
         $this->dao->delete()->from(TABLE_PRIVLANG)->exec();
+        $this->dao->delete()->from(TABLE_PRIV)->exec();
+        $this->dao->delete()->from(TABLE_CONFIG)->where('module')->eq('priv')->exec();
 
-        $views = array();
+        $viewModules = array();
         $this->loadModel('setting');
         foreach($resource as $moduleName => $methods)
         {
-            $groupKey    = $moduleName;
-            $view        = isset($this->lang->navGroup->{$groupKey}) ? $this->lang->navGroup->{$groupKey} : $moduleName;
-            $viewModules = array();
-            $order       = 1;
+            $groupKey = $moduleName;
+            $view     = isset($this->lang->navGroup->{$groupKey}) ? $this->lang->navGroup->{$groupKey} : $moduleName;
+            $viewModules[$view][] = $moduleName;
+
+            $order = 1;
             foreach($methods as $methodName => $methodLang)
             {
-                $viewModules[] = $methodName;
                 $priv = new stdclass();
                 $priv->moduleName = $moduleName;
                 $priv->methodName = $methodName;
@@ -862,13 +990,15 @@ class groupModel extends model
                     }
                 }
             }
-            $viewModules = implode(',', $viewModules);
-            $views[$view] = empty($views[$view]) ? $viewModules : "{$views[$view]},{$viewModules}";
         }
 
-        foreach($views as $viewName => $view) $this->setting->setItem("system.priv.{$viewName}Modules", $view);
+        foreach($viewModules as $viewName => $modules)
+        {
+            $modules = implode(',', $viewModules[$viewName]);
+            $this->setting->setItem("system.priv.{$viewName}Modules", $modules);
+        }
 
-        $views = array_keys($views);
+        $views = array_keys($viewModules);
         $this->setting->setItem("system.priv.views", implode(',', $views));
 
         if(!dao::isError()) return true;

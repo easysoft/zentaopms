@@ -382,14 +382,15 @@ class group extends control
     }
 
    /**
-     * edit permission.
+     * edit manage priv.
      *
      * @access public
      * @return void
      */
-    public function permissionedit()
+    public function editManagePriv()
     {
-        $this->view->title = $this->lang->group->permissionedit;
+        $this->view->title    = $this->lang->group->editManagePriv;
+        $this->view->editType = $this->cookie->managePrivEditType ? $this->cookie->managePrivEditType : 'bycard';
         $this->display();
     }
 
@@ -401,7 +402,8 @@ class group extends control
      */
     public function managePrivPackage()
     {
-        $this->view->title = $this->lang->group->managePrivPackage;
+        $this->view->title            = $this->lang->group->managePrivPackage;
+        $this->view->packagesTreeList = $this->group->getPrivPackageTreeList();
         $this->display();
     }
 
@@ -421,7 +423,7 @@ class group extends control
         }
 
         $this->view->title   = $this->lang->group->createPrivPackage;
-        $this->view->modules = array(0,1);
+        $this->view->modules = $this->group->getPrivModules();
         $this->display();
     }
 
@@ -447,10 +449,32 @@ class group extends control
 
         $this->view->title       = $this->lang->group->editPrivPackage;
         $this->view->privPackage = $this->group->getPrivPackageByID($privPackageID);
-        $this->view->modules     = array(0,1);
+        $this->view->modules     = $this->group->getPrivModules();
         $this->view->actions     = $this->loadModel('action')->getList('privpackage', $privPackageID);
         $this->view->users       = $this->loadModel('user')->getPairs();
         $this->display();
+    }
+
+    /**
+     * Delete a priv package.
+     *
+     * @param  int    $privPackageID
+     * @access public
+     * @return void
+     */
+    public function deletePrivPackage($privPackageID, $confirm = 'no')
+    {
+        if($confirm == 'no')
+        {
+            return print(js::confirm($this->lang->group->confirmDeleteAB, $this->createLink('group', 'deletePrivPackage', "privPackageID=$privPackageID&confirm=yes")));
+        }
+        else
+        {
+            $this->group->deletePrivPackage($privPackageID);
+            if(!dao::isError()) $this->loadModel('action')->create('privpackage', $privPackageID, 'deleted');
+
+            return print(js::reload('parent'));
+        }
     }
 
     /**
@@ -496,10 +520,10 @@ class group extends control
         $tree .= "<ul class='relationBox'>";
         foreach($modulePrivs[$module] as $id => $modulePriv)
         {
-              if($privID == $id) continue;
-              $tree .= '<li>';
-              $tree .= html::checkbox('relation', array($id => $modulePriv->name), (empty($recommends) or isset($recommends[$id])) ? $id : '');
-              $tree .= '</li>';
+            if($privID == $id) continue;
+            $tree .= '<li>';
+            $tree .= html::checkbox('relation', array($id => $modulePriv->name), (empty($recommends) or isset($recommends[$id])) ? $id : '');
+            $tree .= '</li>';
         }
         $tree .= '</ul></li>';
         return print($tree);
