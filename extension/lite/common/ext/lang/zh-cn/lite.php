@@ -152,7 +152,7 @@ $lang->searchObjects['todo']      = '待办';
 $lang->searchObjects['story']     = '目标';
 $lang->searchObjects['task']      = '任务';
 $lang->searchObjects['doc']       = '文档';
-$lang->searchObjects['project']   = '项目';
+$lang->searchObjects['project']   = $lang->projectCommon;
 $lang->searchObjects['execution'] = '看板';
 $lang->searchObjects['user']      = '用户';
 

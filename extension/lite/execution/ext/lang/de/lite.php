@@ -22,6 +22,6 @@ $lang->execution->icons['gantt']     = 'lane';
 $lang->execution->icons['tree']      = 'treemap';
 $lang->execution->icons['grouptask'] = 'sitemap';
 
-$lang->execution->aclList['private'] = "Private (Accessible to team members and project leaders)";
+$lang->execution->aclList['private'] = "Private (Accessible to team members and {$lang->projectCommon} leaders)";
 
-$lang->execution->common = 'Project Execution';
+$lang->execution->common = "{$lang->projectCommon} Execution";
