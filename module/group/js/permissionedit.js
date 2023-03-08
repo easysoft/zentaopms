@@ -63,4 +63,5 @@ $(function()
     initRecomendTree(data);
     initDependTree(data);
     $('li.has-list > ul').addClass("menu-active-primary menu-hover-primary");
+    $('.sorter-group').sortable();
 });
