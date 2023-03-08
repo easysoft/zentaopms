@@ -421,7 +421,7 @@ class group extends control
         }
 
         $this->view->title   = $this->lang->group->createPrivPackage;
-        $this->view->modules = array(0,1);
+        $this->view->modules = $this->group->getPrivModules();
         $this->display();
     }
 
@@ -447,7 +447,7 @@ class group extends control
 
         $this->view->title       = $this->lang->group->editPrivPackage;
         $this->view->privPackage = $this->group->getPrivPackageByID($privPackageID);
-        $this->view->modules     = array(0,1);
+        $this->view->modules     = $this->group->getPrivModules();
         $this->view->actions     = $this->loadModel('action')->getList('privpackage', $privPackageID);
         $this->view->users       = $this->loadModel('user')->getPairs();
         $this->display();

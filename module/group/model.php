@@ -805,6 +805,38 @@ class groupModel extends model
     }
 
     /**
+     * Get priv modules.
+     *
+     * @param  string $viewName
+     * @access public
+     * @return array
+     */
+    public function getPrivModules($viewName = '')
+    {
+        $this->loadModel('setting');
+
+        $views = empty($viewName) ? $this->setting->getItem("owner=system&module=priv&key=views") : $viewName;
+        $views = explode(',', $views);
+
+        $modules = array();
+        foreach($views as $view)
+        {
+            $viewModules = $this->setting->getItem("owner=system&module=priv&key={$view}Modules");
+            if(empty($viewModules)) continue;
+
+            $viewModules = explode(',', $viewModules);
+            foreach($viewModules as $index => $module)
+            {
+                $this->app->loadLang($module);
+                $modules[$module] = $this->lang->{$view}->common . '/' . $this->lang->{$module}->common;
+                unset($viewModules[$index]);
+            }
+        }
+
+        return $modules;
+    }
+
+    /**
      * Init Privs.
      *
      * @access public
@@ -815,18 +847,20 @@ class groupModel extends model
         $this->sortResource();
         $resource = json_decode(json_encode($this->lang->resource), true);
         $this->dao->delete()->from(TABLE_PRIVLANG)->exec();
+        $this->dao->delete()->from(TABLE_PRIV)->exec();
+        $this->dao->delete()->from(TABLE_CONFIG)->where('module')->eq('priv')->exec();
 
-        $views = array();
+        $viewModules = array();
         $this->loadModel('setting');
         foreach($resource as $moduleName => $methods)
         {
-            $groupKey    = $moduleName;
-            $view        = isset($this->lang->navGroup->{$groupKey}) ? $this->lang->navGroup->{$groupKey} : $moduleName;
-            $viewModules = array();
-            $order       = 1;
+            $groupKey = $moduleName;
+            $view     = isset($this->lang->navGroup->{$groupKey}) ? $this->lang->navGroup->{$groupKey} : $moduleName;
+            $viewModules[$view][] = $moduleName;
+
+            $order = 1;
             foreach($methods as $methodName => $methodLang)
             {
-                $viewModules[] = $methodName;
                 $priv = new stdclass();
                 $priv->moduleName = $moduleName;
                 $priv->methodName = $methodName;
@@ -853,13 +887,15 @@ class groupModel extends model
                     }
                 }
             }
-            $viewModules = implode(',', $viewModules);
-            $views[$view] = empty($views[$view]) ? $viewModules : "{$views[$view]},{$viewModules}";
         }
 
-        foreach($views as $viewName => $view) $this->setting->setItem("system.priv.{$viewName}Modules", $view);
+        foreach($viewModules as $viewName => $modules)
+        {
+            $modules = implode(',', $viewModules[$viewName]);
+            $this->setting->setItem("system.priv.{$viewName}Modules", $modules);
+        }
 
-        $views = array_keys($views);
+        $views = array_keys($viewModules);
         $this->setting->setItem("system.priv.views", implode(',', $views));
 
         if(!dao::isError()) return true;
