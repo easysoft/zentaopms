@@ -1693,7 +1693,7 @@ $lang->resource->group->manageView         = 'manageView';
 $lang->resource->group->managePriv         = 'managePriv';
 $lang->resource->group->manageMember       = 'manageMember';
 $lang->resource->group->manageProjectAdmin = 'manageProjectAdmin';
-$lang->resource->group->permissionedit     = 'permissionedit';
+$lang->resource->group->editManagePriv     = 'editManagePriv';
 $lang->resource->group->managePrivPackage  = 'managePrivPackage';
 $lang->resource->group->createPrivPackage  = 'createPrivPackage';
 $lang->resource->group->editPrivPackage    = 'editPrivPackage';
@@ -1707,7 +1707,7 @@ $lang->group->methodOrder[25] = 'delete';
 $lang->group->methodOrder[30] = 'managePriv';
 $lang->group->methodOrder[35] = 'manageMember';
 $lang->group->methodOrder[40] = 'manageProjectAdmin';
-$lang->group->methodOrder[45] = 'permissionedit';
+$lang->group->methodOrder[45] = 'editManagePriv';
 
 /* User. */
 $lang->resource->user = new stdclass();

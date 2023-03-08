@@ -389,7 +389,7 @@ class group extends control
      */
     public function editManagePriv()
     {
-        $this->view->title       = $this->lang->group->permissionedit;
+        $this->view->title       = $this->lang->group->editManagePriv;
         $this->view->projectType = 'bylist';
         $this->display();
     }

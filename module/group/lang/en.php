@@ -23,7 +23,7 @@ $lang->group->byModuleTips       = '<span class="tips">(Press Shift/Ctrl to Mult
 $lang->group->allTips            = 'After checking this option, the administrator can manage all objects in the system, including objects created later.';
 $lang->group->manageMember       = 'Manage Members';
 $lang->group->manageProjectAdmin = 'Manage Program Admins';
-$lang->group->permissionedit     = 'Permission Edit';
+$lang->group->editManagePriv     = 'Permission Edit';
 $lang->group->confirmDelete      = "Do you want to delete '%s'?";
 $lang->group->confirmDeleteAB    = 'Do you want to delete this?';
 $lang->group->successSaved       = 'Saved.';
