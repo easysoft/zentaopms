@@ -8,11 +8,12 @@
      */
     function handleSaveFormDraft()
     {
-        if(config.currentMethod === 'login' || config.currentMethod.indexOf('edit') != -1) return;
+        if(config.currentMethod === 'login' || config.currentMethod.indexOf('edit') != -1 || config.currentMethod.indexOf('import') != -1) return;
         setTimeout(function() {
             var form = $('.table-form').parent();
             if(form.length)
             {
+                if($(form).attr('target') == 'hiddenwin') return;
                 var formDataID     = config.currentMethod + '-' + config.currentModule + '-' + $(form).attr("id");
                 var formDataStored = $.zui.store.get(formDataID);
                 if(formDataStored)
@@ -36,7 +37,14 @@
                                         /* formItem === checkbox or formItem === multipleSelect */
                                         if(item.name.indexOf('[]') != -1)
                                         {
-                                            var formItem = $('[name^=' + item.name.replace('[]', '') + ']');
+                                            if((item.name.indexOf(']') != -1) && (item.name.indexOf('[') != -1))
+                                            {
+                                                var formItem = $('[name^=' + item.name.replace('[]', '').replace('[', '').replace(']', '') + ']');
+                                            }
+                                            else
+                                            {
+                                                var formItem = $('[name^=' + item.name.replace('[]', '') + ']');
+                                            }
                                         }
                                         else if((item.name.indexOf(']') != -1) && (item.name.indexOf('[') != -1))
                                         {
