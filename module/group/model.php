@@ -765,6 +765,11 @@ class groupModel extends model
     public function createPrivPackage()
     {
         $package = fixer::input('post')->get();
+        if(isset($package->module))
+        {
+            $packages = $this->getPrivPackagesByModule($package->module);
+            $package->order = (count($packages) + 1) * 5;
+        }
         $this->dao->insert(TABLE_PRIVPACKAGE)->data($package)->batchCheck($this->config->privPackage->create->requiredFields, 'notempty')->exec();
         $packageID = $this->dao->lastInsertId();
         $this->loadModel('action')->create('privpackage', $packageID, 'Opened');
