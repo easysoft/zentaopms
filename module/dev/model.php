@@ -666,7 +666,7 @@ class devModel extends model
     public function getTagMenus($module, $moduleName = '', $methodName = '')
     {
         $menus = array();
-        if($this->config->vision == 'lite' and $module == 'execution') return $menus;
+        if(!$module or ($this->config->vision == 'lite' and $module == 'execution')) return $menus;
 
         $titleList  = array();
         $tagMethods = array();
