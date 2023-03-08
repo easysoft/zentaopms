@@ -178,7 +178,7 @@ $footer = array(
     'linkCreator' => '#?page{page}&recPerPage={recPerPage}'
 );
 
-\common::sortFeatureMenu();
+common::sortFeatureMenu();
 $statuses = array();
 foreach ($lang->product->featureBar['all'] as $key => $text)
 {
@@ -191,7 +191,7 @@ foreach ($lang->product->featureBar['all'] as $key => $text)
 }
 
 $others = array();
-if (\common::hasPriv('product', 'batchEdit'))
+if(common::hasPriv('product', 'batchEdit'))
 {
     $others[] = array(
         'text'    => $lang->product->edit,
@@ -230,180 +230,24 @@ $btnGroup[] = array(
     'url'   => createLink('product', 'create')
 );
 
-/* Search Form options. */
-$searchOptions = <<<OPTIONS
-{
-    "formConfig": { "actions": "11", "method": "post" },
-    "fields": [
-        { "label": "项目集名称", "name": "name", "control": "input", "operator": "include", "defaultValue": "1111", "placeholder": "请填写" },
-        { "label": "状态", "name": "status", "control": "select", "operator": "!=", "defaultValue": "wait",
-            "values": {
-                "": "",
-                "wait": "未开始",
-                "doing": "进行中",
-                "suspended": "已挂起",
-                "closed": "已关闭"
-            }
-        },
-        { "label": "项目集描述", "name": "desc", "control": "input", "defaultValue": "11", "placeholder": "请填写1" },
-        { "label": "负责人", "name": "PM", "control": "select", "defaultValue": "", "placeholder": "请填写2" },
-        { "label": "创建日期", "name": "openedDate", "control": "date", "defaultValue": "" },
-        { "label": "计划开始", "name": "begin", "control": "date", "defaultValue": "" },
-        { "label": "计划完成", "name": "end", "control": "date", "defaultValue": "" },
-        { "label": "由谁创建", "name": "openedBy", "control": "select", "defaultValue": "" },
-        { "label": "最后编辑日期", "name": "lastEditedDate", "control": "date", "defaultValue": "" },
-        { "label": "实际开始", "name": "realBegan", "control": "date", "defaultValue": "" },
-        { "label": "实际完成日期", "name": "realEnd", "control": "date", "defaultValue": "" },
-        { "label": "关闭日期", "name": "closedDate", "control": "date", "defaultValue": "" }
-    ],
-    "operators": [
-        { "value": "=", "title": "=" },
-        { "value": "!=", "title": "!=" },
-        { "value": ">", "title": ">" },
-        { "value": ">=", "title": ">=" },
-        { "value": "<", "title": "<" },
-        { "value": "<=", "title": "<=" },
-        { "value": "include", "title": "包含" },
-        { "value": "between", "title": "介于" },
-        { "value": "notinclude", "title": "不包含" },
-        { "value": "belong", "title": "从属于" }
-    ],
-    "savedQuery": [
-        { "id": "1", "title": "条件11", "account": "11",
-            "content": [
-                { "fields": "status", "control": "select", "condition": "=", "value": "doing" },
-                { "fields": "openedDate", "control": "date", "condition": "=", "value": "2022-11-15" },
-                { "fields": "openedBy", "control": "input", "condition": "=", "value": "" },
-                { "fields": "PM", "control": "select", "condition": "!=", "value": "" },
-                { "fields": "openedDate", "control": "date", "condition": "include", "value": "" },
-                { "fields": "begin", "control": "date", "condition": "=", "value": "" }
-            ]
-        }
-    ],
-    "andOr": [
-        { "value": "and", "title": "并且" },
-        { "value": "or", "title": "或者" }
-    ],
-    "groupName": [
-        "第一组",
-        "第二组"
-    ],
-    "savedQueryTitle": "已保存的查询条件",
-    "saveSearch": {
-        "text": "保存搜索条件",
-        "config": {
-            "data-toggle": "modal",
-            "href": "#saveModal",
-            "data-url": "/index.php?m=search&f=saveQuery&module=task&onMenuBar=yes"
-        }
-    }
-}
-OPTIONS;
-$options = json_decode($searchOptions);
+header();
 
-$jsSearch = <<<JSSEARCH
-    var el = document.getElementById('searchBtn');
-    if( el ) {
-        el.addEventListener('click', function(event){
-            var searchPanel = document.getElementById('searchPanel');
-            if(!searchPanel) return;
-            searchPanel.classList.toggle('hidden');
-        });
-    }
-
-    zui.create(
-        "AjaxForm",
-        "#saveForm",
-        {
-            "js-render":true,
-            "rules":
-            {
-                "title":
-                {
-                    "required":true,
-                    "errMsg":"请输入保存条件名"
-                },
-                "onLoad": function(e) {
-                    console.log(">>>", e);
-                },
-                "onError": function(e) {
-                    console.log('onError>>>', e);
-                },
-                headers: {
-                    'Content-type': 'application/json; charset=UTF-8'
-                }
-            }
-        }
-    );
-JSSEARCH;
-
-page
+pagemain
 (
-    header(),
-    pagemain
+    mainmenu
     (
-        mainmenu
-        (
-            set('statuses', $statuses),
-            set('others',   $others),
-            set('btnGroup', $btnGroup)
-        ),
-        panel
-        (
-            setId('searchPanel'),
-            to('body', searchform(set($options)))
-        ),
-        dtable
-        (
-            set('width', '100%'),
-            set('cols',  $cols),
-            set('data',  $data),
-            set('footPager', $footer),
-            set('footToolbar', array('items' => array(array('size' => 'sm', 'text' => '编辑', 'btnType' => 'primary'))))
-        )
+        set('statuses', $statuses),
+        set('others',   $others),
+        set('btnGroup', $btnGroup)
     ),
-    modal
+    dtable
     (
-        setId('saveModal'),
-        set('type', 'none'),
-        form
-        (
-            setId('saveForm'),
-            setClass('validation form-group'),
-            set('action', \helper::createLink('search', 'saveQuery', 'product')),
-            set('method', 'POST'),
-            div
-            (
-                setClass('flex flex-row justify-between'),
-                input
-                (
-                    setId('title'),
-                    set('name', 'title'),
-                    setClass('form-control w-5/12'),
-                    set('type', 'text'),
-                    set('placeholder', '请输入保存条件名称')
-                ),
-                checkbox
-                (
-                    setId('common'),
-                    set('name', 'common'),
-                    setClass('w-3/12'),
-                    '设为公共查询条件'
-                ),
-                checkbox
-                (
-                    setId('onMenuBar'),
-                    set('name', 'onMenuBar'),
-                    setClass('w-3/12'),
-                    '显示在菜单栏'
-                ),
-                btn(
-                    setClass('w-1/12 primary'),
-                    set('data-type', 'submit'),
-                    '保存'
-                )
-            )
-        )
-    ),
-    h::js($jsSearch)
+        set('width', '100%'),
+        set('cols',  $cols),
+        set('data',  $data),
+        set('footPager', $footer),
+        set('footToolbar', array('items' => array(array('size' => 'sm', 'text' => '编辑', 'btnType' => 'primary'))))
+    )
 );
+
+render();
