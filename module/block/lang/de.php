@@ -132,13 +132,13 @@ $lang->block->titleList['testtask']       = 'Test Task';
 
 $lang->block->default['waterfall']['project']['3']['title']  = 'Plan Gantt Chart';
 $lang->block->default['waterfall']['project']['3']['block']  = 'waterfallgantt';
-$lang->block->default['waterfall']['project']['3']['source'] = $lang->projectCommon;
+$lang->block->default['waterfall']['project']['3']['source'] = 'project';
 $lang->block->default['waterfall']['project']['3']['grid']   = 8;
 
 $lang->block->default['waterfall']['project']['6']['title']  = 'Dynamic';
 $lang->block->default['waterfall']['project']['6']['block']  = 'projectdynamic';
 $lang->block->default['waterfall']['project']['6']['grid']   = 4;
-$lang->block->default['waterfall']['project']['6']['source'] = $lang->projectCommon;
+$lang->block->default['waterfall']['project']['6']['source'] = 'project';
 
 $lang->block->default['waterfallplus'] = $lang->block->default['waterfall'];
 
@@ -290,7 +290,7 @@ $lang->block->default['full']['my']['4']['params']['count'] = '20';
 
 $lang->block->default['full']['my']['5']['title']           = "{$lang->projectCommon} Statistic";
 $lang->block->default['full']['my']['5']['block']           = 'statistic';
-$lang->block->default['full']['my']['5']['source']          = $lang->projectCommon;
+$lang->block->default['full']['my']['5']['source']          = 'project';
 $lang->block->default['full']['my']['5']['grid']            = 8;
 $lang->block->default['full']['my']['5']['params']['count'] = '20';
 
@@ -301,7 +301,7 @@ $lang->block->default['full']['my']['6']['grid']   = 4;
 
 $lang->block->default['full']['my']['7']['title']  = "Recent {$lang->projectCommon}s";
 $lang->block->default['full']['my']['7']['block']  = "recent{$lang->projectCommon}";
-$lang->block->default['full']['my']['7']['source'] = $lang->projectCommon;
+$lang->block->default['full']['my']['7']['source'] = 'project';
 $lang->block->default['full']['my']['7']['grid']   = 8;
 
 $lang->block->default['full']['my']['8']['title']  = 'Todo';
@@ -321,12 +321,12 @@ $lang->block->default['full']['my']['8']['params']['feedbackCount'] = '20';
 
 $lang->block->default['full']['my']['9']['title']  = 'Project List';
 $lang->block->default['full']['my']['9']['block']  = 'project';
-$lang->block->default['full']['my']['9']['source'] = $lang->projectCommon;
+$lang->block->default['full']['my']['9']['source'] = 'project';
 $lang->block->default['full']['my']['9']['grid']   = 8;
 
 $lang->block->default['full']['my']['10']['title']  = "{$lang->projectCommon} List";
 $lang->block->default['full']['my']['10']['block']  = $lang->projectCommon;
-$lang->block->default['full']['my']['10']['source'] = $lang->projectCommon;
+$lang->block->default['full']['my']['10']['source'] = 'project';
 $lang->block->default['full']['my']['10']['grid']   = 8;
 
 $lang->block->default['full']['my']['10']['params']['orderBy'] = 'id_desc';
@@ -529,18 +529,18 @@ $lang->block->typeList->testtask['done']    = 'Erledigt';
 $lang->block->typeList->testtask['all']     = 'Alle';
 
 $lang->block->modules['project']->moreLinkList = new stdclass();
-$lang->block->modules['project']->moreLinkList->recentproject  = "{$lang->projectCommon}|browse|";
-$lang->block->modules['project']->moreLinkList->statistic      = "{$lang->projectCommon}|browse|";
-$lang->block->modules['project']->moreLinkList->project        = "{$lang->projectCommon}|browse|";
+$lang->block->modules['project']->moreLinkList->recentproject  = "project|browse|";
+$lang->block->modules['project']->moreLinkList->statistic      = "project|browse|";
+$lang->block->modules['project']->moreLinkList->project        = "project|browse|";
 $lang->block->modules['project']->moreLinkList->cmmireport     = 'weekly|index|';
 $lang->block->modules['project']->moreLinkList->cmmiestimate   = 'workestimation|index|';
 $lang->block->modules['project']->moreLinkList->cmmiissue      = 'issue|browse|';
 $lang->block->modules['project']->moreLinkList->cmmirisk       = 'risk|browse|';
-$lang->block->modules['project']->moreLinkList->scrumlist      = "{$lang->projectCommon}|execution|";
+$lang->block->modules['project']->moreLinkList->scrumlist      = "project|execution|";
 $lang->block->modules['project']->moreLinkList->scrumtest      = 'testtask|browse|';
 $lang->block->modules['project']->moreLinkList->scrumproduct   = 'product|all|';
-$lang->block->modules['project']->moreLinkList->sprint         = "{$lang->projectCommon}|execution|";
-$lang->block->modules['project']->moreLinkList->projectdynamic = "{$lang->projectCommon}|dynamic|";
+$lang->block->modules['project']->moreLinkList->sprint         = "project|execution|";
+$lang->block->modules['project']->moreLinkList->projectdynamic = "project|dynamic|";
 
 $lang->block->modules['product']->moreLinkList        = new stdclass();
 $lang->block->modules['product']->moreLinkList->list  = 'product|all|';
