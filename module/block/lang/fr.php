@@ -136,7 +136,7 @@ $lang->block->default['waterfall']['project']['3']['source'] = 'project';
 $lang->block->default['waterfall']['project']['3']['grid']   = 8;
 
 $lang->block->default['waterfall']['project']['6']['title']  = 'Dynamic';
-$lang->block->default['waterfall']['project']['6']['block']  = 'dynamic';
+$lang->block->default['waterfall']['project']['6']['block']  = 'projectdynamic';
 $lang->block->default['waterfall']['project']['6']['grid']   = 4;
 $lang->block->default['waterfall']['project']['6']['source'] = 'project';
 
