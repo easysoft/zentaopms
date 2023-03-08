@@ -1166,7 +1166,14 @@ class bug extends control
         unset($productBugs[$bugID]);
 
         $executions = array(0 => '') + $this->product->getExecutionPairsByProduct($bug->product, $bug->branch, 'id_desc', $bug->project);
-        if(!empty($bug->execution) and empty($executions[$bug->execution])) $executions[$execution->id] = $execution->name;
+        if(!empty($bug->execution) and empty($executions[$bug->execution])) $executions[$execution->id] = $execution->name . "({$this->lang->bug->deleted})";
+
+        $projects = array(0 => '') + $this->product->getProjectPairsByProduct($productID, $bug->branch);
+        if(!empty($bug->project) and empty($projects[$bug->project]))
+        {
+            $project = $this->loadModel('project')->getByID($bug->project);
+            $projects[$project->id] = $project->name . "({$this->lang->bug->deleted})";
+        }
 
         if($product->shadow) $this->view->project = $this->loadModel('project')->getByShadowProduct($bug->product);
 
@@ -1176,7 +1183,7 @@ class bug extends control
         $this->view->productBugs           = $productBugs;
         $this->view->productName           = $this->products[$productID];
         $this->view->plans                 = $this->loadModel('productplan')->getPairs($productID, $bug->branch, '', true);
-        $this->view->projects              = array(0 => '') + $this->product->getProjectPairsByProduct($productID, $bug->branch, $bug->project);
+        $this->view->projects              = $projects;
         $this->view->projectExecutionPairs = $this->loadModel('project')->getProjectExecutionPairs();
         $this->view->moduleOptionMenu      = $moduleOptionMenu;
         $this->view->currentModuleID       = $currentModuleID;
