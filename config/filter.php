@@ -73,6 +73,7 @@ $filter->tree         = new stdclass();
 $filter->productplan  = new stdclass();
 $filter->projectplan  = new stdclass();
 $filter->kanban       = new stdclass();
+$filter->group        = new stdclass();
 
 $filter->index->index             = new stdclass();
 $filter->block->default           = new stdclass();
