@@ -75,6 +75,7 @@ $lang->group->all      = 'Alle';
 $lang->group->config   = 'Config';
 
 if(!isset($lang->privPackage)) $lang->privPackage = new stdclass();
+$lang->privpackage->common = 'Priv Package';
 $lang->privPackage->id     = 'ID';
 $lang->privPackage->name   = 'Priv Package Name';
 $lang->privPackage->module = 'Module';

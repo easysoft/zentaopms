@@ -877,12 +877,14 @@ class groupModel extends model
             $this->app->loadLang($view);
             $viewID           = $view . 'View';
             $treeView         = new stdclass();
-            $treeView->id    = $viewID;
-            $treeView->name  = $this->lang->{$view}->common;
-            $treeView->path  = ",{$viewID},";
-            $treeView->grade = 1;
-            $treeView->order = $viewIndex;
-            $tree[$viewID]   = $treeView;
+            $treeView->id     = $viewID;
+            $treeView->name   = $this->lang->{$view}->common;
+            $treeView->parent = 0;
+            $treeView->path   = ",{$viewID},";
+            $treeView->grade  = 1;
+            $treeView->order  = $viewIndex;
+            $treeView->desc   = '';
+            $tree[$viewID]    = $treeView;
 
             $viewModules = $this->setting->getItem("owner=system&module=priv&key={$view}Modules");
             if(empty($viewModules)) continue;
@@ -892,24 +894,28 @@ class groupModel extends model
             {
                 $this->app->loadLang($module);
 
-                $treeModule        = new stdclass();
-                $treeModule->id    = $module;
-                $treeModule->name  = $this->lang->{$module}->common;
-                $treeModule->path  = ",{$viewID},{$module},";
-                $treeModule->grade = 2;
-                $treeModule->order = $moduleIndex;
-                $tree[$module]     = $treeModule;
+                $treeModule         = new stdclass();
+                $treeModule->id     = $module;
+                $treeModule->name   = $this->lang->{$module}->common;
+                $treeModule->parent = $viewID;
+                $treeModule->path   = ",{$viewID},{$module},";
+                $treeModule->grade  = 2;
+                $treeModule->order  = $moduleIndex;
+                $treeModule->desc   = '';
+                $tree[$module]      = $treeModule;
 
                 $packages = $this->getPrivPackagesByModule($module);
                 foreach($packages as $packageID => $package)
                 {
                     $treePackage = new stdclass();
-                    $treePackage->id    = $packageID;
-                    $treePackage->name  = $package->name;
-                    $treePackage->path  = ",{$viewID},{$module},{$packageID},";
-                    $treePackage->grade = 3;
-                    $treePackage->order = $package->order;
-                    $tree[$packageID]   = $treePackage;
+                    $treePackage->id     = $packageID;
+                    $treePackage->name   = $package->name;
+                    $treePackage->parent = $module;
+                    $treePackage->path   = ",{$viewID},{$module},{$packageID},";
+                    $treePackage->grade  = 3;
+                    $treePackage->desc   = $package->desc;
+                    $treePackage->order  = $package->order;
+                    $tree[$packageID]    = $treePackage;
                 }
             }
         }

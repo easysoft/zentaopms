@@ -75,6 +75,7 @@ $lang->group->all      = '所有权限';
 $lang->group->config   = '配置';
 
 if(!isset($lang->privpackage)) $lang->privpackage = new stdclass();
+$lang->privpackage->common = '权限包';
 $lang->privpackage->id     = '编号';
 $lang->privpackage->name   = '权限包名称';
 $lang->privpackage->module = '所属模块';

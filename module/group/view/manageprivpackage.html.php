@@ -24,6 +24,32 @@
   </div>
 </div>
 <div id='mainContent' class='main-table'>
+  <form class='main-table' id='privPackageForm' method='post' data-ride='table' data-nested='true' data-expand-nest-child='false' data-checkable='false' data-enable-empty-nested-row='true' data-replace-id='privPackageTableList' data-preserve-nested='true' data-nest-level-indent='22'>
+    <table class='table has-sort-head table-fixed table-nested' id='privPackageList'>
+      <thead>
+        <tr>
+          <th class='table-nest-title c-name'>
+            <?php echo $lang->privpackage->common;?>
+            <a class='table-nest-toggle table-nest-toggle-global' data-expand-text='<?php echo $lang->expand; ?>' data-collapse-text='<?php echo $lang->collapse;?>'></a>
+          </th>
+          <th class='c-desc'><?php echo $lang->privpackage->desc;?></th>
+          <th class='c-order'><?php echo $lang->sort;?></th>
+          <th class='text-center c-actions-2'><?php echo $lang->actions;?></th>
+        </tr>
+      </thead>
+      <tbody id='privPackageTableList'>
+        <?php foreach($packagesTreeList as $package):?>
+        <tr <?php echo "data-id='$package->id' data-order='$package->order' data-parent='$package->parent' data-level='$package->grade' data-nest-parent='$package->parent' data-nest-path='$package->path'"?>>
+          <td class='text-left has-prefix' title='<?php echo $package->name?>'><?php echo $package->name?></td>
+          <td class='text-left' title='<?php echo $package->desc?>'><?php echo $package->desc?></td>
+          <td></td>
+          <td class='c-actions'>
+          </td>
+        </tr>
+        <?php endforeach;?>
+      </tbody>
+    </table>
+  </form>
 </div>
 <?php include '../../common/view/footer.html.php';?>
 
