@@ -13,7 +13,7 @@
 <?php include '../../common/view/header.html.php';?>
 <div id="mainMenu" class='clearfix'>
   <div class="btn-toolbar pull-left">
-    <?php common::printBack(inlink('permissionedit', ''), 'btn btn-primary');?>
+    <?php common::printBack(inlink('editManagePriv', ''), 'btn btn-primary');?>
     <div class="divider"></div>
     <div class="page-title">
       <span class="text" title='<?php echo $lang->group->managePrivPackage;?>'><?php echo $lang->group->managePrivPackage;?></span>
