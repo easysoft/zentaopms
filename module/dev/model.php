@@ -697,6 +697,8 @@ class devModel extends model
                     list($thisModule, $thisMethod) = $this->config->dev->linkMethods[$module]["{$thisModule}-{$thisMethod}"];
                 }
 
+                if($this->config->vision == 'lite' and $module == 'kanbanProject' and $thisMethod == 'index') continue;
+
                 $subMenu      = $this->getMenuObject($label, $thisModule, $thisMethod, ($methodName == $thisMethod and $moduleName == $thisModule));
                 $titleList[]  = $subMenu->title;
                 $tagMethods[] = $thisMethod;
@@ -780,7 +782,7 @@ class devModel extends model
         }
 
         /* Merge other feature bar menu tree. */
-        if($this->config->vision == 'rnd')
+        if($this->config->vision == 'rnd' or in_array($module, $this->config->dev->onlyMainMenu))
         {
             $this->app->loadLang($module);
             if(isset($this->lang->$module->featureBar))
@@ -789,10 +791,10 @@ class devModel extends model
                 {
                     if(in_array($method, $tagMethods)) continue;
 
-                    $label        = zget($this->lang->$module, $method, $this->lang->$module->common);
-                    $titleList[]  = $label;
-                    $tagMethods[] = $method;
-                    $menus[]      = $this->getMenuObject($label, $module, $method, ($methodName == $method and $moduleName == $module));
+                    $label          = zget($this->lang->$module, $method, $this->lang->$module->common);
+                    $titleList[]    = $label;
+                    $tagMethods[]   = $method;
+                    $menus[$method] = $this->getMenuObject($label, $module, $method, ($methodName == $method and $moduleName == $module));
                 }
             }
         }
