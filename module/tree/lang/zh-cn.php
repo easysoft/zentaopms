@@ -51,7 +51,7 @@ $lang->tree->successSave          = '成功保存';
 $lang->tree->successFixed         = '成功修正数据！';
 $lang->tree->repeatName           = '模块名“%s”已经存在！';
 $lang->tree->shouldNotBlank       = '模块名不能为空格！';
-$lang->tree->syncProductModule    = '同步产品模块';
+$lang->tree->syncProductModule    = "同步{$lang->productCommon}模块";
 
 $lang->tree->module       = '模块';
 $lang->tree->name         = '模块名称';
@@ -59,7 +59,7 @@ $lang->tree->wordName     = '名称';
 $lang->tree->line         = "{$lang->productCommon}线名称";
 $lang->tree->cate         = '分类名称';
 $lang->tree->dir          = '目录名称';
-$lang->tree->root         = '所属产品';
+$lang->tree->root         = "所属{$lang->productCommon}";
 $lang->tree->branch       = '平台/分支';
 $lang->tree->path         = '路径';
 $lang->tree->type         = '类型';

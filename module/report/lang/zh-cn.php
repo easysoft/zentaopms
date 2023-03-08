@@ -211,7 +211,7 @@ $lang->report->annualData->todoStatus['all']    = '所有待办';
 $lang->report->annualData->todoStatus['undone'] = '未完成';
 $lang->report->annualData->todoStatus['done']   = '已完成';
 
-$lang->report->annualData->radarItems['product']   = '产品管理';
+$lang->report->annualData->radarItems['product']   = "{$lang->productCommon}管理";
 $lang->report->annualData->radarItems['execution'] = "{$lang->projectCommon}管理";
 $lang->report->annualData->radarItems['devel']     = "研发";
 $lang->report->annualData->radarItems['qa']        = "测试";
@@ -228,7 +228,7 @@ $lang->report->taskOutput          = "任务产出";
 $lang->report->bugOutput           = "Bug产出";
 $lang->report->caseOutput          = "用例产出";
 $lang->report->bugProgress         = "Bug进展";
-$lang->report->productProgress     = "产品进展";
+$lang->report->productProgress     = "{$lang->productCommon}进展";
 $lang->report->executionProgress   = "执行进展";
 $lang->report->projectProgress     = "{$lang->projectCommon}进展";
 $lang->report->yearProjectOverview = "年度{$lang->projectCommon}总览";
