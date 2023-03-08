@@ -13,7 +13,12 @@
     </div>
   </div>
   <div class="btn-toolbar pull-left">
-    <?php echo html::a(inlink('testcase', "executionID=$executionID&productID=$productID&branchID=$branchID&type=$type&moduleID=$moduleID&orderBy=$orderBy"), "<span class='text'>{$lang->all}</span> <span class='label label-light label-badge'>{$pager->recTotal}</span>", '', "class='btn btn-link btn-active-text'");?>
+    <?php
+     foreach($this->lang->execution->featureBar['testcase'] as $label)
+     {
+         echo html::a(inlink('testcase', "executionID=$executionID&productID=$productID&branchID=$branchID&type=$type&moduleID=$moduleID&orderBy=$orderBy"), "<span class='text'>{$label}</span> <span class='label label-light label-badge'>{$pager->recTotal}</span>", '', "class='btn btn-link btn-active-text'");
+     }
+    ?>
   </div>
   <div class="btn-toolbar pull-right">
     <?php if(common::canModify('execution', $execution)) echo html::a(helper::createLink('testcase', 'create', "productID=$productID&branch=0&moduleID=0&from=execution&param=$execution->id", '', '', '', true), "<i class='icon icon-plus'></i> " . $lang->testcase->create, '', "class='btn btn-primary' data-app='{$this->app->tab}'");?>

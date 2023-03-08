@@ -14,8 +14,8 @@ $lang->my->myTestTask      = '我的版本';
 $lang->my->myTestCase      = '我的用例';
 $lang->my->story           = "我的{$lang->SRCommon}";
 $lang->my->doc             = "我的文档";
-$lang->my->createProgram   = '添加项目';
-$lang->my->project         = "我的项目";
+$lang->my->createProgram   = '添加' . $lang->projectCommon;
+$lang->my->project         = '我的' . $lang->projectCommon;
 $lang->my->execution       = "我的{$lang->executionCommon}";
 $lang->my->audit           = '审批';
 $lang->my->issue           = '我的问题';
@@ -58,7 +58,7 @@ $lang->my->dynamicAction    = '动态';
 $lang->my->myExecutions = "我参与的阶段/冲刺/迭代";
 $lang->my->name         = '名称';
 $lang->my->code         = '代号';
-$lang->my->projects     = '所属项目';
+$lang->my->projects     = '所属' . $lang->projectCommon;
 $lang->my->executions   = "所属{$lang->executionCommon}";
 
 $lang->my->taskMenu = new stdclass();
@@ -96,27 +96,27 @@ $lang->my->form->lblContact = '联系信息';
 $lang->my->form->lblAccount = '帐号信息';
 
 $lang->my->programLink   = '项目集默认着陆页';
-$lang->my->productLink   = '产品默认着陆页';
-$lang->my->projectLink   = '项目默认着陆页';
+$lang->my->productLink   = $lang->productCommon .'默认着陆页';
+$lang->my->projectLink   = $lang->projectCommon . '默认着陆页';
 $lang->my->executionLink = '执行默认着陆页';
 
 $lang->my->programLinkList = array();
 $lang->my->programLinkList['program-browse']  = '项目集列表/可以查看所有的项目集';
 $lang->my->programLinkList['program-kanban']  = '项目集看板/可以可视化的查看到所有项目集的进展情况';
-$lang->my->programLinkList['program-project'] = '最近一个项目集的项目列表/可以查看当前项目集下所有项目';
+$lang->my->programLinkList['program-project'] = "最近一个项目集的{$lang->projectCommon}列表/可以查看当前项目集下所有{$lang->projectCommon}";
 
 $lang->my->productLinkList = array();
-$lang->my->productLinkList['product-all']       = '产品列表/可以查看所有产品';
-$lang->my->productLinkList['product-kanban']    = '产品看板/以可视化的方式查看到所有产品的整体情况';
-$lang->my->productLinkList['product-index']     = '所有产品仪表盘/可以查看所有产品的统计,概况，总览等';
-$lang->my->productLinkList['product-dashboard'] = '最近一个产品仪表盘/可以查看最近查看过的一个产品仪表盘';
-$lang->my->productLinkList['product-browse']    = '最近一个产品的需求列表/可以进入最近查看过的一个产品下的研发需求列表';
+$lang->my->productLinkList['product-all']       = "{$lang->productCommon}列表/可以查看所有{$lang->productCommon}";
+$lang->my->productLinkList['product-kanban']    = "{$lang->productCommon}看板/以可视化的方式查看到所有{$lang->productCommon}的整体情况";
+$lang->my->productLinkList['product-index']     = "所有{$lang->productCommon}仪表盘/可以查看所有{$lang->productCommon}的统计,概况，总览等";
+$lang->my->productLinkList['product-dashboard'] = "最近一个{$lang->productCommon}仪表盘/可以查看最近查看过的一个{$lang->productCommon}仪表盘";
+$lang->my->productLinkList['product-browse']    = "最近一个{$lang->productCommon}的需求列表/可以进入最近查看过的一个{$lang->productCommon}下的研发需求列表";
 
 $lang->my->projectLinkList = array();
-$lang->my->projectLinkList['project-browse']    = '项目列表/可以查看所有项目';
-$lang->my->projectLinkList['project-kanban']    = '项目看板/以可视化的查看到所有项目的整体情况';
-$lang->my->projectLinkList['project-execution'] = '最近一个项目执行列表/可以查看项目下所有的执行列表';
-$lang->my->projectLinkList['project-index']     = '最近一个项目仪表盘/可以进入最近查看过的一个项目的仪表盘';
+$lang->my->projectLinkList['project-browse']    = "{$lang->projectCommon}列表/可以查看所有{$lang->projectCommon}";
+$lang->my->projectLinkList['project-kanban']    = "{$lang->projectCommon}看板/以可视化的查看到所有{$lang->projectCommon}的整体情况";
+$lang->my->projectLinkList['project-execution'] = "最近一个{$lang->projectCommon}执行列表/可以查看{$lang->projectCommon}下所有的执行列表";
+$lang->my->projectLinkList['project-index']     = "最近一个{$lang->projectCommon}仪表盘/可以进入最近查看过的一个{$lang->projectCommon}的仪表盘";
 
 $lang->my->executionLinkList = array();
 $lang->my->executionLinkList['execution-all']             = '执行列表/可以查看所有执行';

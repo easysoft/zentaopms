@@ -29,7 +29,7 @@ $lang->build->basicInfo = 'Basis Info';
 
 $lang->build->id             = 'ID';
 $lang->build->product        = $lang->productCommon;
-$lang->build->project        = 'Project';
+$lang->build->project        = $lang->projectCommon;
 $lang->build->branch         = 'Platform/Branch';
 $lang->build->branchAll      = 'All associated %s';
 $lang->build->branchName     = '%s';
@@ -64,7 +64,7 @@ $lang->build->notice = new stdclass();
 $lang->build->notice->changeProduct   = "The {$lang->SRCommon}, bug, or the version of the submitted test order has been linked, and its {$lang->productCommon} cannot be modified";
 $lang->build->notice->changeExecution = "The version of the submitted test order cannot be modified {$lang->executionCommon}";
 $lang->build->notice->changeBuilds    = "The version of the submitted test order cannot be modified builds";
-$lang->build->notice->autoRelation    = "The completed requirements, resolved bugs, and generated bugs under the relevant version will be automatically associated with the project version";
+$lang->build->notice->autoRelation    = "The completed requirements, resolved bugs, and generated bugs under the relevant version will be automatically associated with the {$lang->projectCommon} version";
 $lang->build->notice->createTest      = "The execution of this version has been deleted, and the test cannot be submitted";
 
 $lang->build->confirmChangeBuild = "After branch『%s』disassociation,under the %s have %s {$lang->SRCommon} and %s Bug will remove synchronization from version, whether to cancel？";

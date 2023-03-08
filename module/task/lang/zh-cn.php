@@ -67,7 +67,7 @@ $lang->task->foldEffort          = '收起日志';
 
 $lang->task->common            = '任务';
 $lang->task->id                = '编号';
-$lang->task->project           = '所属项目';
+$lang->task->project           = '所属' . $lang->projectCommon;
 $lang->task->execution         = '所属' . $lang->execution->common;
 $lang->task->module            = '所属模块';
 $lang->task->moduleAB          = '模块';
@@ -250,7 +250,7 @@ $lang->task->confirmFinish             = '"预计剩余"为0，确认将任务�
 $lang->task->confirmRecord             = '"剩余"为0，任务将标记为"已完成"，您确定吗？';
 $lang->task->confirmTransfer           = '剩余工时为0，当前成员已完成任务，任务指派给：<strong>%s</strong>。';
 $lang->task->noticeTaskStart           = '"总计消耗"和"预计剩余"不能同时为0';
-$lang->task->noticeLinkStory           = "没有可关联的相关{$lang->SRCommon}，您可以为当前项目%s，然后%s";
+$lang->task->noticeLinkStory           = "没有可关联的相关{$lang->SRCommon}，您可以为当前{$lang->projectCommon}%s，然后%s";
 $lang->task->noticeLinkStoryNoProduct  = "没有可关联的相关{$lang->SRCommon}";
 $lang->task->noticeSaveRecord          = '您有尚未保存的工时记录，请先将其保存。';
 $lang->task->noticeManageTeam          = '任务状态是%s，不能维护团队';
@@ -259,7 +259,7 @@ $lang->task->deniedNotice              = '当前任务只有%s才可以%s。';
 $lang->task->deniedStatusNotice        = '当前任务状态是%s，不能维护日志。';
 $lang->task->transferNotice            = '串行多人任务不能转交。';
 $lang->task->noTask                    = '暂时没有任务。';
-$lang->task->createDenied              = '你不能在该项目添加任务';
+$lang->task->createDenied              = "你不能在该{$lang->projectCommon}添加任务";
 $lang->task->cannotDeleteParent        = '不能删除父任务。';
 $lang->task->addChildTask              = '因该任务已经产生消耗，为保证数据一致性，我们会帮您创建一条同名子任务记录该消耗。';
 

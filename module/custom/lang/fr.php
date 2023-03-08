@@ -200,8 +200,8 @@ $lang->custom->notice->confirmReviewCase   = 'Set the case in Wait to Normal?';
 $lang->custom->notice->storyReviewTip      = 'After selecting by individual, position, and department, take the union of these three filters. ';
 $lang->custom->notice->selectAllTip        = 'After selecting all people, the reviewers will be emptied and grayed out while hiding their positions and departments.';
 $lang->custom->notice->repeatKey           = 'Repeat Key %s';
-$lang->custom->notice->readOnlyOfCode      = "Le code est un terme de gestion utilisé pour la confidentialité ou comme alias. Lorsque la gestion du code est activée, le produit, le projet et l'exécution dans le système afficheront les informations de code sur les pages de création, de modification, de détails et de liste.";
-$lang->custom->notice->readOnlyOfPercent   = 'The "Workload Ratio" is used to divide the workload of a project into different stages. The sum of the percentages of the same level stages cannot exceed 100%. After enabling the "Workload Ratio", users have to fill in the ratio fields when setting up the stages in the Waterfall project and Waterfall Plus project management models.';
+$lang->custom->notice->readOnlyOfCode      = "A code is a management term that exists for secrecy or as an antonym. When code management is enabled, the code information of {$lang->productCommon}, {$lang->projectCommon}, and execution in the system will be displayed in the creation, editing, detail, and list pages.";
+$lang->custom->notice->readOnlyOfPercent   = "The \"Workload Ratio\" is used to divide the workload of a {$lang->projectCommon} into different stages. The sum of the percentages of the same level stages cannot exceed 100%. After enabling the \"Workload Ratio\", users have to fill in the ratio fields when setting up the stages in the Waterfall {$lang->projectCommon} and Waterfall Plus {$lang->projectCommon} management models.";
 
 $lang->custom->notice->indexPage['product'] = "ZenTao 8.2+ possède une page d'accueil. Voulez-vous consulter la page d'accueil du produit ?";
 $lang->custom->notice->indexPage['project'] = "ZenTao 8.2+ possède une page d'accueil. Voulez-vous consulter la page d'accueil du produit ?";
@@ -247,7 +247,7 @@ $lang->custom->useLight          = 'Use Light Mode';
 $lang->custom->useALM            = 'Use ALM Mode';
 $lang->custom->currentModeTips   = 'You are currently using %s, you can switch to the %s.';
 $lang->custom->changeModeTips    = 'Please double confirm to switch to %s Mode.';
-$lang->custom->selectProgramTips = 'After switching to the Light Mode, in order to ensure the consistency of the data structure, you need to select a program as the default program, and subsequent new product and project data are associated with this default program.';
+$lang->custom->selectProgramTips = "After switching to the Light Mode, in order to ensure the consistency of the data structure, you need to select a program as the default program, and subsequent new {$lang->productCommon} and {$lang->projectCommon} data are associated with this default program.";
 
 $lang->custom->modeList['light'] = 'Light Mode';
 $lang->custom->modeList['ALM']   = 'ALM Mode';

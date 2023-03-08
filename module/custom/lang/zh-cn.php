@@ -69,10 +69,10 @@ $lang->custom->unitList['hours']      = '小时';
 $lang->custom->unitList['days']       = '天';
 $lang->custom->unitList['loc']        = 'KLOC';
 
-$lang->custom->tipProgressList['SPI'] = '项目进度绩效(SPI)';
+$lang->custom->tipProgressList['SPI'] = "{$lang->projectCommon}进度绩效(SPI)";
 $lang->custom->tipProgressList['SV']  = '进度偏差率(SV%)';
 
-$lang->custom->tipCostList['CPI'] = '项目成本绩效(CPI)';
+$lang->custom->tipCostList['CPI'] = "{$lang->projectCommon}成本绩效(CPI)";
 $lang->custom->tipCostList['CV']  = '成本偏差率(CV%)';
 
 $lang->custom->tipRangeList[0]  = '否';
@@ -200,8 +200,8 @@ $lang->custom->notice->confirmReviewCase   = '是否将待评审的用例修改�
 $lang->custom->notice->storyReviewTip      = '按人员、职位、部门勾选后，取所有人员的并集。';
 $lang->custom->notice->selectAllTip        = '勾选所有人员后，会清空并置灰评审人员，同时隐藏职位、部门。';
 $lang->custom->notice->repeatKey           = '%s键重复';
-$lang->custom->notice->readOnlyOfCode      = '代号是一种管理话术，主要便于保密或作为别名存在。启用代号管理后，系统中的产品、项目、执行在创建、编辑、详情、列表等页面均会展示代号信息。';
-$lang->custom->notice->readOnlyOfPercent   = '工作量占比用于划分项目中存在多个阶段时的工作量的占比，同一级阶段的百分比之和最高为100%。启用工作量占比后，系统中的瀑布项目和融合瀑布项目模型中设置阶段时需要维护阶段的工作量占比。';
+$lang->custom->notice->readOnlyOfCode      = "代号是一种管理话术，主要便于保密或作为别名存在。启用代号管理后，系统中的{$lang->productCommon}、{$lang->projectCommon}、执行在创建、编辑、详情、列表等页面均会展示代号信息。";
+$lang->custom->notice->readOnlyOfPercent   = "工作量占比用于划分{$lang->projectCommon}中存在多个阶段时的工作量的占比，同一级阶段的百分比之和最高为100%。启用工作量占比后，系统中的瀑布{$lang->projectCommon}和融合瀑布{$lang->projectCommon}模型中设置阶段时需要维护阶段的工作量占比。";
 
 $lang->custom->notice->indexPage['product'] = "从8.2版本起增加了产品主页视图，是否默认进入产品主页？";
 $lang->custom->notice->indexPage['project'] = "从8.2版本起增加了项目主页视图，是否默认进入项目主页？";
@@ -247,23 +247,23 @@ $lang->custom->useLight          = '使用轻量管理模式';
 $lang->custom->useALM            = '使用全生命周期管理模式';
 $lang->custom->currentModeTips   = '您当前使用的是%s, 您可以切换到%s';
 $lang->custom->changeModeTips    = '您确定要切换到%s吗？';
-$lang->custom->selectProgramTips = '切换到轻量管理模式后，为确保数据结构一致，需要选择一个项目集作为默认项目集，后续新增的产品和项目数据都关联在这个默认的项目集下。';
+$lang->custom->selectProgramTips = "切换到轻量管理模式后，为确保数据结构一致，需要选择一个项目集作为默认项目集，后续新增的{$lang->productCommon}和{$lang->projectCommon}数据都关联在这个默认的项目集下。";
 
 $lang->custom->modeList['light'] = '轻量级管理模式';
 $lang->custom->modeList['ALM']   = '全生命周期管理模式';
 
-$lang->custom->modeIntroductionList['light'] = '提供了项目管理的核心功能，适用于小型研发团队';
+$lang->custom->modeIntroductionList["light"] = "提供了{$lang->projectCommon}管理的核心功能，适用于小型研发团队";
 $lang->custom->modeIntroductionList['ALM']   = '概念更加完整、严谨，功能更加丰富，适用于中大型研发团队';
 
 $lang->custom->features['program']              = '项目集';
-$lang->custom->features['productRR']            = '产品-研发需求';
-$lang->custom->features['productUR']            = '产品-用户需求';
-$lang->custom->features['productLine']          = '产品-产品线';
-$lang->custom->features['projectScrum']         = '项目-敏捷模型';
-$lang->custom->features['projectWaterfall']     = '项目-瀑布模型';
-$lang->custom->features['projectKanban']        = '项目-看板模型';
-$lang->custom->features['projectAgileplus']     = '项目-融合敏捷模型';
-$lang->custom->features['projectWaterfallplus'] = '项目-融合瀑布模型';
+$lang->custom->features["productRR"]            = "{$lang->productCommon}-研发需求";
+$lang->custom->features["productUR"]            = "{$lang->productCommon}-用户需求";
+$lang->custom->features["productLine"]          = "{$lang->productCommon}-{$lang->productCommon}线";
+$lang->custom->features["projectScrum"]         = "{$lang->projectCommon}-敏捷模型";
+$lang->custom->features["projectWaterfall"]     = "{$lang->projectCommon}-瀑布模型";
+$lang->custom->features["projectKanban"]        = "{$lang->projectCommon}-看板模型";
+$lang->custom->features["projectAgileplus"]     = "{$lang->projectCommon}-融合敏捷模型";
+$lang->custom->features["projectWaterfallplus"] = "{$lang->projectCommon}-融合瀑布模型";
 $lang->custom->features['execution']            = '执行';
 $lang->custom->features['qa']                   = '测试';
 $lang->custom->features['devops']               = 'DevOps';
@@ -280,8 +280,8 @@ $lang->custom->features['workflow']             = '工作流';
 $lang->custom->features['admin']                = '后台';
 $lang->custom->features['vision']               = '研发综合界面、运营管理界面';
 
-$lang->custom->needClosedFunctions['waterfall']     = '瀑布项目';
-$lang->custom->needClosedFunctions['waterfallplus'] = '融合瀑布项目';
+$lang->custom->needClosedFunctions["waterfall"]     = "瀑布{$lang->projectCommon}";
+$lang->custom->needClosedFunctions["waterfallplus"] = "融合瀑布{$lang->projectCommon}";
 $lang->custom->needClosedFunctions['URStory']       = '用户需求';
 if($config->edition == 'max') $lang->custom->needClosedFunctions['assetLib'] = '资产库';
 

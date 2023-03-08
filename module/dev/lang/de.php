@@ -201,3 +201,5 @@ $lang->dev->projectMenu['scrum']         = "Scrum / Scrum + {$lang->projectCommo
 $lang->dev->projectMenu['waterfall']     = "Waterfall / Waterfall + {$lang->projectCommon}";
 $lang->dev->projectMenu['kanbanProject'] = "Kanban {$lang->projectCommon}";
 if($config->vision == 'lite') $lang->dev->projectMenu['kanbanProject'] = $lang->projectCommon;
+
+$this->lang->dev->replaceLable['project-execution'] = "{$lang->executionCommon} / Stage";

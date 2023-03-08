@@ -71,7 +71,7 @@ $lang->testtask->reportAction   = 'Case Report';
 $lang->testtask->id                = 'ID';
 $lang->testtask->common            = 'Testaufgabe';
 $lang->testtask->product           = $lang->productCommon;
-$lang->testtask->project           = 'Project';
+$lang->testtask->project           = $lang->projectCommon;
 $lang->testtask->execution         = $lang->execution->common;
 $lang->testtask->type              = 'Typ';
 $lang->testtask->build             = 'Build';
@@ -145,9 +145,9 @@ $lang->testtask->showFail      = 'Fehlgeschlagen <span class="text-danger">%s</s
 
 $lang->testtask->confirmDelete     = 'Möchten Sie dieses Build löschen?';
 $lang->testtask->confirmUnlinkCase = 'Möchten Sie die Verknüpfung zu dem Fall aufheben?';
-$lang->testtask->noticeNoOther     = 'Es existieren keine weiteren Testaufgaben für dieses Produkt';
+$lang->testtask->noticeNoOther     = "No test builds for this {$lang->productCommon}.";
 $lang->testtask->noTesttask        = 'Keine Testaufgaben. ';
-$lang->testtask->checkLinked       = "Please check whether the product that the test request is linked to has been linked to a {$lang->executionCommon}.";
+$lang->testtask->checkLinked       = "Please check whether the {$lang->productCommon} that the test request is linked to has been linked to a {$lang->executionCommon}.";
 $lang->testtask->noImportData      = 'The imported XML does not parse the data.';
 $lang->testtask->unitXMLFormat     = 'Please select a file in JUnit XML format.';
 $lang->testtask->titleOfAuto       = "%s automated testing";

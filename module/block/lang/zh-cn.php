@@ -76,7 +76,7 @@ $lang->block->consumedHours       = '已消耗';
 $lang->block->time                = '第';
 $lang->block->week                = '周';
 $lang->block->month               = '月';
-$lang->block->selectProduct       = '选择产品';
+$lang->block->selectProduct       = "选择{$lang->productCommon}";
 $lang->block->of                  = '的';
 $lang->block->remain              = '剩余工时';
 $lang->block->allStories          = '总需求';
@@ -572,9 +572,9 @@ $lang->block->gridOptions[4] = '右侧';
 
 $lang->block->flowchart            = array();
 $lang->block->flowchart['admin']   = array('管理员', '维护部门', '添加用户', '维护权限');
-if($config->systemMode == 'ALM') $lang->block->flowchart['program'] = array('项目集负责人', '创建项目集', '关联产品', "创建项目", "制定预算和规划", '添加干系人');
+if($config->systemMode == 'ALM') $lang->block->flowchart['program'] = array('项目集负责人', '创建项目集', "关联{$lang->productCommon}", "创建{$lang->projectCommon}", "制定预算和规划", '添加干系人');
 $lang->block->flowchart['product'] = array($lang->productCommon . '经理', '创建' . $lang->productCommon, '维护模块', "维护计划", "维护需求", '创建发布');
-$lang->block->flowchart['project'] = array('项目经理', '创建项目、' . $lang->execution->common, '维护团队', "关联需求", '分解任务', '跟踪进度');
+$lang->block->flowchart['project'] = array('项目经理', "创建{$lang->productCommon}、" . $lang->execution->common, '维护团队', "关联需求", '分解任务', '跟踪进度');
 $lang->block->flowchart['dev']     = array('研发人员', '领取任务和Bug', '设计实现方案', '更新状态', '完成任务和Bug', '提交代码');
 $lang->block->flowchart['tester']  = array('测试人员', '撰写用例', '执行用例', '提交Bug', '验证Bug', '关闭Bug');
 
@@ -587,7 +587,7 @@ $lang->block->zentaoapp->allStorySum          = '需求总数';
 $lang->block->zentaoapp->storyCompleteRate    = '需求完成率';
 $lang->block->zentaoapp->latestExecution      = '近期执行';
 $lang->block->zentaoapp->involvedExecution    = '我参与的执行';
-$lang->block->zentaoapp->mangedProduct        = '负责产品';
+$lang->block->zentaoapp->mangedProduct        = "负责{$lang->productCommon}";
 $lang->block->zentaoapp->involvedProject      = '参与项目';
 $lang->block->zentaoapp->customIndexCard      = '定制首页卡片';
 $lang->block->zentaoapp->createStory          = '提需求';
@@ -632,7 +632,7 @@ $lang->block->visionTitle            = '禅道使用界面分为【研发综合�
 $lang->block->visions['rnd']         = new stdclass();
 $lang->block->visions['rnd']->key    = 'rnd';
 $lang->block->visions['rnd']->title  = '研发综合界面';
-$lang->block->visions['rnd']->text   = '集项目集、产品、项目、执行、测试等多维度管理于一体，提供全过程项目管理解决方案。';
+$lang->block->visions['rnd']->text   = "集项目集、{$lang->productCommon}、项目、执行、测试等多维度管理于一体，提供全过程项目管理解决方案。";
 $lang->block->visions['lite']        = new stdclass();
 $lang->block->visions['lite']->key   = 'lite';
 $lang->block->visions['lite']->title = '运营管理界面';
