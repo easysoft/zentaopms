@@ -28,7 +28,7 @@ $lang->custom->region               = '区间';
 $lang->custom->tips                 = '提示语';
 $lang->custom->setTips              = '设置提示语';
 $lang->custom->isRange              = '是否目标控制范围';
-$lang->custom->concept              = "项目概念";
+$lang->custom->concept              = "{$lang->projectCommon}概念";
 $lang->custom->URStory              = "用户需求";
 $lang->custom->SRStory              = "软件需求";
 $lang->custom->epic                 = "史诗";
@@ -204,7 +204,7 @@ $lang->custom->notice->readOnlyOfCode      = "代号是一种管理话术，主�
 $lang->custom->notice->readOnlyOfPercent   = "工作量占比用于划分{$lang->projectCommon}中存在多个阶段时的工作量的占比，同一级阶段的百分比之和最高为100%。启用工作量占比后，系统中的瀑布{$lang->projectCommon}和融合瀑布{$lang->projectCommon}模型中设置阶段时需要维护阶段的工作量占比。";
 
 $lang->custom->notice->indexPage['product'] = "从8.2版本起增加了产品主页视图，是否默认进入产品主页？";
-$lang->custom->notice->indexPage['project'] = "从8.2版本起增加了项目主页视图，是否默认进入项目主页？";
+$lang->custom->notice->indexPage['project'] = "从8.2版本起增加了{$lang->projectCommon}主页视图，是否默认进入{$lang->projectCommon}主页？";
 $lang->custom->notice->indexPage['qa']      = "从8.2版本起增加了测试主页视图，是否默认进入测试主页？";
 
 $lang->custom->notice->invalidStrlen['ten']        = '键的长度必须小于10个字符！';
@@ -233,8 +233,8 @@ $lang->custom->restDayList[6] = '周六休息';
 $lang->custom->restDayList[0] = '周天休息';
 
 global $config;
-$lang->custom->sprintConceptList[0] = '项目 产品 迭代';
-$lang->custom->sprintConceptList[1] = '项目 产品 冲刺';
+$lang->custom->sprintConceptList[0] = "{$lang->projectCommon} 产品 迭代";
+$lang->custom->sprintConceptList[1] = "{$lang->projectCommon} 产品 冲刺";
 
 $lang->custom->workingList['full'] = '完整研发管理工具';
 
@@ -320,7 +320,7 @@ $lang->custom->conceptOptions->hourPoint['1'] = '故事点';
 $lang->custom->conceptOptions->hourPoint['2'] = '功能点';
 
 $lang->custom->scrum = new stdclass();
-$lang->custom->scrum->setConcept = '设置项目概念';
+$lang->custom->scrum->setConcept = "设置{$lang->projectCommon}概念";
 
 $lang->custom->reviewRules['allpass']  = '全部通过通过';
 $lang->custom->reviewRules['halfpass'] = '半数以上通过通过';
