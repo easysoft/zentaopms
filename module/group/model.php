@@ -725,14 +725,23 @@ class groupModel extends model
      *
      * @param  string    $menu
      * @access public
-     * @return void
+     * @return array
      */
-    public function getMenuModules($menu)
+    public function getMenuModules($menu, $translateLang = false)
     {
         $modules = array();
         foreach($this->lang->resource as $moduleName => $action)
         {
-            if($this->checkMenuModule($menu, $moduleName)) $modules[] = $moduleName;
+            if($this->checkMenuModule($menu, $moduleName))
+            {
+                $modules[$moduleName] = $moduleName;
+                if($translateLang)
+                {
+                    if(!isset($this->lang->{$moduleName}->common)) $this->app->loadLang($moduleName);
+                    $modules[$moduleName] = isset($this->lang->{$moduleName}->common) ? $this->lang->{$moduleName}->common : $moduleName;
+                    if($moduleName == 'requirement') $modules[$moduleName] = $this->lang->URCommon;
+                }
+            }
         }
         return $modules;
     }
@@ -863,5 +872,83 @@ class groupModel extends model
         $this->setting->setItem("system.priv.views", implode(',', $views));
 
         if(!dao::isError()) return true;
+    }
+
+    /**
+     * Get priv by ID.
+     *
+     * @param  int    $privID
+     * @access public
+     * @return object
+     */
+    public function getPrivByID($privID)
+    {
+        return $this->dao->select('t1.*,t2.name,t2.desc')->from(TABLE_PRIV)->alias('t1')
+            ->leftJoin(TABLE_PRIVLANG)->alias('t2')->on('t1.id=t2.priv')
+            ->where('t1.id')->eq($privID)
+            ->andWhere('t2.lang')->eq($this->app->getClientLang())
+            ->fetch();
+    }
+
+    /**
+     * Get priv by module.
+     *
+     * @param  array    $modules
+     * @access public
+     * @return array
+     */
+    public function getPrivByModule($modules)
+    {
+        return $this->dao->select('t1.*,t2.name,t2.desc')->from(TABLE_PRIV)->alias('t1')
+            ->leftJoin(TABLE_PRIVLANG)->alias('t2')->on('t1.id=t2.priv')
+            ->where('t1.module')->in($modules)
+            ->andWhere('t2.lang')->eq($this->app->getClientLang())
+            ->orderBy('`order`')
+            ->fetchGroup('module', 'id');
+    }
+
+    /**
+     * Get priv relation.
+     *
+     * @param  int    $priv
+     * @param  string $type
+     * @param  string $module
+     * @access public
+     * @return array
+     */
+    public function getPrivRelation($priv, $type, $module = '')
+    {
+        return $this->dao->select('t2.*')->from(TABLE_PRIVRELATION)->alias('t1')
+            ->leftJoin(TABLE_PRIV)->alias('t2')->on('t1.relationPriv=t2.id')
+            ->where('t1.priv')->eq($priv)
+            ->andWhere('t1.type')->eq($type)
+            ->beginIF($module)->andWhere('t2.module')->eq($module)->fi()
+            ->fetchAll('id');
+    }
+
+    /**
+     * Save relation.
+     *
+     * @param  array    $privIdList
+     * @param  string   $type
+     * @access public
+     * @return void
+     */
+    public function saveRelation($privIdList, $type)
+    {
+        $data = fixer::input('post')->get();
+
+        $this->dao->delete()->from(TABLE_PRIVRELATION)->where('priv')->in($privIdList)->andWhere('type')->eq($type)->exec();
+        foreach($privIdList as $privID)
+        {
+            $relation = new stdclass();
+            $relation->priv = $privID;
+            $relation->type = $type;
+            foreach($data->relation as $privRelation)
+            {
+                $relation->relationPriv = $privRelation;
+                $this->dao->insert(TABLE_PRIVRELATION)->data($relation)->exec();
+            }
+        }
     }
 }

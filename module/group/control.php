@@ -452,4 +452,56 @@ class group extends control
         $this->view->users       = $this->loadModel('user')->getPairs();
         $this->display();
     }
+
+    /**
+     * Add recommendation.
+     *
+     * @param  int    $privID
+     * @access public
+     * @return void
+     */
+    public function addRecommendation($privID)
+    {
+        if($_POST)
+        {
+            $this->group->saveRelation(array($privID), 'recommend');
+            return print(js::reload('parent'));
+        }
+
+        $priv = $this->group->getPrivByID($privID);
+
+        $this->view->priv        = $priv;
+        $this->view->modules     = array('' => $this->lang->group->selectModule) + $this->group->getMenuModules(null, true);
+        $this->view->modulePrivs = $this->group->getPrivByModule($priv->module);
+        $this->view->recommends  = $this->group->getPrivRelation($priv->id, 'recommend');
+        $this->display();
+    }
+
+    /**
+     * Ajax get priv tree.
+     *
+     * @param  int    $privID
+     * @param  string $module
+     * @access public
+     * @return void
+     */
+    public function ajaxGetPrivTree($privID, $module)
+    {
+        $modules     = $this->group->getMenuModules(null, true);
+        $modulePrivs = $this->group->getPrivByModule($module);
+        $recommends  = $this->group->getPrivRelation($privID, 'recommend', $module);
+
+        $tree  = '<li>';
+        $tree .= html::a('#', $modules[$module]);
+        $tree .= "<ul class='relationBox'>";
+        foreach($modulePrivs[$module] as $id => $modulePriv)
+        {
+              if($privID == $id) continue;
+              $tree .= '<li>';
+              $tree .= html::checkbox('relation', array($id => $modulePriv->name), (empty($recommends) or isset($recommends[$id])) ? $id : '');
+              $tree .= '</li>';
+        }
+        $tree .= '</ul></li>';
+        return print($tree);
+    }
 }

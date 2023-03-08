@@ -56,6 +56,9 @@ $lang->group->managePrivPackage  = 'Manage Priv Package';
 $lang->group->createPrivPackage  = 'Create Priv Package';
 $lang->group->editPrivPackage    = 'Edit Priv Package';
 $lang->group->deletePrivPackage  = 'Delete Priv Package';
+$lang->group->addRecommendation  = 'Add Recommendation';
+$lang->group->selectedPrivs      = 'Selected Privilege: %s';
+$lang->group->selectModule       = 'Select Module';
 
 $lang->group->id       = 'ID';
 $lang->group->name     = 'Name';

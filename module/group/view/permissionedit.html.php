@@ -46,7 +46,7 @@
       <div class="panel-content">
         <div class="menuTree depend menu-active-primary menu-hover-primary"></div>
       </div>
-      <div class="panel-bottom"> 
+      <div class="panel-bottom">
         <?php echo html::commonButton ('<i class="icon icon-plus"></i>' . $lang->group->add, '', 'btn btn-primary');?>
       </div>
     </div>
@@ -55,8 +55,8 @@
       <div class="panel-content">
         <div class="menuTree recommend menu-active-primary menu-hover-primary"></div>
       </div>
-      <div class="panel-bottom"> 
-        <?php echo html::commonButton ('<i class="icon icon-plus"></i>' . $lang->group->add, '', 'btn btn-primary');?>
+      <div class="panel-bottom">
+        <?php echo html::a(inlink('addRecommendation', 'privID=1'), '<i class="icon icon-plus"></i>' . $lang->group->add, '', "class='btn btn-primary iframe'");?>
       </div>
     </div>
   </div>
