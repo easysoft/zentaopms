@@ -114,10 +114,10 @@ $lang->block->left            = 'Remain';
 $lang->block->titleList['flowchart']      = 'Flow Chart';
 $lang->block->titleList['guide']          = 'Guides';
 $lang->block->titleList['statistic']      = 'Statistic';
-$lang->block->titleList['recentproject']  = 'Recent Project';
+$lang->block->titleList['recentproject']  = "Recent {$lang->projectCommon}";
 $lang->block->titleList['assigntome']     = 'Assign to me';
-$lang->block->titleList['projectteam']    = 'Project manpower input';
-$lang->block->titleList['project']        = 'Project List';
+$lang->block->titleList['projectteam']    = "{$lang->projectCommon} manpower input";
+$lang->block->titleList['project']        = "{$lang->projectCommon} List";
 $lang->block->titleList['dynamic']        = 'Dynamic';
 $lang->block->titleList['list']           = 'Todo List';
 $lang->block->titleList['contribute']     = 'Contribute';
@@ -125,20 +125,20 @@ $lang->block->titleList['scrumoverview']  = 'Scrumoverview';
 $lang->block->titleList['scrumtest']      = 'Scrum Test';
 $lang->block->titleList['scrumlist']      = 'Scrum List';
 $lang->block->titleList['sprint']         = 'Sprint';
-$lang->block->titleList['projectdynamic'] = 'Project Dynamic';
+$lang->block->titleList['projectdynamic'] = "{$lang->projectCommon} Dynamic";
 $lang->block->titleList['bug']            = 'Bug';
 $lang->block->titleList['case']           = 'Case';
 $lang->block->titleList['testtask']       = 'Test Task';
 
 $lang->block->default['waterfall']['project']['3']['title']  = 'Plan Gantt Chart';
 $lang->block->default['waterfall']['project']['3']['block']  = 'waterfallgantt';
-$lang->block->default['waterfall']['project']['3']['source'] = 'project';
+$lang->block->default['waterfall']['project']['3']['source'] = $lang->projectCommon;
 $lang->block->default['waterfall']['project']['3']['grid']   = 8;
 
 $lang->block->default['waterfall']['project']['6']['title']  = 'Dynamic';
 $lang->block->default['waterfall']['project']['6']['block']  = 'projectdynamic';
 $lang->block->default['waterfall']['project']['6']['grid']   = 4;
-$lang->block->default['waterfall']['project']['6']['source'] = 'project';
+$lang->block->default['waterfall']['project']['6']['source'] = $lang->projectCommon;
 
 $lang->block->default['waterfallplus'] = $lang->block->default['waterfall'];
 
@@ -288,9 +288,9 @@ $lang->block->default['full']['my']['4']['grid']            = 4;
 $lang->block->default['full']['my']['4']['source']          = 'todo';
 $lang->block->default['full']['my']['4']['params']['count'] = '20';
 
-$lang->block->default['full']['my']['5']['title']           = 'Project Statistic';
+$lang->block->default['full']['my']['5']['title']           = "{$lang->projectCommon} Statistic";
 $lang->block->default['full']['my']['5']['block']           = 'statistic';
-$lang->block->default['full']['my']['5']['source']          = 'project';
+$lang->block->default['full']['my']['5']['source']          = $lang->projectCommon;
 $lang->block->default['full']['my']['5']['grid']            = 8;
 $lang->block->default['full']['my']['5']['params']['count'] = '20';
 
@@ -299,9 +299,9 @@ $lang->block->default['full']['my']['6']['block']  = 'contribute';
 $lang->block->default['full']['my']['6']['source'] = '';
 $lang->block->default['full']['my']['6']['grid']   = 4;
 
-$lang->block->default['full']['my']['7']['title']  = 'Recent Project';
-$lang->block->default['full']['my']['7']['block']  = 'recentproject';
-$lang->block->default['full']['my']['7']['source'] = 'project';
+$lang->block->default['full']['my']['7']['title']  = "Recent {$lang->projectCommon}s";
+$lang->block->default['full']['my']['7']['block']  = "recent{$lang->projectCommon}";
+$lang->block->default['full']['my']['7']['source'] = $lang->projectCommon;
 $lang->block->default['full']['my']['7']['grid']   = 8;
 
 $lang->block->default['full']['my']['8']['title']  = 'Todo';
@@ -321,12 +321,12 @@ $lang->block->default['full']['my']['8']['params']['feedbackCount'] = '20';
 
 $lang->block->default['full']['my']['9']['title']  = 'Project List';
 $lang->block->default['full']['my']['9']['block']  = 'project';
-$lang->block->default['full']['my']['9']['source'] = 'project';
+$lang->block->default['full']['my']['9']['source'] = $lang->projectCommon;
 $lang->block->default['full']['my']['9']['grid']   = 8;
 
-$lang->block->default['full']['my']['10']['title']  = 'Project List';
-$lang->block->default['full']['my']['10']['block']  = 'project';
-$lang->block->default['full']['my']['10']['source'] = 'project';
+$lang->block->default['full']['my']['10']['title']  = "{$lang->projectCommon} List";
+$lang->block->default['full']['my']['10']['block']  = $lang->projectCommon;
+$lang->block->default['full']['my']['10']['source'] = $lang->projectCommon;
 $lang->block->default['full']['my']['10']['grid']   = 8;
 
 $lang->block->default['full']['my']['10']['params']['orderBy'] = 'id_desc';
@@ -356,21 +356,21 @@ $lang->block->availableBlocks->feedback    = 'Feedbacks';
 $lang->block->availableBlocks->ticket      = 'Tickets';
 
 $lang->block->moduleList['product']   = $lang->productCommon;
-$lang->block->moduleList['project']   = 'Project';
+$lang->block->moduleList['project']   = $lang->projectCommon;
 $lang->block->moduleList['execution'] = $lang->execution->common;
 $lang->block->moduleList['qa']        = 'QA';
 $lang->block->moduleList['todo']      = 'Todos';
 
 $lang->block->modules['project'] = new stdclass();
 $lang->block->modules['project']->availableBlocks = new stdclass();
-$lang->block->modules['project']->availableBlocks->project       = 'Project List';
-$lang->block->modules['project']->availableBlocks->recentproject = 'Recent Project';
-$lang->block->modules['project']->availableBlocks->statistic     = 'Project Statistic';
-$lang->block->modules['project']->availableBlocks->projectteam = 'Project Human Input';
+$lang->block->modules['project']->availableBlocks->project       = "{$lang->projectCommon} List";
+$lang->block->modules['project']->availableBlocks->recentproject = "Recent {$lang->projectCommon}";
+$lang->block->modules['project']->availableBlocks->statistic     = "{$lang->projectCommon} Statistic";
+$lang->block->modules['project']->availableBlocks->projectteam   = "{$lang->projectCommon} Manpower Input";
 
 $lang->block->modules['scrum']['index'] = new stdclass();
 $lang->block->modules['scrum']['index']->availableBlocks = new stdclass();
-$lang->block->modules['scrum']['index']->availableBlocks->scrumoverview  = 'Project Overview';
+$lang->block->modules['scrum']['index']->availableBlocks->scrumoverview  = "{$lang->projectCommon} Overview";
 $lang->block->modules['scrum']['index']->availableBlocks->scrumlist      = $lang->executionCommon . ' List';
 $lang->block->modules['scrum']['index']->availableBlocks->sprint         = $lang->executionCommon . ' Overview';
 $lang->block->modules['scrum']['index']->availableBlocks->scrumtest      = 'Test Version';
@@ -423,10 +423,10 @@ $lang->block->orderByList->product['status_asc']  = 'Status Aufsteigend';
 $lang->block->orderByList->product['status_desc'] = 'Status Absteigend';
 
 $lang->block->orderByList->project = array();
-$lang->block->orderByList->project['id_asc']      = 'ID Aufsteigend';
-$lang->block->orderByList->project['id_desc']     = 'ID Absteigend';
-$lang->block->orderByList->project['status_asc']  = 'Status Aufsteigend';
-$lang->block->orderByList->project['status_desc'] = 'Status Absteigend';
+$lang->block->orderByList->project['id_asc']      = "{$lang->projectCommon} ID ASC";
+$lang->block->orderByList->project['id_desc']     = "{$lang->projectCommon} ID DESC";
+$lang->block->orderByList->project['status_asc']  = "{$lang->projectCommon} Status ASC";
+$lang->block->orderByList->project['status_desc'] = "{$lang->projectCommon} Status DESC";
 
 $lang->block->orderByList->execution = array();
 $lang->block->orderByList->execution['id_asc']      = 'ID Aufsteigend';
@@ -529,18 +529,18 @@ $lang->block->typeList->testtask['done']    = 'Erledigt';
 $lang->block->typeList->testtask['all']     = 'Alle';
 
 $lang->block->modules['project']->moreLinkList = new stdclass();
-$lang->block->modules['project']->moreLinkList->recentproject  = 'project|browse|';
-$lang->block->modules['project']->moreLinkList->statistic      = 'project|browse|';
-$lang->block->modules['project']->moreLinkList->project        = 'project|browse|';
+$lang->block->modules['project']->moreLinkList->recentproject  = "{$lang->projectCommon}|browse|";
+$lang->block->modules['project']->moreLinkList->statistic      = "{$lang->projectCommon}|browse|";
+$lang->block->modules['project']->moreLinkList->project        = "{$lang->projectCommon}|browse|";
 $lang->block->modules['project']->moreLinkList->cmmireport     = 'weekly|index|';
 $lang->block->modules['project']->moreLinkList->cmmiestimate   = 'workestimation|index|';
 $lang->block->modules['project']->moreLinkList->cmmiissue      = 'issue|browse|';
 $lang->block->modules['project']->moreLinkList->cmmirisk       = 'risk|browse|';
-$lang->block->modules['project']->moreLinkList->scrumlist      = 'project|execution|';
+$lang->block->modules['project']->moreLinkList->scrumlist      = "{$lang->projectCommon}|execution|";
 $lang->block->modules['project']->moreLinkList->scrumtest      = 'testtask|browse|';
 $lang->block->modules['project']->moreLinkList->scrumproduct   = 'product|all|';
-$lang->block->modules['project']->moreLinkList->sprint         = 'project|execution|';
-$lang->block->modules['project']->moreLinkList->projectdynamic = 'project|dynamic|';
+$lang->block->modules['project']->moreLinkList->sprint         = "{$lang->projectCommon}|execution|";
+$lang->block->modules['project']->moreLinkList->projectdynamic = "{$lang->projectCommon}|dynamic|";
 
 $lang->block->modules['product']->moreLinkList        = new stdclass();
 $lang->block->modules['product']->moreLinkList->list  = 'product|all|';
@@ -588,7 +588,7 @@ $lang->block->zentaoapp->storyCompleteRate    = 'Story CompleteRate';
 $lang->block->zentaoapp->latestExecution      = 'Latest Execution';
 $lang->block->zentaoapp->involvedExecution    = 'Involved Execution';
 $lang->block->zentaoapp->mangedProduct        = "Manged {$lang->productCommon}";
-$lang->block->zentaoapp->involvedProject      = 'Involved Project';
+$lang->block->zentaoapp->involvedProject      = "Involved {$lang->projectCommon}";
 $lang->block->zentaoapp->customIndexCard      = 'Custom Index Cards';
 $lang->block->zentaoapp->createStory          = 'Story Create';
 $lang->block->zentaoapp->createEffort         = 'Effort Create';
@@ -599,7 +599,7 @@ $lang->block->zentaoapp->notSupportKanban     = 'The mobile terminal does not su
 $lang->block->zentaoapp->notSupportVersion    = 'This version of ZenTao is not currently supported on the mobile terminal';
 $lang->block->zentaoapp->incompatibleVersion  = 'The current version of ZenTao is lower, please upgrade to the latest version and try again';
 $lang->block->zentaoapp->canNotGetVersion     = 'Failed to get ZenTao version, please confirm if the URL is correct';
-$lang->block->zentaoapp->desc                 = 'ZenTao mobile app provides you with a mobile work environment, which is convenient for managing personal to-do tasks at any time, tracking project progress, and enhancing the flexibility and agility of project management.';
+$lang->block->zentaoapp->desc                 = "ZenTao mobile app provides you with a mobile work environment, which is convenient for managing personal to-do tasks at any time, tracking {$lang->projectCommon} progress, and enhancing the flexibility and agility of {$lang->projectCommon} management.";
 $lang->block->zentaoapp->downloadTip          = 'Scan QR code to download';
 
 $lang->block->zentaoclient = new stdClass();
@@ -632,11 +632,11 @@ $lang->block->visionTitle            = 'The user interface of ZenTao is divided 
 $lang->block->visions['rnd']         = new stdclass();
 $lang->block->visions['rnd']->key    = 'rnd';
 $lang->block->visions['rnd']->title  = 'Full feature interface';
-$lang->block->visions['rnd']->text   = "Integrate the program, {$lang->productCommon}, {$lang->projectCommon}, execution, test, etc., and provide the lifecycle project management solution.";
+$lang->block->visions['rnd']->text   = "Integrate the program, {$lang->productCommon}, {$lang->projectCommon}, execution, test, etc., and provide the lifecycle {$lang->projectCommon} management solution.";
 $lang->block->visions['lite']        = new stdclass();
 $lang->block->visions['lite']->key   = 'lite';
 $lang->block->visions['lite']->title = 'Operation Management Interface';
-$lang->block->visions['lite']->text  = 'Specially designed for Non-R&D teams, and based on the visual Kanban project management model.';
+$lang->block->visions['lite']->text  = "Specially designed for Non-R&D teams, and based on the visual Kanban {$lang->projectCommon} management model.";
 
 $lang->block->customModes['light'] = 'Light Mode';
 $lang->block->customModes['ALM']   = 'ALM Mode';
@@ -644,4 +644,4 @@ $lang->block->customModes['ALM']   = 'ALM Mode';
 $lang->block->customModeTip = new stdClass();
 $lang->block->customModeTip->common = 'There are 2 running modes of ZenTao:  Light Mode and ALM Mode.';
 $lang->block->customModeTip->ALM    = 'The concept is more complete and rigorous, and the function is more abundant. It is suitable for medium and large R&D teams.';
-$lang->block->customModeTip->light  = 'Provides the core function of project management, suitable for small R&D teams.';
+$lang->block->customModeTip->light  = "Provides the core function of {$lang->projectCommon} management, suitable for small R&D teams.";
