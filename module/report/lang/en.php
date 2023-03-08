@@ -18,7 +18,7 @@ $lang->report->percent            = '%';
 $lang->report->undefined          = 'Undefined';
 $lang->report->query              = 'Query';
 $lang->report->annual             = 'Annual Summary';
-$lang->report->project            = 'Project';
+$lang->report->project            = $lang->projectCommon;
 $lang->report->PO                 = 'PO';
 $lang->report->viewEveryoneAnnual = 'View everyone annual summary';
 
@@ -51,7 +51,7 @@ $lang->report->beginAndEnd      = ' From';
 $lang->report->begin            = ' Begin';
 $lang->report->end              = ' End';
 $lang->report->dept             = 'Department';
-$lang->report->deviationChart   = 'Project Deviation Chart';
+$lang->report->deviationChart   = "{$lang->projectCommon} Deviation Chart";
 
 $lang->reportList = new stdclass();
 $lang->reportList->product = new stdclass();
@@ -211,8 +211,8 @@ $lang->report->annualData->todoStatus['all']    = 'All';
 $lang->report->annualData->todoStatus['undone'] = 'Undone';
 $lang->report->annualData->todoStatus['done']   = 'Done';
 
-$lang->report->annualData->radarItems['product']   = "Product";
-$lang->report->annualData->radarItems['execution'] = "Project";
+$lang->report->annualData->radarItems['product']   = 'Product';
+$lang->report->annualData->radarItems['execution'] = $lang->projectCommon;
 $lang->report->annualData->radarItems['devel']     = "Development";
 $lang->report->annualData->radarItems['qa']        = "QA";
 $lang->report->annualData->radarItems['other']     = "Other";
