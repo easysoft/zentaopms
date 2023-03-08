@@ -390,7 +390,7 @@ class group extends control
     public function editManagePriv()
     {
         $this->view->title    = $this->lang->group->editManagePriv;
-        $this->view->editType = $this->cookie->managePrivEditType ? $this->cookie->managePrivEditType : 'bylist';
+        $this->view->editType = $this->cookie->managePrivEditType ? $this->cookie->managePrivEditType : 'bycard';
         $this->display();
     }
 
