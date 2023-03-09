@@ -59,7 +59,7 @@ $lang->stakeholder->keyList[1] = 'Yes';
 $lang->stakeholder->typeList['inside']  = 'Internal';
 $lang->stakeholder->typeList['outside'] = 'External';
 
-$lang->stakeholder->fromList['team']    = 'Project Team';
+$lang->stakeholder->fromList['team']    = $lang->projectCommon . ' Team';
 $lang->stakeholder->fromList['company'] = 'Internal';
 $lang->stakeholder->fromList['outside'] = 'External';
 

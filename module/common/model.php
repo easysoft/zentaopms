@@ -156,10 +156,8 @@ class commonModel extends model
             $this->loadModel('action')->create('execution', $parentExecutionID, 'syncexecutionbychild');
         }
 
-        if($execution->type == 'stage')
-        {
-            $this->loadModel('programplan')->computeProgress($execution->id);
-        }
+        $project = $this->loadModel('project')->getByID($execution->project);
+        if($project->model == 'waterfall' or $project->model == 'waterfallplus') $this->loadModel('programplan')->computeProgress($execution->id);
 
         return $parentExecution;
     }
@@ -912,9 +910,13 @@ class commonModel extends model
             if($tab == 'product') $currentMethod = 'all';
         }
 
-        $link = helper::createLink($currentModule, $currentMethod);
+        $btnTitle  = isset($lang->db->custom['common']['mainNav'][$tab]) ? $lang->db->custom['common']['mainNav'][$tab] : $lang->$tab->common;
+        $commonKey = $tab . 'Common';
+        if(isset($lang->$commonKey)) $btnTitle = $lang->$commonKey;
+
+        $link      = helper::createLink($currentModule, $currentMethod);
         $className = $tab == 'devops' ? 'btn num' : 'btn';
-        $html = $link ? html::a($link, "$icon {$lang->$tab->common}", '', "class='$className' style='padding-top: 2px'") : "$icon {$lang->$tab->common}";
+        $html      = $link ? html::a($link, "$icon $btnTitle", '', "class='$className' style='padding-top: 2px'") : "$icon $btnTitle";
 
         echo "<div class='btn-group header-btn'>" . $html . '</div>';
     }
@@ -1096,8 +1098,9 @@ class commonModel extends model
         global $app, $lang, $config;
 
         /* Set main menu by app tab and module. */
-        self::setMainMenu();
-        self::checkMenuVarsReplaced();
+        static::replaceMenuLang();
+        static::setMainMenu();
+        static::checkMenuVarsReplaced();
 
         $activeMenu = '';
         $tab = $app->tab;
@@ -1852,7 +1855,8 @@ EOD;
         $pipelineList = $app->dbh->query("SELECT type,name,url FROM " . TABLE_PIPELINE . " WHERE `deleted` = '0' $condition order by type")->fetchAll();
         if(empty($pipelineList)) return;
 
-        $html  = "<li class='dropdown dropdown-hover'><a href='javascript:;' data-toggle='dropdown'>{$lang->app->common}<span class='caret'></span></a>";
+        $appCommon = isset($lang->db->custom['devopsMenu']['menu']['app']) ? $lang->db->custom['devopsMenu']['menu']['app'] : $lang->app->common;
+        $html  = "<li class='dropdown dropdown-hover'><a href='javascript:;' data-toggle='dropdown'>{$appCommon}<span class='caret'></span></a>";
         $html .= "<ul class='dropdown-menu'>";
 
         foreach($pipelineList as $pipeline)
@@ -2393,7 +2397,7 @@ EOD;
         if($this->app->getModuleName() == 'upgrade' and $this->session->upgrading) return false;
 
         $statusFile = $this->app->getAppRoot() . 'www' . DIRECTORY_SEPARATOR . 'data' . DIRECTORY_SEPARATOR . 'ok.txt';
-        return (!is_file($statusFile) or (time() - filemtime($statusFile)) > 3600) ? $statusFile : false;
+        return (!is_file($statusFile) or (time() - filemtime($statusFile)) > $this->config->safeFileTimeout) ? $statusFile : false;
     }
 
     /**
@@ -3043,6 +3047,14 @@ EOD;
             }
             if($productsStatus[$object->product] == 'closed') return false;
         }
+        elseif(!empty($object->product) and is_string($object->product) and empty($config->CRProduct))
+        {
+            $products      = array(0) + explode(',', $object->product);
+            $products      = $app->control->loadModel('product')->getByIdList($products);
+            $productStatus = array();
+            foreach($products as $product) $productStatus[$product->status] = 1;
+            if(!empty($productStatus['closed']) and count($productStatus) == 1) return false;
+        }
 
         /* Check the execution is closed. */
         $productModuleList = array('story', 'bug', 'testtask');
@@ -3527,6 +3539,66 @@ EOD;
         }
 
         return true;
+    }
+
+    /**
+     * Replace menu lang.
+     *
+     * @static
+     * @access public
+     * @return void
+     */
+    public static function replaceMenuLang()
+    {
+        global $lang;
+        if(empty($lang->db->custom)) return;
+        foreach($lang->db->custom as $moduleName => $sectionMenus)
+        {
+            if(strpos($moduleName, 'Menu') === false) continue;
+
+            $isSecondMenu = strpos($moduleName, 'SubMenu') === false;
+            $moduleName   = str_replace($isSecondMenu ? 'Menu' : 'SubMenu', '', $moduleName);
+
+            foreach($sectionMenus as $section => $menus)
+            {
+                foreach($menus as $key => $value)
+                {
+                    /* Get second menu. */
+                    if($isSecondMenu)
+                    {
+                        $isDropMenu = strpos($section, 'DropMenu') !== false;
+                        if(!$isDropMenu)
+                        {
+                            if(!isset($lang->{$moduleName}->{$section})) break;
+                            if(is_object($lang->{$moduleName}->{$section}) and isset($lang->{$moduleName}->{$section}->{$key})) $settingMenu = &$lang->{$moduleName}->{$section}->{$key};
+                            if(is_array($lang->{$moduleName}->{$section})  and isset($lang->{$moduleName}->{$section}[$key]))   $settingMenu = &$lang->{$moduleName}->{$section}[$key];
+                        }
+                        else
+                        {
+                            /* Get drop menu in second menu. */
+                            $dropMenuKey = str_replace('DropMenu', '', $section);
+                            if(!isset($lang->{$moduleName}->menu->{$dropMenuKey}['dropMenu']->{$key})) break;
+                            $settingMenu = &$lang->{$moduleName}->menu->{$dropMenuKey}['dropMenu']->{$key};
+                        }
+                    }
+                    /* Get third menu. */
+                    elseif(isset($lang->{$moduleName}->menu->{$section}['subMenu']))
+                    {
+                        $subMenu = $lang->{$moduleName}->menu->{$section}['subMenu'];
+                        if(is_object($subMenu) and isset($subMenu->{$key})) $settingMenu = &$lang->{$moduleName}->menu->{$section}['subMenu']->{$key};
+                        if(is_array($subMenu)  and isset($subMenu[$key]))   $settingMenu = &$lang->{$moduleName}->menu->{$section}['subMenu'][$key];
+                    }
+
+                    /* Set custom menu lang. */
+                    if(!empty($settingMenu))
+                    {
+                        if(is_string($settingMenu)) $settingMenu = $value . substr($settingMenu, strpos($settingMenu, '|'));
+                        if(is_array($settingMenu) and isset($settingMenu['link'])) $settingMenu['link'] = $value . substr($settingMenu['link'], strpos($settingMenu['link'], '|'));
+                        unset($settingMenu);
+                    }
+                }
+            }
+        }
     }
 
     /**

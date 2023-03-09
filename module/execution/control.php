@@ -126,6 +126,8 @@ class execution extends control
 
         if(!isset($_SESSION['limitedExecutions'])) $this->execution->getLimitedExecution();
 
+	if($executionID) $this->session->set("storyList", $this->createLink("execution", "story", "&executionID=" . $executionID));
+
         /* Set browse type. */
         $browseType = strtolower($status);
 
@@ -1036,7 +1038,8 @@ class execution extends control
         $execution   = $this->commonAction($executionID);
         $project     = $this->loadModel('project')->getByID($execution->project);
         $executionID = $execution->id;
-        $products    = $this->product->getProducts($execution->id);
+	$products    = $this->product->getProducts($execution->id);
+	if(count($products) === 1) $productID = current($products)->id;
 
         if($execution->hasProduct)
         {
@@ -1702,6 +1705,8 @@ class execution extends control
             global $lang;
             $lang->executionCommon = $lang->execution->stage;
             include $this->app->getModulePath('', 'execution') . 'lang/' . $this->app->getClientLang() . '.php';
+
+            $this->config->execution->create->requiredFields .= ',products0';
         }
 
         $this->app->loadLang('program');
@@ -2092,7 +2097,7 @@ class execution extends control
         $project = $this->project->getById($execution->project);
         if(!$project->hasProduct) $this->lang->execution->PO = $this->lang->common->story . $this->lang->execution->owner;
 
-        if($execution->type == 'stage')
+        if($project->model == 'waterfall' or $project->model == 'waterfallplus')
         {
             $parentStage = $this->project->getByID($execution->parent, 'stage');
 
@@ -2181,6 +2186,8 @@ class execution extends control
         if(!$this->post->executionIDList) return print(js::locate($this->session->executionList, 'parent'));
         $executionIDList = $this->post->executionIDList;
         $executions      = $this->dao->select('*')->from(TABLE_EXECUTION)->where('id')->in($executionIDList)->fetchAll('id');
+        $projects        = $this->dao->select('id,project')->from(TABLE_PROJECT)->where('id')->in($executionIDList)->fetchPairs();
+        $projects        = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->in($projects)->fetchAll('id');
 
         $appendPoUsers = $appendPmUsers = $appendQdUsers = $appendRdUsers = array();
         foreach($executions as $execution)
@@ -2213,6 +2220,7 @@ class execution extends control
         $this->view->position[]  = $this->lang->execution->batchEdit;
         $this->view->executions  = $executions;
         $this->view->allProjects = $allProjects;
+        $this->view->projects    = $projects;
         $this->view->pmUsers     = $pmUsers;
         $this->view->poUsers     = $poUsers;
         $this->view->qdUsers     = $qdUsers;
@@ -2629,27 +2637,19 @@ class execution extends control
         $this->session->set('execGroupBy', $groupBy);
         $this->session->set('storyList', $this->app->getURI(true), 'execution');
         $this->session->set('rdSearchValue', '');
-        $this->session->set('execLaneType', $browseType);
 
-        $features   = $this->execution->getExecutionFeatures($execution);
-        $kanbanData = $this->loadModel('kanban')->getRDKanban($executionID, $browseType, $orderBy, 0, $groupBy);
-
-        /* Remove lanes if no feature. */
-        foreach($kanbanData as $regionID => $region)
-        {
-            foreach($region->groups as $groupID => $group)
-            {
-                if(!$features['story'] and $group->lanes[0]->type == 'story') unset($kanbanData[$regionID]->groups[$groupID]);
-                if(!$features['qa']    and $group->lanes[0]->type == 'bug')   unset($kanbanData[$regionID]->groups[$groupID]);
-            }
-            $kanbanData[$regionID]->groups = array_values($kanbanData[$regionID]->groups);
-        }
-
+        $features         = $this->execution->getExecutionFeatures($execution);
+        $kanbanData       = $this->loadModel('kanban')->getRDKanban($executionID, $browseType, $orderBy, 0, $groupBy);
         $executionActions = array();
         foreach($this->config->execution->statusActions as $action)
         {
             if($this->execution->isClickable($execution, $action)) $executionActions[] = $action;
         }
+
+        /* Set lane type. */
+        if(!$features['story'] and !$features['qa']) $browseType = 'task';
+        if(!$features['story']) unset($this->lang->kanban->group->task['story']);
+        $this->session->set('execLaneType', $browseType);
 
         $userList    = array();
         $users       = $this->loadModel('user')->getPairs('noletter|nodeleted');
@@ -2732,7 +2732,6 @@ class execution extends control
         $uri = $this->app->getURI(true);
         $this->app->session->set('taskList', $uri, 'execution');
         $this->app->session->set('bugList',  $uri, 'qa');
-        $this->app->session->set('execLaneType', $browseType);
         $this->app->session->set('execGroupBy', $groupBy);
 
         /* Load language. */
@@ -2750,6 +2749,8 @@ class execution extends control
             $browseType = 'task';
             unset($this->lang->kanban->group->task['story']);
         }
+
+        $this->app->session->set('execLaneType', $browseType);
 
         if($groupBy == 'story' and $browseType == 'task' and !isset($this->lang->kanban->orderList[$orderBy])) $orderBy = 'id_asc';
         $kanbanGroup = $this->kanban->getExecutionKanban($executionID, $browseType, $groupBy, '', $orderBy);

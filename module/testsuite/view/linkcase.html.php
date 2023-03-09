@@ -26,6 +26,13 @@
 </div>
 <div class="cell show" id="queryBox" data-module='testsuite'></div>
 <div id='mainContent'>
+  <?php if(empty($cases)):?>
+  <div class="table-empty-tip">
+    <p>
+      <span class="text-muted"><?php echo $lang->testcase->noCase;?></span>
+    </p>
+  </div>
+  <?php else:?>
   <form class='main-table table-testcase' data-ride='table' method='post'>
     <div class="table-header">
       <i class="icon-unlink"></i> &nbsp;<strong><?php echo $lang->testsuite->unlinkedCases;?></strong> (<?php echo $pager->recTotal;?>)
@@ -87,5 +94,6 @@
     </div>
     <?php endif;?>
   </form>
+  <?php endif;?>
 </div>
 <?php include '../../common/view/footer.html.php';?>

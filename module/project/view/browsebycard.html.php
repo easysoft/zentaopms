@@ -107,10 +107,12 @@
           <span class="label label-<?php echo $status;?>"><?php echo $lang->project->statusList[$status];?></span>
         </div>
         <div class='panel-heading'>
-          <?php if($project->model === 'waterfall'):?>
-          <span class='project-type-label label label-warning label-outline'><i class='icon icon-waterfall'></i></span>
+          <?php if(in_array($project->model, array('waterfall', 'waterfallplus'))):?>
+          <span class='project-type-label label label-warning label-outline'><i class='icon icon-<?php echo $project->model;?>'></i></span>
           <?php elseif($project->model === 'kanban'):?>
           <span class='project-type-label label label-info label-outline'><i class='icon icon-kanban'></i></span>
+          <?php elseif($project->model === 'agileplus'):?>
+          <span class='project-type-label label label-info label-outline'><i class='icon icon-agileplus'></i></span>
           <?php else:?>
           <span class='project-type-label label label-info label-outline'><i class='icon icon-sprint'></i></span>
           <?php endif;?>

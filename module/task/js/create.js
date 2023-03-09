@@ -619,7 +619,7 @@ $(document).on('click', '#testStory_chosen', function()
 
 $('#modalTeam tfoot .btn').click(function()
 {
-    var team  = '';
+    var team  = [];
     var time  = 0;
     var error = false;
     var mode  = $('[name="mode"]').val();
@@ -630,7 +630,7 @@ $('#modalTeam tfoot .btn').click(function()
 
         var tr      = $(this).closest('tr');
         var account = $(this).find('option:selected').text();
-        team += ' ' + account;
+        if(!team.includes(account)) team.push(account);
 
         estimate = parseFloat($(this).parents('td').next('td').find('[name^=teamEstimate]').val());
         if(!isNaN(estimate) && estimate > 0) time += estimate;
@@ -643,8 +643,7 @@ $('#modalTeam tfoot .btn').click(function()
     });
 
     if(error) return false;
-    var teamList = team.split(" ");
-    if(teamList.length <= 2)
+    if(team.length < 2)
     {
         bootbox.alert(teamMemberError);
         return false;

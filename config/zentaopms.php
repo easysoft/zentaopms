@@ -227,7 +227,7 @@ $config->openMethods[] = 'doc.createbasicinfo';
 $config->openMethods[] = 'project.createguide';
 $config->openMethods[] = 'task.editteam';
 $config->openMethods[] = 'feedback.mergeproductmodule';
-$config->openMethods[] = 'zanode.nodeList';
+$config->openMethods[] = 'zanode.nodelist';
 $config->openMethods[] = 'action.restoreStages';
 
 $config->openModules = array();
@@ -424,6 +424,7 @@ $config->programPriv->waterfall     = array_merge($config->programPriv->scrum, a
 $config->programPriv->agileplus     = $config->programPriv->scrum;
 $config->programPriv->waterfallplus = $config->programPriv->waterfall;
 
+$config->safeFileTimeout  = 3600;
 $config->waterfallModules = array('workestimation', 'durationestimation', 'budget', 'programplan', 'review', 'reviewissue', 'weekly', 'cm', 'milestone', 'design', 'opportunity', 'auditplan', 'trainplan', 'gapanalysis', 'pssp', 'researchplan', 'researchreport');
 
 $config->showMainMenu = true;

@@ -1025,11 +1025,11 @@ class myModel extends model
 
         $flows = ($this->config->edition == 'open') ? array() : $this->dao->select('module,name')->from(TABLE_WORKFLOW)->where('module')->in($typeList)->andWhere('buildin')->eq(0)->fetchPairs('module', 'name');
         $menu  = new stdclass();
-        $menu->all = $this->lang->my->auditMenu->audit->all;
+        $menu->all = $this->lang->my->featureBar['audit']['all'];
         foreach($typeList as $type)
         {
             $this->app->loadLang($type);
-            $menu->$type = isset($this->lang->$type->common) ? $this->lang->$type->common : zget($flows, $type);
+            $menu->$type = isset($this->lang->my->featureBar['audit'][$type]) ? $this->lang->my->featureBar['audit'][$type] : zget($flows, $type);
         }
 
         return $menu;

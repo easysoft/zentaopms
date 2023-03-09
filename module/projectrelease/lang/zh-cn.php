@@ -9,7 +9,7 @@
  * @version     $Id: zh-cn.php 4129 2020-11-27 01:58:14Z wwccss $
  * @link        http://www.zentao.net
  */
-$lang->projectrelease->common           = '项目发布';
+$lang->projectrelease->common           = $lang->projectCommon . '发布';
 $lang->projectrelease->create           = "创建发布";
 $lang->projectrelease->edit             = "编辑发布";
 $lang->projectrelease->linkStory        = "关联{$lang->SRCommon}";
@@ -27,7 +27,7 @@ $lang->projectrelease->unlinkBug        = '移除Bug';
 $lang->projectrelease->export           = '导出HTML';
 $lang->projectrelease->browseAction     = "发布列表";
 $lang->projectrelease->notify           = "通知";
-$lang->projectrelease->product          = "所属产品";
+$lang->projectrelease->product          = "所属{$lang->productCommon}";
 
 $lang->projectrelease->featureBar['browse']['all']       = '全部';
 $lang->projectrelease->featureBar['browse']['normal']    = '正常';

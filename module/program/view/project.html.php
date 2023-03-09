@@ -22,8 +22,8 @@ $closedCount    = 0;
 ?>
 <div id="mainMenu" class="clearfix">
   <div class="btn-toolBar pull-left">
-    <?php common::sortFeatureMenu('program', 'browse');?>
-    <?php foreach($lang->program->featureBar['browse'] as $key => $label):?>
+    <?php common::sortFeatureMenu('program', 'project');?>
+    <?php foreach($lang->program->featureBar['project'] as $key => $label):?>
     <?php $active = $browseType == $key ? 'btn-active-text' : '';?>
     <?php $label = "<span class='text'>$label</span>";?>
     <?php if($browseType == $key) $label .= " <span class='label label-light label-badge'>{$pager->recTotal}</span>";?>

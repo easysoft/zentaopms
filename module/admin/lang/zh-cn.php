@@ -61,7 +61,7 @@ $lang->admin->info->account = "您的禅道社区账户为%s。";
 $lang->admin->info->log     = '超出存天数的日志会被删除，需要开启计划任务。';
 
 $lang->admin->notice = new stdclass();
-$lang->admin->notice->register = "可%s禅道社区 www.zentao.net, 及时获得禅道最新信息。";
+$lang->admin->notice->register = "可%s禅道社区 www.zentao.net，及时获得禅道最新信息。";
 $lang->admin->notice->ignore   = "不再提示";
 $lang->admin->notice->int      = "『%s』应当是正整数。";
 

@@ -2190,7 +2190,7 @@ class project extends control
             }
 
             $oldProducts = $this->product->getProducts($projectID);
-            if($project->multiple and $project->model != 'waterfall') $oldExecutionProducts = $this->dao->select('project,product')->from(TABLE_PROJECTPRODUCT)->where('project')->in(array_keys($executions))->fetchGroup('project', 'product');
+            if($project->multiple and $project->model != 'waterfall' and $project->model != 'waterfallplus') $oldExecutionProducts = $this->dao->select('project,product')->from(TABLE_PROJECTPRODUCT)->where('project')->in(array_keys($executions))->fetchGroup('project', 'product');
 
             $this->project->updateProducts($projectID);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
@@ -2216,7 +2216,7 @@ class project extends control
                 }
             }
 
-            if($project->multiple and $project->model != 'waterfall')
+            if($project->multiple and $project->model != 'waterfall' and $project->model != 'waterfallplus')
             {
                 $unlinkedProducts = array_diff($oldProductIDs, $newProductIDs);
                 if(!empty($unlinkedProducts))

@@ -914,7 +914,8 @@ class product extends control
     {
         $this->loadModel('build');
         if(!$executionID) return print(html::select('product', array(), '', "class='form-control chosen' required"));
-        $products = $this->product->getProductPairsByProject($executionID);
+        $status   = empty($this->config->CRProduct) ? 'noclosed' : '';
+        $products = $this->product->getProductPairsByProject($executionID, $status);
         if(empty($products))
         {
             return printf($this->lang->build->noProduct, $this->createLink('execution', 'manageproducts', "executionID=$executionID&from=buildCreate", '', 'true'), 'project');
@@ -1031,7 +1032,7 @@ class product extends control
     public function ajaxGetExecutionsByProject($productID, $projectID = 0, $branch = 0, $number = 0)
     {
         $noMultipleExecutionID = $projectID ? $this->loadModel('execution')->getNoMultipleID($projectID) : '';
-        $executions            = $this->product->getExecutionPairsByProduct($productID, $branch, 'id_desc', $projectID, 'multiple');
+        $executions            = $this->product->getExecutionPairsByProduct($productID, $branch, 'id_desc', $projectID, 'multiple,stagefilter');
 
         $disabled = $noMultipleExecutionID ? "disabled='disabled'" : '';
         $html = html::select("executions[{$number}]", array('' => '') + $executions, 0, "class='form-control' onchange='loadExecutionBuilds($productID, this.value, $number)' $disabled");
@@ -1095,7 +1096,7 @@ class product extends control
         if(empty($productID) or $programID) $lines = $this->product->getLinePairs($programID);
 
         if($productID)  return print(html::select("lines[$productID]", array('' => '') + $lines, '', "class='form-control picker-select'"));
-        if(!$productID) return print(html::select('line', array('' => '') + $lines, '', "class='form-control chosen'"));
+        if(!$productID) return print(html::select('line', array('' => '') + $lines, '', "class='form-control picker-select'"));
     }
 
     /**

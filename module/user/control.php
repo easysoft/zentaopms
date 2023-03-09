@@ -978,6 +978,7 @@ class user extends control
         }
         else
         {
+            setcookie('tab', false, time(), $this->config->webRoot);
             $loginExpired = !(preg_match("/(m=|\/)(index)(&f=|-)(index)(&|-|\.)?/", strtolower($this->referer), $output) or $this->referer == $this->config->webRoot or empty($this->referer) or preg_match("/\/www\/$/", strtolower($this->referer), $output));
 
             $this->loadModel('misc');
@@ -1050,7 +1051,7 @@ class user extends control
         if(isset($this->app->user->id)) $this->loadModel('action')->create('user', $this->app->user->id, 'logout');
         setcookie('za', false, time() - 3600, $this->config->webRoot);
         setcookie('zp', false, time() - 3600, $this->config->webRoot);
-        setcookie('tab', false, time() - 3600, $this->config->webRoot);        ;
+        setcookie('tab', false, time() - 3600, $this->config->webRoot);
         session_destroy();
 
         if($this->app->getViewType() == 'json') return print(json_encode(array('status' => 'success')));

@@ -14,7 +14,7 @@
 <?php include '../../common/view/datepicker.html.php';?>
 <?php include '../../common/view/kindeditor.html.php';?>
 <?php js::import($jsRoot . 'misc/date.js');?>
-<?php js::set('isStage', $execution->type == 'stage');?>
+<?php js::set('isWaterfall', (isset($project) and ($project->model == 'waterfall' or $project->model == 'waterfallplus')));?>
 <?php js::set('executionAttr', $execution->attribute);?>
 <?php js::set('manageProductsLang', $lang->project->manageProducts);?>
 <?php js::set('manageProductPlanLang', $lang->project->manageProductPlan);?>
@@ -87,18 +87,18 @@
             </div>
           </td>
         </tr>
-        <?php if($execution->type != 'kanban'):?>
+        <?php if($execution->type != 'kanban' or $project->model == 'waterfall' or $project->model == 'waterfallplus'):?>
         <tr>
           <th><?php echo $lang->execution->type;?></th>
           <td>
           <?php
-          if($execution->type != 'stage')
-          {
-              echo html::select('lifetime', $lang->execution->lifeTimeList, $execution->lifetime, "class='form-control' onchange='showLifeTimeTips()'");
-          }
-          else
+          if($project->model == 'waterfall' or $project->model == 'waterfallplus')
           {
               echo $enableOptionalAttr ? html::select('attribute', $lang->stage->typeList, $execution->attribute, "class='form-control chosen'") : zget($lang->stage->typeList, $execution->attribute);
+          }
+          elseif($execution->type != 'kanban')
+          {
+              echo html::select('lifetime', $lang->execution->lifeTimeList, $execution->lifetime, "class='form-control' onchange='showLifeTimeTips()'");
           }
           ?>
           </td>
@@ -144,7 +144,7 @@
             </div>
           </td>
         </tr>
-        <?php if($execution->type == 'stage'):?>
+        <?php if($execution->type == 'stage' and isset($config->setPercent) and $config->setPercent == 1):?>
         <tr>
           <th><?php echo $lang->stage->percent;?></th>
           <td>

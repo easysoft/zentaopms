@@ -96,8 +96,9 @@ function loadProductModules(productID, branch)
         $inputGroup.find('select').chosen()
         if(typeof(caseModule) == 'string') $('#moduleIdBox').prepend("<span class='input-group-addon'>" + caseModule + "</span>");
         $inputGroup.fixInputGroup();
+
+        setStories();
     });
-    setStories();
 }
 
 /**

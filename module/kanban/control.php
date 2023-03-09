@@ -60,11 +60,11 @@ class kanban extends control
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
         }
 
-        unset($this->lang->kanbanspace->featureBar['involved']);
+        unset($this->lang->kanban->featureBar['space']['involved']);
 
         $this->view->users    = $this->loadModel('user')->getPairs('noclosed|nodeleted');
         $this->view->type     = $type;
-        $this->view->typeList = $this->lang->kanbanspace->featureBar;
+        $this->view->typeList = $this->lang->kanban->featureBar['space'];
 
         $this->display();
     }
@@ -232,7 +232,7 @@ class kanban extends control
             $spaceID       = $copyKanban->space;
         }
 
-        unset($this->lang->kanbanspace->featureBar['involved']);
+        unset($this->lang->kanban->featureBar['space']['involved']);
 
         $space      = $this->kanban->getSpaceById($spaceID);
         $spaceUsers = $spaceID == 0 ? ',' : trim($space->owner) . ',' . trim($space->team);
@@ -245,7 +245,7 @@ class kanban extends control
         $this->view->spaceID       = $spaceID;
         $this->view->spacePairs    = $spacePairs;
         $this->view->type          = $type;
-        $this->view->typeList      = $this->lang->kanbanspace->featureBar;
+        $this->view->typeList      = $this->lang->kanban->featureBar['space'];
         $this->view->kanbans       = array('' => '') + $this->kanban->getPairs();
         $this->view->copyKanbanID  = $copyKanbanID;
         $this->view->copyKanban    = $copyKanbanID ? $copyKanban : '';

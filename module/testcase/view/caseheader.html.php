@@ -79,7 +79,16 @@
     <?php echo html::a(inlink('browseUnits', "productID=$productID&browseType=$key&orderBy=$orderBy"), "<span class='text'>$label</span>", '', "id='{$key}UnitTab' class='btn btn-link' data-app='{$this->app->tab}'");?>
     <?php endforeach;?>
     <?php else:?>
-    <?php foreach(customModel::getFeatureMenu('testcase', 'browse') as $menuItem):?>
+    <?php
+    $rawModule = $this->app->rawModule;
+    $rawMethod = $this->app->rawMethod;
+    if(!isset($lang->{$rawModule}->featureBar[$rawMethod]))
+    {
+        $rawModule = $app->tab == 'project' ? 'project' : 'testcase';
+        $rawMethod = $rawModule == 'testcase' ? 'browse' : 'testcase';
+    }
+    ?>
+    <?php foreach(customModel::getFeatureMenu($rawModule, $rawMethod) as $menuItem):?>
     <?php
     if(isset($menuItem->hidden)) continue;
     $menuType = $menuItem->name;
@@ -175,13 +184,13 @@
         $active  = !empty($groupBy) ? 'btn-active-text' : '';
 
         echo "<div id='groupTab' class='btn-group'>";
-        echo html::a($this->createLink('testcase', 'groupCase', "productID=$productID&branch=$branch&groupBy=story&projectID=$projectID"), "<span class='text'>{$lang->testcase->groupByStories}</span>", '', "class='btn btn-link $active' data-app='{$this->app->tab}'");
+        echo html::a($this->createLink('testcase', 'groupCase', "productID=$productID&branch=$branch&groupBy=story&projectID=$projectID"), "<span class='text'>{$menuItem->text}</span>", '', "class='btn btn-link $active' data-app='{$this->app->tab}'");
         echo '</div>';
     }
     elseif($hasZeroPriv and $menuType == 'zerocase')
     {
         $projectID = $isProjectApp ? $this->session->project : 0;
-        echo html::a($this->createLink('testcase', 'zeroCase', "productID=$productID&branch=$branch&orderBy=id_desc&projectID=$projectID"), "<span class='text'>{$lang->testcase->zeroCase}</span>", '', "class='btn btn-link' id='zerocaseTab' data-app='{$this->app->tab}'");
+        echo html::a($this->createLink('testcase', 'zeroCase', "productID=$productID&branch=$branch&orderBy=id_desc&projectID=$projectID"), "<span class='text'>{$menuItem->text}</span>", '', "class='btn btn-link' id='zerocaseTab' data-app='{$this->app->tab}'");
     }
 
     ?>
@@ -196,7 +205,7 @@
     <?php if(!empty($productID)): ?>
     <div class='btn-group'>
       <button type='button' class='btn btn-link dropdown-toggle' data-toggle='dropdown'>
-        <i class='icon icon-export muted'></i> 
+        <i class='icon icon-export muted'></i>
         <span class='caret'></span>
       </button>
       <ul class='dropdown-menu pull-right' id='exportActionMenu'>

@@ -53,7 +53,6 @@
 .picker-single .picker-option.picker-option-selected.picker-option-active.option-ursr > .border,
 .picker-single .picker-option.picker-option-selected.picker-option-active.option-ursr > .border {
     background: rgba(230,240,255, 0.4)!important;
-    border: 1px solid #2E7FFF;
 }
 #pickerDropMenu-pk_URSR > .picker-option-list {
     display: flex;
@@ -173,7 +172,7 @@ function initPreference() {
             $option.addClass('option-ursr');
             $option.parent().addClass('list-ursr');
             $option.empty();
-            $option.prepend('<div class="border"><div class="value"><p>' + (b.$_index + 1) + '</p></div><div class="context">' + b.text + '</div></div>');
+            $option.prepend('<div class="border shadow-primary-hover"><div class="value"><p>' + (b.$_index + 1) + '</p></div><div class="context">' + b.text + '</div></div>');
         }
         return $option;
     }
@@ -205,3 +204,4 @@ $(function()
 })
 
 </script>
+

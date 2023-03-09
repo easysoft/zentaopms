@@ -588,7 +588,10 @@ class upgradeModel extends model
                 $this->updateMyBlocks();
                 break;
             case '18_1':
-                $this->addMixStage();
+                $this->insertMixStage();
+                break;
+            case '18_2':
+                $this->loadModel('setting')->setSN();
                 break;
         }
 
@@ -7064,6 +7067,8 @@ class upgradeModel extends model
             foreach($labels as $method => $label)
             {
                 $workflowAction = $this->dao->select('*')->from(TABLE_WORKFLOWACTION)->where('module')->eq($module)->andWhere('action')->eq($method)->fetch();
+                if(!$workflowAction) continue;
+
                 unset($workflowAction->id);
                 $workflowAction->vision = $workflowAction->vision == 'lite' ? 'rnd' : 'lite';
                 $this->dao->replace(TABLE_WORKFLOWACTION)->data($workflowAction)->exec();
@@ -8170,30 +8175,51 @@ class upgradeModel extends model
     }
 
     /**
-     * Add mix stage.
+     * Insert mix stage.
      *
      * @access public
      * @return bool
      */
-    public function addMixStage()
+    public function insertMixStage()
     {
-        $typeList = $this->dao->select('lang,vision')->from(TABLE_LANG)
+        $typeList = $this->dao->select('*')->from(TABLE_LANG)
             ->where('module')->eq('stage')
             ->andWhere('section')->eq('typeList')
-            ->groupBy('lang,vision')
             ->fetchAll();
+        $this->dao->delete()->from(TABLE_LANG)
+            ->where('module')->eq('stage')
+            ->andWhere('section')->eq('typeList')
+            ->exec();
+
+        $mixInserted = array();
         foreach($typeList as $type)
         {
-            $langFile = $this->app->getModuleRoot() . DS . 'stage' . DS . 'lang' . DS . ($type->lang == 'all' ? $this->app->clientLang : $type->lang) . '.php';
-            if(is_file($langFile)) include $langFile;
+            if(!isset($mixInserted[$type->lang . '-' . $type->vision]))
+            {
+                $langFile = $this->app->getModuleRoot() . DS . 'stage' . DS . 'lang' . DS . ($type->lang == 'all' ? $this->app->clientLang : $type->lang) . '.php';
+                if(is_file($langFile)) include $langFile;
+
+                $this->dao->replace(TABLE_LANG)
+                    ->set('module')->eq('stage')
+                    ->set('section')->eq('typeList')
+                    ->set('lang')->eq($type->lang)
+                    ->set('vision')->eq($type->vision)
+                    ->set('key')->eq('mix')
+                    ->set('value')->eq($lang->stage->typeList['mix'])
+                    ->exec();
+
+                $mixInserted[$type->lang . '-' . $type->vision] = true;
+            }
+
+            if($type->key == 'mix') continue;
 
             $this->dao->replace(TABLE_LANG)
                 ->set('module')->eq('stage')
                 ->set('section')->eq('typeList')
                 ->set('lang')->eq($type->lang)
                 ->set('vision')->eq($type->vision)
-                ->set('key')->eq('mix')
-                ->set('value')->eq($lang->stage->typeList['mix'])
+                ->set('key')->eq($type->key)
+                ->set('value')->eq($type->value)
                 ->exec();
         }
 

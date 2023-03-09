@@ -9,7 +9,7 @@
  * @version     $Id: zh-cn.php 4729 2013-05-03 07:53:55Z chencongzhi520@gmail.com $
  * @link        http://www.zentao.net
  */
-$lang->programplan->common        = '项目阶段';
+$lang->programplan->common        = $lang->projectCommon . '阶段';
 $lang->programplan->browse        = '浏览甘特图';
 $lang->programplan->gantt         = '甘特图';
 $lang->programplan->ganttEdit     = '甘特图编辑';
@@ -67,8 +67,8 @@ $lang->programplan->settingGantt     = '设置甘特图';
 $lang->programplan->viewSetting      = '显示设置';
 $lang->programplan->desc             = '描述';
 
-$lang->programplan->errorBegin       = '阶段的开始时间不能小于所属项目的开始时间%s';
-$lang->programplan->errorEnd         = '阶段的结束时间不能大于所属项目的结束时间%s';
+$lang->programplan->errorBegin       = "阶段的开始时间不能小于所属{$lang->projectCommon}的开始时间%s";
+$lang->programplan->errorEnd         = "阶段的结束时间不能大于所属{$lang->projectCommon}的结束时间%s";
 $lang->programplan->emptyBegin       = '『计划开始』日期不能为空';
 $lang->programplan->emptyEnd         = '『计划完成』日期不能为空';
 $lang->programplan->checkBegin       = '『计划开始』应当为合法的日期';
@@ -115,7 +115,8 @@ $lang->programplan->error->planFinishSmall = '"计划完成时间"必须大于"�
 $lang->programplan->error->percentOver     = '相同父阶段的子阶段工作量占比之和不超过100%';
 $lang->programplan->error->createdTask     = '已分解任务，不可添加子阶段';
 $lang->programplan->error->parentWorkload  = '子阶段的工作量之和不能大于父阶段的工作量:%s';
-$lang->programplan->error->parentDuration  = '子阶段计划开始、计划完成不能超过父阶段';
+$lang->programplan->error->letterParent    = "子阶段计划开始不能超过父阶段的计划开始时间 %s";
+$lang->programplan->error->greaterParent   = "子阶段计划完成不能超过父阶段的计划完成时间 %s";
 $lang->programplan->error->sameName        = '阶段名称不能相同！';
 $lang->programplan->error->sameCode        = '阶段代号不能相同！';
 $lang->programplan->error->taskDrag        = '%s的任务不可以拖动';

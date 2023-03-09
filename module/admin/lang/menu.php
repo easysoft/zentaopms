@@ -89,15 +89,17 @@ if(helper::hasFeature('waterfall') or helper::hasFeature('waterfallplus')) $lang
 $lang->admin->menuList->model['tabMenu']['common']['build']        = array('link' => "{$lang->build->common}|custom|required|module=build", 'alias' => 'set', 'exclude' => 'custom');
 $lang->admin->menuList->model['tabMenu']['common']['flow']         = array('link' => "{$lang->custom->flow}|custom|flow|", 'divider' => true);
 $lang->admin->menuList->model['tabMenu']['common']['code']         = array('link' => "{$lang->code}|custom|code|");
+
+$lang->admin->menuList->model['tabMenu']['common']['percent']      = array('link' => "{$lang->stage->percent}|custom|percent|");
 $lang->admin->menuList->model['tabMenu']['common']['hours']        = array('link' => "{$lang->workingHour}|custom|hours|", 'subModule' => 'holiday', 'links' => array('holiday|browse|', 'custom|hours|'));
 if(helper::hasFeature('waterfall')) $lang->admin->menuList->model['tabMenu']['waterfall']['stage'] = array('link' => "{$lang->stage->list}|stage|browse|", 'subModule' => 'stage', 'exclude' => 'stage-plusbrowse');
 if(helper::hasFeature('waterfallplus')) $lang->admin->menuList->model['tabMenu']['waterfallplus']['stage'] = array('link' => "{$lang->stage->list}|stage|plusbrowse|", 'subModule' => 'stage', 'exclude' => 'stage-browse');
-
 $lang->admin->menuList->model['tabMenu']['menuOrder']['common']['5']        = 'project';
 if(helper::hasFeature('waterfall') or helper::hasFeature('waterfallplus')) $lang->admin->menuList->model['tabMenu']['menuOrder']['common']['7']        = 'stage';
 $lang->admin->menuList->model['tabMenu']['menuOrder']['common']['10']       = 'build';
 $lang->admin->menuList->model['tabMenu']['menuOrder']['common']['35']       = 'flow';
 $lang->admin->menuList->model['tabMenu']['menuOrder']['common']['40']       = 'code';
+$lang->admin->menuList->model['tabMenu']['menuOrder']['common']['43']       = 'percent';
 $lang->admin->menuList->model['tabMenu']['menuOrder']['common']['45']       = 'hours';
 if(helper::hasFeature('waterfall')) $lang->admin->menuList->model['tabMenu']['menuOrder']['waterfall']['5']     = 'stage';
 if(helper::hasFeature('waterfallplus')) $lang->admin->menuList->model['tabMenu']['menuOrder']['waterfallplus']['5'] = 'stage';
@@ -163,15 +165,17 @@ $lang->admin->menuList->message['menuOrder']['10'] = 'webhook';
 $lang->admin->menuList->message['menuOrder']['20'] = 'browser';
 $lang->admin->menuList->message['menuOrder']['25'] = 'setting';
 
-$lang->admin->menuList->dev['subMenu']['api']    = array('link' => "{$lang->api->doc}|dev|api|module=index");
-$lang->admin->menuList->dev['subMenu']['db']     = array('link' => "{$lang->database}|dev|db|table=" . trim(TABLE_EFFORT, '`'));
-$lang->admin->menuList->dev['subMenu']['editor'] = array('link' => "{$lang->editor}|dev|editor|");
-$lang->admin->menuList->dev['subMenu']['entry']  = array('link' => "{$lang->admin->entry}|entry|browse|", 'subModule' => 'entry');
+$lang->admin->menuList->dev['subMenu']['api']      = array('link' => "{$lang->api->doc}|dev|api|module=index");
+$lang->admin->menuList->dev['subMenu']['db']       = array('link' => "{$lang->database}|dev|db|table=" . trim(TABLE_EFFORT, '`'));
+$lang->admin->menuList->dev['subMenu']['langItem'] = array('link' => "{$lang->langItem}|dev|langitem|");
+$lang->admin->menuList->dev['subMenu']['editor']   = array('link' => "{$lang->editor->common}|dev|editor|", 'subModule' => 'editor');
+$lang->admin->menuList->dev['subMenu']['entry']    = array('link' => "{$lang->admin->entry}|entry|browse|", 'subModule' => 'entry');
 
 $lang->admin->menuList->dev['menuOrder']['5']  = 'api';
 $lang->admin->menuList->dev['menuOrder']['10'] = 'db';
-$lang->admin->menuList->dev['menuOrder']['15'] = 'editor';
-$lang->admin->menuList->dev['menuOrder']['20'] = 'entry';
+$lang->admin->menuList->dev['menuOrder']['15'] = 'langItem';
+$lang->admin->menuList->dev['menuOrder']['20'] = 'editor';
+$lang->admin->menuList->dev['menuOrder']['25'] = 'entry';
 
 if($config->edition != 'max')
 {

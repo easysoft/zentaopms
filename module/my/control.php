@@ -837,13 +837,20 @@ EOF;
         $this->app->loadClass('pager', $static = true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
-        $this->view->title      = $this->lang->my->common . $this->lang->colon . $this->lang->my->execution;
-        $this->view->position[] = $this->lang->my->execution;
-        $this->view->tabID      = 'project';
-        $this->view->executions = $this->user->getObjects($this->app->user->account, 'execution', $type, $orderBy, $pager);
-        $this->view->type       = $type;
-        $this->view->pager      = $pager;
-        $this->view->mode       = 'execution';
+        $executions  = $this->user->getObjects($this->app->user->account, 'execution', $type, $orderBy, $pager);
+        $parentGroup = $this->dao->select('parent, id')->from(TABLE_PROJECT)
+            ->where('parent')->in(array_keys($executions))
+            ->andWhere('type')->in('stage,kanban,sprint')
+            ->fetchGroup('parent', 'id');
+
+        $this->view->title       = $this->lang->my->common . $this->lang->colon . $this->lang->my->execution;
+        $this->view->position[]  = $this->lang->my->execution;
+        $this->view->tabID       = 'project';
+        $this->view->executions  = $executions;
+        $this->view->parentGroup = $parentGroup;
+        $this->view->type        = $type;
+        $this->view->pager       = $pager;
+        $this->view->mode        = 'execution';
 
         $this->display();
     }
@@ -968,7 +975,7 @@ EOF;
             $typeList = $this->my->getReviewingTypeList();
             if(!isset($typeList->$browseType)) $browseType = 'all';
 
-            $this->lang->my->auditMenu->audit = $typeList;
+            $this->lang->my->featureBar['audit'] = (array)$typeList;
             $reviewList = $this->my->getReviewingList($browseType, $orderBy, $pager);
         }
 
@@ -1256,6 +1263,7 @@ EOF;
         $this->view->orderBy    = $orderBy;
         $this->view->pager      = $pager;
         $this->view->browseType = $browseType;
+        $this->view->mode       = 'ticket';
         $this->display();
     }
 

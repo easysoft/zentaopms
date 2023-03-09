@@ -67,8 +67,8 @@ $lang->programplan->settingGantt     = 'Gantt Setting';
 $lang->programplan->viewSetting      = 'Setting';
 $lang->programplan->desc             = 'Description';
 
-$lang->programplan->errorBegin       = "Project begin date: %s, begin date should be >= project begin date.";
-$lang->programplan->errorEnd         = "Project end date: %s, end date should be <= project end date.";
+$lang->programplan->errorBegin       = "{$lang->projectCommon} begin date: %s, begin date should be >= {$lang->projectCommon} begin date.";
+$lang->programplan->errorEnd         = "{$lang->projectCommon} end date: %s, end date should be <= {$lang->projectCommon} end date.";
 $lang->programplan->emptyBegin       = '『Begin』should not be blank';
 $lang->programplan->emptyEnd         = '『End』should not be blank';
 $lang->programplan->checkBegin       = '『Begin』should be valid date';
@@ -115,7 +115,8 @@ $lang->programplan->error->planFinishSmall = 'The "End" date must be > the "Begi
 $lang->programplan->error->percentOver     = 'The sum of "Workload %" cannot exceed 100% of one stage.';
 $lang->programplan->error->createdTask     = 'The task is decomposed. Sub stages cannot be added.';
 $lang->programplan->error->parentWorkload  = 'The sum of the workload in the sub stage cannot be > that in the parent stage: %s.';
-$lang->programplan->error->parentDuration  = 'The planned start and planned completion of the child phase cannot exceed the parent phase.';
+$lang->programplan->error->letterParent    = "The planned start of the child stage cannot be less than the begin of parent stage: %s.";
+$lang->programplan->error->greaterParent   = "The planned end of the child stage cannot be greater the end of parent stage: %s";
 $lang->programplan->error->sameName        = 'Stage name cannot be the same!';
 $lang->programplan->error->sameCode        = 'Stage code cannot be the same!';
 $lang->programplan->error->taskDrag        = 'The %s task cannot be dragged';

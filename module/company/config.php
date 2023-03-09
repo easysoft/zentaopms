@@ -11,7 +11,7 @@ $config->company->dynamic->search['module']               = 'action';
 
 if($config->vision == 'rnd') $config->company->dynamic->search['fields']['product']    = $lang->action->product;
 
-$config->company->dynamic->search['fields']['project']    = '项目';
+$config->company->dynamic->search['fields']['project']    = $lang->projectCommon;
 $config->company->dynamic->search['fields']['execution']  = $lang->action->execution;
 $config->company->dynamic->search['fields']['actor']      = $lang->action->actor;
 $config->company->dynamic->search['fields']['objectID']   = $lang->action->objectID;

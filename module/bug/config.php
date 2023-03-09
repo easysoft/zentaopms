@@ -223,7 +223,7 @@ $config->bug->datatable->fieldList['execution']['title']      = 'execution';
 $config->bug->datatable->fieldList['execution']['fixed']      = 'no';
 $config->bug->datatable->fieldList['execution']['width']      = '120';
 $config->bug->datatable->fieldList['execution']['required']   = 'no';
-$config->bug->datatable->fieldList['execution']['dataSource'] = array('module' => 'product', 'method' =>'getAllExecutionPairsByProduct', 'params' => '$productID&$branch');
+$config->bug->datatable->fieldList['execution']['dataSource'] = array('module' => 'product', 'method' =>'getAllExecutionPairsByProduct', 'params' => '$productID&$branch&0&stagefilter');
 
 $config->bug->datatable->fieldList['plan']['title']    = 'plan';
 $config->bug->datatable->fieldList['plan']['fixed']    = 'no';

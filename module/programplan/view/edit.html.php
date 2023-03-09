@@ -46,6 +46,7 @@
             <th><?php echo $lang->programplan->PM;?> </th>
             <td colspan='2'><?php echo html::select('PM', $PMUsers, '', "class='form-control picker-select'");?></td>
           </tr>
+          <?php if(isset($config->setPercent) and $config->setPercent == 1):?>
           <tr>
             <th><?php echo $lang->programplan->percent;?> </th>
             <td colspan='2'>
@@ -55,6 +56,7 @@
               </div>
             </td>
           </tr>
+          <?php endif;?>
           <tr id="attributeType">
             <th><?php echo $lang->programplan->attribute;?></th>
             <td colspan='2'>

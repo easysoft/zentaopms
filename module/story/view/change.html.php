@@ -21,7 +21,7 @@
         <small><?php echo $lang->arrow . ' ' . $lang->story->change;?></small>
       </h2>
     </div>
-    <form class="main-form" method='post' enctype='multipart/form-data' target='hiddenwin' id='dataform'>
+    <form class="main-form form-ajax" method='post' enctype='multipart/form-data' id='dataform'>
       <table class='table table-form'>
         <tr>
           <th class='w-80px'><?php echo $lang->story->reviewedBy;?></th>

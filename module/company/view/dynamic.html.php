@@ -14,7 +14,7 @@
 <?php js::set('browseType', $browseType);?>
 <div id="mainMenu" class="clearfix">
   <div class="btn-toolbar pull-left">
-    <?php foreach($lang->action->periods as $period => $label):?>
+    <?php foreach($lang->company->featureBar['dynamic'] as $period => $label):?>
     <?php
     $label  = "<span class='text'>$label</span>";
     $active = '';

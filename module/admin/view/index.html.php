@@ -26,7 +26,7 @@
                 <img src="static/svg/admin-<?php echo $menuKey;?>.svg"/>
                 <?php echo $menu['name'];?>
               </div>
-              <?php echo html::a($config->admin->helpURL[$menuKey], "<i class='icon icon-help'></i> ", '_blank', 'class="text-muted setting-help"');?>
+              <?php echo html::a($config->admin->helpURL[$menuKey], "<i title='{$lang->help}' class='icon icon-help'></i> ", '_blank', 'class="text-muted setting-help"');?>
             </h4>
             <p class="text-muted setting-desc" title="<?php echo $menu['desc'];?>"><?php echo $menu['desc'];?></p>
           </button>

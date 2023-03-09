@@ -34,7 +34,7 @@ $lang->doclib->create['execution'] = '创建' . $lang->executionCommon . '文档
 $lang->doclib->create['custom']    = '创建自定义文档库';
 
 $lang->doclib->main['product']   = $lang->productCommon . '主库';
-$lang->doclib->main['project']   = '项目主库';
+$lang->doclib->main['project']   = "{$lang->projectCommon}主库";
 $lang->doclib->main['execution'] = $lang->executionCommon . '主库';
 
 $lang->doclib->tabList['product']   = $lang->productCommon;
@@ -47,7 +47,7 @@ $lang->doclib->nameList['custom'] = '自定义文档库名称';
 $lang->doc->common       = '文档';
 $lang->doc->id           = '文档编号';
 $lang->doc->product      = '所属' . $lang->productCommon;
-$lang->doc->project      = '所属项目';
+$lang->doc->project      = "所属{$lang->projectCommon}";
 $lang->doc->execution    = '所属' . $lang->execution->common;
 $lang->doc->lib          = '所属文档库';
 $lang->doc->module       = '所属目录';
@@ -165,7 +165,7 @@ $lang->doc->allExecutions = '所有' . $lang->executionCommon;
 $lang->doc->allProjects   = '所有' . $lang->projectCommon;
 
 $lang->doc->libTypeList['product']   = $lang->productCommon . '文档库';
-$lang->doc->libTypeList['project']   = '项目文档库';
+$lang->doc->libTypeList['project']   = "{$lang->projectCommon}文档库";
 $lang->doc->libTypeList['execution'] = $lang->execution->common . '文档库';
 $lang->doc->libTypeList['api']       = '接口库';
 $lang->doc->libTypeList['custom']    = '自定义文档库';
@@ -251,11 +251,11 @@ $lang->doc->selectLibType        = '请选择文档库类型';
 $lang->doc->noLibreOffice        = '您还没有office转换设置访问权限!';
 $lang->doc->errorParentChapter   = '父章节不能是自身章节及子章节！';
 
-$lang->doc->noticeAcl['lib']['product']['default']   = '有所选产品访问权限的用户可以访问。';
-$lang->doc->noticeAcl['lib']['product']['custom']    = '有所选产品访问权限或白名单里的用户可以访问。';
-$lang->doc->noticeAcl['lib']['project']['default']   = "有所选项目访问权限的用户可以访问。";
-$lang->doc->noticeAcl['lib']['project']['open']      = "有所选项目访问权限的用户可以访问。";
-$lang->doc->noticeAcl['lib']['project']['private']   = "有所选项目访问权限或白名单里的用户可以访问。";
+$lang->doc->noticeAcl['lib']['product']['default']   = "有所选{$lang->productCommon}访问权限的用户可以访问。";
+$lang->doc->noticeAcl['lib']['product']['custom']    = "有所选{$lang->productCommon}访问权限或白名单里的用户可以访问。";
+$lang->doc->noticeAcl['lib']['project']['default']   = "有所选{$lang->projectCommon}访问权限的用户可以访问。";
+$lang->doc->noticeAcl['lib']['project']['open']      = "有所选{$lang->projectCommon}访问权限的用户可以访问。";
+$lang->doc->noticeAcl['lib']['project']['private']   = "有所选{$lang->projectCommon}访问权限或白名单里的用户可以访问。";
 $lang->doc->noticeAcl['lib']['project']['custom']    = "白名单的用户可以访问。";
 $lang->doc->noticeAcl['lib']['execution']['default'] = "有所选{$lang->execution->common}访问权限的用户可以访问。";
 $lang->doc->noticeAcl['lib']['execution']['custom']  = "有所选{$lang->execution->common}访问权限或白名单里的用户可以访问。";
