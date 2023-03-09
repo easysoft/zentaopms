@@ -82,6 +82,7 @@ $lang->group->other      = 'Andere';
 $lang->group->all        = 'Alle';
 $lang->group->config     = 'Config';
 $lang->group->unassigned = 'Unassigned';
+$lang->group->view       = 'View';
 
 if(!isset($lang->privPackage)) $lang->privPackage = new stdclass();
 $lang->privpackage->common = 'Priv Package';

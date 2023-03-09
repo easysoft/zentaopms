@@ -395,17 +395,7 @@ class group extends control
      */
     public function editManagePriv($browseType = '', $view = '', $paramID = 0, $recTotal = 0, $recPerPage = 100, $pageID = 1)
     {
-        if(empty($browseType)) $browseType = $this->cookie->managePrivEditType ? $this->cookie->managePrivEditType : 'bycard';;
-
-        $this->app->loadClass('pager', $static = true);
-        $pager = new pager($recTotal, $recPerPage, $pageID);
-
-        $privList = $browseType != 'bysearch' ? $this->group->getPrivsListByView($view, $pager) :  $this->group->getPrivsListBySearch($pager);
-
-        /* Build the search form. */
-        $queryID   = ($browseType == 'bysearch') ? (int)$paramID : 0;
-        $actionURL = $this->createLink('group', 'editManagePriv', "browseType=bysearch&view=&paramID=myQueryID&recTotal=$recTotal&recPerPage=$recPerPage");
-        $this->group->buildPrivSearchForm($queryID, $actionURL);
+        if(empty($browseType) and $browseType != 'bysearch') $browseType = $this->cookie->managePrivEditType ? $this->cookie->managePrivEditType : 'bycard';;
 
         $moduleLang = $this->group->getMenuModules('', true);
 
@@ -430,15 +420,51 @@ class group extends control
             $this->view->privLang     = $privLang;
             $this->view->privPackages = $privPackages;
         }
+        else
+        {
+            $this->app->loadClass('pager', $static = true);
+            $pager = new pager($recTotal, $recPerPage, $pageID);
 
-        $this->view->title      = $this->lang->group->editManagePriv;
-        $this->view->browseType = $browseType;
-        $this->view->privList   = $privList;
-        $this->view->packages   = $this->group->getPrivPackagesByView($view);
-        $this->view->moduleLang = $moduleLang;
-        $this->view->pager      = $pager;
+            $privList = $browseType != 'bysearch' ? $this->group->getPrivsListByView($view, $pager) :  $this->group->getPrivsListBySearch($paramID, $pager);
+
+            /* Build the search form. */
+            $queryID   = ($browseType == 'bysearch') ? (int)$paramID : 0;
+            $actionURL = $this->createLink('group', 'editManagePriv', "browseType=bysearch&view=&paramID=myQueryID&recTotal=$recTotal&recPerPage=$recPerPage");
+            $this->group->buildPrivSearchForm($queryID, $actionURL);
+        }
+
+        $this->view->title          = $this->lang->group->editManagePriv;
+        $this->view->browseType     = $browseType;
+        $this->view->privList       = $privList;
+        $this->view->packages       = $this->group->getPrivPackagesByView($view);
+        $this->view->moduleLang     = $moduleLang;
+        $this->view->pager          = $pager;
+        $this->view->modulePackages =  $this->group->getModuleAndPackageTree();
 
         $this->display();
+    }
+
+    /**
+     * Batch change package.
+     *
+     * @param  int    $packageID
+     * @access public
+     * @return void
+     */
+    public function batchChangePackage($packageID)
+    {
+        if(empty($_POST['privIdList'])) return print(js::reload('parent'));
+        $privIdList = array_unique($_POST['privIdList']);
+        $allChanges = $this->group->batchChangePackage($privIdList, $packageID);
+        if(dao::isError()) return print(js::error(dao::getError()));
+
+        $this->loadModel('action');
+        foreach($allChanges as $privID => $changes)
+        {
+            $actionID = $this->action->create('priv', $privID, 'Edited');
+            $this->action->logHistory($actionID, $changes);
+        }
+        return print(js::reload('parent'));
     }
 
     /**

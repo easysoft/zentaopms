@@ -25,3 +25,4 @@
 #privList .c-view, #privList .c-module, #privList .c-package {width: 100px;}
 #privList .c-privs {width: 180px;}
 #privList .c-actions {width: 50px;}
+#privList tbody tr td  {overflow: hidden; white-space: nowrap;}

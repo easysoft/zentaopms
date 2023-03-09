@@ -15,6 +15,9 @@
   <div class="btn-toolbar">
     <?php echo html::a($this->createLink('group', 'browse', ''), '<i class="icon icon-angle-left"></i>' . $lang->goback, '', 'class="btn btn-back"');?>
     <a href="#" class="btn btn-link btn-active-text"><?php echo $lang->group->all?></a>
+    <?php if($browseType != 'bycard'):?>
+    <a class="btn btn-link querybox-toggle" id='bysearchTab'><i class="icon icon-search muted"></i> <?php echo $lang->searchAB;?></a>
+    <?php endif;?>
   </div>
   <div class="btn-toolbar">
     <div class="btn-group">
@@ -26,6 +29,7 @@
     <a href="#" class="btn btn-primary"><?php echo $lang->group->batchSetDependency?></a>
   </div>
 </div>
+<div class="cell<?php if($browseType == 'bysearch') echo ' show';?>" id="queryBox" data-module="priv"></div>
 <div id='mainContent'>
   <div class="main main-content">
   <?php
