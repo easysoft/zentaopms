@@ -39,7 +39,18 @@
         <?php if(!empty($modules[$group])):?>
         <div class='modulegroup'><?php echo $groupName?></div>
         <?php foreach($modules[$group] as $module):?>
-        <?php $moduleName = zget($lang->dev->tableList, $module, $module);?>
+        <?php
+        $moduleName = $module;
+        if(isset($lang->dev->tableList[$module]))
+        {
+            $moduleName = $lang->dev->tableList[$module];
+        }
+        else
+        {
+            if(!isset($lang->{$module}->common)) $app->loadLang($module);
+            $moduleName = isset($lang->{$module}->common) ? $lang->{$module}->common : $module;
+        }
+        ?>
         <?php echo html::a(inlink('extend', "moduleDir=$module"), $moduleName, 'extendWin');?>
         <?php endforeach;?>
         <?php endif;?>
