@@ -57,6 +57,7 @@ $lang->group->managePrivPackage  = '维护权限包';
 $lang->group->createPrivPackage  = '新增权限包';
 $lang->group->editPrivPackage    = '编辑权限包';
 $lang->group->deletePrivPackage  = '删除权限包';
+$lang->group->sortPrivPackages   = '权限包排序';
 $lang->group->addRecommendation  = '添加推荐';
 $lang->group->selectedPrivs      = '选中权限：%s';
 $lang->group->selectModule       = '选择模块';

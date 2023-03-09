@@ -1698,6 +1698,7 @@ $lang->resource->group->managePrivPackage  = 'managePrivPackage';
 $lang->resource->group->createPrivPackage  = 'createPrivPackage';
 $lang->resource->group->editPrivPackage    = 'editPrivPackage';
 $lang->resource->group->deletePrivPackage  = 'deletePrivPackage';
+$lang->resource->group->sortPrivPackages   = 'sortPrivPackages';
 
 $lang->group->methodOrder[5]  = 'browse';
 $lang->group->methodOrder[10] = 'create';
