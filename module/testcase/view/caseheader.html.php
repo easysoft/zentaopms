@@ -21,7 +21,7 @@
 #byTypeTab li.split{border-top: 1px solid #eee;}
 </style>
 <div id='mainMenu' class='clearfix'>
-  <?php if(!in_array($this->app->rawMethod, array('groupcase', 'browseunits'))):?>
+  <?php if($this->app->rawMethod == 'browse'):?>
   <div id="sidebarHeader">
     <div class="title">
       <?php

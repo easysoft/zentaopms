@@ -339,7 +339,7 @@ $lang->searchObjects['caselib']     = 'Case Library';
 $lang->searchObjects['testreport']  = 'CR de Test';
 $lang->searchObjects['program']     = 'Program';
 $lang->searchObjects['project']     = $lang->projectCommon;
-$lang->searchObjects['execution']   = $lang->executionCommon;
+$lang->searchObjects['execution']   = $lang->execution->common;
 $lang->searchObjects['user']        = 'User';
 $lang->searchTips                   = '';
 
@@ -363,7 +363,7 @@ $lang->visionList['lite'] = 'Operation Management Interface';
 $lang->createObjects['todo']        = 'Todo';
 $lang->createObjects['effort']      = 'Effort';
 $lang->createObjects['bug']         = 'Bug';
-$lang->createObjects['story']       = 'Story';
+$lang->createObjects['story']       = $lang->SRCommon;
 $lang->createObjects['task']        = 'Task';
 $lang->createObjects['testcase']    = 'Case';
 $lang->createObjects['execution']   = $lang->execution->common;

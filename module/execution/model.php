@@ -59,7 +59,7 @@ class executionModel extends model
      */
     public function getExecutionFeatures($execution)
     {
-        $features = array('story' => true, 'task' => true, 'qa' => true, 'devops' => true, 'burn' => true, 'build' => true, 'other' => true);
+        $features = array('story' => true, 'task' => true, 'qa' => true, 'devops' => true, 'burn' => true, 'build' => true, 'other' => true, 'plan' => true);
 
         /* Unset story, bug, build and testtask if type is ops. */
         if($execution->lifetime == 'ops')
@@ -81,8 +81,14 @@ class executionModel extends model
                 if(in_array($execution->attribute, array('request', 'review')))
                 {
                     $features['story'] = false;
+                    $features['plan'] = false;
                 }
             }
+        }
+
+        if(isset($execution->projectInfo) and in_array($execution->projectInfo->model, array('waterfall', 'kanban', 'waterfallplus')) and empty($execution->projectInfo->hasProduct))
+        {
+            $features['plan'] = false;
         }
 
         return $features;

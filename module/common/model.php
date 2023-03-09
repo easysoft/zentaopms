@@ -912,7 +912,7 @@ class commonModel extends model
 
         $btnTitle  = isset($lang->db->custom['common']['mainNav'][$tab]) ? $lang->db->custom['common']['mainNav'][$tab] : $lang->$tab->common;
         $commonKey = $tab . 'Common';
-        if(isset($lang->$commonKey)) $btnTitle = $lang->$commonKey;
+        if(isset($lang->$commonKey) and $tab != 'execution') $btnTitle = $lang->$commonKey;
 
         $link      = helper::createLink($currentModule, $currentMethod);
         $className = $tab == 'devops' ? 'btn num' : 'btn';

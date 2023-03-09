@@ -190,7 +190,7 @@
         </tr>
         <?php $i ++;?>
         <?php endforeach;?>
-        <?php elseif(!empty($project) and empty($project->hasProduct) and strpos($project->model, 'waterfall') === false):?>
+        <?php elseif(!empty($project) and empty($project->hasProduct) and !in_array($project->model, array('waterfall', 'kanban', 'waterfallplus'))):?>
         <tr>
           <th><?php echo $lang->execution->linkPlan;?></th>
           <td id="plansBox">

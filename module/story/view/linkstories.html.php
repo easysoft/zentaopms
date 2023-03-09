@@ -59,7 +59,7 @@
           <?php if(!empty($product->shadow)):?>
           <td class='nobr' title="<?php echo $products[$story2Link->product]?>"><?php echo html::a($this->createLink('product', 'browse', "productID=$story2Link->product&branch=$story2Link->branch"), $products[$story2Link->product], '_blank');?></td>
           <?php endif;?>
-          <td class='text-left nobr' title="<?php echo $story2Link->title?>"><?php echo html::a($storyLink, $story2Link->title);?></td>
+          <td class='text-left nobr' title="<?php echo $story2Link->title?>"><?php echo $story2Link->title;?></td>
           <td><?php echo $this->processStatus('story', $story2Link);?></td>
           <td><?php echo zget($users, $story2Link->openedBy);?></td>
           <td><?php echo zget($users, $story2Link->assignedTo);?></td>

@@ -62,7 +62,7 @@ $lang->product->doc         = "Documents {$lang->productCommon}";
 $lang->product->project     = ' Liste ' . $lang->executionCommon;
 $lang->product->build       = 'Liste Builds';
 $lang->product->moreProduct = "More {$lang->productCommon}";
-$lang->product->projectInfo = "Les {$lang->projectCommon}s qui sont associés à ce {$lang->productCommon} sont listés ci-dessous.";
+$lang->product->projectInfo = "My {$lang->projectCommon}s that are linked to this {$lang->productCommon} are listed below.";
 $lang->product->progress    = "Progress";
 
 $lang->product->currentExecution      = "Current Execution";

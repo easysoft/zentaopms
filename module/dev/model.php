@@ -820,6 +820,16 @@ class devModel extends model
         if(!in_array($type, $this->config->dev->navTypes)) return $menuTree;
 
         $mainNav = $type == 'second' ? $this->lang->mainNav : array();
+        if($this->config->vision != 'open' and $type == 'second')
+        {
+            $flowNav = $this->dao->select('module')->from(TABLE_WORKFLOW)
+                ->where('buildin')->eq(0)
+                ->andWhere('vision')->eq($this->config->vision)
+                ->andWhere('navigator')->in('primary,secondary')
+                ->fetchPairs();
+            foreach($flowNav as $nav) unset($mainNav->$nav);
+        }
+
         if($type != 'second')
         {
             /* Set main nav list. */
