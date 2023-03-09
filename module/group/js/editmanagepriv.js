@@ -28,6 +28,12 @@ $(function()
         });
     };
 
+    function updatePrivTree(objTree)
+    {
+        $(".menuTree.depend").data('zui.tree').reload(objTree.dependData);
+        $(".menuTree.recommend").data('zui.tree').reload(objTree.recommendData);
+    };
+
     $(".menuTree").on('mouseover', ".priv-item", function()
     {
         $(this).addClass('text-primary');
@@ -38,30 +44,10 @@ $(function()
         $(this).find('.icon').addClass('hidden');
     });
 
-    var data = [
-      {
-          title: '地盘',
-          children: [
-              {title: '地盘仪表盘'},
-              {title: '我的项目'},
-              {title: '个性化设置'},
-              {title: '维护联系人'},
-              {title: '我的日程'},
-              {title: '地盘仪表盘'},
-              {title: '我的项目'},
-              {title: '个性化设置'},
-              {title: '维护联系人'},
-              {title: '我的日程'},
-              {title: '地盘仪表盘'},
-              {title: '我的项目'},
-              {title: '个性化设置'},
-              {title: '维护联系人'},
-              {title: '我的日程'},
-          ]
-      }
-    ];
+    var data = [];
     initRecomendTree(data);
     initDependTree(data);
+
     $('li.has-list > ul').addClass("menu-active-primary menu-hover-primary");
     $('.sorter-group').sortable();
 
@@ -71,19 +57,21 @@ $(function()
         location.href = location.href;
     });
 
-    $('.permission-row .checkbox-primary').on('click', 'input', function(e)
+    $('.permission-row .checkbox-primary').on('click', 'label', function(e)
     {
-        console.log($(e.target).attr('type'));
-    }).on('click', 'label', function(e)
-    {
+        e.stopPropagation();
         if($(e.target).prop('tagName') == 'LABEL')
         {
             var selectedID = $(this).siblings('input:checkbox').data('id');
             $.get(createLink('group', 'ajaxGetPrivRelations', "privID=" + selectedID), function(data)
             {
+                if(!data) return;
                 var relatedPriv   = JSON.parse(data);
-                var dependData    = relatedPriv.depend;
-                var recommendData = relatedPriv.recommend;
+                updatePrivTree(
+                {
+                    dependData: relatedPriv.depend,
+                    recommendData: relatedPriv.recommend
+                });
             })
         }
     });
