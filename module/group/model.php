@@ -839,7 +839,7 @@ class groupModel extends model
      */
     public function getPrivPackagesByModule($module)
     {
-        return $this->dao->select('*')->from(TABLE_PRIVPACKAGE)->where('module')->eq($module)->fetchAll('id');
+        return $this->dao->select('*')->from(TABLE_PRIVPACKAGE)->where('module')->eq($module)->orderBy('order_asc')->fetchAll('id');
     }
 
     /**
