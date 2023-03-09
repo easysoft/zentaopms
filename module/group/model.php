@@ -885,6 +885,7 @@ class groupModel extends model
         $this->loadModel('setting');
 
         $views = empty($viewName) ? $this->setting->getItem("owner=system&module=priv&key=views") : $viewName;
+        if(empty($views)) return array();
         $views = explode(',', $views);
 
         $modules = array();
