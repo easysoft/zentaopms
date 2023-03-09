@@ -15,7 +15,7 @@
   <div class='text-center'>
     <?php
     echo $lang->dev->noteEditor;
-    if(common::hasPriv('editor', 'switch')) echo html::a($this->createLink('editor', 'switch', 'status=1'), $lang->dev->switchList[1], '', "class='btn btn-primary'");
+    if(common::hasPriv('editor', 'turnon')) echo html::a($this->createLink('editor', 'turnon', 'status=1'), $lang->dev->switchList[1], '', "class='btn btn-primary'");
     ?>
   </div>
 </div>

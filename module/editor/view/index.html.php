@@ -11,12 +11,12 @@
  */
 ?>
 <?php include $app->getModuleRoot() . 'dev/view/header.html.php';?>
-<?php if(common::hasPriv('editor', 'switch')):?>
+<?php if(common::hasPriv('editor', 'turnon')):?>
 <div id='mainMenu' class='clearfix menu-secondary'>
   <div class="pull-left">
     <?php
     echo $lang->editor->turnOff;
-    echo html::a($this->createLink('editor', 'switch', 'status=0'), $lang->dev->switchList['0'], '', "class='btn btn-sm'");
+    echo html::a($this->createLink('editor', 'turnon', 'status=0'), $lang->dev->switchList['0'], '', "class='btn btn-sm'");
     ?>
   </div>
 </div>

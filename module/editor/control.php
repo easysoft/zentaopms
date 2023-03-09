@@ -197,7 +197,7 @@ class editor extends control
      * @access public
      * @return void
      */
-    public function switch($status)
+    public function turnon($status)
     {
         $this->loadModel('setting')->setItem('system.common.global.editor', $status);
 
