@@ -8,12 +8,13 @@
      */
     function handleSaveFormDraft()
     {
-        if(config.currentMethod === 'login' || config.currentMethod.indexOf('edit') != -1 || config.currentMethod.indexOf('import') != -1) return;
-        setTimeout(function() {
+        if(config.currentMethod === 'login' || config.currentModule === 'repo' || config.currentMethod.indexOf('edit') != -1 || config.currentMethod.indexOf('import') != -1) return;
+        setTimeout(function() 
+        {
             var form = $('.table-form').parent();
             if(form.length)
             {
-                if($(form).attr('target') == 'hiddenwin') return;
+                if($(form).attr('target') == 'hiddenwin' && config.currentModule != 'program') return;
                 var formDataID     = config.currentMethod + '-' + config.currentModule + '-' + $(form).attr("id");
                 var formDataStored = $.zui.store.get(formDataID);
                 if(formDataStored)
@@ -29,7 +30,8 @@
                                 name: 'undo',
                                 icon: 'undo',
                                 text: lang.resume,
-                                action: function() {
+                                action: function() 
+                                {
                                     var valueMultiple = {};
                                     for(var i = 0; i < formDataStored.length; i++)
                                     {
@@ -48,39 +50,39 @@
                                         }
                                         else if((item.name.indexOf(']') != -1) && (item.name.indexOf('[') != -1))
                                         {
-                                             var formItem = $('[id^=' + item.name.replace('[', '').replace(']', '') + ']');
+                                            var formItem = $('[id^=' + item.name.replace('[', '').replace(']', '') + ']');
                                         }
                                         else 
                                         {
                                             /* var formItem = $('#' + item.name);*/
-                                             var formItem = $('[id^=' + item.name + ']');
+                                            var formItem = $('[id^=' + item.name + ']');
                                         }
 
                                         var tagName = formItem.prop('tagName');
                                         if(tagName === 'SELECT')
                                         {
-                                             formItem.val(item.value);
-                                             if($(formItem).hasClass('chosen'))
-                                             {
-                                                 $(formItem).trigger('chosen:updated');
-                                             }   
-                                             else if($(formItem).hasClass('picker-select'))
-                                             {
-                                                 if($(formItem).attr('multiple'))
-                                                 {
-                                                     var value = [];
-                                                     if(!valueMultiple[item.name]) valueMultiple[item.name] = [];
-                                                     valueMultiple[item.name].push(item.value);
-                                                     $(formItem).data('zui.picker').setValue(valueMultiple[item.name]);
-                                                 }   
-                                                 else
-                                                 {
-                                                     $(formItem).data('zui.picker').setValue(item.value);
-                                                 }   
-                                             }   
-                                         }   
-                                         else if(tagName === 'INPUT')
-                                         {
+                                            formItem.val(item.value);
+                                            if($(formItem).hasClass('chosen'))
+                                            {
+                                                $(formItem).trigger('chosen:updated');
+                                            }
+                                            else if($(formItem).hasClass('picker-select'))
+                                            {
+                                                if($(formItem).attr('multiple'))
+                                                {
+                                                    var value = [];
+                                                    if(!valueMultiple[item.name]) valueMultiple[item.name] = [];
+                                                    valueMultiple[item.name].push(item.value);
+                                                    $(formItem).data('zui.picker').setValue(valueMultiple[item.name]);
+                                                }
+                                                else
+                                                {
+                                                    $(formItem).data('zui.picker').setValue(item.value);
+                                                }
+                                            }   
+                                        }
+                                        else if(tagName === 'INPUT')
+                                        {
                                              if($(formItem).attr('type') === 'checkbox')
                                              {
                                                  $(formItem).prop('checked', true).trigger('change');
@@ -93,38 +95,37 @@
                                              {
                                                  formItem.val(item.value);
                                              }
-                                         }
-                                         else if(tagName === 'TEXTAREA' && $(formItem).hasClass('kindeditor'))
-                                         {
+                                        }
+                                        else if(tagName === 'TEXTAREA' && $(formItem).hasClass('kindeditor'))
+                                        {
                                              KindEditor.remove('#' + item.name);
                                              formItem.val(item.value);
                                              $(formItem).kindeditor();
-                                         }
-                                     }
-                                     $.zui.store.remove(formDataID);
-                                 }
-                             }
-                         ],
-                         onAction: function(name, action, messager)
-                         {
-                             $.zui.store.remove(formDataID);
-                         }
-                     }).show();
-                 }
-                 form.on('input', function()
-                 {   
+                                        }
+                                    }
+                                    $.zui.store.remove(formDataID);
+                                }
+                            }
+                        ],
+                        onAction: function(name, action, messager)
+                        {
+                            $.zui.store.remove(formDataID);
+                        }
+                    }).show();
+                }
+                form.on('input', function()
+                {   
                      $.zui.store.set(formDataID, $(form).serializeArray());
-
-                 }).on('change', function()
-                 {
-                     $.zui.store.set(formDataID, $(form).serializeArray());
-                 }).on('success.form.zui', function(event, res)
-                 {
-                     if(res.result === 'success' || res.status === 'success') $.zui.store.remove(formDataID);
-                 })  
-             }   
-         }, 500);
-     }  
+                }).on('change', function()
+                {
+                    $.zui.store.set(formDataID, $(form).serializeArray());
+                }).on('success.form.zui', function(event, res)
+                {
+                    if(res.result === 'success' || res.status === 'success') $.zui.store.remove(formDataID);
+                })  
+            }   
+        }, 500);
+    }
     handleSaveFormDraft();
 
     /* Tab session */
