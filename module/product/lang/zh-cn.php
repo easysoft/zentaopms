@@ -62,7 +62,7 @@ $lang->product->doc         = '文档列表';
 $lang->product->project     = $lang->executionCommon . '列表';
 $lang->product->build       = '版本列表';
 $lang->product->moreProduct = "更多{$lang->productCommon}";
-$lang->product->projectInfo = "所有与此{$lang->productCommon}关联的{$lang->projectCommon}";
+$lang->product->projectInfo = "所有与此{$lang->productCommon}关联的我参与的{$lang->projectCommon}";
 $lang->product->progress    = "{$lang->productCommon}完成度";
 
 $lang->product->currentExecution      = "当前执行";
