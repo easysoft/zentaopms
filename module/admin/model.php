@@ -320,6 +320,11 @@ class adminModel extends model
         {
             $menu['disabled'] = true;
             if(!isset($menu['link'])) $menu['link'] = '';
+            if($menuKey == 'company')
+            {
+                $dept = $this->dao->select('id')->from(TABLE_DEPT)->fetch();
+                if($dept and common::hasPriv('company', 'browse')) $menu['link'] = helper::createLink('company', 'browse');
+            }
 
             /* Set links to authorized navigation. */
             if(isset($menu['subMenu']))
