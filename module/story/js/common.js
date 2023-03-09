@@ -38,7 +38,6 @@ $(function()
             {
                 setTimeout(function()
                 {
-                    console.log(11);
                     $saveButton.attr('type', 'button').removeAttr('disabled');
                     $saveDraftButton.removeAttr('disabled');
                 }, 10000);

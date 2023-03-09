@@ -1096,7 +1096,7 @@ class product extends control
         if(empty($productID) or $programID) $lines = $this->product->getLinePairs($programID);
 
         if($productID)  return print(html::select("lines[$productID]", array('' => '') + $lines, '', "class='form-control picker-select'"));
-        if(!$productID) return print(html::select('line', array('' => '') + $lines, '', "class='form-control chosen'"));
+        if(!$productID) return print(html::select('line', array('' => '') + $lines, '', "class='form-control picker-select'"));
     }
 
     /**
