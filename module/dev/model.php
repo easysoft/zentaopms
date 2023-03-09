@@ -536,13 +536,13 @@ class devModel extends model
                 break;
         }
 
-        foreach($customeds as $type => $customed)
+        foreach($customeds as $customType => $customed)
         {
             if(is_array($customed))
             {
                 foreach($customed as $row)
                 {
-                    $langKey = $type == 'featureBar' ? "featureBar-{$method}_" : $row->section . '_';
+                    $langKey = $customType == 'featureBar' ? "featureBar-{$method}_" : $row->section . '_';
                     $rowKey  = $row->key;
                     $customedLangs[$langKey . $rowKey] = $row->value;
                 }
