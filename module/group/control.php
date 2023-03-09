@@ -501,52 +501,56 @@ class group extends control
     /**
      * Add recommendation.
      *
-     * @param  int    $privID
+     * @param  string    $privIdList
      * @access public
      * @return void
      */
-    public function addRecommendation($privID)
+    public function addRecommendation($privIdList)
     {
         if($_POST)
         {
-            $this->group->saveRelation(array($privID), 'recommend');
+            $this->group->saveRelation($privIdList, 'recommend');
             return print(js::reload('parent'));
         }
 
-        $priv = $this->group->getPrivByID($privID);
+        $privs   = $this->group->getPrivByIdList($privIdList);
+        $modules = array();
+        foreach($privs as $priv) $modules[$priv->module] = $priv->module;
 
-        $this->view->priv        = $priv;
+        $this->view->privs       = $privs;
         $this->view->modules     = array('' => $this->lang->group->selectModule) + $this->group->getMenuModules(null, true);
-        $this->view->modulePrivs = $this->group->getPrivByModule($priv->module);
-        $this->view->recommends  = $this->group->getPrivRelation($priv->id, 'recommend');
+        $this->view->modulePrivs = $this->group->getPrivByModule($modules);
+        $this->view->recommends  = $this->group->getPrivRelation($privIdList, 'recommend');
         $this->display();
     }
 
     /**
      * Ajax get priv tree.
      *
-     * @param  int    $privID
+     * @param  string $privIdList
      * @param  string $module
      * @access public
      * @return void
      */
-    public function ajaxGetPrivTree($privID, $module)
+    public function ajaxGetPrivTree($privIdList, $module)
     {
+        if(is_string($privIdList)) $privIdList = explode(',', $privIdList);
+
         $modules     = $this->group->getMenuModules(null, true);
         $modulePrivs = $this->group->getPrivByModule($module);
-        $recommends  = $this->group->getPrivRelation($privID, 'recommend', $module);
+        $recommends  = $this->group->getPrivRelation($privIdList, 'recommend', $module);
 
-        $tree  = '<li>';
+        $tree  = "<ul class='tree' data-ride='tree'><li>";
         $tree .= html::a('#', $modules[$module]);
         $tree .= "<ul class='relationBox'>";
         foreach($modulePrivs[$module] as $id => $modulePriv)
         {
-            if($privID == $id) continue;
+            if(in_array($id, $privIdList)) continue;
             $tree .= '<li>';
-            $tree .= html::checkbox('relation', array($id => $modulePriv->name), (empty($recommends) or isset($recommends[$id])) ? $id : '');
+            $tree .= html::checkbox("relation[$module]", array($id => $modulePriv->name), (empty($recommends) or isset($recommends[$id])) ? $id : '');
             $tree .= '</li>';
         }
-        $tree .= '</ul></li>';
+        $tree .= '</ul></li></ul>';
         return print($tree);
     }
 
@@ -585,7 +589,7 @@ class group extends control
     }
     /**
      *
-     * edit priv 
+     * edit priv
      * @param int $privID
      * @access public
      * @return void
@@ -597,7 +601,7 @@ class group extends control
 	$privID = intval($privID);
 	$currentLang = $this->app->clientLang ? : 'zh-cn';
 	$priv = $this->group->getPrivInfo($privID,$currentLang);
-	
+
 	if(!empty($_POST))
 	{
 	    $responseResult = "success";
@@ -619,6 +623,6 @@ class group extends control
 	{
 	  $this->view->priv = $priv;
 	  $this->display();
-	}	
+	}
     }
 }

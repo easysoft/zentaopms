@@ -1035,6 +1035,22 @@ class groupModel extends model
     }
 
     /**
+     * Get priv by id list.
+     *
+     * @param  string    $privIdList
+     * @access public
+     * @return array
+     */
+    public function getPrivByIdList($privIdList)
+    {
+        return $this->dao->select('t1.*,t2.name,t2.desc')->from(TABLE_PRIV)->alias('t1')
+            ->leftJoin(TABLE_PRIVLANG)->alias('t2')->on('t1.id=t2.priv')
+            ->where('t1.id')->in($privIdList)
+            ->andWhere('t2.lang')->eq($this->app->getClientLang())
+            ->fetchAll('id');
+    }
+
+    /**
      * Get priv by module.
      *
      * @param  array    $modules
@@ -1117,7 +1133,7 @@ class groupModel extends model
     {
         return $this->dao->select('t2.*')->from(TABLE_PRIVRELATION)->alias('t1')
             ->leftJoin(TABLE_PRIV)->alias('t2')->on('t1.relationPriv=t2.id')
-            ->where('t1.priv')->eq($priv)
+            ->where('t1.priv')->in($priv)
             ->andWhere('t1.type')->eq($type)
             ->beginIF($module)->andWhere('t2.module')->eq($module)->fi()
             ->fetchAll('id');
@@ -1133,18 +1149,28 @@ class groupModel extends model
      */
     public function saveRelation($privIdList, $type)
     {
+        if(is_string($privIdList)) $privIdList = explode(',', $privIdList);
         $data = fixer::input('post')->get();
 
-        $this->dao->delete()->from(TABLE_PRIVRELATION)->where('priv')->in($privIdList)->andWhere('type')->eq($type)->exec();
+        $deleteModuleSQL = $this->dao->select('id')->from(TABLE_PRIV)->where('module')->in(array_keys($data->relation))->get();
+        $this->dao->delete()->from(TABLE_PRIVRELATION)
+            ->where('priv')->in($privIdList)
+            ->andWhere('type')->eq($type)
+            ->andWhere('relationPriv IN(' . $deleteModuleSQL . ')')
+            ->exec();
+
         foreach($privIdList as $privID)
         {
             $relation = new stdclass();
             $relation->priv = $privID;
             $relation->type = $type;
-            foreach($data->relation as $privRelation)
+            foreach($data->relation as $privModule => $privRelations)
             {
-                $relation->relationPriv = $privRelation;
-                $this->dao->insert(TABLE_PRIVRELATION)->data($relation)->exec();
+                foreach($privRelations as $privRelation)
+                {
+                    $relation->relationPriv = $privRelation;
+                    $this->dao->insert(TABLE_PRIVRELATION)->data($relation)->exec();
+                }
             }
         }
     }
@@ -1173,7 +1199,7 @@ class groupModel extends model
 	}
 	return $privInfo;
     }
-	
+
 
     /**
      *
@@ -1185,13 +1211,13 @@ class groupModel extends model
      **/
     public function getModuleAndPackageTree()
     {
-        
+
         $this->loadModel('setting');
 
         $views = empty($viewName) ? $this->setting->getItem("owner=system&module=priv&key=views") : $viewName;
         if(empty($views)) return array();
         $views = explode(',', $views);
-	
+
 	$tree = [];
         foreach($views as $viewIndex => $view)
         {
@@ -1202,7 +1228,7 @@ class groupModel extends model
             foreach($viewModules as $moduleIndex => $module)
 	    {
                 $this->app->loadLang($module);
-		
+
 		$tree[$module] = $this->lang->{$module}->common;;
                 $packages = $this->getPrivPackagesByModule($module);
                 foreach($packages as $packageID => $package)
@@ -1212,7 +1238,7 @@ class groupModel extends model
             }
         }
         return $tree;
-    
+
     }
     /**
      *
@@ -1229,7 +1255,7 @@ class groupModel extends model
 
 	$data = fixer::input('post')->remove('name,desc')->get();
 	if($data->module)
-	{	    	    
+	{
 	    $update = [];
 	    $module = explode(",",$data->module);
 	    $update['module'] = $module[0];
