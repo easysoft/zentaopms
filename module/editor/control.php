@@ -200,6 +200,6 @@ class editor extends control
         $this->loadModel('setting')->setItem('system.common.global.editor', $status);
 
         $link = empty($status) ? $this->createLink('dev', 'editor') : $this->createLink('editor', 'index');
-        return print(js::locate($link, 'parent'));
+        return print(js::locate($link));
     }
 }

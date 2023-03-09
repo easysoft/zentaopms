@@ -16,7 +16,7 @@
   <div class="pull-left">
     <?php
     echo $lang->editor->turnOff;
-    echo html::a($this->createLink('editor', 'switch', 'status=0'), $lang->dev->switchList['0'], 'hiddenwin', "class='btn btn-sm'");
+    echo html::a($this->createLink('editor', 'switch', 'status=0'), $lang->dev->switchList['0'], '', "class='btn btn-sm'");
     ?>
   </div>
 </div>
