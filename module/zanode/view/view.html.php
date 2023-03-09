@@ -156,7 +156,18 @@ $account = strpos($zanode->osName, "windows") ? $config->zanode->defaultWinAccou
       <?php if(common::hasPriv('zanode', 'browseSnapshot')):?>
       <div class="cell">
         <div class="detail zanode-detail">
-          <div class="detail-title"><?php echo $lang->zanode->browseSnapshot;?></div>
+          <div class="detail-title">
+            <?php echo $lang->zanode->browseSnapshot;?>
+            <div class="btn-toolbar pull-right" id='createActionMenu'>
+              <?php
+              if($zanode->status == 'running'){
+                $snapshotAttr = "title='{$lang->zanode->createSnapshot}'";
+                $snapshotAttr .= $zanode->status != 'running' ? ' class="btn btn-snap-create disabled"' : ' class="btn btn-primary btn-snap-create iframe"';
+                common::printLink('zanode', 'createSnapshot', "zanodeID={$zanode->id}", "<i class='icon icon-plus'></i> " . $lang->zanode->createSnapshot, '', $snapshotAttr, true, true);
+              }
+              ?>
+            </div>
+          </div>
           <?php if(!empty($snapshotList)): ?>
           <div class="detail-content article-content">
           <?php echo "<iframe width='100%' id='nodesIframe' src='" . $this->createLink('zanode', 'browseSnapshot', "nodeID=$zanode->id", '', true) . "' frameborder='no' allowfullscreen='true' mozallowfullscreen='true' webkitallowfullscreen='true' allowtransparency='true' scrolling='auto' style='min-height:300px;'></iframe>";?>
