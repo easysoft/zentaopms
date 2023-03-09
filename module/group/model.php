@@ -1146,7 +1146,7 @@ class groupModel extends model
         return $this->dao->select('t1.type,t2.*,t3.name')->from(TABLE_PRIVRELATION)->alias('t1')
             ->leftJoin(TABLE_PRIV)->alias('t2')->on('t1.relationPriv=t2.id')
             ->leftJoin(TABLE_PRIVLANG)->alias('t3')->on('t2.id=t3.priv')
-            ->where('t1.priv')->eq($priv)
+            ->where('t1.priv')->in($priv)
             ->beginIF(!empty($type))->andWhere('t1.type')->eq($type)->fi()
             ->beginIF($module)->andWhere('t2.module')->eq($module)->fi()
             ->fetchAll('id');
