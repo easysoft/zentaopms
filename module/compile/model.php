@@ -129,7 +129,14 @@ class compileModel extends model
 
         $url = new stdclass();
         $url->userPWD = "$jenkinsUser:$jenkinsPassword";
-        $url->url     = sprintf('%s/job/%s/buildWithParameters/api/json', $jenkinsServer, $jenkins->pipeline);
+        if(strpos($jenkins->pipeline, '/job/') !== false)
+        {
+            $url->url = sprintf('%s%sbuildWithParameters/api/json', $jenkinsServer, $jenkins->pipeline);
+        }
+        else
+        {
+            $url->url = sprintf('%s/job/%s/buildWithParameters/api/json', $jenkinsServer, $jenkins->pipeline);
+        }
 
         return $url;
     }
@@ -261,7 +268,14 @@ class compileModel extends model
         $jenkinsPassword = $jenkins->token ? $jenkins->token : base64_decode($jenkins->password);
 
         /* Get build list by API. */
-        $url      = sprintf('%s/job/%s/api/json?tree=builds[id,number,result,queueId,timestamp]', $jenkins->url, $job->pipeline);
+        if(strpos($job->pipeline, '/job/') !== false)
+        {
+            $url = sprintf('%s%sapi/json?tree=builds[id,number,result,queueId,timestamp]', $jenkins->url, $job->pipeline);
+        }
+        else
+        {
+            $url = sprintf('%s/job/%s/api/json?tree=builds[id,number,result,queueId,timestamp]', $jenkins->url, $job->pipeline);
+        }
         $response = common::http($url, '', array(CURLOPT_USERPWD => "$jenkinsUser:$jenkinsPassword"));
         if(!$response) return false;
 
