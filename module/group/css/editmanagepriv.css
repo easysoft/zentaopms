@@ -16,7 +16,7 @@
 .flex-sm {flex: 1 1 15%;}
 .flex-content {flex: 1 1 70%;}
 .sorter-group {display: flex; flex-wrap: wrap;}
-.sorter-group > .group-item {flex: 1 1 25%;}
+.sorter-group > .group-item {flex: 0 0 25%;}
 
 /* tree */
 .tree ul > li {display: inline-block; width: 50%;}
