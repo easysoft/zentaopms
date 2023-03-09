@@ -46,7 +46,7 @@
         <div class="menuTree depend menu-active-primary menu-hover-primary"></div>
       </div>
       <div class="panel-bottom">
-        <?php echo html::commonButton ('<i class="icon icon-plus"></i>' . $lang->group->add, '', 'btn btn-primary');?>
+        <?php echo html::a($this->inLink('addDependent'), $lang->group->add, '', "class='btn btn-primary'");?>
       </div>
     </div>
     <div class="priv-panel mt-m">

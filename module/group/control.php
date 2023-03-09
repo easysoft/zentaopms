@@ -382,7 +382,7 @@ class group extends control
     }
 
    /**
-     * edit manage priv.
+     * Edit manage priv.
      *
      * @param  string $browseType
      * @param  string $view
@@ -407,11 +407,37 @@ class group extends control
         $actionURL = $this->createLink('group', 'editManagePriv', "browseType=bysearch&view=&paramID=myQueryID&recTotal=$recTotal&recPerPage=$recPerPage");
         $this->group->buildPrivSearchForm($queryID, $actionURL);
 
+        $moduleLang = $this->group->getMenuModules('', true);
+
+        if($browseType == 'bycard')
+        {
+            $moduleList   = $this->loadModel('setting')->getItem("owner=system&module=priv&section=&key={$view}Modules");
+            $privGroup    = $this->group->getPrivGroup($moduleList);
+            $privPackages = $this->group->getPrivPackagePairs();
+            $privLang     = $this->group->getPrivLangPairs();
+
+            $privList = array();
+            foreach($privGroup as $module => $privs)
+            {
+                if(!isset($privList[$module])) $privList[$module] = array();
+                foreach($privs as $priv)
+                {
+                    if(!isset($privList[$module][$priv->package])) $privList[$module][$priv->package] = array();
+                    $privList[$module][$priv->package][$priv->id] = $priv;
+                }
+            }
+
+            $this->view->privLang     = $privLang;
+            $this->view->privPackages = $privPackages;
+        }
+
         $this->view->title      = $this->lang->group->editManagePriv;
         $this->view->browseType = $browseType;
         $this->view->privList   = $privList;
         $this->view->packages   = $this->group->getPrivPackagesByView($view);
+        $this->view->moduleLang = $moduleLang;
         $this->view->pager      = $pager;
+
         $this->display();
     }
 
@@ -587,6 +613,7 @@ class group extends control
             }
         }
     }
+
     /**
      *
      * edit priv
@@ -624,5 +651,47 @@ class group extends control
 	  $this->view->priv = $priv;
 	  $this->display();
 	}
+    }
+
+    /**
+     * Add dependent privs.
+     *
+     * @access public
+     * @return void
+     */
+    public function addDependent()
+    {
+        $this->display();
+    }
+
+    /**
+     * AJAX: Get priv's related priv list.
+     *
+     * @param  int    $privID
+     * @param  string $type
+     * @access public
+     * @return bool
+     */
+    public function ajaxGetPrivRelations($privID, $type = 'depend')
+    {
+        $moduleLang   = $this->group->getMenuModules('', true);
+        $relatedPrivs = $this->group->getPrivRelation($privID);
+
+        if(empty($relatedPrivs)) return print('');
+
+        $privList = array();
+        foreach($relatedPrivs as $relatedPrivID => $relatedPriv)
+        {
+            if(!isset($privList[$relatedPriv->type])) $privList[$relatedPriv->type] = array();
+            if(!isset($privList[$relatedPriv->type][$relatedPriv->module])) $privList[$relatedPriv->type][$relatedPriv->module] = array();
+            $privList[$relatedPriv->type][$relatedPriv->module]['title']      = zget($moduleLang, $relatedPriv->module, $relatedPriv->module);
+            $privList[$relatedPriv->type][$relatedPriv->module]['module']     = $relatedPriv->module;
+            $privList[$relatedPriv->type][$relatedPriv->module]['children'][] = array('title' => $relatedPriv->name);
+        }
+
+        $privList['depend']    = array_values($privList['depend']);
+        $privList['recommend'] = array_values($privList['recommend']);
+
+        return print(json_encode($privList));
     }
 }
