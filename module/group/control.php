@@ -615,7 +615,7 @@ class group extends control
 
 	$this->view->modulePackage =  $this->group->getModuleAndPackageTree();
 
-        //if($priv)
+        if($priv)
 	{
 	  $this->view->priv = $priv;
 	  $this->display();
