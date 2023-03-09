@@ -50,6 +50,8 @@ class editor extends control
      */
     public function extend($moduleDir = '')
     {
+        if(!isset($this->lang->{$moduleDir}->common)) $this->app->loadLang($moduleDir);
+
         $moduleFiles = $this->editor->getModuleFiles($moduleDir);
         $this->view->module = $moduleDir;
         $this->view->tree   = $this->editor->printTree($moduleFiles);
