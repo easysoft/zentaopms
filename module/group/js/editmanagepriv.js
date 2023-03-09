@@ -70,13 +70,22 @@ $(function()
         $.cookie('managePrivEditType', $(this).data('type'), {expires: config.cookieLife, path: config.webRoot});
         location.href = location.href;
     });
+
     $('.permission-row .checkbox-primary').on('click', 'input', function(e)
     {
         console.log($(e.target).attr('type'));
     }).on('click', 'label', function(e)
     {
-        if($(e.target).prop('tagName') == 'LABEL');
-        console.log('label');
+        if($(e.target).prop('tagName') == 'LABEL')
+        {
+            var selectedID = $(this).siblings('input:checkbox').data('id');
+            $.get(createLink('group', 'ajaxGetPrivRelations', "privID=" + selectedID), function(data)
+            {
+                var relatedPriv   = JSON.parse(data);
+                var dependData    = relatedPriv.depend;
+                var recommendData = relatedPriv.recommend;
+            })
+        }
     });
 });
 

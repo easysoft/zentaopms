@@ -723,11 +723,12 @@ class groupModel extends model
     /**
      * Get modules in menu
      *
-     * @param  string    $menu
+     * @param  string  $menu
+     * @param  bool    $translateLang
      * @access public
      * @return array
      */
-    public function getMenuModules($menu, $translateLang = false)
+    public function getMenuModules($menu = '', $translateLang = false)
     {
         $modules = array();
         foreach($this->lang->resource as $moduleName => $action)
@@ -840,6 +841,17 @@ class groupModel extends model
     public function getPrivPackagesByModule($module)
     {
         return $this->dao->select('*')->from(TABLE_PRIVPACKAGE)->where('module')->eq($module)->orderBy('order_asc')->fetchAll('id');
+    }
+
+    /**
+     * Get all priv package pairs.
+     *
+     * @access public
+     * @return array
+     */
+    public function getPrivPackagePairs()
+    {
+        return $this->dao->select('id,name')->from(TABLE_PRIVPACKAGE)->fetchPairs();
     }
 
     /**
@@ -1113,12 +1125,13 @@ class groupModel extends model
      * @access public
      * @return array
      */
-    public function getPrivRelation($priv, $type, $module = '')
+    public function getPrivRelation($priv, $type = '', $module = '')
     {
-        return $this->dao->select('t2.*')->from(TABLE_PRIVRELATION)->alias('t1')
+        return $this->dao->select('t1.type,t2.*,t3.name')->from(TABLE_PRIVRELATION)->alias('t1')
             ->leftJoin(TABLE_PRIV)->alias('t2')->on('t1.relationPriv=t2.id')
+            ->leftJoin(TABLE_PRIVLANG)->alias('t3')->on('t2.id=t3.priv')
             ->where('t1.priv')->eq($priv)
-            ->andWhere('t1.type')->eq($type)
+            ->beginIF(!empty($type))->andWhere('t1.type')->eq($type)->fi()
             ->beginIF($module)->andWhere('t2.module')->eq($module)->fi()
             ->fetchAll('id');
     }
@@ -1246,5 +1259,32 @@ class groupModel extends model
 
         $this->loadModel('search')->setSearchParams($this->config->group->priv->search);
     }
-}
 
+    /**
+     * Get priv group by module.
+     *
+     * @param  array    $moduleList
+     * @access public
+     * @return array
+     */
+    public function getPrivGroup($moduleList = array())
+    {
+        return $this->dao->select('*')->from(TABLE_PRIV)
+            ->beginIF(!empty($moduleList))->where('module')->in($moduleList)->fi()
+            ->orderBy('order_asc')
+            ->fetchGroup('module');
+    }
+
+    /**
+     * Get all priv's lang pairs.
+     *
+     * @access public
+     * @return array
+     */
+    public function getPrivLangPairs()
+    {
+        return $this->dao->select('priv,name')->from(TABLE_PRIVLANG)
+            ->where('lang')->eq($this->app->clientLang)
+            ->fetchPairs();
+    }
+}
