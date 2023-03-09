@@ -843,6 +843,19 @@ class groupModel extends model
     }
 
     /**
+     * Get priv packages by view.
+     *
+     * @param  string $view
+     * @access public
+     * @return void
+     */
+    public function getPrivPackagesByView($view = '')
+    {
+        $modules = $this->setting->getItem("owner=system&module=priv&key={$view}Modules");
+        return $this->dao->select('*')->from(TABLE_PRIVPACKAGE)->where('module')->in($modules)->orderBy('order_asc')->fetchAll('id');
+    }
+
+    /**
      * Get priv modules.
      *
      * @param  string $viewName
@@ -1039,6 +1052,59 @@ class groupModel extends model
     }
 
     /**
+     * Get privs list by module.
+     *
+     * @param  string $view
+     * @param  object $pager
+     * @access public
+     * @return array
+     */
+    public function getPrivsListByView($view = '', $pager = null)
+    {
+        $modules = $this->loadModel('setting')->getItem("owner=system&module=priv&key={$view}Modules");
+        return $this->dao->select('t1.*,t2.name,t2.desc')->from(TABLE_PRIV)->alias('t1')
+            ->leftJoin(TABLE_PRIVLANG)->alias('t2')->on('t1.id=t2.priv')
+            ->where('1=1')
+            ->beginIF(!empty($view))->andWhere('t1.module')->in($modules)->fi()
+            ->andWhere('t2.lang')->eq($this->app->getClientLang())
+            ->orderBy('`order`')
+            ->page($pager)
+            ->fetchAll('id');
+    }
+
+    /**
+     * Get privs list by module.
+     *
+     * @param  int    $queryID
+     * @param  object $pager
+     * @access public
+     * @return array
+     */
+    public function getPrivsListBySearch($queryID = 0, $pager = null)
+    {
+        $query = $queryID ? $this->loadModel('search')->getQuery($queryID) : '';
+
+        /* Get the sql and form status from the query. */
+        if($query)
+        {
+            $this->session->set('privQuery', $query->sql);
+            $this->session->set('privForm', $query->form);
+        }
+        if($this->session->privQuery == false) $this->session->set('privQuery', ' 1 = 1');
+
+        $privQuery = $this->session->privQuery;
+
+        return $this->dao->select('t1.*,t2.name,t2.desc')->from(TABLE_PRIV)->alias('t1')
+            ->leftJoin(TABLE_PRIVLANG)->alias('t2')->on('t1.id=t2.priv')
+            ->where('1=1')
+            ->andWhere($privQuery)
+            ->andWhere('t2.lang')->eq($this->app->getClientLang())
+            ->orderBy('`order`')
+            ->page($pager)
+            ->fetchAll('id');
+    }
+
+    /**
      * Get priv relation.
      *
      * @param  int    $priv
@@ -1081,5 +1147,13 @@ class groupModel extends model
                 $this->dao->insert(TABLE_PRIVRELATION)->data($relation)->exec();
             }
         }
+    }
+
+    public function buildPrivSearchForm($queryID, $actionURL)
+    {
+        $this->config->group->priv->search['actionURL'] = $actionURL;
+        $this->config->group->priv->search['queryID']   = $queryID;
+
+        $this->loadModel('search')->setSearchParams($this->config->group->priv->search);
     }
 }

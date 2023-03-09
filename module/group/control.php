@@ -384,13 +384,34 @@ class group extends control
    /**
      * edit manage priv.
      *
+     * @param  string $browseType
+     * @param  string $view
+     * @param  int    $paramID
+     * @param  int    $recTotal
+     * @param  int    $recPerPage
+     * @param  int    $pageID
      * @access public
      * @return void
      */
-    public function editManagePriv()
+    public function editManagePriv($browseType = '', $view = '', $paramID = 0, $recTotal = 0, $recPerPage = 100, $pageID = 1)
     {
-        $this->view->title    = $this->lang->group->editManagePriv;
-        $this->view->editType = $this->cookie->managePrivEditType ? $this->cookie->managePrivEditType : 'bycard';
+        if(empty($browseType)) $browseType = $this->cookie->managePrivEditType ? $this->cookie->managePrivEditType : 'bycard';;
+
+        $this->app->loadClass('pager', $static = true);
+        $pager = new pager($recTotal, $recPerPage, $pageID);
+
+        $privList = $browseType != 'bysearch' ? $this->group->getPrivsListByView($view, $pager) :  $this->group->getPrivsListBySearch($pager);
+
+        /* Build the search form. */
+        $queryID   = ($browseType == 'bysearch') ? (int)$paramID : 0;
+        $actionURL = $this->createLink('group', 'editManagePriv', "browseType=bysearch&view=&paramID=myQueryID&recTotal=$recTotal&recPerPage=$recPerPage");
+        $this->group->buildPrivSearchForm($queryID, $actionURL);
+
+        $this->view->title      = $this->lang->group->editManagePriv;
+        $this->view->browseType = $browseType;
+        $this->view->privList   = $privList;
+        $this->view->packages   = $this->group->getPrivPackagesByView($view);
+        $this->view->pager      = $pager;
         $this->display();
     }
 

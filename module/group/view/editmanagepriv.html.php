@@ -18,8 +18,8 @@
   </div>
   <div class="btn-toolbar">
     <div class="btn-group">
-      <a href="#" data-type="bycard" class="btn btn-icon btn-switch <?php if($editType == 'bycard') echo 'text-primary' ?>"><i class="icon icon-cards-view"></i></a>
-      <a href="#" data-type="bylist" class="btn btn-icon btn-switch <?php if($editType == 'bylist') echo 'text-primary' ?>"><i class="icon icon-list"></i></a>
+      <a href="#" data-type="bycard" class="btn btn-icon btn-switch <?php if($browseType == 'bycard') echo 'text-primary' ?>"><i class="icon icon-cards-view"></i></a>
+      <a href="#" data-type="bylist" class="btn btn-icon btn-switch <?php if($browseType == 'bylist' or $browseType == 'bysearch') echo 'text-primary' ?>"><i class="icon icon-list"></i></a>
     </div>
     <a href="#" class="btn btn-primary"><?php echo $lang->group->addPriv?></a>
     <?php if(common::hasPriv('group', 'managePrivPackage')) echo html::a($this->createLink('group', 'managePrivPackage', ''), $lang->group->managePrivPackage, '', 'class="btn btn-primary"');?>
@@ -29,7 +29,7 @@
 <div id='mainContent'>
   <div class="main main-content">
   <?php
-  if($editType == 'bycard')
+  if($browseType == 'bycard')
   {
       include 'editmanageprivbycard.html.php';
   }

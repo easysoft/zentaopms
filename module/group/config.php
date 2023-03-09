@@ -17,3 +17,10 @@ $config->privPackage->create = new stdclass();
 $config->privPackage->edit   = new stdclass();
 $config->privPackage->create->requiredFields = 'name,module';
 $config->privPackage->edit->requiredFields   = 'name,module';
+
+global $lang;
+$config->group->priv = new stdclass();
+$config->group->priv->search['module']                   = 'priv';
+$config->group->priv->search['fields']['name']           = $lang->group->name;
+$config->group->priv->search['params']['name']           = array('operator' => 'include', 'control' => 'input',  'values' => '');
+
