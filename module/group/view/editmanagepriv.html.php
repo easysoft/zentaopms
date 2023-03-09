@@ -13,7 +13,7 @@
 <?php include '../../common/view/header.html.php';?>
 <div id="mainMenu" class='flex-space-center'>
   <div class="btn-toolbar">
-    <?php echo html::backButton('<i class="icon icon-angle-left"></i>' . $lang->goback, '', '');?>
+    <?php echo html::a($this->createLink('group', 'browse', ''), '<i class="icon icon-angle-left"></i>' . $lang->goback, '', 'class="btn btn-back"');?>
     <a href="#" class="btn btn-link btn-active-text"><?php echo $lang->group->all?></a>
   </div>
   <div class="btn-toolbar">
