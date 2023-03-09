@@ -70,5 +70,13 @@ $(function()
         $.cookie('managePrivEditType', $(this).data('type'), {expires: config.cookieLife, path: config.webRoot});
         location.href = location.href;
     });
+    $('.permission-row .checkbox-primary').on('click', 'input', function(e)
+    {
+        console.log($(e.target).attr('type'));
+    }).on('click', 'label', function(e)
+    {
+        if($(e.target).prop('tagName') == 'LABEL');
+        console.log('label');
+    });
 });
 

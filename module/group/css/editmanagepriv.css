@@ -17,6 +17,7 @@
 .flex-content {flex: 1 1 70%;}
 .sorter-group {display: flex; flex-wrap: wrap;}
 .sorter-group > .group-item {flex: 0 0 25%;}
+.checkbox-primary > input {width: 20px;}
 
 /* tree */
 .tree ul > li {display: inline-block; width: 50%;}
