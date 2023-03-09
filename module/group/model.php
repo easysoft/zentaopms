@@ -1149,6 +1149,96 @@ class groupModel extends model
         }
     }
 
+    /**
+     *
+     * get a priv
+     *
+     * @param int $privID
+     * @return object
+     *
+     **/
+    public function getPrivInfo($priv,$lang)
+    {
+    	$privInfo = $this->dao->select("t1.priv,t1.name,t1.desc,t2.module,t2.package")->from(TABLE_PRIVLANG . ' t1')
+	    ->leftJoin(TABLE_PRIV . ' t2')
+	    ->on("t1.priv = t2.id")
+	    ->where('t1.priv')
+    	    ->eq($priv)
+    	    ->andWHere('t1.lang')
+    	    ->eq($lang)
+	    ->fetch();
+	if($privInfo)
+	{
+	   $privInfo->module = $privInfo->package ? $privInfo->module . ',' . $privInfo->package : $privInfo->module;
+	}
+	return $privInfo;
+    }
+	
+
+    /**
+     *
+     * get a prvi package tree
+     *
+     * @param void
+     * @return array
+     *
+     **/
+    public function getModuleAndPackageTree()
+    {
+        
+        $this->loadModel('setting');
+
+        $views = empty($viewName) ? $this->setting->getItem("owner=system&module=priv&key=views") : $viewName;
+        if(empty($views)) return array();
+        $views = explode(',', $views);
+	
+	$tree = [];
+        foreach($views as $viewIndex => $view)
+        {
+            $viewModules = $this->setting->getItem("owner=system&module=priv&key={$view}Modules");
+            if(empty($viewModules)) continue;
+
+            $viewModules = explode(',', $viewModules);
+            foreach($viewModules as $moduleIndex => $module)
+	    {
+                $this->app->loadLang($module);
+		
+		$tree[$module] = $this->lang->{$module}->common;;
+                $packages = $this->getPrivPackagesByModule($module);
+                foreach($packages as $packageID => $package)
+		{
+		    $tree[$module. ',' . $packageID] = $this->lang->{$module}->common .'/'. $package->name;
+                }
+            }
+        }
+        return $tree;
+    
+    }
+    /**
+     *
+     * update a Priv Info
+     *
+     * @param void
+     * @return void
+     *
+     **/
+    public function updatePrivLang($privID,$lang)
+    {
+        $data = fixer::input('post')->remove('module')->get();
+	$this->dao->update(TABLE_PRIVLANG)->data($data)->where('priv')->eq($privID)->andWhere('lang')->eq($lang)->exec();
+
+	$data = fixer::input('post')->remove('name,desc')->get();
+	if($data->module)
+	{	    	    
+	    $update = [];
+	    $module = explode(",",$data->module);
+	    $update['module'] = $module[0];
+	    $update['package'] = 0;
+	    if(count($module) > 1) $update['package'] = $module[1];
+	    $this->dao->update(TABLE_PRIV)->data($update)->where('id')->eq($privID)->exec();
+	}
+    }
+
     public function buildPrivSearchForm($queryID, $actionURL)
     {
         $this->config->group->priv->search['actionURL'] = $actionURL;
@@ -1157,3 +1247,4 @@ class groupModel extends model
         $this->loadModel('search')->setSearchParams($this->config->group->priv->search);
     }
 }
+

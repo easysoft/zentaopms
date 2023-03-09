@@ -51,6 +51,9 @@ $lang->group->noGroup            = 'No group';
 $lang->group->repeat             = "『%s』『%s』exists.Please adjust it and try again.";
 $lang->group->noneProject        = 'No Project';
 $lang->group->addPriv            = 'Add Priv';
+$lang->group->editPriv 		 = 'Edit Priv';
+$lang->group->privName 		 = 'Priv Name';
+$lang->group->privDesc 		 = 'Priv Desc';
 $lang->group->add                = 'Add';
 $lang->group->batchSetDependency = 'Batch Set Dependency';
 $lang->group->managePrivPackage  = 'Manage Priv Package';
@@ -85,6 +88,7 @@ $lang->privPackage->id     = 'ID';
 $lang->privPackage->name   = 'Priv Package Name';
 $lang->privPackage->module = 'Module';
 $lang->privPackage->desc   = 'Priv Package Desc';
+$lang->privpackage->belong = 'Priv Package';
 
 $lang->group->copyOptions['copyPriv'] = 'Rechte kopieren';
 $lang->group->copyOptions['copyUser'] = 'Benutzer kopieren';

@@ -51,6 +51,9 @@ $lang->group->noGroup            = '暂时没有分组。';
 $lang->group->repeat             = "『%s』已经有『%s』这条记录了，请调整后再试。";
 $lang->group->noneProject        = '暂时没有项目';
 $lang->group->addPriv            = '新增权限';
+$lang->group->editPriv 		 = '编辑权限';
+$lang->group->privName 	         = '权限名称';
+$lang->group->privDesc 	         = '描述';
 $lang->group->add                = '添加';
 $lang->group->batchSetDependency = '批量设置依赖';
 $lang->group->managePrivPackage  = '维护权限包';
@@ -85,7 +88,7 @@ $lang->privpackage->id     = '编号';
 $lang->privpackage->name   = '权限包名称';
 $lang->privpackage->module = '所属模块';
 $lang->privpackage->desc   = '权限包说明';
-
+$lang->privpackage->belong = '所属权限包';
 $lang->group->copyOptions['copyPriv'] = '复制权限';
 $lang->group->copyOptions['copyUser'] = '复制用户';
 
