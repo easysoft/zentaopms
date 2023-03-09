@@ -22,8 +22,8 @@ class zanodemodel extends model
     const STATUS_UNKNOWN       = 'unknown';
     const STATUS_DESTROY       = 'destroy';
     const STATUS_RESTORING     = 'restoring';
-    const STATUS_CREATING_SNAP = 'Creating_snap';
-    const STATUS_CREATING_IMG  = 'Creating_img';
+    const STATUS_CREATING_SNAP = 'creating_snap';
+    const STATUS_CREATING_IMG  = 'creating_img';
     const STATUS_DESTROY_FAIL  = 'vim_destroy_fail';
 
     const KVM_CREATE_PATH = '/api/v1/kvm/create';
@@ -187,7 +187,7 @@ class zanodemodel extends model
         
         if(!empty($result) and $result->code == 'success')
         {
-            $this->dao->update(TABLE_HOST)->set('status')->eq(static::STATUS_CREATING_SNAP)->where('id')->eq($node->id)->exec();
+            $this->dao->update(TABLE_HOST)->set('status')->eq(static::STATUS_CREATING_IMG)->where('id')->eq($node->id)->exec();
             return $newID;
         }
 
@@ -428,6 +428,11 @@ class zanodemodel extends model
     public function handleNode($id, $type)
     {
         $node = $this->getNodeByID($id);
+
+        if(in_array($node->status, array('restoring', 'creating_img', 'creating_snap')))
+        {
+            return sprintf($this->lang->zanode->busy, $this->lang->zanode->statusList[$node->status]);
+        }
 
         /* Prepare create params. */
         $agnetUrl = 'http://' . $node->ip . ':' . $node->hzap;
@@ -834,6 +839,8 @@ class zanodemodel extends model
         $node = $this->dao->select('*')->from(TABLE_ZAHOST)
             ->where('mac')->eq($mac)
             ->fetch();
+
+        if(empty($node)) return $node;
 
         $host = $this->loadModel("zahost")->getByID($node->parent);
         if($node->status == 'running' || $node->status == 'ready')

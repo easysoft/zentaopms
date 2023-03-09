@@ -72,7 +72,7 @@ class hostHeartbeatEntry extends baseEntry
                 $node      = $this->loadModel('zanode')->getNodeByMac($vm->macAddress);
 
                 if(empty($node)) continue;
-                if(in_array($node->status, array('restoring', 'Creating_img', 'Creating_snap')))
+                if(in_array($node->status, array('restoring', 'creating_img', 'creating_snap')))
                     $vm->status = $node->status;
                 $vmData = array(
                     'vnc'       => $vm->vncPortOnHost,

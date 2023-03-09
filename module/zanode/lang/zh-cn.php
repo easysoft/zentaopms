@@ -72,6 +72,7 @@ $lang->automation->scriptPath = $lang->zanode->scriptPath;
 $lang->automation->node       = $lang->zanode->common;
 
 $lang->zanode->notFoundAgent  = '没有发现Agent服务';
+$lang->zanode->busy           = '节点正在%s, 请等待操作完成';
 $lang->zanode->createVmFail   = '创建执行节点失败';
 $lang->zanode->noVncPort      = '无法获取执行节点端口';
 $lang->zanode->nameValid      = "名称只能是字母、数字，'-'，'_'，'.'，且不能以符号开头";
@@ -134,8 +135,8 @@ $lang->zanode->statusList['destroy_fail']  = '销毁失败';
 $lang->zanode->statusList['wait']          = '初始化中';
 $lang->zanode->statusList['online']        = '已上架';
 $lang->zanode->statusList['restoring']     = '还原中';
-$lang->zanode->statusList['Creating_snap'] = '创建快照中';
-$lang->zanode->statusList['Creating_img']  = '导出镜像中';
+$lang->zanode->statusList['creating_snap'] = '创建快照中';
+$lang->zanode->statusList['creating_img']  = '导出镜像中';
 
 $lang->zanode->initNotice = "保存成功，请初始化执行节点或返回列表。";
 $lang->zanode->initButton = "去初始化";

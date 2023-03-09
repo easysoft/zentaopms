@@ -192,13 +192,13 @@ $account = strpos($zanode->osName, "windows") ? $config->zanode->defaultWinAccou
           $resumeAttr .= $zanode->status == 'running' ? ' class="btn disabled"' : "class='btn' target='hiddenwin' onclick='if(confirm(\"{$lang->zanode->confirmResume}\")==false) return false;'";
 
           $rebootAttr  = "title='{$lang->zanode->reboot}' target='hiddenwin'";
-          $rebootAttr .= $zanode->status == 'shutoff' || $zanode->status == 'wait' ? ' class="btn disabled"' : "class='btn' target='hiddenwin' onclick='if(confirm(\"{$lang->zanode->confirmReboot}\")==false) return false;'";
+          $rebootAttr .= in_array($zanode->status, array('wait', 'creating_img', 'creating_snap', 'restoring', 'shutoff')) ? ' class="btn disabled"' : "class='btn' target='hiddenwin' onclick='if(confirm(\"{$lang->zanode->confirmReboot}\")==false) return false;'";
 
           $closeAttr = "title='{$lang->zanode->shutdown}'";
-          $closeAttr .= $zanode->status == 'wait' ? ' class="btn disabled"' : ' class="btn iframe"';
+          $closeAttr .= in_array($zanode->status, array('wait', 'creating_img', 'creating_snap', 'restoring')) ? ' class="btn disabled"' : ' class="btn iframe"';
 
           $startAttr = "title='{$lang->zanode->boot}'";
-          $startAttr .= $zanode->status == 'wait' ? ' class="btn disabled"' : ' class="btn iframe"';
+          $startAttr .= in_array($zanode->status, array('wait', 'creating_img', 'creating_snap', 'restoring')) ? ' class="btn disabled"' : ' class="btn iframe"';
 
           $snapshotAttr = "title='{$lang->zanode->createSnapshot}'";
           $snapshotAttr .= $zanode->status != 'running' ? ' class="btn disabled"' : ' class="btn iframe"';
