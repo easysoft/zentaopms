@@ -34,5 +34,5 @@ $config->group->priv->search['params']['view']           = array('operator' => '
 $config->group->priv->search['params']['module']         = array('operator' => '=',       'control' => 'select',  'values' => '');
 $config->group->priv->search['params']['package']        = array('operator' => '=',       'control' => 'select',  'values' => '');
 $config->group->priv->search['params']['recommendPrivs'] = array('operator' => 'include', 'control' => 'select',  'values' => '');
-$config->group->priv->search['params']['dependPrivs'] = array('operator' => 'include', 'control' => 'select',  'values' => '');
+$config->group->priv->search['params']['dependPrivs']    = array('operator' => 'include', 'control' => 'select',  'values' => '');
 $config->group->priv->search['params']['desc']           = array('operator' => 'include', 'control' => 'input',   'values' => '');
