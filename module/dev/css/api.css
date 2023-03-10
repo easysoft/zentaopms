@@ -1,0 +1,3 @@
+#sidebar .module-tree, #mainContent .module-content {overflow-y: auto;}
+#mainContent .module-col {padding: 0;}
+#mainContent .module-content {padding: 10px; padding-right: 0; margin-right: 0;}
