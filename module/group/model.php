@@ -882,7 +882,7 @@ class groupModel extends model
             $modules = $this->setting->getItem("owner=system&module=priv&key={$view}Modules");
         }
         $modules = trim($modules, ',');
-        return $this->dao->select("id,name,INSTR('$modules', `module`) as moduleOrder")->from(TABLE_PRIVPACKAGE)->where('module')->in($modules)->orderBy('moduleOrder_asc,order_asc')->fetchPairs();
+        return $this->dao->select('id,name')->from(TABLE_PRIVPACKAGE)->where('module')->in($modules)->orderBy('order_asc')->fetchPairs();
     }
 
     /**
