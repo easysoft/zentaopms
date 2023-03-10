@@ -16,6 +16,11 @@
             {
                 if($(form).hasClass('no-stash')) return;
                 if($(form).attr('target') == 'hiddenwin' && config.currentModule.indexOf('program') != -1  && config.currentModule.indexOf('project') != -1) return;
+                function storeFormArr()
+                {
+                    $.zui.store.set(formDataID, $(form).serializeArray());
+                    var arr = $(form).serializeArray();
+                }
                 var formDataID     = config.currentMethod + '-' + config.currentModule + '-' + $(form).attr("id");
                 var formDataStored = $.zui.store.get(formDataID);
                 if(formDataStored && formDataStored.length)
@@ -101,10 +106,8 @@
                                             KindEditor.remove('#' + item.name);
                                             formItem.val(item.value);
                                             $(formItem).kindeditor({
-                                                afterChange: function()
-                                                {
-                                                    /* Conetnt change event. */
-                                                }
+                                                /* Conetnt change event. */
+                                                afterChange: storeFormArr()
                                             });
                                         }
                                     }
@@ -118,11 +121,11 @@
                     }).show();
                 }
                 form.on('input', function()
-                {
-                     $.zui.store.set(formDataID, $(form).serializeArray());
+                {    
+                    storeFormArr()
                 }).on('change', function()
                 {
-                    $.zui.store.set(formDataID, $(form).serializeArray());
+                    storeFormArr()
                 }).on('success.form.zui', function(event, res)
                 {
                     if(res.result === 'success' || res.status === 'success') $.zui.store.remove(formDataID);
