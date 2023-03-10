@@ -14,7 +14,7 @@
 <?php include $app->getModuleRoot() . 'common/view/header.lite.html.php';?>
 <?php
 $browser = helper::getBrowser();
-if($browser['name'] != 'ie')
+if($browser['name'] == 'ie')
 {
     include 'ieedit.html.php';
     die();
