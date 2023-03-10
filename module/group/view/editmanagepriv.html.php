@@ -26,25 +26,24 @@
     </div>
     <a href="#" class="btn btn-primary"><?php echo $lang->group->addPriv?></a>
     <?php if(common::hasPriv('group', 'managePrivPackage')) echo html::a($this->createLink('group', 'managePrivPackage', ''), $lang->group->managePrivPackage, '', 'class="btn btn-primary"');?>
-    <a href="#" class="btn btn-primary"><?php echo $lang->group->batchSetDependency?></a>
+    <?php if(common::hasPriv('group', 'addRelation')):?>
+    <a href="#" class="btn btn-primary iframe" disabled id='batchSetDepend'><?php echo $lang->group->batchSetDependency?></a>
+    <a href="#" class="btn btn-primary iframe" disabled id='batchSetRecommend'><?php echo $lang->group->batchSetRecommendation?></a>
+    <?php endif;?>
   </div>
 </div>
 <div class="cell<?php if($browseType == 'bysearch') echo ' show';?>" id="queryBox" data-module="priv"></div>
 <div id='mainContent'>
   <div class="main main-content">
-  <?php
-  if($browseType == 'bycard')
-  {
-      include 'editmanageprivbycard.html.php';
-  }
-  else
-  {
-      include 'editmanageprivbylist.html.php';
-  }?>
+  <?php if($browseType == 'bycard'):?>
+    <?php include 'editmanageprivbycard.html.php';?>
   </div>
   <div class="side">
     <div class="priv-panel">
-      <div class="panel-title">依赖的权限</div>
+      <div class="panel-title">
+        <?php echo $lang->group->dependentPrivs?>
+        <span class='priv-count'></span>
+      </div>
       <div class="panel-content">
         <div class="menuTree depend menu-active-primary menu-hover-primary"></div>
         <div class="empty-tip flex-center">
@@ -52,11 +51,14 @@
         </div>
       </div>
       <div class="panel-bottom">
-        <?php echo html::a($this->inLink('addDependent'), $lang->group->add, '', "class='btn btn-primary'");?>
+        <?php echo html::a('#', '<i class="icon icon-plus"></i>' . $lang->group->add, '', "class='btn btn-primary iframe' id='addDependent'");?>
       </div>
     </div>
     <div class="priv-panel mt-m">
-      <div class="panel-title">推荐的权限</div>
+      <div class="panel-title">
+        <?php echo $lang->group->recommendPrivs?>
+        <span class='priv-count'></span>
+      </div>
       <div class="panel-content">
         <div class="menuTree recommend menu-active-primary menu-hover-primary"></div>
         <div class="empty-tip flex-center">
@@ -64,10 +66,14 @@
         </div>
       </div>
       <div class="panel-bottom">
-        <?php echo html::a(inlink('addRecommendation', 'privID=1'), '<i class="icon icon-plus"></i>' . $lang->group->add, '', "class='btn btn-primary iframe'");?>
+        <?php echo html::a('#', '<i class="icon icon-plus"></i>' . $lang->group->add, '', "class='btn btn-primary iframe' id='addRecommendation'");?>
       </div>
     </div>
   </div>
+  <?php else:?>
+  <?php include 'editmanageprivbylist.html.php';?>
+  </div>
+  <?php endif;?>
 </div>
 <?php include '../../common/view/footer.html.php';?>
 

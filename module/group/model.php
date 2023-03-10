@@ -1214,13 +1214,16 @@ class groupModel extends model
      */
     public function getPrivRelation($priv, $type = '', $module = '')
     {
-        return $this->dao->select('t1.type,t2.*,t3.name')->from(TABLE_PRIVRELATION)->alias('t1')
+        $relations = $this->dao->select('t1.type,t2.*,t3.name')->from(TABLE_PRIVRELATION)->alias('t1')
             ->leftJoin(TABLE_PRIV)->alias('t2')->on('t1.relationPriv=t2.id')
             ->leftJoin(TABLE_PRIVLANG)->alias('t3')->on('t2.id=t3.priv')
             ->where('t1.priv')->in($priv)
             ->beginIF(!empty($type))->andWhere('t1.type')->eq($type)->fi()
             ->beginIF($module)->andWhere('t2.module')->eq($module)->fi()
-            ->fetchAll('id');
+            ->fetchGroup('type', 'id');
+
+        if(!empty($type)) return zget($relations, $type, array());
+        return $relations;
     }
 
     /**
@@ -1347,7 +1350,7 @@ class groupModel extends model
         if(empty($views)) return array();
         $views = explode(',', $views);
 
-	$tree = [];
+        $tree = [];
         foreach($views as $viewIndex => $view)
         {
             $viewModules = $this->setting->getItem("owner=system&module=priv&key={$view}Modules");
@@ -1355,14 +1358,14 @@ class groupModel extends model
 
             $viewModules = explode(',', $viewModules);
             foreach($viewModules as $moduleIndex => $module)
-	    {
+            {
                 $this->app->loadLang($module);
 
-		$tree[$module] = $this->lang->{$module}->common;;
+                $tree[$module] = $this->lang->{$module}->common;;
                 $packages = $this->getPrivPackagesByModule($module);
                 foreach($packages as $packageID => $package)
-		{
-		    $tree[$module. ',' . $packageID] = $this->lang->{$module}->common .'/'. $package->name;
+                {
+                    $tree[$module. ',' . $packageID] = $this->lang->{$module}->common .'/'. $package->name;
                 }
             }
         }
@@ -1440,7 +1443,7 @@ class groupModel extends model
         $views = explode(',', $views);
         foreach($views as $index => $view)
         {
-            $views[$view] = $this->lang->{$view}->common;
+            $views[$view] = isset($this->lang->{$view}->common) ? $this->lang->{$view}->common : $view;
             unset($views[$index]);
         }
 

@@ -1,6 +1,6 @@
 <?php
 /**
- * The addrecommendation view file of group module of ZenTaoPMS.
+ * The addrelation view file of group module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
  * @license     ZPL (http://zpl.pub/page/zplv12.html)
@@ -11,13 +11,9 @@
  */
 ?>
 <?php include '../../common/view/header.lite.html.php';?>
-<style>
-.tree .relationBox li{float:left; width: 150px;}
-#dataform {min-height:240px;}
-</style>
 <div id='mainContent' class='main-content'>
   <div class='main-header'>
-    <h2><?php echo $lang->group->addRecommendation;?></h2>
+    <h2><?php echo $type == 'depend' ? $lang->group->addDependent : $lang->group->addRecommendation;?></h2>
   </div>
   <div class='main-row'>
     <div class="main-col">
@@ -43,8 +39,7 @@
               <?php echo html::a('#', $modules[$privModule]);?>
               <ul class='relationBox'>
                 <?php foreach($modulePrivs[$privModule] as $id => $modulePriv):?>
-                <?php if(in_array($id, $privIdList)) continue;?>
-                <li><?php echo html::checkbox("relation[{$priv->module}]", array($id => $modulePriv->name), (empty($recommends) or isset($recommends[$id])) ? $id : '')?></li>
+                <li><?php echo html::checkbox("relation[{$privModule}]", array($id => $modulePriv->name), (empty($relations) or isset($relations[$id])) ? $id : '')?></li>
                 <?php endforeach;?>
               </ul>
             </li>
@@ -57,19 +52,5 @@
   </div>
 </div>
 <?php js::set('privIdList', implode(',', array_keys($privs)));?>
-<script>
-$(function()
-{
-    $('ul.tree:first > li').addClass('open').addClass('id');
-    $('#module').change(function()
-    {
-        if($(this).val() == '') return;
-        $('.treeBox').load(createLink('group', 'ajaxGetPrivTree', 'privIdList=' + privIdList + '&module=' + $(this).val()), function()
-        {
-            $('ul.tree').tree();
-            $('ul.tree:first > li').addClass('open').addClass('id');
-        });
-    })
-})
-</script>
+<?php js::set('type', $type);?>
 <?php include '../../common/view/footer.lite.html.php';?>

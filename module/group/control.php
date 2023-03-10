@@ -561,14 +561,18 @@ class group extends control
      * Add recommendation.
      *
      * @param  string    $privIdList
+     * @param  string    $type     depend|recommend
      * @access public
      * @return void
      */
-    public function addRecommendation($privIdList)
+    public function addRelation($privIdList, $type)
     {
+        if(strpos("depend|recommend", $type) === false) return print('Error type');
+
         if($_POST)
         {
-            $this->group->saveRelation($privIdList, 'recommend');
+            $this->group->saveRelation($privIdList, $type);
+            if(strpos($privIdList, ',') === false) print(js::execute("if(typeof(parent.parent.getSideRelation) == 'function') parent.parent.getSideRelation({$privIdList})"));
             return print(js::reload('parent'));
         }
 
@@ -579,8 +583,23 @@ class group extends control
         $this->view->privs       = $privs;
         $this->view->modules     = array('' => $this->lang->group->selectModule) + $this->group->getMenuModules(null, true);
         $this->view->modulePrivs = $this->group->getPrivByModule($modules);
-        $this->view->recommends  = $this->group->getPrivRelation($privIdList, 'recommend');
+        $this->view->relations   = $this->group->getPrivRelation($privIdList, $type);
+        $this->view->type        = $type;
         $this->display();
+    }
+
+    /**
+     * Delete relation.
+     *
+     * @param  string $type
+     * @param  int    $privID
+     * @param  int    $relationPriv
+     * @access public
+     * @return void
+     */
+    public function deleteRelation($type, $privID, $relationPriv)
+    {
+        $this->dao->delete()->from(TABLE_PRIVRELATION)->where('type')->eq($type)->andWhere('priv')->eq($privID)->andWhere('relationPriv')->eq($relationPriv)->exec();
     }
 
     /**
@@ -588,25 +607,25 @@ class group extends control
      *
      * @param  string $privIdList
      * @param  string $module
+     * @param  string $type     recommend|depend
      * @access public
      * @return void
      */
-    public function ajaxGetPrivTree($privIdList, $module)
+    public function ajaxGetPrivTree($privIdList, $module, $type = 'recommend')
     {
         if(is_string($privIdList)) $privIdList = explode(',', $privIdList);
 
         $modules     = $this->group->getMenuModules(null, true);
         $modulePrivs = $this->group->getPrivByModule($module);
-        $recommends  = $this->group->getPrivRelation($privIdList, 'recommend', $module);
+        $relations   = $this->group->getPrivRelation($privIdList, $type, $module);
 
         $tree  = "<ul class='tree' data-ride='tree'><li>";
         $tree .= html::a('#', $modules[$module]);
         $tree .= "<ul class='relationBox'>";
         foreach($modulePrivs[$module] as $id => $modulePriv)
         {
-            if(in_array($id, $privIdList)) continue;
             $tree .= '<li>';
-            $tree .= html::checkbox("relation[$module]", array($id => $modulePriv->name), (empty($recommends) or isset($recommends[$id])) ? $id : '');
+            $tree .= html::checkbox("relation[$module]", array($id => $modulePriv->name), (empty($relations) or isset($relations[$id])) ? $id : '');
             $tree .= '</li>';
         }
         $tree .= '</ul></li></ul>';
@@ -658,73 +677,60 @@ class group extends control
      **/
     public function editPriv($privID)
     {
-	$privID = intval($privID);
-	$currentLang = $this->app->clientLang ? : 'zh-cn';
-	$priv = $this->group->getPrivInfo($privID,$currentLang);
+        $privID = intval($privID);
+        $currentLang = $this->app->clientLang ? : 'zh-cn';
+        $priv = $this->group->getPrivInfo($privID,$currentLang);
 
-	if(!empty($_POST))
-	{
-	    $responseResult = "success";
-	    $responseMeessage = $this->lang->saveSuccess;
-	    $locate = "parent";
-	    $this->group->updatePrivLang($privID,$currentLang);
-	    if(dao::isError())
-	    {
-	    	$responseResult = "fail";
-		$responseMessage = dao::getError();
-		$locate = "";
-	    }
-	    $this->send(array('result'=>$responseResult,'message'=>$responseMessage,'locate'=>$locate));
-	}
+        if(!empty($_POST))
+        {
+            $responseResult = "success";
+            $responseMeessage = $this->lang->saveSuccess;
+            $locate = "parent";
+            $this->group->updatePrivLang($privID,$currentLang);
+            if(dao::isError())
+            {
+                $responseResult = "fail";
+                $responseMessage = dao::getError();
+                $locate = "";
+            }
+            $this->send(array('result'=>$responseResult,'message'=>$responseMessage,'locate'=>$locate));
+        }
 
-	$this->view->modulePackage =  $this->group->getModuleAndPackageTree();
+        $this->view->modulePackage =  $this->group->getModuleAndPackageTree();
 
         if($priv)
-	{
-	  $this->view->priv = $priv;
-	  $this->display();
-	}
-    }
-
-    /**
-     * Add dependent privs.
-     *
-     * @access public
-     * @return void
-     */
-    public function addDependent()
-    {
-        $this->display();
+        {
+            $this->view->priv = $priv;
+            $this->display();
+        }
     }
 
     /**
      * AJAX: Get priv's related priv list.
      *
      * @param  int    $privID
-     * @param  string $type
      * @access public
      * @return bool
      */
-    public function ajaxGetPrivRelations($privID, $type = 'depend')
+    public function ajaxGetPrivRelations($privID)
     {
-        $moduleLang   = $this->group->getMenuModules('', true);
         $relatedPrivs = $this->group->getPrivRelation($privID);
-
         if(empty($relatedPrivs)) return print('');
 
-        $privList = array();
-        foreach($relatedPrivs as $relatedPrivID => $relatedPriv)
+        $moduleLang = $this->group->getMenuModules('', true);
+        $privList   = array('depend' => array(), 'recommend' => array());
+        foreach($relatedPrivs as $type => $relations)
         {
-            if(!isset($privList[$relatedPriv->type])) $privList[$relatedPriv->type] = array();
-            if(!isset($privList[$relatedPriv->type][$relatedPriv->module])) $privList[$relatedPriv->type][$relatedPriv->module] = array();
-            $privList[$relatedPriv->type][$relatedPriv->module]['title']      = zget($moduleLang, $relatedPriv->module, $relatedPriv->module);
-            $privList[$relatedPriv->type][$relatedPriv->module]['module']     = $relatedPriv->module;
-            $privList[$relatedPriv->type][$relatedPriv->module]['children'][] = array('title' => $relatedPriv->name);
+            foreach($relations as $relatedPriv)
+            {
+                $module = $relatedPriv->module;
+                if(!isset($privList[$type][$module])) $privList[$type][$module] = array();
+                $privList[$type][$module]['title']      = zget($moduleLang, $module, $module);
+                $privList[$type][$module]['module']     = $relatedPriv->module;
+                $privList[$type][$module]['children'][] = array('title' => $relatedPriv->name, 'relationPriv' => $relatedPriv->id, 'privID' => $privID);
+            }
+            $privList[$type] = array_values($privList[$type]);
         }
-
-        $privList['depend']    = array_values($privList['depend']);
-        $privList['recommend'] = array_values($privList['recommend']);
-
         return print(json_encode($privList));
     }
 }
