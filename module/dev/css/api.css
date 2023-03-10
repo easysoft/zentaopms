@@ -4,5 +4,6 @@
 
 /* module-tree. */
 #moduleTree.tree ul {margin-bottom: 0;}
+#moduleTree .active {background-color: #fff;}
 #menuTree > li.has-list > ul > li {padding-left: 10px;}
 #menuTree > li.has-list > ul > li.has-list {padding-left: 15px;}

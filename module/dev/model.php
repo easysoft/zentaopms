@@ -1077,31 +1077,36 @@ class devModel extends model
      * Get moduleT tree.
      *
      * @param  string $currentModule
+     * @param  string $type
      * @access public
      * @return array
      */
-    public function getModuleTree($currentModule)
+    public function getTree($currentModule, $type)
     {
-        $moduleTree = array();
-        $modules    = $this->getModules();
+        $tree = array();
+        if(!in_array($type, array('module', 'table'))) return $tree;
+
+        $objects = $type == 'module' ? $this->getModules() : $this->getTables();
         foreach($this->lang->dev->groupList as $moduleKey => $moduleName)
         {
-            if(empty($modules[$moduleKey])) continue;
+            if(empty($objects[$moduleKey])) continue;
             $module = new stdclass();
             $module->key      = $moduleKey;
             $module->title    = $moduleName;
+            $module->active   = 0;
             $module->children = array();
-            foreach($modules[$moduleKey] as $objectKey => $objectName)
+            foreach($objects[$moduleKey] as $objectKey => $objectName)
             {
                 $object = new stdclass();
-                $object->key    = $objectKey;
+                $object->key    = $objectName;
                 $object->title  = zget($this->lang->dev->tableList, $objectKey, $objectKey);
-                $object->active = $objectKey == $currentModule ? 1 : 0;
+                $object->active = $objectName == $currentModule ? 1 : 0;
+                if($object->active) $module->active = 1;
 
                 $module->children[] = $object;
             }
-            $moduleTree[] = $module;
+            $tree[] = $module;
         }
-        return $moduleTree;
+        return $tree;
     }
 }

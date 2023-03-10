@@ -28,7 +28,7 @@ class dev extends control
         $this->view->tab            = 'api';
         $this->view->selectedModule = $module;
         $this->view->apis           = $module ? $this->dev->getAPIs($module) : array();
-        $this->view->moduleTree     = $this->dev->getModuleTree($module);
+        $this->view->moduleTree     = $this->dev->getTree($module, 'module');
         $this->display();
     }
 
@@ -45,7 +45,7 @@ class dev extends control
         $this->view->position[]    = html::a(inlink('api'), $this->lang->dev->common);
         $this->view->position[]    = $this->lang->dev->db;
 
-        $this->view->tables        = $this->dev->getTables();
+        $this->view->tableTree     = $this->dev->getTree($table, 'table');
         $this->view->selectedTable = $table;
         $this->view->tab           = 'db';
         $this->view->fields        = $table ? $this->dev->getFields($table) : array();

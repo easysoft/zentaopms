@@ -16,6 +16,7 @@ function setHeight()
     var paneHeight = $(window).height() - 90;
     $('#sidebar .module-tree,#mainContent .module-content').css('height', paneHeight);
 }
+
 /**
  * Init module tree by zui.
  *
@@ -30,7 +31,6 @@ function initModule()
         initialState: 'active',
         itemCreator: function($li, item)
         {
-            console.log(item);
             $li.append('<a data-module="' + item.key + '" data-has-children="' + (item.children ? !!item.children.length : false) + '" href=# title="' + item.title + '">' + item.title + '</a>');
             if (item.active) $li.addClass('active open in');
         }
