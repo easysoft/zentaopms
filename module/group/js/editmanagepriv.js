@@ -101,6 +101,11 @@ $(function()
         e.stopPropagation();
         if($(e.target).prop('tagName') == 'LABEL')
         {
+            if($('.permission-row label.bg-primary-pale').length)
+            {
+                $('.permission-row label.bg-primary-pale').removeClass('bg-primary-pale');
+            }
+            $(e.target).addClass('bg-primary-pale');
             var selectedID = $(this).siblings('input:checkbox').data('id');
             $.get(createLink('group', 'ajaxGetPrivRelations', "privID=" + selectedID), function(data)
             {
