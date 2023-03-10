@@ -11,6 +11,8 @@
  */
 class search extends control
 {
+    public $search;
+
     /**
      * Determine whether to display the effort object.
      *
@@ -64,6 +66,7 @@ class search extends control
         $this->view->queryID      = $queryID;
         $this->view->style        = empty($style) ? 'full' : $style;
         $this->view->onMenuBar    = empty($onMenuBar) ? 'no' : $onMenuBar;
+        $this->view->formSession  = $_SESSION[$module . 'Form'];
         if($module == 'program')
         {
             $this->view->options = $this->search->setOptions($fields, $this->view->fieldParams, $this->view->queries);

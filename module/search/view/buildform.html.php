@@ -199,7 +199,7 @@ foreach($fieldParams as $fieldName => $param)
                     $selected = $formSession["value$fieldNO"];
                     if(!isset($param['values'][$selected])) $config->moreLinks["value$fieldNO"] = $config->moreLinks["field{$currentField}"];
                 }
-                if($param['control'] == 'select') echo html::select("value$fieldNO", $param['values'], $formSession["value$fieldNO"], "class='form-control searchSelect chosen'");
+                if($param['control'] == 'select') echo html::select("value$fieldNO", $param['values'], isset($formSession["value$fieldNO"]) ? $formSession["value$fieldNO"] : '', "class='form-control searchSelect chosen'");
 
                 if($param['control'] == 'input')
                 {

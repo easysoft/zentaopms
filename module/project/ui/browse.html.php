@@ -1,22 +1,6 @@
 <?php
 namespace zin;
 
-\commonModel::setMainMenu();
-$navItems = array();
-foreach (\customModel::getMainMenu() as $menuItem)
-{
-    $navItems[] = array(
-        'text'   => $menuItem->text,
-        'url'    => \commonModel::createMenuLink($menuItem, $app->tab),
-        'active' => $menuItem->order === 1,
-    );
-}
-
-/* Generate dropdown menus. */
-$userMenu         = \commonModel::printUserBarZin();
-$globalCreateMenu = \commonModel::printCreateListZin();
-$switcherMenu     = \commonModel::printVisionSwitcherZin();
-
 \common::sortFeatureMenu();
 $statuses = array();
 foreach ($lang->project->featureBar['browse'] as $key => $text)
@@ -53,7 +37,7 @@ $others[] = array(
     'type'  => 'button',
     'icon'  => 'search',
     'text'  => $lang->search->common,
-    'class' => 'ghost'
+    'class' => ($browseType == 'bysearch' ? 'active' : 'ghost')
 );
 
 $btnGroup = array();
@@ -70,89 +54,129 @@ $btnGroup[] = array(
     'url'   => createLink('project', 'create')
 );
 
-/* Search Form options. */
-$searchOptions = <<<OPTIONS
-{
-    "formConfig": { "actions": "11", "method": "post" },
-    "fields": [
-        { "label": "项目集名称", "name": "name", "control": "input", "operator": "include", "defaultValue": "1111", "placeholder": "请填写" },
-        { "label": "状态", "name": "status", "control": "select", "operator": "!=", "defaultValue": "wait",
-            "values": {
-                "": "",
-                "wait": "未开始",
-                "doing": "进行中",
-                "suspended": "已挂起",
-                "closed": "已关闭"
-            }
-        },
-        { "label": "项目集描述", "name": "desc", "control": "input", "defaultValue": "11", "placeholder": "请填写1" },
-        { "label": "负责人", "name": "PM", "control": "select", "defaultValue": "", "placeholder": "请填写2" },
-        { "label": "创建日期", "name": "openedDate", "control": "date", "defaultValue": "" },
-        { "label": "计划开始", "name": "begin", "control": "date", "defaultValue": "" },
-        { "label": "计划完成", "name": "end", "control": "date", "defaultValue": "" },
-        { "label": "由谁创建", "name": "openedBy", "control": "select", "defaultValue": "" },
-        { "label": "最后编辑日期", "name": "lastEditedDate", "control": "date", "defaultValue": "" },
-        { "label": "实际开始", "name": "realBegan", "control": "date", "defaultValue": "" },
-        { "label": "实际完成日期", "name": "realEnd", "control": "date", "defaultValue": "" },
-        { "label": "关闭日期", "name": "closedDate", "control": "date", "defaultValue": "" }
-    ],
-    "operators": [
-        { "value": "=", "title": "=" },
-        { "value": "!=", "title": "!=" },
-        { "value": ">", "title": ">" },
-        { "value": ">=", "title": ">=" },
-        { "value": "<", "title": "<" },
-        { "value": "<=", "title": "<=" },
-        { "value": "include", "title": "包含" },
-        { "value": "between", "title": "介于" },
-        { "value": "notinclude", "title": "不包含" },
-        { "value": "belong", "title": "从属于" }
-    ],
-    "savedQuery": [
-        { "id": "1", "title": "条件11", "account": "11",
-            "content": [
-                { "fields": "status", "control": "select", "condition": "=", "value": "doing" },
-                { "fields": "openedDate", "control": "date", "condition": "=", "value": "2022-11-15" },
-                { "fields": "openedBy", "control": "input", "condition": "=", "value": "" },
-                { "fields": "PM", "control": "select", "condition": "!=", "value": "" },
-                { "fields": "openedDate", "control": "date", "condition": "include", "value": "" },
-                { "fields": "begin", "control": "date", "condition": "=", "value": "" }
-            ]
-        }
-    ],
-    "andOr": [
-        { "value": "and", "title": "并且" },
-        { "value": "or", "title": "或者" }
-    ],
-    "groupName": [
-        "第一组",
-        "第二组"
-    ],
-    "savedQueryTitle": "已保存的查询条件",
-    "saveSearch": {
-        "text": "保存搜索条件",
-        "config": {
-            "data-toggle": "modal",
-            "href": "#saveModal",
-            "data-url": "/index.php?m=search&f=saveQuery&module=task&onMenuBar=yes"
-        }
-    }
-}
-OPTIONS;
-$options = json_decode($searchOptions);
+$buildFormUrl = createLink('search', 'buildForm', 'module=project');
+$formAction   = createLink('search', 'buildQuery');
+$jsSearch     = <<<JSSEARCH
+var browseType = '{$browseType}';
 
-$jsSearch = <<<JSSEARCH
+window.addEventListener('DOMContentLoaded', (event) => {
+
     var el = document.getElementById('bysearchTab');
     if( el ) {
         el.addEventListener('click', function(event){
+            var btnSearch      = this;
+            btnSearch.disabled = true;
+
             var searchPanel = document.getElementById('searchPanel');
             if(!searchPanel) return;
             searchPanel.classList.toggle('hidden');
+
+            axios.get('{$buildFormUrl}')
+                .then(function(response) {
+                    if(response.data.status != 'success')
+                    {
+                        console.error(response.data);
+                        return;
+                    }
+
+                    /* Search fields. */
+                    var data = {};
+                    try {
+                        data = JSON.parse(response.data.data);
+                    } catch(e) {
+                        console.log(e);
+                    }
+                    var fields = [];
+                    for( var fieldName in data.searchFields ) {
+                        var params = data.fieldParams[fieldName];
+                        var field  = new Object();
+
+                        field.label        = data.searchFields[fieldName];
+                        field.name         = fieldName;
+                        field.control      = params ? ((params.class === 'date') ? 'date' : params.control) : '';
+                        field.operator     = params ? params.operator : '';
+                        field.values       = params ? params.values : '';
+                        field.defaultValue = '';
+                        field.placeholder  = '';
+
+                        fields.push(field);
+                    };
+
+                    zui.create('searchForm', "[id='queryForm']", {
+                        "formConfig": { "action": "", "method": "post" },
+                        "fields": fields,
+                        "operators": [
+                            { "value": "=", "title": "=" },
+                            { "value": "!=", "title": "!=" },
+                            { "value": ">", "title": ">" },
+                            { "value": ">=", "title": ">=" },
+                            { "value": "<", "title": "<" },
+                            { "value": "<=", "title": "<=" },
+                            { "value": "include", "title": "包含" },
+                            { "value": "between", "title": "介于" },
+                            { "value": "notinclude", "title": "不包含" },
+                            { "value": "belong", "title": "从属于" }
+                        ],
+                        "savedQuery": [
+                            { "id": "1", "title": "条件11", "account": "11",
+                                "content": [
+                                    { "fields": "status", "control": "select", "condition": "=", "value": "doing" },
+                                    { "fields": "openedDate", "control": "date", "condition": "=", "value": "2022-11-15" },
+                                    { "fields": "openedBy", "control": "input", "condition": "=", "value": "" },
+                                    { "fields": "PM", "control": "select", "condition": "!=", "value": "" },
+                                    { "fields": "openedDate", "control": "date", "condition": "include", "value": "" },
+                                    { "fields": "begin", "control": "date", "condition": "=", "value": "" }
+                                ]
+                            }
+                        ],
+                        "andOr": [
+                            { "value": "and", "title": "并且" },
+                            { "value": "or", "title": "或者" }
+                        ],
+                        "groupName": [
+                            "第一组",
+                            "第二组"
+                        ],
+                        "savedQueryTitle": "已保存的查询条件",
+                        "saveSearch": {
+                            "text": "保存搜索条件",
+                            "config": {
+                                "data-toggle": "modal",
+                                "href": "#saveModal",
+                                "data-url": "/index.php?m=search&f=saveQuery&module=task&onMenuBar=yes"
+                            }
+                        },
+                        "submitForm": (e) => {
+                            const formData = new FormData(e.target.closest('form'));
+                            formData.set('actionURL', data.actionURL);
+                            formData.set('module', data.module);
+                            formData.set('groupItems', data.groupItems);
+                            formData.set('formType', 'lite');
+
+                            axios.post('{$formAction}', formData)
+                                .then(function(response){
+                                    window.location.replace(data.actionURL);
+                                })
+                                .catch(function(error){console.error(error);});
+                        },
+                        "formSession": data.formSession
+                    });
+                })
+                .catch(function(error){
+                    console.error(error);
+                })
+                .finally(function(){
+                    btnSearch.disabled = false;
+                });
         });
+
+        if( browseType == 'bysearch')
+        {
+            el.dispatchEvent(new Event('click'));
+        }
     }
 
     var involved = document.getElementsByName('involved');
-    console.log(involved);
     if( involved ) {
         involved.forEach(function(invItem){
             invItem.addEventListener('click', function(event){
@@ -161,30 +185,8 @@ $jsSearch = <<<JSSEARCH
         });
     }
 
-    zui.create(
-        "AjaxForm",
-        "#saveForm",
-        {
-            "js-render":true,
-            "rules":
-            {
-                "title":
-                {
-                    "required":true,
-                    "errMsg":"请输入保存条件名"
-                },
-                "onLoad": function(e) {
-                    console.log(">>>", e);
-                },
-                "onError": function(e) {
-                    console.log('onError>>>', e);
-                },
-                headers: {
-                    'Content-type': 'application/json; charset=UTF-8'
-                }
-            }
-        }
-    );
+});
+
 JSSEARCH;
 
 $setting = $this->datatable->getSetting('project');
@@ -249,113 +251,81 @@ foreach($setting as $value)
 $data = array();
 foreach($projectStats as $project)
 {
-    /* TODO statistic */
     $item     = new \stdClass();
     foreach($setting as $value) $this->project->printCellZin($value, $project, $users, $item, $programID);
 
     $data[] = $item;
 }
 
-page
+set('ajax', true);
+h::js($jsSearch);
+
+header();
+
+pagemain
 (
-    pageheader
+    mainmenu
     (
-        pageheading
-        (
-            set('text', $lang->{$app->tab}->common),
-            set('icon', $app->tab),
-            set('url', \helper::createLink($app->tab, 'browse'))
-        ),
-        pagenavbar
-        (
-            setId('navbar'),
-            set('items', $navItems)
-        ),
-        pagetoolbar
-        (
-            set('create',   array('href' => '#globalCreateMenu')),
-            set('switcher', array('href' => '#switcherMenu', 'text' => '研发管理界面')),
-            block('avatar', avatar(set('name', $app->user->account), set('avatar', $app->user->avatar), set('trigger', '#userMenu')))
-        )
+        set('statuses', $statuses),
+        set('others', $others),
+        set('btnGroup', $btnGroup)
     ),
-    pagemain
+    panel
     (
-        mainmenu
-        (
-            set('statuses', $statuses),
-            set('others', $others),
-            set('btnGroup', $btnGroup)
-        ),
-        panel
-        (
-            setId('searchPanel'),
-            setClass('mb-3'),
-            to('body', searchform(set($options)))
-        ),
-        dtable
-        (
-            set('cols', $cols),
-            set('width', '100%'),
-            set('data', $data)
-        )
+        setId('searchPanel'),
+        setClass('mb-3 hidden'),
+        to('body', div(setId('queryForm')))
     ),
-    dropdown
+    dtable
     (
-        setId('userMenu'),
-        set('items', $userMenu)
-    ),
-    dropdown
+        set('cols', $cols),
+        set('width', '100%'),
+        set('data', $data)
+    )
+);
+
+modal
+(
+    setId('saveModal'),
+    set('type', 'none'),
+    form
     (
-        setId('globalCreateMenu'),
-        set('items', $globalCreateMenu)
-    ),
-    dropdown
-    (
-        setId('switcherMenu'),
-        set('items', $switcherMenu)
-    ),
-    modal
-    (
-        setId('saveModal'),
-        set('type', 'none'),
-        form
+        setId('saveForm'),
+        setClass('validation form-group'),
+        set('action', \helper::createLink('search', 'saveQuery', 'product')),
+        set('method', 'POST'),
+        div
         (
-            setId('saveForm'),
-            setClass('validation form-group'),
-            set('action', \helper::createLink('search', 'saveQuery', 'product')),
-            set('method', 'POST'),
-            div
+            setClass('flex flex-row justify-between'),
+            input
             (
-                setClass('flex flex-row justify-between'),
-                input
-                (
-                    setId('title'),
-                    set('name', 'title'),
-                    setClass('form-control w-5/12'),
-                    set('type', 'text'),
-                    set('placeholder', '请输入保存条件名称')
-                ),
-                checkbox
-                (
-                    setId('common'),
-                    set('name', 'common'),
-                    setClass('w-3/12'),
-                    '设为公共查询条件'
-                ),
-                checkbox
-                (
-                    setId('onMenuBar'),
-                    set('name', 'onMenuBar'),
-                    setClass('w-3/12'),
-                    '显示在菜单栏'
-                ),
-                btn(
-                    setClass('w-1/12 primary'),
-                    set('data-type', 'submit'),
-                    '保存'
-                )
+                setId('title'),
+                set('name', 'title'),
+                setClass('form-control w-5/12'),
+                set('type', 'text'),
+                set('placeholder', '请输入保存条件名称')
+            ),
+            checkbox
+            (
+                setId('common'),
+                set('name', 'common'),
+                setClass('w-3/12'),
+                '设为公共查询条件'
+            ),
+            checkbox
+            (
+                setId('onMenuBar'),
+                set('name', 'onMenuBar'),
+                setClass('w-3/12'),
+                '显示在菜单栏'
+            ),
+            btn(
+                setClass('w-1/12 primary'),
+                set('data-type', 'submit'),
+                '保存'
             )
         )
-    ),
-    h::js($jsSearch)
+    )
 );
+
+render();
