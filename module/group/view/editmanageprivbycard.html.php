@@ -33,10 +33,10 @@
         <td class="flex-content sorter-group">
           <?php foreach($privs as $privID => $priv):?>
           <div class="group-item">
-            <div class="checkbox-primary">
-              <?php $action = $priv->methodName;?>
-              <?php $label  = zget($privLang, $privID, $action);?>
-              <?php echo html::checkbox("actions[$module][]", array($action => $label), '', "title='{$label}' id='actions[$module]$action' data-id='$privID'");?>
+            <?php $action = $priv->methodName;?>
+            <?php $label  = zget($privLang, $privID, $action);?>
+            <div class="checkbox-primary" <?php echo "title=" . $label ?>>
+              <?php echo html::checkbox("actions[$module][]", array($action => $label), $action, "title='{$label}' id='actions[$module]$action' data-id='$privID'");?>
             </div>
           </div>
           <?php endforeach;?>
