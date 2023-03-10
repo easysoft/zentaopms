@@ -2,7 +2,7 @@
 .flex-center {display: flex; justify-content: center; align-items: center;}
 .flex-space-center {display: flex; justify-content: space-between; align-items: center;}
 #mainContent {display: flex; gap: 16px; height: calc(100vh - 120px)}
-#mainContent > .main {flex: 1 1 75%; overflow-y: auto;}
+#mainContent > .main {flex: 1 1 75%; overflow-y: auto; min-height: 480px;}
 #mainContent > .side {flex: 1 1 25%;}
 
 .priv-panel {background: #fff; padding: 10px; box-shadow: 0 1px 1px rgb(0 0 0 / 5%), 0 2px 6px 0 rgb(0 0 0 / 5%);}
@@ -10,9 +10,9 @@
 .priv-panel > .panel-bottom {padding-top: 20px;}
 
 /* permission-table */
-/* .permission-head {padding-right: 20px;}*/
 #permissionEditForm tr {display: flex;}
 .flex-sm {flex: 1 1 15%;}
+.flex-md {flex: 1 1 30%;}
 .flex-content {flex: 1 1 70%;}
 .sorter-group {display: flex; flex-wrap: wrap;}
 .sorter-group > .group-item {flex: 0 0 25%; overflow: hidden;}

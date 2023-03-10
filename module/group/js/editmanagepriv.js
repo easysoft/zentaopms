@@ -51,9 +51,23 @@ function initDependTree(data)
 function updatePrivTree(objTree)
 {
     $(".menuTree.depend").data('zui.tree').reload(objTree.dependData || [] );
-    if(objTree.dependData && objTree.dependData.length) $(".menuTree.depend + .empty-tip").addClass('hidden');
+    if(objTree.dependData && objTree.dependData.length) 
+    {
+        $(".menuTree.depend + .empty-tip").addClass('hidden');
+    }
+    else
+    {
+        $(".menuTree.depend + .empty-tip").removeClass('hidden');
+    }
     $(".menuTree.recommend").data('zui.tree').reload(objTree.recommendData || []);
-    if(objTree.recommendData && objTree.recommendData.length) $(".menuTree.recommend + .empty-tip").addClass('hidden');
+    if(objTree.recommendData && objTree.recommendData.length)
+    {
+        $(".menuTree.recommend + .empty-tip").addClass('hidden');
+    }
+    else
+    {
+        $(".menuTree.recommend + .empty-tip").removeClass('hidden');
+    }
 };
 
 $(function()
