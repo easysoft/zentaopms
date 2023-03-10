@@ -90,8 +90,14 @@ $(function()
         'selector': '.group-item',
         finish: function(e)
         {
-            var orders = [];
-            console.log($('.sorter-group').data('zui.sortable').getItems());
+            var orders = {};
+            var arrGetItems = $('.sorter-group').data('zui.sortable').getItems();
+            for(var i = 0; i < arrGetItems.length; i++)
+            {
+                var groupItem = arrGetItems[i];
+                var privID    = $(groupItem.item).find('input').data('id');
+                orders['orders[' + privID + ']'] = groupItem.order;
+            }
             //$packageBox.find('.group-item').each(function()
             //{
             //    orders['orders[' + privID + ']'] = $(this).data('order');
