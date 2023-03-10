@@ -1484,7 +1484,6 @@ class groupModel extends model
     public function updatePrivOrder()
     {
         $data = fixer::input('post')->get();
-
-        foreach($data as $privID => $order) $this->dao->update(TABLE_PRIV)->set('order')->eq($order)->where('id')->eq($privID)->exec();
+        foreach($data->orders as $privID => $order) $this->dao->update(TABLE_PRIV)->set('order')->eq($order)->where('id')->eq($privID)->exec();
     }
 }

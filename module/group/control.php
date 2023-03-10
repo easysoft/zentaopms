@@ -740,6 +740,6 @@ class group extends control
      */
     public function ajaxUpdatePrivOrder()
     {
-        $this->group->updatePrivOrder();
+        if(!empty($_POST)) $this->group->updatePrivOrder();
     }
 }
