@@ -11,13 +11,13 @@
         if(config.currentMethod === 'login' || config.currentModule === 'repo' || config.currentMethod.indexOf('edit') != -1 || config.currentMethod.indexOf('import') != -1) return;
         setTimeout(function() 
         {
-            var form = $('.table-form').parent();
+            var form = $('form[method=post]');
             if(form.length)
             {
-                if($(form).attr('target') == 'hiddenwin' && config.currentModule != 'program') return;
+                if($(form).attr('target') == 'hiddenwin' && config.currentModule.indexOf('program') != -1  && config.currentModule.indexOf('project') != -1) return;
                 var formDataID     = config.currentMethod + '-' + config.currentModule + '-' + $(form).attr("id");
                 var formDataStored = $.zui.store.get(formDataID);
-                if(formDataStored)
+                if(formDataStored && formDataStored.length)
                 {
                     var message = lang.confirmDraft.replace('%name%', lang[config.currentModule] ? lang[config.currentModule] : '');
                     new $.zui.Messager(message, {
@@ -50,7 +50,7 @@
                                         }
                                         else if((item.name.indexOf(']') != -1) && (item.name.indexOf('[') != -1))
                                         {
-                                            var formItem = $('[id^=' + item.name.replace('[', '').replace(']', '') + ']');
+                                            var formItem = $('#' + item.name.replace('[', '').replace(']', ''));
                                         }
                                         else 
                                         {
