@@ -1150,93 +1150,70 @@ class groupModel extends model
     }
 
     /**
-     *
      * get a priv
      *
      * @param int $privID
      * @return object
-     *
      **/
     public function getPrivInfo($priv,$lang)
     {
-    	$privInfo = $this->dao->select("t1.priv,t1.name,t1.desc,t2.module,t2.package")->from(TABLE_PRIVLANG . ' t1')
-	    ->leftJoin(TABLE_PRIV . ' t2')
+    	$privInfo = $this->dao->select("t1.priv,t1.name,t1.desc,t2.module,t2.package")->from(TABLE_PRIVLANG)->alias('t1')
+	    ->leftJoin(TABLE_PRIV )->alias('t2')
 	    ->on("t1.priv = t2.id")
-	    ->where('t1.priv')
-    	    ->eq($priv)
-    	    ->andWHere('t1.lang')
-    	    ->eq($lang)
-	    ->fetch();
-	if($privInfo)
-	{
-	   $privInfo->module = $privInfo->package ? $privInfo->module . ',' . $privInfo->package : $privInfo->module;
-	}
-	return $privInfo;
+	    ->where('t1.priv')->eq($priv)
+        ->andWHere('t1.lang')->eq($lang)
+        ->fetch();
+
+	    if($privInfo) $privInfo->module = $privInfo->package ? $privInfo->module . ',' . $privInfo->package : $privInfo->module;
+        
+        return $privInfo;
     }
 	
 
     /**
+     * get prvi package tree
      *
-     * get a prvi package tree
-     *
-     * @param void
      * @return array
-     *
      **/
     public function getModuleAndPackageTree()
     {
+        $modules = $this->getMenuModules(null,true);
         
-        $this->loadModel('setting');
+        $tree = [];
 
-        $views = empty($viewName) ? $this->setting->getItem("owner=system&module=priv&key=views") : $viewName;
-        if(empty($views)) return array();
-        $views = explode(',', $views);
-	
-	$tree = [];
-        foreach($views as $viewIndex => $view)
+        foreach($modules as $module => $moduleName)
         {
-            $viewModules = $this->setting->getItem("owner=system&module=priv&key={$view}Modules");
-            if(empty($viewModules)) continue;
-
-            $viewModules = explode(',', $viewModules);
-            foreach($viewModules as $moduleIndex => $module)
-	    {
-                $this->app->loadLang($module);
-		
-		$tree[$module] = $this->lang->{$module}->common;;
-                $packages = $this->getPrivPackagesByModule($module);
-                foreach($packages as $packageID => $package)
-		{
-		    $tree[$module. ',' . $packageID] = $this->lang->{$module}->common .'/'. $package->name;
-                }
+            $tree[$module] = $moduleName;
+            $packages = $this->getPrivPackagesByModule($module);
+            foreach($packages as $packageID => $package)
+            {
+                $tree[$module . ',' . $packageID] = $moduleName . '/' . $package->name;
             }
         }
-        return $tree;
-    
+        return $tree;  
     }
     /**
-     *
-     * update a Priv Info
+     * update Priv Info
      *
      * @param void
      * @return void
-     *
      **/
-    public function updatePrivLang($privID,$lang)
+    public function updatePrivLang($privID, $lang)
     {
         $data = fixer::input('post')->remove('module')->get();
-	$this->dao->update(TABLE_PRIVLANG)->data($data)->where('priv')->eq($privID)->andWhere('lang')->eq($lang)->exec();
+	    $this->dao->update(TABLE_PRIVLANG)->data($data)->where('priv')->eq($privID)->andWhere('lang')->eq($lang)->exec();
 
-	$data = fixer::input('post')->remove('name,desc')->get();
-	if($data->module)
-	{	    	    
-	    $update = [];
-	    $module = explode(",",$data->module);
-	    $update['module'] = $module[0];
-	    $update['package'] = 0;
-	    if(count($module) > 1) $update['package'] = $module[1];
-	    $this->dao->update(TABLE_PRIV)->data($update)->where('id')->eq($privID)->exec();
-	}
+	    $data = fixer::input('post')->remove('name, desc')->get(); 
+        if($data->module)
+	    {	    	    
+	        $update = [];
+	        $module = explode(",",$data->module);
+	        $update['module'] = $module[0];
+	        $update['package'] = 0;
+            if(count($module) > 1) $update['package'] = $module[1];
+
+	        $this->dao->update(TABLE_PRIV)->data($update)->where('id')->eq($privID)->exec();
+	    }
     }
 
     public function buildPrivSearchForm($queryID, $actionURL)

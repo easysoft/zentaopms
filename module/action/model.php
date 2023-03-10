@@ -1392,7 +1392,6 @@ class actionModel extends model
             {
                 $objectName     = array();
                 $relatedProject = array();
-
                 if(strpos(",{$this->config->action->needGetProjectType},", ",{$objectType},") !== false)
                 {
                     $objectInfo = $this->dao->select("id, project, $field AS name")->from($table)->where('id')->in($objectIdList)->fetchAll();
@@ -1448,11 +1447,15 @@ class actionModel extends model
                     $objectName = $this->dao->select("id,name")->from(TABLE_BRANCH)->where('id')->in($objectIdList)->fetchPairs();
                     if(in_array(BRANCH_MAIN, $objectIdList)) $objectName[BRANCH_MAIN] = $this->lang->branch->main;
                 }
-                else
+                elseif($objectType == 'privlang')
                 {
+                    $objectName = $this->dao->select("priv AS id, $field AS name")->from($table)->where('priv')->in($objectIdList)->fetchPairs();
+                }
+                else
+                {                    
                     $objectName = $this->dao->select("id, $field AS name")->from($table)->where('id')->in($objectIdList)->fetchPairs();
                 }
-
+                
                 $objectNames[$objectType]     = $objectName;
                 $relatedProjects[$objectType] = $relatedProject;
             }

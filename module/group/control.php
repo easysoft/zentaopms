@@ -584,41 +584,44 @@ class group extends control
         }
     }
     /**
+     * edit priv
      *
-     * edit priv 
      * @param int $privID
      * @access public
      * @return void
-     *
-     *
      **/
     public function editPriv($privID)
     {
-	$privID = intval($privID);
-	$currentLang = $this->app->clientLang ? : 'zh-cn';
-	$priv = $this->group->getPrivInfo($privID,$currentLang);
-	
-	if(!empty($_POST))
-	{
-	    $responseResult = "success";
-	    $responseMeessage = $this->lang->saveSuccess;
-	    $locate = "parent";
-	    $this->group->updatePrivLang($privID,$currentLang);
-	    if(dao::isError())
+	    $privID = intval($privID);
+	    $currentLang = $this->app->clientLang ? : 'zh-cn';
+	    $priv = $this->group->getPrivInfo($privID, $currentLang);
+        
+        if(!$priv)
+        {
+            return print(js::alert($this->lang->group->noneProject));
+        }
+
+        if(!empty($_POST))
 	    {
-	    	$responseResult = "fail";
-		$responseMessage = dao::getError();
-		$locate = "";
+	        $responseResult     = "success";
+	        $responseMeessage   = $this->lang->saveSuccess;
+	        $locate             = "parent";
+	        $this->group->updatePrivLang($privID, $currentLang);
+
+            $actionID = $this->loadModel('action')->create('privlang', $privID, 'Edited');
+            
+            if(dao::isError())
+	        {
+	    	    $responseResult     = "fail";
+		        $responseMessage    = dao::getError();
+		        $locate             = "";
+            }
+
+	        $this->send(array('result' => $responseResult, 'message' => $responseMessage, 'locate' => $locate));
 	    }
-	    $this->send(array('result'=>$responseResult,'message'=>$responseMessage,'locate'=>$locate));
-	}
 
-	$this->view->modulePackage =  $this->group->getModuleAndPackageTree();
-
-        if($priv)
-	{
-	  $this->view->priv = $priv;
-	  $this->display();
-	}	
+	    $this->view->modulePackage  = $this->group->getModuleAndPackageTree();
+        $this->view->priv           = $priv;
+        $this->display();
     }
 }
