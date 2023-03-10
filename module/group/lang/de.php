@@ -86,12 +86,12 @@ $lang->group->config     = 'Config';
 $lang->group->unassigned = 'Unassigned';
 $lang->group->view       = 'View';
 
-if(!isset($lang->privPackage)) $lang->privPackage = new stdclass();
+if(!isset($lang->privpackage)) $lang->privpackage = new stdclass();
 $lang->privpackage->common = 'Priv Package';
-$lang->privPackage->id     = 'ID';
-$lang->privPackage->name   = 'Priv Package Name';
-$lang->privPackage->module = 'Module';
-$lang->privPackage->desc   = 'Priv Package Desc';
+$lang->privpackage->id     = 'ID';
+$lang->privpackage->name   = 'Priv Package Name';
+$lang->privpackage->module = 'Module';
+$lang->privpackage->desc   = 'Priv Package Desc';
 $lang->privpackage->belong = 'Priv Package';
 
 $lang->group->copyOptions['copyPriv'] = 'Rechte kopieren';
