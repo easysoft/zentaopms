@@ -166,6 +166,14 @@ $lang->dev->tableList['client']                = 'Client Version Update';
 $lang->dev->tableList['conference']            = 'Conference';
 $lang->dev->tableList['integration']           = 'Integration';
 $lang->dev->tableList['license']               = 'License';
+$lang->dev->tableList['zanode']                = 'ZAnode';
+$lang->dev->tableList['dashboard']             = 'Dashboard';
+$lang->dev->tableList['screen']                = 'Screen';
+$lang->dev->tableList['zahost']                = 'ZAhost';
+$lang->dev->tableList['approval']              = 'Approval';
+$lang->dev->tableList['approvalflow']          = 'Approval Flow';
+$lang->dev->tableList['chart']                 = 'Chart';
+$lang->dev->tableList['dataset']               = 'Dataset';
 
 $lang->dev->groupList['my']        = 'Dashboard';
 $lang->dev->groupList['program']   = 'Program';
