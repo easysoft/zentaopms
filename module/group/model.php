@@ -1305,7 +1305,7 @@ class groupModel extends model
     }
 
     /**
-     * get a priv
+     * get priv
      *
      * @param   int     $privID
      * @param   string  $lang
@@ -1327,7 +1327,7 @@ class groupModel extends model
 
 
     /**
-     * get prvi package tree
+     * get priv package tree
      *
      * @return array
      **/
@@ -1349,7 +1349,7 @@ class groupModel extends model
         return $tree;  
     }
     /**
-     * update Priv Info
+     * update priv info
      *
      * @param   void
      * @return  void
