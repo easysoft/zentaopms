@@ -1,27 +1,36 @@
-ALTER TABLE `zt_chart` ADD `stage` enum('draft','published') NOT NULL DEFAULT 'draft' AFTER `group`;
-CREATE TABLE `zt_pivot`  (
-  `id` mediumint(9) NOT NULL AUTO_INCREMENT,
-  `name` varchar(255) NOT NULL,
-  `dimension` int(8) NOT NULL DEFAULT 0,
-  `type` varchar(20) NOT NULL,
-  `group` mediumint(8) NOT NULL DEFAULT 0,
-  `stage` enum('draft','published') NOT NULL DEFAULT 'draft',
-  `dataset` varchar(30) NOT NULL,
-  `desc` text NOT NULL,
-  `settings` mediumtext NOT NULL,
-  `filters` mediumtext NOT NULL,
-  `fields` mediumtext NOT NULL,
-  `sql` text NOT NULL,
-  `builtin` tinyint(1) NOT NULL,
-  `objects` mediumtext NULL,
-  `createdBy` char(30) NOT NULL,
-  `createdDate` datetime(0) NOT NULL,
-  `editedBy` varchar(30) NOT NULL,
-  `editedDate` datetime(0) NOT NULL,
-  `deleted` tinyint(4) NOT NULL DEFAULT 0,
-  PRIMARY KEY (`id`)
-) ENGINE = MyISAM  DEFAULT CHARSET=utf8;
+ALTER TABLE `zt_chart` CHANGE `builtin` `buildin` enum('0','1') NOT NULL DEFAULT '0';
+ALTER TABLE `zt_chart` ADD `stage` enum('draft','published') NOT NULL DEFAULT 'draft' AFTER `sql`;
+ALTER TABLE `zt_chart` ADD `langs` text NOT NULL AFTER `fields`;
+ALTER TABLE `zt_chart` ADD `step` tinyint(1) unsigned NOT NULL AFTER `filters`;
+ALTER TABLE `zt_chart` DROP `dataset`;
 
 ALTER TABLE `zt_screen` ADD `status` enum('draft','published') NOT NULL DEFAULT 'draft' AFTER `scheme`;
-ALTER TABLE `zt_screen` ADD `builtin` tinyint(1) unsigned NOT NULL DEFAULT '0' AFTER `status`;
-UPDATE `zt_screen` SET builtin = '1', status = 'published';
+ALTER TABLE `zt_screen` ADD `buildin` enum('0', '1') NOT NULL DEFAULT '0' AFTER `status`;
+
+UPDATE `zt_screen` SET `buildin` = '1', `status` = 'published';
+
+CREATE TABLE `zt_pivot`  (
+  `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
+  `dimension` mediumint(8) unsigned NOT NULL DEFAULT 0,
+  `group` mediumint(8) unsigned NOT NULL DEFAULT 0,
+  `name` varchar(255) NOT NULL,
+  `desc` text NOT NULL,
+  `sql` mediumtext NOT NULL,
+  `fields` mediumtext NOT NULL,
+  `langs` mediumtext NOT NULL,
+  `vars` mediumtext NOT NULL,
+  `objects` mediumtext NULL,
+  `settings` mediumtext NOT NULL,
+  `filters` mediumtext NOT NULL,
+  `step` tinyint(1) unsigned NOT NULL,
+  `stage` enum('draft','published') NOT NULL DEFAULT 'draft',
+  `buildin` enum('0', '1') NOT NULL DEFAULT '0',
+  `createdBy` varchar(30) NOT NULL,
+  `createdDate` datetime NOT NULL,
+  `editedBy` varchar(30) NOT NULL,
+  `editedDate` datetime NOT NULL,
+  `deleted` enum('0', '1') NOT NULL DEFAULT 0,
+  PRIMARY KEY (`id`),
+  KEY(`dimension`),
+  KEY(`group`)
+) ENGINE = InnoDB DEFAULT CHARSET=utf8;
