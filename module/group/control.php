@@ -446,7 +446,7 @@ class group extends control
         $this->view->privList       = $privList;
         $this->view->packages       = $this->group->getPrivPackagesByView($view);
         $this->view->moduleLang     = $moduleLang;
-        $this->view->modulePackages = $this->group->getModuleAndPackageTree();
+        $this->view->modulePackages = $this->group->getModuleAndPackageTree('package');
 
         $this->display();
     }
@@ -660,7 +660,7 @@ class group extends control
 	    $privID      = intval($privID);
 	    $currentLang = $this->app->clientLang ? : 'zh-cn';
 	    $priv        = $this->group->getPrivInfo($privID, $currentLang);
-        
+
         if(!$priv)
         {
             return print(js::alert($this->lang->group->noneProject));
@@ -674,7 +674,7 @@ class group extends control
 	        $this->group->updatePrivLang($privID, $currentLang);
 
             $actionID = $this->loadModel('action')->create('privlang', $privID, 'Edited');
-            
+
             if(dao::isError())
 	        {
 	    	    $responseResult     = "fail";

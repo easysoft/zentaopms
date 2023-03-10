@@ -1321,32 +1321,33 @@ class groupModel extends model
         ->fetch();
 
 	    if($privInfo) $privInfo->module = $privInfo->package ? $privInfo->module . ',' . $privInfo->package : $privInfo->module;
-        
+
         return $privInfo;
     }
 
 
     /**
-     * get priv package tree
+     * Get priv package tree.
      *
+     * @param  string $type
      * @return array
      **/
-    public function getModuleAndPackageTree()
+    public function getModuleAndPackageTree($type = 'all')
     {
         $modules = $this->getMenuModules(null, true);
-        
+
         $tree = [];
 
         foreach($modules as $module => $moduleName)
         {
-            $tree[$module]  = $moduleName;
-            $packages       = $this->getPrivPackagesByModule($module);
+            if($type == 'all') $tree[$module] = $moduleName;
+            $packages = $this->getPrivPackagesByModule($module);
             foreach($packages as $packageID => $package)
             {
                 $tree[$module . ',' . $packageID] = $moduleName . '/' . $package->name;
             }
         }
-        return $tree;  
+        return $tree;
     }
     /**
      * update priv info
@@ -1359,9 +1360,9 @@ class groupModel extends model
         $data = fixer::input('post')->remove('module')->get();
 	    $this->dao->update(TABLE_PRIVLANG)->data($data)->where('priv')->eq($privID)->andWhere('lang')->eq($lang)->exec();
 
-	    $data = fixer::input('post')->remove('name, desc')->get(); 
+	    $data = fixer::input('post')->remove('name, desc')->get();
         if($data->module)
-	    {	    	    
+	    {
 	        $update = [];
 	        $module = explode(",", $data->module);
 	        $update['module'] = $module[0];
