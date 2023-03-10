@@ -62,9 +62,10 @@ $lang->privp->p2      = '推荐权限';
             $packagesPinYin = common::convert2Pinyin($modulePackages);
             foreach($modulePackages as $id => $name)
             {
-                $packageID = explode(',', $id);
-                $packageID = isset($packageID[1]) ? $packageID[1] : $packageID[0];
-                $actionLink = $this->createLink('group', 'batchChangePackage', "packageID=$packageID");
+                $id         = explode(',', $id);
+                $module     = $id[0];
+                $packageID  = isset($id[1]) ? $id[1] : 0;
+                $actionLink = $this->createLink('group', 'batchChangePackage', "module=$module&packageID=$packageID");
                 echo html::a('#', $name, '', "data-key='" . zget($packagesPinYin, $name, '') . "' title='{$name}' onclick=\"setFormAction('$actionLink', 'hiddenwin', '#privForm')\"");
             }
             ?>

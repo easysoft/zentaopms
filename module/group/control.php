@@ -455,15 +455,16 @@ class group extends control
     /**
      * Batch change package.
      *
+     * @param  string $module
      * @param  int    $packageID
      * @access public
      * @return void
      */
-    public function batchChangePackage($packageID)
+    public function batchChangePackage($module, $packageID)
     {
         if(empty($_POST['privIdList'])) return print(js::reload('parent'));
         $privIdList = array_unique($_POST['privIdList']);
-        $allChanges = $this->group->batchChangePackage($privIdList, $packageID);
+        $allChanges = $this->group->batchChangePackage($privIdList, $module, $packageID);
         if(dao::isError()) return print(js::error(dao::getError()));
 
         $this->loadModel('action');

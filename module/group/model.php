@@ -1328,19 +1328,21 @@ class groupModel extends model
      * Batch change package.
      *
      * @param  array  $privIdList
-     * @param  string $packageID
+     * @param  string $module
+     * @param  int    $packageID
      * @access public
      * @return void
      */
-    public function batchChangePackage($privIdList, $packageID)
+    public function batchChangePackage($privIdList, $module, $packageID)
     {
         $oldPrivs = $this->getPrivByIdList($privIdList);
         foreach($privIdList as $privID)
         {
             $oldPriv = $oldPrivs[$privID];
-            if($packageID == $oldPriv->package) continue;
+            if($packageID == $oldPriv->package and $module == $oldPriv->module) continue;
 
             $priv = new stdclass();
+            $priv->module  = $module;
             $priv->package = $packageID;
 
             $this->dao->update(TABLE_PRIV)->data($priv)->autoCheck()->where('id')->eq((int)$privID)->exec();
