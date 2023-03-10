@@ -17,7 +17,7 @@
     <strong><?php echo zget($lang->editor->modules, $module, isset($lang->{$module}->common) ? $lang->{$module}->common : $module);?></strong>
   </div>
 </div>
-<div class='main-content'>
+<div class='main-content extend-content'>
   <?php echo $tree?>
 </div>
 <script>

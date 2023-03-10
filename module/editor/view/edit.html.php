@@ -74,7 +74,7 @@ js::import($jsRoot . 'monaco-editor/min/vs/loader.js');
         </td>
       </tr>
       <?php endif;?>
-      <tr>
+      <tr class='footer'>
         <td class='text-center'>
           <?php echo html::submitButton()?>
           <?php if($action and $action != 'edit' and $action != 'newPage'):?>
@@ -124,8 +124,11 @@ $(function()
             automaticLayout: true,
             minimap:         {enabled: false}
         });
-        var codeHeight = top.window.innerHeight - 280;
-        if($('#fileNameBox').length == 0) codeHeight += 56;
+        var codeHeight    = parent.$('#editWin').height();
+        var headerHeight  = $('.main-header').height();
+        var footerHeight  = $('.footer').height();
+        var nameBoxHeight = $('#fileNameBox').height() ? $('#fileNameBox').height() : 0;
+        codeHeight -= headerHeight + footerHeight + nameBoxHeight;
         <?php if(!empty($showContent)):?>
         contentHeight = showContentEditor.getContentHeight();
         if(contentHeight > 300) contentHeight = 300;
@@ -134,7 +137,7 @@ $(function()
         codeHeight -= contentHeight + 30;
         if(codeHeight < 300) codeHeight = 300;
         <?php endif;?>
-        $('#fileContentEditor').height(codeHeight);
+        $('#fileContentEditor').height(codeHeight - 30);
     });
     $('#submit').click(function()
     {
