@@ -4,3 +4,4 @@
 .m-editor-edit .checkbox-primary {display:inline-block; padding-left:12px;}
 .m-editor-edit .checkbox-primary label {padding-left:12px;}
 .m-editor-edit .main-header {padding: 10px 20px;}
+.main-content textarea.form-control {min-height: 300px; height: auto;}

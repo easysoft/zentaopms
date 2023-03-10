@@ -13,6 +13,13 @@
 <?php if(empty($filePath)) die();?>
 <?php include $app->getModuleRoot() . 'common/view/header.lite.html.php';?>
 <?php
+$browser = helper::getBrowser();
+if($browser['name'] != 'ie')
+{
+    include 'ieedit.html.php';
+    die();
+}
+
 js::set('jsRoot', $jsRoot);
 js::set('clientLang', $app->clientLang);
 js::import($jsRoot . 'monaco-editor/min/vs/loader.js');
