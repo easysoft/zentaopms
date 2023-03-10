@@ -45,7 +45,7 @@ $lang->privp->p2      = '推荐权限';
         <td title='<?php echo isset($moduleLang[$priv->module]) ? $moduleLang[$priv->module] : $priv->module;?>'><?php echo isset($moduleLang[$priv->module]) ? $moduleLang[$priv->module] : $priv->module;?></td>
         <td title='<?php echo zget($packages, $priv->package, '');?>'><?php echo zget($packages, $priv->package, '');?></td>
         <td title='<?php echo zget($privRelations['recommend'], $priv->id, '');?>'><?php echo zget($privRelations['recommend'], $priv->id, '');?></td>
-        <td title='<?php echo zget($privRelations['dependent'], $priv->id, '');?>'><?php echo zget($privRelations['dependent'], $priv->id, '');?></td>
+        <td title='<?php echo zget($privRelations['depend'], $priv->id, '');?>'><?php echo zget($privRelations['depend'], $priv->id, '');?></td>
         <td title='<?php echo $priv->desc;?>'><?php echo $priv->desc;?></td>
         <td class='c-actions'><?php if(common::hasPriv('group', 'editPriv')) common::printIcon('group', 'editPriv', "privID=$priv->id", '', 'list', 'edit', '', 'iframe', true);?></td>
       </tr>
