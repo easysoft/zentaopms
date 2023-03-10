@@ -1,2 +1,3 @@
 #sidebar .modulegroup {font-weight:bold; padding-top: 8px; border-top: 1px solid #ddd;}
 #sidebar .active {background-color: #e9f2fb; color: #006af1;}
+#sidebar .cell a {white-space: nowrap;}
