@@ -54,8 +54,7 @@
                                         }
                                         else 
                                         {
-                                            /* var formItem = $('#' + item.name);*/
-                                            var formItem = $('[id^=' + item.name + ']');
+                                            var formItem = $('#' + item.name);
                                         }
 
                                         var tagName = formItem.prop('tagName');
