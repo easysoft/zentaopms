@@ -9,3 +9,9 @@ td.w-200px a:hover {font-weight:bold;}
 #mainContent .module-content {padding: 0;}
 #sidebar .module-tree {overflow-y: auto;}
 #sidebar .module-tree .panel-heading {padding: 4px 10px;}
+
+/* module-tree. */
+#moduleTree.tree ul {margin-bottom: 0;}
+#moduleTree .active {background-color: #fff;}
+#menuTree > li.has-list > ul > li {padding-left: 10px;}
+#menuTree > li.has-list > ul > li.has-list {padding-left: 15px;}

@@ -1087,7 +1087,8 @@ class devModel extends model
         if(!in_array($type, array('module', 'table'))) return $tree;
 
         $objects = $type == 'module' ? $this->getModules() : $this->getTables();
-        foreach($this->lang->dev->groupList as $moduleKey => $moduleName)
+        $groupList = array_merge($this->lang->dev->groupList, $this->lang->dev->endGroupList);
+        foreach($groupList as $moduleKey => $moduleName)
         {
             if(empty($objects[$moduleKey])) continue;
             $module = new stdclass();
