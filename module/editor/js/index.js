@@ -18,6 +18,6 @@ $(function()
 function setHeight()
 {
     var paneHeight = $(window).height() - 120;
-    $('#sidebar .moduleTree,#mainContent .module-col,#extendWin').css('height', paneHeight);
+    $('#sidebar .module-tree,#mainContent .module-col,#extendWin').css('height', paneHeight);
     $(' #mainContent .module-content, #editWin').css('height', paneHeight - 6);
 }

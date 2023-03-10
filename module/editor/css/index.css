@@ -7,5 +7,5 @@ td.w-200px a:hover {font-weight:bold;}
 .with-list a {white-space: nowrap;}
 #mainContent .module-col{padding: 0px; padding-left: 10px;}
 #mainContent .module-content {padding: 0;}
-#sidebar .moduleTree {overflow-y: auto;}
-#sidebar .moduleTree .panel-heading {padding: 4px 10px;}
+#sidebar .module-tree {overflow-y: auto;}
+#sidebar .module-tree .panel-heading {padding: 4px 10px;}

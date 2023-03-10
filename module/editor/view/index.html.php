@@ -23,7 +23,7 @@
 <?php endif;?>
 <div id='mainContent' class='main-row'>
   <div class='side-col' id='sidebar'>
-    <div class='cell moduleTree'>
+    <div class='cell module-tree'>
       <div class='panel panel-sm with-list'>
         <div class='panel-heading'><i class='icon-list'></i> <strong><?php echo $lang->editor->moduleList?></strong></div>
         <?php foreach($lang->dev->groupList as $group => $groupName):?>
