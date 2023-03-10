@@ -56,7 +56,7 @@
           <td class='c-actions'>
             <?php
             common::printIcon('gitlab', 'edit', "gitlabID=$id", '', 'list', 'edit');
-            echo common::buildIconButton('gitlab', 'bindUser', "gitlabID=$id", '', 'list', 'link');
+            echo common::buildIconButton('gitlab', 'bindUser', "gitlabID=$id", '', 'list', 'lock');
             common::printIcon('gitlab', 'delete', "gitlabID=$id", '', 'list', 'trash', 'hiddenwin');
             ?>
           </td>
