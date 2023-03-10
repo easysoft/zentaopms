@@ -131,9 +131,9 @@ $(function()
  */
 function updateRelations(e)
 {
-    if($('.permission-row label.bg-primary-pale').length)
+    if($('.bg-primary-pale').length)
     {
-        $('.permission-row label.bg-primary-pale').removeClass('bg-primary-pale');
+        $('.bg-primary-pale').removeClass('bg-primary-pale');
     }
     $(e.target).addClass('bg-primary-pale');
     var selectedID = $('#privListTable').length == 0 ? $(e.target).siblings('input:checkbox').data('id') : $(e.target).closest('tr').attr('data-id');
