@@ -431,6 +431,7 @@ class group extends control
             $queryID   = ($browseType == 'bysearch') ? (int)$paramID : 0;
             $actionURL = $this->createLink('group', 'editManagePriv', "browseType=bysearch&view=&paramID=myQueryID&recTotal=$recTotal&recPerPage=$recPerPage");
             $this->group->buildPrivSearchForm($queryID, $actionURL);
+            $this->view->pager = $pager;
         }
 
         $this->view->title          = $this->lang->group->editManagePriv;
@@ -438,8 +439,7 @@ class group extends control
         $this->view->privList       = $privList;
         $this->view->packages       = $this->group->getPrivPackagesByView($view);
         $this->view->moduleLang     = $moduleLang;
-        $this->view->pager          = $pager;
-        $this->view->modulePackages =  $this->group->getModuleAndPackageTree();
+        $this->view->modulePackages = $this->group->getModuleAndPackageTree();
 
         $this->display();
     }
@@ -610,27 +610,27 @@ class group extends control
      * Sort priv packages.
      *
      * @param  int    $parentID
-     * @param  int    $grade
+     * @param  string $type
      * @access public
      * @return void
      */
-    public function sortPrivPackages($parentID = 0, $grade = 0)
+    public function sortPrivPackages($parentID = 0, $type = '')
     {
         $orders = $_POST['orders'];
         if(empty($orders)) return false;
-        if($grade == '1')
+        if($type == 'view')
         {
             $orders = str_replace('View,', ',', $orders);
             $orders = trim($orders, ',');
             $this->loadModel('setting')->setItem("system.priv.views", $orders);
         }
-        if($grade == '2')
+        if($type == 'module')
         {
             $orders   = trim($orders, ',');
             $parentID = rtrim($parentID, 'View');
             $this->loadModel('setting')->setItem("system.priv.{$parentID}Modules", $orders);
         }
-        if($grade == '3')
+        if($type == 'package')
         {
             $orders = explode(',', $orders);
             foreach($orders as $index => $id)
