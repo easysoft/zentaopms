@@ -24,8 +24,8 @@
 .priv-item > .icon {padding-left: 5px;}
 .empty-tip {height: 100%;}
 
-#privList .c-name {min-width: 100px;}
-#privList .c-view, #privList .c-module, #privList .c-package {width: 100px;}
-#privList .c-privs {min-width: 180px;}
-#privList .c-actions {width: 50px;}
-#privList tbody tr td  {overflow: hidden; white-space: nowrap;}
+#privListTable .c-name {min-width: 100px;}
+#privListTable .c-view, #privListTable .c-module, #privListTable .c-package {width: 100px;}
+#privListTable .c-privs {min-width: 180px;}
+#privListTable .c-actions {width: 50px;}
+#privListTable tbody tr td  {overflow: hidden; white-space: nowrap;}

@@ -50,7 +50,7 @@ function initDependTree(data)
 function updatePrivTree(objTree)
 {
     $(".menuTree.depend").data('zui.tree').reload(objTree.dependData || [] );
-    if(objTree.dependData && objTree.dependData.length) 
+    if(objTree.dependData && objTree.dependData.length)
     {
         $(".menuTree.depend + .empty-tip").addClass('hidden');
     }
@@ -99,27 +99,42 @@ $(function()
     $('.permission-row .checkbox-primary').on('click', 'label', function(e)
     {
         e.stopPropagation();
-        if($(e.target).prop('tagName') == 'LABEL')
-        {
-            if($('.permission-row label.bg-primary-pale').length)
-            {
-                $('.permission-row label.bg-primary-pale').removeClass('bg-primary-pale');
-            }
-            $(e.target).addClass('bg-primary-pale');
-            var selectedID = $(this).siblings('input:checkbox').data('id');
-            $.get(createLink('group', 'ajaxGetPrivRelations', "privID=" + selectedID), function(data)
-            {
-                var objTree = {};
-                if(data)
-                {
-                    var relatedPriv  = JSON.parse(data);
-                    objTree          = {
-                        dependData: relatedPriv.depend,
-                        recommendData: relatedPriv.recommend
-                    };
-                }
-                updatePrivTree(objTree);
-            })
-        }
+        if($(e.target).prop('tagName') == 'LABEL') updateRelations(e);
+    });
+
+    $('#privListTable tr').on('click', 'td', function(e)
+    {
+        e.stopPropagation();
+        if(!$(e.target.closest('td')).hasClass('c-actions') && $(e.target).attr('type') != 'checkbox') updateRelations(e);
     });
 });
+
+/**
+ * Update depend and recommend privs.
+ *
+ * @param e $e
+ * @access public
+ * @return void
+ */
+function updateRelations(e)
+{
+    if($('.permission-row label.bg-primary-pale').length)
+    {
+        $('.permission-row label.bg-primary-pale').removeClass('bg-primary-pale');
+    }
+    $(e.target).addClass('bg-primary-pale');
+    var selectedID = $('#privListTable').length == 0 ? $(e.target).siblings('input:checkbox').data('id') : $(e.target).closest('tr').attr('data-id');
+    $.get(createLink('group', 'ajaxGetPrivRelations', "privID=" + selectedID), function(data)
+    {
+        var objTree = {};
+        if(data)
+        {
+          var relatedPriv  = JSON.parse(data);
+          objTree          = {
+              dependData: relatedPriv.depend,
+              recommendData: relatedPriv.recommend
+          };
+        }
+        updatePrivTree(objTree);
+    })
+}
