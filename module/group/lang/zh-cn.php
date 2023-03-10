@@ -40,6 +40,7 @@ $lang->group->projectList        = '可访问项目';
 $lang->group->executionList      = "可访问{$lang->execution->common}";
 $lang->group->dynamic            = '可查看动态';
 $lang->group->noticeVisit        = '空代表没有访问限制';
+$lang->group->noticeNoChecked    = '请先勾选权限！';
 $lang->group->noneProgram        = "暂时没有项目集";
 $lang->group->noneProduct        = "暂时没有{$lang->productCommon}";
 $lang->group->noneExecution      = "暂时没有{$lang->execution->common}";

@@ -40,6 +40,7 @@ $lang->group->projectList        = 'Accès ' . $lang->executionCommon . 's';
 $lang->group->executionList      = "Access {$lang->execution->common}";
 $lang->group->dynamic            = 'Accès Historique';
 $lang->group->noticeVisit        = "Blanc signifie « pas de limitation d'accès ».";
+$lang->group->noticeNoChecked    = 'Please checked privilege!';
 $lang->group->noneProgram        = "No Program";
 $lang->group->noneProduct        = "No {$lang->productCommon}";
 $lang->group->noneExecution      = "No {$lang->execution->common}";

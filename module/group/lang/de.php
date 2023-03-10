@@ -40,6 +40,7 @@ $lang->group->projectList        = 'Projekte sind zugänglich.';
 $lang->group->executionList      = "Access {$lang->execution->common}";
 $lang->group->dynamic            = 'Access Dynamics';
 $lang->group->noticeVisit        = 'Leer bedeutet Zugriff verweigert.';
+$lang->group->noticeNoChecked    = 'Please checked privilege!';
 $lang->group->noneProgram        = "No Program";
 $lang->group->noneProduct        = "No {$lang->productCommon}";
 $lang->group->noneExecution      = "No {$lang->execution->common}";

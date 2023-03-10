@@ -40,6 +40,7 @@ $lang->group->projectList        = 'Access Project';
 $lang->group->executionList      = "Access {$lang->execution->common}";
 $lang->group->dynamic            = 'Access Dynamics';
 $lang->group->noticeVisit        = 'Blank means no access limit.';
+$lang->group->noticeNoChecked    = 'Please checked privilege!';
 $lang->group->noneProgram        = "No Program";
 $lang->group->noneProduct        = "No {$lang->productCommon}";
 $lang->group->noneExecution      = "No {$lang->execution->common}";
