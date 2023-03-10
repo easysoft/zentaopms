@@ -1174,16 +1174,16 @@ class groupModel extends model
                 $privQuery = preg_replace("/`recommendPrivs`([^']+)'([%]?{$priv}[%]?)'/Ui", (!empty($privs) ? "`id`$1('{$privs}')" : '0=1'), $privQuery);
             }
         }
-        if(strpos($privQuery, '`dependentPrivs`') !== false)
+        if(strpos($privQuery, '`dependPrivs`') !== false)
         {
-            preg_match_all("/`dependentPrivs`[^']+'([^']+)'/Ui", $privQuery, $out);
-            $privQuery = str_replace(array('`dependentPrivs` =', '`dependentPrivs` LIKE', '`dependentPrivs`  =', '`dependentPrivs` !=', '`dependentPrivs` NOT LIKE'), array('`dependentPrivs` IN', '`dependentPrivs` IN', '`dependentPrivs` IN', '`dependentPrivs` NOT IN', '`dependentPrivs` NOT IN'), $privQuery);
+            preg_match_all("/`dependPrivs`[^']+'([^']+)'/Ui", $privQuery, $out);
+            $privQuery = str_replace(array('`dependPrivs` =', '`dependPrivs` LIKE', '`dependPrivs`  =', '`dependPrivs` !=', '`dependPrivs` NOT LIKE'), array('`dependPrivs` IN', '`dependPrivs` IN', '`dependPrivs` IN', '`dependPrivs` NOT IN', '`dependPrivs` NOT IN'), $privQuery);
             foreach($out[1] as $priv)
             {
                 $priv  = str_replace('%', '', $priv);
-                $privs = $this->dao->select('priv,priv')->from(TABLE_PRIVRELATION)->where('relationPriv')->eq($priv)->andWhere('type')->eq('dependent')->fetchPairs();
+                $privs = $this->dao->select('priv,priv')->from(TABLE_PRIVRELATION)->where('relationPriv')->eq($priv)->andWhere('type')->eq('depend')->fetchPairs();
                 $privs = implode(',', $privs);
-                $privQuery = preg_replace("/`dependentPrivs`([^']+)'([%]?{$priv}[%]?)'/Ui", (!empty($privs) ? "`id`$1('{$privs}')" : '0=1'), $privQuery);
+                $privQuery = preg_replace("/`dependPrivs`([^']+)'([%]?{$priv}[%]?)'/Ui", (!empty($privs) ? "`id`$1('{$privs}')" : '0=1'), $privQuery);
             }
         }
 
@@ -1441,7 +1441,7 @@ class groupModel extends model
         $this->config->group->priv->search['params']['module']['values']         = array('' => '') + $modules;
         $this->config->group->priv->search['params']['package']['values']        = array('' => '') + $packages;
         $this->config->group->priv->search['params']['recommendPrivs']['values'] = array('' => '') + $privs;
-        $this->config->group->priv->search['params']['dependentPrivs']['values'] = array('' => '') + $privs;
+        $this->config->group->priv->search['params']['dependPrivs']['values']    = array('' => '') + $privs;
 
         $this->loadModel('search')->setSearchParams($this->config->group->priv->search);
     }

@@ -435,7 +435,7 @@ class group extends control
 
             $privRelations = $this->group->getPrivRelationsByIdList(array_keys($privList));
             if(!isset($privRelations['recommend'])) $privRelations['recommend'] = array();
-            if(!isset($privRelations['dependent'])) $privRelations['dependent'] = array();
+            if(!isset($privRelations['depend']))    $privRelations['depend']    = array();
 
             $this->view->pager         = $pager;
             $this->view->privRelations = $privRelations;
