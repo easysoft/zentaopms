@@ -1148,12 +1148,57 @@ class groupModel extends model
 
         $privQuery = $this->session->privQuery;
 
-        return $this->dao->select('t1.*,t2.name,t2.desc')->from(TABLE_PRIV)->alias('t1')
+        $this->loadModel('setting');
+        if(strpos($privQuery, '`view`') !== false)
+        {
+            preg_match_all("/`view`[^']+'([^']+)'/Ui", $privQuery, $out);
+            $privQuery = str_replace(array('`view` =', '`view` LIKE', '`view`  =', '`view` !=', '`view`  NOT LIKE'), array('`view` IN', '`view` IN', '`view` IN', '`view` NOT IN', '`view` NOT IN'), $privQuery);
+            foreach($out[1] as $view)
+            {
+                $view = str_replace('%', '', $view);
+                $modules = $this->setting->getItem("owner=system&module=priv&key={$view}Modules");
+                $modules = str_replace(',', "','", $modules);
+                $privQuery = preg_replace("/`view`([^']+)'([%]?{$view}[%]?)'/Ui", "`module`$1('{$modules}')", $privQuery);
+            }
+        }
+
+        if(strpos($privQuery, '`recommendPrivs`') !== false)
+        {
+            preg_match_all("/`recommendPrivs`[^']+'([^']+)'/Ui", $privQuery, $out);
+            $privQuery = str_replace(array('`recommendPrivs` =', '`recommendPrivs` LIKE', '`recommendPrivs`  =', '`recommendPrivs` !=', '`recommendPrivs` NOT LIKE'), array('`recommendPrivs` IN', '`recommendPrivs` IN', '`recommendPrivs` IN', '`recommendPrivs` NOT IN', '`recommendPrivs` NOT IN'), $privQuery);
+            foreach($out[1] as $priv)
+            {
+                $priv  = str_replace('%', '', $priv);
+                $privs = $this->dao->select('priv')->from(TABLE_PRIVRELATION)->where('relationPriv')->eq($priv)->andWhere('type')->eq('recommend')->fetchAll('priv');
+                $privs = implode("','", $privs);
+                $privQuery = preg_replace("/`recommendPrivs`([^']+)'([%]?{$priv}[%]?)'/Ui", (!empty($privs) ? "`id`$1('{$privs}')" : '0=1'), $privQuery);
+            }
+        }
+        if(strpos($privQuery, '`dependentPrivs`') !== false)
+        {
+            preg_match_all("/`dependentPrivs`[^']+'([^']+)'/Ui", $privQuery, $out);
+            $privQuery = str_replace(array('`dependentPrivs` =', '`dependentPrivs` LIKE', '`dependentPrivs`  =', '`dependentPrivs` !=', '`dependentPrivs` NOT LIKE'), array('`dependentPrivs` IN', '`dependentPrivs` IN', '`dependentPrivs` IN', '`dependentPrivs` NOT IN', '`dependentPrivs` NOT IN'), $privQuery);
+            foreach($out[1] as $priv)
+            {
+                $priv  = str_replace('%', '', $priv);
+                $privs = $this->dao->select('priv')->from(TABLE_PRIVRELATION)->where('relationPriv')->eq($priv)->andWhere('type')->eq('dependent')->fetchAll('priv');
+                $privs = implode(',', $privs);
+                $privQuery = preg_replace("/`dependentPrivs`([^']+)'([%]?{$priv}[%]?)'/Ui", (!empty($privs) ? "`id`$1('{$privs}')" : '0=1'), $privQuery);
+            }
+        }
+
+        $views   = empty($view) ? $this->setting->getItem("owner=system&module=priv&key=views") : $view;
+        $views   = explode(',', $views);
+        $modules = '';
+        foreach($views as $view) $modules .= ',' . $this->setting->getItem("owner=system&module=priv&key={$view}Modules");
+        $modules = trim($modules, ',');
+
+        return $this->dao->select("t1.*,t2.name,t2.desc, INSTR('$modules', `module`) as moduleOrder")->from(TABLE_PRIV)->alias('t1')
             ->leftJoin(TABLE_PRIVLANG)->alias('t2')->on('t1.id=t2.priv')
             ->where('1=1')
             ->andWhere($privQuery)
             ->andWhere('t2.lang')->eq($this->app->getClientLang())
-            ->orderBy('`order`')
+            ->orderBy('`moduleOrder` asc, `order`')
             ->page($pager)
             ->fetchAll('id');
     }
@@ -1363,6 +1408,37 @@ class groupModel extends model
     {
         $this->config->group->priv->search['actionURL'] = $actionURL;
         $this->config->group->priv->search['queryID']   = $queryID;
+
+        $this->loadModel('setting');
+
+        $views = $this->setting->getItem("owner=system&module=priv&key=views");
+        $views = explode(',', $views);
+        foreach($views as $index => $view)
+        {
+            $views[$view] = $this->lang->{$view}->common;
+            unset($views[$index]);
+        }
+
+        $modules = '';
+        foreach(array_keys($views) as $view) $modules .= ',' . $this->setting->getItem("owner=system&module=priv&key={$view}Modules");
+        $modules    = trim($modules, ',');
+        $modules    = explode(',', $modules);
+        $moduleLang = $this->getMenuModules('', true);
+        foreach($modules as $index => $module)
+        {
+            $modules[$module] = zget($moduleLang, $module);
+            unset($modules[$index]);
+        }
+
+        $packages = $this->getPrivPackagesByView('');
+
+        $privs = $this->getPrivLangPairs();
+
+        $this->config->group->priv->search['params']['view']['values']           = array('' => '') + $views;
+        $this->config->group->priv->search['params']['module']['values']         = array('' => '') + $modules;
+        $this->config->group->priv->search['params']['package']['values']        = array('' => '') + $packages;
+        $this->config->group->priv->search['params']['recommendPrivs']['values'] = array('' => '') + $privs;
+        $this->config->group->priv->search['params']['dependentPrivs']['values'] = array('' => '') + $privs;
 
         $this->loadModel('search')->setSearchParams($this->config->group->priv->search);
     }

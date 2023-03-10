@@ -65,7 +65,7 @@ $lang->group->addRecommendation  = 'Add Recommendation';
 $lang->group->selectedPrivs      = 'Selected Privilege: %s';
 $lang->group->selectModule       = 'Select Module';
 $lang->group->recommendPrivs     = 'Recommended Privs';
-$lang->group->DependentPrivs     = 'Dependented Privs';
+$lang->group->dependentPrivs     = 'Dependented Privs';
 
 $lang->group->id         = 'ID';
 $lang->group->name       = 'Groupe';

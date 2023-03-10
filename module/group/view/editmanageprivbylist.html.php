@@ -15,6 +15,13 @@ $lang->privp->p1      = '依赖权限';
 $lang->privp->p2      = '推荐权限';
 ?>
 <?php $canBatchChangePackage = common::hasPriv('group', 'batchChangePackage');?>
+<?php if(empty($privList)):?>
+<div class="table-empty-tip">
+  <p>
+    <span class="text-muted"><?php echo $lang->noData;?></span>
+  </p>
+</div>
+<?php else:?>
 <form class="main-table" method="post" id="privForm" data-ride="table">
   <table class="table has-sort-head" id='privList'>
     <thead>
@@ -77,3 +84,4 @@ $lang->privp->p2      = '推荐权限';
     <?php $pager->show('right', 'pagerjs');?>
   </div>
 </form>
+<?php endif;?>
