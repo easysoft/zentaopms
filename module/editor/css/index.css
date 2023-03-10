@@ -4,5 +4,8 @@ table tr > td:last-child {padding-right: 0;}
 .modulegroup {font-weight:bold; padding-top:8px; border-top:1px solid #ddd;}
 td.w-200px a:hover {font-weight:bold;}
 .w-350px {width:350px;}
-.module-col {padding-bottom:30px;}
 .with-list a {white-space: nowrap;}
+#mainContent .module-col{padding: 0px; padding-left: 10px;}
+#mainContent .module-content {padding: 0;}
+#sidebar .module-tree {overflow-y: auto;}
+#sidebar .module-tree .panel-heading {padding: 4px 10px;}

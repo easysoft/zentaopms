@@ -11,7 +11,6 @@
  */
 ?>
 <?php include $app->getModuleRoot() . 'common/view/header.lite.html.php';?>
-<style>body{padding-bottom:0px;background-color:#fff;}</style>
 <div class='main-header'>
   <div class='heading'><i class='icon-plus'></i> <strong><?php echo $lang->editor->newPage?></strong></div>
 </div>

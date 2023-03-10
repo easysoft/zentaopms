@@ -23,7 +23,7 @@
 <?php endif;?>
 <div id='mainContent' class='main-row'>
   <div class='side-col' id='sidebar'>
-    <div class='cell'>
+    <div class='cell module-tree'>
       <div class='panel panel-sm with-list'>
         <div class='panel-heading'><i class='icon-list'></i> <strong><?php echo $lang->editor->moduleList?></strong></div>
         <?php foreach($lang->dev->groupList as $group => $groupName):?>
@@ -63,7 +63,7 @@
       <iframe frameborder='0' name='extendWin' id='extendWin' width='100%'></iframe>
     </div>
   </div>
-  <div class='main-col main-content'>
+  <div class='main-col main-content module-content'>
     <iframe frameborder='0' name='editWin' id='editWin' width='100%'></iframe>
   </div>
 </div>

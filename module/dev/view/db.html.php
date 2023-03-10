@@ -1,7 +1,7 @@
 <?php include 'header.html.php';?>
 <div id='mainContent' class='main-row'>
   <div class='side-col' id='sidebar'>
-    <div class='cell'>
+    <div class='cell module-tree'>
       <div class="panel panel-sm with-list">
         <div class='panel-heading'><i class='icon-list'></i> <strong><?php echo $lang->dev->dbList?></strong></div>
         <?php foreach($lang->dev->groupList as $group => $groupName):?>
@@ -31,9 +31,9 @@
       </div>
     </div>
   </div>
-  <div class='main-col main-content'>
+  <div class='main-col main-content module-col'>
     <?php if($selectedTable):?>
-    <div class='detail'>
+    <div class='detail module-content'>
       <div class='detail-title'><?php echo $selectedTable?></div>
       <div class='detail-content'>
         <table class="table table-bordered">
