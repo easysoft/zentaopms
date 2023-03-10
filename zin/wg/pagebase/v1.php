@@ -30,7 +30,8 @@ class pagebase extends wg
     {
         global $lang, $config;
 
-        $zui = $this->prop('zui');
+        $zui  = $this->prop('zui');
+        $ajax = $this->prop('ajax');
         return h::html
         (
             before(html('<!DOCTYPE html>')),
@@ -38,7 +39,8 @@ class pagebase extends wg
             (
                 html($this->prop('metas')),
                 h::title($this->props->get('title', '') . " - $lang->zentaoPMS"),
-                $zui ? h::import(array($config->zin->zuiPath . 'zui.zentao.umd.cjs', $config->zin->zuiPath . 'zui.zentao.css')) : null,
+                $zui  ? h::import(array($config->zin->zuiPath . 'zui.zentao.umd.cjs', $config->zin->zuiPath . 'zui.zentao.css')) : null,
+                $ajax ? h::import(array($config->zin->zuiPath . 'axios.min.js')) : null,
                 h::js('window.domReady = function(fn){if (document.readyState !== \'loading\') {fn();} else {document.addEventListener(\'DOMContentLoaded\', fn);}};'),
                 $zui ? h::js
                 (
