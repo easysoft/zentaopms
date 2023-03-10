@@ -125,7 +125,7 @@ $(function()
             minimap:         {enabled: false}
         });
         var codeHeight    = parent.$('#editWin').height();
-        var headerHeight  = $('.main-header').height();
+        var headerHeight  = $('.main-header').outerHeight();
         var footerHeight  = $('.footer').height();
         var nameBoxHeight = $('#fileNameBox').height() ? $('#fileNameBox').height() : 0;
         codeHeight -= headerHeight + footerHeight + nameBoxHeight;

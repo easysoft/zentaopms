@@ -5,6 +5,7 @@ table tr > td:last-child {padding-right: 0;}
 td.w-200px a:hover {font-weight:bold;}
 .w-350px {width:350px;}
 .with-list a {white-space: nowrap;}
-#mainContent .module-col{overflow-y: none; padding: 0 10px;}
+#mainContent .module-col{padding: 0px; padding-left: 10px;}
 #mainContent .module-content {padding: 0;}
-#sidebar .moduleTree{overflow-y: auto;}
+#sidebar .moduleTree {overflow-y: auto;}
+#sidebar .moduleTree .panel-heading {padding: 4px 10px;}
