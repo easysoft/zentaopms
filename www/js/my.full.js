@@ -14,6 +14,7 @@
             var form = $('form[method=post]');
             if(form.length)
             {
+                if($(form).hasClass('no-stash')) return;
                 if($(form).attr('target') == 'hiddenwin' && config.currentModule.indexOf('program') != -1  && config.currentModule.indexOf('project') != -1) return;
                 var formDataID     = config.currentMethod + '-' + config.currentModule + '-' + $(form).attr("id");
                 var formDataStored = $.zui.store.get(formDataID);
@@ -102,12 +103,12 @@
                                              $(formItem).kindeditor();
                                         }
                                     }
-                                    $.zui.store.remove(formDataID);
                                 }
                             }
                         ],
                         onAction: function(name, action, messager)
                         {
+                            if(name == 'undo')
                             $.zui.store.remove(formDataID);
                         }
                     }).show();
