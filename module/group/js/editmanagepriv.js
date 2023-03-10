@@ -117,8 +117,11 @@ $(function()
 
     $('#privListTable tr').on('click', 'td', function(e)
     {
-        e.stopPropagation();
-        if(!$(e.target.closest('td')).hasClass('c-actions') && $(e.target).attr('type') != 'checkbox') updateRelations(e);
+        if(!$(e.target.closest('td')).hasClass('c-actions') && $(e.target).attr('type') != 'checkbox')
+        {
+            e.stopPropagation();
+            updateRelations(e);
+        }
     });
 });
 
