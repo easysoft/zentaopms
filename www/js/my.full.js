@@ -9,12 +9,18 @@
     function handleSaveFormDraft()
     {
         if(config.currentMethod === 'login' || config.currentModule === 'repo' || config.currentMethod.indexOf('edit') != -1 || config.currentMethod.indexOf('import') != -1) return;
-        setTimeout(function() 
+        setTimeout(function()
         {
             var form = $('form[method=post]');
             if(form.length)
             {
+                if($(form).hasClass('no-stash')) return;
                 if($(form).attr('target') == 'hiddenwin' && config.currentModule.indexOf('program') != -1  && config.currentModule.indexOf('project') != -1) return;
+                function storeFormArr()
+                {
+                    $.zui.store.set(formDataID, $(form).serializeArray());
+                    var arr = $(form).serializeArray();
+                }
                 var formDataID     = config.currentMethod + '-' + config.currentModule + '-' + $(form).attr("id");
                 var formDataStored = $.zui.store.get(formDataID);
                 if(formDataStored && formDataStored.length)
@@ -30,7 +36,7 @@
                                 name: 'undo',
                                 icon: 'undo',
                                 text: lang.resume,
-                                action: function() 
+                                action: function()
                                 {
                                     var valueMultiple = {};
                                     for(var i = 0; i < formDataStored.length; i++)
@@ -52,7 +58,7 @@
                                         {
                                             var formItem = $('#' + item.name.replace('[', '').replace(']', ''));
                                         }
-                                        else 
+                                        else
                                         {
                                             var formItem = $('#' + item.name);
                                         }
@@ -78,31 +84,33 @@
                                                 {
                                                     $(formItem).data('zui.picker').setValue(item.value);
                                                 }
-                                            }   
+                                            }
                                         }
                                         else if(tagName === 'INPUT')
                                         {
-                                             if($(formItem).attr('type') === 'checkbox')
-                                             {
-                                                 $(formItem).prop('checked', true).trigger('change');
-                                             }   
-                                             else if($(formItem).attr('type') === 'radio')
-                                             {
-                                                 $('#' + item.name + item.value).prop('checked', true).trigger('change');
-                                             }
-                                             else
-                                             {
-                                                 formItem.val(item.value);
-                                             }
+                                            if($(formItem).attr('type') === 'checkbox')
+                                            {
+                                                $(formItem).prop('checked', true).trigger('change');
+                                            }
+                                            else if($(formItem).attr('type') === 'radio')
+                                            {
+                                                $('#' + item.name + item.value).prop('checked', true).trigger('change');
+                                            }
+                                            else
+                                            {
+                                                formItem.val(item.value);
+                                            }
                                         }
                                         else if(tagName === 'TEXTAREA' && $(formItem).hasClass('kindeditor'))
                                         {
-                                             KindEditor.remove('#' + item.name);
-                                             formItem.val(item.value);
-                                             $(formItem).kindeditor();
+                                            KindEditor.remove('#' + item.name);
+                                            formItem.val(item.value);
+                                            $(formItem).kindeditor({
+                                                /* Conetnt change event. */
+                                                afterChange: storeFormArr()
+                                            });
                                         }
                                     }
-                                    $.zui.store.remove(formDataID);
                                 }
                             }
                         ],
@@ -113,16 +121,16 @@
                     }).show();
                 }
                 form.on('input', function()
-                {   
-                     $.zui.store.set(formDataID, $(form).serializeArray());
+                {    
+                    storeFormArr()
                 }).on('change', function()
                 {
-                    $.zui.store.set(formDataID, $(form).serializeArray());
+                    storeFormArr()
                 }).on('success.form.zui', function(event, res)
                 {
                     if(res.result === 'success' || res.status === 'success') $.zui.store.remove(formDataID);
-                })  
-            }   
+                })
+            }
         }, 500);
     }
     handleSaveFormDraft();

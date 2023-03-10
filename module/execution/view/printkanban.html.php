@@ -18,7 +18,7 @@
         <div class='main-header'>
           <h2><?php echo $lang->printKanban->common;?></h2>
         </div>
-        <form target='_blank' method='post'>
+        <form class="no-stash" target='_blank' method='post'>
           <table class='table table-form'>
             <tr>
               <td class='text-right w-100px'><?php echo $lang->printKanban->content?>:</td>
