@@ -16,13 +16,13 @@
       <strong><?php echo $lang->upgrade->result;?></strong>
     </div>
     <div class='modal-body'>
-      <?php if($result == 'fail'):?>
+      <?php if(in_array($result, array('fail', 'sqlFail'))):?>
       <div class='alert alert-danger mgb-10'><strong><?php echo $lang->upgrade->fail?></strong></div>
       <?php echo html::textarea('errors', join("\n", $errors), "rows='10' class='form-control' readonly");?>
       <?php endif;?>
     </div>
-    <?php if($result == 'fail'):?>
-    <div class='modal-footer text-left'><?php echo $lang->upgrade->afterDeleted;?> <?php echo html::a('#', $this->lang->refresh, '', "class='btn btn-sm' onclick='refreshPage(this)'");?></div>
+    <?php if(in_array($result, array('fail', 'sqlFail'))):?>
+    <div class='modal-footer text-left'><?php echo $result == 'sqlFail' ? $lang->upgrade->afterExec : $lang->upgrade->afterDeleted;?> <?php echo html::a('#', $this->lang->refresh, '', "class='btn btn-sm' onclick='refreshPage(this)'");?></div>
     <?php endif;?>
   </div>
 </div>

@@ -661,7 +661,7 @@ class productModel extends model
         if($currentModule == 'bug' and $currentMethod == 'edit') $currentMethod = 'browse';
         if($currentMethod == 'report') $currentMethod = 'browse';
 
-        $currentProductName = $this->lang->product->common;
+        $currentProductName = $this->lang->productCommon;
         if($productID)
         {
             $currentProduct     = $this->getById($productID);

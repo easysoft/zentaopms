@@ -38,6 +38,19 @@ $(function()
             $this.addClass('expandable-hitarea').removeClass('collapsable-hitarea');
         }
     });
+
+    $('.has-list a').on('click', function()
+    {
+        $('.has-list a.text-primary').removeClass('text-primary active');
+        $(this).addClass('text-primary active');
+    }).on('mouseover', function()
+    {
+        $('.has-list a:not(.active)').removeClass('text-primary');
+        $(this).addClass('text-primary');
+    }).on('mouseout', function()
+    {
+        if(!$(this).hasClass('active')) $(this).removeClass('text-primary');
+    });
 });
 </script>
 <iframe frameborder='0' name='hiddenwin' id='hiddenwin' scrolling='no' class='hidden'></iframe>
