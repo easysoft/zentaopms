@@ -209,6 +209,7 @@ $lang->stage->type        = '阶段类型';
 $lang->stage->list        = '阶段列表';
 $lang->stage->percent     = '工作量占比';
 $lang->execution->list    = "{$lang->executionCommon}列表";
+$lang->execution->CFD     = "累积流图";
 $lang->kanban->common     = '看板';
 $lang->backup->common     = '备份';
 $lang->action->trash      = '回收站';

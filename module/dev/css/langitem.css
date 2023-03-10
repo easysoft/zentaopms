@@ -8,7 +8,7 @@
 .flex-center {display: flex; justify-content: center; align-items: center;}
 
 /* menu-tree */
-.menu-tree {flex: 0 0 200px; background: #fff; padding: 10px 10px; overflow: hidden;}
+.menu-tree {flex: 0 0 180px; background: #fff; padding: 10px 10px; overflow: hidden;}
 .menu-tree > .tree {padding-top: 20px;}
 .tree ul {margin-bottom: 0;}
 #menuTree > li.has-list > ul > li {padding-left: 10px;}

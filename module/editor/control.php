@@ -22,7 +22,7 @@ class editor extends control
     public function __construct($module = '', $method = '')
     {
         parent::__construct($module, $method);
-        if($this->app->getMethodName() != 'switch' and empty($this->config->global->editor)) $this->locate($this->createLink('dev', 'editor'));
+        if($this->app->getMethodName() != 'turnon' and empty($this->config->global->editor)) $this->locate($this->createLink('dev', 'editor'));
     }
 
     /**

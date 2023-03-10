@@ -3181,18 +3181,21 @@ EOD;
         curl_close($curl);
 
 
-        $logFile = $app->getLogRoot() . 'saas.'. date('Ymd') . '.log.php';
-        if(!file_exists($logFile)) file_put_contents($logFile, '<?php die(); ?' . '>');
-
-        $fh = @fopen($logFile, 'a');
-        if($fh)
+        if($app->config->debug)
         {
-            fwrite($fh, date('Ymd H:i:s') . ": " . $app->getURI() . "\n");
-            fwrite($fh, "url:    " . $url . "\n");
-            if(!empty($data)) fwrite($fh, "data:   " . print_r($data, true) . "\n");
-            fwrite($fh, "results:" . print_r($response, true) . "\n");
-            if(!empty($errors)) fwrite($fh, "errors: " . $errors . "\n");
-            fclose($fh);
+            $logFile = $app->getLogRoot() . 'saas.'. date('Ymd') . '.log.php';
+            if(!file_exists($logFile)) file_put_contents($logFile, '<?php die(); ?' . '>');
+
+            $fh = @fopen($logFile, 'a');
+            if($fh)
+            {
+                fwrite($fh, date('Ymd H:i:s') . ": " . $app->getURI() . "\n");
+                fwrite($fh, "url:    " . $url . "\n");
+                if(!empty($data)) fwrite($fh, "data:   " . print_r($data, true) . "\n");
+                fwrite($fh, "results:" . print_r($response, true) . "\n");
+                if(!empty($errors)) fwrite($fh, "errors: " . $errors . "\n");
+                fclose($fh);
+            }
         }
 
         if($errors) commonModel::$requestErrors[] = $errors;
@@ -3211,11 +3214,12 @@ EOD;
      * @param  string       $method    POST|PATCH|PUT
      * @param  int          $timeout
      * @param  bool         $httpCode
+     * @param  bool         $log
      * @static
      * @access public
      * @return string
      */
-    public static function http($url, $data = null, $options = array(), $headers = array(), $dataType = 'data', $method = 'POST', $timeout = 30, $httpCode = false)
+    public static function http($url, $data = null, $options = array(), $headers = array(), $dataType = 'data', $method = 'POST', $timeout = 30, $httpCode = false, $log = true)
     {
         global $lang, $app;
         if(!extension_loaded('curl'))
@@ -3265,18 +3269,21 @@ EOD;
         if($httpCode) $httpCode = curl_getinfo($curl,CURLINFO_HTTP_CODE);
         curl_close($curl);
 
-        $logFile = $app->getLogRoot() . 'saas.'. date('Ymd') . '.log.php';
-        if(!file_exists($logFile)) file_put_contents($logFile, '<?php die(); ?' . '>');
-
-        $fh = @fopen($logFile, 'a');
-        if($fh)
+        if($log or $app->config->debug)
         {
-            fwrite($fh, date('Ymd H:i:s') . ": " . $app->getURI() . "\n");
-            fwrite($fh, "url:    " . $url . "\n");
-            if(!empty($data)) fwrite($fh, "data:   " . print_r($data, true) . "\n");
-            fwrite($fh, "results:" . print_r($response, true) . "\n");
-            if(!empty($errors)) fwrite($fh, "errors: " . $errors . "\n");
-            fclose($fh);
+            $logFile = $app->getLogRoot() . 'saas.'. date('Ymd') . '.log.php';
+            if(!file_exists($logFile)) file_put_contents($logFile, '<?php die(); ?' . '>');
+
+            $fh = @fopen($logFile, 'a');
+            if($fh)
+            {
+                fwrite($fh, date('Ymd H:i:s') . ": " . $app->getURI() . "\n");
+                fwrite($fh, "url:    " . $url . "\n");
+                if(!empty($data)) fwrite($fh, "data:   " . print_r($data, true) . "\n");
+                fwrite($fh, "results:" . print_r($response, true) . "\n");
+                if(!empty($errors)) fwrite($fh, "errors: " . $errors . "\n");
+                fclose($fh);
+            }
         }
 
         if($errors) commonModel::$requestErrors[] = $errors;

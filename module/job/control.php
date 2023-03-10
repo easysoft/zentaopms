@@ -60,6 +60,10 @@ class job extends control
                 $branch   = $this->gitlab->apiGetSingleBranch($job->server, $pipeline->project, $pipeline->reference);
                 if($branch and isset($branch->can_push) and !$branch->can_push) $job->canExec = false;
             }
+            elseif($job->engine == 'jenkins')
+            {
+                if(strpos($job->pipeline, '/job/') !== false) $job->pipeline = trim(str_replace('/job/', '/', $job->pipeline), '/');
+            }
         }
 
         $this->view->title      = $this->lang->ci->job . $this->lang->colon . $this->lang->job->browse;
@@ -115,7 +119,7 @@ class job extends control
         }
 
         $this->app->loadLang('action');
-        $repoList    = $this->loadModel('repo')->getList($this->projectID);
+        $repoList    = $this->loadModel('repo')->getList($this->projectID, false);
         $repoPairs   = array(0 => '');
         $gitlabRepos = array(0 => '');
         $repoTypes   = array();
