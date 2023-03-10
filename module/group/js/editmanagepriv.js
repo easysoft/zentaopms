@@ -5,7 +5,6 @@
   * @access public
   * @return void
   */
-
 function initRecomendTree(data)
 {
     $(".menuTree.depend").tree(
@@ -72,7 +71,6 @@ function updatePrivTree(objTree)
 
 $(function()
 {
-
     $(".menuTree").on('mouseover', ".priv-item", function()
     {
         $(this).addClass('text-primary');
@@ -87,7 +85,10 @@ $(function()
     initDependTree([]);
 
     $('li.has-list > ul').addClass("menu-active-primary menu-hover-primary");
-    $('.sorter-group').sortable();
+    $('.sorter-group').sortable(
+    {
+        'selector': '.group-item'
+    });
 
     $('.btn-switch').on('click', function()
     {
@@ -117,4 +118,3 @@ $(function()
         }
     });
 });
-
