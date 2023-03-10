@@ -1,33 +1,11 @@
 <?php include 'header.html.php';?>
+<?php js::set('moduleTree', $moduleTree);?>
 <div id='mainContent' class='main-row'>
   <div class='side-col' id='sidebar'>
     <div class='cell module-tree'>
       <div class="panel panel-sm with-list">
         <div class='panel-heading'><i class='icon-list'></i> <strong><?php echo $lang->dev->moduleList?></strong></div>
-        <?php foreach($lang->dev->groupList as $group => $groupName):?>
-        <?php if(!empty($modules[$group])):?>
-        <div class='modulegroup'><?php echo $groupName?></div>
-        <?php foreach($modules[$group] as $module):?>
-        <?php
-        $active     = ($module == $selectedModule) ? 'text-primary' : '';
-        $moduleName = zget($lang->dev->tableList, $module, $module);
-        ?>
-        <?php echo html::a(inlink('api', "module=$module"), $moduleName, '', "class='$active'");?>
-        <?php endforeach;?>
-        <?php endif;?>
-        <?php endforeach;?>
-        <?php foreach($lang->dev->endGroupList as $group => $groupName):?>
-        <?php if(!empty($modules[$group])):?>
-        <div class='modulegroup'><?php echo $groupName?></div>
-        <?php foreach($modules[$group] as $module):?>
-        <?php
-        $active     = ($module == $selectedModule) ? 'text-primary' : '';
-        $moduleName = zget($lang->dev->tableList, $module, $module);
-        ?>
-        <?php echo html::a(inlink('api', "module=$module"), $moduleName, '', "class='$active'");?>
-        <?php endforeach;?>
-        <?php endif;?>
-        <?php endforeach;?>
+        <div id="moduleTree" class="menu-active-primary menu-hover-primary"></div>
       </div>
     </div>
   </div>

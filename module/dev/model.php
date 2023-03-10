@@ -1072,4 +1072,36 @@ class devModel extends model
         $menu->children = array();
         return $menu;
     }
+
+    /**
+     * Get moduleT tree.
+     *
+     * @param  string $currentModule
+     * @access public
+     * @return array
+     */
+    public function getModuleTree($currentModule)
+    {
+        $moduleTree = array();
+        $modules    = $this->getModules();
+        foreach($this->lang->dev->groupList as $moduleKey => $moduleName)
+        {
+            if(empty($modules[$moduleKey])) continue;
+            $module = new stdclass();
+            $module->key      = $moduleKey;
+            $module->title    = $moduleName;
+            $module->children = array();
+            foreach($modules[$moduleKey] as $objectKey => $objectName)
+            {
+                $object = new stdclass();
+                $object->key    = $objectKey;
+                $object->title  = zget($this->lang->dev->tableList, $objectKey, $objectKey);
+                $object->active = $objectKey == $currentModule ? 1 : 0;
+
+                $module->children[] = $object;
+            }
+            $moduleTree[] = $module;
+        }
+        return $moduleTree;
+    }
 }

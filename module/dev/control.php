@@ -28,7 +28,7 @@ class dev extends control
         $this->view->tab            = 'api';
         $this->view->selectedModule = $module;
         $this->view->apis           = $module ? $this->dev->getAPIs($module) : array();
-        $this->view->modules        = $this->dev->getModules();
+        $this->view->moduleTree     = $this->dev->getModuleTree($module);
         $this->display();
     }
 

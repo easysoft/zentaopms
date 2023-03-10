@@ -12,6 +12,6 @@ $(function()
  */
 function setHeight()
 {
-    var paneHeight = $(window).height() - 100;
+    var paneHeight = $(window).height() - 90;
     $('#sidebar .module-tree,#mainContent .module-content').css('height', paneHeight);
 }
