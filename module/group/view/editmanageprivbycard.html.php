@@ -22,10 +22,14 @@
     </thead>
     <tbody>
       <?php foreach($privList as $module => $packages):?>
+      <?php $i = 1;?>
+      <?php foreach($packages as $packageID => $privs):?>
       <tr class="permission-row">
-        <td class="flex-sm text-center" rowspan="<?php echo count($packages);?>"><?php echo zget($moduleLang, $module, $module);?></td>
-        <?php foreach($packages as $packageID => $privs):?>
-        <td class="flex-sm text-center"><?php echo zget($privPackages, $packageID, $lang->group->unassigned);?></td>
+        <?php if($i == 1):?>
+        <td class="flex-sm flex-center" rowspan="<?php echo $i == 1 ? count($packages) : 1;?>"><?php echo zget($moduleLang, $module, $module);?></td>
+        <?php endif;?>
+        <?php $packageTdStyle = $i == 1 ? 'flex-sm' : 'flex-md';?>
+        <td class="<?php echo $packageTdStyle;?> flex-center"><?php echo zget($privPackages, $packageID, $lang->group->unassigned);?></td>
         <td class="flex-content sorter-group">
           <?php foreach($privs as $privID => $priv):?>
           <div class="group-item">
@@ -37,10 +41,10 @@
           </div>
           <?php endforeach;?>
         </td>
-        <?php endforeach;?>
       </tr>
+      <?php $i ++;?>
+      <?php endforeach;?>
       <?php endforeach;?>
     </tbody>
   </table>
 </form>
-
