@@ -53,6 +53,7 @@ $lang->upgrade->forbiddenExt   = 'The extension is incompatible with the version
 $lang->upgrade->updateFile     = 'File information has to be updated.';
 $lang->upgrade->noticeSQL      = 'Your database is inconsistent with the standard and it failed to fix it. Please run the following SQL and refresh.';
 $lang->upgrade->afterDeleted   = 'Please execute commands to delete the files. Please refresh after you delete them.';
+$lang->upgrade->afterExec      = 'Please manually modify the database according to the above error information, and refresh after modifiy!';
 $lang->upgrade->mergeProgram   = 'Data Merge';
 $lang->upgrade->mergeTips      = 'Data Migration Tips';
 $lang->upgrade->toPMS15Guide   = 'ZenTao open source version 15 upgrade';
