@@ -87,8 +87,21 @@ $(function()
     $('li.has-list > ul').addClass("menu-active-primary menu-hover-primary");
     $('.sorter-group').sortable(
     {
-        'selector': '.group-item'
+        'selector': '.group-item',
+        finish: function(e)
+        {
+            var orders = [];
+            console.log($('.sorter-group').data('zui.sortable').getItems());
+            //$packageBox.find('.group-item').each(function()
+            //{
+            //    orders['orders[' + privID + ']'] = $(this).data('order');
+            //});
+            $.post(createLink('group', 'ajaxUpdatePrivOrder'), orders).error(function()
+            {
+            });
+        }
     });
+
 
     $('.btn-switch').on('click', function()
     {

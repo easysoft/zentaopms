@@ -1473,4 +1473,17 @@ class groupModel extends model
             ->where('lang')->eq($this->app->clientLang)
             ->fetchPairs();
     }
+
+    /**
+     * Update priv order.
+     *
+     * @access public
+     * @return void
+     */
+    public function updatePrivOrder()
+    {
+        $data = fixer::input('post')->get();
+
+        foreach($data as $privID => $order) $this->dao->update(TABLE_PRIV)->set('order')->eq($order)->where('id')->eq($privID)->exec();
+    }
 }

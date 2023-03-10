@@ -731,4 +731,15 @@ class group extends control
 
         return print(json_encode($privList));
     }
+
+    /**
+     * AJAX: update priv order.
+     *
+     * @access public
+     * @return void
+     */
+    public function ajaxUpdatePrivOrder()
+    {
+        $this->group->updatePrivOrder();
+    }
 }
