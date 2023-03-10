@@ -41,13 +41,15 @@
   {
       include 'editmanageprivbylist.html.php';
   }?>
-
   </div>
   <div class="side">
     <div class="priv-panel">
       <div class="panel-title">依赖的权限</div>
       <div class="panel-content">
         <div class="menuTree depend menu-active-primary menu-hover-primary"></div>
+        <div class="empty-tip flex-center">
+          <p><span class="text-muted"><?php echo $lang->noData;?></span></p>
+        </div>
       </div>
       <div class="panel-bottom">
         <?php echo html::a($this->inLink('addDependent'), $lang->group->add, '', "class='btn btn-primary'");?>
@@ -57,6 +59,9 @@
       <div class="panel-title">推荐的权限</div>
       <div class="panel-content">
         <div class="menuTree recommend menu-active-primary menu-hover-primary"></div>
+        <div class="empty-tip flex-center">
+          <p><span class="text-muted"><?php echo $lang->noData;?></span></p>
+        </div>
       </div>
       <div class="panel-bottom">
         <?php echo html::a(inlink('addRecommendation', 'privID=1'), '<i class="icon icon-plus"></i>' . $lang->group->add, '', "class='btn btn-primary iframe'");?>
