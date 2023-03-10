@@ -1179,6 +1179,26 @@ class groupModel extends model
     }
 
     /**
+     * Get priv relation.
+     *
+     * @param  int    $priv
+     * @param  string $type
+     * @param  string $module
+     * @access public
+     * @return array
+     */
+    public function getPrivRelationPairs($priv, $type = '', $module = '')
+    {
+        return $this->dao->select('t2.id,t3.name')->from(TABLE_PRIVRELATION)->alias('t1')
+            ->leftJoin(TABLE_PRIV)->alias('t2')->on('t1.relationPriv=t2.id')
+            ->leftJoin(TABLE_PRIVLANG)->alias('t3')->on('t2.id=t3.priv')
+            ->where('t1.priv')->in($priv)
+            ->beginIF(!empty($type))->andWhere('t1.type')->eq($type)->fi()
+            ->beginIF($module)->andWhere('t2.module')->eq($module)->fi()
+            ->fetchPairs();
+    }
+
+    /**
      * Save relation.
      *
      * @param  array    $privIdList

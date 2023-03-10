@@ -64,6 +64,8 @@ $lang->group->sortPrivPackages   = '权限包排序';
 $lang->group->addRecommendation  = '添加推荐';
 $lang->group->selectedPrivs      = '选中权限：%s';
 $lang->group->selectModule       = '选择模块';
+$lang->group->recommendPrivs     = '依赖权限';
+$lang->group->DependentPrivs     = '推荐权限';
 
 $lang->group->id         = '编号';
 $lang->group->name       = '分组名称';
