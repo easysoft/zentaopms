@@ -432,11 +432,9 @@ class group extends control
             $actionURL = $this->createLink('group', 'editManagePriv', "browseType=bysearch&view=&paramID=myQueryID&recTotal=$recTotal&recPerPage=$recPerPage");
             $this->group->buildPrivSearchForm($queryID, $actionURL);
 
-            $privRelations = array();
-            $privRelations['recommend'] = $this->group->getPrivRelationPairs(array_keys($privList), 'recommend');
-            $privRelations['recommend'] = implode(',', $privRelations['recommend']);
-            $privRelations['dependent'] = $this->group->getPrivRelationPairs(array_keys($privList), 'dependent');
-            $privRelations['dependent'] = implode(',', $privRelations['dependent']);
+            $privRelations = $this->group->getPrivRelationsByIdList(array_keys($privList));
+            if(!isset($privRelations['recommend'])) $privRelations['recommend'] = array();
+            if(!isset($privRelations['dependent'])) $privRelations['dependent'] = array();
 
             $this->view->pager         = $pager;
             $this->view->privRelations = $privRelations;

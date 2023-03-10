@@ -1244,6 +1244,31 @@ class groupModel extends model
     }
 
     /**
+     * Get priv relation.
+     *
+     * @param  array  $privs
+     * @access public
+     * @return array
+     */
+    public function getPrivRelationsByIdList($privs, $type = '')
+    {
+        $privs = $this->dao->select('t1.priv,t3.name,t1.type,t1.relationPriv')->from(TABLE_PRIVRELATION)->alias('t1')
+            ->leftJoin(TABLE_PRIV)->alias('t2')->on('t1.relationPriv=t2.id')
+            ->leftJoin(TABLE_PRIVLANG)->alias('t3')->on('t2.id=t3.priv')
+            ->where('t1.priv')->in($privs)
+            ->beginIF(!empty($type))->andWhere('t1.type')->eq($type)->fi()
+            ->fetchGroup('type');
+        $relationPrivs = array();
+        foreach($privs as $type => $typePrivs)
+        {
+            $relationPrivs[$type] = array();
+            foreach($typePrivs as $priv) $relationPrivs[$type][$priv->priv] = empty($relationPrivs[$type][$priv->priv]) ? $priv->name : "{$relationPrivs[$type][$priv->priv]},{$priv->name}";
+        }
+
+        return $relationPrivs;
+    }
+
+    /**
      * Save relation.
      *
      * @param  array    $privIdList
