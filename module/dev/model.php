@@ -1074,10 +1074,10 @@ class devModel extends model
     }
 
     /**
-     * Get moduleT tree.
+     * Get module tree.
      *
      * @param  string $currentModule
-     * @param  string $type
+     * @param  string $type module|table
      * @access public
      * @return array
      */
