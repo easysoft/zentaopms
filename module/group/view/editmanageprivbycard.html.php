@@ -36,7 +36,7 @@
             <div class="checkbox-primary">
               <?php $action = $priv->methodName;?>
               <?php $label  = zget($privLang, $privID, $action);?>
-              <?php echo html::checkbox("actions[$module][]", array($action => $label), $action, "title='{$label}' id='actions[$module]$action' data-id='$privID'");?>
+              <?php echo html::checkbox("actions[$module][]", array($action => $label), '', "title='{$label}' id='actions[$module]$action' data-id='$privID'");?>
             </div>
           </div>
           <?php endforeach;?>
