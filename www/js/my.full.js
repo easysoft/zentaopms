@@ -108,7 +108,6 @@
                         ],
                         onAction: function(name, action, messager)
                         {
-                            if(name == 'undo')
                             $.zui.store.remove(formDataID);
                         }
                     }).show();
@@ -122,7 +121,7 @@
                 }).on('success.form.zui', function(event, res)
                 {
                     if(res.result === 'success' || res.status === 'success') $.zui.store.remove(formDataID);
-                })  
+                })
             }   
         }, 500);
     }
