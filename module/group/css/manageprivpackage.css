@@ -8,4 +8,5 @@
 #privPackageTableList > tr.drop-not-allowed {opacity: 0.1!important}
 tbody.sortable > tr > td.sort-handler .table-nest-toggle:before {cursor: pointer !important;}
 tbody.sortable > tr > td.sort-handler {color: #3c4353 !important;}
-
+.has-nest-child > td > .table-nest-toggle {opacity: unset;}
+.table-nest-toggle {opacity: 0;}

@@ -13,6 +13,7 @@
 <?php include '../../common/view/header.lite.html.php';?>
 <style>
 .tree .relationBox li{float:left; width: 150px;}
+#dataform {min-height:240px;}
 </style>
 <div id='mainContent' class='main-content'>
   <div class='main-header'>
@@ -20,33 +21,54 @@
   </div>
   <div class='main-row'>
     <div class="main-col">
-      <div><?php printf($lang->group->selectedPrivs, $priv->name)?></div>
+      <div>
+        <?php
+        $privName    = array();
+        $privModules = array();
+        foreach($privs as $priv)
+        {
+            $privName[] = $priv->name;
+            $privModules[$priv->module][] = $priv->id;
+        }
+        $privName = implode('、', $privName);
+        printf($lang->group->selectedPrivs, $privName);
+        ?>
+      </div>
       <div class='w-300px'><?php echo html::select('module', $modules, '', "class='form-control chosen'")?></div>
       <form id='dataform' method='post' target='hiddenwin'>
-        <ul class='tree' data-ride='tree'>
-          <li>
-            <?php echo html::a('#', $modules[$priv->module]);?>
-            <ul class='relationBox'>
-              <?php foreach($modulePrivs[$priv->module] as $id => $modulePriv):?>
-              <?php if($id == $priv->id) continue;?>
-              <li><?php echo html::checkbox('relation', array($id => $modulePriv->name), (empty($recommends) or isset($recommends[$id])) ? $id : '')?></li>
-              <?php endforeach;?>
-            </ul>
-          </li>
-        </ul>
+        <div class='treeBox'>
+          <?php foreach($privModules as $privModule => $privIdList):?>
+          <ul class='tree' data-ride='tree'>
+            <li>
+              <?php echo html::a('#', $modules[$privModule]);?>
+              <ul class='relationBox'>
+                <?php foreach($modulePrivs[$privModule] as $id => $modulePriv):?>
+                <?php if(in_array($id, $privIdList)) continue;?>
+                <li><?php echo html::checkbox("relation[{$priv->module}]", array($id => $modulePriv->name), (empty($recommends) or isset($recommends[$id])) ? $id : '')?></li>
+                <?php endforeach;?>
+              </ul>
+            </li>
+          </ul>
+          <?php endforeach;?>
+        </div>
         <div class='text-center'><?php echo html::submitButton();?></div>
       </form>
     </div>
   </div>
 </div>
-<?php js::set('privID', $priv->id);?>
+<?php js::set('privIdList', implode(',', array_keys($privs)));?>
 <script>
 $(function()
 {
+    $('ul.tree:first > li').addClass('open').addClass('id');
     $('#module').change(function()
     {
         if($(this).val() == '') return;
-        $('ul.tree').load(createLink('group', 'ajaxGetPrivTree', 'privID=' + privID + '&module=' + $(this).val()), function(){$('ul.tree').tree();});
+        $('.treeBox').load(createLink('group', 'ajaxGetPrivTree', 'privIdList=' + privIdList + '&module=' + $(this).val()), function()
+        {
+            $('ul.tree').tree();
+            $('ul.tree:first > li').addClass('open').addClass('id');
+        });
     })
 })
 </script>

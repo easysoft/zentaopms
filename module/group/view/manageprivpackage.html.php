@@ -39,7 +39,7 @@
       </thead>
       <tbody id='privPackageTableList'>
         <?php foreach($packagesTreeList as $package):?>
-        <tr <?php echo "data-id='$package->id' data-order='$package->order' data-parent='$package->parent' data-level='$package->grade' data-nest-parent='$package->parent' data-nest-path='$package->path'"?>>
+        <tr <?php echo "data-id='$package->id' data-order='$package->order' data-parent='$package->parent' data-level='$package->grade' data-type='$package->type' data-nest-parent='$package->parent' data-nest-path='$package->path'"?>>
           <td class='text-left has-prefix' title='<?php echo $package->name?>'><?php echo $package->name?></td>
           <td class='text-left' title='<?php echo $package->desc?>'><?php echo $package->desc?></td>
           <td><?php if(common::hasPriv('group', 'privPackageSort')) echo '<a class="sort-handler"><i class="icon-move"></i></a>';?></td>

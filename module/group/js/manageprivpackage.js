@@ -6,10 +6,6 @@ $(function()
         selector: 'tr',
         dragCssClass: 'drag-row',
         trigger: $list.find('.sort-handler').length ? '.sort-handler' : null,
-        before: function(e)
-        {
-            // if($(e.event.target).closest('a,.btn').length) return false;
-        },
         canMoveHere: function($ele, $target)
         {
             return $ele.data('parent') === $target.data('parent');
@@ -20,15 +16,15 @@ $(function()
         },
         finish: function(e)
         {
-            var orders = '';
-            var $parent = $(e.element).data('parent');
-            var parentID = typeof $parent == 'object' ? $parent.id : 0;
-            var grade    = typeof $parent == 'object' ? parseInt($parent.level + 1) : 1;
+            var orders   = '';
+            var $item    = $(e.element);
+            var type     = $item.data('type');
+            var parentID = type == 'view' ? 0 : $(e.element).data('parent').id;
             $list.find('tr[data-parent="' + parentID + '"]').each(function(){
                 orders += $(this).data('id') + ',';
             });
 
-            $.post(createLink('group', 'sortPrivPackages', 'parent=' + parentID + '&grade=' + grade), {'orders': orders});
+            $.post(createLink('group', 'sortPrivPackages', 'parent=' + parentID + '&type=' + type), {'orders': orders});
 
             e.element.addClass('drop-success');
             setTimeout(function(){e.element.removeClass('drop-success');}, 800);

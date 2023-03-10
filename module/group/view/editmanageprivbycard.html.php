@@ -21,49 +21,30 @@
       </tr>
     </thead>
     <tbody>
+      <?php foreach($privList as $module => $packages):?>
+      <?php $i = 1;?>
+      <?php foreach($packages as $packageID => $privs):?>
       <tr class="permission-row">
-        <td class="flex-sm text-center"> 首页 </td>
-        <td class="flex-sm text-center"> 首页 </td>
-        <td class="flex-content">
-          <div class="group-item">
-            <div class="checkbox-primary">
-              <input type="checkbox" name="actions[my][]" value="index" checked="checked" title="地盘仪表盘" id="actions[my]index"></input>
-              <label for="actions[my]index"> 地盘仪表盘 </label>
-            </div>
-          </div>
-        </td>
-      </tr>
-      <tr class="permission-row">
-        <td class="flex-sm text-center"> 地盘 </td>
-        <td class="flex-sm text-center"> 地盘</td>
+        <?php if($i == 1):?>
+        <td class="flex-sm flex-center" rowspan="<?php echo $i == 1 ? count($packages) : 1;?>"><?php echo zget($moduleLang, $module, $module);?></td>
+        <?php endif;?>
+        <?php $packageTdStyle = $i == 1 ? 'flex-sm' : 'flex-md';?>
+        <td class="<?php echo $packageTdStyle;?> flex-center"><?php echo zget($privPackages, $packageID, $lang->group->unassigned);?></td>
         <td class="flex-content sorter-group">
+          <?php foreach($privs as $privID => $priv):?>
           <div class="group-item">
             <div class="checkbox-primary">
-              <input type="checkbox" name="actions[my][]" value="index" checked="checked" title="地盘仪表盘" id="actions[my]index"></input>
-              <label for="actions[my]index"> 地盘仪表盘0 </label>
-            </div>
-          </div> 
-          <div class="group-item">
-            <div class="checkbox-primary">
-              <input type="checkbox" name="actions[my][]" value="index" checked="checked" title="地盘仪表盘" id="actions[my]index"></input>
-              <label for="actions[my]index"> 地盘仪表盘1 </label>
-            </div>
-          </div> 
-          <div class="group-item">
-            <div class="checkbox-primary">
-              <input type="checkbox" name="actions[my][]" value="index" checked="checked" title="地盘仪表盘" id="actions[my]index"></input>
-              <label for="actions[my]index"> 地盘仪表盘2 </label>
-            </div>
-          </div> 
-          <div class="group-item">
-            <div class="checkbox-primary">
-              <input type="checkbox" name="actions[my][]" value="index" checked="checked" title="地盘仪表盘" id="actions[my]index"></input>
-              <label for="actions[my]index"> 地盘仪表盘3 </label>
+              <?php $action = $priv->methodName;?>
+              <?php $label  = zget($privLang, $privID, $action);?>
+              <?php echo html::checkbox("actions[$module][]", array($action => $label), '', "title='{$label}' id='actions[$module]$action' data-id='$privID'");?>
             </div>
           </div>
+          <?php endforeach;?>
         </td>
       </tr>
+      <?php $i ++;?>
+      <?php endforeach;?>
+      <?php endforeach;?>
     </tbody>
   </table>
 </form>
-

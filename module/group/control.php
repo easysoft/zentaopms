@@ -382,7 +382,7 @@ class group extends control
     }
 
    /**
-     * edit manage priv.
+     * Edit manage priv.
      *
      * @param  string $browseType
      * @param  string $view
@@ -395,24 +395,84 @@ class group extends control
      */
     public function editManagePriv($browseType = '', $view = '', $paramID = 0, $recTotal = 0, $recPerPage = 100, $pageID = 1)
     {
-        if(empty($browseType)) $browseType = $this->cookie->managePrivEditType ? $this->cookie->managePrivEditType : 'bycard';;
+        if(empty($browseType) and $browseType != 'bysearch') $browseType = $this->cookie->managePrivEditType ? $this->cookie->managePrivEditType : 'bycard';;
+        if($browseType == 'bysearch' and $this->cookie->managePrivEditType == 'bycard') $browseType = 'bycard';
 
-        $this->app->loadClass('pager', $static = true);
-        $pager = new pager($recTotal, $recPerPage, $pageID);
+        $moduleLang = $this->group->getMenuModules('', true);
 
-        $privList = $browseType != 'bysearch' ? $this->group->getPrivsListByView($view, $pager) :  $this->group->getPrivsListBySearch($pager);
+        if($browseType == 'bycard')
+        {
+            $moduleList   = $this->loadModel('setting')->getItem("owner=system&module=priv&section=&key={$view}Modules");
+            $privGroup    = $this->group->getPrivGroup($moduleList);
+            $privPackages = $this->group->getPrivPackagePairs();
+            $privLang     = $this->group->getPrivLangPairs();
 
-        /* Build the search form. */
-        $queryID   = ($browseType == 'bysearch') ? (int)$paramID : 0;
-        $actionURL = $this->createLink('group', 'editManagePriv', "browseType=bysearch&view=&paramID=myQueryID&recTotal=$recTotal&recPerPage=$recPerPage");
-        $this->group->buildPrivSearchForm($queryID, $actionURL);
+            $privList = array();
+            foreach($privGroup as $module => $privs)
+            {
+                if(!isset($privList[$module])) $privList[$module] = array();
+                foreach($privs as $priv)
+                {
+                    if(!isset($privList[$module][$priv->package])) $privList[$module][$priv->package] = array();
+                    $privList[$module][$priv->package][$priv->id] = $priv;
+                }
+            }
 
-        $this->view->title      = $this->lang->group->editManagePriv;
-        $this->view->browseType = $browseType;
-        $this->view->privList   = $privList;
-        $this->view->packages   = $this->group->getPrivPackagesByView($view);
-        $this->view->pager      = $pager;
+            $this->view->privLang     = $privLang;
+            $this->view->privPackages = $privPackages;
+        }
+        else
+        {
+            $this->app->loadClass('pager', $static = true);
+            $pager = new pager($recTotal, $recPerPage, $pageID);
+
+            $privList = $browseType != 'bysearch' ? $this->group->getPrivsListByView($view, $pager) :  $this->group->getPrivsListBySearch($paramID, $pager);
+
+            /* Build the search form. */
+            $queryID   = ($browseType == 'bysearch') ? (int)$paramID : 0;
+            $actionURL = $this->createLink('group', 'editManagePriv', "browseType=bysearch&view=&paramID=myQueryID&recTotal=$recTotal&recPerPage=$recPerPage");
+            $this->group->buildPrivSearchForm($queryID, $actionURL);
+
+            $privRelations = $this->group->getPrivRelationsByIdList(array_keys($privList));
+            if(!isset($privRelations['recommend'])) $privRelations['recommend'] = array();
+            if(!isset($privRelations['dependent'])) $privRelations['dependent'] = array();
+
+            $this->view->pager         = $pager;
+            $this->view->privRelations = $privRelations;
+        }
+
+        $this->view->title          = $this->lang->group->editManagePriv;
+        $this->view->browseType     = $browseType;
+        $this->view->privList       = $privList;
+        $this->view->packages       = $this->group->getPrivPackagesByView($view);
+        $this->view->moduleLang     = $moduleLang;
+        $this->view->modulePackages = $this->group->getModuleAndPackageTree();
+
         $this->display();
+    }
+
+    /**
+     * Batch change package.
+     *
+     * @param  string $module
+     * @param  int    $packageID
+     * @access public
+     * @return void
+     */
+    public function batchChangePackage($module, $packageID)
+    {
+        if(empty($_POST['privIdList'])) return print(js::reload('parent'));
+        $privIdList = array_unique($_POST['privIdList']);
+        $allChanges = $this->group->batchChangePackage($privIdList, $module, $packageID);
+        if(dao::isError()) return print(js::error(dao::getError()));
+
+        $this->loadModel('action');
+        foreach($allChanges as $privID => $changes)
+        {
+            $actionID = $this->action->create('priv', $privID, 'Edited');
+            $this->action->logHistory($actionID, $changes);
+        }
+        return print(js::reload('parent'));
     }
 
     /**
@@ -501,52 +561,56 @@ class group extends control
     /**
      * Add recommendation.
      *
-     * @param  int    $privID
+     * @param  string    $privIdList
      * @access public
      * @return void
      */
-    public function addRecommendation($privID)
+    public function addRecommendation($privIdList)
     {
         if($_POST)
         {
-            $this->group->saveRelation(array($privID), 'recommend');
+            $this->group->saveRelation($privIdList, 'recommend');
             return print(js::reload('parent'));
         }
 
-        $priv = $this->group->getPrivByID($privID);
+        $privs   = $this->group->getPrivByIdList($privIdList);
+        $modules = array();
+        foreach($privs as $priv) $modules[$priv->module] = $priv->module;
 
-        $this->view->priv        = $priv;
+        $this->view->privs       = $privs;
         $this->view->modules     = array('' => $this->lang->group->selectModule) + $this->group->getMenuModules(null, true);
-        $this->view->modulePrivs = $this->group->getPrivByModule($priv->module);
-        $this->view->recommends  = $this->group->getPrivRelation($priv->id, 'recommend');
+        $this->view->modulePrivs = $this->group->getPrivByModule($modules);
+        $this->view->recommends  = $this->group->getPrivRelation($privIdList, 'recommend');
         $this->display();
     }
 
     /**
      * Ajax get priv tree.
      *
-     * @param  int    $privID
+     * @param  string $privIdList
      * @param  string $module
      * @access public
      * @return void
      */
-    public function ajaxGetPrivTree($privID, $module)
+    public function ajaxGetPrivTree($privIdList, $module)
     {
+        if(is_string($privIdList)) $privIdList = explode(',', $privIdList);
+
         $modules     = $this->group->getMenuModules(null, true);
         $modulePrivs = $this->group->getPrivByModule($module);
-        $recommends  = $this->group->getPrivRelation($privID, 'recommend', $module);
+        $recommends  = $this->group->getPrivRelation($privIdList, 'recommend', $module);
 
-        $tree  = '<li>';
+        $tree  = "<ul class='tree' data-ride='tree'><li>";
         $tree .= html::a('#', $modules[$module]);
         $tree .= "<ul class='relationBox'>";
         foreach($modulePrivs[$module] as $id => $modulePriv)
         {
-            if($privID == $id) continue;
+            if(in_array($id, $privIdList)) continue;
             $tree .= '<li>';
-            $tree .= html::checkbox('relation', array($id => $modulePriv->name), (empty($recommends) or isset($recommends[$id])) ? $id : '');
+            $tree .= html::checkbox("relation[$module]", array($id => $modulePriv->name), (empty($recommends) or isset($recommends[$id])) ? $id : '');
             $tree .= '</li>';
         }
-        $tree .= '</ul></li>';
+        $tree .= '</ul></li></ul>';
         return print($tree);
     }
 
@@ -554,27 +618,27 @@ class group extends control
      * Sort priv packages.
      *
      * @param  int    $parentID
-     * @param  int    $grade
+     * @param  string $type
      * @access public
      * @return void
      */
-    public function sortPrivPackages($parentID = 0, $grade = 0)
+    public function sortPrivPackages($parentID = 0, $type = '')
     {
         $orders = $_POST['orders'];
         if(empty($orders)) return false;
-        if($grade == '1')
+        if($type == 'view')
         {
             $orders = str_replace('View,', ',', $orders);
             $orders = trim($orders, ',');
             $this->loadModel('setting')->setItem("system.priv.views", $orders);
         }
-        if($grade == '2')
+        if($type == 'module')
         {
             $orders   = trim($orders, ',');
             $parentID = rtrim($parentID, 'View');
             $this->loadModel('setting')->setItem("system.priv.{$parentID}Modules", $orders);
         }
-        if($grade == '3')
+        if($type == 'package')
         {
             $orders = explode(',', $orders);
             foreach($orders as $index => $id)
@@ -583,18 +647,19 @@ class group extends control
             }
         }
     }
+
     /**
      * edit priv
      *
-     * @param int $privID
-     * @access public
-     * @return void
+     * @param   int     $privID
+     * @access  public
+     * @return  void
      **/
     public function editPriv($privID)
     {
-	    $privID = intval($privID);
+	    $privID      = intval($privID);
 	    $currentLang = $this->app->clientLang ? : 'zh-cn';
-	    $priv = $this->group->getPrivInfo($privID, $currentLang);
+	    $priv        = $this->group->getPrivInfo($privID, $currentLang);
         
         if(!$priv)
         {
@@ -623,5 +688,47 @@ class group extends control
 	    $this->view->modulePackage  = $this->group->getModuleAndPackageTree();
         $this->view->priv           = $priv;
         $this->display();
+    }
+
+    /**
+     * Add dependent privs.
+     *
+     * @access public
+     * @return void
+     */
+    public function addDependent()
+    {
+        $this->display();
+    }
+
+    /**
+     * AJAX: Get priv's related priv list.
+     *
+     * @param  int    $privID
+     * @param  string $type
+     * @access public
+     * @return bool
+     */
+    public function ajaxGetPrivRelations($privID, $type = 'depend')
+    {
+        $moduleLang   = $this->group->getMenuModules('', true);
+        $relatedPrivs = $this->group->getPrivRelation($privID);
+
+        if(empty($relatedPrivs)) return print('');
+
+        $privList = array();
+        foreach($relatedPrivs as $relatedPrivID => $relatedPriv)
+        {
+            if(!isset($privList[$relatedPriv->type])) $privList[$relatedPriv->type] = array();
+            if(!isset($privList[$relatedPriv->type][$relatedPriv->module])) $privList[$relatedPriv->type][$relatedPriv->module] = array();
+            $privList[$relatedPriv->type][$relatedPriv->module]['title']      = zget($moduleLang, $relatedPriv->module, $relatedPriv->module);
+            $privList[$relatedPriv->type][$relatedPriv->module]['module']     = $relatedPriv->module;
+            $privList[$relatedPriv->type][$relatedPriv->module]['children'][] = array('title' => $relatedPriv->name);
+        }
+
+        $privList['depend']    = array_values($privList['depend']);
+        $privList['recommend'] = array_values($privList['recommend']);
+
+        return print(json_encode($privList));
     }
 }
