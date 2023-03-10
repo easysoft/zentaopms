@@ -1169,7 +1169,7 @@ class groupModel extends model
             foreach($out[1] as $priv)
             {
                 $priv  = str_replace('%', '', $priv);
-                $privs = $this->dao->select('priv')->from(TABLE_PRIVRELATION)->where('relationPriv')->eq($priv)->andWhere('type')->eq('recommend')->fetchAll('priv');
+                $privs = $this->dao->select('priv,priv')->from(TABLE_PRIVRELATION)->where('relationPriv')->eq($priv)->andWhere('type')->eq('recommend')->fetchPairs();
                 $privs = implode("','", $privs);
                 $privQuery = preg_replace("/`recommendPrivs`([^']+)'([%]?{$priv}[%]?)'/Ui", (!empty($privs) ? "`id`$1('{$privs}')" : '0=1'), $privQuery);
             }
@@ -1181,7 +1181,7 @@ class groupModel extends model
             foreach($out[1] as $priv)
             {
                 $priv  = str_replace('%', '', $priv);
-                $privs = $this->dao->select('priv')->from(TABLE_PRIVRELATION)->where('relationPriv')->eq($priv)->andWhere('type')->eq('dependent')->fetchAll('priv');
+                $privs = $this->dao->select('priv,priv')->from(TABLE_PRIVRELATION)->where('relationPriv')->eq($priv)->andWhere('type')->eq('dependent')->fetchPairs();
                 $privs = implode(',', $privs);
                 $privQuery = preg_replace("/`dependentPrivs`([^']+)'([%]?{$priv}[%]?)'/Ui", (!empty($privs) ? "`id`$1('{$privs}')" : '0=1'), $privQuery);
             }
