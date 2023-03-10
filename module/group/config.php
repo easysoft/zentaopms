@@ -26,7 +26,7 @@ $config->group->priv->search['fields']['view']           = $lang->group->view;
 $config->group->priv->search['fields']['module']         = $lang->group->module;
 $config->group->priv->search['fields']['package']        = $lang->privpackage->belong;
 $config->group->priv->search['fields']['recommendPrivs'] = $lang->group->recommendPrivs;
-$config->group->priv->search['fields']['dependentPrivs'] = $lang->group->dependentPrivs;
+$config->group->priv->search['fields']['dependPrivs']    = $lang->group->dependentPrivs;
 $config->group->priv->search['fields']['desc']           = $lang->group->privDesc;
 
 $config->group->priv->search['params']['name']           = array('operator' => 'include', 'control' => 'input',   'values' => '');
@@ -34,5 +34,5 @@ $config->group->priv->search['params']['view']           = array('operator' => '
 $config->group->priv->search['params']['module']         = array('operator' => '=',       'control' => 'select',  'values' => '');
 $config->group->priv->search['params']['package']        = array('operator' => '=',       'control' => 'select',  'values' => '');
 $config->group->priv->search['params']['recommendPrivs'] = array('operator' => 'include', 'control' => 'select',  'values' => '');
-$config->group->priv->search['params']['dependentPrivs'] = array('operator' => 'include', 'control' => 'select',  'values' => '');
+$config->group->priv->search['params']['dependPrivs']    = array('operator' => 'include', 'control' => 'select',  'values' => '');
 $config->group->priv->search['params']['desc']           = array('operator' => 'include', 'control' => 'input',   'values' => '');

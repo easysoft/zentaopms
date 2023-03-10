@@ -396,6 +396,7 @@ class group extends control
     public function editManagePriv($browseType = '', $view = '', $paramID = 0, $recTotal = 0, $recPerPage = 100, $pageID = 1)
     {
         if(empty($browseType) and $browseType != 'bysearch') $browseType = $this->cookie->managePrivEditType ? $this->cookie->managePrivEditType : 'bycard';;
+        if($browseType == 'bysearch' and $this->cookie->managePrivEditType == 'bycard') $browseType = 'bycard';
 
         $moduleLang = $this->group->getMenuModules('', true);
 
@@ -434,7 +435,7 @@ class group extends control
 
             $privRelations = $this->group->getPrivRelationsByIdList(array_keys($privList));
             if(!isset($privRelations['recommend'])) $privRelations['recommend'] = array();
-            if(!isset($privRelations['dependent'])) $privRelations['dependent'] = array();
+            if(!isset($privRelations['depend']))    $privRelations['depend']    = array();
 
             $this->view->pager         = $pager;
             $this->view->privRelations = $privRelations;
@@ -445,7 +446,7 @@ class group extends control
         $this->view->privList       = $privList;
         $this->view->packages       = $this->group->getPrivPackagesByView($view);
         $this->view->moduleLang     = $moduleLang;
-        $this->view->modulePackages = $this->group->getModuleAndPackageTree();
+        $this->view->modulePackages = $this->group->getModuleAndPackageTree('package');
 
         $this->display();
     }
@@ -667,42 +668,45 @@ class group extends control
     }
 
     /**
-     *
      * edit priv
-     * @param int $privID
-     * @access public
-     * @return void
      *
-     *
+     * @param   int     $privID
+     * @access  public
+     * @return  void
      **/
     public function editPriv($privID)
     {
-        $privID = intval($privID);
-        $currentLang = $this->app->clientLang ? : 'zh-cn';
-        $priv = $this->group->getPrivInfo($privID,$currentLang);
+	    $privID      = intval($privID);
+	    $currentLang = $this->app->clientLang ? : 'zh-cn';
+	    $priv        = $this->group->getPrivInfo($privID, $currentLang);
+
+        if(!$priv)
+        {
+            return print(js::alert($this->lang->group->noneProject));
+        }
 
         if(!empty($_POST))
-        {
-            $responseResult = "success";
-            $responseMeessage = $this->lang->saveSuccess;
-            $locate = "parent";
-            $this->group->updatePrivLang($privID,$currentLang);
+	    {
+	        $responseResult     = "success";
+	        $responseMeessage   = $this->lang->saveSuccess;
+	        $locate             = "parent";
+	        $this->group->updatePrivLang($privID, $currentLang);
+
+            $actionID = $this->loadModel('action')->create('privlang', $privID, 'Edited');
+
             if(dao::isError())
-            {
-                $responseResult = "fail";
-                $responseMessage = dao::getError();
-                $locate = "";
+	        {
+	    	    $responseResult     = "fail";
+		        $responseMessage    = dao::getError();
+		        $locate             = "";
             }
-            $this->send(array('result'=>$responseResult,'message'=>$responseMessage,'locate'=>$locate));
-        }
 
-        $this->view->modulePackage =  $this->group->getModuleAndPackageTree();
+	        $this->send(array('result' => $responseResult, 'message' => $responseMessage, 'locate' => $locate));
+	    }
 
-        if($priv)
-        {
-            $this->view->priv = $priv;
-            $this->display();
-        }
+	    $this->view->modulePackage  = $this->group->getModuleAndPackageTree();
+        $this->view->priv           = $priv;
+        $this->display();
     }
 
     /**
@@ -732,5 +736,16 @@ class group extends control
             $privList[$type] = array_values($privList[$type]);
         }
         return print(json_encode($privList));
+    }
+
+    /**
+     * AJAX: update priv order.
+     *
+     * @access public
+     * @return void
+     */
+    public function ajaxUpdatePrivOrder()
+    {
+        if(!empty($_POST)) $this->group->updatePrivOrder();
     }
 }

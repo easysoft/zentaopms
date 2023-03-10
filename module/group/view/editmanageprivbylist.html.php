@@ -9,10 +9,6 @@
 * @version     $Id: editmanageprivbylist.html.php 4769 2021-07-23 11:16:21Z $
 * @link        https://www.zentao.net
 */
-
-$lang->privp = new stdclass();
-$lang->privp->p1      = '依赖权限';
-$lang->privp->p2      = '推荐权限';
 ?>
 <?php $canBatchChangePackage = common::hasPriv('group', 'batchChangePackage');?>
 <?php if(empty($privList)):?>
@@ -23,29 +19,29 @@ $lang->privp->p2      = '推荐权限';
 </div>
 <?php else:?>
 <form class="main-table" method="post" id="privForm" data-ride="table">
-  <table class="table has-sort-head" id='privList'>
+  <table class="table has-sort-head" id='privListTable'>
     <thead>
       <tr>
         <th class="c-name"><?php echo ($canBatchChangePackage ? "<div class='checkbox-primary check-all' title='{$this->lang->selectAll}'><label></label></div>" : '') . $lang->group->privName;?></th>
         <th class="c-view"><?php echo $lang->group->view;?></th>
         <th class="c-module"><?php echo $lang->group->module;?></th>
         <th class="c-package"><?php echo $lang->privpackage->belong;?></th>
-        <th class="c-privs"><?php echo $lang->privp->p1;?></th>
-        <th class="c-privs"><?php echo $lang->privp->p2;?></th>
+        <th class="c-privs"><?php echo $lang->group->recommendPrivs;?></th>
+        <th class="c-privs"><?php echo $lang->group->dependentPrivs;?></th>
         <th class="c-desc"><?php echo $lang->group->privDesc;?></th>
         <th class="c-actions-1 text-center"><?php echo $lang->actions;?></th>
       </tr>
     </thead>
     <tbody>
       <?php foreach($privList as $priv):?>
-      <tr>
+      <tr data-id='<?php echo $priv->id;?>'>
         <td title='<?php echo $priv->name;?>'><?php echo ($canBatchChangePackage ? html::checkbox('privIdList', array($priv->id => '')) : '') . $priv->name;?></td>
         <?php $view = isset($this->lang->navGroup->{$priv->module}) ? $this->lang->navGroup->{$priv->module} : $priv->module;?>
         <td title='<?php echo isset($lang->{$view}->common) ? $lang->{$view}->common : $view;?>'><?php echo isset($lang->{$view}->common) ? $lang->{$view}->common : $view;?></td>
         <td title='<?php echo isset($moduleLang[$priv->module]) ? $moduleLang[$priv->module] : $priv->module;?>'><?php echo isset($moduleLang[$priv->module]) ? $moduleLang[$priv->module] : $priv->module;?></td>
         <td title='<?php echo zget($packages, $priv->package, '');?>'><?php echo zget($packages, $priv->package, '');?></td>
         <td title='<?php echo zget($privRelations['recommend'], $priv->id, '');?>'><?php echo zget($privRelations['recommend'], $priv->id, '');?></td>
-        <td title='<?php echo zget($privRelations['dependent'], $priv->id, '');?>'><?php echo zget($privRelations['dependent'], $priv->id, '');?></td>
+        <td title='<?php echo zget($privRelations['depend'], $priv->id, '');?>'><?php echo zget($privRelations['depend'], $priv->id, '');?></td>
         <td title='<?php echo $priv->desc;?>'><?php echo $priv->desc;?></td>
         <td class='c-actions'><?php if(common::hasPriv('group', 'editPriv')) common::printIcon('group', 'editPriv', "privID=$priv->id", '', 'list', 'edit', '', 'iframe', true);?></td>
       </tr>

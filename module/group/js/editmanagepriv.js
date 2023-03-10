@@ -5,7 +5,6 @@
   * @access public
   * @return void
   */
-
 function initRecomendTree(data)
 {
     $(".menuTree.depend").tree(
@@ -102,9 +101,26 @@ function getSideRelation(privID)
     })
 }
 
+/**
+ * Update depend and recommend privs.
+ *
+ * @param e $e
+ * @access public
+ * @return void
+ */
+function updateRelations(e)
+{
+    if($('.bg-primary-pale').length) $('.bg-primary-pale').removeClass('bg-primary-pale');
+    $(e.target).addClass('bg-primary-pale');
+
+    var selectedID = $('#privListTable').length == 0 ? $(e.target).siblings('input:checkbox').data('id') : $(e.target).closest('tr').attr('data-id');
+    $('.side a#addDependent').attr('href', createLink('group', 'addRelation', "privIdList=" + selectedID + '&type=depend'));
+    $('.side a#addRecommendation').attr('href', createLink('group', 'addRelation', "privIdList=" + selectedID + '&type=recommend'));
+    getSideRelation(selectedID);
+}
+
 $(function()
 {
-
     $(".menuTree").on('mouseover', ".priv-item", function()
     {
         $(this).addClass('text-primary');
@@ -119,7 +135,27 @@ $(function()
     initDependTree([]);
 
     $('li.has-list > ul').addClass("menu-active-primary menu-hover-primary");
-    $('.sorter-group').sortable();
+    $('.sorter-group').sortable(
+    {
+        'selector': '.group-item',
+        finish: function(e)
+        {
+            var orders = {};
+            var arrGetItems = $(e.target).parent().data('zui.sortable').getItems();
+            for(var i = 0; i < arrGetItems.length; i++)
+            {
+                var groupItem = arrGetItems[i];
+                var privID    = $(groupItem.item).find('input').data('id');
+                orders['orders[' + privID + ']'] = groupItem.order;
+            }
+
+            $.post(createLink('group', 'ajaxUpdatePrivOrder'), orders).error(function()
+            {
+                bootbox.alert(lang.timeout);
+            });
+        }
+    });
+
 
     $('.btn-switch').on('click', function()
     {
@@ -130,12 +166,15 @@ $(function()
     $('.permission-row .checkbox-primary').on('click', 'label', function(e)
     {
         e.stopPropagation();
-        if($(e.target).prop('tagName') == 'LABEL')
+        if($(e.target).prop('tagName') == 'LABEL') updateRelations(e);
+    });
+
+    $('#privListTable tr').on('click', 'td', function(e)
+    {
+        if(!$(e.target.closest('td')).hasClass('c-actions') && $(e.target).attr('type') != 'checkbox')
         {
-            var selectedID = $(this).siblings('input:checkbox').data('id');
-            $('.side a#addDependent').attr('href', createLink('group', 'addRelation', "privIdList=" + selectedID + '&type=depend'));
-            $('.side a#addRecommendation').attr('href', createLink('group', 'addRelation', "privIdList=" + selectedID + '&type=recommend'));
-            getSideRelation(selectedID);
+            e.stopPropagation();
+            updateRelations(e);
         }
     });
 

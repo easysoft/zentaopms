@@ -1169,21 +1169,21 @@ class groupModel extends model
             foreach($out[1] as $priv)
             {
                 $priv  = str_replace('%', '', $priv);
-                $privs = $this->dao->select('priv')->from(TABLE_PRIVRELATION)->where('relationPriv')->eq($priv)->andWhere('type')->eq('recommend')->fetchAll('priv');
+                $privs = $this->dao->select('priv,priv')->from(TABLE_PRIVRELATION)->where('relationPriv')->eq($priv)->andWhere('type')->eq('recommend')->fetchPairs();
                 $privs = implode("','", $privs);
                 $privQuery = preg_replace("/`recommendPrivs`([^']+)'([%]?{$priv}[%]?)'/Ui", (!empty($privs) ? "`id`$1('{$privs}')" : '0=1'), $privQuery);
             }
         }
-        if(strpos($privQuery, '`dependentPrivs`') !== false)
+        if(strpos($privQuery, '`dependPrivs`') !== false)
         {
-            preg_match_all("/`dependentPrivs`[^']+'([^']+)'/Ui", $privQuery, $out);
-            $privQuery = str_replace(array('`dependentPrivs` =', '`dependentPrivs` LIKE', '`dependentPrivs`  =', '`dependentPrivs` !=', '`dependentPrivs` NOT LIKE'), array('`dependentPrivs` IN', '`dependentPrivs` IN', '`dependentPrivs` IN', '`dependentPrivs` NOT IN', '`dependentPrivs` NOT IN'), $privQuery);
+            preg_match_all("/`dependPrivs`[^']+'([^']+)'/Ui", $privQuery, $out);
+            $privQuery = str_replace(array('`dependPrivs` =', '`dependPrivs` LIKE', '`dependPrivs`  =', '`dependPrivs` !=', '`dependPrivs` NOT LIKE'), array('`dependPrivs` IN', '`dependPrivs` IN', '`dependPrivs` IN', '`dependPrivs` NOT IN', '`dependPrivs` NOT IN'), $privQuery);
             foreach($out[1] as $priv)
             {
                 $priv  = str_replace('%', '', $priv);
-                $privs = $this->dao->select('priv')->from(TABLE_PRIVRELATION)->where('relationPriv')->eq($priv)->andWhere('type')->eq('dependent')->fetchAll('priv');
+                $privs = $this->dao->select('priv,priv')->from(TABLE_PRIVRELATION)->where('relationPriv')->eq($priv)->andWhere('type')->eq('depend')->fetchPairs();
                 $privs = implode(',', $privs);
-                $privQuery = preg_replace("/`dependentPrivs`([^']+)'([%]?{$priv}[%]?)'/Ui", (!empty($privs) ? "`id`$1('{$privs}')" : '0=1'), $privQuery);
+                $privQuery = preg_replace("/`dependPrivs`([^']+)'([%]?{$priv}[%]?)'/Ui", (!empty($privs) ? "`id`$1('{$privs}')" : '0=1'), $privQuery);
             }
         }
 
@@ -1308,93 +1308,72 @@ class groupModel extends model
     }
 
     /**
+     * get priv
      *
-     * get a priv
-     *
-     * @param int $privID
-     * @return object
-     *
+     * @param   int     $privID
+     * @param   string  $lang
+     * @return  object
      **/
     public function getPrivInfo($priv,$lang)
     {
-    	$privInfo = $this->dao->select("t1.priv,t1.name,t1.desc,t2.module,t2.package")->from(TABLE_PRIVLANG . ' t1')
-	    ->leftJoin(TABLE_PRIV . ' t2')
+    	$privInfo = $this->dao->select("t1.priv, t1.name, t1.desc, t2.module, t2.package")->from(TABLE_PRIVLANG)->alias('t1')
+	    ->leftJoin(TABLE_PRIV )->alias('t2')
 	    ->on("t1.priv = t2.id")
-	    ->where('t1.priv')
-    	    ->eq($priv)
-    	    ->andWHere('t1.lang')
-    	    ->eq($lang)
-	    ->fetch();
-	if($privInfo)
-	{
-	   $privInfo->module = $privInfo->package ? $privInfo->module . ',' . $privInfo->package : $privInfo->module;
-	}
-	return $privInfo;
+	    ->where('t1.priv')->eq($priv)
+        ->andWHere('t1.lang')->eq($lang)
+        ->fetch();
+
+	    if($privInfo) $privInfo->module = $privInfo->package ? $privInfo->module . ',' . $privInfo->package : $privInfo->module;
+
+        return $privInfo;
     }
 
 
     /**
+     * Get priv package tree.
      *
-     * get a prvi package tree
-     *
-     * @param void
+     * @param  string $type
      * @return array
-     *
      **/
-    public function getModuleAndPackageTree()
+    public function getModuleAndPackageTree($type = 'all')
     {
+        $modules = $this->getMenuModules(null, true);
 
-        $this->loadModel('setting');
+        $tree = array();
 
-        $views = empty($viewName) ? $this->setting->getItem("owner=system&module=priv&key=views") : $viewName;
-        if(empty($views)) return array();
-        $views = explode(',', $views);
-
-        $tree = [];
-        foreach($views as $viewIndex => $view)
+        foreach($modules as $module => $moduleName)
         {
-            $viewModules = $this->setting->getItem("owner=system&module=priv&key={$view}Modules");
-            if(empty($viewModules)) continue;
-
-            $viewModules = explode(',', $viewModules);
-            foreach($viewModules as $moduleIndex => $module)
+            if($type == 'all') $tree[$module] = $moduleName;
+            $packages = $this->getPrivPackagesByModule($module);
+            foreach($packages as $packageID => $package)
             {
-                $this->app->loadLang($module);
-
-                $tree[$module] = $this->lang->{$module}->common;;
-                $packages = $this->getPrivPackagesByModule($module);
-                foreach($packages as $packageID => $package)
-                {
-                    $tree[$module. ',' . $packageID] = $this->lang->{$module}->common .'/'. $package->name;
-                }
+                $tree[$module . ',' . $packageID] = $moduleName . '/' . $package->name;
             }
         }
         return $tree;
-
     }
     /**
+     * update priv info
      *
-     * update a Priv Info
-     *
-     * @param void
-     * @return void
-     *
+     * @param   void
+     * @return  void
      **/
-    public function updatePrivLang($privID,$lang)
+    public function updatePrivLang($privID, $lang)
     {
         $data = fixer::input('post')->remove('module')->get();
-	$this->dao->update(TABLE_PRIVLANG)->data($data)->where('priv')->eq($privID)->andWhere('lang')->eq($lang)->exec();
+	    $this->dao->update(TABLE_PRIVLANG)->data($data)->where('priv')->eq($privID)->andWhere('lang')->eq($lang)->exec();
 
-	$data = fixer::input('post')->remove('name,desc')->get();
-	if($data->module)
-	{
-	    $update = [];
-	    $module = explode(",",$data->module);
-	    $update['module'] = $module[0];
-	    $update['package'] = 0;
-	    if(count($module) > 1) $update['package'] = $module[1];
-	    $this->dao->update(TABLE_PRIV)->data($update)->where('id')->eq($privID)->exec();
-	}
+	    $data = fixer::input('post')->remove('name, desc')->get();
+        if($data->module)
+	    {
+	        $update = [];
+	        $module = explode(",", $data->module);
+	        $update['module'] = $module[0];
+	        $update['package'] = 0;
+            if(count($module) > 1) $update['package'] = $module[1];
+
+	        $this->dao->update(TABLE_PRIV)->data($update)->where('id')->eq($privID)->exec();
+	    }
     }
 
     /**
@@ -1466,7 +1445,7 @@ class groupModel extends model
         $this->config->group->priv->search['params']['module']['values']         = array('' => '') + $modules;
         $this->config->group->priv->search['params']['package']['values']        = array('' => '') + $packages;
         $this->config->group->priv->search['params']['recommendPrivs']['values'] = array('' => '') + $privs;
-        $this->config->group->priv->search['params']['dependentPrivs']['values'] = array('' => '') + $privs;
+        $this->config->group->priv->search['params']['dependPrivs']['values']    = array('' => '') + $privs;
 
         $this->loadModel('search')->setSearchParams($this->config->group->priv->search);
     }
@@ -1497,5 +1476,17 @@ class groupModel extends model
         return $this->dao->select('priv,name')->from(TABLE_PRIVLANG)
             ->where('lang')->eq($this->app->clientLang)
             ->fetchPairs();
+    }
+
+    /**
+     * Update priv order.
+     *
+     * @access public
+     * @return void
+     */
+    public function updatePrivOrder()
+    {
+        $data = fixer::input('post')->get();
+        foreach($data->orders as $privID => $order) $this->dao->update(TABLE_PRIV)->set('order')->eq($order)->where('id')->eq($privID)->exec();
     }
 }
