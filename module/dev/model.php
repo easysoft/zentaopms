@@ -1074,14 +1074,14 @@ class devModel extends model
     }
 
     /**
-     * Get module tree.
+     * Get tree by type.
      *
-     * @param  string $currentModule
+     * @param  string $currentObject
      * @param  string $type module|table
      * @access public
      * @return array
      */
-    public function getTree($currentModule, $type)
+    public function getTree($currentObject, $type)
     {
         $tree = array();
         if(!in_array($type, array('module', 'table'))) return $tree;
@@ -1091,6 +1091,7 @@ class devModel extends model
         foreach($groupList as $moduleKey => $moduleName)
         {
             if(empty($objects[$moduleKey])) continue;
+
             $module = new stdclass();
             $module->key      = $moduleKey;
             $module->title    = $moduleName;
@@ -1098,10 +1099,11 @@ class devModel extends model
             $module->children = array();
             foreach($objects[$moduleKey] as $objectKey => $objectName)
             {
-                $object = new stdclass();
+                $defaultValue   = $type == 'module' ? $objectName : '';
+                $object         = new stdclass();
                 $object->key    = $objectName;
-                $object->title  = zget($this->lang->dev->tableList, $objectKey, $objectKey);
-                $object->active = $objectName == $currentModule ? 1 : 0;
+                $object->title  = zget($this->lang->dev->tableList, $objectKey, $defaultValue);
+                $object->active = $objectName == $currentObject ? 1 : 0;
                 if($object->active) $module->active = 1;
 
                 $module->children[] = $object;

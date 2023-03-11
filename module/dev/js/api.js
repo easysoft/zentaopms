@@ -1,6 +1,6 @@
 $(function()
 {
-    initModule();
+    initModuleTree();
     setHeight();
     $(window).resize(setHeight);
 });
@@ -23,7 +23,7 @@ function setHeight()
  * @access public
  * @return void
  */
-function initModule()
+function initModuleTree()
 {
     $('#moduleTree').tree(
     {

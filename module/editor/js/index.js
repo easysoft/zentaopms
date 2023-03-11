@@ -1,6 +1,6 @@
 $(function()
 {
-    initModule();
+    initModuleTree();
     setHeight();
     $(window).resize(setHeight);
 });
@@ -24,7 +24,7 @@ function setHeight()
  * @access public
  * @return void
  */
-function initModule()
+function initModuleTree()
 {
     $('#moduleTree').tree(
     {
@@ -45,5 +45,6 @@ function initModule()
 
         $(this).closest('.side-col').find('li.active').removeClass('active');
         $(this).parent().addClass('active');
+        $(this).parent().parent().parent().addClass('active');
     })
 }

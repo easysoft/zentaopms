@@ -1,6 +1,6 @@
 $(function()
 {
-    initTable();
+    initTableTree();
     setHeight();
     $(window).resize(setHeight);
 });
@@ -23,7 +23,7 @@ function setHeight()
  * @access public
  * @return void
  */
-function initTable()
+function initTableTree()
 {
     $('#tableTree').tree(
     {
