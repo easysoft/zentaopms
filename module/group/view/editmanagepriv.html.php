@@ -51,7 +51,7 @@
         </div>
       </div>
       <div class="panel-bottom">
-        <?php echo html::a('#', '<i class="icon icon-plus"></i>' . $lang->group->add, '', "class='btn btn-primary iframe' id='addDependent'");?>
+        <?php echo html::a('#', '<i class="icon icon-plus"></i>' . $lang->group->add, '', "class='btn btn-primary iframe' disabled id='addDependent'");?>
       </div>
     </div>
     <div class="priv-panel mt-m">
@@ -66,7 +66,7 @@
         </div>
       </div>
       <div class="panel-bottom">
-        <?php echo html::a('#', '<i class="icon icon-plus"></i>' . $lang->group->add, '', "class='btn btn-primary iframe' id='addRecommendation'");?>
+        <?php echo html::a('#', '<i class="icon icon-plus"></i>' . $lang->group->add, '', "class='btn btn-primary iframe' disabled id='addRecommendation'");?>
       </div>
     </div>
   </div>
