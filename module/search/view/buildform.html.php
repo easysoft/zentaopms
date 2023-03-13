@@ -75,7 +75,7 @@ html[lang^='zh-'] .operatorWidth {width: 90px !important;}
     <i class='icon icon-angle-left'></i>
   </div>
 <?php endif;?>
-<form method='post' action='<?php echo $this->createLink('search', 'buildQuery');?>' target='hiddenwin' id='<?php echo $formId;?>' class='search-form<?php if($style == 'simple') echo ' search-form-simple';?>'>
+<form method='post' action='<?php echo $this->createLink('search', 'buildQuery');?>' target='hiddenwin' id='<?php echo $formId;?>' class='search-form no-stash<?php if($style == 'simple') echo ' search-form-simple';?>'>
 <div class='hidden'>
 <?php
 /* Print every field as an html object, select or input. Thus when setFiled is called, copy it's html to build the search form. */
