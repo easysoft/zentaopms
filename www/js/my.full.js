@@ -31,7 +31,7 @@
                 if($(form).attr('target') == 'hiddenwin' && config.currentModule.indexOf('program') != -1 && config.currentModule.indexOf('project') != -1 && config.currentModule.indexOf('testcase') != -1)  return;
                 var formID         = config.currentMethod + '-' + config.currentModule + '-' + $(form).attr("id");
                 var formDataStored = $.zui.store.get(formID);
-                setTimeout(function () {
+                setTimeout(function() {
                     $.zui.store.remove(formID);
                 }, 100)
                 if(formDataStored && formDataStored.length)
@@ -97,7 +97,16 @@
                                                 }
                                             }
                                         }
-                                        else if(tagName === 'INPUT')
+                                        else if(tagName === 'TEXTAREA' && $(formItem).hasClass('kindeditor'))
+                                        {
+                                            KindEditor.remove('#' + item.name);
+                                            formItem.val(item.value);
+                                            $(formItem).kindeditor({
+                                                /* Conetnt change event. */
+                                                afterChange: storeFormData(formID, $(form).serializeArray())
+                                            });
+                                        }
+                                        else
                                         {
                                             if($(formItem).attr('type') === 'checkbox')
                                             {
@@ -112,15 +121,6 @@
                                                 formItem.val(item.value);
                                             }
                                         }
-                                        else if(tagName === 'TEXTAREA' && $(formItem).hasClass('kindeditor'))
-                                        {
-                                            KindEditor.remove('#' + item.name);
-                                            formItem.val(item.value);
-                                            $(formItem).kindeditor({
-                                                /* Conetnt change event. */
-                                                afterChange: storeFormData(formID, $(form).serializeArray())
-                                            });
-                                        }
                                     }
                                 }
                             }
@@ -129,7 +129,7 @@
                         {
                             setTimeout(function () {
                                 $.zui.store.remove(formID);
-                            }, 0)
+                            }, 100)
                         }
                     }).show();
                 }
