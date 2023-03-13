@@ -995,6 +995,7 @@ class groupModel extends model
         $this->sortResource();
         $resource = json_decode(json_encode($this->lang->resource), true);
         $this->dao->delete()->from(TABLE_PRIVLANG)->exec();
+        $this->dao->delete()->from(TABLE_PRIVRELATION)->exec();
         $this->dao->delete()->from(TABLE_PRIV)->exec();
         $this->dao->delete()->from(TABLE_CONFIG)->where('module')->eq('priv')->exec();
         $this->dbh->exec('ALTER TABLE ' . TABLE_PRIV . ' auto_increment = 1');
