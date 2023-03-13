@@ -37,6 +37,9 @@
   <div class="main main-content">
   <?php if($browseType == 'bycard'):?>
     <?php include 'editmanageprivbycard.html.php';?>
+  <?php else:?>
+  <?php include 'editmanageprivbylist.html.php';?>
+  <?php endif;?>
   </div>
   <div class="side">
     <div class="priv-panel">
@@ -70,10 +73,6 @@
       </div>
     </div>
   </div>
-  <?php else:?>
-  <?php include 'editmanageprivbylist.html.php';?>
-  </div>
-  <?php endif;?>
 </div>
 <?php include '../../common/view/footer.html.php';?>
 
