@@ -22,7 +22,6 @@
           <tr>
             <th><?php echo $lang->gitea->name;?></th>
             <td class='required'><?php echo html::input('name', '', "class='form-control'");?></td>
-            <td class="tips-git"></td>
           </tr>
           <tr>
             <th><?php echo $lang->gitea->url;?></th>
