@@ -19,7 +19,7 @@ function initPreference() {
         'execution-task': 'list-recent',
         'execution-executionkanban': 'kanban',
     }
-    function optionRenderProgram($option, b) 
+    function optionRenderProgram($option, b)
     {
         /* transform ， to , then split to fit lang */
         var textArr = b.text.split('/');
@@ -35,21 +35,21 @@ function initPreference() {
              *      <div class="title"></div>
              *      <div class="context"></div>
              *     </div>
-             *  </div> 
+             *  </div>
              **/
             $option.prepend('<div class="preference-border"><div class="preference-img"><img src="theme/default/images/guide/' + objPngSrc[b.value] + '.png"></div><div class="preference-text"><div class="title">' + textArr[0] + '</div><div class="context">' + textArr[1] + '</div></div></div>');
         }
         return $option;
     }
-    function textRenderProgram($text, b) 
+    function textRenderProgram($text, b)
     {
         $text.empty();
         $text.addClass('preference-selection');
         $text.prepend('<span>' + b.split('/')[0] + '</span>')
         return $text;
     }
-    
-    function optionRenderURSR($option, b) 
+
+    function optionRenderURSR($option, b)
     {
         if (!$option.hasClass('option-ursr'))
         {
@@ -60,7 +60,7 @@ function initPreference() {
         }
         return $option;
     }
-    
+
     $('.programLink').picker({
         optionRender: optionRenderProgram,
         selectionTextRender: textRenderProgram
@@ -80,6 +80,12 @@ function initPreference() {
     $('.URSR').picker({
         optionRender: optionRenderURSR
     });
+    $(document).on('mousemove', 'a.picker-option', function(e)
+    {
+        $('.picker-option.text-primary').removeClass('text-primary');
+        $(this).addClass('text-primary');
+    });
+
 }
 
 $(function()
