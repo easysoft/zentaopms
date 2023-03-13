@@ -2,7 +2,6 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/bug.class.php';
-$db->switchDB();
 su('admin');
 
 /**
@@ -49,4 +48,3 @@ r($bug->batchChangeBranchTest($bugIDList3, $branchList3[2], $bugIDList3[2])) && 
 r($bug->batchChangeBranchTest($bugIDList4, $branchList4[0], $bugIDList4[0])) && p()                  && e('0');            // 修改分支为主干 未发生变化
 r($bug->batchChangeBranchTest($bugIDList4, $branchList4[1], $bugIDList4[1])) && p('0:field,old,new') && e('branch,0,37');  // 修改分支为分支37
 r($bug->batchChangeBranchTest($bugIDList4, $branchList4[2], $bugIDList4[2])) && p('0:field,old,new') && e('branch,37,38'); // 修改分支为分支38
-$db->restoreDB();

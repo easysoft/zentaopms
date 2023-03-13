@@ -2,7 +2,6 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/file.class.php';
-$db->switchDB();
 su('admin');
 
 /**
@@ -35,4 +34,3 @@ r($file->updateObjectIDTest($uid, $objectID[1], $objectType[1], $albums2)) && p(
 r($file->updateObjectIDTest($uid, $objectID[2], $objectType[2], $albums3)) && p('4:id,objectID,objectType;5:id,objectID,objectType')                            && e('4,103,task;5,103,task');                                 // 测试更新 id 4 5 的objectID 为 103 objectType 为 task
 r($file->updateObjectIDTest($uid, $objectID[3], $objectType[3], $albums4)) && p('6:id,objectID,objectType;7:id,objectID,objectType;8:id,objectID,objectType')   && e('6,104,traincourse;7,104,traincourse;8,104,traincourse'); // 测试更新 id 6 7 8 的objectID 为 104 objectType 为 traincourse
 r($file->updateObjectIDTest($uid, $objectID[4], $objectType[4], $albums5)) && p('9:id,objectID,objectType;10:id,objectID,objectType;11:id,objectID,objectType') && e('9,105,testcase;10,105,testcase;11,105,testcase');        // 测试更新 id 9 10 11 的objectID 为 105 objectType 为 testcase
-$db->restoreDB();

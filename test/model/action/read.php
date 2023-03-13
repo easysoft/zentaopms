@@ -2,7 +2,6 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/action.class.php';
-$db->switchDB();
 su('admin');
 
 /**
@@ -29,4 +28,3 @@ r($action->readTest($objectType[1], $objectID[1])) && p('0:objectType,objectID,r
 r($action->readTest($objectType[2], $objectID[2])) && p('0:objectType,objectID,read') && e('productplan,3,1'); // 测试对action 3 进行阅读操作
 r($action->readTest($objectType[3], $objectID[3])) && p('0:objectType,objectID,read') && e('release,4,1');     // 测试对action 4 进行阅读操作
 r($action->readTest($objectType[4], $objectID[4])) && p('0:objectType,objectID,read') && e('project,5,1');     // 测试对action 5 进行阅读操作
-$db->restoreDB();

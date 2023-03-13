@@ -32,26 +32,26 @@ class Processor
     {
         $this->dao->begin();
 
-        $this->initBassicSql();
+        //$this->initBassicSql();
         $this->initDept();
         $this->initUser();
         $this->initProgram();
-        $this->initProduct();
-        $this->initPlan();
+        //$this->initProduct();
+        //$this->initPlan();
         $this->initProject();
-        $this->initBuild();
-        $this->initTask();
+        //$this->initBuild();
+        //$this->initTask();
         $this->initExecution();
-        $this->initRelease();
-        $this->initStakeholder();
-        $this->initUserquery();
-        $this->initMessage();
-        $this->initUpdateKanban();
-        $this->initStory();
-        $this->initBug();
-        $this->initTest();
-        $this->initTodo();
-        $this->initSonPlan();
+        //$this->initRelease();
+        //$this->initStakeholder();
+        //$this->initUserquery();
+        //$this->initMessage();
+        //$this->initUpdateKanban();
+        //$this->initStory();
+        //$this->initBug();
+        //$this->initTest();
+        //$this->initTodo();
+        //$this->initSonPlan();
 
         $this->dao->commit();
     }

@@ -2,7 +2,6 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/git.class.php';
-$db->switchDB();
 su('admin');
 
 /**
@@ -29,4 +28,3 @@ $repo->client = '';
 $repo->path   = '';
 r($git->getRepoLogs($repo)) && p() && e(0);    // 使用错误的版本库
 
-$db->restoreDB();

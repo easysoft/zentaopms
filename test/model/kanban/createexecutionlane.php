@@ -2,7 +2,6 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/kanban.class.php';
-$db->switchDB();
 su('admin');
 
 /**
@@ -46,4 +45,3 @@ r($kanban->createExecutionLaneTest($executionIDList[2], $typeIDList[3], $groupBy
 r($kanban->createExecutionLaneTest($executionIDList[2], $typeIDList[3], $groupByIDList[5])) && p() && e('10'); // 创建执行103 bug  按指派给分组的泳道
 r($kanban->createExecutionLaneTest($executionIDList[3]))                                    && p() && e('3');  // 创建执行104的泳道
 r($kanban->createExecutionLaneTest($executionIDList[4]))                                    && p() && e('3');  // 创建执行105的泳道
-$db->restoreDB();

@@ -2,7 +2,6 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/bug.class.php';
-$db->switchDB();
 su('admin');
 
 /**
@@ -70,4 +69,3 @@ r($bug->batchChangeModuleTest($bugIDList4, $moduleList[2], $bugIDList4[0])) && p
 r($bug->batchChangeModuleTest($bugIDList4, $moduleList[3], $bugIDList4[1])) && p('0:field,old,new') && e('module,9,10');  // 修改bug2 3模块为10
 r($bug->batchChangeModuleTest($bugIDList4, $moduleList[4], $bugIDList4[0])) && p('0:field,old,new') && e('module,10,11'); // 修改bug2 3模块为11
 r($bug->batchChangeModuleTest($bugIDList4, $moduleList[4], $bugIDList4[1])) && p()                  && e('0');            // 修改bug2 3模块为11 未发生变化
-$db->restoreDB();
