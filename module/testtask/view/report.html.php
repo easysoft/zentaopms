@@ -27,7 +27,7 @@
         <div class='panel-title'><?php echo $lang->testtask->report->select;?></div>
       </div>
       <div class='panel-body'>
-        <form method='post' id='chartTypesForm'>
+        <form method='post' id='chartTypesForm' class='no-stash'>
           <div class='checkboxes'>
             <?php echo html::checkBox('charts', $lang->testtask->report->charts, $checkedCharts, '', 'block');?>
           </div>

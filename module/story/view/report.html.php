@@ -28,7 +28,7 @@
         <div class='panel-title'><?php echo $lang->story->report->select;?></div>
       </div>
       <div class='panel-body'>
-        <form method='post' id='chartTypesForm'>
+        <form method='post' id='chartTypesForm' class='no-stash'>
           <div class='checkboxes'>
             <?php if($storyType == 'requirement') unset($lang->story->report->charts['storysPerPlan']);?>
             <?php echo html::checkBox('charts', $lang->story->report->charts, $checkedCharts, '', 'block');?>
