@@ -8,6 +8,10 @@
      */
     function handleSaveFormDraft()
     {
+        /* Ignore onlybody page. */
+        var onlybody = window.location.search.substr(1).match(new RegExp("(^|&)onlybody=([^&]*)(&|$)", "i"));
+        if(onlybody && onlybody[2] == 'yes') return;
+
         if(config.currentMethod === 'login' || config.currentModule === 'repo' || config.currentMethod.indexOf('edit') != -1 || config.currentMethod.indexOf('import') != -1) return;
         setTimeout(function()
         {
@@ -124,7 +128,7 @@
                     }).show();
                 }
                 form.on('input', function()
-                {    
+                {
                     storeFormArr()
                 }).on('change', function()
                 {
