@@ -1207,7 +1207,7 @@ class groupModel extends model
      * Get priv relation.
      *
      * @param  int    $priv
-     * @param  string $type
+     * @param  string $type    depend|recommend
      * @param  string $module
      * @access public
      * @return array
@@ -1250,6 +1250,7 @@ class groupModel extends model
      * Get priv relation.
      *
      * @param  array  $privs
+     * @param  string $type    depend|recommend
      * @access public
      * @return array
      */
@@ -1275,14 +1276,15 @@ class groupModel extends model
      * Save relation.
      *
      * @param  array    $privIdList
-     * @param  string   $type
+     * @param  string   $type    depend|recommend
      * @access public
-     * @return void
+     * @return bool
      */
     public function saveRelation($privIdList, $type)
     {
         if(is_string($privIdList)) $privIdList = explode(',', $privIdList);
         $data = fixer::input('post')->get();
+        if(empty($data->relation)) return false;
 
         $deleteModuleSQL = $this->dao->select('id')->from(TABLE_PRIV)->where('module')->in(array_keys($data->relation))->get();
         $this->dao->delete()->from(TABLE_PRIVRELATION)
@@ -1305,6 +1307,7 @@ class groupModel extends model
                 }
             }
         }
+        return true;
     }
 
     /**

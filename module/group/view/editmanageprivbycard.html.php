@@ -15,9 +15,9 @@
   <table class='table table-hover table-striped table-bordered' id='privList'>
     <thead>
       <tr class="text-center permission-head">
-        <th class="flex-sm">模块</th>
-        <th class="flex-sm">权限包</th>
-        <th class="flex-content">权限</th>
+        <th class="flex-sm"><?php echo $lang->group->module?></th>
+        <th class="flex-sm"><?php echo $lang->privpackage->common?></th>
+        <th class="flex-content"><?php echo $lang->group->acl?></th>
       </tr>
     </thead>
     <tbody>

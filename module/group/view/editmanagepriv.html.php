@@ -14,7 +14,7 @@
 <div id="mainMenu" class='flex-space-center'>
   <div class="btn-toolbar">
     <?php echo html::a($this->createLink('group', 'browse', ''), '<i class="icon icon-angle-left"></i>' . $lang->goback, '', 'class="btn btn-back"');?>
-    <a href="#" class="btn btn-link btn-active-text"><?php echo $lang->group->all?></a>
+    <?php echo html::a(inlink('editManagePriv', "browseType={$browseType}&view="), $lang->group->all, '', "class='btn btn-link btn-active-text'");?>
     <?php if($browseType != 'bycard'):?>
     <a class="btn btn-link querybox-toggle" id='bysearchTab'><i class="icon icon-search muted"></i> <?php echo $lang->searchAB;?></a>
     <?php endif;?>
@@ -51,7 +51,7 @@
         </div>
       </div>
       <div class="panel-bottom">
-        <?php echo html::a('#', '<i class="icon icon-plus"></i>' . $lang->group->add, '', "class='btn btn-primary iframe' id='addDependent'");?>
+        <?php echo html::a('#', '<i class="icon icon-plus"></i>' . $lang->group->add, '', "class='btn btn-primary iframe' disabled id='addDependent'");?>
       </div>
     </div>
     <div class="priv-panel mt-m">
@@ -66,7 +66,7 @@
         </div>
       </div>
       <div class="panel-bottom">
-        <?php echo html::a('#', '<i class="icon icon-plus"></i>' . $lang->group->add, '', "class='btn btn-primary iframe' id='addRecommendation'");?>
+        <?php echo html::a('#', '<i class="icon icon-plus"></i>' . $lang->group->add, '', "class='btn btn-primary iframe' disabled id='addRecommendation'");?>
       </div>
     </div>
   </div>

@@ -447,6 +447,7 @@ class group extends control
         $this->view->packages       = $this->group->getPrivPackagesByView($view);
         $this->view->moduleLang     = $moduleLang;
         $this->view->modulePackages = $this->group->getModuleAndPackageTree('package');
+        $this->view->view           = $view;
 
         $this->display();
     }
@@ -570,8 +571,10 @@ class group extends control
     {
         if(strpos("depend|recommend", $type) === false) return print('Error type');
 
-        if($_POST)
+        if($this->server->request_method == 'POST')
         {
+            if(empty($_POST['relation'])) return print(js::alert($this->lang->group->noticeNoChecked));
+
             $this->group->saveRelation($privIdList, $type);
             if(strpos($privIdList, ',') === false) print(js::execute("if(typeof(parent.parent.getSideRelation) == 'function') parent.parent.getSideRelation({$privIdList})"));
             return print(js::reload('parent'));
