@@ -13,7 +13,7 @@
 <?php include '../../common/view/header.html.php';?>
 <div id="mainMenu" class='flex-space-center'>
   <div class="btn-toolbar">
-    <?php echo html::a($this->createLink('group', 'browse', ''), '<i class="icon icon-angle-left"></i>' . $lang->goback, '', 'class="btn btn-back"');?>
+    <?php echo html::a($this->createLink('group', 'browse', ''), '<i class="icon icon-angle-left"></i>' . $lang->goback, '', 'class="btn btn-primary"');?>
     <?php echo html::a(inlink('editManagePriv', "browseType={$browseType}&view="), $lang->group->all, '', "class='btn btn-link btn-active-text'");?>
     <?php if($browseType != 'bycard'):?>
     <a class="btn btn-link querybox-toggle" id='bysearchTab'><i class="icon icon-search muted"></i> <?php echo $lang->searchAB;?></a>
