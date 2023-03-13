@@ -997,6 +997,7 @@ class groupModel extends model
         $this->dao->delete()->from(TABLE_PRIVLANG)->exec();
         $this->dao->delete()->from(TABLE_PRIV)->exec();
         $this->dao->delete()->from(TABLE_CONFIG)->where('module')->eq('priv')->exec();
+        $this->dbh->exec('ALTER TABLE ' . TABLE_PRIV . ' auto_increment = 1');
 
         $viewModules = array();
         $this->loadModel('setting');
@@ -1014,6 +1015,7 @@ class groupModel extends model
                 $priv->methodName = $methodName;
                 $priv->module     = $moduleName;
                 $priv->package    = 0;
+                $priv->system     = 1;
                 $priv->order      = $order * 5;
                 $order ++;
 
