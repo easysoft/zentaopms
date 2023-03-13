@@ -114,6 +114,12 @@
   </form>
 </div>
 <script>
+/**
+ * Init preference.
+ *
+ * @access public
+ * @return void
+ */
 function initPreference() {
     var objPngSrc = {
         'program-browse': 'list',
@@ -135,6 +141,15 @@ function initPreference() {
         'execution-task': 'list-recent',
         'execution-executionkanban': 'kanban',
     }
+
+    /**
+     * Render program option.
+     *
+     * @param  object  $option
+     * @param  object  $b
+     * @access public
+     * @return object
+     */
     function optionRenderProgram($option, b)
     {
         /* transform ， to , then split to fit lang */
@@ -144,19 +159,19 @@ function initPreference() {
             $option.empty();
             $option.addClass('preference');
             $option.attr("title", textArr[0]);
-            /** dom to prepend
-             *  <div class="border>
-             *    <div class="preference-img"><img src="theme/default/images/guide/' + b.value + '.png"></div>
-             *    <div class="preference-text">
-             *      <div class="title"></div>
-             *      <div class="context"></div>
-             *     </div>
-             *  </div>
-             **/
             $option.prepend('<div class="preference-border"><div class="preference-img"><img src="theme/default/images/guide/' + objPngSrc[b.value] + '.png"></div><div class="preference-text"><div class="title">' + textArr[0] + '</div><div class="context">' + textArr[1] + '</div></div></div>');
         }
         return $option;
     }
+
+    /**
+     * Render program text.
+     *
+     * @param  object  $text
+     * @param  object  $b
+     * @access public
+     * @return object
+     */
     function textRenderProgram($text, b)
     {
         $text.empty();
@@ -165,6 +180,14 @@ function initPreference() {
         return $text;
     }
 
+    /**
+     * Render URSR option.
+     *
+     * @param  object  $option
+     * @param  object  $b
+     * @access public
+     * @return object
+     */
     function optionRenderURSR($option, b)
     {
         if (!$option.hasClass('option-ursr'))
@@ -181,18 +204,22 @@ function initPreference() {
         optionRender: optionRenderProgram,
         selectionTextRender: textRenderProgram
     });
+
     $('.productLink').picker({
         optionRender: optionRenderProgram,
         selectionTextRender: textRenderProgram
     });
+
     $('.projectLink').picker({
         optionRender: optionRenderProgram,
         selectionTextRender: textRenderProgram
     });
+
     $('.executionLink').picker({
         optionRender: optionRenderProgram,
         selectionTextRender: textRenderProgram
     });
+
     $('.URSR').picker({
         optionRender: optionRenderURSR
     });

@@ -22,6 +22,7 @@
     function handleSaveFormDraft()
     {
         if(config.currentModule === 'repo') return;
+        if(config.currentModule.indexOf('workflow') !== -1) return;
 
         var skipMethods = ['edit', 'import', 'login', 'export', 'finish', 'confirm', 'resolve', 'start', 'pause', 'cancel', 'report', 'close', 'activate', 'restart', 'suspend', 'putoff', 'browse', 'hangup', 'track', 'index', 'reply', 'manage', 'run'];
         for(var i = 0; i < skipMethods.length; i++)
