@@ -918,7 +918,8 @@ class bug extends control
         $branches  = $product->type == 'normal' ? array() : $this->loadModel('branch')->getPairs($bug->product);
 
         $projects = $this->loadModel('product')->getProjectPairsByProduct($productID, $bug->branch);
-
+        $this->session->set("project", key($projects), 'project');
+        
         $this->executeHooks($bugID);
 
         /* Header and positon. */
