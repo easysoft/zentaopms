@@ -23,7 +23,7 @@
     {
         if(config.currentModule === 'repo') return;
 
-        var skipMethods = ['edit', 'import', 'login', 'export', 'finish', 'confirm', 'resolve', 'start', 'pause', 'cancel', 'report', 'close', 'activate', 'restart', 'suspend', 'putoff', 'browse', 'hangup', 'track', 'index', 'reply'];
+        var skipMethods = ['edit', 'import', 'login', 'export', 'finish', 'confirm', 'resolve', 'start', 'pause', 'cancel', 'report', 'close', 'activate', 'restart', 'suspend', 'putoff', 'browse', 'hangup', 'track', 'index', 'reply', 'manage'];
         for(var i = 0; i < skipMethods.length; i++)
         {
             if(config.currentMethod.indexOf(skipMethods[i]) === 0) return;
