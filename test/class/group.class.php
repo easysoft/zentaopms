@@ -419,4 +419,55 @@ class groupTest
 
         return $objects;
     }
+
+
+
+
+
+    /**
+     * 获取一条权限的基本信息
+     *
+     * @param   int         $privID
+     * @param   string      $lang
+     * @access  public 
+     * @return  void
+     */
+    public function getPrivInfoTest($priv, $lang)
+    {
+        $object = $this->objectModel->getPrivInfo($priv, $lang);
+        if(dao::isError()) return dao::getError();    
+        return $object;
+    }
+
+
+
+
+
+    /**     
+     * 获取模块和权限包option
+     *
+     * @access public 
+     * @return array
+     */
+    public function getModuleAndPackageTreeTest()
+    {
+        return  $this->objectModel->getModuleAndPackageTree();
+    }
+
+
+    /**
+     * 更新权限
+     *
+     * @access public 
+     * @return void
+     */
+    public function updatePrivTest($privID,$lang)
+    {
+        $this->objectModel->updatePrivLang($privID,$lang);
+        if(dao::isError())
+        {
+            return false;
+        }
+        return true;
+    }
 }
