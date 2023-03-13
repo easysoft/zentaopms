@@ -188,6 +188,7 @@ $(function()
         var relationPriv = $this.data('relationpriv');
         $.get(createLink('group', 'deleteRelation', 'type=' + type + '&privID=' + privID + '&relationPriv=' + relationPriv));
         $this.closest('.priv-panel').find('.panel-title .priv-count').html('(' + (privCount - 1) + ')');
+        if($this.closest('ul').find('li').length == 1) $this.closest('ul').closest('li').remove();
         $this.closest('li').remove();
     })
 

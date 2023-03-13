@@ -538,6 +538,40 @@ class group extends control
     }
 
     /**
+     * Sort priv packages.
+     *
+     * @param  int    $parentID
+     * @param  string $type
+     * @access public
+     * @return void
+     */
+    public function sortPrivPackages($parentID = 0, $type = '')
+    {
+        $orders = $_POST['orders'];
+        if(empty($orders)) return false;
+        if($type == 'view')
+        {
+            $orders = str_replace('View,', ',', $orders);
+            $orders = trim($orders, ',');
+            $this->loadModel('setting')->setItem("system.priv.views", $orders);
+        }
+        if($type == 'module')
+        {
+            $orders   = trim($orders, ',');
+            $parentID = rtrim($parentID, 'View');
+            $this->loadModel('setting')->setItem("system.priv.{$parentID}Modules", $orders);
+        }
+        if($type == 'package')
+        {
+            $orders = explode(',', $orders);
+            foreach($orders as $index => $id)
+            {
+                if(!empty($id)) $this->dao->update(TABLE_PRIVPACKAGE)->set('order')->eq(($index + 1) * 5)->where('id')->eq($id)->exec();
+            }
+        }
+    }
+
+    /**
      * Delete a priv package.
      *
      * @param  int    $privPackageID
@@ -667,40 +701,6 @@ class group extends control
         }
         $tree .= '</ul></li></ul>';
         return print($tree);
-    }
-
-    /**
-     * Sort priv packages.
-     *
-     * @param  int    $parentID
-     * @param  string $type
-     * @access public
-     * @return void
-     */
-    public function sortPrivPackages($parentID = 0, $type = '')
-    {
-        $orders = $_POST['orders'];
-        if(empty($orders)) return false;
-        if($type == 'view')
-        {
-            $orders = str_replace('View,', ',', $orders);
-            $orders = trim($orders, ',');
-            $this->loadModel('setting')->setItem("system.priv.views", $orders);
-        }
-        if($type == 'module')
-        {
-            $orders   = trim($orders, ',');
-            $parentID = rtrim($parentID, 'View');
-            $this->loadModel('setting')->setItem("system.priv.{$parentID}Modules", $orders);
-        }
-        if($type == 'package')
-        {
-            $orders = explode(',', $orders);
-            foreach($orders as $index => $id)
-            {
-                if(!empty($id)) $this->dao->update(TABLE_PRIVPACKAGE)->set('order')->eq(($index + 1) * 5)->where('id')->eq($id)->exec();
-            }
-        }
     }
 
     /**
