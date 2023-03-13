@@ -820,6 +820,7 @@ CREATE TABLE IF NOT EXISTS `zt_priv` (
   `methodName` varchar(30) NOT NULL,
   `module` varchar(30) NOT NULL,
   `package` mediumint(8) unsigned NOT NULL,
+  `system` enum('0','1') NOT NULL DEFAULT '0',
   `order` tinyint(3) unsigned NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `priv` (`moduleName`,`methodName`)
