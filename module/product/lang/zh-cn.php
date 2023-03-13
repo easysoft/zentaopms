@@ -93,6 +93,7 @@ $lang->product->unfoldClosed          = '展开已关闭';
 $lang->product->confirmDelete        = " 您确定删除该{$lang->productCommon}吗？";
 $lang->product->errorNoProduct       = "还没有创建{$lang->productCommon}！";
 $lang->product->accessDenied         = "您无权访问该{$lang->productCommon}";
+$lang->product->notExists            = "该{$lang->productCommon}不存在！";
 $lang->product->programChangeTip     = "如下{$lang->projectCommon}只关联了该{$lang->productCommon}， 将直接转移至新{$lang->projectCommon}集下。";
 $lang->product->notChangeProgramTip  = "该{$lang->productCommon}的{$lang->SRCommon}已经关联到如下{$lang->projectCommon}，请点击{$lang->projectCommon}名称进入{$lang->SRCommon}列表取消关联后再操作";
 $lang->product->confirmChangeProgram = "如下{$lang->projectCommon}既关联了该{$lang->productCommon}又关联了其他{$lang->productCommon}，请确认是否继续关联该{$lang->productCommon}，勾选后将取消与其他{$lang->productCommon}的关联关系，同时转移至新{$lang->projectCommon}集下。";
