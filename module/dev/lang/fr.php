@@ -38,6 +38,9 @@ $lang->dev->fields['type']   = 'Type';
 $lang->dev->fields['length'] = 'Length';
 $lang->dev->fields['null']   = 'Null';
 
+$lang->dev->switchList['1'] = 'On';
+$lang->dev->switchList['0'] = 'Off';
+
 $lang->dev->tableList = array();
 $lang->dev->tableList['action']                = 'Action';
 $lang->dev->tableList['bug']                   = 'Bug';
@@ -166,6 +169,14 @@ $lang->dev->tableList['client']                = 'Client Version Update';
 $lang->dev->tableList['conference']            = 'Conference';
 $lang->dev->tableList['integration']           = 'Integration';
 $lang->dev->tableList['license']               = 'License';
+$lang->dev->tableList['zanode']                = 'ZAnode';
+$lang->dev->tableList['dashboard']             = 'Dashboard';
+$lang->dev->tableList['screen']                = 'Screen';
+$lang->dev->tableList['zahost']                = 'ZAhost';
+$lang->dev->tableList['approval']              = 'Approval';
+$lang->dev->tableList['approvalflow']          = 'Approval Flow';
+$lang->dev->tableList['chart']                 = 'Chart';
+$lang->dev->tableList['dataset']               = 'Dataset';
 
 $lang->dev->groupList['my']        = 'Dashboard';
 $lang->dev->groupList['program']   = 'Program';
@@ -202,4 +213,4 @@ $lang->dev->projectMenu['waterfall']     = "Waterfall / Waterfall + {$lang->proj
 $lang->dev->projectMenu['kanbanProject'] = "Kanban {$lang->projectCommon}";
 if($config->vision == 'lite') $lang->dev->projectMenu['kanbanProject'] = $lang->projectCommon;
 
-$this->lang->dev->replaceLable['project-execution'] = "{$lang->executionCommon} / Stage";
+if($config->vision == 'rnd') $this->lang->dev->replaceLable['project-execution'] = "{$lang->executionCommon} / Stage";

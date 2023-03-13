@@ -13,9 +13,8 @@ $(function()
  */
 function setHeight()
 {
-    var paneHeight = $(window).height() - 120;
-    $('#sidebar .module-tree,#mainContent .module-col,#extendWin').css('height', paneHeight);
-    $(' #mainContent .module-content, #editWin').css('height', paneHeight - 6);
+    var paneHeight = $(window).height() - 90;
+    $('#sidebar .module-tree,#mainContent .module-content').css('height', paneHeight);
 }
 
 /**
@@ -41,10 +40,6 @@ function initModuleTree()
     {
         var target = $(e.target);
         if (target.attr('data-has-children') === 'true') return;
-        $('#extendWin').attr('src', createLink('editor', 'extend', 'moduleDir=' + target.attr('data-module')));
-
-        $(this).closest('.side-col').find('li.active').removeClass('active');
-        $(this).parent().addClass('active');
-        $(this).parent().parent().parent().addClass('active');
+        self.location.href = createLink('dev', 'api', 'module=' + target.attr('data-module'));
     })
 }

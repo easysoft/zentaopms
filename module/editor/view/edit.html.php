@@ -13,6 +13,13 @@
 <?php if(empty($filePath)) die();?>
 <?php include $app->getModuleRoot() . 'common/view/header.lite.html.php';?>
 <?php
+$browser = helper::getBrowser();
+if($browser['name'] == 'ie')
+{
+    include 'ieedit.html.php';
+    die();
+}
+
 js::set('jsRoot', $jsRoot);
 js::set('clientLang', $app->clientLang);
 js::import($jsRoot . 'monaco-editor/min/vs/loader.js');
@@ -74,7 +81,7 @@ js::import($jsRoot . 'monaco-editor/min/vs/loader.js');
         </td>
       </tr>
       <?php endif;?>
-      <tr>
+      <tr class='footer'>
         <td class='text-center'>
           <?php echo html::submitButton()?>
           <?php if($action and $action != 'edit' and $action != 'newPage'):?>
@@ -111,7 +118,12 @@ $(function()
             autoIndent:      true,
             contextmenu:     true,
             automaticLayout: true,
-            minimap:         {enabled: false}
+            minimap:         {enabled: false},
+            scrollBeyondLastLine: false,
+            scrollbar: {
+                verticalScrollbarSize: 10,
+                horizontalScrollbarSize: 10
+            }
         });
         <?php endif;?>
         fileContentEditor = monaco.editor.create(document.getElementById('fileContentEditor'),
@@ -122,10 +134,18 @@ $(function()
             autoIndent:      true,
             contextmenu:     true,
             automaticLayout: true,
-            minimap:         {enabled: false}
+            minimap:         {enabled: false},
+            scrollBeyondLastLine: false,
+            scrollbar: {
+                verticalScrollbarSize: 10,
+                horizontalScrollbarSize: 10
+            }
         });
-        var codeHeight = top.window.innerHeight - 280;
-        if($('#fileNameBox').length == 0) codeHeight += 56;
+        var codeHeight    = parent.$('#editWin').height();
+        var headerHeight  = $('.main-header').outerHeight();
+        var footerHeight  = $('.footer').height();
+        var nameBoxHeight = $('#fileNameBox').height() ? $('#fileNameBox').height() : 0;
+        codeHeight -= headerHeight + footerHeight + nameBoxHeight;
         <?php if(!empty($showContent)):?>
         contentHeight = showContentEditor.getContentHeight();
         if(contentHeight > 300) contentHeight = 300;
@@ -134,7 +154,7 @@ $(function()
         codeHeight -= contentHeight + 30;
         if(codeHeight < 300) codeHeight = 300;
         <?php endif;?>
-        $('#fileContentEditor').height(codeHeight);
+        $('#fileContentEditor').height(codeHeight - 30);
     });
     $('#submit').click(function()
     {

@@ -1305,8 +1305,8 @@ class product extends control
         $actionURL = $this->createLink('product', 'all', "browseType=bySearch&orderBy=order_asc&queryID=myQueryID");
         $this->product->buildProductSearchForm($param, $actionURL);
 
-        $this->view->title        = $this->lang->product->common;
-        $this->view->position[]   = $this->lang->product->common;
+        $this->view->title        = $this->lang->productCommon;
+        $this->view->position[]   = $this->lang->productCommon;
 
         $this->view->recTotal         = $pager->recTotal;
         $this->view->productStats     = $productStats;

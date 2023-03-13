@@ -143,10 +143,11 @@ class mrModel extends model
      * Get gitlab projects.
      *
      * @param  int    $hostID
+     * @param  array  $projectIds
      * @access public
      * @return array
      */
-    public function getGitlabProjects($hostID = 0)
+    public function getGitlabProjects($hostID = 0, $projectIds = array())
     {
         $allProjects = array();
         $allGroups   = array();
@@ -164,7 +165,19 @@ class mrModel extends model
             $minProject = min($projectCount->minSource, $projectCount->minTarget);
             $maxProject = max($projectCount->maxSource, $projectCount->maxTarget);
         }
-        $allProjects[$hostID] = $this->gitlab->apiGetProjects($hostID, 'false', $minProject, $maxProject);
+
+        if($projectIds)
+        {
+            foreach($projectIds as $projectID)
+            {
+                $project = $this->gitlab->apiGetSingleProject($hostID, $projectID);
+                if(isset($project->id)) $allProjects[$hostID][] = $project;
+            }
+        }
+        else
+        {
+            $allProjects[$hostID] = $this->gitlab->apiGetProjects($hostID, 'false', $minProject, $maxProject);
+        }
 
         /* If not an administrator, need to obtain group member information. */
         $groupIDList = array(0 => 0);
@@ -747,7 +760,7 @@ class mrModel extends model
             $url = sprintf($this->loadModel('gitea')->getApiRoot($hostID), "/repos/$projectID/pulls");
         }
 
-        $response = json_decode(commonModel::http($url));
+        $response = json_decode(commonModel::http($url, $data = null, $options = array(), $headers = array(), $dataType = 'data', $method = 'POST', $timeout = 30, $httpCode = false, $log = false));
         if(empty($response)) $response = array();
         if($scm == 'Gitea')
         {

@@ -20,6 +20,8 @@ class gitlabModel extends model
     public $developerAccess  = 30;
     public $maintainerAccess = 40;
 
+    protected $projects = array();
+
     /**
      * Get a gitlab by id.
      *
@@ -386,6 +388,45 @@ class gitlabModel extends model
     }
 
     /**
+     * Get Gitlab commits.
+     *
+     * @param  object $repo
+     * @param  string $entry
+     * @param  string $revision
+     * @param  string $type
+     * @param  object $pager
+     * @param  string $begin
+     * @param  string $end
+     * @access public
+     * @return array
+     */
+    public function getCommits($repo, $entry, $revision = 'HEAD', $type = 'dir', $pager = null, $begin = 0, $end = 0)
+    {
+        $scm = $this->app->loadClass('scm');
+        $scm->setEngine($repo);
+        $comments = $scm->engine->getCommitsByPath($entry, '', '', isset($pager->recPerPage) ? $pager->recPerPage : 10, isset($pager->pageID) ? $pager->pageID : 1);
+
+        $designNames = $this->dao->select("commit, name")->from(TABLE_DESIGN)->where('deleted')->eq(0)->fetchPairs();
+        $designIds   = $this->dao->select("commit, id")->from(TABLE_DESIGN)->where('deleted')->eq(0)->fetchPairs();
+        $commitIds   = array();
+        foreach($comments as $comment)
+        {
+            $comment->revision        = $comment->id;
+            $comment->originalComment = $comment->title;
+            $comment->comment         = $this->loadModel('repo')->replaceCommentLink($comment->title);
+            $comment->committer       = $comment->committer_name;
+            $comment->time            = date("Y-m-d H:i:s", strtotime($comment->committed_date));
+            $comment->designName      = zget($designNames, $comment->revision, '');
+            $comment->designID        = zget($designIds, $comment->revision, '');
+            $commitIds[]              = $comment->id;
+        }
+        $commitCounts = $this->dao->select('revision,commit')->from(TABLE_REPOHISTORY)->where('revision')->in($commitIds)->fetchPairs();
+        foreach($comments as $comment) $comment->commit = !empty($commitCounts[$comment->id]) ? $commitCounts[$comment->id] : '';
+
+        return $comments;
+    }
+
+    /**
      * Create a gitlab.
      *
      * @access public
@@ -424,7 +465,7 @@ class gitlabModel extends model
         if(strpos($host, 'http://') !== 0 and strpos($host, 'https://') !== 0) return false;
 
         $url = sprintf($host, $api);
-        return json_decode(commonModel::http($url, $data, $options));
+        return json_decode(commonModel::http($url, $data, $options, $headers = array(), $dataType = 'data', $method = 'POST', $timeout = 30, $httpCode = false, $log = false));
     }
 
     /**
@@ -461,7 +502,7 @@ class gitlabModel extends model
         $gitlab = $this->loadModel('gitlab')->getByID($gitlabID);
         if(!$gitlab) return '';
         $url = rtrim($gitlab->url, '/') . "/api/v4/todos?project_id=$projectID&type=MergeRequest&state=pending&private_token={$gitlab->token}&sudo={$sudo}";
-        return json_decode(commonModel::http($url));
+        return json_decode(commonModel::http($url, $data = null, $optionsi = array(), $headers = array(), $dataType = 'data', $method = 'POST', $timeout = 30, $httpCode = false, $log = false));
     }
 
     /**
@@ -708,7 +749,7 @@ class gitlabModel extends model
         $allResults = array();
         for($page = 1; true; $page++)
         {
-            $results = json_decode(commonModel::http($url . "&simple={$simple}&page={$page}&per_page=100"));
+            $results = json_decode(commonModel::http($url . "&simple={$simple}&page={$page}&per_page=100", $data = null, $optionsi = array(), $headers = array(), $dataType = 'data', $method = 'POST', $timeout = 30, $httpCode = false, $log = false));
             if(!is_array($results)) break;
             if(!empty($results)) $allResults = array_merge($allResults, $results);
             if(count($results) < 100) break;
@@ -986,8 +1027,11 @@ class gitlabModel extends model
      */
     public function apiGetSingleProject($gitlabID, $projectID)
     {
+        if(isset($this->projects[$gitlabID][$projectID])) return $this->projects[$gitlabID][$projectID];
+
         $url = sprintf($this->getApiRoot($gitlabID, false), "/projects/$projectID");
-        return json_decode(commonModel::http($url));
+        $this->projects[$gitlabID][$projectID] = json_decode(commonModel::http($url, $data = null, $optionsi = array(), $headers = array(), $dataType = 'data', $method = 'POST', $timeout = 30, $httpCode = false, $log = false));
+        return $this->projects[$gitlabID][$projectID];
     }
 
     /**

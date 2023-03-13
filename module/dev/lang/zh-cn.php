@@ -169,6 +169,14 @@ $lang->dev->tableList['client']                = '客户端版本更新';
 $lang->dev->tableList['conference']            = '音视频';
 $lang->dev->tableList['integration']           = '集成';
 $lang->dev->tableList['license']               = '授权';
+$lang->dev->tableList['zanode']                = '执行节点';
+$lang->dev->tableList['dashboard']             = '仪表盘';
+$lang->dev->tableList['screen']                = '大屏';
+$lang->dev->tableList['zahost']                = '宿主机';
+$lang->dev->tableList['approval']              = '审批';
+$lang->dev->tableList['approvalflow']          = '审批流';
+$lang->dev->tableList['chart']                 = '图表';
+$lang->dev->tableList['dataset']               = '数据集';
 
 $lang->dev->groupList['my']        = '我的地盘';
 $lang->dev->groupList['program']   = '项目集';
@@ -205,4 +213,4 @@ $lang->dev->projectMenu['waterfall']     = "瀑布 / 融合瀑布{$lang->project
 $lang->dev->projectMenu['kanbanProject'] = "看板{$lang->projectCommon}";
 if($config->vision == 'lite') $lang->dev->projectMenu['kanbanProject'] = $lang->projectCommon;
 
-$this->lang->dev->replaceLable['project-execution'] = "{$lang->executionCommon} / 阶段";
+if($config->vision == 'rnd') $this->lang->dev->replaceLable['project-execution'] = "{$lang->executionCommon} / 阶段";

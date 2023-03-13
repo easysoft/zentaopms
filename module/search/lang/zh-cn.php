@@ -94,14 +94,14 @@ $lang->search->modules['testreport']  = '测试报告';
 $lang->search->modules['productplan'] = '计划';
 $lang->search->modules['program']     = '项目集';
 $lang->search->modules['project']     = $lang->projectCommon;
-$lang->search->modules['execution']   = $lang->executionCommon;
+$lang->search->modules['execution']   = $lang->execution->common;
 $lang->search->modules['story']       = $lang->SRCommon;
 $lang->search->modules['requirement'] = $lang->URCommon;
 
 $lang->search->objectTypeList['story']            = $lang->SRCommon;
 $lang->search->objectTypeList['requirement']      = $lang->URCommon;
 $lang->search->objectTypeList['stage']            = '阶段';
-$lang->search->objectTypeList['sprint']           = $lang->executionCommon;
+$lang->search->objectTypeList['sprint']           = $lang->execution->common;
 $lang->search->objectTypeList['kanban']           = '看板';
 $lang->search->objectTypeList['commonIssue']      = '问题';
 $lang->search->objectTypeList['stakeholderIssue'] = '干系人问题';

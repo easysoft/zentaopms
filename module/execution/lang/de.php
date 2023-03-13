@@ -227,7 +227,6 @@ $lang->execution->build                     = 'Builds';
 $lang->execution->testtask                  = 'Testaufgaben';
 $lang->execution->burn                      = 'Burndown';
 $lang->execution->computeBurn               = 'Aktualisieren';
-$lang->execution->CFD                       = 'Cumulative Flow diagrams';
 $lang->execution->computeCFD                = 'Compute Cumulative Flow diagrams';
 $lang->execution->burnData                  = 'Burndown Daten';
 $lang->execution->fixFirst                  = 'Bearbeite Mannstunden des ersten Tags';

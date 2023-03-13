@@ -345,7 +345,7 @@
               </div>
             </div>
             <?php endif;?>
-            <?php if(!(strpos($execution->projectInfo->model, 'waterfall') !== false and (empty($execution->projectInfo->hasProduct) or in_array($execution->attribute, array('request', 'review'))))):?>
+            <?php if($features['plan']):?>
             <div class="detail">
               <div class="detail-title"><strong><?php echo $lang->execution->linkPlan;?></strong></div>
               <div class="detail-content">

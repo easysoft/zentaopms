@@ -536,13 +536,13 @@ class devModel extends model
                 break;
         }
 
-        foreach($customeds as $type => $customed)
+        foreach($customeds as $customType => $customed)
         {
             if(is_array($customed))
             {
                 foreach($customed as $row)
                 {
-                    $langKey = $type == 'featureBar' ? "featureBar-{$method}_" : $row->section . '_';
+                    $langKey = $customType == 'featureBar' ? "featureBar-{$method}_" : $row->section . '_';
                     $rowKey  = $row->key;
                     $customedLangs[$langKey . $rowKey] = $row->value;
                 }
@@ -820,6 +820,16 @@ class devModel extends model
         if(!in_array($type, $this->config->dev->navTypes)) return $menuTree;
 
         $mainNav = $type == 'second' ? $this->lang->mainNav : array();
+        if($this->config->vision != 'open' and $type == 'second')
+        {
+            $flowNav = $this->dao->select('module')->from(TABLE_WORKFLOW)
+                ->where('buildin')->eq(0)
+                ->andWhere('vision')->eq($this->config->vision)
+                ->andWhere('navigator')->in('primary,secondary')
+                ->fetchPairs();
+            foreach($flowNav as $nav) unset($mainNav->$nav);
+        }
+
         if($type != 'second')
         {
             /* Set main nav list. */
@@ -1061,5 +1071,45 @@ class devModel extends model
         $menu->active   = (int)$active;
         $menu->children = array();
         return $menu;
+    }
+
+    /**
+     * Get tree by type.
+     *
+     * @param  string $currentObject
+     * @param  string $type module|table
+     * @access public
+     * @return array
+     */
+    public function getTree($currentObject, $type)
+    {
+        $tree = array();
+        if(!in_array($type, array('module', 'table'))) return $tree;
+
+        $objects = $type == 'module' ? $this->getModules() : $this->getTables();
+        $groupList = array_merge($this->lang->dev->groupList, $this->lang->dev->endGroupList);
+        foreach($groupList as $moduleKey => $moduleName)
+        {
+            if(empty($objects[$moduleKey])) continue;
+
+            $module = new stdclass();
+            $module->key      = $moduleKey;
+            $module->title    = $moduleName;
+            $module->active   = 0;
+            $module->children = array();
+            foreach($objects[$moduleKey] as $objectKey => $objectName)
+            {
+                $defaultValue   = $type == 'module' ? $objectName : '';
+                $object         = new stdclass();
+                $object->key    = $objectName;
+                $object->title  = zget($this->lang->dev->tableList, $objectKey, $defaultValue);
+                $object->active = $objectName == $currentObject ? 1 : 0;
+                if($object->active) $module->active = 1;
+
+                $module->children[] = $object;
+            }
+            $tree[] = $module;
+        }
+        return $tree;
     }
 }
