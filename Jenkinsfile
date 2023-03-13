@@ -59,5 +59,307 @@ pipeline {
       }
     }
 
+     stage('Unit Test'){
+      stages{
+        stage('Unittest Init') {
+              agent {
+                  kubernetes {
+                      inheritFrom "xuanim"
+                          containerTemplate {
+                              name "zentao"
+                              image "${MIDDLE_IMAGE_REPO}:${MIDDLE_IMAGE_TAG}"
+                              command "sleep"
+                              args "99d"
+                          }
+                  }
+              }
+              options { skipDefaultCheckout() }
+
+              steps {
+                  container('zentao') {
+                      sh 'initdb.php ; /apps/zentao/test/ztest init'
+                  }
+              }
+              post {
+                success {
+                    sh 'echo "stage unit init success"'
+                }
+                failure {
+                    sh 'echo "stage unit init failure"'
+                }
+              }
+          }
+
+        stage('Run Test') {
+          parallel {
+            stage('UnitTest P1') {
+              agent {
+                kubernetes {
+                  inheritFrom "xuanim"
+                  containerTemplate {
+                    name "zentao1"
+                    image "${MIDDLE_IMAGE_REPO}:${MIDDLE_IMAGE_TAG}"
+                    command "sleep"
+                    args "99d"
+                  }
+                }
+              }
+              options { skipDefaultCheckout() }
+
+              steps {
+                container('zentao1') {
+                    sh 'initdb.php config'
+                    sh '/apps/zentao/test/ztest extract ; /apps/zentao/test/ztest P1 | tee /apps/zentao/test/p1.log'
+                    sh 'pipeline-unittest.sh /apps/zentao/test/p1.log'
+                }
+              }
+
+              post {
+                success {
+                  sh 'echo /tmp/p1.log'
+                  sh 'printenv'
+                }
+                failure {
+                  sh 'failure'
+                }
+              }
+
+            }
+            stage('UnitTest P2') {
+              agent {
+                kubernetes {
+                  inheritFrom "xuanim"
+                  containerTemplate {
+                    name "zentao2"
+                    image "${MIDDLE_IMAGE_REPO}:${MIDDLE_IMAGE_TAG}"
+                    command "sleep"
+                    args "99d"
+                  }
+                }
+              }
+              options { skipDefaultCheckout() }
+
+              steps {
+                container('zentao2') {
+                    sh 'initdb.php config'
+                    sh '/apps/zentao/test/ztest extract ; /apps/zentao/test/ztest P2 | tee /apps/zentao/test/p2.log'
+                    sh 'pipeline-unittest.sh /apps/zentao/test/p2.log'
+                }
+              }
+
+              /*
+              post {
+                success {
+                  container('xuanimbot') {
+                    sh 'echo "stage unit-test success"'
+                  }
+                }
+                failure {
+                  container('xuanimbot') {
+                    sh 'echo "stage unit-test failure"'
+                  }
+                }
+              }
+              */
+            }
+            stage('UnitTest P3') {
+              agent {
+                kubernetes {
+                  inheritFrom "xuanim"
+                  containerTemplate {
+                    name "zentao3"
+                    image "${MIDDLE_IMAGE_REPO}:${MIDDLE_IMAGE_TAG}"
+                    command "sleep"
+                    args "99d"
+                  }
+                }
+              }
+              options { skipDefaultCheckout() }
+
+              steps {
+                container('zentao3') {
+                    sh 'initdb.php config'
+                    sh '/apps/zentao/test/ztest extract ; /apps/zentao/test/ztest P3 | tee /apps/zentao/test/p3.log'
+                    sh 'pipeline-unittest.sh /apps/zentao/test/p3.log'
+                }
+              }
+
+              /*
+              post {
+                success {
+                  container('xuanimbot') {
+                    sh 'echo "stage unit-test success"'
+                  }
+                }
+                failure {
+                  container('xuanimbot') {
+                    sh 'echo "stage unit-test failure"'
+                  }
+                }
+              }
+              */
+            }
+            stage('UnitTest P4') {
+              agent {
+                kubernetes {
+                  inheritFrom "xuanim"
+                  containerTemplate {
+                    name "zentao4"
+                    image "${MIDDLE_IMAGE_REPO}:${MIDDLE_IMAGE_TAG}"
+                    command "sleep"
+                    args "99d"
+                  }
+                }
+              }
+              options { skipDefaultCheckout() }
+
+              steps {
+                container('zentao4') {
+                    sh 'initdb.php config'
+                    sh '/apps/zentao/test/ztest extract ; /apps/zentao/test/ztest P4 | tee /apps/zentao/test/p4.log '
+                    sh 'pipeline-unittest.sh /apps/zentao/test/p4.log'
+                }
+              }
+
+              /*
+              post {
+                success {
+                  container('xuanimbot') {
+                    sh 'echo "stage unit-test success"'
+                  }
+                }
+                failure {
+                  container('xuanimbot') {
+                    sh 'echo "stage unit-test failure"'
+                  }
+                }
+              }
+              */
+            }
+            stage('UnitTest P5') {
+              agent {
+                kubernetes {
+                  inheritFrom "xuanim"
+                  containerTemplate {
+                    name "zentao5"
+                    image "${MIDDLE_IMAGE_REPO}:${MIDDLE_IMAGE_TAG}"
+                    command "sleep"
+                    args "99d"
+                  }
+                }
+              }
+              options { skipDefaultCheckout() }
+
+              steps {
+                container('zentao5') {
+                    sh 'initdb.php config'
+                    sh '/apps/zentao/test/ztest extract ; /apps/zentao/test/ztest P5 | tee /apps/zentao/test/p5.log'
+                    sh 'pipeline-unittest.sh /apps/zentao/test/p5.log'
+                }
+              }
+
+              /*
+              post {
+                success {
+                  container('xuanimbot') {
+                    sh 'echo "stage unit-test success"'
+                  }
+                }
+                failure {
+                  container('xuanimbot') {
+                    sh 'echo "stage unit-test failure"'
+                  }
+                }
+              }
+              */
+            }
+            stage('UnitTest P6') {
+              agent {
+                kubernetes {
+                  inheritFrom "xuanim"
+                  containerTemplate {
+                    name "zentao6"
+                    image "${MIDDLE_IMAGE_REPO}:${MIDDLE_IMAGE_TAG}"
+                    command "sleep"
+                    args "99d"
+                  }
+                }
+              }
+              options { skipDefaultCheckout() }
+
+              steps {
+                container('zentao6') {
+                    sh 'initdb.php config'
+                    sh '/apps/zentao/test/ztest extract ; /apps/zentao/test/ztest P6 | tee /apps/zentao/test/p6.log'
+                    sh 'pipeline-unittest.sh /apps/zentao/test/p6.log'
+                }
+              }
+
+              /*
+              post {
+                success {
+                  container('xuanimbot') {
+                    sh 'echo "stage unit-test success"'
+                  }
+                }
+                failure {
+                  container('xuanimbot') {
+                    sh 'echo "stage unit-test failure"'
+                  }
+                }
+              }
+              */
+            }
+            stage('UnitTest P7') {
+              agent {
+                kubernetes {
+                  inheritFrom "xuanim"
+                  containerTemplate {
+                    name "zentao7"
+                    image "${MIDDLE_IMAGE_REPO}:${MIDDLE_IMAGE_TAG}"
+                    command "sleep"
+                    args "99d"
+                  }
+                }
+              }
+              options { skipDefaultCheckout() }
+
+              steps {
+                container('zentao7') {
+                    sh 'initdb.php config'
+                    sh '/apps/zentao/test/ztest extract ; /apps/zentao/test/ztest P7 | tee /apps/zentao/test/p7.log'
+                    sh 'pipeline-unittest.sh /apps/zentao/test/p7.log'
+                }
+              }
+
+              /*
+              post {
+                success {
+                  container('xuanimbot') {
+                    sh 'echo "stage unit-test success"'
+                  }
+                }
+                failure {
+                  container('xuanimbot') {
+                    sh 'echo "stage unit-test failure"'
+                  }
+                }
+              }
+              */
+            }
+
+          } // End Parallel
+       }
+        post{
+            success{
+                echo 'success'
+            }
+            failure{
+                echo 'failure'
+            }
+        }
+      }//End unittest
+    }
+
   } // End Root Stages
 } // End pipeline
