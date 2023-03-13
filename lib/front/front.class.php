@@ -56,6 +56,7 @@ class html extends baseHTML
     static public function input($name, $value = "", $attrib = "", $autocomplete = false)
     {
         $id = "id='$name'";
+        $id = str_replace(array('[', ']'), "", $id);
         if(strpos($attrib, 'id=') !== false) $id = '';
         if(is_null($value)) $value = '';
         $value = str_replace("'", '&#039;', $value);

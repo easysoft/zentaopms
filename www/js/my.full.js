@@ -15,7 +15,7 @@
             if(form.length)
             {
                 if($(form).hasClass('no-stash')) return;
-                if($(form).attr('target') == 'hiddenwin' && config.currentModule.indexOf('program') != -1  && config.currentModule.indexOf('project') != -1) return;
+                if($(form).attr('target') == 'hiddenwin' && (config.currentModule.indexOf('program') != -1 || config.currentModule.indexOf('project') != -1 || config.currentModule.indexOf('testcase') != -1)) return;
                 function storeFormArr()
                 {
                     $.zui.store.set(formDataID, $(form).serializeArray());
@@ -116,7 +116,10 @@
                         ],
                         onAction: function(name, action, messager)
                         {
-                            $.zui.store.remove(formDataID);
+                            setTimeout(function () {
+                                $.zui.store.remove(formDataID);
+                            }, 0)
+
                         }
                     }).show();
                 }
