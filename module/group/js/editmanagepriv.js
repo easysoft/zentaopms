@@ -192,12 +192,17 @@ $(function()
         $this.closest('li').remove();
     })
 
-    $(document).on('change', '.checkbox-primary input[type=checkbox]', function()
+    $(document).on('change', '.checkbox-primary input[type=checkbox], #privListTable input[type=checkbox]', function()
     {
         var privIdList = '';
         $('.checkbox-primary input[type=checkbox]:checked').each(function()
         {
             var privID = $(this).data('id');
+            if(privID) privIdList += ',' + privID;
+        });
+        $('#privListTable input[type=checkbox]:checked').each(function()
+        {
+            var privID = $(this).closest('tr').data('id');
             if(privID) privIdList += ',' + privID;
         });
 
