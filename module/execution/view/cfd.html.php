@@ -39,7 +39,7 @@
       <?php echo html::select('type', $lang->execution->cfdTypeList, $type, "class='form-control chosen'");?>
     </div>
     <div id="cfdDateSelect">
-    <form method='post' class='form-ajax not-watch'>
+    <form method='post' class='form-ajax not-watch no-stash'>
       <div class='input-group'>
       <?php echo html::input('begin', $begin, "class='form-control form-date' onchange='$(\"#datePreview\").removeClass(\"hidden\")' placeholder='" . $lang->execution->charts->cfd->begin . "'");?>
       <span class='input-group-addon'><?php echo $lang->project->to;?></span>

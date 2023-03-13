@@ -54,7 +54,7 @@
             <div class='actions'><?php echo html::a("javascript:showLink({$release->id}, \"story\")", '<i class="icon-link"></i> ' . $lang->release->linkStory, '', "class='btn btn-primary'");?></div>
             <div class='linkBox cell hidden'></div>
             <?php endif;?>
-            <form class='main-table table-story<?php if($link === 'true' and $type == 'story') echo " hidden";?>' method='post' id='linkedStoriesForm' data-ride="table">
+            <form class='main-table table-story no-stash<?php if($link === 'true' and $type == 'story') echo " hidden";?>' method='post' id='linkedStoriesForm' data-ride="table">
               <table class='table has-sort-head' id='storyList'>
                 <?php
                 $canBatchUnlink = common::hasPriv('release', 'batchUnlinkStory');

@@ -330,7 +330,8 @@ class baseHTML
      */
     static public function hidden($name, $value = "", $attrib = "")
     {
-        return "<input type='hidden' name='$name' id='$name' value='$value' $attrib />\n";
+        $id = str_replace(array('[', ']'), "", $name);
+        return "<input type='hidden' name='$name' id='$id' value='$value' $attrib />\n";
     }
 
     /**
@@ -347,7 +348,8 @@ class baseHTML
     static public function password($name, $value = "", $attrib = "")
     {
         if(stripos($attrib, 'autocomplete') === false) $attrib .= " autocomplete='off'";
-        return "<input type='password' name='$name' id='$name' value='$value' $attrib />\n";
+        $id = str_replace(array('[', ']'), "", $name);
+        return "<input type='password' name='$name' id='$id' value='$value' $attrib />\n";
     }
 
     /**
@@ -364,6 +366,7 @@ class baseHTML
     static public function textarea($name, $value = "", $attrib = "")
     {
         $id = "id='$name'";
+        $id = str_replace(array('[', ']'), "", $id);
         if(strpos($attrib, 'id=') !== false) $id = '';
         return "<textarea name='$name' $id $attrib>$value</textarea>\n";
     }
@@ -397,8 +400,9 @@ class baseHTML
      */
     static public function date($name, $value = "", $options = '', $attrib = '')
     {
-        $html = "<div class='input-append date date-picker' {$options}>";
-        $html .= "<input type='text' name='{$name}' id='$name' value='$value' {$attrib} />\n";
+        $id    = str_replace(array('[', ']'), "", $name);
+        $html  = "<div class='input-append date date-picker' {$options}>";
+        $html .= "<input type='text' name='{$name}' id='$id' value='$value' {$attrib} />\n";
         $html .= "<span class='add-on'><button class='btn' type='button'><i class='icon-calendar'></i></button></span></div>";
         return $html;
     }
@@ -417,8 +421,9 @@ class baseHTML
      */
     static public function dateTime($name, $value = "", $options = '', $attrib = '')
     {
-        $html = "<div class='input-append date time-picker' {$options}>";
-        $html .= "<input type='text' name='{$name}' id='$name' value='$value' {$attrib} />\n";
+        $id    = str_replace(array('[', ']'), "", $name);
+        $html  = "<div class='input-append date time-picker' {$options}>";
+        $html .= "<input type='text' name='{$name}' id='$id' value='$value' {$attrib} />\n";
         $html .= "<span class='add-on'><button class='btn' type='button'><i class='icon-calendar'></i></button></span></div>";
         return $html;
     }
