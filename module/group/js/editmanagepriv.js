@@ -202,14 +202,16 @@ $(function()
 
         if(privIdList == '')
         {
-            $('#batchSetDepend').attr('href', '#').attr('disabled', 'disabled');
-            $('#batchSetRecommend').attr('href', '#').attr('disabled', 'disabled');
+            $('#batchSetDepend,#batchSetRecommend,#batchDeleteDepend,#batchDeleteRecommend').attr('href', '#');
+            $('#batchActions').addClass('disabled');
             return;
         }
 
         privIdList = privIdList.substr(1);
-        $('#batchSetDepend').attr('href', createLink('group', 'addRelation', "privIdList=" + privIdList + '&type=depend')).removeAttr('disabled');
-        $('#batchSetRecommend').attr('href', createLink('group', 'addRelation', "privIdList=" + privIdList + '&type=recommend')).removeAttr('disabled');
-        if(!$('#batchSetDepend').hasClass('modaled')) $('#batchSetDepend,#batchSetRecommend').modal().addClass('modaled');
+        $('#batchSetDepend').attr('href', createLink('group', 'addRelation', "privIdList=" + privIdList + '&type=depend'));
+        $('#batchSetRecommend').attr('href', createLink('group', 'addRelation', "privIdList=" + privIdList + '&type=recommend'));
+        $('#batchDeleteDepend').attr('href', createLink('group', 'batchDeleteRelation', "privIdList=" + privIdList + '&type=depend'));
+        $('#batchDeleteRecommend').attr('href', createLink('group', 'batchDeleteRelation', "privIdList=" + privIdList + '&type=recommend'));
+        $('#batchActions').removeClass('disabled');
     })
 });

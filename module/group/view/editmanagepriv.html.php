@@ -26,10 +26,19 @@
     </div>
     <a href="#" class="btn btn-primary"><?php echo $lang->group->addPriv?></a>
     <?php if(common::hasPriv('group', 'managePrivPackage')) echo html::a($this->createLink('group', 'managePrivPackage', ''), $lang->group->managePrivPackage, '', 'class="btn btn-primary"');?>
-    <?php if(common::hasPriv('group', 'addRelation')):?>
-    <a href="#" class="btn btn-primary iframe" disabled id='batchSetDepend'><?php echo $lang->group->batchSetDependency?></a>
-    <a href="#" class="btn btn-primary iframe" disabled id='batchSetRecommend'><?php echo $lang->group->batchSetRecommendation?></a>
-    <?php endif;?>
+    <div class="dropdown">
+      <a href="javascript:;" id='batchActions' data-toggle="dropdown" class="btn btn-primary disabled"><?php echo $lang->group->batchActions?> <span class="caret"></span></a>
+      <ul class="dropdown-menu pull-right">
+        <?php if(common::hasPriv('group', 'addRelation')):?>
+        <li><a href="#" class="iframe" id='batchSetDepend'><?php echo $lang->group->batchSetDependency?></a></li>
+        <li><a href="#" class="iframe" id='batchSetRecommend'><?php echo $lang->group->batchSetRecommendation?></a></li>
+        <?php endif;?>
+        <?php if(common::hasPriv('group', 'batchDeleteRelation')):?>
+        <li><a href="#" class="iframe" id='batchDeleteDepend'><?php echo $lang->group->batchDeleteDependency?></a></li>
+        <li><a href="#" class="iframe" id='batchDeleteRecommend'><?php echo $lang->group->batchDeleteRecommendation?></a></li>
+        <?php endif;?>
+      </ul>
+    </div>
   </div>
 </div>
 <div class="cell<?php if($browseType == 'bysearch') echo ' show';?>" id="queryBox" data-module="priv"></div>

@@ -587,7 +587,6 @@ class group extends control
         $this->view->privs       = $privs;
         $this->view->modules     = array('' => $this->lang->group->selectModule) + $this->group->getMenuModules(null, true);
         $this->view->modulePrivs = $this->group->getPrivByModule($modules);
-        $this->view->relations   = $this->group->getPrivRelation($privIdList, $type);
         $this->view->type        = $type;
         $this->display();
     }
@@ -595,7 +594,7 @@ class group extends control
     /**
      * Delete relation.
      *
-     * @param  string $type
+     * @param  string $type   recommend|depend
      * @param  int    $privID
      * @param  int    $relationPriv
      * @access public
@@ -604,6 +603,41 @@ class group extends control
     public function deleteRelation($type, $privID, $relationPriv)
     {
         $this->dao->delete()->from(TABLE_PRIVRELATION)->where('type')->eq($type)->andWhere('priv')->eq($privID)->andWhere('relationPriv')->eq($relationPriv)->exec();
+    }
+
+    /**
+     * Batch delete relation.
+     *
+     * @param  string  $privIdList
+     * @param  string  $type     recommend|depend
+     * @access public
+     * @return void
+     */
+    public function batchDeleteRelation($privIdList, $type)
+    {
+        if(strpos("depend|recommend", $type) === false) return print('Error type');
+
+        if($this->server->request_method == 'POST')
+        {
+            if(empty($_POST['relation'])) return print(js::alert($this->lang->group->noticeNoChecked));
+
+            $data        = fixer::input('post')->get();
+            $deletedPriv = array();
+            foreach($data->relation as $module => $relations) $deletedPriv = array_merge($deletedPriv, $relations);
+            $this->dao->delete()->from(TABLE_PRIVRELATION)->where('type')->eq($type)->andWhere('priv')->in($privIdList)->andWhere('relationPriv')->in($deletedPriv)->exec();
+
+            return print(js::reload('parent'));
+        }
+
+        $privs   = $this->group->getPrivByIdList($privIdList);
+        $modules = array();
+        foreach($privs as $priv) $modules[$priv->module] = $priv->module;
+
+        $this->view->privs       = $privs;
+        $this->view->modules     = array('' => $this->lang->group->selectModule) + $this->group->getMenuModules(null, true);
+        $this->view->modulePrivs = $this->group->getPrivByModule($modules);
+        $this->view->type        = $type;
+        $this->display('group', 'addrelation');
     }
 
     /**
@@ -621,7 +655,6 @@ class group extends control
 
         $modules     = $this->group->getMenuModules(null, true);
         $modulePrivs = $this->group->getPrivByModule($module);
-        $relations   = $this->group->getPrivRelation($privIdList, $type, $module);
 
         $tree  = "<ul class='tree' data-ride='tree'><li>";
         $tree .= html::a('#', $modules[$module]);
@@ -629,7 +662,7 @@ class group extends control
         foreach($modulePrivs[$module] as $id => $modulePriv)
         {
             $tree .= '<li>';
-            $tree .= html::checkbox("relation[$module]", array($id => $modulePriv->name), (empty($relations) or isset($relations[$id])) ? $id : '');
+            $tree .= html::checkbox("relation[$module]", array($id => $modulePriv->name), '');
             $tree .= '</li>';
         }
         $tree .= '</ul></li></ul>';

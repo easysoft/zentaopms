@@ -13,7 +13,11 @@
 <?php include '../../common/view/header.lite.html.php';?>
 <div id='mainContent' class='main-content'>
   <div class='main-header'>
+    <?php if($app->rawMethod != 'addRelation'):?>
+    <h2><?php echo $type == 'depend' ? $lang->group->deleteDependent : $lang->group->deleteRecommendation;?></h2>
+    <?php else:?>
     <h2><?php echo $type == 'depend' ? $lang->group->addDependent : $lang->group->addRecommendation;?></h2>
+    <?php endif;?>
   </div>
   <div class='main-row'>
     <div class="main-col">
@@ -39,7 +43,7 @@
               <?php echo html::a('#', $modules[$privModule]);?>
               <ul class='relationBox'>
                 <?php foreach($modulePrivs[$privModule] as $id => $modulePriv):?>
-                <li><?php echo html::checkbox("relation[{$privModule}]", array($id => $modulePriv->name), (empty($relations) or isset($relations[$id])) ? $id : '')?></li>
+                <li><?php echo html::checkbox("relation[{$privModule}]", array($id => $modulePriv->name), '')?></li>
                 <?php endforeach;?>
               </ul>
             </li>
