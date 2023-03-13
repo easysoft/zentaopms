@@ -13,7 +13,7 @@
 <?php include '../../common/view/header.lite.html.php';?>
 <div id='mainContent' class='main-content'>
   <div class='main-header'>
-    <?php if($app->rawMethod != 'addRelation'):?>
+    <?php if($app->rawMethod != 'addrelation'):?>
     <h2><?php echo $type == 'depend' ? $lang->group->deleteDependent : $lang->group->deleteRecommendation;?></h2>
     <?php else:?>
     <h2><?php echo $type == 'depend' ? $lang->group->addDependent : $lang->group->addRecommendation;?></h2>
