@@ -38,6 +38,9 @@ $lang->dev->fields['type']   = 'Type';
 $lang->dev->fields['length'] = 'Length';
 $lang->dev->fields['null']   = 'Null';
 
+$lang->dev->switchList['1'] = 'On';
+$lang->dev->switchList['0'] = 'Off';
+
 $lang->dev->tableList = array();
 $lang->dev->tableList['action']                = 'Action';
 $lang->dev->tableList['bug']                   = 'Bug';
