@@ -11,7 +11,6 @@
     function storeFormData(formID, formData)
     {
         $.zui.store.set(formID, formData);
-        // $.zui.store.set(formID, $(form).serializeArray());
     }
 
     /**
@@ -34,7 +33,7 @@
                 var formDataStored = $.zui.store.get(formID);
                 setTimeout(function () {
                     $.zui.store.remove(formID);
-                }, 0)
+                }, 100)
                 if(formDataStored && formDataStored.length)
                 {
                     var message = lang.confirmDraft.replace('%name%', lang[config.currentModule] ? lang[config.currentModule] : '');
@@ -125,7 +124,13 @@
                                     }
                                 }
                             }
-                        ]
+                        ],
+                        onAction: function(name, action, messager)
+                        {
+                            setTimeout(function () {
+                                $.zui.store.remove(formID);
+                            }, 0)
+                        }
                     }).show();
                 }
                 form.on('input', function()
