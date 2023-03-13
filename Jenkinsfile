@@ -28,7 +28,6 @@ pipeline {
   stages {
      stage('SonarQube and Build Image') {
        parallel {
-        /*
          stage('SonarQube') {
            steps {
              container('sonar') {
@@ -49,7 +48,6 @@ pipeline {
             }
           }
         }
-        */
          stage('Build Image') {
            steps {
              container('docker') {
