@@ -116,6 +116,7 @@ function updateRelations(e)
     var selectedID = $('#privListTable').length == 0 ? $(e.target).siblings('input:checkbox').data('id') : $(e.target).closest('tr').attr('data-id');
     $('.side a#addDependent').attr('href', createLink('group', 'addRelation', "privIdList=" + selectedID + '&type=depend')).removeAttr('disabled');
     $('.side a#addRecommendation').attr('href', createLink('group', 'addRelation', "privIdList=" + selectedID + '&type=recommend')).removeAttr('disabled');
+    if(!$('.side a#addDependent').hasClass('modaled')) $('.side a#addDependent,.side a#addRecommendation').modal().addClass('modaled');
     getSideRelation(selectedID);
 }
 
