@@ -1072,4 +1072,44 @@ class devModel extends model
         $menu->children = array();
         return $menu;
     }
+
+    /**
+     * Get tree by type.
+     *
+     * @param  string $currentObject
+     * @param  string $type module|table
+     * @access public
+     * @return array
+     */
+    public function getTree($currentObject, $type)
+    {
+        $tree = array();
+        if(!in_array($type, array('module', 'table'))) return $tree;
+
+        $objects = $type == 'module' ? $this->getModules() : $this->getTables();
+        $groupList = array_merge($this->lang->dev->groupList, $this->lang->dev->endGroupList);
+        foreach($groupList as $moduleKey => $moduleName)
+        {
+            if(empty($objects[$moduleKey])) continue;
+
+            $module = new stdclass();
+            $module->key      = $moduleKey;
+            $module->title    = $moduleName;
+            $module->active   = 0;
+            $module->children = array();
+            foreach($objects[$moduleKey] as $objectKey => $objectName)
+            {
+                $defaultValue   = $type == 'module' ? $objectName : '';
+                $object         = new stdclass();
+                $object->key    = $objectName;
+                $object->title  = zget($this->lang->dev->tableList, $objectKey, $defaultValue);
+                $object->active = $objectName == $currentObject ? 1 : 0;
+                if($object->active) $module->active = 1;
+
+                $module->children[] = $object;
+            }
+            $tree[] = $module;
+        }
+        return $tree;
+    }
 }
