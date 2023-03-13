@@ -802,7 +802,7 @@ class groupModel extends model
             $packages = $this->getPrivPackagesByModule($package->module);
             $package->order = (count($packages) + 1) * 5;
         }
-        $this->dao->update(TABLE_PRIVPACKAGE)->data($package)->batchCheck($this->config->privPackage->update->requiredFields, 'notempty')->where('id')->eq($packageID)->exec();
+        $this->dao->update(TABLE_PRIVPACKAGE)->data($package)->batchCheck($this->config->privPackage->edit->requiredFields, 'notempty')->where('id')->eq($packageID)->exec();
         if(dao::isError()) return false;
 
         $package = $this->getPrivPackageByID($packageID);
