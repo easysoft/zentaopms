@@ -346,7 +346,11 @@ class adminModel extends model
                     if($menuKey == 'dev' and $subMenuKey == 'editor')
                     {
                         if(!empty($this->config->global->editor)) $subMenu['link'] = $this->lang->editor->common . '|editor|index|';
-                        if(empty($this->config->global->editor) and !$this->app->user->admin) continue;
+                        if(empty($this->config->global->editor) and !$this->app->user->admin)
+                        {
+                            unset($menu['subMenu']['editor']);
+                            continue;
+                        }
                     }
 
                     $link = array();
