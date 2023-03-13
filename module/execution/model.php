@@ -2896,8 +2896,11 @@ class executionModel extends model
         }
 
         /* Get stories of children task. */
-        $childrens = $this->dao->select('*')->from(TABLE_TASK)->where('parent')->in($parents)->fetchAll('id');
-        foreach($childrens as $children) $taskStories[$children->story] = $children->story;
+        if(!empty($parents))
+        {
+            $childrens = $this->dao->select('*')->from(TABLE_TASK)->where('parent')->in($parents)->fetchAll('id');
+            foreach($childrens as $children) $taskStories[$children->story] = $children->story;
+        }
 
         /* Remove empty story. */
         unset($taskStories[0]);
