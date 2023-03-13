@@ -14,6 +14,9 @@
 <?php include '../../common/view/tablesorter.html.php';?>
 <?php js::set('confirmUnlinkStory', $lang->release->confirmUnlinkStory)?>
 <?php js::set('confirmUnlinkBug', $lang->release->confirmUnlinkBug)?>
+<?php js::set('storySummary', $summary);?>
+<?php js::set('storyCommon', $lang->SRCommon);?>
+<?php js::set('checkedSummary', str_replace('%storyCommon%', $lang->SRCommon, $lang->product->checkedSummary));?>
 <?php $canBeChanged = common::canBeChanged('release', $release);?>
 <div id='mainMenu' class='clearfix'>
   <div class='btn-toolbar pull-left'>
@@ -54,7 +57,7 @@
             <div class='actions'><?php echo html::a("javascript:showLink({$release->id}, \"story\")", '<i class="icon-link"></i> ' . $lang->release->linkStory, '', "class='btn btn-primary'");?></div>
             <div class='linkBox cell hidden'></div>
             <?php endif;?>
-            <form class='main-table table-story no-stash<?php if($link === 'true' and $type == 'story') echo " hidden";?>' method='post' id='linkedStoriesForm' data-ride="table">
+            <form class='main-table table-story no-stash<?php if($link === 'true' and $type == 'story') echo " hidden";?>' method='post' id='linkedStoriesForm' data-ride="">
               <table class='table has-sort-head' id='storyList'>
                 <?php
                 $canBatchUnlink = common::hasPriv('release', 'batchUnlinkStory');
@@ -84,7 +87,7 @@
                 <tbody class='text-center'>
                   <?php foreach($stories as $storyID => $story):?>
                   <?php $storyLink = $this->createLink('story', 'view', "storyID=$story->id", '', true);?>
-                  <tr>
+                  <tr data-id='<?php echo $story->id;?>' data-estimate='<?php echo $story->estimate?>' <?php if(!empty($story->children)) echo "data-children=" . count($story->children);?> data-cases='<?php echo zget($storyCases, $story->id, 0);?>'>
                     <td class='c-id text-left'>
                       <?php if(($canBatchUnlink or $canBatchClose) and $canBeChanged):?>
                       <div class="checkbox-primary">
@@ -113,7 +116,7 @@
                       if(common::hasPriv('release', 'unlinkStory') and $canBeChanged)
                       {
                           $unlinkURL = $this->createLink('release', 'unlinkStory', "releaseID=$release->id&story=$story->id");
-                          echo html::a("javascript:ajaxDelete(\"$unlinkURL\", \"storyList\", confirmUnlinkStory)", '<i class="icon-unlink"></i>', '', "class='btn' title='{$lang->release->unlinkStory}'");
+                          echo html::a($unlinkURL, '<i class="icon-unlink"></i>', 'hiddenwin', "class='btn' title='{$lang->release->unlinkStory}'");
                       }
                       ?>
                     </td>
@@ -139,6 +142,8 @@
                   }
                   ?>
                 </div>
+                <?php endif;?>
+                <?php if($this->app->getViewType() != 'xhtml'):?>
                 <div class='table-statistic'><?php echo $summary;?></div>
                 <?php endif;?>
                 <?php
