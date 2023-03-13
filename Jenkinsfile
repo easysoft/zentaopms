@@ -350,16 +350,16 @@ pipeline {
 
           } // End Parallel
        }
-        post{
-            success{
-                echo 'success'
-            }
-            failure{
-                echo 'failure'
-            }
-        }
-      }//End unittest
-    }
+      }
+      post{
+          success{
+              echo 'success'
+          }
+          failure{
+              echo 'failure'
+          }
+      }
+    }//End unittest
 
   } // End Root Stages
 } // End pipeline
