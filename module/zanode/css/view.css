@@ -17,5 +17,6 @@
 .node-not-wrap{white-space: nowrap;}
 .btn-info {background-color: unset;}
 .btn.disabled i {color: #fff;}
+.btn-toolbar a img{margin-bottom: 1px;}
 #serviceContent{min-height: 120px;}
 .btn-snap-create{width: 100px;height: 30px;}

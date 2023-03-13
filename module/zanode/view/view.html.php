@@ -223,7 +223,7 @@ $account = strpos($zanode->osName, "windows") ? $config->zanode->defaultWinAccou
           }
 
           common::printLink('zanode', 'reboot', "zanodeID={$zanode->id}", "<i class='icon icon-restart'></i> " . $lang->zanode->rebootNode, '', $rebootAttr);
-          common::printLink('zanode', 'createSnapshot', "zanodeID={$zanode->id}", "<i class='icon icon-plus'></i> " . $lang->zanode->createSnapshot, '', $snapshotAttr, true, true);
+          common::printLink('zanode', 'createSnapshot', "zanodeID={$zanode->id}", "<img src='static/svg/snapshot.svg' /> " . $lang->zanode->createSnapshot, '', $snapshotAttr, true, true);
 
         }
         ?>

@@ -626,4 +626,16 @@ class zanode extends control
             return $this->send(array('result' => 'success', 'message' => 'success'));
         }
     }
+
+    /**
+     * Ajax：get nodes.
+     *
+     * @access public
+     * @return void
+     */
+    public function ajaxGetNodes()
+    {
+        $nodeList = $this->zanode->getPairs();
+        return print(html::select("node", $nodeList, '', "class='form-control picker-select'"));
+    }
 }
