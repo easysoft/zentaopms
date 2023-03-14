@@ -227,7 +227,6 @@ $lang->execution->build                     = 'Builds';
 $lang->execution->testtask                  = 'Testaufgaben';
 $lang->execution->burn                      = 'Burndown';
 $lang->execution->computeBurn               = 'Aktualisieren';
-$lang->execution->CFD                       = 'Cumulative Flow diagrams';
 $lang->execution->computeCFD                = 'Compute Cumulative Flow diagrams';
 $lang->execution->burnData                  = 'Burndown Daten';
 $lang->execution->fixFirst                  = 'Bearbeite Mannstunden des ersten Tags';
@@ -286,7 +285,7 @@ $lang->execution->importPlanStory           = $lang->executionCommon . ' is crea
 $lang->execution->importEditPlanStory       = $lang->executionCommon . ' is edited!\nDo you want to import stories that have been linked to the plan? The stories in the draft will be automatically filtered out when imported.';
 $lang->execution->importBranchPlanStory     = $lang->executionCommon . ' is created!\nDo you want to import stories that have been linked to the plan? Only the activation stories of the branch associated with this ' .$lang->executionCommon. ' will be associated with the import';
 $lang->execution->importBranchEditPlanStory = $lang->executionCommon . ' is edited!\nDo you want to import stories that have been linked to the plan? Only the activation stories of the branch associated with this ' .$lang->executionCommon. ' will be associated with the import';
-$lang->execution->needLinkProducts          = 'The execution has not been linked with any product, and the related functions cannot be used. Please link the product first and try again.';
+$lang->execution->needLinkProducts          = "The execution has not been linked with any {$lang->productCommon}, and the related functions cannot be used. Please link the {$lang->productCommon} first and try again.";
 $lang->execution->iteration                 = 'Iteration';
 $lang->execution->iterationInfo             = '%s Iterationen';
 $lang->execution->viewAll                   = 'Alle anzeigen';
@@ -335,7 +334,7 @@ $lang->execution->aboveAllExecution = "Alle oberen {$lang->executionCommon}";
 
 /* Page prompt. */
 $lang->execution->linkStoryByPlanTips  = "This action will link all stories in this plan to the {$lang->executionCommon}.";
-$lang->execution->batchCreateStoryTips = "Please select the product that needs to be created in batches";
+$lang->execution->batchCreateStoryTips = "Please select the {$lang->productCommon} that needs to be created in batches";
 $lang->execution->selectExecution      = "Auswahl {$lang->executionCommon}";
 $lang->execution->beginAndEnd          = 'Dauer';
 $lang->execution->lblStats             = 'Mannstunden Summe(h) : ';
@@ -375,15 +374,15 @@ $lang->execution->noExecution          = 'Keine Projekte. ';
 $lang->execution->noExecutions         = "No {$lang->execution->common}.";
 $lang->execution->noPrintData          = "No data can be printed.";
 $lang->execution->noMembers            = 'Keine Mitglieder. ';
-$lang->execution->workloadTotal        = "The cumulative workload ratio should not exceed 100%s, and the total workload under the current product is: %s";
-$lang->execution->linkAllStoryTip      = "({$lang->SRCommon} has never been linked under the {$lang->projectCommon}, and can be directly linked with {$lang->SRCommon} of the product linked with the sprint/stage)";
+$lang->execution->workloadTotal        = "The cumulative workload ratio should not exceed 100%s, and the total workload under the current {$lang->productCommon} is: %s";
+$lang->execution->linkAllStoryTip      = "({$lang->SRCommon} has never been linked under the {$lang->projectCommon}, and can be directly linked with {$lang->SRCommon} of the {$lang->productCommon} linked with the sprint/stage)";
 $lang->execution->copyTeamTitle        = "Choose a {$lang->project->common} or {$lang->execution->common} Team to copy.";
 
 /* Interactive prompts. */
 $lang->execution->confirmDelete                = "Möchten Sie {$lang->executionCommon}[%s] löschen?";
 $lang->execution->confirmUnlinkMember          = "Möchten Sie den Benutzer vom {$lang->executionCommon} entfernen?";
 $lang->execution->confirmUnlinkStory           = "After {$lang->SRCommon} is removed, cased linked to {$lang->SRCommon} will be reomoved and tasks linked to {$lang->SRCommon} will be cancelled. Do you want to continue?";
-$lang->execution->confirmSync                  = "After modifying the {$lang->projectCommon}, in order to maintain the consistency of data, the data of products, requirements, teams and whitelist associated with the implementation will be synchronized to the new {$lang->projectCommon}. Please know.";
+$lang->execution->confirmSync                  = "After modifying the {$lang->projectCommon}, in order to maintain the consistency of data, the data of {$lang->productCommon}s, {$lang->SRCommon}s, teams and whitelist associated with the implementation will be synchronized to the new {$lang->projectCommon}. Please know.";
 $lang->execution->confirmUnlinkExecutionStory  = "Do you want to unlink this Story from the {$lang->projectCommon}?";
 $lang->execution->notAllowedUnlinkStory        = "This {$lang->SRCommon} is linked to the {$lang->executionCommon} of the {$lang->projectCommon}. Remove it from the {$lang->executionCommon}, then try again.";
 $lang->execution->notAllowRemoveProducts       = "The story of this product is linked with the {$lang->executionCommon}. Unlink it before doing any action.";
@@ -430,7 +429,7 @@ $lang->execution->hasStartedTaskOrSubStage     = "Tasks or subphases under %s %s
 $lang->execution->hasSuspendedOrClosedChildren = "The sub-stages under stage %s are not all suspended or closed, cannot be modified, and have been filtered.";
 $lang->execution->hasNotClosedChildren         = "The sub-stages under stage %s are not all closed, cannot be modified, and have been filtered.";
 $lang->execution->hasStartedTask               = "The task under %s %s has already started, cannot be modified, and has been filtered.";
-$lang->execution->cannotManageProducts         = 'The ' . strtolower($lang->project->common). ' model of this ' . strtolower($lang->execution->common) . " is %s and this " . strtolower($lang->execution->common) . ' cannot be associated with products.';
+$lang->execution->cannotManageProducts         = 'The ' . strtolower($lang->project->common). ' model of this ' . strtolower($lang->execution->common) . " is %s and this " . strtolower($lang->execution->common) . " cannot be associated with {$lang->productCommon}.";
 
 /* Statistics. */
 $lang->execution->charts = new stdclass();
@@ -524,7 +523,16 @@ $lang->execution->featureBar['task']['assignedtome'] = $lang->execution->assigne
 $lang->execution->featureBar['task']['myinvolved']   = $lang->execution->myInvolved;
 $lang->execution->featureBar['task']['assignedbyme'] = $lang->execution->assignedByMe;
 $lang->execution->featureBar['task']['needconfirm']  = 'Story geändert';
-$lang->execution->featureBar['task']['status']       = $lang->execution->statusSelects[''];
+$lang->execution->featureBar['task']['status']       = $lang->more;
+
+$lang->execution->moreSelects['task']['status']['wait']         = 'Waiting';
+$lang->execution->moreSelects['task']['status']['doing']        = 'Doing';
+$lang->execution->moreSelects['task']['status']['undone']       = 'Unfinished';
+$lang->execution->moreSelects['task']['status']['finishedbyme'] = 'FinishedByMe';
+$lang->execution->moreSelects['task']['status']['done']         = 'Done';
+$lang->execution->moreSelects['task']['status']['closed']       = 'Closed';
+$lang->execution->moreSelects['task']['status']['cancel']       = 'Cancelled';
+$lang->execution->moreSelects['task']['status']['delayed']      = 'Delayed';
 
 $lang->execution->featureBar['all']['all']       = $lang->execution->all;
 $lang->execution->featureBar['all']['undone']    = $lang->execution->undone;
@@ -537,6 +545,13 @@ $lang->execution->featureBar['bug']['all']        = 'All';
 $lang->execution->featureBar['bug']['unresolved'] = 'Active';
 
 $lang->execution->featureBar['build']['all'] = 'Build List';
+
+$lang->execution->featureBar['story']['all']       = 'All';
+$lang->execution->featureBar['story']['unclosed']  = 'Unclosed';
+$lang->execution->featureBar['story']['draft']     = 'Draft';
+$lang->execution->featureBar['story']['reviewing'] = 'Reviewing';
+
+$lang->execution->featureBar['testcase']['all'] = 'All';
 
 $lang->execution->myExecutions = 'Ich bin beteiligt.';
 $lang->execution->doingProject = "Ongoing {$lang->projectCommon}s";
@@ -556,7 +571,7 @@ $lang->execution->action = new stdclass();
 $lang->execution->action->opened               = '$date, created by <strong>$actor</strong>. $extra' . "\n";
 $lang->execution->action->managed              = '$date, managed by <strong>$actor</strong>. $extra' . "\n";
 $lang->execution->action->edited               = '$date, edited by <strong>$actor</strong>. $extra' . "\n";
-$lang->execution->action->extra                = 'Linked products is %s.';
+$lang->execution->action->extra                = "Linked {$lang->productCommon}s is %s.";
 $lang->execution->action->startbychildactivate = '$date, activating the sub stage sets the execution status as Ongoing.' . "\n";
 $lang->execution->action->waitbychilddelete    = '$date, deleting the sub stage sets the execution status as waitting.' . "\n";
 $lang->execution->action->closebychilddelete   = '$date, deleting the sub stage sets the execution status as closing.' . "\n";

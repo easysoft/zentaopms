@@ -2,7 +2,7 @@
 $lang->editor->common    = 'Editeur';
 $lang->editor->api       = 'API';
 $lang->editor->index     = 'Accueil';
-$lang->editor->newMethod = 'New Méthode';
+$lang->editor->newMethod = 'New M?thode';
 $lang->editor->extend    = 'Extension';
 $lang->editor->api       = 'API';
 $lang->editor->newLang   = 'New Language';
@@ -29,18 +29,19 @@ $lang->editor->pageName     = "Nom Page :";
 $lang->editor->deleteConfirm = 'Voulez-vous le supprimer ?';
 $lang->editor->extendConfirm = 'Voulez-vous utiliser le code original ?';
 $lang->editor->repeatFile    = 'Doublon';
-$lang->editor->repeatPage    = "Cette page existe. Voulez-vous l'écraser ?";
-$lang->editor->noticeOkFile  = 'Pour des raisons de sécurité, votre compte administrateur doit être confirmé. \n Please login ZenTao server and create %s File.\n Note:\n 1. File is blank.\n 2. If the file existed, delete it and then create a new one.';
+$lang->editor->repeatPage    = "Cette page existe. Voulez-vous l'?craser ?";
+$lang->editor->noticeOkFile  = 'Pour des raisons de s?curit?, votre compte administrateur doit ?tre confirm?. \n Please login ZenTao server and create %s File.\n Note:\n 1. File is blank.\n 2. If the file existed, delete it and then create a new one.';
 $lang->editor->editFileError = 'Vous pouvez seulement modifier les fichiers ZenTao !';
+$lang->editor->turnOff       = "If you don't use the editor function, you can turn it off here.";
 
 $lang->editor->notWritable    = "Non inscriptible. Permission requise. Essayez chmod 777 -R ";
-$lang->editor->notDelete      = 'Ne peut pas être supprimé. Vérifiez les permissions !';
+$lang->editor->notDelete      = 'Ne peut pas ?tre supprim?. V?rifiez les permissions !';
 $lang->editor->emptyFileName  = 'Entrez un nom de fichier !';
-$lang->editor->onlyLocalVisit = "Cette fonctionnalité ne fonctionne que pour une IP 127.0.0.1. <a href='https://api.zentao.pm/goto.php?item=howtodevelop&from=en' target='_blank'>Aide</a>";
+$lang->editor->onlyLocalVisit = "Cette fonctionnalit? ne fonctionne que pour une IP 127.0.0.1. <a href='https://api.zentao.pm/goto.php?item=howtodevelop&from=en' target='_blank'>Aide</a>";
 
 $lang->editor->translate['config.php']  = 'config';
-$lang->editor->translate['control.php'] = 'contrôle';
-$lang->editor->translate['model.php']   = 'modèle';
+$lang->editor->translate['control.php'] = 'contr?le';
+$lang->editor->translate['model.php']   = 'mod?le';
 
 $lang->editor->modules['action']      = 'System Log';
 $lang->editor->modules['admin']       = 'Admin';
@@ -67,7 +68,7 @@ $lang->editor->modules['release']     = 'Release';
 $lang->editor->modules['report']      = 'Rapport';
 $lang->editor->modules['search']      = 'Recherche';
 $lang->editor->modules['story']       = 'Story';
-$lang->editor->modules['task']        = 'Tâche';
+$lang->editor->modules['task']        = 'T?che';
 $lang->editor->modules['testcase']    = 'CasTest';
 $lang->editor->modules['testtask']    = 'Recette';
 $lang->editor->modules['todo']        = 'Agenda';

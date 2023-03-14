@@ -49,6 +49,8 @@ $().ready(function()
         }
     });
     $('#product').change();
+
+    $('[data-toggle="popover"]').popover();
 });
 
 /**

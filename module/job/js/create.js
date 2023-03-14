@@ -18,7 +18,7 @@ $(document).ready(function()
         $('#frameBox .loading').remove();
         $('#frameBox .input-group').append(html);
         $('#frameBox #frame').chosen();
-        
+
         $('#frame').change();
     }
     getFrameSelect('');
@@ -171,23 +171,16 @@ $(document).ready(function()
     $('#jkServer').change(function()
     {
         var jenkinsID = $(this).val();
-        $('#jenkinsServerTR #jkTask').remove();
-        $('#jenkinsServerTR #jkTask_chosen').remove();
+        $('#jenkinsServerTR .dropdown,.input-group-addon').hide();
         $('#jenkinsServerTR .input-group').append("<div class='load-indicator loading'></div>");
-        $.getJSON(createLink('jenkins', 'ajaxGetJenkinsTasks', 'jenkinsID=' + jenkinsID), function(tasks)
-        {
-            html = "<select id='jkTask' name='jkTask' class='form-control'>";
-            for(taskKey in tasks)
-            {
-                var task = tasks[taskKey];
-                html += "<option value='" + taskKey + "'>" + task + "</option>";
-            }
-            html += '</select>';
-            $('#jenkinsServerTR .loading').remove();
-            $('#jenkinsServerTR .input-group').append(html);
+        setJenkinsJob('', '');
 
-            $('#jenkinsServerTR #jkTask').chosen({drop_direction: 'auto'});
-        })
+        $.get(createLink('jenkins', 'ajaxGetJenkinsTasks', 'jenkinsID=' + jenkinsID), function(tasks)
+        {
+            $('#jenkinsServerTR .loading').remove();
+            $('#dropMenuTasks').html(tasks);
+            $('#jenkinsServerTR .dropdown,.input-group-addon').show();
+        });
 
         /* There has been a problem with handling the prompt label. */
         $('#jkTaskLabel').remove();
@@ -253,3 +246,18 @@ $(document).ready(function()
     $('#engine').change();
     $('#triggerType').change();
 });
+
+/**
+ * Set jenkins job.
+ *
+ * @param string $name
+ * @param string $task
+ * @access public
+ * @return void
+ */
+function setJenkinsJob(name, task)
+{
+    if(name) $('.jktask-label').removeClass('text-right');
+    $('#jkTask').val(task);
+    $('.jktask-label .text').html(name);
+}

@@ -1,0 +1,9 @@
+#sidebar .module-tree, #mainContent .module-content {overflow-y: auto;}
+#mainContent .module-col {padding: 0;}
+#mainContent .module-content {padding: 10px; padding-right: 0; margin-right: 0;}
+
+/* module-tree. */
+#moduleTree.tree ul {margin-bottom: 0;}
+#moduleTree .active {background-color: #fff;}
+#menuTree > li.has-list > ul > li {padding-left: 10px;}
+#menuTree > li.has-list > ul > li.has-list {padding-left: 15px;}

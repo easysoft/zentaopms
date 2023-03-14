@@ -1,7 +1,7 @@
 <?php
 /* Field. */
 $lang->projectstory->project = "{$lang->projectCommon}ID";
-$lang->projectstory->product = "产品ID";
+$lang->projectstory->product = "{$lang->productCommon}ID";
 $lang->projectstory->story   = "需求ID";
 $lang->projectstory->version = "版本";
 $lang->projectstory->order   = "排序";

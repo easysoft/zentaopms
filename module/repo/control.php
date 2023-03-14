@@ -80,7 +80,7 @@ class repo extends control
         $repoID = $this->repo->saveState(0, $objectID);
         if($this->viewType !== 'json') $this->commonAction($repoID, $objectID);
 
-        $repoList      = $this->repo->getList(0, '', $orderBy);
+        $repoList      = $this->repo->getList(0, '', $orderBy, null, true);
         $sonarRepoList = $this->loadModel('job')->getSonarqubeByRepo(array_keys($repoList));
 
         /* Pager. */
@@ -599,16 +599,47 @@ class repo extends control
         }
 
         /* Refresh repo. */
-        if($refresh) $this->repo->updateCommit($repoID, $objectID, $originBranchID);
+        if($refresh)
+        {
+            $this->repo->updateCommit($repoID, $objectID, $originBranchID);
 
-        /* Get files info. */
-        $infos = $this->repo->getFileCommits($repo, $branchID, $path);
-        if($this->cookie->repoRefresh) setcookie('repoRefresh', 0, 0, $this->config->webRoot, '', $this->config->cookieSecure, true);
+            if($repo->SCM == 'Gitlab') $this->repo->checkDeletedBranches($repoID, $branches);
+        }
 
         /* Set logType and revisions. */
         $logType      = 'dir';
         $revisions    = $this->repo->getCommits($repo, $path, $revision, $logType, $pager);
         $lastRevision = current($revisions);
+
+        /* Get files info. */
+        if($repo->SCM == 'Gitlab')
+        {
+            $cacheFile        = $this->repo->getCacheFile($repo->id, $path, $branchID);
+            $cacheRefreshTime = isset($lastRevision->time) ? date('Y-m-d H:i', strtotime($lastRevision->time)) : date('Y-m-d H:i');
+            if(!$cacheFile or !file_exists($cacheFile) or filemtime($cacheFile) < strtotime($cacheRefreshTime))
+            {
+                $infos = $this->repo->getFileList($repo, $branchID, $path);
+
+                if($cacheFile)
+                {
+                    if(!file_exists($cacheFile . '.lock'))
+                    {
+                        touch($cacheFile . '.lock');
+                        file_put_contents($cacheFile, serialize($infos));
+                        unlink($cacheFile . '.lock');
+                    }
+                }
+            }
+            else
+            {
+                $infos = unserialize(file_get_contents($cacheFile));
+            }
+        }
+        else
+        {
+            $infos = $this->repo->getFileCommits($repo, $branchID, $path);
+        }
+        if($this->cookie->repoRefresh) setcookie('repoRefresh', 0, 0, $this->config->webRoot, '', $this->config->cookieSecure, true);
 
         /* Synchronous commit only in root path. */
         if(in_array($repo->SCM, $this->config->repo->gitTypeList) and empty($path) and $infos and empty($revisions)) $this->locate($this->repo->createLink('showSyncCommit', "repoID=$repoID&objectID=$objectID&branch=" . helper::safe64Encode(base64_encode($this->cookie->repoBranch))));
@@ -685,6 +716,8 @@ class repo extends control
         $this->view->revision   = $revision;
         $this->view->repoID     = $repoID;
         $this->view->objectID   = $objectID;
+        $this->view->entry      = $entry;
+        $this->view->type       = $type;
         $this->view->branchID   = $this->cookie->repoBranch;
         $this->view->entry      = urldecode($entry);
         $this->view->path       = urldecode($entry);

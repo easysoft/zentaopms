@@ -83,7 +83,7 @@ $lang->job->frameList['sonarqube'] = 'SonarQube';
 $lang->job->paramValueList['']                 = '';
 $lang->job->paramValueList['$zentao_version']  = 'Current version';
 $lang->job->paramValueList['$zentao_account']  = 'Current user';
-$lang->job->paramValueList['$zentao_product']  = 'Current product ID';
+$lang->job->paramValueList['$zentao_product']  = "Current {$lang->productCommon} ID";
 $lang->job->paramValueList['$zentao_repopath'] = 'Current version library path';
 
 $lang->job->engineList = array();

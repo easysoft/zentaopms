@@ -1,7 +1,7 @@
 <?php
 $lang->projectplan = new stdclass();
-$lang->projectplan->common  = '项目计划';
-$lang->projectplan->browse  = '项目计划列表';
-$lang->projectplan->create  = '新增项目计划';
-$lang->projectplan->edit    = '编辑项目计划';
-$lang->projectplan->view    = '项目计划详情';
+$lang->projectplan->common  = "{$lang->projectCommon}计划";
+$lang->projectplan->browse  = "{$lang->projectCommon}计划列表";
+$lang->projectplan->create  = "新增{$lang->projectCommon}计划";
+$lang->projectplan->edit    = "编辑{$lang->projectCommon}计划";
+$lang->projectplan->view    = "{$lang->projectCommon}计划详情";

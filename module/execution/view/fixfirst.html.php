@@ -15,7 +15,7 @@
 <div class='main-header'>
   <h2><?php echo $lang->execution->fixFirst;?></h2>
 </div>
-  <form target='hiddenwin' method='post'>
+  <form target='hiddenwin' method='post' class='no-stash'>
     <table class='table table-form'>
       <tr>
         <td>

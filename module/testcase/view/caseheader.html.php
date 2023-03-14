@@ -21,7 +21,7 @@
 #byTypeTab li.split{border-top: 1px solid #eee;}
 </style>
 <div id='mainMenu' class='clearfix'>
-  <?php if(!in_array($this->app->rawMethod, array('groupcase', 'browseunits'))):?>
+  <?php if($this->app->rawMethod == 'browse'):?>
   <div id="sidebarHeader">
     <div class="title">
       <?php
@@ -84,8 +84,8 @@
     $rawMethod = $this->app->rawMethod;
     if(!isset($lang->{$rawModule}->featureBar[$rawMethod]))
     {
-        $rawModule = 'testcase';
-        $rawMethod = 'browse';
+        $rawModule = $app->tab == 'project' ? 'project' : 'testcase';
+        $rawMethod = $rawModule == 'testcase' ? 'browse' : 'testcase';
     }
     ?>
     <?php foreach(customModel::getFeatureMenu($rawModule, $rawMethod) as $menuItem):?>
@@ -184,13 +184,13 @@
         $active  = !empty($groupBy) ? 'btn-active-text' : '';
 
         echo "<div id='groupTab' class='btn-group'>";
-        echo html::a($this->createLink('testcase', 'groupCase', "productID=$productID&branch=$branch&groupBy=story&projectID=$projectID"), "<span class='text'>{$lang->testcase->groupByStories}</span>", '', "class='btn btn-link $active' data-app='{$this->app->tab}'");
+        echo html::a($this->createLink('testcase', 'groupCase', "productID=$productID&branch=$branch&groupBy=story&projectID=$projectID"), "<span class='text'>{$menuItem->text}</span>", '', "class='btn btn-link $active' data-app='{$this->app->tab}'");
         echo '</div>';
     }
     elseif($hasZeroPriv and $menuType == 'zerocase')
     {
         $projectID = $isProjectApp ? $this->session->project : 0;
-        echo html::a($this->createLink('testcase', 'zeroCase', "productID=$productID&branch=$branch&orderBy=id_desc&projectID=$projectID"), "<span class='text'>{$lang->testcase->zeroCase}</span>", '', "class='btn btn-link' id='zerocaseTab' data-app='{$this->app->tab}'");
+        echo html::a($this->createLink('testcase', 'zeroCase', "productID=$productID&branch=$branch&orderBy=id_desc&projectID=$projectID"), "<span class='text'>{$menuItem->text}</span>", '', "class='btn btn-link' id='zerocaseTab' data-app='{$this->app->tab}'");
     }
 
     ?>

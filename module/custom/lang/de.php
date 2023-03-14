@@ -200,11 +200,11 @@ $lang->custom->notice->confirmReviewCase   = 'Set the case in Wait to Normal?';
 $lang->custom->notice->storyReviewTip      = 'After selecting by individual, position, and department, take the union of these three filters. ';
 $lang->custom->notice->selectAllTip        = 'After selecting all people, the reviewers will be emptied and grayed out while hiding their positions and departments.';
 $lang->custom->notice->repeatKey           = 'Repeat Key %s';
-$lang->custom->notice->readOnlyOfCode      = 'A code is a management term that exists for secrecy or as an antonym. When code management is enabled, the code information of product, project, and execution in the system will be displayed in the creation, editing, detail, and list pages.';
-$lang->custom->notice->readOnlyOfPercent   = 'The "Workload Ratio" is used to divide the workload of a project into different stages. The sum of the percentages of the same level stages cannot exceed 100%. After enabling the "Workload Ratio", users have to fill in the ratio fields when setting up the stages in the Waterfall project and Waterfall Plus project management models.';
+$lang->custom->notice->readOnlyOfCode      = "A code is a management term that exists for secrecy or as an antonym. When code management is enabled, the code information of {$lang->productCommon}, {$lang->projectCommon}, and execution in the system will be displayed in the creation, editing, detail, and list pages.";
+$lang->custom->notice->readOnlyOfPercent   = "The \"Workload Ratio\" is used to divide the workload of a {$lang->projectCommon} into different stages. The sum of the percentages of the same level stages cannot exceed 100%. After enabling the \"Workload Ratio\", users have to fill in the ratio fields when setting up the stages in the Waterfall {$lang->projectCommon} and Waterfall Plus {$lang->projectCommon} management models.";
 
 $lang->custom->notice->indexPage['product'] = "ZenTao 8.2+ has Product Homepage. Do you want to go to Product Homepage?";
-$lang->custom->notice->indexPage['project'] = "ZenTao 8.2+ has Project Homepage. Do you want to go to Project Homepage?";
+$lang->custom->notice->indexPage['project'] = "ZenTao 8.2+ has {$lang->projectCommon} Home. Do you want to go to {$lang->projectCommon} Home?";
 $lang->custom->notice->indexPage['qa']      = "ZenTao 8.2+ has QA Homepage. Do you want to go to QA Homepage?";
 
 $lang->custom->notice->invalidStrlen['ten']        = 'The length of the key must be less than 10 characters.';
@@ -247,12 +247,12 @@ $lang->custom->useLight          = 'Use Light Mode';
 $lang->custom->useALM            = 'Use ALM Mode';
 $lang->custom->currentModeTips   = 'You are currently using %s, you can switch to the %s.';
 $lang->custom->changeModeTips    = 'Please double confirm to switch to %s Mode.';
-$lang->custom->selectProgramTips = 'After switching to the Light Mode, in order to ensure the consistency of the data structure, you need to select a program as the default program, and subsequent new product and project data are associated with this default program.';
+$lang->custom->selectProgramTips = "After switching to the Light Mode, in order to ensure the consistency of the data structure, you need to select a program as the default program, and subsequent new {$lang->productCommon} and {$lang->projectCommon} data are associated with this default program.";
 
 $lang->custom->modeList['light'] = 'Light Mode';
 $lang->custom->modeList['ALM']   = 'ALM Mode';
 
-$lang->custom->modeIntroductionList['light'] = 'Provides the core function of project management, suitable for small R&D teams';
+$lang->custom->modeIntroductionList['light'] = "Provides the core function of {$lang->projectCommon} management, suitable for small R&D teams";
 $lang->custom->modeIntroductionList['ALM']   = 'The concept is more complete and rigorous, and the function is more abundant. It is suitable for medium and large R&D teams';
 
 $lang->custom->features['program']              = 'Program';

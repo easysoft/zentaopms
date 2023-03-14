@@ -31,8 +31,8 @@ $lang->company->admins   = 'Administrateur';
 $lang->company->deleted  = 'Deleted';
 
 $lang->company->product   = $lang->productCommon;
-$lang->company->project   = 'Project';
-$lang->company->execution = 'Execution';
+$lang->company->project   = $lang->projectCommon;
+$lang->company->execution = $lang->executionCommon;
 $lang->company->user      = 'Utilisateurs';
 $lang->company->empty     = 'No Dynamic';
 

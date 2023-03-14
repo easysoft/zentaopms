@@ -1,0 +1,9 @@
+::-webkit-scrollbar {width: 10px; height: 10px;}
+::-webkit-scrollbar-button {width: 0; height: 0;}
+::-webkit-scrollbar-thumb:vertical {min-height: 28px; background-color: rgba(0, 0, 0, 0.2); background-clip: padding-box; border-radius: 2px; -webkit-box-shadow: inset 1px 1px 0 rgb(0 0 0 / 10%), inset 0 -1px 0 rgb(0 0 0 / 7%);}
+::-webkit-scrollbar-track:hover {background-color:rgba(0,0,0,.05);-webkit-box-shadow:inset 1px 0 0 rgba(0,0,0,.1);}
+::-webkit-scrollbar-thumb:hover{background-color:rgba(0,0,0,.4);}
+
+.m-editor-newpage {padding-bottom:0px; background-color:#fff;}
+.m-editor-newpage .main-header {padding: 10px 20px;}
+.m-editor-newpage .main-content {box-shadow: none;}

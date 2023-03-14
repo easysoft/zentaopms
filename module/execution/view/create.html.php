@@ -156,7 +156,7 @@
                   <div class='table-col'>
                     <?php $hasBranch = $product->type != 'normal' and isset($branchGroups[$product->id]);?>
                     <div class='input-group <?php if($hasBranch) echo ' has-branch';?>'>
-                      <span class='input-group-addon'><?php echo $lang->product->common;?></span>
+                      <span class='input-group-addon'><?php echo $lang->productCommon;?></span>
                       <?php $disabled = ($isStage and !$project->division) ? "disabled='disabled'" : '';?>
                       <?php echo html::select("products[$i]", $allProducts, $product->id, "class='form-control chosen' $disabled onchange='loadBranches(this)' data-last='" . $product->id . "' data-type='" . $product->type . "'");?>
                       <?php if($isStage and !$project->division) echo html::hidden("products[$i]", $product->id);?>
@@ -190,7 +190,7 @@
         </tr>
         <?php $i ++;?>
         <?php endforeach;?>
-        <?php elseif(!empty($project) and empty($project->hasProduct) and strpos($project->model, 'waterfall') === false):?>
+        <?php elseif(!empty($project) and empty($project->hasProduct) and !in_array($project->model, array('waterfall', 'kanban', 'waterfallplus'))):?>
         <tr>
           <th><?php echo $lang->execution->linkPlan;?></th>
           <td id="plansBox">
@@ -209,7 +209,7 @@
                 <div class='table-row'>
                   <div class='table-col'>
                     <div class='input-group'>
-                      <span class='input-group-addon'><?php echo $lang->product->common;?></span>
+                      <span class='input-group-addon'><?php echo $lang->productCommon;?></span>
                       <?php echo html::select("products[0]", $allProducts, '', "class='form-control chosen' onchange='loadBranches(this)'");?>
                     </div>
                   </div>

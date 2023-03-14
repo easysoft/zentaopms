@@ -199,7 +199,7 @@ class upgrade extends control
             $this->locate(inlink('afterExec', "fromVersion=$fromVersion"));
         }
 
-        $this->view->result = 'fail';
+        $this->view->result = 'sqlFail';
         $this->view->errors = $this->upgrade->getError();
         $this->display();
     }
