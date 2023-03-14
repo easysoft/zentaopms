@@ -26,13 +26,18 @@ pipeline {
 
 
   stages {
+     stage('Prepare') {
+       steps {
+           echo "checkout code"
+       }
+     }
      stage('SonarQube and Build Image') {
        parallel {
          stage('SonarQube') {
            steps {
              container('sonar') {
                  withSonarQubeEnv('sonarqube') {
-                     catchError(stageResult: 'FAILURE') {
+                     catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
                          sh 'git config --global --add safe.directory $(pwd)'
                          sh 'sonar-scanner -Dsonar.inclusions=$(git diff --name-only HEAD~1|tr "\\n" ",") -Dsonar.analysis.user=$(git show -s --format=%an)'
                     }
@@ -116,11 +121,10 @@ pipeline {
 
               post {
                 success {
-                  sh 'echo /tmp/p1.log'
-                  sh 'printenv'
+                  sh 'echo success'
                 }
                 failure {
-                  sh 'failure'
+                  sh 'echo failure'
                 }
               }
 
@@ -353,10 +357,10 @@ pipeline {
       }
       post{
           success{
-              echo 'success'
+              sh 'echo "success"'
           }
           failure{
-              echo 'failure'
+              sh 'echo "failure"'
           }
       }
     }//End unittest
