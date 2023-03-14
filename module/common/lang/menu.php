@@ -507,27 +507,21 @@ $lang->kanban->menu = new stdclass();
 /* Doc menu. */
 $lang->doc->menu = new stdclass();
 $lang->doc->menu->dashboard = array('link' => "{$lang->dashboard}|doc|index");
-$lang->doc->menu->recent    = array('link' => "{$lang->doc->recent}|doc|browse|browseTyp=byediteddate", 'alias' => 'recent');
-$lang->doc->menu->my        = array('link' => "{$lang->doc->my}|doc|browse|browseTyp=openedbyme", 'alias' => 'my');
-$lang->doc->menu->collect   = array('link' => "{$lang->doc->favorite}|doc|browse|browseTyp=collectedbyme", 'alias' => 'collect');
-$lang->doc->menu->product   = array('link' => "{$lang->doc->product}|doc|tableContents|type=product", 'alias' => 'showfiles,product');
-$lang->doc->menu->api       = array('link' => "{$lang->doc->api}|api|index", 'alias' => 'api');
-$lang->doc->menu->project   = array('link' => "{$lang->doc->project}|doc|tableContents|type=project", 'alias' => 'showfiles,project');
-$lang->doc->menu->execution = array('link' => "{$lang->doc->execution}|doc|tableContents|type=execution", 'alias' => 'showfiles,execution');
-$lang->doc->menu->custom    = array('link' => "{$lang->doc->custom}|doc|tableContents|type=custom", 'alias' => 'custom');
+$lang->doc->menu->my        = array('link' => "{$lang->doc->mySpace}|doc|browse|browseTyp=openedbyme", 'alias' => 'my');
+$lang->doc->menu->product   = array('link' => "{$lang->doc->productSpace}|doc|tableContents|type=product", 'alias' => 'showfiles,product');
+$lang->doc->menu->project   = array('link' => "{$lang->doc->projectSpace}|doc|tableContents|type=project", 'alias' => 'showfiles,project');
+$lang->doc->menu->api       = array('link' => "{$lang->doc->apiSpace}|api|index", 'alias' => 'api');
+$lang->doc->menu->custom    = array('link' => "{$lang->doc->teamSpace}|doc|tableContents|type=custom", 'alias' => 'custom');
 
 $lang->doc->dividerMenu = ',product,';
 
 /* Doc menu order. */
 $lang->doc->menuOrder[5]  = 'dashboard';
-$lang->doc->menuOrder[10] = 'recent';
-$lang->doc->menuOrder[15] = 'my';
-$lang->doc->menuOrder[20] = 'collect';
-$lang->doc->menuOrder[25] = 'product';
-$lang->doc->menuOrder[30] = 'project';
-$lang->doc->menuOrder[35] = 'execution';
-$lang->doc->menuOrder[36] = 'api';
-$lang->doc->menuOrder[40] = 'custom';
+$lang->doc->menuOrder[10] = 'my';
+$lang->doc->menuOrder[15] = 'product';
+$lang->doc->menuOrder[20] = 'project';
+$lang->doc->menuOrder[25] = 'api';
+$lang->doc->menuOrder[30] = 'custom';
 
 $lang->doc->menu->product['subMenu']   = new stdclass();
 $lang->doc->menu->project['subMenu']   = new stdclass();

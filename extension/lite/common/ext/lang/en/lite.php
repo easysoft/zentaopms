@@ -113,32 +113,23 @@ $lang->kanbanProject->menu->settings['subMenu']->view        = array('link' => "
 $lang->kanbanProject->menu->settings['subMenu']->members     = array('link' => "{$lang->team->common}|project|team|project=%s", 'alias' => 'managemembers,team');
 $lang->kanbanProject->menu->settings['subMenu']->whitelist   = array('link' => "{$lang->whitelist}|project|whitelist|project=%s", 'subModule' => 'personnel');
 
-unset($lang->doc->menu->product);
-unset($lang->doc->menu->api);
-unset($lang->doc->menu->execution);
-
 $lang->URCommon = 'Story';
 $lang->SRCommon = 'Story';
 
 /* Doc menu. */
 $lang->doc->menu            = new stdclass();
 $lang->doc->menu->dashboard = array('link' => "{$lang->dashboard}|doc|index");
-$lang->doc->menu->recent    = array('link' => "{$lang->doc->recent}|doc|browse|browseTyp=byediteddate", 'alias' => 'recent');
-$lang->doc->menu->my        = array('link' => "{$lang->doc->my}|doc|browse|browseTyp=openedbyme", 'alias' => 'my');
-$lang->doc->menu->collect   = array('link' => "{$lang->doc->favorite}|doc|browse|browseTyp=collectedbyme", 'alias' => 'collect');
-$lang->doc->menu->project   = array('link' => "{$lang->doc->project}|doc|tableContents|type=project", 'alias' => 'showfiles,project');
-$lang->doc->menu->custom    = array('link' => "{$lang->doc->custom}|doc|tableContents|type=custom", 'alias' => 'custom');
+$lang->doc->menu->my        = array('link' => "{$lang->doc->mySpace}|doc|browse|browseTyp=openedbyme", 'alias' => 'my');
+$lang->doc->menu->project   = array('link' => "{$lang->doc->projectSpace}|doc|tableContents|type=project", 'alias' => 'showfiles,project');
+$lang->doc->menu->custom    = array('link' => "{$lang->doc->teamSpace}|doc|tableContents|type=custom", 'alias' => 'custom');
 
 $lang->doc->dividerMenu = ',project,';
 
 /* Doc menu order. */
-$lang->doc->menuOrder     = array();
 $lang->doc->menuOrder[5]  = 'dashboard';
-$lang->doc->menuOrder[10] = 'recent';
-$lang->doc->menuOrder[15] = 'my';
-$lang->doc->menuOrder[20] = 'collect';
-$lang->doc->menuOrder[25] = $lang->projectCommon;
-$lang->doc->menuOrder[30] = 'custom';
+$lang->doc->menuOrder[10] = 'my';
+$lang->doc->menuOrder[15] = 'project';
+$lang->doc->menuOrder[20] = 'custom';
 
 $lang->doc->menu->project['subMenu'] = new stdclass();
 $lang->doc->menu->custom['subMenu']  = new stdclass();
