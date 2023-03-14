@@ -1305,6 +1305,7 @@ class groupModel extends model
             {
                 foreach($privRelations as $privRelation)
                 {
+                    if($privID == $privRelation) continue;
                     $relation->relationPriv = $privRelation;
                     $this->dao->insert(TABLE_PRIVRELATION)->data($relation)->exec();
                 }
