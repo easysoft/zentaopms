@@ -1,13 +1,13 @@
-ALTER TABLE `zt_chart` CHANGE `builtin` `buildin` enum('0','1') NOT NULL DEFAULT '0';
+ALTER TABLE `zt_chart` CHANGE `builtin` `builtin` enum('0','1') NOT NULL DEFAULT '0';
 ALTER TABLE `zt_chart` ADD `stage` enum('draft','published') NOT NULL DEFAULT 'draft' AFTER `sql`;
 ALTER TABLE `zt_chart` ADD `langs` text NOT NULL AFTER `fields`;
 ALTER TABLE `zt_chart` ADD `step` tinyint(1) unsigned NOT NULL AFTER `filters`;
 ALTER TABLE `zt_chart` DROP `dataset`;
 
 ALTER TABLE `zt_screen` ADD `status` enum('draft','published') NOT NULL DEFAULT 'draft' AFTER `scheme`;
-ALTER TABLE `zt_screen` ADD `buildin` enum('0', '1') NOT NULL DEFAULT '0' AFTER `status`;
+ALTER TABLE `zt_screen` ADD `builtin` enum('0', '1') NOT NULL DEFAULT '0' AFTER `status`;
 
-UPDATE `zt_screen` SET `buildin` = '1', `status` = 'published';
+UPDATE `zt_screen` SET `builtin` = '1', `status` = 'published';
 
 CREATE TABLE `zt_pivot`  (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
@@ -24,7 +24,7 @@ CREATE TABLE `zt_pivot`  (
   `filters` mediumtext NOT NULL,
   `step` tinyint(1) unsigned NOT NULL,
   `stage` enum('draft','published') NOT NULL DEFAULT 'draft',
-  `buildin` enum('0', '1') NOT NULL DEFAULT '0',
+  `builtin` enum('0', '1') NOT NULL DEFAULT '0',
   `createdBy` varchar(30) NOT NULL,
   `createdDate` datetime NOT NULL,
   `editedBy` varchar(30) NOT NULL,
