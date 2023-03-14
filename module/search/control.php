@@ -125,6 +125,11 @@ class search extends control
             $data     = fixer::input('post')->get();
             $shortcut = empty($data->onMenuBar) ? 0 : 1;
 
+            if($this->viewType == 'json')
+            {
+                echo 'success';
+                return;
+            }
             return print(js::closeModal('parent.parent', '', "function(){parent.parent.loadQueries($queryID, $shortcut, '{$data->title}')}"));
         }
 

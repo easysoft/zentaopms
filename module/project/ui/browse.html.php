@@ -54,137 +54,189 @@ $btnGroup[] = array(
     'url'   => createLink('project', 'create')
 );
 
-$buildFormUrl = createLink('search', 'buildForm', 'module=project');
-$formAction   = createLink('search', 'buildQuery');
-$jsSearch     = <<<JSSEARCH
+$buildFormURL   = createLink('search', 'buildForm', 'module=project');
+$formActionURL  = createLink('search', 'buildQuery');
+$saveQueryURL   = createLink('search', 'saveQuery', 'module=project&onMenuBar=no');
+$deleteQueryURL = createLink('search', 'deleteQuery', 'queryID=myQueryID');
+$applyQueryURL  = $actionURL;
+
+$jsSearch = <<<JSSEARCH
 var browseType = '{$browseType}';
+var buildFormURL = '{$buildFormURL}';
+var formActionURL = '{$formActionURL}';
+var saveQueryURL = '{$saveQueryURL}';
+var deleteQueryURL = '{$deleteQueryURL}';
+var applyQueryURL = '{$applyQueryURL}';
+var module = '{$this->moduleName}';
+
+function initSaveSearch()
+{
+    var saveModal = document.getElementById('saveModal');
+    if(!saveModal) return;
+
+    var searchForm = saveModal.querySelector('form');
+    if(!searchForm) return;
+
+    var btnSave = searchForm.querySelector('button');
+    if(!btnSave) return;
+
+    btnSave.addEventListener('click', function(event)
+    {
+        var data = new FormData(searchForm);
+        data.set('module', module);
+        if(data.get('common') === 'on') data.set('common', 1);
+
+        axios.post(saveQueryURL, data)
+            .then(function(response)
+            {
+                if(response.data === 'success')
+                {
+                    event.target.closest('div.modal').classList.remove('show');
+                }
+            })
+            .catch(function(error){console.error(error);});
+    });
+}
+
+function initSearchButton()
+{
+    /* Click search button. */
+    var el = document.getElementById('bysearchTab');
+    if(!el) return;
+
+    el.addEventListener('click', function(event)
+    {
+        var btnSearch      = this;
+        btnSearch.disabled = true;
+
+        /* Show search panel. */
+        var searchPanel = document.getElementById('searchPanel');
+        if(!searchPanel) return;
+        searchPanel.classList.toggle('hidden');
+
+        /* Ajax: Get search form data. */
+        axios.get(buildFormURL)
+            .then(function(response)
+            {
+                if(response.data.status != 'success')
+                {
+                    console.error(response.data);
+                    return;
+                }
+
+                /* Search fields. */
+                var data   = JSON.parse(response.data.data);
+                var fields = [];
+                for( var fieldName in data.searchFields )
+                {
+                    var params = data.fieldParams[fieldName];
+                    var field  = new Object();
+
+                    field.label        = data.searchFields[fieldName];
+                    field.name         = fieldName;
+                    field.control      = params ? ((params.class === 'date') ? 'date' : params.control) : '';
+                    field.operator     = params ? params.operator : '';
+                    field.values       = params ? params.values : '';
+                    field.defaultValue = '';
+                    field.placeholder  = '';
+
+                    fields.push(field);
+                };
+
+                /* Saved queries. */
+                var savedQueries = Object.keys(data.queries).map((key) => {
+                    if(typeof data.queries[key] !== 'object') return false;
+                    return data.queries[key];
+                });
+
+                /* Render search form. */
+                zui.create('searchForm', "[id='queryForm']", {
+                    "formConfig": { "action": "", "method": "post" },
+                    "fields": fields,
+                    "operators": [
+                        { "value": "=", "title": "=" },
+                        { "value": "!=", "title": "!=" },
+                        { "value": ">", "title": ">" },
+                        { "value": ">=", "title": ">=" },
+                        { "value": "<", "title": "<" },
+                        { "value": "<=", "title": "<=" },
+                        { "value": "include", "title": "包含" },
+                        { "value": "between", "title": "介于" },
+                        { "value": "notinclude", "title": "不包含" },
+                        { "value": "belong", "title": "从属于" }
+                    ],
+                    "savedQuery": savedQueries,
+                    "savedQueryTitle": "已保存的查询条件",
+                    "andOr": [
+                        { "value": "and", "title": "并且" },
+                        { "value": "or", "title": "或者" }
+                    ],
+                    "groupName": [
+                        "第一组",
+                        "第二组"
+                    ],
+                    "saveSearch": {
+                        "text": "保存搜索条件",
+                        hasPermission: true,
+                        "config": {
+                            'data-toggle': 'modal',
+                            'href': '#saveModal'
+                        }
+                    },
+                    "applyQueryURL": applyQueryURL,
+                    "onDeleteQuery": (e, id) => {
+                        e.stopPropagation();
+                        axios.get(deleteQueryURL.replace('myQueryID', id))
+                            .then(function(response){
+                                if(response.data === 'success')
+                                {
+                                    e.target.closest('div').remove();
+                                }
+                            })
+                            .catch(function(error){console.error(error);});
+                    },
+                    "submitForm": (e) => {
+                        const formData = new FormData(e.target.closest('form'));
+                        formData.set('actionURL', data.actionURL);
+                        formData.set('module', data.module);
+                        formData.set('groupItems', data.groupItems);
+                        formData.set('formType', 'lite');
+
+                        axios.post(formActionURL, formData)
+                            .then(function(response){
+                                window.location.replace(data.actionURL);
+                            })
+                            .catch(function(error){console.error(error);});
+                    },
+                    "formSession": data.formSession
+                });
+            })
+            .catch(function(error){
+                console.error(error);
+            })
+            .finally(function(){
+                btnSearch.disabled = false;
+            });
+    });
+
+    /* Trigger search button. */
+    if( browseType == 'bysearch')
+    {
+        el.dispatchEvent(new Event('click'));
+    }
+}
 
 window.addEventListener('DOMContentLoaded', (event) => {
-
-    var el = document.getElementById('bysearchTab');
-    if( el ) {
-        el.addEventListener('click', function(event){
-            var btnSearch      = this;
-            btnSearch.disabled = true;
-
-            var searchPanel = document.getElementById('searchPanel');
-            if(!searchPanel) return;
-            searchPanel.classList.toggle('hidden');
-
-            axios.get('{$buildFormUrl}')
-                .then(function(response) {
-                    if(response.data.status != 'success')
-                    {
-                        console.error(response.data);
-                        return;
-                    }
-
-                    /* Search fields. */
-                    var data = {};
-                    try {
-                        data = JSON.parse(response.data.data);
-                    } catch(e) {
-                        console.log(e);
-                    }
-                    var fields = [];
-                    for( var fieldName in data.searchFields ) {
-                        var params = data.fieldParams[fieldName];
-                        var field  = new Object();
-
-                        field.label        = data.searchFields[fieldName];
-                        field.name         = fieldName;
-                        field.control      = params ? ((params.class === 'date') ? 'date' : params.control) : '';
-                        field.operator     = params ? params.operator : '';
-                        field.values       = params ? params.values : '';
-                        field.defaultValue = '';
-                        field.placeholder  = '';
-
-                        fields.push(field);
-                    };
-
-                    zui.create('searchForm', "[id='queryForm']", {
-                        "formConfig": { "action": "", "method": "post" },
-                        "fields": fields,
-                        "operators": [
-                            { "value": "=", "title": "=" },
-                            { "value": "!=", "title": "!=" },
-                            { "value": ">", "title": ">" },
-                            { "value": ">=", "title": ">=" },
-                            { "value": "<", "title": "<" },
-                            { "value": "<=", "title": "<=" },
-                            { "value": "include", "title": "包含" },
-                            { "value": "between", "title": "介于" },
-                            { "value": "notinclude", "title": "不包含" },
-                            { "value": "belong", "title": "从属于" }
-                        ],
-                        "savedQuery": [
-                            { "id": "1", "title": "条件11", "account": "11",
-                                "content": [
-                                    { "fields": "status", "control": "select", "condition": "=", "value": "doing" },
-                                    { "fields": "openedDate", "control": "date", "condition": "=", "value": "2022-11-15" },
-                                    { "fields": "openedBy", "control": "input", "condition": "=", "value": "" },
-                                    { "fields": "PM", "control": "select", "condition": "!=", "value": "" },
-                                    { "fields": "openedDate", "control": "date", "condition": "include", "value": "" },
-                                    { "fields": "begin", "control": "date", "condition": "=", "value": "" }
-                                ]
-                            }
-                        ],
-                        "andOr": [
-                            { "value": "and", "title": "并且" },
-                            { "value": "or", "title": "或者" }
-                        ],
-                        "groupName": [
-                            "第一组",
-                            "第二组"
-                        ],
-                        "savedQueryTitle": "已保存的查询条件",
-                        "saveSearch": {
-                            "text": "保存搜索条件",
-                            "config": {
-                                "data-toggle": "modal",
-                                "href": "#saveModal",
-                                "data-url": "/index.php?m=search&f=saveQuery&module=task&onMenuBar=yes"
-                            }
-                        },
-                        "submitForm": (e) => {
-                            const formData = new FormData(e.target.closest('form'));
-                            formData.set('actionURL', data.actionURL);
-                            formData.set('module', data.module);
-                            formData.set('groupItems', data.groupItems);
-                            formData.set('formType', 'lite');
-
-                            axios.post('{$formAction}', formData)
-                                .then(function(response){
-                                    window.location.replace(data.actionURL);
-                                })
-                                .catch(function(error){console.error(error);});
-                        },
-                        "formSession": data.formSession
-                    });
-                })
-                .catch(function(error){
-                    console.error(error);
-                })
-                .finally(function(){
-                    btnSearch.disabled = false;
-                });
-        });
-
-        if( browseType == 'bysearch')
-        {
-            el.dispatchEvent(new Event('click'));
-        }
-    }
+    initSearchButton();
+    initSaveSearch();
 
     var involved = document.getElementsByName('involved');
-    if( involved ) {
+    if( involved )
+    {
         involved.forEach(function(invItem){
-            invItem.addEventListener('click', function(event){
-                console.log('>>>', event);
-            });
+            invItem.addEventListener('click', function(event){ });
         });
     }
-
 });
 
 JSSEARCH;
@@ -290,10 +342,6 @@ modal
     set('type', 'none'),
     form
     (
-        setId('saveForm'),
-        setClass('validation form-group'),
-        set('action', \helper::createLink('search', 'saveQuery', 'product')),
-        set('method', 'POST'),
         div
         (
             setClass('flex flex-row justify-between'),
