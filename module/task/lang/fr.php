@@ -294,6 +294,11 @@ $lang->task->error->leftEmptyAB       = 'When the task status is %s, "Hours Left
 $lang->task->error->leftEmpty         = 'Task#%sWhen the task status is %s, "Left" cannot be 0';
 $lang->task->error->notempty          = '%s must be > 0.';
 $lang->task->error->teamLeftEmpty     = 'Please maintain team hours.';
+$lang->task->error->beginLtExecution  = "The 'StartDate' of the task must be greater than or equal the 'Planned Begin' of %s to %s.";
+$lang->task->error->beginGtExecution  = "The 'StartDate' of the task must be less than or equal the 'Planned End' of %s to %s.";
+$lang->task->error->endGtExecution    = "The 'Deadline' of the task must be less than or equal the 'Planned End' of %s to %s.";
+$lang->task->error->endLtExecution    = "The 'Deadline' of the task must be greater than or equal the 'Planned Begin' of %s to %s.";
+$lang->task->error->dateExceed        = "Because the scheduled date of task %s exceeds the scheduled date of {$lang->execution->common}, it is automatically changed to the scheduled date of {$lang->execution->common}";
 
 /* Report. */
 $lang->task->report = new stdclass();
