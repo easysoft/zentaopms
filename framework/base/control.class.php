@@ -933,6 +933,12 @@ class baseControl
         if(empty($moduleName)) $moduleName = $this->moduleName;
         if(empty($methodName)) $methodName = $this->methodName;
 
+        if(isset($_GET['o']))
+        {
+            $this->display($moduleName, $methodName);
+            return;
+        }
+
         include $this->app->getBasePath() . 'zin' . DS . 'zin.php';
 
         define('ZUI3', 'zui3');
