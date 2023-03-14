@@ -111,7 +111,7 @@ function getSideRelation(privID)
 function updateRelations(e)
 {
     if($('.bg-primary-pale').length) $('.bg-primary-pale').removeClass('bg-primary-pale');
-    $(e.target).addClass('bg-primary-pale');
+    $('#privListTable').length > 0 ? $(e.target).closest('tr').addClass('bg-primary-pale') : $(e.target).addClass('bg-primary-pale');
 
     var selectedID = $('#privListTable').length == 0 ? $(e.target).siblings('input:checkbox').data('id') : $(e.target).closest('tr').attr('data-id');
     $('.side a#addDependent').attr('href', createLink('group', 'addRelation', "privIdList=" + selectedID + '&type=depend')).removeAttr('disabled');

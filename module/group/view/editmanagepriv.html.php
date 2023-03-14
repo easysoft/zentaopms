@@ -24,7 +24,7 @@
       <a href="#" data-type="bycard" class="btn btn-icon btn-switch <?php if($browseType == 'bycard') echo 'text-primary' ?>"><i class="icon icon-cards-view"></i></a>
       <a href="#" data-type="bylist" class="btn btn-icon btn-switch <?php if($browseType == 'bylist' or $browseType == 'bysearch') echo 'text-primary' ?>"><i class="icon icon-list"></i></a>
     </div>
-    <a href="#" class="btn btn-primary"><?php echo $lang->group->addPriv?></a>
+    <?php if(common::hasPriv('group', 'createPriv')) echo html::a($this->createLink('group', 'createPriv', '', '', true), $lang->group->createPriv, '', 'class="btn btn-primary iframe"');?>
     <?php if(common::hasPriv('group', 'managePrivPackage')) echo html::a($this->createLink('group', 'managePrivPackage', ''), $lang->group->managePrivPackage, '', 'class="btn btn-primary"');?>
     <div class="dropdown">
       <a href="javascript:;" id='batchActions' data-toggle="dropdown" class="btn btn-primary disabled"><?php echo $lang->group->batchActions?> <span class="caret"></span></a>

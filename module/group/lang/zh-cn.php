@@ -51,11 +51,15 @@ $lang->group->allCheck           = '全部';
 $lang->group->noGroup            = '暂时没有分组。';
 $lang->group->repeat             = "『%s』已经有『%s』这条记录了，请调整后再试。";
 $lang->group->noneProject        = '暂时没有' . $lang->projectCommon;
-$lang->group->addPriv            = '新增权限';
+$lang->group->createPriv         = '新增权限';
 $lang->group->editPriv           = '编辑权限';
 $lang->group->privName           = '权限名称';
 $lang->group->privDesc           = '描述';
 $lang->group->add                = '添加';
+$lang->group->moduleName         = '模块名';
+$lang->group->methodName         = '方法名';
+$lang->group->viewAB             = '所属视图';
+$lang->group->moduleAB           = '所属模块';
 
 $lang->group->batchActions              = '批量操作';
 $lang->group->batchSetDependency        = '批量设置依赖';

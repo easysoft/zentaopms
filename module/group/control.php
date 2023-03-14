@@ -444,7 +444,7 @@ class group extends control
         $this->view->title          = $this->lang->group->editManagePriv;
         $this->view->browseType     = $browseType;
         $this->view->privList       = $privList;
-        $this->view->packages       = $this->group->getPrivPackagesByView($view);
+        $this->view->packages       = $this->group->getPrivPackagePairs($view);
         $this->view->moduleLang     = $moduleLang;
         $this->view->modulePackages = $this->group->getModuleAndPackageTree('package');
         $this->view->view           = $view;
@@ -704,7 +704,38 @@ class group extends control
     }
 
     /**
-     * edit priv
+     * Create a priv.
+     *
+     * @access public
+     * @return void
+     */
+    public function createPriv()
+    {
+        if(!empty($_POST))
+        {
+            $packageID = $this->group->createPriv();
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
+        }
+        $views      = $this->loadModel('setting')->getItem("owner=system&module=priv&key=views");
+        $views      = explode(',', $views);
+        $moduleLang = $this->group->getMenuModules('', true);
+        foreach($views as $index => $view)
+        {
+            $views[$view] = isset($this->lang->{$view}->common) ? $this->lang->{$view}->common : zget($moduleLang, $view);
+            unset($views[$index]);
+        }
+
+        $this->view->title    = $this->lang->group->createPrivPackage;
+        $this->view->views    = array('' => '') + $views;
+        $this->view->modules  = array('' => '') + $this->group->getPrivModules('', 'noViewName');
+        $this->view->packages = array('' => '') + $this->group->getPrivPackagePairs();
+        $this->view->packagesTreeList = $this->group->getPrivPackageTreeList();
+        $this->display();
+    }
+
+    /**
+     * Edit a priv.
      *
      * @param   int     $privID
      * @access  public
@@ -743,6 +774,35 @@ class group extends control
 	    $this->view->modulePackage  = $this->group->getModuleAndPackageTree();
         $this->view->priv           = $priv;
         $this->display();
+    }
+
+    /**
+     * Ajax get priv modules by view.
+     *
+     * @param  string $viewName
+     * @access public
+     * @return string
+     */
+    public function ajaxGetPrivModules($viewName = '')
+    {
+        $modules = $this->group->getPrivModules($viewName, 'noViewName');
+        echo html::select('module', array('' => '') + $modules, '', "class='form-control picker-select'");
+    }
+
+    /**
+     * Ajax get priv packages by view or module.
+     *
+     * @param  string $object
+     * @param  string $type
+     * @access public
+     * @return string
+     */
+    public function ajaxGetPrivPackages($object = '', $type = 'view')
+    {
+        $packages = array();
+        if($type == 'view') $packages = $this->group->getPrivPackagePairs($object);
+        if($type == 'module') $packages = $this->group->getPrivPackagesByModule($object);
+        echo html::select('package', array('' => '') + $packages, '', "class='form-control picker-select'");
     }
 
     /**
