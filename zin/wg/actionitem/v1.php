@@ -3,10 +3,11 @@ namespace zin;
 
 require_once dirname(__DIR__) . DS . 'btn' . DS . 'v1.php';
 require_once dirname(__DIR__) . DS . 'dropdown' . DS . 'v1.php';
+require_once dirname(__DIR__) . DS . 'checkbox' . DS . 'v1.php';
 
 class actionItem extends wg
 {
-    static $defineProps = 'name:string="action", type:string="item", outerTag:string="li", tagName:string="a", icon?:string, text?:string, url?:string, target?:string, active?:bool, disabled?:bool, trailingIcon?:string, outerProps?:array, outerClass?: string';
+    static $defineProps = 'name:string="action", type:string="item", outerTag:string="li", tagName:string="a", icon?:string, text?:string, url?:string, target?:string, active?:bool, disabled?:bool, trailingIcon?:string, outerProps?:array, outerClass?:string, badge?:string|array|object, props?:array';
 
     protected function buildDividerItem()
     {
@@ -20,6 +21,7 @@ class actionItem extends wg
         return h::div
         (
             set($this->props->skip(array_keys(actionItem::getDefinedProps()))),
+            set($this->prop('props')),
             $icon ? icon($icon) : NULL,
             empty($text) ? NULL : span($text, setClass('text')),
             $this->children(),
@@ -29,13 +31,18 @@ class actionItem extends wg
 
     protected function buildDropdownItem()
     {
-        $dropdown = new dropdown($this->props->skip('tagName,type,name,outerTag,outerProps'),  $this->children());
+        $dropdown = new dropdown($this->props->skip('tagName,type,name,outerTag,outerProps,props'), set($this->prop('props')), $this->children());
         return $dropdown;
     }
 
     protected function buildBtnItem()
     {
-        return new btn($this->props->skip('tagName,type,name,outerTag,outerProps'), $this->children());
+        return new btn($this->props->skip('tagName,type,name,outerTag,outerProps,props'), set($this->prop('props')),$this->children());
+    }
+
+    protected function buildCheckboxItem()
+    {
+        return new checkbox($this->props->skip('tagName,type,name,outerTag,outerProps,props'), set($this->prop('props')),$this->children());
     }
 
     protected function buildItem()
@@ -44,7 +51,10 @@ class actionItem extends wg
         $methodName = "build{$type}Item";
         if(method_exists($this, $methodName)) return $this->$methodName();
 
-        list($tagName, $icon, $text, $trailingIcon, $url, $target, $active, $disabled) = $this->prop(array('tagName', 'icon', 'text', 'trailingIcon', 'url', 'target', 'active', 'disabled'));
+        list($tagName, $icon, $text, $trailingIcon, $url, $target, $active, $disabled, $badge) = $this->prop(array('tagName', 'icon', 'text', 'trailingIcon', 'url', 'target', 'active', 'disabled', 'badge'));
+
+        if(is_string($badge)) $badge = label($badge);
+        else if(is_array($badge)) $badge = label(set($badge));
 
         return h::create
         (
@@ -54,6 +64,7 @@ class actionItem extends wg
             set($this->props->skip(array_keys(actionItem::getDefinedProps()))),
             $icon ? icon($icon) : NULL,
             $text,
+            $badge,
             $this->children(),
             $trailingIcon ? icon($trailingIcon) : NULL,
         );

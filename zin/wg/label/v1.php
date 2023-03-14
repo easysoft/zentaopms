@@ -12,6 +12,7 @@ class label extends wg
         (
             setClass('label'),
             set($this->props->skip(array_keys(static::getDefinedProps()))),
+            $this->prop('text'),
             $this->children()
         );
     }

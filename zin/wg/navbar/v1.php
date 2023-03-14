@@ -114,8 +114,7 @@ class navbar extends wg
         commonModel::setMainMenu();
         commonModel::checkMenuVarsReplaced();
 
-        $app  = data('app');
-        $lang = data('lang');
+        global $app, $lang;
         $isTutorialMode = commonModel::isTutorialMode();
         $currentModule = $app->rawModule;
         $currentMethod = $app->rawMethod;

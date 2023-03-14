@@ -32,3 +32,8 @@ function getWebRoot($full = false)
 {
     return \getWebRoot($full);
 }
+
+function hasPriv($module, $method, $object = null, $vars = '')
+{
+    return common::hasPriv($module, $method, $object, $vars);
+}

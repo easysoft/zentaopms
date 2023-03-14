@@ -34,6 +34,7 @@ function label()       {return createWg('label', func_get_args());}
 function dtable()      {return createWg('dtable', func_get_args());}
 function menu()        {return createWg('menu', func_get_args());}
 function radio()       {return createWg('radio', func_get_args());}
+function switcher()    {return createWg('switcher', func_get_args());}
 function select()      {return createWg('select', func_get_args());}
 function formlabel()   {return createWg('formlabel', func_get_args());}
 function formgroup()   {return createWg('formgroup', func_get_args());}
