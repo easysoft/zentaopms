@@ -850,37 +850,27 @@ class groupModel extends model
     }
 
     /**
-     * Get all priv package pairs.
+     * Get priv package pairs by view.
      *
      * @access public
      * @return array
      */
-    public function getPrivPackagePairs()
-    {
-        return $this->dao->select('id,name')->from(TABLE_PRIVPACKAGE)->fetchPairs();
-    }
-
-    /**
-     * Get priv packages by view.
-     *
-     * @param  string $view
-     * @access public
-     * @return array
-     */
-    public function getPrivPackagesByView($view = '')
+    public function getPrivPackagePairs($view = '')
     {
         $this->loadModel('setting');
-        if(empty($view))
+
+        if(!empty($view))
+        {
+            $modules = $this->setting->getItem("owner=system&module=priv&key={$view}Modules");
+        }
+        else
         {
             $modules = '';
             $views   = $this->setting->getItem("owner=system&module=priv&key=views");
             $views   = explode(',', $views);
             foreach($views as $view) $modules .= ',' . $this->setting->getItem("owner=system&module=priv&key={$view}Modules");
         }
-        else
-        {
-            $modules = $this->setting->getItem("owner=system&module=priv&key={$view}Modules");
-        }
+
         $modules = trim($modules, ',');
         return $this->dao->select('id,name')->from(TABLE_PRIVPACKAGE)->where('module')->in($modules)->orderBy('order_asc')->fetchPairs();
     }
@@ -889,10 +879,11 @@ class groupModel extends model
      * Get priv modules.
      *
      * @param  string $viewName
+     * @param  string $param
      * @access public
      * @return array
      */
-    public function getPrivModules($viewName = '')
+    public function getPrivModules($viewName = '', $param = '')
     {
         $this->loadModel('setting');
 
@@ -909,7 +900,7 @@ class groupModel extends model
             $viewModules = explode(',', $viewModules);
             foreach($viewModules as $index => $module)
             {
-                $modules[$module] = $this->lang->{$view}->common . '/' . zget($moduleLang, $module);
+                $modules[$module] = $param == 'noViewName' ? zget($moduleLang, $module) : $this->lang->{$view}->common . '/' . zget($moduleLang, $module);
                 unset($viewModules[$index]);
             }
         }
@@ -1444,7 +1435,7 @@ class groupModel extends model
             unset($modules[$index]);
         }
 
-        $packages = $this->getPrivPackagesByView('');
+        $packages = $this->getPrivPackagePairs();
 
         $privs = $this->getPrivLangPairs();
 
