@@ -454,8 +454,16 @@ EOD;
             if($param->isOptional())
             {
                 $defaultParam = $param->getDefaultValue();
-                if(is_string($defaultParam)) $methodParam .= "='$defaultParam', ";
-                else $methodParam .= "=$defaultParam, ";
+                if(is_string($defaultParam))
+                {
+                    $methodParam .= "='$defaultParam', ";
+                }
+                else
+                {
+                    if(is_array($defaultParam) and empty($defaultParam)) $defaultParam = 'array()';
+                    if(is_null($defaultParam)) $defaultParam = 'null';
+                    $methodParam .= "=$defaultParam, ";
+                }
             }
             else
             {
