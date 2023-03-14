@@ -178,76 +178,54 @@ $footer = array(
     'linkCreator' => '#?page{page}&recPerPage={recPerPage}'
 );
 
-common::sortFeatureMenu();
-$statuses = array();
-foreach ($lang->product->featureBar['all'] as $key => $text)
-{
-    $statuses[] = array(
-        'text'   => $text,
-        'active' => ($key == $browseType),
-        'url'    => createLink($this->moduleName, $this->methodName, 'all', "browseType=$key&orderBy=$orderBy"),
-        'class'  => 'btn btn-link'
-    );
-}
-
-$others = array();
-if(common::hasPriv('product', 'batchEdit'))
-{
-    $others[] = array(
-        'text'    => $lang->product->edit,
-        'checked' => $this->cookie->editProject,
-        'type'    => 'checkbox'
-    );
-}
-$others[] = array(
-    'id'    => 'searchBtn',
-    'type'  => 'button',
-    'icon'  => 'search',
-    'text'  => $lang->product->searchStory,
-    'class' => 'ghost'
+featureBar
+(
+    hasPriv('product', 'batchEdit') ? item
+    (
+        set::type('checkbox'),
+        set::text($lang->product->edit),
+        set::checked($this->cookie->editProject)
+    ) : NULL,
+    item
+    (
+        set::icon('search'),
+        set::text($lang->product->searchStory)
+        /* toggle('search-panel') */
+    )
 );
 
-$btnGroup = array();
-$btnGroup[] = array(
-    'text'  => $lang->product->export,
-    'icon'  => 'export',
-    'class' => 'btn secondary',
-    'url'   => createLink('product', 'export', $browseType, "status=$browseType&orderBy=$orderBy"),
-);
-if($config->systemMode == 'ALM')
-{
-    $btnGroup[] = array(
+toolbar
+(
+    item(set(array
+    (
+        'text'  => $lang->product->export,
+        'icon'  => 'export',
+        'class' => 'secondary',
+        'url'   => createLink('product', 'export', $browseType, "status=$browseType&orderBy=$orderBy"),
+    ))),
+    $config->systemMode == 'ALM' ? item(set(array
+    (
         'text'  => $lang->product->line,
         'icon'  => 'edit',
-        'class' => 'btn secondary',
+        'class' => 'secondary',
         'url'   => createLink('product', 'manageLine', $browseType),
-    );
-}
-$btnGroup[] = array(
-    'text'  => $lang->product->create,
-    'icon'  => 'plus',
-    'class' => 'btn primary',
-    'url'   => createLink('product', 'create')
+    ))) : NULL,
+    item(set(array
+    (
+        'text'  => $lang->product->create,
+        'icon'  => 'plus',
+        'class' => 'primary',
+        'url'   => createLink('product', 'create')
+    )))
 );
 
-header();
-
-pagemain
+dtable
 (
-    mainmenu
-    (
-        set('statuses', $statuses),
-        set('others',   $others),
-        set('btnGroup', $btnGroup)
-    ),
-    dtable
-    (
-        set('width', '100%'),
-        set('cols',  $cols),
-        set('data',  $data),
-        set('footPager', $footer),
-        set('footToolbar', array('items' => array(array('size' => 'sm', 'text' => '编辑', 'btnType' => 'primary'))))
-    )
+    set::className('shadow'),
+    set::cols($cols),
+    set::data($data),
+    set::footPager($footer),
+    set::footToolbar(array('items' => array(array('size' => 'sm', 'text' => '编辑', 'btnType' => 'primary'))))
 );
 
 render();
