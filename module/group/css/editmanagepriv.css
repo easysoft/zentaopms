@@ -10,10 +10,8 @@
 .priv-panel > .panel-bottom {padding-top: 20px;}
 
 /* permission-table */
-#permissionEditForm tr {display: flex;}
-.flex-sm {flex: 1 1 15%;}
-.flex-md {flex: 1 1 30%;}
-.flex-content {flex: 1 1 70%;}
+.td-sm {width: 120px;}
+.td-md {width: 240px;}
 .sorter-group {display: flex; flex-wrap: wrap;}
 .sorter-group > .group-item {flex: 0 0 25%; overflow: hidden;}
 .checkbox-primary > input {width: 20px;}
