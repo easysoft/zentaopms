@@ -313,6 +313,13 @@ class wg
         return get_called_class();
     }
 
+    public function shortType()
+    {
+        $type = $this->type();
+        $pos = strrpos($type, '\\');
+        return $pos === false ? $type : substr($type, $pos + 1);
+    }
+
     public function id()
     {
         return $this->prop('id');

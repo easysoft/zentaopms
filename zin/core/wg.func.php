@@ -103,3 +103,36 @@ function divorce($item)
     }
     return $item;
 }
+
+function hasWgInList($items, $type)
+{
+    if(!is_array($items)) $items = array($items);
+    foreach($items as $item)
+    {
+        if($item instanceof wg && $item->type() == $type) return true;
+    }
+    return false;
+}
+
+function groupWgInList($items, $types)
+{
+    if(is_string($types)) $types = explode(',', $types);
+    $typesMap = array();
+    $restList = array();
+
+    foreach($types as $type) $typesMap[$type] = array();
+
+    foreach($items as $item)
+    {
+        if(!($item instanceof wg)) continue;
+
+        $type = $item->shortType();
+        if(isset($typesMap[$type])) $typesMap[$type][] = $item;
+        else $restList[] = $item;
+    }
+
+    $groups = array();
+    foreach($types as $index => $type) $groups[] = $typesMap[$type];
+    $groups[] = $restList;
+    return $groups;
+}
