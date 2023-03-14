@@ -1684,21 +1684,24 @@ $lang->dept->methodOrder[25] = 'delete';
 
 /* Group. */
 $lang->resource->group = new stdclass();
-$lang->resource->group->browse             = 'browse';
-$lang->resource->group->create             = 'create';
-$lang->resource->group->edit               = 'edit';
-$lang->resource->group->copy               = 'copy';
-$lang->resource->group->delete             = 'delete';
-$lang->resource->group->manageView         = 'manageView';
-$lang->resource->group->managePriv         = 'managePriv';
-$lang->resource->group->manageMember       = 'manageMember';
-$lang->resource->group->manageProjectAdmin = 'manageProjectAdmin';
-$lang->resource->group->editManagePriv     = 'editManagePriv';
-$lang->resource->group->managePrivPackage  = 'managePrivPackage';
-$lang->resource->group->createPrivPackage  = 'createPrivPackage';
-$lang->resource->group->editPrivPackage    = 'editPrivPackage';
-$lang->resource->group->deletePrivPackage  = 'deletePrivPackage';
-$lang->resource->group->sortPrivPackages   = 'sortPrivPackages';
+$lang->resource->group->browse              = 'browse';
+$lang->resource->group->create              = 'create';
+$lang->resource->group->edit                = 'edit';
+$lang->resource->group->copy                = 'copy';
+$lang->resource->group->delete              = 'delete';
+$lang->resource->group->manageView          = 'manageView';
+$lang->resource->group->managePriv          = 'managePriv';
+$lang->resource->group->manageMember        = 'manageMember';
+$lang->resource->group->manageProjectAdmin  = 'manageProjectAdmin';
+$lang->resource->group->editManagePriv      = 'editManagePriv';
+$lang->resource->group->managePrivPackage   = 'managePrivPackage';
+$lang->resource->group->createPrivPackage   = 'createPrivPackage';
+$lang->resource->group->editPrivPackage     = 'editPrivPackage';
+$lang->resource->group->deletePrivPackage   = 'deletePrivPackage';
+$lang->resource->group->sortPrivPackages    = 'sortPrivPackages';
+$lang->resource->group->addRelation         = 'addRelation';
+$lang->resource->group->deleteRelation      = 'deleteRelation';
+$lang->resource->group->batchDeleteRelation = 'batchDeleteRelation';
 
 $lang->group->methodOrder[5]  = 'browse';
 $lang->group->methodOrder[10] = 'create';
@@ -1709,6 +1712,14 @@ $lang->group->methodOrder[30] = 'managePriv';
 $lang->group->methodOrder[35] = 'manageMember';
 $lang->group->methodOrder[40] = 'manageProjectAdmin';
 $lang->group->methodOrder[45] = 'editManagePriv';
+$lang->group->methodOrder[50] = 'managePrivPackage';
+$lang->group->methodOrder[55] = 'createPrivPackage';
+$lang->group->methodOrder[60] = 'editPrivPackage';
+$lang->group->methodOrder[65] = 'deletePrivPackage';
+$lang->group->methodOrder[70] = 'sortPrivPackages';
+$lang->group->methodOrder[75] = 'addRelation';
+$lang->group->methodOrder[80] = 'deleteRelation';
+$lang->group->methodOrder[85] = 'batchDeleteRelation';
 
 /* User. */
 $lang->resource->user = new stdclass();

@@ -51,11 +51,15 @@ $lang->group->allCheck           = 'All';
 $lang->group->noGroup            = 'Aucun groupe';
 $lang->group->repeat             = "『%s』『%s』exists.Please adjust it and try again.";
 $lang->group->noneProject        = 'No ' . $lang->projectCommon;
-$lang->group->addPriv            = 'Add Priv';
+$lang->group->createPriv         = 'Add Priv';
 $lang->group->editPriv           = 'Edit Priv';
 $lang->group->privName           = 'Priv Name';
 $lang->group->privDesc           = 'Priv Desc';
 $lang->group->add                = 'Add';
+$lang->group->moduleName         = 'Module Name';
+$lang->group->methodName         = 'Method Name';
+$lang->group->viewAB             = 'View';
+$lang->group->moduleAB           = 'Module';
 
 $lang->group->batchActions              = 'Batch Operation';
 $lang->group->batchSetDependency        = 'Batch Set Dependency';
@@ -75,6 +79,9 @@ $lang->group->selectedPrivs             = 'Selected Privilege: %s';
 $lang->group->selectModule              = 'Select Module';
 $lang->group->recommendPrivs            = 'Recommended Privs';
 $lang->group->dependentPrivs            = 'Dependented Privs';
+$lang->group->addRelation               = 'Add Relation';
+$lang->group->deleteRelation            = 'Delete Relation';
+$lang->group->batchDeleteRelation       = 'Batch Delete Relation';
 
 $lang->group->id         = 'ID';
 $lang->group->name       = 'Groupe';

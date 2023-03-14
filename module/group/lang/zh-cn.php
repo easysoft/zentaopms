@@ -79,6 +79,9 @@ $lang->group->selectedPrivs             = '选中权限：%s';
 $lang->group->selectModule              = '选择模块';
 $lang->group->recommendPrivs            = '依赖的权限';
 $lang->group->dependentPrivs            = '推荐的权限';
+$lang->group->addRelation               = '添加权限关联';
+$lang->group->deleteRelation            = '删除权限关联';
+$lang->group->batchDeleteRelation       = '批量删除权限关联';
 
 $lang->group->id         = '编号';
 $lang->group->name       = '分组名称';
