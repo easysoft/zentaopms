@@ -24,7 +24,7 @@
         <table class='table table-form'>
           <tr>
             <th><?php echo $lang->zahost->type;?></th>
-            <td><?php echo html::select('type', $lang->zanode->typeList, 'virtual', "class='form-control chosen' onchange='zanodeType()'")?></td>
+            <td><?php echo html::select('hostType', $lang->zanode->typeList, 'virtual', "class='form-control chosen' onchange='zanodeType()'")?></td>
             <td></td>
           </tr>
           <tr>

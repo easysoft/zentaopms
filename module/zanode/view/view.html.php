@@ -44,7 +44,7 @@ $account = strpos($zanode->osName, "windows") ? $config->zanode->defaultWinAccou
   <div class="col-8 main-col">
     <div class="cell">
       <div class="detail zanode-detail">
-        <div class="detail-title"><?php echo $lang->zahost->baseInfo; ?></div>
+        <div class="detail-title"><?php echo $lang->zanode->baseInfo; ?></div>
         <div class="detail-content article-content">
           <div class="main-row zanode-mt-8">
             <div class="col-4">
@@ -63,7 +63,7 @@ $account = strpos($zanode->osName, "windows") ? $config->zanode->defaultWinAccou
             <div class="col-4">
               <div class="main-row">
                 <div class="col-3 text-right"><?php echo $lang->zanode->cpuCores; ?>:</div>
-                <div class="col-8"><?php echo $zanode->cpuCores . ' ' . $lang->zahost->cpuUnit; ?></div>
+                <div class="col-8"><?php echo $zanode->cpuCores . ' ' . $lang->zanode->cpuUnit; ?></div>
               </div>
             </div>
           </div>
@@ -132,28 +132,34 @@ $account = strpos($zanode->osName, "windows") ? $config->zanode->defaultWinAccou
             <?php echo $lang->zanode->init->statusTitle; ?>
             <button type='button' id='checkServiceStatus' class='btn btn-info'><i class="icon icon-refresh"></i> <span class='checkStatus'><?php echo $lang->zanode->init->checkStatus;?></span></button>
           </div>
-          <div class="detail-content statusContainer load-indicator" id='serviceContent'>
+          <div class="detail-content article-content statusContainer load-indicator" id='serviceContent'>
             <div class="service-status hide">
               <span class='dot-symbol dot-zenagent text-danger'>●</span>
-              <span>&nbsp;&nbsp;ZenAgent &nbsp;
+              <span>&nbsp;ZenAgent &nbsp;
                 <span class="zenagent-status"><?php echo $lang->zanode->initializing; ?></span>
               </span>
             </div>
             <div class="service-status hide">
               <span class='dot-symbol dot-ztf text-danger'>●</span>
-              <span>&nbsp;&nbsp;ZTF &nbsp;
+              <span>&nbsp;ZTF &nbsp;
                 <span class="ztf-status"><?php echo $lang->zanode->initializing; ?></span>&nbsp;
                 <a class='node-init-install hide' target='hiddenwin' href='javascript:;' data-href='<?php echo $this->createLink('zanode', 'ajaxInstallService', 'nodeID=' . $zanode->id . '&service=ztf');?>'><i class="icon icon-download icon-sm ztf-install-icon"></i><span class="ztf-install"><?php echo $lang->zanode->install ?></span></a>
               </span>
             </div>
             <div class="status-notice hide">
               <span class='init-success hide'><?php echo sprintf($lang->zanode->init->initSuccessNoticeTitle, "<a id='jumpManual' href='javascript:;'>{$lang->zanode->manual}</a>", html::a(helper::createLink('testcase', 'automation', "", '', true), $lang->zanode->automation, '', "class='iframe' title='{$lang->zanode->automation}' data-width='50%'", '')); ?></span>
-              <span class='init-fail hide'><?php echo $lang->zanode->init->initFailNoticeTitle . '<br/>' . $lang->zanode->init->initFailNoticeDesc;?></span>
+              <div class='hide init-fail'>
+                <?php echo $lang->zanode->init->initFailNotice;?>
+                <textarea style="display:none;" id="initBash"><?php echo $initBash; ?></textarea>
+                <div class="zanode-init">
+                <?php echo "$initBash <button type='button' class='btn btn-info btn-mini btn-init-copy'><i class='icon-common-copy icon-copy' title='" . $lang->zanode->copy .  "'></i></button>"; ?>
+                </div>
+              </div>
             </div>
           </div>
         </div>
       </div>
-      <?php if(common::hasPriv('zanode', 'browseSnapshot')):?>
+      <?php if(common::hasPriv('zanode', 'browseSnapshot') && $zanode->hostType == ''):?>
       <div class="cell">
         <div class="detail zanode-detail">
           <div class="detail-title"><?php echo $lang->zanode->browseSnapshot;?></div>
@@ -175,23 +181,23 @@ $account = strpos($zanode->osName, "windows") ? $config->zanode->defaultWinAccou
         <?php
         if (empty($zanode->deleted)) {
           $suspendAttr  = "title='{$lang->zanode->suspend}' target='hiddenwin'";
-          $suspendAttr .= $zanode->status != 'running' ? ' class="btn disabled"' : "class='btn' target='hiddenwin' onclick='if(confirm(\"{$lang->zanode->confirmSuspend}\")==false) return false;'";
+          $suspendAttr .= $zanode->hostType == 'physics' || $zanode->status != 'running' ? ' class="btn disabled"' : "class='btn' target='hiddenwin' onclick='if(confirm(\"{$lang->zanode->confirmSuspend}\")==false) return false;'";
 
           $resumeAttr  = "title='{$lang->zanode->resume}' target='hiddenwin'";
-          $resumeAttr .= $zanode->status == 'running' ? ' class="btn disabled"' : "class='btn' target='hiddenwin' onclick='if(confirm(\"{$lang->zanode->confirmResume}\")==false) return false;'";
+          $resumeAttr .= $zanode->hostType == 'physics' || $zanode->status == 'running' ? ' class="btn disabled"' : "class='btn' target='hiddenwin' onclick='if(confirm(\"{$lang->zanode->confirmResume}\")==false) return false;'";
 
           $rebootAttr  = "title='{$lang->zanode->reboot}' target='hiddenwin'";
-          $rebootAttr .= $zanode->status == 'shutoff' || $zanode->status == 'wait' ? ' class="btn disabled"' : "class='btn' target='hiddenwin' onclick='if(confirm(\"{$lang->zanode->confirmReboot}\")==false) return false;'";
+          $rebootAttr .= $zanode->hostType == 'physics' || $zanode->status == 'shutoff' || $zanode->status == 'wait' ? ' class="btn disabled"' : "class='btn' target='hiddenwin' onclick='if(confirm(\"{$lang->zanode->confirmReboot}\")==false) return false;'";
 
           $closeAttr = "title='{$lang->zanode->shutdown}'";
-          $closeAttr .= $zanode->status == 'wait' ? ' class="btn disabled"' : ' class="btn iframe"';
+          $closeAttr .= $zanode->hostType == 'physics' || $zanode->status == 'wait' ? ' class="btn disabled"' : ' class="btn iframe"';
 
           $startAttr = "title='{$lang->zanode->boot}'";
-          $startAttr .= $zanode->status == 'wait' ? ' class="btn disabled"' : ' class="btn iframe"';
+          $startAttr .= $zanode->hostType == 'physics' || $zanode->status == 'wait' ? ' class="btn disabled"' : ' class="btn iframe"';
 
           $snapshotAttr = "title='{$lang->zanode->createSnapshot}'";
-          $snapshotAttr .= $zanode->status != 'running' ? ' class="btn disabled"' : ' class="btn iframe"';
-          common::printLink('zanode', 'getVNC', "id={$zanode->id}", "<i class='icon icon-remote'></i> " . $lang->zanode->getVNC, in_array($zanode->status ,array('running', 'launch', 'wait')) ? '_blank' : '', "title='{$lang->zanode->getVNC}' class='btn desktop  " . (in_array($zanode->status ,array('running', 'launch', 'wait')) ? '':'disabled') . "'", '');
+          $snapshotAttr .= $zanode->hostType == 'physics' || $zanode->status != 'running' ? ' class="btn disabled"' : ' class="btn iframe"';
+          common::printLink('zanode', 'getVNC', "id={$zanode->id}", "<i class='icon icon-remote'></i> " . $lang->zanode->getVNC, in_array($zanode->status ,array('running', 'launch', 'wait')) ? '_blank' : '', "title='{$lang->zanode->getVNC}' class='btn desktop  " . ($zanode->hostType == '' && in_array($zanode->status ,array('running', 'launch', 'wait')) ? '':'disabled') . "'", '');
 
           if($zanode->status == "suspend")
           {

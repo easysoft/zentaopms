@@ -6,7 +6,7 @@
  */
 function zanodeType()
 {
-    if($('#type').val() == 'physics')
+    if($('#hostType').val() == 'physics')
     {
         $('#parent').closest('tr').hide();
         $('#image').closest('tr').hide();

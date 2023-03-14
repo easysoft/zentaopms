@@ -63,6 +63,9 @@ $lang->zanode->manual          = '手册';
 $lang->zanode->initializing    = '初始化中';
 $lang->zanode->showPwd         = '显示密码';
 $lang->zanode->hidePwd         = '隐藏密码';
+$lang->zanode->baseInfo        = '基础信息';
+$lang->zanode->cpuUnit         = '核';
+$lang->zanode->IP              = 'IP/域名';
 
 $lang->zanode->typeList['node']    = '虚拟机';
 $lang->zanode->typeList['physics'] = '物理机';
@@ -149,8 +152,7 @@ $lang->zanode->init->next          = "下一步";
 $lang->zanode->init->button        = "去设置";
 
 $lang->zanode->init->initSuccessNoticeTitle = "服务已就绪，还需两步即可在执行节点上执行自动化测试：<br/>1、根据%s配置自动化测试运行环境。<br/>2、进行%s";
-$lang->zanode->init->initFailNoticeTitle    = "初始化失败，请查看初始化脚本执行日志并尝试以下两种解决方案：";
-$lang->zanode->init->initFailNoticeDesc     = "1、 重新执行脚本 <br/>2、 查看初始化常见问题";
+$lang->zanode->init->initFailNotice         = "服务未就绪，在执行节点上执行安装服务命令或<a href='https://github.com/easysoft/zenagent/' target='_blank'>查看帮助</a>.";
 
 $lang->zanode->init->serviceStatus = array(
     "ZenAgent" => 'not_install',

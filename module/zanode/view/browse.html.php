@@ -80,26 +80,26 @@
               <td class='c-actions'>
                 <?php
                 $suspendAttr  = "title='{$lang->zanode->suspend}' target='hiddenwin'";
-                $suspendAttr .= $node->type == 'physics' || $node->status != 'running' ? ' class="btn disabled"' : "class='btn' target='hiddenwin' onclick='if(confirm(\"{$lang->zanode->confirmSuspend}\")==false) return false;'";
+                $suspendAttr .= $node->hostType == 'physics' || $node->status != 'running' ? ' class="btn disabled"' : "class='btn' target='hiddenwin' onclick='if(confirm(\"{$lang->zanode->confirmSuspend}\")==false) return false;'";
 
                 $resumeAttr  = "title='{$lang->zanode->resume}' target='hiddenwin'";
-                $resumeAttr .= $node->type == 'physics' || $node->status == 'running' || $node->status == 'wait' ? ' class="btn disabled"' : "class='btn' target='hiddenwin' onclick='if(confirm(\"{$lang->zanode->confirmResume}\")==false) return false;'";
+                $resumeAttr .= $node->hostType == 'physics' || $node->status == 'running' || $node->status == 'wait' ? ' class="btn disabled"' : "class='btn' target='hiddenwin' onclick='if(confirm(\"{$lang->zanode->confirmResume}\")==false) return false;'";
 
                 $rebootAttr  = "title='{$lang->zanode->reboot}' target='hiddenwin'";
-                $rebootAttr .= $node->type == 'physics' || $node->status == 'shutoff' || $node->status == 'wait' ? ' class="btn disabled"' : "class='btn' target='hiddenwin' onclick='if(confirm(\"{$lang->zanode->confirmReboot}\")==false) return false;'";
+                $rebootAttr .= $node->hostType == 'physics' || $node->status == 'shutoff' || $node->status == 'wait' ? ' class="btn disabled"' : "class='btn' target='hiddenwin' onclick='if(confirm(\"{$lang->zanode->confirmReboot}\")==false) return false;'";
 
                 $closeAttr = "title='{$lang->zanode->shutdown}'";
-                $closeAttr .= $node->type == 'physics' || $node->status == 'wait' ? ' class="btn disabled"' : ' class="btn iframe"';
+                $closeAttr .= $node->hostType == 'physics' || $node->status == 'wait' ? ' class="btn disabled"' : ' class="btn iframe"';
 
                 $startAttr = "title='{$lang->zanode->boot}'";
-                $startAttr .= $node->type == 'physics' || $node->status == 'wait' ? ' class="btn disabled"' : ' class="btn iframe"';
+                $startAttr .= $node->hostType == 'physics' || $node->status == 'wait' ? ' class="btn disabled"' : ' class="btn iframe"';
 
                 $snapshotAttr = "title='{$lang->zanode->createSnapshot}'";
-                $snapshotAttr .= $node->type == 'physics' || $node->status != 'running' ? ' class="btn disabled"' : ' class="btn iframe"';
+                $snapshotAttr .= $node->hostType == 'physics' || $node->status != 'running' ? ' class="btn disabled"' : ' class="btn iframe"';
 
-                $imageAttr = $node->status != 'running' ? ' class="btn btn-action iframe createImage disabled"' : ' class="btn btn-action iframe createImage"';
+                $imageAttr = $node->hostType == 'physics' || $node->status != 'running' ? ' class="btn btn-action iframe createImage disabled"' : ' class="btn btn-action iframe createImage"';
 
-                common::printLink('zanode', 'getVNC', "id={$node->id}", "<i class='icon icon-remote'></i> ", (in_array($node->status ,array('running', 'launch', 'wait')) ? '_blank' : ''), "title='{$lang->zanode->getVNC}' class='btn desktop  " . (in_array($node->status ,array('running', 'launch', 'wait')) ? '':'disabled') . "'", '');
+                common::printLink('zanode', 'getVNC', "id={$node->id}", "<i class='icon icon-remote'></i> ", (in_array($node->status ,array('running', 'launch', 'wait')) ? '_blank' : ''), "title='{$lang->zanode->getVNC}' class='btn desktop  " . ($node->hostType == '' && in_array($node->status ,array('running', 'launch', 'wait')) ? '':'disabled') . "'", '');
                 if($node->status == "suspend")
                 {
                     common::printLink('zanode', 'resume', "zanodeID={$node->id}", "<i class='icon icon-resume'></i> ", '', $resumeAttr);

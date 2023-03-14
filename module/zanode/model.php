@@ -54,14 +54,22 @@ class zanodemodel extends model
     public function create()
     {
         $data = fixer::input('post')
-            ->setIF($this->post->type == 'physics', 'parent', 0)
-            ->setIF($this->post->type == 'physics', 'osName', $this->post->osNamePhysics)
+            ->setIF($this->post->hostType == 'physics', 'parent', 0)
+            ->setIF($this->post->hostType == 'physics', 'osName', $this->post->osNamePhysics)
             ->remove('osNamePhysics')
             ->get();
 
+        $data->type = "node";
+
+        if($data->hostType == 'physics')
+        {
+            $data->secret = md5($data->name . time());
+            $data->status = "offline";
+        }
+
         /* Batch check fields. */
         $this->dao->update(TABLE_ZAHOST)->data($data)
-            ->batchCheck($data->type == 'node' ? $this->config->zanode->create->requiredFields : $this->config->zanode->create->physicsRequiredFields, 'notempty');
+            ->batchCheck($data->hostType != 'physics' ? $this->config->zanode->create->requiredFields : $this->config->zanode->create->physicsRequiredFields, 'notempty');
 
         if(dao::isError()) return false;
 
@@ -72,10 +80,10 @@ class zanodemodel extends model
         }
 
         /* If name already exists return error. */
-        $node = $this->dao->select('*')->from(TABLE_ZAHOST)->where('name')->eq($data->name)->andWhere('type')->in('node,physics')->fetch();
+        $node = $this->dao->select('*')->from(TABLE_ZAHOST)->where('name')->eq($data->name)->andWhere('type')->eq('node')->fetch();
         if($node) return dao::$errors[] = $this->lang->zanode->nameUnique;
 
-        if($data->type == 'physics')
+        if($data->hostType == 'physics')
         {
             $ping = $this->loadModel('zahost')->checkAddress($data->extranet);
             if(!$ping)
@@ -450,7 +458,7 @@ class zanodemodel extends model
     {
         $node = $this->getNodeByID($id);
 
-        if($node)
+        if($node && $node->hostType != 'physics')
         {
             $req = array( 'name' => $node->name );
             $agnetUrl = 'http://' . $node->ip . ':' . $node->hzap;
@@ -570,11 +578,11 @@ class zanodemodel extends model
             $query = str_replace('`hostID`', 't2.`id`', $query);
         }
 
-        $list = $this->dao->select("t1.*, t2.name as hostName, if(t1.type='node', t2.extranet, t1.extranet) extranet,if(t1.type='node', t3.osName, t1.osName) osName")->from(TABLE_ZAHOST)->alias('t1')
+        $list = $this->dao->select("t1.*, t2.name as hostName, if(t1.hostType='', t2.extranet, t1.extranet) extranet,if(t1.hostType='', t3.osName, t1.osName) osName")->from(TABLE_ZAHOST)->alias('t1')
             ->leftJoin(TABLE_ZAHOST)->alias('t2')->on('t1.parent = t2.id')
             ->leftJoin(TABLE_IMAGE)->alias('t3')->on('t3.id = t1.image')
             ->where('t1.deleted')->eq(0)
-            ->andWhere("((t1.type = 'node' and t2.type = 'zahost') or t1.type = 'physics')")
+            ->andWhere("t1.type = 'node'")
             ->beginIF($query)->andWhere($query)->fi()
             ->orderBy($orderBy)
             ->page($pager)
@@ -587,7 +595,9 @@ class zanodemodel extends model
 
         foreach($list as $l)
         {
-            $host = zget($hosts, $l->parent);
+            $host         = $l->hostType == '' ? zget($hosts, $l->parent) : clone $l;
+            $host->status = in_array($host->status, array('running', 'ready')) ? "online" : $host->status;
+
             if($l->status == 'running' || $l->status == 'ready')
             {
                 if(empty($host))
@@ -604,7 +614,7 @@ class zanodemodel extends model
 
                 if(time() - strtotime($l->heartbeat) > 60)
                 {
-                    $l->status = 'wait';
+                    $l->status = $l->hostType == '' ? 'wait' : 'offline';
                 }
             }
         }
@@ -654,6 +664,8 @@ class zanodemodel extends model
      */
     public function getListByHost($hostID, $orderBy = 'id_desc')
     {
+        if(!$hostID) return array();
+
         $list = $this->dao->select('id, name, vnc, cpuCores, memory, diskSize, osName, status, heartbeat')->from(TABLE_ZAHOST)
             ->where('deleted')->eq(0)
             ->andWhere("parent")->eq($hostID)
@@ -786,14 +798,16 @@ class zanodemodel extends model
      */
     public function getNodeByID($id)
     {
-        $node = $this->dao->select("t1.*, t2.name as hostName, t2.extranet as ip,t2.zap as hzap,if(t1.type='node', t3.osName, t1.osName) osName, t2.tokenSN as tokenSN, t2.secret as secret")->from(TABLE_ZAHOST)
+        $node = $this->dao->select("t1.*, t2.name as hostName, if(t1.hostType='', t2.extranet, t1.extranet) ip,t2.zap as hzap,if(t1.hostType='', t3.osName, t1.osName) osName, if(t1.hostType='', t2.tokenSN, t1.tokenSN) tokenSN, if(t1.hostType='', t2.secret, t1.secret) secret")->from(TABLE_ZAHOST)
             ->alias('t1')
             ->leftJoin(TABLE_ZAHOST)->alias('t2')->on('t1.parent = t2.id')
             ->leftJoin(TABLE_IMAGE)->alias('t3')->on('t3.id = t1.image')
             ->where('t1.id')->eq($id)
             ->fetch();
 
-        $host = $this->loadModel("zahost")->getByID($node->type == 'node' ? $node->parent : $node->id);
+        $host = $node->hostType == '' ? $this->loadModel("zahost")->getByID($node->parent) : clone  $node;
+        $host->status = in_array($host->status, array('running', 'ready')) ? "online" : $host->status;
+
         if($node->status == 'running' || $node->status == 'ready')
         {
             if(empty($host) || $host->status != 'online')
@@ -802,7 +816,7 @@ class zanodemodel extends model
             }
             elseif(time() - strtotime($node->heartbeat) > 60)
             {
-                $node->status = 'wait';
+                $node->status = $node->hostType == '' ? 'wait' : 'offline';
             }
         }
 
@@ -821,7 +835,9 @@ class zanodemodel extends model
             ->where('mac')->eq($mac)
             ->fetch();
 
-        $host = $this->loadModel("zahost")->getByID($node->parent);
+        $host = $node->hostType == '' ? $this->loadModel("zahost")->getByID($node->parent) : $node;
+        $host->status = in_array($host->status, array('running', 'ready')) ? "online" : $host->status;
+
         if($node->status == 'running' || $node->status == 'ready')
         {
             if(empty($host) || $host->status != 'online')

@@ -12,7 +12,7 @@ $config->zanode->defaultAccount    = 'z';
 $config->zanode->defaultWinAccount = 'admin';
 $config->zanode->defaultPwd        = 'CQdliYQn6tKkoFhP';
 
-$config->zanode->initBash = 'curl -sSL https://pkg.qucheng.com/zenagent/zagent.sh | bash /dev/stdin -szvm -z%s';
+$config->zanode->initBash = 'curl -sSL https://pkg.qucheng.com/zenagent/zagent.sh | bash /dev/stdin -s zvm -k %s -z %s';
 
 $config->zanode->os = new stdClass();
 
