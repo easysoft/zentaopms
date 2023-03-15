@@ -61,6 +61,8 @@ $lang->custom->defaultProgram       = 'Default program';
 $lang->custom->modeManagement       = 'Mode Management';
 $lang->custom->percent              = $lang->stage->percent;
 $lang->custom->setPercent           = "Enable or Disable {$lang->stage->percent}";
+$lang->custom->beginAndEndDate      = 'Begin & End';
+$lang->custom->beginAndEndDateRange = 'The Range Of Begin & End';
 
 $lang->custom->unitList['efficiency'] = 'Working Hours/';
 $lang->custom->unitList['manhour']    = 'Man-hour/';
@@ -122,11 +124,12 @@ $lang->custom->story->fields['reviewResultList'] = 'Review Result';
 $lang->custom->story->fields['review']           = 'Review Required';
 
 $lang->custom->task = new stdClass();
-$lang->custom->task->fields['required']   = $lang->custom->required;
-$lang->custom->task->fields['priList']    = 'Priority';
-$lang->custom->task->fields['typeList']   = 'Type';
-$lang->custom->task->fields['reasonList'] = 'Close Reason';
-$lang->custom->task->fields['statusList'] = 'Status';
+$lang->custom->task->fields['required']      = $lang->custom->required;
+$lang->custom->task->fields['priList']       = 'Priority';
+$lang->custom->task->fields['typeList']      = 'Type';
+$lang->custom->task->fields['reasonList']    = 'Close Reason';
+$lang->custom->task->fields['statusList']    = 'Status';
+$lang->custom->task->fields['limitTaskDate'] = 'Begin & End';
 
 $lang->custom->bug = new stdClass();
 $lang->custom->bug->fields['required']       = $lang->custom->required;
@@ -324,3 +327,6 @@ $lang->custom->scrum->setConcept = 'Set concept';
 
 $lang->custom->reviewRules['allpass']  = 'All passed';
 $lang->custom->reviewRules['halfpass'] = 'More than half passed';
+
+$lang->custom->limitTaskDate['0'] = 'Unlimited';
+$lang->custom->limitTaskDate['1'] = 'Limited to the execution begin and end date range';

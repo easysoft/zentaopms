@@ -61,6 +61,8 @@ $lang->custom->defaultProgram       = '默认项目集';
 $lang->custom->modeManagement       = '模式管理';
 $lang->custom->percent              = $lang->stage->percent;
 $lang->custom->setPercent           = "是否启用{$lang->stage->percent}";
+$lang->custom->beginAndEndDate      = '起止日期';
+$lang->custom->beginAndEndDateRange = '起止日期范围';
 
 $lang->custom->unitList['efficiency'] = '工时/';
 $lang->custom->unitList['manhour']    = '人时/';
@@ -122,11 +124,12 @@ $lang->custom->story->fields['reviewResultList'] = '评审结果';
 $lang->custom->story->fields['review']           = '评审流程';
 
 $lang->custom->task = new stdClass();
-$lang->custom->task->fields['required']   = $lang->custom->required;
-$lang->custom->task->fields['priList']    = '优先级';
-$lang->custom->task->fields['typeList']   = '类型';
-$lang->custom->task->fields['reasonList'] = '关闭原因';
-$lang->custom->task->fields['statusList'] = '状态';
+$lang->custom->task->fields['required']      = $lang->custom->required;
+$lang->custom->task->fields['priList']       = '优先级';
+$lang->custom->task->fields['typeList']      = '类型';
+$lang->custom->task->fields['reasonList']    = '关闭原因';
+$lang->custom->task->fields['statusList']    = '状态';
+$lang->custom->task->fields['limitTaskDate'] = '起止日期';
 
 $lang->custom->bug = new stdClass();
 $lang->custom->bug->fields['required']       = $lang->custom->required;
@@ -324,3 +327,6 @@ $lang->custom->scrum->setConcept = "设置{$lang->projectCommon}概念";
 
 $lang->custom->reviewRules['allpass']  = '全部通过通过';
 $lang->custom->reviewRules['halfpass'] = '半数以上通过通过';
+
+$lang->custom->limitTaskDate['0'] = '不限制';
+$lang->custom->limitTaskDate['1'] = '限定在所属执行起止日期范围内';

@@ -93,6 +93,7 @@ $lang->product->unfoldClosed          = 'Unfold Closed';
 $lang->product->confirmDelete        = " Do you want to delete the {$lang->productCommon}?";
 $lang->product->errorNoProduct       = "No {$lang->productCommon} is created yet!";
 $lang->product->accessDenied         = "You have no access to the {$lang->productCommon}.";
+$lang->product->notExists            = "{$lang->productCommon} is not exists!";
 $lang->product->programChangeTip     = "The {$lang->projectCommon}s linked with this {$lang->productCommon}: %s will be transferred to the modified program set together.";
 $lang->product->notChangeProgramTip  = "The {$lang->SRCommon} of {$lang->productCommon} has been linked to the following {$lang->projectCommon}s, please cancel the link before proceeding";
 $lang->product->confirmChangeProgram = "The {$lang->projectCommon}s linked with this {$lang->productCommon}: %s is also linked with other {$lang->productCommon}s, whether to transfer {$lang->projectCommon}s to the modified program set.";
