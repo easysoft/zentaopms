@@ -855,24 +855,22 @@ class groupModel extends model
      * @access public
      * @return array
      */
-    public function getPrivPackagePairs($view = '')
+    public function getPrivPackagePairs($view = '', $module = '', $field = 'name')
     {
         $this->loadModel('setting');
 
-        if(!empty($view))
+        $modules = '';
+        if(!empty($module))
+        {
+            $modules = $module;
+        }
+        elseif(!empty($view))
         {
             $modules = $this->setting->getItem("owner=system&module=priv&key={$view}Modules");
         }
-        else
-        {
-            $modules = '';
-            $views   = $this->setting->getItem("owner=system&module=priv&key=views");
-            $views   = explode(',', $views);
-            foreach($views as $view) $modules .= ',' . $this->setting->getItem("owner=system&module=priv&key={$view}Modules");
-        }
-
         $modules = trim($modules, ',');
-        return $this->dao->select('id,name')->from(TABLE_PRIVPACKAGE)->where('module')->in($modules)->orderBy('order_asc')->fetchPairs();
+
+        return $this->dao->select("id,{$field}")->from(TABLE_PRIVPACKAGE)->where('1=1')->beginIF(!empty($modules))->andWhere('module')->in($modules)->fi()->orderBy('order_asc')->fetchPairs();
     }
 
     /**
@@ -906,6 +904,32 @@ class groupModel extends model
         }
 
         return $modules;
+    }
+
+    /**
+     * Get priv module view pairs.
+     *
+     * @access public
+     * @return void
+     */
+    public function getPrivModuleViewPairs()
+    {
+        $this->loadModel('setting');
+
+        $views = empty($viewName) ? $this->setting->getItem("owner=system&module=priv&key=views") : $viewName;
+        if(empty($views)) return array();
+        $views = explode(',', $views);
+
+        $pairs = array();
+        foreach($views as $viewIndex => $view)
+        {
+            $viewModules = $this->setting->getItem("owner=system&module=priv&key={$view}Modules");
+            $viewModules = explode(',', $viewModules);
+
+            foreach($viewModules as $module) $pairs[$module] = $view;
+        }
+
+        return $pairs;
     }
 
     /**
@@ -1044,18 +1068,20 @@ class groupModel extends model
     }
 
     /**
-     * Get priv by ID.
+     * Get priv by id.
      *
      * @param  int    $privID
+     * @param  string $lang
      * @access public
      * @return object
      */
-    public function getPrivByID($privID)
+    public function getPrivByID($privID, $lang = '')
     {
+        if(empty($lang)) $lang = $this->app->getClientLang();
         return $this->dao->select('t1.*,t2.name,t2.desc')->from(TABLE_PRIV)->alias('t1')
             ->leftJoin(TABLE_PRIVLANG)->alias('t2')->on('t1.id=t2.priv')
             ->where('t1.id')->eq($privID)
-            ->andWhere('t2.lang')->eq($this->app->getClientLang())
+            ->andWhere('t2.lang')->eq($lang)
             ->fetch();
     }
 
@@ -1109,12 +1135,13 @@ class groupModel extends model
         foreach($views as $view) $modules .= ',' . $this->setting->getItem("owner=system&module=priv&key={$view}Modules");
         $modules = trim($modules, ',');
 
-        $privs = $this->dao->select("t1.*,t2.name,t2.desc, INSTR('$modules', `module`) as moduleOrder")->from(TABLE_PRIV)->alias('t1')
+        $privs = $this->dao->select("t1.*,t2.name,t2.desc, INSTR('$modules', t1.`module`) as moduleOrder")->from(TABLE_PRIV)->alias('t1')
             ->leftJoin(TABLE_PRIVLANG)->alias('t2')->on('t1.id=t2.priv')
+            ->leftJoin(TABLE_PRIVPACKAGE)->alias('t3')->on('t1.package=t3.id')
             ->where('1=1')
             ->beginIF(!empty($view))->andWhere('t1.module')->in($modules)->fi()
             ->andWhere('t2.lang')->eq($this->app->getClientLang())
-            ->orderBy("moduleOrder asc, `order` asc")
+            ->orderBy("moduleOrder asc, t3.order asc, `order` asc")
             ->page($pager)
             ->fetchAll('id');
         return $privs;
@@ -1187,12 +1214,13 @@ class groupModel extends model
         foreach($views as $view) $modules .= ',' . $this->setting->getItem("owner=system&module=priv&key={$view}Modules");
         $modules = trim($modules, ',');
 
-        return $this->dao->select("t1.*,t2.name,t2.desc, INSTR('$modules', `module`) as moduleOrder")->from(TABLE_PRIV)->alias('t1')
+        return $this->dao->select("t1.*,t2.name,t2.desc, INSTR('$modules', t1.`module`) as moduleOrder")->from(TABLE_PRIV)->alias('t1')
             ->leftJoin(TABLE_PRIVLANG)->alias('t2')->on('t1.id=t2.priv')
+            ->leftJoin(TABLE_PRIVPACKAGE)->alias('t3')->on('t1.package=t3.id')
             ->where('1=1')
             ->andWhere($privQuery)
             ->andWhere('t2.lang')->eq($this->app->getClientLang())
-            ->orderBy('`moduleOrder` asc, `order`')
+            ->orderBy("moduleOrder asc, t3.order asc, `order` asc")
             ->page($pager)
             ->fetchAll('id');
     }
@@ -1314,14 +1342,12 @@ class groupModel extends model
      **/
     public function getPrivInfo($priv,$lang)
     {
-    	$privInfo = $this->dao->select("t1.priv, t1.name, t1.desc, t2.module, t2.package")->from(TABLE_PRIVLANG)->alias('t1')
-	    ->leftJoin(TABLE_PRIV )->alias('t2')
-	    ->on("t1.priv = t2.id")
-	    ->where('t1.priv')->eq($priv)
-        ->andWHere('t1.lang')->eq($lang)
-        ->fetch();
-
-	    if($privInfo) $privInfo->module = $privInfo->package ? $privInfo->module . ',' . $privInfo->package : $privInfo->module;
+        $privInfo = $this->dao->select("t1.priv, t1.name, t1.desc, t2.module, t2.package")->from(TABLE_PRIVLANG)->alias('t1')
+            ->leftJoin(TABLE_PRIV)->alias('t2')
+            ->on("t1.priv = t2.id")
+            ->where('t1.priv')->eq($priv)
+            ->andWHere('t1.lang')->eq($lang)
+            ->fetch();
 
         return $privInfo;
     }
@@ -1350,28 +1376,93 @@ class groupModel extends model
         }
         return $tree;
     }
+
+    /**
+     * Create a privilege package.
+     *
+     * @access public
+     * @return int
+     */
+    public function createPriv()
+    {
+        $data = fixer::input('post')->get();
+
+        if(!empty($data->moduleName) and !empty($data->methodName))
+        {
+            $method = $this->dao->select('`moduleName`,`methodName`')->from(TABLE_PRIV)->where('`moduleName`')->eq($data->moduleName)->andWhere('`methodName`')->eq($data->methodName)->fetchPairs();
+            if(count($method) > 0) dao::$errors['methodName'] = $this->lang->group->repeatPriv;
+        }
+
+        $this->config->priv->create->requiredFields = explode(',', $this->config->priv->create->requiredFields);
+        foreach($this->config->priv->create->requiredFields as $field)
+        {
+            if(isset($data->{$field}) and empty($data->{$field}))
+            {
+                $langField = 'priv' . ucfirst($field);
+                dao::$errors[$field] = sprintf($this->lang->error->notempty, $this->lang->group->{$langField});
+            }
+        }
+
+        if(dao::isError()) return false;
+
+        $priv = fixer::input('post')->remove('name,desc,view')->get();
+        if(!empty($priv->module)) $priv->order = $this->dao->select('(count(`id`) + 1) * 5 as `order`')->from(TABLE_PRIV)->where('`module`')->eq($priv->module)->andWhere('`package`')->eq($priv->package)->fetch('order');
+        $this->dao->insert(TABLE_PRIV)->data($priv)->exec();
+        if(dao::isError()) return false;
+
+        $privID = $this->dao->lastInsertId();
+
+        $privLang = fixer::input('post')->remove('moduleName,methodName,view,module,package')->get();
+        $privLang->priv = $privID;
+        $privLang->lang = $this->app->clientLang;
+        $this->dao->insert(TABLE_PRIVLANG)->data($privLang)->exec();
+
+        $this->loadModel('action')->create('privlang', $privID, 'Opened');
+        return $packageID;
+    }
+
     /**
      * update priv info
      *
      * @param   void
      * @return  void
      **/
-    public function updatePrivLang($privID, $lang)
+    public function updatePriv($privID, $lang)
     {
-        $data = fixer::input('post')->remove('module')->get();
-	    $this->dao->update(TABLE_PRIVLANG)->data($data)->where('priv')->eq($privID)->andWhere('lang')->eq($lang)->exec();
+        $oldPriv = $this->getPrivByID($privID, $lang);
 
-	    $data = fixer::input('post')->remove('name, desc')->get();
-        if($data->module)
-	    {
-	        $update = [];
-	        $module = explode(",", $data->module);
-	        $update['module'] = $module[0];
-	        $update['package'] = 0;
-            if(count($module) > 1) $update['package'] = $module[1];
+        $data = fixer::input('post')->get();
 
-	        $this->dao->update(TABLE_PRIV)->data($update)->where('id')->eq($privID)->exec();
-	    }
+        if(!empty($data->moduleName) and !empty($data->methodName))
+        {
+            $method = $this->dao->select('moduleName,methodName')->from(TABLE_PRIV)->where('`moduleName`')->eq($data->moduleName)->andWhere('`methodName`')->eq($data->methodName)->andWhere('id')->ne($privID)->fetchAll('methodName');
+            if(count($method) > 0) dao::$errors['methodName'] = $this->lang->group->repeatPriv;
+        }
+
+        $this->config->priv->edit->requiredFields = explode(',', $this->config->priv->edit->requiredFields);
+        foreach($this->config->priv->edit->requiredFields as $field)
+        {
+            if(isset($data->{$field}) and empty($data->{$field}))
+            {
+                $langField = 'priv' . ucfirst($field);
+                dao::$errors[$field] = sprintf($this->lang->error->notempty, $this->lang->group->{$langField});
+            }
+        }
+
+        if(dao::isError()) return false;
+
+        $priv = fixer::input('post')->remove('name,desc,view')->get();
+        if(!empty($priv->module) and $priv->module != $oldPriv->module and $priv->package != $oldPriv->package) $priv->order = $this->dao->select('(count(`id`) + 1) * 5 as `order`')->from(TABLE_PRIV)->where('`module`')->eq($priv->module)->andWhere('`package`')->eq($priv->package)->fetch('order');
+        $this->dao->update(TABLE_PRIV)->data($priv)->where('id')->eq($privID)->exec();
+
+        $privLang = fixer::input('post')->remove('moduleName,methodName,view,module,package')->get();
+        $this->dao->update(TABLE_PRIVLANG)->data($privLang)->where('priv')->eq($privID)->andWhere('lang')->eq($lang)->exec();
+
+        $priv = $this->getPrivByID($privID, $lang);
+
+        $changes = common::createChanges($oldPriv, $priv);
+        return $changes;
+
     }
 
     /**

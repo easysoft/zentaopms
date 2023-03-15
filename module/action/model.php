@@ -1462,10 +1462,10 @@ class actionModel extends model
                     $objectName = $this->dao->select("priv AS id, $field AS name")->from($table)->where('priv')->in($objectIdList)->fetchPairs();
                 }
                 else
-                {                    
+                {
                     $objectName = $this->dao->select("id, $field AS name")->from($table)->where('id')->in($objectIdList)->fetchPairs();
                 }
-                
+
                 $objectNames[$objectType]     = $objectName;
                 $relatedProjects[$objectType] = $relatedProject;
             }
@@ -1672,6 +1672,10 @@ class actionModel extends model
         elseif($action->objectType == 'privpackage' and common::hasPriv('group', 'managePrivPackage'))
         {
             $action->objectLink = helper::createLink('group', 'managePrivPackage');
+        }
+        elseif($action->objectType == 'privlang' and common::hasPriv('group', 'editManagePriv'))
+        {
+            $action->objectLink = helper::createLink('group', 'editManagePriv');
         }
 
         if($action->objectType == 'stakeholder' and $action->project == 0) $action->objectLink = '';

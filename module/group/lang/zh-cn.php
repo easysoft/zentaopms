@@ -56,10 +56,11 @@ $lang->group->editPriv           = '编辑权限';
 $lang->group->privName           = '权限名称';
 $lang->group->privDesc           = '描述';
 $lang->group->add                = '添加';
-$lang->group->moduleName         = '模块名';
-$lang->group->methodName         = '方法名';
-$lang->group->viewAB             = '所属视图';
-$lang->group->moduleAB           = '所属模块';
+$lang->group->privModuleName     = '模块名';
+$lang->group->privMethodName     = '方法名';
+$lang->group->privView           = '所属视图';
+$lang->group->privModule         = '所属模块';
+$lang->group->repeatPriv         = '同一模块名下的方法名不能相同，请修改后再试。';
 
 $lang->group->batchActions              = '批量操作';
 $lang->group->batchSetDependency        = '批量设置依赖';

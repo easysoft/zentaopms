@@ -22,9 +22,27 @@
           <th class='c-name'><?php echo $lang->group->privName;?></th>
           <td class='required'><?php echo html::input('name', $priv->name, "class='form-control'");?></td>
         </tr>
+        <?php if(empty($priv->system)):?>
+        <tr>
+          <th><?php echo $lang->group->privModuleName;?></th>
+          <td class='required'><?php echo html::input('moduleName', $priv->moduleName, "class='form-control'");?></td>
+        </tr>
+        <tr>
+          <th><?php echo $lang->group->privMethodName;?></th>
+          <td class='required'><?php echo html::input('methodName', $priv->methodName, "class='form-control'");?></td>
+        </tr>
+        <?php endif;?>
+        <tr>
+          <th><?php echo $lang->group->privView;?></th>
+          <td class='required'><?php echo html::select('view', $views, $priv->view, "class='form-control chosen' onchange='loadModuleAndPackage(this.value)' data-drop_direction='down'");?></td>
+        </tr>
+        <tr>
+          <th><?php echo $lang->group->privModule;?></th>
+          <td class='required'><?php echo html::select('module', $modules, $priv->module, "class='form-control picker-select' onchange='loadPackages(this.value, \"module\")'");?></td>
+        </tr>
         <tr>
           <th><?php echo $lang->privpackage->belong;?></th>
-          <td class='required'><?php echo html::select('module', $modulePackage, $priv->module, "class='form-control picker-select'");?></td>
+          <td class='required'><?php echo html::select('package', $packages, $priv->package, "class='form-control picker-select'");?></td>
         </tr>
         <tr>
           <th><?php echo $lang->group->privDesc;?></th>
@@ -36,6 +54,8 @@
       </tbody>
     </table>
   </form>
+  <hr class='small' />
+  <div class='main'><?php include '../../common/view/action.html.php';?></div>
 </div>
 <?php include '../../common/view/footer.html.php';?>
 

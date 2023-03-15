@@ -726,11 +726,12 @@ class group extends control
             unset($views[$index]);
         }
 
-        $this->view->title    = $this->lang->group->createPrivPackage;
-        $this->view->views    = array('' => '') + $views;
-        $this->view->modules  = array('' => '') + $this->group->getPrivModules('', 'noViewName');
-        $this->view->packages = array('' => '') + $this->group->getPrivPackagePairs();
-        $this->view->packagesTreeList = $this->group->getPrivPackageTreeList();
+        $this->view->title              = $this->lang->group->createPriv;
+        $this->view->views              = array('' => '') + $views;
+        $this->view->modules            = array('' => '') + $this->group->getPrivModules('', 'noViewName');
+        $this->view->packages           = array('' => '') + $this->group->getPrivPackagePairs();
+        $this->view->moduleViewPairs    = $this->group->getPrivModuleViewPairs();
+        $this->view->packageModulePairs = $this->group->getPrivPackagePairs('', '', 'module');
         $this->display();
     }
 
@@ -743,9 +744,8 @@ class group extends control
      **/
     public function editPriv($privID)
     {
-	    $privID      = intval($privID);
-	    $currentLang = $this->app->clientLang ? : 'zh-cn';
-	    $priv        = $this->group->getPrivInfo($privID, $currentLang);
+        $privID = intval($privID);
+        $priv   = $this->group->getPrivByID($privID);
 
         if(!$priv)
         {
@@ -753,26 +753,40 @@ class group extends control
         }
 
         if(!empty($_POST))
-	    {
-	        $responseResult     = "success";
-	        $responseMeessage   = $this->lang->saveSuccess;
-	        $locate             = "parent";
-	        $this->group->updatePrivLang($privID, $currentLang);
-
-            $actionID = $this->loadModel('action')->create('privlang', $privID, 'Edited');
-
-            if(dao::isError())
-	        {
-	    	    $responseResult     = "fail";
-		        $responseMessage    = dao::getError();
-		        $locate             = "";
+        {
+            $currentLang = $this->app->clientLang ? : 'zh-cn';
+            $changes     = $this->group->updatePriv($privID, $currentLang);
+            if($changes)
+            {
+                $actionID = $this->loadModel('action')->create('privlang', $privID, 'Edited');
+                $this->action->logHistory($actionID, $changes);
             }
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
 
-	        $this->send(array('result' => $responseResult, 'message' => $responseMessage, 'locate' => $locate));
-	    }
+            $this->send(array('result' => $responseResult, 'message' => $responseMessage, 'locate' => $locate));
+        }
 
-	    $this->view->modulePackage  = $this->group->getModuleAndPackageTree();
-        $this->view->priv           = $priv;
+        $views      = $this->loadModel('setting')->getItem("owner=system&module=priv&key=views");
+        $views      = explode(',', $views);
+        $moduleLang = $this->group->getMenuModules('', true);
+        foreach($views as $index => $view)
+        {
+            $views[$view] = isset($this->lang->{$view}->common) ? $this->lang->{$view}->common : zget($moduleLang, $view);
+            unset($views[$index]);
+        }
+        $moduleViewPairs = $this->group->getPrivModuleViewPairs();
+        $priv->view      = zget($moduleViewPairs, $priv->module, '');
+
+        $this->view->title              = $this->lang->group->editPriv;
+        $this->view->views              = array('' => '') + $views;
+        $this->view->modules            = array('' => '') + $this->group->getPrivModules('', 'noViewName');
+        $this->view->packages           = array('' => '') + $this->group->getPrivPackagePairs();
+        $this->view->moduleViewPairs    = $moduleViewPairs;
+        $this->view->packageModulePairs = $this->group->getPrivPackagePairs('', '', 'module');
+        $this->view->priv               = $priv;
+        $this->view->actions            = $this->loadModel('action')->getList('privlang', $privID);
+        $this->view->users              = $this->loadModel('user')->getPairs();
         $this->display();
     }
 
@@ -786,7 +800,7 @@ class group extends control
     public function ajaxGetPrivModules($viewName = '')
     {
         $modules = $this->group->getPrivModules($viewName, 'noViewName');
-        echo html::select('module', array('' => '') + $modules, '', "class='form-control picker-select'");
+        echo html::select('module', array('' => '') + $modules, '', "class='form-control picker-select' onchange='loadPackages(this.value, \"module\")'");
     }
 
     /**
@@ -801,8 +815,8 @@ class group extends control
     {
         $packages = array();
         if($type == 'view') $packages = $this->group->getPrivPackagePairs($object);
-        if($type == 'module') $packages = $this->group->getPrivPackagesByModule($object);
-        echo html::select('package', array('' => '') + $packages, '', "class='form-control picker-select'");
+        if($type == 'module') $packages = $this->group->getPrivPackagePairs('', $object);
+        echo html::select('package', array('' => '') + $packages, '', "class='form-control picker-select' onchange='changeViewAndModule(this.value)'");
     }
 
     /**

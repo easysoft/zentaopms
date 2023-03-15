@@ -56,10 +56,11 @@ $lang->group->editPriv           = 'Edit Priv';
 $lang->group->privName           = 'Priv Name';
 $lang->group->privDesc           = 'Priv Desc';
 $lang->group->add                = 'Add';
-$lang->group->moduleName         = 'Module Name';
-$lang->group->methodName         = 'Method Name';
-$lang->group->viewAB             = 'View';
-$lang->group->moduleAB           = 'Module';
+$lang->group->privModuleName     = 'Module Name';
+$lang->group->privMethodName     = 'Method Name';
+$lang->group->privView           = 'View';
+$lang->group->privModule         = 'Module';
+$lang->group->repeatPriv         = 'The method name of the same module cannot be the same. Please modify the method name and try again.';
 
 $lang->group->batchActions              = 'Batch Operation';
 $lang->group->batchSetDependency        = 'Batch Set Dependency';
