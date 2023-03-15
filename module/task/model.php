@@ -1403,7 +1403,7 @@ class taskModel extends model
             if(!empty($this->config->limitTaskDate))
             {
                 $this->checkEstStartedAndDeadline($oldTask->execution, $task->estStarted, $task->deadline, "task:{$taskID} ");
-                return false;
+                if(dao::isError()) return false;
             }
 
             if(empty($task->closedReason) and $task->status == 'closed')
