@@ -390,11 +390,11 @@ class executionModel extends model
         $type    = 'sprint';
         if($project) $type = zget($this->config->execution->modelList, $project->model, 'sprint');
 
-        if(($project->model == 'waterfall' or $project->model == 'waterfallplus') and isset($this->config->setPercent) and $this->config->setPercent == 1)
+        if($project->model == 'waterfall' or $project->model == 'waterfallplus')
         {
             $_POST['products'] = array_filter($_POST['products']);
             if(empty($_POST['products'])) dao::$errors['products0'] = $this->lang->project->errorNoProducts;
-            $this->checkWorkload('create', $_POST['percent'], $project);
+            if(isset($this->config->setPercent) and $this->config->setPercent == 1) $this->checkWorkload('create', $_POST['percent'], $project);
             if(dao::isError()) return false;
         }
 
