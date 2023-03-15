@@ -41,7 +41,7 @@ class page extends pagebase
 
     protected function created()
     {
-        $this->setDefaultProps(array('title' => data('test2')));
+        $this->setDefaultProps(array('title' => data('title')));
         parent::created();
     }
 }
