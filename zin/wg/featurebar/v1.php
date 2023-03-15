@@ -41,7 +41,7 @@ class featureBar extends wg
             (
                 'text'   => $text,
                 'active' => $isActive,
-                'url'    => createLink($currentModule, $currentMethod, 'all', "browseType=$key&orderBy=$orderBy"),
+                'url'    => createLink($currentModule, $currentMethod, "browseType=$key&orderBy=$orderBy"),
                 'badge'  => $isActive && !empty($recTotal) ? array('text' => $recTotal, 'class' => 'size-sm circle white') : NULL,
             );
         }

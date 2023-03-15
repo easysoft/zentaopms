@@ -22,7 +22,7 @@ class stdClass extends \stdClass
 {
 }
 
-function createLink($moduleName, $methodName = 'index', $vars = '', $viewType = 'json')
+function createLink($moduleName, $methodName = 'index', $vars = array(), $viewType = '')
 {
     return \helper::createLink($moduleName, $methodName, $vars, $viewType);
 }
