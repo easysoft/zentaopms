@@ -26,12 +26,12 @@ pipeline {
 
 
   stages {
-     stage("拉取代码") {
+     stage("checkout code") {
        steps {
            echo "checkout code success"
        }
      }
-     stage('sonar扫描') {
+     stage('sonar scanner') {
        parallel {
          stage('SonarQube') {
            steps {
