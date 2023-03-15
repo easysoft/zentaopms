@@ -3076,6 +3076,7 @@ EOT;
         }
 
         $libTree = array();
+        $apiLibs = array();
         foreach($libs as $lib)
         {
             $item = new stdclass();
@@ -3088,7 +3089,8 @@ EOT;
             $item->modules    = $this->getModuleTree($lib->id, $moduleID, $lib->type == 'api' ? 'api' : 'doc');
             if($lib->type != 'execution')
             {
-                $libTree[$lib->type][$lib->id] = $item;
+                if($item->type == 'lib') $libTree[$lib->type][$lib->id] = $item;
+                if($item->type == 'api') $apiLibs[$lib->id] = $item;
             }
             else
             {
@@ -3120,6 +3122,8 @@ EOT;
 
         if(in_array($type, array('product', 'project')))
         {
+            $libTree[$type] = array_merge($libTree[$type], $apiLibs);
+
             $libTree['annex'] = new stdclass();
             $libTree['annex']->id         = 0;
             $libTree['annex']->name       = $this->lang->doclib->files;
