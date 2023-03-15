@@ -219,8 +219,17 @@ $lang->review->common     = '审批';
 $lang->zahost->common     = '宿主机';
 $lang->zanode->common     = '执行节点';
 $lang->contact->common    = '联系人';
-$lang->programStakeholder->common = '干系人';
-$lang->featureSwitch->common = '功能开关';
+
+$lang->programstakeholder->common = '干系人';
+$lang->featureswitch->common      = '功能开关';
+$lang->importdata->common         = '数据导入';
+$lang->systemsetting->common      = '系统设置';
+$lang->staffmanage->common        = '人员管理';
+$lang->modelconfig->common        = '模型配置';
+$lang->featureconfig->common      = '功能配置';
+$lang->doctemplate->common        = '文档模板';
+$lang->notifysetting->common      = '通知设置';
+$lang->bidesign->common           = 'BI设计';
 
 $lang->personnel->common     = '人员';
 $lang->personnel->invest     = '投入人员';

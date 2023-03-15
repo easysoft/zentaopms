@@ -92,8 +92,7 @@ $lang->zanode      = new stdclass();
 $lang->holiday     = new stdclass();
 $lang->contact     = new stdclass();
 
-$lang->programStakeholder = new stdclass();
-$lang->featureSwitch      = new stdclass();
+$lang->programstakeholder = new stdclass();
 $lang->researchplan       = new stdclass();
 $lang->workestimation     = new stdclass();
 $lang->gapanalysis        = new stdclass();
@@ -107,6 +106,15 @@ $lang->systemdynamic      = new stdclass();
 $lang->systemcompany      = new stdclass();
 $lang->pipeline           = new stdclass();
 $lang->devopssetting      = new stdclass();
+$lang->featureswitch      = new stdclass();
+$lang->importdata         = new stdclass();
+$lang->systemsetting      = new stdclass();
+$lang->staffmanage        = new stdclass();
+$lang->modelconfig        = new stdclass();
+$lang->featureconfig      = new stdclass();
+$lang->doctemplate        = new stdclass();
+$lang->notifysetting      = new stdclass();
+$lang->bidesign           = new stdclass();
 
 $lang->projectbuild   = new stdclass();
 $lang->projectrelease = new stdclass();
