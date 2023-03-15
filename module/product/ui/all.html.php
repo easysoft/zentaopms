@@ -9,11 +9,14 @@ foreach($cols as $idx => $col)
         unset($cols[$idx]['width']);
         $cols[$idx]['minWidth']     = 200;
         $cols[$idx]['nestedToggle'] = true;
+        $cols[$idx]['iconRender']   = jsRaw('function(row){return row.data.type === \'program\' ? \'icon-cards-view text-gray\' : \'\'}');
+        continue;
     }
 
     if($col['name'] != 'actions') continue;
 
-    $cols[$idx]['actionsMap'] = array(
+    $cols[$idx]['actionsMap'] = array
+    (
         'edit'      => array('icon'=> 'icon-edit',         'hint'=> '编辑'),
         'group'     => array('icon'=> 'icon-group',        'hint'=> '团队'),
         'split'     => array('icon'=> 'icon-split',        'hint'=> '添加子项目集'),
@@ -31,7 +34,7 @@ foreach($cols as $idx => $col)
     $cols[$idx]['width'] = 128;
 }
 
-/* TODO implements extend fields. */
+/* TODO: implements extend fields. */
 $extendFields = $this->product->getFlowExtendFields();
 
 $data         = array();
@@ -54,7 +57,7 @@ foreach($productStructure as $programID => $program)
     /* ALM mode with more data. */
     if(isset($program['programName']) and $config->systemMode == 'ALM')
     {
-        $item = new \stdClass();
+        $item = new stdClass();
 
         $item->programPM = '';
         if(!empty($program['programPM']))
@@ -74,7 +77,7 @@ foreach($productStructure as $programID => $program)
         $totalStories = $program['finishClosedStories'] + $program['unclosedStories'];
 
         $item->name             = $program['programName'];
-        $item->id               = $program['id'];
+        $item->id               = 'program-' . $programID;
         $item->type             = 'program';
         $item->level            = 1;
         $item->asParent         = true;
@@ -96,17 +99,17 @@ foreach($productStructure as $programID => $program)
 
     foreach($program as $lineID => $line)
     {
-
         /* ALM mode with Product Line. */
         if(isset($line['lineName']) and isset($line['products']) and is_array($line['products']) and $config->systemMode == 'ALM')
         {
             $totalStories = (isset($line['finishClosedStories']) ? $line['finishClosedStories'] : 0) + (isset($line['unclosedStories']) ? $line['unclosedStories'] : 0);
 
-            $item = new \stdClass();
+            $item = new stdClass();
             $item->name             = $line['lineName'];
-            $item->id               = $line['id'];
+            $item->id               = 'productLine-' . $lineID;
             $item->type             = 'productLine';
             $item->asParent         = true;
+            $item->parent           = 'program-' . $programID;
             $item->programName      = $line['lineName'];
             $item->draftStories     = $line['draftStories'];
             $item->activeStories    = $line['activeStories'];
@@ -128,17 +131,13 @@ foreach($productStructure as $programID => $program)
         {
             foreach($line['products'] as $productID => $product)
             {
-                $item = new \stdClass();
+                $item = new stdClass();
 
                 if(!empty($product->PO))
                 {
-                    $userName  = zget($users, $product->PO);
-                    //echo html::smallAvatar(array('avatar' => $usersAvatar[$product->PO], 'account' => $product->PO, 'name' => $userName), 'avatar-circle avatar-' . zget($userIdPairs, $product->PO));
-
-                    $userID = isset($userIdPairs[$product->PO]) ? $userIdPairs[$product->PO] : '';
-                    //echo html::a($this->createLink('user', 'profile', "userID=$userID", '', true), $userName, '', "title='{$userName}' class='iframe' data-width='600'");
-
-                    $item->PO = $userName;
+                    $item->PO               = zget($users, $product->PO);
+                    $item->POAvatar         = $usersAvatar[$product->PO];
+                    $item->POAccount        = $product->PO;
                 }
                 $totalStories = $product->stories['finishClosed'] + $product->stories['unclosed'];
 
@@ -146,7 +145,6 @@ foreach($productStructure as $programID => $program)
                 $item->id               = $product->id;
                 $item->type             = 'project';
                 $item->level            = 2;
-                $item->asParent         = false;
                 $item->programName      = $product->name; /* TODO replace with <a> */
                 $item->draftStories     = $product->stories['draft'];
                 $item->activeStories    = $product->stories['active'];
@@ -157,7 +155,7 @@ foreach($productStructure as $programID => $program)
                 $item->totalBugs        = (($product->unResolved + $product->fixedBugs) == 0 ? 0 : round($product->fixedBugs / ($product->unResolved + $product->fixedBugs), 3) * 100) . '%';
                 $item->plans            = $product->plans;
                 $item->releases         = $product->releases;
-                $item->parent           = $product->program ? $product->program : '';
+                $item->parent           = $product->program ? "program-$product->program" : '';
                 /* TODO attach extend fields. */
                 $item->actions          = 'close|other:-pause,active|group|-edit|more:delete,link';
 
@@ -221,11 +219,14 @@ toolbar
 
 dtable
 (
-    set::className('shadow'),
+    set::className('shadow rounded'),
     set::cols($cols),
     set::data($data),
     set::footPager($footer),
+    set::nested(true),
     set::footToolbar(array('items' => array(array('size' => 'sm', 'text' => '编辑', 'btnType' => 'primary'))))
 );
+
+jsVar('window.$data', $data);
 
 render();
