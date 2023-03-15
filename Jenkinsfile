@@ -75,7 +75,8 @@ pipeline {
                      sh 'git config --global --add safe.directory /home/jenkins/agent/workspace/pangu_pangu_xuanimbot_master'
                      sh '/usr/local/bin/xuanimbot  --users "$(git show -s --format=%cn)" --title "build image" --url "${RUN_DISPLAY_URL}" --content "构建禅道单元测试镜像失败" --debug --custom'
                  }
-            }
+             }
+           }
         }
       }
     }
