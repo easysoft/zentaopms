@@ -914,4 +914,26 @@ class custom extends control
         $this->view->restDay   = zget($this->config->execution, 'restDay', 0);
         $this->display();
     }
+
+    /**
+     * Set whether the task begin and end date is limited to the execution begin and end date.
+     *
+     * @access public
+     * @return void
+     */
+    public function limitTaskDate()
+    {
+        if($_POST)
+        {
+            $this->loadModel('setting')->setItem('system.common.limitTaskDate', $this->post->limitTaskDate);
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'reload'));
+        }
+
+        $this->view->title      = $this->lang->custom->beginAndEndDate;
+        $this->view->position[] = $this->lang->custom->common;
+        $this->view->position[] = $this->view->title;
+        $this->view->module     = 'task';
+
+        $this->display();
+    }
 }
