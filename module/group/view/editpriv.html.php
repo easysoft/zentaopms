@@ -11,6 +11,8 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
+<?php js::set('moduleViewPairs', $moduleViewPairs);?>
+<?php js::set('packageModulePairs', $packageModulePairs);?>
 <div id='mainContent' class='main-content'>
   <div class='main-header'>
     <h2><?php echo $lang->group->editPriv;?></h2>
