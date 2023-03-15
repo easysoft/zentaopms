@@ -320,18 +320,14 @@ class editorModel extends model
      *
      * @param  string    $filePath
      * @access public
-     * @return bool
+     * @return string
      */
     public function save($filePath)
     {
         /* Reduce expiration time for check safe file. */
         $this->config->safeFileTimeout = 15 * 60;
         $statusFile = $this->loadModel('common')->checkSafeFile();
-        if($statusFile)
-        {
-            print(js::alert(sprintf($this->lang->editor->noticeOkFile, str_replace('\\', '/', $statusFile))));
-            return false;
-        }
+        if($statusFile) return print(js::alert(sprintf($this->lang->editor->noticeOkFile, str_replace('\\', '/', $statusFile))));
 
         $dirPath     = dirname($filePath);
         $extFilePath = substr($filePath, 0, strpos($filePath, DS . 'ext' . DS) + 4);
@@ -347,7 +343,7 @@ class editorModel extends model
         if(get_magic_quotes_gpc()) $fileContent = stripslashes($fileContent);
 
         file_put_contents($filePath, $fileContent);
-        return true;
+        return '';
     }
 
     /**
