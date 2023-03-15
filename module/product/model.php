@@ -170,15 +170,14 @@ class productModel extends model
     {
         if(defined('TUTORIAL')) return $productID;
 
-        $product = $this->getById($productID);
-        if(!empty($product) and $product->shadow) $this->accessDenied($this->lang->product->notExists);
-
         if($productID == 0 and $this->cookie->preProductID and isset($products[$this->cookie->preProductID])) $productID = $this->cookie->preProductID;
         if($productID == 0 and $this->session->product == '') $productID = key($products);
         $this->session->set('product', (int)$productID, $this->app->tab);
 
         if(!isset($products[$this->session->product]))
         {
+            $product = $this->getById($productID);
+
             if(empty($product) or $product->deleted == 1) $productID = key($products);
             $this->session->set('product', (int)$productID, $this->app->tab);
             if($productID && strpos(",{$this->app->user->view->products},", ",{$productID},") === false)
@@ -2587,6 +2586,8 @@ class productModel extends model
         if(!$this->app->user->admin and strpos(",{$this->app->user->view->products},", ",$productID,") === false and $productID != 0 and !defined('TUTORIAL')) return $this->accessDenied($this->lang->product->accessDenied);
 
         $product = $this->getByID($productID);
+        if(!empty($product) and $product->shadow) $this->accessDenied($this->lang->product->notExists);
+
         $params  = array('branch' => $branch);
         common::setMenuVars('product', $productID, $params);
         if(!$product) return;
