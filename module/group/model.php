@@ -1466,6 +1466,21 @@ class groupModel extends model
     }
 
     /**
+     * Delete a priv.
+     *
+     * @param  int    $privID
+     * @access public
+     * @return bool
+     */
+    public function deletePriv($privID)
+    {
+        $this->dao->delete()->from(TABLE_PRIV)->where('id')->eq($privID)->exec();
+        $this->dao->delete()->from(TABLE_PRIVLANG)->where('priv')->eq($privID)->exec();
+        $this->dao->delete()->from(TABLE_PRIVRELATION)->where('priv')->eq($privID)->orWhere('relationPriv')->eq($privID)->exec();
+        if(dao::isError()) return false;
+    }
+
+    /**
      * Batch change package.
      *
      * @param  array  $privIdList

@@ -29,7 +29,7 @@
         <th class="c-privs"><?php echo $lang->group->recommendPrivs;?></th>
         <th class="c-privs"><?php echo $lang->group->dependentPrivs;?></th>
         <th class="c-desc"><?php echo $lang->group->privDesc;?></th>
-        <th class="c-actions-1 text-center"><?php echo $lang->actions;?></th>
+        <th class="c-actions-2 text-center"><?php echo $lang->actions;?></th>
       </tr>
     </thead>
     <tbody>
@@ -43,7 +43,10 @@
         <td title='<?php echo zget($privRelations['recommend'], $priv->id, '');?>'><?php echo zget($privRelations['recommend'], $priv->id, '');?></td>
         <td title='<?php echo zget($privRelations['depend'], $priv->id, '');?>'><?php echo zget($privRelations['depend'], $priv->id, '');?></td>
         <td title='<?php echo $priv->desc;?>'><?php echo $priv->desc;?></td>
-        <td class='c-actions'><?php if(common::hasPriv('group', 'editPriv')) common::printIcon('group', 'editPriv', "privID=$priv->id", '', 'list', 'edit', '', 'iframe', true);?></td>
+        <td class='c-actions'>
+          <?php if(common::hasPriv('group', 'editPriv')) common::printIcon('group', 'editPriv', "privID=$priv->id", '', 'list', 'edit', '', 'iframe', true);?>
+          <?php if(common::hasPriv('group', 'deletePriv') and empty($priv->system)) common::printIcon('group', 'deletePriv', "privID=$priv->id", '', 'list', 'trash', 'hiddenwin');?>
+        </td>
       </tr>
       <?php endforeach;?>
     </tbody>

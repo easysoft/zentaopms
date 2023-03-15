@@ -586,8 +586,9 @@ class group extends control
         }
         else
         {
+            $privPackage = $this->getPrivPackageByID($privPackageID);
             $this->group->deletePrivPackage($privPackageID);
-            if(!dao::isError()) $this->loadModel('action')->create('privpackage', $privPackageID, 'deleted');
+            if(!dao::isError()) $this->loadModel('action')->create('privpackage', $privPackageID, 'deleted', '', zget($privPackage, 'name'));
 
             return print(js::reload('parent'));
         }
@@ -788,6 +789,29 @@ class group extends control
         $this->view->actions            = $this->loadModel('action')->getList('privlang', $privID);
         $this->view->users              = $this->loadModel('user')->getPairs();
         $this->display();
+    }
+
+    /**
+     * Delete a priv.
+     *
+     * @param  int    $privID
+     * @access public
+     * @return void
+     */
+    public function deletePriv($privID, $confirm = 'no')
+    {
+        if($confirm == 'no')
+        {
+            return print(js::confirm($this->lang->group->confirmDeleteAB, $this->createLink('group', 'deletePriv', "privID=$privID&confirm=yes")));
+        }
+        else
+        {
+            $priv = $this->group->getPrivByID($privID);
+            $this->group->deletePriv($privID);
+            if(!dao::isError()) $this->loadModel('action')->create('privlang', $privID, 'deleted', '', "$priv->moduleName-$priv->methodName");
+
+            return print(js::reload('parent'));
+        }
     }
 
     /**
