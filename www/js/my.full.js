@@ -34,10 +34,11 @@
 
         setTimeout(function()
         {
-            var form = $('form[method=post]');
+            var form = $('form[method=post].main-form');
             if(form.length)
             {
                 if($(form).hasClass('no-stash') || $(form).data('ride') == 'table') return;
+                var target = $(form).attr('target');
                 if($(form).attr('target') == 'hiddenwin' && config.currentModule.indexOf('program') == -1 && config.currentModule.indexOf('project') == -1 && config.currentModule.indexOf('testcase') == -1) return;
 
                 var formID         = config.currentMethod + '-' + config.currentModule + '-' + $(form).attr("id");
