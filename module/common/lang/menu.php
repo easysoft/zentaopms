@@ -628,12 +628,17 @@ $lang->navGroup->projectrelease = 'project';
 $lang->navGroup->build          = 'project';
 $lang->navGroup->measrecord     = 'project';
 $lang->navGroup->milestone      = 'project';
+$lang->navGroup->researchplan   = 'project';
+$lang->navGroup->workestimation = 'project';
+$lang->navGroup->gapanalysis    = 'project';
 
-$lang->navGroup->execution    = 'execution';
-$lang->navGroup->task         = 'execution';
-$lang->navGroup->build        = 'execution';
-$lang->navGroup->team         = 'execution';
+$lang->navGroup->execution     = 'execution';
+$lang->navGroup->task          = 'execution';
+$lang->navGroup->build         = 'execution';
+$lang->navGroup->team          = 'execution';
+$lang->navGroup->executionview = 'execution';
 
+$lang->navGroup->managespace  = 'kanban';
 $lang->navGroup->kanbanspace  = 'kanban';
 $lang->navGroup->kanban       = 'kanban';
 $lang->navGroup->kanbanregion = 'kanban';
@@ -675,8 +680,15 @@ $lang->navGroup->ci               = 'devops';
 $lang->navGroup->svn              = 'devops';
 $lang->navGroup->git              = 'devops';
 $lang->navGroup->app              = 'devops';
+$lang->navGroup->pipeline         = 'devops';
+$lang->navGroup->devopssetting    = 'devops';
 
-$lang->navGroup->company = 'system';
+$lang->navGroup->company        = 'system';
+$lang->navGroup->systemteam     = 'system';
+$lang->navGroup->systemschedule = 'system';
+$lang->navGroup->systemeffort   = 'system';
+$lang->navGroup->systemdynamic  = 'system';
+$lang->navGroup->systemcompany  = 'system';
 
 $lang->navGroup->attend   = 'attend';
 $lang->navGroup->leave    = 'attend';

@@ -2052,6 +2052,19 @@ $lang->editor->methodOrder[30] = 'delete';
 $lang->resource->contact = new stdclass();
 
 $lang->resource->programStakeholder = new stdclass();
+$lang->resource->researchplan       = new stdclass();
+$lang->resource->workestimation     = new stdclass();
+$lang->resource->gapanalysis        = new stdclass();
+$lang->resource->executionview      = new stdclass();
+$lang->resource->managespace        = new stdclass();
+$lang->resource->managespace        = new stdclass();
+$lang->resource->systemteam         = new stdclass();
+$lang->resource->systemschedule     = new stdclass();
+$lang->resource->systemeffort       = new stdclass();
+$lang->resource->systemdynamic      = new stdclass();
+$lang->resource->systemcompany      = new stdclass();
+$lang->resource->pipeline           = new stdclass();
+$lang->resource->devopssetting      = new stdclass();
 
 global $config;
 $inUpgrade = (defined('IN_UPGRADE') and IN_UPGRADE);

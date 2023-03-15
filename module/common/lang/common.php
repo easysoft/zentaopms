@@ -91,8 +91,22 @@ $lang->zahost      = new stdclass();
 $lang->zanode      = new stdclass();
 $lang->holiday     = new stdclass();
 $lang->contact     = new stdclass();
+
 $lang->programStakeholder = new stdclass();
-$lang->featureSwitch = new stdclass();
+$lang->featureSwitch      = new stdclass();
+$lang->researchplan       = new stdclass();
+$lang->workestimation     = new stdclass();
+$lang->gapanalysis        = new stdclass();
+$lang->executionview      = new stdclass();
+$lang->managespace        = new stdclass();
+$lang->managespace        = new stdclass();
+$lang->systemteam         = new stdclass();
+$lang->systemschedule     = new stdclass();
+$lang->systemeffort       = new stdclass();
+$lang->systemdynamic      = new stdclass();
+$lang->systemcompany      = new stdclass();
+$lang->pipeline           = new stdclass();
+$lang->devopssetting      = new stdclass();
 
 $lang->projectbuild   = new stdclass();
 $lang->projectrelease = new stdclass();
