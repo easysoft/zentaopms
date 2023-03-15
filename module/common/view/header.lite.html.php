@@ -24,16 +24,7 @@ $commonLang   = array('zh-cn', 'zh-tw', 'en', 'fr', 'de');
   {
       $timestamp = time();
 
-      if(defined('ZUI3'))
-      {
-          css::import('https://ztui.sh.oop.cc/assets/style.4d294030.css');
-          css::import($jsRoot . 'zui3/min.css');
-      }
-      else
-      {
-          css::import($themeRoot . 'zui/css/min.css?t=' . $timestamp);
-      }
-
+      css::import($themeRoot . 'zui/css/min.css?t=' . $timestamp);
       css::import($defaultTheme . 'style.css?t=' . $timestamp);
       css::import($langTheme);
 
@@ -41,12 +32,6 @@ $commonLang   = array('zh-cn', 'zh-tw', 'en', 'fr', 'de');
 
       js::import($jsRoot . 'jquery/lib.js');
       js::import($jsRoot . 'zui/min.js?t=' . $timestamp);
-
-      if(defined('ZUI3'))
-      {
-        js::import($jsRoot . 'zui3/min.cjs');
-        js::import('https://unpkg.com/htmx.org@1.8.2');
-      }
 
       if(!in_array($clientLang, $commonLang)) js::import($jsRoot . 'zui/lang.' . $clientLang . '.min.js?t=' . $timestamp);
       js::import($jsRoot . 'my.full.js?t=' . $timestamp);
