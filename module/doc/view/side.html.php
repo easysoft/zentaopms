@@ -84,13 +84,14 @@ $sideWidth = common::checkNotCN() ? '270' : '238';
                          '<li data-method="editLib"><a><i class="icon icon-edit"></i>编辑库</a></li>' +
                          '<li data-method="deleteLib"><a><i class="icon icon-trash"></i>删除库</a></li>')
                          :
-                         ('<li data-method="addCatalogue"><a><i class="icon icon-controls"></i>添加同级目录</a></li>' +
-                         '<li data-method="editLib"><a><i class="icon icon-edit"></i>添加子目录</a></li>' +
-                         '<li data-method="editLib"><a><i class="icon icon-edit"></i>编辑目录</a></li>' +
-                         '<li data-method="deleteLib"><a><i class="icon icon-trash"></i>删除目录</a></li>')
+                         ('<li data-method="addCata"><a><i class="icon icon-controls"></i>添加同级目录</a></li>' +
+                         '<li data-method="addCataChild"><a><i class="icon icon-edit"></i>添加子目录</a></li>' +
+                         '<li data-method="editCata"><a><i class="icon icon-edit"></i>编辑目录</a></li>' +
+                         '<li data-method="deleteCata"><a><i class="icon icon-trash"></i>删除目录</a></li>')
 
           var dropdown = '<ul class="dropdown-menu dropdown-in-tree" ' +
-                         'id="dropDownLibrary" style="display: unset; ' +
+                         'id="' + option.id + '"' +
+                         'style="display: unset; ' +
                          'left:' + option.left + 'px; ' +
                          'top:' + option.top + 'px;' +
                           '">' + $liList +
