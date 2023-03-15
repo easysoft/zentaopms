@@ -3,34 +3,34 @@ namespace zin;
 
 class avatar extends wg
 {
-    protected static $defineProps = array
-    (
-        'class?:string="userMenu dropdown-toggle"',
-        'data-arrow?:string="true"',
-        'data-toggle?:string="dropdown"',
-        'data-trigger?:string="hover"',
-        'data-placement?:string="bottom"',
-        'href?:string="#userMenu"',
-        'theme?:string="success"',
-        'radius?:string="circle"',
+    protected static $defineProps = array(
+        'className?:string',
+        'style?:array',
         'size?:string',
-        'outline?:string',
-        'trigger?:string',
-        'showName' => array
-        (
-            'type' => 'bool',
-            'default' => false
-        )
+        'circle?:bool=false',
+        'rounded?:bool=false',
+        'background?:string',
+        'foreColor?:string',
+        'text?:string',
+        'code?:string',
+        'maxTextLength?:number=2',
+        'hueDistance?:number=43',
+        'saturation?:number=0.4',
+        'lightness?:number=0.6',
+        'src?:string'
     );
 
-    private $skipProps        = array('theme', 'radius', 'showName', 'outline', 'size', 'avatar', 'name', 'trigger');
-    private $skipTriggerProps = array('data-arrow', 'data-toggle', 'data-placement', 'data-trigger', 'href');
+    private $textLen    = 0;
+    private $sizeMap    = array('xs' => 20, 'sm' => 24, 'lg' => 48, 'xl' => 80);
+    private $actualSize = 32;
+    private $finalClass = array('avatar');
+    private $finalStyle;
 
     protected function onAddChild($child)
     {
-        if(is_string($child) && !$this->props->has('name'))
+        if(is_string($child) && !$this->props->has('text'))
         {
-            $this->setProp('name', $child);
+            $this->setProp('text', $child);
             return false;
         }
 
@@ -39,37 +39,236 @@ class avatar extends wg
 
     protected function build()
     {
-        $name   = $this->prop('name');
-        $avatar = $this->prop('avatar');
+        /* Attach classes. */
+        $this->finalClass[]           = $this->prop('className');
 
-        /* Without name and avatar url. */
-        if(empty($name) and empty($avatar)) return null;
+        /* Init style. */
+        $this->finalStyle             = new \stdClass();
+        $this->finalStyle->background = $this->prop('background');
+        $this->finalStyle->color      = $this->prop('foreColor');
 
-        $radius   = $this->prop('radius');
-        $theme    = $this->prop('theme');
-        $outline  = $this->prop('outline');
-        $size     = $this->prop('size');
-        $role     = $this->prop('role');
-        $showName = $this->prop('showName');
-        $trigger  = $this->prop('trigger');
+        foreach($this->props->style->data as $attr => $val) $this->finalStyle->{$attr} = $val;
 
-        $skipProps = !empty($trigger) ? $this->skipProps : array_merge($this->skipProps, $this->skipTriggerProps);
-        if(!empty($trigger)) $this->setProp('href', $trigger);
+        $this->initSize();
+        $this->initShape();
 
+        $content = $this->getContent();
+        $finalStyle = json_decode(json_encode($this->finalStyle), true);
         return h::div
         (
-            set($this->props->skip($skipProps)),
-            h::div
+            setClass($this->finalClass),
+            setStyle($finalStyle),
+            set($this->props->skip(array_keys(static::getDefinedProps()))),
+            $content,
+            $this->children()
+        );
+    }
+
+    private function initSize()
+    {
+        $size       = $this->prop('size');
+        $this->actualSize = $size;
+
+        if(!$size) return;
+
+        if(is_numeric($size))
+        {
+            $fontSize = intval($size/2) > 12 ? intval($size/2) : 12;
+            $this->finalStyle->width    = "{$size}px";
+            $this->finalStyle->height   = "{$size}px";
+            $this->finalStyle->fontSize = "{$fontSize}px";
+
+            return;
+        }
+
+        $this->finalClass[] = "size-{$size}";
+        $this->actualSize   = isset($this->sizeMap[$size]) ? $this->sizeMap[$size] : 20;
+    }
+
+    private function initShape()
+    {
+        $circle  = $this->prop('circle');
+        $rounded = $this->prop('rounded');
+
+        /* Set circle. */
+        if($circle)
+        {
+            $this->finalClass[] = 'circle';
+        }
+        else if($rounded)
+        {
+            if(is_numeric($rounded)) $this->finalStyle->borderRadius = "{$rounded}px";
+            else $this->finalClass[] = "rounded-{$rounded}";
+        }
+    }
+
+    private function getAvatarText()
+    {
+        $maxTextLen    = intval($this->prop('maxTextLength'));
+        $text          = $this->prop('text');
+        $this->textLen = strlen($text);
+
+        if(preg_match('/[\x{4e00}-\x{9fa5}]+.*/u', $text))
+        {
+            $this->textLen = mb_strlen($text);
+
+            return $this->textLen <= $maxTextLen ? $text : mb_substr($text, $this->textLen - $maxTextLen);
+        }
+
+        return $this->textLen <= $maxTextLen ? $text : substr($text, 0, $maxTextLen);
+    }
+
+    /**
+     * Convert HSL values to RGB value.
+     *
+     * @param  int $h
+     * @param  number $s
+     * @param  number $l
+     * @access private
+     * @return array
+     */
+    private function hslToRgb($h, $s, $l)
+    {
+        $h = ($h % 360) / 360;
+        $s = ($s > 0 ? $s : 0);
+        $s = ($s > 255) ? 255 : $s;
+        $l = ($l > 0 ? $l : 0);
+        $l = ($l > 255) ? 255 : $l;
+
+        $m2 = ($l <= 0.5) ? ($l * ($s + 1)) : ($l + $s - $l * $s);
+        $m1 = $l * 2 - $m2;
+
+        $hueFn = function($val, $m1, $m2)
+        {
+            $val = $val < 0 ? $val + 1 : ($val > 1 ? $val - 1 : $val);
+
+            if($val * 6 < 1) return $m1 + ($m2 - $m1) * $val * 6;
+            elseif($val * 2 < 1) return $m2;
+            elseif($val * 3 < 2) return $m1 + ($m2 - $m1) * (2/3 - $val) * 6;
+
+            return $m1;
+        };
+
+        return array(
+            'r' => $hueFn($h + 1/3, $m1, $m2) * 255,
+            'g' => $hueFn($h, $m1, $m2) * 255,
+            'b' => $hueFn($h - 1/3, $m1, $m2) * 255
+        );
+    }
+
+    private function hex2Rgb($hex)
+    {
+        if(strpos($hex, '#') !== 0 or !preg_match('/#[0-9A-F]{3,6}$/', $hex)) throw new \Exception('incorrect data format');
+
+        $r = 0;
+        $g = 0;
+        $b = 0;
+        if(strlen($hex) == 4) list($r, $g, $b) = sscanf($hex, "#%01x%01x%01x");
+        elseif(strlen($hex) == 7) list($r, $g, $b) = sscanf($hex, "#%02x%02x%02x");
+        else throw new \Exception('incorrect RGB value');
+
+        return array(
+            'r' => $r,
+            'g' => $g,
+            'b' => $b
+        );
+    }
+
+    /*
+     * Get contrast color.
+     *
+     * @param  array|string $rgb
+     * @param  string       $theme  dark|light
+     * @access private
+     * @return string
+     */
+    private function contrastColor($rgb, $themeDark = null, $themeLight = null)
+    {
+        $rgb = is_array($rgb) ? $rgb : $this->hex2Rgb($rgb);
+
+        $r = $rgb['r'];
+        $g = $rgb['g'];
+        $b = $rgb['b'];
+        if(($r * 0.299 + $g * 0.587 + $b * 0.114) > 186)
+        {
+            /* Is light color. */
+            return $themeDark ? $themeDark : '#333333';
+        }
+
+        return $themeLight ? $themeLight : '#ffffff';
+    }
+
+    private function getTextStyle()
+    {
+        $hueDistance = intval($this->prop('hueDistance'));
+        $saturation  = $this->prop('saturation');
+        $lightness   = $this->prop('lightness');
+        $background  = $this->prop('background');
+        $foreColor   = $this->prop('foreColor');
+        $code        = $this->prop('code');
+        $avatarCode  = $code ? $code : $this->prop('text');
+
+        if(!$background)
+        {
+            $val = 0;
+            if(is_numeric($avatarCode)) $val = intval($avatarCode);
+            else for($i = 0; $i < strlen($avatarCode); $i++) $val += ord($avatarCode[$i]);
+            $hue = $val * $hueDistance % 360;
+            $this->finalStyle->background = "hsl({$hue}, {$saturation}%, {$lightness}%)";
+
+            if(!$foreColor)
+            {
+                $rgb = $this->hslToRgb($hue, $saturation, $lightness);
+                $this->finalStyle->color = $this->contrastColor($rgb);
+            }
+        }
+        elseif (!$foreColor and $background) $this->finalStyle->color = $this->contrastColor($background);
+
+        $textStyle = null;
+        if($this->actualSize and $this->actualSize < (14 * $this->textLen))
+        {
+            $textStyle = array(
+                'transform' => 'scale(' . $this->actualSize / (14 * $this->textLen) . ')',
+                'white-space' => 'nowrap'
+            );
+        }
+
+        return $textStyle;
+    }
+
+    private function getContent()
+    {
+        $src  = $this->prop('src');
+        $text = $this->prop('text');
+
+        /* With avatar. */
+        if($src)
+        {
+            $this->finalClass[] = 'has-img';
+
+            return h::img
             (
-                setClass('avatar'),
-                empty($radius)  ? null : setClass($radius),
-                empty($theme)   ? null : setClass($theme),
-                empty($outline) ? null : setClass($outline . '-outline'),
-                empty($size)    ? null : setClass($size),
-                !empty($avatar) ? h::img(set('src', $avatar)) : strtoupper(mb_substr($name, 0, 1))
-            ),
-            empty($showName) ? null : h::span($name),
-            empty($showName) or empty($role) ? null : h::span($role)
+                setClass('avatar-img'),
+                set('src', $src ),
+                set('alt', $text)
+            );
+        }
+
+        /* Without text and image. */
+        if(!$text) return null;
+
+        $displayText = $this->getAvatarText();
+
+        $this->finalClass[] = 'has-text';
+        $this->finalClass[] = 'has-text-' . $this->textLen;
+
+        $textStyle = $this->getTextStyle();
+        return h::div
+        (
+            setClass('avatar-text'),
+            set('data-actualSize', $this->actualSize),
+            set('style', $textStyle),
+            $displayText
         );
     }
 }
