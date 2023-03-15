@@ -398,11 +398,11 @@ class group extends control
         if(empty($browseType) and $browseType != 'bysearch') $browseType = $this->cookie->managePrivEditType ? $this->cookie->managePrivEditType : 'bycard';;
         if($browseType == 'bysearch' and $this->cookie->managePrivEditType == 'bycard') $browseType = 'bycard';
 
-        $moduleLang = $this->group->getMenuModules('', true);
+        $moduleLang = $this->group->getMenuModules($view, true);
 
         if($browseType == 'bycard')
         {
-            $moduleList   = $this->loadModel('setting')->getItem("owner=system&module=priv&section=&key={$view}Modules");
+            $moduleList   = array_keys($moduleLang);
             $privGroup    = $this->group->getPrivGroup($moduleList);
             $privPackages = $this->group->getPrivPackagePairs();
             $privLang     = $this->group->getPrivLangPairs();

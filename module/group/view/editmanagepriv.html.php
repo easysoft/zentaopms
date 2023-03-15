@@ -14,7 +14,26 @@
 <div id="mainMenu" class='flex-space-center'>
   <div class="btn-toolbar">
     <?php echo html::a($this->createLink('group', 'browse', ''), '<i class="icon icon-angle-left"></i>' . $lang->goback, '', 'class="btn btn-primary"');?>
-    <?php echo html::a(inlink('editManagePriv', "browseType={$browseType}&view="), $lang->group->all, '', "class='btn btn-link btn-active-text'");?>
+    <?php $active = empty($view) ? 'btn-active-text' : '';?>
+    <?php echo html::a(inlink('editManagePriv', "browseType={$browseType}&view="), $lang->group->all, '', "class='btn btn-link $active'");?>
+    <?php
+    $i = 0;
+    $params = "browseType=$browseType&view=%s";
+    foreach($lang->mainNav as $moduleMenu => $title)
+    {
+        if(!is_string($title)) continue;
+        $i ++;
+        if($i == $config->group->maxToolBarCount) echo '<div class="btn-group"><a href="javascript:;" data-toggle="dropdown" class="btn btn-link">' . $lang->group->more . '<span class="caret"></span></a><ul class="dropdown-menu">';
+        $active = $view == $moduleMenu ? 'btn-active-text' : '';
+        if($i >= $config->group->maxToolBarCount) echo '<li>';
+        echo html::a(inlink('editManagePriv', sprintf($params, $moduleMenu)), "<span class='text'>" . strip_tags(substr($title, 0, strpos($title, '|'))) . '</span>', '', "class='btn btn-link $active'");
+        if($i >= $config->group->maxToolBarCount) echo '</li>';
+    }
+    if($i >= $config->group->maxToolBarCount) echo '</ul></div>';
+    ?>
+
+    <?php $active = $view == 'other' ? 'btn-active-text' : '';?>
+    <?php echo html::a(inlink('editManagePriv', sprintf($params, 'other')), "<span class='text'>{$lang->group->other}</span>", '', "class='btn btn-link $active'");?>
     <?php if($browseType != 'bycard'):?>
     <a class="btn btn-link querybox-toggle" id='bysearchTab'><i class="icon icon-search muted"></i> <?php echo $lang->searchAB;?></a>
     <?php endif;?>

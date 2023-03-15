@@ -15,8 +15,8 @@
   <table class='table table-hover table-striped table-bordered' id='privList'>
     <thead>
       <tr class="text-center permission-head">
-        <th class="flex-sm"><?php echo $lang->group->module?></th>
-        <th class="flex-sm"><?php echo $lang->privpackage->common?></th>
+        <th class="td-sm"><?php echo $lang->group->module?></th>
+        <th class="td-sm"><?php echo $lang->privpackage->common?></th>
         <th class="flex-content"><?php echo $lang->group->acl?></th>
       </tr>
     </thead>
@@ -26,7 +26,7 @@
       <?php foreach($packages as $packageID => $privs):?>
       <tr class="permission-row">
         <?php if($i == 1):?>
-        <td class="flex-sm text-center" rowspan="<?php echo $i == 1 ? count($packages) : 1;?>"><?php echo zget($moduleLang, $module, $module);?></td>
+        <td class="td-sm text-center" rowspan="<?php echo $i == 1 ? count($packages) : 1;?>"><?php echo zget($moduleLang, $module, $module);?></td>
         <?php endif;?>
         <?php $packageTdStyle = $i == 1 ? 'td-sm' : 'td-md';?>
         <td class="<?php echo $packageTdStyle;?> text-center"><?php echo zget($privPackages, $packageID, $lang->group->unassigned);?></td>
