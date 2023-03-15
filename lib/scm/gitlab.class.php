@@ -549,10 +549,11 @@ class gitlab
      * @param  string $version
      * @param  int    $count
      * @param  string $branch
+     * @param  bool   $getFile
      * @access public
      * @return array
      */
-    public function getCommits($version = '', $count = 0, $branch = '')
+    public function getCommits($version = '', $count = 0, $branch = '', $getFile = false)
     {
         if(!scm::checkRevision($version)) return array();
         $api     = "commits";
@@ -620,7 +621,7 @@ class gitlab
             $log->time      = date('Y-m-d H:i:s', strtotime($commit->created_at));
 
             $commits[$commit->id] = $log;
-            $files[$commit->id]   = $this->getFilesByCommit($log->revision);
+            if($getFile) $files[$commit->id] = $this->getFilesByCommit($log->revision);
         }
 
         return array('commits' => $commits, 'files' => $files);
@@ -653,10 +654,12 @@ class gitlab
      * @param  string    $fromRevision
      * @param  string    $toRevision
      * @param  int       $perPage
+     * @param  int       $page
+     * @param  bool      $getUrl
      * @access public
      * @return array
      */
-    public function getCommitsByPath($path, $fromRevision = '', $toRevision = '', $perPage = 0)
+    public function getCommitsByPath($path, $fromRevision = '', $toRevision = '', $perPage = 0, $page = 1, $getUrl = false)
     {
         $path = ltrim($path, DIRECTORY_SEPARATOR);
         $api = "commits";
@@ -683,6 +686,18 @@ class gitlab
         if($until) $param->until = $until;
 
         if($perPage) $param->per_page = $perPage;
+        if($page)    $param->page = $page;
+
+        if($getUrl)
+        {
+            $params = (array) $param;
+            $params['private_token'] = $this->token;
+            $params['per_page']      = isset($params['per_page']) ? $params['per_page'] : 100;
+
+            $api = ltrim($api, '/');
+            $api = $this->root . $api . '?' . http_build_query($params);
+            return $api;
+        }
 
         return $this->fetch($api, $param);
     }
@@ -736,10 +751,11 @@ class gitlab
      *
      * @param  string    $path
      * @param  bool      $recursive
+     * @param  bool      $loop
      * @access public
      * @return mixed
      */
-    public function tree($path, $recursive = 1)
+    public function tree($path, $recursive = 1, $loop = false)
     {
         $api = "tree";
 
@@ -747,17 +763,20 @@ class gitlab
         $params['path']      = ltrim($path, '/');
         $params['ref']       = $this->branch;
         $params['recursive'] = (int) $recursive;
-        return $this->fetch($api, $params);
+        return $this->fetch($api, $params, $loop, $loop ? true : false);
     }
 
     /**
      * Fetch data from gitlab api.
      *
      * @param  string    $api
+     * @param  array     $params
+     * @param  bool      $needToLoop
+     * @param  bool      $multi
      * @access public
      * @return mixed
      */
-    public function fetch($api, $params = array(), $needToLoop = false)
+    public function fetch($api, $params = array(), $needToLoop = false, $multi = false)
     {
         $params = (array) $params;
         $params['private_token'] = $this->token;
@@ -768,19 +787,49 @@ class gitlab
         if($needToLoop)
         {
             $allResults = array();
-            for($page = 1; true; $page++)
+            if($multi)
             {
-                $results = json_decode(commonModel::http($api . "&page={$page}"));
-                if(!is_array($results)) break;
-                if(!empty($results)) $allResults = array_merge($allResults, $results);
-                if(count($results) < 100) break;
+                $results = commonModel::httpWithHeader($api . "&page=1");
+                if(empty($results['header']['X-Total-Pages'])) return array();
+
+                $totalPages = $results['header']['X-Total-Pages'];
+                if($totalPages == 1)
+                {
+                    $allResults = json_decode($results['body']);
+                }
+                else
+                {
+                    $requests = array();
+                    for($page = 1; $page <= $totalPages; $page++)
+                    {
+                        $requests[$page]['url'] = $api . "&page={$page}";
+                    }
+
+                    $results = requests::request_multiple($requests, array('timeout' => 60));
+                    foreach($results as $result)
+                    {
+                        if(empty($result->body)) continue;
+                        $data       = json_decode($result->body);
+                        $allResults = array_merge($allResults, $data);
+                    }
+                }
+            }
+            else
+            {
+                for($page = 1; true; $page++)
+                {
+                    $results = json_decode(commonModel::http($api . "&page={$page}", null, array(), array(), 'data', 'POST', 30, true, false));
+                    if(!is_array($results)) break;
+                    if(!empty($results)) $allResults = array_merge($allResults, $results);
+                    if(count($results) < 100) break;
+                }
             }
 
             return $allResults;
         }
         else
         {
-            list($response, $httpCode) = commonModel::http($api, null, array(), array(), 'data', 'Post', 30, true);
+            list($response, $httpCode) = commonModel::http($api, null, array(), array(), 'data', 'POST', 30, true, false);
             if(!empty(commonModel::$requestErrors))
             {
                 commonModel::$requestErrors = array();
@@ -828,12 +877,15 @@ class gitlab
             $parsedLog->time      = date('Y-m-d H:i:s', strtotime($commit->committed_date));
             $parsedLog->comment   = $commit->message;
             $parsedLog->change    = array();
-            foreach($commit->diffs as $diff)
+            if(!empty($commit->diffs))
             {
-                $parsedLog->change[$diff->path] = array();
-                $parsedLog->change[$diff->path]['action']  = $diff->action;
-                $parsedLog->change[$diff->path]['kind']    = $diff->type;
-                $parsedLog->change[$diff->path]['oldPath'] = $diff->oldPath;
+                foreach($commit->diffs as $diff)
+                {
+                    $parsedLog->change[$diff->path] = array();
+                    $parsedLog->change[$diff->path]['action']  = $diff->action;
+                    $parsedLog->change[$diff->path]['kind']    = $diff->type;
+                    $parsedLog->change[$diff->path]['oldPath'] = $diff->oldPath;
+                }
             }
             $parsedLogs[] = $parsedLog;
         }

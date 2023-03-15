@@ -59,12 +59,14 @@ foreach(explode(',', $config->story->create->requiredFields) as $field)
               <?php if($branches and $type != 'story') echo html::select('branch', $branches, $branch, "onchange='loadBranch();' class='form-control chosen control-branch'");?>
               </div>
             </td>
-            <td colspan='2' id='assignedToBox' class='<?php if((!$branches and $type == 'story') or $type == 'requirement') echo "hidden"; ?> switchBranch'>
+            <?php if(!((!$branches and $type == 'story') or $type == 'requirement')):?>
+            <td colspan='2' id='assignedToBox' class="switchBranch">
               <div class='input-group'>
                 <div class="input-group-addon assignedTo"><?php echo $lang->story->assignedTo;?></div>
                 <?php echo html::select('assignedTo', $users, '', "class='form-control picker-select'");?>
               </div>
             </td>
+            <?php endif;?>
             <td class='w-60px <?php if((!$branches and $type == 'story') or $type == 'requirement') echo "hidden"; ?> switchBranch'></td>
             <td colspan="2" class='<?php if($branches and $type == 'story') echo "hidden"; ?> switchBranch'>
             <div class='input-group' id='moduleIdBox'>

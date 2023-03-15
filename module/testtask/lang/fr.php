@@ -71,7 +71,7 @@ $lang->testtask->reportAction   = 'Rapport CasTests';
 $lang->testtask->id                = 'ID';
 $lang->testtask->common            = 'Recette';
 $lang->testtask->product           = $lang->productCommon;
-$lang->testtask->project           = 'Project';
+$lang->testtask->project           = $lang->projectCommon;;
 $lang->testtask->execution         = $lang->execution->common;
 $lang->testtask->type              = 'Type';
 $lang->testtask->build             = 'Build';
@@ -145,9 +145,9 @@ $lang->testtask->showFail      = 'Echouée <span class="text-danger">%s</span> f
 
 $lang->testtask->confirmDelete     = 'Voulez-vous supprimer ce build ?';
 $lang->testtask->confirmUnlinkCase = 'Voulez-vous détacher ce CasTest ?';
-$lang->testtask->noticeNoOther     = "Il n'y a pas de Campagnes de Recette pour ce product.";
+$lang->testtask->noticeNoOther     = "No test builds for this {$lang->productCommon}.";
 $lang->testtask->noTesttask        = 'Pas de campagne. ';
-$lang->testtask->checkLinked       = "Vérifiez si le product auquel la campagne de recette est associée est bien lié à un projet.";
+$lang->testtask->checkLinked       = "Please check whether the {$lang->productCommon} that the test request is linked to has been linked to a {$lang->executionCommon}.";
 $lang->testtask->noImportData      = "Le XML importé ne parse pas les données.";
 $lang->testtask->unitXMLFormat     = 'Veuillez sélectionner un fichier au format XML JUnit.';
 $lang->testtask->titleOfAuto       = "%s tests automatisés";

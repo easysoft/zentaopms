@@ -126,6 +126,8 @@ class execution extends control
 
         if(!isset($_SESSION['limitedExecutions'])) $this->execution->getLimitedExecution();
 
+	if($executionID) $this->session->set("storyList", $this->createLink("execution", "story", "&executionID=" . $executionID));
+
         /* Set browse type. */
         $browseType = strtolower($status);
 
@@ -1703,6 +1705,8 @@ class execution extends control
             global $lang;
             $lang->executionCommon = $lang->execution->stage;
             include $this->app->getModulePath('', 'execution') . 'lang/' . $this->app->getClientLang() . '.php';
+
+            $this->config->execution->create->requiredFields .= ',products0';
         }
 
         $this->app->loadLang('program');

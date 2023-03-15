@@ -31,7 +31,7 @@
           <tr>
             <th class='c-issue'><?php echo $lang->gitlab->gitlabIssue;?></th>
             <th class='c-type'><?php echo $lang->gitlab->objectType;?></th>
-            <th class='c-product'><?php echo $lang->product->common;?></th>
+            <th class='c-product'><?php echo $lang->productCommon;?></th>
             <th class='c-execution'><?php echo $lang->execution->common;?></th>
           </tr>
         </thead>

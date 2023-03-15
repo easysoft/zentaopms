@@ -72,7 +72,7 @@ $canImportTask      = common::hasPriv('execution', 'importTask') && $execution->
 
 $canCreateBug        = $features['qa'] && $productID && common::hasPriv('bug', 'create');
 $canBatchCreateBug   = $features['qa'] && $productID && common::hasPriv('bug', 'batchCreate') && $execution->multiple;
-$canImportBug        = $features['qa'] && $productID && common::hasPriv('execution', 'importBug');
+$canImportBug        = $features['qa'] && $productID && common::hasPriv('execution', 'importBug') && $execution->multiple;
 $hasBugButton        = $features['qa'] && ($canCreateBug || $canBatchCreateBug);
 
 $canCreateStory      = $features['story'] && $productID && common::hasPriv('story', 'create');

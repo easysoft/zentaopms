@@ -17,7 +17,7 @@
     <strong><?php echo zget($lang->editor->modules, $module, isset($lang->{$module}->common) ? $lang->{$module}->common : $module);?></strong>
   </div>
 </div>
-<div class='main-content'>
+<div class='main-content extend-content'>
   <?php echo $tree?>
 </div>
 <script>
@@ -37,6 +37,19 @@ $(function()
             parent.addClass('expandable').removeClass('collapsable');
             $this.addClass('expandable-hitarea').removeClass('collapsable-hitarea');
         }
+    });
+
+    $('.has-list a').on('click', function()
+    {
+        $('.has-list a.text-primary').removeClass('text-primary active');
+        $(this).addClass('text-primary active');
+    }).on('mouseover', function()
+    {
+        $('.has-list a:not(.active)').removeClass('text-primary');
+        $(this).addClass('text-primary');
+    }).on('mouseout', function()
+    {
+        if(!$(this).hasClass('active')) $(this).removeClass('text-primary');
     });
 });
 </script>

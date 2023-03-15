@@ -418,6 +418,7 @@ $lang->project->noMultiple->scrum->menu->settings   = $lang->scrum->menu->settin
 $lang->project->noMultiple->kanban                 = new stdclass();
 $lang->project->noMultiple->kanban->menu           = new stdclass();
 $lang->project->noMultiple->kanban->menu->kanban   = array('link' => "{$lang->kanban->common}|execution|kanban|executionID=%s");
+$lang->project->noMultiple->kanban->menu->CFD      = array('link' => "{$lang->execution->CFD}|execution|cfd|executionID=%s");
 $lang->project->noMultiple->kanban->menu->build    = $lang->kanbanProject->menu->build;
 $lang->project->noMultiple->kanban->menu->settings = $lang->kanbanProject->menu->settings;
 
@@ -438,8 +439,9 @@ $lang->project->noMultiple->scrum->menuOrder[50] = 'dynamic';
 $lang->project->noMultiple->scrum->menuOrder[55] = 'settings';
 
 $lang->project->noMultiple->kanban->menuOrder[5]  = 'kanban';
-$lang->project->noMultiple->kanban->menuOrder[10] = 'build';
-$lang->project->noMultiple->kanban->menuOrder[15] = 'settings';
+$lang->project->noMultiple->kanban->menuOrder[10] = 'CFD';
+$lang->project->noMultiple->kanban->menuOrder[15] = 'build';
+$lang->project->noMultiple->kanban->menuOrder[20] = 'settings';
 
 /* QA menu.*/
 $lang->qa->menu = new stdclass();

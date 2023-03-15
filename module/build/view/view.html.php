@@ -74,7 +74,7 @@ tbody tr td:first-child input {display: none;}
         <div class='actions'><?php echo html::a("javascript:showLink($build->id, \"story\")", '<i class="icon-link"></i> ' . $lang->build->linkStory, '', "class='btn btn-primary'");?></div>
         <div class='linkBox cell hidden'></div>
         <?php endif;?>
-        <form class='main-table table-story' data-ride='table' method='post' target='hiddenwin' action='<?php echo $this->createLink($module, 'batchUnlinkStory', "buildID={$build->id}")?>' id='linkedStoriesForm'>
+        <form class='main-table table-story<?php if($link === 'true' and $type == 'story') echo " hidden";?>' data-ride='table' method='post' target='hiddenwin' action='<?php echo $this->createLink($module, 'batchUnlinkStory', "buildID={$build->id}")?>' id='linkedStoriesForm'>
           <table class='table has-sort-head' id='storyList'>
             <?php $canBatchUnlink = ($canBeChanged and common::hasPriv($module, 'batchUnlinkStory'));?>
             <?php $vars = "buildID={$build->id}&type=story&link=$link&param=$param&orderBy=%s";?>
@@ -192,7 +192,7 @@ tbody tr td:first-child input {display: none;}
         <div class='actions'><?php echo html::a("javascript:showLink($build->id, \"bug\")", '<i class="icon-bug"></i> ' . $lang->build->linkBug, '', "class='btn btn-primary'");?></div>
         <div class='linkBox cell hidden'></div>
         <?php endif;?>
-        <form class='main-table table-bug' data-ride='table' method='post' target='hiddenwin' action="<?php echo $this->createLink($module, 'batchUnlinkBug', "build=$build->id");?>" id='linkedBugsForm'>
+        <form class='main-table table-bug<?php if($link === 'true' and $type == 'bug') echo " hidden";?>' data-ride='table' method='post' target='hiddenwin' action="<?php echo $this->createLink($module, 'batchUnlinkBug', "build=$build->id");?>" id='linkedBugsForm'>
           <table class='table has-sort-head' id='bugList'>
             <?php $canBatchUnlink = $canBeChanged and common::hasPriv($module, 'batchUnlinkBug');?>
             <?php $vars = "buildID={$build->id}&type=bug&link=$link&param=$param&orderBy=%s";?>

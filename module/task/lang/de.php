@@ -67,7 +67,7 @@ $lang->task->foldEffort          = 'Fold Effort';
 
 $lang->task->common            = 'Aufgabe';
 $lang->task->id                = 'ID';
-$lang->task->project           = 'Project';
+$lang->task->project           = $lang->projectCommon;
 $lang->task->execution         = $lang->executionCommon;
 $lang->task->module            = 'Modul';
 $lang->task->moduleAB          = 'Modul';
@@ -250,7 +250,7 @@ $lang->task->confirmFinish             = '"Reststunden " sind 0. Möchten Sue de
 $lang->task->confirmRecord             = '"Reststunden " sind 0. Möchten Sie den Task auf Erledigt setzen?';
 $lang->task->confirmTransfer           = '"Left Hour" is 0，Do you want to assign to <strong>%s</strong> task?';
 $lang->task->noticeTaskStart           = '"Cost Hour" and "Left Hour" cannot be 0 at the same time.';
-$lang->task->noticeLinkStory           = "Es wurde keine Story verknüpft. Sie können %s für dieses Projekt, anschließend %s.";
+$lang->task->noticeLinkStory           = "Es wurde keine Story verknüpft. Sie können %s für dieses {$lang->projectCommon}, anschließend %s.";
 $lang->task->noticeLinkStoryNoProduct  = "No story has been linked.";
 $lang->task->noticeSaveRecord          = 'Ihre Stunden wurden nicht gespeichrt. Bitte erst speichern.';
 $lang->task->noticeManageTeam          = 'Task status is %s, can not manage team.';
@@ -259,7 +259,7 @@ $lang->task->deniedNotice              = 'Nur %s kann die Aufgabe %s.';
 $lang->task->deniedStatusNotice        = 'The task status is %s, the effort cannot be maintained.';
 $lang->task->transferNotice            = 'Linear task cannot be transferred.';
 $lang->task->noTask                    = 'Keine Aufagben. ';
-$lang->task->createDenied              = 'Aufgben erstellen it in diesem Projekt gesperrt';
+$lang->task->createDenied              = "Aufgben erstellen it in diesem {$lang->projectCommon} gesperrt";
 $lang->task->cannotDeleteParent        = 'Cannot delete parent task';
 $lang->task->addChildTask              = 'Because the task has already consumed consumption, to ensure data consistency, we will help you create a subtask with the same name to record the consumption.';
 
@@ -294,6 +294,11 @@ $lang->task->error->leftEmptyAB       = 'When the task status is %s, "Hours Left
 $lang->task->error->leftEmpty         = 'Task#%sWhen the task status is %s, "Left" cannot be 0';
 $lang->task->error->notempty          = '%s must be > 0.';
 $lang->task->error->teamLeftEmpty     = 'Please maintain team hours.';
+$lang->task->error->beginLtExecution  = "The 'StartDate' of the task must be greater than or equal the 'Planned Begin' of %s to %s.";
+$lang->task->error->beginGtExecution  = "The 'StartDate' of the task must be less than or equal the 'Planned End' of %s to %s.";
+$lang->task->error->endGtExecution    = "The 'Deadline' of the task must be less than or equal the 'Planned End' of %s to %s.";
+$lang->task->error->endLtExecution    = "The 'Deadline' of the task must be greater than or equal the 'Planned Begin' of %s to %s.";
+$lang->task->error->dateExceed        = "Because the scheduled date of task %s exceeds the scheduled date of {$lang->execution->common}, it is automatically changed to the scheduled date of {$lang->execution->common}";
 
 /* Report. */
 $lang->task->report = new stdclass();

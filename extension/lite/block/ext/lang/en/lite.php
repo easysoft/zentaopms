@@ -33,13 +33,13 @@ $lang->block->default['full']['my']['5']['params']['count']   = '15';
 
 $lang->block->modules['kanban']['index'] = new stdclass();
 $lang->block->modules['kanban']['index']->availableBlocks = new stdclass();
-$lang->block->modules['kanban']['index']->availableBlocks->scrumoverview  = 'Project Overview';
+$lang->block->modules['kanban']['index']->availableBlocks->scrumoverview  = "{$lang->projectCommon} Overview";
 $lang->block->modules['kanban']['index']->availableBlocks->scrumlist      = $lang->executionCommon . ' List';
 $lang->block->modules['kanban']['index']->availableBlocks->sprint         = $lang->executionCommon . ' Overview';
 $lang->block->modules['kanban']['index']->availableBlocks->projectdynamic = 'Dynamics';
 
 $lang->block->modules['project']->availableBlocks = new stdclass();
-$lang->block->modules['project']->availableBlocks->project = 'Project List';
+$lang->block->modules['project']->availableBlocks->project = "{$lang->projectCommon} List";
 
 $lang->block->modules['execution'] = new stdclass();
 $lang->block->modules['execution']->availableBlocks = new stdclass();

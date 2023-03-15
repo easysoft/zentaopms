@@ -67,8 +67,8 @@ $lang->programplan->settingGantt     = 'Gantt Setting';
 $lang->programplan->viewSetting      = 'Setting';
 $lang->programplan->desc             = 'Description';
 
-$lang->programplan->errorBegin       = "Project begin date: %s, begin date should be >= project begin date.";
-$lang->programplan->errorEnd         = "Project end date: %s, end date should be <= project end date.";
+$lang->programplan->errorBegin       = "{$lang->projectCommon} begin date: %s, begin date should be >= {$lang->projectCommon} begin date.";
+$lang->programplan->errorEnd         = "{$lang->projectCommon} end date: %s, end date should be <= {$lang->projectCommon} end date.";
 $lang->programplan->emptyBegin       = '『Begin』should not be blank';
 $lang->programplan->emptyEnd         = '『End』should not be blank';
 $lang->programplan->checkBegin       = '『Begin』should be valid date';

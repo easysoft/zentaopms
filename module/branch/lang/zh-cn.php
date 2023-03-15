@@ -27,7 +27,7 @@ $lang->branch->mergeBranch       = '合并@branch@';
 $lang->branch->mergeBranchAction = '合并分支';
 
 $lang->branch->id          = 'ID';
-$lang->branch->product     = '所属产品';
+$lang->branch->product     = "所属{$lang->productCommon}";
 $lang->branch->name        = '%s名称';
 $lang->branch->status      = '状态';
 $lang->branch->createdDate = '创建时间';
@@ -51,7 +51,7 @@ $lang->branch->targetBranchTips  = '您可以将其合并到已有的一个@bran
 $lang->branch->confirmMerge      = '"mergedBranch"的数据将被合并到"targetBranch",请确认是否要执行分支合并操作，合并后数据将不可再恢复！';
 
 $lang->branch->noData     = '暂时没有分支。';
-$lang->branch->mainBranch = '产品默认主干%s。';
+$lang->branch->mainBranch = "{$lang->productCommon}默认主干%s。";
 
 $lang->branch->statusList = array();
 $lang->branch->statusList['active'] = '激活';

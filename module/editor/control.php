@@ -22,7 +22,7 @@ class editor extends control
     public function __construct($module = '', $method = '')
     {
         parent::__construct($module, $method);
-        if($this->app->getMethodName() != 'switch' and empty($this->config->global->editor)) $this->locate($this->createLink('dev', 'editor'));
+        if($this->app->getMethodName() != 'turnon' and empty($this->config->global->editor)) $this->locate($this->createLink('dev', 'editor'));
     }
 
     /**
@@ -36,8 +36,8 @@ class editor extends control
         $this->app->loadLang('dev');
         $this->view->title      = $this->lang->editor->common;
         $this->view->position[] = $this->lang->editor->common;
-        $this->view->modules    = $this->loadModel('dev')->getModules();
         $this->view->tab        = $type;
+        $this->view->moduleTree = $this->loadModel('dev')->getTree($type, 'module');
         $this->display();
     }
 
@@ -50,6 +50,8 @@ class editor extends control
      */
     public function extend($moduleDir = '')
     {
+        if(!isset($this->lang->{$moduleDir}->common)) $this->app->loadLang($moduleDir);
+
         $moduleFiles = $this->editor->getModuleFiles($moduleDir);
         $this->view->module = $moduleDir;
         $this->view->tree   = $this->editor->printTree($moduleFiles);
@@ -195,11 +197,11 @@ class editor extends control
      * @access public
      * @return void
      */
-    public function switch($status)
+    public function turnon($status)
     {
         $this->loadModel('setting')->setItem('system.common.global.editor', $status);
 
         $link = empty($status) ? $this->createLink('dev', 'editor') : $this->createLink('editor', 'index');
-        return print(js::locate($link, 'parent'));
+        return print(js::locate($link));
     }
 }

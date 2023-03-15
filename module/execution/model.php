@@ -59,7 +59,7 @@ class executionModel extends model
      */
     public function getExecutionFeatures($execution)
     {
-        $features = array('story' => true, 'task' => true, 'qa' => true, 'devops' => true, 'burn' => true, 'build' => true, 'other' => true);
+        $features = array('story' => true, 'task' => true, 'qa' => true, 'devops' => true, 'burn' => true, 'build' => true, 'other' => true, 'plan' => true);
 
         /* Unset story, bug, build and testtask if type is ops. */
         if($execution->lifetime == 'ops')
@@ -81,8 +81,14 @@ class executionModel extends model
                 if(in_array($execution->attribute, array('request', 'review')))
                 {
                     $features['story'] = false;
+                    $features['plan'] = false;
                 }
             }
+        }
+
+        if(isset($execution->projectInfo) and in_array($execution->projectInfo->model, array('waterfall', 'kanban', 'waterfallplus')) and empty($execution->projectInfo->hasProduct))
+        {
+            $features['plan'] = false;
         }
 
         return $features;
@@ -386,6 +392,8 @@ class executionModel extends model
 
         if(($project->model == 'waterfall' or $project->model == 'waterfallplus') and isset($this->config->setPercent) and $this->config->setPercent == 1)
         {
+            $_POST['products'] = array_filter($_POST['products']);
+            if(empty($_POST['products'])) dao::$errors['products0'] = $this->lang->project->errorNoProducts;
             $this->checkWorkload('create', $_POST['percent'], $project);
             if(dao::isError()) return false;
         }
@@ -1883,7 +1891,7 @@ class executionModel extends model
             ->page($pager, 't1.id')
             ->fetchAll('id');
 
-        if(empty($productID) and !empty($executions)) $projectProductIdList = $this->dao->select('project, product')->from(TABLE_PROJECTPRODUCT)->where('project')->in(array_keys($executions))->fetchPairs();
+        if(empty($productID) and !empty($executions)) $projectProductIdList = $this->dao->select('project, GROUP_CONCAT(product) as product')->from(TABLE_PROJECTPRODUCT)->where('project')->in(array_keys($executions))->groupBy('project')->fetchPairs();
 
         $hours = $this->loadModel('project')->computerProgress($executions);
         $burns = $this->getBurnData($executions);
@@ -2856,10 +2864,11 @@ class executionModel extends model
     {
         $this->loadModel('task');
 
+        $dateExceed  = '';
         $taskStories = array();
         $parents     = array();
         $execution   = $this->getByID($executionID);
-        $tasks       = $this->dao->select('id,execution,assignedTo,story,consumed,status,parent')->from(TABLE_TASK)->where('id')->in($this->post->tasks)->fetchAll('id');
+        $tasks       = $this->dao->select('id,execution,assignedTo,story,consumed,status,parent,estStarted,deadline')->from(TABLE_TASK)->where('id')->in($this->post->tasks)->fetchAll('id');
         foreach($tasks as $task)
         {
             /* Save the assignedToes and stories, should linked to execution. */
@@ -2879,6 +2888,13 @@ class executionModel extends model
                 $data->canceledDate = null;
             }
 
+            if(!empty($this->config->limitTaskDate))
+            {
+                if($task->estStarted < $execution->begin or $task->estStarted > $execution->end or $task->deadline > $execution->end or $task->deadline < $execution->begin) $dateExceed .= "#{$task->id},";
+                if($task->estStarted < $execution->begin or $task->estStarted > $execution->end) $data->estStarted = $execution->begin;
+                if($task->deadline > $execution->end or $task->deadline < $execution->begin)     $data->deadline   = $execution->end;
+            }
+
             /* Update tasks. */
             $this->dao->update(TABLE_TASK)->data($data)->where('id')->eq($task->id)->exec();
             unset($data->status);
@@ -2887,9 +2903,18 @@ class executionModel extends model
             $this->loadModel('action')->create('task', $task->id, 'moved', '', $task->execution);
         }
 
+        if(!empty($dateExceed))
+        {
+            $dateExceed = trim($dateExceed, ',');
+            echo js::alert(sprintf($this->lang->task->error->dateExceed, $dateExceed));
+        }
+
         /* Get stories of children task. */
-        $childrens = $this->dao->select('*')->from(TABLE_TASK)->where('parent')->in($parents)->fetchAll('id');
-        foreach($childrens as $children) $taskStories[$children->story] = $children->story;
+        if(!empty($parents))
+        {
+            $childrens = $this->dao->select('*')->from(TABLE_TASK)->where('parent')->in($parents)->fetchAll('id');
+            foreach($childrens as $children) $taskStories[$children->story] = $children->story;
+        }
 
         /* Remove empty story. */
         unset($taskStories[0]);
@@ -3032,6 +3057,12 @@ class executionModel extends model
             {
                 dao::$errors['message'][] = $this->lang->task->error->estimateNumber;
                 return false;
+            }
+
+            if(!empty($this->config->limitTaskDate))
+            {
+                $this->task->checkEstStartedAndDeadline($executionID, $task->estStarted, $task->deadline);
+                if(dao::isError()) return false;
             }
 
             $tasks[$key] = $task;

@@ -20,7 +20,11 @@
         <?php foreach($method->parameters as $param):?>
         <tr>
           <th class='c-name'><?php echo $param->name?></th>
+          <?php if(!$param->isOptional() or is_string($param->getDefaultValue())):?>
           <td><?php echo html::input("$param->name", $param->isOptional() ? $param->getDefaultValue() : '', "class='form-control'")?></td>
+          <?php else:?>
+          <td><?php echo $lang->api->error->notInput . html::hidden("$param->name", '', "class='form-control'")?></td>
+          <?php endif;?>
         </tr>
         <?php endforeach;?>
         <tr>

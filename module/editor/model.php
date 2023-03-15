@@ -25,6 +25,7 @@ class editorModel extends model
         foreach($this->config->editor->sort as $name)
         {
             $moduleFullFile = $modulePath . $name;
+            if(!file_exists($moduleFullFile)) continue;
             if($name == 'control.php' or $name == 'model.php')
             {
                 $allModules[$modulePath][$moduleFullFile] = $this->analysis($moduleFullFile);
@@ -204,9 +205,15 @@ class editorModel extends model
     {
         $tree     = '';
         $fileName = basename($filePath);
-        $file     = "<span title='$fileName'>$fileName</span>";
-        if(isset($this->lang->editor->modules[$fileName]))   $file = "<span title='$fileName'>" . $this->lang->editor->modules[$fileName]   . '</span>';
-        if(isset($this->lang->editor->translate[$fileName])) $file = "<span title='$fileName'>" . $this->lang->editor->translate[$fileName] . '</span>';
+        if(isset($this->lang->editor->translate[$fileName]))
+        {
+            $file = "<span title='$fileName'>" . $this->lang->editor->translate[$fileName] . '</span>';
+        }
+        else
+        {
+            $moduleName = zget($this->lang->editor->modules, $fileName, isset($this->lang->{$fileName}->common) ? $this->lang->{$fileName}->common : $fileName);
+            $file = "<span title='{$fileName}'>{$moduleName}</span>";
+        }
 
         if(strpos($filePath, DS . 'ext' . DS) !== false)
         {
@@ -447,8 +454,16 @@ EOD;
             if($param->isOptional())
             {
                 $defaultParam = $param->getDefaultValue();
-                if(is_string($defaultParam)) $methodParam .= "='$defaultParam', ";
-                else $methodParam .= "=$defaultParam, ";
+                if(is_string($defaultParam))
+                {
+                    $methodParam .= "='$defaultParam', ";
+                }
+                else
+                {
+                    if(is_array($defaultParam) and empty($defaultParam)) $defaultParam = 'array()';
+                    if(is_null($defaultParam)) $defaultParam = 'null';
+                    $methodParam .= "=$defaultParam, ";
+                }
             }
             else
             {
