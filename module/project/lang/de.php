@@ -308,8 +308,8 @@ $lang->project->featureBar['testcase']['autocase']    = 'Automated';
 
 $lang->project->featureBar['build']['all'] = 'Build List';
 
-$lang->project->aclList["private"] = "Private (For the {$lang->projectCommon} leader, team members and stakeholders only)";
-$lang->project->aclList["open"]    = "Open (accessible with {$lang->projectCommon} view permissions)";
+$lang->project->aclList['private'] = "Private (For the {$lang->projectCommon} leader, team members and stakeholders only)";
+$lang->project->aclList['open']    = "Open (accessible with {$lang->projectCommon} view permissions)";
 
 $lang->project->multipleList['1'] = 'Yes';
 $lang->project->multipleList['0'] = 'No';

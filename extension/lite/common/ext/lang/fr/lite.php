@@ -30,7 +30,7 @@ if($config->edition != 'open')
 /* Menu order. */
 $lang->mainNav->menuOrder     = array();
 $lang->mainNav->menuOrder[5]  = 'my';
-$lang->mainNav->menuOrder[10] = $lang->projectCommon;
+$lang->mainNav->menuOrder[10] = 'project';
 $lang->mainNav->menuOrder[15] = 'kanban';
 $lang->mainNav->menuOrder[35] = 'doc';
 $lang->mainNav->menuOrder[45] = 'system';
@@ -137,7 +137,7 @@ $lang->doc->menuOrder[5]  = 'dashboard';
 $lang->doc->menuOrder[10] = 'recent';
 $lang->doc->menuOrder[15] = 'my';
 $lang->doc->menuOrder[20] = 'collect';
-$lang->doc->menuOrder[25] = $lang->projectCommon;
+$lang->doc->menuOrder[25] = 'project';
 $lang->doc->menuOrder[30] = 'custom';
 
 $lang->doc->menu->project['subMenu'] = new stdclass();

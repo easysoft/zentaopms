@@ -874,8 +874,8 @@ class programModel extends model
             $this->loadModel('user');
             if($program->acl != 'open') $this->user->updateUserView($programID, 'program');
 
-	    /* If the program changes, the authorities of programs and projects under the program should be refreshed. */
-	    $children = $this->dao->select('id, type')->from(TABLE_PROGRAM)->where('path')->like("%,{$programID},%")->andWhere('id')->ne($programID)->andWhere('acl')->eq('program')->fetchPairs('id', 'type');
+            /* If the program changes, the authorities of programs and projects under the program should be refreshed. */
+            $children = $this->dao->select('id, type')->from(TABLE_PROGRAM)->where('path')->like("%,{$programID},%")->andWhere('id')->ne($programID)->andWhere('acl')->eq('program')->fetchPairs('id', 'type');
             foreach($children as $id => $type) $this->user->updateUserView($id, $type);
             if(isset($program->PM) and $program->PM != $oldProgram->PM)
             {
@@ -888,11 +888,29 @@ class programModel extends model
                 $this->processNode($programID, $program->parent, $oldProgram->path, $oldProgram->grade);
 
                 /* Move product to new top program. */
-                if($oldProgram->parent == 0)
+                $oldTopProgram = $this->getTopByPath($oldProgram->path);
+                $newTopProgram = $this->getTopByID($programID);
+
+                if($oldTopProgram != $newTopProgram)
                 {
-                    $oldTopProgram = $this->getTopByPath($oldProgram->path);
-                    $newTopProgram = $this->getTopByID($programID);
-                    if($oldTopProgram != $newTopProgram) $this->dao->update(TABLE_PRODUCT)->set('program')->eq($newTopProgram)->where('program')->eq($oldTopProgram)->exec();
+                    if($oldProgram->parent == 0)
+                    {
+                        $this->dao->update(TABLE_PRODUCT)->set('program')->eq($newTopProgram)->where('program')->eq($oldTopProgram)->exec();
+                    }
+                    else
+                    {
+                        /* Get the shadow products that produced by the program's no product projects. */
+                        $shadowProducts = $this->dao->select('t1.id')->from(TABLE_PRODUCT)->alias('t1')
+                            ->leftJoin(TABLE_PROJECTPRODUCT)->alias('t2')->on('t1.id=t2.product')
+                            ->leftJoin(TABLE_PROJECT)->alias('t3')->on('t2.project=t3.id')
+                            ->where('t3.path')->like("%,$programID,%")
+                            ->andWhere('t3.type')->eq('project')
+                            ->andWhere('t3.hasProduct')->eq('0')
+                            ->andWhere('t1.shadow')->eq('1')
+                            ->fetchPairs();
+                        $this->dao->update(TABLE_PRODUCT)->set('program')->eq($newTopProgram)->where('id')->in($shadowProducts)->exec();
+                    }
+
                 }
             }
 

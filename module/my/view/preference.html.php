@@ -19,7 +19,7 @@
   <div class='main-header'>
     <h2><i class='icon-key'></i> <?php echo $lang->my->preference;?></h2>
   </div>
-  <form method='post' target='hiddenwin'>
+  <form method='post' target='hiddenwin' class='no-stash'>
     <table align='center' class='table table-form w-320px'>
       <tr>
         <th class='w-140px'><?php echo $lang->my->storyConcept;?></th>
