@@ -19,6 +19,7 @@
     <?php
     $i = 0;
     $params = "browseType=&view=%s";
+    $config->group->maxToolBarCount --;
     foreach($lang->mainNav as $moduleMenu => $title)
     {
         if(!is_string($title)) continue;
