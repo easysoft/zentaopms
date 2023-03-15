@@ -26,12 +26,12 @@ pipeline {
 
 
   stages {
-     stage('Prepare') {
+     stage("拉取代码") {
        steps {
-           echo "checkout code"
+           echo "checkout code success"
        }
      }
-     stage('SonarQube and Build Image') {
+     stage('sonar扫描') {
        parallel {
          stage('SonarQube') {
            steps {
@@ -46,10 +46,16 @@ pipeline {
            }
            post {
              success {
-               echo "stage sonarqube success"
+                 container('xuanimbot') {
+                     sh 'git config --global --add safe.directory /home/jenkins/agent/workspace/pangu_pangu_xuanimbot_master'
+                     sh '/usr/local/bin/xuanimbot  --users "$(git show -s --format=%cn)" --title "sonar scanner" --url "${RUN_DISPLAY_URL}" --content "sonar静态扫描通过" --debug --custom'
+                 }
              }
              failure {
-               echo "stage sonarqube failure"
+                 container('xuanimbot') {
+                     sh 'git config --global --add safe.directory /home/jenkins/agent/workspace/pangu_pangu_xuanimbot_master'
+                     sh '/usr/local/bin/xuanimbot  --users "$(git show -s --format=%cn)" --title "sonar scanner" --url "${RUN_DISPLAY_URL}" --content "sonar静态扫描失败" --debug --custom'
+                 }
             }
           }
         }
@@ -60,6 +66,16 @@ pipeline {
                  sh 'docker push ${MIDDLE_IMAGE_REPO}:${MIDDLE_IMAGE_TAG}'
              }
            }
+           post {
+             success {
+                 echo 'build image success'
+             }
+             failure {
+                 container('xuanimbot') {
+                     sh 'git config --global --add safe.directory /home/jenkins/agent/workspace/pangu_pangu_xuanimbot_master'
+                     sh '/usr/local/bin/xuanimbot  --users "$(git show -s --format=%cn)" --title "build image" --url "${RUN_DISPLAY_URL}" --content "构建禅道单元测试镜像失败" --debug --custom'
+                 }
+            }
         }
       }
     }
@@ -90,7 +106,10 @@ pipeline {
                     sh 'echo "stage unit init success"'
                 }
                 failure {
-                    sh 'echo "stage unit init failure"'
+                 container('xuanimbot') {
+                     sh 'git config --global --add safe.directory /home/jenkins/agent/workspace/pangu_pangu_xuanimbot_master'
+                     sh '/usr/local/bin/xuanimbot  --users "$(git show -s --format=%cn)" --title "unittest init" --url "${RUN_DISPLAY_URL}" --content "初始化单元测试数据库失败" --debug --custom'
+                 }
                 }
               }
           }
@@ -118,16 +137,6 @@ pipeline {
                     sh 'pipeline-unittest.sh /apps/zentao/test/p1.log'
                 }
               }
-
-              post {
-                success {
-                  sh 'echo success'
-                }
-                failure {
-                  sh 'echo failure'
-                }
-              }
-
             }
             stage('UnitTest P2') {
               agent {
@@ -151,20 +160,6 @@ pipeline {
                 }
               }
 
-              /*
-              post {
-                success {
-                  container('xuanimbot') {
-                    sh 'echo "stage unit-test success"'
-                  }
-                }
-                failure {
-                  container('xuanimbot') {
-                    sh 'echo "stage unit-test failure"'
-                  }
-                }
-              }
-              */
             }
             stage('UnitTest P3') {
               agent {
@@ -187,21 +182,6 @@ pipeline {
                     sh 'pipeline-unittest.sh /apps/zentao/test/p3.log'
                 }
               }
-
-              /*
-              post {
-                success {
-                  container('xuanimbot') {
-                    sh 'echo "stage unit-test success"'
-                  }
-                }
-                failure {
-                  container('xuanimbot') {
-                    sh 'echo "stage unit-test failure"'
-                  }
-                }
-              }
-              */
             }
             stage('UnitTest P4') {
               agent {
@@ -225,20 +205,6 @@ pipeline {
                 }
               }
 
-              /*
-              post {
-                success {
-                  container('xuanimbot') {
-                    sh 'echo "stage unit-test success"'
-                  }
-                }
-                failure {
-                  container('xuanimbot') {
-                    sh 'echo "stage unit-test failure"'
-                  }
-                }
-              }
-              */
             }
             stage('UnitTest P5') {
               agent {
@@ -261,21 +227,6 @@ pipeline {
                     sh 'pipeline-unittest.sh /apps/zentao/test/p5.log'
                 }
               }
-
-              /*
-              post {
-                success {
-                  container('xuanimbot') {
-                    sh 'echo "stage unit-test success"'
-                  }
-                }
-                failure {
-                  container('xuanimbot') {
-                    sh 'echo "stage unit-test failure"'
-                  }
-                }
-              }
-              */
             }
             stage('UnitTest P6') {
               agent {
@@ -299,20 +250,6 @@ pipeline {
                 }
               }
 
-              /*
-              post {
-                success {
-                  container('xuanimbot') {
-                    sh 'echo "stage unit-test success"'
-                  }
-                }
-                failure {
-                  container('xuanimbot') {
-                    sh 'echo "stage unit-test failure"'
-                  }
-                }
-              }
-              */
             }
             stage('UnitTest P7') {
               agent {
@@ -335,32 +272,22 @@ pipeline {
                     sh 'pipeline-unittest.sh /apps/zentao/test/p7.log'
                 }
               }
-
-              /*
-              post {
-                success {
-                  container('xuanimbot') {
-                    sh 'echo "stage unit-test success"'
-                  }
-                }
-                failure {
-                  container('xuanimbot') {
-                    sh 'echo "stage unit-test failure"'
-                  }
-                }
-              }
-              */
             }
-
           } // End Parallel
        }
       }
       post{
           success{
-              sh 'echo "success"'
+              container('xuanimbot') {
+                  sh 'git config --global --add safe.directory /home/jenkins/agent/workspace/pangu_pangu_xuanimbot_master'
+                  sh '/usr/local/bin/xuanimbot  --users "$(git show -s --format=%cn)" --title "unittest" --url "${RUN_DISPLAY_URL}" --content "单元测试通过" --debug --custom'
+              }
           }
           failure{
-              sh 'echo "failure"'
+              container('xuanimbot') {
+                  sh 'git config --global --add safe.directory /home/jenkins/agent/workspace/pangu_pangu_xuanimbot_master'
+                  sh '/usr/local/bin/xuanimbot  --users "$(git show -s --format=%cn)" --title "unittest" --url "${RUN_DISPLAY_URL}" --content "单元测试通过" --debug --custom'
+              }
           }
       }
     }//End unittest
