@@ -14,11 +14,6 @@ foreach (\customModel::getMainMenu() as $menuItem)
     );
 }
 
-/* Generate dropdown menus. */
-$userMenu         = \commonModel::printUserBarZin();
-$globalCreateMenu = \commonModel::printCreateListZin();
-$switcherMenu     = \commonModel::printVisionSwitcherZin();
-
 $cols   = array_values($config->program->dtable->fieldList);
 $fields = array_keys($config->program->dtable->fieldList);
 $data   = array_values($programs);
@@ -84,57 +79,21 @@ if (\common::hasPriv('program', 'create'))
     );
 }
 
-page
+set('title', $title);
+pagemain
 (
-    set('title', $title),
-    pageheader
+    mainmenu
     (
-        pageheading
-        (
-            set('text', $lang->{$app->tab}->common),
-            set('icon', $app->tab),
-            set('url', \helper::createLink($app->tab, 'browse'))
-        ),
-        pagenavbar
-        (
-            setId('navbar'),
-            set('items', $navItems)
-        ),
-        pagetoolbar
-        (
-            set('create',   array('href' => '#globalCreateMenu')),
-            set('switcher', array('href' => '#switcherMenu', 'text' => '研发管理界面')),
-            block('avatar', avatar(set('name', $app->user->account), set('avatar', $app->user->avatar), set('trigger', '#userMenu')))
-        )
+        set('statuses', $statuses),
+        set('others', $others),
+        set('btnGroup', $btnGroup)
     ),
-    pagemain
+    dtable
     (
-        mainmenu
-        (
-            set('statuses', $statuses),
-            set('others', $others),
-            set('btnGroup', $btnGroup)
-        ),
-        dtable
-        (
-            set('cols', $cols),
-            set('width', '100%'),
-            set('data', $data)
-        )
-    ),
-    dropdown
-    (
-        setId('userMenu'),
-        set('items', $userMenu)
-    ),
-    dropdown
-    (
-        setId('globalCreateMenu'),
-        set('items', $globalCreateMenu)
-    ),
-    dropdown
-    (
-        setId('switcherMenu'),
-        set('items', $switcherMenu)
+        set('cols', $cols),
+        set('width', '100%'),
+        set('data', $data)
     )
 );
+
+render();
