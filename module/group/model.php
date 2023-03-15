@@ -22,6 +22,8 @@ class groupModel extends model
     public function create()
     {
         $group = fixer::input('post')->get();
+        $group->vision = $this->config->vision;
+
         if(isset($group->limited))
         {
             unset($group->limited);
