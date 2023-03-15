@@ -35,3 +35,15 @@ $lang->mainNav->menuOrder[20] = 'projectInit';
 $lang->mainNav->menuOrder[25] = 'feedback';
 $lang->mainNav->menuOrder[30] = 'doc';
 $lang->mainNav->menuOrder[35] = 'admin';
+
+$lang->navGroup->demandpool = 'demandpool';
+$lang->navGroup->demand     = 'demandpool';
+
+$lang->demandpool->menu = new stdclass();
+$lang->demandpool->menu->browse = array('link' => "{$lang->demand->common}|demand|browse|poolID=%s", 'alias' => 'create,batchcreate,edit,managetree,view,tostory,showimport');
+$lang->demandpool->menu->track  = array('link' => "矩阵|demand|track|demandID=%s");
+$lang->demandpool->menu->view   = array('link' => "概况|demandpool|view|poolID=%s");
+
+$lang->demandpool->menuOrder[5]  = 'browse';
+$lang->demandpool->menuOrder[10] = 'track';
+$lang->demandpool->menuOrder[15] = 'view';
