@@ -26,8 +26,6 @@ $(function()
 
             $.post(createLink('group', 'sortPrivPackages', 'parent=' + parentID + '&type=' + type), {'orders': orders});
 
-            e.element.addClass('drop-success');
-            setTimeout(function(){e.element.removeClass('drop-success');}, 800);
             $list.children('.drop-not-allowed').removeClass('drop-not-allowed');
             $('#privPackageForm').table('initNestedList')
         }

@@ -446,7 +446,7 @@ class group extends control
         $this->view->privList       = $privList;
         $this->view->packages       = $this->group->getPrivPackagePairs($view);
         $this->view->moduleLang     = $moduleLang;
-        $this->view->modulePackages = $this->group->getModuleAndPackageTree('package');
+        $this->view->modulePackages = $this->group->getModuleAndPackageTree();
         $this->view->view           = $view;
 
         $this->display();

@@ -11,6 +11,7 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
+<?php include '../../common/view/sortable.html.php';?>
 <div id="mainMenu" class='clearfix'>
   <div class="btn-toolbar pull-left">
     <?php common::printBack(inlink('editManagePriv', ''), 'btn btn-primary');?>
@@ -33,16 +34,14 @@
             <a class='table-nest-toggle table-nest-toggle-global' data-expand-text='<?php echo $lang->expand; ?>' data-collapse-text='<?php echo $lang->collapse;?>'></a>
           </th>
           <th class='c-desc'><?php echo $lang->privpackage->desc;?></th>
-          <th class='c-order'><?php echo $lang->sort;?></th>
           <th class='text-center c-actions-2'><?php echo $lang->actions;?></th>
         </tr>
       </thead>
       <tbody id='privPackageTableList'>
         <?php foreach($packagesTreeList as $package):?>
         <tr <?php echo "data-id='$package->id' data-order='$package->order' data-parent='$package->parent' data-level='$package->grade' data-type='$package->type' data-nest-parent='$package->parent' data-nest-path='$package->path'"?>>
-          <td class='text-left has-prefix' title='<?php echo $package->name?>'><?php echo $package->name?></td>
-          <td class='text-left' title='<?php echo $package->desc?>'><?php echo $package->desc?></td>
-          <td><?php if(common::hasPriv('group', 'privPackageSort')) echo '<a class="sort-handler"><i class="icon-move"></i></a>';?></td>
+          <td class='sort-handler text-left has-prefix' title='<?php echo $package->name?>'><?php echo $package->name?></td>
+          <td class='sort-handler text-left' title='<?php echo $package->desc?>'><?php echo $package->desc?></td>
           <td class='c-actions'>
             <?php
             if(common::hasPriv('group', 'editPrivPackage') and $package->grade == 3) common::printIcon('group', 'editPrivPackage', "packageID=$package->id", '', 'list', 'edit', '', 'iframe', true);
