@@ -236,8 +236,8 @@ $lang->custom->restDayList[6] = '周六休息';
 $lang->custom->restDayList[0] = '周天休息';
 
 global $config;
-$lang->custom->sprintConceptList[0] = "{$lang->projectCommon} 产品 迭代";
-$lang->custom->sprintConceptList[1] = "{$lang->projectCommon} 产品 冲刺";
+$lang->custom->sprintConceptList[0] = "项目 产品 迭代";
+$lang->custom->sprintConceptList[1] = "项目 产品 冲刺";
 
 $lang->custom->workingList['full'] = '完整研发管理工具';
 

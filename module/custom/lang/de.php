@@ -236,8 +236,8 @@ $lang->custom->restDayList[6] = 'Saturday rest';
 $lang->custom->restDayList[0] = 'Sunday rest';
 
 global $config;
-$lang->custom->sprintConceptList[0] = 'Program Product Iteration';
-$lang->custom->sprintConceptList[1] = 'Program Product Sprint';
+$lang->custom->sprintConceptList[0] = 'Project Product Iteration';
+$lang->custom->sprintConceptList[1] = 'Project Product Sprint';
 
 $lang->custom->workingList['full'] = 'Full Management of Dev';
 
