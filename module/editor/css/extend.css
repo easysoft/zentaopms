@@ -12,3 +12,4 @@
 .m-editor-extend .main-header {padding: 10px 20px; }
 .m-editor-extend .main-content {padding: 0px; padding-top: 10px; box-shadow: none;}
 #extendTree li a {white-space: nowrap;}
+#extendTree span {padding: 0 4px;}
