@@ -781,8 +781,8 @@ class group extends control
 
         $this->view->title              = $this->lang->group->editPriv;
         $this->view->views              = array('' => '') + $views;
-        $this->view->modules            = array('' => '') + $this->group->getPrivModules('', 'noViewName');
-        $this->view->packages           = array('' => '') + $this->group->getPrivPackagePairs();
+        $this->view->modules            = array('' => '') + $this->group->getPrivModules($priv->view, 'noViewName');
+        $this->view->packages           = array('' => '') + $this->group->getPrivPackagePairs($priv->view, $priv->module);
         $this->view->moduleViewPairs    = $moduleViewPairs;
         $this->view->packageModulePairs = $this->group->getPrivPackagePairs('', '', 'module');
         $this->view->priv               = $priv;
