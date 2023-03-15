@@ -17,6 +17,17 @@ class page extends pagebase
         'footer' => array(),
     );
 
+    protected function buildHead()
+    {
+        $pageCSS = data('pageCSS');
+
+        return array
+        (
+            empty($pageCSS) ? NULL : css($pageCSS),
+            $this->block('head')
+        );
+    }
+
     protected function buildBody()
     {
         $header = $this->hasBlock('header') ? $this->block('header') : new header();
@@ -31,11 +42,15 @@ class page extends pagebase
                 $this->block('footer')
             );
         }
+
+        $pageJS  = data('pageJS');
+
         return array
         (
             $header,
             new main($this->children()),
-            $this->block('footer')
+            $this->block('footer'),
+            empty($pageJS) ? NULL : js($pageJS)
         );
     }
 
