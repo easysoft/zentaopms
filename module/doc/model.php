@@ -1428,8 +1428,8 @@ class docModel extends model
                 ->andWhere('vision')->eq($this->config->vision)
                 ->andWhere('type')->eq($type)
                 ->beginIF(!empty($appendLib))->orWhere('id')->eq($appendLib)->fi()
-                ->beginIF($type == 'custom')->orderBy('`order` asc, id_desc')->fi()
-                ->beginIF($type == 'book')->orderBy('`order` asc, id_desc')->fi()
+                ->beginIF($type == 'custom')->orderBy('`order` asc, id_asc')->fi()
+                ->beginIF($type == 'book')->orderBy('`order` asc, id_asc')->fi()
                 ->fetchAll('id');
         }
         elseif($type != 'product' and $type != 'project' and $type != 'execution')
@@ -1438,13 +1438,15 @@ class docModel extends model
         }
         else
         {
+            $executionList = array();
+            if($type == 'project') $executionList = $this->dao->select('id')->from(TABLE_EXECUTION)->where('project')->eq($objectID)->fetchPairs();
             $objectLibs = $this->dao->select('*')->from(TABLE_DOCLIB)
                 ->where('deleted')->eq(0)
                 ->andWhere('vision')->eq($this->config->vision)
                 ->andWhere($type)->eq($objectID)
+                ->beginIF(!empty($executionList))->orWhere('execution')->in($executionList)->fi()
                 ->beginIF(!empty($appendLib))->orWhere('id')->eq($appendLib)->fi()
-                ->beginIF($type == 'project')->andWhere('execution')->eq(0)->fi()
-                ->orderBy('`order` asc, id_desc')
+                ->orderBy('`order` asc, id_asc')
                 ->fetchAll('id');
         }
 
@@ -2810,14 +2812,13 @@ EOT;
      */
     public function setMenuByType($type, $objectID, $libID, $appendLib = 0)
     {
+        $this->session->set('docList', $this->app->getURI(true), $this->app->tab);
         if(empty($type))
         {
             $doclib   = $this->getLibById($libID);
             $type     = $doclib->type == 'execution' ? 'project' : $doclib->type;
             $objectID = $type == 'custom' or $type == 'book' ? 0 : $doclib->$type;
         }
-
-        $this->session->set('docList', $this->app->getURI(true), $this->app->tab);
 
         $objects = $this->getOrderedObjects($type);
 
@@ -3003,5 +3004,131 @@ EOT;
 
             $order++;
         }
+    }
+
+    /**
+     * Get module tree.
+     *
+     * @param  int    $rootID
+     * @param  int    $moduleID
+     * @param  string $type doc|api
+     * @param  int    $parent
+     * @param  array  $modules
+     * @access public
+     * @return array
+     */
+    public function getModuleTree($rootID, $moduleID = 0, $type = 'doc', $parent = 0, &$modules = array())
+    {
+        if(empty($modules))
+        {
+            $modules = $this->dao->select('*')->from(TABLE_MODULE)
+                ->where('root')->eq((int)$rootID)
+                ->andWhere('type')->eq($type)
+                ->andWhere('deleted')->eq(0)
+                ->orderBy('grade desc, `order`')
+                ->fetchAll('id');
+        }
+
+        $moduleTree = array();
+        foreach($modules as $module)
+        {
+            if($module->parent != $parent) continue;
+            unset($modules[$module->id]);
+
+            $item = new stdclass();
+            $item->id       = $module->id;
+            $item->name     = $module->name;
+            $item->active   = $module->id == $moduleID ? 1 : 0;
+            $item->children = $this->getModuleTree($rootID, $moduleID, $type, $module->id, $modules);
+
+            $moduleTree[$module->id] = $item;
+        }
+
+        return $moduleTree;
+    }
+
+    /**
+     * Get lib tree.
+     *
+     * @param  int    $libID
+     * @param  array  $libs
+     * @param  string $type product|project|api|custom
+     * @param  int    $moduleID
+     * @param  int    $objectID
+     * @param  int    $executionID
+     * @access public
+     * @return array
+     */
+    public function getLibTree($libID, $libs, $type, $moduleID, $objectID = 0)
+    {
+        if($type == 'project')
+        {
+            $executionLibs = array();
+            foreach($libs as $lib)
+            {
+                if($lib->type != 'execution') continue;
+                $executionLibs[$lib->execution][$libID] = $lib;
+            }
+
+            $executionPairs = $this->dao->select('id,name')->from(TABLE_EXECUTION)
+                ->where('id')->in(array_keys($executionLibs))
+                ->fetchPairs();
+        }
+
+        $libTree = array();
+        foreach($libs as $lib)
+        {
+            $item = new stdclass();
+            $item->id         = $lib->id;
+            $item->type       = $lib->type == 'api' ? 'api' : 'lib';
+            $item->name       = $lib->name;
+            $item->objectType = $type;
+            $item->objectID   = $objectID;
+            $item->active     = $lib->id == $libID ? 1 : 0;
+            $item->modules    = $this->getModuleTree($lib->id, $moduleID, $lib->type == 'api' ? 'api' : 'doc');
+            if($lib->type != 'execution')
+            {
+                $libTree[$lib->type][$lib->id] = $item;
+            }
+            else
+            {
+                $executionID = $lib->execution;
+                if(empty($libTree['execution'][$executionID]))
+                {
+                    $execution = new stdclass();
+                    $execution->id        = $executionID;
+                    $execution->name      = zget($executionPairs, $executionID);
+                    $execution->type      = 'execution';
+                    $execution->active    = $item->active;
+                    $execution->isMainLib = 0;
+                    $execution->children  = array();
+                    if(count($executionLibs[$executionID]) == 1)
+                    {
+                        $execution->id        = $libID;
+                        $execution->isMainLib = 1;
+                        $execution->children  = $item->modules;
+                    }
+
+                    $libTree['execution'][$executionID] = $execution;
+                    continue;
+                }
+
+                $libTree['execution'][$executionID]->active = $item->active ? 1 : $libTree['execution'][$executionID]->active;
+                $libTree['execution'][$executionID]->children[$lib->id] = $item;
+            }
+        }
+
+        if(in_array($type, array('product', 'project')))
+        {
+            $libTree['annex'] = new stdclass();
+            $libTree['annex']->id         = 0;
+            $libTree['annex']->name       = $this->lang->doclib->files;
+            $libTree['annex']->type       = 'annex';
+            $libTree['annex']->objectType = $type;
+            $libTree['annex']->objectID   = $objectID;
+            $libTree['annex']->active     = empty($libID) ? 1 : 0;
+        }
+
+        return $libTree;
     }
 }

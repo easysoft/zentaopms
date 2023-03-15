@@ -1282,14 +1282,16 @@ class doc extends control
      * @access public
      * @return void
      */
-    public function tableContents($type, $objectID = 0, $libID = 0, $browseType = '', $param = 0, $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function tableContents($type, $objectID = 0, $libID = 0, $moduleID = 0, $browseType = '', $param = 0, $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
-        list($libs, $libID, $object, $objectID) = $this->doc->setMenuByType($type, $objectID, $libID);
         $this->session->set('createProjectLocate', $this->app->getURI(true), 'doc');
 
-        $libID = (int)$libID;
+        list($libs, $libID, $object, $objectID) = $this->doc->setMenuByType($type, $objectID, $libID);
 
+        $libID      = (int)$libID;
         $moduleTree = $type == 'book' ? $this->doc->getBookStructure($libID) : $this->doc->getTreeMenu($type, $objectID, $libID);
+
+        $libTree = $this->doc->getLibTree($libID, $libs, $type, $moduleID, $objectID);
 
         $title = ($type == 'book' or $type == 'custom') ? $this->lang->doc->tableContents : $object->name . $this->lang->colon . $this->lang->doc->tableContents;
 
