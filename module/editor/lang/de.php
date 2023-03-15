@@ -63,6 +63,7 @@ $lang->editor->modules['my']          = 'Dashboard';
 $lang->editor->modules['product']     = $lang->productCommon;
 $lang->editor->modules['productplan'] = 'Plan';
 $lang->editor->modules['project']     = $lang->projectCommon;
+$lang->editor->modules['execution']   = $lang->executionCommon;
 $lang->editor->modules['qa']          = 'QA';
 $lang->editor->modules['release']     = 'Release';
 $lang->editor->modules['report']      = 'Berichte';

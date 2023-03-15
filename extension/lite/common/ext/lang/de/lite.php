@@ -30,7 +30,7 @@ if($config->edition != 'open')
 /* Menu order. */
 $lang->mainNav->menuOrder     = array();
 $lang->mainNav->menuOrder[5]  = 'my';
-$lang->mainNav->menuOrder[10] = $lang->projectCommon;
+$lang->mainNav->menuOrder[10] = 'project';
 $lang->mainNav->menuOrder[15] = 'kanban';
 $lang->mainNav->menuOrder[35] = 'doc';
 $lang->mainNav->menuOrder[45] = 'system';
