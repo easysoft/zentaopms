@@ -3,7 +3,7 @@
 .table-footer .pager {margin: 0px; height: 30px; padding-top: 10px;}
 .table-footer .pager .icon-play.icon-flip-horizontal:before {content:"\e314";}
 .table-footer .pager .icon-play:before {content:"\e315";}
-.modal.with-titlebar .modal-header {margin-bottom: 10px;}
+.modal.with-titlebar .modal-header, .no-stash {margin-bottom: 10px;}
 .modal.with-titlebar .modal-header .modal-title {display: block;}
 
 .list {color: #333; background-color: #fff; border: solid #DDD 1px; border-radius: 3px;}

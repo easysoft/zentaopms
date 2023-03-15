@@ -326,7 +326,8 @@ class projectrelease extends control
         $this->view->bugPager     = $bugPager;
         $this->view->leftBugPager = $leftBugPager;
         $this->view->builds       = $this->loadModel('build')->getBuildPairs($release->product, 'all', 'withbranch|hasproject', 0, 'execution', '', false);
-        $this->view->summary       = $this->product->summary($stories);
+        $this->view->summary      = $this->product->summary($stories);
+        $this->view->storyCases   = $this->loadModel('testcase')->getStoryCaseCounts(array_keys($stories));
 
         if($this->app->getViewType() == 'json')
         {
@@ -640,26 +641,17 @@ class projectrelease extends control
      * @access public
      * @return void
      */
-    public function unlinkStory($releaseID, $storyID)
+    public function unlinkStory($releaseID, $storyID, $confirm = 'no')
     {
-        $this->projectrelease->unlinkStory($releaseID, $storyID);
-
-        /* if ajax request, send result. */
-        if($this->server->ajax)
+        if($confirm == 'no')
         {
-            if(dao::isError())
-            {
-                $response['result']  = 'fail';
-                $response['message'] = dao::getError();
-            }
-            else
-            {
-                $response['result']  = 'success';
-                $response['message'] = '';
-            }
-            return $this->send($response);
+            return print(js::confirm($this->lang->release->confirmUnlinkStory, inlink('unlinkstory', "releaseID=$releaseID&storyID=$storyID&confirm=yes")));
         }
-        return print(js::reload('parent'));
+        else
+        {
+            $this->projectrelease->unlinkStory($releaseID, $storyID);
+            return print(js::reload('parent'));
+        }
     }
 
     /**

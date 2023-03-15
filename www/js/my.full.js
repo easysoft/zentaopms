@@ -1,6 +1,19 @@
 (function($)
 {
     /**
+     * Save form Arr to $.zui.store.
+     *
+     * @access public
+     * @param {string} formID
+     * @param {array}  formData
+     * @return void
+     */
+    function storeFormData(formID, formData)
+    {
+        $.zui.store.set(formID, formData);
+    }
+
+    /**
      * Handle the logic save form draft.
      *
      * @access public
@@ -8,21 +21,28 @@
      */
     function handleSaveFormDraft()
     {
-        if(config.currentMethod === 'login' || config.currentModule === 'repo' || config.currentMethod.indexOf('edit') != -1 || config.currentMethod.indexOf('import') != -1) return;
+        if(config.currentModule === 'repo') return;
+        if(config.currentModule.indexOf('workflow') !== -1) return;
+
+        var skipMethods = ['edit', 'import', 'login', 'export', 'finish', 'confirm', 'resolve', 'start', 'pause', 'cancel', 'report', 'close', 'activate', 'restart', 'suspend', 'putoff', 'browse', 'hangup', 'track', 'index', 'reply', 'manage', 'run'];
+        for(var i = 0; i < skipMethods.length; i++)
+        {
+            if(config.currentMethod.indexOf(skipMethods[i]) === 0) return;
+        };
+
         setTimeout(function()
         {
             var form = $('form[method=post]');
             if(form.length)
             {
-                if($(form).hasClass('no-stash')) return;
-                if($(form).attr('target') == 'hiddenwin' && config.currentModule.indexOf('program') != -1  && config.currentModule.indexOf('project') != -1) return;
-                function storeFormArr()
-                {
-                    $.zui.store.set(formDataID, $(form).serializeArray());
-                    var arr = $(form).serializeArray();
-                }
-                var formDataID     = config.currentMethod + '-' + config.currentModule + '-' + $(form).attr("id");
-                var formDataStored = $.zui.store.get(formDataID);
+                if($(form).hasClass('no-stash') || $(form).data('ride') == 'table') return;
+                if($(form).attr('target') == 'hiddenwin' && config.currentModule.indexOf('program') == -1 && config.currentModule.indexOf('project') == -1 && config.currentModule.indexOf('testcase') == -1) return;
+
+                var formID         = config.currentMethod + '-' + config.currentModule + '-' + $(form).attr("id");
+                var formDataStored = $.zui.store.get(formID);
+                setTimeout(function() {
+                    $.zui.store.remove(formID);
+                }, 100)
                 if(formDataStored && formDataStored.length)
                 {
                     var message = lang.confirmDraft.replace('%name%', lang[config.currentModule] ? lang[config.currentModule] : '');
@@ -86,7 +106,16 @@
                                                 }
                                             }
                                         }
-                                        else if(tagName === 'INPUT')
+                                        else if(tagName === 'TEXTAREA' && $(formItem).hasClass('kindeditor'))
+                                        {
+                                            KindEditor.remove('#' + item.name);
+                                            formItem.val(item.value);
+                                            $(formItem).kindeditor({
+                                                /* Conetnt change event. */
+                                                afterChange: storeFormData(formID, $(form).serializeArray())
+                                            });
+                                        }
+                                        else
                                         {
                                             if($(formItem).attr('type') === 'checkbox')
                                             {
@@ -101,34 +130,27 @@
                                                 formItem.val(item.value);
                                             }
                                         }
-                                        else if(tagName === 'TEXTAREA' && $(formItem).hasClass('kindeditor'))
-                                        {
-                                            KindEditor.remove('#' + item.name);
-                                            formItem.val(item.value);
-                                            $(formItem).kindeditor({
-                                                /* Conetnt change event. */
-                                                afterChange: storeFormArr()
-                                            });
-                                        }
                                     }
                                 }
                             }
                         ],
                         onAction: function(name, action, messager)
                         {
-                            $.zui.store.remove(formDataID);
+                            setTimeout(function () {
+                                $.zui.store.remove(formID);
+                            }, 100)
                         }
                     }).show();
                 }
                 form.on('input', function()
-                {    
-                    storeFormArr()
+                {
+                    storeFormData(formID, $(form).serializeArray())
                 }).on('change', function()
                 {
-                    storeFormArr()
+                    storeFormData(formID, $(form).serializeArray())
                 }).on('success.form.zui', function(event, res)
                 {
-                    if(res.result === 'success' || res.status === 'success') $.zui.store.remove(formDataID);
+                    if(res.result === 'success' || res.status === 'success') $.zui.store.remove(formID);
                 })
             }
         }, 500);

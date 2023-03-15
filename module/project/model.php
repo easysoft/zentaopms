@@ -2303,7 +2303,7 @@ class projectModel extends model
                     if(!empty($suffix) or !empty($prefix)) echo '<div class="project-name' . (empty($prefix) ? '' : ' has-prefix') . (empty($suffix) ? '' : ' has-suffix') . '">';
                     if(!empty($prefix)) echo $prefix;
                     if($this->config->vision == 'rnd') $projectIcon = "<i class='text-muted icon icon-{$projectType}'></i> ";
-                    echo html::a($projectLink, $projectIcon . $project->name, '', "class='text-ellipsis text-primary'");
+                    echo html::a($projectLink, $projectIcon . $project->name, '', "class='text-ellipsis'");
                     if(!empty($suffix)) echo $suffix;
                     if(!empty($suffix) or !empty($prefix)) echo '</div>';
                     break;

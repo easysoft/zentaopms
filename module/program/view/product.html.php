@@ -122,7 +122,7 @@
         </div>
         <?php
         $summary = sprintf($lang->product->pageSummary, count($products));
-        echo "<div id='productsCount' class='statistic'>$summary</div>";
+        echo "<div id='productsCount' class='table-statistic'>$summary</div>";
         ?>
         <?php endif;?>
         <?php $pager->show('right', 'pagerjs');?>

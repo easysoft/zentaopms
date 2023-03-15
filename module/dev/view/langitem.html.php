@@ -69,9 +69,9 @@
         ?>
         <div data-id="<?php echo $itemKey?>" class="form-item flex <?php if(!$isCurrentLang):?>w-expand<?php endif;?>">
           <?php if(!$isCurrentLang):?>
-          <div data-id="<?php echo $itemKey?>" class="label h-full"><?php echo $currentLangs[$langKey]?></div>
+          <div data-id="<?php echo $itemKey?>" class="label h-full" title="<?php echo $currentLangs[$langKey]?>"><?php echo $currentLangs[$langKey]?></div>
           <?php endif;?>
-          <div data-id="<?php echo $itemKey?>" class="label h-full"><?php echo $originalLang?></div>
+          <div data-id="<?php echo $itemKey?>" class="label h-full" title="<?php echo $originalLang?>"><?php echo $originalLang?></div>
           <div class="input-group flex">
             <i class="icon icon-angle-right text-primary"></i>
             <?php $originalLangChanged = $this->dev->isOriginalLangChanged($defaultValue, $customedLang);?>

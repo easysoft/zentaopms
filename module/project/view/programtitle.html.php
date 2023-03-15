@@ -15,7 +15,7 @@
   <h4 class="modal-title"><i class="icon-cog"></i><?php echo $lang->project->moduleSetting;?></h4>
 </div>
 <div class="modal-body" style="max-height: 564px; overflow: visible;">
-  <form class="form-condensed" method="post" target="hiddenwin">
+  <form class="form-condensed no-stash" method="post" target="hiddenwin">
     <table class="table table-form">
       <tbody>
         <tr>
