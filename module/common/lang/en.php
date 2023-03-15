@@ -358,6 +358,7 @@ $lang->exportTypeList['all']      = 'All Data';
 $lang->exportTypeList['selected'] = 'Selected Data';
 
 $lang->visionList = array();
+$lang->visionList['ipd']  = 'OR & MM Interface';
 $lang->visionList['rnd']  = 'Full Feature Interface';
 $lang->visionList['lite'] = 'Operation Management Interface';
 
