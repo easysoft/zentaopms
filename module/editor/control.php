@@ -162,7 +162,7 @@ class editor extends control
             if(strpos(strtolower($filePath), strtolower($this->app->getBasePath())) !== 0) return print($this->lang->editor->editFileError);
             if($action != 'edit' and $action != 'newPage') $filePath = $this->editor->getSavePath($filePath, $action);
             if($action != 'edit' and $action != 'newPage' and file_exists($filePath) and !$this->post->override) return print(js::error($this->lang->editor->repeatFile));
-            if($this->editor->save($filePath)) return;
+            if(!$this->editor->save($filePath)) return;
             echo js::reload('parent.parent.extendWin');
             return print(js::locate(inlink('edit', "filePath=" . helper::safe64Encode($filePath) . "&action=edit"), 'parent'));
         }

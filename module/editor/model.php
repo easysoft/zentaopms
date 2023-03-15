@@ -343,7 +343,7 @@ class editorModel extends model
         if(get_magic_quotes_gpc()) $fileContent = stripslashes($fileContent);
 
         file_put_contents($filePath, $fileContent);
-        return '';
+        return true;
     }
 
     /**
