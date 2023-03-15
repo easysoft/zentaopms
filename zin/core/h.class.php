@@ -174,8 +174,8 @@ class h extends wg
         foreach($vars as $var => $val)
         {
             if(empty($var)) continue;
-            if(strpos($var, 'window.') === 0) $jsCode .= "$var=" . json_encode($val) . ';';
-            else $jsCode .= "var $var=" . json_encode($val) . ';';
+            if(strpos($var, 'window.') === 0) $jsCode .= "$var=" . h::encodeJsonWithRawJs($val) . ';';
+            else $jsCode .= "var $var=" . h::encodeJsonWithRawJs($val) . ';';
         }
         return static::js($jsCode);
     }
@@ -186,9 +186,21 @@ class h extends wg
         $func = array_shift($args);
         foreach($args as $index => $arg)
         {
-            $args[$index] = json_encode($arg, JSON_UNESCAPED_UNICODE);
+            $args[$index] = h::encodeJsonWithRawJs($arg, JSON_UNESCAPED_UNICODE);
         }
         return static::js($func . '(' . implode(',', $args) . ');');
+    }
+
+    public static function jsRaw()
+    {
+        return 'RAWJS<' . implode("\n", func_get_args()) . '>RAWJS';
+    }
+
+    protected static function encodeJsonWithRawJs($data)
+    {
+        $json = json_encode($data, JSON_UNESCAPED_UNICODE);
+        $json = str_replace('"RAWJS<', '', str_replace('>RAWJS"', '', $json));
+        return $json;
     }
 
     protected static function convertStrToRawHtml($children)
