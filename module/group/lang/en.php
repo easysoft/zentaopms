@@ -53,6 +53,7 @@ $lang->group->repeat             = "『%s』『%s』exists.Please adjust it and 
 $lang->group->noneProject        = 'No ' . $lang->projectCommon;
 $lang->group->createPriv         = 'Add Priv';
 $lang->group->editPriv           = 'Edit Priv';
+$lang->group->deletePriv         = 'Delete Priv';
 $lang->group->privName           = 'Priv Name';
 $lang->group->privDesc           = 'Priv Desc';
 $lang->group->add                = 'Add';

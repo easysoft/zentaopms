@@ -53,6 +53,7 @@ $lang->group->repeat             = "『%s』已经有『%s』这条记录了，�
 $lang->group->noneProject        = '暂时没有' . $lang->projectCommon;
 $lang->group->createPriv         = '新增权限';
 $lang->group->editPriv           = '编辑权限';
+$lang->group->deletePriv         = '删除权限';
 $lang->group->privName           = '权限名称';
 $lang->group->privDesc           = '描述';
 $lang->group->add                = '添加';
