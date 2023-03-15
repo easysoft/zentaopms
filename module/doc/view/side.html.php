@@ -89,7 +89,6 @@ $sideWidth = common::checkNotCN() ? '270' : '238';
                          '<li data-method="editLib"><a><i class="icon icon-edit"></i>编辑目录</a></li>' +
                          '<li data-method="deleteLib"><a><i class="icon icon-trash"></i>删除目录</a></li>')
 
-          debugger;
           var dropdown = '<ul class="dropdown-menu dropdown-in-tree" ' +
                          'id="dropDownLibrary" style="display: unset; ' +
                          'left:' + option.left + 'px; ' +
@@ -111,7 +110,8 @@ $sideWidth = common::checkNotCN() ? '270' : '238';
       $('.file-tree').on('click', '.icon-drop', function(e)
       {
           var isCatalogue = $(this).attr('data-isCatalogue') === 'false' ? false : true;
-          var dropDownID  = isCatalogue ? 'dropDownLibrary' : 'dropDownCatalogue';
+          var dropDownID  = isCatalogue ? 'dropDownCatalogue' : 'dropDownLibrary';
+          console.log(dropDownID);
           var option = {
               left: e.pageX,
               top: e.pageY,
