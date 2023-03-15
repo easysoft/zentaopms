@@ -9,6 +9,8 @@ ALTER TABLE `zt_screen` ADD `builtin` enum('0', '1') NOT NULL DEFAULT '0' AFTER 
 
 UPDATE `zt_screen` SET `builtin` = '1', `status` = 'published';
 
+ALTER TABLE `zt_dataview` ADD `langs` text NOT NULL AFTER `fields`;
+
 CREATE TABLE `zt_pivot`  (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
   `dimension` mediumint(8) unsigned NOT NULL DEFAULT 0,
