@@ -26,8 +26,8 @@
         <th class="c-view"><?php echo $lang->group->view;?></th>
         <th class="c-module"><?php echo $lang->group->module;?></th>
         <th class="c-package"><?php echo $lang->privpackage->belong;?></th>
-        <th class="c-privs"><?php echo $lang->group->recommendPrivs;?></th>
         <th class="c-privs"><?php echo $lang->group->dependentPrivs;?></th>
+        <th class="c-privs"><?php echo $lang->group->recommendPrivs;?></th>
         <th class="c-desc"><?php echo $lang->group->privDesc;?></th>
         <th class="c-actions-2 text-center"><?php echo $lang->actions;?></th>
       </tr>
@@ -40,8 +40,8 @@
         <td title='<?php echo isset($lang->{$view}->common) ? $lang->{$view}->common : $view;?>'><?php echo isset($lang->{$view}->common) ? $lang->{$view}->common : $view;?></td>
         <td title='<?php echo isset($moduleLang[$priv->module]) ? $moduleLang[$priv->module] : $priv->module;?>'><?php echo isset($moduleLang[$priv->module]) ? $moduleLang[$priv->module] : $priv->module;?></td>
         <td title='<?php echo zget($packages, $priv->package, '');?>'><?php echo zget($packages, $priv->package, '');?></td>
-        <td title='<?php echo zget($privRelations['recommend'], $priv->id, '');?>'><?php echo zget($privRelations['recommend'], $priv->id, '');?></td>
         <td title='<?php echo zget($privRelations['depend'], $priv->id, '');?>'><?php echo zget($privRelations['depend'], $priv->id, '');?></td>
+        <td title='<?php echo zget($privRelations['recommend'], $priv->id, '');?>'><?php echo zget($privRelations['recommend'], $priv->id, '');?></td>
         <td title='<?php echo $priv->desc;?>'><?php echo $priv->desc;?></td>
         <td class='c-actions'>
           <?php if(common::hasPriv('group', 'editPriv')) common::printIcon('group', 'editPriv', "privID=$priv->id", '', 'list', 'edit', '', 'iframe', true);?>
