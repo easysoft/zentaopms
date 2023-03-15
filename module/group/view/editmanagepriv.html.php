@@ -15,10 +15,10 @@
   <div class="btn-toolbar">
     <?php echo html::a($this->createLink('group', 'browse', ''), '<i class="icon icon-angle-left"></i>' . $lang->goback, '', 'class="btn btn-primary"');?>
     <?php $active = empty($view) ? 'btn-active-text' : '';?>
-    <?php echo html::a(inlink('editManagePriv', "browseType={$browseType}&view="), $lang->group->all, '', "class='btn btn-link $active'");?>
+    <?php echo html::a(inlink('editManagePriv', "browseType=&view="), $lang->group->all, '', "class='btn btn-link $active'");?>
     <?php
     $i = 0;
-    $params = "browseType=$browseType&view=%s";
+    $params = "browseType=&view=%s";
     foreach($lang->mainNav as $moduleMenu => $title)
     {
         if(!is_string($title)) continue;
