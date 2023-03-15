@@ -69,19 +69,19 @@ class custom extends control
             $this->view->unitList        = explode(',', $unitList);
             $this->view->defaultCurrency = zget($this->config->$module, 'defaultCurrency', 'CNY');
         }
-        if($module == 'story' and $field == 'reviewRules')
+        if(($module == 'story' or $module == 'demand') and $field == 'reviewRules')
         {
             $this->app->loadConfig($module);
             $this->view->reviewRule     = zget($this->config->$module, 'reviewRules', '1');
             $this->view->users          = $this->loadModel('user')->getPairs('noclosed|nodeleted');
             $this->view->superReviewers = zget($this->config->$module, 'superReviewers', '');
         }
-        if(($module == 'story' or $module == 'testcase') and $field == 'review')
+        if(($module == 'story' or $module == 'testcase' or $module == 'demand') and $field == 'review')
         {
             $this->app->loadConfig($module);
             $this->loadModel('user');
 
-            if($module == 'story')
+            if($module == 'story' or $module == 'demand')
             {
                 $this->view->depts            = $this->loadModel('dept')->getDeptPairs();
 
@@ -139,7 +139,7 @@ class custom extends control
                 if(empty($data->defaultCurrency)) return $this->send(array('result' => 'fail', 'message' => $this->lang->custom->defaultNotEmpty));
                 $this->loadModel('setting')->setItems("system.$module", $data);
             }
-            elseif($module == 'story' and $field == 'review')
+            elseif(($module == 'story' or $module == 'demand') and $field == 'review')
             {
                 $data = fixer::input('post')
                     ->setDefault('forceReview', '')
@@ -165,7 +165,7 @@ class custom extends control
 
                 $this->loadModel('setting')->setItems("system.$module@{$this->config->vision}", $data);
             }
-            elseif($module == 'story' and $field == 'reviewRules')
+            elseif(($module == 'story' or $module == 'demand') and $field == 'reviewRules')
             {
                 $data = fixer::input('post')->setDefault('superReviewers', '')->join('superReviewers', ',')->get();
                 $this->loadModel('setting')->setItems("system.$module@{$this->config->vision}", $data);
