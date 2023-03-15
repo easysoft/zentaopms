@@ -74,7 +74,7 @@ $lang->my->menu->execution  = array('link' => "{$lang->execution->common}|my|exe
 $lang->my->menu->contribute = array('link' => "$lang->contribute|my|contribute|mode=task");
 $lang->my->menu->dynamic    = array('link' => "$lang->dynamic|my|dynamic|");
 $lang->my->menu->score      = array('link' => "{$lang->score->shortCommon}|my|score|", 'subModule' => 'score');
-$lang->my->menu->contacts   = array('link' => "$lang->contact|my|managecontacts|");
+$lang->my->menu->contacts   = array('link' => "{$lang->contact->common}|my|managecontacts|");
 
 /* My menu order. */
 $lang->my->menuOrder[5]  = 'index';
@@ -591,14 +591,16 @@ $lang->system->menuOrder[15] = 'dynamic';
 $lang->system->menuOrder[20] = 'view';
 
 /* Nav group.*/
-$lang->navGroup         = new stdclass();
-$lang->navGroup->my     = 'my';
-$lang->navGroup->effort = 'my';
-$lang->navGroup->score  = 'my';
-$lang->navGroup->todo   = 'my';
+$lang->navGroup          = new stdclass();
+$lang->navGroup->my      = 'my';
+$lang->navGroup->effort  = 'my';
+$lang->navGroup->score   = 'my';
+$lang->navGroup->todo    = 'my';
+$lang->navGroup->contact = 'my';
 
 $lang->navGroup->program   = 'program';
 $lang->navGroup->personnel = 'program';
+$lang->navGroup->programStakeholder = 'program';
 
 $lang->navGroup->product     = 'product';
 $lang->navGroup->productplan = 'product';

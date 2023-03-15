@@ -218,12 +218,15 @@ $lang->app->serverLink    = '服务器链接';
 $lang->review->common     = '审批';
 $lang->zahost->common     = '宿主机';
 $lang->zanode->common     = '执行节点';
+$lang->contact->common    = '联系人';
+$lang->programStakeholder->common = '干系人';
+$lang->featureSwitch->common = '功能开关';
 
 $lang->personnel->common     = '人员';
 $lang->personnel->invest     = '投入人员';
 $lang->personnel->accessible = '可访问人员';
 
-$lang->stakeholder->common = '干系人';
+$lang->stakeholder->common = '项目干系人';
 $lang->release->common     = '发布';
 $lang->message->common     = '通知';
 $lang->mail->common        = '邮件';
@@ -238,7 +241,6 @@ $lang->qa->shortCommon          = 'QA';
 $lang->dashboard       = '仪表盘';
 $lang->contribute      = '贡献';
 $lang->dynamic         = '动态';
-$lang->contact         = '联系人';
 $lang->whitelist       = '白名单';
 $lang->roadmap         = '路线图';
 $lang->track           = '矩阵';

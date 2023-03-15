@@ -2048,6 +2048,11 @@ $lang->editor->methodOrder[20] = 'newPage';
 $lang->editor->methodOrder[25] = 'save';
 $lang->editor->methodOrder[30] = 'delete';
 
+// 新增
+$lang->resource->contact = new stdclass();
+
+$lang->resource->programStakeholder = new stdclass();
+
 global $config;
 $inUpgrade = (defined('IN_UPGRADE') and IN_UPGRADE);
 if(!$inUpgrade)

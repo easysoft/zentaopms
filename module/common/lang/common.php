@@ -90,6 +90,9 @@ $lang->app         = new stdclass();
 $lang->zahost      = new stdclass();
 $lang->zanode      = new stdclass();
 $lang->holiday     = new stdclass();
+$lang->contact     = new stdclass();
+$lang->programStakeholder = new stdclass();
+$lang->featureSwitch = new stdclass();
 
 $lang->projectbuild   = new stdclass();
 $lang->projectrelease = new stdclass();
