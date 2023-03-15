@@ -1485,6 +1485,7 @@ class productModel extends model
                 $executionName = $projectID != 0 ? '' : $execution->projectName;
                 foreach($paths as $path)
                 {
+                    if(!isset($allExecutions[$path])) continue;
                     $executionName .= '/' . $allExecutions[$path]->name;
                 }
 
