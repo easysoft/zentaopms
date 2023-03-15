@@ -255,18 +255,18 @@ $lang->custom->selectProgramTips = "切换到轻量管理模式后，为确保�
 $lang->custom->modeList['light'] = '轻量级管理模式';
 $lang->custom->modeList['ALM']   = '全生命周期管理模式';
 
-$lang->custom->modeIntroductionList["light"] = "提供了{$lang->projectCommon}管理的核心功能，适用于小型研发团队";
+$lang->custom->modeIntroductionList['light'] = "提供了{$lang->projectCommon}管理的核心功能，适用于小型研发团队";
 $lang->custom->modeIntroductionList['ALM']   = '概念更加完整、严谨，功能更加丰富，适用于中大型研发团队';
 
 $lang->custom->features['program']              = '项目集';
-$lang->custom->features["productRR"]            = "{$lang->productCommon}-研发需求";
-$lang->custom->features["productUR"]            = "{$lang->productCommon}-用户需求";
-$lang->custom->features["productLine"]          = "{$lang->productCommon}-{$lang->productCommon}线";
-$lang->custom->features["projectScrum"]         = "{$lang->projectCommon}-敏捷模型";
-$lang->custom->features["projectWaterfall"]     = "{$lang->projectCommon}-瀑布模型";
-$lang->custom->features["projectKanban"]        = "{$lang->projectCommon}-看板模型";
-$lang->custom->features["projectAgileplus"]     = "{$lang->projectCommon}-融合敏捷模型";
-$lang->custom->features["projectWaterfallplus"] = "{$lang->projectCommon}-融合瀑布模型";
+$lang->custom->features['productRR']            = "{$lang->productCommon}-研发需求";
+$lang->custom->features['productUR']            = "{$lang->productCommon}-用户需求";
+$lang->custom->features['productLine']          = "{$lang->productCommon}-{$lang->productCommon}线";
+$lang->custom->features['projectScrum']         = "{$lang->projectCommon}-敏捷模型";
+$lang->custom->features['projectWaterfall']     = "{$lang->projectCommon}-瀑布模型";
+$lang->custom->features['projectKanban']        = "{$lang->projectCommon}-看板模型";
+$lang->custom->features['projectAgileplus']     = "{$lang->projectCommon}-融合敏捷模型";
+$lang->custom->features['projectWaterfallplus'] = "{$lang->projectCommon}-融合瀑布模型";
 $lang->custom->features['execution']            = '执行';
 $lang->custom->features['qa']                   = '测试';
 $lang->custom->features['devops']               = 'DevOps';
@@ -283,8 +283,8 @@ $lang->custom->features['workflow']             = '工作流';
 $lang->custom->features['admin']                = '后台';
 $lang->custom->features['vision']               = '研发综合界面、运营管理界面';
 
-$lang->custom->needClosedFunctions["waterfall"]     = "瀑布{$lang->projectCommon}";
-$lang->custom->needClosedFunctions["waterfallplus"] = "融合瀑布{$lang->projectCommon}";
+$lang->custom->needClosedFunctions['waterfall']     = "瀑布{$lang->projectCommon}";
+$lang->custom->needClosedFunctions['waterfallplus'] = "融合瀑布{$lang->projectCommon}";
 $lang->custom->needClosedFunctions['URStory']       = '用户需求';
 if($config->edition == 'max') $lang->custom->needClosedFunctions['assetLib'] = '资产库';
 
