@@ -13,6 +13,15 @@ class common extends \commonModel
 {
 }
 
+/**
+ * Created by typecasting to object.
+ *
+ * @link https://php.net/manual/en/reserved.classes.php
+ */
+class stdClass extends \stdClass
+{
+}
+
 function createLink($moduleName, $methodName = 'index', $vars = '', $viewType = 'json')
 {
     return \helper::createLink($moduleName, $methodName, $vars, $viewType);
