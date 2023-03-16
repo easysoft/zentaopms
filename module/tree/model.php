@@ -998,6 +998,7 @@ class treeModel extends model
 
         if($linkObject)
         {
+            $branch = zget($extra, 'branchID', 0);
             /* Get object paths of this execution. */
             if(strpos(',story,case,', ",$linkObject,") !== false)
             {
@@ -1009,7 +1010,7 @@ class treeModel extends model
                     ->orWhere('t4.project')->eq($executionID)->markRight(1)
                     ->andWhere('t3.deleted')->eq(0)
                     ->andWhere('t2.deleted')->eq(0)
-                    ->beginIF(isset($extra['branchID']))->andWhere('t2.branch')->eq(zget($extra, 'branchID', 0))->fi()
+                    ->beginIF(isset($extra['branchID']) and $branchID !== 'all')->andWhere('t2.branch')->eq($branch)->fi()
                     ->fetchPairs();
             }
             elseif($linkObject == 'bug' and strpos(',project,execution,', ",{$this->app->tab},") !== false)
@@ -1018,7 +1019,7 @@ class treeModel extends model
                     ->leftJoin(TABLE_MODULE)->alias('t2')->on('t1.module = t2.id')
                     ->where('t1.deleted')->eq(0)
                     ->andWhere('t2.deleted')->eq(0)
-                    ->andWhere('t1.branch')->eq(zget($extra, 'branchID', 0))
+                    ->beginIF(isset($extra['branchID']) and $branch !== 'all')->andWhere('t1.branch')->eq($branch)->fi()
                     ->andWhere("t1.{$this->app->tab}")->eq($executionID)
                     ->fetchPairs();
             }
