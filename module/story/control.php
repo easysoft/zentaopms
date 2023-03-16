@@ -1631,7 +1631,7 @@ class story extends control
                 {
                     $module = 'story';
                     $method = 'view';
-                    $params = "storyID=$storyID&version=0&param=0&storyType=$storyType";
+                    $params = "storyID=$storyID&version=0&param={$this->session->execution}&storyType=$storyType";
                 }
             }
             else
