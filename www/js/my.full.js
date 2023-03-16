@@ -31,7 +31,7 @@
         {
             if(config.currentMethod.indexOf(skipMethods[i]) === 0) return;
         };
-        var $messager;
+        var $messager = '';
 
         setTimeout(function()
         {
@@ -43,7 +43,7 @@
                 if($(form).attr('target') == 'hiddenwin')
                 {
                     var needSkip    = true;
-                    var keepModules = ['program', 'product', 'project', 'testcase'];
+                    var keepModules = ['program', 'product', 'project', 'testcase', 'execution', 'caselib'];
                     for(var i = 0; i < keepModules.length; i++)
                     {
                         if(needSkip && config.currentModule.indexOf(keepModules[i]) === 0) needSkip = false;
@@ -62,7 +62,7 @@
                 if(formDataStored && formDataStored.length)
                 {
                     message   = lang.confirmDraft.replace('%name%', lang[config.currentModule] ? lang[config.currentModule] : '');
-                    $messager =  new $.zui.Messager(message, {
+                    $messager = new $.zui.Messager(message, {
                         close: true,
                         type: 'info',
                         placement: 'top',
