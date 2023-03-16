@@ -271,6 +271,7 @@
           <?php foreach($stories as $key => $story):?>
           <?php
           $totalEstimate += $story->estimate;
+          $story->from    = $this->app->tab;
           ?>
           <tr id="story<?php echo $story->id;?>" data-id='<?php echo $story->id;?>' data-order='<?php echo $story->order ?>' data-estimate='<?php echo $story->estimate?>' data-cases='<?php echo zget($storyCases, $story->id, 0)?>'>
           <?php foreach($setting as $key => $value)
@@ -286,7 +287,7 @@
           <?php if(!empty($story->children)):?>
           <?php $i = 0;?>
           <?php foreach($story->children as $key => $child):?>
-          <?php $child->from = 'execution';?>
+          <?php $child->from = $this->app->tab;?>
           <?php $class  = $i == 0 ? ' table-child-top' : '';?>
           <?php $class .= ($i + 1 == count($story->children)) ? ' table-child-bottom' : '';?>
           <tr class='table-children<?php echo $class;?> parent-<?php echo $story->id;?>' data-id='<?php echo $child->id?>' data-status='<?php echo $child->status?>' data-estimate='<?php echo $child->estimate?>' data-cases='<?php echo zget($storyCases, $story->id, 0);?>'>
