@@ -172,7 +172,8 @@ toolbar
 
 js
 (
-    'window.footerGenerator = function() {',
+    'window.footerGenerator = function()',
+    '{',
         'const count = this.layout.allRows.filter((x) => x.data.type === "product").length;',
         "const statistic = '{$lang->product->pageSummary}'.replace('%s', ' ' + count + ' ');",
         'return [{children: statistic, className: "text-dark"}, "flex", "pager"];',
