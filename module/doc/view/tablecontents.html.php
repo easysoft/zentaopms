@@ -30,11 +30,11 @@ if($this->methodName != 'browse')
 if(empty($type)) $type = 'product';
 ?>
 <div class="cell<?php if($browseType == 'bySearch') echo ' show';?>" id="queryBox" data-module=<?php echo $type . 'Doc';?>></div>
-<div class="main-content">
-  <div class="side">
+<div class="main-table-content">
+  <div class="side panel">
     <div id="fileTree"></div>
   </div>
-  <div class="cell" id="<?php echo $type;?>">
+  <div class="content panel" id="<?php echo $type;?>">
     <div class="detail">
       <li class="detail-title"><?php echo $lang->doc->tableContents;?></li>
       <?php

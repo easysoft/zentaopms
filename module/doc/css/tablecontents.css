@@ -1,3 +1,5 @@
+.flex {display: flex;}
+.flex-full {flex: 1;}
 .float-r {float: right;}
 .h-full {height: 100%;}
 .w-full {width: 100%;}main-content {padding-top: 0; padding-bottom: 0;}
@@ -38,6 +40,9 @@ li.drag-shadow ul {display: none!important;}
 .tree-group {position: relative;}
 .tree-group > .module-name {white-space: nowrap; overflow: hidden; text-overflow: ellipsis; width: 100%; display: block;}
 .tree li.has-list.open:before {left: 6px;}
+.main-table-content {display: flex; gap: 20px;}
+.main-table-content > .side {flex: 0 0 300px;}
+.main-table-content > .content {flex: 1;}
 
 /* css for tree */
 .file-tree {overflow-x: auto;}
