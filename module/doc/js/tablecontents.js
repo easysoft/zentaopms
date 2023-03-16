@@ -95,4 +95,94 @@ $(function()
            });
        }
    });
+
+    $('#fileTree').tree(
+    {
+        data: treeData,
+        itemCreator: function($li, item)
+        {
+            var $item = '<a href=# ' +
+                        'data-has-children="' + (item.children ? !!item.children.length : false) + '"'  +
+                        'title="' + item.title +
+                        '">' +
+                        '<div class="text h-full w-full flex-center">' + item.title +
+                            '<i class="icon icon-drop icon-ellipsis-v float-r hidden"' +
+                            'data-isCatalogue="' + (item.isCatalogue === false ? false : true) + '"' +
+                            '></i>' +
+                        '</div>' +
+                        '</a>';
+            $li.append($item);
+            if (item.active) $li.addClass('active open in');
+        }
+    });
+    $('li.has-list > ul').addClass("menu-active-primary menu-hover-primary");
+
+    $('.file-tree').on('mousemove', 'a', function(e)
+    {
+        $(this).find('.icon').removeClass('hidden');
+    }).on('mouseout', 'a', function(e)
+    {
+        $(this).find('.icon').addClass('hidden');
+    });
+
+    function renderDropdown(option)
+    {
+        var $liList = (option.id == 'dropDownLibrary') ?
+                       ('<li data-method="addCatalogue"><a><i class="icon icon-controls"></i>添加目录</a></li>' +
+                       '<li data-method="editLib"><a><i class="icon icon-edit"></i>编辑库</a></li>' +
+                       '<li data-method="deleteLib"><a><i class="icon icon-trash"></i>删除库</a></li>')
+                       :
+                       ('<li data-method="addCata"><a><i class="icon icon-controls"></i>添加同级目录</a></li>' +
+                       '<li data-method="addCataChild"><a><i class="icon icon-edit"></i>添加子目录</a></li>' +
+                       '<li data-method="editCata"><a><i class="icon icon-edit"></i>编辑目录</a></li>' +
+                       '<li data-method="deleteCata"><a><i class="icon icon-trash"></i>删除目录</a></li>')
+
+        var dropdown = '<ul class="dropdown-menu dropdown-in-tree" ' +
+                       'id="' + option.id + '"' +
+                       'style="display: unset; ' +
+                       'left:' + option.left + 'px; ' +
+                       'top:' + option.top + 'px;' +
+                        '">' + $liList +
+                       '</ul>';
+        return dropdown;
+    };
+
+    function refreshDropdown(option)
+    {
+        $('#' + option.id).css({
+        'display': 'unset',
+        'left': option.left,
+        'top': option.top
+        });
+    };
+
+    $('.file-tree').on('click', '.icon-drop', function(e)
+    {
+        var isCatalogue = $(this).attr('data-isCatalogue') === 'false' ? false : true;
+        var dropDownID  = isCatalogue ? 'dropDownCatalogue' : 'dropDownLibrary';
+        console.log(dropDownID);
+        var option = {
+            left: e.pageX,
+            top: e.pageY,
+            id: dropDownID
+        };
+        if (!$('#' + dropDownID).length)
+        {
+            var dropDown = renderDropdown(option);
+            $("body").append(dropDown);
+        }
+        else
+        {
+            refreshDropdown(option)
+        }
+        e.stopPropagation();
+    });
+
+    $('body').on('click', function(e)
+    {
+        if(!$.contains(e.target, $('.dropdown-in-tree')))
+        {
+            $('.dropdown-in-tree').css('display', 'none');
+        }
+    })
 })

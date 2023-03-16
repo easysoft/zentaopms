@@ -12,6 +12,7 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php js::set('moduleTree', $moduleTree);?>
+<?php js::set('treeData', $libTree);?>
 <?php js::set('docLang', $lang->doc);?>
 <?php
 $sideLibs = array();
@@ -30,6 +31,9 @@ if(empty($type)) $type = 'product';
 ?>
 <div class="cell<?php if($browseType == 'bySearch') echo ' show';?>" id="queryBox" data-module=<?php echo $type . 'Doc';?>></div>
 <div class="main-content">
+  <div class="side">
+    <div id="fileTree"></div>
+  </div>
   <div class="cell" id="<?php echo $type;?>">
     <div class="detail">
       <li class="detail-title"><?php echo $lang->doc->tableContents;?></li>
