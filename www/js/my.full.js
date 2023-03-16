@@ -26,7 +26,7 @@
         var skipModules = ['repo', 'mr', 'job'];
         if(skipModules.indexOf(config.currentModule) !== -1) return;
 
-        var skipMethods = ['edit', 'import', 'login', 'export', 'finish', 'confirm', 'resolve', 'start', 'pause', 'cancel', 'report', 'close', 'activate', 'restart', 'suspend', 'putoff', 'browse', 'hangup', 'track', 'index', 'reply', 'manage', 'run'];
+        var skipMethods = ['edit', 'import', 'login', 'export', 'finish', 'confirm', 'resolve', 'start', 'pause', 'cancel', 'report', 'close', 'activate', 'restart', 'suspend', 'putoff', 'browse', 'hangup', 'track', 'index', 'reply', 'manage', 'run', 'show'];
         for(var i = 0; i < skipMethods.length; i++)
         {
             if(config.currentMethod.indexOf(skipMethods[i]) === 0) return;
@@ -39,13 +39,25 @@
             {
                 if($(form).hasClass('no-stash') || $(form).data('ride') == 'table') return;
                 var target = $(form).attr('target');
-                if($(form).attr('target') == 'hiddenwin' && config.currentModule.indexOf('program') == -1 && config.currentModule.indexOf('project') == -1 && config.currentModule.indexOf('testcase') == -1) return;
+                if($(form).attr('target') == 'hiddenwin')
+                {
+                    var needSkip    = true;
+                    var keepModules = ['program', 'product', 'project', 'testcase'];
+                    for(var i = 0; i < keepModules.length; i++)
+                    {
+                        if(needSkip && config.currentModule.indexOf(keepModules[i]) === 0) needSkip = false;
+                    };
+
+                    if(needSkip) return;
+                }
 
                 var formID         = config.currentMethod + '-' + config.currentModule + '-' + $(form).attr("id");
                 var formDataStored = $.zui.store.get(formID);
+                /* Clear form data for store. */
                 setTimeout(function() {
                     $.zui.store.remove(formID);
-                }, 100)
+                }, 100);
+
                 if(formDataStored && formDataStored.length)
                 {
                     var message = lang.confirmDraft.replace('%name%', lang[config.currentModule] ? lang[config.currentModule] : '');
@@ -113,10 +125,7 @@
                                         {
                                             KindEditor.remove('#' + item.name);
                                             formItem.val(item.value);
-                                            $(formItem).kindeditor({
-                                                /* Conetnt change event. */
-                                                afterChange: storeFormData(formID, $(form).serializeArray())
-                                            });
+                                            $(formItem).kindeditor();
                                         }
                                         else
                                         {

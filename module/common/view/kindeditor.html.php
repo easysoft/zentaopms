@@ -109,6 +109,10 @@ $uid = uniqid('');
             items: editorTool,
             placeholder: $editor.attr('placeholder') || options.placeholder || '',
             pasteImage: {postUrl: createLink('file', 'ajaxPasteImg', 'uid=' + kuid), placeholder: $editor.attr('placeholder') || <?php echo json_encode($lang->noticePasteImg);?>},
+            afterChange: function()
+            {
+                $editor.closest('.main-form').trigger('change');
+            }
         });
 
         try
