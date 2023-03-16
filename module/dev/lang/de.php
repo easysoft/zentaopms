@@ -1,7 +1,7 @@
 <?php
 $lang->dev->common       = 'Entwicklung';
-$lang->dev->api          = 'API';
-$lang->dev->db           = 'Datenbank';
+$lang->dev->api          = 'API Document';
+$lang->dev->db           = 'Data Dictionary';
 $lang->dev->editor       = 'Bearbeiter';
 $lang->dev->translate    = 'Translate';
 $lang->dev->dbList       = 'Datenbank';
