@@ -28,7 +28,7 @@ class productplan extends control
         $this->lang->product->branch = sprintf($this->lang->product->branch, $this->lang->product->branchName[$product->type]);
 
         $this->app->loadConfig('execution');
-        $this->product->setMenu($productID, $branch);
+        if(!$product->shadow) $this->product->setMenu($productID, $branch);
         $this->session->set('currentProductType', $product->type);
 
         $branches = $this->loadModel('branch')->getList($productID, 0, 'all');
