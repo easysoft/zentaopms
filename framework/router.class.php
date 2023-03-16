@@ -109,9 +109,15 @@ class router extends baseRouter
         parent::loadLang($moduleName, $appName);
 
         /* Replace main nav lang. */
-        if($moduleName == 'common' and $this->dbh and !empty($this->config->db->name) and !defined('IN_UPGRADE'))
+        if($moduleName == 'common' and $this->dbh and !empty($this->config->db->name))
         {
-            $customMenus = $this->dbh->query('SELECT * FROM' . TABLE_LANG . "WHERE `module`='common' AND `section`='mainNav' AND `lang`='{$this->clientLang}' AND `vision`='{$this->config->vision}'")->fetchAll();
+            $customMenus = array();
+            try
+            {
+                $customMenus = $this->dbh->query('SELECT * FROM' . TABLE_LANG . "WHERE `module`='common' AND `section`='mainNav' AND `lang`='{$this->clientLang}' AND `vision`='{$this->config->vision}'")->fetchAll();
+            }
+            catch(PDOException $exception){}
+
             foreach($customMenus as $menu)
             {
                 $menuKey = $menu->key;
@@ -317,7 +323,12 @@ class router extends baseRouter
             }
 
             /* Replace common lang. */
-            $customMenus = $this->dbh->query('SELECT * FROM' . TABLE_LANG . "WHERE `module`='common' AND `lang`='{$this->clientLang}' AND `section`='' AND `vision`='{$config->vision}'")->fetchAll();
+            $customMenus = array();
+            try
+            {
+                $customMenus = $this->dbh->query('SELECT * FROM' . TABLE_LANG . "WHERE `module`='common' AND `lang`='{$this->clientLang}' AND `section`='' AND `vision`='{$config->vision}'")->fetchAll();
+            }
+            catch(PDOException $exception){}
             foreach($customMenus as $menu) if(isset($lang->{$menu->key})) $lang->{$menu->key} = $menu->value;
         }
     }
