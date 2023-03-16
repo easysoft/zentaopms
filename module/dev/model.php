@@ -418,6 +418,7 @@ class devModel extends model
                 $originalLangs['SRCommon']        = $this->lang->dev->SR;
 
                 $URSRList = $this->loadModel('custom')->getItems("lang={$language}&module=custom&section=URSRList&key={$this->config->custom->URSR}&vision={$this->config->vision}");
+                if(empty($URSRList)) $URSRList = $this->custom->getItems("lang={$language}&module=custom&section=URSRList&vision={$this->config->vision}");
                 $URSRList = array_shift($URSRList);
                 if($URSRList)
                 {
@@ -505,6 +506,7 @@ class devModel extends model
                 $customedLangs['URCommon'] = $this->lang->dev->UR == $this->lang->URCommon ? '' : $this->lang->URCommon;
                 $customedLangs['SRCommon'] = $this->lang->dev->SR == $this->lang->SRCommon ? '' : $this->lang->SRCommon;
                 $URSRList = $this->custom->getItems("lang={$language}&module=custom&section=URSRList&key={$this->config->custom->URSR}&vision={$this->config->vision}");
+                if(empty($URSRList)) $URSRList = $this->custom->getItems("lang={$language}&module=custom&section=URSRList&vision={$this->config->vision}");
                 $URSRList = array_shift($URSRList);
                 if($URSRList)
                 {
@@ -1040,7 +1042,12 @@ class devModel extends model
             $_POST = array();
 
             $oldValue = $this->dao->select('*')->from(TABLE_LANG)->where('`key`')->eq($this->config->custom->URSR)->andWhere('section')->eq('URSRList')->andWhere('lang')->eq($language)->andWhere('module')->eq('custom')->fetch('value');
-            $oldValue = json_decode($oldValue);
+            $URSRList = $this->loadModel('custom')->getItems("lang={$language}&module=custom&section=URSRList&key={$this->config->custom->URSR}&vision={$this->config->vision}");
+            if(empty($URSRList)) $URSRList = $this->custom->getItems("lang={$language}&module=custom&section=URSRList&vision={$this->config->vision}");
+            $URSRList = array_shift($URSRList);
+
+            $this->config->custom->URSR = $URSRList->key;
+            $oldValue = json_decode($URSRList->value);
 
             $_POST['SRName'] = !empty($post['common_SRCommon']) ? $post['common_SRCommon'] : zget($oldValue, 'defaultSRName', $oldValue->SRName);
             $_POST['URName'] = !empty($post['common_URCommon']) ? $post['common_URCommon'] : zget($oldValue, 'defaultURName', $oldValue->URName);
