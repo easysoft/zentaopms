@@ -25,7 +25,7 @@
         </tr>
         <tr>
           <th><?php echo $lang->caselib->desc;?></th>
-          <td><?php echo html::textarea('desc', '', "rows=10 class='form-control'");?></td>
+          <td><?php echo html::textarea('desc', '', "rows=10 class='form-control kindeditor'");?></td>
         </tr>
         <?php $this->printExtendFields('', 'table');?>
         <tr>
