@@ -1438,13 +1438,21 @@ class docModel extends model
         }
         else
         {
-            $executionList = array();
-            if($type == 'project') $executionList = $this->dao->select('id')->from(TABLE_EXECUTION)->where('project')->eq($objectID)->fetchPairs();
+            $executionIDList = array();
+            if($type == 'project')
+            {
+                $executionIDList = $this->dao->select('id')->from(TABLE_EXECUTION)
+                    ->where('project')->eq($objectID)
+                    ->andWhere('multiple')->eq(1)
+                    ->andWhere('deleted')->eq(0)
+                    ->fetchPairs();
+            }
+
             $objectLibs = $this->dao->select('*')->from(TABLE_DOCLIB)
                 ->where('deleted')->eq(0)
                 ->andWhere('vision')->eq($this->config->vision)
                 ->andWhere($type)->eq($objectID)
-                ->beginIF(!empty($executionList))->orWhere('execution')->in($executionList)->fi()
+                ->beginIF(!empty($executionIDList))->orWhere('execution')->in($executionIDList)->fi()
                 ->beginIF(!empty($appendLib))->orWhere('id')->eq($appendLib)->fi()
                 ->orderBy('`order` asc, id_asc')
                 ->fetchAll('id');
