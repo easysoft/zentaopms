@@ -66,6 +66,10 @@ class zanodemodel extends model
             $data->secret = md5($data->name . time());
             $data->status = "offline";
         }
+        else
+        {
+            $data->hostType = '';
+        }
 
         /* Batch check fields. */
         $this->dao->update(TABLE_ZAHOST)->data($data)

@@ -85,6 +85,7 @@ class hostHeartbeatEntry extends baseEntry
                 
                 if($hostInfo->hostType == 'physics')
                 {
+                    unset($vmData['extranet']);
                     $this->dao->update(TABLE_ZAHOST)->data($vmData)->where('id')->eq($hostInfo->id)->exec();
                 }
                 else
