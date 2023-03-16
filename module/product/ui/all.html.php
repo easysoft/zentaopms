@@ -142,12 +142,7 @@ featureBar
         set::text($lang->product->edit),
         set::checked($this->cookie->editProject)
     ) : NULL,
-    item
-    (
-        set::icon('search'),
-        set::text($lang->product->searchStory)
-        /* toggle('search-panel') */
-    )
+    li(searchToggle())
 );
 
 toolbar
