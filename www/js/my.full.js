@@ -23,7 +23,7 @@
     {
         if(config.currentModule.indexOf('workflow') !== -1) return;
 
-        var skipModules = ['repo', 'mr', 'job'];
+        var skipModules = ['repo', 'mr', 'job', 'dev', 'custom', 'editor'];
         if(skipModules.indexOf(config.currentModule) !== -1) return;
 
         var skipMethods = ['edit', 'import', 'login', 'export', 'finish', 'confirm', 'resolve', 'start', 'pause', 'cancel', 'report', 'close', 'activate', 'restart', 'suspend', 'putoff', 'browse', 'hangup', 'track', 'index', 'reply', 'manage', 'run', 'show'];
