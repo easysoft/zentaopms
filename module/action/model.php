@@ -453,7 +453,7 @@ class actionModel extends model
             elseif($actionName == 'unlinkedfromexecution')
             {
                 $name = $this->dao->select('name')->from(TABLE_PROJECT)->where('id')->eq($action->extra)->fetch('name');
-                if($name) $action->extra = common::hasPriv('project', 'story') ? html::a(helper::createLink('project', 'story', "projectID=$action->extra"), "#$action->extra " . $name) : "#$action->extra " . $name;
+                if($name) $action->extra = common::hasPriv('execution', 'view') ? html::a(helper::createLink('execution', 'view', "executionID=$action->extra"), "#$action->extra " . $name) : "#$action->extra " . $name;
             }
             elseif($actionName == 'unlinkedfromproject')
             {
@@ -949,7 +949,7 @@ class actionModel extends model
             else
             {
                 if($actionType == 'restoredsnapshot' && in_array($action->objectType, array('vm', 'zanode')) && $value == 'defaultSnap') $value = $this->lang->$objectType->snapshot->defaultSnapName;
-                
+
                 $desc = str_replace('$' . $key, $value, $desc);
             }
         }
