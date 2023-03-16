@@ -5,7 +5,7 @@ require_once dirname(__DIR__) . DS . 'nav' . DS . 'v1.php';
 
 class featureBar extends wg
 {
-    static $defineProps = 'items?:array';
+    static $defineProps = 'items?:array, current?:string, link?:string, linkParams?:string';
 
     static $defineBlocks = array
     (
@@ -29,19 +29,26 @@ class featureBar extends wg
         $rawItems = $lang->$currentModule->featureBar[$currentMethod];
         if(!is_array($rawItems)) return NULL;
 
-        $browseType = data('browseType', '');
-        $orderBy    = data('orderBy', '');
-        $recTotal   = data('recTotal');
-        $items      = array();
+        $current  = $this->prop('current', data('browseType', ''));
+        $recTotal = data('recTotal');
+        $items    = array();
+        $link     = $this->prop('link');
+
+        if(empty($link))
+        {
+            $linkParams = $this->prop('linkParams');
+            if(empty($linkParams)) $linkParams = 'browseType={key}&orderBy=' . data('orderBy', '');
+            $link = createLink($currentModule, $currentMethod, $linkParams);
+        }
 
         foreach($rawItems as $key => $text)
         {
-            $isActive = $key == $browseType;
+            $isActive = $key == $current;
             $items[] = array
             (
                 'text'   => $text,
                 'active' => $isActive,
-                'url'    => createLink($currentModule, $currentMethod, "browseType=$key&orderBy=$orderBy"),
+                'url'    => str_replace('{key}', $key, $link),
                 'badge'  => $isActive && !empty($recTotal) ? array('text' => $recTotal, 'class' => 'size-sm circle white') : NULL,
             );
         }
