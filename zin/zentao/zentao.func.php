@@ -1,6 +1,8 @@
 <?php
 namespace zin;
 
+require_once 'pager.func.php';
+
 class helper extends \helper
 {
 }
