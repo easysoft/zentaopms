@@ -21,8 +21,10 @@
      */
     function handleSaveFormDraft()
     {
-        if(config.currentModule === 'repo') return;
         if(config.currentModule.indexOf('workflow') !== -1) return;
+
+        var skipModules = ['repo', 'mr', 'job'];
+        if(skipModules.indexOf(config.currentModule) !== -1) return;
 
         var skipMethods = ['edit', 'import', 'login', 'export', 'finish', 'confirm', 'resolve', 'start', 'pause', 'cancel', 'report', 'close', 'activate', 'restart', 'suspend', 'putoff', 'browse', 'hangup', 'track', 'index', 'reply', 'manage', 'run'];
         for(var i = 0; i < skipMethods.length; i++)
@@ -32,10 +34,11 @@
 
         setTimeout(function()
         {
-            var form = $('form[method=post]');
+            var form = $('form[method=post].main-form');
             if(form.length)
             {
                 if($(form).hasClass('no-stash') || $(form).data('ride') == 'table') return;
+                var target = $(form).attr('target');
                 if($(form).attr('target') == 'hiddenwin' && config.currentModule.indexOf('program') == -1 && config.currentModule.indexOf('project') == -1 && config.currentModule.indexOf('testcase') == -1) return;
 
                 var formID         = config.currentMethod + '-' + config.currentModule + '-' + $(form).attr("id");

@@ -34,7 +34,8 @@ $lang->editor->noticeOkFile  = 'Pour des raisons de s?curit?, votre compte admin
 $lang->editor->editFileError = 'Vous pouvez seulement modifier les fichiers ZenTao !';
 $lang->editor->turnOff       = "If you don't use the editor function, you can turn it off here.";
 
-$lang->editor->notWritable    = "Non inscriptible. Permission requise. Essayez chmod 777 -R ";
+$lang->editor->notExists      = "Not exists. Please create it. Try mkdir -p %s";
+$lang->editor->notWritable    = "Non inscriptible. Permission requise. Essayez chmod 777 -R %s";
 $lang->editor->notDelete      = 'Ne peut pas ?tre supprim?. V?rifiez les permissions !';
 $lang->editor->emptyFileName  = 'Entrez un nom de fichier !';
 $lang->editor->onlyLocalVisit = "Cette fonctionnalit? ne fonctionne que pour une IP 127.0.0.1. <a href='https://api.zentao.pm/goto.php?item=howtodevelop&from=en' target='_blank'>Aide</a>";

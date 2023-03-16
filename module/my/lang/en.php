@@ -103,7 +103,7 @@ $lang->my->executionLink = 'Execution Default Page';
 $lang->my->programLinkList = array();
 $lang->my->programLinkList['program-browse']  = 'Project Set List/View all project sets';
 $lang->my->programLinkList['program-kanban']  = 'Project Set Kanban/You can visually view the progress of all project sets';
-$lang->my->programLinkList['program-project'] = "{$lang->projectCommon} list of the most recent {$lang->projectCommon} set/You can view all items under the current {$lang->projectCommon} set";
+$lang->my->programLinkList['program-project'] = "{$lang->projectCommon} list of the most recent program/You can view all items under the current program";
 
 $lang->my->productLinkList = array();
 $lang->my->productLinkList['product-all']       = "{$lang->productCommon} List/Can view all {$lang->productCommon}s";

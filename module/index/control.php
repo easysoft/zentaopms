@@ -63,17 +63,6 @@ class index extends control
     }
 
     /**
-     * Just test the extension engine.
-     *
-     * @access public
-     * @return void
-     */
-    public function testext()
-    {
-        echo $this->fetch('misc', 'getsid');
-    }
-
-    /**
      * ajaxClearObjectSession
      *
      * @access public
