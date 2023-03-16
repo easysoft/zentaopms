@@ -1010,7 +1010,7 @@ class treeModel extends model
                     ->orWhere('t4.project')->eq($executionID)->markRight(1)
                     ->andWhere('t3.deleted')->eq(0)
                     ->andWhere('t2.deleted')->eq(0)
-                    ->beginIF(isset($extra['branchID']) and $branchID !== 'all')->andWhere('t2.branch')->eq($branch)->fi()
+                    ->beginIF(isset($extra['branchID']) and $branch !== 'all')->andWhere('t2.branch')->eq($branch)->fi()
                     ->fetchPairs();
             }
             elseif($linkObject == 'bug' and strpos(',project,execution,', ",{$this->app->tab},") !== false)
