@@ -404,7 +404,7 @@
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="icon icon-close"></i></button>
         <?php
         $linkStoryByPlanTips = $multiBranch ? sprintf($lang->execution->linkBranchStoryByPlanTips, $lang->project->branch) : $lang->execution->linkNormalStoryByPlanTips;
-        $linkStoryByPlanTips = $execution->multiple ? $linkStoryByPlanTips : str_replace($lang->executionCommon, $lang->projectCommon, $linkStoryByPlanTips);
+        $linkStoryByPlanTips = $execution->multiple ? $linkStoryByPlanTips : str_replace($lang->execution->common, $lang->projectCommon, $linkStoryByPlanTips);
         ?>
         <h4 class="modal-title"><?php echo $lang->execution->linkStoryByPlan;?></h4><?php echo '(' . $linkStoryByPlanTips . ')';?>
       </div>
