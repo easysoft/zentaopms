@@ -32,7 +32,7 @@ class zui extends wg
                 set('data-zin-id', $this->gid)
             ) : NULL,
             $this->children(),
-            h::jsCall('zui.create', $name, $selector, $options)
+            h::jsCall('~zui.create', $name, $selector, $options)
         );
     }
 

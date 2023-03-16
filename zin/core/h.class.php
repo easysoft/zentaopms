@@ -188,6 +188,12 @@ class h extends wg
         {
             $args[$index] = h::encodeJsonWithRawJs($arg, JSON_UNESCAPED_UNICODE);
         }
+
+        if($func[0] === '~')
+        {
+            $func = substr($func, 1);
+            return static::js("domReady($func.bind(null, " . implode(',', $args) . "));");
+        }
         return static::js($func . '(' . implode(',', $args) . ');');
     }
 
