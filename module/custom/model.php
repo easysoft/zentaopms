@@ -27,7 +27,15 @@ class customModel extends model
             $stmt = $this->dbh->query($sql);
 
             $allCustomLang = array();
-            while($row = $stmt->fetch()) $allCustomLang[$row->id] = $row;
+            while($row = $stmt->fetch())
+            {
+                /* Replace common lang for menu. */
+                if(strpos($row->module, 'Menu') !== false or strpos($row->section, 'featureBar-') !== false or $row->section == 'mainNav' or strpos($row->section, 'moreSelects-') !== false)
+                {
+                    $row->value = strtr($row->value, $this->config->custom->commonLang);
+                }
+                $allCustomLang[$row->id] = $row;
+            }
         }
         catch(PDOException $e)
         {
@@ -43,8 +51,26 @@ class customModel extends model
         $processedLang = array();
         foreach($allCustomLang as $id => $customLang)
         {
-            if(isset($sectionLang[$customLang->module][$customLang->section]['all']) && isset($sectionLang[$customLang->module][$customLang->section][$currentLang]) && $customLang->lang == 'all') continue;
-            $processedLang[$customLang->module][$customLang->section][$customLang->key] = $customLang->value;
+            if(isset($sectionLang[$customLang->module][$customLang->section]['all']) and isset($sectionLang[$customLang->module][$customLang->section][$currentLang]) and $customLang->lang == 'all') continue;
+
+            if(strpos($customLang->section, 'featureBar-') !== false or strpos($customLang->section, 'moreSelects-') !== false)
+            {
+                $sections = explode('-', $customLang->section);
+                $sections = array_reverse($sections);
+                if(!isset($processedLang[$customLang->module])) $processedLang[$customLang->module] = array();
+                $sectionArr = array($customLang->key => $customLang->value);
+                foreach($sections as $section)
+                {
+                    $sectionKey = key($sectionArr);
+                    $sectionArr[$section] = $sectionArr;
+                    if($sectionKey != $section) unset($sectionArr[$sectionKey]);
+                }
+                if(!empty($sectionArr)) $processedLang[$customLang->module] = array_merge_recursive($processedLang[$customLang->module], $sectionArr);
+            }
+            else
+            {
+                $processedLang[$customLang->module][$customLang->section][$customLang->key] = $customLang->value;
+            }
         }
 
         return $processedLang;
@@ -778,20 +804,26 @@ class customModel extends model
     /**
      * Edit UR and SR concept.
      *
-     * @param  int $key
+     * @param  int    $key
+     * @param  string $lang    zh-cn|zh-tw|en|fr|de
      * @access public
      * @return bool
      */
-    public function updateURAndSR($key = 0)
+    public function updateURAndSR($key = 0, $lang = '')
     {
-        $lang = $this->app->getClientLang();
+        if(empty($lang)) $lang = $this->app->getClientLang();
         $data = fixer::input('post')->get();
 
-        if(!$data->SRName || !$data->URName) return false;
+        if(empty($data->SRName) || empty($data->URName)) return false;
+
+        $oldValue = $this->dao->select('*')->from(TABLE_LANG)->where('`key`')->eq($key)->andWhere('section')->eq('URSRList')->andWhere('lang')->eq($lang)->andWhere('module')->eq('custom')->fetch('value');
+        $oldValue = json_decode($oldValue);
 
         $URSRList = new stdclass();
-        $URSRList->SRName = $data->SRName;
-        $URSRList->URName = $data->URName;
+        $URSRList->defaultSRName = zget($oldValue, 'defaultSRName', $oldValue->SRName);
+        $URSRList->defaultURName = zget($oldValue, 'defaultURName', $oldValue->URName);
+        $URSRList->SRName        = empty($data->SRName) ? $URSRList->defaultSRName : $data->SRName;
+        $URSRList->URName        = empty($data->URName) ? $URSRList->defaultURName : $data->URName;
 
         $value = json_encode($URSRList);
         $this->dao->update(TABLE_LANG)->set('value')->eq($value)

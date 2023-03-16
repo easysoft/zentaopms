@@ -13,7 +13,7 @@ function processCheckbox()
             if (checkNum >= 2)
             {
                 $("input:checkbox[name='revision[]']").each(function(){if($(this).attr('checked') == false) $(this).attr("disabled","disabled")});
-            } 
+            }
             else
             {
                 $("input:checkbox[name='revision[]']").each(function(){if($(this).attr('checked') == false) $(this).attr("enabled","enabled")});

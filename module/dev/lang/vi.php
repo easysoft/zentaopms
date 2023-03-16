@@ -1,16 +1,19 @@
 <?php
-$lang->dev->common     = 'Phát triển';
-$lang->dev->api        = 'API';
-$lang->dev->db         = 'Database';
-$lang->dev->editor     = 'Editor';
-$lang->dev->translate  = 'Translate';
-$lang->dev->dbList     = 'Database';
-$lang->dev->moduleList = 'Modules';
-$lang->dev->params     = 'Thông số';
-$lang->dev->type       = 'Loại';
-$lang->dev->desc       = 'Mô tả';
-$lang->dev->noParams   = 'Không có Parameters';
-$lang->dev->post       = 'POST Parameter';
+$lang->dev->common       = 'Phát triển';
+$lang->dev->api          = 'API';
+$lang->dev->db           = 'Database';
+$lang->dev->editor       = 'Editor';
+$lang->dev->translate    = 'Translate';
+$lang->dev->dbList       = 'Database';
+$lang->dev->moduleList   = 'Modules';
+$lang->dev->params       = 'Thông số';
+$lang->dev->type         = 'Loại';
+$lang->dev->desc         = 'Mô tả';
+$lang->dev->noParams     = 'Không có Parameters';
+$lang->dev->post         = 'POST Parameter';
+$lang->dev->modifyValue  = 'modifyValue';
+$lang->dev->defaultValue = 'defaultValue';
+
 
 $lang->dev->paramRange    = 'Parameter Range: %s';
 $lang->dev->paramDate     = 'Date format: YY-mm-dd, e.g 2019-01-01';

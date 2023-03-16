@@ -1,0 +1,7 @@
+.m-editor-edit {padding-bottom: 0px; background-color: #fff;}
+#showContentEditor, #fileContentEditor {border:1px solid #ddd;}
+.m-editor-edit .main-content {padding:0px;}
+.m-editor-edit .checkbox-primary {display:inline-block; padding-left:12px;}
+.m-editor-edit .checkbox-primary label {padding-left:12px;}
+.m-editor-edit .main-header {padding: 10px 20px;}
+.main-content textarea.form-control {min-height: 300px; height: auto;}

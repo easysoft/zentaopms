@@ -59,7 +59,7 @@ class executionModel extends model
      */
     public function getExecutionFeatures($execution)
     {
-        $features = array('story' => true, 'task' => true, 'qa' => true, 'devops' => true, 'burn' => true, 'build' => true, 'other' => true);
+        $features = array('story' => true, 'task' => true, 'qa' => true, 'devops' => true, 'burn' => true, 'build' => true, 'other' => true, 'plan' => true);
 
         /* Unset story, bug, build and testtask if type is ops. */
         if($execution->lifetime == 'ops')
@@ -81,8 +81,14 @@ class executionModel extends model
                 if(in_array($execution->attribute, array('request', 'review')))
                 {
                     $features['story'] = false;
+                    $features['plan'] = false;
                 }
             }
+        }
+
+        if(isset($execution->projectInfo) and in_array($execution->projectInfo->model, array('waterfall', 'kanban', 'waterfallplus')) and empty($execution->projectInfo->hasProduct))
+        {
+            $features['plan'] = false;
         }
 
         return $features;
@@ -384,8 +390,10 @@ class executionModel extends model
         $type    = 'sprint';
         if($project) $type = zget($this->config->execution->modelList, $project->model, 'sprint');
 
-        if($project->model == 'waterfall' or $project->model == 'waterfallplus')
+        if(($project->model == 'waterfall' or $project->model == 'waterfallplus') and isset($this->config->setPercent) and $this->config->setPercent == 1)
         {
+            $_POST['products'] = array_filter($_POST['products']);
+            if(empty($_POST['products'])) dao::$errors['products0'] = $this->lang->project->errorNoProducts;
             $this->checkWorkload('create', $_POST['percent'], $project);
             if(dao::isError()) return false;
         }
@@ -433,7 +441,7 @@ class executionModel extends model
         }
 
         /* Check the workload format and total. */
-        if(!empty($sprint->percent)) $this->checkWorkload('create', $sprint->percent, $sprint->project);
+        if(!empty($sprint->percent) and isset($this->config->setPercent) and $this->config->setPercent == 1) $this->checkWorkload('create', $sprint->percent, $sprint->project);
 
         /* Set planDuration and realDuration. */
         if($this->config->edition == 'max')
@@ -622,7 +630,7 @@ class executionModel extends model
         $execution = $this->loadModel('file')->processImgURL($execution, $this->config->execution->editor->edit['id'], $this->post->uid);
 
         /* Check the workload format and total. */
-        if(!empty($execution->percent)) $this->checkWorkload('update', $execution->percent, $oldExecution);
+        if(!empty($execution->percent) and isset($this->config->setPercent) and $this->config->setPercent == 1) $this->checkWorkload('update', $execution->percent, $oldExecution);
 
         /* Set planDuration and realDuration. */
         if($this->config->edition == 'max')
@@ -1883,7 +1891,7 @@ class executionModel extends model
             ->page($pager, 't1.id')
             ->fetchAll('id');
 
-        if(empty($productID) and !empty($executions)) $projectProductIdList = $this->dao->select('project, product')->from(TABLE_PROJECTPRODUCT)->where('project')->in(array_keys($executions))->fetchPairs();
+        if(empty($productID) and !empty($executions)) $projectProductIdList = $this->dao->select('project, GROUP_CONCAT(product) as product')->from(TABLE_PROJECTPRODUCT)->where('project')->in(array_keys($executions))->groupBy('project')->fetchPairs();
 
         $hours = $this->loadModel('project')->computerProgress($executions);
         $burns = $this->getBurnData($executions);
@@ -2888,8 +2896,11 @@ class executionModel extends model
         }
 
         /* Get stories of children task. */
-        $childrens = $this->dao->select('*')->from(TABLE_TASK)->where('parent')->in($parents)->fetchAll('id');
-        foreach($childrens as $children) $taskStories[$children->story] = $children->story;
+        if(!empty($parents))
+        {
+            $childrens = $this->dao->select('*')->from(TABLE_TASK)->where('parent')->in($parents)->fetchAll('id');
+            foreach($childrens as $children) $taskStories[$children->story] = $children->story;
+        }
 
         /* Remove empty story. */
         unset($taskStories[0]);

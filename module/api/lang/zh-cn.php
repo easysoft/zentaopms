@@ -215,3 +215,4 @@ $lang->api_lib_release->version = '版本';
 $lang->api->error             = new stdclass();
 $lang->api->error->onlySelect = 'SQL查询接口只允许SELECT查询';
 $lang->api->error->disabled   = '因为安全原因，该功能被禁用。可以到config目录，修改配置项 %s，打开此功能。';
+$lang->api->error->notInput   = '因字段参数类型限制，暂不支持调试';

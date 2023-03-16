@@ -66,18 +66,19 @@ $currentBrowseType = isset($lang->bug->mySelects[$browseType]) && in_array($brow
         }
         elseif($menuItem->name == 'more')
         {
-            if(!empty($lang->bug->moreSelects))
+            $moreSelects = isset($lang->bug->moreSelects[$app->rawMethod]['more']) ? $lang->bug->moreSelects[$app->rawMethod]['more'] : array();
+            if(!empty($moreSelects))
             {
                 $moreLabel       = $lang->more;
                 $moreLabelActive = '';
-                if(isset($lang->bug->moreSelects[$this->session->bugBrowseType]))
+                if(isset($moreSelects[$this->session->bugBrowseType]))
                 {
-                    $moreLabel       = "<span class='text'>{$lang->bug->moreSelects[$this->session->bugBrowseType]}</span> <span class='label label-light label-badge'>{$pager->recTotal}</span>";
+                    $moreLabel       = "<span class='text'>{$moreSelects[$this->session->bugBrowseType]}</span> <span class='label label-light label-badge'>{$pager->recTotal}</span>";
                     $moreLabelActive = 'btn-active-text';
                 }
                 echo "<div class='btn-group'><a href='javascript:;' data-toggle='dropdown' class='btn btn-link {$moreLabelActive}'>{$moreLabel} <span class='caret'></span></a>";
                 echo "<ul class='dropdown-menu'>";
-                foreach($lang->bug->moreSelects as $menuBrowseType => $label)
+                foreach($moreSelects as $menuBrowseType => $label)
                 {
                     $active = $menuBrowseType == $this->session->bugBrowseType ? 'btn-active-text' : '';
                     echo '<li>' . html::a($this->createLink('bug', 'browse', "productid=$productID&branch=$branch&browseType=$menuBrowseType"), "<span class='text'>{$label}</span>", '', "class='btn btn-link $active'") . '</li>';

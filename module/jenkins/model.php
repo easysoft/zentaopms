@@ -51,10 +51,11 @@ class jenkinsModel extends model
      * Get jenkins tasks.
      *
      * @param  int    $id
+     * @param  int    $depth
      * @access public
      * @return array
      */
-    public function getTasks($id)
+    public function getTasks($id, $depth = 0)
     {
         $jenkins = $this->getById($id);
 
@@ -63,14 +64,67 @@ class jenkinsModel extends model
         $jenkinsPassword = $jenkins->token ? $jenkins->token : $jenkins->password;
 
         $userPWD  = "$jenkinsUser:$jenkinsPassword";
-        $response = common::http($jenkinsServer . '/api/json/items/list', '', array(CURLOPT_USERPWD => $userPWD));
+        $response = common::http($jenkinsServer . '/api/json/items/list' . ($depth ? "?depth=1" : ''), '', array(CURLOPT_USERPWD => $userPWD), $headers = array(), $dataType = 'data', $method = 'POST', $timeout = 30, $httpCode = false, $log = false);
         $response = json_decode($response);
 
         $tasks = array();
-        if(isset($response->jobs))
+        if($depth)
         {
-            foreach($response->jobs as $job) $tasks[basename($job->url)] = $job->name;
+            /* Support up to 4 levels. */
+            if(isset($response->jobs)) $tasks = $this->getDepthJobs($response->jobs, $userPWD, 1);
         }
+        else
+        {
+            if(isset($response->jobs))
+            {
+                foreach($response->jobs as $job) $tasks[basename($job->url)] = $job->name;
+            }
+        }
+        return $tasks;
+    }
+
+    /**
+     * Get jobs by depth.
+     *
+     * @param object $jobs
+     * @param string $userPWD
+     * @param int    $depth
+     * @access protected
+     * @return array
+     */
+    protected function getDepthJobs($jobs, $userPWD, $depth = 1)
+    {
+        if($depth > 4) return array();
+
+        $tasks = array();
+        foreach($jobs as $job)
+        {
+            if(empty($job->url)) continue;
+
+            $isJob = true;
+            if(stripos($job->_class, '.multibranch') !== false or stripos($job->_class, '.folder') !== false or stripos($job->_class, '.OrganizationFolder') !== false) $isJob = false;
+            if(!empty($job->buildable) and $job->buildable == true) $isJob = true;
+
+            if($isJob)
+            {
+                $parms = parse_url($job->url);
+                $tasks[$parms['path']] = $job->name;
+            }
+            else
+            {
+                if($depth > 1)
+                {
+                    $response = common::http($job->url . 'api/json', '', array(CURLOPT_USERPWD => $userPWD), $headers = array(), $dataType = 'data', $method = 'POST', $timeout = 30, $httpCode = false, $log = false);
+                    $job = json_decode($response);
+                }
+
+                $tasks[basename($job->url)] = array();
+                if(empty($job->jobs)) continue;
+
+                $tasks[basename($job->url)] = $this->getDepthJobs($job->jobs, $userPWD, $depth + 1);
+            }
+        }
+
         return $tasks;
     }
 

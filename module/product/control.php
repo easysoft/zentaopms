@@ -914,7 +914,8 @@ class product extends control
     {
         $this->loadModel('build');
         if(!$executionID) return print(html::select('product', array(), '', "class='form-control chosen' required"));
-        $products = $this->product->getProductPairsByProject($executionID);
+        $status   = empty($this->config->CRProduct) ? 'noclosed' : '';
+        $products = $this->product->getProductPairsByProject($executionID, $status);
         if(empty($products))
         {
             return printf($this->lang->build->noProduct, $this->createLink('execution', 'manageproducts', "executionID=$executionID&from=buildCreate", '', 'true'), 'project');
@@ -1095,7 +1096,7 @@ class product extends control
         if(empty($productID) or $programID) $lines = $this->product->getLinePairs($programID);
 
         if($productID)  return print(html::select("lines[$productID]", array('' => '') + $lines, '', "class='form-control picker-select'"));
-        if(!$productID) return print(html::select('line', array('' => '') + $lines, '', "class='form-control chosen'"));
+        if(!$productID) return print(html::select('line', array('' => '') + $lines, '', "class='form-control picker-select'"));
     }
 
     /**
@@ -1304,8 +1305,8 @@ class product extends control
         $actionURL = $this->createLink('product', 'all', "browseType=bySearch&orderBy=order_asc&queryID=myQueryID");
         $this->product->buildProductSearchForm($param, $actionURL);
 
-        $this->view->title        = $this->lang->product->common;
-        $this->view->position[]   = $this->lang->product->common;
+        $this->view->title        = $this->lang->productCommon;
+        $this->view->position[]   = $this->lang->productCommon;
 
         $this->view->recTotal         = $pager->recTotal;
         $this->view->productStats     = $productStats;

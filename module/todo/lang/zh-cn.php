@@ -32,10 +32,11 @@ $lang->todo->import       = "导入";
 $lang->todo->legendBasic  = "基本信息";
 $lang->todo->cycle        = "周期";
 $lang->todo->cycleConfig  = "周期设置";
-$lang->todo->project      = "所属项目";
-$lang->todo->product      = "所属产品";
+$lang->todo->project      = "所属{$lang->projectCommon}";
+$lang->todo->product      = "所属{$lang->productCommon}";
 $lang->todo->execution    = "所属{$lang->execution->common}";
 $lang->todo->changeDate   = "修改日期";
+$lang->todo->future       = '待定';
 
 $lang->todo->reasonList['story'] = "转{$lang->SRCommon}";
 $lang->todo->reasonList['task']  = "转任务";
@@ -117,7 +118,7 @@ $lang->todo->noTodo         = '该类型没有待办事务';
 $lang->todo->noAssignedTo   = '被指派人不能为空';
 $lang->todo->unfinishedTodo = '待办ID %s 不是完成状态，不能关闭。';
 $lang->todo->today          = '今日待办';
-$lang->todo->selectProduct  = "请选择产品";
+$lang->todo->selectProduct  = "请选择{$lang->productCommon}";
 
 $lang->todo->periods['all']             = '指派自己';
 $lang->todo->periods['before']          = '未完';

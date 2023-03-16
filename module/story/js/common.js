@@ -38,7 +38,6 @@ $(function()
             {
                 setTimeout(function()
                 {
-                    console.log(11);
                     $saveButton.attr('type', 'button').removeAttr('disabled');
                     $saveDraftButton.removeAttr('disabled');
                 }, 10000);
@@ -175,4 +174,15 @@ function popoverCancel(index)
     if(page == 'edit') return;
 
     $('[data-id="' + index + '"]').addClass('hide');
+}
+
+/**
+ * Reload parent window When operating in a pop-up window.
+ *
+ * @access public
+ * @return void
+ */
+function reloadByAjaxForm()
+{
+    parent.location.reload();
 }

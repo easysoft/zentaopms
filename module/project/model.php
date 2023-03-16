@@ -1347,12 +1347,6 @@ class projectModel extends model
         $requiredFields = $this->config->project->create->requiredFields;
         if($this->post->delta == 999) $requiredFields = trim(str_replace(',end,', ',', ",{$requiredFields},"), ',');
 
-        /* Redefines the language entries for the fields in the project table. */
-        foreach(explode(',', $requiredFields) as $field)
-        {
-            if(isset($this->lang->project->$field)) $this->lang->project->$field = $this->lang->project->$field;
-        }
-
         $this->lang->error->unique = $this->lang->error->repeat;
         $project = $this->loadModel('file')->processImgURL($project, $this->config->project->editor->create['id'], $this->post->uid);
         $this->dao->insert(TABLE_PROJECT)->data($project)
@@ -1527,6 +1521,7 @@ class projectModel extends model
             ->setDefault('team', $this->post->name)
             ->setDefault('lastEditedBy', $this->app->user->account)
             ->setDefault('lastEditedDate', helper::now())
+            ->setDefault('days', '0')
             ->setIF($this->post->delta == 999, 'end', LONG_TIME)
             ->setIF($this->post->delta == 999, 'days', 0)
             ->setIF($this->post->begin == '0000-00-00', 'begin', '')
@@ -1591,12 +1586,6 @@ class projectModel extends model
 
         $requiredFields = $this->config->project->edit->requiredFields;
         if($this->post->delta == 999) $requiredFields = trim(str_replace(',end,', ',', ",{$requiredFields},"), ',');
-
-        /* Redefines the language entries for the fields in the project table. */
-        foreach(explode(',', $requiredFields) as $field)
-        {
-            if(isset($this->lang->project->$field)) $this->lang->project->$field = $this->lang->project->$field;
-        }
 
         $this->lang->error->unique = $this->lang->error->repeat;
         $this->dao->update(TABLE_PROJECT)->data($project)
@@ -2514,6 +2503,13 @@ class projectModel extends model
                 $this->dao->update(TABLE_PROJECT)->set('division')->eq('1')->where('id')->eq((int)$projectID)->exec();
                 $this->dao->update(TABLE_EXECUTION)->set('division')->eq('1')->where('project')->eq((int)$projectID)->exec();
             }
+
+            $project = $this->getByID($projectID);
+            if(!empty($project) and ($project->model == 'waterfall' or $project->model == 'waterfallplus') and empty($project->division) and !empty($executions))
+            {
+                $this->loadModel('execution');
+                foreach($executions as $executionID) $this->execution->updateProducts($executionID);
+            }
         }
 
         $oldProductKeys = array_keys($oldProjectProducts);
@@ -2911,7 +2907,7 @@ class projectModel extends model
             $executionID = $this->dao->select('id')->from(TABLE_EXECUTION)
                 ->where('project')->eq($projectID)
                 ->andWhere('multiple')->eq('0')
-                ->andWhere('type')->eq('sprint')
+                ->andWhere('type')->in('kanban,sprint')
                 ->andWhere('deleted')->eq('0')
                 ->fetch('id');
         }

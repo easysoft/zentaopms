@@ -1,8 +1,142 @@
-/* Tab session */
 (function($)
 {
-    if(!config.tabSession) return;
+    /**
+     * Handle the logic save form draft.
+     *
+     * @access public
+     * @return void
+     */
+    function handleSaveFormDraft()
+    {
+        if(config.currentMethod === 'login' || config.currentModule === 'repo' || config.currentMethod.indexOf('edit') != -1 || config.currentMethod.indexOf('import') != -1) return;
+        setTimeout(function()
+        {
+            var form = $('form[method=post]');
+            if(form.length)
+            {
+                if($(form).hasClass('no-stash')) return;
+                if($(form).attr('target') == 'hiddenwin' && config.currentModule.indexOf('program') != -1  && config.currentModule.indexOf('project') != -1) return;
+                function storeFormArr()
+                {
+                    $.zui.store.set(formDataID, $(form).serializeArray());
+                    var arr = $(form).serializeArray();
+                }
+                var formDataID     = config.currentMethod + '-' + config.currentModule + '-' + $(form).attr("id");
+                var formDataStored = $.zui.store.get(formDataID);
+                if(formDataStored && formDataStored.length)
+                {
+                    var message = lang.confirmDraft.replace('%name%', lang[config.currentModule] ? lang[config.currentModule] : '');
+                    new $.zui.Messager(message, {
+                        type: 'success',
+                        close: true,
+                        placement: 'center',
+                        time: 0,
+                        actions: [
+                            {
+                                name: 'undo',
+                                icon: 'undo',
+                                text: lang.resume,
+                                action: function()
+                                {
+                                    var valueMultiple = {};
+                                    for(var i = 0; i < formDataStored.length; i++)
+                                    {
+                                        var item = formDataStored[i];
+                                        /* formItem === checkbox or formItem === multipleSelect */
+                                        if(item.name.indexOf('[]') != -1)
+                                        {
+                                            if((item.name.indexOf(']') != -1) && (item.name.indexOf('[') != -1))
+                                            {
+                                                var formItem = $('[name^=' + item.name.replace('[]', '').replace('[', '').replace(']', '') + ']');
+                                            }
+                                            else
+                                            {
+                                                var formItem = $('[name^=' + item.name.replace('[]', '') + ']');
+                                            }
+                                        }
+                                        else if((item.name.indexOf(']') != -1) && (item.name.indexOf('[') != -1))
+                                        {
+                                            var formItem = $('#' + item.name.replace('[', '').replace(']', ''));
+                                        }
+                                        else
+                                        {
+                                            var formItem = $('#' + item.name);
+                                        }
 
+                                        var tagName = formItem.prop('tagName');
+                                        if(tagName === 'SELECT')
+                                        {
+                                            formItem.val(item.value);
+                                            if($(formItem).hasClass('chosen'))
+                                            {
+                                                $(formItem).trigger('chosen:updated');
+                                            }
+                                            else if($(formItem).hasClass('picker-select'))
+                                            {
+                                                if($(formItem).attr('multiple'))
+                                                {
+                                                    var value = [];
+                                                    if(!valueMultiple[item.name]) valueMultiple[item.name] = [];
+                                                    valueMultiple[item.name].push(item.value);
+                                                    $(formItem).data('zui.picker').setValue(valueMultiple[item.name]);
+                                                }
+                                                else
+                                                {
+                                                    $(formItem).data('zui.picker').setValue(item.value);
+                                                }
+                                            }
+                                        }
+                                        else if(tagName === 'INPUT')
+                                        {
+                                            if($(formItem).attr('type') === 'checkbox')
+                                            {
+                                                $(formItem).prop('checked', true).trigger('change');
+                                            }
+                                            else if($(formItem).attr('type') === 'radio')
+                                            {
+                                                $('#' + item.name + item.value).prop('checked', true).trigger('change');
+                                            }
+                                            else
+                                            {
+                                                formItem.val(item.value);
+                                            }
+                                        }
+                                        else if(tagName === 'TEXTAREA' && $(formItem).hasClass('kindeditor'))
+                                        {
+                                            KindEditor.remove('#' + item.name);
+                                            formItem.val(item.value);
+                                            $(formItem).kindeditor({
+                                                /* Conetnt change event. */
+                                                afterChange: storeFormArr()
+                                            });
+                                        }
+                                    }
+                                }
+                            }
+                        ],
+                        onAction: function(name, action, messager)
+                        {
+                            $.zui.store.remove(formDataID);
+                        }
+                    }).show();
+                }
+                form.on('input', function()
+                {    
+                    storeFormArr()
+                }).on('change', function()
+                {
+                    storeFormArr()
+                }).on('success.form.zui', function(event, res)
+                {
+                    if(res.result === 'success' || res.status === 'success') $.zui.store.remove(formDataID);
+                })
+            }
+        }, 500);
+    }
+    handleSaveFormDraft();
+
+    /* Tab session */
+    if(!config.tabSession) return;
     /** Store current tab id */
     var _tid = '';
 

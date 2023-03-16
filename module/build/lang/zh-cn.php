@@ -29,7 +29,7 @@ $lang->build->basicInfo = '基本信息';
 
 $lang->build->id             = 'ID';
 $lang->build->product        = '所属' . $lang->productCommon;
-$lang->build->project        = '所属项目';
+$lang->build->project        = '所属' . $lang->projectCommon;
 $lang->build->branch         = '平台/分支';
 $lang->build->branchAll      = '所有关联%s';
 $lang->build->branchName     = '所属%s';
@@ -64,7 +64,7 @@ $lang->build->notice = new stdclass();
 $lang->build->notice->changeProduct   = "已经关联{$lang->SRCommon}、Bug或提交测试单的版本，不能修改其所属{$lang->productCommon}";
 $lang->build->notice->changeExecution = "提交测试单的版本，不能修改其所属{$lang->executionCommon}";
 $lang->build->notice->changeBuilds    = "提交测试单的版本，不能修改关联版本";
-$lang->build->notice->autoRelation    = "相关版本下完成的需求、解决的Bug、产生的Bug将会自动关联到项目版本中";
+$lang->build->notice->autoRelation    = "相关版本下完成的需求、解决的Bug、产生的Bug将会自动关联到{$lang->projectCommon}版本中";
 $lang->build->notice->createTest      = "该版本所属执行已删除，不能提交测试";
 
 $lang->build->confirmChangeBuild = "%s『%s』解除关联后，%s下 %s个{$lang->SRCommon}和%s个Bug将同步从版本移除，是否解除？";

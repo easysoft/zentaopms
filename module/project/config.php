@@ -33,7 +33,7 @@ $config->project->sortFields->status = 'status';
 $config->project->sortFields->budget = 'budget';
 
 $config->project->multiple['project']   = ',qa,devops,doc,build,release,dynamic,settings,';
-$config->project->multiple['execution'] = ',task,kanban,burn,view,story,';
+$config->project->multiple['execution'] = ',task,kanban,burn,view,story,CFD,';
 
 global $lang;
 $config->project->datatable = new stdclass();

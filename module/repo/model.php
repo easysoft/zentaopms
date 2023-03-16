@@ -107,10 +107,11 @@ class repoModel extends model
      * @param  string $SCM  Subversion|Git|Gitlab
      * @param  string $orderBy
      * @param  object $pager
+     * @param  bool   $getCodePath
      * @access public
      * @return array
      */
-    public function getList($projectID = 0, $SCM = '', $orderBy = 'id_desc', $pager = null)
+    public function getList($projectID = 0, $SCM = '', $orderBy = 'id_desc', $pager = null, $getCodePath = false)
     {
         $repos = $this->dao->select('*')->from(TABLE_REPO)
             ->where('deleted')->eq('0')
@@ -143,7 +144,7 @@ class repoModel extends model
                 }
             }
 
-            if(in_array(strtolower($repo->SCM), $this->config->repo->gitServiceList)) $repo = $this->processGitService($repo);
+            if(in_array(strtolower($repo->SCM), $this->config->repo->gitServiceList)) $repo = $this->processGitService($repo, $getCodePath);
         }
 
         return $repos;
@@ -731,6 +732,8 @@ class repoModel extends model
      */
     public function getCommits($repo, $entry, $revision = 'HEAD', $type = 'dir', $pager = null, $begin = 0, $end = 0)
     {
+        if($repo->SCM == 'Gitlab') return $this->loadModel('gitlab')->getCommits($repo, $entry, $revision, $type, $pager, $begin, $end);
+
         $entry = ltrim($entry, '/');
         $entry = $repo->prefix . (empty($entry) ? '' : '/' . $entry);
 
@@ -895,10 +898,10 @@ class repoModel extends model
      */
     public function getCacheFile($repoID, $path, $revision)
     {
-        $cachePath = $this->app->getCacheRoot() . '/' . 'repo';
+        $cachePath = $this->app->getCacheRoot() . '/repo/' . $repoID;
         if(!is_dir($cachePath)) mkdir($cachePath, 0777, true);
         if(!is_writable($cachePath)) return false;
-        return $cachePath . '/' . $repoID . '-' . md5("{$this->cookie->repoBranch}-$path-$revision");
+        return $cachePath . '/' . md5("{$this->cookie->repoBranch}-$path-$revision");
     }
 
     /**
@@ -2136,20 +2139,21 @@ class repoModel extends model
      * Process git service repo.
      *
      * @param  object    $repo
+     * @param  bool      $getCodePath
      * @access public
      * @return object
      */
-    public function processGitService($repo)
+    public function processGitService($repo, $getCodePath = true)
     {
         $service = $this->loadModel('pipeline')->getByID($repo->serviceHost);
         if($repo->SCM == 'Gitlab')
         {
-            $project = $this->loadModel('gitlab')->apiGetSingleProject($repo->serviceHost, $repo->serviceProject);
+            if($getCodePath) $project = $this->loadModel('gitlab')->apiGetSingleProject($repo->serviceHost, $repo->serviceProject);
 
             $repo->path     = $service ? sprintf($this->config->repo->{$service->type}->apiPath, $service->url, $repo->serviceProject) : '';
             $repo->client   = $service ? $service->url : '';
             $repo->password = $service ? $service->token : '';
-            $repo->codePath = $project ? $project->web_url : $repo->path;
+            $repo->codePath = isset($project->web_url) ? $project->web_url : $repo->path;
         }
         elseif(in_array($repo->SCM, array('Gitea', 'Gogs')))
         {
@@ -2369,6 +2373,48 @@ class repoModel extends model
     }
 
     /**
+     * Get Repo file list.
+     *
+     * @param object $repo
+     * @param string $branch
+     * @param string $path
+     * @access public
+     * @return array
+     */
+    public function getFileList($repo, $branch, $path = '')
+    {
+        $scm = $this->app->loadClass('scm');
+        $scm->setEngine($repo);
+
+        $paths = array();
+        $files = $scm->engine->tree($path, 0);
+        foreach($files as $file)
+        {
+            $paths[] = $file->path;
+        }
+
+        $requests = array();
+        foreach($paths as $path)
+        {
+            $requests[]['url'] = $scm->engine->getCommitsByPath($path, '', '', 1, 1, true);
+        }
+        $this->app->loadClass('requests', true);
+        $commits = requests::request_multiple($requests);
+
+        foreach($files as $key => $file)
+        {
+            $files[$key]->kind = $file->type == 'tree' ? 'dir' : 'file';
+
+            $commit = isset($commits[$key]->body) ? json_decode($commits[$key]->body) : array();
+            $files[$key]->revision = isset($commit[0]->id) ? $commit[0]->id : '';
+            $files[$key]->comment  = isset($commit[0]->title) ? $commit[0]->title : '';
+            $files[$key]->account  = isset($commit[0]->committer_name) ? $commit[0]->committer_name : '';
+            $files[$key]->date     = isset($commit[0]->committed_date) ? $commit[0]->committed_date : '';
+        }
+        return $files;
+    }
+
+    /**
      * Get html for file tree.
      *
      * @param  object $repo
@@ -2383,6 +2429,50 @@ class repoModel extends model
         $allFiles = array();
         if(is_null($diffs))
         {
+            if($repo->SCM == 'Gitlab')
+            {
+                $cacheFile    = $this->getCacheFile($repo->id, 'tree-list', 'tree-list');
+                $lastRevision = $this->dao->select('t1.revision')->from(TABLE_REPOHISTORY)->alias('t1')
+                    ->leftJoin(TABLE_REPOBRANCH)->alias('t2')->on('t1.id=t2.revision')
+                    ->where('t1.repo')->eq($repo->id)
+                    ->andWhere('t2.branch')->eq($this->cookie->repoBranch)
+                    ->orderBy('t1.commit desc')
+                    ->fetch('revision');
+
+                if($cacheFile and file_exists($cacheFile)) $infos = unserialize(file_get_contents($cacheFile));
+                if(!$cacheFile or !file_exists($cacheFile) or $infos['revision'] != $lastRevision)
+                {
+                    $scm = $this->app->loadClass('scm');
+                    $scm->setEngine($repo);
+
+                    $this->app->loadClass('requests', true);
+                    $files = $scm->engine->tree('', 1, true);
+
+                    $allFiles = array();
+                    foreach($files as $file)
+                    {
+                        $allFiles[] = $file->path;
+                    }
+                    $infos = array('revision' => $lastRevision, 'files' => $allFiles);
+
+                    if($cacheFile)
+                    {
+                        if(!file_exists($cacheFile . '.lock'))
+                        {
+                            touch($cacheFile . '.lock');
+                            file_put_contents($cacheFile, serialize($infos));
+                            unlink($cacheFile . '.lock');
+                        }
+                    }
+                }
+                else
+                {
+                    $infos    = unserialize(file_get_contents($cacheFile));
+                    $allFiles = $infos['files'];
+                }
+            }
+            else
+            {
             if($repo->SCM != 'Subversion' and empty($branch)) $branch = $this->cookie->repoBranch;
             $files = $this->dao->select('t1.path,t2.time,t1.action')->from(TABLE_REPOFILES)->alias('t1')
                 ->leftJoin(TABLE_REPOHISTORY)->alias('t2')->on('t1.revision=t2.id')
@@ -2419,6 +2509,7 @@ class repoModel extends model
                 {
                     $allFiles[] = $file->path;
                 }
+            }
             }
         }
         else
@@ -2833,5 +2924,34 @@ class repoModel extends model
             $_COOKIE['repoBranch'] = $branch;
         }
         if($repo->SCM == 'Subversion') $this->loadModel('svn')->updateCommit($repo, $commentGroup, false);
+    }
+
+    /**
+     * Delete the deleted branch.
+     *
+     * @param int   $repoID
+     * @param array $latestBranches
+     * @access public
+     * @return bool
+     */
+    public function checkDeletedBranches($repoID, $latestBranches)
+    {
+        if(empty($latestBranches)) return false;
+
+        $currentBranches = $this->dao->select('branch')->from(TABLE_REPOBRANCH)->where('repo')->eq($repoID)->groupBy('branch')->fetchPairs('branch');
+
+        $deletedBranches = array_diff($currentBranches, $latestBranches);
+        foreach($deletedBranches as $deletedBranch)
+        {
+            if($deletedBranch == 'master') continue;
+
+            $revisionIds = $this->dao->select('revision')->from(TABLE_REPOBRANCH)->where('repo')->eq($repoID)->andWhere('branch')->eq($deletedBranch)->fetchPairs('revision');
+            $fileIds     = $this->dao->select('id')->from(TABLE_REPOFILES)->where('revision')->in($revisionIds)->fetchPairs('id');
+
+            $this->dao->delete()->from(TABLE_REPOHISTORY)->where('id')->in($revisionIds)->exec();
+            $this->dao->delete()->from(TABLE_REPOFILES)->where('id')->in($fileIds)->exec();
+            $this->dao->delete()->from(TABLE_REPOBRANCH)->where('repo')->eq($repoID)->andWhere('branch')->eq($deletedBranch)->exec();
+        }
+        return true;
     }
 }

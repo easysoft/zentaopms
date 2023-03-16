@@ -83,7 +83,7 @@ $lang->job->frameList['sonarqube'] = 'SonarQube';
 $lang->job->paramValueList['']                 = '';
 $lang->job->paramValueList['$zentao_version']  = 'Current version';
 $lang->job->paramValueList['$zentao_account']  = 'Current user';
-$lang->job->paramValueList['$zentao_product']  = 'Current product ID';
+$lang->job->paramValueList['$zentao_product']  = "Current {$lang->productCommon} ID";
 $lang->job->paramValueList['$zentao_repopath'] = 'Current version library path';
 
 $lang->job->engineList = array();
@@ -100,3 +100,6 @@ $lang->job->pipelineVariables                 = "Variables";
 $lang->job->pipelineVariablesKeyPlaceHolder   = "Input variable key";
 $lang->job->pipelineVariablesValuePlaceHolder = "Input variable value";
 $lang->job->pipelineVariablesTips             = "Specify variable values to be used in this run. The values specified in CI/CD settings will be used by default.";
+
+$lang->job->featureBar['browse']['job']     = 'List';
+$lang->job->featureBar['browse']['compile'] = 'History';

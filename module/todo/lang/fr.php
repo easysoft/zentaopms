@@ -32,10 +32,11 @@ $lang->todo->import       = "Importer";
 $lang->todo->legendBasic  = "Infos de Base";
 $lang->todo->cycle        = "Rendre Récurrent";
 $lang->todo->cycleConfig  = "Récurrence";
-$lang->todo->project      = "Project";
-$lang->todo->product      = "Product";
+$lang->todo->project      = $lang->projectCommon;
+$lang->todo->product      = $lang->productCommon;
 $lang->todo->execution    = $lang->executionCommon;
 $lang->todo->changeDate   = "Change Date";
+$lang->todo->future       = 'TBD';
 
 $lang->todo->reasonList['story'] = "Convertir en Story";
 $lang->todo->reasonList['task']  = "Convertir en Tâche";
@@ -117,16 +118,16 @@ $lang->todo->noTodo         = 'Aucune entrée de ce type.';
 $lang->todo->noAssignedTo   = "Le champ Assigné à ne doit pas être vide.";
 $lang->todo->unfinishedTodo = "Les entrées de l'ID %s ne sont pas terminés et ne peuvent pas se fermer.";
 $lang->todo->today          = 'Todo Today';
-$lang->todo->selectProduct  = "Please select a product";
+$lang->todo->selectProduct  = "Please select a {$lang->productCommon}";
 
-$lang->todo->periods['all']             = 'Toutes les entrées';
-$lang->todo->periods['before']          = 'Non terminée';
-$lang->todo->periods['future']          = 'A définir';
+$lang->todo->periods['all']             = 'Assigned To Yourself';
+$lang->todo->periods['before']          = 'Unfinished';
+$lang->todo->periods['future']          = 'TBD';
 $lang->todo->periods['thisWeek']        = 'This Week';
 $lang->todo->periods['thisMonth']       = 'This Month';
-$lang->todo->periods['thisYear']        = 'Cette Année';
+$lang->todo->periods['thisYear']        = 'This Year';
 $lang->todo->periods['assignedToOther'] = 'Assigned To Other';
-$lang->todo->periods['cycle']           = 'Récurrence';
+$lang->todo->periods['cycle']           = 'Recurrence';
 
 $lang->todo->action = new stdclass();
 $lang->todo->action->finished = array('main' => '$date, est $extra par <strong>$actor</strong>.', 'extra' => 'reasonList');

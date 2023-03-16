@@ -158,7 +158,7 @@
                   <div class='table-col'>
                     <?php $hasBranch = $product->type != 'normal' and isset($branchGroups[$product->id]);?>
                     <div class='input-group <?php if($hasBranch) echo ' has-branch';?>'>
-                      <span class='input-group-addon'><?php echo $lang->product->common;?></span>
+                      <span class='input-group-addon'><?php echo $lang->productCommon;?></span>
                       <?php echo html::select("products[$i]", $allProducts, $product->id, "class='form-control chosen' onchange='loadBranches(this)' data-last='" . $product->id . "' data-type='" . $product->type . "'");?>
                     </div>
                   </div>
