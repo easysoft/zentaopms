@@ -1002,18 +1002,22 @@ class groupModel extends model
     /**
      * Init Privs.
      *
+     * @param  bool   $onlyUpdateModule
      * @access public
      * @return void
      */
-    public function initPrivs()
+    public function initPrivs($onlyUpdateModule = true)
     {
         $this->sortResource();
         $resource = json_decode(json_encode($this->lang->resource), true);
-        $this->dao->delete()->from(TABLE_PRIVLANG)->exec();
-        $this->dao->delete()->from(TABLE_PRIVRELATION)->exec();
-        $this->dao->delete()->from(TABLE_PRIV)->exec();
-        $this->dao->delete()->from(TABLE_CONFIG)->where('module')->eq('priv')->exec();
-        $this->dbh->exec('ALTER TABLE ' . TABLE_PRIV . ' auto_increment = 1');
+        if(!$onlyUpdateModule)
+        {
+            $this->dao->delete()->from(TABLE_PRIVLANG)->exec();
+            $this->dao->delete()->from(TABLE_PRIVRELATION)->exec();
+            $this->dao->delete()->from(TABLE_PRIV)->exec();
+            $this->dao->delete()->from(TABLE_CONFIG)->where('module')->eq('priv')->exec();
+            $this->dbh->exec('ALTER TABLE ' . TABLE_PRIV . ' auto_increment = 1');
+        }
 
         $viewModules = array();
         $this->loadModel('setting');
@@ -1023,6 +1027,7 @@ class groupModel extends model
             $view     = isset($this->lang->navGroup->{$groupKey}) ? $this->lang->navGroup->{$groupKey} : $moduleName;
             $viewModules[$view][] = $moduleName;
 
+            if($onlyUpdateModule) continue;
             $order = 1;
             foreach($methods as $methodName => $methodLang)
             {
