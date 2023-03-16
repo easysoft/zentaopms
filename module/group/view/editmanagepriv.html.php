@@ -19,7 +19,7 @@
     <?php
     $i = 0;
     $params = "browseType=&view=%s";
-    $config->group->maxToolBarCount --;
+    $config->group->maxToolBarCount -= $browseType == 'bycard' ? 1 : 2;
     foreach($lang->mainNav as $moduleMenu => $title)
     {
         if(!is_string($title)) continue;
