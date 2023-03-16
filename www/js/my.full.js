@@ -23,14 +23,15 @@
     {
         if(config.currentModule.indexOf('workflow') !== -1) return;
 
-        var skipModules = ['repo', 'mr', 'job'];
+        var skipModules = ['repo', 'mr', 'job', 'dev', 'custom', 'editor'];
         if(skipModules.indexOf(config.currentModule) !== -1) return;
 
-        var skipMethods = ['edit', 'import', 'login', 'export', 'finish', 'confirm', 'resolve', 'start', 'pause', 'cancel', 'report', 'close', 'activate', 'restart', 'suspend', 'putoff', 'browse', 'hangup', 'track', 'index', 'reply', 'manage', 'run'];
+        var skipMethods = ['edit', 'import', 'login', 'export', 'finish', 'confirm', 'resolve', 'start', 'pause', 'cancel', 'report', 'close', 'activate', 'restart', 'suspend', 'putoff', 'browse', 'hangup', 'track', 'index', 'reply', 'manage', 'run', 'show'];
         for(var i = 0; i < skipMethods.length; i++)
         {
             if(config.currentMethod.indexOf(skipMethods[i]) === 0) return;
         };
+        var $messager;
 
         setTimeout(function()
         {
@@ -39,20 +40,33 @@
             {
                 if($(form).hasClass('no-stash') || $(form).data('ride') == 'table') return;
                 var target = $(form).attr('target');
-                if($(form).attr('target') == 'hiddenwin' && config.currentModule.indexOf('program') == -1 && config.currentModule.indexOf('project') == -1 && config.currentModule.indexOf('testcase') == -1) return;
+                if($(form).attr('target') == 'hiddenwin')
+                {
+                    var needSkip    = true;
+                    var keepModules = ['program', 'product', 'project', 'testcase'];
+                    for(var i = 0; i < keepModules.length; i++)
+                    {
+                        if(needSkip && config.currentModule.indexOf(keepModules[i]) === 0) needSkip = false;
+                    };
+
+                    if(needSkip) return;
+                }
 
                 var formID         = config.currentMethod + '-' + config.currentModule + '-' + $(form).attr("id");
                 var formDataStored = $.zui.store.get(formID);
+                /* Clear form data for store. */
                 setTimeout(function() {
                     $.zui.store.remove(formID);
-                }, 100)
+                }, 100);
+
                 if(formDataStored && formDataStored.length)
                 {
-                    var message = lang.confirmDraft.replace('%name%', lang[config.currentModule] ? lang[config.currentModule] : '');
-                    new $.zui.Messager(message, {
-                        type: 'success',
+                    message   = lang.confirmDraft.replace('%name%', lang[config.currentModule] ? lang[config.currentModule] : '');
+                    $messager =  new $.zui.Messager(message, {
                         close: true,
-                        placement: 'center',
+                        type: 'info',
+                        placement: 'top',
+                        cssClass: 'mt-md messagger-zt ',
                         time: 0,
                         actions: [
                             {
@@ -70,11 +84,11 @@
                                         {
                                             if((item.name.indexOf(']') != -1) && (item.name.indexOf('[') != -1))
                                             {
-                                                var formItem = $('[name^=' + item.name.replace('[]', '').replace('[', '').replace(']', '') + ']');
+                                                var formItem = $('#' + item.name.replace('[]', '').replace('[', '').replace(']', ''));
                                             }
                                             else
                                             {
-                                                var formItem = $('[name^=' + item.name.replace('[]', '') + ']');
+                                                var formItem = $('#' + item.name.replace('[]', ''));
                                             }
                                         }
                                         else if((item.name.indexOf(']') != -1) && (item.name.indexOf('[') != -1))
@@ -83,40 +97,45 @@
                                         }
                                         else
                                         {
-                                            var formItem = $('#' + item.name);
+                                            var formItem = $('[name^=' + item.name + ']');
+                                            if (!(formItem.length && (formItem.attr('type') === 'radio' || formItem.attr('type') === 'checkbox')))
+                                            formItem = $('#' + item.name);
                                         }
 
                                         var tagName = formItem.prop('tagName');
                                         if(tagName === 'SELECT')
                                         {
-                                            formItem.val(item.value);
-                                            if($(formItem).hasClass('chosen'))
+                                            if($(formItem).attr('multiple'))
                                             {
+                                                if(!valueMultiple[item.name]) valueMultiple[item.name] = [];
+                                                valueMultiple[item.name].push(item.value);
+                                                if($(formItem).hasClass('picker-select'))
+                                                {
+                                                    $(formItem).trigger('change');
+                                                    $(formItem).data('zui.picker').setValue(valueMultiple[item.name]);
+                                                }
+                                                else if($(formItem).hasClass('chosen'))
+                                                {
+                                                    formItem.val(valueMultiple[item.name]);
+                                                    $(formItem).trigger('change');
+                                                    $(formItem).trigger('chosen:updated');
+                                                }
+                                            }
+                                            else if($(formItem).hasClass('chosen'))
+                                            {
+                                                formItem.val(item.value);
                                                 $(formItem).trigger('chosen:updated');
                                             }
                                             else if($(formItem).hasClass('picker-select'))
                                             {
-                                                if($(formItem).attr('multiple'))
-                                                {
-                                                    var value = [];
-                                                    if(!valueMultiple[item.name]) valueMultiple[item.name] = [];
-                                                    valueMultiple[item.name].push(item.value);
-                                                    $(formItem).data('zui.picker').setValue(valueMultiple[item.name]);
-                                                }
-                                                else
-                                                {
-                                                    $(formItem).data('zui.picker').setValue(item.value);
-                                                }
+                                                $(formItem).data('zui.picker').setValue(item.value);
                                             }
                                         }
                                         else if(tagName === 'TEXTAREA' && $(formItem).hasClass('kindeditor'))
                                         {
                                             KindEditor.remove('#' + item.name);
                                             formItem.val(item.value);
-                                            $(formItem).kindeditor({
-                                                /* Conetnt change event. */
-                                                afterChange: storeFormData(formID, $(form).serializeArray())
-                                            });
+                                            $(formItem).kindeditor();
                                         }
                                         else
                                         {
@@ -156,6 +175,12 @@
                     if(res.result === 'success' || res.status === 'success') $.zui.store.remove(formID);
                 })
             }
+
+            $('body').one('click', function(e)
+            {
+                if($('.messager').length &&  !$.contains(e.target, $('.messager')))
+                $messager.destroy();
+            });
         }, 500);
     }
     handleSaveFormDraft();
@@ -993,7 +1018,7 @@ function toggleFold(form, unfoldIdList, objectID, objectType)
     $parentTd = $form.find('td.has-child');
     if($parentTd.length == 0) return false;
 
-    var toggleClass = ['product', 'requirement'].includes(objectType) ? 'story-toggle' : 'task-toggle';
+    var toggleClass = ['product', 'requirement', 'story'].indexOf(objectType) !== -1 ? 'story-toggle' : 'task-toggle';
     var nameClass   = ['product', 'productplan'].indexOf(objectType) !== -1 ? 'c-title' : 'c-name';
     $form.find('th.' + nameClass).addClass('clearfix').append("<span id='toggleFold' class='collapsed'><i  class='icon icon-angle-double-right'></i></span>");
 
