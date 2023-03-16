@@ -101,8 +101,6 @@ class router extends baseRouter
         global $lang;
         if(!is_object($lang)) $lang = new language();
 
-        $appName = '';
-
         /* Set productCommon and projectCommon for flow. */
         if($moduleName == 'common') $this->setCommonLang();
 
@@ -367,9 +365,6 @@ class router extends baseRouter
     public function loadModuleConfig($moduleName, $appName = '')
     {
         global $config;
-
-        $appName = '';
-
         if($config and (!isset($config->$moduleName) or !is_object($config->$moduleName))) $config->$moduleName = new stdclass();
 
         /* 初始化数组。Init the variables. */
