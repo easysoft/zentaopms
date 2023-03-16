@@ -189,6 +189,7 @@ class taskModel extends model
             if($bugID > 0)
             {
                 $this->dao->update(TABLE_TASK)->set('fromBug')->eq($bugID)->where('id')->eq($taskID)->exec();
+                $this->dao->update(TABLE_BUG)->set('toTask')->eq($taskID)->where('id')->eq($bugID)->exec();
                 $this->loadModel('action')->create('bug', $bugID, 'converttotask', '', $taskID);
             }
 
