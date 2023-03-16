@@ -31,6 +31,7 @@
         {
             if(config.currentMethod.indexOf(skipMethods[i]) === 0) return;
         };
+        var $messager;
 
         setTimeout(function()
         {
@@ -60,11 +61,12 @@
 
                 if(formDataStored && formDataStored.length)
                 {
-                    var message = lang.confirmDraft.replace('%name%', lang[config.currentModule] ? lang[config.currentModule] : '');
-                    new $.zui.Messager(message, {
-                        type: 'success',
+                    message   = lang.confirmDraft.replace('%name%', lang[config.currentModule] ? lang[config.currentModule] : '');
+                    $messager =  new $.zui.Messager(message, {
                         close: true,
+                        type: 'info',
                         placement: 'top',
+                        cssClass: 'mt-md messagger-zt ',
                         time: 0,
                         actions: [
                             {
@@ -173,6 +175,12 @@
                     if(res.result === 'success' || res.status === 'success') $.zui.store.remove(formID);
                 })
             }
+
+            $('body').one('click', function(e)
+            {
+                if($('.messager').length &&  !$.contains(e.target, $('.messager')))
+                $messager.destroy();
+            });
         }, 500);
     }
     handleSaveFormDraft();
