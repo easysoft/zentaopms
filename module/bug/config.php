@@ -217,7 +217,7 @@ $config->bug->datatable->fieldList['project']['fixed']      = 'no';
 $config->bug->datatable->fieldList['project']['width']      = '120';
 $config->bug->datatable->fieldList['project']['required']   = 'no';
 $config->bug->datatable->fieldList['project']['control']    = 'hidden';
-$config->bug->datatable->fieldList['project']['dataSource'] = array('module' => 'product', 'method' => 'getProjectPairsByProduct', 'params' => '$productID');
+$config->bug->datatable->fieldList['project']['dataSource'] = array('module' => 'product', 'method' => 'getProjectPairsByProduct', 'params' => '$productID&');
 
 $config->bug->datatable->fieldList['execution']['title']      = 'execution';
 $config->bug->datatable->fieldList['execution']['fixed']      = 'no';
