@@ -5276,9 +5276,10 @@ class storyModel extends model
                 echo $story->version;
                 break;
             case 'actions':
-                if($tab == 'execution')
+                if($tab == 'execution' or ($tab == 'project' and isset($_SESSION['multiple']) and empty($_SESSION['multiple'])))
                 {
                     $menuType = 'execution';
+                    if($storyType == 'requirement') $menuType = 'browse';
                 }
                 else
                 {
