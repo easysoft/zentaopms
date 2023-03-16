@@ -266,7 +266,7 @@ class prepareUpdate
     {
         `sed -i "s/ \/\/ pms insert position\.$/\\n\\\$lang->upgrade->fromVersions['{$this->internalZT->pmsVersionAB}']       = '{$this->internalZT->pmsVersion}'; \/\/ pms insert position\./" ../module/upgrade/lang/version.php`;
         `sed -i "s/ \/\/ biz insert position\.$/\\n\\\$lang->upgrade->fromVersions['biz{$this->internalZT->bizVersionAB}']       = 'Biz{$this->internalZT->bizVersion}'; \/\/ biz insert position\./" ../module/upgrade/lang/version.php`;
-        `sed -i "s/ \/\/ max insert position\.$/\\n\\\$lang->upgrade->fromVersions['max{$this->internalZT->lastMaxVersionAB}']      = 'Max{$this->internalZT->lastMaxVersion}'; \/\/ max insert position\./" ../module/upgrade/lang/version.php`;
+        `sed -i "s/ \/\/ max insert position\.$/\\n\\\$lang->upgrade->fromVersions['max{$this->internalZT->lastMaxVersionAB}']       = 'Max{$this->internalZT->lastMaxVersion}'; \/\/ max insert position\./" ../module/upgrade/lang/version.php`;
     }
 
     /**

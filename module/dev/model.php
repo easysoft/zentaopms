@@ -1099,10 +1099,11 @@ class devModel extends model
             $module->children = array();
             foreach($objects[$moduleKey] as $objectKey => $objectName)
             {
-                $defaultValue   = $type == 'module' ? $objectName : '';
+                if($type == 'table' and !isset($this->lang->dev->tableList[$objectKey])) continue;
+
                 $object         = new stdclass();
                 $object->key    = $objectName;
-                $object->title  = zget($this->lang->dev->tableList, $objectKey, $defaultValue);
+                $object->title  = zget($this->lang->dev->tableList, $objectKey, $objectName);
                 $object->active = $objectName == $currentObject ? 1 : 0;
                 if($object->active) $module->active = 1;
 

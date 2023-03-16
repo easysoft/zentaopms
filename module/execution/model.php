@@ -390,11 +390,11 @@ class executionModel extends model
         $type    = 'sprint';
         if($project) $type = zget($this->config->execution->modelList, $project->model, 'sprint');
 
-        if(($project->model == 'waterfall' or $project->model == 'waterfallplus') and isset($this->config->setPercent) and $this->config->setPercent == 1)
+        if($project->model == 'waterfall' or $project->model == 'waterfallplus')
         {
             $_POST['products'] = array_filter($_POST['products']);
             if(empty($_POST['products'])) dao::$errors['products0'] = $this->lang->project->errorNoProducts;
-            $this->checkWorkload('create', $_POST['percent'], $project);
+            if(isset($this->config->setPercent) and $this->config->setPercent == 1) $this->checkWorkload('create', $_POST['percent'], $project);
             if(dao::isError()) return false;
         }
 
@@ -2864,10 +2864,11 @@ class executionModel extends model
     {
         $this->loadModel('task');
 
+        $dateExceed  = '';
         $taskStories = array();
         $parents     = array();
         $execution   = $this->getByID($executionID);
-        $tasks       = $this->dao->select('id,execution,assignedTo,story,consumed,status,parent')->from(TABLE_TASK)->where('id')->in($this->post->tasks)->fetchAll('id');
+        $tasks       = $this->dao->select('id,execution,assignedTo,story,consumed,status,parent,estStarted,deadline')->from(TABLE_TASK)->where('id')->in($this->post->tasks)->fetchAll('id');
         foreach($tasks as $task)
         {
             /* Save the assignedToes and stories, should linked to execution. */
@@ -2887,12 +2888,25 @@ class executionModel extends model
                 $data->canceledDate = null;
             }
 
+            if(!empty($this->config->limitTaskDate))
+            {
+                if($task->estStarted < $execution->begin or $task->estStarted > $execution->end or $task->deadline > $execution->end or $task->deadline < $execution->begin) $dateExceed .= "#{$task->id},";
+                if($task->estStarted < $execution->begin or $task->estStarted > $execution->end) $data->estStarted = $execution->begin;
+                if($task->deadline > $execution->end or $task->deadline < $execution->begin)     $data->deadline   = $execution->end;
+            }
+
             /* Update tasks. */
             $this->dao->update(TABLE_TASK)->data($data)->where('id')->eq($task->id)->exec();
             unset($data->status);
             $this->dao->update(TABLE_TASK)->data($data)->where('parent')->eq($task->id)->exec();
 
             $this->loadModel('action')->create('task', $task->id, 'moved', '', $task->execution);
+        }
+
+        if(!empty($dateExceed))
+        {
+            $dateExceed = trim($dateExceed, ',');
+            echo js::alert(sprintf($this->lang->task->error->dateExceed, $dateExceed));
         }
 
         /* Get stories of children task. */
@@ -3043,6 +3057,12 @@ class executionModel extends model
             {
                 dao::$errors['message'][] = $this->lang->task->error->estimateNumber;
                 return false;
+            }
+
+            if(!empty($this->config->limitTaskDate))
+            {
+                $this->task->checkEstStartedAndDeadline($executionID, $task->estStarted, $task->deadline);
+                if(dao::isError()) return false;
             }
 
             $tasks[$key] = $task;

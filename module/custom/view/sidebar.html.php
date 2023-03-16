@@ -8,7 +8,7 @@
           $currentModule = 'custom';
           $method        = $key;
           $params        = $key == 'required' ? "module=$module" : '';
-          $active        = $app->rawMethod == $key ? 'active' : '';
+          $active        = $app->rawMethod == strtolower($key) ? 'active' : '';
           if(!in_array($key, $config->custom->notSetMethods))
           {
               $params = "module=$module&field=$key";

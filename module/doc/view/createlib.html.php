@@ -19,7 +19,7 @@
         <div class='main-header'>
           <h2><?php echo $lang->doc->createLib;?></h2>
         </div>
-        <form method='post' target='hiddenwin'>
+        <form method='post' target='hiddenwin' class='no-stash'>
           <table class='table table-form'>
             <tr>
               <th class='w-110px'><?php echo $lang->doc->libType?></th>
