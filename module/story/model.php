@@ -2489,6 +2489,13 @@ class storyModel extends model
                 dao::$errors['message'][] = sprintf($this->lang->error->notempty, $this->lang->task->$field);
                 return false;
             }
+
+            if(!empty($this->config->limitTaskDate))
+            {
+                $this->task->checkEstStartedAndDeadline($executionID, $task->estStarted, $task->deadline);
+                if(dao::isError()) return false;
+            }
+
             if($task->estimate) $task->estimate = (float)$task->estimate;
         }
 
@@ -4678,7 +4685,7 @@ class storyModel extends model
                 $menu .= "</ul></div>";
             }
 
-            if(($this->app->tab == 'execution' || (!empty($execution) and $execution->multiple === '0')) and $story->status == 'active') $menu .= $this->buildMenu('task', 'create', "execution={$this->session->execution}&{$params}&moduleID=$story->module", $story, $type, 'plus', '', 'showinonlybody');
+            if(($this->app->tab == 'execution' or (!empty($execution) and $execution->multiple === '0')) and $story->status == 'active' and $story->type == 'story') $menu .= $this->buildMenu('task', 'create', "execution={$this->session->execution}&{$params}&moduleID=$story->module", $story, $type, 'plus', '', 'showinonlybody');
 
             $menu .= "<div class='divider'></div>";
             $menu .= $this->buildFlowMenu('story', $story, $type, 'direct');

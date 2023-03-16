@@ -61,6 +61,8 @@ $lang->custom->defaultProgram       = '默认项目集';
 $lang->custom->modeManagement       = '模式管理';
 $lang->custom->percent              = $lang->stage->percent;
 $lang->custom->setPercent           = "是否启用{$lang->stage->percent}";
+$lang->custom->beginAndEndDate      = '起止日期';
+$lang->custom->beginAndEndDateRange = '起止日期范围';
 
 $lang->custom->unitList['efficiency'] = '工时/';
 $lang->custom->unitList['manhour']    = '人时/';
@@ -122,11 +124,12 @@ $lang->custom->story->fields['reviewResultList'] = '评审结果';
 $lang->custom->story->fields['review']           = '评审流程';
 
 $lang->custom->task = new stdClass();
-$lang->custom->task->fields['required']   = $lang->custom->required;
-$lang->custom->task->fields['priList']    = '优先级';
-$lang->custom->task->fields['typeList']   = '类型';
-$lang->custom->task->fields['reasonList'] = '关闭原因';
-$lang->custom->task->fields['statusList'] = '状态';
+$lang->custom->task->fields['required']      = $lang->custom->required;
+$lang->custom->task->fields['priList']       = '优先级';
+$lang->custom->task->fields['typeList']      = '类型';
+$lang->custom->task->fields['reasonList']    = '关闭原因';
+$lang->custom->task->fields['statusList']    = '状态';
+$lang->custom->task->fields['limitTaskDate'] = '起止日期';
 
 $lang->custom->bug = new stdClass();
 $lang->custom->bug->fields['required']       = $lang->custom->required;
@@ -233,8 +236,8 @@ $lang->custom->restDayList[6] = '周六休息';
 $lang->custom->restDayList[0] = '周天休息';
 
 global $config;
-$lang->custom->sprintConceptList[0] = "{$lang->projectCommon} 产品 迭代";
-$lang->custom->sprintConceptList[1] = "{$lang->projectCommon} 产品 冲刺";
+$lang->custom->sprintConceptList[0] = "项目 产品 迭代";
+$lang->custom->sprintConceptList[1] = "项目 产品 冲刺";
 
 $lang->custom->workingList['full'] = '完整研发管理工具';
 
@@ -252,18 +255,18 @@ $lang->custom->selectProgramTips = "切换到轻量管理模式后，为确保�
 $lang->custom->modeList['light'] = '轻量级管理模式';
 $lang->custom->modeList['ALM']   = '全生命周期管理模式';
 
-$lang->custom->modeIntroductionList["light"] = "提供了{$lang->projectCommon}管理的核心功能，适用于小型研发团队";
+$lang->custom->modeIntroductionList['light'] = "提供了{$lang->projectCommon}管理的核心功能，适用于小型研发团队";
 $lang->custom->modeIntroductionList['ALM']   = '概念更加完整、严谨，功能更加丰富，适用于中大型研发团队';
 
 $lang->custom->features['program']              = '项目集';
-$lang->custom->features["productRR"]            = "{$lang->productCommon}-研发需求";
-$lang->custom->features["productUR"]            = "{$lang->productCommon}-用户需求";
-$lang->custom->features["productLine"]          = "{$lang->productCommon}-{$lang->productCommon}线";
-$lang->custom->features["projectScrum"]         = "{$lang->projectCommon}-敏捷模型";
-$lang->custom->features["projectWaterfall"]     = "{$lang->projectCommon}-瀑布模型";
-$lang->custom->features["projectKanban"]        = "{$lang->projectCommon}-看板模型";
-$lang->custom->features["projectAgileplus"]     = "{$lang->projectCommon}-融合敏捷模型";
-$lang->custom->features["projectWaterfallplus"] = "{$lang->projectCommon}-融合瀑布模型";
+$lang->custom->features['productRR']            = "{$lang->productCommon}-研发需求";
+$lang->custom->features['productUR']            = "{$lang->productCommon}-用户需求";
+$lang->custom->features['productLine']          = "{$lang->productCommon}-产品线";
+$lang->custom->features['projectScrum']         = "{$lang->projectCommon}-敏捷模型";
+$lang->custom->features['projectWaterfall']     = "{$lang->projectCommon}-瀑布模型";
+$lang->custom->features['projectKanban']        = "{$lang->projectCommon}-看板模型";
+$lang->custom->features['projectAgileplus']     = "{$lang->projectCommon}-融合敏捷模型";
+$lang->custom->features['projectWaterfallplus'] = "{$lang->projectCommon}-融合瀑布模型";
 $lang->custom->features['execution']            = '执行';
 $lang->custom->features['qa']                   = '测试';
 $lang->custom->features['devops']               = 'DevOps';
@@ -280,8 +283,8 @@ $lang->custom->features['workflow']             = '工作流';
 $lang->custom->features['admin']                = '后台';
 $lang->custom->features['vision']               = '研发综合界面、运营管理界面';
 
-$lang->custom->needClosedFunctions["waterfall"]     = "瀑布{$lang->projectCommon}";
-$lang->custom->needClosedFunctions["waterfallplus"] = "融合瀑布{$lang->projectCommon}";
+$lang->custom->needClosedFunctions['waterfall']     = "瀑布{$lang->projectCommon}";
+$lang->custom->needClosedFunctions['waterfallplus'] = "融合瀑布{$lang->projectCommon}";
 $lang->custom->needClosedFunctions['URStory']       = '用户需求';
 if($config->edition == 'max') $lang->custom->needClosedFunctions['assetLib'] = '资产库';
 
@@ -324,3 +327,6 @@ $lang->custom->scrum->setConcept = "设置{$lang->projectCommon}概念";
 
 $lang->custom->reviewRules['allpass']  = '全部通过通过';
 $lang->custom->reviewRules['halfpass'] = '半数以上通过通过';
+
+$lang->custom->limitTaskDate['0'] = '不限制';
+$lang->custom->limitTaskDate['1'] = '限定在所属执行起止日期范围内';

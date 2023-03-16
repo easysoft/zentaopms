@@ -255,6 +255,7 @@ class release extends control
         $this->view->leftBugPager  = $leftBugPager;
         $this->view->builds        = $this->loadModel('build')->getBuildPairs($release->product, 'all', 'withbranch|hasproject', 0, 'execution', '', false);
         $this->view->summary       = $this->product->summary($stories);
+        $this->view->storyCases    = $this->loadModel('testcase')->getStoryCaseCounts(array_keys($stories));
 
         if($this->app->getViewType() == 'json')
         {
@@ -367,9 +368,7 @@ class release extends control
                 $html .= "<h3>{$this->lang->release->stories}</h3>";
                 $this->loadModel('story');
 
-                $stories = $this->dao->select('id, title')->from(TABLE_STORY)->where($this->session->storyQueryCondition)
-                    ->beginIF($this->session->storyOrderBy != false)->orderBy($this->session->storyOrderBy)->fi()
-                    ->fetchAll('id');
+                $stories = $this->dbh->query($this->session->storyQueryCondition . " ORDER BY " . strtr($this->session->storyOrderBy, '_', ' '))->fetchAll();
 
                 foreach($stories as $story) $story->title = "<a href='" . common::getSysURL() . $this->createLink('story', 'view', "storyID=$story->id") . "' target='_blank'>$story->title</a>";
 
@@ -562,26 +561,18 @@ class release extends control
      * @access public
      * @return void
      */
-    public function unlinkStory($releaseID, $storyID)
+    public function unlinkStory($releaseID, $storyID, $confirm = 'no')
     {
-        $this->release->unlinkStory($releaseID, $storyID);
-
-        /* if ajax request, send result. */
-        if($this->server->ajax)
+        if($confirm == 'no')
         {
-            if(dao::isError())
-            {
-                $response['result']  = 'fail';
-                $response['message'] = dao::getError();
-            }
-            else
-            {
-                $response['result']  = 'success';
-                $response['message'] = '';
-            }
-            return $this->send($response);
+            return print(js::confirm($this->lang->release->confirmUnlinkStory, inlink('unlinkstory', "releaseID=$releaseID&storyID=$storyID&confirm=yes")));
         }
-        echo js::reload('parent');
+        else
+        {
+            $this->release->unlinkStory($releaseID, $storyID);
+
+            return print(js::reload('parent'));
+        }
     }
 
     /**

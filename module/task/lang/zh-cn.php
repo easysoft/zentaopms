@@ -294,6 +294,11 @@ $lang->task->error->leftEmptyAB       = '任务状态为%s时，预计剩余不�
 $lang->task->error->leftEmpty         = 'Task#%s任务状态为%s时，剩余不能为0';
 $lang->task->error->notempty          = '%s必须大于0。';
 $lang->task->error->teamLeftEmpty     = '请维护团队工时。';
+$lang->task->error->beginLtExecution  = "任务开始日期应大于等于%s的开始日期：%s。";
+$lang->task->error->beginGtExecution  = "任务开始日期应小于等于%s的结束日期：%s。";
+$lang->task->error->endGtExecution    = "任务截止日期应小于等于%s的结束日期：%s。";
+$lang->task->error->endLtExecution    = "任务截止日期应大于等于%s的开始日期：%s。";
+$lang->task->error->dateExceed        = "任务%s的计划日期超过该{$lang->execution->common}计划日期，将自动改为{$lang->execution->common}的计划日期。";
 
 /* Report. */
 $lang->task->report         = new stdclass();

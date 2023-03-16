@@ -745,6 +745,12 @@ class programplanModel extends model
 
             $datas[] = $plan;
         }
+        
+        if(empty($datas))
+        {            
+            dao::$errors['message'][] = sprintf($this->lang->error->notempty, $this->lang->programplan->name);
+            return false;
+        }
 
         $totalPercent = 0;
         $totalDevType = 0;
