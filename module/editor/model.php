@@ -327,14 +327,14 @@ class editorModel extends model
         /* Reduce expiration time for check safe file. */
         $this->config->safeFileTimeout = 15 * 60;
         $statusFile = $this->loadModel('common')->checkSafeFile();
-        if($statusFile) return print(js::alert(sprintf($this->lang->editor->noticeOkFile, str_replace('\\', '/', $statusFile))));
+        if($statusFile) return sprintf($this->lang->editor->noticeOkFile, str_replace('\\', '/', $statusFile));
 
         $dirPath     = dirname($filePath);
         $extFilePath = substr($filePath, 0, strpos($filePath, DS . 'ext' . DS) + 4);
         if(!is_dir($dirPath) and is_writable($extFilePath)) mkdir($dirPath, 0777, true);
-        if(!is_dir($dirPath))      return print(js::alert(sprintf($this->lang->editor->notExists, $extFilePath)));
-        if(!is_writable($dirPath)) return print(js::alert(sprintf($this->lang->editor->notWritable, $extFilePath)));
-        if(strpos(strtolower(realpath($dirPath)), strtolower($this->app->getBasePath())) !== 0) return print(js::alert($this->lang->editor->editFileError));
+        if(!is_dir($dirPath))      return sprintf($this->lang->editor->notExists, $extFilePath);
+        if(!is_writable($dirPath)) return sprintf($this->lang->editor->notWritable, $extFilePath);
+        if(strpos(strtolower(realpath($dirPath)), strtolower($this->app->getBasePath())) !== 0) return $this->lang->editor->editFileError;
 
         $fileContent = $this->post->fileContent;
         $evils       = array('eval', 'exec', 'passthru', 'proc_open', 'shell_exec', 'system', '$$', 'include', 'require', 'assert', 'javascript', 'onclick');
