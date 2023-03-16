@@ -43,6 +43,7 @@ function createWg($name, $args)
 {
     global $app;
 
+    $name  = strtolower($name);
     $wgVer = getWgVer($name);
 
     include_once $app->getBasePath() . 'zin' . DS . 'wg' . DS . $name . DS . "v$wgVer.php";
