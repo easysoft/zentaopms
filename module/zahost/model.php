@@ -193,7 +193,7 @@ class zahostModel extends model
      */
     public function getImageList($hostID, $browseType = 'all', $param = 0, $orderBy = 'id', $pager = null)
     {
-        $imageList    = json_decode(file_get_contents($this->config->zahost->imageListUrl));
+        $imageList    = json_decode(commonModel::http($this->config->zahost->imageListUrl, array(), array()));
 
         $downloadedImageList = $this->dao->select('*')->from(TABLE_IMAGE)
             ->where('host')->eq($hostID)
@@ -256,7 +256,7 @@ class zahostModel extends model
      */
     public function createImage($hostID, $imageName)
     {
-        $imageList = json_decode(file_get_contents($this->config->zahost->imageListUrl));
+        $imageList = json_decode(commonModel::http($this->config->zahost->imageListUrl, array(), array()));
 
         $imageData = new stdclass;
         foreach($imageList  as $item) if($item->name == $imageName) $imageData = $item;
