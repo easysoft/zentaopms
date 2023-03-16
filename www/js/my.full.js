@@ -23,7 +23,7 @@
     {
         if(config.currentModule.indexOf('workflow') !== -1) return;
 
-        var skipModules = ['repo', 'mr', 'job'];
+        var skipModules = ['repo', 'mr', 'job', 'dev', 'custom', 'editor'];
         if(skipModules.indexOf(config.currentModule) !== -1) return;
 
         var skipMethods = ['edit', 'import', 'login', 'export', 'finish', 'confirm', 'resolve', 'start', 'pause', 'cancel', 'report', 'close', 'activate', 'restart', 'suspend', 'putoff', 'browse', 'hangup', 'track', 'index', 'reply', 'manage', 'run', 'show'];
@@ -95,30 +95,38 @@
                                         }
                                         else
                                         {
-                                            var formItem = $('#' + item.name);
+                                            var formItem = $('[name^=' + item.name + ']');
+                                            if (!(formItem.length && (formItem.attr('type') === 'radio' || formItem.attr('type') === 'checkbox')))
+                                            formItem = $('#' + item.name);
                                         }
 
                                         var tagName = formItem.prop('tagName');
                                         if(tagName === 'SELECT')
                                         {
-                                            formItem.val(item.value);
-                                            if($(formItem).hasClass('chosen'))
+                                            if($(formItem).attr('multiple'))
                                             {
+                                                if(!valueMultiple[item.name]) valueMultiple[item.name] = [];
+                                                valueMultiple[item.name].push(item.value);
+                                                if($(formItem).hasClass('picker-select'))
+                                                {
+                                                    $(formItem).trigger('change');
+                                                    $(formItem).data('zui.picker').setValue(valueMultiple[item.name]);
+                                                }
+                                                else if($(formItem).hasClass('chosen'))
+                                                {
+                                                    formItem.val(valueMultiple[item.name]);
+                                                    $(formItem).trigger('change');
+                                                    $(formItem).trigger('chosen:updated');
+                                                }
+                                            }
+                                            else if($(formItem).hasClass('chosen'))
+                                            {
+                                                formItem.val(item.value);
                                                 $(formItem).trigger('chosen:updated');
                                             }
                                             else if($(formItem).hasClass('picker-select'))
                                             {
-                                                if($(formItem).attr('multiple'))
-                                                {
-                                                    var value = [];
-                                                    if(!valueMultiple[item.name]) valueMultiple[item.name] = [];
-                                                    valueMultiple[item.name].push(item.value);
-                                                    $(formItem).data('zui.picker').setValue(valueMultiple[item.name]);
-                                                }
-                                                else
-                                                {
-                                                    $(formItem).data('zui.picker').setValue(item.value);
-                                                }
+                                                $(formItem).data('zui.picker').setValue(item.value);
                                             }
                                         }
                                         else if(tagName === 'TEXTAREA' && $(formItem).hasClass('kindeditor'))
