@@ -109,7 +109,7 @@ class router extends baseRouter
         parent::loadLang($moduleName, $appName);
 
         /* Replace main nav lang. */
-        if($moduleName == 'common' and $this->dbh and !empty($this->config->db->name))
+        if($moduleName == 'common' and $this->dbh and !empty($this->config->db->name) and !defined('IN_UPGRADE'))
         {
             $customMenus = $this->dbh->query('SELECT * FROM' . TABLE_LANG . "WHERE `module`='common' AND `section`='mainNav' AND `lang`='{$this->clientLang}' AND `vision`='{$this->config->vision}'")->fetchAll();
             foreach($customMenus as $menu)
