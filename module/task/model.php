@@ -125,6 +125,7 @@ class taskModel extends model
             ->setIF(is_numeric($this->post->left),     'left',     (float)$this->post->left)
             ->setDefault('openedBy',   $this->app->user->account)
             ->setDefault('openedDate', helper::now())
+            ->setDefault('vision', $this->config->vision)
             ->cleanINT('execution,story,module')
             ->stripTags($this->config->task->editor->create['id'], $this->config->allowedTags)
             ->join('mailto', ',')
