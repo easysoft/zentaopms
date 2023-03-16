@@ -64,7 +64,7 @@
                     new $.zui.Messager(message, {
                         type: 'success',
                         close: true,
-                        placement: 'center',
+                        placement: 'top',
                         time: 0,
                         actions: [
                             {
@@ -82,11 +82,11 @@
                                         {
                                             if((item.name.indexOf(']') != -1) && (item.name.indexOf('[') != -1))
                                             {
-                                                var formItem = $('[name^=' + item.name.replace('[]', '').replace('[', '').replace(']', '') + ']');
+                                                var formItem = $('#' + item.name.replace('[]', '').replace('[', '').replace(']', ''));
                                             }
                                             else
                                             {
-                                                var formItem = $('[name^=' + item.name.replace('[]', '') + ']');
+                                                var formItem = $('#' + item.name.replace('[]', ''));
                                             }
                                         }
                                         else if((item.name.indexOf(']') != -1) && (item.name.indexOf('[') != -1))
