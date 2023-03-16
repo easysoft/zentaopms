@@ -19,6 +19,7 @@
 .productTree li>a, div.hide-in-search>a {display: block; padding: 2px 10px 2px 5px; overflow: hidden; line-height: 20px; text-overflow: ellipsis; white-space: nowrap; border-radius: 4px;}
 .productTree .tree li>.list-toggle {line-height: 24px;}
 .productTree .tree li.has-list.open:before {content: unset;}
+.tree.noProgram li {padding-left: 0;}
 
 #swapper li>div.hide-in-search>a:focus, #swapper li>div.hide-in-search>a:hover {color: #838a9d; cursor: default;}
 #swapper li > a {margin-top: 4px; margin-bottom: 4px;}
@@ -56,9 +57,9 @@ foreach($products as $programID => $programProducts)
 }
 $productsPinYin = common::convert2Pinyin($productNames);
 
-$myProductsHtml     = $config->systemMode == 'ALM' ? '<ul class="tree tree-angles" data-ride="tree">' : '';
-$normalProductsHtml = $config->systemMode == 'ALM' ? '<ul class="tree tree-angles" data-ride="tree">' : '';
-$closedProductsHtml = $config->systemMode == 'ALM' ? '<ul class="tree tree-angles" data-ride="tree">' : '';
+$myProductsHtml     = $config->systemMode == 'ALM' ? '<ul class="tree tree-angles" data-ride="tree">' : '<ul class="tree noProgram">';
+$normalProductsHtml = $config->systemMode == 'ALM' ? '<ul class="tree tree-angles" data-ride="tree">' : '<ul class="tree noProgram">';
+$closedProductsHtml = $config->systemMode == 'ALM' ? '<ul class="tree tree-angles" data-ride="tree">' : '<ul class="tree noProgram">';
 
 foreach($products as $programID => $programProducts)
 {
