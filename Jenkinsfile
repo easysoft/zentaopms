@@ -31,7 +31,7 @@ pipeline {
            echo "checkout code success"
        }
      }
-     stage('sonar scanner') {
+     stage('Sonar Scanner') {
        parallel {
          stage('SonarQube') {
            steps {
@@ -48,13 +48,13 @@ pipeline {
              success {
                  container('xuanimbot') {
                      sh 'git config --global --add safe.directory $(pwd)'
-                     sh '/usr/local/bin/xuanimbot  --users "$(git show -s --format=%cn)" --title "sonar scanner" --url "${RUN_DISPLAY_URL}" --content "sonar静态扫描通过" --debug --custom'
+                     sh '/usr/local/bin/xuanimbot  --users "$(git show -s --format=%cn)" --title "sonar scanner" --url "${RUN_DISPLAY_URL}" --content "sonar scanner success" --debug --custom'
                  }
              }
              failure {
                  container('xuanimbot') {
                      sh 'git config --global --add safe.directory $(pwd)'
-                     sh '/usr/local/bin/xuanimbot  --users "$(git show -s --format=%cn)" --title "sonar scanner" --url "${RUN_DISPLAY_URL}" --content "sonar静态扫描失败" --debug --custom'
+                     sh '/usr/local/bin/xuanimbot  --users "$(git show -s --format=%cn)" --title "sonar scanner" --url "${RUN_DISPLAY_URL}" --content "sonar scanner failure" --debug --custom'
                  }
             }
           }
@@ -73,7 +73,7 @@ pipeline {
              failure {
                  container('xuanimbot') {
                      sh 'git config --global --add safe.directory $(pwd)'
-                     sh '/usr/local/bin/xuanimbot  --users "$(git show -s --format=%cn)" --title "build image" --url "${RUN_DISPLAY_URL}" --content "构建禅道单元测试镜像失败" --debug --custom'
+                     sh '/usr/local/bin/xuanimbot  --users "$(git show -s --format=%cn)" --title "build image" --url "${RUN_DISPLAY_URL}" --content "Build unit test image failure" --debug --custom'
                  }
              }
            }
@@ -83,7 +83,7 @@ pipeline {
 
      stage('Unit Test'){
       stages{
-        stage('Unittest Init') {
+        stage('Init') {
               agent {
                   kubernetes {
                       inheritFrom "xuanim"
@@ -109,13 +109,13 @@ pipeline {
                 failure {
                  container('xuanimbot') {
                      sh 'git config --global --add safe.directory $(pwd)'
-                     sh '/usr/local/bin/xuanimbot  --users "$(git show -s --format=%cn)" --title "unittest init" --url "${RUN_DISPLAY_URL}" --content "初始化单元测试数据库失败" --debug --custom'
+                     sh '/usr/local/bin/xuanimbot  --users "$(git show -s --format=%cn)" --title "unittest init" --url "${RUN_DISPLAY_URL}" --content "Unit test database initialization failed" --debug --custom'
                  }
                 }
               }
           }
 
-        stage('Run Test') {
+        stage('Run') {
           parallel {
             stage('UnitTest P1') {
               agent {
@@ -281,13 +281,13 @@ pipeline {
           success{
               container('xuanimbot') {
                   sh 'git config --global --add safe.directory /home/jenkins/agent/workspace/pangu_pangu_xuanimbot_master'
-                  sh '/usr/local/bin/xuanimbot  --users "$(git show -s --format=%cn)" --title "unittest" --url "${RUN_DISPLAY_URL}" --content "单元测试通过" --debug --custom'
+                  sh '/usr/local/bin/xuanimbot  --users "$(git show -s --format=%cn)" --title "unittest" --url "${RUN_DISPLAY_URL}" --content "Unit test passed" --debug --custom'
               }
           }
           failure{
               container('xuanimbot') {
                   sh 'git config --global --add safe.directory $(pwd)'
-                  sh '/usr/local/bin/xuanimbot  --users "$(git show -s --format=%cn)" --title "unittest" --url "${RUN_DISPLAY_URL}" --content "单元测试通过" --debug --custom'
+                  sh '/usr/local/bin/xuanimbot  --users "$(git show -s --format=%cn)" --title "unittest" --url "${RUN_DISPLAY_URL}" --content "Unit test failed" --debug --custom'
               }
           }
       }
