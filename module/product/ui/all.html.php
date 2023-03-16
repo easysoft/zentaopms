@@ -2,37 +2,6 @@
 namespace zin;
 
 $cols = array_values($config->product->all->dtable->fieldList);
-foreach($cols as $idx => $col)
-{
-    if($col['name'] == 'name')
-    {
-        unset($cols[$idx]['width']);
-        $cols[$idx]['minWidth']     = 200;
-        $cols[$idx]['nestedToggle'] = true;
-        $cols[$idx]['iconRender']   = jsRaw('function(row){return row.data.type === \'program\' ? \'icon-cards-view text-gray\' : \'\'}');
-        continue;
-    }
-
-    if($col['name'] != 'actions') continue;
-
-    $cols[$idx]['actionsMap'] = array
-    (
-        'edit'      => array('icon'=> 'icon-edit',         'hint'=> '编辑'),
-        'group'     => array('icon'=> 'icon-group',        'hint'=> '团队'),
-        'split'     => array('icon'=> 'icon-split',        'hint'=> '添加子项目集'),
-        'delete'    => array('icon'=> 'icon-trash',        'hint'=> '删除', 'text' => '删除'),
-        'close'     => array('icon'=> 'icon-off',          'hint'=> '关闭'),
-        'start'     => array('icon'=> 'icon-start',        'hint'=> '开始'),
-        'pause'     => array('icon'=> 'icon-pause',        'text'=> '挂起项目集'),
-        'active'    => array('icon'=> 'icon-magic',        'text'=> '激活项目集'),
-        'other'     => array('type'=> 'dropdown',          'hint'=> '其他操作', 'caret' => true),
-        'link'      => array('icon'=> 'icon-link',         'text'=> '关联产品', 'name' => 'link'),
-        'more'      => array('icon'=> 'icon-ellipsis-v',   'hint'=> '更多', 'type' => 'dropdown', 'caret' => false),
-        'whitelist' => array('icon'=> 'icon-shield-check', 'text'=> '项目白名单', 'name' => 'whitelist'),
-    );
-    $cols[$idx]['type']  = 'actions';
-    $cols[$idx]['width'] = 128;
-}
 
 /* TODO: implements extend fields. */
 $extendFields = $this->product->getFlowExtendFields();
@@ -143,7 +112,7 @@ foreach($productStructure as $programID => $program)
 
                 $item->name             = $product->name; /* TODO replace with <a> */
                 $item->id               = $product->id;
-                $item->type             = 'project';
+                $item->type             = 'product';
                 $item->level            = 2;
                 $item->programName      = $product->name; /* TODO replace with <a> */
                 $item->draftStories     = $product->stories['draft'];
@@ -164,17 +133,6 @@ foreach($productStructure as $programID => $program)
         }
     }
 }
-
-$footer = array(
-    'items' => array(
-        array('type' => 'info', 'text' => '共 {recTotal} 项'),
-        array('type' => 'info', 'text' => '{page}/{pageTotal}'),
-    ),
-    'page' => 1,
-    'recTotal' => 101,
-    'recPerPage' => 10,
-    'linkCreator' => '#?page{page}&recPerPage={recPerPage}'
-);
 
 featureBar
 (
@@ -217,16 +175,23 @@ toolbar
     )))
 );
 
+js
+(
+    'window.footerGenerator = function() {',
+        'const count = this.layout.allRows.filter((x) => x.data.type === "product").length;',
+        "const statistic = '{$lang->product->pageSummary}'.replace('%s', ' ' + count + ' ');",
+        'return [{children: statistic, className: "text-dark"}, "flex", "pager"];',
+    '}'
+);
+
 dtable
 (
     set::className('shadow rounded'),
     set::cols($cols),
     set::data($data),
-    set::footPager($footer),
+    set::footPager(usePager()),
     set::nested(true),
-    set::footToolbar(array('items' => array(array('size' => 'sm', 'text' => '编辑', 'btnType' => 'primary'))))
+    set::footer(jsRaw('function(){return window.footerGenerator.call(this);}'))
 );
-
-jsVar('window.$data', $data);
 
 render();

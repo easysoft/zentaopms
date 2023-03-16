@@ -170,6 +170,7 @@ $config->product->all->dtable->fieldList['name']['nestedToggle'] = true;
 $config->product->all->dtable->fieldList['name']['checkbox']     = true;
 $config->product->all->dtable->fieldList['name']['iconRender']   = true;
 $config->product->all->dtable->fieldList['name']['sortType']     = true;
+$config->product->all->dtable->fieldList['name']['iconRender']   = 'RAWJS<function(row){return row.data.type === \'program\' ? \'icon-cards-view text-gray\' : \'\'}>RAWJS';
 
 $config->product->all->dtable->fieldList['PO']['name']     = 'PO';
 $config->product->all->dtable->fieldList['PO']['title']    = $lang->product->manager;
@@ -237,13 +238,6 @@ $config->product->all->dtable->fieldList['releases']['title']    = $lang->produc
 $config->product->all->dtable->fieldList['releases']['width']    = 60;
 $config->product->all->dtable->fieldList['releases']['type']     = 'format';
 $config->product->all->dtable->fieldList['releases']['sortType'] = false;
-
-$config->product->all->dtable->fieldList['actions']['name']   = 'actions';
-$config->product->all->dtable->fieldList['actions']['title']  = $lang->actions;
-$config->product->all->dtable->fieldList['actions']['width']  = 70;
-$config->product->all->dtable->fieldList['actions']['type']   = 'html';
-$config->product->all->dtable->fieldList['actions']['fixed']  = 'right';
-$config->product->all->dtable->fieldList['actions']['module'] = 'product';
 
 $config->product->actionsMap['normal'] = array('edit');
 
