@@ -63,6 +63,9 @@ $lang->zanode->manual          = 'Manual';
 $lang->zanode->initializing    = 'Initializing';
 $lang->zanode->showPwd         = 'Show Password';
 $lang->zanode->hidePwd         = 'Hide Password';
+$lang->zanode->baseInfo        = 'Basic information';
+$lang->zanode->cpuUnit         = 'CORE';
+$lang->zanode->IP              = 'Extranet Address';
 
 $lang->zanode->typeList['node']    = 'Virtual machine';
 $lang->zanode->typeList['physics'] = 'Physical machine';
@@ -152,8 +155,7 @@ $lang->zanode->init->next          = "Next";
 $lang->zanode->init->button        = "Go To Settings";
 
 $lang->zanode->init->initSuccessNoticeTitle = "The service is ready, and it takes two steps to execute the automated test on the execution node: <br/>1. Configure the automated test running environment according to the %s<br/>2. Go to %s";
-$lang->zanode->init->initFailNoticeTitle    = "Initialization failed, check the init script execution log and try the following two solutions:";
-$lang->zanode->init->initFailNoticeDesc     = "1. Re-execute the script <br/>2. Review the initialization FAQ";
+$lang->zanode->init->initFailNotice         = "Fail，Execute the installation service command on the node or <a href='https://github.com/easysoft/zenagent/' target='_blank'>See Help</a>.";
 
 $lang->zanode->init->serviceStatus = array(
     "ZenAgent" => 'not_install',

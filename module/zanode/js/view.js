@@ -88,14 +88,14 @@ function checkServiceStatus(){
 
         if(!isSuccess)
         {
-            // $('.init-fail').show();
+            $('.init-fail').show();
             $('.init-success').hide();
         }
         else
         {
             clearInterval(checkInterval)
             $('.init-success').show();
-            // $('.init-fail').hide();
+            $('.init-fail').hide();
         }
         setTimeout(function() {
             $('#serviceContent').removeClass('loading');
@@ -149,6 +149,28 @@ $('.btn-pwd-copy').live('click', function()
     $('.btn-pwd-copy').tooltip({
         trigger: 'click',
         placement: 'bottom',
+        title: zanodeLang.copied,
+        tipClass: 'tooltip-success'
+    });
+
+    $(this).tooltip('show');
+    var that = this;
+    setTimeout(function()
+    {
+        $(that).tooltip('hide')
+    }, 2000)
+})
+
+$('.btn-init-copy').live('click', function()
+{
+    var copyText = $('#initBash');
+    copyText.show();
+    copyText .select();
+    document.execCommand("Copy");
+    copyText.hide();
+    $('.btn-init-copy').tooltip({
+        trigger: 'click',
+        placement: 'top',
         title: zanodeLang.copied,
         tipClass: 'tooltip-success'
     });

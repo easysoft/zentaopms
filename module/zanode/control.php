@@ -161,17 +161,16 @@ class zanode extends control
         $node = $this->zanode->getNodeByID($id);
         $vnc  = $this->zanode->getVncUrl($node);
 
-        /* Add action log. */
-        // if(!empty($vnc->token)) $this->loadModel('action')->create('zanode', $id, 'getVNC');
-
-        $this->view->url         = $node->ip . ":" . $node->hzap;
-        $this->view->host        = !empty($vnc->hostIP) ? $vnc->hostIP:'';
-        $this->view->token       = !empty($vnc->token) ? $vnc->token:'';
-        $this->view->title       = $this->lang->zanode->view;
-        $this->view->zanode      = $node;
+        $this->view->url          = $node->ip . ":" . $node->hzap;
+        $this->view->host         = !empty($vnc->hostIP) ? $vnc->hostIP:'';
+        $this->view->token        = !empty($vnc->token) ? $vnc->token:'';
+        $this->view->title        = $this->lang->zanode->view;
+        $this->view->zanode       = $node;
         $this->view->snapshotList = $this->zanode->getSnapshotList($id);
-        $this->view->actions     = $this->loadModel('action')->getList('zanode', $id);
-        $this->view->users       = $this->loadModel('user')->getPairs('noletter');
+        $this->view->initBash     = sprintf($this->config->zanode->initBash, $node->secret, getWebRoot(true));
+        $this->view->actions      = $this->loadModel('action')->getList('zanode', $id);
+        $this->view->users        = $this->loadModel('user')->getPairs('noletter');
+
         $this->display();
     }
 

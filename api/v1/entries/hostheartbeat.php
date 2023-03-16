@@ -28,8 +28,8 @@ class hostHeartbeatEntry extends baseEntry
 
         /* Check param. */
         $status = $this->requestBody->status;
-        $vms    = $this->requestBody->Vms;
-        $zap    = $this->requestBody->port;
+        $vms    = !empty($this->requestBody->Vms) ? $this->requestBody->Vms : array();
+        $zap    = !empty($this->requestBody->port) ? $this->requestBody->port : 0;
         $now    = helper::now();
         if(!$status) return $this->sendError(400, 'Params error.');
 
@@ -37,7 +37,7 @@ class hostHeartbeatEntry extends baseEntry
         $conditionValue = $secret ? $secret  : $token;
 
         $this->dao = $this->loadModel('common')->dao;
-        $hostInfo = $this->dao->select('id,tokenSN')->from(TABLE_ZAHOST)
+        $hostInfo = $this->dao->select('id,tokenSN,hostType')->from(TABLE_ZAHOST)
             ->beginIF($secret)->where('secret')->eq($secret)->fi()
             ->beginIF(!$secret)->where('tokenSN')->eq($token)
             ->andWhere('tokenTime')->gt($now)->fi()
@@ -88,9 +88,17 @@ class hostHeartbeatEntry extends baseEntry
 
                 if($heartbeat > 0) $vmData['heartbeat'] = date("Y-m-d H:i:s", $heartbeat);
                 
-                $this->dao->update(TABLE_ZAHOST)->data($vmData)->where('mac')->eq($vm->macAddress)->exec();
+                if($hostInfo->hostType == 'physics')
+                {
+                    unset($vmData['extranet']);
+                    $this->dao->update(TABLE_ZAHOST)->data($vmData)->where('id')->eq($hostInfo->id)->exec();
+                }
+                else
+                {
+                    $this->dao->update(TABLE_ZAHOST)->data($vmData)->where('mac')->eq($vm->macAddress)->exec();
+                }
                 
-                if($vm->status == 'running')
+                if($vm->status == 'running' && $hostInfo->hostType != 'physics')
                 {
                     if(!empty($node))
                     {
