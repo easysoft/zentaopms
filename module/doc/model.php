@@ -3110,12 +3110,10 @@ EOT;
                     $execution->name      = zget($executionPairs, $executionID);
                     $execution->type      = 'execution';
                     $execution->active    = $item->active;
-                    $execution->isMainLib = 0;
                     $execution->children  = array();
                     if(count($executionLibs[$executionID]) == 1)
                     {
                         $execution->id        = $libID;
-                        $execution->isMainLib = 1;
                         $execution->children  = $item->modules;
                     }
 
@@ -3141,6 +3139,7 @@ EOT;
             $libTree['annex']->active     = empty($libID) ? 1 : 0;
         }
 
+        $libTree = array_values($libTree);
         return $libTree;
     }
 }
