@@ -5,7 +5,6 @@ pipeline {
     }
   }
 
-
   environment {
     ZENTAO_VERSION = """${sh(
                             returnStdout: true,
@@ -24,23 +23,21 @@ pipeline {
     ).trim()}"""
   }
 
-
   stages {
      stage("checkout code") {
        steps {
            echo "checkout code success"
        }
      }
+
      stage('Sonar Scanner') {
        parallel {
          stage('SonarQube') {
            steps {
              container('sonar') {
                  withSonarQubeEnv('sonarqube') {
-                     catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
-                         sh 'git config --global --add safe.directory $(pwd)'
-                         sh 'sonar-scanner -Dsonar.inclusions=$(git diff --name-only HEAD~1|tr "\\n" ",") -Dsonar.analysis.user=$(git show -s --format=%an)'
-                    }
+                     sh 'git config --global --add safe.directory $(pwd)'
+                     sh 'sonar-scanner -Dsonar.inclusions=$(git diff --name-only HEAD~1|tr "\\n" ",") -Dsonar.analysis.user=$(git show -s --format=%an)'
                }
              }
            }
@@ -48,17 +45,18 @@ pipeline {
              success {
                  container('xuanimbot') {
                      sh 'git config --global --add safe.directory $(pwd)'
-                     sh '/usr/local/bin/xuanimbot  --users "$(git show -s --format=%cn)" --title "sonar scanner" --url "${RUN_DISPLAY_URL}" --content "sonar scanner success" --debug --custom'
+                     sh '/usr/local/bin/xuanimbot  --users "$(git show -s --format=%cn)" --title "sonar scanner" --url "https://sonar.qc.oop.cc/dashboard?id=zentaopms&branch=${GIT_BRANCH}" --content "sonar scanner success" --debug --custom'
                  }
              }
              failure {
                  container('xuanimbot') {
                      sh 'git config --global --add safe.directory $(pwd)'
-                     sh '/usr/local/bin/xuanimbot  --users "$(git show -s --format=%cn)" --title "sonar scanner" --url "${RUN_DISPLAY_URL}" --content "sonar scanner failure" --debug --custom'
+                     sh '/usr/local/bin/xuanimbot  --users "$(git show -s --format=%cn)" --title "sonar scanner" --url "https://sonar.qc.oop.cc/dashboard?id=zentaopms&branch=${GIT_BRANCH}" --content "sonar scanner failure" --debug --custom'
                  }
             }
           }
         }
+
          stage('Build Image') {
            steps {
              container('docker') {
@@ -139,6 +137,7 @@ pipeline {
                 }
               }
             }
+
             stage('UnitTest P2') {
               agent {
                 kubernetes {
@@ -162,6 +161,7 @@ pipeline {
               }
 
             }
+
             stage('UnitTest P3') {
               agent {
                 kubernetes {
@@ -184,6 +184,7 @@ pipeline {
                 }
               }
             }
+
             stage('UnitTest P4') {
               agent {
                 kubernetes {
@@ -207,6 +208,7 @@ pipeline {
               }
 
             }
+
             stage('UnitTest P5') {
               agent {
                 kubernetes {
@@ -229,6 +231,7 @@ pipeline {
                 }
               }
             }
+
             stage('UnitTest P6') {
               agent {
                 kubernetes {
@@ -250,8 +253,8 @@ pipeline {
                     sh 'pipeline-unittest.sh /apps/zentao/test/p6.log'
                 }
               }
-
             }
+
             stage('UnitTest P7') {
               agent {
                 kubernetes {
@@ -275,7 +278,7 @@ pipeline {
               }
             }
           } // End Parallel
-       }
+        }
       }
       post{
           success{
