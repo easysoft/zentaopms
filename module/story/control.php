@@ -1386,16 +1386,27 @@ class story extends control
      */
     public function view($storyID, $version = 0, $param = 0, $storyType = 'story')
     {
-        $uri        = $this->app->getURI(true);
-        $tab        = $this->app->tab;
+        $uri     = $this->app->getURI(true);
+        $tab     = $this->app->tab;
+        $storyID = (int)$storyID;
+        $story   = $this->story->getById($storyID, $version, true);
+        $product = $this->product->getByID($story->product);
+        if($tab == 'product' and !empty($product->shadow))
+        {
+            $backLink = $this->session->productList ? $this->session->productList : inlink('product', 'all');
+            $viewLink = $this->createLink('story', 'view', "storyID=$storyID&version=$version&param=$param&storyType=$storyType") . '#app=project';
+            $js       = js::start();
+            $js      .= "setTimeout(\"parent.$.apps.open('$uri#app=project')\", 100)";
+            $js      .= js::end();
+            return print(js::refresh($backLink . '#app=product', 'self', '10') . $js);
+        }
+
         $buildApp   = $tab == 'product' ?   'project' : $tab;
         $releaseApp = $tab == 'execution' ? 'product' : $tab;
         $this->session->set('productList', $uri . "#app={$tab}", 'product');
         if(!isonlybody()) $this->session->set('buildList', $uri, $buildApp);
         $this->app->loadLang('bug');
 
-        $storyID        = (int)$storyID;
-        $story          = $this->story->getById($storyID, $version, true);
         $linkModuleName = $this->config->vision == 'lite' ? 'project' : 'product';
         if(!$story) return print(js::error($this->lang->notFound) . js::locate($this->createLink($linkModuleName, 'index')));
 
@@ -1407,7 +1418,6 @@ class story extends control
 
         $this->story->replaceURLang($story->type);
 
-        $product       = $this->product->getByID($story->product);
         $plan          = $this->dao->findById($story->plan)->from(TABLE_PRODUCTPLAN)->fetch('title');
         $bugs          = $this->dao->select('id,title,status,pri,severity')->from(TABLE_BUG)->where('story')->eq($storyID)->andWhere('deleted')->eq(0)->fetchAll();
         $fromBug       = $this->dao->select('id,title')->from(TABLE_BUG)->where('id')->eq($story->fromBug)->fetch();
