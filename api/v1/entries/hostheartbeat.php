@@ -52,6 +52,8 @@ class hostHeartbeatEntry extends baseEntry
             if(empty($hostInfo->id)) return $this->sendError(400, 'Secret error.');
         }
 
+        $isPhysicsNode = $hostInfo->type == 'node' && $hostInfo->hostType == 'physics' ? true : false;
+
         $host = new stdclass();
         $host->status = $status;
         if($secret)
@@ -69,7 +71,7 @@ class hostHeartbeatEntry extends baseEntry
             foreach($vms as $vm)
             {
                 $heartbeat = strtotime(substr($vm->heartbeat, 0, 19));
-                $vmData = array(
+                $vmData    = array(
                     'vnc'       => $vm->vncPortOnHost,
                     'zap'       => $vm->agentPortOnHost,
                     'ztf'       => $vm->ztfPortOnHost,
@@ -80,20 +82,24 @@ class hostHeartbeatEntry extends baseEntry
                 );
                 
                 if(!$vm->sshPortOnHost) unset($vmData['ssh']);
-
                 if($heartbeat > 0) $vmData['heartbeat'] = date("Y-m-d H:i:s", $heartbeat);
                 
-                if($hostInfo->type == 'node' && $hostInfo->hostType == 'physics')
+                if($isPhysicsNode)
                 {
                     unset($vmData['extranet']);
                     $this->dao->update(TABLE_ZAHOST)->data($vmData)->where('id')->eq($hostInfo->id)->exec();
                 }
                 else
                 {
+                    $node = $this->loadModel('zanode')->getNodeByMac($vm->macAddress);
+                    if(empty($node)) continue;
+
+                    if(in_array($node->status, array('restoring', 'creating_img', 'creating_snap')))
+                        $vmData->status = $vm->status = $node->status;
                     $this->dao->update(TABLE_ZAHOST)->data($vmData)->where('mac')->eq($vm->macAddress)->exec();
                 }
                 
-                if($vm->status == 'running' && $hostInfo->hostType != 'physics')
+                if($vm->status == 'running' && !$isPhysicsNode)
                 {
                     $node = $this->loadModel('zanode')->getNodeByMac($vm->macAddress);
                     if(!empty($node))

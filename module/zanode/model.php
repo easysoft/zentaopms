@@ -12,16 +12,19 @@
 class zanodemodel extends model
 {
 
-    const STATUS_CREATED      = 'created';
-    const STATUS_LAUNCH       = 'launch';
-    const STATUS_FAIL_CREATE  = 'vm_fail_create';
-    const STATUS_RUNNING      = 'running';
-    const STATUS_SHUTOFF      = 'shutoff';
-    const STATUS_BUSY         = 'busy';
-    const STATUS_READY        = 'ready';
-    const STATUS_UNKNOWN      = 'unknown';
-    const STATUS_DESTROY      = 'destroy';
-    const STATUS_DESTROY_FAIL = 'vim_destroy_fail';
+    const STATUS_CREATED       = 'created';
+    const STATUS_LAUNCH        = 'launch';
+    const STATUS_FAIL_CREATE   = 'vm_fail_create';
+    const STATUS_RUNNING       = 'running';
+    const STATUS_SHUTOFF       = 'shutoff';
+    const STATUS_BUSY          = 'busy';
+    const STATUS_READY         = 'ready';
+    const STATUS_UNKNOWN       = 'unknown';
+    const STATUS_DESTROY       = 'destroy';
+    const STATUS_RESTORING     = 'restoring';
+    const STATUS_CREATING_SNAP = 'creating_snap';
+    const STATUS_CREATING_IMG  = 'creating_img';
+    const STATUS_DESTROY_FAIL  = 'vim_destroy_fail';
 
     const KVM_CREATE_PATH = '/api/v1/kvm/create';
     const KVM_TOKEN_PATH  = '/api/v1/virtual/getVncToken';
@@ -193,7 +196,12 @@ class zanodemodel extends model
 
         $result = json_decode(commonModel::http($agnetUrl . static::KVM_EXPORT_PATH, json_encode($param,JSON_NUMERIC_CHECK), null, array("Authorization:$node->tokenSN")));
 
-        if(!empty($result) and $result->code == 'success') return $newID;
+        
+        if(!empty($result) and $result->code == 'success')
+        {
+            $this->dao->update(TABLE_HOST)->set('status')->eq(static::STATUS_CREATING_IMG)->where('id')->eq($node->id)->exec();
+            return $newID;
+        }
 
         $this->dao->delete()->from(TABLE_IMAGE)->where('id')->eq($newID)->exec();
         return false;
@@ -251,11 +259,14 @@ class zanodemodel extends model
         if(!empty($result) and $result->code == 'success')
         {
             $this->loadModel('action')->create('zanode', $zanodeID, 'createdSnapshot', '', $data->name);
+            $this->dao->update(TABLE_HOST)->set('status')->eq(static::STATUS_CREATING_SNAP)->where('id')->eq($node->id)->exec();
+
             return $newID;
         }
 
         $this->dao->delete()->from(TABLE_IMAGE)->where('id')->eq($newID)->exec();
         dao::$errors[] = (!empty($result) and !empty($result->msg)) ? $result->msg : $this->app->lang->fail;
+
         return false;
     }
 
@@ -298,11 +309,14 @@ class zanodemodel extends model
 
         if(!empty($result) and $result->code == 'success')
         {
+            $this->dao->update(TABLE_HOST)->set('status')->eq(static::STATUS_CREATING_SNAP)->where('id')->eq($node->id)->exec();
+
             return $newID;
         }
 
         $this->dao->delete()->from(TABLE_IMAGE)->where('id')->eq($newID)->exec();
         dao::$errors[] = (!empty($result) and !empty($result->msg)) ? $result->msg : $this->app->lang->fail;
+
         return false;
     }
 
@@ -426,6 +440,11 @@ class zanodemodel extends model
     public function handleNode($id, $type)
     {
         $node = $this->getNodeByID($id);
+
+        if(in_array($node->status, array('restoring', 'creating_img', 'creating_snap')))
+        {
+            return sprintf($this->lang->zanode->busy, $this->lang->zanode->statusList[$node->status]);
+        }
 
         /* Prepare create params. */
         $agnetUrl = 'http://' . $node->ip . ':' . $node->hzap;
@@ -838,8 +857,9 @@ class zanodemodel extends model
         $node = $this->dao->select('*')->from(TABLE_ZAHOST)
             ->where('mac')->eq($mac)
             ->fetch();
+        if(empty($node)) return $node;
 
-        $host = $node->hostType == '' ? $this->loadModel("zahost")->getByID($node->parent) : $node;
+        $host         = $node->hostType == '' ? $this->loadModel("zahost")->getByID($node->parent) : $node;
         $host->status = in_array($host->status, array('running', 'ready')) ? "online" : $host->status;
 
         if($node->status == 'running' || $node->status == 'ready')

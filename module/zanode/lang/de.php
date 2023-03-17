@@ -75,6 +75,7 @@ $lang->automation->scriptPath = $lang->zanode->scriptPath;
 $lang->automation->node       = $lang->zanode->common;
 
 $lang->zanode->notFoundAgent  = 'No Agent service is found';
+$lang->zanode->busy           = 'This Node is %s, please wait for the operation to complete.';
 $lang->zanode->createVmFail   = 'Failed to create a ZenAgent Node';
 $lang->zanode->noVncPort      = 'Failed to get vnc port';
 $lang->zanode->nameValid      = "The name can only be letters, numbers, '-', '_', '.', and cannot start with a symbol";
@@ -137,6 +138,8 @@ $lang->zanode->statusList['destroy_fail'] = 'Destroy Fail';
 $lang->zanode->statusList['wait']         = 'Initializing';
 $lang->zanode->statusList['online']       = 'Online';
 $lang->zanode->statusList['restoring']    = 'Restoring';
+$lang->zanode->statusList['creating_snap'] = 'Creating Snapshot';
+$lang->zanode->statusList['creating_img']  = 'Creating Image';
 
 $lang->zanode->initNotice = "Succeeded. Please initialize the execution node or return to the list.";
 $lang->zanode->initButton = "Initialize";

@@ -164,7 +164,18 @@ $account = strpos($zanode->osName, "windows") ? $config->zanode->defaultWinAccou
       <?php if(common::hasPriv('zanode', 'browseSnapshot') && $zanode->hostType == ''):?>
       <div class="cell">
         <div class="detail zanode-detail">
-          <div class="detail-title"><?php echo $lang->zanode->browseSnapshot;?></div>
+          <div class="detail-title">
+            <?php echo $lang->zanode->browseSnapshot;?>
+            <div class="btn-toolbar pull-right" id='createActionMenu'>
+              <?php
+              if($zanode->status == 'running'){
+                $snapshotAttr = "title='{$lang->zanode->createSnapshot}'";
+                $snapshotAttr .= $zanode->status != 'running' ? ' class="btn btn-snap-create disabled"' : ' class="btn btn-primary btn-snap-create iframe"';
+                common::printLink('zanode', 'createSnapshot', "zanodeID={$zanode->id}", "<i class='icon icon-plus'></i> " . $lang->zanode->createSnapshot, '', $snapshotAttr, true, true);
+              }
+              ?>
+            </div>
+          </div>
           <?php if(!empty($snapshotList)): ?>
           <div class="detail-content article-content">
           <?php echo "<iframe width='100%' id='nodesIframe' src='" . $this->createLink('zanode', 'browseSnapshot', "nodeID=$zanode->id", '', true) . "' frameborder='no' allowfullscreen='true' mozallowfullscreen='true' webkitallowfullscreen='true' allowtransparency='true' scrolling='auto' style='min-height:300px;'></iframe>";?>
@@ -189,13 +200,13 @@ $account = strpos($zanode->osName, "windows") ? $config->zanode->defaultWinAccou
           $resumeAttr .= $zanode->hostType == 'physics' || $zanode->status == 'running' ? ' class="btn disabled"' : "class='btn' target='hiddenwin' onclick='if(confirm(\"{$lang->zanode->confirmResume}\")==false) return false;'";
 
           $rebootAttr  = "title='{$lang->zanode->reboot}' target='hiddenwin'";
-          $rebootAttr .= $zanode->hostType == 'physics' || $zanode->status == 'shutoff' || $zanode->status == 'wait' ? ' class="btn disabled"' : "class='btn' target='hiddenwin' onclick='if(confirm(\"{$lang->zanode->confirmReboot}\")==false) return false;'";
+          $rebootAttr .= $zanode->hostType == 'physics' || in_array($zanode->status, array('wait', 'creating_img', 'creating_snap', 'restoring', 'shutoff')) ? ' class="btn disabled"' : "class='btn' target='hiddenwin' onclick='if(confirm(\"{$lang->zanode->confirmReboot}\")==false) return false;'";
 
           $closeAttr = "title='{$lang->zanode->shutdown}'";
-          $closeAttr .= $zanode->hostType == 'physics' || $zanode->status == 'wait' ? ' class="btn disabled"' : ' class="btn iframe"';
+          $closeAttr .= $zanode->hostType == 'physics' || in_array($zanode->status, array('wait', 'creating_img', 'creating_snap', 'restoring')) ? ' class="btn disabled"' : ' class="btn iframe"';
 
           $startAttr = "title='{$lang->zanode->boot}'";
-          $startAttr .= $zanode->hostType == 'physics' || $zanode->status == 'wait' ? ' class="btn disabled"' : ' class="btn iframe"';
+          $startAttr .= $zanode->hostType == 'physics' || in_array($zanode->status, array('wait', 'creating_img', 'creating_snap', 'restoring')) ? ' class="btn disabled"' : ' class="btn iframe"';
 
           $snapshotAttr = "title='{$lang->zanode->createSnapshot}'";
           $snapshotAttr .= $zanode->hostType == 'physics' || $zanode->status != 'running' ? ' class="btn disabled"' : ' class="btn iframe"';

@@ -31,6 +31,7 @@ class hostSubmitEntry extends baseEntry
         $image = new stdclass();
         $task  = $this->requestBody->task;
         $image->status = $this->requestBody->status;
+        $image->status == 'complete' && $image->status = "completed";
 
         $this->dao = $this->loadModel('common')->dao;
         $id = $this->dao->select('id')->from(TABLE_ZAHOST)
@@ -40,10 +41,11 @@ class hostSubmitEntry extends baseEntry
             
         if(!$id) return $this->sendError(400, 'Secret error.');
 
-        $imageInfo = $this->dao->select('`status`,`from`', 'name')->from(TABLE_IMAGE)
+        $imageInfo = $this->dao->select('`status`,`from`,name,host')->from(TABLE_IMAGE)
             ->where('id')->eq($task)
             ->fetch();
         if(empty($imageInfo)) return $this->sendSuccess(200, 'success');
+
         if($imageInfo->from == 'snapshot' && $imageInfo->status == 'restoring') 
         {
             if(in_array($image->status, array('failed', 'completed'))) $image->status = $image->status == 'completed' ? 'restore_completed' : 'restore_failed';
@@ -58,6 +60,11 @@ class hostSubmitEntry extends baseEntry
         }
 
         $this->dao->update(TABLE_IMAGE)->data($image)->where("id")->eq($task)->exec();
+
+        if($imageInfo->from != 'zentao' && in_array($imageInfo->status, array('creating', 'restoring')))
+        {
+            $this->dao->update(TABLE_ZAHOST)->data(array("status" => "wait"))->where("id")->eq($imageInfo->host)->exec();
+        }
 
         return $this->sendSuccess(200, 'success');
     }
