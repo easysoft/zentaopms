@@ -4611,7 +4611,7 @@ class storyModel extends model
                     $menu .= $this->buildMenu('story', 'batchCreate', "productID=$story->product&branch=$story->branch&module=$story->module&$params&executionID=$executionID&plan=0&storyType=story", $story, $type, 'split', '', 'showinonlybody', '', '', $title);
                 }
 
-                if($this->app->rawModule == 'projectstory' and $this->config->vision != 'lite')
+                if(($this->app->rawModule == 'projectstory' or $storyType == 'requirement') and $this->config->vision != 'lite')
                 {
                     if($canCreateCase and ($canClose or $canUnlinkStory)) $menu .= "<div class='dividing-line'></div>";
 
@@ -5130,7 +5130,7 @@ class storyModel extends model
             }
             elseif($id == 'actions')
             {
-                $class .= ' text-left';
+                $class .= ($tab == 'project' and $story->type == 'requirement') ? ' text-center' : ' text-left';
             }
             elseif($id == 'order')
             {
