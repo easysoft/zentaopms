@@ -37,7 +37,7 @@ class hostHeartbeatEntry extends baseEntry
         $conditionValue = $secret ? $secret  : $token;
 
         $this->dao = $this->loadModel('common')->dao;
-        $hostInfo = $this->dao->select('id,tokenSN,hostType')->from(TABLE_ZAHOST)
+        $hostInfo = $this->dao->select('id,tokenSN,hostType,type')->from(TABLE_ZAHOST)
             ->beginIF($secret)->where('secret')->eq($secret)->fi()
             ->beginIF(!$secret)->where('tokenSN')->eq($token)
             ->andWhere('tokenTime')->gt($now)->fi()
@@ -45,7 +45,7 @@ class hostHeartbeatEntry extends baseEntry
         if(empty($hostInfo->id))
         {
             if(empty($token)) return $this->sendError(400, 'Secret error.');
-            $hostInfo = $this->dao->select('id,tokenSN')->from(TABLE_ZAHOST)
+            $hostInfo = $this->dao->select('id,tokenSN,hostType,type')->from(TABLE_ZAHOST)
                 ->where('oldTokenSN')->eq($token)
                 ->andWhere('tokenTime')->gt(date(DT_DATETIME1, strtotime($now) - 30))->fi()
                 ->fetch();
@@ -83,7 +83,7 @@ class hostHeartbeatEntry extends baseEntry
 
                 if($heartbeat > 0) $vmData['heartbeat'] = date("Y-m-d H:i:s", $heartbeat);
                 
-                if($hostInfo->hostType == 'physics')
+                if($hostInfo->type == 'node' && $hostInfo->hostType == 'physics')
                 {
                     unset($vmData['extranet']);
                     $this->dao->update(TABLE_ZAHOST)->data($vmData)->where('id')->eq($hostInfo->id)->exec();
