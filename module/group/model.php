@@ -1208,7 +1208,7 @@ class groupModel extends model
             {
                 $priv  = str_replace('%', '', $priv);
                 $privs = $this->dao->select('priv,priv')->from(TABLE_PRIVRELATION)->where('relationPriv')->eq($priv)->andWhere('type')->eq('depend')->fetchPairs();
-                $privs = implode(',', $privs);
+                $privs = implode("','", $privs);
                 $privQuery = preg_replace("/`dependPrivs`([^']+)'([%]?{$priv}[%]?)'/Ui", (!empty($privs) ? "t1.`id`$1('{$privs}')" : '0=1'), $privQuery);
             }
         }
