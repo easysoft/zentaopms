@@ -8,7 +8,7 @@ foreach ($lang->project->featureBar['browse'] as $key => $text)
     $statuses[] = array(
         'text' => $text . (($browseType == $key) ? "({$pager->recTotal})" : ''),
         'active' => $key === $browseType,
-        'url' => \helper::createLink('project', 'browse', "programID=$programID&browseType=$key"),
+        'url' => \helper::createLink('project', 'browse', "programID=$programID&browseType=$key", 'json'),
         'class' => $key === $browseType ? '' : 'ghost'
     );
 }
@@ -45,19 +45,19 @@ $btnGroup[] = array(
     'text'  => $lang->export,
     'icon'  => 'export',
     'class' => 'btn secondary',
-    'url'   => createLink('project', 'export', $browseType, "status=$browseType&orderBy=$orderBy"),
+    'url'   => createLink('project', 'export', $browseType, "status=$browseType&orderBy=$orderBy", 'json'),
 );
 $btnGroup[] = array(
     'text'  => $lang->project->create,
     'icon'  => 'plus',
     'class' => 'btn primary',
-    'url'   => createLink('project', 'create')
+    'url'   => createLink('project', 'create', '', 'json')
 );
 
-$buildFormURL   = createLink('search', 'buildForm', 'module=project');
-$formActionURL  = createLink('search', 'buildQuery');
-$saveQueryURL   = createLink('search', 'saveQuery', 'module=project&onMenuBar=no');
-$deleteQueryURL = createLink('search', 'deleteQuery', 'queryID=myQueryID');
+$buildFormURL   = createLink('search', 'buildForm', 'module=project', 'json');
+$formActionURL  = createLink('search', 'buildQuery', '', 'json');
+$saveQueryURL   = createLink('search', 'saveQuery', 'module=project&onMenuBar=no', 'json');
+$deleteQueryURL = createLink('search', 'deleteQuery', 'queryID=myQueryID', 'json');
 $applyQueryURL  = $actionURL;
 
 $jsSearch = <<<JSSEARCH
