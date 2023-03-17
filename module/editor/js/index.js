@@ -48,7 +48,11 @@ function initModuleTree()
         $(this).parent().parent().parent().addClass('active');
     })
 
-    $firstModule = $('#moduleTree li a:not([data-has-children="true"])').eq(0);
-    $firstModule.closest('li.has-list').addClass('open in');
-    $firstModule.trigger('click');
+    $firstModule = $('#moduleTree li a:not([data-has-children="true"])');
+    if($firstModule.length)
+    {
+        $firstModule = $firstModule.eq(0);
+        $firstModule.closest('li.has-list').addClass('open in');
+        $firstModule.trigger('click');
+    }
 }
