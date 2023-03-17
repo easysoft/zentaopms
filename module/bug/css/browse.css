@@ -22,6 +22,7 @@ th.c-confirmed {text-align: center;}
 .c-severity {overflow: hidden; white-space: nowrap;}
 .c-keywords {overflow: hidden; white-space: nowrap;}
 .c-id {text-overflow: ellipsis; white-space: nowrap;}
+.c-toTask {overflow: hidden; white-space: nowrap;}
 
 .body-modal #mainMenu>.btn-toolbar {width: auto;}
 

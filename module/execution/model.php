@@ -1311,6 +1311,27 @@ class executionModel extends model
             unset($execution->end);
         }
 
+        if($this->post->readjustTime && $oldExecution->grade > 1)
+        {
+            $parent      = $this->getByID($oldExecution->parent);
+            $begin       = $execution->begin;
+            $end         = $execution->end;
+            $parentBegin = $parent->begin;
+            $parentEnd   = $parent->end;
+
+            if($begin < $parentBegin)
+            {
+                dao::$errors["message"][] = sprintf($this->lang->execution->errorLetterParent, $parentBegin);
+            }
+
+            if($end > $parentEnd)
+            {
+                dao::$errors["message"][] = sprintf($this->lang->execution->errorGreaterParent, $parentEnd);
+            }
+        }
+
+        if(dao::isError()) return false;
+
         $execution = $this->loadModel('file')->processImgURL($execution, $this->config->execution->editor->activate['id'], $this->post->uid);
         $this->dao->update(TABLE_EXECUTION)->data($execution)
             ->autoCheck()
