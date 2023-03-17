@@ -4,6 +4,7 @@ namespace zin;
 require_once dirname(__DIR__) . DS . 'btn' . DS . 'v1.php';
 require_once dirname(__DIR__) . DS . 'dropdown' . DS . 'v1.php';
 require_once dirname(__DIR__) . DS . 'checkbox' . DS . 'v1.php';
+require_once dirname(__DIR__) . DS . 'btngroup' . DS . 'v1.php';
 
 class actionItem extends wg
 {
@@ -43,6 +44,11 @@ class actionItem extends wg
     protected function buildCheckboxItem()
     {
         return new checkbox($this->props->skip('tagName,type,name,outerTag,outerProps,props'), set($this->prop('props')),$this->children());
+    }
+
+    protected function buildBtnGroupItem()
+    {
+        return new btnGroup($this->props->skip('tagName,type,name,outerTag,outerProps,props'), set($this->prop('props')),$this->children());
     }
 
     protected function buildItem()

@@ -20,7 +20,7 @@ function icon()        {return createWg('icon', func_get_args());}
 function btn()         {return createWg('btn', func_get_args());}
 function pagebase()    {return createWg('pagebase', func_get_args());}
 function page()        {return createWg('page',    func_get_args());}
-function btngroup()    {return createWg('btngroup', func_get_args());}
+function btnGroup()    {return createWg('btngroup', func_get_args());}
 function checkbox()    {return createWg('checkbox', func_get_args());}
 function pagemain()    {return createWg('pagemain', func_get_args());}
 function mainmenu()    {return createWg('mainmenu', func_get_args());}

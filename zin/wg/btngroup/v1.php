@@ -3,7 +3,7 @@ namespace zin;
 
 require_once dirname(__DIR__) . DS . 'btn' . DS . 'v1.php';
 
-class btngroup extends wg
+class btnGroup extends wg
 {
     static $defineProps = 'items?:array';
 

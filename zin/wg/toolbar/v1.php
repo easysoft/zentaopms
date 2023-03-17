@@ -17,6 +17,7 @@ class toolbar extends wg
 
         $type = $item->prop('type');
         if($type === 'divider') return div(setClass('toolbar-divider'));
+        if($type === 'btnGroup') return new btnGroup(inherit($item));
 
         list($btnClass, $btnProps) = $this->prop(array('btnClass', 'btnProps'));
         return new btn
