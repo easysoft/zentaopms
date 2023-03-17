@@ -35,6 +35,9 @@ $commonLang   = array('zh-cn', 'zh-tw', 'en', 'fr', 'de');
 
       if(!in_array($clientLang, $commonLang)) js::import($jsRoot . 'zui/lang.' . $clientLang . '.min.js?t=' . $timestamp);
       js::import($jsRoot . 'my.full.js?t=' . $timestamp);
+
+      if(isset($config->zinTool)) js::import($jsRoot . 'zui3/zin.js');
+
   }
   else
   {
