@@ -282,7 +282,7 @@ class doc extends control
         if($confirm == 'no')
         {
             $deleteTip = $type == 'book' ? $this->lang->doc->confirmDeleteBook : $this->lang->doc->confirmDeleteLib;
-            return print(js::confirm($deleteTip, $this->createLink('doc', 'deleteLib', "libID=$libID&confirm=yes&type=$lib&from=$from")));
+            return print(js::confirm($deleteTip, $this->createLink('doc', 'deleteLib', "libID=$libID&confirm=yes&type=$type&from=$from")));
         }
         else
         {
