@@ -103,9 +103,9 @@ $(function()
         {
             var $item = '<a href=# ' +
                         'data-has-children="' + (item.children ? !!item.children.length : false) + '"'  +
-                        'title="' + item.title +
+                        'title="' + item.name +
                         '">' +
-                        '<div class="text h-full w-full flex-center">' + item.title +
+                        '<div class="text h-full w-full flex-center">' + (item.name || '') +
                             '<i class="icon icon-drop icon-ellipsis-v float-r hidden"' +
                             'data-isCatalogue="' + (item.isCatalogue === false ? false : true) + '"' +
                             '></i>' +
