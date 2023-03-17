@@ -98,4 +98,18 @@ programmenu
     )
 );
 
+modulemenu
+(
+    set
+    (
+        array
+        (
+            'id' => 1,
+            'title' => '所有分类',
+            'moduleSettingText' => '模块设置',
+            'displaySettingText' => '显示设置'
+        )
+    )
+);
+
 render();
