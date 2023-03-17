@@ -96,6 +96,8 @@ $(function()
        }
    });
 
+   console.log(treeData);
+
     $('#fileTree').tree(
     {
         data: treeData,
@@ -107,7 +109,7 @@ $(function()
                         '">' +
                         '<div class="text h-full w-full flex-center">' + (item.name || '') +
                             '<i class="icon icon-drop icon-ellipsis-v float-r hidden"' +
-                            'data-isCatalogue="' + (item.isCatalogue === false ? false : true) + '"' +
+                            'data-isCatalogue="' + (item.type ? false : true) + '"' +
                             '></i>' +
                         '</div>' +
                         '</a>';
@@ -117,7 +119,7 @@ $(function()
     });
     $('li.has-list > ul').addClass("menu-active-primary menu-hover-primary");
 
-    $('.file-tree').on('mousemove', 'a', function(e)
+    $('#fileTree').on('mousemove', 'a', function(e)
     {
         $(this).find('.icon').removeClass('hidden');
     }).on('mouseout', 'a', function(e)
@@ -156,11 +158,10 @@ $(function()
         });
     };
 
-    $('.file-tree').on('click', '.icon-drop', function(e)
+    $('#fileTree').on('click', '.icon-drop', function(e)
     {
         var isCatalogue = $(this).attr('data-isCatalogue') === 'false' ? false : true;
         var dropDownID  = isCatalogue ? 'dropDownCatalogue' : 'dropDownLibrary';
-        console.log(dropDownID);
         var option = {
             left: e.pageX,
             top: e.pageY,
