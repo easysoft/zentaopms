@@ -1275,6 +1275,7 @@ class productModel extends model
     public function getProjectPairsByProduct($productID, $branch = 0, $appendProject = 0, $status = '', $param = '')
     {
         $product = $this->getById($productID);
+        if(empty($product)) return array();
 
         return $this->dao->select('t2.id, t2.name')->from(TABLE_PROJECTPRODUCT)->alias('t1')
             ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
