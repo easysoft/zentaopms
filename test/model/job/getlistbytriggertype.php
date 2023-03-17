@@ -2,7 +2,6 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/job.class.php';
-$db->switchDB();
 su('admin');
 
 /**
@@ -22,4 +21,3 @@ $repoIdList  = array('1', '2', '100001');
 
 r($job->getListByTriggerTypeTest($triggerType[0], $repoIdList)) && p('1:name') && e('这是一个Job1'); // 获取trigger type为tag的repo为1的name
 r($job->getListByTriggerTypeTest($triggerType[1], $repoIdList)) && p('2:name') && e('这是一个Job2'); // 获取trigger type为commit的repo为2的name
-$db->restoreDB();

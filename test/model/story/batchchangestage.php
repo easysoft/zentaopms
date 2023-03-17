@@ -2,7 +2,6 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/story.class.php';
-$db->switchDB();
 su('admin');
 
 /**
@@ -30,4 +29,3 @@ r($result)         && p('102:stage') && e('developing'); // 批量修改6个需�
 r($result)         && p('106:stage') && e('developing'); // 批量修改6个需求的阶段，查看需求104修改后的阶段
 r($result)         && p('110:stage') && e('developing'); // 批量修改6个需求的阶段，查看需求110修改后的阶段
 r($result)         && p('114:stage') && e('developing'); // 批量修改6个需求的阶段，查看需求114修改后的阶段
-$db->restoreDB();

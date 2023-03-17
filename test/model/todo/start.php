@@ -2,7 +2,6 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/todo.class.php';
-$db->switchDB();
 su('admin');
 
 /**
@@ -24,4 +23,3 @@ $todo = new todoTest();
 r($todo->startTest($todoIDList[0])) && p('status') && e('doing'); // 开始一个状态为wait的todo
 r($todo->startTest($todoIDList[1])) && p('status') && e('doing'); // 开始一个状态为doing的todo
 r($todo->startTest($todoIDList[2])) && p('status') && e('doing'); // 开始一个状态为done的todo
-$db->restoreDB();

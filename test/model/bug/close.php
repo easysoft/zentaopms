@@ -2,7 +2,6 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php'; su('admin');
 include dirname(dirname(dirname(__FILE__))) . '/class/bug.class.php';
-$db->switchDB();
 
 /**
 
@@ -28,4 +27,3 @@ r($bug->closeObject($bugIDList[2])) && p('0:field,old,new;1:field,old,new') && e
 r($bug->closeObject($bugIDList[3])) && p('0:field,old,new;1:field,old,new') && e('assignedTo,dev1,closed;status,resolved,closed'); // 测试关闭状态为resolved的bug52
 r($bug->closeObject($bugIDList[4])) && p('0:field,old,new;1:field,old,new') && e('assignedTo,dev1,closed;status,active,closed');   // 测试关闭状态为closed的bug81
 r($bug->closeObject($bugIDList[5])) && p('0:field,old,new;1:field,old,new') && e('assignedTo,dev1,closed;status,active,closed');   // 测试关闭状态为closed的bug82
-$db->restoreDB();

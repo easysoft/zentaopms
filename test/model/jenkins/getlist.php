@@ -2,7 +2,6 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/jenkins.class.php';
-$db->switchDB();
 su('admin');
 
 /**
@@ -20,4 +19,3 @@ $jenkins = new jenkinsTest();
 $orderBy = 'id_desc';
 r($jenkins->getList($orderBy)) && p('id') && e('3');    // 获取Jenkins列表
 
-$db->restoreDB();

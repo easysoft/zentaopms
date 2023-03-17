@@ -2,7 +2,6 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/gogs.class.php';
-$db->switchDB();
 su('admin');
 
 /**
@@ -33,4 +32,3 @@ r($gogs->create()) && p() && e('url');    // 服务器地址为空
 $_POST['url'] = 'http://10.0.7.242:9021';
 r($gogs->create()) && p('name,url,token') && e('Gogs,http://10.0.7.242:9021,9ff43f9d1a369465bcf0781a3785f46bcef782d1');    // 正确Gogs数据
 
-$db->restoreDB();

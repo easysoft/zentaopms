@@ -2,7 +2,6 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/api.class.php';
-$db->switchDB();
 su('admin');
 
 /**
@@ -53,4 +52,3 @@ r($api->createTest($normalApi)) && p('lib') && e('920');                        
 r($api->createTest($emptyLibApi)) && p('lib:0') && e('『所属接口库』不能为空。');   //测试没有lib创建api
 r($api->createTest($emptyTitleApi)) && p('title:0') && e('『接口名称』不能为空。'); //测试没有title创建api
 r($api->createTest($emptyPathApi)) && p('path:0') && e('『请求路径』不能为空。');   //测试没有path创建api
-$db->restoreDB();

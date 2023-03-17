@@ -2,7 +2,6 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/custom.class.php';
-$db->switchDB();
 su('admin');
 
 /**
@@ -35,4 +34,3 @@ r($custom->deleteItemsTest($paramString[2])) && p() && e('0');  //测试参数�
 r($custom->deleteItemsTest($paramString[3])) && p() && e('0');  //测试参数为lang,key,section
 r($custom->deleteItemsTest($paramString[4])) && p() && e('0');  //测试参数为lang,key,section,module
 r($custom->deleteItemsTest($paramString[5])) && p() && e('0');  //测试参数为lang,key,section,module,vision
-$db->restoreDB();

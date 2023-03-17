@@ -2,7 +2,6 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/kanban.class.php';
-$db->switchDB();
 su('admin');
 
 /**
@@ -42,4 +41,3 @@ r($kanban->updateTest($kanbanIDList[0], array('name' => $names[0])))  && p()    
 r($kanban->updateTest($kanbanIDList[0], array('name' => $names[1])))  && p('name:0')          && e('『看板名称』不能为空。');             // 测试修改看板名称为空
 r($kanban->updateTest($kanbanIDList[0], array('name' => $names[2])))  && p('name:0')          && e('『看板名称』不能为空。');             // 测试修改看板名称为空格
 r($kanban->updateTest($kanbanIDList[0], array('space' => $space[1]))) && p('space:0')         && e('『所属空间』不能为空。');             // 测试修改看板空间为空
-$db->restoreDB();

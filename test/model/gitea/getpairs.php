@@ -2,7 +2,6 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/gitea.class.php';
-$db->switchDB();
 su('admin');
 
 /**
@@ -19,4 +18,3 @@ $gitea = new giteaTest();
 
 r($gitea->getPairs()) && p() && e('4');    // 获取Gitea
 
-$db->restoreDB();

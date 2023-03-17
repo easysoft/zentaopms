@@ -1,7 +1,6 @@
 #!/usr/bin/env php
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
-$db->switchDB();
 su('admin');
 
 /**
@@ -28,4 +27,3 @@ r(count($beforeMembers)) && p('')     && e('3');          // 查看移除团队�
 r(count($afterMembers))  && p('')     && e('2');          // 查看移除团队成员之后的ID为11的项目团队成员数量
 r($beforeMembers)        && p('pm92') && e('产品经理92'); // 查看项目ID为11的团队成员的真实姓名
 r($afterMembers)         && p('pm92') && e('产品经理92'); // 查看项目ID为11的团队成员的真实姓名
-$db->restoreDB();

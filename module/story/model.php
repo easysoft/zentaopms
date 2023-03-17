@@ -3626,7 +3626,7 @@ class storyModel extends model
         }
 
         $this->dao->sqlobj->sql = $query;
-        return $this->mergePlanTitle($productID, $stories, $branch, $type);
+        return $this->mergePlanTitle($productID, $stories, $branch, $storyType);
     }
 
     /**
@@ -4996,7 +4996,7 @@ class storyModel extends model
             }
             else
             {
-                $storyLink = helper::createLink('story', 'view', "storyID=$story->id&version=0&param={$this->session->project}&storyType=$story->type");
+                $storyLink = helper::createLink('story', 'view', "storyID=$story->id&version=0&param={$this->session->execution}&storyType=$story->type");
             }
         }
         elseif($tab == 'execution')
@@ -5168,7 +5168,7 @@ class storyModel extends model
                 {
                     $showBranch = isset($this->config->product->browse->showBranch) ? $this->config->product->browse->showBranch : 1;
                 }
-                $titleHtml = $story->title;
+                $titleHtml = '';
                 if($storyType == 'requirement' and $story->type == 'story') $titleHtml = '<span class="label label-badge label-light">SR</span> ';
                 if($story->parent > 0 and isset($story->parentName)) $titleHtml = "{$story->parentName} / ";
                 if(isset($branches[$story->branch]) and $showBranch and $this->config->vision == 'rnd') $titleHtml = "<span class='label label-outline label-badge' title={$branches[$story->branch]}>{$branches[$story->branch]}</span> ";

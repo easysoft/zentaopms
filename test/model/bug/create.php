@@ -2,7 +2,6 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/bug.class.php';
-$db->switchDB();
 su('admin');
 
 /**
@@ -53,4 +52,3 @@ r($bug->createObject($b_notitle))      && p('title:0')       && e('『Bug标题�
 r($bug->createObject($b_nobuild))      && p('openedBuild:0') && e('『影响版本』不能为空。'); // 测试不输入影响版本创建bug
 r($bug->createObject($b_assign))       && p('assignedTo')    && e('user92');                 // 测试指派人bug
 
-$db->restoreDB();

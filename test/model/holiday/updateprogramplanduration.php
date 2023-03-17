@@ -2,7 +2,6 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/holiday.class.php';
-$db->switchDB();
 su('admin');
 
 /**
@@ -38,4 +37,3 @@ r($holiday->updateProgramPlanDurationTest(1,   $holidayIDList[1])) && p() && e('
 r($holiday->updateProgramPlanDurationTest(11,  $holidayIDList[0])) && p() && e('59'); //测试插入id为1的节假日时迭代11项目的planDuration
 r($holiday->updateProgramPlanDurationTest(11,  $holidayIDList[1])) && p() && e('59'); //测试插入id为3的节假日时迭代11项目的planDuration
 
-$db->restoreDB();
