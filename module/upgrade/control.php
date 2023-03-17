@@ -190,6 +190,7 @@ class upgrade extends control
             if(version_compare($openVersion, '15_0_rc1', '>=') and $systemMode == 'new')
             {
                 $this->loadModel('setting')->setItem('system.common.global.mode', 'ALM');
+                if(empty($this->config->URAndSR)) $this->setting->setItem('system.common.closedFeatures', 'productUR');
                 $selectMode = false;
             }
             if(version_compare($openVersion, '18_0_beta1', '>=')) $selectMode = false;
