@@ -1,7 +1,7 @@
 <?php
 $lang->dev->common       = 'Develop';
-$lang->dev->api          = 'API';
-$lang->dev->db           = 'Database';
+$lang->dev->api          = 'API Document';
+$lang->dev->db           = 'Data Dictionary';
 $lang->dev->editor       = 'Editor';
 $lang->dev->translate    = 'Translate';
 $lang->dev->dbList       = 'Database';
@@ -18,7 +18,7 @@ $lang->dev->paramRange     = 'Parameter Range: %s';
 $lang->dev->paramDate      = 'Date format: YY-mm-dd, e.g 2019-01-01';
 $lang->dev->paramColor     = 'Color format: #RGB, e.g. #3da7f5';
 $lang->dev->paramMailto    = "User account. Separate accounts by ','.";
-$lang->dev->noteEditor     = "The editor is disabled for security reasons. To use this feature, please go to the official website to download and install the plugin of the <a href='https://www.zentao.net/extension-viewExt-150.html' target='_blank'>editor</a>.";
+$lang->dev->noteEditor     = "The editor is disabled for security reasons. To use this feature, Please turn on.";
 $lang->dev->noteTranslate  = "The translation is disabled for security reasons. To use this feature, please go to the official website to download and install the plugin of <a href='https://www.zentao.net/extension-viewExt-151.html' target='_blank'>translation</a>.";
 $lang->dev->confirmRestore = 'Do you want to reset?';
 

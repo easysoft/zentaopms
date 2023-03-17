@@ -151,7 +151,7 @@ $lang->execution->left     = '剩余';
 $lang->execution->copyTeamTip        = "可以选择复制{$lang->projectCommon}或{$lang->execution->common}团队的成员";
 $lang->execution->daysGreaterProject = '可用工日不能大于执行的可用工日『%s』';
 $lang->execution->errorHours         = '可用工时/天不能大于『24』';
-$lang->execution->agileplusMethodTip = "融合敏捷{$lang->projectCommon}创建执行时，支持迭代和看板两种管理方法。";
+$lang->execution->agileplusMethodTip = "融合敏捷{$lang->projectCommon}创建执行时，支持{$lang->executionCommon}和看板两种管理方法。";
 $lang->execution->typeTip            = '“综合”类型的父阶段可以创建其它类型的子级，其它父子层级的类型均一致。';
 $lang->execution->waterfallTip       = "瀑布{$lang->projectCommon}和融合瀑布{$lang->projectCommon}中，";
 
@@ -654,8 +654,8 @@ $lang->execution->gantt->exportFail = '导出失败。';
 
 $lang->execution->boardColorList = array('#32C5FF', '#006AF1', '#9D28B2', '#FF8F26', '#7FBB00', '#424BAC', '#66c5f8', '#EC2761');
 
-$lang->execution->linkBranchStoryByPlanTips = "执行按计划关联需求时，只导入本执行所关联%s的激活状态的需求。";
-$lang->execution->linkNormalStoryByPlanTips = "执行按计划关联需求时，只导入激活状态的需求。";
+$lang->execution->linkBranchStoryByPlanTips = "{$lang->execution->common}按计划关联需求时，只导入本{$lang->execution->common}所关联%s的激活状态的需求。";
+$lang->execution->linkNormalStoryByPlanTips = "{$lang->execution->common}按计划关联需求时，只导入激活状态的需求。";
 
 $lang->execution->featureBar['dynamic']['all']       = '全部';
 $lang->execution->featureBar['dynamic']['today']     = '今天';

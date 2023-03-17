@@ -2177,6 +2177,7 @@ class execution extends control
             $allProjects = $this->project->getPairsByModel($project->model, 0, 'noclosed', isset($projectID) ? $projectID : 0);
             $this->project->setMenu($projectID);
             $this->view->project = $project;
+            if($project->model == 'waterfall' or $project->model == 'waterfallplus') $this->lang->execution->common = $this->lang->execution->stage;
         }
         else
         {

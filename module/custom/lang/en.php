@@ -9,8 +9,8 @@ $lang->custom->restore              = 'Reset';
 $lang->custom->key                  = 'Key';
 $lang->custom->value                = 'Value';
 $lang->custom->working              = 'Mode';
-$lang->custom->select               = 'Select Concept';
 $lang->custom->hours                = 'Hours';
+$lang->custom->select               = 'Select Concept';
 $lang->custom->branch               = 'Multi-Branch';
 $lang->custom->owner                = 'Owner';
 $lang->custom->module               = 'Module';
@@ -236,8 +236,8 @@ $lang->custom->restDayList[6] = 'Saturday rest';
 $lang->custom->restDayList[0] = 'Sunday rest';
 
 global $config;
-$lang->custom->sprintConceptList[0] = 'Program Product Iteration';
-$lang->custom->sprintConceptList[1] = 'Program Product Sprint';
+$lang->custom->sprintConceptList[0] = 'Project Product Iteration';
+$lang->custom->sprintConceptList[1] = 'Project Product Sprint';
 
 $lang->custom->workingList['full'] = 'Application Lifecycle Management';
 

@@ -1,7 +1,7 @@
 <?php
 $lang->dev->common       = '二次开发';
-$lang->dev->api          = 'API';
-$lang->dev->db           = '数据库';
+$lang->dev->api          = '接口文档';
+$lang->dev->db           = '数据字典';
 $lang->dev->editor       = '编辑器';
 $lang->dev->translate    = '翻译';
 $lang->dev->dbList       = '数据库';
