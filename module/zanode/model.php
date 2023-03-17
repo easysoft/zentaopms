@@ -857,10 +857,9 @@ class zanodemodel extends model
         $node = $this->dao->select('*')->from(TABLE_ZAHOST)
             ->where('mac')->eq($mac)
             ->fetch();
-
         if(empty($node)) return $node;
 
-        $host = $node->hostType == '' ? $this->loadModel("zahost")->getByID($node->parent) : $node;
+        $host         = $node->hostType == '' ? $this->loadModel("zahost")->getByID($node->parent) : $node;
         $host->status = in_array($host->status, array('running', 'ready')) ? "online" : $host->status;
 
         if($node->status == 'running' || $node->status == 'ready')
