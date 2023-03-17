@@ -8270,6 +8270,86 @@ class upgradeModel extends model
     }
 
     /**
+     * Process dashboard to screen.
+     *
+     * @access public
+     * @return void
+     */
+    public function processDashboard()
+    {
+        $dashboards = $this->dao->select('*')->from(TABLE_DASHBOARD)->fetchAll();
+        foreach($dashboards as $dashboard)
+        {
+            $screen = new stdclass();
+            $screen->name        = $dashboard->name;
+            $screen->dimension   = '1';
+            $screen->desc        = $dashboard->desc;
+            $screen->scheme      = $this->processDashboardLayout($dashboard->layout);
+            $screen->deleted     = $dashboard->deleted;
+            $screen->status      = 'published';
+            $screen->createdBy   = $dashboard->createdBy;
+            $screen->createdDate = $dashboard->createdDate;
+            $this->dao->insert(TABLE_SCREEN)->data($screen)->exec();
+        }
+    }
+
+    /**
+     * Process dashboard layout to screen scheme.
+     *
+     * @param  string $layout
+     * @access public
+     * @return void
+     */
+    public function processDashboardLayout($layout)
+    {
+        $scheme = file_get_contents($this->app->getModuleRoot() . DS . 'screen' . DS . 'json' . DS . 'screen.json');
+        $scheme = json_decode($scheme);
+
+        $componentList = array();
+        $layout = json_decode($layout);
+        $canvasHeight = $scheme->editCanvasConfig->height;
+
+        $this->loadModel('screen');
+        foreach($layout as $option)
+        {
+            $component = new stdclass();
+            $component = $this->loadModel('screen')->setComponentDefaults($component);
+            $component->id   = $option->i->id;
+            $component->attr = json_decode('{"offsetX": 0, "offsetY": 0, "lockScale": false, "zIndex": -1}');
+            $component->attr->x = round($scheme->editCanvasConfig->width * ($option->x / 12));
+            $component->attr->y = round(54 * $option->y);
+            $component->attr->w = round($scheme->editCanvasConfig->width * ($option->w / 12));
+            $component->attr->h = round(54 * $option->h);
+
+            $type  = !empty($option->i->type) ? $option->i->type : 'chart';
+            $chart = $this->loadModel($type)->getByID($option->i->id);
+
+            $settings = $chart->settings;
+            if($type == 'chart') $chartType = $chart->builtin ? $chart->type : $settings[0]['type'];
+            if($type == 'pivot') $chartType = 'table';
+            $chartConfig = json_decode(zget($this->config->screen->chartConfig, $chartType));
+
+            $component->title       = $chart->name;
+            $component->type        = $chartType;
+            $component->sourceID    = $option->i->id;
+            $component->key         = $chartConfig->key;
+            $component->chartConfig = $chartConfig;
+            $component->option      = json_decode(zget($this->config->screen->chartOption, $chartType));
+            if(isset($component->option->title->text)) $component->option->title->text = $chart->name;
+            $component = $this->screen->getChartOption($component);
+
+            $componentList[] = $component;
+
+            if($canvasHeight < ($component->attr->y + $component->attr->h)) $canvasHeight = $component->attr->y + $component->attr->h;
+        }
+
+        $scheme->editCanvasConfig->height = $canvasHeight;
+        $scheme->componentList = $componentList;
+        $scheme = json_encode($scheme);
+        return $scheme;
+    }
+
+    /**
      * Insert mix stage.
      *
      * @access public

@@ -119,7 +119,8 @@
             },
             "dataset": null
         },
-        "previewScaleType": "fit"
+        "previewScaleType": "fit",
+        "globalFilter": [] 
     },
     "componentList": [
     ],
