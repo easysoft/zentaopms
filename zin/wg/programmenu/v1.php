@@ -1,7 +1,7 @@
 <?php
 namespace zin;
 
-class sidemenu extends wg
+class programmenu extends wg
 {
     protected static $defineProps = array
     (
@@ -10,6 +10,6 @@ class sidemenu extends wg
 
     protected function build()
     {
-        return zui::sidemenu(inherit($this));
+        return zui::programmenu(inherit($this));
     }
 }

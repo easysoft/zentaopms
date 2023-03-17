@@ -64,4 +64,4 @@ function inputbtn()    {return createWg('inputbtn', func_get_args());}
 function toolbar()     {return createWg('toolbar', func_get_args());}
 function searchform()  {return createWg('searchform', func_get_args());}
 function searchToggle(){return createWg('searchtoggle', func_get_args());}
-function sidemenu()    {return createWg('sidemenu', func_get_args());}
+function programmenu() {return createWg('programmenu', func_get_args());}

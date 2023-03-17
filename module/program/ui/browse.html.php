@@ -5,6 +5,34 @@ namespace zin;
 $cols   = array_values($config->program->dtable->fieldList);
 $data   = array_values($programs);
 
+$programmenuItems = array();
+
+foreach($data as $p)
+{
+    $item = array(
+        'key' => $p->id,
+        'text' => $p->name,
+    );
+
+    $children = getProgram($p->id, $data);
+    if (count($children) === 0) continue;
+
+    $item['items'] = array();
+    foreach ($children as $child) {
+        $item['items'][] = array(
+            'key' => $child->id,
+            'text' => $child->name,
+        );
+    }
+    $programmenuItems[] = $item;
+}
+
+function getProgram($id, $data) {
+    return array_filter($data, function($p) use($id) {
+        return $p->parent === $id;
+    });
+}
+
 foreach ($data as $row)
 {
     if (!property_exists($row, 'progress'))
@@ -53,6 +81,21 @@ dtable
     set::cols($cols),
     set::data($data),
     set::footer(false)
+);
+
+programmenu
+(
+    set
+    (
+        array
+        (
+            'title' => '所有项目集',
+            'subTitle' => '筛选项目集',
+            'activeClass' => 'active',
+            'activeIcon' => 'check',
+            'items' => $programmenuItems
+        )
+    )
 );
 
 render();
