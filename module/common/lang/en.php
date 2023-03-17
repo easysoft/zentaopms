@@ -90,7 +90,7 @@ $lang->viewDetails        = 'View Details';
 
 $lang->actions         = 'Action';
 $lang->restore         = 'Reset';
-$lang->confirmDraft    = 'There are unsaved form of %name%. Do you want to restore them?';
+$lang->confirmDraft    = 'Unsaved form is found. Do you want to restore it?';
 $lang->resume          = 'resume';
 $lang->comment         = 'Note';
 $lang->history         = 'History';
