@@ -1112,11 +1112,12 @@ class myModel extends model
         {
             if($checkExists) return true;
             $story = new stdclass();
-            $story->id      = $data->id;
-            $story->title   = $data->title;
-            $story->type    = 'story';
-            $story->time    = $data->openedDate;
-            $story->status  = $data->status;
+            $story->id        = $data->id;
+            $story->title     = $data->title;
+            $story->type      = 'story';
+            $story->storyType = $data->type;
+            $story->time      = $data->openedDate;
+            $story->status    = $data->status;
             $stories[$story->id] = $story;
         }
 
@@ -1435,6 +1436,7 @@ class myModel extends model
             $review->status = $objectType == 'attend' ? $object->reviewStatus : ((isset($object->status) and !isset($flows[$objectType])) ? $object->status : 'done');
             if(strpos($review->result, ',') !== false) list($review->result) = explode(',', $review->result);
 
+            if($objectType == 'story')    $review->storyType = $object->type;
             if($review->type == 'review') $review->type = 'projectreview';
             if($review->type == 'case')   $review->type = 'testcase';
             $review->title = '';

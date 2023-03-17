@@ -47,7 +47,7 @@
   </div>
   <?php endif;?>
 
-  <form class='main-form form-ajax flex-1' method='post'>
+  <form class='main-form form-ajax flex-1' method='post' id="data-form-<?php echo $type?>">
     <div class="main-content">
       <div class="title-content flex">
         <?php if(str_replace('-', '_', $this->app->getClientLang()) != $language):?>

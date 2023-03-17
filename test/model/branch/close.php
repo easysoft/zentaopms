@@ -2,7 +2,6 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/branch.class.php';
-$db->switchDB();
 su('admin');
 
 /**
@@ -31,4 +30,3 @@ r($branch->closeTest($branchID[3])) && p('id,status') && e('4,closed'); // 测�
 r($branch->closeTest($branchID[4])) && p('id,status') && e('5,closed'); // 测试关闭branchID 5
 r($branch->closeTest($branchID[5])) && p('id,status') && e('6,closed'); // 测试关闭branchID 6
 r($branch->closeTest($branchID[0])) && p('id,status') && e('1,closed'); // 测试重复关闭branchID 1
-$db->restoreDB();

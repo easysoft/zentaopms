@@ -236,8 +236,7 @@ class doc extends control
 
             $response['message']    = $this->lang->saveSuccess;
             $response['result']     = 'success';
-            $response['closeModal'] = true;
-            $response['callback']   = "redirectParentWindow($hasLibPriv, $libID, $objectID)";
+            $response['locate']     = 'parent';
             return $this->send($response);
         }
 

@@ -2,7 +2,6 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/productplan.class.php';
-$db->switchDB();
 
 /**
 
@@ -31,4 +30,3 @@ r($plan->updateStatus($planId[0], $planId[1], $planId[4])) && p() && e('1'); //�
 r($plan->updateStatus($planId[0], $planId[2], $planId[5])) && p() && e('1'); //修改状态为done
 r($plan->updateStatus($planId[0], $planId[3], $planId[6])) && p() && e('1'); //修改状态为closed
 ?>
-$db->restoreDB();

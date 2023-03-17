@@ -2,7 +2,6 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/api.class.php';
-$db->switchDB();
 su('admin');
 
 /**
@@ -17,4 +16,3 @@ pid=1
 
 global $tester;
 r($api->deleteReleaseTest(1, 1)) && p('id') && e('1'); //删除一个发布
-$db->restoreDB();

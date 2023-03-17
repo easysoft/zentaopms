@@ -50,7 +50,7 @@ class hostSubmitEntry extends baseEntry
         {
             if(in_array($image->status, array('failed', 'completed'))) $image->status = $image->status == 'completed' ? 'restore_completed' : 'restore_failed';
         }
-        else if($imageInfo->from == 'snapshot' && $imageInfo->status == 'creating')
+        else if($imageInfo->from == 'snapshot')
         {
             if($image->status == 'failed')
             {

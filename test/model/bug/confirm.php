@@ -2,7 +2,6 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/bug.class.php';
-$db->switchDB();
 su('admin');
 
 /**
@@ -33,4 +32,3 @@ r($bug->confirmTest($bugIDlist[1],$bug3)) && p('0:field,old,new;1:field,old,new'
 r($bug->confirmTest($bugIDlist[2],$bug4)) && p('0:field,old,new')                 && e('assignedTo,admin,user95');               // 确认已确认的bug
 r($bug->confirmTest($bugIDlist[3],$bug5)) && p('0:field,old,new;1:field,old,new') && e('status,resolved,active;pri,3,2');        // 确认优先级变化的bug
 r($bug->confirmTest($bugIDlist[4],$bug8)) && p('0:field,old,new')                 && e('status,closed,active');                  // 确认bug
-$db->restoreDB();

@@ -2,7 +2,6 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/tree.class.php';
-$db->switchDB();
 su('admin');
 
 /**
@@ -36,4 +35,3 @@ r($tree->fixModulePathTest($root[5], $type[0])) && p('1989:path;2705:path;2905:p
 r($tree->fixModulePathTest($root[6], $type[1])) && p('21:path;22:path;3021:path')     && e(',21,;,22,;,21,3021,');            // 修复root为 101 的module path
 r($tree->fixModulePathTest($root[7], $type[1])) && p('24:path;25:path;3022:path')     && e(',24,;,25,;,23,3022');             // 修复root为 102 的module path
 r($tree->fixModulePathTest($root[8], $type[1])) && p('27:path;28:path;3023:path')     && e(',27,;,28,;,25,3023');             // 修复root为 103 的module path
-$db->restoreDB();

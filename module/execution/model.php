@@ -390,11 +390,11 @@ class executionModel extends model
         $type    = 'sprint';
         if($project) $type = zget($this->config->execution->modelList, $project->model, 'sprint');
 
-        if(($project->model == 'waterfall' or $project->model == 'waterfallplus') and isset($this->config->setPercent) and $this->config->setPercent == 1)
+        if($project->model == 'waterfall' or $project->model == 'waterfallplus')
         {
             $_POST['products'] = array_filter($_POST['products']);
             if(empty($_POST['products'])) dao::$errors['products0'] = $this->lang->project->errorNoProducts;
-            $this->checkWorkload('create', $_POST['percent'], $project);
+            if(isset($this->config->setPercent) and $this->config->setPercent == 1) $this->checkWorkload('create', $_POST['percent'], $project);
             if(dao::isError()) return false;
         }
 
@@ -1310,6 +1310,27 @@ class executionModel extends model
             unset($execution->begin);
             unset($execution->end);
         }
+
+        if($this->post->readjustTime && $oldExecution->grade > 1)
+        {
+            $parent      = $this->getByID($oldExecution->parent);
+            $begin       = $execution->begin;
+            $end         = $execution->end;
+            $parentBegin = $parent->begin;
+            $parentEnd   = $parent->end;
+
+            if($begin < $parentBegin)
+            {
+                dao::$errors["message"][] = sprintf($this->lang->execution->errorLetterParent, $parentBegin);
+            }
+
+            if($end > $parentEnd)
+            {
+                dao::$errors["message"][] = sprintf($this->lang->execution->errorGreaterParent, $parentEnd);
+            }
+        }
+
+        if(dao::isError()) return false;
 
         $execution = $this->loadModel('file')->processImgURL($execution, $this->config->execution->editor->activate['id'], $this->post->uid);
         $this->dao->update(TABLE_EXECUTION)->data($execution)
@@ -5684,12 +5705,13 @@ class executionModel extends model
      */
     public function generateRow($executions, $users, $productID)
     {
-        $rows = array();
+        $today = helper::today();
+        $rows  = array();
         foreach($executions as $id => $execution)
         {
             $label = $execution->type == 'stage' ? 'label-warning' : 'label-info';
             $link  = $execution->type == 'kanban' ? helper::createLink('execution', 'kanban', "id=$execution->id") : helper::createLink('execution', 'task', "id=$execution->id");
-            $execution->name     = "<span class='project-type-label label label-outline $label'>{$this->lang->execution->typeList[$execution->type]}</span> " . (empty($execution->children) ? html::a($link, $execution->name) : $execution->name);
+            $execution->name     = "<span class='project-type-label label label-outline $label'>{$this->lang->execution->typeList[$execution->type]}</span> " . (empty($execution->children) ? html::a($link, $execution->name, '_self', 'class="text-primary"') : $execution->name) . (strtotime($today) > strtotime($execution->end) ? '<span class="label label-danger label-badge">' . $this->lang->execution->delayed . '</span>' : '');;
             $execution->project  = $execution->projectName;
             $execution->parent   = ($execution->parent and $execution->grade > 1) ? $execution->parent : '';
             $execution->asParent = !empty($execution->children);

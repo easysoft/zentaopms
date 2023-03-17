@@ -39,7 +39,7 @@ class mr extends control
             ->andWhere('synced')->eq(1)
             ->orderBy('id')
             ->count();
-        if($repoCount == 0) $this->locate($this->repo->createLink('create'));
+        if($repoCount == 0) $this->locate($this->loadModel('repo')->createLink('create'));
 
         $repoID = $this->loadModel('repo')->saveState($repoID, $objectID);
         $repo   = $this->repo->getRepoByID($repoID);

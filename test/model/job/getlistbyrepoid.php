@@ -2,7 +2,6 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/job.class.php';
-$db->switchDB();
 su('admin');
 
 /**
@@ -21,4 +20,3 @@ $repoIdList = array('1', '100001');
 
 r($job->getListByRepoIDTest($repoIdList[0])) && p('1:name') && e('这是一个Job1'); // 获取repo为1的name
 r($job->getListByRepoIDTest($repoIdList[1])) && p('100001:name') && e('0');       // 获取repo为100001的name
-$db->restoreDB();

@@ -2,7 +2,6 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/user.class.php';
-$db->switchDB();
 su('admin');
 
 /**
@@ -38,4 +37,3 @@ r($computedAdminProducts)               && p()           && e(',11,12,'); //获�
 r($user->computeUserViewTest('user10')) && p('products') && e('99');      //获取user10账户可见的产品ID
 r($user->computeUserViewTest('test2'))  && p('projects') && e(',12');     //获取test2账户可见的项目ID
 r($user->computeUserViewTest(null))     && p('account')  && e('admin');   //用户名传null，则获取当前登录账户的views
-$db->restoreDB();

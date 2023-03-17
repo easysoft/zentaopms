@@ -2,7 +2,6 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/project.class.php';
-$db->switchDB();
 su('admin');
 
 /**
@@ -32,4 +31,3 @@ r($products)        && p('1:program,name') && e('1,正常产品1'); // 查看被
 r($products)        && p('2:program,name') && e('1,正常产品2'); // 查看被更新了项目集的产品详情
 r($products)        && p('3:program,name') && e('1,正常产品3'); // 查看被更新了项目集的产品详情
 r($products)        && p('4:program,name') && e('1,正常产品4'); // 查看被更新了项目集的产品详情
-$db->restoreDB();

@@ -45,7 +45,7 @@
       $viewLink = $this->createLink('execution', 'task', 'executionID=' . $execution->id);
       ?>
       <tr <?php echo $appid?>>
-        <td class='c-name text-left' title='<?php echo $execution->name;?>'><nobr><?php echo html::a($viewLink, $execution->name, '', "title='$execution->name'");?></nobr></td>
+        <td class='c-name text-left' title='<?php echo $execution->name;?>'><nobr><?php echo html::a($viewLink, $execution->name, '', "title='$execution->name' class='text-primary'");?></nobr></td>
         <td class="c-date"><?php echo $execution->end;?></td>
         <?php if($longBlock):?>
         <td class="w-70px">

@@ -1267,9 +1267,14 @@ class story extends control
 
             if($this->app->tab == 'project')
             {
-                $module = 'projectstory';
-                $method = 'view';
-                $params = "storyID=$storyID";
+                $module  = 'projectstory';
+                $method  = 'view';
+                $params  = "storyID=$storyID";
+                if(!$this->session->multiple)
+                {
+                    $module  = 'story';
+                    $params .= "&version=0&param={$this->session->project}&storyType=$storyType";
+                }
             }
             elseif($this->app->tab == 'execution')
             {
@@ -1283,7 +1288,8 @@ class story extends control
                 $method = 'view';
                 $params = "storyID=$storyID&version=0&param=0&storyType=$storyType";
             }
-            return print(js::locate($this->createLink($module, $method, $params), 'parent'));
+
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink($module, $method, $params)));
         }
 
         $this->commonAction($storyID);
@@ -1631,7 +1637,7 @@ class story extends control
                 {
                     $module = 'story';
                     $method = 'view';
-                    $params = "storyID=$storyID&version=0&param=0&storyType=$storyType";
+                    $params = "storyID=$storyID&version=0&param={$this->session->execution}&storyType=$storyType";
                 }
             }
             else
@@ -1799,9 +1805,6 @@ class story extends control
         /* Get story and product. */
         $story   = $this->story->getById($storyID);
         $product = $this->product->getById($story->product);
-
-        /* Set menu. */
-        $this->product->setMenu($story->product, $story->branch);
 
         /* Get reviewers. */
         $reviewers = $product->reviewer;
