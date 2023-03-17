@@ -1549,7 +1549,12 @@ class groupModel extends model
             unset($modules[$index]);
         }
 
-        $packages = $this->getPrivPackagePairs();
+        $packages       = $this->getPrivPackagePairs();
+        $packageModules = $this->getPrivPackagePairs('', '', 'module');
+        foreach($packages as $packageID => $package)
+        {
+            $packages[$packageID] = $modules[$packageModules[$packageID]] . '/' . $package;
+        }
 
         $privs = $this->getPrivLangPairs();
 
