@@ -2,7 +2,6 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/bug.class.php';
-$db->switchDB();
 su('admin');
 
 /**
@@ -33,4 +32,3 @@ r($bug->linkBugToBuildTest($bugIDList2, $buildList[1])) && p('bugs')  && e('3,4'
 r($bug->linkBugToBuildTest($bugIDList3, $buildList[2])) && p('bugs')  && e('5,6');   // 把bug 5 6关联到build 5
 r($bug->linkBugToBuildTest($bugIDList4, $buildList[0])) && p('bugs')  && e('1,2,7,8');   // 把bug 5 6关联到build 1
 r($bug->linkBugToBuildTest($bugIDList5, $buildList[0])) && p('bugs')  && e('1,2,7,8,9,10');   // 把bug 5 6关联到build 1
-$db->restoreDB();

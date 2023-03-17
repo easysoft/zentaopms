@@ -2,7 +2,6 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/block.class.php';
-$db->switchDB();
 su('admin');
 
 /**
@@ -55,4 +54,3 @@ r($block->saveTest($changeTitle,   $blockID[0], $source, $changeTitle->modules))
 r($block->saveTest($changeModules, $blockID[0], $source, $changeModules->modules))                            && p('title,module,grid,block') && e('我的贡献,my,8,dynamic');            // 测试修改block 模块
 r($block->saveTest($changeBlock,   $blockID[1], $source, $changeBlock->modules,  $changeBlock->moduleBlock))  && p('title,module,grid,block') && e('项目统计,projectteam,8,projectteam');        // 测试修改block 区块
 r($block->saveTest($changeParams,  $blockID[2], $source, $changeParams->modules, $changeParams->moduleBlock)) && p('title,module,grid,block') && e('未关闭的产品,statistic,8,statistic'); // 测试修改block 变量
-$db->restoreDB();

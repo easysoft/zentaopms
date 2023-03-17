@@ -2,7 +2,6 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/task.class.php';
-$db->switchDB();
 su('admin');
 
 /**
@@ -25,4 +24,3 @@ $normal = array('names' => $name, 'types' => $type,'statuses'=> $statuses);
 
 $task = new taskTest();
 r($task->batchUpdateObject($normal, $taskID)) && p('1:field,old,new') && e('name,开发任务17,批量修改任务一'); // 测试批量修改任务
-$db->restoreDB();

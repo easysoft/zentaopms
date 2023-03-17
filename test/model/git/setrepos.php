@@ -2,7 +2,6 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/git.class.php';
-$db->switchDB();
 su('admin');
 
 /**
@@ -19,4 +18,3 @@ $git = new gitTest();
 $tester->dao->update(TABLE_REPO)->set('synced')->eq(1)->where('id')->eq(1)->exec();
 r($git->setRepos()) && p('id') && e(1);     // 设置版本库
 
-$db->restoreDB();

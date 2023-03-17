@@ -2,7 +2,6 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/git.class.php';
-$db->switchDB();
 su('admin');
 
 /**
@@ -24,4 +23,3 @@ r($git->updateCommit($repo)) && p() && e(1);     // 测试正常的版本库
 $repo = new stdclass();
 r($git->updateCommit($repo)) && p() && e(0);    // 测试空的版本库
 
-$db->restoreDB();

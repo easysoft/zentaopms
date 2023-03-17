@@ -2,7 +2,6 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/job.class.php';
-$db->switchDB();
 su('admin');
 
 /**
@@ -21,4 +20,3 @@ $jobIdList = array('1', '100001');
 
 r($job->getTriggerConfigTest($jobIdList[0])) && p() && e('目录改动(/module/caselib)'); // 获取job为1的trigger config
 r($job->getTriggerConfigTest($jobIdList[1])) && p() && e('0');                         // 获取job为100001的trigger config
-$db->restoreDB();

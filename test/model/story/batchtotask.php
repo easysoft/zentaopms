@@ -2,7 +2,6 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/story.class.php';
-$db->switchDB();
 su('admin');
 
 /**
@@ -34,4 +33,3 @@ r($tasks)        && p('912:project,execution,name,status,pri,type,assignedTo')  
 r($tasks)        && p('913:project,execution,name,status,pri,type,assignedTo')  && e('11,101,软件需求70,wait,0,test,');  //查看从需求转化过来的任务的名称、状态、优先级等字段
 r($tasks)        && p('914:project,execution,name,status,pri,type,assignedTo')  && e('11,101,软件需求102,wait,0,test,'); //查看从需求转化过来的任务的名称、状态、优先级等字段
 r($tasks)        && p('915:project,execution,name,status,pri,type,assignedTo')  && e('11,101,软件需求220,wait,0,test,'); //查看从需求转化过来的任务的名称、状态、优先级等字段
-$db->restoreDB();
