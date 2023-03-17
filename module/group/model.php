@@ -1316,13 +1316,6 @@ class groupModel extends model
         $data = fixer::input('post')->get();
         if(empty($data->relation)) return false;
 
-        $deleteModuleSQL = $this->dao->select('id')->from(TABLE_PRIV)->where('module')->in(array_keys($data->relation))->get();
-        $this->dao->delete()->from(TABLE_PRIVRELATION)
-            ->where('priv')->in($privIdList)
-            ->andWhere('type')->eq($type)
-            ->andWhere('relationPriv IN(' . $deleteModuleSQL . ')')
-            ->exec();
-
         foreach($privIdList as $privID)
         {
             $relation = new stdclass();
