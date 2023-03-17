@@ -36,7 +36,7 @@ if(empty($type)) $type = 'product';
   </div>
   <div class="content panel" id="<?php echo $type;?>">
     <div class="detail">
-      <li class="detail-title"><?php echo $lang->doc->tableContents;?></li>
+      <div class="detail-title"><?php echo $lang->doc->tableContents;?></div>
       <?php
       $canEditLib    = common::hasPriv('doc', 'editLib');
       $canManageBook = common::hasPriv('doc', 'manageBook');
@@ -77,7 +77,7 @@ if(empty($type)) $type = 'product';
       <?php echo $moduleTree;?>
       <?php endif;?>
       <?php else:?>
-      <div class="no-content"><img src="<?php echo $config->webRoot . 'theme/default/images/main/no_content.png'?>"/></div>
+      <div class="no-content"><img alt="" src="<?php echo $config->webRoot . 'theme/default/images/main/no_content.png'?>"/></div>
       <div class="notice text-muted"><?php echo (empty($libs) and $type == 'custom') ? $lang->doc->noLib : $lang->doc->noDoc;?></div>
       <div class="no-content-button">
         <?php

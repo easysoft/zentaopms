@@ -96,8 +96,6 @@ $(function()
        }
    });
 
-   console.log(treeData);
-
     $('#fileTree').tree(
     {
         data: treeData,
