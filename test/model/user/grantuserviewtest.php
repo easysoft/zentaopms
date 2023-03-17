@@ -2,7 +2,6 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/user.class.php';
-$db->switchDB();
 su('admin');
 
 /**
@@ -35,4 +34,3 @@ r($adminProducts)  && p()  && e('11,12'); //获取admin账户可见的前两个�
 r($test2Projects)  && p()  && e('12,11'); //获取test2账户可见的前两个项目的ID
 r($user10Projects) && p()  && e('19,11'); //获取user10账户可见的前两个项目的ID
 r($nullViews)      && p()  && e('');      //获取null账户可见的项目、产品等
-$db->restoreDB();

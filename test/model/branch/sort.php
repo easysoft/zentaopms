@@ -2,7 +2,6 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/branch.class.php';
-$db->switchDB();
 su('admin');
 
 /**
@@ -34,4 +33,3 @@ r($branch->sortTest($branches[0], $order)) && p() && e('2,1'); // 测试产品 4
 r($branch->sortTest($branches[1], $order)) && p() && e('4,3'); // 测试产品 42 order 排序
 r($branch->sortTest($branches[2], $order)) && p() && e('6,5'); // 测试产品 43 order 排序
 r($branch->sortTest($branches[3], $order)) && p() && e('8,7'); // 测试产品 44 order 排序
-$db->restoreDB();

@@ -2,7 +2,6 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/build.class.php';
-$db->switchDB();
 su('admin');
 
 /**
@@ -24,4 +23,3 @@ $build = new buildTest();
 r($build->unlinkBugTest($buildIDList[0],$bugs,$bugs[0])) && p('1:bugs,project')    && e(',311,11');               //项目版本解除bug
 r($build->unlinkBugTest($buildIDList[1],$bugs,$bugs[1])) && p('11:bugs,execution') && e(',301,101');              //执行版本解除bug
 
-$db->restoreDB();

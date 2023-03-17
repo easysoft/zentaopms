@@ -7622,12 +7622,19 @@ class upgradeModel extends model
             if($project->status == 'closed') $this->action->create('project', $projectID, 'closedbysystem');
 
             $project->id = $projectID;
-            $this->createProjectDocLib($project);
+            if($fromMode == 'classic')
+            {
+                $this->dao->update(TABLE_PROJECT)->set('multiple')->eq('0')->where('id')->eq($sprint->id)->exec();
+                $this->dao->update(TABLE_DOCLIB)->set('project')->eq($projectID)->set('type')->eq('project')->set('execution')->eq(0)->where('execution')->eq($sprint->id)->andWhere('type')->eq('execution')->exec();
+                $this->dao->update(TABLE_DOC)->set('project')->eq($projectID)->set('execution')->eq(0)->where('execution')->eq($sprint->id)->exec();
+            }
+            else
+            {
+                $this->createProjectDocLib($project);
+            }
 
             $productIdList = $this->dao->select('product')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($sprint->id)->fetchPairs();
             $this->processMergedData($programID, $projectID, '', $productIdList, array($sprint->id));
-
-            if($fromMode == 'classic') $this->dao->update(TABLE_PROJECT)->set('multiple')->eq('0')->where('id')->eq($sprint->id)->exec();
         }
 
         $this->fixProjectPath($programID);

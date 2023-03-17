@@ -2,7 +2,6 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/bug.class.php';
-$db->switchDB();
 su('admin');
 
 /**
@@ -36,4 +35,3 @@ r($bug->assignTest($bugIDlist[2],$bug3))  && p('0:field,old,new') && e('assigned
 r($bug->assignTest($bugIDlist[3],$bug4))  && p('0:field,old,new') && e('assignedTo,admin,user95'); // 指派bugID为4的bug
 r($bug->assignTest($bugIDlist[4],$bug51)) && p('0:field,old,new') && e('assignedTo,dev1,user96');  // 指派bugID为51的bug
 r($bug->assignTest($bugIDlist[5],$bug81)) && p() && e('0');                                        // 指派人不发生变化的bug
-$db->restoreDB();
