@@ -101,7 +101,6 @@ class hostHeartbeatEntry extends baseEntry
                 
                 if($vm->status == 'running' && !$isPhysicsNode)
                 {
-                    $node = $this->loadModel('zanode')->getNodeByMac($vm->macAddress);
                     if(!empty($node))
                     {
                         $snaps = $this->loadModel('zanode')->getSnapshotList($node->id);
