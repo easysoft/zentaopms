@@ -52,9 +52,13 @@ $(function()
         if(!$(this).hasClass('active')) $(this).removeClass('text-primary');
     });
 
-    var $firstBtn = $('a[target="editWin"]').eq(0);
-    $firstBtn.trigger('click');
-    $(parent.document).find('#editWin').attr('src', $firstBtn.attr('href'));
+    var $firstBtn = $('a[target="editWin"]');
+    if($firstBtn.length)
+    {
+        $firstBtn = $firstBtn.eq(0);
+        $firstBtn.trigger('click');
+        $(parent.document).find('#editWin').attr('src', $firstBtn.attr('href'));
+    }
 });
 </script>
 <iframe frameborder='0' name='hiddenwin' id='hiddenwin' scrolling='no' class='hidden'></iframe>
