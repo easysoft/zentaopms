@@ -4891,7 +4891,7 @@ class upgradeModel extends model
                     $data->begin         = $projects[$projectID]->begin;
                     $data->end           = $projects[$projectID]->end;
                     $data->projectStatus = $projects[$projectID]->status;
-                    $data->team          = $projects[$projectID]->team;
+                    $data->team          = empty($projects[$projectID]->team) ? $projects[$projectID]->name : $projects[$projectID]->team;
                     $data->PM            = $projects[$projectID]->PM;
                     $data->projectAcl    = $projects[$projectID]->acl == 'custom' ? 'private' : $projects[$projectID]->acl;
 
@@ -4929,6 +4929,7 @@ class upgradeModel extends model
         $project->model          = 'scrum';
         $project->parent         = $programID;
         $project->status         = $data->projectStatus;
+        $project->team           = isset($data->team) ? $data->team : $data->projectName;
         $project->begin          = $data->begin;
         $project->end            = isset($data->end) ? $data->end : LONG_TIME;
         $project->days           = $this->computeDaysDelta($project->begin, $project->end);
