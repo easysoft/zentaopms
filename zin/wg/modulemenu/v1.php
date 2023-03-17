@@ -5,17 +5,14 @@ class modulemenu extends wg
 {
     private $modules = array();
 
-    protected static $defineProps = array
-    (
-        'js-render?:bool=true'
-    );
+    protected static $defineProps = array('js-render?:bool=true');
 
     private function buildMenuTree($parent, $parentID)
     {
         $children = $this->getChildModule($parentID);
-        if (count($children) === 0) return;
+        if(count($children) === 0) return;
 
-        foreach ($children as $child)
+        foreach($children as $child)
         {
             $item = array('key' => $child->id, 'text' => $child->name);
             $items = $this->buildMenuTree($item['items'], $child->id);
@@ -34,7 +31,8 @@ class modulemenu extends wg
     protected function build()
     {
         global $app;
-        $id = $this->prop('id');
+        $id = $this->prop('productID');
+        $this->setProp('productID', null);
         $this->modules = $app->loadTarget('tree')->getProductStructure($id, 'story');
         $moduleItems = $this->buildMenuTree(array(), 0);
         $this->setProp('items', $moduleItems);
