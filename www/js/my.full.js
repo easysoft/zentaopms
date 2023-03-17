@@ -135,7 +135,13 @@
                                         {
                                             KindEditor.remove('#' + item.name);
                                             formItem.val(item.value);
-                                            $(formItem).kindeditor();
+                                            $(formItem).kindeditor(
+                                            {
+                                                afterChange: function()
+                                                {
+                                                    $(formItem).closest('.main-form').trigger('change');
+                                                }
+                                            });
                                         }
                                         else
                                         {
