@@ -8277,14 +8277,15 @@ class upgradeModel extends model
      */
     public function processDashboard()
     {
+        $dimension  = $this->dao->select('id')->from(TABLE_DIMENSION)->where('code')->eq('efficiency')->fetch('id');
         $dashboards = $this->dao->select('*')->from(TABLE_DASHBOARD)->fetchAll();
         foreach($dashboards as $dashboard)
         {
             $screen = new stdclass();
             $screen->name        = $dashboard->name;
-            $screen->dimension   = '1';
+            $screen->dimension   = $dimension ? $dimension : 0;
             $screen->desc        = $dashboard->desc;
-            $screen->scheme      = $this->processDashboardLayout($dashboard->layout);
+            $screen->scheme      = $this->processDashboardLayout($dashboard);
             $screen->deleted     = $dashboard->deleted;
             $screen->status      = 'published';
             $screen->createdBy   = $dashboard->createdBy;
@@ -8294,22 +8295,22 @@ class upgradeModel extends model
     }
 
     /**
-     * Process dashboard layout to screen scheme.
+     * Upgrade dashboard info to screen.
      *
-     * @param  string $layout
+     * @param  object $dashboard
      * @access public
      * @return void
      */
-    public function processDashboardLayout($layout)
+    public function processDashboardLayout($dashboard)
     {
+        $this->loadModel('screen');
+
         $scheme = file_get_contents($this->app->getModuleRoot() . DS . 'screen' . DS . 'json' . DS . 'screen.json');
         $scheme = json_decode($scheme);
 
+        $layout        = json_decode($dashboard->layout);
+        $canvasHeight  = $scheme->editCanvasConfig->height;
         $componentList = array();
-        $layout = json_decode($layout);
-        $canvasHeight = $scheme->editCanvasConfig->height;
-
-        $this->loadModel('screen');
         foreach($layout as $option)
         {
             $component = new stdclass();
@@ -8328,6 +8329,8 @@ class upgradeModel extends model
             if($type == 'chart') $chartType = $chart->builtin ? $chart->type : $settings[0]['type'];
             if($type == 'pivot') $chartType = 'table';
             $chartConfig = json_decode(zget($this->config->screen->chartConfig, $chartType));
+            $chartConfig->fields   = $chart->fieldSettings;
+            $chartConfig->sourceID = $option->i->id;
 
             $component->title       = $chart->name;
             $component->type        = $chartType;
@@ -8343,7 +8346,31 @@ class upgradeModel extends model
             if($canvasHeight < ($component->attr->y + $component->attr->h)) $canvasHeight = $component->attr->y + $component->attr->h;
         }
 
-        $scheme->editCanvasConfig->height = $canvasHeight;
+        $filters       = json_decode($dashboard->filters);
+        $globalFilters = array();
+        foreach($filters as $filter)
+        {
+            $globalFilter =  new stdclass();
+            $globalFilter->name         = $filter->name;
+            $globalFilter->type         = $filter->type;
+            $globalFilter->field        = $filter->field;
+            $globalFilter->defaultValue = zget($filter, 'defaultValue' , '');
+
+            $diagram = array();
+            foreach($layout as $option)
+            {
+                $type   = !empty($option->i->type) ? $option->i->type : 'chart';
+                $chart  = $this->loadModel($type)->getByID($option->i->id);
+                $fields = explode('.', $filter->field);
+                if($chart->dataset == $fields[0]) $diagram[] = array('id' => "diagram-{$chart->id}", 'field' => $fields[1]);
+            }
+            $globalFilter->diagram = $diagram;
+
+            $globalFilters[] = $globalFilter;
+        }
+
+        $scheme->editCanvasConfig->height       = $canvasHeight;
+        $scheme->editCanvasConfig->globalFilter = $globalFilters;
         $scheme->componentList = $componentList;
         $scheme = json_encode($scheme);
         return $scheme;
