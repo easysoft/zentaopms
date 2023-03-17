@@ -3094,7 +3094,7 @@ EOT;
             $item->objectType = $type;
             $item->objectID   = $objectID;
             $item->active     = $lib->id == $libID ? 1 : 0;
-            $item->modules    = $this->getModuleTree($lib->id, $moduleID, $lib->type == 'api' ? 'api' : 'doc');
+            $item->children   = $this->getModuleTree($lib->id, $moduleID, $lib->type == 'api' ? 'api' : 'doc');
             if($lib->type != 'execution')
             {
                 if($item->type == 'lib') $libTree[$lib->type][$lib->id] = $item;
@@ -3114,7 +3114,7 @@ EOT;
                     if(count($executionLibs[$executionID]) == 1)
                     {
                         $execution->id        = $libID;
-                        $execution->children  = $item->modules;
+                        $execution->children  = $item->children;
                     }
 
                     $libTree['execution'][$executionID] = $execution;
@@ -3129,17 +3129,20 @@ EOT;
         if(in_array($type, array('product', 'project')))
         {
             $libTree[$type] = array_merge($libTree[$type], $apiLibs);
+            if($type == 'project' and !empty($libTree['execution'])) $libTree[$type] = array_merge($libTree[$type], $libTree['execution']);
 
-            $libTree['annex'] = new stdclass();
-            $libTree['annex']->id         = 0;
-            $libTree['annex']->name       = $this->lang->doclib->files;
-            $libTree['annex']->type       = 'annex';
-            $libTree['annex']->objectType = $type;
-            $libTree['annex']->objectID   = $objectID;
-            $libTree['annex']->active     = empty($libID) ? 1 : 0;
+            $annex = new stdclass();
+            $annex->id         = 0;
+            $annex->name       = $this->lang->doclib->files;
+            $annex->type       = 'annex';
+            $annex->objectType = $type;
+            $annex->objectID   = $objectID;
+            $annex->active     = empty($libID) ? 1 : 0;
+
+            $libTree[$type][] = $annex;
         }
 
-        $libTree = array_values($libTree);
+        $libTree = $libTree[$type];
         return $libTree;
     }
 }
