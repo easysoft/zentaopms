@@ -148,6 +148,7 @@ $account = strpos($zanode->osName, "windows") ? $config->zanode->defaultWinAccou
             </div>
             <div class="status-notice hide">
               <span class='init-success hide'><?php echo sprintf($lang->zanode->init->initSuccessNoticeTitle, "<a id='jumpManual' href='javascript:;'>{$lang->zanode->manual}</a>", html::a(helper::createLink('testcase', 'automation', "", '', true), $lang->zanode->automation, '', "class='iframe' title='{$lang->zanode->automation}' data-width='50%'", '')); ?></span>
+              <?php if($zanode->hostType == 'physics'):?>
               <div class='hide init-fail'>
                 <?php echo $lang->zanode->init->initFailNotice;?>
                 <textarea style="display:none;" id="initBash"><?php echo $initBash; ?></textarea>
@@ -155,6 +156,7 @@ $account = strpos($zanode->osName, "windows") ? $config->zanode->defaultWinAccou
                 <?php echo "$initBash <button type='button' class='btn btn-info btn-mini btn-init-copy'><i class='icon-common-copy icon-copy' title='" . $lang->zanode->copy .  "'></i></button>"; ?>
                 </div>
               </div>
+              <?php endif?>
             </div>
           </div>
         </div>
