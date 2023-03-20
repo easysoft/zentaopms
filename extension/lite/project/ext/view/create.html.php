@@ -61,7 +61,10 @@
           </td>
           <td colspan='2'><?php echo html::radio('delta', $lang->project->endList , '', "onclick='computeEndDate(this.value)'");?></td>
         </tr>
-
+        <tr>
+          <th><?php echo $lang->execution->team;?></th>
+          <td colspan='2'><?php echo html::select('teamMembers[]', $users, '', "class='form-control picker-select' multiple"); ?></td>
+        </tr>
         <tr>
           <th><?php echo $lang->project->desc;?></th>
           <td colspan='3'>
