@@ -6,8 +6,8 @@ class avatar extends wg
     protected static $defineProps = array(
         'className?:string',
         'style?:array',
-        'size?:string',
-        'circle?:bool=false',
+        'size?:number=32',
+        'circle?:bool=true',
         'rounded?:bool=false',
         'background?:string',
         'foreColor?:string',
@@ -20,10 +20,11 @@ class avatar extends wg
         'src?:string'
     );
 
-    private $textLen    = 0;
-    private $sizeMap    = array('xs' => 20, 'sm' => 24, 'lg' => 48, 'xl' => 80);
-    private $actualSize = 32;
-    private $finalClass = array('avatar');
+    private $textLen        = 0;
+    private $displayTextLen = 0;
+    private $sizeMap        = array('xs' => 20, 'sm' => 24, 'lg' => 48, 'xl' => 80);
+    private $actualSize     = 32;
+    private $finalClass     = array('avatar');
     private $finalStyle;
 
     protected function onAddChild($child)
@@ -108,11 +109,18 @@ class avatar extends wg
         $text          = $this->prop('text');
         $this->textLen = strlen($text);
 
-        if(preg_match('/[\x{4e00}-\x{9fa5}]+.*/u', $text))
+        if(preg_match('/[\x{4e00}-\x{9fa5}\s]+$/u', $text))
         {
-            $this->textLen = mb_strlen($text);
+            $this->textLen        = mb_strlen($text);
+            $text                 = $this->textLen <= $maxTextLen ? $text : mb_substr($text, $this->textLen - $maxTextLen);
+            $this->displayTextLen = mb_strlen($text);
+            return $text;
+        }
 
-            return $this->textLen <= $maxTextLen ? $text : mb_substr($text, $this->textLen - $maxTextLen);
+        if(preg_match('/[A-Za-z\d\s]+$/', $text))
+        {
+            $this->displayTextLen = 1;
+            return substr($text, 0, 1);
         }
 
         return $this->textLen <= $maxTextLen ? $text : substr($text, 0, $maxTextLen);
@@ -213,8 +221,11 @@ class avatar extends wg
             $val = 0;
             if(is_numeric($avatarCode)) $val = intval($avatarCode);
             else for($i = 0; $i < strlen($avatarCode); $i++) $val += ord($avatarCode[$i]);
-            $hue = $val * $hueDistance % 360;
-            $this->finalStyle->background = "hsl({$hue}, {$saturation}%, {$lightness}%)";
+
+            $hue         = $val * $hueDistance % 360;
+            $actualSat   = $saturation * 100;
+            $actualLight = $lightness * 100;
+            $this->finalStyle->background = "hsl({$hue}, {$actualSat}%, {$actualLight}%)";
 
             if(!$foreColor)
             {
@@ -225,10 +236,10 @@ class avatar extends wg
         elseif (!$foreColor and $background) $this->finalStyle->color = $this->contrastColor($background);
 
         $textStyle = null;
-        if($this->actualSize and $this->actualSize < (14 * $this->textLen))
+        if($this->actualSize and $this->actualSize < (14 * $this->displayTextLen))
         {
             $textStyle = array(
-                'transform' => 'scale(' . $this->actualSize / (14 * $this->textLen) . ')',
+                'transform' => 'scale(' . $this->actualSize / (14 * $this->displayTextLen) . ')',
                 'white-space' => 'nowrap'
             );
         }

@@ -8,7 +8,7 @@ foreach ($lang->project->featureBar['browse'] as $key => $text)
     $statuses[] = array(
         'text' => $text . (($browseType == $key) ? "({$pager->recTotal})" : ''),
         'active' => $key === $browseType,
-        'url' => \helper::createLink('project', 'browse', "programID=$programID&browseType=$key", 'json'),
+        'url' => \helper::createLink('project', 'browse', "programID=$programID&browseType=$key"),
         'class' => $key === $browseType ? '' : 'ghost'
     );
 }
