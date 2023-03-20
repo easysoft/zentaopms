@@ -1327,7 +1327,7 @@ class groupModel extends model
                 {
                     if($privID == $privRelation) continue;
                     $relation->relationPriv = $privRelation;
-                    $this->dao->insert(TABLE_PRIVRELATION)->data($relation)->exec();
+                    $this->dao->replace(TABLE_PRIVRELATION)->data($relation)->exec();
                 }
             }
         }
