@@ -269,9 +269,9 @@ $lang->waterfall->menu->devops     = array('link' => "{$lang->repo->common}|repo
 $lang->waterfall->menu->build      = array('link' => "{$lang->build->common}|project|build|project=%s", 'subModule' => 'projectbuild');
 $lang->waterfall->menu->release    = array('link' => "{$lang->release->common}|projectrelease|browse|project=%s", 'subModule' => 'projectrelease');
 $lang->waterfall->menu->dynamic    = array('link' => "$lang->dynamic|project|dynamic|project=%s");
+$lang->waterfall->menu->settings   = array('link' => "$lang->settings|project|view|project=%s", 'subModule' => 'stakeholder', 'alias' => 'edit,manageproducts,group,managemembers,manageview,managepriv,whitelist,addwhitelist,team', 'exclude' => 'tree-browsetask');
 
-$lang->waterfall->menu->settings = $lang->scrum->menu->settings;
-$lang->waterfall->dividerMenu    = ',programplan,build,dynamic,';
+$lang->waterfall->dividerMenu = ',programplan,build,dynamic,';
 
 $lang->waterfall->menu->storyGroup['dropMenu'] = $lang->scrum->menu->storyGroup['dropMenu'];
 
