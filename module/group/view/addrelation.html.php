@@ -42,9 +42,30 @@
             <li>
               <?php echo html::a('#', $modules[$privModule]);?>
               <ul class='relationBox'>
-                <?php foreach($modulePrivs[$privModule] as $id => $modulePriv):?>
-                <li><?php echo html::checkbox("relation[{$privModule}]", array($id => $modulePriv->name), '')?></li>
+                <?php foreach($packages as $packageID => $packageName):?>
+                <?php if(empty($modulePrivs[$privModule][$packageID])) continue;?>
+                <li>
+                  <?php echo html::a('#', $packageName);?>
+                  <ul>
+                    <?php foreach($modulePrivs[$privModule][$packageID] as $id => $modulePriv):?>
+                    <li><?php echo html::checkbox("relation[{$privModule}]", array($id => $modulePriv->name), '')?></li>
+                    <?php endforeach;?>
+                    <?php unset($modulePrivs[$privModule][$packageID]);?>
+                  </ul>
+                </li>
                 <?php endforeach;?>
+                <?php if(!empty($modulePrivs[$privModule])):?>
+                <li>
+                  <?php echo html::a('#', $lang->group->unassigned);?>
+                  <ul>
+                    <?php foreach($modulePrivs[$privModule] as $packageID => $packagePrivs):?>
+                    <?php foreach($packagePrivs as $id => $modulePriv):?>
+                    <li><?php echo html::checkbox("relation[{$privModule}]", array($id => $modulePriv->name), '')?></li>
+                    <?php endforeach;?>
+                    <?php endforeach;?>
+                  </ul>
+                </li>
+                <?php endif;?>
               </ul>
             </li>
           </ul>

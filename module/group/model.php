@@ -846,7 +846,7 @@ class groupModel extends model
      */
     public function getPrivPackagesByModule($module)
     {
-        return $this->dao->select('*')->from(TABLE_PRIVPACKAGE)->where('module')->eq($module)->orderBy('order_asc')->fetchAll('id');
+        return $this->dao->select('*')->from(TABLE_PRIVPACKAGE)->where('module')->in($module)->orderBy('order_asc')->fetchAll('id');
     }
 
     /**
@@ -1115,12 +1115,16 @@ class groupModel extends model
      */
     public function getPrivByModule($modules)
     {
-        return $this->dao->select('t1.*,t2.name,t2.desc')->from(TABLE_PRIV)->alias('t1')
+        $stmt = $this->dao->select('t1.*,t2.name,t2.desc')->from(TABLE_PRIV)->alias('t1')
             ->leftJoin(TABLE_PRIVLANG)->alias('t2')->on('t1.id=t2.priv')
             ->where('t1.module')->in($modules)
             ->andWhere('t2.lang')->eq($this->app->getClientLang())
             ->orderBy('`order`')
-            ->fetchGroup('module', 'id');
+            ->query();
+
+        $privs = array();
+        while($priv = $stmt->fetch()) $privs[$priv->module][$priv->package][$priv->id] = $priv;
+        return $privs;
     }
 
     /**

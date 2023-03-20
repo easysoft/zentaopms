@@ -621,6 +621,7 @@ class group extends control
 
         $this->view->privs       = $privs;
         $this->view->modules     = array('' => $this->lang->group->selectModule) + $this->group->getMenuModules(null, true);
+        $this->view->packages    = $this->group->getPrivPackagePairs(null, implode(',', $modules));
         $this->view->modulePrivs = $this->group->getPrivByModule($modules);
         $this->view->type        = $type;
         $this->display();
@@ -670,6 +671,7 @@ class group extends control
 
         $this->view->privs       = $privs;
         $this->view->modules     = array('' => $this->lang->group->selectModule) + $this->group->getMenuModules(null, true);
+        $this->view->packages    = $this->group->getPrivPackagePairs(null, implode(',', $modules));
         $this->view->modulePrivs = $this->group->getPrivByModule($modules);
         $this->view->type        = $type;
         $this->display('group', 'addrelation');
@@ -689,16 +691,43 @@ class group extends control
         if(is_string($privIdList)) $privIdList = explode(',', $privIdList);
 
         $modules     = $this->group->getMenuModules(null, true);
+        $packages    = $this->group->getPrivPackagePairs(null, $module);
         $modulePrivs = $this->group->getPrivByModule($module);
 
         $tree  = "<ul class='tree' data-ride='tree'><li>";
         $tree .= html::a('#', $modules[$module]);
         $tree .= "<ul class='relationBox'>";
-        foreach($modulePrivs[$module] as $id => $modulePriv)
+        foreach($packages as $packageID => $packageName)
+        {
+            if(empty($modulePrivs[$module][$packageID])) continue;
+            $tree .= '<li>';
+            $tree .= html::a('#', $packageName);
+            $tree .= '<ul>';
+
+            foreach($modulePrivs[$module][$packageID] as $id => $modulePriv)
+            {
+                $tree .= '<li>';
+                $tree .= html::checkbox("relation[$module]", array($id => $modulePriv->name), '');
+                $tree .= '</li>';
+            }
+            $tree .= '</ul></li>';
+            unset($modulePrivs[$module][$packageID]);
+        }
+        if(!empty($modulePrivs[$module]))
         {
             $tree .= '<li>';
-            $tree .= html::checkbox("relation[$module]", array($id => $modulePriv->name), '');
-            $tree .= '</li>';
+            $tree .= html::a('#', $this->lang->group->unassigned);
+            $tree .= '<ul>';
+            foreach($modulePrivs[$module] as $packageID => $packagePrivs)
+            {
+                foreach($packagePrivs as $id => $modulePriv)
+                {
+                    $tree .= '<li>';
+                    $tree .= html::checkbox("relation[$module]", array($id => $modulePriv->name), '');
+                    $tree .= '</li>';
+                }
+            }
+            $tree .= '</ul></li>';
         }
         $tree .= '</ul></li></ul>';
         return print($tree);
