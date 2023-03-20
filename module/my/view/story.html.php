@@ -27,7 +27,7 @@
   </div>
 </div>
 <div id="mainContent">
-<div class="cell<?php if($type == 'bysearch') echo ' show';?>" id="queryBox" data-module=<?php echo ($app->rawMethod == 'contribute' ? 'contributeStory' : 'workStory');?>></div>
+  <div class="cell<?php if($type == 'bysearch') echo ' show';?>" id="queryBox" data-module=<?php echo ($app->rawMethod == 'contribute' ? 'contributeStory' : 'workStory');?>></div>
   <?php if(!$stories):?>
   <div class="table-empty-tip">
     <p><span class="text-muted"><?php echo sprintf($lang->my->noData, $lang->SRCommon);?></span></p>
