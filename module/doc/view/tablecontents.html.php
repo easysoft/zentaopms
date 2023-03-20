@@ -112,6 +112,59 @@
       </p>
     </div>
     <?php else:?>
+    <div class="panel">
+      <table class="table table-borderless table-hover table-files table-fixed no-margin">
+        <thead>
+          <tr>
+            <?php if($browseType == 'bySearch'):?>
+            <th class="c-id"><?php echo $lang->doc->id;?></th>
+            <?php endif;?>
+            <th class="c-name"><?php echo $lang->doc->title;?></th>
+            <th class="c-user"><?php echo $lang->doc->addedByAB;?></th>
+            <th class="c-datetime"><?php echo $lang->doc->addedDate;?></th>
+            <th class="c-datetime"><?php echo $lang->doc->editedBy;?></th>
+            <th class="c-datetime"><?php echo $lang->doc->editedDate;?></th>
+            <th class="w-90px text-center"><?php echo $lang->actions;?></th>
+          </tr>
+        </thead>
+        <tbody>
+          <?php foreach($docs as $doc):?>
+          <?php $star = strpos($doc->collector, ',' . $this->app->user->account . ',') !== false ? 'icon-star text-yellow' : 'icon-star-empty';?>
+          <?php $collectTitle = strpos($doc->collector, ',' . $this->app->user->account . ',') !== false ? $lang->doc->cancelCollection : $lang->doc->collect;?>
+          <tr>
+            <?php if($browseType == 'bySearch'):?>
+            <td class="c-id" title='<?php echo $doc->id?>'>
+              <?php $idHtml = "<i class='icon icon-file-text text-muted'></i> {$doc->id}";?>
+              <?php if(common::hasPriv('doc', 'view')) $idHtml = html::a($this->createLink('doc', 'view', "docID=$doc->id&version=0", '', true), $doc->id, '', "title='{$doc->id}' data-app='{$this->app->tab}'");?>
+              <?php echo $idHtml;?>
+            </td>
+            <?php endif;?>
+            <td class="c-name" title='<?php echo $doc->title;?>'>
+              <?php $nameHtml = "<i class='icon icon-file-text text-muted'></i> {$doc->title}";?>
+              <?php if(common::hasPriv('doc', 'view')) $nameHtml = html::a($this->createLink('doc', 'view', "docID=$doc->id&version=0", '', true), "<i class='icon icon-file-text text-muted'></i> &nbsp;" . $doc->title, '', "title='{$doc->title}' class='iframe' data-width='90%'");?>
+              <?php echo $nameHtml;?>
+              <?php if(common::canBeChanged('doc', $doc) and common::hasPriv('doc', 'collect')):?>
+              <a data-url="<?php echo $this->createLink('doc', 'collect', "objectID=$doc->id&objectType=doc");?>" title="<?php echo $collectTitle;?>" class='btn btn-link ajaxCollect'><i class='icon <?php echo $star;?>'></i></a>
+              <?php endif;?>
+            </td>
+            <td class="c-user"><?php echo zget($users, $doc->addedBy);?></td>
+            <td class="c-datetime"><?php echo formatTime($doc->addedDate, 'y-m-d');?></td>
+            <td class="c-user"><?php echo zget($users, $doc->editedBy);?></td>
+            <td class="c-datetime"><?php echo formatTime($doc->editedDate, 'y-m-d');?></td>
+            <td class="c-actions">
+              <?php if(common::canBeChanged('doc', $doc)):?>
+              <?php common::printLink('doc', 'edit', "docID=$doc->id&comment=false", "<i class='icon icon-edit'></i>", '', "title='{$lang->edit}' class='btn btn-link'", true, false)?>
+              <?php common::printLink('doc', 'delete', "docID=$doc->id&confirm=no", "<i class='icon icon-trash'></i>", 'hiddenwin', "title='{$lang->delete}' class='btn btn-link'")?>
+              <?php endif;?>
+            </td>
+          </tr>
+          <?php endforeach;?>
+        </tbody>
+      </table>
+      <?php if(!empty($docs)):?>
+      <div class='table-footer'><?php $pager->show('right', 'pagerjs');?></div>
+      <?php endif;?>
+    </div>
     <?php endif;?>
   </div>
 </div>
