@@ -16,7 +16,7 @@
   <div class='main-header'>
     <h2><?php echo $lang->kanban->createSpace;?></h2>
   </div>
-  <form class='form-indicator main-form form-ajax' method='post' enctype='multipart/form-data' id='dataform'>
+  <form class='form-indicator main-form form-ajax no-stash' method='post' enctype='multipart/form-data' id='dataform'>
     <table class='table table-form'>
       <tr>
         <th><?php echo $lang->kanbanspace->type;?></th>
