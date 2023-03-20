@@ -1428,7 +1428,7 @@ class projectModel extends model
                 /* If parent not empty, link products or create products. */
                 $product = new stdclass();
                 $product->name           = $project->hasProduct && $this->post->productName ? $this->post->productName : $project->name;
-                $product->shadow         = (int)empty($project->hasProduct);
+                $product->shadow         = zget($project, 'vision', 'rnd') == 'rnd' ? (int)empty($project->hasProduct) : 1;
                 $product->bind           = $this->post->parent ? 0 : 1;
                 $product->program        = $project->parent ? current(array_filter(explode(',', $program->path))) : 0;
                 $product->acl            = $project->acl == 'open' ? 'open' : 'private';
