@@ -194,8 +194,9 @@
                   <th><?php echo $lang->bug->pri;?></th>
                   <td>
                     <?php if($bug->pri):?>
-                    <span class='label-pri <?php echo 'label-pri-' . $bug->pri;?>' title='<?php echo zget($lang->bug->priList, $bug->pri);?>'><?php echo zget($lang->bug->priList, $bug->pri)?></span></td>
+                    <span class='label-pri <?php echo 'label-pri-' . $bug->pri;?>' title='<?php echo zget($lang->bug->priList, $bug->pri);?>'><?php echo zget($lang->bug->priList, $bug->pri)?></span>
                     <?php endif;?>
+                  </td>
                 </tr>
                 <tr>
                   <th><?php echo $lang->bug->status;?></th>
