@@ -1088,6 +1088,7 @@ class zanodemodel extends model
     {
         $now  = helper::now();
         $data = fixer::input('post')
+            ->remove('syncToZentao')
             ->setDefault('createdBy', $this->app->user->account)
             ->setDefault('createdDate', $now)
             ->setDefault('node', 0)
@@ -1137,5 +1138,15 @@ class zanodemodel extends model
             $this->dao->delete()->from(TABLE_TESTRESULT)->where('id')->eq($task)->exec();
             return  dao::$errors = $this->lang->zanode->runTimeout;
         }
+    }
+
+    /**
+     * Sync cases in dir to zentao.
+     *
+     * @access public
+     * @return void
+     */
+    public function syncCasesToZentao($path)
+    {
     }
 }

@@ -53,6 +53,7 @@ $lang->zanode->confirmRestore  = "执行节点将会还原至此快照状态，�
 $lang->zanode->actionSuccess   = '操作成功';
 $lang->zanode->deleted         = "已删除";
 $lang->zanode->scriptPath      = "脚本目录";
+$lang->zanode->syncToZentao    = "同步脚本信息到禅道";
 $lang->zanode->shell           = "shell命令";
 $lang->zanode->automation      = "自动化设置";
 $lang->zanode->install         = "安装";

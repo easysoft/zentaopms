@@ -53,6 +53,7 @@ $lang->zanode->confirmRestore  = "The ZenAgent Node will be restored to this sna
 $lang->zanode->actionSuccess   = 'Success';
 $lang->zanode->deleted         = "Deleted";
 $lang->zanode->scriptPath      = "Script path";
+$lang->zanode->syncToZentao    = "Sync cases in the directory to Zentao";
 $lang->zanode->shell           = "Shell";
 $lang->zanode->automation      = "Automation";
 $lang->zanode->install         = "Install";

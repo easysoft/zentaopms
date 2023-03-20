@@ -49,6 +49,10 @@
           </td>
         </tr>
         <tr>
+          <th></th>
+          <td><?php echo html::checkbox('syncToZentao', array(1 => $lang->zanode->syncToZentao), '');?></td>
+        </tr>
+        <tr>
           <th>
             <?php echo $lang->zanode->shell;?>
           </th>
