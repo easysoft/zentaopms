@@ -46,6 +46,11 @@ $lang->repo->httpClone       = '使用HTTP克隆';
 $lang->repo->cloneUrl        = '克隆地址';
 $lang->repo->linkTask        = '关联任务';
 $lang->repo->unlinkedTasks   = '未关联任务';
+$lang->repo->importAction    = '导入代码库';
+$lang->repo->import          = '导入';
+$lang->repo->importName      = '导入后的名称';
+$lang->repo->importServer    = '请选择服务器';
+$lang->repo->gitlabList      = 'Gitlab代码库';
 
 $lang->repo->submit     = '提交';
 $lang->repo->cancel     = '取消';
