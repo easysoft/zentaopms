@@ -386,7 +386,9 @@ class product extends control
         $this->view->from            = $this->app->tab;
         $this->view->modulePairs     = $showModule ? $this->tree->getModulePairs($productID, 'story', $showModule) : array();
         $this->view->project         = $project;
-        $this->display();
+        $this->view->recTotal        = $pager->recTotal;
+
+        $this->render();
     }
 
     /**
@@ -468,7 +470,6 @@ class product extends control
         $this->view->URSRPairs  = $this->loadModel('custom')->getURSRPairs();
 
         unset($this->lang->product->typeList['']);
-        //$this->display();
         $this->render();
     }
 

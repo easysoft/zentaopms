@@ -55,4 +55,31 @@ dtable
     set::footer(false)
 );
 
+programmenu
+(
+    set
+    (
+        array
+        (
+            'title' => '所有项目集',
+            'subTitle' => '筛选项目集',
+            'programs' => $data
+        )
+    )
+);
+
+modulemenu
+(
+    set
+    (
+        array
+        (
+            'productID' => 1,
+            'title' => '所有分类',
+            'moduleSettingText' => '模块设置',
+            'displaySettingText' => '显示设置'
+        )
+    )
+);
+
 render();

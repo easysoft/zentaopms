@@ -27,7 +27,7 @@ class zin
         $data = &self::$data;
         foreach($names as $name)
         {
-            if(is_object(($data)))
+            if(is_object($data))
             {
                 if(!isset($data->$name)) return $defaultValue;
                 $data = &$data->$name;
