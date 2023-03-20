@@ -186,6 +186,9 @@
             {
                 if($('.messager').length &&  !$.contains(e.target, $('.messager')))
                 $messager.destroy();
+            }).on('click', '#submit.form-stash-clear', function()
+            {
+                $.zui.store.remove(formID);
             });
         }, 500);
     }
