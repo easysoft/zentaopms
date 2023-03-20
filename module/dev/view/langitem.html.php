@@ -71,7 +71,7 @@
           <?php if(!$isCurrentLang):?>
           <div data-id="<?php echo $itemKey?>" class="label h-full" title="<?php echo $currentLangs[$langKey]?>"><?php echo $currentLangs[$langKey]?></div>
           <?php endif;?>
-          <div data-id="<?php echo $itemKey?>" class="label h-full" title="<?php echo $originalLang?>"><?php echo $originalLang?></div>
+          <div data-id="<?php echo $itemKey?>" class="label h-full <?php if($language != 'zh-cn')  echo 'lg'?>" title="<?php echo $originalLang?>"><?php echo $originalLang?></div>
           <div class="input-group flex">
             <i class="icon icon-angle-right text-primary"></i>
             <?php $originalLangChanged = $this->dev->isOriginalLangChanged($defaultValue, $customedLang);?>
