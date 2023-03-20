@@ -1305,6 +1305,7 @@ class doc extends control
         $this->view->param      = $queryID;
         $this->view->users      = $this->user->getPairs('noletter');
         $this->view->libTree    = $libTree;
+        $this->view->moduleID   = $moduleID;
         if($browseType == 'bySearch')
         {
             /* Load pager. */

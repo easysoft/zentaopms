@@ -187,8 +187,6 @@ $lang->product->menuOrder[55] = 'settings';
 $lang->product->menuOrder[60] = 'create';
 $lang->product->menuOrder[65] = 'all';
 
-$lang->product->menu->doc['subMenu'] = new stdclass();
-
 $lang->product->menu->settings['subMenu'] = new stdclass();
 $lang->product->menu->settings['subMenu']->view      = array('link' => "{$lang->overview}|product|view|productID=%s", 'alias' => 'edit');
 $lang->product->menu->settings['subMenu']->module    = array('link' => "{$lang->module}|tree|browse|product=%s&view=story", 'subModule' => 'tree');
@@ -236,8 +234,6 @@ $lang->scrum->menuOrder[35] = 'build';
 $lang->scrum->menuOrder[40] = 'release';
 $lang->scrum->menuOrder[45] = 'dynamic';
 $lang->scrum->menuOrder[55] = 'settings';
-
-$lang->scrum->menu->doc['subMenu'] = new stdclass();
 
 $lang->scrum->menu->qa['subMenu'] = new stdclass();
 //$lang->scrum->menu->qa['subMenu']->index      = array('link' => "$lang->dashboard|project|qa|projectID=%s");
@@ -288,8 +284,6 @@ $lang->waterfall->menuOrder[60] = 'doc';
 $lang->waterfall->menuOrder[65] = 'build';
 $lang->waterfall->menuOrder[70] = 'release';
 $lang->waterfall->menuOrder[80] = 'dynamic';
-
-$lang->waterfall->menu->doc['subMenu'] = new stdclass();
 
 $lang->waterfall->menu->programplan['subMenu'] = new stdclass();
 $lang->waterfall->menu->programplan['subMenu']->lists = array('link' => "{$lang->stage->list}|programplan|browse|projectID=%s&productID=0&type=lists", 'alias' => 'create');
@@ -371,8 +365,6 @@ $lang->execution->menuOrder[55] = 'build';
 $lang->execution->menuOrder[60] = 'release';
 $lang->execution->menuOrder[65] = 'action';
 $lang->execution->menuOrder[70] = 'settings';
-
-$lang->execution->menu->doc['subMenu'] = new stdclass();
 
 $lang->execution->menu->view['subMenu']            = new stdclass();
 $lang->execution->menu->view['subMenu']->groupTask = "$lang->groupView|execution|grouptask|executionID=%s";
@@ -522,11 +514,6 @@ $lang->doc->menuOrder[15] = 'product';
 $lang->doc->menuOrder[20] = 'project';
 $lang->doc->menuOrder[25] = 'api';
 $lang->doc->menuOrder[30] = 'custom';
-
-$lang->doc->menu->product['subMenu']   = new stdclass();
-$lang->doc->menu->project['subMenu']   = new stdclass();
-$lang->doc->menu->execution['subMenu'] = new stdclass();
-$lang->doc->menu->custom['subMenu']    = new stdclass();
 
 $lang->doc->menu->api['subMenu'] = new stdclass();
 $lang->doc->menu->api['subMenu']->index  = array('link' => "{$lang->doc->apiDoc}|api|index|libID=%s", 'alias' => 'create,edit');

@@ -2132,123 +2132,6 @@ class docModel extends model
     }
 
     /**
-     * Build document module index page create document button.
-     *
-     * @param  string $objectType
-     * @param  int    $objectID
-     * @param  int    $libID
-     * @access public
-     * @return string
-     */
-    public function buildCreateButton4Doc($objectType, $objectID, $libID)
-    {
-        if(!common::hasPriv('doc', 'create') and !common::hasPriv('doc', 'createLib')) return '';
-
-        if($objectType == 'book')
-        {
-            $html = html::a(helper::createLink('doc', 'createLib', "type=$objectType&objectID=$objectID"), '<i class="icon icon-plus"></i> ' . $this->lang->doc->createBook, '', 'class="btn btn-secondary iframe"');
-        }
-        elseif($libID)
-        {
-            $html  = "<div class='dropdown' id='createDropdown'>";
-            $html .= "<button class='btn btn-primary' type='button' data-toggle='dropdown'><i class='icon icon-plus'></i> " . $this->lang->doc->createAB . " <span class='caret'></span></button>";
-            $html .= "<ul class='dropdown-menu pull-right'>";
-
-            if(common::hasPriv('doc', 'create'))
-            {
-                foreach($this->lang->doc->typeList as $typeKey => $typeName)
-                {
-                    $class  = (strpos($this->config->doc->officeTypes, $typeKey) !== false or strpos($this->config->doc->textTypes, $typeKey) !== false) ? 'iframe' : '';
-                    $icon   = zget($this->config->doc->iconList, $typeKey);
-                    $method = strpos($this->config->doc->textTypes, $typeKey) !== false ? 'createBasicInfo' : 'create';
-                    $html  .= "<li>";
-                    $html  .= html::a(helper::createLink('doc', $method, "objectType=$objectType&objectID=$objectID&libID=$libID&moduleID=0&type=$typeKey", '', $class ? true : false), "<i class='icon-$icon icon'></i> " . $typeName, '', "class='$class' data-app='{$this->app->tab}'");
-                    $html  .= "</li>";
-                    if($typeKey == 'url') $html .= '<li class="divider"></li>';
-                }
-            }
-
-            if(common::hasPriv('doc', 'createLib'))
-            {
-                if(common::hasPriv('doc', 'create')) $html .= '<li class="divider"></li>';
-                $html .= '<li>' . html::a(helper::createLink('doc', 'createLib', "type=$objectType&objectID=$objectID"), "<i class='icon-doc-lib icon'></i> " . $this->lang->doc->createLib, '', "class='iframe' data-width='70%'") . '</li>';
-            }
-            $html .= "</ul></div>";
-        }
-        else
-        {
-            $html = html::a(helper::createLink('doc', 'createLib', "type=$objectType&objectID=$objectID"), '<i class="icon icon-plus"></i> ' . $this->lang->doc->createLib, '', 'class="btn btn-secondary iframe"');
-        }
-
-        return $html;
-    }
-
-    /**
-     * Build collect button from document.
-     *
-     * @access public
-     * @return string
-     */
-    public function buildCollectButton4Doc()
-    {
-        $favoritesLimit = 10;
-        $allLibs        = array_keys($this->getLibs('all'));
-        $docs           = $this->dao->select('t1.id,t1.title,t1.lib,t2.type,t2.product,t2.project,t2.execution')->from(TABLE_DOC)->alias('t1')
-            ->leftJoin(TABLE_DOCLIB)->alias('t2')->on('t1.lib=t2.id')
-            ->where('t1.deleted')->eq(0)
-            ->andWhere('t1.lib')->in($allLibs)
-            ->beginIF($this->config->doc->notArticleType)->andWhere('t1.type')->notIN($this->config->doc->notArticleType)->fi()
-            ->andWhere('t1.collector')->like("%,{$this->app->user->account},%")
-            ->orderBy('t1.id_desc')
-            ->limit($favoritesLimit)
-            ->fetchAll();
-
-        $html = '';
-        $rawMethod = $this->app->rawMethod;
-        if($this->app->rawMethod == 'showfiles')
-        {
-            $html  = '<div class="btn-group">';
-            $html .= '<form class="input-control has-icon-right table-col" method="post">';
-            $html .= html::input('title', $this->post->title, "class='form-control' placeholder='{$this->lang->doc->fileTitle}'");
-            $html .= html::submitButton("<i class='icon icon-search'></i>", '', "btn  btn-icon btn-link input-control-icon-right");
-            $html .= '</form></div>';
-        }
-        elseif(in_array($rawMethod, array('tablecontents', 'objectlibs', 'product', 'project', 'execution', 'book', 'custom')))
-        {
-            $html  = '<a class="btn btn-link querybox-toggle" id="bysearchTab"><i class="icon icon-search muted"></i> ' . $this->lang->doc->search . '</a>';
-        }
-        $html .= "<div class='btn-group dropdown-hover'>";
-        $html .= "<a href='javascript:;' class='btn btn-link' data-toggle='dropdown'>{$this->lang->doc->myCollection}</a>";
-        $html .= "<ul class='dropdown-menu pull-right' id='collection-menu'>";
-
-        if(empty($docs)) $html .= "<li>{$this->lang->noData}</li>";
-
-        foreach($docs as $doc)
-        {
-            $objectID = 0;
-            if($doc->type == 'product') $objectID = $doc->product;
-            if($doc->type == 'project') $objectID = $doc->project;
-            if($doc->type == 'execution') $objectID = $doc->execution;
-
-            $tab = $this->app->tab;
-            if($tab != 'doc') $tab = $objectID ? $doc->type : 'doc';
-
-            $html .= '<li>' . html::a(inlink('objectLibs', "type={$doc->type}&objectID=$objectID&libID={$doc->lib}&docID={$doc->id}"), "<i class='icon icon-file-text'></i> " . $doc->title, '', "data-app='$tab' title='{$doc->title}'") . '</li>';
-        }
-
-        $collectionCount = $this->dao->select('count(id) as count')->from(TABLE_DOC)
-            ->where('deleted')->eq(0)
-            ->andWhere('lib')->in($allLibs)
-            ->beginIF($this->config->doc->notArticleType)->andWhere('type')->notIN($this->config->doc->notArticleType)->fi()
-            ->andWhere('collector')->like("%,{$this->app->user->account},%")
-            ->fetch('count');
-        if($collectionCount > $favoritesLimit) $html .= '<li>' . html::a(inlink('browse', "type=collectedByMe"), $this->lang->doc->allCollections) . '</li>';
-
-        $html .= '</ul></div>';
-        return $html;
-    }
-
-    /**
      * Build browse switch button.
      *
      * @param  int    $type
@@ -2835,7 +2718,6 @@ EOT;
             $libs                 = $this->getLibsByObject('custom', 0, '', $appendLib);
             $this->app->rawMethod = 'custom';
             if($libID == 0 and !empty($libs)) $libID = reset($libs)->id;
-            $this->lang->modulePageNav = $this->select($type, $objects, $objectID, $libs, $libID);
 
             $object     = new stdclass();
             $object->id = 0;
@@ -2845,8 +2727,6 @@ EOT;
             $libs                 = $this->getLibsByObject('book', 0, '', $appendLib);
             $this->app->rawMethod = 'book';
             if(!empty($libs) and ($libID == 0 or !isset($libs[$libID]))) $libID = reset($libs)->id;
-            $this->lang->modulePageNav = $this->select($type, $objects, $objectID, $libs, $libID);
-
             $object     = new stdclass();
             $object->id = 0;
         }
@@ -2857,8 +2737,6 @@ EOT;
             $libs     = $this->getLibsByObject($type, $objectID, '', $appendLib);
 
             if($libID == 0 and !empty($libs)) $libID = reset($libs)->id;
-            $this->lang->modulePageNav = $this->select($type, $objects, $objectID, $libs, $libID);
-
             if($this->app->tab == 'doc') $this->app->rawMethod = $type;
 
             $object = $this->dao->select('id,name,status')->from($table)->where('id')->eq($objectID)->fetch();
@@ -2873,9 +2751,6 @@ EOT;
 
         $tab = strpos(',doc,product,project,execution,', ",{$this->app->tab},") !== false ? $this->app->tab : 'doc';
         if($tab != 'doc') $this->loadModel($type)->setMenu($objectID);
-
-        $this->lang->TRActions  = $this->buildCollectButton4Doc();
-        $this->lang->TRActions .= $this->buildCreateButton4Doc($type, $objectID, $libID);
 
         return array($libs, $libID, $object, $objectID);
     }
@@ -3096,7 +2971,7 @@ EOT;
             $item->active     = $lib->id == $libID ? 1 : 0;
             $item->children   = $this->getModuleTree($lib->id, $moduleID, $lib->type == 'api' ? 'api' : 'doc');
             $item->children   = array_values($item->children);
-            if($lib->type != 'execution')
+            if(($type == 'project' and $lib->type != 'execution') or $type != 'project')
             {
                 if($item->type == 'lib') $libTree[$lib->type][$lib->id] = $item;
                 if($item->type == 'api') $apiLibs[$lib->id] = $item;

@@ -190,6 +190,13 @@ $lang->doc->typeList['word']     = 'Word';
 $lang->doc->typeList['ppt']      = 'PPT';
 $lang->doc->typeList['excel']    = 'Excel';
 
+$lang->doc->createList['html']     = '创建文档';
+$lang->doc->createList['api']      = '创建接口';
+$lang->doc->createList['template'] = '由模板创建';
+$lang->doc->createList['word']     = 'Word';
+$lang->doc->createList['ppt']      = 'PPT';
+$lang->doc->createList['excel']    = 'Excel';
+
 $lang->doc->types['text'] = '文档';
 $lang->doc->types['url']  = '链接';
 
