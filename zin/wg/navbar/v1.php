@@ -154,11 +154,11 @@ class navbar extends wg
             {
                 $executionID = $menuItem->link['vars'];
                 $executionMoreItem = $this->getExecutionMoreItem($executionID);
-                if(!empty($executionMoreItem))
-                {
-                    $items[] = array('type' => 'divider');
-                    $items[] = $executionMoreItem;
-                }
+                // if(!empty($executionMoreItem))
+                // {
+                //     $items[] = array('type' => 'divider');
+                //     $items[] = $executionMoreItem;
+                // }
             }
             elseif($menuItem->link['module'] == 'app' and $menuItem->link['method'] == 'serverlink')
             {
