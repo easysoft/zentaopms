@@ -65,11 +65,12 @@
   ?>
   </div>
 </div>
-<div id='mainContent'class="main-row fade">
+<div id='mainContent'class="fade flex">
   <div class="side side-col panel">
     <div id="fileTree" class="file-tree"></div>
   </div>
-  <div class="main-col">
+  <div id="spliter" class="spliter"></div>
+  <div class="main-col flex-full panel">
     <div class="cell<?php if($browseType == 'bySearch') echo ' show';?>" id="queryBox" data-module=<?php echo $type . 'Doc';?>></div>
     <?php if(empty($docs)):?>
     <div class="table-empty-tip">
