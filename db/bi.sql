@@ -8,6 +8,7 @@ ALTER TABLE `zt_screen` ADD `status` enum('draft','published') NOT NULL DEFAULT 
 ALTER TABLE `zt_screen` ADD `builtin` enum('0', '1') NOT NULL DEFAULT '0' AFTER `status`;
 
 UPDATE `zt_screen` SET `builtin` = '1', `status` = 'published';
+UPDATE `zt_grouppriv` SET `module` = 'screen' where `module` = 'dashboard';
 
 ALTER TABLE `zt_dataview` ADD `langs` text NOT NULL AFTER `fields`;
 
