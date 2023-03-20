@@ -1299,6 +1299,13 @@ class doc extends control
         $actionURL = $this->createLink('doc', 'tableContents', "type=$type&objectID=$objectID&libID=$libID&browseType=bySearch&param=myQueryID");
         $this->doc->buildSearchForm($libID, $libs, $queryID, $actionURL, $type);
 
+        /* Load pager. */
+        $rawMethod = $this->app->rawMethod;
+        $this->app->rawMethod = 'tableContents';
+        $this->app->loadClass('pager', $static = true);
+        $pager = new pager($recTotal, $recPerPage, $pageID);
+        $this->app->rawMethod = $rawMethod;
+
         $this->view->title      = $title;
         $this->view->type       = $type;
         $this->view->browseType = $browseType;
@@ -1306,18 +1313,12 @@ class doc extends control
         $this->view->users      = $this->user->getPairs('noletter');
         $this->view->libTree    = $libTree;
         $this->view->moduleID   = $moduleID;
+        $this->view->docs       = $browseType == 'bySearch' ? $this->doc->getDocsBySearch($type, $objectID, $libID, $queryID, $pager) : $this->doc->getDocs($libID, $moduleID, 'id_desc', $pager);
+        $this->view->pager      = $pager;
+
         if($browseType == 'bySearch')
         {
-            /* Load pager. */
-            $rawMethod = $this->app->rawMethod;
-            $this->app->rawMethod = 'tableContents';
-            $this->app->loadClass('pager', $static = true);
-            $pager = new pager($recTotal, $recPerPage, $pageID);
-            $this->app->rawMethod = $rawMethod;
-
-            $this->view->docs       = $this->doc->getDocsBySearch($type, $objectID, $libID, $queryID, $pager);
             $this->view->browseType = 'bySearch';
-            $this->view->pager      = $pager;
             $this->display('doc', 'browse', "browseType=bySearch&param=$queryID");
         }
         else

@@ -35,8 +35,9 @@
   {
       if($libID)
       {
-          $html  = "<div class='dropdown' id='createDropdown'>";
-          $html .= "<button class='btn btn-primary' type='button' data-toggle='dropdown'><i class='icon icon-plus'></i> " . $this->lang->doc->create . " <span class='caret'></span></button>";
+          $html  = "<div class='dropdown btn-group createDropdown'>";
+          $html .= html::a($this->createLink('doc', 'createBasicInfo', "objectType=$type&objectID=$objectID&libID=$libID&moduleID=$moduleID&type=html", '', true), "<i class='icon icon-plus'></i> {$lang->doc->create}", '', "class='btn btn-primary iframe'");
+          $html .= "<button type='button' class='btn btn-primary dropdown-toggle' data-toggle='dropdown'><span class='caret'></span></button>";
           $html .= "<ul class='dropdown-menu pull-right'>";
 
           foreach($this->lang->doc->createList as $typeKey => $typeName)
@@ -56,6 +57,8 @@
               if($typeKey == 'template') $html .= '<li class="divider"></li>';
               if($config->edition != 'max' and $typeKey == 'api') $html .= '<li class="divider"></li>';
           }
+
+          $html .= '</ul></div>';
           echo $html;
       }
   }
@@ -63,11 +66,52 @@
   </div>
 </div>
 <div id='mainContent'class="main-row fade">
-  <div class="side panel">
+  <div class="side side-col panel">
     <div id="fileTree" class="file-tree"></div>
   </div>
   <div class="main-col">
     <div class="cell<?php if($browseType == 'bySearch') echo ' show';?>" id="queryBox" data-module=<?php echo $type . 'Doc';?>></div>
+    <?php if(empty($docs)):?>
+    <div class="table-empty-tip">
+      <p>
+        <span class="text-muted"><?php echo $lang->doc->noDoc;?></span>
+        <?php
+        if(common::hasPriv('doc', 'create'))
+        {
+            if($libID)
+            {
+                $html  = "<div class='dropdown btn-group createDropdown'>";
+                $html .= html::a($this->createLink('doc', 'createBasicInfo', "objectType=$type&objectID=$objectID&libID=$libID&moduleID=$moduleID&type=html", '', true), "<i class='icon icon-plus'></i> {$lang->doc->create}", '', "class='btn btn-info iframe'");
+                $html .= "<button type='button' class='btn btn-info dropdown-toggle' data-toggle='dropdown'><span class='caret'></span></button>";
+                $html .= "<ul class='dropdown-menu pull-right'>";
+
+                foreach($this->lang->doc->createList as $typeKey => $typeName)
+                {
+                    if($config->edition != 'max' and $typeKey == 'template') continue;
+                    $class  = (strpos($this->config->doc->officeTypes, $typeKey) !== false or strpos($this->config->doc->textTypes, $typeKey) !== false) ? 'iframe' : '';
+                    $module = $typeKey == 'api' ? 'api' : 'doc';
+                    $method = strpos($this->config->doc->textTypes, $typeKey) !== false ? 'createBasicInfo' : 'create';
+
+                    $params = "objectType=$type&objectID=$objectID&libID=$libID&moduleID=$moduleID&type=$typeKey";
+                    if($typeKey == 'api') $params = "libID=$libID&moduleID=$moduleID";
+                    if($typeKey == 'template') $params = "objectType=$type&objectID=$objectID&libID=$libID&moduleID=$moduleID&type=html&fromGlobal=&from=template";
+
+                    $html .= "<li>";
+                    $html .= html::a(helper::createLink($module, $method, $params, '', $class ? true : false), $typeName, '', "class='$class' data-app='{$this->app->tab}'");
+                    $html .= "</li>";
+                    if($typeKey == 'template') $html .= '<li class="divider"></li>';
+                    if($config->edition != 'max' and $typeKey == 'api') $html .= '<li class="divider"></li>';
+                }
+
+                $html .= '</ul></div>';
+                echo $html;
+            }
+        }
+        ?>
+      </p>
+    </div>
+    <?php else:?>
+    <?php endif;?>
   </div>
 </div>
 <?php include '../../common/view/footer.html.php';?>
