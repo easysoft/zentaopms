@@ -32,7 +32,7 @@
   $requiredFields = array();
   foreach(explode(',', $showFields) as $field)
   {
-      if($field)$visibleFields[$field] = '';
+      if($field) $visibleFields[$field] = '';
   }
   foreach(explode(',', $config->bug->edit->requiredFields) as $field)
   {
