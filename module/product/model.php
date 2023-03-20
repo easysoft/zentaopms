@@ -2474,7 +2474,7 @@ class productModel extends model
         }
         elseif($module == 'feedback')
         {
-            return helper::createLink('feedback', $method, "browseType=byProduct&productID=%s");
+            return helper::createLink('feedback', 'browse', "browseType=byProduct&productID=%s");
         }
         elseif($module == 'ticket')
         {
