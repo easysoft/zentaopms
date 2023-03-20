@@ -7677,6 +7677,7 @@ class upgradeModel extends model
             $project->type           = 'project';
             $project->model          = 'scrum';
             $project->parent         = $programID;
+            $project->team           = $project->name;
             $project->auth           = 'extend';
             $project->begin          = '';
             $project->end            = '';
