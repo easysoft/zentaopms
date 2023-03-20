@@ -4861,7 +4861,7 @@ class upgradeModel extends model
             else
             {
                 /* Use historical projects as project upgrades. */
-                $projects = $this->dao->select('id,name,begin,end,status,PM,acl')->from(TABLE_PROJECT)->where('id')->in($projectIdList)->fetchAll('id');
+                $projects = $this->dao->select('id,name,begin,end,status,PM,acl,team')->from(TABLE_PROJECT)->where('id')->in($projectIdList)->fetchAll('id');
 
                 $projectPairs = $this->dao->select('name,id')->from(TABLE_PROJECT)
                     ->where('deleted')->eq('0')
@@ -4929,7 +4929,7 @@ class upgradeModel extends model
         $project->model          = 'scrum';
         $project->parent         = $programID;
         $project->status         = $data->projectStatus;
-        $project->team           = isset($data->team) ? $data->team : $data->projectName;
+        $project->team           = empty($data->team) ? $data->team : $data->projectName;
         $project->begin          = $data->begin;
         $project->end            = isset($data->end) ? $data->end : LONG_TIME;
         $project->days           = $this->computeDaysDelta($project->begin, $project->end);
