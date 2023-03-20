@@ -79,7 +79,7 @@
             <?php $foreachLang = $originalLangChanged ? $customedLang : $defaultValue;?>
             <?php foreach($foreachLang as $i => $subLang):?>
             <?php if(isset($config->custom->commonLang[$subLang])):?>
-            <span class='input-group-addon flex-center'><?php echo $config->custom->commonLang[$subLang] . html::hidden("{$itemKey}[]", $subLang);?></span>
+            <div class='input-group-addon flex-center' title=<?php echo $config->custom->commonLang[$subLang]?> ><?php echo $config->custom->commonLang[$subLang] . html::hidden("{$itemKey}[]", $subLang);?></div>
             <?php else:?>
             <?php
             $placeholder     = $originalLangChanged ? '' : "placeholder='{$subLang}'";
