@@ -1,5 +1,6 @@
 .flex {display: flex;}
 .flex-full {flex: 1;}
+.flex-full > .panel {box-shadow: none;}
 .float-r {float: right;}
 .h-full {height: 100%;}
 .w-full {width: 100%;}main-content {padding-top: 0; padding-bottom: 0;}
