@@ -309,4 +309,20 @@ $(function()
     }
 
     initSplitRow();
-})
+
+    $('#spliter').on('click', '.icon', function()
+    {
+        if($(this).hasClass('isHide'))
+        {
+            $(this).addClass('icon-angle-left');
+            $(this).removeClass('icon-angle-right isHide');
+            $('#sideBar').removeClass('hidden');
+        }
+        else
+        {
+            $(this).removeClass('icon-angle-left');
+            $(this).addClass('icon-angle-right isHide');
+            $('#sideBar').addClass('hidden');
+        }
+    })
+});
