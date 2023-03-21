@@ -44,7 +44,7 @@
               <ul class='relationBox'>
                 <?php foreach($packages as $packageID => $packageName):?>
                 <?php if(empty($modulePrivs[$privModule][$packageID])) continue;?>
-                <li>
+                <li class='clearleft'>
                   <?php echo html::a('#', $packageName);?>
                   <ul>
                     <?php foreach($modulePrivs[$privModule][$packageID] as $id => $modulePriv):?>
@@ -55,7 +55,7 @@
                 </li>
                 <?php endforeach;?>
                 <?php if(!empty($modulePrivs[$privModule])):?>
-                <li>
+                <li class='clearleft'>
                   <?php echo html::a('#', $lang->group->unassigned);?>
                   <ul>
                     <?php foreach($modulePrivs[$privModule] as $packageID => $packagePrivs):?>
