@@ -801,9 +801,13 @@ class groupModel extends model
         {
             $packages = $this->getPrivPackagesByModule($package->module);
             $package->order = (count($packages) + 1) * 5;
+
+            $priv = new stdclass();
+            $priv->module = $package->module;
         }
         $this->dao->update(TABLE_PRIVPACKAGE)->data($package)->batchCheck($this->config->privPackage->edit->requiredFields, 'notempty')->where('id')->eq($packageID)->exec();
         if(dao::isError()) return false;
+        if(isset($priv)) $this->dao->update(TABLE_PRIV)->data($priv)->where('package')->eq($packageID)->exec();
 
         $package = $this->getPrivPackageByID($packageID);
         $changes = common::createChanges($oldPackage, $package);
