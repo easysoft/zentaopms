@@ -394,12 +394,13 @@ class apiModel extends model
     /**
      * Get api doc list by module id.
      *
-     * @param  int   $libID
-     * @param  int   $moduleID
-     * @param  int   $release
+     * @param  int    $libID
+     * @param  int    $moduleID
+     * @param  int    $release
+     * @param  object $pager
      * @return array $list
      */
-    public function getListByModuleId($libID = 0, $moduleID = 0, $release = 0)
+    public function getListByModuleId($libID = 0, $moduleID = 0, $release = 0, $pager = null)
     {
         /* Get release info. */
         if($release > 0)
@@ -437,6 +438,7 @@ class apiModel extends model
                 ->from(TABLE_API)
                 ->where($where)
                 ->andWhere('deleted')->eq(0)
+                ->page($pager)
                 ->fetchAll();
         }
         array_map(function ($item) {

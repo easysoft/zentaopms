@@ -51,50 +51,6 @@
     </div>
   </div>
   <?php endif;?>
-
-  <?php if($apiID):?>
-    <?php include './content.html.php';?>
-  <?php else:?>
-  <?php if(empty($libs) || empty($apiList)):?>
-  <div class="cell">
-    <div class="detail">
-      <li class="detail-title"><?php echo intval($libID) > 0 ? $lang->api->apiList : $lang->api->pageTitle;?></li>
-    </div>
-    <div class="detail">
-      <div class="no-content"><img src="<?php echo $config->webRoot . 'theme/default/images/main/no_content.png'?>"/></div>
-      <div class="notice text-muted"><?php echo (empty($libs)) ? $lang->api->noLib : $lang->api->noApi;?></div>
-      <div class="no-content-button">
-        <?php
-        if($libID && common::hasPriv('api', 'create'))
-        {
-            echo html::a(helper::createLink('api', 'create', "libID={$libID}"), '<i class="icon icon-plus"></i> ' . $lang->api->createApi, '', 'class="btn btn-info btn-wide"');
-        }
-        ?>
-      </div>
-    </div>
-  </div>
-  <?php else:?>
-  <div class="cell main-col" data-min-width="400">
-    <div class="detail base-url">
-      <p><?php echo $lang->api->baseUrl . ': ' . $lib->baseUrl;?></p>
-    </div>
-    <div class="detail">
-      <ul class="list-group">
-        <?php foreach($apiList as $api):?>
-        <li class="list-group-item">
-          <div class="heading <?php echo $api->method;?>">
-            <a href="<?php echo helper::createLink('api', 'index', "libID={$api->lib}&moduleID=0&apiID={$api->id}&version=0&release=$release");?>">
-              <span class="label label-primary"><?php echo $api->method;?></span>
-              <span class="path" title="<?php echo $api->path;?>"><?php echo $api->path;?></span>
-              <span class="desc" title="<?php echo $api->title;?>"><?php echo $api->title;?></span>
-            </a>
-          </div>
-        </li>
-        <?php endforeach;?>
-      </ul>
-    </div>
-  </div>
-  <?php endif;?>
-  <?php endif;?>
+  <?php include 'apilist.html.php';?>
 </div>
 <?php include '../../common/view/footer.html.php';?>

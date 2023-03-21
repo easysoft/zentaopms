@@ -954,9 +954,19 @@ class docModel extends model
         }
         elseif(in_array($type, array('product', 'project', 'execution', 'custom', 'book')))
         {
-            $queryName = $type . 'Doc';
-            $this->config->doc->search['module']                  = $queryName;
-            $this->config->doc->search['params']['lib']['values'] = array('' => '', $libID => (isset($libs[$libID]) ? $libs[$libID]->name : $libID), 'all' => $this->lang->doclib->all);
+            if(!isset($libs[$libID])) $libs[$libID] = $this->getLibById($libID);
+
+            $libType   = $libs[$libID]->type;
+            $libPairs  = array('' => '');
+            $queryName = $type . $libType . 'Doc';
+            foreach($libs as $lib)
+            {
+                if($lib->type != $libType) continue;
+                $libPairs[$lib->id] = $lib->name;
+            }
+
+            $this->config->doc->search['module'] = $queryName;
+            $this->config->doc->search['params']['lib']['values'] = $libPairs + array('all' => $this->lang->doclib->all);
             unset($this->config->doc->search['fields']['product']);
             unset($this->config->doc->search['fields']['execution']);
             unset($this->config->doc->search['fields']['module']);
@@ -2795,8 +2805,10 @@ EOT;
      */
     public function getDocsBySearch($type, $objectID, $libID, $queryID, $pager)
     {
-        $queryName = $type . 'DocQuery';
-        $queryForm = $type . 'DocForm';
+        $lib       = $this->getLibById($libID);
+        $libType   = $lib->type;
+        $queryName = $type . $libType . 'DocQuery';
+        $queryForm = $type . $libType . 'DocForm';
         if($queryID)
         {
             $query = $this->loadModel('search')->getQuery($queryID);
@@ -2817,8 +2829,8 @@ EOT;
 
         $libs  = $this->getLibsByObject($type, $objectID);
         $query = $this->session->$queryName;
-        $query = strpos($query, "`lib` = 'all'") === false ? "$query and lib = $libID" : str_replace("`lib` = 'all'", '1', $query);
-        $docs  = $this->dao->select('*')->from(TABLE_DOC)
+        if(strpos($query, "`lib` = 'all'") !== false) $query = str_replace("`lib` = 'all'", '1', $query);
+        return $this->dao->select('*')->from(TABLE_DOC)
             ->where('deleted')->eq(0)
             ->andWhere($query)
             ->andWhere('lib')->in(array_keys($libs))
@@ -2826,47 +2838,6 @@ EOT;
             ->orderBy('id_desc')
             ->page($pager)
             ->fetchAll('id');
-
-        $docContents = $this->dao->select('*')->from(TABLE_DOCCONTENT)->where('doc')->in(array_keys($docs))->orderBy('version,doc')->fetchAll('doc');
-
-        $files = $this->dao->select('*')->from(TABLE_FILE)
-            ->where('objectType')->eq('doc')
-            ->andWhere('objectID')->in(array_keys($docs))
-            ->fetchGroup('objectID');
-        foreach($docs as $docID => $doc)
-        {
-            $docs[$docID]->fileSize = 0;
-            if(isset($files[$docID]))
-            {
-                $docContent = $docContents[$docID];
-                $fileSize   = 0;
-                foreach($files[$docID] as $file)
-                {
-                    if(strpos(",{$docContent->files},", ",{$file->id},") === false) continue;
-                    $fileSize += $file->size;
-                }
-
-                if($fileSize < 1024)
-                {
-                    $fileSize .= 'B';
-                }
-                elseif($fileSize < 1024 * 1024)
-                {
-                    $fileSize = round($fileSize / 1024, 2) . 'KB';
-                }
-                elseif($fileSize < 1024 * 1024 * 1024)
-                {
-                    $fileSize = round($fileSize / 1024 / 1024, 2) . 'MB';
-                }
-                else
-                {
-                    $fileSize = round($fileSize / 1024 / 1024 / 1024, 2) . 'G';
-                }
-
-                $docs[$docID]->fileSize = $fileSize;
-            }
-        }
-        return $docs;
     }
 
     /**
@@ -2941,10 +2912,11 @@ EOT;
      * @param  int    $moduleID
      * @param  int    $objectID
      * @param  int    $executionID
+     * @param  string $browseType bySearch
      * @access public
      * @return array
      */
-    public function getLibTree($libID, $libs, $type, $moduleID, $objectID = 0)
+    public function getLibTree($libID, $libs, $type, $moduleID, $objectID = 0, $browseType = '')
     {
         if($type == 'project')
         {
@@ -2970,7 +2942,7 @@ EOT;
             $item->name       = $lib->name;
             $item->objectType = $type;
             $item->objectID   = $objectID;
-            $item->active     = $lib->id == $libID ? 1 : 0;
+            $item->active     = $lib->id == $libID && $browseType != 'bySearch' ? 1 : 0;
             $item->children   = $this->getModuleTree($lib->id, $moduleID, $lib->type == 'api' ? 'api' : 'doc');
             $item->children   = array_values($item->children);
             if(($type == 'project' and $lib->type != 'execution') or $type != 'project')

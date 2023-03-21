@@ -45,11 +45,11 @@ if($app->rawMethod == 'contribute') $config->doc->search['fields']['project'] = 
 $config->doc->search['fields']['execution']  = $lang->doc->execution;
 $config->doc->search['fields']['lib']        = $lang->doc->lib;
 $config->doc->search['fields']['module']     = $lang->doc->module;
-$config->doc->search['fields']['keywords']   = $lang->doc->keywords;
-$config->doc->search['fields']['addedBy']    = $lang->doc->addedBy;
+$config->doc->search['fields']['addedBy']    = $lang->doc->addedByAB;
 $config->doc->search['fields']['addedDate']  = $lang->doc->addedDate;
 $config->doc->search['fields']['editedBy']   = $lang->doc->editedBy;
 $config->doc->search['fields']['editedDate'] = $lang->doc->editedDate;
+$config->doc->search['fields']['keywords']   = $lang->doc->keywords;
 $config->doc->search['fields']['version']    = $lang->doc->version;
 
 $config->doc->search['params']['title']      = array('operator' => 'include', 'control' => 'input',  'values' => '');

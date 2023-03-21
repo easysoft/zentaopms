@@ -1019,8 +1019,7 @@ class doc extends control
         if(!empty($_POST)) $searchTitle = $this->post->title;
         if(empty($_POST) and !empty($searchTitle)) $this->post->title = $searchTitle;
 
-        $this->lang->TRActions = $this->doc->buildCollectButton4Doc();
-        $this->lang->TRActions .= $this->doc->buildBrowseSwitch($type, $objectID, $viewType, $orderBy, $recTotal, $recPerPage, $pageID, $searchTitle);
+        $this->lang->TRActions = $this->doc->buildBrowseSwitch($type, $objectID, $viewType, $orderBy, $recTotal, $recPerPage, $pageID, $searchTitle);
 
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
@@ -1133,9 +1132,6 @@ class doc extends control
 
         /* Set Custom. */
         foreach(explode(',', $this->config->doc->customObjectLibs) as $libType) $customObjectLibs[$libType] = $this->lang->doc->customObjectLibs[$libType];
-
-        $actionURL = $this->createLink('doc', 'tableContents', "type=$type&objectID=$objectID&libID=$libID&browseType=bySearch&param=myQueryID");
-        $this->doc->buildSearchForm(0, array(), 0, $actionURL, $type);
 
         $moduleTree = $type == 'book' ? $this->doc->getBookStructure($libID) : $this->doc->getTreeMenu($type, $objectID, $libID, 0, $docID);
 
@@ -1267,13 +1263,13 @@ class doc extends control
         $libID      = (int)$libID;
         $moduleTree = $type == 'book' ? $this->doc->getBookStructure($libID) : $this->doc->getTreeMenu($type, $objectID, $libID);
 
-        $libTree = $this->doc->getLibTree($libID, $libs, $type, $moduleID, $objectID);
+        $libTree = $this->doc->getLibTree($libID, $libs, $type, $moduleID, $objectID, $browseType);
 
         $title = ($type == 'book' or $type == 'custom') ? $this->lang->doc->tableContents : $object->name . $this->lang->colon . $this->lang->doc->tableContents;
 
         /* Build the search form. */
         $queryID   = $browseType == 'bySearch' ? (int)$param : 0;
-        $actionURL = $this->createLink('doc', 'tableContents', "type=$type&objectID=$objectID&libID=0&browseType=bySearch&param=myQueryID");
+        $actionURL = $this->createLink('doc', 'tableContents', "type=$type&objectID=$objectID&libID=$libID&moduleID=0&browseType=bySearch&param=myQueryID");
         $this->doc->buildSearchForm($libID, $libs, $queryID, $actionURL, $type);
 
         /* Load pager. */
@@ -1283,6 +1279,27 @@ class doc extends control
         $pager = new pager($recTotal, $recPerPage, $pageID);
         $this->app->rawMethod = $rawMethod;
 
+        $this->view->libID = $libID;
+
+        $lib     = $this->doc->getLibById($libID);
+        $libType = zget($lib, 'type', '');
+        if($libType == 'api')
+        {
+            $this->view->lib     = $lib;
+            $this->view->libs    = $libs;
+            $this->view->apiID   = 0;
+            $this->view->release = 0;
+            $this->view->apiList = $this->loadModel('api')->getListByModuleId($libID, $moduleID, 0, $pager);
+        }
+        elseif($browseType == 'annex')
+        {
+            //$this->view->files = $this->doc->getLibFiles($type, $objectID, 'id_desc', $pager);
+        }
+        else
+        {
+            $this->view->docs = $browseType == 'bySearch' ? $this->doc->getDocsBySearch($type, $objectID, $libID, $queryID, $pager) : $this->doc->getDocs($libID, $moduleID, 'id_desc', $pager);
+        }
+
         $this->view->title          = $title;
         $this->view->type           = $type;
         $this->view->browseType     = $browseType;
@@ -1291,23 +1308,11 @@ class doc extends control
         $this->view->libTree        = $libTree;
         $this->view->moduleID       = $moduleID;
         $this->view->objectDropdown = $objectDropdown;
-        $this->view->docs           = $browseType == 'bySearch' ? $this->doc->getDocsBySearch($type, $objectID, 0, $queryID, $pager) : $this->doc->getDocs($libID, $moduleID, 'id_desc', $pager);
+        $this->view->libType        = $libType;
         $this->view->pager          = $pager;
+        $this->view->objectID       = $objectID;
 
-        if($browseType == 'bySearch')
-        {
-            $this->view->browseType = 'bySearch';
-            $this->display('doc', 'browse', "browseType=bySearch&param=$queryID");
-        }
-        else
-        {
-            $this->view->libs       = $libs;
-            $this->view->objectID   = $objectID;
-            $this->view->libID      = $libID;
-            $this->view->moduleTree = $moduleTree;
-
-            $this->display();
-        }
+        $this->display();
     }
 
     /**
