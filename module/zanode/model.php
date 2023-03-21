@@ -631,7 +631,7 @@ class zanodemodel extends model
 
                 if($host->status != 'online' || time() - strtotime($host->heartbeat) > 60)
                 {
-                    $l->status = self::STATUS_SHUTOFF;
+                    $l->status = $l->hostType == '' ? 'wait' : 'offline';
                     continue;
                 }
 
@@ -641,6 +641,7 @@ class zanodemodel extends model
                 }
             }
         }
+        var_dump($list);die;
         return $list;
     }
 
