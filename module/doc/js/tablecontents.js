@@ -98,16 +98,19 @@ $(function()
 
     $('#fileTree').tree(
     {
+        initialState: 'active',
         data: treeData,
         itemCreator: function($li, item)
         {
+            var libClass = ['lib', 'annex'].indexOf(item.type) !== -1 ? 'lib' : '';
             var hasChild = item.children ? !!item.children.length : false;
-            var $item = '<a href="#" data-has-children="' + hasChild + '" title="' + item.name + '" data-id="' + item.id + '" class="' + (item.type ? 'lib' : '') + '">';
+            var $item = '<a href="#" data-has-children="' + hasChild + '" title="' + item.name + '" data-id="' + item.id + '" class="' + libClass + '">';
             $item += '<div class="text h-full w-full flex-center">' + item.name;
             $item += '<i class="icon icon-drop icon-ellipsis-v float-r hidden" data-isCatalogue="' + (item.type ? false : true) + '"></i>';
             $item += '</div>';
             $item += '</a>';
             $li.append($item);
+            $li.addClass(libClass);
 
             if (item.active) $li.addClass('active open in');
         }
@@ -120,12 +123,21 @@ $(function()
     }).on('mouseout', 'a', function()
     {
         $(this).find('.icon').addClass('hidden');
-    }).on('click', 'a', function()
+    }).on('click', 'a', function(e)
     {
-        var libID    = 0;
+        var isLib    = $(this).hasClass('lib');
         var moduleID = $(this).data('id');
 
-        location.href = createLink('doc', 'tableContents', linkParams + '&libID=' + libID + '&moduleID=' + moduleID);
+        if(isLib)
+        {
+            linkParams += '&libID=' + moduleID;
+        }
+        else
+        {
+            var libID   = $(this).closest('.lib').data('id');
+            linkParams += '&libID=' + libID + '&moduleID=' + moduleID;
+        }
+        location.href = createLink('doc', 'tableContents', linkParams);
     });
 
     function renderDropdown(option)
