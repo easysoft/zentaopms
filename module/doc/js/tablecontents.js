@@ -92,7 +92,7 @@ $(function()
         data: treeData,
         itemCreator: function($li, item)
         {
-            var libClass = ['lib', 'annex', 'api'].indexOf(item.type) !== -1 ? 'lib' : '';
+            var libClass = ['lib', 'annex', 'api', 'execution'].indexOf(item.type) !== -1 ? 'lib' : '';
             var hasChild = item.children ? !!item.children.length : false;
             var $item = '<a href="###" data-has-children="' + hasChild + '" title="' + item.name + '" data-id="' + item.id + '" class="' + libClass + '" data-type="' + item.type + '">';
             $item += '<div class="text h-full w-full flex-center">' + item.name;
@@ -120,14 +120,10 @@ $(function()
 
         if(isLib)
         {
-            if($(this).data('type') == 'annex')
-            {
-                linkParams += '&libID=&moduleID=0&browseType=annex';
-            }
-            else
-            {
-                linkParams += '&libID=' + moduleID;
-            }
+            if($(this).data('type') == 'annex') return false;
+
+            linkParams += '&libID=' + moduleID;
+            moduleID    = 0;
         }
         else
         {
