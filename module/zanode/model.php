@@ -641,7 +641,6 @@ class zanodemodel extends model
                 }
             }
         }
-        var_dump($list);die;
         return $list;
     }
 
