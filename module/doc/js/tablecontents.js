@@ -199,12 +199,13 @@ $(function()
             that.name = NAME;
             var $element = that.$ = $(element);
 
-            options = that.options = $.extend({}, SplitRow.DEFAULTS, this.$.data(), options);
-            var id = options.id || $element.attr('id') || $.zui.uuid();
-            var $cols = $element.children('.col');
-            var $firstCol = $cols.first();
+            options        = that.options = $.extend({}, SplitRow.DEFAULTS, this.$.data(), options);
+            var id         = options.id || $element.attr('id') || $.zui.uuid();
+            var $cols      = $element.children('.col');
+            var $firstCol  = $cols.first();
+            var $firstBar  = $('#leftBar > .btn-group');
             var $secondCol = $cols.eq(1);
-            var $spliter = $firstCol.next('.col-spliter');
+            var $spliter   = $firstCol.next('.col-spliter');
             if (!$spliter.length)
             {
                 $spliter = $(options.spliter);
@@ -222,6 +223,7 @@ $(function()
                 var maxFirstWidth = 400;
                 width = Math.max(minFirstColWidth, Math.min(width, maxFirstWidth));
                 $firstCol.width(width);
+                $firstBar.width(width);
                 $secondCol.width($('#mainContent').width() - width);
                 $.zui.store.set('splitRowFirstSize:' + id, width);
             };
