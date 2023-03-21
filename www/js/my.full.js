@@ -192,7 +192,6 @@
             });
         }, 500);
     }
-    handleSaveFormDraft();
 
     /* Tab session */
     if(!config.tabSession) return;
