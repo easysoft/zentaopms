@@ -71,7 +71,7 @@
     <div id="fileTree" class="file-tree"></div>
   </div>
   <div id="spliter" class="spliter col-spliter"></div>
-  <div class="panel main-col flex-full col overflow-x-auto flex-auto" data-min-width="500">
+  <div class="main-col flex-full col overflow-x-auto flex-auto" data-min-width="500">
     <div class="cell<?php if($browseType == 'bySearch') echo ' show';?>" style="min-width: 400px" id="queryBox" data-module=<?php echo $type . 'Doc';?>></div>
     <?php if(empty($docs)):?>
     <div class="table-empty-tip">
@@ -148,7 +148,7 @@
             <?php
             if(common::hasPriv('doc', 'objectLibs'))
             {
-                echo html::a($this->createLink('doc', 'objectLibs', "type=$type&objectID=$objectID&libID=$doc->lib&docID=$doc->id"), "<i class='icon icon-file-text text-muted'></i> &nbsp;" . $doc->title, '', "title='{$doc->title}' data-app='{$this->app->tab}'");
+                echo html::a($this->createLink('doc', 'objectLibs', "type=$type&objectID=$objectID&libID=$doc->lib&docID=$doc->id"), "<i class='icon icon-file-text text-muted'></i> &nbsp;" . $doc->title, '', "title='{$doc->title}' data-app='{$this->app->tab}' class='text-primary'");
             }
             else
             {

@@ -61,6 +61,6 @@ li.drag-shadow ul {display: none!important;}
 .createDropdown button.dropdown-toggle.btn-primary, .createDropdown button.dropdown-toggle.btn-info {padding: 6px;}
 .createDropdown ul > li {text-align: left;}
 
-.table .c-name > a.iframe {display: inline-block; max-width: 90%;}
+.table .c-name > a.text-primary {display: inline-block; max-width: 90%; overflow: hidden;}
 .table .c-name > .ajaxCollect {float: right; position: relative; right: 10px; top: -3px;}
 .panel th.c-id {width: 60px;}
