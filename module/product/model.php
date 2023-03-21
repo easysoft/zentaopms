@@ -2590,7 +2590,6 @@ class productModel extends model
         if(!$this->app->user->admin and strpos(",{$this->app->user->view->products},", ",$productID,") === false and $productID != 0 and !defined('TUTORIAL')) return $this->accessDenied($this->lang->product->accessDenied);
 
         $product = $this->getByID($productID);
-        if(!empty($product) and $product->shadow) $this->accessDenied($this->lang->product->notExists);
 
         $params = array('branch' => $branch);
         common::setMenuVars('product', $productID, $params);
