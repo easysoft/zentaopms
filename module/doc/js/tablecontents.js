@@ -183,5 +183,120 @@ $(function()
         {
             $('.dropdown-in-tree').css('display', 'none');
         }
-    })
+    });
+
+    function initSplitRow()
+    {
+        /* Init split row. */
+        var NAME = 'zui.splitRow';
+        /* The SplitRow model class. */
+        var SplitRow = function(element, options)
+        {
+            var that = this;
+            that.name = NAME;
+            var $element = that.$ = $(element);
+
+            options = that.options = $.extend({}, SplitRow.DEFAULTS, this.$.data(), options);
+            var id = options.id || $element.attr('id') || $.zui.uuid();
+            var $cols = $element.children('.col');
+            var $firstCol = $cols.first();
+            var $secondCol = $cols.eq(1);
+            var $spliter = $firstCol.next('.col-spliter');
+            if (!$spliter.length)
+            {
+                $spliter = $(options.spliter);
+                if (!$spliter.parent().length)
+                {
+                    $spliter.insertAfter($firstCol);
+                }
+            }
+            var spliterWidth      = $spliter.width();
+            var minFirstColWidth  = $firstCol.data('min-width');
+            var minSecondColWidth = $secondCol.data('min-width');
+            var rowWidth          = $element.width();
+            var setFirstColWidth  = function(width)
+            {
+                var maxFirstWidth = 400;
+                width = Math.max(minFirstColWidth, Math.min(width, maxFirstWidth));
+                $firstCol.width(width);
+                $secondCol.width($('#mainContent').width() - width);
+                $.zui.store.set('splitRowFirstSize:' + id, width);
+            };
+
+            var defaultWidth = $.zui.store.get('splitRowFirstSize:' + id);
+            if(typeof(defaultWidth) == 'undefined') defaultWidth = $element.width() * 0.33;
+            setFirstColWidth(defaultWidth);
+
+            var documentEventName = '.' + id;
+
+            var mouseDownX, isMouseDown, startFirstWidth, rafID;
+            $spliter.on('mousedown', function(e)
+            {
+                startFirstWidth = $firstCol.width();
+                mouseDownX = e.pageX;
+                isMouseDown = true;
+                $element.addClass('row-spliting');
+                e.preventDefault();
+                var handleMouseMove = function(e)
+                {
+                    if(isMouseDown)
+                    {
+                        var deltaX = e.pageX - mouseDownX;
+                        setFirstColWidth(startFirstWidth + deltaX);
+                        e.preventDefault();
+                    }
+                    else
+                    {
+                        $(document).off(documentEventName);
+                        $element.removeClass('row-spliting');
+                    }
+                };
+                $(document).on('mousemove' + documentEventName, function(e)
+                {
+                    if(rafID) cancelAnimationFrame(rafID);
+                    rafID = requestAnimationFrame(function()
+                    {
+                        handleMouseMove(e);
+                        rafID = 0;
+                    });
+                }).on('mouseup' + documentEventName + ' mouseleave' + documentEventName, function(e)
+                {
+                    if(rafID) cancelAnimationFrame(rafID);
+                    isMouseDown = false;
+                    $(document).off(documentEventName);
+                    $element.removeClass('row-spliting');
+                });
+            });
+        };
+
+        /* default options. */
+        SplitRow.DEFAULTS =
+        {
+            spliter: '<div class="col-spliter"></div>',
+        };
+
+        /* Extense jquery element. */
+        $.fn.splitRow = function(option)
+        {
+            return this.each(function()
+            {
+                var $this = $(this);
+                var data = $this.data(NAME);
+                var options = typeof option == 'object' && option;
+                if(!data) $this.data(NAME, (data = new SplitRow(this, options)));
+            });
+        };
+
+        SplitRow.NAME = NAME;
+
+        $.fn.splitRow.Constructor = SplitRow;
+
+        /* Auto call splitRow after document load complete. */
+        $(function()
+        {
+            $('.split-row').splitRow();
+        });
+    }
+
+    initSplitRow();
 })

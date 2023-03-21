@@ -65,13 +65,13 @@
   ?>
   </div>
 </div>
-<div id='mainContent'class="fade flex">
-  <div class="side side-col panel">
+<div id='mainContent'class="fade flex split-row">
+  <div id='side-bar' class="panel side side-col col overflow-x-auto flex-none" data-min-width="150">
     <div id="fileTree" class="file-tree"></div>
   </div>
-  <div id="spliter" class="spliter"></div>
-  <div class="main-col flex-full panel">
-    <div class="cell<?php if($browseType == 'bySearch') echo ' show';?>" id="queryBox" data-module=<?php echo $type . 'Doc';?>></div>
+  <div id="spliter" class="spliter col-spliter"></div>
+  <div class="panel main-col flex-full col overflow-x-auto flex-auto" data-min-width="500">
+    <div class="cell<?php if($browseType == 'bySearch') echo ' show';?>" style="min-width: 400px" id="queryBox" data-module=<?php echo $type . 'Doc';?>></div>
     <?php if(empty($docs)):?>
     <div class="table-empty-tip">
       <p>

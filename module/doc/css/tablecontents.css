@@ -1,9 +1,12 @@
 .flex {display: flex;}
-.flex-full {flex: 1;}
+.flex-none {flex: none;}
+.flex-auto {flex: auto;}
 .flex-full > .panel {box-shadow: none;}
 .float-r {float: right;}
 .h-full {height: 100%;}
-.w-full {width: 100%;}main-content {padding-top: 0; padding-bottom: 0;}
+.w-full {width: 100%;}
+.overflow-x-auto {overflow-x: auto;}
+main-content {padding-top: 0; padding-bottom: 0;}
 .main-content #createDropdown {display: inline-block;}
 .main-content #createDropdown ul {position: absolute;}
 #pageNav .dropdown-menu {max-height: inherit;}
