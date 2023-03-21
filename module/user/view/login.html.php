@@ -12,6 +12,7 @@ include '../../common/view/header.lite.html.php';
 if(empty($config->notMd5Pwd))js::import($jsRoot . 'md5.js');
 ?>
 <?php js::set('loginTimeoutTip', $lang->user->error->loginTimeoutTip);?>
+<?php $zentaodirName = basename($this->app->getBasePath());?>
 <main id="main" class="fade no-padding">
   <div class="container" id="login">
     <div id="loginPanel">
@@ -116,7 +117,7 @@ if(empty($config->notMd5Pwd))js::import($jsRoot . 'md5.js');
     <div id="info" class="table-row">
       <div class="table-col text-middle text-center">
         <div id="poweredby">
-          <?php if($unsafeSites):?>
+          <?php if($unsafeSites and !empty($unsafeSites[$zentaodirName])):?>
           <div><a class='showNotice' href='javascript:showNotice()',><?php echo $lang->user->notice4Safe;?></a></div>
           <?php endif;?>
           <?php if($config->checkVersion):?>
@@ -128,7 +129,7 @@ if(empty($config->notMd5Pwd))js::import($jsRoot . 'md5.js');
   </div>
 </main>
 <?php
-if($unsafeSites)
+if($unsafeSites and !empty($unsafeSites[$zentaodirName]))
 {
     $paths     = array();
     $databases = array();
