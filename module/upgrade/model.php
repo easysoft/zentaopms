@@ -8427,4 +8427,204 @@ class upgradeModel extends model
 
         return true;
     }
+
+    public function createDefaultGroup($type)
+    {
+        $firstGroup = new stdclass();
+        $firstGroup->root   = 1;
+        $firstGroup->type   = $type;
+        $firstGroup->parent = 0;
+        $firstGroup->name   = $this->lang->upgrade->defaultGroup;
+
+        $this->dao->insert(TABLE_MODULE)->data($firstGroup)->autoCheck()->exec();
+
+        $firstGroupID = $this->dao->lastInsertID();
+
+        $this->dao->update(TABLE_MODULE)->set('path')->eq(",{$firstGroupID},")->where('id')->eq($firstGroupID)->exec();
+
+        $secondGroup = new stdclass();
+        $secondGroup->root   = 1;
+        $secondGroup->type   = $type;
+        $secondGroup->parent = $firstGroupID;
+        $secondGroup->name   = $this->lang->upgrade->defaultGroup;
+
+        $this->dao->insert(TABLE_MODULE)->data($secondGroup)->autoCheck()->exec();
+        $secondGroupID = $this->dao->lastInsertID();
+
+        $this->dao->update(TABLE_MODULE)->set('path')->eq(",{$firstGroupID},{$secondGroupID},")->where('id')->eq($secondGroupID)->exec();
+
+        return $secondGroupID;
+    }
+
+    /**
+     * Process chart.
+     *
+     * @access public
+     * @return bool
+     */
+    public function processChart()
+    {
+        $charts = $this->dao->select('*')->from(TABLE_CHART)->fetchAll();
+
+        $defaultGroupID = $this->createDefaultGroup('chart');
+
+        $data = new stdclass();
+        foreach($charts as $chart)
+        {
+            $data->dimension = 1;
+            $data->group     = $defaultGroupID;
+            $data->stage     = 'published';
+            $data->step      = 4;
+
+            $settings = json_decode($chart->settings, true);
+
+            if(isset($settings['filter']))
+            {
+                $filters = $settings['filter'];
+                $filters['type'] = 'condition';
+
+                unset($settings['filter']);
+            }
+
+            $data->settings = json_encode($settings);
+            $data->filters  = json_encode($filters);
+
+            if($chart->type == 'table')
+            {
+                $this->upgradeToPivotTable($chart);
+            }
+            else
+            {
+                $this->dao->update(TABLE_CHART)->data($data)->autoCheck()->where('id')->eq($chart->id)->exec();
+            }
+        }
+
+        return !dao::isError();
+    }
+
+    public function upgradeToPivotTable($chart)
+    {
+    }
+
+    /**
+     * Process report data.
+     *
+     * @access public
+     * @return bool
+     */
+    public function processReport()
+    {
+        $reports = $this->dao->select('*')->from(TABLE_REPORT)->fetchAll();
+
+        $modulePairs = $this->dao->select('id, name')->from(TABLE_MODULE)->where('type')->eq('report')->fetchPairs();
+        $groupPairs  = $this->dao->select('name, id')->from(TABLE_MODULE)->where('type')->eq('pivot')->fetchPairs();
+
+        $this->loadModel('report');
+
+        foreach($reports as $report)
+        {
+            /* TODO: vars need to process. */
+            if(strpos($report->sql, '$') !== false) continue;
+
+            $data = new stdclass();
+            $data->dimension   = 1;
+            $data->name        = $report->name;
+            $data->sql         = $this->report->replaceTableNames($report->sql);
+            $data->vars        = $report->vars;
+            $data->langs       = $report->langs;
+            $data->stage       = 'published';
+            $data->step        = 4;
+            $data->desc        = $report->desc;
+            $data->createdBy   = $report->addedBy;
+            $data->createdDate = $report->addedDate;
+
+            $modules = explode($report->module, ',');
+            $groups  = array();
+            foreach($modules as $module)
+            {
+                $moduleName = zget($modulePairs, $module, '');
+                if(isset($groupNames[$moduleName]))
+                {
+                    $groups[] = $groupNames[$moduleName];
+                }
+                else
+                {
+                    if(!isset($defaultGroupID)) $defaultGroupID = $this->createDefaultGroup('pivot');
+                    $groups[] = $defaultGroupID;
+                }
+            }
+            $data->group = implode(',', $groups);
+
+            $params   = json_decode($report->params);
+            $settings = new stdclass();
+            $settings->group1 = $params->group1;
+            $settings->group2 = $params->group2;
+
+            $columns = array();
+            foreach($params->reportField as $index => $field)
+            {
+                $column = new stdclass();
+                $column->field     = $field;
+                $column->isUser    = isset($params->isUser) ? zget($params->isUser, $index, '') : '';
+                $column->stat      = isset($params->reportType) ? zget($params->reportType, $index, '') : '';
+                $column->sumAppend = isset($params->sumAppend) ? zget($params->sumAppend, $index, '') : '';
+                $column->total     = isset($params->reportTotal) ? zget($params->reportTotal, $index, '') : '';
+                $column->percent   = isset($params->percent) ? zget($params->percent, $index, '') : '';
+                $column->contrast  = isset($params->contrast) ? zget($params->contrast, $index, '') : '';
+                $column->showAlone = isset($params->showAlone) ? zget($params->showAlone, $index, '') : '';
+
+                $columns[] = $column;
+            }
+            $settings->columns = $columns;
+
+            $fieldSettings = $this->getFieldSettings($data->sql);
+
+            $data->settings = json_encode($settings);
+            $data->fields   = json_encode($fieldSettings);
+
+            $this->dao->insert(TABLE_PIVOT)->data($data)->autoCheck()->printSQL();
+        }
+
+        return !dao::isError();
+    }
+
+    /**
+     * Get field settings.
+     *
+     * @param  string    $sql
+     * @access public
+     * @return array
+     */
+    public function getFieldSettings($sql)
+    {
+        $this->loadModel('dataview');
+
+        $columns      = $this->dataview->getColumns($sql);
+        $columnFields = array();
+        foreach($columns as $column => $type) $columnFields[$column] = $column;
+
+        $tableAndFields = $this->dataview->getTables($sql);
+        $tables         = $tableAndFields['tables'];
+        $fields         = $tableAndFields['fields'];
+
+        $moduleNames = array();
+        if($tables) $moduleNames = $this->dataview->getModuleNames($tables);
+
+        list($fieldPairs, $relatedObject) = $this->dataview->mergeFields($columnFields, $fields, $moduleNames);
+
+        $fieldSettings = array();
+        foreach($fieldPairs as $field => $name)
+        {
+            $relatedTable = zget($relatedObject, $field);
+
+            $fieldSetting = new stdclass();
+            $fieldSetting->object = $relatedTable;
+            $fieldSetting->field  = $field;
+            $fieldSetting->type   = 'string';
+
+            $fieldSettings[$field] = $fieldSetting;
+        }
+
+        return $fieldSettings;
+    }
 }
