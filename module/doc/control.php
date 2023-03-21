@@ -1262,7 +1262,7 @@ class doc extends control
     {
         $this->session->set('createProjectLocate', $this->app->getURI(true), 'doc');
 
-        list($libs, $libID, $object, $objectID) = $this->doc->setMenuByType($type, $objectID, $libID);
+        list($libs, $libID, $object, $objectID, $objectDropdown) = $this->doc->setMenuByType($type, $objectID, $libID);
 
         $libID      = (int)$libID;
         $moduleTree = $type == 'book' ? $this->doc->getBookStructure($libID) : $this->doc->getTreeMenu($type, $objectID, $libID);
@@ -1283,15 +1283,16 @@ class doc extends control
         $pager = new pager($recTotal, $recPerPage, $pageID);
         $this->app->rawMethod = $rawMethod;
 
-        $this->view->title      = $title;
-        $this->view->type       = $type;
-        $this->view->browseType = $browseType;
-        $this->view->param      = $queryID;
-        $this->view->users      = $this->user->getPairs('noletter');
-        $this->view->libTree    = $libTree;
-        $this->view->moduleID   = $moduleID;
-        $this->view->docs       = $browseType == 'bySearch' ? $this->doc->getDocsBySearch($type, $objectID, 0, $queryID, $pager) : $this->doc->getDocs($libID, $moduleID, 'id_desc', $pager);
-        $this->view->pager      = $pager;
+        $this->view->title          = $title;
+        $this->view->type           = $type;
+        $this->view->browseType     = $browseType;
+        $this->view->param          = $queryID;
+        $this->view->users          = $this->user->getPairs('noletter');
+        $this->view->libTree        = $libTree;
+        $this->view->moduleID       = $moduleID;
+        $this->view->objectDropdown = $objectDropdown;
+        $this->view->docs           = $browseType == 'bySearch' ? $this->doc->getDocsBySearch($type, $objectID, 0, $queryID, $pager) : $this->doc->getDocs($libID, $moduleID, 'id_desc', $pager);
+        $this->view->pager          = $pager;
 
         if($browseType == 'bySearch')
         {

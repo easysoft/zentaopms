@@ -2711,7 +2711,8 @@ EOT;
             $objectID = $type == 'custom' or $type == 'book' ? 0 : $doclib->$type;
         }
 
-        $objects = $this->getOrderedObjects($type);
+        $objects        = $this->getOrderedObjects($type);
+        $objectDropdown = '';
 
         if($type == 'custom')
         {
@@ -2739,7 +2740,8 @@ EOT;
             if($libID == 0 and !empty($libs)) $libID = reset($libs)->id;
             if($this->app->tab == 'doc') $this->app->rawMethod = $type == 'execution' ? 'project' : $type;
 
-            $object = $this->dao->select('id,name,status')->from($table)->where('id')->eq($objectID)->fetch();
+            $object         = $this->dao->select('id,name,status')->from($table)->where('id')->eq($objectID)->fetch();
+            $objectDropdown = $this->select($type, $objects, $objectID, array());
 
             if(empty($object))
             {
@@ -2752,7 +2754,7 @@ EOT;
         $tab = strpos(',doc,product,project,execution,', ",{$this->app->tab},") !== false ? $this->app->tab : 'doc';
         if($tab != 'doc') $this->loadModel($type)->setMenu($objectID);
 
-        return array($libs, $libID, $object, $objectID);
+        return array($libs, $libID, $object, $objectID, $objectDropdown);
     }
 
     /**
