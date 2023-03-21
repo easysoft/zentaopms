@@ -49,7 +49,7 @@ $uid = uniqid('');
     [ 'formatblock', 'fontname', 'fontsize', 'lineheight', '|', 'forecolor', 'hilitecolor', '|', 'bold', 'italic','underline', 'strikethrough', '|',
     'justifyleft', 'justifycenter', 'justifyright', 'justifyfull', '|',
     'insertorderedlist', 'insertunorderedlist', '|',
-    'emoticons', 'image', 'insertfile', 'hr', '|', 'link', '|',
+    'emoticons', 'image', 'hr', '|', 'link', '|',
     'undo', 'redo', '|', 'selectall', 'cut', 'copy', 'paste', '|', 'plainpaste', 'wordpaste', '|', 'removeformat', 'clearhtml','quickformat', '|',
     'indent', 'outdent', 'subscript', 'superscript', '|',
     'table', 'code', 'pagebreak',

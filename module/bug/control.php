@@ -918,7 +918,8 @@ class bug extends control
         $branches  = $product->type == 'normal' ? array() : $this->loadModel('branch')->getPairs($bug->product);
 
         $projects = $this->loadModel('product')->getProjectPairsByProduct($productID, $bug->branch);
-
+        $this->session->set("project", key($projects), 'project');
+        
         $this->executeHooks($bugID);
 
         /* Header and positon. */
@@ -1259,6 +1260,7 @@ class bug extends control
             /* Set plans. */
             foreach($bugs as $bug)
             {
+                $projectID  = $bug->project;
                 $plans      = $this->loadModel('productplan')->getPairs($productID, $bug->branch, '', true);
                 $plans      = array('' => '', 'ditto' => $this->lang->bug->ditto) + $plans;
                 $bug->plans = $plans;
@@ -1280,6 +1282,13 @@ class bug extends control
 
             /* Set product menu. */
             $this->qa->setMenu($this->products, $productID, $branch);
+
+            $project = $this->loadModel('project')->getByID($projectID);
+            if($product->shadow and isset($project) and empty($project->multiple))
+            {
+                $this->config->bug->custom->batchEditFields = str_replace('productplan', '', $this->config->bug->custom->batchEditFields);
+                $this->config->bug->list->customBatchEditFields = str_replace(',productplan,', ',', $this->config->bug->list->customBatchEditFields);
+            }
 
             $this->view->title      = $product->name . $this->lang->colon . "BUG" . $this->lang->bug->batchEdit;
             $this->view->position[] = html::a($this->createLink('bug', 'browse', "productID=$productID&branch=$branch"), $this->products[$productID]);
@@ -1324,7 +1333,7 @@ class bug extends control
         $showSuhosinInfo = common::judgeSuhosinSetting($countInputVars);
         if($showSuhosinInfo) $this->view->suhosinInfo = extension_loaded('suhosin') ? sprintf($this->lang->suhosinInfo, $countInputVars) : sprintf($this->lang->maxVarsInfo, $countInputVars);
 
-        /* Set Custom*/
+        /* Set Custom. */
         foreach(explode(',', $this->config->bug->list->customBatchEditFields) as $field) $customFields[$field] = $this->lang->bug->$field;
         $this->view->customFields = $customFields;
         $this->view->showFields   = $this->config->bug->custom->batchEditFields;

@@ -953,6 +953,8 @@ class execution extends control
                 break;
             }
         }
+        $summary = $this->product->summary($stories);
+        if($storyType == 'requirement') $summary = str_replace($this->lang->SRCommon, $this->lang->URCommon, $summary);
 
         /* Assign. */
         $this->view->title             = $title;
@@ -962,7 +964,7 @@ class execution extends control
         $this->view->stories           = $stories;
         $this->view->linkedTaskStories = $this->story->getIdListWithTask($executionID);
         $this->view->allPlans          = $allPlans;
-        $this->view->summary           = $this->product->summary($stories);
+        $this->view->summary           = $summary;
         $this->view->orderBy           = $orderBy;
         $this->view->storyType         = $storyType;
         $this->view->type              = $this->session->executionStoryBrowseType;

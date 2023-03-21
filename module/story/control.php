@@ -960,6 +960,8 @@ class story extends control
         $branch         = $product->type == 'branch' ? ($story->branch > 0 ? $story->branch : '0') : 'all';
         $productStories = $this->story->getProductStoryPairs($story->product, $branch, 0, 'all', 'id_desc', 0, '', $story->type);
 
+        if($story->type == 'requirement') $this->lang->story->notice->reviewerNotEmpty = str_replace($this->lang->SRCommon, $this->lang->URCommon, $this->lang->story->notice->reviewerNotEmpty);
+
         $this->view->title            = $this->lang->story->edit . "STORY" . $this->lang->colon . $this->view->story->title;
         $this->view->position[]       = $this->lang->story->edit;
         $this->view->story            = $story;
@@ -1903,9 +1905,6 @@ class story extends control
 
         $this->story->replaceURLang($story->type);
 
-        /* Set menu. */
-        $this->product->setMenu($product->id, $story->branch);
-
         /* Set the closed reason options and remove subdivided options. */
         $reasonList = $this->lang->story->reasonList;
         if($story->status == 'draft') unset($reasonList['cancel']);
@@ -2326,9 +2325,6 @@ class story extends control
         $story    = $this->story->getById($storyID);
         $products = $this->product->getPairs();
         $product  = $this->product->getById($story->product);
-
-        /* Set menu. */
-        $this->product->setMenu($story->product, $story->branch);
 
         $this->view->title      = zget($products, $story->product, '') . $this->lang->colon . $this->lang->story->assign;
         $this->view->position[] = $this->lang->story->assign;
