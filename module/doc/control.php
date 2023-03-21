@@ -1285,6 +1285,7 @@ class doc extends control
         $libType = zget($lib, 'type', '');
         if($libType == 'api')
         {
+            $this->session->set('objectName', $this->lang->doc->api, 'admin');
             $this->view->lib     = $lib;
             $this->view->libs    = $libs;
             $this->view->apiID   = 0;
@@ -1293,10 +1294,12 @@ class doc extends control
         }
         elseif($browseType == 'annex')
         {
+            $this->session->set('objectName', $this->lang->doc->files, 'admin');
             //$this->view->files = $this->doc->getLibFiles($type, $objectID, 'id_desc', $pager);
         }
         else
         {
+            $this->session->set('objectName', $this->lang->doc->common, 'admin');
             $this->view->docs = $browseType == 'bySearch' ? $this->doc->getDocsBySearch($type, $objectID, $libID, $queryID, $pager) : $this->doc->getDocs($libID, $moduleID, 'id_desc', $pager);
         }
 

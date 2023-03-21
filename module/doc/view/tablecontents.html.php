@@ -72,9 +72,7 @@
   </div>
   <div id="spliter" class="spliter col-spliter"></div>
   <div class="main-col flex-full col overflow-x-auto flex-auto" data-min-width="500">
-    <?php if($browseType != 'annex'):?>
     <div class="cell<?php if($browseType == 'bySearch') echo ' show';?>" style="min-width: 400px" id="queryBox" data-module=<?php echo $type . $libType . 'Doc';?>></div>
-    <?php endif;?>
     <?php
     if($browseType == 'annex')
     {

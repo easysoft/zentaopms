@@ -136,6 +136,7 @@ $lang->doc->collect          = 'Favorit hinzufügen';
 $lang->doc->cancelCollection = 'Favorit entfernen';
 $lang->doc->deleteFile       = 'Delete File';
 $lang->doc->menuTitle        = 'Menu';
+$lang->doc->api              = 'API';
 
 $lang->doc->collectAction = 'Add Favorite';
 

@@ -136,6 +136,7 @@ $lang->doc->collect          = '收藏';
 $lang->doc->cancelCollection = '取消收藏';
 $lang->doc->deleteFile       = '删除附件';
 $lang->doc->menuTitle        = '目录';
+$lang->doc->api              = '接口';
 
 $lang->doc->collectAction = '收藏文档';
 
