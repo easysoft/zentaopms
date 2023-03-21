@@ -63,7 +63,9 @@ programmenu
         (
             'title' => '所有项目集',
             'subTitle' => '筛选项目集',
-            'programs' => $data
+            'programs' => $data,
+            'activeKey' => '7',
+            'closeLink' => '#'
         )
     )
 );
@@ -75,9 +77,11 @@ modulemenu
         array
         (
             'productID' => 1,
-            'title' => '所有分类',
+            'title' => '售后服务',
             'moduleSettingText' => '模块设置',
-            'displaySettingText' => '显示设置'
+            'displaySettingText' => '显示设置',
+            'activeKey' => '4',
+            'closeLink' => '#'
         )
     )
 );
