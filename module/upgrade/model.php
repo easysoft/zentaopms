@@ -8478,6 +8478,7 @@ class upgradeModel extends model
 
             $settings = json_decode($chart->settings, true);
 
+            $filters = array();
             if(isset($settings['filter']))
             {
                 $filters = $settings['filter'];
@@ -8499,11 +8500,74 @@ class upgradeModel extends model
             }
         }
 
+        if(dao::isError()) return false;
+
+        $this->dao->exec("ALTER TABLE " . TABLE_CHART . " DROP `dataset`");
+
         return !dao::isError();
     }
 
-    public function upgradeToPivotTable($chart)
+    /**
+     * upgrade to pivot table.
+     *
+     * @param  int    $table
+     * @access public
+     * @return void
+     */
+    public function upgradeToPivotTable($table)
     {
+        static $defaulGroupID;
+        if(!isset($defaultGroupID)) $defaultGroupID = $this->createDefaultGroup('pivot');
+
+        $pivot = new stdclass();
+        $pivot->dimension   = 1;
+        $pivot->group       = $defaultGroupID;
+        $pivot->name        = $table->name;
+        $pivot->stage       = 'published';
+        $pivot->desc        = $table->desc;
+        $pivot->step        = 4;
+        $pivot->createdBy   = $table->createdBy;
+        $pivot->createdDate = $table->createdDate;
+
+        $pivotSettings = new stdclass();
+        $tableSettings = json_decode($table->settings);
+        if($tableSettings)
+        {
+            $index = 1;
+            foreach($tableSettings->group as $index => $group)
+            {
+                if($index > 3) continue;
+
+                $groupKey = "group{$index}";
+                $pivotSettings->$groupKey = $group->field;
+
+                $index ++;
+            }
+
+            $columns = array();
+            foreach($tableSettings->column as $index => $tableColumn)
+            {
+                $column = new stdclass();
+                $column->field = $tableColumn->field;
+                $column->stat  = $tableColumn->valOrAgg;
+
+                $columns[] = $column;
+            }
+            $pivotSettings->columns = $columns;
+
+            $pivot->settings = json_encode($pivotSettings);
+        }
+
+        /* TODO: process filters. */
+        $pivot->filters = '';
+
+        $this->dao->insert(TABLE_PIVOT)->data($pivot)->autoCheck()->exec();
+
+        if(dao::isError()) return false;
+
+        $this->dao->delete()->from(TABLE_CHART)->where('id')->eq($table->id)->exec();
+
+        return !dao::isError();
     }
 
     /**
@@ -8549,7 +8613,17 @@ class upgradeModel extends model
                 }
                 else
                 {
-                    if(!isset($defaultGroupID)) $defaultGroupID = $this->createDefaultGroup('pivot');
+                    if(!isset($defaultGroupID))
+                    {
+                        $defaultGroupID = $this->dao->select('id')->from(TABLE_MODULE)
+                            ->where('type')->eq('pivot')
+                            ->andWhere('name')->eq($this->lang->upgrade->defaultGroup)
+                            ->andWhere('root')->eq(1)
+                            ->andWhere('parent')->ne(0)
+                            ->fetch('id');
+
+                        if(!$defaultGroupID) $defaultGroupID = $this->createDefaultGroup('pivot');
+                    }
                     $groups[] = $defaultGroupID;
                 }
             }
@@ -8582,7 +8656,7 @@ class upgradeModel extends model
             $data->settings = json_encode($settings);
             $data->fields   = json_encode($fieldSettings);
 
-            $this->dao->insert(TABLE_PIVOT)->data($data)->autoCheck()->printSQL();
+            $this->dao->insert(TABLE_PIVOT)->data($data)->autoCheck()->exec();
         }
 
         return !dao::isError();
