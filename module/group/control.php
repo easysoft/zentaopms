@@ -619,10 +619,14 @@ class group extends control
         $modules = array();
         foreach($privs as $priv) $modules[$priv->module] = $priv->module;
 
+        $modulePrivs   = $this->group->getPrivByModule($modules);
+        $packageIdList = array();
+        foreach($modulePrivs as $packagePrivs) $packageIdList = array_unique(array_merge($packageIdList, array_keys($packagePrivs)));
+
         $this->view->privs       = $privs;
         $this->view->modules     = array('' => $this->lang->group->selectModule) + $this->group->getMenuModules(null, true);
-        $this->view->packages    = $this->group->getPrivPackagePairs(null, implode(',', $modules));
-        $this->view->modulePrivs = $this->group->getPrivByModule($modules);
+        $this->view->packages    = $this->dao->select('*')->from(TABLE_PRIVPACKAGE)->where('id')->in($packageIdList)->orderBy('`order`')->fetchPairs('id', 'name');
+        $this->view->modulePrivs = $modulePrivs;
         $this->view->type        = $type;
         $this->display();
     }
@@ -669,10 +673,14 @@ class group extends control
         $modules = array();
         foreach($privs as $priv) $modules[$priv->module] = $priv->module;
 
+        $modulePrivs   = $this->group->getPrivByModule($modules);
+        $packageIdList = array();
+        foreach($modulePrivs as $packagePrivs) $packageIdList = array_unique(array_merge($packageIdList, array_keys($packagePrivs)));
+
         $this->view->privs       = $privs;
         $this->view->modules     = array('' => $this->lang->group->selectModule) + $this->group->getMenuModules(null, true);
-        $this->view->packages    = $this->group->getPrivPackagePairs(null, implode(',', $modules));
-        $this->view->modulePrivs = $this->group->getPrivByModule($modules);
+        $this->view->packages    = $this->dao->select('*')->from(TABLE_PRIVPACKAGE)->where('id')->in($packageIdList)->orderBy('`order`')->fetchPairs('id', 'name');
+        $this->view->modulePrivs = $modulePrivs;
         $this->view->type        = $type;
         $this->display('group', 'addrelation');
     }
@@ -690,9 +698,12 @@ class group extends control
     {
         if(is_string($privIdList)) $privIdList = explode(',', $privIdList);
 
-        $modules     = $this->group->getMenuModules(null, true);
-        $packages    = $this->group->getPrivPackagePairs(null, $module);
-        $modulePrivs = $this->group->getPrivByModule($module);
+        $modulePrivs   = $this->group->getPrivByModule($module);
+        $packageIdList = array();
+        foreach($modulePrivs as $packagePrivs) $packageIdList = array_unique(array_merge($packageIdList, array_keys($packagePrivs)));
+
+        $modules  = $this->group->getMenuModules(null, true);
+        $packages = $this->dao->select('*')->from(TABLE_PRIVPACKAGE)->where('id')->in($packageIdList)->orderBy('`order`')->fetchPairs('id', 'name');
 
         $tree  = "<ul class='tree' data-ride='tree'><li>";
         $tree .= html::a('#', $modules[$module]);
@@ -700,7 +711,7 @@ class group extends control
         foreach($packages as $packageID => $packageName)
         {
             if(empty($modulePrivs[$module][$packageID])) continue;
-            $tree .= '<li>';
+            $tree .= "<li class='clearleft'>";
             $tree .= html::a('#', $packageName);
             $tree .= '<ul>';
 
@@ -715,7 +726,7 @@ class group extends control
         }
         if(!empty($modulePrivs[$module]))
         {
-            $tree .= '<li>';
+            $tree .= "<li class='clearleft'>";
             $tree .= html::a('#', $this->lang->group->unassigned);
             $tree .= '<ul>';
             foreach($modulePrivs[$module] as $packageID => $packagePrivs)
