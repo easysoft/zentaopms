@@ -36,7 +36,7 @@ EOT;
 <?php js::set('field',   $field)?>
 <?php js::set('confirmReviewCase', $lang->custom->notice->confirmReviewCase)?>
 <?php js::set('stopSubmit', true)?>
-<?php if($module == 'story' and $field == 'review'):?>
+<?php if(($module == 'story' or $module == 'demand') and $field == 'review'):?>
 <style>
 .table-form>tbody>tr>th {width: 120px !important}
 .checkbox-primary {margin-bottom: 0px; width: 82px !important;}
