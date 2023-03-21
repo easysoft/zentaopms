@@ -288,7 +288,7 @@ class buildModel extends model
             if(empty($build->releaseID) and (strpos($params, 'nodone') !== false) and ($build->objectStatus === 'done')) continue;
             if((strpos($params, 'noterminate') !== false) and ($build->releaseStatus === 'terminate')) continue;
             if((strpos($params, 'withexecution') !== false) and $build->execution and isset($executions[$build->execution])) continue;
-            if($branch !== 'all' and strpos(",{$build->branch},", ",{$branch},")) continue;
+            if($branch !== 'all' and strpos(",{$build->branch},", ",{$branch},") === false) continue;
 
             if($build->deleted == 1) $build->name .= ' (' . $this->lang->build->deleted . ')';
 
