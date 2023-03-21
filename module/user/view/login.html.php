@@ -118,7 +118,7 @@ if(empty($config->notMd5Pwd))js::import($jsRoot . 'md5.js');
       <div class="table-col text-middle text-center">
         <div id="poweredby">
           <?php if($unsafeSites and !empty($unsafeSites[$zentaodirName])):?>
-          <div><a class='showNotice' href='javascript:showNotice()',><?php echo $lang->user->notice4Safe;?></a></div>
+          <div><a class='showNotice' href='javascript:showNotice()'><?php echo $lang->user->notice4Safe;?></a></div>
           <?php endif;?>
           <?php if($config->checkVersion):?>
           <iframe id='updater' class='hidden' frameborder='0' width='100%' height='45' scrolling='no' allowtransparency='true' src="<?php echo $this->createLink('misc', 'checkUpdate', "sn=$s");?>"></iframe>
