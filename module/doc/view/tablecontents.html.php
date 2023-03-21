@@ -16,7 +16,7 @@
 <?php js::set('linkParams', "type=$type&objectID=$objectID");?>
 <?php js::set('docLang', $lang->doc);?>
 <div id="mainMenu" class="clearfix">
-  <div class="btn-toolbar pull-left">
+  <div id="leftBar" class="btn-toolbar pull-left">
     <?php echo $objectDropdown;?>
     <a class="btn btn-link querybox-toggle" id='bysearchTab'><i class="icon icon-search muted"></i> <?php echo $lang->doc->searchDoc;?></a>
   </div>

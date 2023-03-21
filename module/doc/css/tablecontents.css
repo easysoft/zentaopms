@@ -49,7 +49,7 @@ li.drag-shadow ul {display: none!important;}
 .main-table-content > .content {flex: 1;}
 
 /* css for tree */
-.file-tree {overflow-x: auto;}
+.file-tree {overflow-x: auto; padding: 10px;}
 .file-tree  a {height: 30px;}
 .flex-center {display: flex; align-items: center; justify-content: space-between;}
 .tree li>.list-toggle {top: 4px;}

@@ -102,7 +102,7 @@ $(function()
         itemCreator: function($li, item)
         {
             var hasChild = item.children ? !!item.children.length : false;
-            var $item    = '<a href="#" data-has-children="' + hasChild + '" title="' + item.name + '" data-id="' + item.id + '">';
+            var $item = '<a href="#" data-has-children="' + hasChild + '" title="' + item.name + '" data-id="' + item.id + '" class="' + (item.type ? 'lib' : '') + '">';
             $item += '<div class="text h-full w-full flex-center">' + item.name;
             $item += '<i class="icon icon-drop icon-ellipsis-v float-r hidden" data-isCatalogue="' + (item.type ? false : true) + '"></i>';
             $item += '</div>';
