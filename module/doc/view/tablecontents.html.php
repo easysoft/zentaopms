@@ -13,6 +13,7 @@
 <?php include '../../common/view/header.html.php';?>
 <?php js::set('moduleTree', $moduleTree);?>
 <?php js::set('treeData', $libTree);?>
+<?php js::set('linkParams', "type=$type&objectID=$objectID");?>
 <?php js::set('docLang', $lang->doc);?>
 <div id="mainMenu" class="clearfix">
   <div class="btn-toolbar pull-left">
