@@ -502,17 +502,14 @@ class doc extends control
         if($this->app->tab == 'product')
         {
             $this->product->setMenu($objectID);
-            unset($this->lang->product->menu->doc['subMenu']);
         }
         else if($this->app->tab == 'project')
         {
             $this->project->setMenu($objectID);
-            unset($this->lang->project->menu->doc['subMenu']);
         }
         else if($this->app->tab == 'execution')
         {
             $this->execution->setMenu($objectID);
-            unset($this->lang->execution->menu->doc['subMenu']);
         }
         else if($this->app->tab == 'my')
         {
@@ -523,30 +520,10 @@ class doc extends control
         }
         else
         {
-            $this->app->rawMethod = $objectType;
-
-            unset($this->lang->doc->menu->product['subMenu']);
-            unset($this->lang->doc->menu->custom['subMenu']);
-            unset($this->lang->doc->menu->project['subMenu']);
-            unset($this->lang->doc->menu->execution['subMenu']);
-
-            /* High light menu. */
-            if(strpos(',product,project,execution,custom,book,', ",$objectType,") !== false)
-            {
-                $menu                               = $this->lang->doc->menu->$objectType;
-                $menu['alias']                      .= ',edit';
-                $menu['subModule']                  = 'doc';
-                $this->lang->doc->menu->$objectType = $menu;
-            }
+            $this->app->rawMethod = $objectType == 'execution' ? 'project' : $objectType;
         }
 
         $this->config->showMainMenu = strpos(',html,markdown,text,', ",{$doc->type},") === false;
-
-        $objects                   = $this->doc->getOrderedObjects($objectType);
-        $appendLib                 = (!empty($lib) and $lib->deleted == '1') ? $libID : 0;
-        $libs                      = $this->doc->getLibsByObject($objectType, $objectID, '', $appendLib);
-        $this->lang->modulePageNav = $this->doc->select($objectType, $objects, $objectID, $libs, $libID);
-        $this->lang->TRActions     = common::hasPriv('doc', 'create') ? $this->doc->buildCreateButton4Doc($objectType, $objectID, $libID) : '';
 
         $this->view->title      = $lib->name . $this->lang->colon . $this->lang->doc->edit;
         $this->view->position[] = html::a($this->createLink('doc', 'browse', "libID=$libID"), $lib->name);

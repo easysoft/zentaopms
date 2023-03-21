@@ -116,9 +116,7 @@
       <table class="table table-borderless table-hover table-files table-fixed no-margin">
         <thead>
           <tr>
-            <?php if($browseType == 'bySearch'):?>
             <th class="c-id"><?php echo $lang->doc->id;?></th>
-            <?php endif;?>
             <th class="c-name"><?php echo $lang->doc->title;?></th>
             <th class="c-user"><?php echo $lang->doc->addedByAB;?></th>
             <th class="c-datetime"><?php echo $lang->doc->addedDate;?></th>
@@ -132,20 +130,33 @@
           <?php $star = strpos($doc->collector, ',' . $this->app->user->account . ',') !== false ? 'icon-star text-yellow' : 'icon-star-empty';?>
           <?php $collectTitle = strpos($doc->collector, ',' . $this->app->user->account . ',') !== false ? $lang->doc->cancelCollection : $lang->doc->collect;?>
           <tr>
-            <?php if($browseType == 'bySearch'):?>
+          <?php $objectID = isset($doc->{$type}) ? $doc->{$type} : 0;?>
             <td class="c-id" title='<?php echo $doc->id?>'>
-              <?php $idHtml = "<i class='icon icon-file-text text-muted'></i> {$doc->id}";?>
-              <?php if(common::hasPriv('doc', 'view')) $idHtml = html::a($this->createLink('doc', 'view', "docID=$doc->id&version=0", '', true), $doc->id, '', "title='{$doc->id}' data-app='{$this->app->tab}'");?>
-              <?php echo $idHtml;?>
+            <?php
+            if(common::hasPriv('doc', 'objectLibs'))
+            {
+                echo html::a($this->createLink('doc', 'objectLibs', "type=$type&objectID=$objectID&libID=$doc->lib&docID=$doc->id"), $doc->id, '', "title='{$doc->id}' data-app='{$this->app->tab}'");
+            }
+            else
+            {
+                echo "<i class='icon icon-file-text text-muted'></i> {$doc->id}";
+            }
+            ?>
             </td>
-            <?php endif;?>
             <td class="c-name" title='<?php echo $doc->title;?>'>
-              <?php $nameHtml = "<i class='icon icon-file-text text-muted'></i> {$doc->title}";?>
-              <?php if(common::hasPriv('doc', 'view')) $nameHtml = html::a($this->createLink('doc', 'view', "docID=$doc->id&version=0", '', true), "<i class='icon icon-file-text text-muted'></i> &nbsp;" . $doc->title, '', "title='{$doc->title}' class='iframe' data-width='90%'");?>
-              <?php echo $nameHtml;?>
-              <?php if(common::canBeChanged('doc', $doc) and common::hasPriv('doc', 'collect')):?>
+            <?php
+            if(common::hasPriv('doc', 'objectLibs'))
+            {
+                echo html::a($this->createLink('doc', 'objectLibs', "type=$type&objectID=$objectID&libID=$doc->lib&docID=$doc->id"), "<i class='icon icon-file-text text-muted'></i> &nbsp;" . $doc->title, '', "title='{$doc->title}' data-app='{$this->app->tab}'");
+            }
+            else
+            {
+                echo "<i class='icon icon-file-text text-muted'></i> {$doc->title}";
+            }
+            ?>
+            <?php if(common::canBeChanged('doc', $doc) and common::hasPriv('doc', 'collect')):?>
               <a data-url="<?php echo $this->createLink('doc', 'collect', "objectID=$doc->id&objectType=doc");?>" title="<?php echo $collectTitle;?>" class='btn btn-link ajaxCollect'><i class='icon <?php echo $star;?>'></i></a>
-              <?php endif;?>
+            <?php endif;?>
             </td>
             <td class="c-user"><?php echo zget($users, $doc->addedBy);?></td>
             <td class="c-datetime"><?php echo formatTime($doc->addedDate, 'y-m-d');?></td>

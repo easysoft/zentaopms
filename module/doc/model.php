@@ -2737,7 +2737,7 @@ EOT;
             $libs     = $this->getLibsByObject($type, $objectID, '', $appendLib);
 
             if($libID == 0 and !empty($libs)) $libID = reset($libs)->id;
-            if($this->app->tab == 'doc') $this->app->rawMethod = $type;
+            if($this->app->tab == 'doc') $this->app->rawMethod = $type == 'execution' ? 'project' : $type;
 
             $object = $this->dao->select('id,name,status')->from($table)->where('id')->eq($objectID)->fetch();
 
@@ -3018,7 +3018,7 @@ EOT;
             $libTree[$type][] = $annex;
         }
 
-        $libTree = $libTree[$type];
+        $libTree = array_values($libTree[$type]);
         return $libTree;
     }
 }

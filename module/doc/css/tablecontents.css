@@ -63,3 +63,4 @@ li.drag-shadow ul {display: none!important;}
 
 .table .c-name > a.iframe {display: inline-block; max-width: 90%;}
 .table .c-name > .ajaxCollect {float: right; position: relative; right: 10px; top: -3px;}
+.panel th.c-id {width: 60px;}
