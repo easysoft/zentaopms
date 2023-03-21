@@ -242,7 +242,7 @@
       $canBatchClose       = common::hasPriv('story', 'batchClose');
       $canBatchChangeStage = common::hasPriv('story', 'batchChangeStage');
       $canBatchUnlink      = common::hasPriv('execution', 'batchUnlinkStory');
-      $canBatchToTask      = common::hasPriv('story', 'batchToTask', $checkObject);
+      $canBatchToTask      = (common::hasPriv('story', 'batchToTask', $checkObject) and $storyType != 'requirement');
       $canBatchAssignTo    = common::hasPriv($storyType, 'batchAssignTo');
 
       $canBatchAction      = ($canBeChanged and ($canBatchEdit or $canBatchClose or $canBatchChangeStage or $canBatchUnlink or $canBatchToTask or $canBatchAssignTo));
