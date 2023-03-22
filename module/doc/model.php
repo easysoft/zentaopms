@@ -2907,7 +2907,7 @@ EOT;
             $moduleTree[$module->id] = $item;
         }
 
-        return $moduleTree;
+        return array_values($moduleTree);
     }
 
     /**
