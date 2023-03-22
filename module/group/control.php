@@ -403,19 +403,16 @@ class group extends control
         if($browseType == 'bycard')
         {
             $moduleList   = array_keys($moduleLang);
-            $privGroup    = $this->group->getPrivGroup($moduleList);
+            $privs        = $this->group->getPrivsListByView($view);
             $privPackages = $this->group->getPrivPackagePairs();
             $privLang     = $this->group->getPrivLangPairs();
 
             $privList = array();
-            foreach($privGroup as $module => $privs)
+            foreach($privs as $privID => $priv)
             {
-                if(!isset($privList[$module])) $privList[$module] = array();
-                foreach($privs as $priv)
-                {
-                    if(!isset($privList[$module][$priv->package])) $privList[$module][$priv->package] = array();
-                    $privList[$module][$priv->package][$priv->id] = $priv;
-                }
+                if(!isset($privList[$priv->module])) $privList[$priv->module] = array();
+                if(!isset($privList[$priv->module][$priv->package])) $privList[$priv->module][$priv->package] = array();
+                $privList[$priv->module][$priv->package][$priv->id] = $priv;
             }
 
             $this->view->privLang     = $privLang;

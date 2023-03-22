@@ -1576,21 +1576,6 @@ class groupModel extends model
     }
 
     /**
-     * Get priv group by module.
-     *
-     * @param  array    $moduleList
-     * @access public
-     * @return array
-     */
-    public function getPrivGroup($moduleList = array())
-    {
-        return $this->dao->select('*')->from(TABLE_PRIV)
-            ->beginIF(!empty($moduleList))->where('module')->in($moduleList)->fi()
-            ->orderBy('order_asc')
-            ->fetchGroup('module');
-    }
-
-    /**
      * Get all priv's lang pairs.
      *
      * @access public
