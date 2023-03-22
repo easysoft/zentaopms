@@ -58,10 +58,10 @@ li.drag-shadow ul {display: none!important;}
 .tree li>.list-toggle {top: 4px;}
 
 /* css for sidebar */
-.sidebar-toggle > .icon {position: absolute; top: 50%; left: -1px; width: 12px; height: 30px; margin-top: -10px; line-height: 30px; color: #fff; text-align: center; background: #7dcdfe; border-radius: 6px;}
+.sidebar-toggle > .icon {position: absolute; top: 50%; left: 6px; width: 12px; height: 30px; margin-top: -10px; line-height: 30px; color: #fff; text-align: center; background: #7dcdfe; border-radius: 6px; cursor: pointer;}
 .col-spliter:after {display: none;}
 
-.spliter {flex: 0 0 12px; position: relative;}
+.spliter {flex: 0 0 6px; margin-right: 6px;}
 .spliter-btn {height: 28px; width: 10px; background: #fff; position: absolute; top: 30%; left: -6px; border: 1px solid #D9D9D9; border-radius: 2px;}
 .spliter-btn > .spliter-inner {width: 4px; height: 12px; border-left: 1px solid #D9D9D9; border-right: 1px solid #D9D9D9;}
 

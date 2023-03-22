@@ -149,7 +149,7 @@ $(function()
 
     function refreshDropdown(option)
     {
-        $('#' + option.id).css({
+        $('#' + option.type).css({
             'display': 'unset',
             'left': option.left,
             'top': option.top
@@ -326,10 +326,11 @@ $(function()
             $(this).addClass('icon-angle-right isHide');
             $('#sideBar').addClass('hidden');
         }
-    }).on('mousemove', function()
+    }).on('mousemove', function(e)
     {
         if(!$('#sideBar.hidden').length)
         $(this).find('.spliter-btn').removeClass('hidden');
+        $('.spliter-btn').css('top', e.pageY - 120);
     }).on('mouseout', function()
     {
         $(this).find('.spliter-btn').addClass('hidden');
