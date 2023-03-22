@@ -94,4 +94,25 @@
     ;?>
   </div>
 </div>
+<div class='hidden' id='dropDownData'>
+  <div class='libDorpdown'>
+    <?php if(common::hasPriv('tree', 'browse')):?>
+    <li data-method="addCatalogue"><a><i class="icon icon-controls"></i><?php echo $lang->doc->libDropdown['addModule'];?></a></li>
+    <?php endif;?>
+    <?php if(common::hasPriv('doc', 'editLib')):?>
+    <li data-method="editLib"><a><i class="icon icon-edit"></i><?php echo $lang->doc->libDropdown['editLib'];?></a></li>
+    <?php endif;?>
+    <?php if(common::hasPriv('doc', 'deleteLib')):?>
+    <li data-method="deleteLib"><a><i class="icon icon-trash"></i><?php echo $lang->doc->libDropdown['deleteLib'];?></a></li>
+    <?php endif;?>
+  </div>
+  <div class='moduleDorpdown'>
+    <?php if(common::hasPriv('tree', 'browse')):?>
+    <li data-method="addCata"><a><i class="icon icon-controls"></i><?php echo $lang->doc->libDropdown['addSameModule'];?></a></li>
+    <li data-method="addCataChild"><a><i class="icon icon-edit"></i><?php echo $lang->doc->libDropdown['addSubModule'];?></a></li>
+    <li data-method="editCata"><a><i class="icon icon-edit"></i><?php echo $lang->doc->libDropdown['editModule'];?></a></li>
+    <li data-method="deleteCata"><a><i class="icon icon-trash"></i><?php echo $lang->doc->libDropdown['delModule'];?></a></li>
+    <?php endif;?>
+  </div>
+</div>
 <?php include '../../common/view/footer.html.php';?>

@@ -109,6 +109,10 @@ $(function()
 
     $('#fileTree').on('mousemove', 'a', function()
     {
+        var libClass = '.libDorpdown';
+        if(!$(this).hasClass('lib')) libClass = '.moduleDorpdown';
+        if($(libClass).find('li').length == 0) return false;
+
         $(this).find('.icon').removeClass('hidden');
     }).on('mouseout', 'a', function()
     {
@@ -135,23 +139,13 @@ $(function()
 
     function renderDropdown(option)
     {
-        var $liList = (option.id == 'dropDownLibrary') ?
-                       ('<li data-method="addCatalogue"><a><i class="icon icon-controls"></i>添加目录</a></li>' +
-                       '<li data-method="editLib"><a><i class="icon icon-edit"></i>编辑库</a></li>' +
-                       '<li data-method="deleteLib"><a><i class="icon icon-trash"></i>删除库</a></li>')
-                       :
-                       ('<li data-method="addCata"><a><i class="icon icon-controls"></i>添加同级目录</a></li>' +
-                       '<li data-method="addCataChild"><a><i class="icon icon-edit"></i>添加子目录</a></li>' +
-                       '<li data-method="editCata"><a><i class="icon icon-edit"></i>编辑目录</a></li>' +
-                       '<li data-method="deleteCata"><a><i class="icon icon-trash"></i>删除目录</a></li>')
+        var libClass = '.libDorpdown';
+        if(option.id != 'dropDownLibrary') libClass = '.moduleDorpdown';
+        if($(libClass).find('li').length == 0) return '';
 
-        var dropdown = '<ul class="dropdown-menu dropdown-in-tree" ' +
-                       'id="' + option.id + '"' +
-                       'style="display: unset; ' +
-                       'left:' + option.left + 'px; ' +
-                       'top:' + option.top + 'px;' +
-                        '">' + $liList +
-                       '</ul>';
+        var dropdown = '<ul class="dropdown-menu dropdown-in-tree" id="' + option.id + '" style="display: unset; left:' + option.left + 'px; top:' + option.top + 'px;">';
+        dropdown += $(libClass).html();
+        dropdown += '</ul>';
         return dropdown;
     };
 

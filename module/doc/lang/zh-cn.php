@@ -284,3 +284,11 @@ $lang->doc->placeholder->url = '相应的链接地址';
 $lang->doc->summary = "本页共 <strong>%s</strong> 个附件，共计 <strong>%s</strong>，其中<strong>%s</strong>。";
 $lang->doc->ge      = '个';
 $lang->doc->point   = '、';
+
+$lang->doc->libDropdown['editLib']       = '编辑库';
+$lang->doc->libDropdown['deleteLib']     = '删除库';
+$lang->doc->libDropdown['addModule']     = '添加目录';
+$lang->doc->libDropdown['addSameModule'] = '添加同级目录';
+$lang->doc->libDropdown['addSubModule']  = '添加子目录';
+$lang->doc->libDropdown['editModule']    = '编辑目录';
+$lang->doc->libDropdown['delModule']     = '删除目录';

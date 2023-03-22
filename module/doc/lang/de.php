@@ -284,3 +284,11 @@ $lang->doc->placeholder->url = 'Url';
 $lang->doc->summary = "Total files on this page: <strong>%s</strong> , total size: <strong>%s</strong>, <strong>%s</strong>.";
 $lang->doc->ge      = ':';
 $lang->doc->point   = '.';
+
+$lang->doc->libDropdown['editLib']       = 'Edit Library';
+$lang->doc->libDropdown['deleteLib']     = 'Delete Library';
+$lang->doc->libDropdown['addModule']     = 'Add Directory';
+$lang->doc->libDropdown['addSameModule'] = 'Add Same Directory';
+$lang->doc->libDropdown['addSubModule']  = 'Add Sub Directory';
+$lang->doc->libDropdown['editModule']    = 'Edit Directory';
+$lang->doc->libDropdown['delModule']     = 'Delete Directory';
