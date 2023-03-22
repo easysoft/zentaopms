@@ -188,7 +188,6 @@ $(function()
 
     $('body').on('click', function(e)
     {
-        var boolIf = $.contains(e.target, $('.dropdown-in-tree'));
         if(!$.contains(e.target, $('.dropdown-in-tree')))
         {
             $('.dropdown-in-tree').css('display', 'none');
