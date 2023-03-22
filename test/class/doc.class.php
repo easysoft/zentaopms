@@ -41,7 +41,7 @@ class docTest
     public function createApiLibTest($param)
     {
         global $tester;
-        $tester->app->loadConfig('api');
+        $tester->loadModel('api');
         $tester->app->loadLang('doclib');
 
         $createFields = array('name' => '', 'baseUrl' => '', 'acl' => '', 'desc' => '测试详情');
@@ -137,7 +137,7 @@ class docTest
     public function createTest($param)
     {
         global $tester;
-        $tester->app->loadConfig('api');
+        $tester->loadModel('api');
         $tester->app->loadLang('doclib');
 
         $labels = array();
