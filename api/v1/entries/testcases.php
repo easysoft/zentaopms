@@ -36,7 +36,7 @@ class testcasesEntry extends entry
         }
 
         $control = $this->loadController('testcase', 'browse');
-        $control->browse($productID, $this->param('branch', ''), $type, $param, $this->param('order', 'id_desc'), 0, $this->param('limit', 20), $this->param('page', 1));
+        $control->browse($productID, $this->param('branch', ''), $type, $param, '', $this->param('order', 'id_desc'), 0, $this->param('limit', 20), $this->param('page', 1));
 
         $data = $this->getData();
 
