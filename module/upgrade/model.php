@@ -8482,8 +8482,6 @@ class upgradeModel extends model
             if(isset($settings['filter']))
             {
                 $filters = $settings['filter'];
-                $filters['type'] = 'condition';
-
                 unset($settings['filter']);
             }
 
@@ -8556,10 +8554,8 @@ class upgradeModel extends model
             $pivotSettings->columns = $columns;
 
             $pivot->settings = json_encode($pivotSettings);
+            $pivot->filters  = json_encode($tableSettings->filter);
         }
-
-        /* TODO: process filters. */
-        $pivot->filters = '';
 
         $this->dao->insert(TABLE_PIVOT)->data($pivot)->autoCheck()->exec();
 
