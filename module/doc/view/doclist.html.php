@@ -13,10 +13,15 @@
 <style>
 #docListForm table tr {border: none;}
 #docListForm th.c-id {width: 72px;}
-#docListForm th.c-user {width: 96px;}
-#docListForm th.c-datetime {width: 132px;}
+#docListForm th.c-user {width: 80px;}
 #docListForm th.c-actions {width: 84px; padding-left: 15px;}
 </style>
+<?php if(common::checkNotCN()):?>
+<style>
+#docListForm th.c-date {width: 108px;}
+#docListForm th.c-user {width: 102px !important;}
+</style>
+<?php endif;?>
 <?php if(empty($docs)):?>
 <div class="table-empty-tip">
   <p>
@@ -73,9 +78,9 @@
           </th>
           <th class="c-name"><?php common::printOrderLink('title', $orderBy, $vars, $lang->doc->title, '', 'tableContents');?></th>
           <th class="c-user"><?php common::printOrderLink('addedBy', $orderBy, $vars, $lang->doc->addedByAB, '', 'tableContents');?></th>
-          <th class="c-datetime"><?php common::printOrderLink('addedDate', $orderBy, $vars, $lang->doc->addedDate, '', 'tableContents');?></th>
+          <th class="c-date"><?php common::printOrderLink('addedDate', $orderBy, $vars, $lang->doc->addedDate, '', 'tableContents');?></th>
           <th class="c-user"><?php common::printOrderLink('editedBy', $orderBy, $vars, $lang->doc->editedBy, '', 'tableContents');?></th>
-          <th class="c-datetime"><?php common::printOrderLink('editedDate', $orderBy, $vars, $lang->doc->editedDate, '', 'tableContents');?></th>
+          <th class="c-date"><?php common::printOrderLink('editedDate', $orderBy, $vars, $lang->doc->editedDate, '', 'tableContents');?></th>
           <th class="c-actions"><?php echo $lang->actions;?></th>
         </tr>
       </thead>
