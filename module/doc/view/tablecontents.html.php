@@ -67,7 +67,7 @@
   </div>
 </div>
 <div id='mainContent'class="fade flex split-row">
-  <div id='sideBar' class="panel side side-col col overflow-x-auto flex-none" data-min-width="150">
+  <div id='sideBar' class="panel side side-col col overflow-auto flex-none" data-min-width="150">
     <div id="fileTree" class="file-tree"></div>
   </div>
   <div id="spliter" class="spliter col-spliter sidebar-toggle">
@@ -76,7 +76,7 @@
       <div class="spliter-inner"></div>
     </div>
   </div>
-  <div class="main-col flex-full col overflow-x-auto flex-auto" data-min-width="500">
+  <div class="main-col flex-full col overflow-auto flex-auto" data-min-width="500">
     <div class="cell<?php if($browseType == 'bySearch') echo ' show';?>" style="min-width: 400px" id="queryBox" data-module=<?php echo $type . $libType . 'Doc';?>></div>
     <?php
     if($browseType == 'annex')

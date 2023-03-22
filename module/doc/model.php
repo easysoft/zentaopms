@@ -956,19 +956,27 @@ class docModel extends model
         {
             if(!isset($libs[$libID])) $libs[$libID] = $this->getLibById($libID);
 
-            $libType   = $libs[$libID]->type;
             $libPairs  = array('' => '');
-            $queryName = $type . $libType . 'Doc';
+            $queryName = $type . 'libDoc';
             foreach($libs as $lib)
             {
-                if($lib->type != $libType) continue;
+                if($lib->type == 'api') continue;
                 $libPairs[$lib->id] = $lib->name;
             }
+
+            if($type == 'project')
+            {
+                $this->config->doc->search['params']['execution']['values'] = array('' => '') + $this->loadModel('execution')->getPairs($this->session->project, 'all', 'all') + array('all' => $this->lang->doc->allExecutions);
+            }
+            else
+            {
+                unset($this->config->doc->search['fields']['execution']);
+            }
+
 
             $this->config->doc->search['module'] = $queryName;
             $this->config->doc->search['params']['lib']['values'] = $libPairs + array('all' => $this->lang->doclib->all);
             unset($this->config->doc->search['fields']['product']);
-            unset($this->config->doc->search['fields']['execution']);
             unset($this->config->doc->search['fields']['module']);
         }
         else
@@ -2806,9 +2814,8 @@ EOT;
     public function getDocsBySearch($type, $objectID, $libID, $queryID, $pager)
     {
         $lib       = $this->getLibById($libID);
-        $libType   = $lib->type;
-        $queryName = $type . $libType . 'DocQuery';
-        $queryForm = $type . $libType . 'DocForm';
+        $queryName = $type . 'libDocQuery';
+        $queryForm = $type . 'libDocForm';
         if($queryID)
         {
             $query = $this->loadModel('search')->getQuery($queryID);
@@ -2963,7 +2970,8 @@ EOT;
                     $execution->children  = array();
                     if(count($executionLibs[$executionID]) == 1)
                     {
-                        $execution->id        = $libID;
+                        $execution->id        = $item->id;
+                        $execution->type      = 'lib';
                         $execution->children  = $item->children;
                     }
 
