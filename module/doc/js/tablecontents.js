@@ -166,6 +166,7 @@ $(function()
 
     $('#fileTree').on('click', '.icon-drop', function(e)
     {
+        $('.dropdown-in-tree').css('display', 'none');
         var isCatalogue = $(this).attr('data-isCatalogue') === 'false' ? false : true;
         var dropDownID  = isCatalogue ? 'dropDownCatalogue' : 'dropDownLibrary';
         var option = {
@@ -187,6 +188,7 @@ $(function()
 
     $('body').on('click', function(e)
     {
+        var boolIf = $.contains(e.target, $('.dropdown-in-tree'));
         if(!$.contains(e.target, $('.dropdown-in-tree')))
         {
             $('.dropdown-in-tree').css('display', 'none');
