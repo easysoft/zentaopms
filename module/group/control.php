@@ -583,7 +583,7 @@ class group extends control
         }
         else
         {
-            $privPackage = $this->getPrivPackageByID($privPackageID);
+            $privPackage = $this->group->getPrivPackageByID($privPackageID);
             $this->group->deletePrivPackage($privPackageID);
             if(!dao::isError()) $this->loadModel('action')->create('privpackage', $privPackageID, 'deleted', '', zget($privPackage, 'name'));
 
