@@ -1,7 +1,12 @@
 <?php include $app->getModuleRoot() . 'common/view/header.lite.html.php';?>
 <?php include $app->getModuleRoot() . 'common/view/chart.html.php';?>
 <?php js::import($jsRoot . 'echarts/echarts.common.min.js');?>
+<?php js::import($jsRoot . 'echarts/timeline.min.js');?>
 <?php js::set('executions', $executions);?>
+<?php js::set('burnXUnit', $lang->execution->burnXUnit);?>
+<?php js::set('burnYUnit', $lang->execution->burnYUnit);?>
+<?php js::set('workHour', $lang->execution->workHour);?>
+<?php js::set('workHourUnit', $lang->execution->workHourUnit);?>
 <div class='header'>
   <div class='img-header'>
     <h2 class='title'><?php echo $screen->name;?></h2>
@@ -41,7 +46,8 @@ function initBurnChar()
             }
           },
           tooltip: {
-            trigger: 'axis'
+              trigger: 'axis',
+              valueFormatter: (value) => (value == undefined ? 0 : value) + ' ' + workHour + '/' + workHourUnit
           },
           legend: {
             data: ["<?php echo $lang->execution->charts->burn->graph->actuality;?>","<?php echo $lang->execution->charts->burn->graph->reference;?>"],
@@ -67,6 +73,11 @@ function initBurnChar()
           },
           xAxis: {
             type: 'category',
+            name: burnXUnit,
+            nameTextStyle:{
+                padding: [20, 0, 0, -40],
+                verticalAlign: "top"
+            },
             boundaryGap: false,
             axisLabel: {
               show: true,
@@ -78,11 +89,18 @@ function initBurnChar()
           },
           yAxis: {
             type: 'value',
+            name: burnYUnit,
+            nameTextStyle:{
+                padding: [0, 0, -40, -45]
+            },
             axisLabel: {
               show: true,
               textStyle: {
                 color: '#dee0e4'
               }
+            },
+            axisLine: {
+                show: true
             },
             splitLine: {
               show: true,
