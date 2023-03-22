@@ -34,6 +34,7 @@ function initBurnChar()
         var option = {
           title: {
             text: execution.name,
+            top: 10,
             textStyle: {
               color: '#a1c4e9',
               fontSize: 15
@@ -54,6 +55,7 @@ function initBurnChar()
           grid: {
             left: '3%',
             right: '4%',
+            top: 40,
             bottom: '3%',
             containLabel: true
           },
