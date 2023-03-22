@@ -904,15 +904,29 @@ class apiModel extends model
      * @param  object $lib
      * @param  string $queryID
      * @param  string $actionURL
+     * @param  array  $libs
+     * @param  string $type product|project
      * @access public
      * @return void
      */
-    public function buildSearchForm($lib, $queryID, $actionURL)
+    public function buildSearchForm($lib, $queryID, $actionURL, $libs = array(), $type = '')
     {
-        $this->config->api->search['module']                  = 'api';
+        $libPairs = array('' => '', $lib->id => $lib->name);
+        $this->config->api->search['module'] = 'api';
+        if(!empty($libs))
+        {
+            $queryName = $type . 'apiDoc';
+            foreach($libs as $lib)
+            {
+                if($lib->type != 'api') continue;
+                $libPairs[$lib->id] = $lib->name;
+            }
+            $this->config->api->search['module'] = $queryName;
+        }
+
         $this->config->api->search['queryID']                 = $queryID;
         $this->config->api->search['actionURL']               = $actionURL;
-        $this->config->api->search['params']['lib']['values'] = (!empty($lib)) ? array($lib->id => $lib->name) + array('all' => $this->lang->api->allLibs) : array('all' => $this->lang->api->allLibs);
+        $this->config->api->search['params']['lib']['values'] = $libPairs + array('all' => $this->lang->api->allLibs);
 
         $this->loadModel('search')->setSearchParams($this->config->api->search);
     }
@@ -922,36 +936,42 @@ class apiModel extends model
      *
      * @param  string $libID
      * @param  int    $queryID
+     * @param  int    $objectType product|project
+     * @param  array  $libs
      * @access public
      * @return array
      */
-    public function getApiListBySearch($libID, $queryID)
+    public function getApiListBySearch($libID, $queryID, $objectType = '', $libs = array())
     {
+        $queryName = $objectType ? $objectType . 'apiDocQuery' : 'apiQuery';
+        $queryForm = $objectType ? $objectType . 'apiDocForm' : 'apiForm';
        if($queryID)
        {
            $query = $this->loadModel('search')->getQuery($queryID);
            if($query)
            {
-               $this->session->set('apiQuery', $query->sql);
-               $this->session->set('apiForm', $query->form);
+               $this->session->set($queryName, $query->sql);
+               $this->session->set($queryForm, $query->form);
            }
            else
            {
-               $this->session->set('apiQuery', ' 1 = 1');
+               $this->session->set($queryName, ' 1 = 1');
            }
        }
        else
        {
-           if($this->session->apiQuery == false) $this->session->set('apiQuery', ' 1 = 1');
+           if($this->session->$queryName == false) $this->session->set($queryName, ' 1 = 1');
        }
 
-       $apiQuery = $this->session->apiQuery;
-       $apiQuery = strpos($apiQuery, "`lib` = 'all'") === false ? "$apiQuery and lib = $libID" : str_replace("`lib` = 'all'", '1', $apiQuery);
+       $apiQuery = $this->session->$queryName;
+       if(strpos($apiQuery, "`lib` = 'all'") === false and !$objectType) $apiQuery = "$apiQuery and lib = $libID";
+       if(strpos($apiQuery, "`lib` = 'all'") !== false) $apiQuery = str_replace("`lib` = 'all'", '1', $apiQuery);
 
        $list = $this->dao->select('*')
            ->from(TABLE_API)
            ->where('deleted')->eq(0)
            ->andWhere($apiQuery)
+           ->beginIF(!empty($libs))->andWhere('`lib`')->in($libs)->fi()
            ->fetchAll();
 
        return $list;

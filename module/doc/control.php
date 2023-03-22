@@ -1254,7 +1254,7 @@ class doc extends control
      * @access public
      * @return void
      */
-    public function tableContents($type, $objectID = 0, $libID = 0, $moduleID = 0, $browseType = '', $param = 0, $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function tableContents($type, $objectID = 0, $libID = 0, $moduleID = 0, $browseType = '', $orderBy = 'id_desc', $param = 0, $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         $this->session->set('createProjectLocate', $this->app->getURI(true), 'doc');
 
@@ -1265,12 +1265,21 @@ class doc extends control
 
         $libTree = $this->doc->getLibTree($libID, $libs, $type, $moduleID, $objectID, $browseType);
 
-        $title = ($type == 'book' or $type == 'custom') ? $this->lang->doc->tableContents : $object->name . $this->lang->colon . $this->lang->doc->tableContents;
+        $title   = ($type == 'book' or $type == 'custom') ? $this->lang->doc->tableContents : $object->name . $this->lang->colon . $this->lang->doc->tableContents;
+        $lib     = $this->doc->getLibById($libID);
+        $libType = isset($lib->type) && $lib->type == 'api' ? 'api' : 'lib';
 
         /* Build the search form. */
         $queryID   = $browseType == 'bySearch' ? (int)$param : 0;
-        $actionURL = $this->createLink('doc', 'tableContents', "type=$type&objectID=$objectID&libID=$libID&moduleID=0&browseType=bySearch&param=myQueryID");
-        $this->doc->buildSearchForm($libID, $libs, $queryID, $actionURL, $type);
+        $actionURL = $this->createLink('doc', 'tableContents', "type=$type&objectID=$objectID&libID=$libID&moduleID=0&browseType=bySearch&orderBy=$orderBy&param=myQueryID");
+        if($libType == 'api')
+        {
+            $this->loadModel('api')->buildSearchForm($lib, $queryID, $actionURL, $libs, $type);
+        }
+        else
+        {
+            $this->doc->buildSearchForm($libID, $libs, $queryID, $actionURL, $type);
+        }
 
         /* Load pager. */
         $rawMethod = $this->app->rawMethod;
@@ -1280,22 +1289,16 @@ class doc extends control
         $this->app->rawMethod = $rawMethod;
 
         $this->view->libID = $libID;
-
-        $lib     = $this->doc->getLibById($libID);
-        $libType = zget($lib, 'type', '');
         if($libType == 'api')
         {
+            $this->loadModel('api');
             $this->session->set('objectName', $this->lang->doc->api, 'admin');
+
             $this->view->lib     = $lib;
             $this->view->libs    = $libs;
             $this->view->apiID   = 0;
             $this->view->release = 0;
-            $this->view->apiList = $this->loadModel('api')->getListByModuleId($libID, $moduleID, 0, $pager);
-        }
-        elseif($browseType == 'annex')
-        {
-            $this->session->set('objectName', $this->lang->doc->files, 'admin');
-            //$this->view->files = $this->doc->getLibFiles($type, $objectID, 'id_desc', $pager);
+            $this->view->apiList = $browseType == 'bySearch' ? $this->api->getApiListBySearch($libID, $queryID, $type, array_keys($libs)) : $this->api->getListByModuleId($libID, $moduleID, 0, $pager);
         }
         else
         {

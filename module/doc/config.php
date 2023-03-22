@@ -53,14 +53,14 @@ $config->doc->search['fields']['keywords']   = $lang->doc->keywords;
 $config->doc->search['fields']['version']    = $lang->doc->version;
 
 $config->doc->search['params']['title']      = array('operator' => 'include', 'control' => 'input',  'values' => '');
-$config->doc->search['params']['keywords']   = array('operator' => 'include', 'control' => 'input',  'values' => '');
 $config->doc->search['params']['product']    = array('operator' => '=',       'control' => 'select', 'values' => '');
+$config->doc->search['params']['lib']        = array('operator' => '=',       'control' => 'select', 'values' => '' );
 $config->doc->search['params']['module']     = array('operator' => 'belong',  'control' => 'select', 'values' => '');
 if($app->rawMethod == 'contribute') $config->doc->search['params']['project'] = array('operator' => '=', 'control' => 'select', 'values' => '');
 $config->doc->search['params']['execution']  = array('operator' => '=',       'control' => 'select', 'values' => '');
-$config->doc->search['params']['lib']        = array('operator' => '=',       'control' => 'select', 'values' => '' );
 $config->doc->search['params']['addedBy']    = array('operator' => '=',       'control' => 'select', 'values' => 'users');
 $config->doc->search['params']['addedDate']  = array('operator' => '=',       'control' => 'input',  'values' => '', 'class' => 'date');
 $config->doc->search['params']['editedBy']   = array('operator' => '=',       'control' => 'select', 'values' => 'users');
 $config->doc->search['params']['editedDate'] = array('operator' => '=',       'control' => 'input',  'values' => '', 'class' => 'date');
+$config->doc->search['params']['keywords']   = array('operator' => 'include', 'control' => 'input',  'values' => '');
 $config->doc->search['params']['version']    = array('operator' => '=',       'control' => 'input',  'values' => '');
