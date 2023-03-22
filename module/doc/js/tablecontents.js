@@ -328,13 +328,5 @@ $(function()
             $(this).addClass('icon-angle-right isHide');
             $('#sideBar').addClass('hidden');
         }
-    }).on('mousemove', function(e)
-    {
-        if(!$('#sideBar.hidden').length)
-        $(this).find('.spliter-btn').removeClass('hidden');
-        $('.spliter-btn').css('top', e.pageY - 120);
-    }).on('mouseout', function()
-    {
-        $(this).find('.spliter-btn').addClass('hidden');
     });
 });
