@@ -186,7 +186,6 @@ $(function()
     {
         var item = $(this).data();
         if(item.type !== 'add') return;
-        console.log(item);
         switch(item.method)
         {
             case 'addCataLib' :

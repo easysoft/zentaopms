@@ -63,7 +63,7 @@
 </div>
 <?php else:?>
 <?php $vars = "type=$type&objectID=$objectID&$libID=$libID&moduleID=$moduleID&browseType=$browseType&orderBy=%s&param=$param&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}";?>
-<div class="panel">
+<div>
   <form class='main-table' method='post' id='docListForm'>
     <table class="table table-borderless table-hover table-files table-fixed no-margin  has-sort-head table-fixed">
       <thead>
