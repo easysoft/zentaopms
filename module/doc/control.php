@@ -1303,7 +1303,7 @@ class doc extends control
         else
         {
             $this->session->set('objectName', $this->lang->doc->common, 'admin');
-            $this->view->docs = $browseType == 'bySearch' ? $this->doc->getDocsBySearch($type, $objectID, $libID, $queryID, $pager) : $this->doc->getDocs($libID, $moduleID, 'id_desc', $pager);
+            $this->view->docs = $browseType == 'bySearch' ? $this->doc->getDocsBySearch($type, $objectID, $libID, $queryID, $pager) : $this->doc->getDocs($libID, $moduleID, $orderBy, $pager);
         }
 
         $this->view->title          = $title;
@@ -1318,6 +1318,8 @@ class doc extends control
         $this->view->pager          = $pager;
         $this->view->objectID       = $objectID;
         $this->view->orderBy        = $orderBy;
+        $this->view->exportMethod   = $type . '2export';
+        $this->view->canExport      = common::hasPriv('doc', $type . '2export');
 
         $this->display();
     }

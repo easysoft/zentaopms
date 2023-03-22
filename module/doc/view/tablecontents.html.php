@@ -21,10 +21,9 @@
   </div>
   <div class="btn-toolbar pull-right">
   <?php
-  $exportMethod = $type . '2export';
-  if(common::hasPriv('doc', $exportMethod))
+  if($canExport)
   {
-      echo html::a($this->createLink('doc', $exportMethod, "libID=$libID&docID=0", 'html', true), "<i class='icon-export muted'> </i>" . $lang->export, '', "class='btn btn-link export' id='$exportMethod'");
+      echo html::a($this->createLink('doc', $exportMethod, "libID=$libID&docID=0", 'html', true), "<i class='icon-export muted'> </i>" . $lang->export, '', "class='btn btn-link export' id='{$exportMethod}'");
   }
 
   if(common::hasPriv('doc', 'createLib'))
