@@ -149,15 +149,6 @@ $(function()
         return dropdown;
     };
 
-    function refreshDropdown(option)
-    {
-        $('#' + option.type).css({
-            'display': 'unset',
-            'left': option.left,
-            'top': option.top
-        });
-    };
-
     $('#fileTree').on('click', '.icon-drop', function(e)
     {
         $('.dropdown-in-tree').css('display', 'none');
@@ -183,23 +174,33 @@ $(function()
             libID    : libID,
             moduleID : moduleID
         };
-        if (!$('#' + dropDownID).length)
-        {
-            var dropDown = renderDropdown(option);
-            $("body").append(dropDown);
-        }
-        else
-        {
-            refreshDropdown(option)
-        }
+        var dropDown = renderDropdown(option);
+        $("body").append(dropDown);
         e.stopPropagation();
     });
 
     $('body').on('click', function(e)
     {
-        if(!$.contains(e.target, $('.dropdown-in-tree'))) $('.dropdown-in-tree').css('display', 'none');
+        if(!$.contains(e.target, $('.dropdown-in-tree'))) $('.dropdown-in-tree').remove();
+    }).on('click', '.dropdown-in-tree li', function(e)
+    {
+        var item = $(this).data();
+        if(item.type !== 'add') return;
+        console.log(item);
+        switch(item.method)
+        {
+            case 'addCataLib' :
+                break;
+            case 'addCata' :
+                break;
+            case 'addCataChild' :
+                break;
+        }
     });
 
+   /*
+    *
+    */
     function initSplitRow()
     {
         /* Init split row. */
