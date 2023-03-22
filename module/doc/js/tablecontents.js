@@ -119,19 +119,21 @@ $(function()
     {
         var isLib    = $(this).hasClass('lib');
         var moduleID = $(this).data('id');
+        var libID    = 0;
+        var params   = '';
 
         if(isLib)
         {
             if($(this).data('type') == 'annex') return false;
 
-            linkParams += '&libID=' + moduleID;
-            moduleID    = 0;
+            libID     = moduleID;
+            moduleID  = 0;
         }
         else
         {
-            var libID   = $(this).closest('.lib').data('id');
-            linkParams += '&libID=' + libID + '&moduleID=' + moduleID;
+            libID   = $(this).closest('.lib').data('id');
         }
+        linkParams = linkParams.replace('%s', '&libID=' + libID + '&moduleID=' + moduleID);
         location.href = createLink('doc', 'tableContents', linkParams);
     });
 

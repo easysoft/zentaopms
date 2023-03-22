@@ -1317,6 +1317,7 @@ class doc extends control
         $this->view->libType        = $libType;
         $this->view->pager          = $pager;
         $this->view->objectID       = $objectID;
+        $this->view->orderBy        = $orderBy;
 
         $this->display();
     }
