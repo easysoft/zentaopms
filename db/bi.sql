@@ -1,3 +1,5 @@
+ALTER TABLE `zt_chart` MODIFY `group` varchar(255) NOT NULL;
+ALTER TABLE `zt_chart` CHANGE `builtin` `builtin` enum('0','1') NOT NULL DEFAULT '0';
 ALTER TABLE `zt_chart` ADD `stage` enum('draft','published') NOT NULL DEFAULT 'draft' AFTER `sql`;
 ALTER TABLE `zt_chart` ADD `langs` text NOT NULL AFTER `fields`;
 ALTER TABLE `zt_chart` ADD `step` tinyint(1) unsigned NOT NULL AFTER `filters`;
@@ -5,6 +7,7 @@ ALTER TABLE `zt_chart` DROP `dataset`;
 
 ALTER TABLE `zt_screen` ADD `status` enum('draft','published') NOT NULL DEFAULT 'draft' AFTER `scheme`;
 ALTER TABLE `zt_screen` ADD `builtin` enum('0', '1') NOT NULL DEFAULT '0' AFTER `status`;
+
 
 UPDATE `zt_screen` SET `builtin` = '1', `status` = 'published';
 UPDATE `zt_grouppriv` SET `module` = 'screen' where `module` = 'dashboard';
@@ -20,7 +23,7 @@ ALTER TABLE `zt_dataview` ADD `langs` text NOT NULL AFTER `fields`;
 CREATE TABLE `zt_pivot`  (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
   `dimension` mediumint(8) unsigned NOT NULL DEFAULT 0,
-  `group` mediumint(8) unsigned NOT NULL DEFAULT 0,
+  `group` varchar(255) NOT NULL,
   `name` varchar(255) NOT NULL,
   `desc` text NOT NULL,
   `sql` mediumtext NOT NULL,
