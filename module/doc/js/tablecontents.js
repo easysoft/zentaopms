@@ -144,7 +144,7 @@ $(function()
         if($(libClass).find('li').length == 0) return '';
 
         var dropdown = '<ul class="dropdown-menu dropdown-in-tree" id="' + option.type + '" style="display: unset; left:' + option.left + 'px; top:' + option.top + 'px;">';
-        dropdown += $(libClass).html().replace(/%libID%/g, option.libID).replace(/%module%/g, option.moduleID);
+        dropdown += $(libClass).html().replace(/%libID%/g, option.libID).replace(/%moduleID%/g, option.moduleID);
         dropdown += '</ul>';
         return dropdown;
     };
@@ -175,7 +175,7 @@ $(function()
             moduleID : moduleID
         };
         var dropDown = renderDropdown(option);
-        $("body").append(dropDown);
+        $(".m-doc-tablecontents").append(dropDown);
         e.stopPropagation();
     });
 
@@ -185,6 +185,14 @@ $(function()
     }).on('click', '.dropdown-in-tree li', function(e)
     {
         var item = $(this).data();
+        if($(this).hasClass('edit-module'))
+        {
+            new $.zui.ModalTrigger({
+                type: 'ajax',
+                url: $(this).find('a').data('href'),
+                keyboard: true
+            }).show();
+        }
         if(item.type !== 'add') return;
         switch(item.method)
         {
