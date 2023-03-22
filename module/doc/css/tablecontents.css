@@ -6,7 +6,8 @@
 .h-full {height: 100%;}
 .w-full {width: 100%;}
 .overflow-x-auto {overflow-x: auto;}
-#mainContent {padding-top: 0; padding-bottom: 0; height: calc(100vh - 125px)}
+.overflow-auto {overflow: auto;}
+#mainContent {padding-top: 0; padding-bottom: 0; height: calc(100vh - 125px);}
 #mainContent #createDropdown {display: inline-block;}
 #mainContent #createDropdown ul {position: absolute;}
 #pageNav .dropdown-menu {max-height: inherit;}

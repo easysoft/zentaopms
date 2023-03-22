@@ -321,6 +321,7 @@ $(function()
         }
     }).on('mousemove', function()
     {
+        if(!$('#sideBar.hidden').length)
         $(this).find('.spliter-btn').removeClass('hidden');
     }).on('mouseout', function()
     {
