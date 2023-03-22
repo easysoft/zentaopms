@@ -12,6 +12,7 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/sortable.html.php';?>
+<?php js::set('canSortPackage', common::hasPriv('group', 'sortPrivPackages') ? 1 : 0);?>
 <div id="mainMenu" class='clearfix'>
   <div class="btn-toolbar pull-left">
     <?php common::printBack(inlink('editManagePriv', ''), 'btn btn-primary');?>
