@@ -49,13 +49,14 @@ function initBurnChar()
               color: '#dee0e4',
               fontSize: 14
             },
+            top: 10,
             right: 0
           },
           color: ['#42526a', '#2567cf', 'red'],
           grid: {
             left: '3%',
             right: '4%',
-            top: 40,
+            top: 65,
             bottom: '3%',
             containLabel: true
           },
