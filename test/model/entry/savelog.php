@@ -2,7 +2,6 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/entry.class.php';
-$db->switchDB();
 su('admin');
 
 /**
@@ -21,4 +20,3 @@ $e_url = 'http://qcmmi.com';
 $entry = new entryTest();
 
 r($entry->saveLogTest($e_id, $e_url)) && p('objectType') && e('entry'); //测试插入一条日志
-$db->restoreDB();

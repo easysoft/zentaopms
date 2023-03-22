@@ -17,7 +17,7 @@
   <div class='main-header'>
     <h2><?php echo ($from == 'testtask' ? ($lang->testtask->common . $lang->colon) : ''). $lang->testtask->batchRun;?></h2>
   </div>
-  <form class='main-form' method='post' target='hiddenwin'>
+  <form class='main-form no-stash' method='post' target='hiddenwin'>
     <table class='table table-fixed table-form table-bordered'>
       <thead>
         <tr>

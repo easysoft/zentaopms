@@ -161,7 +161,7 @@
                   <th><?php echo $lang->bug->fromCase;?></th>
                   <td><?php if($bug->case) echo html::a(helper::createLink('testcase', 'view', "caseID=$bug->case&version=$bug->caseVersion", '', true), "<i class='icon icon-sitemap'></i> {$lang->bug->fromCase}$lang->colon$bug->case", '', isonlybody() ? '' : "data-toggle='modal' data-type='iframe' data-width='80%'");?></td>
                 </tr>
-                <tr valign='middle' class='<?php if($product->shadow and isset($project) and !$project->multiple) echo 'hide'?>'>
+                <tr valign='middle' class='<?php if($product->shadow and isset($project) and empty($project->multiple)) echo 'hide'?>'>
                   <th><?php echo $lang->bug->productplan;?></th>
                   <td><?php if(!$bug->plan or !common::printLink('productplan', 'view', "planID=$bug->plan&type=bug", $bug->planName)) echo $bug->planName;?></td>
                 </tr>
@@ -192,7 +192,11 @@
                 </tr>
                 <tr>
                   <th><?php echo $lang->bug->pri;?></th>
-                  <td><span class='label-pri <?php echo 'label-pri-' . $bug->pri;?>' title='<?php echo zget($lang->bug->priList, $bug->pri);?>'><?php echo zget($lang->bug->priList, $bug->pri)?></span></td>
+                  <td>
+                    <?php if($bug->pri):?>
+                    <span class='label-pri <?php echo 'label-pri-' . $bug->pri;?>' title='<?php echo zget($lang->bug->priList, $bug->pri);?>'><?php echo zget($lang->bug->priList, $bug->pri)?></span>
+                    <?php endif;?>
+                  </td>
                 </tr>
                 <tr>
                   <th><?php echo $lang->bug->status;?></th>
@@ -251,7 +255,7 @@
                   <?php if($browserList):?>
                   <p class='browserContent'>
                     <?php foreach($browserList as $browser):?>
-                    <?php if($os) echo "<span class='label label-outline'>" .  zget($lang->bug->browserList, $browser) . "</span>";?>
+                    <?php if($browser) echo "<span class='label label-outline'>" .  zget($lang->bug->browserList, $browser) . "</span>";?>
                     <?php endforeach;?>
                   </p>
                   <?php endif;?>

@@ -56,6 +56,7 @@ class html extends baseHTML
     static public function input($name, $value = "", $attrib = "", $autocomplete = false)
     {
         $id = "id='$name'";
+        $id = str_replace(array('[', ']'), "", $id);
         if(strpos($attrib, 'id=') !== false) $id = '';
         if(is_null($value)) $value = '';
         $value = str_replace("'", '&#039;', $value);
@@ -207,6 +208,7 @@ class html extends baseHTML
     static public function number($name, $value = '', $attrib = '')
     {
         $id = "id='$name'";
+        $id = str_replace(array('[', ']'), "", $id);
         if(strpos($attrib, 'id=') !== false) $id = '';
         $value = str_replace("'", '&#039;', $value);
         return "<input type='number' name='$name' {$id} value='$value' $attrib />\n";

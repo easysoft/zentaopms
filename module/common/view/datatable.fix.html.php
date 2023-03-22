@@ -19,6 +19,8 @@ $(function()
         var $btnToolbar = $('#main .table-header .btn-toolbar:first');
         if($btnToolbar.length > 0)
         {
+            if($('.dropdown #tableCustomBtn').length) $('#tableCustomBtn').closest('.dropdown').remove();
+
             <?php $mode = isset($config->datatable->$datatableId->mode) ? $config->datatable->$datatableId->mode : 'table';?>
             var $dropdown = $('<div class="dropdown"><button id="tableCustomBtn" type="button" class="btn btn-link" data-toggle="dropdown"><i class="icon-cog-outline"></i></button></div>');
             var $dropmenu = $('<ul class="dropdown-menu pull-right"></ul>');
@@ -98,7 +100,7 @@ $(function()
         <h4 class="modal-title"><i class="icon-cog-outline"></i> <?php echo $lang->datatable->displaySetting;?></h4>
       </div>
       <div class="modal-body">
-        <form class="form-condensed not-watch" method='post' target='hiddenwin' action='<?php echo $this->createLink('datatable', 'ajaxSave')?>'>
+        <form class="form-condensed not-watch no-stash" method='post' target='hiddenwin' action='<?php echo $this->createLink('datatable', 'ajaxSave')?>'>
           <table class='table table-form'>
             <tr>
               <td class='w-160px'><?php echo $lang->datatable->showModule;?></td>

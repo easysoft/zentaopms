@@ -32,7 +32,7 @@ js::set('revision', $revision);
 js::set('sourceRevision', $oldRevision);
 js::set('encodePath', $this->repo->encodePath($entry));
 if($showEditor) js::set('codeContent', $content);
-js::import($jsRoot  . '/zui/tabs/tabs.min.js');
+js::import($jsRoot  . 'zui/tabs/tabs.min.js');
 js::import($jsRoot  . 'monaco-editor/min/vs/loader.js');
 ?>
 <div id="monacoEditor" class='repoCode'>
@@ -338,7 +338,7 @@ $(function()
         parent.loadLinkPage(link);
     });
 
-    $('#relationTabs').on('click', '.unlinks',function()
+    $('#relationTabs').on('click', '.unlinks', function()
     {
         var link = $(this).attr('data-link');
         $.post(link, function(data)

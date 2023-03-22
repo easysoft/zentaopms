@@ -330,7 +330,8 @@ class baseHTML
      */
     static public function hidden($name, $value = "", $attrib = "")
     {
-        return "<input type='hidden' name='$name' id='$name' value='$value' $attrib />\n";
+        $id = str_replace(array('[', ']'), "", $name);
+        return "<input type='hidden' name='$name' id='$id' value='$value' $attrib />\n";
     }
 
     /**
@@ -347,7 +348,8 @@ class baseHTML
     static public function password($name, $value = "", $attrib = "")
     {
         if(stripos($attrib, 'autocomplete') === false) $attrib .= " autocomplete='off'";
-        return "<input type='password' name='$name' id='$name' value='$value' $attrib />\n";
+        $id = str_replace(array('[', ']'), "", $name);
+        return "<input type='password' name='$name' id='$id' value='$value' $attrib />\n";
     }
 
     /**
@@ -364,6 +366,7 @@ class baseHTML
     static public function textarea($name, $value = "", $attrib = "")
     {
         $id = "id='$name'";
+        $id = str_replace(array('[', ']'), "", $id);
         if(strpos($attrib, 'id=') !== false) $id = '';
         return "<textarea name='$name' $id $attrib>$value</textarea>\n";
     }
@@ -397,8 +400,9 @@ class baseHTML
      */
     static public function date($name, $value = "", $options = '', $attrib = '')
     {
-        $html = "<div class='input-append date date-picker' {$options}>";
-        $html .= "<input type='text' name='{$name}' id='$name' value='$value' {$attrib} />\n";
+        $id    = str_replace(array('[', ']'), "", $name);
+        $html  = "<div class='input-append date date-picker' {$options}>";
+        $html .= "<input type='text' name='{$name}' id='$id' value='$value' {$attrib} />\n";
         $html .= "<span class='add-on'><button class='btn' type='button'><i class='icon-calendar'></i></button></span></div>";
         return $html;
     }
@@ -417,8 +421,9 @@ class baseHTML
      */
     static public function dateTime($name, $value = "", $options = '', $attrib = '')
     {
-        $html = "<div class='input-append date time-picker' {$options}>";
-        $html .= "<input type='text' name='{$name}' id='$name' value='$value' {$attrib} />\n";
+        $id    = str_replace(array('[', ']'), "", $name);
+        $html  = "<div class='input-append date time-picker' {$options}>";
+        $html .= "<input type='text' name='{$name}' id='$id' value='$value' {$attrib} />\n";
         $html .= "<span class='add-on'><button class='btn' type='button'><i class='icon-calendar'></i></button></span></div>";
         return $html;
     }
@@ -1196,10 +1201,27 @@ EOT;
         if($config->tabSession and helper::isWithTID()) $jsConfig->tid = zget($_GET, 'tid', '');
 
         $jsLang = new stdclass();
-        $jsLang->submitting = isset($lang->loading) ? $lang->loading : '';
-        $jsLang->save       = $jsConfig->save;
-        $jsLang->expand     = isset($lang->expand)  ? $lang->expand  : '';
-        $jsLang->timeout    = isset($lang->timeout) ? $lang->timeout : '';
+        $jsLang->submitting   = isset($lang->loading) ? $lang->loading : '';
+        $jsLang->save         = $jsConfig->save;
+        $jsLang->expand       = isset($lang->expand)  ? $lang->expand  : '';
+        $jsLang->timeout      = isset($lang->timeout) ? $lang->timeout : '';
+        $jsLang->confirmDraft = isset($lang->confirmDraft) ? $lang->confirmDraft : '';
+        $jsLang->resume       = isset($lang->resume)  ? $lang->resume  : '';
+        $jsLang->program      = zget($lang->program, 'common', '');
+        $jsLang->project      = zget($lang->project, 'common', '');
+        $jsLang->product      = zget($lang->product, 'common', '');
+        $jsLang->task         = zget($lang->task, 'common', '');
+        $jsLang->story        = zget($lang->story, 'common', '');
+        $jsLang->bug          = zget($lang->bug, 'common', '');
+        $jsLang->testcase     = zget($lang->testcase, 'common', '');
+        $jsLang->zahost       = zget($lang->zahost, 'common', '');
+        $jsLang->zanode       = zget($lang->zanode, 'common', '');
+        $jsLang->gitlab       = zget($lang->gitlab, 'common', '');
+        $jsLang->gogs         = zget($lang->gogs, 'common', '');
+        $jsLang->gitea        = zget($lang->gitea, 'common', '');
+        $jsLang->jenkins      = zget($lang->jenkins, 'common', '');
+        $jsLang->sonarqube    = zget($lang->sonarqube, 'common', '');
+        $jsLang->repo         = zget($lang->repo, 'common', '');
 
         $js  = static::start(false);
         $js .= 'window.config=' . json_encode($jsConfig) . ";\n";

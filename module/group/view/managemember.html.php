@@ -28,7 +28,7 @@
       </div>
     </div>
     <div class="main-col">
-      <form class='main-table table-members' method='post' target='hiddenwin'>
+      <form class='main-table table-members no-stash' method='post' target='hiddenwin'>
         <table class='table table-form'>
           <?php if($groupUsers):?>
           <tr>

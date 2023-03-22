@@ -33,7 +33,8 @@ $config->upgrade->maxVersion['max4_0_beta2'] = '18_0_beta2';
 $config->upgrade->maxVersion['max4_0_beta3'] = '18_0_beta3';
 $config->upgrade->maxVersion['max4_0']       = '18_0';
 $config->upgrade->maxVersion['max4_1']       = '18_1';
-$config->upgrade->maxVersion['max4_2']       = '18_2'; // max insert position.
+$config->upgrade->maxVersion['max4_2']       = '18_2';
+$config->upgrade->maxVersion['max4_3']       = '18_3'; // max insert position.
 
 $config->upgrade->bizVersion = array();
 $config->upgrade->bizVersion['biz1_0']       = '9_5_1';
@@ -105,7 +106,8 @@ $config->upgrade->bizVersion['biz8_0_beta2'] = '18_0_beta2';
 $config->upgrade->bizVersion['biz8_0_beta3'] = '18_0_beta3';
 $config->upgrade->bizVersion['biz8_0']       = '18_0';
 $config->upgrade->bizVersion['biz8_1']       = '18_1';
-$config->upgrade->bizVersion['biz8_2']       = '18_2'; // biz insert position.
+$config->upgrade->bizVersion['biz8_2']       = '18_2';
+$config->upgrade->bizVersion['biz8_3']       = '18_3'; // biz insert position.
 
 $config->upgrade->proVersion = array();
 $config->upgrade->proVersion['pro1_0']        = '3_1';
@@ -403,18 +405,6 @@ $config->delete['17_8'][] = 'extension/max/common/ext/lang/fr/crystal.php';
 $config->delete['17_8'][] = 'extension/max/common/ext/lang/vi/crystal.php';
 $config->delete['18_0'][] = 'extension/max/custom/ext/view/mode.zentaomax.html.hook.php';
 $config->delete['18_0'][] = 'extension/max/my/ext/view/audit.html.php';
-$config->delete['18_0'][] = 'extension/biz/common/ext/lang/de/report.php';
-$config->delete['18_0'][] = 'extension/biz/common/ext/lang/en/report.php';
-$config->delete['18_0'][] = 'extension/biz/common/ext/lang/fr/report.php';
-$config->delete['18_0'][] = 'extension/biz/common/ext/lang/vi/report.php';
-$config->delete['18_0'][] = 'extension/biz/common/ext/lang/zh-cn/report.php';
-$config->delete['18_0'][] = 'extension/biz/common/ext/lang/zh-tw/report.php';
-$config->delete['18_0'][] = 'extension/max/common/ext/lang/de/report.php';
-$config->delete['18_0'][] = 'extension/max/common/ext/lang/en/report.php';
-$config->delete['18_0'][] = 'extension/max/common/ext/lang/fr/report.php';
-$config->delete['18_0'][] = 'extension/max/common/ext/lang/vi/report.php';
-$config->delete['18_0'][] = 'extension/max/common/ext/lang/zh-cn/report.php';
-$config->delete['18_0'][] = 'extension/max/common/ext/lang/zh-tw/report.php';
 $config->delete['18_0'][] = 'extension/max/block/ext/config/zentaomax.php';
 $config->delete['18_0'][] = 'extension/biz/repo/ext/control/ajaxgetcommitinfo.php';
 $config->delete['18_0'][] = 'extension/biz/repo/ext/control/ajaxgetbranchesandtags.php';
@@ -427,7 +417,7 @@ $config->delete['18_0'][] = 'extension/max/repo/ext/control/ajaxgetbranchesandta
 $config->delete['18_0'][] = 'extension/max/repo/ext/control/editbug.php';
 $config->delete['18_0'][] = 'extension/max/repo/ext/view/ajaxgetcommitinfo.html.php';
 
-$config->upgrade->openModules = array('action', 'admin', 'api', 'automation', 'backup', 'block', 'branch', 'budget', 'bug', 'build', 'caselib', 'ci', 'client', 'common', 'company', 'compile', 'convert', 'cron', 'custom', 'datatable', 'dept', 'design', 'dev', 'doc', 'durationestimation', 'entry', 'execution', 'extension', 'file', 'git', 'gitlab', 'group', 'holiday', 'im', 'index', 'index.html', 'install', 'issue', 'jenkins', 'job', 'kanban', 'license', 'mail', 'message', 'misc', 'mr', 'my', 'personnel', 'pipeline', 'product', 'productplan', 'productset', 'program', 'programplan', 'project', 'projectbuild', 'projectplan', 'projectrelease', 'projectstory', 'qa', 'release', 'repo', 'report', 'risk', 'score', 'screen', 'search', 'setting', 'sonarqube', 'sso', 'stage', 'stakeholder', 'story', 'subject', 'svn', 'task', 'testcase', 'testreport', 'testsuite', 'testtask', 'todo', 'tree', 'tutorial', 'upgrade', 'user', 'webhook', 'weekly', 'workestimation', 'gitea', 'gogs', 'transfer', 'zahost', 'zanode');
+$config->upgrade->openModules = array('action', 'admin', 'api', 'automation', 'backup', 'block', 'branch', 'budget', 'bug', 'build', 'caselib', 'ci', 'client', 'common', 'company', 'compile', 'convert', 'cron', 'custom', 'datatable', 'dept', 'design', 'dev', 'doc', 'durationestimation', 'entry', 'execution', 'extension', 'file', 'git', 'gitlab', 'group', 'holiday', 'im', 'index', 'index.html', 'install', 'issue', 'jenkins', 'job', 'kanban', 'license', 'mail', 'message', 'misc', 'mr', 'my', 'personnel', 'pipeline', 'product', 'productplan', 'productset', 'program', 'programplan', 'project', 'projectbuild', 'projectplan', 'projectrelease', 'projectstory', 'qa', 'release', 'repo', 'report', 'risk', 'score', 'screen', 'search', 'setting', 'sonarqube', 'sso', 'stage', 'stakeholder', 'story', 'subject', 'svn', 'task', 'testcase', 'testreport', 'testsuite', 'testtask', 'todo', 'tree', 'tutorial', 'upgrade', 'user', 'webhook', 'weekly', 'workestimation', 'gitea', 'gogs', 'transfer', 'zahost', 'zanode', 'editor');
 
 $config->upgrade->unsetModules = array('design', 'program', 'programplan', 'projectbuild', 'projectrelease', 'stage', 'stakeholder', 'product', 'branch', 'productplan', 'release', 'build', 'qa', 'bug', 'testcase', 'testtask', 'testreport', 'testsuite', 'caselib', 'automation', 'repo', 'ci', 'compile', 'jenkins', 'job', 'svn', 'gitlab', 'sonarqube', 'mr', 'git', 'report', 'sqlbuilder', 'feedback', 'faq', 'attend', 'holiday', 'leave', 'makeup', 'overtime', 'lieu', 'ops', 'host', 'serverroom', 'account', 'domain', 'service', 'deploy', 'conference', 'traincourse', 'pssp', 'baseline', 'classify', 'cm', 'cmcl', 'auditcl', 'reviewcl', 'process', 'activity', 'zoutput', 'auditplan', 'nc', 'subject', 'weekly', 'workestimation', 'issue', 'durationestimation', 'risk', 'opportunity', 'trainplan', 'gapanalysis', 'researchplan', 'researchreport', 'meeting', 'meetingroom', 'budget', 'reviewissue', 'reviewsetting', 'review', 'milestone', 'measurement', 'measrecord', 'assetlib', 'setting', 'im', 'client', 'ldap', 'dev', 'api', 'gitea', 'gogs', 'zanode', 'zahost');
 

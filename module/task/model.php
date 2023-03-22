@@ -28,6 +28,12 @@ class taskModel extends model
             return false;
         }
 
+        if(!empty($this->config->limitTaskDate))
+        {
+            $this->checkEstStartedAndDeadline($executionID, $this->post->estStarted, $this->post->deadline);
+            if(dao::isError()) return false;
+        }
+
         $executionID    = (int)$executionID;
         $estStarted     = '0000-00-00';
         $deadline       = '0000-00-00';
@@ -51,6 +57,19 @@ class taskModel extends model
                 $estStarted = (!isset($this->post->testEstStarted[$i]) or (isset($this->post->estStartedDitto[$i]) and $this->post->estStartedDitto[$i] == 'on')) ? $estStarted : $this->post->testEstStarted[$i];
                 $deadline   = (!isset($this->post->testDeadline[$i]) or (isset($this->post->deadlineDitto[$i]) and $this->post->deadlineDitto[$i] == 'on'))     ? $deadline : $this->post->testDeadline[$i];
                 $assignedTo = (!isset($this->post->testAssignedTo[$i]) or $this->post->testAssignedTo[$i] == 'ditto') ? $assignedTo : $this->post->testAssignedTo[$i];
+
+                if(!empty($this->config->limitTaskDate))
+                {
+                    $this->checkEstStartedAndDeadline($executionID, $estStarted, $deadline);
+                    if(dao::isError())
+                    {
+                        foreach(dao::getError() as $field => $error)
+                        {
+                            dao::$errors[] = $error;
+                            return false;
+                        }
+                    }
+                }
 
                 if($estStarted > $deadline)
                 {
@@ -106,6 +125,7 @@ class taskModel extends model
             ->setIF(is_numeric($this->post->left),     'left',     (float)$this->post->left)
             ->setDefault('openedBy',   $this->app->user->account)
             ->setDefault('openedDate', helper::now())
+            ->setDefault('vision', $this->config->vision)
             ->cleanINT('execution,story,module')
             ->stripTags($this->config->task->editor->create['id'], $this->config->allowedTags)
             ->join('mailto', ',')
@@ -170,6 +190,7 @@ class taskModel extends model
             if($bugID > 0)
             {
                 $this->dao->update(TABLE_TASK)->set('fromBug')->eq($bugID)->where('id')->eq($taskID)->exec();
+                $this->dao->update(TABLE_BUG)->set('toTask')->eq($taskID)->where('id')->eq($bugID)->exec();
                 $this->loadModel('action')->create('bug', $bugID, 'converttotask', '', $taskID);
             }
 
@@ -402,6 +423,12 @@ class taskModel extends model
         /* check data. */
         foreach($data as $i => $task)
         {
+            if(!empty($this->config->limitTaskDate))
+            {
+                $this->checkEstStartedAndDeadline($executionID, $task->estStarted, $task->deadline);
+                if(dao::isError()) return false;
+            }
+
             if(!helper::isZeroDate($task->deadline) and $task->deadline < $task->estStarted)
             {
                 dao::$errors['message'][] = $this->lang->task->error->deadlineSmall;
@@ -1063,6 +1090,12 @@ class taskModel extends model
             return false;
         }
 
+        if(!empty($this->config->limitTaskDate))
+        {
+            $this->checkEstStartedAndDeadline($oldTask->execution, $this->post->estStarted, $this->post->deadline);
+            if(dao::isError()) return false;
+        }
+
         if(!empty($_POST['lastEditedDate']) and $oldTask->lastEditedDate != $this->post->lastEditedDate)
         {
             dao::$errors[] = $this->lang->error->editedByOther;
@@ -1367,6 +1400,12 @@ class taskModel extends model
             {
                 dao::$errors[] = sprintf($this->lang->task->error->leftEmptyAB, zget($this->lang->task->statusList, $task->status));
                 return false;
+            }
+
+            if(!empty($this->config->limitTaskDate))
+            {
+                $this->checkEstStartedAndDeadline($oldTask->execution, $task->estStarted, $task->deadline, "task:{$taskID} ");
+                if(dao::isError()) return false;
             }
 
             if(empty($task->closedReason) and $task->status == 'closed')
@@ -4450,5 +4489,27 @@ class taskModel extends model
         if($taskType != 'multi') return array();
         $teamMembers = $this->dao->select('account')->from(TABLE_TASKTEAM)->where('task')->eq($taskID)->fetchPairs();
         return empty($teamMembers) ? $teamMembers : array_keys($teamMembers);
+    }
+
+    /**
+     * Check estStarted and deadline date.
+     *
+     * @param  int    $executionID
+     * @param  string $estStarted
+     * @param  string $deadline
+     * @param  string $pre
+     * @access public
+     * @return void
+     */
+    public function checkEstStartedAndDeadline($executionID, $estStarted, $deadline, $pre = '')
+    {
+        $execution = $this->loadModel('execution')->getByID($executionID);
+        if(empty($execution) or empty($this->config->limitTaskDate)) return false;
+        if(empty($execution->multiple)) $this->lang->execution->common = $this->lang->project->common;
+
+        if(!empty($estStarted) and !helper::isZeroDate($estStarted) and $estStarted < $execution->begin) dao::$errors['estStarted'][] = $pre . sprintf($this->lang->task->error->beginLtExecution, $this->lang->execution->common, $execution->begin);
+        if(!empty($estStarted) and !helper::isZeroDate($estStarted) and $estStarted > $execution->end)   dao::$errors['estStarted'][] = $pre . sprintf($this->lang->task->error->beginGtExecution, $this->lang->execution->common, $execution->end);
+        if(!empty($deadline) and !helper::isZeroDate($deadline) and $deadline > $execution->end)       dao::$errors['deadline'][]   = $pre . sprintf($this->lang->task->error->endGtExecution, $this->lang->execution->common, $execution->end);
+        if(!empty($deadline) and !helper::isZeroDate($deadline) and $deadline < $execution->begin)     dao::$errors['deadline'][]   = $pre . sprintf($this->lang->task->error->endLtExecution, $this->lang->execution->common, $execution->begin);
     }
 }

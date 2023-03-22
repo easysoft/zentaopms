@@ -13,7 +13,7 @@
 <?php include '../../common/view/header.html.php';?>
 <div id="mainMenu" class="clearfix">
   <div class="btn-toolbar pull-left">
-    <?php foreach($lang->my->projectMenu as $key => $label):?>
+    <?php foreach($lang->my->featureBar['project'] as $key => $label):?>
     <?php $active = $status == $key ? 'btn-active-text' : '';?>
     <?php $label = "<span class='text'>$label</span>";?>
     <?php if($status == $key) $label .= " <span class='label label-light label-badge'>{$pager->recTotal}</span>";?>

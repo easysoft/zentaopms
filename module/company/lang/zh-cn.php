@@ -31,7 +31,7 @@ $lang->company->admins   = '管理员';
 $lang->company->deleted  = '已删除';
 
 $lang->company->product   = $lang->productCommon;
-$lang->company->project   = '项目';
+$lang->company->project   = $lang->projectCommon;
 $lang->company->execution = $lang->executionCommon;
 $lang->company->user      = '用户';
 $lang->company->empty     = '暂时没有动态';
@@ -41,3 +41,11 @@ $lang->company->guestOptions[1] = '允许';
 
 $lang->company->order['date_desc'] = '倒序排列';
 $lang->company->order['date_asc']  = '正序排列';
+
+$lang->company->featureBar['dynamic']['all']       = '全部';
+$lang->company->featureBar['dynamic']['today']     = '今天';
+$lang->company->featureBar['dynamic']['yesterday'] = '昨天';
+$lang->company->featureBar['dynamic']['thisWeek']  = '本周';
+$lang->company->featureBar['dynamic']['lastWeek']  = '上周';
+$lang->company->featureBar['dynamic']['thisMonth'] = '本月';
+$lang->company->featureBar['dynamic']['lastMonth'] = '上月';

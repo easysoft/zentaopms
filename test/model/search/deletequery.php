@@ -2,7 +2,6 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/search.class.php';
-$db->switchDB();
 su('admin');
 
 /**
@@ -23,4 +22,3 @@ $queryIDList = array('1', '2');
 r($search->deleteQueryTest($queryIDList[0])) && p() && e('5'); //测试删除ID为1的数据后剩余的数量
 r($search->deleteQueryTest($queryIDList[1])) && p() && e('4'); //测试删除ID为2的数据后剩余的数量
 
-$db->restoreDB();

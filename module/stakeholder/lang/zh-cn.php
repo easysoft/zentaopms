@@ -59,7 +59,7 @@ $lang->stakeholder->keyList[1] = '是';
 $lang->stakeholder->typeList['inside']  = '内部';
 $lang->stakeholder->typeList['outside'] = '外部';
 
-$lang->stakeholder->fromList['team']    = '项目团队成员';
+$lang->stakeholder->fromList['team']    = $lang->projectCommon . '团队成员';
 $lang->stakeholder->fromList['company'] = '公司同事';
 $lang->stakeholder->fromList['outside'] = '外部人员';
 

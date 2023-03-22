@@ -1591,6 +1591,7 @@ class storyModel extends model
             ->setDefault('reviewedDate', $date)
             ->stripTags($this->config->story->editor->review['id'], $this->config->allowedTags)
             ->setIF(!$this->post->assignedTo, 'assignedTo', '')
+            ->setIF(!empty($_POST['assignedTo']), 'assignedDate', $now)
             ->removeIF($this->post->result != 'reject', 'closedReason, duplicateStory, childStories')
             ->removeIF($this->post->result == 'reject' and $this->post->closedReason != 'duplicate', 'duplicateStory')
             ->removeIF($this->post->result == 'reject' and $this->post->closedReason != 'subdivided', 'childStories')
@@ -2489,6 +2490,13 @@ class storyModel extends model
                 dao::$errors['message'][] = sprintf($this->lang->error->notempty, $this->lang->task->$field);
                 return false;
             }
+
+            if(!empty($this->config->limitTaskDate))
+            {
+                $this->task->checkEstStartedAndDeadline($executionID, $task->estStarted, $task->deadline);
+                if(dao::isError()) return false;
+            }
+
             if($task->estimate) $task->estimate = (float)$task->estimate;
         }
 
@@ -3618,7 +3626,7 @@ class storyModel extends model
         }
 
         $this->dao->sqlobj->sql = $query;
-        return $this->mergePlanTitle($productID, $stories, $branch, $type);
+        return $this->mergePlanTitle($productID, $stories, $branch, $storyType);
     }
 
     /**
@@ -4581,7 +4589,7 @@ class storyModel extends model
                 if($this->app->rawModule != 'projectstory' OR $this->config->vision == 'lite' OR $shadow)
                 {
                     $isClick = $this->isClickable($story, 'batchcreate');
-                    $title   = $this->lang->story->subdivide;
+                    $title   = $story->type == 'story' ? $this->lang->story->subdivideSR : $this->lang->story->subdivide;
                     if(!$isClick and $story->status != 'closed')
                     {
                         if($story->parent > 0)
@@ -4603,12 +4611,12 @@ class storyModel extends model
                     $menu .= $this->buildMenu('story', 'batchCreate', "productID=$story->product&branch=$story->branch&module=$story->module&$params&executionID=$executionID&plan=0&storyType=story", $story, $type, 'split', '', 'showinonlybody', '', '', $title);
                 }
 
-                if($this->app->rawModule == 'projectstory' and $this->config->vision != 'lite')
+                if(($this->app->rawModule == 'projectstory' or ($this->app->tab != 'product' and $storyType == 'requirement')) and $this->config->vision != 'lite')
                 {
                     if($canCreateCase and ($canClose or $canUnlinkStory)) $menu .= "<div class='dividing-line'></div>";
 
                     $menu .= $this->buildMenu('story', 'close', $params . "&from=&storyType=$story->type", $story, $type, '', '', 'iframe', true);
-                    if($execution->hasProduct) $menu .= $this->buildMenu('projectstory', 'unlinkStory', "projectID={$this->session->project}&$params", $story, $type, 'unlink', 'hiddenwin', 'showinonlybody');
+                    if(!empty($execution) and $execution->hasProduct) $menu .= $this->buildMenu('projectstory', 'unlinkStory', "projectID={$this->session->project}&$params", $story, $type, 'unlink', 'hiddenwin', 'showinonlybody');
                 }
 
                 if($this->app->tab == 'product' and $storyType == 'story')
@@ -4635,7 +4643,12 @@ class storyModel extends model
             $menu .= $this->buildMenu('story', 'review', $params . "&from={$this->app->tab}&storyType=$story->type", $story, $type, 'search', '', 'showinonlybody');
 
             $executionID = empty($execution) ? 0 : $execution->id;
-            if(!isonlybody()) $menu .= $this->buildMenu('story', 'batchCreate', "productID=$story->product&branch=$story->branch&moduleID=$story->module&$params&executionID=$executionID&plan=0&storyType=story", $story, $type, 'split', '', 'divideStory', true, "data-toggle='modal' data-type='iframe' data-width='95%'", $this->lang->story->subdivide);
+            if(!isonlybody())
+            {
+                $subdivideTitle = $story->type == 'story' ? $this->lang->story->subdivideSR : $this->lang->story->subdivide;
+                $menu          .= $this->buildMenu('story', 'batchCreate', "productID=$story->product&branch=$story->branch&moduleID=$story->module&$params&executionID=$executionID&plan=0&storyType=story", $story, $type, 'split', '', 'divideStory', true, "data-toggle='modal' data-type='iframe' data-width='95%'", $subdivideTitle);
+
+            }
 
             $menu .= $this->buildMenu('story', 'assignTo', $params . "&kanbanGroup=default&from=&storyType=$story->type", $story, $type, '', '', 'iframe showinonlybody', true);
             $menu .= $this->buildMenu('story', 'close',    $params . "&from=&storyType=$story->type", $story, $type, '', '', 'iframe showinonlybody', true);
@@ -4673,7 +4686,7 @@ class storyModel extends model
                 $menu .= "</ul></div>";
             }
 
-            if(($this->app->tab == 'execution' || (!empty($execution) and $execution->multiple === '0')) and $story->status == 'active') $menu .= $this->buildMenu('task', 'create', "execution={$this->session->execution}&{$params}&moduleID=$story->module", $story, $type, 'plus', '', 'showinonlybody');
+            if(($this->app->tab == 'execution' or (!empty($execution) and $execution->multiple === '0')) and $story->status == 'active' and $story->type == 'story') $menu .= $this->buildMenu('task', 'create', "execution={$this->session->execution}&{$params}&moduleID=$story->module", $story, $type, 'plus', '', 'showinonlybody');
 
             $menu .= "<div class='divider'></div>";
             $menu .= $this->buildFlowMenu('story', $story, $type, 'direct');
@@ -4765,7 +4778,7 @@ class storyModel extends model
                 if(common::hasPriv('story', 'batchCreate') and !$execution->multiple and !$execution->hasProduct)
                 {
                     $isClick = $this->isClickable($story, 'batchcreate');
-                    $title   = $this->lang->story->subdivide;
+                    $title   = $story->type == 'story' ? $this->lang->story->subdivideSR : $this->lang->story->subdivide;
                     if(!$isClick and $story->status != 'closed')
                     {
                         if($story->parent > 0)
@@ -4983,7 +4996,7 @@ class storyModel extends model
             }
             else
             {
-                $storyLink = helper::createLink('story', 'view', "storyID=$story->id&version=0&param={$this->session->project}&storyType=$story->type");
+                $storyLink = helper::createLink('story', 'view', "storyID=$story->id&version=0&param={$this->session->execution}&storyType=$story->type");
             }
         }
         elseif($tab == 'execution')
@@ -5117,7 +5130,7 @@ class storyModel extends model
             }
             elseif($id == 'actions')
             {
-                $class .= ' text-left';
+                $class .= ($tab == 'project' and $story->type == 'requirement') ? ' text-center' : ' text-left';
             }
             elseif($id == 'order')
             {
@@ -5155,12 +5168,13 @@ class storyModel extends model
                 {
                     $showBranch = isset($this->config->product->browse->showBranch) ? $this->config->product->browse->showBranch : 1;
                 }
-                if($storyType == 'requirement' and $story->type == 'story') echo '<span class="label label-badge label-light">SR</span> ';
-                if($story->parent > 0 and isset($story->parentName)) $story->title = "{$story->parentName} / {$story->title}";
-                if(isset($branches[$story->branch]) and $showBranch and $this->config->vision == 'rnd') echo "<span class='label label-outline label-badge' title={$branches[$story->branch]}>{$branches[$story->branch]}</span> ";
-                if($story->module and isset($modulePairs[$story->module])) echo "<span class='label label-gray label-badge'>{$modulePairs[$story->module]}</span> ";
-                if($story->parent > 0) echo '<span class="label label-badge label-light" title="' . $this->lang->story->children . '">' . $this->lang->story->childrenAB . '</span> ';
-                echo $canView ? html::a($storyLink, $story->title, '', "title='$story->title' style='color: $story->color' data-app='$tab'") : "<span style='color: $story->color'>{$story->title}</span>";
+                $titleHtml = '';
+                if($storyType == 'requirement' and $story->type == 'story') $titleHtml = '<span class="label label-badge label-light">SR</span> ';
+                if($story->parent > 0 and isset($story->parentName)) $titleHtml = "{$story->parentName} / ";
+                if(isset($branches[$story->branch]) and $showBranch and $this->config->vision == 'rnd') $titleHtml = "<span class='label label-outline label-badge' title={$branches[$story->branch]}>{$branches[$story->branch]}</span> ";
+                if($story->module and isset($modulePairs[$story->module])) $titleHtml = "<span class='label label-gray label-badge'>{$modulePairs[$story->module]}</span> ";
+                if($story->parent > 0) $titleHtml = '<span class="label label-badge label-light" title="' . $this->lang->story->children . '">' . $this->lang->story->childrenAB . '</span> ';
+                echo $canView ? html::a($storyLink, $titleHtml . $story->title, '', "title='$story->title' style='color: $story->color' data-app='$tab'") : "<span style='color: $story->color'>{$titleHtml}{$story->title}</span>";
                 if(!empty($story->children)) echo '<a class="story-toggle" data-id="' . $story->id . '"><i class="icon icon-angle-right"></i></a>';
                 break;
             case 'plan':
@@ -5264,9 +5278,10 @@ class storyModel extends model
                 echo $story->version;
                 break;
             case 'actions':
-                if($tab == 'execution' || ($tab == 'project' && isset($_SESSION['multiple']) && empty($_SESSION['multiple'])))
+                if($tab == 'execution' or ($tab == 'project' and isset($_SESSION['multiple']) and empty($_SESSION['multiple'])))
                 {
                     $menuType = 'execution';
+                    if($storyType == 'requirement') $menuType = 'browse';
                 }
                 else
                 {

@@ -803,15 +803,15 @@ EOT;
         {
             $result  = $this->api->request($method->className, $method->methodName, $action);
             $content = json_decode($result['content']);
-            $status  = $content->status;
-            $data    = json_decode($content->data);
+            $status  = zget($content, 'status', '');
+            $data    = isset($content->data) ? json_decode($content->data) : '';
             $data    = '<xmp>' . print_r($data, true) . '</xmp>';
 
             $response['result'] = 'success';
             $response['status'] = $status;
             $response['url']    = $result['url'];
             $response['data']   = $data;
-            $this->send($response);
+            return print(json_encode($response));
         }
 
         $this->view->method   = $method;

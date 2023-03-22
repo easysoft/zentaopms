@@ -7,7 +7,7 @@ $lang->story->common      = '目标';
 /* Main Navigation. */
 $lang->mainNav            = new stdclass();
 $lang->mainNav->my        = "{$lang->navIcons['my']} {$lang->my->shortCommon}|my|index|";
-$lang->mainNav->project   = "{$lang->navIcons['project']} {$lang->project->common}|$projectModule|$projectMethod|";
+$lang->mainNav->project   = "{$lang->navIcons['project']} {$lang->projectCommon}|$projectModule|$projectMethod|";
 $lang->mainNav->execution = "{$lang->navIcons['execution']} 任务|$executionModule|$executionMethod|";
 $lang->mainNav->kanban    = "{$lang->navIcons['kanban']} {$lang->kanban->common}|kanban|space|";
 $lang->mainNav->doc       = "{$lang->navIcons['doc']} {$lang->doc->common}|doc|index|";
@@ -143,13 +143,16 @@ $lang->doc->menuOrder[30] = 'custom';
 $lang->doc->menu->project['subMenu'] = new stdclass();
 $lang->doc->menu->custom['subMenu']  = new stdclass();
 
+/* Admin menu. */
+$lang->admin->menu            = new stdclass();
+
 /* adjust items of search. */
 $lang->searchObjects['all']       = '全部';
 $lang->searchObjects['todo']      = '待办';
 $lang->searchObjects['story']     = '目标';
 $lang->searchObjects['task']      = '任务';
 $lang->searchObjects['doc']       = '文档';
-$lang->searchObjects['project']   = '项目';
+$lang->searchObjects['project']   = $lang->projectCommon;
 $lang->searchObjects['execution'] = '看板';
 $lang->searchObjects['user']      = '用户';
 

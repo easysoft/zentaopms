@@ -355,7 +355,7 @@ class tree extends control
         $parentModules = $this->tree->getParents($currentModuleID);
         $newModule     = (version_compare($execution->openedVersion, '4.1', '>') and $products) ? true : false;
 
-        $title      = $this->lang->tree->manageExecution;
+        $title      = $execution->multiple ? $this->lang->tree->manageExecution : $this->lang->tree->manageProject;
         $position[] = html::a($this->createLink('execution', 'task', "executionID=$rootID"), $execution->name);
         $position[] = $this->lang->tree->manageExecution;
 
@@ -363,6 +363,7 @@ class tree extends control
         $this->view->position        = $position;
         $this->view->rootID          = $rootID;
         $this->view->productID       = $productID;
+        $this->view->execution       = $execution;
         $this->view->allProject      = $executions;
         $this->view->newModule       = $newModule;
         $this->view->modules         = $this->tree->getTaskTreeMenu($rootID, $productID, $rooteModuleID = 0, array('treeModel', 'createTaskManageLink'), 'allModule');

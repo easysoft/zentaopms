@@ -62,7 +62,7 @@
     </div>
   </div>
   <div class="btn-toolbar pull-left">
-    <?php foreach($lang->story->featureBar['browse'] as $featureType => $label):?>
+    <?php foreach($lang->execution->featureBar['story'] as $featureType => $label):?>
     <?php $active = $type == $featureType ? 'btn-active-text' : '';?>
     <?php $label  = "<span class='text'>$label</span>";?>
     <?php if($type == $featureType) $label .= " <span class='label label-light label-badge'>{$pager->recTotal}</span>";?>
@@ -239,10 +239,10 @@
 
       $totalEstimate       = 0;
       $canBatchEdit        = common::hasPriv('story', 'batchEdit');
-      $canBatchClose       = common::hasPriv('story', 'batchClose');
-      $canBatchChangeStage = common::hasPriv('story', 'batchChangeStage');
+      $canBatchClose       = (common::hasPriv('story', 'batchClose') and $storyType != 'requirement');
+      $canBatchChangeStage = (common::hasPriv('story', 'batchChangeStage') and $storyType != 'requirement');
       $canBatchUnlink      = common::hasPriv('execution', 'batchUnlinkStory');
-      $canBatchToTask      = common::hasPriv('story', 'batchToTask', $checkObject);
+      $canBatchToTask      = (common::hasPriv('story', 'batchToTask', $checkObject) and $storyType != 'requirement');
       $canBatchAssignTo    = common::hasPriv($storyType, 'batchAssignTo');
 
       $canBatchAction      = ($canBeChanged and ($canBatchEdit or $canBatchClose or $canBatchChangeStage or $canBatchUnlink or $canBatchToTask or $canBatchAssignTo));
@@ -271,6 +271,7 @@
           <?php foreach($stories as $key => $story):?>
           <?php
           $totalEstimate += $story->estimate;
+          $story->from    = $this->app->tab;
           ?>
           <tr id="story<?php echo $story->id;?>" data-id='<?php echo $story->id;?>' data-order='<?php echo $story->order ?>' data-estimate='<?php echo $story->estimate?>' data-cases='<?php echo zget($storyCases, $story->id, 0)?>'>
           <?php foreach($setting as $key => $value)
@@ -286,7 +287,7 @@
           <?php if(!empty($story->children)):?>
           <?php $i = 0;?>
           <?php foreach($story->children as $key => $child):?>
-          <?php $child->from = 'execution';?>
+          <?php $child->from = $this->app->tab;?>
           <?php $class  = $i == 0 ? ' table-child-top' : '';?>
           <?php $class .= ($i + 1 == count($story->children)) ? ' table-child-bottom' : '';?>
           <tr class='table-children<?php echo $class;?> parent-<?php echo $story->id;?>' data-id='<?php echo $child->id?>' data-status='<?php echo $child->status?>' data-estimate='<?php echo $child->estimate?>' data-cases='<?php echo zget($storyCases, $story->id, 0);?>'>
@@ -364,7 +365,7 @@
               echo html::commonButton($lang->close, "data-form-action='$actionLink'");
           }
           ?>
-          <?php if(common::hasPriv('story', 'batchChangeStage')):?>
+          <?php if($canBatchChangeStage):?>
           <div class="btn-group dropup">
             <button data-toggle="dropdown" type="button" class="btn"><?php echo $lang->story->stageAB;?> <span class="caret"></span></button>
             <ul class='dropdown-menu <?php echo count($stories) == 1 ? 'stageBox' : '';?>'>
@@ -404,7 +405,7 @@
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="icon icon-close"></i></button>
         <?php
         $linkStoryByPlanTips = $multiBranch ? sprintf($lang->execution->linkBranchStoryByPlanTips, $lang->project->branch) : $lang->execution->linkNormalStoryByPlanTips;
-        $linkStoryByPlanTips = $execution->multiple ? $linkStoryByPlanTips : str_replace($lang->executionCommon, $lang->projectCommon, $linkStoryByPlanTips);
+        $linkStoryByPlanTips = $execution->multiple ? $linkStoryByPlanTips : str_replace($lang->execution->common, $lang->projectCommon, $linkStoryByPlanTips);
         ?>
         <h4 class="modal-title"><?php echo $lang->execution->linkStoryByPlan;?></h4><?php echo '(' . $linkStoryByPlanTips . ')';?>
       </div>

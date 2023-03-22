@@ -74,7 +74,7 @@ $lang->user->clientStatus     = '登录状态';
 $lang->user->clientLang       = '客户端语言';
 $lang->user->programs         = '项目集';
 $lang->user->products         = $lang->productCommon;
-$lang->user->projects         = '项目';
+$lang->user->projects         = $lang->projectCommon;
 $lang->user->sprints          = $lang->execution->common;
 $lang->user->identity         = '身份';
 $lang->user->switchVision     = '切换到 %s';
@@ -322,3 +322,20 @@ $lang->user->jumping = "<span id='time'>10</span>秒钟后页面将自动跳转�
 
 $lang->user->zentaoapp = new stdclass();
 $lang->user->zentaoapp->logout = '退出登录';
+
+$lang->user->featureBar['todo']['all']             = '指派自己';
+$lang->user->featureBar['todo']['before']          = '未完';
+$lang->user->featureBar['todo']['future']          = '待定';
+$lang->user->featureBar['todo']['thisWeek']        = '本周';
+$lang->user->featureBar['todo']['thisMonth']       = '本月';
+$lang->user->featureBar['todo']['thisYear']        = '本年';
+$lang->user->featureBar['todo']['assignedToOther'] = '指派他人';
+$lang->user->featureBar['todo']['cycle']           = '周期';
+
+$lang->user->featureBar['dynamic']['all']       = '全部';
+$lang->user->featureBar['dynamic']['today']     = '今天';
+$lang->user->featureBar['dynamic']['yesterday'] = '昨天';
+$lang->user->featureBar['dynamic']['thisWeek']  = '本周';
+$lang->user->featureBar['dynamic']['lastWeek']  = '上周';
+$lang->user->featureBar['dynamic']['thisMonth'] = '本月';
+$lang->user->featureBar['dynamic']['lastMonth'] = '上月';

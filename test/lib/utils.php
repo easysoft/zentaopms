@@ -46,6 +46,15 @@ function ztfRun($dir)
     global $config;
 
     $ztfPath = RUNTIME_ROOT . 'ztf';
+    $modelPath = TEST_BASEHPATH . '/model';
+
+    $runTestPath = '';
+    if(is_array($dir))
+    {
+        foreach($dir as $model) $runTestPath .= " $modelPath/$model";
+    }
+
+    if($runTestPath) $dir = $runTestPath;
     $command = "$ztfPath $dir";
     system($command);
 }
@@ -62,7 +71,8 @@ function ztfExtract($dir)
     global $config;
 
     $ztfPath = RUNTIME_ROOT . 'ztf';
-    $command = "$ztfPath extract $dir";
+    $testPath = TEST_BASEHPATH;
+    $command = "$ztfPath extract $testPath/$dir";
     system($command);
 }
 

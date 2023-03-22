@@ -32,10 +32,11 @@ $lang->todo->import       = "Import";
 $lang->todo->legendBasic  = "Basic Info";
 $lang->todo->cycle        = "Recur";
 $lang->todo->cycleConfig  = "Recurrence";
-$lang->todo->project      = "Project";
-$lang->todo->product      = "Product";
+$lang->todo->project      = $lang->projectCommon;
+$lang->todo->product      = $lang->productCommon;
 $lang->todo->execution    = $lang->executionCommon;
 $lang->todo->changeDate   = "Change Date";
+$lang->todo->future       = 'TBD';
 
 $lang->todo->reasonList['story'] = "Convert to Story";
 $lang->todo->reasonList['task']  = "Convert to Task";
@@ -117,7 +118,7 @@ $lang->todo->noTodo         = 'No todos of this type.';
 $lang->todo->noAssignedTo   = "The AssignedTo should not be empty.";
 $lang->todo->unfinishedTodo = 'The todos of ID %s are not finished, and can not close.';
 $lang->todo->today          = 'Todo Today';
-$lang->todo->selectProduct  = "Please select a product";
+$lang->todo->selectProduct  = "Please select a {$lang->productCommon}";
 
 $lang->todo->periods['all']             = 'Assigned To Yourself';
 $lang->todo->periods['before']          = 'Unfinished';

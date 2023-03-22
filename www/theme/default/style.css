@@ -8,6 +8,8 @@
 * @version     $Id: style.css 1454 2009-10-23 01:45:26Z wwccss $
 * @link        http://www.zentao.net
 */
+
+.mt-md {margin-top: 100px!important;}
 /* Finish task #5068*/
 .main-table .table{cursor:pointer;}
 .table-striped > tbody > tr:nth-child(2n+1) > td, .table-striped > tbody > tr:nth-child(2n+1) > th{background:none;}
@@ -240,3 +242,5 @@ tbody tr td.c-actions .dividing-line {width: 1px; height: 16px; display: inline-
 #adminMenu.dropdown-menu > li > a {padding: 6px 29px 6px 20px;}
 #adminMenu.dropdown-menu > li > a > img {padding-bottom: 4px; padding-right: 8px;}
 #adminMenu.dropdown-menu > li.disabled img {filter: grayscale(100%); opacity: .6;}
+
+#userNav .dropdown-menu > li > a:hover > .user-profile-role {color: #FFFFFF;}

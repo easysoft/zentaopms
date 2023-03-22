@@ -2,7 +2,6 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/dept.class.php';
-$db->switchDB();
 su('admin');
 
 /**
@@ -20,4 +19,3 @@ $deptID = '11';
 $dept = new deptTest();
 r($dept->deleteTest($deptID)) && p() && e('99'); //删除后统计数量
 
-$db->restoreDB();

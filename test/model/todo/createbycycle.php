@@ -2,7 +2,6 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/todo.class.php';
-$db->switchDB();
 su('admin');
 
 /**
@@ -38,4 +37,3 @@ $todo = new todoTest();
 r($todo->createByCycleTest($todo1)) && p() && e('11');   // 测试创建周期日待办
 r($todo->createByCycleTest($todo2)) && p() && e('9');    // 测试创建周期周待办
 r($todo->createByCycleTest($todo3)) && p() && e('`%d`'); // 测试创建周期月待办
-$db->restoreDB();

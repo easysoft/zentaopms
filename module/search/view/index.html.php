@@ -19,7 +19,7 @@ adjustMenuWidth();
 
 <div class='row'>
   <div class='col-md-12'>
-    <form method='post' action='<?php echo inlink('index')?>' style='margin-bottom:10px;'>
+    <form method='post' action='<?php echo inlink('index')?>' class='no-stash'>
       <div class='input-group col-md-8 col-md-offset-2'>
         <span class='input-group-btn w-auto'><?php echo html::input('words', $words, "class='form-control'")?></span>
         <span class='input-group-btn select'><?php echo html::select('type[]', $typeList, $type, "class='form-control chosen' multiple")?></span>

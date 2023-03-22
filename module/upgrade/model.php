@@ -1091,7 +1091,9 @@ class upgradeModel extends model
              case '18_0':
                 $confirmContent .= file_get_contents($this->getUpgradeFile('18.0'));
              case '18_1':
-                $confirmContent .= file_get_contents($this->getUpgradeFile('18.1')); // confirm insert position.
+                $confirmContent .= file_get_contents($this->getUpgradeFile('18.1'));
+             case '18_2':
+                $confirmContent .= file_get_contents($this->getUpgradeFile('18.2')); // confirm insert position.
         }
 
         return $confirmContent;
@@ -2027,7 +2029,7 @@ class upgradeModel extends model
             $sqlToLower = strtolower($sql);
             if(strpos($sqlToLower, 'fulltext') !== false and strpos($sqlToLower, 'innodb') !== false and $mysqlVersion < 5.6)
             {
-                self::$errors[] = $this->lang->install->errorEngineInnodb;
+                static::$errors[] = $this->lang->install->errorEngineInnodb;
                 return false;
             }
 
@@ -2044,7 +2046,7 @@ class upgradeModel extends model
                 $this->saveLogs($e->getMessage());
                 $errorInfo = $e->errorInfo;
                 $errorCode = $errorInfo[1];
-                if(strpos($ignoreCode, "|$errorCode|") === false) self::$errors[] = $e->getMessage() . "<p>The sql is: $sql</p>";
+                if(strpos($ignoreCode, "|$errorCode|") === false) static::$errors[] = $e->getMessage() . "<p>The sql is: $sql</p>";
             }
         }
     }
@@ -3259,7 +3261,7 @@ class upgradeModel extends model
      */
     public function isError()
     {
-        return !empty(self::$errors);
+        return !empty(static::$errors);
     }
 
     /**
@@ -3270,8 +3272,8 @@ class upgradeModel extends model
      */
     public function getError()
     {
-        $errors = self::$errors;
-        self::$errors = array();
+        $errors = static::$errors;
+        static::$errors = array();
         return $errors;
     }
 
@@ -4860,7 +4862,7 @@ class upgradeModel extends model
             else
             {
                 /* Use historical projects as project upgrades. */
-                $projects = $this->dao->select('id,name,begin,end,status,PM,acl')->from(TABLE_PROJECT)->where('id')->in($projectIdList)->fetchAll('id');
+                $projects = $this->dao->select('id,name,begin,end,status,PM,acl,team')->from(TABLE_PROJECT)->where('id')->in($projectIdList)->fetchAll('id');
 
                 $projectPairs = $this->dao->select('name,id')->from(TABLE_PROJECT)
                     ->where('deleted')->eq('0')
@@ -4890,7 +4892,7 @@ class upgradeModel extends model
                     $data->begin         = $projects[$projectID]->begin;
                     $data->end           = $projects[$projectID]->end;
                     $data->projectStatus = $projects[$projectID]->status;
-                    $data->team          = $projects[$projectID]->team;
+                    $data->team          = empty($projects[$projectID]->team) ? $projects[$projectID]->name : $projects[$projectID]->team;
                     $data->PM            = $projects[$projectID]->PM;
                     $data->projectAcl    = $projects[$projectID]->acl == 'custom' ? 'private' : $projects[$projectID]->acl;
 
@@ -4928,6 +4930,7 @@ class upgradeModel extends model
         $project->model          = 'scrum';
         $project->parent         = $programID;
         $project->status         = $data->projectStatus;
+        $project->team           = empty($data->team) ? $data->team : $data->projectName;
         $project->begin          = $data->begin;
         $project->end            = isset($data->end) ? $data->end : LONG_TIME;
         $project->days           = $this->computeDaysDelta($project->begin, $project->end);
@@ -7621,12 +7624,19 @@ class upgradeModel extends model
             if($project->status == 'closed') $this->action->create('project', $projectID, 'closedbysystem');
 
             $project->id = $projectID;
-            $this->createProjectDocLib($project);
+            if($fromMode == 'classic')
+            {
+                $this->dao->update(TABLE_PROJECT)->set('multiple')->eq('0')->where('id')->eq($sprint->id)->exec();
+                $this->dao->update(TABLE_DOCLIB)->set('project')->eq($projectID)->set('type')->eq('project')->set('execution')->eq(0)->where('execution')->eq($sprint->id)->andWhere('type')->eq('execution')->exec();
+                $this->dao->update(TABLE_DOC)->set('project')->eq($projectID)->set('execution')->eq(0)->where('execution')->eq($sprint->id)->exec();
+            }
+            else
+            {
+                $this->createProjectDocLib($project);
+            }
 
             $productIdList = $this->dao->select('product')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($sprint->id)->fetchPairs();
             $this->processMergedData($programID, $projectID, '', $productIdList, array($sprint->id));
-
-            if($fromMode == 'classic') $this->dao->update(TABLE_PROJECT)->set('multiple')->eq('0')->where('id')->eq($sprint->id)->exec();
         }
 
         $this->fixProjectPath($programID);
@@ -7668,6 +7678,7 @@ class upgradeModel extends model
             $project->type           = 'project';
             $project->model          = 'scrum';
             $project->parent         = $programID;
+            $project->team           = $project->name;
             $project->auth           = 'extend';
             $project->begin          = '';
             $project->end            = '';

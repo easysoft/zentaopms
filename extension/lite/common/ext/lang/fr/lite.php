@@ -7,7 +7,7 @@ $lang->story->common      = 'Story';
 /* Main Navigation. */
 $lang->mainNav            = new stdclass();
 $lang->mainNav->my        = "{$lang->navIcons['my']} {$lang->my->shortCommon}|my|index|";
-$lang->mainNav->project   = "{$lang->navIcons['project']} {$lang->project->common}|$projectModule|$projectMethod|";
+$lang->mainNav->project   = "{$lang->navIcons['project']} {$lang->projectCommon}|$projectModule|$projectMethod|";
 $lang->mainNav->execution = "{$lang->navIcons['execution']} Task|$executionModule|$executionMethod|";
 $lang->mainNav->kanban    = "{$lang->navIcons['kanban']} {$lang->kanban->common}|kanban|space|";
 $lang->mainNav->doc       = "{$lang->navIcons['doc']} {$lang->doc->common}|doc|index|";
@@ -143,21 +143,24 @@ $lang->doc->menuOrder[30] = 'custom';
 $lang->doc->menu->project['subMenu'] = new stdclass();
 $lang->doc->menu->custom['subMenu']  = new stdclass();
 
+/* Admin menu. */
+$lang->admin->menu            = new stdclass();
+
 /* adjust items of search. */
 $lang->searchObjects['all']       = 'All';
 $lang->searchObjects['todo']      = 'Todo';
 $lang->searchObjects['story']     = 'Story';
 $lang->searchObjects['task']      = 'Task';
 $lang->searchObjects['doc']       = 'Doc';
-$lang->searchObjects['project']   = 'Project';
+$lang->searchObjects['project']   = $lang->projectCommon;
 $lang->searchObjects['execution'] = 'Kanban';
 $lang->searchObjects['user']      = 'User';
 
 if($config->edition != 'open') $lang->searchObjects['feedback'] = 'Feedback';
 if($config->visions == ',lite,') unset($lang->searchObjects['feedback']);
 
-$lang->navGroup->task      = 'project';
-$lang->navGroup->execution = 'project';
+$lang->navGroup->task      = $lang->projectCommon;
+$lang->navGroup->execution = $lang->projectCommon;
 
 unset($lang->searchObjects['bug']);
 unset($lang->searchObjects['testcase']);

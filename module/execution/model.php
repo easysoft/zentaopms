@@ -59,7 +59,7 @@ class executionModel extends model
      */
     public function getExecutionFeatures($execution)
     {
-        $features = array('story' => true, 'task' => true, 'qa' => true, 'devops' => true, 'burn' => true, 'build' => true, 'other' => true);
+        $features = array('story' => true, 'task' => true, 'qa' => true, 'devops' => true, 'burn' => true, 'build' => true, 'other' => true, 'plan' => true);
 
         /* Unset story, bug, build and testtask if type is ops. */
         if($execution->lifetime == 'ops')
@@ -81,8 +81,14 @@ class executionModel extends model
                 if(in_array($execution->attribute, array('request', 'review')))
                 {
                     $features['story'] = false;
+                    $features['plan'] = false;
                 }
             }
+        }
+
+        if(isset($execution->projectInfo) and in_array($execution->projectInfo->model, array('waterfall', 'kanban', 'waterfallplus')) and empty($execution->projectInfo->hasProduct))
+        {
+            $features['plan'] = false;
         }
 
         return $features;
@@ -384,9 +390,11 @@ class executionModel extends model
         $type    = 'sprint';
         if($project) $type = zget($this->config->execution->modelList, $project->model, 'sprint');
 
-        if(($project->model == 'waterfall' or $project->model == 'waterfallplus') and isset($this->config->setPercent) and $this->config->setPercent == 1)
+        if($project->model == 'waterfall' or $project->model == 'waterfallplus')
         {
-            $this->checkWorkload('create', $_POST['percent'], $project);
+            $_POST['products'] = array_filter($_POST['products']);
+            if(empty($_POST['products'])) dao::$errors['products0'] = $this->lang->project->errorNoProducts;
+            if(isset($this->config->setPercent) and $this->config->setPercent == 1) $this->checkWorkload('create', $_POST['percent'], $project);
             if(dao::isError()) return false;
         }
 
@@ -1303,6 +1311,32 @@ class executionModel extends model
             unset($execution->end);
         }
 
+        if($this->post->readjustTime)
+        {
+            $begin = $execution->begin;
+            $end   = $execution->end;
+
+            if($begin > $end) dao::$errors["message"][] = sprintf($this->lang->execution->errorLetterPlan, $end, $begin);
+
+            if($oldExecution->grade > 1)
+            {
+                $parent      = $this->dao->select('begin,end')->from(TABLE_PROJECT)->where('id')->eq($oldExecution->parent)->fetch();
+                $parentBegin = $parent->begin;
+                $parentEnd   = $parent->end;
+                if($begin < $parentBegin)
+                {
+                    dao::$errors["message"][] = sprintf($this->lang->execution->errorLetterParent, $parentBegin);
+                }
+
+                if($end > $parentEnd)
+                {
+                    dao::$errors["message"][] = sprintf($this->lang->execution->errorGreaterParent, $parentEnd);
+                }
+            }
+        }
+
+        if(dao::isError()) return false;
+
         $execution = $this->loadModel('file')->processImgURL($execution, $this->config->execution->editor->activate['id'], $this->post->uid);
         $this->dao->update(TABLE_EXECUTION)->data($execution)
             ->autoCheck()
@@ -1883,7 +1917,7 @@ class executionModel extends model
             ->page($pager, 't1.id')
             ->fetchAll('id');
 
-        if(empty($productID) and !empty($executions)) $projectProductIdList = $this->dao->select('project, product')->from(TABLE_PROJECTPRODUCT)->where('project')->in(array_keys($executions))->fetchPairs();
+        if(empty($productID) and !empty($executions)) $projectProductIdList = $this->dao->select('project, GROUP_CONCAT(product) as product')->from(TABLE_PROJECTPRODUCT)->where('project')->in(array_keys($executions))->groupBy('project')->fetchPairs();
 
         $hours = $this->loadModel('project')->computerProgress($executions);
         $burns = $this->getBurnData($executions);
@@ -2856,10 +2890,11 @@ class executionModel extends model
     {
         $this->loadModel('task');
 
+        $dateExceed  = '';
         $taskStories = array();
         $parents     = array();
         $execution   = $this->getByID($executionID);
-        $tasks       = $this->dao->select('id,execution,assignedTo,story,consumed,status,parent')->from(TABLE_TASK)->where('id')->in($this->post->tasks)->fetchAll('id');
+        $tasks       = $this->dao->select('id,execution,assignedTo,story,consumed,status,parent,estStarted,deadline')->from(TABLE_TASK)->where('id')->in($this->post->tasks)->fetchAll('id');
         foreach($tasks as $task)
         {
             /* Save the assignedToes and stories, should linked to execution. */
@@ -2879,6 +2914,13 @@ class executionModel extends model
                 $data->canceledDate = null;
             }
 
+            if(!empty($this->config->limitTaskDate))
+            {
+                if($task->estStarted < $execution->begin or $task->estStarted > $execution->end or $task->deadline > $execution->end or $task->deadline < $execution->begin) $dateExceed .= "#{$task->id},";
+                if($task->estStarted < $execution->begin or $task->estStarted > $execution->end) $data->estStarted = $execution->begin;
+                if($task->deadline > $execution->end or $task->deadline < $execution->begin)     $data->deadline   = $execution->end;
+            }
+
             /* Update tasks. */
             $this->dao->update(TABLE_TASK)->data($data)->where('id')->eq($task->id)->exec();
             unset($data->status);
@@ -2887,9 +2929,18 @@ class executionModel extends model
             $this->loadModel('action')->create('task', $task->id, 'moved', '', $task->execution);
         }
 
+        if(!empty($dateExceed))
+        {
+            $dateExceed = trim($dateExceed, ',');
+            echo js::alert(sprintf($this->lang->task->error->dateExceed, $dateExceed));
+        }
+
         /* Get stories of children task. */
-        $childrens = $this->dao->select('*')->from(TABLE_TASK)->where('parent')->in($parents)->fetchAll('id');
-        foreach($childrens as $children) $taskStories[$children->story] = $children->story;
+        if(!empty($parents))
+        {
+            $childrens = $this->dao->select('*')->from(TABLE_TASK)->where('parent')->in($parents)->fetchAll('id');
+            foreach($childrens as $children) $taskStories[$children->story] = $children->story;
+        }
 
         /* Remove empty story. */
         unset($taskStories[0]);
@@ -3032,6 +3083,12 @@ class executionModel extends model
             {
                 dao::$errors['message'][] = $this->lang->task->error->estimateNumber;
                 return false;
+            }
+
+            if(!empty($this->config->limitTaskDate))
+            {
+                $this->task->checkEstStartedAndDeadline($executionID, $task->estStarted, $task->deadline);
+                if(dao::isError()) return false;
             }
 
             $tasks[$key] = $task;
@@ -5653,12 +5710,13 @@ class executionModel extends model
      */
     public function generateRow($executions, $users, $productID)
     {
-        $rows = array();
+        $today = helper::today();
+        $rows  = array();
         foreach($executions as $id => $execution)
         {
             $label = $execution->type == 'stage' ? 'label-warning' : 'label-info';
             $link  = $execution->type == 'kanban' ? helper::createLink('execution', 'kanban', "id=$execution->id") : helper::createLink('execution', 'task', "id=$execution->id");
-            $execution->name     = "<span class='project-type-label label label-outline $label'>{$this->lang->execution->typeList[$execution->type]}</span> " . (empty($execution->children) ? html::a($link, $execution->name) : $execution->name);
+            $execution->name     = "<span class='project-type-label label label-outline $label'>{$this->lang->execution->typeList[$execution->type]}</span> " . (empty($execution->children) ? html::a($link, $execution->name, '_self', 'class="text-primary"') : $execution->name) . (strtotime($today) > strtotime($execution->end) ? '<span class="label label-danger label-badge">' . $this->lang->execution->delayed . '</span>' : '');;
             $execution->project  = $execution->projectName;
             $execution->parent   = ($execution->parent and $execution->grade > 1) ? $execution->parent : '';
             $execution->asParent = !empty($execution->children);
@@ -5714,6 +5772,12 @@ class executionModel extends model
         $post    = $_POST;
 
         $_POST = array();
+        $extendFields = $this->getExtendFields();
+        foreach(array_keys($extendFields) as $field)
+        {
+            if(isset($post[$field])) $_POST[$field] = $post[$field];
+        }
+
         $_POST['project']     = $projectID;
         $_POST['name']        = $project->name;
         $_POST['begin']       = $project->begin;
@@ -5767,6 +5831,12 @@ class executionModel extends model
         $post    = $_POST;
 
         $_POST = array();
+        $extendFields = $this->getExtendFields();
+        foreach(array_keys($extendFields) as $field)
+        {
+            if(isset($post[$field])) $_POST[$field] = $post[$field];
+        }
+
         $_POST['project']   = $projectID;
         $_POST['name']      = $project->name;
         $_POST['begin']     = $project->begin;
@@ -5947,5 +6017,24 @@ class executionModel extends model
             if(!empty($children)) $sortedExecutions += $this->resetExecutionSorts($executions, $children);
         }
         return $sortedExecutions;
+    }
+
+    /**
+     * Get Extend Fields in workflow.
+     *
+     * @param  string $module
+     * @access public
+     * @return array
+     */
+    public function getExtendFields($module = 'project')
+    {
+        $extendFields = $this->dao->select('field')
+            ->from(TABLE_WORKFLOWFIELD)
+            ->where('module')->eq('project')
+            ->andWhere('buildin')->eq(0)
+            ->andWhere('role')->eq('custom')
+            ->fetchPairs('field');
+
+        return $extendFields;
     }
 }

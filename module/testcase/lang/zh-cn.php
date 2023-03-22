@@ -11,8 +11,8 @@
  */
 $lang->testcase->id               = '用例编号';
 $lang->testcase->product          = "所属{$lang->productCommon}";
-$lang->testcase->project          = '所属项目';
-$lang->testcase->execution        = '所属执行';
+$lang->testcase->project          = '所属' . $lang->projectCommon;
+$lang->testcase->execution        = '所属' . $lang->executionCommon;
 $lang->testcase->linkStory        = '关联需求';
 $lang->testcase->module           = '所属模块';
 $lang->testcase->auto             = '自动化测试用例';
@@ -186,7 +186,7 @@ $lang->testcase->summary               = "本页共 <strong>%s</strong> 个用�
 $lang->testcase->confirmDelete         = '您确认要删除该测试用例吗？';
 $lang->testcase->confirmBatchDelete    = '您确认要批量删除这些测试用例吗？';
 $lang->testcase->ditto                 = '同上';
-$lang->testcase->dittoNotice           = '该用例与上一用例不属于同一产品！';
+$lang->testcase->dittoNotice           = "该用例与上一用例不属于同一{$lang->productCommon}！";
 $lang->testcase->confirmUnlinkTesttask = '用例[%s]已关联在之前所属平台/分支的测试单中，调整平台/分支后，将从之前所属平台/分支的测试单中移除，请确认是否继续修改。';
 
 $lang->testcase->reviewList[0] = '否';
@@ -253,8 +253,8 @@ $lang->testcase->selectLibAB   = '选择用例库';
 $lang->testcase->action = new stdclass();
 $lang->testcase->action->fromlib               = array('main' => '$date, 由 <strong>$actor</strong> 从用例库 <strong>$extra</strong>导入。');
 $lang->testcase->action->reviewed              = array('main' => '$date, 由 <strong>$actor</strong> 记录评审结果，结果为 <strong>$extra</strong>。', 'extra' => 'reviewResultList');
-$lang->testcase->action->linked2project        = array('main' => '$date, 由 <strong>$actor</strong> 关联到项目 <strong>$extra</strong>。');
-$lang->testcase->action->unlinkedfromproject   = array('main' => '$date, 由 <strong>$actor</strong> 从项目 <strong>$extra</strong> 移除。');
+$lang->testcase->action->linked2project        = array('main' => '$date, 由 <strong>$actor</strong> 关联到' . $lang->projectCommon . ' <strong>$extra</strong>。');
+$lang->testcase->action->unlinkedfromproject   = array('main' => '$date, 由 <strong>$actor</strong> 从' . $lang->projectCommon . ' <strong>$extra</strong> 移除。');
 $lang->testcase->action->linked2execution      = array('main' => '$date, 由 <strong>$actor</strong> 关联到' . $lang->executionCommon . ' <strong>$extra</strong>。');
 $lang->testcase->action->unlinkedfromexecution = array('main' => '$date, 由 <strong>$actor</strong> 从' . $lang->executionCommon . ' <strong>$extra</strong> 移除。');
 
@@ -266,4 +266,3 @@ $lang->testcase->featureBar['browse']['group']       = '分组查看';
 $lang->testcase->featureBar['browse']['zerocase']    = "零用例{$lang->SRCommon}";
 $lang->testcase->featureBar['browse']['suite']       = '套件';
 $lang->testcase->featureBar['browse']['autocase']    = $lang->testcase->showAutoCase;
-$lang->testcase->featureBar['groupcase']             = $lang->testcase->featureBar['browse'];

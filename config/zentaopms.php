@@ -425,6 +425,7 @@ $config->programPriv->waterfall     = array_merge($config->programPriv->scrum, a
 $config->programPriv->agileplus     = $config->programPriv->scrum;
 $config->programPriv->waterfallplus = $config->programPriv->waterfall;
 
+$config->safeFileTimeout  = 3600;
 $config->waterfallModules = array('workestimation', 'durationestimation', 'budget', 'programplan', 'review', 'reviewissue', 'weekly', 'cm', 'milestone', 'design', 'opportunity', 'auditplan', 'trainplan', 'gapanalysis', 'pssp', 'researchplan', 'researchreport');
 
 $config->showMainMenu = true;

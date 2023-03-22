@@ -2,7 +2,6 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/project.class.php';
-$db->switchDB();
 su('admin');
 
 /**
@@ -61,4 +60,3 @@ r($project->update(20, $emptyTitleProject))     && p('message[name]:0')  && e('�
 r($project->update(20, $emptyBeginProject))     && p('message[begin]:0') && e('『计划开始』不能为空。'); // 当计划完成为空时更新项目信息
 r($project->update(20, $emptyEndProject))       && p('message:end')      && e('项目的完成日期应大于等于执行的最大完成日期：2022-10-26'); // 当项目的完成日期小于执行的完成日期时
 r($project->update(20, $beginGtExecutionBegin)) && p('message:begin')    && e('项目的开始日期应小于等于执行的最小开始日期：2022-07-07'); // 当项目的开始日期大于执行的开始日期时
-$db->restoreDB();

@@ -215,3 +215,4 @@ $lang->api_lib_release->version = 'Version';
 $lang->api->error = new stdclass();
 $lang->api->error->onlySelect = 'SQL API only allows SELECT query.';
 $lang->api->error->disabled   = 'For security reasons, this feature is disabled. Go to the config directory and modify the configuration item %s to enable it.';
+$lang->api->error->notInput   = 'Debugging is not supported temporarily due to field parameter type restrictions';

@@ -1428,7 +1428,7 @@ class projectModel extends model
                 /* If parent not empty, link products or create products. */
                 $product = new stdclass();
                 $product->name           = $project->hasProduct && $this->post->productName ? $this->post->productName : $project->name;
-                $product->shadow         = (int)empty($project->hasProduct);
+                $product->shadow         = zget($project, 'vision', 'rnd') == 'rnd' ? (int)empty($project->hasProduct) : 1;
                 $product->bind           = $this->post->parent ? 0 : 1;
                 $product->program        = $project->parent ? current(array_filter(explode(',', $program->path))) : 0;
                 $product->acl            = $project->acl == 'open' ? 'open' : 'private';
@@ -1521,6 +1521,7 @@ class projectModel extends model
             ->setDefault('team', $this->post->name)
             ->setDefault('lastEditedBy', $this->app->user->account)
             ->setDefault('lastEditedDate', helper::now())
+            ->setDefault('days', '0')
             ->setIF($this->post->delta == 999, 'end', LONG_TIME)
             ->setIF($this->post->delta == 999, 'days', 0)
             ->setIF($this->post->begin == '0000-00-00', 'begin', '')
@@ -2302,7 +2303,7 @@ class projectModel extends model
                     if(!empty($suffix) or !empty($prefix)) echo '<div class="project-name' . (empty($prefix) ? '' : ' has-prefix') . (empty($suffix) ? '' : ' has-suffix') . '">';
                     if(!empty($prefix)) echo $prefix;
                     if($this->config->vision == 'rnd') $projectIcon = "<i class='text-muted icon icon-{$projectType}'></i> ";
-                    echo html::a($projectLink, $projectIcon . $project->name, '', "class='text-ellipsis text-primary'");
+                    echo html::a($projectLink, $projectIcon . $project->name, '', "class='text-ellipsis'");
                     if(!empty($suffix)) echo $suffix;
                     if(!empty($suffix) or !empty($prefix)) echo '</div>';
                     break;
@@ -2501,6 +2502,13 @@ class projectModel extends model
             {
                 $this->dao->update(TABLE_PROJECT)->set('division')->eq('1')->where('id')->eq((int)$projectID)->exec();
                 $this->dao->update(TABLE_EXECUTION)->set('division')->eq('1')->where('project')->eq((int)$projectID)->exec();
+            }
+
+            $project = $this->getByID($projectID);
+            if(!empty($project) and ($project->model == 'waterfall' or $project->model == 'waterfallplus') and empty($project->division) and !empty($executions))
+            {
+                $this->loadModel('execution');
+                foreach($executions as $executionID) $this->execution->updateProducts($executionID);
             }
         }
 
@@ -2899,7 +2907,7 @@ class projectModel extends model
             $executionID = $this->dao->select('id')->from(TABLE_EXECUTION)
                 ->where('project')->eq($projectID)
                 ->andWhere('multiple')->eq('0')
-                ->andWhere('type')->eq('sprint')
+                ->andWhere('type')->in('kanban,sprint')
                 ->andWhere('deleted')->eq('0')
                 ->fetch('id');
         }

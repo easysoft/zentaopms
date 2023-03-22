@@ -124,7 +124,8 @@ class user extends control
 
         $user    = $this->user->getById($userID, 'id');
         $account = $user->account;
-        $users   = $this->loadModel('dept')->getDeptUserPairs($this->app->user->dept, 'id');
+        $deptID  = $this->app->user->admin ? 0 : $this->app->user->dept;
+        $users   = $this->loadModel('dept')->getDeptUserPairs($deptID, 'id');
 
         /* Modify story title. */
         $this->loadModel('story');
@@ -167,7 +168,8 @@ class user extends control
 
         $user    = $this->user->getById($userID, 'id');
         $account = $user->account;
-        $users   = $this->loadModel('dept')->getDeptUserPairs($this->app->user->dept, 'id');
+        $deptID  = $this->app->user->admin ? 0 : $this->app->user->dept;
+        $users   = $this->loadModel('dept')->getDeptUserPairs($deptID, 'id');
 
         /* Set the menu. */
         $this->view->userList = $this->user->setUserList($users, $userID);
@@ -208,7 +210,8 @@ class user extends control
 
         $user    = $this->user->getById($userID, 'id');
         $account = $user->account;
-        $users   = $this->loadModel('dept')->getDeptUserPairs($this->app->user->dept, 'id');
+        $deptID  = $this->app->user->admin ? 0 : $this->app->user->dept;
+        $users   = $this->loadModel('dept')->getDeptUserPairs($deptID, 'id');
 
         /* Set menu. */
         $this->view->userList = $this->user->setUserList($users, $userID);
@@ -248,7 +251,8 @@ class user extends control
 
         $user    = $this->user->getById($userID, 'id');
         $account = $user->account;
-        $users   = $this->loadModel('dept')->getDeptUserPairs($this->app->user->dept, 'id');
+        $deptID  = $this->app->user->admin ? 0 : $this->app->user->dept;
+        $users   = $this->loadModel('dept')->getDeptUserPairs($deptID, 'id');
 
         /* Set menu. */
         $this->view->userList = $this->user->setUserList($users, $userID);
@@ -299,7 +303,8 @@ class user extends control
 
         $user    = $this->user->getById($userID, 'id');
         $account = $user->account;
-        $users   = $this->loadModel('dept')->getDeptUserPairs($this->app->user->dept, 'id');
+        $deptID  = $this->app->user->admin ? 0 : $this->app->user->dept;
+        $users   = $this->loadModel('dept')->getDeptUserPairs($deptID, 'id');
 
         /* Append id for secend sort. */
         $sort = common::appendOrder($orderBy);
@@ -355,7 +360,8 @@ class user extends control
 
         $user    = $this->user->getById($userID, 'id');
         $account = $user->account;
-        $users   = $this->loadModel('dept')->getDeptUserPairs($this->app->user->dept, 'id');
+        $deptID  = $this->app->user->admin ? 0 : $this->app->user->dept;
+        $users   = $this->loadModel('dept')->getDeptUserPairs($deptID, 'id');
 
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
@@ -395,7 +401,8 @@ class user extends control
 
         $user    = $this->user->getById($userID, 'id');
         $account = $user->account;
-        $users   = $this->loadModel('dept')->getDeptUserPairs($this->app->user->dept, 'id');
+        $deptID  = $this->app->user->admin ? 0 : $this->app->user->dept;
+        $users   = $this->loadModel('dept')->getDeptUserPairs($deptID, 'id');
 
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
@@ -435,7 +442,8 @@ class user extends control
 
         $user    = $this->user->getById($userID, 'id');
         $account = $user->account;
-        $users   = $this->loadModel('dept')->getDeptUserPairs($this->app->user->dept, 'id');
+        $deptID  = $this->app->user->admin ? 0 : $this->app->user->dept;
+        $users   = $this->loadModel('dept')->getDeptUserPairs($deptID, 'id');
 
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
@@ -468,7 +476,8 @@ class user extends control
 
         $user    = $this->user->getById($userID, 'id');
         $account = $user->account;
-        $users   = $this->loadModel('dept')->getDeptUserPairs($this->app->user->dept, 'id');
+        $deptID  = $this->app->user->admin ? 0 : $this->app->user->dept;
+        $users   = $this->loadModel('dept')->getDeptUserPairs($deptID, 'id');
 
         $this->view->title        = "USER #$user->id $user->account/" . $this->lang->user->profile;
         $this->view->position[]   = $this->lang->user->common;
@@ -1204,7 +1213,8 @@ class user extends control
     {
         $user    = $this->user->getById($userID, 'id');
         $account = $user->account;
-        $users   = $this->loadModel('dept')->getDeptUserPairs($this->app->user->dept, 'id');
+        $deptID  = $this->app->user->admin ? 0 : $this->app->user->dept;
+        $users   = $this->loadModel('dept')->getDeptUserPairs($deptID, 'id');
 
         /* set menus. */
         $this->view->userList = $this->user->setUserList($users, $userID);

@@ -857,8 +857,9 @@ class myModel extends model
                 ->where($myStoryQuery)
                 ->andWhere('t1.type')->eq('story')
                 ->andWhere('t1.assignedTo',1)->eq($this->app->user->account)
-                ->orWhere('t5.reviewer')->eq($this->app->user->account)
+                ->orWhere("(t5.reviewer = '{$this->app->user->account}' and t1.status in('reviewing','changing'))")
                 ->markRight(1)
+                ->andWhere('t1.product')->ne('0')
                 ->andWhere('t1.deleted')->eq(0)
                 ->orderBy($orderBy)
                 ->page($pager, 't1.id')
@@ -1025,11 +1026,11 @@ class myModel extends model
 
         $flows = ($this->config->edition == 'open') ? array() : $this->dao->select('module,name')->from(TABLE_WORKFLOW)->where('module')->in($typeList)->andWhere('buildin')->eq(0)->fetchPairs('module', 'name');
         $menu  = new stdclass();
-        $menu->all = $this->lang->my->auditMenu->audit->all;
+        $menu->all = $this->lang->my->featureBar['audit']['all'];
         foreach($typeList as $type)
         {
             $this->app->loadLang($type);
-            $menu->$type = isset($this->lang->$type->common) ? $this->lang->$type->common : zget($flows, $type);
+            $menu->$type = isset($this->lang->my->featureBar['audit'][$type]) ? $this->lang->my->featureBar['audit'][$type] : zget($flows, $type);
         }
 
         return $menu;
@@ -1112,11 +1113,12 @@ class myModel extends model
         {
             if($checkExists) return true;
             $story = new stdclass();
-            $story->id      = $data->id;
-            $story->title   = $data->title;
-            $story->type    = 'story';
-            $story->time    = $data->openedDate;
-            $story->status  = $data->status;
+            $story->id        = $data->id;
+            $story->title     = $data->title;
+            $story->type      = 'story';
+            $story->storyType = $data->type;
+            $story->time      = $data->openedDate;
+            $story->status    = $data->status;
             $stories[$story->id] = $story;
         }
 
@@ -1435,6 +1437,7 @@ class myModel extends model
             $review->status = $objectType == 'attend' ? $object->reviewStatus : ((isset($object->status) and !isset($flows[$objectType])) ? $object->status : 'done');
             if(strpos($review->result, ',') !== false) list($review->result) = explode(',', $review->result);
 
+            if($objectType == 'story')    $review->storyType = $object->type;
             if($review->type == 'review') $review->type = 'projectreview';
             if($review->type == 'case')   $review->type = 'testcase';
             $review->title = '';

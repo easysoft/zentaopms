@@ -61,7 +61,7 @@ $lang->task->confirmRecord         = '"Left Hour" is 0. Do you want to set the t
 $lang->task->confirmTransfer       = '"Left Hour" is 0，Do you want to transfer task?';
 $lang->task->noTask                = 'No tasks yet. ';
 $lang->task->kanbanDenied          = 'Please create a Kanban first';
-$lang->task->createDenied          = 'Create Task is denied in this project';
+$lang->task->createDenied          = "Create Task is denied in this {$lang->projectCommon}";
 $lang->task->cannotDeleteParent    = 'Cannot delete parent task';
 $lang->task->addChildTask          = 'Because the task has cost hours, ZenTao will create a child task with the same name to record the cost housrs to ensure data consistency.';
 

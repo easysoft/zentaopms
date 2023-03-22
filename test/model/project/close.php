@@ -1,7 +1,6 @@
 #!/usr/bin/env php
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
-$db->switchDB();
 su('admin');
 
 /**
@@ -28,4 +27,3 @@ $changes3 = $tester->project->close(41);
 r($changes1) && p('1:field,old,new') && e('status,wait,closed');      // 关闭id为20状态不是closed的项目
 r($changes2) && p('1:field,old,new') && e('closedBy,,admin');         // 关闭id为26状态是closed的项目
 r($changes3) && p('1:field,old,new') && e('status,suspended,closed'); // 关闭id为41状态是suspended的项目
-$db->restoreDB();

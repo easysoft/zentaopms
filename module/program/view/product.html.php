@@ -17,7 +17,7 @@
 <div id="mainMenu" class="clearfix">
   <?php if(!isonlybody()):?>
   <div class="btn-toolBar pull-left">
-    <?php foreach($lang->product->featureBar['all'] as $key => $label):?>
+    <?php foreach($lang->program->featureBar['product'] as $key => $label):?>
     <?php $active = $key == $browseType ? 'btn-active-text' : '';?>
     <?php if($key == $browseType) $label .= " <span class='label label-light label-badge'>{$pager->recTotal}</span>";?>
     <?php echo html::a(inlink("product", "programID=$programID&browseType=$key&orderBy=$orderBy"), "<span class='text'>{$label}</span>", '', "class='btn btn-link $active'");?>
@@ -122,7 +122,7 @@
         </div>
         <?php
         $summary = sprintf($lang->product->pageSummary, count($products));
-        echo "<div id='productsCount' class='statistic'>$summary</div>";
+        echo "<div id='productsCount' class='table-statistic'>$summary</div>";
         ?>
         <?php endif;?>
         <?php $pager->show('right', 'pagerjs');?>

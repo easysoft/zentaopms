@@ -11,8 +11,8 @@
  */
 $lang->testcase->id               = 'ID';
 $lang->testcase->product          = $lang->productCommon;
-$lang->testcase->project          = 'Project';
-$lang->testcase->execution        = 'Execution';
+$lang->testcase->project          = $lang->projectCommon;
+$lang->testcase->execution        = $lang->executionCommon;
 $lang->testcase->linkStory        = 'linkStory';
 $lang->testcase->module           = 'Module';
 $lang->testcase->auto             = 'Test Automation Cases';
@@ -186,7 +186,7 @@ $lang->testcase->summary               = "Total <strong>%s</strong> CasTests sur
 $lang->testcase->confirmDelete         = 'Voulez-vous supprimer ce CasTest ?';
 $lang->testcase->confirmBatchDelete    = 'Voulez-vous supprimer des Castests par Lot ?';
 $lang->testcase->ditto                 = 'Idem';
-$lang->testcase->dittoNotice           = "Ce CasTest n'est pas associé au Product alors que le précédent l'était !";
+$lang->testcase->dittoNotice           = "This Case is not linked to the {$lang->productCommon} as the last one is!";
 $lang->testcase->confirmUnlinkTesttask = 'The case [%s] is already associated in the testtask order of the previous branch/platform, after adjusting the branch/platform, it will be removed from the test list of the previous branch/platform, please confirm whether to continue to modify.';
 
 $lang->testcase->reviewList[0] = 'NON';
@@ -253,10 +253,10 @@ $lang->testcase->selectLibAB   = 'Sélectionner Library';
 $lang->testcase->action = new stdclass();
 $lang->testcase->action->fromlib               = array('main' => '$date, importé par <strong>$actor</strong> depuis <strong>$extra</strong>.');
 $lang->testcase->action->reviewed              = array('main' => '$date, enregistré par <strong>$actor</strong> et le résultat de validation est <strong>$extra</strong>.', 'extra' => 'reviewResultList');
-$lang->testcase->action->linked2project        = array('main' => '$date, 由 <strong>$actor</strong> 关联到项目 <strong>$extra</strong>。');
-$lang->testcase->action->unlinkedfromproject   = array('main' => '$date, 由 <strong>$actor</strong> 从项目 <strong>$extra</strong> 移除。');
-$lang->testcase->action->linked2execution      = array('main' => '$date, 由 <strong>$actor</strong> 关联到' . $lang->executionCommon . ' <strong>$extra</strong>。');
-$lang->testcase->action->unlinkedfromexecution = array('main' => '$date, 由 <strong>$actor</strong> 从' . $lang->executionCommon . ' <strong>$extra</strong> 移除。');
+$lang->testcase->action->linked2project        = array('main' => '$date, linked ' . $lang->projectCommon . ' by <strong>$actor</strong> to <strong>$extra</strong>.');
+$lang->testcase->action->unlinkedfromproject   = array('main' => '$date, removed by <strong>$actor</strong> from <strong>$extra</strong>.');
+$lang->testcase->action->linked2execution      = array('main' => '$date, linked ' . $lang->executionCommon . ' by  <strong>$actor</strong> to <strong>$extra</strong>.');
+$lang->testcase->action->unlinkedfromexecution = array('main' => '$date, removed by <strong>$actor</strong> from <strong>$extra</strong>.');
 
 $lang->testcase->featureBar['browse']['casetype']    = $lang->testcase->caseType;
 $lang->testcase->featureBar['browse']['all']         = $lang->testcase->allCases;
@@ -266,4 +266,3 @@ $lang->testcase->featureBar['browse']['group']       = 'Group View';
 $lang->testcase->featureBar['browse']['zerocase']    = 'Zero Case Story';
 $lang->testcase->featureBar['browse']['suite']       = 'Suite';
 $lang->testcase->featureBar['browse']['autocase']    = $lang->testcase->showAutoCase;
-$lang->testcase->featureBar['groupcase']             = $lang->testcase->featureBar['browse'];

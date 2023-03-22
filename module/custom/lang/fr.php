@@ -9,8 +9,8 @@ $lang->custom->restore              = 'Réinitialiser';
 $lang->custom->key                  = 'Clé';
 $lang->custom->value                = 'Valeur';
 $lang->custom->working              = 'Mode';
-$lang->custom->select               = 'Choix du Concept';
 $lang->custom->hours                = 'Hours';
+$lang->custom->select               = 'Choix du Concept';
 $lang->custom->branch               = 'Multi-Branches';
 $lang->custom->owner                = 'Propriétaire';
 $lang->custom->module               = 'Module';
@@ -61,6 +61,8 @@ $lang->custom->defaultProgram       = 'Default program';
 $lang->custom->modeManagement       = 'Mode Management';
 $lang->custom->percent              = $lang->stage->percent;
 $lang->custom->setPercent           = "Enable or Disable {$lang->stage->percent}";
+$lang->custom->beginAndEndDate      = 'Begin & End';
+$lang->custom->beginAndEndDateRange = 'The Range Of Begin & End';
 
 $lang->custom->unitList['efficiency'] = 'Working Hours/';
 $lang->custom->unitList['manhour']    = 'Man-hour/';
@@ -122,11 +124,12 @@ $lang->custom->story->fields['reviewResultList'] = 'Valider Résultats';
 $lang->custom->story->fields['review']           = 'Validation Requise';
 
 $lang->custom->task = new stdClass();
-$lang->custom->task->fields['required']   = $lang->custom->required;
-$lang->custom->task->fields['priList']    = 'Priorité';
-$lang->custom->task->fields['typeList']   = 'Type';
-$lang->custom->task->fields['reasonList'] = 'Raison Fermeture';
-$lang->custom->task->fields['statusList'] = 'Statut';
+$lang->custom->task->fields['required']      = $lang->custom->required;
+$lang->custom->task->fields['priList']       = 'Priorité';
+$lang->custom->task->fields['typeList']      = 'Type';
+$lang->custom->task->fields['reasonList']    = 'Raison Fermeture';
+$lang->custom->task->fields['statusList']    = 'Statut';
+$lang->custom->task->fields['limitTaskDate'] = 'Begin & End';
 
 $lang->custom->bug = new stdClass();
 $lang->custom->bug->fields['required']       = $lang->custom->required;
@@ -200,11 +203,11 @@ $lang->custom->notice->confirmReviewCase   = 'Set the case in Wait to Normal?';
 $lang->custom->notice->storyReviewTip      = 'After selecting by individual, position, and department, take the union of these three filters. ';
 $lang->custom->notice->selectAllTip        = 'After selecting all people, the reviewers will be emptied and grayed out while hiding their positions and departments.';
 $lang->custom->notice->repeatKey           = 'Repeat Key %s';
-$lang->custom->notice->readOnlyOfCode      = "Le code est un terme de gestion utilisé pour la confidentialité ou comme alias. Lorsque la gestion du code est activée, le produit, le projet et l'exécution dans le système afficheront les informations de code sur les pages de création, de modification, de détails et de liste.";
-$lang->custom->notice->readOnlyOfPercent   = 'The "Workload Ratio" is used to divide the workload of a project into different stages. The sum of the percentages of the same level stages cannot exceed 100%. After enabling the "Workload Ratio", users have to fill in the ratio fields when setting up the stages in the Waterfall project and Waterfall Plus project management models.';
+$lang->custom->notice->readOnlyOfCode      = "A code is a management term that exists for secrecy or as an antonym. When code management is enabled, the code information of {$lang->productCommon}, {$lang->projectCommon}, and execution in the system will be displayed in the creation, editing, detail, and list pages.";
+$lang->custom->notice->readOnlyOfPercent   = "The \"Workload Ratio\" is used to divide the workload of a {$lang->projectCommon} into different stages. The sum of the percentages of the same level stages cannot exceed 100%. After enabling the \"Workload Ratio\", users have to fill in the ratio fields when setting up the stages in the Waterfall {$lang->projectCommon} and Waterfall Plus {$lang->projectCommon} management models.";
 
 $lang->custom->notice->indexPage['product'] = "ZenTao 8.2+ possède une page d'accueil. Voulez-vous consulter la page d'accueil du produit ?";
-$lang->custom->notice->indexPage['project'] = "ZenTao 8.2+ possède une page d'accueil. Voulez-vous consulter la page d'accueil du produit ?";
+$lang->custom->notice->indexPage['project'] = "ZenTao 8.2+ has {$lang->projectCommon} Home. Do you want to go to {$lang->projectCommon} Home?";
 $lang->custom->notice->indexPage['qa']      = "ZenTao 8.2+ possède une FAQ. Voulez-vous consulter la FAQ ?";
 
 $lang->custom->notice->invalidStrlen['ten']        = 'La clé devrait être <= 10 caractères.';
@@ -233,8 +236,8 @@ $lang->custom->restDayList[6] = 'Saturday rest';
 $lang->custom->restDayList[0] = 'Sunday rest';
 
 global $config;
-$lang->custom->sprintConceptList[0] = 'Program Product Iteration';
-$lang->custom->sprintConceptList[1] = 'Program Product Sprint';
+$lang->custom->sprintConceptList[0] = 'Project Product Iteration';
+$lang->custom->sprintConceptList[1] = 'Project Product Sprint';
 
 $lang->custom->workingList['full'] = 'Application Lifecycle Management';
 
@@ -247,12 +250,12 @@ $lang->custom->useLight          = 'Use Light Mode';
 $lang->custom->useALM            = 'Use ALM Mode';
 $lang->custom->currentModeTips   = 'You are currently using %s, you can switch to the %s.';
 $lang->custom->changeModeTips    = 'Please double confirm to switch to %s Mode.';
-$lang->custom->selectProgramTips = 'After switching to the Light Mode, in order to ensure the consistency of the data structure, you need to select a program as the default program, and subsequent new product and project data are associated with this default program.';
+$lang->custom->selectProgramTips = "After switching to the Light Mode, in order to ensure the consistency of the data structure, you need to select a program as the default program, and subsequent new {$lang->productCommon} and {$lang->projectCommon} data are associated with this default program.";
 
 $lang->custom->modeList['light'] = 'Light Mode';
 $lang->custom->modeList['ALM']   = 'ALM Mode';
 
-$lang->custom->modeIntroductionList['light'] = 'Provides the core function of project management, suitable for small R&D teams';
+$lang->custom->modeIntroductionList['light'] = "Provides the core function of {$lang->projectCommon} management, suitable for small R&D teams";
 $lang->custom->modeIntroductionList['ALM']   = 'The concept is more complete and rigorous, and the function is more abundant. It is suitable for medium and large R&D teams';
 
 $lang->custom->features['program']              = 'Program';
@@ -324,3 +327,6 @@ $lang->custom->scrum->setConcept = 'Set concept';
 
 $lang->custom->reviewRules['allpass']  = 'All passed';
 $lang->custom->reviewRules['halfpass'] = 'More than half passed';
+
+$lang->custom->limitTaskDate['0'] = 'Unlimited';
+$lang->custom->limitTaskDate['1'] = 'Limited to the execution begin and end date range';

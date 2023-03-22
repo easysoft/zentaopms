@@ -2,7 +2,6 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/project.class.php';
-$db->switchDB();
 su('admin');
 
 /**
@@ -34,4 +33,3 @@ $projects = $project->batchUpdate($data);
 r(count($projects)) && p()                              && e('3');                                      // 查看被编辑了的项目数量
 r($projects)        && p('11:name,parent,PM,begin,acl') && e('批量修改项目11,1,admin,2022-02-08,open'); // 查看被编辑了的项目11详情
 r($projects)        && p('12:name,parent,PM,begin,acl') && e('批量修改项目12,2,,2022-03-05,private');   // 查看被编辑了的项目12详情
-$db->restoreDB();

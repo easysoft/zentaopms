@@ -40,7 +40,7 @@
           </tr>
           <tr>
             <th class='w-140px'><?php echo $lang->product->line;?></th>
-            <td><?php echo html::select('line', $lines, $product->line, "class='form-control chosen'");?></td><td></td>
+            <td><?php echo html::select('line', $lines, $product->line, "class='form-control picker-select'");?></td><td></td>
           </tr>
           <?php endif;?>
           <tr>

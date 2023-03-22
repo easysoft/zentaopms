@@ -16,17 +16,17 @@ $lang->execution->id                  = $lang->executionCommon . '编号';
 $lang->execution->type                = $lang->executionCommon . '类型';
 $lang->execution->name                = $lang->executionCommon . '名称';
 $lang->execution->code                = $lang->executionCommon . '代号';
-$lang->execution->projectName         = '所属项目';
-$lang->execution->project             = '所属项目';
+$lang->execution->projectName         = '所属' . $lang->projectCommon;
+$lang->execution->project             = '所属' . $lang->projectCommon;
 $lang->execution->execId              = "{$lang->execution->common}编号";
 $lang->execution->execName            = "{$lang->execution->common}名称";
 $lang->execution->execCode            = "{$lang->execution->common}代号";
 $lang->execution->execType            = "{$lang->execution->common}类型";
-$lang->execution->lifetime            = '项目周期';
+$lang->execution->lifetime            = $lang->projectCommon . '周期';
 $lang->execution->attribute           = '阶段类型';
 $lang->execution->percent             = '工作量占比';
 $lang->execution->milestone           = '里程碑';
-$lang->execution->parent              = '所属项目';
+$lang->execution->parent              = '所属' . $lang->projectCommon;
 $lang->execution->path                = '路径';
 $lang->execution->grade               = '层级';
 $lang->execution->output              = '输出';
@@ -128,7 +128,7 @@ $lang->execution->recent              = '近期访问：';
 $lang->execution->copyNoExecution     = '没有可用的' . $lang->executionCommon . '来复制';
 $lang->execution->noTeam              = '暂时没有团队成员';
 $lang->execution->or                  = '或';
-$lang->execution->selectProject       = '请选择项目';
+$lang->execution->selectProject       = '请选择' . $lang->projectCommon;
 $lang->execution->unfoldClosed        = '展开已结束';
 $lang->execution->editName            = '编辑名称';
 $lang->execution->setWIP              = '在制品数量设置（WIP）';
@@ -138,7 +138,7 @@ $lang->execution->batchCreateTask     = '批量建任务';
 $lang->execution->kanbanNoLinkProduct = "看板没有关联{$lang->productCommon}";
 $lang->execution->myTask              = "我的任务";
 $lang->execution->list                = '列表';
-$lang->execution->allProject          = '全部项目';
+$lang->execution->allProject          = '全部' . $lang->projectCommon;
 $lang->execution->method              = '管理方法';
 $lang->execution->sameAsParent        = "同父阶段";
 
@@ -148,12 +148,12 @@ $lang->execution->estimate = '预计';
 $lang->execution->consumed = '消耗';
 $lang->execution->left     = '剩余';
 
-$lang->execution->copyTeamTip        = "可以选择复制项目或{$lang->execution->common}团队的成员";
+$lang->execution->copyTeamTip        = "可以选择复制{$lang->projectCommon}或{$lang->execution->common}团队的成员";
 $lang->execution->daysGreaterProject = '可用工日不能大于执行的可用工日『%s』';
 $lang->execution->errorHours         = '可用工时/天不能大于『24』';
-$lang->execution->agileplusMethodTip = '融合敏捷项目创建执行时，支持迭代和看板两种管理方法。';
+$lang->execution->agileplusMethodTip = "融合敏捷{$lang->projectCommon}创建执行时，支持{$lang->executionCommon}和看板两种管理方法。";
 $lang->execution->typeTip            = '“综合”类型的父阶段可以创建其它类型的子级，其它父子层级的类型均一致。';
-$lang->execution->waterfallTip       = '瀑布项目和融合瀑布项目中，';
+$lang->execution->waterfallTip       = "瀑布{$lang->projectCommon}和融合瀑布{$lang->projectCommon}中，";
 
 $lang->execution->start    = "开始";
 $lang->execution->activate = "激活";
@@ -201,11 +201,11 @@ $lang->execution->statusList['suspended'] = '已挂起';
 $lang->execution->statusList['closed']    = '已关闭';
 
 global $config;
-$lang->execution->aclList['private'] = "私有（团队成员和项目负责人、干系人可访问）";
-$lang->execution->aclList['open']    = "继承项目访问权限（能访问当前项目，即可访问）";
+$lang->execution->aclList['private'] = "私有（团队成员和{$lang->projectCommon}负责人、干系人可访问）";
+$lang->execution->aclList['open']    = "继承{$lang->projectCommon}访问权限（能访问当前{$lang->projectCommon}，即可访问）";
 
 $lang->execution->kanbanAclList['private'] = '私有';
-$lang->execution->kanbanAclList['open']    = '继承项目';
+$lang->execution->kanbanAclList['open']    = "继承{$lang->projectCommon}";
 
 $lang->execution->storyPoint = '故事点';
 
@@ -227,7 +227,6 @@ $lang->execution->build                     = '所有版本';
 $lang->execution->testtask                  = '测试单';
 $lang->execution->burn                      = '燃尽图';
 $lang->execution->computeBurn               = '更新燃尽图';
-$lang->execution->CFD                       = '累积流图';
 $lang->execution->computeCFD                = '更新累积流图';
 $lang->execution->burnData                  = '燃尽图数据';
 $lang->execution->fixFirst                  = '修改首天工时';
@@ -286,7 +285,7 @@ $lang->execution->importPlanStory           = '创建' . $lang->executionCommon 
 $lang->execution->importEditPlanStory       = '编辑' . $lang->executionCommon . '成功！\n是否导入计划关联的相关' . $lang->SRCommon . '？导入时将自动过滤掉草稿状态的' . $lang->SRCommon . '。';
 $lang->execution->importBranchPlanStory     = '创建' . $lang->executionCommon . '成功！\n是否导入计划关联的相关' . $lang->SRCommon . '？导入时将只关联本' . $lang->executionCommon . '所关联分支的激活需求。';
 $lang->execution->importBranchEditPlanStory = '编辑' . $lang->executionCommon . '成功！\n是否导入计划关联的相关' . $lang->SRCommon . '？导入时将只关联本' . $lang->executionCommon . '所关联分支的激活需求。';
-$lang->execution->needLinkProducts          = '该执行还未关联任何产品，相关功能无法使用，请先关联产品后再试。';
+$lang->execution->needLinkProducts          = "该执行还未关联任何{$lang->productCommon}，相关功能无法使用，请先关联{$lang->productCommon}后再试。";
 $lang->execution->iteration                 = '版本迭代';
 $lang->execution->iterationInfo             = '迭代%s次';
 $lang->execution->viewAll                   = '查看所有';
@@ -335,7 +334,7 @@ $lang->execution->aboveAllExecution = "以上所有{$lang->executionCommon}";
 
 /* 页面提示。*/
 $lang->execution->linkStoryByPlanTips  = "此操作会将所选计划下面的{$lang->SRCommon}全部关联到此{$lang->executionCommon}中";
-$lang->execution->batchCreateStoryTips = '请选择需要批量新建研发需求的产品';
+$lang->execution->batchCreateStoryTips = "请选择需要批量新建研发需求的{$lang->productCommon}";
 $lang->execution->selectExecution      = "请选择{$lang->execution->common}";
 $lang->execution->beginAndEnd          = '起止时间';
 $lang->execution->lblStats             = '工时统计';
@@ -355,7 +354,7 @@ $lang->execution->wbs                  = "分解任务";
 $lang->execution->batchWBS             = "批量分解";
 $lang->execution->howToUpdateBurn      = "<a href='https://api.zentao.net/goto.php?item=burndown&lang=zh-cn' target='_blank' title='如何更新燃尽图？' class='btn btn-link'>帮助 <i class='icon icon-help'></i></a>";
 $lang->execution->whyNoStories         = "看起来没有{$lang->SRCommon}可以关联。请检查下{$lang->executionCommon}关联的{$lang->productCommon}中有没有{$lang->SRCommon}，而且要确保它们已经审核通过。";
-$lang->execution->projectNoStories     = "看起来没有{$lang->SRCommon}可以关联。请检查下项目中有没有{$lang->SRCommon}，而且要确保它们已经审核通过。";
+$lang->execution->projectNoStories     = "看起来没有{$lang->SRCommon}可以关联。请检查下{$lang->projectCommon}中有没有{$lang->SRCommon}，而且要确保它们已经审核通过。";
 $lang->execution->productStories       = "{$lang->executionCommon}关联的{$lang->SRCommon}是{$lang->productCommon}{$lang->SRCommon}的子集，并且只有评审通过的{$lang->SRCommon}才能关联。请<a href='%s'>关联{$lang->SRCommon}</a>。";
 $lang->execution->haveBranchDraft      = "导入完成！有%s条非激活状态或不是{$lang->executionCommon}关联分支的{$lang->SRCommon}无法导入";
 $lang->execution->haveDraft            = "导入完成！有%s条非激活状态的{$lang->SRCommon}无法导入";
@@ -375,28 +374,27 @@ $lang->execution->noExecution          = "暂时没有{$lang->executionCommon}�
 $lang->execution->noExecutions         = "暂时没有{$lang->execution->common}。";
 $lang->execution->noPrintData          = "暂无数据可打印";
 $lang->execution->noMembers            = '暂时没有团队成员。';
-$lang->execution->workloadTotal        = "工作量占比累计不应当超过100%s, 当前产品下的工作量之和为%s";
-// $lang->execution->linkProjectStoryTip = "(关联{$lang->SRCommon}来源于项目下所关联的{$lang->SRCommon})";
-$lang->execution->linkAllStoryTip      = "(项目下还未关联{$lang->SRCommon}，可直接关联该{$lang->execution->common}所关联产品的{$lang->SRCommon})";
+$lang->execution->workloadTotal        = "工作量占比累计不应当超过100%s, 当前{$lang->productCommon}下的工作量之和为%s";
+$lang->execution->linkAllStoryTip      = "({$lang->projectCommon}下还未关联{$lang->SRCommon}，可直接关联该{$lang->execution->common}所关联{$lang->productCommon}的{$lang->SRCommon})";
 $lang->execution->copyTeamTitle        = "选择一个{$lang->project->common}或{$lang->execution->common}团队";
 
 /* 交互提示。*/
 $lang->execution->confirmDelete                = "您确定删除{$lang->executionCommon}[%s]吗？";
 $lang->execution->confirmUnlinkMember          = "您确定从该{$lang->executionCommon}中移除该用户吗？";
 $lang->execution->confirmUnlinkStory           = "移除该{$lang->SRCommon}后，该{$lang->SRCommon}关联的用例将被移除，该{$lang->SRCommon}关联的任务将被取消，请确认。";
-$lang->execution->confirmSync                  = "修改所属项目后,为了保持数据的一致性，该执行所关联的产品、需求、团队和白名单数据将会同步到新的项目中，请知悉。";
-$lang->execution->confirmUnlinkExecutionStory  = "您确定从该项目中移除该{$lang->SRCommon}吗？";
-$lang->execution->notAllowedUnlinkStory        = "该{$lang->SRCommon}已经与项目下{$lang->executionCommon}相关联，请从{$lang->executionCommon}中移除后再操作。";
+$lang->execution->confirmSync                  = "修改所属{$lang->projectCommon}后,为了保持数据的一致性，该执行所关联的{$lang->productCommon}、{$lang->SRCommon}、团队和白名单数据将会同步到新的{$lang->projectCommon}中，请知悉。";
+$lang->execution->confirmUnlinkExecutionStory  = "您确定从该{$lang->projectCommon}中移除该{$lang->SRCommon}吗？";
+$lang->execution->notAllowedUnlinkStory        = "该{$lang->SRCommon}已经与{$lang->projectCommon}下{$lang->executionCommon}相关联，请从{$lang->executionCommon}中移除后再操作。";
 $lang->execution->notAllowRemoveProducts       = "该{$lang->productCommon}中的{$lang->SRCommon}%s已与该{$lang->executionCommon}进行了关联，请取消关联后再操作。";
 $lang->execution->errorNoLinkedProducts        = "该{$lang->executionCommon}没有关联的{$lang->productCommon}，系统将转到{$lang->productCommon}关联页面";
 $lang->execution->errorSameProducts            = "{$lang->executionCommon}不能关联多个相同的{$lang->productCommon}。";
 $lang->execution->errorSameBranches            = "{$lang->executionCommon}不能关联多个相同的分支。";
-$lang->execution->errorBegin                   = "{$lang->executionCommon}的开始时间不能小于所属项目的开始时间%s。";
-$lang->execution->errorEnd                     = "{$lang->executionCommon}的截止时间不能大于所属项目的结束时间%s。";
-$lang->execution->errorLetterProject           = "{$lang->executionCommon}的计划开始时间不能小于所属项目的计划开始时间%s。";
-$lang->execution->errorGreaterProject          = "{$lang->executionCommon}的计划完成时间不能大于所属项目的计划完成时间%s。";
-$lang->execution->errorCommonBegin             = $lang->executionCommon . '开始日期应大于等于项目的开始日期：%s。';
-$lang->execution->errorCommonEnd               = $lang->executionCommon . '截止日期应小于等于项目的截止日期：%s。';
+$lang->execution->errorBegin                   = "{$lang->executionCommon}的开始时间不能小于所属{$lang->projectCommon}的开始时间%s。";
+$lang->execution->errorEnd                     = "{$lang->executionCommon}的截止时间不能大于所属{$lang->projectCommon}的结束时间%s。";
+$lang->execution->errorLetterProject           = "{$lang->executionCommon}的计划开始时间不能小于所属{$lang->projectCommon}的计划开始时间%s。";
+$lang->execution->errorGreaterProject          = "{$lang->executionCommon}的计划完成时间不能大于所属{$lang->projectCommon}的计划完成时间%s。";
+$lang->execution->errorCommonBegin             = $lang->executionCommon . "开始日期应大于等于{$lang->projectCommon}的开始日期：%s。";
+$lang->execution->errorCommonEnd               = $lang->executionCommon . "截止日期应小于等于{$lang->projectCommon}的截止日期：%s。";
 $lang->execution->errorLetterParent            = '计划开始时间不能小于所属父阶段的计划开始时间：%s。';
 $lang->execution->errorGreaterParent           = '计划完成时间不能大于所属父阶段的计划完成时间：%s。';
 $lang->execution->errorNameRepeat              = "相同父阶段的子%s名称不能相同";
@@ -419,7 +417,7 @@ $lang->execution->fixFirstWithLeft             = '修改剩余工时';
 $lang->execution->unfinishedExecution          = "该{$lang->executionCommon}下还有";
 $lang->execution->unfinishedTask               = "[%s]个未完成的任务，";
 $lang->execution->unresolvedBug                = "[%s]个未解决的bug，";
-$lang->execution->projectNotEmpty              = '所属项目不能为空。';
+$lang->execution->projectNotEmpty              = "所属{$lang->projectCommon}不能为空。";
 $lang->execution->confirmStoryToTask           = '%s' . $lang->SRCommon . '已经在当前' . $lang->execution->common . '中转了任务，请确认是否重复转任务。';
 $lang->execution->ge                           = "『%s』应当不小于实际开始时间『%s』。";
 $lang->execution->storyDragError               = "该{$lang->SRCommon}不是激活状态，请激活后再拖动";
@@ -431,7 +429,7 @@ $lang->execution->hasStartedTaskOrSubStage     = "%s%s下的任务或子阶段�
 $lang->execution->hasSuspendedOrClosedChildren = "阶段%s下的子阶段未全部挂起或关闭，无法修改，已过滤。";
 $lang->execution->hasNotClosedChildren         = "阶段%s下的子阶段未全部关闭，无法修改，已过滤。";
 $lang->execution->hasStartedTask               = "%s%s下的任务已经开始，无法修改，已过滤。";
-$lang->execution->cannotManageProducts         = "当前{$lang->execution->common}的{$lang->project->common}为%s{$lang->project->common}，不能关联产品。";
+$lang->execution->cannotManageProducts         = "当前{$lang->execution->common}的{$lang->project->common}为%s{$lang->project->common}，不能关联{$lang->productCommon}。";
 
 /* 统计。*/
 $lang->execution->charts = new stdclass();
@@ -525,7 +523,16 @@ $lang->execution->featureBar['task']['assignedtome'] = $lang->execution->assigne
 $lang->execution->featureBar['task']['myinvolved']   = $lang->execution->myInvolved;
 $lang->execution->featureBar['task']['assignedbyme'] = $lang->execution->assignedByMe;
 $lang->execution->featureBar['task']['needconfirm']  = "{$lang->SRCommon}变更";
-$lang->execution->featureBar['task']['status']       = $lang->execution->statusSelects[''];
+$lang->execution->featureBar['task']['status']       = $lang->more;
+
+$lang->execution->moreSelects['task']['status']['wait']         = '未开始';
+$lang->execution->moreSelects['task']['status']['doing']        = '进行中';
+$lang->execution->moreSelects['task']['status']['undone']       = '未完成';
+$lang->execution->moreSelects['task']['status']['finishedbyme'] = '我完成';
+$lang->execution->moreSelects['task']['status']['done']         = '已完成';
+$lang->execution->moreSelects['task']['status']['closed']       = '已关闭';
+$lang->execution->moreSelects['task']['status']['cancel']       = '已取消';
+$lang->execution->moreSelects['task']['status']['delayed']      = '已延期';
 
 $lang->execution->featureBar['all']['all']       = '全部';
 $lang->execution->featureBar['all']['undone']    = $lang->execution->undone;
@@ -539,8 +546,15 @@ $lang->execution->featureBar['bug']['unresolved'] = '未解决';
 
 $lang->execution->featureBar['build']['all'] = '全部版本';
 
+$lang->execution->featureBar['story']['all']       = '全部';
+$lang->execution->featureBar['story']['unclosed']  = '未关闭';
+$lang->execution->featureBar['story']['draft']     = '草稿';
+$lang->execution->featureBar['story']['reviewing'] = '评审中';
+
+$lang->execution->featureBar['testcase']['all'] = '全部';
+
 $lang->execution->myExecutions = '我参与的';
-$lang->execution->doingProject = '进行中的项目';
+$lang->execution->doingProject = "进行中的{$lang->projectCommon}";
 
 $lang->execution->kanbanColType['wait']      = $lang->execution->statusList['wait']      . '的' . $lang->execution->common;
 $lang->execution->kanbanColType['doing']     = $lang->execution->statusList['doing']     . '的' . $lang->execution->common;
@@ -557,7 +571,7 @@ $lang->execution->action = new stdclass();
 $lang->execution->action->opened               = '$date, 由 <strong>$actor</strong> 创建。$extra' . "\n";
 $lang->execution->action->managed              = '$date, 由 <strong>$actor</strong> 维护。$extra' . "\n";
 $lang->execution->action->edited               = '$date, 由 <strong>$actor</strong> 编辑。$extra' . "\n";
-$lang->execution->action->extra                = '相关产品为 %s。';
+$lang->execution->action->extra                = "相关{$lang->productCommon}为 %s。";
 $lang->execution->action->startbychildactivate = '$date, 系统判断由于子阶段激活，将' . $lang->executionCommon . '状态置为进行中。' . "\n";
 $lang->execution->action->waitbychilddelete    = '$date, 系统判断由于子阶段删除，将' . $lang->executionCommon . '状态置为未开始。' . "\n";
 $lang->execution->action->closebychilddelete   = '$date, 系统判断由于子阶段删除，将' . $lang->executionCommon . '状态置为已关闭。' . "\n";
@@ -640,5 +654,13 @@ $lang->execution->gantt->exportFail = '导出失败。';
 
 $lang->execution->boardColorList = array('#32C5FF', '#006AF1', '#9D28B2', '#FF8F26', '#7FBB00', '#424BAC', '#66c5f8', '#EC2761');
 
-$lang->execution->linkBranchStoryByPlanTips = "执行按计划关联需求时，只导入本执行所关联%s的激活状态的需求。";
-$lang->execution->linkNormalStoryByPlanTips = "执行按计划关联需求时，只导入激活状态的需求。";
+$lang->execution->linkBranchStoryByPlanTips = "{$lang->execution->common}按计划关联需求时，只导入本{$lang->execution->common}所关联%s的激活状态的需求。";
+$lang->execution->linkNormalStoryByPlanTips = "{$lang->execution->common}按计划关联需求时，只导入激活状态的需求。";
+
+$lang->execution->featureBar['dynamic']['all']       = '全部';
+$lang->execution->featureBar['dynamic']['today']     = '今天';
+$lang->execution->featureBar['dynamic']['yesterday'] = '昨天';
+$lang->execution->featureBar['dynamic']['thisWeek']  = '本周';
+$lang->execution->featureBar['dynamic']['lastWeek']  = '上周';
+$lang->execution->featureBar['dynamic']['thisMonth'] = '本月';
+$lang->execution->featureBar['dynamic']['lastMonth'] = '上月';

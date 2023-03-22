@@ -85,8 +85,8 @@ $lang->kanban->importExecution     = $lang->execution->common;
 $lang->kanban->importBuild         = '版本';
 $lang->kanban->importTicket        = '工单';
 $lang->kanban->allKanban           = '所有看板';
-$lang->kanban->allProjects         = '所有项目';
-$lang->kanban->allProducts         = '所有产品';
+$lang->kanban->allProjects         = '所有' . $lang->projectCommon;
+$lang->kanban->allProducts         = "所有{$lang->productCommon}";
 $lang->kanban->mine                = '我负责';
 $lang->kanban->alignment           = '列标题对齐方式';
 $lang->kanban->allUsers            = '加载所有用户';
@@ -127,8 +127,8 @@ $lang->kanban->confirmDeleteKanban = '您确认要删除该看板吗？';
 $lang->kanban->cardCountTip        = '请输入卡片数量';
 
 $lang->kanban->selectedKanban  = '请选择看板';
-$lang->kanban->selectedProduct = '请选择产品';
-$lang->kanban->selectedProject = '请选择项目';
+$lang->kanban->selectedProduct = "请选择{$lang->productCommon}";
+$lang->kanban->selectedProject = '请选择' . $lang->projectCommon;
 $lang->kanban->selectedLane    = '目标泳道';
 
 $lang->kanban->aclGroup['open']    = '公开';
@@ -315,10 +315,10 @@ $lang->kanbanspace->empty = '暂时没有空间';
 $lang->kanbanspace->aclList['open']    = '公开（有看板空间视图权限即可访问）';
 $lang->kanbanspace->aclList['private'] = '私有（只有看板空间负责人、团队成员、白名单可访问）';
 
-$lang->kanbanspace->featureBar['involved']    = '我参与的';
-$lang->kanbanspace->featureBar['cooperation'] = '协作空间';
-$lang->kanbanspace->featureBar['public']      = '公共空间';
-$lang->kanbanspace->featureBar['private']     = '私人空间';
+$lang->kanban->featureBar['space']['involved']    = '我参与的';
+$lang->kanban->featureBar['space']['cooperation'] = '协作空间';
+$lang->kanban->featureBar['space']['public']      = '公共空间';
+$lang->kanban->featureBar['space']['private']     = '私人空间';
 
 $lang->kanbanspace->typeList['cooperation'] = '协作空间';
 $lang->kanbanspace->typeList['public']      = '公共空间';

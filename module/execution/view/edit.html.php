@@ -87,23 +87,21 @@
             </div>
           </td>
         </tr>
-        <?php if($execution->type != 'kanban' or $project->model == 'waterfall' or $project->model == 'waterfallplus'):?>
+        <?php if($project->model == 'waterfall' or $project->model == 'waterfallplus'):?>
         <tr>
-          <th><?php echo $lang->execution->type;?></th>
+          <th><?php echo $lang->stage->type;?></th>
           <td>
-          <?php
-          if($project->model == 'waterfall' or $project->model == 'waterfallplus')
-          {
-              echo $enableOptionalAttr ? html::select('attribute', $lang->stage->typeList, $execution->attribute, "class='form-control chosen'") : zget($lang->stage->typeList, $execution->attribute);
-          }
-          elseif($execution->type != 'kanban')
-          {
-              echo html::select('lifetime', $lang->execution->lifeTimeList, $execution->lifetime, "class='form-control' onchange='showLifeTimeTips()'");
-          }
-          ?>
+          <?php echo $enableOptionalAttr ? html::select('attribute', $lang->stage->typeList, $execution->attribute, "class='form-control chosen'") : zget($lang->stage->typeList, $execution->attribute); ?>
           </td>
           <td>
             <icon class='icon icon-help' data-toggle='popover' data-trigger='focus hover' data-placement='right' data-tip-class='text-muted popover-sm' data-content="<?php echo $lang->execution->typeTip;?>"></icon>
+          </td>
+        </tr>
+        <?php elseif($execution->type != 'kanban'):?>
+        <tr>
+          <th><?php echo $lang->execution->type;?></th>
+          <td>
+          <?php echo html::select('lifetime', $lang->execution->lifeTimeList, $execution->lifetime, "class='form-control' onchange='showLifeTimeTips()'"); ?>
           </td>
         </tr>
         <?php endif;?>
@@ -170,7 +168,7 @@
                   <div class='table-col'>
                     <?php $hasBranch = $product->type != 'normal' and isset($branchGroups[$product->id]);?>
                     <div class='input-group <?php if($hasBranch) echo ' has-branch';?>'>
-                      <span class='input-group-addon'><?php echo $lang->product->common;?></span>
+                      <span class='input-group-addon'><?php echo $lang->productCommon;?></span>
                       <?php $disabled = ($execution->type == 'stage' and !$execution->division) ? "disabled='disabled'" : '';?>
                       <?php echo html::select("products[$i]", $allProducts, $product->id, "class='form-control chosen' $disabled onchange='loadBranches(this)' data-last='" . $product->id . "' data-type='" . $product->type . "'");?>
                       <?php if($execution->type == 'stage' and !$execution->division) echo html::hidden("products[$i]", $product->id);?>
@@ -221,7 +219,7 @@
                 <div class='table-row'>
                   <div class='table-col'>
                     <div class='input-group'>
-                      <span class='input-group-addon'><?php echo $lang->product->common;?></span>
+                      <span class='input-group-addon'><?php echo $lang->productCommon;?></span>
                       <?php echo html::select("products[0]", $allProducts, '', "class='form-control chosen' onchange='loadBranches(this)'");?>
                     </div>
                   </div>
@@ -261,7 +259,7 @@
                   <div class='table-col'>
                     <?php $hasBranch = $product->type != 'normal' and isset($branchGroups[$product->id]);?>
                     <div class='input-group <?php if($hasBranch) echo ' has-branch';?>'>
-                      <span class='input-group-addon'><?php echo $lang->product->common;?></span>
+                      <span class='input-group-addon'><?php echo $lang->productCommon;?></span>
                       <?php $disabled = ($project->model == 'waterfall' or $project->model == 'waterfallplus') ? "disabled='disabled'" : '';?>
                       <?php echo html::select("products[$i]", $allProducts, $product->id, "class='form-control chosen' $disabled onchange='loadBranches(this)' data-last='" . $product->id . "' data-type='" . $product->type . "'");?>
                       <?php if($execution->type == 'stage' and !$project->division) echo html::hidden("products[$i]", $product->id);?>

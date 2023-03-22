@@ -1,3 +1,3 @@
 <?php
 $lang->company->execution = 'Kanban';
-$lang->company->product   = 'Project';
+$lang->company->product   = $lang->projectCommon;

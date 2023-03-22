@@ -199,6 +199,9 @@ class project extends control
      */
     public function ajaxGetUnlinkTips($projectID, $account)
     {
+        $project = $this->project->getByID($projectID);
+        if(!$project->multiple) return;
+         
         $executions       = $this->loadModel('execution')->getByProject($projectID, 'undone', 0, true);
         $executionMembers = $this->dao->select('t1.root,t2.name')->from(TABLE_TEAM)->alias('t1')
             ->leftJoin(TABLE_EXECUTION)->alias('t2')->on('t1.root=t2.id')
@@ -2190,7 +2193,7 @@ class project extends control
             }
 
             $oldProducts = $this->product->getProducts($projectID);
-            if($project->multiple and $project->model != 'waterfall') $oldExecutionProducts = $this->dao->select('project,product')->from(TABLE_PROJECTPRODUCT)->where('project')->in(array_keys($executions))->fetchGroup('project', 'product');
+            if($project->multiple and $project->model != 'waterfall' and $project->model != 'waterfallplus') $oldExecutionProducts = $this->dao->select('project,product')->from(TABLE_PROJECTPRODUCT)->where('project')->in(array_keys($executions))->fetchGroup('project', 'product');
 
             $this->project->updateProducts($projectID);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
@@ -2216,7 +2219,7 @@ class project extends control
                 }
             }
 
-            if($project->multiple and $project->model != 'waterfall')
+            if($project->multiple and $project->model != 'waterfall' and $project->model != 'waterfallplus')
             {
                 $unlinkedProducts = array_diff($oldProductIDs, $newProductIDs);
                 if(!empty($unlinkedProducts))

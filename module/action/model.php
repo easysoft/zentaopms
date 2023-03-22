@@ -453,7 +453,7 @@ class actionModel extends model
             elseif($actionName == 'unlinkedfromexecution')
             {
                 $name = $this->dao->select('name')->from(TABLE_PROJECT)->where('id')->eq($action->extra)->fetch('name');
-                if($name) $action->extra = common::hasPriv('project', 'story') ? html::a(helper::createLink('project', 'story', "projectID=$action->extra"), "#$action->extra " . $name) : "#$action->extra " . $name;
+                if($name) $action->extra = common::hasPriv('execution', 'view') ? html::a(helper::createLink('execution', 'view', "executionID=$action->extra"), "#$action->extra " . $name) : "#$action->extra " . $name;
             }
             elseif($actionName == 'unlinkedfromproject')
             {
@@ -483,8 +483,18 @@ class actionModel extends model
             }
             elseif(strpos('feedback,ticket', $action->objectType) === false and $actionName == 'tostory')
             {
-                $title = $this->dao->select('title')->from(TABLE_STORY)->where('id')->eq($action->extra)->fetch('title');
-                if($title) $action->extra = common::hasPriv('story', 'view') ? html::a(helper::createLink('story', 'view', "storyID=$action->extra"), "#$action->extra " . $title) : "#$action->extra " . $title;
+                $productShadow = $this->dao->select('shadow')->from(TABLE_PRODUCT)->where('id')->in(trim($action->product, ','))->fetch('shadow');
+                $title         = $this->dao->select('title')->from(TABLE_STORY)->where('id')->eq($action->extra)->fetch('title');
+                $defaultExtra  = "#$action->extra " . $title;
+                if($productShadow)
+                {
+                    $projectID = $this->dao->select('project')->from(TABLE_PROJECTSTORY)->where('story')->eq($action->extra)->fetch('project');
+                    if($title) $action->extra = (common::hasPriv('projectstory', 'view') and $projectID) ? html::a(helper::createLink('projectstory', 'view', "storyID={$action->extra}&projectID=$projectID"), $defaultExtra) : $defaultExtra;
+                }
+                else
+                {
+                    if($title) $action->extra = common::hasPriv('story', 'view') ?  html::a(helper::createLink('story', 'view', "storyID=$action->extra"), $defaultExtra) : $defaultExtra;
+                }
             }
             elseif($actionName == 'importedcard')
             {
@@ -939,7 +949,7 @@ class actionModel extends model
             else
             {
                 if($actionType == 'restoredsnapshot' && in_array($action->objectType, array('vm', 'zanode')) && $value == 'defaultSnap') $value = $this->lang->$objectType->snapshot->defaultSnapName;
-                
+
                 $desc = str_replace('$' . $key, $value, $desc);
             }
         }

@@ -9,7 +9,7 @@
  * @version     $Id: zh-cn.php 4729 2013-05-03 07:53:55Z chencongzhi520@gmail.com $
  * @link        http://www.zentao.net
  */
-$lang->programplan->common        = '项目阶段';
+$lang->programplan->common        = $lang->projectCommon . '阶段';
 $lang->programplan->browse        = '浏览甘特图';
 $lang->programplan->gantt         = '甘特图';
 $lang->programplan->ganttEdit     = '甘特图编辑';
@@ -67,13 +67,13 @@ $lang->programplan->settingGantt     = '设置甘特图';
 $lang->programplan->viewSetting      = '显示设置';
 $lang->programplan->desc             = '描述';
 
-$lang->programplan->errorBegin       = '阶段的开始时间不能小于所属项目的开始时间%s';
-$lang->programplan->errorEnd         = '阶段的结束时间不能大于所属项目的结束时间%s';
+$lang->programplan->errorBegin       = "阶段的开始时间不能小于所属{$lang->projectCommon}的开始时间%s";
+$lang->programplan->errorEnd         = "阶段的结束时间不能大于所属{$lang->projectCommon}的结束时间%s";
 $lang->programplan->emptyBegin       = '『计划开始』日期不能为空';
 $lang->programplan->emptyEnd         = '『计划完成』日期不能为空';
 $lang->programplan->checkBegin       = '『计划开始』应当为合法的日期';
 $lang->programplan->checkEnd         = '『计划完成』应当为合法的日期';
-$lang->programplan->methodTip        = '您可以在该阶段下选择继续创建阶段或创建迭代/看板进行工作。迭代/看板不支持继续拆分。';
+$lang->programplan->methodTip        = "您可以在该阶段下选择继续创建阶段或创建{$lang->executionCommon}/看板进行工作。{$lang->executionCommon}/看板不支持继续拆分。";
 
 $lang->programplan->milestoneList[1] = '是';
 $lang->programplan->milestoneList[0] = '否';

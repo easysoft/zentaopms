@@ -60,7 +60,9 @@
         <tr class='hide'>
           <th class='w-120px'><?php echo $lang->build->builds;?></th>
           <td id='buildBox'><?php echo html::select('builds[]', array(), '', "class='form-control chosen' multiple data-placeholder='{$lang->build->placeholder->multipleSelect}'");?></td>
-          <td><?php echo $lang->build->notice->autoRelation;?></td>
+          <td>
+            <icon class='icon icon-help' data-toggle='popover' data-trigger='focus hover' data-placement='right' data-tip-class='text-muted popover-sm' data-content="<?php echo $lang->build->notice->autoRelation;?>"></icon>
+          </td>
         </tr>
         <tr>
           <th class='w-120px'><?php echo $lang->build->name;?></th>

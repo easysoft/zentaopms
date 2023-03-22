@@ -34,16 +34,38 @@ class mr extends control
         $this->app->loadClass('pager', $static = true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
-        $repos = $this->loadModel('repo')->getListBySCM(array('Gitlab', 'Gitea', 'Gogs'));
-        if(empty($repos)) $this->locate($this->repo->createLink('create'));
+        $repoCount = $this->dao->select('*')->from(TABLE_REPO)->where('deleted')->eq('0')
+            ->andWhere('SCM')->in(array('Gitlab', 'Gitea', 'Gogs'))
+            ->andWhere('synced')->eq(1)
+            ->orderBy('id')
+            ->count();
+        if($repoCount == 0) $this->locate($this->loadModel('repo')->createLink('create'));
 
-        $repoID = $this->repo->saveState($repoID, $objectID);
+        $repoID = $this->loadModel('repo')->saveState($repoID, $objectID);
         $repo   = $this->repo->getRepoByID($repoID);
-        if(!in_array(strtolower($repo->SCM), $this->config->mr->gitServiceList)) $repo = $repos[0];
+        if(!in_array(strtolower($repo->SCM), $this->config->mr->gitServiceList))
+        {
+            $repoID = $this->dao->select('id')->from(TABLE_REPO)->where('deleted')->eq('0')->andWhere('SCM')->in(array('Gitlab', 'Gitea', 'Gogs'))->andWhere('synced')->eq(1)->orderBy('id')->fetch('id');
+            $repo   = $this->repo->getRepoByID($repoID);
+        }
         $this->loadModel('ci')->setMenu($repo->id);
 
-        $projects = $this->mr->getAllProjects($repoID, $repo->SCM);
-        $MRList   = $this->mr->getList($mode, $param, $orderBy, $pager, empty($projects) ? false : $projects, $repoID);
+        $filterProjects = empty($repo->serviceProject) ? array() : array($repo->serviceHost => array($repo->serviceProject => $repo->serviceProject));
+        $MRList         = $this->mr->getList($mode, $param, $orderBy, $pager, $filterProjects, $repoID);
+        if($repo->SCM == 'Gitlab')
+        {
+            $projectIds = array();
+            foreach($MRList as $MR)
+            {
+                $projectIds[$MR->sourceProject] = $MR->sourceProject;
+                $projectIds[$MR->targetProject] = $MR->targetProject;
+            }
+            $projects = $this->mr->getGitlabProjects($repo->serviceHost, $projectIds);
+        }
+        else
+        {
+            $projects = $this->mr->getAllProjects($repoID, $repo->SCM);
+        }
 
         /* Save current URI to session. */
         $this->session->set('mrList', $this->app->getURI(true), 'repo');
@@ -87,7 +109,6 @@ class mr extends control
         $this->view->param      = $param;
         $this->view->repoID     = $repoID;
         $this->view->objectID   = $objectID;
-        $this->view->repos      = $repos;
         $this->view->repo       = $repo;
         $this->view->orderBy    = $orderBy;
         $this->view->openIDList = $openIDList;
