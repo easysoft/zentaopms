@@ -2802,16 +2802,16 @@ EOT;
     /**
      * Get docs by search.
      *
-     * @param  string $type
+     * @param  string $type product|project|execution|custom|book
      * @param  int    $objectID
      * @param  int    $libID
      * @param  int    $queryID
+     * @param  string $orderBy
      * @param  object $pager
-     *
      * @access public
      * @return array
      */
-    public function getDocsBySearch($type, $objectID, $libID, $queryID, $pager)
+    public function getDocsBySearch($type, $objectID, $libID, $queryID, $orderBy = 'id_desc', $pager = null)
     {
         $lib       = $this->getLibById($libID);
         $queryName = $type . 'libDocQuery';
@@ -2842,7 +2842,7 @@ EOT;
             ->andWhere($query)
             ->andWhere('lib')->in(array_keys($libs))
             ->beginIF($this->config->doc->notArticleType)->andWhere('type')->notIN($this->config->doc->notArticleType)->fi()
-            ->orderBy('id_desc')
+            ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll('id');
     }
