@@ -12,7 +12,10 @@
 ?>
 <style>
 #docListForm table tr {border: none;}
-#mainContent .c-id {width: 70px;}
+#docListForm th.c-id {width: 72px;}
+#docListForm th.c-user {width: 96px;}
+#docListForm th.c-datetime {width: 132px;}
+#docListForm th.c-actions {width: 84px; padding-left: 15px;}
 </style>
 <?php if(empty($docs)):?>
 <div class="table-empty-tip">
@@ -73,7 +76,7 @@
           <th class="c-datetime"><?php common::printOrderLink('addedDate', $orderBy, $vars, $lang->doc->addedDate, '', 'tableContents');?></th>
           <th class="c-user"><?php common::printOrderLink('editedBy', $orderBy, $vars, $lang->doc->editedBy, '', 'tableContents');?></th>
           <th class="c-datetime"><?php common::printOrderLink('editedDate', $orderBy, $vars, $lang->doc->editedDate, '', 'tableContents');?></th>
-          <th class="w-90px text-center"><?php echo $lang->actions;?></th>
+          <th class="c-actions"><?php echo $lang->actions;?></th>
         </tr>
       </thead>
       <tbody>
@@ -108,9 +111,9 @@
           <?php endif;?>
           </td>
           <td class="c-user"><?php echo zget($users, $doc->addedBy);?></td>
-          <td class="c-datetime"><?php echo formatTime($doc->addedDate, 'y-m-d');?></td>
+          <td class="c-datetime"><?php echo formatTime($doc->addedDate, 'Y-m-d');?></td>
           <td class="c-user"><?php echo zget($users, $doc->editedBy);?></td>
-          <td class="c-datetime"><?php echo formatTime($doc->editedDate, 'y-m-d');?></td>
+          <td class="c-datetime"><?php echo formatTime($doc->editedDate, 'Y-m-d');?></td>
           <td class="c-actions">
             <?php if(common::canBeChanged('doc', $doc)):?>
             <?php common::printLink('doc', 'edit', "docID=$doc->id&comment=false", "<i class='icon icon-edit'></i>", '', "title='{$lang->edit}' class='btn btn-link'", true, false)?>

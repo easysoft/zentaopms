@@ -77,8 +77,8 @@
               <?php endif;?>
               <td class="c-num"><?php echo $doc->fileSize ? $doc->fileSize : '-';?></td>
               <td class="c-user"><?php echo zget($users, $doc->addedBy);?></td>
-              <td class="c-datetime"><?php echo formatTime($doc->addedDate, 'y-m-d');?></td>
-              <td class="c-datetime"><?php echo formatTime($doc->editedDate, 'y-m-d');?></td>
+              <td class="c-datetime"><?php echo formatTime($doc->addedDate, 'Y-m-d');?></td>
+              <td class="c-datetime"><?php echo formatTime($doc->editedDate, 'Y-m-d');?></td>
               <td class="c-actions">
                 <?php if(common::canBeChanged('doc', $doc)):?>
                 <?php if(common::hasPriv('doc', 'collect')):?>
