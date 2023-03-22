@@ -3,7 +3,7 @@ $lang->demandpool = new stdclass();
 $lang->demandpool->common = 'Demandpool';
 
 $lang->demand = new stdclass();
-$lang->demand->common = 'demand';
+$lang->demand->common = 'Demand';
 
 $lang->projectInit = new stdclass();
 $lang->projectInit->common = 'Project approval';
