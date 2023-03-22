@@ -140,24 +140,26 @@ $lang->doc->api              = 'API';
 
 $lang->doc->collectAction = 'Add Favorite';
 
-$lang->doc->libName          = 'Name';
-$lang->doc->libType          = 'Kategorie';
-$lang->doc->custom           = 'Eigene Dok Bibliothek';
-$lang->doc->customAB         = 'Eigene Bibliothek';
-$lang->doc->createLib        = 'Create Library';
-$lang->doc->allLibs          = 'Bibliothek';
-$lang->doc->objectLibs       = "{$lang->productCommon}/{$lang->executionCommon} Bibliothek Liste";
-$lang->doc->showFiles        = 'Dok Bibliothek';
-$lang->doc->editLib          = 'Edit Document Library';
-$lang->doc->deleteLib        = 'Bibliothek löschen';
-$lang->doc->fixedMenu        = 'Im Menü fixieren';
-$lang->doc->removeMenu       = 'Vom Menü entfernen';
-$lang->doc->search           = 'Suche';
-$lang->doc->allCollections   = 'All Collections';
-$lang->doc->keywordsTips     = 'Please use commas to separate multiple keywords.';
-$lang->doc->sortLibs         = 'Sort Libs';
-$lang->doc->titlePlaceholder = 'Please enter the title';
-$lang->doc->confirm          = 'Confirm';
+$lang->doc->libName           = 'Name';
+$lang->doc->libType           = 'Kategorie';
+$lang->doc->custom            = 'Eigene Dok Bibliothek';
+$lang->doc->customAB          = 'Eigene Bibliothek';
+$lang->doc->createLib         = 'Create Library';
+$lang->doc->allLibs           = 'Bibliothek';
+$lang->doc->objectLibs        = "{$lang->productCommon}/{$lang->executionCommon} Bibliothek Liste";
+$lang->doc->showFiles         = 'Dok Bibliothek';
+$lang->doc->editLib           = 'Edit Document Library';
+$lang->doc->deleteLib         = 'Bibliothek löschen';
+$lang->doc->fixedMenu         = 'Im Menü fixieren';
+$lang->doc->removeMenu        = 'Vom Menü entfernen';
+$lang->doc->search            = 'Suche';
+$lang->doc->allCollections    = 'All Collections';
+$lang->doc->keywordsTips      = 'Please use commas to separate multiple keywords.';
+$lang->doc->sortLibs          = 'Sort Libs';
+$lang->doc->titlePlaceholder  = 'Please enter the title';
+$lang->doc->confirm           = 'Confirm';
+$lang->doc->docSummary        = 'Total: <strong>%s</strong>.';
+$lang->doc->docCheckedSummary = 'Seleted: <strong>%total%</strong>.';
 
 global $config;
 /* Query condition list. */

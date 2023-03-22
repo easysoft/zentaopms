@@ -56,7 +56,7 @@
 <?php else:?>
 <?php $vars = "type=$type&objectID=$objectID&$libID=$libID&moduleID=$moduleID&browseType=$browseType&orderBy=%s&param=$param&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}";?>
 <div class="panel">
-  <form class='main-table' method='post' id='docListForm' data-ride="table">
+  <form class='main-table' method='post' id='docListForm'>
     <table class="table table-borderless table-hover table-files table-fixed no-margin  has-sort-head table-fixed">
       <thead>
         <tr>
@@ -126,9 +126,28 @@
       <?php if($canExport):?>
       <div class="checkbox-primary check-all"><label><?php echo $lang->selectAll?></label></div>
       <?php endif;?>
+      <div class="table-statistic"><?php echo sprintf($lang->doc->docSummary, count($docs));?></div>
       <?php $pager->show('right', 'pagerjs');?>
     </div>
     <?php endif;?>
   <form>
 </div>
 <?php endif;?>
+<script>
+$(function()
+{
+    var pageSummary    = '<?php echo sprintf($lang->doc->docSummary, count($docs));?>';
+    var checkedSummary = '<?php echo $lang->doc->docCheckedSummary?>';
+    $('#docListForm').table(
+    {
+        replaceId: 'docIDList',
+        statisticCreator: function(table)
+        {
+            var $table       = table.getTable();
+            var $checkedRows = $table.find('tbody>tr.checked');
+            var checkedTotal = $checkedRows.length;
+            return checkedTotal ? checkedSummary.replace('%total%', checkedTotal) : pageSummary;
+        }
+    });
+});
+</script>
