@@ -930,7 +930,7 @@ class baseControl
      */
     public function render($moduleName = '', $methodName = '')
     {
-        if(isset($_GET['o']))
+        if(isset($_GET['zin']) && $_GET['zin'] == '0')
         {
             $this->display($moduleName, $methodName);
             return;

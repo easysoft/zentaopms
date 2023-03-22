@@ -3,7 +3,8 @@ namespace zin;
 
 class avatar extends wg
 {
-    protected static $defineProps = array(
+    protected static $defineProps = array
+    (
         'className?:string',
         'style?:array',
         'size?:number=32',

@@ -22,21 +22,17 @@ if(!\commonModel::isTutorialMode())
 }
 
 /* Create Button of toolbar. */
-$createStoryLink = createLink('story', 'create', "product=$productID&branch=$branch&moduleID=$moduleID&storyID=0&projectID=$projectID&bugID=0&planID=0&todoID=0&extra=&storyType=$storyType");
-$batchCreateLink = createLink('story', 'batchCreate', "productID=$productID&branch=$branch&moduleID=$moduleID&storyID=0&project=$projectID&plan=0&storyType=$storyType");
-
-$buttonLink  = '';
-$buttonTitle = '';
-$buttonType  = $from == 'project' ? 'btn-secondary' : 'btn-primary';
-if(\common::hasPriv($storyType, 'batchCreate'))
+$createBtnLink  = '';
+$createBtnTitle = '';
+if(hasPriv($storyType, 'create'))
 {
-    $buttonLink  = empty($productID) ? '' : $batchCreateLink;
-    $buttonTitle = $lang->story->batchCreate;
+    $createBtnLink  = createLink('story', 'create', "product=$productID&branch=$branch&moduleID=$moduleID&storyID=0&projectID=$projectID&bugID=0&planID=0&todoID=0&extra=&storyType=$storyType");
+    $createBtnTitle = $lang->story->create;
 }
-if(\common::hasPriv($storyType, 'create'))
+elseif(hasPriv($storyType, 'batchCreate'))
 {
-    $buttonLink  = $createStoryLink;
-    $buttonTitle = $lang->story->create;
+    $createBtnLink  = empty($productID) ? '' : createLink('story', 'batchCreate', "productID=$productID&branch=$branch&moduleID=$moduleID&storyID=0&project=$projectID&plan=0&storyType=$storyType");
+    $createBtnTitle = $lang->story->batchCreate;
 }
 
 /* DataTable. */
@@ -107,10 +103,10 @@ toolbar
     ))),
     item(set(array
     (
-        'text'  => $buttonTitle,
+        'text'  => $createBtnTitle,
         'icon'  => 'plus',
-        'class' => 'primary',
-        'url'   => $buttonLink
+        'class' => $from == 'project' ? 'secondary' : 'primary',
+        'url'   => $createBtnLink
     )))
 );
 

@@ -245,7 +245,7 @@ function getPageInfo(win)
         else
         {
             if($table.find('td .checkbox-primary').length) setting.plugins.push('checkable');
-            if($table.hasClass('has-sort-head"')) setting.plugins.push('sortable');
+            if($table.hasClass('has-sort-head')) setting.plugins.push('sortable');
             if($table.find('tbody>tr.table-parent,tbody>tr.has-child').length) setting.plugins.push('nested');
         }
         if(setting.plugins.includes('checkable'))
