@@ -70,10 +70,8 @@ $(function()
            {
                $('#modules').find('li.can-sort').each(function()
                {
-                   var $li = $(this);
-
-                   var item = $li.data();
-                   '<?php echo $type;?>' == 'book' ? orders['sort[' + item.id + ']'] = $li.attr('data-order') || item.order : orders['orders[' + item.id + ']'] = $li.attr('data-order') || item.order;
+                   var item = $(this).data();
+                   '<?php echo $type;?>' == 'book' ? orders['sort[' + item.id + ']'] = item.order || item.order : orders['orders[' + item.id + ']'] = item.order || item.order;
                });
 
                link = createLink('tree', 'updateOrder');
@@ -140,11 +138,11 @@ $(function()
     function renderDropdown(option)
     {
         var libClass = '.libDorpdown';
-        if(option.id != 'dropDownLibrary') libClass = '.moduleDorpdown';
+        if(option.type != 'dropDownLibrary') libClass = '.moduleDorpdown';
         if($(libClass).find('li').length == 0) return '';
 
-        var dropdown = '<ul class="dropdown-menu dropdown-in-tree" id="' + option.id + '" style="display: unset; left:' + option.left + 'px; top:' + option.top + 'px;">';
-        dropdown += $(libClass).html();
+        var dropdown = '<ul class="dropdown-menu dropdown-in-tree" id="' + option.type + '" style="display: unset; left:' + option.left + 'px; top:' + option.top + 'px;">';
+        dropdown += $(libClass).html().replace(/%libID%/g, option.libID).replace(/%module%/g, option.moduleID);
         dropdown += '</ul>';
         return dropdown;
     };
@@ -152,9 +150,9 @@ $(function()
     function refreshDropdown(option)
     {
         $('#' + option.id).css({
-        'display': 'unset',
-        'left': option.left,
-        'top': option.top
+            'display': 'unset',
+            'left': option.left,
+            'top': option.top
         });
     };
 
@@ -163,10 +161,25 @@ $(function()
         $('.dropdown-in-tree').css('display', 'none');
         var isCatalogue = $(this).attr('data-isCatalogue') === 'false' ? false : true;
         var dropDownID  = isCatalogue ? 'dropDownCatalogue' : 'dropDownLibrary';
+        var libID       = 0;
+        var moduleID    = 0;
+        var $module     = $(this).closest('a');
+        if($module.hasClass('lib'))
+        {
+            libID = $module.data('id');
+        }
+        else
+        {
+            moduleID = $module.data('id');
+            libID    = $module.closest('.lib').data('id');
+        }
+
         var option = {
-            left: e.pageX,
-            top: e.pageY,
-            id: dropDownID
+            left     : e.pageX,
+            top      : e.pageY,
+            type     : dropDownID,
+            libID    : libID,
+            moduleID : moduleID
         };
         if (!$('#' + dropDownID).length)
         {
@@ -182,10 +195,7 @@ $(function()
 
     $('body').on('click', function(e)
     {
-        if(!$.contains(e.target, $('.dropdown-in-tree')))
-        {
-            $('.dropdown-in-tree').css('display', 'none');
-        }
+        if(!$.contains(e.target, $('.dropdown-in-tree'))) $('.dropdown-in-tree').css('display', 'none');
     });
 
     function initSplitRow()
@@ -209,10 +219,7 @@ $(function()
             if (!$spliter.length)
             {
                 $spliter = $(options.spliter);
-                if (!$spliter.parent().length)
-                {
-                    $spliter.insertAfter($firstCol);
-                }
+                if (!$spliter.parent().length) $spliter.insertAfter($firstCol);
             }
             var spliterWidth      = $spliter.width();
             var minFirstColWidth  = $firstCol.data('min-width');
@@ -285,8 +292,8 @@ $(function()
         {
             return this.each(function()
             {
-                var $this = $(this);
-                var data = $this.data(NAME);
+                var $this   = $(this);
+                var data    = $this.data(NAME);
                 var options = typeof option == 'object' && option;
                 if(!data) $this.data(NAME, (data = new SplitRow(this, options)));
             });
