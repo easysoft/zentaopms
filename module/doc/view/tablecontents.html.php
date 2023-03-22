@@ -69,9 +69,7 @@
   <div id='sideBar' class="panel side side-col col overflow-auto flex-none" data-min-width="150">
     <div id="fileTree" class="file-tree"></div>
   </div>
-  <div id="spliter" class="spliter col-spliter sidebar-toggle">
-    <i class="icon icon-angle-left"></i>
-  </div>
+  <div id="spliter" class="spliter col-spliter sidebar-toggle"></div>
   <div class="main-col flex-full col overflow-auto flex-auto" data-min-width="500">
     <div class="cell<?php if($browseType == 'bySearch') echo ' show';?>" style="min-width: 400px" id="queryBox" data-module=<?php echo $type . $libType . 'Doc';?>></div>
     <?php
@@ -93,7 +91,7 @@
 <div class='hidden' id='dropDownData'>
   <div class='libDorpdown'>
     <?php if(common::hasPriv('tree', 'browse')):?>
-    <li data-method="addCatalogue"><a><i class="icon icon-controls"></i><?php echo $lang->doc->libDropdown['addModule'];?></a></li>
+    <li data-method="addCataLib" data-type="add"><a><i class="icon icon-controls"></i><?php echo $lang->doc->libDropdown['addModule'];?></a></li>
     <?php endif;?>
     <?php if(common::hasPriv('doc', 'editLib')):?>
     <li data-method="editLib"><a href='<?php echo inlink('editLib', 'libID=%libID%');?>' class='iframe'><i class="icon icon-edit"></i><?php echo $lang->doc->libDropdown['editLib'];?></a></li>
@@ -104,8 +102,8 @@
   </div>
   <div class='moduleDorpdown'>
     <?php if(common::hasPriv('tree', 'browse')):?>
-    <li data-method="addCata"><a><i class="icon icon-controls"></i><?php echo $lang->doc->libDropdown['addSameModule'];?></a></li>
-    <li data-method="addCataChild"><a><i class="icon icon-edit"></i><?php echo $lang->doc->libDropdown['addSubModule'];?></a></li>
+    <li data-method="addCata" data-type="add"><a><i class="icon icon-controls"></i><?php echo $lang->doc->libDropdown['addSameModule'];?></a></li>
+    <li data-method="addCataChild" data-type="add"><a><i class="icon icon-edit"></i><?php echo $lang->doc->libDropdown['addSubModule'];?></a></li>
     <li data-method="editCata"><a href='<?php echo helper::createLink('tree', 'edit', 'moduleID=%moduleID%');?>' class='iframe'><i class="icon icon-edit"></i><?php echo $lang->doc->libDropdown['editModule'];?></a></li>
     <li data-method="deleteCata"><a href='<?php echo helper::createLink('tree', 'delete', 'rootID=%libID%&moduleID=%moduleID%');?>' target='hiddenwin'><i class="icon icon-trash"></i><?php echo $lang->doc->libDropdown['delModule'];?></a></li>
     <?php endif;?>
