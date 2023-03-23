@@ -1186,7 +1186,7 @@ class storyModel extends model
             }
 
             $changes = common::createChanges($oldStory, $story);
-            if(empty($files) and $this->post->uid != '' and isset($_SESSION['album']['used'][$this->post->uid])) $files = $this->file->getPairs($_SESSION['album']['used'][$this->post->uid]);
+            if($this->post->uid != '' and isset($_SESSION['album']['used'][$this->post->uid])) $files = $this->file->getPairs($_SESSION['album']['used'][$this->post->uid]);
 
             if($this->post->comment != '' or !empty($changes))
             {
@@ -6298,10 +6298,11 @@ class storyModel extends model
         $storyCases = $this->loadModel('testcase')->getStoryCaseCounts($relatedStoryIds);
 
         /* Get related objects title or names. */
-        $relatedSpecs = $this->dao->select('*')->from(TABLE_STORYSPEC)->where('`story`')->in($storyIdList)->orderBy('version desc')->fetchGroup('story');
+        $relatedSpecs   = $this->dao->select('*')->from(TABLE_STORYSPEC)->where('`story`')->in($storyIdList)->orderBy('version desc')->fetchGroup('story');
+        $relatedStories = $this->dao->select('*')->from(TABLE_STORY)->where('`id`')->in($relatedStoryIds)->fetchPairs('id', 'title');
 
         $fileIdList = array();
-        foreach($relatedSpecs as $relatedSpec)
+        foreach($relatedSpecs as $storyID => $relatedSpec)
         {
             if(!empty($relatedSpec[0]->files)) $fileIdList[] = $relatedSpec[0]->files;
         }
@@ -6351,7 +6352,7 @@ class storyModel extends model
                 foreach($linkStoriesIdList as $linkStoryID)
                 {
                     $linkStoryID = trim($linkStoryID);
-                    $tmpLinkStories[] = isset($relatedStories[$linkStoryID]) ? $relatedStories[$linkStoryID] : $linkStoryID;
+                    $tmpLinkStories[] = zget($relatedStories, $linkStoryID);
                 }
                 $story->linkStories = join("; \n", $tmpLinkStories);
             }
@@ -6365,7 +6366,7 @@ class storyModel extends model
                     if(empty($childStoryID)) continue;
 
                     $childStoryID = trim($childStoryID);
-                    $tmpChildStories[] = isset($relatedStories[$childStoryID]) ? $relatedStories[$childStoryID] : $childStoryID;
+                    $tmpChildStories[] = zget($relatedStories, $childStoryID);
                 }
                 $story->childStories = join("; \n", $tmpChildStories);
             }
