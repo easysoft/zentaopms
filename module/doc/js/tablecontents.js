@@ -229,7 +229,26 @@ $(function()
             $(this).closest('[data-id=insert]').remove();
             return;
         }
-        var $a = $('[data-id=aTreeModal]').html().replace(/%name%/g, value);
-        $(this).replaceWith($a);
+
+        var moduleData = {
+            "name": "名称",
+            "parentID": "父ID",
+            "createType": "创建类型，child: 子目录, same: 同级",
+            "objectID": "当前点击对象ID",
+            "libID": "库ID",
+            "moduleType": "目录类型， doc|api",
+            "order": "排序信息"
+        };
+        $.post(createLink('tree', 'ajaxCreateModule'), moduleData, function(result)
+        {
+            if(result.result == 'fail')
+            {
+                bootbox.alert(result.message);
+                return false;
+            }
+
+            var module = result.module;
+            $(this).replaceWith($('[data-id=aTreeModal]').html().replace(/%name%/g, module.name).replace(/%id%/g, module.id));
+        });
     });
 });
