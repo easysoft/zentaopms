@@ -219,13 +219,14 @@ $(function()
             }).show();
         }
         if(item.type !== 'add') return;
-        var $item = $(this);
-        var $input = '';
+        var $item             = $(this);
+        var $input            = '';
+        moduleData.createType = 'child';
+        moduleData.parentID   = 0;
+        moduleData.isUpdate   = false;
         switch(item.method)
         {
             case 'addCataLib' :
-                moduleData.createType = 'child';
-                moduleData.parentID = 0;
                 if(item.hasChildren)
                 {
                     var $rootDom = $('[data-id=' + item.libid + ']a').parent().find('ul');
@@ -236,19 +237,34 @@ $(function()
                     var $rootDom = $('[data-id=' + item.libid + ']a').parent();
                     $rootDom.addClass('open in has-list');
                     $input += $('[data-id=ulTreeModal]').html();
+                    moduleData.isUpdate = true;
                 }
-                $rootDom.prepend($input);
+                $rootDom.append($input);
                 $rootDom.find('input').focus();
                 break;
             case 'addCataBro' :
                 moduleData.createType = 'same';
-                moduleData.parentID = 0;
                 $input += $('[data-id=liTreeModal]').html();
-                var $rootDom = $('#fileTree [data-id=' + item.id + ']li').closest('ul');
-                $rootDom.prepend($input);
+                var $rootDom = $('#fileTree [data-id=' + item.id + ']li');
+                $rootDom.after($input);
                 $rootDom.find('input').focus();
                 break;
             case 'addCataChild' :
+                moduleData.parentID   = item.id;
+                if(item.hasChildren)
+                {
+                    $input += $('[data-id=liTreeModal]').html();
+                    var $rootDom = $('#fileTree [data-id=' + item.id + ']li').find('ul');
+                }
+                else
+                {
+                    var $rootDom = $('#fileTree [data-id=' + item.id + ']li');
+                    $rootDom.addClass('open in has-list');
+                    $input += $('[data-id=ulTreeModal]').html();
+                    moduleData.isUpdate = true;
+                }
+                $rootDom.append($input);
+                $rootDom.find('input').focus();
                 break;
         }
     }).on('blur', '.file-tree input.input-tree', function()
@@ -279,7 +295,7 @@ $(function()
                 return false;
             }
             var module = result.module;
-            var resultDom = $('[data-id=aTreeModal]').html().replace(/%name%/g, module.name).replace(/%id%/g, module.id)
+            var resultDom = $('[data-id=aTreeModal]').html().replace(/%name%/g, module.name).replace(/%id%/g, module.id).replace('insert', module.id);
             $this.parent().append(resultDom);
             $this.remove();
         });
