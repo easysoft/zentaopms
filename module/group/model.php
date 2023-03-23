@@ -1199,11 +1199,20 @@ class groupModel extends model
         if(strpos($privQuery, '`recommendPrivs`') !== false)
         {
             preg_match_all("/`recommendPrivs`[^']+'([^']+)'/Ui", $privQuery, $out);
-            $privQuery = preg_replace(array('/`recommendPrivs`[ ]+=/', '/`recommendPrivs`[ ]+LIKE/', '/`recommendPrivs`[ ]+=/', '/`recommendPrivs`[ ]+!=/', '/`recommendPrivs`[ ]+NOT LIKE/'), array('`recommendPrivs` IN', '`recommendPrivs` IN', '`recommendPrivs` IN', '`recommendPrivs` NOT IN', '`recommendPrivs` NOT IN'), $privQuery);
             foreach($out[1] as $priv)
             {
-                $priv      = str_replace('%', '', $priv);
-                $privs     = $this->dao->select('priv,priv')->from(TABLE_PRIVRELATION)->where('relationPriv')->eq($priv)->andWhere('type')->eq('recommend')->fetchPairs();
+                $priv = str_replace('%', '', $priv);
+                if(!empty($priv))
+                {
+                    $privQuery = preg_replace(array('/`recommendPrivs`[ ]+=/', '/`recommendPrivs`[ ]+LIKE/', '/`recommendPrivs`[ ]+=/', '/`recommendPrivs`[ ]+!=/', '/`recommendPrivs`[ ]+NOT LIKE/'), array('`recommendPrivs` IN', '`recommendPrivs` IN', '`recommendPrivs` IN', '`recommendPrivs` NOT IN', '`recommendPrivs` NOT IN'), $privQuery);
+                    $privs     = $this->dao->select('priv,priv')->from(TABLE_PRIVRELATION)->where('relationPriv')->eq($priv)->andWhere('type')->eq('recommend')->fetchPairs();
+                }
+                else
+                {
+                    $privQuery = preg_replace(array('/`recommendPrivs`[ ]+=/', '/`recommendPrivs`[ ]+LIKE/', '/`recommendPrivs`[ ]+=/', '/`recommendPrivs`[ ]+!=/', '/`recommendPrivs`[ ]+NOT LIKE/'), array('`recommendPrivs` NOT IN', '`recommendPrivs` NOT IN', '`recommendPrivs` NOT IN', '`recommendPrivs` IN', '`recommendPrivs` IN'), $privQuery);
+                    $privs     = $this->dao->select('priv,relationPriv')->from(TABLE_PRIVRELATION)->where('type')->eq('recommend')->fetchPairs();
+                    $privs     = array_unique(array_keys($privs) + array_values($privs));
+                }
                 $privs     = implode("','", $privs);
                 $privs     = !empty($privs) ? $privs : 0;
                 $privQuery = preg_replace("/`recommendPrivs`([^']+)'([%]?{$priv}[%]?)'/Ui", "t1.`id`$1('{$privs}')", $privQuery);
@@ -1211,12 +1220,21 @@ class groupModel extends model
         }
         if(strpos($privQuery, '`dependPrivs`') !== false)
         {
-            preg_match_all("/`dependPrivs`[^']+'([^']+)'/Ui", $privQuery, $out);
-            $privQuery = preg_replace(array('/`dependPrivs`[ ]+=/', '/`dependPrivs`[ ]+LIKE/', '/`dependPrivs`[ ]+=/', '/`dependPrivs`[ ]+!=/', '/`dependPrivs`[ ]+NOT LIKE/'), array('`dependPrivs` IN', '`dependPrivs` IN', '`dependPrivs` IN', '`dependPrivs` NOT IN', '`dependPrivs` NOT IN'), $privQuery);
+            preg_match_all("/`dependPrivs`[^']+'([^']*)'/Ui", $privQuery, $out);
             foreach($out[1] as $priv)
             {
-                $priv      = str_replace('%', '', $priv);
-                $privs     = $this->dao->select('priv,priv')->from(TABLE_PRIVRELATION)->where('relationPriv')->eq($priv)->andWhere('type')->eq('depend')->fetchPairs();
+                $priv = str_replace('%', '', $priv);
+                if(!empty($priv))
+                {
+                    $privQuery = preg_replace(array('/`dependPrivs`[ ]+=/', '/`dependPrivs`[ ]+LIKE/', '/`dependPrivs`[ ]+=/', '/`dependPrivs`[ ]+!=/', '/`dependPrivs`[ ]+NOT LIKE/'), array('`dependPrivs` IN', '`dependPrivs` IN', '`dependPrivs` IN', '`dependPrivs` NOT IN', '`dependPrivs` NOT IN'), $privQuery);
+                    $privs     = $this->dao->select('priv,priv')->from(TABLE_PRIVRELATION)->where('relationPriv')->eq($priv)->andWhere('type')->eq('depend')->fetchPairs();
+                }
+                else
+                {
+                    $privQuery = preg_replace(array('/`dependPrivs`[ ]+=/', '/`dependPrivs`[ ]+LIKE/', '/`dependPrivs`[ ]+=/', '/`dependPrivs`[ ]+!=/', '/`dependPrivs`[ ]+NOT LIKE/'), array('`dependPrivs` NOT IN', '`dependPrivs` NOT IN', '`dependPrivs` NOT IN', '`dependPrivs` IN', '`dependPrivs` IN'), $privQuery);
+                    $privs     = $this->dao->select('priv,relationPriv')->from(TABLE_PRIVRELATION)->where('type')->eq('depend')->fetchPairs();
+                    $privs     = array_unique(array_keys($privs) + array_values($privs));
+                }
                 $privs     = implode("','", $privs);
                 $privs     = !empty($privs) ? $privs : 0;
                 $privQuery = preg_replace("/`dependPrivs`([^']+)'([%]?{$priv}[%]?)'/Ui", "t1.`id`$1('{$privs}')", $privQuery);
