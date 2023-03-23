@@ -836,7 +836,7 @@ class gitlab
                 return array();
             }
 
-            if($httpCode == 500) return array();
+            if($httpCode == 500 or $httpCode == 404) return array();
             return json_decode($response);
         }
     }
