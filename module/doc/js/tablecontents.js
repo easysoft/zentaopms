@@ -220,12 +220,12 @@ $(function()
         }
         if(item.type !== 'add') return;
         var $item = $(this);
+        var $input = '';
         switch(item.method)
         {
             case 'addCataLib' :
                 moduleData.createType = 'child';
                 moduleData.parentID = 0;
-                var $input = '';
                 if(item.hasChildren)
                 {
                     var $rootDom = $('[data-id=' + item.libid + ']a').parent().find('ul');
@@ -240,7 +240,13 @@ $(function()
                 $rootDom.prepend($input);
                 $rootDom.find('input').focus();
                 break;
-            case 'addCata' :
+            case 'addCataBro' :
+                moduleData.createType = 'same';
+                moduleData.parentID = 0;
+                $input += $('[data-id=liTreeModal]').html();
+                var $rootDom = $('#fileTree [data-id=' + item.id + ']li').closest('ul');
+                $rootDom.prepend($input);
+                $rootDom.find('input').focus();
                 break;
             case 'addCataChild' :
                 break;
