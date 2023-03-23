@@ -6,7 +6,6 @@
   </div>
   <?php else:?>
   <div class='row'>
-    <?php $i = 1;?>
     <?php foreach ($screens as $screenID => $screen):?>
     <div class='col-md-3' data-id='<?php echo $screen->id;?>'>
       <?php if(common::hasPriv('screen', 'view')):?>
@@ -20,10 +19,9 @@
             <img src='<?php echo $screen->cover;?>' controls='controls' width='100%'/>
           </div>
           <?php else:?>
-          <div class='top img bg<?php echo $i?>'>
+          <div class='top img'>
+            <img src='<?php echo "static/images/screen_{$screen->status}.png";?>' controls='controls' width='100%'/>
           </div>
-          <?php $i++;?>
-          <?php if($i == 7) $i = 1;?>
           <?php endif?>
           <div class='bottom' data-builtin='<?php echo $screen->builtin;?>' data-status='<?php echo $screen->status;?>'>
             <div class='screen-title' title='<?php echo $screen->name?>'><?php echo $screen->name;?></div>
