@@ -1669,13 +1669,13 @@ class actionModel extends model
             if($action->project)   $action->objectLink = common::hasPriv('project', 'team')   ? helper::createLink('project',   'team', 'projectID=' . $action->project) : '';
             if($action->execution) $action->objectLink = common::hasPriv('execution', 'team') ? helper::createLink('execution', 'team', 'executionID=' . $action->execution) : '';
         }
-        elseif($action->objectType == 'privpackage' and common::hasPriv('group', 'managePrivPackage'))
+        elseif($action->objectType == 'privpackage')
         {
-            $action->objectLink = helper::createLink('group', 'managePrivPackage');
+            $action->objectLink = '';
         }
-        elseif($action->objectType == 'privlang' and common::hasPriv('group', 'editManagePriv'))
+        elseif($action->objectType == 'privlang')
         {
-            $action->objectLink = helper::createLink('group', 'editManagePriv');
+            $action->objectLink = '';
         }
 
         if($action->objectType == 'stakeholder' and $action->project == 0) $action->objectLink = '';

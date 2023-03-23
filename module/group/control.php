@@ -467,7 +467,7 @@ class group extends control
         $this->loadModel('action');
         foreach($allChanges as $privID => $changes)
         {
-            $actionID = $this->action->create('priv', $privID, 'Edited');
+            $actionID = $this->action->create('privlang', $privID, 'Edited');
             $this->action->logHistory($actionID, $changes);
         }
         return print(js::reload('parent'));
