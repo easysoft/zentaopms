@@ -2984,7 +2984,7 @@ EOT;
             }
         }
 
-        if(in_array($type, array('product', 'project')))
+        if(in_array($type, array('product', 'project', 'execution')))
         {
             $libTree[$type] = array_merge($libTree[$type], $apiLibs);
             if($type == 'project' and !empty($libTree['execution'])) $libTree[$type] = array_merge($libTree[$type], $libTree['execution']);
