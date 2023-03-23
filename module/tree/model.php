@@ -2299,4 +2299,63 @@ class treeModel extends model
         $this->lang->module->name  = $this->lang->tree->wordName;
         $this->lang->module->short = $this->lang->tree->short;
     }
+
+    /**
+     * Create module.
+     *
+     * @access public
+     * @return bool|object
+     */
+    public function createModule()
+    {
+        $data = fixer::input('post')
+            ->setDefault('name', '')
+            ->setDefault('createType', 'child')
+            ->setDefault('objectID', 0)
+            ->setDefault('order', 10)
+            ->get();
+        if($data->createType == 'same')
+        {
+            $baseModule = $this->getByID($module->objectID);
+            if(!empty($baseModule))
+            {
+                $data->parentID = $baseModule->parentID;
+                $data->order    = $baseModule->order;
+            }
+        }
+
+        $module         = new stdClass();
+        $module->root   = zget($data, 'libID', 0);
+        $module->type   = zget($data, 'moduleType', 'doc');
+        $module->parent = zget($data, 'parentID', 0);
+        $module->name   = strip_tags(trim($data->name));
+        if(empty($module->name))
+        {
+            dao::$errors[] = sprintf($this->lang->notempty, $this->lang->tree->dir);
+            return false;
+        }
+
+        $repeatName = $this->checkUnique($module);
+        if($repeatName)
+        {
+            dao::$errors[] = sprintf($this->lang->tree->repeatName, $repeatName);
+            return false;
+        }
+
+        $parent = $this->getByID($module->parent);
+        $module->branch = 0;
+        $module->short  = '';
+        $module->grade  = $module->parent ? $parent->grade + 1 : 1;
+        $module->order  = $module->parent ? $parent->order : $data->order;
+        $this->dao->insert(TABLE_MODULE)->data($module)->exec();
+
+        $moduleID = $this->dao->lastInsertID();
+        if($module->parent)
+        {
+            $modulePath = $parent->path . "$moduleID,";
+            $this->dao->update(TABLE_MODULE)->set('path')->eq($modulePath)->where('id')->eq($moduleID)->limit(1)->exec();
+        }
+
+        return $this->getByID($moduleID);
+    }
 }

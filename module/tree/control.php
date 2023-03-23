@@ -689,4 +689,20 @@ class tree extends control
         $this->view->users   = $this->loadModel('user')->getPairs('noletter');
         $this->display();
     }
+
+    /**
+     * Create module by ajax.
+     *
+     * @access public
+     * @return object
+     */
+    public function ajaxCreateModule()
+    {
+        if(!helper::isAjaxRequest()) return $this->send(array('result' => 'fail', 'message' => ''));;
+
+        $module = $this->tree->createModule();
+        if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+        return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'module' => $module));
+    }
 }
