@@ -8475,7 +8475,8 @@ class upgradeModel extends model
      */
     public function processChart()
     {
-        $charts = $this->dao->select('*')->from(TABLE_CHART)->fetchAll();
+        $charts               = $this->dao->select('*')->from(TABLE_CHART)->fetchAll();
+        $dashboardLayoutPairs = $this->dao->select('id, layout')->from(TABLE_DASHBOARD)->fetchPairs();
 
         $defaultGroupID = $this->createDefaultGroup('chart');
 
@@ -8501,11 +8502,28 @@ class upgradeModel extends model
 
             if($chart->type == 'table')
             {
-                $this->upgradeToPivotTable($chart);
+                $pivotID = $this->upgradeToPivotTable($chart);
+
             }
             else
             {
                 $this->dao->update(TABLE_CHART)->data($data)->autoCheck()->where('id')->eq($chart->id)->exec();
+            }
+
+            foreach($dashboardLayoutPairs as $dashboardID => $layout)
+            {
+                $layout = json_decode($layout);
+                foreach($layout as $index => $chartLayout)
+                {
+                    if($chartLayout->i->id != $chart->id) continue;
+
+                    $chartLayout->i->type = $chart->type == 'table' ? 'pivot' : 'chart';
+                    if($chart->type == 'table') $chartLayout->i->id = $pivotID;
+
+                    $layout[$index] = $chartLayout;
+                }
+
+                $this->dao->update(TABLE_DASHBOARD)->set('layout')->eq(json_encode($layout))->where('id')->eq($dashboardID)->exec();
             }
         }
 
@@ -8569,12 +8587,13 @@ class upgradeModel extends model
         }
 
         $this->dao->insert(TABLE_PIVOT)->data($pivot)->autoCheck()->exec();
+        $pivotID = $this->dao->lastInsertID();
 
         if(dao::isError()) return false;
 
         $this->dao->delete()->from(TABLE_CHART)->where('id')->eq($table->id)->exec();
 
-        return !dao::isError();
+        return $pivotID;
     }
 
     /**
