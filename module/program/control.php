@@ -779,4 +779,67 @@ class program extends control
         $data = fixer::input('post')->get();
         $this->loadModel('setting')->updateItem("{$this->app->user->account}.program.showAllProjects", $data->showAllProjects);
     }
+
+    public function projectView()
+    {
+        echo 'projectView';
+    }
+
+    public function productView($status = 'unclosed', $orderBy = 'order_asc', $recTotal = 0, $recPerPage = 10, $pageID = 1, $param = 0)
+    {
+        if(common::hasPriv('program', 'create')) $this->lang->pageActions = html::a($this->createLink('program', 'create'), "<i class='icon icon-plus'></i> " . $this->lang->program->create, '', "class='btn btn-primary create-program-btn'");
+
+        $this->session->set('programList', $this->app->getURI(true), 'program');
+        $this->session->set('projectList', $this->app->getURI(true), 'program');
+        $this->session->set('createProjectLocate', $this->app->getURI(true), 'program');
+
+        $this->app->loadClass('pager', true);
+        $pager = new pager($recTotal, $recPerPage, $pageID);
+
+        $programType = $this->cookie->programType ? $this->cookie->programType : 'bylist';
+
+        if(strtolower($status) == 'bysearch')
+        {
+            $queryID  = (int)$param;
+            $programs = $this->program->getListBySearch($orderBy, $queryID);
+        }
+        else
+        {
+            /* Get top programs and projects. */
+            $topObjects = $this->program->getList($status == 'unclosed' ? 'doing,suspended,wait' : $status, $orderBy, $pager, 'top');
+            if(!$topObjects) $topObjects = array(0);
+            $programs   = $this->program->getList($status == 'closed' ? 'closed' : 'all', $orderBy, NULL, 'child', array_keys($topObjects));
+
+            /* Get summary. */
+            $topCount = $indCount = 0;
+            foreach($programs as $program)
+            {
+                if($program->type == 'program' and $program->parent == 0) $topCount ++;
+                if($program->type == 'project' and $program->parent == 0) $indCount ++;
+            }
+            $summary = sprintf($this->lang->program->summary, $topCount, $indCount);
+        }
+
+        /* Get PM id list. */
+        $accounts = array();
+        $hasProject = false;
+        foreach($programs as $program)
+        {
+            if(!empty($program->PM) and !in_array($program->PM, $accounts)) $accounts[] = $program->PM;
+            if($hasProject === false and $program->type != 'program') $hasProject = true;
+        }
+        $PMList = $this->loadModel('user')->getListByAccounts($accounts, 'account');
+
+        $this->view->programs     = $programs;
+        $this->view->status       = $status;
+        $this->view->programType  = $programType;
+        $this->view->hasProject   = true;
+        $this->view->orderBy      = $orderBy;
+        $this->view->recTotal     = 322;
+        $this->view->summary      = isset($summary) ? $summary : '';
+        $this->view->pager        = $pager;
+        $this->view->PMList       = $PMList;
+
+        $this->render();
+    }
 }

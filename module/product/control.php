@@ -470,7 +470,7 @@ class product extends control
         $this->view->URSRPairs  = $this->loadModel('custom')->getURSRPairs();
 
         unset($this->lang->product->typeList['']);
-        $this->render();
+        $this->display();
     }
 
     /**

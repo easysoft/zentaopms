@@ -126,3 +126,77 @@ $config->program->actionsMap['text']['delete']    = $lang->delete;
 $config->program->actionsMap['text']['link']      = $lang->project->manageProducts;
 $config->program->actionsMap['text']['whitelist'] = $lang->project->whitelist;
 $config->program->actionsMap['text']['delete']    = $lang->delete;
+
+/* DataTable fields of Product View. */
+$config->program->productView = new stdClass();
+$config->program->productView->dtable = new stdClass();
+$config->program->productView->dtable->fieldList = array();
+
+$config->program->productView->dtable->fieldList['name']['name']         = 'name';
+$config->program->productView->dtable->fieldList['name']['title']        = $lang->nameAB;
+$config->program->productView->dtable->fieldList['name']['width']        = 200;
+$config->program->productView->dtable->fieldList['name']['type']         = 'link';
+$config->program->productView->dtable->fieldList['name']['flex']         = 1;
+$config->program->productView->dtable->fieldList['name']['nestedToggle'] = true;
+$config->program->productView->dtable->fieldList['name']['checkbox']     = true;
+$config->program->productView->dtable->fieldList['name']['sortType']     = true;
+$config->program->productView->dtable->fieldList['name']['iconRender']   = 'RAWJS<function(row){ if(row.data.type === \'program\') return \'icon-cards-view text-gray\'; if(row.data.type === \'productLine\') return \'icon-scrum text-gray\'; return \'\';}>RAWJS';
+
+$config->program->productView->dtable->fieldList['PM']['name']     = 'PM';
+$config->program->productView->dtable->fieldList['PM']['title']    = $lang->program->PM;
+$config->program->productView->dtable->fieldList['PM']['minWidth'] = 80;
+$config->program->productView->dtable->fieldList['PM']['type']     = 'avatarBtn';
+
+$config->program->productView->dtable->fieldList['feedback']['name']     = 'feedback';
+$config->program->productView->dtable->fieldList['feedback']['title']    = $lang->program->feedback;
+$config->program->productView->dtable->fieldList['feedback']['width']    = 60;
+$config->program->productView->dtable->fieldList['feedback']['type']     = 'format';
+$config->program->productView->dtable->fieldList['feedback']['sortType'] = true;
+
+$config->program->productView->dtable->fieldList['unclosedReqCount']['name']     = 'unclosedReqCount';
+$config->program->productView->dtable->fieldList['unclosedReqCount']['title']    = $lang->program->unclosedReqCount;
+$config->program->productView->dtable->fieldList['unclosedReqCount']['minWidth'] = 100;
+$config->program->productView->dtable->fieldList['unclosedReqCount']['type']     = 'format';
+$config->program->productView->dtable->fieldList['unclosedReqCount']['sortType'] = true;
+
+$config->program->productView->dtable->fieldList['closedReqRate']['name']     = 'closedReqRate';
+$config->program->productView->dtable->fieldList['closedReqRate']['title']    = $lang->program->closedReqRate;
+$config->program->productView->dtable->fieldList['closedReqRate']['minWidth'] = 100;
+$config->program->productView->dtable->fieldList['closedReqRate']['type']     = 'circleProgress';
+$config->program->productView->dtable->fieldList['closedReqRate']['sortType'] = true;
+
+$config->program->productView->dtable->fieldList['planCount']['name']     = 'planCount';
+$config->program->productView->dtable->fieldList['planCount']['title']    = $lang->productplan->shortCommon;
+$config->program->productView->dtable->fieldList['planCount']['width']    = 60;
+$config->program->productView->dtable->fieldList['planCount']['type']     = 'format';
+$config->program->productView->dtable->fieldList['planCount']['sortType'] = true;
+
+$config->program->productView->dtable->fieldList['executionCount']['name']     = 'executionCount';
+$config->program->productView->dtable->fieldList['executionCount']['title']    = $lang->execution->common;
+$config->program->productView->dtable->fieldList['executionCount']['width']    = 60;
+$config->program->productView->dtable->fieldList['executionCount']['type']     = 'format';
+$config->program->productView->dtable->fieldList['executionCount']['sortType'] = true;
+
+$config->program->productView->dtable->fieldList['testCaseCoverRate']['name']     = 'testCaseCoverRate';
+$config->program->productView->dtable->fieldList['testCaseCoverRate']['title']    = $lang->program->testCaseCoverRate;
+$config->program->productView->dtable->fieldList['testCaseCoverRate']['minWidth'] = 100;
+$config->program->productView->dtable->fieldList['testCaseCoverRate']['type']     = 'circleProgress';
+$config->program->productView->dtable->fieldList['testCaseCoverRate']['sortType'] = true;
+
+$config->program->productView->dtable->fieldList['bugActivedCount']['name']     = 'bugActivedCount';
+$config->program->productView->dtable->fieldList['bugActivedCount']['title']    = $lang->program->bugActivedCount;
+$config->program->productView->dtable->fieldList['bugActivedCount']['minWidth'] = 60;
+$config->program->productView->dtable->fieldList['bugActivedCount']['type']     = 'format';
+$config->program->productView->dtable->fieldList['bugActivedCount']['sortType'] = true;
+
+$config->program->productView->dtable->fieldList['fixedRate']['name']     = 'fixedRate';
+$config->program->productView->dtable->fieldList['fixedRate']['title']    = $lang->program->fixedRate;
+$config->program->productView->dtable->fieldList['fixedRate']['minWidth'] = 60;
+$config->program->productView->dtable->fieldList['fixedRate']['type']     = 'circleProgress';
+$config->program->productView->dtable->fieldList['fixedRate']['sortType'] = true;
+
+$config->program->productView->dtable->fieldList['releaseCount']['name']     = 'releaseCount';
+$config->program->productView->dtable->fieldList['releaseCount']['title']    = $lang->release->common;
+$config->program->productView->dtable->fieldList['releaseCount']['width']    = 80;
+$config->program->productView->dtable->fieldList['releaseCount']['type']     = 'html';
+$config->program->productView->dtable->fieldList['releaseCount']['sortType'] = false;
