@@ -106,8 +106,6 @@ if($config->edition != 'open') $lang->execution->menu->gantt    = array('link' =
 $lang->execution->menu->tree      = array('link' => "Tree|execution|tree|executionID=%s");
 $lang->execution->menu->grouptask = array('link' => "Group view|execution|grouptask|executionID=%s");
 
-$lang->kanbanProject->menu->doc['subMenu'] = new stdclass();
-
 $lang->kanbanProject->menu->settings['subMenu']              = new stdclass();
 $lang->kanbanProject->menu->settings['subMenu']->view        = array('link' => "$lang->overview|project|view|project=%s", 'alias' => 'edit');
 $lang->kanbanProject->menu->settings['subMenu']->members     = array('link' => "{$lang->team->common}|project|team|project=%s", 'alias' => 'managemembers,team');
@@ -131,11 +129,8 @@ $lang->doc->menuOrder[10] = 'my';
 $lang->doc->menuOrder[15] = 'project';
 $lang->doc->menuOrder[20] = 'custom';
 
-$lang->doc->menu->project['subMenu'] = new stdclass();
-$lang->doc->menu->custom['subMenu']  = new stdclass();
-
 /* Admin menu. */
-$lang->admin->menu            = new stdclass();
+$lang->admin->menu = new stdclass();
 
 /* adjust items of search. */
 $lang->searchObjects['all']       = 'All';

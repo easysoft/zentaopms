@@ -960,6 +960,7 @@ class docModel extends model
             $queryName = $type . 'libDoc';
             foreach($libs as $lib)
             {
+                if(empty($lib)) continue;
                 if($lib->type == 'api') continue;
                 $libPairs[$lib->id] = $lib->name;
             }
@@ -2656,7 +2657,8 @@ class docModel extends model
             if($this->app->tab == 'doc') $this->app->rawMethod = $type == 'execution' ? 'project' : $type;
 
             $object         = $this->dao->select('id,name,status')->from($table)->where('id')->eq($objectID)->fetch();
-            $objectDropdown = $this->select($type, $objects[$objectID], $objectID);
+            $objectTitle    = zget($objects, $objectID, '');
+            $objectDropdown = $this->select($type, $objectTitle, $objectID);
 
             if(empty($object))
             {
@@ -2738,6 +2740,7 @@ class docModel extends model
             ->where('deleted')->eq(0)
             ->andWhere($query)
             ->andWhere('lib')->in(array_keys($libs))
+            ->andWhere('vision')->eq($this->config->vision)
             ->beginIF($this->config->doc->notArticleType)->andWhere('type')->notIN($this->config->doc->notArticleType)->fi()
             ->orderBy($orderBy)
             ->page($pager)

@@ -65,7 +65,20 @@
   ?>
   </div>
 </div>
-<div id='mainContent'class="fade flex split-row">
+<div id='mainContent'class="fade <?php if(!empty($libTree)) echo 'flex';?> split-row">
+<?php if(empty($libTree)):?>
+  <div class="table-empty-tip">
+    <p>
+      <span class="text-muted"><?php echo $lang->doc->noLib;?></span>
+      <?php
+      if(common::hasPriv('doc', 'createLib'))
+      {
+          echo html::a(helper::createLink('doc', 'createLib', "type=$type&objectID=$objectID"), '<i class="icon icon-plus"></i> ' . $this->lang->doc->createLib, '', 'class="btn btn-info iframe"');
+      }
+      ?>
+    </p>
+  </div>
+<?php else:?>
   <div id='sideBar' class="panel side side-col col overflow-auto" data-min-width="150">
     <div id="fileTree" class="file-tree"></div>
   </div>
@@ -87,6 +100,7 @@
     }
     ;?>
   </div>
+<?php endif;?>
 </div>
 <div class='hidden' id='dropDownData'>
   <div class='libDorpdown'>

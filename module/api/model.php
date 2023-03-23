@@ -918,6 +918,7 @@ class apiModel extends model
             $queryName = $type . 'apiDoc';
             foreach($libs as $lib)
             {
+                if(empty($lib)) continue;
                 if($lib->type != 'api') continue;
                 $libPairs[$lib->id] = $lib->name;
             }
