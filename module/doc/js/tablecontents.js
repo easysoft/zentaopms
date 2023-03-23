@@ -130,9 +130,9 @@ $(function()
         if($(this).hasClass('edit-module'))
         {
             new $.zui.ModalTrigger({
-                keyboard : true
+                keyboard : true,
                 type     : 'ajax',
-                url      : $(this).find('a').data('href'),
+                url      : $(this).find('a').data('href')
             }).show();
         }
         if(item.type !== 'add') return;
