@@ -8044,29 +8044,29 @@ class upgradeModel extends model
         $this->loadModel('dataset');
         $this->loadModel('dataview');
 
-        /* Create default module. */
-        $defaultModuleID = $this->dao->select('id')->from(TABLE_MODULE)->where('type')->eq('dataview')->andWhere('name')->eq($this->lang->dataview->default)->fetch('id');
-        if(empty($defaultModuleID))
+        /* Create built-in module. */
+        $builtInModuleID = $this->dao->select('id')->from(TABLE_MODULE)->where('type')->eq('dataview')->andWhere('name')->eq($this->lang->dataview->builtIn)->fetch('id');
+        if(empty($builtInModuleID))
         {
             $group = new stdclass();
             $group->root   = 0;
-            $group->name   = $this->lang->dataview->default;
+            $group->name   = $this->lang->dataview->builtIn;
             $group->parent = 0;
             $group->grade  = 1;
             $group->order  = 10;
             $group->type   = 'dataview';
 
             $this->dao->insert(TABLE_MODULE)->data($group)->exec();
-            $defaultModuleID = $this->dao->lastInsertID();
-            $this->dao->update(TABLE_MODULE)->set("`path` = CONCAT(',', `id`, ',')")->where('id')->eq($defaultModuleID)->exec();
+            $builtInModuleID = $this->dao->lastInsertID();
+            $this->dao->update(TABLE_MODULE)->set("`path` = CONCAT(',', `id`, ',')")->where('id')->eq($builtInModuleID)->exec();
         }
 
         $dataview = new stdclass();
-        $dataview->group = $defaultModuleID;
+        $dataview->group = $builtInModuleID;
         $dataview->createdBy   = 'system';
         $dataview->createdDate = helper::now();
 
-        /* Process default dataset. */
+        /* Process built-in dataset. */
         foreach($this->lang->dataset->tables as $code => $dataset)
         {
             $dataview->name = $dataset['name'];
@@ -8093,6 +8093,43 @@ class upgradeModel extends model
 
             }
             $dataview->fields = json_encode($fields);
+
+            $this->dao->insert(TABLE_DATAVIEW)->data($dataview)->exec();
+            $dataviewID = $this->dao->lastInsertID();
+            if(!empty($dataview->view) and !empty($dataview->sql)) $this->dataview->createViewInDB($dataviewID, $dataview->view, $dataview->sql);
+        }
+
+        /* Create custom module. */
+        $defaultModuleID = $this->dao->select('id')->from(TABLE_MODULE)->where('type')->eq('dataview')->andWhere('name')->eq($this->lang->dataview->default)->fetch('id');
+        if(empty($defaultModuleID))
+        {
+            $group = new stdclass();
+            $group->root   = 0;
+            $group->name   = $this->lang->dataview->default;
+            $group->parent = 0;
+            $group->grade  = 1;
+            $group->order  = 10;
+            $group->type   = 'dataview';
+
+            $this->dao->insert(TABLE_MODULE)->data($group)->exec();
+            $defaultModuleID = $this->dao->lastInsertID();
+            $this->dao->update(TABLE_MODULE)->set("`path` = CONCAT(',', `id`, ',')")->where('id')->eq($defaultModuleID)->exec();
+        }
+
+        $dataview = new stdclass();
+        $dataview->group = $defaultModuleID;
+        $dataview->createdBy   = 'system';
+        $dataview->createdDate = helper::now();
+
+        /* Process custom dataset. */
+        $customDataset = $this->dao->select('*')->from(TABLE_DATASET)->fetchAll('id');
+        foreach($customDataset as $datasetID => $dataset)
+        {
+            $dataview->name   = $dataset->name;
+            $dataview->code   = 'custom_' . $datasetID;
+            $dataview->view   = 'ztv_custom_' . $datasetID;
+            $dataview->sql    = $dataset->sql;
+            $dataview->fields = $dataset->fields;
 
             $this->dao->insert(TABLE_DATAVIEW)->data($dataview)->exec();
             $dataviewID = $this->dao->lastInsertID();
