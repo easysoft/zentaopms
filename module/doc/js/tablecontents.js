@@ -150,6 +150,15 @@ $(function()
         return dropdown;
     };
 
+    var moduleData = {
+        "name": "",
+        "createType": "",
+        "libID": '',
+        "parentID": '',
+        "objectID": '',
+        "moduleType": '',
+        "order": ""
+    };
     $('#fileTree').on('click', '.icon-drop', function(e)
     {
         $('.dropdown-in-tree').css('display', 'none');
@@ -157,18 +166,31 @@ $(function()
         var dropDownID  = isCatalogue ? 'dropDownCatalogue' : 'dropDownLibrary';
         var libID       = 0;
         var moduleID    = 0;
+        var parentID    = 0;
         var $module     = $(this).closest('a');
         var hasChildren = $module.data('has-children');
+        var moduleType  = '';
         if($module.hasClass('lib'))
         {
-            libID = $module.data('id');
+            libID      = $module.data('id');
+            moduleType = $module.data('type');
+            parentID   = libID;
         }
         else
         {
-            moduleID = $module.data('id');
-            libID    = $module.closest('.lib').data('id');
+            moduleID   = $module.data('id');
+            libID      = $module.closest('.lib').data('id');
+            moduleType = $module.closest('.lib').data('type');
+            parentID   = $module.closest('ul').closest('.lib').data('id');
         }
-
+        moduleData = {
+            "createType": "",
+            "libID": libID,
+            "parentID": parentID,
+            "objectID": moduleID,
+            "moduleType": moduleType == 'lib' ? 'doc' : moduleType,
+        };
+        console.log(moduleData);
         var option = {
             left        : e.pageX,
             top         : e.pageY,
@@ -198,10 +220,12 @@ $(function()
         }
         if(item.type !== 'add') return;
         var $item = $(this);
+        var $input = '';
         switch(item.method)
         {
             case 'addCataLib' :
-                var $input = '';
+                moduleData.createType = 'child';
+                moduleData.parentID = 0;
                 if(item.hasChildren)
                 {
                     var $rootDom = $('[data-id=' + item.libid + ']a').parent().find('ul');
@@ -216,39 +240,48 @@ $(function()
                 $rootDom.prepend($input);
                 $rootDom.find('input').focus();
                 break;
-            case 'addCata' :
+            case 'addCataBro' :
+                moduleData.createType = 'same';
+                moduleData.parentID = 0;
+                $input += $('[data-id=liTreeModal]').html();
+                var $rootDom = $('#fileTree [data-id=' + item.id + ']li').closest('ul');
+                $rootDom.prepend($input);
+                $rootDom.find('input').focus();
                 break;
             case 'addCataChild' :
                 break;
         }
     }).on('blur', '.file-tree input.input-tree', function()
     {
-        var value = $(this).val();
+        var $this = $(this);
+        var value = $this.val();
         if(!value)
         {
-            $(this).closest('[data-id=insert]').remove();
+            $this.closest('[data-id=insert]').remove();
             return;
         }
 
-        var moduleData = {
-            "name": "名称",
-            "parentID": "父ID",
-            "createType": "创建类型，child: 子目录, same: 同级",
-            "objectID": "当前点击对象ID",
-            "libID": "库ID",
-            "moduleType": "目录类型， doc|api",
-            "order": "排序信息"
-        };
+        moduleData.name = value;
         $.post(createLink('tree', 'ajaxCreateModule'), moduleData, function(result)
         {
+            result = JSON.parse(result);
             if(result.result == 'fail')
             {
-                bootbox.alert(result.message);
+                bootbox.alert(
+                result.message[0],
+                function()
+                {
+                    setTimeout(function()
+                    {
+                        $('.file-tree .input-tree').focus()
+                    }, 10)
+                });
                 return false;
             }
-
             var module = result.module;
-            $(this).replaceWith($('[data-id=aTreeModal]').html().replace(/%name%/g, module.name).replace(/%id%/g, module.id));
+            var resultDom = $('[data-id=aTreeModal]').html().replace(/%name%/g, module.name).replace(/%id%/g, module.id)
+            $this.parent().append(resultDom);
+            $this.remove();
         });
     });
 });
