@@ -2349,12 +2349,10 @@ class treeModel extends model
         $module->order  = $module->parent ? $parent->order : $data->order;
         $this->dao->insert(TABLE_MODULE)->data($module)->exec();
 
-        $moduleID = $this->dao->lastInsertID();
-        if($module->parent)
-        {
-            $modulePath = $parent->path . "$moduleID,";
-            $this->dao->update(TABLE_MODULE)->set('path')->eq($modulePath)->where('id')->eq($moduleID)->limit(1)->exec();
-        }
+        $moduleID   = $this->dao->lastInsertID();
+        $modulePath = "$moduleID,";
+        if($module->parent) $modulePath = $parent->path . $modulePath;
+        $this->dao->update(TABLE_MODULE)->set('path')->eq($modulePath)->where('id')->eq($moduleID)->limit(1)->exec();
 
         return $this->getByID($moduleID);
     }
