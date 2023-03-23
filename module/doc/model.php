@@ -39,17 +39,20 @@ class docModel extends model
      * Get api Libraries.
      *
      * @param  int    $appendLib
+     * @param  string $appendLib
+     * @param  int    $objectID
      * @return array
-     * @author thanatos thanatos915@163.com
      */
-    public function getApiLibs($appendLib = 0)
+    public function getApiLibs($appendLib = 0, $objectType = '', $objectID = 0)
     {
         $libs = $this->dao->select('*')->from(TABLE_DOCLIB)
             ->where('deleted')->eq(0)
             ->andWhere('type')->eq('api')
             ->beginIF(!empty($appendLib))->orWhere('id')->eq($appendLib)->fi()
+            ->beginIF(!empty($objectType))->andWhere($objectType)->eq($objectID)->fi()
             ->orderBy('`order`_asc, id_desc')
             ->fetchAll('id');
+
         $libs = array_filter($libs, array($this, 'checkPrivLib'));
         return $libs;
     }

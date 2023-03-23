@@ -1288,7 +1288,6 @@ class doc extends control
         $pager = new pager($recTotal, $recPerPage, $pageID);
         $this->app->rawMethod = $rawMethod;
 
-        $this->view->libID = $libID;
         if($libType == 'api')
         {
             $this->loadModel('api');
@@ -1306,12 +1305,16 @@ class doc extends control
             $this->view->docs = $browseType == 'bySearch' ? $this->doc->getDocsBySearch($type, $objectID, $libID, $queryID, $orderBy, $pager) : $this->doc->getDocs($libID, $moduleID, $orderBy, $pager);
         }
 
+        $apiObjectType = $type == 'product' || $type == 'project' ? $type : '';
+        $apiObjectID   = $apiObjectType ? $objectID : 0;
+
         $this->view->title          = $title;
         $this->view->type           = $type;
         $this->view->browseType     = $browseType;
         $this->view->param          = $queryID;
         $this->view->users          = $this->user->getPairs('noletter');
         $this->view->libTree        = $libTree;
+        $this->view->libID          = $libID;
         $this->view->moduleID       = $moduleID;
         $this->view->objectDropdown = $objectDropdown;
         $this->view->libType        = $libType;
@@ -1320,6 +1323,7 @@ class doc extends control
         $this->view->orderBy        = $orderBy;
         $this->view->exportMethod   = $type . '2export';
         $this->view->canExport      = common::hasPriv('doc', $type . '2export');
+        $this->view->apiLibs        = $this->doc->getApiLibs(0, $apiObjectType, $apiObjectID);
 
         $this->display();
     }

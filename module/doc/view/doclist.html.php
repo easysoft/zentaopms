@@ -27,7 +27,7 @@
   <p>
     <span class="text-muted"><?php echo $lang->doc->noDoc;?></span>
     <?php
-    if(common::hasPriv('doc', 'create') and $browseType != 'bySearch')
+    if($browseType != 'bySearch' and (common::hasPriv('doc', 'create') or (common::hasPriv('api', 'create') and !empty($apiLibs))))
     {
         if($libID)
         {
@@ -36,22 +36,30 @@
             $html .= "<button type='button' class='btn btn-info dropdown-toggle' data-toggle='dropdown'><span class='caret'></span></button>";
             $html .= "<ul class='dropdown-menu pull-right'>";
 
+            $apiLibID = key($apiLibs);
             foreach($this->lang->doc->createList as $typeKey => $typeName)
             {
                 if($config->edition != 'max' and $typeKey == 'template') continue;
+                if($typeKey == 'api' and (!common::hasPriv('api', 'create') or empty($apiLibs))) continue;
+                if($typeKey != 'api' and !common::hasPriv('doc', 'create')) continue;
+
                 $class  = (strpos($this->config->doc->officeTypes, $typeKey) !== false or strpos($this->config->doc->textTypes, $typeKey) !== false) ? 'iframe' : '';
                 $module = $typeKey == 'api' ? 'api' : 'doc';
                 $method = strpos($this->config->doc->textTypes, $typeKey) !== false ? 'createBasicInfo' : 'create';
 
                 $params = "objectType=$type&objectID=$objectID&libID=$libID&moduleID=$moduleID&type=$typeKey";
-                if($typeKey == 'api') $params = "libID=$libID&moduleID=$moduleID";
+                if($typeKey == 'api') $params = "libID=$apiLibID&moduleID=$moduleID";
                 if($typeKey == 'template') $params = "objectType=$type&objectID=$objectID&libID=$libID&moduleID=$moduleID&type=html&fromGlobal=&from=template";
 
                 $html .= "<li>";
                 $html .= html::a(helper::createLink($module, $method, $params, '', $class ? true : false), $typeName, '', "class='$class' data-app='{$this->app->tab}'");
                 $html .= "</li>";
-                if($typeKey == 'template') $html .= '<li class="divider"></li>';
-                if($config->edition != 'max' and $typeKey == 'api') $html .= '<li class="divider"></li>';
+
+                $printDivider = false;
+                if($typeKey == 'template') $printDivider = true;
+                if($config->edition != 'max' and $typeKey == 'api') $printDivider = true;
+                if($config->edition != 'max' and empty($apiLibs) and $typeKey == 'html') $printDivider = true;
+                if($printDivider) $html .= '<li class="divider"></li>';
             }
 
             $html .= '</ul></div>';
