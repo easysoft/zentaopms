@@ -294,10 +294,17 @@ $(function()
                 });
                 return false;
             }
-            var module = result.module;
+            var module    = result.module;
             var resultDom = $('[data-id=aTreeModal]').html().replace(/%name%/g, module.name).replace(/%id%/g, module.id).replace('insert', module.id);
             $this.parent().append(resultDom);
             $this.remove();
+            if(moduleData.isUpdate)
+            {
+              $.getJSON(createLink('doc', 'tableContents', 'type=' + objectType, 'json'), {}, function(data){
+                  var treeData = JSON.parse(data.data);
+                  $('#fileTree').data('zui.tree').reload(treeData.libTree);
+                  }, 'json');
+            }
         });
     });
 });
