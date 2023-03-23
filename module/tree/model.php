@@ -2314,25 +2314,42 @@ class treeModel extends model
             ->setDefault('objectID', 0)
             ->setDefault('order', 10)
             ->get();
-        if($data->createType == 'same')
-        {
-            $baseModule = $this->getByID($module->objectID);
-            if(!empty($baseModule))
-            {
-                $data->parentID = $baseModule->parentID;
-                $data->order    = $baseModule->order;
-            }
-        }
 
         $module         = new stdClass();
         $module->root   = zget($data, 'libID', 0);
         $module->type   = zget($data, 'moduleType', 'doc');
         $module->parent = zget($data, 'parentID', 0);
         $module->name   = strip_tags(trim($data->name));
+        $module->branch = 0;
+        $module->short  = '';
+        $module->order  = $data->order;
+
         if(empty($module->name))
         {
             dao::$errors[] = sprintf($this->lang->error->notempty, $this->lang->tree->dir);
             return false;
+        }
+
+        if($data->createType == 'child')
+        {
+            $baseModule = $this->getByID($module->objectID);
+            if(!empty($baseModule))
+            {
+                $module->parent = $baseModule->parentID;
+                $module->order  = $baseModule->order;
+            }
+        }
+        elseif($data->createType == 'same')
+        {
+            $maxOrder = $this->dao->select('order')->from(TABLE_MODULE)
+                ->where('root')->eq($module->root)
+                ->andWhere('parent')->eq($module->parent)
+                ->andWhere('type')->eq($module->type)
+                ->orderBy('order_desc')
+                ->limit(1)
+                ->fetch('order');
+
+            $module->order = (int)$maxOrder + 10;
         }
 
         $repeatName = $this->checkUnique($module);
@@ -2343,10 +2360,7 @@ class treeModel extends model
         }
 
         $parent = $this->getByID($module->parent);
-        $module->branch = 0;
-        $module->short  = '';
-        $module->grade  = $module->parent ? $parent->grade + 1 : 1;
-        $module->order  = $module->parent ? $parent->order : $data->order;
+        $module->grade = $module->parent ? $parent->grade + 1 : 1;
         $this->dao->insert(TABLE_MODULE)->data($module)->exec();
 
         $moduleID   = $this->dao->lastInsertID();
