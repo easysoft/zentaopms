@@ -123,7 +123,23 @@ $(function()
     });
     $('body').on('click', function(e)
     {
-        if(!$.contains(e.target, $('.dropdown-in-tree'))) $('.dropdown-in-tree').remove();
+        $('.dropdown-in-tree').remove();
+    }).on('click', '.sidebar-toggle', function()
+    {
+        var $this = $(this);
+        var $icon = $this.find('.icon');
+        if($('#sideBar').hasClass('hidden'))
+        {
+            $icon.addClass('icon-angle-left');
+            $icon.removeClass('icon-angle-right');
+            $('#sideBar').removeClass('hidden');
+        }
+        else
+        {
+            $icon.addClass('icon-angle-right');
+            $icon.removeClass('icon-angle-left');
+            $('#sideBar').addClass('hidden');
+        }
     }).on('click', '.dropdown-in-tree li', function(e)
     {
         var item = $(this).data();
