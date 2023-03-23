@@ -1,4 +1,5 @@
 <style>
+.table-empty-tip > div {display: inline-block;}
 .detail .list-group-item .heading.GET {
     background-color: #e7f0f7;
 }
@@ -79,13 +80,13 @@
   <div class="detail">
     <li class="detail-title"><?php echo intval($libID) > 0 ? $lang->api->apiList : $lang->api->pageTitle;?></li>
   </div>
-  <div class="detail">
+  <div class="detail table-empty-tip">
     <div class="notice text-muted"><?php echo (empty($libs)) ? $lang->api->noLib : $lang->api->noApi;?></div>
     <div class="no-content-button">
       <?php
       if($libID && common::hasPriv('api', 'create'))
       {
-          echo html::a(helper::createLink('api', 'create', "libID={$libID}"), '<i class="icon icon-plus"></i> ' . $lang->api->createApi, '', 'class="btn btn-info btn-wide"');
+          echo html::a(helper::createLink('api', 'create', "libID={$libID}"), '<i class="icon icon-plus"></i> ' . $lang->api->createApi, '', 'class="btn btn-info"');
       }
       ?>
     </div>
