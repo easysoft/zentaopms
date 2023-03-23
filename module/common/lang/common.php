@@ -115,6 +115,17 @@ $lang->featureconfig      = new stdclass();
 $lang->doctemplate        = new stdclass();
 $lang->notifysetting      = new stdclass();
 $lang->bidesign           = new stdclass();
+$lang->programstakeholder = new stdclass();
+$lang->projectsettings    = new stdclass();
+$lang->dataaccess         = new stdclass();
+$lang->executiongantt     = new stdclass();
+$lang->executionkanban    = new stdclass();
+$lang->executionburn      = new stdclass();
+$lang->executioncfd       = new stdclass();
+$lang->executionstory     = new stdclass();
+$lang->executionqa        = new stdclass();
+$lang->executionsettings  = new stdclass();
+$lang->generalcomment     = new stdclass();
 
 $lang->projectbuild   = new stdclass();
 $lang->projectrelease = new stdclass();

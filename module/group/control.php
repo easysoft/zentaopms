@@ -402,7 +402,6 @@ class group extends control
 
         if($browseType == 'bycard')
         {
-            $moduleList   = array_keys($moduleLang);
             $privs        = $this->group->getPrivsListByView($view);
             $privPackages = $this->group->getPrivPackagePairs();
             $privLang     = $this->group->getPrivLangPairs();

@@ -68,8 +68,8 @@
     if($i >= $config->group->maxToolBarCount) echo '</ul></div>';
     ?>
 
-    <?php $active = $menu == 'other' ? 'btn-active-text' : '';?>
-    <?php echo html::a(inlink('managePriv', sprintf($params, 'other')), "<span class='text'>{$lang->group->other}</span>", '', "class='btn btn-link $active'");?>
+    <?php $active = $menu == 'general' ? 'btn-active-text' : '';?>
+    <?php echo html::a(inlink('managePriv', sprintf($params, 'general')), "<span class='text'>{$lang->group->general}</span>", '', "class='btn btn-link $active'");?>
 
     <div class='input-control space w-150px'>
       <?php echo html::select('version', $this->lang->group->versions, $version, "onchange=showPriv(this.value) class='form-control chosen'");?>

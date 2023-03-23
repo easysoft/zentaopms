@@ -714,8 +714,8 @@ class groupModel extends model
     public function checkMenuModule($menu, $moduleName)
     {
         if(empty($menu)) return true;
-        if($menu == 'other' and (isset($this->lang->navGroup->$moduleName) or isset($this->lang->mainNav->$moduleName))) return false;
-        if($menu != 'other' and !($moduleName == $menu or (isset($this->lang->navGroup->$moduleName) and $this->lang->navGroup->$moduleName == $menu))) return false;
+        if($menu == 'general' and (isset($this->lang->navGroup->$moduleName) or isset($this->lang->mainNav->$moduleName))) return false;
+        if($menu != 'general' and !($moduleName == $menu or (isset($this->lang->navGroup->$moduleName) and $this->lang->navGroup->$moduleName == $menu))) return false;
         if($menu == 'project' and strpos('caselib|testsuite|report', $moduleName) !== false) return false;
         return true;
     }
@@ -1152,7 +1152,7 @@ class groupModel extends model
             ->leftJoin(TABLE_PRIVLANG)->alias('t2')->on('t1.id=t2.priv')
             ->leftJoin(TABLE_PRIVPACKAGE)->alias('t3')->on('t1.package=t3.id')
             ->where('1=1')
-            ->beginIF(!empty($view))->andWhere('t1.module')->in($modules)->fi()
+            ->beginIF(!empty($view) and $view != 'general')->andWhere('t1.module')->in($modules)->fi()
             ->andWhere('t2.lang')->eq($this->app->getClientLang())
             ->orderBy("moduleOrder asc, t3.order asc, `order` asc")
             ->page($pager)

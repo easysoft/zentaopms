@@ -53,8 +53,8 @@ $lang->group->priv    = 'Nhóm quyền';
 $lang->group->option  = 'Tùy chọn';
 $lang->group->inside  = 'Nhóm người dùng';
 $lang->group->outside = 'Other người dùng';
-$lang->group->limited  = 'Limited Users';
-$lang->group->other   = 'Khác';
+$lang->group->limited = 'Limited Users';
+$lang->group->general = 'General';
 $lang->group->all     = 'Tất cả Privileges';
 
 $lang->group->copyOptions['copyPriv'] = 'Copy Privileges';

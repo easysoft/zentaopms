@@ -230,6 +230,17 @@ $lang->featureconfig->common      = '功能配置';
 $lang->doctemplate->common        = '文档模板';
 $lang->notifysetting->common      = '通知设置';
 $lang->bidesign->common           = 'BI设计';
+$lang->programstakeholder->common = '个人设置';
+$lang->projectsettings->common    = '设置';
+$lang->dataaccess->common         = '数据权限';
+$lang->executiongantt->common     = '甘特图';
+$lang->executionkanban->common    = '看板';
+$lang->executionburn->common      = '燃尽图';
+$lang->executioncfd->common       = '累积流图';
+$lang->executionstory->common     = '研发需求';
+$lang->executionqa->common        = '测试';
+$lang->executionsettings->common  = '设置';
+$lang->generalcomment->common     = '备注';
 
 $lang->personnel->common     = '人员';
 $lang->personnel->invest     = '投入人员';

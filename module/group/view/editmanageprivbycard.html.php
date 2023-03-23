@@ -22,6 +22,7 @@
     </thead>
     <tbody>
       <?php foreach($privList as $module => $packages):?>
+      <?php if(!$this->group->checkMenuModule($view, $module)) continue;?>
       <?php $i = 1;?>
       <?php foreach($packages as $packageID => $privs):?>
       <tr class="permission-row">

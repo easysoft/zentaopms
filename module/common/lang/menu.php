@@ -591,12 +591,12 @@ $lang->system->menuOrder[15] = 'dynamic';
 $lang->system->menuOrder[20] = 'view';
 
 /* Nav group.*/
-$lang->navGroup          = new stdclass();
-$lang->navGroup->my      = 'my';
-$lang->navGroup->effort  = 'my';
-$lang->navGroup->score   = 'my';
-$lang->navGroup->todo    = 'my';
-$lang->navGroup->contact = 'my';
+$lang->navGroup = new stdclass();
+$lang->navGroup->my               = 'my';
+$lang->navGroup->score            = 'my';
+$lang->navGroup->todo             = 'my';
+$lang->navGroup->contact          = 'my';
+$lang->navGroup->personalsettings = 'my';
 
 $lang->navGroup->program            = 'program';
 $lang->navGroup->personnel          = 'program';
@@ -609,11 +609,12 @@ $lang->navGroup->branch      = 'product';
 $lang->navGroup->story       = 'product';
 $lang->navGroup->requirement = 'product';
 
-$lang->navGroup->project     = 'project';
-$lang->navGroup->deploy      = 'project';
-$lang->navGroup->programplan = 'project';
-$lang->navGroup->design      = 'project';
-$lang->navGroup->stakeholder = 'project';
+$lang->navGroup->project         = 'project';
+$lang->navGroup->deploy          = 'project';
+$lang->navGroup->programplan     = 'project';
+$lang->navGroup->design          = 'project';
+$lang->navGroup->stakeholder     = 'project';
+$lang->navGroup->projectsettings = 'project';
 
 $lang->navGroup->projectbuild   = 'project';
 $lang->navGroup->projectstory   = 'project';
@@ -632,11 +633,18 @@ $lang->navGroup->researchplan   = 'project';
 $lang->navGroup->workestimation = 'project';
 $lang->navGroup->gapanalysis    = 'project';
 
-$lang->navGroup->execution     = 'execution';
-$lang->navGroup->task          = 'execution';
-$lang->navGroup->build         = 'execution';
-$lang->navGroup->team          = 'execution';
-$lang->navGroup->executionview = 'execution';
+$lang->navGroup->execution         = 'execution';
+$lang->navGroup->task              = 'execution';
+$lang->navGroup->build             = 'execution';
+$lang->navGroup->team              = 'execution';
+$lang->navGroup->executionview     = 'execution';
+$lang->navGroup->executiongantt    = 'execution';
+$lang->navGroup->executionkanban   = 'execution';
+$lang->navGroup->executionburn     = 'execution';
+$lang->navGroup->executioncfd      = 'execution';
+$lang->navGroup->executionstory    = 'execution';
+$lang->navGroup->executionqa       = 'execution';
+$lang->navGroup->executionsettings = 'execution';
 
 $lang->navGroup->managespace  = 'kanban';
 $lang->navGroup->kanbanspace  = 'kanban';
@@ -690,6 +698,7 @@ $lang->navGroup->systemschedule = 'system';
 $lang->navGroup->systemeffort   = 'system';
 $lang->navGroup->systemdynamic  = 'system';
 $lang->navGroup->systemcompany  = 'system';
+$lang->navGroup->dataaccess     = 'system';
 
 $lang->navGroup->attend   = 'attend';
 $lang->navGroup->leave    = 'attend';
@@ -725,9 +734,7 @@ $lang->navGroup->featureconfig = 'admin';
 $lang->navGroup->doctemplate   = 'admin';
 $lang->navGroup->notifysetting = 'admin';
 
-$lang->navGroup->search  = 'search';
 $lang->navGroup->index   = 'index';
-$lang->navGroup->tree    = 'tree';
 $lang->navGroup->misc    = 'misc';
 $lang->navGroup->upgrade = 'upgrade';
 

@@ -33,8 +33,8 @@
     if($i >= $config->group->maxToolBarCount) echo '</ul></div>';
     ?>
 
-    <?php $active = $view == 'other' ? 'btn-active-text' : '';?>
-    <?php echo html::a(inlink('editManagePriv', sprintf($params, 'other')), "<span class='text'>{$lang->group->other}</span>", '', "class='btn btn-link $active'");?>
+    <?php $active = $view == 'general' ? 'btn-active-text' : '';?>
+    <?php echo html::a(inlink('editManagePriv', sprintf($params, 'general')), "<span class='text'>{$lang->group->general}</span>", '', "class='btn btn-link $active'");?>
     <?php if($browseType != 'bycard'):?>
     <a class="btn btn-link querybox-toggle" id='bysearchTab'><i class="icon icon-search muted"></i> <?php echo $lang->searchAB;?></a>
     <?php endif;?>
