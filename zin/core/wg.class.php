@@ -416,7 +416,7 @@ class wg
 
     public static function nextGid($type = NULL)
     {
-        return str_replace('\\', '_', empty($type) ? get_called_class() : $type) . '_' . ++static::$gidSeed;
+        return 'zin' . ++static::$gidSeed;
     }
 
     protected static function getDefinedProps($name = NULL)
