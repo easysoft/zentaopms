@@ -69,7 +69,7 @@
             <tr>
               <td><?php echo $node->id; ?></td>
               <td title='<?php echo $node->name ?>'><?php echo html::a($this->inlink('view', "id=$node->id"), $node->name, '', ""); ?></td>
-              <td><?php echo zget($this->lang->zanode->typeList, $node->type); ?></td>
+              <td><?php echo $node->hostType == 'physics' ? $this->lang->zanode->typeList['physics'] : $this->lang->zanode->typeList['node']; ?></td>
               <td><?php echo $node->extranet; ?></td>
               <td><?php echo zget($config->zanode->os->cpuCores, $node->cpuCores); ?></td>
               <td><?php echo $node->memory . $this->lang->zahost->unitList['GB']; ?></td>
