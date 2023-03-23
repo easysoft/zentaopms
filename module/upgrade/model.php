@@ -8513,8 +8513,13 @@ class upgradeModel extends model
      */
     public function processChart()
     {
-        $charts               = $this->dao->select('*')->from(TABLE_CHART)->fetchAll();
+        $charts               = $this->dao->select('*')->from(TABLE_CHART)->fetchAll('id');
         $dashboardLayoutPairs = $this->dao->select('id, layout')->from(TABLE_DASHBOARD)->fetchPairs();
+
+        $dataviewList = $this->dao->select('t1.code,t1.sql,t1.fields')->from(TABLE_DATAVIEW)->alias('t1')
+            ->leftJoin(TABLE_CHART)->alias('t2')->on('t1.code = t2.dataset')
+            ->where('t2.id')->in(array_keys($charts))
+            ->fetchAll('code');
 
         $defaultGroupID = $this->createDefaultGroup('chart');
 
@@ -8537,6 +8542,13 @@ class upgradeModel extends model
 
             $data->settings = json_encode($settings);
             $data->filters  = json_encode($filters);
+
+            if(isset($dataviewList[$chart->dataset]))
+            {
+                $dataview     = $dataviewList[$chart->dataset];
+                $data->sql    = isset($dataview->sql) ? $dataview->sql : '';
+                $data->fields = isset($dataview->fields) ? $dataview->fields : '';
+            }
 
             if($chart->type == 'table')
             {
