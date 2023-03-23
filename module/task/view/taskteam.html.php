@@ -1,3 +1,5 @@
+<?php $oldMaxCount = $this->config->maxCount;?>
+<?php $this->config->maxCount = 500;?>
 <style>
 #taskTeamEditor button > i {color: #5e626d;}
 #taskTeamEditor .estimateBox span {background-color: #fff;}
@@ -359,3 +361,4 @@ function setLineNumber()
 
 }
 </script>
+<?php $this->config->maxCount = $oldMaxCount;?>
