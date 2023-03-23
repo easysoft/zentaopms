@@ -40,8 +40,8 @@ $lang->navGroup->demandpool = 'demandpool';
 $lang->navGroup->demand     = 'demandpool';
 
 $lang->demandpool->menu = new stdclass();
-$lang->demandpool->menu->browse  = array('link' => "{$lang->demand->common}|demand|browse|poolID=%s", 'alias' => 'create,batchcreate,edit,managetree,view,tostory,showimport');
-$lang->demandpool->menu->review  = array('link' => "评审|demand|review|poolID=%s");
+$lang->demandpool->menu->browse  = array('link' => "{$lang->demand->common}|demand|browse|poolID=%s", 'alias' => 'create,batchcreate,edit,managetree,view,tostory,showimport,review');
+//$lang->demandpool->menu->review  = array('link' => "评审|demand|review|poolID=%s");
 $lang->demandpool->menu->kanban  = array('link' => "看板|demand|kanban|poolID=%s");
 $lang->demandpool->menu->track   = array('link' => "矩阵图|demand|track|demandID=%s");
 $lang->demandpool->menu->insight = array('link' => "洞察|demand|insight|demandID=%s");
