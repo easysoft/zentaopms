@@ -59,18 +59,18 @@ class props extends \zin\utils\dataset
      */
     protected function setVal($prop, $value)
     {
-        if($prop === 'class' || $prop === '.')   return $this->class->set($value);
-        if($prop === 'style' || $prop === '~')   return $this->style->set($value);
-        if(strpos($prop, '~') === 0)             return $this->style->set(substr($prop, 1), $value);
-        if($prop === '--')                       return $this->style->cssVar($value);
-        if(strpos($prop, '--') === 0)            return $this->style->cssVar(substr($prop, 2), $value);
-        if($prop === '!')                        return $this->hx($value);
-        if(strpos($prop, '!') === 0)             return $this->hx(substr($prop, 1), $value);
-        if(strpos($prop, ':') === 0)             return $this->set('data-' . substr($prop, 1), $value);
-        if($prop === '@')                        return $this->onEvent($value);
-        if(strpos($prop, '@') === 0)             return $this->onEvent(substr($prop, 1), $value);
-
-        return parent::setVal($prop, $value);
+        if($prop === 'class' || $prop === '.')     $this->class->set($value);
+        elseif($prop === 'style' || $prop === '~') $this->style->set($value);
+        elseif(strpos($prop, '~') === 0)           $this->style->set(substr($prop, 1), $value);
+        elseif($prop === '--')                     $this->style->cssVar($value);
+        elseif(strpos($prop, '--') === 0)          $this->style->cssVar(substr($prop, 2), $value);
+        elseif($prop === '!')                      $this->hx($value);
+        elseif(strpos($prop, '!') === 0)           $this->hx(substr($prop, 1), $value);
+        elseif(strpos($prop, ':') === 0)           $this->set('data-' . substr($prop, 1), $value);
+        elseif($prop === '@')                      $this->bindEvent($value);
+        elseif(strpos($prop, '@') === 0)           $this->bindEvent(substr($prop, 1), $value);
+        else                                       parent::setVal($prop, $value);
+        return $this;
     }
 
     public function reset($name, $value = NULL)
@@ -100,15 +100,15 @@ class props extends \zin\utils\dataset
         return $this;
     }
 
-    public function onEvent($name, $callback = NULL)
+    public function bindEvent($name, $callback = NULL)
     {
         if(is_array($name))
         {
-            foreach($name as $key => $value) $this->set("@$key", $value);
+            foreach($name as $key => $value) parent::setVal("@$key", $value);
             return;
         }
 
-        $this->set("@$name", $callback);
+        parent::setVal("@$name", $callback);
     }
 
     public function events()
@@ -120,6 +120,16 @@ class props extends \zin\utils\dataset
         }
 
         return $events;
+    }
+
+    public function hasEvent()
+    {
+        foreach($this->data as $name => $value)
+        {
+            if(strpos($name, '@') === 0) return true;
+        }
+
+        return false;
     }
 
     public function hx($name, $value = NULL)

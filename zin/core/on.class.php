@@ -17,6 +17,7 @@ class on
 {
     public static function __callStatic($name, $args)
     {
-        return call_user_func_array('zin\on', array_merge(array($name), $args));
+        list($callback, $options) = array_merge($args, array(NULL));
+        return on($name, $callback, $options);
     }
 }

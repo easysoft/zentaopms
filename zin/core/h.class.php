@@ -17,7 +17,7 @@ require_once 'wg.func.php';
 
 class h extends wg
 {
-    protected static $defineProps = 'tagName, selfClose?:bool=false, customProps?:string|array';
+    protected static $defineProps = 'tagName, selfClose?:bool=false';
 
     public function getTagName()
     {
@@ -34,9 +34,11 @@ class h extends wg
 
     public function build()
     {
-        if($this->isSelfClose()) return $this->buildSelfCloseTag();
+        $events = $this->buildEvents();
 
-        return array($this->buildTagBegin(), parent::build(), $this->buildTagEnd());
+        if($this->isSelfClose()) return array($this->buildSelfCloseTag(), $events);
+
+        return array($this->buildTagBegin(), parent::build(), $this->buildTagEnd(), $events);
     }
 
     public function toJsonData()
@@ -53,13 +55,44 @@ class h extends wg
 
     protected function getPropsStr()
     {
-        $skipProps   = array_keys(static::getDefinedProps());
-        $customProps = $this->props->get('customProps');
-
-        if($customProps) $skipProps = array_merge($skipProps, is_string($customProps) ? explode(',', $customProps) : $customProps);
-
-        $propStr = $this->props->toStr($skipProps);
+        $propStr = $this->props->toStr(array_keys(static::getDefinedProps()));
+        if($this->props->hasEvent() && empty($this->id())) $propStr = "$propStr id='$this->gid'";
         return empty($propStr) ? '' : " $propStr";
+    }
+
+    protected function buildEvents()
+    {
+        $events = $this->props->events();
+        if(empty($events)) return NULL;
+
+        $id = $this->id();
+        $code = array('const ele = document.getElementById("' . (empty($id) ? $this->gid : $id) . '");');
+        foreach($events as $event => $options)
+        {
+            if(is_string($options)) $options = array('handler' => $options);
+            $selector = isset($options['selector']) ? $options['selector'] : NULL;
+            $handler  = isset($options['handler']) ? trim($options['handler']) : '';
+            $stop  = isset($options['stop']) ? $options['stop'] : NULL;
+            $prevent  = isset($options['prevent']) ? $options['prevent'] : NULL;
+            $self  = isset($options['self']) ? $options['self'] : NULL;
+            unset($options['selector']);
+            unset($options['handler']);
+            unset($options['stop']);
+            unset($options['prevent']);
+            unset($options['self']);
+            $code[] = "ele.addEventListener('$event', function(e) {";
+
+            if($selector) $code[] = "if(!e.target.closest('$selector')) return;";
+            if($self)     $code[] = "if(ele !== e.target) return;";
+            if($stop)     $code[] = "e.stopPropagation();";
+            if($prevent)  $code[] = "e.preventDefault();";
+
+            if(preg_match('/^[$A-Z_][0-9A-Z_$\[\]."\']*$/i', $handler)) $code[] = "($handler)(e);";
+            else $code[] = $handler;
+
+            $code[] = '}' . (empty($options) ? '' : (', ' . json_encode($options))) . ');';
+        }
+        return static::js($code);
     }
 
     protected function buildSelfCloseTag()

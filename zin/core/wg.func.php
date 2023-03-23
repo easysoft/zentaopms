@@ -55,16 +55,33 @@ function setTag($id)
     return prop('tagName', $id);
 }
 
-function on($name, $callback, $options = NULL)
+function on($name, $handler, $options = NULL)
 {
-    if(is_string($options) && is_string($callback))
+    if(is_string($options) && is_string($handler))
     {
-        $tmp      = $callback;
-        $callback = $options;
-        $options  = array('selector' => $tmp);
+        $options  = array('selector' => $handler, 'handler' => $options);
     }
-    if(is_bool($options)) $options = array('useCapture' => $options);
-    return set("@$name", array($callback, $options));
+    elseif(is_bool($options))
+    {
+        $options = array('capture' => $options, 'handler' => $handler);
+    }
+    elseif(is_array($options))
+    {
+        $options['handler'] = $handler;
+    }
+    else
+    {
+        $options = array('handler' => $handler);
+    }
+    if(strpos($name, '__') !== false)
+    {
+        list($name, $flags) = explode('__', $name);
+        if(strpos($flags, 'capture') !== false) $options['capture'] = true;
+        if(strpos($flags, 'stop') !== false)    $options['stop'] = true;
+        if(strpos($flags, 'prevent') !== false) $options['prevent'] = true;
+        if(strpos($flags, 'self') !== false)    $options['self'] = true;
+    }
+    return set("@$name", $options);
 }
 
 function html(/* string ...$lines */)
