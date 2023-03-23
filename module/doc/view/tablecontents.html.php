@@ -12,7 +12,7 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php js::set('treeData', $libTree);?>
-<?php js::set('linkParams', "type=$type&objectID=$objectID%s&browseType=$browseType&orderBy=$orderBy");?>
+<?php js::set('linkParams', "type=$type&objectID=$objectID%s&browseType=&orderBy=$orderBy");?>
 <?php js::set('docLang', $lang->doc);?>
 <div id="mainMenu" class="clearfix">
   <div id="leftBar" class="btn-toolbar pull-left">
