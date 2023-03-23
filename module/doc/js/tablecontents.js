@@ -218,6 +218,7 @@ $(function()
         }
     }).on('blur', '.file-tree input.input-tree', function()
     {
-        console.log($(this));
+        var $a = $('[data-id=aTreeModal]').html().replace(/%name%/g, $(this).val());
+        $(this).replaceWith($a);
     });
 });
