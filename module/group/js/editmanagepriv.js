@@ -77,6 +77,7 @@ function updatePrivTree(objTree)
         $(".menuTree.recommend + .empty-tip").removeClass('hidden');
         $(".menuTree.recommend").closest('.priv-panel').find('.panel-title .priv-count').html('');
     }
+    if(!canDeleteRelation) $('.side a.priv-item .icon-close').remove();
 }
 
 /**

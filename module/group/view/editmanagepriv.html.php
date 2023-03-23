@@ -103,5 +103,5 @@
     </div>
   </div>
 </div>
+<?php js::set('canDeleteRelation', common::hasPriv('group', 'deleteRelation'));?>
 <?php include '../../common/view/footer.html.php';?>
-
