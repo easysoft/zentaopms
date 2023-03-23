@@ -65,13 +65,13 @@
   ?>
   </div>
 </div>
+<div class="cell<?php if($browseType == 'bySearch') echo ' show';?>" style="min-width: 400px" id="queryBox" data-module=<?php echo $type . $libType . 'Doc';?>></div>
 <div id='mainContent'class="fade flex split-row">
   <div id='sideBar' class="panel side side-col col overflow-auto flex-none" data-min-width="150">
     <div id="fileTree" class="file-tree"></div>
   </div>
   <div id="spliter" class="spliter col-spliter sidebar-toggle"></div>
-  <div class="main-col flex-full col overflow-auto flex-auto panel" data-min-width="500">
-    <div class="cell<?php if($browseType == 'bySearch') echo ' show';?>" style="min-width: 400px" id="queryBox" data-module=<?php echo $type . $libType . 'Doc';?>></div>
+  <div class="main-col flex-full col overflow-auto flex-auto" data-min-width="500">
     <?php
     if($browseType == 'annex')
     {
