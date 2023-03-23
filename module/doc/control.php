@@ -1376,4 +1376,29 @@ class doc extends control
         $this->view->libs  = $this->doc->getLibs($type, '', '', $objectID);
         $this->display();
     }
+
+    /**
+     * Ajax get objectType drop menu.
+     *
+     * @param  string $objectType
+     * @param  int    $objectID
+     * @param  string $module
+     * @param  string $method
+     * @access public
+     * @return void
+     */
+    public function ajaxGetDropMenu($objectType, $objectID, $module, $method)
+    {
+        list($myObjects, $normalObjects, $closedObjects) = $this->doc->getOrderedObjects($objectType, 'nomerge');
+
+        $this->view->objectType    = $objectType;
+        $this->view->objectID      = $objectID;
+        $this->view->module        = $module;
+        $this->view->method        = $method;
+        $this->view->normalObjects = $myObjects + $normalObjects;
+        $this->view->closedObjects = $closedObjects;
+        $this->view->objectsPinYin = common::convert2Pinyin($myObjects + $normalObjects + $closedObjects);
+
+        $this->display();
+    }
 }

@@ -97,6 +97,7 @@ $lang->doc->order        = 'Order';
 $lang->doc->doc          = 'Document';
 $lang->doc->updateOrder  = 'Update Order';
 $lang->doc->nextStep     = 'Next';
+$lang->doc->closed       = 'Closed';
 
 $lang->doc->moduleDoc     = 'Par Module';
 $lang->doc->searchDoc     = 'Rechercher';

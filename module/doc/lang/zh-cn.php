@@ -97,6 +97,7 @@ $lang->doc->order        = '排序';
 $lang->doc->doc          = '文档';
 $lang->doc->updateOrder  = '更新排序';
 $lang->doc->nextStep     = '下一步';
+$lang->doc->closed       = '已关闭';
 
 $lang->doc->moduleDoc     = '按模块浏览';
 $lang->doc->searchDoc     = '搜索';

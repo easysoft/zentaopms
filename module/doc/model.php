@@ -1517,10 +1517,11 @@ class docModel extends model
      * Get ordered objects for dic.
      *
      * @param  string $objectType
+     * @param  string $returnType nomerge|merge
      * @access public
      * @return array
      */
-    public function getOrderedObjects($objectType = 'product')
+    public function getOrderedObjects($objectType = 'product', $returnType = 'merge')
     {
         $myObjects = $normalObjects = $closedObjects = array();
         if($objectType == 'product')
@@ -1631,6 +1632,7 @@ class docModel extends model
             }
         }
 
+        if($returnType == 'nomerge') return array($myObjects, $normalObjects, $closedObjects);
         return $myObjects + $normalObjects + $closedObjects;
     }
 
@@ -2232,128 +2234,24 @@ class docModel extends model
      * Create the select code of doc.
      *
      * @param  string $type
-     * @param  array  $objects
+     * @param  string $objectTitle
      * @param  int    $objectID
      * @param  array  $libs
      * @param  int    $libID
      * @access public
      * @return string
      */
-    public function select($type, $objects, $objectID, $libs, $libID = 0)
+    public function select($type, $objectTitle, $objectID)
     {
-        if($type != 'custom' and $type != 'book' and empty($objects)) return '';
+        if(!in_array($type, array('product', 'project'))) return '';
 
-        $output            = '';
-        $closedObjectsHtml = '';
-        $closedObjects     = array();
-        $maxHeight         = (in_array($type, array('project', 'execution')) and $this->app->tab == 'doc') ? '260px' : '290px';
-        $class             = (in_array($type, array('project', 'execution')) and $this->app->tab == 'doc') ? 'col-left' : '';
-
+        $currentModule = $this->app->getModuleName();
         $currentMethod = $this->app->getMethodName();
-        $methodName    = in_array($currentMethod, array('tablecontents', 'showfiles')) ? 'tablecontents' : 'objectLibs';
 
-        if($this->app->tab == 'doc' and $type != 'custom' and $type != 'book')
-        {
-            $objectTitle = $type == 'execution' ? substr($objects[$objectID], strpos($objects[$objectID], '/') + 1) : $objects[$objectID];
-
-            $output = <<<EOT
-<div class='btn-group angle-btn'>
-  <div class='btn-group'>
-    <button data-toggle='dropdown' type='button' class='btn btn-limit' id='currentItem' title='{$objectTitle}'>
-      <div class='nobr'>{$objectTitle}</div>
-      <span class='caret'></span>
-    </button>
-    <div id='dropMenu' class='dropdown-menu search-list load-indicator' data-ride='searchList'>
-    <div class="input-control search-box has-icon-left has-icon-right search-example">
-      <input type="search" class="form-control search-input"/>
-      <label class="input-control-icon-left search-icon"><i class="icon icon-search"></i></label>
-      <a class="input-control-icon-right search-clear-btn"><i class="icon icon-close icon-sm"></i></a>
-    </div>
-    <div class='list-group'>
-      <div class='table-row'>
-        <div class='table-col $class'>
-          <div class='list-group' style='max-height: $maxHeight'>
-EOT;
-            if(in_array($type, array('project', 'execution')) and $this->app->tab == 'doc')
-            {
-                $closedObjects = $this->dao->select('id,name')->from(TABLE_PROJECT)->where('id')->in(array_keys($objects))->andWhere('status')->eq('closed')->fetchPairs();
-            }
-
-            foreach($objects as $key => $object)
-            {
-                $selected = $key == $objectID ? 'selected' : '';
-                if(isset($closedObjects[$key]))
-                {
-                    $closedObjectsHtml .= html::a(inlink($methodName, "type=$type&objectID=$key"), $object, '', "class='$selected' title='$object' data-app='{$this->app->tab}'");
-                    if($selected == 'selected') $tabActive = 'closed';
-                }
-                else
-                {
-                    $output .= html::a(inlink($methodName, "type=$type&objectID=$key"), $object, '', "class='$selected' title='$object' data-app='{$this->app->tab}'");
-                }
-            }
-            if(in_array($type, array('project', 'execution')) and $this->app->tab == 'doc')
-            {
-                $output .= <<<EOT
-            </div>
-            <div class='col-footer'>
-              <a class='pull-right toggle-right-col not-list-item'>{$this->lang->project->doneProjects}<i class='icon icon-angle-right'></i></a>
-            </div>
-          </div>
-          <div class='table-col col-right'>
-            <div class='list-group'>$closedObjectsHtml</div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-EOT;
-            }
-            else
-            {
-                $output .= "</div></div></div></div></div></div></div>";
-            }
-        }
-
-        if(!empty($libs))
-        {
-            $libName = empty($libID) ? $this->lang->doclib->files : $libs[$libID]->name;
-            $output  .= <<<EOT
-<div class='btn-group angle-btn'>
-  <div class='btn-group'>
-    <button id='currentBranch' data-toggle='dropdown' type='button' class='btn btn-limit'><div class='nobr'>{$libName}</div> <span class='caret'></span>
-    </button>
-    <div id='dropMenu' class='dropdown-menu search-list' data-ride='searchList'>
-      <div class="input-control search-box has-icon-left has-icon-right search-example">
-        <input type="search" class="form-control search-input" />
-        <label class="input-control-icon-left search-icon"><i class="icon icon-search"></i></label>
-        <a class="input-control-icon-right search-clear-btn"><i class="icon icon-close icon-sm"></i></a>
-      </div>
-      <div class='table-col'>
-        <div class='list-group'>
-EOT;
-            foreach($libs as $key => $lib)
-            {
-                $selected = $key == $libID ? 'selected' : '';
-                $docCount = isset($lib->docCount) ? $lib->docCount : 0;
-                $output  .= html::a(inlink($methodName, "type=$type&objectID=$objectID&libID=$key"), "<span style='display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;'>$lib->name</span>&nbsp;<span>($docCount)</span>", '', "class='$selected' data-app='{$this->app->tab}' title='$lib->name ($docCount)' style='display: flex; justify-content: start;'");
-            }
-            if($type != 'custom' and $type != 'book')
-            {
-                $files     = $this->getLibFiles($type, $objectID, 't1.id_desc');
-                $fileCount = count($files) > 99 ? '99+' : count($files);
-                $selected  = empty($libID) ? 'selected' : '';
-                $output   .= html::a(inlink('showFiles', "type=$type&objectID=$objectID"), "{$this->lang->doclib->files} ($fileCount)", '', "class='$selected' data-app='{$this->app->tab}' title='{$this->lang->doclib->files} ($fileCount)'");
-            }
-            if(count($libs) >= 2 and common::hasPriv('doc', 'sortLibs'))
-            {
-                $output .= '<li class="divider"></li>';
-                $output .= html::a(inlink('sortLibs', "type=$type&objectID=$objectID", '', true), "<i class='icon-move'></i>  {$this->lang->doc->sortLibs}", '', "data-title='{$this->lang->doc->sortLibs}' data-toggle='modal' data-type='iframe' data-width='400px' data-app='{$this->app->tab}'");
-            }
-            $output .= "</div></div></div></div></div>";
-        }
-
+        $dropMenuLink = helper::createLink('doc', 'ajaxGetDropMenu', "objectType=$type&objectID=$objectID&module=$currentModule&method=$currentMethod");
+        $output  = "<div class='btn-group selectBox' id='swapper'><button data-toggle='dropdown' type='button' class='btn' id='currentItem' title='{$objectTitle}'><span class='text'>{$objectTitle}</span> <span class='caret' style='margin-bottom: -1px'></span></button><div id='dropMenu' class='dropdown-menu search-list' data-ride='searchList' data-url='$dropMenuLink'>";
+        $output .= '<div class="input-control search-box has-icon-left has-icon-right search-example"><input type="search" class="form-control search-input" /><label class="input-control-icon-left search-icon"><i class="icon icon-search"></i></label><a class="input-control-icon-right search-clear-btn"><i class="icon icon-close icon-sm"></i></a></div>';
+        $output .= "</div></div>";
         return $output;
     }
 
@@ -2729,9 +2627,7 @@ EOT;
             $objectID = $type == 'custom' or $type == 'book' ? 0 : $doclib->$type;
         }
 
-        $objects        = $this->getOrderedObjects($type);
         $objectDropdown = '';
-
         if($type == 'custom')
         {
             $libs                 = $this->getLibsByObject('custom', 0, '', $appendLib);
@@ -2751,6 +2647,7 @@ EOT;
         }
         else
         {
+            $objects  = $this->getOrderedObjects($type);
             $objectID = $this->loadModel($type)->saveState($objectID, $objects);
             $table    = $this->config->objectTables[$type];
             $libs     = $this->getLibsByObject($type, $objectID, '', $appendLib);
@@ -2759,7 +2656,7 @@ EOT;
             if($this->app->tab == 'doc') $this->app->rawMethod = $type == 'execution' ? 'project' : $type;
 
             $object         = $this->dao->select('id,name,status')->from($table)->where('id')->eq($objectID)->fetch();
-            $objectDropdown = $this->select($type, $objects, $objectID, array());
+            $objectDropdown = $this->select($type, $objects[$objectID], $objectID);
 
             if(empty($object))
             {
@@ -2939,7 +2836,7 @@ EOT;
                 ->fetchPairs();
         }
 
-        $libTree = array();
+        $libTree = array($type => array());
         $apiLibs = array();
         foreach($libs as $lib)
         {

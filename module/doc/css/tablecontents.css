@@ -78,3 +78,5 @@ li.drag-shadow ul {display: none!important;}
 .table .c-name > .ajaxCollect {float: right; position: relative; right: 10px; top: -3px;}
 
 #bysearchTab::before {display: none;}
+#leftBar .selectBox #currentItem {width: 185px; display: flex; align-items: center;}
+#leftBar .selectBox #currentItem > .text {overflow: hidden; text-align: left; flex: 0 1 100%;}
