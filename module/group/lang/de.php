@@ -84,6 +84,7 @@ $lang->group->dependentPrivs            = 'Dependented Privs';
 $lang->group->addRelation               = 'Add Relation';
 $lang->group->deleteRelation            = 'Delete Relation';
 $lang->group->batchDeleteRelation       = 'Batch Delete Relation';
+$lang->group->batchChangePackage        = 'Batch Change Priv Package';
 
 $lang->group->id         = 'ID';
 $lang->group->name       = 'Name';

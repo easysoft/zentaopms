@@ -1707,6 +1707,7 @@ $lang->resource->group->batchDeleteRelation = 'batchDeleteRelation';
 $lang->resource->group->createPriv          = 'createPriv';
 $lang->resource->group->editPriv            = 'editPriv';
 $lang->resource->group->deletePriv          = 'deletePriv';
+$lang->resource->group->batchChangePackage  = 'batchChangePackage';
 
 $lang->group->methodOrder[5]   = 'browse';
 $lang->group->methodOrder[10]  = 'create';
@@ -1722,12 +1723,13 @@ $lang->group->methodOrder[55]  = 'createPrivPackage';
 $lang->group->methodOrder[60]  = 'editPrivPackage';
 $lang->group->methodOrder[65]  = 'deletePrivPackage';
 $lang->group->methodOrder[70]  = 'sortPrivPackages';
-$lang->group->methodOrder[75]  = 'addRelation';
-$lang->group->methodOrder[80]  = 'deleteRelation';
-$lang->group->methodOrder[85]  = 'batchDeleteRelation';
-$lang->group->methodOrder[90]  = 'createPriv';
-$lang->group->methodOrder[95]  = 'editPriv';
-$lang->group->methodOrder[100] = 'deletePriv';
+$lang->group->methodOrder[75]  = 'batchChangePackage';
+$lang->group->methodOrder[80]  = 'addRelation';
+$lang->group->methodOrder[85]  = 'deleteRelation';
+$lang->group->methodOrder[90]  = 'batchDeleteRelation';
+$lang->group->methodOrder[95]  = 'createPriv';
+$lang->group->methodOrder[100] = 'editPriv';
+$lang->group->methodOrder[105] = 'deletePriv';
 
 /* User. */
 $lang->resource->user = new stdclass();

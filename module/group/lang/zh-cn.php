@@ -84,6 +84,7 @@ $lang->group->dependentPrivs            = '依赖的权限';
 $lang->group->addRelation               = '添加权限关联';
 $lang->group->deleteRelation            = '删除权限关联';
 $lang->group->batchDeleteRelation       = '批量删除权限关联';
+$lang->group->batchChangePackage        = '批量修改权限包';
 
 $lang->group->id         = '编号';
 $lang->group->name       = '分组名称';
