@@ -68,12 +68,12 @@ class wg
         zin::disableGlobalRender();
 
         $before   = $this->buildBefore();
-        $after    = $this->buildAfter();
         $children = $this->build();
+        $after    = $this->buildAfter();
 
         zin::enableGlobalRender();
 
-        return static::renderToHtml(array($before, $after, $children), $this);
+        return static::renderToHtml(array($before, $children, $after), $this);
     }
 
     public function display()
