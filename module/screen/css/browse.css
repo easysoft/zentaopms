@@ -9,6 +9,7 @@
 .screen .top {text-align: center; min-height:182px; position:relative;}
 .screen .top.img {height: 182px; text-align: center;}
 .screen .top.img img {height:100%; overflow: hidden; object-fit: cover; object-position: top;}
+.screen .top.img.image_draft img {object-position: center;}
 .screen .top .image {height:100%; display:flex; align-items:center; justify-content:center;}
 .screen .top .image i {font-size:100px;}
 .screen .top .image i:before {content: '\f1c5';}

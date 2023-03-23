@@ -19,7 +19,7 @@
             <img src='<?php echo $screen->cover;?>' controls='controls' width='100%'/>
           </div>
           <?php else:?>
-          <div class='top img'>
+          <div class='top img image_<?php echo $screen->status;?>'>
             <img src='<?php echo "static/images/screen_{$screen->status}.png";?>' controls='controls' width='100%'/>
           </div>
           <?php endif?>
