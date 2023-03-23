@@ -213,7 +213,7 @@ $(function()
                     $rootDom.addClass('open in has-list');
                     $input += $('[data-id=ulTreeModal]').html();
                 }
-                $rootDom.append($input);
+                $rootDom.preppend($input);
                 $rootDom.find('input').focus();
                 break;
             case 'addCata' :
