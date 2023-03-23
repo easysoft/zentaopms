@@ -911,6 +911,7 @@ class apiModel extends model
      */
     public function buildSearchForm($lib, $queryID, $actionURL, $libs = array(), $type = '')
     {
+        if(empty($lib)) return;
         $libPairs = array('' => '', $lib->id => $lib->name);
         $this->config->api->search['module'] = 'api';
         if(!empty($libs))

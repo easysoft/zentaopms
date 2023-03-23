@@ -17,7 +17,9 @@
 <div id="mainMenu" class="clearfix">
   <div id="leftBar" class="btn-toolbar pull-left">
     <?php echo $objectDropdown;?>
+    <?php if(!empty($libTree)):?>
     <a class="btn btn-link querybox-toggle" id='bysearchTab'><i class="icon icon-search muted"></i> <?php echo $lang->doc->searchDoc;?></a>
+    <?php endif;?>
   </div>
   <div class="btn-toolbar pull-right">
   <?php

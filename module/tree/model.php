@@ -2331,7 +2331,7 @@ class treeModel extends model
         $module->name   = strip_tags(trim($data->name));
         if(empty($module->name))
         {
-            dao::$errors[] = sprintf($this->lang->notempty, $this->lang->tree->dir);
+            dao::$errors[] = sprintf($this->lang->error->notempty, $this->lang->tree->dir);
             return false;
         }
 
