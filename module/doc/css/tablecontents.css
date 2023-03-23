@@ -50,12 +50,16 @@ li.drag-shadow ul {display: none!important;}
 .main-table-content > .side {flex: 0 0 300px;}
 .main-table-content > .content {flex: 1;}
 
+/* css for mian */
+.split-row > #sideBar {flex: 0 0 200px; overflow-x: auto;}
+
 /* css for tree */
 .file-tree {overflow-x: auto; padding: 10px;}
 .file-tree  a {height: 30px;}
 .flex-between {display: flex; align-items: center; justify-content: space-between;}
 .flex-center {display: flex; align-items: center; justify-content: center;}
 .tree li>.list-toggle {top: 4px;}
+.input-tree {width: 120px;}
 
 /* css for sidebar */
 .sidebar-toggle > .icon {position: absolute; top: 50%; left: -12px; width: 12px; height: 30px; margin-top: -10px; line-height: 30px; color: #fff; text-align: center; background: #7dcdfe; border-radius: 6px; cursor: pointer;}

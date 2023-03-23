@@ -66,10 +66,10 @@
   </div>
 </div>
 <div id='mainContent'class="fade flex split-row">
-  <div id='sideBar' class="panel side side-col col overflow-auto flex-none" data-min-width="150">
+  <div id='sideBar' class="panel side side-col col overflow-auto" data-min-width="150">
     <div id="fileTree" class="file-tree"></div>
   </div>
-  <div id="spliter" class="spliter col-spliter sidebar-toggle"></div>
+  <div class="sidebar-toggle"></div>
   <div class="main-col flex-full col overflow-auto flex-auto" data-min-width="500">
     <div class="cell<?php if($browseType == 'bySearch') echo ' show';?>" style="min-width: 400px" id="queryBox" data-module=<?php echo $type . $libType . 'Doc';?>></div>
     <?php
@@ -91,7 +91,7 @@
 <div class='hidden' id='dropDownData'>
   <div class='libDorpdown'>
     <?php if(common::hasPriv('tree', 'browse')):?>
-    <li data-method="addCataLib" data-type="add"><a><i class="icon icon-controls"></i><?php echo $lang->doc->libDropdown['addModule'];?></a></li>
+    <li data-method="addCataLib" data-has-children='%hasChildren%'  data-libid='%libID%' data-moduleid="%moduleID%" data-type="add"><a><i class="icon icon-controls"></i><?php echo $lang->doc->libDropdown['addModule'];?></a></li>
     <?php endif;?>
     <?php if(common::hasPriv('doc', 'editLib')):?>
     <li data-method="editLib"><a href='<?php echo inlink('editLib', 'libID=%libID%');?>' data-toggle='modal' data-type='iframe'><i class="icon icon-edit"></i><?php echo $lang->doc->libDropdown['editLib'];?></a></li>
@@ -108,5 +108,19 @@
     <li data-method="deleteCata"><a href='<?php echo helper::createLink('tree', 'delete', 'rootID=%libID%&moduleID=%moduleID%');?>' target='hiddenwin'><i class="icon icon-trash"></i><?php echo $lang->doc->libDropdown['delModule'];?></a></li>
     <?php endif;?>
   </div>
+</div>
+<div class='hidden' data-id="ulTreeModal">
+  <ul data-id="liTreeModal" class="menu-active-primary menu-hover-primary has-input">
+    <li data-id="insert" class="has-input">
+      <input data-target="%target%" class="form-control input-tree"></input>
+    </li>
+  </ul>
+</div>
+<div class="hidden" data-id="aTreeModal">
+  <a href="###" data-has-children="false" title="%name%" data-id="%id%">
+    <div class="text h-full w-full flex-between">"%name"
+      <i class="icon icon-drop icon-ellipsis-v float-r hidden" data-iscatalogue="true"></i>
+    </div>
+  </a>
 </div>
 <?php include '../../common/view/footer.html.php';?>

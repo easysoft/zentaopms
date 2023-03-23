@@ -144,7 +144,7 @@ $(function()
         if($(libClass).find('li').length == 0) return '';
 
         var dropdown = '<ul class="dropdown-menu dropdown-in-tree" id="' + option.type + '" style="display: unset; left:' + option.left + 'px; top:' + option.top + 'px;">';
-        dropdown += $(libClass).html().replace(/%libID%/g, option.libID).replace(/%moduleID%/g, option.moduleID);
+        dropdown += $(libClass).html().replace(/%libID%/g, option.libID).replace(/%moduleID%/g, option.moduleID).replace(/%hasChildren%/g, option.hasChildren);
         dropdown += '</ul>';
         return dropdown;
     };
@@ -157,6 +157,7 @@ $(function()
         var libID       = 0;
         var moduleID    = 0;
         var $module     = $(this).closest('a');
+        var hasChildren = $module.data('has-children');
         if($module.hasClass('lib'))
         {
             libID = $module.data('id');
@@ -168,11 +169,12 @@ $(function()
         }
 
         var option = {
-            left     : e.pageX,
-            top      : e.pageY,
-            type     : dropDownID,
-            libID    : libID,
-            moduleID : moduleID
+            left        : e.pageX,
+            top         : e.pageY,
+            type        : dropDownID,
+            libID       : libID,
+            moduleID    : moduleID,
+            hasChildren : hasChildren
         };
         var dropDown = renderDropdown(option);
         $(".m-doc-tablecontents").append(dropDown);
@@ -194,147 +196,28 @@ $(function()
             }).show();
         }
         if(item.type !== 'add') return;
+        var $item = $(this);
         switch(item.method)
         {
             case 'addCataLib' :
+                var $input = '';
+                if(item.hasChildren)
+                {
+                    var $rootDom = $('[data-id=' + item.libid + ']li').find('ul');
+                    $input += $('[data-id=liTreeModal]').html();
+                }
+                else
+                {
+                }
+                $rootDom.append($input);
                 break;
             case 'addCata' :
                 break;
             case 'addCataChild' :
                 break;
         }
-    });
-
-   /*
-    *
-    */
-    function initSplitRow()
+    }).on('blur', '.file-tree input.input-tree', function()
     {
-        /* Init split row. */
-        var NAME = 'zui.splitRow';
-        /* The SplitRow model class. */
-        var SplitRow = function(element, options)
-        {
-            var that = this;
-            that.name = NAME;
-            var $element = that.$ = $(element);
-
-            options        = that.options = $.extend({}, SplitRow.DEFAULTS, this.$.data(), options);
-            var id         = options.id || $element.attr('id') || $.zui.uuid();
-            var $cols      = $element.children('.col');
-            var $firstCol  = $cols.first();
-            var $firstBar  = $('#leftBar > .btn-group');
-            var $secondCol = $cols.eq(1);
-            var $spliter   = $firstCol.next('.col-spliter');
-            if (!$spliter.length)
-            {
-                $spliter = $(options.spliter);
-                if (!$spliter.parent().length) $spliter.insertAfter($firstCol);
-            }
-            var spliterWidth      = $spliter.width();
-            var minFirstColWidth  = $firstCol.data('min-width');
-            var minSecondColWidth = $secondCol.data('min-width');
-            var rowWidth          = $element.width();
-            var setFirstColWidth  = function(width)
-            {
-                var maxFirstWidth = 400;
-                width = Math.max(minFirstColWidth, Math.min(width, maxFirstWidth));
-                $firstCol.width(width);
-                $firstBar.width(width);
-                $secondCol.width($('#mainContent').width() - width);
-                $.zui.store.set('splitRowFirstSize:' + id, width);
-            };
-
-            var defaultWidth = $.zui.store.get('splitRowFirstSize:' + id);
-            if(typeof(defaultWidth) == 'undefined') defaultWidth = $element.width() * 0.33;
-            setFirstColWidth(defaultWidth);
-
-            var documentEventName = '.' + id;
-
-            var mouseDownX, isMouseDown, startFirstWidth, rafID;
-            $spliter.on('mousedown', function(e)
-            {
-                startFirstWidth = $firstCol.width();
-                mouseDownX = e.pageX;
-                isMouseDown = true;
-                $element.addClass('row-spliting');
-                e.preventDefault();
-                var handleMouseMove = function(e)
-                {
-                    if(isMouseDown)
-                    {
-                        var deltaX = e.pageX - mouseDownX;
-                        setFirstColWidth(startFirstWidth + deltaX);
-                        e.preventDefault();
-                    }
-                    else
-                    {
-                        $(document).off(documentEventName);
-                        $element.removeClass('row-spliting');
-                    }
-                };
-                $(document).on('mousemove' + documentEventName, function(e)
-                {
-                    if(rafID) cancelAnimationFrame(rafID);
-                    rafID = requestAnimationFrame(function()
-                    {
-                        handleMouseMove(e);
-                        rafID = 0;
-                    });
-                }).on('mouseup' + documentEventName + ' mouseleave' + documentEventName, function(e)
-                {
-                    if(rafID) cancelAnimationFrame(rafID);
-                    isMouseDown = false;
-                    $(document).off(documentEventName);
-                    $element.removeClass('row-spliting');
-                });
-            });
-        };
-
-        /* default options. */
-        SplitRow.DEFAULTS =
-        {
-            spliter: '<div class="col-spliter"></div>',
-        };
-
-        /* Extense jquery element. */
-        $.fn.splitRow = function(option)
-        {
-            return this.each(function()
-            {
-                var $this   = $(this);
-                var data    = $this.data(NAME);
-                var options = typeof option == 'object' && option;
-                if(!data) $this.data(NAME, (data = new SplitRow(this, options)));
-            });
-        };
-
-        SplitRow.NAME = NAME;
-
-        $.fn.splitRow.Constructor = SplitRow;
-
-        /* Auto call splitRow after document load complete. */
-        $(function()
-        {
-            $('.split-row').splitRow();
-        });
-    }
-
-    initSplitRow();
-
-    $('#spliter').on('click', '.icon', function()
-    {
-        if($(this).hasClass('isHide'))
-        {
-            $(this).addClass('icon-angle-left');
-            $(this).removeClass('icon-angle-right isHide');
-            $('#sideBar').removeClass('hidden');
-        }
-        else
-        {
-            $(this).removeClass('icon-angle-left');
-            $(this).addClass('icon-angle-right isHide');
-            $('#sideBar').addClass('hidden');
-        }
+        console.log($(this));
     });
 });
