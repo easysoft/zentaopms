@@ -8079,16 +8079,17 @@ class upgradeModel extends model
             $fields = array();
             foreach($table->schema->fields as $key => $field)
             {
-                if($field['type'] == 'object' and isset($field['show'])) $key = str_replace('.', '_', $field['show']);
+                if($field['type'] == 'object' and isset($field['show']))
+                {
+                    $key = str_replace('.', '_', $field['show']);
+                    $relatedField = substr($field['show'], strpos($field['show'], '.') + 1);
+                }
                 if(!isset($fields[$key])) $fields[$key] = array();
 
-                $defaultObject = $field['type'] == 'date' ? 'date' : 'string';
-                $defaultType   = strpos(',number,string,date,null,', ",{$field['type']},") !== false ? $field['type'] : 'string';
-
                 $fields[$key]['name']   = $field['name'];
-                $fields[$key]['object'] = $defaultObject;
-                $fields[$key]['field']  = $key;
-                $fields[$key]['type']   = $defaultType;
+                $fields[$key]['field']  = isset($relatedField) ? $relatedField : $key;
+                $fields[$key]['object'] = isset($field['object']) ? $field['object'] : $code;
+                $fields[$key]['type']   = $field['type'];
 
             }
             $dataview->fields = json_encode($fields);
