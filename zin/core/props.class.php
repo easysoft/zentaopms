@@ -111,6 +111,17 @@ class props extends \zin\utils\dataset
         $this->set("@$name", $callback);
     }
 
+    public function events()
+    {
+        $events = array();
+        foreach($this->data as $name => $value)
+        {
+            if(strpos($name, '@') === 0) $events[substr($name, 1)] = $value;
+        }
+
+        return $events;
+    }
+
     public function hx($name, $value = NULL)
     {
         if(is_array($name))

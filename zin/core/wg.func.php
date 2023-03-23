@@ -55,6 +55,18 @@ function setTag($id)
     return prop('tagName', $id);
 }
 
+function on($name, $callback, $options = NULL)
+{
+    if(is_string($options) && is_string($callback))
+    {
+        $tmp      = $callback;
+        $callback = $options;
+        $options  = array('selector' => $tmp);
+    }
+    if(is_bool($options)) $options = array('useCapture' => $options);
+    return set("@$name", array($callback, $options));
+}
+
 function html(/* string ...$lines */)
 {
     return directive('html', implode("\n", \zin\utils\flat(func_get_args())));
