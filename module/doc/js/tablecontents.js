@@ -107,6 +107,7 @@ $(function()
 
     $('#fileTree').on('mousemove', 'a', function()
     {
+        if($(this).data('type') == 'annex') return;
         var libClass = '.libDorpdown';
         if(!$(this).hasClass('lib')) libClass = '.moduleDorpdown';
         if($(libClass).find('li').length == 0) return false;
@@ -203,13 +204,17 @@ $(function()
                 var $input = '';
                 if(item.hasChildren)
                 {
-                    var $rootDom = $('[data-id=' + item.libid + ']li').find('ul');
+                    var $rootDom = $('[data-id=' + item.libid + ']a').parent().find('ul');
                     $input += $('[data-id=liTreeModal]').html();
                 }
                 else
                 {
+                    var $rootDom = $('[data-id=' + item.libid + ']a').parent();
+                    $rootDom.addClass('open in has-list');
+                    $input += $('[data-id=ulTreeModal]').html();
                 }
                 $rootDom.append($input);
+                $rootDom.find('input').focus();
                 break;
             case 'addCata' :
                 break;
@@ -218,7 +223,13 @@ $(function()
         }
     }).on('blur', '.file-tree input.input-tree', function()
     {
-        var $a = $('[data-id=aTreeModal]').html().replace(/%name%/g, $(this).val());
+        var value = $(this).val();
+        if(!value)
+        {
+            $(this).closest('[data-id=insert]').remove();
+            return;
+        }
+        var $a = $('[data-id=aTreeModal]').html().replace(/%name%/g, value);
         $(this).replaceWith($a);
     });
 });
