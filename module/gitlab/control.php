@@ -140,7 +140,7 @@ class gitlab extends control
         $user   = $this->gitlab->apiGetCurrentUser($gitlab->url, $gitlab->token);
         if(!isset($user->is_admin) or !$user->is_admin) return print(js::alert($this->lang->gitlab->tokenLimit) . js::locate($this->createLink('gitlab', 'edit', array('gitlabID' => $gitlabID))));
 
-        $zentaoUsers = $this->dao->select('account,email,realname')->from(TABLE_USER)->fetchAll('account');
+        $zentaoUsers = $this->dao->select('account,email,realname')->from(TABLE_USER)->where('deleted')->eq('0')->fetchAll('account');
 
         if($_POST)
         {
