@@ -15,7 +15,7 @@ $(function()
         dropdown += $(libClass).html().replace(/%libID%/g, option.libID).replace(/%moduleID%/g, option.moduleID).replace(/%hasChildren%/g, option.hasChildren);
         dropdown += '</ul>';
         return dropdown;
-    };
+    }
 
     $('#fileTree').tree(
     {
@@ -37,7 +37,7 @@ $(function()
 
             $li.append($item);
             $li.addClass(libClass);
-            if (item.active) $li.addClass('active open in');
+            if(item.active) $li.addClass('active open in');
         }
     });
 
@@ -68,12 +68,12 @@ $(function()
         {
             if($(this).data('type') == 'annex') return false;
 
-            libID     = moduleID;
-            moduleID  = 0;
+            libID    = moduleID;
+            moduleID = 0;
         }
         else
         {
-            libID   = $(this).closest('.lib').data('id');
+            libID = $(this).closest('.lib').data('id');
         }
         linkParams = linkParams.replace('%s', '&libID=' + libID + '&moduleID=' + moduleID);
         location.href = createLink('doc', 'tableContents', linkParams);
@@ -82,13 +82,14 @@ $(function()
     var moduleData = {
         "name"       : "",
         "createType" : "",
-        "libID"      : '',
-        "parentID"   : '',
-        "objectID"   : '',
-        "moduleType" : '',
+        "libID"      : "",
+        "parentID"   : "",
+        "objectID"   : "",
+        "moduleType" : "",
         "order"      : "",
         "isUpdate"   : ""
     };
+
     $('#fileTree').on('click', '.icon-drop', function(e)
     {
         $('.dropdown-in-tree').css('display', 'none');
@@ -113,12 +114,14 @@ $(function()
             moduleType = $module.closest('.lib').data('type');
             parentID   = $module.closest('ul').closest('.lib').data('id');
         }
+
         moduleData = {
             "libID"     : libID,
             "parentID"  : parentID,
             "objectID"  : moduleID,
             "moduleType": moduleType == 'lib' ? 'doc' : moduleType,
         };
+
         var option = {
             left        : e.pageX,
             top         : e.pageY,
@@ -127,10 +130,12 @@ $(function()
             moduleID    : moduleID,
             hasChildren : hasChildren
         };
+
         var dropDown = renderDropdown(option);
         $(".m-doc-tablecontents").append(dropDown);
         e.stopPropagation();
     });
+
     $('body').on('click', function(e)
     {
         $('.dropdown-in-tree').remove();
@@ -165,6 +170,7 @@ $(function()
             }).show();
         }
         if(item.type !== 'add') return;
+
         var $item             = $(this);
         moduleData.parentID   = 0;
         moduleData.isUpdate   = false;

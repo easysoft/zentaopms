@@ -2339,7 +2339,7 @@ class treeModel extends model
                 $module->order  = $baseModule->order;
             }
         }
-        elseif($data->createType == 'children')
+        elseif($data->createType == 'child')
         {
             $maxOrder = $this->dao->select('`order`')->from(TABLE_MODULE)
                 ->where('root')->eq($module->root)
