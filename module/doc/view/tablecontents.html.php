@@ -95,7 +95,7 @@
     <div id="fileTree" class="file-tree"></div>
   </div>
   <div class="sidebar-toggle flex-center"><i class="icon icon-angle-left"></i></div>
-  <div class="main-col flex-full col overflow-auto flex-auto" data-min-width="500">
+  <div class="main-col flex-full col overflow-visible flex-auto overflow-visible" data-min-width="500">
     <div class="cell<?php if($browseType == 'bySearch') echo ' show';?>" style="min-width: 400px" id="queryBox" data-module=<?php echo $type . $libType . 'Doc';?>></div>
     <?php
     if($browseType == 'annex')

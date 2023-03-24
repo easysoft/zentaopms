@@ -7,13 +7,14 @@
 .w-full {width: 100%;}
 .overflow-x-auto {overflow-x: auto;}
 .overflow-auto {overflow: auto;}
+.overflow-visible {overflow: visible;}
 .overflow-hidden {overflow: hidden;}
 #mainContent {padding-top: 0; padding-bottom: 0; height: calc(100vh - 125px);}
 #mainContent #createDropdown {display: inline-block;}
 #mainContent #createDropdown ul {position: absolute;}
 #pageNav .dropdown-menu {max-height: inherit;}
 #mainContent > .panel {margin-bottom: 0; height: calc(100vh - 125px); overflow-y: auto;}
-#mainContent > .main-col {padding-left: 0; overflow-x: hidden;}
+#mainContent > .main-col {padding-left: 0;}
 
 .no-content {width: 100px; height: 100px; margin: 0 auto;}
 .notice {text-align: center; padding-left: 15px; padding-top: 20px;}
