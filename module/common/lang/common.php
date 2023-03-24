@@ -126,6 +126,10 @@ $lang->executionstory     = new stdclass();
 $lang->executionqa        = new stdclass();
 $lang->executionsettings  = new stdclass();
 $lang->generalcomment     = new stdclass();
+$lang->generalping        = new stdclass();
+$lang->generaltemplate    = new stdclass();
+$lang->generaleffort      = new stdclass();
+$lang->productsettings    = new stdclass();
 
 $lang->projectbuild   = new stdclass();
 $lang->projectrelease = new stdclass();

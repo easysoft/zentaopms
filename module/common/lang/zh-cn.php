@@ -241,6 +241,10 @@ $lang->executionstory->common     = '研发需求';
 $lang->executionqa->common        = '测试';
 $lang->executionsettings->common  = '设置';
 $lang->generalcomment->common     = '备注';
+$lang->generalping->common        = '防超时';
+$lang->generaltemplate->common    = '模板';
+$lang->generaleffort->common      = '通用日志';
+$lang->productsettings->common    = '产品设置';
 
 $lang->personnel->common     = '人员';
 $lang->personnel->invest     = '投入人员';

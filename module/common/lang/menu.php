@@ -602,12 +602,13 @@ $lang->navGroup->program            = 'program';
 $lang->navGroup->personnel          = 'program';
 $lang->navGroup->programstakeholder = 'program';
 
-$lang->navGroup->product     = 'product';
-$lang->navGroup->productplan = 'product';
-$lang->navGroup->release     = 'product';
-$lang->navGroup->branch      = 'product';
-$lang->navGroup->story       = 'product';
-$lang->navGroup->requirement = 'product';
+$lang->navGroup->product         = 'product';
+$lang->navGroup->productplan     = 'product';
+$lang->navGroup->release         = 'product';
+$lang->navGroup->branch          = 'product';
+$lang->navGroup->story           = 'product';
+$lang->navGroup->requirement     = 'product';
+$lang->navGroup->productsettings = 'product';
 
 $lang->navGroup->project         = 'project';
 $lang->navGroup->deploy          = 'project';

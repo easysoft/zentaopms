@@ -2086,6 +2086,10 @@ $lang->resource->executionstory     = new stdclass();
 $lang->resource->executionqa        = new stdclass();
 $lang->resource->executionsettings  = new stdclass();
 $lang->resource->generalcomment     = new stdclass();
+$lang->resource->generalping        = new stdclass();
+$lang->resource->generaltemplate    = new stdclass();
+$lang->resource->generaleffort      = new stdclass();
+$lang->resource->productsettings    = new stdclass();
 
 global $config;
 $inUpgrade = (defined('IN_UPGRADE') and IN_UPGRADE);
