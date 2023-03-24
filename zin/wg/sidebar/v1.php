@@ -15,9 +15,9 @@ class sidebar extends wg
             $this->children(),
             $showToggle ? div
             (
-                set::class('sidebar-toggle sidebar-left-toggle'),
-                icon('angle-left'),
-                on::click('document.body.classList.toggle("hide-sidebar-left")')
+                set::class("sidebar-toggle sidebar-$side-toggle"),
+                icon("angle-$side"),
+                on::click("zui.toggleSidebar({side: '$side'})")
             ) : NULL
         );
     }
