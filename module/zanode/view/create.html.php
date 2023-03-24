@@ -13,6 +13,8 @@
 <?php include '../../common/view/header.html.php';?>
 <?php include $app->getModuleRoot() . 'common/view/kindeditor.html.php';?>
 <?php js::set('hostID', $hostID);?>
+<?php js::set('linuxList', $config->zanode->linuxList);?>
+<?php js::set('windowsList', $config->zanode->windowsList);?>
 <div id='mainContent' class='main-row'>
   <div class='main-col main-content'>
     <div class='center-block'>
@@ -71,8 +73,10 @@
           <tr>
             <th><?php echo $lang->zanode->osName;?></th>
             <td>
-              <?php echo html::input('osName', '', "class='form-control' readonly='readonly'")?>
-              <?php echo html::input('osNamePhysics', '', "class='form-control hidden'")?>
+              <?php echo html::input('osName', '', "class='form-control' readonly='readonly' onchange='zanodeOsChange()'")?>
+              <div id="osNamePhysicsContainer" class="hidden">
+                <?php echo html::select('', $config->zanode->osType, 'linux', "class='form-control' id='osNamePhysicsPre'") . html::select('osNamePhysics', $config->zanode->linuxList, '', "class='form-control chosen'"); ?>
+              </div>
             </td>
           </tr>
           <tr>

@@ -59,7 +59,6 @@ class zanodemodel extends model
         $data = fixer::input('post')
             ->setIF($this->post->hostType == 'physics', 'parent', 0)
             ->setIF($this->post->hostType == 'physics', 'osName', $this->post->osNamePhysics)
-            ->remove('osNamePhysics')
             ->get();
 
         $data->type = "node";
@@ -80,6 +79,7 @@ class zanodemodel extends model
 
         if(dao::isError()) return false;
 
+        unset($data->osNamePhysics);
         if(!preg_match("/^(?!_)(?!-)(?!\.)[a-zA-Z0-9\_\.\-]+$/", $data->name))
         {
             dao::$errors[] = $this->lang->zanode->nameValid;

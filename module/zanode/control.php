@@ -167,7 +167,7 @@ class zanode extends control
         $this->view->title        = $this->lang->zanode->view;
         $this->view->zanode       = $node;
         $this->view->snapshotList = $this->zanode->getSnapshotList($id);
-        $this->view->initBash     = sprintf($this->config->zanode->initBash, $node->secret, getWebRoot(true));
+        $this->view->initBash     = sprintf(zget($this->config->zanode->versionToOs, $node->osName, '') != '' ? $this->config->zanode->initPosh : $this->config->zanode->initBash, $node->secret, getWebRoot(true));
         $this->view->actions      = $this->loadModel('action')->getList('zanode', $id);
         $this->view->users        = $this->loadModel('user')->getPairs('noletter');
 
@@ -563,8 +563,9 @@ class zanode extends control
         if ($node->status != 'running')
         {
             $serviceStatus['ZenAgent'] = "unknown";
-            $serviceStatus['ZTF'] = "unknown";
+            $serviceStatus['ZTF']      = "unknown";
         }
+        $node->status = $node->status == 'online' ? 'ready' : $node->status;
         $serviceStatus['node'] = $node->status;
 
         return $this->send(array('result' => 'success', 'message' => '', 'data' => $serviceStatus));

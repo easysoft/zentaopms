@@ -12,7 +12,7 @@ function zanodeType()
         $('#image').closest('tr').hide();
         $('#extranet').closest('tr').removeClass('hidden');
         $('#osName').addClass('hidden');
-        $('#osNamePhysics').removeClass('hidden');
+        $('#osNamePhysicsContainer').removeClass('hidden');
     }
     else
     {
@@ -20,7 +20,7 @@ function zanodeType()
         $('#image').closest('tr').show();
         $('#extranet').closest('tr').addClass('hidden');
         $('#osName').removeClass('hidden');
-        $('#osNamePhysics').addClass('hidden');
+        $('#osNamePhysicsContainer').addClass('hidden');
     }
 }
 
@@ -38,3 +38,30 @@ function loadHosts()
         $('#hostIdBox').find('#parent').chosen();
     });
 }
+
+$(function()
+{
+    $('#osNamePhysicsPre').on('change', function()
+    {
+        console.log($(this).val())
+        if($(this).val() == 'linux')
+        {
+            $('#osNamePhysics').empty();
+            for(var i in linuxList)
+            {
+                console.log(linuxList[i])
+                $('#osNamePhysics').append('<option value="' + i + '">' + linuxList[i] + '</option>')
+            }
+        }
+        else
+        {
+            $('#osNamePhysics').empty();
+            for(var i in windowsList)
+            {
+                console.log(windowsList[i])
+                $('#osNamePhysics').append('<option value="' + i + '">' + windowsList[i] + '</option>')
+            }
+        }
+        $('#osNamePhysics').trigger('chosen:updated');
+    })
+})

@@ -22,6 +22,7 @@ $lang->zanode->getVNC          = '远程';
 $lang->zanode->all             = '全部';
 $lang->zanode->byQuery         = '搜索';
 $lang->zanode->osName          = '操作系统';
+$lang->zanode->osNamePhysics   = '操作系统';
 $lang->zanode->image           = '镜像';
 $lang->zanode->imageName       = '镜像名称';
 $lang->zanode->name            = '名称';
@@ -29,7 +30,8 @@ $lang->zanode->start           = '创建后自动开启';
 $lang->zanode->hostName        = '所属宿主机';
 $lang->zanode->host            = $lang->zanode->hostName;
 $lang->zanode->extranet        = 'IP/域名';
-$lang->zanode->sshAddress      = 'SSH命令';
+$lang->zanode->sshCommand      = 'SSH命令';
+$lang->zanode->sshAddress      = 'SSH地址';
 $lang->zanode->osArch          = '架构';
 $lang->zanode->cpuCores        = 'CPU';
 $lang->zanode->defaultUser     = '默认用户';
@@ -136,7 +138,7 @@ $lang->zanode->statusList['shutoff']       = '已关机';
 $lang->zanode->statusList['shutodown']     = '已关机';
 $lang->zanode->statusList['destroy_fail']  = '销毁失败';
 $lang->zanode->statusList['wait']          = '初始化中';
-$lang->zanode->statusList['online']        = '已上架';
+$lang->zanode->statusList['online']        = '运行中';
 $lang->zanode->statusList['restoring']     = '还原中';
 $lang->zanode->statusList['creating_snap'] = '创建快照中';
 $lang->zanode->statusList['creating_img']  = '导出镜像中';
@@ -154,8 +156,9 @@ $lang->zanode->init->ready         = "已就绪";
 $lang->zanode->init->next          = "下一步";
 $lang->zanode->init->button        = "去设置";
 
-$lang->zanode->init->initSuccessNoticeTitle = "服务已就绪，还需两步即可在执行节点上执行自动化测试：<br/>1、根据%s配置自动化测试运行环境。<br/>2、进行%s";
-$lang->zanode->init->initFailNotice         = "服务未就绪，在执行节点上执行安装服务命令或<a href='https://github.com/easysoft/zenagent/' target='_blank'>查看帮助</a>.";
+$lang->zanode->init->initSuccessNoticeTitle  = "服务已就绪，还需两步即可在执行节点上执行自动化测试：<br/>1、根据%s配置自动化测试运行环境。<br/>2、进行%s";
+$lang->zanode->init->initFailNotice          = "服务未就绪，在执行节点上执行安装服务命令或<a href='https://github.com/easysoft/zenagent/' target='_blank'>查看帮助</a>.";
+$lang->zanode->init->initFailNoticeOnPhysics = "服务还没有安装，请在执行节点执行以下命令后检测服务状态。<a href='https://github.com/easysoft/zenagent/' target='_blank'>查看帮助</a>";
 
 $lang->zanode->init->serviceStatus = array(
     "ZenAgent" => 'not_install',
