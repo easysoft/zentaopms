@@ -52,10 +52,10 @@ li.drag-shadow ul {display: none!important;}
 .main-table-content > .content {flex: 1;}
 
 /* css for mian */
-.split-row > #sideBar {flex: 0 0 200px; overflow-x: auto;}
+#mainContent > #sideBar {flex: 0 0 200px; overflow-x: auto;}
 
 /* css for tree */
-.file-tree {overflow-x: auto; padding: 10px;}
+.file-tree { padding: 10px;}
 .file-tree  a {height: 30px;}
 .flex-between {display: flex; align-items: center; justify-content: space-between;}
 .flex-center {display: flex; align-items: center; justify-content: center;}

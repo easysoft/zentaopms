@@ -15,6 +15,7 @@
 <?php js::set('linkParams', "type=$type&objectID=$objectID%s&browseType=&orderBy=$orderBy");?>
 <?php js::set('docLang', $lang->doc);?>
 <?php js::set('objectType', $type);?>
+<?php js::set('objectID', $objectID);?>
 <div id="mainMenu" class="clearfix">
   <div id="leftBar" class="btn-toolbar pull-left">
     <?php echo $objectDropdown;?>

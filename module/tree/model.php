@@ -2341,7 +2341,7 @@ class treeModel extends model
         }
         elseif($data->createType == 'same')
         {
-            $maxOrder = $this->dao->select('order')->from(TABLE_MODULE)
+            $maxOrder = $this->dao->select('`order`')->from(TABLE_MODULE)
                 ->where('root')->eq($module->root)
                 ->andWhere('parent')->eq($module->parent)
                 ->andWhere('type')->eq($module->type)

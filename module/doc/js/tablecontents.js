@@ -179,7 +179,7 @@ $(function()
                 var $input   = $('[data-id=liTreeModal]').html();
                 var $rootDom = $('#fileTree [data-id=' + item.id + ']li');
                 $rootDom.after($input);
-                $rootDom.find('input').focus();
+                $('#fileTree').find('input').focus();
                 break;
             case 'addCataChild' :
                 moduleData.parentID   = item.id;
@@ -233,7 +233,7 @@ $(function()
             $this.remove();
             if(moduleData.isUpdate)
             {
-                $.getJSON(createLink('doc', 'tableContents', 'type=' + objectType, 'json'), {}, function(data){
+                $.getJSON(createLink('doc', 'tableContents', 'type=' + objectType + '&objectID=' + objectID , 'json'), {}, function(data){
                         var treeData = JSON.parse(data.data);
                         $('#fileTree').data('zui.tree').reload(treeData.libTree);
                         $('li.has-list > ul').addClass("menu-active-primary menu-hover-primary");
