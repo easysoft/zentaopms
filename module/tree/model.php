@@ -2330,16 +2330,16 @@ class treeModel extends model
             return false;
         }
 
-        if($data->createType == 'child')
+        if($data->createType == 'same')
         {
-            $baseModule = $this->getByID($module->objectID);
+            $baseModule = $this->getByID($data->objectID);
             if(!empty($baseModule))
             {
                 $module->parent = $baseModule->parentID;
                 $module->order  = $baseModule->order;
             }
         }
-        elseif($data->createType == 'same')
+        elseif($data->createType == 'children')
         {
             $maxOrder = $this->dao->select('`order`')->from(TABLE_MODULE)
                 ->where('root')->eq($module->root)
