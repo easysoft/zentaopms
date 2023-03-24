@@ -1,12 +1,12 @@
 <?php
 $lang->demandpool = new stdclass();
-$lang->demandpool->common = 'Demandpool';
+$lang->demandpool->common = 'RM Hub';
 
 $lang->demand = new stdclass();
 $lang->demand->common = 'Demand';
 
 $lang->projectInit = new stdclass();
-$lang->projectInit->common = 'Project approval';
+$lang->projectInit->common = 'Initiating';
 
 $lang->navIcons['demandpool'] = "<i class='icon icon-bars'></i>";
 
