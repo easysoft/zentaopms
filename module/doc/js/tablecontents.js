@@ -149,6 +149,7 @@ $(function()
             $icon.removeClass('icon-angle-left');
             $('#sideBar').addClass('hidden');
         }
+        $('#docListForm').data('zui.table').fixFooter();
     }).on('click', '.dropdown-in-tree li', function(e)
     {
         var item = $(this).data();
