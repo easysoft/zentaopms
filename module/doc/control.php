@@ -1320,7 +1320,7 @@ class doc extends control
         $this->view->orderBy        = $orderBy;
         $this->view->exportMethod   = $type . '2export';
         $this->view->canExport      = common::hasPriv('doc', $type . '2export');
-        $this->view->apiLibs        = $this->doc->getApiLibs(0, $apiObjectType, $apiObjectID);
+        $this->view->apiLibs        = $type == 'execution' ? array() : $this->doc->getApiLibs(0, $apiObjectType, $apiObjectID);
 
         $this->display();
     }
