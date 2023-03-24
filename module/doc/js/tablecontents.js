@@ -136,8 +136,7 @@ $(function()
         $('.dropdown-in-tree').remove();
     }).on('click', '.sidebar-toggle', function()
     {
-        var $this = $(this);
-        var $icon = $this.find('.icon');
+        var $icon = $(this).find('.icon');
         if($('#sideBar').hasClass('hidden'))
         {
             $icon.addClass('icon-angle-left');
@@ -181,6 +180,7 @@ $(function()
                     moduleData.isUpdate = true;
                     $rootDom.addClass('open in has-list');
                 }
+                $('#fileTree').data('zui.tree').expand($('li[data-id="' + item.libid + '"]'));
                 $rootDom.append($input);
                 $rootDom.find('input').focus();
                 break;
@@ -192,7 +192,7 @@ $(function()
                 $('#fileTree').find('input').focus();
                 break;
             case 'addCataChild' :
-                moduleData.parentID   = item.id;
+                moduleData.parentID = item.id;
                 if(item.hasChildren)
                 {
                     var $input   = $('[data-id=liTreeModal]').html();
@@ -205,17 +205,18 @@ $(function()
                     moduleData.isUpdate = true;
                     $rootDom.addClass('open in has-list');
                 }
+
+                $('#fileTree').data('zui.tree').expand($('li[data-id="' + item.id + '"]'));
                 $rootDom.append($input);
                 $rootDom.find('input').focus();
                 break;
         }
     }).on('blur', '.file-tree input.input-tree', function()
     {
-        var $this = $(this);
-        var value = $this.val();
+        var value = $(this).val();
         if(!value)
         {
-            $this.closest('[data-id=insert]').remove();
+            $(this).closest('[data-id=insert]').remove();
             return;
         }
 
@@ -239,8 +240,8 @@ $(function()
             }
             var module    = result.module;
             var resultDom = $('[data-id=aTreeModal]').html().replace(/%name%/g, module.name).replace(/%id%/g, module.id).replace('insert', module.id);
-            $this.parent().append(resultDom);
-            $this.remove();
+            $(this).parent().append(resultDom);
+            $(this).remove();
             if(moduleData.isUpdate)
             {
                 $.getJSON(createLink('doc', 'tableContents', 'type=' + objectType + '&objectID=' + objectID , 'json'), {}, function(data){
