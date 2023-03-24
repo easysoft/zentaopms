@@ -55,9 +55,9 @@
               $module = $typeKey == 'api' ? 'api' : 'doc';
               $method = strpos($this->config->doc->textTypes, $typeKey) !== false ? 'createBasicInfo' : 'create';
 
-              $params = "objectType=$type&objectID=$objectID&libID=$libID&moduleID=$moduleID&type=$typeKey";
+              $params = "objectType={$lib->type}&objectID=$objectID&libID=$libID&moduleID=$moduleID&type=$typeKey";
               if($typeKey == 'api') $params = "libID=$apiLibID&moduleID=$moduleID";
-              if($typeKey == 'template') $params = "objectType=$type&objectID=$objectID&libID=$libID&moduleID=$moduleID&type=html&fromGlobal=&from=template";
+              if($typeKey == 'template') $params = "objectType={$libType}&objectID=$objectID&libID=$libID&moduleID=$moduleID&type=html&fromGlobal=&from=template";
 
               $html .= "<li>";
               $html .= html::a(helper::createLink($module, $method, $params, '', $class ? true : false), $typeName, '', "class='$class' data-app='{$this->app->tab}'");
