@@ -7,6 +7,7 @@
 .w-full {width: 100%;}
 .overflow-x-auto {overflow-x: auto;}
 .overflow-auto {overflow: auto;}
+.overflow-hidden {overflow: hidden;}
 #mainContent {padding-top: 0; padding-bottom: 0; height: calc(100vh - 125px);}
 #mainContent #createDropdown {display: inline-block;}
 #mainContent #createDropdown ul {position: absolute;}
@@ -57,10 +58,12 @@ li.drag-shadow ul {display: none!important;}
 /* css for tree */
 .file-tree { padding: 10px;}
 .file-tree  a {height: 30px;}
+.file-tree  a.icon-show {padding-right: 10px;}
 .flex-between {display: flex; align-items: center; justify-content: space-between;}
 .flex-center {display: flex; align-items: center; justify-content: center;}
 .tree li>.list-toggle {top: 4px;}
 .input-tree {width: 120px;}
+.tree-icon {position: absolute; right: 0;}
 
 /* css for sidebar */
 .sidebar-toggle {flex: 0 0 16px;}

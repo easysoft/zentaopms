@@ -25,9 +25,9 @@ $(function()
         {
             var libClass = ['lib', 'annex', 'api', 'execution'].indexOf(item.type) !== -1 ? 'lib' : '';
             var hasChild = item.children ? !!item.children.length : false;
-            var $item = '<a href="###" data-has-children="' + hasChild + '" title="' + item.name + '" data-id="' + item.id + '" class="' + libClass + '" data-type="' + item.type + '">';
-            $item += '<div class="text h-full w-full flex-between">' + item.name;
-            $item += '<i class="icon icon-drop icon-ellipsis-v float-r hidden" data-isCatalogue="' + (item.type ? false : true) + '"></i>';
+            var $item = '<a href="###" style="position: relative" data-has-children="' + hasChild + '" title="' + item.name + '" data-id="' + item.id + '" class="' + libClass + '" data-type="' + item.type + '">';
+            $item += '<div class="text h-full w-full flex-between overflow-hidden">' + item.name;
+            $item += '<i class="icon icon-drop icon-ellipsis-v hidden tree-icon" data-isCatalogue="' + (item.type ? false : true) + '"></i>';
             $item += '</div>';
             $item += '</a>';
             $li.append($item);
@@ -39,14 +39,18 @@ $(function()
 
     $('#fileTree').on('mousemove', 'a', function()
     {
-        if($(this).data('type') == 'annex') return;
+        var $this = $(this);
+        if($this.data('type') == 'annex') return;
         var libClass = '.libDorpdown';
-        if(!$(this).hasClass('lib')) libClass = '.moduleDorpdown';
+        if(!$this.hasClass('lib')) libClass = '.moduleDorpdown';
         if($(libClass).find('li').length == 0) return false;
-        $(this).find('.icon').removeClass('hidden');
+        $this.find('.icon').removeClass('hidden');
+        $this.addClass('icon-show');
     }).on('mouseout', 'a', function()
     {
-        $(this).find('.icon').addClass('hidden');
+        var $this = $(this);
+        $this.find('.icon').addClass('hidden');
+        $this.removeClass('icon-show');
     }).on('click', 'a', function(e)
     {
         var isLib    = $(this).hasClass('lib');
