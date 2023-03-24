@@ -149,7 +149,10 @@ $(function()
             $icon.removeClass('icon-angle-left');
             $('#sideBar').addClass('hidden');
         }
-        $('#docListForm').data('zui.table').fixFooter();
+
+        var $docListForm = $('#docListForm').data('zui.table');
+        $docListForm.fixHeader();
+        $docListForm.fixFooter();
     }).on('click', '.dropdown-in-tree li', function(e)
     {
         var item = $(this).data();
