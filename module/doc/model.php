@@ -2644,7 +2644,7 @@ class docModel extends model
         elseif($type == 'book')
         {
             $libs                 = $this->getLibsByObject('book', 0, '', $appendLib);
-            $this->app->rawMethod = 'book';
+            $this->app->rawMethod = 'custom';
             if(!empty($libs) and ($libID == 0 or !isset($libs[$libID]))) $libID = reset($libs)->id;
             $object     = new stdclass();
             $object->id = 0;
