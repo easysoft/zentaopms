@@ -136,13 +136,39 @@ foreach($productStructure as $programID => $program)
 
 featureBar
 (
+    to
+    ('before',
+        programmenu
+        (
+            setStyle(array('margin-right' => '20px')),
+            set
+            (
+                array
+                (
+                    'title' => '所有项目集',
+                    'subTitle' => '筛选项目集',
+                    'activeKey' => '7',
+                    'closeLink' => '#'
+                )
+            )
+        )
+    ),
     hasPriv('product', 'batchEdit') ? item
     (
         set::type('checkbox'),
         set::text($lang->product->edit),
         set::checked($this->cookie->editProject)
     ) : NULL,
-    li(searchToggle())
+    li(searchToggle()),
+    li
+    (
+        btn
+        (
+            set::class('ghost'),
+            set::icon('fold-all'),
+            set::text($lang->sort)
+        )
+    )
 );
 
 toolbar
