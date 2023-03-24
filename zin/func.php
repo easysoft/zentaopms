@@ -56,6 +56,7 @@ function pagetoolbar() {return createWg('pagetoolbar', func_get_args());}
 function avatar()      {return createWg('avatar', func_get_args());}
 function pager()       {return createWg('pager', func_get_args());}
 function modal()       {return createWg('modal', func_get_args());}
+function modalTrigger(){return createWg('modaltrigger', func_get_args());}
 function tabs()        {return createWg('tabs', func_get_args());}
 function panel()       {return createWg('panel', func_get_args());}
 function tooltip()     {return createWg('tooltip', func_get_args());}
