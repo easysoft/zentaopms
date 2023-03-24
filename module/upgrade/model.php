@@ -8140,6 +8140,58 @@ class upgradeModel extends model
     }
 
     /**
+     * Update dataset priv.
+     *
+     * @access public
+     * @return bool
+     */
+    public function updateDatasetPriv()
+    {
+        $datasetPrivList = $this->dao->select('*')->from(TABLE_GROUPPRIV)->where('module')->eq('dataset')->fetchAll();
+        foreach($datasetPrivList as $datasetPriv)
+        {
+            if($datasetPriv->method == 'view')
+            {
+                $this->dao->delete()->from(TABLE_GROUPPRIV)
+                    ->where('module')->eq('dataset')
+                    ->andWhere('method')->eq('view')
+                    ->andWhere('`group`')->eq($datasetPriv->group)
+                    ->exec();
+
+                $browsePriv = $this->dao->select('*')->from(TABLE_GROUPPRIV)
+                    ->where('module')->eq('dataset')
+                    ->andWhere('method')->eq('browse')
+                    ->andWhere('`group`')->eq($datasetPriv->group)
+                    ->fetchAll();
+                if(empty($browsePriv))
+                {
+                    $data = new stdClass();
+                    $data->group  = $datasetPriv->group;
+                    $data->module = 'dataview';
+                    $data->method = 'browse';
+                    $this->dao->insert(TABLE_GROUPPRIV)->data($data)->exec();
+                }
+            }
+
+            if($datasetPriv->method == 'edit')
+            {
+                $data = new stdClass();
+                $data->group  = $datasetPriv->group;
+                $data->module = 'dataview';
+                $data->method = 'query';
+                $this->dao->insert(TABLE_GROUPPRIV)->data($data)->exec();
+            }
+        }
+
+        $this->dao->update(TABLE_GROUPPRIV)->set('module')->eq('dataview')
+            ->where('module')->eq('dataset')
+            ->andWhere('method')->in('browse,create,edit,delete')
+            ->exec();
+
+        return true;
+    }
+
+    /**
      * Process report modules.
      *
      * @param  array  $modules
