@@ -53,7 +53,8 @@ li.drag-shadow ul {display: none!important;}
 .main-table-content > .content {flex: 1;}
 
 /* css for mian */
-#mainContent > #sideBar {flex: 0 0 200px; overflow-x: auto;}
+#mainContent > #sideBar {flex: 0 0 150px; overflow-x: auto;}
+[lang^=zh] #mainContent > #sideBar {flex: 0 0 180px;}
 
 /* css for tree */
 .file-tree { padding: 10px;}
@@ -84,5 +85,6 @@ li.drag-shadow ul {display: none!important;}
 table.table > thead > tr {height: 32px;}
 
 #bysearchTab::before {display: none;}
-#leftBar .selectBox #currentItem {width: 200px; display: flex; align-items: center;}
+#leftBar .selectBox #currentItem {width: 150px; display: flex; align-items: center;}
+[lang^=zh] #leftBar .selectBox #currentItem {width: 180px;}
 #leftBar .selectBox #currentItem > .text {overflow: hidden; text-align: left; flex: 0 1 100%;}
