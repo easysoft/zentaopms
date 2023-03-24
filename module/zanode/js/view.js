@@ -36,7 +36,14 @@ function checkServiceStatus(){
                 {
                     if(resultData.data[key] == 'unknown')
                     {
-                        $('.ztf-status').text(zanodeLang.init.unknown)
+                        if(hostType == 'physics')
+                        {
+                            $('.ztf-status').text(zanodeLang.init.not_install)
+                        }
+                        else
+                        {
+                            $('.ztf-status').text(zanodeLang.init.unknown)
+                        }
                     }
                     else
                     {
@@ -210,6 +217,9 @@ $('#jumpManual').click(function()
 
 $(function(){
     $('#checkServiceStatus').trigger("click")
+    if(hostType == 'physics'){
+        return;
+    }
     checkInterval = setInterval(() => {
         intervalTimes++;
         if(intervalTimes > 300)

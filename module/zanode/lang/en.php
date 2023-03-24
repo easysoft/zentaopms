@@ -22,6 +22,7 @@ $lang->zanode->getVNC          = 'Remote management';
 $lang->zanode->all             = 'All';
 $lang->zanode->byQuery         = 'Search';
 $lang->zanode->osName          = 'System';
+$lang->zanode->osNamePhysics   = 'System';
 $lang->zanode->image           = 'VM Image';
 $lang->zanode->imageName       = 'Image Name';
 $lang->zanode->name            = 'Name';
@@ -29,7 +30,8 @@ $lang->zanode->start           = 'Start After Created';
 $lang->zanode->hostName        = 'Host Name';
 $lang->zanode->host            = $lang->zanode->hostName;
 $lang->zanode->extranet        = 'IP/Domain';
-$lang->zanode->sshAddress      = 'SSH Command';
+$lang->zanode->sshCommand      = 'SSH Command';
+$lang->zanode->sshAddress      = 'SSH Address';
 $lang->zanode->osArch          = 'Arch';
 $lang->zanode->cpuCores        = 'CPU';
 $lang->zanode->defaultUser     = 'Default Account Name';
@@ -155,8 +157,9 @@ $lang->zanode->init->ready         = "Ready";
 $lang->zanode->init->next          = "Next";
 $lang->zanode->init->button        = "Go To Settings";
 
-$lang->zanode->init->initSuccessNoticeTitle = "The service is ready, and it takes two steps to execute the automated test on the execution node: <br/>1. Configure the automated test running environment according to the %s<br/>2. Go to %s";
-$lang->zanode->init->initFailNotice         = "Fail，Execute the installation service command on the node or <a href='https://github.com/easysoft/zenagent/' target='_blank'>See Help</a>.";
+$lang->zanode->init->initSuccessNoticeTitle  = "The service is ready, and it takes two steps to execute the automated test on the execution node: <br/>1. Configure the automated test running environment according to the %s<br/>2. Go to %s";
+$lang->zanode->init->initFailNotice          = "Fail，Execute the installation service command on the node or <a href='https://github.com/easysoft/zenagent/' target='_blank'>See Help</a>.";
+$lang->zanode->init->initFailNoticeOnPhysics = "The service has not been installed yet, please check the service status after executing the following command on the execution node。<a href='https://github.com/easysoft/zenagent/' target='_blank'>See Help</a>";
 
 $lang->zanode->init->serviceStatus = array(
     "ZenAgent" => 'not_install',

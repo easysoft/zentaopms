@@ -21,11 +21,13 @@
 <?php js::set('nodeID', $zanode->id) ?>
 <?php js::set('zanodeLang', $lang->zanode); ?>
 <?php js::set('nodeStatus', $zanode->status); ?>
+<?php js::set('hostType', $zanode->hostType); ?>
 <?php js::set('webRoot', getWebRoot());?>
-<?php $browseLink = $this->session->zanodeList ? $this->session->zanodeList : $this->createLink('zanode', 'browse', ""); ?>
+<?php $browseLink = $this->session->zanodeList ? $this->session->zanodeList : $this->createLink('zanode', 'browse', "");?>
 <?php
 $vars    = "id={$zanode->id}&orderBy=%s";
 $account = strpos($zanode->osName, "windows") ? $config->zanode->defaultWinAccount : $config->zanode->defaultAccount;
+$ssh = $zanode->hostType == 'physics' ? $zanode->extranet : ($zanode->ssh ? 'ssh ' . $account . '@' . $zanode->ip . ' -p ' . $zanode->ssh : '');
 ?>
 <div id='mainMenu' class='clearfix'>
   <div class='btn-toolbar pull-left'>
@@ -43,6 +45,54 @@ $account = strpos($zanode->osName, "windows") ? $config->zanode->defaultWinAccou
 <div id='mainContent' class='main-row'>
   <div class="col-8 main-col">
     <div class="cell">
+    <?php if($zanode->hostType == 'physics'):?>
+      <div class="detail zanode-detail">
+        <div class="detail-title"><?php echo $lang->zanode->baseInfo; ?></div>
+        <div class="detail-content article-content">
+          <div class="main-row zanode-mt-8">
+            <div class="col-4">
+              <div class="main-row">
+                <div class="col-4 text-right"><?php echo $lang->zanode->osName; ?>:</div>
+                <div class="col-7"><?php echo zget($config->zanode->linuxList, $zanode->osName, zget($config->zanode->windowsList, $zanode->osName)); ?></div>
+              </div>
+            </div>
+            <div class="col-4">
+              <div class="main-row">
+                <div class="col-3 text-right"><?php echo $lang->zanode->sshAddress; ?>:</div>
+                <div class="col-8 node-not-wrap"><?php echo  $ssh;?><?php echo $ssh ? " <button type='button' class='btn btn-info btn-mini btn-ssh-copy'><i class='icon-common-copy icon-copy' title='" . $lang->zanode->copy .  "'></i></button>" : ''; ?></div>
+              </div>
+              <textarea style="display:none;" id="ssh-copy">ssh <?php echo $ssh; ?></textarea>
+            </div>
+            <div class="col-4">
+              <div class="main-row">
+                <div class="col-3 text-right"><?php echo $lang->zanode->cpuCores; ?>:</div>
+                <div class="col-8"><?php echo $zanode->cpuCores . ' ' . $lang->zanode->cpuUnit; ?></div>
+              </div>
+            </div>
+          </div>
+          <div class="main-row zanode-mt-8">
+            <div class="col-4">
+              <div class="main-row">
+                <div class="col-4 text-right"><?php echo $lang->zanode->status; ?>:</div>
+                <div class="col-7"><?php echo zget($lang->zanode->statusList, $zanode->status); ?></div>
+              </div>
+            </div>
+            <div class="col-4">
+              <div class="main-row">
+                <div class="col-3 text-right"><?php echo $lang->zanode->memory; ?>:</div>
+                <div class="col-8"><?php echo $zanode->memory; ?>&nbsp;GB</div>
+              </div>
+            </div>
+            <div class="col-4">
+              <div class="main-row">
+                <div class="col-3 text-right"><?php echo $lang->zanode->diskSize; ?>:</div>
+                <div class="col-8"><?php echo $zanode->diskSize; ?>&nbsp;GB</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <?php else: ?>
       <div class="detail zanode-detail">
         <div class="detail-title"><?php echo $lang->zanode->baseInfo; ?></div>
         <div class="detail-content article-content">
@@ -55,10 +105,10 @@ $account = strpos($zanode->osName, "windows") ? $config->zanode->defaultWinAccou
             </div>
             <div class="col-4">
               <div class="main-row">
-                <div class="col-3 text-right"><?php echo $lang->zanode->sshAddress; ?>:</div>
-                <div class="col-8 node-not-wrap"><?php echo $zanode->ssh ? 'ssh ' . $account . '@' . $zanode->ip . ' -p ' . $zanode->ssh : ''; ?><?php echo $zanode->ssh ? " <button type='button' class='btn btn-info btn-mini btn-ssh-copy'><i class='icon-common-copy icon-copy' title='" . $lang->zanode->copy .  "'></i></button>" : ''; ?></div>
+                <div class="col-3 text-right"><?php echo $lang->zanode->sshCommand; ?>:</div>
+                <div class="col-8 node-not-wrap"><?php echo  $ssh;?><?php echo $ssh ? " <button type='button' class='btn btn-info btn-mini btn-ssh-copy'><i class='icon-common-copy icon-copy' title='" . $lang->zanode->copy .  "'></i></button>" : ''; ?></div>
               </div>
-              <textarea style="display:none;" id="ssh-copy">ssh <?php echo $account . '@' . $zanode->ip . ' -p ' . $zanode->ssh; ?></textarea>
+              <textarea style="display:none;" id="ssh-copy">ssh <?php echo $ssh; ?></textarea>
             </div>
             <div class="col-4">
               <div class="main-row">
@@ -116,6 +166,7 @@ $account = strpos($zanode->osName, "windows") ? $config->zanode->defaultWinAccou
           </div>
         </div>
       </div>
+      <?php endif ?>
       <div class="detail zanode-detail">
         <div class="detail-title"><?php echo $lang->zanode->desc; ?></div>
         <div class="detail-content article-content"><?php echo !empty($zanode->desc) ? htmlspecialchars_decode($zanode->desc) : $lang->noData; ?></div>
@@ -133,12 +184,14 @@ $account = strpos($zanode->osName, "windows") ? $config->zanode->defaultWinAccou
             <button type='button' id='checkServiceStatus' class='btn btn-info'><i class="icon icon-refresh"></i> <span class='checkStatus'><?php echo $lang->zanode->init->checkStatus;?></span></button>
           </div>
           <div class="detail-content article-content statusContainer load-indicator" id='serviceContent'>
+          <?php if($zanode->hostType != 'physics'):?>
             <div class="service-status hide">
               <span class='dot-symbol dot-zenagent text-danger'>●</span>
               <span>&nbsp;ZenAgent &nbsp;
                 <span class="zenagent-status"><?php echo $lang->zanode->initializing; ?></span>
               </span>
             </div>
+          <?php endif ?>
             <div class="service-status hide">
               <span class='dot-symbol dot-ztf text-danger'>●</span>
               <span>&nbsp;ZTF &nbsp;
@@ -150,7 +203,7 @@ $account = strpos($zanode->osName, "windows") ? $config->zanode->defaultWinAccou
               <span class='init-success hide'><?php echo sprintf($lang->zanode->init->initSuccessNoticeTitle, "<a id='jumpManual' href='javascript:;'>{$lang->zanode->manual}</a>", html::a(helper::createLink('testcase', 'automation', "", '', true), $lang->zanode->automation, '', "class='iframe' title='{$lang->zanode->automation}' data-width='50%'", '')); ?></span>
               <?php if($zanode->hostType == 'physics'):?>
               <div class='hide init-fail'>
-                <?php echo $lang->zanode->init->initFailNotice;?>
+                <?php echo $zanode->hostType == 'physics' ? $lang->zanode->init->initFailNoticeOnPhysics : $lang->zanode->init->initFailNotice;?>
                 <textarea style="display:none;" id="initBash"><?php echo $initBash; ?></textarea>
                 <div class="zanode-init">
                 <?php echo "$initBash <button type='button' class='btn btn-info btn-mini btn-init-copy'><i class='icon-common-copy icon-copy' title='" . $lang->zanode->copy .  "'></i></button>"; ?>

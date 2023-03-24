@@ -69,7 +69,7 @@
           </tr>
           <tr>
             <th><?php echo $lang->zanode->osName;?></th>
-            <td><?php echo html::input('osName', $zanode->osName, "class='form-control' " . ($zanode->hostType != 'physics' ? "readonly='readonly'" : ''))?></td>
+            <td><?php echo html::input('osName',  $zanode->hostType != 'physics' ? $zanode->osName : zget($config->zanode->linuxList, $zanode->osName, zget($config->zanode->windowsList, $zanode->osName)), "class='form-control' readonly='readonly'")?></td>
           </tr>
           <tr>
             <th><?php echo $lang->zanode->desc ?></th>
