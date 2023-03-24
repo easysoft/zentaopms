@@ -244,5 +244,11 @@ $(function()
                     }, 'json');
             }
         });
+    }).on('keydown', '.file-tree input.input-tree', function(e)
+    {
+        if(e.keyCode == 13)
+        {
+            $(this).trigger('blur');
+        }
     });
 });
