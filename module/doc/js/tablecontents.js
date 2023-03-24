@@ -30,27 +30,29 @@ $(function()
             $item += '<i class="icon icon-drop icon-ellipsis-v hidden tree-icon" data-isCatalogue="' + (item.type ? false : true) + '"></i>';
             $item += '</div>';
             $item += '</a>';
+
             $li.append($item);
             $li.addClass(libClass);
             if (item.active) $li.addClass('active open in');
         }
     });
-    $('li.has-list > ul').addClass("menu-active-primary menu-hover-primary");
+
+    $('li.has-list > ul, #fileTree').addClass("menu-active-primary menu-hover-primary");
 
     $('#fileTree').on('mousemove', 'a', function()
     {
-        var $this = $(this);
-        if($this.data('type') == 'annex') return;
+        if($(this).data('type') == 'annex') return;
+
         var libClass = '.libDorpdown';
-        if(!$this.hasClass('lib')) libClass = '.moduleDorpdown';
+        if(!$(this).hasClass('lib')) libClass = '.moduleDorpdown';
         if($(libClass).find('li').length == 0) return false;
-        $this.find('.icon').removeClass('hidden');
-        $this.addClass('icon-show');
+
+        $(this).find('.icon').removeClass('hidden');
+        $(this).addClass('show-icon');
     }).on('mouseout', 'a', function()
     {
-        var $this = $(this);
-        $this.find('.icon').addClass('hidden');
-        $this.removeClass('icon-show');
+        $(this).find('.icon').addClass('hidden');
+        $(this).removeClass('show-icon');
     }).on('click', 'a', function(e)
     {
         var isLib    = $(this).hasClass('lib');
