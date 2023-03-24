@@ -78,7 +78,8 @@ li.drag-shadow ul {display: none!important;}
 
 .table .c-name > a:first-child {display: inline-block; max-width: 90%; overflow: hidden;}
 .table .c-name > .ajaxCollect {float: right; position: relative; right: 10px; top: -3px;}
+table.table > thead > tr {height: 32px;}
 
 #bysearchTab::before {display: none;}
-#leftBar .selectBox #currentItem {width: 185px; display: flex; align-items: center;}
+#leftBar .selectBox #currentItem {width: 200px; display: flex; align-items: center;}
 #leftBar .selectBox #currentItem > .text {overflow: hidden; text-align: left; flex: 0 1 100%;}
