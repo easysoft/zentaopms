@@ -139,7 +139,7 @@ class repo extends control
 
         $this->app->loadLang('action');
 
-        if($this->app->tab == 'project')
+        if($this->app->tab == 'project' or $this->app->tab == 'execution')
         {
             $products = $this->loadModel('product')->getProductPairsByProject($objectID);
         }
@@ -154,7 +154,7 @@ class repo extends control
         $this->view->users           = $this->loadModel('user')->getPairs('noletter|noempty|nodeleted|noclosed');
         $this->view->products        = $products;
         $this->view->projects        = $this->loadModel('product')->getProjectPairsByProductIDList(array_keys($products));
-        $this->view->relatedProjects = $this->app->tab == 'project' ? array($objectID) : array();
+        $this->view->relatedProjects = ($this->app->tab == 'project' or $this->app->tab == 'execution') ? array($objectID) : array();
         $this->view->serviceHosts    = $this->loadModel('gitlab')->getPairs();
         $this->view->objectID        = $objectID;
 
