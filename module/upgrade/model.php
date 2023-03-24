@@ -8568,7 +8568,7 @@ class upgradeModel extends model
         $charts               = $this->dao->select('*')->from(TABLE_CHART)->fetchAll('id');
         $dashboardLayoutPairs = $this->dao->select('id, layout')->from(TABLE_DASHBOARD)->fetchPairs();
 
-        $dataviewList = $this->dao->select('t1.code,t1.sql,t1.fields')->from(TABLE_DATAVIEW)->alias('t1')
+        $dataviewList = $this->dao->select('t1.code,t1.view,t1.fields')->from(TABLE_DATAVIEW)->alias('t1')
             ->leftJoin(TABLE_CHART)->alias('t2')->on('t1.code = t2.dataset')
             ->where('t2.id')->in(array_keys($charts))
             ->fetchAll('code');
@@ -8598,7 +8598,7 @@ class upgradeModel extends model
             if(isset($dataviewList[$chart->dataset]))
             {
                 $dataview     = $dataviewList[$chart->dataset];
-                $data->sql    = isset($dataview->sql) ? $dataview->sql : '';
+                $data->sql    = 'SELECT * FROM ' . $dataview->view;
                 $data->fields = isset($dataview->fields) ? $dataview->fields : '';
             }
 
