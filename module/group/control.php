@@ -419,10 +419,16 @@ class group extends control
         }
         else
         {
-            $this->app->loadClass('pager', $static = true);
-            $pager = new pager($recTotal, $recPerPage, $pageID);
+            $privList = $browseType != 'bysearch' ? $this->group->getPrivsListByView($view) : $this->group->getPrivsListBySearch($paramID);
 
-            $privList = $browseType != 'bysearch' ? $this->group->getPrivsListByView($view, $pager) :  $this->group->getPrivsListBySearch($paramID, $pager);
+            foreach($privList as $privID => $priv) if(!$this->group->checkMenuModule($view, $priv->module)) unset($privList[$privID]);
+
+            /* Pager. */
+            $this->app->loadClass('pager', $static = true);
+            $recTotal = count($privList);
+            $pager    = new pager($recTotal, $recPerPage, $pageID);
+            $privList = array_chunk($privList, $pager->recPerPage, true);
+            $privList = empty($privList) ? $privList : $privList[$pageID - 1];
 
             /* Build the search form. */
             $queryID   = ($browseType == 'bysearch') ? (int)$paramID : 0;
