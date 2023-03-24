@@ -162,12 +162,12 @@ $(function()
                 if(item.hasChildren)
                 {
                     var $input   = $('[data-id=liTreeModal]').html();
-                    var $rootDom = $('[data-id=' + item.libid + ']a').parent().find('ul');
+                    var $rootDom = $('[data-id=' + item.libid + ']a + ul');
                 }
                 else
                 {
                     var $input   = $('[data-id=ulTreeModal]').html();
-                    var $rootDom = $('[data-id=' + item.libid + ']a').parent();
+                    var $rootDom = $('[data-id=' + item.libid + ']a + ul');
                     moduleData.isUpdate = true;
                     $rootDom.addClass('open in has-list');
                 }
@@ -186,7 +186,7 @@ $(function()
                 if(item.hasChildren)
                 {
                     var $input   = $('[data-id=liTreeModal]').html();
-                    var $rootDom = $('#fileTree [data-id=' + item.id + ']li').find('ul');
+                    var $rootDom = $('#fileTree [data-id=' + item.id + ']a + ul ');
                 }
                 else
                 {
