@@ -58,7 +58,7 @@ li.drag-shadow ul {display: none!important;}
 /* css for tree */
 .file-tree { padding: 10px;}
 .file-tree  a {height: 30px;}
-.file-tree  a.icon-show {padding-right: 10px;}
+.file-tree  a.icon-show {padding-right: 15px;}
 .flex-between {display: flex; align-items: center; justify-content: space-between;}
 .flex-center {display: flex; align-items: center; justify-content: center;}
 .tree li>.list-toggle {top: 4px;}
