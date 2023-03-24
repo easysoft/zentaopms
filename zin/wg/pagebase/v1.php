@@ -35,6 +35,7 @@ class pagebase extends wg
         return h::html
         (
             before(html('<!DOCTYPE html>')),
+            set($this->props->skip(array_keys(static::getDefinedProps()))),
             h::head
             (
                 html($this->prop('metas')),

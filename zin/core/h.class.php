@@ -56,7 +56,7 @@ class h extends wg
     protected function getPropsStr()
     {
         $propStr = $this->props->toStr(array_keys(static::getDefinedProps()));
-        if($this->props->hasEvent() && empty($this->id())) $propStr = "$propStr id='$this->gid'";
+        if($this->props->hasEvent() && empty($this->id()) && $this->getTagName() !== 'html') $propStr = "$propStr id='$this->gid'";
         return empty($propStr) ? '' : " $propStr";
     }
 
@@ -66,7 +66,7 @@ class h extends wg
         if(empty($events)) return NULL;
 
         $id = $this->id();
-        $code = array('const ele = document.getElementById("' . (empty($id) ? $this->gid : $id) . '");');
+        $code = array($this->getTagName() === 'html' ? 'const ele = document;' : 'const ele = document.getElementById("' . (empty($id) ? $this->gid : $id) . '");');
         foreach($events as $event => $options)
         {
             if(is_string($options)) $options = array('handler' => $options);

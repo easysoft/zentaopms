@@ -190,4 +190,6 @@ dtable
     set::footer(jsRaw('function(){return window.footerGenerator.call(this);}'))
 );
 
+sidebar(modulemenu());
+
 render();

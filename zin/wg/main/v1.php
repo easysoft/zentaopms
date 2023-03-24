@@ -9,6 +9,7 @@ class main extends wg
     static $defineBlocks = array
     (
         'menu' => array('map' => 'featureBar,nav,toolbar'),
+        'sidebar' => array('map' => 'sidebar')
     );
 
     protected function buildMenu()
@@ -37,10 +38,24 @@ class main extends wg
 
     protected function buildContent()
     {
+        $sidebars = $this->block('sidebar');
+        if(empty($sidebars)) return $this->buildContent();
+
+        $leftSides = array();
+        $rightSides = array();
+        foreach($sidebars as $sidebar)
+        {
+            if($sidebar instanceof wg && $sidebar->prop('side') === 'left') $leftSides[] = $sidebar;
+            else $rightSides[] = $sidebar;
+        }
+
         return div
         (
             set::id('mainContent'),
-            $this->children()
+            $leftSides,
+            set::class(empty($leftSides) && empty($rightSides) ? '' : 'row', empty($leftSides) ? '' : 'has-sidebar-left', empty($rightSides) ? '' : 'has-sidebar-right'),
+            $this->children(),
+            $rightSides
         );
     }
 
@@ -49,6 +64,7 @@ class main extends wg
         return div
         (
             set::id('main'),
+            set($this->props->skip(array_keys(static::getDefinedProps()))),
             div
             (
                 set::class('container'),

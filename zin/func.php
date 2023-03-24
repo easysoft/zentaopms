@@ -47,6 +47,7 @@ function header()      {return createWg('header', func_get_args());}
 function heading()     {return createWg('heading', func_get_args());}
 function navbar()      {return createWg('navbar', func_get_args());}
 function main()        {return createWg('main', func_get_args());}
+function sidebar()     {return createWg('sidebar', func_get_args());}
 function featureBar()  {return createWg('featurebar', func_get_args());}
 function pageheader()  {return createWg('pageheader', func_get_args());}
 function pageheading() {return createWg('pageheading', func_get_args());}
