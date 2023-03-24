@@ -120,6 +120,17 @@ $lang->program->beyondParentBudget = '已超出所属项目集的剩余预算';
 $lang->program->checkedProjects    = '已选择%s项';
 $lang->program->budgetOverrun      = '项目集的预算超出了父项目集的剩余预算：';
 
+/* ToolBar. */
+$lang->program->createProduct    = '添加产品';
+
+/* DTable columns of product view page. */
+$lang->program->unclosedReqCount = '需求未关闭';
+$lang->program->closedReqRate    = '需求完成率';
+$lang->program->testCaseCoverRate= '用例覆盖率';
+$lang->program->bugActivedCount  = 'Bug激活';
+$lang->program->fixedRate        = '修复率';
+$lang->program->feedback         = '反馈';
+
 $lang->program->tip = new stdclass();
 $lang->program->tip->closed     = '该项目集已是关闭状态，无须关闭。';
 $lang->program->tip->notSuspend = '该项目集已关闭，不可进行挂起操作。';
@@ -158,6 +169,10 @@ $lang->program->featureBar['browse']['wait']      = '未开始';
 $lang->program->featureBar['browse']['doing']     = '进行中';
 $lang->program->featureBar['browse']['suspended'] = '已挂起';
 $lang->program->featureBar['browse']['closed']    = '已关闭';
+
+$lang->program->featureBar['productview']['all']      = '全部';
+$lang->program->featureBar['productview']['unclosed'] = '未关闭';
+$lang->program->featureBar['productview']['end']      = '结束';
 
 $lang->program->kanban = new stdclass();
 $lang->program->kanban->common             = '项目集看板';

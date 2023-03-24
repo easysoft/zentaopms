@@ -55,35 +55,35 @@ dtable
     set::footer(false)
 );
 
-programmenu
-(
-    set
-    (
-        array
-        (
-            'title' => '所有项目集',
-            'subTitle' => '筛选项目集',
-            'programs' => $data,
-            'activeKey' => '7',
-            'closeLink' => '#'
-        )
-    )
-);
-
-modulemenu
-(
-    set
-    (
-        array
-        (
-            'productID' => 1,
-            'title' => '售后服务',
-            'moduleSettingText' => '模块设置',
-            'displaySettingText' => '显示设置',
-            'activeKey' => '4',
-            'closeLink' => '#'
-        )
-    )
-);
+//programmenu
+//(
+//    set
+//    (
+//        array
+//        (
+//            'title' => '所有项目集',
+//            'subTitle' => '筛选项目集',
+//            'programs' => $data,
+//            'activeKey' => '7',
+//            'closeLink' => '#'
+//        )
+//    )
+//);
+//
+//modulemenu
+//(
+//    set
+//    (
+//        array
+//        (
+//            'productID' => 1,
+//            'title' => '售后服务',
+//            'moduleSettingText' => '模块设置',
+//            'displaySettingText' => '显示设置',
+//            'activeKey' => '4',
+//            'closeLink' => '#'
+//        )
+//    )
+//);
 
 render();
