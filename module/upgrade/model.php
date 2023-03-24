@@ -8715,9 +8715,6 @@ class upgradeModel extends model
 
         foreach($reports as $report)
         {
-            /* TODO: vars need to process. */
-            if(strpos($report->sql, '$') !== false) continue;
-
             $data = new stdclass();
             $data->dimension   = 1;
             $data->name        = $report->name;
@@ -8730,6 +8727,7 @@ class upgradeModel extends model
             $data->createdBy   = $report->addedBy;
             $data->createdDate = $report->addedDate;
 
+            /* Process group. */
             $modules = explode($report->module, ',');
             $groups  = array();
             foreach($modules as $module)
@@ -8757,6 +8755,24 @@ class upgradeModel extends model
             }
             $data->group = implode(',', $groups);
 
+            /* Process vars. */
+            $vars    = json_decode($report->vars);
+            $filters = array();
+            foreach($vars->varName as $index => $varName)
+            {
+                $filter = new stdclass();
+                $filter->from       = 'query';
+                $filter->field      = $varName;
+                $filter->name       = $vars->showName[$index];
+                $filter->type       = $vars->requestType[$index];
+                $filter->typeOption = $filter->type == 'select' ? $vars->selectList[$index] : '';
+                $filter->default    = $vars->default[$index];
+
+                $filters[] = $filter;
+            }
+            $data->filters = json_encode($filters);
+
+            /* Process settings. */
             $params   = json_decode($report->params);
             $settings = new stdclass();
             $settings->group1 = $params->group1;
@@ -8779,6 +8795,7 @@ class upgradeModel extends model
             }
             $settings->columns = $columns;
 
+            /* Process fieldSettings. */
             $fieldSettings = $this->getFieldSettings($data->sql);
 
             $data->settings = json_encode($settings);
