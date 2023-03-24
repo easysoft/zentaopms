@@ -40,7 +40,7 @@
           </tr>
           <tr>
             <th><?php echo $lang->doc->title;?></th>
-            <td colspan='2'><?php echo html::input('title', '', "class='form-control'");?></td>
+            <td colspan='2' class='required'><?php echo html::input('title', '', "class='form-control'");?></td>
           </tr>
           <tr>
             <th><?php echo $lang->doc->keywords;?></th>
