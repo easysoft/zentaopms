@@ -480,6 +480,8 @@ class api extends control
             if($api === false) return $this->sendError(dao::getError());
 
             $this->action->create('api', $api->id, 'Created');
+
+            if(isonlybody()) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
             return $this->sendSuccess(array('locate' => helper::createLink('api', 'index', "libID={$api->lib}&moduleID=0&apiID={$api->id}")));
         }
 

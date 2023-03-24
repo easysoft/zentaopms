@@ -1303,6 +1303,7 @@ class doc extends control
 
         $apiObjectType = $type == 'product' || $type == 'project' ? $type : '';
         $apiObjectID   = $apiObjectType ? $objectID : 0;
+        $apiLibs       = $apiObjectType ? $this->doc->getApiLibs(0, $apiObjectType, $apiObjectID) : array();
 
         $this->view->title          = $title;
         $this->view->type           = $type;
@@ -1320,7 +1321,7 @@ class doc extends control
         $this->view->orderBy        = $orderBy;
         $this->view->exportMethod   = $type . '2export';
         $this->view->canExport      = common::hasPriv('doc', $type . '2export');
-        $this->view->apiLibs        = $type == 'execution' ? array() : $this->doc->getApiLibs(0, $apiObjectType, $apiObjectID);
+        $this->view->apiLibID       = key($apiLibs);
 
         $this->display();
     }

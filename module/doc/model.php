@@ -2906,4 +2906,60 @@ class docModel extends model
         $libTree = array_values($libTree[$type]);
         return $libTree;
     }
+
+    /**
+     * Print create document button.
+     *
+     * @param  object $lib
+     * @param  type   $type project|product|custom
+     * @param  int    $objectID
+     * @param  int    $moduleID
+     * @param  int    $apiLibID
+     * @param  string $from list
+     * @access public
+     * @return string
+     */
+    public function printCreateBtn($lib, $type, $objectID, $moduleID, $apiLibID = 0, $from = '')
+    {
+        $libType = isset($lib->type) && $lib->type == 'api' ? 'api' : 'lib';
+
+        $class = $from == 'list' ? 'btn-info' : 'btn-primary';
+        $html  = "<div class='dropdown btn-group createDropdown'>";
+        $html .= html::a(helper::createLink('doc', 'createBasicInfo', "objectType={$lib->type}&objectID=$objectID&libID={$lib->id}&moduleID=$moduleID&type=html", '', true), "<i class='icon icon-plus'></i> {$this->lang->doc->create}", '', "class='btn $class iframe'");
+        $html .= "<button type='button' class='btn $class dropdown-toggle' data-toggle='dropdown'><span class='caret'></span></button>";
+        $html .= "<ul class='dropdown-menu pull-right'>";
+
+        foreach($this->lang->doc->createList as $typeKey => $typeName)
+        {
+            if($this->config->edition != 'max' and $typeKey == 'template') continue;
+            if($typeKey == 'api' and (!common::hasPriv('api', 'create') or !$apiLibID)) continue;
+            if($typeKey != 'api' and !common::hasPriv('doc', 'create')) continue;
+
+            $class  = ($typeKey != 'template') ? 'iframe' : '';
+            $attr   = "data-app='{$this->app->tab}'";
+            $module = $typeKey == 'api' ? 'api' : 'doc';
+            $method = strpos($this->config->doc->textTypes, $typeKey) !== false ? 'createBasicInfo' : 'create';
+
+            $params = "objectType={$lib->type}&objectID=$objectID&libID={$lib->id}&moduleID=$moduleID&type=$typeKey";
+            if($typeKey == 'api')
+            {
+                $attr  .= " data-width=85%";
+                $params = "libID=$apiLibID&moduleID=$moduleID";
+            }
+            if($typeKey == 'template') $params = "objectType=$type&objectID=$objectID&libID={$lib->id}&moduleID=$moduleID&type=html&fromGlobal=&from=template";
+
+            $html .= "<li>";
+            $html .= html::a(helper::createLink($module, $method, $params, '', $class ? true : false), $typeName, '', "class='$class' $attr");
+            $html .= "</li>";
+
+            $printDivider = false;
+            if($typeKey == 'template') $printDivider = true;
+            if($this->config->edition != 'max' and $typeKey == 'api') $printDivider = true;
+            if($this->config->edition != 'max' and !$apiLibID and $typeKey == 'html') $printDivider = true;
+            if($printDivider) $html .= '<li class="divider"></li>';
+        }
+
+        $html .= '</ul></div>';
+        return $html;
+    }
 }
