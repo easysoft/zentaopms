@@ -2077,6 +2077,7 @@ $lang->resource->doctemplate        = new stdclass();
 $lang->resource->notifysetting      = new stdclass();
 $lang->resource->bidesign           = new stdclass();
 $lang->resource->personalsettings   = new stdclass();
+$lang->resource->projectsettings    = new stdclass();
 $lang->resource->dataaccess         = new stdclass();
 $lang->resource->executiongantt     = new stdclass();
 $lang->resource->executionkanban    = new stdclass();
