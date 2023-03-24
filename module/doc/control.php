@@ -319,6 +319,9 @@ class doc extends control
      */
     public function create($objectType, $objectID, $libID, $moduleID = 0, $docType = '', $fromGlobal = false, $from = 'doc')
     {
+        $linkType = $objectType;
+        if($objectType == 'execution' and $this->app->tab != 'execution') $linkType = 'project';
+
         if(!empty($_POST))
         {
             setcookie('lastDocModule', (int)$this->post->module, $this->config->cookieLife, $this->config->webRoot, '', $this->config->cookieSecure, false);
@@ -339,43 +342,36 @@ class doc extends control
 
             if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $docID));
             $objectID = zget($lib, $lib->type, 0);
-            $params   = "type={$lib->type}&objectID=$objectID&libID={$lib->id}&docID=" . $docResult['id'];
+            $params   = "type=$linkType&objectID=$objectID&libID={$lib->id}&docID=" . $docResult['id'];
             $link     = isonlybody() ? 'parent' : $this->createLink('doc', 'objectLibs', $params);
             $response = array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $link);
 
             return $this->send($response);
         }
 
-        unset($_GET['onlybody']);
-
         if($this->app->tab == 'product')
         {
             $this->product->setMenu($objectID);
-            unset($this->lang->product->menu->doc['subMenu']);
         }
-        else if($this->app->tab == 'project')
+        elseif($this->app->tab == 'project')
         {
-            $this->project->setMenu($objectID);
-            unset($this->lang->project->menu->doc['subMenu']);
+            $linkType = 'project';
+            $this->project->setMenu($this->session->project);
         }
-        else if($this->app->tab == 'execution')
+        elseif($this->app->tab == 'execution')
         {
             $this->execution->setMenu($objectID);
-            unset($this->lang->execution->menu->doc['subMenu']);
         }
         else
         {
             $this->app->rawMethod = $objectType;
-            unset($this->lang->doc->menu->product['subMenu']);
-            unset($this->lang->doc->menu->custom['subMenu']);
-            unset($this->lang->doc->menu->execution['subMenu']);
-            unset($this->lang->doc->menu->project['subMenu']);
         }
+        unset($_GET['onlybody']);
 
         $this->config->showMainMenu = (strpos($this->config->doc->textTypes, $docType) === false or $from == 'template');
 
         /* Get libs and the default lib id. */
-        $gobackLink = ($objectID == 0 and $libID == 0) ? $this->createLink('doc', 'tableContents', "type=$objectType") : '';
+        $gobackLink = ($objectID == 0 and $libID == 0) ? $this->createLink('doc', 'tableContents', "type=$linkType") : '';
         $unclosed   = strpos($this->config->doc->custom->showLibs, 'unclosed') !== false ? 'unclosedProject' : '';
         $libs       = $this->doc->getLibs($objectType, $extra = "withObject,$unclosed", $libID, $objectID);
         if(!$libID and !empty($libs)) $libID = key($libs);
@@ -386,6 +382,7 @@ class doc extends control
 
         $this->view->title = $libName . $this->lang->doc->create;
 
+        $this->view->linkType         = $linkType;
         $this->view->objectType       = $objectType;
         $this->view->objectID         = zget($lib, $lib->type, 0);
         $this->view->libID            = $libID;
@@ -1293,7 +1290,6 @@ class doc extends control
             $this->loadModel('api');
             $this->session->set('objectName', $this->lang->doc->api, 'admin');
 
-            $this->view->lib     = $lib;
             $this->view->libs    = $libs;
             $this->view->apiID   = 0;
             $this->view->release = 0;
@@ -1317,6 +1313,7 @@ class doc extends control
         $this->view->libID          = $libID;
         $this->view->moduleID       = $moduleID;
         $this->view->objectDropdown = $objectDropdown;
+        $this->view->lib            = $lib;
         $this->view->libType        = $libType;
         $this->view->pager          = $pager;
         $this->view->objectID       = $objectID;

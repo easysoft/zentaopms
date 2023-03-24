@@ -40,7 +40,7 @@
       if($libID)
       {
           $html  = "<div class='dropdown btn-group createDropdown'>";
-          $html .= html::a($this->createLink('doc', 'createBasicInfo', "objectType=$type&objectID=$objectID&libID=$libID&moduleID=$moduleID&type=html", '', true), "<i class='icon icon-plus'></i> {$lang->doc->create}", '', "class='btn btn-primary iframe'");
+          $html .= html::a($this->createLink('doc', 'createBasicInfo', "objectType={$lib->type}&objectID=$objectID&libID=$libID&moduleID=$moduleID&type=html", '', true), "<i class='icon icon-plus'></i> {$lang->doc->create}", '', "class='btn btn-primary iframe'");
           $html .= "<button type='button' class='btn btn-primary dropdown-toggle' data-toggle='dropdown'><span class='caret'></span></button>";
           $html .= "<ul class='dropdown-menu pull-right'>";
 

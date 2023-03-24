@@ -59,7 +59,7 @@
 <?php if($objectType == 'custom' and empty($libs)):?>
 <?php echo html::a(helper::createLink('doc', 'createLib', "type=custom&objectID=$objectID"), '<i class="icon icon-plus"></i> ' . $lang->doc->createLib, '', 'class="iframe hidden createCustomLib"');?>
 <?php endif;?>
-<?php $backLink = $this->createLink('doc', 'tableContents', "type=$objectType&objectID=$objectID&libID=$libID");?>
+<?php $backLink = $this->createLink('doc', 'tableContents', "type=$linkType&objectID=$objectID&libID=$libID");?>
 <div id="mainContent" class="main-content">
   <form class="load-indicator main-form form-ajax" id="dataform" method='post' enctype='multipart/form-data'>
     <table class='table table-form'>
