@@ -89,4 +89,4 @@ table.table > thead > tr {height: 32px;}
 [lang^=zh] #leftBar .selectBox #currentItem {width: 180px;}
 #leftBar .selectBox #currentItem > .text {overflow: hidden; text-align: left; flex: 0 1 100%;}
 
-.has-input {overflow: hidden;}
+.tree li.has-input {overflow: hidden;}

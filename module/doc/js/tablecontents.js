@@ -191,8 +191,9 @@ $(function()
             case 'addCataBro' :
                 moduleData.createType = 'same';
                 var $input   = $('[data-id=liTreeModal]').html();
-                var $rootDom = $('#fileTree [data-id=' + item.id + ']li');
+                var $rootDom = $('#fileTree li[data-id=' + item.id + ']');
                 $rootDom.after($input);
+                $rootDom.closest('ul').find('.has-input').css('padding-left', '0');
                 $('#fileTree').find('input').focus();
                 break;
             case 'addCataChild' :
@@ -257,9 +258,6 @@ $(function()
         });
     }).on('keydown', '.file-tree input.input-tree', function(e)
     {
-        if(e.keyCode == 13)
-        {
-            $(this).trigger('blur');
-        }
+        if(e.keyCode == 13) $(this).trigger('blur');
     });
 });
