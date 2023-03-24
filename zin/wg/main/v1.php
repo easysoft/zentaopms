@@ -38,15 +38,17 @@ class main extends wg
 
     protected function buildContent()
     {
-        $sidebars = $this->block('sidebar');
-        if(empty($sidebars)) return $this->buildContent();
-
-        $leftSides = array();
+        $leftSides  = array();
         $rightSides = array();
-        foreach($sidebars as $sidebar)
+        $sidebars   = $this->block('sidebar');
+
+        if(!empty($sidebars))
         {
-            if($sidebar instanceof wg && $sidebar->prop('side') === 'left') $leftSides[] = $sidebar;
-            else $rightSides[] = $sidebar;
+            foreach($sidebars as $sidebar)
+            {
+                if($sidebar instanceof wg && $sidebar->prop('side') === 'left') $leftSides[] = $sidebar;
+                else $rightSides[] = $sidebar;
+            }
         }
 
         return div
