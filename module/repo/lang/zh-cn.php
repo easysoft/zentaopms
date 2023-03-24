@@ -32,7 +32,7 @@ $lang->repo->blameTmpl       = '第 <strong>%line</strong> 行代码相关信息
 $lang->repo->notRelated      = '暂时没有关联禅道对象';
 
 $lang->repo->browseAction    = '浏览代码库';
-$lang->repo->createAction    = '创建代码库';
+$lang->repo->createAction    = '添加代码库';
 $lang->repo->editAction      = '编辑代码库';
 $lang->repo->diffAction      = '版本对比';
 $lang->repo->downloadAction  = '下载代码库文件';

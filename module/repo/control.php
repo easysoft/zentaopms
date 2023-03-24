@@ -1749,8 +1749,14 @@ class repo extends control
             ->setDefault('projects', array())
             ->get();
 
+        $productIds = $postData->products;
+        if(empty($productIds))
+        {
+            $products   = $this->loadModel('product')->getPairs('', 0, '', 'all');
+            $productIds = array_keys($products);
+        }
         /* Get all projects that can be accessed. */
-        $accessProjects = $this->loadModel('product')->getProjectPairsByProductIDList($postData->products);
+        $accessProjects = $this->loadModel('product')->getProjectPairsByProductIDList($productIds);
 
         $selectedProjects = array_intersect(array_keys($accessProjects), $postData->projects);
 

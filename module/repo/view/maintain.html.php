@@ -17,7 +17,7 @@
   </div>
   <div class='btn-toolbar pull-right'>
     <?php if(common::hasPriv('repo', 'import')) echo html::a(helper::createLink('repo', 'import'), "<i class='icon icon-import'></i> " . $this->lang->repo->importAction, '', "class='btn btn-link'");?>
-    <?php if(common::hasPriv('repo', 'create')) echo html::a(helper::createLink('repo', 'create'), "<i class='icon icon-plus'></i> " . $this->lang->repo->create, '', "class='btn btn-primary'");?>
+    <?php if(common::hasPriv('repo', 'create')) echo html::a(helper::createLink('repo', 'create'), "<i class='icon icon-plus'></i> " . $this->lang->repo->createAction, '', "class='btn btn-primary'");?>
   </div>
 </div>
 <div id='mainContent'>
