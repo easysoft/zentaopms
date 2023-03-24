@@ -248,11 +248,11 @@ $(function()
             $(this).remove();
             if(moduleData.isUpdate)
             {
-                $.getJSON(createLink('doc', 'tableContents', 'type=' + objectType + '&objectID=' + objectID , 'json'), {}, function(data){
-                        var treeData = JSON.parse(data.data);
-                        $('#fileTree').data('zui.tree').reload(treeData.libTree);
-                        $('li.has-list > ul').addClass("menu-active-primary menu-hover-primary");
-                    }, 'json');
+                $.getJSON(createLink('doc', 'tableContents', 'type=' + objectType + '&objectID=' + objectID , 'json'), function(data){
+                    var treeData = JSON.parse(data.data);
+                    $('#fileTree').data('zui.tree').reload(treeData.libTree);
+                    $('li.has-list > ul').addClass("menu-active-primary menu-hover-primary");
+                });
             }
         });
     }).on('keydown', '.file-tree input.input-tree', function(e)
