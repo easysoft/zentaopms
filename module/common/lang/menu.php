@@ -617,6 +617,8 @@ $lang->navGroup->design          = 'project';
 $lang->navGroup->stakeholder     = 'project';
 $lang->navGroup->projectsettings = 'project';
 $lang->navGroup->projectreview   = 'project';
+$lang->navGroup->projecttrack    = 'project';
+$lang->navGroup->projectqa       = 'project';
 
 $lang->navGroup->projectbuild   = 'project';
 $lang->navGroup->projectstory   = 'project';

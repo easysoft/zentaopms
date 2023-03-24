@@ -131,6 +131,8 @@ $lang->generaltemplate    = new stdclass();
 $lang->generaleffort      = new stdclass();
 $lang->productsettings    = new stdclass();
 $lang->projectreview      = new stdclass();
+$lang->projecttrack       = new stdclass();
+$lang->projectqa          = new stdclass();
 
 $lang->projectbuild   = new stdclass();
 $lang->projectrelease = new stdclass();

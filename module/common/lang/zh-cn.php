@@ -246,6 +246,8 @@ $lang->generaltemplate->common    = '模板';
 $lang->generaleffort->common      = '通用日志';
 $lang->productsettings->common    = '产品设置';
 $lang->projectreview->common      = '评审';
+$lang->projecttrack->common       = '矩阵';
+$lang->projectqa->common          = '测试';
 
 $lang->personnel->common     = '人员';
 $lang->personnel->invest     = '投入人员';

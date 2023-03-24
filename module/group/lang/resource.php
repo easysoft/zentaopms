@@ -2092,6 +2092,8 @@ $lang->resource->generaltemplate    = new stdclass();
 $lang->resource->generaleffort      = new stdclass();
 $lang->resource->productsettings    = new stdclass();
 $lang->resource->projectreview      = new stdclass();
+$lang->resource->projecttrack       = new stdclass();
+$lang->resource->projectqa          = new stdclass();
 
 global $config;
 $inUpgrade = (defined('IN_UPGRADE') and IN_UPGRADE);
