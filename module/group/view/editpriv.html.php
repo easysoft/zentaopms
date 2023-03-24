@@ -24,16 +24,15 @@
           <th class='c-name'><?php echo $lang->group->privName;?></th>
           <td class='required'><?php echo html::input('name', $priv->name, "class='form-control'");?></td>
         </tr>
-        <?php if(empty($priv->system)):?>
+        <?php $isSystem = !empty($priv->system);?>
         <tr>
           <th><?php echo $lang->group->privModuleName;?></th>
-          <td class='required'><?php echo html::input('moduleName', $priv->moduleName, "class='form-control'");?></td>
+          <td class='<?php echo !$isSystem ? 'required' : '';?>'><?php echo !$isSystem ? html::input('moduleName', $priv->moduleName, "class='form-control'") : $priv->moduleName;?></td>
         </tr>
         <tr>
           <th><?php echo $lang->group->privMethodName;?></th>
-          <td class='required'><?php echo html::input('methodName', $priv->methodName, "class='form-control'");?></td>
+          <td class='<?php echo !$isSystem ? 'required' : '';?>'><?php echo !$isSystem ? html::input('methodName', $priv->methodName, "class='form-control'") : $priv->methodName;?></td>
         </tr>
-        <?php endif;?>
         <tr>
           <th><?php echo $lang->group->privView;?></th>
           <td class='required'><?php echo html::select('view', $views, $priv->view, "class='form-control chosen' onchange='loadModuleAndPackage(this.value)' data-drop_direction='down'");?></td>
