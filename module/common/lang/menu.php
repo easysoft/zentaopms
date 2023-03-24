@@ -593,6 +593,7 @@ $lang->system->menuOrder[20] = 'view';
 /* Nav group.*/
 $lang->navGroup = new stdclass();
 $lang->navGroup->my               = 'my';
+$lang->navGroup->effort           = 'my';
 $lang->navGroup->score            = 'my';
 $lang->navGroup->todo             = 'my';
 $lang->navGroup->contact          = 'my';
