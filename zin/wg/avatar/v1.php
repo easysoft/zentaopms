@@ -107,7 +107,7 @@ class avatar extends wg
     private function getAvatarText()
     {
         $maxTextLen    = intval($this->prop('maxTextLength'));
-        $text          = $this->prop('text');
+        $text          = strtoupper($this->prop('text', ''));
         $this->textLen = strlen($text);
 
         if(preg_match('/[\x{4e00}-\x{9fa5}\s]+$/u', $text))
@@ -284,4 +284,3 @@ class avatar extends wg
         );
     }
 }
-
