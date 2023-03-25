@@ -4,6 +4,7 @@ namespace zin;
 require_once dirname(__DIR__) . DS . 'heading' . DS . 'v1.php';
 require_once dirname(__DIR__) . DS . 'navbar' . DS . 'v1.php';
 require_once dirname(__DIR__) . DS . 'toolbar' . DS . 'v1.php';
+require_once dirname(__DIR__) . DS . 'useravatar' . DS . 'v1.php';
 
 class header extends wg
 {
@@ -117,28 +118,34 @@ class header extends wg
 
     static function userBar()
     {
-        global $lang, $app;
+        global $lang, $app, $config;
 
         if(!isset($app->user)) return;
 
-        $isGuest = $app->user->account == 'guest';
+        $user    = $app->user;
+        $isGuest = $user->account == 'guest';
         $items   = array();
 
         if(!$isGuest)
         {
-            $noRole = (!empty($app->user->role) and isset($lang->user->roleList[$app->user->role])) ? '' : ' no-role';
-
+            $noRole = empty($user->role) || !isset($lang->user->roleList[$user->role]);
             $items[] = array
             (
-                'outerProps' => array('class' => 'items-center gap-2 px-2 py-1 row'),
-                'children' => array($app->user->realname),
+                'type'      => 'custom',
+                'tag'       => 'a',
+                'href'      => createLink('my', 'profile', '', '', true),
+                'className' => 'items-center gap-2 px-2 py-1 row text-inherit',
+                'renders'   => array(array('__html' => implode('', array
+                (
+                    userAvatar(set::user($user), setClass('flex-none'))->render(),
+                    div
+                    (
+                        setClass('flex-auto'),
+                        div(setClass('text-lg'), empty($user->realname) ? $user->account : $user->realname),
+                        $noRole ? NULL : div(setClass('text-gray text-sm'), $lang->user->roleList[$user->role])
+                    )->render()
+                )))),
             );
-
-            // echo '<li class="user-profile-item">';
-            // echo "<a href='" . helper::createLink('my', 'profile', '', '', true) . "' data-width='700' class='iframe $noRole'" . '>';
-            // echo html::avatar($app->user, '', 'avatar-circle', 'id="menu-avatar"');
-            // echo '<div class="user-profile-name">' . (empty($app->user->realname) ? $app->user->account : $app->user->realname) . '</div>';
-            // if(isset($lang->user->roleList[$app->user->role])) echo '<div class="user-profile-role">' . $lang->user->roleList[$app->user->role] . '</div>';
 
             $items[] = array('type' => 'divider');
 
@@ -195,19 +202,35 @@ class header extends wg
             $items[] = array('type' => 'divider');
         }
 
-        $items[] = array('type' => 'heading', 'text' => $lang->theme, 'icon' => 'theme');
+        $themeItems = array();
         foreach($app->lang->themes as $key => $value)
         {
-            $items[] = array('text' => $value, 'data-value' => $key, 'url' => "javascript:selectTheme(\"$key\")", 'active' => $app->cookie->theme == $key);
+            $themeItems[] = array('text' => $value, 'data-value' => $key, 'url' => "javascript:selectTheme(\"$key\")", 'active' => $app->cookie->theme == $key);
         }
+        $items[] = array
+        (
+            'text' => $lang->theme,
+            'icon' => 'theme',
+            'items' => $themeItems
+        );
 
-        $items[] = array('type' => 'heading', 'text' => $lang->lang, 'icon' => 'theme');
+        $langItems = array();
         foreach ($app->config->langs as $key => $value)
         {
-            $items[] = array('text' => $value, 'data-value' => $key, 'url' => "javascript:selectLang(\"$key\")", 'active' => $app->cookie->lang == $key);
+            $langItems[] = array('text' => $value, 'data-value' => $key, 'url' => "javascript:selectLang(\"$key\")", 'active' => $app->cookie->lang == $key);
         }
+        $items[] = array('text' => $lang->lang, 'icon' => 'lang', 'items' => $langItems);
 
-        // commonModel::printAboutBar();
+        $helpItems = array();
+        $manualUrl = ((!empty($config->isINT)) ? $config->manualUrl['int'] : $config->manualUrl['home']) . '&theme=' . $_COOKIE['theme'];
+        $helpItems[] = array('text' => $lang->manual, 'url' => $manualUrl, 'attrs' => array('data-app' => 'help'));
+        $helpItems[] = array('text' => $lang->changeLog, 'url' => createLink('misc', 'changeLog'));
+        $items[] = array('text' => $lang->help, 'icon' => 'help', 'items' => $helpItems);
+
+        /* printClientLink */
+
+        $items[] = array('text' => $lang->aboutZenTao, 'icon' => 'about', 'url' => createLink('misc', 'about'));
+        $items[] = array('type' => 'html', 'className' => 'menu-item', 'html' => $lang->designedByAIUX);
 
         $items[] = array('type' => 'divider');
 
@@ -224,8 +247,14 @@ class header extends wg
         (
             a
             (
-                icon('account', set::size('lg')),
-                setClass('primary border border-white border-opacity-50 avatar w-7 circle'),
+                setClass('circle'),
+                userAvatar
+                (
+                    setClass('border border-white border-opacity-50'),
+                    set::circle(true),
+                    set::size(28),
+                    set::user($user)
+                ),
                 set::square(true),
                 set::caret(false)
             ),
