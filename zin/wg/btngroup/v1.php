@@ -16,7 +16,8 @@ class btnGroup extends wg
     protected function build()
     {
         $items = $this->prop('items');
-        return div(
+        return div
+        (
             setClass('btn-group'),
             set($this->props->skip(array_keys(static::getDefinedProps()))),
             is_array($items) ? array_map(array($this, 'onBuildItem'), $items) : NULL,

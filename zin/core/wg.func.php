@@ -17,6 +17,8 @@ require_once 'wg.class.php';
 
 function set($name, $value = NULL)
 {
+    if($name === NULL) return NULL;
+
     $props = null;
     if($name instanceof props) $props = $name;
     else if(is_array($name)) $props = $name;

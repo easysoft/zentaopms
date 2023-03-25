@@ -304,7 +304,7 @@ class wg
         foreach($props as $name => $value)
         {
             if($this->props->has($name)) continue;
-            $this->props->set($name, $value);
+            $this->setProp($name, $value);
         }
     }
 

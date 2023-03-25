@@ -1,8 +1,6 @@
 <?php
 namespace zin;
 
-use build;
-
 class modalTrigger extends wg
 {
     static $defineProps = array
