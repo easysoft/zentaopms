@@ -51,7 +51,6 @@ class modalTrigger extends wg
             }
             $target = "#$target";
         }
-
         if(!empty($url) && empty($type)) $type = 'ajax';
 
         if(empty($triggerBlock)) $triggerBlock = h::a($this->children());
