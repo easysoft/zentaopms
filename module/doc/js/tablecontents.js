@@ -224,10 +224,11 @@ $(function()
         }
     }).on('blur', '.file-tree input.input-tree', function()
     {
-        var value = $(this).val();
+        var $input = $(this);
+        var value = $input.val();
         if(!value)
         {
-            $(this).closest('[data-id=insert]').remove();
+            $input.closest('[data-id=insert]').remove();
             return;
         }
 
@@ -251,8 +252,9 @@ $(function()
             }
             var module    = result.module;
             var resultDom = $('[data-id=aTreeModal]').html().replace(/%name%/g, module.name).replace(/%id%/g, module.id).replace('insert', module.id);
-            $(this).parent().append(resultDom);
-            $(this).remove();
+            $input.closest('ul').find('.has-input').css('padding-left', '15px');
+            $input.after(resultDom);
+            $input.remove();
             if(moduleData.isUpdate)
             {
                 $.getJSON(createLink('doc', 'tableContents', 'type=' + objectType + '&objectID=' + objectID , 'json'), function(data){
