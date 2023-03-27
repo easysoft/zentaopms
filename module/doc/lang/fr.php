@@ -32,6 +32,11 @@ $lang->doclib->aclListB['open']    = 'Public';
 $lang->doclib->aclListB['custom']  = 'Person.';
 $lang->doclib->aclListB['private'] = 'Privée';
 
+$lang->doclib->aclList = array();
+$lang->doclib->aclList['open']    = "Public <span class='acl-tip'>(Users who can access doccan access it)</span>";
+$lang->doclib->aclList['default'] = "Default <span class='acl-tip'>(Users who can access the selected %s or users in the whiltelist can access it)</span>";
+$lang->doclib->aclList['private'] = "Private <span class='acl-tip'> (Only the one who created it or users in the whiltelist can access it)</span>";
+
 $lang->doclib->create['product']   = 'Créer ' . $lang->productCommon . ' Library';
 $lang->doclib->create['execution'] = 'Créer ' . 'Bibliothèque ' . $lang->executionCommon;
 $lang->doclib->create['custom']    = 'Créer Bibliothèque Personnelle';
