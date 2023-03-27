@@ -19,9 +19,45 @@ class h extends wg
 {
     protected static $defineProps = 'tagName, selfClose?:bool=false';
 
+    private $matchedPortals = NULL;
+
     public function getTagName()
     {
         return $this->props->get('tagName');
+    }
+
+    public function isMatch($selector)
+    {
+        $list = explode(',', $selector);
+        foreach($list as $selector)
+        {
+            $selector = trim($selector);
+            if(strpos($selector, '.') === 0 && $this->props->class->has(substr($selector, 1))) return true;
+            if(strpos($selector, '#') === 0 && $this->id() === substr($selector, 1)) return true;
+            if($selector === $this->getTagName()) return true;
+        }
+        return false;
+    }
+
+    /**
+     * Render widget to html
+     * @return string
+     */
+    public function render(&$portals = NULL)
+    {
+        if(!empty($portals))
+        {
+            $this->matchedPortals = array();
+            foreach($portals as $portal)
+            {
+                if($this->isMatch($portal->prop('target'))) $this->matchedPortals[] = $portal->children();
+            }
+        }
+        else
+        {
+            $this->matchedPortals = NULL;
+        }
+        return parent::render($portals);
     }
 
     public function isSelfClose()
@@ -38,7 +74,7 @@ class h extends wg
 
         if($this->isSelfClose()) return array($this->buildSelfCloseTag(), $events);
 
-        return array($this->buildTagBegin(), parent::build(), $this->buildTagEnd(), $events);
+        return array($this->buildTagBegin(), parent::build(), $this->matchedPortals, $this->buildTagEnd(), $events);
     }
 
     public function toJsonData()

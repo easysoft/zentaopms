@@ -14,6 +14,7 @@ require_once dirname(__DIR__) . DS . 'utils' . DS . 'flat.func.php';
 require_once 'props.class.php';
 require_once 'directive.func.php';
 require_once 'wg.class.php';
+require_once 'portal.class.php';
 
 function set($name, $value = NULL)
 {
@@ -133,6 +134,13 @@ function divorce($item)
         foreach($item as $i) divorce($i);
     }
     return $item;
+}
+
+function portal()
+{
+    $args   = func_get_args();
+    $target = array_shift($args);
+    return new portal(set::target($target), $args);
 }
 
 function hasWgInList($items, $type)

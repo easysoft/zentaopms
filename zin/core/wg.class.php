@@ -63,24 +63,21 @@ class wg
      * Render widget to html
      * @return string
      */
-    public function render()
+    public function render(&$portals = NULL)
     {
-        zin::disableGlobalRender();
-
         $before   = $this->buildBefore();
         $children = $this->build();
         $after    = $this->buildAfter();
 
-        zin::enableGlobalRender();
-
-        return static::renderToHtml(array($before, $children, $after), $this);
+        return static::renderToHtml(array($before, $children, $after), $portals);
     }
 
     public function display()
     {
         zin::disableGlobalRender();
 
-        $html = $this->render(true);
+        $portals = $this->getPortals();
+        $html = $this->render($portals);
         echo $html;
 
         $this->displayed = true;
@@ -158,6 +155,7 @@ class wg
         }
 
         if($child instanceof wg && empty($child->parent)) $child->parent = &$this;
+        if($child instanceof wg && $child->type() === 'zin\portal') $name = 'portals';
 
         if($name === 'children' && $child instanceof wg)
         {
@@ -232,6 +230,19 @@ class wg
             }
             return;
         }
+    }
+
+    public function getPortals($deep = true)
+    {
+        $portals = $this->block('portals');
+        if($deep)
+        {
+            foreach($this->children() as $child)
+            {
+                if($child instanceof wg) $portals = array_merge($portals, $child->getPortals(true));
+            }
+        }
+        return $portals;
     }
 
     public function prop($name, $defaultValue = NULL)
@@ -527,7 +538,7 @@ class wg
     /**
      * @return string
      */
-    public static function renderToHtml($children)
+    public static function renderToHtml($children, &$portals = NULL)
     {
         $html = array();
         foreach($children as $child)
@@ -536,11 +547,11 @@ class wg
 
             if(is_array($child))
             {
-                $html[] = static::renderToHtml($child);
+                $html[] = static::renderToHtml($child, $portals);
             }
             elseif($child instanceof wg)
             {
-                $html[] = $child->render();
+                $html[] = $child->render($portals);
             }
             elseif(is_string($child))
             {
@@ -548,7 +559,7 @@ class wg
             }
             elseif(is_object($child))
             {
-                if(method_exists($child, 'render')) $html[] = $child->render();
+                if(method_exists($child, 'render')) $html[] = $child->render($portals);
                 elseif(isHtml($child))              $html[] = $child->data;
                 elseif(isText($child))              $html[] = htmlspecialchars($child->data);
                 elseif(isset($child->html))         $html[] = $child->html;
