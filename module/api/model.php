@@ -938,7 +938,7 @@ class apiModel extends model
      *
      * @param  string $libID
      * @param  int    $queryID
-     * @param  int    $objectType product|project
+     * @param  string $objectType product|project
      * @param  array  $libs
      * @access public
      * @return array
@@ -947,35 +947,35 @@ class apiModel extends model
     {
         $queryName = $objectType ? $objectType . 'apiDocQuery' : 'apiQuery';
         $queryForm = $objectType ? $objectType . 'apiDocForm' : 'apiForm';
-       if($queryID)
-       {
-           $query = $this->loadModel('search')->getQuery($queryID);
-           if($query)
-           {
-               $this->session->set($queryName, $query->sql);
-               $this->session->set($queryForm, $query->form);
-           }
-           else
-           {
-               $this->session->set($queryName, ' 1 = 1');
-           }
-       }
-       else
-       {
-           if($this->session->$queryName == false) $this->session->set($queryName, ' 1 = 1');
-       }
+        if($queryID)
+        {
+            $query = $this->loadModel('search')->getQuery($queryID);
+            if($query)
+            {
+                $this->session->set($queryName, $query->sql);
+                $this->session->set($queryForm, $query->form);
+            }
+            else
+            {
+                $this->session->set($queryName, ' 1 = 1');
+            }
+        }
+        else
+        {
+            if($this->session->$queryName == false) $this->session->set($queryName, ' 1 = 1');
+        }
 
-       $apiQuery = $this->session->$queryName;
-       if(strpos($apiQuery, "`lib` = 'all'") === false and !$objectType) $apiQuery = "$apiQuery and lib = $libID";
-       if(strpos($apiQuery, "`lib` = 'all'") !== false) $apiQuery = str_replace("`lib` = 'all'", '1', $apiQuery);
+        $apiQuery = $this->session->$queryName;
+        if(strpos($apiQuery, "`lib` = 'all'") === false and !$objectType) $apiQuery = "$apiQuery and lib = $libID";
+        if(strpos($apiQuery, "`lib` = 'all'") !== false) $apiQuery = str_replace("`lib` = 'all'", '1', $apiQuery);
 
-       $list = $this->dao->select('*')
-           ->from(TABLE_API)
-           ->where('deleted')->eq(0)
-           ->andWhere($apiQuery)
-           ->beginIF(!empty($libs))->andWhere('`lib`')->in($libs)->fi()
-           ->fetchAll();
+        $list = $this->dao->select('*')
+                          ->from(TABLE_API)
+                          ->where('deleted')->eq(0)
+                          ->andWhere($apiQuery)
+                          ->beginIF(!empty($libs))->andWhere('`lib`')->in($libs)->fi()
+                          ->fetchAll();
 
-       return $list;
+        return $list;
     }
 }

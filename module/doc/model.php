@@ -2715,7 +2715,6 @@ class docModel extends model
      */
     public function getDocsBySearch($type, $objectID, $libID, $queryID, $orderBy = 'id_desc', $pager = null)
     {
-        $lib       = $this->getLibById($libID);
         $queryName = $type . 'libDocQuery';
         $queryForm = $type . 'libDocForm';
         if($queryID)

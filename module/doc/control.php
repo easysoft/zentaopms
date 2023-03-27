@@ -355,7 +355,6 @@ class doc extends control
         }
         elseif($this->app->tab == 'project')
         {
-            $linkType = 'project';
             $this->project->setMenu($this->session->project);
         }
         elseif($this->app->tab == 'execution')
@@ -1243,7 +1242,9 @@ class doc extends control
      * @param  string $type
      * @param  int    $objectID
      * @param  int    $libID
+     * @param  int    $moduleID
      * @param  string $browseType
+     * @param  string $orderBy
      * @param  int    $param
      * @param  int    $recTotal
      * @param  int    $recPerPage
