@@ -34,8 +34,8 @@ $lang->editor->noticeOkFile  = 'For security reasons, your Admin account has to 
 $lang->editor->editFileError = 'You can only modify ZenTao files!';
 $lang->editor->turnOff       = "If you don't use the editor function, you can turn it off here.";
 
-$lang->editor->notExists      = "Not exists. Please create it. Try mkdir -p %s";
-$lang->editor->notWritable    = "Not wirtable. Permission is required. Please try chmod 777 -R %s";
+$lang->editor->notExists      = "Not exists. Please create it. Try 『mkdir -p %s』";
+$lang->editor->notWritable    = "Not wirtable. Permission is required. Please try 『chmod 777 -R %s』";
 $lang->editor->notDelete      = 'Cannot be deleted. Please check your permissions!';
 $lang->editor->emptyFileName  = 'Please enter a File Name!';
 $lang->editor->onlyLocalVisit = "This feature only works when the IP is 127.0.0.1 for security. <a href='https://api.zentao.pm/goto.php?item=howtodevelop&from=en' target='_blank'>Help</a>";

@@ -332,7 +332,11 @@ class editorModel extends model
         $dirPath     = dirname($filePath);
         $extFilePath = substr($filePath, 0, strpos($filePath, DS . 'ext' . DS) + 4);
         if(!is_dir($dirPath) and is_writable($extFilePath)) mkdir($dirPath, 0777, true);
-        if(!is_dir($dirPath))      return sprintf($this->lang->editor->notExists, $extFilePath);
+        if(!is_dir($dirPath))
+        {
+            if(is_dir($extFilePath)) return sprintf($this->lang->editor->notWritable, $extFilePath);
+            return sprintf($this->lang->editor->notExists, $extFilePath);
+        }
         if(!is_writable($dirPath)) return sprintf($this->lang->editor->notWritable, $extFilePath);
         if(strpos(strtolower(realpath($dirPath)), strtolower($this->app->getBasePath())) !== 0) return $this->lang->editor->editFileError;
 

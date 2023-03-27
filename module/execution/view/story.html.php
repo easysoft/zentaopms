@@ -239,10 +239,10 @@
 
       $totalEstimate       = 0;
       $canBatchEdit        = common::hasPriv('story', 'batchEdit');
-      $canBatchClose       = common::hasPriv('story', 'batchClose');
-      $canBatchChangeStage = common::hasPriv('story', 'batchChangeStage');
+      $canBatchClose       = (common::hasPriv('story', 'batchClose') and $storyType != 'requirement');
+      $canBatchChangeStage = (common::hasPriv('story', 'batchChangeStage') and $storyType != 'requirement');
       $canBatchUnlink      = common::hasPriv('execution', 'batchUnlinkStory');
-      $canBatchToTask      = common::hasPriv('story', 'batchToTask', $checkObject);
+      $canBatchToTask      = (common::hasPriv('story', 'batchToTask', $checkObject) and $storyType != 'requirement');
       $canBatchAssignTo    = common::hasPriv($storyType, 'batchAssignTo');
 
       $canBatchAction      = ($canBeChanged and ($canBatchEdit or $canBatchClose or $canBatchChangeStage or $canBatchUnlink or $canBatchToTask or $canBatchAssignTo));
@@ -365,7 +365,7 @@
               echo html::commonButton($lang->close, "data-form-action='$actionLink'");
           }
           ?>
-          <?php if(common::hasPriv('story', 'batchChangeStage')):?>
+          <?php if($canBatchChangeStage):?>
           <div class="btn-group dropup">
             <button data-toggle="dropdown" type="button" class="btn"><?php echo $lang->story->stageAB;?> <span class="caret"></span></button>
             <ul class='dropdown-menu <?php echo count($stories) == 1 ? 'stageBox' : '';?>'>

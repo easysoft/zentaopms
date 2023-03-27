@@ -77,10 +77,9 @@ class taskBatchCreateEntry extends entry
 
         $data = $this->getData();
         if(!$data) return $this->send400('error');
-        if(isset($data->status) and $data->status == 'fail') return $this->sendError(zget($data, 'code', 400), $data->message);
+        if(isset($data->data->result) and $data->data->result == 'fail') return $this->sendError(400, $data->data->message);
 
-        if(!$taskID) return $this->send(200, array());
-        $task = $this->loadModel('task')->getById($taskID);
-        return $this->send(200, array('task' => $task));
+        $tasks = $this->loadModel('task')->getByList($data->idList);
+        return $this->send(200, array('task' => $tasks));
     }
 }

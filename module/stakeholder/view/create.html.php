@@ -72,15 +72,15 @@
           </tr>
           <tr>
             <th><?php echo $lang->stakeholder->nature;?></th>
-            <td colspan='3'><?php echo html::textarea('nature', '', "class='form-control'");?></td>
+            <td colspan='3'><?php echo html::textarea('nature', '', "class='form-control kindeditor'");?></td>
           </tr>
           <tr>
             <th><?php echo $lang->stakeholder->analysis;?></th>
-            <td colspan='3'><?php echo html::textarea('analysis', '', "class='form-control'");?></td>
+            <td colspan='3'><?php echo html::textarea('analysis', '', "class='form-control kindeditor'");?></td>
           </tr>
           <tr>
             <th><?php echo $lang->stakeholder->strategy;?></th>
-            <td colspan='3'><?php echo html::textarea('strategy', '', "class='form-control'");?></td>
+            <td colspan='3'><?php echo html::textarea('strategy', '', "class='form-control kindeditor'");?></td>
           </tr>
           <tr>
             <td colspan='4' class='text-center form-actions'><?php echo html::submitButton() . html::backButton();?></td>

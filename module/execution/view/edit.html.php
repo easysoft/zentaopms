@@ -87,23 +87,21 @@
             </div>
           </td>
         </tr>
-        <?php if($execution->type != 'kanban' or $project->model == 'waterfall' or $project->model == 'waterfallplus'):?>
+        <?php if($project->model == 'waterfall' or $project->model == 'waterfallplus'):?>
         <tr>
-          <th><?php echo $lang->execution->type;?></th>
+          <th><?php echo $lang->stage->type;?></th>
           <td>
-          <?php
-          if($project->model == 'waterfall' or $project->model == 'waterfallplus')
-          {
-              echo $enableOptionalAttr ? html::select('attribute', $lang->stage->typeList, $execution->attribute, "class='form-control chosen'") : zget($lang->stage->typeList, $execution->attribute);
-          }
-          elseif($execution->type != 'kanban')
-          {
-              echo html::select('lifetime', $lang->execution->lifeTimeList, $execution->lifetime, "class='form-control' onchange='showLifeTimeTips()'");
-          }
-          ?>
+          <?php echo $enableOptionalAttr ? html::select('attribute', $lang->stage->typeList, $execution->attribute, "class='form-control chosen'") : zget($lang->stage->typeList, $execution->attribute); ?>
           </td>
           <td>
             <icon class='icon icon-help' data-toggle='popover' data-trigger='focus hover' data-placement='right' data-tip-class='text-muted popover-sm' data-content="<?php echo $lang->execution->typeTip;?>"></icon>
+          </td>
+        </tr>
+        <?php elseif($execution->type != 'kanban'):?>
+        <tr>
+          <th><?php echo $lang->execution->type;?></th>
+          <td>
+          <?php echo html::select('lifetime', $lang->execution->lifeTimeList, $execution->lifetime, "class='form-control' onchange='showLifeTimeTips()'"); ?>
           </td>
         </tr>
         <?php endif;?>

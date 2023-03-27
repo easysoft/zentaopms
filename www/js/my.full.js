@@ -184,12 +184,14 @@
 
             $('body').one('click', function(e)
             {
-                if($('.messager').length &&  !$.contains(e.target, $('.messager')))
+                if($messager && $('.messager').length &&  !$.contains(e.target, $('.messager')))
                 $messager.destroy();
+            }).on('click', '#submit.form-stash-clear', function()
+            {
+                $.zui.store.remove(formID);
             });
         }, 500);
     }
-    handleSaveFormDraft();
 
     /* Tab session */
     if(!config.tabSession) return;

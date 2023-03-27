@@ -91,6 +91,13 @@ class tasksEntry extends entry
 
         $assignedTo = $this->request('assignedTo');
         if($assignedTo and !is_array($assignedTo)) $this->setPost('assignedTo', array($assignedTo));
+        if($this->request('multiple'))
+        {
+            if(count($this->request('team')) != count($this->request('teamEstimate'))) return $this->sendError(400, 'Arrays team and teamEstimate should be the same length');
+            $this->setPost('mode', $this->request('mode', 'linear'));
+            $this->setPost('teamSource', array_fill(0, count($this->request('team')), ''));
+        }
+
         $this->setPost('execution', $executionID);
 
         $control = $this->loadController('task', 'create');

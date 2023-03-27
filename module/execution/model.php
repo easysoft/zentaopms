@@ -1311,22 +1311,27 @@ class executionModel extends model
             unset($execution->end);
         }
 
-        if($this->post->readjustTime && $oldExecution->grade > 1)
+        if($this->post->readjustTime)
         {
-            $parent      = $this->getByID($oldExecution->parent);
-            $begin       = $execution->begin;
-            $end         = $execution->end;
-            $parentBegin = $parent->begin;
-            $parentEnd   = $parent->end;
+            $begin = $execution->begin;
+            $end   = $execution->end;
 
-            if($begin < $parentBegin)
-            {
-                dao::$errors["message"][] = sprintf($this->lang->execution->errorLetterParent, $parentBegin);
-            }
+            if($begin > $end) dao::$errors["message"][] = sprintf($this->lang->execution->errorLetterPlan, $end, $begin);
 
-            if($end > $parentEnd)
+            if($oldExecution->grade > 1)
             {
-                dao::$errors["message"][] = sprintf($this->lang->execution->errorGreaterParent, $parentEnd);
+                $parent      = $this->dao->select('begin,end')->from(TABLE_PROJECT)->where('id')->eq($oldExecution->parent)->fetch();
+                $parentBegin = $parent->begin;
+                $parentEnd   = $parent->end;
+                if($begin < $parentBegin)
+                {
+                    dao::$errors["message"][] = sprintf($this->lang->execution->errorLetterParent, $parentBegin);
+                }
+
+                if($end > $parentEnd)
+                {
+                    dao::$errors["message"][] = sprintf($this->lang->execution->errorGreaterParent, $parentEnd);
+                }
             }
         }
 

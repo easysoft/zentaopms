@@ -67,11 +67,11 @@
             <th class='c-review<?php  echo zget($visibleFields, 'review', ' hidden') . zget($requiredFields, 'review', '', ' required')?> reviewBox'><?php echo $lang->testcase->review;?></th>
             <?php
             $extendFields = $this->testcase->getFlowExtendFields();
-            foreach($extendFields as $extendField) 
-            {   
-                $required = strpos(",$extendField->rules,", ',1,') !== false ? 'required' : ''; 
+            foreach($extendFields as $extendField)
+            {
+                $required = strpos(",$extendField->rules,", ',1,') !== false ? 'required' : '';
                 echo "<th class='c-extend $required'>{$extendField->name}</th>";
-            }   
+            }
             ?>
             <th class='c-actions text-left'><?php echo $lang->actions;?></th>
           </tr>
@@ -125,7 +125,7 @@
         <tfoot>
           <tr>
             <td colspan='<?php echo $colspan?>' class='text-center form-actions'>
-              <?php echo html::submitButton();?>
+              <?php echo html::submitButton('', '', 'form-stash-clear btn btn-wide btn-primary');?>
               <?php echo html::backButton();?>
             </td>
           </tr>
@@ -160,7 +160,7 @@
       <td class='<?php echo zget($visibleFields, 'keywords', 'hidden')?> keywordsBox'><?php echo html::input("keywords[%s]", '', "class='form-control'");?></td>
       <td class='text-left<?php echo zget($visibleFields, 'stage', ' hidden')?> stageBox' style='overflow:visible'><?php echo html::select("stage[%s][]", $lang->testcase->stageList, '', "class='form-control chosen' multiple");?></td>
       <td class='<?php echo zget($visibleFields, 'review', 'hidden')?> reviewBox'><?php echo html::select("needReview[%s]", $lang->testcase->reviewList, $needReview, "class='form-control chosen'");?></td>
-      <?php 
+      <?php
       $this->loadModel('flow');
       foreach($extendFields as $extendField) echo "<td" . (($extendField->control == 'select' or $extendField->control == 'multi-select') ? " style='overflow:visible'" : '') . ">" . $this->flow->getFieldControl($extendField, '', $extendField->field . "[%s]") . "</td>";
       ?>
