@@ -1142,7 +1142,7 @@ class docModel extends model
             if(isset($extraDocLibs[$object->id])) return true;
         }
 
-        if(!empty($object->product) or !empty($object->execution))
+        if($object->acl == 'default' and (!empty($object->product) or !empty($object->execution)))
         {
             $acls = $this->app->user->rights['acls'];
             if(!empty($object->product) and !empty($acls['products']) and !in_array($object->product, $acls['products'])) return false;
@@ -1493,24 +1493,10 @@ class docModel extends model
                 ->fetchPairs('product', 'projectCount');
         }
 
-        $docCountPairs = $this->dao->select('lib, count(id) as docCount')->from(TABLE_DOC)
-            ->where('lib')->in(array_keys($objectLibs))
-            ->andWhere('vision')->eq($this->config->vision)
-            ->andWhere('type')->notin('chapter')
-            ->andWhere('deleted')->eq(0)
-            ->groupBy('lib')
-            ->fetchPairs('lib');
-
         $libs = array();
         foreach($objectLibs as $lib)
         {
-            if($this->checkPrivLib($lib))
-            {
-                $docCount = zget($docCountPairs, $lib->id, 0);
-                $lib->docCount = $docCount > 99 ? '99+' : $docCount;
-
-                $libs[$lib->id] = $lib;
-            }
+            if($this->checkPrivLib($lib)) $libs[$lib->id] = $lib;
         }
 
         $itemCounts = $this->statLibCounts(array_keys($libs));

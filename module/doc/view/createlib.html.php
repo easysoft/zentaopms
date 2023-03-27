@@ -42,23 +42,13 @@
               <th><?php echo $lang->api->baseUrl?></th>
               <td><?php echo html::input('baseUrl', '', "class='form-control' placeholder='" . $lang->api->baseUrlDesc . "'");?></td>
             </tr>
-            <?php if($type == 'custom'):?>
             <tr id="aclBox">
               <th><?php echo $lang->doclib->control;?></th>
               <td>
-                <?php echo html::radio('acl', $lang->doclib->aclList, 'open', "onchange='toggleAcl(this.value, \"lib\")'", 'block')?>
+                <?php echo html::radio('acl', $lang->doclib->aclList, $type == 'custom' ? 'open' : 'default', "onchange='toggleAcl(this.value, \"lib\")'")?>
               </td>
             </tr>
-            <?php else:?>
-            <tr>
-              <th><?php echo $lang->doclib->control;?></th>
-              <td>
-                <span><?php echo html::radio('acl', $lang->doc->aclList, 'open', "onchange='toggleAcl(this.value, \"lib\")'")?></span>
-                <span class='text-info' id='noticeAcl'><?php echo $lang->doc->noticeAcl['lib']['product']['default'];?></span>
-              </td>
-            </tr>
-            <?php endif;?>
-            <tr id='whiteListBox' class='hidden'>
+            <tr id='whiteListBox' class="<?php if($type == 'custom') echo 'hidden';?>">
               <th><?php echo $lang->doc->whiteList;?></th>
               <td>
                 <div id='groupBox' class='input-group'>
@@ -92,16 +82,10 @@
 </div>
 <div class='hidden'>
   <table>
-    <tr id='aclBoxA'>
+    <tr id='aclAPIBox'>
       <th><?php echo $lang->doclib->control;?></th>
       <td>
         <?php echo html::radio('acl', $lang->doclib->aclListA, 'default', "onchange='toggleAcl(this.value, \"lib\")'")?>
-      </td>
-    </tr>
-    <tr id='aclBoxB'>
-      <th><?php echo $lang->doclib->control;?></th>
-      <td>
-        <?php echo html::radio('acl', $lang->doclib->aclListB, 'open', "onchange='toggleAcl(this.value, \"lib\")'")?>
       </td>
     </tr>
   </table>

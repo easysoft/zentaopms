@@ -188,6 +188,13 @@ class doc extends control
             if($execution->type == 'stage') $this->lang->doc->execution = str_replace($this->lang->executionCommon, $this->lang->project->stage, $this->lang->doc->execution);
         }
 
+        if($type == 'custom') unset($this->lang->doclib->aclList['defalut']);
+        if($type != 'custom')
+        {
+            $this->lang->doclib->aclList['default'] = sprintf($this->lang->doclib->aclList['default'], $this->lang->{$type}->common);
+            unset($this->lang->doclib->aclList['open']);
+        }
+
         $this->view->groups      = $this->loadModel('group')->getPairs();
         $this->view->users       = $this->user->getPairs('nocode|noclosed');
         $this->view->objects     = $objects;

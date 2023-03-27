@@ -10,4 +10,5 @@ table {width: 90% !important;}
 #execution_chosen {width: 50% !important;}
 
 #groups_chosen.chosen-container .chosen-results, #users_chosen.chosen-container .chosen-results {max-height: 160px;}
-.objectBox > td.required:after {right: 180px;}
+.objectBox > td.required:after {right: 277px;}
+#aclBox .radio-inline + .radio-inline {margin-top: 5px; margin-left: 0px;}
