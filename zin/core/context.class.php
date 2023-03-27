@@ -31,6 +31,11 @@ class context
 
     public static $map = array();
 
+    public static function current()
+    {
+        return current(static::$map);
+    }
+
     public static function create($wg)
     {
         $gid = $wg->gid;
