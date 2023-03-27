@@ -45,7 +45,7 @@
             <tr id="aclBox">
               <th><?php echo $lang->doclib->control;?></th>
               <td>
-                <?php echo html::radio('acl', $lang->doclib->aclList, $type == 'custom' ? 'open' : 'default', "onchange='toggleAcl(this.value, \"lib\")'")?>
+                <?php echo html::radio('acl', $lang->doclib->aclList, $type == 'custom' ? 'open' : 'default', "onchange='toggleAcl(this.value, \"lib\")'", 'block')?>
               </td>
             </tr>
             <tr id='whiteListBox' class="<?php if($type == 'custom') echo 'hidden';?>">

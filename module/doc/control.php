@@ -188,7 +188,7 @@ class doc extends control
             if($execution->type == 'stage') $this->lang->doc->execution = str_replace($this->lang->executionCommon, $this->lang->project->stage, $this->lang->doc->execution);
         }
 
-        if($type == 'custom') unset($this->lang->doclib->aclList['defalut']);
+        if($type == 'custom') unset($this->lang->doclib->aclList['default']);
         if($type != 'custom')
         {
             $this->lang->doclib->aclList['default'] = sprintf($this->lang->doclib->aclList['default'], $this->lang->{$type}->common);

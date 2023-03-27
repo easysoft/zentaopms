@@ -1121,18 +1121,16 @@ class docModel extends model
 
             $authorizedUsers = $this->user->getProjectAuthedUsers($project, $stakeHolders, $projectTeams, array_flip(explode(",", $project->whitelist)));
 
-            if(strpos(",{$object->users},", $account) !== false) return true;
             if(array_key_exists($this->app->user->account, array_filter($authorizedUsers))) return true;
         }
 
-        if($object->acl == 'custom')
+        if($object->acl == 'custom' or $object->acl == 'private' or $object->acl == 'default')
         {
             $userGroups = $this->app->user->groups;
             foreach($userGroups as $groupID)
             {
                 if(strpos(",$object->groups,", ",$groupID,") !== false) return true;
             }
-            if(strpos(",{$object->users},", $account) !== false) return true;
         }
 
         if(strpos($extra, 'notdoc') !== false)
