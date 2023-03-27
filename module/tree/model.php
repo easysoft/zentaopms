@@ -2367,7 +2367,8 @@ class treeModel extends model
         {
             $this->dao->update(TABLE_MODULE)
                 ->set('`order`')->eq('`order` + 10')
-                ->where('`root`')->eq($module->root)
+                ->where('deleted')->eq(0)
+                ->andWhere('`root`')->eq($module->root)
                 ->andWhere('`parent`')->eq($module->parent)
                 ->andWhere('`type`')->eq($module->type)
                 ->andWhere('`order`')->ge($module->order + 10)
