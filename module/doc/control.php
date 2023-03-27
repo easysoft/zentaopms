@@ -150,6 +150,7 @@ class doc extends control
 
         if(in_array($type, array('product', 'project'))) $this->app->loadLang('api');
 
+        $objects = array();
         if($type == 'product') $objects = $this->product->getPairs();
         if($type == 'project') $objects = $this->project->getPairsByProgram();
         if($type == 'execution')
