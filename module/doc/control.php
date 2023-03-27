@@ -140,7 +140,7 @@ class doc extends control
                 $this->action->create('docLib', $libID, 'Created');
 
                 if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $libID));
-                return print(js::locate($this->createLink('doc', 'tableContents', "type=$objectType&objectID=$objectID&libID=$libID"), 'parent.parent'));
+                return print(js::locate($this->createLink('doc', 'tableContents', "type=$type&objectID=$objectID&libID=$libID"), 'parent.parent'));
             }
             else
             {
