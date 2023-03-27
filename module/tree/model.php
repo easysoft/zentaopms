@@ -139,7 +139,7 @@ class treeModel extends model
      */
     public function getOptionMenu($rootID, $type = 'story', $startModule = 0, $branch = 0, $param = 'nodeleted', $grade = 'all')
     {
-        if(empty($branch)) $branch = 0;
+        if(empty($branch) and !is_array($branch)) $branch = 0;
         if(defined('TUTORIAL'))
         {
             $modulePairs = $this->loadModel('tutorial')->getModulePairs();
