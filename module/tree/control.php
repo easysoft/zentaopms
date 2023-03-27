@@ -694,7 +694,7 @@ class tree extends control
      * Create module by ajax.
      *
      * @access public
-     * @return object
+     * @return void
      */
     public function ajaxCreateModule()
     {

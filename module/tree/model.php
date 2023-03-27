@@ -2335,11 +2335,11 @@ class treeModel extends model
             $baseModule = $this->getByID($data->objectID);
             if(!empty($baseModule))
             {
-                $module->parent = $baseModule->parentID;
+                $module->parent = $baseModule->parent;
                 $module->order  = $baseModule->order;
             }
         }
-        elseif($data->createType == 'children')
+        elseif($data->createType == 'child')
         {
             $maxOrder = $this->dao->select('`order`')->from(TABLE_MODULE)
                 ->where('root')->eq($module->root)
@@ -2363,10 +2363,23 @@ class treeModel extends model
         $module->grade = $module->parent ? $parent->grade + 1 : 1;
         $this->dao->insert(TABLE_MODULE)->data($module)->exec();
 
+        if($data->createType == 'same')
+        {
+            $this->dao->update(TABLE_MODULE)
+                ->set('`order`')->eq('`order` + 10')
+                ->where('`root`')->eq($module->root)
+                ->andWhere('`parent`')->eq($module->parent)
+                ->andWhere('`type`')->eq($module->type)
+                ->andWhere('`order`')->ge($module->order + 10)
+                ->exec();
+
+            $module->order += 10;
+        }
+
         $moduleID   = $this->dao->lastInsertID();
         $modulePath = "$moduleID,";
         if($module->parent) $modulePath = $parent->path . $modulePath;
-        $this->dao->update(TABLE_MODULE)->set('path')->eq($modulePath)->where('id')->eq($moduleID)->limit(1)->exec();
+        $this->dao->update(TABLE_MODULE)->set('`path`')->eq($modulePath)->set('`order`')->eq($module->order)->where('id')->eq($moduleID)->limit(1)->exec();
 
         return $this->getByID($moduleID);
     }
