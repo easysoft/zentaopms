@@ -211,12 +211,10 @@ $(document).ready(function()
     });
 
     $('#fileType').change();
-    <?php if($this->cookie->checkedItem):?>
     setTimeout(function()
     {
-        $('#exportType').val('selected').trigger('chosen:updated');
+        if($.cookie('checkedItem') !== '') $('#exportType').val('selected').trigger('chosen:updated');
     }, 150);
-    <?php endif;?>
 
     if($('#customFields #exportFields').length > 0)
     {
