@@ -180,6 +180,8 @@ $lang->project->branch             = '平台/分支';
 $lang->project->plan               = '所属计划';
 $lang->project->createKanban       = '添加看板';
 $lang->project->kanban             = '看板';
+$lang->project->moreActions        = '更多操作';
+$lang->project->other              = '其他操作';
 
 /* Project Kanban. */
 $lang->project->projectTypeList = array();
