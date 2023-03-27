@@ -2854,7 +2854,6 @@ class docModel extends model
             $item->objectID   = $objectID;
             $item->active     = $lib->id == $libID && $browseType != 'bySearch' ? 1 : 0;
             $item->children   = $this->getModuleTree($lib->id, $moduleID, $lib->type == 'api' ? 'api' : 'doc');
-            $item->children   = array_values($item->children);
             if(($type == 'project' and $lib->type != 'execution') or $type != 'project')
             {
                 if($item->type == 'lib') $libTree[$lib->type][$lib->id] = $item;
