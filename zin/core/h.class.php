@@ -43,12 +43,12 @@ class h extends wg
      * Render widget to html
      * @return string
      */
-    public function render(&$portals = NULL)
+    public function render(&$context = NULL)
     {
-        if(!empty($portals))
+        if($context instanceof context)
         {
             $this->matchedPortals = array();
-            foreach($portals as $portal)
+            foreach($context->portals as $portal)
             {
                 if($this->isMatch($portal->prop('target'))) $this->matchedPortals[] = $portal->children();
             }
@@ -57,7 +57,7 @@ class h extends wg
         {
             $this->matchedPortals = NULL;
         }
-        return parent::render($portals);
+        return parent::render($context);
     }
 
     public function isSelfClose()

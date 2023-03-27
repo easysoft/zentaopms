@@ -16,4 +16,9 @@ require_once 'wg.class.php';
 class portal extends wg
 {
     static $defineProps = 'target:string';
+
+    public static function __callStatic($name, $args)
+    {
+        return new portal(set('target', $name), $args);
+    }
 }

@@ -11,11 +11,10 @@
 
 namespace zin;
 
-use stdClass;
-
 require_once 'props.class.php';
 require_once 'directive.func.php';
 require_once 'zin.class.php';
+require_once 'context.class.php';
 
 class wg
 {
@@ -63,21 +62,28 @@ class wg
      * Render widget to html
      * @return string
      */
-    public function render(&$portals = NULL)
+    public function render(&$context = NULL)
     {
-        $before   = $this->buildBefore();
-        $children = $this->build();
-        $after    = $this->buildAfter();
+        if($context === NULL) $context = context::create($this);
 
-        return static::renderToHtml(array($before, $children, $after), $portals);
+        $before   = $this->buildBefore($context);
+        $children = $this->build($context);
+        $after    = $this->buildAfter($context);
+
+        $html = static::renderToHtml(array($before, $children, $after), $context);
+
+        context::destroy($this->gid);
+
+        return $html;
     }
 
     public function display()
     {
         zin::disableGlobalRender();
 
-        $portals = $this->getPortals();
-        $html = $this->render($portals);
+        $context = context::create($this);
+        $html    = $this->render($context);
+
         echo $html;
 
         $this->displayed = true;
@@ -538,7 +544,7 @@ class wg
     /**
      * @return string
      */
-    public static function renderToHtml($children, &$portals = NULL)
+    public static function renderToHtml($children, &$context = NULL)
     {
         $html = array();
         foreach($children as $child)
@@ -547,11 +553,11 @@ class wg
 
             if(is_array($child))
             {
-                $html[] = static::renderToHtml($child, $portals);
+                $html[] = static::renderToHtml($child, $context);
             }
             elseif($child instanceof wg)
             {
-                $html[] = $child->render($portals);
+                $html[] = $child->render($context);
             }
             elseif(is_string($child))
             {
@@ -559,7 +565,7 @@ class wg
             }
             elseif(is_object($child))
             {
-                if(method_exists($child, 'render')) $html[] = $child->render($portals);
+                if(method_exists($child, 'render')) $html[] = $child->render($context);
                 elseif(isHtml($child))              $html[] = $child->data;
                 elseif(isText($child))              $html[] = htmlspecialchars($child->data);
                 elseif(isset($child->html))         $html[] = $child->html;
