@@ -21,6 +21,9 @@ $lang->doclib->execution  = $lang->executionCommon . ' Bibliothek';
 $lang->doclib->product    = $lang->productCommon . ' Bibliothek';
 $lang->doclib->apiLibName = 'Api Library Name';
 
+$lang->doclib->type['wiki'] = 'WIKI';
+$lang->doclib->type['api']  = 'API';
+
 $lang->doclib->aclListA = array();
 $lang->doclib->aclListA['default'] = 'Default';
 $lang->doclib->aclListA['custom']  = 'Custom';

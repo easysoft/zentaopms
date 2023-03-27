@@ -193,10 +193,11 @@ class docModel extends model
     {
         $lib = fixer::input('post')
             ->setForce('product', $this->post->type == 'product' ? $this->post->product : 0)
+            ->setForce('project', $this->post->type == 'project' ? $this->post->project : 0)
             ->setForce('execution', $this->post->type == 'execution' ? $this->post->execution : 0)
             ->join('groups', ',')
             ->join('users', ',')
-            ->remove('uid,contactListMenu')
+            ->remove('uid,contactListMenu,libType')
             ->get();
 
         if($lib->type == 'execution' and $lib->execution)

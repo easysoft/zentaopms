@@ -21,6 +21,9 @@ $lang->doclib->execution  = $lang->executionCommon . '库';
 $lang->doclib->product    = $lang->productCommon . '库';
 $lang->doclib->apiLibName = '接口库名称';
 
+$lang->doclib->type['wiki'] = 'WIKI文档库';
+$lang->doclib->type['api']  = '接口库';
+
 $lang->doclib->aclListA = array();
 $lang->doclib->aclListA['default'] = '默认';
 $lang->doclib->aclListA['custom']  = '自定义';
@@ -146,7 +149,7 @@ $lang->doc->api              = '接口';
 $lang->doc->collectAction = '收藏文档';
 
 $lang->doc->libName           = '文档库名称';
-$lang->doc->libType           = '文档库类型';
+$lang->doc->libType           = '库类型';
 $lang->doc->custom            = '自定义文档库';
 $lang->doc->customAB          = '自定义库';
 $lang->doc->createLib         = '创建库';

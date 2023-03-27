@@ -27,13 +27,15 @@
               <th><?php echo $lang->doc->{$type}?></th>
               <td class='required'><?php echo html::select($type, $objects, $objectID, "class='form-control chosen' data-drop_direction='down'")?></td>
             </tr>
+            <tr>
+              <th><?php echo $lang->doc->libType;?></th>
+              <td>
+                <span><?php echo html::radio('libType', $lang->doclib->type, 'wiki')?></span>
+              </td>
+            </tr>
             <?php endif;?>
             <tr class="normalLib">
               <th><?php echo $lang->doclib->name?></th>
-              <td><?php echo html::input('name', '', "class='form-control'")?></td>
-            </tr>
-            <tr class='apilib hidden'>
-              <th><?php echo $lang->api->name?></th>
               <td><?php echo html::input('name', '', "class='form-control'")?></td>
             </tr>
             <tr class="apilib hidden">
@@ -77,7 +79,10 @@
               </td>
             </tr>
             <tr>
-              <td class='text-center form-actions' colspan='2'><?php echo html::submitButton();?></td>
+              <td class='text-center form-actions' colspan='2'>
+                <?php echo html::submitButton();?>
+                <?php echo html::hidden('type', $type);?>
+              </td>
             </tr>
           </table>
         </form>
