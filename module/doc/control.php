@@ -132,11 +132,10 @@ class doc extends control
             $libID = $this->doc->createlib();
             if(!dao::isError())
             {
-                $objectType = $this->post->type;
-                if($objectType == 'project' and $this->post->project) $objectID = $this->post->project;
-                if($objectType == 'product' and $this->post->product) $objectID = $this->post->product;
-                if($objectType == 'execution' and $this->post->execution) $objectID = $this->post->execution;
-                if($objectType == 'custom' or $objectType == 'book') $objectID = 0;
+                if($type == 'project' and $this->post->project) $objectID = $this->post->project;
+                if($type == 'product' and $this->post->product) $objectID = $this->post->product;
+                if($type == 'execution' and $this->post->execution) $objectID = $this->post->execution;
+                if($type == 'custom') $objectID = 0;
 
                 $this->action->create('docLib', $libID, 'Created');
 
@@ -149,54 +148,49 @@ class doc extends control
             }
         }
 
-        $products   = $this->product->getPairs();
-        $projects   = $this->project->getPairsByProgram('', 'all', true);
-        $executions = $this->execution->getList();
+        if(in_array($type, array('product', 'project'))) $this->app->loadLang('api');
 
-        /* Splice project name. */
-        foreach($executions as $executionID => $execution)
+        if($type == 'product') $objects = $this->product->getPairs();
+        if($type == 'project') $objects = $this->project->getPairsByProgram();
+        if($type == 'execution')
         {
-            if($execution->multiple)
-            {
-                if($execution->type == 'stage' and $execution->grade > 1)
-                {
-                    $parentExecutions = $this->dao->select('id,name')->from(TABLE_EXECUTION)->where('id')->in(trim($execution->path, ','))->andWhere('type')->in('stage,kanban,sprint')->orderBy('grade')->fetchPairs();
-                    $execution->name  = implode('/', $parentExecutions);
-                }
-
-                $executionPrefix          = isset($projects[$execution->project]) ? $projects[$execution->project] . '/' : '';
-                $executions[$executionID] = $executionPrefix . $execution->name;
-            }
-            else
-            {
-                unset($executions[$executionID]);
-            }
+            $objects  = $this->execution->getList();
+            $projects = $this->project->getPairsByProgram('', 'all', true);
         }
 
-        /* Get the project that has permission to view. */
-        foreach($projects as $projectID => $project) if(!$this->app->user->admin and strpos(',' . $this->app->user->view->projects . ',', ',' . $projectID . ',') === false) unset($projects[$projectID]);
+        /* Splice project name. */
+        if($type == 'object')
+        {
+            foreach($objects as $id => $object)
+            {
+                if($object->multiple)
+                {
+                    if($object->type == 'stage' and $object->grade > 1)
+                    {
+                        $parentExecutions = $this->dao->select('id,name')->from(TABLE_EXECUTION)->where('id')->in(trim($object->path, ','))->andWhere('type')->in('stage,kanban,sprint')->orderBy('grade')->fetchPairs();
+                        $object->name  = implode('/', $parentExecutions);
+                    }
+
+                    $objectPrefix  = isset($projects[$object->project]) ? $projects[$object->project] . '/' : '';
+                    $objects[$id]  = $objectPrefix . $object->name;
+                }
+                else
+                {
+                    unset($objects[$id]);
+                }
+            }
+        }
 
         if($type == 'execution')
         {
             $execution = $this->execution->getByID($objectID);
             if($execution->type == 'stage') $this->lang->doc->execution = str_replace($this->lang->executionCommon, $this->lang->project->stage, $this->lang->doc->execution);
-            if($execution->type == 'stage') $this->lang->doc->libTypeList['execution'] = str_replace($this->lang->executionCommon, $this->lang->project->stage, $this->lang->doc->libTypeList['execution']);
         }
-
-        $libTypeList = $this->lang->doc->libTypeList;
-        if(empty($products)) unset($libTypeList['product']);
-        if(empty($projects)) unset($libTypeList['project']);
-        if(empty($executions)) unset($libTypeList['execution']);
-
-        $this->app->loadLang('api');
 
         $this->view->groups      = $this->loadModel('group')->getPairs();
         $this->view->users       = $this->user->getPairs('nocode|noclosed');
-        $this->view->products    = $products;
-        $this->view->projects    = $projects;
-        $this->view->executions  = $executions;
+        $this->view->objects     = $objects;
         $this->view->type        = $type;
-        $this->view->libTypeList = $libTypeList;
         $this->view->objectID    = $objectID;
         $this->display();
     }

@@ -124,9 +124,6 @@ function changeByLibType(libType)
         changeDoclibAcl(libType);
     }
 
-    var acl    = $('form [name=acl]').val();
-    var notice = typeof(noticeAcl[libType][acl]) != 'undefined' ? noticeAcl[libType][acl] : '';
-    $('#noticeAcl').html(notice);
     $('#whiteListBox').addClass('hidden');
 }
 
