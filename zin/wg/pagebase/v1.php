@@ -7,7 +7,12 @@ class pagebase extends wg
 
     static $defineProps = 'metas?: string|array, title?: string, bodyProps?: array, zui?: bool, display?: bool';
 
-    static $defaultProps = array('zui' => false, 'display' => true, 'metas' => array('<meta charset="utf-8">', '<meta http-equiv="X-UA-Compatible" content="IE=edge">', '<meta name="viewport" content="width=device-width, initial-scale=1">', '<meta name="renderer" content="webkit">'));
+    static $defaultProps = array
+    (
+        'zui' => false,
+        'display' => true,
+        'metas' => array('<meta charset="utf-8">', '<meta http-equiv="X-UA-Compatible" content="IE=edge">', '<meta name="viewport" content="width=device-width, initial-scale=1">', '<meta name="renderer" content="webkit">')
+    );
 
     static $defineBlocks = array('head' => array());
 

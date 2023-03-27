@@ -136,8 +136,8 @@ foreach($productStructure as $programID => $program)
 
 featureBar
 (
-    to
-    ('before',
+    to::before
+    (
         programmenu
         (
             setStyle(array('margin-right' => '20px')),
