@@ -260,6 +260,13 @@ class doc extends control
 
             $this->view->execution = $execution;
         }
+
+        if($lib->type == 'custom') unset($this->lang->doclib->aclList['default']);
+        if($lib->type != 'custom')
+        {
+            $this->lang->doclib->aclList['default'] = sprintf($this->lang->doclib->aclList['default'], $this->lang->{$lib->type}->common);
+            unset($this->lang->doclib->aclList['open']);
+        }
         $this->view->lib    = $lib;
         $this->view->groups = $this->loadModel('group')->getPairs();
         $this->view->users  = $this->user->getPairs('noletter|noclosed', $lib->users);

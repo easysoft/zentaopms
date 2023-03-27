@@ -49,17 +49,9 @@
       </tr>
       <tr>
         <th><?php echo $lang->doclib->control;?></th>
-        <?php if($lib->type == 'product' or $lib->type == 'execution'):?>
         <td>
-          <?php echo html::radio('acl', $lang->doclib->aclListA, $lib->acl, "onchange='toggleAcl(this.value, \"lib\")'")?>
-          <span class='text-info' id='noticeAcl'><?php echo $lang->doc->noticeAcl['lib'][$lib->type][$lib->acl];?></span>
+          <?php echo html::radio('acl', $lang->doclib->aclList, $lib->acl, "onchange='toggleAcl(this.value, \"lib\")'", 'block')?>
         </td>
-        <?php else:?>
-        <td>
-          <?php echo html::radio('acl', $lang->doclib->aclListB, $lib->acl, "onchange='toggleAcl(this.value, \"lib\")'")?>
-          <span class='text-info' id='noticeAcl'><?php echo $lang->doc->noticeAcl['lib'][$lib->type][$lib->acl];?></span>
-        </td>
-        <?php endif;?>
       </tr>
       <tr id='whiteListBox' class='hidden'>
         <th><?php echo $lang->doc->whiteList?></th>

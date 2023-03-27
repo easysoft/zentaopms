@@ -48,7 +48,7 @@
                 <?php echo html::radio('acl', $lang->doclib->aclList, $type == 'custom' ? 'open' : 'default', "onchange='toggleAcl(this.value, \"lib\")'", 'block')?>
               </td>
             </tr>
-            <tr id='whiteListBox' class="<?php if($type == 'custom') echo 'hidden';?>">
+            <tr id='whiteListBox' class='hidden'>
               <th><?php echo $lang->doc->whiteList;?></th>
               <td>
                 <div id='groupBox' class='input-group'>

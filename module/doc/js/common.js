@@ -21,7 +21,6 @@ function loadModules(libID)
  */
 function toggleAcl(acl, type)
 {
-    if(acl == 'default' && type == 'lib') return;
     var libID = $('#lib').val();
     if(acl == 'custom')
     {
