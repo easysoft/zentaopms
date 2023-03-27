@@ -2362,6 +2362,7 @@ class treeModel extends model
         $parent = $this->getByID($module->parent);
         $module->grade = $module->parent ? $parent->grade + 1 : 1;
         $this->dao->insert(TABLE_MODULE)->data($module)->exec();
+        $moduleID = $this->dao->lastInsertID();
 
         if($data->createType == 'same')
         {
@@ -2377,7 +2378,6 @@ class treeModel extends model
             $module->order += 10;
         }
 
-        $moduleID   = $this->dao->lastInsertID();
         $modulePath = "$moduleID,";
         if($module->parent) $modulePath = $parent->path . $modulePath;
         $this->dao->update(TABLE_MODULE)->set('`path`')->eq($modulePath)->set('`order`')->eq($module->order)->where('id')->eq($moduleID)->limit(1)->exec();
