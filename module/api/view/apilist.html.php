@@ -1,4 +1,5 @@
 <style>
+.base-url {margin: 0; border-bottom: 1px solid #eee;}
 .table-empty-tip > div {display: inline-block;}
 .detail .list-group-item .heading.GET {
     background-color: #e7f0f7;
