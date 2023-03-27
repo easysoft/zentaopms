@@ -9,8 +9,6 @@
  * @version     $Id: model.php 5149 2013-07-16 01:47:01Z zhujinyonging@gmail.com $
  * @link        http://www.zentao.net
  */
-?>
-<?php
 class treeModel extends model
 {
     /**
@@ -204,7 +202,7 @@ class treeModel extends model
         }
 
         ksort($treeMenu);
-        $topMenu = @array_shift($treeMenu);
+        $topMenu = array_shift($treeMenu);
         $topMenu = explode("\n", trim((string)$topMenu));
         $lastMenu[] = '/';
         foreach($topMenu as $menu)
@@ -348,7 +346,7 @@ class treeModel extends model
                 }
 
                 ksort($treeMenu);
-                $topMenu = @array_shift($treeMenu);
+                $topMenu = array_shift($treeMenu);
                 $topMenu = explode("\n", trim((string)$topMenu));
                 foreach($topMenu as $menu)
                 {
