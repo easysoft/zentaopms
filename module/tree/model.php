@@ -2367,7 +2367,7 @@ class treeModel extends model
         if($data->createType == 'same')
         {
             $this->dao->update(TABLE_MODULE)
-                ->set('`order`')->eq('`order` + 10')
+                ->set('`order` = `order` + 10')
                 ->where('deleted')->eq(0)
                 ->andWhere('`root`')->eq($module->root)
                 ->andWhere('`parent`')->eq($module->parent)
