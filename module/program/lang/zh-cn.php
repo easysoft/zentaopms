@@ -9,6 +9,7 @@ $lang->program->status         = '状态';
 $lang->program->PM             = '负责人';
 $lang->program->budget         = '预算';
 $lang->program->budgetUnit     = '预算单位';
+$lang->program->invested       = '已投入';
 $lang->program->begin          = '计划开始';
 $lang->program->end            = '计划完成';
 $lang->program->realBegin      = '实际开始';
@@ -83,6 +84,7 @@ $lang->program->confirmChangePRJUint    = '是否同步更新该项目集下子�
 $lang->program->exRateNotNegative       = '『汇率』不能是负数。';
 $lang->program->changePRJUnit           = '更新项目预算单位';
 $lang->program->showNotCurrentProjects  = '显示非当前项目集的项目信息';
+$lang->program->other                   = '其他';
 
 $lang->program->progress         = '项目进度';
 $lang->program->progressAB       = '进度';
@@ -122,6 +124,7 @@ $lang->program->budgetOverrun      = '项目集的预算超出了父项目集的
 
 /* ToolBar. */
 $lang->program->createProduct    = '添加产品';
+$lang->program->createProject    = '添加项目';
 
 /* DTable columns of product view page. */
 $lang->program->unclosedReqCount = '需求未关闭';
@@ -174,6 +177,12 @@ $lang->program->featureBar['productview']['all']      = '全部';
 $lang->program->featureBar['productview']['unclosed'] = '未关闭';
 $lang->program->featureBar['productview']['end']      = '结束';
 
+$lang->program->featureBar['projectview']['all']      = '全部';
+$lang->program->featureBar['projectview']['unclosed'] = '未关闭';
+$lang->program->featureBar['projectview']['wait']     = '未开始';
+$lang->program->featureBar['projectview']['doing']    = '进行中';
+$lang->program->featureBar['projectview']['more']     = '更多';
+
 $lang->program->kanban = new stdclass();
 $lang->program->kanban->common             = '项目集看板';
 $lang->program->kanban->typeList['my']     = '我参与的项目集';
@@ -189,3 +198,7 @@ $lang->program->kanban->normalReleases  = '正常的发布';
 $lang->program->kanban->laneColorList = array('#32C5FF', '#006AF1', '#9D28B2', '#FF8F26', '#FFC20E', '#00A78E', '#7FBB00', '#424BAC', '#C0E9FF', '#EC2761');
 
 $lang->program->defaultProgram = '默认项目集';
+
+$lang->program->projectView = '项目视角';
+$lang->program->productView = '产品视角';
+$lang->program->workerDay   = '人天';

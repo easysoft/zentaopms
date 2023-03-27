@@ -12,7 +12,6 @@ $item->id                = "$i";
 $item->name              = 'parent';
 $item->type              = 'program';
 $item->asParent          = true;
-$item->parent            = "0";
 $item->PM                = '管理员';
 $item->feedback          = 200;
 $item->unclosedReqCount  = 100;
@@ -181,7 +180,7 @@ window.renderReleaseCountCell = function(result, {col, row})
 
     if(changed === 0) return result;
     if(changed > 0) result[0] = {html: row.data.releaseCount + ' <span class="label size-sm circle primary-pale bd-primary">+' + changed + '</span>'};
-    if(changed < 0) result[0] = {html: row.data.releaseCount + ' <span class="label size-sm circle warning-pale bd-warning">-' + changed + '</span>'};
+    if(changed < 0) result[0] = {html: row.data.releaseCount + ' <span class="label size-sm circle warning-pale bd-warning">' + changed + '</span>'};
 
     return result;
 }
