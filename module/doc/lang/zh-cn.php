@@ -10,7 +10,7 @@
  * @link        http://www.zentao.net
  */
 $lang->doclib = new stdclass();
-$lang->doclib->name       = '文档库名称';
+$lang->doclib->name       = '库名称';
 $lang->doclib->control    = '访问控制';
 $lang->doclib->group      = '分组';
 $lang->doclib->user       = '用户';
@@ -28,6 +28,10 @@ $lang->doclib->aclListA['custom']  = '自定义';
 $lang->doclib->aclListB['open']    = '公开';
 $lang->doclib->aclListB['custom']  = '自定义';
 $lang->doclib->aclListB['private'] = '私有';
+
+$lang->doclib->aclList = array();
+$lang->doclib->aclList['open']    = "公开 <span class='acl-tip'>（有文档视图权限即可访问）</span>";
+$lang->doclib->aclList['private'] = "私有 <span class='acl-tip'>（仅创建者和白名单用户可访问）</span>";
 
 $lang->doclib->create['product']   = '创建' . $lang->productCommon . '文档库';
 $lang->doclib->create['execution'] = '创建' . $lang->executionCommon . '文档库';

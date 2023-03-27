@@ -196,6 +196,7 @@ class docModel extends model
             ->setForce('execution', $this->post->type == 'execution' ? $this->post->execution : 0)
             ->join('groups', ',')
             ->join('users', ',')
+            ->remove('uid,contactListMenu')
             ->get();
 
         if($lib->type == 'execution' and $lib->execution)

@@ -40,6 +40,14 @@
               <th><?php echo $lang->api->baseUrl?></th>
               <td><?php echo html::input('baseUrl', '', "class='form-control' placeholder='" . $lang->api->baseUrlDesc . "'");?></td>
             </tr>
+            <?php if($type == 'custom'):?>
+            <tr id="aclBox">
+              <th><?php echo $lang->doclib->control;?></th>
+              <td>
+                <?php echo html::radio('acl', $lang->doclib->aclList, 'open', "onchange='toggleAcl(this.value, \"lib\")'", 'block')?>
+              </td>
+            </tr>
+            <?php else:?>
             <tr>
               <th><?php echo $lang->doclib->control;?></th>
               <td>
@@ -47,6 +55,7 @@
                 <span class='text-info' id='noticeAcl'><?php echo $lang->doc->noticeAcl['lib']['product']['default'];?></span>
               </td>
             </tr>
+            <?php endif;?>
             <tr id='whiteListBox' class='hidden'>
               <th><?php echo $lang->doc->whiteList;?></th>
               <td>
@@ -57,6 +66,7 @@
                 <div class='input-group'>
                   <span class='input-group-addon'><?php echo $lang->doclib->user?></span>
                   <?php echo html::select('users[]', $users, '', "class='form-control picker-select' multiple")?>
+                  <?php echo $this->fetch('my', 'buildContactLists', "dropdownName=users&attr=data-drop_direction='up'");?>
                 </div>
               </td>
             </tr>
@@ -92,4 +102,5 @@
   </table>
 </div>
 <?php js::set('noticeAcl', $lang->doc->noticeAcl['lib']);?>
+<?php js::set('libType', $type);?>
 <?php include '../../common/view/footer.lite.html.php';?>

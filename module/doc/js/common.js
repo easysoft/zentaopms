@@ -31,7 +31,7 @@ function toggleAcl(acl, type)
     else if(acl == 'private')
     {
         $('#whiteListBox').removeClass('hidden');
-        $('#groupBox').addClass('hidden');
+        $('#groupBox').remove('hidden');
         if(type == 'doc')
         {
             loadWhitelist(libID);
@@ -46,6 +46,8 @@ function toggleAcl(acl, type)
 
     if(type == 'lib')
     {
+        if((libType == 'api' || libType == 'book') && acl == 'private') $('#whiteListBox').addClass('hidden');
+
         if(libType == 'project' && typeof(doclibID) != 'undefined')
         {
             var link = createLink('doc', 'ajaxGetWhitelist', 'doclibID=' + doclibID + '&acl=' + acl);
@@ -56,11 +58,6 @@ function toggleAcl(acl, type)
                 $('#users').picker();
             })
         }
-    }
-    else
-    {
-        var notice  = typeof(noticeAcl[acl]) != 'undefined' ? noticeAcl[acl] : '';
-        $('#noticeAcl').html(notice);
     }
 }
 
