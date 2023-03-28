@@ -22,6 +22,9 @@ $lang->doclib->product    = $lang->productCommon . '库';
 $lang->doclib->apiLibName = '接口库名称';
 $lang->doclib->privateACL = "私有 <span class='acl-tip'>（仅创建者和有%s权限的白名单用户可访问）</span>";
 
+$lang->doclib->tip = new stdclass();
+$lang->doclib->tip->selectExecution = "执行为空时，创建的库为{$lang->projectCommon}库";
+
 $lang->doclib->type['wiki'] = 'WIKI文档库';
 $lang->doclib->type['api']  = '接口库';
 

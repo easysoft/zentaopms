@@ -22,6 +22,9 @@ $lang->doclib->product    = $lang->productCommon . ' Library';
 $lang->doclib->apiLibName = 'Api Library Name';
 $lang->doclib->privateACL = "Private <span class='acl-tip'>(Only creators and whitelisted users with %s permissions can access it)</span>";
 
+$lang->doclib->tip = new stdclass();
+$lang->doclib->tip->selectExecution = "When execution is empty, the library created is the {$lang->projectCommon} library";
+
 $lang->doclib->type['wiki'] = 'WIKI';
 $lang->doclib->type['api']  = 'API';
 

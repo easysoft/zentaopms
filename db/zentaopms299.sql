@@ -2,6 +2,8 @@ UPDATE `zt_doc` SET `type` = 'text' WHERE `type` = 'url';
 
 UPDATE `zt_doclib` SET `acl` = 'private' WHERE `type` = 'custom' and `acl` = 'custom';
 UPDATE `zt_doclib` SET `acl` = 'private' WHERE `type` = 'product' AND `acl` = 'custom';
+UPDATE `zt_doclib` SET `acl` = 'private' WHERE `type` = 'project' AND `acl` = 'custom';
+UPDATE `zt_doclib` SET `acl` = 'default' WHERE `type` = 'project' AND `acl` IN ('open', 'private');
 
 ALTER TABLE `zt_doclib` ADD `addedBy` varchar(30) NOT NULL AFTER `order`;
 ALTER TABLE `zt_doclib` ADD `addedDate` datetime NOT NULL AFTER `addedBy`;

@@ -27,6 +27,12 @@
               <th><?php echo $lang->doc->{$type}?></th>
               <td class='required'><?php echo html::select($type, $objects, $objectID, "class='form-control chosen' data-drop_direction='down'")?></td>
             </tr>
+            <?php if($type == 'project'):?>
+            <tr class='executionBox'>
+              <th><?php echo $lang->doc->execution?></th>
+              <td><?php echo html::select('execution', $executionPairs, 0, "class='form-control chosen' data-drop_direction='down' data-placeholder='{$lang->doclib->tip->selectExecution}'")?></td>
+            </tr>
+            <?php endif;?>
             <tr>
               <th><?php echo $lang->doc->libType;?></th>
               <td>

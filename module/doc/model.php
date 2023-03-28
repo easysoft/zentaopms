@@ -1118,7 +1118,7 @@ class docModel extends model
             }
         }
 
-        if($object->project and $object->acl == 'private')
+        if($object->type == 'project' and $object->acl == 'default')
         {
             $stakeHolders = array();
             $project      = $this->loadModel('project')->getById($object->project);
@@ -1137,7 +1137,7 @@ class docModel extends model
             if(isset($extraDocLibs[$object->id])) return true;
         }
 
-        if($object->acl == 'default' and (!empty($object->product) or !empty($object->execution)))
+        if($object->acl == 'default' and (in_array($object->type, array('product', 'execution'))))
         {
             $acls = $this->app->user->rights['acls'];
             if(!empty($object->product) and !empty($acls['products']) and !in_array($object->product, $acls['products'])) return false;
@@ -1464,7 +1464,7 @@ class docModel extends model
                 ->where('deleted')->eq(0)
                 ->andWhere('vision')->eq($this->config->vision)
                 ->andWhere($type)->eq($objectID)
-                ->beginIF(!empty($executionIDList))->orWhere('execution')->in($executionIDList)->fi()
+                ->beginIF(!empty($executionIDList))->orWhere('execution')->in(array_keys($executionIDList))->fi()
                 ->beginIF(!empty($appendLib))->orWhere('id')->eq($appendLib)->fi()
                 ->orderBy('`order` asc, id_asc')
                 ->fetchAll('id');
