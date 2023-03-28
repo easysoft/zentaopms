@@ -42,7 +42,6 @@ $(document).ready(function()
 
     $('li.has-list > ul, #fileTree').addClass("menu-active-primary menu-hover-primary");
 
-        console.log(linkParams)
     $('#fileTree').on('mousemove', 'a', function()
     {
         if($(this).data('type') == 'annex') return;

@@ -23,9 +23,9 @@
   </div>
   <div class="btn-toolbar pull-right">
   <?php
-    if(common::hasPriv('api', 'struct'))        echo html::a($this->createLink('api', 'struct',        "libID=$libID", 'html', true), "<i class='icon-treemap muted'> </i>" . $lang->api->struct, '', "class='btn btn-link export' id='export'");
-    if(common::hasPriv('api', 'releases'))      echo html::a($this->createLink('api', 'releases',      "libID=$libID", 'html', true), "<i class='icon-version muted'> </i>" . $lang->api->releases, '', "class='btn btn-link export' id='export'");
-    if(common::hasPriv('api', 'createRelease')) echo html::a($this->createLink('api', 'createRelease', "libID=$libID", 'html', true), "<i class='icon-publish muted'> </i>" . $lang->api->createRelease, '', "class='btn btn-link export' id='export'");
+    if(common::hasPriv('api', 'struct'))        echo html::a($this->createLink('api', 'struct',        "libID=$libID"), "<i class='icon-treemap muted'> </i>" . $lang->api->struct, '', "class='btn btn-link'");
+    if(common::hasPriv('api', 'releases'))      echo html::a($this->createLink('api', 'releases',      "libID=$libID", 'html', true), "<i class='icon-version muted'> </i>" . $lang->api->releases, '', "class='btn btn-link'");
+    if(common::hasPriv('api', 'createRelease')) echo html::a($this->createLink('api', 'createRelease', "libID=$libID", 'html', true), "<i class='icon-publish muted'> </i>" . $lang->api->createRelease, '', "class='btn btn-link iframe' data-width='800px'");
     if(common::hasPriv('api', 'export'))        echo html::a($this->createLink('api', 'export',        "libID=$libID", 'html', true), "<i class='icon-export muted'> </i>" . $lang->export, '', "class='btn btn-link export' id='export'");
     if(common::hasPriv('api', 'createLib'))     echo html::a($this->createLink('api', 'createLib',     "objectTpye=$objectType&objectID=$objectID"), '<i class="icon icon-plus"></i> ' . $lang->api->createLib, '', 'class="btn btn-secondary iframe" data-width="800px"');
     if(common::hasPriv('api', 'create'))        echo html::a($this->createLink('api', 'create',        "objectTpye=$objectType&objectID=$objectID"), '<i class="icon icon-plus"></i> ' . $lang->api->createApi, '', 'class="btn btn-primary"');
