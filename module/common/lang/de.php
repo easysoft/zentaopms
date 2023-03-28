@@ -359,7 +359,7 @@ $lang->exportTypeList['selected'] = 'Ausgewählte';
 
 $lang->visionList = array();
 $lang->visionList['ipd']  = 'OR & MM Interface';
-$lang->visionList['rnd']  = 'Full Feature Interface';
+$lang->visionList['rnd']  = 'IPD Interface';
 $lang->visionList['lite'] = 'Operation Management Interface';
 
 $lang->createObjects['todo']        = 'Todo';
