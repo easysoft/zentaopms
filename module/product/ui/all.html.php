@@ -1,6 +1,8 @@
 <?php
 namespace zin;
 
+include_once './data.php';
+
 $cols = array_values($config->product->all->dtable->fieldList);
 
 /* TODO: implements extend fields. */
@@ -146,7 +148,7 @@ featureBar
                 array
                 (
                     'title' => '所有项目集',
-                    'subTitle' => '筛选项目集',
+                    'programs' => $programs,
                     'activeKey' => '7',
                     'closeLink' => '#'
                 )
@@ -216,6 +218,15 @@ dtable
     set::footer(jsRaw('function(){return window.footerGenerator.call(this);}'))
 );
 
-sidebar(modulemenu());
+sidebar
+(
+    modulemenu
+    (
+        set::productID(1),
+        set::title('所有分类'),
+        set::activeKey('4'),
+        set::closeLink('#'),
+    )
+);
 
 render();

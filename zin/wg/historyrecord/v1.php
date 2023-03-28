@@ -154,13 +154,14 @@ class historyrecord extends wg
             div
             (
                 setClass('detail-title'),
-                $lang->history,
+                span($lang->history),
                 button
                 (
                     setClass('btn btn-mini btn-icon btn-reverse'),
                     set::type('button'),
                     set::title($lang->reverse),
                     h::i(setClass('icon icon-arrow-up icon-sm')),
+                    setStyle('margin-right', '4px'),
                 ),
                 button
                 (
@@ -173,7 +174,7 @@ class historyrecord extends wg
                 (
                     setClass('btn btn-link pull-right btn-comment'),
                     set::type('button'),
-                    h::i(setClass('icon icon-chat-line'), $lang->action->create)
+                    h::i(setClass('icon icon-chat-line'), ' ' . $lang->action->create)
                 ),
             ),
             div(setClass('detail-content'), $this->buildHistoriesList())

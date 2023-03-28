@@ -55,21 +55,22 @@ dtable
     set::footer(false)
 );
 
-//programmenu
-//(
-//    set
-//    (
-//        array
-//        (
-//            'title' => '所有项目集',
-//            'subTitle' => '筛选项目集',
-//            'programs' => $data,
-//            'activeKey' => '7',
-//            'closeLink' => '#'
-//        )
-//    )
-//);
-//
+\a($data);
+
+programmenu
+(
+   set
+   (
+       array
+       (
+           'title' => '所有项目集',
+           'programs' => $data,
+           'activeKey' => '7',
+           'closeLink' => '#'
+       )
+   )
+);
+
 //modulemenu
 //(
 //    set

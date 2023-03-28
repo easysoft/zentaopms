@@ -5,18 +5,24 @@ class modulemenu extends wg
 {
     private $modules = array();
 
-    protected static $defineProps = array('js-render?:bool=true');
+    protected static $defineProps = array
+    (
+        'productID:number',
+        'moduleSettingText?:string="模块设置"',
+        'displaySettingText?:string="显示设置"',
+    );
 
     private function buildMenuTree($parent, $parentID)
     {
         $children = $this->getChildModule($parentID);
-        if(count($children) === 0) return;
+        if(count($children) === 0) return array();
 
         foreach($children as $child)
         {
-            $item = array('key' => $child->id, 'text' => $child->name);
+            $item = array('key' => $child->id, 'text' => $child->name, 'items' => array());
             $items = $this->buildMenuTree($item['items'], $child->id);
             if(count($items) !== 0) $item['items'] = $items;
+            else                    unset($item['items']);
             $parent[] = $item;
         }
 
@@ -51,6 +57,7 @@ class modulemenu extends wg
                 h::i
                 (
                     setClass('icon icon-close'),
+                    setStyle('color', '#313C52')
                 )
             );
         }

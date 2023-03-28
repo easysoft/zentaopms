@@ -5,18 +5,26 @@ class programmenu extends wg
 {
     private $programs = array();
 
-    protected static $defineProps = array('title?:string, subTitle?:string, programs?:array, activeClass?:string, activeIcon?:string, activeKey?:string');
+    protected static $defineProps = array
+    (
+        'title?:string,
+        programs?:array,
+        activeClass?:string,
+        activeIcon?:string,
+        activeKey?:string'
+    );
 
     private function buildMenuTree($parent, $parentID)
     {
         $children = $this->getChildProgram($parentID);
-        if(count($children) === 0) return;
+        if(count($children) === 0) return array();
 
         foreach($children as $child)
         {
-            $item = array('key' => $child->id, 'text' => $child->name);
+            $item = array('key' => $child->id, 'text' => $child->name, 'items' => array());
             $items = $this->buildMenuTree($item['items'], $child->id);
             if(count($items) !== 0) $item['items'] = $items;
+            else                    unset($item['items']);
             $parent[] = $item;
         }
         return $parent;
@@ -31,7 +39,9 @@ class programmenu extends wg
     {
         if(!empty($this->prop('programs'))) $this->programs = $this->prop('programs');
         $this->setProp('programs', null);
-        $this->setProp('items', $this->buildMenuTree(array(), 0));
+        $items = $this->buildMenuTree(array(), 0);
+        array_unshift($items, array('type' => 'heading', 'text' => '筛选项目集'));
+        $this->setProp('items', $items);
         $this->setProp('commonItemProps', array('item' => array('className' => 'not-hide-menu')));
         $this->setProp('isDropdownMenu', true);
         $this->setProp('_to', "[data-zin-id='$this->gid']");
@@ -48,7 +58,11 @@ class programmenu extends wg
             $closeBtn = a
             (
                 set('href', $this->prop('closeLink')),
-                h::i(setClass('icon icon-close'))
+                h::i
+                (
+                    setClass('icon icon-close'),
+                    setStyle('color', '#313C52'),
+                )
             );
         }
 
