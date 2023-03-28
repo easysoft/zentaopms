@@ -21,7 +21,6 @@ $(function()
         'annex': 'annex',
         'lib': 'wiki-file-lib'
     }
-    console.log(treeData);
 
     $('#fileTree').tree(
     {
@@ -188,17 +187,19 @@ $(function()
                 {
                     var $input   = $('[data-id=liTreeModal]').html();
                     var $rootDom = $('[data-id=' + item.libid + ']a + ul');
+                    $rootDom.append($input);
                 }
                 else
                 {
                     var $input   = $('[data-id=ulTreeModal]').html();
-                    var $rootDom = $('[data-id=' + item.libid + ']a + ul');
+                    var $rootDom = $('[data-id=' + item.libid + ']a');
+                    var $li      = $rootDom.parent();
                     moduleData.isUpdate = true;
-                    $rootDom.addClass('open in has-list');
+                    $rootDom.after($input);
+                    $li.addClass('open in has-list');
                 }
                 $('#fileTree').data('zui.tree').expand($('li[data-id="' + item.libid + '"]'));
-                $rootDom.append($input);
-                $rootDom.find('input').focus();
+                $rootDom.parent().find('input').focus();
                 break;
             case 'addCataBro' :
                 moduleData.createType = 'same';
