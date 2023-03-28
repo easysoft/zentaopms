@@ -978,4 +978,62 @@ class apiModel extends model
 
         return $list;
     }
+
+    /**
+     * Get ordered objects for dic.
+     *
+     * @access public
+     * @return array
+     */
+    public function getOrderedObjects()
+    {
+        $normalObjects = $closedObjects = array('product' => array(), 'project' => array());
+
+        $products = $this->dao->select('t1.id, t1.name, t1.status')->from(TABLE_PRODUCT)->alias('t1')
+            ->leftjoin(TABLE_DOCLIB)->alias('t2')->on('t2.product=t1.id')
+            ->where('t2.id')->gt(0)
+            ->andWhere('t1.vision')->eq($this->config->vision)
+            ->andWhere('t2.vision')->eq($this->config->vision)
+            ->andWhere('t1.deleted')->eq(0)
+            ->andWhere('t2.type')->eq('api')
+            ->beginIF(!$this->app->user->admin)->andWhere('t1.id')->in($this->app->user->view->products)->fi()
+            ->fetchAll('id');
+
+        foreach($products as $id => $product)
+        {
+            if($product->status == 'normal')
+            {
+                $normalObjects['product'][$id] = $product->name;
+            }
+            elseif($product->status == 'closed')
+            {
+                $closedObjects['product'][$id] = $product->name;
+            }
+        }
+
+        $projects = $this->dao->select('t1.id, t1.name, t1.status')->from(TABLE_PROJECT)->alias('t1')
+            ->leftjoin(TABLE_DOCLIB)->alias('t2')->on('t2.project=t1.id')
+            ->where('t2.id')->gt(0)
+            ->andWhere('t1.vision')->eq($this->config->vision)
+            ->andWhere('t2.vision')->eq($this->config->vision)
+            ->andWhere('t2.type')->eq('api')
+            ->andWhere('t1.deleted')->eq(0)
+            ->beginIF(!$this->app->user->admin)->andWhere('t1.id')->in($this->app->user->view->projects)->fi()
+            ->orderBy('t1.hasProduct_asc')
+            ->fetchAll('id');
+
+        foreach($projects as $id => $project)
+        {
+            if($project->status != 'done' and $project->status != 'closed')
+            {
+                $normalObjects['project'][$id] = $project->name;
+            }
+            else if($project->status == 'done' or $project->status == 'closed')
+            {
+                $closedObjects['project'][$id] = $project->name;
+            }
+        }
+
+        return array($normalObjects, $closedObjects);
+    }
 }

@@ -15,29 +15,41 @@
 #gray-line {width: 230px;height: 1px; margin-left: 10px; margin-bottom:2px; background-color: #ddd;}
 #dropMenu.has-search-text .hide-in-search {display: flex;}
 #swapper li>.selected {color: #0c64eb!important; background: #e9f2fb!important;}
+ .tree-product:last-child {border-bottom: 1px solid #eee;}
 </style>
 <?php
 $normalObjectsHtml = '<ul class="tree noProgram">';
 $closedObjectsHtml = '<ul class="tree noProgram">';
-$link              = $this->createLink($module, $method, "type=$objectType&objectID=%s");
-foreach($normalObjects as $normalObjectID => $normalObjectName)
-{
-    $selected           = $normalObjectID == $objectID ? 'selected' : '';
-    $normalObjectsHtml .= '<li>' . html::a(sprintf($link, $normalObjectID), $normalObjectName, '', "class='$selected clickable' title='{$normalObjectName}' data-key='" . zget($objectsPinYin, $normalObjectName, '') . "'") . '</li>';
-}
+$link              = $this->createLink('api', 'index', "obejctType=%s&objectID=%s");
+$selected          = $objectType == 'nolink' ? 'selected' : '';
 
-foreach($closedObjects as $closedObjectID => $closedObjectName)
+$normalObjectsHtml .= "<li>" . html::a(sprintf($link, 'nolink', 0), $lang->api->noLinked, '', "class='clickable $selected' title='{$lang->api->noLinked}' data-key='" . zget($objectsPinYin, $lang->api->noLinked, '') . "'") . '</li>';
+$normalObjectsHtml .= '<li class="divider"></li>';
+foreach(array('product', 'project') as $moduleType)
 {
-    $selected           = $closedObjectID == $objectID ? 'selected' : '';
-    $closedObjectsHtml .= '<li>' . html::a(sprintf($link, $closedObjectID), $closedObjectName, '', "class='$selected clickable' title='{$closedObjectName}' data-key='" . zget($objectsPinYin, $closedObjectName, '') . "'") . '</li>';
-}
+    foreach($normalObjects[$moduleType] as $normalObjectID => $normalObjectName)
+    {
+        $selected           = $normalObjectID == $objectID ? 'selected' : '';
+        $normalObjectsHtml .= "<li>" . html::a(sprintf($link, $moduleType, $normalObjectID), "<i class='icon icon-$moduleType'></i> $normalObjectName", '', "class='$selected clickable' title='{$normalObjectName}' data-key='" . zget($objectsPinYin, $normalObjectName, '') . "'") . '</li>';
+    }
 
+    foreach($closedObjects[$moduleType] as $closedObjectID => $closedObjectName)
+    {
+        $selected           = $closedObjectID == $objectID ? 'selected' : '';
+        $closedObjectsHtml .= '<li>' . html::a(sprintf($link, $moduleType, $closedObjectID), "<i class='icon icon-$moduleType'></i> $closedObjectName", '', "class='$selected clickable' title='{$closedObjectName}' data-key='" . zget($objectsPinYin, $closedObjectName, '') . "'") . '</li>';
+    }
+    if($moduleType  == 'product')
+    {
+        if($normalObjects['project']) $normalObjectsHtml .= '<li class="divider"></li>';
+        if($closedObjects['project']) $closedObjectsHtml .= '<li class="divider"></li>';
+    }
+}
 $normalObjectsHtml .= '</ul>';
 $closedObjectsHtml .= '</ul>';
 ?>
 
 <div class="table-row">
-  <div class="table-col col-left">
+<div class="table-col <?php if($closedObjects['product'] or $closedObjects['project']) echo 'col-left'?>">
     <div class='list-group'>
       <div class="tab-content objectTree" id="tabContent">
         <div class="tab-pane objects active">
@@ -45,9 +57,11 @@ $closedObjectsHtml .= '</ul>';
         </div>
       </div>
     </div>
+    <?php if($closedObjects['product'] or $closedObjects['project']):?>
     <div class="col-footer">
       <a class='pull-right toggle-right-col not-list-item'><?php echo $lang->doc->closed?><i class='icon icon-angle-right'></i></a>
     </div>
+    <?php endif;?>
   </div>
   <div id="gray-line" hidden></div>
   <div id="closed" hidden><?php echo $lang->doc->closed?></div>
