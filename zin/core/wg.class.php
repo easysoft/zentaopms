@@ -73,27 +73,36 @@ class wg
         return false;
     }
 
-    /**
-     * Render widget to html
-     * @param context $context
-     * @return string
-     */
-    public function render(&$context = NULL)
+    protected function checkPortals()
     {
-        if($context === NULL) $context = context::create($this);
-
         $this->matchedPortals = array();
-        $portals = $context->portals();
+        $portals = context::current()->getPortals();
         foreach($portals as $portal)
         {
             if($this->isMatch($portal->prop('target'))) $this->matchedPortals[] = $portal->children();
         }
+    }
 
-        $before   = $this->buildBefore($context);
-        $children = $this->build($context);
-        $after    = $this->buildAfter($context);
+    protected function getPortals()
+    {
+        $portals = $this->matchedPortals;
+        $this->matchedPortals = NULL;
+        return $portals;
+    }
 
-        $html = static::renderToHtml(array($before, $children, $after), $context);
+    /**
+     * Render widget to html
+     * @return string
+     */
+    public function render()
+    {
+        $this->checkPortals();
+
+        $before   = $this->buildBefore();
+        $children = $this->build();
+        $after    = $this->buildAfter();
+
+        $html = static::renderToHtml(array($before, $children, $this->getPortals(), $after));
 
         context::destroy($this->gid);
 
@@ -104,10 +113,7 @@ class wg
     {
         zin::disableGlobalRender();
 
-        $context = context::create($this);
-        $html    = $this->render($context);
-
-        echo $html;
+        echo $this->render();
 
         $this->displayed = true;
         return $this;
@@ -184,10 +190,7 @@ class wg
         }
 
         if($child instanceof wg && empty($child->parent)) $child->parent = &$this;
-        if($child instanceof wg && $child->type() === 'zin\portal')
-        {
-            if(context::addPortal($child)) return;
-        }
+        if($child instanceof wg && $child->type() === 'zin\portal') return;
 
         if($name === 'children' && $child instanceof wg)
         {
@@ -557,7 +560,7 @@ class wg
     /**
      * @return string
      */
-    public static function renderToHtml($children, &$context = NULL)
+    public static function renderToHtml($children)
     {
         $html = array();
         foreach($children as $child)
@@ -566,11 +569,11 @@ class wg
 
             if(is_array($child))
             {
-                $html[] = static::renderToHtml($child, $context);
+                $html[] = static::renderToHtml($child);
             }
             elseif($child instanceof wg)
             {
-                $html[] = $child->render($context);
+                $html[] = $child->render();
             }
             elseif(is_string($child))
             {
@@ -578,7 +581,7 @@ class wg
             }
             elseif(is_object($child))
             {
-                if(method_exists($child, 'render')) $html[] = $child->render($context);
+                if(method_exists($child, 'render')) $html[] = $child->render();
                 elseif(isHtml($child))              $html[] = $child->data;
                 elseif(isText($child))              $html[] = htmlspecialchars($child->data);
                 elseif(isset($child->html))         $html[] = $child->html;

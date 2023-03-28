@@ -12,6 +12,7 @@
 namespace zin;
 
 require_once dirname(__DIR__) . DS . 'utils' . DS . 'dataset.class.php';
+require_once 'portal.class.php';
 
 class context extends \zin\utils\dataset
 {
@@ -31,22 +32,78 @@ class context extends \zin\utils\dataset
         return $root->gid === $this->root->gid;
     }
 
-    public function portals($portal = NULL)
+    public function getPortals()
     {
-        return $this->list('portals', $portal);
+        return $this->getList('portals');
+    }
+
+    public function addPortal($portal)
+    {
+        return $this->addToList('portals', $portal);
+    }
+
+    public function addImport()
+    {
+        return $this->addToList('import', func_get_args());
+    }
+
+    public function getImportList()
+    {
+        return $this->getList('import');
+    }
+
+    public function addCSS()
+    {
+        return $this->addToList('css', func_get_args());
+    }
+
+    public function getCssList()
+    {
+        return $this->getList('css');
+    }
+
+    public function addJS()
+    {
+        return $this->addToList('js', func_get_args());
+    }
+
+    public function addJSVar($name, $value)
+    {
+        return $this->addToList('jsVar', h::createJsVarCode($name, $value));
+    }
+
+    public function addJSCall()
+    {
+        $code = call_user_func_array('h::createJsCallCode', func_get_args());
+        return $this->addToList('jsCall', $code);
+    }
+
+    public function getJsList()
+    {
+        return array_merge($this->getList('jsVar'), $this->getList('js'), $this->getList('jsCall'));
     }
 
     public static $map = array();
 
-    public static function addPortal($portal)
+    public static function portal(/* string $name, mixed ...$children */)
+    {
+        $args    = func_get_args();
+        $name    = array_shift($args);
+        $context = static::current();
+        $portal  = new portal(set::target($name), $args);
+        $context->addPortal($portal);
+    }
+
+    public static function js(/* string ...$code */)
     {
         $context = static::current();
-        if($context)
-        {
-            $context->portals($portal);
-            return true;
-        }
-        return false;
+        call_user_func_array(array($context, 'addJS'), func_get_args());
+    }
+
+    public static function css(/* string ...$code */)
+    {
+        $context = static::current();
+        call_user_func_array(array($context, 'addCSS'), func_get_args());
     }
 
     /**
@@ -55,7 +112,8 @@ class context extends \zin\utils\dataset
      */
     public static function current()
     {
-        return current(static::$map);
+        if(empty(static::$map)) static::$map['current'] = new context(NULL);
+        return static::$map['current'];
     }
 
     public static function create($wg)

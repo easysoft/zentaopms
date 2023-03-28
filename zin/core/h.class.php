@@ -38,7 +38,7 @@ class h extends wg
 
         if($this->isSelfClose()) return array($this->buildSelfCloseTag(), $events);
 
-        return array($this->buildTagBegin(), parent::build(), $this->matchedPortals, $this->buildTagEnd(), $events);
+        return array($this->buildTagBegin(), parent::build(), $this->getPortals(), $this->buildTagEnd(), $events);
     }
 
     public function toJsonData()
@@ -195,6 +195,11 @@ class h extends wg
         return static::create('style', html(implode("\n", \zin\utils\flat(func_get_args()))));
     }
 
+    public static function globalJS()
+    {
+        return static::create('script', html(implode("\n", \zin\utils\flat(func_get_args()))));
+    }
+
     public static function js()
     {
         return static::create('script', html('(function(){'. implode("\n", \zin\utils\flat(func_get_args())) . '}())'));
@@ -202,18 +207,16 @@ class h extends wg
 
     public static function jsVar($name, $value)
     {
-        $vars = is_string($name) ? array($name => $value) : $name;
-        $jsCode = '';
-        foreach($vars as $var => $val)
-        {
-            if(empty($var)) continue;
-            if(strpos($var, 'window.') === 0) $jsCode .= "$var=" . h::encodeJsonWithRawJs($val) . ';';
-            else $jsCode .= "var $var=" . h::encodeJsonWithRawJs($val) . ';';
-        }
-        return static::js($jsCode);
+        return static::js(static::createJsVarCode($name, $value));
     }
 
     public static function jsCall()
+    {
+        $code = call_user_func_array(array('static', 'createJsCallCode'), func_get_args());
+        return static::js($code);
+    }
+
+    public static function createJsCallCode()
     {
         $args = func_get_args();
         $func = array_shift($args);
@@ -225,9 +228,22 @@ class h extends wg
         if($func[0] === '~')
         {
             $func = substr($func, 1);
-            return static::js("domReady($func.bind(null, " . implode(',', $args) . "));");
+            return "$($func.bind(null, " . implode(',', $args) . "));";
         }
-        return static::js($func . '(' . implode(',', $args) . ');');
+        return $func . '(' . implode(',', $args) . ');';
+    }
+
+    public static function createJsVarCode($name, $value)
+    {
+        $vars = is_string($name) ? array($name => $value) : $name;
+        $jsCode = '';
+        foreach($vars as $var => $val)
+        {
+            if(empty($var)) continue;
+            if(strpos($var, 'window.') === 0) $jsCode .= "$var=" . h::encodeJsonWithRawJs($val) . ';';
+            else $jsCode .= "var $var=" . h::encodeJsonWithRawJs($val) . ';';
+        }
+        return $jsCode;
     }
 
     public static function jsRaw()

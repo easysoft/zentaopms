@@ -36,7 +36,14 @@ class pagebase extends wg
         global $lang, $config;
 
         $zui  = $this->prop('zui');
-        $ajax = $this->prop('ajax');
+        $head = $this->buildHead();
+        $body = $this->buildBody();
+
+        $context = context::current();
+        $css = $context->getCssList();
+        $js = $context->getJsList();
+        $imports = $context->getImportList();
+
         return h::html
         (
             before(html('<!DOCTYPE html>')),
@@ -46,8 +53,6 @@ class pagebase extends wg
                 html($this->prop('metas')),
                 h::title($this->props->get('title', '') . " - $lang->zentaoPMS"),
                 $zui  ? h::import(array($config->zin->zuiPath . 'zui.zentao.umd.cjs', $config->zin->zuiPath . 'zui.zentao.css')) : null,
-                $ajax ? h::import(array($config->zin->zuiPath . 'axios.min.js')) : null,
-                h::js('window.domReady = function(fn){if (document.readyState !== \'loading\') {fn();} else {document.addEventListener(\'DOMContentLoaded\', fn);}};'),
                 $zui ? h::js
                 (
                     'zui.create = function(name, element, options){',
@@ -60,13 +65,16 @@ class pagebase extends wg
                         'return Component ? new Component(element, options) : null;',
                     '};'
                 ) : null,
-                $this->buildHead()
+                empty($imports) ? NULL : h::import($imports),
+                $head,
+                empty($css) ? NULL : h::css($css)
             ),
             h::body
             (
                 set($this->prop('bodyProps')),
-                $this->buildBody(),
-                $config->debug ? h::js('window.zin = ' . json_encode(array('page' => $this->toJsonData(), 'definedProps' => wg::$definedPropsMap, 'wgBlockMap' => wg::$wgToBlockMap)) . ';console.log("zin", window.zin)') : null
+                $body,
+                $config->debug ? h::js('window.zin = ' . json_encode(array('page' => $this->toJsonData(), 'definedProps' => wg::$definedPropsMap, 'wgBlockMap' => wg::$wgToBlockMap)) . ';console.log("zin", window.zin)') : null,
+                empty($js) ? NULL : h::js($js)
             )
         );
     }

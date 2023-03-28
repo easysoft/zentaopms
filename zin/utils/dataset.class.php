@@ -220,7 +220,7 @@ class dataset
         return $val === NULL ? $defaultValue : $val;
     }
 
-    public function setList($prop, $values)
+    public function addToList($prop, $values)
     {
         if(!is_array($values)) $values = array($values);
 

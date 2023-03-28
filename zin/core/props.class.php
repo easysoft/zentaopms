@@ -87,19 +87,6 @@ class props extends \zin\utils\dataset
         if($value) $this->setVal($name, $value);
     }
 
-    /**
-     * @deprecated
-     */
-    public function addToList()
-    {
-        $args = func_get_args();
-        $name = array_shift($args);
-        if(!$this->has($name)) $this->set($name, $args);
-        else $this->set($name, array_merge($this->get($name), $args));
-
-        return $this;
-    }
-
     public function bindEvent($name, $callback = NULL)
     {
         if(is_array($name))
