@@ -722,6 +722,7 @@ class productModel extends model
             ->setDefault('createdBy', $this->app->user->account)
             ->setDefault('createdDate', helper::now())
             ->setDefault('createdVersion', $this->config->version)
+            ->setDefault('vision', $this->config->vision)
             ->setIF($this->post->acl == 'open', 'whitelist', '')
             ->setIF(!isset($_POST['whitelist']), 'whitelist', '')
             ->stripTags($this->config->product->editor->create['id'], $this->config->allowedTags)
