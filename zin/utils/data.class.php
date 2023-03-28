@@ -18,19 +18,6 @@ require_once 'dataset.class.php';
  */
 class data extends dataset
 {
-    public static $global = NULL;
-
-    public static function setGlobal()
-    {
-        $args = func_get_args();
-        if(!data::$global) data::$global = new data();
-        foreach($args as $data)
-        {
-            data::$global->set($data);
-        }
-        return data::$global;
-    }
-
     public function __constructor()
     {
         $list = func_get_args();
@@ -92,16 +79,5 @@ class data extends dataset
             $data = &$data[$name];
         }
         return $data;
-    }
-
-    public function getWithGlobal($prop, $defaultValue)
-    {
-        $value = $this->get($prop);
-        if($value === NULL && data::$global)
-        {
-            return data::$global->get($prop, $defaultValue);
-        }
-
-        return $value === NULL ? $defaultValue : $value;
     }
 }

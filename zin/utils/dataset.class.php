@@ -220,6 +220,25 @@ class dataset
         return $val === NULL ? $defaultValue : $val;
     }
 
+    public function setList($prop, $values)
+    {
+        if(!is_array($values)) $values = array($values);
+
+        $list = $this->getList($prop);
+        $this->set($prop, array_merge($list, $values));
+    }
+
+    public function getList($prop)
+    {
+        return $this->get($prop, array());
+    }
+
+    public function list($prop, $values = NULL)
+    {
+        if($values === NULL) return $this->getList($prop);
+        return $this->setList($prop, $values);
+    }
+
     /**
      * Delete property by name
      *

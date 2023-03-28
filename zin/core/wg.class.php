@@ -75,6 +75,7 @@ class wg
 
     /**
      * Render widget to html
+     * @param context $context
      * @return string
      */
     public function render(&$context = NULL)
@@ -82,7 +83,8 @@ class wg
         if($context === NULL) $context = context::create($this);
 
         $this->matchedPortals = array();
-        foreach($context->portals as $portal)
+        $portals = $context->portals();
+        foreach($portals as $portal)
         {
             if($this->isMatch($portal->prop('target'))) $this->matchedPortals[] = $portal->children();
         }

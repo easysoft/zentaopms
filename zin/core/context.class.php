@@ -11,11 +11,14 @@
 
 namespace zin;
 
-class context
-{
-    public $root;
+require_once dirname(__DIR__) . DS . 'utils' . DS . 'dataset.class.php';
 
-    public $portals = array();
+class context extends \zin\utils\dataset
+{
+    /**
+     * @var object
+     */
+    public $root;
 
     public function __construct($root)
     {
@@ -28,6 +31,11 @@ class context
         return $root->gid === $this->root->gid;
     }
 
+    public function portals($portal = NULL)
+    {
+        return $this->list('portals', $portal);
+    }
+
     public static $map = array();
 
     public static function addPortal($portal)
@@ -35,12 +43,16 @@ class context
         $context = static::current();
         if($context)
         {
-            $context->portals[] = $portal;
+            $context->portals($portal);
             return true;
         }
         return false;
     }
 
+    /**
+     * Get current context
+     * @return context
+     */
     public static function current()
     {
         return current(static::$map);
