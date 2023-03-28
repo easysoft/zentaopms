@@ -16,7 +16,7 @@ $('#subNavbar li').not('[data-id=<?php echo $group;?>]').removeClass('active');
     <div class="cell">
       <div class='panel'>
         <div class='panel-heading'>
-          <div class='panel-title'><?php echo $lang->report->list;?></div>
+          <div class='panel-title'><?php echo $lang->pivot->list;?></div>
         </div>
         <div class='panel-body'>
           <div class='list-group'>
@@ -27,7 +27,7 @@ $('#subNavbar li').not('[data-id=<?php echo $group;?>]').removeClass('active');
       <?php if($this->config->edition == 'open'):?>
       <div class='panel panel-body' style='padding: 10px 6px'>
         <div class='text proversion'>
-          <strong class='text-danger small text-latin'>BIZ</strong> &nbsp;<span class='text-important'><?php echo (!empty($config->isINT)) ? $lang->report->proVersionEn : $lang->report->proVersion;?></span>
+          <strong class='text-danger small text-latin'>BIZ</strong> &nbsp;<span class='text-important'><?php echo (!empty($config->isINT)) ? $lang->pivot->proVersionEn : $lang->pivot->proVersion;?></span>
         </div>
       </div>
       <?php endif;?>
