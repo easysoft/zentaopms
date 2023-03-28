@@ -75,13 +75,15 @@
           </td>
           <td class="c-name" title='<?php echo $doc->title;?>'>
           <?php
+          $docType = $doc->type == 'text' ? 'wiki-file' : $doc->type;
+          $icon    = html::image("static/svg/{$docType}.svg");
           if(common::hasPriv('doc', 'objectLibs'))
           {
-              echo html::a($this->createLink('doc', 'objectLibs', "type=$type&objectID=$objectID&libID=$doc->lib&docID=$doc->id"), "<i class='icon icon-file-text text-muted'></i> &nbsp;" . $doc->title, '', "title='{$doc->title}' data-app='{$this->app->tab}'");
+              echo html::a($this->createLink('doc', 'objectLibs', "type=$type&objectID=$objectID&libID=$doc->lib&docID=$doc->id"), $icon . $doc->title, '', "title='{$doc->title}' data-app='{$this->app->tab}'");
           }
           else
           {
-              echo "<i class='icon icon-file-text text-muted'></i> {$doc->title}";
+              echo "$icon {$doc->title}";
           }
           ?>
           <?php if(common::canBeChanged('doc', $doc) and common::hasPriv('doc', 'collect') and $libType and $libType != 'api'):?>
