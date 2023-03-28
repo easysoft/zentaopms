@@ -355,9 +355,8 @@ class pivotModel extends model
         }
 
         /* Fix bug for children. */
-        $parents       = array();
-        $taskIdList    = array();
-        $taskGroups    = array();
+        $parents    = array();
+        $taskGroups = array();
         foreach($tasks as $task)
         {
             if($task->parent > 0) $parents[$task->parent] = $task->parent;
