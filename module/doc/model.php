@@ -192,7 +192,7 @@ class docModel extends model
         $lib = fixer::input('post')
             ->setForce('product', $this->post->type == 'product' ? $this->post->product : 0)
             ->setForce('project', $this->post->type == 'project' ? $this->post->project : 0)
-            ->setForce('execution', $this->post->type == 'execution' ? $this->post->execution : 0)
+            ->setForce('execution', $this->post->type == 'execution' || $this->post->execution ? $this->post->execution : 0)
             ->join('groups', ',')
             ->join('users', ',')
             ->add('addedBy', $this->app->user->account)
@@ -1487,7 +1487,11 @@ class docModel extends model
                 ->where('deleted')->eq(0)
                 ->andWhere('vision')->eq($this->config->vision)
                 ->andWhere($type)->eq($objectID)
-                ->beginIF(!empty($executionIDList))->orWhere('execution')->in(array_keys($executionIDList))->fi()
+                ->beginIF(!empty($executionIDList))
+                ->orWhere('(execution')->in(array_keys($executionIDList))
+                ->andWhere('deleted')->eq(0)
+                ->markRight(1)
+                ->fi()
                 ->beginIF(!empty($appendLib))->orWhere('id')->eq($appendLib)->fi()
                 ->orderBy('`order` asc, id_asc')
                 ->fetchAll('id');
@@ -2832,7 +2836,7 @@ class docModel extends model
             foreach($libs as $lib)
             {
                 if($lib->type != 'execution') continue;
-                $executionLibs[$lib->execution][$libID] = $lib;
+                $executionLibs[$lib->execution][$lib->id] = $lib;
             }
 
             $executionPairs = $this->dao->select('id,name')->from(TABLE_EXECUTION)
@@ -2876,11 +2880,11 @@ class docModel extends model
                     }
 
                     $libTree['execution'][$executionID] = $execution;
-                    continue;
+                    if(count($executionLibs[$executionID]) == 1) continue;
                 }
 
                 $libTree['execution'][$executionID]->active = $item->active ? 1 : $libTree['execution'][$executionID]->active;
-                $libTree['execution'][$executionID]->children[$lib->id] = $item;
+                $libTree['execution'][$executionID]->children[] = $item;
             }
         }
 

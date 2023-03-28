@@ -310,6 +310,11 @@ class doc extends control
 
             $objectType = $lib->type;
             $objectID   = strpos(',product,project,execution,', ",$objectType,") !== false ? $lib->{$objectType} : 0;
+            if($this->app->tab == 'doc' and $objectType == 'execution')
+            {
+                $objectType = 'project';
+                $objectID   = $lib->project;
+            }
             $browseLink = $this->createLink('doc', $from, "type=$objectType&objectID=$objectID");
 
             return print(js::locate($browseLink, 'parent'));
