@@ -27,7 +27,7 @@
     if(common::hasPriv('api', 'releases'))      echo html::a($this->createLink('api', 'releases',      "libID=$libID", 'html', true), "<i class='icon-version muted'> </i>" . $lang->api->releases, '', "class='btn btn-link'");
     if(common::hasPriv('api', 'createRelease')) echo html::a($this->createLink('api', 'createRelease', "libID=$libID", 'html', true), "<i class='icon-publish muted'> </i>" . $lang->api->createRelease, '', "class='btn btn-link iframe' data-width='800px'");
     if(common::hasPriv('api', 'export'))        echo html::a($this->createLink('api', 'export',        "libID=$libID", 'html', true), "<i class='icon-export muted'> </i>" . $lang->export, '', "class='btn btn-link export' id='export'");
-    if(common::hasPriv('api', 'createLib'))     echo html::a($this->createLink('api', 'createLib',     "objectTpye=$objectType&objectID=$objectID"), '<i class="icon icon-plus"></i> ' . $lang->api->createLib, '', 'class="btn btn-secondary iframe" data-width="800px"');
+    if(common::hasPriv('api', 'createLib'))     echo html::a($this->createLink('api', 'createLib',     "type=$objectType"), '<i class="icon icon-plus"></i> ' . $lang->api->createLib, '', 'class="btn btn-secondary iframe" data-width="800px"');
     if(common::hasPriv('api', 'create'))        echo html::a($this->createLink('api', 'create',        "objectTpye=$objectType&objectID=$objectID"), '<i class="icon icon-plus"></i> ' . $lang->api->createApi, '', 'class="btn btn-primary"');
   ?>
   </div>
@@ -38,7 +38,7 @@
     <p>
       <span class="text-muted"><?php echo $lang->doc->noLib;?></span>
       <?php
-      echo html::a(helper::createLink('doc', 'createLib', "type=$objectType&objectID=$objectID"), '<i class="icon icon-plus"></i> ' . $this->lang->doc->createLib, '', 'class="btn btn-info iframe"');
+      if(common::hasPriv('api', 'createLib')) echo html::a(helper::createLink('api', 'createLib', "type=$objectType"), '<i class="icon icon-plus"></i> ' . $lang->api->createLib, '', 'class="btn btn-info iframe" data-width="800px"');
       ?>
     </p>
   </div>

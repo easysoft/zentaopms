@@ -530,7 +530,7 @@ class apiModel extends model
     public function getReleaseByQuery($libID, $pager = '', $orderBy = '')
     {
         return $this->dao->select('*')->from(TABLE_API_LIB_RELEASE)
-            ->where('lib')->eq($libID)
+            ->where('lib')->in($libID)
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll();
@@ -1035,5 +1035,37 @@ class apiModel extends model
         }
 
         return array($normalObjects, $closedObjects);
+    }
+
+    /**
+     * Get lib tree.
+     *
+     * @param  int    $libID
+     * @param  int    $libs
+     * @param  int    $objectID
+     * @access public
+     * @return array
+     */
+    public function getLibTree($libID, $libs, $objectID = 0)
+    {
+        $libTree  = $this->loadModel('doc')->getLibTree($libID, $libs, 'api', $objectID);
+        $releases = $this->getReleaseByQuery(array_keys($libs), null, 'lib_asc, id_desc');
+
+        foreach($libTree as &$tree)
+        {
+            $tree->versions    = array();
+            $tree->lastVersion = '';
+            foreach($releases as $index => $release)
+            {
+                if($tree->id == $release->lib)
+                {
+                    if(empty($tree->versions)) $tree->lastVersion = $release->version;
+
+                    $tree->versions[] = $release->version;
+                    unset($releases[$index]);
+                }
+            }
+        }
+        return $libTree;
     }
 }

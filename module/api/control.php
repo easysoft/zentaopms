@@ -87,13 +87,24 @@ class api extends control
         $this->view->browseType     = $browseType;
         $this->view->objectType     = $objectType;
         $this->view->objectID       = $objectID;
-        $this->view->libTree        = $this->loadModel('doc')->getLibTree($libID, $libs, 'api', $objectID);
+        $this->view->libTree        = $this->api->getLibTree($libID, $libs, $objectID);
         $this->view->users          = $this->user->getPairs('noclosed,noletter');
         $this->view->objectDropdown = $this->generateLibsDropMenu($libs[$libID], $release);
 
         $this->display();
     }
 
+    /**
+     * View api.
+     *
+     * @param  int    $libID
+     * @param  int    $apiID
+     * @param  int    $moduleID
+     * @param  int    $release
+     * @param  int    $version
+     * @access public
+     * @return void
+     */
     public function view($libID, $apiID, $moduleID = 0, $release = 0, $version = 0)
     {
         /* Get all api doc libraries. */
@@ -361,6 +372,8 @@ class api extends control
      */
     public function createLib($type = 'product')
     {
+        if(empty($type)) $type = 'product';
+
         if(!empty($_POST))
         {
             $libID = $this->doc->createApiLib();
