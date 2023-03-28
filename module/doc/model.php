@@ -189,7 +189,6 @@ class docModel extends model
      */
     public function createLib()
     {
-        $now = helper::now();
         $lib = fixer::input('post')
             ->setForce('product', $this->post->type == 'product' ? $this->post->product : 0)
             ->setForce('project', $this->post->type == 'project' ? $this->post->project : 0)
@@ -197,7 +196,7 @@ class docModel extends model
             ->join('groups', ',')
             ->join('users', ',')
             ->add('addedBy', $this->app->user->account)
-            ->add('addedDate', $now)
+            ->add('addedDate', helper::now())
             ->remove('uid,contactListMenu,libType')
             ->get();
 
@@ -230,17 +229,26 @@ class docModel extends model
      */
     public function createApiLib()
     {
-        /* Replace doc library name. */
-        $this->lang->doclib->name = $this->lang->doclib->apiLibName;
-
         $data = fixer::input('post')
             ->trim('name')
             ->join('groups', ',')
             ->join('users', ',')
+            ->setForce('product', $this->post->libType == 'product' ? $this->post->product : 0)
+            ->setForce('project', $this->post->libType == 'project' ? $this->post->project : 0)
+            ->add('addedBy', $this->app->user->account)
+            ->add('addedDate', helper::now())
+            ->remove('uid,contactListMenu,libType')
             ->get();
 
-        if($data->acl == 'private') $data->users = $this->app->user->account;
-        if($data->acl == 'custom' && strpos($data->users, $this->app->user->account) === false) $data->users .= ',' . $this->app->user->account;
+        $this->app->loadLang('api');
+
+        /* Replace doc library name. */
+        $this->lang->doclib->name    = $this->lang->doclib->apiLibName;
+        $this->lang->doclib->baseUrl = $this->lang->api->baseUrl;
+        $this->lang->doclib->project = $this->lang->api->project;
+        $this->lang->doclib->product = $this->lang->api->product;
+
+        $this->config->api->createlib->requiredFields .= $this->post->libType == 'product' ? ',product' : ',project';
 
         $data->type = static::DOC_TYPE_API;
         $this->dao->insert(TABLE_DOCLIB)->data($data)->autoCheck()
@@ -254,16 +262,33 @@ class docModel extends model
     /**
      * Update api lib.
      *
-     * @param  int      $id
-     * @param  stdClass $oldDoc
-     * @param  array    $data
+     * @param  int   $id
      * @access public
      * @return array|int
      */
-    public function updateApiLib($id, $oldDoc, $data)
+    public function updateApiLib($id)
     {
+        $oldLib = $this->getLibById($id);
+
+        $data = fixer::input('post')
+            ->trim('name')
+            ->join('groups', ',')
+            ->join('users', ',')
+            ->setForce('product', $this->post->libType == 'product' ? $this->post->product : 0)
+            ->setForce('project', $this->post->libType == 'project' ? $this->post->project : 0)
+            ->remove('uid,contactListMenu,libType')
+            ->get();
+
+        $this->app->loadLang('api');
+
         /* Replace doc library name. */
-        $this->lang->doclib->name = $this->lang->doclib->apiLibName;
+        $this->lang->doclib->name    = $this->lang->doclib->apiLibName;
+        $this->lang->doclib->baseUrl = $this->lang->api->baseUrl;
+        $this->lang->doclib->project = $this->lang->api->project;
+        $this->lang->doclib->product = $this->lang->api->product;
+
+
+        $this->config->api->editlib->requiredFields .= $this->post->libType == 'product' ? ',product' : ',project';
 
         $data->type = static::DOC_TYPE_API;
         $this->dao->update(TABLE_DOCLIB)->data($data)->autoCheck()
@@ -806,7 +831,6 @@ class docModel extends model
             return false;
         }
 
-        $now = helper::now();
         $doc = fixer::input('post')->setDefault('module', 0)
             ->callFunc('title', 'trim')
             ->stripTags($this->config->doc->editor->edit['id'], $this->config->allowedTags)
@@ -816,7 +840,7 @@ class docModel extends model
             ->setDefault('execution', 0)
             ->setDefault('mailto', '')
             ->add('editedBy', $this->app->user->account)
-            ->add('editedDate', $now)
+            ->add('editedDate', helper::now())
             ->cleanInt('module')
             ->join('groups', ',')
             ->join('users', ',')

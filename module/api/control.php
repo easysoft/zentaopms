@@ -333,26 +333,27 @@ class api extends control
      * @access public
      * @return void
      */
-    public function createLib($type = 'normal')
+    public function createLib($type = 'product')
     {
         if(!empty($_POST))
         {
-            $libID = $type == 'demo' ? $this->api->createDemoData($this->post->name, $this->post->baseUrl) : $this->doc->createApiLib();
-            if(dao::isError())  return $this->sendError(dao::getError());
-
-            /* If the created api library of imported zentao api library, return directly. */
-            if($type == 'demo') return $this->sendSuccess(array('locate' => $this->createLink('api', 'index', "libID=$libID")));
+            $libID = $this->doc->createApiLib();
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             /* Record action for create api library. */
-            $this->action->create('docLib', $libID, 'Created');
+            $this->action->create('doclib', $libID, 'created');
 
             if(!helper::isAjaxRequest()) return print(js::locate($this->createLink('api', 'index', "libID=$libID"), 'parent.parent'));
-            return $this->sendSuccess(array('locate' => $this->createLink('api', 'index', "libID=$libID")));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink('api', 'index', "libID=$libID")));
         }
 
-        $this->view->type   = $type;
-        $this->view->groups = $this->loadModel('group')->getPairs();
-        $this->view->users  = $this->user->getPairs('nocode|noclosed');
+        $this->lang->api->aclList['default'] = sprintf($this->lang->doclib->aclList['default'], $this->lang->{$type}->common);
+
+        $this->view->type     = $type;
+        $this->view->groups   = $this->loadModel('group')->getPairs();
+        $this->view->users    = $this->user->getPairs('nocode|noclosed');
+        $this->view->projects = $this->loadModel('project')->getPairsByModel();
+        $this->view->products = $this->loadModel('product')->getPairs();
 
         $this->display();
     }
@@ -366,28 +367,26 @@ class api extends control
      */
     public function editLib($id)
     {
-        $doc = $this->doc->getLibById($id);
+        $lib = $this->doc->getLibById($id);
 
         if(!empty($_POST))
         {
-            $lib = fixer::input('post')->join('groups', ',')->join('users', ',')->get();
-
-            if($lib->acl == 'private') $lib->users = $this->app->user->account;
-            $this->doc->updateApiLib($id, $doc, $lib);
+            $this->doc->updateApiLib($id);
 
             if(dao::isError()) return $this->sendError(dao::getError());
 
-            $res = array(
-                'message'    => $this->lang->saveSuccess,
-                'closeModal' => true,
-                'callback'   => "redirectParentWindow($id)",
-            );
-            return $this->sendSuccess($res);
+            return $this->sendSuccess(array('message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => "redirectParentWindow($id)"));
         }
 
-        $this->view->doc    = $doc;
-        $this->view->groups = $this->loadModel('group')->getPairs();
-        $this->view->users  = $this->user->getPairs('nocode|noclosed');
+        $type = !empty($lib->product) ? 'product' : 'project';
+        $this->lang->api->aclList['default'] = sprintf($this->lang->doclib->aclList['default'], $this->lang->{$type}->common);
+
+        $this->view->lib      = $lib;
+        $this->view->type     = $type;
+        $this->view->groups   = $this->loadModel('group')->getPairs();
+        $this->view->users    = $this->user->getPairs('nocode|noclosed');
+        $this->view->projects = $this->loadModel('project')->getPairsByModel();
+        $this->view->products = $this->loadModel('product')->getPairs();
 
         $this->display();
     }
