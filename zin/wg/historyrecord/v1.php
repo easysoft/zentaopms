@@ -29,7 +29,7 @@ class historyrecord extends wg
             $actionItemView = li
             (
                 set::value($i++),
-                html($app->loadTarget('action')->printAction($action))
+                html($app->loadTarget('action')->renderAction($action))
             );
 
             if(!empty($action->history))
