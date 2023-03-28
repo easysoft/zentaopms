@@ -56,7 +56,7 @@ class pivotModel extends model
                 $tmpDate = $setsDate;
                 $tmpDate[] = $date;
                 sort($tmpDate);
-                $tmpDateStr = ',' . join(',', $tmpDate);
+                $tmpDateStr = ',' . implode(',', $tmpDate);
                 $preDate = rtrim(substr($tmpDateStr, 0, strpos($tmpDateStr, $date)), ',');
                 $preDate = substr($preDate, strrpos($preDate, ',') + 1);
 
