@@ -9,8 +9,6 @@
  * @version     $Id: model.php 4726 2013-05-03 05:51:27Z chencongzhi520@gmail.com $
  * @link        http://www.zentao.net
  */
-?>
-<?php
 class pivotModel extends model
 {
     /**
