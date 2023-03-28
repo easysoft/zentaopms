@@ -1109,10 +1109,13 @@ class docModel extends model
         if(isset($object->addedBy) and $object->addedBy == $this->app->user->account) return true;
         if(isset($object->users) and strpos(",{$object->users},", $account) !== false) return true;
 
-        $userGroups = $this->app->user->groups;
-        foreach($userGroups as $groupID)
+        if(!empty($object->groups))
         {
-            if(strpos(",$object->groups,", ",$groupID,") !== false) return true;
+            $userGroups = $this->app->user->groups;
+            foreach($userGroups as $groupID)
+            {
+                if(strpos(",$object->groups,", ",$groupID,") !== false) return true;
+            }
         }
 
         if($object->project and $object->acl == 'private')

@@ -192,6 +192,7 @@ class doc extends control
         if($type != 'custom')
         {
             $this->lang->doclib->aclList['default'] = sprintf($this->lang->doclib->aclList['default'], $this->lang->{$type}->common);
+            $this->lang->doclib->aclList['private'] = sprintf($this->lang->doclib->privateACL, $this->lang->{$type}->common);
             unset($this->lang->doclib->aclList['open']);
         }
 

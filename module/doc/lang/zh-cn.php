@@ -20,6 +20,7 @@ $lang->doclib->select     = '选择文档库';
 $lang->doclib->execution  = $lang->executionCommon . '库';
 $lang->doclib->product    = $lang->productCommon . '库';
 $lang->doclib->apiLibName = '接口库名称';
+$lang->doclib->privateACL = "私有 <span class='acl-tip'>（仅创建者和有%s权限的白名单用户可访问）</span>";
 
 $lang->doclib->type['wiki'] = 'WIKI文档库';
 $lang->doclib->type['api']  = '接口库';
@@ -34,7 +35,7 @@ $lang->doclib->aclListB['private'] = '私有';
 
 $lang->doclib->aclList = array();
 $lang->doclib->aclList['open']    = "公开 <span class='acl-tip'>（有文档视图权限即可访问）</span>";
-$lang->doclib->aclList['default'] = "默认 <span class='acl-tip'>（有所选%s访问权限的用户可以访问）</span>";
+$lang->doclib->aclList['default'] = "默认 <span class='acl-tip'>（有所选%s访问权限用户可以访问）</span>";
 $lang->doclib->aclList['private'] = "私有 <span class='acl-tip'>（仅创建者和白名单用户可访问）</span>";
 
 $lang->doclib->create['product']   = '创建' . $lang->productCommon . '文档库';

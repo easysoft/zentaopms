@@ -20,6 +20,7 @@ $lang->doclib->select     = 'Select';
 $lang->doclib->execution  = $lang->executionCommon . ' Library';
 $lang->doclib->product    = $lang->productCommon . ' Library';
 $lang->doclib->apiLibName = 'Api Library Name';
+$lang->doclib->privateACL = "Private <span class='acl-tip'> (Only creators and whitelisted users with %s permissions can access it)";
 
 $lang->doclib->type['wiki'] = 'WIKI';
 $lang->doclib->type['api']  = 'API';
