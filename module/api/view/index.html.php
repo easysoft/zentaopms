@@ -32,7 +32,7 @@
   ?>
   </div>
 </div>
-<div id='mainContent'class="fade <?php if(!empty($libTree)) echo 'flex';?>">
+<div id='mainContent' class="fade <?php if(!empty($libTree)) echo 'flex';?>">
 <?php if(empty($libTree)):?>
   <div class="table-empty-tip">
     <p>
