@@ -53,3 +53,6 @@ $lang->demandpool->menuOrder[15] = 'kanban';
 $lang->demandpool->menuOrder[20] = 'track';
 $lang->demandpool->menuOrder[25] = 'insight';
 $lang->demandpool->menuOrder[30] = 'view';
+
+unset($lang->product->homeMenu->home);
+unset($lang->product->homeMenu->kanban);
