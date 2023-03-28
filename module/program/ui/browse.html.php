@@ -55,8 +55,6 @@ dtable
     set::footer(false)
 );
 
-\a($data);
-
 programmenu
 (
    set
