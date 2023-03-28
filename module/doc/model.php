@@ -191,12 +191,15 @@ class docModel extends model
      */
     public function createLib()
     {
+        $now = helper::now();
         $lib = fixer::input('post')
             ->setForce('product', $this->post->type == 'product' ? $this->post->product : 0)
             ->setForce('project', $this->post->type == 'project' ? $this->post->project : 0)
             ->setForce('execution', $this->post->type == 'execution' ? $this->post->execution : 0)
             ->join('groups', ',')
             ->join('users', ',')
+            ->add('addedBy', $this->app->user->account)
+            ->add('addedDate', $now)
             ->remove('uid,contactListMenu,libType')
             ->get();
 
@@ -296,21 +299,15 @@ class docModel extends model
             ->setDefault('groups', '')
             ->join('groups', ',')
             ->join('users', ',')
+            ->remove('uid,contactListMenu')
             ->get();
 
-        if($oldLib->type == 'project' or $oldLib->type == 'custom')
+        if($oldLib->type == 'project')
         {
             $libCreatedBy = $this->dao->select('*')->from(TABLE_ACTION)->where('objectType')->eq('doclib')->andWhere('objectID')->eq($libID)->andWhere('action')->eq('created')->fetch('actor');
 
-            if($oldLib->type == 'custom')
-            {
-                if($lib->acl == 'private') $lib->users = $libCreatedBy ? $libCreatedBy : $this->app->user->account;
-            }
-            else
-            {
-                $openedBy = $this->dao->findById($oldLib->project)->from(TABLE_PROJECT)->fetch('openedBy');
-                if($lib->acl == 'private' and $lib->acl == 'custom') $lib->users .= ',' . $libCreatedBy ? $libCreatedBy : $openedBy;
-            }
+            $openedBy = $this->dao->findById($oldLib->project)->from(TABLE_PROJECT)->fetch('openedBy');
+            if($lib->acl == 'private' and $lib->acl == 'custom') $lib->users .= ',' . $libCreatedBy ? $libCreatedBy : $openedBy;
         }
         if($oldLib->acl != $lib->acl and $lib->acl == 'open') $lib->users = '';
 

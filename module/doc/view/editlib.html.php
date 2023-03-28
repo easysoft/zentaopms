@@ -47,7 +47,7 @@
           <span class='hidden'><?php echo html::radio('type', $lang->doc->libTypeList, $lib->type);?></span>
         </td>
       </tr>
-      <tr>
+      <tr id="aclBox">
         <th><?php echo $lang->doclib->control;?></th>
         <td>
           <?php echo html::radio('acl', $lang->doclib->aclList, $lib->acl, "onchange='toggleAcl(this.value, \"lib\")'", 'block')?>
@@ -63,6 +63,7 @@
           <div class='input-group'>
             <span class='input-group-addon'><?php echo $lang->doclib->user?></span>
             <?php echo html::select('users[]', $users, $lib->users, "class='form-control picker-select' multiple")?>
+            <?php echo $this->fetch('my', 'buildContactLists', "dropdownName=users&attr=data-drop_direction='up'");?>
           </div>
         </td>
       </tr>

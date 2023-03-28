@@ -149,7 +149,7 @@ $lang->doc->api              = '接口';
 
 $lang->doc->collectAction = '收藏文档';
 
-$lang->doc->libName           = '文档库名称';
+$lang->doc->libName           = '库名称';
 $lang->doc->libType           = '库类型';
 $lang->doc->custom            = '自定义文档库';
 $lang->doc->customAB          = '自定义库';
