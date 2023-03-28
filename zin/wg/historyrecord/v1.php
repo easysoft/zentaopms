@@ -3,7 +3,7 @@ namespace zin;
 
 class historyrecord extends wg
 {
-    protected static $defineProps = array('actions:array,users:array,methodName:string');
+    protected static $defineProps = 'actions:array,users:array,methodName:string';
 
     private function buildHistoriesList()
     {
@@ -12,7 +12,7 @@ class historyrecord extends wg
         $users      = $this->prop('users');
         $methodName = $this->prop('methodName');
         $historiesListView = h::ol(setClass('histories-list'));
-        $i = 1;
+        $i = 0;
         foreach($actions as $action)
         {
             $canEditComment = (!isset($canBeChanged) || !empty($canBeChanged))
@@ -21,14 +21,15 @@ class historyrecord extends wg
                 && strpos(',view,objectlibs,viewcard,', ",$methodName,") !== false
                 && $action->actor == $app->user->account
                 && common::hasPriv('action', 'editComment');
-                $action->actor = zget($users, $action->actor);
+
+            $action->actor = zget($users, $action->actor);
 
             if($action->action == 'assigned' || $action->action == 'toaudit') $action->extra = zget($users, $action->extra);
             if(strpos($action->actor, ':') !== false) $action->actor = substr($action->actor, strpos($action->actor, ':') + 1);
 
             $actionItemView = li
             (
-                set::value($i++),
+                set::value(++$i),
                 html($app->loadTarget('action')->renderAction($action))
             );
 
@@ -42,6 +43,18 @@ class historyrecord extends wg
                         set::type('button'),
                         set::title($lang->switchDisplay),
                         h::i(setClass('change-show icon icon-plus icon-sm')),
+                        on::click(<<<EXPAND
+                        var changeBox = document.querySelector("#changeBox$i");
+                        var icon = e.target.querySelector('.icon');
+                        console.log(icon);
+                        icon.classList.toggle('icon-plus');
+                        icon.classList.toggle('icon-minus');
+                        if (icon.classList.contains('icon-plus')) {
+                            changeBox.classList.remove('show');
+                        } else {
+                            changeBox.classList.add('show');
+                        }
+                        EXPAND),
                     )
                 );
                 $actionItemView->add
@@ -50,7 +63,7 @@ class historyrecord extends wg
                     (
                         setClass('history-changes'),
                         set::id("changeBox$i"),
-                        html($app->loadTarget('action')->printChanges($action->objectType, $action->history)),
+                        html($app->loadTarget('action')->renderChanges($action->objectType, $action->history)),
                     )
                 );
             }
@@ -158,10 +171,16 @@ class historyrecord extends wg
                 button
                 (
                     setClass('btn btn-mini btn-icon btn-reverse'),
+                    setStyle('margin-right', '4px'),
                     set::type('button'),
                     set::title($lang->reverse),
                     h::i(setClass('icon icon-arrow-up icon-sm')),
-                    setStyle('margin-right', '4px'),
+                    on::click(<<<REVERSE
+                    document.querySelector('.histories-list').classList.toggle('sort-reverse');
+                    var icon = e.target.querySelector('.icon');
+                    icon.classList.toggle('icon-arrow-up');
+                    icon.classList.toggle('icon-arrow-down');
+                    REVERSE),
                 ),
                 button
                 (
@@ -169,6 +188,22 @@ class historyrecord extends wg
                     set::type('button'),
                     set::title($lang->switchDisplay),
                     h::i(setClass('icon icon-plus icon-sm')),
+                    on::click(<<<EXPANDALL
+                    var icon = e.target.querySelector('.icon');
+                    var isExpand = icon.classList.contains('icon-plus');
+                    var changeBoxs = document.querySelectorAll('[id^="changeBox"]');
+                    if(isExpand) {
+                        changeBoxs.forEach(function(box) {
+                            box.classList.add('show');
+                        });
+                    } else {
+                        changeBoxs.forEach(function(box) {
+                            box.classList.remove('show');
+                        });
+                    }
+                    icon.classList.toggle('icon-plus');
+                    icon.classList.toggle('icon-minus');
+                    EXPANDALL),
                 ),
                 button
                 (
