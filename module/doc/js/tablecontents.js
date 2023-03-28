@@ -19,7 +19,8 @@ $(function()
 
     var imgObj = {
         'annex': 'annex',
-        'lib': 'wiki-file-lib'
+        'lib': 'wiki-file-lib',
+        'api': 'interface'
     }
 
     $('#fileTree').tree(
