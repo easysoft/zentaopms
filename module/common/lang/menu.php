@@ -539,26 +539,24 @@ $lang->doc->menu->api['subMenu']->index  = array('link' => "{$lang->doc->apiDoc}
 $lang->doc->menu->api['subMenu']->struct = array('link' => "{$lang->doc->apiStruct}|api|struct|libID=%s", 'alias' => 'createstruct,editstruct');
 
 /* Report menu.*/
-$lang->report->menu             = new stdclass();
-$lang->report->menu->screen     = array('link' => "{$lang->screen->common}|screen|browse");
-$lang->report->menu->pivotTable = array('link' => "{$lang->report->pivotTable}|report|productsummary", 'alias' => 'projectdeviation,bugcreate,workload,bugassign');
+$lang->report->menu         = new stdclass();
+$lang->report->menu->screen = array('link' => "{$lang->screen->common}|screen|browse");
+$lang->report->menu->pivot  = array('link' => "{$lang->pivot->common}|pivot|preview");
 
 /* Report menu order. */
 $lang->report->menuOrder[5]  = 'screen';
-$lang->report->menuOrder[10] = 'pivotTable';
+$lang->report->menuOrder[10] = 'pivot';
 
-/*
-$lang->report->menu->pivotTable['subMenu'] = new stdclass();
-$lang->report->menu->pivotTable['subMenu']->product = array('link' => "{$lang->product->common}|report|productsummary");
-$lang->report->menu->pivotTable['subMenu']->project = array('link' => "{$lang->project->common}|report|projectdeviation");
-$lang->report->menu->pivotTable['subMenu']->test    = array('link' => "{$lang->qa->common}|report|bugcreate", 'alias' => 'bugassign');
-$lang->report->menu->pivotTable['subMenu']->staff   = array('link' => "{$lang->system->common}|report|workload");
+$lang->report->menu->pivot['subMenu'] = new stdclass();
+$lang->report->menu->pivot['subMenu']->product = array('link' => "{$lang->product->common}|pivot|preview|diemsnion=&group=product");
+$lang->report->menu->pivot['subMenu']->project = array('link' => "{$lang->project->common}|pivot|preview|dimension=&group=project");
+$lang->report->menu->pivot['subMenu']->test    = array('link' => "{$lang->qa->common}|pivot|preview|dimension=&group=test");
+$lang->report->menu->pivot['subMenu']->staff   = array('link' => "{$lang->system->common}|pivot|preview|dimension=&group=staff");
 
-$lang->report->menu->pivotTable['menuOrder'][5]  = 'product';
-$lang->report->menu->pivotTable['menuOrder'][10] = 'project';
-$lang->report->menu->pivotTable['menuOrder'][15] = 'test';
-$lang->report->menu->pivotTable['menuOrder'][20] = 'staff';
- */
+$lang->report->menu->pivot['menuOrder'][5]  = 'product';
+$lang->report->menu->pivot['menuOrder'][10] = 'project';
+$lang->report->menu->pivot['menuOrder'][15] = 'test';
+$lang->report->menu->pivot['menuOrder'][20] = 'staff';
 
 /* Company menu.*/
 $lang->company->menu              = new stdclass();
