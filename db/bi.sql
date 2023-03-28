@@ -1,5 +1,4 @@
-CREATE TABLE `zt_chart_back` LIKE `zt_chart`;
-INSERT INTO `zt_chart_back` SELECT * FROM `zt_chart`;
+CREATE TABLE `zt_chart_back` LIKE `zt_chart`; INSERT INTO `zt_chart_back` SELECT * FROM `zt_chart`;
 
 ALTER TABLE `zt_chart` MODIFY `group` varchar(255) NOT NULL;
 ALTER TABLE `zt_chart` ADD `stage` enum('draft','published') NOT NULL DEFAULT 'draft' AFTER `sql`;
@@ -13,13 +12,13 @@ ALTER TABLE `zt_screen` ADD `builtin` enum('0', '1') NOT NULL DEFAULT '0' AFTER 
 
 UPDATE `zt_screen` SET `builtin` = '1', `status` = 'published';
 
-UPDATE `zt_grouppriv` SET `module` = 'screen' where `module` = 'dashboard';
-UPDATE `zt_grouppriv` SET `module` = 'pivot', `method` = 'create' where `module` = 'report' and (`method` = 'custom' or `method` = 'saveReport') ;
-UPDATE `zt_grouppriv` SET `module` = 'pivot', `method` = 'delete' where `module` = 'report' and `method` = 'deleteReport';
-UPDATE `zt_grouppriv` SET `module` = 'pivot', `method` = 'edit' where `module` = 'report' and `method` = 'editReport';
-UPDATE `zt_grouppriv` SET `module` = 'pivot', `method` = 'preview' where `module` = 'report' and `method` = 'show';
-UPDATE `zt_grouppriv` SET `module` = 'pivot', `method` = 'design' where `module` = 'report' and `method` = 'useReport';
-UPDATE `zt_grouppriv` SET `module` = 'pivot', `method` = 'export' where `module` = 'report' and `method` = 'crystalExport';
+REPLACE `zt_grouppriv` SET `module` = 'screen' where `module` = 'dashboard';
+REPLACE `zt_grouppriv` SET `module` = 'pivot', `method` = 'create' where `module` = 'report' and (`method` = 'custom' or `method` = 'saveReport') ;
+REPLACE `zt_grouppriv` SET `module` = 'pivot', `method` = 'delete' where `module` = 'report' and `method` = 'deleteReport';
+REPLACE `zt_grouppriv` SET `module` = 'pivot', `method` = 'edit' where `module` = 'report' and `method` = 'editReport';
+REPLACE `zt_grouppriv` SET `module` = 'pivot', `method` = 'preview' where `module` = 'report' and `method` = 'show';
+REPLACE `zt_grouppriv` SET `module` = 'pivot', `method` = 'design' where `module` = 'report' and `method` = 'useReport';
+REPLACE `zt_grouppriv` SET `module` = 'pivot', `method` = 'export' where `module` = 'report' and `method` = 'crystalExport';
 
 CREATE TABLE `zt_pivot`  (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,

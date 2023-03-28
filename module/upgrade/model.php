@@ -8060,7 +8060,7 @@ class upgradeModel extends model
         }
 
         $dataview = new stdclass();
-        $dataview->group = $builtInModuleID;
+        $dataview->group       = $builtInModuleID;
         $dataview->createdBy   = 'system';
         $dataview->createdDate = helper::now();
 
@@ -8508,12 +8508,20 @@ class upgradeModel extends model
         return true;
     }
 
+    /**
+     * Create default group.
+     * 
+     * @param  string    $type 
+     * @access public
+     * @return void
+     */
     public function createDefaultGroup($type)
     {
         $firstGroup = new stdclass();
         $firstGroup->root   = 1;
         $firstGroup->type   = $type;
         $firstGroup->parent = 0;
+        $firstGroup->grade  = 1;
         $firstGroup->name   = $this->lang->upgrade->defaultGroup;
 
         $this->dao->insert(TABLE_MODULE)->data($firstGroup)->autoCheck()->exec();
@@ -8526,6 +8534,7 @@ class upgradeModel extends model
         $secondGroup->root   = 1;
         $secondGroup->type   = $type;
         $secondGroup->parent = $firstGroupID;
+        $secondGroup->grade  = 2;
         $secondGroup->name   = $this->lang->upgrade->defaultGroup;
 
         $this->dao->insert(TABLE_MODULE)->data($secondGroup)->autoCheck()->exec();
@@ -8544,7 +8553,7 @@ class upgradeModel extends model
      */
     public function processChart()
     {
-        $charts               = $this->dao->select('*')->from(TABLE_CHART)->fetchAll('id');
+        $charts               = $this->dao->select('*')->from(TABLE_CHART)->where('deleted')->eq(0)->fetchAll('id');
         $dashboardLayoutPairs = $this->dao->select('id, layout')->from(TABLE_DASHBOARD)->fetchPairs();
 
         $dataviewList = $this->dao->select('t1.code,t1.view,t1.fields')->from(TABLE_DATAVIEW)->alias('t1')
@@ -8552,42 +8561,52 @@ class upgradeModel extends model
             ->where('t2.id')->in(array_keys($charts))
             ->fetchAll('code');
 
-        $defaultGroupID = $this->createDefaultGroup('chart');
+        $defaultChartGroupID = $this->createDefaultGroup('chart');
 
-        $data = new stdclass();
         foreach($charts as $chart)
         {
-            $data->dimension = 1;
-            $data->group     = $defaultGroupID;
-            $data->stage     = 'published';
-            $data->step      = 4;
-
-            $settings = json_decode($chart->settings, true);
-
-            $filters = array();
-            if(isset($settings['filter']))
-            {
-                $filters = $settings['filter'];
-                unset($settings['filter']);
-            }
-
-            $data->settings = json_encode($settings);
-            $data->filters  = json_encode($filters);
-
-            if(isset($dataviewList[$chart->dataset]))
-            {
-                $dataview     = $dataviewList[$chart->dataset];
-                $data->sql    = 'SELECT * FROM ' . $dataview->view;
-                $data->fields = isset($dataview->fields) ? $dataview->fields : '';
-            }
-
             if($chart->type == 'table')
             {
-                $pivotID = $this->upgradeToPivotTable($chart);
-
+               $pivotID = $this->upgradeToPivotTable($chart);
             }
             else
             {
+                $data = new stdclass();
+                $data->dimension = 1;
+                $data->group     = $defaultChartGroupID;
+                $data->stage     = 'published';
+                $data->step      = 4;
+                $data->type      = $chart->type == 'bar' ? 'cluBarX' : $chart->type;
+
+                $settings = json_decode($chart->settings);
+
+                if($settings)
+                {
+                    $settings->type = $data->type;
+
+                    $filters = array();
+                    if(isset($settings->filter))
+                    {
+                        $filters = $settings->filter;
+                        unset($settings->filter);
+                    }
+                }
+
+                $data->settings = json_encode($settings);
+                $data->filters  = json_encode($filters);
+
+                if(isset($dataviewList[$chart->dataset]))
+                {
+                    $dataview     = $dataviewList[$chart->dataset];
+                    $data->sql    = 'SELECT * FROM ' . $dataview->view;
+                    $data->fields = isset($dataview->fields) ? $dataview->fields : '';
+                }
+                else
+                {
+                    $fieldSettings = $this->getFieldSettings($chart->sql);
+                    $data->fields = json_encode($fieldSettings);
+                }
+
                 $this->dao->update(TABLE_CHART)->data($data)->autoCheck()->where('id')->eq($chart->id)->exec();
             }
 
@@ -8624,18 +8643,23 @@ class upgradeModel extends model
      */
     public function upgradeToPivotTable($table)
     {
-        static $defaulGroupID;
-        if(!isset($defaultGroupID)) $defaultGroupID = $this->createDefaultGroup('pivot');
+        static $defaultPivotGroupID;
+
+        if(!$defaultPivotGroupID) $defaultPivotGroupID = $this->createDefaultGroup('pivot');
 
         $pivot = new stdclass();
         $pivot->dimension   = 1;
-        $pivot->group       = $defaultGroupID;
-        $pivot->name        = $table->name;
+        $pivot->group       = $defaultPivotGroupID;
         $pivot->stage       = 'published';
         $pivot->desc        = $table->desc;
         $pivot->step        = 4;
+        $pivot->sql         = $table->sql;
         $pivot->createdBy   = $table->createdBy;
         $pivot->createdDate = $table->createdDate;
+
+        $name = array();
+        $name['zh-cn'] = $table->name;
+        $pivot->name   = json_encode($name);
 
         $pivotSettings = new stdclass();
         $tableSettings = json_decode($table->settings);
@@ -8666,6 +8690,10 @@ class upgradeModel extends model
             $pivot->settings = json_encode($pivotSettings);
             $pivot->filters  = json_encode($tableSettings->filter);
         }
+
+        /* Process fieldSettings. */
+        $fieldSettings = $this->getFieldSettings($table->sql);
+        $pivot->fields = json_encode($fieldSettings);
 
         $this->dao->insert(TABLE_PIVOT)->data($pivot)->autoCheck()->exec();
         $pivotID = $this->dao->lastInsertID();
@@ -8735,21 +8763,25 @@ class upgradeModel extends model
             $data->group = implode(',', $groups);
 
             /* Process vars. */
-            $vars    = json_decode($report->vars);
-            $filters = array();
-            foreach($vars->varName as $index => $varName)
+            $vars = json_decode($report->vars);
+            if($vars)
             {
-                $filter = new stdclass();
-                $filter->from       = 'query';
-                $filter->field      = $varName;
-                $filter->name       = $vars->showName[$index];
-                $filter->type       = $vars->requestType[$index];
-                $filter->typeOption = $filter->type == 'select' ? $vars->selectList[$index] : '';
-                $filter->default    = $vars->default[$index];
+                $filters = array();
+                foreach($vars->varName as $index => $varName)
+                {
+                    $filter = new stdclass();
+                    $filter->from       = 'query';
+                    $filter->field      = $varName;
+                    $filter->name       = $vars->showName[$index];
+                    $filter->type       = $vars->requestType[$index];
+                    $filter->typeOption = $filter->type == 'select' ? $vars->selectList[$index] : '';
+                    $filter->default    = $vars->default[$index];
 
-                $filters[] = $filter;
+                    $filters[] = $filter;
+                }
+                $data->filters = json_encode($filters);
+
             }
-            $data->filters = json_encode($filters);
 
             /* Process settings. */
             $params   = json_decode($report->params);
@@ -8775,7 +8807,13 @@ class upgradeModel extends model
             $settings->columns = $columns;
 
             /* Process fieldSettings. */
-            $fieldSettings = $this->getFieldSettings($data->sql);
+
+            $sql = $data->sql;
+            if(!empty($filters))
+            {
+                foreach($filters as $filter) $sql = str_replace('$' . $filter->field, "'{$filter->default}'", $sql);
+            }
+            $fieldSettings = $this->getFieldSettings($sql);
 
             $data->settings = json_encode($settings);
             $data->fields   = json_encode($fieldSettings);
