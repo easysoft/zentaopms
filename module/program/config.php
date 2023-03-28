@@ -165,7 +165,7 @@ $config->program->productView->dtable->fieldList['closedReqRate']['minWidth'] = 
 $config->program->productView->dtable->fieldList['closedReqRate']['type']     = 'circleProgress';
 $config->program->productView->dtable->fieldList['closedReqRate']['sortType'] = true;
 
-$config->program->productView->dtable->fieldList['planCount']['name']     = 'planCount';
+$config->program->productView->dtable->fieldList['planCount']['name']     = 'plans';
 $config->program->productView->dtable->fieldList['planCount']['title']    = $lang->productplan->shortCommon;
 $config->program->productView->dtable->fieldList['planCount']['width']    = 60;
 $config->program->productView->dtable->fieldList['planCount']['type']     = 'format';
@@ -183,7 +183,7 @@ $config->program->productView->dtable->fieldList['testCaseCoverRate']['minWidth'
 $config->program->productView->dtable->fieldList['testCaseCoverRate']['type']     = 'circleProgress';
 $config->program->productView->dtable->fieldList['testCaseCoverRate']['sortType'] = true;
 
-$config->program->productView->dtable->fieldList['bugActivedCount']['name']     = 'bugActivedCount';
+$config->program->productView->dtable->fieldList['bugActivedCount']['name']     = 'unResolvedBugs';
 $config->program->productView->dtable->fieldList['bugActivedCount']['title']    = $lang->program->bugActivedCount;
 $config->program->productView->dtable->fieldList['bugActivedCount']['minWidth'] = 60;
 $config->program->productView->dtable->fieldList['bugActivedCount']['type']     = 'format';
@@ -223,11 +223,11 @@ $config->program->projectView->dtable->fieldList['status']['type']      = 'statu
 $config->program->projectView->dtable->fieldList['status']['sortType']  = true;
 $config->program->projectView->dtable->fieldList['status']['statusMap'] = $lang->program->statusList;
 
-$config->program->projectView->dtable->fieldList['PMName']['name']     = 'PMName';
-$config->program->projectView->dtable->fieldList['PMName']['title']    = $lang->program->PM;
-$config->program->projectView->dtable->fieldList['PMName']['minWidth'] = 80;
-$config->program->projectView->dtable->fieldList['PMName']['type']     = 'avatarBtn';
-$config->program->projectView->dtable->fieldList['PMName']['sortType'] = true;
+$config->program->projectView->dtable->fieldList['PM']['name']     = 'PM';
+$config->program->projectView->dtable->fieldList['PM']['title']    = $lang->program->PM;
+$config->program->projectView->dtable->fieldList['PM']['minWidth'] = 80;
+$config->program->projectView->dtable->fieldList['PM']['type']     = 'avatarBtn';
+$config->program->projectView->dtable->fieldList['PM']['sortType'] = true;
 
 $config->program->projectView->dtable->fieldList['budget']['name']     = 'budget';
 $config->program->projectView->dtable->fieldList['budget']['title']    = $lang->program->budget;

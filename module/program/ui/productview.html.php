@@ -3,124 +3,153 @@ namespace zin;
 
 $cols = array_values($config->program->productView->dtable->fieldList);
 
-$data = array();
+$totalStories = 0;
+$hasProduct   = false;
+$linesCount   = 0;
+$data         = array();
+foreach($productStructure as $programID => $program)
+{
+    /* TODO attach program lines */
+    if(isset($programLines[$programID]))
+    {
+        foreach($programLines[$programID] as $lineID => $lineName)
+        {
+            if(!isset($program[$lineID]))
+            {
+                $program[$lineID] = array();
+                $program[$lineID]['product']  = '';
+                $program[$lineID]['lineName'] = $lineName;
+            }
+        }
+    }
 
-$i    = 100;
-$item = new stdClass();
+    /* ALM mode with more data. */
+    if(isset($program['programName']) and $config->systemMode == 'ALM')
+    {
+        $item = new stdClass();
 
-$item->id                = "$i";
-$item->name              = 'parent';
-$item->type              = 'program';
-$item->asParent          = true;
-$item->PM                = '管理员';
-$item->feedback          = 200;
-$item->unclosedReqCount  = 100;
-$item->closedReqRate     = intval(800 / $i);
-$item->planCount         = $i;
-$item->executionCount    = $i;
-$item->testCaseCoverRate = intval(800 / $i);
-$item->bugActivedCount   = $i;
-$item->fixedRate         = intval(800 / $i);
-$item->releaseCount      = $i;
-$item->releaseCountBefore= 102;
+        $item->programPM = '';
+        if(!empty($program['programPM']))
+        {
+            $programPM = $program['programPM'];
+            $userName  = zget($users, $programPM);
 
-$data[] = $item;
+            $userID = isset($userIdPairs[$programPM]) ? $userIdPairs[$programPM] : '';
 
-$i    = 101;
-$item = new stdClass();
+            $item->programPM = $userName;
+            $item->PM        = $userName;
+            $item->PMAccount = $userName;
+            $item->PMAvatar  = $usersAvatar[$programPM];
+        }
 
-$item->id                = "$i";
-$item->name              = 'ProductLine';
-$item->type              = 'productLine';
-$item->asParent          = true;
-$item->parent            = "100";
-$item->PM                = '管理员';
-$item->feedback          = 200;
-$item->unclosedReqCount  = 100;
-$item->closedReqRate     = intval(800 / $i);
-$item->planCount         = $i;
-$item->executionCount    = $i;
-$item->testCaseCoverRate = intval(800 / $i);
-$item->bugActivedCount   = $i;
-$item->fixedRate         = intval(800 / $i);
-$item->releaseCount      = $i;
-$item->releaseCountBefore= 102;
+        $totalStories = $program['finishClosedStories'] + $program['unclosedStories'];
 
-$data[] = $item;
+        $item->name              = $program['programName'];
+        $item->id                = 'program-' . $programID;
+        $item->type              = 'program';
+        $item->level             = 1;
+        $item->asParent          = true;
+        $item->feedback          = rand(0, 100);
+        $item->programName       = $program['programName'];
+        $item->draftStories      = $program['draftStories'];
+        $item->activeStories     = $program['activeStories'];
+        $item->changingStories   = $program['changingStories'];
+        $item->reviewingStories  = $program['reviewingStories'];
+        $item->closedReqRate     = ($totalStories == 0 ? 0 : round($program['finishClosedStories'] / $totalStories, 3) * 100);
+        $item->unResolvedBugs    = $program['unResolvedBugs'];
+        $item->fixedRate         = (($program['unResolvedBugs'] + $program['fixedBugs']) == 0 ? 0 : round($program['fixedBugs'] / ($program['unResolvedBugs'] + $program['fixedBugs']), 3) * 100);
+        $item->plans             = $program['plans'];
+        $item->releaseCount      = $program['releases'];
+        $item->releaseCountOld   = rand(0, 10);
+        $item->testCaseCoverRate = rand(0, 100);
+        /* TODO attach extend fields. */
 
-$i    = 102;
-$item = new stdClass();
+        $data[] = $item;
+    }
 
-$item->id                = "$i";
-$item->name              = 'Product';
-$item->type              = 'product';
-$item->asParent          = false;
-$item->parent            = "101";
-$item->PM                = '管理员';
-$item->feedback          = 200;
-$item->unclosedReqCount  = 100;
-$item->closedReqRate     = intval(800 / $i);
-$item->planCount         = $i;
-$item->executionCount    = $i;
-$item->testCaseCoverRate = intval(800 / $i);
-$item->bugActivedCount   = $i;
-$item->fixedRate         = intval(800 / $i);
-$item->releaseCount      = $i;
-$item->releaseCountBefore= 102;
+    foreach($program as $lineID => $line)
+    {
+        /* ALM mode with Product Line. */
+        if(isset($line['lineName']) and isset($line['products']) and is_array($line['products']) and $config->systemMode == 'ALM')
+        {
+            $totalStories = (isset($line['finishClosedStories']) ? $line['finishClosedStories'] : 0) + (isset($line['unclosedStories']) ? $line['unclosedStories'] : 0);
+            $linesCount++;
 
-$data[] = $item;
+            $item = new stdClass();
+            $item->name              = $line['lineName'];
+            $item->id                = 'productLine-' . $lineID;
+            $item->type              = 'productLine';
+            $item->asParent          = true;
+            $item->feedback          = rand(0, 100);
+            $item->parent            = 'program-' . $programID;
+            $item->programName       = $line['lineName'];
+            $item->draftStories      = $line['draftStories'];
+            $item->activeStories     = $line['activeStories'];
+            $item->changingStories   = $line['changingStories'];
+            $item->reviewingStories  = $line['reviewingStories'];
+            $item->closedReqRate     = ($totalStories == 0 ? 0 : round((isset($line['finishClosedStories']) ? $line['finishClosedStories'] : 0) / $totalStories, 3) * 100);
+            $item->unResolvedBugs    = $line['unResolvedBugs'];
+            $item->fixedRate         = ((isset($line['fixedBugs']) and ($line['unResolvedBugs'] + $line['fixedBugs'] != 0)) ? round($line['fixedBugs'] / ($line['unResolvedBugs'] + $line['fixedBugs']), 3) * 100 : 0);
+            $item->plans             = $line['plans'];
+            $item->releaseCount      = isset($line['releases']) ? $line['releases'] : 0;
+            $item->releaseCountOld   = rand(0, 10);
+            $item->testCaseCoverRate = rand(0, 100);
+            /* TODO attach extend fields. */
 
-$i    = 103;
-$item = new stdClass();
+            $data[] = $item;
+        }
 
-$item->id                = "$i";
-$item->name              = 'IndProduct';
-$item->type              = 'product';
-$item->asParent          = false;
-$item->parent            = "0";
-$item->PM                = '管理员';
-$item->feedback          = 200;
-$item->unclosedReqCount  = 100;
-$item->closedReqRate     = intval(800 / $i);
-$item->planCount         = $i;
-$item->executionCount    = $i;
-$item->testCaseCoverRate = intval(800 / $i);
-$item->bugActivedCount   = $i;
-$item->fixedRate         = intval(800 / $i);
-$item->releaseCount      = $i;
-$item->releaseCountBefore= 102;
+        /* Products of Product Line. */
+        if(isset($line['products']) and is_array($line['products']))
+        {
+            foreach($line['products'] as $productID => $product)
+            {
+                $hasProduct = true;
 
-$data[] = $item;
+                $item = new stdClass();
 
-$i    = 104;
-$item = new stdClass();
+                if(!empty($product->PO))
+                {
+                    $item->PM               = zget($users, $product->PO);
+                    $item->PMAvatar         = $usersAvatar[$product->PO];
+                    $item->PMAccount        = $product->PO;
+                }
+                $totalStories = $product->stories['finishClosed'] + $product->stories['unclosed'];
 
-$item->id                = "$i";
-$item->name              = 'SubProduct';
-$item->type              = 'product';
-$item->asParent          = false;
-$item->parent            = "100";
-$item->PM                = '管理员';
-$item->feedback          = 200;
-$item->unclosedReqCount  = 100;
-$item->closedReqRate     = intval(800 / $i);
-$item->planCount         = $i;
-$item->executionCount    = $i;
-$item->testCaseCoverRate = intval(800 / $i);
-$item->bugActivedCount   = $i;
-$item->fixedRate         = intval(800 / $i);
-$item->releaseCount      = $i;
-$item->releaseCountBefore= 102;
+                $item->name              = $product->name; /* TODO replace with <a> */
+                $item->id                = $product->id;
+                $item->type              = 'product';
+                $item->programName       = $product->name; /* TODO replace with <a> */
+                $item->feedback          = rand(0, 100);
+                $item->draftStories      = $product->stories['draft'];
+                $item->activeStories     = $product->stories['active'];
+                $item->changingStories   = $product->stories['changing'];
+                $item->reviewingStories  = $product->stories['reviewing'];
+                $item->closedReqRate     = ($totalStories == 0 ? 0 : round($product->stories['finishClosed'] / $totalStories, 3) * 100);
+                $item->unResolvedBugs    = $product->unResolved;
+                $item->fixedRate         = (($product->unResolved + $product->fixedBugs) == 0 ? 0 : round($product->fixedBugs / ($product->unResolved + $product->fixedBugs), 3) * 100);
+                $item->plans             = $product->plans;
+                $item->parent            = $product->line ? "productLine-$lineID" : ($product->program ? "program-$product->program" : '');
+                $item->releaseCount      = $product->releases;
+                $item->releaseCountOld   = rand(0, 10);
+                $item->testCaseCoverRate = rand(0, 100);
+                /* TODO attach extend fields. */
 
-$data[] = $item;
+                $data[] = $item;
+            }
+        }
+    }
+}
 
-set::title('产品视角');
+$summary = sprintf($lang->product->lineSummary, $linesCount, count($productStats));
+
+set::title($lang->program->productView);
 
 featureBar
 (
-    set::current($status),
+    set::current($browseType),
     set::linkParams("status={key}&orderBy=$orderBy"),
-    (hasPriv('project', 'batchEdit') && $programType != 'bygrid' && $hasProject === true) ? item
+    (hasPriv('product', 'batchEdit') && $hasProduct === true) ? item
     (
         set::type('checkbox'),
         set::text($lang->project->edit),
@@ -160,27 +189,21 @@ toolbar
 
 js
 (
-    'window.footerGenerator = function()',
-    '{',
-        'const count = this.layout.allRows.filter((x) => x.data.type === "product").length;',
-        "const statistic = '{$summary}'.replace('%s', ' ' + count + ' ');",
-        'return [{children: statistic, className: "text-dark"}, "flex", "pager"];',
-    '}'
-);
-
-/* Render release count. */
-js
-(
 <<<RENDERCELL
+window.footerGenerator = function()
+{
+    return [{children: '{$summary}', className: "text-dark"}, "flex", "pager"];
+}
+
 window.renderReleaseCountCell = function(result, {col, row})
 {
     if(col.name !== 'releaseCount') return result;
 
-    var changed = row.data.releaseCount - row.data.releaseCountBefore;
+    var changed = row.data.releaseCount - row.data.releaseCountOld;
 
-    if(changed === 0) return result;
-    if(changed > 0) result[0] = {html: row.data.releaseCount + ' <span class="label size-sm circle primary-pale bd-primary">+' + changed + '</span>'};
-    if(changed < 0) result[0] = {html: row.data.releaseCount + ' <span class="label size-sm circle warning-pale bd-warning">' + changed + '</span>'};
+    if(changed === 0) result[0] = 0;
+    if(changed > 0)   result[0] = {html: row.data.releaseCount + ' <span class="label size-sm circle primary-pale bd-primary">+' + changed + '</span>'};
+    if(changed < 0)   result[0] = {html: row.data.releaseCount + ' <span class="label size-sm circle warning-pale bd-warning">' + changed + '</span>'};
 
     return result;
 }

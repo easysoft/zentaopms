@@ -19,8 +19,8 @@ foreach($programs as $program)
     if(!empty($program->PM))
     {
         $userName = zget($users, $program->PM);
-        $program->PMNameAvatar = $usersAvatar[$program->PM];
-        $program->PMName   = $userName;
+        $program->PMAvatar = $usersAvatar[$program->PM];
+        $program->PM       = $userName;
     }
 
     /* Calculate budget.*/
@@ -28,10 +28,7 @@ foreach($programs as $program)
     $program->budget = $program->budget != 0 ? zget($lang->project->currencySymbol, $program->budgetUnit) . ' ' . $programBudget : $lang->project->future;
 
     /* Progress. */
-    if(isset($progressList[$program->id]))
-    {
-        $program->progress = round($progressList[$program->id]);
-    }
+    if(isset($progressList[$program->id])) $program->progress = round($progressList[$program->id]);
 
     $program->invested = 0;
 
@@ -42,17 +39,10 @@ foreach($programs as $program)
     {
         if(is_object($action)) $action->name = $program->type . '_' . $action->name;
         else $action = $program->type . '_' . $action;
-        if(isset($action->items))
-        {
-            foreach($action->items as $idx => $item)
-            {
-                $action->items[$idx]->name = $program->type . '_' . $item->name;
-            }
-        }
+
+        if(isset($action->items)) foreach($action->items as $idx => $item) $action->items[$idx]->name = $program->type . '_' . $item->name;
         $program->actions[] = $action;
-
     }
-
 
     $data[] = $program;
 }
