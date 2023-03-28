@@ -970,7 +970,7 @@ class pivotModel extends model
 
         /* Build status stat. */
         $statusStat = array();
-        foreach($statuses as $storyID => $status)
+        foreach($statuses as $status)
         {
             if(!isset($statusStat[$status])) $statusStat[$status] = 0;
             $statusStat[$status] += 1;
