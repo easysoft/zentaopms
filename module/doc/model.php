@@ -9,8 +9,6 @@
  * @version     $Id: model.php 881 2010-06-22 06:50:32Z chencongzhi520 $
  * @link        http://www.zentao.net
  */
-?>
-<?php
 
 class docModel extends model
 {
@@ -203,7 +201,8 @@ class docModel extends model
             ->remove('uid,contactListMenu,libType')
             ->get();
 
-        if($lib->type == 'execution' and $lib->execution)
+        if($lib->execution) $lib->type = 'execution';
+        if($lib->type == 'execution' and $lib->execution and !$lib->project)
         {
             $execution    = $this->loadModel('execution')->getByID($lib->execution);
             $lib->project = $execution->project;
@@ -1118,7 +1117,7 @@ class docModel extends model
             }
         }
 
-        if($object->type == 'project' and $object->acl == 'default')
+        if($object->project and !$object->execution and $object->acl == 'default')
         {
             $stakeHolders = array();
             $project      = $this->loadModel('project')->getById($object->project);

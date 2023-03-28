@@ -40,9 +40,6 @@ class doc extends control
         $this->app->loadClass('pager', $static = true);
         $pager = new pager(0, 5, 1);
 
-        $actionURL = $this->createLink('doc', 'browse', "lib=0&browseType=bySearch&queryID=myQueryID");
-        $this->doc->buildSearchForm(0, array(), 0, $actionURL, 'index');
-
         $this->view->title      = $this->lang->doc->common . $this->lang->colon . $this->lang->doc->index;
         $this->view->position[] = $this->lang->doc->index;
 
@@ -155,8 +152,8 @@ class doc extends control
         if($type == 'product') $objects = $this->product->getPairs();
         if($type == 'project')
         {
-            $objects    = $this->project->getPairsByProgram();
-            $executions = $this->execution->getList($objectID);
+            $objects = $this->project->getPairsByProgram();
+            if($this->app->tab == 'doc') $executions = $this->execution->getList($objectID);
         }
         if($type == 'execution')
         {
