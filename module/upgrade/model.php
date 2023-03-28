@@ -750,9 +750,7 @@ class upgradeModel extends model
                 $this->processFeedbackModule();
                 break;
             //case 'biupgrade':
-            //    $this->addDefaultModules4BI('chart');
-            //    $modules = $this->addDefaultModules4BI('report');
-            //    $this->processReportModules($modules);
+            //    $this->loadModel('upgrade')->createDefaultDimension();
             //    $this->processDataset();
         }
     }
@@ -8199,14 +8197,8 @@ class upgradeModel extends model
      * @access public
      * @return bool
      */
-    public function processReportModules($modules)
+    public function createDefaultDimension()
     {
-        foreach($modules as $code => $module)
-        {
-            if(!$code || !$module) continue;
-            $this->dao->update(TABLE_REPORT)->set("`module` = REPLACE(`module`, '$code', $module)")->exec();
-        }
-
         /* Create default dimension. */
         $this->app->loadLang('dimension');
         $dimension              = new stdclass();
@@ -8216,24 +8208,10 @@ class upgradeModel extends model
         $dimension->createdDate = helper::now();
 
         $this->dao->insert(TABLE_DIMENSION)->data($dimension)->exec();
+        $dimensionID = $this->dao->lastInsertID();
 
-        return !dao::isError();
-    }
-
-    /**
-     * Process pivot modules.
-     *
-     * @param  array  $modules
-     * @access public
-     * @return bool
-     */
-    public function processPivotModules($modules)
-    {
-        foreach($modules as $code => $module)
-        {
-            if(!$code || !$module) continue;
-            $this->dao->update(TABLE_PIVOT)->set("`group` = REPLACE(`group`, '$code', $module)")->exec();
-        }
+        $this->loadModel('upgrade')->addDefaultModules4BI('chart', $dimensionID);
+        $this->loadModel('upgrade')->addDefaultModules4BI('pivot', $dimensionID);
 
         return !dao::isError();
     }
