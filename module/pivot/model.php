@@ -47,7 +47,7 @@ class pivotModel extends model
         $now  = date('Y-m-d');
         $preValue = 0;
         $setsDate = array_keys($sets);
-        foreach($dateList as $i => $date)
+        foreach($dateList as $date)
         {
             $date  = date('Y-m-d', strtotime($date));
             if($date > $now) break;
