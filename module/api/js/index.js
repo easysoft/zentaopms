@@ -22,11 +22,11 @@ $(document).ready(function()
         data: treeData,
         itemCreator: function($li, item)
         {
-            var libClass = 'lib';
+            var libClass = item.type == 'api' ? 'lib' : '';
             var hasChild = item.children ? !!item.children.length : false;
             var $item = '<a href="###" style="position: relative" data-has-children="' + hasChild + '" title="' + item.name + '" data-id="' + item.id + '" class="' + libClass + '" data-type="' + item.type + '">';
             $item += '<div class="text h-full w-full flex-start overflow-hidden">';
-            if(libClass == 'lib') $item += '<div class="img-lib"></div>';
+            if(libClass == 'lib') $item += '<div class="img-lib" style="background-image:url(static/svg/interfacelib.svg)"></div>';
             $item += '<span style="padding-left: 5px;">';
             $item += item.name
             $item += '</span>';
@@ -42,6 +42,7 @@ $(document).ready(function()
 
     $('li.has-list > ul, #fileTree').addClass("menu-active-primary menu-hover-primary");
 
+        console.log(linkParams)
     $('#fileTree').on('mousemove', 'a', function()
     {
         if($(this).data('type') == 'annex') return;
@@ -65,8 +66,6 @@ $(document).ready(function()
 
         if(isLib)
         {
-            if($(this).data('type') == 'annex') return false;
-
             libID    = moduleID;
             moduleID = 0;
         }
@@ -75,7 +74,7 @@ $(document).ready(function()
             libID = $(this).closest('.lib').data('id');
         }
         linkParams = linkParams.replace('%s', '&libID=' + libID + '&moduleID=' + moduleID);
-        location.href = createLink('doc', 'tableContents', linkParams);
+        location.href = createLink('api', 'index', linkParams);
     });
 });
 

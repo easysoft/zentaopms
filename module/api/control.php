@@ -37,6 +37,7 @@ class api extends control
      */
     public function index($objectType = 'nolink', $objectID = 0, $libID = 0, $moduleID = 0, $apiID = 0, $version = 0, $release = 0, $appendLib = 0, $browseType = '', $param = 0)
     {
+        if(empty($objectType)) $objectType = 'nolink';
         /* Get all api doc libraries. */
         $libs = $this->doc->getApiLibs($appendLib, $objectType, $objectID);
         if($libID == 0 and !empty($libs))
