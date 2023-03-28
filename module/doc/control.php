@@ -153,7 +153,11 @@ class doc extends control
         if($type == 'project')
         {
             $objects = $this->project->getPairsByProgram();
-            if($this->app->tab == 'doc') $executions = $this->execution->getList($objectID);
+            if($this->app->tab == 'doc')
+            {
+                $executions = $this->execution->getList($objectID);
+                $this->view->project = $this->project->getById($objectID);
+            }
         }
         if($type == 'execution')
         {
@@ -1449,6 +1453,9 @@ class doc extends control
                 }
             }
         }
-        return print(html::select('execution', $executionPairs, 0, "class='form-control' data-placeholder='{$this->lang->doclib->tip->selectExecution}'"));
+
+        $project  = $this->project->getById($projectID);
+        $disabled = $project->multiple ? '' : 'disabled';
+        return print(html::select('execution', $executionPairs, 0, "class='form-control' data-placeholder='{$this->lang->doclib->tip->selectExecution}' $disabled"));
     }
 }
