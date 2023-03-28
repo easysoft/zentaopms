@@ -109,13 +109,14 @@ class personnelTest
     }
 
     /**
-     * getUserEffortHoursTest
+     * GetUserHoursTest
      *
-     * @param mixed $projectID
+     * @param  mixed  $projectID
+     * @param  array  $accounts
      * @access public
      * @return void
      */
-    public function getUserEffortHoursTest($projectID)
+    public function getUserHoursTest($projectID, $accounts)
     {
         global $tester;
         $projects = $tester->dao->select('id')->from(TABLE_PROJECT)->where('id')->in($projectID)->fetchall('id');
@@ -124,6 +125,17 @@ class personnelTest
             ->andWhere('deleted')->eq('0')
             ->fetchAll('id');
 
+        /* Initialize personnel related tasks. */
+        $invest = array();
+        foreach($accounts as $account)
+        {
+            $invest[$account]['createdTask']  = 0;
+            $invest[$account]['finishedTask'] = 0;
+            $invest[$account]['pendingTask']  = 0;
+            $invest[$account]['consumedTask'] = 0;
+            $invest[$account]['leftTask']     = 0;
+        }
+
         $userTasks = array();
 
         foreach($tasks as $task)
@@ -131,23 +143,23 @@ class personnelTest
             if($task->openedBy && isset($invest[$task->openedBy]))
             {
                 $invest[$task->openedBy]['createdTask'] += 1;
-                $userTasks[$task->openedBy][$task->id]    = $task->id;
+                $userTasks[$task->openedBy][$task->id]   = $task->id;
             }
 
             if($task->finishedBy && isset($invest[$task->finishedBy]))
             {
                 $invest[$task->finishedBy]['finishedTask'] += 1;
-                $userTasks[$task->finishedBy][$task->id]     = $task->id;
+                $userTasks[$task->finishedBy][$task->id]    = $task->id;
             }
 
             if($task->assignedTo && $task->status == 'wait' && isset($invest[$task->assignedTo]))
             {
                 $invest[$task->assignedTo]['pendingTask'] += 1;
-                $userTasks[$task->assignedTo][$task->id]    = $task->id;
+                $userTasks[$task->assignedTo][$task->id]   = $task->id;
             }
         }
 
-        $objects = $this->objectModel->getUserEffortHours($userTasks);
+        $objects = $this->objectModel->getUserHours($userTasks);
 
         if(dao::isError()) return dao::getError();
 

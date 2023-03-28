@@ -376,15 +376,7 @@ class personnelModel extends model
         }
 
         /* The number of hours per person. */
-        $userHours = array();
-        if($this->config->edition != 'open')
-        {
-            $userHours = $this->getUserEffortHours($userTasks);
-        }
-        else
-        {
-            $userHours = $this->getUserHours($userTasks);
-        }
+        $userHours = $this->getUserHours($userTasks);
 
         foreach($userHours as $account => $hours)
         {
@@ -393,33 +385,6 @@ class personnelModel extends model
         }
 
         return $invest;
-    }
-
-    /**
-     * Get user hours.
-     *
-     * @param  object    $userTasks
-     * @access public
-     * @return object
-     */
-    public function getUserEffortHours($userTasks)
-    {
-        $accounts   = array();
-        $taskIDList = array();
-        foreach($userTasks as $account => $taskID)
-        {
-            $accounts[] = $account;
-            $taskIDList = array_merge($taskIDList, $taskID);
-        }
-
-        $userHours = $this->dao->select('account, sum(`left`) as `left`, sum(consumed) as consumed')->from(TABLE_EFFORT)
-            ->where('account')->in($accounts)
-            ->andWhere('deleted')->eq(0)
-            ->andWhere('objectType')->eq('task')
-            ->andWhere('objectID')->in($taskIDList)
-            ->groupBy('account')
-            ->fetchAll('account');
-        return $userHours;
     }
 
     /**
@@ -439,12 +404,31 @@ class personnelModel extends model
             $taskIDList = array_merge($taskIDList, $taskID);
         }
 
-        $userHours = $this->dao->select('account, sum(`left`) as `left`, sum(consumed) as consumed')->from(TABLE_EFFORT)
+        $effortList = $this->dao->select('id, account, objectID , `left`, consumed')->from(TABLE_EFFORT)
             ->where('account')->in($accounts)
+            ->andWhere('deleted')->eq(0)
             ->andWhere('objectID')->in($taskIDList)
             ->andWhere('objectType')->eq('task')
-            ->groupBy('account')
-            ->fetchAll('account');
+            ->orderBy('id_asc')
+            ->fetchGroup('account', 'id');
+
+        $userHours = array();
+        foreach($effortList as $account => $efforts)
+        {
+            $latestLeft = array();
+
+            $userHours[$account] = new stdclass();
+            $userHours[$account]->left     = 0;
+            $userHours[$account]->consumed = 0;
+
+            foreach($efforts as $effort)
+            {
+                $latestLeft[$effort->objectID]  = $effort->left;
+                $userHours[$account]->consumed += $effort->consumed;
+            }
+            $userHours[$account]->left = array_sum($latestLeft);
+        }
+
         return $userHours;
     }
 
