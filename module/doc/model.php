@@ -191,12 +191,15 @@ class docModel extends model
      */
     public function createLib()
     {
+        $now = helper::now();
         $lib = fixer::input('post')
             ->setForce('product', $this->post->type == 'product' ? $this->post->product : 0)
             ->setForce('project', $this->post->type == 'project' ? $this->post->project : 0)
             ->setForce('execution', $this->post->type == 'execution' ? $this->post->execution : 0)
             ->join('groups', ',')
             ->join('users', ',')
+            ->add('addedBy', $this->app->user->account)
+            ->add('addedDate', $now)
             ->remove('uid,contactListMenu,libType')
             ->get();
 
