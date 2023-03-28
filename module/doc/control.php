@@ -286,7 +286,7 @@ class doc extends control
      * @access public
      * @return void
      */
-    public function deleteLib($libID, $confirm = 'no', $type = 'lib', $from = 'objectLibs')
+    public function deleteLib($libID, $confirm = 'no', $type = 'lib', $from = 'tableContents')
     {
         if($libID == 'product' or $libID == 'execution') return;
         if($confirm == 'no')
