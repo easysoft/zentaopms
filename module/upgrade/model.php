@@ -8118,18 +8118,19 @@ class upgradeModel extends model
 
         $dataview = new stdclass();
         $dataview->group = $defaultModuleID;
-        $dataview->createdBy   = 'system';
-        $dataview->createdDate = helper::now();
 
         /* Process custom dataset. */
         $customDataset = $this->dao->select('*')->from(TABLE_DATASET)->fetchAll('id');
         foreach($customDataset as $datasetID => $dataset)
         {
-            $dataview->name   = $dataset->name;
-            $dataview->code   = 'custom_' . $datasetID;
-            $dataview->view   = 'ztv_custom_' . $datasetID;
-            $dataview->sql    = $dataset->sql;
-            $dataview->fields = $dataset->fields;
+            $dataview->name        = $dataset->name;
+            $dataview->code        = 'custom_' . $datasetID;
+            $dataview->view        = 'ztv_custom_' . $datasetID;
+            $dataview->sql         = $dataset->sql;
+            $dataview->fields      = $dataset->fields;
+            $dataview->createdBy   = $dataset->createdBy;
+            $dataview->createdDate = $dataset->createdDate;
+            $dataview->deleted     = $dataset->deleted;
 
             $this->dao->insert(TABLE_DATAVIEW)->data($dataview)->exec();
             $dataviewID = $this->dao->lastInsertID();
