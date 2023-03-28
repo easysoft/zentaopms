@@ -19,45 +19,9 @@ class h extends wg
 {
     protected static $defineProps = 'tagName, selfClose?:bool=false';
 
-    private $matchedPortals = NULL;
-
     public function getTagName()
     {
         return $this->props->get('tagName');
-    }
-
-    public function isMatch($selector)
-    {
-        $list = explode(',', $selector);
-        foreach($list as $selector)
-        {
-            $selector = trim($selector);
-            if(strpos($selector, '.') === 0 && $this->props->class->has(substr($selector, 1))) return true;
-            if(strpos($selector, '#') === 0 && $this->id() === substr($selector, 1)) return true;
-            if($selector === $this->getTagName()) return true;
-        }
-        return false;
-    }
-
-    /**
-     * Render widget to html
-     * @return string
-     */
-    public function render(&$context = NULL)
-    {
-        if($context instanceof context)
-        {
-            $this->matchedPortals = array();
-            foreach($context->portals as $portal)
-            {
-                if($this->isMatch($portal->prop('target'))) $this->matchedPortals[] = $portal->children();
-            }
-        }
-        else
-        {
-            $this->matchedPortals = NULL;
-        }
-        return parent::render($context);
     }
 
     public function isSelfClose()

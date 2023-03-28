@@ -15,12 +15,11 @@ class context
 {
     public $root;
 
-    public $portals;
+    public $portals = array();
 
     public function __construct($root)
     {
         $this->root = $root;
-        $this->portals = $root->getPortals();
     }
 
     public function isRoot($root)
@@ -30,6 +29,17 @@ class context
     }
 
     public static $map = array();
+
+    public static function addPortal($portal)
+    {
+        $context = static::current();
+        if($context)
+        {
+            $context->portals[] = $portal;
+            return true;
+        }
+        return false;
+    }
 
     public static function current()
     {

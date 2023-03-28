@@ -46,6 +46,8 @@ class wg
 
     public $displayed = false;
 
+    protected $matchedPortals = NULL;
+
     public function __construct(/* string|element|object|array|null ...$args */)
     {
         $this->props = new props();
@@ -58,6 +60,19 @@ class wg
         zin::renderInGlobal($this);
     }
 
+    public function isMatch($selector)
+    {
+        $list = explode(',', $selector);
+        foreach($list as $selector)
+        {
+            $selector = trim($selector);
+            if(strpos($selector, '.') === 0 && $this->props->class->has(substr($selector, 1))) return true;
+            if(strpos($selector, '#') === 0 && $this->id() === substr($selector, 1)) return true;
+            if($selector === $this->type()) return true;
+        }
+        return false;
+    }
+
     /**
      * Render widget to html
      * @return string
@@ -65,6 +80,12 @@ class wg
     public function render(&$context = NULL)
     {
         if($context === NULL) $context = context::create($this);
+
+        $this->matchedPortals = array();
+        foreach($context->portals as $portal)
+        {
+            if($this->isMatch($portal->prop('target'))) $this->matchedPortals[] = $portal->children();
+        }
 
         $before   = $this->buildBefore($context);
         $children = $this->build($context);
@@ -104,7 +125,7 @@ class wg
 
     protected function build()
     {
-        return $this->children();
+        return  $this->children();
     }
 
     protected function onAddBlock($child, $name)
@@ -161,7 +182,10 @@ class wg
         }
 
         if($child instanceof wg && empty($child->parent)) $child->parent = &$this;
-        if($child instanceof wg && $child->type() === 'zin\portal') $name = 'portals';
+        if($child instanceof wg && $child->type() === 'zin\portal')
+        {
+            if(context::addPortal($child)) return;
+        }
 
         if($name === 'children' && $child instanceof wg)
         {
@@ -236,19 +260,6 @@ class wg
             }
             return;
         }
-    }
-
-    public function getPortals($deep = true)
-    {
-        $portals = $this->block('portals');
-        if($deep)
-        {
-            foreach($this->children() as $child)
-            {
-                if($child instanceof wg) $portals = array_merge($portals, $child->getPortals(true));
-            }
-        }
-        return $portals;
     }
 
     public function prop($name, $defaultValue = NULL)
