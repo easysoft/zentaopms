@@ -314,7 +314,7 @@ class doc extends control
 
             $objectType = $lib->type;
             $objectID   = strpos(',product,project,execution,', ",$objectType,") !== false ? $lib->{$objectType} : 0;
-            if($this->app->tab == 'doc' and $objectType == 'execution')
+            if(in_array($this->app->tab, array('project', 'doc')) and $objectType == 'execution')
             {
                 $objectType = 'project';
                 $objectID   = $lib->project;
