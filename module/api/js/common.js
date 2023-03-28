@@ -19,23 +19,36 @@ function loadDocModule(libID)
  */
 function toggleAcl(acl, type)
 {
-    if(acl == 'custom')
-    {
-        $('#whiteListBox').removeClass('hidden');
-    }
-    else
+    if(acl == 'open')
     {
         $('#whiteListBox').addClass('hidden');
     }
-    if(type == 'lib')
+    else
     {
-        var notice  = typeof(noticeAcl[acl]) != 'undefined' ? noticeAcl[acl] : '';
-        $('#noticeAcl').html(notice);
+        $('#whiteListBox').removeClass('hidden');
+    }
+}
+
+/**
+ * Toggle lib type.
+ *
+ * @param  string $libType
+ * @access public
+ * @return void
+ */
+function toggleLibType(libType)
+{
+    if(libType == 'project')
+    {
+        $('#projectBox').removeClass('hidden');
+        $('#productBox').addClass('hidden');
+        $('#acldefault').next('.acl-tip').html($('#acldefault').next('.acl-tip').html().replace(productLang, projectLang));
     }
     else
     {
-        var notice  = typeof(noticeAcl[acl]) != 'undefined' ? noticeAcl[acl] : '';
-        $('#noticeAcl').html(notice);
+        $('#projectBox').addClass('hidden');
+        $('#productBox').removeClass('hidden');
+        $('#acldefault').next('.acl-tip').html($('#acldefault').next('.acl-tip').html().replace(projectLang, productLang));
     }
 }
 

@@ -100,3 +100,5 @@ ol, ul {margin-bottom: 0}
 
 form .table-data, #content .table-data {border: 1px solid #e2e2e3;}
 .table-data thead {background: #f9f9f9;}
+
+#aclBox .acl-tip {color: #838a9d;}
