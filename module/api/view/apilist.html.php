@@ -81,7 +81,7 @@
   <div class="detail">
     <li class="detail-title"><?php echo intval($libID) > 0 ? $lang->api->apiList : $lang->api->pageTitle;?></li>
   </div>
-  <div class="detail table-empty-tip">
+  <div class="table-empty-tip">
     <div class="notice text-muted"><?php echo (empty($libs)) ? $lang->api->noLib : $lang->api->noApi;?></div>
     <div class="no-content-button">
       <?php
