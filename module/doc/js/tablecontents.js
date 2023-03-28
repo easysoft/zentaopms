@@ -17,6 +17,12 @@ $(function()
         return dropdown;
     }
 
+    var imgObj = {
+        'annex': 'annex',
+        'lib': 'wiki-file-lib'
+    }
+    console.log(treeData);
+
     $('#fileTree').tree(
     {
         initialState: 'active',
@@ -26,9 +32,9 @@ $(function()
             var libClass = ['lib', 'annex', 'api', 'execution'].indexOf(item.type) !== -1 ? 'lib' : '';
             var hasChild = item.children ? !!item.children.length : false;
             var $item = '<a href="###" style="position: relative" data-has-children="' + hasChild + '" title="' + item.name + '" data-id="' + item.id + '" class="' + libClass + '" data-type="' + item.type + '">';
-            $item += '<div class="text h-full w-full flex-between overflow-hidden">';
-            $item += '<span>';
-            if(libClass == 'lib') $item += '<i class="icon-file-excel"></i> ';
+            $item += '<div class="text h-full w-full flex-start overflow-hidden">';
+            if(libClass == 'lib') $item += '<div class="img-lib" style="background-image:url(static/svg/' + imgObj[item.type || 'lib'] + '.svg)"></div>';
+            $item += '<span style="padding-left: 5px;">';
             $item += item.name
             $item += '</span>';
             $item += '<i class="icon icon-drop icon-ellipsis-v hidden tree-icon" data-isCatalogue="' + (item.type ? false : true) + '"></i>';
