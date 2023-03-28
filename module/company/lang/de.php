@@ -30,6 +30,8 @@ $lang->company->guest    = 'Gast Login';
 $lang->company->admins   = 'Administratoren';
 $lang->company->deleted  = 'Deleted';
 
+$lang->company->manageRole = 'Role setting';
+
 $lang->company->product   = $lang->productCommon;
 $lang->company->project   = $lang->projectCommon;
 $lang->company->execution = 'Execution';

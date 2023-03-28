@@ -36,6 +36,9 @@ js::set('confirmDelete', $lang->user->confirmDelete);
     echo html::a($link, "<i class='icon icon-plus'></i> {$lang->user->create}", '', "class='btn btn-primary create-user-btn'");
     ?>
     <?php else:?>
+      <?php if(common::hasPriv('custom', 'set')):?>
+      <?php common::printLink('custom', 'set', "module=user&field=roleList", "<i class='icon icon-cog-outline'></i> " . $lang->company->manageRole, '', "class='btn btn-link'");?>
+      <?php endif;?>
       <?php if(common::hasPriv('user', 'create') and common::hasPriv('user', 'batchCreate')):?>
       <?php
       $createUserLink      = $this->createLink('user', 'create', "dept={$deptID}");

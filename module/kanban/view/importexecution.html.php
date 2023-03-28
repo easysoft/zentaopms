@@ -62,8 +62,12 @@
             <?php printf('%03d', $execution->id);?>
           </td>
           <?php if(common::hasPriv('execution', 'view')):?>
+          <?php
+          $isClickable = true;
+          if($execution->type == 'stage') $isClickable = $this->programplan->checkLeafStage($execution->id) ? true : false;
+          ?>
           <td title='<?php echo $execution->title;?>'>
-            <a href='javascript:void(0);' onclick="locateView('execution', <?php echo $execution->id;?>)"><?php echo $execution->name;?></a>
+            <a href='javascript:void(0);' <?php echo $isClickable ? "onclick='locateView(\"execution\", $execution->id)'" : '';?>><?php echo $execution->name;?></a>
           </td>
           <?php else:?>
           <td title='<?php echo $execution->title;?>'><?php echo $execution->name;?></td>
