@@ -25,4 +25,5 @@ function changeDoclibAcl(libType)
         $('#mainContent table th').css('width', '70px');
         $('#aclBox').find('td').html($('#aclOtherBox td').html());
     }
+    $('#whiteListBox').addClass('hidden');
 }
