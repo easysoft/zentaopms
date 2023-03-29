@@ -65,6 +65,11 @@
                   <th><?php echo $lang->doc->execution?></th>
                   <td id='executionBox'><?php echo html::select('execution', $executions, '', "class='form-control chosen' data-placeholder='{$lang->doc->placeholder->execution}' onchange='loadObjectModules(\"execution\", this.value)'")?></td>
                 </tr>
+                <?php elseif($objectType == 'execution'):?>
+                <tr>
+                  <th><?php echo $lang->doc->execution;?></th>
+                  <td class='required'><?php echo html::select('execution', $objects, $objectID, "class='form-control chosen' onchange='loadObjectModules(\"execution\", this.value)'");?></td>
+                </tr>
                 <?php elseif($objectType == 'product'):?>
                 <tr>
                   <th><?php echo $lang->doc->product;?></th>

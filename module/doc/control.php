@@ -405,7 +405,8 @@ class doc extends control
                 }
                 elseif($objectType == 'execution')
                 {
-                    $objects = $this->loadModel('execution')->getPairs();
+                    $execution = $this->loadModel('execution')->getById($objectID);
+                    $objects   = $this->execution->getPairs($execution->project, 'all', "multiple,leaf,noprefix");
                 }
                 elseif($objectType == 'product')
                 {

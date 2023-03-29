@@ -2978,6 +2978,13 @@ class docModel extends model
         return $html;
     }
 
+    /**
+     * Get option menu  for libs.
+     *
+     * @param  array  $libs
+     * @access public
+     * @return array
+     */
     public function getLibsOptionMenu($libs)
     {
         $this->loadModel('tree');
