@@ -62,8 +62,10 @@
                 <tr>
                   <th><?php echo $lang->doc->project;?></th>
                   <td class='required'><?php echo html::select('project', $objects, $objectID, "class='form-control chosen' onchange=loadExecutions(this.value)");?></td>
+                  <?php if($this->app->tab == 'doc'):?>
                   <th><?php echo $lang->doc->execution?></th>
                   <td id='executionBox'><?php echo html::select('execution', $executions, '', "class='form-control chosen' data-placeholder='{$lang->doc->placeholder->execution}' onchange='loadObjectModules(\"execution\", this.value)'")?></td>
+                  <?php endif;?>
                 </tr>
                 <?php elseif($objectType == 'execution'):?>
                 <tr>
