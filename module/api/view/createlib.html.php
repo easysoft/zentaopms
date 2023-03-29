@@ -50,13 +50,13 @@
             </tr>
             <tr id='aclBox'>
               <th><?php echo $lang->api->control;?></th>
-              <td colspan='2'>
+              <td>
                 <span><?php echo html::radio('acl', $lang->api->aclList, 'open', "onchange='toggleAcl(this.value, \"lib\")'", 'block');?></span>
               </td>
             </tr>
             <tr id='whiteListBox' class='hidden'>
               <th><?php echo $lang->api->whiteList;?></th>
-              <td colspan='2'>
+              <td>
                 <div class='input-group'>
                   <span class='input-group-addon groups-addon'><?php echo $lang->api->group?></span>
                     <?php echo html::select('groups[]', $groups, '', "class='form-control chosen' multiple")?>
@@ -69,13 +69,7 @@
               </td>
             </tr>
             <tr>
-              <th><?php echo $lang->api->desc;?></th>
-              <td colspan='2'>
-                <?php echo html::textarea('desc', '', "rows='8' class='form-control kindeditor' hidefocus='true' tabindex=''");?>
-              </td>
-            </tr>
-            <tr>
-              <td class='text-center form-actions' colspan='3'><?php echo html::submitButton();?></td>
+              <td class='text-center form-actions' colspan='2'><?php echo html::submitButton();?></td>
             </tr>
           </table>
         </form>

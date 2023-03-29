@@ -56,7 +56,7 @@
             </tr>
             <tr id='whiteListBox' class='<?php echo $lib->acl != 'open' ? '' : 'hidden';?>'>
               <th><?php echo $lang->api->whiteList;?></th>
-              <td colspan='2'>
+              <td>
                 <div class='input-group'>
                   <span class='input-group-addon groups-addon'><?php echo $lang->api->group?></span>
                     <?php echo html::select('groups[]', $groups, $lib->groups, "class='form-control chosen' multiple");?>
@@ -66,12 +66,6 @@
                     <?php echo html::select('users[]', $users, $lib->users, "class='form-control chosen' multiple");?>
                     <?php echo $this->fetch('my', 'buildContactLists', "dropdownName=users&attr=data-drop_direction='up'");?>
                 </div>
-              </td>
-            </tr>
-            <tr>
-              <th><?php echo $lang->api->desc;?></th>
-              <td colspan='2'>
-                  <?php echo html::textarea('desc', $lib->desc, "rows='8' class='form-control kindeditor' hidefocus='true' tabindex=''");?>
               </td>
             </tr>
             <tr>
