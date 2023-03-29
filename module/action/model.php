@@ -901,7 +901,7 @@ class actionModel extends model
          */
         if(empty($desc))
         {
-            if($action->objectType == 'story' and $action->action == 'reviewed' and strpos($action->extra, ',') !== false)
+            if(($action->objectType == 'story' or $action->objectType == 'demand') and $action->action == 'reviewed' and strpos($action->extra, ',') !== false)
             {
                 $desc = $this->lang->$objectType->action->rejectreviewed;
             }
@@ -987,7 +987,7 @@ class actionModel extends model
                 $actionDesc = str_replace('$extra', $action->extra, $desc['main']);
             }
 
-            if($action->objectType == 'story' and $action->action == 'reviewed')
+            if(($action->objectType == 'story' or $action->objectType == 'demand') and $action->action == 'reviewed')
             {
                 if(strpos($action->extra, ',') !== false)
                 {
