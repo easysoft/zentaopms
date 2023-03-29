@@ -750,8 +750,12 @@ class upgradeModel extends model
                 $this->processFeedbackModule();
                 break;
             case 'biz8.4':
-                $this->loadModel('upgrade')->createDefaultDimension();
+                $this->createDefaultDimension();
                 $this->processDataset();
+                $this->updateDatasetPriv();
+                $this->processChart();
+                $this->processReport();
+                $this->processDashboard();
         }
     }
 
