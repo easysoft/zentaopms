@@ -55,6 +55,11 @@ $lang->doclib->tabList['custom']    = '自定义';
 
 $lang->doclib->nameList['custom'] = '自定义文档库名称';
 
+$lang->doclib->apiNameUnique = array();
+$lang->doclib->apiNameUnique['product'] = '同一' . $lang->productCommon . '下的接口库中';
+$lang->doclib->apiNameUnique['project'] = '同一' . $lang->projectCommon . '下的接口库中';
+$lang->doclib->apiNameUnique['nolink']  = '无关联接口库中';
+
 /* 字段列表。*/
 $lang->doc->common       = '文档';
 $lang->doc->id           = 'ID';

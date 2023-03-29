@@ -210,7 +210,11 @@ class docModel extends model
             $execution    = $this->loadModel('execution')->getByID($lib->execution);
             $lib->project = $execution->project;
         }
-        if($this->post->libType == 'api') $lib->type = 'api';
+        if($this->post->libType == 'api')
+        {
+            $lib->type = 'api';
+            $this->checkApiLibName($lib, $this->post->type);
+        }
 
         $lib->name = trim($lib->name); //Temporary treatment: Code for bug #15528.
         $this->dao->insert(TABLE_DOCLIB)->data($lib)->autoCheck()
@@ -228,13 +232,15 @@ class docModel extends model
      */
     public function createApiLib()
     {
+        $libType = $this->post->libType;
+
         $data = fixer::input('post')
             ->trim('name')
             ->join('groups', ',')
             ->join('users', ',')
-            ->setForce('product', $this->post->libType == 'product' ? $this->post->product : 0)
-            ->setForce('project', $this->post->libType == 'project' ? $this->post->project : 0)
-            ->setForce('execution', $this->post->libType == 'project' ? $this->post->execution : 0)
+            ->setForce('product', $libType == 'product' ? $this->post->product : 0)
+            ->setForce('project', $libType == 'project' ? $this->post->project : 0)
+            ->setForce('execution', $libType == 'project' ? $this->post->execution : 0)
             ->add('addedBy', $this->app->user->account)
             ->add('addedDate', helper::now())
             ->remove('uid,contactListMenu,libType')
@@ -248,13 +254,16 @@ class docModel extends model
         $this->lang->doclib->project = $this->lang->api->project;
         $this->lang->doclib->product = $this->lang->api->product;
 
-        if($this->post->libType == 'product') $this->config->api->createlib->requiredFields .= ',product';
-        if($this->post->libType == 'project') $this->config->api->createlib->requiredFields .= ',project';
+        if($libType == 'product') $this->config->api->createlib->requiredFields .= ',product';
+        if($libType == 'project') $this->config->api->createlib->requiredFields .= ',project';
+
+        $this->checkApiLibName($data, $libType);
+
+        if(dao::isError()) return false;
 
         $data->type = static::DOC_TYPE_API;
         $this->dao->insert(TABLE_DOCLIB)->data($data)->autoCheck()
             ->batchCheck($this->config->api->createlib->requiredFields, 'notempty')
-            ->check('name', 'unique', "`type` = '" . static::DOC_TYPE_API . "'")
             ->exec();
 
         return $this->dao->lastInsertID();
@@ -269,14 +278,15 @@ class docModel extends model
      */
     public function updateApiLib($id)
     {
-        $oldLib = $this->getLibById($id);
+        $oldLib  = $this->getLibById($id);
+        $libType = $this->post->libType;
 
         $data = fixer::input('post')
             ->trim('name')
             ->join('groups', ',')
             ->join('users', ',')
-            ->setForce('product', $this->post->libType == 'product' ? $this->post->product : 0)
-            ->setForce('project', $this->post->libType == 'project' ? $this->post->project : 0)
+            ->setForce('product', $libType == 'product' ? $this->post->product : 0)
+            ->setForce('project', $libType == 'project' ? $this->post->project : 0)
             ->remove('uid,contactListMenu,libType')
             ->get();
 
@@ -288,8 +298,13 @@ class docModel extends model
         $this->lang->doclib->project = $this->lang->api->project;
         $this->lang->doclib->product = $this->lang->api->product;
 
-        if($this->post->libType == 'product') $this->config->api->createlib->requiredFields .= ',product';
-        if($this->post->libType == 'project') $this->config->api->createlib->requiredFields .= ',project';
+        if($libType == 'product') $this->config->api->createlib->requiredFields .= ',product';
+        if($libType == 'project') $this->config->api->createlib->requiredFields .= ',project';
+
+        $data->id = $id;
+        $this->checkApiLibName($data, $libType);
+
+        if(dao::isError()) return false;
 
         $data->type = static::DOC_TYPE_API;
         $this->dao->update(TABLE_DOCLIB)->data($data)->autoCheck()
@@ -335,6 +350,17 @@ class docModel extends model
             if($lib->acl == 'private' and $lib->acl == 'custom') $lib->users .= ',' . $libCreatedBy ? $libCreatedBy : $openedBy;
         }
         if($oldLib->acl != $lib->acl and $lib->acl == 'open') $lib->users = '';
+
+        if($oldLib->type == 'api')
+        {
+            $type = 'nolink';
+            if(!empty($oldLib->product)) $type = 'product';
+            if(!empty($oldLib->project)) $type = 'project';
+            $lib->id      = $libID;
+            $lib->product = $oldLib->product;
+            $lib->project = $oldLib->project;
+            $this->checkApiLibName($lib, $type);
+        }
 
         $lib->name = trim($lib->name); //Temporary treatment: Code for bug #15528.
         $this->dao->update(TABLE_DOCLIB)->data($lib)->autoCheck()
@@ -2983,5 +3009,30 @@ class docModel extends model
             if(empty($moduleOptionMenu)) $modules["{$libID}_0"] = $libName . $moduleName;
         }
         return $modules;
+    }
+
+    /**
+     * Check api library name.
+     *
+     * @param  object $lib
+     * @param  string $libType
+     * @access public
+     * @return void
+     */
+    public function checkApiLibName($lib, $libType)
+    {
+        $sameNames = $this->dao->select('*')
+            ->from(TABLE_DOCLIB)
+            ->where('`product`')->eq($lib->product)
+            ->andWhere('`project`')->eq($lib->project)
+            ->andWhere('`name`')->eq($lib->name)
+            ->andWhere('`type`')->eq('api')
+            ->beginIF(isset($lib->id))
+            ->andWhere('`id`')->ne($lib->id)
+            ->fi()
+            ->fetchAll();
+        if(count($sameNames) > 0 and $libType == 'product') dao::$errors['name'] = $this->lang->doclib->apiNameUnique[$libType] . sprintf($this->lang->error->unique, $this->lang->doclib->name, $lib->name);
+        if(count($sameNames) > 0 and $libType == 'project') dao::$errors['name'] = $this->lang->doclib->apiNameUnique[$libType] . sprintf($this->lang->error->unique, $this->lang->doclib->name, $lib->name);
+        if(count($sameNames) > 0 and $libType == 'nolink')  dao::$errors['name'] = $this->lang->doclib->apiNameUnique[$libType] . sprintf($this->lang->error->unique, $this->lang->doclib->name, $lib->name);
     }
 }
