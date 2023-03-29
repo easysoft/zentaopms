@@ -12,12 +12,13 @@
 
 /* tree */
 .img-lib {flex: 0 0 16px; height: 14px;}
-
+a.lib {margin-bottom: 0;}
 .tree-icon {position: absolute; right: 0;}
 .tree li > a {max-width: 100%; padding: 2px;}
 .file-tree  a.show-icon > div {padding-right: 15px;}
 .file-tree .tree-text {overflow: hidden;}
 .tree li.has-input {overflow: hidden;}
+.tree li.has-list.open:before {display: none;}
 
 /* sideBar */
 
