@@ -28,16 +28,10 @@
   </div>
   <form method='post' class='load-indicator main-form form-ajax'>
     <table class='table table-form'>
-      <?php if(!empty($lib->product)):?>
+      <?php if(in_array($lib->type, array('product', 'project', 'execution'))):?>
       <tr>
-        <th class='w-130px'><?php echo $lang->doc->product?></th>
-        <td><?php echo $product->name?></td>
-      </tr>
-      <?php endif;?>
-      <?php if(!empty($lib->execution)):?>
-      <tr>
-        <th class='w-130px'><?php echo $lang->doc->execution?></th>
-        <td><?php echo $execution->name?></td>
+        <th class='w-130px'><?php echo $lang->doc->{$lib->type};?></th>
+        <td><?php echo $object->name?></td>
       </tr>
       <?php endif;?>
       <tr>

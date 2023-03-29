@@ -182,7 +182,7 @@ class doc extends control
                     $executionPairs[$id]  = $executionPrefix . $execution->name;
                 }
             }
-            if($type == 'executions') $objects = $executionPairs;
+            if($type == 'execution') $objects = $executionPairs;
         }
 
         if($type == 'execution')
@@ -248,7 +248,8 @@ class doc extends control
         }
 
         $lib = $this->doc->getLibByID($libID);
-        if(!empty($lib->product)) $this->view->product = $this->dao->select('id,name')->from(TABLE_PRODUCT)->where('id')->eq($lib->product)->fetch();
+        if(!empty($lib->product)) $this->view->object = $this->product->getByID($lib->product);
+        if(!empty($lib->project) and empty($lib->execution)) $this->view->object = $this->project->getById($lib->project);
         if(!empty($lib->execution))
         {
             $execution = $this->execution->getByID($lib->execution);
@@ -263,7 +264,7 @@ class doc extends control
                 $this->lang->doc->execution = str_replace($this->lang->executionCommon, $this->lang->project->stage, $this->lang->doc->execution);
             }
 
-            $this->view->execution = $execution;
+            $this->view->object = $execution;
         }
 
         if($lib->type == 'custom') unset($this->lang->doclib->aclList['default']);
