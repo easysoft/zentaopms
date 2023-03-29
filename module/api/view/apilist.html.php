@@ -91,7 +91,7 @@
       <?php
       if($libID && common::hasPriv('api', 'create'))
       {
-          echo html::a(helper::createLink('api', 'create', "libID={$libID}"), '<i class="icon icon-plus"></i> ' . $lang->api->createApi, '', 'class="btn btn-info"');
+          echo html::a(helper::createLink('api', 'create', "libID={$libID}&moduleID=$moduleID"), '<i class="icon icon-plus"></i> ' . $lang->api->createApi, '', 'class="btn btn-info"');
       }
       ?>
     </div>

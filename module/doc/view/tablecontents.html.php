@@ -30,14 +30,22 @@
       echo html::a($this->createLink('doc', $exportMethod, "libID=$libID&docID=0", 'html', true), "<i class='icon-export muted'> </i>" . $lang->export, '', "class='btn btn-link export' id='{$exportMethod}'");
   }
 
-  if(common::hasPriv('doc', 'createLib'))
+  if($libType != 'api')
   {
-      echo html::a(helper::createLink('doc', 'createLib', "type=$type&objectID=$objectID"), '<i class="icon icon-plus"></i> ' . $this->lang->doc->createLib, '', 'class="btn btn-secondary iframe" data-width="800px"');
-  }
+      if(common::hasPriv('doc', 'createLib'))
+      {
+          echo html::a(helper::createLink('doc', 'createLib', "type=$type&objectID=$objectID"), '<i class="icon icon-plus"></i> ' . $this->lang->doc->createLib, '', 'class="btn btn-secondary iframe" data-width="800px"');
+      }
 
-  if($libID and (common::hasPriv('doc', 'create') or (common::hasPriv('api', 'create') and !$apiLibID)))
+      if($libID and (common::hasPriv('doc', 'create') or (common::hasPriv('api', 'create') and !$apiLibID)))
+      {
+          echo $this->doc->printCreateBtn($lib, $type, $objectID, $moduleID, $apiLibID);
+      }
+  }
+  else
   {
-      echo $this->doc->printCreateBtn($lib, $type, $objectID, $moduleID, $apiLibID);
+      if(common::hasPriv('api', 'createLib')) echo html::a($this->createLink('api', 'createLib', "type=$type"), '<i class="icon icon-plus"></i> ' . $lang->api->createLib, '', 'class="btn btn-secondary iframe" data-width="800px"');
+      if(common::hasPriv('api', 'create'))    echo html::a($this->createLink('api', 'create',    "libID=$libID&moduleID=$moduleID"), '<i class="icon icon-plus"></i> ' . $lang->api->createApi, '', 'class="btn btn-primary"');
   }
   ?>
   </div>
@@ -60,7 +68,7 @@
     <div id="fileTree" class="file-tree"></div>
   </div>
   <div class="sidebar-toggle flex-center"><i class="icon icon-angle-left"></i></div>
-  <div class="main-col flex-full col overflow-visible flex-auto overflow-visible" data-min-width="500">
+  <div class="main-col flex-full overflow-visible flex-auto overflow-visible" data-min-width="500">
     <div class="cell<?php if($browseType == 'bySearch') echo ' show';?>" style="min-width: 400px" id="queryBox" data-module=<?php echo $type . $libType . 'Doc';?>></div>
     <?php
     if($browseType == 'annex')
