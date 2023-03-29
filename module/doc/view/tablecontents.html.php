@@ -31,22 +31,14 @@
       echo html::a($this->createLink('doc', $exportMethod, "libID=$libID&docID=0", 'html', true), "<i class='icon-export muted'> </i>" . $lang->export, '', "class='btn btn-link export' id='{$exportMethod}'");
   }
 
-  if($libType != 'api')
+  if(common::hasPriv('doc', 'createLib'))
   {
-      if(common::hasPriv('doc', 'createLib'))
-      {
-          echo html::a(helper::createLink('doc', 'createLib', "type=$type&objectID=$objectID"), '<i class="icon icon-plus"></i> ' . $this->lang->doc->createLib, '', 'class="btn btn-secondary iframe" data-width="800px"');
-      }
-
-      if($libID and (common::hasPriv('doc', 'create') or (common::hasPriv('api', 'create') and !$apiLibID)))
-      {
-          echo $this->doc->printCreateBtn($lib, $type, $objectID, $moduleID, $apiLibID);
-      }
+      echo html::a(helper::createLink('doc', 'createLib', "type=$type&objectID=$objectID"), '<i class="icon icon-plus"></i> ' . $this->lang->doc->createLib, '', 'class="btn btn-secondary iframe" data-width="800px"');
   }
-  else
+
+  if($libID and (common::hasPriv('doc', 'create') or (common::hasPriv('api', 'create') and !$apiLibID)))
   {
-      if(common::hasPriv('api', 'createLib')) echo html::a($this->createLink('api', 'createLib', "type=$type"), '<i class="icon icon-plus"></i> ' . $lang->api->createLib, '', 'class="btn btn-secondary iframe" data-width="800px"');
-      if(common::hasPriv('api', 'create'))    echo html::a($this->createLink('api', 'create',    "libID=$libID&moduleID=$moduleID"), '<i class="icon icon-plus"></i> ' . $lang->api->createApi, '', 'class="btn btn-primary"');
+      echo $this->doc->printCreateBtn($lib, $type, $objectID, $moduleID, $apiLibID);
   }
   ?>
   </div>
