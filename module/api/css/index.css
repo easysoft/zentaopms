@@ -1,18 +1,22 @@
 .flex {display: flex;}
 .flex-center {display: flex; justify-content: center; align-items: center;}
+.flex-start {display: flex; align-items: center;}
 #main {padding-bottom: 0;}
 
 .selectBox > button {width: 180px;}
+
 /* main-content */
-#mainContent {}
 #mainContent > #sideBar {flex: 0 0 180px; height: calc(100vh - 120px); overflow: auto;}
 #mainContent > .sidebar-toggle {flex: 0 0 16px;}
 #mainContent > .main-col {flex: auto; height: calc(100vh - 120px); overflow: auto;}
 
 /* tree */
+.img-lib {flex: 0 0 16px; height: 14px;}
+
 .tree-icon {position: absolute; right: 0;}
 .tree li > a {max-width: 100%; padding: 2px;}
-.file-tree  a.show-icon {padding-right: 15px;}
+.file-tree  a.show-icon > div {padding-right: 15px;}
+.file-tree .tree-text {overflow: hidden;}
 .tree li.has-input {overflow: hidden;}
 
 /* sideBar */

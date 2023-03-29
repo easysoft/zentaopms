@@ -83,7 +83,7 @@
 <div class="hidden" data-id="aTreeModal">
   <a href="###" data-has-children="false" title="%name%" data-id="%id%">
     <div class="text h-full w-full flex-between overflow-hidden" style="position: relative;">
-      <span>%name%</span>
+      <div>%name%</div>
       <i class="icon icon-drop icon-ellipsis-v hidden file-drop-icon" data-iscatalogue="true"></i>
     </div>
   </a>

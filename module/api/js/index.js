@@ -72,9 +72,9 @@ $(document).ready(function()
             var $item = '<a href="###" style="position: relative" data-has-children="' + hasChild + '" title="' + item.name + '" data-id="' + item.id + '" class="' + libClass + '" data-type="' + item.type + '">';
             $item += '<div class="text h-full w-full flex-start overflow-hidden">';
             if(libClass == 'lib') $item += '<div class="img-lib" style="background-image:url(static/svg/interfacelib.svg)"></div>';
-            $item += '<span style="padding-left: 5px;">';
+            $item += '<div class="tree-text" style="padding-left: 5px;">';
             $item += item.name
-            $item += '</span>';
+            $item += '</div>';
             $item += '<i class="icon icon-drop icon-ellipsis-v hidden tree-icon" data-isCatalogue="' + (item.type ? false : true) + '"></i>';
             $item += '</div>';
             $item += '</a>';
