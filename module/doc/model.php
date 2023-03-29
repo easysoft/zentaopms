@@ -47,7 +47,7 @@ class docModel extends model
             ->where('deleted')->eq(0)
             ->andWhere('type')->eq('api')
             ->beginIF(!empty($appendLib))->orWhere('id')->eq($appendLib)->fi()
-            ->beginIF(!empty($objectType) && $objectID > 0)->andWhere($objectType)->eq($objectID)->fi()
+            ->beginIF(!empty($objectType) && $objectID > 0 and $objectType != 'nolink')->andWhere($objectType)->eq($objectID)->fi()
             ->beginIF($objectType == 'nolink')
             ->andWhere('product')->eq(0)
             ->andWhere('project')->eq(0)
@@ -234,6 +234,7 @@ class docModel extends model
             ->join('users', ',')
             ->setForce('product', $this->post->libType == 'product' ? $this->post->product : 0)
             ->setForce('project', $this->post->libType == 'project' ? $this->post->project : 0)
+            ->setForce('execution', $this->post->libType == 'project' ? $this->post->execution : 0)
             ->add('addedBy', $this->app->user->account)
             ->add('addedDate', helper::now())
             ->remove('uid,contactListMenu,libType')
@@ -247,7 +248,8 @@ class docModel extends model
         $this->lang->doclib->project = $this->lang->api->project;
         $this->lang->doclib->product = $this->lang->api->product;
 
-        $this->config->api->createlib->requiredFields .= $this->post->libType == 'product' ? ',product' : ',project';
+        if($this->post->libType == 'product') $this->config->api->createlib->requiredFields .= ',product';
+        if($this->post->libType == 'project') $this->config->api->createlib->requiredFields .= ',project';
 
         $data->type = static::DOC_TYPE_API;
         $this->dao->insert(TABLE_DOCLIB)->data($data)->autoCheck()
@@ -286,8 +288,8 @@ class docModel extends model
         $this->lang->doclib->project = $this->lang->api->project;
         $this->lang->doclib->product = $this->lang->api->product;
 
-
-        $this->config->api->editlib->requiredFields .= $this->post->libType == 'product' ? ',product' : ',project';
+        if($this->post->libType == 'product') $this->config->api->createlib->requiredFields .= ',product';
+        if($this->post->libType == 'project') $this->config->api->createlib->requiredFields .= ',project';
 
         $data->type = static::DOC_TYPE_API;
         $this->dao->update(TABLE_DOCLIB)->data($data)->autoCheck()

@@ -42,13 +42,21 @@ function toggleLibType(libType)
     {
         $('#projectBox').removeClass('hidden');
         $('#productBox').addClass('hidden');
+        $('#acldefault').closest('.radio').show();
         $('#acldefault').next('.acl-tip').html($('#acldefault').next('.acl-tip').html().replace(productLang, projectLang));
+    }
+    else if(libType == 'product')
+    {
+        $('#projectBox').addClass('hidden');
+        $('#productBox').removeClass('hidden');
+        $('#acldefault').closest('.radio').show();
+        $('#acldefault').next('.acl-tip').html($('#acldefault').next('.acl-tip').html().replace(projectLang, productLang));
     }
     else
     {
         $('#projectBox').addClass('hidden');
-        $('#productBox').removeClass('hidden');
-        $('#acldefault').next('.acl-tip').html($('#acldefault').next('.acl-tip').html().replace(projectLang, productLang));
+        $('#productBox').addClass('hidden');
+        $('#acldefault').closest('.radio').hide();
     }
 }
 
