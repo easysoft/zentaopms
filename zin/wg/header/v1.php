@@ -309,7 +309,7 @@ class header extends wg
             $module       = $objectType == 'kanbanspace' ? 'kanban' : $objectType;
             if($objectType == 'effort') $createMethod = 'batchCreate';
             if($objectType == 'kanbanspace') $createMethod = 'createSpace';
-            if(strpos('|bug|execution|kanbanspace|', "|$objectType|") !== false) $needPrintDivider = true;
+            if(str_contains('|bug|execution|kanbanspace|', "|$objectType|")) $needPrintDivider = true;
 
             if(!common::hasPriv($module, $createMethod)) continue;
 

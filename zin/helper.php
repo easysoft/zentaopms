@@ -52,3 +52,18 @@ function createWg($name, $args)
 
     return class_exists($wgName) ? (new $wgName($args)) : $wgName($args);
 }
+
+if(!function_exists('str_contains'))
+{
+    /**
+     * Determine if a string contains a given substring
+     *
+     * @param string $haystack
+     * @param string $needle
+     * @return bool
+     */
+    function str_contains($haystack, $needle)
+    {
+        return strpos($haystack, $needle) !== false;
+    }
+}

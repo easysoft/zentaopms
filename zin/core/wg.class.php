@@ -523,7 +523,7 @@ class wg
             if(is_int($name) && is_string($value))
             {
                 $value = trim($value);
-                if(strpos($value, ':') === false)
+                if(!str_contains($value, ':'))
                 {
                     $name  = $value;
                     $value = '';
@@ -548,7 +548,7 @@ class wg
             }
             else if(is_string($value))
             {
-                if(strpos($value, '=') === false)
+                if(!str_contains($value, '='))
                 {
                     $type    = $value;
                     $default = NULL;

@@ -76,13 +76,13 @@ function on($name, $handler, $options = NULL)
     {
         $options = array('handler' => $handler);
     }
-    if(strpos($name, '__') !== false)
+    if(str_contains($name, '__'))
     {
         list($name, $flags) = explode('__', $name);
-        if(strpos($flags, 'capture') !== false) $options['capture'] = true;
-        if(strpos($flags, 'stop') !== false)    $options['stop'] = true;
-        if(strpos($flags, 'prevent') !== false) $options['prevent'] = true;
-        if(strpos($flags, 'self') !== false)    $options['self'] = true;
+        if(str_contains($flags, 'capture')) $options['capture'] = true;
+        if(str_contains($flags, 'stop'))    $options['stop']    = true;
+        if(str_contains($flags, 'prevent')) $options['prevent'] = true;
+        if(str_contains($flags, 'self'))    $options['self']    = true;
     }
     return set("@$name", $options);
 }

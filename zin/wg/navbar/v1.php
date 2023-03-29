@@ -139,12 +139,12 @@ class navbar extends wg
             $exclude   = isset($menuItem->exclude) ? $menuItem->exclude : '';
 
             $isActive = false;
-            if($menuItem->name == $currentModule and strpos(",$exclude,", ",$currentModule-$currentMethod,") === false)
+            if($menuItem->name == $currentModule and !str_contains(",$exclude,", ",$currentModule-$currentMethod,"))
             {
                 $activeMenu = $menuItem->name;
                 $isActive = true;
             }
-            elseif($subModule and in_array($currentModule, $subModule) and strpos(",$exclude,", ",$currentModule-$currentMethod,") === false)
+            elseif($subModule and in_array($currentModule, $subModule) and !str_contains(",$exclude,", ",$currentModule-$currentMethod,"))
             {
                 $activeMenu = $menuItem->name;
                 $isActive = true;
@@ -180,7 +180,7 @@ class navbar extends wg
                     if(isset($menuItem->link['method'])) $method = $menuItem->link['method'];
                 }
 
-                if($module == $currentModule and ($method == $currentMethod or strpos(",$alias,", ",$currentMethod,") !== false) and strpos(",$exclude,", ",$currentMethod,") === false)
+                if($module == $currentModule and ($method == $currentMethod or str_contains(",$alias,", ",$currentMethod,")) and !str_contains(",$exclude,", ",$currentMethod,"))
                 {
                     $activeMenu = $menuItem->name;
                     $isActive   = true;
@@ -212,7 +212,7 @@ class navbar extends wg
                         else
                         {
                             $subModule = isset($dropMenuItem['subModule']) ? explode(',', $dropMenuItem['subModule']) : array();
-                            if($subModule and in_array($currentModule, $subModule) and strpos(",$exclude,", ",$currentModule-$currentMethod,") === false) $activeMainMenu = true;
+                            if($subModule and in_array($currentModule, $subModule) and !str_contains(",$exclude,", ",$currentModule-$currentMethod,")) $activeMainMenu = true;
                         }
 
                         if($activeMainMenu)

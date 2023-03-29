@@ -18,14 +18,14 @@ class historyrecord extends wg
             $canEditComment = (!isset($canBeChanged) || !empty($canBeChanged))
                 && end($actions) == $action
                 && trim($action->comment) !== ''
-                && strpos(',view,objectlibs,viewcard,', ",$methodName,") !== false
+                && str_contains(',view,objectlibs,viewcard,', ",$methodName,")
                 && $action->actor == $app->user->account
                 && common::hasPriv('action', 'editComment');
 
             $action->actor = zget($users, $action->actor);
 
             if($action->action == 'assigned' || $action->action == 'toaudit') $action->extra = zget($users, $action->extra);
-            if(strpos($action->actor, ':') !== false) $action->actor = substr($action->actor, strpos($action->actor, ':') + 1);
+            if(str_contains($action->actor, ':')) $action->actor = substr($action->actor, strpos($action->actor, ':') + 1);
 
             $actionItemView = li
             (
@@ -83,7 +83,7 @@ class historyrecord extends wg
                 }
 
                 $comment = null;
-                if(strpos($action->comment, '<pre class="prettyprint lang-html">') !== false)
+                if(str_contains($action->comment, '<pre class="prettyprint lang-html">'))
                 {
                     $before   = explode('<pre class="prettyprint lang-html">', $action->comment);
                     $after    = explode('</pre>', $before[1]);
