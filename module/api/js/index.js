@@ -72,7 +72,7 @@ $(document).ready(function()
         {
             libID = $(this).closest('.lib').data('id');
         }
-        linkParams = linkParams.replace('%s', '&libID=' + libID + '&moduleID=' + moduleID);
+        var linkParams = 'libID=' + libID + '&moduleID=' + moduleID;
         location.href = createLink('api', 'index', linkParams);
     });
 });

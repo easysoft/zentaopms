@@ -11,19 +11,23 @@
  */
 class api extends control
 {
+    public $objectType = 'nolink';
+    public $objectID   = 0;
+
     public function __construct($moduleName = '', $methodName = '', $appName = '')
     {
         parent::__construct($moduleName, $methodName, $appName);
         $this->user   = $this->loadModel('user');
         $this->doc    = $this->loadModel('doc');
         $this->action = $this->loadModel('action');
+
+        if($this->cookie->objectType) $this->objectType = $this->cookie->objectType;
+        if($this->cookie->objectID)   $this->objectID   = $this->cookie->objectID;
     }
 
     /**
      * Api doc index page.
      *
-     * @param  string $objectType
-     * @param  int    $objectID
      * @param  int    $libID
      * @param  int    $moduleID
      * @param  int    $apiID
@@ -35,9 +39,11 @@ class api extends control
      * @access public
      * @return void
      */
-    public function index($objectType = 'nolink', $objectID = 0, $libID = 0, $moduleID = 0, $apiID = 0, $version = 0, $release = 0, $appendLib = 0, $browseType = '', $param = 0)
+    public function index($libID = 0, $moduleID = 0, $apiID = 0, $version = 0, $release = 0, $appendLib = 0, $browseType = '', $param = 0)
     {
-        if(empty($objectType)) $objectType = 'nolink';
+        $objectType = $this->objectType;
+        $objectID   = $this->objectID;
+
         /* Get all api doc libraries. */
         $libs = $this->doc->getApiLibs($appendLib, $objectType, $objectID);
         if($libID == 0 and !empty($libs))
@@ -68,7 +74,7 @@ class api extends control
 
         /* Build the search form. */
         $queryID   = $browseType == 'bySearch' ? (int)$param : 0;
-        $actionURL = $this->createLink('api', 'index', "objectType=$objectType&objectID=$objectID&libID=$libID&moduleID=0&apiID=0&version=0&release=0&appendLib=0&browseType=bySearch&param=myQueryID");
+        $actionURL = $this->createLink('api', 'index', "libID=$libID&moduleID=0&apiID=0&version=0&release=0&appendLib=0&browseType=bySearch&param=myQueryID");
         $this->api->buildSearchForm($lib,$queryID, $actionURL);
 
         if($browseType == 'bySearch')
@@ -87,6 +93,7 @@ class api extends control
         $this->view->browseType     = $browseType;
         $this->view->objectType     = $objectType;
         $this->view->objectID       = $objectID;
+        $this->view->moduleID       = $moduleID;
         $this->view->libTree        = $this->api->getLibTree($libID, $libs, $objectID);
         $this->view->users          = $this->user->getPairs('noclosed,noletter');
         $this->view->objectDropdown = $this->generateLibsDropMenu($libs[$libID], $release);

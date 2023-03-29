@@ -20,23 +20,26 @@
 <?php
 $normalObjectsHtml = '<ul class="tree noProgram">';
 $closedObjectsHtml = '<ul class="tree noProgram">';
-$link              = $this->createLink('api', 'index', "obejctType=%s&objectID=%s");
+$link              = $this->createLink('api', 'index');
 $selected          = $objectType == 'nolink' ? 'selected' : '';
+$dataParams        = 'data-type="nolink" data-id="0"';
 
-$normalObjectsHtml .= "<li>" . html::a(sprintf($link, 'nolink', 0), $lang->api->noLinked, '', "class='clickable $selected' title='{$lang->api->noLinked}' data-key='" . zget($objectsPinYin, $lang->api->noLinked, '') . "'") . '</li>';
+$normalObjectsHtml .= "<li>" . html::a($link, $lang->api->noLinked, '', "class='clickable $selected' title='{$lang->api->noLinked}' $dataParams data-key='" . zget($objectsPinYin, $lang->api->noLinked, '') . "'") . '</li>';
 $normalObjectsHtml .= '<li class="divider"></li>';
 foreach(array('product', 'project') as $moduleType)
 {
     foreach($normalObjects[$moduleType] as $normalObjectID => $normalObjectName)
     {
+        $dataParams         = "data-type='$moduleType' data-id='$normalObjectID'";
         $selected           = $normalObjectID == $objectID ? 'selected' : '';
-        $normalObjectsHtml .= "<li>" . html::a(sprintf($link, $moduleType, $normalObjectID), "<i class='icon icon-$moduleType'></i> $normalObjectName", '', "class='$selected clickable' title='{$normalObjectName}' data-key='" . zget($objectsPinYin, $normalObjectName, '') . "'") . '</li>';
+        $normalObjectsHtml .= "<li>" . html::a($link, "<i class='icon icon-$moduleType'></i> $normalObjectName", '', "class='$selected clickable' title='{$normalObjectName}' $dataParams data-key='" . zget($objectsPinYin, $normalObjectName, '') . "'") . '</li>';
     }
 
     foreach($closedObjects[$moduleType] as $closedObjectID => $closedObjectName)
     {
+        $dataParams         = "data-type='$moduleType' data-id='$normalObjectID'";
         $selected           = $closedObjectID == $objectID ? 'selected' : '';
-        $closedObjectsHtml .= '<li>' . html::a(sprintf($link, $moduleType, $closedObjectID), "<i class='icon icon-$moduleType'></i> $closedObjectName", '', "class='$selected clickable' title='{$closedObjectName}' data-key='" . zget($objectsPinYin, $closedObjectName, '') . "'") . '</li>';
+        $closedObjectsHtml .= '<li>' . html::a($link, "<i class='icon icon-$moduleType'></i> $closedObjectName", '', "class='$selected clickable' title='{$closedObjectName}' $dataParams data-key='" . zget($objectsPinYin, $closedObjectName, '') . "'") . '</li>';
     }
     if($moduleType  == 'product')
     {
@@ -135,6 +138,14 @@ $(function()
             $('#closed').attr("hidden", true);
             $('#gray-line').attr("hidden", true);
         }
+    });
+
+    $('#tabContent a').on('click', function()
+    {
+        var objectType = $(this).data('type');
+        var objectID   = $(this).data('id');
+        $.cookie('objectType', objectType, {expires: config.cookieLife, path: config.webRoot});
+        $.cookie('objectID', objectID, {expires: config.cookieLife, path: config.webRoot});
     });
 })
 </script>
