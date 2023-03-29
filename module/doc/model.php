@@ -2914,7 +2914,7 @@ class docModel extends model
      */
     public function printCreateBtn($lib, $type, $objectID, $moduleID, $apiLibID = 0, $from = '')
     {
-        $libType = isset($lib->type) && $lib->type == 'api' ? 'api' : 'lib';
+        if(!common::hasPriv('doc', 'create')) return null;
 
         $class = $from == 'list' ? 'btn-info' : 'btn-primary';
         $html  = "<div class='dropdown btn-group createDropdown'>";
@@ -2925,19 +2925,10 @@ class docModel extends model
         foreach($this->lang->doc->createList as $typeKey => $typeName)
         {
             if($this->config->edition != 'max' and $typeKey == 'template') continue;
-            if($typeKey == 'api' and (!common::hasPriv('api', 'create') or !$apiLibID)) continue;
-            if($typeKey != 'api' and !common::hasPriv('doc', 'create')) continue;
 
             $attr   = "data-app='{$this->app->tab}'";
-            $module = $typeKey == 'api' ? 'api' : 'doc';
-
             $class  = strpos($this->config->doc->officeTypes, $typeKey) !== false ? 'iframe' : '';
             $params = "objectType={$lib->type}&objectID=$objectID&libID={$lib->id}&moduleID=$moduleID&type=$typeKey";
-            if($typeKey == 'api')
-            {
-                $attr  .= " data-width='85%'";
-                $params = "libID=$apiLibID&moduleID=$moduleID";
-            }
 
             $html .= "<li>";
             if($typeKey == 'template')
@@ -2965,7 +2956,7 @@ class docModel extends model
             }
             else
             {
-                $html .= html::a(helper::createLink($module, 'create', $params, '', $class ? true : false), $typeName, '', "class='$class' $attr");
+                $html .= html::a(helper::createLink('doc', 'create', $params, '', $class ? true : false), $typeName, '', "class='$class' $attr");
             }
             $html .= "</li>";
 

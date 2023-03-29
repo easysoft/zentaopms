@@ -32,8 +32,9 @@
           <td colspan='5' id="editorContent">
             <div class="main-row fade in">
               <div id='contentBox' class="main-col">
-                <div class='contenthtml'><?php echo html::textarea('content', '', "style='width:100%;'");?></div>
-                <div class='contentmarkdown <?php if(strpos($config->doc->create->requiredFields, 'content') !== false) echo 'required'?> hidden'><?php echo html::textarea('contentMarkdown', '', "style='width:100%;'");?></div>
+                <?php $contentRequired = strpos($config->doc->create->requiredFields, 'content') !== false ? 'required' : '';?>
+                <div class='contenthtml <?php echo $contentRequired?>'><?php echo html::textarea('content', '', "style='width:100%;'");?></div>
+                <div class='contentmarkdown <?php echo $contentRequired;?> hidden'><?php echo html::textarea('contentMarkdown', '', "style='width:100%;'");?></div>
                 <?php echo html::hidden('contentType', 'html');?>
                 <?php echo html::hidden('type', 'text');?>
               </div>
@@ -43,9 +44,9 @@
       </tbody>
     </table>
 
-    <div class='modal fade modal-basic' id='modalBasicInfo' data-scroll-inside='true'>
+    <div class='modal fade modal-basic' id='modalBasicInfo'>
       <div class='modal-dialog'>
-        <div class='modal-content with-padding'>
+        <div class='modal-content'>
           <div class='modal-header'>
             <button type='button' class='close' data-dismiss='modal'>
               <i class="icon icon-close"></i>
@@ -57,19 +58,24 @@
                 <tr><th class='w-100px'></th><td></td><th class='w-100px'></th><td></td></tr>
                 <tr>
                   <th><?php echo $lang->doc->title?></th>
-                  <td colspan='3' class='required'><?php echo html::input('copyTitle', '', "placeholder='{$lang->doc->titlePlaceholder}' class='form-control' disabled");?></td>
+                  <td colspan='3' id='copyTitle'></td>
                 </tr>
                 <?php if($objectType == 'project'):?>
                 <tr>
                   <th><?php echo $lang->doc->project;?></th>
                   <td class='required'><?php echo html::select('project', $objects, $objectID, "class='form-control chosen' onchange=loadExecutions(this.value)");?></td>
                   <th><?php echo $lang->doc->execution?></th>
-                  <td id='executionBox'><?php echo html::select('execution', $executions, '', "class='form-control chosen' data-placeholder='{$lang->doc->placeholder->execution}' onchange='loadModules(this.value, \"execution\")'")?></td>
+                  <td id='executionBox'><?php echo html::select('execution', $executions, '', "class='form-control chosen' data-placeholder='{$lang->doc->placeholder->execution}' onchange='loadObjectModules(\"execution\", this.value)'")?></td>
+                </tr>
+                <?php elseif($objectType == 'product'):?>
+                <tr>
+                  <th><?php echo $lang->doc->product;?></th>
+                  <td class='required'><?php echo html::select('product', $objects, $objectID, "class='form-control chosen' onchange='loadObjectModules(\"product\", this.value)'");?></td>
                 </tr>
                 <?php endif;?>
                 <tr>
                   <th class='w-100px'><?php echo $lang->doc->libAndModule?></th>
-                  <td><span id='moduleBox' class='required'><?php echo html::select('module', $moduleOptionMenu, $moduleID, "class='form-control chosen'");?></span></td>
+                  <td colspan='3'><span id='moduleBox' class='required'><?php echo html::select('module', $moduleOptionMenu, $moduleID, "class='form-control chosen'");?></span></td>
                 </tr>
                 <tr>
                   <th><?php echo $lang->doc->keywords;?></th>
@@ -93,9 +99,7 @@
                 <tr>
                   <th class="th-control text-top"><?php echo $lang->doclib->control;?></th>
                   <td colspan='3' class='aclBox'>
-                    <?php $aclList = $lang->doc->aclList;?>
-                    <?php if($objectType == 'project') $aclList = $lang->doc->projectAclList;?>
-                    <?php echo html::radio('acl', $aclList, 'open', "onchange='toggleAcl(this.value, \"doc\")'");?>
+                    <?php echo html::radio('acl', $lang->doc->aclList, 'open', "onchange='toggleAcl(this.value, \"doc\")'");?>
                   </td>
                 </tr>
                 <tr id='whiteListBox' class='hidden'>
@@ -128,20 +132,6 @@
     </div>
   </form>
 </div>
-<script>
-$(function()
-{
-    var contentHeight = $(document).height() - 92;
-    setTimeout(function(){$('.ke-edit-iframe, .ke-edit, .ke-edit-textarea').height(contentHeight);}, 100);
-    setTimeout(function(){$('.CodeMirror').height($(document).height() - 112);}, 100);
-    $('#modalBasicInfo .modal-content').css('max-height', contentHeight);
-
-    $('#contentBox #content').attr('id', 'contentHTML');
-    $('#modalBasicInfo').on('show.zui.modal', function(){$('#modalBasicInfo #copyTitle').val($('.doc-title #editorTitle').val())});
-
-    $('iframe.ke-edit-iframe').contents().find('.article-content').css('padding', '20px 20px 0 20px');
-})
-</script>
 <?php js::set('textType', $config->doc->textTypes);?>
 <?php js::set('docType', $docType);?>
 <?php js::set('fromGlobal', $fromGlobal);?>
