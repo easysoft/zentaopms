@@ -44,8 +44,9 @@
       <tr id="aclBox">
         <th><?php echo $lang->doclib->control;?></th>
         <td>
-          <?php if($lib->type != 'api') echo html::radio('acl', $lang->doclib->aclList, $lib->acl, "onchange='toggleAcl(this.value, \"lib\")'", 'block')?>
-          <?php if($lib->type == 'api') echo html::radio('acl', $lang->api->aclList, $lib->acl, "onchange='toggleAcl(this.value, \"lib\")'", 'block')?>
+          <?php if($lib->type != 'api' and empty($lib->main)) echo html::radio('acl', $lang->doclib->aclList, $lib->acl, "onchange='toggleAcl(this.value, \"lib\")'", 'block')?>
+          <?php if($lib->type == 'api' and empty($lib->main)) echo html::radio('acl', $lang->api->aclList, $lib->acl, "onchange='toggleAcl(this.value, \"lib\")'", 'block')?>
+          <?php if(!empty($lib->main)) echo html::radio('acl', $lang->doclib->aclList, 'default', "onchange='toggleAcl(this.value, \"lib\")'", 'block');;?>
         </td>
       </tr>
       <tr id='whiteListBox' class='hidden'>
