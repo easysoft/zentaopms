@@ -96,7 +96,7 @@ class api extends control
         $this->view->moduleID       = $moduleID;
         $this->view->libTree        = $this->api->getLibTree($libID, $libs, $objectID);
         $this->view->users          = $this->user->getPairs('noclosed,noletter');
-        $this->view->objectDropdown = $this->generateLibsDropMenu($libs[$libID], $release);
+        $this->view->objectDropdown = isset($libs[$libID]) ? $this->generateLibsDropMenu($libs[$libID], $release) : '';
 
         $this->display();
     }
@@ -546,7 +546,7 @@ class api extends control
         $libName = isset($lib->name) ? $lib->name . $this->lang->colon : '';
 
         $this->getTypeOptions($libID);
-        $this->view->gobackLink       = $this->createLink('api', 'index', "libID=$libID&moduleID=$moduleID");
+        $this->view->gobackLink       = '';
         $this->view->user             = $this->app->user->account;
         $this->view->allUsers         = $this->loadModel('user')->getPairs('devfirst|noclosed');
         $this->view->libID            = $libID;

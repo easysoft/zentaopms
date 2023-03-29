@@ -57,10 +57,10 @@
     <?php if(common::hasPriv('tree', 'browse')):?>
     <li data-method="addCataLib" data-has-children='%hasChildren%'  data-libid='%libID%' data-moduleid="%moduleID%" data-type="add"><a><i class="icon icon-controls"></i><?php echo $lang->doc->libDropdown['addModule'];?></a></li>
     <?php endif;?>
-    <?php if(common::hasPriv('doc', 'editLib')):?>
-    <li data-method="editLib"><a href='<?php echo inlink('editLib', 'libID=%libID%');?>' data-toggle='modal' data-type='iframe'><i class="icon icon-edit"></i><?php echo $lang->doc->libDropdown['editLib'];?></a></li>
+    <?php if(common::hasPriv('api', 'editLib')):?>
+    <li data-method="editLib"><a href='<?php echo inlink('editLib', 'libID=%libID%');?>' data-toggle='modal' data-type='iframe'><i class="icon icon-edit"></i><?php echo $lang->api->libDropdown['editLib'];?></a></li>
     <?php endif;?>
-    <?php if(common::hasPriv('doc', 'deleteLib')):?>
+    <?php if(common::hasPriv('api', 'deleteLib')):?>
     <li data-method="deleteLib"><a href='<?php echo inlink('deleteLib', 'libID=%libID%');?>' target='hiddenwin'><i class="icon icon-trash"></i><?php echo $lang->doc->libDropdown['deleteLib'];?></a></li>
     <?php endif;?>
   </ul>
