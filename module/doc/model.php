@@ -749,6 +749,7 @@ class docModel extends model
             ->get();
 
         $doc->contentMarkdown = $this->post->contentMarkdown;
+        if($doc->acl == 'open') $doc->users = $doc->groups = '';
         if(empty($doc->lib) and strpos($doc->module, '_') !== false) list($doc->lib, $doc->module) = explode('_', $doc->module);
         if(empty($doc->lib)) return dao::$errors['lib'] = sprintf($this->lang->error->notempty, $this->lang->doc->lib);
 
