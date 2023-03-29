@@ -8595,6 +8595,36 @@ class upgradeModel extends model
                         $filters = $settings->filter;
                         unset($settings->filter);
                     }
+
+                    if(isset($settings->yaxis))
+                    {
+                        $yaxisFields = $settings->yaxis;
+                        foreach($yaxisFields as $yaxisIndex => $yaxisField)
+                        {
+                            if($yaxisField->valOrAgg == 'value')          $yaxisField->valOrAgg = 'sum';
+                            if($yaxisField->valOrAgg == 'count_distinct') $yaxisField->valOrAgg = 'distinct';
+                            if($yaxisField->valOrAgg == 'value_all')      $yaxisField->valOrAgg = 'count';
+                            if($yaxisField->valOrAgg == 'value_distinct') $yaxisField->valOrAgg = 'distinct';
+
+                            $yaxisFields[$yaxisIndex] = $yaxisField;
+                        }
+                        $settings->yaxis = $yaxisFields;
+                    }
+
+                    if(isset($settings->metric))
+                    {
+                        $metricFields = $settings->metric;
+                        foreach($metricFields as $metricIndex => $metricField)
+                        {
+                            if($metricField->valOrAgg == 'value')          $metricField->valOrAgg = 'sum';
+                            if($metricField->valOrAgg == 'count_distinct') $metricField->valOrAgg = 'distinct';
+                            if($metricField->valOrAgg == 'value_all')      $metricField->valOrAgg = 'count';
+                            if($metricField->valOrAgg == 'value_distinct') $metricField->valOrAgg = 'distinct';
+
+                            $metricFields[$metricIndex] = $metricField;
+                        }
+                        $settings->metric = $metricFields;
+                    }
                 }
 
                 $data->settings = json_encode(array($settings));
@@ -8687,6 +8717,11 @@ class upgradeModel extends model
                 $column = new stdclass();
                 $column->field = $tableColumn->field;
                 $column->stat  = $tableColumn->valOrAgg;
+
+                if($column->stat == 'value')          $column->stat = 'sum';
+                if($column->stat == 'count_distinct') $column->stat = 'distinct';
+                if($column->stat == 'value_all')      $column->stat = 'count';
+                if($column->stat == 'value_distinct') $column->stat = 'distinct';
 
                 $columns[] = $column;
             }
