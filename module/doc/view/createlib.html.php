@@ -30,7 +30,10 @@
             <?php if($app->tab == 'doc' and $type == 'project'):?>
             <tr class='executionBox'>
               <th><?php echo $lang->doc->execution?></th>
-              <td><?php echo html::select('execution', $executionPairs, 0, "class='form-control chosen' data-drop_direction='down' data-placeholder='{$lang->doclib->tip->selectExecution}'")?></td>
+              <td>
+                <?php $disabled = $project->multiple ? '' : 'disabled';?>
+                <?php echo html::select('execution', $executionPairs, 0, "class='form-control chosen' data-drop_direction='down' data-placeholder='{$lang->doclib->tip->selectExecution}' $disabled")?>
+              </td>
             </tr>
             <?php endif;?>
             <tr>

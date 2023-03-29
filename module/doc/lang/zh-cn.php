@@ -63,6 +63,7 @@ $lang->doc->project      = "所属{$lang->projectCommon}";
 $lang->doc->execution    = '所属' . $lang->execution->common;
 $lang->doc->lib          = '所属库';
 $lang->doc->module       = '所属目录';
+$lang->doc->libAndModule = '所属库&目录';
 $lang->doc->object       = '所属对象';
 $lang->doc->title        = '文档标题';
 $lang->doc->digest       = '文档摘要';
@@ -199,6 +200,9 @@ $lang->doc->aclList['open']    = '公开';
 $lang->doc->aclList['custom']  = '自定义';
 $lang->doc->aclList['private'] = '私有';
 
+$lang->doc->projectAclList['open']    = "公开<span class='text-gray'>（有所属库权限即可访问）</span>";
+$lang->doc->projectAclList['private'] = "私有<span class='text-gray'>（仅创建者和白名单用户可访问）</span>";
+
 $lang->doc->typeList['html']     = '富文本';
 $lang->doc->typeList['markdown'] = 'Markdown';
 $lang->doc->typeList['url']      = '链接';
@@ -294,7 +298,8 @@ $lang->doc->noticeAcl['doc']['custom']  = '白名单的用户可以访问。';
 $lang->doc->noticeAcl['doc']['private'] = '只有创建者自己可以访问。';
 
 $lang->doc->placeholder = new stdclass();
-$lang->doc->placeholder->url = '相应的链接地址';
+$lang->doc->placeholder->url       = '相应的链接地址';
+$lang->doc->placeholder->execution = '执行为空时，创建文件在项目库下';
 
 $lang->doc->summary = "本页共 <strong>%s</strong> 个附件，共计 <strong>%s</strong>，其中<strong>%s</strong>。";
 $lang->doc->ge      = '个';

@@ -29,7 +29,7 @@ $(function()
         data: treeData,
         itemCreator: function($li, item)
         {
-            var libClass = ['lib', 'annex', 'api', 'execution'].indexOf(item.type) !== -1 ? 'lib' : '';
+            var libClass = ['lib', 'annex', 'api'].indexOf(item.type) !== -1 ? 'lib' : '';
             var hasChild = item.children ? !!item.children.length : false;
             var $item = '<a href="###" style="position: relative" data-has-children="' + hasChild + '" title="' + item.name + '" data-id="' + item.id + '" class="' + libClass + '" data-type="' + item.type + '">';
             $item += '<div class="text h-full w-full flex-start overflow-hidden">';

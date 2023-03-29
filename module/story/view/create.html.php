@@ -59,7 +59,7 @@ foreach(explode(',', $config->story->create->requiredFields) as $field)
               <?php if($branches and $type != 'story') echo html::select('branch', $branches, $branch, "onchange='loadBranch();' class='form-control chosen control-branch'");?>
               </div>
             </td>
-            <?php if(!((!$branches and $type == 'story') or $type == 'requirement')):?>
+            <?php if($branches and $type == 'story'):?>
             <td colspan='2' id='assignedToBox' class="switchBranch">
               <div class='input-group'>
                 <div class="input-group-addon assignedTo"><?php echo $lang->story->assignedTo;?></div>
@@ -128,7 +128,8 @@ foreach(explode(',', $config->story->create->requiredFields) as $field)
               <i class="icon-exclamation-sign"></i> <?php echo $lang->story->notice->branch;?>
             </td>
           </tr>
-          <tr class='<?php if($branches) echo "hidden"; ?> switchBranch'>
+          <?php if(!$branches):?>
+          <tr class='switchBranch'>
             <?php if(!$hiddenPlan):?>
             <th class='planTh'><?php echo $lang->story->planAB;?></th>
             <td colspan="2">
@@ -159,6 +160,7 @@ foreach(explode(',', $config->story->create->requiredFields) as $field)
               </div>
             </td>
           </tr>
+          <?php endif;?>
           <tr class='sourceBox <?php echo $hiddenSource;?>'>
             <th><?php echo $lang->story->source;?></th>
             <td colspan='2'>

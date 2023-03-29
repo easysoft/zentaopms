@@ -5,10 +5,24 @@
  * @access public
  * @return void
  */
-function loadModules(libID)
+function loadModules(objectType, objectID)
 {
-    var link = createLink('doc', 'ajaxGetModules', 'libID=' + libID);
+    var link = createLink('doc', 'ajaxGetModules', 'objectType=' + objectType + '&objectID=' + objectID);
     $('#moduleBox').load(link, function(){$('#moduleBox').find('select').chosen()});
+}
+
+/**
+ * Load executions.
+ *
+ * @param  id $projectID
+ * @access public
+ * @return void
+ */
+function loadExecutions(projectID)
+{
+    var link = createLink('project', 'ajaxGetExecutions', "projectID=" + projectID + "&executionID=0&mode=multiple");
+    $('#executionBox').load(link, function(){$('#executionBox').find('select').attr('data-placeholder', holders.execution).attr('onchange', "loadModules(this.value, 'execution')").chosen()});
+    loadModules('project', projectID);
 }
 
 /**
@@ -22,26 +36,24 @@ function loadModules(libID)
 function toggleAcl(acl, type)
 {
     var libID = $('#lib').val();
+    if($('#lib').length == 0)
+    {
+        var moduleID = $('#module').val();
+        if(moduleID.indexOf('_') >= 0) libID = moduleID.substr(0, moduleID.indexOf('_'));
+    }
     if(acl == 'custom')
     {
         $('#whiteListBox').removeClass('hidden');
         $('#groupBox').removeClass('hidden');
-        if(type == 'doc') loadWhitelist(libID);
     }
     else if(acl == 'private')
     {
         $('#whiteListBox').removeClass('hidden');
-        $('#groupBox').remove('hidden');
-        if(type == 'doc')
-        {
-            loadWhitelist(libID);
-            $('#whiteListBox').addClass('hidden');
-        }
+        $('#groupBox').addClass('hidden');
     }
     else
     {
         $('#whiteListBox').addClass('hidden');
-        if(type == 'doc') loadWhitelist(libID);
     }
 
     if(type == 'lib')
@@ -58,6 +70,12 @@ function toggleAcl(acl, type)
                 $('#users').picker();
             })
         }
+    }
+    else if(type == 'doc')
+    {
+        $('#whiteListBox').toggleClass('hidden', acl == 'open');
+        $('#groupBox').toggleClass('hidden', acl == 'open');
+        loadWhitelist(libID);
     }
 }
 
@@ -270,7 +288,8 @@ $(document).ready(function()
         }).on('click', function(e){e.stopPropagation()});
     }
 
-    $(document).on('mousedown', '.ajaxCollect', function (event) {
+    $(document).on('mousedown', '.ajaxCollect', function (event)
+    {
         var obj = $(this);
         var url = obj.data('url');
         $.get(url, function(response)

@@ -67,7 +67,11 @@
           if($execution->type == 'stage') $isClickable = $this->programplan->checkLeafStage($execution->id) ? true : false;
           ?>
           <td title='<?php echo $execution->title;?>'>
-            <a href='javascript:void(0);' <?php echo $isClickable ? "onclick='locateView(\"execution\", $execution->id)'" : '';?>><?php echo $execution->name;?></a>
+            <?php if($isClickable):?>
+            <a href='javascript:void(0);' onclick="locateView('execution', <?php echo $execution->id;?>)"><?php echo $execution->name;?></a>
+            <?php else:?>
+            <?php echo $execution->name;?>
+            <?php endif;?>
           </td>
           <?php else:?>
           <td title='<?php echo $execution->title;?>'><?php echo $execution->name;?></td>
