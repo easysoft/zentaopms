@@ -37,7 +37,7 @@
             </tr>
             <?php endif;?>
             <?php if(in_array($type, array('product', 'project'))):?>
-            <tr>
+            <tr <?php if($config->vision == 'lite') echo 'class="hidden"'?>>
               <th><?php echo $lang->doc->libType;?></th>
               <td>
                 <span><?php echo html::radio('libType', $lang->doclib->type, 'wiki', "onchange='changeDoclibAcl(this.value)'")?></span>
