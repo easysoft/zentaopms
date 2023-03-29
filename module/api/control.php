@@ -431,8 +431,11 @@ class api extends control
             return $this->sendSuccess(array('message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => "redirectParentWindow($id)"));
         }
 
-        $type = !empty($lib->product) ? 'product' : 'project';
-        $this->lang->api->aclList['default'] = sprintf($this->lang->doclib->aclList['default'], $this->lang->{$type}->common);
+        $type = 'nolink';
+        if(!empty($lib->product)) $type = 'product';
+        if(!empty($lib->project)) $type = 'project';
+        if($type != 'nolink') $this->lang->api->aclList['default'] = sprintf($this->lang->doclib->aclList['default'], $this->lang->{$type}->common);
+        if($type == 'nolink') unset($this->lang->api->aclList['default']);
 
         $this->view->lib      = $lib;
         $this->view->type     = $type;

@@ -55,6 +55,11 @@ $lang->doclib->tabList['custom']    = 'Custom';
 
 $lang->doclib->nameList['custom'] = 'Custom Name';
 
+$lang->doclib->apiNameUnique = array();
+$lang->doclib->apiNameUnique['product'] = 'In the api library of the same ' . $lang->productCommon . ', ';
+$lang->doclib->apiNameUnique['project'] = 'In the api library of the same ' . $lang->projectCommon . ', ';
+$lang->doclib->apiNameUnique['nolink']  = 'In the no linked api library, ';
+
 /* Fields. */
 $lang->doc->common       = 'Dok';
 $lang->doc->id           = 'ID';
