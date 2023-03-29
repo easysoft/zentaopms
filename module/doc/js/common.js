@@ -41,7 +41,7 @@ function toggleAcl(acl, type)
         var moduleID = $('#module').val();
         if(moduleID.indexOf('_') >= 0) libID = moduleID.substr(0, moduleID.indexOf('_'));
     }
-    if(acl == 'default' && $('#libTypewiki').attr('checked') != 'checked')
+    if(acl == 'default' && ($('#libTypeapi').attr('checked') == 'checked' || libType == 'api'))
     {
         $('#whiteListBox').removeClass('hidden');
         $('#groupBox').removeClass('hidden');
