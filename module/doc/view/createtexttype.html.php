@@ -47,12 +47,10 @@
     <div class='modal fade modal-basic' id='modalBasicInfo'>
       <div class='modal-dialog'>
         <div class='modal-content'>
-          <div class='modal-header'>
+          <div class='modal-body'>
             <button type='button' class='close' data-dismiss='modal'>
               <i class="icon icon-close"></i>
             </button>
-          </div>
-          <div class='modal-body'>
             <table class='table table-form' id="basicInfoBox">
               <tbody>
                 <tr><th class='w-100px'></th><td></td><th class='w-100px'></th><td></td></tr>
