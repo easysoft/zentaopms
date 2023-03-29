@@ -10,6 +10,7 @@ $extendFields = $this->product->getFlowExtendFields();
 
 $data         = array();
 $totalStories = 0;
+$programs     = array();
 foreach($productStructure as $programID => $program)
 {
     if(isset($programLines[$programID]))
@@ -25,78 +26,18 @@ foreach($productStructure as $programID => $program)
         }
     }
 
-    /* ALM mode with more data. */
-    if(isset($program['programName']) and $config->systemMode == 'ALM')
+    if(isset($program['programName']))
     {
-        $item = new stdClass();
+        $pro = new stdClass();
+        $pro->id     = $program['id'];
+        $pro->name   = $program['programName'];
+        $pro->parent = null;
 
-        $item->programPM = '';
-        if(!empty($program['programPM']))
-        {
-            /* TODO generate avatar and link. */
-            $programPM = $program['programPM'];
-            $userName  = zget($users, $programPM);
-            // echo html::smallAvatar(array('avatar' => $usersAvatar[$programPM], 'account' => $programPM, 'name' => $userName), 'avatar-circle avatar-top avatar-' . zget($userIdPairs, $programPM));
-
-            $userID = isset($userIdPairs[$programPM]) ? $userIdPairs[$programPM] : '';
-            // echo html::a($this->createLink('user', 'profile', "userID=$userID", '', true), $userName, '', "title='{$userName}' class='iframe' data-width='600'");
-
-            $item->programPM = $userName;
-            $item->PO        = $userName;
-        }
-
-        $totalStories = $program['finishClosedStories'] + $program['unclosedStories'];
-
-        $item->name             = $program['programName'];
-        $item->id               = 'program-' . $programID;
-        $item->type             = 'program';
-        $item->level            = 1;
-        $item->asParent         = true;
-        $item->programName      = $program['programName'];
-        $item->draftStories     = $program['draftStories'];
-        $item->activeStories    = $program['activeStories'];
-        $item->changingStories  = $program['changingStories'];
-        $item->reviewingStories = $program['reviewingStories'];
-        $item->totalStories     = ($totalStories == 0 ? 0 : round($program['finishClosedStories'] / $totalStories, 3) * 100) . '%';
-        $item->unResolvedBugs   = $program['unResolvedBugs'];
-        $item->totalBugs        = (($program['unResolvedBugs'] + $program['fixedBugs']) == 0 ? 0 : round($program['fixedBugs'] / ($program['unResolvedBugs'] + $program['fixedBugs']), 3) * 100) . '%';
-        $item->plans            = $program['plans'];
-        $item->releases         = $program['releases'];
-        /* TODO attach extend fields. */
-        $item->actions          = 'close|other:-pause,active|group|-edit|more:delete,link';
-
-        $data[] = $item;
+        $programs[] = $pro;
     }
 
     foreach($program as $lineID => $line)
     {
-        /* ALM mode with Product Line. */
-        if(isset($line['lineName']) and isset($line['products']) and is_array($line['products']) and $config->systemMode == 'ALM')
-        {
-            $totalStories = (isset($line['finishClosedStories']) ? $line['finishClosedStories'] : 0) + (isset($line['unclosedStories']) ? $line['unclosedStories'] : 0);
-
-            $item = new stdClass();
-            $item->name             = $line['lineName'];
-            $item->id               = 'productLine-' . $lineID;
-            $item->type             = 'productLine';
-            $item->asParent         = true;
-            $item->parent           = 'program-' . $programID;
-            $item->programName      = $line['lineName'];
-            $item->draftStories     = $line['draftStories'];
-            $item->activeStories    = $line['activeStories'];
-            $item->changingStories  = $line['changingStories'];
-            $item->reviewingStories = $line['reviewingStories'];
-            $item->totalStories     = ($totalStories == 0 ? 0 : round((isset($line['finishClosedStories']) ? $line['finishClosedStories'] : 0) / $totalStories, 3) * 100) . '%';
-            $item->unResolvedBugs   = $line['unResolvedBugs'];
-            $item->totalBugs        = ((isset($line['fixedBugs']) and ($line['unResolvedBugs'] + $line['fixedBugs'] != 0)) ? round($line['fixedBugs'] / ($line['unResolvedBugs'] + $line['fixedBugs']), 3) * 100 : 0) . '%';
-            $item->plans            = $line['plans'];
-            $item->releases         = $line['releases'];
-            /* TODO attach extend fields. */
-            $item->actions          = 'close|other:-pause,active|group|-edit|more:delete,link';
-
-            $data[] = $item;
-        }
-
         /* Products of Product Line. */
         if(isset($line['products']) and is_array($line['products']))
         {
@@ -112,23 +53,25 @@ foreach($productStructure as $programID => $program)
                 }
                 $totalStories = $product->stories['finishClosed'] + $product->stories['unclosed'];
 
-                $item->name             = $product->name; /* TODO replace with <a> */
-                $item->id               = $product->id;
-                $item->type             = 'product';
-                $item->level            = 2;
-                $item->programName      = $product->name; /* TODO replace with <a> */
-                $item->draftStories     = $product->stories['draft'];
-                $item->activeStories    = $product->stories['active'];
-                $item->changingStories  = $product->stories['changing'];
-                $item->reviewingStories = $product->stories['reviewing'];
-                $item->totalStories     = ($totalStories == 0 ? 0 : round($product->stories['finishClosed'] / $totalStories, 3) * 100) . '%';
-                $item->unResolvedBugs   = $product->unResolved;
-                $item->totalBugs        = (($product->unResolved + $product->fixedBugs) == 0 ? 0 : round($product->fixedBugs / ($product->unResolved + $product->fixedBugs), 3) * 100) . '%';
-                $item->plans            = $product->plans;
-                $item->releases         = $product->releases;
-                $item->parent           = $product->program ? "program-$product->program" : '';
+                $item->name              = $product->name; /* TODO replace with <a> */
+                $item->id                = $product->id;
+                $item->type              = 'product';
+                $item->draftStories      = $product->stories['draft'];
+                $item->activeStories     = $product->stories['active'];
+                $item->changingStories   = $product->stories['changing'];
+                $item->reviewingStories  = $product->stories['reviewing'];
+                $item->storyCompleteRate = ($totalStories == 0 ? 0 : round($product->stories['finishClosed'] / $totalStories, 3) * 100);
+                $item->unResolvedBugs    = $product->unResolved;
+                $item->bugFixedRate      = (($product->unResolved + $product->fixedBugs) == 0 ? 0 : round($product->fixedBugs / ($product->unResolved + $product->fixedBugs), 3) * 100);
+                $item->plans             = $product->plans;
+                $item->releases          = $product->releases;
+                $item->parent            = null;
+                $item->productLine       = $product->line ? $line['lineName'] :  '';
+                $item->execution         = rand(0, 10);
+                $item->feedback          = rand(0, 100);
+                $item->testCaseCoverRate = rand(0, 100);
+                $item->releasesOld       = rand(0, 10);
                 /* TODO attach extend fields. */
-                $item->actions          = 'close|other:-pause,active|group|-edit|more:delete,link';
 
                 $data[] = $item;
             }
@@ -147,10 +90,11 @@ featureBar
             (
                 array
                 (
-                    'title' => '所有项目集',
-                    'programs' => $programs,
-                    'activeKey' => '7',
-                    'closeLink' => '#'
+                    'title'     => $lang->program->all,
+                    'programs'  => $programs,
+                    'activeKey' => !empty($programs) ? $programs[0]->id : null,
+                    'closeLink' => '#',
+                    'onClickItem' => jsRaw('function(e){console.log(e)}')
                 )
             )
         )
@@ -177,16 +121,17 @@ toolbar
 (
     item(set(array
     (
-        'text'  => $lang->product->export,
+        'text'  => $lang->export,
         'icon'  => 'export',
-        'class' => 'secondary',
+        'class' => 'ghost text-darker',
         'url'   => createLink('product', 'export', $browseType, "status=$browseType&orderBy=$orderBy"),
     ))),
+    div(setClass('nav-divider')),
     $config->systemMode == 'ALM' ? item(set(array
     (
-        'text'  => $lang->product->line,
+        'text'  => $lang->product->editLine,
         'icon'  => 'edit',
-        'class' => 'secondary',
+        'class' => 'ghost',
         'url'   => createLink('product', 'manageLine', $browseType),
     ))) : NULL,
     item(set(array
@@ -200,12 +145,27 @@ toolbar
 
 js
 (
-    'window.footerGenerator = function()',
-    '{',
-        'const count = this.layout.allRows.filter((x) => x.data.type === "product").length;',
-        "const statistic = '{$lang->product->pageSummary}'.replace('%s', ' ' + count + ' ');",
-        'return [{children: statistic, className: "text-dark"}, "flex", "pager"];',
-    '}'
+<<<RENDERCELL
+window.footerGenerator = function()
+{
+    const count = this.layout.allRows.filter((x) => x.data.type === "product").length;
+    const statistic = '{$lang->product->pageSummary}'.replace('%s', ' ' + count + ' ');
+    return [{children: statistic, className: "text-dark"}, "flex", "pager"];
+}
+
+window.renderReleaseCountCell = function(result, {col, row})
+{
+    if(!col || !row || col.name !== 'releases') return result;
+
+    var changed = row.data.releases - row.data.releasesOld;
+
+    if(changed === 0) result[0] = 0;
+    if(changed > 0)   result[0] = {html: row.data.releases + ' <span class="label size-sm circle primary-pale bd-primary">+' + changed + '</span>'};
+    if(changed < 0)   result[0] = {html: row.data.releases + ' <span class="label size-sm circle warning-pale bd-warning">' + changed + '</span>'};
+
+    return result;
+}
+RENDERCELL
 );
 
 dtable
@@ -215,18 +175,9 @@ dtable
     set::data($data),
     set::footPager(usePager()),
     set::nested(true),
+    //set::onRenderCell(jsRaw('window.renderReleaseCountCell')),
+    set::onRenderCell(jsRaw('function(result, data){return window.renderReleaseCountCell(result, data);}')),
     set::footer(jsRaw('function(){return window.footerGenerator.call(this);}'))
-);
-
-sidebar
-(
-    modulemenu
-    (
-        set::productID(1),
-        set::title('所有分类'),
-        set::activeKey('4'),
-        set::closeLink('#'),
-    )
 );
 
 render();

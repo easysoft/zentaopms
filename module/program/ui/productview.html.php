@@ -62,6 +62,8 @@ foreach($productStructure as $programID => $program)
         $item->releaseCount      = $program['releases'];
         $item->releaseCountOld   = rand(0, 10);
         $item->testCaseCoverRate = rand(0, 100);
+        $item->unclosedReqCount  = rand(0, 100);
+        $item->executionCount    = rand(0, 100);
         /* TODO attach extend fields. */
 
         $data[] = $item;
@@ -94,6 +96,8 @@ foreach($productStructure as $programID => $program)
             $item->releaseCount      = isset($line['releases']) ? $line['releases'] : 0;
             $item->releaseCountOld   = rand(0, 10);
             $item->testCaseCoverRate = rand(0, 100);
+            $item->unclosedReqCount  = rand(0, 100);
+            $item->executionCount    = rand(0, 100);
             /* TODO attach extend fields. */
 
             $data[] = $item;
@@ -133,6 +137,8 @@ foreach($productStructure as $programID => $program)
                 $item->releaseCount      = $product->releases;
                 $item->releaseCountOld   = rand(0, 10);
                 $item->testCaseCoverRate = rand(0, 100);
+                $item->unclosedReqCount  = rand(0, 100);
+                $item->executionCount    = rand(0, 100);
                 /* TODO attach extend fields. */
 
                 $data[] = $item;
@@ -217,7 +223,7 @@ dtable
     set::data($data),
     set::footPager(usePager()),
     set::nested(true),
-    set::onRenderCell(jsRaw('window.renderReleaseCountCell')),
+    set::onRenderCell(jsRaw('function(result, data){ return window.renderReleaseCountCell(result, data); }')),
     set::footer(jsRaw('function(){return window.footerGenerator.call(this);}'))
 );
 

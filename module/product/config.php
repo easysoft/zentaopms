@@ -166,11 +166,18 @@ $config->product->all->dtable->fieldList['name']['title']        = $lang->produc
 $config->product->all->dtable->fieldList['name']['width']        = 400;
 $config->product->all->dtable->fieldList['name']['type']         = 'link';
 $config->product->all->dtable->fieldList['name']['flex']         = 1;
-$config->product->all->dtable->fieldList['name']['nestedToggle'] = true;
+$config->product->all->dtable->fieldList['name']['nestedToggle'] = false;
 $config->product->all->dtable->fieldList['name']['checkbox']     = true;
 $config->product->all->dtable->fieldList['name']['iconRender']   = true;
 $config->product->all->dtable->fieldList['name']['sortType']     = true;
 $config->product->all->dtable->fieldList['name']['iconRender']   = 'RAWJS<function(row){return row.data.type === \'program\' ? \'icon-cards-view text-gray\' : \'\'}>RAWJS';
+
+$config->product->all->dtable->fieldList['productLine']['name']     = 'productLine';
+$config->product->all->dtable->fieldList['productLine']['title']    = $lang->product->belongingLine;
+$config->product->all->dtable->fieldList['productLine']['width']    = 120;
+$config->product->all->dtable->fieldList['productLine']['type']     = 'format';
+$config->product->all->dtable->fieldList['productLine']['sortType'] = true;
+$config->product->all->dtable->fieldList['productLine']['group']    = $lang->SRCommon;
 
 $config->product->all->dtable->fieldList['PO']['name']     = 'PO';
 $config->product->all->dtable->fieldList['PO']['title']    = $lang->product->manager;
@@ -178,9 +185,16 @@ $config->product->all->dtable->fieldList['PO']['minWidth'] = 60;
 $config->product->all->dtable->fieldList['PO']['type']     = 'avatarBtn';
 $config->product->all->dtable->fieldList['PO']['sortType'] = true;
 
+$config->product->all->dtable->fieldList['feedback']['name']     = 'feedback';
+$config->product->all->dtable->fieldList['feedback']['title']    = $lang->product->feedback;
+$config->product->all->dtable->fieldList['feedback']['width']    = 60;
+$config->product->all->dtable->fieldList['feedback']['type']     = 'format';
+$config->product->all->dtable->fieldList['feedback']['sortType'] = false;
+$config->product->all->dtable->fieldList['feedback']['group']    = $lang->SRCommon;
+
 $config->product->all->dtable->fieldList['draftStories']['name']     = 'draftStories';
 $config->product->all->dtable->fieldList['draftStories']['title']    = $lang->product->draftStory;
-$config->product->all->dtable->fieldList['draftStories']['width']    = 60;
+$config->product->all->dtable->fieldList['draftStories']['width']    = 80;
 $config->product->all->dtable->fieldList['draftStories']['type']     = 'format';
 $config->product->all->dtable->fieldList['draftStories']['sortType'] = false;
 $config->product->all->dtable->fieldList['draftStories']['group']    = $lang->SRCommon;
@@ -209,12 +223,30 @@ $config->product->all->dtable->fieldList['reviewingStories']['group']    = $lang
 $config->product->all->dtable->fieldList['storyCompleteRate']['name']     = 'storyCompleteRate';
 $config->product->all->dtable->fieldList['storyCompleteRate']['title']    = $lang->product->storyCompleteRate;
 $config->product->all->dtable->fieldList['storyCompleteRate']['width']    = 60;
-$config->product->all->dtable->fieldList['storyCompleteRate']['type']     = 'format';
+$config->product->all->dtable->fieldList['storyCompleteRate']['type']     = 'circleProgress';
 $config->product->all->dtable->fieldList['storyCompleteRate']['sortType'] = false;
 $config->product->all->dtable->fieldList['storyCompleteRate']['group']    = $lang->SRCommon;
 
+$config->product->all->dtable->fieldList['plans']['name']     = 'plans';
+$config->product->all->dtable->fieldList['plans']['title']    = $lang->product->plan;
+$config->product->all->dtable->fieldList['plans']['width']    = 60;
+$config->product->all->dtable->fieldList['plans']['type']     = 'format';
+$config->product->all->dtable->fieldList['plans']['sortType'] = false;
+
+$config->product->all->dtable->fieldList['execution']['name']     = 'execution';
+$config->product->all->dtable->fieldList['execution']['title']    = $lang->execution->common;
+$config->product->all->dtable->fieldList['execution']['width']    = 60;
+$config->product->all->dtable->fieldList['execution']['type']     = 'format';
+$config->product->all->dtable->fieldList['execution']['sortType'] = false;
+
+$config->product->all->dtable->fieldList['testCaseCoverRate']['name']     = 'testCaseCoverRate';
+$config->product->all->dtable->fieldList['testCaseCoverRate']['title']    = $lang->product->testCaseCoverRate;
+$config->product->all->dtable->fieldList['testCaseCoverRate']['width']    = 80;
+$config->product->all->dtable->fieldList['testCaseCoverRate']['type']     = 'circleProgress';
+$config->product->all->dtable->fieldList['testCaseCoverRate']['sortType'] = false;
+
 $config->product->all->dtable->fieldList['unResolvedBugs']['name']     = 'unResolvedBugs';
-$config->product->all->dtable->fieldList['unResolvedBugs']['title']    = $lang->product->activeStory;
+$config->product->all->dtable->fieldList['unResolvedBugs']['title']    = $lang->product->activeBug;
 $config->product->all->dtable->fieldList['unResolvedBugs']['width']    = 60;
 $config->product->all->dtable->fieldList['unResolvedBugs']['type']     = 'format';
 $config->product->all->dtable->fieldList['unResolvedBugs']['sortType'] = false;
@@ -223,15 +255,9 @@ $config->product->all->dtable->fieldList['unResolvedBugs']['group']    = 'Bug';
 $config->product->all->dtable->fieldList['bugFixedRate']['name']     = 'bugFixedRate';
 $config->product->all->dtable->fieldList['bugFixedRate']['title']    = $lang->product->bugFixedRate;
 $config->product->all->dtable->fieldList['bugFixedRate']['width']    = 60;
-$config->product->all->dtable->fieldList['bugFixedRate']['type']     = 'format';
+$config->product->all->dtable->fieldList['bugFixedRate']['type']     = 'circleProgress';
 $config->product->all->dtable->fieldList['bugFixedRate']['sortType'] = false;
 $config->product->all->dtable->fieldList['bugFixedRate']['group']    = 'Bug';
-
-$config->product->all->dtable->fieldList['plans']['name']     = 'plans';
-$config->product->all->dtable->fieldList['plans']['title']    = $lang->product->plan;
-$config->product->all->dtable->fieldList['plans']['width']    = 60;
-$config->product->all->dtable->fieldList['plans']['type']     = 'format';
-$config->product->all->dtable->fieldList['plans']['sortType'] = false;
 
 $config->product->all->dtable->fieldList['releases']['name']     = 'releases';
 $config->product->all->dtable->fieldList['releases']['title']    = $lang->product->release;
