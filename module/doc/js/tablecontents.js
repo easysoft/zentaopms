@@ -23,31 +23,52 @@ $(function()
         'api': 'interface'
     }
 
-    $('#fileTree').tree(
+    function initTree(ele, treeData)
     {
-        initialState: 'active',
-        data: treeData,
-        itemCreator: function($li, item)
+        ele.tree(
         {
-            var libClass = ['lib', 'annex', 'api', 'execution'].indexOf(item.type) !== -1 ? 'lib' : '';
-            var hasChild = item.children ? !!item.children.length : false;
-            var link     = item.hasAction ? '###' : '#';
-            var $item    = '<a href="' + link + '" style="position: relative" data-has-children="' + hasChild + '" title="' + item.name + '" data-id="' + item.id + '" class="' + libClass + '" data-type="' + item.type + '" data-action="' + item.hasAction + '">';
+            initialState: 'active',
+            data: treeData,
+            itemCreator: function($li, item)
+            {
+                var libClass = ['lib', 'annex', 'api', 'execution'].indexOf(item.type) !== -1 ? 'lib' : '';
+                var hasChild = item.children ? !!item.children.length : false;
+                var link     = item.hasAction ? '###' : '#';
+                var $item    = '<a href="' + link + '" style="position: relative" data-has-children="' + hasChild + '" title="' + item.name + '" data-id="' + item.id + '" class="' + libClass + '" data-type="' + item.type + '" data-action="' + item.hasAction + '">';
 
-            $item += '<div class="text h-full w-full flex-start overflow-hidden">';
-            if(libClass == 'lib' && item.type != 'execution') $item += '<div class="img-lib" style="background-image:url(static/svg/' + imgObj[item.type || 'lib'] + '.svg)"></div>';
-            $item += '<span style="padding-left: 5px;">';
-            $item += item.name
-            $item += '</span>';
-            $item += '<i class="icon icon-drop icon-ellipsis-v hidden tree-icon" data-isCatalogue="' + (libClass ? false : true) + '"></i>';
-            $item += '</div>';
-            $item += '</a>';
+                $item += '<div class="text h-full w-full flex-start overflow-hidden">';
+                if(libClass == 'lib' && item.type != 'execution') $item += '<div class="img-lib" style="background-image:url(static/svg/' + imgObj[item.type || 'lib'] + '.svg)"></div>';
+                $item += '<span style="padding-left: 5px;">';
+                $item += item.name
+                $item += '</span>';
+                $item += '<i class="icon icon-drop icon-ellipsis-v hidden tree-icon" data-isCatalogue="' + (libClass ? false : true) + '"></i>';
+                $item += '</div>';
+                $item += '</a>';
 
-            $li.append($item);
-            $li.addClass(libClass);
-            if(item.active) $li.addClass('active open in');
+                $li.append($item);
+                $li.addClass(libClass);
+                if(item.active) $li.addClass('active open in');
+            }
+        });
+    }
+
+    if(Array.isArray(treeData))
+    {
+        initTree($('#fileTree'), treeData);
+    }
+    else
+    {
+        initTree($('#projectTree'), treeData.project);
+        initTree($('#annexTree'), treeData.annex);
+        if(treeData.execution&& treeData.execution.length)
+        {
+            initTree($('#executionTree'), treeData.execution);
         }
-    });
+        else
+        {
+            $('.execution-tree').remove();
+        }
+    }
 
     $('li.has-list > ul, #fileTree').addClass("menu-active-primary menu-hover-primary");
 
