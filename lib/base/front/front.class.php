@@ -1148,18 +1148,8 @@ EOT;
         return $js;
     }
 
-    /**
-     * 导出$config到js，因为js的createLink()方法需要获取config信息。
-     * Export the config vars for createLink() js version.
-     *
-     * @static
-     * @access public
-     * @return void
-     */
-    static public function exportConfigVars()
+    static function getJSConfigVars()
     {
-        if(!function_exists('json_encode')) return false;
-
         global $app, $config, $lang;
         $defaultViewType = $app->getViewType();
         $themeRoot       = $app->getWebRoot() . 'theme/';
@@ -1194,6 +1184,25 @@ EOT;
         $jsConfig->onlybody       = zget($_GET, 'onlybody', 'no');
         $jsConfig->tabSession     = $config->tabSession;
         if($config->tabSession and helper::isWithTID()) $jsConfig->tid = zget($_GET, 'tid', '');
+
+        return $jsConfig;
+    }
+
+    /**
+     * 导出$config到js，因为js的createLink()方法需要获取config信息。
+     * Export the config vars for createLink() js version.
+     *
+     * @static
+     * @access public
+     * @return void
+     */
+    static public function exportConfigVars()
+    {
+        if(!function_exists('json_encode')) return false;
+
+        global $lang;
+
+        $jsConfig = static::getJSConfigVars();
 
         $jsLang = new stdclass();
         $jsLang->submitting = isset($lang->loading) ? $lang->loading : '';
