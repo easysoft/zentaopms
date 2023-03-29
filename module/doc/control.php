@@ -392,29 +392,22 @@ class doc extends control
         $moduleID = $moduleID ? (int)$moduleID : (int)$this->cookie->lastDocModule;
         if($docType == 'html')
         {
-            if(strpos("|product|project|execution|", "|{$objectType}|") === false)
+            if($objectType == 'project')
             {
-                $moduleOptionMenu = $this->tree->getOptionMenu($libID, 'doc', $startModuleID = 0);
+                $objects = $this->loadModel('project')->getPairs();
+                $this->view->executions = array(0 => '') + $this->loadModel('execution')->getPairs($objectID, 'all', 'multiple');
             }
-            else
+            elseif($objectType == 'execution')
             {
-                if($objectType == 'project')
-                {
-                    $objects = $this->loadModel('project')->getPairs();
-                    $this->view->executions = array(0 => '') + $this->loadModel('execution')->getPairs($objectID, 'all', 'multiple');
-                }
-                elseif($objectType == 'execution')
-                {
-                    $execution = $this->loadModel('execution')->getById($objectID);
-                    $objects   = $this->execution->getPairs($execution->project, 'all', "multiple,leaf,noprefix");
-                }
-                elseif($objectType == 'product')
-                {
-                    $objects = $this->loadModel('product')->getPairs();
-                }
-                $moduleOptionMenu = $this->doc->getLibsOptionMenu($libs);
-                $moduleID         = $libID . '_' . $moduleID;
+                $execution = $this->loadModel('execution')->getById($objectID);
+                $objects   = $this->execution->getPairs($execution->project, 'all', "multiple,leaf,noprefix");
             }
+            elseif($objectType == 'product')
+            {
+                $objects = $this->loadModel('product')->getPairs();
+            }
+            $moduleOptionMenu = $this->doc->getLibsOptionMenu($libs);
+            $moduleID         = $libID . '_' . $moduleID;
         }
         else
         {
@@ -997,7 +990,7 @@ class doc extends control
             if($doclib->acl == 'custom') return print(html::select('users[]', $users, $selectedUser, "multiple class='form-control picker-select' $dropDirection"));
             if($doclib->acl == 'open') return print(html::select('users[]', $users, $selectedUser, "multiple class='form-control picker-select' $dropDirection"));
             if($doclib->acl == 'default') return print(html::select('users[]', $users, $selectedUser, "multiple class='form-control picker-select' $dropDirection"));
-            echo ($doclib->acl == 'private' and $doclib->type == 'project') ? 'project' : 'private';
+            if($doclib->acl == 'private') echo 'private';
             return false;
         }
 

@@ -125,25 +125,8 @@ function loadWhitelist(libID)
 
     $.post(userLink, function(users)
     {
-        if(users == 'private')
+        if(users != 'private')
         {
-            $('#aclopen').parent('.radio-inline').addClass('hidden');
-            $('#aclcustom').parent('.radio-inline').addClass('hidden');
-            $('#whiteListBox').addClass('hidden');
-            $('#aclprivate').prop('checked', true);
-        }
-        else if(users == 'project')
-        {
-            $('#aclprivate').parent('.radio-inline').addClass('hidden');
-            $('#aclcustom').parent('.radio-inline').addClass('hidden');
-            $('#whiteListBox').addClass('hidden');
-            $('#aclopen').prop('checked', true);
-        }
-        else
-        {
-            $('#aclopen').parent('.radio-inline').removeClass('hidden');
-            $('#aclcustom').parent('.radio-inline').removeClass('hidden');
-
             $('#users').replaceWith(users);
             $('#users').next('.picker').remove();
             $('#users').picker();
