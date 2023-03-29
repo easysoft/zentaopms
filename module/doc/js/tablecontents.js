@@ -189,8 +189,6 @@ $(function()
         });
     });
 
-;
-
     $('body').on('click', function()
     {
         $('.dropdown-in-tree').remove();
@@ -324,5 +322,12 @@ $(function()
     }).on('keydown', '.file-tree input.input-tree', function(e)
     {
         if(e.keyCode == 13) $(this).trigger('blur');
+    }).on('click', '#mainMenu .btn-toolbar a, .no-content-button a', function()
+    {
+        if(libType == 'api')
+        {
+            $.cookie('objectType', objectType, {expires: config.cookieLife, path: config.webRoot});
+            $.cookie('objectID', objectID, {expires: config.cookieLife, path: config.webRoot});
+        }
     });
 });

@@ -14,6 +14,7 @@
 <?php js::set('treeData', $libTree);?>
 <?php js::set('linkParams', "type=$type&objectID=$objectID%s&browseType=&orderBy=$orderBy");?>
 <?php js::set('docLang', $lang->doc);?>
+<?php js::set('libType', $libType);?>
 <?php js::set('objectType', $type);?>
 <?php js::set('objectID', $objectID);?>
 <div id="mainMenu" class="clearfix">
