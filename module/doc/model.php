@@ -2888,7 +2888,7 @@ class docModel extends model
         if(in_array($type, array('product', 'project', 'execution')))
         {
             $libTree[$type] = array_merge($libTree[$type], $apiLibs);
-            if($type == 'project' and !empty($libTree['execution'])) $libTree[$type] = array_merge($libTree[$type], $libTree['execution']);
+            if($type == 'project' and !empty($libTree['execution'])) $libTree['execution'] = array_values($libTree['execution']);
 
             $annex = new stdclass();
             $annex->id         = 0;
@@ -2898,14 +2898,21 @@ class docModel extends model
             $annex->objectID   = $objectID;
             $annex->active     = empty($libID) ? 1 : 0;
 
-            $libTree[$type][] = $annex;
+            if($type == 'project')
+            {
+                $libTree['annex'] = $annex;
+            }
+            else
+            {
+                $libTree[$type][''] = $annex;
+            }
         }
         elseif($type == 'api')
         {
             $libTree[$type] = array_merge($libTree[$type], $apiLibs);
         }
 
-        $libTree = array_values($libTree[$type]);
+        if($type != 'project') $libTree = array_values($libTree[$type]);
         return $libTree;
     }
 
