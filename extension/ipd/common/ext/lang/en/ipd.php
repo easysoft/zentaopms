@@ -40,7 +40,7 @@ $lang->navGroup->demandpool = 'demandpool';
 $lang->navGroup->demand     = 'demandpool';
 
 $lang->demandpool->menu = new stdclass();
-$lang->demandpool->menu->browse  = array('link' => "{$lang->demand->common}|demand|browse|poolID=%s", 'alias' => 'create,batchcreate,edit,managetree,view,review,tostory,showimport');
+$lang->demandpool->menu->browse  = array('link' => "{$lang->demand->common}|demand|browse|poolID=%s", 'alias' => 'create,batchcreate,edit,managetree,view,tostory,showimport,review,change');
 //$lang->demandpool->menu->review  = array('link' => "Review|demand|review|poolID=%s");
 $lang->demandpool->menu->kanban  = array('link' => "Kanban|demand|kanban|poolID=%s");
 $lang->demandpool->menu->track   = array('link' => "Track|demand|track|demandID=%s");
