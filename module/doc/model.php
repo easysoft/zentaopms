@@ -2389,11 +2389,8 @@ class docModel extends model
             ->andWhere('deleted')->eq(0)
             ->orderBy('grade desc, `order`')
             ->get();
-        $stmt     = $this->dbh->query($query);
-        while ($module = $stmt->fetch())
-        {
-            $this->buildTree($treeMenu, $type, $objectID, $rootID, $module, $moduleDocs, $docID);
-        }
+        $stmt = $this->dbh->query($query);
+        while($module = $stmt->fetch()) $this->buildTree($treeMenu, $type, $objectID, $rootID, $module, $moduleDocs, $docID);
 
         if(isset($moduleDocs[0]))
         {
@@ -2804,6 +2801,7 @@ class docModel extends model
             $item = new stdclass();
             $item->id       = $module->id;
             $item->name     = $module->name;
+            $item->type     = $module->type;
             $item->active   = $module->id == $moduleID ? 1 : 0;
             $item->children = $this->getModuleTree($rootID, $moduleID, $type, $module->id, $modules);
 
