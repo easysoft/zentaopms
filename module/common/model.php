@@ -894,7 +894,7 @@ class commonModel extends model
         global $lang, $config, $app;
 
         if(!$tab) return;
-        if($tab == 'admin' and method_exists($app->control, 'loadModel')) $app->control->loadModel('admin')->setMenu();
+        if($tab == 'admin' and $app->control and method_exists($app->control, 'loadModel')) $app->control->loadModel('admin')->setMenu();
         $icon = zget($lang->navIcons, $tab, '');
 
         if(!in_array($tab, array('program', 'product', 'project')))
