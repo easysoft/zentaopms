@@ -2736,12 +2736,15 @@ class docModel extends model
         $libs  = $this->getLibsByObject($type, $objectID);
         $query = $this->session->$queryName;
         if(strpos($query, "`lib` = 'all'") !== false) $query = str_replace("`lib` = 'all'", '1', $query);
+
+        $docIdList = $this->getPrivDocs(array_keys($libs));
         return $this->dao->select('*')->from(TABLE_DOC)
             ->where('deleted')->eq(0)
             ->andWhere($query)
             ->andWhere('lib')->in(array_keys($libs))
             ->andWhere('vision')->eq($this->config->vision)
             ->beginIF($this->config->doc->notArticleType)->andWhere('type')->notIN($this->config->doc->notArticleType)->fi()
+            ->beginIF(!empty($docIdList))->andWhere('id')->in($docIdList)->fi()
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll('id');
