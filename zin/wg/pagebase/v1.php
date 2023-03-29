@@ -43,6 +43,7 @@ class pagebase extends wg
         $css = $context->getCssList();
         $js = $context->getJsList();
         $imports = $context->getImportList();
+        $jsConfig = \js::getJSConfigVars();
 
         return h::html
         (
@@ -65,6 +66,7 @@ class pagebase extends wg
                         'return Component ? new Component(element, options) : null;',
                     '};'
                 ) : null,
+                h::jsVar('window.config', $jsConfig),
                 empty($imports) ? NULL : h::import($imports),
                 $head,
                 empty($css) ? NULL : h::css($css)
