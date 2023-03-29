@@ -322,6 +322,7 @@ class doc extends control
                 unset($_GET['onlybody']);
                 return print(js::locate($this->createLink('doc', 'objectLibs', 'type=book'), 'parent.parent'));
             }
+            if($this->app->tab == 'doc' and $from == 'tableContents') return print(js::reload('parent'));
 
             $objectType = $lib->type;
             $objectID   = strpos(',product,project,execution,', ",$objectType,") !== false ? $lib->{$objectType} : 0;
