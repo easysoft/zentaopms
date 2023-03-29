@@ -11,12 +11,18 @@
  */
 class api extends control
 {
+    public $objectType = 'nolink';
+    public $objectID   = 0;
+
     public function __construct($moduleName = '', $methodName = '', $appName = '')
     {
         parent::__construct($moduleName, $methodName, $appName);
         $this->user   = $this->loadModel('user');
         $this->doc    = $this->loadModel('doc');
         $this->action = $this->loadModel('action');
+
+        if($this->cookie->objectType) $this->objectType = $this->cookie->objectType;
+        if($this->cookie->objectID)   $this->objectID   = $this->cookie->objectID;
     }
 
     /**
@@ -35,26 +41,24 @@ class api extends control
      */
     public function index($libID = 0, $moduleID = 0, $apiID = 0, $version = 0, $release = 0, $appendLib = 0, $browseType = '', $param = 0)
     {
+        $objectType = $this->objectType;
+        $objectID   = $this->objectID;
+
         /* Get all api doc libraries. */
-        $libs = $this->doc->getApiLibs($appendLib);
-        if($libID == 0 and !empty($libs)) $libID = key($libs);
+        $libs = $this->doc->getApiLibs($appendLib, $objectType, $objectID);
+        if($libID == 0 and !empty($libs))
+        {
+            $lib        = current($libs);
+            $libID      = $lib->id;
+            $objectType = $lib->product ? 'product' : ($lib->project ? 'project' : '');
+            $objectID   = $lib->product ? $lib->product : $lib->project;
+        }
 
         /* Get an api doc. */
         if($apiID > 0)
         {
-            $api = $this->api->getLibById($apiID, $version, $release);
-            if($api)
-            {
-                $moduleID  = $api->module;
-                $libID     = $api->lib;
-                $api->desc = htmlspecialchars_decode($api->desc);
-
-                $this->view->api      = $api;
-                $this->view->apiID    = $apiID;
-                $this->view->version  = $version;
-                $this->view->typeList = $this->api->getTypeList($api->lib);
-                $this->view->actions  = $apiID ? $this->action->getList('api', $apiID) : array();
-            }
+            echo $this->fetch('api', 'view', "libID=$libID&apiID=$apiID&moduleID=$moduleID&release=$release&version=$version");
+            return;
         }
         else
         {
@@ -68,12 +72,6 @@ class api extends control
         $lib       = $this->doc->getLibById($libID);
         $appendLib = (!empty($lib) and $lib->deleted == '1') ? $libID : 0;
 
-        /* Generate bread crumbs dropMenu. */
-        if($libs) $this->lang->modulePageNav = $this->generateLibsDropMenu($libs, $libID, $release);
-
-        $this->setMenu($libID, $moduleID);
-        $this->lang->TRActions = '<a class="btn btn-link querybox-toggle" id="bysearchTab"><i class="icon icon-search muted"></i> ' . $this->lang->api->search . '</a>' . $this->lang->TRActions;
-
         /* Build the search form. */
         $queryID   = $browseType == 'bySearch' ? (int)$param : 0;
         $actionURL = $this->createLink('api', 'index', "libID=$libID&moduleID=0&apiID=0&version=0&release=0&appendLib=0&browseType=bySearch&param=myQueryID");
@@ -85,17 +83,63 @@ class api extends control
             $this->view->typeList = $this->api->getTypeList($libID);
         }
 
-        $this->view->lib        = $lib;
-        $this->view->isRelease  = $release > 0;
-        $this->view->release    = $release;
-        $this->view->title      = $this->lang->api->pageTitle;
-        $this->view->libID      = $libID;
-        $this->view->apiID      = $apiID;
-        $this->view->libs       = $libs;
-        $this->view->browseType = $browseType;
-        $this->view->moduleTree = $libID ? $this->doc->getApiModuleTree($libID, $apiID, $release, $moduleID) : '';
-        $this->view->users      = $this->user->getPairs('noclosed,noletter');
+        $this->view->lib            = $lib;
+        $this->view->isRelease      = $release > 0;
+        $this->view->release        = $release;
+        $this->view->title          = $this->lang->api->pageTitle;
+        $this->view->libID          = $libID;
+        $this->view->apiID          = $apiID;
+        $this->view->libs           = $libs;
+        $this->view->browseType     = $browseType;
+        $this->view->objectType     = $objectType;
+        $this->view->objectID       = $objectID;
+        $this->view->moduleID       = $moduleID;
+        $this->view->libTree        = $this->api->getLibTree($libID, $libs, $objectID);
+        $this->view->users          = $this->user->getPairs('noclosed,noletter');
+        $this->view->objectDropdown = $this->generateLibsDropMenu($libs[$libID], $release);
 
+        $this->display();
+    }
+
+    /**
+     * View api.
+     *
+     * @param  int    $libID
+     * @param  int    $apiID
+     * @param  int    $moduleID
+     * @param  int    $release
+     * @param  int    $version
+     * @access public
+     * @return void
+     */
+    public function view($libID, $apiID, $moduleID = 0, $release = 0, $version = 0)
+    {
+        /* Get all api doc libraries. */
+        $libs = $this->doc->getApiLibs($libID);
+
+        $api = $this->api->getLibById($apiID, $version, $release);
+        if($api)
+        {
+            $moduleID  = $api->module;
+            $libID     = $api->lib;
+            $api->desc = htmlspecialchars_decode($api->desc);
+
+            $this->view->api      = $api;
+            $this->view->apiID    = $apiID;
+            $this->view->version  = $version;
+            $this->view->typeList = $this->api->getTypeList($api->lib);
+            $this->view->actions  = $apiID ? $this->action->getList('api', $apiID) : array();
+        }
+
+        $this->view->title          = $this->lang->api->pageTitle;
+        $this->view->libs           = $libs;
+        $this->view->isRelease      = $release > 0;
+        $this->view->release        = $release;
+        $this->view->libID          = $libID;
+        $this->view->apiID          = $apiID;
+        $this->view->users          = $this->user->getPairs('noclosed,noletter');
+        $this->view->moduleTree     = $this->doc->getApiModuleTree($libID, $apiID, $release, $moduleID);
+        $this->view->objectDropdown = $this->generateLibsDropMenu($libs[$libID], $release);
         $this->display();
     }
 
@@ -110,7 +154,7 @@ class api extends control
     {
         $libs = $this->doc->getApiLibs();
         $this->app->loadClass('pager', $static = true);
-        $this->lang->modulePageNav = $this->generateLibsDropMenu($libs, $libID);
+        $this->lang->modulePageNav = $this->generateLibsDropMenu($libs[$libID]);
 
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
@@ -198,7 +242,7 @@ class api extends control
     {
         $libs = $this->doc->getApiLibs();
         $this->app->loadClass('pager', $static = true);
-        $this->lang->modulePageNav = $this->generateLibsDropMenu($libs, $libID, $releaseID);
+        $this->lang->modulePageNav = $this->generateLibsDropMenu($libs[$libID], $releaseID);
 
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
@@ -335,6 +379,8 @@ class api extends control
      */
     public function createLib($type = 'product')
     {
+        if(empty($type)) $type = 'product';
+
         if(!empty($_POST))
         {
             $libID = $this->doc->createApiLib();
@@ -342,6 +388,11 @@ class api extends control
 
             /* Record action for create api library. */
             $this->action->create('doclib', $libID, 'created');
+
+            /* Set locate object data. */
+            setCookie("objectType", $this->post->libType, $this->config->cookieLife, $this->config->webRoot, '', false, true);
+            setCookie("objectID", $this->post->libType == 'project' ? $this->post->project : $this->post->product, $this->config->cookieLife, $this->config->webRoot, '', false, true);
+
 
             if(!helper::isAjaxRequest()) return print(js::locate($this->createLink('api', 'index', "libID=$libID"), 'parent.parent'));
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink('api', 'index', "libID=$libID")));
@@ -615,7 +666,7 @@ class api extends control
      */
     private function setMenu($libID = 0, $moduleID = 0)
     {
-        common::setMenuVars('doc', $libID);
+        common::setMenuVars('doc', '');
 
         /* Global struct link. */
         $menu = '';
@@ -658,76 +709,38 @@ class api extends control
     /**
      * Generate api doc index page dropMenu
      *
-     * @param  array $libs
-     * @param  int   $libID
-     * @param  int   $version
+     * @param  object $lib
+     * @param  int    $version
      * @access public
      * @return string
      */
-    private function generateLibsDropMenu($libs, $libID, $version = 0)
+    private function generateLibsDropMenu($lib, $version = 0)
     {
-        if(empty($libs)) return '';
-        if(!isset($libs[$libID])) return '';
+        if(empty($lib)) return '';
 
-        $methodName = $this->app->rawMethod;
-
-        $libName = $libs[$libID]->name;
-        $output  = <<<EOT
-<div class='btn-group angle-btn'>
-  <div class='btn-group'>
-    <button id='currentBranch' data-toggle='dropdown' type='button' class='btn btn-limit'><div class='nobr'>{$libName}</div> <span class='caret'></span>
-    </button>
-    <div id='dropMenu' class='dropdown-menu search-list' data-ride='searchList'>
-      <div class="input-control search-box has-icon-left has-icon-right search-example">
-        <input type="search" class="form-control search-input" />
-        <label class="input-control-icon-left search-icon"><i class="icon icon-search"></i></label>
-        <a class="input-control-icon-right search-clear-btn"><i class="icon icon-close icon-sm"></i></a>
-      </div>
-      <div class='table-col'>
-        <div class='list-group'>
-EOT;
-        foreach($libs as $key => $lib)
+        $objectTitle = $this->lang->api->noLinked;
+        $objectType  = 'nolink';
+        $objectID    = 0;
+        if($lib->product)
         {
-            $selected = $key == $libID ? 'selected' : '';
-            $output  .= html::a(inlink($methodName, "libID=$key"), $lib->name, '', "class='$selected' data-app='{$this->app->tab}'");
+            $objectType = 'product';
+            $objectID   = $lib->product;
+            $product    = $this->loadModel('product')->getByID($objectID);
+            $objectTitle = zget($product, 'name', '');
         }
-        if(count($libs) >= 2 and common::hasPriv('doc', 'sortLibs'))
+        elseif($lib->project)
         {
-            $output   .= '<li class="divider"></li>';
-            $output   .= html::a($this->createLink('doc', 'sortLibs', "type=api&objectID=0", '', true), "<i class='icon-move'></i>  {$this->lang->doc->sortLibs}", '', "data-title='{$this->lang->doc->sortLibs}' data-toggle='modal' data-type='iframe' data-width='400px' data-app='{$this->app->tab}'");
-        }
-        $output .= "</div></div></div></div></div>";
-
-        /* Get lib version */
-        $versions = $this->api->getReleaseListByApi($libID);
-        if(!empty($versions))
-        {
-            $versionName = $version > 0 ? $versions[$version]->version : $this->lang->api->defaultVersion;
-            $output     .= <<<EOT
-<div class='btn-group angle-btn'>
-  <div class='btn-group'>
-    <button id='currentBranch' data-toggle='dropdown' type='button' class='btn btn-limit'><div class='nobr'>{$versionName}</div> <span class='caret'></span>
-    </button>
-    <div id='dropMenu' class='dropdown-menu search-list' data-ride='searchList'>
-      <div class="input-control search-box has-icon-left has-icon-right search-example">
-        <input type="search" class="form-control search-input" />
-        <label class="input-control-icon-left search-icon"><i class="icon icon-search"></i></label>
-        <a class="input-control-icon-right search-clear-btn"><i class="icon icon-close icon-sm"></i></a>
-      </div>
-      <div class='table-col'>
-        <div class='list-group'>
-EOT;
-            $params   = $methodName == 'index' ? "libID=$libID&moduleID=0&apiID=0&version=0" : "libID=$libID";
-            $selected = $version > 0 ? '' : 'selected';
-            $output  .= html::a(inlink($methodName, $params . "&release=0"), $this->lang->api->defaultVersion, '', "class='$selected'");
-            foreach($versions as $key => $item)
-            {
-                $selected = $key == $version ? 'selected' : '';
-                $output  .= html::a(inlink($methodName, $params . "&release=$key"), $item->version, '', "class='$selected' data-app='{$this->app->tab}'");
-            }
-            $output .= "</div></div></div></div></div>";
+            $objectType  = 'project';
+            $objectID    = $lib->project;
+            $project     = $this->loadModel('project')->getByID($objectID);
+            $objectTitle = zget($project, 'name', '');
         }
 
+        $dropMenuLink = helper::createLink('api', 'ajaxGetDropMenu', "objectType=$objectType&objectID=$objectID&libID=$lib->id&version=$version");
+
+        $output  = "<div class='btn-group selectBox' id='swapper'><button data-toggle='dropdown' type='button' class='btn' id='currentItem' title='{$objectTitle}'><span class='text'>{$objectTitle}</span> <span class='caret' style='margin-bottom: -1px'></span></button><div id='dropMenu' class='dropdown-menu search-list' data-ride='searchList' data-url='$dropMenuLink'>";
+        $output .= '<div class="input-control search-box has-icon-left has-icon-right search-example"><input type="search" class="form-control search-input" /><label class="input-control-icon-left search-icon"><i class="icon icon-search"></i></label><a class="input-control-icon-right search-clear-btn"><i class="icon icon-close icon-sm"></i></a></div>';
+        $output .= "</div></div>";
         return $output;
     }
 
@@ -861,5 +874,36 @@ EOT;
             $options[] = array('label' => $struct->name, 'value' => $struct->id);
         }
         $this->view->typeOptions = $options;
+    }
+
+    /**
+     * Ajax get objectType drop menu.
+     *
+     * @param  string $objectType
+     * @param  int    $objectID
+     * @param  string $module
+     * @param  string $method
+     * @access public
+     * @return void
+     */
+    public function ajaxGetDropMenu($objectType, $objectID, $module, $method)
+    {
+        list($normalObjects, $closedObjects) = $this->api->getOrderedObjects($objectType, 'nomerge', 'api');
+
+        $titleList = array($this->lang->api->noLinked);
+        $titleList += array_values($normalObjects['product']);
+        $titleList += array_values($normalObjects['project']);
+        $titleList += array_values($closedObjects['product']);
+        $titleList += array_values($closedObjects['project']);
+
+        $this->view->objectType    = $objectType;
+        $this->view->objectID      = $objectID;
+        $this->view->module        = $module;
+        $this->view->method        = $method;
+        $this->view->normalObjects = array($this->lang->api->noLinked) + $normalObjects;
+        $this->view->closedObjects = $closedObjects;
+        $this->view->objectsPinYin = common::convert2Pinyin($titleList);
+
+        $this->display();
     }
 }

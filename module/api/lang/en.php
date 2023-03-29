@@ -61,6 +61,7 @@ $lang->api->defaultVersion   = "Current Version";
 $lang->api->zentaoAPI        = "Zentao API v1";
 $lang->api->search           = "Search";
 $lang->api->allLibs          = "AllLibs";
+$lang->api->noLinked         = "No Linked";
 
 /* Common access control lang. */
 $lang->api->whiteList          = 'Whitelist';
