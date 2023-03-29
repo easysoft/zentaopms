@@ -208,12 +208,6 @@ class docModel extends model
         }
         if($this->post->libType == 'api') $lib->type = 'api';
 
-        if($lib->acl == 'custom' or $lib->acl == 'private')
-        {
-            $trimedUsers = ',' . trim($lib->users, ',') . ',';
-            if(strpos($trimedUsers, ',' . $this->app->user->account . ',') === false) $lib->users .= ',' . $this->app->user->account;
-        }
-
         $lib->name = trim($lib->name); //Temporary treatment: Code for bug #15528.
         $this->dao->insert(TABLE_DOCLIB)->data($lib)->autoCheck()
             ->batchCheck($this->config->doc->createlib->requiredFields, 'notempty')
