@@ -11,7 +11,7 @@ $config->api->struct = new stdClass();
 $config->api->struct->requiredFields = 'name,params';
 
 $config->api->create = new stdclass();
-$config->api->create->requiredFields = 'lib,title,path';
+$config->api->create->requiredFields = 'title,path';
 
 $config->api->edit = new stdclass();
 $config->api->edit->requiredFields = 'lib,title,path';

@@ -15,7 +15,6 @@ $(function()
 
     $('iframe.ke-edit-iframe').contents().find('.article-content').css('padding', '20px 20px 0 20px');
 
-    toggleAcl($('input[name="acl"]:checked').val(), 'doc');
     setTimeout(function(){initPage(docType)}, 50);
     if(typeof(window.editor) != 'undefined')
     {

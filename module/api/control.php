@@ -96,7 +96,7 @@ class api extends control
         $this->view->moduleID       = $moduleID;
         $this->view->libTree        = $this->api->getLibTree($libID, $libs, $objectID);
         $this->view->users          = $this->user->getPairs('noclosed,noletter');
-        $this->view->objectDropdown = $this->generateLibsDropMenu($libs[$libID], $release);
+        $this->view->objectDropdown = isset($libs[$libID]) ? $this->generateLibsDropMenu($libs[$libID], $release) : '';
 
         $this->display();
     }
@@ -373,11 +373,12 @@ class api extends control
     /**
      * Create a api doc library.
      *
-     * @param  string normal|demo
+     * @param  string $type project|product
+     * @param  int    $objectID
      * @access public
      * @return void
      */
-    public function createLib($type = 'product')
+    public function createLib($type = 'product', $objectID = 0)
     {
         if(empty($type)) $type = 'product';
 
@@ -401,6 +402,7 @@ class api extends control
         $this->lang->api->aclList['default'] = sprintf($this->lang->api->aclList['default'], $this->lang->{$type}->common);
 
         $this->view->type     = $type;
+        $this->view->objectID = $objectID;
         $this->view->groups   = $this->loadModel('group')->getPairs();
         $this->view->users    = $this->user->getPairs('nocode|noclosed');
         $this->view->projects = $this->loadModel('project')->getPairsByModel();
@@ -544,7 +546,7 @@ class api extends control
         $libName = isset($lib->name) ? $lib->name . $this->lang->colon : '';
 
         $this->getTypeOptions($libID);
-        $this->view->gobackLink       = $this->createLink('api', 'index', "libID=$libID&moduleID=$moduleID");
+        $this->view->gobackLink       = '';
         $this->view->user             = $this->app->user->account;
         $this->view->allUsers         = $this->loadModel('user')->getPairs('devfirst|noclosed');
         $this->view->libID            = $libID;
