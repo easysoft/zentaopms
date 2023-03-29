@@ -568,6 +568,21 @@ class actionModel extends model
                     }
                 }
             }
+            elseif($actionName == 'closed' and $action->objectType == 'demand')
+            {
+                $action->appendLink = '';
+                if(strpos($action->extra, '|') !== false) $action->extra = substr($action->extra, 0, strpos($action->extra, '|'));
+                if(strpos($action->extra, ':') !== false)
+                {
+                    list($extra, $id) = explode(':', $action->extra);
+                    $action->extra    = $extra;
+                    if($id)
+                    {
+                        $name  = $this->dao->select('title')->from(TABLE_DEMAND)->where('id')->eq($id)->fetch('title');
+                        if($name) $action->appendLink = html::a(helper::createLink($action->objectType, 'view', "id=$id"), "#$id " . $name);
+                    }
+                }
+            }
             elseif($actionName == 'finished' and $objectType == 'todo')
             {
                 $action->appendLink = '';
@@ -949,7 +964,7 @@ class actionModel extends model
             else
             {
                 if($actionType == 'restoredsnapshot' && in_array($action->objectType, array('vm', 'zanode')) && $value == 'defaultSnap') $value = $this->lang->$objectType->snapshot->defaultSnapName;
-                
+
                 $desc = str_replace('$' . $key, $value, $desc);
             }
         }
