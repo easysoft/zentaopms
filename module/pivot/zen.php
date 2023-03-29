@@ -20,7 +20,7 @@ class pivotZen extends pivot
         if(!$group) $group = $this->getDefaultGroup($dimension);
         if(!$module || !$method) list($module, $method, $params) = $this->getDefaultMethod($dimension, $group);
 
-        if(!empty($module) && !empty($method) && !common::hasPriv($module, $method)) common::deny('pivot', $method);
+        if(!empty($module) && !empty($method) && !common::hasPriv($module, $method)) $this->loadModel('common')->deny('pivot', $method);
 
         $this->view->sidebar   = $this->getSidebar($dimension, $group, $module, $method, $params);
         $this->view->dimension = $dimension;
