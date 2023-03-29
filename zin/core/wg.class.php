@@ -48,6 +48,14 @@ class wg
 
     protected $matchedPortals = NULL;
 
+    protected static $wgToBlockMap = array();
+
+    protected static $definedPropsMap = array();
+
+    private static $gidSeed = 0;
+
+    private static $pageResources = array();
+
     public function __construct(/* string|element|object|array|null ...$args */)
     {
         $this->props = new props();
@@ -412,15 +420,8 @@ class wg
         return $defaultProps;
     }
 
-    protected static $wgToBlockMap = array();
-
-    protected static $definedPropsMap = array();
-
-    private static $gidSeed = 0;
-
-    private static $pageResources = array();
-
     public static function getPageCSS() {}
+
     public static function getPageJS() {}
 
     protected static function checkPageResources()
