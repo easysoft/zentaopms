@@ -15,6 +15,10 @@
 #docListForm th.c-id {width: 72px;}
 #docListForm th.c-user {width: 80px;}
 #docListForm th.c-actions {width: 84px; padding-left: 15px;}
+#docListForm .checkbox-primary {line-height: 16px;}
+#docListForm .checkbox-primary > label {height: 16px; line-height: 16px; padding-left: 16px;}
+#docListForm .checkbox-primary > label:before {left: -1px; font-size: 10px;}
+#docListForm .checkbox-primary > label:after {width: 12px; height: 12px;}
 </style>
 <?php if(common::checkNotCN()):?>
 <style>
@@ -75,13 +79,15 @@
           </td>
           <td class="c-name" title='<?php echo $doc->title;?>'>
           <?php
+          $docType = $doc->type == 'text' ? 'wiki-file' : $doc->type;
+          $icon    = html::image("static/svg/{$docType}.svg");
           if(common::hasPriv('doc', 'objectLibs'))
           {
-              echo html::a($this->createLink('doc', 'objectLibs', "type=$type&objectID=$objectID&libID=$doc->lib&docID=$doc->id"), "<i class='icon icon-file-text text-muted'></i> &nbsp;" . $doc->title, '', "title='{$doc->title}' data-app='{$this->app->tab}'");
+              echo html::a($this->createLink('doc', 'objectLibs', "type=$type&objectID=$objectID&libID=$doc->lib&docID=$doc->id"), $icon . $doc->title, '', "title='{$doc->title}' data-app='{$this->app->tab}'");
           }
           else
           {
-              echo "<i class='icon icon-file-text text-muted'></i> {$doc->title}";
+              echo "$icon {$doc->title}";
           }
           ?>
           <?php if(common::canBeChanged('doc', $doc) and common::hasPriv('doc', 'collect') and $libType and $libType != 'api'):?>

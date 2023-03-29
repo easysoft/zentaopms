@@ -148,6 +148,7 @@ class reportModel extends model
             ->leftJoin(TABLE_PROGRAM)->alias('t2')->on('t1.program = t2.id')
             ->where('t1.deleted')->eq(0)
             ->andWhere('t1.shadow')->eq(0)
+            ->andWhere('t1.vision')->eq('rnd')
             ->beginIF(strpos($conditions, 'closedProduct') === false)->andWhere('t1.status')->ne('closed')->fi()
             ->beginIF(!$permission)->andWhere('t1.id')->in($this->app->user->view->products)->fi()
             ->orderBy('t2.order_asc, t1.line_desc, t1.order_asc')

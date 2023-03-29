@@ -64,9 +64,9 @@ $lang->api->allLibs          = "全部接口库";
 
 /* Common access control lang. */
 $lang->api->whiteList          = '白名单';
-$lang->api->aclList['open']    = '公开';
-$lang->api->aclList['private'] = '私有';
-$lang->api->aclList['custom']  = '自定义';
+$lang->api->aclList['open']    = "公开 <span class='acl-tip'>（有文档视图权限即可访问）</span>";
+$lang->api->aclList['default'] = "默认 <span class='acl-tip'>（有所选%s访问权限用户和白名单用户可以访问）</span>";
+$lang->api->aclList['private'] = "私有 <span class='acl-tip'>（仅创建者和白名单用户可访问）</span>";
 $lang->api->group              = '分组';
 $lang->api->user               = '用户';
 
@@ -102,8 +102,8 @@ $lang->api->structType         = '类型';
 $lang->api->structAttr         = '属性';
 $lang->api->structAddedBy      = '创建人';
 $lang->api->structAddedDate    = '创建时间';
-$lang->api->name               = '接口库名称';
-$lang->api->baseUrl            = '请求基路径';
+$lang->api->name               = '库名称';
+$lang->api->baseUrl            = '请求基础路径';
 $lang->api->baseUrlDesc        = '网址或者路径，比如 test.zentao.net 或者 /v1';
 $lang->api->desc               = '描述';
 $lang->api->control            = '访问控制';
@@ -148,6 +148,10 @@ $lang->api->default            = '默认值';
 $lang->api->desc               = '描述';
 $lang->api->customType         = '自定义结构';
 $lang->api->format             = '格式化';
+$lang->api->libType            = '接口库类型';
+$lang->api->product            = '所属' . $lang->productCommon;
+$lang->api->project            = '所属' . $lang->projectCommon;
+
 $lang->api->methodOptions      = array(
     'GET'     => 'GET',
     'POST'    => 'POST',
@@ -168,6 +172,10 @@ $lang->api->requestTypeOptions = array();
 $lang->api->requestTypeOptions['application/json']                  = 'application/json';
 $lang->api->requestTypeOptions['application/x-www-form-urlencoded'] = 'application/x-www-form-urlencoded';
 $lang->api->requestTypeOptions['multipart/form-data']               = 'multipart/form-data';
+
+$lang->api->libTypeList = array();
+$lang->api->libTypeList['product'] = $lang->productCommon . '接口库';
+$lang->api->libTypeList['project'] = $lang->projectCommon . '接口库';
 
 $lang->api->statusOptions      = array(
     'done'   => '开发完成',

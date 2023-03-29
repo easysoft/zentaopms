@@ -23,37 +23,55 @@
         <form class='load-indicator main-form form-ajax' id="apiForm" method='post' enctype='multipart/form-data'>
           <table class='table table-form'>
             <tr>
+              <th><?php echo $lang->api->libType;?></th>
+              <td>
+                <span><?php echo html::radio('libType', $lang->api->libTypeList, $type, "onchange='toggleLibType(this.value)'")?></span>
+              </td>
+            </tr>
+            <tr id='productBox' class='<?php echo $type != 'product' ? 'hidden' : '';?>'>
+              <th><?php echo $lang->api->product;?></th>
+              <td>
+                <span><?php echo html::select('product', $products, $lib->product, "class='form-control chosen'")?></span>
+              </td>
+            </tr>
+            <tr id='projectBox' class='<?php echo $type != 'project' ? 'hidden' : '';?>'>
+              <th><?php echo $lang->api->project;?></th>
+              <td>
+                <span><?php echo html::select('project', $projects, $lib->project, "class='form-control chosen'")?></span>
+              </td>
+            </tr>
+            <tr>
               <th><?php echo $lang->api->name?></th>
-              <td style="width: 80%"><?php echo html::input('name', $doc->name, "class='form-control'");?></td>
+              <td style="width: 80%"><?php echo html::input('name', $lib->name, "class='form-control'");?></td>
             </tr>
             <tr>
               <th><?php echo $lang->api->baseUrl?></th>
-              <td style="width: 80%"><?php echo html::input('baseUrl', $doc->baseUrl, "class='form-control'");?></td>
+              <td style="width: 80%"><?php echo html::input('baseUrl', $lib->baseUrl, "class='form-control'");?></td>
             </tr>
-            <tr>
+            <tr id='aclBox'>
               <th><?php echo $lang->api->control;?></th>
               <td>
-                <span><?php echo html::radio('acl', $lang->api->aclList, $doc->acl, "onchange='toggleAcl(this.value, \"lib\")'")?></span>
-                <span class='text-info' id='noticeAcl'><?php echo $lang->api->noticeAcl['open'];?></span>
+                <span><?php echo html::radio('acl', $lang->api->aclList, $lib->acl, "onchange='toggleAcl(this.value, \"lib\")'", 'block')?></span>
               </td>
             </tr>
-            <tr id='whiteListBox' class='<?php echo $doc->acl == 'custom' ? '' : 'hidden';?>'>
+            <tr id='whiteListBox' class='<?php echo $lib->acl != 'open' ? '' : 'hidden';?>'>
               <th><?php echo $lang->api->whiteList;?></th>
-              <td>
+              <td colspan='2'>
                 <div class='input-group'>
                   <span class='input-group-addon groups-addon'><?php echo $lang->api->group?></span>
-                    <?php echo html::select('groups[]', $groups, $doc->groups, "class='form-control chosen' multiple");?>
+                    <?php echo html::select('groups[]', $groups, $lib->groups, "class='form-control chosen' multiple");?>
                 </div>
                 <div class='input-group'>
                   <span class='input-group-addon'><?php echo $lang->api->user?></span>
-                    <?php echo html::select('users[]', $users, $doc->users, "class='form-control chosen' multiple");?>
+                    <?php echo html::select('users[]', $users, $lib->users, "class='form-control chosen' multiple");?>
+                    <?php echo $this->fetch('my', 'buildContactLists', "dropdownName=users&attr=data-drop_direction='up'");?>
                 </div>
               </td>
             </tr>
             <tr>
               <th><?php echo $lang->api->desc;?></th>
               <td colspan='2'>
-                  <?php echo html::textarea('desc', $doc->desc, "rows='8' class='form-control kindeditor' hidefocus='true' tabindex=''");?>
+                  <?php echo html::textarea('desc', $lib->desc, "rows='8' class='form-control kindeditor' hidefocus='true' tabindex=''");?>
               </td>
             </tr>
             <tr>
@@ -65,22 +83,6 @@
     </div>
   </div>
 </div>
-<div class='hidden'>
-  <table>
-    <tr id='aclBoxA'>
-      <th><?php echo $lang->api->control;?></th>
-      <td>
-          <?php echo html::radio('acl', $lang->api->aclListA, 'default', "onchange='toggleAcl(this.value, \"lib\")'");?>
-      </td>
-    </tr>
-    <tr id='aclBoxB'>
-      <th><?php echo $lang->api->control;?></th>
-      <td><?php echo html::radio('acl', $lang->api->aclListB, 'open', "onchange='toggleAcl(this.value, \"lib\")'");?></td>
-    </tr>
-  </table>
-</div>
-<?php js::set('noticeAcl', $lang->api->noticeAcl);?>
-<script>
-$(function(){toggleAcl($('form input[name="acl"]:checked').val(), 'lib');}) 
-</script>
+<?php js::set('productLang', $lang->productCommon);?>
+<?php js::set('projectLang', $lang->projectCommon);?>
 <?php include '../../common/view/footer.lite.html.php';?>

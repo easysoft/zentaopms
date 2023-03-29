@@ -1552,7 +1552,7 @@ class story extends control
             if($story->parent > 0)
             {
                 $this->story->updateParentStatus($story->id);
-                $this->loadModel('action')->create('story', $task->parent, 'deleteChildrenStory', '', $storyID);
+                $this->action->create('story', $story->parent, 'deleteChildrenStory', '', $storyID);
             }
 
             $this->executeHooks($storyID);
@@ -2200,8 +2200,8 @@ class story extends control
      */
     public function batchChangeBranch($branchID, $confirm = '', $storyIdList = '', $storyType = 'story')
     {
-        if(empty($_POST['storyIdList'])) return print(js::locate($this->session->storyList, 'parent'));
-        $storyIdList = $this->post->storyIdList;
+        if(empty($storyIdList) and empty($_POST['storyIdList'])) return print(js::locate($this->session->storyList, 'parent'));
+        if(!empty($_POST['storyIdList'])) $storyIdList = $this->post->storyIdList;
         $plans       = $this->loadModel('productplan')->getPlansByStories($storyIdList);
         if(empty($confirm))
         {
@@ -2466,7 +2466,6 @@ class story extends control
         /* Get story, product, products, and queryID. */
         $story    = $this->story->getById($storyID);
         $products = $this->product->getPairs('', 0, '', 'all');
-        $queryID  = 0;
         $product  = $this->product->getByID($story->product);
 
         /* Change for requirement story title. */

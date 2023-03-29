@@ -10,7 +10,7 @@
  * @link        http://www.zentao.net
  */
 $lang->doclib = new stdclass();
-$lang->doclib->name       = '文档库名称';
+$lang->doclib->name       = '库名称';
 $lang->doclib->control    = '访问控制';
 $lang->doclib->group      = '分组';
 $lang->doclib->user       = '用户';
@@ -20,6 +20,13 @@ $lang->doclib->select     = '选择文档库';
 $lang->doclib->execution  = $lang->executionCommon . '库';
 $lang->doclib->product    = $lang->productCommon . '库';
 $lang->doclib->apiLibName = '接口库名称';
+$lang->doclib->privateACL = "私有 <span class='acl-tip'>（仅创建者和有%s权限的白名单用户可访问）</span>";
+
+$lang->doclib->tip = new stdclass();
+$lang->doclib->tip->selectExecution = "执行为空时，创建的库为{$lang->projectCommon}库";
+
+$lang->doclib->type['wiki'] = 'WIKI文档库';
+$lang->doclib->type['api']  = '接口库';
 
 $lang->doclib->aclListA = array();
 $lang->doclib->aclListA['default'] = '默认';
@@ -28,6 +35,11 @@ $lang->doclib->aclListA['custom']  = '自定义';
 $lang->doclib->aclListB['open']    = '公开';
 $lang->doclib->aclListB['custom']  = '自定义';
 $lang->doclib->aclListB['private'] = '私有';
+
+$lang->doclib->aclList = array();
+$lang->doclib->aclList['open']    = "公开 <span class='acl-tip'>（有文档视图权限即可访问）</span>";
+$lang->doclib->aclList['default'] = "默认 <span class='acl-tip'>（有所选%s访问权限用户可以访问）</span>";
+$lang->doclib->aclList['private'] = "私有 <span class='acl-tip'>（仅创建者和白名单用户可访问）</span>";
 
 $lang->doclib->create['product']   = '创建' . $lang->productCommon . '文档库';
 $lang->doclib->create['execution'] = '创建' . $lang->executionCommon . '文档库';
@@ -142,8 +154,8 @@ $lang->doc->api              = '接口';
 
 $lang->doc->collectAction = '收藏文档';
 
-$lang->doc->libName           = '文档库名称';
-$lang->doc->libType           = '文档库类型';
+$lang->doc->libName           = '库名称';
+$lang->doc->libType           = '库类型';
 $lang->doc->custom            = '自定义文档库';
 $lang->doc->customAB          = '自定义库';
 $lang->doc->createLib         = '创建库';

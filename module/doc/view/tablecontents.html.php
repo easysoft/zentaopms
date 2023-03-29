@@ -32,7 +32,7 @@
 
   if(common::hasPriv('doc', 'createLib'))
   {
-      echo html::a(helper::createLink('doc', 'createLib', "type=$type&objectID=$objectID"), '<i class="icon icon-plus"></i> ' . $this->lang->doc->createLib, '', 'class="btn btn-secondary iframe"');
+      echo html::a(helper::createLink('doc', 'createLib', "type=$type&objectID=$objectID"), '<i class="icon icon-plus"></i> ' . $this->lang->doc->createLib, '', 'class="btn btn-secondary iframe" data-width="800px"');
   }
 
   if($libID and (common::hasPriv('doc', 'create') or (common::hasPriv('api', 'create') and !$apiLibID)))
@@ -109,8 +109,8 @@
 </div>
 <div class="hidden" data-id="aTreeModal">
   <a href="###" data-has-children="false" title="%name%" data-id="%id%">
-    <div class="text h-full w-full overflow-hidden" style="position: relative;">
-      %name%
+    <div class="text h-full w-full flex-between overflow-hidden" style="position: relative;">
+      <span>%name%</span>
       <i class="icon icon-drop icon-ellipsis-v hidden file-drop-icon" data-iscatalogue="true"></i>
     </div>
   </a>

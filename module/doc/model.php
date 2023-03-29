@@ -9,8 +9,6 @@
  * @version     $Id: model.php 881 2010-06-22 06:50:32Z chencongzhi520 $
  * @link        http://www.zentao.net
  */
-?>
-<?php
 
 class docModel extends model
 {
@@ -193,12 +191,17 @@ class docModel extends model
     {
         $lib = fixer::input('post')
             ->setForce('product', $this->post->type == 'product' ? $this->post->product : 0)
-            ->setForce('execution', $this->post->type == 'execution' ? $this->post->execution : 0)
+            ->setForce('project', $this->post->type == 'project' ? $this->post->project : 0)
+            ->setForce('execution', $this->post->type == 'execution' || $this->post->execution ? $this->post->execution : 0)
             ->join('groups', ',')
             ->join('users', ',')
+            ->add('addedBy', $this->app->user->account)
+            ->add('addedDate', helper::now())
+            ->remove('uid,contactListMenu,libType')
             ->get();
 
-        if($lib->type == 'execution' and $lib->execution)
+        if($lib->execution) $lib->type = 'execution';
+        if($lib->type == 'execution' and $lib->execution and !$lib->project)
         {
             $execution    = $this->loadModel('execution')->getByID($lib->execution);
             $lib->project = $execution->project;
@@ -226,17 +229,26 @@ class docModel extends model
      */
     public function createApiLib()
     {
-        /* Replace doc library name. */
-        $this->lang->doclib->name = $this->lang->doclib->apiLibName;
-
         $data = fixer::input('post')
             ->trim('name')
             ->join('groups', ',')
             ->join('users', ',')
+            ->setForce('product', $this->post->libType == 'product' ? $this->post->product : 0)
+            ->setForce('project', $this->post->libType == 'project' ? $this->post->project : 0)
+            ->add('addedBy', $this->app->user->account)
+            ->add('addedDate', helper::now())
+            ->remove('uid,contactListMenu,libType')
             ->get();
 
-        if($data->acl == 'private') $data->users = $this->app->user->account;
-        if($data->acl == 'custom' && strpos($data->users, $this->app->user->account) === false) $data->users .= ',' . $this->app->user->account;
+        $this->app->loadLang('api');
+
+        /* Replace doc library name. */
+        $this->lang->doclib->name    = $this->lang->doclib->apiLibName;
+        $this->lang->doclib->baseUrl = $this->lang->api->baseUrl;
+        $this->lang->doclib->project = $this->lang->api->project;
+        $this->lang->doclib->product = $this->lang->api->product;
+
+        $this->config->api->createlib->requiredFields .= $this->post->libType == 'product' ? ',product' : ',project';
 
         $data->type = static::DOC_TYPE_API;
         $this->dao->insert(TABLE_DOCLIB)->data($data)->autoCheck()
@@ -250,16 +262,33 @@ class docModel extends model
     /**
      * Update api lib.
      *
-     * @param  int      $id
-     * @param  stdClass $oldDoc
-     * @param  array    $data
+     * @param  int   $id
      * @access public
      * @return array|int
      */
-    public function updateApiLib($id, $oldDoc, $data)
+    public function updateApiLib($id)
     {
+        $oldLib = $this->getLibById($id);
+
+        $data = fixer::input('post')
+            ->trim('name')
+            ->join('groups', ',')
+            ->join('users', ',')
+            ->setForce('product', $this->post->libType == 'product' ? $this->post->product : 0)
+            ->setForce('project', $this->post->libType == 'project' ? $this->post->project : 0)
+            ->remove('uid,contactListMenu,libType')
+            ->get();
+
+        $this->app->loadLang('api');
+
         /* Replace doc library name. */
-        $this->lang->doclib->name = $this->lang->doclib->apiLibName;
+        $this->lang->doclib->name    = $this->lang->doclib->apiLibName;
+        $this->lang->doclib->baseUrl = $this->lang->api->baseUrl;
+        $this->lang->doclib->project = $this->lang->api->project;
+        $this->lang->doclib->product = $this->lang->api->product;
+
+
+        $this->config->api->editlib->requiredFields .= $this->post->libType == 'product' ? ',product' : ',project';
 
         $data->type = static::DOC_TYPE_API;
         $this->dao->update(TABLE_DOCLIB)->data($data)->autoCheck()
@@ -294,21 +323,15 @@ class docModel extends model
             ->setDefault('groups', '')
             ->join('groups', ',')
             ->join('users', ',')
+            ->remove('uid,contactListMenu')
             ->get();
 
-        if($oldLib->type == 'project' or $oldLib->type == 'custom')
+        if($oldLib->type == 'project')
         {
             $libCreatedBy = $this->dao->select('*')->from(TABLE_ACTION)->where('objectType')->eq('doclib')->andWhere('objectID')->eq($libID)->andWhere('action')->eq('created')->fetch('actor');
 
-            if($oldLib->type == 'custom')
-            {
-                if($lib->acl == 'private') $lib->users = $libCreatedBy ? $libCreatedBy : $this->app->user->account;
-            }
-            else
-            {
-                $openedBy = $this->dao->findById($oldLib->project)->from(TABLE_PROJECT)->fetch('openedBy');
-                if($lib->acl == 'private' and $lib->acl == 'custom') $lib->users .= ',' . $libCreatedBy ? $libCreatedBy : $openedBy;
-            }
+            $openedBy = $this->dao->findById($oldLib->project)->from(TABLE_PROJECT)->fetch('openedBy');
+            if($lib->acl == 'private' and $lib->acl == 'custom') $lib->users .= ',' . $libCreatedBy ? $libCreatedBy : $openedBy;
         }
         if($oldLib->acl != $lib->acl and $lib->acl == 'open') $lib->users = '';
 
@@ -797,7 +820,6 @@ class docModel extends model
             return false;
         }
 
-        $now = helper::now();
         $doc = fixer::input('post')->setDefault('module', 0)
             ->callFunc('title', 'trim')
             ->stripTags($this->config->doc->editor->edit['id'], $this->config->allowedTags)
@@ -807,7 +829,7 @@ class docModel extends model
             ->setDefault('execution', 0)
             ->setDefault('mailto', '')
             ->add('editedBy', $this->app->user->account)
-            ->add('editedDate', $now)
+            ->add('editedDate', helper::now())
             ->cleanInt('module')
             ->join('groups', ',')
             ->join('users', ',')
@@ -938,7 +960,7 @@ class docModel extends model
             $products = $this->product->getPairs();
 
             $this->config->doc->search['params']['project']['values']   = array('' => '') + $this->loadModel('project')->getPairsByProgram() + array('all' => $this->lang->doc->allProjects);
-            $this->config->doc->search['params']['execution']['values'] = array('' => '') + $this->loadModel('execution')->getPairs() + array('all' => $this->lang->doc->allExecutions);
+            $this->config->doc->search['params']['execution']['values'] = array('' => '') + $this->loadModel('execution')->getPairs(0, 'all', 'multiple') + array('all' => $this->lang->doc->allExecutions);
             $this->config->doc->search['params']['lib']['values']       = array('' => '') + $this->loadModel('doc')->getLibs('all', 'withObject') + array('all' => $this->lang->doclib->all);
             $this->config->doc->search['params']['product']['values']   = array('' => '') + $products + array('all' => $this->lang->doc->allProduct);
 
@@ -959,7 +981,7 @@ class docModel extends model
 
             if($type == 'project')
             {
-                $this->config->doc->search['params']['execution']['values'] = array('' => '') + $this->loadModel('execution')->getPairs($this->session->project, 'all', 'all') + array('all' => $this->lang->doc->allExecutions);
+                $this->config->doc->search['params']['execution']['values'] = array('' => '') + $this->loadModel('execution')->getPairs($this->session->project, 'all', 'multiple') + array('all' => $this->lang->doc->allExecutions);
             }
             else
             {
@@ -975,7 +997,7 @@ class docModel extends model
         else
         {
             $products = $this->product->getPairs('nocode', $this->session->project);
-            $this->config->doc->search['params']['execution']['values'] = array('' => '') + $this->loadModel('execution')->getPairs($this->session->project, 'all', 'noclosed') + array('all' => $this->lang->doc->allExecutions);
+            $this->config->doc->search['params']['execution']['values'] = array('' => '') + $this->loadModel('execution')->getPairs($this->session->project, 'all', 'multiple') + array('all' => $this->lang->doc->allExecutions);
             $this->config->doc->search['params']['lib']['values']       = array('' => '', $libID => ($libID ? $libs[$libID] : 0), 'all' => $this->lang->doclib->all);
             $this->config->doc->search['params']['product']['values']   = array('' => '') + $products + array('all' => $this->lang->doc->allProduct);
         }
@@ -1099,7 +1121,16 @@ class docModel extends model
         if(isset($object->addedBy) and $object->addedBy == $this->app->user->account) return true;
         if(isset($object->users) and strpos(",{$object->users},", $account) !== false) return true;
 
-        if($object->project and $object->acl == 'private')
+        if(!empty($object->groups))
+        {
+            $userGroups = $this->app->user->groups;
+            foreach($userGroups as $groupID)
+            {
+                if(strpos(",$object->groups,", ",$groupID,") !== false) return true;
+            }
+        }
+
+        if($object->project and !$object->execution and $object->acl == 'default')
         {
             $stakeHolders = array();
             $project      = $this->loadModel('project')->getById($object->project);
@@ -1108,18 +1139,7 @@ class docModel extends model
 
             $authorizedUsers = $this->user->getProjectAuthedUsers($project, $stakeHolders, $projectTeams, array_flip(explode(",", $project->whitelist)));
 
-            if(strpos(",{$object->users},", $account) !== false) return true;
             if(array_key_exists($this->app->user->account, array_filter($authorizedUsers))) return true;
-        }
-
-        if($object->acl == 'custom')
-        {
-            $userGroups = $this->app->user->groups;
-            foreach($userGroups as $groupID)
-            {
-                if(strpos(",$object->groups,", ",$groupID,") !== false) return true;
-            }
-            if(strpos(",{$object->users},", $account) !== false) return true;
         }
 
         if(strpos($extra, 'notdoc') !== false)
@@ -1129,7 +1149,7 @@ class docModel extends model
             if(isset($extraDocLibs[$object->id])) return true;
         }
 
-        if(!empty($object->product) or !empty($object->execution))
+        if($object->acl == 'default' and (in_array($object->type, array('product', 'execution'))))
         {
             $acls = $this->app->user->rights['acls'];
             if(!empty($object->product) and !empty($acls['products']) and !in_array($object->product, $acls['products'])) return false;
@@ -1449,14 +1469,7 @@ class docModel extends model
         else
         {
             $executionIDList = array();
-            if($type == 'project')
-            {
-                $executionIDList = $this->dao->select('id')->from(TABLE_EXECUTION)
-                    ->where('project')->eq($objectID)
-                    ->andWhere('multiple')->eq(1)
-                    ->andWhere('deleted')->eq(0)
-                    ->fetchPairs();
-            }
+            if($type == 'project') $executionIDList = $this->loadModel('execution')->getPairs($objectID, 'all', 'multiple');
 
             $objectLibs = $this->dao->select('*')->from(TABLE_DOCLIB)
                 ->where('deleted')->eq(0)
@@ -1470,7 +1483,7 @@ class docModel extends model
                 $objectLibs += $this->dao->select('*')->from(TABLE_DOCLIB)
                     ->where('deleted')->eq(0)
                     ->andWhere('vision')->eq($this->config->vision)
-                    ->andWhere('execution')->in($executionIDList)
+                    ->andWhere('execution')->in(array_keys($executionIDList))
                     ->beginIF(!empty($appendLib))->orWhere('id')->eq($appendLib)->fi()
                     ->orderBy('`order` asc, id_asc')
                     ->fetchAll('id');
@@ -1488,24 +1501,10 @@ class docModel extends model
                 ->fetchPairs('product', 'projectCount');
         }
 
-        $docCountPairs = $this->dao->select('lib, count(id) as docCount')->from(TABLE_DOC)
-            ->where('lib')->in(array_keys($objectLibs))
-            ->andWhere('vision')->eq($this->config->vision)
-            ->andWhere('type')->notin('chapter')
-            ->andWhere('deleted')->eq(0)
-            ->groupBy('lib')
-            ->fetchPairs('lib');
-
         $libs = array();
         foreach($objectLibs as $lib)
         {
-            if($this->checkPrivLib($lib))
-            {
-                $docCount = zget($docCountPairs, $lib->id, 0);
-                $lib->docCount = $docCount > 99 ? '99+' : $docCount;
-
-                $libs[$lib->id] = $lib;
-            }
+            if($this->checkPrivLib($lib)) $libs[$lib->id] = $lib;
         }
 
         $itemCounts = $this->statLibCounts(array_keys($libs));
@@ -2653,7 +2652,7 @@ class docModel extends model
             $table    = $this->config->objectTables[$type];
             $libs     = $this->getLibsByObject($type, $objectID, '', $appendLib);
 
-            if($libID == 0 and !empty($libs)) $libID = reset($libs)->id;
+            if(($libID == 0 or !isset($libs[$libID])) and !empty($libs)) $libID = reset($libs)->id;
             if($this->app->tab == 'doc') $this->app->rawMethod = $type == 'execution' ? 'project' : $type;
 
             $object         = $this->dao->select('id,name,status')->from($table)->where('id')->eq($objectID)->fetch();
@@ -2712,7 +2711,6 @@ class docModel extends model
      */
     public function getDocsBySearch($type, $objectID, $libID, $queryID, $orderBy = 'id_desc', $pager = null)
     {
-        $lib       = $this->getLibById($libID);
         $queryName = $type . 'libDocQuery';
         $queryForm = $type . 'libDocForm';
         if($queryID)
@@ -2831,7 +2829,7 @@ class docModel extends model
             foreach($libs as $lib)
             {
                 if($lib->type != 'execution') continue;
-                $executionLibs[$lib->execution][$libID] = $lib;
+                $executionLibs[$lib->execution][$lib->id] = $lib;
             }
 
             $executionPairs = $this->dao->select('id,name')->from(TABLE_EXECUTION)
@@ -2862,24 +2860,23 @@ class docModel extends model
                 if(empty($libTree['execution'][$executionID]))
                 {
                     $execution = new stdclass();
-                    $execution->id        = $executionID;
-                    $execution->name      = zget($executionPairs, $executionID);
-                    $execution->type      = 'execution';
-                    $execution->active    = $item->active;
-                    $execution->children  = array();
+                    $execution->id       = $executionID;
+                    $execution->name     = zget($executionPairs, $executionID);
+                    $execution->type     = 'execution';
+                    $execution->active   = $item->active;
+                    $execution->children = array();
                     if(count($executionLibs[$executionID]) == 1)
                     {
-                        $execution->id        = $item->id;
-                        $execution->type      = 'lib';
-                        $execution->children  = $item->children;
+                        $execution->id       = $item->id;
+                        $execution->children = $item->children;
                     }
 
                     $libTree['execution'][$executionID] = $execution;
-                    continue;
+                    if(count($executionLibs[$executionID]) == 1) continue;
                 }
 
                 $libTree['execution'][$executionID]->active = $item->active ? 1 : $libTree['execution'][$executionID]->active;
-                $libTree['execution'][$executionID]->children[$lib->id] = $item;
+                $libTree['execution'][$executionID]->children[] = $item;
             }
         }
 

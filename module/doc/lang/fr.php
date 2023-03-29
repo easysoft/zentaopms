@@ -20,6 +20,13 @@ $lang->doclib->select     = 'Sélect.';
 $lang->doclib->execution  = 'Bibliothèque ' . $lang->executionCommon;
 $lang->doclib->product    = $lang->productCommon . ' Library';
 $lang->doclib->apiLibName = 'Api Library Name';
+$lang->doclib->privateACL = "Private <span class='acl-tip'>(Only creators and whitelisted users with %s permissions can access it)</span>";
+
+$lang->doclib->tip = new stdclass();
+$lang->doclib->tip->selectExecution = "When execution is empty, the library created is the {$lang->projectCommon} library";
+
+$lang->doclib->type['wiki'] = 'WIKI';
+$lang->doclib->type['api']  = 'API';
 
 $lang->doclib->aclListA = array();
 $lang->doclib->aclListA['default'] = 'Défaut';
@@ -28,6 +35,11 @@ $lang->doclib->aclListA['custom']  = 'Person.';
 $lang->doclib->aclListB['open']    = 'Public';
 $lang->doclib->aclListB['custom']  = 'Person.';
 $lang->doclib->aclListB['private'] = 'Privée';
+
+$lang->doclib->aclList = array();
+$lang->doclib->aclList['open']    = "Public <span class='acl-tip'>(Users who can access doccan access it)</span>";
+$lang->doclib->aclList['default'] = "Default <span class='acl-tip'>(Users who can access the selected %s or users in the whiltelist can access it)</span>";
+$lang->doclib->aclList['private'] = "Private <span class='acl-tip'> (Only the one who created it or users in the whiltelist can access it)</span>";
 
 $lang->doclib->create['product']   = 'Créer ' . $lang->productCommon . ' Library';
 $lang->doclib->create['execution'] = 'Créer ' . 'Bibliothèque ' . $lang->executionCommon;

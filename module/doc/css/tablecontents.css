@@ -9,6 +9,7 @@
 .overflow-auto {overflow: auto;}
 .overflow-visible {overflow: visible;}
 .overflow-hidden {overflow: hidden;}
+.img-lib {width: 14px; height: 14px; margin-bottom: 2px;}
 #mainContent {padding-top: 0; padding-bottom: 0; height: calc(100vh - 125px);}
 #mainContent #createDropdown {display: inline-block;}
 #mainContent #createDropdown ul {position: absolute;}
@@ -62,6 +63,7 @@ li.drag-shadow ul {display: none!important;}
 .file-tree  a.show-icon {padding-right: 15px;}
 .flex-between {display: flex; align-items: center; justify-content: space-between;}
 .flex-center {display: flex; align-items: center; justify-content: center;}
+.flex-start {display: flex; align-items: center;}
 .tree li > .list-toggle {top: 4px;}
 .input-tree {width: 120px;}
 .tree-icon {position: absolute; right: 0;}

@@ -17,9 +17,18 @@
   <?php if($libID):?>
   <?php $sideWidth = common::checkNotCN() ? '270' : '238';?>
   <div class="side-col" style="width:<?php echo $sideWidth;?>px" data-min-width="<?php echo $sideWidth;?>">
-    <div class="cell" style="min-height: 286px">
+    <div class="cell" style="min-height: 286px; overflow: visible;">
       <div id='title'>
-        <li class='menu-title'><?php echo $this->lang->api->module;?></li>
+        <li class='menu-title'>
+          <div class="title"><?php echo $this->lang->api->module;?></div>
+          <div class="dropdown vision-drop">
+            <button data-toggle="dropdown" class="btn btn-link">v-1.43</button>
+            <ul class="dropdown-menu">
+              <li><a>1.43</a></li>
+              <li><a>1.44</a></li>
+            </ul>
+          </div>
+        </li>
         <?php
         $canTreeBrowse   = common::hasPriv('tree', 'browse');
         $canViewReleases = common::hasPriv('api', 'releases');

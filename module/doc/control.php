@@ -40,9 +40,6 @@ class doc extends control
         $this->app->loadClass('pager', $static = true);
         $pager = new pager(0, 5, 1);
 
-        $actionURL = $this->createLink('doc', 'browse', "lib=0&browseType=bySearch&queryID=myQueryID");
-        $this->doc->buildSearchForm(0, array(), 0, $actionURL, 'index');
-
         $this->view->title      = $this->lang->doc->common . $this->lang->colon . $this->lang->doc->index;
         $this->view->position[] = $this->lang->doc->index;
 
@@ -132,16 +129,15 @@ class doc extends control
             $libID = $this->doc->createlib();
             if(!dao::isError())
             {
-                $objectType = $this->post->type;
-                if($objectType == 'project' and $this->post->project) $objectID = $this->post->project;
-                if($objectType == 'product' and $this->post->product) $objectID = $this->post->product;
-                if($objectType == 'execution' and $this->post->execution) $objectID = $this->post->execution;
-                if($objectType == 'custom' or $objectType == 'book') $objectID = 0;
+                if($type == 'project' and $this->post->project) $objectID = $this->post->project;
+                if($type == 'product' and $this->post->product) $objectID = $this->post->product;
+                if($type == 'execution' and $this->post->execution) $objectID = $this->post->execution;
+                if($type == 'custom') $objectID = 0;
 
                 $this->action->create('docLib', $libID, 'Created');
 
                 if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $libID));
-                return print(js::locate($this->createLink('doc', 'tableContents', "type=$objectType&objectID=$objectID&libID=$libID"), 'parent.parent'));
+                return print(js::locate($this->createLink('doc', 'tableContents', "type=$type&objectID=$objectID&libID=$libID"), 'parent.parent'));
             }
             else
             {
@@ -149,55 +145,66 @@ class doc extends control
             }
         }
 
-        $products   = $this->product->getPairs();
-        $projects   = $this->project->getPairsByProgram('', 'all', true);
-        $executions = $this->execution->getList();
+        if(in_array($type, array('product', 'project'))) $this->app->loadLang('api');
 
-        /* Splice project name. */
-        foreach($executions as $executionID => $execution)
+        $objects        = array();
+        $executionPairs = array(0 => '');
+        if($type == 'product') $objects = $this->product->getPairs();
+        if($type == 'project')
         {
-            if($execution->multiple)
+            $objects = $this->project->getPairsByProgram();
+            if($this->app->tab == 'doc')
             {
-                if($execution->type == 'stage' and $execution->grade > 1)
-                {
-                    $parentExecutions = $this->dao->select('id,name')->from(TABLE_EXECUTION)->where('id')->in(trim($execution->path, ','))->andWhere('type')->in('stage,kanban,sprint')->orderBy('grade')->fetchPairs();
-                    $execution->name  = implode('/', $parentExecutions);
-                }
-
-                $executionPrefix          = isset($projects[$execution->project]) ? $projects[$execution->project] . '/' : '';
-                $executions[$executionID] = $executionPrefix . $execution->name;
-            }
-            else
-            {
-                unset($executions[$executionID]);
+                $executions = $this->execution->getList($objectID);
+                $this->view->project = $this->project->getById($objectID);
             }
         }
+        if($type == 'execution')
+        {
+            $executions = $this->execution->getList();
+            $projects   = $this->project->getPairsByProgram('', 'all', true);
+        }
 
-        /* Get the project that has permission to view. */
-        foreach($projects as $projectID => $project) if(!$this->app->user->admin and strpos(',' . $this->app->user->view->projects . ',', ',' . $projectID . ',') === false) unset($projects[$projectID]);
+        /* Splice project name. */
+        if(!empty($executions))
+        {
+            foreach($executions as $id => $execution)
+            {
+                if($execution->multiple)
+                {
+                    if($execution->type == 'stage' and $execution->grade > 1)
+                    {
+                        $parentExecutions = $this->dao->select('id,name')->from(TABLE_EXECUTION)->where('id')->in(trim($execution->path, ','))->andWhere('type')->in('stage,kanban,sprint')->orderBy('grade')->fetchPairs();
+                        $execution->name  = implode('/', $parentExecutions);
+                    }
+
+                    $executionPrefix  = isset($projects[$execution->project]) ? $projects[$execution->project] . '/' : '';
+                    $executionPairs[$id]  = $executionPrefix . $execution->name;
+                }
+            }
+            if($type == 'executions') $objects = $executionPairs;
+        }
 
         if($type == 'execution')
         {
             $execution = $this->execution->getByID($objectID);
             if($execution->type == 'stage') $this->lang->doc->execution = str_replace($this->lang->executionCommon, $this->lang->project->stage, $this->lang->doc->execution);
-            if($execution->type == 'stage') $this->lang->doc->libTypeList['execution'] = str_replace($this->lang->executionCommon, $this->lang->project->stage, $this->lang->doc->libTypeList['execution']);
         }
 
-        $libTypeList = $this->lang->doc->libTypeList;
-        if(empty($products)) unset($libTypeList['product']);
-        if(empty($projects)) unset($libTypeList['project']);
-        if(empty($executions)) unset($libTypeList['execution']);
+        if($type == 'custom') unset($this->lang->doclib->aclList['default']);
+        if($type != 'custom')
+        {
+            $this->lang->doclib->aclList['default'] = sprintf($this->lang->doclib->aclList['default'], $this->lang->{$type}->common);
+            $this->lang->doclib->aclList['private'] = sprintf($this->lang->doclib->privateACL, $this->lang->{$type}->common);
+            unset($this->lang->doclib->aclList['open']);
+        }
 
-        $this->app->loadLang('api');
-
-        $this->view->groups      = $this->loadModel('group')->getPairs();
-        $this->view->users       = $this->user->getPairs('nocode|noclosed');
-        $this->view->products    = $products;
-        $this->view->projects    = $projects;
-        $this->view->executions  = $executions;
-        $this->view->type        = $type;
-        $this->view->libTypeList = $libTypeList;
-        $this->view->objectID    = $objectID;
+        $this->view->groups         = $this->loadModel('group')->getPairs();
+        $this->view->users          = $this->user->getPairs('nocode|noclosed');
+        $this->view->objects        = $objects;
+        $this->view->executionPairs = $executionPairs;
+        $this->view->type           = $type;
+        $this->view->objectID       = $objectID;
         $this->display();
     }
 
@@ -258,6 +265,15 @@ class doc extends control
 
             $this->view->execution = $execution;
         }
+
+        if($lib->type == 'custom') unset($this->lang->doclib->aclList['default']);
+        if($lib->type != 'custom')
+        {
+            $this->lang->doclib->aclList['default'] = sprintf($this->lang->doclib->aclList['default'], $this->lang->{$lib->type}->common);
+            $this->lang->doclib->aclList['private'] = sprintf($this->lang->doclib->privateACL, $this->lang->{$lib->type}->common);
+            unset($this->lang->doclib->aclList['open']);
+        }
+
         $this->view->lib    = $lib;
         $this->view->groups = $this->loadModel('group')->getPairs();
         $this->view->users  = $this->user->getPairs('noletter|noclosed', $lib->users);
@@ -276,7 +292,7 @@ class doc extends control
      * @access public
      * @return void
      */
-    public function deleteLib($libID, $confirm = 'no', $type = 'lib', $from = 'objectLibs')
+    public function deleteLib($libID, $confirm = 'no', $type = 'lib', $from = 'tableContents')
     {
         if($libID == 'product' or $libID == 'execution') return;
         if($confirm == 'no')
@@ -298,6 +314,11 @@ class doc extends control
 
             $objectType = $lib->type;
             $objectID   = strpos(',product,project,execution,', ",$objectType,") !== false ? $lib->{$objectType} : 0;
+            if(in_array($this->app->tab, array('project', 'doc')) and $objectType == 'execution')
+            {
+                $objectType = 'project';
+                $objectID   = $lib->project;
+            }
             $browseLink = $this->createLink('doc', $from, "type=$objectType&objectID=$objectID");
 
             return print(js::locate($browseLink, 'parent'));
@@ -359,7 +380,6 @@ class doc extends control
         }
         elseif($this->app->tab == 'project')
         {
-            $linkType = 'project';
             $this->project->setMenu($this->session->project);
         }
         elseif($this->app->tab == 'execution')
@@ -1267,7 +1287,9 @@ class doc extends control
      * @param  string $type
      * @param  int    $objectID
      * @param  int    $libID
+     * @param  int    $moduleID
      * @param  string $browseType
+     * @param  string $orderBy
      * @param  int    $param
      * @param  int    $recTotal
      * @param  int    $recPerPage
@@ -1426,5 +1448,38 @@ class doc extends control
         $this->view->objectsPinYin = common::convert2Pinyin($myObjects + $normalObjects + $closedObjects);
 
         $this->display();
+    }
+
+    /**
+     * Ajax Get the execution drop down by the projectID.
+     *
+     * @param  int    $projectID
+     * @access public
+     * @return void
+     */
+    public function ajaxGetExecution($projectID)
+    {
+        $executions     = $this->execution->getList($projectID);
+        $executionPairs = array(0 => '');
+        if(!empty($executions))
+        {
+            foreach($executions as $id => $execution)
+            {
+                if($execution->multiple)
+                {
+                    if($execution->type == 'stage' and $execution->grade > 1)
+                    {
+                        $parentExecutions = $this->dao->select('id,name')->from(TABLE_EXECUTION)->where('id')->in(trim($execution->path, ','))->andWhere('type')->in('stage,kanban,sprint')->orderBy('grade')->fetchPairs();
+                        $execution->name  = implode('/', $parentExecutions);
+                    }
+
+                    $executionPairs[$id] = $execution->name;
+                }
+            }
+        }
+
+        $project  = $this->project->getById($projectID);
+        $disabled = $project->multiple ? '' : 'disabled';
+        return print(html::select('execution', $executionPairs, 0, "class='form-control' data-placeholder='{$this->lang->doclib->tip->selectExecution}' $disabled"));
     }
 }

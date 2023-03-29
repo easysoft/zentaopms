@@ -17,18 +17,24 @@ $(function()
         return dropdown;
     }
 
+    var imgObj = {
+        'annex': 'annex',
+        'lib': 'wiki-file-lib',
+        'api': 'interface'
+    }
+
     $('#fileTree').tree(
     {
         initialState: 'active',
         data: treeData,
         itemCreator: function($li, item)
         {
-            var libClass = ['lib', 'annex', 'api', 'execution'].indexOf(item.type) !== -1 ? 'lib' : '';
+            var libClass = ['lib', 'annex', 'api'].indexOf(item.type) !== -1 ? 'lib' : '';
             var hasChild = item.children ? !!item.children.length : false;
             var $item = '<a href="###" style="position: relative" data-has-children="' + hasChild + '" title="' + item.name + '" data-id="' + item.id + '" class="' + libClass + '" data-type="' + item.type + '">';
-            $item += '<div class="text h-full w-full flex-between overflow-hidden">';
-            $item += '<span>';
-            if(libClass == 'lib') $item += '<i class="icon-file-excel"></i> ';
+            $item += '<div class="text h-full w-full flex-start overflow-hidden">';
+            if(libClass == 'lib') $item += '<div class="img-lib" style="background-image:url(static/svg/' + imgObj[item.type || 'lib'] + '.svg)"></div>';
+            $item += '<span style="padding-left: 5px;">';
             $item += item.name
             $item += '</span>';
             $item += '<i class="icon icon-drop icon-ellipsis-v hidden tree-icon" data-isCatalogue="' + (item.type ? false : true) + '"></i>';
@@ -182,17 +188,19 @@ $(function()
                 {
                     var $input   = $('[data-id=liTreeModal]').html();
                     var $rootDom = $('[data-id=' + item.libid + ']a + ul');
+                    $rootDom.append($input);
                 }
                 else
                 {
                     var $input   = $('[data-id=ulTreeModal]').html();
-                    var $rootDom = $('[data-id=' + item.libid + ']a + ul');
+                    var $rootDom = $('[data-id=' + item.libid + ']a');
+                    var $li      = $rootDom.parent();
                     moduleData.isUpdate = true;
-                    $rootDom.addClass('open in has-list');
+                    $rootDom.after($input);
+                    $li.addClass('open in has-list');
                 }
                 $('#fileTree').data('zui.tree').expand($('li[data-id="' + item.libid + '"]'));
-                $rootDom.append($input);
-                $rootDom.find('input').focus();
+                $rootDom.parent().find('input').focus();
                 break;
             case 'addCataBro' :
                 moduleData.createType = 'same';
@@ -224,10 +232,11 @@ $(function()
         }
     }).on('blur', '.file-tree input.input-tree', function()
     {
-        var value = $(this).val();
+        var $input = $(this);
+        var value = $input.val();
         if(!value)
         {
-            $(this).closest('[data-id=insert]').remove();
+            $input.closest('[data-id=insert]').remove();
             return;
         }
 
@@ -251,8 +260,9 @@ $(function()
             }
             var module    = result.module;
             var resultDom = $('[data-id=aTreeModal]').html().replace(/%name%/g, module.name).replace(/%id%/g, module.id).replace('insert', module.id);
-            $(this).parent().append(resultDom);
-            $(this).remove();
+            $input.closest('ul').find('.has-input').css('padding-left', '15px');
+            $input.after(resultDom);
+            $input.remove();
             if(moduleData.isUpdate)
             {
                 $.getJSON(createLink('doc', 'tableContents', 'type=' + objectType + '&objectID=' + objectID , 'json'), function(data){

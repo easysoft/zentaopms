@@ -47,19 +47,11 @@
           <span class='hidden'><?php echo html::radio('type', $lang->doc->libTypeList, $lib->type);?></span>
         </td>
       </tr>
-      <tr>
+      <tr id="aclBox">
         <th><?php echo $lang->doclib->control;?></th>
-        <?php if($lib->type == 'product' or $lib->type == 'execution'):?>
         <td>
-          <?php echo html::radio('acl', $lang->doclib->aclListA, $lib->acl, "onchange='toggleAcl(this.value, \"lib\")'")?>
-          <span class='text-info' id='noticeAcl'><?php echo $lang->doc->noticeAcl['lib'][$lib->type][$lib->acl];?></span>
+          <?php echo html::radio('acl', $lang->doclib->aclList, $lib->acl, "onchange='toggleAcl(this.value, \"lib\")'", 'block')?>
         </td>
-        <?php else:?>
-        <td>
-          <?php echo html::radio('acl', $lang->doclib->aclListB, $lib->acl, "onchange='toggleAcl(this.value, \"lib\")'")?>
-          <span class='text-info' id='noticeAcl'><?php echo $lang->doc->noticeAcl['lib'][$lib->type][$lib->acl];?></span>
-        </td>
-        <?php endif;?>
       </tr>
       <tr id='whiteListBox' class='hidden'>
         <th><?php echo $lang->doc->whiteList?></th>
@@ -71,6 +63,7 @@
           <div class='input-group'>
             <span class='input-group-addon'><?php echo $lang->doclib->user?></span>
             <?php echo html::select('users[]', $users, $lib->users, "class='form-control picker-select' multiple")?>
+            <?php echo $this->fetch('my', 'buildContactLists', "dropdownName=users&attr=data-drop_direction='up'");?>
           </div>
         </td>
       </tr>

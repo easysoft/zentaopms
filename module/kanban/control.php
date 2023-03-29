@@ -1374,6 +1374,7 @@ class kanban extends control
 
         $this->loadModel('project');
         $this->loadModel('execution');
+        $this->loadModel('programplan');
 
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
