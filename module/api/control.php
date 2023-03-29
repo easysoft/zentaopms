@@ -373,11 +373,12 @@ class api extends control
     /**
      * Create a api doc library.
      *
-     * @param  string normal|demo
+     * @param  string $type project|product
+     * @param  int    $objectID
      * @access public
      * @return void
      */
-    public function createLib($type = 'product')
+    public function createLib($type = 'product', $objectID = 0)
     {
         if(empty($type)) $type = 'product';
 
@@ -401,6 +402,7 @@ class api extends control
         $this->lang->api->aclList['default'] = sprintf($this->lang->api->aclList['default'], $this->lang->{$type}->common);
 
         $this->view->type     = $type;
+        $this->view->objectID = $objectID;
         $this->view->groups   = $this->loadModel('group')->getPairs();
         $this->view->users    = $this->user->getPairs('nocode|noclosed');
         $this->view->projects = $this->loadModel('project')->getPairsByModel();

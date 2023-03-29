@@ -31,13 +31,13 @@
             <tr id='productBox'>
               <th><?php echo $lang->api->product;?></th>
               <td class='required'>
-                <span><?php echo html::select('product', $products, 0, "class='form-control chosen'")?></span>
+                <span><?php echo html::select('product', $products, $objectID, "class='form-control chosen'")?></span>
               </td>
             </tr>
             <tr id='projectBox' class='hidden'>
               <th><?php echo $lang->api->project;?></th>
               <td class='required'>
-                <span><?php echo html::select('project', $projects, 0, "class='form-control chosen'")?></span>
+                <span><?php echo html::select('project', $projects, $objectID, "class='form-control chosen'")?></span>
               </td>
             </tr>
             <tr>

@@ -62,7 +62,10 @@ js::set('struct_paramsType', $lang->struct->paramsType);
         <tbody>
           <tr>
             <th class='w-110px'><?php echo $lang->api->lib;?></th>
-            <td> <?php echo html::select('lib', $libs, $libID, "class='form-control chosen' onchange=loadDocModule(this.value)");?> </td>
+            <td>
+              <?php echo html::select('selectedLib', $libs, $libID, "class='form-control chosen' disabled");?>
+              <?php echo html::hidden('lib', $libID);?>
+            </td>
             <td></td>
           </tr>
           <tr>
