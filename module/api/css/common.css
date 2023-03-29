@@ -174,3 +174,8 @@ form .table-data, #content .table-data {border: 1px solid #e2e2e3;}
 .detail+.detail {border-top: 0px;}
 .menu-title {display: flex; align-items: center; justify-content: space-between;}
 .vision-drop.dropdown {padding-right: 35px;}
+
+#bysearchTab::before {display: none;}
+#leftBar .selectBox #currentItem {width: 150px; display: flex; align-items: center;}
+[lang^=zh] #leftBar .selectBox #currentItem {width: 180px;}
+#leftBar .selectBox #currentItem > .text {overflow: hidden; text-align: left; flex: 0 1 100%;}
