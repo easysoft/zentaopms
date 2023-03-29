@@ -8,6 +8,10 @@
     color: #0f6ab4;
 }
 
+.detail .list-group {
+    height: calc(100vh - 215px);
+    overflow-y: auto;
+}
 .detail .list-group-item .heading.OPTIONS {
     background-color: #e7f0f7;
 }
