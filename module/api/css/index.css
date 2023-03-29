@@ -1,18 +1,18 @@
 .flex {display: flex;}
 .flex-center {display: flex; justify-content: center; align-items: center;}
-.main {padding-bottom: 0;}
+#main {padding-bottom: 0;}
 
 .selectBox > button {width: 180px;}
 /* main-content */
 #mainContent {}
-#mainContent > #sideBar {flex: 0 0 180px; height: calc(100vh - 140px); overflow: auto;}
+#mainContent > #sideBar {flex: 0 0 180px; height: calc(100vh - 120px); overflow: auto;}
 #mainContent > .sidebar-toggle {flex: 0 0 16px;}
-#mainContent > .main-col {flex: auto; height: calc(100vh - 140px); overflow: auto;}
+#mainContent > .main-col {flex: auto; height: calc(100vh - 120px); overflow: auto;}
 
 /* tree */
 
 /* sideBar */
 
-.sidebar-toggle > .icon {width: 12px; height: 30px; margin-top: -10px; line-height: 30px; color: #fff; text-align: center; background: #7dcdfe; border-radius: 6px;}
+.sidebar-toggle > .icon {width: 16px; height: 30px; margin-top: -10px; line-height: 30px; color: #fff; text-align: center; background: #7dcdfe; border-radius: 6px; cursor: pointer;}
 
 /* table */

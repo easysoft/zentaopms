@@ -16,6 +16,23 @@ $(document).ready(function()
         });
     });
 
+    $(document).on('click', '.sidebar-toggle > .icon', function()
+    {
+        var $icon = $(this);
+        if($icon.hasClass('icon-angle-left'))
+        {
+            $icon.removeClass('icon-angle-left');
+            $icon.addClass('icon-angle-right');
+            $('#sideBar').addClass('hidden');
+        }
+        else
+        {
+            $icon.removeClass('icon-angle-right');
+            $icon.addClass('icon-angle-left');
+            $('#sideBar').removeClass('hidden');
+        }
+    });
+
     $('#fileTree').tree(
     {
         initialState: 'active',
