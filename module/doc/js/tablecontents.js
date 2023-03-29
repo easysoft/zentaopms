@@ -77,7 +77,7 @@ $(function()
 
         if(isLib)
         {
-            if($(this).data('type') == 'annex') return false;
+            if($(this).data('type') == 'annex' && !canViewFiles) return false;
 
             libID    = moduleID;
             moduleID = 0;
@@ -87,7 +87,8 @@ $(function()
             libID = $(this).closest('.lib').data('id');
         }
         linkParams = linkParams.replace('%s', '&libID=' + libID + '&moduleID=' + moduleID);
-        location.href = createLink('doc', 'tableContents', linkParams);
+        var link = $(this).data('type') == 'annex' ? createLink('doc', 'showFiles', 'type=' + objectType + '&objectID=' + objectID) : createLink('doc', 'tableContents', linkParams);
+        location.href = link
     });
 
     var moduleData = {

@@ -1022,17 +1022,14 @@ class doc extends control
      * @access public
      * @return void
      */
-    public function showFiles($type, $objectID, $viewType = '', $orderBy = 't1.id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1, $searchTitle = '')
+    public function showFiles($type, $objectID, $viewType = '', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1, $searchTitle = '')
     {
+        $this->loadModel('file');
         if(empty($viewType)) $viewType = !empty($_COOKIE['docFilesViewType']) ? $this->cookie->docFilesViewType : 'list';
         setcookie('docFilesViewType', $viewType, $this->config->cookieLife, $this->config->webRoot, '', false, true);
 
-        $objects  = $this->doc->getOrderedObjects($type);
-        $objectID = $this->{$type}->saveState($objectID, $objects);
-        $libs     = $this->doc->getLibsByObject($type, $objectID);
-
-        $tab = strpos('doc,product,project,execution', $this->app->tab) !== false ? $this->app->tab : 'doc';
-        if($tab != 'doc') $this->loadModel($tab)->setMenu($objectID);
+        $objects = $this->doc->getOrderedObjects($type);
+        list($libs, $libID, $object, $objectID, $objectDropdown) = $this->doc->setMenuByType($type, $objectID, 0);
 
         $table  = $this->config->objectTables[$type];
         $object = $this->dao->select('id,name,status')->from($table)->where('id')->eq($objectID)->fetch();
@@ -1041,27 +1038,32 @@ class doc extends control
         if(empty($_POST) and !empty($searchTitle)) $this->post->title = $searchTitle;
 
         /* Load pager. */
+        $rawMethod = $this->app->rawMethod;
+        $this->app->rawMethod = 'showFiles';
         $this->app->loadClass('pager', $static = true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
+        $this->app->rawMethod = $rawMethod;
 
         $files   = $this->doc->getLibFiles($type, $objectID, $orderBy, $pager);
 
         $this->view->title      = $object->name;
         $this->view->position[] = $object->name;
 
-        $this->view->type         = $type;
-        $this->view->object       = $object;
-        $this->view->files        = $files;
-        $this->view->users        = $this->loadModel('user')->getPairs('noletter');
-        $this->view->pager        = $pager;
-        $this->view->viewType     = $viewType;
-        $this->view->orderBy      = $orderBy;
-        $this->view->objectID     = $objectID;
-        $this->view->canBeChanged = common::canModify($type, $object); // Determines whether an object is editable.
-        $this->view->summary      = $this->doc->summary($files);
-        $this->view->sourcePairs  = $this->doc->getFileSourcePairs($files);
-        $this->view->fileIcon     = $this->doc->getFileIcon($files);
-        $this->view->libTree      = $this->doc->getLibTree(0, $libs, $type, 0, $objectID);
+        $this->view->type           = $type;
+        $this->view->object         = $object;
+        $this->view->files          = $files;
+        $this->view->users          = $this->loadModel('user')->getPairs('noletter');
+        $this->view->pager          = $pager;
+        $this->view->viewType       = $viewType;
+        $this->view->orderBy        = $orderBy;
+        $this->view->objectID       = $objectID;
+        $this->view->canBeChanged   = common::canModify($type, $object); // Determines whether an object is editable.
+        $this->view->summary        = $this->doc->summary($files);
+        $this->view->sourcePairs    = $this->doc->getFileSourcePairs($files);
+        $this->view->fileIcon       = $this->doc->getFileIcon($files);
+        $this->view->libTree        = $this->doc->getLibTree(0, $libs, $type, 0, $objectID);
+        $this->view->objectDropdown = $objectDropdown;
+        $this->view->searchTitle    = $searchTitle;
 
         $this->display();
     }

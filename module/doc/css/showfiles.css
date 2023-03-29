@@ -1,3 +1,100 @@
 .c-id {width: 80px;}
 .c-source {width: 300px;}
 .c-size {width: 100px;}
+.c-type {width: 70px;}
+
+.flex {display: flex;}
+.flex-none {flex: none;}
+.flex-auto {flex: auto;}
+.flex-full > .panel {box-shadow: none;}
+.float-r {float: right;}
+.h-full {height: 100%;}
+.w-full {width: 100%;}
+.overflow-x-auto {overflow-x: auto;}
+.overflow-auto {overflow: auto;}
+.overflow-visible {overflow: visible;}
+.overflow-hidden {overflow: hidden;}
+.img-lib {width: 14px; height: 14px; margin-bottom: 2px; flex: 0 0 14px;}
+#mainContent {padding-top: 0; padding-bottom: 0;}
+#mainContent #createDropdown {display: inline-block;}
+#mainContent #createDropdown ul {position: absolute;}
+#pageNav .dropdown-menu {max-height: inherit;}
+#mainContent > .panel {margin-bottom: 0; height: calc(100vh - 125px); overflow-y: auto;}
+#mainContent > .main-col {padding-left: 0;}
+
+.no-content {width: 100px; height: 100px; margin: 0 auto;}
+.notice {text-align: center; padding-left: 15px; padding-top: 20px;}
+.no-content-button {text-align: center; padding-top: 20px;}
+.no-content-button a:nth-child(2) {margin-left: 20px;}
+
+.cell .detail .detail-title {padding-left: 5px; list-style: none;}
+.menu-actions {position: absolute; top: 7px; right: 45px; padding: 7px 8px;}
+.detail ul {position: relative;}
+.tail-info {position: absolute; right: 0; padding-left: 10px; padding-top: 1px;}
+.tail-info, .doc-title, span.item {background: #fff;}
+span.item>a {padding-left: 6px;}
+span.dotted-line+a {display: block;}
+#modules li.doc:before, .chapterNode:before, .independent:before {content: " "; width: 100%; border-bottom: 1px dashed #b5b9c5; position: absolute; top: 13px; right: 0; left: 30px;}
+.doc-title ,.item{display: inline-block !important; position: relative; padding-right: 10px; max-width:80%; white-space: nowrap; text-overflow: ellipsis; overflow: hidden;}
+#modules i.icon-file-text {color: #D0D2D6; font-size: 14px;}
+
+.sortable-sorting .module-name > a {cursor: move;}
+.sortable-sorting li >.tree-group {opacity: .5;}
+.sortable-sorting li:before {opacity: .3;}
+.sortable-sorting .drop-here .tree-group {background-color: #fff3e0;}
+.sortable-sorting .drop-here .tree-group > * {opacity: .1;}
+.sortable-sorting .drag-shadow .tree-group {opacity: 1!important;}
+.sortable-sorting .drag-shadow .tree-actions {visibility: hidden;}
+.is-sorting > li:before {opacity: 1;}
+.is-sorting > li > .tree-group {opacity: 1; border-radius: 4px;}
+.is-sorting > li ul {display: none!important;}
+li.drag-shadow ul {display: none!important;}
+
+.tree-group {position: relative;}
+.tree-group > .module-name {white-space: nowrap; overflow: hidden; text-overflow: ellipsis; width: 100%; display: block;}
+.tree li.has-list.open:before {left: 6px;}
+.main-table-content {display: flex; gap: 20px;}
+.main-table-content > .side {flex: 0 0 300px;}
+.main-table-content > .content {flex: 1;}
+
+/* css for mian */
+#mainContent > #sideBar {flex: 0 0 150px; overflow-x: auto; padding-right: 5px;}
+[lang^=zh] #mainContent > #sideBar {flex: 0 0 180px;}
+
+/* css for tree */
+
+.tree li.has-list.open:before {content: unset;}
+.tree li > a {max-width: 100%; padding: 2px;}
+.file-tree  a {height: 30px;}
+.file-tree  a.show-icon {padding-right: 15px;}
+.flex-between {display: flex; align-items: center; justify-content: space-between;}
+.flex-center {display: flex; align-items: center; justify-content: center;}
+.flex-start {display: flex; align-items: center;}
+.tree li > .list-toggle {top: 4px;}
+.input-tree {width: 120px;}
+.tree-icon {position: absolute; right: 0;}
+.tree li.has-input {overflow: hidden;}
+
+/* css for sidebar */
+.sidebar-toggle {flex: 0 0 16px;}
+.sidebar-toggle > .icon {width: 12px; height: 30px; margin-top: -10px; line-height: 30px; color: #fff; text-align: center; background: #7dcdfe; border-radius: 6px; cursor: pointer;}
+
+.spliter {flex: 0 0 12px;}
+.spliter-btn {height: 28px; width: 10px; background: #fff; position: absolute; top: 30%; left: -1px; border: 1px solid #D9D9D9; border-radius: 2px;}
+.spliter-btn > .spliter-inner {width: 4px; height: 12px; border-left: 1px solid #D9D9D9; border-right: 1px solid #D9D9D9;}
+
+#mainContent .table-empty-tip > p, #createDocs {display: inline-block;}
+.createDropdown a.btn-primary, .createDropdown a.btn-info {border-right: 1px solid rgba(255,255,255,0.2);}
+.createDropdown button.dropdown-toggle.btn-primary, .createDropdown button.dropdown-toggle.btn-info {padding: 6px;}
+.createDropdown ul > li {text-align: left;}
+.createDropdown .btn.btn-info:hover {box-shadow: none;}
+
+.table .c-name > a:first-child {display: inline-block; max-width: 90%; overflow: hidden;}
+.table .c-name > .ajaxCollect {float: right; position: relative; right: 10px; top: -3px;}
+table.table > thead > tr {height: 32px;}
+
+#bysearchTab::before {display: none;}
+#leftBar .selectBox #currentItem {width: 150px; display: flex; align-items: center;}
+[lang^=zh] #leftBar .selectBox #currentItem {width: 180px;}
+#leftBar .selectBox #currentItem > .text {overflow: hidden; text-align: left; flex: 0 1 100%;}
+#leftBar .searchBox {padding-left: 5px;}

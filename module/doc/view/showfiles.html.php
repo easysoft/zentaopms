@@ -11,12 +11,42 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
-<div class="main-row fade" id="mainRow">
-  <div class="main-col" data-min-width="400">
+<?php js::set('treeData', $libTree);?>
+<?php js::set('linkParams', "type=$type&objectID=$objectID%s");?>
+<?php js::set('docLang', $lang->doc);?>
+<?php js::set('libType', 'annex');?>
+<?php js::set('objectType', $type);?>
+<?php js::set('objectID', $objectID);?>
+<?php js::set('canViewFiles', common::hasPriv('doc', 'showfiles'));?>
+<?php js::set('type', $type);?>
+<?php js::set('tab', $this->app->tab);?>
+<div id="mainMenu" class="clearfix">
+  <div id="leftBar" class="btn-toolbar pull-left">
+    <?php echo $objectDropdown;?>
+    <div class='btn-group searchBox'>
+      <form class="input-control has-icon-right table-col" method="post">
+        <?php echo html::input('title', $this->post->title, "class='form-control' placeholder='{$lang->doc->fileTitle}'");?>
+        <?php echo html::submitButton("<i class='icon icon-search'></i>", '', "btn  btn-icon btn-link input-control-icon-right");?>
+      </form>
+    </div>
+  </div>
+  <div class="btn-toolbar pull-right">
+    <div class='btn-group'>
+      <?php echo html::a(inlink('showFiles', "type=$type&objectID=$objectID&viewType=list&orderBy=$orderBy&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}&searchTitle=$searchTitle"), "<i class='icon icon-bars'></i>", '', "title={$this->lang->doc->browseTypeList['list']} class='btn btn-icon" . ($viewType == 'list' ? ' text-primary' : '') . "' data-app='{$this->app->tab}'");?>
+      <?php echo html::a(inlink('showFiles', "type=$type&objectID=$objectID&viewType=card&orderBy=$orderBy&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}&searchTitle=$searchTitle"), "<i class='icon icon-cards-view'></i>", '', "title={$this->lang->doc->browseTypeList['grid']} class='btn btn-icon" . ($viewType != 'list' ? ' text-primary' : '') . "' data-app='{$this->app->tab}'");?>
+    </div>
+  </div>
+</div>
+<div class="main-row fade <?php if(!empty($libTree)) echo 'flex';?>" id="mainContent">
+  <div id='sideBar' class="panel side side-col col overflow-auto" data-min-width="150">
+    <div id="fileTree" class="file-tree"></div>
+  </div>
+  <div class="sidebar-toggle flex-center"><i class="icon icon-angle-left"></i></div>
+  <div class="main-col flex-full overflow-visible flex-auto" data-min-width="500">
     <?php if($viewType == 'list'):?>
     <?php if(!empty($files)):?>
     <div class='main-table'>
-      <table class="table has-sort-head">
+      <table class="table has-sort-head" id='#filesTable'>
         <thead>
           <tr>
             <?php $this->app->rawMethod = 'showfiles';?>
@@ -24,7 +54,7 @@
             <th class="c-id"><?php common::printOrderLink('id', $orderBy, $vars, $lang->doc->id);?></th>
             <th class="c-name"><?php common::printOrderLink('title', $orderBy, $vars, $lang->doc->fileTitle);?></th>
             <th class="c-source"><?php common::printOrderLink('objectID', $orderBy, $vars, $lang->doc->source);?></th>
-            <th class="c-size"><?php common::printOrderLink('extension', $orderBy, $vars, $lang->doc->extension);?></th>
+            <th class="c-type"><?php common::printOrderLink('extension', $orderBy, $vars, $lang->doc->extension);?></th>
             <th class="c-size"><?php common::printOrderLink('size', $orderBy, $vars, $lang->doc->size);?></th>
             <th class="c-size"><?php common::printOrderLink('addedBy', $orderBy, $vars, $lang->doc->addedBy);?></th>
             <th class="c-size"><?php common::printOrderLink('addedDate', $orderBy, $vars, $lang->doc->addedDate);?></th>
@@ -84,8 +114,8 @@
           <div class='col'>
             <div class='lib-file'>
               <?php
-              $imageSize  = $this->loadModel('file')->getImageSize($file);
-              $imageWidth = $imageSize[0];
+              $imageSize  = $this->file->getImageSize($file);
+              $imageWidth = isset($imageSize[0]) ? $imageSize[0] : 0;
 
               $fileID = $file->id;
               $url    = helper::createLink('file', 'download', 'fileID=' . $fileID);
@@ -140,8 +170,42 @@
     <?php endif?>
   </div>
 </div>
-<?php js::set('type', $type);?>
-<?php js::set('tab', $this->app->tab);?>
+<div class='hidden' id='dropDownData'>
+  <ul class='libDorpdown'>
+    <?php if(common::hasPriv('tree', 'browse')):?>
+    <li data-method="addCataLib" data-has-children='%hasChildren%'  data-libid='%libID%' data-moduleid="%moduleID%" data-type="add"><a><i class="icon icon-controls"></i><?php echo $lang->doc->libDropdown['addModule'];?></a></li>
+    <?php endif;?>
+    <?php if(common::hasPriv('doc', 'editLib')):?>
+    <li data-method="editLib"><a href='<?php echo inlink('editLib', 'libID=%libID%');?>' data-toggle='modal' data-type='iframe'><i class="icon icon-edit"></i><?php echo $lang->doc->libDropdown['editLib'];?></a></li>
+    <?php endif;?>
+    <?php if(common::hasPriv('doc', 'deleteLib')):?>
+    <li data-method="deleteLib"><a href='<?php echo inlink('deleteLib', 'libID=%libID%');?>' target='hiddenwin'><i class="icon icon-trash"></i><?php echo $lang->doc->libDropdown['deleteLib'];?></a></li>
+    <?php endif;?>
+  </ul>
+  <ul class='moduleDorpdown'>
+    <?php if(common::hasPriv('tree', 'browse')):?>
+    <li data-method="addCataBro" data-type="add" data-id="%moduleID%"><a><i class="icon icon-controls"></i><?php echo $lang->doc->libDropdown['addSameModule'];?></a></li>
+    <li data-method="addCataChild" data-type="add" data-id="%moduleID%" data-has-children='%hasChildren%'><a><i class="icon icon-edit"></i><?php echo $lang->doc->libDropdown['addSubModule'];?></a></li>
+    <li data-method="editCata" class='edit-module'><a data-href='<?php echo helper::createLink('tree', 'edit', 'moduleID=%moduleID%&type=doc');?>'><i class="icon icon-edit"></i><?php echo $lang->doc->libDropdown['editModule'];?></a></li>
+    <li data-method="deleteCata"><a href='<?php echo helper::createLink('tree', 'delete', 'rootID=%libID%&moduleID=%moduleID%');?>' target='hiddenwin'><i class="icon icon-trash"></i><?php echo $lang->doc->libDropdown['delModule'];?></a></li>
+    <?php endif;?>
+  </ul>
+</div>
+<div class='hidden' data-id="ulTreeModal">
+  <ul data-id="liTreeModal" class="menu-active-primary menu-hover-primary has-input">
+    <li data-id="insert" class="has-input">
+      <input data-target="%target%" class="form-control input-tree"></input>
+    </li>
+  </ul>
+</div>
+<div class="hidden" data-id="aTreeModal">
+  <a href="###" style="position: relative" data-has-children="false" data-action="true" title="%name%" data-id="%id%">
+    <div class="text h-full w-full flex-between overflow-hidden" style="position: relative;">
+      <span style="padding-left: 5px;">%name%</span>
+      <i class="icon icon-drop icon-ellipsis-v tree-icon hidden" data-iscatalogue="true"></i>
+    </div>
+  </a>
+</div>
 <script>
 <?php $sessionString = session_name() . '=' . session_id();?>
 function downloadFile(fileID, extension, imageWidth)

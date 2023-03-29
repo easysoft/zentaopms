@@ -17,6 +17,7 @@
 <?php js::set('libType', $libType);?>
 <?php js::set('objectType', $type);?>
 <?php js::set('objectID', $objectID);?>
+<?php js::set('canViewFiles', common::hasPriv('doc', 'showfiles'));?>
 <div id="mainMenu" class="clearfix">
   <div id="leftBar" class="btn-toolbar pull-left">
     <?php echo $objectDropdown;?>
@@ -58,7 +59,7 @@
     <div id="fileTree" class="file-tree"></div>
   </div>
   <div class="sidebar-toggle flex-center"><i class="icon icon-angle-left"></i></div>
-  <div class="main-col flex-full overflow-visible flex-auto overflow-visible" data-min-width="500">
+  <div class="main-col flex-full overflow-visible flex-auto" data-min-width="500">
     <div class="cell<?php if($browseType == 'bySearch') echo ' show';?>" style="min-width: 400px" id="queryBox" data-module=<?php echo $type . $libType . 'Doc';?>></div>
     <?php
     if($browseType == 'annex')
