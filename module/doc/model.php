@@ -1475,7 +1475,7 @@ class docModel extends model
                 ->where('deleted')->eq(0)
                 ->andWhere('vision')->eq($this->config->vision)
                 ->andWhere($type)->eq($objectID)
-                ->beginIF($type == 'project')->andWhere('type')->eq('project')->fi()
+                ->beginIF($type == 'project')->andWhere('type')->in('api,project')->fi()
                 ->beginIF(!empty($appendLib))->orWhere('id')->eq($appendLib)->fi()
                 ->orderBy('`order` asc, id_asc')
                 ->fetchAll('id');
@@ -1485,6 +1485,7 @@ class docModel extends model
                     ->where('deleted')->eq(0)
                     ->andWhere('vision')->eq($this->config->vision)
                     ->andWhere('execution')->in(array_keys($executionIDList))
+                    ->andWhere('type')->eq('execution')
                     ->beginIF(!empty($appendLib))->orWhere('id')->eq($appendLib)->fi()
                     ->orderBy('`order` asc, id_asc')
                     ->fetchAll('id');
