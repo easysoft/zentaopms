@@ -20,7 +20,7 @@
         <div class='main-header'>
           <h2><?php echo $lang->doc->createLib;?></h2>
         </div>
-        <form method='post' target='hiddenwin' class='no-stash'>
+        <form method='post' class='main-form form-ajax no-stash' enctype='multipart/form-data' >
           <table class='table table-form'>
             <?php if(in_array($type, array('product', 'project', 'execution'))):?>
             <tr class='objectBox'>
