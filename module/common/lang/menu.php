@@ -644,7 +644,7 @@ $lang->navGroup->doclib = 'doc';
 $lang->navGroup->api    = 'doc';
 
 $lang->navGroup->screen = 'report';
-$lang->navGroup->report = 'report';
+$lang->navGroup->pivot  = 'report';
 
 $lang->navGroup->qa            = 'qa';
 $lang->navGroup->bug           = 'qa';
