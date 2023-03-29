@@ -161,13 +161,13 @@ class docModel extends model
 
             $account    = ",{$this->app->user->account},";
             $userGroups = $this->app->user->groups;
-            while ($lib = $stmt->fetch())
+            while($lib = $stmt->fetch())
             {
                 if(strpos(",$lib->users,", $account) !== false)
                 {
                     $libs[$lib->lib] = $lib->lib;
                 }
-                else
+                elseif($lib->groups)
                 {
                     foreach($userGroups as $groupID)
                     {
@@ -719,23 +719,16 @@ class docModel extends model
             ->add('version', 1)
             ->setDefault('product,execution,module', 0)
             ->stripTags($this->config->doc->editor->create['id'], $this->config->allowedTags)
-            ->cleanInt('product,execution,module,lib')
+            ->cleanInt('product,execution')
             ->join('groups', ',')
             ->join('users', ',')
             ->join('mailto', ',')
             ->remove('files,labels,uid,contactListMenu')
             ->get();
 
-        if(empty($doc->lib))
-        {
-            dao::$errors['lib'] = sprintf($this->lang->error->notempty, $this->lang->doc->lib);
-            return false;
-        }
-
-        /* Fix bug #2929. strip_tags($this->post->contentMarkdown, $this->config->allowedTags)*/
-        $doc                  = $this->loadModel('file')->processImgURL($doc, $this->config->doc->editor->create['id'], $this->post->uid);
         $doc->contentMarkdown = $this->post->contentMarkdown;
-        if($doc->acl == 'private') $doc->users = $this->app->user->account;
+        if(empty($doc->lib) and strpos($doc->module, '_') !== false) list($doc->lib, $doc->module) = explode('_', $doc->module);
+        if(empty($doc->lib)) return dao::$errors['lib'] = sprintf($this->lang->error->notempty, $this->lang->doc->lib);
 
         if($doc->title)
         {
@@ -744,24 +737,20 @@ class docModel extends model
             if($result['stop']) return array('status' => 'exists', 'id' => $result['duplicate']);
         }
 
-        $lib            = $this->getLibByID($doc->lib);
+        /* Fix bug #2929. strip_tags($this->post->contentMarkdown, $this->config->allowedTags)*/
+        $lib = $this->getLibByID($doc->lib);
+        $doc = $this->loadModel('file')->processImgURL($doc, $this->config->doc->editor->create['id'], $this->post->uid);
+
         $doc->product   = $lib->product;
         $doc->project   = $lib->project;
         $doc->execution = $lib->execution;
-        if($doc->type == 'url')
-        {
-            $doc->content     = $doc->url;
-            $doc->contentType = 'html';
-        }
 
         $docContent          = new stdclass();
         $docContent->title   = $doc->title;
         $docContent->content = $doc->contentType == 'html' ? $doc->content : $doc->contentMarkdown;
         $docContent->type    = $doc->contentType;
         $docContent->version = 1;
-        unset($doc->contentMarkdown);
-        unset($doc->contentType);
-        unset($doc->url);
+        unset($doc->contentMarkdown, $doc->contentType, $doc->url);
 
         $requiredFields = $this->config->doc->create->requiredFields;
         if(strpos("url|word|ppt|excel", $this->post->type) !== false) $requiredFields = trim(str_replace(",content,", ",", ",{$requiredFields},"), ',');
@@ -1170,16 +1159,15 @@ class docModel extends model
         if($libs === null) $libs = $this->getLibs('all');
         if(isset($libs[$object->lib]) and isset($extraDocLibs[$object->lib])) unset($extraDocLibs[$object->lib]);
 
-        if($object->acl == 'open' and !isset($extraDocLibs[$object->lib])) return true;
+        if($object->acl == 'open'   and !isset($extraDocLibs[$object->lib])) return true;
         if($object->acl == 'public' and !isset($extraDocLibs[$object->lib])) return true;
 
-        $account = ',' . $this->app->user->account . ',';
+        $account = ",{$this->app->user->account},";
         if(isset($object->addedBy) and $object->addedBy == $this->app->user->account) return true;
         if(strpos(",$object->users,", $account) !== false) return true;
-        if($object->acl == 'custom')
+        if($object->groups)
         {
-            $userGroups = $this->app->user->groups;
-            foreach($userGroups as $groupID)
+            foreach($this->app->user->groups as $groupID)
             {
                 if(strpos(",$object->groups,", ",$groupID,") !== false) return true;
             }
@@ -1474,10 +1462,19 @@ class docModel extends model
                 ->where('deleted')->eq(0)
                 ->andWhere('vision')->eq($this->config->vision)
                 ->andWhere($type)->eq($objectID)
-                ->beginIF(!empty($executionIDList))->orWhere('execution')->in($executionIDList)->fi()
                 ->beginIF(!empty($appendLib))->orWhere('id')->eq($appendLib)->fi()
                 ->orderBy('`order` asc, id_asc')
                 ->fetchAll('id');
+            if($executionIDList)
+            {
+                $objectLibs += $this->dao->select('*')->from(TABLE_DOCLIB)
+                    ->where('deleted')->eq(0)
+                    ->andWhere('vision')->eq($this->config->vision)
+                    ->andWhere('execution')->in($executionIDList)
+                    ->beginIF(!empty($appendLib))->orWhere('id')->eq($appendLib)->fi()
+                    ->orderBy('`order` asc, id_asc')
+                    ->fetchAll('id');
+            }
         }
 
         if($type == 'product')
@@ -2924,7 +2921,7 @@ class docModel extends model
 
         $class = $from == 'list' ? 'btn-info' : 'btn-primary';
         $html  = "<div class='dropdown btn-group createDropdown'>";
-        $html .= html::a(helper::createLink('doc', 'createBasicInfo', "objectType={$lib->type}&objectID=$objectID&libID={$lib->id}&moduleID=$moduleID&type=html", '', true), "<i class='icon icon-plus'></i> {$this->lang->doc->create}", '', "class='btn $class iframe'");
+        $html .= html::a(helper::createLink('doc', 'create', "objectType={$lib->type}&objectID=$objectID&libID={$lib->id}&moduleID=$moduleID&type=html"), "<i class='icon icon-plus'></i> {$this->lang->doc->create}", '', "class='btn $class'");
         $html .= "<button type='button' class='btn $class dropdown-toggle' data-toggle='dropdown'><span class='caret'></span></button>";
         $html .= "<ul class='dropdown-menu pull-right'>";
 
@@ -2934,21 +2931,45 @@ class docModel extends model
             if($typeKey == 'api' and (!common::hasPriv('api', 'create') or !$apiLibID)) continue;
             if($typeKey != 'api' and !common::hasPriv('doc', 'create')) continue;
 
-            $class  = ($typeKey != 'template') ? 'iframe' : '';
             $attr   = "data-app='{$this->app->tab}'";
             $module = $typeKey == 'api' ? 'api' : 'doc';
-            $method = strpos($this->config->doc->textTypes, $typeKey) !== false ? 'createBasicInfo' : 'create';
 
+            $class  = strpos($this->config->doc->officeTypes, $typeKey) !== false ? 'iframe' : '';
             $params = "objectType={$lib->type}&objectID=$objectID&libID={$lib->id}&moduleID=$moduleID&type=$typeKey";
             if($typeKey == 'api')
             {
-                $attr  .= " data-width=85%";
+                $attr  .= " data-width='85%'";
                 $params = "libID=$apiLibID&moduleID=$moduleID";
             }
-            if($typeKey == 'template') $params = "objectType=$type&objectID=$objectID&libID={$lib->id}&moduleID=$moduleID&type=html&fromGlobal=&from=template";
 
             $html .= "<li>";
-            $html .= html::a(helper::createLink($module, $method, $params, '', $class ? true : false), $typeName, '', "class='$class' $attr");
+            if($typeKey == 'template')
+            {
+                $params = "objectType=$type&objectID=$objectID&libID={$lib->id}&moduleID=$moduleID&type=html&fromGlobal=&from=template";
+                $html .= html::a('#modalTemplate', $typeName, '', "data-toggle='modal' $attr");
+        $html .= "
+    <div class='modal fade' id='modalTemplate' data-scroll-inside='true'>
+      <div class='modal-dialog'>
+        <div class='modal-content with-padding'>
+          <div class='modal-header'>
+            <button type='button' class='close' data-dismiss='modal'>
+              <i class='icon icon-close'></i>
+            </button>
+          </div>
+          <div class='modal-body'>
+            <table class='table table-form'>
+<tr>
+<th>模板选择</th>
+<td></td>
+</tr>
+</table>
+</div>
+";
+            }
+            else
+            {
+                $html .= html::a(helper::createLink($module, 'create', $params, '', $class ? true : false), $typeName, '', "class='$class' $attr");
+            }
             $html .= "</li>";
 
             $printDivider = false;
@@ -2960,5 +2981,19 @@ class docModel extends model
 
         $html .= '</ul></div>';
         return $html;
+    }
+
+    public function getLibsOptionMenu($libs)
+    {
+        $this->loadModel('tree');
+        $modules = array();
+        foreach($libs as $libID => $libName)
+        {
+            if(strpos($libName, '/') !== false) list($objectName, $libName) = explode('/', $libName);
+            $moduleOptionMenu = $this->tree->getOptionMenu($libID, 'doc', $startModuleID = 0);
+            foreach($moduleOptionMenu as $moduleID => $moduleName) $modules["{$libID}_{$moduleID}"] = $libName . $moduleName;
+            if(empty($moduleOptionMenu)) $modules["{$libID}_0"] = $libName . $moduleName;
+        }
+        return $modules;
     }
 }
