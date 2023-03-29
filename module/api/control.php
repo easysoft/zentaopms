@@ -389,12 +389,12 @@ class api extends control
 
             /* Record action for create api library. */
             $this->action->create('doclib', $libID, 'created');
+            if(isonlybody()) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
 
             /* Set locate object data. */
-            setCookie("objectType", $this->post->libType, $this->config->cookieLife, $this->config->webRoot, '', false, true);
-            setCookie("objectID", $this->post->libType == 'project' ? $this->post->project : $this->post->product, $this->config->cookieLife, $this->config->webRoot, '', false, true);
+            setCookie("objectType", $this->post->libType, $this->config->cookieLife, $this->config->webRoot);
+            setCookie("objectID", $this->post->libType == 'project' ? $this->post->project : $this->post->product, $this->config->cookieLife, $this->config->webRoot);
 
-            if(isonlybody()) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
             if(!helper::isAjaxRequest()) return print(js::locate($this->createLink('api', 'index', "libID=$libID"), 'parent.parent'));
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink('api', 'index', "libID=$libID")));
         }
