@@ -1035,7 +1035,6 @@ class doc extends control
         $table  = $this->config->objectTables[$type];
         $object = $this->dao->select('id,name,status')->from($table)->where('id')->eq($objectID)->fetch();
 
-        if(!empty($_POST)) $searchTitle = $this->post->title;
         if(empty($_POST) and !empty($searchTitle)) $this->post->title = $searchTitle;
 
         /* Load pager. */
@@ -1045,7 +1044,7 @@ class doc extends control
         $pager = new pager($recTotal, $recPerPage, $pageID);
         $this->app->rawMethod = $rawMethod;
 
-        $files   = $this->doc->getLibFiles($type, $objectID, $orderBy, $pager);
+        $files = $this->doc->getLibFiles($type, $objectID, $orderBy, $pager);
 
         $this->view->title      = $object->name;
         $this->view->position[] = $object->name;
