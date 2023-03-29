@@ -8572,7 +8572,7 @@ class upgradeModel extends model
         {
             if($chart->type == 'table')
             {
-               $pivotID = $this->upgradeToPivotTable($chart);
+               $pivotID = $this->upgradeToPivotTable($chart, $dataviewList);
             }
             else
             {
@@ -8597,7 +8597,7 @@ class upgradeModel extends model
                     }
                 }
 
-                $data->settings = json_encode($settings);
+                $data->settings = json_encode(array($settings));
                 $data->filters  = json_encode($filters);
 
                 if(isset($dataviewList[$chart->dataset]))
@@ -8606,7 +8606,7 @@ class upgradeModel extends model
                     $data->sql    = 'SELECT * FROM ' . $dataview->view;
                     $data->fields = isset($dataview->fields) ? $dataview->fields : '';
                 }
-                else
+                elseif($chart->sql)
                 {
                     $fieldSettings = $this->getFieldSettings($chart->sql);
                     $data->fields = json_encode($fieldSettings);
@@ -8646,7 +8646,7 @@ class upgradeModel extends model
      * @access public
      * @return void
      */
-    public function upgradeToPivotTable($table)
+    public function upgradeToPivotTable($table, $dataviewList)
     {
         static $defaultPivotGroupID;
 
@@ -8696,9 +8696,19 @@ class upgradeModel extends model
             $pivot->filters  = json_encode($tableSettings->filter);
         }
 
+        if(isset($dataviewList[$table->dataset]))
+        {
+            $dataview     = $dataviewList[$table->dataset];
+            $pivot->sql    = 'SELECT * FROM ' . $dataview->view;
+            $pivot->fields = isset($dataview->fields) ? $dataview->fields : '';
+        }
+        elseif($pivot->sql)
+        {
+            $fieldSettings = $this->getFieldSettings($table->sql);
+            $pivot->fields = json_encode($fieldSettings);
+        }
+
         /* Process fieldSettings. */
-        $fieldSettings = $this->getFieldSettings($table->sql);
-        $pivot->fields = json_encode($fieldSettings);
 
         $this->dao->insert(TABLE_PIVOT)->data($pivot)->autoCheck()->exec();
         $pivotID = $this->dao->lastInsertID();
@@ -8838,6 +8848,8 @@ class upgradeModel extends model
      */
     public function getFieldSettings($sql)
     {
+        if(!$sql) return array();
+
         $this->loadModel('dataview');
 
         $columns      = $this->dataview->getColumns($sql);
