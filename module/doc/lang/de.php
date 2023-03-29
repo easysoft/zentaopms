@@ -63,6 +63,7 @@ $lang->doc->project      = $lang->projectCommon;
 $lang->doc->execution    = $lang->execution->common;
 $lang->doc->lib          = 'Bibliothek';
 $lang->doc->module       = 'Modul';
+$lang->doc->libAndModule = 'Bibliothek & Modul';
 $lang->doc->object       = 'Object';
 $lang->doc->title        = 'Titel';
 $lang->doc->digest       = 'Zusammenfassung';
@@ -195,9 +196,8 @@ $lang->doc->libIconList['custom']    = 'icon-folder-o';
 $lang->doc->systemLibs['product']   = $lang->productCommon . 'Dok Bibliothek';
 $lang->doc->systemLibs['execution'] = $lang->executionCommon . 'Dok Bibliothek';
 
-$lang->doc->aclList['open']    = 'Öffentlich';
-$lang->doc->aclList['custom']  = 'Eigene';
-$lang->doc->aclList['private'] = 'Privat';
+$lang->doc->aclList['open']    = "Öffentlich <span class='text-gray'>(Access with library permissions)</span>";
+$lang->doc->aclList['private'] = "Privat <span class='text-gray'>(Only creators and whitelist users can access)</span>";
 
 $lang->doc->typeList['html']     = 'Html';
 $lang->doc->typeList['markdown'] = 'Markdown';
@@ -207,7 +207,6 @@ $lang->doc->typeList['ppt']      = 'PPT';
 $lang->doc->typeList['excel']    = 'Excel';
 
 $lang->doc->createList['html']     = 'Create Document';
-$lang->doc->createList['api']      = 'Create API';
 $lang->doc->createList['template'] = 'Create By Template';
 $lang->doc->createList['word']     = 'Word';
 $lang->doc->createList['ppt']      = 'PPT';
@@ -294,7 +293,8 @@ $lang->doc->noticeAcl['doc']['custom']  = 'Users in the whiltelist can access it
 $lang->doc->noticeAcl['doc']['private'] = 'Only the one who created it can access it.';
 
 $lang->doc->placeholder = new stdclass();
-$lang->doc->placeholder->url = 'Url';
+$lang->doc->placeholder->url       = 'URL';
+$lang->doc->placeholder->execution = 'When the execution is empty, the document is created in the project library';
 
 $lang->doc->summary = "Total files on this page: <strong>%s</strong> , total size: <strong>%s</strong>, <strong>%s</strong>.";
 $lang->doc->ge      = ':';

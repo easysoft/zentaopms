@@ -63,6 +63,7 @@ $lang->doc->project      = $lang->projectCommon;
 $lang->doc->execution    = $lang->execution->common;
 $lang->doc->lib          = 'Bibliothèque';
 $lang->doc->module       = 'Catégorie';
+$lang->doc->libAndModule = 'Library & Catalog';
 $lang->doc->object       = 'Object';
 $lang->doc->title        = 'Nom';
 $lang->doc->digest       = 'Résumé';
@@ -195,9 +196,8 @@ $lang->doc->libIconList['custom']    = 'icon-folder-o';
 $lang->doc->systemLibs['product']   = $lang->productCommon;
 $lang->doc->systemLibs['execution'] = $lang->executionCommon;
 
-$lang->doc->aclList['open']    = 'Public';
-$lang->doc->aclList['custom']  = 'Person.';
-$lang->doc->aclList['private'] = 'Privé';
+$lang->doc->aclList['open']    = "Public <span class='text-gray'>(Access with library permissions)</span>";
+$lang->doc->aclList['private'] = "Privé <span class='text-gray'>(Only creators and whitelist users can access)</span>";
 
 $lang->doc->typeList['html']     = 'Html';
 $lang->doc->typeList['markdown'] = 'Markdown';
@@ -294,7 +294,8 @@ $lang->doc->noticeAcl['doc']['custom']  = 'Les utilisateurs de la Liste Blanche 
 $lang->doc->noticeAcl['doc']['private'] = 'Seulement celui qui a ajouté le document peut y accéder.';
 
 $lang->doc->placeholder = new stdclass();
-$lang->doc->placeholder->url = 'URL';
+$lang->doc->placeholder->url       = 'URL';
+$lang->doc->placeholder->execution = 'When the execution is empty, the document is created in the project library';
 
 $lang->doc->summary = "Total files on this page: <strong>%s</strong> , total size: <strong>%s</strong>, <strong>%s</strong>.";
 $lang->doc->ge      = ':';
