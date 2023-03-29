@@ -136,7 +136,7 @@ class commonModel extends model
      *
      * @param  object $execution
      * @access public
-     * @return object $parentExecution
+     * @return object|false $parentExecution
      */
     public function syncExecutionByChild($execution)
     {
@@ -1474,15 +1474,20 @@ class commonModel extends model
             echo "<li class='dropdown-submenu' id='downloadMobile'><a href='javascript:;'>" . $lang->downloadMobile . "</a><ul class='dropdown-menu pull-left''>";
 
             /* Intranet users use local pictures. */
-            $curl = curl_init();
-            curl_setopt($curl, CURLOPT_URL, 'https://www.zentao.net/page/appqrcode.json');
-            curl_setopt($curl, CURLOPT_TIMEOUT_MS, 200);
-            curl_setopt($curl, CURLOPT_CONNECTTIMEOUT_MS, 200);
-            curl_setopt($curl, CURLOPT_RETURNTRANSFER, TRUE);
-            curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, FALSE);
-            curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, FALSE);
-            $connected = curl_exec($curl);
-            curl_close($curl);
+            $connected = false;
+            if(extension_loaded('curl'))
+            {
+                $curl = curl_init();
+                curl_setopt($curl, CURLOPT_URL, 'https://www.zentao.net/page/appqrcode.json');
+                curl_setopt($curl, CURLOPT_TIMEOUT_MS, 200);
+                curl_setopt($curl, CURLOPT_CONNECTTIMEOUT_MS, 200);
+                curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+                curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
+                curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false);
+                $connected = curl_exec($curl);
+                curl_close($curl);
+            }
+
             if($connected)
             {
                 echo "<li><div class='mobile-qrcode'><iframe src='https://www.zentao.net/page/appqrcode.html?v={$config->version}' frameborder='0' scrolling='no' seamless></iframe></div></li>";
@@ -1557,7 +1562,7 @@ class commonModel extends model
         }
         else
         {
-            $orderBy   = "" . trim($fieldName, '`') . "" . '_' . 'asc';
+            $orderBy   = trim($fieldName, '`') . '_' . 'asc';
             $className = 'header';
         }
 
@@ -1569,10 +1574,9 @@ class commonModel extends model
     }
 
     /**
+     * Print link to a module's method.
      *
-     * Print link to an modules' methd.
-     *
-     * Before printing, check the privilege first. If no privilege, return fasle. Else, print the link, return true.
+     * Before printing, check the privilege first. If no privilege, return false. Else, print the link, return true.
      *
      * @param string $module    the module name
      * @param string $method    the method
@@ -1629,7 +1633,7 @@ class commonModel extends model
 
         if(!commonModel::hasPriv('action', 'comment', $object)) return false;
         echo html::commonButton('<i class="icon icon-chat-line"></i> ' . $lang->action->create, '', 'btn btn-link pull-right btn-comment');
-        echo <<<EOD
+        echo <<<EOF
 <div class="modal fade modal-comment">
   <div class="modal-dialog">
     <div class="modal-content">
@@ -1658,7 +1662,7 @@ $(function()
     if(\$body.hasClass('hide-modal-close')) \$body.removeClass('hide-modal-close');
 });
 </script>
-EOD;
+EOF;
     }
 
     /**
@@ -2143,9 +2147,9 @@ EOD;
      * Get the previous and next object.
      *
      * @param  string $type story|task|bug|case
-     * @param  string $objectID
+     * @param  int    $objectID
      * @access public
-     * @return void
+     * @return object
      */
     public function getPreAndNextObject($type, $objectID)
     {
@@ -2267,6 +2271,7 @@ EOD;
      *
      * @param  string    $sql
      * @param  string    $objectType story|task|bug|testcase
+     * @param  bool      $onlyCondition
      * @access public
      * @return void
      */
@@ -2836,7 +2841,7 @@ EOD;
     /**
      * Check whether view type is tutorial
      * @access public
-     * @return boolean
+     * @return bool
      */
     public static function isTutorialMode()
     {
@@ -3095,23 +3100,23 @@ EOD;
     /**
      * Response.
      *
-     * @param  string $code
+     * @param  string $reasonPhrase
      * @access public
      * @return void
      */
-    public function response($code)
+    public function response($reasonPhrase)
     {
         $response = new stdclass();
         if(isset($this->config->entry->errcode))
         {
-            $response->errcode = $this->config->entry->errcode[$code];
-            $response->errmsg  = urlencode($this->lang->entry->errmsg[$code]);
+            $response->errcode = $this->config->entry->errcode[$reasonPhrase];
+            $response->errmsg  = urlencode($this->lang->entry->errmsg[$reasonPhrase]);
 
             die(urldecode(json_encode($response)));
         }
         else
         {
-            $response->error = $code;
+            $response->error = $reasonPhrase;
             die(urldecode(json_encode($response)));
         }
     }
@@ -3120,10 +3125,10 @@ EOD;
     /**
      * Http response with header.
      *
-     * @param  string       $url
-     * @param  string|array $data
-     * @param  array        $options   This is option and value pair, like CURLOPT_HEADER => true. Use curl_setopt function to set options.
-     * @param  array        $headers   Set request headers.
+     * @param  string              $url
+     * @param  string|array|object $data
+     * @param  array               $options   This is option and value pair, like CURLOPT_HEADER => true. Use curl_setopt function to set options.
+     * @param  array               $headers   Set request headers.
      * @static
      * @access public
      * @return string
@@ -3140,16 +3145,16 @@ EOD;
 
         $curl = curl_init();
         curl_setopt($curl, CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_1_0);
-        curl_setopt($curl, CURLOPT_USERAGENT, 'Sae T OAuth2 v0.1');
+        curl_setopt($curl, CURLOPT_USERAGENT, 'ZenTao PMS ' . $app->config->version);
         curl_setopt($curl, CURLOPT_CONNECTTIMEOUT, 30);
         curl_setopt($curl, CURLOPT_TIMEOUT, 30);
-        curl_setopt($curl, CURLOPT_RETURNTRANSFER, TRUE);
-        curl_setopt($curl, CURLOPT_ENCODING, "");
-        curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, FALSE);
-        curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, FALSE);
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($curl, CURLOPT_ENCODING, '');
+        curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false);
         curl_setopt($curl, CURLOPT_IPRESOLVE, CURL_IPRESOLVE_V4);
         curl_setopt($curl, CURLOPT_HEADER, true);
-        curl_setopt($curl, CURLINFO_HEADER_OUT, TRUE);
+        curl_setopt($curl, CURLINFO_HEADER_OUT, true);
         curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
         curl_setopt($curl, CURLOPT_URL, $url);
 
@@ -3175,8 +3180,8 @@ EOD;
         {
             $field = explode(':', $item);
             if(count($field) < 2) continue;
-            $headerkey = array_shift($field);
-            $newHeader[$headerkey] = join('', $field);
+            $headerKey = array_shift($field);
+            $newHeader[$headerKey] = join('', $field);
         }
         curl_close($curl);
 
@@ -3240,17 +3245,17 @@ EOD;
 
         $curl = curl_init();
         curl_setopt($curl, CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_1_0);
-        curl_setopt($curl, CURLOPT_USERAGENT, 'Sae T OAuth2 v0.1');
+        curl_setopt($curl, CURLOPT_USERAGENT, 'ZenTao PMS ' . $app->config->version);
         curl_setopt($curl, CURLOPT_CONNECTTIMEOUT, $timeout);
         curl_setopt($curl, CURLOPT_TIMEOUT, $timeout);
-        curl_setopt($curl, CURLOPT_RETURNTRANSFER, TRUE);
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($curl, CURLOPT_ENCODING, "");
-        curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, FALSE);
-        curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, FALSE);
+        curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false);
         curl_setopt($curl, CURLOPT_IPRESOLVE, CURL_IPRESOLVE_V4);
-        curl_setopt($curl, CURLOPT_HEADER, FALSE);
+        curl_setopt($curl, CURLOPT_HEADER, false);
         curl_setopt($curl, CURLOPT_FOLLOWLOCATION, 2);
-        curl_setopt($curl, CURLINFO_HEADER_OUT, TRUE);
+        curl_setopt($curl, CURLINFO_HEADER_OUT, true);
         curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
         curl_setopt($curl, CURLOPT_URL, $url);
 
@@ -3357,13 +3362,13 @@ EOD;
     /**
      * Get relations for two object.
      *
-     * @param  varchar $atype
-     * @param  int     $aid
-     * @param  varchar $btype
-     * @param  int     $bid
+     * @param  string  $AType
+     * @param  int     $AID
+     * @param  string  $BType
+     * @param  int     $BID
      *
      * @access public
-     * @return string
+     * @return array
      */
     public function getRelations($AType = '', $AID = 0, $BType = '', $BID = 0)
     {
@@ -3386,7 +3391,7 @@ EOD;
      * @param  array   $params
      *
      * @access public
-     * @return string
+     * @return void
      */
     static public function setMenuVars($moduleName, $objectID, $params = array())
     {
@@ -3463,8 +3468,9 @@ EOD;
         }
     }
 
-    /*
+    /**
      * Replace the %s of one key of a menu by objectID or $params.
+     *
      * @param  object  $menu
      * @param  int     $objectID
      * @param  array   $params
