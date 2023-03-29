@@ -18,22 +18,27 @@ function portal(/* string $name, mixed ...$children */)
     call_user_func_array('\zin\context::portal', func_get_args());
 }
 
-function pageJS()
+function js()
 {
     call_user_func_array('\zin\context::js', func_get_args());
 }
 
-function pageCSS()
+function jsCall()
 {
-    call_user_func_array('\zin\context::css', func_get_args());
+    call_user_func_array('\zin\context::jsCall', func_get_args());
 }
 
-function pageJSVar()
+function jsVar()
 {
     call_user_func_array('\zin\context::jsVar', func_get_args());
 }
 
-function pageImport()
+function css()
+{
+    call_user_func_array('\zin\context::css', func_get_args());
+}
+
+function import()
 {
     call_user_func_array('\zin\context::import', func_get_args());
 }

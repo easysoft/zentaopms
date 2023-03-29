@@ -42,9 +42,4 @@ function li()       {return call_user_func_array('\zin\h::li', func_get_args());
 function input()    {return call_user_func_array('\zin\h::input', func_get_args());}
 function textarea() {return call_user_func_array('\zin\h::textarea', func_get_args());}
 
-function js()       {return call_user_func_array('\zin\h::js', func_get_args());}
-function jsVar()    {return call_user_func_array('\zin\h::jsVar', func_get_args());}
-function jsCall()   {return call_user_func_array('\zin\h::jsCall', func_get_args());}
 function jsRaw()    {return call_user_func_array('\zin\h::jsRaw', func_get_args());}
-function css()      {return call_user_func_array('\zin\h::css', func_get_args());}
-function import()   {return call_user_func_array('\zin\h::import', func_get_args());}

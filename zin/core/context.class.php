@@ -12,6 +12,7 @@
 namespace zin;
 
 require_once dirname(__DIR__) . DS . 'utils' . DS . 'dataset.class.php';
+require_once dirname(__DIR__) . DS . 'utils' . DS . 'flat.func.php';
 require_once 'portal.class.php';
 
 class context extends \zin\utils\dataset
@@ -74,7 +75,8 @@ class context extends \zin\utils\dataset
 
     public function addJSCall()
     {
-        $code = call_user_func_array('h::createJsCallCode', func_get_args());
+        $code = call_user_func_array('\zin\h::createJsCallCode', func_get_args());
+        \a(array('code', $code, $this->getJsList()));
         return $this->addToList('jsCall', $code);
     }
 
@@ -97,13 +99,32 @@ class context extends \zin\utils\dataset
     public static function js(/* string ...$code */)
     {
         $context = static::current();
-        call_user_func_array(array($context, 'addJS'), func_get_args());
+        call_user_func_array(array($context, 'addJS'), \zin\utils\flat(func_get_args()));
+    }
+
+    public static function jsCall(/* string ...$code */)
+    {
+        $context = static::current();
+        call_user_func_array(array($context, 'addJSCall'), func_get_args());
+    }
+
+
+    public static function jsVar($name, $value)
+    {
+        $context = static::current();
+        $context->addJSVar($name, $value);
     }
 
     public static function css(/* string ...$code */)
     {
         $context = static::current();
-        call_user_func_array(array($context, 'addCSS'), func_get_args());
+        call_user_func_array(array($context, 'addCSS'), \zin\utils\flat(func_get_args()));
+    }
+
+    public static function import(/* string ...$files */)
+    {
+        $context = static::current();
+        call_user_func_array(array($context, 'addImport'), func_get_args());
     }
 
     /**
