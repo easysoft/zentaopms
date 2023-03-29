@@ -11,8 +11,9 @@
 #mainContent > .main-col {flex: auto; height: calc(100vh - 120px); overflow: auto;}
 
 /* tree */
-.img-lib {flex: 0 0 16px; height: 14px;}
-a.lib {margin-bottom: 0;}
+#sideBar {padding-left: 0; padding-right: 0;}
+li.lib {width: unset;}
+a.lib {margin-bottom: 0; width: unset;}
 .tree-icon {position: absolute; right: 0;}
 .tree li > a {max-width: 100%; padding: 2px;}
 .file-tree  a.show-icon > div {padding-right: 15px;}
@@ -20,6 +21,7 @@ a.lib {margin-bottom: 0;}
 .tree li.has-input {overflow: hidden;}
 .tree li.has-list.open:before {display: none;}
 
+.img-lib {flex: 0 0 16px; height: 14px;}
 /* sideBar */
 
 .sidebar-toggle > .icon {width: 16px; height: 30px; margin-top: -10px; line-height: 30px; color: #fff; text-align: center; background: #7dcdfe; border-radius: 6px; cursor: pointer;}
