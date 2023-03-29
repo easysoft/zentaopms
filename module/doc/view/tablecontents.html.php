@@ -14,6 +14,7 @@
 <?php js::set('treeData', $libTree);?>
 <?php js::set('linkParams', "type=$type&objectID=$objectID%s&browseType=&orderBy=$orderBy");?>
 <?php js::set('docLang', $lang->doc);?>
+<?php js::set('libType', $libType);?>
 <?php js::set('objectType', $type);?>
 <?php js::set('objectID', $objectID);?>
 <div id="mainMenu" class="clearfix">
@@ -30,22 +31,14 @@
       echo html::a($this->createLink('doc', $exportMethod, "libID=$libID&docID=0", 'html', true), "<i class='icon-export muted'> </i>" . $lang->export, '', "class='btn btn-link export' id='{$exportMethod}'");
   }
 
-  if($libType != 'api')
+  if(common::hasPriv('doc', 'createLib'))
   {
-      if(common::hasPriv('doc', 'createLib'))
-      {
-          echo html::a(helper::createLink('doc', 'createLib', "type=$type&objectID=$objectID"), '<i class="icon icon-plus"></i> ' . $this->lang->doc->createLib, '', 'class="btn btn-secondary iframe" data-width="800px"');
-      }
-
-      if($libID and (common::hasPriv('doc', 'create') or (common::hasPriv('api', 'create') and !$apiLibID)))
-      {
-          echo $this->doc->printCreateBtn($lib, $type, $objectID, $moduleID, $apiLibID);
-      }
+      echo html::a(helper::createLink('doc', 'createLib', "type=$type&objectID=$objectID"), '<i class="icon icon-plus"></i> ' . $this->lang->doc->createLib, '', 'class="btn btn-secondary iframe" data-width="800px"');
   }
-  else
+
+  if($libID and (common::hasPriv('doc', 'create') or (common::hasPriv('api', 'create') and !$apiLibID)))
   {
-      if(common::hasPriv('api', 'createLib')) echo html::a($this->createLink('api', 'createLib', "type=$type"), '<i class="icon icon-plus"></i> ' . $lang->api->createLib, '', 'class="btn btn-secondary iframe" data-width="800px"');
-      if(common::hasPriv('api', 'create'))    echo html::a($this->createLink('api', 'create',    "libID=$libID&moduleID=$moduleID"), '<i class="icon icon-plus"></i> ' . $lang->api->createApi, '', 'class="btn btn-primary"');
+      echo $this->doc->printCreateBtn($lib, $type, $objectID, $moduleID, $apiLibID);
   }
   ?>
   </div>
@@ -116,10 +109,10 @@
   </ul>
 </div>
 <div class="hidden" data-id="aTreeModal">
-  <a href="###" data-has-children="false" title="%name%" data-id="%id%">
+  <a href="###" style="position: relative" data-has-children="false" data-action="true" title="%name%" data-id="%id%">
     <div class="text h-full w-full flex-between overflow-hidden" style="position: relative;">
-      <span>%name%</span>
-      <i class="icon icon-drop icon-ellipsis-v hidden file-drop-icon" data-iscatalogue="true"></i>
+      <span style="padding-left: 5px;">%name%</span>
+      <i class="icon icon-drop icon-ellipsis-v tree-icon hidden" data-iscatalogue="true"></i>
     </div>
   </a>
 </div>

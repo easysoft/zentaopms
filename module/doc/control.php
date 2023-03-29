@@ -137,11 +137,11 @@ class doc extends control
                 $this->action->create('docLib', $libID, 'Created');
 
                 if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $libID));
-                return print(js::locate($this->createLink('doc', 'tableContents', "type=$type&objectID=$objectID&libID=$libID"), 'parent.parent'));
+                return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => "parent.locateNewLib(\"$type\", \"$objectID\", \"$libID\")"));
             }
             else
             {
-                echo js::error(dao::getError());
+                return $this->send(array('result' => 'fail', 'message' => dao::getError()));
             }
         }
 

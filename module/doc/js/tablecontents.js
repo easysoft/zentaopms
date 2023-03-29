@@ -32,7 +32,7 @@ $(function()
             var libClass = ['lib', 'annex', 'api', 'execution'].indexOf(item.type) !== -1 ? 'lib' : '';
             var hasChild = item.children ? !!item.children.length : false;
             var link     = item.hasAction ? '###' : '#';
-            var $item    = '<a href="' + link + '" style="position: relative" data-has-children="' + hasChild + '" title="' + item.name + '" data-id="' + item.id + '" class="' + libClass + '" data-type="' + item.type + '" data-action="' + item.hasAction + '">';
+            var $item    = '<a href="' + link + '" style="position: relative" data-has-children="' + hasChild + '" title="' + item.name + '" data-id="'  +  item.id + '" class="' + libClass + '" data-type="' + item.type + '" data-action="' + item.hasAction + '">';
 
             $item += '<div class="text h-full w-full flex-start overflow-hidden">';
             if(libClass == 'lib' && item.type != 'execution') $item += '<div class="img-lib" style="background-image:url(static/svg/' + imgObj[item.type || 'lib'] + '.svg)"></div>';
@@ -58,10 +58,10 @@ $(function()
 
         var libClass = '.libDorpdown';
         if(!$(this).hasClass('lib')) libClass = '.moduleDorpdown';
-        if($(libClass).find('li').length == 0) return false;
 
         $(this).find('.icon').removeClass('hidden');
-        $(this).addClass('show-icon');
+        $(this).addClass('show-icon');   if($(libClass).find('li').length == 0) return false;
+
     }).on('mouseout', 'a', function()
     {
         $(this).find('.icon').addClass('hidden');
@@ -188,8 +188,6 @@ $(function()
             }
         });
     });
-
-;
 
     $('body').on('click', function()
     {
@@ -324,5 +322,12 @@ $(function()
     }).on('keydown', '.file-tree input.input-tree', function(e)
     {
         if(e.keyCode == 13) $(this).trigger('blur');
+    }).on('click', '#mainMenu .btn-toolbar a, .no-content-button a', function()
+    {
+        if(libType == 'api')
+        {
+            $.cookie('objectType', objectType, {expires: config.cookieLife, path: config.webRoot});
+            $.cookie('objectID', objectID, {expires: config.cookieLife, path: config.webRoot});
+        }
     });
 });

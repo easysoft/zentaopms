@@ -380,7 +380,7 @@ class api extends control
      */
     public function createLib($type = 'product', $objectID = 0)
     {
-        if(empty($type)) $type = 'product';
+        if(!in_array($type, array('product', 'project'))) $type = 'product';
 
         if(!empty($_POST))
         {

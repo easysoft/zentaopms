@@ -311,3 +311,8 @@ $(document).ready(function()
         return false;
     });
 });
+
+function locateNewLib(type, objectID, libID)
+{
+    location.href = createLink('doc', 'tableContents', 'type=' + type + '&objectID=' + objectID + '&libID=' + libID);
+}

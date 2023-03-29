@@ -63,8 +63,7 @@ js::set('struct_paramsType', $lang->struct->paramsType);
           <tr>
             <th class='w-110px'><?php echo $lang->api->lib;?></th>
             <td>
-              <?php echo html::select('selectedLib', $libs, $libID, "class='form-control chosen' disabled");?>
-              <?php echo html::hidden('lib', $libID);?>
+              <?php echo $libName . html::hidden('lib', $libID);?>
             </td>
             <td></td>
           </tr>
