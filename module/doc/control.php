@@ -259,6 +259,7 @@ class doc extends control
             $this->lang->doclib->aclList['private'] = sprintf($this->lang->doclib->privateACL, $this->lang->{$type}->common);
             unset($this->lang->doclib->aclList['open']);
         }
+        if(!empty($lib->main)) unset($this->lang->doclib->aclList['private'], $this->lang->doclib->aclList['open']);
 
         $this->view->lib    = $lib;
         $this->view->groups = $this->loadModel('group')->getPairs();

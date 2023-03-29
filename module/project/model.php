@@ -1416,7 +1416,7 @@ class projectModel extends model
             $lib->name    = $this->lang->doclib->main['project'];
             $lib->type    = 'project';
             $lib->main    = '1';
-            $lib->acl     = $project->acl != 'program' ? $project->acl : 'custom';
+            $lib->acl     = 'default';
             $lib->users   = ',' . implode(',', array_filter($authorizedUsers)) . ',';
             $lib->vision  = zget($project, 'vision', 'rnd');
             $this->dao->insert(TABLE_DOCLIB)->data($lib)->exec();
