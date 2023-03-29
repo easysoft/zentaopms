@@ -29,11 +29,13 @@ $(function()
         data: treeData,
         itemCreator: function($li, item)
         {
-            var libClass = ['lib', 'annex', 'api'].indexOf(item.type) !== -1 ? 'lib' : '';
+            var libClass = ['lib', 'annex', 'api', 'execution'].indexOf(item.type) !== -1 ? 'lib' : '';
             var hasChild = item.children ? !!item.children.length : false;
-            var $item = '<a href="###" style="position: relative" data-has-children="' + hasChild + '" title="' + item.name + '" data-id="' + item.id + '" class="' + libClass + '" data-type="' + item.type + '">';
+            var link     = item.hasAction ? '###' : '#';
+            var $item    = '<a href="' + link + '" style="position: relative" data-has-children="' + hasChild + '" title="' + item.name + '" data-id="' + item.id + '" class="' + libClass + '" data-type="' + item.type + '" data-action="' + item.hasAction + '">';
+
             $item += '<div class="text h-full w-full flex-start overflow-hidden">';
-            if(libClass == 'lib') $item += '<div class="img-lib" style="background-image:url(static/svg/' + imgObj[item.type || 'lib'] + '.svg)"></div>';
+            if(libClass == 'lib' && item.type != 'execution') $item += '<div class="img-lib" style="background-image:url(static/svg/' + imgObj[item.type || 'lib'] + '.svg)"></div>';
             $item += '<span style="padding-left: 5px;">';
             $item += item.name
             $item += '</span>';
@@ -52,6 +54,7 @@ $(function()
     $('#fileTree').on('mousemove', 'a', function()
     {
         if($(this).data('type') == 'annex') return;
+        if(!$(this).data('action')) return;
 
         var libClass = '.libDorpdown';
         if(!$(this).hasClass('lib')) libClass = '.moduleDorpdown';
@@ -65,6 +68,8 @@ $(function()
         $(this).removeClass('show-icon');
     }).on('click', 'a', function(e)
     {
+        if(!$(this).data('action')) return;
+
         var isLib    = $(this).hasClass('lib');
         var moduleID = $(this).data('id');
         var libID    = 0;

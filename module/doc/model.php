@@ -2867,15 +2867,17 @@ class docModel extends model
                 if(empty($libTree['execution'][$executionID]))
                 {
                     $execution = new stdclass();
-                    $execution->id       = $executionID;
-                    $execution->name     = zget($executionPairs, $executionID);
-                    $execution->type     = 'execution';
-                    $execution->active   = $item->active;
-                    $execution->children = array();
+                    $execution->id        = $executionID;
+                    $execution->name      = zget($executionPairs, $executionID);
+                    $execution->type      = 'execution';
+                    $execution->active    = $item->active;
+                    $execution->hasAction = false;
+                    $execution->children  = array();
                     if(count($executionLibs[$executionID]) == 1)
                     {
-                        $execution->id       = $item->id;
-                        $execution->children = $item->children;
+                        $execution->id        = $item->id;
+                        $execution->hasAction = true;
+                        $execution->children  = $item->children;
                     }
 
                     $libTree['execution'][$executionID] = $execution;
