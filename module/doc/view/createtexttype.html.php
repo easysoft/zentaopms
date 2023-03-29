@@ -139,7 +139,6 @@
 </div>
 <?php js::set('textType', $config->doc->textTypes);?>
 <?php js::set('docType', $docType);?>
-<?php js::set('fromGlobal', $fromGlobal);?>
 <?php js::set('holders', $lang->doc->placeholder);?>
 <?php js::set('type', 'doc');?>
 <?php js::set('requiredFields', ',' . $config->doc->create->requiredFields . ',');?>

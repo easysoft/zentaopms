@@ -47,7 +47,7 @@ class docModel extends model
             ->where('deleted')->eq(0)
             ->andWhere('type')->eq('api')
             ->beginIF(!empty($appendLib))->orWhere('id')->eq($appendLib)->fi()
-            ->beginIF(!empty($objectType) && $objectID > 0)->andWhere($objectType)->eq($objectID)->fi()
+            ->beginIF(!empty($objectType) && $objectID > 0 and $objectType != 'nolink')->andWhere($objectType)->eq($objectID)->fi()
             ->beginIF($objectType == 'nolink')
             ->andWhere('product')->eq(0)
             ->andWhere('project')->eq(0)
@@ -234,6 +234,7 @@ class docModel extends model
             ->join('users', ',')
             ->setForce('product', $this->post->libType == 'product' ? $this->post->product : 0)
             ->setForce('project', $this->post->libType == 'project' ? $this->post->project : 0)
+            ->setForce('execution', $this->post->libType == 'project' ? $this->post->execution : 0)
             ->add('addedBy', $this->app->user->account)
             ->add('addedDate', helper::now())
             ->remove('uid,contactListMenu,libType')
@@ -247,7 +248,8 @@ class docModel extends model
         $this->lang->doclib->project = $this->lang->api->project;
         $this->lang->doclib->product = $this->lang->api->product;
 
-        $this->config->api->createlib->requiredFields .= $this->post->libType == 'product' ? ',product' : ',project';
+        if($this->post->libType == 'product') $this->config->api->createlib->requiredFields .= ',product';
+        if($this->post->libType == 'project') $this->config->api->createlib->requiredFields .= ',project';
 
         $data->type = static::DOC_TYPE_API;
         $this->dao->insert(TABLE_DOCLIB)->data($data)->autoCheck()
@@ -286,8 +288,8 @@ class docModel extends model
         $this->lang->doclib->project = $this->lang->api->project;
         $this->lang->doclib->product = $this->lang->api->product;
 
-
-        $this->config->api->editlib->requiredFields .= $this->post->libType == 'product' ? ',product' : ',project';
+        if($this->post->libType == 'product') $this->config->api->createlib->requiredFields .= ',product';
+        if($this->post->libType == 'project') $this->config->api->createlib->requiredFields .= ',project';
 
         $data->type = static::DOC_TYPE_API;
         $this->dao->update(TABLE_DOCLIB)->data($data)->autoCheck()
@@ -2945,35 +2947,10 @@ class docModel extends model
             $attr   = "data-app='{$this->app->tab}'";
             $class  = strpos($this->config->doc->officeTypes, $typeKey) !== false ? 'iframe' : '';
             $params = "objectType={$lib->type}&objectID=$objectID&libID={$lib->id}&moduleID=$moduleID&type=$typeKey";
+            if($typeKey == 'template') $params = "objectType=$type&objectID=$objectID&libID={$lib->id}&moduleID=$moduleID&type=html&from=template";
 
             $html .= "<li>";
-            if($typeKey == 'template')
-            {
-                $params = "objectType=$type&objectID=$objectID&libID={$lib->id}&moduleID=$moduleID&type=html&fromGlobal=&from=template";
-                $html .= html::a('#modalTemplate', $typeName, '', "data-toggle='modal' $attr");
-        $html .= "
-    <div class='modal fade' id='modalTemplate' data-scroll-inside='true'>
-      <div class='modal-dialog'>
-        <div class='modal-content with-padding'>
-          <div class='modal-header'>
-            <button type='button' class='close' data-dismiss='modal'>
-              <i class='icon icon-close'></i>
-            </button>
-          </div>
-          <div class='modal-body'>
-            <table class='table table-form'>
-<tr>
-<th>模板选择</th>
-<td></td>
-</tr>
-</table>
-</div>
-";
-            }
-            else
-            {
-                $html .= html::a(helper::createLink('doc', 'create', $params, '', $class ? true : false), $typeName, '', "class='$class' $attr");
-            }
+            $html .= html::a(helper::createLink('doc', 'create', $params, '', $class ? true : false), $typeName, '', "class='$class' $attr");
             $html .= "</li>";
 
             $printDivider = false;

@@ -177,6 +177,7 @@ $lang->api->requestTypeOptions['multipart/form-data']               = 'multipart
 $lang->api->libTypeList = array();
 $lang->api->libTypeList['product'] = $lang->productCommon . ' Api Library';
 $lang->api->libTypeList['project'] = $lang->projectCommon . ' Api Library';
+$lang->api->libTypeList['nolink']  = 'No Linked Api Library';
 
 $lang->api->statusOptions      = array(
     'done'   => 'Done',

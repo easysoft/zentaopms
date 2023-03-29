@@ -12,7 +12,7 @@ $(function()
         if(option.type != 'dropDownLibrary') libClass = '.moduleDorpdown';
         if($(libClass).find('li').length == 0) return '';
         var dropdown = '<ul class="dropdown-menu dropdown-in-tree" id="' + option.type + '" style="display: unset; left:' + option.left + 'px; top:' + option.top + 'px;">';
-        dropdown += $(libClass).html().replace(/%libID%/g, option.libID).replace(/%moduleID%/g, option.moduleID).replace(/%hasChildren%/g, option.hasChildren).replace(/%libType%/g, option.libType);
+        dropdown += $(libClass).html().replace(/%libID%/g, option.libID).replace(/%moduleID%/g, option.moduleID).replace(/%hasChildren%/g, option.hasChildren);
         dropdown += '</ul>';
         return dropdown;
     }
@@ -23,7 +23,6 @@ $(function()
         'api': 'interface'
     }
 
-    console.log(treeData, 'treeData');
     $('#fileTree').tree(
     {
         initialState: 'active',
@@ -40,7 +39,7 @@ $(function()
             $item += '<span style="padding-left: 5px;">';
             $item += item.name
             $item += '</span>';
-            $item += '<i class="icon icon-drop icon-ellipsis-v hidden tree-icon" data-isCatalogue="' + (item.type ? false : true) + '"></i>';
+            $item += '<i class="icon icon-drop icon-ellipsis-v hidden tree-icon" data-isCatalogue="' + (libClass ? false : true) + '"></i>';
             $item += '</div>';
             $item += '</a>';
 
@@ -141,7 +140,6 @@ $(function()
             type        : dropDownID,
             libID       : libID,
             moduleID    : moduleID,
-            moduleType  : moduleType,
             hasChildren : hasChildren
         };
 
@@ -237,7 +235,7 @@ $(function()
                 if(item.hasChildren)
                 {
                     var $input   = $('[data-id=liTreeModal]').html();
-                    var $rootDom = $('[data-id=' + item.libid + ']a + ul');
+                    var $rootDom = $('[data-id=' + item.moduleid+ ']a + ul');
                     $rootDom.append($input);
                 }
                 else
@@ -262,10 +260,12 @@ $(function()
                 break;
             case 'addCataChild' :
                 moduleData.parentID = item.id;
+                console.log(item);
                 if(item.hasChildren)
                 {
                     var $input   = $('[data-id=liTreeModal]').html();
-                    var $rootDom = $('#fileTree [data-id=' + item.id + ']a + ul ');
+                    var $rootDom = $('#fileTree [data-id=' + item.id + ']a + ul');
+                    var $rootDom = $('#fileTree [data-id=' + item.id + ']a + ul');
                 }
                 else
                 {

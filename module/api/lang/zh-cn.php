@@ -177,6 +177,7 @@ $lang->api->requestTypeOptions['multipart/form-data']               = 'multipart
 $lang->api->libTypeList = array();
 $lang->api->libTypeList['product'] = $lang->productCommon . '接口库';
 $lang->api->libTypeList['project'] = $lang->projectCommon . '接口库';
+$lang->api->libTypeList['nolink']  = '无关联接口库';
 
 $lang->api->statusOptions      = array(
     'done'   => '开发完成',
