@@ -732,7 +732,7 @@ class customModel extends model
                     if(strpos(",$fields,", ",$field,") === false) $fields = "$field,$fields";
                 }
 
-                $requiredFields[$method]['requiredFields'] = $fields;
+                $requiredFields[$method]['requiredFields'] = trim($fields, ',');
             }
         }
 
