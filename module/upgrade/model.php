@@ -8557,7 +8557,7 @@ class upgradeModel extends model
      */
     public function processChart()
     {
-        $charts               = $this->dao->select('*')->from(TABLE_CHART)->where('deleted')->eq(0)->fetchAll('id');
+        $charts               = $this->dao->select('*')->from(TABLE_CHART)->where('builtin')->eq(0)->fetchAll('id');
         $dashboardLayoutPairs = $this->dao->select('id, layout')->from(TABLE_DASHBOARD)->fetchPairs();
 
         $dataviewList = $this->dao->select('t1.code,t1.view,t1.fields')->from(TABLE_DATAVIEW)->alias('t1')

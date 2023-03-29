@@ -13,6 +13,8 @@ CREATE TABLE IF NOT EXISTS `zt_dimension` (
   KEY `code` (`code`)
 )
 
+CREATE TABLE `zt_chart_back` SELECT * FROM `zt_chart`;
+
 ALTER TABLE `zt_chart` ADD `dimension` mediumint(8) unsigned NOT NULL DEFAULT 0 AFTER `name`;
 ALTER TABLE `zt_chart` ADD `group` mediumint(8) unsigned NOT NULL DEFAULT 0 AFTER `type`;
 ALTER TABLE `zt_chart` ADD `fields` mediumtext NOT NULL AFTER `filters`;
@@ -33,8 +35,6 @@ UPDATE `zt_dashboard` SET `dimension` = 1 WHERE `dimension` = 0;
 UPDATE `zt_grouppriv` SET `module` = 'dataview' WHERE `module` = 'dataset' AND `method` in ('create', 'browse', 'edit', 'delete');
 DELETE FROM `zt_grouppriv` WHERE `module` = 'dataset' AND `method` = 'view';
 /* */
-
-CREATE TABLE `zt_chart_back` LIKE `zt_chart`; INSERT INTO `zt_chart_back` SELECT * FROM `zt_chart`;
 
 ALTER TABLE `zt_chart` MODIFY `group` varchar(255) NOT NULL;
 ALTER TABLE `zt_chart` ADD `stage` enum('draft','published') NOT NULL DEFAULT 'draft' AFTER `sql`;
