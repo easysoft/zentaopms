@@ -145,9 +145,53 @@ $(function()
         var dropDown = renderDropdown(option);
         $(".m-doc-tablecontents").append(dropDown);
         e.stopPropagation();
+    }).on('blur', '.file-tree input.input-tree', function()
+    {
+        var $input = $(this);
+        var value = $input.val();
+        if(!value)
+        {
+            $input.closest('[data-id=insert]').remove();
+            return;
+        }
+
+        moduleData.name = value;
+        $.post(createLink('tree', 'ajaxCreateModule'), moduleData, function(result)
+        {
+            result = JSON.parse(result);
+            if(result.result == 'fail')
+            {
+                bootbox.alert(
+                    result.message[0],
+                    function()
+                    {
+                        setTimeout(function()
+                        {
+                            $('.file-tree .input-tree').focus()
+                        }, 10)
+                    }
+                );
+                return false;
+            }
+            var module    = result.module;
+            var resultDom = $('[data-id=aTreeModal]').html().replace(/%name%/g, module.name).replace(/%id%/g, module.id).replace('insert', module.id);
+            $input.closest('ul').find('.has-input').css('padding-left', '15px');
+            $input.after(resultDom);
+            $input.remove();
+            if(moduleData.isUpdate)
+            {
+                $.getJSON(createLink('doc', 'tableContents', 'type=' + objectType + '&objectID=' + objectID , 'json'), function(data){
+                    var treeData = JSON.parse(data.data);
+                    $('#fileTree').data('zui.tree').reload(treeData.libTree);
+                    $('li.has-list > ul').addClass("menu-active-primary menu-hover-primary");
+                });
+            }
+        });
     });
 
-    $('body').on('click', function(e)
+;
+
+    $('body').on('click', function()
     {
         $('.dropdown-in-tree').remove();
     }).on('click', '.sidebar-toggle', function()

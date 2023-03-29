@@ -10,6 +10,7 @@
 #mainContent > .main-col {flex: auto; height: calc(100vh - 120px); overflow: auto;}
 
 /* tree */
+.tree-icon {position: absolute; right: 0;}
 
 /* sideBar */
 
