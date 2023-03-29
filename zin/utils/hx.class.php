@@ -39,7 +39,7 @@ class hx extends dataset
      */
     protected function setVal($prop, $value, $removeEmpty = false)
     {
-        if(strpos($prop, 'hx-') === 0) $prop = substr($prop, 3);
+        if(str_starts_with($prop, 'hx-')) $prop = substr($prop, 3);
         return parent::setVal($prop, $value);
     }
 

@@ -61,14 +61,14 @@ class props extends \zin\utils\dataset
     {
         if($prop === 'class' || $prop === '.')     $this->class->set($value);
         elseif($prop === 'style' || $prop === '~') $this->style->set($value);
-        elseif(strpos($prop, '~') === 0)           $this->style->set(substr($prop, 1), $value);
+        elseif(str_starts_with($prop, '~'))        $this->style->set(substr($prop, 1), $value);
         elseif($prop === '--')                     $this->style->cssVar($value);
-        elseif(strpos($prop, '--') === 0)          $this->style->cssVar(substr($prop, 2), $value);
+        elseif(str_starts_with($prop, '--'))       $this->style->cssVar(substr($prop, 2), $value);
         elseif($prop === '!')                      $this->hx($value);
-        elseif(strpos($prop, '!') === 0)           $this->hx(substr($prop, 1), $value);
-        elseif(strpos($prop, ':') === 0)           $this->set('data-' . substr($prop, 1), $value);
+        elseif(str_starts_with($prop, '!'))        $this->hx(substr($prop, 1), $value);
+        elseif(str_starts_with($prop, ':'))        $this->set('data-' . substr($prop, 1), $value);
         elseif($prop === '@')                      $this->bindEvent($value);
-        elseif(strpos($prop, '@') === 0)           $this->bindEvent(substr($prop, 1), $value);
+        elseif(str_starts_with($prop, '@'))        $this->bindEvent(substr($prop, 1), $value);
         else                                       parent::setVal($prop, $value);
         return $this;
     }
@@ -103,7 +103,7 @@ class props extends \zin\utils\dataset
         $events = array();
         foreach($this->data as $name => $value)
         {
-            if(strpos($name, '@') === 0) $events[substr($name, 1)] = $value;
+            if(str_starts_with($name, '@')) $events[substr($name, 1)] = $value;
         }
 
         return $events;
@@ -113,7 +113,7 @@ class props extends \zin\utils\dataset
     {
         foreach($this->data as $name => $value)
         {
-            if(strpos($name, '@') === 0) return true;
+            if(str_starts_with($name, '@')) return true;
         }
 
         return false;

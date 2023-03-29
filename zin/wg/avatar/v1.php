@@ -167,7 +167,7 @@ class avatar extends wg
 
     private function hex2Rgb($hex)
     {
-        if(strpos($hex, '#') !== 0 or !preg_match('/#[0-9A-F]{3,6}$/', $hex)) throw new \Exception('incorrect data format');
+        if(!str_starts_with($hex, '#') || !preg_match('/#[0-9A-F]{3,6}$/', $hex)) throw new \Exception('incorrect data format');
 
         $r = 0;
         $g = 0;

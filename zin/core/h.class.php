@@ -240,7 +240,7 @@ class h extends wg
         foreach($vars as $var => $val)
         {
             if(empty($var)) continue;
-            if(strpos($var, 'window.') === 0) $jsCode .= "$var=" . h::encodeJsonWithRawJs($val) . ';';
+            if(str_starts_with($var, 'window.')) $jsCode .= "$var=" . h::encodeJsonWithRawJs($val) . ';';
             else $jsCode .= "var $var=" . h::encodeJsonWithRawJs($val) . ';';
         }
         return $jsCode;

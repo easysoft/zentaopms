@@ -106,7 +106,7 @@ class dropdown extends wg
                 }
                 foreach($items as $index => $item)
                 {
-                    if(!isset($item['icon']) || empty($item['icon']) || strpos($item['icon'], 'icon-') === 0) continue;
+                    if(!isset($item['icon']) || empty($item['icon']) || str_starts_with($item['icon'], 'icon-')) continue;
                     $items[$index]['icon'] = 'icon-' . $item['icon'];
                 }
 

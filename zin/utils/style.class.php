@@ -88,7 +88,7 @@ class style extends dataset
             $vars = array();
             foreach ($this->data as $prop => $value)
             {
-                if(strpos($name, '--') !== 0) continue;
+                if(!str_starts_with($name, '--')) continue;
                 $vars[substr($prop, 2)] = $value;
             }
             return $vars;
@@ -168,6 +168,6 @@ class style extends dataset
      */
     static public function formatVarName($name)
     {
-        return strpos($name, '--') === 0 ? $name : "--$name";
+        return str_starts_with($name, '--') ? $name : "--$name";
     }
 }

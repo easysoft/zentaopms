@@ -66,8 +66,8 @@ class wg
         foreach($list as $selector)
         {
             $selector = trim($selector);
-            if(strpos($selector, '.') === 0 && $this->props->class->has(substr($selector, 1))) return true;
-            if(strpos($selector, '#') === 0 && $this->id() === substr($selector, 1)) return true;
+            if(str_starts_with($selector, '.') && $this->props->class->has(substr($selector, 1))) return true;
+            if(str_starts_with($selector, '#') && $this->id() === substr($selector, 1)) return true;
             if($selector === $this->type()) return true;
         }
         return false;
@@ -367,7 +367,7 @@ class wg
         $data['props'] = $this->props->toJsonData();
 
         $data['type'] = $this->type();
-        if(strpos($data['type'], 'zin\\') === 0) $data['type'] = substr($data['type'], 4);
+        if(str_starts_with($data['type'], 'zin\\')) $data['type'] = substr($data['type'], 4);
 
         $data['blocks'] = array();
         foreach($this->blocks as $key => $value)
@@ -462,7 +462,7 @@ class wg
     {
         $wgType = ($wg instanceof wg) ? $wg->type() : $wg;
         $wgBlockMap = static::wgBlockMap();
-        if(strpos($wgType, 'zin\\') === 0) $wgType = substr($wgType, 4);
+        if(str_starts_with($wgType, 'zin\\')) $wgType = substr($wgType, 4);
         return isset($wgBlockMap[$wgType]) ? $wgBlockMap[$wgType] : NULL;
     }
 
