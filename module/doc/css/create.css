@@ -37,7 +37,7 @@
 #modalBasicInfo .modal-body .close {position:absolute; right:15px; top:15px}
 #basicInfoBox{margin-bottom: 10px;}
 #basicInfoBox tfoot td {padding-bottom: 0;}
-.aclBox .radio-inline{display:block;}
+.aclBox .radio-inline{display:block; padding-bottom:5px;}
 .aclBox .radio-inline+.radio-inline {margin-left: 0px !important;}
 
 #whiteListBox .input-group:last-child {margin-top: 10px;}
