@@ -199,6 +199,9 @@ class doc extends control
             unset($this->lang->doclib->aclList['open']);
         }
 
+        $this->app->loadLang('api');
+        $this->lang->api->aclList['default'] = sprintf($this->lang->api->aclList['default'], $this->lang->{$type}->common);
+
         $this->view->groups         = $this->loadModel('group')->getPairs();
         $this->view->users          = $this->user->getPairs('nocode|noclosed');
         $this->view->objects        = $objects;
@@ -268,10 +271,17 @@ class doc extends control
         }
 
         if($lib->type == 'custom') unset($this->lang->doclib->aclList['default']);
+        if($lib->type == 'api')
+        {
+            $this->app->loadLang('api');
+            $type = !empty($lib->product) ? 'product' : 'project';
+            $this->lang->api->aclList['default'] = sprintf($this->lang->api->aclList['default'], $this->lang->{$type}->common);
+        }
         if($lib->type != 'custom')
         {
-            $this->lang->doclib->aclList['default'] = sprintf($this->lang->doclib->aclList['default'], $this->lang->{$lib->type}->common);
-            $this->lang->doclib->aclList['private'] = sprintf($this->lang->doclib->privateACL, $this->lang->{$lib->type}->common);
+            $type = isset($type) ? $type : $lib->type;
+            $this->lang->doclib->aclList['default'] = sprintf($this->lang->doclib->aclList['default'], $this->lang->{$type}->common);
+            $this->lang->doclib->aclList['private'] = sprintf($this->lang->doclib->privateACL, $this->lang->{$type}->common);
             unset($this->lang->doclib->aclList['open']);
         }
 
@@ -329,11 +339,11 @@ class doc extends control
     /**
      * Create a doc.
      *
-     * @param  string     $objectType
+     * @param  string     $objectType   product|project|execution|custom
      * @param  int        $objectID
      * @param  int|string $libID
      * @param  int        $moduleID
-     * @param  string     $docType
+     * @param  string     $docType       html|word|ppt|excel
      * @param  bool       $fromGlobal
      * @param  string     $from
      * @access public
@@ -346,13 +356,17 @@ class doc extends control
 
         if(!empty($_POST))
         {
-            setcookie('lastDocModule', (int)$this->post->module, $this->config->cookieLife, $this->config->webRoot, '', $this->config->cookieSecure, false);
+            $libID    = $this->post->lib;
+            $moduleID = $this->post->module;
+            if(empty($libID) and strpos($this->post->module, '_') !== false) list($libID, $moduleID) = explode('_', $this->post->module);
+            setcookie('lastDocModule', $moduleID, $this->config->cookieLife, $this->config->webRoot, '', $this->config->cookieSecure, false);
+
             $docResult = $this->doc->create();
             if(!$docResult or dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $docID = $docResult['id'];
             $files = zget($docResult, 'files', '');
-            $lib   = $this->doc->getLibByID($this->post->lib);
+            $lib   = $this->doc->getLibByID($libID);
             if($docResult['status'] == 'exists')
             {
                 return $this->send(array('result' => 'fail', 'message' => sprintf($this->lang->duplicate, $this->lang->doc->common), 'locate' => $this->createLink('doc', 'view', "docID=$docID")));
@@ -397,22 +411,51 @@ class doc extends control
         $libs       = $this->doc->getLibs($objectType, $extra = "withObject,$unclosed", $libID, $objectID);
         if(!$libID and !empty($libs)) $libID = key($libs);
 
-        $lib     = $this->doc->getLibByID($libID);
-        $type    = isset($lib->type) ? $lib->type : 'product';
-        $libName = isset($lib->name) ? $lib->name . $this->lang->colon : '';
+        $lib      = $this->doc->getLibByID($libID);
+        $objects  = array();
+        $moduleID = $moduleID ? (int)$moduleID : (int)$this->cookie->lastDocModule;
+        if($docType == 'html')
+        {
+            if(strpos("|product|project|execution|", "|{$objectType}|") === false)
+            {
+                $moduleOptionMenu = $this->tree->getOptionMenu($libID, 'doc', $startModuleID = 0);
+            }
+            else
+            {
+                if($objectType == 'project')
+                {
+                    $objects = $this->loadModel('project')->getPairs();
+                    $this->view->executions = array(0 => '') + $this->loadModel('execution')->getPairs($objectID, 'all', 'multiple');
+                }
+                elseif($objectType == 'execution')
+                {
+                    $objects = $this->loadModel('execution')->getPairs();
+                }
+                elseif($objectType == 'product')
+                {
+                    $objects = $this->loadModel('product')->getPairs();
+                }
+                $moduleOptionMenu = $this->doc->getLibsOptionMenu($libs);
+                $moduleID         = $libID . '_' . $moduleID;
+            }
+        }
+        else
+        {
+            $moduleOptionMenu = $this->tree->getOptionMenu($libID, 'doc', $startModuleID = 0);
+        }
 
-        $this->view->title = $libName . $this->lang->doc->create;
-
+        $this->view->title            = zget($lib, 'name', '', $lib->name . $this->lang->colon) . $this->lang->doc->create;
         $this->view->linkType         = $linkType;
         $this->view->objectType       = $objectType;
         $this->view->objectID         = zget($lib, $lib->type, 0);
         $this->view->libID            = $libID;
         $this->view->lib              = $lib;
         $this->view->libs             = $libs;
+        $this->view->objects          = $objects;
         $this->view->gobackLink       = $gobackLink;
-        $this->view->libName          = $this->dao->findByID($libID)->from(TABLE_DOCLIB)->fetch('name');
-        $this->view->moduleOptionMenu = $this->tree->getOptionMenu($libID, 'doc', $startModuleID = 0);
-        $this->view->moduleID         = $moduleID ? (int)$moduleID : (int)$this->cookie->lastDocModule;
+        $this->view->libName          = zget($lib, 'name', '');
+        $this->view->moduleOptionMenu = $moduleOptionMenu;
+        $this->view->moduleID         = $moduleID;
         $this->view->docType          = $docType;
         $this->view->groups           = $this->loadModel('group')->getPairs();
         $this->view->users            = $this->user->getPairs('nocode|noclosed|nodeleted');
@@ -797,16 +840,19 @@ class doc extends control
     }
 
     /**
-     * Ajax get modules by libID.
+     * Ajax get modules by object.
      *
-     * @param int $libID
+     * @param string $objectType
+     * @param int    $objectID
      * @access public
      * @return void
      */
-    public function ajaxGetModules($libID)
+    public function ajaxGetModules($objectType, $objectID)
     {
-        $moduleOptionMenu = $this->tree->getOptionMenu($libID, 'doc', $startModuleID = 0);
-        return print(html::select('module', $moduleOptionMenu, 0, "class='form-control'"));
+        $unclosed = strpos($this->config->doc->custom->showLibs, 'unclosed') !== false ? 'unclosedProject' : '';
+        $libs     = $this->doc->getLibs($objectType, $extra = "withObject,$unclosed", '', $objectID);
+        $moduleOptionMenu = $this->doc->getLibsOptionMenu($libs);
+        return print(html::select('module', $moduleOptionMenu, '', "class='form-control'"));
     }
 
     /**
@@ -940,7 +986,7 @@ class doc extends control
     public function ajaxGetWhitelist($doclibID, $acl = '', $control = '', $docID = 0)
     {
         $doclib        = $this->doc->getLibById($doclibID);
-        $doc           = $this->doc->getById($docID);
+        $doc           = $docID ? $this->doc->getById($docID) : null;
         $users         = $this->user->getPairs('noletter|noempty|noclosed');
         $selectedUser  = $docID ? $doc->users : $doclib->users;
         $selectedGroup = $docID ? $doc->groups : $doclib->groups;
@@ -953,7 +999,7 @@ class doc extends control
             {
                 foreach($groups as $groupID => $group)
                 {
-                    if(strpos($doclib->groups, (string)$groupID) === false) unset($groups[$groupID]);
+                    if(strpos(",{$doclib->groups},", ",{$groupID},") === false) unset($groups[$groupID]);
                 }
                 return print(html::select('groups[]', $groups, $selectedGroup, "class='form-control picker-select' multiple $dropDirection"));
             }
@@ -971,21 +1017,10 @@ class doc extends control
                 if(($doclib->acl == 'custom' or $doclib->acl == 'private') and strpos($doclib->users, (string)$account) === false ) unset($users[$account]);
             }
 
-            if($doclib->acl == 'custom')
-            {
-                return print(html::select('users[]', $users, $selectedUser, "multiple class='form-control picker-select' $dropDirection"));
-            }
+            if($doclib->acl == 'custom') return print(html::select('users[]', $users, $selectedUser, "multiple class='form-control picker-select' $dropDirection"));
             if($doclib->acl == 'open') return print(html::select('users[]', $users, $selectedUser, "multiple class='form-control picker-select' $dropDirection"));
             if($doclib->acl == 'default') return print(html::select('users[]', $users, $selectedUser, "multiple class='form-control picker-select' $dropDirection"));
-            if($doclib->acl == 'private' and $doclib->type == 'project')
-            {
-                echo 'project';
-            }
-            else
-            {
-                echo 'private';
-            }
-
+            echo ($doclib->acl == 'private' and $doclib->type == 'project') ? 'project' : 'private';
             return false;
         }
 
@@ -996,7 +1031,6 @@ class doc extends control
             $projectTeams = $this->loadModel('user')->getTeamMemberPairs($doclib->project);
             $stakeholders = $this->loadModel('stakeholder')->getStakeHolderPairs($doclib->project);
             $whitelist    = implode(',', array_keys($projectTeams + $stakeholders)) . $project->whitelist . ',' . $project->PM . ',' . $doclib->users;
-
             $selectedUser = $whitelist;
         }
 

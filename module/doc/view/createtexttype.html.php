@@ -10,52 +10,9 @@
  * @link        http://www.zentao.net
  */
 ?>
-<?php include '../../common/view/header.html.php';?>
+<?php include '../../common/view/header.lite.html.php';?>
 <?php include '../../common/view/kindeditor.html.php';?>
 <?php include '../../common/view/markdown.html.php';?>
-<?php js::set('holders', $lang->doc->placeholder);?>
-<?php js::set('type', 'doc');?>
-<?php js::set('requiredFields', ',' . $config->doc->create->requiredFields . ',');?>
-<?php js::set('libNotEmpty', sprintf($lang->error->notempty, $lang->doc->lib));?>
-<?php js::set('keywordsNotEmpty', sprintf($lang->error->notempty, $lang->doc->keywords));?>
-<style>
-#main {padding: 0;}
-.container {padding: 0 !important;}
-#mainContent {padding: 0 !important;}
-.doc-title input {border: unset; font-size: 18px; font-weight: bold; color: #3c4353; padding-left: 16px;}
-.doc-title .form-control:focus {border: unset; box-shadow: unset;}
-.doc-title input::-webkit-input-placeholder {color: #D8DBDE;}
-.doc-title.required:after {top: 4px; right: 0; left: 12px; display: inline-table;}
-#submit {margin-right: 16px;}
-#headerBox {border-bottom: 1px solid #e3e3e3;}
-#headerBox td:last-child {padding-right: 24px;}
-#editorContent {padding: 0;}
-
-#contentBox {padding: 0; width: 100%;}
-.ke-container {overflow: visible;}
-.ke-container, .contenthtml {border: unset; background: #efefef;}
-.ke-container.focus {box-shadow: unset; border-color: unset;}
-.ke-toolbar {padding-left: 20px; width: 100%; height: 30px;}
-.ke-edit {border-top: 1px solid rgb(220, 220, 220)}
-.ke-edit, .CodeMirror {margin: 8px 200px 0 200px; background: #fff;}
-.kindeditor-ph {padding: 20px 20px 0 20px !important;}
-.editor-toolbar {background: #fff; padding-left: 20px; border-right: unset; border-top: unset; height: 30px;}
-.CodeMirror {padding: 20px 20px 0 20px;}
-.CodeMirror.CodeMirror-wrap {border-left: 0; border-right: 0; border-bottom: 0;}
-.ke-statusbar {display: none;}
-.contentmarkdown {background: #efefef;}
-
-.article-content {padding: 8px 20px;}
-
-#noticeAcl {margin-left: 10px; vertical-align: middle;}
-
-#basicInfoLink {border: unset;}
-
-#modalBasicInfo .modal-content {overflow-x: hidden; overflow-y: scroll;}
-#modalBasicInfo .modal-body {padding-bottom: 10px;}
-.modal-title {font-size: 14px !important; font-weight: 700 !important;}
-#basicInfoBox tfoot td {padding-bottom: 0;}
-</style>
 <?php if($objectType == 'custom' and empty($libs)):?>
 <?php echo html::a(helper::createLink('doc', 'createLib', "type=custom&objectID=$objectID"), '<i class="icon icon-plus"></i> ' . $lang->doc->createLib, '', 'class="iframe hidden createCustomLib"');?>
 <?php endif;?>
@@ -66,10 +23,9 @@
       <tbody>
         <tr id='headerBox'>
           <td width='90px'><?php echo html::a($backLink, '<i class="icon icon-back icon-sm"></i> ' . $lang->goback, '', "class='btn btn-secondary' id='backBtn'");?></td>
-          <td class="doc-title" colspan='3'><?php echo html::input('title', '', "placeholder='{$lang->doc->titlePlaceholder}' class='form-control' required");?></td>
+          <td class="doc-title" colspan='3'><?php echo html::input('title', '', "placeholder='{$lang->doc->titlePlaceholder}' id='editorTitle' class='form-control' required");?></td>
           <td class="text-right">
-            <?php echo html::submitButton('', "data-placement='bottom'", 'btn btn-primary');?>
-            <?php echo html::a('#modalBasicInfo', "<i class='icon icon-cog-outline'></i> " . $lang->settings, '', "data-toggle='modal' id='basicInfoLink' class='btn'");?>
+            <?php echo html::a('#modalBasicInfo', $lang->release->common, '', "data-toggle='modal' id='basicInfoLink' class='btn btn-primary'");?>
           </td>
         </tr>
         <tr>
@@ -77,7 +33,7 @@
             <div class="main-row fade in">
               <div id='contentBox' class="main-col">
                 <div class='contenthtml'><?php echo html::textarea('content', '', "style='width:100%;'");?></div>
-                <div class='contentmarkdown hidden'><?php echo html::textarea('contentMarkdown', '', "style='width:100%;'");?></div>
+                <div class='contentmarkdown <?php if(strpos($config->doc->create->requiredFields, 'content') !== false) echo 'required'?> hidden'><?php echo html::textarea('contentMarkdown', '', "style='width:100%;'");?></div>
                 <?php echo html::hidden('contentType', 'html');?>
                 <?php echo html::hidden('type', 'text');?>
               </div>
@@ -91,32 +47,41 @@
       <div class='modal-dialog'>
         <div class='modal-content with-padding'>
           <div class='modal-header'>
-            <h2 class='modal-title'><?php echo $lang->doc->basicInfo;?></h2>
+            <button type='button' class='close' data-dismiss='modal'>
+              <i class="icon icon-close"></i>
+            </button>
           </div>
           <div class='modal-body'>
             <table class='table table-form' id="basicInfoBox">
               <tbody>
+                <tr><th class='w-100px'></th><td></td><th class='w-100px'></th><td></td></tr>
                 <tr>
-                  <th class='w-100px'><?php echo $lang->doc->lib;?></th>
-                  <td colspan="2"><?php echo html::select('lib', $libs, $libID, "class='form-control chosen' onchange=loadDocModule(this.value)");?></td>
+                  <th><?php echo $lang->doc->title?></th>
+                  <td colspan='3' class='required'><?php echo html::input('copyTitle', '', "placeholder='{$lang->doc->titlePlaceholder}' class='form-control' disabled");?></td>
                 </tr>
+                <?php if($objectType == 'project'):?>
                 <tr>
-                  <th><?php echo $lang->doc->module;?></th>
-                  <td colspan="2">
-                    <span id='moduleBox'><?php echo html::select('module', $moduleOptionMenu, $moduleID, "class='form-control chosen'");?></span>
-                  </td>
+                  <th><?php echo $lang->doc->project;?></th>
+                  <td class='required'><?php echo html::select('project', $objects, $objectID, "class='form-control chosen' onchange=loadExecutions(this.value)");?></td>
+                  <th><?php echo $lang->doc->execution?></th>
+                  <td id='executionBox'><?php echo html::select('execution', $executions, '', "class='form-control chosen' data-placeholder='{$lang->doc->placeholder->execution}' onchange='loadModules(this.value, \"execution\")'")?></td>
+                </tr>
+                <?php endif;?>
+                <tr>
+                  <th class='w-100px'><?php echo $lang->doc->libAndModule?></th>
+                  <td><span id='moduleBox' class='required'><?php echo html::select('module', $moduleOptionMenu, $moduleID, "class='form-control chosen'");?></span></td>
                 </tr>
                 <tr>
                   <th><?php echo $lang->doc->keywords;?></th>
-                  <td colspan='2'><?php echo html::input('keywords', '', "class='form-control' placeholder='{$lang->doc->keywordsTips}'");?></td>
+                  <td colspan='3'><?php echo html::input('keywords', '', "class='form-control' placeholder='{$lang->doc->keywordsTips}'");?></td>
                 </tr>
                 <tr id='fileBox'>
                   <th><?php echo $lang->doc->files;?></th>
-                  <td colspan='2'><?php echo $this->fetch('file', 'buildform');?></td>
+                  <td colspan='3'><?php echo $this->fetch('file', 'buildform');?></td>
                 </tr>
                 <tr>
                   <th><?php echo $lang->doc->mailto;?></th>
-                  <td colspan="2">
+                  <td colspan="3">
                     <div class="input-group">
                       <?php
                       echo html::select('mailto[]', $users, '', "multiple class='form-control picker-select' data-drop-direction='top'");
@@ -126,17 +91,16 @@
                   </td>
                 </tr>
                 <tr>
-                  <th class="th-control"><?php echo $lang->doclib->control;?></th>
-                  <td colspan='2'>
-                    <?php $acl = $lib->acl == 'default' ? 'open' : $lib->acl;?>
-                    <?php $acl = ($lib->type == 'project' and $acl == 'private') ? 'open' : $acl;?>
-                    <?php echo html::radio('acl', $lang->doc->aclList, $acl, "onchange='toggleAcl(this.value, \"doc\")'");?>
-                    <span class='text-info' id='noticeAcl'><?php echo $lang->doc->noticeAcl['doc'][$acl];?></span>
+                  <th class="th-control text-top"><?php echo $lang->doclib->control;?></th>
+                  <td colspan='3' class='aclBox'>
+                    <?php $aclList = $lang->doc->aclList;?>
+                    <?php if($objectType == 'project') $aclList = $lang->doc->projectAclList;?>
+                    <?php echo html::radio('acl', $aclList, 'open', "onchange='toggleAcl(this.value, \"doc\")'");?>
                   </td>
                 </tr>
                 <tr id='whiteListBox' class='hidden'>
                   <th><?php echo $lang->doc->whiteList;?></th>
-                  <td colspan='2'>
+                  <td colspan='3'>
                     <div class='input-group'>
                       <span class='input-group-addon groups-addon'><?php echo $lang->doclib->group?></span>
                       <?php echo html::select('groups[]', $groups, '', "class='form-control picker-select' multiple data-drop-direction='top'")?>
@@ -144,13 +108,17 @@
                     <div class='input-group'>
                       <span class='input-group-addon'><?php echo $lang->doclib->user?></span>
                       <?php echo html::select('users[]', $users, '', "class='form-control picker-select' multiple data-drop-direction='top'")?>
+                      <?php echo $this->fetch('my', 'buildContactLists', "dropdownName=users");?>
                     </div>
                   </td>
                 </tr>
               </tbody>
               <tfoot>
                 <tr>
-                  <td colspan='3' class='text-center'><?php echo html::a('javascript:void(0)', $lang->doc->confirm, '', "id='saveBtn' class='btn btn-primary btn-wide'");?></td>
+                  <td colspan='4' class='text-center'>
+                    <?php echo html::submitButton($lang->release->common);?>
+                    <?php echo html::commonButton($lang->cancel, "data-dismiss='modal'", "btn btn-wide");?>
+                  </td>
                 </tr>
               </tfoot>
             </table>
@@ -163,29 +131,24 @@
 <script>
 $(function()
 {
-    var contentHeight = $(document).height() - 120;
-    setTimeout(function(){$('.ke-edit-iframe, .ke-edit, .ke-edit-textarea, .CodeMirror').height(contentHeight);}, 100);
+    var contentHeight = $(document).height() - 92;
+    setTimeout(function(){$('.ke-edit-iframe, .ke-edit, .ke-edit-textarea').height(contentHeight);}, 100);
+    setTimeout(function(){$('.CodeMirror').height($(document).height() - 112);}, 100);
     $('#modalBasicInfo .modal-content').css('max-height', contentHeight);
 
-    $('iframe.ke-edit-iframe').contents().find('.article-content').css('padding', '20px 20px 0 20px');
+    $('#contentBox #content').attr('id', 'contentHTML');
+    $('#modalBasicInfo').on('show.zui.modal', function(){$('#modalBasicInfo #copyTitle').val($('.doc-title #editorTitle').val())});
 
-    $('#saveBtn').click(function()
-    {
-        var requiredArr = ['lib', 'keywords'];
-        for(var i = 0; i < 3; i++)
-        {
-            if(requiredFields.indexOf(',' + requiredArr[i] + ',') != -1 && !$('#' + requiredArr[i]).val().trim())
-            {
-                alert(eval(requiredArr[i] + 'NotEmpty'));
-                return false;
-            }
-        }
-        $(document).on('click', '#modalBasicInfo tfoot .btn', function() {$('#modalBasicInfo').modal('hide');});
-    });
+    $('iframe.ke-edit-iframe').contents().find('.article-content').css('padding', '20px 20px 0 20px');
 })
 </script>
 <?php js::set('textType', $config->doc->textTypes);?>
 <?php js::set('docType', $docType);?>
 <?php js::set('fromGlobal', $fromGlobal);?>
-<?php js::set('noticeAcl', $lang->doc->noticeAcl['doc']);?>
-<?php include '../../common/view/footer.html.php';?>
+<?php js::set('holders', $lang->doc->placeholder);?>
+<?php js::set('type', 'doc');?>
+<?php js::set('requiredFields', ',' . $config->doc->create->requiredFields . ',');?>
+<?php js::set('libNotEmpty', sprintf($lang->error->notempty, $lang->doc->lib));?>
+<?php js::set('keywordsNotEmpty', sprintf($lang->error->notempty, $lang->doc->keywords));?>
+<?php js::set('from', $from);?>
+<?php include '../../common/view/footer.lite.html.php';?>
