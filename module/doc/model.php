@@ -2947,35 +2947,10 @@ class docModel extends model
             $attr   = "data-app='{$this->app->tab}'";
             $class  = strpos($this->config->doc->officeTypes, $typeKey) !== false ? 'iframe' : '';
             $params = "objectType={$lib->type}&objectID=$objectID&libID={$lib->id}&moduleID=$moduleID&type=$typeKey";
+            if($typeKey == 'template') $params = "objectType=$type&objectID=$objectID&libID={$lib->id}&moduleID=$moduleID&type=html&from=template";
 
             $html .= "<li>";
-            if($typeKey == 'template')
-            {
-                $params = "objectType=$type&objectID=$objectID&libID={$lib->id}&moduleID=$moduleID&type=html&fromGlobal=&from=template";
-                $html .= html::a('#modalTemplate', $typeName, '', "data-toggle='modal' $attr");
-        $html .= "
-    <div class='modal fade' id='modalTemplate' data-scroll-inside='true'>
-      <div class='modal-dialog'>
-        <div class='modal-content with-padding'>
-          <div class='modal-header'>
-            <button type='button' class='close' data-dismiss='modal'>
-              <i class='icon icon-close'></i>
-            </button>
-          </div>
-          <div class='modal-body'>
-            <table class='table table-form'>
-<tr>
-<th>模板选择</th>
-<td></td>
-</tr>
-</table>
-</div>
-";
-            }
-            else
-            {
-                $html .= html::a(helper::createLink('doc', 'create', $params, '', $class ? true : false), $typeName, '', "class='$class' $attr");
-            }
+            $html .= html::a(helper::createLink('doc', 'create', $params, '', $class ? true : false), $typeName, '', "class='$class' $attr");
             $html .= "</li>";
 
             $printDivider = false;

@@ -93,9 +93,8 @@ function loadDocModule(libID)
     var link = createLink('doc', 'ajaxGetChild', 'libID=' + libID);
     $.post(link, function(data)
     {
-        $('#module').replaceWith(data);
-        $('#module_chosen').remove();
-        $('#module').chosen();
+        $('#moduleBox').html(data);
+        $('#module').picker();
     });
 
     loadWhitelist(libID);

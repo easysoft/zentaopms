@@ -321,12 +321,11 @@ class doc extends control
      * @param  int|string $libID
      * @param  int        $moduleID
      * @param  string     $docType       html|word|ppt|excel
-     * @param  bool       $fromGlobal
      * @param  string     $from
      * @access public
      * @return void
      */
-    public function create($objectType, $objectID, $libID, $moduleID = 0, $docType = '', $fromGlobal = false, $from = 'doc')
+    public function create($objectType, $objectID, $libID, $moduleID = 0, $docType = '', $from = 'doc')
     {
         $linkType = $objectType;
         if($objectType == 'execution' and $this->app->tab != 'execution') $linkType = 'project';
@@ -430,7 +429,6 @@ class doc extends control
         $this->view->docType          = $docType;
         $this->view->groups           = $this->loadModel('group')->getPairs();
         $this->view->users            = $this->user->getPairs('nocode|noclosed|nodeleted');
-        $this->view->fromGlobal       = $fromGlobal;
         $this->view->from             = $from;
 
         $this->display();
