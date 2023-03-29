@@ -47,7 +47,11 @@ class docModel extends model
             ->where('deleted')->eq(0)
             ->andWhere('type')->eq('api')
             ->beginIF(!empty($appendLib))->orWhere('id')->eq($appendLib)->fi()
-            ->beginIF(!empty($objectType))->andWhere($objectType)->eq($objectID)->fi()
+            ->beginIF(!empty($objectType) && $objectID > 0)->andWhere($objectType)->eq($objectID)->fi()
+            ->beginIF($objectType == 'nolink')
+            ->andWhere('product')->eq(0)
+            ->andWhere('project')->eq(0)
+            ->fi()
             ->orderBy('`order`_asc, id_desc')
             ->fetchAll('id');
 
@@ -2891,6 +2895,10 @@ class docModel extends model
             $annex->active     = empty($libID) ? 1 : 0;
 
             $libTree[$type][] = $annex;
+        }
+        elseif($type == 'api')
+        {
+            $libTree[$type] = array_merge($libTree[$type], $apiLibs);
         }
 
         $libTree = array_values($libTree[$type]);

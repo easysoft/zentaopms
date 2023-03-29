@@ -515,10 +515,6 @@ $lang->doc->menuOrder[20] = 'project';
 $lang->doc->menuOrder[25] = 'api';
 $lang->doc->menuOrder[30] = 'custom';
 
-$lang->doc->menu->api['subMenu'] = new stdclass();
-$lang->doc->menu->api['subMenu']->index  = array('link' => "{$lang->doc->apiDoc}|api|index|libID=%s", 'alias' => 'create,edit');
-$lang->doc->menu->api['subMenu']->struct = array('link' => "{$lang->doc->apiStruct}|api|struct|libID=%s", 'alias' => 'createstruct,editstruct');
-
 /* Report menu.*/
 $lang->report->menu             = new stdclass();
 $lang->report->menu->screen     = array('link' => "{$lang->screen->common}|screen|browse");

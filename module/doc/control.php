@@ -1364,6 +1364,7 @@ class doc extends control
 
         $this->view->title          = $title;
         $this->view->type           = $type;
+        $this->view->objectType     = $type;
         $this->view->browseType     = $browseType;
         $this->view->param          = $queryID;
         $this->view->users          = $this->user->getPairs('noletter');

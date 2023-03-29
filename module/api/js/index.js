@@ -15,6 +15,83 @@ $(document).ready(function()
             $('#outline li.has-list>i+ul').prev('i').remove();
         });
     });
+
+    $(document).on('click', '.sidebar-toggle > .icon', function()
+    {
+        var $icon = $(this);
+        if($icon.hasClass('icon-angle-left'))
+        {
+            $icon.removeClass('icon-angle-left');
+            $icon.addClass('icon-angle-right');
+            $('#sideBar').addClass('hidden');
+        }
+        else
+        {
+            $icon.removeClass('icon-angle-right');
+            $icon.addClass('icon-angle-left');
+            $('#sideBar').removeClass('hidden');
+        }
+    });
+
+    $('#fileTree').tree(
+    {
+        initialState: 'active',
+        data: treeData,
+        itemCreator: function($li, item)
+        {
+            var libClass = item.type == 'api' ? 'lib' : '';
+            var hasChild = item.children ? !!item.children.length : false;
+            var $item = '<a href="###" style="position: relative" data-has-children="' + hasChild + '" title="' + item.name + '" data-id="' + item.id + '" class="' + libClass + '" data-type="' + item.type + '">';
+            $item += '<div class="text h-full w-full flex-start overflow-hidden">';
+            if(libClass == 'lib') $item += '<div class="img-lib" style="background-image:url(static/svg/interfacelib.svg)"></div>';
+            $item += '<span style="padding-left: 5px;">';
+            $item += item.name
+            $item += '</span>';
+            $item += '<i class="icon icon-drop icon-ellipsis-v hidden tree-icon" data-isCatalogue="' + (item.type ? false : true) + '"></i>';
+            $item += '</div>';
+            $item += '</a>';
+
+            $li.append($item);
+            $li.addClass(libClass);
+            if(item.active) $li.addClass('active open in');
+        }
+    });
+
+    $('li.has-list > ul, #fileTree').addClass("menu-active-primary menu-hover-primary");
+
+    $('#fileTree').on('mousemove', 'a', function()
+    {
+        if($(this).data('type') == 'annex') return;
+
+        var libClass = '.libDorpdown';
+        if(!$(this).hasClass('lib')) libClass = '.moduleDorpdown';
+        if($(libClass).find('li').length == 0) return false;
+
+        $(this).find('.icon').removeClass('hidden');
+        $(this).addClass('show-icon');
+    }).on('mouseout', 'a', function()
+    {
+        $(this).find('.icon').addClass('hidden');
+        $(this).removeClass('show-icon');
+    }).on('click', 'a', function(e)
+    {
+        var isLib    = $(this).hasClass('lib');
+        var moduleID = $(this).data('id');
+        var libID    = 0;
+        var params   = '';
+
+        if(isLib)
+        {
+            libID    = moduleID;
+            moduleID = 0;
+        }
+        else
+        {
+            libID = $(this).closest('.lib').data('id');
+        }
+        var linkParams = 'libID=' + libID + '&moduleID=' + moduleID;
+        location.href = createLink('api', 'index', linkParams);
+    });
 });
 
 /**
