@@ -349,6 +349,10 @@ $filter->testtask->cases->cookie['preTaskID']      = 'int';
 $filter->testtask->cases->cookie['taskCaseModule'] = 'int';
 $filter->testtask->default->cookie['lastProduct']  = 'int';
 $filter->testtask->default->cookie['preProductID'] = 'int';
+$filter->testcase->browse->cookie['onlyScene']     = 'code';
+
+if(empty($filter->project->testcase)) $filter->project->testcase = new stdclass();
+$filter->project->testcase->cookie= array('onlyScene' => 'code');
 
 $filter->todo->export->cookie['checkedItem'] = 'reg::checked';
 

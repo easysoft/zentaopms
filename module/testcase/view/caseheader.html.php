@@ -202,6 +202,11 @@
   </div>
   <?php if(!isonlybody()):?>
   <div class='btn-toolbar pull-right'>
+    <?php if(common::hasPriv('testcase', 'createScene') || common::hasPriv('testcase', 'editScene') || common::hasPriv('testcase', 'deleteScene') || common::hasPriv('testcase', 'changeScene') || common::hasPriv('testcase', 'batchChangeScene') || common::hasPriv('testcase', 'updateOrder') || common::hasPriv('testcase', 'importXmind') || common::hasPriv('testcase', 'getXmindImport') || common::hasPriv('testcase', 'showXMindImport') || common::hasPriv('testcase', 'exportXmind')): ?>
+    <div class='btn-group btn btn-link'>
+      <?php echo html::checkbox('onlyScene', array('1' => $lang->testcase->onlyScene), '', $this->cookie->onlyScene ? 'checked=checked' : '');?>
+    </div>
+    <?php endif;?>
     <?php if(!empty($productID)): ?>
     <div class='btn-group'>
       <button type='button' class='btn btn-link dropdown-toggle' data-toggle='dropdown'>
@@ -248,9 +253,15 @@
       <?php
       $createTestcaseLink = $this->createLink('testcase', 'create', "productID=$productID&branch=$branch&moduleID=$initModule");
       $batchCreateLink    = $this->createLink('testcase', 'batchCreate', "productID=$productID&branch=$branch&moduleID=$initModule");
+      $createSceneLink = $this->createLink('testcase', 'createScene', "productID=$productID&branch=$branch&moduleID=$initModule");
 
       $buttonLink  = '';
       $buttonTitle = '';
+      if(common::hasPriv('testcase', 'createScene'))
+      {
+          $buttonLink  = $createSceneLink;
+          $buttonTitle = $lang->testcase->newScene;
+      }
       if(common::hasPriv('testcase', 'batchCreate'))
       {
           $buttonLink  = !empty($productID) ? $batchCreateLink : '';
@@ -270,6 +281,9 @@
       <ul class='dropdown-menu'>
         <li><?php echo html::a($createTestcaseLink, $lang->testcase->create);?></li>
         <li><?php echo html::a($batchCreateLink, $lang->testcase->batchCreate, '', "data-app='{$this->app->tab}'");?></li>
+        <?php if(common::hasPriv('testcase', 'createScene')){ ?>
+        <li><?php echo html::a($createSceneLink, $lang->testcase->newScene);?></li>
+        <?php } ?>
       </ul>
       <?php endif;?>
     </div>

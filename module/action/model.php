@@ -1886,6 +1886,29 @@ class actionModel extends model
             if($release->shadow) $this->dao->update(TABLE_BUILD)->set('deleted')->eq(0)->where('id')->eq($release->shadow)->exec();
         }
 
+        if($action->objectType == 'case')
+        {
+            $case = $this->dao->select('*')->from(TABLE_CASE)->where('id')->eq($action->objectID)->fetch();
+            if($case->scene)
+            {
+                $scene = $this->dao->select('*')->from(VIEW_SCENECASE)->where('id')->eq($case->scene)->fetch();
+                if($scene->deleted)
+                {
+                    return print(js::error($this->lang->action->refusecase));
+                }
+            }
+        }
+
+        if($action->objectType == 'scene')
+        {
+            $scene = $this->dao->select('*')->from("zt_scene")->where('id')->eq($action->objectID)->fetch();
+            if($scene->parent)
+            {
+                $scenerow = $this->dao->select('*')->from(VIEW_SCENECASE)->where('id')->eq($scene->parent)->fetch();
+                if($scenerow->deleted) return print(js::error($this->lang->action->refusescene));
+            }
+        }
+
         /* Update deleted field in object table. */
         $table = $this->config->objectTables[$action->objectType];
         $this->dao->update($table)->set('deleted')->eq(0)->where('id')->eq($action->objectID)->exec();

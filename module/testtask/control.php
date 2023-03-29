@@ -540,6 +540,7 @@ class testtask extends control
         $this->config->testcase->search['params']['module']['values']  = $this->loadModel('tree')->getOptionMenu($productID, $viewType = 'case');
         $this->config->testcase->search['params']['status']['values']  = array('' => '') + $this->lang->testcase->statusList;
         $this->config->testcase->search['params']['lib']['values']     = $this->loadModel('caselib')->getLibraries();
+        $this->config->testcase->search['params']['scene']['values']   = $this->testcase->getSceneMenu($productID, $moduleID, 'case', 0,  0);
 
         $this->config->testcase->search['queryID']              = $queryID;
         $this->config->testcase->search['fields']['assignedTo'] = $this->lang->testtask->assignedTo;
@@ -1109,8 +1110,10 @@ class testtask extends control
         $this->loadModel('testcase');
         $this->config->testcase->search['params']['product']['values'] = array($productID => $this->products[$productID]);
         $this->config->testcase->search['params']['module']['values']  = $this->loadModel('tree')->getOptionMenu($productID, 'case', 0, $task->branch);
-        $this->config->testcase->search['actionURL'] = inlink('linkcase', "taskID=$taskID&type=$type&param=$param");
-        $this->config->testcase->search['style']     = 'simple';
+        $this->config->testcase->search['actionURL']                   = inlink('linkcase', "taskID=$taskID&type=$type&param=$param");
+        $this->config->testcase->search['params']['scene']['values']   = $this->testcase->getSceneMenu($productID, 0, $viewType = 'case', $startSceneID = 0,  0);
+        $this->config->testcase->search['style']                       = 'simple';
+
 
         $build   = $this->loadModel('build')->getByID($task->build);
         $stories = array();

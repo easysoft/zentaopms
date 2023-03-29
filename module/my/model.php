@@ -416,12 +416,15 @@ class myModel extends model
             ->orderBy('order_asc')
             ->fetchPairs();
 
+        $scene = $this->loadModel('testcase')->getSceneMenu(0, 0);
+
         $queryName = $type == 'contribute' ? 'contributeTestcase' : 'workTestcase';
         $this->app->loadConfig('testcase');
         $this->config->testcase->search['module']                      = $queryName;
         $this->config->testcase->search['queryID']                     = $queryID;
         $this->config->testcase->search['actionURL']                   = $actionURL;
         $this->config->testcase->search['params']['product']['values'] = array('' => '') + $products;
+        $this->config->testcase->search['params']['scene']['values']   = array('' => '') + $scene;
         $this->config->testcase->search['params']['lib']['values']     = array('' => '') + $this->loadModel('caselib')->getLibraries();
 
         unset($this->config->testcase->search['fields']['module']);

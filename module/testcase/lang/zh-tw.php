@@ -246,3 +246,83 @@ $lang->testcase->featureBar['browse']['suite']       = '套件';
 $lang->testcase->featureBar['browse']['zerocase']    = "零用例{$lang->SRCommon}";
 $lang->testcase->featureBar['browse']['browseunits'] = '單元測試';
 $lang->testcase->featureBar['groupcase']             = $lang->testcase->featureBar['browse'];
+
+
+$lang->testcase->importXmind     = "导入XMIND";
+$lang->testcase->exportXmind     = "导出XMIND";
+$lang->testcase->getXmindImport  = "获取导图";
+$lang->testcase->showXMindImport = "显示导图";
+
+
+$lang->testcase->xmindImport           = "导入XMIND";
+$lang->testcase->xmindExport           = "导出XMIND";
+$lang->testcase->xmindImportEdit       = "XMIND 编辑";
+$lang->testcase->errorFileNotEmpty     = '上传文件不能为空';
+$lang->testcase->errorXmindUpload      = '上传失败';
+$lang->testcase->errorFileFormat       = '文件格式错误';
+$lang->testcase->moduleSelector        = '模块选择';
+$lang->testcase->errorImportBadProduct = '产品不存在，导入错误';
+$lang->testcase->errorSceneNotExist    = '场景[%d]不存在';
+
+$lang->testcase->save  = '保存';
+$lang->testcase->close = '关闭';
+
+$lang->testcase->xmindImportSetting = '导入特征字符设置';
+$lang->testcase->xmindExportSetting = '导出特征字符设置';
+
+$lang->testcase->settingModule = '模&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;块';
+$lang->testcase->settingScene  = '场&nbsp;&nbsp;&nbsp;&nbsp;景';
+$lang->testcase->settingCase   = '测试用例';
+$lang->testcase->settingPri    = '优先级&nbsp;';
+$lang->testcase->settingGroup  = '步骤分组';
+
+$lang->testcase->caseNotExist =  '未识别导入数据中的用例，导入失败';
+$lang->testcase->saveFail     =  '保存失败';
+$lang->testcase->set2Scene    =  '设为场景';
+$lang->testcase->set2Testcase =  '设为测试用例';
+$lang->testcase->clearSetting =  '清除设置';
+$lang->testcase->setModule    =  '设置场景模块';
+$lang->testcase->pickModule   =  '请选择模块';
+$lang->testcase->clearBefore  =  '清除前面场景';
+$lang->testcase->clearAfter   =  '清除后面场景';
+$lang->testcase->clearCurrent =  '清除当前场景';
+$lang->testcase->removeGroup  =  '移除分组';
+$lang->testcase->set2Group    =  '设为分组';
+
+$lang->testcase->exportTemplet = '导出模板';
+
+$lang->testcase->createScene      = "建场景";
+$lang->testcase->changeScene      = "拖动改变所属场景";
+$lang->testcase->batchChangeScene = "批量改变所属场景";
+$lang->testcase->updateOrder      = "拖动排序";
+$lang->testcase->differentProduct = "所属产品不同";
+
+$lang->testcase->newScene           = "建场景";
+$lang->testcase->sceneTitle         = '场景标题';
+$lang->testcase->parentScene        = "父场景";
+$lang->testcase->scene              = "所属场景";
+$lang->testcase->summary            = '本页共 %d 个顶级场景，%d 个独立用例。';
+$lang->testcase->summaryScene       = '本页共 %d 个顶级场景。';
+$lang->testcase->deleteScene        = '删除场景';
+$lang->testcase->editScene          = '编辑场景';
+$lang->testcase->hasChildren        = '该场景有子场景或测试用例存在，要全部删除吗？';
+$lang->testcase->confirmDeleteScene = '您确定要删除场景：\“%s\”吗？';
+$lang->testcase->sceneb             = "场景";
+$lang->testcase->onlyScene          = '仅场景';
+$lang->testcase->iScene             = '所属场景';
+$lang->testcase->generalTitle       = '标题';
+$lang->testcase->noScene            = '暂时没有场景';
+$lang->testcase->rowIndex           = '行索引';
+$lang->testcase->nestTotal          = '嵌套总数';
+$lang->testcase->normal             = '正常';
+
+/* Translation for drag modal message box. */
+$lang->testcase->dragModalTitle       = '拖拽操作选择';
+$lang->testcase->dragModalMessage     = '<p>当前操作有两种可能的情况: </p><p>1) 调整排序<br/> 2) 更改所属场景，所属模块同时变更为目标场景的模块</p><p>请选择您要执行的操作</p>';
+$lang->testcase->dragModalChangeScene = '更改所属场景';
+$lang->testcase->dragModalChangeOrder = '调整排序';
+
+$lang->testcase->confirmBatchDeleteSceneCase = '您确认要批量删除这些场景或测试用例吗？';
+
+$lang->scene = new stdclass();
+$lang->scene->title = '场景标题';

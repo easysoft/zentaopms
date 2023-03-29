@@ -355,6 +355,10 @@ define('TABLE_DASHBOARD', '`' . $config->db->prefix . 'dashboard`');
 define('TABLE_DATASET',   '`' . $config->db->prefix . 'dataset`');
 define('TABLE_DATAVIEW',  '`' . $config->db->prefix . 'dataview`');
 define('TABLE_DIMENSION', '`' . $config->db->prefix . 'dimension`');
+define('TABLE_SCENE',    '`' . $config->db->prefix . 'scene`');
+define('VIEW_SCENECASE', '`ztv_scenecase`');
+
+define('CHANGEVALUE', 100000000);
 
 $config->objectTables['product']      = TABLE_PRODUCT;
 $config->objectTables['productplan']  = TABLE_PRODUCTPLAN;
@@ -409,6 +413,7 @@ $config->objectTables['zahost']       = TABLE_ZAHOST;
 $config->objectTables['zanode']       = TABLE_ZAHOST;
 $config->objectTables['automation']   = TABLE_AUTOMATION;
 $config->objectTables['stepResult']   = TABLE_TESTRUN;
+$config->objectTables['scene']        = TABLE_SCENE;
 
 $config->newFeatures      = array('introduction', 'tutorial', 'youngBlueTheme', 'visions');
 $config->disabledFeatures = '';

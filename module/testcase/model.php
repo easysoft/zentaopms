@@ -143,6 +143,7 @@ class testcaseModel extends model
         }
 
         $module = 0;
+        $scene  = 0;
         $story  = 0;
         $type   = '';
         $pri    = 3;
@@ -155,10 +156,12 @@ class testcaseModel extends model
             }
 
             $module = $cases->module[$i] == 'ditto' ? $module : $cases->module[$i];
+            $scene  = $cases->scene[$i] == 'ditto'  ? $scene  : $cases->scene[$i];
             $story  = $cases->story[$i] == 'ditto'  ? $story  : $cases->story[$i];
             $type   = $cases->type[$i] == 'ditto'   ? $type   : $cases->type[$i];
             $pri    = $cases->pri[$i] == 'ditto'    ? $pri    : $cases->pri[$i];
             $cases->module[$i] = (int)$module;
+            $cases->scene[$i]  = (int)$scene;
             $cases->story[$i]  = !empty($storyID) ? $storyID : (int)$story;
             $cases->type[$i]   = $type;
             $cases->pri[$i]    = $pri;
@@ -178,6 +181,7 @@ class testcaseModel extends model
             if($this->app->tab == 'project') $data[$i]->project = $this->session->project;
             $data[$i]->branch       = isset($cases->branch[$i]) ? $cases->branch[$i] : '0';
             $data[$i]->module       = $cases->module[$i];
+            $data[$i]->scene        = $cases->scene[$i];
             $data[$i]->type         = $cases->type[$i];
             $data[$i]->pri          = $cases->pri[$i];
             $data[$i]->stage        = empty($cases->stage[$i]) ? '' : implode(',', $cases->stage[$i]);
@@ -648,11 +652,12 @@ class testcaseModel extends model
         if($this->app->tab == 'project') $caseQuery = str_replace('`product`', 't2.`product`', $caseQuery);
 
         /* Search criteria under compatible project. */
-        $sql = $this->dao->select('*')->from(TABLE_CASE)->alias('t1');
+        $sql = $this->dao->select('*')->from(VIEW_SCENECASE)->alias('t1');
         if($this->app->tab == 'project') $sql->leftJoin(TABLE_PROJECTCASE)->alias('t2')->on('t1.id=t2.case');
         $cases = $sql
             ->where($caseQuery)
-            ->beginIF($this->app->tab == 'project')->andWhere('t2.project')->eq($this->session->project)->fi()
+            ->andWhere('t1.isCase')->eq(1)
+            ->beginIF($this->app->tab == 'project' and $this->config->systemMode == 'new')->andWhere('t2.project')->eq($this->session->project)->fi()
             ->beginIF($this->app->tab == 'project' and !empty($productID) and $queryProductID != 'all')->andWhere('t2.product')->eq($productID)->fi()
             ->beginIF($this->app->tab != 'project' and !empty($productID) and $queryProductID != 'all')->andWhere('t1.product')->eq($productID)->fi()
             ->beginIF($auto != 'unit')->andWhere('t1.auto')->ne('unit')->fi()
@@ -1133,6 +1138,7 @@ class testcaseModel extends model
         {
             if($data->pris[$caseID]    == 'ditto') $data->pris[$caseID]    = isset($prev['pri'])    ? $prev['pri']    : 3;
             if($data->modules[$caseID] == 'ditto') $data->modules[$caseID] = isset($prev['module']) ? $prev['module'] : 0;
+            if($data->scene[$caseID]   == 'ditto') $data->scene[$caseID]   = isset($prev['scene'])  ? $prev['scene']  : 0;
             if($data->types[$caseID]   == 'ditto') $data->types[$caseID]   = isset($prev['type'])   ? $prev['type']   : '';
             if($data->story[$caseID]   == '') $data->story[$caseID] = 0;
             if($data->story[$caseID]   == 'ditto') $data->story[$caseID] = isset($prev['story']) ? $prev['story'] : 0;
@@ -1142,6 +1148,7 @@ class testcaseModel extends model
             $prev['type']   = $data->types[$caseID];
             $prev['story']  = $data->story[$caseID];
             $prev['module'] = $data->modules[$caseID];
+            $prev['scene']  = $data->scene[$caseID];
             if(isset($data->branches)) $prev['branch'] = $data->branches[$caseID];
         }
 
@@ -1155,6 +1162,7 @@ class testcaseModel extends model
             $case->lastEditedDate = $now;
             $case->pri            = $data->pris[$caseID];
             $case->module         = $data->modules[$caseID];
+            $case->scene          = $data->scene[$caseID];
             $case->status         = $data->statuses[$caseID];
             $case->story          = $data->story[$caseID];
             $case->color          = $data->color[$caseID];
@@ -1280,19 +1288,108 @@ class testcaseModel extends model
     {
         $now        = helper::now();
         $allChanges = array();
-        $oldCases   = $this->getByList($caseIDList);
+        $oldCases   = $this->dao->select('*')->from(VIEW_SCENECASE)
+            ->where('deleted')->eq(0)
+            ->beginIF($caseIDList)->andWhere('id')->in($caseIDList)->fi()
+            ->fetchAll('id');
+
+        /* Split selected nodes into 2 arrays. */
+        /* Top level nodes. */
+        $finalOldCases1 = array();
+        /* Non-top level nodes. */
+        $finalOldCases2 = array();
+        if(!empty($oldCases))
+        {
+            foreach($oldCases as $k => $v)
+            {
+                $flag = 0;
+                foreach($oldCases as $k2 => $v2)
+                {
+                    $resFlag = strpos($v->path,$v2->path);
+
+                    /* v2 is ancestor. */
+                    if (($resFlag || $resFlag === 0) && $v->grade > $v2->grade ) $flag = 1;
+                }
+                if($flag == 0)
+                {
+                    /* None selected node is its ancestor, assign to this array. */
+                    $finalOldCases1[$k] = $v;
+                }
+                else
+                {
+                    /* As one selected node is its ancestor, assign to this array. */
+                    $finalOldCases2[$k] = $v;
+                }
+            }
+        }
+
+        /* Process all top level nodes of selected nodes. */
         foreach($caseIDList as $caseID)
         {
-            $oldCase = $oldCases[$caseID];
-            if($moduleID == $oldCase->module) continue;
+            if(!isset($finalOldCases1[$caseID])) continue;
+
+            $oldCase = $finalOldCases1[$caseID];
 
             $case = new stdclass();
             $case->lastEditedBy   = $this->app->user->account;
             $case->lastEditedDate = $now;
             $case->module         = $moduleID;
 
-            $this->dao->update(TABLE_CASE)->data($case)->autoCheck()->where('id')->eq((int)$caseID)->exec();
-            if(!dao::isError()) $allChanges[$caseID] = common::createChanges($oldCase, $case);
+            if($oldCase->isCase == 2)
+            {
+                $case->parent = 0;
+                $case->path   = ",$caseID,";
+                $case->grade  = 1;
+
+                $this->dao->update(TABLE_SCENE)->data($case)
+                    ->autoCheck()
+                    ->where('id')->eq((int)$caseID - CHANGEVALUE)
+                    ->exec();
+                if(!dao::isError()) $allChanges[0][$caseID] = common::createChanges($oldCase, $case);
+            }
+            else
+            {
+                $case->scene = 0;
+                $this->dao->update(TABLE_CASE)->data($case)
+                    ->autoCheck()
+                    ->where('id')->eq((int)$caseID)
+                    ->exec();
+                if(!dao::isError()) $allChanges[1][$caseID] = common::createChanges($oldCase, $case);
+            }
+        }
+
+        /* Process non-top level nodes of selected nodes. */
+        foreach($caseIDList as $caseID)
+        {
+            if(!isset($finalOldCases2[$caseID])) continue;
+
+            $oldCase = $finalOldCases2[$caseID];
+
+            $case = new stdclass();
+            $case->lastEditedBy   = $this->app->user->account;
+            $case->lastEditedDate = $now;
+            $case->module         = $moduleID;
+
+            if($oldCase->isCase == 2)
+            {
+                $resultScene = $this->dao->findById((int)$oldCase->parent - CHANGEVALUE)->from(TABLE_SCENE)->fetch();
+                $case->path  = $resultScene->path . "$caseID,";
+                $case->grade = $resultScene->grade + 1;
+
+                $this->dao->update(TABLE_SCENE)->data($case)
+                    ->autoCheck()
+                    ->where('id')->eq((int)$caseID - CHANGEVALUE)
+                    ->exec();
+                if(!dao::isError()) $allChanges[0][$caseID] = common::createChanges($oldCase, $case);
+            }
+            else
+            {
+                $this->dao->update(TABLE_CASE)->data($case)
+                    ->autoCheck()
+                    ->where('id')->eq((int)$caseID)
+                    ->exec();
+                if(!dao::isError()) $allChanges[1][$caseID] = common::createChanges($oldCase, $case);
+            }
         }
 
         return $allChanges;
@@ -1983,7 +2080,7 @@ class testcaseModel extends model
      * @access public
      * @return void
      */
-    public function buildSearchForm($productID, $products, $queryID, $actionURL, $projectID = 0)
+    public function buildSearchForm($productID, $products, $queryID, $actionURL, $projectID = 0, $moduleID = 0, $branch = 0)
     {
         $productList = array();
         if($this->app->tab == 'project' and empty($productID))
@@ -1997,13 +2094,15 @@ class testcaseModel extends model
         }
         $this->config->testcase->search['params']['product']['values'] = array('') + $productList;
 
-        $module = $this->loadModel('tree')->getOptionMenu($productID, 'case', 0);
+        $module = $this->loadModel('tree')->getOptionMenu($productID, 'case', 0, $branch);
+        $scene  = $this->getSceneMenu($productID, $moduleID, $viewType = 'case', $startSceneID = 0, $branch, 0, true);
         if(!$productID)
         {
             $module = array();
             foreach($products as $id => $name) $module += $this->loadModel('tree')->getOptionMenu($id, 'case', 0);
         }
         $this->config->testcase->search['params']['module']['values'] = $module;
+        $this->config->testcase->search['params']['scene']['values']  = $scene;
 
         $this->config->testcase->search['params']['lib']['values'] = $this->loadModel('caselib')->getLibraries();
 
@@ -2022,6 +2121,7 @@ class testcaseModel extends model
         if(!$this->config->testcase->needReview) unset($this->config->testcase->search['params']['status']['values']['wait']);
         $this->config->testcase->search['actionURL'] = $actionURL;
         $this->config->testcase->search['queryID']   = $queryID;
+        $this->config->testcase->search['module']    = $this->app->rawModule;
 
         $this->loadModel('search')->setSearchParams($this->config->testcase->search);
     }
@@ -2036,7 +2136,7 @@ class testcaseModel extends model
      * @access public
      * @return void
      */
-    public function printCell($col, $case, $users, $branches, $modulePairs = array(), $browseType = '', $mode = 'datatable')
+    public function printCell($col, $case, $users, $branches, $modulePairs = array(), $browseType = '', $mode = 'datatable', $isCase = 1)
     {
         /* Check the product is closed. */
         $canBeChanged = common::canBeChanged('case', $case);
@@ -2074,45 +2174,84 @@ class testcaseModel extends model
             if($id == 'lastRunResult') $class .= " {$case->lastRunResult}";
             if(strpos(',stage,precondition,keywords,story,', ",{$id},") !== false) $class .= ' text-ellipsis';
 
-            echo "<td class='{$class}' {$title}>";
+            if($id == 'title')
+            {
+                if($isCase == 2)
+                {
+                    echo "<td class='c-name table-nest-title text-left sort-handler has-prefix has-suffix' {$title}><span class='table-nest-icon icon '></span>";
+                }
+                else
+                {
+                    echo "<td class='c-name table-nest-title text-left sort-handler has-prefix has-suffix' {$title}><span class='table-nest-icon icon icon-test'></span>";
+                }
+            }
+            else
+            {
+                echo "<td class='{$class}' {$title}>";
+            }
             if($this->config->edition != 'open') $this->loadModel('flow')->printFlowCell('testcase', $case, $id);
             switch($id)
             {
             case 'id':
+                $showid = "";
+                if($isCase == 2)
+                {
+                    $showid = substr($case->id,1);
+                    $showid = preg_replace('/^0+/', '', $showid);
+                }
+                else
+                {
+                    $showid = $case->id;
+                }
                 if($canBatchAction)
                 {
                     $disabled = $canBeChanged ? '' : 'disabled';
-                    echo html::checkbox('caseIDList', array($case->id => ''), '', $disabled) . html::a(helper::createLink('testcase', 'view', "caseID=$case->id"), sprintf('%03d', $case->id), '', "data-app='{$this->app->tab}'");
+                    if($isCase == 1){
+                        echo html::checkbox('caseIDList', array($case->id => ''), '', $disabled) . html::a(helper::createLink('testcase', 'view', "caseID=$case->id"), sprintf('%03d', $showid), '', "data-app='{$this->app->tab}'");
+                    }
+                    else
+                    {
+                        echo html::checkbox('caseIDList', array($case->id => ''), '', $disabled) .  sprintf('%03d', $showid);
+                    }
                 }
                 else
                 {
-                    printf('%03d', $case->id);
+                    printf('%03d', $showid);
                 }
                 break;
             case 'pri':
-                echo "<span class='label-pri label-pri-" . $case->pri . "' title='" . zget($this->lang->testcase->priList, $case->pri, $case->pri) . "'>";
-                echo zget($this->lang->testcase->priList, $case->pri, $case->pri);
-                echo "</span>";
+                if($isCase != 2)
+                {
+                    echo "<span class='label-pri label-pri-" . $case->pri . "' title='" . zget($this->lang->testcase->priList, $case->pri, $case->pri) . "'>";
+                    echo zget($this->lang->testcase->priList, $case->pri, $case->pri);
+                    echo "</span>";
+                }
                 break;
             case 'title':
-                if($this->app->tab == 'project')
-                {
-                    $showBranch = isset($this->config->project->testcase->showBranch) ? $this->config->project->testcase->showBranch : 1;
+                if($isCase == 1){
+                    if($this->app->tab == 'project')
+                    {
+                        $showBranch = isset($this->config->project->testcase->showBranch) ? $this->config->project->testcase->showBranch : 1;
+                    }
+                    else
+                    {
+                        $showBranch = isset($this->config->testcase->browse->showBranch) ? $this->config->testcase->browse->showBranch : 1;
+                    }
+
+                    $autoIcon = $case->auto == 'auto' ? " <i class='icon icon-draft-edit'></i>" : '';
+                    if(isset($branches[$case->branch]) and $showBranch) echo "<span class='label label-outline label-badge'>{$branches[$case->branch]}</span> ";
+                    if($modulePairs and $case->module and isset($modulePairs[$case->module])) echo "<span class='label label-gray label-badge'>{$modulePairs[$case->module]}</span> ";
+                    echo $canView ? html::a($caseLink, $case->title, null, "style='color: $case->color' data-app='{$this->app->tab}'")
+                        : "<span style='color: $case->color'>$case->title</span>";
+
+                    $fromLink = ($fromCaseID and $canView) ? helper::createLink('testcase', 'view', "caseID=$fromCaseID") : '#';
+                    $title    = $fromCaseID ? "[<i class='icon icon-share' title='{$this->lang->testcase->fromCaselib}'></i>#$fromCaseID]$autoIcon" : $autoIcon;
+                    if($case->auto == 'auto') echo html::a($fromLink, $title, '', "data-app='{$this->app->tab}'");
                 }
                 else
                 {
-                    $showBranch = isset($this->config->testcase->browse->showBranch) ? $this->config->testcase->browse->showBranch : 1;
+                    echo $case->title;
                 }
-
-                $autoIcon = $case->auto == 'auto' ? " <i class='icon icon-draft-edit'></i>" : '';
-                if(isset($branches[$case->branch]) and $showBranch) echo "<span class='label label-outline label-badge'>{$branches[$case->branch]}</span> ";
-                if($modulePairs and $case->module and isset($modulePairs[$case->module])) echo "<span class='label label-gray label-badge'>{$modulePairs[$case->module]}</span> ";
-                echo $canView ? html::a($caseLink, $case->title, null, "style='color: $case->color' data-app='{$this->app->tab}'")
-                    : "<span style='color: $case->color'>$case->title</span>";
-
-                $fromLink = ($fromCaseID and $canView) ? helper::createLink('testcase', 'view', "caseID=$fromCaseID") : '#';
-                $title    = $fromCaseID ? "[<i class='icon icon-share' title='{$this->lang->testcase->fromCaselib}'></i>#$fromCaseID]$autoIcon" : $autoIcon;
-                if($case->auto == 'auto') echo html::a($fromLink, $title, '', "data-app='{$this->app->tab}'");
                 break;
             case 'branch':
                 echo $branches[$case->branch];
@@ -2152,7 +2291,7 @@ class testcaseModel extends model
                 echo $case->keywords;
                 break;
             case 'version':
-                echo $case->version;
+                if($isCase == 1) echo $case->version;
                 break;
             case 'openedBy':
                 echo zget($users, $case->openedBy);
@@ -2179,23 +2318,32 @@ class testcaseModel extends model
                 if(!helper::isZeroDate($case->lastRunDate)) echo substr($case->lastRunDate, 5, 11);
                 break;
             case 'lastRunResult':
-                $class = 'result-' . $case->lastRunResult;
-                $lastRunResultText = $case->lastRunResult ? zget($this->lang->testcase->resultList, $case->lastRunResult, $case->lastRunResult) : $this->lang->testcase->unexecuted;
-                echo "<span class='$class'>" . $lastRunResultText . "</span>";
+                if ($isCase == 1) {
+                    $class = 'result-' . $case->lastRunResult;
+                    $lastRunResultText = $case->lastRunResult ? zget($this->lang->testcase->resultList, $case->lastRunResult, $case->lastRunResult) : $this->lang->testcase->unexecuted;
+                    echo "<span class='$class'>" . $lastRunResultText . "</span>";
+                }
                 break;
             case 'bugs':
-                echo (common::hasPriv('testcase', 'bugs') and $case->bugs) ? html::a(helper::createLink('testcase', 'bugs', "runID=0&caseID={$case->id}"), $case->bugs, '', "class='iframe'") : $case->bugs;
+                if ($isCase == 1) echo (common::hasPriv('testcase', 'bugs') and $case->bugs) ? html::a(helper::createLink('testcase', 'bugs', "runID=0&caseID={$case->id}"), $case->bugs, '', "class='iframe'") : $case->bugs;
                 break;
             case 'results':
-                echo (common::hasPriv('testtask', 'results') and $case->results) ? html::a(helper::createLink('testtask', 'results', "runID=0&caseID={$case->id}"), $case->results, '', "class='iframe'") : $case->results;
+                if ($isCase == 1) echo (common::hasPriv('testtask', 'results') and $case->results) ? html::a(helper::createLink('testtask', 'results', "runID=0&caseID={$case->id}"), $case->results, '', "class='iframe'") : $case->results;
                 break;
             case 'stepNumber':
-                echo $case->stepNumber;
+                if ($isCase == 1) echo $case->stepNumber;
                 break;
             case 'actions':
-                $case->browseType = $browseType;
-                echo $this->buildOperateMenu($case, 'browse');
-                break;
+                if ($isCase == 1) 
+                {
+                    $case->browseType = $browseType;
+                    echo $this->buildOperateMenu($case, 'browse');
+                    break;
+                }
+                else
+                {
+                    echo $this->buildOperateBrowseSceneMenu($case);
+                }
             }
             echo '</td>';
         }
@@ -2720,5 +2868,968 @@ class testcaseModel extends model
 
         foreach($branches as $branchID => $branchName) $modules += $this->tree->getOptionMenu($productID, 'case', 0, $branchID);
         return $modules;
+    }
+
+    public function batchChangeScene($caseIDList, $sceneId)
+    {
+        $now        = helper::now();
+        $allChanges = array();
+
+        $ioldCases   = $this->dao->select('*')->from(VIEW_SCENECASE)
+            ->where('deleted')->eq(0)
+            ->beginIF($caseIDList)->andWhere('id')->in($caseIDList)->fi()
+            ->fetchAll('id');
+
+        /* If the target node is root. */
+        if(!$sceneId)
+        {
+            $oldCases = $ioldCases;
+
+            /* Split selected nodes into 2 arrays. */
+            $finalOldCases1 = array(); /* Parent Scenes. */
+            $finalOldCases2 = array(); /* Cases and leaf Scenes. */
+            if(!empty($oldCases))
+            {
+                foreach($oldCases as $k => $v)
+                {
+                    $flag = 0;
+                    foreach($oldCases as $k2 => $v2)
+                    {
+                        $resFlag = strpos($v->path,$v2->path);
+
+                        /* $v2 is the ancestor of $v. */
+                        if(($resFlag || $resFlag === 0) && $v->grade > $v2->grade ) $flag = 1;
+                    }
+
+                    if($flag == 0)
+                    {
+                        /* None selected node is its ancestor, then assign to this array. */
+                        $finalOldCases1[$k] = $v;
+                    }
+                    else
+                    {
+                        /* As one selected node is ancestor, then assign to this array. */
+                        $finalOldCases2[$k] = $v;
+                    }
+                }
+            }
+
+            /* Process all top level nodes (all parent scenes) of selected nodes. */
+            foreach($caseIDList as $caseID)
+            {
+                if(!isset($finalOldCases1[$caseID])) continue;
+
+                $oldCase = $finalOldCases1[$caseID];
+                if($sceneId == $oldCase->parent) continue;
+                if($sceneId == $oldCase->id) continue;
+
+                $case = new stdclass();
+                $case->lastEditedBy   = $this->app->user->account;
+                $case->lastEditedDate = $now;
+
+                if($oldCase->isCase == 2)
+                {
+                    $case->parent = 0;
+                    $case->path   = ",$caseID,";
+                    $case->grade  = 1;
+
+                    $this->dao->update(TABLE_SCENE)->data($case)
+                        ->autoCheck()
+                        ->where('id')->eq((int)$caseID - CHANGEVALUE)
+                        ->exec();
+                    if(!dao::isError()) $allChanges[0][$caseID] = common::createChanges($oldCase, $case);
+                }
+                else
+                {
+                    $case->scene = 0;
+
+                    $this->dao->update(TABLE_CASE)->data($case)
+                        ->autoCheck()
+                        ->where('id')->eq((int)$caseID)
+                        ->exec();
+                    if(!dao::isError()) $allChanges[1][$caseID] = common::createChanges($oldCase, $case);
+                }
+            }
+
+            /* Process all non-top level nodes of selected nodes. */
+            foreach($caseIDList as $caseID)
+            {
+                if (!isset($finalOldCases2[$caseID])) continue;
+
+                $oldCase = $finalOldCases2[$caseID];
+                if($sceneId == $oldCase->parent) continue;
+                if($sceneId == $oldCase->id) continue;
+
+                $case = new stdclass();
+                $case->lastEditedBy   = $this->app->user->account;
+                $case->lastEditedDate = $now;
+
+                if($oldCase->isCase == 2)
+                {
+                    $case->parent = $sceneId;
+                    $resultScene  = $this->dao->findById((int)$oldCase->parent - CHANGEVALUE)->from(TABLE_SCENE)->fetch();
+                    $case->path   = $resultScene->path . "$caseID,";
+                    $case->grade  = $resultScene->grade + 1;
+
+                    $this->dao->update(TABLE_SCENE)->data($case)
+                        ->autoCheck()
+                        ->where('id')->eq((int)$caseID - CHANGEVALUE)
+                        ->exec();
+                    if(!dao::isError()) $allChanges[0][$caseID] = common::createChanges($oldCase, $case);
+                }
+                else
+                {
+                    $case->scene = $sceneId;
+                    $this->dao->update(TABLE_CASE)->data($case)
+                        ->autoCheck()
+                        ->where('id')->eq((int)$caseID)
+                        ->exec();
+                    if(!dao::isError()) $allChanges[1][$caseID] = common::createChanges($oldCase, $case);
+                }
+            }
+        }
+        else
+        {
+            $sceneRow = $this->dao->findById((int)$sceneId)->from(VIEW_SCENECASE)->fetch();
+
+            /* Remove ancestors of target node. Won't change ancestors' scene to be target scene. */
+            $oldCases = array();
+            if(!empty($ioldCases))
+            {
+                foreach($ioldCases as $k => $v)
+                {
+                    $resFlag = strpos($sceneRow->path,$v->path);
+                    if(($resFlag || $resFlag === 0) && $sceneRow->grade > $v->grade )
+                    {
+                        /* The ancestors of the target node. */
+                    }
+                    else
+                    {
+                        $oldCases[$k] = $v;
+                    }
+                }
+            }
+
+            /* These selected nodes removed ancestors are split into 2 arrays. */
+            $finalOldCases1 = array();
+            $finalOldCases2 = array();
+            if (!empty($oldCases))
+            {
+                foreach($oldCases as $k => $v)
+                {
+                    $flag = 0;
+                    foreach($oldCases as $k2 => $v2)
+                    {
+                        $resFlag = strpos($v->path,$v2->path);
+
+                        /* v2 is ancestor. */
+                        if (($resFlag || $resFlag === 0) && $v->grade > $v2->grade ) $flag = 1;
+                    }
+
+                    if($flag == 0)
+                    {
+                        /* None selected node is its ancestor, then assign it to this array. */
+                        $finalOldCases1[$k] = $v;
+                    }
+                    else
+                    {
+                        /* As one selected node is its ancestor, then assign it to this array. */
+                        $finalOldCases2[$k] = $v;
+                    }
+                }
+            }
+
+            /* Process all top level of selected nodes. */
+            foreach($caseIDList as $caseID)
+            {
+                if(isset($finalOldCases1[$caseID]))
+                {
+                    $oldCase = $finalOldCases1[$caseID];
+                    if($sceneId == $oldCase->parent) continue;
+                    if($sceneId == $oldCase->id) continue;
+
+                    $resFlag = strpos($sceneRow->path,$oldCase->path);
+                    /* Target node is child. */
+                    if(($resFlag || $resFlag === 0) && $sceneRow->grade > $oldCase->grade ) continue;
+
+                    $case = new stdclass();
+                    $case->lastEditedBy   = $this->app->user->account;
+                    $case->lastEditedDate = $now;
+                    $case->product        = $sceneRow->product;
+                    $case->module         = $sceneRow->module;
+
+                    if($oldCase->isCase == 2)
+                    {
+                        $case->parent = $sceneId;
+                        $case->path   = $sceneRow->path . "$caseID,";
+                        $case->grade  = $sceneRow->grade + 1;
+
+                        $this->dao->update(TABLE_SCENE)->data($case)->autoCheck()->where('id')->eq((int)$caseID-CHANGEVALUE)->exec();
+                        if(!dao::isError()) $allChanges[0][$caseID] = common::createChanges($oldCase, $case);
+
+                    }
+                    else
+                    {
+                        $case->scene = $sceneId;
+
+                        $this->dao->update(TABLE_CASE)->data($case)->autoCheck()->where('id')->eq((int)$caseID)->exec();
+                        if(!dao::isError()) $allChanges[1][$caseID] = common::createChanges($oldCase, $case);
+                    }
+                }
+            }
+
+            /* Process all non-top level nodes of selected nodes. */
+            foreach($caseIDList as $caseID)
+            {
+                if(!isset($finalOldCases2[$caseID])) continue;
+
+                $oldCase = $finalOldCases2[$caseID];
+                if($sceneId == $oldCase->parent) continue;
+                if($sceneId == $oldCase->id) continue;
+
+                $resFlag = strpos($sceneRow->path,$oldCase->path);
+                /* Target node is child. */
+                if(($resFlag || $resFlag === 0) && $sceneRow->grade > $oldCase->grade) continue;
+
+                $case = new stdclass();
+                $case->lastEditedBy   = $this->app->user->account;
+                $case->lastEditedDate = $now;
+                $case->product        = $sceneRow->product;
+                $case->module         = $sceneRow->module;
+
+                if($oldCase->isCase == 2)
+                {
+                    $resultScene = $this->dao->findById((int)$oldCase->parent - CHANGEVALUE)->from(TABLE_SCENE)->fetch();
+                    $case->path  = $resultScene->path . "$caseID,";
+                    $case->grade = $resultScene->grade + 1;
+
+                    $this->dao->update(TABLE_SCENE)->data($case)
+                        ->autoCheck()
+                        ->where('id')->eq((int)$caseID - CHANGEVALUE)
+                        ->exec();
+                    if(!dao::isError()) $allChanges[0][$caseID] = common::createChanges($oldCase, $case);
+                }
+                else
+                {
+                    $this->dao->update(TABLE_CASE)->data($case)
+                        ->autoCheck()
+                        ->where('id')->eq((int)$caseID)
+                        ->exec();
+                    if(!dao::isError()) $allChanges[1][$caseID] = common::createChanges($oldCase, $case);
+                }
+            }
+        }
+
+        return $allChanges;
+    }
+
+    public function buildMenuQuery($rootID, $moduleID, $type, $startScene = 0, $branch = 'all')
+    {
+        /* Set the start module. */
+        $startScenePath = '';
+        if($startScene > 0)
+        {
+            $startScene = $this->dao->findById((int)$startScene)->from(VIEW_SCENECASE)->fetch();
+            if($startScene) $startScenePath = $startScene->path . '%';
+        }
+
+        return $this->dao->select('*')->from(VIEW_SCENECASE)
+            ->where('deleted')->eq(0)
+            ->beginIF($rootID)->andWhere('product')->eq((int)$rootID)->fi()
+            ->beginIF(intval($moduleID) > 0)->andWhere('module')->eq((int)$moduleID)->fi()
+            ->beginIF($startScenePath)->andWhere('path')->like($startScenePath)->fi()
+            ->beginIF($branch !== 'all' and $branch !== '' and $branch !== false)->andWhere('branch')->eq((int)$branch)->fi()
+            ->andWhere('isCase')->eq(2)
+            ->orderBy('grade desc, sort')
+            ->get();
+    }
+
+    public function buildOperateBrowseSceneMenu($scene)
+    {
+        $canBeChanged = common::canBeChanged('case', $scene);
+        if(!$canBeChanged) return '';
+
+        $params = "sceneID=$scene->id";
+
+        /* Generate params for editing scene. */
+        $editParams = $params;
+        if($this->app->tab == 'project')   $editParams .= "&projectID={$this->session->project}";
+        if($this->app->tab == 'execution') $editParams .= "&executionID={$this->session->execution}";
+
+        $menu  = $this->buildMenu('testcase', 'editScene',   $editParams, $scene, 'browse', 'edit',  '',          '', '', '', $this->lang->testcase->editScene);
+        $menu .= $this->buildMenu('testcase', 'deleteScene', $params,     $scene, 'browse', 'trash', 'hiddenwin', '', '', '', $this->lang->testcase->deleteScene);
+
+        return $menu;
+    }
+
+    public function buildSearchFormAddScene($productID, $products, $queryID, $actionURL, $projectID = 0,$moduleID = 0)
+    {
+        $product = ($this->app->tab == 'project' and empty($productID)) ? $products : array($productID => $products[$productID]) + array('all' => $this->lang->testcase->allProduct);
+        $this->config->testcase->search['params']['product']['values'] = $product;
+
+        $module = $this->loadModel('tree')->getOptionMenu($productID, 'case', 0);
+        $scene  = $this->getSceneMenu($productID, $moduleID, $viewType = 'case', $startSceneID = 0,  0);
+
+        if(!$productID)
+        {
+            $module = array();
+            foreach($products as $id => $product) $module += $this->loadModel('tree')->getOptionMenu($id, 'case', 0);
+        }
+
+        $this->config->testcase->search['params']['module']['values'] = $module;
+        $this->config->testcase->search['params']['parent']['values'] = $scene;
+        $this->config->testcase->search['params']['lib']['values']    = $this->loadModel('caselib')->getLibraries();
+
+        if($this->session->currentProductType == 'normal')
+        {
+            unset($this->config->testcase->search['fields']['branch']);
+            unset($this->config->testcase->search['params']['branch']);
+        }
+        else
+        {
+            $productInfo = $this->loadModel('product')->getByID($productID);
+
+            $this->config->testcase->search['fields']['branch']           = sprintf($this->lang->product->branch, $this->lang->product->branchName[$productInfo->type]);
+            $this->config->testcase->search['params']['branch']['values'] = array('' => '', '0' => $this->lang->branch->main) + $this->loadModel('branch')->getPairs($productID, '', $projectID) + array('all' => $this->lang->branch->all);
+        }
+
+        if(!$this->config->testcase->needReview) unset($this->config->testcase->search['params']['status']['values']['wait']);
+        $this->config->testcase->search['actionURL'] = $actionURL;
+        $this->config->testcase->search['queryID']   = $queryID;
+
+        $this->loadModel('search')->setSearchParams($this->config->testcase->search);
+    }
+
+    public function buildTreeArray(& $treeMenu, $scenes, $scene, $sceneName = '/')
+    {
+        $parentScenes = explode(',', $scene->path);
+        foreach($parentScenes as $parentSceneID)
+        {
+            if(empty($parentSceneID)) continue;
+            if(empty($scenes[$parentSceneID])) continue;
+
+            $sceneName .= $scenes[$parentSceneID]->title . '/';
+        }
+
+        $sceneName  = rtrim($sceneName, '/');
+        $sceneName .= "|$scene->id\n";
+
+        if(isset($treeMenu[$scene->id]) and !empty($treeMenu[$scene->id]))
+        {
+            if(isset($treeMenu[$scene->parent]))
+            {
+                $treeMenu[$scene->parent] .= $sceneName;
+            }
+            else
+            {
+                $treeMenu[$scene->parent] = $sceneName;
+            }
+            $treeMenu[$scene->parent] .= $treeMenu[$scene->id];
+        }
+        else
+        {
+            if(isset($treeMenu[$scene->parent]) and !empty($treeMenu[$scene->parent]))
+            {
+                $treeMenu[$scene->parent] .= $sceneName;
+            }
+            else
+            {
+                $treeMenu[$scene->parent] = $sceneName;
+            }
+        }
+    }
+
+    /**
+     * Create scene.
+     *
+     * @access public
+     * @return void
+     */
+    public function createScene()
+    {
+        $now   = helper::now();
+        $scene = fixer::input('post')
+            ->setDefault('openedBy', $this->app->user->account)
+            ->setDefault('openedDate', $now)
+            ->setDefault('parent', $this->post->scene === false ? 0 : $this->post->scene)
+            ->cleanInt('product,module,branch')
+            ->remove('scene')
+            ->get();
+
+        $this->dao->insert(TABLE_SCENE)->data($scene)
+            ->autoCheck()
+            ->batchCheck($this->config->testcase->createscene->requiredFields, 'notempty')
+            ->check('title', 'unique')
+            ->checkFlow()
+            ->exec();
+
+        if(!$this->dao->isError())
+        {
+            $sceneID     = $this->dao->lastInsertID();
+            $childPath   = "";
+            $grade       = "";
+            $viewSceneID = intval($sceneID) + CHANGEVALUE;
+
+            if($scene->parent)
+            {
+                $resultScene = $this->dao->findById((int)$scene->parent - CHANGEVALUE)->from(TABLE_SCENE)->fetch();
+                $childPath   = $resultScene->path . $viewSceneID . ',';
+                $grade       = $resultScene->grade + 1;
+                $this->dao->update(TABLE_SCENE)
+                    ->set('path')->eq($childPath)
+                    ->set('grade')->eq($grade)
+                    ->set('product')->eq($resultScene->product)
+                    ->set('module')->eq($resultScene->module)
+                    ->set('sort')->eq(intval($sceneID) + CHANGEVALUE)
+                    ->where('id')->eq($sceneID)->limit(1)
+                    ->exec();
+            }
+            else
+            {
+                $childPath = ",$viewSceneID,";
+                $grade     = 1;
+                $this->dao->update(TABLE_SCENE)
+                    ->set('path')->eq($childPath)
+                    ->set('grade')->eq($grade)
+                    ->set('sort')->eq(intval($sceneID) + CHANGEVALUE)
+                    ->where('id')->eq($sceneID)->limit(1)
+                    ->exec();
+            }
+
+            return array('status' => 'created', 'id' => $sceneID);
+        }
+    }
+
+    public function getAllChildId($sceneID)
+    {
+        if($sceneID == 0) return array();
+
+        $scene = $this->dao->findById((int)$sceneID)->from(VIEW_SCENECASE)->fetch();
+        if(empty($scene)) return array();
+
+        return $this->dao->select('id')->from(VIEW_SCENECASE)
+            ->where('path')->like($scene->path . '%')
+            ->andWhere('deleted')->eq(0)
+            ->fetchPairs();
+    }
+
+    public function getBySearchHasScene($productID, $queryID, $orderBy, $pager = null, $branch = 0, $auto = 'no')
+    {
+        if($queryID)
+        {
+            $query = $this->loadModel('search')->getQuery($queryID);
+            if($query)
+            {
+                $this->session->set('testcaseQuery', $query->sql);
+                $this->session->set('testcaseForm', $query->form);
+            }
+            else
+            {
+                $this->session->set('testcaseQuery', ' 1 = 1');
+            }
+        }
+        else
+        {
+            if($this->session->testcaseQuery == false) $this->session->set('testcaseQuery', ' 1 = 1');
+        }
+
+        $queryProductID = $productID;
+        $allProduct     = "`product` = 'all'";
+        $caseQuery      = '(' . $this->session->testcaseQuery;
+        if(strpos($this->session->testcaseQuery, $allProduct) !== false)
+        {
+            $products  = $this->app->user->view->products;
+            $caseQuery = str_replace($allProduct, '1', $caseQuery);
+            $caseQuery = $caseQuery . ' AND `product` ' . helper::dbIN($products);
+            $queryProductID = 'all';
+        }
+
+        $allBranch = "`branch` = 'all'";
+        if($branch !== 'all' and strpos($caseQuery, '`branch` =') === false) $caseQuery .= " AND `branch` in('$branch')";
+        if(strpos($caseQuery, $allBranch) !== false) $caseQuery = str_replace($allBranch, '1', $caseQuery);
+        $caseQuery .= ')';
+        $caseQuery  = str_replace('`version`', 't1.`version`', $caseQuery);
+
+        if($this->app->tab == 'project') $caseQuery = str_replace('`product`', 't2.`product`', $caseQuery);
+
+        /* Search criteria under compatible project. */
+        $sql = $this->dao->select('*')->from(VIEW_SCENECASE)->alias('t1');
+        if($this->app->tab == 'project') $sql->leftJoin(TABLE_PROJECTCASE)->alias('t2')->on('t1.id=t2.case');
+        $cases = $sql
+            ->where($caseQuery)
+            ->andWhere('isCase')->eq(1)
+            ->beginIF($this->app->tab == 'project')->andWhere('t2.project')->eq($this->session->project)->fi()
+            ->beginIF($this->app->tab == 'project' and !empty($productID) and $queryProductID != 'all')->andWhere('t2.product')->eq($productID)->fi()
+            ->beginIF($this->app->tab != 'project' and !empty($productID) and $queryProductID != 'all')->andWhere('t1.product')->eq($productID)->fi()
+            ->beginIF($auto != 'unit')->andWhere('t1.auto')->ne('unit')->fi()
+            ->beginIF($auto == 'unit')->andWhere('t1.auto')->eq('unit')->fi()
+            ->andWhere('t1.deleted')->eq(0)
+            ->orderBy($orderBy)->page($pager)->fetchAll('id');
+
+        return $cases;
+    }
+
+    /**
+     * Get scenes and cases list.
+     *
+     * @param  mixed  $productID  int|array
+     * @param  string $branch     number|all
+     * @param  int    $moduleID
+     * @param  array  $caseIdArr
+     * @param  object $pager      object|NULL
+     * @param  string $type
+     * @param  array  $topIdList
+     * @param  string $browseType
+     * @access public
+     * @return array
+     */
+    public function getList($productID,$branch, $moduleID, $caseIdArr, $pager = NULL, $type = '', $topIdList = array(), $browseType, &$executionSql = NULL)
+    {
+        /* Get list of module and its children module. */
+        $modules = $moduleID ? $this->loadModel('tree')->getAllChildId($moduleID) : '0';
+
+        /* Get scenes and all cases in $caseIdArr. */
+        $cases = $this->dao->select('id,path')->from(VIEW_SCENECASE)
+            ->where('id')->in($caseIdArr)
+            ->beginIF($browseType != 'bysearch')->orWhere('( isCase')->eq(2)->fi()
+            ->beginIF($browseType == 'bysearch')->andWhere('( 1')->eq(1)->fi()
+            ->beginIF(is_array($productID))->andWhere('product')->in($productID)->fi()
+            ->beginIF(!is_array($productID) and intval($productID) > 0)->andWhere('product')->eq($productID)->fi()
+            ->beginIF($branch != 'all')->andWhere('branch')->eq($branch)->fi()
+            ->beginIF(intval($moduleID) > 0)->andWhere('module')->in($modules)->fi()
+            ->markRight(1)
+            ->fetchPairs('id','path');
+
+        $sceneIdArr = array();
+        foreach ($cases as $path) {
+            $tmpArr     = explode(',', trim($path, ','));
+            $sceneIdArr = array_merge($sceneIdArr,$tmpArr);
+        }
+        $sceneIdArr = array_unique($sceneIdArr);
+
+        /* Get path list. */
+        $pathList = $this->dao->select('id,path')->from(VIEW_SCENECASE)
+            ->where('deleted')->eq(0)
+            ->beginIF(is_array($productID))->andWhere('product')->in($productID)->fi()
+            ->beginIF(!is_array($productID) and intval($productID) > 0)->andWhere('product')->eq($productID)->fi()
+            ->andWhere('id')->in($sceneIdArr)
+            ->beginIF($modules)->andWhere('module')->in($modules)->fi()
+            ->beginIF($this->cookie->onlyScene)->andWhere('isCase')->eq(2)->fi()
+            ->orderBy('id_asc')
+            ->fetchPairs('id');
+
+        /* Get all IDs list. */
+        $objectIdList = array();
+        foreach($pathList as $path)
+        {
+            if($type == 'child' and !empty($topIdList))
+            {
+                $paths = explode(',', trim($path, ','));
+                $topID = $paths[0];
+
+                if(!in_array($topID, $topIdList)) continue;
+            }
+
+            foreach(explode(',', trim($path, ',')) as $pathID) $objectIdList[$pathID] = $pathID;
+        }
+
+        /* Get paginated data with all IDs list. */
+        $queryFunction = function($modules, $type, $objectIdList, $branch)
+        {
+            $this->dao->reset();
+            $rawMethod = $this->app->rawMethod;
+            $rawModule = $this->app->rawModule;
+            return $this->dao->select('*')->from(VIEW_SCENECASE)
+                ->where('deleted')->eq(0)
+                ->beginIF($this->cookie->onlyScene)->andWhere('isCase')->eq(2)->fi()
+                ->beginIF($modules)->andWhere('module')->in($modules)->fi()
+                ->beginIF($rawMethod == 'browse' and $type === 'top')->andWhere('parent')->eq(0)->andWhere('id')->in($objectIdList)->fi()
+                ->beginIF($rawMethod == 'browse' and $type === 'child')->andWhere('id')->in($objectIdList)->fi()
+                ->beginIF($rawModule == 'project' and $rawMethod == 'testcase' and intval($branch) > 0)->andWhere('branch')->eq($branch)->fi()
+                ->beginIF($rawModule == 'project' and $rawMethod == 'testcase' and $type === 'top')->andWhere('parent')->eq(0)->andWhere('id')->in($objectIdList)->fi()
+                ->beginIF($rawModule == 'project' and $rawMethod == 'testcase' and $type === 'child')->andWhere('id')->in($objectIdList)->fi();
+        };
+
+        /* Sort by product ID for project list. */
+        $orderBy = 'product_desc,sort_asc';
+
+        /* Get sql for batch execution. */
+        if($executionSql !== NULL) $executionSql = $queryFunction($modules, $type, $objectIdList, $branch)->andWhere('isCase')->eq(1)->orderBy($orderBy)->get();
+
+        return $queryFunction($modules, $type, $objectIdList, $branch)->orderBy($orderBy)->page($pager)->fetchAll('id');
+    }
+
+    public function getParents($viewID)
+    {
+        if($viewID == 0) return '/';
+
+        $path = $this->dao->select('path')->from(VIEW_SCENECASE)->where('id')->eq((int)$viewID)->fetch('path');
+        $path = trim($path, ',');
+        if(!$path) return '/';
+
+        $pathArr   = explode(',', $path);
+        $scenePath = "";
+        foreach ($pathArr as $vid)
+        {
+            $title      = $this->dao->select('title')->from(VIEW_SCENECASE)->where('id')->eq((int)$vid)->fetch('title');
+            $scenePath .= '&nbsp;<i class="icon-angle-right"></i>&nbsp;'.$title;
+        }
+
+        return substr($scenePath,34);
+    }
+
+    public function getSceneMenu($rootID, $moduleID, $type = '', $startScene = 0, $branch = 0, $currentScene = 0, $emptyMenu = false)
+    {
+        if(empty($branch)) $branch = 0;
+
+        /* If type of $branch is array, get scenes of these branches. */
+        if(is_array($branch))
+        {
+            $scenes = array();
+            foreach($branch as $branchID) $scenes[$branchID] = $this->getOptionMenu($rootID,$moduleID, $type, $startScene, $branchID,$currentScene);
+
+            return $scenes;
+        }
+
+        if($type == 'line') $rootID = 0;
+
+        $branches = array($branch => '');
+        if($branch != 'all' and strpos('story|bug|case', $type) !== false)
+        {
+            $product = $this->loadModel('product')->getById($rootID);
+            if($product and $product->type != 'normal')
+            {
+                $branchPairs = $this->loadModel('branch')->getPairs($rootID, 'all');
+                $branches    = array($branch => $branchPairs[$branch]);
+            }
+            elseif($product and $product->type == 'normal')
+            {
+                $branches = array(0 => '');
+            }
+        }
+
+        $treeMenu = array();
+        foreach($branches as $branchID => $branch)
+        {
+            $scenes = array();
+            $stmt   = $this->dbh->query($this->buildMenuQuery($rootID, $moduleID, $type, $startScene, $branchID));
+            while($scene = $stmt->fetch())
+            {
+                if ($scene->id != $currentScene) $scenes[$scene->id] = $scene;
+            }
+
+            foreach($scenes as $scene)
+            {
+                $branchName = (isset($product) and $product->type != 'normal' and $scene->branch === BRANCH_MAIN) ? $this->lang->branch->main : $branch;
+
+                $this->buildTreeArray($treeMenu, $scenes, $scene, (empty($branchName)) ? '/' : "/$branchName/");
+            }
+        }
+
+        ksort($treeMenu);
+        $topMenu = @array_shift($treeMenu);
+        $topMenu = explode("\n", trim((string)$topMenu));
+        $lastMenu[] = '/';
+        foreach($topMenu as $menu)
+        {
+            if(!strpos($menu, '|')) continue;
+            list($label, $sceneID) = explode('|', $menu);
+            $lastMenu[$sceneID]    = $label;
+        }
+
+        /* Attach empty option. */
+        if($emptyMenu) $lastMenu['null'] = $this->lang->null;
+
+        return $lastMenu;
+    }
+
+    public function getScenesName($moduleIdList, $allPath = true, $branchPath = false)
+    {
+        if(!$allPath) return $this->dao->select('id, title')->from(VIEW_SCENECASE)->where('id')->in($moduleIdList)->andWhere('deleted')->eq(0)->fetchPairs('id', 'title');
+
+        $modules    = $this->dao->select('id, title, path, branch')->from(VIEW_SCENECASE)->where('id')->in($moduleIdList)->andWhere('deleted')->eq(0)->fetchAll('path');
+        $allModules = $this->dao->select('id, title')->from(VIEW_SCENECASE)->where('id')->in(join(array_keys($modules)))->andWhere('deleted')->eq(0)->fetchPairs('id', 'title');
+
+        $branchIDList = array();
+        $modulePairs  = array();
+        foreach($modules as $module)
+        {
+            $paths = explode(',', trim($module->path, ','));
+            $moduleName = '';
+            foreach($paths as $path) $moduleName .= '/' . $allModules[$path];
+            $modulePairs[$module->id] = $moduleName;
+
+            if($module->branch) $branchIDList[$module->branch] = $module->branch;
+        }
+
+        if(!$branchPath) return $modulePairs;
+
+        $branchs  = $this->dao->select('id, title')->from(VIEW_SCENECASE)->where('id')->in($branchIDList)->andWhere('deleted')->eq(0)->fetchALL('id');
+        foreach($modules as $module)
+        {
+            if(isset($modulePairs[$module->id]))
+            {
+                $branchName = isset($branchs[$module->branch]) ? '/' . $branchs[$module->branch]->name : '';
+                $modulePairs[$module->id] = $branchName . $modulePairs[$module->id];
+            }
+        }
+
+        return $modulePairs;
+    }
+
+    public function getTestCaseHasScene($productID, $branch, $browseType, $queryID, $moduleID, $sort, $pager, $auto = 'no')
+    {
+        /* Set modules and browse type. */
+        $modules    = $moduleID ? $this->loadModel('tree')->getAllChildId($moduleID) : '0';
+        $browseType = ($browseType == 'bymodule' and $this->session->caseBrowseType and $this->session->caseBrowseType != 'bysearch') ? $this->session->caseBrowseType : $browseType;
+        $group      = $this->lang->navGroup->testcase;
+
+        /* By module or all cases. */
+        $cases = array();
+        if($browseType == 'bymodule' or $browseType == 'all' or $browseType == 'wait')
+        {
+            if($this->app->tab == 'project')
+            {
+                $cases = $this->getModuleProjectCases($productID, $branch, $modules, $sort, $pager, $browseType, $auto);
+            }
+            else
+            {
+                $cases = $this->getModuleCases($productID, $branch, $modules, $sort, $pager, $browseType, $auto);
+            }
+        }
+        /* Cases need confirmed. */
+        elseif($browseType == 'needconfirm')
+        {
+            $cases = $this->dao->select('distinct t1.*, t2.title AS storyTitle')->from(TABLE_CASE)->alias('t1')
+                ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story = t2.id')
+                ->leftJoin(TABLE_PROJECTCASE)->alias('t3')->on('t1.id = t3.case')
+                ->where("t2.status = 'active'")
+                ->andWhere('t1.deleted')->eq(0)
+                ->andWhere('t2.version > t1.storyVersion')
+                ->beginIF(!empty($productID))->andWhere('t1.product')->eq($productID)->fi()
+                ->beginIF($this->app->tab == 'project')->andWhere('t3.project')->eq($this->session->project)->fi()
+                ->beginIF($branch !== 'all')->andWhere('t1.branch')->eq($branch)->fi()
+                ->beginIF($modules)->andWhere('t1.module')->in($modules)->fi()
+                ->beginIF($auto != 'unit')->andWhere('t1.auto')->ne('unit')->fi()
+                ->beginIF($auto == 'unit')->andWhere('t1.auto')->eq('unit')->fi()
+                ->orderBy($sort)
+                ->page($pager, 't1.id')
+                ->fetchAll();
+        }
+        elseif($browseType == 'bysuite')
+        {
+            $cases = $this->getBySuite($productID, $branch, $queryID, $modules, $sort, $pager, $auto);
+        }
+        /* By search. */
+        elseif($browseType == 'bysearch')
+        {
+            $cases = $this->getBySearchHasScene($productID, $queryID, $sort, $pager, $branch, $auto);
+        }
+
+        return $cases;
+    }
+
+    public function getXmindConfig()
+    {
+        return $this->loadExtension('xmind')->getXmindConfig();
+    }
+
+    public function getXmindExport($productID, $moduleID,$branch)
+    {
+        return $this->loadExtension('xmind')->getXmindExport($productID, $moduleID,$branch);
+    }
+
+    public function getXmindImport($xmlPath)
+    {
+        return $this->loadExtension('xmind')->getXmindImport($xmlPath);
+    }
+
+    public function istrcut($text, $length)
+    {
+        return (mb_strlen($text, 'utf8') > $length) ? mb_substr($text, 0, $length, 'utf8').'...' : $text;
+    }
+    public function printHead($col, $orderBy, $vars, $checkBox = true)
+    {
+        $id = $col->id;
+        if($col->show)
+        {
+            $fixed = $col->fixed == 'no' ? 'true' : 'false';
+            $width = is_numeric($col->width) ? "{$col->width}px" : $col->width;
+            $title = isset($col->title) ? "title='$col->title'" : '';
+            $title = (isset($col->name) and $col->name) ? "title='$col->name'" : $title;
+            if($id == 'id' and (int)$width < 90) $width = '120px';
+
+            $align = $id == 'actions' ? 'text-center' : '';
+            $align = in_array($id, array('budget', 'teamCount', 'estimate', 'consume', 'consumed', 'left')) ? 'text-right' : $align;
+
+            $style  = '';
+            $data   = '';
+            $data  .= "data-width='$width'";
+            $style .= "width:$width;";
+
+            if(isset($col->minWidth))
+            {
+                $data  .= "data-minWidth='{$col->minWidth}px'";
+                $style .= "min-width:{$col->minWidth}px;";
+            }
+
+            if(isset($col->maxWidth))
+            {
+                $data  .= "data-maxWidth='{$col->maxWidth}px'";
+                $style .= "max-width:{$col->maxWidth}px;";
+            }
+
+            if(isset($col->pri)) $data .= "data-pri='{$col->pri}'";
+            if($col->title == $this->lang->testcase->title)
+            {
+                echo "<th data-flex='$fixed' $data style='$style' class='c-$id $align' title='".$this->lang->testcase->generalTitle."'>";
+            }
+            else
+            {
+                echo "<th data-flex='$fixed' $data style='$style' class='c-$id $align' $title>";
+            }
+
+            if($id == 'actions')
+            {
+                echo $this->lang->actions;
+            }
+            else
+            {
+                if($id == 'id' && $checkBox) echo "<div class='checkbox-primary check-all' title='".$this->lang->selectAll."'><label></label></div>";
+                if($col->title == $this->lang->testcase->title)
+                {
+                    echo $this->lang->testcase->generalTitle;
+                }
+                else
+                {
+                    echo $col->title;
+                }
+            }
+
+            echo '</th>';
+        }
+    }
+
+    public function saveXmindConfig()
+    {
+        return $this->loadExtension('xmind')->saveXmindConfig();
+    }
+
+    public function saveXmindImport()
+    {
+        return $this->loadExtension('xmind')->saveXmindImport();
+    }
+
+    public function updateScene($sceneID)
+    {
+        /* Get original data. */
+        $scene = $this->dao->findById((int)$sceneID)->from(VIEW_SCENECASE)->fetch();
+        $now   = helper::now();
+
+        /* Collect changed data. */
+        $scenePost = fixer::input('post')
+            ->add('id', $sceneID - CHANGEVALUE)
+            ->setDefault('lastEditedBy', $this->app->user->account)
+            ->add('lastEditedDate', $now)
+            ->cleanInt('product,module')
+            ->get();
+
+        /* Update scene with changed data. */
+        $this->dao->update(TABLE_SCENE)->data($scenePost)
+            ->batchCheck($this->config->testcase->createscene->requiredFields, 'notempty')
+            ->where('id')->eq((int)$sceneID - CHANGEVALUE)
+            ->checkFlow()
+            ->exec();
+
+        /* Verify database error. */
+        if($this->dao->isError()) return;
+
+        $sceneNew    = $this->dao->findById((int)$sceneID - CHANGEVALUE)->from(TABLE_SCENE)->fetch();
+        $childPath   = "";
+        $grade       = "";
+        $viewSceneID = $sceneID;
+
+        /* Not change key fields. */
+        if($scene->parent == $sceneNew->parent and $scene->product == $sceneNew->product and $scene->branch == $sceneNew->branch and $scene->module == $sceneNew->module) return array('status' => 'updated', 'id' => $sceneID);;
+
+        if($sceneNew->parent)
+        {
+            /* Update product, module, branch, path and grade field with parent scene. */
+            $resultScene = $this->dao->findById((int)$sceneNew->parent - CHANGEVALUE)->from(TABLE_SCENE)->fetch();
+            $childPath   = $resultScene->path . $viewSceneID . ',';
+            $grade       = $resultScene->grade + 1;
+            $this->dao->update(TABLE_SCENE)
+                ->set('path')->eq($childPath)
+                ->set('grade')->eq($grade)
+                ->set('product')->eq($resultScene->product)
+                ->set('module')->eq($resultScene->module)
+                ->set('branch')->eq($resultScene->branch)
+                ->where('id')->eq($sceneID - CHANGEVALUE)
+                ->exec();
+        }
+        else
+        {
+            /* Update path and grade field without parent scene. */
+            $childPath = ",$viewSceneID,";
+            $grade     = 1;
+            $this->dao->update(TABLE_SCENE)
+                ->set('path')->eq($childPath)
+                ->set('grade')->eq($grade)
+                ->where('id')->eq($sceneID - CHANGEVALUE)
+                ->exec();
+        }
+
+        /* Get children scenes and cases. */
+        $children = $this->dao->select('*')->from(VIEW_SCENECASE)
+            ->where('deleted')->eq(0)
+            ->andWhere('(path')->like($scene->path.'%')
+            ->orWhere('path')->like(",$sceneID,%")
+            ->markRight(1)
+            ->orderBy('grade asc')
+            ->fetchAll('id');
+
+        foreach($children as $id => $childScene)
+        {
+            if(!$id or $id == $sceneID or !$childScene->parent) continue;
+
+            /* Get grade of child with parent scene. */
+            $parentScene = $this->dao->findById($childScene->parent - CHANGEVALUE)->from(TABLE_SCENE)->fetch();
+
+            /* Update sub-scene. */
+            if($childScene->isCase == 2)
+            {
+                /* The grade of child node must be greater than parent node. */
+                if($childScene->grade <= $scene->grade) continue;
+
+                $viewID    = $id;
+                $childPath = $parentScene->path . $viewID . ',';
+                $grade     = $parentScene->grade + 1;
+
+                $this->dao->update(TABLE_SCENE)
+                    ->set('path')->eq($childPath)
+                    ->set('grade')->eq($grade)
+                    ->set('product')->eq($parentScene->product)
+                    ->set('module')->eq($parentScene->module)
+                    ->set('branch')->eq($parentScene->branch)
+                    ->set('lastEditedBy')->eq($this->app->user->account)
+                    ->set('lastEditedDate')->eq($now)
+                    ->where('id')->eq($id - CHANGEVALUE)
+                    ->exec();
+
+                continue;
+            }
+
+            /* Update case. */
+            $this->dao->update(TABLE_CASE)
+                ->set('product')->eq($parentScene->product)
+                ->set('module')->eq($parentScene->module)
+                ->set('branch')->eq($parentScene->branch)
+                ->set('lastEditedBy')->eq($this->app->user->account)
+                ->set('lastEditedDate')->eq($now)
+                ->where('id')->eq($id)
+                ->exec();
+        }
+
+        return array('status' => 'updated', 'id' => $sceneID);
     }
 }
