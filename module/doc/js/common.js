@@ -1,11 +1,12 @@
 /**
- * Load modules by libID.
+ * Load modules by objectID and objectType.
  *
- * @param  int    $libID
+ * @param  string   $objectType
+ * @param  int      $objectID
  * @access public
  * @return void
  */
-function loadModules(objectType, objectID)
+function loadObjectModules(objectType, objectID)
 {
     var link = createLink('doc', 'ajaxGetModules', 'objectType=' + objectType + '&objectID=' + objectID);
     $('#moduleBox').load(link, function(){$('#moduleBox').find('select').chosen()});
@@ -14,15 +15,15 @@ function loadModules(objectType, objectID)
 /**
  * Load executions.
  *
- * @param  id $projectID
+ * @param  int $projectID
  * @access public
  * @return void
  */
 function loadExecutions(projectID)
 {
     var link = createLink('project', 'ajaxGetExecutions', "projectID=" + projectID + "&executionID=0&mode=multiple");
-    $('#executionBox').load(link, function(){$('#executionBox').find('select').attr('data-placeholder', holders.execution).attr('onchange', "loadModules(this.value, 'execution')").chosen()});
-    loadModules('project', projectID);
+    $('#executionBox').load(link, function(){$('#executionBox').find('select').attr('data-placeholder', holders.execution).attr('onchange', "loadObjectModules('execution', this.value)").chosen()});
+    loadObjectModules('project', projectID);
 }
 
 /**

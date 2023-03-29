@@ -196,12 +196,8 @@ $lang->doc->libIconList['custom']    = 'icon-folder-o';
 $lang->doc->systemLibs['product']   = $lang->productCommon;
 $lang->doc->systemLibs['execution'] = $lang->executionCommon;
 
-$lang->doc->aclList['open']    = '公开';
-$lang->doc->aclList['custom']  = '自定义';
-$lang->doc->aclList['private'] = '私有';
-
-$lang->doc->projectAclList['open']    = "公开<span class='text-gray'>（有所属库权限即可访问）</span>";
-$lang->doc->projectAclList['private'] = "私有<span class='text-gray'>（仅创建者和白名单用户可访问）</span>";
+$lang->doc->aclList['open']    = "公开<span class='text-gray'>（有所属库权限即可访问）</span>";
+$lang->doc->aclList['private'] = "私有<span class='text-gray'>（仅创建者和白名单用户可访问）</span>";
 
 $lang->doc->typeList['html']     = '富文本';
 $lang->doc->typeList['markdown'] = 'Markdown';
@@ -211,7 +207,6 @@ $lang->doc->typeList['ppt']      = 'PPT';
 $lang->doc->typeList['excel']    = 'Excel';
 
 $lang->doc->createList['html']     = '创建文档';
-$lang->doc->createList['api']      = '创建接口';
 $lang->doc->createList['template'] = '由模板创建';
 $lang->doc->createList['word']     = 'Word';
 $lang->doc->createList['ppt']      = 'PPT';

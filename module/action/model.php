@@ -1651,7 +1651,7 @@ class actionModel extends model
                     }
                     else
                     {
-                        $action->objectLink = helper::createLink('doc', 'objectLibs', sprintf($vars, $docLib->type, $docLib->objectID, $action->objectID, $appendLib));
+                        $action->objectLink = helper::createLink('doc', 'tablecontents', sprintf($vars, $docLib->type, $docLib->objectID, $action->objectID, $appendLib));
                     }
                 }
                 elseif($action->objectType == 'user')
