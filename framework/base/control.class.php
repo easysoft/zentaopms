@@ -915,6 +915,16 @@ class baseControl
      */
     public function display($moduleName = '', $methodName = '')
     {
+        if($this->config->debug && $this->viewType === 'html' && (!isset($_GET['zin']) || $_GET['zin'] != '0'))
+        {
+            if(empty($moduleName)) $moduleName = $this->moduleName;
+            if(empty($methodName)) $methodName = $this->methodName;
+            $modulePath   = $this->app->getModulePath($this->appName, $moduleName);
+            $viewType     = $this->viewType == 'mhtml' ? 'html' : $this->viewType;
+            $mainViewFile = $modulePath . 'ui' . DS . $this->devicePrefix . $methodName . '.' . $viewType . '.php';
+            if(file_exists($mainViewFile)) return $this->render($moduleName, $methodName);
+        }
+
         if(empty($this->output)) $this->parse($moduleName, $methodName);
         echo $this->output;
     }
