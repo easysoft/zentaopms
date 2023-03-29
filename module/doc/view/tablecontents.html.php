@@ -46,7 +46,7 @@
   else
   {
       if(common::hasPriv('api', 'createLib')) echo html::a($this->createLink('api', 'createLib', "type=$type"), '<i class="icon icon-plus"></i> ' . $lang->api->createLib, '', 'class="btn btn-secondary iframe" data-width="800px"');
-      if(common::hasPriv('api', 'create'))    echo html::a($this->createLink('api', 'create',    "libID=$libID&moduleID=$moduleID"), '<i class="icon icon-plus"></i> ' . $lang->api->createApi, '', 'class="btn btn-primary"');
+      if(common::hasPriv('api', 'create'))    echo html::a($this->createLink('api', 'create',    "libID=$libID&moduleID=$moduleID", '', true), '<i class="icon icon-plus"></i> ' . $lang->api->createApi, '', 'class="btn btn-primary iframe" data-width="95%"');
   }
   ?>
   </div>

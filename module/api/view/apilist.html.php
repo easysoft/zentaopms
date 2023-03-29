@@ -91,7 +91,14 @@
       <?php
       if($libID && common::hasPriv('api', 'create'))
       {
-          echo html::a(helper::createLink('api', 'create', "libID={$libID}&moduleID=$moduleID"), '<i class="icon icon-plus"></i> ' . $lang->api->createApi, '', 'class="btn btn-info"');
+          if($app->rawModule == 'doc')
+          {
+              echo html::a($this->createLink('api', 'create',    "libID=$libID&moduleID=$moduleID", '', true), '<i class="icon icon-plus"></i> ' . $lang->api->createApi, '', 'class="btn btn-info iframe" data-width="95%"');
+          }
+          else
+          {
+              echo html::a(helper::createLink('api', 'create', "libID={$libID}&moduleID=$moduleID"), '<i class="icon icon-plus"></i> ' . $lang->api->createApi, '', 'class="btn btn-info"');
+          }
       }
       ?>
     </div>
