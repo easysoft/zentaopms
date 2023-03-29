@@ -749,9 +749,9 @@ class upgradeModel extends model
             case 'biz7_6_2':
                 $this->processFeedbackModule();
                 break;
-            //case 'biupgrade':
-            //    $this->loadModel('upgrade')->createDefaultDimension();
-            //    $this->processDataset();
+            case 'biz8.4':
+                $this->loadModel('upgrade')->createDefaultDimension();
+                $this->processDataset();
         }
     }
 
@@ -8510,8 +8510,8 @@ class upgradeModel extends model
 
     /**
      * Create default group.
-     * 
-     * @param  string    $type 
+     *
+     * @param  string    $type
      * @access public
      * @return void
      */
