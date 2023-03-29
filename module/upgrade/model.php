@@ -8081,6 +8081,7 @@ class upgradeModel extends model
             $fields = array();
             foreach($table->schema->fields as $key => $field)
             {
+                $relatedField = '';
                 if($field['type'] == 'object' and isset($field['show']))
                 {
                     $key = str_replace('.', '_', $field['show']);
@@ -8089,7 +8090,7 @@ class upgradeModel extends model
                 if(!isset($fields[$key])) $fields[$key] = array();
 
                 $fields[$key]['name']   = $field['name'];
-                $fields[$key]['field']  = isset($relatedField) ? $relatedField : $key;
+                $fields[$key]['field']  = empty($relatedField) ? $key : $relatedField;
                 $fields[$key]['object'] = isset($field['object']) ? $field['object'] : $code;
                 $fields[$key]['type']   = $field['type'];
 
