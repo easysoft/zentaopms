@@ -58,10 +58,10 @@ $(function()
 
         var libClass = '.libDorpdown';
         if(!$(this).hasClass('lib')) libClass = '.moduleDorpdown';
-        if($(libClass).find('li').length == 0) return false;
 
         $(this).find('.icon').removeClass('hidden');
-        $(this).addClass('show-icon');
+        $(this).addClass('show-icon');   if($(libClass).find('li').length == 0) return false;
+
     }).on('mouseout', 'a', function()
     {
         $(this).find('.icon').addClass('hidden');
