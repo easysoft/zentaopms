@@ -28,7 +28,7 @@ $('#subNavbar li').not('[data-id=<?php echo $group;?>]').removeClass('active');
     <?php endforeach;?>
   </div>
   <div class='btn-toolbar pull-right child-position'>
-    <?php if(isset($pivot->id) and common::hasPriv('pivot', 'export')):?>
+    <?php if(common::hasPriv('pivot', 'export')):?>
     <a href="#" class="btn btn-link btn-export" data-toggle="modal" data-target="#export"><?php echo '<i class="icon-export muted"> </i>' . $lang->export;?></a>
     <?php endif;?>
     <?php common::printLink('pivot', 'browse', '', $lang->pivot->toDesign, '', "class='btn btn-primary'");?>
