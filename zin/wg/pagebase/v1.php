@@ -52,7 +52,7 @@ class pagebase extends wg
             h::head
             (
                 html($this->prop('metas')),
-                h::title($this->props->get('title', '') . " - $lang->zentaoPMS"),
+                h::title($this->props->get('title', data('title')) . " - $lang->zentaoPMS"),
                 $zui  ? h::import(array($config->zin->zuiPath . 'zui.zentao.umd.cjs', $config->zin->zuiPath . 'zui.zentao.css')) : null,
                 $zui ? h::js
                 (

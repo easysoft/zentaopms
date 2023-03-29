@@ -53,10 +53,4 @@ class page extends pagebase
             empty($pageJS) ? NULL : js($pageJS)
         );
     }
-
-    protected function created()
-    {
-        $this->setDefaultProps(array('title' => data('title')));
-        parent::created();
-    }
 }
