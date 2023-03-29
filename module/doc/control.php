@@ -1024,13 +1024,12 @@ class doc extends control
      */
     public function showFiles($type, $objectID, $viewType = '', $orderBy = 't1.id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1, $searchTitle = '')
     {
-        if(empty($viewType)) $viewType = !empty($_COOKIE['docFilesViewType']) ? $this->cookie->docFilesViewType : 'card';
+        if(empty($viewType)) $viewType = !empty($_COOKIE['docFilesViewType']) ? $this->cookie->docFilesViewType : 'list';
         setcookie('docFilesViewType', $viewType, $this->config->cookieLife, $this->config->webRoot, '', false, true);
 
-        $objects                   = $this->doc->getOrderedObjects($type);
-        $objectID                  = $this->{$type}->saveState($objectID, $objects);
-        $libs                      = $this->doc->getLibsByObject($type, $objectID);
-        $this->lang->modulePageNav = $this->doc->select($type, $objects, $objectID, $libs);
+        $objects  = $this->doc->getOrderedObjects($type);
+        $objectID = $this->{$type}->saveState($objectID, $objects);
+        $libs     = $this->doc->getLibsByObject($type, $objectID);
 
         $tab = strpos('doc,product,project,execution', $this->app->tab) !== false ? $this->app->tab : 'doc';
         if($tab != 'doc') $this->loadModel($tab)->setMenu($objectID);
@@ -1041,13 +1040,11 @@ class doc extends control
         if(!empty($_POST)) $searchTitle = $this->post->title;
         if(empty($_POST) and !empty($searchTitle)) $this->post->title = $searchTitle;
 
-        $this->lang->TRActions = $this->doc->buildBrowseSwitch($type, $objectID, $viewType, $orderBy, $recTotal, $recPerPage, $pageID, $searchTitle);
-
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
-        $files = $this->doc->getLibFiles($type, $objectID, $orderBy, $pager);
+        $files   = $this->doc->getLibFiles($type, $objectID, $orderBy, $pager);
 
         $this->view->title      = $object->name;
         $this->view->position[] = $object->name;
@@ -1064,6 +1061,7 @@ class doc extends control
         $this->view->summary      = $this->doc->summary($files);
         $this->view->sourcePairs  = $this->doc->getFileSourcePairs($files);
         $this->view->fileIcon     = $this->doc->getFileIcon($files);
+        $this->view->libTree      = $this->doc->getLibTree(0, $libs, $type, 0, $objectID);
 
         $this->display();
     }
@@ -1446,6 +1444,6 @@ class doc extends control
 
         $project  = $this->project->getById($projectID);
         $disabled = $project->multiple ? '' : 'disabled';
-        return print(html::select('execution', $executionPairs, 0, "class='form-control' data-placeholder='{$this->lang->doclib->tip->selectExecution}' $disabled"));
+        return print(html::select('execution', $executionPairs, 0, "class='form-control' data-placeholder='{$this->lang->doclib->tip->selectExecution}' $disabled data-drop_direction='down' data-dropDirection='down'"));
     }
 }
