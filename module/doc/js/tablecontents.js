@@ -12,7 +12,7 @@ $(function()
         if(option.type != 'dropDownLibrary') libClass = '.moduleDorpdown';
         if($(libClass).find('li').length == 0) return '';
         var dropdown = '<ul class="dropdown-menu dropdown-in-tree" id="' + option.type + '" style="display: unset; left:' + option.left + 'px; top:' + option.top + 'px;">';
-        dropdown += $(libClass).html().replace(/%libID%/g, option.libID).replace(/%moduleID%/g, option.moduleID).replace(/%hasChildren%/g, option.hasChildren);
+        dropdown += $(libClass).html().replace(/%libID%/g, option.libID).replace(/%moduleID%/g, option.moduleID).replace(/%hasChildren%/g, option.hasChildren).replace(/%libType%/g, option.libType);
         dropdown += '</ul>';
         return dropdown;
     }
@@ -23,6 +23,7 @@ $(function()
         'api': 'interface'
     }
 
+    console.log(treeData, 'treeData');
     $('#fileTree').tree(
     {
         initialState: 'active',
@@ -32,7 +33,7 @@ $(function()
             var libClass = ['lib', 'annex', 'api', 'execution'].indexOf(item.type) !== -1 ? 'lib' : '';
             var hasChild = item.children ? !!item.children.length : false;
             var link     = item.hasAction ? '###' : '#';
-            var $item    = '<a href="' + link + '" style="position: relative" data-has-children="' + hasChild + '" title="' + item.name + '" data-id="'  +  item.id + '" class="' + libClass + '" data-type="' + item.type + '" data-action="' + item.hasAction + '">';
+            var $item    = '<a href="' + link + '" style="position: relative" data-has-children="' + hasChild + '" title="' + item.name + '" data-id="' + item.id + '" class="' + libClass + '" data-type="' + item.type + '" data-action="' + item.hasAction + '">';
 
             $item += '<div class="text h-full w-full flex-start overflow-hidden">';
             if(libClass == 'lib' && item.type != 'execution') $item += '<div class="img-lib" style="background-image:url(static/svg/' + imgObj[item.type || 'lib'] + '.svg)"></div>';
@@ -77,7 +78,7 @@ $(function()
 
         if(isLib)
         {
-            if($(this).data('type') == 'annex') return false;
+            if($(this).data('type') == 'annex' && !canViewFiles) return false;
 
             libID    = moduleID;
             moduleID = 0;
@@ -87,7 +88,8 @@ $(function()
             libID = $(this).closest('.lib').data('id');
         }
         linkParams = linkParams.replace('%s', '&libID=' + libID + '&moduleID=' + moduleID);
-        location.href = createLink('doc', 'tableContents', linkParams);
+        var link = $(this).data('type') == 'annex' ? createLink('doc', 'showFiles', 'type=' + objectType + '&objectID=' + objectID) : createLink('doc', 'tableContents', linkParams);
+        location.href = link
     });
 
     var moduleData = {
@@ -139,6 +141,7 @@ $(function()
             type        : dropDownID,
             libID       : libID,
             moduleID    : moduleID,
+            moduleType  : moduleType,
             hasChildren : hasChildren
         };
 
