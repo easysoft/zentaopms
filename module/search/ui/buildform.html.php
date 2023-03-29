@@ -1,79 +1,13 @@
-<?php js::set('options', json_encode($options));?>
-<?php js::set('canSaveQuery', !empty($_SESSION[$module . 'Query']));?>
-<?php js::set('formSession', $_SESSION[$module . 'Form'])?>
-<?php js::set('onMenuBar', $onMenuBar);?>
-<script>
-$(function()
-{
-    var queryBox      = $('#queryBox');
-    var groupItems    = <?php echo $config->search->groupItems;?>;
-    var module        = '<?php echo $module;?>';
-    var actionURL     = '<?php echo $actionURL;?>';
+<?php
+namespace zin;
 
-    options = JSON.parse(options);
-    options.saveSearch.config = {
-        'data-toggle' : 'modal',
-        'data-url' : createLink('search', 'saveQuery', 'module=' + module)
-    };
-    var searchObject = new zui.SearchForm(queryBox[0], options);
-    var searchForm   = $(searchObject.element).find('.search-form');
-    var $searchForm  = $(searchForm);
+$exampleOptions = json_decode('{"formConfig":{"actions":"11","method":"post"},"fields":[{"label":"项目集名称","name":"name","control":"input","operator":"include","defaultValue":"1111","placeholder":"请填写"},{"label":"状态","name":"status","control":"select","operator":"!=","defaultValue":"wait","values":{"":"","wait":"未开始","doing":"进行中","suspended":"已挂起","closed":"已关闭"}},{"label":"项目集描述","name":"desc","control":"input","defaultValue":"11","placeholder":"请填写1"},{"label":"负责人","name":"PM","control":"select","defaultValue":"","placeholder":"请填写2","values":{"":"","admin":"管理员","dev":"示例数据","test":"测试"}},{"label":"创建日期","name":"openedDate","control":"date","defaultValue":""},{"label":"计划开始","name":"begin","control":"date","defaultValue":""},{"label":"计划完成","name":"end","control":"date","defaultValue":""},{"label":"由谁创建","name":"openedBy","control":"select","defaultValue":"","values":{"":"","admin":"管理员","dev":"开发人员","op":"操作员","test":"测试"}},{"label":"最后编辑日期","name":"lastEditedDate","control":"date","defaultValue":""},{"label":"实际开始","name":"realBegan","control":"date","defaultValue":""},{"label":"实际完成日期","name":"realEnd","control":"date","defaultValue":""},{"label":"关闭日期","name":"closedDate","control":"date","defaultValue":""}],"operators":[{"value":"=","title":"="},{"value":"!=","title":"!="},{"value":">","title":">"},{"value":">=","title":">="},{"value":"<","title":"<"},{"value":"<=","title":"<="},{"value":"include","title":"包含"},{"value":"between","title":"介于"},{"value":"notinclude","title":"不包含"},{"value":"belong","title":"从属于"}],"savedQuery":[{"id":"1","title":"条件11","account":"11","content":[{"fields":"status","control":"select","condition":"=","value":"doing"},{"fields":"openedDate","control":"date","condition":"=","value":"2022-11-15"},{"fields":"openedBy","control":"input","condition":"=","value":""},{"fields":"PM","control":"select","condition":"!=","value":""},{"fields":"openedDate","control":"date","condition":"include","value":""},{"fields":"begin","control":"date","condition":"=","value":""}]},{"id":"2","title":"条件2","account":"11","content":[{"fields":"status","control":"select","condition":"=","value":"doing"},{"fields":"openedDate","control":"date","condition":"=","value":"2022-11-15"},{"fields":"openedBy","control":"input","condition":"=","value":""},{"fields":"PM","control":"select","condition":"!=","value":""},{"fields":"openedDate","control":"date","condition":"include","value":""},{"fields":"begin","control":"date","condition":"=","value":""}]}],"applyQueryURL":"/search-deleteQuery-myQueryID.html","deleteQueryURL":"/project-browse-0-bySearch-myQueryID.html","andOr":[{"value":"and","title":"并且"},{"value":"or","title":"或者"}],"groupName":["第一组","第二组"],"savedQueryTitle":"已保存的查询条件","saveSearch":{"text":"保存搜索条件","hasPermission":true,"config":{"data-toggle":"modal","href":"#saveModal","data-url":"/index.php?m=search&f=saveQuery&module=task&onMenuBar=yes"}},"formSession":{"andOr2":"or","andOr3":"or","andOr5":"or","andOr6":"and","field1":"PM","field2":"openedBy","field3":"openedDate","field4":"name","field5":"status","field6":"closedDate","groupAndOr":"or","operator1":">","operator2":"=","operator3":"<","operator4":">=","operator5":"=","operator6":"include","value1":"dev","value2":"op","value3":"1991-02-04T00:00:00","value4":"Example data","value5":"doing","value6":"2023-03-09T00:00:00","module":"project","groupItems":"3","formType":"lite"}}');
 
-    $searchForm.append('<input type="hidden" name="module" value="' + module +'" />');
-    $searchForm.append('<input type="hidden" name="actionURL" value="' + actionURL +'" />');
-    $searchForm.find('.btn-submit-form').attr('type', 'submit');
-    $searchForm.find('.search-form-footer .save-query').attr('href', createLink('search', 'saveQuery', 'module=' + module + '&onMenuBar=' + onMenuBar));
-    $(document).on('click', '#searchFormBtn', function()
-    {
-        queryBox.toggleClass('hidden');
-    });
+jsVar('options', $options);
+jsVar('canSaveQuery', !empty($_SESSION[$module . 'Query']));
+jsVar('formSession', $_SESSION[$module . 'Form']);
+jsVar('onMenuBar', $onMenuBar);
 
-    $.each(formSession, function(key, value)
-    {
-        $searchForm.find('#' + key + ':visible').val(value);
-    });
+zui::searchform(set($exampleOptions), set::_to('#searchFormPanel'), set::className('shadow'));
 
-    $searchForm.on('click', '.history-record .lighter-pale .icon-close', function(e)
-    {
-        e.preventDefault(); // Fix bug #21572.
-        var $query  = $(this).closest('.label-btn');
-        var queryId = $query.attr('data-id');
-        var deleteQueryLink = $.createLink('search', 'deleteQuery', 'queryID=' + queryId);
-        $.get(deleteQueryLink, function(data)
-        {
-            if(data == 'success') $query.remove();
-        });
-        e.stopPropagation();
-    });
-
-    $(document).on('click', '.search-form .history-record .lighter-pale', function()
-    {
-        executeQuery($(this).parent().attr('data-id'));
-    });
-
-   // $(document).on('click', '.save-query', function()
-   // {
-   //     var name = prompt("请输入名称：");
-   //     alert(name);
-   // });
-
-    /**
-     * Execute query.
-     *
-     * @param  int $queryID
-     * @access public
-     * @return void
-     */
-    function executeQuery(queryID)
-    {
-        if(!queryID) return;
-        location.href = actionURL.replace('myQueryID', queryID);
-    }
-
-    if(!canSaveQuery)
-    {
-        $('.btn.save-query').attr('disabled', 'disabled');
-        $('.btn.save-query').css('pointer-events', 'none');
-    }
-});
-</script>
+render('fragment');
