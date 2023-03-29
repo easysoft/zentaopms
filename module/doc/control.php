@@ -182,7 +182,7 @@ class doc extends control
                     $executionPairs[$id]  = $executionPrefix . $execution->name;
                 }
             }
-            if($type == 'executions') $objects = $executionPairs;
+            if($type == 'execution') $objects = $executionPairs;
         }
 
         if($type == 'execution')
@@ -198,6 +198,9 @@ class doc extends control
             $this->lang->doclib->aclList['private'] = sprintf($this->lang->doclib->privateACL, $this->lang->{$type}->common);
             unset($this->lang->doclib->aclList['open']);
         }
+
+        $this->app->loadLang('api');
+        $this->lang->api->aclList['default'] = sprintf($this->lang->api->aclList['default'], $this->lang->{$type}->common);
 
         $this->view->groups         = $this->loadModel('group')->getPairs();
         $this->view->users          = $this->user->getPairs('nocode|noclosed');
@@ -248,7 +251,8 @@ class doc extends control
         }
 
         $lib = $this->doc->getLibByID($libID);
-        if(!empty($lib->product)) $this->view->product = $this->dao->select('id,name')->from(TABLE_PRODUCT)->where('id')->eq($lib->product)->fetch();
+        if(!empty($lib->product)) $this->view->object = $this->product->getByID($lib->product);
+        if(!empty($lib->project) and empty($lib->execution)) $this->view->object = $this->project->getById($lib->project);
         if(!empty($lib->execution))
         {
             $execution = $this->execution->getByID($lib->execution);
@@ -263,14 +267,21 @@ class doc extends control
                 $this->lang->doc->execution = str_replace($this->lang->executionCommon, $this->lang->project->stage, $this->lang->doc->execution);
             }
 
-            $this->view->execution = $execution;
+            $this->view->object = $execution;
         }
 
         if($lib->type == 'custom') unset($this->lang->doclib->aclList['default']);
+        if($lib->type == 'api')
+        {
+            $this->app->loadLang('api');
+            $type = !empty($lib->product) ? 'product' : 'project';
+            $this->lang->api->aclList['default'] = sprintf($this->lang->api->aclList['default'], $this->lang->{$type}->common);
+        }
         if($lib->type != 'custom')
         {
-            $this->lang->doclib->aclList['default'] = sprintf($this->lang->doclib->aclList['default'], $this->lang->{$lib->type}->common);
-            $this->lang->doclib->aclList['private'] = sprintf($this->lang->doclib->privateACL, $this->lang->{$lib->type}->common);
+            $type = isset($type) ? $type : $lib->type;
+            $this->lang->doclib->aclList['default'] = sprintf($this->lang->doclib->aclList['default'], $this->lang->{$type}->common);
+            $this->lang->doclib->aclList['private'] = sprintf($this->lang->doclib->privateACL, $this->lang->{$type}->common);
             unset($this->lang->doclib->aclList['open']);
         }
 
@@ -311,6 +322,7 @@ class doc extends control
                 unset($_GET['onlybody']);
                 return print(js::locate($this->createLink('doc', 'objectLibs', 'type=book'), 'parent.parent'));
             }
+            if($this->app->tab == 'doc' and $from == 'tableContents') return print(js::reload('parent'));
 
             $objectType = $lib->type;
             $objectID   = strpos(',product,project,execution,', ",$objectType,") !== false ? $lib->{$objectType} : 0;
@@ -1353,6 +1365,7 @@ class doc extends control
 
         $this->view->title          = $title;
         $this->view->type           = $type;
+        $this->view->objectType     = $type;
         $this->view->browseType     = $browseType;
         $this->view->param          = $queryID;
         $this->view->users          = $this->user->getPairs('noletter');

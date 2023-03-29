@@ -11,6 +11,7 @@
  */
 ?>
 <style>
+body {margin-bottom: 25px;}
 #docListForm table tr {border: none;}
 #docListForm th.c-id {width: 72px;}
 #docListForm th.c-user {width: 80px;}
@@ -42,7 +43,7 @@
 <?php $vars = "type=$type&objectID=$objectID&$libID=$libID&moduleID=$moduleID&browseType=$browseType&orderBy=%s&param=$param&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}";?>
 <div>
   <form class='main-table' method='post' id='docListForm'>
-    <table class="table table-borderless table-hover table-files table-fixed no-margin  has-sort-head table-fixed">
+    <table class="table table-files has-sort-head">
       <thead>
         <tr>
           <th class="c-id">

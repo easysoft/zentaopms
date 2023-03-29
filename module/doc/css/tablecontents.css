@@ -9,8 +9,8 @@
 .overflow-auto {overflow: auto;}
 .overflow-visible {overflow: visible;}
 .overflow-hidden {overflow: hidden;}
-.img-lib {width: 14px; height: 14px; margin-bottom: 2px;}
-#mainContent {padding-top: 0; padding-bottom: 0; height: calc(100vh - 125px);}
+.img-lib {width: 14px; height: 14px; margin-bottom: 2px; flex: 0 0 14px;}
+#mainContent {padding-top: 0; padding-bottom: 0;}
 #mainContent #createDropdown {display: inline-block;}
 #mainContent #createDropdown ul {position: absolute;}
 #pageNav .dropdown-menu {max-height: inherit;}

@@ -39,7 +39,7 @@
             <tr>
               <th><?php echo $lang->doc->libType;?></th>
               <td>
-                <span><?php echo html::radio('libType', $lang->doclib->type, 'wiki')?></span>
+                <span><?php echo html::radio('libType', $lang->doclib->type, 'wiki', "onchange='changeDoclibAcl(this.value)'")?></span>
               </td>
             </tr>
             <?php endif;?>
@@ -71,12 +71,6 @@
                 </div>
               </td>
             </tr>
-            <tr class="apilib hidden">
-              <th><?php echo $lang->api->desc;?></th>
-              <td>
-                  <?php echo html::textarea('desc', '', "rows='8' class='form-control kindeditor' hidefocus='true' tabindex=''");?>
-              </td>
-            </tr>
             <tr>
               <td class='text-center form-actions' colspan='2'>
                 <?php echo html::submitButton();?>
@@ -94,11 +88,15 @@
     <tr id='aclAPIBox'>
       <th><?php echo $lang->doclib->control;?></th>
       <td>
-        <?php echo html::radio('acl', $lang->doclib->aclListA, 'default', "onchange='toggleAcl(this.value, \"lib\")'")?>
+        <?php echo html::radio('acl', $lang->api->aclList, 'open', "onchange='toggleAcl(this.value, \"lib\")'", 'block')?>
+      </td>
+    </tr>
+    <tr id='aclOtherBox'>
+      <th><?php echo $lang->doclib->control;?></th>
+      <td>
+        <?php echo html::radio('acl', $lang->doclib->aclList, 'default', "onchange='toggleAcl(this.value, \"lib\")'", 'block')?>
       </td>
     </tr>
   </table>
 </div>
-<?php js::set('noticeAcl', $lang->doc->noticeAcl['lib']);?>
-<?php js::set('libType', $type);?>
 <?php include '../../common/view/footer.lite.html.php';?>

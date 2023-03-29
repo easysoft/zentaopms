@@ -2,10 +2,10 @@
 $config->api = new stdClass();
 
 $config->api->createlib = new stdclass();
-$config->api->createlib->requiredFields = 'name,baseUrl';
+$config->api->createlib->requiredFields = 'name';
 
 $config->api->editlib = new stdclass();
-$config->api->editlib->requiredFields = 'name,baseUrl';
+$config->api->editlib->requiredFields = 'name';
 
 $config->api->struct = new stdClass();
 $config->api->struct->requiredFields = 'name,params';

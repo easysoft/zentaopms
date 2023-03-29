@@ -47,7 +47,11 @@ class docModel extends model
             ->where('deleted')->eq(0)
             ->andWhere('type')->eq('api')
             ->beginIF(!empty($appendLib))->orWhere('id')->eq($appendLib)->fi()
-            ->beginIF(!empty($objectType))->andWhere($objectType)->eq($objectID)->fi()
+            ->beginIF(!empty($objectType) && $objectID > 0)->andWhere($objectType)->eq($objectID)->fi()
+            ->beginIF($objectType == 'nolink')
+            ->andWhere('product')->eq(0)
+            ->andWhere('project')->eq(0)
+            ->fi()
             ->orderBy('`order`_asc, id_desc')
             ->fetchAll('id');
 
@@ -206,12 +210,7 @@ class docModel extends model
             $execution    = $this->loadModel('execution')->getByID($lib->execution);
             $lib->project = $execution->project;
         }
-
-        if($lib->acl == 'custom' or $lib->acl == 'private')
-        {
-            $trimedUsers = ',' . trim($lib->users, ',') . ',';
-            if(strpos($trimedUsers, ',' . $this->app->user->account . ',') === false) $lib->users .= ',' . $this->app->user->account;
-        }
+        if($this->post->libType == 'api') $lib->type = 'api';
 
         $lib->name = trim($lib->name); //Temporary treatment: Code for bug #15528.
         $this->dao->insert(TABLE_DOCLIB)->data($lib)->autoCheck()
@@ -2860,15 +2859,17 @@ class docModel extends model
                 if(empty($libTree['execution'][$executionID]))
                 {
                     $execution = new stdclass();
-                    $execution->id       = $executionID;
-                    $execution->name     = zget($executionPairs, $executionID);
-                    $execution->type     = 'execution';
-                    $execution->active   = $item->active;
-                    $execution->children = array();
+                    $execution->id        = $executionID;
+                    $execution->name      = zget($executionPairs, $executionID);
+                    $execution->type      = 'execution';
+                    $execution->active    = $item->active;
+                    $execution->hasAction = false;
+                    $execution->children  = array();
                     if(count($executionLibs[$executionID]) == 1)
                     {
-                        $execution->id       = $item->id;
-                        $execution->children = $item->children;
+                        $execution->id        = $item->id;
+                        $execution->hasAction = true;
+                        $execution->children  = $item->children;
                     }
 
                     $libTree['execution'][$executionID] = $execution;
@@ -2894,6 +2895,10 @@ class docModel extends model
             $annex->active     = empty($libID) ? 1 : 0;
 
             $libTree[$type][] = $annex;
+        }
+        elseif($type == 'api')
+        {
+            $libTree[$type] = array_merge($libTree[$type], $apiLibs);
         }
 
         $libTree = array_values($libTree[$type]);
