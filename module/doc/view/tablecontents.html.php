@@ -117,10 +117,10 @@
   </ul>
 </div>
 <div class="hidden" data-id="aTreeModal">
-  <a href="###" data-has-children="false" title="%name%" data-id="%id%">
+  <a href="###" style="position: relative" data-has-children="false" data-action="true" title="%name%" data-id="%id%">
     <div class="text h-full w-full flex-between overflow-hidden" style="position: relative;">
-      <span>%name%</span>
-      <i class="icon icon-drop icon-ellipsis-v hidden file-drop-icon" data-iscatalogue="true"></i>
+      <span style="padding-left: 5px;">%name%</span>
+      <i class="icon icon-drop icon-ellipsis-v tree-icon hidden" data-iscatalogue="true"></i>
     </div>
   </a>
 </div>
