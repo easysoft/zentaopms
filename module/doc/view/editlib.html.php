@@ -50,7 +50,8 @@
       <tr id="aclBox">
         <th><?php echo $lang->doclib->control;?></th>
         <td>
-          <?php echo html::radio('acl', $lang->doclib->aclList, $lib->acl, "onchange='toggleAcl(this.value, \"lib\")'", 'block')?>
+          <?php if($lib->type != 'api') echo html::radio('acl', $lang->doclib->aclList, $lib->acl, "onchange='toggleAcl(this.value, \"lib\")'", 'block')?>
+          <?php if($lib->type == 'api') echo html::radio('acl', $lang->api->aclList, $lib->acl, "onchange='toggleAcl(this.value, \"lib\")'", 'block')?>
         </td>
       </tr>
       <tr id='whiteListBox' class='hidden'>

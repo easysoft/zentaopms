@@ -206,6 +206,7 @@ class docModel extends model
             $execution    = $this->loadModel('execution')->getByID($lib->execution);
             $lib->project = $execution->project;
         }
+        if($this->post->libType) $lib->type = 'api';
 
         if($lib->acl == 'custom' or $lib->acl == 'private')
         {

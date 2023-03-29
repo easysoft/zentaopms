@@ -10,3 +10,19 @@ $('#project').change(function()
         }
     });
 });
+
+function changeDoclibAcl(libType)
+{
+    if(libType == 'api')
+    {
+        $('.apilib').removeClass('hidden');
+        $('#mainContent table th').css('width', '100px');
+        $('#aclBox').find('td').html($('#aclAPIBox td').html());
+    }
+    else
+    {
+        $('.apilib').addClass('hidden');
+        $('#mainContent table th').css('width', '70px');
+        $('#aclBox').find('td').html($('#aclOtherBox td').html());
+    }
+}

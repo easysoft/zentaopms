@@ -199,6 +199,9 @@ class doc extends control
             unset($this->lang->doclib->aclList['open']);
         }
 
+        $this->app->loadLang('api');
+        $this->lang->api->aclList['default'] = sprintf($this->lang->api->aclList['default'], $this->lang->{$type}->common);
+
         $this->view->groups         = $this->loadModel('group')->getPairs();
         $this->view->users          = $this->user->getPairs('nocode|noclosed');
         $this->view->objects        = $objects;
@@ -267,10 +270,17 @@ class doc extends control
         }
 
         if($lib->type == 'custom') unset($this->lang->doclib->aclList['default']);
+        if($lib->type == 'api')
+        {
+            $this->app->loadLang('api');
+            $type = !empty($lib->product) ? 'product' : 'project';
+            $this->lang->api->aclList['default'] = sprintf($this->lang->api->aclList['default'], $this->lang->{$type}->common);
+        }
         if($lib->type != 'custom')
         {
-            $this->lang->doclib->aclList['default'] = sprintf($this->lang->doclib->aclList['default'], $this->lang->{$lib->type}->common);
-            $this->lang->doclib->aclList['private'] = sprintf($this->lang->doclib->privateACL, $this->lang->{$lib->type}->common);
+            $type = isset($type) ? $type : $lib->type;
+            $this->lang->doclib->aclList['default'] = sprintf($this->lang->doclib->aclList['default'], $this->lang->{$type}->common);
+            $this->lang->doclib->aclList['private'] = sprintf($this->lang->doclib->privateACL, $this->lang->{$type}->common);
             unset($this->lang->doclib->aclList['open']);
         }
 

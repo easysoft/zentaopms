@@ -36,12 +36,12 @@ function loadExecutions(projectID)
 function toggleAcl(acl, type)
 {
     var libID = $('#lib').val();
-    if($('#lib').length == 0)
+    if($('#lib').length == 0 && $('#module').length > 0)
     {
         var moduleID = $('#module').val();
         if(moduleID.indexOf('_') >= 0) libID = moduleID.substr(0, moduleID.indexOf('_'));
     }
-    if(acl == 'custom')
+    if(acl == 'default' && $('#libTypewiki').attr('checked') != 'checked')
     {
         $('#whiteListBox').removeClass('hidden');
         $('#groupBox').removeClass('hidden');
@@ -49,16 +49,17 @@ function toggleAcl(acl, type)
     else if(acl == 'private')
     {
         $('#whiteListBox').removeClass('hidden');
-        $('#groupBox').addClass('hidden');
+        $('#groupBox').removeClass('hidden');
     }
     else
     {
         $('#whiteListBox').addClass('hidden');
+        $('#groupBox').addClass('hidden');
     }
 
     if(type == 'lib')
     {
-        if((libType == 'api' || libType == 'book') && acl == 'private') $('#whiteListBox').addClass('hidden');
+        if(libType == 'book' && acl == 'private') $('#whiteListBox').addClass('hidden');
 
         if(libType == 'project' && typeof(doclibID) != 'undefined')
         {
