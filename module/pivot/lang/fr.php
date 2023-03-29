@@ -105,3 +105,9 @@ $lang->pivot->proVersion    = '<a href="https://www.zentao.pm/page/vs.html" targ
 $lang->pivot->proVersionEn  = '<a href="https://www.zentao.pm/page/vs.html" target="_blank">Try ZenTao Pro for more!</a>';
 $lang->pivot->workloadDesc  = 'Workload = the total left hours of all tasks of the user / selected days * hours per day.
 For example: the begin and end date is January 1st to January 7th, and the total work days is 5 days, 8 hours per day. The Work load is all unfinished tasks assigned to this user to be finished in 5 days, 8 hours per day.';
+
+$lang->pivot->featureBar = array();
+$lang->pivot->featureBar['preview']['product'] = $lang->product->common;
+$lang->pivot->featureBar['preview']['project'] = $lang->project->common;
+$lang->pivot->featureBar['preview']['test']    = $lang->qa->common;
+$lang->pivot->featureBar['preview']['staff']   = $lang->system->common;

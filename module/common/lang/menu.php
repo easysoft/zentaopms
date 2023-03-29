@@ -547,17 +547,6 @@ $lang->report->menu->pivot  = array('link' => "{$lang->pivot->common}|pivot|prev
 $lang->report->menuOrder[5]  = 'screen';
 $lang->report->menuOrder[10] = 'pivot';
 
-$lang->report->menu->pivot['subMenu'] = new stdclass();
-$lang->report->menu->pivot['subMenu']->product = array('link' => "{$lang->product->common}|pivot|preview|diemsnion=&group=product");
-$lang->report->menu->pivot['subMenu']->project = array('link' => "{$lang->project->common}|pivot|preview|dimension=&group=project");
-$lang->report->menu->pivot['subMenu']->test    = array('link' => "{$lang->qa->common}|pivot|preview|dimension=&group=test");
-$lang->report->menu->pivot['subMenu']->staff   = array('link' => "{$lang->system->common}|pivot|preview|dimension=&group=staff");
-
-$lang->report->menu->pivot['menuOrder'][5]  = 'product';
-$lang->report->menu->pivot['menuOrder'][10] = 'project';
-$lang->report->menu->pivot['menuOrder'][15] = 'test';
-$lang->report->menu->pivot['menuOrder'][20] = 'staff';
-
 /* Company menu.*/
 $lang->company->menu              = new stdclass();
 $lang->company->menu->browseUser  = array('link' => "{$lang->user->common}|company|browse", 'subModule' => ',user,');

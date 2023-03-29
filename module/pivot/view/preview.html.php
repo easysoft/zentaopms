@@ -8,6 +8,14 @@ $('#subNavbar li').not('[data-id=<?php echo $group;?>]').removeClass('active');
 <?php endif;?>
 <?php js::set('dimension', $dimension);?>
 <?php js::set('group', $group);?>
+<div id="mainMenu" class='clearfix'>
+  <div class="btn-toolbar pull-left">
+    <?php foreach($lang->pivot->featureBar['preview'] as $key => $label):?>
+    <?php $active = ($key == $group) ? ' btn-active-text' : '';?>
+    <?php echo html::a(inlink('preview', "dimension=$dimension&group=$key"), "<span class='text'>$label</span>", '', "class='btn btn-link {$active}'");?>
+    <?php endforeach;?>
+  </div>
+</div>
 <div id='mainContent' class='main-row'>
   <div class='side-col col-lg' id='sidebar'>
     <div class="sidebar-toggle">
