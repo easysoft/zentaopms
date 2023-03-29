@@ -39,10 +39,10 @@ class pagebase extends wg
         $head = $this->buildHead();
         $body = $this->buildBody();
 
-        $context = context::current();
-        $css = $context->getCssList();
-        $js = $context->getJsList();
-        $imports = $context->getImportList();
+        $context  = context::current();
+        $css      = array_merge([data('pageCSS', '')], $context->getCssList());
+        $js       = array_merge($context->getJsList(), [data('pageJS', '')]);
+        $imports  = $context->getImportList();
         $jsConfig = \js::getJSConfigVars();
 
         return h::html

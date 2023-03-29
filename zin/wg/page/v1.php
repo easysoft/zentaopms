@@ -9,24 +9,13 @@ class page extends pagebase
 {
     static $defaultProps = array('zui' => true);
 
-    static $defineBlocks = array
-    (
+    static $defineBlocks =
+    [
         'head' => array(),
         'header' => array('map' => 'header'),
         'main' => array('map' => 'main'),
         'footer' => array(),
-    );
-
-    protected function buildHead()
-    {
-        $pageCSS = data('pageCSS');
-
-        return array
-        (
-            empty($pageCSS) ? NULL : css($pageCSS),
-            $this->block('head')
-        );
-    }
+    ];
 
     protected function buildBody()
     {
@@ -43,14 +32,11 @@ class page extends pagebase
             );
         }
 
-        $pageJS  = data('pageJS');
-
         return array
         (
             $header,
             new main($this->children()),
             $this->block('footer'),
-            empty($pageJS) ? NULL : js($pageJS)
         );
     }
 }

@@ -159,8 +159,8 @@ class h extends wg
 
     public static function textarea()
     {
-        $children = h::convertStrToRawHtml(func_get_args());
-        return static::create('textarea', $children);
+        $code = h::convertStrToRawCode(func_get_args());
+        return static::create('textarea', $code);
     }
 
     public static function importJs($src)
@@ -192,17 +192,23 @@ class h extends wg
 
     public static function css()
     {
-        return static::create('style', html(implode("\n", \zin\utils\flat(func_get_args()))));
+        $code = h::convertStrToRawCode(func_get_args());
+        if(empty($code)) return NULL;
+        return static::create('style', html(implode("\n", $code)));
     }
 
     public static function globalJS()
     {
-        return static::create('script', html(implode("\n", \zin\utils\flat(func_get_args()))));
+        $code = h::convertStrToRawCode(func_get_args());
+        if(empty($code)) return NULL;
+        return static::create('script', html(implode("\n", $code)));
     }
 
     public static function js()
     {
-        return static::create('script', html('(function(){'. implode("\n", \zin\utils\flat(func_get_args())) . '}())'));
+        $code = h::convertStrToRawCode(func_get_args());
+        if(empty($code)) return NULL;
+        return static::create('script', html('(function(){'. implode("\n", $code) . '}())'));
     }
 
     public static function jsVar($name, $value)
@@ -258,13 +264,14 @@ class h extends wg
         return $json;
     }
 
-    protected static function convertStrToRawHtml($children)
+    protected static function convertStrToRawCode($children)
     {
         $children = \zin\utils\flat($children);
+        $code = array();
         foreach($children as $key => $child)
         {
-            if(is_string($child)) $children[$key] = html($child);
+            if(is_string($child)) $code[] = $child;
         }
-        return $children;
+        return $code;
     }
 }
