@@ -96,7 +96,7 @@ class docModel extends model
 
         $products   = $this->loadModel('product')->getPairs();
         $projects   = $this->loadModel('project')->getPairsByProgram();
-        $executions = $this->loadModel('execution')->getPairs(0, 'all', 'multiple');
+        $executions = $this->loadModel('execution')->getPairs(0, 'all', 'multiple,leaf');
         $waterfalls = array();
         if(empty($objectID) and $type != 'product' and $type != 'project' and $type != 'custom')
         {
@@ -959,7 +959,7 @@ class docModel extends model
             $products = $this->product->getPairs();
 
             $this->config->doc->search['params']['project']['values']   = array('' => '') + $this->loadModel('project')->getPairsByProgram() + array('all' => $this->lang->doc->allProjects);
-            $this->config->doc->search['params']['execution']['values'] = array('' => '') + $this->loadModel('execution')->getPairs(0, 'all', 'multiple') + array('all' => $this->lang->doc->allExecutions);
+            $this->config->doc->search['params']['execution']['values'] = array('' => '') + $this->loadModel('execution')->getPairs(0, 'all', 'multiple,leaf,noprefix') + array('all' => $this->lang->doc->allExecutions);
             $this->config->doc->search['params']['lib']['values']       = array('' => '') + $this->loadModel('doc')->getLibs('all', 'withObject') + array('all' => $this->lang->doclib->all);
             $this->config->doc->search['params']['product']['values']   = array('' => '') + $products + array('all' => $this->lang->doc->allProduct);
 
@@ -980,7 +980,7 @@ class docModel extends model
 
             if($type == 'project')
             {
-                $this->config->doc->search['params']['execution']['values'] = array('' => '') + $this->loadModel('execution')->getPairs($this->session->project, 'all', 'multiple') + array('all' => $this->lang->doc->allExecutions);
+                $this->config->doc->search['params']['execution']['values'] = array('' => '') + $this->loadModel('execution')->getPairs($this->session->project, 'all', 'multiple,leaf,noprefix') + array('all' => $this->lang->doc->allExecutions);
             }
             else
             {
@@ -996,7 +996,7 @@ class docModel extends model
         else
         {
             $products = $this->product->getPairs('nocode', $this->session->project);
-            $this->config->doc->search['params']['execution']['values'] = array('' => '') + $this->loadModel('execution')->getPairs($this->session->project, 'all', 'multiple') + array('all' => $this->lang->doc->allExecutions);
+            $this->config->doc->search['params']['execution']['values'] = array('' => '') + $this->loadModel('execution')->getPairs($this->session->project, 'all', 'multiple,leaf,noprefix') + array('all' => $this->lang->doc->allExecutions);
             $this->config->doc->search['params']['lib']['values']       = array('' => '', $libID => ($libID ? $libs[$libID] : 0), 'all' => $this->lang->doclib->all);
             $this->config->doc->search['params']['product']['values']   = array('' => '') + $products + array('all' => $this->lang->doc->allProduct);
         }
@@ -1468,12 +1468,13 @@ class docModel extends model
         else
         {
             $executionIDList = array();
-            if($type == 'project') $executionIDList = $this->loadModel('execution')->getPairs($objectID, 'all', 'multiple');
+            if($type == 'project') $executionIDList = $this->loadModel('execution')->getPairs($objectID, 'all', 'multiple,leaf');
 
             $objectLibs = $this->dao->select('*')->from(TABLE_DOCLIB)
                 ->where('deleted')->eq(0)
                 ->andWhere('vision')->eq($this->config->vision)
                 ->andWhere($type)->eq($objectID)
+                ->beginIF($type == 'project')->andWhere('type')->eq('project')->fi()
                 ->beginIF(!empty($appendLib))->orWhere('id')->eq($appendLib)->fi()
                 ->orderBy('`order` asc, id_asc')
                 ->fetchAll('id');
@@ -2004,7 +2005,7 @@ class docModel extends model
     public function getLibIdListByProject($projectID = 0)
     {
         $products   = $this->loadModel('product')->getProductIDByProject($projectID, false);
-        $executions = $this->loadModel('execution')->getPairs($projectID, 'all', 'noclosed');
+        $executions = $this->loadModel('execution')->getPairs($projectID, 'all', 'noclosed,leaf');
 
         $executionLibs = array();
         $productLibs   = array();

@@ -147,43 +147,19 @@ class doc extends control
 
         if(in_array($type, array('product', 'project'))) $this->app->loadLang('api');
 
-        $objects        = array();
-        $executionPairs = array(0 => '');
+        $objects = array();
         if($type == 'product') $objects = $this->product->getPairs();
         if($type == 'project')
         {
             $objects = $this->project->getPairsByProgram();
             if($this->app->tab == 'doc')
             {
-                $executions = $this->execution->getList($objectID);
-                $this->view->project = $this->project->getById($objectID);
+                $this->view->executionPairs = $this->execution->getPairs($objectID, 'all', 'multiple,leaf,noprefix');
+                $this->view->project        = $this->project->getById($objectID);
             }
         }
-        if($type == 'execution')
-        {
-            $executions = $this->execution->getList();
-            $projects   = $this->project->getPairsByProgram('', 'all', true);
-        }
 
-        /* Splice project name. */
-        if(!empty($executions))
-        {
-            foreach($executions as $id => $execution)
-            {
-                if($execution->multiple)
-                {
-                    if($execution->type == 'stage' and $execution->grade > 1)
-                    {
-                        $parentExecutions = $this->dao->select('id,name')->from(TABLE_EXECUTION)->where('id')->in(trim($execution->path, ','))->andWhere('type')->in('stage,kanban,sprint')->orderBy('grade')->fetchPairs();
-                        $execution->name  = implode('/', $parentExecutions);
-                    }
-
-                    $executionPrefix  = isset($projects[$execution->project]) ? $projects[$execution->project] . '/' : '';
-                    $executionPairs[$id]  = $executionPrefix . $execution->name;
-                }
-            }
-            if($type == 'execution') $objects = $executionPairs;
-        }
+        if($type == 'execution') $objects = $this->execution->getPairs(0, 'all', 'multiple,leaf,noprefix');
 
         if($type == 'execution')
         {
@@ -205,7 +181,6 @@ class doc extends control
         $this->view->groups         = $this->loadModel('group')->getPairs();
         $this->view->users          = $this->user->getPairs('nocode|noclosed');
         $this->view->objects        = $objects;
-        $this->view->executionPairs = $executionPairs;
         $this->view->type           = $type;
         $this->view->objectID       = $objectID;
         $this->display();
@@ -1468,28 +1443,12 @@ class doc extends control
      *
      * @param  int    $projectID
      * @access public
-     * @return void
+     * @return string
      */
     public function ajaxGetExecution($projectID)
     {
         $executions     = $this->execution->getList($projectID);
-        $executionPairs = array(0 => '');
-        if(!empty($executions))
-        {
-            foreach($executions as $id => $execution)
-            {
-                if($execution->multiple)
-                {
-                    if($execution->type == 'stage' and $execution->grade > 1)
-                    {
-                        $parentExecutions = $this->dao->select('id,name')->from(TABLE_EXECUTION)->where('id')->in(trim($execution->path, ','))->andWhere('type')->in('stage,kanban,sprint')->orderBy('grade')->fetchPairs();
-                        $execution->name  = implode('/', $parentExecutions);
-                    }
-
-                    $executionPairs[$id] = $execution->name;
-                }
-            }
-        }
+        $executionPairs = array(0 => '') + $this->execution->getPairs($projectID, 'all', 'multiple,leaf,noprefix');
 
         $project  = $this->project->getById($projectID);
         $disabled = $project->multiple ? '' : 'disabled';

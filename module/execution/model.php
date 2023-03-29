@@ -1672,6 +1672,7 @@ class executionModel extends model
             {
                 if(isset($allExecutions[$path])) $executionName .= '/' . $allExecutions[$path]->name;
             }
+            if(strpos($mode, 'noprefix') !== false) $executionName = ltrim($executionName, '/');
 
             $pairs[$execution->id] = $executionName;
         }
