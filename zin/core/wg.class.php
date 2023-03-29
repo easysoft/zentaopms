@@ -54,10 +54,10 @@ class wg
 
         $this->gid = self::nextGid();
         $this->setDefaultProps(static::getDefaultProps());
-        $this->add(func_get_args());
-        $this->created();
+        $this->add(func_get_args());        $this->created();
 
         zin::renderInGlobal($this);
+        static::checkPageResources();
     }
 
     public function isMatch($selector)
@@ -417,6 +417,25 @@ class wg
     protected static $definedPropsMap = array();
 
     private static $gidSeed = 0;
+
+    private static $pageResources = array();
+
+    public static function getPageCSS() {}
+    public static function getPageJS() {}
+
+    protected static function checkPageResources()
+    {
+        $name = get_called_class();
+        if(isset(static::$pageResources[$name])) return;
+
+        static::$pageResources[$name] = true;
+
+        $pageCSS = static::getPageCSS();
+        $pageJS  = static::getPageJS();
+
+        if(!empty($pageCSS)) context::css($pageCSS);
+        if(!empty($pageJS))  context::js($pageJS);
+    }
 
     public static function wgBlockMap()
     {
