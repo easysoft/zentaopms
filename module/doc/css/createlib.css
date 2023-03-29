@@ -6,3 +6,4 @@ table {width: 90% !important;}
 #whiteListBox div.input-group {margin-bottom: 2px;}
 
 #groups_chosen.chosen-container .chosen-results, #users_chosen.chosen-container .chosen-results {max-height: 160px;}
+#aclBox > th {vertical-align: top; padding-top: 17px;}
