@@ -25,7 +25,7 @@
             <?php if(in_array($type, array('product', 'project', 'execution'))):?>
             <tr class='objectBox'>
               <th><?php echo $lang->doc->{$type}?></th>
-              <td class='required'><?php echo html::select($type, $objects, $objectID, "class='form-control chosen' data-drop_direction='down'")?></td>
+              <td class='required'><?php echo html::select($type, $objects, $objectID, "class='form-control chosen' data-dropDirection='down'")?></td>
             </tr>
             <?php if($app->tab == 'doc' and $type == 'project'):?>
             <tr class='executionBox'>
@@ -36,12 +36,14 @@
               </td>
             </tr>
             <?php endif;?>
+            <?php if(in_array($type, array('product', 'project'))):?>
             <tr>
               <th><?php echo $lang->doc->libType;?></th>
               <td>
                 <span><?php echo html::radio('libType', $lang->doclib->type, 'wiki', "onchange='changeDoclibAcl(this.value)'")?></span>
               </td>
             </tr>
+            <?php endif;?>
             <?php endif;?>
             <tr class="normalLib">
               <th><?php echo $lang->doclib->name?></th>

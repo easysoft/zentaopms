@@ -535,6 +535,7 @@ class executionModel extends model
             /* Create doc lib. */
             $this->app->loadLang('doc');
             $lib = new stdclass();
+            $lib->project   = $sprintProject;
             $lib->execution = $executionID;
             $lib->name      = $type == 'stage' ? str_replace($this->lang->executionCommon, $this->lang->project->stage, $this->lang->doclib->main['execution']) : $this->lang->doclib->main['execution'];
             $lib->type      = 'execution';
