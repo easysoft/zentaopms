@@ -12,13 +12,12 @@ CREATE TABLE IF NOT EXISTS `zt_dimension` (
   PRIMARY KEY (`id`),
   KEY `code` (`code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+CREATE TABLE `zt_chart_back` SELECT * FROM `zt_chart`;
 
 ALTER TABLE `zt_chart` MODIFY `fields` mediumtext NOT NULL;
 
 UPDATE `zt_grouppriv` SET `module` = 'dataview' WHERE `module` = 'dataset' AND `method` in ('create', 'browse', 'edit', 'delete');
 DELETE FROM `zt_grouppriv` WHERE `module` = 'dataset' AND `method` = 'view';
-
-CREATE TABLE `zt_chart_back` LIKE `zt_chart`; INSERT INTO `zt_chart_back` SELECT * FROM `zt_chart`;
 
 ALTER TABLE `zt_chart` MODIFY `group` varchar(255) NOT NULL;
 ALTER TABLE `zt_chart` ADD `stage` enum('draft','published') NOT NULL DEFAULT 'draft' AFTER `sql`;
