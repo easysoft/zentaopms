@@ -107,7 +107,8 @@
 <?php else:?>
 <div class="cell main-col" data-min-width="400">
   <div class="detail base-url">
-    <p><?php echo $lang->api->baseUrl . ': ' . $lib->baseUrl;?></p>
+    <?php $delimiter = strpos($app->clientLang, 'zh') === 0 ? '：' : ': ';?>
+    <p><?php echo $lang->api->baseUrl . $delimiter . $lib->baseUrl;?></p>
   </div>
   <div class="detail">
     <ul class="list-group">

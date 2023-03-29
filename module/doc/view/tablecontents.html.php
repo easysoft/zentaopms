@@ -36,7 +36,14 @@
       echo html::a(helper::createLink('doc', 'createLib', "type=$type&objectID=$objectID"), '<i class="icon icon-plus"></i> ' . $this->lang->doc->createLib, '', 'class="btn btn-secondary iframe" data-width="800px"');
   }
 
-  if($libID and common::hasPriv('doc', 'create')) echo $this->doc->printCreateBtn($lib, $type, $objectID, $moduleID, $apiLibID);
+  if($libType == 'api')
+  {
+      if(common::hasPriv('api', 'create')) echo html::a($this->createLink('api', 'create',    "libID=$libID&moduleID=$moduleID", '', true), '<i class="icon icon-plus"></i> ' . $lang->api->createApi, '', 'class="btn btn-primary iframe" data-width="95%"');
+  }
+  elseif($libID and common::hasPriv('doc', 'create'))
+  {
+      echo $this->doc->printCreateBtn($lib, $type, $objectID, $moduleID, $apiLibID);
+  }
   ?>
   </div>
 </div>
