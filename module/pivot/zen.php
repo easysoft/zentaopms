@@ -29,6 +29,11 @@ class pivotZen extends pivot
         $this->view->method    = $method;
         $this->view->params    = $params;
 
+        $pivot = new stdclass();
+        parse_str($params, $output);
+        if(isset($output['pivotID'])) $pivot = $this->pivot->getByID($output['pivotID']);
+        $this->view->pivot = $pivot;
+
         if(empty($this->view->title)) $this->view->title = $this->lang->pivot->list;
     }
 
