@@ -13,6 +13,9 @@
 <?php include '../../common/view/header.lite.html.php';?>
 <?php include '../../common/view/chosen.html.php';?>
 <?php js::set('libType', $type);?>
+<?php if($type == 'project'):?>
+<style> tr > td.form-actions {padding-bottom: 30px !important;}</style>
+<?php endif;?>
 <div id="main">
   <div class="container">
     <div id='mainContent' class='main-content'>
