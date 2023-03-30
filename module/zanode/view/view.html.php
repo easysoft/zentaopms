@@ -200,7 +200,7 @@ $ssh = $zanode->hostType == 'physics' ? $zanode->extranet : ($zanode->ssh ? 'ssh
               </span>
             </div>
             <div class="status-notice hide">
-              <span class='init-success hide'><?php echo sprintf($lang->zanode->init->initSuccessNoticeTitle, "<a id='jumpManual' href='javascript:;'>{$lang->zanode->manual}</a>", html::a(helper::createLink('testcase', 'automation', "", '', true), $lang->zanode->automation, '', "class='iframe' title='{$lang->zanode->automation}' data-width='50%'", '')); ?></span>
+              <span class='init-success hide'><?php echo sprintf($lang->zanode->init->initSuccessNoticeTitle, "<a id='jumpManual' href='javascript:;'>{$lang->zanode->manual}</a>", html::a(helper::createLink('testcase', 'automation', "", '', true), $lang->zanode->automation, '', "class='iframe' title='{$lang->zanode->automation}' data-width='800px'", '')); ?></span>
               <?php if($zanode->hostType == 'physics'):?>
               <div class='hide init-fail'>
                 <?php echo $zanode->hostType == 'physics' ? $lang->zanode->init->initFailNoticeOnPhysics : $lang->zanode->init->initFailNotice;?>
