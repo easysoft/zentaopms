@@ -20,6 +20,7 @@
   #guideDialog .project-type.active img {border-color: #006AF1; border-width: 2px; margin-top: 0}
   #guideDialog .col:nth-child(-n+3) {margin-bottom: 15px;}
   @media screen and (max-width: 1366px){#guideDialog {width: 640px} #guideDialog .project-type-img.more-type {height: 108px;}}
+  @media screen and (max-width: 1366px){[lang^='en'] #guideDialog .row .col-xs-4 {height: 200px;} [lang^='de'] #guideDialog .row .col-xs-4 {height: 200px;} [lang^='fr'] #guideDialog .row .col-xs-4 {height: 200px;}}
   </style>
   <div class='modal-content'>
     <div class='modal-body'>
