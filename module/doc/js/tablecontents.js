@@ -86,9 +86,9 @@ $(function()
             if($module.hasClass('lib'))
             {
                 libID      = $module.data('id');
-                moduleType = $module.data('type');
                 parentID   = libID;
                 moduleID   = libID;
+                moduleType = $module.data('type');
             }
             else
             {
@@ -102,7 +102,7 @@ $(function()
                 "libID"     : libID,
                 "parentID"  : parentID,
                 "objectID"  : moduleID,
-                "moduleType": moduleType == 'lib' ? 'doc' : moduleType,
+                "moduleType": ['lib', 'execution'].indexOf(moduleType) !== -1 ? 'doc' : moduleType,
             };
 
             var option = {
@@ -222,8 +222,6 @@ $(function()
         var link = $(this).data('type') == 'annex' ? createLink('doc', 'showFiles', 'type=' + objectType + '&objectID=' + objectID) : createLink('doc', 'tableContents', linkParams);
         location.href = link
     });
-
-
 
     $('body').on('click', function()
     {
@@ -353,8 +351,15 @@ $(function()
             {
                 $.getJSON(createLink('doc', 'tableContents', 'type=' + objectType + '&objectID=' + objectID , 'json'), function(data){
                     var treeData = JSON.parse(data.data);
-                    $('#fileTree').data('zui.tree').reload(treeData.libTree);
-                    $('li.has-list > ul').addClass("menu-active-primary menu-hover-primary");
+                    if(Array.isArray(treeData.libTree))
+                    {
+                        $('#fileTree').data('zui.tree').reload(treeData.libTree);
+                        $('li.has-list > ul').addClass("menu-active-primary menu-hover-primary");
+                    }
+                    else
+                    {
+                        $tree.data('zui.tree').reload(treeData.libTree[$tree.data('id')]);
+                    }
                 });
             }
         });
