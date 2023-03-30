@@ -8236,4 +8236,50 @@ class upgradeModel extends model
 
         return true;
     }
+
+    /**
+     * Change book to custom lib.
+     *
+     * @access public
+     * @return void
+     */
+    public function changeBookToCustomLib()
+    {
+        $libs = $this->dao->select('id,id')->from(TABLE_DOCLIB)->where('`type`')->eq('book')->fetchPairs();
+        foreach($libs as $libID)
+        {
+            $chapterModulePairs = array();
+            $chapters           = $this->dao->select('*')->from(TABLE_DOC)->where('lib')->eq($libID)->andWhere('`type`')->eq('chapter')->orderBy('`grade` asc, `order` asc')->fetchGroup('grade', 'id');
+            foreach($chapters as $grade => $gradeChapters)
+            {
+                foreach($gradeChapters as $id => $chapter)
+                {
+                    $module = new stdclass();
+                    $module->root    = $chapter->lib;
+                    $module->name    = $chapter->title;
+                    $module->parent  = zget($chapterModulePairs, $chapter->parent);
+                    $module->grade   = $chapter->grade;
+                    $module->order   = $chapter->order;
+                    $module->type    = 'doc';
+                    $module->deleted = $chapter->deleted;
+
+                    $this->dao->insert(TABLE_MODULE)->data($module)->exec();
+                    $moduleID = $this->dao->lastInsertID();
+
+                    $chapterModulePairs[$id] = $moduleID;
+
+                    $path = explode(',', $chapter->path);
+                    $path = array_filter($path);
+                    foreach($path as $index => $chapterID) $path[$index] = zget($chapterModulePairs, $chapterID);
+                    $path = implode(',', $path);
+                    $this->dao->update(TABLE_MODULE)->set('`path`')->eq(",{$path},")->where('id')->eq($moduleID)->exec();
+
+                    $this->dao->update(TABLE_DOC)->set('`module`')->eq($moduleID)->set('`parent`')->eq($moduleID)->set("`path` = REPLACE(`path`, '{$chapter->path}', ',{$path},')")->set('`type`')->eq('text')->where('`parent`')->eq($id)->andWhere('`type`')->eq('article')->exec();
+
+                    $this->dao->update(TABLE_DOC)->set('`deleted`')->eq('1')->where('id')->eq($id)->exec();
+                }
+            }
+        }
+        return true;
+    }
 }
