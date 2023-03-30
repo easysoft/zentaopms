@@ -135,8 +135,6 @@ $(function()
                 {
                     $.getJSON(createLink('doc', 'tableContents', 'type=' + objectType + '&objectID=' + objectID , 'json'), function(data){
                         var treeData = JSON.parse(data.data);
-                        console.log(treeData);
-                        debugger;
                         $('#fileTree').data('zui.tree').reload(treeData.libTree);
                         $('li.has-list > ul').addClass("menu-active-primary menu-hover-primary");
                     });
@@ -345,7 +343,6 @@ $(function()
             {
                 $.getJSON(createLink('doc', 'tableContents', 'type=' + objectType + '&objectID=' + objectID , 'json'), function(data){
                     var treeData = JSON.parse(data.data);
-                    console.log('treeData:', treeData);
                     $('#fileTree').data('zui.tree').reload(treeData.libTree);
                     $('li.has-list > ul').addClass("menu-active-primary menu-hover-primary");
                 });
