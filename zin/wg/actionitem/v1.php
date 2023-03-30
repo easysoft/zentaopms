@@ -8,7 +8,24 @@ require_once dirname(__DIR__) . DS . 'btngroup' . DS . 'v1.php';
 
 class actionItem extends wg
 {
-    static $defineProps = 'name:string="action", type:string="item", outerTag:string="li", tagName:string="a", icon?:string, text?:string, url?:string, target?:string, active?:bool, disabled?:bool, trailingIcon?:string, outerProps?:array, outerClass?:string, badge?:string|array|object, props?:array';
+    static $defineProps = array
+    (
+        'name:string="action"',
+        'type:string="item"',
+        'outerTag:string="li"',
+        'tagName:string="a"',
+        'icon?:string',
+        'text?:string',
+        'url?:string',
+        'target?:string',
+        'active?:bool',
+        'disabled?:bool',
+        'trailingIcon?:string',
+        'outerProps?:array',
+        'outerClass?:string',
+        'badge?:string|array|object',
+        'props?:array'
+    );
 
     protected function buildDividerItem()
     {
@@ -59,7 +76,7 @@ class actionItem extends wg
 
         list($tagName, $icon, $text, $trailingIcon, $url, $target, $active, $disabled, $badge) = $this->prop(array('tagName', 'icon', 'text', 'trailingIcon', 'url', 'target', 'active', 'disabled', 'badge'));
 
-        if(is_string($badge)) $badge = label($badge);
+        if(is_string($badge))     $badge = label($badge);
         else if(is_array($badge)) $badge = label(set($badge));
 
         return h::create

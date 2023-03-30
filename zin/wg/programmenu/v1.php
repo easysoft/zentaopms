@@ -7,11 +7,11 @@ class programmenu extends wg
 
     protected static $defineProps = array
     (
-        'title?:string,
-        programs?:array,
-        activeClass?:string,
-        activeIcon?:string,
-        activeKey?:string'
+        'title?:string',
+        'programs?:array',
+        'activeClass?:string',
+        'activeIcon?:string',
+        'activeKey?:string'
     );
 
     private function buildMenuTree($parent, $parentID)

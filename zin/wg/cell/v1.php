@@ -16,7 +16,7 @@ class cell extends wg
         $style['order']       = $this->prop('order');
         $style['flex-grow']   = $this->prop('grow');
         $style['flex-shrink'] = $this->prop('shrink');
-        $style['flex-basis']  = $this->prop('width');
+        $style['flex-basis']  = $basis;
         $style['align-self']  = $this->prop('align');
         $style['flex']        = $this->prop('flex');
 
