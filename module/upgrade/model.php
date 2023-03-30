@@ -749,7 +749,7 @@ class upgradeModel extends model
             case 'biz7_6_2':
                 $this->processFeedbackModule();
                 break;
-            case 'biz8.4':
+            case 'biz8_3':
                 $this->createDefaultDimension();
                 $this->processDataset();
                 $this->updateDatasetPriv();
