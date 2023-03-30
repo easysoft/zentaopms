@@ -1322,7 +1322,8 @@ class doc extends control
         }
         else
         {
-            $this->session->set('objectName', $this->lang->doc->common, 'admin');
+            if(in_array($type, array('product', 'project'))) $this->session->set('objectName', $this->lang->doc->common, 'admin');
+            if(in_array($type, array('execution', 'custom'))) $this->session->set('objectName', '', 'admin');
             $this->view->docs = $browseType == 'bySearch' ? $this->doc->getDocsBySearch($type, $objectID, $libID, $queryID, $orderBy, $pager) : $this->doc->getDocs($libID, $moduleID, $orderBy, $pager);
         }
 
