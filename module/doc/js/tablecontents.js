@@ -1,5 +1,16 @@
 $(function()
 {
+    var moduleData = {
+        "name"       : "",
+        "createType" : "",
+        "libID"      : "",
+        "parentID"   : "",
+        "objectID"   : "",
+        "moduleType" : "",
+        "order"      : "",
+        "isUpdate"   : ""
+    };
+
     /**
      * Render Dropdown dom.
      *
@@ -17,15 +28,24 @@ $(function()
         return dropdown;
     }
 
-    var imgObj = {
-        'annex': 'annex',
-        'lib': 'wiki-file-lib',
-        'api': 'interface',
-        'execution': 'wiki-file-lib',
-    }
 
+    /**
+     * Render tree dom.
+     *
+     * @param string treee
+     * @param array treeeData
+     * @access public
+     * @return void
+     */
     function initTree(ele, treeData)
     {
+        var imgObj = {
+            'annex': 'annex',
+            'lib': 'wiki-file-lib',
+            'api': 'interface',
+            'execution': 'wiki-file-lib',
+        };
+
         ele.tree(
         {
             initialState: 'active',
@@ -203,16 +223,6 @@ $(function()
         location.href = link
     });
 
-    var moduleData = {
-        "name"       : "",
-        "createType" : "",
-        "libID"      : "",
-        "parentID"   : "",
-        "objectID"   : "",
-        "moduleType" : "",
-        "order"      : "",
-        "isUpdate"   : ""
-    };
 
 
     $('body').on('click', function()
@@ -352,4 +362,4 @@ $(function()
     {
         if(e.keyCode == 13) $(this).trigger('blur');
     });
-});
+})
