@@ -64,7 +64,7 @@ body {margin-bottom: 25px;}
       </thead>
       <tbody>
         <?php foreach($docs as $doc):?>
-        <?php $star = strpos($doc->collector, ',' . $this->app->user->account . ',') !== false ? 'icon-star text-yellow' : 'icon-star-empty';?>
+        <?php $star = strpos($doc->collector, ',' . $this->app->user->account . ',') !== false ? 'star' : 'star-empty';?>
         <?php $collectTitle = strpos($doc->collector, ',' . $this->app->user->account . ',') !== false ? $lang->doc->cancelCollection : $lang->doc->collect;?>
         <tr>
         <?php $objectID = isset($doc->{$type}) ? $doc->{$type} : 0;?>
@@ -92,7 +92,7 @@ body {margin-bottom: 25px;}
           }
           ?>
           <?php if(common::canBeChanged('doc', $doc) and common::hasPriv('doc', 'collect') and $libType and $libType != 'api'):?>
-            <a data-url="<?php echo $this->createLink('doc', 'collect', "objectID=$doc->id&objectType=doc");?>" title="<?php echo $collectTitle;?>" class='btn btn-link ajaxCollect'><i class='icon <?php echo $star;?>'></i></a>
+            <a data-url="<?php echo $this->createLink('doc', 'collect', "objectID=$doc->id&objectType=doc");?>" title="<?php echo $collectTitle;?>" class='btn btn-link ajaxCollect'><?php echo html::image("static/svg/{$star}.svg");?></a>
           <?php endif;?>
           </td>
           <td class="c-user"><?php echo zget($users, $doc->addedBy);?></td>
