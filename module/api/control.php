@@ -45,13 +45,21 @@ class api extends control
         $objectID   = $this->objectID;
 
         /* Get all api doc libraries. */
-        $libs = $this->doc->getApiLibs($appendLib, $objectType, $objectID);
+        $loadLib = false;
+        $libs    = $this->doc->getApiLibs($appendLib, $objectType, $objectID);
+        if(empty($libs))
+        {
+            $loadLib = true;
+            $libs = $this->doc->getApiLibs($appendLib);
+        }
+
         if($libID == 0 and !empty($libs))
         {
             $lib        = current($libs);
             $libID      = $lib->id;
             $objectType = $lib->product ? 'product' : ($lib->project ? 'project' : '');
             $objectID   = $lib->product ? $lib->product : $lib->project;
+            if($loadLib) $libs = $this->doc->getApiLibs($appendLib);
         }
 
         /* Get an api doc. */
