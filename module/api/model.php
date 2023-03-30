@@ -994,7 +994,11 @@ class apiModel extends model
             ->andWhere('t2.vision')->eq($this->config->vision)
             ->andWhere('t1.deleted')->eq(0)
             ->andWhere('t2.type')->eq('api')
-            ->beginIF(!$this->app->user->admin)->andWhere('t1.id')->in($this->app->user->view->products)->fi()
+            ->beginIF(!$this->app->user->admin)
+            ->andWhere('(t2.acl')->eq('open')
+            ->orWhere('t1.id')->in($this->app->user->view->products)
+            ->markRight(1)
+            ->fi()
             ->fetchAll('id');
 
         foreach($products as $id => $product)
@@ -1017,6 +1021,11 @@ class apiModel extends model
             ->andWhere('t2.type')->eq('api')
             ->andWhere('t1.deleted')->eq(0)
             ->beginIF(!$this->app->user->admin)->andWhere('t1.id')->in($this->app->user->view->projects)->fi()
+            ->beginIF(!$this->app->user->admin)
+            ->andWhere('(t2.acl')->eq('open')
+            ->orWhere('t1.id')->in($this->app->user->view->projects)
+            ->markRight(1)
+            ->fi()
             ->orderBy('t1.hasProduct_asc')
             ->fetchAll('id');
 
