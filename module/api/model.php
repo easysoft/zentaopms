@@ -916,14 +916,13 @@ class apiModel extends model
         $this->config->api->search['module'] = 'api';
         if(!empty($libs))
         {
-            $queryName = $type . 'apiDoc';
             foreach($libs as $lib)
             {
                 if(empty($lib)) continue;
                 if($lib->type != 'api') continue;
                 $libPairs[$lib->id] = $lib->name;
             }
-            $this->config->api->search['module'] = $queryName;
+            $this->config->api->search['module'] = !empty($type) ? $type . 'apiDoc' : 'api';
         }
 
         $this->config->api->search['queryID']                 = $queryID;
