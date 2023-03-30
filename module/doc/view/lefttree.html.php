@@ -330,7 +330,7 @@ $(function()
             libID = $(this).closest('.lib').data('id');
         }
 
-        if(!linkParams) linkParams = '%s';
+        if(typeof linkParams == 'undefined') linkParams = '%s';
         linkParams = linkParams.replace('%s', '&libID=' + libID + '&moduleID=' + moduleID);
         if(config.currentModule == 'api') linkParams =  linkParams.substring(1);
 
