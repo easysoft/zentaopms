@@ -139,6 +139,7 @@ $(function()
             libID      = $module.data('id');
             moduleType = $module.data('type');
             parentID   = libID;
+            moduleID   = libID;
         }
         else
         {
@@ -164,6 +165,7 @@ $(function()
             hasChildren : hasChildren
         };
 
+        console.log(option)
         var dropDown = renderDropdown(option);
         $(".m-doc-tablecontents").append(dropDown);
         e.stopPropagation();
@@ -256,7 +258,7 @@ $(function()
                 if(item.hasChildren)
                 {
                     var $input   = $('[data-id=liTreeModal]').html();
-                    var $rootDom = $('[data-id=' + item.moduleid+ ']a + ul');
+                    var $rootDom = $('[data-id=' + item.moduleid + ']a + ul');
                     $rootDom.append($input);
                 }
                 else
