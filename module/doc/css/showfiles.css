@@ -54,4 +54,4 @@ li.drag-shadow ul {display: none!important;}
 #leftBar .selectBox #currentItem {width: 150px; display: flex; align-items: center;}
 [lang^=zh] #leftBar .selectBox #currentItem {width: 180px;}
 #leftBar .selectBox #currentItem > .text {overflow: hidden; text-align: left; flex: 0 1 100%;}
-#leftBar .searchBox {padding-left: 5px;}
+#leftBar .selectBox + .searchBox {padding-left: 5px;}
