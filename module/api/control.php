@@ -46,6 +46,8 @@ class api extends control
 
         /* Get all api doc libraries. */
         $libs = $this->doc->getApiLibs($appendLib, $objectType, $objectID);
+        if(empty($libs)) $libs = $this->doc->getApiLibs($appendLib);
+
         if($libID == 0 and !empty($libs))
         {
             $lib        = current($libs);
