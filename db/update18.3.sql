@@ -66,3 +66,6 @@ CREATE TABLE `zt_pivot`  (
   KEY(`dimension`),
   KEY(`group`)
 ) ENGINE = InnoDB DEFAULT CHARSET=utf8;
+
+update `zt_grouppriv` set module = 'pivot' where method in ('projectDeviation','productSummary', 'bugCreate', 'bugAssign', 'workload', 'showProduct', 'showProject') and module = 'report'
+update `zt_grouppriv` set module = 'screen' where method in ('annualData','allAnnualData') and module = 'report'
