@@ -1,12 +1,13 @@
 #main {padding: 0;}
 .container {padding: 0 !important;}
 #mainContent {padding: 0;}
+.doc-title {width:400px;}
 .doc-title input {border: unset; font-size: 18px; font-weight: bold; color: #3c4353; padding-left: 16px;}
 .doc-title .form-control:focus {border: unset; box-shadow: unset;}
 .doc-title input::-webkit-input-placeholder {color: #D8DBDE;}
 .doc-title.required:after {top: 4px; right: 0; left: 12px; display: inline-table;}
+#savePath {display:inline-block; width:320px; overflow:hidden; white-space: nowrap; height: 19px; padding-top: 4px; padding-right:8px;}
 .contentmarkdown.required:after, .contenthtml.required:after {right:3px;}
-#submit {margin-right: 16px;}
 #headerBox {border-bottom: 1px solid #e3e3e3;}
 #headerBox td:last-child {padding-right: 24px;}
 #editorContent {padding: 0;}
@@ -34,7 +35,7 @@
 #modalBasicInfo .modal-dialog {width:800px;}
 #modalBasicInfo .modal-content {padding:0px;}
 #modalBasicInfo .modal-body {padding:10px 30px 10px 10px; overflow-x: hidden !important;}
-#modalBasicInfo .modal-body .close {position:absolute; right:15px; top:15px}
+#modalBasicInfo .modal-body .close {position:fixed; right:15px; top:15px}
 #basicInfoBox{margin-bottom: 10px;}
 #basicInfoBox tfoot td {padding-bottom: 0;}
 .aclBox .radio-inline{display:block; padding-bottom:5px;}

@@ -367,7 +367,7 @@ class docModel extends model
 
         if($browseType == "all")
         {
-            $docs = $this->getDocs(0, 0, $sort, $pager);
+            $docs = $this->getDocs(0, 0, $browseType, $sort, $pager);
         }
         elseif($browseType == 'bySearch')
         {
@@ -598,13 +598,15 @@ class docModel extends model
      * @access public
      * @return void
      */
-    public function getDocs($libID, $module, $orderBy, $pager = null)
+    public function getDocs($libID, $module, $browseType, $orderBy, $pager = null)
     {
         $docIdList = $this->getPrivDocs($libID, $module);
         return $this->dao->select('*')->from(TABLE_DOC)
             ->where('deleted')->eq(0)
             ->andWhere('vision')->eq($this->config->vision)
             ->andWhere('id')->in($docIdList)
+            ->beginIF($browseType == 'all')->andWhere("(status = 'normal' or (status = 'draft' and addedBy='{$this->app->user->account}'))")->fi()
+            ->beginIF($browseType == 'draft')->andWhere('status')->eq('draft')->fi()
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll('id');
@@ -778,6 +780,7 @@ class docModel extends model
         unset($doc->contentMarkdown, $doc->contentType, $doc->url);
 
         $requiredFields = $this->config->doc->create->requiredFields;
+        if($doc->status == 'draft') $requiredFields = '';
         if(strpos("url|word|ppt|excel", $this->post->type) !== false) $requiredFields = trim(str_replace(",content,", ",", ",{$requiredFields},"), ',');
 
         $checkContent = strpos(",$requiredFields,", ',content,') !== false;
@@ -930,10 +933,8 @@ class docModel extends model
      */
     public function saveDraft($docID)
     {
-        $data       = fixer::input('post')
-            ->stripTags($this->config->doc->editor->edit['id'], $this->config->allowedTags)
-            ->get();
-        $doc        = new stdclass();
+        $data = fixer::input('post')->stripTags($this->config->doc->editor->edit['id'], $this->config->allowedTags)->get();
+        $doc  = new stdclass();
         $doc->draft = $data->content;
 
         $docType = $this->dao->select('type')->from(TABLE_DOCCONTENT)->where('doc')->eq((int)$docID)->orderBy('version_desc')->fetch();

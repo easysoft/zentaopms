@@ -71,6 +71,7 @@ $lang->doc->comment      = '文档备注';
 $lang->doc->type         = '文档类型';
 $lang->doc->content      = '文档正文';
 $lang->doc->keywords     = '关键字';
+$lang->doc->status       = '文档状态';
 $lang->doc->url          = '文档URL';
 $lang->doc->files        = '附件';
 $lang->doc->addedBy      = '由谁添加';
@@ -111,6 +112,8 @@ $lang->doc->doc          = '文档';
 $lang->doc->updateOrder  = '更新排序';
 $lang->doc->nextStep     = '下一步';
 $lang->doc->closed       = '已关闭';
+$lang->doc->saveDraft    = '存为草稿';
+$lang->doc->defaultSave  = '默认存入：';
 
 $lang->doc->moduleDoc     = '按模块浏览';
 $lang->doc->searchDoc     = '搜索';
@@ -195,6 +198,10 @@ $lang->doc->libIconList['custom']    = 'icon-folder-o';
 
 $lang->doc->systemLibs['product']   = $lang->productCommon;
 $lang->doc->systemLibs['execution'] = $lang->executionCommon;
+
+$lang->doc->statusList['']       = "";
+$lang->doc->statusList['normal'] = "已发布";
+$lang->doc->statusList['draft']  = "草稿";
 
 $lang->doc->aclList['open']    = "公开<span class='text-gray'>（有所属库权限即可访问）</span>";
 $lang->doc->aclList['private'] = "私有<span class='text-gray'>（仅创建者和白名单用户可访问）</span>";
@@ -307,3 +314,6 @@ $lang->doc->libDropdown['addSameModule'] = '添加同级目录';
 $lang->doc->libDropdown['addSubModule']  = '添加子目录';
 $lang->doc->libDropdown['editModule']    = '编辑目录';
 $lang->doc->libDropdown['delModule']     = '删除目录';
+
+$lang->doc->featureBar['tableContents']['all']   = '全部';
+$lang->doc->featureBar['tableContents']['draft'] = '草稿';

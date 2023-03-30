@@ -81,16 +81,17 @@ body {margin-bottom: 25px;}
           <td class="c-name" title='<?php echo $doc->title;?>'>
           <?php
           $docType = $doc->type == 'text' ? 'wiki-file' : $doc->type;
-          $icon    = html::image("static/svg/{$docType}.svg");
+          $icon    = html::image("static/svg/{$docType}.svg", "class='file-icon'");
           if(common::hasPriv('doc', 'objectLibs'))
           {
-              echo html::a($this->createLink('doc', 'objectLibs', "type=$type&objectID=$objectID&libID=$doc->lib&docID=$doc->id"), $icon . $doc->title, '', "title='{$doc->title}' data-app='{$this->app->tab}'");
+              echo html::a($this->createLink('doc', 'objectLibs', "type=$type&objectID=$objectID&libID=$doc->lib&docID=$doc->id"), $icon . $doc->title, '', "title='{$doc->title}' class='doc-title' data-app='{$this->app->tab}'");
           }
           else
           {
-              echo "$icon {$doc->title}";
+              echo "<span class='doc-title'>$icon {$doc->title}</span>";
           }
           ?>
+          <?php if($doc->status == 'draft') echo "<span class='label label-badge draft'>{$lang->doc->draft}</span>";?>
           <?php if(common::canBeChanged('doc', $doc) and common::hasPriv('doc', 'collect') and $libType and $libType != 'api'):?>
             <a data-url="<?php echo $this->createLink('doc', 'collect', "objectID=$doc->id&objectType=doc");?>" title="<?php echo $collectTitle;?>" class='btn btn-link ajaxCollect'><i class='icon <?php echo $star;?>'></i></a>
           <?php endif;?>

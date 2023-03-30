@@ -71,6 +71,7 @@ $lang->doc->comment      = 'Commentaire';
 $lang->doc->type         = 'Type';
 $lang->doc->content      = 'Texte';
 $lang->doc->keywords     = 'Tags';
+$lang->doc->status       = 'Status';
 $lang->doc->url          = 'URL';
 $lang->doc->files        = 'Fichiers';
 $lang->doc->addedBy      = 'Auteur';
@@ -111,6 +112,8 @@ $lang->doc->doc          = 'Document';
 $lang->doc->updateOrder  = 'Update Order';
 $lang->doc->nextStep     = 'Next';
 $lang->doc->closed       = 'Closed';
+$lang->doc->saveDraft    = 'Save Draft';
+$lang->doc->defaultSave  = 'Default Save: ';
 
 $lang->doc->moduleDoc     = 'Par Module';
 $lang->doc->searchDoc     = 'Rechercher';
@@ -195,6 +198,10 @@ $lang->doc->libIconList['custom']    = 'icon-folder-o';
 
 $lang->doc->systemLibs['product']   = $lang->productCommon;
 $lang->doc->systemLibs['execution'] = $lang->executionCommon;
+
+$lang->doc->statusList['']       = "";
+$lang->doc->statusList['normal'] = "Released";
+$lang->doc->statusList['draft']  = "Draft";
 
 $lang->doc->aclList['open']    = "Public <span class='text-gray'>(Access with library permissions)</span>";
 $lang->doc->aclList['private'] = "Privé <span class='text-gray'>(Only creators and whitelist users can access)</span>";
@@ -308,3 +315,6 @@ $lang->doc->libDropdown['addSameModule'] = 'Add Same Directory';
 $lang->doc->libDropdown['addSubModule']  = 'Add Sub Directory';
 $lang->doc->libDropdown['editModule']    = 'Edit Directory';
 $lang->doc->libDropdown['delModule']     = 'Delete Directory';
+
+$lang->doc->featureBar['tableContents']['all']   = 'All';
+$lang->doc->featureBar['tableContents']['draft'] = 'Draft';

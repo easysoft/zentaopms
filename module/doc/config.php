@@ -44,6 +44,7 @@ $config->doc->search['fields']['product']    = $lang->doc->product;
 if($app->rawMethod == 'contribute') $config->doc->search['fields']['project'] = $lang->doc->project;
 $config->doc->search['fields']['execution']  = $lang->doc->execution;
 $config->doc->search['fields']['lib']        = $lang->doc->lib;
+$config->doc->search['fields']['status']     = $lang->doc->status;
 $config->doc->search['fields']['module']     = $lang->doc->module;
 $config->doc->search['fields']['addedBy']    = $lang->doc->addedByAB;
 $config->doc->search['fields']['addedDate']  = $lang->doc->addedDate;
@@ -54,7 +55,8 @@ $config->doc->search['fields']['version']    = $lang->doc->version;
 
 $config->doc->search['params']['title']      = array('operator' => 'include', 'control' => 'input',  'values' => '');
 $config->doc->search['params']['product']    = array('operator' => '=',       'control' => 'select', 'values' => '');
-$config->doc->search['params']['lib']        = array('operator' => '=',       'control' => 'select', 'values' => '' );
+$config->doc->search['params']['lib']        = array('operator' => '=',       'control' => 'select', 'values' => '');
+$config->doc->search['params']['status']     = array('operator' => '=',       'control' => 'select', 'values' => $lang->doc->statusList);
 $config->doc->search['params']['module']     = array('operator' => 'belong',  'control' => 'select', 'values' => '');
 if($app->rawMethod == 'contribute') $config->doc->search['params']['project'] = array('operator' => '=', 'control' => 'select', 'values' => '');
 $config->doc->search['params']['execution']  = array('operator' => '=',       'control' => 'select', 'values' => '');

@@ -4,6 +4,9 @@ $(function()
     var contentHeight = $(document).height() - 92;
     setTimeout(function(){$('.ke-edit-iframe, .ke-edit, .ke-edit-textarea').height(contentHeight);}, 100);
     setTimeout(function(){$('.CodeMirror').height($(document).height() - 112);}, 100);
+    $('iframe.ke-edit-iframe').contents().find('.article-content').css('padding', '20px 20px 0 20px');
+
+    setSavePath();
 
     /* Change for show create error. */
     $('#contentBox #content').attr('id', 'contentHTML');
@@ -12,8 +15,39 @@ $(function()
     {
         $('#modalBasicInfo #copyTitle').html($('.doc-title #editorTitle').val().replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;"));
     });
+    $('#modalBasicInfo').on('hide.zui.modal', function(){setSavePath();});
 
-    $('iframe.ke-edit-iframe').contents().find('.article-content').css('padding', '20px 20px 0 20px');
+    $('#saveDraft').click(function()
+    {
+        if($('#editorTitle').val() == '')
+        {
+            bootbox.alert(titleNotEmpty);
+            return false;
+        }
+        $('#status').val('draft');
+        $('#dataform').submit();
+    });
+    $('#basicInfoLink').click(function()
+    {
+        if($('#editorTitle').val() == '')
+        {
+            bootbox.alert(titleNotEmpty);
+            return false;
+        }
+        if(requiredFields.indexOf('content') >= 0)
+        {
+            var contentType = $('#contentType').val();
+            var content     = '';
+            if(contentType == 'html')    content = $('#contentHTML').val();
+            if(contentType == 'markdown')content = $('#contentMarkdown').val();
+            if(content == '')
+            {
+                bootbox.alert(contentNotEmpty);
+                return false;
+            }
+        }
+        $('#status').val('normal');
+    });
 
     setTimeout(function(){initPage(docType)}, 50);
     if(typeof(window.editor) != 'undefined')

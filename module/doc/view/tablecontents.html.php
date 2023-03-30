@@ -22,6 +22,10 @@
   <div id="leftBar" class="btn-toolbar pull-left">
     <?php echo $objectDropdown;?>
     <?php if(!empty($libTree)):?>
+    <?php foreach($lang->doc->featureBar['tableContents'] as $barType => $barName):?>
+    <?php $active  = $barType == $browseType ? 'btn-active-text' : '';?>
+    <?php echo html::a($this->createLink('doc', 'tableContents', "type=$type&objectID=$objectID&libID=$libID&moduleID=$moduleID&browseType=$barType"), $barName, '', "class='btn btn-link $active' id='{$barType}Tab'");?>
+    <?php endforeach;?>
     <a class="btn btn-link querybox-toggle" id='bysearchTab'><i class="icon icon-search muted"></i> <?php echo $lang->doc->searchDoc;?></a>
     <?php endif;?>
   </div>

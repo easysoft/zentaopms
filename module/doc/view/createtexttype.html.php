@@ -24,7 +24,9 @@
         <tr id='headerBox'>
           <td width='90px'><?php echo html::a($backLink, '<i class="icon icon-back icon-sm"></i> ' . $lang->goback, '', "class='btn btn-secondary' id='backBtn'");?></td>
           <td class="doc-title" colspan='3'><?php echo html::input('title', '', "placeholder='{$lang->doc->titlePlaceholder}' id='editorTitle' class='form-control' required");?></td>
-          <td class="text-right">
+          <td class="text-right btn-tools">
+            <span id='savePath' class='text-gray'></span>
+            <?php echo html::commonButton($lang->doc->saveDraft, "id='saveDraft'", "btn btn-secondary");?>
             <?php echo html::a('#modalBasicInfo', $lang->release->common, '', "data-toggle='modal' id='basicInfoLink' class='btn btn-primary'");?>
           </td>
         </tr>
@@ -37,6 +39,7 @@
                 <div class='contentmarkdown <?php echo $contentRequired;?> hidden'><?php echo html::textarea('contentMarkdown', '', "style='width:100%;'");?></div>
                 <?php echo html::hidden('contentType', 'html');?>
                 <?php echo html::hidden('type', 'text');?>
+                <?php echo html::hidden('status', 'normal');?>
               </div>
             </div>
           </td>
@@ -145,4 +148,7 @@
 <?php js::set('libNotEmpty', sprintf($lang->error->notempty, $lang->doc->lib));?>
 <?php js::set('keywordsNotEmpty', sprintf($lang->error->notempty, $lang->doc->keywords));?>
 <?php js::set('from', $from);?>
+<?php js::set('defaultSave', $lang->doc->defaultSave);?>
+<?php js::set('titleNotEmpty', sprintf($lang->error->notempty, $lang->doc->title));?>
+<?php js::set('contentNotEmpty', sprintf($lang->error->notempty, $lang->doc->content));?>
 <?php include '../../common/view/footer.lite.html.php';?>

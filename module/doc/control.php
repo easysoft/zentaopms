@@ -1268,7 +1268,7 @@ class doc extends control
      * @param  int    $objectID
      * @param  int    $libID
      * @param  int    $moduleID
-     * @param  string $browseType
+     * @param  string $browseType    all|draft|bysearch
      * @param  string $orderBy
      * @param  int    $param
      * @param  int    $recTotal
@@ -1277,7 +1277,7 @@ class doc extends control
      * @access public
      * @return void
      */
-    public function tableContents($type, $objectID = 0, $libID = 0, $moduleID = 0, $browseType = '', $orderBy = 'id_desc', $param = 0, $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function tableContents($type, $objectID = 0, $libID = 0, $moduleID = 0, $browseType = 'all', $orderBy = 'status,id_desc', $param = 0, $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         $this->session->set('createProjectLocate', $this->app->getURI(true), 'doc');
 
@@ -1324,7 +1324,7 @@ class doc extends control
         else
         {
             $this->session->set('objectName', $this->lang->doc->common, 'admin');
-            $this->view->docs = $browseType == 'bySearch' ? $this->doc->getDocsBySearch($type, $objectID, $libID, $queryID, $orderBy, $pager) : $this->doc->getDocs($libID, $moduleID, $orderBy, $pager);
+            $this->view->docs = $browseType == 'bySearch' ? $this->doc->getDocsBySearch($type, $objectID, $libID, $queryID, $orderBy, $pager) : $this->doc->getDocs($libID, $moduleID, $browseType, $orderBy, $pager);
         }
 
         $apiObjectType = $type == 'product' || $type == 'project' ? $type : '';

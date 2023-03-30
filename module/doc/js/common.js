@@ -315,3 +315,34 @@ function locateNewLib(type, objectID, libID)
 {
     location.href = createLink('doc', 'tableContents', 'type=' + type + '&objectID=' + objectID + '&libID=' + libID);
 }
+
+/**
+ * Set save path.
+ *
+ * @access public
+ * @return void
+ */
+function setSavePath()
+{
+    savePath = defaultSave;
+    if($('#modalBasicInfo #product').length == 1)
+    {
+        savePath += $('#modalBasicInfo #product option:checked').text() + '/';
+    }
+    else if($('#modalBasicInfo #project').length == 1 && $('#modalBasicInfo #execution').length == 0)
+    {
+        savePath += $('#modalBasicInfo #project option:checked').text() + '/';
+    }
+    else if($('#modalBasicInfo #project').length == 1 && $('#modalBasicInfo #execution').length == 1)
+    {
+        if($('#modalBasicInfo #execution').val() == '') savePath += $('#modalBasicInfo #project option:checked').text() + '/';
+        if($('#modalBasicInfo #execution').val() != '') savePath += $('#modalBasicInfo #execution option:checked').text() + '/';
+    }
+    else if($('#modalBasicInfo #execution').length == 1)
+    {
+        savePath += $('#modalBasicInfo #execution option:checked').text() + '/';
+    }
+    savePath += $('#modalBasicInfo #module option:checked').text();
+
+    $('#savePath').html(savePath).attr('title', savePath);
+}

@@ -1,5 +1,6 @@
 UPDATE `zt_doc` SET `type` = 'text' WHERE `type` = 'url';
 UPDATE `zt_doc` SET `acl` = 'private' WHERE `acl` = 'custom';
+UPDATE `zt_doc` SET `status` = 'normal' WHERE `status` = '';
 
 UPDATE `zt_doclib` SET `acl` = 'private' WHERE `type` = 'custom' and `acl` = 'custom';
 UPDATE `zt_doclib` SET `acl` = 'private' WHERE `type` = 'product' AND `acl` = 'custom';
@@ -12,6 +13,7 @@ UPDATE `zt_doclib` SET `acl` = 'default' WHERE `main` = '1';
 
 ALTER TABLE `zt_doclib` ADD `addedBy` varchar(30) NOT NULL AFTER `order`;
 ALTER TABLE `zt_doclib` ADD `addedDate` datetime NOT NULL AFTER `addedBy`;
+ALTER TABLE `zt_doc` CHANGE `status` `status` varchar(30) COLLATE 'utf8_general_ci' NOT NULL DEFAULT 'normal';
 
 /* Update doc lib. */
 UPDATE zt_doclib AS t1
