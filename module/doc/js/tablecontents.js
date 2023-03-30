@@ -1,5 +1,16 @@
 $(function()
 {
+    var moduleData = {
+        "name"       : "",
+        "createType" : "",
+        "libID"      : "",
+        "parentID"   : "",
+        "objectID"   : "",
+        "moduleType" : "",
+        "order"      : "",
+        "isUpdate"   : ""
+    };
+
     /**
      * Render Dropdown dom.
      *
@@ -17,15 +28,24 @@ $(function()
         return dropdown;
     }
 
-    var imgObj = {
-        'annex': 'annex',
-        'lib': 'wiki-file-lib',
-        'api': 'interface',
-        'execution': 'wiki-file-lib',
-    }
 
+    /**
+     * Render tree dom.
+     *
+     * @param string treee
+     * @param array treeeData
+     * @access public
+     * @return void
+     */
     function initTree(ele, treeData)
     {
+        var imgObj = {
+            'annex': 'annex',
+            'lib': 'wiki-file-lib',
+            'api': 'interface',
+            'execution': 'wiki-file-lib',
+        };
+
         ele.tree(
         {
             initialState: 'active',
@@ -50,6 +70,96 @@ $(function()
                 $li.addClass(libClass);
                 if(item.active) $li.addClass('active open in');
             }
+        });
+
+        ele.on('click', '.icon-drop', function(e)
+        {
+            $('.dropdown-in-tree').css('display', 'none');
+            var isCatalogue = $(this).attr('data-isCatalogue') === 'false' ? false : true;
+            var dropDownID  = isCatalogue ? 'dropDownCatalogue' : 'dropDownLibrary';
+            var libID       = 0;
+            var moduleID    = 0;
+            var parentID    = 0;
+            var $module     = $(this).closest('a');
+            var hasChildren = $module.data('has-children');
+            var moduleType  = '';
+            if($module.hasClass('lib'))
+            {
+                libID      = $module.data('id');
+                moduleType = $module.data('type');
+                parentID   = libID;
+                moduleID   = libID;
+            }
+            else
+            {
+                moduleID   = $module.data('id');
+                libID      = $module.closest('.lib').data('id');
+                moduleType = $module.closest('.lib').data('type');
+                parentID   = $module.closest('ul').closest('.lib').data('id');
+            }
+
+            moduleData = {
+                "libID"     : libID,
+                "parentID"  : parentID,
+                "objectID"  : moduleID,
+                "moduleType": moduleType == 'lib' ? 'doc' : moduleType,
+            };
+
+            var option = {
+                left        : e.pageX,
+                top         : e.pageY,
+                type        : dropDownID,
+                libID       : libID,
+                moduleID    : moduleID,
+                hasChildren : hasChildren
+            };
+
+            var dropDown = renderDropdown(option);
+            $(".m-doc-tablecontents").append(dropDown);
+
+            e.stopPropagation();
+        }).on('blur', '.file-tree input.input-tree', function()
+        {
+            var $input = $(this);
+            var value = $input.val();
+            if(!value)
+            {
+                $input.closest('[data-id=insert]').remove();
+                return;
+            }
+
+            moduleData.name = value;
+            $.post(createLink('tree', 'ajaxCreateModule'), moduleData, function(result)
+            {
+                result = JSON.parse(result);
+                if(result.result == 'fail')
+                {
+                    bootbox.alert(
+                        result.message[0],
+                        function()
+                        {
+                            setTimeout(function()
+                            {
+                                $('.file-tree .input-tree').focus()
+                            }, 10)
+                        }
+                    );
+                    return false;
+                }
+                var module    = result.module;
+                var resultDom = $('[data-id=aTreeModal]').html().replace(/%name%/g, module.name).replace(/%id%/g, module.id).replace('insert', module.id);
+                $input.closest('ul').find('.has-input').css('padding-left', '15px');
+                $input.after(resultDom);
+                $input.remove();
+                if(moduleData.isUpdate)
+                {
+                    $.getJSON(createLink('doc', 'tableContents', 'type=' + objectType + '&objectID=' + objectID , 'json'), function(data){
+                        var treeData = JSON.parse(data.data);
+                        $('#fileTree').data('zui.tree').reload(treeData.libTree);
+                        $('li.has-list > ul').addClass("menu-active-primary menu-hover-primary");
+                    });
+                }
+            });
         });
     }
 
@@ -113,106 +223,7 @@ $(function()
         location.href = link
     });
 
-    var moduleData = {
-        "name"       : "",
-        "createType" : "",
-        "libID"      : "",
-        "parentID"   : "",
-        "objectID"   : "",
-        "moduleType" : "",
-        "order"      : "",
-        "isUpdate"   : ""
-    };
 
-    $('#fileTree').on('click', '.icon-drop', function(e)
-    {
-        $('.dropdown-in-tree').css('display', 'none');
-        var isCatalogue = $(this).attr('data-isCatalogue') === 'false' ? false : true;
-        var dropDownID  = isCatalogue ? 'dropDownCatalogue' : 'dropDownLibrary';
-        var libID       = 0;
-        var moduleID    = 0;
-        var parentID    = 0;
-        var $module     = $(this).closest('a');
-        var hasChildren = $module.data('has-children');
-        var moduleType  = '';
-        if($module.hasClass('lib'))
-        {
-            libID      = $module.data('id');
-            moduleType = $module.data('type');
-            parentID   = libID;
-            moduleID   = libID;
-        }
-        else
-        {
-            moduleID   = $module.data('id');
-            libID      = $module.closest('.lib').data('id');
-            moduleType = $module.closest('.lib').data('type');
-            parentID   = $module.closest('ul').closest('.lib').data('id');
-        }
-
-        moduleData = {
-            "libID"     : libID,
-            "parentID"  : parentID,
-            "objectID"  : moduleID,
-            "moduleType": moduleType == 'lib' ? 'doc' : moduleType,
-        };
-
-        var option = {
-            left        : e.pageX,
-            top         : e.pageY,
-            type        : dropDownID,
-            libID       : libID,
-            moduleID    : moduleID,
-            hasChildren : hasChildren
-        };
-
-        console.log(option)
-        var dropDown = renderDropdown(option);
-        $(".m-doc-tablecontents").append(dropDown);
-        e.stopPropagation();
-    }).on('blur', '.file-tree input.input-tree', function()
-    {
-        var $input = $(this);
-        var value = $input.val();
-        if(!value)
-        {
-            $input.closest('[data-id=insert]').remove();
-            return;
-        }
-
-        moduleData.name = value;
-        $.post(createLink('tree', 'ajaxCreateModule'), moduleData, function(result)
-        {
-            result = JSON.parse(result);
-            if(result.result == 'fail')
-            {
-                bootbox.alert(
-                    result.message[0],
-                    function()
-                    {
-                        setTimeout(function()
-                        {
-                            $('.file-tree .input-tree').focus()
-                        }, 10)
-                    }
-                );
-                return false;
-            }
-            var module    = result.module;
-            var resultDom = $('[data-id=aTreeModal]').html().replace(/%name%/g, module.name).replace(/%id%/g, module.id).replace('insert', module.id);
-            $input.closest('ul').find('.has-input').css('padding-left', '15px');
-            $input.after(resultDom);
-            $input.remove();
-            if(moduleData.isUpdate)
-            {
-                $.getJSON(createLink('doc', 'tableContents', 'type=' + objectType + '&objectID=' + objectID , 'json'), function(data){
-                    var treeData = JSON.parse(data.data);
-                    $('#fileTree').data('zui.tree').reload(treeData.libTree);
-                    $('li.has-list > ul').addClass("menu-active-primary menu-hover-primary");
-                });
-            }
-        });
-    });
 
     $('body').on('click', function()
     {
@@ -262,7 +273,7 @@ $(function()
                     var $input   = $('[data-id=liTreeModal]').html();
                     var $rootDom = $('[data-id=' + item.moduleid + ']a + ul');
                     $rootDom.append($input);
-                    $tree.data('zui.tree').expand($('li[data-id="' + item.libid + '"]'));
+                    $rootDom.closest('.tree').data('zui.tree').expand($('li[data-id="' + item.libid + '"]'));
                 }
                 else
                 {
@@ -285,7 +296,6 @@ $(function()
                 break;
             case 'addCataChild' :
                 moduleData.parentID = item.id;
-                console.log(item);
                 if(item.hasChildren)
                 {
                     var $input   = $('[data-id=liTreeModal]').html();
@@ -308,6 +318,7 @@ $(function()
     }).on('blur', '.file-tree input.input-tree', function()
     {
         var $input = $(this);
+        var $tree  = $input.closest('.tree');
         var value = $input.val();
         if(!value)
         {
@@ -351,4 +362,4 @@ $(function()
     {
         if(e.keyCode == 13) $(this).trigger('blur');
     });
-});
+})
