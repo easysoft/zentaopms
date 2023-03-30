@@ -8410,21 +8410,24 @@ class upgradeModel extends model
             $type  = !empty($option->i->type) ? $option->i->type : 'chart';
             $chart = $this->loadModel($type)->getByID($option->i->id);
 
-            $settings = $chart->settings;
-            if($type == 'chart') $chartType = $chart->builtin ? $chart->type : $settings[0]['type'];
-            if($type == 'pivot') $chartType = 'table';
-            $chartConfig = json_decode(zget($this->config->screen->chartConfig, $chartType));
-            $chartConfig->fields   = $chart->fieldSettings;
-            $chartConfig->sourceID = $option->i->id;
+            if($chart)
+            {
+                $settings = $chart->settings;
+                if($type == 'chart') $chartType = $chart->builtin ? $chart->type : $settings[0]['type'];
+                if($type == 'pivot') $chartType = 'table';
+                $chartConfig = json_decode(zget($this->config->screen->chartConfig, $chartType));
+                $chartConfig->fields   = $chart->fieldSettings;
+                $chartConfig->sourceID = $option->i->id;
 
-            $component->title       = $chart->name;
-            $component->type        = $chartType;
-            $component->sourceID    = $option->i->id;
-            $component->key         = $chartConfig->key;
-            $component->chartConfig = $chartConfig;
-            $component->option      = json_decode(zget($this->config->screen->chartOption, $chartType));
-            if(isset($component->option->title->text)) $component->option->title->text = $chart->name;
-            $component = $this->screen->getChartOption($component);
+                $component->title       = $chart->name;
+                $component->type        = $chartType;
+                $component->sourceID    = $option->i->id;
+                $component->key         = $chartConfig->key;
+                $component->chartConfig = $chartConfig;
+                $component->option      = json_decode(zget($this->config->screen->chartOption, $chartType));
+                if(isset($component->option->title->text)) $component->option->title->text = $chart->name;
+                $component = $this->screen->getChartOption($component);
+            }
 
             $componentList[] = $component;
 
@@ -8657,6 +8660,7 @@ class upgradeModel extends model
 
                     $layout[$index] = $chartLayout;
                 }
+                $dashboardLayoutPairs[$dashboardID] = json_encode($layout);
 
                 $this->dao->update(TABLE_DASHBOARD)->set('layout')->eq(json_encode($layout))->where('id')->eq($dashboardID)->exec();
             }
@@ -8766,7 +8770,7 @@ class upgradeModel extends model
         $reports = $this->dao->select('*')->from(TABLE_REPORT)->fetchAll();
 
         $modulePairs = $this->dao->select('id, name')->from(TABLE_MODULE)->where('type')->eq('report')->fetchPairs();
-        $groupPairs  = $this->dao->select('name, id')->from(TABLE_MODULE)->where('type')->eq('pivot')->fetchPairs();
+        $groupNames  = $this->dao->select('name, id')->from(TABLE_MODULE)->where('type')->eq('pivot')->fetchPairs();
 
         $this->loadModel('report');
 
