@@ -14,6 +14,11 @@ class programmenu extends wg
         'activeKey?:string'
     );
 
+    public static function getPageCSS()
+    {
+        return file_get_contents(__DIR__ . DS . 'css' . DS . 'v1.css');
+    }
+
     private function buildMenuTree($parent, $parentID)
     {
         $children = $this->getChildProgram($parentID);

@@ -5,6 +5,11 @@ class historyrecord extends wg
 {
     protected static $defineProps = 'actions:array,users:array,methodName:string';
 
+    public static function getPageCSS()
+    {
+        return file_get_contents(__DIR__ . DS . 'css' . DS . 'v1.css');
+    }
+
     private function buildHistoriesList()
     {
         global $app, $lang;
