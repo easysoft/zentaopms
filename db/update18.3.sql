@@ -28,17 +28,18 @@ ALTER TABLE `zt_screen` ADD `builtin` enum('0', '1') NOT NULL DEFAULT '0' AFTER 
 
 UPDATE `zt_screen` SET `builtin` = '1', `status` = 'published';
 
-UPDATE `zt_grouppriv` SET `module` = 'dataview' WHERE `module` = 'dataset' AND `method` in ('create', 'browse', 'edit', 'delete');
+UPDATE `zt_grouppriv` SET `module` = 'dataview' WHERE `module` = 'dataset' AND `method` IN ('create', 'browse', 'edit', 'delete');
 UPDATE `zt_grouppriv` SET `module` = 'screen' WHERE `module` = 'dashboard';
-UPDATE `zt_grouppriv` SET `module` = 'pivot', `method` = 'create') WHERE `module` = 'report' AND `method` = 'custom';
-UPDATE `zt_grouppriv` SET `module` = 'pivot', `method` = 'delete') WHERE `module` = 'report' AND `method` = 'deleteReport';
-UPDATE `zt_grouppriv` SET `module` = 'pivot', `method` = 'edit') WHERE `module` = 'report' AND `method` = 'editReport';
-UPDATE `zt_grouppriv` SET `module` = 'pivot', `method` = 'preview') WHERE `module` = 'report' AND `method` = 'show';
-UPDATE `zt_grouppriv` SET `module` = 'pivot', `method` = 'design') WHERE `module` = 'report' AND `method` = 'useReport';
-UPDATE `zt_grouppriv` SET `module` = 'pivot', `method` = 'export') WHERE `module` = 'report' AND `method` = 'crystalExport';
+UPDATE `zt_grouppriv` SET `module` = 'screen' WHERE `module` = 'report' AND `method` IN ('annualData','allAnnualData');
+UPDATE `zt_grouppriv` SET `module` = 'pivot' WHERE `module` = 'report' AND `method` IN ('projectDeviation','productSummary', 'bugCreate', 'bugAssign', 'workload', 'showProduct', 'showProject');
 
-REPLACE INTO `zt_grouppriv` (`group`, `module`, `method`) SELECT `group`, 'pivot', 'create' FROM `zt_grouppriv` WHERE `module` = 'report' AND `method` = 'saveReport';
-DELETE FROM `zt_grouppriv` WHERE `module` = 'report' AND `method` = 'saveReport';
+REPLACE INTO `zt_grouppriv` (`group`, `module`, `method`) SELECT `group`, 'pivot', 'create' FROM `zt_grouppriv` WHERE `module` = 'report' AND `method` IN ('custom', 'saveReport');
+REPLACE INTO `zt_grouppriv` (`group`, `module`, `method`) SELECT `group`, 'pivot', 'edit' FROM `zt_grouppriv` WHERE `module` = 'report' AND `method` = 'editReport';
+REPLACE INTO `zt_grouppriv` (`group`, `module`, `method`) SELECT `group`, 'pivot', 'delete' FROM `zt_grouppriv` WHERE `module` = 'report' AND `method` = 'deleteReport';
+REPLACE INTO `zt_grouppriv` (`group`, `module`, `method`) SELECT `group`, 'pivot', 'preview' FROM `zt_grouppriv` WHERE `module` = 'report' AND `method` = 'show';
+REPLACE INTO `zt_grouppriv` (`group`, `module`, `method`) SELECT `group`, 'pivot', 'design' FROM `zt_grouppriv` WHERE `module` = 'report' AND `method` = 'useReport';
+REPLACE INTO `zt_grouppriv` (`group`, `module`, `method`) SELECT `group`, 'pivot', 'export' FROM `zt_grouppriv` WHERE `module` = 'report' AND `method` = 'crystalExport';
+
 DELETE FROM `zt_grouppriv` WHERE `module` = 'dataset' AND `method` = 'view';
 
 CREATE TABLE `zt_pivot`  (
@@ -66,6 +67,3 @@ CREATE TABLE `zt_pivot`  (
   KEY(`dimension`),
   KEY(`group`)
 ) ENGINE = InnoDB DEFAULT CHARSET=utf8;
-
-update `zt_grouppriv` set module = 'pivot' where method in ('projectDeviation','productSummary', 'bugCreate', 'bugAssign', 'workload', 'showProduct', 'showProject') and module = 'report'
-update `zt_grouppriv` set module = 'screen' where method in ('annualData','allAnnualData') and module = 'report'

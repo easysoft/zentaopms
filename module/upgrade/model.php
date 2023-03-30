@@ -8772,14 +8772,14 @@ class upgradeModel extends model
         $modulePairs = $this->dao->select('id, name')->from(TABLE_MODULE)->where('type')->eq('report')->fetchPairs();
         $groupNames  = $this->dao->select('name, id')->from(TABLE_MODULE)->where('type')->eq('pivot')->fetchPairs();
 
-        $this->loadModel('report');
+        $this->loadModel('pivot');
 
         foreach($reports as $report)
         {
             $data = new stdclass();
             $data->dimension   = 1;
             $data->name        = $report->name;
-            $data->sql         = $this->report->replaceTableNames($report->sql);
+            $data->sql         = $this->pivot->replaceTableNames($report->sql);
             $data->vars        = $report->vars;
             $data->langs       = $report->langs;
             $data->stage       = 'published';
@@ -8840,21 +8840,20 @@ class upgradeModel extends model
             /* Process settings. */
             $params   = json_decode($report->params);
             $settings = new stdclass();
-            $settings->group1 = $params->group1;
-            $settings->group2 = $params->group2;
+            $settings->group1      = $params->group1;
+            $settings->group2      = $params->group2;
+            $settings->columnTotal = 'sum';
 
             $columns = array();
             foreach($params->reportField as $index => $field)
             {
                 $column = new stdclass();
-                $column->field     = $field;
-                $column->isUser    = isset($params->isUser) ? zget($params->isUser, $index, '') : '';
-                $column->stat      = isset($params->reportType) ? zget($params->reportType, $index, '') : '';
-                $column->sumAppend = isset($params->sumAppend) ? zget($params->sumAppend, $index, '') : '';
-                $column->total     = isset($params->reportTotal) ? zget($params->reportTotal, $index, '') : '';
-                $column->percent   = isset($params->percent) ? zget($params->percent, $index, '') : '';
-                $column->contrast  = isset($params->contrast) ? zget($params->contrast, $index, '') : '';
-                $column->showAlone = isset($params->showAlone) ? zget($params->showAlone, $index, '') : '';
+                $column->field      = $field;
+                $column->stat       = isset($params->reportType) ? zget($params->reportType, $index, '') : 'noStat';
+                $column->slice      = 'noSlice';
+                $column->showTotal  = (isset($params->reportTotal) && zget($params->reportTotal, $index, '') == '1') ? 'sum' : 'noShow';
+                $column->showMode   = (isset($params->percent) && zget($params->percent, $index, '') == '1' && isset($params->contrast) && zget($params->contrast, $index, '') == 'crystalTotal') ? 'total' : 'default';
+                $column->monopolize = isset($params->showAlone) ? zget($params->showAlone, $index, '0') : '0';
 
                 $columns[] = $column;
             }
