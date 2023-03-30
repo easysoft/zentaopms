@@ -965,15 +965,14 @@ class apiModel extends model
         }
 
         $apiQuery = $this->session->$queryName;
-        if(strpos($apiQuery, "`lib` = 'all'") === false and !$objectType) $apiQuery = "$apiQuery and lib = $libID";
         if(strpos($apiQuery, "`lib` = 'all'") !== false) $apiQuery = str_replace("`lib` = 'all'", '1', $apiQuery);
 
         $list = $this->dao->select('*')
-                          ->from(TABLE_API)
-                          ->where('deleted')->eq(0)
-                          ->andWhere($apiQuery)
-                          ->beginIF(!empty($libs))->andWhere('`lib`')->in($libs)->fi()
-                          ->fetchAll();
+            ->from(TABLE_API)
+            ->where('deleted')->eq(0)
+            ->andWhere($apiQuery)
+            ->beginIF(!empty($libs))->andWhere('`lib`')->in($libs)->fi()
+            ->fetchAll();
 
         return $list;
     }
@@ -1041,13 +1040,16 @@ class apiModel extends model
      *
      * @param  int    $libID
      * @param  int    $libs
+     * @param  int    $moduleID
      * @param  int    $objectID
+     * @param  string $browseType bySearch
+
      * @access public
      * @return array
      */
-    public function getLibTree($libID, $libs, $objectID = 0)
+    public function getLibTree($libID, $libs, $moduleID, $objectID = 0, $browseType = '')
     {
-        $libTree  = $this->loadModel('doc')->getLibTree($libID, $libs, 'api', $objectID);
+        $libTree  = $this->loadModel('doc')->getLibTree($libID, $libs, 'api', $moduleID, $objectID, $browseType);
         $releases = $this->getReleaseByQuery(array_keys($libs), null, 'lib_asc, id_desc');
 
         foreach($libTree as &$tree)

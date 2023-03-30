@@ -79,7 +79,7 @@ class api extends control
 
         if($browseType == 'bySearch')
         {
-            $this->view->apiList  = $this->api->getApiListBySearch($libID, $queryID);
+            $this->view->apiList  = $this->api->getApiListBySearch($libID, $queryID, '', array_keys($libs));
             $this->view->typeList = $this->api->getTypeList($libID);
         }
 
@@ -94,7 +94,7 @@ class api extends control
         $this->view->objectType     = $objectType;
         $this->view->objectID       = $objectID;
         $this->view->moduleID       = $moduleID;
-        $this->view->libTree        = $this->api->getLibTree($libID, $libs, $moduleID);
+        $this->view->libTree        = $this->api->getLibTree($libID, $libs, $moduleID, $objectID, $browseType);
         $this->view->users          = $this->user->getPairs('noclosed,noletter');
         $this->view->objectDropdown = isset($libs[$libID]) ? $this->generateLibsDropMenu($libs[$libID], $release) : '';
 

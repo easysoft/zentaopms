@@ -301,8 +301,7 @@ class docModel extends model
         if($libType == 'product') $this->config->api->createlib->requiredFields .= ',product';
         if($libType == 'project') $this->config->api->createlib->requiredFields .= ',project';
 
-        $data->id = $id;
-        $this->checkApiLibName($data, $libType);
+        $this->checkApiLibName($data, $libType, $id);
 
         if(dao::isError()) return false;
 
@@ -356,10 +355,9 @@ class docModel extends model
             $type = 'nolink';
             if(!empty($oldLib->product)) $type = 'product';
             if(!empty($oldLib->project)) $type = 'project';
-            $lib->id      = $libID;
             $lib->product = $oldLib->product;
             $lib->project = $oldLib->project;
-            $this->checkApiLibName($lib, $type);
+            $this->checkApiLibName($lib, $type, $libID);
         }
 
         $lib->name = trim($lib->name); //Temporary treatment: Code for bug #15528.
@@ -3019,7 +3017,7 @@ class docModel extends model
      * @access public
      * @return void
      */
-    public function checkApiLibName($lib, $libType)
+    public function checkApiLibName($lib, $libType, $libID = 0)
     {
         $sameNames = $this->dao->select('*')
             ->from(TABLE_DOCLIB)
@@ -3027,9 +3025,7 @@ class docModel extends model
             ->andWhere('`project`')->eq($lib->project)
             ->andWhere('`name`')->eq($lib->name)
             ->andWhere('`type`')->eq('api')
-            ->beginIF(isset($lib->id))
-            ->andWhere('`id`')->ne($lib->id)
-            ->fi()
+            ->beginIF(!empty($libID))->andWhere('`id`')->ne($libID)->fi()
             ->fetchAll();
         if(count($sameNames) > 0 and $libType == 'product') dao::$errors['name'] = $this->lang->doclib->apiNameUnique[$libType] . sprintf($this->lang->error->unique, $this->lang->doclib->name, $lib->name);
         if(count($sameNames) > 0 and $libType == 'project') dao::$errors['name'] = $this->lang->doclib->apiNameUnique[$libType] . sprintf($this->lang->error->unique, $this->lang->doclib->name, $lib->name);
