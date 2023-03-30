@@ -1,3 +1,114 @@
+<style>
+.tree-group {position: relative;}
+.tree-group > .module-name {white-space: nowrap; overflow: hidden; text-overflow: ellipsis; width: 100%; display: block;}
+.tree li.has-list.open:before {left: 6px;}
+.main-table-content {display: flex; gap: 20px;}
+.main-table-content > .side {flex: 0 0 300px;}
+.main-table-content > .content {flex: 1;}
+
+/* css for mian */
+#mainContent > #sideBar {flex: 0 0 150px; overflow-x: auto; padding-right: 5px;}
+[lang^=zh] #mainContent > #sideBar {flex: 0 0 180px;}
+
+/* css for tree */
+
+.tree li.has-list.open:before {content: unset;}
+.tree li > a {max-width: 100%; padding: 2px;}
+.file-tree  a {height: 30px;}
+.flex-between {display: flex; align-items: center; justify-content: space-between;}
+.flex-center {display: flex; align-items: center; justify-content: center;}
+.flex-start {display: flex; align-items: center;}
+.tree li > .list-toggle {top: 4px;}
+.input-tree {width: 120px;}
+.tree-icon {position: absolute; right: 0;}
+.tree li.has-input {overflow: hidden;}
+.img-lib {flex: 0 0 16px; height: 14px;}
+.tree-icon {position: absolute; right: 0;}
+.tree li > a {max-width: 100%; padding: 2px;}
+.file-tree  a.show-icon > div {padding-right: 15px;}
+.tree li.has-input {overflow: hidden;}
+#fileTree .icon {font-size: 14px; margin-right: 5px;}
+#fileTree .title {font-size: 16px; height: 20px; margin-top: 5px; margin-bottom: 5px;}
+/* css for sidebar */
+.sidebar-toggle {flex: 0 0 16px;}
+.sidebar-toggle > .icon {width: 12px; height: 30px; margin-top: -10px; line-height: 30px; color: #fff; text-align: center; background: #7dcdfe; border-radius: 6px; cursor: pointer;}
+
+.spliter {flex: 0 0 12px;}
+.spliter-btn {height: 28px; width: 10px; background: #fff; position: absolute; top: 30%; left: -1px; border: 1px solid #D9D9D9; border-radius: 2px;}
+.spliter-btn > .spliter-inner {width: 4px; height: 12px; border-left: 1px solid #D9D9D9; border-right: 1px solid #D9D9D9;}
+
+#mainContent .table-empty-tip > p, #createDocs {display: inline-block;}
+.createDropdown a.btn-primary, .createDropdown a.btn-info {border-right: 1px solid rgba(255,255,255,0.2);}
+.createDropdown button.dropdown-toggle.btn-primary, .createDropdown button.dropdown-toggle.btn-info {padding: 6px;}
+.createDropdown ul > li {text-align: left;}
+.createDropdown .btn.btn-info:hover {box-shadow: none;}
+
+.table .c-name > a:first-child {display: inline-block; max-width: 90%; overflow: hidden;}
+.table .c-name > .ajaxCollect {float: right; position: relative; right: 10px; top: -3px;}
+table.table > thead > tr {height: 32px;}
+
+#bysearchTab::before {display: none;}
+#leftBar .selectBox #currentItem {width: 150px; display: flex; align-items: center;}
+[lang^=zh] #leftBar .selectBox #currentItem {width: 180px;}
+#leftBar .selectBox #currentItem > .text {overflow: hidden; text-align: left; flex: 0 1 100%;}
+</style>
+
+<div id="fileTree" class="file-tree">
+<?php if($type == 'project'):?>
+<div class="project-tree">
+    <div class="title"><i class="icon icon-project text-primary"></i><?php echo $lang->projectCommon?></div>
+    <div id="projectTree" data-id="project"></div>
+</div>
+<div class="execution-tree">
+    <div class="title"><i class="icon icon-run text-primary"></i><?php echo $lang->execution->common?></div>
+    <div id="executionTree" data-id="execution"></div>
+</div>
+<div class="annex-tree">
+    <div class="title"><i class="icon icon-paper-clip text-primary"></i><?php echo $lang->files?></div>
+    <div id="annexTree" data-id="annex"></div>
+</div>
+<?php endif;?>
+</div>
+
+<!-- Code for dropdown menu. -->
+<div class='hidden' id='dropDownData'>
+  <ul class='libDorpdown'>
+    <?php if(common::hasPriv('tree', 'browse')):?>
+    <li data-method="addCataLib" data-has-children='%hasChildren%'  data-libid='%libID%' data-moduleid="%moduleID%" data-type="add"><a><i class="icon icon-icon-add-directory"></i><?php echo $lang->doc->libDropdown['addModule'];?></a></li>
+    <?php endif;?>
+    <?php if(common::hasPriv('doc', 'editLib')):?>
+    <li data-method="editLib"><a href='<?php echo inlink('editLib', 'libID=%libID%');?>' data-toggle='modal' data-type='iframe'><i class="icon icon-edit"></i><?php echo $lang->doc->libDropdown['editLib'];?></a></li>
+    <?php endif;?>
+    <?php if(common::hasPriv('doc', 'deleteLib')):?>
+    <li data-method="deleteLib"><a href='<?php echo inlink('deleteLib', 'libID=%libID%');?>' target='hiddenwin'><i class="icon icon-trash"></i><?php echo $lang->doc->libDropdown['deleteLib'];?></a></li>
+    <?php endif;?>
+  </ul>
+  <ul class='moduleDorpdown'>
+    <?php if(common::hasPriv('tree', 'browse')):?>
+    <li data-method="addCataBro" data-type="add" data-id="%moduleID%"><a><i class="icon icon-icon-add-directory"></i><?php echo $lang->doc->libDropdown['addSameModule'];?></a></li>
+    <li data-method="addCataChild" data-type="add" data-id="%moduleID%" data-has-children='%hasChildren%'><a><i class="icon icon-icon-add-directory"></i><?php echo $lang->doc->libDropdown['addSubModule'];?></a></li>
+    <li data-method="editCata" class='edit-module'><a data-href='<?php echo helper::createLink('tree', 'edit', 'moduleID=%moduleID%&type=doc');?>'><i class="icon icon-edit"></i><?php echo $lang->doc->libDropdown['editModule'];?></a></li>
+    <li data-method="deleteCata"><a href='<?php echo helper::createLink('tree', 'delete', 'rootID=%libID%&moduleID=%moduleID%');?>' target='hiddenwin'><i class="icon icon-trash"></i><?php echo $lang->doc->libDropdown['delModule'];?></a></li>
+    <?php endif;?>
+  </ul>
+</div>
+<div class='hidden' data-id="ulTreeModal">
+  <ul data-id="liTreeModal" class="menu-active-primary menu-hover-primary has-input">
+    <li data-id="insert" class="has-input">
+      <input data-target="%target%" class="form-control input-tree"></input>
+    </li>
+  </ul>
+</div>
+<div class="hidden" data-id="aTreeModal">
+  <a href="###" style="position: relative" data-has-children="false" data-action="true" title="%name%" data-id="%id%">
+    <div class="text h-full w-full flex-between overflow-hidden" style="position: relative;">
+      <span style="padding-left: 5px;">%name%</span>
+      <i class="icon icon-drop icon-ellipsis-v tree-icon hidden" data-iscatalogue="true"></i>
+    </div>
+  </a>
+</div>
+
+<script>
 $(function()
 {
     var moduleData = {
@@ -52,9 +163,10 @@ $(function()
             data: treeData,
             itemCreator: function($li, item)
             {
-                var libClass = ['lib', 'annex', 'api', 'execution'].indexOf(item.type) !== -1 ? 'lib' : '';
+                var objectType = config.currentModule == 'api' ? item.objectType : item.type;
+                var libClass = ['lib', 'annex', 'api', 'execution'].indexOf(objectType) !== -1 ? 'lib' : '';
                 var hasChild = item.children ? !!item.children.length : false;
-                var link     = item.hasAction ? '###' : '#';
+                var link     = item.type != 'execution' || item.hasAction ? '###' : '#';
                 var $item    = '<a href="' + link + '" style="position: relative" data-has-children="' + hasChild + '" title="' + item.name + '" data-id="' + item.id + '" class="' + libClass + '" data-type="' + item.type + '" data-action="' + item.hasAction + '">';
 
                 $item += '<div class="text h-full w-full flex-start overflow-hidden">';
@@ -218,8 +330,12 @@ $(function()
         {
             libID = $(this).closest('.lib').data('id');
         }
+
+        if(!linkParams) linkParams = '%s';
         linkParams = linkParams.replace('%s', '&libID=' + libID + '&moduleID=' + moduleID);
-        var link = $(this).data('type') == 'annex' ? createLink('doc', 'showFiles', 'type=' + objectType + '&objectID=' + objectID) : createLink('doc', 'tableContents', linkParams);
+        if(config.currentModule == 'api') linkParams =  linkParams.substring(1);
+
+        var link = $(this).data('type') == 'annex' ?  createLink(config.currentModule, 'showFiles', 'type=' + objectType + '&objectID=' + objectID) : createLink(config.currentModule, config.currentModule == 'api' ? 'index' : 'tableContents', linkParams);
         location.href = link
     });
 
@@ -368,3 +484,4 @@ $(function()
         if(e.keyCode == 13) $(this).trigger('blur');
     });
 })
+</script>

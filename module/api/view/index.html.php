@@ -43,7 +43,7 @@
   </div>
 <?php else:?>
   <div id='sideBar' class="panel side side-col col overflow-auto" data-min-width="150">
-    <div id="fileTree" class="file-tree"></div>
+    <?php include '../../doc/view/lefttree.html.php';?>
   </div>
   <div class="sidebar-toggle flex-center"><i class="icon icon-angle-left"></i></div>
   <div class="main-col flex-full overflow-visible flex-auto overflow-visible" data-min-width="500">

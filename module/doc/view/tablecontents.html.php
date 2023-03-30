@@ -63,22 +63,7 @@
   </div>
 <?php else:?>
   <div id='sideBar' class="panel side side-col col overflow-auto" data-min-width="150">
-    <div id="fileTree" class="file-tree">
-    <?php if($type == 'project'):?>
-    <div class="project-tree">
-        <div class="title"><i class="icon icon-project text-primary"></i><?php echo $lang->projectCommon?></div>
-        <div id="projectTree" data-id="project"></div>
-    </div>
-    <div class="execution-tree">
-        <div class="title"><i class="icon icon-run text-primary"></i><?php echo $lang->execution->common?></div>
-        <div id="executionTree" data-id="execution"></div>
-    </div>
-    <div class="annex-tree">
-        <div class="title"><i class="icon icon-paper-clip text-primary"></i><?php echo $lang->files?></div>
-        <div id="annexTree" data-id="annex"></div>
-    </div>
-    <?php endif;?>
-    </div>
+    <?php include 'lefttree.html.php';?>
   </div>
   <div class="sidebar-toggle flex-center"><i class="icon icon-angle-left"></i></div>
   <div class="main-col flex-full overflow-visible flex-auto" data-min-width="500">
@@ -99,41 +84,5 @@
     ;?>
   </div>
 <?php endif;?>
-</div>
-<div class='hidden' id='dropDownData'>
-  <ul class='libDorpdown'>
-    <?php if(common::hasPriv('tree', 'browse')):?>
-    <li data-method="addCataLib" data-has-children='%hasChildren%'  data-libid='%libID%' data-moduleid="%moduleID%" data-type="add"><a><i class="icon icon-icon-add-directory"></i><?php echo $lang->doc->libDropdown['addModule'];?></a></li>
-    <?php endif;?>
-    <?php if(common::hasPriv('doc', 'editLib')):?>
-    <li data-method="editLib"><a href='<?php echo inlink('editLib', 'libID=%libID%');?>' data-toggle='modal' data-type='iframe'><i class="icon icon-edit"></i><?php echo $lang->doc->libDropdown['editLib'];?></a></li>
-    <?php endif;?>
-    <?php if(common::hasPriv('doc', 'deleteLib')):?>
-    <li data-method="deleteLib"><a href='<?php echo inlink('deleteLib', 'libID=%libID%');?>' target='hiddenwin'><i class="icon icon-trash"></i><?php echo $lang->doc->libDropdown['deleteLib'];?></a></li>
-    <?php endif;?>
-  </ul>
-  <ul class='moduleDorpdown'>
-    <?php if(common::hasPriv('tree', 'browse')):?>
-    <li data-method="addCataBro" data-type="add" data-id="%moduleID%"><a><i class="icon icon-icon-add-directory"></i><?php echo $lang->doc->libDropdown['addSameModule'];?></a></li>
-    <li data-method="addCataChild" data-type="add" data-id="%moduleID%" data-has-children='%hasChildren%'><a><i class="icon icon-icon-add-directory"></i><?php echo $lang->doc->libDropdown['addSubModule'];?></a></li>
-    <li data-method="editCata" class='edit-module'><a data-href='<?php echo helper::createLink('tree', 'edit', 'moduleID=%moduleID%&type=doc');?>'><i class="icon icon-edit"></i><?php echo $lang->doc->libDropdown['editModule'];?></a></li>
-    <li data-method="deleteCata"><a href='<?php echo helper::createLink('tree', 'delete', 'rootID=%libID%&moduleID=%moduleID%');?>' target='hiddenwin'><i class="icon icon-trash"></i><?php echo $lang->doc->libDropdown['delModule'];?></a></li>
-    <?php endif;?>
-  </ul>
-</div>
-<div class='hidden' data-id="ulTreeModal">
-  <ul data-id="liTreeModal" class="menu-active-primary menu-hover-primary has-input">
-    <li data-id="insert" class="has-input">
-      <input data-target="%target%" class="form-control input-tree"></input>
-    </li>
-  </ul>
-</div>
-<div class="hidden" data-id="aTreeModal">
-  <a href="###" style="position: relative" data-has-children="false" data-action="true" title="%name%" data-id="%id%">
-    <div class="text h-full w-full flex-between overflow-hidden" style="position: relative;">
-      <span style="padding-left: 5px;">%name%</span>
-      <i class="icon icon-drop icon-ellipsis-v tree-icon hidden" data-iscatalogue="true"></i>
-    </div>
-  </a>
 </div>
 <?php include '../../common/view/footer.html.php';?>
