@@ -2695,7 +2695,7 @@ class docModel extends model
         }
 
         $tab = strpos(',doc,product,project,execution,', ",{$this->app->tab},") !== false ? $this->app->tab : 'doc';
-        if($tab != 'doc') $this->loadModel($type)->setMenu($objectID);
+        if($tab != 'doc' and method_exists($type . 'Model', 'setMenu')) $this->loadModel($type)->setMenu($objectID);
 
         return array($libs, $libID, $object, $objectID, $objectDropdown);
     }

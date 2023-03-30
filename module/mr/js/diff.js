@@ -133,7 +133,7 @@ function getDiffs(fileName)
 function createTab(filename, filepath)
 {
     $('[data-path="' + decodeURIComponent(filepath) + '"]').closest('li').addClass('selected');
-    var tabID = Base64.encode(filepath).replaceAll('=', '-');
+    var tabID = Base64.encode(filepath).replace(/=/g, '-');
     return {
         title: filename,
         id:    tabID,
@@ -200,7 +200,7 @@ $(document).ready(function()
 
         /* Remove file path for opened files. */
         $('#fileTabs').on('onClose', function(event, tab) {
-            var filepath = decodeURIComponent(Base64.decode(tab.id.replaceAll('-', '=')));
+            var filepath = decodeURIComponent(Base64.decode(tab.id.replace(/-/g, '=')));
             var index    = openedFiles.indexOf(filepath);
             if(index > -1)
             {
@@ -213,7 +213,7 @@ $(document).ready(function()
 
         /* Append file path into the title. */
         $('#fileTabs').on('onLoad', function(event, tab) {
-            var filepath = decodeURIComponent(Base64.decode(tab.id.replaceAll('-', '=')));
+            var filepath = decodeURIComponent(Base64.decode(tab.id.replace(/-/g, '=')));
             $('#tab-nav-item-' + tab.id).attr('title', filepath);
             document.getElementById('tab-iframe-' + tab.id).contentWindow.updateEditorInline(diffAppose);
 
@@ -221,7 +221,7 @@ $(document).ready(function()
         });
 
         $('#fileTabs').on('onOpen', function(event, tab) {
-            var filepath = decodeURIComponent(Base64.decode(tab.id.replaceAll('-', '=')));
+            var filepath = decodeURIComponent(Base64.decode(tab.id.replace(/-/g, '=')));
             var index    = openedFiles.indexOf(filepath);
             if(index > -1) document.getElementById('tab-iframe-' + tab.id).contentWindow.updateEditorInline(diffAppose);
         });
