@@ -10,11 +10,14 @@ class modal extends modaldialog
     protected function build()
     {
         list($id, $modalProps) = $this->prop(array('id', 'modalProps'));
+
+        $this->setProp($modalProps);
+
         return div
         (
             setClass('modal'),
             set::id($id),
-            set($modalProps),
+            set($this->props->skip(array_merge(array_keys($modalProps), array_keys(static::getDefinedProps())))),
             parent::build()
         );
     }
