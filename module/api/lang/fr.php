@@ -65,7 +65,7 @@ $lang->api->noLinked         = "No Linked";
 /* Common access control lang. */
 $lang->api->whiteList          = 'Whitelist';
 $lang->api->aclList['open']    = "Public <span class='acl-tip'>(Users who can access doccan access it)</span>";
-$lang->api->aclList['default'] = "Default <span class='acl-tip'>(Users who can access the selected %s or users in the whiltelist can access it)</span>";
+$lang->api->aclList['default'] = "Default <span class='acl-tip'>(Users who can access the selected %s can access it)</span>";
 $lang->api->aclList['private'] = "Private <span class='acl-tip'> (Only the one who created it or users in the whiltelist can access it)</span>";
 $lang->api->group              = 'Group';
 $lang->api->user               = 'User';

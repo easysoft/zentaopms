@@ -195,8 +195,8 @@ class docModel extends model
     {
         $lib = fixer::input('post')
             ->setForce('product', ($this->post->type == 'product' and !empty($_POST['product'])) ? $this->post->product : 0)
-            ->setForce('project', ($this->post->type == 'project' and !empty($_POST['product'])) ? $this->post->project : 0)
-            ->setForce('execution', ($this->post->type == 'execution' or !empty($_POST['execution'])) ? $this->post->execution : 0)
+            ->setForce('project', ($this->post->type == 'project' and !empty($_POST['project'])) ? $this->post->project : 0)
+            ->setForce('execution', ($this->post->libType != 'api' and !empty($_POST['execution'])) ? $this->post->execution : 0)
             ->join('groups', ',')
             ->join('users', ',')
             ->add('addedBy', $this->app->user->account)
