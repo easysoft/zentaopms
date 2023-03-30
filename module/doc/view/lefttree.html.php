@@ -5,6 +5,7 @@
 .main-table-content {display: flex; gap: 20px;}
 .main-table-content > .side {flex: 0 0 300px;}
 .main-table-content > .content {flex: 1;}
+#main {margin-bottom: 0;}
 
 /* css for mian */
 #mainContent > #sideBar {flex: 0 0 150px; overflow-x: auto; padding-right: 5px;}
@@ -22,7 +23,7 @@
 .input-tree {width: 120px;}
 .tree-icon {position: absolute; right: 0;}
 .tree li.has-input {overflow: hidden;}
-.img-lib {flex: 0 0 16px; height: 14px;}
+.img-lib {flex: 0 0 14px; height: 14px;}
 .tree-icon {position: absolute; right: 0;}
 .tree li > a {max-width: 100%; padding: 2px;}
 .file-tree  a.show-icon > div {padding-right: 15px;}
@@ -102,7 +103,7 @@ table.table > thead > tr {height: 32px;}
 <div class="hidden" data-id="aTreeModal">
   <a href="###" style="position: relative" data-has-children="false" data-action="true" title="%name%" data-id="%id%">
     <div class="text h-full w-full flex-between overflow-hidden" style="position: relative;">
-      <span style="padding-left: 5px;">%name%</span>
+      <div style="padding-left: 5px;">%name%</div>
       <i class="icon icon-drop icon-ellipsis-v tree-icon hidden" data-iscatalogue="true"></i>
     </div>
   </a>
@@ -170,9 +171,9 @@ $(function()
 
                 $item += '<div class="text h-full w-full flex-start overflow-hidden">';
                 if(libClass == 'lib') $item += '<div class="img-lib" style="background-image:url(static/svg/' + imgObj[item.type || 'lib'] + '.svg)"></div>';
-                $item += '<span style="padding-left: 5px;">';
+                $item += '<div style="padding-left: 5px;">';
                 $item += item.name
-                $item += '</span>';
+                $item += '</div>';
                 $item += '<i class="icon icon-drop icon-ellipsis-v hidden tree-icon" data-isCatalogue="' + (libClass ? false : true) + '"></i>';
                 $item += '</div>';
                 $item += '</a>';
@@ -330,7 +331,7 @@ $(function()
             libID = $(this).closest('.lib').data('id');
         }
 
-        if(!linkParams) linkParams = '%s';
+        if(typeof linkParams == 'undefined') linkParams = '%s';
         linkParams = linkParams.replace('%s', '&libID=' + libID + '&moduleID=' + moduleID);
         if(config.currentModule == 'api') linkParams =  linkParams.substring(1);
 

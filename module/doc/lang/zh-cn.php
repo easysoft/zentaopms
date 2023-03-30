@@ -19,7 +19,7 @@ $lang->doclib->all        = '所有文档库';
 $lang->doclib->select     = '选择文档库';
 $lang->doclib->execution  = $lang->executionCommon . '库';
 $lang->doclib->product    = $lang->productCommon . '库';
-$lang->doclib->apiLibName = '接口库名称';
+$lang->doclib->apiLibName = '库名称';
 $lang->doclib->privateACL = "私有 <span class='acl-tip'>（仅创建者和有%s权限的白名单用户可访问）</span>";
 
 $lang->doclib->tip = new stdclass();
