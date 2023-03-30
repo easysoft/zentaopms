@@ -9,6 +9,7 @@
 .overflow-auto {overflow: auto;}
 .overflow-visible {overflow: visible;}
 .overflow-hidden {overflow: hidden;}
+#main {padding-bottom: 0;}
 .img-lib {width: 14px; height: 14px; margin-bottom: 2px; flex: 0 0 14px;}
 #mainContent {padding-top: 0; padding-bottom: 0;}
 #mainContent #createDropdown {display: inline-block;}
