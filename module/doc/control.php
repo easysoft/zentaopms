@@ -154,7 +154,7 @@ class doc extends control
             $objects = $this->project->getPairsByProgram();
             if($this->app->tab == 'doc')
             {
-                $this->view->executionPairs = $this->execution->getPairs($objectID, 'all', 'multiple,leaf,noprefix,empty');
+                $this->view->executionPairs = array(0 => '') + $this->execution->getPairs($objectID, 'all', 'multiple,leaf,noprefix');
                 $this->view->project        = $this->project->getById($objectID);
             }
         }
@@ -1440,7 +1440,7 @@ class doc extends control
     public function ajaxGetExecution($projectID)
     {
         $executions     = $this->execution->getList($projectID);
-        $executionPairs = array(0 => '') + $this->execution->getPairs($projectID, 'all', 'multiple,leaf,noprefix,empty');
+        $executionPairs = array(0 => '') + $this->execution->getPairs($projectID, 'all', 'multiple,leaf,noprefix');
 
         $project  = $this->project->getById($projectID);
         $disabled = $project->multiple ? '' : 'disabled';
