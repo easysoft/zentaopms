@@ -49,3 +49,9 @@ span.dotted-line+a {display: block;}
 .is-sorting > li > .tree-group {opacity: 1; border-radius: 4px;}
 .is-sorting > li ul {display: none!important;}
 li.drag-shadow ul {display: none!important;}
+
+#bysearchTab::before {display: none;}
+#leftBar .selectBox #currentItem {width: 150px; display: flex; align-items: center;}
+[lang^=zh] #leftBar .selectBox #currentItem {width: 180px;}
+#leftBar .selectBox #currentItem > .text {overflow: hidden; text-align: left; flex: 0 1 100%;}
+#leftBar .searchBox {padding-left: 5px;}
