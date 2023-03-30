@@ -2827,7 +2827,7 @@ class docModel extends model
             $item = new stdclass();
             $item->id       = $module->id;
             $item->name     = $module->name;
-            $item->type     = $module->type;
+            $item->type     = $module->type == 'api' ? 'apiDoc' : $module->type;
             $item->active   = $module->id == $moduleID ? 1 : 0;
             $item->children = $this->getModuleTree($rootID, $moduleID, $type, $module->id, $modules);
 
