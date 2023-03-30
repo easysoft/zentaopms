@@ -239,6 +239,7 @@ $(function()
     }).on('click', '.dropdown-in-tree li', function(e)
     {
         var item = $(this).data();
+        var $tree = $(this).closest('.tree');
         if($(this).hasClass('edit-module'))
         {
             new $.zui.ModalTrigger({
@@ -261,6 +262,7 @@ $(function()
                     var $input   = $('[data-id=liTreeModal]').html();
                     var $rootDom = $('[data-id=' + item.moduleid + ']a + ul');
                     $rootDom.append($input);
+                    $tree.data('zui.tree').expand($('li[data-id="' + item.libid + '"]'));
                 }
                 else
                 {
@@ -271,7 +273,6 @@ $(function()
                     $rootDom.after($input);
                     $li.addClass('open in has-list');
                 }
-                $('#fileTree').data('zui.tree').expand($('li[data-id="' + item.libid + '"]'));
                 $rootDom.parent().find('input').focus();
                 break;
             case 'addCataBro' :
@@ -290,6 +291,7 @@ $(function()
                     var $input   = $('[data-id=liTreeModal]').html();
                     var $rootDom = $('#fileTree [data-id=' + item.id + ']a + ul');
                     var $rootDom = $('#fileTree [data-id=' + item.id + ']a + ul');
+                    $tree.data('zui.tree').expand($('li[data-id="' + item.id + '"]'));
                 }
                 else
                 {
@@ -299,7 +301,6 @@ $(function()
                     $rootDom.addClass('open in has-list');
                 }
 
-                $('#fileTree').data('zui.tree').expand($('li[data-id="' + item.id + '"]'));
                 $rootDom.append($input);
                 $rootDom.find('input').focus();
                 break;
