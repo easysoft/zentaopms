@@ -133,21 +133,6 @@
               <table class="table table-data data-basic">
                 <tbody>
                   <?php $space = common::checkNotCN() ? ' ' : '';?>
-                  <?php if($product->status == 'wait'):?>
-                  <?php $product = $this->product->getStatByID($product->id, 'requirement');?>
-                  <tr>
-                    <th><?php echo $lang->story->statusList['draft']  . $space . $lang->URCommon;?></th>
-                    <td><strong><?php echo $product->stories['draft']?></strong></td>
-                    <th class="c-common"><?php echo $lang->story->statusList['active']  . $space . $lang->URCommon;?></th>
-                    <td colspan="2"><strong><?php echo $product->stories['active']?></strong></td>
-                  </tr>
-                  <tr>
-                    <th><?php echo $lang->story->statusList['reviewing']  . $space . $lang->URCommon;?></th>
-                    <td><strong><?php echo $product->stories['reviewing']?></strong></td>
-                    <th><?php echo $lang->story->statusList['changing']  . $space . $lang->URCommon;?></th>
-                    <td colspan="2"><strong><?php echo $product->stories['changing']?></strong></td>
-                  </tr>
-                  <?php else:?>
                   <tr>
                     <th class="c-common"><?php echo $lang->story->statusList['active']  . $space . $lang->story->common;?></th>
                     <td><strong><?php echo $product->stories['active']?></strong></td>
@@ -180,7 +165,6 @@
                     <th><?php echo $lang->product->executions?></th>
                     <td><strong><?php echo $product->executions?></strong></td>
                   </tr>
-                  <?php endif;?>
                 </tbody>
               </table>
             </div>
