@@ -16,6 +16,9 @@
 <?php if($type == 'project'):?>
 <style> tr > td.form-actions {padding-bottom: 30px !important;}</style>
 <?php endif;?>
+<?php if($type == 'execution'):?>
+<style> tr > td.form-actions {padding-bottom: 60px !important;}</style>
+<?php endif;?>
 <div id="main">
   <div class="container">
     <div id='mainContent' class='main-content'>
