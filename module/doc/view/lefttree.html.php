@@ -5,6 +5,7 @@
 .main-table-content {display: flex; gap: 20px;}
 .main-table-content > .side {flex: 0 0 300px;}
 .main-table-content > .content {flex: 1;}
+#main {margin-bottom: 0;}
 
 /* css for mian */
 #mainContent > #sideBar {flex: 0 0 150px; overflow-x: auto; padding-right: 5px;}
