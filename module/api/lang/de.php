@@ -39,7 +39,6 @@ $lang->api->noModule         = 'No directory in the API library. Please add the 
 $lang->api->post             = 'Auf Seiten Liste beziehen bei POST Debug';
 $lang->api->noUniqueName     = 'The API library name exists.';
 $lang->api->noUniqueVersion  = 'The version exists.';
-$lang->api->version          = 'Version';
 $lang->api->createStruct     = 'Create Data Structure';
 $lang->api->editStruct       = 'Edit Data Structure';
 $lang->api->deleteStruct     = 'Delete Data Structure';

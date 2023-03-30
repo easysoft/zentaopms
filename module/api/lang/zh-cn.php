@@ -39,7 +39,6 @@ $lang->api->noModule         = '库下没有目录，请先维护目录';
 $lang->api->post             = 'POST方式调试请参照页面表单';
 $lang->api->noUniqueName     = '库名已存在。';
 $lang->api->noUniqueVersion  = '版本已存在。';
-$lang->api->version          = '版本';
 $lang->api->createStruct     = '创建数据结构';
 $lang->api->editStruct       = '编辑数据结构';
 $lang->api->deleteStruct     = '删除数据结构';
@@ -220,7 +219,7 @@ $lang->apistruct = new stdClass();
 $lang->apistruct->name = '结构名';
 
 $lang->api_lib_release = new stdClass();
-$lang->api_lib_release->version = '版本';
+$lang->api_lib_release->version = '版本号';
 
 $lang->api->error             = new stdclass();
 $lang->api->error->onlySelect = 'SQL查询接口只允许SELECT查询';
