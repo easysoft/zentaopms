@@ -5,7 +5,7 @@ class pagebase extends wg
 {
     static $tag = 'html';
 
-    static $defineProps = 'metas?: string|array, title?: string, bodyProps?: array, zui?: bool, display?: bool';
+    static $defineProps = 'metas?: string|array, title?: string, bodyProps?: array, bodyClass?: array|string, zui?: bool, display?: bool';
 
     static $defaultProps = array
     (
@@ -74,6 +74,7 @@ class pagebase extends wg
             h::body
             (
                 set($this->prop('bodyProps')),
+                set::class($this->prop('bodyClass')),
                 $body,
                 $config->debug ? h::js('window.zin = ' . json_encode(array('page' => $this->toJsonData(), 'definedProps' => wg::$definedPropsMap, 'wgBlockMap' => wg::$wgToBlockMap)) . ';console.log("zin", window.zin)') : null,
                 empty($js) ? NULL : h::js($js)
