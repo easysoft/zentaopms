@@ -120,6 +120,16 @@ class repoModel extends model
             ->page($pager)
             ->fetchAll('id');
 
+        if($getCodePath)
+        {
+            $gitlabRepos = array();
+            foreach($repos as $repo)
+            {
+                if($repo->SCM == 'Gitlab') $gitlabRepos[$repo->id] = $repo;
+            }
+            $this->loadModel('gitlab')->apiMultiGetProjects($gitlabRepos);
+        }
+
         /* Get products. */
         $productIdList = $this->loadModel('product')->getProductIDByProject($projectID, false);
         foreach($repos as $i => $repo)
