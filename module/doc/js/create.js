@@ -25,9 +25,9 @@ $(function()
             return false;
         }
         $('#status').val('draft');
-        $('#dataform').submit();
+        submit(this);
     });
-    $('#releaseBtn').click(function(){$('#dataform').submit();});
+    $('#releaseBtn').click(function(){submit(this);});
     $('#basicInfoLink').click(function()
     {
         if($('#editorTitle').val() == '')

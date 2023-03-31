@@ -31,7 +31,7 @@
           <td class="doc-title" colspan='3'><?php echo html::input('title', '', "placeholder='{$lang->doc->titlePlaceholder}' id='editorTitle' class='form-control' required");?></td>
           <td class="text-right btn-tools">
             <span id='savePath' class='text-gray'></span>
-            <?php echo html::commonButton($lang->doc->saveDraft, "id='saveDraft'", "btn btn-secondary");?>
+            <?php echo html::commonButton($lang->doc->saveDraft, "id='saveDraft' data-placement='bottom'", "btn btn-secondary");?>
             <?php echo html::a('#modalBasicInfo', $lang->release->common, '', "data-toggle='modal' id='basicInfoLink' class='btn btn-primary'");?>
           </td>
         </tr>

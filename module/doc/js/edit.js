@@ -168,17 +168,3 @@ function loadWhitelist(libID)
         }
     });
 }
-
-/**
- * Submit form.
- *
- * @param  object $object
- * @access public
- * @return void
- */
-function submit(object)
-{
-    $(object).attr('type', 'submit');
-    $('#dataform').submit();
-    setTimeout(function(){$(object).attr('type', 'button').removeAttr('disabled')}, 1000);
-}
