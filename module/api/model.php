@@ -916,14 +916,13 @@ class apiModel extends model
         $this->config->api->search['module'] = 'api';
         if(!empty($libs))
         {
-            $queryName = $type . 'apiDoc';
             foreach($libs as $lib)
             {
                 if(empty($lib)) continue;
                 if($lib->type != 'api') continue;
                 $libPairs[$lib->id] = $lib->name;
             }
-            $this->config->api->search['module'] = $queryName;
+            $this->config->api->search['module'] = !empty($type) ? $type . 'apiDoc' : 'api';
         }
 
         $this->config->api->search['queryID']                 = $queryID;
@@ -966,15 +965,14 @@ class apiModel extends model
         }
 
         $apiQuery = $this->session->$queryName;
-        if(strpos($apiQuery, "`lib` = 'all'") === false and !$objectType) $apiQuery = "$apiQuery and lib = $libID";
         if(strpos($apiQuery, "`lib` = 'all'") !== false) $apiQuery = str_replace("`lib` = 'all'", '1', $apiQuery);
 
         $list = $this->dao->select('*')
-                          ->from(TABLE_API)
-                          ->where('deleted')->eq(0)
-                          ->andWhere($apiQuery)
-                          ->beginIF(!empty($libs))->andWhere('`lib`')->in($libs)->fi()
-                          ->fetchAll();
+            ->from(TABLE_API)
+            ->where('deleted')->eq(0)
+            ->andWhere($apiQuery)
+            ->beginIF(!empty($libs))->andWhere('`lib`')->in($libs)->fi()
+            ->fetchAll();
 
         return $list;
     }
@@ -996,7 +994,11 @@ class apiModel extends model
             ->andWhere('t2.vision')->eq($this->config->vision)
             ->andWhere('t1.deleted')->eq(0)
             ->andWhere('t2.type')->eq('api')
-            ->beginIF(!$this->app->user->admin)->andWhere('t1.id')->in($this->app->user->view->products)->fi()
+            ->beginIF(!$this->app->user->admin)
+            ->andWhere('(t2.acl')->eq('open')
+            ->orWhere('t1.id')->in($this->app->user->view->products)
+            ->markRight(1)
+            ->fi()
             ->fetchAll('id');
 
         foreach($products as $id => $product)
@@ -1019,6 +1021,11 @@ class apiModel extends model
             ->andWhere('t2.type')->eq('api')
             ->andWhere('t1.deleted')->eq(0)
             ->beginIF(!$this->app->user->admin)->andWhere('t1.id')->in($this->app->user->view->projects)->fi()
+            ->beginIF(!$this->app->user->admin)
+            ->andWhere('(t2.acl')->eq('open')
+            ->orWhere('t1.id')->in($this->app->user->view->projects)
+            ->markRight(1)
+            ->fi()
             ->orderBy('t1.hasProduct_asc')
             ->fetchAll('id');
 
@@ -1042,13 +1049,16 @@ class apiModel extends model
      *
      * @param  int    $libID
      * @param  int    $libs
+     * @param  int    $moduleID
      * @param  int    $objectID
+     * @param  string $browseType bySearch
+
      * @access public
      * @return array
      */
-    public function getLibTree($libID, $libs, $objectID = 0)
+    public function getLibTree($libID, $libs, $moduleID, $objectID = 0, $browseType = '')
     {
-        $libTree  = $this->loadModel('doc')->getLibTree($libID, $libs, 'api', $objectID);
+        $libTree  = $this->loadModel('doc')->getLibTree($libID, $libs, 'api', $moduleID, $objectID, $browseType);
         $releases = $this->getReleaseByQuery(array_keys($libs), null, 'lib_asc, id_desc');
 
         foreach($libTree as &$tree)

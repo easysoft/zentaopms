@@ -20,12 +20,13 @@
 <?php js::set('canViewFiles', common::hasPriv('doc', 'showfiles'));?>
 <?php js::set('type', $type);?>
 <?php js::set('tab', $this->app->tab);?>
+<?php js::set('searchLink', helper::createLink('doc', 'showFiles', "type=$type&objectID=$objectID&viewType=$viewType&orderBy=id_desc&recTotal=0&recPerPage=20&pageID=1&searchTitle=%s"));?>
 <div id="mainMenu" class="clearfix">
   <div id="leftBar" class="btn-toolbar pull-left">
     <?php echo $objectDropdown;?>
     <div class='btn-group searchBox'>
-      <form class="input-control has-icon-right table-col" method="post">
-        <?php echo html::input('title', $this->post->title, "class='form-control' placeholder='{$lang->doc->fileTitle}'");?>
+      <form class="input-control has-icon-right table-col not-watch" method="post">
+        <?php echo html::input('title', $searchTitle, "class='form-control' placeholder='{$lang->doc->fileTitle}'");?>
         <?php echo html::submitButton("<i class='icon icon-search'></i>", '', "btn  btn-icon btn-link input-control-icon-right");?>
       </form>
     </div>
@@ -39,7 +40,7 @@
 </div>
 <div class="main-row fade <?php if(!empty($libTree)) echo 'flex';?>" id="mainContent">
   <div id='sideBar' class="panel side side-col col overflow-auto" data-min-width="150">
-    <div id="fileTree" class="file-tree"></div>
+    <?php include 'lefttree.html.php';?>
   </div>
   <div class="sidebar-toggle flex-center"><i class="icon icon-angle-left"></i></div>
   <div class="main-col flex-full overflow-visible flex-auto" data-min-width="500">

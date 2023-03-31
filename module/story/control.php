@@ -1396,7 +1396,6 @@ class story extends control
         if($tab == 'product' and !empty($product->shadow))
         {
             $backLink = $this->session->productList ? $this->session->productList : inlink('product', 'all');
-            $viewLink = $this->createLink('story', 'view', "storyID=$storyID&version=$version&param=$param&storyType=$storyType") . '#app=project';
             $js       = js::start();
             $js      .= "setTimeout(\"parent.$.apps.open('$uri#app=project')\", 100)";
             $js      .= js::end();

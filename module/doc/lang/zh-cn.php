@@ -19,7 +19,7 @@ $lang->doclib->all        = '所有文档库';
 $lang->doclib->select     = '选择文档库';
 $lang->doclib->execution  = $lang->executionCommon . '库';
 $lang->doclib->product    = $lang->productCommon . '库';
-$lang->doclib->apiLibName = '接口库名称';
+$lang->doclib->apiLibName = '库名称';
 $lang->doclib->privateACL = "私有 <span class='acl-tip'>（仅创建者和有%s权限的白名单用户可访问）</span>";
 
 $lang->doclib->tip = new stdclass();
@@ -54,6 +54,11 @@ $lang->doclib->tabList['execution'] = $lang->executionCommon;
 $lang->doclib->tabList['custom']    = '自定义';
 
 $lang->doclib->nameList['custom'] = '自定义文档库名称';
+
+$lang->doclib->apiNameUnique = array();
+$lang->doclib->apiNameUnique['product'] = '同一' . $lang->productCommon . '下的接口库中';
+$lang->doclib->apiNameUnique['project'] = '同一' . $lang->projectCommon . '下的接口库中';
+$lang->doclib->apiNameUnique['nolink']  = '无关联接口库中';
 
 /* 字段列表。*/
 $lang->doc->common       = '文档';

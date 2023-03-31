@@ -19,13 +19,13 @@ function loadDocModule(libID)
  */
 function toggleAcl(acl, type)
 {
-    if(acl == 'open')
+    if(acl == 'private')
     {
-        $('#whiteListBox').addClass('hidden');
+        $('#whiteListBox').removeClass('hidden');
     }
     else
     {
-        $('#whiteListBox').removeClass('hidden');
+        $('#whiteListBox').addClass('hidden');
     }
 }
 

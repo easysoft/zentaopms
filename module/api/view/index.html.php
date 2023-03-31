@@ -22,12 +22,12 @@
   </div>
   <div class="btn-toolbar pull-right">
   <?php
-    if(common::hasPriv('api', 'struct'))        echo html::a($this->createLink('api', 'struct',        "libID=$libID"), "<i class='icon-treemap muted'> </i>" . $lang->api->struct, '', "class='btn btn-link'");
-    if(common::hasPriv('api', 'releases'))      echo html::a($this->createLink('api', 'releases',      "libID=$libID", 'html', true), "<i class='icon-version muted'> </i>" . $lang->api->releases, '', "class='btn btn-link iframe' data-width='800px'");
-    if(common::hasPriv('api', 'createRelease')) echo html::a($this->createLink('api', 'createRelease', "libID=$libID"), "<i class='icon-publish muted'> </i>" . $lang->api->createRelease, '', "class='btn btn-link iframe' data-width='800px'");
-    //if(common::hasPriv('api', 'export'))        echo html::a($this->createLink('api', 'export',        "libID=$libID", 'html', true), "<i class='icon-export muted'> </i>" . $lang->export, '', "class='btn btn-link export' id='export'");
+    if($libTree and common::hasPriv('api', 'struct'))        echo html::a($this->createLink('api', 'struct',        "libID=$libID"), "<i class='icon-treemap muted'> </i>" . $lang->api->struct, '', "class='btn btn-link'");
+    if($libTree and common::hasPriv('api', 'releases'))      echo html::a($this->createLink('api', 'releases',      "libID=$libID", 'html', true), "<i class='icon-version muted'> </i>" . $lang->api->releases, '', "class='btn btn-link iframe' data-width='800px'");
+    if($libTree and common::hasPriv('api', 'createRelease')) echo html::a($this->createLink('api', 'createRelease', "libID=$libID"), "<i class='icon-publish muted'> </i>" . $lang->api->createRelease, '', "class='btn btn-link iframe' data-width='800px'");
+    //if($config->edition != 'open' and $libTree and  common::hasPriv('api', 'export'))        echo html::a($this->createLink('api', 'export',        "libID=$libID", 'html', true), "<i class='icon-export muted'> </i>" . $lang->export, '', "class='btn btn-link export' id='export'");
     if(common::hasPriv('api', 'createLib'))     echo html::a($this->createLink('api', 'createLib',     "type=" . ($objectType == 'project' ? 'project' : 'product') . "&objectID=$objectID"), '<i class="icon icon-plus"></i> ' . $lang->api->createLib, '', 'class="btn btn-secondary iframe" data-width="800px"');
-    if(common::hasPriv('api', 'create'))        echo html::a($this->createLink('api', 'create',        "libID=$libID&moduleID=$moduleID"), '<i class="icon icon-plus"></i> ' . $lang->api->createApi, '', 'class="btn btn-primary"');
+    if($libTree and common::hasPriv('api', 'create'))        echo html::a($this->createLink('api', 'create',        "libID=$libID&moduleID=$moduleID"), '<i class="icon icon-plus"></i> ' . $lang->api->createApi, '', 'class="btn btn-primary"');
   ?>
   </div>
 </div>
@@ -43,11 +43,11 @@
   </div>
 <?php else:?>
   <div id='sideBar' class="panel side side-col col overflow-auto" data-min-width="150">
-    <div id="fileTree" class="file-tree"></div>
+    <?php include '../../doc/view/lefttree.html.php';?>
   </div>
   <div class="sidebar-toggle flex-center"><i class="icon icon-angle-left"></i></div>
   <div class="main-col flex-full overflow-visible flex-auto overflow-visible" data-min-width="500">
-    <div class="cell<?php if($browseType == 'bySearch') echo ' show';?>" style="min-width: 400px" id="queryBox" data-module=<?php echo $type . $libType . 'Doc';?>></div>
+    <div class="cell<?php if($browseType == 'bySearch') echo ' show';?>" style="min-width: 400px" id="queryBox" data-module='api'></div>
   <?php include 'apilist.html.php';?>
   </div>
 <?php endif;?>
@@ -55,7 +55,7 @@
 <div class='hidden' id='dropDownData'>
   <ul class='libDorpdown'>
     <?php if(common::hasPriv('tree', 'browse')):?>
-    <li data-method="addCataLib" data-has-children='%hasChildren%'  data-libid='%libID%' data-moduleid="%moduleID%" data-type="add"><a><i class="icon icon-controls"></i><?php echo $lang->doc->libDropdown['addModule'];?></a></li>
+    <li data-method="addCataLib" data-has-children='%hasChildren%'  data-libid='%libID%' data-moduleid="%moduleID%" data-type="add"><a><i class="icon icon-icon-add-directory"></i><?php echo $lang->doc->libDropdown['addModule'];?></a></li>
     <?php endif;?>
     <?php if(common::hasPriv('api', 'editLib')):?>
     <li data-method="editLib"><a href='<?php echo inlink('editLib', 'libID=%libID%');?>' data-toggle='modal' data-type='iframe'><i class="icon icon-edit"></i><?php echo $lang->doc->libDropdown['editLib'];?></a></li>
@@ -66,8 +66,8 @@
   </ul>
   <ul class='moduleDorpdown'>
     <?php if(common::hasPriv('tree', 'browse')):?>
-    <li data-method="addCataBro" data-type="add" data-id="%moduleID%"><a><i class="icon icon-controls"></i><?php echo $lang->doc->libDropdown['addSameModule'];?></a></li>
-    <li data-method="addCataChild" data-type="add" data-id="%moduleID%" data-has-children='%hasChildren%'><a><i class="icon icon-edit"></i><?php echo $lang->doc->libDropdown['addSubModule'];?></a></li>
+    <li data-method="addCataBro" data-type="add" data-id="%moduleID%"><a><i class="icon icon-icon-add-directory"></i><?php echo $lang->doc->libDropdown['addSameModule'];?></a></li>
+    <li data-method="addCataChild" data-type="add" data-id="%moduleID%" data-has-children='%hasChildren%'><a><i class="icon icon-icon-add-directory"></i><?php echo $lang->doc->libDropdown['addSubModule'];?></a></li>
     <li data-method="editCata" class='edit-module'><a data-href='<?php echo helper::createLink('tree', 'edit', 'moduleID=%moduleID%&type=doc');?>'><i class="icon icon-edit"></i><?php echo $lang->doc->libDropdown['editModule'];?></a></li>
     <li data-method="deleteCata"><a href='<?php echo helper::createLink('tree', 'delete', 'rootID=%libID%&moduleID=%moduleID%');?>' target='hiddenwin'><i class="icon icon-trash"></i><?php echo $lang->doc->libDropdown['delModule'];?></a></li>
     <?php endif;?>

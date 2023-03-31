@@ -45,13 +45,21 @@ class api extends control
         $objectID   = $this->objectID;
 
         /* Get all api doc libraries. */
-        $libs = $this->doc->getApiLibs($appendLib, $objectType, $objectID);
+        $loadLib = false;
+        $libs    = $this->doc->getApiLibs($appendLib, $objectType, $objectID);
+        if(empty($libs))
+        {
+            $loadLib = true;
+            $libs = $this->doc->getApiLibs($appendLib);
+        }
+
         if($libID == 0 and !empty($libs))
         {
             $lib        = current($libs);
             $libID      = $lib->id;
             $objectType = $lib->product ? 'product' : ($lib->project ? 'project' : '');
             $objectID   = $lib->product ? $lib->product : $lib->project;
+            if($loadLib) $libs = $this->doc->getApiLibs($appendLib);
         }
 
         /* Get an api doc. */
@@ -75,11 +83,11 @@ class api extends control
         /* Build the search form. */
         $queryID   = $browseType == 'bySearch' ? (int)$param : 0;
         $actionURL = $this->createLink('api', 'index', "libID=$libID&moduleID=0&apiID=0&version=0&release=0&appendLib=0&browseType=bySearch&param=myQueryID");
-        $this->api->buildSearchForm($lib,$queryID, $actionURL);
+        $this->api->buildSearchForm($lib,$queryID, $actionURL, $libs);
 
         if($browseType == 'bySearch')
         {
-            $this->view->apiList  = $this->api->getApiListBySearch($libID, $queryID);
+            $this->view->apiList  = $this->api->getApiListBySearch($libID, $queryID, '', array_keys($libs));
             $this->view->typeList = $this->api->getTypeList($libID);
         }
 
@@ -94,7 +102,7 @@ class api extends control
         $this->view->objectType     = $objectType;
         $this->view->objectID       = $objectID;
         $this->view->moduleID       = $moduleID;
-        $this->view->libTree        = $this->api->getLibTree($libID, $libs, $moduleID);
+        $this->view->libTree        = $this->api->getLibTree($libID, $libs, $moduleID, $objectID, $browseType);
         $this->view->users          = $this->user->getPairs('noclosed,noletter');
         $this->view->objectDropdown = isset($libs[$libID]) ? $this->generateLibsDropMenu($libs[$libID], $release) : '';
 
@@ -431,8 +439,11 @@ class api extends control
             return $this->sendSuccess(array('message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => "redirectParentWindow($id)"));
         }
 
-        $type = !empty($lib->product) ? 'product' : 'project';
-        $this->lang->api->aclList['default'] = sprintf($this->lang->doclib->aclList['default'], $this->lang->{$type}->common);
+        $type = 'nolink';
+        if(!empty($lib->product)) $type = 'product';
+        if(!empty($lib->project)) $type = 'project';
+        if($type != 'nolink') $this->lang->api->aclList['default'] = sprintf($this->lang->doclib->aclList['default'], $this->lang->{$type}->common);
+        if($type == 'nolink') unset($this->lang->api->aclList['default']);
 
         $this->view->lib      = $lib;
         $this->view->type     = $type;

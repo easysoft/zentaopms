@@ -13,6 +13,12 @@
 <?php include '../../common/view/header.lite.html.php';?>
 <?php include '../../common/view/chosen.html.php';?>
 <?php js::set('libType', $type);?>
+<?php if($type == 'project'):?>
+<style> tr > td.form-actions {padding-bottom: 30px !important;}</style>
+<?php endif;?>
+<?php if($type == 'execution'):?>
+<style> tr > td.form-actions {padding-bottom: 60px !important;}</style>
+<?php endif;?>
 <div id="main">
   <div class="container">
     <div id='mainContent' class='main-content'>
@@ -25,14 +31,14 @@
             <?php if(in_array($type, array('product', 'project', 'execution'))):?>
             <tr class='objectBox'>
               <th><?php echo $lang->doc->{$type}?></th>
-              <td class='required'><?php echo html::select($type, $objects, $objectID, "class='form-control chosen' data-dropDirection='down' data-drop_direction='down'")?></td>
+              <td class='required'><?php echo html::select($type, $objects, $objectID, "class='form-control chosen' data-drop-direction='down'")?></td>
             </tr>
             <?php if($app->tab == 'doc' and $type == 'project'):?>
             <tr class='executionBox'>
               <th><?php echo $lang->doc->execution?></th>
               <td>
                 <?php $disabled = $project->multiple ? '' : 'disabled';?>
-                <?php echo html::select('execution', $executionPairs, 0, "class='form-control chosen' data-drop_direction='down' data-dropDirection='down' data-placeholder='{$lang->doclib->tip->selectExecution}' $disabled")?>
+                <?php echo html::select('execution', $executionPairs, 0, "class='form-control chosen' data-drop-direction='down' data-placeholder='{$lang->doclib->tip->selectExecution}' $disabled")?>
               </td>
             </tr>
             <?php endif;?>

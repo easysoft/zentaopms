@@ -39,7 +39,6 @@ $lang->api->noModule         = 'No directory in the API library. Please add the 
 $lang->api->post             = 'Se référer à la liste si POST Debug';
 $lang->api->noUniqueName     = 'The API library name exists.';
 $lang->api->noUniqueVersion  = 'The version exists.';
-$lang->api->version          = 'Version';
 $lang->api->createStruct     = 'Create Data Structure';
 $lang->api->editStruct       = 'Edit Data Structure';
 $lang->api->deleteStruct     = 'Delete Data Structure';
@@ -66,7 +65,7 @@ $lang->api->noLinked         = "No Linked";
 /* Common access control lang. */
 $lang->api->whiteList          = 'Whitelist';
 $lang->api->aclList['open']    = "Public <span class='acl-tip'>(Users who can access doccan access it)</span>";
-$lang->api->aclList['default'] = "Default <span class='acl-tip'>(Users who can access the selected %s or users in the whiltelist can access it)</span>";
+$lang->api->aclList['default'] = "Default <span class='acl-tip'>(Users who can access the selected %s can access it)</span>";
 $lang->api->aclList['private'] = "Private <span class='acl-tip'> (Only the one who created it or users in the whiltelist can access it)</span>";
 $lang->api->group              = 'Group';
 $lang->api->user               = 'User';

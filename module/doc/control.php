@@ -154,7 +154,7 @@ class doc extends control
             $objects = $this->project->getPairsByProgram();
             if($this->app->tab == 'doc')
             {
-                $this->view->executionPairs = $this->execution->getPairs($objectID, 'all', 'multiple,leaf,noprefix,empty');
+                $this->view->executionPairs = array(0 => '') + $this->execution->getPairs($objectID, 'all', 'multiple,leaf,noprefix');
                 $this->view->project        = $this->project->getById($objectID);
             }
         }
@@ -1033,7 +1033,6 @@ class doc extends control
         $table  = $this->config->objectTables[$type];
         $object = $this->dao->select('id,name,status')->from($table)->where('id')->eq($objectID)->fetch();
 
-        if(!empty($_POST)) $searchTitle = $this->post->title;
         if(empty($_POST) and !empty($searchTitle)) $this->post->title = $searchTitle;
 
         /* Load pager. */
@@ -1043,7 +1042,7 @@ class doc extends control
         $pager = new pager($recTotal, $recPerPage, $pageID);
         $this->app->rawMethod = $rawMethod;
 
-        $files   = $this->doc->getLibFiles($type, $objectID, $orderBy, $pager);
+        $files = $this->doc->getLibFiles($type, $objectID, $orderBy, $pager);
 
         $this->view->title      = $object->name;
         $this->view->position[] = $object->name;
@@ -1323,7 +1322,8 @@ class doc extends control
         }
         else
         {
-            $this->session->set('objectName', $this->lang->doc->common, 'admin');
+            if(in_array($type, array('product', 'project'))) $this->session->set('objectName', $this->lang->doc->common, 'admin');
+            if($this->config->vision == 'lite' or in_array($type, array('execution', 'custom'))) $this->session->set('objectName', '', 'admin');
             $this->view->docs = $browseType == 'bySearch' ? $this->doc->getDocsBySearch($type, $objectID, $libID, $queryID, $orderBy, $pager) : $this->doc->getDocs($libID, $moduleID, $browseType, $orderBy, $pager);
         }
 
@@ -1441,10 +1441,10 @@ class doc extends control
     public function ajaxGetExecution($projectID)
     {
         $executions     = $this->execution->getList($projectID);
-        $executionPairs = array(0 => '') + $this->execution->getPairs($projectID, 'all', 'multiple,leaf,noprefix,empty');
+        $executionPairs = array(0 => '') + $this->execution->getPairs($projectID, 'all', 'multiple,leaf,noprefix');
 
         $project  = $this->project->getById($projectID);
         $disabled = $project->multiple ? '' : 'disabled';
-        return print(html::select('execution', $executionPairs, 0, "class='form-control' data-placeholder='{$this->lang->doclib->tip->selectExecution}' $disabled data-drop_direction='down' data-dropDirection='down'"));
+        return print(html::select('execution', $executionPairs, 0, "class='form-control' data-placeholder='{$this->lang->doclib->tip->selectExecution}' $disabled data-drop_direction='down' data-drop-direction='down'"));
     }
 }

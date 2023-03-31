@@ -19,7 +19,7 @@ $lang->doclib->all        = 'Alle Bibliotheken';
 $lang->doclib->select     = 'Auswahl';
 $lang->doclib->execution  = $lang->executionCommon . ' Bibliothek';
 $lang->doclib->product    = $lang->productCommon . ' Bibliothek';
-$lang->doclib->apiLibName = 'Api Library Name';
+$lang->doclib->apiLibName = 'Library Name';
 $lang->doclib->privateACL = "Private <span class='acl-tip'>(Only creators and whitelisted users with %s permissions can access it)</span>";
 
 $lang->doclib->tip = new stdclass();
@@ -54,6 +54,11 @@ $lang->doclib->tabList['execution'] = $lang->executionCommon;
 $lang->doclib->tabList['custom']    = 'Custom';
 
 $lang->doclib->nameList['custom'] = 'Custom Name';
+
+$lang->doclib->apiNameUnique = array();
+$lang->doclib->apiNameUnique['product'] = 'In the api library of the same ' . $lang->productCommon . ', ';
+$lang->doclib->apiNameUnique['project'] = 'In the api library of the same ' . $lang->projectCommon . ', ';
+$lang->doclib->apiNameUnique['nolink']  = 'In the no linked api library, ';
 
 /* Fields. */
 $lang->doc->common       = 'Dok';
