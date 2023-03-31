@@ -27,7 +27,6 @@
 .tree li > a {max-width: 100%; padding: 2px;}
 .file-tree  a.show-icon > div {padding-right: 15px;}
 .tree li.has-input {overflow: hidden;}
-#fileTree .icon {font-size: 14px; margin-right: 5px;}
 #fileTree .title {font-size: 16px; height: 20px; margin-top: 5px; margin-bottom: 5px;}
 .tree-text {flex: flex-auto; overflow: hidden;}
 
