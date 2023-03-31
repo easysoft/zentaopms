@@ -29,6 +29,8 @@
 .tree li.has-input {overflow: hidden;}
 #fileTree .icon {font-size: 14px; margin-right: 5px;}
 #fileTree .title {font-size: 16px; height: 20px; margin-top: 5px; margin-bottom: 5px;}
+.tree-text {flex: flex-auto; overflow: hidden;}
+
 /* css for sidebar */
 .sidebar-toggle {flex: 0 0 16px;}
 .sidebar-toggle > .icon {width: 12px; height: 30px; margin-top: -10px; line-height: 30px; color: #fff; text-align: center; background: #7dcdfe; border-radius: 6px; cursor: pointer; padding-left: 0; padding-top: 0;}
@@ -97,7 +99,7 @@
 <div class="hidden" data-id="aTreeModal">
   <a href="###" style="position: relative" data-has-children="false" data-action="true" title="%name%" data-id="%id%">
     <div class="text h-full w-full flex-between overflow-hidden" style="position: relative;">
-      <div style="padding-left: 5px;">%name%</div>
+      <div class="tree-text">%name%</div>
       <i class="icon icon-drop icon-ellipsis-v tree-icon hidden" data-iscatalogue="true"></i>
     </div>
   </a>
@@ -165,7 +167,7 @@ $(function()
 
                 $item += '<div class="text h-full w-full flex-start overflow-hidden">';
                 if(libClass == 'lib') $item += '<div class="img-lib" style="background-image:url(static/svg/' + imgObj[item.type || 'lib'] + '.svg)"></div>';
-                $item += '<div style="padding-left: 5px;">';
+                $item += '<div class="tree-text">';
                 $item += item.name
                 $item += '</div>';
                 $item += '<i class="icon icon-drop icon-ellipsis-v hidden tree-icon" data-isCatalogue="' + (libClass ? false : true) + '"></i>';
