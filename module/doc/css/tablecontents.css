@@ -48,7 +48,7 @@ li.drag-shadow ul {display: none!important;}
 
 .table .c-name > .doc-title {display: inline-block; max-width: 90%; overflow: hidden; background: transparent; padding-right:0px;}
 .table .c-name > .draft {background-color:rgba(129, 102, 238, 0.12); color:#8166EE;}
-.table .c-name > .ajaxCollect {float: right; position: relative; right: 10px; top: -3px;}
+.table .c-name > .ajaxCollect {float: right; position: relative; right: 10px; top: 0px;}
 table.table > thead > tr {height: 32px;}
 
 #bysearchTab::before {display: none;}
