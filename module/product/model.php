@@ -2321,13 +2321,20 @@ class productModel extends model
             $menu .= $this->buildFlowMenu('product', $product, $type, 'direct');
             $menu .= "<div class='divider'></div>";
 
-            $menu .= $this->buildMenu('product', 'close', $params, $product, $type, '', '', 'iframe', true, "data-app='product'");
+            if($product->status != 'closed') $menu .= $this->buildMenu('product', 'close', $params, $product, $type, '', '', 'iframe', true, "data-app='product'");
+            if($product->status == 'closed') $menu .= $this->buildMenu('product', 'activate', $params, $product, $type, '', '', 'iframe', true, "data-app='product'");
             $menu .= "<div class='divider'></div>";
+
+            $menu .= $this->buildMenu('product', 'edit', $params, $product, $type);
+        }
+        elseif($type == 'browse')
+        {
+            $menu .= $this->buildMenu('product', 'edit', $params, $product, $type);
+            if($product->status != 'closed') $menu .= $this->buildMenu('product', 'close', $params, $product, $type, '', '', 'iframe', true, "data-app='product'");
+            if($product->status == 'closed') $menu .= $this->buildMenu('product', 'activate', $params, $product, $type, '', '', 'iframe', true, "data-app='product'");
         }
 
-        $menu .= $this->buildMenu('product', 'edit', $params, $product, $type);
-
-        if($type == 'view') $menu .= $this->buildMenu('product', 'delete', $params, $product, $type, 'trash', 'hiddenwin');
+        $menu .= $this->buildMenu('product', 'delete', $params, $product, $type, 'trash', 'hiddenwin');
 
         return $menu;
     }

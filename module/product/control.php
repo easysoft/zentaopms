@@ -701,6 +701,39 @@ class product extends control
     }
 
     /**
+     * Activate a product.
+     *
+     * @param  int    $productID
+     * @access public
+     * @return void
+     */
+    public function activate($productID)
+    {
+        $product = $this->product->getById($productID);
+        $actions = $this->loadModel('action')->getList('product', $productID);
+
+        if(!empty($_POST))
+        {
+            $changes = $this->product->activate($productID);
+            if(dao::isError()) return print(js::error(dao::getError()));
+
+            if($this->post->comment != '' or !empty($changes))
+            {
+                $actionID = $this->action->create('product', $productID, 'Activate', $this->post->comment);
+                $this->action->logHistory($actionID, $changes);
+            }
+
+            return print(js::reload('parent.parent'));
+        }
+
+        $this->view->product = $product;
+        $this->view->title   = $this->view->product->name . $this->lang->colon .$this->lang->activate;
+        $this->view->actions = $actions;
+        $this->view->users   = $this->loadModel('user')->getPairs('noletter');
+        $this->display();
+    }
+
+    /**
      * View a product.
      *
      * @param  int    $productID
