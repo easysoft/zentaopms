@@ -12,7 +12,6 @@
 ?>
 <style>
 body {margin-bottom: 25px;}
-#docListForm table tr {border: none;}
 #docListForm th.c-id {width: 72px;}
 #docListForm th.c-user {width: 80px;}
 #docListForm th.c-actions {width: 84px; padding-left: 15px;}
@@ -93,7 +92,7 @@ body {margin-bottom: 25px;}
           ?>
           <?php if($doc->status == 'draft') echo "<span class='label label-badge draft'>{$lang->doc->draft}</span>";?>
           <?php if(common::canBeChanged('doc', $doc) and common::hasPriv('doc', 'collect') and $libType and $libType != 'api'):?>
-            <a data-url="<?php echo $this->createLink('doc', 'collect', "objectID=$doc->id&objectType=doc");?>" title="<?php echo $collectTitle;?>" class='btn btn-link ajaxCollect'><?php echo html::image("static/svg/{$star}.svg");?></a>
+            <a data-url="<?php echo $this->createLink('doc', 'collect', "objectID=$doc->id&objectType=doc");?>" title="<?php echo $collectTitle;?>" class='btn btn-link ajaxCollect'><?php echo html::image("static/svg/{$star}.svg", "class='$star'");?></a>
           <?php endif;?>
           </td>
           <td class="c-user"><?php echo zget($users, $doc->addedBy);?></td>
