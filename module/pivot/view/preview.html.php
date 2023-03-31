@@ -29,12 +29,13 @@ $('#subNavbar li').not('[data-id=<?php echo $group;?>]').removeClass('active');
   </div>
   <div class='btn-toolbar pull-right child-position'>
     <?php if(common::hasPriv('pivot', 'export')):?>
-    <a href="#" class="btn btn-link btn-export" disabled data-toggle="modal" data-target="#export"><?php echo '<i class="icon-export muted"> </i>' . $lang->export;?></a>
+    <a href="#" class="btn btn-link btn-export hidden" data-toggle="modal" data-target="#export"><?php echo '<i class="icon-export muted"> </i>' . $lang->export;?></a>
     <?php endif;?>
     <?php common::printLink('pivot', 'browse', '', $lang->pivot->toDesign, '', "class='btn btn-primary'");?>
   </div>
 </div>
-<?php include $this->app->getModuleExtPath('', 'pivot', 'view')['common'] . 'exportdata.html.php';?>
+<?php $pivotPath = $this->app->getModuleExtPath('', 'pivot', 'view');?>
+<?php include $pivotPath['common'] . 'exportdata.html.php';?>
 <?php endif;?>
 
 <div id='mainContent' class='main-row'>
