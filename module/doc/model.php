@@ -618,7 +618,7 @@ class docModel extends model
      */
     public function getDocs($libID, $module, $browseType, $orderBy, $pager = null)
     {
-        $docIdList = $this->getPrivDocs($libID, $module);
+        $docIdList = $this->getPrivDocs($libID, $module, 'children');
         return $this->dao->select('*')->from(TABLE_DOC)
             ->where('deleted')->eq(0)
             ->andWhere('vision')->eq($this->config->vision)
@@ -641,13 +641,13 @@ class docModel extends model
      */
     public function getPrivDocs($libIdList = array(), $module = 0, $mode = 'normal')
     {
+        $modules = $module && $mode == 'children' ? $this->loadModel('tree')->getAllChildID($module) : $module;
         $stmt = $this->dao->select('*')->from(TABLE_DOC)
             ->where('1=1')
+            ->andWhere('module')->in($modules)
             ->beginIF($mode == 'normal')->andWhere('deleted')->eq(0)->fi()
             ->beginIF($this->config->doc->notArticleType)->andWhere('type')->notIN($this->config->doc->notArticleType)->fi()
             ->beginIF($libIdList)->andWhere('lib')->in($libIdList)->fi()
-            ->beginIF(strpos($this->config->doc->custom->showLibs, 'children') === false)->andWhere('module')->in($module)->fi()
-            ->beginIF(!empty($module) and strpos($this->config->doc->custom->showLibs, 'children') !== false)->andWhere('module')->in($module)->fi()
             ->query();
 
         $docIdList = array();
