@@ -1096,6 +1096,8 @@ class upgradeModel extends model
                 $confirmContent .= file_get_contents($this->getUpgradeFile('18.1'));
              case '18_2':
                 $confirmContent .= file_get_contents($this->getUpgradeFile('18.2')); // confirm insert position.
+             case '18_3':
+                $confirmContent .= file_get_contents($this->getUpgradeFile('18.3')); // confirm insert position.
         }
 
         return $confirmContent;
@@ -8849,11 +8851,19 @@ class upgradeModel extends model
             {
                 $column = new stdclass();
                 $column->field      = $field;
-                $column->stat       = isset($params->reportType) ? zget($params->reportType, $index, '') : 'noStat';
-                $column->slice      = 'noSlice';
+                $column->slice      = $field;
+                $column->stat       = isset($params->reportType) ? zget($params->reportType, $index, 'noStat') : 'noStat';
                 $column->showTotal  = (isset($params->reportTotal) && zget($params->reportTotal, $index, '') == '1') ? 'sum' : 'noShow';
                 $column->showMode   = (isset($params->percent) && zget($params->percent, $index, '') == '1' && isset($params->contrast) && zget($params->contrast, $index, '') == 'crystalTotal') ? 'total' : 'default';
                 $column->monopolize = isset($params->showAlone) ? zget($params->showAlone, $index, '0') : '0';
+
+                if($column->stat == 'sum')
+                {
+                    $sumAppend = isset($params->sumAppend) ? zget($params->sumAppend, $index, $field) : $field;
+
+                    if($sumAppend == $field) $column->slice = 'noSlice';
+                    if($sumAppend != $field) $column->field = $sumAppend;
+                }
 
                 $columns[] = $column;
             }
