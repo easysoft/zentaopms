@@ -23,7 +23,7 @@ if(isset($pageCSS)) css::internal($pageCSS);
       <strong>
         <?php
         $lblEditTree = $lang->tree->edit;
-        if($type == 'doc') $lblEditTree = $lang->doc->editType;
+        if($type == 'doc' or $type == 'api') $lblEditTree = $lang->tree->editDir;
         if($type == 'line') $lblEditTree = $lang->tree->manageLine;
         echo $lblEditTree;
         ?>
@@ -69,7 +69,7 @@ if(isset($pageCSS)) css::internal($pageCSS);
           <th class='thWidth'>
             <?php
             $lblTreeName = $lang->tree->name;
-            if($type == 'doc') $lblTreeName = $lang->tree->cate;
+            if($type == 'doc' or $type == 'api') $lblTreeName = $lang->tree->dir;
             if($type == 'line') $lblTreeName = $lang->tree->line;
             echo $lblTreeName;
             ?>

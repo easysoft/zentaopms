@@ -52,6 +52,7 @@ $lang->tree->noSubmodule          = "当前模块下没有可复制的子模块�
 $lang->tree->successSave          = '成功保存';
 $lang->tree->successFixed         = '成功修正数据！';
 $lang->tree->repeatName           = '模块名“%s”已经存在！';
+$lang->tree->repeatDirName        = '目录名“%s”已经存在！';
 $lang->tree->shouldNotBlank       = '模块名不能为空格！';
 $lang->tree->syncProductModule    = "同步{$lang->productCommon}模块";
 
@@ -78,6 +79,7 @@ $lang->tree->short        = '简称';
 $lang->tree->all          = '所有模块';
 $lang->tree->executionDoc = "{$lang->executionCommon}文档";
 $lang->tree->product      = "所属{$lang->productCommon}";
+$lang->tree->editDir      = "编辑目录";
 
 $lang->tree->emptyHistory = "暂时没有历史记录。";
 

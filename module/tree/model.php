@@ -2353,7 +2353,7 @@ class treeModel extends model
         $repeatName = $this->checkUnique($module);
         if($repeatName)
         {
-            dao::$errors[] = sprintf($this->lang->tree->repeatName, $repeatName);
+            dao::$errors[] = sprintf($this->lang->tree->repeatDirName, $repeatName);
             return false;
         }
 
