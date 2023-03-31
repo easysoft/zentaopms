@@ -54,5 +54,23 @@ $lang->demandpool->menuOrder[20] = 'track';
 $lang->demandpool->menuOrder[25] = 'insight';
 $lang->demandpool->menuOrder[30] = 'view';
 
+$lang->product->menu              = new stdclass();
+$lang->product->menu->requirement = array('link' => "{$lang->URCommon}|product|browse|productID=%s&branch=&browseType=unclosed&param=0&storyType=requirement", 'alias' => 'batchedit', 'subModule' => 'story');
+$lang->product->menu->roadmap     = array('link' => "路标|roadmap|browse|productID=%s");
+$lang->product->menu->initiating  = array('link' => "立项|product|initiating|productID=%s");
+$lang->product->menu->settings    = array('link' => "{$lang->settings}|product|view|productID=%s", 'subModule' => 'tree,branch', 'alias' => 'edit,whitelist,addwhitelist');
+
+$lang->product->menu->settings['subMenu'] = new stdclass();
+$lang->product->menu->settings['subMenu']->view      = array('link' => "{$lang->overview}|product|view|productID=%s", 'alias' => 'edit');
+$lang->product->menu->settings['subMenu']->module    = array('link' => "{$lang->module}|tree|browse|product=%s&view=story", 'subModule' => 'tree');
+$lang->product->menu->settings['subMenu']->branch    = array('link' => "@branch@|branch|manage|product=%s", 'subModule' => 'branch');
+$lang->product->menu->settings['subMenu']->whitelist = array('link' => "{$lang->whitelist}|product|whitelist|product=%s", 'subModule' => 'personnel');
+
+$lang->product->menuOrder = array();
+$lang->product->menuOrder[5]  = 'requirement';
+$lang->product->menuOrder[10] = 'roadmap';
+$lang->product->menuOrder[15] = 'initiating';
+$lang->product->menuOrder[20] = 'settings';
+
 unset($lang->product->homeMenu->home);
 unset($lang->product->homeMenu->kanban);
