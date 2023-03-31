@@ -25,7 +25,6 @@ $selected          = $objectType == 'nolink' ? 'selected' : '';
 $dataParams        = 'data-type="nolink" data-id="0"';
 
 $normalObjectsHtml .= "<li>" . html::a($link, $lang->api->noLinked, '', "class='clickable $selected' title='{$lang->api->noLinked}' $dataParams data-key='" . zget($objectsPinYin, $lang->api->noLinked, '') . "'") . '</li>';
-$normalObjectsHtml .= '<li class="divider"></li>';
 foreach(array('product', 'project') as $moduleType)
 {
     foreach($normalObjects[$moduleType] as $normalObjectID => $normalObjectName)
