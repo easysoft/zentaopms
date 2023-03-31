@@ -752,6 +752,7 @@ class docModel extends model
      */
     public function create()
     {
+        if(!isset($_POST['lib']) and strpos($_POST['module'], '_') !== false) list($_POST['lib'], $_POST['module']) = explode('_', $_POST['module']);
         $now = helper::now();
         $doc = fixer::input('post')
             ->callFunc('title', 'trim')
@@ -763,7 +764,7 @@ class docModel extends model
             ->add('version', 1)
             ->setDefault('product,execution,module', 0)
             ->stripTags($this->config->doc->editor->create['id'], $this->config->allowedTags)
-            ->cleanInt('product,execution')
+            ->cleanInt('product,execution,module,lib')
             ->join('groups', ',')
             ->join('users', ',')
             ->join('mailto', ',')
@@ -843,6 +844,7 @@ class docModel extends model
             return false;
         }
 
+        if(!isset($_POST['lib']) and strpos($_POST['module'], '_') !== false) list($_POST['lib'], $_POST['module']) = explode('_', $_POST['module']);
         $doc = fixer::input('post')->setDefault('module', 0)
             ->callFunc('title', 'trim')
             ->stripTags($this->config->doc->editor->edit['id'], $this->config->allowedTags)
@@ -853,13 +855,14 @@ class docModel extends model
             ->setDefault('mailto', '')
             ->add('editedBy', $this->app->user->account)
             ->add('editedDate', helper::now())
-            ->cleanInt('module')
+            ->cleanInt('project,product,execution,lib,module')
             ->join('groups', ',')
             ->join('users', ',')
             ->join('mailto', ',')
             ->remove('comment,files,labels,uid,contactListMenu')
             ->get();
 
+        if($doc->acl == 'open') $doc->users = $doc->groups = '';
         if($doc->type == 'chapter' and $doc->parent)
         {
             $parentDoc = $this->dao->select('*')->from(TABLE_DOC)->where('id')->eq((int)$doc->parent)->fetch();
@@ -869,8 +872,6 @@ class docModel extends model
                 return false;
             }
         }
-
-        if(!empty($doc->acl) and $doc->acl == 'private') $doc->users = $oldDoc->addedBy;
 
         $oldDocContent = $this->dao->select('*')->from(TABLE_DOCCONTENT)->where('doc')->eq($docID)->andWhere('version')->eq($oldDoc->version)->fetch();
         if($oldDocContent)
@@ -891,8 +892,13 @@ class docModel extends model
             $doc->execution = $lib->execution;
         }
 
-        if(isset($doc->type) and $doc->type == 'url') $doc->content = $doc->url;
-        unset($doc->url);
+        $requiredFields = $this->config->doc->edit->requiredFields;
+        if($doc->status == 'draft') $requiredFields = '';
+        if(strpos(",$requiredFields,", ',content,') !== false)
+        {
+            $requiredFields = trim(str_replace(',content,', ',', ",$requiredFields,"), ',');
+            if(isset($doc->content) and empty($doc->content)) return dao::$errors['content'] = sprintf($this->lang->error->notempty, $this->lang->doc->content);
+        }
 
         $files   = $this->file->saveUpload('doc', $docID);
         $changes = common::createChanges($oldDoc, $doc);
@@ -903,28 +909,26 @@ class docModel extends model
             if($change['field'] == 'content' or $change['field'] == 'title') $changed = true;
         }
 
-        $requiredFields = $this->config->doc->edit->requiredFields;
-        $checkContent   = strpos(",$requiredFields,", ',content,') !== false;
-        if($checkContent)
-        {
-            $requiredFields = trim(str_replace(',content,', ',', ",$requiredFields,"), ',');
-            if(isset($doc->content) and empty($doc->content)) return dao::$errors['content'] = sprintf($this->lang->error->notempty, $this->lang->doc->content);
-        }
-
         if($changed)
         {
-            $doc->version        = $oldDoc->version + 1;
             $docContent          = new stdclass();
-            $docContent->doc     = $docID;
             $docContent->title   = $doc->title;
             $docContent->content = isset($doc->content) ? $doc->content : '';
-            $docContent->version = $doc->version;
-            $docContent->type    = $oldDocContent->type;
             $docContent->files   = $oldDocContent->files;
-            if(isset($doc->digest)) $docContent->digest = $doc->digest;
             if($files) $docContent->files .= ',' . join(',', array_keys($files));
             $docContent->files = trim($docContent->files, ',');
-            $this->dao->replace(TABLE_DOCCONTENT)->data($docContent)->exec();
+            if(isset($doc->digest)) $docContent->digest = $doc->digest;
+            if($doc->status == 'draft')
+            {
+                $this->dao->update(TABLE_DOCCONTENT)->data($docContent)->where('id')->eq($oldDocContent->id)->exec();
+            }
+            else
+            {
+                $doc->version        = $oldDoc->version + 1;
+                $docContent->version = $doc->version;
+                $docContent->type    = $oldDocContent->type;
+                $this->dao->replace(TABLE_DOCCONTENT)->data($docContent)->exec();
+            }
         }
         unset($doc->contentType);
 

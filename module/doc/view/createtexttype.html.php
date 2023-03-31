@@ -13,6 +13,11 @@
 <?php include '../../common/view/header.lite.html.php';?>
 <?php include '../../common/view/kindeditor.html.php';?>
 <?php include '../../common/view/markdown.html.php';?>
+<style>
+#main {padding: 0;}
+.container {padding: 0 !important;}
+#mainContent {padding: 0 !important;}
+</style>
 <?php if($objectType == 'custom' and empty($libs)):?>
 <?php echo html::a(helper::createLink('doc', 'createLib', "type=custom&objectID=$objectID"), '<i class="icon icon-plus"></i> ' . $lang->doc->createLib, '', 'class="iframe hidden createCustomLib"');?>
 <?php endif;?>
@@ -22,7 +27,7 @@
     <table class='table table-form'>
       <tbody>
         <tr id='headerBox'>
-          <td width='90px'><?php echo html::a($backLink, '<i class="icon icon-back icon-sm"></i> ' . $lang->goback, '', "class='btn btn-secondary' id='backBtn'");?></td>
+          <td width='90px'><?php echo html::a($backLink, "<i class='icon icon-back icon-sm'></i> " . $lang->goback, '', "id='backBtn' class='btn btn-secondary'");?></td>
           <td class="doc-title" colspan='3'><?php echo html::input('title', '', "placeholder='{$lang->doc->titlePlaceholder}' id='editorTitle' class='form-control' required");?></td>
           <td class="text-right btn-tools">
             <span id='savePath' class='text-gray'></span>
@@ -83,11 +88,11 @@
                 <?php endif;?>
                 <tr>
                   <th class='w-100px'><?php echo $lang->doc->libAndModule?></th>
-                  <td colspan='3'><span id='moduleBox' class='required'><?php echo html::select('module', $moduleOptionMenu, $moduleID, "class='form-control chosen'");?></span></td>
+                  <td colspan='3' class='required'><span id='moduleBox'><?php echo html::select('module', $moduleOptionMenu, $moduleID, "class='form-control chosen'");?></span></td>
                 </tr>
                 <tr>
                   <th><?php echo $lang->doc->keywords;?></th>
-                  <td colspan='3'><?php echo html::input('keywords', '', "class='form-control' placeholder='{$lang->doc->keywordsTips}'");?></td>
+                  <td colspan='3' class='<?php if(strpos($config->doc->edit->requiredFields, 'keywords') !== false) echo 'required'?>'><?php echo html::input('keywords', '', "id='modalKeywords' class='form-control' placeholder='{$lang->doc->keywordsTips}'");?></td>
                 </tr>
                 <tr id='fileBox'>
                   <th><?php echo $lang->doc->files;?></th>
