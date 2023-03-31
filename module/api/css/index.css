@@ -46,5 +46,6 @@ span.dotted-line+a {display: block;}
 .is-sorting > li > .tree-group {opacity: 1; border-radius: 4px;}
 .is-sorting > li ul {display: none!important;}
 li.drag-shadow ul {display: none!important;}
+.cell {height: 100%;}
 
 #queryBox #groupAndOr {min-width: 60px;}
