@@ -50,7 +50,7 @@
 </style>
 
 <div id="fileTree" class="file-tree">
-<?php if($type == 'project'):?>
+<?php if(isset($type) and $type == 'project'):?>
 <div class="project-tree">
     <div class="title"><i class="icon icon-project text-primary"> </i><?php echo $lang->projectCommon?></div>
     <div id="projectTree" data-id="project"></div>
@@ -67,15 +67,17 @@
 </div>
 
 <!-- Code for dropdown menu. -->
+<?php js::set('hasLibPriv', common::hasPriv('tree', 'browse') || common::hasPriv($app->rawModule, 'editLib') || common::hasPriv($app->rawModule, 'deleteLib'));?>
+<?php js::set('hasModulePriv', common::hasPriv('tree', 'browse'));?>
 <div class='hidden' id='dropDownData'>
   <ul class='libDorpdown'>
     <?php if(common::hasPriv('tree', 'browse')):?>
     <li data-method="addCataLib" data-has-children='%hasChildren%'  data-libid='%libID%' data-moduleid="%moduleID%" data-type="add"><a><i class="icon icon-icon-add-directory"></i><?php echo $lang->doc->libDropdown['addModule'];?></a></li>
     <?php endif;?>
-    <?php if(common::hasPriv('doc', 'editLib')):?>
+    <?php if(common::hasPriv($app->rawModule, 'editLib')):?>
     <li data-method="editLib"><a href='<?php echo inlink('editLib', 'libID=%libID%');?>' data-toggle='modal' data-type='iframe'><i class="icon icon-edit"></i><?php echo $lang->doc->libDropdown['editLib'];?></a></li>
     <?php endif;?>
-    <?php if(common::hasPriv('doc', 'deleteLib')):?>
+    <?php if(common::hasPriv($app->rawModule, 'deleteLib')):?>
     <li data-method="deleteLib"><a href='<?php echo inlink('deleteLib', 'libID=%libID%');?>' target='hiddenwin'><i class="icon icon-trash"></i><?php echo $lang->doc->libDropdown['deleteLib'];?></a></li>
     <?php endif;?>
   </ul>
@@ -169,7 +171,8 @@ $(function()
                 $item += '<div class="tree-text">';
                 $item += item.name
                 $item += '</div>';
-                $item += '<i class="icon icon-drop icon-ellipsis-v hidden tree-icon" data-isCatalogue="' + (libClass ? false : true) + '"></i>';
+
+                if((libClass != 'lib' && hasModulePriv) || (libClass == 'lib' && hasLibPriv)) $item += '<i class="icon icon-drop icon-ellipsis-v hidden tree-icon" data-isCatalogue="' + (libClass ? false : true) + '"></i>';
                 $item += '</div>';
                 $item += '</a>';
 
