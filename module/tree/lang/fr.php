@@ -78,6 +78,8 @@ $lang->tree->short        = 'Abbr.';
 $lang->tree->all          = 'Tous les Modules';
 $lang->tree->executionDoc = "Document {$lang->executionCommon}";
 $lang->tree->product      = $lang->productCommon;
+$lang->tree->editDir      = "Edit Directory";
+$lang->tree->dirName      = "Directory Name";
 
 $lang->tree->emptyHistory = "Pas Historique";
 
