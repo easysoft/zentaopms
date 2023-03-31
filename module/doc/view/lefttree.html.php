@@ -55,7 +55,7 @@ js::set('release',    isset($release) ? $release : 0);
 
 /* ObjectType and objectID used for other space. */
 js::set('objectType', isset($type) ? $type : '');
-js::set('objectID',   isset($objectID) ? $objectType : '');
+js::set('objectID',   isset($objectID) ? $objectID : '');
 ?>
 
 <div id="fileTree" class="file-tree">
