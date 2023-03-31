@@ -102,8 +102,8 @@ js::set('objectID',   isset($objectID) ? $objectID : '');
 </div>
 <div class='hidden' data-id="ulTreeModal">
   <ul data-id="liTreeModal" class="menu-active-primary menu-hover-primary has-input">
-    <li data-id="insert" class="has-input">
-      <input data-target="%target%" class="form-control input-tree"></input>
+    <li data-id="insert" class="has-input flex-start">
+      <input data-target="%target%" class="form-control input-tree overflow-hidden"></input>
     </li>
   </ul>
 </div>
@@ -452,6 +452,7 @@ $(function()
         if(!value)
         {
             $input.closest('[data-id=insert]').remove();
+            $('.file-tree [data-id="liTreeModal"]').remove();
             return;
         }
 
