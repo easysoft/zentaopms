@@ -7,6 +7,6 @@ class switcher extends checkbox
 {
     protected static $defaultProps = array
     (
-        'typeClass' => 'switch'
+        'typeClass' => 'switch switch'
     );
 }
