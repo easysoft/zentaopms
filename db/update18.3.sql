@@ -42,7 +42,7 @@ REPLACE INTO `zt_grouppriv` (`group`, `module`, `method`) SELECT `group`, 'pivot
 
 DELETE FROM `zt_grouppriv` WHERE `module` = 'dataset' AND `method` = 'view';
 
-CREATE TABLE `zt_pivot`  (
+CREATE TABLE IF NOT EXISTS `zt_pivot`  (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
   `dimension` mediumint(8) unsigned NOT NULL DEFAULT 0,
   `group` varchar(255) NOT NULL,
