@@ -69,7 +69,7 @@ if(isset($pageCSS)) css::internal($pageCSS);
           <th class='thWidth'>
             <?php
             $lblTreeName = $lang->tree->name;
-            if($type == 'doc' or $type == 'api') $lblTreeName = $lang->tree->dirName;
+            if($type == 'doc' or $type == 'api') $lblTreeName = $lang->tree->dir;
             if($type == 'line') $lblTreeName = $lang->tree->line;
             echo $lblTreeName;
             ?>

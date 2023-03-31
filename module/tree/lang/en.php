@@ -52,6 +52,7 @@ $lang->tree->noSubmodule          = "There are no copyable submodules under the 
 $lang->tree->successSave          = 'Saved.';
 $lang->tree->successFixed         = 'Fixed.';
 $lang->tree->repeatName           = 'The name "%s" exists!';
+$lang->tree->repeatDirName        = 'The name "%s" exists!';
 $lang->tree->shouldNotBlank       = 'Module name should not be blank!';
 $lang->tree->syncProductModule    = 'Sync Module';
 
@@ -79,7 +80,6 @@ $lang->tree->all          = 'All Modules';
 $lang->tree->executionDoc = "{$lang->executionCommon} Document";
 $lang->tree->product      = $lang->productCommon;
 $lang->tree->editDir      = "Edit Directory";
-$lang->tree->dirName      = "Directory Name";
 
 $lang->tree->emptyHistory = "No History";
 
