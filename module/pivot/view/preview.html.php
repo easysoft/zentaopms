@@ -34,6 +34,7 @@ $('#subNavbar li').not('[data-id=<?php echo $group;?>]').removeClass('active');
     <?php common::printLink('pivot', 'browse', '', $lang->pivot->toDesign, '', "class='btn btn-primary'");?>
   </div>
 </div>
+<?php include $this->app->getModuleExtPath('', 'pivot', 'view')['common'] . 'exportdata.html.php';?>
 <?php endif;?>
 
 <div id='mainContent' class='main-row'>
