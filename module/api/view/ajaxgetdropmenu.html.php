@@ -49,8 +49,8 @@ foreach(array('product', 'project') as $moduleType)
 
     if($moduleType  == 'product')
     {
-        if($normalObjects['project'] and (!empty($nolinkLibs) or !empty($normalObjects['product']))) $normalObjectsHtml .= '<li class="divider"></li>';
-        if($closedObjects['project'] and !empty($normalObjects['product'])) $closedObjectsHtml .= '<li class="divider"></li>';
+        if(!empty($normalObjects['project']) and (!empty($nolinkLibs) or !empty($normalObjects['product']))) $normalObjectsHtml .= '<li class="divider"></li>';
+        if(!empty($closedObjects['project']) and !empty($normalObjects['product'])) $closedObjectsHtml .= '<li class="divider"></li>';
     }
 }
 $normalObjectsHtml .= '</ul>';

@@ -985,6 +985,8 @@ class apiModel extends model
      */
     public function getOrderedObjects()
     {
+        $normalObjects = $closedObjects = array();
+
         $libs     = $this->loadModel('doc')->getApiLibs();
         $products = $this->dao->select('t1.id, t1.name, t1.status')->from(TABLE_PRODUCT)->alias('t1')
             ->leftjoin(TABLE_DOCLIB)->alias('t2')->on('t2.product=t1.id')
