@@ -12,6 +12,7 @@
 [lang^=zh] #mainContent > #sideBar {flex: 0 0 180px;}
 
 /* css for tree */
+#fileTree .title {font-size: 16px; height: 20px; margin-top: 5px; margin-bottom: 5px;}
 .tree li.has-list.open:before {content: unset;}
 .tree li > a {max-width: 100%; padding: 2px;}
 .file-tree  a {height: 30px;}
@@ -27,9 +28,9 @@
 .tree li > a {max-width: 100%; padding: 2px;}
 .file-tree  a.show-icon > div {padding-right: 15px;}
 .tree li.has-input {overflow: hidden;}
-#fileTree .title {font-size: 16px; height: 20px; margin-top: 5px; margin-bottom: 5px;}
 .tree-text {margin-left: 5px; overflow: hidden;}
 i.btn-info, i.btn-info:hover {border: none; background: #fff; box-shadow: unset;}
+.tree-version-trigger {padding: 0 10px; width: 54px;}
 
 /* css for sidebar */
 .sidebar-toggle {flex: 0 0 16px;}
@@ -52,7 +53,10 @@ i.btn-info, i.btn-info:hover {border: none; background: #fff; box-shadow: unset;
 
 <?php
 /* Release used for api space. */
-js::set('release',    isset($release) ? $release : 0);
+js::set('release', isset($release) ? $release : 0);
+js::set('libid', $libID);
+js::set('versionLang', $lang->build->common);
+
 
 /* ObjectType and objectID used for other space. */
 js::set('objectType', isset($type) ? $type : '');
@@ -107,14 +111,6 @@ js::set('objectID',   isset($objectID) ? $objectID : '');
     </li>
   </ul>
 </div>
-<div class="hidden" data-id="aTreeModal">
-  <a href="###" style="position: relative" data-has-children="false" data-action="true" title="%name%" data-id="%id%">
-    <div class="text h-full w-full flex-between overflow-hidden" style="position: relative;">
-      <div class="tree-text">%name%</div>
-      <i class="icon icon-drop icon-ellipsis-v tree-icon hidden" data-iscatalogue="true"></i>
-    </div>
-  </a>
-</div>
 
 <script>
 $(function()
@@ -131,6 +127,8 @@ $(function()
         "order"      : "",
         "isUpdate"   : ""
     };
+
+    var versionsData = {};
 
     /**
      * Render Dropdown dom.
@@ -151,6 +149,35 @@ $(function()
         return dropdown;
     }
 
+    /*
+     * Redner version dropdown dom.
+     *
+     * @param versions array
+     * @access public
+     * @return string
+     */
+    function renderDropVersion(option)
+    {
+        var versions = option.versions;
+        if (!versions || !versions.length)
+        {
+            $dropdown = '';
+        }
+        else
+        {
+            var $lis = '<li><a href="###" data-id=0>' + versionLang + '</a></li>';
+            for(i = 0; i< versions.length; i++)
+            {
+                var version = versions[i];
+                $lis += '<li><a href="###" data-id="' + version.id + '">' + version.version+ '</a></li>';
+            }
+            var $dropdown = '<ul id="versionSwitcher" class="dropdown-menu dropdown-in-tree" style="display: unset; left:' + option.left + 'px; top:' + option.top + 'px;">';
+            $dropdown += $lis;
+            $dropdown += '</ul>';
+        }
+        return $dropdown;
+    }
+
     /**
      * Render tree dom.
      *
@@ -163,15 +190,14 @@ $(function()
     {
         var imgObj = {
             'annex': 'annex',
-            'lib': 'wiki-file-lib',
             'api': 'interface',
-            'execution': 'wiki-file-lib',
+            'lib': 'wiki-file-lib',
+            'execution': 'wiki-file-lib'
         };
-
         ele.tree(
         {
-            initialState: 'active',
             data: treeData,
+            initialState: 'active',
             itemCreator: function($li, item)
             {
                 var objectType = config.currentModule == 'api' ? item.objectType : item.type;
@@ -183,12 +209,22 @@ $(function()
                 $item += '<div class="text h-full w-full flex-start overflow-hidden">';
                 if(libClass == 'lib') $item += '<div class="img-lib" style="background-image:url(static/svg/' + imgObj[item.type || 'lib'] + '.svg)"></div>';
                 $item += '<div class="tree-text">';
-                $item += item.name
+                $item += item.name;
                 $item += '</div>';
 
+                if(libClass == 'lib' && item.versions)
+                {
+                    var versionName = '';
+                    for(var i = 0; i < item.versions.length; i++)
+                    {
+                        if(item.versions[i].id == release) versionName = item.versions[i].version
+                    }
+                    $item += '<div class="tree-version-trigger" data-id="' +  item.id + '">' + (versionName || versionLang) + '<span class="caret"></span></div>';
+                }
                 if((libClass != 'lib' && hasModulePriv) || (libClass == 'lib' && hasLibPriv)) $item += '<i class="icon icon-drop icon-ellipsis-v hidden tree-icon" data-isCatalogue="' + (libClass ? false : true) + '"></i>';
                 $item += '</div>';
                 $item += '</a>';
+                if(item.versions) versionsData[item.id] = item.versions;
 
                 $li.append($item);
                 $li.addClass(libClass);
@@ -243,38 +279,17 @@ $(function()
             $(this).closest('body').append(dropDown);
 
             e.stopPropagation();
-        }).on('blur', '.file-tree input.input-tree', function()
+        }).on('click', '.tree-version-trigger', function(e)
         {
-            var $input = $(this);
-            var value = $input.val();
-            if(!value)
-            {
-                $input.closest('[data-id=insert]').remove();
-                return;
-            }
-
-            moduleData.name = value;
-            $.post(createLink('tree', 'ajaxCreateModule'), moduleData, function(result)
-            {
-                result = JSON.parse(result);
-                if(result.result == 'fail')
-                {
-                    bootbox.alert(
-                        result.message[0],
-                        function()
-                        {
-                            setTimeout(function()
-                            {
-                                $('.file-tree .input-tree').focus()
-                            }, 10)
-                        }
-                    );
-                    return false;
-                }
-
-                var module = result.module;
-                return lcatePage(module.root, module.id, 'doc');
-            });
+            $('.dropdown-in-tree').css('display', 'none');
+            var option = {
+                left     : e.pageX,
+                top      : e.pageY,
+                versions : versionsData[$(this).data('id')]
+            };
+            var dropDown = renderDropVersion(option);
+            $(this).closest('body').append(dropDown);
+            e.stopPropagation();
         });
     }
 
@@ -444,6 +459,10 @@ $(function()
                 $rootDom.find('input').focus();
                 break;
         }
+    }).on('click', '#versionSwitcher a', function()
+    {
+        linkParams = linkParams.replace('%s', '&libID=' + libid + '&moduleID=0&apiID=0&version=0&release=' + $(this).data('id'));
+        location.href = createLink(config.currentModule, 'index', linkParams);
     }).on('blur', '.file-tree input.input-tree', function()
     {
         var $input = $(this);
