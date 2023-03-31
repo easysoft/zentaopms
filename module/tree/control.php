@@ -387,7 +387,6 @@ class tree extends control
         if(!empty($_POST))
         {
             $this->tree->update($moduleID);
-            echo js::alert($this->lang->tree->successSave);
             die(js::reload('parent'));
         }
 

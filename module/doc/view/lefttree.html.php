@@ -85,7 +85,7 @@
     <?php if(common::hasPriv('tree', 'browse')):?>
     <li data-method="addCataBro" data-type="add" data-id="%moduleID%"><a><i class="icon icon-icon-add-directory"></i><?php echo $lang->doc->libDropdown['addSameModule'];?></a></li>
     <li data-method="addCataChild" data-type="add" data-id="%moduleID%" data-has-children='%hasChildren%'><a><i class="icon icon-icon-add-directory"></i><?php echo $lang->doc->libDropdown['addSubModule'];?></a></li>
-    <li data-method="editCata" class='edit-module'><a data-href='<?php echo helper::createLink('tree', 'edit', 'moduleID=%moduleID%&type=doc');?>'><i class="icon icon-edit"></i><?php echo $lang->doc->libDropdown['editModule'];?></a></li>
+    <li data-method="editCata" class='edit-module'><a data-href='<?php echo helper::createLink('tree', 'edit', "moduleID=%moduleID%&type=$app->rawModule");?>'><i class="icon icon-edit"></i><?php echo $lang->doc->libDropdown['editModule'];?></a></li>
     <li data-method="deleteCata"><a href='<?php echo helper::createLink('tree', 'delete', 'rootID=%libID%&moduleID=%moduleID%');?>' target='hiddenwin'><i class="icon icon-trash"></i><?php echo $lang->doc->libDropdown['delModule'];?></a></li>
     <?php endif;?>
   </ul>
@@ -364,10 +364,12 @@ $(function()
         var item = $(this).data();
         if($(this).hasClass('edit-module'))
         {
+            var link = $(this).find('a').data('href');
+            if(typeof(moduleData.moduleType) != 'undefined' && moduleData.moduleType == 'api') link = link.replace('doc', 'api');
             new $.zui.ModalTrigger({
                 keyboard : true,
                 type     : 'ajax',
-                url      : $(this).find('a').data('href')
+                url      : link
             }).show();
         }
         if(item.type !== 'add') return;
