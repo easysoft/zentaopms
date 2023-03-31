@@ -845,7 +845,7 @@ class testcaseModel extends model
 
         list($stepChanged, $status) = $result;
 
-        $version = $stepChanged ? $oldCase->version + 1 : $oldCase->version;
+        $version = $stepChanged ? (int)$oldCase->version + 1 : (int)$oldCase->version;
 
         if(!empty($_POST['auto']))
         {
@@ -894,8 +894,8 @@ class testcaseModel extends model
                 $isLibCase    = ($oldCase->lib and empty($oldCase->product));
                 if($isLibCase)
                 {
-                    $fromcaseVersion  = $this->dao->select('fromCaseVersion')->from(TABLE_CASE)->where('fromCaseID')->eq($caseID)->fetch('fromCaseVersion');
-                    $fromcaseVersion += 1;
+                    $fromcaseVersion = $this->dao->select('fromCaseVersion')->from(TABLE_CASE)->where('fromCaseID')->eq($caseID)->fetch('fromCaseVersion');
+                    $fromcaseVersion = (int)$fromcaseVersion + 1;
                     $this->dao->update(TABLE_CASE)->set('`fromCaseVersion`')->eq($fromcaseVersion)->where('`fromCaseID`')->eq($caseID)->exec();
                 }
 
@@ -1232,8 +1232,8 @@ class testcaseModel extends model
                 $isLibCase = ($oldCase->lib and empty($oldCase->product));
                 if($isLibCase and $caseChanged)
                 {
-                    $fromcaseVersion  = $this->dao->select('fromCaseVersion')->from(TABLE_CASE)->where('fromCaseID')->eq($caseID)->fetch('fromCaseVersion');
-                    $fromcaseVersion += 1;
+                    $fromcaseVersion = $this->dao->select('fromCaseVersion')->from(TABLE_CASE)->where('fromCaseID')->eq($caseID)->fetch('fromCaseVersion');
+                    $fromcaseVersion = (int)$fromcaseVersion + 1;
                     $this->dao->update(TABLE_CASE)->set('`fromCaseVersion`')->eq($fromcaseVersion)->where('`fromCaseID`')->eq($caseID)->exec();
                 }
             }
@@ -1663,7 +1663,7 @@ class testcaseModel extends model
                     }
                 }
 
-                $version           = $stepChanged ? $oldCase->version + 1 : $oldCase->version;
+                $version           = $stepChanged ? (int)$oldCase->version + 1 : (int)$oldCase->version;
                 $caseData->version = $version;
                 $changes           = common::createChanges($oldCase, $caseData);
                 if($caseData->story != $oldCase->story) $caseData->storyVersion = zget($storyVersionPairs, $caseData->story, 1);
@@ -1824,7 +1824,7 @@ class testcaseModel extends model
         foreach($libCases as $libCaseID => $case)
         {
             $case->fromCaseID      = $case->id;
-            $case->fromCaseVersion = $case->version;
+            $case->fromCaseVersion = (int)$case->version;
             $case->product         = $productID;
             if(isset($data->module[$case->id])) $case->module = $data->module[$case->id];
             if(isset($data->branch[$case->id])) $case->branch = $data->branch[$case->id];
@@ -1942,7 +1942,7 @@ class testcaseModel extends model
 
                 $libCase->lastEditedBy   = $this->app->user->account;
                 $libCase->lastEditedDate = helper::now();
-                $libCase->version        = $libCases[$caseID][$libCaseID]->version + 1;
+                $libCase->version        = (int)$libCases[$caseID][$libCaseID]->version + 1;
                 $this->dao->update(TABLE_CASE)->data($libCase)->autoCheck()->where('id')->eq((int)$libCaseID)->exec();
 
                 $this->action->create('case', $libCaseID, 'updatetolib', '', $caseID);

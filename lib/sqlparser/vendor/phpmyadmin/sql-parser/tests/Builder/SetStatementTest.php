@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 namespace PhpMyAdmin\SqlParser\Tests\Builder;
 
 use PhpMyAdmin\SqlParser\Parser;
@@ -9,7 +7,7 @@ use PhpMyAdmin\SqlParser\Tests\TestCase;
 
 class SetStatementTest extends TestCase
 {
-    public function testBuilderView(): void
+    public function testBuilderView()
     {
         /* Assertion 1 */
         $query = 'SET CHARACTER SET \'utf8\'';
