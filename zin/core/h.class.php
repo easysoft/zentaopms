@@ -246,8 +246,10 @@ class h extends wg
         foreach($vars as $var => $val)
         {
             if(empty($var)) continue;
-            if(str_starts_with($var, 'window.')) $jsCode .= "$var=" . h::encodeJsonWithRawJs($val) . ';';
-            else $jsCode .= "var $var=" . h::encodeJsonWithRawJs($val) . ';';
+            $val = h::encodeJsonWithRawJs($val);
+            if(str_starts_with($var, 'window.')) $jsCode .= "$var=" . $val . ';';
+            elseif(str_starts_with($var, '+')) $jsCode .= 'let ' . substr($var, 1) . '=' . $val . ';';
+            else $jsCode .= "const $var=" . $val . ';';
         }
         return $jsCode;
     }
