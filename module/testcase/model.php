@@ -3629,21 +3629,6 @@ class testcaseModel extends model
         return $cases;
     }
 
-    public function getXmindConfig()
-    {
-        return $this->loadExtension('xmind')->getXmindConfig();
-    }
-
-    public function getXmindExport($productID, $moduleID,$branch)
-    {
-        return $this->loadExtension('xmind')->getXmindExport($productID, $moduleID,$branch);
-    }
-
-    public function getXmindImport($xmlPath)
-    {
-        return $this->loadExtension('xmind')->getXmindImport($xmlPath);
-    }
-
     public function istrcut($text, $length)
     {
         return (mb_strlen($text, 'utf8') > $length) ? mb_substr($text, 0, $length, 'utf8').'...' : $text;
@@ -3708,16 +3693,6 @@ class testcaseModel extends model
 
             echo '</th>';
         }
-    }
-
-    public function saveXmindConfig()
-    {
-        return $this->loadExtension('xmind')->saveXmindConfig();
-    }
-
-    public function saveXmindImport()
-    {
-        return $this->loadExtension('xmind')->saveXmindImport();
     }
 
     public function updateScene($sceneID)
@@ -3831,5 +3806,557 @@ class testcaseModel extends model
         }
 
         return array('status' => 'updated', 'id' => $sceneID);
+    }
+
+    public function getXmindImport($fileName)
+    {
+        $xmlNode  = simplexml_load_file($fileName);
+        $testData = $this->xmlToArray($xmlNode);
+
+        return json_encode($testData);
+    }
+
+    public function saveXmindImport()
+    {
+        $this->dao->begin();
+
+        $sceneIds  = array();
+        $sceneList = $this->post->sceneList;
+        foreach($sceneList as $scene)
+        {
+            $tmpId  = $scene["tmpId"];
+            $tmpPId = $scene["tmpPId"];
+
+            $result = $this->saveScene($scene,$sceneIds);
+            /* Rollback. */
+            if($result["result"] == "fail")
+            {
+                $this->dao->rollBack();
+                return $result;
+            }
+
+            $sceneIds[$tmpId] = array("id"=>$result['sceneID'], "tmpPId"=>$tmpPId);
+        }
+
+        $testcaseList = $this->post->testcaseList;
+        foreach($testcaseList as $testcase)
+        {
+            $tmpId  = $testcase["tmpId"];
+            $tmpPId = $testcase["tmpPId"];
+
+            $result = $this->saveTestcase($testcase,$sceneIds);
+            if($result["result"] == "fail")
+            {
+                $this->dao->rollBack();
+                return $result;
+            }
+
+            $sceneIds[$tmpId] = array("id"=>$result['testcaseID'], "tmpPId"=>$tmpPId);
+        }
+
+        $this->dao->commit();
+
+        return array("result"=>"success","message"=>1);
+    }
+
+    public function saveTestcase($testcaseData, $sceneIds)
+    {
+        $tmpPId = $testcaseData["tmpPId"];
+        $scene  = 0;
+
+        if(isset($sceneIds[$tmpPId]))
+        {
+            $pScene = $sceneIds[$tmpPId];
+            $scene  = $pScene["id"] + CHANGEVALUE;
+        }
+
+        $id         = isset($testcaseData["id"]) ? $testcaseData["id"] : -1;
+        $module     = $testcaseData["module"];
+        $product    = $testcaseData["product"];
+        $branch     = $testcaseData["branch"];
+        $title      = $testcaseData["name"];
+        $pri        = $testcaseData["pri"];
+        $now        = helper::now();
+        $testcaseID = -1;
+        $version    = 1;
+
+        if(!isset($testcaseData["id"]))
+        {
+            $testcase             = new stdclass();
+            $testcase->scene      = $scene;
+            $testcase->module     = $module;
+            $testcase->product    = $product;
+            $testcase->branch     = $branch;
+            $testcase->title      = $title;
+            $testcase->pri        = $pri;
+            $testcase->type       = "feature";
+            $testcase->status     = "normal";
+            $testcase->version    = $version;
+            $testcase->openedBy   = $this->app->user->account;
+            $testcase->openedDate = $now;
+
+            $this->dao->insert(TABLE_CASE)->data($testcase)->autoCheck()->exec();
+            $testcaseID = $this->dao->lastInsertID();
+
+            $order = new stdclass();
+            $order->sort = $testcaseID;
+            $this->dao->update(TABLE_CASE)->data($order)->where('id')->eq((int)$testcaseID)->exec();
+        }
+        else
+        {
+            $oldCase = $this->dao->select('version,id')->from(TABLE_CASE)->where('id')->eq((int)$id)->fetch();
+
+            if(isset($oldCase->id))
+            {
+                if(!isset($oldCase->version)) return array('result' => 'fail', 'message' => 'not exist testcase');
+
+                $version  = $oldCase->version + 1;
+
+                $testcase                 = new stdclass();
+                $testcase->id             = $id;
+                $testcase->scene          = $scene;
+                $testcase->module         = $module;
+                $testcase->product        = $product;
+                $testcase->branch         = $branch;
+                $testcase->title          = $title;
+                $testcase->pri            = $pri;
+                $testcase->version        = $version;
+                $testcase->lastEditedBy   = $this->app->user->account;
+                $testcase->lastEditedDate = $now;
+
+                $testcaseID = $id;
+                $this->dao->update(TABLE_CASE)->data($testcase)->where('id')->eq((int)$id)->exec();
+            }
+            else
+            {
+                $testcase             = new stdclass();
+                $testcase->scene      = $scene;
+                $testcase->module     = $module;
+                $testcase->product    = $product;
+                $testcase->branch     = $branch;
+                $testcase->title      = $title;
+                $testcase->pri        = $pri;
+                $testcase->type       = "feature";
+                $testcase->status     = "normal";
+                $testcase->version    = $version;
+                $testcase->openedBy   = $this->app->user->account;
+                $testcase->openedDate = $now;
+
+                $this->dao->insert(TABLE_CASE)->data($testcase)->autoCheck()->exec();
+                $testcaseID = $this->dao->lastInsertID();
+
+                $order       = new stdclass();
+                $order->sort = $testcaseID;
+                $this->dao->update(TABLE_CASE)->data($order)->where('id')->eq((int)$testcaseID)->exec();
+            }
+        }
+
+        if($this->dao->isError())
+        {
+            return array('result' => 'fail', 'message' => $this->dao->getError(true));
+        }
+
+        $stepList = isset($testcaseData["stepList"]) ? $testcaseData["stepList"] : array();
+        if(isset($stepList))
+        {
+            foreach($stepList as $step)
+            {
+                $tmpPId = $step["tmpPId"];
+                $pObj   = isset($sceneIds[$tmpPId]) ? $sceneIds[$tmpPId] : array();
+
+                $parent = 0;
+                if(isset($sceneIds[$tmpPId])) $parent = $pObj["id"];
+
+                $case   = $testcaseID;
+                $type   = $step["type"];
+                $desc   = $step["desc"];
+                $expect = isset($step["expect"]) ? $step["expect"] : '';
+
+                $casestep            = new stdclass();
+                $casestep->case      = $case;
+                $casestep->version   = $version;
+                $casestep->type      = $type;
+                $casestep->parent    = $parent;
+                $casestep->desc      = $desc;
+                $casestep->expect    = $expect;
+
+                $this->dao->insert(TABLE_CASESTEP)->data($casestep)->autoCheck()->exec();
+                $casestepID = $this->dao->lastInsertID();
+
+                if($this->dao->isError()) return array('result' => 'fail', 'message' => $this->dao->getError(true));
+
+                $sceneIds[$step["tmpId"]] = array("id"=>$casestepID, "tmpPId"=>$tmpPId);
+            }
+        }
+
+        return array('result' => 'success', 'message' => 1,'testcaseID'=>$testcaseID);
+    }
+
+    public function saveScene($sceneData, $sceneIds)
+    {
+        $id      = isset($sceneData["id"]) ? $sceneData["id"] : -1;
+        $name    = $sceneData["name"];
+        $module  = isset($sceneData["module"]) ? $sceneData["module"] : 0;
+        $product = $sceneData["product"];
+        $branch  = $sceneData["branch"];
+        $now     = helper::now();
+        $sceneID = -1;
+
+        if(!isset($sceneData["id"]))
+        {
+            $scene             = new stdclass();
+            $scene->title      = $name;
+            $scene->module     = $module;
+            $scene->product    = $product;
+            $scene->branch     = $branch;
+            $scene->openedBy   = $this->app->user->account;
+            $scene->openedDate = $now;
+
+            $this->dao->insert(TABLE_SCENE)->data($scene)->autoCheck()->exec();
+            $sceneID = $this->dao->lastInsertID();
+
+            $order       = new stdclass();
+            $order->sort = ($sceneID + CHANGEVALUE);
+
+            $this->dao->update(TABLE_SCENE)->data($order)->where('id')->eq((int)$sceneID)->exec();
+        }
+        else
+        {
+            $scene                 = new stdclass();
+            $scene->title          = $name;
+            $scene->module         = $module;
+            $scene->product        = $product;
+            $scene->branch         = $branch;
+            $scene->lastEditedBy   = $this->app->user->account;
+            $scene->lastEditedDate = $now;
+
+            $sceneID      = $id;
+            $affectedRows = $this->dao->update(TABLE_SCENE)->data($scene)->where('id')->eq((int)$id)->exec();
+            if(empty($affectedRows)) return array('result' => 'fail', 'message' => sprintf($this->lang->testcase->errorSceneNotExist, $id));
+        }
+
+        if($this->dao->isError()) return array('result' => 'fail', 'message' => $this->dao->getError(true));
+
+        $tmpPId = $sceneData["tmpPId"];
+        $pScene = isset($sceneIds[$tmpPId]) ? $sceneIds[$tmpPId] : array();
+        $parent = 0;
+        $grade  = 1;
+        $path   = ",".($sceneID + CHANGEVALUE).",";
+
+        if(isset($sceneIds[$tmpPId]))
+        {
+            $parent      = $pScene["id"];
+            $parentScene = $this->dao->findById((int)$parent)->from(TABLE_SCENE)->fetch();
+            $path        = $parentScene->path . ($sceneID + CHANGEVALUE).",";
+            $grade       = $parentScene->grade + 1;
+        }
+
+        if($parent != 0) $parent = $parent + CHANGEVALUE;
+
+        $this->dao->update(TABLE_SCENE)
+            ->set('parent')->eq($parent)
+            ->set('path')->eq($path)
+            ->set('grade')->eq($grade)
+            ->where('id')->eq($sceneID)
+            ->limit(1)
+            ->exec();
+
+        if($this->dao->isError()) return array('result' => 'fail', 'message' => $this->dao->getError(true));
+
+        return array('result' => 'success', 'message' => 1,"sceneID"=>$sceneID);
+    }
+
+    public function getXmindExport($productID, $moduleID, $branch)
+    {
+        $caseList   = $this->getCaseByProductAndModule($productID, $moduleID);
+        $stepList   = $this->getStepByProductAndModule($productID, $moduleID);
+        $sceneInfo  = $this->getSceneByProductAndModule($productID, $moduleID);
+        $moduleList = $this->getModuleByProductAndModel($productID, $moduleID, $branch);
+
+        $config = $this->getXmindConfig();
+
+        return array(
+                'caseList'  =>$caseList,
+                'stepList'  =>$stepList,
+                'sceneMaps' =>$sceneInfo['sceneMaps'],
+                'topScenes' =>$sceneInfo['topScenes'],
+                'moduleList'=>$moduleList,
+                'config'    =>$config
+            );
+    }
+
+    function getModuleByProductAndModel($productID, $moduleID, $branch)
+    {
+        $moduleList = array();
+
+        if($moduleID > 0)
+        {
+            $module = $this->loadModel('tree')->getByID($moduleID);
+
+            $moduleList[$module->id] = $module->name;
+        }
+        else
+        {
+            $moduleList = $this->loadModel('tree')->getOptionMenu($productID, $viewType = 'case', $startModuleID = 0, ($branch === 'all' or !isset($branches[$branch])) ? 0 : $branch);
+
+            unset($moduleList['0']);
+        }
+
+        return $moduleList;
+    }
+
+    function getCaseByProductAndModule($productID, $moduleID)
+    {
+        $fields = "t2.id as productID,"
+            . "t2.`name` as productName,"
+            . "t3.id as moduleID,"
+            . "t3.`name` as moduleName,"
+            . "t4.id as sceneID,"
+            . "t4.title as sceneName,"
+            . "t1.id as testcaseID,"
+            . "t1.title as `name`,"
+            . "t1.pri";
+
+        $caseList = $this->dao->select($fields)->from(TABLE_CASE)->alias('t1')
+            ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product = t2.id')
+            ->leftJoin(TABLE_MODULE)->alias('t3')->on('t1.module = t3.id')
+            ->leftJoin(TABLE_SCENE)->alias('t4')->on('t1.scene = t4.id+' . CHANGEVALUE)
+            ->where('t1.deleted')->eq(0)
+            ->andWhere('t1.product')->eq($productID)
+            ->beginIF($moduleID > 0)->andWhere('t1.module')->eq($moduleID)->fi()
+            ->fetchAll();
+
+        return $caseList;
+    }
+
+    function getStepByProductAndModule($productID, $moduleID)
+    {
+        $fields = "t1.id as testcaseID,"
+            . "t2.id as stepID,"
+            . "t2.type,"
+            . "t2.parent as parentID,"
+            . "t2.`desc`,"
+            . "t2.expect";
+
+        $stepList = $this->dao->select($fields)->from(TABLE_CASE)->alias('t1')
+            ->leftJoin(TABLE_CASESTEP)->alias('t2')->on('t1.id = t2.`case` and t1.version = t2.version')
+            ->where('t1.deleted')->eq(0)
+            ->andWhere('t1.product')->eq($productID)
+            ->andWhere('t2.id')->ne('null')
+            ->beginIF($moduleID > 0)->andWhere('t1.module')->eq($moduleID)->fi()
+            ->fetchAll();
+
+        return $stepList;
+    }
+
+    function getSceneByProductAndModule($productID, $moduleID)
+    {
+        $sceneList = $this->dao->select('id as sceneID, title as sceneName, path, parent as parentID, product as productID, module as moduleID')
+            ->from(TABLE_SCENE)
+            ->where('deleted')->eq(0)
+            ->andWhere('product')->eq($productID)
+            ->beginIF($moduleID > 0)->andWhere('module')->eq($moduleID)->fi()
+            ->fetchAll();
+
+        $sceneMaps = array();
+        $topScenes = array();
+        foreach($sceneList as $one)
+        {
+            if($one->parentID == 0) $topScenes[] = $one;
+
+            $sceneMaps[$one->sceneID] = $one;
+        }
+
+        return array('sceneMaps'=>$sceneMaps,'topScenes'=>$topScenes);
+    }
+
+    function checkConfigValue($str)
+    {
+        return preg_match("/^[a-zA-Z]{1,10}$/",$str);
+    }
+
+    function saveXmindConfig()
+    {
+        $configList = array();
+
+        $module = $this->post->module;
+        if(isset($module) && !empty($module))
+        {
+            if(!$this->checkConfigValue($module)) return array('result' => 'fail', 'message' => '模块特征字符串只能是1-10个字母');
+            $configList[] = array('key'=>'module','value'=>$module);
+        }
+
+        $scene = $this->post->scene;
+        if(isset($scene) && !empty($scene))
+        {
+            if(!$this->checkConfigValue($scene)) return array('result' => 'fail', 'message' => '场景特征字符串只能是1-10个字母');
+            $configList[] = array('key'=>'scene','value'=>$scene);
+        }
+
+        $case = $this->post->case;
+        if(isset($case) && !empty($case))
+        {
+            if(!$this->checkConfigValue($case)) return array('result' => 'fail', 'message' => '测试用例特征字符串只能是1-10个字母');
+            $configList[] = array('key'=>'case','value'=>$case);
+        }
+
+        $pri = $this->post->pri;
+        if(isset($pri) && !empty($pri))
+        {
+            if(!$this->checkConfigValue($pri)) return array('result' => 'fail', 'message' => '优先级特征字符串只能是1-10个字母');
+            $configList[] = array('key'=>'pri','value'=>$pri);
+        }
+
+        $group = $this->post->group;
+        if(isset($group) && !empty($group))
+        {
+            if(!$this->checkConfigValue($group)) return array('result' => 'fail', 'message' => '步骤分组特征字符串只能是1-10个字母');
+            $configList[] = array('key'=>'group','value'=>$group);
+        }
+
+        $map = array();
+        $map[strtolower($module)] = true;
+        $map[strtolower($scene)]  = true;
+        $map[strtolower($case)]   = true;
+        $map[strtolower($pri)]    = true;
+        $map[strtolower($group)]  = true;
+
+        if(count($map) < 5) return array('result' => 'fail', 'message' => '特征字符串不能重复');
+
+        $this->dao->begin();
+
+        $this->dao->delete()->from(TABLE_CONFIG)
+            ->where('owner')->eq($this->app->user->account)
+            ->andWhere('module')->eq('testcase')
+            ->andWhere('section')->eq('xmind')
+            ->exec();
+
+        foreach($configList as $one)
+        {
+            $config = new stdclass();
+
+            $config->module  = 'testcase';
+            $config->section = 'xmind';
+            $config->key     = $one['key'];
+            $config->value   = $one['value'];
+            $config->owner   = $this->app->user->account;
+
+            $this->dao->insert(TABLE_CONFIG)->data($config)->autoCheck()->exec();
+
+            if($this->dao->isError())
+            {
+                $this->dao->rollBack();
+                return array('result' => 'fail', 'message' => $this->dao->getError(true));
+            }
+        }
+
+        $this->dao->commit();
+
+        return array("result" => "success", "message" => 1);
+    }
+
+    function getXmindConfig()
+    {
+        $configItems = $this->dao->select("`key`,value")->from(TABLE_CONFIG)
+            ->where('owner')->eq($this->app->user->account)
+            ->andWhere('module')->eq('testcase')
+            ->andWhere('section')->eq('xmind')
+            ->fetchAll();
+
+        $config = array();
+        foreach($configItems as $item) $config[$item -> key] = $item -> value;
+
+        if(!isset($config['module'])) $config['module'] = 'M';
+        if(!isset($config['scene']))  $config['scene']  = 'S';
+        if(!isset($config['case']))   $config['case']   = 'C';
+        if(!isset($config['pri']))    $config['pri']    = 'P';
+        if(!isset($config['group']))  $config['group']  = 'G';
+
+        return $config;
+    }
+
+    function xmlToArray($xml, $options = array())
+    {
+        $defaults = array(
+            'namespaceRecursive' => false, // Get XML doc namespaces recursively
+            'removeNamespace'    => true, // Remove namespace from resulting keys
+            'namespaceSeparator' => ':', // Change separator to something other than a colon
+            'attributePrefix'    => '', // Distinguish between attributes and nodes with the same name
+            'alwaysArray'        => [], // Array of XML tag names which should always become arrays
+            'autoArray'          => true, // Create arrays for tags which appear more than once
+            'textContent'        => 'text', // Key used for the text content of elements
+            'autoText'           => true, // Skip textContent key if node has no attributes or child nodes
+            'keySearch'          => false, // (Optional) search and replace on tag and attribute names
+            'keyReplace'         => false, // (Optional) replace values for above search values
+        );
+
+        $options        = array_merge($defaults, $options);
+        $namespaces     = $xml->getDocNamespaces($options['namespaceRecursive']);
+        $namespaces[''] = null; // Add empty base namespace
+
+        /* Get attributes from all namespaces. */
+        $attributesArray = [];
+        foreach($namespaces as $prefix => $namespace)
+        {
+            if($options['removeNamespace']) $prefix = '';
+
+            foreach($xml->attributes($namespace) as $attributeName => $attribute)
+            {
+                // (Optional) replace characters in attribute name
+                if($options['keySearch']) $attributeName = str_replace($options['keySearch'], $options['keyReplace'], $attributeName);
+
+                $attributeKey = $options['attributePrefix'] . ($prefix ? $prefix . $options['namespaceSeparator'] : '') . $attributeName;
+                $attributesArray[$attributeKey] = (string) $attribute;
+            }
+        }
+
+        // Get child nodes from all namespaces
+        $tagsArray = [];
+        foreach($namespaces as $prefix => $namespace)
+        {
+            if($options['removeNamespace']) $prefix = '';
+
+            foreach($xml->children($namespace) as $childXml)
+            {
+                // Recurse into child nodes
+                $childArray      = $this->xmlToArray($childXml, $options);
+                $childTagName    = key($childArray);
+                $childProperties = current($childArray);
+
+                // Replace characters in tag name
+                if($options['keySearch']) $childTagName = str_replace($options['keySearch'], $options['keyReplace'], $childTagName);
+
+                // Add namespace prefix, if any
+                if($prefix) $childTagName = $prefix . $options['namespaceSeparator'] . $childTagName;
+
+                if(!isset($tagsArray[$childTagName]))
+                {
+                    // Only entry with this key
+                    // Test if tags of this type should always be arrays, no matter the element count
+                    $tagsArray[$childTagName] = in_array($childTagName, $options['alwaysArray'], true) || !$options['autoArray'] ? [$childProperties] : $childProperties;
+                }
+                elseif(is_array($tagsArray[$childTagName]) && array_keys($tagsArray[$childTagName]) === range(0, count($tagsArray[$childTagName]) - 1))
+                {
+                    // Key already exists and is integer indexed array
+                    $tagsArray[$childTagName][] = $childProperties;
+                }
+                else
+                {
+                    // Key exists so convert to integer indexed array with previous value in position 0
+                    $tagsArray[$childTagName] = [$tagsArray[$childTagName], $childProperties];
+                }
+            }
+        }
+
+        // Get text content of node
+        $textContentArray = array();
+        $plainText = trim((string) $xml);
+        if($plainText !== '') $textContentArray[$options['textContent']] = $plainText;
+
+        // Stick it all together
+        $propertiesArray = !$options['autoText'] || $attributesArray || $tagsArray || $plainText === '' ? array_merge($attributesArray, $tagsArray, $textContentArray) : $plainText;
+
+        // Return node as array
+        return array($xml->getName() => $propertiesArray);
     }
 }

@@ -224,6 +224,11 @@
       $misc  = common::hasPriv('testcase', 'exportTemplate') ? "class='export'" : "class=disabled";
       $link  = common::hasPriv('testcase', 'exportTemplate') ?  $this->createLink('testcase', 'exportTemplate', "productID=$productID") : '#';
       echo "<li $class>" . html::a($link, $lang->testcase->exportTemplate, '', $misc . "data-app={$this->app->tab} data-width='65%'") . "</li>";
+
+      $class = common::hasPriv('testcase', 'exportXmind') ? '' : "class=disabled";
+      $misc  = common::hasPriv('testcase', 'exportXmind') ? "class='export'" : "class=disabled";
+      $link  = common::hasPriv('testcase', 'exportXmind') ?  $this->createLink('testcase', 'exportXmind', "productID=$productID&moduleID=$moduleID&branch=$branch") : '#';
+      echo "<li $class>" . html::a($link, $lang->testcase->xmindExport, '', $misc . "data-app={$this->app->tab}") . "</li>";
       ?>
       </ul>
     </div>
@@ -238,6 +243,11 @@
 
       $link  = $this->createLink('testcase', 'importFromLib', "productID=$productID&branch=$branch&libID=0&orderBy=id_desc&browseType=&queryID=10&recTotal=0&recPerPage=20&pageID=1&projectID=$projectID");
       if(common::hasPriv('testcase', 'importFromLib')) echo "<li>" . html::a($link, $lang->testcase->importFromLib, '', "data-app={$app->tab}") . "</li>";
+
+      $class = common::hasPriv('testcase', 'importXmind') ? '' : "class=disabled";
+      $misc  = common::hasPriv('testcase', 'importXmind') ? "class='export'" : "class=disabled";
+      $link  = common::hasPriv('testcase', 'importXmind') ?  $this->createLink('testcase', 'importXmind', "productID=$productID&branch=$branch") : '#';
+      echo "<li $class>" . html::a($link, $lang->testcase->xmindImport, '', $misc . "data-app={$this->app->tab}") . "</li>";
       ?>
       </ul>
     </div>

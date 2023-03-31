@@ -3030,4 +3030,482 @@ class testcase extends control
                 ->exec();
         }
     }
+    public function exportXMind($productID, $moduleID, $branch)
+    {
+        if($_POST)
+        {
+            if (isset($_POST['imodule'])) $imoduleID = $_POST['imodule'];
+
+            $configResult = $this->testcase->saveXmindConfig();
+            if($configResult['result'] == 'fail') return print(js::alert($configResult['message']));
+
+            $context = $this->testcase->getXmindExport($productID, $imoduleID, $branch);
+
+            $xmlDoc = new DOMDocument('1.0', 'UTF-8');
+            $xmlDoc->formatOutput = true;
+
+            $versionAttr       =  $xmlDoc->createAttribute('version');
+            $versionAttrValue  =  $xmlDoc->createTextNode('1.0.1');
+            $versionAttr->appendChild($versionAttrValue);
+
+            $mapNode = $xmlDoc->createElement('map');
+            $mapNode->appendChild($versionAttr);
+            $xmlDoc->appendChild($mapNode);
+
+            $productName = '';
+            if(count($context['caseList']))
+            {
+                $productName = $context['caseList'][0]->productName;
+            }
+            else
+            {
+                $product     = $this->product->getById($productID);
+                $productName = $product->name;
+            }
+
+            $productNode   = $xmlDoc->createElement('node');
+            $textAttr      = $xmlDoc->createAttribute('TEXT');
+            $textAttrValue = $xmlDoc->createTextNode($this->toText("$productName", $productID));
+
+            $textAttr->appendChild($textAttrValue);
+            $productNode->appendChild($textAttr);
+            $mapNode->appendChild($productNode);
+
+            $sceneNodes  = array();
+            $moduleNodes = array();
+
+            $this->createModuleNode($xmlDoc, $context, $productNode, $moduleNodes);
+            $this->createSceneNode($xmlDoc, $context, $productNode, $moduleNodes, $sceneNodes);
+            $this->createTestcaseNode($xmlDoc, $context, $productNode, $moduleNodes, $sceneNodes);
+
+            $xmlStr = $xmlDoc->saveXML();
+            $this->fetch('file', 'sendDownHeader', array('fileName' => $productName, 'mm', $xmlStr));
+        }
+
+        $tree    = $moduleID ? $this->tree->getByID($moduleID) : '';
+        $product = $this->product->getById($productID);
+        $config  = $this->testcase->getXmindConfig();
+
+        $this->view->settings         = $config;
+        $this->view->moduleName       = $tree != '' ? $tree->name : '/';
+        $this->view->productName      = $product->name;
+        $this->view->moduleID         = $moduleID;
+        $this->view->moduleOptionMenu = $this->tree->getOptionMenu($productID, $viewType = 'case', $startModuleID = 0, ($branch === 'all' or !isset($branches[$branch])) ? 0 : $branch);
+
+        $this->display();
+    }
+
+    function createModuleNode($xmlDoc, $context, $productNode, &$moduleNodes)
+    {
+        $config     = $context['config'];
+        $moduleList = $context['moduleList'];
+
+        foreach($moduleList as $key => $name)
+        {
+            $suffix      =  $config['module'].':'.$key;
+            $moduleNode  =  $this->createNode($xmlDoc, $name, $suffix, array('nodeType' => 'module'));
+            $productNode->appendChild($moduleNode);
+
+            $moduleNodes[$key] = $moduleNode;
+        }
+    }
+
+    function createSceneNode($xmlDoc, $context, $productNode, &$moduleNodes, &$sceneNodes)
+    {
+        $sceneMaps  = $context['sceneMaps'];
+        $config     = $context['config'];
+
+        $topScenes  = $context['topScenes'];
+
+        foreach($topScenes as $scene)
+        {
+            $suffix    = $config['scene'].':'.$scene->sceneID;
+            $sceneNode =  $this->createNode($xmlDoc, $scene->sceneName, $suffix, array('nodeType' => 'scene'));
+
+            $this->createNextChildScenesNode($scene, $sceneNode, $xmlDoc, $context, $moduleNodes, $sceneNodes);
+
+            if(isset($moduleNodes[$scene->moduleID]))
+            {
+                $moduleNode = $moduleNodes[$scene->moduleID];
+                $moduleNode->appendChild($sceneNode);
+            }
+            else
+            {
+                $productNode->appendChild($sceneNode);
+            }
+
+            $sceneNodes[$scene->sceneID] = $sceneNode;
+        }
+    }
+
+    function createNextChildScenesNode($parentScene,$parentNode, $xmlDoc, $context, &$moduleNodes, &$sceneNodes)
+    {
+        $sceneMaps  = $context['sceneMaps'];
+        $config     = $context['config'];
+
+        foreach($sceneMaps as $key => $scene)
+        {
+            if($scene->parentID != $parentScene->sceneID + CHANGEVALUE) continue;
+
+            $suffix    = $config['scene'].':'.$scene->sceneID;
+            $sceneNode = $this->createNode($xmlDoc, $scene->sceneName, $suffix, array('nodeType'=>'scene'));
+
+            $this->createNextChildScenesNode($scene, $sceneNode, $xmlDoc, $context, $moduleNodes, $sceneNodes);
+
+            $parentNode->appendChild($sceneNode);
+            $sceneNodes[$scene->sceneID] = $sceneNode;
+        }
+    }
+
+    function createTestcaseNode($xmlDoc, $context, $productNode, &$moduleNodes, &$sceneNodes)
+    {
+        $caseList = $context['caseList'];
+
+        foreach($caseList as $case)
+        {
+            if(empty($case->testcaseID)) continue;
+
+            $parentNode = $sceneNodes[$case->sceneID];
+            if(!isset($parentNode)) $parentNode = $moduleNodes[$case->moduleID];
+            if(!isset($parentNode)) $parentNode = $productNode;
+
+            $this->createTestcaseNodeImpl($case, $xmlDoc, $context, $parentNode);
+        }
+    }
+
+    function createTestcaseNodeImpl($case, $xmlDoc, $context, $parentNode)
+    {
+        $caseList = $context['caseList'];
+        $stepList = $context['stepList'];
+        $config   = $context['config'];
+        $suffix   = $config['case'].':'.$case->testcaseID.','.$config['pri'].':'.$case->pri;
+        $caseNode = $this->createNode($xmlDoc, $case->name, $suffix, array('nodeType'=>'testcase'));
+
+        $parentNode->appendChild($caseNode);
+
+        $topStepList = $this->findTopStepListByCase($case, $stepList);
+
+        foreach($topStepList as $step)
+        {
+            $subStepList = $this->findSubStepListByStep($step,$stepList);
+
+            $suffix   = count($subStepList) > 0 ? $config['group'] : '';
+            $stepNode = $this->createNode($xmlDoc, $step->desc, $suffix, array('nodeType' => 'step'));
+            $caseNode->appendChild($stepNode);
+
+            if(count($subStepList))
+            {
+                foreach($subStepList as $sub)
+                {
+                    $subNode = $this->createNode($xmlDoc, $sub->desc, '', array('nodeType'=>'substep'));
+                    $stepNode->appendChild($subNode);
+
+                    if(!empty($sub->expect))
+                    {
+                        $expectNode = $this->createNode($xmlDoc, $sub->expect, '', array('nodeType'=>'expect'));
+                        $subNode->appendChild($expectNode);
+                    }
+                }
+            }
+
+            if(count($subStepList) == 0 && !empty($step->expect))
+            {
+                $expectNode = $this->createNode($xmlDoc, $step->expect, '', array('nodeType'=>'expect'));
+                $stepNode->appendChild($expectNode);
+            }
+        }
+    }
+
+    function findSubStepListByStep($step,$stepList)
+    {
+        $subList = array();
+        foreach($stepList as $one)
+        {
+            if($one->parentID == $step->stepID)
+            {
+                $subList[] = $one;
+            }
+        }
+
+        return $subList;
+    }
+
+    public function findTopStepListByCase($case,$stepList)
+    {
+        $topList = array();
+        foreach($stepList as $step)
+        {
+            if($step->parentID == '0' && $step->testcaseID == $case->testcaseID)
+            {
+                $topList[] = $step;
+            }
+        }
+
+        return $topList;
+    }
+
+    public function createNode($xmlDoc, $text, $suffix = '', $attrs=array())
+    {
+        $node = $xmlDoc->createElement('node');
+
+        $textAttr      =  $xmlDoc->createAttribute('TEXT');
+        $textAttrValue =  $xmlDoc->createTextNode($this->toText($text,$suffix));
+
+        $textAttr->appendChild($textAttrValue);
+        $node->appendChild($textAttr);
+
+        $positionAttr      =  $xmlDoc->createAttribute("POSITION");
+        $positionAttrValue =  $xmlDoc->createTextNode('right');
+
+        $positionAttr->appendChild($positionAttrValue);
+        $node->appendChild($positionAttr);
+
+        foreach($attrs as $key => $value)
+        {
+            $attr      = $xmlDoc->createAttribute($key);
+            $attrValue = $xmlDoc->createTextNode($value);
+
+            $attr->appendChild($attrValue);
+            $node->appendChild($attr);
+        }
+
+        return $node;
+    }
+
+    public function toText($str, $suffix)
+    {
+        if(empty($suffix)) return $str;
+        return $str . '['.$suffix.']';
+    }
+
+    public function getXmindConfig()
+    {
+        $result = $this->testcase->getXmindConfig();
+        $this->send($result);
+    }
+
+    public function getXmindImport()
+    {
+        $folder = $this->session->xmindImport;
+        $type   = $this->session->xmindImportType;
+
+        if($type == 'xml')
+        {
+            $xmlPath = "$folder/content.xml";
+            $results = $this->testcase->getXmindImport($xmlPath);
+
+            echo $results;
+        }
+        else
+        {
+            $jsonPath = "$folder/content.json";
+            $jsonStr = file_get_contents($jsonPath);
+
+            echo $jsonStr;
+        }
+    }
+
+    public function importXMind($productID, $branch)
+    {
+        if($_FILES)
+        {
+            if($_FILES['file']['size'] == 0)  return print(js::alert($this->lang->testcase->errorFileNotEmpty));
+
+            $configResult = $this->testcase->saveXmindConfig();
+            if($configResult['result'] == 'fail') return print(js::alert($configResult['message']));
+
+            $tmpName  = $_FILES['file']['tmp_name'];
+            $fileName = $_FILES['file']['name'];
+            $extName  = trim(strtolower(pathinfo($fileName, PATHINFO_EXTENSION)));
+            if($extName != 'xmind') return print(js::alert($this->lang->testcase->errorFileFormat));
+
+            $newPureName  = $this->app->user->id."-xmind";
+            $importFolder = $this->app->getTmpRoot() . "import";
+            if(!is_dir($importFolder)) mkdir($importFolder, 0755, true);
+
+            $dest = $this->app->getTmpRoot() . "import/".$newPureName.$extName;
+            if(!move_uploaded_file($tmpName, $dest)) return print(js::alert($this->lang->testcase->errorXmindUpload));
+
+            $extractFolder   =  $this->app->getTmpRoot() . "import/".$newPureName;
+            $this->classFile = $this->app->loadClass('zfile');
+            if(is_dir($extractFolder)) $this->classFile->removeDir($extractFolder);
+
+            $this->app->loadClass('pclzip', true);
+            $zip = new pclzip($dest);
+
+            $files      = $zip->listContent();
+            $removePath = $files[0]['filename'];
+            if($zip->extract(PCLZIP_OPT_PATH, $extractFolder, PCLZIP_OPT_REMOVE_PATH, $removePath) == 0)
+            {
+                return print(js::alert($this->lang->testcase->errorXmindUpload));
+            }
+
+            $this->classFile->removeFile($dest);
+
+            $jsonPath = $extractFolder."/content.json";
+            if(file_exists($jsonPath) == true)
+            {
+
+                $fetchResult = $this->fetchByJSON($extractFolder, $productID, $branch);
+            }
+            else
+            {
+                $fetchResult = $this->fetchByXML($extractFolder, $productID, $branch);
+            }
+
+            if($fetchResult['result'] == 'fail')
+            {
+                return print(js::alert($fetchResult['message']));
+            }
+
+            $this->session->set('xmindImport', $extractFolder);
+            $this->session->set('xmindImportType', $fetchResult['type']);
+
+            $pId = $fetchResult['pId'];
+
+            return print(js::locate($this->createLink('testcase', 'showXmindImport', "productID=$pId&branch=$branch"), 'parent.parent'));
+        }
+
+        $config = $this->testcase->getXmindConfig();
+
+        $this->view->settings    = $config;
+
+        $this->display();
+    }
+
+    function fetchByXML($extractFolder, $productID, $branch)
+    {
+        $filePath = $extractFolder."/content.xml";
+        $xmlNode = simplexml_load_file($filePath);
+        $title = $xmlNode->sheet->topic->title;
+        if(strlen($title) == 0)
+        {
+            return array('result'=>'fail','message'=>$this->lang->testcase->errorXmindUpload);
+        }
+
+        $pId = $productID;
+        if($this->endsWith($title,"]") == true)
+        {
+            $tmpId = $this->getBetween($title,"[","]");
+            if(empty($tmpId) == false)
+            {
+                $projectCount = $this->dao->select('count(*) as count')
+                    ->from(TABLE_PRODUCT)
+                    ->where('id')
+                    ->eq((int)$tmpId)
+                    ->andWhere('deleted')->eq('0')
+                    ->fetch('count');
+
+                if((int)$projectCount == 0) return array('result'=>'fail','message'=>$this->lang->testcase->errorImportBadProduct);
+
+                $pId = $tmpId;
+            }
+        }
+
+        return array('result'=>'success','pId'=>$pId, 'type'=>'xml');
+    }
+
+    function fetchByJSON($extractFolder, $productID, $branch)
+    {
+        $filePath = $extractFolder."/content.json";
+        $jsonStr = file_get_contents($filePath);
+        $jsonDatas = json_decode($jsonStr, true);
+        $title = $jsonDatas[0]['rootTopic']['title'];
+        if(strlen($title) == 0)
+        {
+            return array('result'=>'fail','message'=>$this->lang->testcase->errorXmindUpload);
+        }
+
+        $pId = $productID;
+        if($this->endsWith($title,"]") == true)
+        {
+            $tmpId = $this->getBetween($title,"[","]");
+            if(empty($tmpId) == false)
+            {
+                $projectCount = $this->dao->select('count(*) as count')
+                    ->from(TABLE_PRODUCT)
+                    ->where('id')
+                    ->eq((int)$tmpId)
+                    ->andWhere('deleted')->eq('0')
+                    ->fetch('count');
+
+                if((int)$projectCount == 0) return array('result'=>'fail','message'=>$this->lang->testcase->errorImportBadProduct);
+
+                $pId = $tmpId;
+            }
+        }
+
+        return array('result'=>'success','pId'=>$pId,'type'=>'json');
+    }
+
+    function getBetween($kw1, $mark1, $mark2)
+    {
+        $kw = $kw1;
+        $kw = '123' . $kw . '123';
+        $st = strripos($kw, $mark1);
+        $ed = strripos($kw, $mark2);
+
+        if(($st == false || $ed == false) || $st >= $ed) return 0;
+
+        $kw = substr($kw, ($st + 1), ($ed - $st - 1));
+        return $kw;
+    }
+
+    function endsWith($haystack, $needle)
+    {
+        return $needle === '' || substr_compare($haystack, $needle, -strlen($needle)) === 0;
+    }
+
+    public function saveXmindConfig()
+    {
+        $result = $this->testcase->saveXmindConfig();
+        $this->send($result);
+    }
+
+    public function saveXmindImport()
+    {
+        if(!empty($_POST))
+        {
+            $result = $this->testcase->saveXmindImport();
+            return $this->send($result);
+        }
+
+        $this->send(array('result' => 'fail', 'message' => $this->lang->errorSaveXmind));
+    }
+
+    public function showXMindImport($productID,$branch)
+    {
+        $product  = $this->product->getById($productID);
+        $branches = (isset($product->type) and $product->type != 'normal') ? $this->loadModel('branch')->getPairs($productID, 'active') : array();
+        $config   = $this->testcase->getXmindConfig();
+
+        /* Set menu. */
+        if($this->app->tab == 'project') $this->loadModel('project')->setMenu(null);
+        if($this->app->tab == 'qa') $this->testcase->setMenu($this->products, $productID, $branch);
+
+        $jsLng = array();
+        $jsLng['caseNotExist'] = $this->lang->testcase->caseNotExist;
+        $jsLng['saveFail']     = $this->lang->testcase->saveFail;
+        $jsLng['set2Scene']    = $this->lang->testcase->set2Scene;
+        $jsLng['set2Testcase'] = $this->lang->testcase->set2Testcase;
+        $jsLng['clearSetting'] = $this->lang->testcase->clearSetting;
+        $jsLng['setModule']    = $this->lang->testcase->setModule;
+        $jsLng['pickModule']   = $this->lang->testcase->pickModule;
+        $jsLng['clearBefore']  = $this->lang->testcase->clearBefore;
+        $jsLng['clearAfter']   = $this->lang->testcase->clearAfter;
+        $jsLng['clearCurrent'] = $this->lang->testcase->clearCurrent;
+        $jsLng['removeGroup']  = $this->lang->testcase->removeGroup;
+        $jsLng['set2Group']    = $this->lang->testcase->set2Group;
+
+        $this->view->title            = $this->lang->testcase->xmindImport;
+        $this->view->settings         = $config;
+        $this->view->productID        = $productID;
+        $this->view->branch           = $branch;
+        $this->view->product          = $product;
+        $this->view->moduleOptionMenu = $this->tree->getOptionMenu($productID, $viewType = 'case', $startModuleID = 0, ($branch === 'all' or !isset($branches[$branch])) ? 0 : $branch);
+        $this->view->gobackLink       = $this->createLink('testcase', 'browse', "productID=$productID");
+        $this->view->jsLng            = $jsLng;
+
+        $this->display();
+    }
 }
