@@ -1170,7 +1170,7 @@ class docModel extends model
             if(isset($extraDocLibs[$object->id])) return true;
         }
 
-        if($object->acl == 'default' and (in_array($object->type, array('product', 'execution'))))
+        if($object->acl == 'default' and (!empty($object->product) or !empty($object->execution)))
         {
             $acls = $this->app->user->rights['acls'];
             if(!empty($object->product) and !empty($acls['products']) and !in_array($object->product, $acls['products'])) return false;
