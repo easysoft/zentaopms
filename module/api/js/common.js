@@ -54,6 +54,9 @@ function toggleLibType(libType)
     }
     else
     {
+        var acl = $("input[name='acl']:checked").val();
+        if(acl == 'default') $("input[id='aclopen']").prop('checked', true);
+
         $('#projectBox').addClass('hidden');
         $('#productBox').addClass('hidden');
         $('#acldefault').closest('.radio').hide();
