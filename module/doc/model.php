@@ -80,7 +80,7 @@ class docModel extends model
                 ->beginIF($type == 'all')->andWhere('deleted')->eq(0)->fi()
                 ->beginIF($excludeType)->andWhere('type')->notin($excludeType)->fi()
                 ->andWhere('vision')->eq($this->config->vision)
-                ->orderBy('`order` asc, id_desc')
+                ->orderBy('`order`_asc, id_asc')
                 ->query();
         }
         else
@@ -91,7 +91,7 @@ class docModel extends model
                 ->beginIF($type)->andWhere('type')->eq($type)->fi()
                 ->beginIF(!$type)->andWhere('type')->ne('api')->fi()
                 ->beginIF($objectID and strpos(',product,project,execution,', ",$type,") !== false)->andWhere($type)->eq($objectID)->fi()
-                ->orderBy("`order` asc, id_desc")->query();
+                ->orderBy("`order`_asc, id_asc")->query();
         }
 
         $products   = $this->loadModel('product')->getPairs();
@@ -137,7 +137,7 @@ class docModel extends model
 
         if(!empty($appendLibs))
         {
-            $stmt = $this->dao->select('*')->from(TABLE_DOCLIB)->where('id')->in($appendLibs)->orderBy("`order` asc, id_desc")->query();
+            $stmt = $this->dao->select('*')->from(TABLE_DOCLIB)->where('id')->in($appendLibs)->orderBy("`order`_asc, id_asc")->query();
             while($lib = $stmt->fetch())
             {
                 if(!isset($libPairs[$lib->id]) and $this->checkPrivLib($lib, $extra)) $libPairs[$lib->id] = $lib->name;

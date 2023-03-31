@@ -27,6 +27,7 @@ $(function()
         $('#status').val('draft');
         $('#dataform').submit();
     });
+    $('#releaseBtn').click(function(){$('#dataform').submit();});
     $('#basicInfoLink').click(function()
     {
         if($('#editorTitle').val() == '')
