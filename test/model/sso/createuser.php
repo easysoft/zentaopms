@@ -2,7 +2,6 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/sso.class.php';
-$db->switchDB();
 su('admin');
 
 /**
@@ -42,4 +41,3 @@ $failUser = array(
 r($sso->createTest($existsUser)) && p('status')  && e('fail');      // 用户存在的情况
 r($sso->createTest($failUser))   && p('status')  && e('fail');      // 用户信息错误的情况
 r($sso->createTest($newUser))    && p('account') && e('bindUser1'); // 用户不存在的情况
-$db->restoreDB();

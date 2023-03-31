@@ -1,9 +1,8 @@
 <?php
+
 /**
  * `WHERE` keyword parser.
  */
-
-declare(strict_types=1);
 
 namespace PhpMyAdmin\SqlParser\Components;
 
@@ -12,15 +11,12 @@ use PhpMyAdmin\SqlParser\Parser;
 use PhpMyAdmin\SqlParser\Token;
 use PhpMyAdmin\SqlParser\TokensList;
 
-use function implode;
-use function in_array;
-use function is_array;
-use function trim;
-
 /**
  * `WHERE` keyword parser.
  *
- * @final
+ * @category   Keywords
+ *
+ * @license    https://www.gnu.org/licenses/gpl-2.0.txt GPL-2.0+
  */
 class Condition extends Component
 {
@@ -29,20 +25,20 @@ class Condition extends Component
      *
      * @var array
      */
-    public static $DELIMITERS = [
+    public static $DELIMITERS = array(
         '&&',
         '||',
         'AND',
         'OR',
-        'XOR',
-    ];
+        'XOR'
+    );
 
     /**
      * List of allowed reserved keywords in conditions.
      *
      * @var array
      */
-    public static $ALLOWED_KEYWORDS = [
+    public static $ALLOWED_KEYWORDS = array(
         'ALL' => 1,
         'AND' => 1,
         'BETWEEN' => 1,
@@ -60,16 +56,15 @@ class Condition extends Component
         'OR' => 1,
         'REGEXP' => 1,
         'RLIKE' => 1,
-        'SOUNDS' => 1,
-        'XOR' => 1,
-    ];
+        'XOR' => 1
+    );
 
     /**
      * Identifiers recognized.
      *
      * @var array
      */
-    public $identifiers = [];
+    public $identifiers = array();
 
     /**
      * Whether this component is an operator.
@@ -86,11 +81,13 @@ class Condition extends Component
     public $expr;
 
     /**
+     * Constructor.
+     *
      * @param string $expr the condition or the operator
      */
     public function __construct($expr = null)
     {
-        $this->expr = trim((string) $expr);
+        $this->expr = trim($expr);
     }
 
     /**
@@ -100,11 +97,11 @@ class Condition extends Component
      *
      * @return Condition[]
      */
-    public static function parse(Parser $parser, TokensList $list, array $options = [])
+    public static function parse(Parser $parser, TokensList $list, array $options = array())
     {
-        $ret = [];
+        $ret = array();
 
-        $expr = new static();
+        $expr = new self();
 
         /**
          * Counts brackets.
@@ -162,25 +159,23 @@ class Condition extends Component
                     }
 
                     // Adding the operator.
-                    $expr = new static($token->value);
+                    $expr = new self($token->value);
                     $expr->isOperator = true;
                     $ret[] = $expr;
 
                     // Preparing to parse another condition.
-                    $expr = new static();
+                    $expr = new self();
                     continue;
                 }
             }
 
-            if (
-                ($token->type === Token::TYPE_KEYWORD)
+            if (($token->type === Token::TYPE_KEYWORD)
                 && ($token->flags & Token::FLAG_KEYWORD_RESERVED)
                 && ! ($token->flags & Token::FLAG_KEYWORD_FUNCTION)
             ) {
                 if ($token->value === 'BETWEEN') {
                     $betweenBefore = true;
                 }
-
                 if (($brackets === 0) && empty(static::$ALLOWED_KEYWORDS[$token->value])) {
                     break;
                 }
@@ -193,27 +188,21 @@ class Condition extends Component
                     if ($brackets === 0) {
                         break;
                     }
-
                     --$brackets;
                 }
             }
 
             $expr->expr .= $token->token;
-            if (
-                ($token->type !== Token::TYPE_NONE)
-                && (($token->type !== Token::TYPE_KEYWORD)
-                || ($token->flags & Token::FLAG_KEYWORD_RESERVED))
-                && ($token->type !== Token::TYPE_STRING)
-                && ($token->type !== Token::TYPE_SYMBOL)
+            if (($token->type === Token::TYPE_NONE)
+                || (($token->type === Token::TYPE_KEYWORD)
+                && (! ($token->flags & Token::FLAG_KEYWORD_RESERVED)))
+                || ($token->type === Token::TYPE_STRING)
+                || ($token->type === Token::TYPE_SYMBOL)
             ) {
-                continue;
+                if (! in_array($token->value, $expr->identifiers)) {
+                    $expr->identifiers[] = $token->value;
+                }
             }
-
-            if (in_array($token->value, $expr->identifiers)) {
-                continue;
-            }
-
-            $expr->identifiers[] = $token->value;
         }
 
         // Last iteration was not processed.
@@ -233,7 +222,7 @@ class Condition extends Component
      *
      * @return string
      */
-    public static function build($component, array $options = [])
+    public static function build($component, array $options = array())
     {
         if (is_array($component)) {
             return implode(' ', $component);

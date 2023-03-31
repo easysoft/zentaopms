@@ -2,7 +2,6 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/task.class.php';
-$db->switchDB();
 su('admin');
 
 /**
@@ -26,4 +25,3 @@ $create = array('consumed' => $consumed, 'left' => $left, 'work' => $work);
 $task = new taskTest('admin');
 r($task->recordEstimateTest($taskIDList[0],$create)) && p('2:field,old,new') && e('status,wait,doing');  // 正常记录工时
 r($task->recordEstimateTest($taskIDList[1],$create)) && p('2:field,old,new') && e('status,pause,doing'); // pause任务记录工时
-$db->restoreDB();

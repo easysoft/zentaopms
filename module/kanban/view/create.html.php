@@ -23,7 +23,7 @@
       <button type='button' class='btn btn-link' data-toggle='modal' data-target='#copyKanbanModal'><?php echo html::icon($lang->icons['copy'], 'muted') . ' ' . $lang->kanban->copy . $lang->kanban->common;?></button>
     </div>
   </div>
-  <form class='form-indicator main-form form-ajax' method='post' enctype='multipart/form-data' id='dataform'>
+  <form class='form-indicator main-form form-ajax no-stash' method='post' enctype='multipart/form-data' id='dataform'>
     <table class='table table-form'>
       <tr>
         <th><?php echo $lang->kanbanspace->type;?></th>

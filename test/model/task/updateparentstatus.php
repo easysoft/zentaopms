@@ -2,7 +2,6 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/task.class.php';
-$db->switchDB();
 su('admin');
 
 /**
@@ -38,4 +37,3 @@ r($task->updateParentStatusTest($taskIDList[2], $parentIDList[1]))        && p('
 r($task->updateParentStatusTest($taskIDList[3], $parentIDList[0]))        && p('status,name') && e('0');               //更新任务ID为不存在的100001 父ID为601 创建动态的任务的父任务
 r($task->updateParentStatusTest($taskIDList[3], $parentIDList[0], false)) && p('status,name') && e('0');               //更新任务ID为不存在的100001 父ID为601 不创建动态的任务的父任务
 r($task->updateParentStatusTest($taskIDList[3], $parentIDList[1]))        && p('status,name') && e('1');               //更新任务ID为不存在的100001 父ID为902 创建动态的任务的父任务
-$db->restoreDB();

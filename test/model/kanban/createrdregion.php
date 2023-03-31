@@ -2,7 +2,6 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/kanban.class.php';
-$db->switchDB();
 su('admin');
 
 /**
@@ -41,4 +40,3 @@ r($kanban->createRDRegionTest($execution2)) && p('name,kanban') && e('默认区�
 r($kanban->createRDRegionTest($execution3)) && p('name,kanban') && e('默认区域,100003'); // 测试创建执行10003的执行看板区域
 r($kanban->createRDRegionTest($execution4)) && p('name,kanban') && e('默认区域,100004'); // 测试创建执行10004的执行看板区域
 r($kanban->createRDRegionTest($execution5)) && p('name,kanban') && e('默认区域,100005'); // 测试创建执行10005的执行看板区域
-$db->restoreDB();

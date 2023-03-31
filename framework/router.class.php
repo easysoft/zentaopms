@@ -101,17 +101,21 @@ class router extends baseRouter
         global $lang;
         if(!is_object($lang)) $lang = new language();
 
-        $appName = '';
-
         /* Set productCommon and projectCommon for flow. */
         if($moduleName == 'common') $this->setCommonLang();
 
         parent::loadLang($moduleName, $appName);
 
         /* Replace main nav lang. */
-        if($moduleName == 'common' and $this->dbh and !empty($this->config->db->name) and !defined('IN_UPGRADE'))
+        if($moduleName == 'common' and $this->dbh and !empty($this->config->db->name))
         {
-            $customMenus = $this->dbh->query('SELECT * FROM' . TABLE_LANG . "WHERE `module`='common' AND `section`='mainNav' AND `lang`='{$this->clientLang}' AND `vision`='{$this->config->vision}'")->fetchAll();
+            $customMenus = array();
+            try
+            {
+                $customMenus = $this->dbh->query('SELECT * FROM' . TABLE_LANG . "WHERE `module`='common' AND `section`='mainNav' AND `lang`='{$this->clientLang}' AND `vision`='{$this->config->vision}'")->fetchAll();
+            }
+            catch(PDOException $exception){}
+
             foreach($customMenus as $menu)
             {
                 $menuKey = $menu->key;
@@ -292,7 +296,6 @@ class router extends baseRouter
                 $productProject = $productProject->value;
                 list($productCommon, $projectCommon) = explode('_', $productProject);
                 $lang->productCommon = isset($this->config->productCommonList[$this->clientLang][(int)$productCommon]) ? $this->config->productCommonList[$this->clientLang][(int)$productCommon] : $this->config->productCommonList['en'][0];
-                $lang->projectCommon = isset($this->config->projectCommonList[$this->clientLang][(int)$projectCommon]) ? $this->config->projectCommonList[$this->clientLang][(int)$projectCommon] : $this->config->projectCommonList['en'][0];
             }
             if(!defined('IN_UPGRADE'))
             {
@@ -317,7 +320,12 @@ class router extends baseRouter
             }
 
             /* Replace common lang. */
-            $customMenus = $this->dbh->query('SELECT * FROM' . TABLE_LANG . "WHERE `module`='common' AND `lang`='{$this->clientLang}' AND `section`='' AND `vision`='{$config->vision}'")->fetchAll();
+            $customMenus = array();
+            try
+            {
+                $customMenus = $this->dbh->query('SELECT * FROM' . TABLE_LANG . "WHERE `module`='common' AND `lang`='{$this->clientLang}' AND `section`='' AND `vision`='{$config->vision}'")->fetchAll();
+            }
+            catch(PDOException $exception){}
             foreach($customMenus as $menu) if(isset($lang->{$menu->key})) $lang->{$menu->key} = $menu->value;
         }
     }
@@ -356,9 +364,6 @@ class router extends baseRouter
     public function loadModuleConfig($moduleName, $appName = '')
     {
         global $config;
-
-        $appName = '';
-
         if($config and (!isset($config->$moduleName) or !is_object($config->$moduleName))) $config->$moduleName = new stdclass();
 
         /* 初始化数组。Init the variables. */

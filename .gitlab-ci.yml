@@ -5,7 +5,7 @@ stages:
   - package
   - cleanup-packages
   - notify
- 
+
 program-static-analysis:
   stage: sonarqube
   image:

@@ -2,7 +2,6 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/testcase.class.php';
-$db->switchDB();
 su('admin');
 
 /**
@@ -27,4 +26,3 @@ $testcase = new testcaseTest();
 r($testcase->createFromImportTest($productID))          && p() && e('这个是测试用例1,这个是测试用例2,导入测试用例1,导入测试用例2');                                 // 测试直接导入数据
 r($testcase->createFromImportTest($productID, $param1)) && p() && e('导入覆盖的用例1,导入覆盖的用例2,导入测试用例1,导入测试用例2');                                 // 测试导入数据覆盖原有数据
 r($testcase->createFromImportTest($productID, $param2)) && p() && e('导入覆盖的用例1,导入覆盖的用例2,导入测试用例1,导入测试用例2,导入插入的用例1,导入插入的用例2'); // 测试导入数据不覆盖原有数据
-$db->restoreDB();

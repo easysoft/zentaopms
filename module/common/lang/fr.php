@@ -90,7 +90,7 @@ $lang->viewDetails        = 'View Details';
 
 $lang->actions         = 'Action';
 $lang->restore         = 'Réinitialiser';
-$lang->confirmDraft    = 'There are unsaved form of %name%. Do you want to restore them?';
+$lang->confirmDraft    = 'Unsaved form is found. Do you want to restore it?';
 $lang->resume          = 'resume';
 $lang->comment         = 'Note';
 $lang->history         = 'Historique';
@@ -176,6 +176,7 @@ $lang->repo->common       = 'Code';
 $lang->repo->codeRepo     = 'Code Repo';
 $lang->screen->common     = 'Screen';
 $lang->report->common     = 'BI';
+$lang->pivot->common      = 'Pivot Table';
 $lang->system->common     = 'System';
 $lang->admin->common      = 'Admin';
 $lang->story->common      = 'Story';
@@ -294,7 +295,6 @@ $lang->project->report = 'Report';
 
 $lang->report->weekly       = 'Weekly';
 $lang->report->annual       = 'Annual Summary';
-$lang->report->pivotTable   = 'Pivot Table';
 $lang->report->notice       = new stdclass();
 $lang->report->notice->help = 'Note : Le rapport est généré à partir des résultats de la liste consultée. Par exemple, cliquez sur AssignedToMe, puis Générer Rapport pour obtenir un rapport basé sur la liste de ce qui vous est assigné.';
 

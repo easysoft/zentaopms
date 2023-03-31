@@ -2,7 +2,6 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/action.class.php';
-$db->switchDB();
 su('admin');
 
 /**
@@ -28,4 +27,3 @@ r($action->updateCommentTest($actionIDList[1], $commentList[1])) && p('comment')
 r($action->updateCommentTest($actionIDList[2], $commentList[2])) && p('comment') && e('备注3'); // 测试更新action 3的备注
 r($action->updateCommentTest($actionIDList[3], $commentList[3])) && p('comment') && e('备注4'); // 测试更新action 4的备注
 r($action->updateCommentTest($actionIDList[4], $commentList[4])) && p('comment') && e('备注5'); // 测试更新action 5的备注
-$db->restoreDB();

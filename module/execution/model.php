@@ -1311,6 +1311,32 @@ class executionModel extends model
             unset($execution->end);
         }
 
+        if($this->post->readjustTime)
+        {
+            $begin = $execution->begin;
+            $end   = $execution->end;
+
+            if($begin > $end) dao::$errors["message"][] = sprintf($this->lang->execution->errorLetterPlan, $end, $begin);
+
+            if($oldExecution->grade > 1)
+            {
+                $parent      = $this->dao->select('begin,end')->from(TABLE_PROJECT)->where('id')->eq($oldExecution->parent)->fetch();
+                $parentBegin = $parent->begin;
+                $parentEnd   = $parent->end;
+                if($begin < $parentBegin)
+                {
+                    dao::$errors["message"][] = sprintf($this->lang->execution->errorLetterParent, $parentBegin);
+                }
+
+                if($end > $parentEnd)
+                {
+                    dao::$errors["message"][] = sprintf($this->lang->execution->errorGreaterParent, $parentEnd);
+                }
+            }
+        }
+
+        if(dao::isError()) return false;
+
         $execution = $this->loadModel('file')->processImgURL($execution, $this->config->execution->editor->activate['id'], $this->post->uid);
         $this->dao->update(TABLE_EXECUTION)->data($execution)
             ->autoCheck()
@@ -5684,12 +5710,13 @@ class executionModel extends model
      */
     public function generateRow($executions, $users, $productID)
     {
-        $rows = array();
+        $today = helper::today();
+        $rows  = array();
         foreach($executions as $id => $execution)
         {
             $label = $execution->type == 'stage' ? 'label-warning' : 'label-info';
             $link  = $execution->type == 'kanban' ? helper::createLink('execution', 'kanban', "id=$execution->id") : helper::createLink('execution', 'task', "id=$execution->id");
-            $execution->name     = "<span class='project-type-label label label-outline $label'>{$this->lang->execution->typeList[$execution->type]}</span> " . (empty($execution->children) ? html::a($link, $execution->name) : $execution->name);
+            $execution->name     = "<span class='project-type-label label label-outline $label'>{$this->lang->execution->typeList[$execution->type]}</span> " . (empty($execution->children) ? html::a($link, $execution->name, '_self', 'class="text-primary"') : $execution->name) . (strtotime($today) > strtotime($execution->end) ? '<span class="label label-danger label-badge">' . $this->lang->execution->delayed . '</span>' : '');;
             $execution->project  = $execution->projectName;
             $execution->parent   = ($execution->parent and $execution->grade > 1) ? $execution->parent : '';
             $execution->asParent = !empty($execution->children);
@@ -5745,6 +5772,12 @@ class executionModel extends model
         $post    = $_POST;
 
         $_POST = array();
+        $extendFields = $this->getExtendFields();
+        foreach(array_keys($extendFields) as $field)
+        {
+            if(isset($post[$field])) $_POST[$field] = $post[$field];
+        }
+
         $_POST['project']     = $projectID;
         $_POST['name']        = $project->name;
         $_POST['begin']       = $project->begin;
@@ -5798,6 +5831,12 @@ class executionModel extends model
         $post    = $_POST;
 
         $_POST = array();
+        $extendFields = $this->getExtendFields();
+        foreach(array_keys($extendFields) as $field)
+        {
+            if(isset($post[$field])) $_POST[$field] = $post[$field];
+        }
+
         $_POST['project']   = $projectID;
         $_POST['name']      = $project->name;
         $_POST['begin']     = $project->begin;
@@ -5978,5 +6017,24 @@ class executionModel extends model
             if(!empty($children)) $sortedExecutions += $this->resetExecutionSorts($executions, $children);
         }
         return $sortedExecutions;
+    }
+
+    /**
+     * Get Extend Fields in workflow.
+     *
+     * @param  string $module
+     * @access public
+     * @return array
+     */
+    public function getExtendFields($module = 'project')
+    {
+        $extendFields = $this->dao->select('field')
+            ->from(TABLE_WORKFLOWFIELD)
+            ->where('module')->eq('project')
+            ->andWhere('buildin')->eq(0)
+            ->andWhere('role')->eq('custom')
+            ->fetchPairs('field');
+
+        return $extendFields;
     }
 }

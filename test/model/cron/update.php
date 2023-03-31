@@ -2,7 +2,6 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/cron.class.php';
-$db->switchDB();
 su('admin');
 
 /**
@@ -37,4 +36,3 @@ r($result1[0]) && p()                  && e('『命令』不能为空');  //命�
 r($result2)    && p('command,type')    && e('test comand,zentao');//更新之后对比更新数据信息
 r($result2)    && p('m,h,dom,mon,dow') && e('55,23,30,12,6');  //更新之后对比更新数据信息
 
-$db->restoreDB();

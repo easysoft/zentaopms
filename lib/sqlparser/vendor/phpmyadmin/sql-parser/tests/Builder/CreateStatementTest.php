@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 namespace PhpMyAdmin\SqlParser\Tests\Builder;
 
 use PhpMyAdmin\SqlParser\Components\CreateDefinition;
@@ -17,9 +15,11 @@ use PhpMyAdmin\SqlParser\TokensList;
 
 class CreateStatementTest extends TestCase
 {
-    public function testBuilder(): void
+    public function testBuilder()
     {
-        $parser = new Parser('CREATE USER "jeffrey"@"localhost" IDENTIFIED BY "mypass"');
+        $parser = new Parser(
+            'CREATE USER "jeffrey"@"localhost" IDENTIFIED BY "mypass"'
+        );
         $stmt = $parser->statements[0];
         $this->assertEquals(
             'CREATE USER "jeffrey"@"localhost" IDENTIFIED BY "mypass"',
@@ -27,7 +27,7 @@ class CreateStatementTest extends TestCase
         );
     }
 
-    public function testBuilderDatabase(): void
+    public function testBuilderDatabase()
     {
         // CREATE DATABASE ...
         $parser = new Parser(
@@ -42,8 +42,12 @@ class CreateStatementTest extends TestCase
             $stmt->build()
         );
 
+
         // CREATE SCHEMA ...
-        $parser = new Parser('CREATE SCHEMA `mydb` DEFAULT CHARACTER SET = utf8 DEFAULT COLLATE = utf8_general_ci');
+        $parser = new Parser(
+            'CREATE SCHEMA `mydb` ' .
+            'DEFAULT CHARACTER SET = utf8 DEFAULT COLLATE = utf8_general_ci'
+        );
         $stmt = $parser->statements[0];
 
         $this->assertEquals(
@@ -53,7 +57,7 @@ class CreateStatementTest extends TestCase
         );
     }
 
-    public function testBuilderDefaultInt(): void
+    public function testBuilderDefaultInt()
     {
         $parser = new Parser(
             'CREATE TABLE IF NOT EXISTS t1 (' .
@@ -70,7 +74,7 @@ class CreateStatementTest extends TestCase
         );
     }
 
-    public function testBuilderCollate(): void
+    public function testBuilderCollate()
     {
         $parser = new Parser(
             'CREATE TABLE IF NOT EXISTS t1 (' .
@@ -87,7 +91,7 @@ class CreateStatementTest extends TestCase
         );
     }
 
-    public function testBuilderDefaultComment(): void
+    public function testBuilderDefaultComment()
     {
         $parser = new Parser(
             'CREATE TABLE `wp_audio` (' .
@@ -106,25 +110,25 @@ class CreateStatementTest extends TestCase
         );
     }
 
-    public function testBuilderTable(): void
+    public function testBuilderTable()
     {
         /* Assertion 1 */
         $stmt = new CreateStatement();
 
         $stmt->name = new Expression('', 'test', '');
-        $stmt->options = new OptionsArray(['TABLE']);
-        $stmt->fields = [
+        $stmt->options = new OptionsArray(array('TABLE'));
+        $stmt->fields = array(
             new CreateDefinition(
                 'id',
-                new OptionsArray(['NOT NULL', 'AUTO_INCREMENT']),
-                new DataType('INT', [11], new OptionsArray(['UNSIGNED']))
+                new OptionsArray(array('NOT NULL', 'AUTO_INCREMENT')),
+                new DataType('INT', array(11), new OptionsArray(array('UNSIGNED')))
             ),
             new CreateDefinition(
                 '',
                 null,
-                new Key('', [['name' => 'id']], 'PRIMARY KEY')
-            ),
-        ];
+                new Key('', array(array('name' => 'id')), 'PRIMARY KEY')
+            )
+        );
 
         $this->assertEquals(
             "CREATE TABLE `test` (\n" .
@@ -166,7 +170,7 @@ class CreateStatementTest extends TestCase
         $this->assertEquals($query, $parser->statements[0]->build());
     }
 
-    public function testBuilderPartitions(): void
+    public function testBuilderPartitions()
     {
         /* Assertion 1 */
         $query = 'CREATE TABLE ts (' . "\n"
@@ -213,10 +217,10 @@ class CreateStatementTest extends TestCase
         $this->assertEquals($query, $parser->statements[0]->build());
     }
 
-    public function partitionQueriesProvider(): array
+    public function partitionQueries()
     {
-        return [
-            [
+        return array(
+            array(
                 'subparts' => <<<EOT
 CREATE TABLE `ts` (
   `id` int(11) DEFAULT NULL,
@@ -239,9 +243,8 @@ SUBPARTITION s5 ENGINE=InnoDB
 )
 )
 EOT
-            ,
-            ],
-            [
+            ),
+            array(
                 'parts' => <<<EOT
 CREATE TABLE ptest (
   `event_date` date NOT NULL
@@ -255,15 +258,16 @@ PARTITION p3 ENGINE=InnoDB,
 PARTITION p4 ENGINE=InnoDB
 )
 EOT
-            ,
-            ],
-        ];
+            )
+        );
     }
 
     /**
-     * @dataProvider partitionQueriesProvider
+     * @dataProvider partitionQueries
+     *
+     * @param string $query
      */
-    public function testBuilderPartitionsEngine(string $query): void
+    public function testBuilderPartitionsEngine($query)
     {
         $parser = new Parser($query);
         $stmt = $parser->statements[0];
@@ -271,7 +275,7 @@ EOT
         $this->assertEquals($query, $stmt->build());
     }
 
-    public function testBuilderView(): void
+    public function testBuilderView()
     {
         $parser = new Parser(
             'CREATE VIEW myView (vid, vfirstname) AS ' .
@@ -326,7 +330,7 @@ EOT
         );
     }
 
-    public function testBuilderViewComplex(): void
+    public function testBuilderViewComplex()
     {
         $parser = new Parser(
             'CREATE VIEW withclause AS' . "\n"
@@ -390,7 +394,7 @@ EOT
         );
     }
 
-    public function testBuilderCreateProcedure(): void
+    public function testBuilderCreateProcedure()
     {
         $parser = new Parser(
             'CREATE DEFINER=`root`@`%`'
@@ -436,7 +440,7 @@ EOT
         );
     }
 
-    public function testBuilderCreateFunction(): void
+    public function testBuilderCreateFunction()
     {
         $parser = new Parser(
             'CREATE DEFINER=`root`@`localhost`'
@@ -562,13 +566,13 @@ EOT
         );
     }
 
-    public function testBuilderTrigger(): void
+    public function testBuilderTrigger()
     {
         $stmt = new CreateStatement();
 
-        $stmt->options = new OptionsArray(['TRIGGER']);
+        $stmt->options = new OptionsArray(array('TRIGGER'));
         $stmt->name = new Expression('ins_sum');
-        $stmt->entityOptions = new OptionsArray(['BEFORE', 'INSERT']);
+        $stmt->entityOptions = new OptionsArray(array('BEFORE', 'INSERT'));
         $stmt->table = new Expression('account');
         $stmt->body = 'SET @sum = @sum + NEW.amount';
 
@@ -579,7 +583,7 @@ EOT
         );
     }
 
-    public function testBuilderRoutine(): void
+    public function testBuilderRoutine()
     {
         $parser = new Parser(
             'CREATE FUNCTION test (IN `i` INT) RETURNS VARCHAR ' .
@@ -602,16 +606,18 @@ EOT
         );
     }
 
-    public function testBuildSelect(): void
+    public function testBuildSelect()
     {
-        $parser = new Parser('CREATE TABLE new_tbl SELECT * FROM orig_tbl');
+        $parser = new Parser(
+            'CREATE TABLE new_tbl SELECT * FROM orig_tbl'
+        );
         $this->assertEquals(
             'CREATE TABLE new_tbl SELECT * FROM orig_tbl',
             $parser->statements[0]->build()
         );
     }
 
-    public function testBuildCreateTableSortedIndex(): void
+    public function testBuildCreateTableSortedIndex()
     {
         $parser = new Parser(
             <<<'SQL'
@@ -653,9 +659,10 @@ SQL;
             . ' ENGINE=InnoDB AUTO_INCREMENT=4465 DEFAULT CHARSET=utf8 TABLESPACE `innodb_system`',
             $stmt->build()
         );
+
     }
 
-    public function testBuildCreateTableComplexIndexes(): void
+    public function testBuildCreateTableComplexIndexes()
     {
         // phpcs:disable Generic.Files.LineLength.TooLong
         $parser = new Parser(

@@ -2,7 +2,6 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/doc.class.php';
-$db->switchDB();
 su('admin');
 
 /**
@@ -35,4 +34,3 @@ r($doc->updateApiLibTest($ids[0], $updateUsers)) && p('0:field,old,new')        
 r($doc->updateApiLibTest($ids[0], $noName))      && p('name:0')                                          && e('『接口库名称』不能为空。');                                             //修改名字为空
 r($doc->updateApiLibTest($ids[0], $repeatName))  && p()                                                  && e('0');                                                                    //修改成重复名称
 
-$db->restoreDB();

@@ -2,7 +2,6 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php'; su('admin');
 include dirname(dirname(dirname(__FILE__))) . '/class/bug.class.php';
-$db->switchDB();
 
 /**
 
@@ -32,4 +31,3 @@ r($bug->updateObject($projectIdList[0], $t_uptype))    && p('0:field,old,new')  
 r($bug->updateObject($projectIdList[0], $t_typetitle)) && p('0:field,old,new;1:field,old,new') && e('title,john,jack;type,config,install'); // 测试更新bug名称和类型
 r($bug->updateObject($projectIdList[0], $t_untitle))   && p()                                  && e('没有数据更新');                        // 测试不更改bug名称
 r($bug->updateObject($projectIdList[0], $t_untype))    && p()                                  && e('没有数据更新');                        // 测试不更改bug类型
-$db->restoreDB();

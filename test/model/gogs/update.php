@@ -2,7 +2,6 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/gogs.class.php';
-$db->switchDB();
 su('admin');
 
 /**
@@ -35,4 +34,3 @@ r($gogs->update($gogsID)) && p() && e('url');    // 服务器地址为空
 $_POST['url'] = 'http://10.0.7.242:9021';
 r($gogs->update($gogsID)) && p('name') && e('Changed Gogs');    // 正确Gogs数据
 
-$db->restoreDB();

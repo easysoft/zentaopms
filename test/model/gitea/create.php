@@ -2,7 +2,6 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/gitea.class.php';
-$db->switchDB();
 su('admin');
 
 /**
@@ -33,4 +32,3 @@ r($gitea->create()) && p() && e('url');    // 服务器地址为空
 $_POST['url'] = 'http://10.0.7.242:9020';
 r($gitea->create()) && p('name,url,token') && e('Gitea,http://10.0.7.242:9020,c6769e6761a7d719129b2421dcb3112d936e2b1f');    // 正确Gitea数据
 
-$db->restoreDB();

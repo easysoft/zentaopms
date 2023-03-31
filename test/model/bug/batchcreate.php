@@ -2,7 +2,6 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/bug.class.php';
-$db->switchDB();
 su('admin');
 
 /**
@@ -44,4 +43,3 @@ r($bug->batchCreateObject($productID, $normal_create3))   && p('2:title,openedBu
 r($bug->batchCreateObject($productID, $normal_create1))   && p()                                                             && e('0');                                             // 测试短时间内重复批量创建bug
 r($bug->batchCreateObject($productID, $exception_create)) && p('message:0')                                                  && e("『影响版本』不能为空。"); // 测试异常创建bug
 
-$db->restoreDB();

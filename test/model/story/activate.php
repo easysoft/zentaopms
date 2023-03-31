@@ -48,4 +48,3 @@ r($afterActivate63)   && p('status') && e('active');  //查看激活之后的需
 r($afterActivate100)  && p('status') && e('active');  //查看激活之后的需求状态
 r($afterActivate301)  && p('status') && e('active');  //查看激活之后的需求状态
 
-$db->restoreDB();

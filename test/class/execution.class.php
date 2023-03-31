@@ -2979,4 +2979,17 @@ class executionTest
         }
         return $executionIDList;
     }
+
+    /**
+     * Get user custom workflow field.
+     *
+     * @param  string  $moduleName
+     * @access public
+     * @return array
+     */
+    public function getExtendFieldsTest($moduleName = 'project')
+    {
+        $extendFields = $this->executionModel->getExtendFields($moduleName);
+        return $extendFields;
+    }
 }

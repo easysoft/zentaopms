@@ -1,9 +1,8 @@
 <?php
+
 /**
  * Parses a function call.
  */
-
-declare(strict_types=1);
 
 namespace PhpMyAdmin\SqlParser\Components;
 
@@ -12,12 +11,12 @@ use PhpMyAdmin\SqlParser\Parser;
 use PhpMyAdmin\SqlParser\Token;
 use PhpMyAdmin\SqlParser\TokensList;
 
-use function is_array;
-
 /**
  * Parses a function call.
  *
- * @final
+ * @category   Keywords
+ *
+ * @license    https://www.gnu.org/licenses/gpl-2.0.txt GPL-2.0+
  */
 class FunctionCall extends Component
 {
@@ -36,6 +35,8 @@ class FunctionCall extends Component
     public $parameters;
 
     /**
+     * Constructor.
+     *
      * @param string         $name       the name of the function to be called
      * @param array|ArrayObj $parameters the parameters of this function
      */
@@ -56,9 +57,9 @@ class FunctionCall extends Component
      *
      * @return FunctionCall
      */
-    public static function parse(Parser $parser, TokensList $list, array $options = [])
+    public static function parse(Parser $parser, TokensList $list, array $options = array())
     {
-        $ret = new static();
+        $ret = new self();
 
         /**
          * The state of the parser.
@@ -98,7 +99,6 @@ class FunctionCall extends Component
                 if (($token->type === Token::TYPE_OPERATOR) && ($token->value === '(')) {
                     $ret->parameters = ArrayObj::parse($parser, $list);
                 }
-
                 break;
             }
         }
@@ -112,7 +112,7 @@ class FunctionCall extends Component
      *
      * @return string
      */
-    public static function build($component, array $options = [])
+    public static function build($component, array $options = array())
     {
         return $component->name . $component->parameters;
     }

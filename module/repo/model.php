@@ -1871,7 +1871,7 @@ class repoModel extends model
                         $_POST['objectType'][1] = 'task';
                         $_POST['objectID'][1]   = $taskID;
                         $_POST['work'][1]       = str_replace('<br />', "\n", $action->comment);
-                        if(is_dir($this->app->getModuleRoot() . 'effort'))
+                        if($this->config->edition != 'open')
                         {
                             $this->loadModel('effort')->batchCreate();
                         }

@@ -1,9 +1,8 @@
 <?php
+
 /**
  * `GROUP BY` keyword parser.
  */
-
-declare(strict_types=1);
 
 namespace PhpMyAdmin\SqlParser\Components;
 
@@ -12,20 +11,15 @@ use PhpMyAdmin\SqlParser\Parser;
 use PhpMyAdmin\SqlParser\Token;
 use PhpMyAdmin\SqlParser\TokensList;
 
-use function implode;
-use function is_array;
-use function trim;
-
 /**
  * `GROUP BY` keyword parser.
  *
- * @final
+ * @category   Keywords
+ *
+ * @license    https://www.gnu.org/licenses/gpl-2.0.txt GPL-2.0+
  */
 class GroupKeyword extends Component
 {
-    /** @var mixed */
-    public $type;
-
     /**
      * The expression that is used for grouping.
      *
@@ -34,6 +28,8 @@ class GroupKeyword extends Component
     public $expr;
 
     /**
+     * Constructor.
+     *
      * @param Expression $expr the expression that we are sorting by
      */
     public function __construct($expr = null)
@@ -48,11 +44,11 @@ class GroupKeyword extends Component
      *
      * @return GroupKeyword[]
      */
-    public static function parse(Parser $parser, TokensList $list, array $options = [])
+    public static function parse(Parser $parser, TokensList $list, array $options = array())
     {
-        $ret = [];
+        $ret = array();
 
-        $expr = new static();
+        $expr = new self();
 
         /**
          * The state of the parser.
@@ -90,17 +86,17 @@ class GroupKeyword extends Component
                 $expr->expr = Expression::parse($parser, $list);
                 $state = 1;
             } elseif ($state === 1) {
-                if (
-                    ($token->type === Token::TYPE_KEYWORD)
+                if (($token->type === Token::TYPE_KEYWORD)
                     && (($token->keyword === 'ASC') || ($token->keyword === 'DESC'))
                 ) {
                     $expr->type = $token->keyword;
-                } elseif (($token->type === Token::TYPE_OPERATOR) && ($token->value === ',')) {
+                } elseif (($token->type === Token::TYPE_OPERATOR)
+                    && ($token->value === ',')
+                ) {
                     if (! empty($expr->expr)) {
                         $ret[] = $expr;
                     }
-
-                    $expr = new static();
+                    $expr = new self();
                     $state = 0;
                 } else {
                     break;
@@ -124,12 +120,12 @@ class GroupKeyword extends Component
      *
      * @return string
      */
-    public static function build($component, array $options = [])
+    public static function build($component, array $options = array())
     {
         if (is_array($component)) {
             return implode(', ', $component);
         }
 
-        return trim((string) $component->expr);
+        return trim($component->expr);
     }
 }

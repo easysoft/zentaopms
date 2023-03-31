@@ -577,7 +577,6 @@ class customModel extends model
     public function getURSRPairs()
     {
         $lang = $this->app->getClientLang();
-        $lang = $lang == 'zh-tw' ? 'zh-cn' : $lang;
         $langData = $this->dao->select('`key`, `value`, `system`')->from(TABLE_LANG)
             ->where('lang')->eq($lang)
             ->andWhere('module')->eq('custom')
@@ -659,7 +658,6 @@ class customModel extends model
     {
         $this->app->loadLang('custom');
         $lang = $this->app->getClientLang();
-        $lang = $lang == 'zh-tw' ? 'zh-cn' : $lang;
 
         $langData = $this->dao->select('`key`, `value`, `system`')->from(TABLE_LANG)
             ->where('lang')->eq($lang)

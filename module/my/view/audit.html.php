@@ -57,7 +57,7 @@
 
       $typeName = '';
       if(isset($lang->{$review->type}->common)) $typeName = $lang->{$review->type}->common;
-      if($type == 'story') $typeName = $lang->SRCommon;
+      if($type == 'story') $typeName = $review->storyType == 'story' ? $lang->SRCommon : $lang->URCommon;
       if($review->type == 'projectreview') $typeName = $lang->project->common;
       if(isset($flows[$review->type])) $typeName = $flows[$review->type];
 
