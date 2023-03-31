@@ -57,7 +57,7 @@ if(isset($pageCSS)) css::internal($pageCSS);
         <?php endif;?>
         <?php if($module->type != 'line'):?>
         <tr <?php if($hidden) echo "style='display:none'";?>>
-          <th class='thWidth'><?php echo ($type == 'doc') ? $lang->tree->parentCate : $lang->tree->parent;?></th>
+          <th class='thWidth'><?php echo ($type == 'doc' or $type == 'api') ? $lang->tree->parentCate : $lang->tree->parent;?></th>
           <td>
             <div class='input-group' id='moduleIdBox'>
               <?php echo html::select('parent', $optionMenu, $module->parent, "class='form-control chosen'");?>

@@ -41,7 +41,7 @@ foreach(array('product', 'project') as $moduleType)
     {
         foreach($closedObjects[$moduleType] as $closedObjectID => $closedObjectName)
         {
-            $dataParams         = "data-type='$moduleType' data-id='$normalObjectID'";
+            $dataParams         = "data-type='$moduleType' data-id='$closedObjectID'";
             $selected           = $closedObjectID == $objectID ? 'selected' : '';
             $closedObjectsHtml .= '<li>' . html::a($link, "<i class='icon icon-$moduleType'></i> $closedObjectName", '', "class='$selected clickable' title='{$closedObjectName}' $dataParams data-key='" . zget($objectsPinYin, $closedObjectName, '') . "'") . '</li>';
         }
@@ -146,7 +146,7 @@ $(function()
         }
     });
 
-    $('#tabContent a').on('click', function()
+    $('.objectTree a').on('click', function()
     {
         var objectType = $(this).data('type');
         var objectID   = $(this).data('id');
