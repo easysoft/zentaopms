@@ -571,4 +571,26 @@ class docTest
 
         return $objects;
     }
+
+    /**
+     * Test check api library name.
+     *
+     * @param  object $lib
+     * @param  string $libType
+     * @param  int    $libID
+     * @access public
+     * @return bool
+     */
+    public function checkApiLibNameTest($lib, $libType, $libID = 0)
+    {
+        $this->objectModel->checkApiLibName($lib, $libType, $libID);
+
+        if(dao::isError())
+        {
+            $errors = dao::getError();
+            return zget($errors, 'name', '1');
+        }
+
+        return 'noerror';
+    }
 }
