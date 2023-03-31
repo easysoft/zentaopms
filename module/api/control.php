@@ -447,8 +447,6 @@ class api extends control
      */
     public function editLib($id)
     {
-        $lib = $this->doc->getLibById($id);
-
         if(!empty($_POST))
         {
             $this->doc->updateApiLib($id);
@@ -458,9 +456,18 @@ class api extends control
             return $this->sendSuccess(array('message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => "redirectParentWindow($id)"));
         }
 
+        $lib  = $this->doc->getLibById($id);
         $type = 'nolink';
-        if(!empty($lib->product)) $type = 'product';
-        if(!empty($lib->project)) $type = 'project';
+        if(!empty($lib->product))
+        {
+            $type = 'product';
+            $this->view->object = $this->loadModel('product')->getByID($lib->product);
+        }
+        if(!empty($lib->project))
+        {
+            $type = 'project';
+            $this->view->object = $this->loadModel('project')->getById($lib->project);
+        }
         if($type != 'nolink') $this->lang->api->aclList['default'] = sprintf($this->lang->doclib->aclList['default'], $this->lang->{$type}->common);
         if($type == 'nolink') unset($this->lang->api->aclList['default']);
 

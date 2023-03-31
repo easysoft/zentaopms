@@ -1,12 +1,12 @@
 <?php
 /**
- * The createlib view of doc module of ZenTaoPMS.
+ * The createlib view of api module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Jia Fu <fujia@cnezsoft.com>
- * @package     doc
- * @version     $Id: createlib.html.php 975 2010-07-29 03:30:25Z jajacn@126.com $
+ * @package     api
+ * @version     $Id: editlib.html.php 975 2010-07-29 03:30:25Z jajacn@126.com $
  * @link        http://www.zentao.net
  */
 ?>
@@ -22,24 +22,12 @@
         </div>
         <form class='load-indicator main-form form-ajax' id="apiForm" method='post' enctype='multipart/form-data'>
           <table class='table table-form'>
+            <?php if(in_array($type, array('product', 'project'))):?>
             <tr>
-              <th><?php echo $lang->api->libType;?></th>
-              <td>
-                <span><?php echo html::radio('libType', $lang->api->libTypeList, $type, "onchange='toggleLibType(this.value)'")?></span>
-              </td>
+              <th class='w-130px'><?php echo $lang->api->{$type};?></th>
+              <td><?php echo $object->name?></td>
             </tr>
-            <tr id='productBox' class='<?php echo $type != 'product' ? 'hidden' : '';?>'>
-              <th><?php echo $lang->api->product;?></th>
-              <td>
-                <span><?php echo html::select('product', $products, $lib->product, "class='form-control chosen'")?></span>
-              </td>
-            </tr>
-            <tr id='projectBox' class='<?php echo $type != 'project' ? 'hidden' : '';?>'>
-              <th><?php echo $lang->api->project;?></th>
-              <td>
-                <span><?php echo html::select('project', $projects, $lib->project, "class='form-control chosen'")?></span>
-              </td>
-            </tr>
+            <?php endif;?>
             <tr>
               <th><?php echo $lang->api->name?></th>
               <td style="width: 80%"><?php echo html::input('name', $lib->name, "class='form-control'");?></td>
