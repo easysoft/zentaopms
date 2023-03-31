@@ -128,7 +128,7 @@
               <tfoot>
                 <tr>
                   <td colspan='4' class='text-center'>
-                    <?php echo html::submitButton($lang->release->common);?>
+                    <?php echo html::commonButton($lang->release->common, "id='releaseBtn'", 'btn btn-primary btn-wide');?>
                     <?php echo html::commonButton($lang->cancel, "data-dismiss='modal'", "btn btn-wide");?>
                   </td>
                 </tr>
