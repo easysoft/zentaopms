@@ -3007,6 +3007,7 @@ class docModel extends model
      *
      * @param  object $lib
      * @param  string $libType
+     * @param  int    $libID
      * @access public
      * @return void
      */
