@@ -1,6 +1,3 @@
-#main {padding: 0;}
-.container {padding: 0 !important;}
-#mainContent {padding: 0;}
 .doc-title {width:400px;}
 .doc-title input {border: unset; font-size: 18px; font-weight: bold; color: #3c4353; padding-left: 16px;}
 .doc-title .form-control:focus {border: unset; box-shadow: unset;}
@@ -14,7 +11,7 @@
 
 #contentBox {padding: 0; width: 100%;}
 #contentBox .ke-container {overflow: visible;}
-#contentBox .ke-container,#contentBox  .contenthtml {border: unset; background: #efefef;}
+#contentBox .ke-container, #contentBox .contenthtml {border: unset; background: #efefef;}
 #contentBox .ke-container.focus {box-shadow: unset; border-color: unset;}
 #contentBox .ke-toolbar {padding-left: 20px; width: 100%; height: 30px;}
 #contentBox .ke-edit {border-top: 1px solid rgb(220, 220, 220)}

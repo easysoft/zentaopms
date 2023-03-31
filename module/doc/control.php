@@ -389,30 +389,24 @@ class doc extends control
 
         $lib      = $this->doc->getLibByID($libID);
         $objects  = array();
+        if($objectType == 'project')
+        {
+            $objects = $this->loadModel('project')->getPairs();
+            $this->view->executions = array(0 => '') + $this->loadModel('execution')->getPairs($objectID, 'all', 'multiple,leaf,noprefix');
+        }
+        elseif($objectType == 'execution')
+        {
+            $execution = $this->loadModel('execution')->getById($objectID);
+            $objects   = $this->execution->getPairs($execution->project, 'all', "multiple,leaf,noprefix");
+        }
+        elseif($objectType == 'product')
+        {
+            $objects = $this->loadModel('product')->getPairs();
+        }
+        $moduleOptionMenu = $this->doc->getLibsOptionMenu($libs);
+
         $moduleID = $moduleID ? (int)$moduleID : (int)$this->cookie->lastDocModule;
-        if($docType == 'html')
-        {
-            if($objectType == 'project')
-            {
-                $objects = $this->loadModel('project')->getPairs();
-                $this->view->executions = array(0 => '') + $this->loadModel('execution')->getPairs($objectID, 'all', 'multiple,leaf,noprefix');
-            }
-            elseif($objectType == 'execution')
-            {
-                $execution = $this->loadModel('execution')->getById($objectID);
-                $objects   = $this->execution->getPairs($execution->project, 'all', "multiple,leaf,noprefix");
-            }
-            elseif($objectType == 'product')
-            {
-                $objects = $this->loadModel('product')->getPairs();
-            }
-            $moduleOptionMenu = $this->doc->getLibsOptionMenu($libs);
-            $moduleID         = $libID . '_' . $moduleID;
-        }
-        else
-        {
-            $moduleOptionMenu = $this->tree->getOptionMenu($libID, 'doc', $startModuleID = 0);
-        }
+        $moduleID = $libID . '_' . $moduleID;
 
         $this->view->title            = zget($lib, 'name', '', $lib->name . $this->lang->colon) . $this->lang->doc->create;
         $this->view->linkType         = $linkType;
@@ -525,8 +519,9 @@ class doc extends control
 
         if($doc->contentType == 'markdown') $this->config->doc->markdown->edit = array('id' => 'content', 'tools' => 'toolbar');
 
-        $lib  = $this->doc->getLibByID($libID);
-        $type = $lib->type;
+        $lib        = $this->doc->getLibByID($libID);
+        $objectType = $lib->type;
+        $objectID   = zget($lib, $objectType, 0);
 
         /* Set menus. */
         if($this->app->tab == 'product')
@@ -553,6 +548,23 @@ class doc extends control
             $this->app->rawMethod = $objectType == 'execution' ? 'project' : $objectType;
         }
 
+        $libs    = $this->doc->getLibs($objectType, 'withObject', $libID, $objectID);
+        $objects = array();
+        if($objectType == 'project')
+        {
+            $objects = $this->loadModel('project')->getPairs();
+        }
+        elseif($objectType == 'execution')
+        {
+            $execution = $this->loadModel('execution')->getById($objectID);
+            $objects   = $this->execution->getPairs($execution->project, 'all', "multiple,leaf,noprefix");
+        }
+        elseif($objectType == 'product')
+        {
+            $objects = $this->loadModel('product')->getPairs();
+        }
+        $moduleOptionMenu = $this->doc->getLibsOptionMenu($libs);
+
         $this->config->showMainMenu = strpos(',html,markdown,text,', ",{$doc->type},") === false;
 
         $this->view->title      = $lib->name . $this->lang->colon . $this->lang->doc->edit;
@@ -560,15 +572,16 @@ class doc extends control
         $this->view->position[] = $this->lang->doc->edit;
 
         $this->view->doc              = $doc;
-        $this->view->moduleOptionMenu = $this->tree->getOptionMenu($libID, 'doc', $startModuleID = 0);
-        $this->view->type             = $type;
-        $this->view->libs             = $this->doc->getLibs('all', 'withObject', $libID, $objectID, 'book');
+        $this->view->moduleOptionMenu = $moduleOptionMenu;
+        $this->view->type             = $objectType;
+        $this->view->libs             = $libs;
+        $this->view->objects          = $objects;
         $this->view->lib              = $lib;
         $this->view->groups           = $this->loadModel('group')->getPairs();
         $this->view->users            = $this->user->getPairs('noletter|noclosed|nodeleted', $doc->users);
         $this->view->from             = $from;
         $this->view->files            = $this->loadModel('file')->getByObject('doc', $docID);
-        $this->view->objectID         = zget($lib, $type, 0);
+        $this->view->objectID         = $objectID;
         $this->display();
     }
 
