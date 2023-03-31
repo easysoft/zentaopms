@@ -21,7 +21,7 @@ function loadObjectModules(objectType, objectID)
  */
 function loadExecutions(projectID)
 {
-    var link = createLink('project', 'ajaxGetExecutions', "projectID=" + projectID + "&executionID=0&mode=multiple");
+    var link = createLink('project', 'ajaxGetExecutions', "projectID=" + projectID + "&executionID=0&mode=multiple,leaf,noprefix");
     $('#executionBox').load(link, function(){$('#executionBox').find('select').attr('data-placeholder', holders.execution).attr('onchange', "loadObjectModules('execution', this.value)").chosen()});
     loadObjectModules('project', projectID);
 }

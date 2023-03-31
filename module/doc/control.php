@@ -395,7 +395,7 @@ class doc extends control
             if($objectType == 'project')
             {
                 $objects = $this->loadModel('project')->getPairs();
-                $this->view->executions = array(0 => '') + $this->loadModel('execution')->getPairs($objectID, 'all', 'multiple');
+                $this->view->executions = array(0 => '') + $this->loadModel('execution')->getPairs($objectID, 'all', 'multiple,leaf,noprefix');
             }
             elseif($objectType == 'execution')
             {

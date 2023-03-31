@@ -278,16 +278,13 @@ class docModel extends model
      */
     public function updateApiLib($id)
     {
-        $oldLib  = $this->getLibById($id);
-        $libType = $this->post->libType;
+        $oldLib = $this->getLibById($id);
 
         $data = fixer::input('post')
             ->trim('name')
             ->join('groups', ',')
             ->join('users', ',')
-            ->setForce('product', $libType == 'product' ? $this->post->product : 0)
-            ->setForce('project', $libType == 'project' ? $this->post->project : 0)
-            ->remove('uid,contactListMenu,libType')
+            ->remove('uid,contactListMenu,type')
             ->get();
 
         $this->app->loadLang('api');
@@ -298,10 +295,7 @@ class docModel extends model
         $this->lang->doclib->project = $this->lang->api->project;
         $this->lang->doclib->product = $this->lang->api->product;
 
-        if($libType == 'product') $this->config->api->createlib->requiredFields .= ',product';
-        if($libType == 'project') $this->config->api->createlib->requiredFields .= ',project';
-
-        $this->checkApiLibName($data, $libType, $id);
+        $this->checkApiLibName($data, $this->post->type, $id);
 
         if(dao::isError()) return false;
 

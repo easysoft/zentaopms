@@ -985,6 +985,8 @@ class apiModel extends model
      */
     public function getOrderedObjects()
     {
+        $normalObjects = $closedObjects = array();
+
         $libs     = $this->loadModel('doc')->getApiLibs();
         $products = $this->dao->select('t1.id, t1.name, t1.status')->from(TABLE_PRODUCT)->alias('t1')
             ->leftjoin(TABLE_DOCLIB)->alias('t2')->on('t2.product=t1.id')
@@ -1039,7 +1041,6 @@ class apiModel extends model
      * @param  int    $moduleID
      * @param  int    $objectID
      * @param  string $browseType bySearch
-
      * @access public
      * @return array
      */
@@ -1051,18 +1052,16 @@ class apiModel extends model
         foreach($libTree as &$tree)
         {
             $tree->versions    = array();
-            $tree->lastVersion = '';
             foreach($releases as $index => $release)
             {
                 if($tree->id == $release->lib)
                 {
-                    if(empty($tree->versions)) $tree->lastVersion = $release->version;
-
-                    $tree->versions[] = $release->version;
+                    $tree->versions[] = $release;
                     unset($releases[$index]);
                 }
             }
         }
+
         return $libTree;
     }
 }

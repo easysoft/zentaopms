@@ -49,6 +49,15 @@
 #leftBar .selectBox #currentItem > .text {overflow: hidden; text-align: left; flex: 0 1 100%;}
 </style>
 
+<?php
+/* Release used for api space. */
+js::set('release',    isset($release) ? $release : 0);
+
+/* ObjectType and objectID used for other space. */
+js::set('objectType', isset($type) ? $type : '');
+js::set('objectID',   isset($objectID) ? $objectType : '');
+?>
+
 <div id="fileTree" class="file-tree">
 <?php if(isset($type) and $type == 'project'):?>
 <div class="project-tree">
@@ -134,6 +143,8 @@ $(function()
         var dropdown = '<ul class="dropdown-menu dropdown-in-tree" id="' + option.type + '" style="display: unset; left:' + option.left + 'px; top:' + option.top + 'px;">';
         dropdown += $(libClass).html().replace(/%libID%/g, option.libID).replace(/%moduleID%/g, option.moduleID).replace(/%hasChildren%/g, option.hasChildren);
         dropdown += '</ul>';
+
+        if(typeof(option.moduleType) != 'undefined' && option.moduleType == 'api') dropdown = dropdown.replace(/doc/g, 'api');
         return dropdown;
     }
 
@@ -221,7 +232,8 @@ $(function()
                 type        : dropDownID,
                 libID       : libID,
                 moduleID    : moduleID,
-                hasChildren : hasChildren
+                hasChildren : hasChildren,
+                moduleType  : moduleType
             };
 
             var dropDown = renderDropdown(option);
