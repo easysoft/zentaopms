@@ -118,6 +118,8 @@ js::set('objectID',   isset($objectID) ? $objectID : '');
 <script>
 $(function()
 {
+    if(typeof linkParams == 'undefined') linkParams = '%s';
+
     var moduleData = {
         "name"       : "",
         "createType" : "",
@@ -268,19 +270,9 @@ $(function()
                     );
                     return false;
                 }
-                var module    = result.module;
-                var resultDom = $('[data-id=aTreeModal]').html().replace(/%name%/g, module.name).replace(/%id%/g, module.id).replace('insert', module.id);
-                $input.closest('ul').find('.has-input').css('padding-left', '15px');
-                $input.after(resultDom);
-                $input.remove();
-                if(moduleData.isUpdate)
-                {
-                    $.getJSON(createLink('doc', 'tableContents', 'type=' + objectType + '&objectID=' + objectID , 'json'), function(data){
-                        var treeData = JSON.parse(data.data);
-                        $('#fileTree').data('zui.tree').reload(treeData.libTree);
-                        $('li.has-list > ul').addClass("menu-active-primary menu-hover-primary");
-                    });
-                }
+
+                var module = result.module;
+                return lcatePage(module.root, module.id, 'doc');
             });
         });
     }
@@ -320,14 +312,12 @@ $(function()
     {
         $(this).find('.icon').addClass('hidden');
         $(this).removeClass('show-icon');
-    }).on('click', 'a', function(e)
+    }).on('click', 'a', function()
     {
         if(!$(this).data('action')) return;
-
         var isLib    = $(this).hasClass('lib');
         var moduleID = $(this).data('id');
         var libID    = 0;
-        var params   = '';
 
         if(isLib)
         {
@@ -341,13 +331,26 @@ $(function()
             libID = $(this).closest('.lib').data('id');
         }
 
-        if(typeof linkParams == 'undefined') linkParams = '%s';
+        return lcatePage(libID, moduleID, $(this).data('type'));
+    });
+
+    /**
+     * Lcate page.
+     *
+     * @param  int    libID
+     * @param  int    moduleID
+     * @param  string type
+     * @access public
+     * @return void
+     */
+    function lcatePage(libID, moduleID, type)
+    {
+
         linkParams = linkParams.replace('%s', '&libID=' + libID + '&moduleID=' + moduleID);
         if(config.currentModule == 'api') linkParams =  linkParams.substring(1);
 
-        var link = $(this).data('type') == 'annex' ?  createLink(config.currentModule, 'showFiles', 'type=' + objectType + '&objectID=' + objectID) : createLink(config.currentModule, config.currentModule == 'api' ? 'index' : 'tableContents', linkParams);
-        location.href = link
-    });
+        location.href = type == 'annex' ?  createLink(config.currentModule, 'showFiles', 'type=' + objectType + '&objectID=' + objectID) : createLink(config.currentModule, config.currentModule == 'api' ? 'index' : 'tableContents', linkParams);
+    }
 
     $('body').on('click', function()
     {
@@ -469,26 +472,9 @@ $(function()
                 );
                 return false;
             }
-            var module    = result.module;
-            var resultDom = $('[data-id=aTreeModal]').html().replace(/%name%/g, module.name).replace(/%id%/g, module.id).replace('insert', module.id);
-            $input.closest('ul').find('.has-input').css('padding-left', '15px');
-            $input.after(resultDom);
-            $input.remove();
-            if(moduleData.isUpdate)
-            {
-                $.getJSON(createLink('doc', 'tableContents', 'type=' + objectType + '&objectID=' + objectID , 'json'), function(data){
-                    var treeData = JSON.parse(data.data);
-                    if(Array.isArray(treeData.libTree))
-                    {
-                        $('#fileTree').data('zui.tree').reload(treeData.libTree);
-                        $('li.has-list > ul').addClass("menu-active-primary menu-hover-primary");
-                    }
-                    else
-                    {
-                        $tree.data('zui.tree').reload(treeData.libTree[$tree.data('id')]);
-                    }
-                });
-            }
+
+            var module = result.module;
+            return lcatePage(module.root, module.id, 'doc');
         });
     }).on('keydown', '.file-tree input.input-tree', function(e)
     {
