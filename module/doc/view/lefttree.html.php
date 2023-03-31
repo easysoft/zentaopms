@@ -52,15 +52,15 @@
 <div id="fileTree" class="file-tree">
 <?php if($type == 'project'):?>
 <div class="project-tree">
-    <div class="title"><i class="icon icon-project text-primary"></i><?php echo $lang->projectCommon?></div>
+    <div class="title"><i class="icon icon-project text-primary"> </i><?php echo $lang->projectCommon?></div>
     <div id="projectTree" data-id="project"></div>
 </div>
 <div class="execution-tree">
-    <div class="title"><i class="icon icon-run text-primary"></i><?php echo $lang->execution->common?></div>
+    <div class="title"><i class="icon icon-run text-primary"> </i><?php echo $lang->execution->common?></div>
     <div id="executionTree" data-id="execution"></div>
 </div>
 <div class="annex-tree">
-    <div class="title"><i class="icon icon-paper-clip text-primary"></i><?php echo $lang->files?></div>
+    <div class="title"><i class="icon icon-paper-clip text-primary"> </i><?php echo $lang->files?></div>
     <div id="annexTree" data-id="annex"></div>
 </div>
 <?php endif;?>
