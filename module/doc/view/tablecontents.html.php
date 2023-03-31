@@ -15,8 +15,6 @@
 <?php js::set('linkParams', "type=$type&objectID=$objectID%s&browseType=&orderBy=$orderBy");?>
 <?php js::set('docLang', $lang->doc);?>
 <?php js::set('libType', $libType);?>
-<?php js::set('objectType', $type);?>
-<?php js::set('objectID', $objectID);?>
 <?php js::set('canViewFiles', common::hasPriv('doc', 'showfiles'));?>
 <div id="mainMenu" class="clearfix">
   <div id="leftBar" class="btn-toolbar pull-left">

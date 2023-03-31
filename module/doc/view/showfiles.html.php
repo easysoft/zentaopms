@@ -15,8 +15,6 @@
 <?php js::set('linkParams', "type=$type&objectID=$objectID%s");?>
 <?php js::set('docLang', $lang->doc);?>
 <?php js::set('libType', 'annex');?>
-<?php js::set('objectType', $type);?>
-<?php js::set('objectID', $objectID);?>
 <?php js::set('canViewFiles', common::hasPriv('doc', 'showfiles'));?>
 <?php js::set('type', $type);?>
 <?php js::set('tab', $this->app->tab);?>

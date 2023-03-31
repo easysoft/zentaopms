@@ -1039,7 +1039,6 @@ class apiModel extends model
      * @param  int    $moduleID
      * @param  int    $objectID
      * @param  string $browseType bySearch
-
      * @access public
      * @return array
      */
@@ -1051,18 +1050,16 @@ class apiModel extends model
         foreach($libTree as &$tree)
         {
             $tree->versions    = array();
-            $tree->lastVersion = '';
             foreach($releases as $index => $release)
             {
                 if($tree->id == $release->lib)
                 {
-                    if(empty($tree->versions)) $tree->lastVersion = $release->version;
-
-                    $tree->versions[] = $release->version;
+                    $tree->versions[] = $release;
                     unset($releases[$index]);
                 }
             }
         }
+
         return $libTree;
     }
 }
