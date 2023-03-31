@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 namespace PhpMyAdmin\SqlParser\Tests\Builder;
 
 use PhpMyAdmin\SqlParser\Parser;
@@ -9,7 +7,7 @@ use PhpMyAdmin\SqlParser\Tests\TestCase;
 
 class PurgeStatementTest extends TestCase
 {
-    public function testBuilder(): void
+    public function testBuilder()
     {
         $query = 'PURGE BINARY LOGS TO \'mysql-bin.010\'';
         $parser = new Parser($query);

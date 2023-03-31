@@ -1,9 +1,8 @@
 <?php
+
 /**
  * Parses the definition of a key.
  */
-
-declare(strict_types=1);
 
 namespace PhpMyAdmin\SqlParser\Components;
 
@@ -13,15 +12,14 @@ use PhpMyAdmin\SqlParser\Parser;
 use PhpMyAdmin\SqlParser\Token;
 use PhpMyAdmin\SqlParser\TokensList;
 
-use function implode;
-use function trim;
-
 /**
  * Parses the definition of a key.
  *
  * Used for parsing `CREATE TABLE` statement.
  *
- * @final
+ * @category   Components
+ *
+ * @license    https://www.gnu.org/licenses/gpl-2.0.txt GPL-2.0+
  */
 class Key extends Component
 {
@@ -30,43 +28,43 @@ class Key extends Component
      *
      * @var array
      */
-    public static $KEY_OPTIONS = [
-        'KEY_BLOCK_SIZE' => [
+    public static $KEY_OPTIONS = array(
+        'KEY_BLOCK_SIZE' => array(
             1,
             'var=',
-        ],
-        'USING' => [
+        ),
+        'USING' => array(
             2,
             'var',
-        ],
-        'WITH PARSER' => [
+        ),
+        'WITH PARSER' => array(
             3,
             'var',
-        ],
-        'COMMENT' => [
+        ),
+        'COMMENT' => array(
             4,
             'var',
-        ],
+        ),
         // MariaDB options
-        'CLUSTERING' => [
+        'CLUSTERING' => array(
             4,
             'var=',
-        ],
-        'ENGINE_ATTRIBUTE' => [
+        ),
+        'ENGINE_ATTRIBUTE' => array(
             5,
             'var=',
-        ],
-        'SECONDARY_ENGINE_ATTRIBUTE' => [
+        ),
+        'SECONDARY_ENGINE_ATTRIBUTE' => array(
             5,
             'var=',
-        ],
+        ),
         // MariaDB & MySQL options
         'VISIBLE' => 6,
         'INVISIBLE' => 6,
         // MariaDB options
         'IGNORED' => 10,
         'NOT IGNORED' => 10,
-    ];
+    );
 
     /**
      * The name of this key.
@@ -105,6 +103,8 @@ class Key extends Component
     public $options;
 
     /**
+     * Constructor.
+     *
      * @param string       $name    the name of the key
      * @param array        $columns the columns covered by this key
      * @param string       $type    the type of this key
@@ -112,7 +112,7 @@ class Key extends Component
      */
     public function __construct(
         $name = null,
-        array $columns = [],
+        array $columns = array(),
         $type = null,
         $options = null
     ) {
@@ -129,16 +129,16 @@ class Key extends Component
      *
      * @return Key
      */
-    public static function parse(Parser $parser, TokensList $list, array $options = [])
+    public static function parse(Parser $parser, TokensList $list, array $options = array())
     {
-        $ret = new static();
+        $ret = new self();
 
         /**
          * Last parsed column.
          *
          * @var array<string,mixed>
          */
-        $lastColumn = [];
+        $lastColumn = array();
 
         /**
          * The state of the parser.
@@ -188,7 +188,9 @@ class Key extends Component
                     $nextToken = $list->getNext();
                     $list->idx = $positionBeforeSearch;// Restore the position
 
-                    if ($nextToken !== null && $nextToken->value === '(') {
+                    if (
+                        $nextToken !== null && $nextToken->value === '('
+                    ) {
                         // Switch to expression mode
                         $state = 5;
                     } else {
@@ -202,10 +204,10 @@ class Key extends Component
                     if ($token->value === '(') {
                         $state = 3;
                     } elseif (($token->value === ',') || ($token->value === ')')) {
-                        $state = $token->value === ',' ? 2 : 4;
+                        $state = ($token->value === ',') ? 2 : 4;
                         if (! empty($lastColumn)) {
                             $ret->columns[] = $lastColumn;
-                            $lastColumn = [];
+                            $lastColumn = array();
                         }
                     }
                 } elseif (
@@ -238,13 +240,11 @@ class Key extends Component
                         $state = 4;// go back to state 4 to fetch options
                         continue;
                     }
-
                     // The expression is not finished, adding a separator for the next expression
                     if ($token->value === ',') {
                         $ret->expr .= ', ';
                         continue;
                     }
-
                     // Start of the expression
                     if ($token->value === '(') {
                         // This is the first expression, set to empty
@@ -252,12 +252,17 @@ class Key extends Component
                             $ret->expr = '';
                         }
 
-                        $ret->expr .= Expression::parse($parser, $list, ['parenthesesDelimited' => true]);
+                        $ret->expr .= Expression::parse(
+                            $parser,
+                            $list,
+                            array(
+                                'parenthesesDelimited' => true
+                            )
+                        );
                         continue;
                     }
                     // Another unexpected operator was found
                 }
-
                 // Something else than an operator was found
                 $parser->error('Unexpected token.', $token);
             }
@@ -274,7 +279,7 @@ class Key extends Component
      *
      * @return string
      */
-    public static function build($component, array $options = [])
+    public static function build($component, array $options = array())
     {
         $ret = $component->type . ' ';
         if (! empty($component->name)) {
@@ -282,10 +287,10 @@ class Key extends Component
         }
 
         if ($component->expr !== null) {
-            return $ret . '(' . $component->expr . ') ' . $component->options;
+            return $ret . '(' . $component->expr . ')' . ' ' . $component->options;
         }
 
-        $columns = [];
+        $columns = array();
         foreach ($component->columns as $column) {
             $tmp = '';
             if (isset($column['name'])) {

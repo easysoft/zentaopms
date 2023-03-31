@@ -1,0 +1,5 @@
+td.child {padding-left: 15px;}
+.c-name {width: 200px;}
+.c-count {width: 70px;}
+#conditions {display: flex;}
+#conditions .condition-options {margin-left: 16px;}

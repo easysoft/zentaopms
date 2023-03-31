@@ -1,0 +1,5 @@
+#begin {min-width: 85px;}
+#end {min-width: 85px;}
+#bug th {font-size: 12px;}
+#bug th:nth-child(7) {width: 87px;}
+#bug th:nth-child(10) {width: 100px;}
