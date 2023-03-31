@@ -9,7 +9,7 @@ class avatar extends wg
         'style?:array',
         'size?:number=32',
         'circle?:bool=true',
-        'rounded?:bool=false',
+        'rounded?:string|number',
         'background?:string',
         'foreColor?:string',
         'text?:string',
@@ -45,16 +45,18 @@ class avatar extends wg
         $this->finalClass[]           = $this->prop('className');
 
         /* Init style. */
-        $this->finalStyle             = new \stdClass();
+        $this->finalStyle             = new stdClass();
         $this->finalStyle->background = $this->prop('background');
         $this->finalStyle->color      = $this->prop('foreColor');
 
         foreach($this->props->style->data as $attr => $val) $this->finalStyle->{$attr} = $val;
 
+        /* Init avatar size. */
         $this->initSize();
+        /* Init avatar shape. */
         $this->initShape();
 
-        $content = $this->getContent();
+        $content    = $this->getContent();
         $finalStyle = json_decode(json_encode($this->finalStyle), true);
         return h::div
         (
@@ -76,9 +78,9 @@ class avatar extends wg
         if(is_numeric($size))
         {
             $fontSize = intval($size/2) > 12 ? intval($size/2) : 12;
-            $this->finalStyle->width    = "{$size}px";
-            $this->finalStyle->height   = "{$size}px";
-            $this->finalStyle->fontSize = "{$fontSize}px";
+            $this->finalStyle->width         = "{$size}px";
+            $this->finalStyle->height        = "{$size}px";
+            $this->finalStyle->{'font-size'} = "{$fontSize}px";
 
             return;
         }
@@ -99,7 +101,7 @@ class avatar extends wg
         }
         else if($rounded)
         {
-            if(is_numeric($rounded)) $this->finalStyle->borderRadius = "{$rounded}px";
+            if(is_numeric($rounded)) $this->finalStyle->{'border-radius'} = "{$rounded}px";
             else $this->finalClass[] = "rounded-{$rounded}";
         }
     }
