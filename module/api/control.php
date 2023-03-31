@@ -47,10 +47,29 @@ class api extends control
         /* Get all api doc libraries. */
         $loadLib = false;
         $libs    = $this->doc->getApiLibs($appendLib, $objectType, $objectID);
+        if(empty($libs) and $objectType != 'nolink')
+        {
+            $objectType = 'nolink';
+            $objectID   = 0;
+            $libs       = $this->doc->getApiLibs($appendLib, 'nolink');
+        }
+
         if(empty($libs))
         {
-            $loadLib = true;
-            $libs = $this->doc->getApiLibs($appendLib);
+            list($normalObjects, $closedObjects) = $this->api->getOrderedObjects();
+
+            if(!empty($normalObjects))
+            {
+                $objectType = key($normalObjects);
+                $objectID   = key($normalObjects[$objectType]);
+                $libs       = $this->doc->getApiLibs($appendLib, $objectType, $objectID);
+            }
+            elseif(!empty($closedObjects))
+            {
+                $objectType = key($closedObjects);
+                $objectID   = key($closedObjects[$objectType]);
+                $libs       = $this->doc->getApiLibs($appendLib, $objectType, $objectID);
+            }
         }
 
         if($libID == 0 and !empty($libs))
@@ -901,20 +920,21 @@ class api extends control
      */
     public function ajaxGetDropMenu($objectType, $objectID, $module, $method)
     {
-        list($normalObjects, $closedObjects) = $this->api->getOrderedObjects($objectType, 'nomerge', 'api');
+        list($normalObjects, $closedObjects) = $this->api->getOrderedObjects();
 
         $titleList = array($this->lang->api->noLinked);
-        $titleList += array_values($normalObjects['product']);
-        $titleList += array_values($normalObjects['project']);
-        $titleList += array_values($closedObjects['product']);
-        $titleList += array_values($closedObjects['project']);
+        if(!empty($normalObjects['product'])) $titleList += array_values($normalObjects['product']);
+        if(!empty($normalObjects['project'])) $titleList += array_values($normalObjects['project']);
+        if(!empty($closedObjects['product'])) $titleList += array_values($closedObjects['product']);
+        if(!empty($closedObjects['project'])) $titleList += array_values($closedObjects['project']);
 
         $this->view->objectType    = $objectType;
         $this->view->objectID      = $objectID;
         $this->view->module        = $module;
         $this->view->method        = $method;
-        $this->view->normalObjects = array($this->lang->api->noLinked) + $normalObjects;
+        $this->view->normalObjects = $normalObjects;
         $this->view->closedObjects = $closedObjects;
+        $this->view->nolinkLibs    = $this->doc->getApiLibs(0, 'nolink');
         $this->view->objectsPinYin = common::convert2Pinyin($titleList);
 
         $this->display();

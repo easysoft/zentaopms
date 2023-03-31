@@ -985,20 +985,13 @@ class apiModel extends model
      */
     public function getOrderedObjects()
     {
-        $normalObjects = $closedObjects = array('product' => array(), 'project' => array());
-
+        $libs     = $this->loadModel('doc')->getApiLibs();
         $products = $this->dao->select('t1.id, t1.name, t1.status')->from(TABLE_PRODUCT)->alias('t1')
             ->leftjoin(TABLE_DOCLIB)->alias('t2')->on('t2.product=t1.id')
             ->where('t2.id')->gt(0)
             ->andWhere('t1.vision')->eq($this->config->vision)
-            ->andWhere('t2.vision')->eq($this->config->vision)
             ->andWhere('t1.deleted')->eq(0)
-            ->andWhere('t2.type')->eq('api')
-            ->beginIF(!$this->app->user->admin)
-            ->andWhere('(t2.acl')->eq('open')
-            ->orWhere('t1.id')->in($this->app->user->view->products)
-            ->markRight(1)
-            ->fi()
+            ->andWhere('t2.id')->in(array_keys($libs))
             ->fetchAll('id');
 
         foreach($products as $id => $product)
@@ -1017,15 +1010,9 @@ class apiModel extends model
             ->leftjoin(TABLE_DOCLIB)->alias('t2')->on('t2.project=t1.id')
             ->where('t2.id')->gt(0)
             ->andWhere('t1.vision')->eq($this->config->vision)
-            ->andWhere('t2.vision')->eq($this->config->vision)
-            ->andWhere('t2.type')->eq('api')
             ->andWhere('t1.deleted')->eq(0)
             ->beginIF(!$this->app->user->admin)->andWhere('t1.id')->in($this->app->user->view->projects)->fi()
-            ->beginIF(!$this->app->user->admin)
-            ->andWhere('(t2.acl')->eq('open')
-            ->orWhere('t1.id')->in($this->app->user->view->projects)
-            ->markRight(1)
-            ->fi()
+            ->andWhere('t2.id')->in(array_keys($libs))
             ->orderBy('t1.hasProduct_asc')
             ->fetchAll('id');
 

@@ -24,26 +24,33 @@ $link              = $this->createLink('api', 'index');
 $selected          = $objectType == 'nolink' ? 'selected' : '';
 $dataParams        = 'data-type="nolink" data-id="0"';
 
-$normalObjectsHtml .= "<li>" . html::a($link, $lang->api->noLinked, '', "class='clickable $selected' title='{$lang->api->noLinked}' $dataParams data-key='" . zget($objectsPinYin, $lang->api->noLinked, '') . "'") . '</li>';
+if(!empty($nolinkLibs)) $normalObjectsHtml .= "<li>" . html::a($link, $lang->api->noLinked, '', "class='clickable $selected' title='{$lang->api->noLinked}' $dataParams data-key='" . zget($objectsPinYin, $lang->api->noLinked, '') . "'") . '</li>';
 foreach(array('product', 'project') as $moduleType)
 {
-    foreach($normalObjects[$moduleType] as $normalObjectID => $normalObjectName)
+    if(!empty($normalObjects[$moduleType]))
     {
-        $dataParams         = "data-type='$moduleType' data-id='$normalObjectID'";
-        $selected           = $normalObjectID == $objectID ? 'selected' : '';
-        $normalObjectsHtml .= "<li>" . html::a($link, "<i class='icon icon-$moduleType'></i> $normalObjectName", '', "class='$selected clickable' title='{$normalObjectName}' $dataParams data-key='" . zget($objectsPinYin, $normalObjectName, '') . "'") . '</li>';
+        foreach($normalObjects[$moduleType] as $normalObjectID => $normalObjectName)
+        {
+            $dataParams         = "data-type='$moduleType' data-id='$normalObjectID'";
+            $selected           = $normalObjectID == $objectID ? 'selected' : '';
+            $normalObjectsHtml .= "<li>" . html::a($link, "<i class='icon icon-$moduleType'></i> $normalObjectName", '', "class='$selected clickable' title='{$normalObjectName}' $dataParams data-key='" . zget($objectsPinYin, $normalObjectName, '') . "'") . '</li>';
+        }
     }
 
-    foreach($closedObjects[$moduleType] as $closedObjectID => $closedObjectName)
+    if(!empty($closedObjects[$moduleType]))
     {
-        $dataParams         = "data-type='$moduleType' data-id='$normalObjectID'";
-        $selected           = $closedObjectID == $objectID ? 'selected' : '';
-        $closedObjectsHtml .= '<li>' . html::a($link, "<i class='icon icon-$moduleType'></i> $closedObjectName", '', "class='$selected clickable' title='{$closedObjectName}' $dataParams data-key='" . zget($objectsPinYin, $closedObjectName, '') . "'") . '</li>';
+        foreach($closedObjects[$moduleType] as $closedObjectID => $closedObjectName)
+        {
+            $dataParams         = "data-type='$moduleType' data-id='$normalObjectID'";
+            $selected           = $closedObjectID == $objectID ? 'selected' : '';
+            $closedObjectsHtml .= '<li>' . html::a($link, "<i class='icon icon-$moduleType'></i> $closedObjectName", '', "class='$selected clickable' title='{$closedObjectName}' $dataParams data-key='" . zget($objectsPinYin, $closedObjectName, '') . "'") . '</li>';
+        }
     }
+
     if($moduleType  == 'product')
     {
-        if($normalObjects['project']) $normalObjectsHtml .= '<li class="divider"></li>';
-        if($closedObjects['project']) $closedObjectsHtml .= '<li class="divider"></li>';
+        if($normalObjects['project'] and (!empty($nolinkLibs) or !empty($normalObjects['product']))) $normalObjectsHtml .= '<li class="divider"></li>';
+        if($closedObjects['project'] and !empty($normalObjects['product'])) $closedObjectsHtml .= '<li class="divider"></li>';
     }
 }
 $normalObjectsHtml .= '</ul>';
@@ -51,7 +58,7 @@ $closedObjectsHtml .= '</ul>';
 ?>
 
 <div class="table-row">
-<div class="table-col <?php if($closedObjects['product'] or $closedObjects['project']) echo 'col-left'?>">
+<div class="table-col <?php if(!empty($closedObjects['product']) or !empty($closedObjects['project'])) echo 'col-left'?>">
     <div class='list-group'>
       <div class="tab-content objectTree" id="tabContent">
         <div class="tab-pane objects active">
@@ -59,7 +66,7 @@ $closedObjectsHtml .= '</ul>';
         </div>
       </div>
     </div>
-    <?php if($closedObjects['product'] or $closedObjects['project']):?>
+    <?php if(!empty($closedObjects['product']) or !empty($closedObjects['project'])):?>
     <div class="col-footer">
       <a class='pull-right toggle-right-col not-list-item'><?php echo $lang->doc->closed?><i class='icon icon-angle-right'></i></a>
     </div>
