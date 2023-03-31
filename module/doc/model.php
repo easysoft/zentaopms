@@ -2944,12 +2944,11 @@ class docModel extends model
      * @param  type   $type project|product|custom
      * @param  int    $objectID
      * @param  int    $moduleID
-     * @param  int    $apiLibID
      * @param  string $from list
      * @access public
      * @return string
      */
-    public function printCreateBtn($lib, $type, $objectID, $moduleID, $apiLibID = 0, $from = '')
+    public function printCreateBtn($lib, $type, $objectID, $moduleID, $from = '')
     {
         if(!common::hasPriv('doc', 'create')) return null;
 
@@ -2974,8 +2973,7 @@ class docModel extends model
 
             $printDivider = false;
             if($typeKey == 'template') $printDivider = true;
-            if($this->config->edition != 'max' and $typeKey == 'api') $printDivider = true;
-            if($this->config->edition != 'max' and !$apiLibID and $typeKey == 'html') $printDivider = true;
+            if($this->config->edition != 'max' and $typeKey == 'html') $printDivider = true;
             if($printDivider) $html .= '<li class="divider"></li>';
         }
 
