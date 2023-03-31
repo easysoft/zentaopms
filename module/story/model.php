@@ -4991,6 +4991,7 @@ class storyModel extends model
         $account     = $this->app->user->account;
         $storyLink   = helper::createLink('story', 'view', "storyID=$story->id&version=0&param=&storyType=$story->type");
         $canView     = common::hasPriv($story->type, 'view', null, "storyType=$story->type");
+        if($this->config->vision == 'ipd') $this->app->loadLang('demand');
 
         if($tab == 'project')
         {
@@ -5281,6 +5282,12 @@ class storyModel extends model
                 break;
             case 'version':
                 echo $story->version;
+                break;
+            case 'duration':
+                echo zget($this->lang->demand->durationList, $story->duration);
+                break;
+            case 'BSA':
+                echo zget($this->lang->demand->bsaList, $story->BSA);
                 break;
             case 'actions':
                 if($tab == 'execution' or ($tab == 'project' and isset($_SESSION['multiple']) and empty($_SESSION['multiple'])))
