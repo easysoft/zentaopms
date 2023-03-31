@@ -49,3 +49,4 @@ li.drag-shadow ul {display: none!important;}
 .cell {height: 100%;}
 
 #queryBox #groupAndOr {min-width: 60px;}
+.tree li>.list-toggle {left: -4px;}
