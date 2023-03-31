@@ -452,6 +452,7 @@ $(function()
         if(!value)
         {
             $input.closest('[data-id=insert]').remove();
+            $('.file-tree [data-id="liTreeModal"]').remove();
             return;
         }
 
