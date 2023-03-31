@@ -28,7 +28,7 @@
 .file-tree  a.show-icon > div {padding-right: 15px;}
 .tree li.has-input {overflow: hidden;}
 #fileTree .title {font-size: 16px; height: 20px; margin-top: 5px; margin-bottom: 5px;}
-.tree-text {flex: flex-auto; overflow: hidden;}
+.tree-text {margin-left: 5px; overflow: hidden;}
 
 /* css for sidebar */
 .sidebar-toggle {flex: 0 0 16px;}
