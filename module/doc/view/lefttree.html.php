@@ -29,6 +29,7 @@
 .tree li.has-input {overflow: hidden;}
 #fileTree .title {font-size: 16px; height: 20px; margin-top: 5px; margin-bottom: 5px;}
 .tree-text {margin-left: 5px; overflow: hidden;}
+i.btn-info, i.btn-info:hover {border: none; background: #fff; box-shadow: unset;}
 
 /* css for sidebar */
 .sidebar-toggle {flex: 0 0 16px;}
@@ -61,15 +62,15 @@ js::set('objectID',   isset($objectID) ? $objectID : '');
 <div id="fileTree" class="file-tree">
 <?php if(isset($type) and $type == 'project'):?>
 <div class="project-tree">
-    <div class="title"><i class="icon icon-project text-primary"> </i><?php echo $lang->projectCommon?></div>
+    <div class="title"><i class="icon icon-project btn-info"> </i><?php echo $lang->projectCommon?></div>
     <div id="projectTree" data-id="project"></div>
 </div>
 <div class="execution-tree">
-    <div class="title"><i class="icon icon-run text-primary"> </i><?php echo $lang->execution->common?></div>
+    <div class="title"><i class="icon icon-run btn-info"> </i><?php echo $lang->execution->common?></div>
     <div id="executionTree" data-id="execution"></div>
 </div>
 <div class="annex-tree">
-    <div class="title"><i class="icon icon-paper-clip text-primary"> </i><?php echo $lang->files?></div>
+    <div class="title"><i class="icon icon-paper-clip btn-info"> </i><?php echo $lang->files?></div>
     <div id="annexTree" data-id="annex"></div>
 </div>
 <?php endif;?>
