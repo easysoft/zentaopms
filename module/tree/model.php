@@ -2016,6 +2016,9 @@ class treeModel extends model
                 $this->dao->update(TABLE_TICKET)->set('module')->eq($module->parent)->where('module')->in($childs)->exec();
                 $cookieName = 'ticketModule';
                 break;
+            case 'doc':
+                $this->dao->update(TABLE_DOC)->set('`module`')->eq($module->parent)->where('`module`')->in($childs)->exec();
+                break;
         }
         if(strpos($this->session->{$module->type . 'List'}, 'param=' . $moduleID)) $this->session->set($module->type . 'List', str_replace('param=' . $moduleID, 'param=0', $this->session->{$module->type . 'List'}));
         if($cookieName) setcookie($cookieName, 0, time() - 3600, $this->config->webRoot, '', $this->config->cookieSecure, false);
