@@ -9,7 +9,7 @@ window.toggleSearchForm = function()
     if(!$form.length) $form = $('<div id="searchFormPanel"></div>').insertAfter('#mainMenu');
     if(!$form.data('loaded'))
     {
-        const url = zui.createLink('search', 'buildForm', 'module=' + config.currentModule);
+        const url = $.createLink('search', 'buildForm', 'module=' + config.currentModule);
         fetch(url).then(response => response.text()).then(html =>
         {
             $form.html(html).data('loaded', true);
