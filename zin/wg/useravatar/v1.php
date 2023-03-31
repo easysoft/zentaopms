@@ -11,7 +11,7 @@ class userAvatar extends wg
         'style?:array',
         'size?:number=32',
         'circle?:bool=true',
-        'rounded?:bool=false',
+        'rounded?:string|number',
         'background?:string',
         'foreColor?:string',
         'text?:string',
