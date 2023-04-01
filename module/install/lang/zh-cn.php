@@ -136,7 +136,6 @@ $lang->install->working        = '工作方式';
 
 $lang->install->dbDriverList = array();
 $lang->install->dbDriverList['mysql'] = 'MySQL';
-$lang->install->dbDriverList['pgsql'] = 'PostgreSQL';
 $lang->install->dbDriverList['dm']    = '达梦';
 
 $lang->install->requestTypes['GET']       = '普通方式';

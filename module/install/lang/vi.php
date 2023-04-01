@@ -106,7 +106,6 @@ $lang->install->working        = 'Operation chế độ';
 
 $lang->install->dbDriverList = array();
 $lang->install->dbDriverList['mysql'] = 'MySQL';
-$lang->install->dbDriverList['pgsql'] = 'PostgreSQL';
 $lang->install->dbDriverList['dm']    = 'DM8';
 
 $lang->install->requestTypes['GET']       = 'GET';

@@ -353,7 +353,7 @@ class installModel extends model
     {
         try
         {
-            return new dbh($this->config->db);
+            return new dbh($this->config->db, false);
         }
         catch (PDOException $exception)
         {
@@ -369,7 +369,7 @@ class installModel extends model
      */
     public function getDatabaseVersion()
     {
-        if($this->config->db->driver != 'mysql') return 0;
+        if($this->config->db->driver != 'mysql') return 8;
 
         $sql = "SELECT VERSION() AS version";
         $result = $this->dbh->query($sql)->fetch();
@@ -423,7 +423,8 @@ class installModel extends model
                 $table = str_replace('`zt_', $this->config->db->name . '.`zt_', $table);
                 $table = str_replace('`ztv_', $this->config->db->name . '.`ztv_', $table);
                 $table = str_replace('zt_', $this->config->db->prefix, $table);
-                if(!$this->dbh->query($table)) return false;
+
+                $this->dbh->exec($table);
             }
         }
         catch (PDOException $exception)
@@ -479,7 +480,7 @@ class installModel extends model
             $admin->password = md5($this->post->password);
             $admin->gender   = 'f';
             $admin->visions  = 'rnd,lite';
-            $this->dao->replace(TABLE_USER)->data($admin)->exec();
+            $this->dao->insert(TABLE_USER)->data($admin)->exec();
         }
     }
 
