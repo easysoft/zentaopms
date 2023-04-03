@@ -3,10 +3,10 @@
 .doc-title .form-control:focus {border: unset; box-shadow: unset;}
 .doc-title input::-webkit-input-placeholder {color: #D8DBDE;}
 .doc-title.required:after {top: 4px; right: 0; left: 12px; display: inline-table;}
-#savePath {display:inline-block; width:320px; overflow:hidden; white-space: nowrap; height: 19px; padding-top: 4px; padding-right:8px;}
-.contentmarkdown.required:after, .contenthtml.required:after {right:3px;}
+#savePath {display:inline-block; width:320px; overflow:hidden; white-space: nowrap; padding-right:8px; position: relative; top:7px;}
 #headerBox {border-bottom: 1px solid #e3e3e3;}
 #headerBox td:last-child {padding-right: 24px;}
+.contentmarkdown.required:after, .contenthtml.required:after {right:3px;}
 #editorContent {padding: 0;}
 
 #contentBox {padding: 0; width: 100%;}

@@ -1293,6 +1293,7 @@ class doc extends control
     {
         $this->session->set('createProjectLocate', $this->app->getURI(true), 'doc');
 
+        if(empty($browseType)) $browseType = 'all';
         list($libs, $libID, $object, $objectID, $objectDropdown) = $this->doc->setMenuByType($type, $objectID, $libID);
 
         $libID      = (int)$libID;

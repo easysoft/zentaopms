@@ -348,7 +348,6 @@ $(function()
             libID = $(this).closest('.lib').data('id');
         }
 
-        console.log(libID, moduleID);
         return lcatePage(libID, moduleID, $(this).data('type'));
     });
 
