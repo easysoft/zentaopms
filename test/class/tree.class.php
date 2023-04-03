@@ -802,4 +802,27 @@ class treeTest
         foreach($objects as $object) $child .= isset($object[0]->children) ? $object[0]->id . ':' . count($object[0]->children) . ';' : "$object[0]->id:0;";
         return $child;
     }
+
+    /**
+     * Create module.
+     *
+     * @param  array  $postData
+     * @access public
+     * @return object|bool
+     */
+    public function createModuleTest($postData)
+    {
+        global $tester;
+        foreach($postData as $key => $value) $_POST[$key] = $value;
+        $object = $this->objectModel->createModule();
+
+        unset($_POST);
+
+        if(dao::isError())
+        {
+            $error = dao::getError();
+            return $error[0];
+        }
+        return $object;
+    }
 }

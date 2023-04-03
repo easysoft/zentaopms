@@ -41,7 +41,7 @@ class docTest
     public function createApiLibTest($param)
     {
         global $tester;
-        $tester->app->loadConfig('api');
+        $tester->loadModel('api');
         $tester->app->loadLang('doclib');
 
         $createFields = array('name' => '', 'baseUrl' => '', 'acl' => '', 'desc' => '测试详情');
@@ -137,7 +137,7 @@ class docTest
     public function createTest($param)
     {
         global $tester;
-        $tester->app->loadConfig('api');
+        $tester->loadModel('api');
         $tester->app->loadLang('doclib');
 
         $labels = array();
@@ -570,5 +570,27 @@ class docTest
         if(dao::isError()) return dao::getError();
 
         return $objects;
+    }
+
+    /**
+     * Test check api library name.
+     *
+     * @param  object $lib
+     * @param  string $libType
+     * @param  int    $libID
+     * @access public
+     * @return bool
+     */
+    public function checkApiLibNameTest($lib, $libType, $libID = 0)
+    {
+        $this->objectModel->checkApiLibName($lib, $libType, $libID);
+
+        if(dao::isError())
+        {
+            $errors = dao::getError();
+            return zget($errors, 'name', '1');
+        }
+
+        return 'noerror';
     }
 }

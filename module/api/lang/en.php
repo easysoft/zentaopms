@@ -39,7 +39,6 @@ $lang->api->noModule         = 'No directory in the API library. Please add the 
 $lang->api->post             = 'Please refer to the page form for post debugging';
 $lang->api->noUniqueName     = 'The API library name exists.';
 $lang->api->noUniqueVersion  = 'The version exists.';
-$lang->api->version          = 'Version';
 $lang->api->createStruct     = 'Create Data Structure';
 $lang->api->editStruct       = 'Edit Data Structure';
 $lang->api->deleteStruct     = 'Delete Data Structure';
@@ -61,12 +60,13 @@ $lang->api->defaultVersion   = "Current Version";
 $lang->api->zentaoAPI        = "Zentao API v1";
 $lang->api->search           = "Search";
 $lang->api->allLibs          = "AllLibs";
+$lang->api->noLinked         = "No Linked";
 
 /* Common access control lang. */
 $lang->api->whiteList          = 'Whitelist';
-$lang->api->aclList['open']    = 'Open';
-$lang->api->aclList['private'] = 'Private';
-$lang->api->aclList['custom']  = 'Custom';
+$lang->api->aclList['open']    = "Public <span class='acl-tip'>(Users who can access doccan access it)</span>";
+$lang->api->aclList['default'] = "Default <span class='acl-tip'>(Users who can access the selected %s can access it)</span>";
+$lang->api->aclList['private'] = "Private <span class='acl-tip'> (Only the one who created it or users in the whiltelist can access it)</span>";
 $lang->api->group              = 'Group';
 $lang->api->user               = 'User';
 
@@ -148,6 +148,10 @@ $lang->api->default            = 'Default';
 $lang->api->desc               = 'Description';
 $lang->api->customType         = 'Custom Structure';
 $lang->api->format             = 'Format';
+$lang->api->libType            = 'Api Library Type';
+$lang->api->product            = $lang->productCommon;
+$lang->api->project            = $lang->projectCommon;
+
 $lang->api->methodOptions      = array(
     'GET'     => 'GET',
     'POST'    => 'POST',
@@ -168,6 +172,11 @@ $lang->api->requestTypeOptions = array();
 $lang->api->requestTypeOptions['application/json']                  = 'application/json';
 $lang->api->requestTypeOptions['application/x-www-form-urlencoded'] = 'application/x-www-form-urlencoded';
 $lang->api->requestTypeOptions['multipart/form-data']               = 'multipart/form-data';
+
+$lang->api->libTypeList = array();
+$lang->api->libTypeList['product'] = $lang->productCommon . ' Api Library';
+$lang->api->libTypeList['project'] = $lang->projectCommon . ' Api Library';
+$lang->api->libTypeList['nolink']  = 'No Linked Api Library';
 
 $lang->api->statusOptions      = array(
     'done'   => 'Done',

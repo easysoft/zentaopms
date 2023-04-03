@@ -715,6 +715,8 @@ CREATE TABLE IF NOT EXISTS `zt_doclib` (
   `collector` text NOT NULL,
   `desc` mediumtext NOT NULL,
   `order` tinyint(5) unsigned NOT NULL,
+  `addedBy` varchar(30) NOT NULL,
+  `addedDate` datetime NOT NULL,
   `deleted` enum('0','1') NOT NULL default '0',
   PRIMARY KEY  (`id`),
   KEY `product` (`product`),
