@@ -44,7 +44,7 @@
           <?php endif;?>
           <tr>
             <th><?php echo $lang->programplan->PM;?> </th>
-            <td colspan='2'><?php echo html::select('PM', $PMUsers, '', "class='form-control picker-select'");?></td>
+            <td colspan='2'><?php echo html::select('PM', $PMUsers, $plan->PM, "class='form-control picker-select'");?></td>
           </tr>
           <?php if(isset($config->setPercent) and $config->setPercent == 1):?>
           <tr>
