@@ -165,13 +165,15 @@ $(function()
         }
         else
         {
+            var libId;
             var $lis = '<li><a href="###" data-id=0>' + versionLang + '</a></li>';
             for(i = 0; i< versions.length; i++)
             {
                 var version = versions[i];
-                $lis += '<li><a href="###" data-id="' + version.id + '">' + version.version+ '</a></li>';
+                $lis += '<li><a href="###"  data-id="' + version.id + '">' + version.version+ '</a></li>';
+                libId = version.lib;
             }
-            var $dropdown = '<ul id="versionSwitcher" class="dropdown-menu dropdown-in-tree" style="display: unset; left:' + option.left + 'px; top:' + option.top + 'px;">';
+            var $dropdown = '<ul id="versionSwitcher" data-lib-id = "' + libId + '" class="dropdown-menu dropdown-in-tree" style="display: unset; left:' + option.left + 'px; top:' + option.top + 'px;">';
             $dropdown += $lis;
             $dropdown += '</ul>';
         }
@@ -461,7 +463,8 @@ $(function()
         }
     }).on('click', '#versionSwitcher a', function()
     {
-        linkParams = linkParams.replace('%s', '&libID=' + libid + '&moduleID=0&apiID=0&version=0&release=' + $(this).data('id'));
+        var $item = $(this);
+        linkParams = linkParams.replace('%s', '&libID=' + $item.closest('ul').data('libId') + '&moduleID=0&apiID=0&version=0&release=' + $item.data('id'));
         location.href = createLink(config.currentModule, 'index', linkParams);
     }).on('blur', '.file-tree input.input-tree', function()
     {
