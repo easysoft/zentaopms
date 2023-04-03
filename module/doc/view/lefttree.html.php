@@ -205,7 +205,7 @@ $(function()
                 var libClass = ['lib', 'annex', 'api', 'execution'].indexOf(objectType) !== -1 ? 'lib' : '';
                 var hasChild = item.children ? !!item.children.length : false;
                 var link     = item.type != 'execution' || item.hasAction ? '###' : '#';
-                var $item    = '<a href="' + link + '" style="position: relative" data-has-children="' + hasChild + '" title="' + item.name + '" data-id="' + item.id + '" class="' + libClass + '" data-type="' + item.type + '" data-action="' + (item.hasAction||'') + '">';
+                var $item    = '<a href="' + link + '" style="position: relative" data-has-children="' + hasChild + '" title="' + item.name + '" data-id="' + item.id + '" class="' + libClass + '" data-type="' + item.type + '" data-action="' + item.hasAction + '">';
 
                 $item += '<div class="text h-full w-full flex-start overflow-hidden">';
                 if(libClass == 'lib') $item += '<div class="img-lib" style="background-image:url(static/svg/' + imgObj[item.type || 'lib'] + '.svg)"></div>';
@@ -229,7 +229,7 @@ $(function()
 
                 $li.append($item);
                 $li.addClass(libClass);
-                if(item.active) $li.addClass('active open in');
+                if(item.active) $li.addClass('active');
             }
         });
 
@@ -331,7 +331,7 @@ $(function()
         $(this).removeClass('show-icon');
     }).on('click', 'a', function()
     {
-        if(!$(this).data('action') && $(this).data('type') !== 'annex') return;
+        if(!$(this).data('action')) return;
         var isLib    = $(this).hasClass('lib');
         var moduleID = $(this).data('id');
         var libID    = 0;
