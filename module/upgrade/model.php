@@ -593,6 +593,9 @@ class upgradeModel extends model
             case '18_2':
                 $this->loadModel('setting')->setSN();
                 break;
+            case '18_3':
+                $this->changeBookToCustomLib();
+                break;
         }
 
         $this->deletePatch();
