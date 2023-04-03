@@ -22,8 +22,9 @@ class screen extends control
     {
         $dimensionID = $this->loadModel('dimension')->setSwitcherMenu($dimensionID);
 
-        $this->view->title   = $this->lang->screen->common;
-        $this->view->screens = $this->screen->getList($dimensionID);
+        $this->view->title     = $this->lang->screen->common;
+        $this->view->screens   = $this->screen->getList($dimensionID);
+        $this->view->dimension = $dimensionID;
         $this->display();
     }
 
