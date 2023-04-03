@@ -1775,9 +1775,6 @@ $lang->screen->methodOrder[15] = 'allAnnualData';
 
 /* Report. */
 $lang->resource->report = new stdclass();
-$lang->resource->report->index            = 'index';
-
-$lang->report->methodOrder[0]  = 'index';
 
 /* Search. */
 $lang->resource->search = new stdclass();
