@@ -219,6 +219,7 @@ $lang->app->serverLink    = 'Server Link';
 $lang->review->common     = 'Review';
 $lang->zahost->common     = 'ZAhost';
 $lang->zanode->common     = 'ZAnode';
+$lang->dimension->common  = 'Dimension';
 
 $lang->personnel->common     = 'Member';
 $lang->personnel->invest     = 'Investment';

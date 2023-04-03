@@ -1169,7 +1169,7 @@ class devModel extends model
         $treeMenu = array();
         foreach($modules as $module) $this->doc->buildTree($treeMenu, 'restapi', 0, 853, $module, $moduleAPIs, $apiID, 0);
 
-        $menu = "<ul id='modules' class='tree' data-ride='tree' data-name='tree-lib'>" . $treeMenu[0] . '</ul>';
+        $menu = "<ul id='modules' class='tree menu-active-primary menu-hover-primary' data-ride='tree' data-name='tree-lib'>" . $treeMenu[0] . '</ul>';
         return array($restApi, $typeList, $menu);
     }
 }

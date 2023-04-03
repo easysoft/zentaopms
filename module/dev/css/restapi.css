@@ -159,3 +159,6 @@ form .table-data, #content .table-data {border: 1px solid #e2e2e3;}
 
 .paramsTable th {text-align: left!important; font-size: 14px;}
 .paramsTable td {text-align: left;}
+
+.module-content {overflow-y: auto; padding-top: 10px;}
+.module-col {padding: 0 0 0 10px;}

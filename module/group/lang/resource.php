@@ -44,8 +44,9 @@ $lang->moduleOrder[105] = 'zahost';
 $lang->moduleOrder[108] = 'zanode';
 
 $lang->moduleOrder[110] = 'doc';
-$lang->moduleOrder[113] = 'screen';
-$lang->moduleOrder[115] = 'report';
+$lang->moduleOrder[111] = 'screen';
+$lang->moduleOrder[112] = 'pivot';
+$lang->moduleOrder[119] = 'report';
 
 $lang->moduleOrder[120] = 'company';
 $lang->moduleOrder[125] = 'dept';
@@ -1771,17 +1772,34 @@ $lang->tree->methodOrder[30] = 'delete';
 
 /* Screen. */
 $lang->resource->screen = new stdclass();
-$lang->resource->screen->browse = 'browse';
-$lang->resource->screen->view   = 'view';
+$lang->resource->screen->browse        = 'browse';
+$lang->resource->screen->view          = 'view';
+$lang->resource->screen->annualData    = 'annualData';
+$lang->resource->screen->allAnnualData = 'allAnnualData';
 
 $lang->screen->methodOrder[0]  = 'browse';
 $lang->screen->methodOrder[5]  = 'view';
+$lang->screen->methodOrder[10] = 'annualData';
+$lang->screen->methodOrder[15] = 'allAnnualData';
+
+/* Pivot. */
+$lang->resource->pivot = new stdclass();
+$lang->resource->pivot->preview          = 'preview';
+$lang->resource->pivot->productSummary   = 'productSummary';
+$lang->resource->pivot->projectDeviation = 'projectDeviation';
+$lang->resource->pivot->bugCreate        = 'bugCreate';
+$lang->resource->pivot->bugAssign        = 'bugAssign';
+$lang->resource->pivot->workload         = 'workload';
+
+$lang->pivot->methodOrder[2]  = 'preview';
+$lang->pivot->methodOrder[10] = 'productSummary';
+$lang->pivot->methodOrder[15] = 'projectDeviation';
+$lang->pivot->methodOrder[20] = 'bugCreate';
+$lang->pivot->methodOrder[25] = 'bugAssign';
+$lang->pivot->methodOrder[30] = 'workload';
 
 /* Report. */
 $lang->resource->report = new stdclass();
-$lang->resource->report->index            = 'index';
-
-$lang->report->methodOrder[0]  = 'index';
 
 /* Search. */
 $lang->resource->search = new stdclass();
