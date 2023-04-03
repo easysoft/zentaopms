@@ -360,6 +360,7 @@ define('TABLE_DIMENSION', '`' . $config->db->prefix . 'dimension`');
 define('TABLE_PRIV',         '`' . $config->db->prefix . 'priv`');
 define('TABLE_PRIVLANG',     '`' . $config->db->prefix . 'privlang`');
 define('TABLE_PRIVPACKAGE',  '`' . $config->db->prefix . 'privpackage`');
+define('TABLE_PRIVMANAGER',  '`' . $config->db->prefix . 'privmanager`');
 define('TABLE_PRIVRELATION', '`' . $config->db->prefix . 'privrelation`');
 
 $config->objectTables['product']      = TABLE_PRODUCT;

@@ -1077,6 +1077,257 @@ class groupModel extends model
     }
 
     /**
+     * Init Data for priv package.
+     *
+     * @access public
+     * @return void
+     */
+    public function initData()
+    {
+        $allResourceFile = "/home/hufangzhou/repo/zentaopms/module/group/lang/allresources.php";
+        ///* 获取权限相关数据 */
+        //if(!file_exists("$allResourceFile")) die("Please execute the commands: touch $allResourceFile; chmod 777 $allResourceFile");
+
+        //$resourceContents = file_get_contents($allResourceFile);
+        //if(!$resourceContents) file_put_contents($allResourceFile, "<?php\n\$views = array();\n\$resources = array();\n");
+
+        //$this->sortResource();
+        //$resource = json_decode(json_encode($this->lang->resource), true);
+        //$resource = serialize($resource);
+        //$view     = array_keys(json_decode(json_encode($this->lang->mainNav), true));
+        //$view     = serialize($view);
+
+        //file_put_contents($allResourceFile, "\$views['{$this->config->edition}']['{$this->config->vision}']='$view';\n", FILE_APPEND);
+        //file_put_contents($allResourceFile, "\$resources['{$this->config->edition}']['{$this->config->vision}']='$resource';\n", FILE_APPEND);
+        //die;
+
+        $this->dbh->exec("ALTER TABLE " . TABLE_PRIVLANG . " CHANGE `priv` `objectID` mediumint(8) unsigned NOT NULL;");
+        $this->dbh->exec("ALTER TABLE " . TABLE_PRIVLANG . " ADD `objectType` enum('priv','manager') NOT NULL DEFAULT 'priv' AFTER `objectID`;");
+        $this->dbh->exec("ALTER TABLE " . TABLE_PRIVLANG . " ADD `key` varchar(100) NOT NULL AFTER `lang`;");
+        $this->dbh->exec("ALTER TABLE " . TABLE_PRIVLANG . " CHANGE `name` `value` varchar(255) NOT NULL;");
+        $this->dbh->exec("ALTER TABLE " . TABLE_PRIVLANG . " ADD UNIQUE KEY `objectlang` (`objectID`,`objectType`,`lang`);");
+        $this->dbh->exec("ALTER TABLE " . TABLE_PRIVLANG . " DROP INDEX `privlang`;");
+        $this->dbh->exec("DROP TABLE IF EXISTS " . TABLE_PRIVMANAGER . ";");
+        $this->dbh->exec("CREATE TABLE IF NOT EXISTS " . TABLE_PRIVMANAGER . " ( `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT, `parent` varchar(30) NOT NULL, `code` varchar(100) NOT NULL, `type` enum('view','module','package') NOT NULL DEFAULT 'package', `order` tinyint(3) unsigned NOT NULL, PRIMARY KEY (`id`)) ENGINE=InnoDB DEFAULT CHARSET=utf8;");
+        $this->dbh->exec("ALTER TABLE " . TABLE_PRIV . " ADD `edition` varchar(30) NOT NULL DEFAULT ',open,biz,max,' AFTER `package`;");
+        $this->dbh->exec("ALTER TABLE " . TABLE_PRIV . " ADD `vision` varchar(30) NOT NULL DEFAULT ',rnd,' AFTER `edition`;");
+        $this->dbh->exec("ALTER TABLE " . TABLE_PRIVMANAGER . " ADD `edition` varchar(30) NOT NULL DEFAULT ',open,biz,max,' AFTER `type`;");
+        $this->dbh->exec("ALTER TABLE " . TABLE_PRIVMANAGER . " ADD `vision` varchar(30) NOT NULL DEFAULT ',rnd,' AFTER `edition`;");
+
+        $this->dbh->exec('ALTER TABLE ' . TABLE_PRIV . ' CHANGE `order` `order` mediumint(8) NOT NULL;');
+        $this->dbh->exec('ALTER TABLE ' . TABLE_PRIVMANAGER . ' CHANGE `order` `order` mediumint(8) NOT NULL;');
+
+        $this->loadModel('dev');
+
+        /* 插入权限所有语言项 */
+        $privList = $this->dao->select('*')->from(TABLE_PRIV)->fetchAll('id');
+        foreach($privList as $privID => $priv)
+        {
+            foreach($this->config->langs as $lang => $langValue)
+            {
+                $methodLang = $this->lang->resource->{$priv->moduleName}->{$priv->methodName};
+
+                $privLang = new stdclass();
+                $privLang->objectID   = $privID;
+                $privLang->objectType = 'priv';
+                $privLang->lang       = $lang;
+                $privLang->key        = "{$priv->moduleName}-{$methodLang}";
+                $privLang->value      = '';
+                $privLang->desc       = '';
+                $this->dao->replace(TABLE_PRIVLANG)->data($privLang)->exec();
+            }
+        }
+
+        /* 迁移权限包数据   privpackage => privmanager */
+        /* 迁移权限包语言项 privpackage => privlang */
+        $packageList = $this->dao->select('*')->from(TABLE_PRIVPACKAGE)->fetchAll('id');
+        foreach($packageList as $packageID => $package)
+        {
+            $packageData = new stdclass();
+            $packageData->id     = $packageID;
+            $packageData->parent = $package->module;
+            $packageData->type   = 'package';
+            $packageData->order  = $package->order;
+
+            $this->dao->insert(TABLE_PRIVMANAGER)->data($packageData)->exec();
+
+            $packageLang = new stdclass();
+            $packageLang->objectID   = $packageID;
+            $packageLang->objectType = 'manager';
+            $packageLang->lang       = 'zh-cn';
+            $packageLang->key        = '';
+            $packageLang->value      = $package->name;
+            $packageLang->desc       = $package->desc;
+
+            $this->dao->insert(TABLE_PRIVLANG)->data($packageLang)->exec();
+        }
+
+        /* 初始化视图和模块到zt_privmanager */
+        $viewPairs   = array();
+        $modulePairs = array();
+        $hasStored   = false;
+        foreach($this->config->langs as $lang => $langValue)
+        {
+            /* 视图 */
+            $viewOrder   = 1;
+            $moduleOrder = 1;
+            //$this->dev->loadDefaultLang($lang, 'common', true);
+            $this->lang->mainNav->general = "{$this->lang->navIcons['my']} {$this->lang->my->shortCommon}|my|index|";
+            foreach($this->lang->mainNav as $moduleMenu => $viewTitle)
+            {
+                if(!is_string($viewTitle)) continue;
+                $viewID = 0;
+                if($moduleMenu != 'general')
+                {
+                    //$viewTitle = strip_tags(substr($viewTitle, 0, strpos($viewTitle, '|')));
+
+                    if(!$hasStored)
+                    {
+                        $viewData = new stdclass();
+                        $viewData->parent = '';
+                        $viewData->code   = $moduleMenu;
+                        $viewData->type   = 'view';
+                        $viewData->order  = $viewOrder * 10;
+                        $viewOrder ++;
+
+                        $this->dao->insert(TABLE_PRIVMANAGER)->data($viewData)->exec();
+                        $viewID = $this->dao->lastInsertId();
+                    }
+                    else
+                    {
+                        $viewID = $this->dao->select('id')->from(TABLE_PRIVMANAGER)
+                            ->where('`type`')->eq('view')
+                            ->andWhere('code')->eq($moduleMenu)
+                            ->fetch('id');
+                    }
+
+                    $viewLang = new stdclass();
+                    $viewLang->objectID   = $viewID;
+                    $viewLang->objectType = 'manager';
+                    $viewLang->lang       = $lang;
+                    $viewLang->key        = $moduleMenu;
+                    $viewLang->value      = '';
+                    $viewLang->desc       = '';
+
+                    $this->dao->insert(TABLE_PRIVLANG)->data($viewLang)->exec();
+                    $viewPairs[$moduleMenu] = $viewID;
+                }
+
+                /* 模块 */
+                $modules = $this->getMenuModules($moduleMenu);
+                foreach($modules as $moduleName)
+                {
+                    //$this->dev->loadDefaultLang($lang, $moduleName, true);
+
+                    $moduleList = $this->getMenuModules($moduleMenu, true);
+
+                    if(!$hasStored)
+                    {
+                        $moduleData = new stdclass();
+                        $moduleData->parent = $viewID;
+                        $moduleData->code   = $moduleName;
+                        $moduleData->type   = 'module';
+                        $moduleData->order  = $moduleOrder * 10;
+                        $moduleOrder ++;
+
+                        $this->dao->insert(TABLE_PRIVMANAGER)->data($moduleData)->exec();
+                        $moduleID = $this->dao->lastInsertId();
+                    }
+                    else
+                    {
+                        $moduleID = $this->dao->select('id')->from(TABLE_PRIVMANAGER)
+                            ->where('`type`')->eq('module')
+                            ->andWhere('code')->eq($moduleName)
+                            ->fetch('id');
+                    }
+
+                    $moduleLang = new stdclass();
+                    $moduleLang->objectID   = $moduleID;
+                    $moduleLang->objectType = 'manager';
+                    $moduleLang->lang       = $lang;
+                    $moduleLang->key        = $moduleName;
+                    $moduleLang->value      = '';
+                    $moduleLang->desc       = '';
+
+                    $this->dao->insert(TABLE_PRIVLANG)->data($moduleLang)->exec();
+                    $modulePairs[$moduleName] = $moduleID;
+
+                    /* 更新权限包的parent字段 */
+                    $this->dao->update(TABLE_PRIVMANAGER)->set('`parent`')->eq($moduleID)
+                        ->where('`parent`')->eq($moduleName)
+                        ->andWhere('`type`')->eq('package')
+                        ->exec();
+                }
+            }
+
+            $hasStored = true;
+        }
+
+        /* 初始化 view 的edition和vision字段 */
+        include $allResourceFile;
+        $editionMap = array('open' => ',open,biz,max,', 'biz' => ',biz,max,', 'max' => ',max,');
+        foreach($views as $edition => $visions)
+        {
+            foreach($visions as $vision => $viewList)
+            {
+                $vision = $vision == 'lite' ? ',rnd,lite,' : ',rnd,';
+                $viewList = unserialize($viewList);
+                foreach($viewList as $view)
+                {
+                    if($view == 'menuOrder') continue;
+
+                    $this->dao->update(TABLE_PRIVMANAGER)
+                        ->set('edition')->eq("{$editionMap[$edition]}")
+                        ->set('vision')->eq("$vision")
+                        ->where('id')->eq($viewPairs[$view])
+                        ->exec();
+                }
+            }
+        }
+
+        /* 初始化 module 和 priv 的edition和vision字段 */
+        foreach($resources as $edition => $visions)
+        {
+            foreach($visions as $vision => $modules)
+            {
+                $vision = $vision == 'lite' ? ',rnd,lite,' : ',rnd,';
+                $modules = unserialize($modules);
+                foreach($modules as $module => $resourceList)
+                {
+                    if(!empty($modulePairs[$module]))
+                    {
+                        $this->dao->update(TABLE_PRIVMANAGER)
+                            ->set('edition')->eq("{$editionMap[$edition]}")
+                            ->set('vision')->eq("$vision")
+                            ->where('id')->eq($modulePairs[$module])
+                            ->exec();
+                    }
+
+                    foreach($resourceList as $method => $methodLang)
+                    {
+                        $this->dao->update(TABLE_PRIV)
+                            ->set('edition')->eq("{$editionMap[$edition]}")
+                            ->set('vision')->eq("$vision")
+                            ->where('moduleName')->eq($module)
+                            ->andWhere('methodName')->eq($method)
+                            ->exec();
+                    }
+                }
+            }
+        }
+
+        $this->dbh->exec('ALTER TABLE ' . TABLE_PRIV . ' DROP `module`;');
+        $this->dbh->exec('ALTER TABLE ' . TABLE_PRIV . ' CHANGE `moduleName` `module` varchar(30) NOT NULL;');
+        $this->dbh->exec('ALTER TABLE ' . TABLE_PRIV . ' CHANGE `methodName` `method` varchar(30) NOT NULL;');
+        $this->dbh->exec('ALTER TABLE ' . TABLE_PRIV . ' DROP INDEX `priv`;');
+        $this->dbh->exec('ALTER TABLE ' . TABLE_PRIV . ' ADD UNIQUE `priv` (`module`,`method`);');
+        $this->dbh->exec('ALTER TABLE ' . TABLE_PRIVMANAGER . ' CHANGE `parent` `parent` mediumint(8) unsigned NOT NULL;');
+        $this->dbh->exec('DROP TABLE IF EXISTS ' . TABLE_PRIVPACKAGE . ';');
+
+        die('success');
+    }
+
+    /**
      * Get priv by id.
      *
      * @param  int    $privID
