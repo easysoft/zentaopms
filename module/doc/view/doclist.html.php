@@ -101,7 +101,16 @@ body {margin-bottom: 25px;}
           <td class="c-datetime"><?php echo formatTime($doc->editedDate, 'Y-m-d');?></td>
           <td class="c-actions">
             <?php if(common::canBeChanged('doc', $doc)):?>
-            <?php common::printLink('doc', 'edit', "docID=$doc->id&comment=false", "<i class='icon icon-edit'></i>", '', "title='{$lang->edit}' class='btn'", true, false)?>
+            <?php
+            $iframe   = '';
+            $onlybody = false;
+            if($doc->type != 'text' or isonlybody())
+            {
+                $iframe   = 'iframe';
+                $onlybody = true;
+            }
+            ?>
+            <?php common::printLink('doc', 'edit', "docID=$doc->id&comment=false", "<i class='icon icon-edit'></i>", '', "title='{$lang->edit}' class='btn $iframe'", true, $onlybody);?>
             <?php common::printLink('doc', 'delete', "docID=$doc->id&confirm=no", "<i class='icon icon-trash'></i>", 'hiddenwin', "title='{$lang->delete}' class='btn'")?>
             <?php endif;?>
           </td>
