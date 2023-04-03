@@ -88,7 +88,6 @@ UPDATE `zt_doc` SET `status` = 'normal' WHERE `status` = '';
 UPDATE `zt_doclib` SET `acl` = 'private' WHERE `type` IN ('custom', 'book', 'product', 'project, ''execution') AND `acl` = 'custom';
 UPDATE `zt_doclib` SET `acl` = 'default' WHERE `type` = 'project' AND `acl` IN ('open', 'private');
 UPDATE `zt_doclib` SET `acl` = 'private' WHERE `type` = 'api' and `acl` = 'custom';
-UPDATE `zt_doclib` SET `acl` = 'default' WHERE `type` = 'api' and `acl` = 'open';
 UPDATE `zt_doclib` SET `acl` = 'default' WHERE `main` = '1';
 
 ALTER TABLE `zt_doclib` ADD `addedBy` varchar(30) NOT NULL AFTER `order`;
