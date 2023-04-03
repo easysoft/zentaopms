@@ -79,7 +79,7 @@ js::set('objectID',   isset($objectID) ? $objectID : '');
 </div>
 <?php endif;?>
 </div>
-<div class="text-center bottom-btn-tree">
+<div class="text-center bottom-btn-tree hidden">
     <?php common::printLink('project', 'programTitle', '', $lang->doc->customShowLibs, '', "class='btn btn-info btn-wide iframe'", true, true);?>
 </div>
 
