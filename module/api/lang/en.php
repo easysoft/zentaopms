@@ -13,7 +13,7 @@ $lang->api->common   = 'API';
 $lang->api->getModel = 'Super Model API';
 $lang->api->sql      = 'SQL Query API';
 
-$lang->api->index            = 'Home';
+$lang->api->index            = 'API Space';
 $lang->api->editLib          = 'Edit';
 $lang->api->releases         = 'Release';
 $lang->api->deleteRelease    = 'Delete Release';

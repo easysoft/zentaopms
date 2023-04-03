@@ -13,7 +13,7 @@ $lang->api->common   = 'API接口';
 $lang->api->getModel = '超级model调用接口';
 $lang->api->sql      = 'SQL查询接口';
 
-$lang->api->index            = '库主页';
+$lang->api->index            = '接口空间';
 $lang->api->editLib          = '编辑库';
 $lang->api->releases         = '版本管理';
 $lang->api->deleteRelease    = '删除版本';

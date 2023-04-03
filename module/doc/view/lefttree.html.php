@@ -30,11 +30,12 @@
 .tree li.has-input {overflow: hidden;}
 .tree-text {margin-left: 5px; overflow: hidden;}
 i.btn-info, i.btn-info:hover {border: none; background: #fff; box-shadow: unset;}
-.tree-version-trigger {padding: 0 10px; width: 54px;}
+.tree-version-trigger {padding: 0 10px; width: 54px; border-radius: 5px; background: #F9F9F9;}
 
 /* css for sidebar */
 .sidebar-toggle {flex: 0 0 16px;}
 .sidebar-toggle > .icon {width: 12px; height: 30px; margin-top: -10px; line-height: 30px; color: #fff; text-align: center; background: #7dcdfe; border-radius: 6px; cursor: pointer; padding-left: 0; padding-top: 0;}
+.bottom-btn-tree {position: fixed; width: 150px; bottom: 40px;}
 
 .spliter {flex: 0 0 12px;}
 .spliter-btn {height: 28px; width: 10px; background: #fff; position: absolute; top: 30%; left: -1px; border: 1px solid #D9D9D9; border-radius: 2px;}
@@ -54,7 +55,6 @@ i.btn-info, i.btn-info:hover {border: none; background: #fff; box-shadow: unset;
 <?php
 /* Release used for api space. */
 js::set('release', isset($release) ? $release : 0);
-js::set('libid', $libID);
 js::set('versionLang', $lang->build->common);
 
 
@@ -78,6 +78,9 @@ js::set('objectID',   isset($objectID) ? $objectID : '');
     <div id="annexTree" data-id="annex"></div>
 </div>
 <?php endif;?>
+</div>
+<div class="text-center bottom-btn-tree hidden">
+    <?php common::printLink('project', 'programTitle', '', $lang->doc->customShowLibs, '', "class='btn btn-info btn-wide iframe'", true, true);?>
 </div>
 
 <!-- Code for dropdown menu. -->
@@ -165,13 +168,15 @@ $(function()
         }
         else
         {
+            var libId;
             var $lis = '<li><a href="###" data-id=0>' + versionLang + '</a></li>';
             for(i = 0; i< versions.length; i++)
             {
                 var version = versions[i];
-                $lis += '<li><a href="###" data-id="' + version.id + '">' + version.version+ '</a></li>';
+                $lis += '<li><a href="###"  data-id="' + version.id + '">' + version.version+ '</a></li>';
+                libId = version.lib;
             }
-            var $dropdown = '<ul id="versionSwitcher" class="dropdown-menu dropdown-in-tree" style="display: unset; left:' + option.left + 'px; top:' + option.top + 'px;">';
+            var $dropdown = '<ul id="versionSwitcher" data-lib-id = "' + libId + '" class="dropdown-menu dropdown-in-tree" style="display: unset; left:' + option.left + 'px; top:' + option.top + 'px;">';
             $dropdown += $lis;
             $dropdown += '</ul>';
         }
@@ -217,7 +222,7 @@ $(function()
                     var versionName = '';
                     for(var i = 0; i < item.versions.length; i++)
                     {
-                        if(item.versions[i].id == release) versionName = item.versions[i].version
+                        if(item.versions[i].id == release) versionName = item.versions[i].version;
                     }
                     $item += '<div class="tree-version-trigger" data-id="' +  item.id + '">' + (versionName || versionLang) + '<span class="caret"></span></div>';
                 }
@@ -228,9 +233,11 @@ $(function()
 
                 $li.append($item);
                 $li.addClass(libClass);
-                if(item.active) $li.addClass('active open in');
+                if(item.active) $li.addClass('active');
             }
         });
+
+        if(location.href.indexOf('moduleID') == -1) ele.data('zui.tree').collapse();
 
         ele.on('click', '.icon-drop', function(e)
         {
@@ -461,7 +468,8 @@ $(function()
         }
     }).on('click', '#versionSwitcher a', function()
     {
-        linkParams = linkParams.replace('%s', '&libID=' + libid + '&moduleID=0&apiID=0&version=0&release=' + $(this).data('id'));
+        var $item = $(this);
+        linkParams = linkParams.replace('%s', '&libID=' + $item.closest('ul').data('libId') + '&moduleID=0&apiID=0&version=0&release=' + $item.data('id'));
         location.href = createLink(config.currentModule, 'index', linkParams);
     }).on('blur', '.file-tree input.input-tree', function()
     {

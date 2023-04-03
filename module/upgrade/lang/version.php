@@ -392,3 +392,4 @@ $lang->upgrade->fromVersions['max4_0_beta3'] = 'Max4.0.beta3';
 $lang->upgrade->fromVersions['max4_0']       = 'Max4.0';
 $lang->upgrade->fromVersions['max4_1']       = 'Max4.1';
 $lang->upgrade->fromVersions['max4_2']       = 'Max4.2'; // max insert position.
+$lang->upgrade->fromVersions['max4_3']       = 'Max4.3';

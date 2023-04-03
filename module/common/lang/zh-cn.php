@@ -219,6 +219,7 @@ $lang->app->serverLink    = '服务器链接';
 $lang->review->common     = '审批';
 $lang->zahost->common     = '宿主机';
 $lang->zanode->common     = '执行节点';
+$lang->dimension->common  = '维度';
 $lang->contact->common    = '联系人';
 
 $lang->programstakeholder->common = '干系人';

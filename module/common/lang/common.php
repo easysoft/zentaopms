@@ -92,6 +92,7 @@ $lang->zahost      = new stdclass();
 $lang->zanode      = new stdclass();
 $lang->holiday     = new stdclass();
 $lang->contact     = new stdclass();
+$lang->dimension   = new stdclass();
 
 $lang->programstakeholder = new stdclass();
 $lang->researchplan       = new stdclass();

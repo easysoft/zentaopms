@@ -79,3 +79,78 @@ UPDATE `zt_chart` SET `settings` = '{\"group\":[],\"column\":[\r\n{\"field\":\"t
 UPDATE `zt_chart` SET `sql` = 'SELECT IF(t3.id IS NOT NULL, t3.`name`, \'空\') AS deptName,count(1) as count, \r\nIF(t3.id IS NOT NULL, t3.`order`, 9999) AS deptOrder \r\nFROM `zt_user` AS t1 \r\nLEFT JOIN `zt_dept` AS t2 ON t1.dept = t2.id\r\nLEFT JOIN `zt_dept` AS t3 ON FIND_IN_SET(TRIM(\',\' FROM t3.path), TRIM(\',\' FROM t2.path)) AND t3.grade = \'1\'\r\nWHERE t1.deleted = \'0\'\r\nGROUP BY deptName, deptOrder \r\nORDER BY deptOrder  ASC' WHERE `id` = '1049';
 UPDATE `zt_chart` SET `sql` = 'SELECT\r\n	t1.`year`,\r\n	t2.id,\r\n	t2.name\r\nFROM\r\n	( SELECT DISTINCT YEAR ( `date` ) AS \'year\' FROM zt_action ) AS t1\r\n	LEFT JOIN (\r\n	SELECT\r\n		id, name,\r\n		YEAR ( closedDate ) AS `year` \r\n	FROM\r\n		zt_project \r\n	WHERE\r\n		`type` = \'project\' \r\n		AND deleted = \'0\' \r\n	) t2 ON t1.`year` = t2.`year`	\r\n WHERE t2.id IS NOT NULL' WHERE `id` = '1066';
 UPDATE `zt_chart` SET `sql` = 'SELECT\r\n    t1.name AS topProgram,t1.id,t2.`year`,\r\n    SUM(IF((t3.`status` = \'closed\'), 1, 0)) as projectA,\r\n    SUM(IFNULL(t4.execution, 0)) as executionA,\r\n    SUM(IFNULL(t6.`release`, 0)) AS \'release\',\r\n    SUM(IFNULL(t7.story, 0)) AS story,\r\n    SUM(IFNULL(t8.bug, 0)) AS bug\r\nFROM zt_project AS t1\r\nLEFT JOIN (SELECT DISTINCT YEAR(`date`) as \'year\' FROM zt_action) as t2 ON 1 = 1\r\nLEFT JOIN zt_project AS t3 ON FIND_IN_SET(t1.id, t3.path) and t3.type = \'project\' AND YEAR(t3.closedDate) = t2.`year`\r\nLEFT JOIN (SELECT COUNT(1) AS \'execution\', parent,YEAR(closedDate) AS `year` FROM zt_project WHERE type IN (\'sprint\', \'stage\', \'kanban\') AND `status` = \'closed\' GROUP BY `year`, parent) AS t4 ON t3.id = t4.parent AND t4.`year` = t2.`year`\r\nLEFT JOIN (SELECT id,program FROM zt_product WHERE deleted = \'0\') AS t5 ON t1.id = t5.program\r\nLEFT JOIN (SELECT COUNT(1) as \'release\', product, YEAR(`date`) as `year` FROM zt_release WHERE deleted = \'0\' GROUP BY product, `year`) AS t6 ON t5.id = t6.product AND t6.`year` = t2.`year`\r\nLEFT JOIN (SELECT COUNT(1) as \'story\', product, YEAR(closedDate) as `year` FROM zt_story WHERE deleted = \'0\' AND closedReason = \'done\' AND status = \'closed\' GROUP BY product, `year`) AS t7 on t5.id = t7.product AND t7.`year` = t2.`year`\r\nLEFT JOIN (SELECT COUNT(1) as \'bug\', product, YEAR(resolvedDate) as `year` FROM zt_bug WHERE deleted = \'0\' AND resolution = \'fixed\' AND status = \'closed\' GROUP BY product, `year`) AS t8 on t5.id = t8.product AND t8.`year` = t2.`year`\r\nWHERE t1.type = \'program\' AND t1.grade = 1 AND t1.deleted = \'0\'\r\nGROUP BY t1.name,t1.id,t2.`year`' WHERE `id` = '1074';
+
+/* Doc SQL. */
+UPDATE `zt_doc` SET `type` = 'text' WHERE `type` = 'url';
+UPDATE `zt_doc` SET `acl` = 'private' WHERE `acl` = 'custom';
+UPDATE `zt_doc` SET `status` = 'normal' WHERE `status` = '';
+
+UPDATE `zt_doclib` SET `acl` = 'private' WHERE `type` = 'custom' and `acl` = 'custom';
+UPDATE `zt_doclib` SET `acl` = 'private' WHERE `type` = 'product' AND `acl` = 'custom';
+UPDATE `zt_doclib` SET `acl` = 'private' WHERE `type` = 'execution' AND `acl` = 'custom';
+UPDATE `zt_doclib` SET `acl` = 'private' WHERE `type` = 'project' AND `acl` = 'custom';
+UPDATE `zt_doclib` SET `acl` = 'default' WHERE `type` = 'project' AND `acl` IN ('open', 'private');
+UPDATE `zt_doclib` SET `acl` = 'private' WHERE `type` = 'api' and `acl` = 'custom';
+UPDATE `zt_doclib` SET `acl` = 'default' WHERE `type` = 'api' and `acl` = 'open';
+UPDATE `zt_doclib` SET `acl` = 'default' WHERE `main` = '1';
+
+ALTER TABLE `zt_doclib` ADD `addedBy` varchar(30) NOT NULL AFTER `order`;
+ALTER TABLE `zt_doclib` ADD `addedDate` datetime NOT NULL AFTER `addedBy`;
+ALTER TABLE `zt_doc` CHANGE `status` `status` varchar(30) COLLATE 'utf8_general_ci' NOT NULL DEFAULT 'normal';
+
+/* Update doc lib. */
+UPDATE zt_doclib AS t1
+INNER JOIN (SELECT * FROM zt_action WHERE `objectType` = 'doclib' AND `action` = 'created') AS t2 ON t1.`id` = t2.`objectID`
+SET t1.`addedDate` = t2.`date`, t1.`addedBy` = t2.`actor`;
+
+UPDATE zt_doclib AS t1
+INNER JOIN (SELECT * FROM zt_action WHERE `objectType` = 'docLib' AND `action` = 'Created') AS t2 ON t1.`id` = t2.`objectID`
+SET t1.`addedDate` = t2.`date`, t1.`addedBy` = t2.`actor`;
+
+/* Update the product master library. */
+UPDATE zt_doclib AS t1
+INNER JOIN zt_product AS t2 ON t1.`product` = t2.`id`
+SET t1.`addedDate` = t2.`createdDate`, t1.`addedBy` = t2.`createdBy`
+WHERE t1.`type` = 'product' AND t1.`main` = '1';
+
+/* Update the project master library. */
+UPDATE zt_doclib AS t1
+INNER JOIN  zt_project AS t2 ON t1.`project` = t2.`id`
+SET t1.`addedDate` = t2.`openedDate`, t1.`addedBy` = t2.`openedBy`
+WHERE t1.`type` = 'project' AND t1.`main` = '1';
+
+/* Update the execution master library. */
+UPDATE zt_doclib AS t1
+INNER JOIN  zt_project AS t2 ON t1.`execution` = t2.`id`
+SET t1.`addedDate` = t2.`openedDate`, t1.`addedBy` = t2.`openedBy`
+WHERE t1.`type` = 'execution' AND t1.`main` = '1';
+
+UPDATE zt_doclib AS t1
+LEFT JOIN zt_project t2 ON t1.`execution` = t2.`id`
+SET t1.`project` = t2.`project`
+WHERE t1.`type` = 'execution' AND t1.`project` = '0' AND t2.`project` != '0';
+
+/* Document permission. */
+INSERT IGNORE INTO `zt_grouppriv` (`group`, `module`, `method`)
+SELECT t1.`group`, t1.`module`, 'myView' FROM `zt_grouppriv` AS t1 WHERE t1.`module` = 'doc' AND t1.`method` = 'browse';
+
+INSERT IGNORE INTO `zt_grouppriv` (`group`, `module`, `method`)
+SELECT t1.`group`, t1.`module`, 'myCollection' FROM `zt_grouppriv` AS t1 WHERE t1.`module` = 'doc' AND t1.`method` = 'browse';
+
+INSERT IGNORE INTO `zt_grouppriv` (`group`, `module`, `method`)
+SELECT t1.`group`, t1.`module`, 'myCreation' FROM `zt_grouppriv` AS t1 WHERE t1.`module` = 'doc' AND t1.`method` = 'browse';
+
+INSERT IGNORE INTO `zt_grouppriv` (`group`, `module`, `method`)
+SELECT t1.`group`, t1.`module`, 'productSpace' FROM `zt_grouppriv` AS t1 WHERE t1.`module` = 'doc' AND t1.`method` = 'tableContents';
+
+INSERT IGNORE INTO `zt_grouppriv` (`group`, `module`, `method`)
+SELECT t1.`group`, t1.`module`, 'projectSpace' FROM `zt_grouppriv` AS t1 WHERE t1.`module` = 'doc' AND t1.`method` = 'tableContents';
+
+INSERT IGNORE INTO `zt_grouppriv` (`group`, `module`, `method`)
+SELECT t1.`group`, t1.`module`, 'addCatalog' FROM `zt_grouppriv` AS t1 WHERE t1.`module` = 'doc' AND t1.`method` = 'catalog';
+
+INSERT IGNORE INTO `zt_grouppriv` (`group`, `module`, `method`)
+SELECT t1.`group`, t1.`module`, 'editCatalog' FROM `zt_grouppriv` AS t1 WHERE t1.`module` = 'doc' AND t1.`method` = 'catalog';
+
+INSERT IGNORE INTO `zt_grouppriv` (`group`, `module`, `method`)
+SELECT t1.`group`, t1.`module`, 'deleteCatalog' FROM `zt_grouppriv` AS t1 WHERE t1.`module` = 'doc' AND t1.`method` = 'catalog';
