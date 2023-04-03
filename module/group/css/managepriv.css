@@ -24,3 +24,4 @@ td.menus + td {border-left: 0;}
 #privList .group-item {margin-top: 16px;}
 #privList .group-item .checkbox-inline label {padding-left: 3px;}
 #privList.table-bordered td, #privList.table-bordered th {border-top-style: dashed; border-bottom-style: dashed;}
+#privList .check-all>label.checkbox-indeterminate-block:before {content: ' '; opacity: 1; transform: scale(1);}

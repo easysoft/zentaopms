@@ -113,8 +113,8 @@
           </div>
         </th>
         <th class='text-middle text-left package'>
-          <div class="checkbox-primary checkbox-inline checkbox-left check-all indeterminate">
-            <label class='text-left checkbox-indeterminate-block' for='allCheckerPackage<?php echo $moduleName;?>' class='checkbox-indeterminate-block'><?php echo '权限包名' . $moduleName;?></label>
+          <div class="checkbox-primary checkbox-inline checkbox-left check-all">
+            <label class='text-left checkbox-indeterminate-block' for='allCheckerPackage<?php echo $moduleName;?>'><?php echo '权限包名' . $moduleName;?></label>
             <input type='checkbox' id='allChecker<?php echo '权限包名' . $moduleName;?>'>
           </div>
         </th>
