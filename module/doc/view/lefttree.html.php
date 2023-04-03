@@ -30,7 +30,7 @@
 .tree li.has-input {overflow: hidden;}
 .tree-text {margin-left: 5px; overflow: hidden;}
 i.btn-info, i.btn-info:hover {border: none; background: #fff; box-shadow: unset;}
-.tree-version-trigger {padding: 0 10px; width: 54px;}
+.tree-version-trigger {padding: 0 10px; width: 54px; border-radius: 5px; background: #F9F9F9;}
 
 /* css for sidebar */
 .sidebar-toggle {flex: 0 0 16px;}
@@ -348,7 +348,6 @@ $(function()
             libID = $(this).closest('.lib').data('id');
         }
 
-        console.log(libID, moduleID);
         return lcatePage(libID, moduleID, $(this).data('type'));
     });
 
