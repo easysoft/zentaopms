@@ -7,6 +7,7 @@
   <?php else:?>
   <div class='row'>
     <?php foreach ($screens as $screenID => $screen):?>
+    <?php if($screenID == 3 && !common::hasPriv('screen', 'annualData')) continue;?>
     <div class='col-md-3' data-id='<?php echo $screen->id;?>'>
       <?php if(common::hasPriv('screen', 'view')):?>
       <a href='<?php echo $this->createLink('screen', 'view', "id=$screen->id");?>' target="_blank" />

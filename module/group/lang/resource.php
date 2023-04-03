@@ -1763,11 +1763,15 @@ $lang->tree->methodOrder[30] = 'delete';
 
 /* Screen. */
 $lang->resource->screen = new stdclass();
-$lang->resource->screen->browse = 'browse';
-$lang->resource->screen->view   = 'view';
+$lang->resource->screen->browse        = 'browse';
+$lang->resource->screen->view          = 'view';
+$lang->resource->screen->annualData    = 'annualData';
+$lang->resource->screen->allAnnualData = 'allAnnualData';
 
 $lang->screen->methodOrder[0]  = 'browse';
 $lang->screen->methodOrder[5]  = 'view';
+$lang->screen->methodOrder[10] = 'annualData';
+$lang->screen->methodOrder[15] = 'allAnnualData';
 
 /* Report. */
 $lang->resource->report = new stdclass();
