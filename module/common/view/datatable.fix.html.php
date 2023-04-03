@@ -19,6 +19,8 @@ $(function()
         var $btnToolbar = $('#main .table-header .btn-toolbar:first');
         if($btnToolbar.length > 0)
         {
+            if($('.dropdown #tableCustomBtn').length) $('#tableCustomBtn').closest('.dropdown').remove();
+
             <?php $mode = isset($config->datatable->$datatableId->mode) ? $config->datatable->$datatableId->mode : 'table';?>
             var $dropdown = $('<div class="dropdown"><button id="tableCustomBtn" type="button" class="btn btn-link" data-toggle="dropdown"><i class="icon-cog-outline"></i></button></div>');
             var $dropmenu = $('<ul class="dropdown-menu pull-right"></ul>');

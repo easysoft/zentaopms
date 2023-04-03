@@ -30,6 +30,8 @@ $lang->company->guest    = '匿名登录';
 $lang->company->admins   = '管理员';
 $lang->company->deleted  = '已删除';
 
+$lang->company->manageRole = '维护职位';
+
 $lang->company->product   = $lang->productCommon;
 $lang->company->project   = $lang->projectCommon;
 $lang->company->execution = $lang->executionCommon;

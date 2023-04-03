@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 namespace PhpMyAdmin\SqlParser\Tests\Builder;
 
 use PhpMyAdmin\SqlParser\Parser;
@@ -9,7 +7,7 @@ use PhpMyAdmin\SqlParser\Tests\TestCase;
 
 class AlterStatementTest extends TestCase
 {
-    public function testBuilder(): void
+    public function testBuilder()
     {
         $query = 'ALTER TABLE `actor` ' .
             'ADD PRIMARY KEY (`actor_id`), ' .

@@ -269,9 +269,9 @@ $lang->waterfall->menu->devops     = array('link' => "{$lang->repo->common}|repo
 $lang->waterfall->menu->build      = array('link' => "{$lang->build->common}|project|build|project=%s", 'subModule' => 'projectbuild');
 $lang->waterfall->menu->release    = array('link' => "{$lang->release->common}|projectrelease|browse|project=%s", 'subModule' => 'projectrelease');
 $lang->waterfall->menu->dynamic    = array('link' => "$lang->dynamic|project|dynamic|project=%s");
+$lang->waterfall->menu->settings   = array('link' => "$lang->settings|project|view|project=%s", 'subModule' => 'stakeholder', 'alias' => 'edit,manageproducts,group,managemembers,manageview,managepriv,whitelist,addwhitelist,team', 'exclude' => 'tree-browsetask');
 
-$lang->waterfall->menu->settings = $lang->scrum->menu->settings;
-$lang->waterfall->dividerMenu    = ',programplan,build,dynamic,';
+$lang->waterfall->dividerMenu = ',programplan,build,dynamic,';
 
 $lang->waterfall->menu->storyGroup['dropMenu'] = $lang->scrum->menu->storyGroup['dropMenu'];
 
@@ -539,24 +539,13 @@ $lang->doc->menu->api['subMenu']->index  = array('link' => "{$lang->doc->apiDoc}
 $lang->doc->menu->api['subMenu']->struct = array('link' => "{$lang->doc->apiStruct}|api|struct|libID=%s", 'alias' => 'createstruct,editstruct');
 
 /* Report menu.*/
-$lang->report->menu             = new stdclass();
-$lang->report->menu->screen     = array('link' => "{$lang->screen->common}|screen|browse");
-$lang->report->menu->pivotTable = array('link' => "{$lang->report->pivotTable}|report|productsummary", 'alias' => 'projectdeviation,bugcreate,workload,bugassign');
+$lang->report->menu         = new stdclass();
+$lang->report->menu->screen = array('link' => "{$lang->screen->common}|screen|browse");
+$lang->report->menu->pivot  = array('link' => "{$lang->pivot->common}|pivot|preview");
 
 /* Report menu order. */
 $lang->report->menuOrder[5]  = 'screen';
-$lang->report->menuOrder[10] = 'pivotTable';
-
-$lang->report->menu->pivotTable['subMenu'] = new stdclass();
-$lang->report->menu->pivotTable['subMenu']->product = array('link' => "{$lang->product->common}|report|productsummary");
-$lang->report->menu->pivotTable['subMenu']->project = array('link' => "{$lang->project->common}|report|projectdeviation");
-$lang->report->menu->pivotTable['subMenu']->test    = array('link' => "{$lang->qa->common}|report|bugcreate", 'alias' => 'bugassign');
-$lang->report->menu->pivotTable['subMenu']->staff   = array('link' => "{$lang->system->common}|report|workload");
-
-$lang->report->menu->pivotTable['menuOrder'][5]  = 'product';
-$lang->report->menu->pivotTable['menuOrder'][10] = 'project';
-$lang->report->menu->pivotTable['menuOrder'][15] = 'test';
-$lang->report->menu->pivotTable['menuOrder'][20] = 'staff';
+$lang->report->menuOrder[10] = 'pivot';
 
 /* Company menu.*/
 $lang->company->menu              = new stdclass();
@@ -644,7 +633,7 @@ $lang->navGroup->doclib = 'doc';
 $lang->navGroup->api    = 'doc';
 
 $lang->navGroup->screen = 'report';
-$lang->navGroup->report = 'report';
+$lang->navGroup->pivot  = 'report';
 
 $lang->navGroup->qa            = 'qa';
 $lang->navGroup->bug           = 'qa';

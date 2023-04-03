@@ -1311,22 +1311,27 @@ class executionModel extends model
             unset($execution->end);
         }
 
-        if($this->post->readjustTime && $oldExecution->grade > 1)
+        if($this->post->readjustTime)
         {
-            $parent      = $this->getByID($oldExecution->parent);
-            $begin       = $execution->begin;
-            $end         = $execution->end;
-            $parentBegin = $parent->begin;
-            $parentEnd   = $parent->end;
+            $begin = $execution->begin;
+            $end   = $execution->end;
 
-            if($begin < $parentBegin)
-            {
-                dao::$errors["message"][] = sprintf($this->lang->execution->errorLetterParent, $parentBegin);
-            }
+            if($begin > $end) dao::$errors["message"][] = sprintf($this->lang->execution->errorLetterPlan, $end, $begin);
 
-            if($end > $parentEnd)
+            if($oldExecution->grade > 1)
             {
-                dao::$errors["message"][] = sprintf($this->lang->execution->errorGreaterParent, $parentEnd);
+                $parent      = $this->dao->select('begin,end')->from(TABLE_PROJECT)->where('id')->eq($oldExecution->parent)->fetch();
+                $parentBegin = $parent->begin;
+                $parentEnd   = $parent->end;
+                if($begin < $parentBegin)
+                {
+                    dao::$errors["message"][] = sprintf($this->lang->execution->errorLetterParent, $parentBegin);
+                }
+
+                if($end > $parentEnd)
+                {
+                    dao::$errors["message"][] = sprintf($this->lang->execution->errorGreaterParent, $parentEnd);
+                }
             }
         }
 
@@ -5767,6 +5772,12 @@ class executionModel extends model
         $post    = $_POST;
 
         $_POST = array();
+        $extendFields = $this->getExtendFields();
+        foreach(array_keys($extendFields) as $field)
+        {
+            if(isset($post[$field])) $_POST[$field] = $post[$field];
+        }
+
         $_POST['project']     = $projectID;
         $_POST['name']        = $project->name;
         $_POST['begin']       = $project->begin;
@@ -5820,6 +5831,12 @@ class executionModel extends model
         $post    = $_POST;
 
         $_POST = array();
+        $extendFields = $this->getExtendFields();
+        foreach(array_keys($extendFields) as $field)
+        {
+            if(isset($post[$field])) $_POST[$field] = $post[$field];
+        }
+
         $_POST['project']   = $projectID;
         $_POST['name']      = $project->name;
         $_POST['begin']     = $project->begin;
@@ -6000,5 +6017,24 @@ class executionModel extends model
             if(!empty($children)) $sortedExecutions += $this->resetExecutionSorts($executions, $children);
         }
         return $sortedExecutions;
+    }
+
+    /**
+     * Get Extend Fields in workflow.
+     *
+     * @param  string $module
+     * @access public
+     * @return array
+     */
+    public function getExtendFields($module = 'project')
+    {
+        $extendFields = $this->dao->select('field')
+            ->from(TABLE_WORKFLOWFIELD)
+            ->where('module')->eq('project')
+            ->andWhere('buildin')->eq(0)
+            ->andWhere('role')->eq('custom')
+            ->fetchPairs('field');
+
+        return $extendFields;
     }
 }

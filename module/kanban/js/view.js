@@ -370,7 +370,7 @@ function renderKanbanItem(item, $item)
         $item.data('card', item);
 
         $info.children('.estimate').text(item.estimate + kanbancardLang.lblHour);
-        if(item.estimate == 0) $info.children('.estimate').hide();
+        item.estimate > 0 ? $info.children('.estimate').show() : $info.children('.estimate').hide();
 
         $info.children('.pri')
             .attr('class', 'pri' + (item.pri ? ' label-pri label-pri-' + item.pri : ''))
