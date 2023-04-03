@@ -218,7 +218,7 @@ $(function()
                     var versionName = '';
                     for(var i = 0; i < item.versions.length; i++)
                     {
-                        if(item.versions[i].id == release) versionName = item.versions[i].version
+                        if(item.versions[i].id == release) versionName = item.versions[i].version;
                     }
                     $item += '<div class="tree-version-trigger" data-id="' +  item.id + '">' + (versionName || versionLang) + '<span class="caret"></span></div>';
                 }
@@ -232,6 +232,8 @@ $(function()
                 if(item.active) $li.addClass('active');
             }
         });
+
+        if(location.href.indexOf('moduleID') == -1) ele.data('zui.tree').collapse();
 
         ele.on('click', '.icon-drop', function(e)
         {
