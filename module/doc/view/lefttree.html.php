@@ -237,8 +237,9 @@ $(function()
                 if(item.active) $li.addClass('active');
             }
         });
-
         if(location.href.indexOf('moduleID') == -1) ele.data('zui.tree').collapse();
+        var $leaf = ele.find('li.active');
+        if($leaf.length) $leaf[$leaf.length - 1].scrollIntoView(true);
 
         ele.on('click', '.icon-drop', function(e)
         {
