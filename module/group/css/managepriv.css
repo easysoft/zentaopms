@@ -12,3 +12,15 @@ td.menus + td {border-left: 0;}
 .menus .checkbox-primary {float: left; width: 220px;}
 .menus .checkbox-primary:first-child {float: left; width: auto;}
 .menus a {margin-left: 10px;}
+
+#privList th.module {width: 142px; background-color: #E6EAF1; font-weight: 600;}
+#privList th.package {width: 142px; background-color: #EDEEF2; font-weight: 600;}
+#privList th.method {min-width: 685px;}
+#privList th.module > .check-all, #privList th.package > .check-all {font-weight: 600;}
+#privList .check-all {display: inline-block;}
+#privList .check-all > label {padding-left: 0;}
+#privList .text-middle.text-left {padding-left: 24px;}
+#privList tbody > tr > td {padding: 4px 20px 20px 20px;}
+#privList .group-item {margin-top: 16px;}
+#privList .group-item .checkbox-inline label {padding-left: 3px;}
+#privList.table-bordered td, #privList.table-bordered th {border-top-style: dashed; border-bottom-style: dashed;}

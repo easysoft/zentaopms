@@ -81,8 +81,9 @@
     <table class='table table-hover table-striped table-bordered' id='privList'>
       <thead>
         <tr class='text-center'>
-          <th class='thWidth'><?php echo $lang->group->module;?></th>
-          <th colspan='2'><?php echo $lang->group->method;?></th>
+          <th class='module'><?php echo $lang->group->module;?></th>
+          <th class='package'><?php echo '权限包';?></th>
+          <th class='method' colspan='2'><?php echo $lang->group->method;?></th>
         </tr>
       </thead>
       <?php foreach($lang->resource as $moduleName => $moduleActions):?>
@@ -105,10 +106,16 @@
       }
       ?>
       <tr class='<?php echo cycle('even, bg-gray');?>'>
-        <th class='text-middle text-right thWidth'>
-          <div class="checkbox-primary checkbox-inline checkbox-right check-all">
+        <th class='text-middle text-left module'>
+          <div class="checkbox-primary checkbox-inline checkbox-left check-all">
+            <label class='text-left' for='allChecker<?php echo $moduleName;?>'><?php echo $lang->$moduleName->common;?></label>
             <input type='checkbox' id='allChecker<?php echo $moduleName;?>'>
-            <label class='text-right' for='allChecker<?php echo $moduleName;?>'><?php echo $lang->$moduleName->common;?></label>
+          </div>
+        </th>
+        <th class='text-middle text-left package'>
+          <div class="checkbox-primary checkbox-inline checkbox-left check-all indeterminate">
+            <label class='text-left checkbox-indeterminate-block' for='allCheckerPackage<?php echo $moduleName;?>' class='checkbox-indeterminate-block'><?php echo '权限包名' . $moduleName;?></label>
+            <input type='checkbox' id='allChecker<?php echo '权限包名' . $moduleName;?>'>
           </div>
         </th>
         <?php if(isset($lang->$moduleName->menus)):?>
