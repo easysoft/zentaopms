@@ -30,11 +30,13 @@
 .tree li.has-input {overflow: hidden;}
 .tree-text {margin-left: 5px; overflow: hidden;}
 i.btn-info, i.btn-info:hover {border: none; background: #fff; box-shadow: unset;}
-.tree-version-trigger {padding: 0 10px; width: 54px; border-radius: 5px; background: #F9F9F9;}
+.tree-version-trigger {display: flex; align-items: center; padding: 0 10px; width: 54px; border-radius: 5px; background: #F9F9F9;}
+.tree-version-trigger > .version-trigger-text {flex: 0 0 30px; overflow: hidden;}
 
 /* css for sidebar */
 .sidebar-toggle {flex: 0 0 16px;}
 .sidebar-toggle > .icon {width: 12px; height: 30px; margin-top: -10px; line-height: 30px; color: #fff; text-align: center; background: #7dcdfe; border-radius: 6px; cursor: pointer; padding-left: 0; padding-top: 0;}
+.bottom-btn-tree {position: fixed; width: 150px; bottom: 40px;}
 
 .spliter {flex: 0 0 12px;}
 .spliter-btn {height: 28px; width: 10px; background: #fff; position: absolute; top: 30%; left: -1px; border: 1px solid #D9D9D9; border-radius: 2px;}
@@ -77,6 +79,9 @@ js::set('objectID',   isset($objectID) ? $objectID : '');
     <div id="annexTree" data-id="annex"></div>
 </div>
 <?php endif;?>
+</div>
+<div class="text-center bottom-btn-tree hidden">
+    <?php common::printLink('project', 'programTitle', '', $lang->doc->customShowLibs, '', "class='btn btn-info btn-wide iframe'", true, true);?>
 </div>
 
 <!-- Code for dropdown menu. -->
@@ -220,7 +225,7 @@ $(function()
                     {
                         if(item.versions[i].id == release) versionName = item.versions[i].version;
                     }
-                    $item += '<div class="tree-version-trigger" data-id="' +  item.id + '">' + (versionName || versionLang) + '<span class="caret"></span></div>';
+                    $item += '<div class="tree-version-trigger" data-id="' +  item.id + '"><div class="version-trigger-text">' + (versionName || versionLang) + '</div><span class="caret"></span></div>';
                 }
                 if((libClass != 'lib' && hasModulePriv) || (libClass == 'lib' && hasLibPriv)) $item += '<i class="icon icon-drop icon-ellipsis-v hidden tree-icon" data-isCatalogue="' + (libClass ? false : true) + '"></i>';
                 $item += '</div>';

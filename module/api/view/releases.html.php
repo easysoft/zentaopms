@@ -41,7 +41,7 @@
           <?php foreach($releases as $release):?>
           <tr>
             <td><?php printf('%03d', $release->id);?></td>
-            <td><?php echo $release->version;?></td>
+            <td title=<?php echo $release->version;?>><?php echo $release->version;?></td>
             <td><?php echo $release->desc;?></td>
             <td><?php echo zget($users, $release->addedBy, '');?></td>
             <td class="c-date"><?php echo $release->addedDate;?></td>
