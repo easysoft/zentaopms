@@ -39,7 +39,8 @@ body {margin-bottom: 25px;}
   </p>
 </div>
 <?php else:?>
-<?php $vars = "type=$type&objectID=$objectID&$libID=$libID&moduleID=$moduleID&browseType=$browseType&orderBy=%s&param=$param&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}";?>
+<?php $vars = "objectID=$objectID&$libID=$libID&moduleID=$moduleID&browseType=$browseType&orderBy=%s&param=$param&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}";?>
+<?php if($app->rawMethod == 'tablecontents') $vars = "type=$type&" . $vars;?>
 <div>
   <form class='main-table' method='post' id='docListForm'>
     <table class="table table-files has-sort-head">
@@ -51,13 +52,13 @@ body {margin-bottom: 25px;}
               <label></label>
             </div>
             <?php endif;?>
-            <?php common::printOrderLink('id', $orderBy, $vars, $lang->idAB, '', 'tableContents');?>
+            <?php common::printOrderLink('id', $orderBy, $vars, $lang->idAB);?>
           </th>
-          <th class="c-name"><?php common::printOrderLink('title', $orderBy, $vars, $lang->doc->title, '', 'tableContents');?></th>
-          <th class="c-user"><?php common::printOrderLink('addedBy', $orderBy, $vars, $lang->doc->addedByAB, '', 'tableContents');?></th>
-          <th class="c-date"><?php common::printOrderLink('addedDate', $orderBy, $vars, $lang->doc->addedDate, '', 'tableContents');?></th>
-          <th class="c-user"><?php common::printOrderLink('editedBy', $orderBy, $vars, $lang->doc->editedBy, '', 'tableContents');?></th>
-          <th class="c-date"><?php common::printOrderLink('editedDate', $orderBy, $vars, $lang->doc->editedDate, '', 'tableContents');?></th>
+          <th class="c-name"><?php common::printOrderLink('title', $orderBy, $vars, $lang->doc->title);?></th>
+          <th class="c-user"><?php common::printOrderLink('addedBy', $orderBy, $vars, $lang->doc->addedByAB);?></th>
+          <th class="c-date"><?php common::printOrderLink('addedDate', $orderBy, $vars, $lang->doc->addedDate);?></th>
+          <th class="c-user"><?php common::printOrderLink('editedBy', $orderBy, $vars, $lang->doc->editedBy);?></th>
+          <th class="c-date"><?php common::printOrderLink('editedDate', $orderBy, $vars, $lang->doc->editedDate);?></th>
           <th class="c-actions"><?php echo $lang->actions;?></th>
         </tr>
       </thead>

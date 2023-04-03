@@ -12,7 +12,6 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php js::set('treeData', $libTree);?>
-<?php js::set('linkParams', "type=$type&objectID=$objectID%s");?>
 <?php js::set('docLang', $lang->doc);?>
 <?php js::set('libType', 'annex');?>
 <?php js::set('canViewFiles', common::hasPriv('doc', 'showfiles'));?>

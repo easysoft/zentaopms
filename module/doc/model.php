@@ -2273,8 +2273,8 @@ class docModel extends model
     {
         if(!in_array($type, array('product', 'project'))) return '';
 
-        $currentModule = $this->app->getModuleName();
-        $currentMethod = $this->app->getMethodName();
+        $currentModule = $this->app->rawModule;
+        $currentMethod = $this->app->rawMethod;
 
         $dropMenuLink = helper::createLink('doc', 'ajaxGetDropMenu', "objectType=$type&objectID=$objectID&module=$currentModule&method=$currentMethod");
         $output  = "<div class='btn-group selectBox' id='swapper'><button data-toggle='dropdown' type='button' class='btn' id='currentItem' title='{$objectTitle}'><span class='text'>{$objectTitle}</span> <span class='caret' style='margin-bottom: -1px'></span></button><div id='dropMenu' class='dropdown-menu search-list' data-ride='searchList' data-url='$dropMenuLink'>";
@@ -2649,24 +2649,15 @@ class docModel extends model
         {
             $doclib   = $this->getLibById($libID);
             $type     = $doclib->type == 'execution' ? 'project' : $doclib->type;
-            $objectID = $type == 'custom' or $type == 'book' ? 0 : $doclib->$type;
+            $objectID = $type == 'custom' ? 0 : $doclib->$type;
         }
 
         $objectDropdown = '';
         if($type == 'custom')
         {
-            $libs                 = $this->getLibsByObject('custom', 0, '', $appendLib);
-            $this->app->rawMethod = 'custom';
+            $libs = $this->getLibsByObject('custom', 0, '', $appendLib);
             if($libID == 0 and !empty($libs)) $libID = reset($libs)->id;
 
-            $object     = new stdclass();
-            $object->id = 0;
-        }
-        elseif($type == 'book')
-        {
-            $libs                 = $this->getLibsByObject('book', 0, '', $appendLib);
-            $this->app->rawMethod = 'custom';
-            if(!empty($libs) and ($libID == 0 or !isset($libs[$libID]))) $libID = reset($libs)->id;
             $object     = new stdclass();
             $object->id = 0;
         }
@@ -2678,8 +2669,6 @@ class docModel extends model
             $libs     = $this->getLibsByObject($type, $objectID, '', $appendLib);
 
             if(($libID == 0 or !isset($libs[$libID])) and !empty($libs)) $libID = reset($libs)->id;
-            if($this->app->tab == 'doc') $this->app->rawMethod = $type == 'execution' ? 'project' : $type;
-
             $object         = $this->dao->select('id,name,status')->from($table)->where('id')->eq($objectID)->fetch();
             $objectTitle    = zget($objects, $objectID, '');
             $objectDropdown = $this->select($type, $objectTitle, $objectID);
@@ -2693,7 +2682,14 @@ class docModel extends model
         }
 
         $tab = strpos(',doc,product,project,execution,', ",{$this->app->tab},") !== false ? $this->app->tab : 'doc';
-        if($tab != 'doc' and method_exists($type . 'Model', 'setMenu')) $this->loadModel($type)->setMenu($objectID);
+        if($tab != 'doc' and method_exists($type . 'Model', 'setMenu'))
+        {
+            $this->loadModel($type)->setMenu($objectID);
+        }
+        elseif($tab == 'doc' and isset($this->lang->doc->menu->{$type}['alias']))
+        {
+            $this->lang->doc->menu->{$type}['alias'] .= ',' . $this->app->rawMethod;
+        }
 
         return array($libs, $libID, $object, $objectID, $objectDropdown);
     }

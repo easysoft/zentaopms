@@ -12,7 +12,7 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php js::set('treeData', $libTree);?>
-<?php js::set('linkParams', "type=$type&objectID=$objectID%s&browseType=&orderBy=$orderBy");?>
+<?php js::set('linkParams', "objectID=$objectID%s&browseType=&orderBy=$orderBy");?>
 <?php js::set('docLang', $lang->doc);?>
 <?php js::set('libType', $libType);?>
 <?php js::set('canViewFiles', common::hasPriv('doc', 'showfiles'));?>
@@ -21,8 +21,9 @@
     <?php echo $objectDropdown;?>
     <?php if(!empty($libTree)):?>
     <?php foreach($lang->doc->featureBar['tableContents'] as $barType => $barName):?>
-    <?php $active  = $barType == $browseType ? 'btn-active-text' : '';?>
-    <?php echo html::a($this->createLink('doc', 'tableContents', "type=$type&objectID=$objectID&libID=$libID&moduleID=$moduleID&browseType=$barType"), $barName, '', "class='btn btn-link $active' id='{$barType}Tab'");?>
+    <?php $active     = $barType == $browseType ? 'btn-active-text' : '';?>
+    <?php $linkParams = $app->rawMethod == 'tablecontents' ? "type=$type&objectID=$objectID&libID=$libID&moduleID=$moduleID&browseType=$barType": "objectID=$objectID&libID=$libID&moduleID=$moduleID&browseType=$barType";?>
+    <?php echo html::a($this->createLink('doc', $app->rawMethod, $linkParams), $barName, '', "class='btn btn-link $active' id='{$barType}Tab'");?>
     <?php endforeach;?>
     <a class="btn btn-link querybox-toggle" id='bysearchTab'><i class="icon icon-search muted"></i> <?php echo $lang->doc->searchDoc;?></a>
     <?php endif;?>
