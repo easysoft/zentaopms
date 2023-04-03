@@ -267,12 +267,10 @@ $lang->testcase->featureBar['browse']['zerocase']    = "零用例{$lang->SRCommo
 $lang->testcase->featureBar['browse']['suite']       = '套件';
 $lang->testcase->featureBar['browse']['autocase']    = $lang->testcase->showAutoCase;
 
-
 $lang->testcase->importXmind     = "导入XMIND";
 $lang->testcase->exportXmind     = "导出XMIND";
 $lang->testcase->getXmindImport  = "获取导图";
 $lang->testcase->showXMindImport = "显示导图";
-
 
 $lang->testcase->xmindImport           = "导入XMIND";
 $lang->testcase->xmindExport           = "导出XMIND";

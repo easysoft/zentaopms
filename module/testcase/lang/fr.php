@@ -267,12 +267,10 @@ $lang->testcase->featureBar['browse']['zerocase']    = 'Zero Case Story';
 $lang->testcase->featureBar['browse']['suite']       = 'Suite';
 $lang->testcase->featureBar['browse']['autocase']    = $lang->testcase->showAutoCase;
 
-
 $lang->testcase->importXmind     = "Import XMIND";
 $lang->testcase->exportXmind     = "Export XMIND";
 $lang->testcase->getXmindImport  = "Get Mindmap";
 $lang->testcase->showXMindImport = "Display Mindmap";
-
 
 $lang->testcase->xmindImport           = "Imort XMIND";
 $lang->testcase->xmindExport           = "Export XMIND";
@@ -315,7 +313,7 @@ $lang->testcase->createScene      = "Add Scene";
 $lang->testcase->changeScene      = "Drag to change the scene which it belongs";
 $lang->testcase->batchChangeScene = "Batch change scene";
 $lang->testcase->updateOrder      = "Drag Sort";
-$lang->testcase->errDiffProduct   = "Different product";
+$lang->testcase->differentProduct = "Different product";
 
 $lang->testcase->newScene                    = "Add Scene";
 $lang->testcase->sceneTitle                  = 'Scene Title';
@@ -328,7 +326,6 @@ $lang->testcase->editScene                   = 'Edit Scene';
 $lang->testcase->hasChildren                 = 'This scene has sub scene or test cases. Do you want to delete them all?';
 $lang->testcase->confirmDeleteScene          = 'Are you sure you want to delete the scene: "%s"?';
 $lang->testcase->sceneb                      = "Scene";
-$lang->testcase->confirmBatchDeleteSceneCase = 'Are you sure you want to delete these scene or test cases in batch?';
 $lang->testcase->onlyScene                   = 'Only Scene';
 $lang->testcase->iScene                      = 'Scene';
 $lang->testcase->generalTitle                = 'Title';
@@ -342,6 +339,8 @@ $lang->testcase->dragModalTitle       = 'Drag and drop operation selection';
 $lang->testcase->dragModalMessage     = '<p>There are two possible situations for the current operation: </p><p>1) Adjust the sequence.<br/> 2) Change its scenario, meanwhile its module will be changed accordingly.</p><p>Please select the operation you want to perform.</p>';
 $lang->testcase->dragModalChangeScene = 'Change its scene';
 $lang->testcase->dragModalChangeOrder = 'Reorder';
+
+$lang->testcase->confirmBatchDeleteSceneCase = 'Are you sure you want to delete these scene or test cases in batch?';
 
 $lang->scene = new stdclass();
 $lang->scene->title = 'Scene Title';
