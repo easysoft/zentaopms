@@ -14,7 +14,7 @@ $lang->navIcons['demandpool'] = "<i class='icon icon-bars'></i>";
 $lang->mainNav              = new stdclass();
 $lang->mainNav->my          = "{$lang->navIcons['my']} {$lang->my->shortCommon}|my|index|";
 $lang->mainNav->demandpool  = "{$lang->navIcons['demandpool']} {$lang->demandpool->common}|demandpool|browse|";
-$lang->mainNav->product     = "{$lang->navIcons['product']} {$lang->productCommon}|$productModule|$productMethod|";
+$lang->mainNav->product     = "{$lang->navIcons['product']} {$lang->productCommon}|product|all|";
 $lang->mainNav->projectInit = "{$lang->navIcons['project']} {$lang->projectInit->common}|$productModule|$productMethod|";
 $lang->mainNav->doc         = "{$lang->navIcons['doc']} {$lang->doc->common}|doc|index|";
 $lang->mainNav->admin       = "{$lang->navIcons['admin']} {$lang->admin->common}|admin|index|";
