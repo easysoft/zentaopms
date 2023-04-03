@@ -66,18 +66,18 @@ class pagebase extends wg
                         'return Component ? new Component(element, options) : null;',
                     '};'
                 ) : null,
-                h::jsVar('window.config', $jsConfig),
-                empty($imports) ? NULL : h::import($imports),
                 $head,
-                empty($css) ? NULL : h::css($css)
             ),
             h::body
             (
+                empty($imports) ? NULL : h::import($imports),
+                h::jsVar('window.config', $jsConfig),
                 set($this->prop('bodyProps')),
                 set::class($this->prop('bodyClass')),
+                empty($css) ? NULL : h::css($css),
                 $body,
-                $config->debug ? h::js('window.zin = ' . json_encode(array('page' => $this->toJsonData(), 'definedProps' => wg::$definedPropsMap, 'wgBlockMap' => wg::$wgToBlockMap)) . ';console.log("zin", window.zin)') : null,
-                empty($js) ? NULL : h::js($js)
+                empty($js) ? NULL : h::js($js),
+                $config->debug ? h::js('window.zin = ' . json_encode(array('page' => $this->toJsonData(), 'definedProps' => wg::$definedPropsMap, 'wgBlockMap' => wg::$wgToBlockMap)) . ';console.log("zin", window.zin)') : null
             )
         );
     }
