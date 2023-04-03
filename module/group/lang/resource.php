@@ -1088,6 +1088,18 @@ $lang->resource->testcase->batchConfirmStoryChange = 'batchConfirmStoryChange';
 $lang->resource->testcase->importToLib             = 'importToLib';
 $lang->resource->testcase->automation              = 'automation';
 
+$lang->resource->testcase->createScene      = 'createScene';
+$lang->resource->testcase->editScene        = 'editScene';
+$lang->resource->testcase->deleteScene      = 'deleteScene';
+$lang->resource->testcase->changeScene      = 'changeScene';
+$lang->resource->testcase->batchChangeScene = 'batchChangeScene';
+$lang->resource->testcase->updateOrder      = 'updateOrder';
+
+$lang->resource->testcase->importXmind     = 'importXmind';
+$lang->resource->testcase->exportXmind     = 'exportXmind';
+$lang->resource->testcase->getXmindImport  = 'getXmindImport';
+$lang->resource->testcase->showXMindImport = 'showXMindImport';
+
 $lang->testcase->methodOrder[0]   = 'index';
 $lang->testcase->methodOrder[5]   = 'browse';
 $lang->testcase->methodOrder[10]  = 'groupCase';
@@ -1119,6 +1131,17 @@ $lang->testcase->methodOrder[135] = 'batchConfirmStoryChange';
 $lang->testcase->methodOrder[140] = 'importToLib';
 $lang->testcase->methodOrder[145] = 'automation';
 $lang->testcase->methodOrder[150] = 'showScript';
+
+$lang->testcase->methodOrder[155] = 'createScene';
+$lang->testcase->methodOrder[160] = 'editScene';
+$lang->testcase->methodOrder[165] = 'deleteScene';
+$lang->testcase->methodOrder[170] = 'changeScene';
+$lang->testcase->methodOrder[175] = 'batchChangeScene';
+$lang->testcase->methodOrder[180] = 'updateOrder';
+$lang->testcase->methodOrder[185] = 'importXmind';
+$lang->testcase->methodOrder[190] = 'getXmindImport';
+$lang->testcase->methodOrder[195] = 'showXMindImport';
+$lang->testcase->methodOrder[200] = 'exportXmind';
 
 /* Test task. */
 $lang->resource->testtask = new stdclass();
