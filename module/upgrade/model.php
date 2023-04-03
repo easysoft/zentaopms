@@ -593,6 +593,9 @@ class upgradeModel extends model
             case '18_2':
                 $this->loadModel('setting')->setSN();
                 break;
+            case '18_3':
+                $this->changeBookToCustomLib();
+                break;
         }
 
         $this->deletePatch();
@@ -1096,6 +1099,8 @@ class upgradeModel extends model
                 $confirmContent .= file_get_contents($this->getUpgradeFile('18.1'));
              case '18_2':
                 $confirmContent .= file_get_contents($this->getUpgradeFile('18.2')); // confirm insert position.
+             case '18_3':
+                $confirmContent .= file_get_contents($this->getUpgradeFile('18.3')); // confirm insert position.
         }
 
         return $confirmContent;
@@ -8517,6 +8522,52 @@ class upgradeModel extends model
     }
 
     /**
+     * Change book to custom lib.
+     *
+     * @access public
+     * @return void
+     */
+    public function changeBookToCustomLib()
+    {
+        $libs = $this->dao->select('id,id')->from(TABLE_DOCLIB)->where('`type`')->eq('book')->fetchPairs();
+        foreach($libs as $libID)
+        {
+            $chapterModulePairs = array();
+            $chapters           = $this->dao->select('*')->from(TABLE_DOC)->where('lib')->eq($libID)->andWhere('`type`')->eq('chapter')->orderBy('`grade` asc, `order` asc')->fetchGroup('grade', 'id');
+            foreach($chapters as $grade => $gradeChapters)
+            {
+                foreach($gradeChapters as $id => $chapter)
+                {
+                    $module = new stdclass();
+                    $module->root    = $chapter->lib;
+                    $module->name    = $chapter->title;
+                    $module->parent  = zget($chapterModulePairs, $chapter->parent);
+                    $module->grade   = $chapter->grade;
+                    $module->order   = $chapter->order;
+                    $module->type    = 'doc';
+                    $module->deleted = $chapter->deleted;
+
+                    $this->dao->insert(TABLE_MODULE)->data($module)->exec();
+                    $moduleID = $this->dao->lastInsertID();
+
+                    $chapterModulePairs[$id] = $moduleID;
+
+                    $path = explode(',', $chapter->path);
+                    $path = array_filter($path);
+                    foreach($path as $index => $chapterID) $path[$index] = zget($chapterModulePairs, $chapterID);
+                    $path = implode(',', $path);
+                    $this->dao->update(TABLE_MODULE)->set('`path`')->eq(",{$path},")->where('id')->eq($moduleID)->exec();
+
+                    $this->dao->update(TABLE_DOC)->set('`module`')->eq($moduleID)->set('`parent`')->eq($moduleID)->set("`path` = REPLACE(`path`, '{$chapter->path}', ',{$path},')")->set('`type`')->eq('text')->where('`parent`')->eq($id)->andWhere('`type`')->eq('article')->exec();
+                }
+            }
+            $this->dao->update(TABLE_DOCLIB)->set('`type`')->eq('custom')->where('id')->eq($libID)->exec();
+            $this->dao->update(TABLE_DOC)->set('`type`')->eq('text')->where('`lib`')->eq($libID)->andWhere('grade')->eq(1)->andWhere('`type`')->eq('article')->exec();
+        }
+        return true;
+    }
+
+    /**
      * Create default group.
      *
      * @param  string    $type
@@ -8849,11 +8900,19 @@ class upgradeModel extends model
             {
                 $column = new stdclass();
                 $column->field      = $field;
-                $column->stat       = isset($params->reportType) ? zget($params->reportType, $index, '') : 'noStat';
-                $column->slice      = 'noSlice';
+                $column->slice      = $field;
+                $column->stat       = isset($params->reportType) ? zget($params->reportType, $index, 'noStat') : 'noStat';
                 $column->showTotal  = (isset($params->reportTotal) && zget($params->reportTotal, $index, '') == '1') ? 'sum' : 'noShow';
                 $column->showMode   = (isset($params->percent) && zget($params->percent, $index, '') == '1' && isset($params->contrast) && zget($params->contrast, $index, '') == 'crystalTotal') ? 'total' : 'default';
                 $column->monopolize = isset($params->showAlone) ? zget($params->showAlone, $index, '0') : '0';
+
+                if($column->stat == 'sum')
+                {
+                    $sumAppend = isset($params->sumAppend) ? zget($params->sumAppend, $index, $field) : $field;
+
+                    if($sumAppend == $field) $column->slice = 'noSlice';
+                    if($sumAppend != $field) $column->field = $sumAppend;
+                }
 
                 $columns[] = $column;
             }

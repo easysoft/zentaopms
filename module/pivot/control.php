@@ -35,6 +35,7 @@ class pivot extends control
      */
     public function preview($dimension = 0, $group = '', $module = 'pivot', $method = '', $params = '')
     {
+        $dimension = $this->loadModel('dimension')->setSwitcherMenu($dimension);
         $this->prepare4Preview($dimension, $group, $module, $method, $params);
         $this->display();
     }

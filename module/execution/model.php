@@ -535,6 +535,7 @@ class executionModel extends model
             /* Create doc lib. */
             $this->app->loadLang('doc');
             $lib = new stdclass();
+            $lib->project   = $sprintProject;
             $lib->execution = $executionID;
             $lib->name      = $type == 'stage' ? str_replace($this->lang->executionCommon, $this->lang->project->stage, $this->lang->doclib->main['execution']) : $this->lang->doclib->main['execution'];
             $lib->type      = 'execution';
@@ -1606,7 +1607,7 @@ class executionModel extends model
      *
      * @param  int    $projectID
      * @param  string $type all|sprint|stage|kanban
-     * @param  string $mode all|noclosed|stagefilter|withdelete|multiple|leaf|order_asc or empty
+     * @param  string $mode all|noclosed|stagefilter|withdelete|multiple|leaf|order_asc|empty|noprefix
      * @access public
      * @return array
      */
@@ -1672,6 +1673,7 @@ class executionModel extends model
             {
                 if(isset($allExecutions[$path])) $executionName .= '/' . $allExecutions[$path]->name;
             }
+            if(strpos($mode, 'noprefix') !== false) $executionName = ltrim($executionName, '/');
 
             $pairs[$execution->id] = $executionName;
         }

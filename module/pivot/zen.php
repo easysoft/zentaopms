@@ -16,7 +16,6 @@ class pivotZen extends pivot
     {
         $params = helper::safe64Decode($params);
 
-        if(!$dimension) $dimension = $this->getDefaultDimension();
         if(!$group) $group = $this->getDefaultGroup($dimension);
         if(!$module || !$method) list($module, $method, $params) = $this->getDefaultMethod($dimension, $group);
 
@@ -30,17 +29,6 @@ class pivotZen extends pivot
         $this->view->params    = $params;
 
         if(empty($this->view->title)) $this->view->title = $this->lang->pivot->list;
-    }
-
-    /**
-     * Get default dimension of pivot.
-     *
-     * @access public
-     * @return int
-     */
-    public function getDefaultDimension()
-    {
-        return 1;
     }
 
     /**
