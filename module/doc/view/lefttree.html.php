@@ -54,7 +54,6 @@ i.btn-info, i.btn-info:hover {border: none; background: #fff; box-shadow: unset;
 <?php
 /* Release used for api space. */
 js::set('release', isset($release) ? $release : 0);
-js::set('libid', $libID);
 js::set('versionLang', $lang->build->common);
 
 
@@ -332,7 +331,7 @@ $(function()
         $(this).removeClass('show-icon');
     }).on('click', 'a', function()
     {
-        if(!$(this).data('action')) return;
+        if(!$(this).data('action') && $(this).data('type') !== 'annex') return;
         var isLib    = $(this).hasClass('lib');
         var moduleID = $(this).data('id');
         var libID    = 0;
@@ -349,6 +348,7 @@ $(function()
             libID = $(this).closest('.lib').data('id');
         }
 
+        console.log(libID, moduleID);
         return lcatePage(libID, moduleID, $(this).data('type'));
     });
 
