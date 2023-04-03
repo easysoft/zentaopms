@@ -1120,4 +1120,56 @@ class devModel extends model
         }
         return $tree;
     }
+
+    /**
+     * Create demo data.
+     *
+     * @param  int     $apiID
+     * @param  string  $version
+     * @access public
+     * @return int
+     */
+    public function getAPIData($apiID = 0, $version = '16.0')
+    {
+        $modules     = $this->loadModel('api')->getDemoData('module', $version);
+        $moduleNames = array();
+        foreach($modules as $index => $module)
+        {
+            $modules[$module->order] = $module;
+            unset($modules[$index]);
+
+            $moduleiNames[$module->id] = $module->name;
+        }
+        ksort($modules);
+
+        $apis    = $this->api->getDemoData('api', $version);
+        $structs = $this->api->getDemoData('apistruct', $version);
+
+        $restApi    = new stdClass();
+        $moduleAPIs = array();
+        foreach($apis as $api)
+        {
+            if(!isset($moduleAPIs[$api->module])) $moduleAPIs[$api->module] = array();
+            $moduleAPIs[$api->module][] = $api;
+
+            if($api->id == $apiID)
+            {
+                $api->moduleName = zget($moduleiNames, $api->module, '');
+                $api->params   = json_decode($api->params, true);
+                $api->response = json_decode($api->response, true);
+                $restApi = $api;
+            }
+        }
+
+        $typeList = array();
+        foreach($this->lang->api->paramsTypeOptions as $key => $item) $typeList[$key] = $item;
+        foreach($structs as $struct) $typeList[$struct->id] = $struct->name;
+
+        $this->loadModel('doc');
+        $treeMenu = array();
+        foreach($modules as $module) $this->doc->buildTree($treeMenu, 'restapi', 0, 853, $module, $moduleAPIs, $apiID, 0);
+
+        $menu = "<ul id='modules' class='tree' data-ride='tree' data-name='tree-lib'>" . $treeMenu[0] . '</ul>';
+        return array($restApi, $typeList, $menu);
+    }
 }
