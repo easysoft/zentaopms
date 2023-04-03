@@ -19,7 +19,8 @@ class docModel extends model
     public $action;
 
     // api doc type
-    const DOC_TYPE_API = 'api';
+    const DOC_TYPE_API  = 'api';
+    const DOC_TYPE_REST = 'restapi';
 
     /**
      * Get library by id.
@@ -2473,10 +2474,10 @@ class docModel extends model
      * @param  array   $moduleDocs
      * @param  pointer $docID
      * @param  int     $moduleID
-     * @access private
+     * @access public
      * @return string
      */
-    private function buildTree(&$treeMenu, $type, $objectID, $libID, $module, $moduleDocs, &$docID, $moduleID = 0)
+    public function buildTree(&$treeMenu, $type, $objectID, $libID, $module, $moduleDocs, &$docID, $moduleID = 0)
     {
         if(!isset($treeMenu[$module->id])) $treeMenu[$module->id] = '';
 
@@ -2490,9 +2491,13 @@ class docModel extends model
                 if($type == static::DOC_TYPE_API)
                 {
                     $treeMenu[$module->id] .= '<li' . ($doc->id == $docID ? ' class="active"' : ' class="doc"') . '>';
-
                     $treeMenu[$module->id] .= html::a(inlink('index', "libID=0&moduleID=0&apiID={$doc->id}"), "<i class='icon icon-file-text text-muted'></i> &nbsp;" . $doc->title, '', "data-app='{$this->app->tab}' class='doc-title' title='{$doc->title}'");
-
+                    $treeMenu[$module->id] .= '</li>';
+                }
+                elseif($type == static::DOC_TYPE_REST)
+                {
+                    $treeMenu[$module->id] .= '<li' . ($doc->id == $docID ? ' class="active"' : ' class="doc"') . '>';
+                    $treeMenu[$module->id] .= html::a(inlink('api', "type=restapi&apiID={$doc->id}"), "<i class='icon icon-file-text text-muted'></i> &nbsp;" . $doc->title, '', "data-app='{$this->app->tab}' class='doc-title' title='{$doc->title}'");
                     $treeMenu[$module->id] .= '</li>';
                 }
                 else
@@ -2535,6 +2540,10 @@ class docModel extends model
         {
             $li = html::a(inlink('index', "libID=$libID&moduleID={$module->id}"), $module->name, '', "data-app='{$this->app->tab}' class='doc-title' title='{$module->name}'");
         }
+        elseif($type == static::DOC_TYPE_REST)
+        {
+            $li = html::a('#', $module->name, '', "data-app='{$this->app->tab}' class='doc-title' title='{$module->name}'");
+        }
         else
         {
             $moduleClass = common::hasPriv('tree', 'updateOrder') ? 'sort-module' : '';
@@ -2554,7 +2563,10 @@ class docModel extends model
         }
         if($treeMenu[$module->id])
         {
-            $li .= '<ul>' . $treeMenu[$module->id] . '</ul>';
+            $class = '';
+            if($type == static::DOC_TYPE_REST) $class = 'class="menu-active-primary menu-hover-primary"';
+
+            $li .= "<ul $class>" . $treeMenu[$module->id] . '</ul>';
         }
 
         if(!isset($treeMenu[$module->parent])) $treeMenu[$module->parent] = '';

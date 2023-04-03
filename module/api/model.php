@@ -889,10 +889,10 @@ class apiModel extends model
      *
      * @param  string   $table
      * @param  stirng   $version
-     * @access private
+     * @access public
      * @return array
      */
-    private function getDemoData($table, $version)
+    public function getDemoData($table, $version)
     {
         $file = $this->app->getAppRoot() . 'db' . DS . 'api' . DS . $version . DS . $table;
         return unserialize(preg_replace_callback('#s:(\d+):"(.*?)";#s', function($match){return 's:'.strlen($match[2]).':"'.$match[2].'";';}, file_get_contents($file)));

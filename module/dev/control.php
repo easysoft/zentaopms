@@ -20,7 +20,7 @@ class dev extends control
      * @access public
      * @return void
      */
-    public function api($module = '', $apiID = 1)
+    public function api($module = 'restapi', $apiID = 1)
     {
         if($module == 'restapi') return print($this->fetch('dev', 'restAPI', "apiID=$apiID"));
 
