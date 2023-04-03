@@ -236,8 +236,9 @@ $(function()
                 if(item.active) $li.addClass('active');
             }
         });
-
         if(location.href.indexOf('moduleID') == -1) ele.data('zui.tree').collapse();
+        var $leaf = ele.find('li.active');
+        if($leaf.length) $leaf[$leaf.length - 1].scrollIntoView(true);
 
         ele.on('click', '.icon-drop', function(e)
         {
@@ -370,9 +371,25 @@ $(function()
     {
 
         linkParams = linkParams.replace('%s', '&libID=' + libID + '&moduleID=' + moduleID);
-        if(config.currentModule == 'api') linkParams =  linkParams.substring(1);
+        var methodName = '';
+        if(config.currentModule == 'api')
+        {
+            methodName = 'index';
+            linkParams =  linkParams.substring(1);
+        }
+        else if(type == 'annex')
+        {
+            methodName = 'showFiles';
+            linkParams = 'type=' + objectType + '&objectID=' + objectID;
+        }
+        else
+        {
+            methodName = objectType == 'custom' ? 'tableContents' : objectType + 'Space';
+            linkParams = objectType == 'custom' ? 'type=custom&' + linkParams : linkParams;
+        }
 
-        location.href = type == 'annex' ?  createLink(config.currentModule, 'showFiles', 'type=' + objectType + '&objectID=' + objectID) : createLink(config.currentModule, config.currentModule == 'api' ? 'index' : 'tableContents', linkParams);
+
+        location.href = createLink(config.currentModule, methodName, linkParams);
     }
 
     $('body').on('click', function()
