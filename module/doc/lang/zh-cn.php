@@ -132,7 +132,9 @@ $lang->doc->orderByVisit  = '最近访问';
 $lang->doc->todayEdited   = '今日更新';
 $lang->doc->pastEdited    = '往日更新';
 $lang->doc->myDoc         = '我的文档';
+$lang->doc->myView        = '最近浏览';
 $lang->doc->myCollection  = '我的收藏';
+$lang->doc->myCreation    = '我创建的';
 $lang->doc->tableContents = '目录';
 
 /* 方法列表。*/
