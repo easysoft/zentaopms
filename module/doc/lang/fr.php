@@ -136,6 +136,9 @@ $lang->doc->myView        = 'Recently Viewed';
 $lang->doc->myCollection  = 'Mes Favoris';
 $lang->doc->myCreation    = 'Created By';
 $lang->doc->tableContents = 'Catalog';
+$lang->doc->addCatalog    = 'Add Catalog';
+$lang->doc->editCatalog   = 'Edit Catalog';
+$lang->doc->deleteCatalog = 'Delete Catalog';
 
 /* Methods list */
 $lang->doc->index            = 'Accueil Documents';
