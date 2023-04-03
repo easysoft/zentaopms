@@ -20,34 +20,33 @@ class webhookModel extends model
      */
     public function getByID($id)
     {
-        $webhook = $this->dao->select('*')->from(TABLE_WEBHOOK)->where('id')->eq($id)->fetch();
-        return $webhook;
+        return $this->dao->select('*')->from(TABLE_WEBHOOK)->where('id')->eq($id)->fetch();
     }
 
     /**
      * Get a webhook by type.
      *
-     * @param  int    $type
+     * @param  string $type
      * @access public
      * @return object
      */
     public function getByType($type)
     {
-        $webhook = $this->dao->select('*')->from(TABLE_WEBHOOK)->where('type')->eq($type)->andWhere('deleted')->eq('0')->fetch();
-        return $webhook;
+        return $this->dao->select('*')->from(TABLE_WEBHOOK)->where('type')->eq($type)->andWhere('deleted')->eq('0')->fetch();
     }
 
     /**
      * Get a webhook by type.
      *
-     * @param  int    $type
+     * @param  int    $webhookID
+     * @param  string $webhookType
+     * @param  string $openID
      * @access public
      * @return object
      */
     public function getBindAccount($webhookID, $webhookType, $openID)
     {
-        $account = $this->dao->select('account')->from(TABLE_OAUTH)->where('providerID')->eq($webhookID)->andWhere('providerType')->eq($webhookType)->andWhere('openID')->eq($openID)->fetch('account');
-        return $account;
+        return $this->dao->select('account')->from(TABLE_OAUTH)->where('providerID')->eq($webhookID)->andWhere('providerType')->eq($webhookType)->andWhere('openID')->eq($openID)->fetch('account');
     }
 
     /**
@@ -61,12 +60,11 @@ class webhookModel extends model
      */
     public function getList($orderBy = 'id_desc', $pager = null, $decode = true)
     {
-        $webhooks = $this->dao->select('*')->from(TABLE_WEBHOOK)
+        return $this->dao->select('*')->from(TABLE_WEBHOOK)
             ->where('deleted')->eq('0')
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll('id');
-        return $webhooks;
     }
 
     /**
@@ -354,6 +352,7 @@ class webhookModel extends model
      * @param  int    $objectID
      * @param  string $actionType
      * @param  int    $actionID
+     * @param  string $actor
      * @access public
      * @return bool
      */
@@ -609,8 +608,15 @@ class webhookModel extends model
     public function getFeishuData($title, $text)
     {
         $data = new stdclass();
-        $data->msg_type = 'text';
-        $data->content['text'] = $text;
+        $data->msg_type = 'interactive';
+
+        $data->card = array();
+        $data->card['header']   = array();
+        $data->card['elements'] = array();
+
+        $data->card['elements'][]         = array('tag' => 'markdown', 'content' => $text);
+        $data->card['header']['title']    = array('tag' => 'plain_text', 'content' => $title);
+        $data->card['header']['template'] = 'blue';
 
         return $data;
     }
@@ -618,6 +624,7 @@ class webhookModel extends model
     /**
      * Get openID list.
      *
+     * @param  int    $webhookID
      * @param  int    $actionID
      * @access public
      * @return string
@@ -742,6 +749,7 @@ class webhookModel extends model
      * @param  int    $webhookID
      * @param  int    $actionID
      * @param  string $data
+     * @param  string $actor
      * @access public
      * @return bool
      */
