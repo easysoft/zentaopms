@@ -54,7 +54,6 @@ i.btn-info, i.btn-info:hover {border: none; background: #fff; box-shadow: unset;
 <?php
 /* Release used for api space. */
 js::set('release', isset($release) ? $release : 0);
-js::set('libid', $libID);
 js::set('versionLang', $lang->build->common);
 
 
@@ -165,13 +164,15 @@ $(function()
         }
         else
         {
+            var libId;
             var $lis = '<li><a href="###" data-id=0>' + versionLang + '</a></li>';
             for(i = 0; i< versions.length; i++)
             {
                 var version = versions[i];
-                $lis += '<li><a href="###" data-id="' + version.id + '">' + version.version+ '</a></li>';
+                $lis += '<li><a href="###"  data-id="' + version.id + '">' + version.version+ '</a></li>';
+                libId = version.lib;
             }
-            var $dropdown = '<ul id="versionSwitcher" class="dropdown-menu dropdown-in-tree" style="display: unset; left:' + option.left + 'px; top:' + option.top + 'px;">';
+            var $dropdown = '<ul id="versionSwitcher" data-lib-id = "' + libId + '" class="dropdown-menu dropdown-in-tree" style="display: unset; left:' + option.left + 'px; top:' + option.top + 'px;">';
             $dropdown += $lis;
             $dropdown += '</ul>';
         }
@@ -204,7 +205,7 @@ $(function()
                 var libClass = ['lib', 'annex', 'api', 'execution'].indexOf(objectType) !== -1 ? 'lib' : '';
                 var hasChild = item.children ? !!item.children.length : false;
                 var link     = item.type != 'execution' || item.hasAction ? '###' : '#';
-                var $item    = '<a href="' + link + '" style="position: relative" data-has-children="' + hasChild + '" title="' + item.name + '" data-id="' + item.id + '" class="' + libClass + '" data-type="' + item.type + '" data-action="' + item.hasAction + '">';
+                var $item    = '<a href="' + link + '" style="position: relative" data-has-children="' + hasChild + '" title="' + item.name + '" data-id="' + item.id + '" class="' + libClass + '" data-type="' + item.type + '" data-action="' + (item.hasAction||'') + '">';
 
                 $item += '<div class="text h-full w-full flex-start overflow-hidden">';
                 if(libClass == 'lib') $item += '<div class="img-lib" style="background-image:url(static/svg/' + imgObj[item.type || 'lib'] + '.svg)"></div>';
@@ -330,7 +331,7 @@ $(function()
         $(this).removeClass('show-icon');
     }).on('click', 'a', function()
     {
-        if(!$(this).data('action')) return;
+        if(!$(this).data('action') && $(this).data('type') !== 'annex') return;
         var isLib    = $(this).hasClass('lib');
         var moduleID = $(this).data('id');
         var libID    = 0;
@@ -347,6 +348,7 @@ $(function()
             libID = $(this).closest('.lib').data('id');
         }
 
+        console.log(libID, moduleID);
         return lcatePage(libID, moduleID, $(this).data('type'));
     });
 
@@ -461,7 +463,8 @@ $(function()
         }
     }).on('click', '#versionSwitcher a', function()
     {
-        linkParams = linkParams.replace('%s', '&libID=' + libid + '&moduleID=0&apiID=0&version=0&release=' + $(this).data('id'));
+        var $item = $(this);
+        linkParams = linkParams.replace('%s', '&libID=' + $item.closest('ul').data('libId') + '&moduleID=0&apiID=0&version=0&release=' + $item.data('id'));
         location.href = createLink(config.currentModule, 'index', linkParams);
     }).on('blur', '.file-tree input.input-tree', function()
     {
