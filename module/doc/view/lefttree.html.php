@@ -212,7 +212,7 @@ $(function()
                 $item += item.name;
                 $item += '</div>';
 
-                if(libClass == 'lib' && item.versions)
+                if(libClass == 'lib' && item.versions && item.versions.length)
                 {
                     var versionName = '';
                     for(var i = 0; i < item.versions.length; i++)
