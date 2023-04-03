@@ -8,6 +8,15 @@ $('#subNavbar li').not('[data-id=<?php echo $group;?>]').removeClass('active');
 <?php endif;?>
 <?php js::set('dimension', $dimension);?>
 <?php js::set('group', $group);?>
+<div id="mainMenu" class='clearfix main-position'>
+  <div class='btn-toolBar pull-left toolbar-padding'>
+    <?php foreach($this->config->report->pivotMenu as $id => $menuInfo):?>
+    <?php list($menuName, $menuModule, $menuMethod, $menuParams) = explode('|', $menuInfo['link']);?>
+    <?php $activeClass  = ($id == $group) ? ' btn-active-text' : '';?>
+    <?php echo html::a(inlink($menuMethod, $menuParams), $menuName, '', "class='btn btn-link {$activeClass}' id='{$group}Tab'");?>
+    <?php endforeach;?>
+  </div>
+</div>
 <div id='mainContent' class='main-row'>
   <div class='side-col col-lg' id='sidebar'>
     <div class="sidebar-toggle">

@@ -44,6 +44,7 @@ class screen extends control
         if($screenID == 3) $this->locate($this->createLink('report', 'annualData'));
 
         $screen = $this->screen->getByID($screenID, $year, $dept, $account);
+
         $this->view->title  = $screen->name;
         $this->view->screen = $screen;
 

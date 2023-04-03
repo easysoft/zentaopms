@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 namespace PhpMyAdmin\SqlParser\Tests\Parser;
 
 use PhpMyAdmin\SqlParser\Tests\TestCase;
@@ -9,27 +7,27 @@ use PhpMyAdmin\SqlParser\Tests\TestCase;
 class InsertStatementTest extends TestCase
 {
     /**
-     * @param mixed $test
-     *
      * @dataProvider insertProvider
+     *
+     * @param mixed $test
      */
-    public function testInsert($test): void
+    public function testInsert($test)
     {
         $this->runParserTest($test);
     }
 
-    public function insertProvider(): array
+    public function insertProvider()
     {
-        return [
-            ['parser/parseInsert'],
-            ['parser/parseInsertSelect'],
-            ['parser/parseInsertOnDuplicateKey'],
-            ['parser/parseInsertSetOnDuplicateKey'],
-            ['parser/parseInsertSelectOnDuplicateKey'],
-            ['parser/parseInsertOnDuplicateKeyErr'],
-            ['parser/parseInsertErr'],
-            ['parser/parseInsertErr2'],
-            ['parser/parseInsertIntoErr'],
-        ];
+        return array(
+            array('parser/parseInsert'),
+            array('parser/parseInsertSelect'),
+            array('parser/parseInsertOnDuplicateKey'),
+            array('parser/parseInsertSetOnDuplicateKey'),
+            array('parser/parseInsertSelectOnDuplicateKey'),
+            array('parser/parseInsertOnDuplicateKeyErr'),
+            array('parser/parseInsertErr'),
+            array('parser/parseInsertErr2'),
+            array('parser/parseInsertIntoErr')
+        );
     }
 }
