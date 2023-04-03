@@ -71,7 +71,7 @@
     </p>
   </div>
 <?php else:?>
-  <div id='sideBar' class="panel side side-col col overflow-auto" data-min-width="150">
+  <div id='sideBar' class="panel side side-col col overflow-auto">
     <?php include 'lefttree.html.php';?>
   </div>
   <div class="sidebar-toggle flex-center"><i class="icon icon-angle-left"></i></div>
