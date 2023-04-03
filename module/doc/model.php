@@ -912,6 +912,7 @@ class docModel extends model
         if($changed)
         {
             $docContent          = new stdclass();
+            $docContent->doc     = $oldDoc->id;
             $docContent->title   = $doc->title;
             $docContent->content = isset($doc->content) ? $doc->content : '';
             $docContent->files   = $oldDocContent->files;
