@@ -34,7 +34,8 @@ $lang->editor->noticeOkFile  = '为了安全起见，系统需要确认您的管
 $lang->editor->editFileError = '只能修改禅道文件！';
 $lang->editor->turnOff       = '如不使用编辑器功能，可在此关闭。';
 
-$lang->editor->notWritable    = "无法写入，可能没有权限。请尝试执行 chmod 777 -R ";
+$lang->editor->notExists      = "不存在该目录，请先创建。请尝试执行『mkdir -p %s』";
+$lang->editor->notWritable    = "无法写入，可能没有权限。请尝试执行『chmod 777 -R %s』";
 $lang->editor->notDelete      = '无法删除，请检查权限！';
 $lang->editor->emptyFileName  = '请写入一个文件名！';
 $lang->editor->onlyLocalVisit = "该功能只能在IP：127.0.0.1下访问。<a href='https://api.zentao.net/goto.php?item=howtodevelop' target='_blank'>说明文档</a>";

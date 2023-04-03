@@ -199,6 +199,9 @@ class project extends control
      */
     public function ajaxGetUnlinkTips($projectID, $account)
     {
+        $project = $this->project->getByID($projectID);
+        if(!$project->multiple) return;
+
         $executions       = $this->loadModel('execution')->getByProject($projectID, 'undone', 0, true);
         $executionMembers = $this->dao->select('t1.root,t2.name')->from(TABLE_TEAM)->alias('t1')
             ->leftJoin(TABLE_EXECUTION)->alias('t2')->on('t1.root=t2.id')

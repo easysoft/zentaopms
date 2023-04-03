@@ -171,14 +171,16 @@ class productModel extends model
         if(defined('TUTORIAL')) return $productID;
 
         $product = $this->getById($productID);
-        if(!empty($product) and $product->shadow) $this->accessDenied($this->lang->product->notExists);
 
         if($productID == 0 and $this->cookie->preProductID and isset($products[$this->cookie->preProductID])) $productID = $this->cookie->preProductID;
         if($productID == 0 and $this->session->product == '') $productID = key($products);
+        if(!empty($product) and $product->shadow) $productID = key($products);
         $this->session->set('product', (int)$productID, $this->app->tab);
 
         if(!isset($products[$this->session->product]))
         {
+            if(!empty($product) and $product->id != $productID) $product = $this->getById($productID);
+
             if(empty($product) or $product->deleted == 1) $productID = key($products);
             $this->session->set('product', (int)$productID, $this->app->tab);
             if($productID && strpos(",{$this->app->user->view->products},", ",{$productID},") === false)
@@ -1276,6 +1278,7 @@ class productModel extends model
     public function getProjectPairsByProduct($productID, $branch = 0, $appendProject = 0, $status = '', $param = '')
     {
         $product = $this->getById($productID);
+        if(empty($product)) return array();
 
         return $this->dao->select('t2.id, t2.name')->from(TABLE_PROJECTPRODUCT)->alias('t1')
             ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
@@ -2474,7 +2477,7 @@ class productModel extends model
         }
         elseif($module == 'feedback')
         {
-            return helper::createLink('feedback', $method, "browseType=byProduct&productID=%s");
+            return helper::createLink('feedback', 'browse', "browseType=byProduct&productID=%s");
         }
         elseif($module == 'ticket')
         {
@@ -2587,7 +2590,8 @@ class productModel extends model
         if(!$this->app->user->admin and strpos(",{$this->app->user->view->products},", ",$productID,") === false and $productID != 0 and !defined('TUTORIAL')) return $this->accessDenied($this->lang->product->accessDenied);
 
         $product = $this->getByID($productID);
-        $params  = array('branch' => $branch);
+
+        $params = array('branch' => $branch);
         common::setMenuVars('product', $productID, $params);
         if(!$product) return;
 

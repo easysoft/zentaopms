@@ -62,7 +62,9 @@ js::set('struct_paramsType', $lang->struct->paramsType);
         <tbody>
           <tr>
             <th class='w-110px'><?php echo $lang->api->lib;?></th>
-            <td> <?php echo html::select('lib', $libs, $libID, "class='form-control chosen' onchange=loadDocModule(this.value)");?> </td>
+            <td>
+              <?php echo $libName . html::hidden('lib', $libID);?>
+            </td>
             <td></td>
           </tr>
           <tr>
@@ -223,7 +225,7 @@ js::set('struct_paramsType', $lang->struct->paramsType);
           <tr>
             <td colspan='3' class='text-center form-actions'>
               <?php echo html::submitButton();?>
-              <?php if(empty($gobackLink)) echo html::backButton($lang->goback, "data-app='{$app->tab}'");?>
+              <?php if(empty($gobackLink)) echo html::backButton($lang->goback, "data-app='{$app->tab}' class='btn btn-back btn-wide'");?>
               <?php if(!empty($gobackLink)) echo html::a($gobackLink, $lang->goback, '', "class='btn btn-back btn-wide'");?>
             </td>
           </tr>

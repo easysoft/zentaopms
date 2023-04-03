@@ -236,8 +236,8 @@ $lang->custom->restDayList[6] = '周六休息';
 $lang->custom->restDayList[0] = '周天休息';
 
 global $config;
-$lang->custom->sprintConceptList[0] = "{$lang->projectCommon} 产品 迭代";
-$lang->custom->sprintConceptList[1] = "{$lang->projectCommon} 产品 冲刺";
+$lang->custom->sprintConceptList[0] = "项目 产品 迭代";
+$lang->custom->sprintConceptList[1] = "项目 产品 冲刺";
 
 $lang->custom->workingList['full'] = '完整研发管理工具';
 
@@ -261,7 +261,7 @@ $lang->custom->modeIntroductionList['ALM']   = '概念更加完整、严谨，�
 $lang->custom->features['program']              = '项目集';
 $lang->custom->features['productRR']            = "{$lang->productCommon}-研发需求";
 $lang->custom->features['productUR']            = "{$lang->productCommon}-用户需求";
-$lang->custom->features['productLine']          = "{$lang->productCommon}-{$lang->productCommon}线";
+$lang->custom->features['productLine']          = "{$lang->productCommon}-产品线";
 $lang->custom->features['projectScrum']         = "{$lang->projectCommon}-敏捷模型";
 $lang->custom->features['projectWaterfall']     = "{$lang->projectCommon}-瀑布模型";
 $lang->custom->features['projectKanban']        = "{$lang->projectCommon}-看板模型";

@@ -2,7 +2,6 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/group.class.php';
-$db->switchDB();
 su('admin');
 
 /**
@@ -24,4 +23,3 @@ a($group->updateTest(2, $t_name));
 r($group->updateTest(2, $t_name)) && p('name') && e('我是一个分组'); //测试更新分组id为2的分组
 r($group->updateTest(2, $t_desc)) && p('desc') && e('这是一个分组'); //测试更新分组2为受限用户分组
 
-$db->restoreDB();

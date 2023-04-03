@@ -2,7 +2,6 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/caselib.class.php';
-$db->switchDB();
 su('admin');
 
 /**
@@ -42,4 +41,3 @@ r($total) && p()                     && e('12');                      //添加�
 r($cases) && p('561:title,keywords') && e('测试导入添加1,keywords1'); //添加数据之后查询新加用例的名称，关键字
 r($cases) && p('562:title,keywords') && e('测试导入添加2,keywords2'); //添加数据之后查询新加用例的名称，关键字
 
-$db->restoreDB();

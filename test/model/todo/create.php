@@ -2,7 +2,6 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/todo.class.php';
-$db->switchDB();
 su('admin');
 
 /**
@@ -63,4 +62,3 @@ r($todo->createTest($accountList[1], $todo1))    && p('name,type,status') && e('
 r($todo->createTest($accountList[2], $todo2))    && p('name,type,status') && e('测试单转Bug13,bug,doing');          //创建bug待办
 r($todo->createTest($accountList[0], $todo3))    && p('name,type,status') && e('开发任务11,task,done');             //创建task待办
 r($todo->createTest($accountList[0], $todo4))    && p('name,type,status') && e('用户需求1,story,closed');           //创建story待办
-$db->restoreDB();

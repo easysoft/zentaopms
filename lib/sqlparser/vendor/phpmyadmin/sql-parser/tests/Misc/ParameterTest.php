@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 namespace PhpMyAdmin\SqlParser\Tests\Misc;
 
 use PhpMyAdmin\SqlParser\Tests\TestCase;
@@ -9,19 +7,19 @@ use PhpMyAdmin\SqlParser\Tests\TestCase;
 class ParameterTest extends TestCase
 {
     /**
-     * @param mixed $test
-     *
      * @dataProvider parameterProvider
+     *
+     * @param mixed $test
      */
-    public function testParameter($test): void
+    public function testParameter($test)
     {
         $this->runParserTest($test);
     }
 
-    public function parameterProvider(): array
+    public function parameterProvider()
     {
-        return [
-            ['misc/parseParameter'],
-        ];
+        return array(
+            array('misc/parseParameter')
+        );
     }
 }

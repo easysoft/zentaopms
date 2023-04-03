@@ -93,6 +93,7 @@ $filter->doc->objectlibs          = new stdclass();
 $filter->doc->tablecontents       = new stdclass();
 $filter->doc->showfiles           = new stdclass();
 $filter->doc->default             = new stdclass();
+$filter->api->default             = new stdClass();
 $filter->api->index               = new stdClass();
 $filter->api->create              = new stdClass();
 $filter->api->edit                = new stdClass();
@@ -227,6 +228,9 @@ $filter->doc->default->cookie['product']            = 'int';
 $filter->doc->showfiles->cookie['docFilesViewType'] = 'code';
 $filter->doc->tablecontents->cookie['preProductID'] = 'int';
 $filter->doc->tablecontents->cookie['preBranch']    = 'reg::word';
+
+$filter->api->default->cookie['objectType']         = 'string';
+$filter->api->default->cookie['objectID']           = 'int';
 $filter->api->index->get['libID']                   = 'int';
 $filter->api->index->get['module']                  = 'int';
 $filter->api->index->get['apiID']                   = 'int';

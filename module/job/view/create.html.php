@@ -106,17 +106,13 @@
           </tr>
           <tr id="jenkinsServerTR">
             <th><?php echo $lang->job->jkHost; ?></th>
-            <td colspan='2'>
+            <td colspan='2' class='required'>
               <div class='table-row'>
                 <div class='table-col'><?php echo html::select('jkServer', $jenkinsServerList, '', "class='form-control chosen'"); ?></div>
                 <div class='table-col'>
                   <div class='input-group'>
                     <span class='input-group-addon'><?php echo $lang->job->pipeline;?></span>
-                    <div class='dropdown'>
-                    <?php echo html::hidden('jkTask');?>
-                    <button data-toggle='dropdown' type='button' class='btn jktask-label required text-right'  title=''><span class='text'></span> <span class='caret' style='margin-bottom: -1px'></span></button>
-                    <div id='dropMenuTasks' class='dropdown-menu search-list' data-ride='searchList' data-url=''></div>
-                    </div>
+                    <?php echo html::select('jkTask', array('' => ''), '', "class='form-control chosen'"); ?>
                   </div>
                 </div>
               </div>

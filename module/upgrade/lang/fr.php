@@ -66,7 +66,7 @@ $lang->upgrade->allLines        = "All Product Lines";
 $lang->upgrade->program         = 'Merge Project';
 $lang->upgrade->existProgram    = 'Existing programs';
 $lang->upgrade->existProject    = 'Existing projects';
-$lang->upgrade->existLine       = 'Existing' . $lang->productCommon . ' lines';
+$lang->upgrade->existLine       = 'Existing product lines';
 $lang->upgrade->product         = $lang->productCommon;
 $lang->upgrade->project         = 'Iteration';
 $lang->upgrade->repo            = 'Repo';
@@ -131,6 +131,8 @@ $lang->upgrade->mergeProjectTip   = 'The historical project will be synchronized
 $lang->upgrade->mergeExecutionTip = 'The system will automatically create projects by year, and merge the historical iteration data into the corresponding projects by year.';
 $lang->upgrade->createProgramTip  = 'At the same time, the system will automatically create a default project set and place all projects under the default project set.';
 $lang->upgrade->mergeManuallyTip  = 'You can manually select the data merging method.';
+
+$lang->upgrade->defaultGroup = 'Default';
 
 include dirname(__FILE__) . '/version.php';
 

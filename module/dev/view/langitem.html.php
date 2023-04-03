@@ -47,7 +47,7 @@
   </div>
   <?php endif;?>
 
-  <form class='main-form form-ajax flex-1' method='post'>
+  <form class='main-form form-ajax flex-1' method='post' id="data-form-<?php echo $type?>">
     <div class="main-content">
       <div class="title-content flex">
         <?php if(str_replace('-', '_', $this->app->getClientLang()) != $language):?>
@@ -71,7 +71,7 @@
           <?php if(!$isCurrentLang):?>
           <div data-id="<?php echo $itemKey?>" class="label h-full" title="<?php echo $currentLangs[$langKey]?>"><?php echo $currentLangs[$langKey]?></div>
           <?php endif;?>
-          <div data-id="<?php echo $itemKey?>" class="label h-full" title="<?php echo $originalLang?>"><?php echo $originalLang?></div>
+          <div data-id="<?php echo $itemKey?>" class="label h-full <?php if($language != 'zh-cn')  echo 'lg'?>" title="<?php echo $originalLang?>"><?php echo $originalLang?></div>
           <div class="input-group flex">
             <i class="icon icon-angle-right text-primary"></i>
             <?php $originalLangChanged = $this->dev->isOriginalLangChanged($defaultValue, $customedLang);?>
@@ -79,7 +79,7 @@
             <?php $foreachLang = $originalLangChanged ? $customedLang : $defaultValue;?>
             <?php foreach($foreachLang as $i => $subLang):?>
             <?php if(isset($config->custom->commonLang[$subLang])):?>
-            <span class='input-group-addon flex-center'><?php echo $config->custom->commonLang[$subLang] . html::hidden("{$itemKey}[]", $subLang);?></span>
+            <div class='input-group-addon flex-center' title=<?php echo $config->custom->commonLang[$subLang]?> ><?php echo $config->custom->commonLang[$subLang] . html::hidden("{$itemKey}[]", $subLang);?></div>
             <?php else:?>
             <?php
             $placeholder     = $originalLangChanged ? '' : "placeholder='{$subLang}'";

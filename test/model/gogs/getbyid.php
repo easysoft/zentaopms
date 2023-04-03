@@ -2,7 +2,6 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/gogs.class.php';
-$db->switchDB();
 su('admin');
 
 /**
@@ -28,4 +27,3 @@ r($gogs->getById($gogsID)) && p() && e(0);     // 使用空的ID
 $gogsID = 111;
 r($gogs->getById($gogsID)) && p() && e(0);     // 使用不存在的ID
 
-$db->restoreDB();

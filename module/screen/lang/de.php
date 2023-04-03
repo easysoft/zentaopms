@@ -5,3 +5,4 @@ $lang->screen->noscreens = 'No screen yet';
 $lang->screen->allDepts  = 'All depts';
 $lang->screen->allUsers  = 'All users';
 $lang->screen->noData    = 'No Data';
+$lang->screen->noDesc    = 'No Desc';

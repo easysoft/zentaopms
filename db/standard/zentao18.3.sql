@@ -857,19 +857,6 @@ CREATE TABLE `zt_designspec` (
   `files` varchar(255) NOT NULL,
   UNIQUE KEY `design` (`design`,`version`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-CREATE TABLE `zt_dimension` (
-  `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
-  `name` varchar(90) NOT NULL,
-  `code` varchar(45) NOT NULL,
-  `desc` text NOT NULL,
-  `createdBy` varchar(30) NOT NULL,
-  `createdDate` datetime NOT NULL,
-  `editedBy` varchar(30) NOT NULL,
-  `editedDate` datetime NOT NULL,
-  `deleted` enum('0','1') NOT NULL DEFAULT '0',
-  PRIMARY KEY (`id`),
-  KEY `code` (`code`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 CREATE TABLE `zt_doc` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
   `vision` varchar(10) NOT NULL DEFAULT 'rnd',

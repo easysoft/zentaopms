@@ -118,7 +118,7 @@ foreach(explode(',', $config->task->edit->requiredFields) as $field)
                   </div>
                 </td>
               </tr>
-              <?php if($execution->lifetime != 'ops'):?>
+              <?php if($execution->lifetime != 'ops' and !in_array($execution->attribute, array('request', 'review'))):?>
               <tr>
                 <th><?php echo $lang->task->story;?></th>
                 <td><span id="storyIdBox"><?php echo html::select('story', $stories, $task->story, "class='form-control chosen' data-drop_direction='down' data-max_drop_width='0'");?></span></td>
@@ -288,7 +288,7 @@ foreach(explode(',', $config->task->edit->requiredFields) as $field)
 	<div class="modal-content with-padding" id='taskTeamEditor'>
 	  <?php if(strpos('|closed|cancel|pause|', $task->status) !== false):?>
 	     <h2 class='label label-info'>
-               <?php echo $this->lang->task->error->teamCantOperate;?>                                             
+               <?php echo $this->lang->task->error->teamCantOperate;?>
              </h2>
 	  <?php endif;?>
           <table class='table table-form'>
@@ -298,7 +298,7 @@ foreach(explode(',', $config->task->edit->requiredFields) as $field)
 	    <tfoot>
 	      <?php if(strpos('|closed|cancel|pause|', $task->status) === false):?>
               <tr><td colspan='3' class='text-center form-actions'><?php echo html::a('javascript:void(0)', $lang->confirm, '', "id='confirmButton' class='btn btn-primary btn-wide'");?></td></tr>
-	      <?php endif;?> 
+	      <?php endif;?>
 	    </tfoot>
           </table>
         </div>

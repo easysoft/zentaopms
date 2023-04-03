@@ -126,7 +126,7 @@ class execution extends control
 
         if(!isset($_SESSION['limitedExecutions'])) $this->execution->getLimitedExecution();
 
-	if($executionID) $this->session->set("storyList", $this->createLink("execution", "story", "&executionID=" . $executionID));
+        if($executionID) $this->session->set("storyList", $this->createLink("execution", "story", "&executionID=" . $executionID));
 
         /* Set browse type. */
         $browseType = strtolower($status);
@@ -953,6 +953,8 @@ class execution extends control
                 break;
             }
         }
+        $summary = $this->product->summary($stories);
+        if($storyType == 'requirement') $summary = str_replace($this->lang->SRCommon, $this->lang->URCommon, $summary);
 
         /* Assign. */
         $this->view->title             = $title;
@@ -962,7 +964,7 @@ class execution extends control
         $this->view->stories           = $stories;
         $this->view->linkedTaskStories = $this->story->getIdListWithTask($executionID);
         $this->view->allPlans          = $allPlans;
-        $this->view->summary           = $this->product->summary($stories);
+        $this->view->summary           = $summary;
         $this->view->orderBy           = $orderBy;
         $this->view->storyType         = $storyType;
         $this->view->type              = $this->session->executionStoryBrowseType;
@@ -2177,6 +2179,7 @@ class execution extends control
             $allProjects = $this->project->getPairsByModel($project->model, 0, 'noclosed', isset($projectID) ? $projectID : 0);
             $this->project->setMenu($projectID);
             $this->view->project = $project;
+            if($project->model == 'waterfall' or $project->model == 'waterfallplus') $this->lang->execution->common = $this->lang->execution->stage;
         }
         else
         {

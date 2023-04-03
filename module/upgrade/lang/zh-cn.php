@@ -62,11 +62,11 @@ $lang->upgrade->toBIZ5Guide   = '禅道企业版5版本升级';
 $lang->upgrade->toMAXGuide    = '禅道旗舰版版本升级';
 
 $lang->upgrade->line            = '产品线';
-$lang->upgrade->allLines        = "所有{$lang->productCommon}线";
+$lang->upgrade->allLines        = "所有产品线";
 $lang->upgrade->program         = '目标项目集和项目';
 $lang->upgrade->existProgram    = '已有项目集';
 $lang->upgrade->existProject    = '已有项目';
-$lang->upgrade->existLine       = '已有' . $lang->productCommon . '线';
+$lang->upgrade->existLine       = '已有产品线';
 $lang->upgrade->product         = $lang->productCommon;
 $lang->upgrade->project         = '迭代';
 $lang->upgrade->repo            = '版本库';
@@ -131,6 +131,8 @@ $lang->upgrade->mergeProjectTip   = "历史的{$lang->projectCommon}将直接同
 $lang->upgrade->mergeExecutionTip = "系统将自动按年创建项目，将历史的{$lang->projectCommon}数据按照年份归并到对应的项目下。";
 $lang->upgrade->createProgramTip  = "同时系统将自动创建一个默认的项目集，将所有的{$lang->projectCommon}都放在默认的项目集下。";
 $lang->upgrade->mergeManuallyTip  = '可以手工选择数据归并的方式。';
+
+$lang->upgrade->defaultGroup = '默认分组';
 
 include dirname(__FILE__) . '/version.php';
 

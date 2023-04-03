@@ -355,7 +355,7 @@ class tree extends control
         $parentModules = $this->tree->getParents($currentModuleID);
         $newModule     = (version_compare($execution->openedVersion, '4.1', '>') and $products) ? true : false;
 
-        $title      = $this->lang->tree->manageExecution;
+        $title      = $execution->multiple ? $this->lang->tree->manageExecution : $this->lang->tree->manageProject;
         $position[] = html::a($this->createLink('execution', 'task', "executionID=$rootID"), $execution->name);
         $position[] = $this->lang->tree->manageExecution;
 
@@ -363,6 +363,7 @@ class tree extends control
         $this->view->position        = $position;
         $this->view->rootID          = $rootID;
         $this->view->productID       = $productID;
+        $this->view->execution       = $execution;
         $this->view->allProject      = $executions;
         $this->view->newModule       = $newModule;
         $this->view->modules         = $this->tree->getTaskTreeMenu($rootID, $productID, $rooteModuleID = 0, array('treeModel', 'createTaskManageLink'), 'allModule');
@@ -386,7 +387,6 @@ class tree extends control
         if(!empty($_POST))
         {
             $this->tree->update($moduleID);
-            echo js::alert($this->lang->tree->successSave);
             die(js::reload('parent'));
         }
 
@@ -687,5 +687,21 @@ class tree extends control
         $this->view->actions = $this->loadModel('action')->getList('module', $productID);
         $this->view->users   = $this->loadModel('user')->getPairs('noletter');
         $this->display();
+    }
+
+    /**
+     * Create module by ajax.
+     *
+     * @access public
+     * @return void
+     */
+    public function ajaxCreateModule()
+    {
+        if(!helper::isAjaxRequest()) return $this->send(array('result' => 'fail', 'message' => ''));;
+
+        $module = $this->tree->createModule();
+        if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+        return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'module' => $module));
     }
 }

@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 namespace PhpMyAdmin\SqlParser\Tests\Builder;
 
 use PhpMyAdmin\SqlParser\Parser;
@@ -9,7 +7,7 @@ use PhpMyAdmin\SqlParser\Tests\TestCase;
 
 class TruncateStatementTest extends TestCase
 {
-    public function testBuilder(): void
+    public function testBuilder()
     {
         $query = 'TRUNCATE TABLE mytable;';
 
@@ -19,7 +17,7 @@ class TruncateStatementTest extends TestCase
         $this->assertEquals($query, $stmt->build());
     }
 
-    public function testBuilderDbtable(): void
+    public function testBuilderDbtable()
     {
         $query = 'TRUNCATE TABLE mydb.mytable;';
 
@@ -29,7 +27,7 @@ class TruncateStatementTest extends TestCase
         $this->assertEquals($query, $stmt->build());
     }
 
-    public function testBuilderDbtableBackQuotes(): void
+    public function testBuilderDbtableBackQuotes()
     {
         $query = 'TRUNCATE TABLE `mydb`.`mytable`;';
 
@@ -38,4 +36,5 @@ class TruncateStatementTest extends TestCase
 
         $this->assertEquals($query, $stmt->build());
     }
+
 }

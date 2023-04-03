@@ -285,6 +285,7 @@ class customModel extends model
                     foreach($item['subMenu'] as $subMenu)
                     {
                         if(!isset($subMenu['link']) or strpos($subMenu['link'], '|') === false) continue;
+                        if(strpos("|program|product|project|execution|qa|", "|{$app->tab}|") === false and strpos($subMenu['link'], '%s') !== false) continue;
                         list($subLabel, $module, $method) = explode('|', $subMenu['link']);
                         if(count(explode('|', $subMenu['link'])) > 3) list($subLabel, $module, $method, $vars) = explode('|', $subMenu['link']);
 
@@ -577,7 +578,6 @@ class customModel extends model
     public function getURSRPairs()
     {
         $lang = $this->app->getClientLang();
-        $lang = $lang == 'zh-tw' ? 'zh-cn' : $lang;
         $langData = $this->dao->select('`key`, `value`, `system`')->from(TABLE_LANG)
             ->where('lang')->eq($lang)
             ->andWhere('module')->eq('custom')
@@ -659,7 +659,6 @@ class customModel extends model
     {
         $this->app->loadLang('custom');
         $lang = $this->app->getClientLang();
-        $lang = $lang == 'zh-tw' ? 'zh-cn' : $lang;
 
         $langData = $this->dao->select('`key`, `value`, `system`')->from(TABLE_LANG)
             ->where('lang')->eq($lang)

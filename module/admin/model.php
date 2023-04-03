@@ -666,6 +666,7 @@ class adminModel extends model
             ->limit('1')
             ->fetch('date');
 
+        if($firstUseDate) $firstUseDate = substr($firstUseDate, 0, 10);
         return helper::getDateInterval($firstUseDate);
     }
 

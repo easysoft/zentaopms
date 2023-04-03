@@ -2,7 +2,6 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/doc.class.php';
-$db->switchDB();
 su('admin');
 
 /**
@@ -35,11 +34,9 @@ $createProject   = array('type' => $type[1], 'project' => $project[1], 'name' =>
 $createExecution = array('type' => $type[2], 'execution' => $execution[1], 'name' => $name[1], 'acl' => $acl[1]);
 $createCustom    = array('type' => $type[3], 'name' => $name[1], 'acl' => $acl[1]);
 $customLib       = array('type' => $type[0], 'product' => $product[1], 'name' => $name[1], 'acl' => $acl[2], 'groups' => $groups,  'users' => $users);
-$noType          = array('type' => $type[4], 'product' => $product[1], 'name' => $name[1], 'acl' => $acl[1]);
 $noProduct       = array('type' => $type[0], 'product' => $product[0], 'name' => $name[1], 'acl' => $acl[1]);
 $noProject       = array('type' => $type[1], 'project' => $project[0], 'name' => $name[1], 'acl' => $acl[1]);
 $noExecution     = array('type' => $type[2], 'execution' => $execution[0], 'name' => $name[1], 'acl' => $acl[1]);
-$noAcl           = array('type' => $type[0], 'product' => $product[1], 'name' => $name[1], 'acl' => $acl[0]);
 
 $doc = new docTest();
 
@@ -48,10 +45,6 @@ r($doc->createLibTest($createProject))   && p('type;acl')          && e('project
 r($doc->createLibTest($createExecution)) && p('type;vision')       && e('execution;rnd');                 //新建公有执行文档库
 r($doc->createLibTest($createCustom))    && p('type;project')      && e('custom;0');                      //新建公有自定义文档库
 r($doc->createLibTest($customLib))       && p('type;groups;users') && e('product;1,2,3;admin,dev1,dev10');//新建私有自定义文档库
-r($doc->createLibTest($noType))          && p('type')              && e('');                              //新建无类型文档库
 r($doc->createLibTest($noProduct))       && p('product:0')         && e('『产品库』应当是数字。');        //新建无产品产品文档库
 r($doc->createLibTest($noProject))       && p('project:0')         && e('『project』应当是数字。');       //新建无项目项目文档库
 r($doc->createLibTest($noExecution))     && p('execution:0')       && e('『迭代库』应当是数字。');        //新建无执行执行文档库
-r($doc->createLibTest($noAcl))           && p('acl')               && e('');                              //新建无权限控制文档库
-
-$db->restoreDB();

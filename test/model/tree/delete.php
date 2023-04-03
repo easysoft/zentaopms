@@ -2,7 +2,6 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/tree.class.php';
-$db->switchDB();
 su('admin');
 
 /**
@@ -36,4 +35,3 @@ r($tree->deleteTest($moduleID[5])) && p('deleted') && e('1'); // 测试删除mod
 r($tree->deleteTest($moduleID[6])) && p('deleted') && e('1'); // 测试删除module 21
 r($tree->deleteTest($moduleID[7])) && p('deleted') && e('1'); // 测试删除module 22
 ob_end_flush();
-$db->restoreDB();

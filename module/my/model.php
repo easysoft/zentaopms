@@ -857,8 +857,9 @@ class myModel extends model
                 ->where($myStoryQuery)
                 ->andWhere('t1.type')->eq('story')
                 ->andWhere('t1.assignedTo',1)->eq($this->app->user->account)
-                ->orWhere('t5.reviewer')->eq($this->app->user->account)
+                ->orWhere("(t5.reviewer = '{$this->app->user->account}' and t1.status in('reviewing','changing'))")
                 ->markRight(1)
+                ->andWhere('t1.product')->ne('0')
                 ->andWhere('t1.deleted')->eq(0)
                 ->orderBy($orderBy)
                 ->page($pager, 't1.id')
@@ -1112,11 +1113,12 @@ class myModel extends model
         {
             if($checkExists) return true;
             $story = new stdclass();
-            $story->id      = $data->id;
-            $story->title   = $data->title;
-            $story->type    = 'story';
-            $story->time    = $data->openedDate;
-            $story->status  = $data->status;
+            $story->id        = $data->id;
+            $story->title     = $data->title;
+            $story->type      = 'story';
+            $story->storyType = $data->type;
+            $story->time      = $data->openedDate;
+            $story->status    = $data->status;
             $stories[$story->id] = $story;
         }
 
@@ -1435,6 +1437,7 @@ class myModel extends model
             $review->status = $objectType == 'attend' ? $object->reviewStatus : ((isset($object->status) and !isset($flows[$objectType])) ? $object->status : 'done');
             if(strpos($review->result, ',') !== false) list($review->result) = explode(',', $review->result);
 
+            if($objectType == 'story')    $review->storyType = $object->type;
             if($review->type == 'review') $review->type = 'projectreview';
             if($review->type == 'case')   $review->type = 'testcase';
             $review->title = '';

@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 namespace PhpMyAdmin\SqlParser\Tests\Parser;
 
 use PhpMyAdmin\SqlParser\Tests\TestCase;
@@ -9,35 +7,35 @@ use PhpMyAdmin\SqlParser\Tests\TestCase;
 class LockStatementTest extends TestCase
 {
     /**
-     * @param mixed $test
-     *
      * @dataProvider lockProvider
+     *
+     * @param mixed $test
      */
-    public function testLock($test): void
+    public function testLock($test)
     {
         $this->runParserTest($test);
     }
 
-    public function lockProvider(): array
+    public function lockProvider()
     {
-        return [
-            ['parser/parseLock1'],
-            ['parser/parseLock2'],
-            ['parser/parseLock3'],
-            ['parser/parseLock4'],
-            ['parser/parseLock5'],
-            ['parser/parseLockErr1'],
-            ['parser/parseLockErr2'],
-            ['parser/parseLockErr3'],
-            ['parser/parseLockErr4'],
-            ['parser/parseLockErr5'],
-            ['parser/parseLockErr6'],
-            ['parser/parseLockErr7'],
-            ['parser/parseLockErr8'],
-            ['parser/parseLockErr9'],
-            ['parser/parseLockErr10'],
-            ['parser/parseUnlock1'],
-            ['parser/parseUnlockErr1'],
-        ];
+        return array(
+            array('parser/parseLock1'),
+            array('parser/parseLock2'),
+            array('parser/parseLock3'),
+            array('parser/parseLock4'),
+            array('parser/parseLock5'),
+            array('parser/parseLockErr1'),
+            array('parser/parseLockErr2'),
+            array('parser/parseLockErr3'),
+            array('parser/parseLockErr4'),
+            array('parser/parseLockErr5'),
+            array('parser/parseLockErr6'),
+            array('parser/parseLockErr7'),
+            array('parser/parseLockErr8'),
+            array('parser/parseLockErr9'),
+            array('parser/parseLockErr10'),
+            array('parser/parseUnlock1'),
+            array('parser/parseUnlockErr1')
+        );
     }
 }

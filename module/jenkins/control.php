@@ -125,9 +125,9 @@ class jenkins extends control
      */
     public function ajaxGetJenkinsTasks($id)
     {
-        if(empty($id)) return print('');
+        if(empty($id)) return print(json_encode(array('' => '')));
 
-        $this->view->tasks = $this->jenkins->getTasks($id, 3);
-        $this->display();
+        $tasks = $this->jenkins->getTasks($id);
+        echo json_encode($tasks);
     }
 }

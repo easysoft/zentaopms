@@ -733,7 +733,7 @@ class fileModel extends model
             $line = str_replace('""', '"', $line);
 
             /* if only one column then line is the data. */
-            if(strpos($line, ',') === false and $line[0] != '"' and $col == -1)
+            if(strpos($line, ',') === false and isset($line[0]) and $line[0] != '"' and $col == -1)
             {
                 $data[$row][0] = trim($line, '"');
             }

@@ -960,6 +960,8 @@ class story extends control
         $branch         = $product->type == 'branch' ? ($story->branch > 0 ? $story->branch : '0') : 'all';
         $productStories = $this->story->getProductStoryPairs($story->product, $branch, 0, 'all', 'id_desc', 0, '', $story->type);
 
+        if($story->type == 'requirement') $this->lang->story->notice->reviewerNotEmpty = str_replace($this->lang->SRCommon, $this->lang->URCommon, $this->lang->story->notice->reviewerNotEmpty);
+
         $this->view->title            = $this->lang->story->edit . "STORY" . $this->lang->colon . $this->view->story->title;
         $this->view->position[]       = $this->lang->story->edit;
         $this->view->story            = $story;
@@ -1267,9 +1269,14 @@ class story extends control
 
             if($this->app->tab == 'project')
             {
-                $module = 'projectstory';
-                $method = 'view';
-                $params = "storyID=$storyID";
+                $module  = 'projectstory';
+                $method  = 'view';
+                $params  = "storyID=$storyID";
+                if(!$this->session->multiple)
+                {
+                    $module  = 'story';
+                    $params .= "&version=0&param={$this->session->project}&storyType=$storyType";
+                }
             }
             elseif($this->app->tab == 'execution')
             {
@@ -1283,7 +1290,8 @@ class story extends control
                 $method = 'view';
                 $params = "storyID=$storyID&version=0&param=0&storyType=$storyType";
             }
-            return print(js::locate($this->createLink($module, $method, $params), 'parent'));
+
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink($module, $method, $params)));
         }
 
         $this->commonAction($storyID);
@@ -1380,16 +1388,26 @@ class story extends control
      */
     public function view($storyID, $version = 0, $param = 0, $storyType = 'story')
     {
-        $uri        = $this->app->getURI(true);
-        $tab        = $this->app->tab;
+        $uri     = $this->app->getURI(true);
+        $tab     = $this->app->tab;
+        $storyID = (int)$storyID;
+        $story   = $this->story->getById($storyID, $version, true);
+        $product = $this->product->getByID($story->product);
+        if($tab == 'product' and !empty($product->shadow))
+        {
+            $backLink = $this->session->productList ? $this->session->productList : inlink('product', 'all');
+            $js       = js::start();
+            $js      .= "setTimeout(\"parent.$.apps.open('$uri#app=project')\", 100)";
+            $js      .= js::end();
+            return print(js::refresh($backLink . '#app=product', 'self', '10') . $js);
+        }
+
         $buildApp   = $tab == 'product' ?   'project' : $tab;
         $releaseApp = $tab == 'execution' ? 'product' : $tab;
         $this->session->set('productList', $uri . "#app={$tab}", 'product');
         if(!isonlybody()) $this->session->set('buildList', $uri, $buildApp);
         $this->app->loadLang('bug');
 
-        $storyID        = (int)$storyID;
-        $story          = $this->story->getById($storyID, $version, true);
         $linkModuleName = $this->config->vision == 'lite' ? 'project' : 'product';
         if(!$story) return print(js::error($this->lang->notFound) . js::locate($this->createLink($linkModuleName, 'index')));
 
@@ -1401,7 +1419,6 @@ class story extends control
 
         $this->story->replaceURLang($story->type);
 
-        $product       = $this->product->getByID($story->product);
         $plan          = $this->dao->findById($story->plan)->from(TABLE_PRODUCTPLAN)->fetch('title');
         $bugs          = $this->dao->select('id,title,status,pri,severity')->from(TABLE_BUG)->where('story')->eq($storyID)->andWhere('deleted')->eq(0)->fetchAll();
         $fromBug       = $this->dao->select('id,title')->from(TABLE_BUG)->where('id')->eq($story->fromBug)->fetch();
@@ -1534,7 +1551,7 @@ class story extends control
             if($story->parent > 0)
             {
                 $this->story->updateParentStatus($story->id);
-                $this->loadModel('action')->create('story', $task->parent, 'deleteChildrenStory', '', $storyID);
+                $this->action->create('story', $story->parent, 'deleteChildrenStory', '', $storyID);
             }
 
             $this->executeHooks($storyID);
@@ -1631,7 +1648,7 @@ class story extends control
                 {
                     $module = 'story';
                     $method = 'view';
-                    $params = "storyID=$storyID&version=0&param=0&storyType=$storyType";
+                    $params = "storyID=$storyID&version=0&param={$this->session->execution}&storyType=$storyType";
                 }
             }
             else
@@ -1800,9 +1817,6 @@ class story extends control
         $story   = $this->story->getById($storyID);
         $product = $this->product->getById($story->product);
 
-        /* Set menu. */
-        $this->product->setMenu($story->product, $story->branch);
-
         /* Get reviewers. */
         $reviewers = $product->reviewer;
         if(!$reviewers and $product->acl != 'open') $reviewers = $this->loadModel('user')->getProductViewListUsers($product, '', '', '', '');
@@ -1899,9 +1913,6 @@ class story extends control
         $product = $this->dao->findById($story->product)->from(TABLE_PRODUCT)->fields('name, id, type')->fetch();
 
         $this->story->replaceURLang($story->type);
-
-        /* Set menu. */
-        $this->product->setMenu($product->id, $story->branch);
 
         /* Set the closed reason options and remove subdivided options. */
         $reasonList = $this->lang->story->reasonList;
@@ -2188,8 +2199,8 @@ class story extends control
      */
     public function batchChangeBranch($branchID, $confirm = '', $storyIdList = '', $storyType = 'story')
     {
-        if(empty($_POST['storyIdList'])) return print(js::locate($this->session->storyList, 'parent'));
-        $storyIdList = $this->post->storyIdList;
+        if(empty($storyIdList) and empty($_POST['storyIdList'])) return print(js::locate($this->session->storyList, 'parent'));
+        if(!empty($_POST['storyIdList'])) $storyIdList = $this->post->storyIdList;
         $plans       = $this->loadModel('productplan')->getPlansByStories($storyIdList);
         if(empty($confirm))
         {
@@ -2324,9 +2335,6 @@ class story extends control
         $products = $this->product->getPairs();
         $product  = $this->product->getById($story->product);
 
-        /* Set menu. */
-        $this->product->setMenu($story->product, $story->branch);
-
         $this->view->title      = zget($products, $story->product, '') . $this->lang->colon . $this->lang->story->assign;
         $this->view->position[] = $this->lang->story->assign;
         $this->view->story      = $story;
@@ -2457,7 +2465,6 @@ class story extends control
         /* Get story, product, products, and queryID. */
         $story    = $this->story->getById($storyID);
         $products = $this->product->getPairs('', 0, '', 'all');
-        $queryID  = 0;
         $product  = $this->product->getByID($story->product);
 
         /* Change for requirement story title. */

@@ -2,7 +2,6 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/bug.class.php';
-$db->switchDB();
 su('admin');
 
 /**
@@ -50,4 +49,3 @@ r($bug->createBugFromGitlabIssueTest($bug4, $executionID))    && p('severity')  
 r($bug->createBugFromGitlabIssueTest($bug5, $executionID))    && p('title:0')   && e('『Bug标题』不能为空。'); // 测试创建没有标题 来源于gitlab issue的异常bug
 r($bug->createBugFromGitlabIssueTest($bug1, $executionID))    && p('task')      && e('0');                     // 测试短时间内重复创建来源于gitlab issue的bug
 
-$db->restoreDB();
