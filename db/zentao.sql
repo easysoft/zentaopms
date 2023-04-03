@@ -441,8 +441,11 @@ CREATE TABLE IF NOT EXISTS `zt_chart` (
   `desc` text NOT NULL,
   `settings` mediumtext NOT NULL,
   `filters` mediumtext NOT NULL,
+  `step` tinyint(1) unsigned NOT NULL,
   `fields` mediumtext NOT NULL,
+  `langs` text NOT NULL,
   `sql` mediumtext,
+  `stage` enum('draft','published') NOT NULL DEFAULT 'draft',
   `builtin` tinyint(1) unsigned NOT NULL,
   `objects` mediumtext NOT NULL,
   `createdBy` char(30) NOT NULL,
@@ -461,13 +464,27 @@ CREATE TABLE IF NOT EXISTS `zt_screen` (
   `cover` mediumtext NOT NULL,
   `scheme` mediumtext NOT NULL,
   `status` enum('draft','published') NOT NULL DEFAULT 'draft',
-  `builtin` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  `builtin` enum('0', '1') NOT NULL DEFAULT '0',
   `createdBy` char(30) NOT NULL,
   `createdDate` datetime NOT NULL,
   `editedBy` char(30) NOT NULL,
   `editedDate` datetime NOT NULL,
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+-- DROP TABLE IF EXISTS `zt_dimension`;
+CREATE TABLE IF NOT EXISTS `zt_dimension` (
+  `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(90) NOT NULL,
+  `code` varchar(45) NOT NULL,
+  `desc` text NOT NULL,
+  `createdBy` varchar(30) NOT NULL,
+  `createdDate` datetime NOT NULL,
+  `editedBy` varchar(30) NOT NULL,
+  `editedDate` datetime NOT NULL,
+  `deleted` enum('0','1') NOT NULL default '0',
+  PRIMARY KEY (`id`),
+  KEY `code` (`code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_company`;
 CREATE TABLE IF NOT EXISTS `zt_company` (
@@ -566,6 +583,7 @@ CREATE TABLE IF NOT EXISTS `zt_dataview` (
   `view` varchar(57) NOT NULL,
   `sql` text NOT NULL,
   `fields` mediumtext NOT NULL,
+  `langs` text NOT NULL,
   `objects` mediumtext NOT NULL,
   `createdBy` varchar(30) NOT NULL,
   `createdDate` datetime NOT NULL,
@@ -697,6 +715,8 @@ CREATE TABLE IF NOT EXISTS `zt_doclib` (
   `collector` text NOT NULL,
   `desc` mediumtext NOT NULL,
   `order` tinyint(5) unsigned NOT NULL,
+  `addedBy` varchar(30) NOT NULL,
+  `addedDate` datetime NOT NULL,
   `deleted` enum('0','1') NOT NULL default '0',
   PRIMARY KEY  (`id`),
   KEY `product` (`product`),
@@ -13920,6 +13940,47 @@ REPLACE INTO `zt_screen` (`id`, `dimension`, `name`, `desc`, `cover`, `scheme`, 
 (5,1,'迭代燃尽图大屏','快速查看公司全部未关闭迭代的燃尽图','static/images/screen5.png','','admin','2022-11-18 10:46:18','admin','2022-11-18 10:46:18','0');
 
 UPDATE `zt_screen` SET builtin = '1', status = 'published';
+
+UPDATE `zt_grouppriv` SET `module` = 'dataview' WHERE `module` = 'dataset' AND `method` IN ('create', 'browse', 'edit', 'delete');
+UPDATE `zt_grouppriv` SET `module` = 'screen' WHERE `module` = 'dashboard';
+UPDATE `zt_grouppriv` SET `module` = 'screen' WHERE `module` = 'report' AND `method` IN ('annualData','allAnnualData');
+UPDATE `zt_grouppriv` SET `module` = 'pivot' WHERE `module` = 'report' AND `method` IN ('projectDeviation','productSummary', 'bugCreate', 'bugAssign', 'workload', 'showProduct', 'showProject');
+
+REPLACE INTO `zt_grouppriv` (`group`, `module`, `method`) SELECT `group`, 'pivot', 'create' FROM `zt_grouppriv` WHERE `module` = 'report' AND `method` IN ('custom', 'saveReport');
+REPLACE INTO `zt_grouppriv` (`group`, `module`, `method`) SELECT `group`, 'pivot', 'edit' FROM `zt_grouppriv` WHERE `module` = 'report' AND `method` = 'editReport';
+REPLACE INTO `zt_grouppriv` (`group`, `module`, `method`) SELECT `group`, 'pivot', 'delete' FROM `zt_grouppriv` WHERE `module` = 'report' AND `method` = 'deleteReport';
+REPLACE INTO `zt_grouppriv` (`group`, `module`, `method`) SELECT `group`, 'pivot', 'preview' FROM `zt_grouppriv` WHERE `module` = 'report' AND `method` = 'show';
+REPLACE INTO `zt_grouppriv` (`group`, `module`, `method`) SELECT `group`, 'pivot', 'design' FROM `zt_grouppriv` WHERE `module` = 'report' AND `method` = 'useReport';
+REPLACE INTO `zt_grouppriv` (`group`, `module`, `method`) SELECT `group`, 'pivot', 'export' FROM `zt_grouppriv` WHERE `module` = 'report' AND `method` = 'crystalExport';
+
+DELETE FROM `zt_grouppriv` WHERE `module` = 'dataset' AND `method` = 'view';
+
+-- DROP TABLE IF EXISTS `zt_pivot`;
+CREATE TABLE IF NOT EXISTS `zt_pivot`  (
+  `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
+  `dimension` mediumint(8) unsigned NOT NULL DEFAULT 0,
+  `group` varchar(255) NOT NULL,
+  `name` text NOT NULL,
+  `desc` text NOT NULL,
+  `sql` mediumtext NOT NULL,
+  `fields` mediumtext NOT NULL,
+  `langs` mediumtext NOT NULL,
+  `vars` mediumtext NOT NULL,
+  `objects` mediumtext NULL,
+  `settings` mediumtext NOT NULL,
+  `filters` mediumtext NOT NULL,
+  `step` tinyint(1) unsigned NOT NULL,
+  `stage` enum('draft','published') NOT NULL DEFAULT 'draft',
+  `builtin` enum('0', '1') NOT NULL DEFAULT '0',
+  `createdBy` varchar(30) NOT NULL,
+  `createdDate` datetime NOT NULL,
+  `editedBy` varchar(30) NOT NULL,
+  `editedDate` datetime NOT NULL,
+  `deleted` enum('0', '1') NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`),
+  KEY(`dimension`),
+  KEY(`group`)
+) ENGINE = InnoDB DEFAULT CHARSET=utf8;
 
 -- DROP TABLE IF EXISTS `zt_sqlview`;
 CREATE TABLE IF NOT EXISTS `zt_sqlview` (

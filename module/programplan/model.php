@@ -963,6 +963,7 @@ class programplanModel extends model
 
                     /* Create doc lib. */
                     $lib = new stdclass();
+                    $lib->project   = $projectID;
                     $lib->execution = $stageID;
                     $lib->name      = str_replace($this->lang->executionCommon, $this->lang->project->stage, $this->lang->doclib->main['execution']);
                     $lib->type      = 'execution';

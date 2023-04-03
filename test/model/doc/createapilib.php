@@ -2,6 +2,11 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/doc.class.php';
+$doclib = zdTable('doclib');
+$doclib->id->range('1');
+$doclib->gen(0);
+
+zdTable('user')->gen(5);
 su('admin');
 
 /**

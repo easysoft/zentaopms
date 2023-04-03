@@ -2016,6 +2016,9 @@ class treeModel extends model
                 $this->dao->update(TABLE_TICKET)->set('module')->eq($module->parent)->where('module')->in($childs)->exec();
                 $cookieName = 'ticketModule';
                 break;
+            case 'doc':
+                $this->dao->update(TABLE_DOC)->set('`module`')->eq($module->parent)->where('`module`')->in($childs)->exec();
+                break;
         }
         if(strpos($this->session->{$module->type . 'List'}, 'param=' . $moduleID)) $this->session->set($module->type . 'List', str_replace('param=' . $moduleID, 'param=0', $this->session->{$module->type . 'List'}));
         if($cookieName) setcookie($cookieName, 0, time() - 3600, $this->config->webRoot, '', $this->config->cookieSecure, false);
@@ -2296,5 +2299,89 @@ class treeModel extends model
         $this->lang->module        = new stdclass();
         $this->lang->module->name  = $this->lang->tree->wordName;
         $this->lang->module->short = $this->lang->tree->short;
+    }
+
+    /**
+     * Create module.
+     *
+     * @access public
+     * @return bool|object
+     */
+    public function createModule()
+    {
+        $data = fixer::input('post')
+            ->setDefault('name', '')
+            ->setDefault('createType', 'child')
+            ->setDefault('objectID', 0)
+            ->setDefault('order', 10)
+            ->get();
+
+        $module         = new stdClass();
+        $module->root   = zget($data, 'libID', 0);
+        $module->type   = zget($data, 'moduleType', 'doc');
+        $module->parent = zget($data, 'parentID', 0);
+        $module->name   = strip_tags(trim($data->name));
+        $module->branch = 0;
+        $module->short  = '';
+        $module->order  = $data->order;
+
+        if(empty($module->name))
+        {
+            dao::$errors[] = sprintf($this->lang->error->notempty, $this->lang->tree->dir);
+            return false;
+        }
+
+        if($data->createType == 'same')
+        {
+            $baseModule = $this->getByID($data->objectID);
+            if(!empty($baseModule))
+            {
+                $module->parent = $baseModule->parent;
+                $module->order  = $baseModule->order;
+            }
+        }
+        elseif($data->createType == 'child')
+        {
+            $maxOrder = $this->dao->select('`order`')->from(TABLE_MODULE)
+                ->where('root')->eq($module->root)
+                ->andWhere('parent')->eq($module->parent)
+                ->andWhere('type')->eq($module->type)
+                ->orderBy('order_desc')
+                ->limit(1)
+                ->fetch('order');
+
+            $module->order = (int)$maxOrder + 10;
+        }
+
+        $repeatName = $this->checkUnique($module);
+        if($repeatName)
+        {
+            dao::$errors[] = sprintf($this->lang->tree->repeatDirName, $repeatName);
+            return false;
+        }
+
+        $parent = $this->getByID($module->parent);
+        $module->grade = $module->parent ? $parent->grade + 1 : 1;
+        $this->dao->insert(TABLE_MODULE)->data($module)->exec();
+        $moduleID = $this->dao->lastInsertID();
+
+        if($data->createType == 'same')
+        {
+            $this->dao->update(TABLE_MODULE)
+                ->set('`order` = `order` + 10')
+                ->where('`root`')->eq($module->root)
+                ->andWhere('`parent`')->eq($module->parent)
+                ->andWhere('`type`')->eq($module->type)
+                ->andWhere('`order`')->gt($module->order)
+                ->exec();
+
+            $module->order += 10;
+        }
+
+        $modulePath = "$moduleID,";
+        if($module->parent) $modulePath = $parent->path . $modulePath;
+        $this->dao->update(TABLE_MODULE)->set('`path`')->eq($modulePath)->set('`order`')->eq($module->order)->where('id')->eq($moduleID)->limit(1)->exec();
+
+        return $this->getByID($moduleID);
     }
 }

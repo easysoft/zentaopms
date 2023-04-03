@@ -171,7 +171,12 @@ class html extends baseHTML
         $convertedPinYin = (empty($config->isINT) and class_exists('common')) ? common::convert2Pinyin($options) : array();
         if(count($options) >= $config->maxCount or isset($config->moreLinks[$name]))
         {
-            if(strpos($attrib, 'chosen') !== false) $attrib = str_replace('chosen', 'picker-select', $attrib);
+            if(strpos($attrib, 'chosen') !== false)
+            {
+                $attrib = str_replace('chosen', 'picker-select', $attrib);
+                $attrib = preg_replace('/data-drop[-_]?direction=([\'"]?)down([\'"]?)/i', 'data-drop-direction=$1bottom$2', $attrib);
+                $attrib = preg_replace('/data-drop[-_]?direction=([\'"]?)up([\'"]?)/i', 'data-drop-direction=$1top$2', $attrib);
+            }
             if(isset($config->moreLinks[$name]))
             {
                 $link = $config->moreLinks[$name];

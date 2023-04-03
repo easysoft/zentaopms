@@ -763,7 +763,7 @@ class storyModel extends model
             ->setDefault('deleteFiles', array())
             ->add('id', $storyID)
             ->add('lastEditedDate', $now)
-            ->setIF($specChanged, 'version', $oldStory->version + 1)
+            ->setIF($specChanged, 'version', (int)$oldStory->version + 1)
             ->setIF($specChanged, 'reviewedBy', '')
             ->setIF($specChanged, 'changedBy', $this->app->user->account)
             ->setIF($specChanged, 'changedDate', $now)
@@ -1481,7 +1481,7 @@ class storyModel extends model
                 $story->closedReason   = isset($data->closedReasons[$storyID])      ? $data->closedReasons[$storyID]      : $oldStory->closedReason;
                 $story->duplicateStory = isset($data->duplicateStories[$storyID])   ? $data->duplicateStories[$storyID]   : $oldStory->duplicateStory;
                 $story->childStories   = isset($data->childStoriesIDList[$storyID]) ? $data->childStoriesIDList[$storyID] : $oldStory->childStories;
-                $story->version        = $story->title == $oldStory->title ? $oldStory->version : $oldStory->version + 1;
+                $story->version        = $story->title == $oldStory->title ? $oldStory->version : (int)$oldStory->version + 1;
                 if($story->stage != $oldStory->stage) $story->stagedBy = (strpos('tested|verified|released|closed', $story->stage) !== false) ? $this->app->user->account : '';
 
                 if($story->title != $oldStory->title and $story->status != 'draft')  $story->status     = 'changing';
