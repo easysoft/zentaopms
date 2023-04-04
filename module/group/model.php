@@ -1868,4 +1868,36 @@ class groupModel extends model
         $data = fixer::input('post')->get();
         foreach($data->orders as $privID => $order) $this->dao->update(TABLE_PRIV)->set('order')->eq($order)->where('id')->eq($privID)->exec();
     }
+
+    /**
+     * Get priv manager pairs.
+     *
+     * @param  string $type
+     * @param  string $parent
+     * @access public
+     * @return array
+     */
+    public function getPrivManagerPairs($type = '', $parent = 0)
+    {
+        $managers = $this->dao->select('t1.id,t2.key,t2.value')
+            ->from(TABLE_PRIVMANAGER)->alias('t1')
+            ->leftJoin(TABLE_PRIVLANG)->alias('t2')->on('t1.id=t2.objectID')
+            ->where('t1.type')->eq($type)
+            ->andWhere('t2.objectType')->eq('manager')
+            ->beginIF(!empty($parent))->andWhere('t1.parent')->eq($parent)->fi()
+            ->andWhere('t1.edition')->like("%,{$this->config->edition},%")
+            ->andWhere('t1.vision')->like("%,{$this->config->vision},%")
+            ->andWhere('t2.lang')->eq($this->app->getClientLang())
+            ->fetchAll('id');
+
+        $moduleLang = $type == 'module' ? $this->getMenuModules('', true) : array();
+        $pairs      = array();
+        foreach($managers as $id => $manager)
+        {
+            if(!empty($manager->value)) $pairs[$id] = $manager->value;
+            if(empty($manager->value) and $type == 'view')   $pairs[$id] = $this->lang->{$manager->key}->common;
+            if(empty($manager->value) and $type == 'module') $pairs[$id] = zget($moduleLang, $manager->key);
+        }
+        return $pairs;
+    }
 }
