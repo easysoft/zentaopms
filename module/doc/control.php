@@ -1194,7 +1194,7 @@ class doc extends control
      */
     public function tableContents($type = 'custom', $objectID = 0, $libID = 0, $moduleID = 0, $browseType = 'all', $orderBy = 'status,id_desc', $param = 0, $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
-        $this->view->isFirstLoad = $objectID == 0 ? 'true' : 'false';
+        $isFirstLoad = $libID == 0 ? true : false;
         $this->session->set('createProjectLocate', $this->app->getURI(true), 'doc');
 
         if(empty($browseType)) $browseType = 'all';
@@ -1252,6 +1252,7 @@ class doc extends control
         $this->view->type           = $type;
         $this->view->objectType     = $type;
         $this->view->browseType     = $browseType;
+        $this->view->isFirstLoad    = $isFirstLoad;
         $this->view->param          = $queryID;
         $this->view->users          = $this->user->getPairs('noletter');
         $this->view->libTree        = $libTree;

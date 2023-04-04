@@ -253,7 +253,9 @@ $(function()
                 if(item.active) $li.addClass('active');
             }
         });
-        if(isFirstLoad !== 'false') ele.data('zui.tree').collapse();
+
+        if(isFirstLoad) ele.data('zui.tree').collapse();
+
         var $leaf = ele.find('li.active');
         if($leaf.length) $leaf[$leaf.length - 1].scrollIntoView(false);
 
