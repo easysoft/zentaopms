@@ -88,7 +88,7 @@
       </thead>
       <tbody>
         <?php foreach($lang->resource as $moduleName => $moduleActions):?>
-        <?php if(!$this->group->checkMenuModule($menu, $moduleName)) continue;?>
+        <?php if(!count((array)$moduleActions)) continue;?>
         <?php if(!$this->group->checkMenuModule($menu, $moduleName)) continue;?>
         <?php
         /* Check method in select version. */
@@ -138,10 +138,21 @@
               <div class="checkbox-primary">
                 <?php $action = $priv->method;?>
                 <?php $privName = $privLang[$privID]->name;?>
-                <?php echo html::checkbox("actions[$moduleName][]", array($action => $privName), '', "title='{$privName}' id='actions[$moduleName]$action' data-id='$privID'");?>
+                <?php echo html::checkbox("actions[$moduleName][]", array($action => $privName), isset($groupPrivs[$moduleName]) ? $groupPrivs[$moduleName] : '', "title='{$privName}' id='actions[$moduleName]$action' data-id='$privID'");?>
               </div>
             </div>
             <?php endforeach;?>
+            <?php if($packageID == 0):?>
+            <?php $unassigned = array_diff(array_keys(json_decode(json_encode($moduleActions), true)), zget($privMethods, $moduleName));?>
+            <?php foreach($moduleActions as $action => $actionLabel):?>
+            <?php if(array_search($action, $unassigned) === false) continue;?>
+            <div class="group-item">
+              <div class="checkbox-primary">
+                <?php echo html::checkbox("actions[{$moduleName}]", array($action => $lang->$moduleName->$actionLabel), isset($groupPrivs[$moduleName][$action]) ? $action : '', "title='{$lang->$moduleName->$actionLabel}'", 'inline');?>
+              </div>
+            </div>
+            <?php endforeach;?>
+            <?php endif;?>
           </td>
         </tr>
         <?php $i ++;?>
