@@ -1401,12 +1401,7 @@ class groupModel extends model
      */
     public function getPrivsListByView($view = '', $pager = null)
     {
-        $this->loadModel('setting');
-        $views   = empty($view) ? $this->setting->getItem("owner=system&module=priv&key=views") : $view;
-        $views   = explode(',', $views);
-        $modules = '';
-        foreach($views as $view) $modules .= ',' . $this->setting->getItem("owner=system&module=priv&key={$view}Modules");
-        $modules = trim($modules, ',');
+        $modules = $this->getPrivManagerPairs('module', $view);
 
         $privs = $this->dao->select("t1.*,t2.name,t2.desc, INSTR('$modules', t1.`module`) as moduleOrder")->from(TABLE_PRIV)->alias('t1')
             ->leftJoin(TABLE_PRIVLANG)->alias('t2')->on('t1.id=t2.priv')
@@ -1886,8 +1881,11 @@ class groupModel extends model
      * @access public
      * @return array
      */
-    public function getPrivManagerPairs($type = '', $parent = 0)
+    public function getPrivManagerPairs($type, $parent = 0)
     {
+        $parentType = $type == 'module' ? 'view' : 'module';
+        $parent     = $this->dao->select('id as parent')->from(TABLE_PRIVMANAGER)->where('type')->eq($parentType)->andWhere('code')->eq($parent)->fetch('parent');
+
         $managers = $this->dao->select('t1.id,t2.key,t2.value')
             ->from(TABLE_PRIVMANAGER)->alias('t1')
             ->leftJoin(TABLE_PRIVLANG)->alias('t2')->on('t1.id=t2.objectID')
