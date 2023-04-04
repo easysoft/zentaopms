@@ -609,17 +609,27 @@ class zanode extends control
      * Ajax: run ZTF script.
      *
      * @param  int    $scriptID
+     * @param  string $taskID
      * @access public
      * @return void
      */
-    public function ajaxRunZTFScript($scriptID = 0)
+    public function ajaxRunZTFScript($scriptID = 0, $taskID = 0)
     {
         if($_POST)
         {
             $caseIDList = $_POST['caseIDList'];
             $runIDList  = $_POST['runIDList'];
             $script     = $this->zanode->getAutomationByID($scriptID);
-            $cases = $this->loadModel('testcase')->getByList($caseIDList);
+            $cases      = $this->loadModel('testcase')->getByList($caseIDList);
+
+            $runs = array();
+            if($taskID)
+            {
+                $runs = $this->dao->select('id, `case`')->from(TABLE_TESTRUN)
+                ->where('`case`')->in($caseIDList)
+                ->andWhere('task')->eq($taskID)->fi()
+                ->fetchPairs('case', 'id');
+            }
 
             $caseIDListArray = explode(',', $caseIDList);
             $runIDListArray  = explode(',', $runIDList);

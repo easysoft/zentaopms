@@ -64,6 +64,24 @@ class ztfSubmitEntry extends baseEntry
                     ->set('ZTFResult')->eq(json_encode($post))
                     ->where('id')->eq($post->task)
                     ->exec();
+
+                $result = $this->dao->select('*')->from(TABLE_TESTRESULT)
+                    ->where('id')->eq($post->task)
+                    ->fetch();
+
+                if($result->run)
+                {
+                    $runStatus = $result->caseResult == 'blocked' ? 'blocked' : 'normal';
+                    $this->dao->update(TABLE_TESTRUN)
+                        ->set('lastRunResult')->eq($result->caseResult)
+                        ->set('status')->eq($runStatus)
+                        ->set('lastRunner')->eq($result->lastRunner)
+                        ->set('lastRunDate')->eq($result->date)
+                        ->where('id')->eq($result->run)
+                        ->exec();
+                }
+                
+                $this->dao->update(TABLE_CASE)->set('lastRunner')->eq($result->lastRunner)->set('lastRunDate')->eq($result->date)->set('lastRunResult')->eq($result->caseResult)->where('id')->eq($result->case)->exec();
             }
             else
             {

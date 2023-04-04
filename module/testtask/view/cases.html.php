@@ -177,7 +177,7 @@ function runAutocase()
         runIDList.push(case2RunMap[$(this).val()]);
     });
 
-    var url = createLink('zanode', 'ajaxRunZTFScript', 'scriptID=' + automation)
+    var url = createLink('zanode', 'ajaxRunZTFScript', 'scriptID=' + automation + "&taskID=" + taskID)
 
     var postData = {'caseIDList' : caseIDList.join(','), 'runIDList' : runIDList.join(',')};
 
