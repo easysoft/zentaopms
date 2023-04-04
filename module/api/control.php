@@ -621,7 +621,7 @@ class api extends control
             }
             else
             {
-                $this->sendSuccess(array('locate' => $this->createLink('api', 'index', "libID=$api->lib&module=$api->module")));
+                return print(js::locate(inlink('index', "libID=$api->lib&module=$api->module"), 'parent'));
             }
         }
     }
