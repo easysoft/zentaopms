@@ -1036,7 +1036,7 @@ class docModel extends model
         $moduleOptionMenu                                        = $this->loadModel('tree')->getOptionMenu($libID, 'doc', $startModuleID = 0);
         $this->config->doc->search['params']['module']['values'] = $moduleOptionMenu;
 
-        if($type == 'index' || $type == 'objectLibs' || ($this->app->rawMethod != 'contribute' and $libID == 0))
+        if($type == 'index' || $type == 'view' || ($this->app->rawMethod != 'contribute' and $libID == 0))
         {
             unset($this->config->doc->search['fields']['module']);
             unset($this->config->doc->search['fields']['lib']);
@@ -1966,37 +1966,6 @@ class docModel extends model
     }
 
     /**
-     * Get product crumb.
-     *
-     * @param  int $productID
-     * @param  int $executionID
-     * @access public
-     * @return string
-     */
-    public function getProductCrumb($productID, $executionID = 0)
-    {
-        if(empty($productID)) return '';
-        if($executionID)
-        {
-            $executionProduct = $this->dao->select('*')->from(TABLE_PROJECTPRODUCT)->where('product')->eq($productID)->andWhere('project')->eq($executionID)->fetch();
-            if(empty($executionProduct))
-            {
-                setcookie('product', 0, $this->config->cookieLife, $this->config->webRoot, '', $this->config->cookieSecure, true);
-                return html::a(helper::createLink('doc', 'allLibs', "type=execution"), $this->lang->executionCommon) . $this->lang->doc->separator;
-            }
-        }
-        $object = $this->dao->select('id,name')->from(TABLE_PRODUCT)->where('id')->eq($productID)->fetch();
-        if(empty($object)) return '';
-
-        $crumb = '';
-        $crumb .= html::a(helper::createLink('doc', 'allLibs', "type=product"), $this->lang->productCommon) . $this->lang->doc->separator;
-        $crumb .= html::a(helper::createLink('doc', 'objectLibs', "type=product&objectID=$productID"), $object->name) . $this->lang->doc->separator;
-        $crumb .= html::a(helper::createLink('doc', 'allLibs', "type=execution&product=$productID"), $this->lang->doclib->execution);
-        if($executionID) $crumb .= $this->lang->doc->separator;
-        return $crumb;
-    }
-
-    /**
      * Set lib users.
      *
      * @param  string $type
@@ -2436,10 +2405,10 @@ class docModel extends model
                 {
                     $treeMenu[0] .= '<div class="tree-group"><span class="tail-info">' . zget($users, $doc->editedBy) . ' &nbsp;' . $doc->editedDate . '</span>';
                 }
-                if($currentMethod == 'objectlibs')
+                if($currentMethod == 'view')
                 {
                     $class = common::hasPriv('doc', 'updateOrder') ? 'sortDoc' : '';
-                    $treeMenu[0] .= "<div class='tree-group'><span class='module-name'>" . html::a(inlink('objectLibs', "type=$type&objectID=$objectID&libID=$rootID&docID={$doc->id}"), "<i class='icon icon-file-text text-muted'></i> &nbsp;" . $doc->title, '', "data-app='{$this->app->tab}' class='doc-title $class' title='{$doc->title}'") . '</span>';
+                    $treeMenu[0] .= "<div class='tree-group'><span class='module-name'>" . html::a(inlink('view', "docID={$doc->id}"), "<i class='icon icon-file-text text-muted'></i> &nbsp;" . $doc->title, '', "data-app='{$this->app->tab}' class='doc-title $class' title='{$doc->title}'") . '</span>';
                     if(common::hasPriv('doc', 'edit') or common::hasPriv('doc', 'updateOrder'))
                     {
                         $treeMenu[0] .= "<div class='tree-actions'>";
@@ -2451,7 +2420,7 @@ class docModel extends model
                 else
                 {
                     $class = common::hasPriv('doc', 'updateOrder') ? 'sortDoc' : '';
-                    $treeMenu[0] .= html::a(inlink('objectLibs', "type=$type&objectID=$objectID&libID=$rootID&docID={$doc->id}"), "<i class='icon icon-file-text text-muted'></i> &nbsp;" . $doc->title, '', "data-app='{$this->app->tab}' class='doc-title $class' title='{$doc->title}'");
+                    $treeMenu[0] .= html::a(inlink('view', "docID={$doc->id}"), "<i class='icon icon-file-text text-muted'></i> &nbsp;" . $doc->title, '', "data-app='{$this->app->tab}' class='doc-title $class' title='{$doc->title}'");
                     $treeMenu[0] .= '</div>';
                 }
 
@@ -2513,10 +2482,10 @@ class docModel extends model
                         $treeMenu[$module->id] .= '<div class="tree-group"><span class="tail-info">' . zget($users, $doc->editedBy) . ' &nbsp;' . $doc->editedDate . '</span>';
                     }
 
-                    if($currentMethod == 'objectlibs')
+                    if($currentMethod == 'view')
                     {
                         $class = common::hasPriv('doc', 'updateOrder') ? 'sortDoc' : '';
-                        $treeMenu[$module->id] .= "<div class='tree-group'><span class='module-name'>" . html::a(inlink('objectLibs', "type=$type&objectID=$objectID&libID=$libID&docID={$doc->id}"), "<i class='icon icon-file-text text-muted'></i> &nbsp;" . $doc->title, '', "data-app='{$this->app->tab}' class='doc-title $class' title='{$doc->title}'") . '</span>';
+                        $treeMenu[$module->id] .= "<div class='tree-group'><span class='module-name'>" . html::a(inlink('view', "docID={$doc->id}"), "<i class='icon icon-file-text text-muted'></i> &nbsp;" . $doc->title, '', "data-app='{$this->app->tab}' class='doc-title $class' title='{$doc->title}'") . '</span>';
                         if(common::hasPriv('doc', 'edit') or common::hasPriv('doc', 'updateOrder'))
                         {
                             $treeMenu[$module->id] .= "<div class='tree-actions'>";
@@ -2529,7 +2498,7 @@ class docModel extends model
                     elseif($currentMethod == 'tablecontents')
                     {
                         $class = common::hasPriv('doc', 'updateOrder') ? 'sortDoc' : '';
-                        $treeMenu[$module->id] .= html::a(inlink('objectLibs', "type=$type&objectID=$objectID&libID=$libID&docID={$doc->id}"), "<i class='icon icon-file-text text-muted'></i> &nbsp;" . $doc->title, '', "data-app='{$this->app->tab}' class='doc-title $class' title='{$doc->title}'");
+                        $treeMenu[$module->id] .= html::a(inlink('view', "docID={$doc->id}"), "<i class='icon icon-file-text text-muted'></i> &nbsp;" . $doc->title, '', "data-app='{$this->app->tab}' class='doc-title $class' title='{$doc->title}'");
                         $treeMenu[$module->id] .= '</div>';
                     }
 

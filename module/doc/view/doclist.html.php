@@ -82,9 +82,9 @@ body {margin-bottom: 25px;}
           <?php
           $docType = $doc->type == 'text' ? 'wiki-file' : $doc->type;
           $icon    = html::image("static/svg/{$docType}.svg", "class='file-icon'");
-          if(common::hasPriv('doc', 'objectLibs'))
+          if(common::hasPriv('doc', 'view'))
           {
-              echo html::a($this->createLink('doc', 'objectLibs', "type=$type&objectID=$objectID&libID=$doc->lib&docID=$doc->id"), $icon . $doc->title, '', "title='{$doc->title}' class='doc-title' data-app='{$this->app->tab}'");
+              echo html::a($this->createLink('doc', 'view', "docID=$doc->id"), $icon . $doc->title, '', "title='{$doc->title}' class='doc-title' data-app='{$this->app->tab}'");
           }
           else
           {
