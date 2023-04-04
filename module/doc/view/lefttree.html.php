@@ -30,7 +30,10 @@
 .tree li.has-input {overflow: hidden;}
 .tree-text {margin-left: 5px; overflow: hidden;}
 i.btn-info, i.btn-info:hover {border: none; background: #fff; box-shadow: unset;}
-.tree-version-trigger {padding: 0 10px; width: 54px; border-radius: 5px; background: #F9F9F9;}
+.tree-version-trigger {padding: 0 10px; width: 54px; border-radius: 5px; background: #F9F9F9; display: flex;}
+.tree-version-trigger > .text {overflow: hidden; flex: 0 0 30px;}
+.file-tree > .bd-b:after {content: ''; position: absolute; inset: 0 -5px 0 -10px; border-bottom: 1px solid #EDEEF2;}
+.file-tree > .tree-child {padding: 5px 0; position: relative;}
 
 /* css for sidebar */
 .sidebar-toggle {flex: 0 0 16px;}
@@ -66,15 +69,15 @@ js::set('isFirstLoad', isset($isFirstLoad) ? $isFirstLoad: '');
 
 <div id="fileTree" class="file-tree">
 <?php if(isset($type) and $type == 'project'):?>
-<div class="project-tree">
+<div class="project-tree bd-b tree-child">
     <div class="title"><i class="icon icon-project btn-info"> </i><?php echo $lang->projectCommon?></div>
     <div id="projectTree" data-id="project"></div>
 </div>
-<div class="execution-tree">
+<div class="execution-tree bd-b tree-child">
     <div class="title"><i class="icon icon-run btn-info"> </i><?php echo $lang->execution->common?></div>
     <div id="executionTree" data-id="execution"></div>
 </div>
-<div class="annex-tree">
+<div class="annex-tree tree-child">
     <div class="title"><i class="icon icon-paper-clip btn-info"> </i><?php echo $lang->files?></div>
     <div id="annexTree" data-id="annex"></div>
 </div>
@@ -226,7 +229,7 @@ $(function()
                 var $item    = '<a href="' + link + '" style="position: relative" data-has-children="' + hasChild + '" title="' + item.name + '" data-id="' + item.id + '" class="' + libClass + '" data-type="' + item.type + '" data-action="' + item.hasAction + '">';
 
                 $item += '<div class="text h-full w-full flex-start overflow-hidden">';
-                if(libClass == 'lib' && (item.type == 'execution' && item.hasAction)) $item += '<div class="img-lib" style="background-image:url(static/svg/' + imgObj[item.type || 'lib'] + '.svg)"></div>';
+                if((libClass == 'lib' && item.type != 'execution') || (item.type == 'execution' && item.hasAction)) $item += '<div class="img-lib" style="background-image:url(static/svg/' + imgObj[item.type || 'lib'] + '.svg)"></div>';
                 $item += '<div class="tree-text">';
                 $item += item.name;
                 $item += '</div>';
@@ -238,7 +241,7 @@ $(function()
                     {
                         if(item.versions[i].id == release) versionName = item.versions[i].version;
                     }
-                    $item += '<div class="tree-version-trigger" data-id="' +  item.id + '">' + (versionName || versionLang) + '<span class="caret"></span></div>';
+                    $item += '<div class="tree-version-trigger" data-id="' +  item.id + '"><div class="text">' + (versionName || versionLang) + '</div><div class="caret"></div></div>';
                 }
                 if((libClass != 'lib' && hasModulePriv) || (libClass == 'lib' && hasLibPriv)) $item += '<i class="icon icon-drop icon-ellipsis-v hidden tree-icon" data-isCatalogue="' + (libClass ? false : true) + '"></i>';
                 $item += '</div>';
@@ -252,7 +255,7 @@ $(function()
         });
         if(isFirstLoad !== 'false') ele.data('zui.tree').collapse();
         var $leaf = ele.find('li.active');
-        if($leaf.length) $leaf[$leaf.length - 1].scrollIntoView(true);
+        if($leaf.length) $leaf[$leaf.length - 1].scrollIntoView(false);
 
         ele.on('click', '.icon-drop', function(e)
         {

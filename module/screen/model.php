@@ -40,7 +40,7 @@ class screenModel extends model
      */
     public function getList($dimensionID)
     {
-        return $this->dao->select('*')->from(TABLE_SCREEN)->where('dimension')->eq($dimensionID)->andWhere('deleted')->eq('0')->fetchAll();
+        return $this->dao->select('*')->from(TABLE_SCREEN)->where('dimension')->eq($dimensionID)->andWhere('deleted')->eq('0')->fetchAll('id');
     }
 
     /**
