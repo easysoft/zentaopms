@@ -383,8 +383,8 @@ $(function()
         }
         else
         {
-            methodName = objectType == 'custom' ? 'tableContents' : objectType + 'Space';
-            linkParams = objectType == 'custom' ? 'type=custom&' + linkParams : linkParams;
+            methodName = objectType == 'execution' || objectType == 'custom' ? 'tableContents' : objectType + 'Space';
+            linkParams = objectType == 'execution' || objectType == 'custom' ? 'type=' + objectType + '&' + linkParams : linkParams;
         }
 
         location.href = createLink(config.currentModule, methodName, linkParams);
