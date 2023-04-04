@@ -42,7 +42,11 @@ class screen extends control
     {
         if(empty($year)) $year = date('Y');
 
-        if($screenID == 3) $this->locate($this->createLink('report', 'annualData'));
+        if($screenID == 3)
+        {
+            echo $this->fetch('report', 'annualData');
+            return;
+        }
 
         $screen = $this->screen->getByID($screenID, $year, $dept, $account);
 
