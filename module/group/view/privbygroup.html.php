@@ -86,70 +86,68 @@
           <th class='method' colspan='2'><?php echo $lang->group->method;?></th>
         </tr>
       </thead>
-      <?php foreach($lang->resource as $moduleName => $moduleActions):?>
-      <?php if(!count((array)$moduleActions)) continue;?>
-      <?php if(!$this->group->checkMenuModule($menu, $moduleName)) continue;?>
-      <?php
-      /* Check method in select version. */
-      if($version)
-      {
-          $hasMethod = false;
-          foreach($moduleActions as $action => $actionLabel)
-          {
-              if(strpos($changelogs, ",$moduleName-$actionLabel,") !== false)
-              {
-                  $hasMethod = true;
-                  break;
-              }
-          }
-          if(!$hasMethod) continue;
-      }
-      ?>
-      <tr class='<?php echo cycle('even, bg-gray');?>'>
-        <th class='text-middle text-left module'>
-          <div class="checkbox-primary checkbox-inline checkbox-left check-all">
-            <label class='text-left' for='allChecker<?php echo $moduleName;?>'><?php echo $lang->$moduleName->common;?></label>
-            <input type='checkbox' id='allChecker<?php echo $moduleName;?>'>
-          </div>
-        </th>
-        <th class='text-middle text-left package'>
-          <div class="checkbox-primary checkbox-inline checkbox-left check-all">
-            <label class='text-left checkbox-indeterminate-block' for='allCheckerPackage<?php echo $moduleName;?>'><?php echo '权限包名' . $moduleName;?></label>
-            <input type='checkbox' id='allChecker<?php echo '权限包名' . $moduleName;?>'>
-          </div>
-        </th>
-        <?php if(isset($lang->$moduleName->menus)):?>
-        <td class='menus'>
-          <?php echo html::checkbox("actions[$moduleName]", array('browse' => $lang->$moduleName->browse), isset($groupPrivs[$moduleName]) ? $groupPrivs[$moduleName] : '');?>
-          <a href='javascript:;'><i class='icon icon-plus'></i></a>
-          <?php echo html::checkbox("actions[$moduleName]", $lang->$moduleName->menus, isset($groupPrivs[$moduleName]) ? $groupPrivs[$moduleName] : '');?>
-        </td>
-        <?php endif;?>
-        <td id='<?php echo $moduleName;?>' class='pv-10px' colspan='<?php echo !empty($lang->$moduleName->menus) ? 1 : 2?>'>
-          <?php $i = 1;?>
-          <?php foreach($moduleActions as $action => $actionLabel):?>
-          <?php if(!empty($lang->$moduleName->menus) and $action == 'browse') continue;;?>
-          <?php if(!empty($version) and strpos($changelogs, ",$moduleName-$actionLabel,") === false) continue;?>
-          <div class='group-item'>
-            <?php echo html::checkbox("actions[{$moduleName}]", array($action => $lang->$moduleName->$actionLabel), isset($groupPrivs[$moduleName][$action]) ? $action : '', "title='{$lang->$moduleName->$actionLabel}'", 'inline');?>
-          </div>
-          <?php endforeach;?>
-        </td>
-      </tr>
-      <?php endforeach;?>
-      <tr>
-        <th class='text-right'>
-          <div class="checkbox-primary checkbox-inline checkbox-right check-all">
-            <input type='checkbox' id='allChecker'>
-            <label class='text-right' for='allChecker'><?php echo $lang->selectAll;?></label>
-          </div>
-        </th>
-        <td class='form-actions' colspan='2'>
-          <?php echo html::submitButton('', "onclick='setNoChecked()'", 'btn btn-wide btn-primary');?>
-          <?php echo html::a($this->inlink('browse'), $lang->goback, '', "class='btn btn-back btn-wide'");?>
-          <?php echo html::hidden('noChecked'); // Save the value of no checked.?>
-        </td>
-      </tr>
+      <tbody>
+        <?php foreach($lang->resource as $moduleName => $moduleActions):?>
+        <?php if(!$this->group->checkMenuModule($menu, $moduleName)) continue;?>
+        <?php if(!$this->group->checkMenuModule($menu, $moduleName)) continue;?>
+        <?php
+        /* Check method in select version. */
+        if($version)
+        {
+            $hasMethod = false;
+            foreach($moduleActions as $action => $actionLabel)
+            {
+                if(strpos($changelogs, ",$moduleName-$actionLabel,") !== false)
+                {
+                    $hasMethod = true;
+                    break;
+                }
+            }
+            if(!$hasMethod) continue;
+        }
+        ?>
+        <?php $i = 1;?>
+        <?php $packages = zget($privList, $moduleName, array());?>
+        <?php foreach($packages as $packageID => $privs):?>
+        <tr class='<?php echo cycle('even, bg-gray');?>'>
+          <?php if($i == 1):?>
+          <th class='text-middle text-left module' rowspan="<?php echo $i == 1 ? count($packages) : 1;?>">
+            <div class="checkbox-primary checkbox-inline checkbox-left check-all">
+              <label class='text-left' for='allChecker<?php echo $moduleName;?>'><?php echo $lang->$moduleName->common;?></label>
+              <input type='checkbox' id='allChecker<?php echo $moduleName;?>'>
+            </div>
+          </th>
+          <?php endif;?>
+          <th class='<?php echo $i == 1 ? 'td-sm' : 'td-md';?> text-middle text-left package'>
+            <div class="checkbox-primary checkbox-inline checkbox-left check-all">
+              <label class='text-left checkbox-indeterminate-block' for='allCheckerPackage<?php echo $packageID;?>'><?php echo zget($privPackages, $packageID, $lang->group->unassigned);?></label>
+              <input type='checkbox' id='allCheckerPackage<?php echo $packageID;?>'>
+            </div>
+          </th>
+
+          <?php if(isset($lang->$moduleName->menus)):?>
+          <td class='menus'>
+            <?php echo html::checkbox("actions[$moduleName]", array('browse' => $lang->$moduleName->browse), isset($groupPrivs[$moduleName]) ? $groupPrivs[$moduleName] : '');?>
+            <a href='javascript:;'><i class='icon icon-plus'></i></a>
+            <?php echo html::checkbox("actions[$moduleName]", $lang->$moduleName->menus, isset($groupPrivs[$moduleName]) ? $groupPrivs[$moduleName] : '');?>
+          </td>
+          <?php endif;?>
+          <td id='<?php echo $moduleName;?>' class='pv-10px' colspan='<?php echo !empty($lang->$moduleName->menus) ? 1 : 2?>'>
+            <?php foreach($moduleActions as $action => $actionLabel):?>
+            <?php if(!empty($lang->$moduleName->menus) and $action == 'browse') continue;;?>
+            <?php if(!empty($version) and strpos($changelogs, ",$moduleName-$actionLabel,") === false) continue;?>
+            <?php if(!isset($privs["$moduleName-$actionLabel"])) continue;?>
+            <?php $privName = (isset($privLang["$moduleName-$actionLabel"]) and !empty($privLang->name)) ? $privLang["$moduleName-$actionLabel"]->name : $lang->$moduleName->$actionLabel;?>
+            <div class='group-item'>
+              <?php echo html::checkbox("actions[{$moduleName}]", array($action => $privName), isset($groupPrivs[$moduleName][$action]) ? $action : '', "title='{$privName}'", 'inline');?>
+            </div>
+            <?php endforeach;?>
+          </td>
+        </tr>
+        <?php $i ++;?>
+        <?php endforeach;?>
+        <?php endforeach;?>
+      </tbody>
     </table>
   </form>
 </div>

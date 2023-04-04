@@ -244,6 +244,22 @@ class group extends control
             $this->view->groupID    = $groupID;
             $this->view->menu       = $menu;
             $this->view->version    = $version;
+
+            $privs        = $this->group->getPrivsListByView($menu);
+            $privPackages = $this->group->getPrivManagerPairs('package');
+            $privLang     = $this->group->transformPrivLang($privs);
+
+            $privList = array();
+            foreach($privs as $privID => $priv)
+            {
+                if(!isset($privList[$priv->parentCode])) $privList[$priv->parentCode] = array();
+                if(!isset($privList[$priv->parentCode][$priv->package])) $privList[$priv->parentCode][$priv->package] = array();
+                $privList[$priv->parentCode][$priv->package][$priv->key] = $priv;
+            }
+
+            $this->view->privList     = $privList;
+            $this->view->privLang     = $privLang;
+            $this->view->privPackages = $privPackages;
         }
         elseif($type == 'byModule')
         {

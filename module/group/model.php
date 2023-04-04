@@ -874,22 +874,32 @@ class groupModel extends model
      * @access public
      * @return array
      */
-    public function getPrivPackagePairs($view = '', $module = '', $field = 'name')
+    public function getPrivPackagePairs($view = '', $module = '', $field = '`value` as name')
     {
-        $this->loadModel('setting');
-
         $modules = '';
         if(!empty($module))
         {
-            $modules = $module;
+            $modules = $this->dao->select('id')->from(TABLE_PRIVMANAGER)->where('type')->eq('module')->andWhere('code')->eq($module)->fetch('id');
         }
-        elseif(!empty($view))
+        else
         {
-            $modules = $this->setting->getItem("owner=system&module=priv&key={$view}Modules");
+            $modules = $this->getPrivManagerPairs('module', $view);
+            $modules = array_keys($modules);
+            $modules = implode(',', $modules);
         }
         $modules = trim($modules, ',');
 
-        return $this->dao->select("id,{$field}")->from(TABLE_PRIVPACKAGE)->where('1=1')->beginIF(!empty($modules))->andWhere('module')->in($modules)->fi()->orderBy('order_asc')->fetchPairs();
+        return $this->dao->select("id,{$field}")
+            ->from(TABLE_PRIVMANAGER)->alias('t1')
+            ->leftJoin(TABLE_PRIVLANG)->alias('t2')->on('t1.id=t2.objectID')
+            ->where('1=1')
+            ->andWhere('t2.objectType')->eq('manager')
+            ->beginIF(!empty($modules))->andWhere('parent')->in($modules)->fi()
+            ->andWhere('t1.edition')->like("%,{$this->config->edition},%")
+            ->andWhere('t1.vision')->like("%,{$this->config->vision},%")
+            ->andWhere('t2.lang')->eq($this->app->getClientLang())
+            ->orderBy('order_asc')
+            ->fetchPairs();
     }
 
     /**
@@ -1417,16 +1427,22 @@ class groupModel extends model
     public function getPrivsListByView($view = '', $pager = null)
     {
         $modules = $this->getPrivManagerPairs('module', $view);
+        $modules = array_keys($modules);
+        $modules = implode(',', $modules);
 
-        $privs = $this->dao->select("t1.*,t2.name,t2.desc, INSTR('$modules', t1.`module`) as moduleOrder")->from(TABLE_PRIV)->alias('t1')
-            ->leftJoin(TABLE_PRIVLANG)->alias('t2')->on('t1.id=t2.priv')
-            ->leftJoin(TABLE_PRIVPACKAGE)->alias('t3')->on('t1.package=t3.id')
+        $privs = $this->dao->select("t1.*, t2.`key`, t2.`value`, t2.desc, t4.code as parentCode, INSTR('$modules', t4.id) as moduleOrder")->from(TABLE_PRIV)->alias('t1')
+            ->leftJoin(TABLE_PRIVLANG)->alias('t2')->on('t1.id=t2.objectID')
+            ->leftJoin(TABLE_PRIVMANAGER)->alias('t3')->on('t1.package=t3.id')
+            ->leftJoin(TABLE_PRIVMANAGER)->alias('t4')->on('t3.parent=t4.id')
             ->where('1=1')
-            ->beginIF(!empty($view) and $view != 'general')->andWhere('t1.module')->in($modules)->fi()
+            ->beginIF(!empty($view) and $view != 'general')->andWhere('t4.id')->in($modules)->fi()
             ->andWhere('t2.lang')->eq($this->app->getClientLang())
+            ->andWhere('t2.objectType')->eq('priv')
+            ->andWhere('t3.type')->eq('package')
+            ->andWhere('t4.type')->eq('module')
             ->orderBy("moduleOrder asc, t3.order asc, `order` asc")
             ->page($pager)
-            ->fetchAll('id');
+            ->fetchAll('key');
         return $privs;
     }
 
@@ -1862,7 +1878,7 @@ class groupModel extends model
      * @access public
      * @return array
      */
-    public function getPrivManagerPairs($type, $parent = 0)
+    public function getPrivManagerPairs($type, $parent = 0, $field = 'value')
     {
         $parentType = $type == 'module' ? 'view' : 'module';
         $parent     = $this->dao->select('id as parent')->from(TABLE_PRIVMANAGER)->where('type')->eq($parentType)->andWhere('code')->eq($parent)->fetch('parent');
@@ -1876,6 +1892,7 @@ class groupModel extends model
             ->andWhere('t1.edition')->like("%,{$this->config->edition},%")
             ->andWhere('t1.vision')->like("%,{$this->config->vision},%")
             ->andWhere('t2.lang')->eq($this->app->getClientLang())
+            ->orderBy('order asc')
             ->fetchAll('id');
 
         $moduleLang = $type == 'module' ? $this->getMenuModules('', true) : array();
