@@ -244,7 +244,7 @@ class api extends control
             $this->api->publishLib($data);
             if(dao::isError()) return $this->sendError(dao::getError());
 
-            return $this->sendSuccess(array('locate' => $this->createLink('api', 'index', "libID=$libID")));
+            return $this->sendSuccess(array('locate' => 'parent'));
         }
 
         $libName = isset($lib->name) ? $lib->name : '';
