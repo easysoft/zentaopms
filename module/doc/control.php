@@ -1062,7 +1062,7 @@ class doc extends control
         $lib = $this->doc->getLibById($doc->lib);
         if(!empty($lib) and $lib->deleted == '1') $appendLib = $doc->id;
 
-        $type     = $lib->type;
+        $type     = isset($lib->type) ? $lib->type : 'custom';
         $objectID = isset($doc->{$type}) ? $doc->{$type} : 0;
         list($libs, $libID, $object, $objectID) = $this->doc->setMenuByType($type, $objectID, $doc->lib, $appendLib);
 

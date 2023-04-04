@@ -2634,6 +2634,7 @@ class docModel extends model
             $type     = $doclib->type == 'execution' ? 'project' : $doclib->type;
             $objectID = $type == 'custom' ? 0 : $doclib->$type;
         }
+        if($this->app->tab == 'doc' and $type == 'execution') $type = 'project';
 
         $objectDropdown = '';
         if($type == 'custom')
