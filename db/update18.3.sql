@@ -29,10 +29,10 @@ ALTER TABLE `zt_screen` ADD `builtin` enum('0', '1') NOT NULL DEFAULT '0' AFTER 
 UPDATE `zt_screen` SET `builtin` = '1', `status` = 'published';
 
 UPDATE `zt_grouppriv` SET `module` = 'dataview' WHERE `module` = 'dataset' AND `method` IN ('create', 'browse', 'edit', 'delete');
-UPDATE `zt_grouppriv` SET `module` = 'screen' WHERE `module` = 'dashboard';
 UPDATE `zt_grouppriv` SET `module` = 'screen' WHERE `module` = 'report' AND `method` IN ('annualData','allAnnualData');
 UPDATE `zt_grouppriv` SET `module` = 'pivot' WHERE `module` = 'report' AND `method` IN ('projectDeviation','productSummary', 'bugCreate', 'bugAssign', 'workload', 'showProduct', 'showProject');
 
+REPLACE INTO `zt_grouppriv` (`group`, `module`, `method`) SELECT `group`, 'screen', `method` FROM `zt_grouppriv` WHERE `module` = 'dashboard';
 REPLACE INTO `zt_grouppriv` (`group`, `module`, `method`) SELECT `group`, 'pivot', 'create' FROM `zt_grouppriv` WHERE `module` = 'report' AND `method` IN ('custom', 'saveReport');
 REPLACE INTO `zt_grouppriv` (`group`, `module`, `method`) SELECT `group`, 'pivot', 'edit' FROM `zt_grouppriv` WHERE `module` = 'report' AND `method` = 'editReport';
 REPLACE INTO `zt_grouppriv` (`group`, `module`, `method`) SELECT `group`, 'pivot', 'delete' FROM `zt_grouppriv` WHERE `module` = 'report' AND `method` = 'deleteReport';
