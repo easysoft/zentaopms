@@ -30,7 +30,7 @@
 .tree li.has-input {overflow: hidden;}
 .tree-text {margin-left: 5px; overflow: hidden;}
 i.btn-info, i.btn-info:hover {border: none; background: #fff; box-shadow: unset;}
-.tree-version-trigger {padding: 0 10px; width: 54px; border-radius: 5px; background: #F9F9F9; display: flex;}
+.tree-version-trigger {padding: 0 10px; width: 54px; border-radius: 5px; background: #F9F9F9; display: flex; align-items: center;}
 .tree-version-trigger > .text {overflow: hidden; flex: 0 0 30px;}
 .file-tree > .bd-b {border-bottom: 1px solid #EDEEF2;}
 .file-tree > .tree-child {padding: 5px 0; position: relative;}
