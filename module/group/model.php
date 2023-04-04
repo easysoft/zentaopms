@@ -1519,21 +1519,24 @@ class groupModel extends model
     /**
      * Get priv relation.
      *
-     * @param  int    $priv
-     * @param  string $type    depend|recommend
-     * @param  string $module
+     * @param  int     $priv
+     * @param  string  $type    depend|recommend
+     * @param  string  $module
      * @access public
      * @return array
      */
     public function getPrivRelation($priv, $type = '', $module = '')
     {
-        $relations = $this->dao->select('t1.type,t2.*,t3.name')->from(TABLE_PRIVRELATION)->alias('t1')
+        $relations = $this->dao->select('t1.type,t2.*,t3.`key`,t3.value')->from(TABLE_PRIVRELATION)->alias('t1')
             ->leftJoin(TABLE_PRIV)->alias('t2')->on('t1.relationPriv=t2.id')
-            ->leftJoin(TABLE_PRIVLANG)->alias('t3')->on('t2.id=t3.priv')
-            ->where('t1.priv')->in($priv)
+            ->leftJoin(TABLE_PRIVLANG)->alias('t3')->on('t2.id=t3.objectID')
+            ->where('t1.priv')->eq($priv)
+            ->andWhere('t3.objectType')->eq('priv')
             ->beginIF(!empty($type))->andWhere('t1.type')->eq($type)->fi()
             ->beginIF($module)->andWhere('t2.module')->eq($module)->fi()
             ->fetchGroup('type', 'id');
+
+        foreach($relations as $type => $privList) $relations[$type] = $this->transformPrivLang($privList);
 
         if(!empty($type)) return zget($relations, $type, array());
         return $relations;
