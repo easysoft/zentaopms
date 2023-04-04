@@ -85,11 +85,18 @@ js::set('isFirstLoad', isset($isFirstLoad) ? $isFirstLoad: '');
 </div>
 
 <!-- Code for dropdown menu. -->
-<?php js::set('hasLibPriv', common::hasPriv('tree', 'browse') || common::hasPriv($app->rawModule, 'editLib') || common::hasPriv($app->rawModule, 'deleteLib'));?>
-<?php js::set('hasModulePriv', common::hasPriv('tree', 'browse'));?>
+<?php $canAddCatalog    = common::hasPriv('doc', 'addCatalog');?>
+<?php $canEditCatalog   = common::hasPriv('doc', 'editCatalog');?>
+<?php $canDeleteCatalog = common::hasPriv('doc', 'deleteCatalog');?>
+<?php $hasModulePriv    = $canAddCatalog || $canEditCatalog || $canDeleteCatalog;?>
+<?php js::set('canAddCatalog', $canAddCatalog);?>
+<?php js::set('canEditCatalog', $canEditCatalog);?>
+<?php js::set('canDeleteCatalog', $canDeleteCatalog);?>
+<?php js::set('hasModulePriv', $hasModulePriv);?>
+<?php js::set('hasLibPriv', $canAddCatalog || common::hasPriv($app->rawModule, 'editLib') || common::hasPriv($app->rawModule, 'deleteLib'));?>
 <div class='hidden' id='dropDownData'>
   <ul class='libDorpdown'>
-    <?php if(common::hasPriv('tree', 'browse')):?>
+    <?php if($canAddCatalog):?>
     <li data-method="addCataLib" data-has-children='%hasChildren%'  data-libid='%libID%' data-moduleid="%moduleID%" data-type="add"><a><i class="icon icon-icon-add-directory"></i><?php echo $lang->doc->libDropdown['addModule'];?></a></li>
     <?php endif;?>
     <?php if(common::hasPriv($app->rawModule, 'editLib')):?>
@@ -100,10 +107,14 @@ js::set('isFirstLoad', isset($isFirstLoad) ? $isFirstLoad: '');
     <?php endif;?>
   </ul>
   <ul class='moduleDorpdown'>
-    <?php if(common::hasPriv('tree', 'browse')):?>
+    <?php if($canAddCatalog):?>
     <li data-method="addCataBro" data-type="add" data-id="%moduleID%"><a><i class="icon icon-icon-add-directory"></i><?php echo $lang->doc->libDropdown['addSameModule'];?></a></li>
     <li data-method="addCataChild" data-type="add" data-id="%moduleID%" data-has-children='%hasChildren%'><a><i class="icon icon-icon-add-directory"></i><?php echo $lang->doc->libDropdown['addSubModule'];?></a></li>
+    <?php endif;?>
+    <?php if($canEditCatalog):?>
     <li data-method="editCata" class='edit-module'><a data-href='<?php echo helper::createLink('tree', 'edit', "moduleID=%moduleID%&type=$app->rawModule");?>'><i class="icon icon-edit"></i><?php echo $lang->doc->libDropdown['editModule'];?></a></li>
+    <?php endif;?>
+    <?php if($canDeleteCatalog):?>
     <li data-method="deleteCata"><a href='<?php echo helper::createLink('tree', 'delete', 'rootID=%libID%&moduleID=%moduleID%');?>' target='hiddenwin'><i class="icon icon-trash"></i><?php echo $lang->doc->libDropdown['delModule'];?></a></li>
     <?php endif;?>
   </ul>
