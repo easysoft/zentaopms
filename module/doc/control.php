@@ -151,7 +151,7 @@ class doc extends control
         if($type == 'product') $objects = $this->product->getPairs();
         if($type == 'project')
         {
-            $objects = $this->project->getPairsByProgram();
+            $objects = $this->project->getPairsByProgram('', 'all', false, 'order_asc', 'kanban');
             if($this->app->tab == 'doc')
             {
                 $this->view->executionPairs = array(0 => '') + $this->execution->getPairs($objectID, 'all', 'multiple,leaf,noprefix');
@@ -391,13 +391,13 @@ class doc extends control
         $objects  = array();
         if($objectType == 'project')
         {
-            $objects = $this->loadModel('project')->getPairs();
-            $this->view->executions = array(0 => '') + $this->loadModel('execution')->getPairs($objectID, 'all', 'multiple,leaf,noprefix');
+            $objects = $this->project->getPairsByProgram('', 'all', false, 'order_asc', 'kanban');
+            $this->view->executions = array(0 => '') + $this->loadModel('execution')->getPairs($objectID, 'sprint,stage', 'multiple,leaf,noprefix');
         }
         elseif($objectType == 'execution')
         {
             $execution = $this->loadModel('execution')->getById($objectID);
-            $objects   = $this->execution->getPairs($execution->project, 'all', "multiple,leaf,noprefix");
+            $objects   = $this->execution->getPairs($execution->project, 'sprint,stage', "multiple,leaf,noprefix");
         }
         elseif($objectType == 'product')
         {
@@ -552,7 +552,7 @@ class doc extends control
         $objects = array();
         if($objectType == 'project')
         {
-            $objects = $this->loadModel('project')->getPairs();
+            $objects = $this->project->getPairsByProgram('', 'all', false, 'order_asc', 'kanban');
         }
         elseif($objectType == 'execution')
         {
@@ -1494,7 +1494,7 @@ class doc extends control
     public function ajaxGetExecution($projectID)
     {
         $executions     = $this->execution->getList($projectID);
-        $executionPairs = array(0 => '') + $this->execution->getPairs($projectID, 'all', 'multiple,leaf,noprefix');
+        $executionPairs = array(0 => '') + $this->execution->getPairs($projectID, 'sprint,stage', 'multiple,leaf,noprefix');
 
         $project  = $this->project->getById($projectID);
         $disabled = $project->multiple ? '' : 'disabled';

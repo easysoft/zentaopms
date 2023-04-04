@@ -986,8 +986,8 @@ class docModel extends model
             $this->config->doc->search['module'] = 'contributeDoc';
             $products = $this->product->getPairs();
 
-            $this->config->doc->search['params']['project']['values']   = array('' => '') + $this->loadModel('project')->getPairsByProgram() + array('all' => $this->lang->doc->allProjects);
-            $this->config->doc->search['params']['execution']['values'] = array('' => '') + $this->loadModel('execution')->getPairs(0, 'all', 'multiple,leaf,noprefix') + array('all' => $this->lang->doc->allExecutions);
+            $this->config->doc->search['params']['project']['values']   = array('' => '') + $this->loadModel('project')->getPairsByProgram('', 'all', false, 'order_asc', 'kanban') + array('all' => $this->lang->doc->allProjects);
+            $this->config->doc->search['params']['execution']['values'] = array('' => '') + $this->loadModel('execution')->getPairs(0, 'sprint,stage', 'multiple,leaf,noprefix') + array('all' => $this->lang->doc->allExecutions);
             $this->config->doc->search['params']['lib']['values']       = array('' => '') + $this->loadModel('doc')->getLibs('all', 'withObject') + array('all' => $this->lang->doclib->all);
             $this->config->doc->search['params']['product']['values']   = array('' => '') + $products + array('all' => $this->lang->doc->allProduct);
 
@@ -1008,7 +1008,7 @@ class docModel extends model
 
             if($type == 'project')
             {
-                $this->config->doc->search['params']['execution']['values'] = array('' => '') + $this->loadModel('execution')->getPairs($this->session->project, 'all', 'multiple,leaf,noprefix') + array('all' => $this->lang->doc->allExecutions);
+                $this->config->doc->search['params']['execution']['values'] = array('' => '') + $this->loadModel('execution')->getPairs($this->session->project, 'sprint,stage', 'multiple,leaf,noprefix') + array('all' => $this->lang->doc->allExecutions);
             }
             else
             {
@@ -1024,7 +1024,7 @@ class docModel extends model
         else
         {
             $products = $this->product->getPairs('nocode', $this->session->project);
-            $this->config->doc->search['params']['execution']['values'] = array('' => '') + $this->loadModel('execution')->getPairs($this->session->project, 'all', 'multiple,leaf,noprefix') + array('all' => $this->lang->doc->allExecutions);
+            $this->config->doc->search['params']['execution']['values'] = array('' => '') + $this->loadModel('execution')->getPairs($this->session->project, 'sprint,stage', 'multiple,leaf,noprefix') + array('all' => $this->lang->doc->allExecutions);
             $this->config->doc->search['params']['lib']['values']       = array('' => '', $libID => ($libID ? $libs[$libID] : 0), 'all' => $this->lang->doclib->all);
             $this->config->doc->search['params']['product']['values']   = array('' => '') + $products + array('all' => $this->lang->doc->allProduct);
         }
@@ -1587,6 +1587,7 @@ class docModel extends model
                     ->leftjoin(TABLE_DOCLIB)->alias('t2')->on('t2.project=t1.id')
                     ->where("CONCAT(',', t2.users, ',')")->like("%,{$this->app->user->account},%")
                     ->andWhere('t1.vision')->eq($this->config->vision)
+                    ->andWhere('t1.model')->ne('kanban')
                     ->andWhere('t1.deleted')->eq(0)
                     ->beginIF(!$this->app->user->admin)->andWhere('t1.id')->in($this->app->user->view->projects)->fi()
                     ->fetchPairs();
@@ -1596,6 +1597,7 @@ class docModel extends model
                 ->where('type')->eq('project')
                 ->andWhere('vision')->eq($this->config->vision)
                 ->andWhere('deleted')->eq(0)
+                ->andWhere('model')->ne('kanban')
                 ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->projects)->fi()
                 ->orderBy('order_asc')
                 ->fetchAll('id');
