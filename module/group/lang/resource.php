@@ -1798,9 +1798,6 @@ $lang->pivot->methodOrder[20] = 'bugCreate';
 $lang->pivot->methodOrder[25] = 'bugAssign';
 $lang->pivot->methodOrder[30] = 'workload';
 
-/* Report. */
-$lang->resource->report = new stdclass();
-
 /* Search. */
 $lang->resource->search = new stdclass();
 $lang->resource->search->buildForm   = 'buildForm';
