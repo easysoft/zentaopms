@@ -25,14 +25,7 @@
 #dropMenu.has-search-text .hide-in-search {display: flex;}
 #swapper li>.selected {color: #0c64eb!important; background: #e9f2fb!important;}
 #dropMenu .col-left   {padding-bottom: 0px;}
-#dropMenu .col-footer {text-align: center}
-#dropMenu .btn-manage {line-height:24px}
 </style>
-<?php if(!common::hasPriv('dimension', 'browse')):?>
-<style>
-#dropMenu .col-left {padding-bottom: 5px;}
-</style>
-<?php endif;?>
 <?php
 $dimensionNames = array();
 foreach($dimensions as $id => $dimension) $dimensionNames[$id] = $dimension->name;
