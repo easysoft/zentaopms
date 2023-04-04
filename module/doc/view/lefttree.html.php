@@ -360,9 +360,6 @@ $(function()
         }
     }
 
-    $('li.has-list > ul, #fileTree').addClass("menu-active-primary menu-hover-primary");
-
-
     /**
      * Lcate page.
      *
