@@ -225,8 +225,7 @@ js::set('struct_paramsType', $lang->struct->paramsType);
           <tr>
             <td colspan='3' class='text-center form-actions'>
               <?php echo html::submitButton();?>
-              <?php if(empty($gobackLink)) echo html::backButton($lang->goback, "data-app='{$app->tab}' class='btn btn-back btn-wide'");?>
-              <?php if(!empty($gobackLink)) echo html::a($gobackLink, $lang->goback, '', "class='btn btn-back btn-wide'");?>
+              <?php echo html::backButton($lang->goback, "data-app='{$app->tab}' class='btn btn-back btn-wide'");?>
             </td>
           </tr>
         </tbody>
