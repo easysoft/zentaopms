@@ -582,7 +582,6 @@ class api extends control
         $libName = isset($lib->name) ? $lib->name . $this->lang->colon : '';
 
         $this->getTypeOptions($libID);
-        $this->view->gobackLink       = '';
         $this->view->user             = $this->app->user->account;
         $this->view->allUsers         = $this->loadModel('user')->getPairs('devfirst|noclosed');
         $this->view->libID            = $libID;
