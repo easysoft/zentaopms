@@ -32,7 +32,7 @@
 i.btn-info, i.btn-info:hover {border: none; background: #fff; box-shadow: unset;}
 .tree-version-trigger {padding: 0 10px; width: 54px; border-radius: 5px; background: #F9F9F9; display: flex;}
 .tree-version-trigger > .text {overflow: hidden; flex: 0 0 30px;}
-.file-tree > .bd-b:after {content: ''; position: absolute; inset: 0 -5px 0 -10px; border-bottom: 1px solid #EDEEF2;}
+.file-tree > .bd-b {border-bottom: 1px solid #EDEEF2;}
 .file-tree > .tree-child {padding: 5px 0; position: relative;}
 
 /* css for sidebar */
@@ -67,7 +67,7 @@ js::set('objectID',   isset($objectID) ? $objectID : '');
 js::set('isFirstLoad', isset($isFirstLoad) ? $isFirstLoad: '');
 ?>
 
-<div id="fileTree" class="file-tree">
+<div id="fileTree" class="file-tree menu-active-primary menu-hover-primary">
 <?php if(isset($type) and $type == 'project'):?>
 <div class="project-tree bd-b tree-child">
     <div class="title"><i class="icon icon-project btn-info"> </i><?php echo $lang->projectCommon?></div>
@@ -293,6 +293,41 @@ $(function()
             $(this).closest('body').append(dropDown);
 
             e.stopPropagation();
+        }).on('mousemove', 'a', function()
+        {
+            if($(this).data('type') == 'annex') return;
+            if(!$(this).data('action')) return;
+
+            var libClass = '.libDorpdown';
+            if(!$(this).hasClass('lib')) libClass = '.moduleDorpdown';
+
+            $(this).find('.icon').removeClass('hidden');
+            $(this).addClass('show-icon');   if($(libClass).find('li').length == 0) return false;
+
+        }).on('mouseout', 'a', function()
+        {
+            $(this).find('.icon').addClass('hidden');
+            $(this).removeClass('show-icon');
+        }).on('click', 'a', function()
+        {
+            if(!$(this).data('action')) return;
+            var isLib    = $(this).hasClass('lib');
+            var moduleID = $(this).data('id');
+            var libID    = 0;
+
+            if(isLib)
+            {
+                if($(this).data('type') == 'annex' && !canViewFiles) return false;
+
+                libID    = moduleID;
+                moduleID = 0;
+            }
+            else
+            {
+                libID = $(this).closest('.lib').data('id');
+            }
+
+            return lcatePage(libID, moduleID, $(this).data('type'));
         }).on('click', '.tree-version-trigger', function(e)
         {
             $('.dropdown-in-tree').css('display', 'none');
@@ -324,45 +359,6 @@ $(function()
             $('.execution-tree').remove();
         }
     }
-
-    $('li.has-list > ul, #fileTree').addClass("menu-active-primary menu-hover-primary");
-
-    $('#fileTree').on('mousemove', 'a', function()
-    {
-        if($(this).data('type') == 'annex') return;
-        if(!$(this).data('action')) return;
-
-        var libClass = '.libDorpdown';
-        if(!$(this).hasClass('lib')) libClass = '.moduleDorpdown';
-
-        $(this).find('.icon').removeClass('hidden');
-        $(this).addClass('show-icon');   if($(libClass).find('li').length == 0) return false;
-
-    }).on('mouseout', 'a', function()
-    {
-        $(this).find('.icon').addClass('hidden');
-        $(this).removeClass('show-icon');
-    }).on('click', 'a', function()
-    {
-        if(!$(this).data('action')) return;
-        var isLib    = $(this).hasClass('lib');
-        var moduleID = $(this).data('id');
-        var libID    = 0;
-
-        if(isLib)
-        {
-            if($(this).data('type') == 'annex' && !canViewFiles) return false;
-
-            libID    = moduleID;
-            moduleID = 0;
-        }
-        else
-        {
-            libID = $(this).closest('.lib').data('id');
-        }
-
-        return lcatePage(libID, moduleID, $(this).data('type'));
-    });
 
     /**
      * Lcate page.
