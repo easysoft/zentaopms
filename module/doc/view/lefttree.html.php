@@ -61,6 +61,7 @@ js::set('versionLang', $lang->build->common);
 /* ObjectType and objectID used for other space. */
 js::set('objectType', isset($type) ? $type : '');
 js::set('objectID',   isset($objectID) ? $objectID : '');
+js::set('isFirstLoad', isset($isFirstLoad) ? $isFirstLoad: '');
 ?>
 
 <div id="fileTree" class="file-tree">
@@ -205,6 +206,8 @@ $(function()
             initialState: 'active',
             itemCreator: function($li, item)
             {
+                if(typeof item.hasAction == 'undefined') item.hasAction = true;
+
                 var objectType = config.currentModule == 'api' ? item.objectType : item.type;
                 var libClass = ['lib', 'annex', 'api', 'execution'].indexOf(objectType) !== -1 ? 'lib' : '';
                 var hasChild = item.children ? !!item.children.length : false;
@@ -212,7 +215,7 @@ $(function()
                 var $item    = '<a href="' + link + '" style="position: relative" data-has-children="' + hasChild + '" title="' + item.name + '" data-id="' + item.id + '" class="' + libClass + '" data-type="' + item.type + '" data-action="' + item.hasAction + '">';
 
                 $item += '<div class="text h-full w-full flex-start overflow-hidden">';
-                if(libClass == 'lib') $item += '<div class="img-lib" style="background-image:url(static/svg/' + imgObj[item.type || 'lib'] + '.svg)"></div>';
+                if(libClass == 'lib' && (item.type == 'execution' && item.hasAction)) $item += '<div class="img-lib" style="background-image:url(static/svg/' + imgObj[item.type || 'lib'] + '.svg)"></div>';
                 $item += '<div class="tree-text">';
                 $item += item.name;
                 $item += '</div>';
@@ -236,7 +239,7 @@ $(function()
                 if(item.active) $li.addClass('active');
             }
         });
-        if(location.href.indexOf('moduleID') == -1) ele.data('zui.tree').collapse();
+        if(isFirstLoad !== 'false') ele.data('zui.tree').collapse();
         var $leaf = ele.find('li.active');
         if($leaf.length) $leaf[$leaf.length - 1].scrollIntoView(true);
 
@@ -484,7 +487,7 @@ $(function()
     }).on('click', '#versionSwitcher a', function()
     {
         var $item = $(this);
-        linkParams = linkParams.replace('%s', '&libID=' + $item.closest('ul').data('libId') + '&moduleID=0&apiID=0&version=0&release=' + $item.data('id'));
+        linkParams = linkParams.replace('%s', 'libID=' + $item.closest('ul').data('libId') + '&moduleID=0&apiID=0&version=0&release=' + $item.data('id'));
         location.href = createLink(config.currentModule, 'index', linkParams);
     }).on('blur', '.file-tree input.input-tree', function()
     {

@@ -1291,6 +1291,7 @@ class doc extends control
      */
     public function tableContents($type = 'custom', $objectID = 0, $libID = 0, $moduleID = 0, $browseType = 'all', $orderBy = 'status,id_desc', $param = 0, $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
+        $this->view->isFirstLoad = $objectID == 0 ? 'true' : 'false';
         $this->session->set('createProjectLocate', $this->app->getURI(true), 'doc');
 
         if(empty($browseType)) $browseType = 'all';
@@ -1359,9 +1360,10 @@ class doc extends control
         $this->view->pager          = $pager;
         $this->view->objectID       = $objectID;
         $this->view->orderBy        = $orderBy;
-        $this->view->exportMethod   = $type . '2export';
-        $this->view->canExport      = common::hasPriv('doc', $type . '2export');
+        $this->view->canExport      = $libType == 'api' ? common::hasPriv('api', 'export') : common::hasPriv('doc', $type . '2export');
+        $this->view->exportMethod   = $libType == 'api' ? 'export' : $type . '2export';
         $this->view->apiLibID       = key($apiLibs);
+
 
         $this->display();
     }

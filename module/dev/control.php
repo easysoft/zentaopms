@@ -51,11 +51,12 @@ class dev extends control
             $moduleID  = $api->module;
             $api->desc = htmlspecialchars_decode($api->desc);
         }
-        $this->view->title      = $this->lang->dev->api;
-        $this->view->moduleTree = $menu;
-        $this->view->typeList   = $typeList;
-        $this->view->api        = $api;
-        $this->view->apiID      = $apiID;
+        $this->view->title          = $this->lang->dev->api;
+        $this->view->selectedModule = 'restapi';
+        $this->view->moduleTree     = $menu;
+        $this->view->typeList       = $typeList;
+        $this->view->api            = $api;
+        $this->view->apiID          = $apiID;
         $this->display();
     }
 

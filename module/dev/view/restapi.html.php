@@ -9,7 +9,7 @@
  * @version     $Id$
  * @link        http://www.zentao.net
  */
-include '../../common/view/header.html.php';
+include 'header.html.php';
 js::set('confirmDelete', $lang->api->confirmDelete);
 ?>
 <div class="main-row" id="mainContent">
