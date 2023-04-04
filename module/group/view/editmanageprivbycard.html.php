@@ -35,8 +35,8 @@
           <?php foreach($privs as $privID => $priv):?>
           <div class="group-item">
             <div class="checkbox-primary">
-              <?php $action = $priv->methodName;?>
-              <?php $label  = zget($privLang, $privID, $action);?>
+              <?php $action = $priv->method;?>
+              <?php $label  = zget($privLang, $privID, $lang->$module->$action);?>
               <?php echo html::checkbox("actions[$module][]", array($action => $label), '', "title='{$label}' id='actions[$module]$action' data-id='$privID'");?>
             </div>
           </div>

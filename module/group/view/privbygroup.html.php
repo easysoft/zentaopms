@@ -133,13 +133,13 @@
           </td>
           <?php endif;?>
           <td id='<?php echo $moduleName;?>' class='pv-10px' colspan='<?php echo !empty($lang->$moduleName->menus) ? 1 : 2?>'>
-            <?php foreach($moduleActions as $action => $actionLabel):?>
-            <?php if(!empty($lang->$moduleName->menus) and $action == 'browse') continue;;?>
-            <?php if(!empty($version) and strpos($changelogs, ",$moduleName-$actionLabel,") === false) continue;?>
-            <?php if(!isset($privs["$moduleName-$actionLabel"])) continue;?>
-            <?php $privName = (isset($privLang["$moduleName-$actionLabel"]) and !empty($privLang->name)) ? $privLang["$moduleName-$actionLabel"]->name : $lang->$moduleName->$actionLabel;?>
-            <div class='group-item'>
-              <?php echo html::checkbox("actions[{$moduleName}]", array($action => $privName), isset($groupPrivs[$moduleName][$action]) ? $action : '', "title='{$privName}'", 'inline');?>
+            <?php foreach($privs as $privID => $priv):?>
+            <div class="group-item">
+              <div class="checkbox-primary">
+                <?php $action = $priv->method;?>
+                <?php $privName = $privLang[$privID]->name;?>
+                <?php echo html::checkbox("actions[$moduleName][]", array($action => $privName), '', "title='{$privName}' id='actions[$moduleName]$action' data-id='$privID'");?>
+              </div>
             </div>
             <?php endforeach;?>
           </td>

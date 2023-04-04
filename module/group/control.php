@@ -250,7 +250,7 @@ class group extends control
             $privLang     = $this->group->transformPrivLang($privs);
 
             $privList = array();
-            foreach($privs as $privID => $priv)
+            foreach($privs as $priv)
             {
                 if(!isset($privList[$priv->parentCode])) $privList[$priv->parentCode] = array();
                 if(!isset($privList[$priv->parentCode][$priv->package])) $privList[$priv->parentCode][$priv->package] = array();

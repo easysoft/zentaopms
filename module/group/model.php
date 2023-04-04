@@ -1430,16 +1430,20 @@ class groupModel extends model
         $modules = array_keys($modules);
         $modules = implode(',', $modules);
 
-        $privs = $this->dao->select("t1.*, t2.`key`, t2.`value`, t2.desc, t4.code as parentCode, INSTR('$modules', t4.id) as moduleOrder")->from(TABLE_PRIV)->alias('t1')
+        $privs = $this->dao->select("t1.*, t2.`key`, t2.`value`, t2.desc, IFNULL(t4.code, t1.module) as parentCode, INSTR('$modules', t4.id) as moduleOrder")->from(TABLE_PRIV)->alias('t1')
             ->leftJoin(TABLE_PRIVLANG)->alias('t2')->on('t1.id=t2.objectID')
             ->leftJoin(TABLE_PRIVMANAGER)->alias('t3')->on('t1.package=t3.id')
             ->leftJoin(TABLE_PRIVMANAGER)->alias('t4')->on('t3.parent=t4.id')
             ->where('1=1')
-            ->beginIF(!empty($view) and $view != 'general')->andWhere('t4.id')->in($modules)->fi()
             ->andWhere('t2.lang')->eq($this->app->getClientLang())
             ->andWhere('t2.objectType')->eq('priv')
-            ->andWhere('t3.type')->eq('package')
+            ->andWhere('((t3.type')->eq('package')
             ->andWhere('t4.type')->eq('module')
+            ->beginIF(!empty($view) and $view != 'general')->andWhere('t4.code')->in($modules)->fi()
+            ->markRight(1)
+            ->orWhere('(t1.package')->eq('0')
+            ->beginIF(!empty($view) and $view != 'general')->andWhere('t1.module')->in($modules)->fi()
+            ->markRight(2)
             ->orderBy("moduleOrder asc, t3.order asc, `order` asc")
             ->page($pager)
             ->fetchAll('key');
@@ -1853,7 +1857,7 @@ class groupModel extends model
      */
     public function getPrivLangPairs()
     {
-        return $this->dao->select('priv,name')->from(TABLE_PRIVLANG)
+        return $this->dao->select('objectID as priv,value as name')->from(TABLE_PRIVLANG)
             ->where('lang')->eq($this->app->clientLang)
             ->fetchPairs();
     }
@@ -1878,12 +1882,12 @@ class groupModel extends model
      * @access public
      * @return array
      */
-    public function getPrivManagerPairs($type, $parent = 0, $field = 'value')
+    public function getPrivManagerPairs($type, $parent = 0)
     {
-        $parentType = $type == 'module' ? 'view' : 'module';
-        $parent     = $this->dao->select('id as parent')->from(TABLE_PRIVMANAGER)->where('type')->eq($parentType)->andWhere('code')->eq($parent)->fetch('parent');
+        $parentType = $type == 'package' ? 'module' : 'view';
+        $parent     = !empty($parent) ? $this->dao->select('id as parent')->from(TABLE_PRIVMANAGER)->where('type')->eq($parentType)->andWhere('code')->eq($parent)->fetch('parent') : 0;
 
-        $managers = $this->dao->select('t1.id,t2.key,t2.value')
+        $managers = $this->dao->select('t1.id,t1.code,t2.key,t2.value')
             ->from(TABLE_PRIVMANAGER)->alias('t1')
             ->leftJoin(TABLE_PRIVLANG)->alias('t2')->on('t1.id=t2.objectID')
             ->where('t1.type')->eq($type)
@@ -1897,11 +1901,12 @@ class groupModel extends model
 
         $moduleLang = $type == 'module' ? $this->getMenuModules('', true) : array();
         $pairs      = array();
-        foreach($managers as $id => $manager)
+        foreach($managers as $managerID => $manager)
         {
-            if(!empty($manager->value)) $pairs[$id] = $manager->value;
-            if(empty($manager->value) and $type == 'view')   $pairs[$id] = $this->lang->{$manager->key}->common;
-            if(empty($manager->value) and $type == 'module') $pairs[$id] = zget($moduleLang, $manager->key);
+            $key = $type == 'package' ? $managerID : $manager->code;
+            if(!empty($manager->value)) $pairs[$key] = $manager->value;
+            if(empty($manager->value) and $type == 'view')   $pairs[$key] = $this->lang->{$manager->key}->common;
+            if(empty($manager->value) and $type == 'module') $pairs[$key] = zget($moduleLang, $manager->key);
         }
         return $pairs;
     }
@@ -1927,7 +1932,7 @@ class groupModel extends model
                 list($moduleName, $methodLang) = explode('-', $priv->key);
                 $this->app->loadLang($moduleName);
 
-                $priv->name = $this->lang->{$moduleName}->$methodLang;
+                $priv->name = !empty($moduleName) && !empty($methodLang) ? $this->lang->{$moduleName}->$methodLang : '';
             }
         }
 
