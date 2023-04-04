@@ -369,8 +369,7 @@ $(function()
      */
     function lcatePage(libID, moduleID, type)
     {
-
-        linkParams = linkParams.replace('%s', '&libID=' + libID + '&moduleID=' + moduleID);
+        linkParams = linkParams.replace('%s', 'libID=' + libID + '&moduleID=' + moduleID);
         var methodName = '';
         if(config.currentModule == 'api')
         {
@@ -384,10 +383,9 @@ $(function()
         }
         else
         {
-            methodName = objectType == 'custom' ? 'tableContents' : objectType + 'Space';
-            linkParams = objectType == 'custom' ? 'type=custom&' + linkParams : linkParams;
+            methodName = objectType == 'execution' || objectType == 'custom' ? 'tableContents' : objectType + 'Space';
+            linkParams = objectType == 'execution' || objectType == 'custom' ? 'type=' + objectType + '&' + linkParams : linkParams;
         }
-
 
         location.href = createLink(config.currentModule, methodName, linkParams);
     }

@@ -12,7 +12,7 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php js::set('treeData', $libTree);?>
-<?php js::set('linkParams', "objectID=$objectID%s&browseType=&orderBy=$orderBy");?>
+<?php js::set('linkParams', "objectID=$objectID&%s&browseType=&orderBy=$orderBy");?>
 <?php js::set('docLang', $lang->doc);?>
 <?php js::set('libType', $libType);?>
 <?php js::set('canViewFiles', common::hasPriv('doc', 'showfiles'));?>

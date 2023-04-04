@@ -91,7 +91,7 @@
                 </tr>
                 <tr>
                   <th><?php echo $lang->doc->keywords;?></th>
-                  <td colspan='3' class='<?php if(strpos($config->doc->edit->requiredFields, 'keywords') !== false) echo 'required'?>'><?php echo html::input('keywords', '', "id='modalKeywords' class='form-control' placeholder='{$lang->doc->keywordsTips}'");?></td>
+                  <td colspan='3' class='<?php if(strpos($config->doc->create->requiredFields, 'keywords') !== false) echo 'required'?>'><?php echo html::input('keywords', '', "id='modalKeywords' class='form-control' placeholder='{$lang->doc->keywordsTips}'");?></td>
                 </tr>
                 <tr id='fileBox'>
                   <th><?php echo $lang->doc->files;?></th>
