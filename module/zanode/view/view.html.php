@@ -27,7 +27,7 @@
 <?php
 $vars    = "id={$zanode->id}&orderBy=%s";
 $account = strpos($zanode->osName, "windows") ? $config->zanode->defaultWinAccount : $config->zanode->defaultAccount;
-$ssh = $zanode->hostType == 'physics' ? $zanode->extranet : ($zanode->ssh ? 'ssh ' . $account . '@' . $zanode->ip . ' -p ' . $zanode->ssh : '');
+$ssh = $zanode->hostType == 'physics' ? ('ssh ' . $zanode->extranet) : ($zanode->ssh ? 'ssh ' . $account . '@' . $zanode->ip . ' -p ' . $zanode->ssh : '');
 ?>
 <div id='mainMenu' class='clearfix'>
   <div class='btn-toolbar pull-left'>
@@ -59,9 +59,9 @@ $ssh = $zanode->hostType == 'physics' ? $zanode->extranet : ($zanode->ssh ? 'ssh
             <div class="col-4">
               <div class="main-row">
                 <div class="col-3 text-right"><?php echo $lang->zanode->sshAddress; ?>:</div>
-                <div class="col-8 node-not-wrap"><?php echo  $ssh;?><?php echo $ssh ? " <button type='button' class='btn btn-info btn-mini btn-ssh-copy'><i class='icon-common-copy icon-copy' title='" . $lang->zanode->copy .  "'></i></button>" : ''; ?></div>
+                <div class="col-8 node-not-wrap"><?php echo $ssh;?><?php echo $ssh ? " <button type='button' class='btn btn-info btn-mini btn-ssh-copy'><i class='icon-common-copy icon-copy' title='" . $lang->zanode->copy .  "'></i></button>" : ''; ?></div>
               </div>
-              <textarea style="display:none;" id="ssh-copy">ssh <?php echo $ssh; ?></textarea>
+              <textarea style="display:none;" id="ssh-copy"><?php echo $ssh; ?></textarea>
             </div>
             <div class="col-4">
               <div class="main-row">
@@ -106,9 +106,9 @@ $ssh = $zanode->hostType == 'physics' ? $zanode->extranet : ($zanode->ssh ? 'ssh
             <div class="col-4">
               <div class="main-row">
                 <div class="col-3 text-right"><?php echo $lang->zanode->sshCommand; ?>:</div>
-                <div class="col-8 node-not-wrap"><?php echo  $ssh;?><?php echo $ssh ? " <button type='button' class='btn btn-info btn-mini btn-ssh-copy'><i class='icon-common-copy icon-copy' title='" . $lang->zanode->copy .  "'></i></button>" : ''; ?></div>
+                <div class="col-8 node-not-wrap"><?php echo $ssh;?><?php echo $ssh ? " <button type='button' class='btn btn-info btn-mini btn-ssh-copy'><i class='icon-common-copy icon-copy' title='" . $lang->zanode->copy .  "'></i></button>" : ''; ?></div>
               </div>
-              <textarea style="display:none;" id="ssh-copy">ssh <?php echo $ssh; ?></textarea>
+              <textarea style="display:none;" id="ssh-copy"><?php echo $ssh; ?></textarea>
             </div>
             <div class="col-4">
               <div class="main-row">
