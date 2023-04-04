@@ -21,8 +21,7 @@ class searchToggle extends wg
             set::class('ghost search-form-toggle'),
             set::icon('search'),
             set::text($lang->searchAB),
-            on::click('window.toggleSearchForm'),
-            to::after()
+            on::click('window.toggleSearchForm')
         );
     }
 }
