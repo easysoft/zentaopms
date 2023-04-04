@@ -11,7 +11,7 @@
  */
 $lang->doclib = new stdclass();
 $lang->doclib->name       = 'Name';
-$lang->doclib->control    = 'Access Control';
+$lang->doclib->control    = 'Zugang';
 $lang->doclib->group      = 'Gruppe';
 $lang->doclib->user       = 'Benutzer';
 $lang->doclib->files      = 'Dateien';
