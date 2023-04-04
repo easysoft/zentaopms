@@ -73,6 +73,7 @@ UPDATE `zt_chart` SET `sql` = 'SELECT\r\n    t1.name AS topProgram,t1.id,t2.`yea
 UPDATE `zt_screen` SET `name` = '燃尽图大屏' WHERE `id` = '5';
 UPDATE `zt_screen` SET `builtin` = '1', `status` = 'published';
 
+UPDATE `zt_grouppriv` SET `module` = 'measrecord' WHERE `module` = 'report' AND `method` IN ('projectSummary','projectWorkload', 'customeredReport', 'instanceTemplate');
 UPDATE `zt_grouppriv` SET `module` = 'dataview' WHERE `module` = 'dataset' AND `method` IN ('create', 'browse', 'edit', 'delete');
 UPDATE `zt_grouppriv` SET `module` = 'screen' WHERE `module` = 'report' AND `method` IN ('annualData','allAnnualData');
 UPDATE `zt_grouppriv` SET `module` = 'pivot' WHERE `module` = 'report' AND `method` IN ('projectDeviation','productSummary', 'bugCreate', 'bugAssign', 'workload', 'showProduct', 'showProject');
