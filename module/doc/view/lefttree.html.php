@@ -30,7 +30,8 @@
 .tree li.has-input {overflow: hidden;}
 .tree-text {margin-left: 5px; overflow: hidden;}
 i.btn-info, i.btn-info:hover {border: none; background: #fff; box-shadow: unset;}
-.tree-version-trigger {padding: 0 10px; width: 54px; border-radius: 5px; background: #F9F9F9;}
+.tree-version-trigger {padding: 0 10px; width: 54px; border-radius: 5px; background: #F9F9F9; display: flex;}
+.tree-version-trigger > .text {overflow: hidden; flex: 0 0 30px;}
 
 /* css for sidebar */
 .sidebar-toggle {flex: 0 0 16px;}
@@ -227,7 +228,7 @@ $(function()
                     {
                         if(item.versions[i].id == release) versionName = item.versions[i].version;
                     }
-                    $item += '<div class="tree-version-trigger" data-id="' +  item.id + '">' + (versionName || versionLang) + '<span class="caret"></span></div>';
+                    $item += '<div class="tree-version-trigger" data-id="' +  item.id + '"><div class="text">' + (versionName || versionLang) + '</div><div class="caret"></div></div>';
                 }
                 if((libClass != 'lib' && hasModulePriv) || (libClass == 'lib' && hasLibPriv)) $item += '<i class="icon icon-drop icon-ellipsis-v hidden tree-icon" data-isCatalogue="' + (libClass ? false : true) + '"></i>';
                 $item += '</div>';
