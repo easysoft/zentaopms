@@ -39,7 +39,8 @@ body {margin-bottom: 25px;}
   </p>
 </div>
 <?php else:?>
-<?php $vars = "type=$type&objectID=$objectID&$libID=$libID&moduleID=$moduleID&browseType=$browseType&orderBy=%s&param=$param&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}";?>
+<?php $vars = "objectID=$objectID&$libID=$libID&moduleID=$moduleID&browseType=$browseType&orderBy=%s&param=$param&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}";?>
+<?php if($app->rawMethod == 'tablecontents') $vars = "type=$type&" . $vars;?>
 <div>
   <form class='main-table' method='post' id='docListForm'>
     <table class="table table-files has-sort-head">
@@ -51,13 +52,13 @@ body {margin-bottom: 25px;}
               <label></label>
             </div>
             <?php endif;?>
-            <?php common::printOrderLink('id', $orderBy, $vars, $lang->idAB, '', 'tableContents');?>
+            <?php common::printOrderLink('id', $orderBy, $vars, $lang->idAB);?>
           </th>
-          <th class="c-name"><?php common::printOrderLink('title', $orderBy, $vars, $lang->doc->title, '', 'tableContents');?></th>
-          <th class="c-user"><?php common::printOrderLink('addedBy', $orderBy, $vars, $lang->doc->addedByAB, '', 'tableContents');?></th>
-          <th class="c-date"><?php common::printOrderLink('addedDate', $orderBy, $vars, $lang->doc->addedDate, '', 'tableContents');?></th>
-          <th class="c-user"><?php common::printOrderLink('editedBy', $orderBy, $vars, $lang->doc->editedBy, '', 'tableContents');?></th>
-          <th class="c-date"><?php common::printOrderLink('editedDate', $orderBy, $vars, $lang->doc->editedDate, '', 'tableContents');?></th>
+          <th class="c-name"><?php common::printOrderLink('title', $orderBy, $vars, $lang->doc->title);?></th>
+          <th class="c-user"><?php common::printOrderLink('addedBy', $orderBy, $vars, $lang->doc->addedByAB);?></th>
+          <th class="c-date"><?php common::printOrderLink('addedDate', $orderBy, $vars, $lang->doc->addedDate);?></th>
+          <th class="c-user"><?php common::printOrderLink('editedBy', $orderBy, $vars, $lang->doc->editedBy);?></th>
+          <th class="c-date"><?php common::printOrderLink('editedDate', $orderBy, $vars, $lang->doc->editedDate);?></th>
           <th class="c-actions"><?php echo $lang->actions;?></th>
         </tr>
       </thead>
@@ -81,9 +82,9 @@ body {margin-bottom: 25px;}
           <?php
           $docType = $doc->type == 'text' ? 'wiki-file' : $doc->type;
           $icon    = html::image("static/svg/{$docType}.svg", "class='file-icon'");
-          if(common::hasPriv('doc', 'objectLibs'))
+          if(common::hasPriv('doc', 'view'))
           {
-              echo html::a($this->createLink('doc', 'objectLibs', "type=$type&objectID=$objectID&libID=$doc->lib&docID=$doc->id"), $icon . $doc->title, '', "title='{$doc->title}' class='doc-title' data-app='{$this->app->tab}'");
+              echo html::a($this->createLink('doc', 'view', "docID=$doc->id"), $icon . $doc->title, '', "title='{$doc->title}' class='doc-title' data-app='{$this->app->tab}'");
           }
           else
           {
@@ -101,7 +102,16 @@ body {margin-bottom: 25px;}
           <td class="c-datetime"><?php echo formatTime($doc->editedDate, 'Y-m-d');?></td>
           <td class="c-actions">
             <?php if(common::canBeChanged('doc', $doc)):?>
-            <?php common::printLink('doc', 'edit', "docID=$doc->id&comment=false", "<i class='icon icon-edit'></i>", '', "title='{$lang->edit}' class='btn'", true, false)?>
+            <?php
+            $iframe   = '';
+            $onlybody = false;
+            if($doc->type != 'text' or isonlybody())
+            {
+                $iframe   = 'iframe';
+                $onlybody = true;
+            }
+            ?>
+            <?php common::printLink('doc', 'edit', "docID=$doc->id&comment=false", "<i class='icon icon-edit'></i>", '', "title='{$lang->edit}' class='btn $iframe'", true, $onlybody);?>
             <?php common::printLink('doc', 'delete', "docID=$doc->id&confirm=no", "<i class='icon icon-trash'></i>", 'hiddenwin', "title='{$lang->delete}' class='btn'")?>
             <?php endif;?>
           </td>

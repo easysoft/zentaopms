@@ -12,7 +12,7 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php js::set('treeData', $libTree);?>
-<?php js::set('linkParams', "type=$type&objectID=$objectID%s&browseType=&orderBy=$orderBy");?>
+<?php js::set('linkParams', "objectID=$objectID&%s&browseType=&orderBy=$orderBy");?>
 <?php js::set('docLang', $lang->doc);?>
 <?php js::set('libType', $libType);?>
 <?php js::set('canViewFiles', common::hasPriv('doc', 'showfiles'));?>
@@ -20,18 +20,30 @@
   <div id="leftBar" class="btn-toolbar pull-left">
     <?php echo $objectDropdown;?>
     <?php if(!empty($libTree)):?>
+    <?php if($libType != 'api'):?>
     <?php foreach($lang->doc->featureBar['tableContents'] as $barType => $barName):?>
-    <?php $active  = $barType == $browseType ? 'btn-active-text' : '';?>
-    <?php echo html::a($this->createLink('doc', 'tableContents', "type=$type&objectID=$objectID&libID=$libID&moduleID=$moduleID&browseType=$barType"), $barName, '', "class='btn btn-link $active' id='{$barType}Tab'");?>
+    <?php $active     = $barType == $browseType ? 'btn-active-text' : '';?>
+    <?php $linkParams = $app->rawMethod == 'tablecontents' ? "type=$type&objectID=$objectID&libID=$libID&moduleID=$moduleID&browseType=$barType": "objectID=$objectID&libID=$libID&moduleID=$moduleID&browseType=$barType";?>
+    <?php echo html::a($this->createLink('doc', $app->rawMethod, $linkParams), $barName, '', "class='btn btn-link $active' id='{$barType}Tab'");?>
     <?php endforeach;?>
+    <?php endif;?>
     <a class="btn btn-link querybox-toggle" id='bysearchTab'><i class="icon icon-search muted"></i> <?php echo $lang->doc->searchDoc;?></a>
     <?php endif;?>
   </div>
   <div class="btn-toolbar pull-right">
   <?php
+  if($libType == 'api')
+  {
+      if(common::hasPriv('api', 'struct'))        echo html::a($this->createLink('api', 'struct',        "libID=$libID"), "<i class='icon-treemap muted'> </i>" . $lang->api->struct, '', "class='btn btn-link'");
+      if(common::hasPriv('api', 'releases'))      echo html::a($this->createLink('api', 'releases',      "libID=$libID", 'html', true), "<i class='icon-version muted'> </i>" . $lang->api->releases, '', "class='btn btn-link iframe' data-width='800px'");
+      if(common::hasPriv('api', 'createRelease')) echo html::a($this->createLink('api', 'createRelease', "libID=$libID"), "<i class='icon-publish muted'> </i>" . $lang->api->createRelease, '', "class='btn btn-link iframe' data-width='800px'");
+  }
+
   if($canExport)
   {
-      echo html::a($this->createLink('doc', $exportMethod, "libID=$libID&docID=0", 'html', true), "<i class='icon-export muted'> </i>" . $lang->export, '', "class='btn btn-link export' id='{$exportMethod}'");
+      $exportLink = $this->createLink('doc', $exportMethod, "libID=$libID&docID=0", 'html', true);
+      if($libType == 'api') $exportLink = $this->createLink('api', $exportMethod, "libID=$libID", 'html', true);
+      echo html::a($exportLink, "<i class='icon-export muted'> </i>" . $lang->export, '', "class='btn btn-link export' id='{$exportMethod}'");
   }
 
   if(common::hasPriv('doc', 'createLib'))
@@ -64,7 +76,7 @@
     </p>
   </div>
 <?php else:?>
-  <div id='sideBar' class="panel side side-col col overflow-auto" data-min-width="150">
+  <div id='sideBar' class="panel side side-col col overflow-auto">
     <?php include 'lefttree.html.php';?>
   </div>
   <div class="sidebar-toggle flex-center"><i class="icon icon-angle-left"></i></div>

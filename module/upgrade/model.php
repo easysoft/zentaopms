@@ -595,6 +595,7 @@ class upgradeModel extends model
                 break;
             case '18_3':
                 $this->changeBookToCustomLib();
+                $this->createDefaultDimension();
                 break;
         }
 
@@ -753,7 +754,6 @@ class upgradeModel extends model
                 $this->processFeedbackModule();
                 break;
             case 'biz8_3':
-                $this->createDefaultDimension();
                 $this->processDataset();
                 $this->updateDatasetPriv();
                 $this->processChart();

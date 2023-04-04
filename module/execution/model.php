@@ -1638,7 +1638,7 @@ class executionModel extends model
             ->beginIF(strpos($mode, 'multiple') !== false)->andWhere('multiple')->eq('1')->fi()
             ->beginIF($type == 'all')->andWhere('type')->in('stage,sprint,kanban')->fi()
             ->beginIF($projectID)->andWhere('project')->eq($projectID)->fi()
-            ->beginIF($type != 'all')->andWhere('type')->eq($type)->fi()
+            ->beginIF($type != 'all')->andWhere('type')->in($type)->fi()
             ->beginIF(strpos($mode, 'withdelete') === false)->andWhere('deleted')->eq(0)->fi()
             ->beginIF(!$this->app->user->admin and strpos($mode, 'all') === false)->andWhere('id')->in($this->app->user->view->sprints)->fi()
             ->orderBy($orderBy)

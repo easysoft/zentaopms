@@ -20,10 +20,11 @@ class screen extends control
      */
     public function browse($dimensionID = 0)
     {
-        $dimensionID = $this->commonAction($dimensionID);
+        $dimensionID = $this->loadModel('dimension')->setSwitcherMenu($dimensionID);
 
-        $this->view->title   = $this->lang->screen->common;
-        $this->view->screens = $this->screen->getList($dimensionID);
+        $this->view->title     = $this->lang->screen->common;
+        $this->view->screens   = $this->screen->getList($dimensionID);
+        $this->view->dimension = $dimensionID;
         $this->display();
     }
 
@@ -41,7 +42,11 @@ class screen extends control
     {
         if(empty($year)) $year = date('Y');
 
-        if($screenID == 3) $this->locate($this->createLink('report', 'annualData'));
+        if($screenID == 3)
+        {
+            echo $this->fetch('report', 'annualData');
+            return;
+        }
 
         $screen = $this->screen->getByID($screenID, $year, $dept, $account);
 

@@ -19,7 +19,8 @@
 <?php
 $normalObjectsHtml = '<ul class="tree noProgram">';
 $closedObjectsHtml = '<ul class="tree noProgram">';
-$link              = $this->createLink($module, $method, "type=$objectType&objectID=%s");
+$params            = $method == 'showfiles' ||$objectType == 'custom' ? "type=$objectType&objectID=%s" : "objectID=%s";
+$link              = $this->createLink($module, $method, $params);
 foreach($normalObjects as $normalObjectID => $normalObjectName)
 {
     $selected           = $normalObjectID == $objectID ? 'selected' : '';

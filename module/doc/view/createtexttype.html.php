@@ -21,13 +21,12 @@
 <?php if($objectType == 'custom' and empty($libs)):?>
 <?php echo html::a(helper::createLink('doc', 'createLib', "type=custom&objectID=$objectID"), '<i class="icon icon-plus"></i> ' . $lang->doc->createLib, '', 'class="iframe hidden createCustomLib"');?>
 <?php endif;?>
-<?php $backLink = $this->createLink('doc', 'tableContents', "type=$linkType&objectID=$objectID&libID=$libID");?>
 <div id="mainContent" class="main-content">
   <form class="load-indicator main-form form-ajax" id="dataform" method='post' enctype='multipart/form-data'>
     <table class='table table-form'>
       <tbody>
         <tr id='headerBox'>
-          <td width='90px'><?php echo html::a($backLink, "<i class='icon icon-back icon-sm'></i> " . $lang->goback, '', "id='backBtn' class='btn btn-secondary'");?></td>
+          <td width='90px'><?php echo html::backButton("<i class='icon icon-back icon-sm'></i> " . $lang->goback, "id='backBtn'", 'btn btn-secondary');?></td>
           <td class="doc-title" colspan='3'><?php echo html::input('title', '', "placeholder='{$lang->doc->titlePlaceholder}' id='editorTitle' class='form-control' required");?></td>
           <td class="text-right btn-tools">
             <span id='savePath' class='text-gray'></span>
@@ -92,7 +91,7 @@
                 </tr>
                 <tr>
                   <th><?php echo $lang->doc->keywords;?></th>
-                  <td colspan='3' class='<?php if(strpos($config->doc->edit->requiredFields, 'keywords') !== false) echo 'required'?>'><?php echo html::input('keywords', '', "id='modalKeywords' class='form-control' placeholder='{$lang->doc->keywordsTips}'");?></td>
+                  <td colspan='3' class='<?php if(strpos($config->doc->create->requiredFields, 'keywords') !== false) echo 'required'?>'><?php echo html::input('keywords', '', "id='modalKeywords' class='form-control' placeholder='{$lang->doc->keywordsTips}'");?></td>
                 </tr>
                 <tr id='fileBox'>
                   <th><?php echo $lang->doc->files;?></th>

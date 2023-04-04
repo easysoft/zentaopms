@@ -120,6 +120,7 @@ class api extends control
         $this->view->objectType     = $objectType;
         $this->view->objectID       = $objectID;
         $this->view->moduleID       = $moduleID;
+        $this->view->version        = $version;
         $this->view->libTree        = $this->api->getLibTree($libID, $libs, $moduleID, $objectID, $browseType);
         $this->view->users          = $this->user->getPairs('noclosed,noletter');
         $this->view->objectDropdown = isset($libs[$libID]) ? $this->generateLibsDropMenu($libs[$libID], $release) : '';
@@ -431,7 +432,7 @@ class api extends control
         $this->view->objectID = $objectID;
         $this->view->groups   = $this->loadModel('group')->getPairs();
         $this->view->users    = $this->user->getPairs('nocode|noclosed');
-        $this->view->projects = $this->loadModel('project')->getPairsByModel();
+        $this->view->projects = $this->loadModel('project')->getPairsByModel('scrum,waterfall,agileplus,waterfallplus');
         $this->view->products = $this->loadModel('product')->getPairs();
 
         $this->display();
@@ -582,7 +583,6 @@ class api extends control
         $libName = isset($lib->name) ? $lib->name . $this->lang->colon : '';
 
         $this->getTypeOptions($libID);
-        $this->view->gobackLink       = '';
         $this->view->user             = $this->app->user->account;
         $this->view->allUsers         = $this->loadModel('user')->getPairs('devfirst|noclosed');
         $this->view->libID            = $libID;

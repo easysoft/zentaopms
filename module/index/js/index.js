@@ -96,7 +96,7 @@
 
             if((link.params.from || link.params.$3) == 'product')
             {
-                if(['objectlibs', 'showfiles', 'browse', 'view', 'edit', 'delete', 'create'].includes(methodLowerCase)) return 'product';
+                if(['showfiles', 'browse', 'view', 'edit', 'delete', 'create'].includes(methodLowerCase)) return 'product';
             }
             return 'doc';
         }

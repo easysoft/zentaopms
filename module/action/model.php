@@ -1662,12 +1662,34 @@ class actionModel extends model
                     $appendLib          = $docLib->deleted == '1' ? $action->objectID : 0;
                     if($docLib->type == 'api')
                     {
-                        $action->objectLink = helper::createLink('api', 'index', "libID={$action->objectID}&moduleID=0&apiID=0&version=0&release=0&appendLib={$appendLib}");
+                        $module = 'api';
+                        $method = 'index';
+                        $params = "libID={$action->objectID}&moduleID=0&apiID=0&version=0&release=0&appendLib={$appendLib}";
+                        if(!empty($docLib->project) or !empty($docLib->product))
+                        {
+                            $module = 'doc';
+                            if(!empty($docLib->product))
+                            {
+                                $objectID = $docLib->product;
+                                $method   = 'productspace';
+                            }
+
+                            if(!empty($docLib->project))
+                            {
+                                $objectID = $docLib->project;
+                                $method   = 'projectspace';
+                            }
+                            $params = "objectID={$objectID}&libID={$action->objectID}";
+                        }
+                        $action->objectLink = helper::createLink($module, $method, $params);
                     }
                     else
                     {
-                        $libType = $docLib->type == 'execution' ? 'project' : $docLib->type;
-                        $action->objectLink = helper::createLink('doc', 'tablecontents', sprintf($vars, $libType, $docLib->objectID, $action->objectID, $appendLib));
+                        $method = 'tablecontents';
+                        if($docLib->type == 'product') $method = 'productspace';
+                        if(in_array($docLib->type, array('project', 'execution'))) $method = 'projectspace';
+                        $params = $method == 'tablecontents' ? sprintf($vars, $docLib->type, $docLib->objectID, $action->objectID, $appendLib) : "objectID={$docLib->objectID}&libID={$action->objectID}";
+                        $action->objectLink = helper::createLink('doc', $method, $params);
                     }
                 }
                 elseif($action->objectType == 'user')

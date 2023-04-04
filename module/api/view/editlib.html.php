@@ -42,7 +42,7 @@
                 <span><?php echo html::radio('acl', $lang->api->aclList, $lib->acl, "onchange='toggleAcl(this.value, \"lib\")'", 'block')?></span>
               </td>
             </tr>
-            <tr id='whiteListBox' class='<?php echo $lib->acl != 'open' ? '' : 'hidden';?>'>
+            <tr id='whiteListBox' class='<?php echo $lib->acl == 'private' ? '' : 'hidden';?>'>
               <th><?php echo $lang->api->whiteList;?></th>
               <td>
                 <div class='input-group'>

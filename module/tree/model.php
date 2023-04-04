@@ -1837,6 +1837,13 @@ class treeModel extends model
         $repeatName = $this->checkUnique($self, array("id{$self->id}" => $module->name), array("id{$self->id}" => $module->branch));
         if($repeatName) helper::end(js::alert(sprintf($this->lang->tree->repeatName, $repeatName)));
 
+        if((empty($module->root) or empty($module->name)) and in_array($self->type, array('doc', 'api')))
+        {
+            $this->app->loadLang('doc');
+            if(empty($module->root)) helper::end(js::alert(sprintf($this->lang->error->notempty, $this->lang->doc->lib)));
+            if(empty($module->name)) helper::end(js::alert(sprintf($this->lang->error->notempty, $this->lang->doc->catalogName)));
+        }
+
         $modules = $self->type == 'story' ? $this->getOptionMenu($self->root, 'story', 0, 'all') : '';
 
         $parent = $this->getById($this->post->parent);

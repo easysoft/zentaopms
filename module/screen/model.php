@@ -40,7 +40,7 @@ class screenModel extends model
      */
     public function getList($dimensionID)
     {
-        return $this->dao->select('*')->from(TABLE_SCREEN)->where('dimension')->eq($dimensionID)->andWhere('deleted')->eq('0')->fetchAll();
+        return $this->dao->select('*')->from(TABLE_SCREEN)->where('dimension')->eq($dimensionID)->andWhere('deleted')->eq('0')->fetchAll('id');
     }
 
     /**
@@ -55,13 +55,6 @@ class screenModel extends model
      */
     public function getByID($screenID, $year = '', $dept = '', $account = '')
     {
-        $this->filter = new stdclass();
-        $this->filter->screen  = $screenID;
-        $this->filter->year    = $year;
-        $this->filter->dept    = $dept;
-        $this->filter->account = $account;
-        $this->filter->charts  = array();
-
         $screen = $this->dao->select('*')->from(TABLE_SCREEN)->where('id')->eq($screenID)->fetch();
         if(!isset($screen->scheme) or empty($screen->scheme)) $screen->scheme = file_get_contents(__DIR__ . '/json/screen.json');
         $screen->chartData = $this->genChartData($screen, $year, $dept, $account);
@@ -73,15 +66,20 @@ class screenModel extends model
      * Generate chartData of screen.
      *
      * @param  object $screen
-     * @param  int $year
-     * @param  int $dept
+     * @param  string $year
+     * @param  string $dept
      * @param  string $account
      * @access public
      * @return object
      */
-    public function genChartData($screen)
+    public function genChartData($screen, $year, $dept, $account)
     {
-        if(!$screen->builtin) return json_decode($screen->scheme);
+        $this->filter = new stdclass();
+        $this->filter->screen  = $screen->id;
+        $this->filter->year    = $year;
+        $this->filter->dept    = $dept;
+        $this->filter->account = $account;
+        $this->filter->charts  = array();
 
         $config = new stdclass();
         $config->width            = 1300;

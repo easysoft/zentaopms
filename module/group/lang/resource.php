@@ -44,8 +44,9 @@ $lang->moduleOrder[105] = 'zahost';
 $lang->moduleOrder[108] = 'zanode';
 
 $lang->moduleOrder[110] = 'doc';
-$lang->moduleOrder[113] = 'screen';
-$lang->moduleOrder[115] = 'report';
+$lang->moduleOrder[111] = 'screen';
+$lang->moduleOrder[112] = 'pivot';
+$lang->moduleOrder[119] = 'report';
 
 $lang->moduleOrder[120] = 'company';
 $lang->moduleOrder[125] = 'dept';
@@ -1368,40 +1369,48 @@ $lang->job->methodOrder[25] = 'exec';
 /* Doc. */
 $lang->resource->doc = new stdclass();
 $lang->resource->doc->index         = 'index';
-$lang->resource->doc->browse        = 'browse';
+$lang->resource->doc->browse        = 'mySpace';
+$lang->resource->doc->myView        = 'myView';
+$lang->resource->doc->myCollection  = 'myCollection';
+$lang->resource->doc->myCreation    = 'myCreation';
 $lang->resource->doc->createLib     = 'createLib';
 $lang->resource->doc->editLib       = 'editLib';
 $lang->resource->doc->deleteLib     = 'deleteLib';
 $lang->resource->doc->create        = 'create';
-$lang->resource->doc->view          = 'view';
 $lang->resource->doc->edit          = 'edit';
+$lang->resource->doc->view          = 'view';
 $lang->resource->doc->delete        = 'delete';
 $lang->resource->doc->deleteFile    = 'deleteFile';
-$lang->resource->doc->allLibs       = 'allLibs';
-$lang->resource->doc->objectLibs    = 'objectLibs';
 $lang->resource->doc->collect       = 'collectAction';
-$lang->resource->doc->tableContents = 'tableContents';
+$lang->resource->doc->productSpace  = 'productSpace';
+$lang->resource->doc->projectSpace  = 'projectSpace';
+$lang->resource->doc->tableContents = 'teamSpace';
 $lang->resource->doc->showFiles     = 'showFiles';
-$lang->resource->doc->updateOrder   = 'updateOrder';
-$lang->resource->doc->sortLibs      = 'sortLibs';
+$lang->resource->doc->addCatalog    = 'addCatalog';
+$lang->resource->doc->editCatalog   = 'editCatalog';
+$lang->resource->doc->deleteCatalog = 'deleteCatalog';
 
-$lang->doc->methodOrder[0]  = 'index';
-$lang->doc->methodOrder[5]  = 'browse';
-$lang->doc->methodOrder[10] = 'createLib';
-$lang->doc->methodOrder[15] = 'editLib';
-$lang->doc->methodOrder[20] = 'deleteLib';
-$lang->doc->methodOrder[25] = 'create';
-$lang->doc->methodOrder[30] = 'view';
-$lang->doc->methodOrder[35] = 'edit';
-$lang->doc->methodOrder[40] = 'delete';
-$lang->doc->methodOrder[45] = 'deleteFile';
-$lang->doc->methodOrder[50] = 'allLibs';
-$lang->doc->methodOrder[55] = 'objectLibs';
-$lang->doc->methodOrder[60] = 'collect';
-$lang->doc->methodOrder[65] = 'tableContents';
-$lang->doc->methodOrder[70] = 'showFiles';
-$lang->doc->methodOrder[75] = 'updateOrder';
-$lang->doc->methodOrder[80] = 'sortLibs';
+$lang->doc->methodOrder[5]   = 'index';
+$lang->doc->methodOrder[10]  = 'browse';
+$lang->doc->methodOrder[15]  = 'myView';
+$lang->doc->methodOrder[20]  = 'myCollection';
+$lang->doc->methodOrder[25]  = 'myCreation';
+$lang->doc->methodOrder[30]  = 'createLib';
+$lang->doc->methodOrder[35]  = 'editLib';
+$lang->doc->methodOrder[40]  = 'deleteLib';
+$lang->doc->methodOrder[45]  = 'create';
+$lang->doc->methodOrder[50]  = 'edit';
+$lang->doc->methodOrder[55]  = 'view';
+$lang->doc->methodOrder[60]  = 'delete';
+$lang->doc->methodOrder[65]  = 'deleteFile';
+$lang->doc->methodOrder[70]  = 'collect';
+$lang->doc->methodOrder[75]  = 'productSpace';
+$lang->doc->methodOrder[80]  = 'projectSpace';
+$lang->doc->methodOrder[85]  = 'tableContents';
+$lang->doc->methodOrder[90]  = 'showFiles';
+$lang->doc->methodOrder[95]  = 'addCatalog';
+$lang->doc->methodOrder[100] = 'editCatalog';
+$lang->doc->methodOrder[105] = 'deleteCatalog';
 
 /* Mail. */
 $lang->resource->mail = new stdclass();
@@ -1763,17 +1772,34 @@ $lang->tree->methodOrder[30] = 'delete';
 
 /* Screen. */
 $lang->resource->screen = new stdclass();
-$lang->resource->screen->browse = 'browse';
-$lang->resource->screen->view   = 'view';
+$lang->resource->screen->browse        = 'browse';
+$lang->resource->screen->view          = 'view';
+$lang->resource->screen->annualData    = 'annualData';
+$lang->resource->screen->allAnnualData = 'allAnnualData';
 
 $lang->screen->methodOrder[0]  = 'browse';
 $lang->screen->methodOrder[5]  = 'view';
+$lang->screen->methodOrder[14] = 'annualData';
+$lang->screen->methodOrder[15] = 'allAnnualData';
+
+/* Pivot. */
+$lang->resource->pivot = new stdclass();
+$lang->resource->pivot->preview          = 'preview';
+$lang->resource->pivot->productSummary   = 'productSummary';
+$lang->resource->pivot->projectDeviation = 'projectDeviation';
+$lang->resource->pivot->bugCreate        = 'bugCreate';
+$lang->resource->pivot->bugAssign        = 'bugAssign';
+$lang->resource->pivot->workload         = 'workload';
+
+$lang->pivot->methodOrder[2]  = 'preview';
+$lang->pivot->methodOrder[10] = 'productSummary';
+$lang->pivot->methodOrder[15] = 'projectDeviation';
+$lang->pivot->methodOrder[20] = 'bugCreate';
+$lang->pivot->methodOrder[25] = 'bugAssign';
+$lang->pivot->methodOrder[30] = 'workload';
 
 /* Report. */
 $lang->resource->report = new stdclass();
-$lang->resource->report->index            = 'index';
-
-$lang->report->methodOrder[0]  = 'index';
 
 /* Search. */
 $lang->resource->search = new stdclass();
