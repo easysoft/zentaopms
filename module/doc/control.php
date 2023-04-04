@@ -1360,8 +1360,8 @@ class doc extends control
         $this->view->pager          = $pager;
         $this->view->objectID       = $objectID;
         $this->view->orderBy        = $orderBy;
-        $this->view->exportMethod   = $type . '2export';
-        $this->view->canExport      = common::hasPriv('doc', $type . '2export');
+        $this->view->canExport      = $libType == 'api' ? common::hasPriv('api', 'export') : common::hasPriv('doc', $type . '2export');
+        $this->view->exportMethod   = $libType == 'api' ? 'export' : $type . '2export';
         $this->view->apiLibID       = key($apiLibs);
 
 

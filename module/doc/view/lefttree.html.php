@@ -487,7 +487,7 @@ $(function()
     }).on('click', '#versionSwitcher a', function()
     {
         var $item = $(this);
-        linkParams = linkParams.replace('%s', '&libID=' + $item.closest('ul').data('libId') + '&moduleID=0&apiID=0&version=0&release=' + $item.data('id'));
+        linkParams = linkParams.replace('%s', 'libID=' + $item.closest('ul').data('libId') + '&moduleID=0&apiID=0&version=0&release=' + $item.data('id'));
         location.href = createLink(config.currentModule, 'index', linkParams);
     }).on('blur', '.file-tree input.input-tree', function()
     {

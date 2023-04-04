@@ -20,11 +20,13 @@
   <div id="leftBar" class="btn-toolbar pull-left">
     <?php echo $objectDropdown;?>
     <?php if(!empty($libTree)):?>
+    <?php if($libType != 'api'):?>
     <?php foreach($lang->doc->featureBar['tableContents'] as $barType => $barName):?>
     <?php $active     = $barType == $browseType ? 'btn-active-text' : '';?>
     <?php $linkParams = $app->rawMethod == 'tablecontents' ? "type=$type&objectID=$objectID&libID=$libID&moduleID=$moduleID&browseType=$barType": "objectID=$objectID&libID=$libID&moduleID=$moduleID&browseType=$barType";?>
     <?php echo html::a($this->createLink('doc', $app->rawMethod, $linkParams), $barName, '', "class='btn btn-link $active' id='{$barType}Tab'");?>
     <?php endforeach;?>
+    <?php endif;?>
     <a class="btn btn-link querybox-toggle" id='bysearchTab'><i class="icon icon-search muted"></i> <?php echo $lang->doc->searchDoc;?></a>
     <?php endif;?>
   </div>
@@ -39,7 +41,9 @@
 
   if($canExport)
   {
-      echo html::a($this->createLink('doc', $exportMethod, "libID=$libID&docID=0", 'html', true), "<i class='icon-export muted'> </i>" . $lang->export, '', "class='btn btn-link export' id='{$exportMethod}'");
+      $exportLink = $this->createLink('doc', $exportMethod, "libID=$libID&docID=0", 'html', true);
+      if($libType == 'api') $exportLink = $this->createLink('api', $exportMethod, "libID=$libID", 'html', true);
+      echo html::a($exportLink, "<i class='icon-export muted'> </i>" . $lang->export, '', "class='btn btn-link export' id='{$exportMethod}'");
   }
 
   if(common::hasPriv('doc', 'createLib'))
