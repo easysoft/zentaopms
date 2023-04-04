@@ -244,7 +244,7 @@ $(function()
         });
         if(isFirstLoad !== 'false') ele.data('zui.tree').collapse();
         var $leaf = ele.find('li.active');
-        if($leaf.length) $leaf[$leaf.length - 1].scrollIntoView(true);
+        if($leaf.length) $leaf[$leaf.length - 1].scrollIntoView(false);
 
         ele.on('click', '.icon-drop', function(e)
         {
