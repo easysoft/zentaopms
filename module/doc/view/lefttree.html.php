@@ -61,6 +61,7 @@ js::set('versionLang', $lang->build->common);
 /* ObjectType and objectID used for other space. */
 js::set('objectType', isset($type) ? $type : '');
 js::set('objectID',   isset($objectID) ? $objectID : '');
+js::set('isFirstLoad', isset($isFirstLoad) ? $isFirstLoad: '');
 ?>
 
 <div id="fileTree" class="file-tree">
@@ -236,7 +237,7 @@ $(function()
                 if(item.active) $li.addClass('active');
             }
         });
-        if(location.href.indexOf('moduleID') == -1) ele.data('zui.tree').collapse();
+        if(isFirstLoad !== 'false') ele.data('zui.tree').collapse();
         var $leaf = ele.find('li.active');
         if($leaf.length) $leaf[$leaf.length - 1].scrollIntoView(true);
 
