@@ -54,7 +54,7 @@ function checkServiceStatus(){
             }
             else if(key == "node")
             {
-                if(nodeStatus != resultData.data[key] && resultData.data[key])
+                if(resultData.data[key] && zanodeLang.statusList[nodeStatus] != zanodeLang.statusList[resultData.data[key]])
                 {
                     window.location.reload();
                 }

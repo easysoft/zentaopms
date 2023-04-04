@@ -828,10 +828,10 @@ class zanodemodel extends model
             ->where('t1.id')->eq($id)
             ->fetch();
 
-        $host = $node->hostType == '' ? $this->loadModel("zahost")->getByID($node->parent) : clone  $node;
+        $host = $node->hostType == '' ? $this->loadModel("zahost")->getByID($node->parent) : clone $node;
         $host->status = in_array($host->status, array('running', 'ready')) ? "online" : $host->status;
 
-        if($node->status == 'running' || $node->status == 'ready')
+        if($node->status == 'running' || $node->status == 'ready' || $node->status == 'online')
         {
             if(empty($host) || $host->status != 'online')
             {
