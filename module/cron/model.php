@@ -35,6 +35,10 @@ class cronModel extends model
         return $this->dao->select('*')->from(TABLE_CRON)
             ->where('1=1')
             ->beginIF(strpos($params, 'nostop') !== false)->andWhere('status')->ne('stop')->fi()
+            ->beginIF($this->config->edition != 'max')
+            ->andWhere('command')->ne('moduleName=measurement&methodName=initCrontabQueue')
+            ->andWhere('command')->ne('moduleName=measurement&methodName=execCrontabQueue')
+            ->fi()
             ->fetchAll('id');
     }
 

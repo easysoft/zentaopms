@@ -23,7 +23,12 @@ if(isset($pageCSS)) css::internal($pageCSS);
       <strong>
         <?php
         $lblEditTree = $lang->tree->edit;
-        if($type == 'doc' or $type == 'api') $lblEditTree = $lang->tree->editDir;
+        $required    = '';
+        if($type == 'doc' or $type == 'api')
+        {
+            $lblEditTree = $lang->tree->editDir;
+            $required    = 'root,name';
+        }
         if($type == 'line') $lblEditTree = $lang->tree->manageLine;
         echo $lblEditTree;
         ?>
@@ -52,7 +57,7 @@ if(isset($pageCSS)) css::internal($pageCSS);
         <?php if($type == 'doc'):?>
         <tr>
           <th class='thWidth'><?php echo $lang->doc->lib;?></th>
-          <td><?php echo html::select('root', $libs, $module->root, "class='form-control chosen'");?></td>
+          <td class="<?php if(strpos($required, 'root') !== false) echo 'required';?>"><?php echo html::select('root', $libs, $module->root, "class='form-control chosen'");?></td>
         </tr>
         <?php endif;?>
         <?php if($module->type != 'line'):?>
@@ -74,7 +79,7 @@ if(isset($pageCSS)) css::internal($pageCSS);
             echo $lblTreeName;
             ?>
           </th>
-          <td><?php echo html::input('name', $module->name, "class='form-control'");?></td>
+          <td class="<?php if(strpos($required, 'name') !== false) echo 'required';?>"><?php echo html::input('name', $module->name, "class='form-control'");?></td>
         </tr>
         <?php if($type == 'bug'):?>
         <tr>

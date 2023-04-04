@@ -28,13 +28,13 @@
                 <span><?php echo html::radio('libType', $lang->api->libTypeList, $type, "onchange='toggleLibType(this.value)'")?></span>
               </td>
             </tr>
-            <tr id='productBox'>
+            <tr id='productBox' class="<?php if($type != 'product') echo 'hidden';?>">
               <th><?php echo $lang->api->product;?></th>
               <td class='required'>
                 <span><?php echo html::select('product', $products, $objectID, "class='form-control chosen'")?></span>
               </td>
             </tr>
-            <tr id='projectBox' class='hidden'>
+            <tr id='projectBox' class="<?php if($type != 'project') echo 'hidden';?>">
               <th><?php echo $lang->api->project;?></th>
               <td class='required'>
                 <span><?php echo html::select('project', $projects, $objectID, "class='form-control chosen'")?></span>

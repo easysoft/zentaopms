@@ -21,6 +21,7 @@ $lang->dev->paramMailto    = "填写帐号，多个账号用','分隔。";
 $lang->dev->noteEditor     = "编辑器功能存在部分安全问题，如需使用该功能，可在此开启。";
 $lang->dev->noteTranslate  = "翻译功能因为安全原因被禁用。使用该功能，请到官网下载安装 <a href='https://www.zentao.net/extension-viewExt-151.html' target='_blank'>翻译</a> 插件。";
 $lang->dev->confirmRestore = '是否要恢复默认？';
+$lang->dev->apiTips        = '可访问的每个页面都可通过JSON接口调取';
 
 $lang->dev->language    = '语言：%s';
 $lang->dev->default     = '默认值';
@@ -200,6 +201,9 @@ if($config->systemMode != 'ALM') unset($lang->dev->groupList['program']);
 $lang->dev->endGroupList['admin']  = '后台';
 $lang->dev->endGroupList['system'] = '系统';
 $lang->dev->endGroupList['other']  = '其他';
+
+$lang->dev->featureBar['api']['restapi'] = 'RESTful接口';
+$lang->dev->featureBar['api']['index']   = '内置页面接口';
 
 $lang->dev->featureBar['langItem']['common']  = '公共';
 $lang->dev->featureBar['langItem']['first']   = '一级菜单';

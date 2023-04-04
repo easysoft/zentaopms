@@ -24,7 +24,7 @@
 .no-content-button {text-align: center; padding-top: 20px;}
 .no-content-button a:nth-child(2) {margin-left: 20px;}
 
-.cell .detail .detail-title {padding-left: 5px; list-style: none;}
+.apiList .detail .detail-title {padding-left: 5px; list-style: none;}
 .menu-actions {position: absolute; top: 7px; right: 45px; padding: 7px 8px;}
 .detail ul {position: relative;}
 .tail-info {position: absolute; right: 0; padding-left: 10px; padding-top: 1px;}
@@ -46,7 +46,7 @@ span.dotted-line+a {display: block;}
 .is-sorting > li > .tree-group {opacity: 1; border-radius: 4px;}
 .is-sorting > li ul {display: none!important;}
 li.drag-shadow ul {display: none!important;}
-.cell {height: 100%;}
+.apiList {height: 100%;}
 
 #queryBox #groupAndOr {min-width: 60px;}
 .tree li>.list-toggle {left: -4px;}

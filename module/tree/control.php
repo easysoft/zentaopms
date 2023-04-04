@@ -505,7 +505,7 @@ class tree extends control
         {
             $module      = $this->tree->getByID($moduleID);
             $confirmLang = $this->lang->tree->confirmDelete;
-            if($module->type == 'doc') $confirmLang = $this->lang->tree->confirmDeleteMenu;
+            if($module->type == 'doc' or $module->type == 'api') $confirmLang = $this->lang->tree->confirmDeleteMenu;
             if($module->type == 'line') $confirmLang = $this->lang->tree->confirmDeleteLine;
             if($module->type == 'host') $confirmLang = $this->lang->tree->confirmDeleteHost;
             if(strpos($this->config->tree->groupTypes, ",$module->type,") !== false) $confirmLang = $this->lang->tree->confirmDeleteGroup;

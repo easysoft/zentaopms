@@ -151,7 +151,7 @@ class doc extends control
         if($type == 'product') $objects = $this->product->getPairs();
         if($type == 'project')
         {
-            $objects = $this->project->getPairsByProgram();
+            $objects = $this->project->getPairsByProgram('', 'all', false, 'order_asc', 'kanban');
             if($this->app->tab == 'doc')
             {
                 $this->view->executionPairs = array(0 => '') + $this->execution->getPairs($objectID, 'all', 'multiple,leaf,noprefix');
@@ -391,13 +391,13 @@ class doc extends control
         $objects  = array();
         if($objectType == 'project')
         {
-            $objects = $this->loadModel('project')->getPairs();
-            $this->view->executions = array(0 => '') + $this->loadModel('execution')->getPairs($objectID, 'all', 'multiple,leaf,noprefix');
+            $objects = $this->project->getPairsByProgram('', 'all', false, 'order_asc', 'kanban');
+            $this->view->executions = array(0 => '') + $this->loadModel('execution')->getPairs($objectID, 'sprint,stage', 'multiple,leaf,noprefix');
         }
         elseif($objectType == 'execution')
         {
             $execution = $this->loadModel('execution')->getById($objectID);
-            $objects   = $this->execution->getPairs($execution->project, 'all', "multiple,leaf,noprefix");
+            $objects   = $this->execution->getPairs($execution->project, 'sprint,stage', "multiple,leaf,noprefix");
         }
         elseif($objectType == 'product')
         {
@@ -552,7 +552,7 @@ class doc extends control
         $objects = array();
         if($objectType == 'project')
         {
-            $objects = $this->loadModel('project')->getPairs();
+            $objects = $this->project->getPairsByProgram('', 'all', false, 'order_asc', 'kanban');
         }
         elseif($objectType == 'execution')
         {
@@ -1274,9 +1274,9 @@ class doc extends control
     }
 
     /**
-     * Show the catalog of the doc library.
+     * Show team Space.
      *
-     * @param  string $type
+     * @param  string $type custom|product|project|execution
      * @param  int    $objectID
      * @param  int    $libID
      * @param  int    $moduleID
@@ -1289,8 +1289,9 @@ class doc extends control
      * @access public
      * @return void
      */
-    public function tableContents($type, $objectID = 0, $libID = 0, $moduleID = 0, $browseType = 'all', $orderBy = 'status,id_desc', $param = 0, $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function tableContents($type = 'custom', $objectID = 0, $libID = 0, $moduleID = 0, $browseType = 'all', $orderBy = 'status,id_desc', $param = 0, $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
+        $this->view->isFirstLoad = $objectID == 0 ? 'true' : 'false';
         $this->session->set('createProjectLocate', $this->app->getURI(true), 'doc');
 
         if(empty($browseType)) $browseType = 'all';
@@ -1301,13 +1302,15 @@ class doc extends control
 
         $libTree = $this->doc->getLibTree($libID, $libs, $type, $moduleID, $objectID, $browseType);
 
-        $title   = ($type == 'book' or $type == 'custom') ? $this->lang->doc->tableContents : $object->name . $this->lang->colon . $this->lang->doc->tableContents;
+        $title   = $type == 'custom' ? $this->lang->doc->tableContents : $object->name . $this->lang->colon . $this->lang->doc->tableContents;
         $lib     = $this->doc->getLibById($libID);
         $libType = isset($lib->type) && $lib->type == 'api' ? 'api' : 'lib';
 
         /* Build the search form. */
         $queryID   = $browseType == 'bySearch' ? (int)$param : 0;
-        $actionURL = $this->createLink('doc', 'tableContents', "type=$type&objectID=$objectID&libID=$libID&moduleID=0&browseType=bySearch&orderBy=$orderBy&param=myQueryID");
+        $params    = "objectID=$objectID&libID=$libID&moduleID=0&browseType=bySearch&orderBy=$orderBy&param=myQueryID";
+        if($this->app->rawMethod == 'tablecontents') $params = "type=$type&" . $params;
+        $actionURL = $this->createLink('doc', $this->app->rawMethod, $params);
         if($libType == 'api')
         {
             $this->loadModel('api')->buildSearchForm($lib, $queryID, $actionURL, $libs, $type);
@@ -1318,11 +1321,8 @@ class doc extends control
         }
 
         /* Load pager. */
-        $rawMethod = $this->app->rawMethod;
-        $this->app->rawMethod = 'tableContents';
         $this->app->loadClass('pager', $static = true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
-        $this->app->rawMethod = $rawMethod;
 
         if($libType == 'api')
         {
@@ -1360,11 +1360,52 @@ class doc extends control
         $this->view->pager          = $pager;
         $this->view->objectID       = $objectID;
         $this->view->orderBy        = $orderBy;
-        $this->view->exportMethod   = $type . '2export';
-        $this->view->canExport      = common::hasPriv('doc', $type . '2export');
+        $this->view->canExport      = $libType == 'api' ? common::hasPriv('api', 'export') : common::hasPriv('doc', $type . '2export');
+        $this->view->exportMethod   = $libType == 'api' ? 'export' : $type . '2export';
         $this->view->apiLibID       = key($apiLibs);
 
+
         $this->display();
+    }
+
+    /**
+     * Show product space.
+     *
+     * @param  int    $objectID
+     * @param  int    $libID
+     * @param  int    $moduleID
+     * @param  string $browseType    all|draft|bysearch
+     * @param  string $orderBy
+     * @param  int    $param
+     * @param  int    $recTotal
+     * @param  int    $recPerPage
+     * @param  int    $pageID
+     * @access public
+     * @return void
+     */
+    public function productSpace($objectID = 0, $libID = 0, $moduleID = 0, $browseType = 'all', $orderBy = 'status,id_desc', $param = 0, $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    {
+        echo $this->fetch('doc', 'tableContents', "type=product&objectID=$objectID&libID=$libID&moduleID=$moduleID&browseType=$browseType&orderBy=$orderBy&param=$param&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID");
+    }
+
+    /**
+     * Show project space.
+     *
+     * @param  int    $objectID
+     * @param  int    $libID
+     * @param  int    $moduleID
+     * @param  string $browseType    all|draft|bysearch
+     * @param  string $orderBy
+     * @param  int    $param
+     * @param  int    $recTotal
+     * @param  int    $recPerPage
+     * @param  int    $pageID
+     * @access public
+     * @return void
+     */
+    public function projectSpace($objectID = 0, $libID = 0, $moduleID = 0, $browseType = 'all', $orderBy = 'status,id_desc', $param = 0, $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    {
+        echo $this->fetch('doc', 'tableContents', "type=project&objectID=$objectID&libID=$libID&moduleID=$moduleID&browseType=$browseType&orderBy=$orderBy&param=$param&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID");
     }
 
     /**
@@ -1455,7 +1496,7 @@ class doc extends control
     public function ajaxGetExecution($projectID)
     {
         $executions     = $this->execution->getList($projectID);
-        $executionPairs = array(0 => '') + $this->execution->getPairs($projectID, 'all', 'multiple,leaf,noprefix');
+        $executionPairs = array(0 => '') + $this->execution->getPairs($projectID, 'sprint,stage', 'multiple,leaf,noprefix');
 
         $project  = $this->project->getById($projectID);
         $disabled = $project->multiple ? '' : 'disabled';

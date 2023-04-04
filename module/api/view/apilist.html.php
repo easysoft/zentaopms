@@ -81,7 +81,7 @@
   <?php include './content.html.php';?>
 <?php else:?>
 <?php if(empty($libs) || empty($apiList)):?>
-<div class="cell">
+<div class="cell apiList">
   <div class="detail">
     <li class="detail-title"><?php echo intval($libID) > 0 ? $lang->api->apiList : $lang->api->pageTitle;?></li>
   </div>
