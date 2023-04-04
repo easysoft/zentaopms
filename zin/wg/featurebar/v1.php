@@ -72,7 +72,6 @@ class featureBar extends wg
         return div
         (
             set::id('featureBar'),
-            setClass('toolbar-nav'),
             $this->block('leading'),
             $this->buildNav(),
             $this->block('trailing')
