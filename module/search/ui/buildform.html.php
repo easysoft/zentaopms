@@ -8,6 +8,6 @@ jsVar('canSaveQuery', !empty($_SESSION[$module . 'Query']));
 jsVar('formSession', $_SESSION[$module . 'Form']);
 jsVar('onMenuBar', $onMenuBar);
 
-zui::searchform(set($exampleOptions), set::_to('#searchFormPanel'), set::className('shadow'));
+zui::searchForm(set($exampleOptions), set::_to('#searchFormPanel'), set::className('shadow'));
 
 render('fragment');

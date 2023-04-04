@@ -1,7 +1,7 @@
 <?php
 namespace zin;
 
-class modulemenu extends wg
+class moduleMenu extends wg
 {
     private $modules = array();
 

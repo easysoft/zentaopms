@@ -2,7 +2,7 @@
 
 namespace zin;
 
-class mainmenu extends wg
+class mainMenu extends wg
 {
     static $defineProps = 'statuses?:array,btnGroup?:array,others?:array';
 

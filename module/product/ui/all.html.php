@@ -83,7 +83,7 @@ featureBar
 (
     to::before
     (
-        programmenu
+        programMenu
         (
             setStyle(array('margin-right' => '20px')),
             set
@@ -182,7 +182,7 @@ dtable
 
 sidebar
 (
-    modulemenu
+    moduleMenu
     (
         set::productID(1),
         set::title('所有分类'),

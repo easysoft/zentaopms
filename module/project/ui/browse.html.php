@@ -314,9 +314,9 @@ h::js($jsSearch);
 
 header();
 
-pagemain
+pageMain
 (
-    mainmenu
+    mainMenu
     (
         set('statuses', $statuses),
         set('others', $others),

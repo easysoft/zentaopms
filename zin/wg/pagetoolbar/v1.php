@@ -1,7 +1,7 @@
 <?php
 namespace zin;
 
-class pagetoolbar extends wg
+class pageToolbar extends wg
 {
     private function buildGlobalCreate()
     {

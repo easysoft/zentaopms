@@ -1,7 +1,7 @@
 <?php
 namespace zin;
 
-class searchform extends wg
+class searchForm extends wg
 {
     protected static $defineProps = array
     (
@@ -10,6 +10,6 @@ class searchform extends wg
 
     protected function build()
     {
-        return zui::searchform(inherit($this));
+        return zui::searchForm(inherit($this));
     }
 }

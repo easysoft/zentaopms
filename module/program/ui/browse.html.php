@@ -20,7 +20,7 @@ featureBar
 (
     to::before
     (
-        programmenu
+        programMenu
         (
            set
            (

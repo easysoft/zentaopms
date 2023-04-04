@@ -1,7 +1,7 @@
 <?php
 namespace zin;
 
-class inputgroup extends wg
+class inputGroup extends wg
 {
     protected static $defineProps = 'items?:array';
 
@@ -13,12 +13,12 @@ class inputgroup extends wg
 
         if($type === 'addon')
         {
-            return inputaddon($item);
+            return inputAddon($item);
         }
 
         if($type === 'btn')
         {
-            return inputbtn($item);
+            return inputBtn($item);
         }
 
         if($type === 'input')

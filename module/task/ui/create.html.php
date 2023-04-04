@@ -23,20 +23,20 @@ page(
     .form-label { width: 6rem !important; }
     END),
     set('title', $title),
-    pageheader
+    pageHeader
     (
-        pageheading
+        pageHeading
         (
             set('text', $lang->{$app->tab}->common),
             set('icon', $app->tab),
             set('url', \helper::createLink($app->tab, 'browse')),
         ),
-        pagenavbar
+        pageNavbar
         (
             setId('navbar'),
             set('items', $navItems)
         ),
-        pagetoolbar
+        pageToolbar
         (
             set('create',   array('href' => '#globalCreateMenu')),
             set('switcher', array('href' => '#switcherMenu', 'text' => '研发管理界面')),
@@ -58,9 +58,9 @@ page(
         div
         (
             setStyle(array('padding-left' => '3rem', 'padding-bottom' => '1rem')),
-            formgrid
+            formGrid
             (
-                formgroup
+                formGroup
                 (
                     set('label', array('required' => true, 'text' => $lang->task->execution)),
                     select(
@@ -69,7 +69,7 @@ page(
                         set('items', array_map(function($v, $k) {return array('text' => $v, 'value' => $k, 'selected' => $k == $execution->id);}, $executions, array_keys($executions)))
                     )
                 ),
-                formgroup
+                formGroup
                 (
                     set('label', array('required' => true, 'text' => $lang->task->type)),
                     select
@@ -79,10 +79,10 @@ page(
                         set('items', array_map(function($v, $k) {return array('text' => $v, 'value' => $k, 'selected' => $k === $task->type);}, $lang->task->typeList, array_keys($lang->task->typeList)))
                     )
                 ),
-                formgroup
+                formGroup
                 (
                     set('label', array('text' => $lang->task->module)),
-                    formrow
+                    formRow
                     (
                         setClass('items-center'),
                         select
@@ -98,7 +98,7 @@ page(
                         )
                     ),
                 ),
-                formgroup
+                formGroup
                 (
                     set('label', array('text' => $lang->task->story)),
                     select(
@@ -107,13 +107,13 @@ page(
                         set('items', array_map(function($v, $k) {return array('text' => $v, 'value' => $k, 'selected' => $k === $task->story);}, $stories, array_keys($stories)))
                     )
                 ),
-                formgroup
+                formGroup
                 (
                     set('name', 'name'),
                     set('label', array('text' => $lang->task->name, 'required' => true)),
-                    forminput(setClass('w-740')),
+                    formInput(setClass('w-740')),
                 ),
-                formgroup
+                formGroup
                 (
                     set('name', 'pri'),
                     set('label', array('text' => $lang->task->pri)),
@@ -123,10 +123,10 @@ page(
                         set('items', array_map(function($v, $k) {return array('text' => $v, 'value' => $k, 'selected' => $k === $task->pri);}, $lang->task->priList, array_keys($lang->task->priList)))
                     )
                 ),
-                formrow
+                formRow
                 (
                     setClass('items-center'),
-                    formgroup
+                    formGroup
                     (
                         set('label', array('text' => $lang->task->assignedTo)),
                         select
@@ -136,10 +136,10 @@ page(
                             set('items', array_map(function($v, $k) {return array('text' => $v, 'value' => $k, 'selected' => $k === $task->assignedTo);}, $members, array_keys($members)))
                         )
                     ),
-                    formgroup
+                    formGroup
                     (
                         set('label', array('text' => $lang->task->estimateAB, 'auto' => true)),
-                        inputgroup
+                        inputGroup
                         (
                             set('items', array(
                                 array('type' => 'input', 'class' => 'w-60', 'name' => 'estimate'),
@@ -147,7 +147,7 @@ page(
                             ))
                         )
                     ),
-                    formgroup
+                    formGroup
                     (
                         checkbox
                         (
@@ -157,7 +157,7 @@ page(
                     )
                 ),
 
-                formgroup
+                formGroup
                 (
                     set('label', array('text' => $lang->task->desc)),
                     textarea
@@ -170,10 +170,10 @@ page(
                         ))
                     )
                 ),
-                formgroup
+                formGroup
                 (
                     set('label', array('text' => $lang->files)),
-                    formrow
+                    formRow
                     (
                         setClass('items-center'),
                         h::label
@@ -192,10 +192,10 @@ page(
                         span('(不超过50M)')
                     )
                 ),
-                formgroup
+                formGroup
                 (
                     set('label', array('text' => $lang->task->datePlan)),
-                    formrow
+                    formRow
                     (
                         setClass('items-center'),
                         h::date
@@ -211,7 +211,7 @@ page(
                         )
                     )
                 ),
-                formgroup
+                formGroup
                 (
                     set('label', array('text' => $lang->story->mailto)),
                     select
@@ -221,12 +221,12 @@ page(
                         set('items', array_map(function($v, $k) {return array('text' => $v, 'value' => $k, 'selected' => $k === str_replace(' ', '', $task->mailto));}, $users, array_keys($users)))
                     )
                 ),
-                formgroup
+                formGroup
                 (
                     set('label', array('text' => $lang->task->afterSubmit)),
                     setClass('items-center'),
                     setStyle(array('align-items' => 'center')),
-                    formrow
+                    formRow
                     (
                         array_map(function($v, $k) {return radio(
                             set('name', 'after'),
@@ -234,9 +234,9 @@ page(
                         );}, $lang->task->afterChoices, array_keys($lang->task->afterChoices))
                     )
                 ),
-                formgroup
+                formGroup
                 (
-                    formrow
+                    formRow
                     (
                         setClass('justify-center'),
                         btn

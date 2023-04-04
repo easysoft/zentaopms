@@ -1,7 +1,7 @@
 <?php
 namespace zin;
 
-class pagebase extends wg
+class pageBase extends wg
 {
     static $tag = 'html';
 

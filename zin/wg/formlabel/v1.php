@@ -1,7 +1,7 @@
 <?php
 namespace zin;
 
-class formlabel extends wg
+class formLabel extends wg
 {
     protected static $defineProps = 'text?:string,required?:bool,auto?:bool';
 

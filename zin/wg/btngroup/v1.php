@@ -1,7 +1,7 @@
 <?php
 namespace zin;
 
-class btngroup extends wg
+class btnGroup extends wg
 {
     static $defineProps = [
         'items?:array',
@@ -28,6 +28,6 @@ class btngroup extends wg
             );
         }
 
-        return zui::btngroup(inherit($this));
+        return zui::btnGroup(inherit($this));
     }
 }

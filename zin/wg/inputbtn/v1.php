@@ -1,7 +1,7 @@
 <?php
 namespace zin;
 
-class inputbtn extends wg
+class inputBtn extends wg
 {
     protected static $defineProps = 'wg?:array';
 
