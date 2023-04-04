@@ -115,10 +115,10 @@ js::set('isFirstLoad', isset($isFirstLoad) ? $isFirstLoad: '');
     <li data-method="addCataChild" data-type="add" data-id="%moduleID%" data-has-children='%hasChildren%'><a><i class="icon icon-icon-add-directory"></i><?php echo $lang->doc->libDropdown['addSubModule'];?></a></li>
     <?php endif;?>
     <?php if($canEditCatalog):?>
-    <li data-method="editCata" class='edit-module'><a data-href='<?php echo helper::createLink('tree', 'edit', "moduleID=%moduleID%&type=$app->rawModule");?>'><i class="icon icon-edit"></i><?php echo $lang->doc->libDropdown['editModule'];?></a></li>
+    <li data-method="editCata" class='edit-module'><a data-href='<?php echo helper::createLink('doc', 'editCatalog', "moduleID=%moduleID%&type=$app->rawModule");?>'><i class="icon icon-edit"></i><?php echo $lang->doc->libDropdown['editModule'];?></a></li>
     <?php endif;?>
     <?php if($canDeleteCatalog):?>
-    <li data-method="deleteCata"><a href='<?php echo helper::createLink('tree', 'delete', 'rootID=%libID%&moduleID=%moduleID%');?>' target='hiddenwin'><i class="icon icon-trash"></i><?php echo $lang->doc->libDropdown['delModule'];?></a></li>
+    <li data-method="deleteCata"><a href='<?php echo helper::createLink('doc', 'deleteCatalog', 'rootID=%libID%&moduleID=%moduleID%');?>' target='hiddenwin'><i class="icon icon-trash"></i><?php echo $lang->doc->libDropdown['delModule'];?></a></li>
     <?php endif;?>
   </ul>
 </div>

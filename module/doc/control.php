@@ -1385,4 +1385,31 @@ class doc extends control
         $disabled = $project->multiple ? '' : 'disabled';
         return print(html::select('execution', $executionPairs, 0, "class='form-control' data-placeholder='{$this->lang->doclib->tip->selectExecution}' $disabled data-drop_direction='down' data-drop-direction='down'"));
     }
+
+    /**
+     * Edit a catalog.
+     *
+     * @param  int    $moduleID
+     * @param  string $type doc|api
+     * @access public
+     * @return void
+     */
+    public function editCatalog($moduleID, $type)
+    {
+        echo $this->fetch('tree', 'edit', "moduleID=$moduleID&type=$type");
+    }
+
+    /**
+     * Delete a catalog.
+     *
+     * @param  int    $rootID
+     * @param  int    $moduleID
+     * @param  string $confirm yes|no
+     * @access public
+     * @return void
+     */
+    public function deleteCatalog($rootID, $moduleID, $confirm = 'no')
+    {
+        echo $this->fetch('tree', 'delete', "rootID=$rootID&moduleID=$moduleID&confirm=$confirm");
+    }
 }
