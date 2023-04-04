@@ -180,4 +180,15 @@ dtable
     set::footer(jsRaw('function(){return window.footerGenerator.call(this);}'))
 );
 
+sidebar
+(
+    modulemenu
+    (
+        set::productID(1),
+        set::title('所有分类'),
+        set::activeKey('4'),
+        set::closeLink('#'),
+    )
+);
+
 render();
