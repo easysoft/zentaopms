@@ -48,7 +48,7 @@ $lang->mainNav->admin     = "{$lang->navIcons['admin']} {$lang->admin->common}|a
 
 $lang->dividerMenu = ',kanban,oa,admin,';
 
-$lang->mainNav->menuOrder[5] = 'my';
+$lang->mainNav->menuOrder[5]  = 'my';
 $lang->mainNav->menuOrder[10] = 'program';
 $lang->mainNav->menuOrder[15] = 'product';
 $lang->mainNav->menuOrder[20] = 'project';
