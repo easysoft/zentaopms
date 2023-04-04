@@ -1054,6 +1054,27 @@ class commonModel extends model
                 }
             }
 
+            /* Check whether the menu of this group have permissions. If yes, point to them. */
+            if($display == false and isset($lang->$group->menu))
+            {
+                foreach($lang->$group->menu as $menu)
+                {
+                    if(!isset($menu['link'])) continue;
+
+                    $linkPart = explode('|', $menu['link']);
+                    if(count($linkPart) < 3) continue;
+                    list($label, $module, $method) = $linkPart;
+
+                    if(common::hasPriv($module, $method))
+                    {
+                        $display       = true;
+                        $currentModule = $module;
+                        $currentMethod = $method;
+                        if(!isset($menu['target'])) break; // Try to jump to the method without opening a new window.
+                    }
+                }
+            }
+
             if(!$display) continue;
 
             /* Assign vars. */
