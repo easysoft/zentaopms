@@ -838,7 +838,13 @@ class groupModel extends model
      */
     public function getPrivPackageByID($packageID)
     {
-        return $this->dao->findById($packageID)->from(TABLE_PRIVPACKAGE)->fetch();
+        return $this->dao->select('distinct t1.*,t2.`value` as name')->from(TABLE_PRIVMANAGER)->alias('t1')
+            ->leftJoin(TABLE_PRIVLANG)->alias('t2')->on('t1.id=t2.objectID')
+            ->where('t1.id')->eq($packageID)
+            ->andWhere('t1.edition')->like("%,{$this->config->edition},%")
+            ->andWhere('t1.vision')->like("%,{$this->config->vision},%")
+            ->andWhere('t2.objectType')->eq('manager')
+            ->fetch();
     }
 
     /**
@@ -850,7 +856,16 @@ class groupModel extends model
      */
     public function getPrivPackagesByModule($module)
     {
-        return $this->dao->select('*')->from(TABLE_PRIVPACKAGE)->where('module')->in($module)->orderBy('order_asc')->fetchAll('id');
+        $moduleID = $this->dao->select('id')->from(TABLE_PRIVMANAGER)->where('`code`')->eq($module)->andWhere('type')->eq('module')->fetch('id');
+
+        return $this->dao->select('t1.*,t2.value as name')->from(TABLE_PRIVMANAGER)->alias('t1')
+            ->leftJoin(TABLE_PRIVLANG)->alias('t2')->on('t1.id=t2.objectID')
+            ->where('t1.parent')->eq($moduleID)
+            ->andWhere('t1.type')->eq('package')
+            ->andWhere('t1.edition')->like("%,{$this->config->edition},%")
+            ->andWhere('t1.vision')->like("%,{$this->config->vision},%")
+            ->orderBy('order_asc')
+            ->fetchAll('id');
     }
 
     /**
@@ -1545,26 +1560,6 @@ class groupModel extends model
     /**
      * Get priv relation.
      *
-     * @param  int    $priv
-     * @param  string $type
-     * @param  string $module
-     * @access public
-     * @return array
-     */
-    public function getPrivRelationPairs($priv, $type = '', $module = '')
-    {
-        return $this->dao->select('t2.id,t3.name')->from(TABLE_PRIVRELATION)->alias('t1')
-            ->leftJoin(TABLE_PRIV)->alias('t2')->on('t1.relationPriv=t2.id')
-            ->leftJoin(TABLE_PRIVLANG)->alias('t3')->on('t2.id=t3.priv')
-            ->where('t1.priv')->in($priv)
-            ->beginIF(!empty($type))->andWhere('t1.type')->eq($type)->fi()
-            ->beginIF($module)->andWhere('t2.module')->eq($module)->fi()
-            ->fetchPairs();
-    }
-
-    /**
-     * Get priv relation.
-     *
      * @param  array  $privs
      * @param  string $type    depend|recommend
      * @access public
@@ -1572,15 +1567,18 @@ class groupModel extends model
      */
     public function getPrivRelationsByIdList($privs, $type = '')
     {
-        $privs = $this->dao->select('t1.priv,t3.name,t1.type,t1.relationPriv')->from(TABLE_PRIVRELATION)->alias('t1')
+        $privs = $this->dao->select('t1.priv,t3.`key`,t3.value,t1.type,t1.relationPriv')->from(TABLE_PRIVRELATION)->alias('t1')
             ->leftJoin(TABLE_PRIV)->alias('t2')->on('t1.relationPriv=t2.id')
-            ->leftJoin(TABLE_PRIVLANG)->alias('t3')->on('t2.id=t3.priv')
+            ->leftJoin(TABLE_PRIVLANG)->alias('t3')->on('t2.id=t3.objectID')
             ->where('t1.priv')->in($privs)
+            ->andWhere('t3.objectType')->eq('priv')
             ->beginIF(!empty($type))->andWhere('t1.type')->eq($type)->fi()
-            ->fetchGroup('type');
+            ->fetchGroup('type', 'relationPriv');
+
         $relationPrivs = array();
         foreach($privs as $type => $typePrivs)
         {
+            $typePrivs = $this->transformPrivLang($typePrivs);
             $relationPrivs[$type] = array();
             foreach($typePrivs as $priv) $relationPrivs[$type][$priv->priv] = empty($relationPrivs[$type][$priv->priv]) ? $priv->name : "{$relationPrivs[$type][$priv->priv]},{$priv->name}";
         }
@@ -1619,26 +1617,6 @@ class groupModel extends model
         }
         return true;
     }
-
-    /**
-     * get priv
-     *
-     * @param   int     $privID
-     * @param   string  $lang
-     * @return  object
-     **/
-    public function getPrivInfo($priv,$lang)
-    {
-        $privInfo = $this->dao->select("t1.priv, t1.name, t1.desc, t2.module, t2.package")->from(TABLE_PRIVLANG)->alias('t1')
-            ->leftJoin(TABLE_PRIV)->alias('t2')
-            ->on("t1.priv = t2.id")
-            ->where('t1.priv')->eq($priv)
-            ->andWHere('t1.lang')->eq($lang)
-            ->fetch();
-
-        return $privInfo;
-    }
-
 
     /**
      * Get priv package tree.
