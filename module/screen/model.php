@@ -81,8 +81,6 @@ class screenModel extends model
      */
     public function genChartData($screen)
     {
-        if(!$screen->builtin) return json_decode($screen->scheme);
-
         $config = new stdclass();
         $config->width            = 1300;
         $config->height           = 1080;
