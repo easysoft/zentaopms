@@ -32,6 +32,8 @@
 i.btn-info, i.btn-info:hover {border: none; background: #fff; box-shadow: unset;}
 .tree-version-trigger {padding: 0 10px; width: 54px; border-radius: 5px; background: #F9F9F9; display: flex;}
 .tree-version-trigger > .text {overflow: hidden; flex: 0 0 30px;}
+.file-tree > .bd-b:after {content: ''; position: absolute; inset: 0 -5px 0 -10px; border-bottom: 1px solid #EDEEF2;}
+.file-tree > .tree-child {padding: 5px 0; position: relative;}
 
 /* css for sidebar */
 .sidebar-toggle {flex: 0 0 16px;}
@@ -67,15 +69,15 @@ js::set('isFirstLoad', isset($isFirstLoad) ? $isFirstLoad: '');
 
 <div id="fileTree" class="file-tree">
 <?php if(isset($type) and $type == 'project'):?>
-<div class="project-tree">
+<div class="project-tree bd-b tree-child">
     <div class="title"><i class="icon icon-project btn-info"> </i><?php echo $lang->projectCommon?></div>
     <div id="projectTree" data-id="project"></div>
 </div>
-<div class="execution-tree">
+<div class="execution-tree bd-b tree-child">
     <div class="title"><i class="icon icon-run btn-info"> </i><?php echo $lang->execution->common?></div>
     <div id="executionTree" data-id="execution"></div>
 </div>
-<div class="annex-tree">
+<div class="annex-tree tree-child">
     <div class="title"><i class="icon icon-paper-clip btn-info"> </i><?php echo $lang->files?></div>
     <div id="annexTree" data-id="annex"></div>
 </div>
