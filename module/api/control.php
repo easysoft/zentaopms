@@ -41,6 +41,9 @@ class api extends control
      */
     public function index($libID = 0, $moduleID = 0, $apiID = 0, $version = 0, $release = 0, $appendLib = 0, $browseType = '', $param = 0)
     {
+        $this->session->set('spaceType', 'api', 'doc');
+        $this->setMenu($libID);
+
         $objectType = $this->objectType;
         $objectID   = $this->objectID;
 
@@ -141,10 +144,11 @@ class api extends control
      */
     public function view($libID, $apiID, $moduleID = 0, $release = 0, $version = 0)
     {
+        $this->setMenu($libID);
+
         /* Get all api doc libraries. */
         $libs = $this->doc->getApiLibs($libID);
-
-        $api = $this->api->getLibById($apiID, $version, $release);
+        $api  = $this->api->getLibById($apiID, $version, $release);
         if($api)
         {
             $moduleID  = $api->module;
@@ -265,16 +269,14 @@ class api extends control
      * @access public
      * @return void
      */
-    public function struct($libID = 0, $releaseID = 0, $orderBy = 'id', $recTotal = 0, $recPerPage = 15, $pageID = 1)
+    public function struct($libID = 0, $releaseID = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 15, $pageID = 1)
     {
-        $libs = $this->doc->getApiLibs();
-        $this->app->loadClass('pager', $static = true);
-        $this->lang->modulePageNav = $this->generateLibsDropMenu($libs[$libID], $releaseID);
-
-        $pager = new pager($recTotal, $recPerPage, $pageID);
+        $this->setMenu($libID);
 
         /* Append id for secend sort. */
         $sort = common::appendOrder($orderBy);
+        $this->app->loadClass('pager', $static = true);
+        $pager = new pager($recTotal, $recPerPage, $pageID);
 
         if($releaseID)
         {
@@ -306,6 +308,8 @@ class api extends control
     public function createStruct($libID = 0)
     {
         common::setMenuVars('doc', $libID);
+        $this->setMenu($libID);
+
         if(!empty($_POST))
         {
             $now    = helper::now();
@@ -351,6 +355,8 @@ class api extends control
     public function editStruct($libID, $structID)
     {
         common::setMenuVars('doc', $libID);
+        $this->setMenu($libID);
+
         $struct = $this->api->getStructByID($structID);
 
         if(!empty($_POST))
@@ -695,53 +701,32 @@ class api extends control
     }
 
     /**
-     * Set doc menu by method name.
+     * Set api menu by method name.
      *
      * @param  int    $libID
-     * @param  int    $moduleID
      * @access public
      * @return void
      */
-    private function setMenu($libID = 0, $moduleID = 0)
+    private function setMenu($libID = 0)
     {
         common::setMenuVars('doc', '');
 
-        /* Global struct link. */
-        $menu = '';
-
-        if($libID and common::hasPriv('api', 'createRelease'))
+        $lib = $this->loadModel('doc')->getLibByID($libID);
+        if($this->app->tab == 'product')
         {
-            $menu .= html::a(helper::createLink('api', 'createRelease', "libID=$libID"), $this->lang->api->createRelease, '', 'class="btn btn-link iframe"');
+            $this->loadModel('product')->setMenu($lib->product);
+        }
+        elseif($this->app->tab == 'project')
+        {
+            $this->loadModel('project')->setMenu($lib->project);
         }
 
-        /* page of index menu. */
-        if(common::hasPriv('api', 'create') or common::hasPriv('api', 'createLib'))
+        if(in_array($this->session->spaceType, array('product', 'project')))
         {
-            $menu .= "<div class='dropdown' id='createDropdown'>";
-            $menu .= "<button class='btn btn-primary' type='button' data-toggle='dropdown'><i class='icon icon-plus'></i> " . $this->lang->api->createAB . " <span class='caret'></span></button>";
-            $menu .= "<ul class='dropdown-menu pull-right'>";
-
-            /* check has permission create api doc */
-            if(intval($libID) > 0 and common::hasPriv('api', 'create'))
-            {
-                $menu .= "<li>";
-                $menu .= html::a(helper::createLink('api', 'create', "libID=$libID&moduleID=$moduleID"), "<i class='icon-rich-text icon'></i> " . $this->lang->api->createApi, '', "data-app='{$this->app->tab}'");
-                $menu .= "</li>";
-            }
-
-            /* check has permission create api doc lib */
-            if(common::hasPriv('api', 'createLib'))
-            {
-                $menu .= '<li>' . html::a(helper::createLink('api', 'createLib'), "<i class='icon-doc-lib icon'></i> " . $this->lang->api->createLib, '', "class='iframe' data-width='70%'") . '</li>';
-
-                $menu .= '<li class="divider"></li>';
-                $menu .= '<li>' . html::a(helper::createLink('api', 'createLib', 'type=demo'), "<i class='icon-zentao icon'></i> " . $this->lang->api->createDemo, '', "class='iframe' data-width='70%'") . '</li>';
-            }
-
-            $menu .= "</ul></div>";
+            $this->lang->doc->menu->api['exclude'] = 'api-' . $this->app->rawMethod;
+            $this->lang->doc->menu->{$this->session->spaceType}['subModule'] = 'api';
         }
 
-        $this->lang->TRActions = $menu;
     }
 
     /**

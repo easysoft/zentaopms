@@ -1196,6 +1196,7 @@ class doc extends control
     {
         $this->view->isFirstLoad = $objectID == 0 ? 'true' : 'false';
         $this->session->set('createProjectLocate', $this->app->getURI(true), 'doc');
+        $this->session->set('spaceType', $type, 'doc');
 
         if(empty($browseType)) $browseType = 'all';
         list($libs, $libID, $object, $objectID, $objectDropdown) = $this->doc->setMenuByType($type, $objectID, $libID);
