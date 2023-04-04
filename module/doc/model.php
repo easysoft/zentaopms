@@ -1478,15 +1478,15 @@ class docModel extends model
      */
     public function getLibsByObject($type, $objectID, $mode = '', $appendLib = 0)
     {
-        if($type == 'custom' or $type == 'book')
+        if($type == 'custom' or $type == 'book' or $type == 'mine')
         {
             $objectLibs = $this->dao->select('*')->from(TABLE_DOCLIB)
                 ->where('deleted')->eq(0)
                 ->andWhere('vision')->eq($this->config->vision)
                 ->andWhere('type')->eq($type)
                 ->beginIF(!empty($appendLib))->orWhere('id')->eq($appendLib)->fi()
-                ->beginIF($type == 'custom')->orderBy('`order` asc, id_asc')->fi()
-                ->beginIF($type == 'book')->orderBy('`order` asc, id_asc')->fi()
+                ->beginIF($type == 'mine')->orWhere('addedBy')->eq($this->app->user->account)->fi()
+                ->orderBy('`order` asc, id_asc')
                 ->fetchAll('id');
         }
         elseif($type != 'product' and $type != 'project' and $type != 'execution')

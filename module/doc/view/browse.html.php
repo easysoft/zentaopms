@@ -16,7 +16,30 @@
 <?php js::set('docLang', $lang->doc);?>
 <?php js::set('confirmDelete', $lang->doc->confirmDelete)?>
 <?php js::set('appTab', $app->tab)?>
+<?php js::set('treeData', $libTree)?>
 <div class="cell<?php if($browseType == 'bySearch') echo ' show';?>" id="queryBox" data-module=<?php echo $type . 'Doc';?>></div>
+<div id="mainMenu" class="clearfix">
+  <div id="leftBar" class="btn-toolbar pull-left">
+    <?php if(!empty($libTree)):?>
+    <?php foreach($lang->doc->featureBar['tableContents'] as $barType => $barName):?>
+    <?php $active     = $barType == $browseType ? 'btn-active-text' : '';?>
+    <?php $linkParams = $app->rawMethod == 'tablecontents' ? "type=$type&objectID=$objectID&libID=$libID&moduleID=$moduleID&browseType=$barType": "objectID=$objectID&libID=$libID&moduleID=$moduleID&browseType=$barType";?>
+    <?php echo html::a($this->createLink('doc', $app->rawMethod, $linkParams), $barName, '', "class='btn btn-link $active' id='{$barType}Tab'");?>
+    <?php endforeach;?>
+    <a class="btn btn-link querybox-toggle" id='bysearchTab'><i class="icon icon-search muted"></i> <?php echo $lang->doc->searchDoc;?></a>
+    <?php endif;?>
+  </div>
+  <div class="btn-toolbar pull-right">
+  <?php
+  if(common::hasPriv('doc', 'createLib'))
+  {
+      echo html::a(helper::createLink('doc', 'createLib', "type=mine"), '<i class="icon icon-plus"></i> ' . $this->lang->doc->createLib, '', 'class="btn btn-secondary iframe" data-width="800px"');
+  }
+
+  if($libID and common::hasPriv('doc', 'create')) echo $this->doc->printCreateBtn($lib, 'mine', 0, 0);
+  ?>
+  </div>
+</div>
 <div id='mainContent'class="fade <?php if(!empty($libTree)) echo 'flex';?>">
 <?php if(empty($libTree)):?>
   <div class="table-empty-tip">
