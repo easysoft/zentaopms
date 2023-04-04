@@ -43,13 +43,12 @@ class api extends control
     {
         $this->session->set('spaceType', 'api', 'doc');
         $this->setMenu($libID);
-
-        $objectType = $this->objectType;
-        $objectID   = $this->objectID;
+        $objectType  = $this->objectType;
+        $objectID    = $this->objectID;
+        $isFirstLoad = $libID ? false : true;
 
         /* Get all api doc libraries. */
-        $loadLib = false;
-        $libs    = $this->doc->getApiLibs($appendLib, $objectType, $objectID);
+        $libs = $this->doc->getApiLibs($appendLib, $objectType, $objectID);
         if(empty($libs) and $objectType != 'nolink')
         {
             $objectType = 'nolink';
@@ -81,7 +80,6 @@ class api extends control
             $libID      = $lib->id;
             $objectType = $lib->product ? 'product' : ($lib->project ? 'project' : '');
             $objectID   = $lib->product ? $lib->product : $lib->project;
-            if($loadLib) $libs = $this->doc->getApiLibs($appendLib);
         }
 
         /* Get an api doc. */
@@ -115,6 +113,7 @@ class api extends control
 
         $this->view->lib            = $lib;
         $this->view->release        = $release;
+        $this->view->isFirstLoad    = $isFirstLoad;
         $this->view->title          = $this->lang->api->pageTitle;
         $this->view->libID          = $libID;
         $this->view->apiID          = $apiID;
@@ -627,7 +626,7 @@ class api extends control
             }
             else
             {
-                $this->sendSuccess(array('locate' => $this->createLink('api', 'index', "libID=$api->lib&module=$api->module")));
+                return print(js::locate(inlink('index', "libID=$api->lib&module=$api->module"), 'parent'));
             }
         }
     }
