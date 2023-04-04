@@ -162,3 +162,4 @@ form .table-data, #content .table-data {border: 1px solid #e2e2e3;}
 
 .module-content {overflow-y: auto; padding-top: 10px;}
 .module-col {padding: 0 0 0 10px;}
+#modules .active {background: #fff;}
