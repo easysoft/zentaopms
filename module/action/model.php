@@ -1673,7 +1673,7 @@ class actionModel extends model
                         $method = 'tablecontents';
                         if($docLib->type == 'product') $method = 'productspace';
                         if(in_array($docLib->type, array('project', 'execution'))) $method = 'projectspace';
-                        $params = $method == 'tablecontents'? sprintf($vars, $docLib->type, $docLib->objectID, $action->objectID, $appendLib) : "objectID={$docLib->objectID}&libID={$action->objectID}";
+                        $params = $method == 'tablecontents' ? sprintf($vars, $docLib->type, $docLib->objectID, $action->objectID, $appendLib) : "objectID={$docLib->objectID}&libID={$action->objectID}";
                         $action->objectLink = helper::createLink('doc', $method, $params);
                     }
                 }
