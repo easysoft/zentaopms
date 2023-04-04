@@ -1338,9 +1338,10 @@ class groupModel extends model
     public function getPrivByID($privID, $lang = '')
     {
         if(empty($lang)) $lang = $this->app->getClientLang();
-        return $this->dao->select('t1.*,t2.name,t2.desc')->from(TABLE_PRIV)->alias('t1')
-            ->leftJoin(TABLE_PRIVLANG)->alias('t2')->on('t1.id=t2.priv')
+        return $this->dao->select('t1.*,t2.key,t2.value,t2.desc')->from(TABLE_PRIV)->alias('t1')
+            ->leftJoin(TABLE_PRIVLANG)->alias('t2')->on('t1.id=t2.objectID')
             ->where('t1.id')->eq($privID)
+            ->andWhere('t2.objectType')->eq('priv')
             ->andWhere('t2.lang')->eq($lang)
             ->fetch();
     }
@@ -1354,10 +1355,11 @@ class groupModel extends model
      */
     public function getPrivByIdList($privIdList)
     {
-        return $this->dao->select('t1.*,t2.name,t2.desc')->from(TABLE_PRIV)->alias('t1')
-            ->leftJoin(TABLE_PRIVLANG)->alias('t2')->on('t1.id=t2.priv')
+        return $this->dao->select('t1.*,t2.key,t2.value,t2.desc')->from(TABLE_PRIV)->alias('t1')
+            ->leftJoin(TABLE_PRIVLANG)->alias('t2')->on('t1.id=t2.objectID')
             ->where('t1.id')->in($privIdList)
             ->andWhere('t2.lang')->eq($this->app->getClientLang())
+            ->andWhere('t2.objectType')->eq('priv')
             ->fetchAll('id');
     }
 
@@ -1370,15 +1372,22 @@ class groupModel extends model
      */
     public function getPrivByModule($modules)
     {
-        $stmt = $this->dao->select('t1.*,t2.name,t2.desc')->from(TABLE_PRIV)->alias('t1')
-            ->leftJoin(TABLE_PRIVLANG)->alias('t2')->on('t1.id=t2.priv')
-            ->where('t1.module')->in($modules)
+        $moduleIdList = $this->dao->select('id')->from(TABLE_PRIVMANAGER)
+            ->where('code')->in($modules)
+            ->andWhere('`type`')->eq('module')
+            ->fetchAll('id');
+
+        $stmt = $this->dao->select('t1.*,t3.`parent` as moduleID,t2.`key`,t2.value,t2.`desc`')->from(TABLE_PRIV)->alias('t1')
+            ->leftJoin(TABLE_PRIVLANG)->alias('t2')->on('t1.id=t2.objectID')
+            ->leftJoin(TABLE_PRIVMANAGER)->alias('t3')->on('t1.package=t3.id')
+            ->where('t3.code')->in($modules)
             ->andWhere('t2.lang')->eq($this->app->getClientLang())
+            ->andWhere('t2.objectType')->eq('priv')
             ->orderBy('`order`')
             ->query();
 
         $privs = array();
-        while($priv = $stmt->fetch()) $privs[$priv->module][$priv->package][$priv->id] = $priv;
+        while($priv = $stmt->fetch()) $privs[$priv->moduleID][$priv->package][$priv->id] = $priv;
         return $privs;
     }
 
@@ -1899,5 +1908,33 @@ class groupModel extends model
             if(empty($manager->value) and $type == 'module') $pairs[$id] = zget($moduleLang, $manager->key);
         }
         return $pairs;
+    }
+
+    /**
+     * Transform priv lang.
+     *
+     * @param  array    $privs
+     * @access public
+     * @return array
+     */
+    public function transformPrivLang($privs)
+    {
+        foreach($privs as $privID => $priv)
+        {
+            $priv->name = '';
+            if(!empty($priv->value))
+            {
+                $priv->name = $priv->value;
+            }
+            else
+            {
+                list($moduleName, $methodLang) = explode('-', $priv->key);
+                $this->app->loadLang($moduleName);
+
+                $priv->name = $this->lang->{$moduleName}->$methodLang;
+            }
+        }
+
+        return $privs;
     }
 }
