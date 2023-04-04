@@ -15,6 +15,7 @@
 <?php js::set('docLang', $lang->doc);?>
 <?php js::set('libType', 'annex');?>
 <?php js::set('canViewFiles', common::hasPriv('doc', 'showfiles'));?>
+<?php js::set('linkParams', "objectID=$objectID&%s");?>
 <?php js::set('type', $type);?>
 <?php js::set('tab', $this->app->tab);?>
 <?php js::set('searchLink', helper::createLink('doc', 'showFiles', "type=$type&objectID=$objectID&viewType=$viewType&orderBy=id_desc&recTotal=0&recPerPage=20&pageID=1&searchTitle=%s"));?>
@@ -69,10 +70,14 @@
           <?php foreach($files as $file):?>
           <?php if(empty($file->pathname)) continue;?>
             <tr>
+              <?php
+              $imageSize  = $this->file->getImageSize($file);
+              $imageWidth = isset($imageSize[0]) ? $imageSize[0] : 0;
+              ?>
               <td><?php echo sprintf('%03d', $file->id);?></td>
               <td class='c-name' title='<?php echo str_replace('.' . $file->extension, '', $file->title);?>'>
                 <?php if(in_array($file->extension, $config->file->imageExtensions)):?>
-                <div style='display: inline-block'><img onload='setImageSize(this, 19)' src='<?php echo $file->webPath;?>'/></div>
+                <div style='display: inline-block'><img onload='setImageSize(this, 19)' src='<?php echo $file->webPath;?>' data-extension="<?php echo $file->extension;?>" data-id="<?php echo $file->id;?>" data-width="<?php echo $imageWidth;?>"/></div>
                 <?php else:?>
                 <?php echo $fileIcon[$file->id];?>
                 <?php endif;?>
@@ -232,6 +237,34 @@ function downloadFile(fileID, extension, imageWidth)
         window.open(url, '_self');
     }
     return false;
+}
+
+/**
+ * Set the max with of image.
+ *
+ * @access public
+ * @return void
+ */
+function setImageSize(image, maxWidth, maxHeight)
+{
+    var $image = $(image);
+    if($image.parent().prop('tagName').toLowerCase() == 'a') return;
+
+    /* If not set maxWidth, set it auto. */
+    if(!maxWidth)
+    {
+        bodyWidth = $('body').width();
+        maxWidth  = bodyWidth - 470; // The side bar's width is 336, and add some margins.
+    }
+    if(!maxHeight) maxHeight = $(top.window).height();
+
+    setTimeout(function()
+    {
+        maxHeightStyle = $image.height() > 0 ? 'max-height:' + maxHeight + 'px' : '';
+        if(!document.getElementsByClassName('xxc-embed').length && $image.width() > 0 && $image.width() > maxWidth) $image.attr('width', maxWidth);
+        $image.wrap('<a href="javascript:;" style="display:inline-block;position:relative;overflow:hidden;' + maxHeightStyle + '" onclick="return downloadFile(' + $image.attr('data-id') + ",'" + $image.attr('data-extension') + "', " +  $image.attr('data-width') + ')"></a>');
+        if($image.height() > 0 && $image.height() > maxHeight) $image.closest('a').append("<a href='###' class='showMoreImage' onclick='showMoreImage(this)'>" + lang.expand + " <i class='icon-angle-down'></i></a>");
+    }, 50);
 }
 </script>
 <?php include '../../common/view/footer.html.php';?>
