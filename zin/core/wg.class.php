@@ -30,6 +30,14 @@ class wg
 
     protected static $defineBlocks = NULL;
 
+    protected static $wgToBlockMap = array();
+
+    protected static $definedPropsMap = array();
+
+    private static $gidSeed = 0;
+
+    private static $pageResources = array();
+
     /**
      * The props of the element
      *
@@ -48,13 +56,7 @@ class wg
 
     protected $matchedPortals = NULL;
 
-    protected static $wgToBlockMap = array();
-
-    protected static $definedPropsMap = array();
-
-    private static $gidSeed = 0;
-
-    private static $pageResources = array();
+    protected $renderOptions = NULL;
 
     public function __construct(/* string|element|object|array|null ...$args */)
     {
@@ -68,15 +70,20 @@ class wg
         static::checkPageResources();
     }
 
+    public function isDomElement()
+    {
+        return false;
+    }
+
     public function isMatch($selector)
     {
-        $list = explode(',', $selector);
-        foreach($list as $selector)
+        $list = is_string($selector) ? static::parseWgSelector($selector) : $selector;
+        foreach($list as $item)
         {
-            $selector = trim($selector);
-            if(str_starts_with($selector, '.') && $this->props->class->has(substr($selector, 1))) return true;
-            if(str_starts_with($selector, '#') && $this->id() === substr($selector, 1)) return true;
-            if($selector === $this->type()) return true;
+            if(!empty($item['id']) && $this->id() !== $item['id']) continue;
+            if(!empty($item['tag']) && $this->type() !== $item['tag']) continue;
+            if(!empty($item['class']) && !$this->props->class->has($item['class'])) continue;
+            return true;
         }
         return false;
     }
@@ -98,28 +105,55 @@ class wg
         return $portals;
     }
 
+    public function buildDom()
+    {
+        $this->checkPortals();
+
+        $options  = $this->renderOptions;
+        $before   = $this->buildBefore();
+        $children = $this->build();
+        $after    = $this->buildAfter();
+        $portals  = $this->getPortals();
+
+        $list = [];
+        if(!empty($before))   $list[] = $before;
+        if(!empty($children)) $list[] = $children;
+        if(!empty($portals))  $list[] = $portals;
+        if(!empty($after))    $list[] = $after;
+
+        $dom = new stdClass();
+        $dom->type = 'wg';
+        $dom->wg   = $this;
+        $dom->list = static::buildDomList($list);
+
+        if(!empty($options) && isset($options['selector']))
+        {
+            $selector = $options['selector'];
+            $dom = static::filterDomTree($dom, $selector);
+        }
+
+        return $dom;
+    }
+
     /**
      * Render widget to html
      * @return string
      */
     public function render()
     {
-        $this->checkPortals();
-
-        $before   = $this->buildBefore();
-        $children = $this->build();
-        $after    = $this->buildAfter();
-
-        $html = static::renderToHtml(array($before, $children, $this->getPortals(), $after));
+        $dom  = $this->buildDom();
+        $html = static::renderToHtml($dom->list);
 
         context::destroy($this->gid);
 
         return $html;
     }
 
-    public function display()
+    public function display($options = [])
     {
         zin::disableGlobalRender();
+
+        $this->renderOptions = $options;
 
         echo $this->render();
 
@@ -577,6 +611,28 @@ class wg
         return $props;
     }
 
+    public static function buildDomList(&$list)
+    {
+        $domList = [];
+        foreach($list as $item)
+        {
+            if(is_array($item))
+            {
+                $subDomList = static::buildDomList($item);
+                if(!empty($subDomList)) $domList = array_merge($domList, $subDomList);
+            }
+            elseif($item instanceof wg)
+            {
+                $domList[] = $item->buildDom();
+            }
+            else
+            {
+                $domList[] = $item;
+            }
+        }
+        return $domList;
+    }
+
     /**
      * @return string
      */
@@ -591,17 +647,18 @@ class wg
             {
                 $html[] = static::renderToHtml($child);
             }
-            elseif($child instanceof wg)
-            {
-                $html[] = $child->render();
-            }
             elseif(is_string($child))
             {
                 $html[] = $child;
             }
+            elseif($child instanceof wg)
+            {
+                $html[] = $child->render();
+            }
             elseif(is_object($child))
             {
-                if(method_exists($child, 'render')) $html[] = $child->render();
+                if(isset($child->type) && $child->type === 'wg' && isset($child->list)) $html[] = static::renderToHtml($child->list);
+                elseif(method_exists($child, 'render')) $html[] = $child->render();
                 elseif(isHtml($child))              $html[] = $child->data;
                 elseif(isText($child))              $html[] = htmlspecialchars($child->data);
                 elseif(isset($child->html))         $html[] = $child->html;
@@ -614,5 +671,79 @@ class wg
             }
         }
         return implode('', $html);
+    }
+
+    public static function parseWgSelector($selector)
+    {
+        $selector = trim($selector);
+        if(empty($selector)) return [];
+
+        $results = [];
+        $parts  = explode(',', $selector);
+        foreach($parts as $part)
+        {
+            $part = trim($part);
+            $len = strlen($part);
+            if($len < 1) continue;
+
+            $result = ['class' => [], 'id' => NULL, 'tag' => NULL];
+            $type = 'tag';
+            $current = '';
+            for($i = 0; $i < $len; $i++)
+            {
+                $c = $part[$i];
+                $t = '';
+
+                if($c === '#')     $t = 'id';
+                elseif($c === '.') $t = 'class';
+
+                if(empty($t))
+                {
+                    $current .= $c;
+                }
+                else
+                {
+                    if(!empty($current))
+                    {
+                        if($type === 'class') $result[$type][] = $current;
+                        else                  $result[$type]   = $current;
+                    }
+                    $current = '';
+                    $type    = $t;
+                }
+            }
+            if(!empty($current))
+            {
+                if($type === 'class') $result[$type][] = $current;
+                else                  $result[$type]   = $current;
+            }
+            $results[] = $result;
+        }
+        return $results;
+    }
+
+    public static function filterDomTree($dom, $selector = NULL, $earlyStop = false)
+    {
+        if($selector === NULL) return $dom;
+
+        if(is_string($selector)) $selector = static::parseWgSelector($selector);
+
+        if(isset($dom->wg) && $dom->wg->isMatch($selector)) return $dom;
+
+        $list = [];
+        foreach($dom->list as $item)
+        {
+            if(!is_object($item) || !isset($item->wg)) continue;
+
+            $result = static::filterDomTree($item, $selector, $earlyStop);
+            if(is_object($result))
+            {
+                $list[] = $result;
+                if($earlyStop) break;
+            }
+        }
+
+        $dom->list = $list;
+        return $dom;
     }
 }
