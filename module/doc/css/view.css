@@ -46,3 +46,4 @@
 .overflow-auto {overflow: auto;}
 .overflow-visible {overflow: visible;}
 .overflow-hidden {overflow: hidden;}
+#mainContent > .panel {margin-bottom: 0; height: calc(100vh - 125px); overflow-y: auto;}

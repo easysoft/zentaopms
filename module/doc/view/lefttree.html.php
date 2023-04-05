@@ -38,7 +38,7 @@ i.btn-info, i.btn-info:hover {border: none; background: #fff; box-shadow: unset;
 /* css for sidebar */
 .sidebar-toggle {flex: 0 0 16px;}
 .sidebar-toggle > .icon {width: 12px; height: 30px; margin-top: -10px; line-height: 30px; color: #fff; text-align: center; background: #7dcdfe; border-radius: 6px; cursor: pointer; padding-left: 0; padding-top: 0;}
-.bottom-btn-tree {position: fixed; width: 150px; bottom: 40px;}
+.bottom-btn-tree {position: fixed; bottom: 66px; left: 48px;}
 
 .spliter {flex: 0 0 12px;}
 .spliter-btn {height: 28px; width: 10px; background: #fff; position: absolute; top: 30%; left: -1px; border: 1px solid #D9D9D9; border-radius: 2px;}
@@ -82,12 +82,12 @@ js::set('canViewFiles', common::hasPriv('doc', 'showfiles'));
     <div id="annexTree" data-id="annex"></div>
   </div>
 <?php endif;?>
-<?php if($app->rawMethod == 'view' and common::hasPriv('doc', 'displaySetting')):?>
-  <div class="text-center bottom-btn-tree">
-    <?php common::printLink('doc', 'displaySetting', '', $lang->doc->displaySetting, '', "class='btn btn-info btn-wide iframe' data-width='400px'", true, true);?>
-  </div>
-<?php endif;?>
 </div>
+<?php if($app->rawMethod == 'view' and common::hasPriv('doc', 'displaySetting')):?>
+<div class="text-center bottom-btn-tree">
+  <?php common::printLink('doc', 'displaySetting', '', $lang->doc->displaySetting, '', "class='btn btn-info btn-wide iframe' data-width='400px'", true, true);?>
+</div>
+<?php endif;?>
 
 <!-- Code for dropdown menu. -->
 <?php $canAddCatalog    = common::hasPriv('doc', 'addCatalog');?>
