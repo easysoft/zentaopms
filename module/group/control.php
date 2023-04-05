@@ -248,9 +248,10 @@ class group extends control
             $privs        = $this->group->getPrivsListByView($menu);
             $privPackages = $this->group->getPrivManagerPairs('package');
             $privLang     = $this->group->transformPrivLang($privs);
-            $privMethods  = $this->group->transformPrivLang($privs);
 
-            $privList = array();
+            $privList    = array();
+            $privMethods = array();
+            $selectPrivs = array();
             foreach($privs as $priv)
             {
                 if(!isset($privList[$priv->parentCode])) $privList[$priv->parentCode] = array();
@@ -259,10 +260,15 @@ class group extends control
 
                 if(!isset($privMethod[$priv->module])) $privMethod[$priv->module] = array();
                 $privMethods[$priv->module][$priv->method] = $priv->method;
+
+                if(!isset($selectPrivs[$priv->parentCode])) $selectPrivs[$priv->parentCode] = array();
+                if(!isset($selectPrivs[$priv->parentCode][$priv->parent])) $selectPrivs[$priv->parentCode][$priv->parent] = 0;
+                if(!empty($groupPrivs[$priv->module][$priv->method])) $selectPrivs[$priv->parentCode][$priv->parent] ++;
             }
 
-            $this->view->privMethods  = $privMethods;
             $this->view->privList     = $privList;
+            $this->view->privMethods  = $privMethods;
+            $this->view->selectPrivs  = $selectPrivs;
             $this->view->privLang     = $privLang;
             $this->view->privPackages = $privPackages;
         }
