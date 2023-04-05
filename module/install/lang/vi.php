@@ -91,6 +91,7 @@ $lang->install->chmodLinux   = ' "%s" permison has to be changed.<br /> Run <cod
 
 $lang->install->timezone       = 'Thiết lập Timezone';
 $lang->install->defaultLang    = 'Ngôn ngữ mặc định';
+$lang->install->dbDriver       = 'Database Driver';
 $lang->install->dbHost         = 'Database Host';
 $lang->install->dbHostNote     = 'If 127.0.0.1 không là accessible, try localhost.';
 $lang->install->dbPort         = 'Host Port';
@@ -102,6 +103,10 @@ $lang->install->dbPrefix       = 'Tiền tố bảng';
 $lang->install->clearDB        = 'Clean up existing data';
 $lang->install->importDemoData = 'Nhập Demo dữ liệu';
 $lang->install->working        = 'Operation chế độ';
+
+$lang->install->dbDriverList = array();
+$lang->install->dbDriverList['mysql'] = 'MySQL';
+$lang->install->dbDriverList['dm']    = 'DM8';
 
 $lang->install->requestTypes['GET']       = 'GET';
 $lang->install->requestTypes['PATH_INFO'] = 'PATH_INFO';

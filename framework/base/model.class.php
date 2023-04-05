@@ -308,7 +308,16 @@ class baseModel
      */
     public function loadDAO()
     {
-        $this->dao = $this->app->loadClass('dao');
+        global $config;
+        $driver = $config->db->driver;
+
+        if(!class_exists($driver))
+        {
+            $classFile = $this->app->coreLibRoot . 'dao' . DS . $driver . '.class.php';
+            include($classFile);
+        }
+
+        $this->dao = new $driver();
     }
 
     /**

@@ -1813,7 +1813,7 @@ EOF;
 
         global $lang, $app;
 
-        $object = $app->dbh->query('SELECT project,type FROM ' . TABLE_EXECUTION . " WHERE `id` = '$executionID'")->fetch();
+        $object = $app->dbh->query('SELECT project,`type` FROM ' . TABLE_EXECUTION . " WHERE `id` = '$executionID'")->fetch();
         if(empty($object)) return;
 
         $executionPairs = array();
@@ -2397,7 +2397,7 @@ EOF;
      */
     public function checkField($table, $field)
     {
-        $fields   = $this->dao->query("DESC $table")->fetchAll();
+        $fields   = $this->dao->descTable($table);
         $hasField = false;
         foreach($fields as $fieldObj)
         {

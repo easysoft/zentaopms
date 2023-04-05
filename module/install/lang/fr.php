@@ -121,6 +121,7 @@ $lang->install->chmodLinux   = 'Les permission de "%s" doivent être modifiées.
 
 $lang->install->timezone       = 'Set Timezone';
 $lang->install->defaultLang    = 'Langue par défaut';
+$lang->install->dbDriver       = 'Database Driver';
 $lang->install->dbHost         = 'Database Serveur';
 $lang->install->dbHostNote     = "If 127.0.0.1 n'est pas accessible, essayez localhost.";
 $lang->install->dbPort         = 'Port Serveur';
@@ -132,6 +133,10 @@ $lang->install->dbPrefix       = 'Table Prefix';
 $lang->install->clearDB        = 'Nettoyer les données existantes';
 $lang->install->importDemoData = 'Importer données de Démo';
 $lang->install->working        = 'Operation Mode';
+
+$lang->install->dbDriverList = array();
+$lang->install->dbDriverList['mysql'] = 'MySQL';
+$lang->install->dbDriverList['dm']    = 'DM8';
 
 $lang->install->requestTypes['GET']       = 'GET';
 $lang->install->requestTypes['PATH_INFO'] = 'PATH_INFO';
