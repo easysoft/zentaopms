@@ -60,31 +60,33 @@ i.btn-info, i.btn-info:hover {border: none; background: #fff; box-shadow: unset;
 js::set('release', isset($release) ? $release : 0);
 js::set('versionLang', $lang->build->common);
 
-
 /* ObjectType and objectID used for other space. */
 js::set('objectType', isset($type) ? $type : '');
 js::set('objectID',   isset($objectID) ? $objectID : '');
 js::set('isFirstLoad', isset($isFirstLoad) ? $isFirstLoad: '');
+js::set('canViewFiles', common::hasPriv('doc', 'showfiles'));
 ?>
 
 <div id="fileTree" class="file-tree menu-active-primary menu-hover-primary">
 <?php if(isset($type) and $type == 'project'):?>
-<div class="project-tree bd-b tree-child">
+  <div class="project-tree bd-b tree-child">
     <div class="title"><i class="icon icon-project btn-info"> </i><?php echo $lang->projectCommon?></div>
     <div id="projectTree" data-id="project"></div>
-</div>
-<div class="execution-tree bd-b tree-child">
+  </div>
+  <div class="execution-tree bd-b tree-child">
     <div class="title"><i class="icon icon-run btn-info"> </i><?php echo $lang->execution->common?></div>
     <div id="executionTree" data-id="execution"></div>
-</div>
-<div class="annex-tree tree-child">
+  </div>
+  <div class="annex-tree tree-child">
     <div class="title"><i class="icon icon-paper-clip btn-info"> </i><?php echo $lang->files?></div>
     <div id="annexTree" data-id="annex"></div>
-</div>
+  </div>
 <?php endif;?>
-</div>
-<div class="text-center bottom-btn-tree hidden">
-    <?php common::printLink('project', 'programTitle', '', $lang->doc->customShowLibs, '', "class='btn btn-info btn-wide iframe'", true, true);?>
+<?php if($app->rawMethod == 'view' and common::hasPriv('doc', 'displaySetting')):?>
+  <div class="text-center bottom-btn-tree">
+    <?php common::printLink('doc', 'displaySetting', '', $lang->doc->displaySetting, '', "class='btn btn-info btn-wide iframe' data-width='400px'", true, true);?>
+  </div>
+<?php endif;?>
 </div>
 
 <!-- Code for dropdown menu. -->
@@ -212,7 +214,11 @@ $(function()
             'annex': 'annex',
             'api': 'interface',
             'lib': 'wiki-file-lib',
-            'execution': 'wiki-file-lib'
+            'execution': 'wiki-file-lib',
+            'text': 'wiki-file',
+            'word': 'word',
+            'ppt': 'ppt',
+            'excel': 'excel'
         };
         ele.tree(
         {
@@ -221,6 +227,8 @@ $(function()
             itemCreator: function($li, item)
             {
                 if(typeof item.hasAction == 'undefined') item.hasAction = true;
+                if(typeof item.active == 'undefined') item.active = 0;
+                if(typeof docID != 'undefined' && item.id == docID) item.active = 1;
 
                 var objectType = config.currentModule == 'api' ? item.objectType : item.type;
                 var libClass = ['lib', 'annex', 'api', 'execution'].indexOf(objectType) !== -1 ? 'lib' : '';
@@ -230,6 +238,7 @@ $(function()
 
                 $item += '<div class="text h-full w-full flex-start overflow-hidden">';
                 if((libClass == 'lib' && item.type != 'execution') || (item.type == 'execution' && item.hasAction)) $item += '<div class="img-lib" style="background-image:url(static/svg/' + imgObj[item.type || 'lib'] + '.svg)"></div>';
+                if(['text', 'word', 'ppt', 'excel'].indexOf(item.type) !== -1) $item += '<div class="img-lib" style="background-image:url(static/svg/' + imgObj[item.type] + '.svg)"></div>';
                 $item += '<div class="tree-text">';
                 $item += item.name;
                 $item += '</div>';
@@ -243,7 +252,7 @@ $(function()
                     }
                     $item += '<div class="tree-version-trigger" data-id="' +  item.id + '"><div class="text">' + (versionName || versionLang) + '</div><div class="caret"></div></div>';
                 }
-                if((libClass != 'lib' && hasModulePriv) || (libClass == 'lib' && hasLibPriv)) $item += '<i class="icon icon-drop icon-ellipsis-v hidden tree-icon" data-isCatalogue="' + (libClass ? false : true) + '"></i>';
+                if(['text', 'word', 'ppt', 'excel'].indexOf(item.type) === -1 && ((libClass != 'lib' && hasModulePriv) || (libClass == 'lib' && hasLibPriv))) $item += '<i class="icon icon-drop icon-ellipsis-v hidden tree-icon" data-isCatalogue="' + (libClass ? false : true) + '"></i>';
                 $item += '</div>';
                 $item += '</a>';
                 if(item.versions) versionsData[item.id] = item.versions;
@@ -396,6 +405,11 @@ $(function()
             methodName = 'showFiles';
             linkParams = 'type=' + objectType + '&objectID=' + objectID;
         }
+        else if(['text', 'word', 'ppt', 'excel'].indexOf(type) !== -1)
+        {
+            methodName = 'view';
+            linkParams = 'docID=' + moduleID;
+        }
         else
         {
             methodName = objectType == 'execution' || objectType == 'custom' ? 'tableContents' : objectType + 'Space';
@@ -424,9 +438,12 @@ $(function()
             $('#sideBar').addClass('hidden');
         }
 
-        var $docListForm = $('#docListForm').data('zui.table');
-        $docListForm.fixHeader();
-        $docListForm.fixFooter();
+        if($('#docListForm').length > 0)
+        {
+            var $docListForm = $('#docListForm').data('zui.table');
+            $docListForm.fixHeader();
+            $docListForm.fixFooter();
+        }
     }).on('click', '.dropdown-in-tree li', function(e)
     {
         var item = $(this).data();
