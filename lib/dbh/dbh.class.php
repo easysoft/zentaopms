@@ -45,7 +45,8 @@ class dbh
      */
     public function __construct($config, $setSchema = true)
     {
-        $dsn = "{$config->driver}:host={$config->host}:{$config->port};dbname={$config->name}";
+        $dsn = "{$config->driver}:host={$config->host}:{$config->port}";
+        if($setSchema) $dsn .= ";dbname={$config->name}";
 
         $pdo = new PDO($dsn, $config->user, $config->password);
         $pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_OBJ);

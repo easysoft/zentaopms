@@ -267,7 +267,7 @@ class product extends control
         {
             $stories = $this->product->getStories($productID, $branchID, $browseType, $queryID, $moduleID, $storyType, $sort, $pager);
         }
-        $queryCondition = $this->dao->get();
+        $queryCondition = $this->story->dao->get();
 
         /* Display status of branch. */
         $branchOption    = array();

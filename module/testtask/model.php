@@ -76,8 +76,7 @@ class testtaskModel extends model
         $products = $scopeAndStatus[0] == 'all' ? $this->app->user->view->products : array();
         $branch   = $scopeAndStatus[0] == 'all' ? 'all' : $branch;
 
-        $executionNameField = "IF(t5.id IS NOT NULL && t5.multiple = '1', CONCAT(t5.name, ' / ', t3.name), IF(t5.id IS NOT NULL, t5.name, t3.name))";
-        return $this->dao->select("t1.*, t5.multiple, IF(t2.shadow = 1, t5.name, t2.name) AS productName, $executionNameField AS executionName, t4.name AS buildName, t4.branch AS branch")
+        $tasks = $this->dao->select("t1.*, t5.multiple, IF(t2.shadow = 1, t5.name, t2.name) AS productName, t3.name as executionName, t4.name AS buildName, t4.branch AS branch, t5.name AS projectName")
             ->from(TABLE_TESTTASK)->alias('t1')
             ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product = t2.id')
             ->leftJoin(TABLE_EXECUTION)->alias('t3')->on('t1.execution = t3.id')
@@ -106,6 +105,22 @@ class testtaskModel extends model
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll('id');
+        foreach($tasks as $taskID => $task)
+        {
+            if($task->multiple)
+            {
+                if($task->projectName and $task->executionName)
+                {
+                    $tasks[$taskID]->executionName = $task->projectName . '/' . $task->executionName;
+                }
+                elseif(!$task->executionName)
+                {
+                    $tasks[$taskID]->executionName = $task->projectName;
+                }
+            }
+        }
+
+        return $tasks;
     }
 
     /**

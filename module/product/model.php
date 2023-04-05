@@ -363,7 +363,7 @@ class productModel extends model
         $views   = empty($append) ? $this->app->user->view->products : $this->app->user->view->products . ",$append";
         $orderBy = !empty($this->config->product->orderBy) ? $this->config->product->orderBy : 'isClosed';
         /* Order by program. */
-        return $this->dao->select('t1.*,  IF(INSTR(" closed", t1.status) < 2, 0, 1) AS isClosed')->from(TABLE_PRODUCT)->alias('t1')
+        return $this->dao->select("t1.*,  IF(INSTR(' closed', t1.status) < 2, 0, 1) AS isClosed")->from(TABLE_PRODUCT)->alias('t1')
             ->leftJoin(TABLE_PROGRAM)->alias('t2')->on('t1.program = t2.id')
             ->where(1)
             ->beginIF(strpos($mode, 'all') === false)->andWhere('t1.deleted')->eq(0)->fi()
@@ -1837,7 +1837,7 @@ class productModel extends model
         $linePairs = $this->getLinePairs();
         foreach($products as $product) $product->lineName = zget($linePairs, $product->line, '');
 
-        $stories = $this->dao->select('product, status, type, count(status) AS count')
+        $stories = $this->dao->select('product, status, count(status) AS count')
             ->from(TABLE_STORY)
             ->where('deleted')->eq(0)
             ->andWhere('type')->eq('story')
@@ -1845,7 +1845,7 @@ class productModel extends model
             ->groupBy('product, status')
             ->fetchGroup('product', 'status');
 
-        $requirements = $this->dao->select('product, status, type, count(status) AS count')
+        $requirements = $this->dao->select('product, status, count(status) AS count')
             ->from(TABLE_STORY)
             ->where('deleted')->eq(0)
             ->andWhere('type')->eq('requirement')

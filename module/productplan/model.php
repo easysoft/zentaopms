@@ -257,7 +257,7 @@ class productplanModel extends model
     {
         $this->app->loadLang('branch');
 
-        $date  = date('Y-m-d');
+        $date = date('Y-m-d');
 
         $branchQuery = '';
         if($branch !== '' and $branch != 'all')

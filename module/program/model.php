@@ -595,7 +595,7 @@ class programModel extends model
         }
 
         $query       = str_replace('`id`','t1.id', $this->session->projectQuery);
-        $projectList = $this->dao->select('distinct t1.*')->from(TABLE_PROJECT)->alias('t1')
+        $projectList = $this->dao->select('t1.*')->from(TABLE_PROJECT)->alias('t1')
             ->leftJoin(TABLE_TEAM)->alias('t2')->on('t1.id=t2.root')
             ->leftJoin(TABLE_STAKEHOLDER)->alias('t3')->on('t1.id=t3.objectID')
             ->where('t1.deleted')->eq('0')
@@ -744,6 +744,7 @@ class programModel extends model
             ->setDefault('status', 'wait')
             ->setDefault('openedBy', $this->app->user->account)
             ->setDefault('parent', 0)
+            ->setDefault('code', '')
             ->setDefault('openedDate', helper::now())
             ->setIF($this->post->acl == 'open', 'whitelist', '')
             ->setIF($this->post->delta == 999, 'end', LONG_TIME)
@@ -752,7 +753,7 @@ class programModel extends model
             ->add('type', 'program')
             ->join('whitelist', ',')
             ->stripTags($this->config->program->editor->create['id'], $this->config->allowedTags)
-            ->remove('delta,future,contactListMenu')
+            ->remove('delta,future,contactListMenu,uid')
             ->get();
 
         /* Redefines the language entries for the fields in the project table. */
@@ -819,7 +820,7 @@ class programModel extends model
             ->setIF(!isset($_POST['whitelist']), 'whitelist', '')
             ->join('whitelist', ',')
             ->stripTags($this->config->program->editor->edit['id'], $this->config->allowedTags)
-            ->remove('uid,delta,future,syncPRJUnit,exchangeRate,contactListMenu')
+            ->remove('id,uid,delta,future,syncPRJUnit,exchangeRate,contactListMenu')
             ->get();
 
         $program  = $this->loadModel('file')->processImgURL($program, $this->config->program->editor->edit['id'], $this->post->uid);

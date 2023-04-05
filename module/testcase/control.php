@@ -154,7 +154,7 @@ class testcase extends control
         }
 
         /* save session .*/
-        $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'testcase', false);
+        $this->loadModel('common')->saveQueryCondition($this->testcase->dao->get(), 'testcase', false);
 
         /* Process case for check story changed. */
         $cases = $this->loadModel('story')->checkNeedConfirm($cases);
