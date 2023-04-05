@@ -108,10 +108,10 @@ ALTER TABLE `zt_doclib`
 CHANGE `product` `product` mediumint unsigned NOT NULL DEFAULT '0',
 CHANGE `project` `project` mediumint unsigned NOT NULL DEFAULT '0',
 CHANGE `execution` `execution` mediumint unsigned NOT NULL DEFAULT '0',
-CHANGE `collector` `collector` text NOT NULL DEFAULT '',
-CHANGE `desc` `desc` mediumtext NOT NULL DEFAULT '',
+CHANGE `collector` `collector` text NULL,
+CHANGE `desc` `desc` mediumtext NULL,
 CHANGE `groups` `groups` varchar(255) NOT NULL DEFAULT '',
-CHANGE `users` `users` text NOT NULL DEFAULT '',
+CHANGE `users` `users` text NULL,
 CHANGE `order` `order` tinyint unsigned NOT NULL DEFAULT '0';
 
 ALTER TABLE `zt_domain`
@@ -153,6 +153,50 @@ CHANGE `editedDate` `editedDate` datetime NULL;
 
 ALTER TABLE `zt_image`
 CHANGE `restoreDate` `restoreDate` datetime NULL;
+
+ALTER TABLE `zt_im_chat`
+CHANGE `avatar` `avatar` text NULL,
+CHANGE `pinnedMessages` `pinnedMessages` text NULL,
+CHANGE `createdDate` `createdDate` datetime NOT NULL,
+CHANGE `editedDate` `editedDate` datetime NULL,
+CHANGE `mergedDate` `mergedDate` datetime NULL,
+CHANGE `lastActiveTime` `lastActiveTime` datetime NULL,
+CHANGE `dismissDate` `dismissDate` datetime NULL,
+CHANGE `archiveDate` `archiveDate` datetime NULL;
+
+ALTER TABLE `zt_im_chat_message_index`
+CHANGE `startDate` `startDate` datetime NULL,
+CHANGE `endDate` `endDate` datetime NULL;
+
+ALTER TABLE `zt_im_chatuser`
+CHANGE `join` `join` datetime NULL,
+CHANGE `quit` `quit` datetime NULL;
+
+ALTER TABLE `zt_im_conference`
+CHANGE `openedDate` `openedDate` datetime NULL;
+
+ALTER TABLE `zt_im_conferenceaction`
+CHANGE `data` `data` text NULL,
+CHANGE `date` `date` datetime NULL;
+
+ALTER TABLE `zt_im_message`
+CHANGE `content` `content` text NULL,
+CHANGE `data` `data` text NULL,
+CHANGE `date` `date` datetime NULL;
+
+ALTER TABLE `zt_im_message_backup`
+CHANGE `data` `data` text NULL,
+CHANGE `content` `content` text NULL,
+CHANGE `date` `date` datetime NULL;
+
+ALTER TABLE `zt_im_message_index`
+CHANGE `startDate` `startDate` datetime NULL,
+CHANGE `endDate` `endDate` datetime NULL;
+
+ALTER TABLE `zt_im_userdevice`
+CHANGE `validUntil` `validUntil` datetime NULL,
+CHANGE `lastLogin` `lastLogin` datetime NULL,
+CHANGE `lastLogout` `lastLogout` datetime NULL;
 
 ALTER TABLE `zt_issue`
 CHANGE `editedBy` `editedBy` varchar(30) NOT NULL DEFAULT '',
@@ -202,14 +246,14 @@ CHANGE `backDate` `backDate` datetime NULL,
 CHANGE `reviewedBy` `reviewedBy` char(30) NOT NULL DEFAULT '',
 CHANGE `reviewedDate` `reviewedDate` datetime NULL,
 CHANGE `assignedTo` `assignedTo` varchar(30) NOT NULL DEFAULT '',
-CHANGE `reviewers` `reviewers` text NOT NULL DEFAULT '',
-CHANGE `backReviewers` `backReviewers` text NOT NULL DEFAULT '';
+CHANGE `reviewers` `reviewers` text NULL,
+CHANGE `backReviewers` `backReviewers` text NULL;
 
 ALTER TABLE `zt_lieu`
 CHANGE `reviewedBy` `reviewedBy` char(30) NOT NULL DEFAULT '',
 CHANGE `reviewedDate` `reviewedDate` datetime NULL,
 CHANGE `assignedTo` `assignedTo` varchar(30) NOT NULL DEFAULT '',
-CHANGE `reviewers` `reviewers` text NOT NULL DEFAULT '';
+CHANGE `reviewers` `reviewers` text NULL;
 
 ALTER TABLE `zt_measqueue`
 CHANGE `updateDate` `updateDate` datetime NULL;
@@ -255,7 +299,7 @@ CHANGE `canceledDate` `canceledDate` datetime NULL,
 CHANGE `cancelReason` `cancelReason` char(30) NOT NULL DEFAULT '',
 CHANGE `hangupedBy` `hangupedBy` varchar(30) NOT NULL DEFAULT '',
 CHANGE `hangupedDate` `hangupedDate` datetime NULL,
-CHANGE `resolution` `resolution` mediumtext NOT NULL DEFAULT '',
+CHANGE `resolution` `resolution` mediumtext NULL,
 CHANGE `resolvedBy` `resolvedBy` varchar(30) NOT NULL DEFAULT '',
 CHANGE `resolvedDate` `resolvedDate` datetime NULL,
 CHANGE `lastCheckedBy` `lastCheckedBy` varchar(30) NOT NULL DEFAULT '',
@@ -266,7 +310,7 @@ CHANGE `rejectReason` `rejectReason` varchar(100) NOT NULL DEFAULT '',
 CHANGE `reviewedBy` `reviewedBy` char(30) NOT NULL DEFAULT '',
 CHANGE `reviewedDate` `reviewedDate` datetime NULL,
 CHANGE `assignedTo` `assignedTo` varchar(30) NOT NULL DEFAULT '',
-CHANGE `reviewers` `reviewers` text NOT NULL DEFAULT '';
+CHANGE `reviewers` `reviewers` text NULL;
 
 ALTER TABLE `zt_pipeline`
 CHANGE `editedBy` `editedBy` varchar(30) NOT NULL DEFAULT '',
@@ -282,7 +326,7 @@ ALTER TABLE `zt_product`
 CHANGE `code` `code` varchar(45) NOT NULL DEFAULT '',
 CHANGE `shadow` `shadow` tinyint unsigned NOT NULL DEFAULT '0',
 CHANGE `feedback` `feedback` varchar(30) NOT NULL DEFAULT '',
-CHANGE `reviewer` `reviewer` text NOT NULL DEFAULT '',
+CHANGE `reviewer` `reviewer` text NULL,
 CHANGE `order` `order` mediumint unsigned NOT NULL DEFAULT '0',
 CHANGE `ticket` `ticket` varchar(30) NOT NULL DEFAULT '';
 
@@ -291,7 +335,7 @@ CHANGE `closedReason` `closedReason` varchar(20) NOT NULL DEFAULT '';
 
 ALTER TABLE `zt_project`
 CHANGE `model` `model` char(30) NOT NULL DEFAULT '',
-CHANGE `output` `output` text NOT NULL DEFAULT '',
+CHANGE `output` `output` text NULL,
 CHANGE `code` `code` varchar(45) NOT NULL DEFAULT '',
 CHANGE `auth` `auth` char(30) NOT NULL DEFAULT '',
 CHANGE `path` `path` varchar(255) NOT NULL DEFAULT '',
@@ -299,7 +343,7 @@ CHANGE `grade` `grade` tinyint unsigned NOT NULL DEFAULT '0',
 CHANGE `realBegan` `realBegan` date NULL,
 CHANGE `realEnd` `realEnd` date NULL,
 CHANGE `days` `days` smallint unsigned NOT NULL DEFAULT '0',
-CHANGE `desc` `desc` mediumtext NOT NULL DEFAULT '',
+CHANGE `desc` `desc` mediumtext NULL,
 CHANGE `version` `version` smallint NOT NULL DEFAULT '0',
 CHANGE `parentVersion` `parentVersion` smallint NOT NULL DEFAULT '0',
 CHANGE `planDuration` `planDuration` int NOT NULL DEFAULT '0',
@@ -310,7 +354,7 @@ CHANGE `closedDate` `closedDate` datetime NULL,
 CHANGE `canceledDate` `canceledDate` datetime NULL,
 CHANGE `suspendedDate` `suspendedDate` date NULL,
 CHANGE `team` `team` varchar(90) NOT NULL DEFAULT '',
-CHANGE `whitelist` `whitelist` text NOT NULL DEFAULT '',
+CHANGE `whitelist` `whitelist` text NULL,
 CHANGE `order` `order` mediumint unsigned NOT NULL DEFAULT '0';
 
 ALTER TABLE `zt_researchplan`
@@ -357,7 +401,7 @@ CHANGE `plannedClosedDate` `plannedClosedDate` date NULL,
 CHANGE `actualClosedDate` `actualClosedDate` date NULL,
 CHANGE `editedBy` `editedBy` varchar(30) NOT NULL DEFAULT '',
 CHANGE `editedDate` `editedDate` datetime NULL,
-CHANGE `resolution` `resolution` mediumtext NOT NULL DEFAULT '',
+CHANGE `resolution` `resolution` mediumtext NULL,
 CHANGE `resolvedBy` `resolvedBy` varchar(30) NOT NULL DEFAULT '',
 CHANGE `activateBy` `activateBy` varchar(30) NOT NULL DEFAULT '',
 CHANGE `activateDate` `activateDate` date NULL,
@@ -423,7 +467,7 @@ CHANGE `estStarted` `estStarted` date NULL,
 CHANGE `realStarted` `realStarted` datetime NULL,
 CHANGE `finishedBy` `finishedBy` varchar(30) NOT NULL DEFAULT '',
 CHANGE `finishedDate` `finishedDate` datetime NULL,
-CHANGE `finishedList` `finishedList` text NOT NULL DEFAULT '',
+CHANGE `finishedList` `finishedList` text NULL,
 CHANGE `canceledBy` `canceledBy` varchar(30) NOT NULL DEFAULT '',
 CHANGE `canceledDate` `canceledDate` datetime NULL,
 CHANGE `closedBy` `closedBy` varchar(30) NOT NULL DEFAULT '',
@@ -466,7 +510,7 @@ CHANGE `finishedBy` `finishedBy` varchar(30) NOT NULL DEFAULT '',
 CHANGE `finishedDate` `finishedDate` datetime NULL,
 CHANGE `resolvedBy` `resolvedBy` varchar(30) NOT NULL DEFAULT '',
 CHANGE `resolvedDate` `resolvedDate` datetime NULL,
-CHANGE `resolution` `resolution` varchar(1000) NOT NULL DEFAULT '',
+CHANGE `resolution` `resolution` text NULL,
 CHANGE `editedBy` `editedBy` varchar(30) NOT NULL DEFAULT '',
 CHANGE `editedDate` `editedDate` datetime NULL;
 
@@ -493,10 +537,10 @@ CHANGE `editedDate` `editedDate` datetime NULL;
 ALTER TABLE `zt_user`
 CHANGE `company` `company` mediumint unsigned NOT NULL DEFAULT '0',
 CHANGE `commiter` `commiter` varchar(100) NOT NULL DEFAULT '',
-CHANGE `avatar` `avatar` text NOT NULL DEFAULT '',
-CHANGE `nature` `nature` text NOT NULL DEFAULT '',
-CHANGE `analysis` `analysis` text NOT NULL DEFAULT '',
-CHANGE `strategy` `strategy` text NOT NULL DEFAULT '',
+CHANGE `avatar` `avatar` text NULL,
+CHANGE `nature` `nature` text NULL,
+CHANGE `analysis` `analysis` text NULL,
+CHANGE `strategy` `strategy` text NULL,
 CHANGE `ldap` `ldap` char(30) NOT NULL DEFAULT '',
 CHANGE `resetToken` `resetToken` varchar(50) NOT NULL DEFAULT '',
 CHANGE `birthday` `birthday` date NULL,

@@ -67,21 +67,33 @@ class dm extends dao
             }
             else
             {
-                $fieldList[$key] = $this->formatField($field, '');
+                $fieldList[$key] = $this->formatField($field);
             }
         }
 
         return parent::select(implode(',', $fieldList));
     }
 
-    private function formatField($originField, $alias)
+    /**
+     * Format field: date => "date", t1.date => t1."date"
+     *
+     * @param string $originField
+     * @param string $alias
+     * @access private
+     * @return tring
+     */
+    private function formatField($originField, $alias = '')
     {
         /* Format originField. */
         $replace = array(
             'GROUP_CONCAT' => 'WM_CONCAT',
         );
 
-        if(strcasecmp($originField, 'distinct') !== 0)
+        if(stripos($originField, 'if(') !== false)
+        {
+            $originField = $this->formatIfFunction($originField);
+        }
+        elseif(strcasecmp($originField, 'distinct') !== 0)
         {
             $tableField = explode('.', $originField);
             if(count($tableField) == 2 and ctype_alnum($tableField[1]) and $tableField[1] != '*')
@@ -99,6 +111,29 @@ class dm extends dao
         if($alias and ctype_alnum($alias)) $alias = '"' . $alias . '"';
 
         return $originField . ' ' .  $alias;
+    }
+
+    /**
+     * Format if function.
+     *
+     * @param  string $field
+     * @access private
+     * @return string
+     */
+    private function formatIfFunction($field)
+    {
+        preg_match('/if\(.+\)+/i', $field, $matches);
+        $if = $matches[0];
+        if(substr_count($if, '(') == 1)
+        {
+            $pos = strpos($if, ')');
+            $if  = substr($if, 0, $pos+1);
+        }
+        $parts = explode(',', substr($if, 3, strlen($if)-4)); // remove 'if(' and ')'
+        $case  = 'CASE WHEN ' . implode(',', array_slice($parts, 0, count($parts)-2)) . ' THEN ' . $parts[count($parts)-2] . ' ELSE ' . $parts[count($parts)-1] . ' END';
+        $field = str_ireplace($if, $case, $field);
+
+        return $field;
     }
 
     /**
@@ -154,12 +189,49 @@ class dm extends dao
         if($pos)
         {
             $originField = substr($condition, 0, $pos);
-            return $this->formatField($originField, '') . substr($condition, $pos);
+            return $this->formatField($originField) . substr($condition, $pos);
         }
         else
         {
-            return $this->formatField($condition, '');
+            return $this->formatField($condition);
         }
+    }
+
+    /**
+     * 创建GROUP BY部分。
+     * Create the groupby part.
+     *
+     * @param  string $groupBy
+     * @access public
+     * @return static|sql the sql object.
+     */
+    public function groupBy($groupBy)
+    {
+        $groups = preg_split("/,(?![^(]+\))/", $groupBy);
+        foreach($groups as $key => $group)
+        {
+            $groups[$key] = $this->formatField($group);
+        }
+
+        $groupBy = implode(',', $groups);
+        return parent::groupBy($groupBy);
+    }
+
+    /**
+     * 创建ON部分。
+     * Create the on part.
+     *
+     * @param  string $condition
+     * @access public
+     * @return static|sql the sql object.
+     */
+    public function on($condition)
+    {
+        $fieldList = explode('=', $condition);
+        foreach($fieldList as $key => $field) $fieldList[$key] = $this->formatField(trim($field));
+        $condition = implode(' = ', $fieldList);
+
+        return parent::on($condition);
     }
 
     public function getPKColumns()
