@@ -254,9 +254,8 @@ class group extends control
             foreach($privs as $priv)
             {
                 if(!isset($privList[$priv->parentCode])) $privList[$priv->parentCode] = array();
-                if(!isset($privList[$priv->parentCode][$priv->package])) $privList[$priv->parentCode][$priv->package] = array();
-                if(!isset($privList[$priv->parentCode][0])) $privList[$priv->parentCode][0] = array();
-                $privList[$priv->parentCode][$priv->package][$priv->key] = $priv;
+                if(!isset($privList[$priv->parentCode][$priv->parent])) $privList[$priv->parentCode][$priv->parent] = array();
+                $privList[$priv->parentCode][$priv->parent][$priv->key] = $priv;
 
                 if(!isset($privMethod[$priv->module])) $privMethod[$priv->module] = array();
                 $privMethods[$priv->module][$priv->method] = $priv->method;

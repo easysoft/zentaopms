@@ -1404,7 +1404,7 @@ class groupModel extends model
 
         $stmt = $this->dao->select('t1.*,t3.`parent` as moduleID,t2.`key`,t2.value,t2.`desc`')->from(TABLE_PRIV)->alias('t1')
             ->leftJoin(TABLE_PRIVLANG)->alias('t2')->on('t1.id=t2.objectID')
-            ->leftJoin(TABLE_PRIVMANAGER)->alias('t3')->on('t1.package=t3.id')
+            ->leftJoin(TABLE_PRIVMANAGER)->alias('t3')->on('t1.parent=t3.id')
             ->where('t3.code')->in($modules)
             ->andWhere('t2.lang')->eq($this->app->getClientLang())
             ->andWhere('t2.objectType')->eq('priv')
@@ -1430,9 +1430,9 @@ class groupModel extends model
         $modules = array_keys($modules);
         $modules = implode(',', $modules);
 
-        $privs = $this->dao->select("t1.*, t2.`key`, t2.`value`, t2.desc, IFNULL(t4.code, t1.module) as parentCode, INSTR('$modules', t4.id) as moduleOrder")->from(TABLE_PRIV)->alias('t1')
+        $privs = $this->dao->select("t1.id, t1.module, t1.method, IF(t3.type = 'module', 0, t1.parent) as parent, t1.order, t2.`key`, t2.`value`, t2.desc, IF(t3.type = 'module', t3.code, t4.code) as parentCode, IF(t3.type = 'module', 0, INSTR('$modules', t4.code)) as moduleOrder")->from(TABLE_PRIV)->alias('t1')
             ->leftJoin(TABLE_PRIVLANG)->alias('t2')->on('t1.id=t2.objectID')
-            ->leftJoin(TABLE_PRIVMANAGER)->alias('t3')->on('t1.package=t3.id')
+            ->leftJoin(TABLE_PRIVMANAGER)->alias('t3')->on('t1.parent=t3.id')
             ->leftJoin(TABLE_PRIVMANAGER)->alias('t4')->on('t3.parent=t4.id')
             ->where('1=1')
             ->andWhere('t2.lang')->eq($this->app->getClientLang())
@@ -1441,7 +1441,8 @@ class groupModel extends model
             ->andWhere('t4.type')->eq('module')
             ->beginIF(!empty($view) and $view != 'general')->andWhere('t4.code')->in($modules)->fi()
             ->markRight(1)
-            ->orWhere('(t1.package')->eq('0')
+            ->orWhere('(t3.type')->eq('module')
+            ->andWhere('t4.type')->eq('view')
             ->beginIF(!empty($view) and $view != 'general')->andWhere('t1.module')->in($modules)->fi()
             ->markRight(2)
             ->orderBy("moduleOrder asc, t3.order asc, `order` asc")
@@ -1542,7 +1543,7 @@ class groupModel extends model
 
         return $this->dao->select("t1.*,t2.name,t2.desc, INSTR('$modules', t1.`module`) as moduleOrder")->from(TABLE_PRIV)->alias('t1')
             ->leftJoin(TABLE_PRIVLANG)->alias('t2')->on('t1.id=t2.priv')
-            ->leftJoin(TABLE_PRIVPACKAGE)->alias('t3')->on('t1.package=t3.id')
+            ->leftJoin(TABLE_PRIVPACKAGE)->alias('t3')->on('t1.parent=t3.id')
             ->where('1=1')
             ->andWhere($privQuery)
             ->andWhere('t2.lang')->eq($this->app->getClientLang())
@@ -1932,7 +1933,7 @@ class groupModel extends model
                 list($moduleName, $methodLang) = explode('-', $priv->key);
                 $this->app->loadLang($moduleName);
 
-                $priv->name = !empty($moduleName) && !empty($methodLang) ? $this->lang->{$moduleName}->$methodLang : '';
+                $priv->name = !empty($moduleName) && !empty($methodLang) && isset($this->lang->{$moduleName}->$methodLang) ? $this->lang->{$moduleName}->$methodLang : '';
             }
         }
 

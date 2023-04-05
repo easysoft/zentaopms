@@ -137,8 +137,8 @@
             <div class="group-item">
               <div class="checkbox-primary">
                 <?php $action = $priv->method;?>
-                <?php $privName = $privLang[$privID]->name;?>
-                <?php echo html::checkbox("actions[$moduleName][]", array($action => $privName), isset($groupPrivs[$moduleName]) ? $groupPrivs[$moduleName] : '', "title='{$privName}' id='actions[$moduleName]$action' data-id='$privID'");?>
+                <?php $privName = is_string($privLang[$privID]->name) ? $privLang[$privID]->name : $privLang[$privID]->name->title;?>
+                <?php echo html::checkbox("actions[$moduleName][]", array($action => $privName), isset($groupPrivs[$moduleName][$action]) ? $action : '', "title='{$privName}' id='actions[$moduleName]$action' data-id='$privID'");?>
               </div>
             </div>
             <?php endforeach;?>
