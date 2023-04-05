@@ -42,6 +42,8 @@ class api extends control
     public function index($libID = 0, $moduleID = 0, $apiID = 0, $version = 0, $release = 0, $appendLib = 0, $browseType = '', $param = 0)
     {
         $this->session->set('spaceType', 'api', 'doc');
+        $this->session->set('structList', $this->app->getURI(true), 'doc');
+
         $this->setMenu($libID);
         $objectType  = $this->objectType;
         $objectID    = $this->objectID;
