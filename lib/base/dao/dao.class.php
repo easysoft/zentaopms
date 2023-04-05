@@ -1691,7 +1691,7 @@ class baseSQL
     public function data($data, $skipFields = '')
     {
         $data = (object) $data;
-        if($skipFields) $skipFields = ',' . str_replace(' ', '', $skipFields) . ',';
+        if($skipFields) $this->skipFields = ',' . str_replace(' ', '', $skipFields) . ',';
 
         if($this->method != 'insert')
         {
@@ -1702,7 +1702,7 @@ class baseSQL
                     unset($data->$field);
                     continue;
                 }
-                if(strpos($skipFields, ",$field,") !== false) continue;
+                if(strpos($this->skipFields, ",$field,") !== false) continue;
                 $this->sql .= "`$field` = " . $this->quote($value) . ',';
             }
         }

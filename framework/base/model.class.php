@@ -308,7 +308,7 @@ class baseModel
      */
     public function loadDAO()
     {
-        global $config;
+        global $config, $dao;
         $driver = $config->db->driver;
 
         if(!class_exists($driver))
@@ -317,7 +317,8 @@ class baseModel
             include($classFile);
         }
 
-        $this->dao = new $driver();
+        $dao = new $driver();
+        $this->dao = $dao;
     }
 
     /**
