@@ -517,14 +517,17 @@ class groupModel extends model
     {
         if($this->post->module == false or $this->post->actions == false or $this->post->groups == false) return false;
 
-        foreach($this->post->actions as $action)
+        $actionIdList = $this->post->actions;
+        $actions      = $this->getPrivByIdList($actionIdList);
+
+        foreach($actions as $actionID => $action)
         {
             foreach($this->post->groups as $group)
             {
                 $data         = new stdclass();
                 $data->group  = $group;
-                $data->module = $this->post->module;
-                $data->method = $action;
+                $data->module = $action->module;
+                $data->method = $action->method;
                 $this->dao->replace(TABLE_GROUPPRIV)->data($data)->exec();
             }
         }

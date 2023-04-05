@@ -970,7 +970,7 @@ class group extends control
             {
                 foreach($packages as $packageID => $packagePriv)
                 {
-                    $privList = array_merge($privList, $packagePriv);
+                    $privList = $privList + $packagePriv;
                 }
             }
         }
