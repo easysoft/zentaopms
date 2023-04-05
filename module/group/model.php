@@ -868,6 +868,25 @@ class groupModel extends model
             ->fetchAll('id');
     }
 
+//    /**
+//     * Get priv packages group by module.
+//     *
+//     * @param  array  $modules
+//     * @access public
+//     * @return array
+//     */
+//    public function getPrivPackageGroupByModules($modules = array())
+//    {
+//        return $this->dao->select('t1.*,t2.`code` as parentCode')->from(TABLE_PRIVMANAGER)->alias('t1')
+//            ->leftJoin(TABLE_PRIVMANAGER)->alias('t2')->on('t1.parent=t2.id')
+//            ->where('t1.`type`')->eq('package')
+//            ->beginIF(!empty($modules))->andWhere('t2.`code`')->in($modules)->fi()
+//            ->andWhere('t2.`type`')->eq('module')
+//            ->andWhere('t1.edition')->like("%,{$this->config->edition},%")
+//            ->andWhere('t1.vision')->like("%,{$this->config->vision},%")
+//            ->fetchGroup('parentCode', 'id');
+//    }
+
     /**
      * Get priv package pairs by view.
      *
@@ -1142,6 +1161,10 @@ class groupModel extends model
         $this->dbh->exec('ALTER TABLE ' . TABLE_PRIV . ' CHANGE `order` `order` mediumint(8) NOT NULL;');
         $this->dbh->exec('ALTER TABLE ' . TABLE_PRIVMANAGER . ' CHANGE `order` `order` mediumint(8) NOT NULL;');
 
+        $this->dbh->exec("ALTER TABLE " . TABLE_PRIV . " CHANGE `package` `package` varchar(100) NOT NULL;");
+        $this->dbh->exec("UPDATE " . TABLE_PRIV . " SET `package`=`module` WHERE `package`=0;");
+        $this->dbh->exec("ALTER TABLE " . TABLE_PRIV . " CHANGE `package` `parent` varchar(100) NOT NULL;");
+
         $this->loadModel('dev');
 
         /* 插入权限所有语言项 */
@@ -1150,7 +1173,7 @@ class groupModel extends model
         {
             foreach($this->config->langs as $lang => $langValue)
             {
-                $methodLang = $this->lang->resource->{$priv->moduleName}->{$priv->methodName};
+                $methodLang = isset($this->lang->resource->{$priv->moduleName}->{$priv->methodName}) ? $this->lang->resource->{$priv->moduleName}->{$priv->methodName} : $priv->methodName;
 
                 $privLang = new stdclass();
                 $privLang->objectID   = $privID;
@@ -1190,7 +1213,13 @@ class groupModel extends model
         /* 初始化视图和模块到zt_privmanager */
         $viewPairs   = array();
         $modulePairs = array();
+        $indexMenu   = array();
         $hasStored   = false;
+        $this->app->loadLang('index');
+        $this->lang->mainNav = json_decode(json_encode($this->lang->mainNav), true);
+
+        $indexMenu['index']  = "{$this->lang->navIcons['my']} {$this->lang->index->common}|index|index|";
+        $this->lang->mainNav = (object)array_merge($indexMenu, $this->lang->mainNav);
         foreach($this->config->langs as $lang => $langValue)
         {
             /* 视图 */
@@ -1282,6 +1311,11 @@ class groupModel extends model
                         ->where('`parent`')->eq($moduleName)
                         ->andWhere('`type`')->eq('package')
                         ->exec();
+
+                    /* 更新权限的parent字段 */
+                    $this->dao->update(TABLE_PRIV)->set('`parent`')->eq($moduleID)
+                        ->where('`parent`')->eq($moduleName)
+                        ->exec();
                 }
             }
 
@@ -1346,6 +1380,7 @@ class groupModel extends model
         $this->dbh->exec('ALTER TABLE ' . TABLE_PRIV . ' CHANGE `methodName` `method` varchar(30) NOT NULL;');
         $this->dbh->exec('ALTER TABLE ' . TABLE_PRIV . ' DROP INDEX `priv`;');
         $this->dbh->exec('ALTER TABLE ' . TABLE_PRIV . ' ADD UNIQUE `priv` (`module`,`method`);');
+        $this->dbh->exec("ALTER TABLE " . TABLE_PRIV . " CHANGE `parent` `parent` mediumint(8) unsigned NOT NULL;");
         $this->dbh->exec('ALTER TABLE ' . TABLE_PRIVMANAGER . ' CHANGE `parent` `parent` mediumint(8) unsigned NOT NULL;');
         $this->dbh->exec('DROP TABLE IF EXISTS ' . TABLE_PRIVPACKAGE . ';');
 
@@ -1402,18 +1437,42 @@ class groupModel extends model
             ->andWhere('`type`')->eq('module')
             ->fetchAll('id');
 
+        $packageIdList = $this->dao->select('id')->from(TABLE_PRIVMANAGER)
+            ->where('`parent`')->in(array_keys($moduleIdList))
+            ->fetchAll('id');
+
+        $parentsIdList = array_merge(array_keys($moduleIdList), array_keys($packageIdList));
+
         $stmt = $this->dao->select('t1.*,t3.`parent` as moduleID,t2.`key`,t2.value,t2.`desc`')->from(TABLE_PRIV)->alias('t1')
             ->leftJoin(TABLE_PRIVLANG)->alias('t2')->on('t1.id=t2.objectID')
             ->leftJoin(TABLE_PRIVMANAGER)->alias('t3')->on('t1.parent=t3.id')
-            ->where('t3.code')->in($modules)
+            ->where('t3.id')->in($parentsIdList)
             ->andWhere('t2.lang')->eq($this->app->getClientLang())
             ->andWhere('t2.objectType')->eq('priv')
             ->orderBy('`order`')
             ->query();
 
         $privs = array();
-        while($priv = $stmt->fetch()) $privs[$priv->moduleID][$priv->package][$priv->id] = $priv;
+        while($priv = $stmt->fetch()) $privs[$priv->moduleID][$priv->parent][$priv->id] = $priv;
         return $privs;
+    }
+
+    /**
+     * Get priv group by package.
+     *
+     * @param  array  $parentList
+     * @access public
+     * @return array
+     */
+    public function getPrivByParent($parentList)
+    {
+        return $this->dao->select('t1.*,t2.`key`,t2.value')->from(TABLE_PRIV)->alias('t1')
+            ->leftJoin(TABLE_PRIVLANG)->alias('t2')->on('t1.id=t2.objectID')
+            ->where('t1.parent')->in($parentList)
+            ->andWhere('t1.edition')->like("%,{$this->config->edition},%")
+            ->andWhere('t1.vision')->like("%,{$this->config->vision},%")
+            ->andWhere('t2.`objectType`')->eq('priv')
+            ->fetchAll('id');
     }
 
     /**
@@ -1883,7 +1942,7 @@ class groupModel extends model
      * @access public
      * @return array
      */
-    public function getPrivManagerPairs($type, $parent = 0)
+    public function getPrivManagerPairs($type, $parent = '')
     {
         $parentType = $type == 'package' ? 'module' : 'view';
         $parent     = !empty($parent) ? $this->dao->select('id as parent')->from(TABLE_PRIVMANAGER)->where('type')->eq($parentType)->andWhere('code')->eq($parent)->fetch('parent') : 0;
@@ -1916,11 +1975,13 @@ class groupModel extends model
      * Transform priv lang.
      *
      * @param  array    $privs
+     * @param  bool     $needPairs
      * @access public
      * @return array
      */
-    public function transformPrivLang($privs)
+    public function transformPrivLang($privs, $needPairs = false)
     {
+        $privPairs = array();
         foreach($privs as $privID => $priv)
         {
             $priv->name = '';
@@ -1933,10 +1994,12 @@ class groupModel extends model
                 list($moduleName, $methodLang) = explode('-', $priv->key);
                 $this->app->loadLang($moduleName);
 
-                $priv->name = !empty($moduleName) && !empty($methodLang) && isset($this->lang->{$moduleName}->$methodLang) ? $this->lang->{$moduleName}->$methodLang : '';
+                $priv->name = (!empty($moduleName) and !empty($methodLang) and isset($this->lang->{$moduleName}->$methodLang)) ? $this->lang->{$moduleName}->$methodLang : '';
             }
+
+            $privPairs[$privID] = $priv->name;
         }
 
-        return $privs;
+        return $needPairs ? $privPairs : $privs;
     }
 }

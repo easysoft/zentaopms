@@ -22,25 +22,29 @@
     <table class='table table-form'>
       <tr class='text-center'>
         <td class='strong'><?php echo $lang->group->module;?></td>
+        <td class='strong'><?php echo $lang->privpackage->common;?></td>
         <td class='strong'><?php echo $lang->group->method;?></td>
         <td class='strong'><?php echo $lang->group->common;?></td>
       </tr>
       <tr class='text-top'>
-        <td class='w-p30'><?php echo html::select('module', $modules, '', " size='10' onclick='setModuleActions(this.value)' class='form-control'");?></td>
-        <td class='w-p30' id='actionBox'>
+        <td class='w-p30'><?php echo html::select('module', $modulePairs, '', " size='10' onclick='setModulePackages(this.value)' class='form-control'");?></td>
+        <td class='w-p30' id='packageBox'>
           <?php
-          $class = '';
-          foreach($actions as $module => $moduleActions)
+          $hiddenClass = '';
+          foreach($packageGroup as $module => $modulePackages)
           {
-              echo html::select('actions[]', $moduleActions, '', "multiple='multiple' class='form-control $class {$module}Actions'");
-              $class = 'hidden';
+              echo html::select('packages[]', $modulePackages, '', "onclick='setActions()' multiple='multiple' class='form-control $hiddenClass' data-module='$module'");
+              $hiddenClass = 'hidden';
           }
           ?>
+        </td>
+        <td class='w-p30' id='actionBox'>
+          <?php echo html::select('actions[]', $indexPrivs, '', "multiple='multiple' class='form-control'");?>
         </td>
         <td><?php echo html::select('groups[]', $groups, '', "multiple='multiple' class='form-control'");?></td>
       </tr>
       <tr>
-        <td class='text-center form-actions' colspan='3'>
+        <td class='text-center form-actions' colspan='4'>
           <?php echo html::submitButton('', "onclick='setNoChecked()'");?>
           <?php echo html::backButton();?>
           <?php echo html::hidden('foo'); // Just make $_POST not empty..?>

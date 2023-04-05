@@ -272,17 +272,23 @@ class group extends control
             $this->view->title      = $this->lang->company->common . $this->lang->colon . $this->lang->group->managePriv;
             $this->view->position[] = $this->lang->group->managePriv;
 
-            foreach($this->lang->resource as $module => $moduleActions)
+            $modules      = $this->dao->select('*')->from(TABLE_PRIVMANAGER)->where('type')->eq('module')->fetchAll('code');
+            $modulePairs  = $this->group->getPrivManagerPairs('module');
+            $packageGroup = array();
+
+            foreach($modulePairs as $moduleCode => $moduleLang)
             {
-                $modules[$module] = $this->lang->$module->common;
-                foreach($moduleActions as $key => $action)
-                {
-                    $actions[$module][$key] = $this->lang->$module->$action;
-                }
+                $packageGroup[$moduleCode] = $this->group->getPrivManagerPairs('package', $moduleCode);
+                $packageGroup[$moduleCode] = $packageGroup[$moduleCode] + array($modules[$moduleCode]->id => $this->lang->group->unassigned);
             }
-            $this->view->groups  = $this->group->getPairs();
-            $this->view->modules = $modules;
-            $this->view->actions = $actions;
+
+            $indexPrivs = $this->group->getPrivByParent(isset($packageGroup['index']) ? array_keys($packageGroup['index']) : $modules['index']->id);
+            $indexPrivs = $this->group->transformPrivLang($indexPrivs, true);
+
+            $this->view->groups       = $this->group->getPairs();
+            $this->view->modulePairs  = $modulePairs;
+            $this->view->packageGroup = $packageGroup;
+            $this->view->indexPrivs   = $indexPrivs;
         }
         $this->display();
     }
@@ -944,5 +950,37 @@ class group extends control
     public function ajaxUpdatePrivOrder()
     {
         if(!empty($_POST)) $this->group->updatePrivOrder();
+    }
+
+    /**
+     * AJAX: Get privs by parents.
+     *
+     * @param  string  $parentType
+     * @param  string  $parentList
+     * @access public
+     * @return bool
+     */
+    public function ajaxGetPrivByParents($parentType, $parentList)
+    {
+        $privList = array();
+        if($parentType == 'module')
+        {
+            $privs = $this->group->getPrivByModule($parentList);
+            foreach($privs as $moduleID => $packages)
+            {
+                foreach($packages as $packageID => $packagePriv)
+                {
+                    $privList = array_merge($privList, $packagePriv);
+                }
+            }
+        }
+        elseif($parentType == 'package')
+        {
+            $privList = $this->group->getPrivByParent($parentList);
+        }
+
+        $privList = $this->group->transformPrivLang($privList, true);
+
+        return print(html::select('actions[]', $privList, '', "multiple='multiple' class='form-control'"));
     }
 }
