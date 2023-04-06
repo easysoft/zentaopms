@@ -994,6 +994,7 @@ class apiModel extends model
             ->andWhere('t1.vision')->eq($this->config->vision)
             ->andWhere('t1.deleted')->eq(0)
             ->andWhere('t2.id')->in(array_keys($libs))
+            ->orderBy('id_desc')
             ->fetchAll('id');
 
         foreach($products as $id => $product)
@@ -1015,7 +1016,7 @@ class apiModel extends model
             ->andWhere('t1.deleted')->eq(0)
             ->beginIF(!$this->app->user->admin)->andWhere('t1.id')->in($this->app->user->view->projects)->fi()
             ->andWhere('t2.id')->in(array_keys($libs))
-            ->orderBy('t1.hasProduct_asc')
+            ->orderBy('t1.hasProduct_asc, id_desc')
             ->fetchAll('id');
 
         foreach($projects as $id => $project)
