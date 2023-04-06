@@ -605,102 +605,99 @@ class commonModel extends model
             if($objectType == 'kanbanspace') $createMethod = 'createSpace';
             if(strpos('|bug|execution|kanbanspace|', "|$objectType|") !== false) $needPrintDivider = true;
 
-            if(common::hasPriv($module, $createMethod))
+            if($objectType == 'doc' and !common::hasPriv('doc', 'tableContents')) continue;
+
+            $hasPriv = common::hasPriv($module, $createMethod);
+            if($objectType == 'doc' and !$hasPriv and common::hasPriv('api', 'create')) $hasPriv = true;
+            if(!$hasPriv) continue;
+
+            /* Determines whether to print a divider. */
+            if($needPrintDivider and $showCreateList)
             {
-                if($objectType == 'doc' and !common::hasPriv('doc', 'tableContents')) continue;
+                $html .= '<li class="divider"></li>';
+                $needPrintDivider = false;
+            }
 
-                /* Determines whether to print a divider. */
-                if($needPrintDivider and $showCreateList)
-                {
-                    $html            .= '<li class="divider"></li>';
-                    $needPrintDivider = false;
-                }
+            $showCreateList = true;
+            $isOnlyBody     = false;
+            $attr           = '';
 
-                $showCreateList = true;
-                $isOnlyBody     = false;
-                $attr           = '';
-
-                $params = '';
-                switch($objectType)
-                {
-                    case 'doc':
-                        $params       = "objectType=&objectID=0&libID=0";
-                        $createMethod = 'selectLibType';
-                        $isOnlyBody   = true;
-                        $attr         = "class='iframe' data-width='700px'";
-                        break;
-                    case 'project':
+            $params = '';
+            switch($objectType)
+            {
+                case 'doc':
+                    $params       = "objectType=&objectID=0&libID=0";
+                    $createMethod = 'selectLibType';
+                    $isOnlyBody   = true;
+                    $attr         = "class='iframe' data-width='700px'";
+                    break;
+                case 'project':
+                    $params = "model=scrum&programID=0&copyProjectID=0&extra=from=global";
+                    if($config->vision == 'lite')
+                    {
+                        $params = "model=kanban";
+                    }
+                    elseif(!defined('TUTORIAL'))
+                    {
+                        $params       = "programID=0&from=global";
+                        $createMethod = 'createGuide';
+                        $attr         = 'data-toggle="modal"';
+                    }
+                    break;
+                case 'bug':
+                    $params = "productID=$productID&branch=&extras=from=global";
+                    break;
+                case 'story':
+                    if(!$productID and $config->vision == 'lite')
+                    {
+                        $module = 'project';
+                        $params = "model=kanban";
+                    }
+                    else
+                    {
+                        $params = "productID=$productID&branch=0&moduleID=0&storyID=0&objectID=0&bugID=0&planID=0&todoID=0&extra=from=global";
                         if($config->vision == 'lite')
                         {
-                            $params = "model=kanban";
-                        }
-                        else if(!defined('TUTORIAL'))
-                        {
-                            $params       = "programID=0&from=global";
-                            $createMethod = 'createGuide';
-                            $attr         = 'data-toggle="modal"';
-                        }
-                        else
-                        {
-                            $params = "model=scrum&programID=0&copyProjectID=0&extra=from=global";
-                        }
+                            $projectID = isset($_SESSION['project']) ? $_SESSION['project'] : 0;
+                            $projects  = $app->dbh->query("SELECT t2.id FROM " . TABLE_PROJECTPRODUCT . " AS t1 LEFT JOIN " . TABLE_PROJECT . " AS t2 ON t1.project = t2.id WHERE t1.`product` = '{$productID}' and t2.`type` = 'project' and t2.id " . helper::dbIN($app->user->view->projects) . " ORDER BY `order` desc")->fetchAll();
 
-                        break;
-                    case 'bug':
-                        $params = "productID=$productID&branch=&extras=from=global";
-                        break;
-                    case 'story':
-                        if(!$productID and $config->vision == 'lite')
-                        {
-                            $module = 'project';
-                            $params = "model=kanban";
+                            $projectIdList = array();
+                            foreach($projects as $project) $projectIdList[$project->id] = $project->id;
+                            if($projectID and !isset($projectIdList[$projectID])) $projectID = 0;
+                            if(empty($projectID)) $projectID = key($projectIdList);
+
+                            $params = "productID={$productID}&branch=0&moduleID=0&storyID=0&objectID={$projectID}&bugID=0&planID=0&todoID=0&extra=from=global";
                         }
-                        else
-                        {
-                            $params = "productID=$productID&branch=0&moduleID=0&storyID=0&objectID=0&bugID=0&planID=0&todoID=0&extra=from=global";
-                            if($config->vision == 'lite')
-                            {
-                                $projectID = isset($_SESSION['project']) ? $_SESSION['project'] : 0;
-                                $projects  = $app->dbh->query("SELECT t2.id FROM " . TABLE_PROJECTPRODUCT . " AS t1 LEFT JOIN " . TABLE_PROJECT . " AS t2 ON t1.project = t2.id WHERE t1.`product` = '{$productID}' and t2.`type` = 'project' and t2.id " . helper::dbIN($app->user->view->projects) . " ORDER BY `order` desc")->fetchAll();
+                    }
 
-                                $projectIdList = array();
-                                foreach($projects as $project) $projectIdList[$project->id] = $project->id;
-                                if($projectID and !isset($projectIdList[$projectID])) $projectID = 0;
-                                if(empty($projectID)) $projectID = key($projectIdList);
-
-                                $params = "productID={$productID}&branch=0&moduleID=0&storyID=0&objectID={$projectID}&bugID=0&planID=0&todoID=0&extra=from=global";
-                            }
-                        }
-
-                        break;
-                    case 'task':
-                        $params = "executionID=0&storyID=0&moduleID=0&taskID=0&todoID=0&extra=from=global";
-                        break;
-                    case 'testcase':
-                        $params = "productID=$productID&branch=&moduleID=0&from=&param=0&storyID=0&extras=from=global";
-                        break;
-                    case 'execution':
-                        $projectID = isset($_SESSION['project']) ? $_SESSION['project'] : 0;
-                        $params = "projectID={$projectID}&executionID=0&copyExecutionID=0&planID=0&confirm=no&productID=0&extra=from=global";
-                        break;
-                    case 'product':
-                        $params = "programID=&extra=from=global";
-                        break;
-                    case 'program':
-                        $params = "parentProgramID=0&extra=from=global";
-                        break;
-                    case 'kanbanspace':
-                        $isOnlyBody = true;
-                        $attr       = "class='iframe' data-width='75%'";
-                        break;
-                    case 'kanban':
-                        $isOnlyBody = true;
-                        $attr       = "class='iframe' data-width='75%'";
-                        break;
-                }
-
-                $html .= '<li>' . html::a(helper::createLink($module, $createMethod, $params, '', $isOnlyBody), "<i class='icon icon-$objectIcon'></i> " . $lang->createObjects[$objectType], '', "$attr data-app=''") . '</li>';
+                    break;
+                case 'task':
+                    $params = "executionID=0&storyID=0&moduleID=0&taskID=0&todoID=0&extra=from=global";
+                    break;
+                case 'testcase':
+                    $params = "productID=$productID&branch=&moduleID=0&from=&param=0&storyID=0&extras=from=global";
+                    break;
+                case 'execution':
+                    $projectID = isset($_SESSION['project']) ? $_SESSION['project'] : 0;
+                    $params = "projectID={$projectID}&executionID=0&copyExecutionID=0&planID=0&confirm=no&productID=0&extra=from=global";
+                    break;
+                case 'product':
+                    $params = "programID=&extra=from=global";
+                    break;
+                case 'program':
+                    $params = "parentProgramID=0&extra=from=global";
+                    break;
+                case 'kanbanspace':
+                    $isOnlyBody = true;
+                    $attr       = "class='iframe' data-width='75%'";
+                    break;
+                case 'kanban':
+                    $isOnlyBody = true;
+                    $attr       = "class='iframe' data-width='75%'";
+                    break;
             }
+
+            $html .= '<li>' . html::a(helper::createLink($module, $createMethod, $params, '', $isOnlyBody), "<i class='icon icon-$objectIcon'></i> " . $lang->createObjects[$objectType], '', "$attr data-app=''") . '</li>';
         }
 
         if(!$showCreateList) return '';

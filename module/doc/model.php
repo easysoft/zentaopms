@@ -38,7 +38,7 @@ class docModel extends model
      * Get api Libraries.
      *
      * @param  int    $appendLib
-     * @param  string $appendLib
+     * @param  string $objectType
      * @param  int    $objectID
      * @return array
      */
@@ -52,6 +52,7 @@ class docModel extends model
             ->beginIF($objectType == 'nolink')
             ->andWhere('product')->eq(0)
             ->andWhere('project')->eq(0)
+            ->andWhere('execution')->eq(0)
             ->fi()
             ->orderBy('`order`_asc, id_desc')
             ->fetchAll('id');
@@ -3000,17 +3001,23 @@ class docModel extends model
      * Get option menu  for libs.
      *
      * @param  array  $libs
+     * @param  string $docType
      * @access public
      * @return array
      */
-    public function getLibsOptionMenu($libs)
+    public function getLibsOptionMenu($libs, $docType = 'doc')
     {
         $this->loadModel('tree');
         $modules = array();
         foreach($libs as $libID => $libName)
         {
-            if(strpos($libName, '/') !== false) list($objectName, $libName) = explode('/', $libName);
-            $moduleOptionMenu = $this->tree->getOptionMenu($libID, 'doc', $startModuleID = 0);
+            if(strpos($libName, '/') !== false)
+            {
+                $pausedLibName = explode('/', $libName);
+                $libName       = array_pop($pausedLibName);
+                $objectName    = array_pop($pausedLibName);
+            }
+            $moduleOptionMenu = $this->tree->getOptionMenu($libID, $docType, $startModuleID = 0);
             foreach($moduleOptionMenu as $moduleID => $moduleName) $modules["{$libID}_{$moduleID}"] = $libName . $moduleName;
             if(empty($moduleOptionMenu)) $modules["{$libID}_0"] = $libName . $moduleName;
         }
