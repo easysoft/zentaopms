@@ -79,6 +79,7 @@ class doc extends control
         $browseType = strtolower($browseType);
         $queryID    = ($browseType == 'bysearch') ? (int)$param : 0;
         $moduleID   = ($browseType == 'bymodule') ? (int)$param : 0;
+        $libID      = ($browseType == 'bylib')    ? (int)$param : 0;
 
         /* Set header and position. */
         $this->view->title = $this->lang->doc->common;
@@ -103,13 +104,22 @@ class doc extends control
             $this->app->rawMethod = 'recent';
         }
 
+        $libs    = $this->doc->getLibsByObject('mine', 0);
+        $libTree = $this->doc->getLibTree($libID, $libs, 'mine', 0);
+
         $this->view->moduleID   = $moduleID;
         $this->view->docs       = $this->doc->getDocsByBrowseType($browseType, $queryID, $moduleID, $sort, $pager);
         $this->view->users      = $this->user->getPairs('noletter');
         $this->view->orderBy    = $orderBy;
         $this->view->browseType = $browseType;
         $this->view->param      = $param;
+        $this->view->libID      = $libID;
+        $this->view->libTree    = $libTree;
         $this->view->pager      = $pager;
+        $this->view->type       = 'mine';
+        $this->view->objectID   = 0;
+        $this->view->canExport  = 0;
+        $this->view->libType    = 'mine';
 
         $this->display();
     }
@@ -126,7 +136,7 @@ class doc extends control
     {
         if(!empty($_POST))
         {
-            $libID = $this->doc->createlib();
+            $libID = $this->doc->createLib();
             if(!dao::isError())
             {
                 if($type == 'project' and $this->post->project) $objectID = $this->post->project;
@@ -167,21 +177,38 @@ class doc extends control
             if($execution->type == 'stage') $this->lang->doc->execution = str_replace($this->lang->executionCommon, $this->lang->project->stage, $this->lang->doc->execution);
         }
 
-        if($type == 'custom') unset($this->lang->doclib->aclList['default']);
-        if($type != 'custom')
+        $acl = 'default';
+        if($type == 'custom')
+        {
+            $acl = 'open';
+            unset($this->lang->doclib->aclList['default']);
+        }
+        elseif($type == 'mine')
+        {
+            $acl = 'private';
+            unset($this->lang->doclib->aclList['open']);
+            unset($this->lang->doclib->aclList['default']);
+            $this->lang->doclib->aclList = $this->lang->doclib->mySpaceAclList['private'];
+        }
+
+        if($type != 'custom' and $type != 'mine')
         {
             $this->lang->doclib->aclList['default'] = sprintf($this->lang->doclib->aclList['default'], $this->lang->{$type}->common);
             $this->lang->doclib->aclList['private'] = sprintf($this->lang->doclib->privateACL, $this->lang->{$type}->common);
             unset($this->lang->doclib->aclList['open']);
         }
 
-        $this->app->loadLang('api');
-        $this->lang->api->aclList['default'] = sprintf($this->lang->api->aclList['default'], $this->lang->{$type}->common);
+        if($type != 'mine')
+        {
+            $this->app->loadLang('api');
+            $this->lang->api->aclList['default'] = sprintf($this->lang->api->aclList['default'], $this->lang->{$type}->common);
+        }
 
         $this->view->groups         = $this->loadModel('group')->getPairs();
         $this->view->users          = $this->user->getPairs('nocode|noclosed');
         $this->view->objects        = $objects;
         $this->view->type           = $type;
+        $this->view->acl            = $acl;
         $this->view->objectID       = $objectID;
         $this->display();
     }
