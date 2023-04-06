@@ -335,7 +335,7 @@ $(function()
 
         }).on('mouseout', 'a', function()
         {
-            $(this).find('.icon').addClass('hidden');
+            if(!$(this).closest('a').hasClass('hover')) $(this).find('.icon').addClass('hidden');
             $(this).removeClass('show-icon');
         }).on('click', 'a', function()
         {
@@ -444,8 +444,12 @@ $(function()
         if($dropdown.length)
         {
             var dropdown = $dropdown.data();
-            var $hoverItem = $('#' + $dropdown.data('treeId')).find('li.hover');
-            $hoverItem.removeClass('hover');
+            var $hoverItem = $('#' + $dropdown.data('treeId')).find('a.hover');
+            if($hoverItem.length)
+            {
+                $hoverItem.removeClass('hover');
+                $hoverItem.find('.icon').addClass('hidden');
+            }
             $dropdown.remove();
         }
     }).on('click', '.sidebar-toggle', function()
