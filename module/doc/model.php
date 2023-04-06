@@ -2030,9 +2030,9 @@ class docModel extends model
 
         $today         = date('Y-m-d');
         $lately        = date('Y-m-d', strtotime('-3 day'));
-        $statisticInfo = $this->dao->select("count(id) as totalDocs, count(editedDate like '{$today}%' or null) as todayEditedDocs,
-            count(editedDate > '{$lately}' or null) as lastEditedDocs, count(addedDate > '{$lately}' or null) as lastAddedDocs,
-            count(collector like '%,{$this->app->user->account},%' or null) as myCollection, count(addedBy = '{$this->app->user->account}' or null) as myDocs")->from(TABLE_DOC)
+        $statisticInfo = $this->dao->select("count(id) as totalDocs, count(IF(editedDate like '{$today}%', 1, null)) as todayEditedDocs,
+            count(IF(editedDate > '{$lately}', 1, null)) as lastEditedDocs, count(IF(addedDate > '{$lately}', 1, null)) as lastAddedDocs,
+            count(IF(collector like '%,{$this->app->user->account},%', 1, null)) as myCollection, count(IF(addedBy = '{$this->app->user->account}', 1, null)) as myDocs")->from(TABLE_DOC)
             ->where('deleted')->eq(0)
             ->andWhere('vision')->eq($this->config->vision)
             ->andWhere('id')->in($docIdList)
