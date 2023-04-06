@@ -154,11 +154,11 @@ class navbar extends wg
             {
                 $executionID = $menuItem->link['vars'];
                 $executionMoreItem = $this->getExecutionMoreItem($executionID);
-                // if(!empty($executionMoreItem))
-                // {
-                //     $items[] = array('type' => 'divider');
-                //     $items[] = $executionMoreItem;
-                // }
+                if(!empty($executionMoreItem))
+                {
+                    $items[] = array('type' => 'divider');
+                    $items[] = $executionMoreItem;
+                }
             }
             elseif($menuItem->link['module'] == 'app' and $menuItem->link['method'] == 'serverlink')
             {
@@ -203,6 +203,8 @@ class navbar extends wg
                         list($subLabel, $subModule, $subMethod, $subParams) = explode('|', $dropMenuLink);
                         if(!common::hasPriv($subModule, $subMethod)) continue;
 
+                        $subLink = createLink($subModule, $subMethod, $subParams);
+
                         $subActive = false;
                         $activeMainMenu = false;
                         if($currentModule == strtolower($subModule) and $currentMethod == strtolower($subMethod))
@@ -227,7 +229,7 @@ class navbar extends wg
                         (
                             'active'   => $subActive,
                             'data-id'  => $dropMenuName,
-                            'url'      => createLink($subModule, $subMethod, $subParams),
+                            'url'      => $subLink,
                             'text'     => $subLabel,
                             'data-app' => $dataApp
                         );
@@ -243,7 +245,8 @@ class navbar extends wg
                         'target'   => $target,
                         'text'     => $label,
                         'data-id'  => $menuItem->name,
-                        'data-app' => $dataApp
+                        'data-app' => $dataApp,
+                        'trigger'  => 'hover'
                     );
                 }
                 else

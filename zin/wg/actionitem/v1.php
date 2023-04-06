@@ -49,7 +49,12 @@ class actionItem extends wg
 
     protected function buildDropdownItem()
     {
-        $dropdown = new dropdown($this->props->skip('tagName,type,name,outerTag,outerProps,props'), set($this->prop('props')), $this->children());
+        $dropdown = new dropdown
+        (
+            $this->props->skip('tagName,items,class,data-id,data-app,type,name,outerTag,outerProps,props,trigger,menuProps'),
+            set($this->props),
+            $this->children()
+        );
         return $dropdown;
     }
 
