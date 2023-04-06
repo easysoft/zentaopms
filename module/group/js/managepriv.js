@@ -74,18 +74,18 @@ function changeParentChecked($item, moduleName, packageID)
     var $moduleItem       = $item.closest('tbody').find('.module[data-module=' + moduleName +']');
     if(moduleSelectPrivs == 0)
     {
-      $moduleItem.find('input[type=checkbox]').removeAttr('checked');
-      $moduleItem.find('label').removeClass('checkbox-indeterminate-block');
+        $moduleItem.find('input[type=checkbox]').removeAttr('checked');
+        $moduleItem.find('label').removeClass('checkbox-indeterminate-block');
     }
     else if(moduleAllPrivs == moduleSelectPrivs)
     {
-      $moduleItem.find('input[type=checkbox]').attr('checked', 'checked');
-      $moduleItem.find('label').removeClass('checkbox-indeterminate-block');
+        $moduleItem.find('input[type=checkbox]').attr('checked', 'checked');
+        $moduleItem.find('label').removeClass('checkbox-indeterminate-block');
     }
     else
     {
-      $moduleItem.find('input[type=checkbox]').removeAttr('checked');
-      $moduleItem.find('label').addClass('checkbox-indeterminate-block');
+        $moduleItem.find('input[type=checkbox]').removeAttr('checked');
+        $moduleItem.find('label').addClass('checkbox-indeterminate-block');
     }
 
     if(packageID == '') return;
@@ -95,18 +95,18 @@ function changeParentChecked($item, moduleName, packageID)
     var $packageItem       = $item.closest('tbody').find('.package[data-module=' + moduleName +'][data-package=' + packageID +']');
     if(packageSelectPrivs == 0)
     {
-      $packageItem.find('input[type=checkbox]').removeAttr('checked');
-      $packageItem.find('label').removeClass('checkbox-indeterminate-block');
+        $packageItem.find('input[type=checkbox]').removeAttr('checked');
+        $packageItem.find('label').removeClass('checkbox-indeterminate-block');
     }
     else if(packageAllPrivs == packageSelectPrivs)
     {
-      $packageItem.find('input[type=checkbox]').attr('checked', 'checked');
-      $packageItem.find('label').removeClass('checkbox-indeterminate-block');
+        $packageItem.find('input[type=checkbox]').attr('checked', 'checked');
+        $packageItem.find('label').removeClass('checkbox-indeterminate-block');
     }
     else
     {
-      $packageItem.find('input[type=checkbox]').removeAttr('checked');
-      $packageItem.find('label').addClass('checkbox-indeterminate-block');
+        $packageItem.find('input[type=checkbox]').removeAttr('checked');
+        $packageItem.find('label').addClass('checkbox-indeterminate-block');
     }
 }
 

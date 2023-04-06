@@ -265,6 +265,27 @@ class group extends control
                 if(!isset($selectPrivs[$priv->parentCode][$priv->parent])) $selectPrivs[$priv->parentCode][$priv->parent] = 0;
                 if(!empty($groupPrivs[$priv->module][$priv->method])) $selectPrivs[$priv->parentCode][$priv->parent] ++;
             }
+            $unassignedModule = array_diff(array_keys(get_object_vars($this->lang->resource)), array_keys($privList));
+
+            foreach($unassignedModule as $index => $module)
+            {
+                if(!$this->group->checkMenuModule($menu, $module)) continue;;
+
+                $selectPrivs[$module] = array();
+                $selectPrivs[$module][0] = 0;
+
+                foreach($this->lang->resource->{$module} as $method => $methodLabel)
+                {
+                    if(isset($privMethods[$module][$method])) continue;
+                    $privMethods[$module][$method] = $method;
+
+                    $privList[$module][0]["{$module}-$method"] = new stdclass();
+                    $privList[$module][0]["{$module}-$method"]->module = $module;
+                    $privList[$module][0]["{$module}-$method"]->method = $method;
+                    $privList[$module][0]["{$module}-$method"]->name   = $this->lang->{$module}->{$methodLabel};
+                    if(!empty($groupPrivs[$module][$method])) $selectPrivs[$module][0] ++;
+                }
+            }
 
             $this->view->privList     = $privList;
             $this->view->privMethods  = $privMethods;

@@ -17,6 +17,7 @@ td.menus + td {border-left: 0;}
 #privList th.package {width: 142px; background-color: #EDEEF2; font-weight: 600;}
 #privList th.method {min-width: 685px;}
 #privList th.module > .check-all, #privList th.package > .check-all {font-weight: 600;}
+#privList th .checkbox-inline input {margin-left: 0px;}
 #privList .check-all {display: inline-block;}
 #privList .check-all > label {padding-left: 0;}
 #privList .text-middle.text-left {padding-left: 24px;}

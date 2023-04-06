@@ -112,7 +112,7 @@
 
         $i = 1;
 
-        $unassigned    = (!empty($moduleActions) and !empty($privMethods[$moduleName])) ? array_diff(array_keys(json_decode(json_encode($moduleActions), true)), $privMethods[$moduleName]) : array();
+        $unassigned    = (!empty($moduleActions) and !empty($privMethods[$moduleName])) ? array_diff(array_keys(get_object_vars($moduleActions)), $privMethods[$moduleName]) : array();
         $modulePrivs   = count($privList[$moduleName], 1) - count($selectPrivs[$moduleName], 1) + count($unassigned);
         $moduleSelect  = array_sum($selectPrivs[$moduleName]);
         ?>
@@ -147,9 +147,7 @@
             <?php foreach($privs as $privID => $priv):?>
             <div class="group-item" data-module='<?php echo $moduleName;?>' data-package='<?php echo $packageID;?>'>
               <div class="checkbox-primary">
-                <?php $action = $priv->method;?>
-                <?php $privName = is_string($privLang[$privID]->name) ? $privLang[$privID]->name : $privLang[$privID]->name->title;?>
-                <?php echo html::checkbox("actions[$moduleName][]", array($action => $privName), isset($groupPrivs[$priv->module][$action]) ? $action : '', "title='{$privName}' id='actions[$moduleName]$action' data-id='$privID'");?>
+                <?php echo html::checkbox("actions[$priv->module]", array($priv->method => $priv->name), isset($groupPrivs[$priv->module][$priv->method]) ? $priv->method : '', "title='{$priv->name}' id='actions[$priv->module]$priv->method' data-id='$privID'");?>
               </div>
             </div>
             <?php endforeach;?>
