@@ -1141,7 +1141,7 @@ class docModel extends model
      */
     public function checkPrivLib($object, $extra = '')
     {
-        if($this->app->user->admin) return true;
+        if($this->app->user->admin and $object->type != 'mine') return true;
 
         if($object->acl == 'open') return true;
 
@@ -2638,15 +2638,7 @@ class docModel extends model
         if($this->app->tab == 'doc' and $type == 'execution') $type = 'project';
 
         $objectDropdown = '';
-        if($type == 'custom')
-        {
-            $libs = $this->getLibsByObject('custom', 0, '', $appendLib);
-            if($libID == 0 and !empty($libs)) $libID = reset($libs)->id;
-
-            $object     = new stdclass();
-            $object->id = 0;
-        }
-        else
+        if(in_array($type, array('project', 'product', 'execution')))
         {
             $objects  = $this->getOrderedObjects($type);
             $objectID = $this->loadModel($type)->saveState($objectID, $objects);
@@ -2664,6 +2656,14 @@ class docModel extends model
                 $methodName = ($type == 'project' and $this->config->vision != 'lite') ? 'createGuide' : 'create';
                 return print(js::locate(helper::createLink($type, $methodName, $param)));
             }
+        }
+        else
+        {
+            $libs = $this->getLibsByObject($type, 0, '', $appendLib);
+            if($libID == 0 and !empty($libs)) $libID = reset($libs)->id;
+
+            $object     = new stdclass();
+            $object->id = 0;
         }
 
         $tab = strpos(',doc,product,project,execution,', ",{$this->app->tab},") !== false ? $this->app->tab : 'doc';

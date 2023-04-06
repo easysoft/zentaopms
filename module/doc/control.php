@@ -55,17 +55,19 @@ class doc extends control
     /**
      * Browse docs.
      *
-     * @param string|int $libID product|execution or the int id of custom library
-     * @param string $browseType
-     * @param int $param
+     * @param string $type mine
+     * @param int    $libID
+     * @param int    $moduleID
+     * @param string $browseType all|draft|bysearch
+     * @param int    $param
      * @param string $orderBy
-     * @param int $recTotal
-     * @param int $recPerPage
-     * @param int $pageID
+     * @param int    $recTotal
+     * @param int    $recPerPage
+     * @param int    $pageID
      * @access public
      * @return void
      */
-    public function browse($browseType = 'all', $param = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function browse($type = 'mine', $libID = 0, $moduleID = 0, $browseType = 'all', $param = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         /* Save session, load module. */
         $uri = $this->app->getURI(true);
@@ -77,9 +79,7 @@ class doc extends control
 
         /* Set browseType.*/
         $browseType = strtolower($browseType);
-        $queryID    = ($browseType == 'bysearch') ? (int)$param : 0;
-        $moduleID   = ($browseType == 'bymodule') ? (int)$param : 0;
-        $libID      = ($browseType == 'bylib')    ? (int)$param : 0;
+        $queryID    = $browseType == 'bysearch' ? (int)$param : 0;
 
         /* Set header and position. */
         $this->view->title = $this->lang->doc->common;
@@ -91,21 +91,7 @@ class doc extends control
         /* Append id for secend sort. */
         $sort = common::appendOrder($orderBy);
 
-        if($browseType == 'collectedbyme')
-        {
-            $this->app->rawMethod = 'collect';
-        }
-        elseif($browseType == 'openedbyme')
-        {
-            $this->app->rawMethod = 'my';
-        }
-        elseif($browseType == 'byediteddate')
-        {
-            $this->app->rawMethod = 'recent';
-        }
-
-        $libs    = $this->doc->getLibsByObject('mine', 0);
-        $libTree = $this->doc->getLibTree($libID, $libs, 'mine', 0);
+        list($libs, $libID, $object, $objectID, $objectDropdown) = $this->doc->setMenuByType('mine', 0, $libID);
 
         $this->view->moduleID   = $moduleID;
         $this->view->docs       = $this->doc->getDocsByBrowseType($browseType, $queryID, $moduleID, $sort, $pager);
@@ -114,12 +100,13 @@ class doc extends control
         $this->view->browseType = $browseType;
         $this->view->param      = $param;
         $this->view->libID      = $libID;
-        $this->view->libTree    = $libTree;
+        $this->view->lib        = $this->doc->getLibById($libID);
+        $this->view->libTree    = $this->doc->getLibTree($libID, $libs, 'mine', 0);
         $this->view->pager      = $pager;
         $this->view->type       = 'mine';
         $this->view->objectID   = 0;
         $this->view->canExport  = 0;
-        $this->view->libType    = 'mine';
+        $this->view->libType    = 'lib';
 
         $this->display();
     }
@@ -140,7 +127,9 @@ class doc extends control
             if(!dao::isError())
             {
                 if($type == 'project' and $this->post->project) $objectID = $this->post->project;
+
                 if($type == 'product' and $this->post->product) $objectID = $this->post->product;
+
                 if($type == 'execution' and $this->post->execution) $objectID = $this->post->execution;
                 if($type == 'custom') $objectID = 0;
 
