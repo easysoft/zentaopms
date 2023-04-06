@@ -2810,6 +2810,21 @@ class docModel extends model
             $item->type     = $module->type == 'api' ? 'apiDoc' : $module->type;
             $item->active   = $module->id == $moduleID ? 1 : 0;
             $item->children = $this->getModuleTree($rootID, $moduleID, $type, $module->id, $modules);
+            $showDoc = $this->loadModel('setting')->getItem('owner=' . $this->app->user->account . '&module=doc&key=showDoc');
+            $showDoc = $showDoc === '0' ? 0 : 1;
+            if($this->app->rawMethod == 'view' and $module->type != 'api' and $showDoc)
+            {
+                $docIDList = $this->getPrivDocs($rootID, $module->id);
+                $docs      = $this->dao->select('*, title as name')->from(TABLE_DOC)
+                    ->where('id')->in($docIDList)
+                    ->andWhere('deleted')->eq(0)
+                    ->fetchAll('id');
+                if(!empty($docs))
+                {
+                    $docs = array_values($docs);
+                    $item->children = array_merge($docs, $item->children);
+                }
+            }
 
             $moduleTree[$module->id] = $item;
         }
@@ -2858,6 +2873,22 @@ class docModel extends model
             $item->objectID   = $objectID;
             $item->active     = $lib->id == $libID && $browseType != 'bySearch' ? 1 : 0;
             $item->children   = $this->getModuleTree($lib->id, $moduleID, $lib->type == 'api' ? 'api' : 'doc');
+            $showDoc = $this->loadModel('setting')->getItem('owner=' . $this->app->user->account . '&module=doc&key=showDoc');
+            $showDoc = $showDoc === '0' ? 0 : 1;
+            if($this->app->rawMethod == 'view' and $lib->type != 'api' and $showDoc)
+            {
+                $docIDList = $this->getPrivDocs($lib->id);
+                $docs      = $this->dao->select('*, title as name')->from(TABLE_DOC)
+                    ->where('id')->in($docIDList)
+                    ->andWhere('deleted')->eq(0)
+                    ->andWhere('module')->eq(0)
+                    ->fetchAll('id');
+                if(!empty($docs))
+                {
+                    $docs = array_values($docs);
+                    $item->children = array_merge($docs, $item->children);
+                }
+            }
             if(($type == 'project' and $lib->type != 'execution') or $type != 'project')
             {
                 if($item->type == 'lib') $libTree[$lib->type][$lib->id] = $item;

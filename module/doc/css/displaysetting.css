@@ -1,0 +1,2 @@
+td.titleBox {width: 100px;}
+td.titleBox + td > .radio-inline + .radio-inline{margin-left: 30px;}
