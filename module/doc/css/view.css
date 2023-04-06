@@ -31,6 +31,7 @@
 .outline-content a {color: #838A9D;}
 .outline-content li.text-ellipsis.active>a {font-weight: 700; color: #0c64eb;}
 #outline li.has-list.open:before {content: unset;}
+#fileTree {margin-bottom: 40px; max-height: calc(100vh - 180px); overflow: auto;}
 
 .title {font-size: 20px !important;}
 .article-content.comment {width: 100% !important;}
