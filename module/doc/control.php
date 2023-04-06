@@ -104,7 +104,7 @@ class doc extends control
             $this->app->rawMethod = 'recent';
         }
 
-        $libs = $this->doc->getLibsByObject('mine', 0);
+        $libs    = $this->doc->getLibsByObject('mine', 0);
         $libTree = $this->doc->getLibTree($libID, $libs, 'mine', 0);
 
         $this->view->moduleID   = $moduleID;
@@ -188,7 +188,7 @@ class doc extends control
             $acl = 'private';
             unset($this->lang->doclib->aclList['open']);
             unset($this->lang->doclib->aclList['default']);
-            $this->lang->doclib->aclList['private'] = $this->lang->doclib->aclListB['private'];
+            $this->lang->doclib->aclList = $this->lang->doclib->mySpaceAclList['private'];
         }
 
         if($type != 'custom' and $type != 'mine')
