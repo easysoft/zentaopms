@@ -1,8 +1,3 @@
-$(function()
-{
-    loadDocLibs(defaultType);
-})
-
 /**
  * Redirect the parent window.
  *
@@ -12,14 +7,14 @@ $(function()
  * @access public
  * @return void
  */
-function redirectParentWindow(objectType, libID, docType)
+function redirectParentWindow(objectType, libID, moduleID, docType)
 {
     if(objectType == 'api')
     {
         parent.$.closeModal(function()
         {
             new parent.$.zui.ModalTrigger({
-                iframe : createLink('api', 'create', 'libID=' + libID),
+                iframe : createLink('api', 'create', 'libID=' + libID + '&moduleID=' + moduleID),
                 width: '85%'
             }).show();
         });
@@ -27,7 +22,7 @@ function redirectParentWindow(objectType, libID, docType)
     }
 
     config.onlybody = 'no';
-    var link = createLink('doc', 'create', 'objectType=' + objectType + '&objectID=0&libID=' + libID + '&moduleID=0&docType=' + docType) + '#app=doc';
+    var link = createLink('doc', 'create', 'objectType=' + objectType + '&objectID=0&libID=' + libID + '&moduleID=' + moduleID + '&docType=' + docType) + '#app=doc';
     window.parent.$.apps.open(link);
 }
 
@@ -37,24 +32,8 @@ function redirectParentWindow(objectType, libID, docType)
  * @param  string  type
  * @return void
  */
-function loadDocLibs(type)
+function loadDocLibs(space, type)
 {
-    $.get(createLink('doc', 'ajaxGetLibsByType', "type=" + type), function(data)
-    {
-        $('#lib').replaceWith(data);
-        $('#lib_chosen').remove();
-        $('#lib').chosen();
-        $('#lib').siblings('div').css('width', 'calc(100% - 25px)');
-
-        if($('#lib').find('option').length == 0)
-        {
-            $('#submit').attr('disabled', 'disabled');
-        }
-        else
-        {
-            $('#submit').removeAttr('disabled');
-        }
-    })
-
-    $('#docType').toggleClass('hidden', type == 'api');
+    var link = createLink('doc', 'ajaxGetLibsByType', "space=" + space + "&type=" + type);
+    $('#moduleBox').load(link, function(){$('#moduleBox').find('select').picker(); $('#moduleLabel').remove();});
 }
