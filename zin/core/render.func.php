@@ -15,7 +15,7 @@ require_once 'zin.class.php';
 
 function render($wgName = 'page')
 {
-    $args = array();
+    $args = [];
     foreach(zin::$globalRenderList as $item)
     {
         if(is_object($item) && isset($item->parent) && $item->parent) continue;
@@ -24,7 +24,16 @@ function render($wgName = 'page')
 
     if(is_string($wgName) && isset(zin::$globalRenderMap[$wgName])) $wgName = zin::$globalRenderMap[$wgName];
 
-    $wg = createWg($wgName, $args);
+    if($wgName === 'page' || $wgName === 'pagebase') $args[] = set::display(false);
 
-    if(!$wg->displayed) $wg->display();
+    $options = [];
+    $headers = getallheaders();
+    if(isset($headers['X-ZIN-Options']) &&  !empty($headers['X-ZIN-Options']))
+    {
+        $setting = $headers['X-ZIN-Options'];
+        $options = $setting[0] === '{' ? json_decode($headers['X-ZIN-Options'], true) : ['selector' => $setting];
+    }
+
+    $wg = createWg($wgName, $args);
+    $wg->display($options);
 }
