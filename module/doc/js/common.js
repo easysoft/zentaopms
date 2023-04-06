@@ -6,10 +6,11 @@
  * @access public
  * @return void
  */
-function loadObjectModules(objectType, objectID)
+function loadObjectModules(objectType, objectID, docType)
 {
-    var link = createLink('doc', 'ajaxGetModules', 'objectType=' + objectType + '&objectID=' + objectID);
-    $('#moduleBox').load(link, function(){$('#moduleBox').find('select').chosen()});
+    if(typeof docType == 'undefined') docType = 'doc';
+    var link = createLink('doc', 'ajaxGetModules', 'objectType=' + objectType + '&objectID=' + objectID + '&type=' + docType);
+    $('#moduleBox').load(link, function(){$('#moduleBox').find('select').picker(); $('#moduleLabel').remove();});
 }
 
 /**
@@ -22,7 +23,7 @@ function loadObjectModules(objectType, objectID)
 function loadExecutions(projectID)
 {
     var link = createLink('project', 'ajaxGetExecutions', "projectID=" + projectID + "&executionID=0&mode=multiple,leaf,noprefix");
-    $('#executionBox').load(link, function(){$('#executionBox').find('select').attr('data-placeholder', holders.execution).attr('onchange', "loadObjectModules('execution', this.value)").chosen()});
+    $('#executionBox').load(link, function(){$('#executionBox').find('select').attr('data-placeholder', holders.execution).attr('onchange', "loadObjectModules('execution', this.value)").picker()});
     loadObjectModules('project', projectID);
 }
 

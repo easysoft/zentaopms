@@ -53,6 +53,7 @@ i.btn-info, i.btn-info:hover {border: none; background: #fff; box-shadow: unset;
 #leftBar .selectBox #currentItem {width: 150px; display: flex; align-items: center;}
 [lang^=zh] #leftBar .selectBox #currentItem {width: 180px;}
 #leftBar .selectBox #currentItem > .text {overflow: hidden; text-align: left; flex: 0 1 100%;}
+.dropdown-in-tree {max-height: 293px; overflow-y: auto;}
 </style>
 
 <?php
@@ -229,6 +230,7 @@ $(function()
                 if(typeof item.hasAction == 'undefined') item.hasAction = true;
                 if(typeof item.active == 'undefined') item.active = 0;
                 if(typeof docID != 'undefined' && item.id == docID) item.active = 1;
+                if(['text', 'word', 'ppt', 'excel'].indexOf(item.type) !== -1) item.hasAction = false;
 
                 var objectType = config.currentModule == 'api' ? item.objectType : item.type;
                 var libClass = ['lib', 'annex', 'api', 'execution'].indexOf(objectType) !== -1 ? 'lib' : '';
@@ -252,7 +254,7 @@ $(function()
                     }
                     $item += '<div class="tree-version-trigger" data-id="' +  item.id + '"><div class="text">' + (versionName || versionLang) + '</div><div class="caret"></div></div>';
                 }
-                if(['text', 'word', 'ppt', 'excel'].indexOf(item.type) === -1 && ((libClass != 'lib' && hasModulePriv) || (libClass == 'lib' && hasLibPriv))) $item += '<i class="icon icon-drop icon-ellipsis-v hidden tree-icon" data-isCatalogue="' + (libClass ? false : true) + '"></i>';
+                if((libClass != 'lib' && hasModulePriv) || (libClass == 'lib' && hasLibPriv)) $item += '<i class="icon icon-drop icon-ellipsis-v hidden tree-icon" data-isCatalogue="' + (libClass ? false : true) + '"></i>';
                 $item += '</div>';
                 $item += '</a>';
                 if(item.versions) versionsData[item.id] = item.versions;
@@ -324,7 +326,8 @@ $(function()
             if(!$(this).hasClass('lib')) libClass = '.moduleDorpdown';
 
             $(this).find('.icon').removeClass('hidden');
-            $(this).addClass('show-icon');   if($(libClass).find('li').length == 0) return false;
+            $(this).addClass('show-icon');
+            if($(libClass).find('li').length == 0) return false;
 
         }).on('mouseout', 'a', function()
         {
@@ -353,13 +356,15 @@ $(function()
         }).on('click', '.tree-version-trigger', function(e)
         {
             $('.dropdown-in-tree').css('display', 'none');
+            var offset = $(this).offset();
             var option = {
-                left     : e.pageX,
-                top      : e.pageY,
+                left     : offset.left,
+                top      : offset.top + 20,
                 versions : versionsData[$(this).data('id')]
             };
             var dropDown = renderDropVersion(option);
             $(this).closest('body').append(dropDown);
+            $('#versionSwitcher').find('a[data-id=' + release + ']').parent().addClass('active');
             e.stopPropagation();
         });
     }
