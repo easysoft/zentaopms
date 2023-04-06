@@ -1486,7 +1486,7 @@ class docModel extends model
                 ->andWhere('vision')->eq($this->config->vision)
                 ->andWhere('type')->eq($type)
                 ->beginIF(!empty($appendLib))->orWhere('id')->eq($appendLib)->fi()
-                ->beginIF($type == 'mine')->orWhere('addedBy')->eq($this->app->user->account)->fi()
+                ->beginIF($type == 'mine')->andWhere('addedBy')->eq($this->app->user->account)->fi()
                 ->orderBy('`order` asc, id_asc')
                 ->fetchAll('id');
         }

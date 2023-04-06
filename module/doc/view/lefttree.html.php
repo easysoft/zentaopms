@@ -418,6 +418,11 @@ $(function()
             methodName = 'showFiles';
             linkParams = 'type=' + objectType + '&objectID=' + objectID;
         }
+        else if(objectType == 'mine')
+        {
+            methodName = 'browse';
+            linkParams = 'type=mine&libID=' + libID;
+        }
         else if(['text', 'word', 'ppt', 'excel'].indexOf(type) !== -1)
         {
             methodName = 'view';
