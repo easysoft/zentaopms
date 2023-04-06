@@ -119,7 +119,7 @@ function changeParentChecked($item, moduleName, packageID)
   */
 function initRecomendTree(data)
 {
-    $(".menuTree.depend").tree(
+    $(".menuTree.recommend").tree(
     {
         data: data,
         initialState: 'active',
@@ -140,7 +140,7 @@ function initRecomendTree(data)
   */
 function initDependTree(data)
 {
-    $(".menuTree.recommend").tree(
+    $(".menuTree.depend").tree(
     {
         data: data,
         initialState: 'active',
@@ -264,8 +264,11 @@ function checkAllChange()
 
 $(function()
 {
-    initRecomendTree([]);
-    initDependTree([]);
+    relatedPrivData = $.parseJSON(relatedPrivData);
+    initDependTree(relatedPrivData.depend);
+    if(relatedPrivData.depend) $(".menuTree.depend + .empty-tip").hide();
+    initRecomendTree(relatedPrivData.recommend);
+    if(relatedPrivData.recommend) $(".menuTree.recommend + .empty-tip").hide();
 
     $('#privList > tbody > tr > th .check-all').change(checkAllChange);
     $('.priv-footer .check-all').change(checkAllChange);
@@ -281,8 +284,8 @@ $(function()
         {
             $(this).removeAttr('checked');
         }
-        var moduleName        = $(this).closest('.group-item').attr('data-module');
-        var packageID          = $(this).closest('.group-item').attr('data-package');
+        var moduleName = $(this).closest('.group-item').attr('data-module');
+        var packageID  = $(this).closest('.group-item').attr('data-package');
         changeParentChecked($(this), moduleName, packageID);
     });
 

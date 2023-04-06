@@ -76,7 +76,7 @@
     </div>
   </div>
 </div>
-<div id='mainContent'>
+<div id='mainContainer'>
   <div class='main main-content'>
     <form class="load-indicator main-form form-ajax" id="managePrivForm" method="post" target='hiddenwin'>
       <table class='table table-hover table-striped table-bordered' id='privList'>
@@ -113,8 +113,8 @@
 
           $i = 1;
 
-          $modulePrivs   = count($privList[$moduleName], 1) - count($selectPrivs[$moduleName], 1);
-          $moduleSelect  = array_sum($selectPrivs[$moduleName]);
+          $modulePrivs  = count($privList[$moduleName], 1) - count($selectPrivs[$moduleName], 1);
+          $moduleSelect = array_sum($selectPrivs[$moduleName]);
           ?>
           <?php foreach($packages as $packageID => $privs):?>
           <tr class='<?php echo cycle('even, bg-gray');?>'>
@@ -163,7 +163,8 @@
   <div class="side">
     <div class="priv-panel">
       <div class="panel-title">
-        <?php echo $lang->group->dependentPrivs?>
+        <?php echo $lang->group->dependentPrivs;?>
+        <icon class='icon icon-help' data-toggle='popover' data-trigger='focus hover' data-placement='right' data-tip-class='text-muted popover-sm' data-content='<?php echo $lang->group->dependPrivTips;?>'></icon>
       </div>
       <div class="panel-content">
         <div class="menuTree depend menu-active-primary menu-hover-primary"></div>
@@ -174,7 +175,8 @@
     </div>
     <div class="priv-panel mt-m">
       <div class="panel-title">
-        <?php echo $lang->group->recommendPrivs?>
+        <?php echo $lang->group->recommendPrivs;?>
+        <icon class='icon icon-help' data-toggle='popover' data-trigger='focus hover' data-placement='right' data-tip-class='text-muted popover-sm' data-content='<?php echo $lang->group->recommendPrivTips;?>'></icon>
       </div>
       <div class="panel-content">
         <div class="menuTree recommend menu-active-primary menu-hover-primary"></div>
@@ -198,9 +200,12 @@
 <?php endif;?>
 <?php js::set('groupID', $groupID);?>
 <?php js::set('menu', $menu);?>
+<?php js::set('relatedPrivData', $relatedPrivData);?>
 <script>
 $(document).ready(function()
 {
+    $(".icon-help").popover();
+
     /**
      * 隐藏列表标签。
      * Hide tabs except the browse list tab.

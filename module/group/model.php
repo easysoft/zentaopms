@@ -2040,4 +2040,45 @@ class groupModel extends model
         }
         return $privs;
     }
+
+    /**
+     * Get dependent privs.
+     *
+     * @param  array  $privIdList
+     * @access public
+     * @return array
+     */
+    public function getDependentPrivs($privIdList)
+    {
+        $relatedPrivs = $this->dao->select('t1.relationPriv,t2.parent,t2.module,t2.method,t3.`key`,t3.value')->from(TABLE_PRIVRELATION)->alias('t1')
+            ->leftJoin(TABLE_PRIV)->alias('t2')->on('t1.relationPriv=t2.id')
+            ->leftJoin(TABLE_PRIVLANG)->alias('t3')->on('t1.relationPriv=t3.objectID')
+            ->leftJoin(TABLE_PRIVMANAGER)->alias('t4')->on('t2.parent=t4.id')
+            ->where('t1.priv')->in($privIdList)
+            ->andWhere('t1.relationPriv')->notin($privIdList)
+            ->andWhere('t1.type')->eq('depend')
+            ->andWhere('t3.objectType')->eq('priv')
+            ->andWhere('t2.edition')->like("%,{$this->config->edition},%")
+            ->andWhere('t2.vision')->like("%,{$this->config->vision},%")
+            ->fetchAll('relationPriv');
+
+        if(empty($relatedPrivs)) return array();
+
+        $modulePairs  = $this->getPrivManagerPairs('module');
+        $managerList  = $this->dao->select('*')->from(TABLE_PRIVMANAGER)->fetchAll('id');
+        $relatedPrivs = $this->transformPrivLang($relatedPrivs);
+        $privList     = array('depend' => array(), 'recommend' => array());
+
+        foreach($relatedPrivs as $privID => $relatedPriv)
+        {
+            $module = $relatedPriv->module;
+            if(!isset($privList['depend'][$module])) $privList['depend'][$module] = array();
+            $moduleCode = $managerList[$relatedPriv->parent]->type == 'package' ? $managerList[$managerList[$relatedPriv->parent]->parent]->code : $managerList[$relatedPriv->parent]->code;
+            $privList['depend'][$module]['title']      = $modulePairs[$module];
+            $privList['depend'][$module]['children'][] = array('title' => $relatedPriv->name, 'relationPriv' => $privID);
+        }
+
+        $privList['depend'] = array_values($privList['depend']);
+        return $privList;
+    }
 }

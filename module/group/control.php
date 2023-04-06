@@ -229,7 +229,7 @@ class group extends control
 
             /* Join changelog when be equal or greater than this version.*/
             $realVersion = str_replace('_', '.', $version);
-            $changelog = array();
+            $changelog   = array();
             foreach($this->lang->changelog as $currentVersion => $currentChangeLog)
             {
                 if(version_compare($currentVersion, $realVersion, '>=')) $changelog[] = join(',', $currentChangeLog);
@@ -250,9 +250,10 @@ class group extends control
             $privLang     = $this->group->transformPrivLang($privs);
             $privs        = $this->group->getCustomPrivs($menu, $privs);
 
-            $privList    = array();
-            $privMethods = array();
-            $selectPrivs = array();
+            $privList           = array();
+            $privMethods        = array();
+            $selectPrivs        = array();
+            $selectedPrivIdList = array();
             foreach($privs as $priv)
             {
                 if(!isset($privList[$priv->parentCode])) $privList[$priv->parentCode] = array();
@@ -264,7 +265,11 @@ class group extends control
 
                 if(!isset($selectPrivs[$priv->parentCode])) $selectPrivs[$priv->parentCode] = array();
                 if(!isset($selectPrivs[$priv->parentCode][$priv->parent])) $selectPrivs[$priv->parentCode][$priv->parent] = 0;
-                if(!empty($groupPrivs[$priv->module][$priv->method])) $selectPrivs[$priv->parentCode][$priv->parent] ++;
+                if(!empty($groupPrivs[$priv->module][$priv->method]))
+                {
+                    $selectPrivs[$priv->parentCode][$priv->parent] ++;
+                    if(isset($priv->id)) $selectedPrivIdList[$priv->id] = $priv->id;
+                }
             }
 
             $unassignedModule = array_diff(array_keys(get_object_vars($this->lang->resource)), array_keys($privList));
@@ -288,10 +293,13 @@ class group extends control
                 }
             }
 
-            $this->view->privList     = $privList;
-            $this->view->privMethods  = $privMethods;
-            $this->view->selectPrivs  = $selectPrivs;
-            $this->view->privPackages = $privPackages;
+            $relatedPrivData = $this->group->getDependentPrivs($selectedPrivIdList);
+
+            $this->view->privList        = $privList;
+            $this->view->privMethods     = $privMethods;
+            $this->view->selectPrivs     = $selectPrivs;
+            $this->view->privPackages    = $privPackages;
+            $this->view->relatedPrivData = json_encode($relatedPrivData);
         }
         elseif($type == 'byModule')
         {
@@ -1049,7 +1057,7 @@ class group extends control
             $privList['depend'][$module]['children'][] = array('title' => $relatedPriv->name, 'relationPriv' => $privID);
         }
 
-        $privList[$type] = array_values($privList[$type]);
+        $privList['depend'] = array_values($privList[$type]);
 
         return print(json_encode($privList));
     }

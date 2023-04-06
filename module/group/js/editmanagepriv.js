@@ -7,7 +7,7 @@
   */
 function initRecomendTree(data)
 {
-    $(".menuTree.depend").tree(
+    $(".menuTree.recommend").tree(
     {
         data: data,
         initialState: 'active',
@@ -28,7 +28,7 @@ function initRecomendTree(data)
   */
 function initDependTree(data)
 {
-    $(".menuTree.recommend").tree(
+    $(".menuTree.depend").tree(
     {
         data: data,
         initialState: 'active',

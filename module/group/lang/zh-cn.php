@@ -62,6 +62,8 @@ $lang->group->privMethodName     = '方法名';
 $lang->group->privView           = '所属视图';
 $lang->group->privModule         = '所属模块';
 $lang->group->repeatPriv         = '同一模块名下的方法名不能相同，请修改后再试。';
+$lang->group->dependPrivTips     = '此处所列的是左侧选中权限的依赖权限列表，是必须要分配的。';
+$lang->group->recommendPrivTips  = '此处所列的是左侧选中权限的推荐权限列表，推荐分配。';
 
 $lang->group->batchActions              = '批量操作';
 $lang->group->batchSetDependency        = '批量设置依赖';
