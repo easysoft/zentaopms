@@ -17,6 +17,7 @@
 <?php js::set('feedbackSource', $config->story->feedbackSource); ?>
 <?php js::set('storyType', $type);?>
 <?php js::set('requiredFields', $config->story->create->requiredFields);?>
+<?php js::set('systemMode', $config->systemMode);?>
 <?php if($type == 'requirement'): ?>
 <style>.input-group .control-branch + .chosen-container-single .chosen-single {border-radius: 0 2px 2px 0; border-left-width: 0px;}</style>
 <?php endif; ?>
@@ -184,6 +185,30 @@ foreach(explode(',', $config->story->create->requiredFields) as $field)
             </td>
           </tr>
           <?php else:?>
+          <?php if($config->systemMode == 'PLM'):?>
+          <tr class='sourceBox <?php echo $hiddenSource;?>'>
+            <th><?php echo $lang->story->source;?></th>
+            <td colspan='2'>
+              <?php echo html::select('source', $lang->story->sourceList, $source, "class='form-control chosen'");?>
+            </td>
+            <td colspan="2" class="sourceTd">
+              <div class="input-group">
+                <div class='input-group-addon' id='sourceNoteBox'><?php echo $lang->story->sourceNote;?></div>
+                <?php echo html::input('sourceNote', $sourceNote, "class='form-control'");?>
+              </div>
+            </td>
+            <td colspan="2" id='feedbackBox' class='hidden'>
+              <div class="input-group">
+                <div class="input-group">
+                  <div class="input-group-addon" style="min-width: 77px;"><?php echo $lang->story->feedbackBy;?></div>
+                  <?php echo html::input('feedbackBy', '', "class='form-control'");?>
+                  <span class='input-group-addon'><?php echo $lang->story->notifyEmail;?></span>
+                  <?php echo html::input('notifyEmail', '', "class='form-control'");?>
+                </div>
+              </div>
+            </td>
+          </tr>
+          <?php else:?>
           <tr>
             <th class='planTh'><?php echo $lang->story->assignedTo;?></th>
             <td colspan='2' id='assignedToBox'>
@@ -201,6 +226,7 @@ foreach(explode(',', $config->story->create->requiredFields) as $field)
             </td>
           </tr>
           <?php endif;?>
+          <?php endif;?>
           <tr>
             <th><?php echo $lang->story->reviewedBy;?></th>
             <td colspan='2' id='reviewerBox'>
@@ -212,7 +238,27 @@ foreach(explode(',', $config->story->create->requiredFields) as $field)
                 </div>
               </div>
             </td>
+            <?php if($config->systemMode == 'PLM'):?>
+            <td colspan="2" <?php if($hiddenParent) echo 'hidden';?>>
+              <div class='input-group'>
+                <div class="input-group-addon"><?php echo $lang->story->parent;?></div>
+                <?php echo html::select('parent', $stories, '', "class='form-control chosen'");?>
+              </div>
+            </td>
+            <?php endif;?>
           </tr>
+          <?php if($config->systemMode == 'PLM'):?>
+          <tr class='ipdBox'>
+            <th><?php echo $lang->story->duration?></th>
+            <td colspan='2'><?php echo html::select('duration', $lang->demand->durationList, '', "class='form-control chosen'")?></td>
+            <td colspan='2'>
+              <div class='input-group'>
+                <div class="input-group-addon"><?php echo $lang->story->BSA;?></div>
+                <?php echo html::select('BSA', $lang->demand->bsaList, '', "class='form-control chosen'");?>
+              </div>
+            </td>
+          </tr>
+          <?php endif;?>
           <?php if($type == 'story'):?>
           <?php if($this->config->URAndSR):?>
           <tr>
@@ -359,6 +405,7 @@ foreach(explode(',', $config->story->create->requiredFields) as $field)
           <tr>
             <td colspan="5" class="text-center form-actions">
               <?php echo html::hidden('type', $type);?>
+              <?php echo html::hidden('vision', 'ipd');?>
               <?php if(defined('TUTORIAL')):?>
               <?php echo html::submitButton();?>
               <?php else:?>
