@@ -2005,4 +2005,39 @@ class groupModel extends model
 
         return $needPairs ? $privPairs : $privs;
     }
+
+    /**
+     * Get custom privs.
+     *
+     * @param  string $menu
+     * @param  array  $privs
+     * @access public
+     * @return array
+     */
+    public function getCustomPrivs($menu, $privs = array())
+    {
+        $allPrivs = $this->dao->select('module,method')->from(TABLE_PRIV)->fetchGroup('module', 'method');
+        foreach($this->lang->resource as $module => $methods)
+        {
+            foreach($methods as $method => $methodLabel)
+            {
+                if(isset($allPrivs[$module][$method])) continue;
+                if(!$this->checkMenuModule($menu, $module)) continue;
+                if(!isset($this->lang->{$module}->{$methodLabel})) $this->app->loadLang($module);
+
+                $key = "{$module}-{$methodLabel}";
+                $priv = new stdclass();
+                $priv->module      = $module;
+                $priv->method      = $method;
+                $priv->parent      = 0;
+                $priv->key         = $key;
+                $priv->parentCode  = $module;
+                $priv->moduleOrder = 0;
+                $priv->name        = $this->lang->{$module}->{$methodLabel};
+
+                $privs[$key] = $priv;
+            }
+        }
+        return $privs;
+    }
 }

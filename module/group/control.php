@@ -248,6 +248,7 @@ class group extends control
             $privs        = $this->group->getPrivsListByView($menu);
             $privPackages = $this->group->getPrivManagerPairs('package');
             $privLang     = $this->group->transformPrivLang($privs);
+            $privs        = $this->group->getCustomPrivs($menu, $privs);
 
             $privList    = array();
             $privMethods = array();
@@ -265,11 +266,11 @@ class group extends control
                 if(!isset($selectPrivs[$priv->parentCode][$priv->parent])) $selectPrivs[$priv->parentCode][$priv->parent] = 0;
                 if(!empty($groupPrivs[$priv->module][$priv->method])) $selectPrivs[$priv->parentCode][$priv->parent] ++;
             }
-            $unassignedModule = array_diff(array_keys(get_object_vars($this->lang->resource)), array_keys($privList));
 
+            $unassignedModule = array_diff(array_keys(get_object_vars($this->lang->resource)), array_keys($privList));
             foreach($unassignedModule as $index => $module)
             {
-                if(!$this->group->checkMenuModule($menu, $module)) continue;;
+                if(!$this->group->checkMenuModule($menu, $module)) continue;
 
                 $selectPrivs[$module] = array();
                 $selectPrivs[$module][0] = 0;
@@ -290,7 +291,6 @@ class group extends control
             $this->view->privList     = $privList;
             $this->view->privMethods  = $privMethods;
             $this->view->selectPrivs  = $selectPrivs;
-            $this->view->privLang     = $privLang;
             $this->view->privPackages = $privPackages;
         }
         elseif($type == 'byModule')
@@ -449,7 +449,7 @@ class group extends control
      */
     public function editManagePriv($browseType = '', $view = '', $paramID = 0, $recTotal = 0, $recPerPage = 100, $pageID = 1)
     {
-        if(empty($browseType) and $browseType != 'bysearch') $browseType = $this->cookie->managePrivEditType ? $this->cookie->managePrivEditType : 'bycard';;
+        if(empty($browseType) and $browseType != 'bysearch') $browseType = $this->cookie->managePrivEditType ? $this->cookie->managePrivEditType : 'bycard';
         if($browseType == 'bysearch' and $this->cookie->managePrivEditType == 'bycard') $browseType = 'bycard';
 
         $moduleLang = $this->group->getMenuModules($view, true);
