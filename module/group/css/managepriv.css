@@ -51,3 +51,4 @@ td.menus + td {border-left: 0;}
 .priv-footer .check-all label {padding-left: 0px; margin-bottom: 0px; font-weight: 400;}
 .priv-footer #submit {margin: 0px 20px;}
 main#main {padding-bottom: 0px;}
+.side .priv-panel {padding: 16px;}

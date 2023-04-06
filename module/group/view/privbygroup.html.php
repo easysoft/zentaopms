@@ -76,9 +76,9 @@
     </div>
   </div>
 </div>
-<div id='mainContainer'>
-  <div class='main main-content'>
-    <form class="load-indicator main-form form-ajax" id="managePrivForm" method="post" target='hiddenwin'>
+<form class="load-indicator main-form form-ajax" id="managePrivForm" method="post">
+  <div id='mainContainer'>
+    <div class='main main-content'>
       <table class='table table-hover table-striped table-bordered' id='privList'>
         <thead>
           <tr class='text-center'>
@@ -158,35 +158,34 @@
           <?php endforeach;?>
         </tbody>
       </table>
-    </form>
-  </div>
-  <div class="side">
-    <div class="priv-panel">
-      <div class="panel-title">
-        <?php echo $lang->group->dependentPrivs;?>
-        <icon class='icon icon-help' data-toggle='popover' data-trigger='focus hover' data-placement='right' data-tip-class='text-muted popover-sm' data-content='<?php echo $lang->group->dependPrivTips;?>'></icon>
+    </div>
+    <div class="side">
+      <div class="priv-panel">
+        <div class="panel-title">
+          <?php echo $lang->group->dependentPrivs;?>
+          <icon class='icon icon-help' data-toggle='popover' data-trigger='focus hover' data-placement='right' data-tip-class='text-muted popover-sm' data-content='<?php echo $lang->group->dependPrivTips;?>'></icon>
+        </div>
+        <div class="panel-content">
+          <div class="menuTree depend menu-active-primary menu-hover-primary"></div>
+          <div class="empty-tip flex-center">
+            <p><span class="text-muted"><?php echo $lang->noData;?></span></p>
+          </div>
+        </div>
       </div>
-      <div class="panel-content">
-        <div class="menuTree depend menu-active-primary menu-hover-primary"></div>
-        <div class="empty-tip flex-center">
-          <p><span class="text-muted"><?php echo $lang->noData;?></span></p>
+      <div class="priv-panel mt-m">
+        <div class="panel-title">
+          <?php echo $lang->group->recommendPrivs;?>
+          <icon class='icon icon-help' data-toggle='popover' data-trigger='focus hover' data-placement='right' data-tip-class='text-muted popover-sm' data-content='<?php echo $lang->group->recommendPrivTips;?>'></icon>
+        </div>
+        <div class="panel-content">
+          <div class="menuTree recommend menu-active-primary menu-hover-primary"></div>
+          <div class="empty-tip flex-center">
+            <p><span class="text-muted"><?php echo $lang->noData;?></span></p>
+          </div>
         </div>
       </div>
     </div>
-    <div class="priv-panel mt-m">
-      <div class="panel-title">
-        <?php echo $lang->group->recommendPrivs;?>
-        <icon class='icon icon-help' data-toggle='popover' data-trigger='focus hover' data-placement='right' data-tip-class='text-muted popover-sm' data-content='<?php echo $lang->group->recommendPrivTips;?>'></icon>
-      </div>
-      <div class="panel-content">
-        <div class="menuTree recommend menu-active-primary menu-hover-primary"></div>
-        <div class="empty-tip flex-center">
-          <p><span class="text-muted"><?php echo $lang->noData;?></span></p>
-        </div>
-      </div>
-    </div>
   </div>
-</div>
   <div class='priv-footer'>
     <div class='text-center text-middle'>
       <div class="checkbox-primary checkbox-inline check-all">
@@ -197,6 +196,7 @@
       <?php echo html::a($this->createLink('group', 'browse'), $lang->goback, '', 'class="btn btn-wide"');?>
     </div>
   </div>
+</form>
 <?php endif;?>
 <?php js::set('groupID', $groupID);?>
 <?php js::set('menu', $menu);?>
