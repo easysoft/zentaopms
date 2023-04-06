@@ -9,7 +9,7 @@
  */
 function redirectParentWindow(objectType, libID, moduleID, docType)
 {
-    if(objectType == 'api')
+    if(docType == 'api')
     {
         parent.$.closeModal(function()
         {
