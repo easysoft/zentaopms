@@ -26,7 +26,8 @@
 .img-lib {flex: 0 0 14px; height: 14px; margin-right: 5px;}
 .tree-icon {position: absolute; right: 0;}
 .tree li > a {max-width: 100%; padding: 2px;}
-.file-tree  a.show-icon > div {padding-right: 15px;}
+.file-tree  a.show-icon > div,
+.file-tree  a.hover > div {padding-right: 15px;}
 .tree li.has-input {overflow: hidden;}
 .tree-text {overflow: hidden;}
 i.btn-info, i.btn-info:hover {border: none; background: #fff; box-shadow: unset;}
