@@ -11,7 +11,8 @@ class programMenu extends wg
         'programs?:array',
         'activeClass?:string',
         'activeIcon?:string',
-        'activeKey?:string'
+        'activeKey?:string',
+        'closeLink?:string'
     );
 
     public static function getPageCSS()
