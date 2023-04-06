@@ -129,7 +129,7 @@ class wg
         if(!empty($options) && isset($options['selector']))
         {
             $selector = $options['selector'];
-            $dom = static::filterDomTree($dom, $selector);
+            $dom = static::filterDomTree($dom, $selector, $options);
         }
 
         return $dom;
@@ -142,7 +142,7 @@ class wg
     public function render()
     {
         $dom  = $this->buildDom();
-        $html = static::renderToHtml($dom->list);
+        $html = static::renderToHtml(is_array($dom) ? $dom : $dom->list);
 
         context::destroy($this->gid);
 
@@ -611,7 +611,7 @@ class wg
         return $props;
     }
 
-    public static function buildDomList(&$list)
+    public static function buildDomList($list)
     {
         $domList = [];
         foreach($list as $item)
@@ -623,7 +623,9 @@ class wg
             }
             elseif($item instanceof wg)
             {
-                $domList[] = $item->buildDom();
+                $dom = $item->buildDom();
+                if(is_array($dom)) $domList = array_merge($domList, $dom);
+                else $domList[] = $dom;
             }
             else
             {
@@ -722,28 +724,42 @@ class wg
         return $results;
     }
 
-    public static function filterDomTree($dom, $selector = NULL, $earlyStop = false)
+    public static function filterDomTree($dom, $selector = NULL, $options = [])
     {
         if($selector === NULL) return $dom;
 
         if(is_string($selector)) $selector = static::parseWgSelector($selector);
 
-        if(isset($dom->wg) && $dom->wg->isMatch($selector)) return $dom;
+        if(isset($dom->wg) && $dom->wg->isMatch($selector))
+        {
+            if($dom->wg->isDomElement())
+            {
+                if(isset($options['inner']) && $options['inner'])
+                {
+                    $dom->list = static::buildDomList($dom->wg->children());
+                }
+            }
+            return $dom;
+        }
 
         $list = [];
+        $earlyStop = isset($options['earlyStop']) ? $options['earlyStop'] : false;
         foreach($dom->list as $item)
         {
             if(!is_object($item) || !isset($item->wg)) continue;
 
-            $result = static::filterDomTree($item, $selector, $earlyStop);
+            $result = static::filterDomTree($item, $selector, $options);
             if(is_object($result))
             {
                 $list[] = $result;
-                if($earlyStop) break;
             }
+            elseif(is_array($result) && !empty($result))
+            {
+                $list = array_merge($list, $result);
+            }
+            if($earlyStop && !empty($list)) break;
         }
 
-        $dom->list = $list;
-        return $dom;
+        return $list;
     }
 }
