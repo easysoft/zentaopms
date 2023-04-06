@@ -274,6 +274,9 @@ $(function()
         ele.on('click', '.icon-drop', function(e)
         {
             var $icon = $(this);
+            $('.icon-drop').addClass('hidden');
+            $(this).removeClass('hidden');
+            $('#fileTree').find('a.hover').removeClass('hover');
             $('.dropdown-in-tree').remove();
             var isCatalogue = $icon.attr('data-isCatalogue') === 'false' ? false : true;
             var dropDownID  = isCatalogue ? 'dropDownCatalogue' : 'dropDownLibrary';
