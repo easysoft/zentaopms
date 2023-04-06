@@ -272,13 +272,14 @@ $(function()
 
         ele.on('click', '.icon-drop', function(e)
         {
-            $('.dropdown-in-tree').css('display', 'none');
-            var isCatalogue = $(this).attr('data-isCatalogue') === 'false' ? false : true;
+            var $icon = $(this);
+            $('.dropdown-in-tree').remove();
+            var isCatalogue = $icon.attr('data-isCatalogue') === 'false' ? false : true;
             var dropDownID  = isCatalogue ? 'dropDownCatalogue' : 'dropDownLibrary';
             var libID       = 0;
             var moduleID    = 0;
             var parentID    = 0;
-            var $module     = $(this).closest('a');
+            var $module     = $icon.closest('a');
             var hasChildren = $module.data('has-children');
             var moduleType  = '';
             if($module.hasClass('lib'))
@@ -314,7 +315,9 @@ $(function()
             };
 
             var dropDown = renderDropdown(option);
-            $(this).closest('body').append(dropDown);
+            $icon.closest('body').append(dropDown);
+            $('.dropdown-in-tree').attr('data-tree-id', $(this).closest('.tree').attr('id'));
+            $icon.closest('li').addClass('hover');
 
             e.stopPropagation();
         }).on('mousemove', 'a', function()
@@ -355,7 +358,7 @@ $(function()
             return lcatePage(libID, moduleID, $(this).data('type'));
         }).on('click', '.tree-version-trigger', function(e)
         {
-            $('.dropdown-in-tree').css('display', 'none');
+            $('.dropdown-in-tree').remove();
             var offset = $(this).offset();
             var option = {
                 left     : offset.left,
@@ -365,6 +368,10 @@ $(function()
             var dropDown = renderDropVersion(option);
             $(this).closest('body').append(dropDown);
             $('#versionSwitcher').find('a[data-id=' + release + ']').parent().addClass('active');
+
+            $('.dropdown-in-tree').attr('data-tree-id', $(this).closest('.tree').attr('id'));
+            $(this).closest('li').addClass('hover');
+
             e.stopPropagation();
         });
     }
@@ -426,7 +433,14 @@ $(function()
 
     $('body').on('click', function()
     {
-        $('.dropdown-in-tree').remove();
+        var $dropdown = $('.dropdown-in-tree');
+        if($dropdown.length)
+        {
+            var dropdown = $dropdown.data();
+            var $hoverItem = $('#' + $dropdown.data('treeId')).find('li.hover');
+            $hoverItem.removeClass('hover');
+            $dropdown.remove();
+        }
     }).on('click', '.sidebar-toggle', function()
     {
         var $icon = $(this).find('.icon');
