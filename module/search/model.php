@@ -1239,7 +1239,7 @@ class searchModel extends model
             if($testDeleted) $data = $this->dao->select('*')->from($table)->limit(1)->fetch();
 
             $query = $this->dao->select('t1.*')->from($table)->alias('t1')
-                ->where('1')
+                ->where('1=1')
                 ->beginIF($type == 'program')->andWhere('type')->eq('program')->fi()
                 ->beginIF($type == 'project')->andWhere('type')->eq('project')->fi()
                 ->beginIF($type == 'execution')->andWhere('type')->in('stage,sprint,kanban')->fi()

@@ -121,6 +121,7 @@ $lang->install->chmodLinux   = ' "%s" Berechtigung muss geändert werden.<br /> 
 
 $lang->install->timezone       = 'Set Timezone';
 $lang->install->defaultLang    = 'Standard Sprache';
+$lang->install->dbDriver       = 'Database Driver';
 $lang->install->dbHost         = 'Datenbank Host';
 $lang->install->dbHostNote     = 'Wenn 127.0.0.1 nicht funktioniert, versuchen Sie localhost.';
 $lang->install->dbPort         = 'Datenbank Port';
@@ -132,6 +133,10 @@ $lang->install->dbPrefix       = 'Tabellen-Prefix';
 $lang->install->clearDB        = 'Tabellen leeren sofern diese scon existieren.';
 $lang->install->importDemoData = 'Import Demo Daten';
 $lang->install->working        = 'Work Mode';
+
+$lang->install->dbDriverList = array();
+$lang->install->dbDriverList['mysql'] = 'MySQL';
+$lang->install->dbDriverList['dm']    = 'DM8';
 
 $lang->install->requestTypes['GET']       = 'GET';
 $lang->install->requestTypes['PATH_INFO'] = 'PATH_INFO';

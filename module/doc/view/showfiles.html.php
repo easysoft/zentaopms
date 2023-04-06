@@ -55,7 +55,7 @@
         <thead>
           <tr>
             <?php $this->app->rawMethod = 'showfiles';?>
-            <?php $vars = "type=$type&objectID=$objectID&viewType=$viewType&orderBy=%s&recTotal=$pager->recTotal&recPerPage=$pager->recPerPage&pageID=$pager->pageID";?>
+            <?php $vars = "type=$type&objectID=$objectID&viewType=$viewType&orderBy=%s&recTotal=$pager->recTotal&recPerPage=$pager->recPerPage&pageID=$pager->pageID&searchTitle=$searchTitle";?>
             <th class="c-id"><?php common::printOrderLink('id', $orderBy, $vars, $lang->doc->id);?></th>
             <th class="c-name"><?php common::printOrderLink('title', $orderBy, $vars, $lang->doc->fileTitle);?></th>
             <th class="c-source"><?php common::printOrderLink('objectID', $orderBy, $vars, $lang->doc->source);?></th>

@@ -1032,36 +1032,4 @@ class apiModel extends model
 
         return array($normalObjects, $closedObjects);
     }
-
-    /**
-     * Get lib tree.
-     *
-     * @param  int    $libID
-     * @param  int    $libs
-     * @param  int    $moduleID
-     * @param  int    $objectID
-     * @param  string $browseType bySearch
-     * @access public
-     * @return array
-     */
-    public function getLibTree($libID, $libs, $moduleID, $objectID = 0, $browseType = '')
-    {
-        $libTree  = $this->loadModel('doc')->getLibTree($libID, $libs, 'api', $moduleID, $objectID, $browseType);
-        $releases = $this->getReleaseByQuery(array_keys($libs), null, 'lib_asc, id_desc');
-
-        foreach($libTree as &$tree)
-        {
-            $tree->versions    = array();
-            foreach($releases as $index => $release)
-            {
-                if($tree->id == $release->lib)
-                {
-                    $tree->versions[] = $release;
-                    unset($releases[$index]);
-                }
-            }
-        }
-
-        return $libTree;
-    }
 }

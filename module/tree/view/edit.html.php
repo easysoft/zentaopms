@@ -36,7 +36,7 @@ if(isset($pageCSS)) css::internal($pageCSS);
     </h4>
   </div>
   <div class='modal-body'>
-    <form action="<?php echo inlink('edit', 'module=' . $module->id .'&type=' .$type);?>" target='hiddenwin' method='post' class='mt-10px' id='dataform'>
+    <form action="<?php echo helper::createLink($app->rawModule, $app->rawMethod, 'module=' . $module->id .'&type=' .$type);?>" target='hiddenwin' method='post' class='mt-10px' id='dataform'>
       <table class='table table-form'>
         <?php if($showProduct):?>
         <tr class="<?php if($hiddenProduct) echo 'hidden';?>">

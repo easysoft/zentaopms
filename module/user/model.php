@@ -100,7 +100,7 @@ class userModel extends model
         unset($this->config->user->moreLink);
 
         $users = $this->dao->select($fields)->from(TABLE_USER)
-            ->where('1')
+            ->where('1=1')
             ->beginIF(strpos($params, 'nodeleted') !== false or empty($this->config->user->showDeleted))->andWhere('deleted')->eq('0')->fi()
             ->beginIF(strpos($params, 'all') === false)->andWhere('type')->eq($type)->fi()
             ->beginIF($accounts)->andWhere('account')->in($accounts)->fi()

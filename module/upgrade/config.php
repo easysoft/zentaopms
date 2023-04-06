@@ -418,6 +418,17 @@ $config->delete['18_0'][] = 'extension/max/repo/ext/control/ajaxgetbranchesandta
 $config->delete['18_0'][] = 'extension/max/repo/ext/control/ajaxgetbranchesandtags.php';
 $config->delete['18_0'][] = 'extension/max/repo/ext/control/editbug.php';
 $config->delete['18_0'][] = 'extension/max/repo/ext/view/ajaxgetcommitinfo.html.php';
+$config->delete['18_4'][] = 'extension/max/report/ext/control/projectsummary.php';
+$config->delete['18_4'][] = 'extension/max/report/ext/control/projectworkload.php';
+$config->delete['18_4'][] = 'extension/max/report/ext/control/customeredreport.php';
+$config->delete['18_4'][] = 'extension/max/report/ext/control/instancetemplate.php';
+$config->delete['18_4'][] = 'extension/max/report/ext/view/programsummary.html.php';
+$config->delete['18_4'][] = 'extension/max/report/ext/view/programworkload.html.php';
+$config->delete['18_4'][] = 'extension/max/report/ext/view/projectsummary.html.php';
+$config->delete['18_4'][] = 'extension/max/report/ext/view/projectworkload.html.php';
+$config->delete['18_4'][] = 'extension/max/report/ext/view/customeredreport.html.php';
+$config->delete['18_4'][] = 'extension/max/report/ext/view/instancetemplate.html.php';
+$config->delete['18_4'][] = 'extension/max/report/ext/view/blockreportlist.html.php';
 
 $config->upgrade->openModules = array('action', 'admin', 'api', 'automation', 'backup', 'block', 'branch', 'budget', 'bug', 'build', 'caselib', 'ci', 'client', 'common', 'company', 'compile', 'convert', 'cron', 'custom', 'datatable', 'dept', 'design', 'dev', 'doc', 'durationestimation', 'entry', 'execution', 'extension', 'file', 'git', 'gitlab', 'group', 'holiday', 'im', 'index', 'index.html', 'install', 'issue', 'jenkins', 'job', 'kanban', 'license', 'mail', 'message', 'misc', 'mr', 'my', 'personnel', 'pipeline', 'product', 'productplan', 'productset', 'program', 'programplan', 'project', 'projectbuild', 'projectplan', 'projectrelease', 'projectstory', 'pivot', 'qa', 'release', 'repo', 'report', 'risk', 'score', 'screen', 'search', 'setting', 'sonarqube', 'sso', 'stage', 'stakeholder', 'story', 'subject', 'svn', 'task', 'testcase', 'testreport', 'testsuite', 'testtask', 'todo', 'tree', 'tutorial', 'upgrade', 'user', 'webhook', 'weekly', 'workestimation', 'gitea', 'gogs', 'transfer', 'zahost', 'zanode', 'editor');
 

@@ -21,7 +21,7 @@
                 </a>
                 <ul class='dropdown-menu doc-version-menu' style='max-height:240px; max-width: 300px; overflow-y:auto'>
                 <?php for($version = $doc->version; $version > 0; $version--): ?>
-                  <li><a href='javascript:void(0)' data-url='<?php echo $this->createLink('doc', 'objectLibs', "type=$objectType&objectID=$object->id&libID=$libID&docID=$doc->id&version=$version"); ?>'>#<?php echo $version; ?></a></li>
+                  <li><a href='javascript:void(0)' data-url='<?php echo $this->createLink('doc', 'view', "docID=$doc->id&version=$version"); ?>'>#<?php echo $version; ?></a></li>
                 <?php endfor; ?>
                 </ul>
               </div>

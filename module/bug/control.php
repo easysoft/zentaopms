@@ -174,7 +174,7 @@ class bug extends control
         $bugs = $this->bug->getBugs($productIDList, $executions, $branch, $browseType, $moduleID, $queryID, $sort, $pager, $this->projectID);
 
         /* Process the sql, get the conditon partion, save it to session. */
-        $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'bug', $browseType == 'needconfirm' ? false : true);
+        $this->loadModel('common')->saveQueryCondition($this->bug->dao->get(), 'bug', $browseType == 'needconfirm' ? false : true);
 
         /* Process bug for check story changed. */
         $bugs = $this->loadModel('story')->checkNeedConfirm($bugs);
