@@ -13,7 +13,7 @@ window.loadPage = function loadPage(url, callback)
 /* Transfer click event to parent */
 $(document).on('click', (e) =>
 {
-    window.parent.$(window.parent.document).trigger('click');
+    window.parent.$('body').trigger('click');
 
     const $a = $(e.target).closest('a');
     if(!$a.length || $a.data('toggle') || $a.hasClass('not-in-app') || $a.attr('target') === '_blank') return;
