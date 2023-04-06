@@ -16,7 +16,7 @@
     <a href='javascript:;' class='btn btn-link btn-active-text'><span class='text'><?php echo $group->name;?></span></a>
   </div>
 </div>
-<div id='mainContent' class='main-content'>
+<div id='mainContent' class='main main-content'>
   <form class="load-indicator main-form form-ajax" id="managePrivForm" method="post">
     <table class='table table-hover table-striped table-bordered'>
       <thead>
@@ -76,88 +76,125 @@
     </div>
   </div>
 </div>
-<div id='mainContent' class='main-content'>
-  <form class="load-indicator main-form form-ajax" id="managePrivForm" method="post" target='hiddenwin'>
-    <table class='table table-hover table-striped table-bordered' id='privList'>
-      <thead>
-        <tr class='text-center'>
-          <th class='module'><?php echo $lang->group->module;?></th>
-          <th class='package'><?php echo '权限包';?></th>
-          <th class='method' colspan='2'><?php echo $lang->group->method;?></th>
-        </tr>
-      </thead>
-      <tbody>
-        <?php foreach($privList as $moduleName => $packages):?>
-        <?php if(!count((array)$packages)) continue;?>
-        <?php
-        $moduleActions = !empty($lang->resource->{$moduleName}) ? $lang->resource->{$moduleName} : null;
-
-        /* Check method in select version. */
-        if($version)
-        {
-            $hasMethod = false;
-            foreach($privMethods as $module => $methods)
-            {
-                foreach($methods as $method)
-                {
-                    if(strpos($changelogs, ",$module-$method,") !== false)
-                    {
-                        $hasMethod = true;
-                        break;
-                    }
-                    if(!$hasMethod) continue;
-                }
-            }
-        }
-
-        $i = 1;
-
-        $modulePrivs  = count($privList[$moduleName], 1) - count($selectPrivs[$moduleName], 1);
-        $moduleSelect = array_sum($selectPrivs[$moduleName]);
-        ?>
-        <?php foreach($packages as $packageID => $privs):?>
-        <tr class='<?php echo cycle('even, bg-gray');?>'>
-          <?php if($i == 1):?>
-          <th class='text-middle text-left module' rowspan="<?php echo $i == 1 ? count($packages) : 1;?>" data-module='<?php echo $moduleName;?>' all-privs='<?php echo $modulePrivs;?>' select-privs='<?php echo $moduleSelect;?>'>
-            <div class="checkbox-primary checkbox-inline checkbox-left check-all">
-              <input type='checkbox' id='allChecker<?php echo $moduleName;?>' value='1' <?php if(!empty($moduleSelect) and $modulePrivs == $moduleSelect) echo 'checked';?>>
-              <label class='text-left <?php if(!empty($moduleSelect) and $modulePrivs != $moduleSelect) echo 'checkbox-indeterminate-block';?>' for='allChecker<?php echo $moduleName;?>'><?php echo $lang->$moduleName->common;?></label>
-            </div>
-          </th>
-          <?php endif;?>
+<div id='mainContent'>
+  <div class='main main-content'>
+    <form class="load-indicator main-form form-ajax" id="managePrivForm" method="post" target='hiddenwin'>
+      <table class='table table-hover table-striped table-bordered' id='privList'>
+        <thead>
+          <tr class='text-center'>
+            <th class='module'><?php echo $lang->group->module;?></th>
+            <th class='package'><?php echo '权限包';?></th>
+            <th class='method' colspan='2'><?php echo $lang->group->method;?></th>
+          </tr>
+        </thead>
+        <tbody>
+          <?php foreach($privList as $moduleName => $packages):?>
+          <?php if(!count((array)$packages)) continue;?>
           <?php
-          $packagePrivs  = count($privs);
-          $packageSelect = $selectPrivs[$moduleName][$packageID];
+          $moduleActions = !empty($lang->resource->{$moduleName}) ? $lang->resource->{$moduleName} : null;
+
+          /* Check method in select version. */
+          if($version)
+          {
+              $hasMethod = false;
+              foreach($privMethods as $module => $methods)
+              {
+                  foreach($methods as $method)
+                  {
+                      if(strpos($changelogs, ",$module-$method,") !== false)
+                      {
+                          $hasMethod = true;
+                          break;
+                      }
+                      if(!$hasMethod) continue;
+                  }
+              }
+          }
+
+          $i = 1;
+
+          $unassigned    = (!empty($moduleActions) and !empty($privMethods[$moduleName])) ? array_diff(array_keys(get_object_vars($moduleActions)), $privMethods[$moduleName]) : array();
+          $modulePrivs   = count($privList[$moduleName], 1) - count($selectPrivs[$moduleName], 1) + count($unassigned);
+          $moduleSelect  = array_sum($selectPrivs[$moduleName]);
           ?>
-          <th class='<?php echo $i == 1 ? 'td-sm' : 'td-md';?> text-middle text-left package' data-module='<?php echo $moduleName;?>' data-package='<?php echo $packageID;?>' all-privs='<?php echo $packagePrivs;?>' select-privs='<?php echo $packageSelect;?>'>
-            <div class="checkbox-primary checkbox-inline checkbox-left check-all">
-              <input type='checkbox' id='allCheckerModule<?php echo $moduleName;?>Package<?php echo $packageID;?>' value='1' <?php if($packagePrivs == $packageSelect) echo 'checked';?>>
-              <label class='text-left <?php if(!empty($packageSelect) and $packagePrivs != $packageSelect) echo 'checkbox-indeterminate-block';?>' for='allCheckerPackage<?php echo $packageID;?>'><?php echo zget($privPackages, $packageID, $lang->group->unassigned);?></label>
-            </div>
-          </th>
-          <?php if(isset($lang->$moduleName->menus)):?>
-          <td class='menus'>
-            <?php echo html::checkbox("actions[$moduleName]", array('browse' => $lang->$moduleName->browse), isset($groupPrivs[$moduleName]) ? $groupPrivs[$moduleName] : '');?>
-            <a href='javascript:;'><i class='icon icon-plus'></i></a>
-            <?php echo html::checkbox("actions[$moduleName]", $lang->$moduleName->menus, isset($groupPrivs[$moduleName]) ? $groupPrivs[$moduleName] : '');?>
-          </td>
-          <?php endif;?>
-          <td id='<?php echo $moduleName;?>' class='pv-10px' colspan='<?php echo !empty($lang->$moduleName->menus) ? 1 : 2?>'>
-            <?php foreach($privs as $privID => $priv):?>
-            <div class="group-item" data-module='<?php echo $moduleName;?>' data-package='<?php echo $packageID;?>'>
-              <div class="checkbox-primary">
-                <?php echo html::checkbox("actions[$priv->module]", array($priv->method => $priv->name), isset($groupPrivs[$priv->module][$priv->method]) ? $priv->method : '', "title='{$priv->name}' id='actions[$priv->module]$priv->method' data-id='$privID'");?>
+          <?php foreach($packages as $packageID => $privs):?>
+          <tr class='<?php echo cycle('even, bg-gray');?>'>
+            <?php if($i == 1):?>
+            <th class='text-middle text-left module' rowspan="<?php echo $i == 1 ? count($packages) : 1;?>" data-module='<?php echo $moduleName;?>' all-privs='<?php echo $modulePrivs;?>' select-privs='<?php echo $moduleSelect;?>'>
+              <div class="checkbox-primary checkbox-inline checkbox-left check-all">
+                <input type='checkbox' id='allChecker<?php echo $moduleName;?>' value='1' <?php if(!empty($moduleSelect) and $modulePrivs == $moduleSelect) echo 'checked';?>>
+                <label class='text-left <?php if(!empty($moduleSelect) and $modulePrivs != $moduleSelect) echo 'checkbox-indeterminate-block';?>' for='allChecker<?php echo $moduleName;?>'><?php echo $lang->$moduleName->common;?></label>
               </div>
-            </div>
-            <?php endforeach;?>
-          </td>
-        </tr>
-        <?php $i ++;?>
-        <?php endforeach;?>
-        <?php endforeach;?>
-      </tbody>
-    </table>
-  </form>
+            </th>
+            <?php endif;?>
+            <?php
+            $packagePrivs  = count($privs);
+            $packageSelect = $selectPrivs[$moduleName][$packageID] + ($packageID == 0 ? count($unassigned) : 0);
+            ?>
+            <th class='<?php echo $i == 1 ? 'td-sm' : 'td-md';?> text-middle text-left package' data-module='<?php echo $moduleName;?>' data-package='<?php echo $packageID;?>' all-privs='<?php echo $packagePrivs;?>' select-privs='<?php echo $packageSelect;?>'>
+              <div class="checkbox-primary checkbox-inline checkbox-left check-all">
+                <input type='checkbox' id='allCheckerModule<?php echo $moduleName;?>Package<?php echo $packageID;?>' value='1' <?php if($packagePrivs == $packageSelect) echo 'checked';?>>
+                <label class='text-left <?php if(!empty($packageSelect) and $packagePrivs != $packageSelect) echo 'checkbox-indeterminate-block';?>' for='allCheckerPackage<?php echo $packageID;?>'><?php echo zget($privPackages, $packageID, $lang->group->unassigned);?></label>
+              </div>
+            </th>
+            <?php if(isset($lang->$moduleName->menus)):?>
+            <td class='menus'>
+              <?php echo html::checkbox("actions[$moduleName]", array('browse' => $lang->$moduleName->browse), isset($groupPrivs[$moduleName]) ? $groupPrivs[$moduleName] : '');?>
+              <a href='javascript:;'><i class='icon icon-plus'></i></a>
+              <?php echo html::checkbox("actions[$moduleName]", $lang->$moduleName->menus, isset($groupPrivs[$moduleName]) ? $groupPrivs[$moduleName] : '');?>
+            </td>
+            <?php endif;?>
+            <td id='<?php echo $moduleName;?>' class='pv-10px' colspan='<?php echo !empty($lang->$moduleName->menus) ? 1 : 2?>'>
+              <?php foreach($privs as $privID => $priv):?>
+              <div class="group-item" data-module='<?php echo $moduleName;?>' data-package='<?php echo $packageID;?>'>
+                <div class="checkbox-primary">
+                  <?php echo html::checkbox("actions[$priv->module]", array($priv->method => $priv->name), isset($groupPrivs[$priv->module][$priv->method]) ? $priv->method : '', "title='{$priv->name}' id='actions[$priv->module]$priv->method' data-id='$privID'");?>
+                </div>
+              </div>
+              <?php endforeach;?>
+              <?php if($packageID == 0):?>
+              <?php foreach($moduleActions as $action => $actionLabel):?>
+              <?php if(array_search($action, $unassigned) === false) continue;?>
+              <div class="group-item" data-module='<?php echo $moduleName;?>' data-package='<?php echo $packageID;?>'>
+                <div class="checkbox-primary">
+                  <?php echo html::checkbox("actions[{$moduleName}]", array($action => $lang->$moduleName->$actionLabel), isset($groupPrivs[$moduleName][$action]) ? $action : '', "title='{$lang->$moduleName->$actionLabel}'", 'inline');?>
+                </div>
+              </div>
+              <?php endforeach;?>
+              <?php endif;?>
+            </td>
+          </tr>
+          <?php $i ++;?>
+          <?php endforeach;?>
+          <?php endforeach;?>
+        </tbody>
+      </table>
+    </form>
+  </div>
+  <div class="side">
+    <div class="priv-panel">
+      <div class="panel-title">
+        <?php echo $lang->group->dependentPrivs?>
+      </div>
+      <div class="panel-content">
+        <div class="menuTree depend menu-active-primary menu-hover-primary"></div>
+        <div class="empty-tip flex-center">
+          <p><span class="text-muted"><?php echo $lang->noData;?></span></p>
+        </div>
+      </div>
+    </div>
+    <div class="priv-panel mt-m">
+      <div class="panel-title">
+        <?php echo $lang->group->recommendPrivs?>
+      </div>
+      <div class="panel-content">
+        <div class="menuTree recommend menu-active-primary menu-hover-primary"></div>
+        <div class="empty-tip flex-center">
+          <p><span class="text-muted"><?php echo $lang->noData;?></span></p>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 <?php endif;?>
 <?php js::set('groupID', $groupID);?>

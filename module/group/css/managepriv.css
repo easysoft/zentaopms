@@ -1,3 +1,17 @@
+.mt-m {margin-top: 16px;}
+.flex-center {display: flex; justify-content: center; align-items: center;}
+#mainContent {display: flex; gap: 16px; height: calc(100vh - 120px);}
+#mainContent > .main {flex: 1 1 75%; overflow-y: auto; min-height: 480px;}
+#mainContent > .side {flex: 1 1 25%;}
+.priv-panel {background: #fff; padding: 10px; box-shadow: 0 1px 1px rgb(0 0 0 / 5%), 0 2px 6px 0 rgb(0 0 0 / 5%);}
+.priv-panel > .panel-content {height: calc(50vh - 160px); overflow-y: auto; min-height: 140px;}
+.priv-panel > .panel-bottom {padding-top: 20px;}
+
+/* tree */
+.tree ul > li {display: inline-block; width: 50%;}
+.priv-item > .icon {padding-left: 5px;}
+.empty-tip {height: 100%;}
+
 .table-bymodule select.form-control {height: 250px;}
 .group-item {display: block; width: 220px; float: left; font-size: 14px;}
 .group-item .checkbox-inline label {padding-left: 8px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;}
