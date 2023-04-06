@@ -31,6 +31,7 @@ $lang->search->onMenuBar     = '显示在菜单栏';
 $lang->search->custom        = '自定义';
 $lang->search->setCommon     = '设为公共查询条件';
 $lang->search->saveCondition = '保存搜索条件';
+$lang->search->setCondName   = '请输入保存条件名称';
 
 $lang->search->account  = '用户名';
 $lang->search->module   = '模块';

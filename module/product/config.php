@@ -163,7 +163,7 @@ $config->product->edit->fields['whitelist'] = array('control' => 'multi-select',
 $config->product->all->dtable = new stdclass();
 $config->product->all->dtable->fieldList['name']['name']         = 'name';
 $config->product->all->dtable->fieldList['name']['title']        = $lang->product->name;
-$config->product->all->dtable->fieldList['name']['width']        = 400;
+$config->product->all->dtable->fieldList['name']['width']        = 200;
 $config->product->all->dtable->fieldList['name']['type']         = 'link';
 $config->product->all->dtable->fieldList['name']['flex']         = 1;
 $config->product->all->dtable->fieldList['name']['nestedToggle'] = false;

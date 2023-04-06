@@ -1,13 +1,150 @@
 <?php
 namespace zin;
 
-$exampleOptions = json_decode('{"formConfig":{"actions":"11","method":"post"},"fields":[{"label":"项目集名称","name":"name","control":"input","operator":"include","defaultValue":"1111","placeholder":"请填写"},{"label":"状态","name":"status","control":"select","operator":"!=","defaultValue":"wait","values":{"":"","wait":"未开始","doing":"进行中","suspended":"已挂起","closed":"已关闭"}},{"label":"项目集描述","name":"desc","control":"input","defaultValue":"11","placeholder":"请填写1"},{"label":"负责人","name":"PM","control":"select","defaultValue":"","placeholder":"请填写2","values":{"":"","admin":"管理员","dev":"示例数据","test":"测试"}},{"label":"创建日期","name":"openedDate","control":"date","defaultValue":""},{"label":"计划开始","name":"begin","control":"date","defaultValue":""},{"label":"计划完成","name":"end","control":"date","defaultValue":""},{"label":"由谁创建","name":"openedBy","control":"select","defaultValue":"","values":{"":"","admin":"管理员","dev":"开发人员","op":"操作员","test":"测试"}},{"label":"最后编辑日期","name":"lastEditedDate","control":"date","defaultValue":""},{"label":"实际开始","name":"realBegan","control":"date","defaultValue":""},{"label":"实际完成日期","name":"realEnd","control":"date","defaultValue":""},{"label":"关闭日期","name":"closedDate","control":"date","defaultValue":""}],"operators":[{"value":"=","title":"="},{"value":"!=","title":"!="},{"value":">","title":">"},{"value":">=","title":">="},{"value":"<","title":"<"},{"value":"<=","title":"<="},{"value":"include","title":"包含"},{"value":"between","title":"介于"},{"value":"notinclude","title":"不包含"},{"value":"belong","title":"从属于"}],"savedQuery":[{"id":"1","title":"条件11","account":"11","content":[{"fields":"status","control":"select","condition":"=","value":"doing"},{"fields":"openedDate","control":"date","condition":"=","value":"2022-11-15"},{"fields":"openedBy","control":"input","condition":"=","value":""},{"fields":"PM","control":"select","condition":"!=","value":""},{"fields":"openedDate","control":"date","condition":"include","value":""},{"fields":"begin","control":"date","condition":"=","value":""}]},{"id":"2","title":"条件2","account":"11","content":[{"fields":"status","control":"select","condition":"=","value":"doing"},{"fields":"openedDate","control":"date","condition":"=","value":"2022-11-15"},{"fields":"openedBy","control":"input","condition":"=","value":""},{"fields":"PM","control":"select","condition":"!=","value":""},{"fields":"openedDate","control":"date","condition":"include","value":""},{"fields":"begin","control":"date","condition":"=","value":""}]}],"applyQueryURL":"/search-deleteQuery-myQueryID.html","deleteQueryURL":"/project-browse-0-bySearch-myQueryID.html","andOr":[{"value":"and","title":"并且"},{"value":"or","title":"或者"}],"groupName":["第一组","第二组"],"savedQueryTitle":"已保存的查询条件","saveSearch":{"text":"保存搜索条件","hasPermission":true,"config":{"data-toggle":"modal","href":"#saveModal","data-url":"/index.php?m=search&f=saveQuery&module=task&onMenuBar=yes"}},"formSession":{"andOr2":"or","andOr3":"or","andOr5":"or","andOr6":"and","field1":"PM","field2":"openedBy","field3":"openedDate","field4":"name","field5":"status","field6":"closedDate","groupAndOr":"or","operator1":">","operator2":"=","operator3":"<","operator4":">=","operator5":"=","operator6":"include","value1":"dev","value2":"op","value3":"1991-02-04T00:00:00","value4":"Example data","value5":"doing","value6":"2023-03-09T00:00:00","module":"project","groupItems":"3","formType":"lite"}}');
+class clsInitSearchForm {
 
-jsVar('options', $options);
+    public static function formConfig()
+    {
+        $config = new stdClass();
+        $config->action = createLink('search', 'buildQuery');
+        $config->method = 'post';
+
+        return $config;
+    }
+
+    public static function formFields($fieldParams, $fieldsMap)
+    {
+        $fields = array();
+
+        foreach($fieldParams as $name => $param)
+        {
+            $field = new stdClass();
+            $field->label        = isset($fieldsMap[$name]) ? $fieldsMap[$name] : '';
+            $field->name         = $name;
+            $field->control      = $param['control'];
+            $field->operator     = $param['operator'];
+            $field->defaultValue = '';
+            $field->placeholder  = '';
+            $field->values       = $param['values'];
+
+            $fields[] = $field;
+        }
+
+        return $fields;
+    }
+
+    public static function formOperators($operators)
+    {
+        $ops = array();
+
+        foreach($operators as $val => $title)
+        {
+            $op = new stdClass();
+            $op->value = $val;
+            $op->title = $title;
+
+            $ops[] = $op;
+        }
+
+        return $ops;
+    }
+
+    public static function formAndOrs($andOrs)
+    {
+        $result = array();
+
+        foreach($andOrs as $val => $title)
+        {
+            $item = new stdClass();
+            $item->value = $val;
+            $item->title = $title;
+
+            $result[] = $item;
+        }
+
+        return $result;
+    }
+
+    public static function formSaveSearch($module)
+    {
+        global $lang;
+
+        $result = new stdClass();
+        $result->text     = $lang->search->saveCondition;
+        $result->hasPriv  = hasPriv('search', 'saveQuery');
+        $result->config   = array(
+            'data-toggle' => 'modal',
+            'data-url'    => createLink('search', 'saveQuery', array('module' => $module)),
+        );
+
+        return $result;
+    }
+
+    public static function formSavedQuery($queries, $account)
+    {
+        $result = array();
+        if(empty($queries)) return $result;
+
+        $hasPriv = hasPriv('search', 'deleteQuery');
+        foreach($queries as $query)
+        {
+            if(!is_object($query)) continue;
+
+            $item = new stdClass();
+            $item->id      = $query->id;
+            $item->title   = $query->title;
+            $item->account = $query->account;
+            $item->hasPriv = ($hasPriv && $account == $query->account);
+
+            $result[] = $item;
+        }
+
+        return $result;
+    }
+}
+
+$opts = new stdClass();
+$opts->formConfig      = clsInitSearchForm::formConfig();
+$opts->fields          = clsInitSearchForm::formFields($fieldParams, $fields);
+$opts->operators       = clsInitSearchForm::formOperators($lang->search->operators);
+$opts->andOr           = clsInitSearchForm::formAndOrs($lang->search->andor);
+$opts->saveSearch      = clsInitSearchForm::formSaveSearch($module);
+$opts->savedQuery      = clsInitSearchForm::formSavedQuery($queries, $this->app->user->account);
+$opts->groupName       = array($lang->search->group1, $lang->search->group2);
+$opts->savedQueryTitle = $lang->search->savedQuery;
+$opts->applyQueryURL   = $actionURL;
+$opts->deleteQueryURL  = createLink('search', 'deleteQuery', 'queryID=myQueryID');
+$opts->formSession     = $formSession;
+$opts->module          = $module;
+$opts->actionURL       = $actionURL;
+$opts->groupItems      = $groupItems;
+
+/* Delete query callback function. */
+$opts->onDeleteQuery = jsRaw
+(
+    "function(event, queryID)".
+    "{".
+    "    var deleteQueryURL = '{$opts->deleteQueryURL}';".
+    "    event.stopPropagation();".
+    "    fetch(deleteQueryURL.replace('myQueryID', queryID), {method:'POST'})".
+    "        .then((response) => {".
+    "            if (!response.ok) throw new Error('HTTP error! Status: ' + response.status);".
+    "            return response.text();".
+    "        })".
+    "        .then((text) => {".
+    "            if(text === 'success') event.target.closest('div').remove();".
+    "            else throw new Error('Failed: ' + text);".
+    "        });".
+    "}"
+);
+
+if(empty($opts->savedQuery)) unset($opts->savedQuery);
+
+jsVar('options',      isset($options) ? $options : null);
 jsVar('canSaveQuery', !empty($_SESSION[$module . 'Query']));
-jsVar('formSession', $_SESSION[$module . 'Form']);
-jsVar('onMenuBar', $onMenuBar);
+jsVar('formSession',  $_SESSION[$module . 'Form']);
+jsVar('onMenuBar',    $onMenuBar);
 
-zui::searchform(set($exampleOptions), set::_to('#searchFormPanel'), set::className('shadow'));
+zui::searchform(set($opts), set::_to('#searchFormPanel'), set::className('shadow'));
 
 render('fragment');
