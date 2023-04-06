@@ -46,6 +46,7 @@ ALTER TABLE `zt_chart` MODIFY `group` varchar(255) NOT NULL;
 ALTER TABLE `zt_chart` ADD `stage` enum('draft','published') NOT NULL DEFAULT 'draft' AFTER `sql`;
 ALTER TABLE `zt_chart` ADD `langs` text NOT NULL AFTER `fields`;
 ALTER TABLE `zt_chart` ADD `step` tinyint(1) unsigned NOT NULL AFTER `filters`;
+ALTER TABLE `zt_chart` DROP `dataset`;
 
 ALTER TABLE `zt_dataview` ADD `langs` text NOT NULL AFTER `fields`;
 
