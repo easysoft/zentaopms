@@ -1,7 +1,7 @@
 <?php
 namespace zin;
 
-class inputaddon extends wg
+class inputAddon extends wg
 {
     protected static $defineProps = 'text?:stirng,wg?:array';
 

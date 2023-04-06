@@ -1,7 +1,7 @@
 <?php
 namespace zin;
 
-class assigntodialog extends wg
+class assigntoDialog extends wg
 {
     protected static $defineProps = array
     (
@@ -54,14 +54,14 @@ class assigntodialog extends wg
                     div
                     (
                         setClass('modal-body'),
-                        formgrid
+                        formGrid
                         (
                             set::action($this->prop('action')),
                             set::method('POST'),
-                            formgroup
+                            formGroup
                             (
-                                formlabel($lang->assignedToAB),
-                                formcell
+                                formLabel($lang->assignedToAB),
+                                formCell
                                 (
                                     select
                                     (
@@ -72,15 +72,15 @@ class assigntodialog extends wg
                                 )
                             ),
                             $useLeft === true
-                                ? formgroup
+                                ? formGroup
                                 (
-                                    formlabel($lang->task->left),
-                                    formcell
+                                    formLabel($lang->task->left),
+                                    formCell
                                     (
                                         div
                                         (
                                             setClass('input-control has-suffix'),
-                                            forminput
+                                            formInput
                                             (
                                                 set::type('number'),
                                                 set::min(0),
@@ -97,10 +97,10 @@ class assigntodialog extends wg
                                 )
                                 : null,
                             $useMailto === true
-                                ? formgroup
+                                ? formGroup
                                 (
-                                    formlabel($lang->bug->mailto),
-                                    formcell
+                                    formLabel($lang->bug->mailto),
+                                    formCell
                                     (
                                         select
                                         (
@@ -111,10 +111,10 @@ class assigntodialog extends wg
                                     )
                                 )
                                 : null,
-                            formgroup
+                            formGroup
                             (
-                                formlabel($lang->comment),
-                                formcell
+                                formLabel($lang->comment),
+                                formCell
                                 (
                                     textarea
                                     (
@@ -124,7 +124,7 @@ class assigntodialog extends wg
                                     )
                                 )
                             ),
-                            formgroup
+                            formGroup
                             (
                                 setClass('justify-center'),
                                 button

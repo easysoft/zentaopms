@@ -1,7 +1,7 @@
 <?php
 namespace zin;
 
-class formgrid extends wg
+class formGrid extends wg
 {
     protected function build()
     {

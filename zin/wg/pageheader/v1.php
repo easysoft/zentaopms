@@ -1,7 +1,7 @@
 <?php
 namespace zin;
 
-class pageheader extends wg
+class pageHeader extends wg
 {
     /**
      * Add child.
@@ -12,19 +12,19 @@ class pageheader extends wg
      */
     protected function onAddChild($child)
     {
-        if(class_exists('zin\pageheading') and $child instanceof pageheading)
+        if(class_exists('zin\pageHeading') and $child instanceof pageHeading)
         {
             $this->add($child, 'heading');
             return false;
         }
 
-        if(class_exists('\zin\pagenavbar') and $child instanceof \zin\pagenavbar)
+        if(class_exists('\zin\pageNavbar') and $child instanceof \zin\pageNavbar)
         {
             $this->add($child, 'navbar');
             return false;
         }
 
-        if(class_exists('\zin\pagetoolbar') and $child instanceof \zin\pagetoolbar)
+        if(class_exists('\zin\pageToolbar') and $child instanceof \zin\pageToolbar)
         {
             $this->add($child, 'toolbar');
             return false;

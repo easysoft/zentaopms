@@ -46,6 +46,17 @@ class index extends control
         $this->display();
     }
 
+    public function index2($open = '')
+    {
+        $this->index($open);
+    }
+
+    public function app($url = '')
+    {
+        $this->view->url = $url;
+        $this->display();
+    }
+
     /**
      * Get the log record according to the version.
      *

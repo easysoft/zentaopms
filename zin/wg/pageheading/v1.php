@@ -1,7 +1,7 @@
 <?php
 namespace zin;
 
-class pageheading extends wg
+class pageHeading extends wg
 {
     protected static $defineProps = 'text?:string, icon?:string, url?:string';
 

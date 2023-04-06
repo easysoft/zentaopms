@@ -1,7 +1,7 @@
 <?php
 namespace zin;
 
-class historyrecord extends wg
+class historyRecord extends wg
 {
     protected static $defineProps = 'actions:array,users:array,methodName:string';
 

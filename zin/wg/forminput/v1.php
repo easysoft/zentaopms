@@ -1,7 +1,7 @@
 <?php
 namespace zin;
 
-class forminput extends wg
+class formInput extends wg
 {
     protected function build()
     {

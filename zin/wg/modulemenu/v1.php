@@ -1,7 +1,7 @@
 <?php
 namespace zin;
 
-class modulemenu extends wg
+class moduleMenu extends wg
 {
     private $modules = array();
 
@@ -11,6 +11,11 @@ class modulemenu extends wg
         'moduleSettingText?:string="模块设置"',
         'displaySettingText?:string="显示设置"',
     );
+
+    public static function getPageCSS()
+    {
+        return file_get_contents(__DIR__ . DS . 'css' . DS . 'v1.css');
+    }
 
     private function buildMenuTree($parent, $parentID)
     {
@@ -82,7 +87,9 @@ class modulemenu extends wg
                 setClass('setting-btns'),
                 a
                 (
-                    setClass('btn primary'),
+                    setClass('btn'),
+                    setStyle('background', '#EEF5FF'),
+                    setStyle('border', 'none'),
                     $this->prop('moduleSettingText')
                 ),
                 a

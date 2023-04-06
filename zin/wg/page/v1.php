@@ -5,7 +5,7 @@ require_once dirname(__DIR__) . DS . 'pagebase' . DS . 'v1.php';
 require_once dirname(__DIR__) . DS . 'header' . DS . 'v1.php';
 require_once dirname(__DIR__) . DS . 'main' . DS . 'v1.php';
 
-class page extends pagebase
+class page extends pageBase
 {
     static $defaultProps = array('zui' => true);
 

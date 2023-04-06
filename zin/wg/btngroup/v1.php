@@ -1,13 +1,19 @@
 <?php
 namespace zin;
 
-class btngroup extends wg
+class btnGroup extends wg
 {
     static $defineProps = [
         'items?:array',
         'disabled?:bool',
         'size?:string',
     ];
+
+    public function onBuildItem($item)
+    {
+        if(!($item instanceof item)) $item = item(set($item));
+        return btn(inherit($item));
+    }
 
     protected function build()
     {
@@ -19,15 +25,12 @@ class btngroup extends wg
         if(!empty($disabled)) $classList .= ' disabled';
         if(!empty($size))     $classList .= " size-$size";
 
-        if(empty($items))
-        {
-            return div
-            (
-                setClass($classList),
-                $this->children(),
-            );
-        }
-
-        return zui::btngroup(inherit($this));
+        return div
+        (
+            setClass($classList),
+            set($this->props->skip(array_keys(static::getDefinedProps()))),
+            is_array($items) ? array_map(array($this, 'onBuildItem'), $items) : NULL,
+            $this->children()
+        );
     }
 }

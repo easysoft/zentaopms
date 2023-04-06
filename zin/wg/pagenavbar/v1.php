@@ -3,6 +3,6 @@ namespace zin;
 
 require_once dirname(__DIR__) . DS . 'nav' . DS . 'v1.php';
 
-class pagenavbar extends nav
+class pageNavbar extends nav
 {
 }

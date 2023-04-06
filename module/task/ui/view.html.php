@@ -1,7 +1,7 @@
 <?php
 namespace zin;
 
-historyrecord
+historyRecord
 (
     set::actions($actions),
     set::users($users),

@@ -24,6 +24,11 @@ class h extends wg
         return $this->props->get('tagName');
     }
 
+    public function isDomElement()
+    {
+        return true;
+    }
+
     public function isSelfClose()
     {
         $selfClose = $this->props->get('selfClose');

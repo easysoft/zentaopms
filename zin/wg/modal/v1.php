@@ -3,7 +3,7 @@ namespace zin;
 
 require_once dirname(__DIR__) . DS . 'modaldialog' . DS . 'v1.php';
 
-class modal extends modaldialog
+class modal extends modalDialog
 {
     static $defineProps = 'id?: string="$GID", modalProps?: array=[]';
 

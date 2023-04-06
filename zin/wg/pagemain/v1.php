@@ -1,7 +1,7 @@
 <?php
 namespace zin;
 
-class pagemain extends wg
+class pageMain extends wg
 {
     protected function build()
     {

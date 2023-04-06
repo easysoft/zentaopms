@@ -1,7 +1,7 @@
 <?php
 namespace zin;
 
-class formgroup extends wg
+class formGroup extends wg
 {
     protected static $defineProps = 'label?:string';
 
@@ -12,7 +12,7 @@ class formgroup extends wg
         (
             setClass('form-group'),
             set($this->props->skip(array_keys(static::getDefinedProps()))),
-            empty($label) ? null : formlabel(inherit(item(set($label)))),
+            empty($label) ? null : formLabel(inherit(item(set($label)))),
             $this->children()
         );
     }

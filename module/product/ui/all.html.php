@@ -83,7 +83,7 @@ featureBar
 (
     to::before
     (
-        programmenu
+        programMenu
         (
             setStyle(array('margin-right' => '20px')),
             set
@@ -178,6 +178,17 @@ dtable
     //set::onRenderCell(jsRaw('window.renderReleaseCountCell')),
     set::onRenderCell(jsRaw('function(result, data){return window.renderReleaseCountCell(result, data);}')),
     set::footer(jsRaw('function(){return window.footerGenerator.call(this);}'))
+);
+
+sidebar
+(
+    moduleMenu
+    (
+        set::productID(1),
+        set::title('所有分类'),
+        set::activeKey('4'),
+        set::closeLink('#'),
+    )
 );
 
 render();

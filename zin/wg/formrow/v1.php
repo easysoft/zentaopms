@@ -1,7 +1,7 @@
 <?php
 namespace zin;
 
-class formrow extends wg
+class formRow extends wg
 {
     protected function build()
     {
