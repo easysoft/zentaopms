@@ -113,8 +113,7 @@
 
           $i = 1;
 
-          $unassigned    = (!empty($moduleActions) and !empty($privMethods[$moduleName])) ? array_diff(array_keys(get_object_vars($moduleActions)), $privMethods[$moduleName]) : array();
-          $modulePrivs   = count($privList[$moduleName], 1) - count($selectPrivs[$moduleName], 1) + count($unassigned);
+          $modulePrivs   = count($privList[$moduleName], 1) - count($selectPrivs[$moduleName], 1);
           $moduleSelect  = array_sum($selectPrivs[$moduleName]);
           ?>
           <?php foreach($packages as $packageID => $privs):?>
@@ -129,7 +128,7 @@
             <?php endif;?>
             <?php
             $packagePrivs  = count($privs);
-            $packageSelect = $selectPrivs[$moduleName][$packageID] + ($packageID == 0 ? count($unassigned) : 0);
+            $packageSelect = $selectPrivs[$moduleName][$packageID];
             ?>
             <th class='<?php echo $i == 1 ? 'td-sm' : 'td-md';?> text-middle text-left package' data-module='<?php echo $moduleName;?>' data-package='<?php echo $packageID;?>' all-privs='<?php echo $packagePrivs;?>' select-privs='<?php echo $packageSelect;?>'>
               <div class="checkbox-primary checkbox-inline checkbox-left check-all">
@@ -152,16 +151,6 @@
                 </div>
               </div>
               <?php endforeach;?>
-              <?php if($packageID == 0):?>
-              <?php foreach($moduleActions as $action => $actionLabel):?>
-              <?php if(array_search($action, $unassigned) === false) continue;?>
-              <div class="group-item" data-module='<?php echo $moduleName;?>' data-package='<?php echo $packageID;?>'>
-                <div class="checkbox-primary">
-                  <?php echo html::checkbox("actions[{$moduleName}]", array($action => $lang->$moduleName->$actionLabel), isset($groupPrivs[$moduleName][$action]) ? $action : '', "title='{$lang->$moduleName->$actionLabel}'", 'inline');?>
-                </div>
-              </div>
-              <?php endforeach;?>
-              <?php endif;?>
             </td>
           </tr>
           <?php $i ++;?>
