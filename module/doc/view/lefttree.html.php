@@ -229,6 +229,7 @@ $(function()
                 if(typeof item.hasAction == 'undefined') item.hasAction = true;
                 if(typeof item.active == 'undefined') item.active = 0;
                 if(typeof docID != 'undefined' && item.id == docID) item.active = 1;
+                if(['text', 'word', 'ppt', 'excel'].indexOf(item.type) !== -1) item.hasAction = false;
 
                 var objectType = config.currentModule == 'api' ? item.objectType : item.type;
                 var libClass = ['lib', 'annex', 'api', 'execution'].indexOf(objectType) !== -1 ? 'lib' : '';
@@ -252,7 +253,7 @@ $(function()
                     }
                     $item += '<div class="tree-version-trigger" data-id="' +  item.id + '"><div class="text">' + (versionName || versionLang) + '</div><div class="caret"></div></div>';
                 }
-                if(['text', 'word', 'ppt', 'excel'].indexOf(item.type) === -1 && ((libClass != 'lib' && hasModulePriv) || (libClass == 'lib' && hasLibPriv))) $item += '<i class="icon icon-drop icon-ellipsis-v hidden tree-icon" data-isCatalogue="' + (libClass ? false : true) + '"></i>';
+                if((libClass != 'lib' && hasModulePriv) || (libClass == 'lib' && hasLibPriv)) $item += '<i class="icon icon-drop icon-ellipsis-v hidden tree-icon" data-isCatalogue="' + (libClass ? false : true) + '"></i>';
                 $item += '</div>';
                 $item += '</a>';
                 if(item.versions) versionsData[item.id] = item.versions;
@@ -324,7 +325,8 @@ $(function()
             if(!$(this).hasClass('lib')) libClass = '.moduleDorpdown';
 
             $(this).find('.icon').removeClass('hidden');
-            $(this).addClass('show-icon');   if($(libClass).find('li').length == 0) return false;
+            $(this).addClass('show-icon');
+            if($(libClass).find('li').length == 0) return false;
 
         }).on('mouseout', 'a', function()
         {
