@@ -421,7 +421,7 @@ $(function()
         }
         else if(objectType == 'mine')
         {
-            methodName = 'browse';
+            methodName = 'mySpace';
             linkParams = 'type=mine&libID=' + libID;
         }
         else if(['text', 'word', 'ppt', 'excel'].indexOf(type) !== -1)

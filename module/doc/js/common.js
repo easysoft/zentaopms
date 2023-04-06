@@ -327,7 +327,7 @@ function locateNewLib(type, objectID, libID)
     }
     else if(type == 'mine')
     {
-        method = 'browse';
+        method = 'mySpace';
         params = 'type=mine&libID=' + libID;
     }
 
