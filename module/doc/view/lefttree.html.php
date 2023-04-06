@@ -274,6 +274,9 @@ $(function()
         ele.on('click', '.icon-drop', function(e)
         {
             var $icon = $(this);
+            $('.icon-drop').addClass('hidden');
+            $(this).removeClass('hidden');
+            $('#fileTree').find('a.hover').removeClass('hover');
             $('.dropdown-in-tree').remove();
             var isCatalogue = $icon.attr('data-isCatalogue') === 'false' ? false : true;
             var dropDownID  = isCatalogue ? 'dropDownCatalogue' : 'dropDownLibrary';
@@ -335,7 +338,7 @@ $(function()
 
         }).on('mouseout', 'a', function()
         {
-            $(this).find('.icon').addClass('hidden');
+            if(!$(this).closest('a').hasClass('hover')) $(this).find('.icon').addClass('hidden');
             $(this).removeClass('show-icon');
         }).on('click', 'a', function()
         {
@@ -444,8 +447,12 @@ $(function()
         if($dropdown.length)
         {
             var dropdown = $dropdown.data();
-            var $hoverItem = $('#' + $dropdown.data('treeId')).find('li.hover');
-            $hoverItem.removeClass('hover');
+            var $hoverItem = $('#' + $dropdown.data('treeId')).find('a.hover');
+            if($hoverItem.length)
+            {
+                $hoverItem.removeClass('hover');
+                $hoverItem.find('.icon').addClass('hidden');
+            }
             $dropdown.remove();
         }
     }).on('click', '.sidebar-toggle', function()
