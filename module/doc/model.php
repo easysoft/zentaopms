@@ -2861,8 +2861,9 @@ class docModel extends model
                 ->fetchPairs();
         }
 
-        $libTree = array($type => array());
-        $apiLibs = array();
+        $libTree      = array($type => array());
+        $apiLibs      = array();
+        $apiLibIDList = array();
         foreach($libs as $lib)
         {
             $item = new stdclass();
@@ -2920,6 +2921,8 @@ class docModel extends model
                 $libTree['execution'][$executionID]->active = $item->active ? 1 : $libTree['execution'][$executionID]->active;
                 $libTree['execution'][$executionID]->children[] = $item;
             }
+
+            if($lib->type == 'api') $apiLibIDList[] = $lib->id;
         }
 
         if(in_array($type, array('product', 'project', 'execution')))
@@ -2947,6 +2950,26 @@ class docModel extends model
         elseif($type == 'api')
         {
             $libTree[$type] = array_merge($libTree[$type], $apiLibs);
+        }
+
+        /* Add release for api. */
+        $releases = $this->loadModel('api')->getReleaseByQuery($apiLibIDList);
+        foreach($libTree as &$libList)
+        {
+            foreach($libList as &$lib)
+            {
+                if(!is_object($lib) or $lib->type != 'api') continue;
+
+                $lib->versions = array();
+                foreach($releases as $index => $release)
+                {
+                    if($lib->id == $release->lib)
+                    {
+                        $lib->versions[] = $release;
+                        unset($releases[$index]);
+                    }
+                }
+            }
         }
 
         if($type != 'project') $libTree = array_values($libTree[$type]);
