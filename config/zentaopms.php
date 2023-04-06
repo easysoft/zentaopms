@@ -442,3 +442,6 @@ $config->featureGroup->agileplus     = array();
 $config->featureGroup->waterfallplus = array();
 $config->featureGroup->assetlib      = array();
 $config->featureGroup->other         = array('devops', 'kanban');
+
+$config->bi = new stdclass();
+$config->bi->pickerHeight = 150;
