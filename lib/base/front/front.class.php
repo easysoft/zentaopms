@@ -524,11 +524,18 @@ class baseHTML
         }
 
         /* If the link of the referer is not the link of the current page or the link of the index,  the cookie and gobackLink will be updated. */
-        if(!preg_match("/(m=|\/)(index|search|$currentModule)(&f=|-)(index|buildquery|$currentMethod)(&|-|\.)?/", strtolower($refererLink)))
+        if(preg_match("/(?:m=|\/)([a-zA-Z0-9]+)(?:(&f=)|(-?))([a-zA-Z0-9]+)?(?:&|-|\.)?/", strtolower($refererLink), $matches))
         {
-            $gobackList[$tab] = $referer;
-            $gobackLink       = $referer;
-            setcookie('goback', json_encode($gobackList), $config->cookieLife, $config->webRoot, '', $config->cookieSecure, false);
+            if(!isset($matches[2])) $matches[2] = $config->default->method;
+            if(!in_array($matches[1], array($config->default->module, 'search')) or !in_array($matches[2], array($config->default->method, 'buildquery')))
+            {
+                if($matches[1] != $currentModule or $matches[2] != $currentMethod)
+                {
+                    $gobackList[$tab] = $referer;
+                    $gobackLink       = $referer;
+                    setcookie('goback', json_encode($gobackList), $config->cookieLife, $config->webRoot, '', $config->cookieSecure, false);
+                }
+            }
         }
 
         return "<a href='{$gobackLink}' class='btn btn-back $class' $misc>{$label}</a>";

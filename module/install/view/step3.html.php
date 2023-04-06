@@ -19,6 +19,7 @@ if(!isset($error))
 \$config->debug           = false;
 \$config->requestType     = '$requestType';
 \$config->timezone        = '$timezone';
+\$config->db->driver      = '$dbDriver';
 \$config->db->host        = '$dbHost';
 \$config->db->port        = '$dbPort';
 \$config->db->name        = '$dbName';

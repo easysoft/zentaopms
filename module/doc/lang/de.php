@@ -11,7 +11,7 @@
  */
 $lang->doclib = new stdclass();
 $lang->doclib->name       = 'Name';
-$lang->doclib->control    = 'Zugriffskontrolle';
+$lang->doclib->control    = 'Zugang';
 $lang->doclib->group      = 'Gruppe';
 $lang->doclib->user       = 'Benutzer';
 $lang->doclib->files      = 'Dateien';
@@ -164,8 +164,8 @@ $lang->doc->cancelCollection = 'Favorit entfernen';
 $lang->doc->deleteFile       = 'Delete File';
 $lang->doc->menuTitle        = 'Menu';
 $lang->doc->api              = 'API';
-
-$lang->doc->collectAction = 'Add Favorite';
+$lang->doc->displaySetting   = 'Display Settings';
+$lang->doc->collectAction    = 'Add Favorite';
 
 $lang->doc->libName           = 'Name';
 $lang->doc->libType           = 'Kategorie';
@@ -187,6 +187,7 @@ $lang->doc->titlePlaceholder  = 'Please enter the title';
 $lang->doc->confirm           = 'Confirm';
 $lang->doc->docSummary        = 'Total: <strong>%s</strong>.';
 $lang->doc->docCheckedSummary = 'Seleted: <strong>%total%</strong>.';
+$lang->doc->showDoc           = 'Whether to display documents';
 
 global $config;
 /* Query condition list. */
@@ -327,3 +328,6 @@ $lang->doc->libDropdown['delModule']     = 'Delete Directory';
 
 $lang->doc->featureBar['tableContents']['all']   = 'All';
 $lang->doc->featureBar['tableContents']['draft'] = 'Draft';
+
+$lang->doc->showDocList[1] = 'Yes';
+$lang->doc->showDocList[0] = 'No';

@@ -57,7 +57,7 @@ $('#subNavbar li').not('[data-id=<?php echo $group;?>]').removeClass('active');
       <?php if($this->config->edition == 'open'):?>
       <div class='panel panel-body' style='padding: 10px 6px'>
         <div class='text proversion'>
-          <strong class='text-danger small text-latin'>BIZ</strong> &nbsp;<span class='text-important'><?php echo (!empty($config->isINT)) ? $lang->pivot->proVersionEn : $lang->pivot->proVersion;?></span>
+          <span class='text-important'><?php echo (!empty($config->isINT)) ? $lang->pivot->proVersionEn : $lang->pivot->proVersion;?></span>
         </div>
       </div>
       <?php endif;?>

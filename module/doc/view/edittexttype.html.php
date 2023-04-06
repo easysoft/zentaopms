@@ -18,7 +18,7 @@
 .container {padding: 0 !important;}
 #mainContent {padding: 0 !important;}
 </style>
-<?php $backLink = $app->session->docList ? $app->session->docList : $this->createLink('doc', 'objectlibs', "type=$type&objectID=$objectID&libID={$lib->id}&docID={$doc->id}") . "#app={$this->app->tab}";?>
+<?php $backLink = $app->session->docList ? $app->session->docList : $this->createLink('doc', 'view', "docID={$doc->id}") . "#app={$this->app->tab}";?>
 <div id="mainContent" class="main-content">
   <form class="load-indicator main-form form-ajax" id="dataform" method='post' enctype='multipart/form-data'>
     <table class='table table-form'>

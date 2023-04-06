@@ -391,6 +391,7 @@ class baseRouter
 
         $this->loadClass('front',  $static = true);
         $this->loadClass('filter', $static = true);
+        $this->loadClass('dbh',    $static = true);
         $this->loadClass('dao',    $static = true);
         $this->loadClass('mobile', $static = true);
 
@@ -758,7 +759,7 @@ class baseRouter
      */
     public function getInstalledVersion()
     {
-        $version = $this->dbh->query("SELECT value FROM " . TABLE_CONFIG . " WHERE `owner` = 'system' AND `key` = 'version' AND `module` = 'common' AND `section` = 'global' LIMIT 1")->fetch();
+        $version = $this->dbh->query("SELECT `value` FROM " . TABLE_CONFIG . " WHERE `owner` = 'system' AND `key` = 'version' AND `module` = 'common' AND `section` = 'global' LIMIT 1")->fetch();
         $version = $version ? $version->value : '0.3.beta';                  // No version, set as 0.3.beta.
         if($version == '3.0.stable') $version = '3.0';    // convert 3.0.stable to 3.0.
         return $version;
@@ -2699,15 +2700,11 @@ class baseRouter
     {
         if(!isset($params->driver)) self::triggerError('no pdo driver defined, it should be mysql or sqlite', __FILE__, __LINE__, $exit = true);
         if(!isset($params->user)) return false;
-        if($params->driver == 'mysql')
-        {
-            $dsn = "mysql:host={$params->host}; port={$params->port}; dbname={$params->name}";
-        }
         try
         {
             $dbPassword = helper::decryptPassword($params->password);
 
-            $dbh = new PDO($dsn, $params->user, $dbPassword, array(PDO::ATTR_PERSISTENT => $params->persistant));
+            $dbh = new dbh($params);
             $dbh->exec("SET NAMES {$params->encoding}");
 
             /*

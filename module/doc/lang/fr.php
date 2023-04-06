@@ -11,7 +11,7 @@
  */
 $lang->doclib = new stdclass();
 $lang->doclib->name       = 'Nom';
-$lang->doclib->control    = "Contrôle d'Accès";
+$lang->doclib->control    = 'Droit';
 $lang->doclib->group      = 'Groupe';
 $lang->doclib->user       = 'Utilisateur';
 $lang->doclib->files      = 'Pièces Jointes';
@@ -164,8 +164,8 @@ $lang->doc->cancelCollection = 'Retirer des Favoris';
 $lang->doc->deleteFile       = 'Supprimer Fichier';
 $lang->doc->menuTitle        = 'Menu';
 $lang->doc->api              = 'API';
-
-$lang->doc->collectAction = 'Add Favorite';
+$lang->doc->displaySetting   = 'Display Settings';
+$lang->doc->collectAction    = 'Add Favorite';
 
 $lang->doc->libName           = 'Bibliothèque de Documents';
 $lang->doc->libType           = 'Catégorie';
@@ -187,6 +187,7 @@ $lang->doc->titlePlaceholder  = 'Veuillez saisir le titre';
 $lang->doc->confirm           = 'Confirm';
 $lang->doc->docSummary        = 'Total: <strong>%s</strong>.';
 $lang->doc->docCheckedSummary = 'Seleted: <strong>%total%</strong>.';
+$lang->doc->showDoc           = 'Whether to display documents';
 
 global $config;
 /* Query condition list. */
@@ -328,3 +329,6 @@ $lang->doc->libDropdown['delModule']     = 'Delete Directory';
 
 $lang->doc->featureBar['tableContents']['all']   = 'All';
 $lang->doc->featureBar['tableContents']['draft'] = 'Draft';
+
+$lang->doc->showDocList[1] = 'Yes';
+$lang->doc->showDocList[0] = 'No';

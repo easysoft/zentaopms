@@ -1043,7 +1043,7 @@ class actionModel extends model
         extract($beginAndEnd);
 
         /* Build has priv condition. */
-        $condition  = 1;
+        $condition  = '1=1';
         $executions = array();
         if(!$this->app->user->admin)
         {
@@ -1118,6 +1118,12 @@ class actionModel extends model
 
         $noMultipleExecutions = $this->dao->select('id')->from(TABLE_PROJECT)->where('multiple')->eq(0)->andWhere('type')->in('sprint,kanban')->fetchPairs('id', 'id');
 
+        $condition = "(`objectType` IN ('doc', 'doclib') OR ($condition)) AND `objectType` NOT IN ('program', 'effort', 'execution')";
+        if($noMultipleExecutions) $condition .= " OR (`objectID` NOT " . helper::dbIN($noMultipleExecutions) . " AND `objectType` = 'execution')";
+        $condition .= " OR (`objectID` in ($programCondition) AND `objectType` = 'program')";
+        $condition .= " OR (`objectID` in ($efforts) AND `objectType` = 'effort')";
+        $condition  = "($condition)";
+
         /* Get actions. */
         $actions = $this->dao->select('*')->from(TABLE_ACTION)
             ->where('objectType')->notIN($this->config->action->ignoreObjectType4Dynamic)
@@ -1130,7 +1136,7 @@ class actionModel extends model
             ->beginIF(is_numeric($productID))->andWhere('product')->like("%,$productID,%")->fi()
             ->andWhere()
             ->markLeft(1)
-            ->where(1)
+            ->where('1=1')
             ->beginIF(is_numeric($projectID))->andWhere('project')->eq($projectID)->fi()
             ->beginIF(!empty($executions))->andWhere('execution')->in(array_keys($executions))->fi()
             ->beginIF(is_numeric($executionID))->andWhere('execution')->eq($executionID)->fi()
@@ -1141,13 +1147,10 @@ class actionModel extends model
             ->beginIF($productID == 'notzero')->andWhere('product')->gt(0)->andWhere('product')->notlike('%,0,%')->fi()
             ->beginIF($projectID == 'notzero')->andWhere('project')->gt(0)->fi()
             ->beginIF($executionID == 'notzero')->andWhere('execution')->gt(0)->fi()
-            ->beginIF($productID == 'all' or $projectID == 'all' or $executionID == 'all')->andWhere("IF((objectType!= 'doc' && objectType!= 'doclib'), ($condition), '1=1')")->fi()
-            ->beginIF($noMultipleExecutions)->andWhere("IF(`objectType` = 'execution', `objectID` NOT " . helper::dbIN($noMultipleExecutions) . ", '1=1')")->fi()
+            ->andWhere($condition)
             ->beginIF($actionCondition)->andWhere("($actionCondition)")->fi()
             /* Filter out client login/logout actions. */
             ->andWhere('action')->notin('disconnectxuanxuan,reconnectxuanxuan,loginxuanxuan,logoutxuanxuan,editmr,removemr')
-            ->andWhere("IF((objectType = 'program'), (objectID in ($programCondition)), '1=1')")
-            ->andWhere("IF((objectType = 'effort'), (objectID in ($efforts)), '1=1')")
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll();
@@ -1650,12 +1653,34 @@ class actionModel extends model
                     $appendLib          = $docLib->deleted == '1' ? $action->objectID : 0;
                     if($docLib->type == 'api')
                     {
-                        $action->objectLink = helper::createLink('api', 'index', "libID={$action->objectID}&moduleID=0&apiID=0&version=0&release=0&appendLib={$appendLib}");
+                        $module = 'api';
+                        $method = 'index';
+                        $params = "libID={$action->objectID}&moduleID=0&apiID=0&version=0&release=0&appendLib={$appendLib}";
+                        if(!empty($docLib->project) or !empty($docLib->product))
+                        {
+                            $module = 'doc';
+                            if(!empty($docLib->product))
+                            {
+                                $objectID = $docLib->product;
+                                $method   = 'productspace';
+                            }
+
+                            if(!empty($docLib->project))
+                            {
+                                $objectID = $docLib->project;
+                                $method   = 'projectspace';
+                            }
+                            $params = "objectID={$objectID}&libID={$action->objectID}";
+                        }
+                        $action->objectLink = helper::createLink($module, $method, $params);
                     }
                     else
                     {
-                        $libType = $docLib->type == 'execution' ? 'project' : $docLib->type;
-                        $action->objectLink = helper::createLink('doc', 'tablecontents', sprintf($vars, $libType, $docLib->objectID, $action->objectID, $appendLib));
+                        $method = 'tablecontents';
+                        if($docLib->type == 'product') $method = 'productspace';
+                        if(in_array($docLib->type, array('project', 'execution'))) $method = 'projectspace';
+                        $params = $method == 'tablecontents' ? sprintf($vars, $docLib->type, $docLib->objectID, $action->objectID, $appendLib) : "objectID={$docLib->objectID}&libID={$action->objectID}";
+                        $action->objectLink = helper::createLink('doc', $method, $params);
                     }
                 }
                 elseif($action->objectType == 'user')
