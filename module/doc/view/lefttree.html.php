@@ -53,6 +53,7 @@ i.btn-info, i.btn-info:hover {border: none; background: #fff; box-shadow: unset;
 #leftBar .selectBox #currentItem {width: 150px; display: flex; align-items: center;}
 [lang^=zh] #leftBar .selectBox #currentItem {width: 180px;}
 #leftBar .selectBox #currentItem > .text {overflow: hidden; text-align: left; flex: 0 1 100%;}
+.dropdown-in-tree {max-height: 293px; overflow-y: auto;}
 </style>
 
 <?php
@@ -355,13 +356,15 @@ $(function()
         }).on('click', '.tree-version-trigger', function(e)
         {
             $('.dropdown-in-tree').css('display', 'none');
+            var offset = $(this).offset();
             var option = {
-                left     : e.pageX,
-                top      : e.pageY,
+                left     : offset.left,
+                top      : offset.top + 20,
                 versions : versionsData[$(this).data('id')]
             };
             var dropDown = renderDropVersion(option);
             $(this).closest('body').append(dropDown);
+            $('#versionSwitcher').find('a[data-id=' + release + ']').parent().addClass('active');
             e.stopPropagation();
         });
     }
