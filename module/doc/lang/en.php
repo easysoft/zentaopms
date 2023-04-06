@@ -219,6 +219,18 @@ $lang->doc->statusList['draft']  = "Draft";
 $lang->doc->aclList['open']    = "Public <span class='text-gray'>(Access with library permissions)</span>";
 $lang->doc->aclList['private'] = "Private <span class='text-gray'>(Only creators and whitelist users can access)</span>";
 
+$lang->doc->space = 'Space';
+$lang->doc->spaceList['mine']    = 'My Space';
+$lang->doc->spaceList['product'] = $lang->productCommon . ' Space';
+$lang->doc->spaceList['project'] = $lang->projectCommon . ' Space';
+$lang->doc->spaceList['api']     = 'API Space';
+$lang->doc->spaceList['custom']  = 'Team Space';
+
+$lang->doc->apiType = 'API Type';
+$lang->doc->apiTypeList['product'] = $lang->productCommon . ' API';
+$lang->doc->apiTypeList['project'] = $lang->projectCommon . ' API';
+$lang->doc->apiTypeList['nolink']  = 'No Link API';
+
 $lang->doc->typeList['html']     = 'Html';
 $lang->doc->typeList['markdown'] = 'Markdown';
 $lang->doc->typeList['url']      = 'URL';
@@ -232,8 +244,8 @@ $lang->doc->createList['word']     = 'Word';
 $lang->doc->createList['ppt']      = 'PPT';
 $lang->doc->createList['excel']    = 'Excel';
 
-$lang->doc->types['text'] = 'Text';
-$lang->doc->types['url']  = 'URL';
+$lang->doc->types['doc'] = 'WIKI';
+$lang->doc->types['api'] = 'API';
 
 $lang->doc->contentTypeList['html']     = 'HTML';
 $lang->doc->contentTypeList['markdown'] = 'MarkDown';
@@ -255,8 +267,8 @@ $lang->doc->fastMenuIconList['collectedbyme'] = 'icon-folder-star';
 $lang->doc->customObjectLibs['files']       = 'Show Attachment Library';
 $lang->doc->customObjectLibs['customFiles'] = 'Show Custom Library';
 
-$lang->doc->orderLib = 'Rank Settings';
-$lang->doc->customShowLibs = 'Display Settings';
+$lang->doc->orderLib                       = 'Rank Settings';
+$lang->doc->customShowLibs                 = 'Display Settings';
 $lang->doc->customShowLibsList['zero']     = 'Display Empty Library';
 $lang->doc->customShowLibsList['children'] = 'Display Child-category Documents';
 $lang->doc->customShowLibsList['unclosed'] = "Display Active {$lang->executionCommon}s Only";
