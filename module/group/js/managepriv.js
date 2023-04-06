@@ -233,39 +233,42 @@ function updateRelations(e)
     getSideRelation(selectedID);
 }
 
+function checkAllChange()
+{
+    var id      = $(this).find('input[type=checkbox]').attr('id');
+    var checked = $(this).find('input[type=checkbox]').prop('checked');
+
+    if(id == 'allChecker')
+    {
+        $('input[type=checkbox]').prop('checked', checked);
+
+        if(checked) $('input[type=checkbox]').attr('checked', checked);
+        if(!checked) $('input[type=checkbox]').removeAttr('checked');
+        $(this).closest('.priv-footer').siblings('#mainContent').find('#privList tbody .checkbox-indeterminate-block').removeClass('checkbox-indeterminate-block');
+    }
+    else
+    {
+        var moduleName = $(this).closest('th').attr('data-module');
+        var packageID  = $(this).closest('th').hasClass('package') ? $(this).closest('th').attr('data-package') : '';
+        var $children  = $(this).closest('th').hasClass('package') ? $(this).closest('tbody').find('[data-module=' + moduleName +'][data-package=' + packageID +']') : $(this).closest('tbody').find('[data-module=' + moduleName +']');
+
+        $children.find('input[type=checkbox]').prop('checked', checked);
+        $children.find('.checkbox-indeterminate-block').removeClass('checkbox-indeterminate-block');
+
+        if(checked) $children.find('input[type=checkbox]').attr('checked', checked);
+        if(!checked) $children.find('input[type=checkbox]').removeAttr('checked');
+
+        changeParentChecked($(this), moduleName, packageID);
+    }
+}
+
 $(function()
 {
     initRecomendTree([]);
     initDependTree([]);
 
-    $('#privList > tbody > tr > th .check-all').change(function()
-    {
-        var id      = $(this).find('input[type=checkbox]').attr('id');
-        var checked = $(this).find('input[type=checkbox]').prop('checked');
-
-        if(id == 'allChecker')
-        {
-            $('input[type=checkbox]').prop('checked', checked);
-
-            if(checked) $('input[type=checkbox]').attr('checked', checked);
-            if(!checked) $('input[type=checkbox]').removeAttr('checked');
-            $(this).closest('tbody').find('.checkbox-indeterminate-block').removeClass('checkbox-indeterminate-block');
-        }
-        else
-        {
-            var moduleName = $(this).closest('th').attr('data-module');
-            var packageID  = $(this).closest('th').hasClass('package') ? $(this).closest('th').attr('data-package') : '';
-            var $children  = $(this).closest('th').hasClass('package') ? $(this).closest('tbody').find('[data-module=' + moduleName +'][data-package=' + packageID +']') : $(this).closest('tbody').find('[data-module=' + moduleName +']');
-
-            $children.find('input[type=checkbox]').prop('checked', checked);
-            $children.find('.checkbox-indeterminate-block').removeClass('checkbox-indeterminate-block');
-
-            if(checked) $children.find('input[type=checkbox]').attr('checked', checked);
-            if(!checked) $children.find('input[type=checkbox]').removeAttr('checked');
-
-            changeParentChecked($(this), moduleName, packageID);
-        }
-    });
+    $('#privList > tbody > tr > th .check-all').change(checkAllChange);
+    $('.priv-footer .check-all').change(checkAllChange);
 
     $('#privList > tbody > tr > td input[type=checkbox]').change(function()
     {
@@ -282,4 +285,9 @@ $(function()
         var packageID          = $(this).closest('.group-item').attr('data-package');
         changeParentChecked($(this), moduleName, packageID);
     });
-})
+
+    $('#submit').click(function()
+    {
+        $('#managePrivForm').submit();
+    });
+});

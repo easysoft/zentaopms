@@ -185,6 +185,16 @@
     </div>
   </div>
 </div>
+  <div class='priv-footer'>
+    <div class='text-center text-middle'>
+      <div class="checkbox-primary checkbox-inline check-all">
+        <input type='checkbox' id='allChecker'>
+        <label class='text-right' for='allChecker'><?php echo $lang->selectAll;?></label>
+      </div>
+      <?php echo html::submitButton($lang->save, '', 'btn btn-primary btn-wide');?>
+      <?php echo html::a($this->createLink('group', 'browse'), $lang->goback, '', 'class="btn btn-wide"');?>
+    </div>
+  </div>
 <?php endif;?>
 <?php js::set('groupID', $groupID);?>
 <?php js::set('menu', $menu);?>

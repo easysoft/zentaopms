@@ -1,7 +1,7 @@
 .mt-m {margin-top: 16px;}
 .flex-center {display: flex; justify-content: center; align-items: center;}
-#mainContent {display: flex; gap: 16px; height: calc(100vh - 120px);}
-#mainContent > .main {flex: 1 1 75%; overflow-y: auto; min-height: 480px;}
+#mainContent {display: flex; gap: 16px; height: calc(100vh - 165px);}
+#mainContent > .main {flex: 1 1 75%; overflow-y: auto; min-height: 445px;}
 #mainContent > .side {flex: 1 1 25%;}
 .priv-panel {background: #fff; padding: 10px; box-shadow: 0 1px 1px rgb(0 0 0 / 5%), 0 2px 6px 0 rgb(0 0 0 / 5%);}
 .priv-panel > .panel-content {height: calc(50vh - 160px); overflow-y: auto; min-height: 140px;}
@@ -13,7 +13,7 @@
 .empty-tip {height: 100%;}
 
 .table-bymodule select.form-control {height: 250px;}
-.group-item {display: block; width: 220px; float: left; font-size: 14px;}
+.group-item {display: block; width: 180px; float: left; font-size: 14px;}
 .group-item .checkbox-inline label {padding-left: 8px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;}
 .table.table-form tbody > tr:last-child td {border-top: 1px solid #ddd;}
 @-moz-document url-prefix() {.table.table-form tbody > tr:last-child td, .table.table-form tbody > tr:last-child th {border-bottom: 1px solid #ddd;};}
@@ -27,16 +27,23 @@ td.menus + td {border-left: 0;}
 .menus .checkbox-primary:first-child {float: left; width: auto;}
 .menus a {margin-left: 10px;}
 
-#privList th.module {width: 142px; background-color: #E6EAF1; font-weight: 600;}
-#privList th.package {width: 142px; background-color: #EDEEF2; font-weight: 600;}
-#privList th.method {min-width: 685px;}
-#privList th.module > .check-all, #privList th.package > .check-all {font-weight: 600;}
+#mainContent .main-content {padding: 2px;}
+#privList .table-bordered th {border: 1px solid #FFF;}
+#privList th.module {width: 142px; min-width: 142px; background-color: #EDEEF2CC; font-weight: 600;}
+#privList th.package {width: 142px; min-width: 142px; background-color: #F4F5F7; font-weight: 600;}
+#privList th.method {min-width: 585px;}
 #privList th .checkbox-inline input {margin-left: 0px;}
 #privList .check-all {display: inline-block;}
-#privList .check-all > label {padding-left: 0;}
+#privList .check-all > label {padding-left: 0; font-weight: 600;}
 #privList .text-middle.text-left {padding-left: 24px;}
 #privList tbody > tr > td {padding: 4px 20px 20px 20px;}
 #privList .group-item {margin-top: 16px;}
 #privList .group-item .checkbox-inline label {padding-left: 3px;}
 #privList.table-bordered td, #privList.table-bordered th {border-top-style: dashed; border-bottom-style: dashed;}
 #privList .check-all>label.checkbox-indeterminate-block:before {content: ' '; opacity: 1; transform: scale(1);}
+.priv-footer {padding: 14px; z-index: 3; box-shadow: inset 0 0px 0px rgb(0 0 0 / 10%), 0 0 5px rgb(0 0 0 / 10%); position: relative; min-height: 40px; background: #fff; border-radius: 0 0 4px 4px;}
+.priv-footer .btn {margin 0px; padding-top: 7px;}
+.priv-footer .check-all {display: inline-block;}
+.priv-footer .check-all label {padding-left: 0px; margin-bottom: 0px; font-weight: 400;}
+.priv-footer #submit {margin: 0px 20px;}
+main#main {padding-bottom: 0px;}
