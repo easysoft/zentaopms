@@ -317,7 +317,7 @@ $(function()
             var dropDown = renderDropdown(option);
             $icon.closest('body').append(dropDown);
             $('.dropdown-in-tree').attr('data-tree-id', $(this).closest('.tree').attr('id'));
-            $icon.closest('li').addClass('hover');
+            $icon.closest('a').addClass('hover');
 
             e.stopPropagation();
         }).on('mousemove', 'a', function()
@@ -370,7 +370,7 @@ $(function()
             $('#versionSwitcher').find('a[data-id=' + release + ']').parent().addClass('active');
 
             $('.dropdown-in-tree').attr('data-tree-id', $(this).closest('.tree').attr('id'));
-            $(this).closest('li').addClass('hover');
+            $(this).closest('a').addClass('hover');
 
             e.stopPropagation();
         });
