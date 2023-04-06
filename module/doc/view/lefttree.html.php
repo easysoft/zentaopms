@@ -338,7 +338,8 @@ $(function()
             $(this).removeClass('show-icon');
         }).on('click', 'a', function()
         {
-            if(!$(this).data('action')) return;
+            if($(this).data('type') == 'execution') return;
+
             var isLib    = $(this).hasClass('lib');
             var moduleID = $(this).data('id');
             var libID    = 0;

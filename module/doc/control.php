@@ -1218,6 +1218,7 @@ class doc extends control
         $this->view->users        = $this->user->getPairs('noclosed,noletter');
         $this->view->autoloadPage = $this->doc->checkAutoloadPage($doc);
         $this->view->libTree      = $this->doc->getLibTree($libID, $libs, $type, $doc->module, $objectID);
+        $this->view->preAndNext   = $this->loadModel('common')->getPreAndNextObject('doc', $docID);
 
         $this->display();
     }
