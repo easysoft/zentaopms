@@ -829,6 +829,7 @@ class productModel extends model
             ->setDefault('line', 0)
             ->setDefault('whitelist', '')
             ->setDefault('reviewer', '')
+            ->setDefault('PMT', '')
             ->join('whitelist', ',')
             ->join('reviewer', ',')
             ->join('PMT', ',')

@@ -3,7 +3,7 @@ $lang->demandpool = new stdclass();
 $lang->demandpool->common = '需求池';
 
 $lang->demand = new stdclass();
-$lang->demand->common = '用户需求';
+$lang->demand->common = '需求';
 
 $lang->projectInit = new stdclass();
 $lang->projectInit->common = '立项';
