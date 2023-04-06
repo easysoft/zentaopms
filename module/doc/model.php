@@ -2911,6 +2911,7 @@ class docModel extends model
                     if(count($executionLibs[$executionID]) == 1)
                     {
                         $execution->id        = $item->id;
+                        $execution->type      = 'lib';
                         $execution->hasAction = true;
                         $execution->children  = $item->children;
                     }
