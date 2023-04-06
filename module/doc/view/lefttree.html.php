@@ -23,12 +23,12 @@
 .input-tree {width: 120px;}
 .tree-icon {position: absolute; right: 0;}
 .tree li.has-input {overflow: hidden;}
-.img-lib {flex: 0 0 14px; height: 14px;}
+.img-lib {flex: 0 0 14px; height: 14px; margin-right: 5px;}
 .tree-icon {position: absolute; right: 0;}
 .tree li > a {max-width: 100%; padding: 2px;}
 .file-tree  a.show-icon > div {padding-right: 15px;}
 .tree li.has-input {overflow: hidden;}
-.tree-text {margin-left: 5px; overflow: hidden;}
+.tree-text {overflow: hidden;}
 i.btn-info, i.btn-info:hover {border: none; background: #fff; box-shadow: unset;}
 .tree-version-trigger {padding: 0 10px; width: 54px; border-radius: 5px; background: #F9F9F9; display: flex; align-items: center;}
 .tree-version-trigger > .text {overflow: hidden; flex: 0 0 30px;}
@@ -53,6 +53,7 @@ i.btn-info, i.btn-info:hover {border: none; background: #fff; box-shadow: unset;
 #leftBar .selectBox #currentItem {width: 150px; display: flex; align-items: center;}
 [lang^=zh] #leftBar .selectBox #currentItem {width: 180px;}
 #leftBar .selectBox #currentItem > .text {overflow: hidden; text-align: left; flex: 0 1 100%;}
+.dropdown-in-tree {max-height: 293px; overflow-y: auto;}
 </style>
 
 <?php
@@ -229,6 +230,7 @@ $(function()
                 if(typeof item.hasAction == 'undefined') item.hasAction = true;
                 if(typeof item.active == 'undefined') item.active = 0;
                 if(typeof docID != 'undefined' && item.id == docID) item.active = 1;
+                if(['text', 'word', 'ppt', 'excel'].indexOf(item.type) !== -1) item.hasAction = false;
 
                 var objectType = config.currentModule == 'api' ? item.objectType : item.type;
                 var libClass = ['lib', 'annex', 'api', 'execution'].indexOf(objectType) !== -1 ? 'lib' : '';
@@ -252,7 +254,7 @@ $(function()
                     }
                     $item += '<div class="tree-version-trigger" data-id="' +  item.id + '"><div class="text">' + (versionName || versionLang) + '</div><div class="caret"></div></div>';
                 }
-                if(['text', 'word', 'ppt', 'excel'].indexOf(item.type) === -1 && ((libClass != 'lib' && hasModulePriv) || (libClass == 'lib' && hasLibPriv))) $item += '<i class="icon icon-drop icon-ellipsis-v hidden tree-icon" data-isCatalogue="' + (libClass ? false : true) + '"></i>';
+                if((libClass != 'lib' && hasModulePriv) || (libClass == 'lib' && hasLibPriv)) $item += '<i class="icon icon-drop icon-ellipsis-v hidden tree-icon" data-isCatalogue="' + (libClass ? false : true) + '"></i>';
                 $item += '</div>';
                 $item += '</a>';
                 if(item.versions) versionsData[item.id] = item.versions;
@@ -270,13 +272,14 @@ $(function()
 
         ele.on('click', '.icon-drop', function(e)
         {
-            $('.dropdown-in-tree').css('display', 'none');
-            var isCatalogue = $(this).attr('data-isCatalogue') === 'false' ? false : true;
+            var $icon = $(this);
+            $('.dropdown-in-tree').remove();
+            var isCatalogue = $icon.attr('data-isCatalogue') === 'false' ? false : true;
             var dropDownID  = isCatalogue ? 'dropDownCatalogue' : 'dropDownLibrary';
             var libID       = 0;
             var moduleID    = 0;
             var parentID    = 0;
-            var $module     = $(this).closest('a');
+            var $module     = $icon.closest('a');
             var hasChildren = $module.data('has-children');
             var moduleType  = '';
             if($module.hasClass('lib'))
@@ -312,7 +315,9 @@ $(function()
             };
 
             var dropDown = renderDropdown(option);
-            $(this).closest('body').append(dropDown);
+            $icon.closest('body').append(dropDown);
+            $('.dropdown-in-tree').attr('data-tree-id', $(this).closest('.tree').attr('id'));
+            $icon.closest('li').addClass('hover');
 
             e.stopPropagation();
         }).on('mousemove', 'a', function()
@@ -324,7 +329,8 @@ $(function()
             if(!$(this).hasClass('lib')) libClass = '.moduleDorpdown';
 
             $(this).find('.icon').removeClass('hidden');
-            $(this).addClass('show-icon');   if($(libClass).find('li').length == 0) return false;
+            $(this).addClass('show-icon');
+            if($(libClass).find('li').length == 0) return false;
 
         }).on('mouseout', 'a', function()
         {
@@ -352,14 +358,20 @@ $(function()
             return lcatePage(libID, moduleID, $(this).data('type'));
         }).on('click', '.tree-version-trigger', function(e)
         {
-            $('.dropdown-in-tree').css('display', 'none');
+            $('.dropdown-in-tree').remove();
+            var offset = $(this).offset();
             var option = {
-                left     : e.pageX,
-                top      : e.pageY,
+                left     : offset.left,
+                top      : offset.top + 20,
                 versions : versionsData[$(this).data('id')]
             };
             var dropDown = renderDropVersion(option);
             $(this).closest('body').append(dropDown);
+            $('#versionSwitcher').find('a[data-id=' + release + ']').parent().addClass('active');
+
+            $('.dropdown-in-tree').attr('data-tree-id', $(this).closest('.tree').attr('id'));
+            $(this).closest('li').addClass('hover');
+
             e.stopPropagation();
         });
     }
@@ -421,7 +433,14 @@ $(function()
 
     $('body').on('click', function()
     {
-        $('.dropdown-in-tree').remove();
+        var $dropdown = $('.dropdown-in-tree');
+        if($dropdown.length)
+        {
+            var dropdown = $dropdown.data();
+            var $hoverItem = $('#' + $dropdown.data('treeId')).find('li.hover');
+            $hoverItem.removeClass('hover');
+            $dropdown.remove();
+        }
     }).on('click', '.sidebar-toggle', function()
     {
         var $icon = $(this).find('.icon');

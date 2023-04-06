@@ -672,7 +672,7 @@ class projectModel extends model
             }
             elseif($module == 'doc')
             {
-                $link = helper::createLink($module, 'tablecontents', "type=project&objectID=%s") . '#app=project';
+                $link = helper::createLink($module, 'projectSpace', "objectID=%s") . '#app=project';
             }
             elseif($module == 'build')
             {
