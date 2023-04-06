@@ -317,6 +317,18 @@ class baseDAO
     }
 
     /**
+     * Desc table, show fields.
+     *
+     * @param  string $tableName
+     * @access public
+     * @return array
+     */
+    public function descTable($tableName)
+    {
+        return $this->query("DESC $tableName")->fetchAll();
+    }
+
+    /**
      * select方法，调用sql::select()。
      * The select method, call sql::select().
      *
@@ -372,7 +384,7 @@ class baseDAO
          **/
         try
         {
-            $row = $this->dbh->query($sql)->fetch(PDO::FETCH_OBJ);
+            $row = $this->dbh->rawQuery($sql)->fetch(PDO::FETCH_OBJ);
         }
         catch (PDOException $e)
         {
@@ -552,7 +564,7 @@ class baseDAO
     public function explain($sql = '')
     {
         $sql    = empty($sql) ? $this->processSQL() : $sql;
-        $result = $this->dbh->query('explain ' . $sql)->fetch();
+        $result = $this->dbh->rawQuery('explain ' . $sql)->fetch();
         a($result);
     }
 
@@ -566,6 +578,26 @@ class baseDAO
     public function processSQL($record = true)
     {
         $sql = $this->sqlobj->get();
+
+        /* INSERT INTO table VALUES(...) */
+        if($this->method == 'insert' and !empty($this->sqlobj->data))
+        {
+            $skipFields = $this->sqlobj->skipFields;
+            $fields = '(';
+            $values = 'VALUES(';
+            foreach($this->sqlobj->data as $field => $value)
+            {
+                if(strpos($skipFields, ",$field,") !== false) continue;
+                $fields .= "`{$field}`,";
+                if(is_string($value)) $value = $this->sqlobj->quote($value);
+                $values .= $value . ',';
+            }
+            $fields = substr($fields, 0, -1);
+            $values = substr($values, 0, -1);
+            $fields .= ')';
+            $values .= ')';
+            $sql .= $fields . ' ' . $values;
+        }
 
         /**
          * 如果是magic模式，处理表和字段。
@@ -670,7 +702,7 @@ class baseDAO
 
         if($sql)
         {
-            $sql       = trim($sql);
+            $sql       = $this->dbh->formatSQL($sql);
             $sqlMethod = strtolower(substr($sql, 0, strpos($sql, ' ')));
             $this->setMethod($sqlMethod);
             $this->sqlobj = new sql();
@@ -688,11 +720,11 @@ class baseDAO
 
             if($this->slaveDBH and $method == 'select')
             {
-                return $this->slaveDBH->query($sql);
+                return $this->slaveDBH->rawQuery($sql);
             }
             else
             {
-                return $this->dbh->query($sql);
+                return $this->dbh->rawQuery($sql);
             }
         }
         catch (PDOException $e)
@@ -1101,7 +1133,7 @@ class baseDAO
         if($funcName == 'unique')
         {
             $args = func_get_args();
-            $sql  = "SELECT COUNT(*) AS count FROM $this->table WHERE `$fieldName` = " . $this->sqlobj->quote($value);
+            $sql  = "SELECT COUNT(*) AS `count` FROM $this->table WHERE `$fieldName` = " . $this->sqlobj->quote($value);
             if($condition) $sql .= ' AND ' . $condition;
             try
             {
@@ -1339,7 +1371,7 @@ class baseDAO
         {
             $this->dbh->setAttribute(PDO::ATTR_CASE, PDO::CASE_LOWER);
             $sql = "DESC $this->table";
-            $rawFields = $this->dbh->query($sql)->fetchAll();
+            $rawFields = $this->dbh->rawQuery($sql)->fetchAll();
             $this->dbh->setAttribute(PDO::ATTR_CASE, PDO::CASE_NATURAL);
         }
         catch (PDOException $e)
@@ -1347,6 +1379,7 @@ class baseDAO
             $this->sqlError($e);
         }
 
+        $fields = array();
         foreach($rawFields as $rawField)
         {
             $firstPOS = strpos($rawField->type, '(');
@@ -1447,13 +1480,39 @@ class baseSQL
     public $dbh;
 
     /**
-     * 更新或插入日期。
+     * 更新或插入的数据。
      * The data to update or insert.
      *
      * @var mix
      * @access public
      */
     public $data;
+
+    /**
+     * 不需要拼接SQL的字段
+     * skipFields
+     *
+     * @var mixed
+     * @access public
+     */
+    public $skipFields;
+
+    /**
+     * SQL 方法, insert, update, delete ...
+     * SQL method, insert, update, delete ...
+     *
+     * @var mixed
+     * @access public
+     */
+    public $method;
+
+    /**
+     * setField
+     *
+     * @var mixed
+     * @access public
+     */
+    public $setField;
 
     /**
      * 是否是第一次设置。
@@ -1529,6 +1588,19 @@ class baseSQL
     }
 
     /**
+     * 设置SQL的方法。
+     * Set SQL method.
+     *
+     * @param string $method
+     * @access public
+     * @return void
+     */
+    public function setMethod($method = '')
+    {
+        $this->method = $method;
+    }
+
+    /**
      * select语句。
      * The sql is select.
      *
@@ -1539,6 +1611,7 @@ class baseSQL
     public static function select($field = '*')
     {
         $sqlobj = self::factory();
+        $sqlobj->setMethod('select');
         $sqlobj->sql = "SELECT $field ";
         return $sqlobj;
     }
@@ -1554,6 +1627,7 @@ class baseSQL
     public static function update($table)
     {
         $sqlobj = self::factory();
+        $sqlobj->setMethod('update');
         $sqlobj->sql = "UPDATE $table SET ";
         return $sqlobj;
     }
@@ -1569,7 +1643,8 @@ class baseSQL
     public static function insert($table)
     {
         $sqlobj = self::factory();
-        $sqlobj->sql = "INSERT INTO $table SET ";
+        $sqlobj->setMethod('insert');
+        $sqlobj->sql = "INSERT INTO $table ";
         return $sqlobj;
     }
 
@@ -1584,6 +1659,7 @@ class baseSQL
     public static function replace($table)
     {
         $sqlobj = self::factory();
+        $sqlobj->setMethod('replace');
         $sqlobj->sql = "REPLACE $table SET ";
         return $sqlobj;
     }
@@ -1598,6 +1674,7 @@ class baseSQL
     public static function delete()
     {
         $sqlobj = self::factory();
+        $sqlobj->setMethod('delete');
         $sqlobj->sql = "DELETE ";
         return $sqlobj;
     }
@@ -1614,17 +1691,20 @@ class baseSQL
     public function data($data, $skipFields = '')
     {
         $data = (object) $data;
-        if($skipFields) $skipFields = ',' . str_replace(' ', '', $skipFields) . ',';
+        if($skipFields) $this->skipFields = ',' . str_replace(' ', '', $skipFields) . ',';
 
-        foreach($data as $field => $value)
+        if($this->method != 'insert')
         {
-            if(!preg_match('|^\w+$|', $field))
+            foreach($data as $field => $value)
             {
-                unset($data->$field);
-                continue;
+                if(!preg_match('|^\w+$|', $field))
+                {
+                    unset($data->$field);
+                    continue;
+                }
+                if(strpos($this->skipFields, ",$field,") !== false) continue;
+                $this->sql .= "`$field` = " . $this->quote($value) . ',';
             }
-            if(strpos($skipFields, ",$field,") !== false) continue;
-            $this->sql .= "`$field` = " . $this->quote($value) . ',';
         }
 
         $this->data = $data;
@@ -1676,15 +1756,23 @@ class baseSQL
     {
         if($this->inCondition and !$this->conditionIsTrue) return $this;
 
-        /* Add ` to avoid keywords of mysql. */
-        if(strpos($set, '=') ===false)
+        if($this->method == 'update')
         {
-            $set = str_replace(',', '', $set);
-            $set = '`' . str_replace('`', '', $set) . '`';
+            /* Add ` to avoid keywords of mysql. */
+            if(strpos($set, '=') ===false)
+            {
+                $set = str_replace(',', '', $set);
+            }
+
+            $this->sql .= $this->isFirstSet ? " $set" : ", $set";
+            if($this->isFirstSet) $this->isFirstSet = false;
+        }
+        elseif($this->method == 'insert')
+        {
+            $this->setField = $value;
+            $this->data->$value = '';
         }
 
-        $this->sql .= $this->isFirstSet ? " $set" : ", $set";
-        if($this->isFirstSet) $this->isFirstSet = false;
         return $this;
     }
 
@@ -1796,7 +1884,7 @@ class baseSQL
         }
         else
         {
-            $condition = $arg1;
+            $condition = ctype_alnum($arg1) ? '`' . $arg1 . '`' : $arg1;
         }
 
         if(!$this->inMark) $this->sql .= ' ' . DAO::WHERE ." $condition ";
@@ -1815,6 +1903,8 @@ class baseSQL
     public function andWhere($condition, $addMark = false)
     {
         if($this->inCondition and !$this->conditionIsTrue) return $this;
+        if(ctype_alnum($condition)) $condition = '`' . $condition . '`';
+
         $mark = $addMark ? '(' : '';
         $this->sql .= " AND {$mark} $condition ";
         return $this;
@@ -1831,6 +1921,8 @@ class baseSQL
     public function orWhere($condition)
     {
         if($this->inCondition and !$this->conditionIsTrue) return $this;
+        if(ctype_alnum($condition)) $condition = '`' . $condition . '`';
+
         $this->sql .= " OR $condition ";
         return $this;
     }
@@ -1846,7 +1938,17 @@ class baseSQL
     public function eq($value)
     {
         if($this->inCondition and !$this->conditionIsTrue) return $this;
-        $this->sql .= " = " . $this->quote($value);
+
+        if($this->method == 'insert')
+        {
+            $field = $this->setField;
+            $this->data->$field = $value;
+        }
+        else
+        {
+            $this->sql .= " = " . $this->quote($value);
+        }
+
         return $this;
     }
 

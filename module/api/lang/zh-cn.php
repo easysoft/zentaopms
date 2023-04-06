@@ -87,6 +87,7 @@ $lang->struct->desc            = '描述';
 $lang->struct->descPlaceholder = '参数说明';
 $lang->struct->action          = '操作';
 $lang->struct->addSubField     = '添加子字段';
+$lang->struct->list            = '数据结构列表';
 
 $lang->struct->typeOptions = array(
     'formData' => 'FormData',

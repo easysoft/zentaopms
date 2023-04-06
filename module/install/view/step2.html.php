@@ -32,6 +32,10 @@
             <td><?php echo html::select('defaultLang', $config->langs, $app->getClientLang(), "class='form-control'");?></td><td></td>
           </tr>
           <tr>
+            <th><?php echo $lang->install->dbDriver;?></th>
+            <td><?php echo html::select('dbDriver', $lang->install->dbDriverList, 'mysql', "class='form-control'");?></td><td></td>
+          </tr>
+          <tr>
             <th><?php echo $lang->install->dbHost;?></th>
             <td><?php echo html::input('dbHost', $dbHost, "class='form-control'");?></td>
             <td><?php echo $lang->install->dbHostNote;?></td>

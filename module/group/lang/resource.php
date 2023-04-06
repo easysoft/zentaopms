@@ -1368,27 +1368,28 @@ $lang->job->methodOrder[25] = 'exec';
 
 /* Doc. */
 $lang->resource->doc = new stdclass();
-$lang->resource->doc->index         = 'index';
-$lang->resource->doc->browse        = 'mySpace';
-$lang->resource->doc->myView        = 'myView';
-$lang->resource->doc->myCollection  = 'myCollection';
-$lang->resource->doc->myCreation    = 'myCreation';
-$lang->resource->doc->createLib     = 'createLib';
-$lang->resource->doc->editLib       = 'editLib';
-$lang->resource->doc->deleteLib     = 'deleteLib';
-$lang->resource->doc->create        = 'create';
-$lang->resource->doc->edit          = 'edit';
-$lang->resource->doc->view          = 'view';
-$lang->resource->doc->delete        = 'delete';
-$lang->resource->doc->deleteFile    = 'deleteFile';
-$lang->resource->doc->collect       = 'collectAction';
-$lang->resource->doc->productSpace  = 'productSpace';
-$lang->resource->doc->projectSpace  = 'projectSpace';
-$lang->resource->doc->tableContents = 'teamSpace';
-$lang->resource->doc->showFiles     = 'showFiles';
-$lang->resource->doc->addCatalog    = 'addCatalog';
-$lang->resource->doc->editCatalog   = 'editCatalog';
-$lang->resource->doc->deleteCatalog = 'deleteCatalog';
+$lang->resource->doc->index          = 'index';
+$lang->resource->doc->browse         = 'mySpace';
+$lang->resource->doc->myView         = 'myView';
+$lang->resource->doc->myCollection   = 'myCollection';
+$lang->resource->doc->myCreation     = 'myCreation';
+$lang->resource->doc->createLib      = 'createLib';
+$lang->resource->doc->editLib        = 'editLib';
+$lang->resource->doc->deleteLib      = 'deleteLib';
+$lang->resource->doc->create         = 'create';
+$lang->resource->doc->edit           = 'edit';
+$lang->resource->doc->view           = 'view';
+$lang->resource->doc->delete         = 'delete';
+$lang->resource->doc->deleteFile     = 'deleteFile';
+$lang->resource->doc->collect        = 'collectAction';
+$lang->resource->doc->productSpace   = 'productSpace';
+$lang->resource->doc->projectSpace   = 'projectSpace';
+$lang->resource->doc->tableContents  = 'teamSpace';
+$lang->resource->doc->showFiles      = 'showFiles';
+$lang->resource->doc->addCatalog     = 'addCatalog';
+$lang->resource->doc->editCatalog    = 'editCatalog';
+$lang->resource->doc->deleteCatalog  = 'deleteCatalog';
+$lang->resource->doc->displaySetting = 'displaySetting';
 
 $lang->doc->methodOrder[5]   = 'index';
 $lang->doc->methodOrder[10]  = 'browse';
@@ -1411,6 +1412,7 @@ $lang->doc->methodOrder[90]  = 'showFiles';
 $lang->doc->methodOrder[95]  = 'addCatalog';
 $lang->doc->methodOrder[100] = 'editCatalog';
 $lang->doc->methodOrder[105] = 'deleteCatalog';
+$lang->doc->methodOrder[110] = 'displaySetting';
 
 /* Mail. */
 $lang->resource->mail = new stdclass();
@@ -1797,9 +1799,6 @@ $lang->pivot->methodOrder[15] = 'projectDeviation';
 $lang->pivot->methodOrder[20] = 'bugCreate';
 $lang->pivot->methodOrder[25] = 'bugAssign';
 $lang->pivot->methodOrder[30] = 'workload';
-
-/* Report. */
-$lang->resource->report = new stdclass();
 
 /* Search. */
 $lang->resource->search = new stdclass();

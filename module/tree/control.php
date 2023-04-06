@@ -387,7 +387,7 @@ class tree extends control
         if(!empty($_POST))
         {
             $this->tree->update($moduleID);
-            die(js::reload('parent'));
+            return print(js::reload('parent'));
         }
 
         $module = $this->tree->getById($moduleID);
@@ -509,7 +509,7 @@ class tree extends control
             if($module->type == 'line') $confirmLang = $this->lang->tree->confirmDeleteLine;
             if($module->type == 'host') $confirmLang = $this->lang->tree->confirmDeleteHost;
             if(strpos($this->config->tree->groupTypes, ",$module->type,") !== false) $confirmLang = $this->lang->tree->confirmDeleteGroup;
-            die(js::confirm($confirmLang, $this->createLink('tree', 'delete', "rootID=$rootID&moduleID=$moduleID&confirm=yes")));
+            return print(js::confirm($confirmLang, $this->createLink($this->app->rawModule, $this->app->rawMethod, "rootID=$rootID&moduleID=$moduleID&confirm=yes")));
         }
         else
         {
