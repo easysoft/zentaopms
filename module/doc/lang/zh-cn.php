@@ -164,8 +164,8 @@ $lang->doc->cancelCollection = '取消收藏';
 $lang->doc->deleteFile       = '删除附件';
 $lang->doc->menuTitle        = '目录';
 $lang->doc->api              = '接口';
-
-$lang->doc->collectAction = '收藏文档';
+$lang->doc->displaySetting   = '显示设置';
+$lang->doc->collectAction    = '收藏文档';
 
 $lang->doc->libName           = '库名称';
 $lang->doc->libType           = '库类型';
@@ -187,6 +187,7 @@ $lang->doc->titlePlaceholder  = '请输入标题';
 $lang->doc->confirm           = '确认';
 $lang->doc->docSummary        = '本页共 <strong>%s</strong> 个文档。';
 $lang->doc->docCheckedSummary = '共选中 <strong>%total%</strong> 个文档。';
+$lang->doc->showDoc           = '是否显示文档';
 
 global $config;
 /* 查询条件列表 */
@@ -327,3 +328,6 @@ $lang->doc->libDropdown['delModule']     = '删除目录';
 
 $lang->doc->featureBar['tableContents']['all']   = '全部';
 $lang->doc->featureBar['tableContents']['draft'] = '草稿';
+
+$lang->doc->showDocList[1] = '是';
+$lang->doc->showDocList[0] = '否';

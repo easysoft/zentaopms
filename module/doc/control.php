@@ -1059,15 +1059,19 @@ class doc extends control
     public function view($docID = 0, $version = 0, $appendLib = 0)
     {
         $doc = $this->doc->getById($docID);
+        if(!$doc)
+        {
+            if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'fail', 'code' => 404, 'message' => '404 Not found'));
+            return print(js::error($this->lang->notFound) . js::locate($this->inlink('index')));
+        }
+
         $lib = $this->doc->getLibById($doc->lib);
         if(!empty($lib) and $lib->deleted == '1') $appendLib = $doc->id;
 
-        $type     = isset($lib->type) ? $lib->type : 'custom';
-        $objectID = isset($doc->{$type}) ? $doc->{$type} : 0;
+        $objectType = isset($lib->type) ? $lib->type : 'custom';
+        $type       = $objectType == 'execution' && $this->app->tab != 'execution' ? 'project' : $objectType;
+        $objectID   = isset($doc->{$type}) ? $doc->{$type} : 0;
         list($libs, $libID, $object, $objectID) = $this->doc->setMenuByType($type, $objectID, $doc->lib, $appendLib);
-
-        /* Set Custom. */
-        foreach(explode(',', $this->config->doc->customObjectLibs) as $libType) $customObjectLibs[$libType] = $this->lang->doc->customObjectLibs[$libType];
 
         $moduleTree = $this->doc->getTreeMenu($type, $objectID, $libID, 0, $docID);
 
@@ -1084,7 +1088,7 @@ class doc extends control
             }
         }
 
-        if(isset($doc) and ($doc->type == 'text' || $doc->type == 'article'))
+        if(isset($doc) and $doc->type == 'text')
         {
             /* Split content into an array. */
             $content = explode("\n", $doc->content);
@@ -1150,28 +1154,22 @@ class doc extends control
 
         $doc = $docID ? $doc : '';
 
-        $this->view->customObjectLibs = $customObjectLibs;
-        $this->view->showLibs         = $this->config->doc->custom->objectLibs;
-
-        $this->view->title      = ($type == 'book' or $type == 'custom') ? $this->lang->doc->customAB : $object->name;
-        $this->view->position[] = ($type == 'book' or $type == 'custom') ? $this->lang->doc->customAB : $object->name;
-
+        $this->view->title        = $type == 'custom' ? $this->lang->doc->customAB : $object->name;
         $this->view->docID        = $docID;
         $this->view->doc          = $doc;
-        $this->view->type         = $type;
         $this->view->version      = $version;
         $this->view->object       = $object;
         $this->view->objectID     = $objectID;
-        $this->view->objectType   = $type;
+        $this->view->objectType   = $objectType;
+        $this->view->type         = $type;
         $this->view->libID        = $libID;
         $this->view->lib          = isset($libs[$libID]) ? $libs[$libID] : new stdclass();
         $this->view->libs         = $this->doc->getLibsByObject($type, $objectID);
-        $this->view->moduleTree   = $moduleTree;
         $this->view->canBeChanged = common::canModify($type, $object); // Determines whether an object is editable.
         $this->view->actions      = $docID ? $this->action->getList('doc', $docID) : array();
         $this->view->users        = $this->user->getPairs('noclosed,noletter');
-        $this->view->preAndNext   = $this->doc->getPreAndNextDoc($docID, $libID);
         $this->view->autoloadPage = $this->doc->checkAutoloadPage($doc);
+        $this->view->libTree      = $this->doc->getLibTree($libID, $libs, $type, $doc->module, $objectID);
 
         $this->display();
     }
@@ -1194,24 +1192,22 @@ class doc extends control
      */
     public function tableContents($type = 'custom', $objectID = 0, $libID = 0, $moduleID = 0, $browseType = 'all', $orderBy = 'status,id_desc', $param = 0, $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
-        $this->view->isFirstLoad = $objectID == 0 ? 'true' : 'false';
+        $isFirstLoad = $libID == 0 ? true : false;
         $this->session->set('createProjectLocate', $this->app->getURI(true), 'doc');
+        $this->session->set('structList', $this->app->getURI(true), 'doc');
+        $this->session->set('spaceType', $type, 'doc');
 
         if(empty($browseType)) $browseType = 'all';
         list($libs, $libID, $object, $objectID, $objectDropdown) = $this->doc->setMenuByType($type, $objectID, $libID);
 
-        $libID      = (int)$libID;
-        $moduleTree = $type == 'book' ? $this->doc->getBookStructure($libID) : $this->doc->getTreeMenu($type, $objectID, $libID);
-
-        $libTree = $this->doc->getLibTree($libID, $libs, $type, $moduleID, $objectID, $browseType);
-
+        $libID   = (int)$libID;
         $title   = $type == 'custom' ? $this->lang->doc->tableContents : $object->name . $this->lang->colon . $this->lang->doc->tableContents;
         $lib     = $this->doc->getLibById($libID);
         $libType = isset($lib->type) && $lib->type == 'api' ? 'api' : 'lib';
 
         /* Build the search form. */
-        $queryID   = $browseType == 'bySearch' ? (int)$param : 0;
-        $params    = "objectID=$objectID&libID=$libID&moduleID=0&browseType=bySearch&orderBy=$orderBy&param=myQueryID";
+        $queryID = $browseType == 'bySearch' ? (int)$param : 0;
+        $params  = "objectID=$objectID&libID=$libID&moduleID=0&browseType=bySearch&orderBy=$orderBy&param=myQueryID";
         if($this->app->rawMethod == 'tablecontents') $params = "type=$type&" . $params;
         $actionURL = $this->createLink('doc', $this->app->rawMethod, $params);
         if($libType == 'api')
@@ -1252,9 +1248,10 @@ class doc extends control
         $this->view->type           = $type;
         $this->view->objectType     = $type;
         $this->view->browseType     = $browseType;
+        $this->view->isFirstLoad    = $isFirstLoad;
         $this->view->param          = $queryID;
         $this->view->users          = $this->user->getPairs('noletter');
-        $this->view->libTree        = $libTree;
+        $this->view->libTree        = $this->doc->getLibTree($libID, $libs, $type, $moduleID, $objectID, $browseType);
         $this->view->libID          = $libID;
         $this->view->moduleID       = $moduleID;
         $this->view->objectDropdown = $objectDropdown;
@@ -1384,5 +1381,53 @@ class doc extends control
         $project  = $this->project->getById($projectID);
         $disabled = $project->multiple ? '' : 'disabled';
         return print(html::select('execution', $executionPairs, 0, "class='form-control' data-placeholder='{$this->lang->doclib->tip->selectExecution}' $disabled data-drop_direction='down' data-drop-direction='down'"));
+    }
+
+    /**
+     * Edit a catalog.
+     *
+     * @param  int    $moduleID
+     * @param  string $type doc|api
+     * @access public
+     * @return void
+     */
+    public function editCatalog($moduleID, $type)
+    {
+        echo $this->fetch('tree', 'edit', "moduleID=$moduleID&type=$type");
+    }
+
+    /**
+     * Delete a catalog.
+     *
+     * @param  int    $rootID
+     * @param  int    $moduleID
+     * @param  string $confirm yes|no
+     * @access public
+     * @return void
+     */
+    public function deleteCatalog($rootID, $moduleID, $confirm = 'no')
+    {
+        echo $this->fetch('tree', 'delete', "rootID=$rootID&moduleID=$moduleID&confirm=$confirm");
+    }
+
+    /**
+     * Display setting.
+     *
+     * @access public
+     * @return void
+     */
+    public function displaySetting()
+    {
+        $this->loadModel('setting');
+        if($_POST)
+        {
+            $this->setting->setItem($this->app->user->account . '.doc.showDoc', $this->post->showDoc);
+            return print(js::reload('parent.parent'));
+        }
+
+        $showDoc = $this->setting->getItem('owner=' . $this->app->user->account . '&module=doc&key=showDoc');
+        $this->view->showDoc = $showDoc === '0' ? '0' : '1';
+
+        $this->display();
     }
 }

@@ -87,6 +87,7 @@ $lang->struct->desc            = 'Description';
 $lang->struct->descPlaceholder = 'Parameter Description';
 $lang->struct->action          = 'Action';
 $lang->struct->addSubField     = 'Add Subfield';
+$lang->struct->list            = 'Data Structure List';
 
 $lang->struct->typeOptions = array(
     'formData' => 'FormData',
