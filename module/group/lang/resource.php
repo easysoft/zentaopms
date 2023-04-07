@@ -1898,6 +1898,9 @@ $lang->resource->api->deleteStruct  = 'deleteStruct';
 $lang->resource->api->create        = 'create';
 $lang->resource->api->edit          = 'edit';
 $lang->resource->api->delete        = 'delete';
+$lang->resource->api->addCatalog    = 'addCatalog';
+$lang->resource->api->editCatalog   = 'editCatalog';
+$lang->resource->api->deleteCatalog = 'deleteCatalog';
 
 $lang->resource->api->getModel     = 'getModel';
 $lang->resource->api->debug        = 'debug';
@@ -1917,9 +1920,12 @@ $lang->api->methodOrder[50] = 'deleteStruct';
 $lang->api->methodOrder[55] = 'create';
 $lang->api->methodOrder[60] = 'edit';
 $lang->api->methodOrder[65] = 'delete';
-$lang->api->methodOrder[70] = 'getModel';
-$lang->api->methodOrder[75] = 'debug';
-$lang->api->methodOrder[80] = 'sql';
+$lang->api->methodOrder[70]  = 'addCatalog';
+$lang->api->methodOrder[75] = 'editCatalog';
+$lang->api->methodOrder[80] = 'deleteCatalog';
+$lang->api->methodOrder[85] = 'getModel';
+$lang->api->methodOrder[90] = 'debug';
+$lang->api->methodOrder[95] = 'sql';
 
 $lang->resource->file = new stdclass();
 $lang->resource->file->download     = 'download';

@@ -2787,9 +2787,9 @@ class docModel extends model
      * @access public
      * @return array
      */
-    public function getModuleTree($rootID, $moduleID = 0, $type = 'doc', $parent = 0, &$modules = array())
+    public function getModuleTree($rootID, $moduleID = 0, $type = 'doc', $parent = 0, $modules = array())
     {
-        if(empty($modules))
+        if(is_array($modules) and empty($modules))
         {
             $modules = $this->dao->select('*')->from(TABLE_MODULE)
                 ->where('root')->eq((int)$rootID)
@@ -2843,10 +2843,11 @@ class docModel extends model
      * @param  int    $objectID
      * @param  int    $executionID
      * @param  string $browseType bySearch
+     * @param  int    $param
      * @access public
      * @return array
      */
-    public function getLibTree($libID, $libs, $type, $moduleID, $objectID = 0, $browseType = '')
+    public function getLibTree($libID, $libs, $type, $moduleID, $objectID = 0, $browseType = '', $param = 0)
     {
         if($type == 'project')
         {
@@ -2862,11 +2863,20 @@ class docModel extends model
                 ->fetchPairs();
         }
 
+        $release = null;
+        if($browseType == 'byrelease' and $param) $release = $this->loadModel('api')->getRelease(0, 'byId', $param);
+
         $libTree      = array($type => array());
         $apiLibs      = array();
         $apiLibIDList = array();
         foreach($libs as $lib)
         {
+            $releaseModule = array();
+            if($release and $release->lib == $lib->id)
+            {
+                foreach($release->snap['modules'] as $module) $releaseModule[$module['id']] = (object)$module;
+            }
+
             $item = new stdclass();
             $item->id         = $lib->id;
             $item->type       = $lib->type == 'api' ? 'api' : 'lib';
@@ -2874,7 +2884,7 @@ class docModel extends model
             $item->objectType = $type;
             $item->objectID   = $objectID;
             $item->active     = $lib->id == $libID && $browseType != 'bySearch' ? 1 : 0;
-            $item->children   = $this->getModuleTree($lib->id, $moduleID, $lib->type == 'api' ? 'api' : 'doc');
+            $item->children   = $this->getModuleTree($lib->id, $moduleID, $lib->type == 'api' ? 'api' : 'doc', 0, $releaseModule);
             $showDoc = $this->loadModel('setting')->getItem('owner=' . $this->app->user->account . '&module=doc&key=showDoc');
             $showDoc = $showDoc === '0' ? 0 : 1;
             if($this->app->rawMethod == 'view' and $lib->type != 'api' and $showDoc)
