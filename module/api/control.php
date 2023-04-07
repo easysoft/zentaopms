@@ -184,24 +184,22 @@ class api extends control
     /**
      * Release list.
      *
-     * @param  int $libID
+     * @param  int    $libID
+     * @param  string $orderBy
      * @access public
      * @return void
      */
-    public function releases($libID, $orderBy = 'id', $recTotal = 0, $recPerPage = 15, $pageID = 1)
+    public function releases($libID, $orderBy = 'id')
     {
         $libs = $this->doc->getApiLibs();
         $this->app->loadClass('pager', $static = true);
         $this->lang->modulePageNav = $this->generateLibsDropMenu($libs[$libID]);
 
-        $pager = new pager($recTotal, $recPerPage, $pageID);
-
         /* Append id for secend sort. */
         $sort     = common::appendOrder($orderBy);
-        $releases = $this->api->getReleaseByQuery($libID, $pager, $sort);
+        $releases = $this->api->getReleaseByQuery($libID, '', $sort);
 
         $this->view->releases = $releases;
-        $this->view->pager    = $pager;
         $this->view->orderBy  = $orderBy;
         $this->view->title    = $this->lang->api->managePublish;
         $this->view->libID    = $libID;
@@ -420,8 +418,6 @@ class api extends control
      */
     public function createLib($type = 'product', $objectID = 0)
     {
-        if(!in_array($type, array('product', 'project'))) $type = 'product';
-
         if(!empty($_POST))
         {
             $libID = $this->doc->createApiLib();
@@ -439,7 +435,8 @@ class api extends control
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink('api', 'index', "libID=$libID")));
         }
 
-        $this->lang->api->aclList['default'] = sprintf($this->lang->api->aclList['default'], $this->lang->{$type}->common);
+        $defaultAclLang = in_array($type, array('product', 'product')) ? $this->lang->{$type}->common : $this->lang->product->common;
+        $this->lang->api->aclList['default'] = sprintf($this->lang->api->aclList['default'], $defaultAclLang);
 
         $this->view->type     = $type;
         $this->view->objectID = $objectID;

@@ -2392,4 +2392,43 @@ class treeModel extends model
 
         return $this->getByID($moduleID);
     }
+
+    /**
+     * Get group pairs.
+     *
+     * @param  int    $dimensionID
+     * @param  int    $parentGroup
+     * @param  int    $grade
+     * @param  string $type
+     * @access public
+     * @return array
+     */
+    public function getGroupPairs($dimensionID = 0, $parentGroup = 0, $grade = 2, $type = 'chart')
+    {
+        $groups = $this->dao->select('id,name,grade,parent')->from(TABLE_MODULE)
+            ->where('root')->eq($dimensionID)
+            ->beginIF(!empty($parentGroup))->andWhere('root')->eq($dimensionID)->fi()
+            ->andWhere('type')->eq($type)
+            ->andWhere('deleted')->eq(0)
+            ->orderBy('order')
+            ->fetchGroup('grade', 'id');
+
+        $groupPairs = array();
+        if(!empty($groups[1]))
+        {
+            foreach($groups[1] as $parentGroup)
+            {
+                if($grade == 1) $groupPairs[$parentGroup->id] = $parentGroup->name;
+                if($grade == 2 and !empty($groups[2]))
+                {
+                    foreach($groups[2] as $childGroup)
+                    {
+                        if($parentGroup->id == $childGroup->parent) $groupPairs[$childGroup->id] = '/' . $parentGroup->name . '/' . $childGroup->name;
+                    }
+                }
+            }
+        }
+
+        return $groupPairs;
+    }
 }

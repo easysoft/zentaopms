@@ -442,9 +442,9 @@ CREATE TABLE IF NOT EXISTS `zt_chart` (
   `desc` text NOT NULL,
   `settings` mediumtext NOT NULL,
   `filters` mediumtext NOT NULL,
-  `step` tinyint(1) unsigned NOT NULL,
+  `step` tinyint(1) unsigned NOT NULL DEFAULT '0',
   `fields` mediumtext NOT NULL,
-  `langs` text NOT NULL,
+  `langs` text NULL,
   `sql` mediumtext,
   `stage` enum('draft','published') NOT NULL DEFAULT 'draft',
   `builtin` tinyint(1) unsigned NOT NULL,
@@ -584,7 +584,7 @@ CREATE TABLE IF NOT EXISTS `zt_dataview` (
   `view` varchar(57) NOT NULL,
   `sql` text NOT NULL,
   `fields` mediumtext NOT NULL,
-  `langs` text NOT NULL,
+  `langs` text NULL,
   `objects` mediumtext NOT NULL,
   `createdBy` varchar(30) NOT NULL,
   `createdDate` datetime NOT NULL,
@@ -685,6 +685,17 @@ CREATE TABLE IF NOT EXISTS `zt_doc` (
   KEY `product` (`product`),
   KEY `execution` (`execution`),
   KEY `lib` (`lib`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+-- DROP TABLE IF EXISTS `zt_docaction`;
+CREATE TABLE IF NOT EXISTS `zt_docaction` (
+  `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
+  `doc` mediumint(8) unsigned NOT NULL,
+  `action` varchar(80) NOT NULL,
+  `actor` char(30) NOT NULL,
+  `date` datetime NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `doc` (`doc`),
+  KEY `actor` (`actor`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_doccontent`;
 CREATE TABLE IF NOT EXISTS `zt_doccontent` (
@@ -9669,7 +9680,6 @@ CREATE TABLE IF NOT EXISTS `zt_assetlib` (
   `createdDate` datetime NOT NULL,
   `editedBy` varchar(30) NOT NULL DEFAULT '',
   `editedDate` datetime NULL,
-  `registerDate`  datetime NULL,
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB CHARSET=utf8;
@@ -14009,12 +14019,12 @@ CREATE TABLE IF NOT EXISTS `zt_pivot`  (
   `desc` text NOT NULL,
   `sql` mediumtext NOT NULL,
   `fields` mediumtext NOT NULL,
-  `langs` mediumtext NOT NULL,
+  `langs` mediumtext NULL,
   `vars` mediumtext NOT NULL,
   `objects` mediumtext NULL,
   `settings` mediumtext NOT NULL,
   `filters` mediumtext NOT NULL,
-  `step` tinyint(1) unsigned NOT NULL,
+  `step` tinyint(1) unsigned NOT NULL DEFAULT '0',
   `stage` enum('draft','published') NOT NULL DEFAULT 'draft',
   `builtin` enum('0', '1') NOT NULL DEFAULT '0',
   `createdBy` varchar(30) NOT NULL,

@@ -1,4 +1,4 @@
-$(document).ready(function()
+$(function()
 {
     $('#apiForm').ajaxForm({
         success: (data) => {
@@ -10,4 +10,6 @@ $(document).ready(function()
             }
         }
     })
+
+    toggleLibType(libType);
 });

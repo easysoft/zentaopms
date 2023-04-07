@@ -26,7 +26,7 @@
     if($libTree and common::hasPriv('api', 'releases'))      echo html::a($this->createLink('api', 'releases',      "libID=$libID", 'html', true), "<i class='icon-version muted'> </i>" . $lang->api->releases, '', "class='btn btn-link iframe' data-width='800px'");
     if($libTree and common::hasPriv('api', 'createRelease')) echo html::a($this->createLink('api', 'createRelease', "libID=$libID"), "<i class='icon-publish muted'> </i>" . $lang->api->createRelease, '', "class='btn btn-link iframe' data-width='800px'");
     if($libTree and common::hasPriv('api', 'export') and $config->edition != 'open') echo html::a($this->createLink('api', 'export', "libID=$libID&version=$version&release=$release", 'html', true), "<i class='icon-export muted'> </i>" . $lang->export, '', "class='btn btn-link export' data-width='480px' id='export'");
-    if(common::hasPriv('api', 'createLib'))           echo html::a($this->createLink('api', 'createLib',     "type=" . ($objectType == 'project' ? 'project' : 'product') . "&objectID=$objectID"), '<i class="icon icon-plus"></i> ' . $lang->api->createLib, '', 'class="btn btn-secondary iframe" data-width="800px"');
+    if(common::hasPriv('api', 'createLib')) echo html::a($this->createLink('api', 'createLib',     "type=" . ($objectType ? $objectType : 'nolink') . "&objectID=$objectID"), '<i class="icon icon-plus"></i> ' . $lang->api->createLib, '', 'class="btn btn-secondary iframe" data-width="800px"');
     if($libTree and common::hasPriv('api', 'create')) echo html::a($this->createLink('api', 'create',        "libID=$libID&moduleID=$moduleID"), '<i class="icon icon-plus"></i> ' . $lang->api->createApi, '', 'class="btn btn-primary"');
   ?>
   </div>
@@ -37,7 +37,7 @@
     <p>
       <span class="text-muted"><?php echo $lang->doc->noLib;?></span>
       <?php
-      if(common::hasPriv('api', 'createLib')) echo html::a(helper::createLink('api', 'createLib', "type=$objectType"), '<i class="icon icon-plus"></i> ' . $lang->api->createLib, '', 'class="btn btn-info iframe" data-width="800px"');
+      if(common::hasPriv('api', 'createLib')) echo html::a(helper::createLink('api', 'createLib', "type=" . ($objectType ? $objectType : 'nolink')), '<i class="icon icon-plus"></i> ' . $lang->api->createLib, '', 'class="btn btn-info iframe" data-width="800px"');
       ?>
     </p>
   </div>
