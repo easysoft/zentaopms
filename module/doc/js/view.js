@@ -188,7 +188,7 @@ $(function()
                 simplemde.togglePreview();
             }
         });
-    });
+    })
 
     $('#sidebar .icon.icon-angle-right').click(function()
     {
@@ -202,13 +202,17 @@ $(function()
     $('#hisTrigger').on('click', function()
     {
         var $history = $('#history');
+        var $icon = $(this);
         if($history.hasClass('hidden'))
         {
             $history.removeClass('hidden');
+            $icon.addClass('text-primary');
         }
         else
         {
             $history.addClass('hidden');
+            $icon.removeClass('text-primary');
         }
     })
+    $('#history').find('.btn.pull-right').removeClass('pull-right');
 })
