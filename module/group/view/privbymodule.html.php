@@ -53,3 +53,5 @@
     </table>
   </form>
 </div>
+<?php js::set('selectedPrivIdList', '[]');?>
+<?php js::set('relatedPrivData', '[]');?>

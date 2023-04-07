@@ -178,25 +178,26 @@ function updatePrivTree(privList)
         if(data.depend == undefined || data.recommend.length > 0)
         {
             $('.side .menuTree.depend').empty();
-            $('.side .menuTree.depend').siblings('.empty-tip').show();
+            $('.side .menuTree.depend').closest('.priv-panel').hide();
         }
         else
         {
             $(".menuTree.depend").data('zui.tree').reload(data.depend);
-            $('.side .menuTree.depend').siblings('.empty-tip').hide();
+            $('.side .menuTree.depend').closest('.priv-panel').show();
         }
 
         if(data.recommend == undefined || data.recommend.length > 0)
         {
             $('.side .menuTree.recommend').empty();
-            $('.side .menuTree.recommend').siblings('.empty-tip').show();
+            $('.side .menuTree.recommend').closest('.priv-panel').hide();
         }
         else
         {
             $(".menuTree.recommend").data('zui.tree').reload(data.recommend);
-            $('.side .menuTree.recommend').siblings('.empty-tip').hide();
+            $('.side .menuTree.recommend').closest('.priv-panel').show();
         }
 
+        resizeContainer();
     });
 }
 
@@ -213,7 +214,6 @@ function checkAllChange()
         if(!checked) $('input[type=checkbox]').removeAttr('checked');
         $('#privList tbody .checkbox-indeterminate-block').removeClass('checkbox-indeterminate-block');
         $('.side .menuTree').empty();
-        $('.side .empty-tip').show();
     }
     else
     {
@@ -233,15 +233,39 @@ function checkAllChange()
     }
 }
 
+/**
+ * Resize container flex.
+ *
+ * @access public
+ * @return void
+ */
+function resizeContainer()
+{
+    if($(".menuTree.depend").closest('.priv-panel').css('display') == 'none' && $(".menuTree.recommend").closest('.priv-panel').css('display') == 'none')
+    {
+        $('#mainContainer > .main').css('flex', '1 1 100%');
+        $('#mainContainer > .side').css('flex', '1 1 0%');
+        $('#mainContainer > .side').hide();
+    }
+    else
+    {
+        $('#mainContainer > .main').css('flex', '1 1 75%');
+        $('#mainContainer > .side').css('flex', '1 1 25%');
+        $('#mainContainer > .side').show();
+    }
+}
+
 $(function()
 {
     selectedPrivIdList = Object.values(selectedPrivIdList);
 
     relatedPrivData = $.parseJSON(relatedPrivData);
     initDependTree(relatedPrivData.depend);
-    if(relatedPrivData.depend) $(".menuTree.depend + .empty-tip").hide();
+    if(relatedPrivData.depend == undefined || relatedPrivData.depend == 0) $(".menuTree.depend").closest('.priv-panel').hide();
     initRecomendTree(relatedPrivData.recommend);
-    if(relatedPrivData.recommend) $(".menuTree.recommend + .empty-tip").hide();
+    if(relatedPrivData.recommend == undefined || relatedPrivData.recommend == 0) $(".menuTree.recommend").closest('.priv-panel').hide();
+
+    resizeContainer();
 
     $('#privList > tbody > tr > th .check-all').change(checkAllChange);
     $('.priv-footer .check-all').change(checkAllChange);

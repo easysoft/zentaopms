@@ -167,9 +167,6 @@
         </div>
         <div class="panel-content">
           <div class="menuTree depend menu-active-primary menu-hover-primary"></div>
-          <div class="empty-tip flex-center">
-            <p><span class="text-muted"><?php echo $lang->noData;?></span></p>
-          </div>
         </div>
       </div>
       <div class="priv-panel mt-m">
@@ -179,9 +176,6 @@
         </div>
         <div class="panel-content">
           <div class="menuTree recommend menu-active-primary menu-hover-primary"></div>
-          <div class="empty-tip flex-center">
-            <p><span class="text-muted"><?php echo $lang->noData;?></span></p>
-          </div>
         </div>
       </div>
     </div>
@@ -202,7 +196,7 @@
 <?php js::set('groupID', $groupID);?>
 <?php js::set('menu', $menu);?>
 <?php js::set('relatedPrivData', $relatedPrivData);?>
-<?php js::set('selectedPrivIdList', isset($selectedPrivIdList) ? $selectedPrivIdList : array());?>
+<?php js::set('selectedPrivIdList', $selectedPrivIdList);?>
 <script>
 $(document).ready(function()
 {
