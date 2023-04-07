@@ -307,18 +307,40 @@ class group extends control
             $this->view->title      = $this->lang->company->common . $this->lang->colon . $this->lang->group->managePriv;
             $this->view->position[] = $this->lang->group->managePriv;
 
-            $modules      = $this->dao->select('*')->from(TABLE_PRIVMANAGER)->where('type')->eq('module')->fetchAll('code');
-            $modulePairs  = $this->group->getPrivManagerPairs('module');
-            $packageGroup = array();
+            $privs             = $this->group->getPrivsListByView('');
+            $privs             = $this->group->getCustomPrivs('', $privs);
+            $modules           = $this->dao->select('*')->from(TABLE_PRIVMANAGER)->where('type')->eq('module')->fetchAll('code');
+            $modulePairs       = $this->group->getPrivManagerPairs('module');
+            $unassignedModules = array_diff(array_keys(array_filter(get_object_vars($this->lang->resource), function($modulePrivs){return !empty((array)$modulePrivs);})), array_keys($modulePairs));
+            foreach($unassignedModules as $unassignedModule)
+            {
+                $this->app->loadLang($unassignedModule);
+                $modulePairs[$unassignedModule] = isset($this->lang->{$unassignedModule}->common) ? $this->lang->{$unassignedModule}->common : $unassignedModule;
+            }
 
+            $packageGroup = array();
             foreach($modulePairs as $moduleCode => $moduleLang)
             {
-                $packageGroup[$moduleCode] = $this->group->getPrivManagerPairs('package', $moduleCode);
-                $packageGroup[$moduleCode] = $packageGroup[$moduleCode] + array($modules[$moduleCode]->id => $this->lang->group->unassigned);
+                $modulePackages  = $this->group->getPrivManagerPairs('package', $moduleCode);
+                $unassignedPrivs = $this->group->getUnassignedPrivsByModule($moduleCode);
+                $packageGroup[$moduleCode] = isset($modules[$moduleCode]) ? $modulePackages : array();
+                $unassignedPrivPackages    = isset($modules[$moduleCode]) ? $modules[$moduleCode]->id : 0;
+                $packageGroup[$moduleCode] = $packageGroup[$moduleCode] + array($unassignedPrivPackages => $this->lang->group->unassigned);
+            }
+
+            $customPrivs = $this->group->getCustomPrivs('');
+            foreach($customPrivs as $privKey => $customPriv)
+            {
+                if(!isset($modulePairs[$customPriv->module])) $modulePairs[$customPriv->module] = isset($this->lang->{$customPriv->module}->common) ? $this->lang->{$customPriv->module}->common : $customPriv->module;
             }
 
             $indexPrivs = $this->group->getPrivByParent(isset($packageGroup['index']) ? array_keys($packageGroup['index']) : $modules['index']->id);
-            $indexPrivs = $this->group->transformPrivLang($indexPrivs, true);
+            $indexPrivs = $this->group->transformPrivLang($indexPrivs);
+            foreach($indexPrivs as $privID => $priv)
+            {
+                $indexPrivs["{$priv->module}-{$priv->method}"] = $priv->name;
+                unset($indexPrivs[$privID]);
+            }
 
             $this->view->groups       = $this->group->getPairs();
             $this->view->modulePairs  = $modulePairs;

@@ -2043,12 +2043,12 @@ class groupModel extends model
                 if(!$this->checkMenuModule($menu, $module)) continue;
                 if(!isset($this->lang->{$module}->{$methodLabel})) $this->app->loadLang($module);
 
-                $key = "{$module}-{$methodLabel}";
+                $key = "{$module}-{$method}";
                 $priv = new stdclass();
                 $priv->module      = $module;
                 $priv->method      = $method;
                 $priv->parent      = 0;
-                $priv->key         = $key;
+                $priv->key         = "{$module}-{$methodLabel}";
                 $priv->parentCode  = $module;
                 $priv->moduleOrder = 0;
                 $priv->name        = $this->lang->{$module}->{$methodLabel};
@@ -2098,5 +2098,14 @@ class groupModel extends model
 
         $privList['depend'] = array_values($privList['depend']);
         return $privList;
+    }
+
+    public function getUnassignedPrivsByModule($module)
+    {
+        return $this->dao->select('t1.*')->from(TABLE_PRIV)->alias('t1')
+            ->leftJoin(TABLE_PRIVMANAGER)->alias('t2')->on('t1.parent=t2.id')
+            ->where('t2.`code`')->eq($module)
+            ->andWhere('t2.type')->eq('module')
+            ->fetchAll('id');
     }
 }
