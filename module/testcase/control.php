@@ -3001,7 +3001,7 @@ class testcase extends control
         if(strpos($orderBy, 'sort') === false) return false;
 
         /* Get list of original scenes and cases, and sort with orderBy param. */
-        $scenesMap = $this->dao->select('id,sort,isCase')->from(VIEW_SCENECASE)->where('id')->in($idList)->orderBy($orderBy)->fetchAll(id);
+        $scenesMap = $this->dao->select('id,sort,isCase')->from(VIEW_SCENECASE)->where('id')->in($idList)->orderBy($orderBy)->fetchAll('id');
 
         foreach($scenesMap as $scene)
         {
