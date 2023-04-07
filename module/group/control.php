@@ -328,11 +328,15 @@ class group extends control
                 $packageGroup[$moduleCode] = $packageGroup[$moduleCode] + array($unassignedPrivPackages => $this->lang->group->unassigned);
             }
 
-            $customPrivs = $this->group->getCustomPrivs('');
-            foreach($customPrivs as $privKey => $customPriv)
+            $hasPrivModule = array();
+            foreach($privs as $privKey => $priv)
             {
-                if(!isset($modulePairs[$customPriv->module])) $modulePairs[$customPriv->module] = isset($this->lang->{$customPriv->module}->common) ? $this->lang->{$customPriv->module}->common : $customPriv->module;
+                if(!isset($modulePairs[$priv->module])) $modulePairs[$priv->module] = isset($this->lang->{$priv->module}->common) ? $this->lang->{$priv->module}->common : $priv->module;
+
+                $hasPrivModule[] = $priv->parentCode;
             }
+            $emptyPrivModules = array_diff(array_keys($modulePairs), $hasPrivModule);
+            foreach($emptyPrivModules as $emptyPrivModule) unset($modulePairs[$emptyPrivModule]);
 
             $indexPrivs = $this->group->getPrivByParent(isset($packageGroup['index']) ? array_keys($packageGroup['index']) : $modules['index']->id);
             $indexPrivs = $this->group->transformPrivLang($indexPrivs);
@@ -1012,31 +1016,37 @@ class group extends control
     /**
      * AJAX: Get privs by parents.
      *
+     * @param  string  $module
      * @param  string  $parentType
      * @param  string  $parentList
      * @access public
      * @return bool
      */
-    public function ajaxGetPrivByParents($parentType, $parentList)
+    public function ajaxGetPrivByParents($module, $parentType, $parentList)
     {
+        $menu     = isset($this->lang->navGroup->$module) ? $this->lang->navGroup->$module : $module;
         $privList = array();
         if($parentType == 'module')
         {
             $privs = $this->group->getPrivByModule($parentList);
             foreach($privs as $moduleID => $packages)
             {
-                foreach($packages as $packageID => $packagePriv)
+                foreach($packages as $packageID => $packagePrivs)
                 {
-                    $privList = $privList + $packagePriv;
+                    foreach($packagePrivs as $privID => $packagePriv)
+                    {
+                        $privList["{$packagePriv->module}-{$packagePriv->method}"] = $packagePriv;
+                    }
                 }
             }
         }
         elseif($parentType == 'package')
         {
-            $privList = $this->group->getPrivByParent($parentList);
+            $privList = $this->group->getPrivByParent(trim($parentList, ','));
         }
 
-        $privList = $this->group->transformPrivLang($privList, true);
+        $privList = $this->group->getCustomPrivs($menu, $privList);
+        $privList = $this->group->transformPrivLang($privList);
 
         return print(html::select('actions[]', $privList, '', "multiple='multiple' class='form-control'"));
     }

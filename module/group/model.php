@@ -534,17 +534,17 @@ class groupModel extends model
     {
         if($this->post->module == false or $this->post->actions == false or $this->post->groups == false) return false;
 
-        $actionIdList = $this->post->actions;
-        $actions      = $this->getPrivByIdList($actionIdList);
+        $actions = $this->post->actions;
 
-        foreach($actions as $actionID => $action)
+        foreach($actions as $action)
         {
+            list($module, $method) = explode('-', $action);
             foreach($this->post->groups as $group)
             {
                 $data         = new stdclass();
                 $data->group  = $group;
-                $data->module = $action->module;
-                $data->method = $action->method;
+                $data->module = $module;
+                $data->method = $method;
                 $this->dao->replace(TABLE_GROUPPRIV)->data($data)->exec();
             }
         }
@@ -2003,7 +2003,7 @@ class groupModel extends model
     public function transformPrivLang($privs, $needPairs = false)
     {
         $privPairs = array();
-        foreach($privs as $privID => $priv)
+        foreach($privs as $moduleMethod => $priv)
         {
             $priv->name = '';
             if(!empty($priv->value))
@@ -2015,10 +2015,10 @@ class groupModel extends model
                 list($moduleName, $methodLang) = explode('-', $priv->key);
                 $this->app->loadLang($moduleName);
 
-                $priv->name = (!empty($moduleName) and !empty($methodLang) and isset($this->lang->{$moduleName}->$methodLang)) ? $this->lang->{$moduleName}->$methodLang : '';
+                $priv->name = (!empty($moduleName) and !empty($methodLang) and isset($this->lang->{$moduleName}->$methodLang)) ? $this->lang->{$moduleName}->$methodLang : $priv->method;
             }
 
-            $privPairs[$privID] = $priv->name;
+            $privPairs[$moduleMethod] = $priv->name;
         }
 
         return $needPairs ? $privPairs : $privs;
@@ -2051,7 +2051,7 @@ class groupModel extends model
                 $priv->key         = "{$module}-{$methodLabel}";
                 $priv->parentCode  = $module;
                 $priv->moduleOrder = 0;
-                $priv->name        = $this->lang->{$module}->{$methodLabel};
+                $priv->name        = isset($this->lang->{$module}->{$methodLabel}) ? $this->lang->{$module}->{$methodLabel} : $method;
 
                 $privs[$key] = $priv;
             }
@@ -2100,6 +2100,13 @@ class groupModel extends model
         return $privList;
     }
 
+    /**
+     * Get unassigned privs by module.
+     *
+     * @param  string  $module
+     * @access public
+     * @return array
+     */
     public function getUnassignedPrivsByModule($module)
     {
         return $this->dao->select('t1.*')->from(TABLE_PRIV)->alias('t1')

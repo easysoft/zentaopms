@@ -55,7 +55,8 @@ function setNoChecked()
  */
 function updatePrivList(parentType, parentList)
 {
-    $.get(createLink('group', 'ajaxGetPrivByParents', 'parentType=' + parentType + '&parentList=' + parentList), function(data)
+    var selectedModule = $('#module').val();
+    $.get(createLink('group', 'ajaxGetPrivByParents', 'module=' + selectedModule + '&parentType=' + parentType + '&parentList=' + parentList), function(data)
     {
         $('#actions').replaceWith(data);
     })
