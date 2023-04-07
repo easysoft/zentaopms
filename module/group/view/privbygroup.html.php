@@ -145,7 +145,7 @@
             <?php endif;?>
             <td id='<?php echo $moduleName;?>' class='pv-10px' colspan='<?php echo !empty($lang->$moduleName->menus) ? 1 : 2?>'>
               <?php foreach($privs as $privID => $priv):?>
-              <div class="group-item" data-module='<?php echo $moduleName;?>' data-package='<?php echo $packageID;?>'>
+              <div class="group-item" data-module='<?php echo $moduleName;?>' data-package='<?php echo $packageID;?>' data-id='<?php echo zget($priv, 'id', 0);?>'>
                 <div class="checkbox-primary">
                   <?php echo html::checkbox("actions[$priv->module]", array($priv->method => $priv->name), isset($groupPrivs[$priv->module][$priv->method]) ? $priv->method : '', "title='{$priv->name}' id='actions[$priv->module]$priv->method' data-id='$privID'");?>
                 </div>
@@ -202,6 +202,7 @@
 <?php js::set('groupID', $groupID);?>
 <?php js::set('menu', $menu);?>
 <?php js::set('relatedPrivData', $relatedPrivData);?>
+<?php js::set('selectedPrivIdList', isset($selectedPrivIdList) ? $selectedPrivIdList : array());?>
 <script>
 $(document).ready(function()
 {

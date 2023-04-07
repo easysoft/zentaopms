@@ -33,8 +33,8 @@ td.menus + td {border-left: 0;}
 
 #mainContent .main-content {padding: 2px;}
 #privList .table-bordered th {border: 1px solid #FFF;}
-#privList th.module {width: 142px; min-width: 142px; background-color: #EDEEF2CC; font-weight: 600;}
-#privList th.package {width: 142px; min-width: 142px; background-color: #F4F5F7; font-weight: 600;}
+#privList th.module {width: 142px; min-width: 142px; background-color: #EDEEF28C; font-weight: 600;}
+#privList th.package {width: 142px; min-width: 142px; background-color: #F4F5F78C; font-weight: 600;}
 #privList th.method {min-width: 585px;}
 #privList th .checkbox-inline input {margin-left: 0px;}
 #privList .check-all {display: inline-block;}
@@ -43,7 +43,7 @@ td.menus + td {border-left: 0;}
 #privList tbody > tr > td {padding: 4px 20px 20px 20px;}
 #privList .group-item {margin-top: 16px;}
 #privList .group-item .checkbox-inline label {padding-left: 3px;}
-#privList.table-bordered td, #privList.table-bordered th {border-top-style: dashed; border-bottom-style: dashed;}
+#privList.table-bordered td, #privList.table-bordered th {border-top-style: dashed; border-bottom-style: dashed; border-color: #FFF;}
 #privList .check-all>label.checkbox-indeterminate-block:before {content: ' '; opacity: 1; transform: scale(1);}
 .priv-footer {padding: 14px; z-index: 3; box-shadow: inset 0 0px 0px rgb(0 0 0 / 10%), 0 0 5px rgb(0 0 0 / 10%); position: relative; min-height: 40px; background: #fff; border-radius: 0 0 4px 4px;}
 .priv-footer .btn {margin 0px; padding-top: 7px;}

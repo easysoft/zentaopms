@@ -160,78 +160,44 @@ function initDependTree(data)
   * @access public
   * @return void
   */
-function updatePrivTree(objTree)
+function updatePrivTree(privList)
 {
-    $(".menuTree.depend").data('zui.tree').reload(objTree.dependData || [] );
-    if(objTree.dependData && objTree.dependData.length)
+    if(privList == null)
     {
-        $(".menuTree.depend + .empty-tip").addClass('hidden');
-
-        var privCount = 0;
-        $.each(objTree.dependData, function(index, item){if(item.children) privCount += item.children.length;});
-        $(".menuTree.depend").closest('.priv-panel').find('.panel-title .priv-count').html('(' + privCount + ')');
-    }
-    else
-    {
-        $(".menuTree.depend + .empty-tip").removeClass('hidden');
-        $(".menuTree.depend").closest('.priv-panel').find('.panel-title .priv-count').html('');
-    }
-    $(".menuTree.recommend").data('zui.tree').reload(objTree.recommendData || []);
-    if(objTree.recommendData && objTree.recommendData.length)
-    {
-        $(".menuTree.recommend + .empty-tip").addClass('hidden');
-
-        var privCount = 0;
-        $.each(objTree.recommendData, function(index, item){if(item.children) privCount += item.children.length;});
-        $(".menuTree.recommend").closest('.priv-panel').find('.panel-title .priv-count').html('(' + privCount + ')');
-    }
-    else
-    {
-        $(".menuTree.recommend + .empty-tip").removeClass('hidden');
-        $(".menuTree.recommend").closest('.priv-panel').find('.panel-title .priv-count').html('');
-    }
-    if(!canDeleteRelation) $('.side a.priv-item .icon-close').remove();
-}
-
-/**
- * Get relation side.
- *
- * @param  int $privID
- * @access public
- * @return void
- */
-function getSideRelation(privID)
-{
-    $.get(createLink('group', 'ajaxGetPrivRelations', "privID=" + privID), function(data)
-    {
-        var objTree = {};
-        if(data)
+        privList = new Array();
+        $('#privList .group-item input:checked').each(function()
         {
-            var relatedPriv = JSON.parse(data);
-            objTree.dependData    = relatedPriv.depend;
-            objTree.recommendData = relatedPriv.recommend;
+            privList.push($(this).closest('.group-item').attr('data-id'));
+        });
+    }
+
+    $.get(createLink('group', 'ajaxGetDependentPrivs', 'privList=' + privList.toString()), function(data)
+    {
+        data = $.parseJSON(data);
+
+        if(data.depend == undefined || data.recommend.length > 0)
+        {
+            $('.side .menuTree.depend').empty();
+            $('.side .menuTree.depend').siblings('.empty-tip').show();
         }
-        updatePrivTree(objTree);
-    })
-}
+        else
+        {
+            $(".menuTree.depend").data('zui.tree').reload(data.depend);
+            $('.side .menuTree.depend').siblings('.empty-tip').hide();
+        }
 
-/**
- * Update depend and recommend privs.
- *
- * @param e $e
- * @access public
- * @return void
- */
-function updateRelations(e)
-{
-    if($('.bg-primary-pale').length) $('.bg-primary-pale').removeClass('bg-primary-pale');
-    $('#privListTable').length > 0 ? $(e.target).closest('tr').addClass('bg-primary-pale') : $(e.target).addClass('bg-primary-pale');
+        if(data.recommend == undefined || data.recommend.length > 0)
+        {
+            $('.side .menuTree.recommend').empty();
+            $('.side .menuTree.recommend').siblings('.empty-tip').show();
+        }
+        else
+        {
+            $(".menuTree.recommend").data('zui.tree').reload(data.recommend);
+            $('.side .menuTree.recommend').siblings('.empty-tip').hide();
+        }
 
-    var selectedID = $('#privListTable').length == 0 ? $(e.target).siblings('input:checkbox').data('id') : $(e.target).closest('tr').attr('data-id');
-    $('.side a#addDependent').attr('href', createLink('group', 'addRelation', "privIdList=" + selectedID + '&type=depend')).removeAttr('disabled');
-    $('.side a#addRecommendation').attr('href', createLink('group', 'addRelation', "privIdList=" + selectedID + '&type=recommend')).removeAttr('disabled');
-    if(!$('.side a#addDependent').hasClass('modaled')) $('.side a#addDependent,.side a#addRecommendation').modal().addClass('modaled');
-    getSideRelation(selectedID);
+    });
 }
 
 function checkAllChange()
@@ -245,7 +211,9 @@ function checkAllChange()
 
         if(checked) $('input[type=checkbox]').attr('checked', checked);
         if(!checked) $('input[type=checkbox]').removeAttr('checked');
-        $(this).closest('.priv-footer').siblings('#mainContent').find('#privList tbody .checkbox-indeterminate-block').removeClass('checkbox-indeterminate-block');
+        $('#privList tbody .checkbox-indeterminate-block').removeClass('checkbox-indeterminate-block');
+        $('.side .menuTree').empty();
+        $('.side .empty-tip').show();
     }
     else
     {
@@ -260,11 +228,15 @@ function checkAllChange()
         if(!checked) $children.find('input[type=checkbox]').removeAttr('checked');
 
         changeParentChecked($(this), moduleName, packageID);
+
+        updatePrivTree(null);
     }
 }
 
 $(function()
 {
+    selectedPrivIdList = Object.values(selectedPrivIdList);
+
     relatedPrivData = $.parseJSON(relatedPrivData);
     initDependTree(relatedPrivData.depend);
     if(relatedPrivData.depend) $(".menuTree.depend + .empty-tip").hide();
@@ -288,6 +260,17 @@ $(function()
         var moduleName = $(this).closest('.group-item').attr('data-module');
         var packageID  = $(this).closest('.group-item').attr('data-package');
         changeParentChecked($(this), moduleName, packageID);
+
+        var privID = $(this).closest('.group-item').attr('data-id');
+        if(privID != 0)
+        {
+            var index = selectedPrivIdList.indexOf(privID);
+
+            if(privID > 0 && index < 0 && checked) selectedPrivIdList.push(privID);
+            if(privID > 0 && index > -1 && !checked) selectedPrivIdList.splice(index, 1);
+
+            updatePrivTree(selectedPrivIdList);
+        }
     });
 
     $('#submit').click(function()
