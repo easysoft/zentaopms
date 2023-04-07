@@ -192,6 +192,7 @@
         <input type='checkbox' id='allChecker'>
         <label class='text-right' for='allChecker'><?php echo $lang->selectAll;?></label>
       </div>
+      <?php echo html::hidden('actions[][]');?>
       <?php echo html::submitButton($lang->save, '', 'btn btn-primary btn-wide');?>
       <?php echo html::a($this->createLink('group', 'browse'), $lang->goback, '', 'class="btn btn-wide"');?>
     </div>

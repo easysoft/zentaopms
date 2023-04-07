@@ -64,6 +64,7 @@ $lang->group->privModule         = 'Module';
 $lang->group->repeatPriv         = 'The method name of the same module cannot be the same. Please modify the method name and try again.';
 $lang->group->dependPrivTips     = 'Here are the selected permissions in the left Permission Dependency List, which are must-require assigned.';
 $lang->group->recommendPrivTips  = 'Here are the recommended permissions in the left Permission Dependency List, which are recommended to be assigned.';
+$lang->group->dependPrivsSaveTip = 'Privileges and dependented privileges are saved successfully';
 
 $lang->group->batchActions              = 'Batch Operation';
 $lang->group->batchSetDependency        = 'Batch Set Dependency';

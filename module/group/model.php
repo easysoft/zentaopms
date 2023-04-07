@@ -422,14 +422,13 @@ class groupModel extends model
         }
         else
         {
-            foreach($this->getMenuModules($menu) as $moduleName)
+            $privs = $this->getPrivsListByView($menu);
+            $privs = $this->getCustomPrivs($menu, $privs);
+            if(!empty($privs))
             {
-                $methodList = (array)zget($this->lang->resource, $moduleName, array());
-                $methodList = array_keys($methodList);
                 $this->dao->delete()->from(TABLE_GROUPPRIV)
                     ->where('`group`')->eq($groupID)
-                    ->andWhere('module')->eq($moduleName)
-                    ->beginIF($methodList)->andWhere('method')->in($methodList)->fi()
+                    ->andWhere("CONCAT(module, '-', method)")->in(array_keys($privs))
                     ->exec();
             }
         }
@@ -437,8 +436,12 @@ class groupModel extends model
         /* Insert new. */
         if($this->post->actions)
         {
+            $depentedPrivs = array();
             foreach($this->post->actions as $moduleName => $moduleActions)
             {
+                $privIdList    = $this->dao->select('id')->from(TABLE_PRIV)->where('module')->eq($moduleName)->andWhere('method')->in($moduleActions)->fetchPairs();
+                $relationPrivs = $this->getPrivRelationsByIdList($privIdList, 'depend', 'idGroup');
+                $depentedPrivs = array_merge($depentedPrivs, array_keys(zget($relationPrivs, 'depend', array())));
                 foreach($moduleActions as $actionName)
                 {
                     $data         = new stdclass();
@@ -448,8 +451,22 @@ class groupModel extends model
                     $this->dao->replace(TABLE_GROUPPRIV)->data($data)->exec();
                 }
             }
+            $depentedPrivs = $this->getPrivByIdList($depentedPrivs);
+            foreach($depentedPrivs as $privID => $priv)
+            {
+                if(in_array($priv->method, $_POST['actions'][$priv->module]))
+                {
+                    unset($depentedPrivs[$privID]);
+                    continue;
+                }
+                $data         = new stdclass();
+                $data->group  = $groupID;
+                $data->module = $priv->module;
+                $data->method = $priv->method;
+                $this->dao->replace(TABLE_GROUPPRIV)->data($data)->exec();
+            }
         }
-        return true;
+        return !empty($depentedPrivs) ? true : false;
     }
 
     /**
@@ -1492,7 +1509,7 @@ class groupModel extends model
         $modules = array_keys($modules);
         $modules = implode(',', $modules);
 
-        $privs = $this->dao->select("t1.id, t1.module, t1.method, IF(t3.type = 'module', 0, t1.parent) as parent, t1.order, t2.`key`, t2.`value`, t2.desc, IF(t3.type = 'module', t3.code, t4.code) as parentCode, IF(t3.type = 'module', 0, INSTR('$modules', t4.code)) as moduleOrder")->from(TABLE_PRIV)->alias('t1')
+        $privs = $this->dao->select("t1.id, t1.module, t1.method, CONCAT(t1.module, '-', t1.method) AS action, IF(t3.type = 'module', 0, t1.parent) as parent, t1.order, t2.`key`, t2.`value`, t2.desc, IF(t3.type = 'module', t3.code, t4.code) as parentCode, IF(t3.type = 'module', 0, INSTR('$modules', t4.code)) as moduleOrder")->from(TABLE_PRIV)->alias('t1')
             ->leftJoin(TABLE_PRIVLANG)->alias('t2')->on('t1.id=t2.objectID')
             ->leftJoin(TABLE_PRIVMANAGER)->alias('t3')->on('t1.parent=t3.id')
             ->leftJoin(TABLE_PRIVMANAGER)->alias('t4')->on('t3.parent=t4.id')
@@ -1509,7 +1526,7 @@ class groupModel extends model
             ->markRight(2)
             ->orderBy("moduleOrder asc, t3.order asc, `order` asc")
             ->page($pager)
-            ->fetchAll('key');
+            ->fetchAll('action');
         return $privs;
     }
 
@@ -1648,7 +1665,7 @@ class groupModel extends model
      * @access public
      * @return array
      */
-    public function getPrivRelationsByIdList($privs, $type = '')
+    public function getPrivRelationsByIdList($privs, $type = '', $returnType = 'name')
     {
         $privs = $this->dao->select('t1.priv,t3.`key`,t3.value,t1.type,t1.relationPriv')->from(TABLE_PRIVRELATION)->alias('t1')
             ->leftJoin(TABLE_PRIV)->alias('t2')->on('t1.relationPriv=t2.id')
@@ -1657,6 +1674,7 @@ class groupModel extends model
             ->andWhere('t3.objectType')->eq('priv')
             ->beginIF(!empty($type))->andWhere('t1.type')->eq($type)->fi()
             ->fetchGroup('type', 'relationPriv');
+        if($returnType == 'idGroup') return $privs;
 
         $relationPrivs = array();
         foreach($privs as $type => $typePrivs)
