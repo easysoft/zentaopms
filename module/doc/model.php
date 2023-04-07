@@ -994,7 +994,7 @@ class docModel extends model
 
             unset($this->config->doc->search['fields']['module']);
         }
-        elseif(in_array($type, array('product', 'project', 'execution', 'custom', 'book')))
+        elseif(in_array($type, array('product', 'project', 'execution', 'custom', 'mine')))
         {
             if(!isset($libs[$libID])) $libs[$libID] = $this->getLibById($libID);
 
@@ -1034,8 +1034,7 @@ class docModel extends model
         $this->config->doc->search['queryID']   = $queryID;
 
         /* Get the modules. */
-        $moduleOptionMenu                                        = $this->loadModel('tree')->getOptionMenu($libID, 'doc', $startModuleID = 0);
-        $this->config->doc->search['params']['module']['values'] = $moduleOptionMenu;
+        $this->config->doc->search['params']['module']['values'] = $this->loadModel('tree')->getOptionMenu($libID, 'doc', $startModuleID = 0);
 
         if($type == 'index' || $type == 'view' || ($this->app->rawMethod != 'contribute' and $libID == 0))
         {
@@ -1141,7 +1140,7 @@ class docModel extends model
      */
     public function checkPrivLib($object, $extra = '')
     {
-        if($this->app->user->admin) return true;
+        if($this->app->user->admin and $object->type != 'mine') return true;
 
         if($object->acl == 'open') return true;
 
@@ -1486,7 +1485,7 @@ class docModel extends model
                 ->andWhere('vision')->eq($this->config->vision)
                 ->andWhere('type')->eq($type)
                 ->beginIF(!empty($appendLib))->orWhere('id')->eq($appendLib)->fi()
-                ->beginIF($type == 'mine')->orWhere('addedBy')->eq($this->app->user->account)->fi()
+                ->beginIF($type == 'mine')->andWhere('addedBy')->eq($this->app->user->account)->fi()
                 ->orderBy('`order` asc, id_asc')
                 ->fetchAll('id');
         }
@@ -2638,15 +2637,7 @@ class docModel extends model
         if($this->app->tab == 'doc' and $type == 'execution') $type = 'project';
 
         $objectDropdown = '';
-        if($type == 'custom')
-        {
-            $libs = $this->getLibsByObject('custom', 0, '', $appendLib);
-            if($libID == 0 and !empty($libs)) $libID = reset($libs)->id;
-
-            $object     = new stdclass();
-            $object->id = 0;
-        }
-        else
+        if(in_array($type, array('project', 'product', 'execution')))
         {
             $objects  = $this->getOrderedObjects($type);
             $objectID = $this->loadModel($type)->saveState($objectID, $objects);
@@ -2665,8 +2656,17 @@ class docModel extends model
                 return print(js::locate(helper::createLink($type, $methodName, $param)));
             }
         }
+        else
+        {
+            $libs = $this->getLibsByObject($type, 0, '', $appendLib);
+            if($libID == 0 and !empty($libs)) $libID = reset($libs)->id;
 
-        $tab = strpos(',doc,product,project,execution,', ",{$this->app->tab},") !== false ? $this->app->tab : 'doc';
+            $object     = new stdclass();
+            $object->id = 0;
+        }
+
+        $tab  = strpos(',doc,product,project,execution,', ",{$this->app->tab},") !== false ? $this->app->tab : 'doc';
+        $type = $type == 'mine' ? 'my' : $type;
         if($tab != 'doc' and method_exists($type . 'Model', 'setMenu'))
         {
             $this->loadModel($type)->setMenu($objectID);
@@ -2911,6 +2911,7 @@ class docModel extends model
                     if(count($executionLibs[$executionID]) == 1)
                     {
                         $execution->id        = $item->id;
+                        $execution->type      = 'lib';
                         $execution->hasAction = true;
                         $execution->children  = $item->children;
                     }
