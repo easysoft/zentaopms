@@ -484,9 +484,13 @@ class docModel extends model
 
         $docContents = $this->dao->select('*')->from(TABLE_DOCCONTENT)->where('doc')->in(array_keys($docs))->orderBy('version,doc')->fetchAll('doc');
 
+        $modules = array();
         $objects = array('product' => 'products', 'execution' => 'executions', 'project' => 'projects');
         foreach($docs as $index => $doc)
         {
+            if(!isset($modules[$doc->lib])) $modules[$doc->lib] = $this->tree->getOptionMenu($doc->lib, 'doc', 0, 0, 'nodeleted', 'all', ' > ');
+            $doc->moduleName = zget($modules[$doc->lib], $doc->module);
+            $doc->moduleName = ltrim($doc->moduleName, '/');
             foreach($objects as $type => $object)
             {
                 if(!empty($doc->{$type}))
@@ -1010,6 +1014,11 @@ class docModel extends model
             if($type == 'project')
             {
                 $this->config->doc->search['params']['execution']['values'] = array('' => '') + $this->loadModel('execution')->getPairs($this->session->project, 'sprint,stage', 'multiple,leaf,noprefix') + array('all' => $this->lang->doc->allExecutions);
+            }
+            elseif($type == 'mine')
+            {
+                unset($this->config->doc->search['fields']['addedBy']);
+                unset($this->config->doc->search['fields']['editedBy']);
             }
             else
             {

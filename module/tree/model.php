@@ -132,10 +132,11 @@ class treeModel extends model
      * @param  int|array $branch
      * @param  string    $param
      * @param  string    $grade
+     * @param  string    $divide /|>
      * @access public
      * @return void
      */
-    public function getOptionMenu($rootID, $type = 'story', $startModule = 0, $branch = 0, $param = 'nodeleted', $grade = 'all')
+    public function getOptionMenu($rootID, $type = 'story', $startModule = 0, $branch = 0, $param = 'nodeleted', $grade = 'all', $divide = '/')
     {
         if(empty($branch) and !is_array($branch)) $branch = 0;
         if(defined('TUTORIAL'))
@@ -197,7 +198,7 @@ class treeModel extends model
             foreach($modules as $module)
             {
                 $branchName = (isset($product) and $product->type != 'normal' and $module->branch === BRANCH_MAIN) ? $this->lang->branch->main : $branch;
-                $this->buildTreeArray($treeMenu, $modules, $module, (empty($branchName)) ? '/' : "/$branchName/");
+                $this->buildTreeArray($treeMenu, $modules, $module, (empty($branchName)) ? '/' : "/$branchName/", $divide);
             }
         }
 
@@ -373,16 +374,16 @@ class treeModel extends model
      * @access public
      * @return void
      */
-    public function buildTreeArray(& $treeMenu, $modules, $module, $moduleName = '/')
+    public function buildTreeArray(& $treeMenu, $modules, $module, $moduleName = '/', $divide = '/')
     {
         $parentModules = explode(',', $module->path);
         foreach($parentModules as $parentModuleID)
         {
             if(empty($parentModuleID)) continue;
             if(empty($modules[$parentModuleID])) continue;
-            $moduleName .= $modules[$parentModuleID]->name . '/';
+            $moduleName .= $modules[$parentModuleID]->name . $divide;
         }
-        $moduleName = rtrim($moduleName, '/');
+        $moduleName = rtrim($moduleName, $divide);
         $moduleName .= "|$module->id\n";
 
         if(isset($treeMenu[$module->id]) and !empty($treeMenu[$module->id]))
