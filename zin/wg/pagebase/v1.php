@@ -45,6 +45,12 @@ class pageBase extends wg
         $imports  = $context->getImportList();
         $jsConfig = \js::getJSConfigVars();
 
+        if($config->debug)
+        {
+            $js[] = h::createJsVarCode('window.zin', ['page' => $this->toJsonData(), 'definedProps' => wg::$definedPropsMap, 'wgBlockMap' => wg::$wgToBlockMap]);
+            $js[] = 'console.log("zin", window.zin)';
+        }
+
         return h::html
         (
             before(html('<!DOCTYPE html>')),
@@ -71,13 +77,12 @@ class pageBase extends wg
             h::body
             (
                 empty($imports) ? NULL : h::import($imports),
-                h::jsVar('window.config', $jsConfig),
+                h::jsVar('window.config', $jsConfig, set::id('configJS')),
                 set($this->prop('bodyProps')),
                 set::class($this->prop('bodyClass')),
-                empty($css) ? NULL : h::css($css),
+                empty($css) ? NULL : h::css($css, set::id('pageCSS')),
                 $body,
-                empty($js) ? NULL : h::js($js),
-                $config->debug ? h::js('window.zin = ' . json_encode(array('page' => $this->toJsonData(), 'definedProps' => wg::$definedPropsMap, 'wgBlockMap' => wg::$wgToBlockMap)) . ';console.log("zin", window.zin)') : null
+                empty($js) ? NULL : h::js($js, set::id('pageJS')),
             )
         );
     }
