@@ -79,4 +79,5 @@
 </div>
 <?php js::set('productLang', $lang->productCommon);?>
 <?php js::set('projectLang', $lang->projectCommon);?>
+<?php js::set('libType', $type);?>
 <?php include '../../common/view/footer.lite.html.php';?>
