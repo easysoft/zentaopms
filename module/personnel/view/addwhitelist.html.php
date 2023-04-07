@@ -40,6 +40,7 @@
         <?php $i = 1;?>
         <?php $whitelistUsers = array();?>
         <?php foreach($whitelist as $user):?>
+        <?php unset($users[$user->account]);?>
         <tr id="whitelist<?php echo $i;?>" data-id="<?php echo $i;?>">
           <td>
             <input type='text' name='realnames[]' value='<?php echo $user->realname;?>' readonly class='form-control' />
