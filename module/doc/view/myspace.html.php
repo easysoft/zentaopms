@@ -17,7 +17,6 @@
 <?php js::set('confirmDelete', $lang->doc->confirmDelete)?>
 <?php js::set('appTab', $app->tab)?>
 <?php js::set('treeData', $libTree)?>
-<div class="cell<?php if($browseType == 'bySearch') echo ' show';?>" id="queryBox" data-module=<?php echo $type . 'Doc';?>></div>
 <div id="mainMenu" class="clearfix">
   <div id="leftBar" class="btn-toolbar pull-left">
     <?php if(!empty($libTree)):?>
@@ -53,6 +52,7 @@
   </div>
   <div class="sidebar-toggle flex-center"><i class="icon icon-angle-left"></i></div>
   <div class="main-col flex-full overflow-visible flex-auto">
+    <div class="cell<?php if($browseType == 'bySearch') echo ' show';?>" id="queryBox" data-module=<?php echo $type . $libType . 'Doc';?>></div>
     <?php include 'mydoclist.html.php'; ?>
   </div>
 <?php endif;?>
