@@ -13,7 +13,6 @@
 <?php include '../../common/view/header.html.php';?>
 <div id='mainContent' class='main-row fade'>
   <div class='main-col'>
-    <div class="cell" id="queryBox" data-module='user'></div>
     <div id='mainMenu' class='clearfix'>
       <div class='main-header'>
         <h2><?php echo $lang->api->managePublish;?></h2>
@@ -24,11 +23,11 @@
       <p><span class="text-muted"><?php echo $lang->noData;?></span></p>
     </div>
     <?php else:?>
-    <form class='main-table table-user' data-ride='table' method='post' data-checkable='false' id='userListForm'>
-      <table class='table has-sort-head' id='userList'>
+    <form class='main-table' method='post' id='releaseListForm'>
+      <table class='table has-sort-head' id='releaseList'>
         <thead>
           <tr>
-            <?php $vars = "libID={$libID}&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}";?>
+            <?php $vars = "libID={$libID}&orderBy=%s";?>
             <th class='c-id'><?php common::printOrderLink('id', $orderBy, $vars, $lang->idAB);?></th>
             <th class='c-version'><?php common::printOrderLink('version', $orderBy, $vars, $lang->api->version);?></th>
             <th class='c-name'><?php echo $lang->api->desc;?></th>
@@ -52,7 +51,6 @@
           <?php endforeach;?>
         </tbody>
       </table>
-      <div class='table-footer'><?php $pager->show('right', 'pagerjs');?></div>
     </form>
     <?php endif;?>
   </div>

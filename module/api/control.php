@@ -178,24 +178,22 @@ class api extends control
     /**
      * Release list.
      *
-     * @param  int $libID
+     * @param  int    $libID
+     * @param  string $orderBy
      * @access public
      * @return void
      */
-    public function releases($libID, $orderBy = 'id', $recTotal = 0, $recPerPage = 15, $pageID = 1)
+    public function releases($libID, $orderBy = 'id')
     {
         $libs = $this->doc->getApiLibs();
         $this->app->loadClass('pager', $static = true);
         $this->lang->modulePageNav = $this->generateLibsDropMenu($libs[$libID]);
 
-        $pager = new pager($recTotal, $recPerPage, $pageID);
-
         /* Append id for secend sort. */
         $sort     = common::appendOrder($orderBy);
-        $releases = $this->api->getReleaseByQuery($libID, $pager, $sort);
+        $releases = $this->api->getReleaseByQuery($libID, '', $sort);
 
         $this->view->releases = $releases;
-        $this->view->pager    = $pager;
         $this->view->orderBy  = $orderBy;
         $this->view->title    = $this->lang->api->managePublish;
         $this->view->libID    = $libID;
