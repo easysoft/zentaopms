@@ -100,6 +100,11 @@ function changeApiType()
     if(apiType == 'project') $('#project').change();
     if(apiType == 'product') $('#product').change();
     if(apiType == 'nolink')  loadDocLibs('api', 'api');
+    if(apiType == '')
+    {
+        $('#moduleBox').html("<select id='module' name='module' class='form-control'><option value=''></option></select>");
+        $('#moduleBox #module').picker();
+    }
 }
 
 /**
