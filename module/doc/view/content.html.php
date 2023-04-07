@@ -1,7 +1,7 @@
 <?php js::set('confirmDelete', $lang->doc->confirmDelete);?>
 <?php $sessionString = session_name() . '=' . session_id();?>
-<div id="mainContent" class="main-row">
-  <div class="main-col col-8">
+<div style="height:100%" id="h-full">
+  <div class="main-col col-8 flex-content">
     <div class="cell" id="content">
       <div class="detail no-padding">
         <div class="detail-title no-padding doc-title">
@@ -162,68 +162,12 @@
         <?php common::printPreAndNext($preAndNext);?>
       </div>
     </div>
-    <div class='cell'>
+    <div id="history" class='panel'>
       <?php
       $canBeChanged = common::canBeChanged('doc', $doc);
       if($canBeChanged) $actionFormLink = $this->createLink('action', 'comment', "objectType=doc&objectID=$doc->id");
       ?>
       <?php include '../../common/view/action.html.php';?>
-    </div>
-  </div>
-  <div class="side-col col-4" id="sidebar">
-    <div class="sidebar-toggle"><i class="icon icon-angle-right"></i></div>
-    <?php if(!empty($doc->digest)):?>
-    <div class="cell" id='sidebarContent'>
-      <details class="detail" open>
-        <summary class="detail-title"><?php echo $lang->doc->digest;?></summary>
-        <div class="detail-content">
-          <?php echo !empty($doc->digest) ? $doc->digest : "<div class='text-center text-muted'>" . $lang->noData . '</div>';?>
-        </div>
-      </details>
-    </div>
-    <?php endif;?>
-    <div class="cell">
-      <details class="detail" open>
-        <summary class="detail-title"><?php echo $lang->doc->basicInfo;?></summary>
-        <div class="detail-content">
-          <table class="table table-data">
-            <tbody>
-              <?php if($doc->productName):?>
-              <tr>
-                <th class='c-product'><?php echo $lang->doc->product;?></th>
-                <td><?php echo $doc->productName;?></td>
-              </tr>
-              <?php endif;?>
-              <?php if($doc->executionName):?>
-              <tr>
-                <th class='c-execution'><?php echo $lang->doc->execution;?></th>
-                <td><?php echo $doc->executionName;?></td>
-              </tr>
-              <?php endif;?>
-              <tr>
-                <th class='c-lib'><?php echo $lang->doc->lib;?></th>
-                <td><?php echo $lib->name;?></td>
-              </tr>
-              <tr>
-                <th><?php echo $lang->doc->module;?></th>
-                <td><?php echo $doc->moduleName ? $doc->moduleName : '/';?></td>
-              </tr>
-              <tr>
-                <th><?php echo $lang->doc->addedDate;?></th>
-                <td><?php echo $doc->addedDate;?></td>
-              </tr>
-              <tr>
-                <th><?php echo $lang->doc->editedBy;?></th>
-                <td><?php echo zget($users, $doc->editedBy);?></td>
-              </tr>
-              <tr>
-                <th><?php echo $lang->doc->editedDate;?></th>
-                <td><?php echo $doc->editedDate;?></td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </details>
     </div>
   </div>
 </div>

@@ -21,11 +21,11 @@
 <?php endif;?>
 <div id='mainContent'class="fade flex">
   <?php if($libID):?>
-    <div id='sideBar' class="panel side side-col col overflow-auto">
+    <div id='sideBar' class="panel side side-col col overflow-auto h-full-adjust">
       <?php include 'lefttree.html.php';?>
     </div>
     <div class="sidebar-toggle flex-center"><i class="icon icon-angle-left"></i></div>
-    <div class="main-col" data-min-width="400">
+    <div class="main-col h-full-adjust" data-min-width="400">
       <?php if($docID):?>
         <?php include './content.html.php';?>
       <?php else:?>
