@@ -19,6 +19,7 @@ $lang->product->create        = "Tạo {$lang->productCommon}";
 $lang->product->delete        = "Xóa {$lang->productCommon}";
 $lang->product->deleted       = 'Đã xóa';
 $lang->product->close         = "Đóng";
+$lang->product->activate      = 'Activate';
 $lang->product->closeAction   = "Đóng {$lang->productCommon}";
 $lang->product->select        = "Chọn {$lang->productCommon}";
 $lang->product->mine          = 'Của bạn';
