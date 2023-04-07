@@ -26,7 +26,8 @@
 .img-lib {flex: 0 0 14px; height: 14px; margin-right: 5px;}
 .tree-icon {position: absolute; right: 0;}
 .tree li > a {max-width: 100%; padding: 2px;}
-.file-tree  a.show-icon > div {padding-right: 15px;}
+.file-tree  a.show-icon > div,
+.file-tree  a.hover > div {padding-right: 15px;}
 .tree li.has-input {overflow: hidden;}
 .tree-text {overflow: hidden;}
 i.btn-info, i.btn-info:hover {border: none; background: #fff; box-shadow: unset;}
@@ -273,6 +274,9 @@ $(function()
         ele.on('click', '.icon-drop', function(e)
         {
             var $icon = $(this);
+            $('.icon-drop').addClass('hidden');
+            $(this).removeClass('hidden');
+            $('#fileTree').find('a.hover').removeClass('hover');
             $('.dropdown-in-tree').remove();
             var isCatalogue = $icon.attr('data-isCatalogue') === 'false' ? false : true;
             var dropDownID  = isCatalogue ? 'dropDownCatalogue' : 'dropDownLibrary';
@@ -317,7 +321,7 @@ $(function()
             var dropDown = renderDropdown(option);
             $icon.closest('body').append(dropDown);
             $('.dropdown-in-tree').attr('data-tree-id', $(this).closest('.tree').attr('id'));
-            $icon.closest('li').addClass('hover');
+            $icon.closest('a').addClass('hover');
 
             e.stopPropagation();
         }).on('mousemove', 'a', function()
@@ -334,11 +338,12 @@ $(function()
 
         }).on('mouseout', 'a', function()
         {
-            $(this).find('.icon').addClass('hidden');
+            if(!$(this).closest('a').hasClass('hover')) $(this).find('.icon').addClass('hidden');
             $(this).removeClass('show-icon');
         }).on('click', 'a', function()
         {
-            if(!$(this).data('action')) return;
+            if($(this).data('type') == 'execution') return;
+
             var isLib    = $(this).hasClass('lib');
             var moduleID = $(this).data('id');
             var libID    = 0;
@@ -370,7 +375,7 @@ $(function()
             $('#versionSwitcher').find('a[data-id=' + release + ']').parent().addClass('active');
 
             $('.dropdown-in-tree').attr('data-tree-id', $(this).closest('.tree').attr('id'));
-            $(this).closest('li').addClass('hover');
+            $(this).closest('a').addClass('hover');
 
             e.stopPropagation();
         });
@@ -417,6 +422,11 @@ $(function()
             methodName = 'showFiles';
             linkParams = 'type=' + objectType + '&objectID=' + objectID;
         }
+        else if(objectType == 'mine')
+        {
+            methodName = 'mySpace';
+            linkParams = 'type=mine&libID=' + libID;
+        }
         else if(['text', 'word', 'ppt', 'excel'].indexOf(type) !== -1)
         {
             methodName = 'view';
@@ -437,8 +447,12 @@ $(function()
         if($dropdown.length)
         {
             var dropdown = $dropdown.data();
-            var $hoverItem = $('#' + $dropdown.data('treeId')).find('li.hover');
-            $hoverItem.removeClass('hover');
+            var $hoverItem = $('#' + $dropdown.data('treeId')).find('a.hover');
+            if($hoverItem.length)
+            {
+                $hoverItem.removeClass('hover');
+                $hoverItem.find('.icon').addClass('hidden');
+            }
             $dropdown.remove();
         }
     }).on('click', '.sidebar-toggle', function()

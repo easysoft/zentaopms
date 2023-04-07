@@ -307,9 +307,31 @@ $(document).ready(function()
     });
 });
 
+/**
+ * locateNewLib
+ *
+ * @param  string $type product|project|execution|custom|mine
+ * @param  int    $objectID
+ * @param  int    $libID
+ * @access public
+ * @return void
+ */
 function locateNewLib(type, objectID, libID)
 {
-    location.href = createLink('doc', 'tableContents', 'type=' + type + '&objectID=' + objectID + '&libID=' + libID);
+    var method = 'tableContents';
+    var params = 'type=' + type + '&objectID=' + objectID + '&libID=' + libID;
+    if(type == 'product' || type == 'project')
+    {
+        method = type + 'Space';
+        params = 'objectID=' + objectID + '&libID=' + libID;
+    }
+    else if(type == 'mine')
+    {
+        method = 'mySpace';
+        params = 'type=mine&libID=' + libID;
+    }
+
+    location.href = createLink('doc', method, params);
 }
 
 /**
