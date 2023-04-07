@@ -63,28 +63,22 @@ class chartModel extends model
     /**
      * Process sql and correct type.
      *
-     * @param  object|array $charts
-     * @param  bool         $isObject
+     * @param  object $chart
      * @access public
-     * @return object|array
+     * @return object
      */
-    public function processChart($charts, $isObject = true)
+    public function processChart($chart)
     {
-        if($isObject) $charts = array($charts);
+        if(!empty($chart->sql))      $chart->sql      = trim(str_replace(';', '', $chart->sql));
+        if(!empty($chart->settings)) $chart->settings = json_decode($chart->settings, true);
 
-        foreach($charts as $id => $chart)
+        if(!empty($chart->settings) and is_array($chart->settings))
         {
-            if(!empty($chart->sql))      $charts[$id]->sql = trim(str_replace(';', '', $chart->sql));
-            if(!empty($chart->settings)) $charts[$id]->settings = json_decode($chart->settings, true);
-
-            if(!empty($chart->settings) and is_array($chart->settings))
-            {
-                $firstSetting = current($chart->settings);
-                if(isset($firstSetting['type'])) $charts[$id]->type = $firstSetting['type'];
-            }
+            $firstSetting = current($chart->settings);
+            if(isset($firstSetting['type'])) $chart->type = $firstSetting['type'];
         }
 
-        return $isObject ? reset($charts) : $charts;
+        return $chart;
     }
 
     /**
