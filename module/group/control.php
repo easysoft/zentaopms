@@ -1046,7 +1046,7 @@ class group extends control
         }
 
         $privList = $this->group->getCustomPrivs($menu, $privList);
-        $privList = $this->group->transformPrivLang($privList);
+        $privList = $this->group->transformPrivLang($privList, true);
 
         return print(html::select('actions[]', $privList, '', "multiple='multiple' class='form-control'"));
     }
