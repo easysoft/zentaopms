@@ -605,7 +605,6 @@ $lang->resource->doc->addCatalog     = 'addCatalog';
 $lang->resource->doc->editCatalog    = 'editCatalog';
 $lang->resource->doc->deleteCatalog  = 'deleteCatalog';
 $lang->resource->doc->displaySetting = 'displaySetting';
-$lang->resource->doc->diff           = 'diffAction';
 
 $lang->doc->methodOrder[5]   = 'index';
 $lang->doc->methodOrder[10]  = 'mySpace';
@@ -628,7 +627,6 @@ $lang->doc->methodOrder[90]  = 'addCatalog';
 $lang->doc->methodOrder[95]  = 'editCatalog';
 $lang->doc->methodOrder[100] = 'deleteCatalog';
 $lang->doc->methodOrder[105] = 'displaySetting';
-$lang->doc->methodOrder[110] = 'diff';
 
 /* Mail. */
 $lang->resource->mail = new stdclass();
@@ -1186,6 +1184,8 @@ if($config->edition == 'biz' or $config->edition == 'max')
 
     $lang->tree->methodOrder[35] = 'editHost';
     $lang->host->methodOrder[40] = 'groupMaintenance';
+
+    $lang->resource->doc->diff = 'diffAction';
 
     $lang->resource->my->review = 'review';
 
