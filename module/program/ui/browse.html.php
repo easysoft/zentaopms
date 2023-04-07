@@ -5,7 +5,7 @@ namespace zin;
 $cols   = array_values($config->program->dtable->fieldList);
 $data   = array_values($programs);
 
-foreach ($data as $row)
+foreach($data as $row)
 {
     if (!property_exists($row, 'progress'))
     {
@@ -18,22 +18,13 @@ foreach ($data as $row)
 
 featureBar
 (
-    to::before
-    (
-        programMenu
-        (
-           set
-           (
-               array
-               (
-                   'title' => '所有项目集',
-                   'programs' => $data,
-                   'activeKey' => '7',
-                   'closeLink' => '#'
-               )
-           )
-        )
-    ),
+    to::before(programMenu(set
+    ([
+        'title' => $lang->program->all,
+        'programs' => $data,
+        'activeKey' => '7',
+        'closeLink' => '#'
+    ]))),
     set::current($status),
     set::linkParams("status={key}&orderBy=$orderBy"),
     (hasPriv('project', 'batchEdit') && $programType != 'bygrid' && $hasProject === true) ? item
@@ -59,15 +50,15 @@ toolbar
         'text' => $lang->program->create,
         'icon'  => 'plus',
         'class' => 'btn primary',
-        'url' => \helper::createLink('program', 'create')
+        'url' => createLink('program', 'create')
     ))) : NULL
 );
 
 dtable
 (
-    set::className('shadow rounded'),
     set::cols($cols),
     set::data($data),
+    set::rowHeight(40),
     set::footer(false)
 );
 

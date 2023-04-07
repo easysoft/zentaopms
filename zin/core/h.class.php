@@ -162,23 +162,23 @@ class h extends wg
         return static::create('input', prop('type', 'file'), func_get_args());
     }
 
-    public static function textarea()
+    public static function textarea(...$args)
     {
-        $code = h::convertStrToRawCode(func_get_args());
-        return static::create('textarea', $code);
+        list($code, $args) = h::splitRawCode($args);
+        return static::create('textarea', $code, ...$args);
     }
 
-    public static function importJs($src)
+    public static function importJs($src, ...$args)
     {
-        return static::create('script', prop('src', $src));
+        return static::create('script', prop('src', $src), ...$args);
     }
 
-    public static function importCss($src)
+    public static function importCss($src, ...$args)
     {
-        return static::create('link', prop('rel', 'stylesheet'), prop('href', $src));
+        return static::create('link', prop('rel', 'stylesheet'), prop('href', $src), ...$args);
     }
 
-    public static function import($file, $type = NULL)
+    public static function import($file, $type = NULL, ...$args)
     {
         if(is_array($file))
         {
@@ -190,47 +190,53 @@ class h extends wg
             return $children;
         }
         if($type === NULL) $type = pathinfo($file, PATHINFO_EXTENSION);
-        if($type == 'js' || $type == 'cjs') return static::importJs($file);
-        if($type == 'css') return static::importCss($file);
+        if($type == 'js' || $type == 'cjs') return static::importJs($file, ...$args);
+        if($type == 'css') return static::importCss($file, ...$args);
         return null;
     }
 
-    public static function css()
+    public static function css(...$args)
     {
-        $code = h::convertStrToRawCode(func_get_args());
+        list($code, $args) = h::splitRawCode($args);
         if(empty($code)) return NULL;
-        return static::create('style', html(implode("\n", $code)));
+        return static::create('style', html(implode("\n", $code)), ...$args);
     }
 
-    public static function globalJS()
+    public static function globalJS(...$args)
     {
-        $code = h::convertStrToRawCode(func_get_args());
+        list($code, $args) = h::splitRawCode($args);
         if(empty($code)) return NULL;
-        return static::create('script', html(implode("\n", $code)));
+        return static::create('script', html(implode("\n", $code)), ...$args);
     }
 
-    public static function js()
+    public static function js(...$args)
     {
-        $code = h::convertStrToRawCode(func_get_args());
+
+        list($code, $args) = h::splitRawCode($args);
         if(empty($code)) return NULL;
-        return static::create('script', html('(function(){'. implode("\n", $code) . '}())'));
+        return static::create('script', html('(function(){'. implode("\n", $code) . '}())'), ...$args);
     }
 
-    public static function jsVar($name, $value)
+    public static function jsVar($name, $value, ...$directives)
     {
-        return static::js(static::createJsVarCode($name, $value));
+        return static::js(static::createJsVarCode($name, $value), ...$directives);
     }
 
-    public static function jsCall()
+    public static function jsCall($funcName, ...$args)
     {
-        $code = call_user_func_array(array('static', 'createJsCallCode'), func_get_args());
-        return static::js($code);
+        $funcArgs   = [];
+        $directives = [];
+        foreach($args as $arg)
+        {
+            if(isDirective($arg)) $directives[] = $arg;
+            else $funcArgs[] = $arg;
+        }
+        $code = static::createJsCallCode($funcName, $funcArgs);
+        return static::js($code, ...$directives);
     }
 
-    public static function createJsCallCode()
+    public static function createJsCallCode($func, $args)
     {
-        $args = func_get_args();
-        $func = array_shift($args);
         foreach($args as $index => $arg)
         {
             $args[$index] = h::encodeJsonWithRawJs($arg, JSON_UNESCAPED_UNICODE);
@@ -271,14 +277,16 @@ class h extends wg
         return $json;
     }
 
-    protected static function convertStrToRawCode($children)
+    protected static function splitRawCode($children)
     {
         $children = \zin\utils\flat($children);
-        $code = array();
+        $code = [];
+        $args = [];
         foreach($children as $key => $child)
         {
             if(is_string($child)) $code[] = $child;
+            else $args[] = $child;
         }
-        return $code;
+        return [$code, $args];
     }
 }

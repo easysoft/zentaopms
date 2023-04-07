@@ -850,7 +850,7 @@ class program extends control
         $this->config->program->search['actionURL'] = $actionURL;
         $this->loadModel('search')->setSearchParams($this->config->program->search);
 
-        $this->view->title      = $this->lang->program->browse;
+        $this->view->title      = $this->lang->program->projectView;
         $this->view->position[] = $this->lang->program->browse;
 
         $this->view->programs     = $programs;

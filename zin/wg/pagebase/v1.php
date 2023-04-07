@@ -39,11 +39,21 @@ class pageBase extends wg
         $head = $this->buildHead();
         $body = $this->buildBody();
 
-        $context  = context::current();
-        $css      = array_merge([data('pageCSS', '')], $context->getCssList());
-        $js       = array_merge($context->getJsList(), [data('pageJS', '')]);
-        $imports  = $context->getImportList();
-        $jsConfig = \js::getJSConfigVars();
+        $context   = context::current();
+        $css       = array_merge([data('pageCSS', '')], $context->getCssList());
+        $js        = array_merge($context->getJsList(), [data('pageJS', '')]);
+        $imports   = $context->getImportList();
+        $jsConfig  = \js::getJSConfigVars();
+        $bodyProps = $this->prop('bodyProps');
+        $bodyClass = $this->prop('bodyClass');
+        $metas     = $this->prop('metas');
+        $title     = $this->props->get('title', data('title')) . " - $lang->zentaoPMS";
+
+        if($config->debug)
+        {
+            $js[] = h::createJsVarCode('window.zin', ['page' => $this->toJsonData(), 'definedProps' => wg::$definedPropsMap, 'wgBlockMap' => wg::$wgToBlockMap]);
+            $js[] = 'console.log("zin", window.zin)';
+        }
 
         return h::html
         (
@@ -51,33 +61,20 @@ class pageBase extends wg
             set($this->props->skip(array_keys(static::getDefinedProps()))),
             h::head
             (
-                html($this->prop('metas')),
-                h::title($this->props->get('title', data('title')) . " - $lang->zentaoPMS"),
-                $zui  ? h::import(array($config->zin->zuiPath . 'zui.zentao.umd.cjs', $config->zin->zuiPath . 'zui.zentao.css')) : null,
-                $zui ? h::js
-                (
-                    'zui.create = function(name, element, options){',
-                        'if(!zui.componentsMap) zui.componentsMap = Object.keys(zui).reduce(function(map, n){',
-                            'if(n[0] !== n[0].toUpperCase()) return map;',
-                            'map[n.toLowerCase()] = zui[n];',
-                            'return map;',
-                        '}, {});',
-                        'const Component = zui.componentsMap[name.toLowerCase()];',
-                        'return Component ? new Component(element, options) : null;',
-                    '};'
-                ) : null,
+                html($metas),
+                h::title($title),
+                $zui ? h::import(array($config->zin->zuiPath . 'zui.zentao.umd.cjs', $config->zin->zuiPath . 'zui.zentao.css')) : null,
                 $head,
             ),
             h::body
             (
                 empty($imports) ? NULL : h::import($imports),
-                h::jsVar('window.config', $jsConfig),
-                set($this->prop('bodyProps')),
-                set::class($this->prop('bodyClass')),
-                empty($css) ? NULL : h::css($css),
+                h::jsVar('window.config', $jsConfig, set::id('configJS')),
+                set($bodyProps),
+                set::class($bodyClass),
+                empty($css) ? NULL : h::css($css, set::id('pageCSS')),
                 $body,
-                empty($js) ? NULL : h::js($js),
-                $config->debug ? h::js('window.zin = ' . json_encode(array('page' => $this->toJsonData(), 'definedProps' => wg::$definedPropsMap, 'wgBlockMap' => wg::$wgToBlockMap)) . ';console.log("zin", window.zin)') : null
+                empty($js) ? NULL : h::js($js, set::id('pageJS')),
             )
         );
     }

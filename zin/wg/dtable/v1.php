@@ -3,10 +3,7 @@ namespace zin;
 
 class dtable extends wg
 {
-    protected static $defineProps = array
-    (
-        'js-render?:bool=true'
-    );
+    static $defineProps = 'className?:string="shadow rounded"';
 
     protected function build()
     {
