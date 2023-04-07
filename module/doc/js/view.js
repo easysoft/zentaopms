@@ -199,4 +199,16 @@ $(function()
     })
 
     $('.outline .outline-toggle i.icon-angle-right').trigger("click");
+    $('#hisTrigger').on('click', function()
+    {
+        var $history = $('#history');
+        if($history.hasClass('hidden'))
+        {
+            $history.removeClass('hidden');
+        }
+        else
+        {
+            $history.addClass('hidden');
+        }
+    })
 })
