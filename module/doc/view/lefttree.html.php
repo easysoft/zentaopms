@@ -187,15 +187,15 @@ $(function()
         }
         else
         {
-            var libId;
+            var lib  = 0;
             var $lis = '<li><a href="###" data-id=0>' + versionLang + '</a></li>';
             for(i = 0; i< versions.length; i++)
             {
                 var version = versions[i];
                 $lis += '<li><a href="###"  data-id="' + version.id + '">' + version.version+ '</a></li>';
-                libId = version.lib;
+                lib   = version.lib;
             }
-            var $dropdown = '<ul id="versionSwitcher" data-lib-id = "' + libId + '" class="dropdown-menu dropdown-in-tree" style="display: unset; left:' + option.left + 'px; top:' + option.top + 'px;">';
+            var $dropdown = '<ul id="versionSwitcher" data-lib = "' + lib + '" class="dropdown-menu dropdown-in-tree" style="display: unset; left:' + option.left + 'px; top:' + option.top + 'px;">';
             $dropdown += $lis;
             $dropdown += '</ul>';
         }
@@ -360,7 +360,7 @@ $(function()
                 libID = $(this).closest('.lib').data('id');
             }
 
-            return lcatePage(libID, moduleID, $(this).data('type'));
+            return locatePage(libID, moduleID, $(this).data('type'));
         }).on('click', '.tree-version-trigger', function(e)
         {
             $('.dropdown-in-tree').remove();
@@ -408,7 +408,7 @@ $(function()
      * @access public
      * @return void
      */
-    function lcatePage(libID, moduleID, type)
+    function locatePage(libID, moduleID, type)
     {
         linkParams = linkParams.replace('%s', 'libID=' + libID + '&moduleID=' + moduleID);
         var methodName = '';
@@ -548,9 +548,16 @@ $(function()
         }
     }).on('click', '#versionSwitcher a', function()
     {
-        var $item = $(this);
-        linkParams = linkParams.replace('%s', 'libID=' + $item.closest('ul').data('libId') + '&moduleID=0&apiID=0&version=0&release=' + $item.data('id'));
-        location.href = createLink(config.currentModule, 'index', linkParams);
+        var libID      = $(this).closest('#versionSwitcher').data('lib');
+        var moduleID   = $(this).data('id');
+        var params     = 'libID=' + libID + '&moduleID=0&apiID=0&version=0&release=' + moduleID;
+        var methodName = config.currentMethod;
+        if(config.currentModule == 'doc')
+        {
+            params     = linkParams.replace('%s', 'libID=' + libID + '&moduleID=' + moduleID).replace('browseType=&', 'browseType=byrelease&').replace('param=0', 'param=' + moduleID);
+            methodName = objectType + 'Space';
+        }
+        location.href = createLink(config.currentModule, methodName, params);
     }).on('blur', '.file-tree input.input-tree', function()
     {
         var $input = $(this);
@@ -583,7 +590,7 @@ $(function()
             }
 
             var module = result.module;
-            return lcatePage(module.root, module.id, 'doc');
+            return locatePage(module.root, module.id, 'doc');
         });
     }).on('keydown', '.file-tree input.input-tree', function(e)
     {
