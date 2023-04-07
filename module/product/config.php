@@ -19,50 +19,42 @@ $config->product->showBranchMethod = 'browse,project';
 global $lang, $app;
 $app->loadLang('story');
 $config->product->search['module']             = 'story';
-$config->product->search['fields']['id']           = $lang->story->id;
-$config->product->search['fields']['title']        = $lang->story->title;
-$config->product->search['fields']['pri']          = $lang->story->pri;
-$config->product->search['fields']['status']       = $lang->story->status;
-$config->product->search['fields']['product']      = $lang->story->product;
-$config->product->search['fields']['branch']       = '';
-$config->product->search['fields']['module']       = $lang->story->module;
-$config->product->search['fields']['assignedTo']   = $lang->story->assignedTo;
-$config->product->search['fields']['assignedDate'] = $lang->story->assignedDate;
-$config->product->search['fields']['category']     = $lang->story->category;
-if($config->systemMode == 'PLM')
-{
-    $config->product->search['fields']['duration'] = $lang->story->duration;
-    $config->product->search['fields']['BSA']      = $lang->story->BSA;
-}
+$config->product->search['fields']['title']    = $lang->story->title;
+$config->product->search['fields']['id']       = $lang->story->id;
+$config->product->search['fields']['keywords'] = $lang->story->keywords;
+$config->product->search['fields']['stage']    = $lang->story->stage;
+$config->product->search['fields']['status']   = $lang->story->status;
+$config->product->search['fields']['pri']      = $lang->story->pri;
+
+$config->product->search['fields']['product']  = $lang->story->product;
+$config->product->search['fields']['branch']   = '';
+$config->product->search['fields']['module']   = $lang->story->module;
+$config->product->search['fields']['plan']     = $lang->story->plan;
+$config->product->search['fields']['estimate'] = $lang->story->estimate;
+
 $config->product->search['fields']['source']     = $lang->story->source;
 $config->product->search['fields']['sourceNote'] = $lang->story->sourceNote;
-if($config->systemMode == 'PLM')
-{
-    $config->product->search['fields']['feedbackBy']     = $lang->story->feedbackBy;
-    $config->product->search['fields']['notifyEmail']    = $lang->story->notifyEmail;
-}
-$config->product->search['fields']['reviewedBy']     = $lang->story->reviewedBy;
-$config->product->search['fields']['reviewedDate']   = $lang->story->reviewedDate;
-$config->product->search['fields']['openedBy']       = $lang->story->openedBy;
+$config->product->search['fields']['fromBug']    = $lang->story->fromBug;
+$config->product->search['fields']['category']   = $lang->story->category;
+
+$config->product->search['fields']['openedBy']     = $lang->story->openedBy;
+$config->product->search['fields']['reviewedBy']   = $lang->story->reviewedBy;
+$config->product->search['fields']['result']       = $lang->story->reviewResultAB;
+$config->product->search['fields']['assignedTo']   = $lang->story->assignedTo;
+$config->product->search['fields']['closedBy']     = $lang->story->closedBy;
+$config->product->search['fields']['lastEditedBy'] = $lang->story->lastEditedBy;
+
+$config->product->search['fields']['mailto']       = $lang->story->mailto;
+
+$config->product->search['fields']['closedReason'] = $lang->story->closedReason;
+$config->product->search['fields']['version']      = $lang->story->version;
+
 $config->product->search['fields']['openedDate']     = $lang->story->openedDate;
-$config->product->search['fields']['closedBy']       = $lang->story->closedBy;
+$config->product->search['fields']['reviewedDate']   = $lang->story->reviewedDate;
+$config->product->search['fields']['assignedDate']   = $lang->story->assignedDate;
 $config->product->search['fields']['closedDate']     = $lang->story->closedDate;
-$config->product->search['fields']['closedReason']   = $lang->story->closedReason;
-$config->product->search['fields']['lastEditedBy']   = $lang->story->lastEditedBy;
 $config->product->search['fields']['lastEditedDate'] = $lang->story->lastEditedDate;
 $config->product->search['fields']['activatedDate']  = $lang->story->activatedDate;
-$config->product->search['fields']['mailto']         = $lang->story->mailto;
-$config->product->search['fields']['version']        = $lang->story->version;
-if($config->systemMode != 'PLM')
-{
-    $config->product->search['fields']['keywords']    = $lang->story->keywords;
-    $config->product->search['fields']['stage']       = $lang->story->stage;
-    $config->product->search['fields']['plan']        = $lang->story->plan;
-    $config->product->search['fields']['estimate']    = $lang->story->estimate;
-    $config->product->search['fields']['fromBug']     = $lang->story->fromBug;
-    $config->product->search['fields']['reviewedBy']  = $lang->story->reviewedBy;
-    $config->product->search['fields']['result']      = $lang->story->reviewResultAB;
-}
 
 $config->product->search['params']['title']          = array('operator' => 'include', 'control' => 'input',  'values' => '');
 $config->product->search['params']['keywords']       = array('operator' => 'include', 'control' => 'input',  'values' => '');
@@ -99,15 +91,6 @@ $config->product->search['params']['assignedDate']   = array('operator' => '=', 
 $config->product->search['params']['closedDate']     = array('operator' => '=', 'control' => 'input', 'values' => '', 'class' => 'date');
 $config->product->search['params']['lastEditedDate'] = array('operator' => '=', 'control' => 'input', 'values' => '', 'class' => 'date');
 $config->product->search['params']['activatedDate']  = array('operator' => '=', 'control' => 'input', 'values' => '', 'class' => 'date');
-
-if($config->systemMode == 'PLM')
-{
-    $app->loadLang('demand');
-    $config->product->search['params']['BSA']         = array('operator' => '=', 'control' => 'select',  'values' => $lang->demand->bsaList);
-    $config->product->search['params']['duration']    = array('operator' => '=', 'control' => 'select',  'values' => $lang->demand->durationList);
-    $config->product->search['params']['feedbackBy']  = array('operator' => '=',       'control' => 'select', 'values' => 'users');
-    $config->product->search['params']['notifyEmail'] = array('operator' => 'include', 'control' => 'input',  'values' => '');
-}
 
 $app->loadLang('product');
 $config->product->all = new stdclass();
