@@ -222,7 +222,7 @@ class api extends control
         {
             $this->api->deleteRelease($id);
             if(dao::isError()) return $this->sendError(dao::getError());
-            return print(js::locate(inlink('releases', "libID=$libID"), 'parent'));
+            return print(js::execute("parent.removeRelease($id)"));
         }
     }
 
