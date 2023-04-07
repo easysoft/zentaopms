@@ -25,14 +25,14 @@ class featureBar extends wg
 
         \common::sortFeatureMenu($currentModule, $currentMethod);
 
-        if(!isset($lang->$currentModule->featureBar[$currentMethod])) return NULL;
-        $rawItems = $lang->$currentModule->featureBar[$currentMethod];
+        $rawItems = \customModel::getFeatureMenu($app->rawModule, $app->rawMethod);
         if(!is_array($rawItems)) return NULL;
 
-        $current  = $this->prop('current', data('browseType', ''));
-        $recTotal = data('recTotal');
-        $items    = array();
-        $link     = $this->prop('link');
+        $current      = $this->prop('current', data('browseType', ''));
+        $recTotal     = data('recTotal');
+        $items        = array();
+        $link         = $this->prop('link');
+        $currentStory = $this->prop('currentStory', data('storyBrowseType', ''));
 
         if(empty($link))
         {
@@ -41,17 +41,52 @@ class featureBar extends wg
             $link = createLink($currentModule, $currentMethod, $linkParams);
         }
 
-        foreach($rawItems as $key => $text)
+        foreach($rawItems as $item)
         {
-            $isActive = $key == $current;
+            if(isset($item->hidden)) continue;
+
+            $isActive = $item->name == $current;
+
+            if($item->name == 'more' && !empty($lang->product->moreSelects))
+            {
+
+                $subItems = array();
+                $callback = $this->prop('moreMenuLinkCallback');
+                $callback = isset($callback[0]) ? $callback[0] : null;
+
+                foreach($lang->product->moreSelects as $key => $text)
+                {
+                    $subItems[] = array
+                    (
+                        'text'   => $text,
+                        'active' => $key == $currentStory,
+                        'url'    => ($callback instanceof \Closure) ? $callback($key, $text) : createLink($app->rawModule, $app->rawMethod)
+                    );
+                }
+
+                $items[] = array
+                (
+                    'text'   => $item->text,
+                    'active' => $isActive,
+                    'url'    => str_replace('{key}', $item->name, $link),
+                    'badge'  => $isActive && !empty($recTotal) ? array('text' => $recTotal, 'class' => 'size-sm circle white') : NULL,
+                    'type'   => 'dropdown',
+                    'items'  => $subItems
+                );
+
+                continue;
+            }
+
+
             $items[] = array
             (
-                'text'   => $text,
+                'text'   => $item->text,
                 'active' => $isActive,
-                'url'    => str_replace('{key}', $key, $link),
+                'url'    => str_replace('{key}', $item->name, $link),
                 'badge'  => $isActive && !empty($recTotal) ? array('text' => $recTotal, 'class' => 'size-sm circle white') : NULL,
             );
         }
+
         return $items;
     }
 

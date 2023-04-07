@@ -51,7 +51,7 @@ class actionItem extends wg
     {
         $dropdown = new dropdown
         (
-            $this->props->skip('tagName,items,class,data-id,data-app,type,name,outerTag,outerProps,props,trigger,menuProps'),
+            $this->props->skip('tagName,items,class,data-id,data-app,type,name,outerTag,outerProps,props,trigger,menuProps,url'),
             set($this->props),
             $this->children()
         );

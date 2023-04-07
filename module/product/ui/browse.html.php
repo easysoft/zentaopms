@@ -70,12 +70,18 @@ foreach($stories as $story)
     }
 }
 
+useData('storyBrowseType', $storyBrowseType);
+
 featureBar
 (
-    li(dropdown(
-        $lang->more,
-        set::items($featureBarMore)
-    )),
+    set::moreMenuLinkCallback
+    (
+        function($key, $value) use($projectIDParam, $productID, $branch, $storyType)
+        {
+            global $app;
+            return createLink($app->rawModule, $app->rawMethod, $projectIDParam . "productID=$productID&branch=$branch&browseType=$key&param=0&storyType=$storyType");
+        }
+    ),
     li(searchToggle())
 );
 
