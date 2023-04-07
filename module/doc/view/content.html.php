@@ -56,7 +56,7 @@
                 $deleteURL = $this->createLink('doc', 'delete', "docID=$doc->id&confirm=yes&from=lib");
                 echo html::a("javascript:ajaxDeleteDoc(\"$deleteURL\", \"docList\", confirmDelete)", '<i class="icon-trash"></i>', '', "title='{$lang->doc->delete}' class='btn btn-link'");
             }?>
-            <a id="hisTrigger" href="###" class="btn btn-link" title=<?php echo $lang->history?>><i class="icon icon-clock"></i></a>
+            <a id="hisTrigger" href="###" class="btn btn-link" title=<?php echo $lang->history?>><span class="icon icon-clock"></span></a>
 
             <?php if($this->config->edition == 'max' and $this->app->tab == 'project'):?>
             <?php
