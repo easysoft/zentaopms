@@ -1835,8 +1835,13 @@ class treeModel extends model
         $changes = common::createChanges($self, $module);
         if(!isset($_POST['branch'])) $module->branch = $self->branch;
 
+        if($self and $module->parent) $self->parent = $module->parent;
         $repeatName = $this->checkUnique($self, array("id{$self->id}" => $module->name), array("id{$self->id}" => $module->branch));
-        if($repeatName) helper::end(js::alert(sprintf($this->lang->tree->repeatName, $repeatName)));
+        if($repeatName)
+        {
+            $tips = in_array($self->type, array('doc', 'api')) ? $this->lang->tree->repeatDirName : $this->lang->tree->repeatName;
+            helper::end(js::alert(sprintf($tips, $repeatName)));
+        }
 
         if((empty($module->root) or empty($module->name)) and in_array($self->type, array('doc', 'api')))
         {
