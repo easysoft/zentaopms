@@ -670,7 +670,7 @@ class projectModel extends model
             {
                 $link = helper::createLink($module, 'browse', "repoID=&branchID=&objectID=%s") . '#app=project';
             }
-            elseif($module == 'doc')
+            elseif($module == 'doc' or $module == 'api')
             {
                 $link = helper::createLink($module, 'projectSpace', "objectID=%s") . '#app=project';
             }
