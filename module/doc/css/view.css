@@ -52,6 +52,6 @@
 .detail-title .actions .ajaxCollect > img {width: 20px;}
 .actions > .text {color: #8c8c8c; font-size: 14px;}
 .flex-content {display: flex; width: 100%; height: 100%;}
-.flex-content > #content {flex: auto;}
+.flex-content > #content {flex: auto; overflow-y: auto;}
 .flex-content > #history {flex: 0 0 302px;;}
 .panel {margin-bottom: 0;}
