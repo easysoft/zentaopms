@@ -49,6 +49,12 @@ class api extends control
         $objectID    = $this->objectID;
         $isFirstLoad = $libID ? false : true;
 
+        if($release)
+        {
+            $browseType = 'byrelease';
+            $param      = $release;
+        }
+
         /* Get all api doc libraries. */
         $libs = $this->doc->getApiLibs($appendLib, $objectType, $objectID);
         if(empty($libs) and $objectType != 'nolink')
@@ -125,7 +131,7 @@ class api extends control
         $this->view->objectID       = $objectID;
         $this->view->moduleID       = $moduleID;
         $this->view->version        = $version;
-        $this->view->libTree        = $this->doc->getLibTree($libID, $libs, 'api', $moduleID, $objectID, $browseType);
+        $this->view->libTree        = $this->doc->getLibTree($libID, $libs, 'api', $moduleID, $objectID, $browseType, $param);
         $this->view->users          = $this->user->getPairs('noclosed,noletter');
         $this->view->objectDropdown = isset($libs[$libID]) ? $this->generateLibsDropMenu($libs[$libID], $release) : '';
 
@@ -216,7 +222,7 @@ class api extends control
         {
             $this->api->deleteRelease($id);
             if(dao::isError()) return $this->sendError(dao::getError());
-            return print(js::locate(inlink('releases', "libID=$libID"), 'parent'));
+            return print(js::execute("parent.removeRelease($id)"));
         }
     }
 
@@ -314,6 +320,7 @@ class api extends control
             $now    = helper::now();
             $userId = $this->app->user->account;
             $data   = fixer::input('post')
+                ->trim('name')
                 ->add('lib', $libID)
                 ->skipSpecial('attribute')
                 ->add('addedBy', $userId)
@@ -522,6 +529,7 @@ class api extends control
      */
     public function edit($apiID)
     {
+        $api = $this->api->getLibById($apiID);
         if(helper::isAjaxRequest() && !empty($_POST))
         {
             $changes = $this->api->update($apiID);
@@ -533,10 +541,9 @@ class api extends control
                 $this->action->logHistory($actionID, $changes);
             }
 
-            return $this->sendSuccess(array('locate' => helper::createLink('api', 'index', "libID=0&moduleID=0&apiID=$apiID")));
+            return $this->sendSuccess(array('locate' => helper::createLink('api', 'index', "libID=$api->lib&moduleID=0&apiID=$apiID")));
         }
 
-        $api = $this->api->getLibById($apiID);
         if($api)
         {
             $this->view->api  = $api;
@@ -927,5 +934,32 @@ class api extends control
         $this->view->objectsPinYin = common::convert2Pinyin($titleList);
 
         $this->display();
+    }
+
+    /**
+     * Edit a catalog.
+     *
+     * @param  int    $moduleID
+     * @param  string $type doc|api
+     * @access public
+     * @return void
+     */
+    public function editCatalog($moduleID, $type)
+    {
+        echo $this->fetch('tree', 'edit', "moduleID=$moduleID&type=$type");
+    }
+
+    /**
+     * Delete a catalog.
+     *
+     * @param  int    $rootID
+     * @param  int    $moduleID
+     * @param  string $confirm yes|no
+     * @access public
+     * @return void
+     */
+    public function deleteCatalog($rootID, $moduleID, $confirm = 'no')
+    {
+        echo $this->fetch('tree', 'delete', "rootID=$rootID&moduleID=$moduleID&confirm=$confirm");
     }
 }

@@ -152,6 +152,15 @@ SELECT t1.`group`, t1.`module`, 'editCatalog' FROM `zt_grouppriv` AS t1 WHERE t1
 INSERT IGNORE INTO `zt_grouppriv` (`group`, `module`, `method`)
 SELECT t1.`group`, t1.`module`, 'deleteCatalog' FROM `zt_grouppriv` AS t1 WHERE t1.`module` = 'doc' AND t1.`method` = 'catalog';
 
+INSERT IGNORE INTO `zt_grouppriv` (`group`, `module`, `method`)
+SELECT t1.`group`, 'api', 'addCatalog' FROM `zt_grouppriv` AS t1 WHERE t1.`module` = 'doc' AND t1.`method` = 'catalog';
+
+INSERT IGNORE INTO `zt_grouppriv` (`group`, `module`, `method`)
+SELECT t1.`group`, 'api', 'editCatalog' FROM `zt_grouppriv` AS t1 WHERE t1.`module` = 'doc' AND t1.`method` = 'catalog';
+
+INSERT IGNORE INTO `zt_grouppriv` (`group`, `module`, `method`)
+SELECT t1.`group`, 'api', 'deleteCatalog' FROM `zt_grouppriv` AS t1 WHERE t1.`module` = 'doc' AND t1.`method` = 'catalog';
+
 UPDATE `zt_grouppriv` SET `method` = 'mySpace' WHERE `module` = 'doc' AND `method` = 'browse';
 
 ALTER TABLE `zt_account`
@@ -739,3 +748,14 @@ CHANGE `editedDate` `editedDate` datetime NULL;
 ALTER TABLE `zt_zoutput`
 CHANGE `editedBy` `editedBy` varchar(30) NOT NULL DEFAULT '',
 CHANGE `editedDate` `editedDate` datetime NULL;
+
+CREATE TABLE IF NOT EXISTS `zt_docaction` (
+  `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
+  `doc` mediumint(8) unsigned NOT NULL,
+  `action` varchar(80) NOT NULL,
+  `actor` char(30) NOT NULL,
+  `date` datetime NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `doc` (`doc`),
+  KEY `actor` (`actor`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;

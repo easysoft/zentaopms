@@ -70,7 +70,7 @@ $lang->doc->project      = $lang->projectCommon;
 $lang->doc->execution    = $lang->execution->common;
 $lang->doc->lib          = 'Bibliothèque';
 $lang->doc->module       = 'Catégorie';
-$lang->doc->libAndModule = 'Library & Catalog';
+$lang->doc->libAndModule = 'Library&Catalog';
 $lang->doc->object       = 'Object';
 $lang->doc->title        = 'Nom';
 $lang->doc->digest       = 'Résumé';
@@ -121,6 +121,7 @@ $lang->doc->nextStep     = 'Next';
 $lang->doc->closed       = 'Closed';
 $lang->doc->saveDraft    = 'Save Draft';
 $lang->doc->defaultSave  = 'Default Save: ';
+$lang->doc->position     = 'Position';
 
 $lang->doc->moduleDoc     = 'Par Module';
 $lang->doc->searchDoc     = 'Rechercher';

@@ -15,10 +15,10 @@ body {margin-bottom: 25px;}
 #docListForm th.c-id {width: 72px;}
 #docListForm th.c-user {width: 80px;}
 #docListForm th.c-actions {width: 84px; padding-left: 15px;}
-#docListForm .checkbox-primary {line-height: 16px;}
-#docListForm .checkbox-primary > label {height: 16px; line-height: 16px; padding-left: 16px;}
-#docListForm .checkbox-primary > label:before {left: -1px; font-size: 10px;}
-#docListForm .checkbox-primary > label:after {width: 12px; height: 12px;}
+#docListForm .table .c-name > .doc-title {display: inline-block; max-width: 90%; overflow: hidden; background: transparent; padding-right:0px;}
+#docListForm .table .c-name > .draft {background-color:rgba(129, 102, 238, 0.12); color:#8166EE;}
+#docListForm .table .c-name > .ajaxCollect {float: right; position: relative; right: 10px; top: 0px;}
+#docListForm table.table > thead > tr {height: 32px;}
 </style>
 <?php if(common::checkNotCN()):?>
 <style>
@@ -55,9 +55,14 @@ body {margin-bottom: 25px;}
             <?php common::printOrderLink('id', $orderBy, $vars, $lang->idAB);?>
           </th>
           <th class="c-name"><?php common::printOrderLink('title', $orderBy, $vars, $lang->doc->title);?></th>
+          <th class="c-module"><?php common::printOrderLink('module', $orderBy, $vars, $lang->doc->position);?></th>
+          <?php if($type != 'mine'):?>
           <th class="c-user"><?php common::printOrderLink('addedBy', $orderBy, $vars, $lang->doc->addedByAB);?></th>
+          <?php endif;?>
           <th class="c-date"><?php common::printOrderLink('addedDate', $orderBy, $vars, $lang->doc->addedDate);?></th>
+          <?php if($type != 'mine'):?>
           <th class="c-user"><?php common::printOrderLink('editedBy', $orderBy, $vars, $lang->doc->editedBy);?></th>
+          <?php endif;?>
           <th class="c-date"><?php common::printOrderLink('editedDate', $orderBy, $vars, $lang->doc->editedDate);?></th>
           <th class="c-actions"><?php echo $lang->actions;?></th>
         </tr>
@@ -96,9 +101,14 @@ body {margin-bottom: 25px;}
             <a data-url="<?php echo $this->createLink('doc', 'collect', "objectID=$doc->id&objectType=doc");?>" title="<?php echo $collectTitle;?>" class='btn btn-link ajaxCollect'><?php echo html::image("static/svg/{$star}.svg", "class='$star'");?></a>
           <?php endif;?>
           </td>
+          <td class="c-module"><?php echo $doc->moduleName;?></td>
+          <?php if($type != 'mine'):?>
           <td class="c-user"><?php echo zget($users, $doc->addedBy);?></td>
+          <?php endif;?>
           <td class="c-datetime"><?php echo formatTime($doc->addedDate, 'Y-m-d');?></td>
+          <?php if($type != 'mine'):?>
           <td class="c-user"><?php echo zget($users, $doc->editedBy);?></td>
+          <?php endif;?>
           <td class="c-datetime"><?php echo formatTime($doc->editedDate, 'Y-m-d');?></td>
           <td class="c-actions">
             <?php if(common::canBeChanged('doc', $doc)):?>

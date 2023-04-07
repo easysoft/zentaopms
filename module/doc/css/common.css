@@ -12,7 +12,6 @@
 .col-spliter:hover:after,
 .row-spliting .col-spliter:before,
 .row-spliting .col-spliter:after {opacity: 1;}
-
 @media (max-width: 720px)
 {
   .split-row > .side-col,

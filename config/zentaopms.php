@@ -311,6 +311,7 @@ define('TABLE_HISTORY',       '`' . $config->db->prefix . 'history`');
 define('TABLE_EXTENSION',     '`' . $config->db->prefix . 'extension`');
 define('TABLE_CRON',          '`' . $config->db->prefix . 'cron`');
 define('TABLE_BLOCK',         '`' . $config->db->prefix . 'block`');
+define('TABLE_DOCACTION',     '`' . $config->db->prefix . 'docaction`');
 define('TABLE_DOCCONTENT',    '`' . $config->db->prefix . 'doccontent`');
 define('TABLE_TESTSUITE',     '`' . $config->db->prefix . 'testsuite`');
 define('TABLE_SUITECASE',     '`' . $config->db->prefix . 'suitecase`');

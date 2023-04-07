@@ -38,7 +38,7 @@
         </thead>
         <tbody>
           <?php foreach($releases as $release):?>
-          <tr>
+          <tr data-id="<?php echo $release->id;?>">
             <td><?php printf('%03d', $release->id);?></td>
             <td title=<?php echo $release->version;?>><?php echo $release->version;?></td>
             <td><?php echo $release->desc;?></td>
@@ -60,5 +60,17 @@ parent.$('#triggerModal .modal-content .modal-header .close').click(function()
 {
     parent.location.reload();
 });
+
+/**
+ * Remove release.
+ *
+ * @param  int    $releaseID
+ * @access public
+ * @return void
+ */
+function removeRelease(releaseID)
+{
+    $('tr[data-id=' + releaseID + ']').remove()
+}
 </script>
 <?php include '../../common/view/footer.html.php';?>
