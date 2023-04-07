@@ -321,20 +321,10 @@
                   </td>
                 </tr>
                 <?php endif;?>
-                <tr>
+                <tr class='categoryTR'>
                   <th><?php echo $lang->story->category;?></th>
                   <td><?php echo zget($lang->story->categoryList, $story->category, $story->category)?></td>
                 </tr>
-                <?php if($config->systemMode == 'PLM'):?>
-                <tr>
-                  <th><?php echo $lang->story->duration;?></th>
-                  <td><?php echo zget($lang->demand->durationList, $story->duration, $story->duration)?></td>
-                </tr>
-                <tr>
-                  <th><?php echo $lang->story->BSA;?></th>
-                  <td><?php echo zget($lang->demand->bsaList, $story->BSA, $story->BSA)?></td>
-                </tr>
-                <?php endif;?>
                 <tr>
                   <th><?php echo $lang->story->pri;?></th>
                   <td>

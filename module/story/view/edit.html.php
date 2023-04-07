@@ -250,16 +250,6 @@
                 <th><?php echo $lang->story->category;?></th>
                 <td><?php echo html::select('category', $lang->story->categoryList, $story->category, "class='form-control chosen'");?></td>
               </tr>
-              <?php if(strpos('draft,changing', $story->status) !== false and $config->systemMode == 'PLM'):?>
-              <tr>
-                <th><?php echo $lang->story->duration;?></th>
-                <td><?php echo html::select('duration', $lang->demand->durationList, $story->duration, "class='form-control chosen'");?></td>
-              </tr>
-              <tr>
-                <th><?php echo $lang->story->BSA;?></th>
-                <td><?php echo html::select('BSA', $lang->demand->bsaList, $story->BSA, "class='form-control chosen'");?></td>
-              </tr>
-              <?php endif;?>
               <tr>
                 <th><?php echo $lang->story->pri;?></th>
                 <td><?php echo html::select('pri', $lang->story->priList, $story->pri, "class='form-control chosen'");?></td>
