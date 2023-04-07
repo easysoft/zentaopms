@@ -531,7 +531,7 @@ $(function()
                 else
                 {
                     var $input   = $('[data-id=ulTreeModal]').html();
-                    var $rootDom = $('[data-id=' + item.libid + ']a');
+                    var $rootDom = $('[data-id=' + item.libid + ']a.lib');
                     var $li      = $rootDom.parent();
                     moduleData.isUpdate = true;
                     $rootDom.after($input);
