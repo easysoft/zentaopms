@@ -53,7 +53,6 @@
   </div>
   <div class="sidebar-toggle flex-center"><i class="icon icon-angle-left"></i></div>
   <div class="main-col flex-full overflow-visible flex-auto">
-    <div class="cell<?php if($browseType == 'bySearch') echo ' show';?>" style="min-width: 400px" id="queryBox" data-module=<?php echo $type . $libType . 'Doc';?>></div>
     <?php include 'mydoclist.html.php'; ?>
   </div>
 <?php endif;?>

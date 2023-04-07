@@ -42,7 +42,7 @@
   {
       $exportLink = $this->createLink('doc', $exportMethod, "libID=$libID&docID=0", 'html', true);
       if($libType == 'api') $exportLink = $this->createLink('api', $exportMethod, "libID=$libID", 'html', true);
-      echo html::a($exportLink, "<i class='icon-export muted'> </i>" . $lang->export, '', "class='btn btn-link export' id='{$exportMethod}'");
+      echo html::a($exportLink, "<i class='icon-export muted'> </i>" . $lang->export, '', "class='btn btn-link export' data-width='480px' id='{$exportMethod}'");
   }
 
   if(common::hasPriv('doc', 'createLib'))

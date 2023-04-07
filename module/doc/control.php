@@ -53,7 +53,7 @@ class doc extends control
     }
 
     /**
-     * Browse docs.
+     * My space.
      *
      * @param string $type mine
      * @param int    $libID
@@ -67,7 +67,7 @@ class doc extends control
      * @access public
      * @return void
      */
-    public function browse($type = 'mine', $libID = 0, $moduleID = 0, $browseType = 'all', $param = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function mySpace($type = 'mine', $libID = 0, $moduleID = 0, $browseType = 'all', $param = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         /* Save session, load module. */
         $uri = $this->app->getURI(true);
@@ -77,9 +77,16 @@ class doc extends control
         $this->session->set('projectList', $uri, 'project');
         $this->loadModel('search');
 
-        /* Set browseType.*/
+        list($libs, $libID, $object, $objectID, $objectDropdown) = $this->doc->setMenuByType('mine', 0, $libID);
+
+        /* Build the search form. */
         $browseType = strtolower($browseType);
         $queryID    = $browseType == 'bysearch' ? (int)$param : 0;
+        $params     = "libID=$libID&moduleID=$moduleID&browseType=bySearch&param=myQueryID&orderBy=$orderBy";
+        if($this->app->rawMethod == 'mySpace') $param = "type=$type&" . $params;
+        $actionURL  = $this->createLink('doc', $this->app->rawMethod, $params);
+
+        $this->doc->buildSearchForm($libID, $libs, $queryID, $actionURL, $type);
 
         /* Set header and position. */
         $this->view->title = $this->lang->doc->common;
@@ -91,8 +98,6 @@ class doc extends control
         /* Append id for secend sort. */
         $sort = common::appendOrder($orderBy);
 
-        list($libs, $libID, $object, $objectID, $objectDropdown) = $this->doc->setMenuByType('mine', 0, $libID);
-
         $this->view->moduleID   = $moduleID;
         $this->view->docs       = $this->doc->getDocsByBrowseType($browseType, $queryID, $moduleID, $sort, $pager);
         $this->view->users      = $this->user->getPairs('noletter');
@@ -103,7 +108,7 @@ class doc extends control
         $this->view->lib        = $this->doc->getLibById($libID);
         $this->view->libTree    = $this->doc->getLibTree($libID, $libs, 'mine', 0);
         $this->view->pager      = $pager;
-        $this->view->type       = 'mine';
+        $this->view->type       = $type;
         $this->view->objectID   = 0;
         $this->view->canExport  = 0;
         $this->view->libType    = 'lib';
@@ -587,10 +592,7 @@ class doc extends control
 
         $this->config->showMainMenu = strpos(',html,markdown,text,', ",{$doc->type},") === false;
 
-        $this->view->title      = $lib->name . $this->lang->colon . $this->lang->doc->edit;
-        $this->view->position[] = html::a($this->createLink('doc', 'browse', "libID=$libID"), $lib->name);
-        $this->view->position[] = $this->lang->doc->edit;
-
+        $this->view->title            = $lib->name . $this->lang->colon . $this->lang->doc->edit;
         $this->view->doc              = $doc;
         $this->view->moduleOptionMenu = $moduleOptionMenu;
         $this->view->type             = $objectType;
@@ -1200,9 +1202,10 @@ class doc extends control
             }
         }
 
-        $doc = $docID ? $doc : '';
+        $doc       = $docID ? $doc : '';
+        $spaceType = $objectType . 'Space';
 
-        $this->view->title        = $type == 'custom' ? $this->lang->doc->customAB : $object->name;
+        $this->view->title        = isset($this->lang->doc->{$spaceType}) ? $this->lang->doc->{$spaceType} : $this->lang->doc->common;
         $this->view->docID        = $docID;
         $this->view->doc          = $doc;
         $this->view->version      = $version;
@@ -1218,6 +1221,7 @@ class doc extends control
         $this->view->users        = $this->user->getPairs('noclosed,noletter');
         $this->view->autoloadPage = $this->doc->checkAutoloadPage($doc);
         $this->view->libTree      = $this->doc->getLibTree($libID, $libs, $type, $doc->module, $objectID);
+        $this->view->preAndNext   = $this->loadModel('common')->getPreAndNextObject('doc', $docID);
 
         $this->display();
     }

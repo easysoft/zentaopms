@@ -219,16 +219,16 @@ $lang->doc->statusList['draft']  = "草稿";
 $lang->doc->aclList['open']    = "公开<span class='text-gray'>（有所属库权限即可访问）</span>";
 $lang->doc->aclList['private'] = "私有<span class='text-gray'>（仅创建者和白名单用户可访问）</span>";
 
-$lang->doc->space    = '所属空间';
+$lang->doc->space = '所属空间';
 $lang->doc->spaceList['mine']    = '我的空间';
-$lang->doc->spaceList['product'] = '产品空间';
-$lang->doc->spaceList['project'] = '项目空间';
+$lang->doc->spaceList['product'] = $lang->productCommon . '空间';
+$lang->doc->spaceList['project'] = $lang->projectCommon . '空间';
 $lang->doc->spaceList['api']     = '接口空间';
 $lang->doc->spaceList['custom']  = '团队空间';
 
-$lang->doc->apiType  = '接口类型';
-$lang->doc->apiTypeList['product'] = '产品接口';
-$lang->doc->apiTypeList['project'] = '项目接口';
+$lang->doc->apiType = '接口类型';
+$lang->doc->apiTypeList['product'] = $lang->productCommon . '接口';
+$lang->doc->apiTypeList['project'] = $lang->projectCommon . '接口';
 $lang->doc->apiTypeList['nolink']  = '无关联接口';
 
 $lang->doc->typeList['html']     = '富文本';
