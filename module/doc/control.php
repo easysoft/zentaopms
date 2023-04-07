@@ -730,28 +730,21 @@ class doc extends control
      */
     public function collect($objectID, $objectType)
     {
+        $table = '';
         if($objectType == 'doc') $table = TABLE_DOC;
-        if($objectType == 'doclib') $table = TABLE_DOCLIB;
-        if($objectType == 'module') $table = TABLE_MODULE;
-        $collectors = $this->dao->select('collector')->from($table)->where('id')->eq($objectID)->fetch('collector');
+        if(empty($table)) return;
 
-        $hasCollect = strpos($collectors, ",{$this->app->user->account},") !== false;
-        if($hasCollect)
+        $action = $this->doc->getActionByObject($objectID, 'collect');
+        if($action)
         {
-            $collectors = str_replace(",{$this->app->user->account},", ',', $collectors);
+            $this->doc->deleteAction($action->id);
         }
         else
         {
-            $collectors   = explode(',', $collectors);
-            $collectors[] = $this->app->user->account;
-            $collectors   = implode(',', $collectors);
+            $this->doc->createAction($objectID, 'collect');
         }
 
-        $collectors = trim($collectors, ',') ? ',' . trim($collectors, ',') . ',' : '';
-
-        $this->dao->update($table)->set('collector')->eq($collectors)->where('id')->eq($objectID)->exec();
-
-        return $this->send(array('status' => $hasCollect ? 'no' : 'yes'));
+        return $this->send(array('status' => $action ? 'no' : 'yes'));
     }
 
     /**
@@ -1131,6 +1124,7 @@ class doc extends control
             $doc = $this->doc->getById($docID, $version, true);
             if(!$doc) return print(js::error($this->lang->notFound));
 
+            $this->doc->createAction($docID, 'view');
             if($doc->keywords)
             {
                 $doc->keywords = str_replace("，", ',', $doc->keywords);

@@ -748,3 +748,14 @@ CHANGE `editedDate` `editedDate` datetime NULL;
 ALTER TABLE `zt_zoutput`
 CHANGE `editedBy` `editedBy` varchar(30) NOT NULL DEFAULT '',
 CHANGE `editedDate` `editedDate` datetime NULL;
+
+CREATE TABLE IF NOT EXISTS `zt_docaction` (
+  `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
+  `doc` mediumint(8) unsigned NOT NULL,
+  `action` varchar(80) NOT NULL,
+  `actor` char(30) NOT NULL,
+  `date` datetime NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `doc` (`doc`),
+  KEY `actor` (`actor`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;

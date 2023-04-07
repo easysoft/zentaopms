@@ -467,11 +467,12 @@ class docModel extends model
         }
         elseif($browseType == "collectedbyme")
         {
-            $docs = $this->dao->select('*')->from(TABLE_DOC)
-                ->where('deleted')->eq(0)
-                ->andWhere('lib')->in($allLibs)
-                ->beginIF($this->config->doc->notArticleType)->andWhere('type')->notIN($this->config->doc->notArticleType)->fi()
-                ->andWhere('collector')->like("%,{$this->app->user->account},%")
+            $docs = $this->dao->select('t1.*')->from(TABLE_DOC)->alias('t1')
+                ->leftJoin(TABLE_DOCACTION)->alias('t2')->on("t1.id=t2.doc && t2.action='collect'")
+                ->where('t1.deleted')->eq(0)
+                ->andWhere('t1.lib')->in($allLibs)
+                ->beginIF($this->config->doc->notArticleType)->andWhere('t1.type')->notIN($this->config->doc->notArticleType)->fi()
+                ->andWhere('t2.actor')->eq($this->app->user->account)
                 ->orderBy($sort)
                 ->page($pager)
                 ->fetchAll('id');
@@ -530,6 +531,7 @@ class docModel extends model
             }
         }
 
+        $docs = $this->processCollector($docs);
         return $docs;
     }
 
@@ -621,7 +623,7 @@ class docModel extends model
     public function getDocs($libID, $module, $browseType, $orderBy, $pager = null)
     {
         $docIdList = $this->getPrivDocs($libID, $module, 'children');
-        return $this->dao->select('*')->from(TABLE_DOC)
+        $docs = $this->dao->select('*')->from(TABLE_DOC)
             ->where('deleted')->eq(0)
             ->andWhere('vision')->eq($this->config->vision)
             ->andWhere('id')->in($docIdList)
@@ -630,6 +632,8 @@ class docModel extends model
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll('id');
+        $docs = $this->processCollector($docs);
+        return $docs;
     }
 
     /**
@@ -684,6 +688,10 @@ class docModel extends model
             if(strpos($this->server->http_referer, $loginLink) !== false) return print(js::locate(inlink('index')));
             return print(js::locate('back'));
         }
+
+        $docs = $this->processCollector(array($doc->id => $doc));
+        $doc  = $docs[$doc->id];
+
         $version    = $version ? $version : $doc->version;
         $docContent = $this->dao->select('*')->from(TABLE_DOCCONTENT)->where('doc')->eq($doc->id)->andWhere('version')->eq($version)->fetch();
 
@@ -2032,11 +2040,16 @@ class docModel extends model
         $lately        = date('Y-m-d', strtotime('-3 day'));
         $statisticInfo = $this->dao->select("count(id) as totalDocs, count(IF(editedDate like '{$today}%', 1, null)) as todayEditedDocs,
             count(IF(editedDate > '{$lately}', 1, null)) as lastEditedDocs, count(IF(addedDate > '{$lately}', 1, null)) as lastAddedDocs,
-            count(IF(collector like '%,{$this->app->user->account},%', 1, null)) as myCollection, count(IF(addedBy = '{$this->app->user->account}', 1, null)) as myDocs")->from(TABLE_DOC)
+            count(IF(addedBy = '{$this->app->user->account}', 1, null)) as myDocs")->from(TABLE_DOC)
             ->where('deleted')->eq(0)
             ->andWhere('vision')->eq($this->config->vision)
             ->andWhere('id')->in($docIdList)
             ->fetch();
+        $statisticInfo->myCollection = $this->dao->select('count(*) from count')->from(TABLE_DOCACTION)
+            ->where('doc')->in($docIdList)
+            ->andWhere('action')->eq('collect')
+            ->andWhere('actor')->eq($this->app->user->account)
+            ->fetch('count');
 
         $statisticInfo->pastEditedDocs       = $statisticInfo->totalDocs - $statisticInfo->todayEditedDocs;
         $statisticInfo->lastEditedProgress   = $statisticInfo->totalDocs ? round($statisticInfo->lastEditedDocs / $statisticInfo->totalDocs, 2) * 100 : 0;
@@ -2742,7 +2755,7 @@ class docModel extends model
         if(strpos($query, "`lib` = 'all'") !== false) $query = str_replace("`lib` = 'all'", '1', $query);
 
         $docIdList = $this->getPrivDocs(array_keys($libs));
-        return $this->dao->select('*')->from(TABLE_DOC)
+        $docs = $this->dao->select('*')->from(TABLE_DOC)
             ->where('deleted')->eq(0)
             ->andWhere($query)
             ->andWhere('lib')->in(array_keys($libs))
@@ -2752,6 +2765,8 @@ class docModel extends model
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll('id');
+        $docs = $this->processCollector($docs);
+        return $docs;
     }
 
     /**
@@ -3081,5 +3096,93 @@ class docModel extends model
         if(count($sameNames) > 0 and $libType == 'product') dao::$errors['name'] = $this->lang->doclib->apiNameUnique[$libType] . sprintf($this->lang->error->unique, $this->lang->doclib->name, $lib->name);
         if(count($sameNames) > 0 and $libType == 'project') dao::$errors['name'] = $this->lang->doclib->apiNameUnique[$libType] . sprintf($this->lang->error->unique, $this->lang->doclib->name, $lib->name);
         if(count($sameNames) > 0 and $libType == 'nolink')  dao::$errors['name'] = $this->lang->doclib->apiNameUnique[$libType] . sprintf($this->lang->error->unique, $this->lang->doclib->name, $lib->name);
+    }
+
+    /**
+     * Create action.
+     *
+     * @param  int    $docID
+     * @param  string $action   view|collect
+     * @param  string $account
+     * @access public
+     * @return int|bool
+     */
+    public function createAction($docID, $action, $account = '')
+    {
+        $docID = (int)$docID;
+        if(empty($docID)) return false;
+
+        if(empty($account))$account = $this->app->user->account;
+        if($action == 'collect') $this->dao->delete()->from(TABLE_DOCACTION)->where('doc')->eq($docID)->andWhere('action')->eq('collect')->andWhere('actor')->eq($account)->exec();
+
+        $data  = new stdclass();
+        $data->doc    = $docID;
+        $data->action = $action;
+        $data->actor  = $account;
+        $data->date   = helper::now();
+        $this->dao->insert(TABLE_DOCACTION)->data($data)->autoCheck()->exec();
+        if(!dao::isError())
+        {
+            $actionID = $this->dao->lastInsertID();
+            if($action == 'view') $this->dao->update(TABLE_DOC)->set('views = views + 1')->where('id')->eq($docID)->exec();
+            if($action == 'collect')
+            {
+                $collectCount = $this->dao->select('count(*) as count')->from(TABLE_DOCACTION)->where('doc')->eq($docID)->andWhere('action')->eq('collect')->fetch('count');
+                $this->dao->update(TABLE_DOC)->set('collector')->eq($collectCount)->where('id')->eq($docID)->exec();
+            }
+
+            return $actionID;
+        }
+    }
+
+    /**
+     * Get action by object.
+     *
+     * @param  int    $docID
+     * @param  string $action    view|collect
+     * @param  string $account
+     * @access public
+     * @return object
+     */
+    public function getActionByObject($docID, $action, $account = '')
+    {
+        if(empty($account)) $account = $this->app->user->account;
+        return $this->dao->select('*')->from(TABLE_DOCACTION)->where('doc')->eq((int)$docID)->andWhere('action')->eq($action)->andWhere('actor')->eq($account)->fetch();
+    }
+
+    /**
+     * Delete action.
+     *
+     * @param  int    $actionID
+     * @access public
+     * @return void
+     */
+    public function deleteAction($actionID)
+    {
+        $action = $this->dao->select('*')->from(TABLE_DOCACTION)->where('id')->eq($actionID)->fetch();
+        $this->dao->delete()->from(TABLE_DOCACTION)->where('id')->eq($actionID)->exec();
+        if($action->action == 'collect')
+        {
+            $collectCount = $this->dao->select('count(*) as count')->from(TABLE_DOCACTION)->where('doc')->eq($action->doc)->andWhere('action')->eq('collect')->fetch('count');
+            $this->dao->update(TABLE_DOC)->set('collector')->eq($collectCount)->where('id')->eq($action->doc)->exec();
+        }
+    }
+
+    /**
+     * Process collector to account.
+     *
+     * @param  array    $docs
+     * @access public
+     * @return array
+     */
+    public function processCollector($docs)
+    {
+        $actionGroup = $this->dao->select('*')->from(TABLE_DOCACTION)->where('doc')->in(array_keys($docs))->andWhere('action')->eq('collect')->fetchGroup('doc', 'actor');
+        foreach($docs as $docID => $doc)
+        {
+            $doc->collector = '';
+            if(isset($actionGroup[$docID])) $doc->collector = ',' . implode(',', array_keys($actionGroup[$docID])) . ',';
+        }
+        return $docs;
     }
 }
