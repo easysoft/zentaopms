@@ -2446,7 +2446,7 @@ class productModel extends model
         {
             $link = helper::createLink($module, $method, "productID=%s");
         }
-        else if($module == 'doc')
+        else if($module == 'doc' or $module == 'api')
         {
             $link = helper::createLink('doc', 'productSpace', "objectID=%s");
         }
