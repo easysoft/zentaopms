@@ -132,7 +132,7 @@ class gitlab extends control
      * @access public
      * @return void
      */
-    public function bindUser($gitlabID)
+    public function bindUser($gitlabID, $type = 'all')
     {
         $userPairs = $this->loadModel('user')->getPairs('noclosed|noletter');
 
@@ -140,7 +140,7 @@ class gitlab extends control
         $user   = $this->gitlab->apiGetCurrentUser($gitlab->url, $gitlab->token);
         if(!isset($user->is_admin) or !$user->is_admin) return print(js::alert($this->lang->gitlab->tokenLimit) . js::locate($this->createLink('gitlab', 'edit', array('gitlabID' => $gitlabID))));
 
-        $zentaoUsers = $this->dao->select('account,email,realname')->from(TABLE_USER)->fetchAll('account');
+        $zentaoUsers = $this->dao->select('account,email,realname')->from(TABLE_USER)->where('deleted')->eq('0')->fetchAll('account');
 
         if($_POST)
         {
@@ -188,11 +188,32 @@ class gitlab extends control
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->server->http_referer));
         }
 
+        $gitlabUsers   = $this->gitlab->apiGetUsers($gitlabID);
+        $bindedUsers   = $this->gitlab->getUserAccountIdPairs($gitlabID);
+        $matchedResult = $this->gitlab->getMatchedUsers($gitlabID, $gitlabUsers, $zentaoUsers);
+        $matchedResult = array_column(json_decode(json_encode($matchedResult), true), null, "email");
+
+        $gitlabUsers = array_filter($gitlabUsers, function($item) use($bindedUsers, $userPairs, $type)
+        {
+            if($type == 'all') return true;
+
+            if(in_array($item->id, $bindedUsers))
+            {
+                $zentaoAccount = isset($item->zentaoAccount) ? zget($userPairs, $item->zentaoAccount, '') : '';
+                return $type == 'binded' ? !empty($zentaoAccount) : empty($zentaoAccount);
+            }
+            return $type == 'binded' ? false : true;
+        });
+
         $this->view->title         = $this->lang->gitlab->bindUser;
+        $this->view->zentaoUsers   = $zentaoUsers;
         $this->view->userPairs     = $userPairs;
-        $this->view->gitlabUsers   = $this->gitlab->apiGetUsers($gitlabID);
-        $this->view->bindedUsers   = $this->gitlab->getUserAccountIdPairs($gitlabID);
-        $this->view->matchedResult = $this->gitlab->getMatchedUsers($gitlabID, $this->view->gitlabUsers, $zentaoUsers);
+        $this->view->type          = $type;
+        $this->view->gitlabID      = $gitlabID;
+        $this->view->gitlabUsers   = $gitlabUsers;
+        $this->view->bindedUsers   = $bindedUsers;
+        $this->view->matchedResult = $matchedResult;
+
         $this->display();
     }
 

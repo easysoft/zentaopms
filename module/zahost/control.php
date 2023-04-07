@@ -44,7 +44,7 @@ class zahost extends control
 
         $showFeature = false;
         $accounts = !empty($this->config->global->skipAutomation) ? $this->config->global->skipAutomation : '';
-        if(strpos(",$accounts,", $this->app->user->account) === false) 
+        if(strpos(",$accounts,", $this->app->user->account) === false)
         {
             $showFeature = true;
             $accounts .= ',' . $this->app->user->account;
@@ -109,6 +109,7 @@ class zahost extends control
             }
 
             $viewLink = $this->createLink('zahost', 'view', "hostID=$hostID");
+            if(isonlybody()) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => 'parent.loadHosts()'));
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $viewLink));
         }
 
@@ -367,5 +368,17 @@ class zahost extends control
         $serviceStatus = $this->zahost->getServiceStatus($host);
 
         return $this->send(array('result' => 'success', 'message' => '', 'data' => $serviceStatus));
+    }
+
+    /**
+     * Ajax：get hosts.
+     *
+     * @access public
+     * @return void
+     */
+    public function ajaxGetHosts()
+    {
+        $hostList = $this->zahost->getPairs();
+        return print(html::select("parent", $hostList, '', "class='form-control chosen'"));
     }
 }

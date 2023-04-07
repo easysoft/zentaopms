@@ -21,7 +21,7 @@
       </div>
       <form method='post' target='hiddenwin' id='ajaxForm' class="load-indicator main-form form-ajax">
         <table class='table table-form'>
-          <?php if($zanode->type == 'node'):?>
+          <?php if($zanode->hostType != 'physics'):?>
           <tr>
             <th><?php echo $lang->zanode->hostName;?></th>
             <td class='p-25f'><?php echo html::input('', $host->name, "class='form-control'  readonly='readonly'");?></td>
@@ -29,17 +29,17 @@
           <?php endif;?>
           <tr>
             <th class='w-120px'><?php echo $lang->zanode->name;?></th>
-            <td class='p-25f'><?php echo html::input('name', $zanode->name, "class='form-control' placeholder=\"{$lang->zanode->nameValid}\" readonly='readonly'");?></td>
+            <td class='p-25f'><?php echo html::input('name', $zanode->name, "class='form-control' placeholder=\"{$lang->zanode->nameValid}\" " . ($zanode->hostType != 'physics' ? "readonly='readonly'" : ''));?></td>
             <td></td>
           </tr>
-          <?php if($zanode->type == 'node'):?>
+          <?php if($zanode->hostType != 'physics'):?>
           <tr>
             <th><?php echo $lang->zanode->image;?></th>
             <td class='p-25f'><?php echo html::input('', $image->name, "class='form-control'  readonly='readonly'");?></td>
           </tr>
           <?php else:?>
           <tr>
-            <th class='w-120px'><?php echo $lang->zahost->IP;?></th>
+            <th class='w-120px'><?php echo $lang->zanode->IP;?></th>
             <td class='p-25f'><?php echo html::input('extranet', $zanode->extranet, "class='form-control' readonly='readonly'");?></td>
           </tr>
           <?php endif;?>
@@ -69,7 +69,7 @@
           </tr>
           <tr>
             <th><?php echo $lang->zanode->osName;?></th>
-            <td><?php echo html::input('osName', $zanode->osName, "class='form-control' readonly='readonly'")?></td>
+            <td><?php echo html::input('osName',  $zanode->hostType != 'physics' ? $zanode->osName : zget($config->zanode->linuxList, $zanode->osName, zget($config->zanode->windowsList, $zanode->osName)), "class='form-control' readonly='readonly'")?></td>
           </tr>
           <tr>
             <th><?php echo $lang->zanode->desc ?></th>

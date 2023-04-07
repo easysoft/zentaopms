@@ -1035,6 +1035,28 @@ class gitlabModel extends model
     }
 
     /**
+     * Multi get projects by repos.
+     *
+     * @param object $repos
+     * @access public
+     * @return void
+     */
+    public function apiMultiGetProjects($repos)
+    {
+        $requests = array();
+        foreach($repos as $id => $repo)
+        {
+            $requests[$id]['url'] = sprintf($this->getApiRoot($repo->serviceHost, false), "/projects/{$repo->serviceProject}");
+        }
+        $this->app->loadClass('requests', true);
+        $results = requests::request_multiple($requests);
+        foreach($results as $id => $result)
+        {
+            if(!empty($result->body) and substr($result->body, 0, 1) == '{') $this->projects[$repos[$id]->serviceHost][$repos[$id]->serviceProject] = json_decode($result->body);
+        }
+    }
+
+    /**
      * Get single user by API.
      *
      * @param  int $gitlabID

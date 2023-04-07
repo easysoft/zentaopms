@@ -120,6 +120,16 @@ class repoModel extends model
             ->page($pager)
             ->fetchAll('id');
 
+        if($getCodePath)
+        {
+            $gitlabRepos = array();
+            foreach($repos as $repo)
+            {
+                if($repo->SCM == 'Gitlab') $gitlabRepos[$repo->id] = $repo;
+            }
+            $this->loadModel('gitlab')->apiMultiGetProjects($gitlabRepos);
+        }
+
         /* Get products. */
         $productIdList = $this->loadModel('product')->getProductIDByProject($projectID, false);
         foreach($repos as $i => $repo)
@@ -242,6 +252,67 @@ class repoModel extends model
         }
 
         return $repoID;
+    }
+
+    /**
+     * Batch create repos.
+     *
+     * @access public
+     * @return bool
+     */
+    public function batchCreate()
+    {
+        $repos = fixer::input('post')->get();
+
+        $dataAry = array();
+        foreach($repos as $key => $val)
+        {
+            if(strpos($key, 'serviceProject') === 0)
+            {
+                $i = substr($key, 14);
+                if(empty($repos->{'product' . $i})) dao::$errors['product' . $i][] = sprintf($this->lang->error->notempty, $this->lang->repo->product);
+                if(empty($repos->{'name' . $i}))    dao::$errors['name' . $i][] = sprintf($this->lang->error->notempty, $this->lang->repo->name);
+
+                if(!empty($repos->{'product' . $i}) and !empty($repos->{'name' . $i})) $dataAry[] = array('serviceProject' => $repos->{'serviceProject' . $i}, 'product' => implode(',', $repos->{'product' . $i}), 'name' => $repos->{'name' . $i}, 'projects' => empty($repos->projects[$i]) ? '' : implode(',', $repos->projects[$i]));
+            }
+        }
+        if(dao::isError()) return false;
+
+        foreach($dataAry as $data)
+        {
+            $repo = new stdclass();
+            $repo->serviceHost    = $repos->serviceHost;
+            $repo->serviceProject = $data['serviceProject'];
+            $repo->product        = $data['product'];
+            $repo->name           = $data['name'];
+            $repo->projects       = $data['projects'];
+            $repo->SCM            = 'Gitlab';
+            $repo->encoding       = 'utf-8';
+            $repo->encrypt        = 'base64';
+
+            $this->dao->insert(TABLE_REPO)->data($repo)
+                ->batchCheck($this->config->repo->create->requiredFields, 'notempty')
+                ->check('serviceHost,serviceProject', 'notempty')
+                ->check('name', 'unique', "`SCM` = '{$repo->SCM}'")
+                ->check('serviceProject', 'unique', "`SCM` = '{$repo->SCM}' and `serviceHost` = '{$repo->serviceHost}'")
+                ->autoCheck()
+                ->exec();
+
+            if(dao::isError()) return false;
+
+            $repoID = $this->dao->lastInsertID();
+
+            if($repo->SCM == 'Gitlab')
+            {
+                /* Add webhook. */
+                $repo = $this->getRepoByID($repoID);
+                $this->loadModel('gitlab')->addPushWebhook($repo);
+            }
+
+            $actionID = $this->loadModel('action')->create('repo', $repoID, 'created');
+        }
+
+        return true;
     }
 
     /**

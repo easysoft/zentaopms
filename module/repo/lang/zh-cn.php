@@ -32,7 +32,7 @@ $lang->repo->blameTmpl       = '第 <strong>%line</strong> 行代码相关信息
 $lang->repo->notRelated      = '暂时没有关联禅道对象';
 
 $lang->repo->browseAction    = '浏览代码库';
-$lang->repo->createAction    = '创建代码库';
+$lang->repo->createAction    = '添加代码库';
 $lang->repo->editAction      = '编辑代码库';
 $lang->repo->diffAction      = '版本对比';
 $lang->repo->downloadAction  = '下载代码库文件';
@@ -46,6 +46,11 @@ $lang->repo->httpClone       = '使用HTTP克隆';
 $lang->repo->cloneUrl        = '克隆地址';
 $lang->repo->linkTask        = '关联任务';
 $lang->repo->unlinkedTasks   = '未关联任务';
+$lang->repo->importAction    = '导入代码库';
+$lang->repo->import          = '导入';
+$lang->repo->importName      = '导入后的名称';
+$lang->repo->importServer    = '请选择服务器';
+$lang->repo->gitlabList      = 'Gitlab代码库';
 
 $lang->repo->submit     = '提交';
 $lang->repo->cancel     = '取消';
