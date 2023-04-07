@@ -9,31 +9,27 @@
  * @version     $Id: zh-cn.php 5080 2013-07-10 00:46:59Z wyd621@gmail.com $
  * @link        http://www.zentao.net
  */
-$lang->report->index              = '统计首页';
-$lang->report->list               = '透视表';
-$lang->report->preview            = '查看透视表';
-$lang->report->item               = '条目';
-$lang->report->value              = '值';
-$lang->report->percent            = '百分比';
-$lang->report->undefined          = '未设定';
-$lang->report->query              = '查询';
-$lang->report->annual             = '年度总结';
-$lang->report->project            = $lang->projectCommon;
-$lang->report->PO                 = 'PO';
-$lang->report->viewEveryoneAnnual = '查看所有人年度总结';
+$lang->report->index     = '统计首页';
+$lang->report->list      = '透视表';
+$lang->report->item      = '条目';
+$lang->report->value     = '值';
+$lang->report->percent   = '百分比';
+$lang->report->undefined = '未设定';
+$lang->report->project   = $lang->projectCommon;
+$lang->report->PO        = 'PO';
 
-$lang->report->colors[]   = 'AFD8F8';
-$lang->report->colors[]   = 'F6BD0F';
-$lang->report->colors[]   = '8BBA00';
-$lang->report->colors[]   = 'FF8E46';
-$lang->report->colors[]   = '008E8E';
-$lang->report->colors[]   = 'D64646';
-$lang->report->colors[]   = '8E468E';
-$lang->report->colors[]   = '588526';
-$lang->report->colors[]   = 'B3AA00';
-$lang->report->colors[]   = '008ED6';
-$lang->report->colors[]   = '9D080D';
-$lang->report->colors[]   = 'A186BE';
+$lang->report->colors[] = 'AFD8F8';
+$lang->report->colors[] = 'F6BD0F';
+$lang->report->colors[] = '8BBA00';
+$lang->report->colors[] = 'FF8E46';
+$lang->report->colors[] = '008E8E';
+$lang->report->colors[] = 'D64646';
+$lang->report->colors[] = '8E468E';
+$lang->report->colors[] = '588526';
+$lang->report->colors[] = 'B3AA00';
+$lang->report->colors[] = '008ED6';
+$lang->report->colors[] = '9D080D';
+$lang->report->colors[] = 'A186BE';
 
 $lang->report->assign['noassign'] = '未指派';
 $lang->report->assign['assign']   = '已指派';
@@ -52,18 +48,6 @@ $lang->report->begin            = '起始日期';
 $lang->report->end              = '结束日期';
 $lang->report->dept             = '部门';
 $lang->report->deviationChart   = "{$lang->execution->common}偏差曲线";
-
-$lang->reportList = new stdclass();
-$lang->reportList->product = new stdclass();
-$lang->reportList->project = new stdclass();
-$lang->reportList->test    = new stdclass();
-$lang->reportList->staff   = new stdclass();
-
-$lang->reportList->product->lists[10] = $lang->productCommon . '汇总表|report|productsummary';
-$lang->reportList->project->lists[10] = "{$lang->execution->common}偏差报表|report|projectdeviation";
-$lang->reportList->test->lists[10]    = 'Bug创建表|report|bugcreate';
-$lang->reportList->test->lists[13]    = 'Bug指派表|report|bugassign';
-$lang->reportList->staff->lists[10]   = '员工负载表|report|workload';
 
 $lang->report->id            = '编号';
 $lang->report->execution     = $lang->execution->common;
@@ -109,12 +93,6 @@ $lang->report->mailTitle->bug      = " Bug(%s),";
 $lang->report->mailTitle->task     = " 任务(%s),";
 $lang->report->mailTitle->todo     = " 待办(%s),";
 $lang->report->mailTitle->testTask = " 测试版本(%s),";
-
-$lang->report->deviationDesc = '按照已关闭执行统计偏差率（偏差率 = (总消耗 - 总预计) / 总预计），总预计为0时偏差率为n/a。';
-$lang->report->proVersion    = '<a href="https://www.zentao.net/page/enterprise.html" target="_blank">更多精彩，尽在企业版！</a>';
-$lang->report->proVersionEn  = '<a href="https://www.zentao.pm/" target="_blank">Try ZenTao Biz for more!</a>';
-$lang->report->workloadDesc  = '工作负载=用户所有任务剩余工时之和/选择的时间天数*每天的工时。例如：起止时间设为1月1日~1月7日、工作日天数5天、每天工时8h，统计的是所有指派给该人员的未完成的任务，在5天内，每天8h的情况下的工作负载。';
-
 
 $lang->report->annualData = new stdclass();
 $lang->report->annualData->title            = "%s %s年工作汇总";
