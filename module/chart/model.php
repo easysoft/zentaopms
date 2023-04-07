@@ -575,7 +575,7 @@ class chartModel extends model
      * @access public
      * @return array
      */
-    public function getSysOptions($type, $object = '', $field = '')
+    public function getSysOptions($type, $object = '', $field = '', $sql = '')
     {
         $options = array('' => '');
         switch($type)
@@ -611,14 +611,21 @@ class chartModel extends model
                     $options = $this->dao->select("id, {$field}")->from($table)->fetchPairs();
                 }
                 break;
-            /*case 'string':
+            case 'string':
                 if($field)
                 {
-                    $table   = zget($this->config->objectTables, $object);
-                    $options = $this->dao->select("{$field}, {$field}")->from($table)->fetchPairs();
+                    $options = array();
+                    if($sql)
+                    {
+                        $cols = $this->dbh->query($sql)->fetchAll();
+                        foreach($cols as $col)
+                        {
+                            $data = $col->$field;
+                            $options[$data] = $data;
+                        }
+                    }
                 }
                 break;
-            */
         }
 
         return $options;
