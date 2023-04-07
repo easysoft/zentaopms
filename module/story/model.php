@@ -1860,6 +1860,7 @@ class storyModel extends model
             ->setDefault('status', 'active')
             ->setDefault('reviewer', '')
             ->setDefault('reviewedBy', '')
+            ->setDefault('submitedBy', $this->app->user->account)
             ->remove('needNotReview')
             ->join('reviewer', ',')
             ->get();
@@ -4489,12 +4490,13 @@ class storyModel extends model
 
         $isSuperReviewer = strpos(',' . trim(zget($config->story, 'superReviewers', ''), ',') . ',', ',' . $app->user->account . ',');
 
-        if($action == 'change')     return (($isSuperReviewer !== false or count($story->reviewer) == 0 or count($story->notReview) == 0) and $story->status == 'active');
-        if($action == 'review')     return (($isSuperReviewer !== false or in_array($app->user->account, $story->notReview)) and $story->status == 'reviewing');
-        if($action == 'recall')     return strpos('reviewing,changing', $story->status) !== false;
-        if($action == 'close')      return $story->status != 'closed';
-        if($action == 'activate')   return $story->status == 'closed';
-        if($action == 'assignto')   return $story->status != 'closed';
+        if($action == 'change')       return (($isSuperReviewer !== false or count($story->reviewer) == 0 or count($story->notReview) == 0) and $story->status == 'active');
+        if($action == 'review')       return (($isSuperReviewer !== false or in_array($app->user->account, $story->notReview)) and $story->status == 'reviewing');
+        if($action == 'recall')       return strpos('reviewing,changing', $story->status) !== false;
+        if($action == 'close')        return $story->status != 'closed';
+        if($action == 'activate')     return $story->status == 'closed';
+        if($action == 'assignto')     return $story->status != 'closed';
+        if($action == 'submitreview') return ($story->status == 'draft' or $story->status == 'changing');
         if($action == 'batchcreate' and $story->parent > 0) return false;
         if($action == 'batchcreate' and !empty($story->twins)) return false;
         if($action == 'batchcreate' and $story->type == 'requirement' and $story->status != 'closed') return strpos('draft,reviewing,changing', $story->status) === false;
@@ -4531,7 +4533,7 @@ class storyModel extends model
                 $title   = $isClick ? '' : $this->lang->story->changeTip;
                 $menu   .= $this->buildMenu('story', 'change', $params . "&from=$story->from&storyType=$story->type", $story, $type, 'alter', '', 'showinonlybody', false, '', $title);
 
-                if(strpos('draft,changing', $story->status) !== false)
+                if((($story->openedBy == $this->app->user->account or $story->submitedBy == $this->app->user->account) and $story->status != 'reviewing') or $story->status == 'active')
                 {
                     $menu .= $this->buildMenu('story', 'submitReview', "storyID=$story->id&storyType=$story->type", $story, $type, 'confirm', '', 'iframe', true, "data-width='50%'");
                 }
@@ -4640,7 +4642,7 @@ class storyModel extends model
         if($type == 'view')
         {
             $menu .= $this->buildMenu('story', 'change', $params . "&from=&storyType=$story->type", $story, $type, 'alter', '', 'showinonlybody');
-            if(strpos('draft,changing', $story->status) !== false) $menu .= $this->buildMenu('story', 'submitReview', $params . "&storyType=$story->type", $story, $type, 'confirm', '', 'showinonlybody iframe', true, "data-width='50%'");
+            if((($story->openedBy == $this->app->user->account or $story->submitedBy == $this->app->user->account) and $story->status != 'reviewing') or $story->status == 'active') $menu .= $this->buildMenu('story', 'submitReview', $params . "&storyType=$story->type", $story, $type, 'confirm', '', 'showinonlybody iframe', true, "data-width='50%'");
 
             $title = $story->status == 'changing' ? $this->lang->story->recallChange : $this->lang->story->recall;
             $menu .= $this->buildMenu('story', 'recall', $params . "&from=view&confirm=no&storyType=$story->type", $story, $type, 'undo', 'hiddenwin', 'showinonlybody', false, '', $title);
