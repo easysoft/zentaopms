@@ -414,8 +414,6 @@ class api extends control
      */
     public function createLib($type = 'product', $objectID = 0)
     {
-        if(!in_array($type, array('product', 'project'))) $type = 'product';
-
         if(!empty($_POST))
         {
             $libID = $this->doc->createApiLib();
@@ -433,7 +431,8 @@ class api extends control
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink('api', 'index', "libID=$libID")));
         }
 
-        $this->lang->api->aclList['default'] = sprintf($this->lang->api->aclList['default'], $this->lang->{$type}->common);
+        $defaultAclLang = in_array($type, array('product', 'product')) ? $this->lang->{$type}->common : $this->lang->product->common;
+        $this->lang->api->aclList['default'] = sprintf($this->lang->api->aclList['default'], $defaultAclLang);
 
         $this->view->type     = $type;
         $this->view->objectID = $objectID;
