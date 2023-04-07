@@ -177,6 +177,7 @@ $lang->repo->codeRepo     = '代码库';
 $lang->screen->common     = '大屏';
 $lang->report->common     = 'BI';
 $lang->pivot->common      = '透视表';
+$lang->chart->common      = '图表';
 $lang->system->common     = '组织';
 $lang->admin->common      = '后台';
 $lang->story->common      = $lang->SRCommon;
