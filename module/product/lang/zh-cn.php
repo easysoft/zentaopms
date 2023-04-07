@@ -233,7 +233,6 @@ $lang->product->featureBar['project']['doing']     = '进行中';
 $lang->product->featureBar['project']['suspended'] = '已挂起';
 $lang->product->featureBar['project']['closed']    = '已关闭';
 
-
 $lang->product->moreSelects['browse']['more']['reviewedbyme']   = $lang->product->reviewedByMe;
 $lang->product->moreSelects['browse']['more']['assignedbyme']   = $lang->product->assignedByMe;
 $lang->product->moreSelects['browse']['more']['closedbyme']     = $lang->product->closedByMe;
@@ -242,6 +241,22 @@ $lang->product->moreSelects['browse']['more']['changingstory']  = $lang->product
 $lang->product->moreSelects['browse']['more']['reviewingstory'] = $lang->product->reviewingStory;
 $lang->product->moreSelects['browse']['more']['willclose']      = $lang->product->willClose;
 $lang->product->moreSelects['browse']['more']['closedstory']    = $lang->product->closedStory;
+
+if($config->systemMode == 'PLM')
+{
+    $lang->product->featureBar['browse'] = array();
+    $lang->product->featureBar['browse']['allstory']       = '全部';
+    $lang->product->featureBar['browse']['assignedtome']   = $lang->product->assignedToMe;
+    $lang->product->featureBar['browse']['draftstory']     = $lang->product->draftStory;
+    $lang->product->featureBar['browse']['reviewingstory'] = '评审中';
+    $lang->product->featureBar['browse']['changingstory']  = '变更中';
+    $lang->product->featureBar['browse']['passedstory']    = '路标通过';
+    $lang->product->featureBar['browse']['launchedstory']  = '已立项';
+    $lang->product->featureBar['browse']['more']           = $lang->more;
+
+    $lang->product->moreSelects['browse'] = array();
+    $lang->product->moreSelects['browse']['more']['closedstory']  = '已关闭';
+}
 
 $lang->product->featureBar['dynamic']['all']       = '全部';
 $lang->product->featureBar['dynamic']['today']     = '今天';
