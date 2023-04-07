@@ -487,6 +487,7 @@ class docModel extends model
 
         $modules = array();
         $objects = array('product' => 'products', 'execution' => 'executions', 'project' => 'projects');
+        $this->loadModel('tree');
         foreach($docs as $index => $doc)
         {
             if(!isset($modules[$doc->lib])) $modules[$doc->lib] = $this->tree->getOptionMenu($doc->lib, 'doc', 0, 0, 'nodeleted', 'all', ' > ');
@@ -2054,7 +2055,7 @@ class docModel extends model
             ->andWhere('vision')->eq($this->config->vision)
             ->andWhere('id')->in($docIdList)
             ->fetch();
-        $statisticInfo->myCollection = $this->dao->select('count(*) from count')->from(TABLE_DOCACTION)
+        $statisticInfo->myCollection = $this->dao->select('count(*) as count')->from(TABLE_DOCACTION)
             ->where('doc')->in($docIdList)
             ->andWhere('action')->eq('collect')
             ->andWhere('actor')->eq($this->app->user->account)

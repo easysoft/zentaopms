@@ -19,7 +19,7 @@
   </div>
   <form method='post' class='form-ajax'>
     <table class='table table-form'>
-      <tr><th class='w-100px'></th><td></td><th class='w-100px'></th><td></td></tr>
+      <tr><th class='w-120px'></th><td></td><th class='w-100px'></th><td></td></tr>
       <tr>
         <th><?php echo $lang->doc->space?></th>
         <td colspan='3'><?php echo html::radio('space', $spaceList, '', "onchange=changeSpace()");?></td>
