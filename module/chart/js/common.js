@@ -1,5 +1,3 @@
-var filterValues = {};
-
 /**
  * Ajax get chart data.
  *
