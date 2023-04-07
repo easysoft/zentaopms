@@ -22,7 +22,7 @@
       <tr><th class='w-120px'></th><td></td><th class='w-100px'></th><td></td></tr>
       <tr>
         <th><?php echo $lang->doc->space?></th>
-        <td colspan='3'><?php echo html::radio('space', $spaceList, '', "onchange=changeSpace()");?></td>
+        <td colspan='3'><?php echo html::radio('space', $spaceList, key($spaceList), "onchange=changeSpace()");?></td>
       </tr>
       <tr id='docType'>
         <th><?php echo $lang->doc->type;?></th>
@@ -54,6 +54,8 @@
 </div>
 <?php js::set('holders', $lang->doc->placeholder);?>
 <script>
+$(function(){changeSpace()});
+
 /**
  * Change space.
  *
