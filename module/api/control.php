@@ -528,6 +528,7 @@ class api extends control
      */
     public function edit($apiID)
     {
+        $api = $this->api->getLibById($apiID);
         if(helper::isAjaxRequest() && !empty($_POST))
         {
             $changes = $this->api->update($apiID);
@@ -539,10 +540,9 @@ class api extends control
                 $this->action->logHistory($actionID, $changes);
             }
 
-            return $this->sendSuccess(array('locate' => helper::createLink('api', 'index', "libID=0&moduleID=0&apiID=$apiID")));
+            return $this->sendSuccess(array('locate' => helper::createLink('api', 'index', "libID=$api->lib&moduleID=0&apiID=$apiID")));
         }
 
-        $api = $this->api->getLibById($apiID);
         if($api)
         {
             $this->view->api  = $api;
