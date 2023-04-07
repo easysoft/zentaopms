@@ -29,7 +29,7 @@
 .file-tree  a.show-icon > div,
 .file-tree  a.hover > div {padding-right: 15px;}
 .tree li.has-input {overflow: hidden;}
-.tree-text {overflow: hidden;}
+.tree-text {overflow: hidden; min-width: 50px;}
 i.btn-info, i.btn-info:hover {border: none; background: #fff; box-shadow: unset;}
 .tree-version-trigger {padding: 0 10px; width: 54px; border-radius: 5px; background: #F9F9F9; display: flex; align-items: center;}
 .tree-version-trigger > .text {overflow: hidden; flex: 0 0 30px;}
@@ -289,7 +289,8 @@ $(function()
         if(isFirstLoad) ele.data('zui.tree').collapse();
 
         var $leaf = ele.find('li.active');
-        if($leaf.length) $leaf[$leaf.length - 1].scrollIntoView(false);
+        if($leaf.length && $('#fileTree').height() >= $('#sideBar').height()) $leaf[$leaf.length - 1].scrollIntoView(true);
+
 
         ele.on('click', '.icon-drop', function(e)
         {
