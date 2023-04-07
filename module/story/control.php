@@ -890,8 +890,8 @@ class story extends control
 
         foreach($products as $product)
         {
-            if($product->status == 'normal' and $product->PO == $this->app->user->account) $myProducts[$product->id] = $product->name;
-            if($product->status == 'normal' and !($product->PO == $this->app->user->account)) $othersProducts[$product->id] = $product->name;
+            if($product->status != 'closed' and $product->PO == $this->app->user->account) $myProducts[$product->id] = $product->name;
+            if($product->status != 'closed' and !($product->PO == $this->app->user->account)) $othersProducts[$product->id] = $product->name;
             if($product->status == 'closed') continue;
         }
         $products = $myProducts + $othersProducts;
