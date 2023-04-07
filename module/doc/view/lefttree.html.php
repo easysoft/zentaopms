@@ -29,7 +29,7 @@
 .file-tree  a.show-icon > div,
 .file-tree  a.hover > div {padding-right: 15px;}
 .tree li.has-input {overflow: hidden;}
-.tree-text {overflow: hidden;}
+.tree-text {overflow: hidden; min-width: 50px;}
 i.btn-info, i.btn-info:hover {border: none; background: #fff; box-shadow: unset;}
 .tree-version-trigger {padding: 0 10px; width: 54px; border-radius: 5px; background: #F9F9F9; display: flex; align-items: center;}
 .tree-version-trigger > .text {overflow: hidden; flex: 0 0 30px;}
