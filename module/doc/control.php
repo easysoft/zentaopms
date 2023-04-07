@@ -53,19 +53,21 @@ class doc extends control
     }
 
     /**
-     * Browse docs.
+     * My space.
      *
-     * @param string|int $libID product|execution or the int id of custom library
-     * @param string $browseType
-     * @param int $param
+     * @param string $type mine
+     * @param int    $libID
+     * @param int    $moduleID
+     * @param string $browseType all|draft|bysearch
+     * @param int    $param
      * @param string $orderBy
-     * @param int $recTotal
-     * @param int $recPerPage
-     * @param int $pageID
+     * @param int    $recTotal
+     * @param int    $recPerPage
+     * @param int    $pageID
      * @access public
      * @return void
      */
-    public function browse($browseType = 'all', $param = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function mySpace($type = 'mine', $libID = 0, $moduleID = 0, $browseType = 'all', $param = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         /* Save session, load module. */
         $uri = $this->app->getURI(true);
@@ -75,10 +77,16 @@ class doc extends control
         $this->session->set('projectList', $uri, 'project');
         $this->loadModel('search');
 
-        /* Set browseType.*/
+        list($libs, $libID, $object, $objectID, $objectDropdown) = $this->doc->setMenuByType('mine', 0, $libID);
+
+        /* Build the search form. */
         $browseType = strtolower($browseType);
-        $queryID    = ($browseType == 'bysearch') ? (int)$param : 0;
-        $moduleID   = ($browseType == 'bymodule') ? (int)$param : 0;
+        $queryID    = $browseType == 'bysearch' ? (int)$param : 0;
+        $params     = "libID=$libID&moduleID=$moduleID&browseType=bySearch&param=myQueryID&orderBy=$orderBy";
+        if($this->app->rawMethod == 'mySpace') $param = "type=$type&" . $params;
+        $actionURL  = $this->createLink('doc', $this->app->rawMethod, $params);
+
+        $this->doc->buildSearchForm($libID, $libs, $queryID, $actionURL, $type);
 
         /* Set header and position. */
         $this->view->title = $this->lang->doc->common;
@@ -90,26 +98,20 @@ class doc extends control
         /* Append id for secend sort. */
         $sort = common::appendOrder($orderBy);
 
-        if($browseType == 'collectedbyme')
-        {
-            $this->app->rawMethod = 'collect';
-        }
-        elseif($browseType == 'openedbyme')
-        {
-            $this->app->rawMethod = 'my';
-        }
-        elseif($browseType == 'byediteddate')
-        {
-            $this->app->rawMethod = 'recent';
-        }
-
         $this->view->moduleID   = $moduleID;
         $this->view->docs       = $this->doc->getDocsByBrowseType($browseType, $queryID, $moduleID, $sort, $pager);
         $this->view->users      = $this->user->getPairs('noletter');
         $this->view->orderBy    = $orderBy;
         $this->view->browseType = $browseType;
         $this->view->param      = $param;
+        $this->view->libID      = $libID;
+        $this->view->lib        = $this->doc->getLibById($libID);
+        $this->view->libTree    = $this->doc->getLibTree($libID, $libs, 'mine', 0);
         $this->view->pager      = $pager;
+        $this->view->type       = $type;
+        $this->view->objectID   = 0;
+        $this->view->canExport  = 0;
+        $this->view->libType    = 'lib';
 
         $this->display();
     }
@@ -126,11 +128,13 @@ class doc extends control
     {
         if(!empty($_POST))
         {
-            $libID = $this->doc->createlib();
+            $libID = $this->doc->createLib();
             if(!dao::isError())
             {
                 if($type == 'project' and $this->post->project) $objectID = $this->post->project;
+
                 if($type == 'product' and $this->post->product) $objectID = $this->post->product;
+
                 if($type == 'execution' and $this->post->execution) $objectID = $this->post->execution;
                 if($type == 'custom') $objectID = 0;
 
@@ -167,21 +171,38 @@ class doc extends control
             if($execution->type == 'stage') $this->lang->doc->execution = str_replace($this->lang->executionCommon, $this->lang->project->stage, $this->lang->doc->execution);
         }
 
-        if($type == 'custom') unset($this->lang->doclib->aclList['default']);
-        if($type != 'custom')
+        $acl = 'default';
+        if($type == 'custom')
+        {
+            $acl = 'open';
+            unset($this->lang->doclib->aclList['default']);
+        }
+        elseif($type == 'mine')
+        {
+            $acl = 'private';
+            unset($this->lang->doclib->aclList['open']);
+            unset($this->lang->doclib->aclList['default']);
+            $this->lang->doclib->aclList = $this->lang->doclib->mySpaceAclList['private'];
+        }
+
+        if($type != 'custom' and $type != 'mine')
         {
             $this->lang->doclib->aclList['default'] = sprintf($this->lang->doclib->aclList['default'], $this->lang->{$type}->common);
             $this->lang->doclib->aclList['private'] = sprintf($this->lang->doclib->privateACL, $this->lang->{$type}->common);
             unset($this->lang->doclib->aclList['open']);
         }
 
-        $this->app->loadLang('api');
-        $this->lang->api->aclList['default'] = sprintf($this->lang->api->aclList['default'], $this->lang->{$type}->common);
+        if($type != 'mine')
+        {
+            $this->app->loadLang('api');
+            $this->lang->api->aclList['default'] = sprintf($this->lang->api->aclList['default'], $this->lang->{$type}->common);
+        }
 
         $this->view->groups         = $this->loadModel('group')->getPairs();
         $this->view->users          = $this->user->getPairs('nocode|noclosed');
         $this->view->objects        = $objects;
         $this->view->type           = $type;
+        $this->view->acl            = $acl;
         $this->view->objectID       = $objectID;
         $this->display();
     }
@@ -375,17 +396,27 @@ class doc extends control
 
         $this->config->showMainMenu = (strpos($this->config->doc->textTypes, $docType) === false or $from == 'template');
 
+        $lib = $libID ? $this->doc->getLibByID($libID) : '';
+        if(empty($objectID) and $lib) $objectID = zget($lib, $lib->type, 0);
+
         /* Get libs and the default lib id. */
         $gobackLink = ($objectID == 0 and $libID == 0) ? $this->createLink('doc', 'tableContents', "type=$linkType") : '';
         $unclosed   = strpos($this->config->doc->custom->showLibs, 'unclosed') !== false ? 'unclosedProject' : '';
         $libs       = $this->doc->getLibs($objectType, $extra = "withObject,$unclosed", $libID, $objectID);
         if(!$libID and !empty($libs)) $libID = key($libs);
+        if(empty($lib) and $libID) $lib = $this->doc->getLibByID($libID);
 
-        $lib      = $this->doc->getLibByID($libID);
         $objects  = array();
         if($objectType == 'project')
         {
             $objects = $this->project->getPairsByProgram('', 'all', false, 'order_asc', 'kanban');
+            if($lib->type == 'execution')
+            {
+                $execution = $this->loadModel('execution')->getById($lib->execution);
+                $objectID  = $execution->project;
+                $libs      = $this->doc->getLibs('execution', $extra = "withObject,$unclosed", $libID, $lib->execution);
+                $this->view->execution = $execution;
+            }
             $this->view->executions = array(0 => '') + $this->loadModel('execution')->getPairs($objectID, 'sprint,stage', 'multiple,leaf,noprefix');
         }
         elseif($objectType == 'execution')
@@ -561,10 +592,7 @@ class doc extends control
 
         $this->config->showMainMenu = strpos(',html,markdown,text,', ",{$doc->type},") === false;
 
-        $this->view->title      = $lib->name . $this->lang->colon . $this->lang->doc->edit;
-        $this->view->position[] = html::a($this->createLink('doc', 'browse', "libID=$libID"), $lib->name);
-        $this->view->position[] = $this->lang->doc->edit;
-
+        $this->view->title            = $lib->name . $this->lang->colon . $this->lang->doc->edit;
         $this->view->doc              = $doc;
         $this->view->moduleOptionMenu = $moduleOptionMenu;
         $this->view->type             = $objectType;
@@ -774,16 +802,26 @@ class doc extends control
     /**
      * Ajax get modules by object.
      *
-     * @param string $objectType
+     * @param string $objectType project|product|custom|mine
      * @param int    $objectID
+     * @param string $docType     doc|api
      * @access public
      * @return void
      */
-    public function ajaxGetModules($objectType, $objectID)
+    public function ajaxGetModules($objectType, $objectID, $docType = 'doc')
     {
-        $unclosed = strpos($this->config->doc->custom->showLibs, 'unclosed') !== false ? 'unclosedProject' : '';
-        $libs     = $this->doc->getLibs($objectType, $extra = "withObject,$unclosed", '', $objectID);
-        $moduleOptionMenu = $this->doc->getLibsOptionMenu($libs);
+        if($docType == 'doc')
+        {
+            $unclosed = strpos($this->config->doc->custom->showLibs, 'unclosed') !== false ? 'unclosedProject' : '';
+            $libPairs = $this->doc->getLibs($objectType, $extra = "withObject,$unclosed", '', $objectID);
+        }
+        elseif($docType == 'api')
+        {
+            $libs     = $this->doc->getApiLibs('', $objectType, $objectID);
+            $libPairs = array();
+            foreach($libs as $libID => $lib) $libPairs[$libID] = $lib->name;
+        }
+        $moduleOptionMenu = $this->doc->getLibsOptionMenu($libPairs, $docType);
         return print(html::select('module', $moduleOptionMenu, '', "class='form-control'"));
     }
 
@@ -846,16 +884,28 @@ class doc extends control
     /**
      * AJAX: Get libs by type.
      *
-     * @param  string $type
+     * @param  string $space       mine|product|project|nolink|custom
+     * @param  string $docType     doc|api
      * @access public
      * @return void
      */
-    public function ajaxGetLibsByType($type)
+    public function ajaxGetLibsByType($space, $docType = 'doc')
     {
-        $unclosed = strpos($this->config->doc->custom->showLibs, 'unclosed') !== false ? 'unclosedProject' : '';
-        $libs = $this->doc->getLibs($type, "withObject,$unclosed");
+        $libPairs = array();
+        if($docType == 'doc')
+        {
+            $unclosed = strpos($this->config->doc->custom->showLibs, 'unclosed') !== false ? 'unclosedProject' : '';
+            $libPairs = $this->doc->getLibs($space, "withObject,$unclosed");
+        }
+        elseif($docType == 'api')
+        {
+            $libs     = $this->doc->getApiLibs('', 'nolink');
+            $libPairs = array();
+            foreach($libs as $libID => $lib) $libPairs[$libID] = $lib->name;
+        }
 
-        return print(html::select('lib', $libs, '', 'class="form-control"'));
+        $moduleOptionMenu = $this->doc->getLibsOptionMenu($libPairs, $docType);
+        return print(html::select('module', $moduleOptionMenu, '', "class='form-control'"));
     }
 
     /**
@@ -1152,9 +1202,10 @@ class doc extends control
             }
         }
 
-        $doc = $docID ? $doc : '';
+        $doc       = $docID ? $doc : '';
+        $spaceType = $objectType . 'Space';
 
-        $this->view->title        = $type == 'custom' ? $this->lang->doc->customAB : $object->name;
+        $this->view->title        = isset($this->lang->doc->{$spaceType}) ? $this->lang->doc->{$spaceType} : $this->lang->doc->common;
         $this->view->docID        = $docID;
         $this->view->doc          = $doc;
         $this->view->version      = $version;
@@ -1170,6 +1221,7 @@ class doc extends control
         $this->view->users        = $this->user->getPairs('noclosed,noletter');
         $this->view->autoloadPage = $this->doc->checkAutoloadPage($doc);
         $this->view->libTree      = $this->doc->getLibTree($libID, $libs, $type, $doc->module, $objectID);
+        $this->view->preAndNext   = $this->loadModel('common')->getPreAndNextObject('doc', $docID);
 
         $this->display();
     }
@@ -1318,25 +1370,34 @@ class doc extends control
     {
         if($_POST)
         {
+            $response = array();
+            if(empty($_POST['module']))
+            {
+                $response['result'] = 'fail';
+                $response['message']['module'] = sprintf($this->lang->error->notempty, $this->lang->doc->libAndModule);
+                return $this->send($response);
+            }
+
+            if(strpos($this->post->module, '_') !== false) list($libID, $moduleID) = explode('_', $this->post->module);
             $response['message']    = $this->lang->saveSuccess;
             $response['result']     = 'success';
             $response['closeModal'] = true;
-            $response['callback']   = "redirectParentWindow(\"{$this->post->objectType}\", \"{$this->post->lib}\", \"{$this->post->type}\")";
+            $response['callback']   = "redirectParentWindow(\"{$this->post->space}\", {$libID}, {$moduleID}, \"{$this->post->type}\")";
             return $this->send($response);
         }
 
-        unset($this->lang->doc->libTypeList['book']);
+        $spaceList = $this->lang->doc->spaceList;
+        $typeList  = $this->lang->doc->types;
+        if(!common::hasPriv('doc', 'create')) unset($spaceList['mine'], $spaceList['custom'], $typeList['doc']);
+        if(!common::hasPriv('api', 'create')) unset($spaceList['api'], $typeList['api']);
 
-        $globalTypeList = $this->lang->doc->libTypeList;
-        $globalTypeList = $this->config->vision == 'lite' ? $globalTypeList : $globalTypeList + $this->lang->doc->libGlobalList;
+        $products = $this->loadModel('product')->getPairs();
+        $projects = $this->project->getPairsByProgram('', 'all', false, 'order_asc', 'kanban');
 
-        $defaultType = key($globalTypeList);
-        $unclosed    = strpos($this->config->doc->custom->showLibs, 'unclosed') !== false ? 'unclosedProject' : '';
-        $libs        = $this->doc->getLibs($defaultType, "withObject,$unclosed");
-
-        $this->view->globalTypeList = $globalTypeList;
-        $this->view->defaultType    = $defaultType;
-        $this->view->libs           = $libs;
+        $this->view->spaceList  = $spaceList;
+        $this->view->typeList   = $typeList;
+        $this->view->products   = $products;
+        $this->view->projects   = $projects;
 
         $this->display();
     }

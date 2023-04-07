@@ -2008,7 +2008,7 @@ class upgradeModel extends model
         if(!file_exists($sqlFile)) return false;
 
         $this->saveLogs('Run Method ' . __FUNCTION__);
-        $mysqlVersion = $this->loadModel('install')->getMysqlVersion();
+        $mysqlVersion = $this->loadModel('install')->getDatabaseVersion();
         $ignoreCode   = '|1050|1054|1060|1091|1061|';
 
         /* Read the sql file to lines, remove the comment lines, then join theme by ';'. */

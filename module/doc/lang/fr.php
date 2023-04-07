@@ -36,6 +36,8 @@ $lang->doclib->aclListB['open']    = 'Public';
 $lang->doclib->aclListB['custom']  = 'Person.';
 $lang->doclib->aclListB['private'] = 'Privée';
 
+$lang->doclib->mySpaceAclList['private'] = "Private <span class='acl-tip'>(Only creators can access it)</span>";
+
 $lang->doclib->aclList = array();
 $lang->doclib->aclList['open']    = "Public <span class='acl-tip'>(Users who can access doccan access it)</span>";
 $lang->doclib->aclList['default'] = "Default <span class='acl-tip'>(Users who can access the selected %s or users in the whiltelist can access it)</span>";
@@ -217,6 +219,18 @@ $lang->doc->statusList['draft']  = "Draft";
 $lang->doc->aclList['open']    = "Public <span class='text-gray'>(Access with library permissions)</span>";
 $lang->doc->aclList['private'] = "Privé <span class='text-gray'>(Only creators and whitelist users can access)</span>";
 
+$lang->doc->space = 'Space';
+$lang->doc->spaceList['mine']    = 'My Space';
+$lang->doc->spaceList['product'] = $lang->productCommon . ' Space';
+$lang->doc->spaceList['project'] = $lang->projectCommon . ' Space';
+$lang->doc->spaceList['api']     = 'API Space';
+$lang->doc->spaceList['custom']  = 'Team Space';
+
+$lang->doc->apiType = 'API Type';
+$lang->doc->apiTypeList['product'] = $lang->productCommon . ' API';
+$lang->doc->apiTypeList['project'] = $lang->projectCommon . ' API';
+$lang->doc->apiTypeList['nolink']  = 'No Link API';
+
 $lang->doc->typeList['html']     = 'Html';
 $lang->doc->typeList['markdown'] = 'Markdown';
 $lang->doc->typeList['url']      = 'URL';
@@ -225,14 +239,13 @@ $lang->doc->typeList['ppt']      = 'PPT';
 $lang->doc->typeList['excel']    = 'Excel';
 
 $lang->doc->createList['html']     = 'Create Document';
-$lang->doc->createList['api']      = 'Create API';
 $lang->doc->createList['template'] = 'Create By Template';
 $lang->doc->createList['word']     = 'Word';
 $lang->doc->createList['ppt']      = 'PPT';
 $lang->doc->createList['excel']    = 'Excel';
 
-$lang->doc->types['text'] = 'Text';
-$lang->doc->types['url']  = 'URL';
+$lang->doc->types['doc'] = 'WIKI';
+$lang->doc->types['api'] = 'API';
 
 $lang->doc->contentTypeList['html']     = 'HTML';
 $lang->doc->contentTypeList['markdown'] = 'MarkDown';
@@ -254,8 +267,8 @@ $lang->doc->fastMenuIconList['collectedbyme'] = 'icon-folder-star';
 $lang->doc->customObjectLibs['files']       = 'Montrer Bibliothèque des Pièces jointes';
 $lang->doc->customObjectLibs['customFiles'] = 'Montrer Library Personnelle';
 
-$lang->doc->orderLib = 'Paramétrage Rang';
-$lang->doc->customShowLibs = 'Paramétrage Affichage';
+$lang->doc->orderLib                       = 'Paramétrage Rang';
+$lang->doc->customShowLibs                 = 'Paramétrage Affichage';
 $lang->doc->customShowLibsList['zero']     = 'Montrer Bibliothèques Vides';
 $lang->doc->customShowLibsList['children'] = 'Montrer sous-catégorie de Documents';
 $lang->doc->customShowLibsList['unclosed'] = "Montrer {$lang->executionCommon}s actifs seulement";

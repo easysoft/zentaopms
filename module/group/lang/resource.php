@@ -1369,7 +1369,7 @@ $lang->job->methodOrder[25] = 'exec';
 /* Doc. */
 $lang->resource->doc = new stdclass();
 $lang->resource->doc->index          = 'index';
-$lang->resource->doc->browse         = 'mySpace';
+$lang->resource->doc->mySpace        = 'mySpace';
 $lang->resource->doc->myView         = 'myView';
 $lang->resource->doc->myCollection   = 'myCollection';
 $lang->resource->doc->myCreation     = 'myCreation';
@@ -1392,7 +1392,7 @@ $lang->resource->doc->deleteCatalog  = 'deleteCatalog';
 $lang->resource->doc->displaySetting = 'displaySetting';
 
 $lang->doc->methodOrder[5]   = 'index';
-$lang->doc->methodOrder[10]  = 'browse';
+$lang->doc->methodOrder[10]  = 'mySpace';
 $lang->doc->methodOrder[15]  = 'myView';
 $lang->doc->methodOrder[20]  = 'myCollection';
 $lang->doc->methodOrder[25]  = 'myCreation';

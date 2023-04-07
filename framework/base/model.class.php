@@ -309,6 +309,8 @@ class baseModel
     public function loadDAO()
     {
         global $config, $dao;
+        if(is_object($dao)) return $this->dao = $dao;
+
         $driver = $config->db->driver;
 
         if(!class_exists($driver))

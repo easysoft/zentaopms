@@ -38,7 +38,7 @@ class docModel extends model
      * Get api Libraries.
      *
      * @param  int    $appendLib
-     * @param  string $appendLib
+     * @param  string $objectType
      * @param  int    $objectID
      * @return array
      */
@@ -52,6 +52,7 @@ class docModel extends model
             ->beginIF($objectType == 'nolink')
             ->andWhere('product')->eq(0)
             ->andWhere('project')->eq(0)
+            ->andWhere('execution')->eq(0)
             ->fi()
             ->orderBy('`order`_asc, id_desc')
             ->fetchAll('id');
@@ -993,7 +994,7 @@ class docModel extends model
 
             unset($this->config->doc->search['fields']['module']);
         }
-        elseif(in_array($type, array('product', 'project', 'execution', 'custom', 'book')))
+        elseif(in_array($type, array('product', 'project', 'execution', 'custom', 'mine')))
         {
             if(!isset($libs[$libID])) $libs[$libID] = $this->getLibById($libID);
 
@@ -1033,8 +1034,7 @@ class docModel extends model
         $this->config->doc->search['queryID']   = $queryID;
 
         /* Get the modules. */
-        $moduleOptionMenu                                        = $this->loadModel('tree')->getOptionMenu($libID, 'doc', $startModuleID = 0);
-        $this->config->doc->search['params']['module']['values'] = $moduleOptionMenu;
+        $this->config->doc->search['params']['module']['values'] = $this->loadModel('tree')->getOptionMenu($libID, 'doc', $startModuleID = 0);
 
         if($type == 'index' || $type == 'view' || ($this->app->rawMethod != 'contribute' and $libID == 0))
         {
@@ -1140,7 +1140,7 @@ class docModel extends model
      */
     public function checkPrivLib($object, $extra = '')
     {
-        if($this->app->user->admin) return true;
+        if($this->app->user->admin and $object->type != 'mine') return true;
 
         if($object->acl == 'open') return true;
 
@@ -1478,15 +1478,15 @@ class docModel extends model
      */
     public function getLibsByObject($type, $objectID, $mode = '', $appendLib = 0)
     {
-        if($type == 'custom' or $type == 'book')
+        if($type == 'custom' or $type == 'mine')
         {
             $objectLibs = $this->dao->select('*')->from(TABLE_DOCLIB)
                 ->where('deleted')->eq(0)
                 ->andWhere('vision')->eq($this->config->vision)
                 ->andWhere('type')->eq($type)
                 ->beginIF(!empty($appendLib))->orWhere('id')->eq($appendLib)->fi()
-                ->beginIF($type == 'custom')->orderBy('`order` asc, id_asc')->fi()
-                ->beginIF($type == 'book')->orderBy('`order` asc, id_asc')->fi()
+                ->beginIF($type == 'mine')->andWhere('addedBy')->eq($this->app->user->account)->fi()
+                ->orderBy('`order` asc, id_asc')
                 ->fetchAll('id');
         }
         elseif($type != 'product' and $type != 'project' and $type != 'execution')
@@ -2637,15 +2637,7 @@ class docModel extends model
         if($this->app->tab == 'doc' and $type == 'execution') $type = 'project';
 
         $objectDropdown = '';
-        if($type == 'custom')
-        {
-            $libs = $this->getLibsByObject('custom', 0, '', $appendLib);
-            if($libID == 0 and !empty($libs)) $libID = reset($libs)->id;
-
-            $object     = new stdclass();
-            $object->id = 0;
-        }
-        else
+        if(in_array($type, array('project', 'product', 'execution')))
         {
             $objects  = $this->getOrderedObjects($type);
             $objectID = $this->loadModel($type)->saveState($objectID, $objects);
@@ -2664,8 +2656,17 @@ class docModel extends model
                 return print(js::locate(helper::createLink($type, $methodName, $param)));
             }
         }
+        else
+        {
+            $libs = $this->getLibsByObject($type, 0, '', $appendLib);
+            if($libID == 0 and !empty($libs)) $libID = reset($libs)->id;
 
-        $tab = strpos(',doc,product,project,execution,', ",{$this->app->tab},") !== false ? $this->app->tab : 'doc';
+            $object     = new stdclass();
+            $object->id = 0;
+        }
+
+        $tab  = strpos(',doc,product,project,execution,', ",{$this->app->tab},") !== false ? $this->app->tab : 'doc';
+        $type = $type == 'mine' ? 'my' : $type;
         if($tab != 'doc' and method_exists($type . 'Model', 'setMenu'))
         {
             $this->loadModel($type)->setMenu($objectID);
@@ -2861,8 +2862,9 @@ class docModel extends model
                 ->fetchPairs();
         }
 
-        $libTree = array($type => array());
-        $apiLibs = array();
+        $libTree      = array($type => array());
+        $apiLibs      = array();
+        $apiLibIDList = array();
         foreach($libs as $lib)
         {
             $item = new stdclass();
@@ -2909,6 +2911,7 @@ class docModel extends model
                     if(count($executionLibs[$executionID]) == 1)
                     {
                         $execution->id        = $item->id;
+                        $execution->type      = 'lib';
                         $execution->hasAction = true;
                         $execution->children  = $item->children;
                     }
@@ -2920,6 +2923,8 @@ class docModel extends model
                 $libTree['execution'][$executionID]->active = $item->active ? 1 : $libTree['execution'][$executionID]->active;
                 $libTree['execution'][$executionID]->children[] = $item;
             }
+
+            if($lib->type == 'api') $apiLibIDList[] = $lib->id;
         }
 
         if(in_array($type, array('product', 'project', 'execution')))
@@ -2947,6 +2952,26 @@ class docModel extends model
         elseif($type == 'api')
         {
             $libTree[$type] = array_merge($libTree[$type], $apiLibs);
+        }
+
+        /* Add release for api. */
+        $releases = $this->loadModel('api')->getReleaseByQuery($apiLibIDList);
+        foreach($libTree as &$libList)
+        {
+            foreach($libList as &$lib)
+            {
+                if(!is_object($lib) or $lib->type != 'api') continue;
+
+                $lib->versions = array();
+                foreach($releases as $index => $release)
+                {
+                    if($lib->id == $release->lib)
+                    {
+                        $lib->versions[] = $release;
+                        unset($releases[$index]);
+                    }
+                }
+            }
         }
 
         if($type != 'project') $libTree = array_values($libTree[$type]);
@@ -3001,17 +3026,23 @@ class docModel extends model
      * Get option menu  for libs.
      *
      * @param  array  $libs
+     * @param  string $docType
      * @access public
      * @return array
      */
-    public function getLibsOptionMenu($libs)
+    public function getLibsOptionMenu($libs, $docType = 'doc')
     {
         $this->loadModel('tree');
         $modules = array();
         foreach($libs as $libID => $libName)
         {
-            if(strpos($libName, '/') !== false) list($objectName, $libName) = explode('/', $libName);
-            $moduleOptionMenu = $this->tree->getOptionMenu($libID, 'doc', $startModuleID = 0);
+            if(strpos($libName, '/') !== false)
+            {
+                $pausedLibName = explode('/', $libName);
+                $libName       = array_pop($pausedLibName);
+                $objectName    = array_pop($pausedLibName);
+            }
+            $moduleOptionMenu = $this->tree->getOptionMenu($libID, $docType, $startModuleID = 0);
             foreach($moduleOptionMenu as $moduleID => $moduleName) $modules["{$libID}_{$moduleID}"] = $libName . $moduleName;
             if(empty($moduleOptionMenu)) $modules["{$libID}_0"] = $libName . $moduleName;
         }
