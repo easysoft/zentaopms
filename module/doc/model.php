@@ -824,7 +824,8 @@ class docModel extends model
             if(empty($docContent->content)) return dao::$errors['content'] = sprintf($this->lang->error->notempty, $this->lang->doc->content);
         }
 
-        $doc->draft = $docContent->content;
+        $doc->draft  = $docContent->content;
+        $doc->vision = $this->config->vision;
         $this->dao->insert(TABLE_DOC)->data($doc, 'content')->autoCheck()
             ->batchCheck($requiredFields, 'notempty')
             ->exec();
