@@ -21,12 +21,12 @@ CREATE TABLE IF NOT EXISTS `zt_pivot`  (
   `desc` text NOT NULL,
   `sql` mediumtext NOT NULL,
   `fields` mediumtext NOT NULL,
-  `langs` mediumtext NOT NULL,
+  `langs` mediumtext NULL,
   `vars` mediumtext NOT NULL,
   `objects` mediumtext NULL,
   `settings` mediumtext NOT NULL,
   `filters` mediumtext NOT NULL,
-  `step` tinyint(1) unsigned NOT NULL,
+  `step` tinyint(1) unsigned NOT NULL DEFAULT '',
   `stage` enum('draft','published') NOT NULL DEFAULT 'draft',
   `builtin` enum('0', '1') NOT NULL DEFAULT '0',
   `createdBy` varchar(30) NOT NULL,
@@ -44,10 +44,11 @@ CREATE TABLE `zt_chart_back` SELECT * FROM `zt_chart`;
 ALTER TABLE `zt_chart` MODIFY `fields` mediumtext NOT NULL;
 ALTER TABLE `zt_chart` MODIFY `group` varchar(255) NOT NULL;
 ALTER TABLE `zt_chart` ADD `stage` enum('draft','published') NOT NULL DEFAULT 'draft' AFTER `sql`;
-ALTER TABLE `zt_chart` ADD `langs` text NOT NULL AFTER `fields`;
-ALTER TABLE `zt_chart` ADD `step` tinyint(1) unsigned NOT NULL AFTER `filters`;
+ALTER TABLE `zt_chart` ADD `langs` text NULL AFTER `fields`;
+ALTER TABLE `zt_chart` ADD `step` tinyint(1) unsigned NOT NULL DEFAULT '0' AFTER `filters`;
+ALTER TABLE `zt_chart` DROP `dataset`;
 
-ALTER TABLE `zt_dataview` ADD `langs` text NOT NULL AFTER `fields`;
+ALTER TABLE `zt_dataview` ADD `langs` text NULL AFTER `fields`;
 
 ALTER TABLE `zt_screen` ADD `status` enum('draft','published') NOT NULL DEFAULT 'draft' AFTER `scheme`;
 ALTER TABLE `zt_screen` ADD `builtin` enum('0', '1') NOT NULL DEFAULT '0' AFTER `status`;
@@ -182,8 +183,7 @@ CHANGE `editedDate` `editedDate` datetime NULL;
 
 ALTER TABLE `zt_assetlib`
 CHANGE `editedBy` `editedBy` varchar(30) NOT NULL DEFAULT '',
-CHANGE `editedDate` `editedDate` datetime NULL,
-CHANGE `registerDate` `registerDate` datetime NULL;
+CHANGE `editedDate` `editedDate` datetime NULL;
 
 ALTER TABLE `zt_attend`
 CHANGE `reviewedBy` `reviewedBy` char(30) NULL DEFAULT '',

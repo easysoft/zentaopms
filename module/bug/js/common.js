@@ -633,6 +633,12 @@ function loadProjectBuilds(projectID)
 
     $.get(createLink('bug', 'ajaxGetReleasedBuilds', 'productID=' + productID), function(data){releasedBuilds = data;}, 'json');
 
+    if($('#executionIdBox #execution').val() != 0)
+    {
+        $('#executionIdBox #execution').change();
+        return;
+    }
+
     if(page == 'create')
     {
         var link = createLink('build', 'ajaxGetProjectBuilds', 'projectID=' + projectID + '&productID=' + productID + '&varName=openedBuild&build=&branch=' + branch);
