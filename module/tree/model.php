@@ -1835,7 +1835,12 @@ class treeModel extends model
         $changes = common::createChanges($self, $module);
         if(!isset($_POST['branch'])) $module->branch = $self->branch;
 
-        if($self and $module->parent) $self->parent = $module->parent;
+        if($self)
+        {
+            $self->parent = $module->parent;
+            if($self->root) $module->root = $self->root;
+        }
+
         $repeatName = $this->checkUnique($self, array("id{$self->id}" => $module->name), array("id{$self->id}" => $module->branch));
         if($repeatName)
         {
