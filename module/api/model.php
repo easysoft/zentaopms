@@ -168,6 +168,7 @@ class apiModel extends model
 
         $now  = helper::now();
         $data = fixer::input('post')
+            ->trim('name')
             ->skipSpecial('attribute')
             ->add('lib', $old->lib)
             ->add('editedBy', $this->app->user->account)

@@ -320,6 +320,7 @@ class api extends control
             $now    = helper::now();
             $userId = $this->app->user->account;
             $data   = fixer::input('post')
+                ->trim('name')
                 ->add('lib', $libID)
                 ->skipSpecial('attribute')
                 ->add('addedBy', $userId)
