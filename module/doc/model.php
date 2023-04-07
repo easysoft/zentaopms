@@ -2772,6 +2772,7 @@ class docModel extends model
             ->andWhere('vision')->eq($this->config->vision)
             ->beginIF($this->config->doc->notArticleType)->andWhere('type')->notIN($this->config->doc->notArticleType)->fi()
             ->beginIF(!empty($docIdList))->andWhere('id')->in($docIdList)->fi()
+            ->andWhere("(status = 'normal' or (status = 'draft' and addedBy='{$this->app->user->account}'))")
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll('id');

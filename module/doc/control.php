@@ -803,6 +803,8 @@ class doc extends control
      */
     public function ajaxGetModules($objectType, $objectID, $docType = 'doc')
     {
+        if(empty($objectID)) return print(html::select('module', array(), '', "class='form-control'"));
+
         if($docType == 'doc')
         {
             $unclosed = strpos($this->config->doc->custom->showLibs, 'unclosed') !== false ? 'unclosedProject' : '';
