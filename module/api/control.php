@@ -240,6 +240,7 @@ class api extends control
         if(!empty($_POST))
         {
             $data = fixer::input('post')
+                ->trim('version')
                 ->add('lib', $libID)
                 ->add('addedBy', $this->app->user->account)
                 ->add('addedDate', helper::now())
