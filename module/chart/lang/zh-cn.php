@@ -9,9 +9,8 @@ $lang->chart->agg         = '汇总';
 $lang->chart->chooseField = '选择字段';
 $lang->chart->aggType     = '统计方式';
 $lang->chart->other       = '其他';
-
-$lang->chart->unlimited       = '不限';
-$lang->chart->colon           = '至';
+$lang->chart->unlimited   = '不限';
+$lang->chart->colon       = '至';
 
 $lang->chart->fieldTypeList = array();
 $lang->chart->fieldTypeList['input']     = '文本框';

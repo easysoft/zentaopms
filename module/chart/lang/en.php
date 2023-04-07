@@ -9,9 +9,8 @@ $lang->chart->agg         = 'Aggregate';
 $lang->chart->chooseField = 'Choose field';
 $lang->chart->aggType     = 'Aggregate type';
 $lang->chart->other       = 'Other';
-
-$lang->chart->unlimited       = 'Unlimited';
-$lang->chart->colon           = 'To';
+$lang->chart->unlimited   = 'Unlimited';
+$lang->chart->colon       = 'To';
 
 $lang->chart->fieldTypeList = array();
 $lang->chart->fieldTypeList['input']    = 'Text';
