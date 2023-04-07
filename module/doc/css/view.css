@@ -49,3 +49,4 @@
 .overflow-hidden {overflow: hidden;}
 #mainContent > .panel {margin-bottom: 0; height: calc(100vh - 125px); overflow-y: auto;}
 .detail-title .actions .ajaxCollect > img {width: 20px;}
+.actions > .text {color: #8c8c8c; font-size: 14px;}
