@@ -238,27 +238,7 @@ foreach(explode(',', $config->story->create->requiredFields) as $field)
                 </div>
               </div>
             </td>
-            <?php if($config->systemMode == 'PLM'):?>
-            <td colspan="2" <?php if($hiddenParent) echo 'hidden';?>>
-              <div class='input-group'>
-                <div class="input-group-addon"><?php echo $lang->story->parent;?></div>
-                <?php echo html::select('parent', $stories, '', "class='form-control chosen'");?>
-              </div>
-            </td>
-            <?php endif;?>
           </tr>
-          <?php if($config->systemMode == 'PLM'):?>
-          <tr class='ipdBox'>
-            <th><?php echo $lang->story->duration?></th>
-            <td colspan='2'><?php echo html::select('duration', $lang->demand->durationList, '', "class='form-control chosen'")?></td>
-            <td colspan='2'>
-              <div class='input-group'>
-                <div class="input-group-addon"><?php echo $lang->story->BSA;?></div>
-                <?php echo html::select('BSA', $lang->demand->bsaList, '', "class='form-control chosen'");?>
-              </div>
-            </td>
-          </tr>
-          <?php endif;?>
           <?php if($type == 'story'):?>
           <?php if($this->config->URAndSR):?>
           <tr>
@@ -405,7 +385,6 @@ foreach(explode(',', $config->story->create->requiredFields) as $field)
           <tr>
             <td colspan="5" class="text-center form-actions">
               <?php echo html::hidden('type', $type);?>
-              <?php echo html::hidden('vision', 'ipd');?>
               <?php if(defined('TUTORIAL')):?>
               <?php echo html::submitButton();?>
               <?php else:?>
