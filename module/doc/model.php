@@ -2340,7 +2340,6 @@ class docModel extends model
             }
         }
 
-
         if(isset($moduleDocs[0]))
         {
             if(!isset($treeMenu[0])) $treeMenu[0] = '';
