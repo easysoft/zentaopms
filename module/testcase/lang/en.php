@@ -271,6 +271,7 @@ $lang->testcase->importXmind     = "Import XMIND";
 $lang->testcase->exportXmind     = "Export XMIND";
 $lang->testcase->getXmindImport  = "Get Mindmap";
 $lang->testcase->showXMindImport = "Display Mindmap";
+$lang->testcase->saveXmindImport = "Save Mindmap";
 
 $lang->testcase->xmindImport           = "Imort XMIND";
 $lang->testcase->xmindExport           = "Export XMIND";

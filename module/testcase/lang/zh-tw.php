@@ -271,6 +271,7 @@ $lang->testcase->importXmind     = "导入XMIND";
 $lang->testcase->exportXmind     = "导出XMIND";
 $lang->testcase->getXmindImport  = "获取导图";
 $lang->testcase->showXMindImport = "显示导图";
+$lang->testcase->saveXmindImport = "保存导图";
 
 $lang->testcase->xmindImport           = "导入XMIND";
 $lang->testcase->xmindExport           = "导出XMIND";

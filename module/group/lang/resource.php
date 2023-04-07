@@ -1097,6 +1097,7 @@ $lang->resource->testcase->batchChangeScene = 'batchChangeScene';
 $lang->resource->testcase->updateOrder      = 'updateOrder';
 
 $lang->resource->testcase->importXmind     = 'importXmind';
+$lang->resource->testcase->saveXmindImport = 'saveXmindImport';
 $lang->resource->testcase->exportXmind     = 'exportXmind';
 $lang->resource->testcase->getXmindImport  = 'getXmindImport';
 $lang->resource->testcase->showXMindImport = 'showXMindImport';
@@ -1143,6 +1144,7 @@ $lang->testcase->methodOrder[185] = 'importXmind';
 $lang->testcase->methodOrder[190] = 'getXmindImport';
 $lang->testcase->methodOrder[195] = 'showXMindImport';
 $lang->testcase->methodOrder[200] = 'exportXmind';
+$lang->testcase->methodOrder[205] = 'saveXmindImport';
 
 /* Test task. */
 $lang->resource->testtask = new stdclass();
