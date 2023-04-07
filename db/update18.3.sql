@@ -171,8 +171,7 @@ CHANGE `editedDate` `editedDate` datetime NULL;
 
 ALTER TABLE `zt_assetlib`
 CHANGE `editedBy` `editedBy` varchar(30) NOT NULL DEFAULT '',
-CHANGE `editedDate` `editedDate` datetime NULL,
-CHANGE `registerDate` `registerDate` datetime NULL;
+CHANGE `editedDate` `editedDate` datetime NULL;
 
 ALTER TABLE `zt_attend`
 CHANGE `reviewedBy` `reviewedBy` char(30) NULL DEFAULT '',

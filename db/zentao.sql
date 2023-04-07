@@ -9669,7 +9669,6 @@ CREATE TABLE IF NOT EXISTS `zt_assetlib` (
   `createdDate` datetime NOT NULL,
   `editedBy` varchar(30) NOT NULL DEFAULT '',
   `editedDate` datetime NULL,
-  `registerDate`  datetime NULL,
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB CHARSET=utf8;
