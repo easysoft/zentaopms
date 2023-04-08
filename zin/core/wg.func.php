@@ -12,7 +12,7 @@ namespace zin;
 
 require_once dirname(__DIR__) . DS . 'utils' . DS . 'flat.func.php';
 require_once 'props.class.php';
-require_once 'directive.func.php';
+require_once 'directive.class.php';
 require_once 'wg.class.php';
 require_once 'context.func.php';
 

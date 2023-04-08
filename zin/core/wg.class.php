@@ -12,7 +12,7 @@
 namespace zin;
 
 require_once 'props.class.php';
-require_once 'directive.func.php';
+require_once 'directive.class.php';
 require_once 'zin.class.php';
 require_once 'context.class.php';
 

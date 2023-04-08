@@ -11,7 +11,7 @@
 
 namespace zin;
 
-require_once 'directive.func.php';
+require_once 'directive.class.php';
 
 class to
 {
