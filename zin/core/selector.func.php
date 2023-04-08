@@ -22,10 +22,11 @@ function parseWgSelector($selector)
 
     $selector = trim($selector);
     $len      = strlen($selector);
-    if($len < 1) NULL;
+
+    if($len < 1) return NULL;
 
     $result = ['class' => [], 'id' => NULL, 'tag' => NULL, 'inner' => false, 'name' => $selector, 'first' => false, 'selector' => $selector];
-    if(str_contains('/', $selector))
+    if(str_contains($selector, '/'))
     {
         $parts          = explode('/', $selector, 2);
         $result['name'] = $parts[0];
