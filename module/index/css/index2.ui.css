@@ -26,11 +26,9 @@
 #appsBar {position: fixed; left: var(--zt-menu-width, 96px); bottom: 0; right: 0; height: var(--zt-apps-bar-height, 40px); background: var(--zt-apps-bar-bg, var(--color-canvas)); box-shadow: 0 -2px 12px rgba(0,0,0,.02); transition: left .2s;}
 .hide-menu #appsBar {left: var(--zt-menu-fold-width, 40px);}
 #appTabs {position: absolute; left: 4px; right: 280px; top: 0; bottom: 0; user-select: none;}
-#appTabs > li > a {border-radius: var(--radius-md);}
-#appTabs > li + li::before {display: block; content: ' '; position: absolute; left: 0; top: 6px; bottom: 6px; width: 1px; background: var(--color-inverse); opacity: .12;}
-#appTabs > li > a::after {display: block; content: ' '; position: absolute; left: 12px; right: 12px; bottom: 2px; height: 2px; background: var(--color-primary-500); opacity: 0; transform: scaleX(.5); transition: opacity .2s, transform .2s;}
-#appTabs > li > a.active {color: inherit}
-#appTabs > li > a.active::after {opacity: 1; transform: scaleX(1);}
+#appTabs > li > a {border-radius: var(--radius-md); opacity: .7;}
+#appTabs > li + li::before {display: block; content: ' '; position: absolute; left: 0; top: 8px; bottom: 8px; width: 1px; background: var(--color-inverse); opacity: .12;}
+#appTabs > li > a.active {color: inherit; opacity: 1; color: var(--color-primary-500)}
 #appsToolbar {position: absolute; right: 4px; width: 280px; top: 0; bottom: 0; display: flex; justify-content: flex-end;}
 #appsToolbar > .btn {color: inherit}
 #appsToolbar > .btn-zentao > .icon {color: var(--color-primary-400)}
