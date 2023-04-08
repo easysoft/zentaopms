@@ -127,6 +127,7 @@ function initRecomendTree(data)
         itemCreator: function($li, item)
         {
             $li.append('<a class="priv-item" data-has-children="' + (item.children ? !!item.children.length : false) + '" href="#" title="' + item.title + '">' + item.title + (item.children ? '' : '<i class="icon icon-close hidden" data-type="depend" data-privid=' + item.privID + ' data-relationpriv=' + item.relationPriv + '></i>') +  '</a>');
+            // $li.append('<input data-has-children="' + (item.children ? !!item.children.length : false) + '"' + (item.children ? '' : 'data-type="depend" data-privid="' + item.privID + '" data-relationpriv="' + item.relationPriv + '"') + 'type="checkbox" name="recommendPrivs[]" value="' + item.id + '" title="' + item.title + '" id="recommendPrivs[' + item.id + ']"');
             if(item.active) $li.addClass('active open in');
         }
     });
@@ -171,33 +172,38 @@ function updatePrivTree(privList)
         });
     }
 
-    $.get(createLink('group', 'ajaxGetDependentPrivs', 'privList=' + privList.toString()), function(data)
+    $.ajax(
     {
-        data = $.parseJSON(data);
+        url: createLink('group', 'ajaxGetRelatedPrivs'),
+        dataType: 'json',
+        method: 'post',
+        data: {"privList" : privList.toString()},
+        success: function(data)
+        {
+            if(data.depend == undefined || data.depend.length == 0)
+            {
+                $('.side .menuTree.depend').empty();
+                $('.side .menuTree.depend').closest('.priv-panel').addClass('hidden');
+            }
+            else
+            {
+                $(".menuTree.depend").data('zui.tree').reload(data.depend);
+                $('.side .menuTree.depend').closest('.priv-panel').removeClass('hidden');
+            }
 
-        if(data.depend == undefined || data.recommend.length > 0)
-        {
-            $('.side .menuTree.depend').empty();
-            $('.side .menuTree.depend').closest('.priv-panel').hide();
-        }
-        else
-        {
-            $(".menuTree.depend").data('zui.tree').reload(data.depend);
-            $('.side .menuTree.depend').closest('.priv-panel').show();
-        }
+            if(data.recommend == undefined || data.recommend.length == 0)
+            {
+                $('.side .menuTree.recommend').empty();
+                $('.side .menuTree.recommend').closest('.priv-panel').addClass('hidden');
+            }
+            else
+            {
+                $(".menuTree.recommend").data('zui.tree').reload(data.recommend);
+                $('.side .menuTree.recommend').closest('.priv-panel').removeClass('hidden');
+            }
 
-        if(data.recommend == undefined || data.recommend.length > 0)
-        {
-            $('.side .menuTree.recommend').empty();
-            $('.side .menuTree.recommend').closest('.priv-panel').hide();
+            resizeContainer();
         }
-        else
-        {
-            $(".menuTree.recommend").data('zui.tree').reload(data.recommend);
-            $('.side .menuTree.recommend').closest('.priv-panel').show();
-        }
-
-        resizeContainer();
     });
 }
 
@@ -213,7 +219,6 @@ function checkAllChange()
         if(checked) $('input[type=checkbox]').attr('checked', checked);
         if(!checked) $('input[type=checkbox]').removeAttr('checked');
         $('#privList tbody .checkbox-indeterminate-block').removeClass('checkbox-indeterminate-block');
-        $('.side .menuTree').empty();
     }
     else
     {
@@ -228,9 +233,8 @@ function checkAllChange()
         if(!checked) $children.find('input[type=checkbox]').removeAttr('checked');
 
         changeParentChecked($(this), moduleName, packageID);
-
-        updatePrivTree(null);
     }
+    updatePrivTree(null);
 }
 
 /**
@@ -245,13 +249,13 @@ function resizeContainer()
     {
         $('#mainContainer > .main').css('flex', '1 1 100%');
         $('#mainContainer > .side').css('flex', '1 1 0%');
-        $('#mainContainer > .side').hide();
+        $('#mainContainer > .side').addClass('hidden');
     }
     else
     {
         $('#mainContainer > .main').css('flex', '1 1 75%');
         $('#mainContainer > .side').css('flex', '1 1 25%');
-        $('#mainContainer > .side').show();
+        $('#mainContainer > .side').removeClass('hidden');
     }
 }
 
@@ -261,9 +265,9 @@ $(function()
 
     relatedPrivData = $.parseJSON(relatedPrivData);
     initDependTree(relatedPrivData.depend);
-    if(relatedPrivData.depend == undefined || relatedPrivData.depend == 0) $(".menuTree.depend").closest('.priv-panel').hide();
+    if(relatedPrivData.depend == undefined || relatedPrivData.depend == 0) $(".menuTree.depend").closest('.priv-panel').addClass('hidden');
     initRecomendTree(relatedPrivData.recommend);
-    if(relatedPrivData.recommend == undefined || relatedPrivData.recommend == 0) $(".menuTree.recommend").closest('.priv-panel').hide();
+    if(relatedPrivData.recommend == undefined || relatedPrivData.recommend == 0) $(".menuTree.recommend").closest('.priv-panel').addClass('hidden');
 
     resizeContainer();
 

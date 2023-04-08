@@ -160,7 +160,7 @@
       </table>
     </div>
     <div class="side">
-      <div class="priv-panel">
+      <div class="priv-panel <?php if(count($relatedPrivData['depend']) == 0) echo 'hidden';?>">
         <div class="panel-title">
           <?php echo $lang->group->dependentPrivs;?>
           <icon class='icon icon-help' data-toggle='popover' data-trigger='focus hover' data-placement='right' data-tip-class='text-muted popover-sm' data-content='<?php echo $lang->group->dependPrivTips;?>'></icon>
@@ -169,7 +169,7 @@
           <div class="menuTree depend menu-active-primary menu-hover-primary"></div>
         </div>
       </div>
-      <div class="priv-panel mt-m">
+      <div class="priv-panel mt-m <?php if(count($relatedPrivData['recommend']) == 0) echo 'hidden';?>">
         <div class="panel-title">
           <?php echo $lang->group->recommendPrivs;?>
           <icon class='icon icon-help' data-toggle='popover' data-trigger='focus hover' data-placement='right' data-tip-class='text-muted popover-sm' data-content='<?php echo $lang->group->recommendPrivTips;?>'></icon>
@@ -195,7 +195,7 @@
 <?php endif;?>
 <?php js::set('groupID', $groupID);?>
 <?php js::set('menu', $menu);?>
-<?php js::set('relatedPrivData', $relatedPrivData);?>
+<?php js::set('relatedPrivData', json_encode($relatedPrivData));?>
 <?php js::set('selectedPrivIdList', $selectedPrivIdList);?>
 <script>
 $(document).ready(function()

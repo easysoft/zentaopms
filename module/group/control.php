@@ -293,14 +293,14 @@ class group extends control
                 }
             }
 
-            $relatedPrivData = $this->group->getDependentPrivs($selectedPrivIdList);
+            $relatedPrivData = $this->group->getRelatedPrivs($selectedPrivIdList);
 
             $this->view->privList           = $privList;
             $this->view->privMethods        = $privMethods;
             $this->view->selectPrivs        = $selectPrivs;
             $this->view->privPackages       = $privPackages;
             $this->view->selectedPrivIdList = $selectedPrivIdList;
-            $this->view->relatedPrivData    = json_encode($relatedPrivData);
+            $this->view->relatedPrivData    = $relatedPrivData;
         }
         elseif($type == 'byModule')
         {
@@ -1059,9 +1059,10 @@ class group extends control
      * @access public
      * @return bool
      */
-    public function ajaxGetDependentPrivs($privIdList)
+    public function ajaxGetRelatedPrivs()
     {
-        $privList = $this->group->getDependentPrivs($privIdList);
+        $privIdList = zget($_POST, 'privList');
+        $privList   = $this->group->getRelatedPrivs($privIdList);
         return print(json_encode($privList));
     }
 }

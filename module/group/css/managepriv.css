@@ -1,4 +1,4 @@
-.mt-m {margin-top: 16px;}
+.priv-panel:not(.hidden) + .mt-m {margin-top: 16px;}
 .flex-center {display: flex; justify-content: center; align-items: center;}
 #mainContainer {display: flex; gap: 16px; height: calc(100vh - 165px);}
 #mainContainer > .main {flex: 1 1 75%; overflow-y: auto; min-height: 445px;}
@@ -45,7 +45,7 @@ td.menus + td {border-left: 0;}
 #privList .group-item .checkbox-inline label {padding-left: 3px;}
 #privList.table-bordered td, #privList.table-bordered th {border-top-style: dashed; border-bottom-style: dashed; border-color: #FFF;}
 #privList .check-all>label.checkbox-indeterminate-block:before {content: ' '; opacity: 1; transform: scale(1);}
-.priv-footer {padding: 14px; z-index: 3; box-shadow: inset 0 0px 0px rgb(0 0 0 / 10%), 0 0 5px rgb(0 0 0 / 10%); position: relative; min-height: 40px; background: #fff; border-radius: 0 0 4px 4px;}
+.priv-footer {padding: 14px; z-index: 11; box-shadow: inset 0 0px 0px rgb(0 0 0 / 10%), 0 0 5px rgb(0 0 0 / 10%); position: relative; min-height: 40px; background: #fff; border-radius: 0 0 4px 4px;}
 .priv-footer .btn {margin 0px; padding-top: 7px;}
 .priv-footer .check-all {display: inline-block;}
 .priv-footer .check-all label {padding-left: 0px; margin-bottom: 0px; font-weight: 400;}
