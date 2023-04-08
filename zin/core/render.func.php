@@ -13,7 +13,7 @@ namespace zin;
 
 require_once 'zin.class.php';
 
-function render($wgName = 'page')
+function render($wgName = 'page', $options = NULL)
 {
     $args = [];
     foreach(zin::$globalRenderList as $item)
@@ -26,12 +26,14 @@ function render($wgName = 'page')
 
     if($wgName === 'page' || $wgName === 'pagebase') $args[] = set::display(false);
 
-    $options = [];
-    $headers = getallheaders();
-    if(isset($headers['X-ZIN-Options']) &&  !empty($headers['X-ZIN-Options']))
+    if($options === NULL)
     {
-        $setting = $headers['X-ZIN-Options'];
-        $options = $setting[0] === '{' ? json_decode($headers['X-ZIN-Options'], true) : ['selector' => $setting];
+        $headers = getallheaders();
+        if(isset($headers['X-ZIN-Options']) &&  !empty($headers['X-ZIN-Options']))
+        {
+            $setting = $headers['X-ZIN-Options'];
+            $options = $setting[0] === '{' ? json_decode($headers['X-ZIN-Options'], true) : ['selector' => $setting];
+        }
     }
 
     $wg = createWg($wgName, $args);
