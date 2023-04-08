@@ -20,7 +20,7 @@ CREATE TABLE IF NOT EXISTS `zt_pivot`  (
   `name` text NOT NULL,
   `desc` text NOT NULL,
   `sql` mediumtext NOT NULL,
-  `fields` mediumtext NOT NULL,
+  `fields` mediumtext NULL,
   `langs` mediumtext NULL,
   `vars` mediumtext NOT NULL,
   `objects` mediumtext NULL,
@@ -35,13 +35,13 @@ CREATE TABLE IF NOT EXISTS `zt_pivot`  (
   `editedDate` datetime NULL,
   `deleted` enum('0', '1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
-  KEY(`dimension`),
-  KEY(`group`)
+  KEY `dimension` (`dimension`),
+  KEY `group` (`group`)
 ) ENGINE = InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `zt_chart_back` SELECT * FROM `zt_chart`;
 
-ALTER TABLE `zt_chart` MODIFY `fields` mediumtext NOT NULL;
+ALTER TABLE `zt_chart` MODIFY `fields` mediumtext NULL;
 ALTER TABLE `zt_chart` MODIFY `group` varchar(255) NOT NULL;
 ALTER TABLE `zt_chart` ADD `stage` enum('draft','published') NOT NULL DEFAULT 'draft' AFTER `sql`;
 ALTER TABLE `zt_chart` ADD `langs` text NULL AFTER `fields`;
@@ -215,6 +215,8 @@ CHANGE `lastEditedBy` `lastEditedBy` char(30) NOT NULL DEFAULT '',
 CHANGE `lastEditedDate` `lastEditedDate` date NULL;
 
 ALTER TABLE `zt_bug`
+CHANGE `injection` `injection` mediumint unsigned NOT NULL DEFAULT '0',
+CHANGE `identify` `identify` mediumint unsigned NOT NULL DEFAULT '0',
 CHANGE `assignedDate` `assignedDate` datetime NULL,
 CHANGE `resolvedDate` `resolvedDate` datetime NULL,
 CHANGE `closedDate` `closedDate` datetime NULL,

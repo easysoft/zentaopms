@@ -249,8 +249,8 @@ CREATE TABLE IF NOT EXISTS `zt_bug` (
   `id` mediumint(8) NOT NULL AUTO_INCREMENT,
   `project` mediumint(8) unsigned NOT NULL,
   `product` mediumint(8) unsigned NOT NULL DEFAULT '0',
-  `injection` mediumint(8) unsigned NOT NULL,
-  `identify` mediumint(8) unsigned NOT NULL,
+  `injection` mediumint(8) unsigned NOT NULL DEFAULT '0',
+  `identify` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `branch` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `module` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `execution` mediumint(8) unsigned NOT NULL DEFAULT '0',
@@ -443,7 +443,7 @@ CREATE TABLE IF NOT EXISTS `zt_chart` (
   `settings` mediumtext NOT NULL,
   `filters` mediumtext NOT NULL,
   `step` tinyint(1) unsigned NOT NULL DEFAULT '0',
-  `fields` mediumtext NOT NULL,
+  `fields` mediumtext NULL,
   `langs` text NULL,
   `sql` mediumtext,
   `stage` enum('draft','published') NOT NULL DEFAULT 'draft',
@@ -481,8 +481,8 @@ CREATE TABLE IF NOT EXISTS `zt_dimension` (
   `desc` text NOT NULL,
   `createdBy` varchar(30) NOT NULL,
   `createdDate` datetime NOT NULL,
-  `editedBy` varchar(30) NOT NULL,
-  `editedDate` datetime NOT NULL,
+  `editedBy` varchar(30) NOT NULL DEFAULT '',
+  `editedDate` datetime NULL,
   `deleted` enum('0','1') NOT NULL default '0',
   PRIMARY KEY (`id`),
   KEY `code` (`code`)
@@ -14018,7 +14018,7 @@ CREATE TABLE IF NOT EXISTS `zt_pivot`  (
   `name` text NOT NULL,
   `desc` text NOT NULL,
   `sql` mediumtext NOT NULL,
-  `fields` mediumtext NOT NULL,
+  `fields` mediumtext NULL,
   `langs` mediumtext NULL,
   `vars` mediumtext NOT NULL,
   `objects` mediumtext NULL,
@@ -14033,8 +14033,8 @@ CREATE TABLE IF NOT EXISTS `zt_pivot`  (
   `editedDate` datetime NOT NULL,
   `deleted` enum('0', '1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
-  KEY(`dimension`),
-  KEY(`group`)
+  KEY `dimension` (`dimension`),
+  KEY `group` (`group`)
 ) ENGINE = InnoDB DEFAULT CHARSET=utf8;
 
 -- DROP TABLE IF EXISTS `zt_sqlview`;
