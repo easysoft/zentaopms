@@ -58,6 +58,11 @@ class h extends wg
         return $this->getTagName();
     }
 
+    public function shortType()
+    {
+        return $this->getTagName();
+    }
+
     protected function getPropsStr()
     {
         $propStr = $this->props->toStr(array_keys(static::getDefinedProps()));
