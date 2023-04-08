@@ -72,6 +72,11 @@ class wg
         static::checkPageResources();
     }
 
+    public function __debugInfo()
+    {
+        return $this->toJsonData();
+    }
+
     public function isDomElement()
     {
         return false;
