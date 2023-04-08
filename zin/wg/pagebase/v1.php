@@ -48,6 +48,7 @@ class pageBase extends wg
         $bodyClass = $this->prop('bodyClass');
         $metas     = $this->prop('metas');
         $title     = $this->props->get('title', data('title')) . " - $lang->zentaoPMS";
+        $attrs     = $this->props->skip(array_keys(static::getDefinedProps()));
 
         if($config->debug)
         {
@@ -58,12 +59,13 @@ class pageBase extends wg
         return h::html
         (
             before(html('<!DOCTYPE html>')),
-            set($this->props->skip(array_keys(static::getDefinedProps()))),
+            set($attrs),
             h::head
             (
                 html($metas),
                 h::title($title),
-                $zui ? h::import(array($config->zin->zuiPath . 'zui.zentao.umd.cjs', $config->zin->zuiPath . 'zui.zentao.css')) : null,
+                $zui ? h::importCss($config->zin->zuiPath . 'zui.zentao.css', set::id('zuiCSS')) : null,
+                $zui ? h::importJs($config->zin->zuiPath . 'zui.zentao.umd.cjs', set::id('zuiJS')) : null,
                 $head,
             ),
             h::body
