@@ -25,7 +25,7 @@ function parseWgSelector($selector)
 
     if($len < 1) return NULL;
 
-    $result = ['class' => [], 'id' => NULL, 'tag' => NULL, 'inner' => false, 'name' => $selector, 'first' => false, 'selector' => $selector];
+    $result = ['class' => [], 'id' => NULL, 'tag' => NULL, 'inner' => false, 'name' => NULL, 'first' => false, 'selector' => $selector];
     if(str_contains($selector, '/'))
     {
         $parts          = explode('/', $selector, 2);
@@ -41,16 +41,51 @@ function parseWgSelector($selector)
         $len      = strlen($selector);
     }
 
-    $type    = 'tag';
-    $current = '';
+    $type         = 'tag';
+    $current      = '';
+    $updateResult = function(&$result, $current, $type)
+    {
+        if(empty($current)) return;
+
+        if($type === 'class')
+        {
+            $result[$type][]  = $current;
+        }
+        elseif($type === 'option')
+        {
+            $option = [];
+            parse_str($current, $option);
+        }
+        else
+        {
+            $result[$type] = $current;
+        }
+    };
+
     for($i = 0; $i < $len; $i++)
     {
         $c = $selector[$i];
         $t = '';
 
-        if($c === '#')     $t = 'id';
-        elseif($c === '.') $t = 'class';
-        elseif($c === ':') $t = 'flag';
+        if($c === '#' & $type !== 'option')
+        {
+            $t = 'id';
+        }
+        elseif($c === '.' & $type !== 'option')
+        {
+            $t = 'class';
+        }
+        elseif($c === '(' && $type !== 'option' && str_ends_with($selector, ')'))
+        {
+            $command = substr($selector, $i + 1, -1);
+            if(empty($command)) $command = $current;
+            $result['command'] = $command;
+            break;
+        }
+        elseif($c === ':')
+        {
+            $t = 'option';
+        }
 
         if(empty($t))
         {
@@ -58,24 +93,20 @@ function parseWgSelector($selector)
         }
         else
         {
-            if(!empty($current))
-            {
-                if($type === 'class')    $result[$type][]  = $current;
-                elseif($type === 'flag') $result[$current] = true;
-                else                     $result[$type]    = $current;
-            }
+            $updateResult($result, $current, $type);
             $current = '';
             $type    = $t;
         }
     }
-    if(!empty($current))
-    {
-        if($type === 'class')    $result[$type][]  = $current;
-        elseif($type === 'flag') $result[$current] = true;
-        else                     $result[$type]    = $current;
-    }
+    $updateResult($result, $current, $type);
 
     if(empty($result['class'])) $result['class'] = NULL;
+    if(empty($result['name']))
+    {
+        if(!empty($result['id']))  $result['name'] = $result['id'];
+        if(!empty($result['tag'])) $result['name'] = $result['tag'];
+        $result['name'] = $selector;
+    }
 
     return (object)$result;
 }

@@ -91,6 +91,7 @@ class wg
         $list = parseWgSelectors($selectors);
         foreach($list as $selector)
         {
+            if(isset($selector->command)) continue;
             if(!empty($selector->id)    && $this->id() !== $selector->id) continue;
             if(!empty($selector->tag)   && $this->shortType() !== $selector->tag) continue;
             if(!empty($selector->class) && !$this->props->class->has($selector->class)) continue;
@@ -130,11 +131,15 @@ class wg
         $portals   = $this->getPortals();
         $options   = $this->renderOptions;
         $selectors = (!empty($options) && isset($options['selector'])) ? $options['selector'] : NULL;
-        $dom       = new dom($this, [$before, $children, $portals, $after], $selectors);
 
-        $dom->renderAsJson = (!empty($options) && isset($options['json'])) ? $options['json'] : false;
-
-        return $dom;
+        return new dom
+        (
+            $this,
+            [$before, $children, $portals, $after],
+            $selectors,
+            (!empty($options) && isset($options['type'])) ? $options['type'] : 'html',
+            (!empty($options) && isset($options['data'])) ? $options['data'] : NULL,
+        );
     }
 
     /**

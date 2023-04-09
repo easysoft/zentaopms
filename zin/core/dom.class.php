@@ -26,7 +26,9 @@ class dom
 
     public $renderInner = false;
 
-    public $renderAsJson = NULL;
+    public $renderType;
+
+    public $dataCommands;
 
     /**
      * Construct the dom object.
@@ -35,11 +37,14 @@ class dom
      * @param  array|string|object $selectors
      * @access public
      */
-    public function __construct($wg, $children, $selectors = NULL)
+    public function __construct($wg, $children, $selectors = NULL, $renderType = NULL, $dataCommands = NULL)
     {
-        $this->wg = $wg;
+        $this->wg           = $wg;
+        $this->renderType   = $renderType;
+
         $this->add($children);
         $this->addSelectors($selectors);
+        $this->addDataCommands($dataCommands);
     }
 
     public function __debugInfo()
@@ -50,7 +55,7 @@ class dom
             'type'         => $this->wg->type(),
             'count'        => count($this->children),
             'renderInner'  => $this->renderInner,
-            'renderAsJson' => $this->renderAsJson,
+            'renderType'   => $this->renderType,
             'selectors'    => stringifyWgSelectors($this->selectors)
         ];
     }
@@ -67,12 +72,41 @@ class dom
         }
     }
 
+    public function addDataCommands($commands)
+    {
+        if(empty($commands)) return;
+
+        if(is_string($commands))
+        {
+            $commandList = explode(',', $commands);
+            $commands    = [];
+            foreach($commandList as $command)
+            {
+                $parts = explode(':', $command, 2);
+                $commands[$parts[0]] = count($parts) > 1 ? $parts[1] : $parts[0];
+            }
+        }
+
+        if($this->dataCommands === NULL) $this->dataCommands = [];
+        $index = 0;
+        foreach($commands as $key => $command)
+        {
+            $this->dataCommands[$index == $key ? $command : $key] = $command;
+            $index++;
+        }
+    }
+
     public function addSelectors($selectors)
     {
         if(empty($selectors)) return;
 
+        if($this->selectors === NULL) $this->selectors = [];
         $selectors = parseWgSelectors($selectors);
-        $this->selectors = $this->selectors === NULL ? $selectors : array_merge($this->selectors, $selectors);
+        foreach($selectors as $selector)
+        {
+            if(isset($selector->command) && !empty($selector->command)) $this->addDataCommands([$selector->tag => $selector->command]);
+            else $this->selectors[] = $selector;
+        }
     }
 
     public function isMatch($selector)
@@ -105,7 +139,9 @@ class dom
 
     public function render()
     {
-        return $this->renderAsJson ? $this->renderJson() : $this->renderHtml();
+        if($this->renderType === 'json') return $this->renderJson();
+        if($this->renderType === 'list') return $this->renderList();
+        return $this->renderHtml();
     }
 
     public function renderJson()
@@ -119,6 +155,16 @@ class dom
             $output[$name] = static::renderItemToJson($item);
         }
 
+        if(!empty($this->dataCommands))
+        {
+            $data = [];
+            foreach($this->dataCommands as $name => $command)
+            {
+                $data[$name] = data($command);
+            }
+            $output['data'] = $data;
+        }
+
         return json_encode($output);
     }
 
@@ -130,9 +176,49 @@ class dom
         $output = [];
         foreach($list as $item)
         {
-            $output[] = static::renderItemToHtml($item);
+            $result = static::renderItemToHtml($item);
+            if(!is_string($result)) $result = json_encode($result);
+            $output[] = $result;
         }
         return implode('', $output);
+    }
+
+    public function renderList()
+    {
+        $list = $this->build();
+        if(empty($list)) return '';
+
+        $output = [];
+        foreach($list as $name => $item)
+        {
+            if(is_array($item) && count($item) === 1) $item = $item[0];
+            $output[] = ['name' => $name, 'data' => static::renderDomItem($item)];
+        }
+
+        if(!empty($this->dataCommands))
+        {
+            foreach($this->dataCommands as $name => $command)
+            {
+                $output[] = ['name' => $name, 'data' => data($command)];
+            }
+        }
+
+        return json_encode($output);
+    }
+
+    public static function renderDomItem($item, $defaultType = 'html')
+    {
+        if($item instanceof dom)
+        {
+            $renderType = $item->renderType;
+            if(empty($renderType)) $renderType = $defaultType;
+            if($renderType === 'json') return $item->wg->toJsonData();
+            return dom::renderItemToHtml($item->build());
+        }
+
+        $renderType = $defaultType;
+        if($renderType === 'json') return static::renderItemToJson($item);
+        return static::renderItemToHtml($item);
     }
 
     public static function renderItemToJson($item)
@@ -147,7 +233,7 @@ class dom
         }
 
         if($item instanceof dom) return $item->wg->toJsonData();
-        if($item instanceof wg)  return $item->toJsonData();
+        if($item instanceof wg)  return dom::renderDomItem($item, 'json');
         if(is_string($item))     return $item;
 
         if(is_object($item))
@@ -209,7 +295,7 @@ class dom
             if($item->wg->isMatch($selector))
             {
                 $item->renderInner  = $selector->inner ?? false;
-                $item->renderAsJson = $selector->json ?? false;
+                $item->renderType   = $selector->type ?? NULL;
                 $filteredList[]     = $item->wg->gid;
                 $results[]          = $item;
             }
