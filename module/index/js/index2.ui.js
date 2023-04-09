@@ -39,6 +39,20 @@ const apps =
     frameContent: null
 };
 
+const debug = config.debug;
+
+function triggerAppEvent(code, event, args)
+{
+    const app = apps.openedMap[code];
+    if(!app) return;
+
+    if(debug) console.log('[APPS]', 'event:', event, code, args);
+    event = event + '.apps';
+    if(!Array.isArray(args)) args = [args];
+    if(app.$app) app.$app.trigger(event, args);
+    if(app.iframe && app.iframe.contentWindow.$) return app.iframe.contentWindow.$(app.iframe.contentWindow.document).trigger(event, args);
+}
+
 /**
  * Open app
  * @param {string} url
@@ -73,7 +87,8 @@ function openApp(url, code, forceReload)
     let openedApp = apps.openedMap[code];
     if(!openedApp)
     {
-        openedApp = $.extend({opened: true, url: url, zIndex: 0}, app);
+        openedApp = $.extend({opened: true, url: url, zIndex: 0, currentUrl: url}, app);
+        forceReload = false;
         apps.openedMap[code] = openedApp;
 
         const $iframe =
@@ -82,23 +97,30 @@ function openApp(url, code, forceReload)
                 'id="appIframe-' + code + '"',
                 'name="app-' + code + '"',
                 'allowfullscreen="true"',
+                'src="' + $.createLink('index', 'app', 'url=' + btoa(url)) + '"',
                 'frameborder="no"',
                 'allowtransparency="true"',
                 'scrolling="auto"',
-                'style="width: 100%; height: 100%; left: 0px;"',
             '/>'
         ].join(' '));
+        const iframe = $iframe[0];
+        openedApp.iframe = iframe;
         openedApp.$app = $('<div class="app-container load-indicator" id="app-' + code + '"></div>')
             .append($iframe)
             .appendTo('#apps');
-        openedApp.iframe = $iframe[0];
+
+        iframe.onload = iframe.onreadystatechange = function(e)
+        {
+            openedApp.$app.removeClass('loading');
+            triggerAppEvent(openedApp.code, 'load', [openedApp, e]);
+        };
     }
 
     /* Set tab cookie */
     $.cookie.set('tab', code, {expires: config.cookieLife, path: config.webRoot});
 
     /* Highlight on left menu */
-    const $menuNav   = $('#menuMainNav,#menuMoreNav');
+    const $menuNav  = $('#menuMainNav,#menuMoreNav');
     const $lastItem = $menuNav.find('li>a.active');
     if($lastItem.data('app') !== code)
     {
@@ -108,7 +130,8 @@ function openApp(url, code, forceReload)
 
     /* Show and load app */
     const isSameUrl = openedApp.currentUrl === url;
-    if(!isSameUrl || forceReload !== false)
+    const needLoad = !isSameUrl || forceReload !== false;
+    if(needLoad)
     {
         reloadApp(code, url);
         openedApp.$app.toggleClass('open-from-hidden', openedApp.zIndex < apps.zIndex)
@@ -127,8 +150,7 @@ function openApp(url, code, forceReload)
             .addClass('show-in-app')
             .append($('<span class="text"></span>').text(app.text));
         $tabItem = $('<li class="nav-item"></li>')
-            .attr('data-app', code)
-            .attr('id', 'appTab-' + code)
+            .attr({'data-app': code, id: 'appTab-' + code})
             .append($link)
             .appendTo($tabs);
     }
@@ -138,6 +160,9 @@ function openApp(url, code, forceReload)
         $lastTab.removeClass('active');
         $tabs.find('li[data-app="' + code + '"]>a').addClass('active');
     }
+
+    if(debug) console.log('[APPS]', 'open:', code);
+    triggerAppEvent(code, 'openapp', [openedApp, {load: needLoad}]);
 
     return openedApp;
 }
@@ -149,38 +174,6 @@ function openApp(url, code, forceReload)
 function showApp(code)
 {
     return openApp('', code, false);
-}
-
-/**
- * Init app iframe
- * @param {ZentaoOpenedApp} app
- */
-function initAppFrame(app, url)
-{
-    const iframe = app.iframe;
-    iframe.onload = iframe.onreadystatechange = function(e)
-    {
-        app.$app.removeClass('loading').trigger('loadapp', app);
-    };
-    const fillFrame = (html) =>
-    {
-        const doc = iframe.contentWindow.document;
-        doc.open();
-        doc.write(html.replace('${DEFAULT_URL}', url));
-        doc.close();
-    };
-    if(apps.frameContent)
-    {
-        fillFrame(apps.frameContent);
-    }
-    else
-    {
-        fetch($.createLink('index', 'app')).then(res => res.text()).then((html) =>
-        {
-            apps.frameContent = html;
-            fillFrame(html);
-        });
-    }
 }
 
 /**
@@ -201,7 +194,7 @@ function reloadApp(code, url)
     {
         if(app.external) iframe.src = url;
         else if(iframe.contentWindow.loadPage) iframe.contentWindow.loadPage(url);
-        else initAppFrame(app, url);
+        else console.error('[APPS]', 'reload: Cannot load page when iframe is not ready.');
     }
     catch(error)
     {
@@ -211,6 +204,79 @@ function reloadApp(code, url)
     app.currentUrl = url;
 }
 
+function updateApp(code, url, title)
+{
+    document.title = title;
+    if(debug) console.log('[APPS]', 'update:', code, url);
+}
+
+/**
+ * Get last opened app
+ * @param {boolean} [onlyShowed] If set to true then only get last app from apps are showed
+ * @returns {object} The opened app info object
+ */
+function getLastApp(onlyShowed)
+{
+    let lastShowIndex = 0;
+    let lastApp = null;
+    for(let code in apps.openedMap)
+    {
+        var app = apps.openedMap[code];
+        if((!onlyShowed || app.show) && lastShowIndex < app.zIndex && !app.closed)
+        {
+            lastShowIndex = app.zIndex;
+            lastApp = app;
+        }
+    }
+    return lastApp;
+}
+
+function closeApp(code)
+{
+    code = code || apps.lastCode;
+    const app = apps.openedMap[code];
+    if(!app) return;
+
+    const iframe = app.iframe;
+    if(iframe)
+    {
+        if(iframe && iframe.contentDocument && iframe.contentWindow && iframe.contentWindow.$)
+        {
+            var result = triggerAppEvent(code, 'closeapp.apps', [app]);
+            if(result === false) return 'cancel';
+        }
+    }
+
+    $('#appTabs a.active[data-app="' + code + '"]').parent().remove();
+
+    app.closed = true;
+    hideApp(code);
+
+    app.$app.remove();
+    app.$bar.remove();
+    delete apps.openedMap[code];
+
+    triggerAppEvent(code, 'closeapp', app);
+}
+
+function hideApp(code)
+{
+    code = code || apps.lastCode;
+    const app = apps.openedMap[code];
+    if(!app) return;
+
+    if(!app.show) return;
+    if(!app.closed) triggerAppEvent(code, 'hideapp', app);
+
+    app.$app.hide();
+    app.show = false;
+    apps.lastCode = null;
+
+
+    /* Active last app */
+    const lastApp = getLastApp(true) || getLastApp();
+    showApp(lastApp ? lastApp.code : apps.defaultCode);
+}
 
 /**
  * Get app code from url
@@ -249,14 +315,8 @@ function getAppCodeFromUrl(urlOrModuleName)
     }
     if(moduleName === 'report')
     {
-        if(['usereport', 'editreport', 'deletereport', 'custom'].includes(methodLowerCase) && link.params.from)
-        {
-            return 'system';
-        }
-        else
-        {
-            return link.prj ? 'project' : 'report';
-        }
+        if(['usereport', 'editreport', 'deletereport', 'custom'].includes(methodLowerCase) && link.params.from) return 'system';
+        else return link.prj ? 'project' : 'report';
     }
     if(moduleName === 'story' && vision === 'lite') return 'project'
     if(moduleName === 'testcase' && methodLowerCase === 'zerocase')
@@ -451,9 +511,7 @@ function refreshMenu()
         apps.map[item.code] = item;
 
         $('<li></li>').attr('data-app', item.code)
-            .attr('data-toggle', 'tooltip')
-            .attr('data-placement', 'right')
-            .attr('data-title', item.text)
+            .attr({'data-toggle': 'tooltip', 'data-placement': 'right', 'data-title': item.text})
             .append($link)
             .appendTo($menuMainNav);
 
@@ -489,9 +547,9 @@ $(document).on('click', '.open-in-app,.show-in-app', function(e)
 {
     const $link = $(this);
     if($link.is('[data-modal],[data-toggle],.iframe,.not-in-app')) return;
-    const url = $link.hasClass('show-in-app') ? '' : ($link.attr('href') || $link.data('url'));
+    const url = $link.attr('href') || $link.data('url');
     if(url && url.includes('onlybody=yes')) return;
-    if(openApp(url, $link.data('app')))
+    if(openApp(url, $link.data('app'), !$link.hasClass('show-in-app')))
     {
         e.preventDefault();
     }
@@ -514,13 +572,24 @@ $(document).on('click', '.open-in-app,.show-in-app', function(e)
     event.preventDefault();
 });
 
-/* Open default app */
-let defaultOpenUrl = defaultOpen || apps.defaultCode;
-if(location.hash.indexOf('#app=') === 0)
+$.get($.createLink('index', 'app'), html =>
 {
-    const params = $.parseSearchParams(location.hash.substring(1));
-    defaultOpenUrl = params.app;
-}
-openApp.call(null, defaultOpenUrl.split(','));
+    apps.frameContent = html;
 
-$.apps = apps;
+    /* Open default app */
+    let defaultOpenUrl = defaultOpen || apps.defaultCode;
+    if(location.hash.indexOf('#app=') === 0)
+    {
+        const params = $.parseSearchParams(location.hash.substring(1));
+        defaultOpenUrl = params.app;
+    }
+    openApp.apply(null, defaultOpenUrl.split(','));
+});
+
+$.apps = $.extend(apps,
+{
+    openApp:   openApp,
+    reloadApp: reloadApp,
+    showApp:   showApp,
+    updateApp: updateApp
+});
