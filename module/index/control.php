@@ -51,9 +51,9 @@ class index extends control
         $this->index($open);
     }
 
-    public function app($url = '')
+    public function app($open = '')
     {
-        $this->view->url = $url;
+        $this->view->defaultUrl = helper::safe64Decode($open);
         $this->display();
     }
 

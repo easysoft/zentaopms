@@ -29,7 +29,7 @@ function render($wgName = 'page', $options = NULL)
     if($options === NULL)
     {
         $headers = getallheaders();
-        if(isset($headers['X-ZIN-Options']) &&  !empty($headers['X-ZIN-Options']))
+        if(isset($headers['X-ZIN-Options']) && !empty($headers['X-ZIN-Options']))
         {
             $setting = $headers['X-ZIN-Options'];
             $options = $setting[0] === '{' ? json_decode($headers['X-ZIN-Options'], true) : ['selector' => $setting];
