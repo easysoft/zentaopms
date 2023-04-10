@@ -22,9 +22,11 @@
 <div id="mainMenu" class="clearfix">
   <div id="leftBar" class="btn-toolbar pull-left">
   <?php echo $objectDropdown;?>
+  <?php echo html::backButton("<i class='icon icon-back icon-sm'></i> " . $lang->goback, "id='backBtn'", 'btn btn-link')?>
   </div>
   <div class="btn-toolbar pull-right">
   <?php
+      common::printLink('project', 'export', "", "<i class='icon-export muted'> </i>" . $lang->export, '', "class='btn btn-link export'");
       if(common::hasPriv('api', 'create')) echo html::a($this->createLink('api', 'create',    "libID=$libID&moduleID=$moduleID", '', true), '<i class="icon icon-plus"></i> ' . $lang->api->createApi, '', 'class="btn btn-primary iframe" data-width="95%"');
       if(common::hasPriv('doc', 'create')) echo $this->doc->printCreateBtn($lib, $type, $objectID, $moduleID);
   ?>
