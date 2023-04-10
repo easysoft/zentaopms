@@ -250,7 +250,7 @@ class h extends wg
         if($func[0] === '~')
         {
             $func = substr($func, 1);
-            return "$($func.bind(null, " . implode(',', $args) . "));";
+            return "$(() => $func(" . implode(',', $args) . "));";
         }
         return $func . '(' . implode(',', $args) . ');';
     }
