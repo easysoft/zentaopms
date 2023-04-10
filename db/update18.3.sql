@@ -215,8 +215,17 @@ CHANGE `lastEditedBy` `lastEditedBy` char(30) NOT NULL DEFAULT '',
 CHANGE `lastEditedDate` `lastEditedDate` date NULL;
 
 ALTER TABLE `zt_bug`
+CHANGE `hardware` `hardware` varchar(30) NOT NULL DEFAULT '',
 CHANGE `injection` `injection` mediumint unsigned NOT NULL DEFAULT '0',
+CHANGE `repo` `repo` mediumint unsigned NOT NULL DEFAULT '0',
+CHANGE `mr` `mr` mediumint unsigned NOT NULL DEFAULT '0',
+CHANGE `entry` `entry` text COLLATE 'utf8mb3_general_ci' NULL,
+CHANGE `lines` `lines` varchar(10) COLLATE 'utf8mb3_general_ci' NOT NULL DEFAULT '',
+CHANGE `v1` `v1` varchar(40) COLLATE 'utf8mb3_general_ci' NOT NULL DEFAULT '',
+CHANGE `v2` `v2` varchar(40) COLLATE 'utf8mb3_general_ci' NOT NULL DEFAULT '',
 CHANGE `identify` `identify` mediumint unsigned NOT NULL DEFAULT '0',
+CHANGE `activatedCount` `activatedCount` smallint NOT NULL DEFAULT '0',
+CHANGE `activatedDate` `activatedDate` datetime NULL,
 CHANGE `assignedDate` `assignedDate` datetime NULL,
 CHANGE `resolvedDate` `resolvedDate` datetime NULL,
 CHANGE `closedDate` `closedDate` datetime NULL,
@@ -609,7 +618,8 @@ CHANGE `editedDate` `editedDate` datetime NULL;
 
 ALTER TABLE `zt_stakeholder`
 CHANGE `editedBy` `editedBy` char(30) NOT NULL DEFAULT '',
-CHANGE `editedDate` `editedDate` date NULL;
+CHANGE `editedDate` `editedDate` date NULL,
+CHANGE `deleted` `deleted` enum('0','1') NOT NULL DEFAULT '0';
 
 ALTER TABLE `zt_story`
 CHANGE `assignedDate` `assignedDate` datetime NULL,
@@ -623,12 +633,14 @@ CHANGE `closedDate` `closedDate` datetime NULL,
 CHANGE `closedReason` `closedReason` varchar(30) NOT NULL DEFAULT '',
 CHANGE `activatedDate` `activatedDate` datetime NULL,
 CHANGE `feedbackBy` `feedbackBy` varchar(100) NOT NULL DEFAULT '',
+CHANGE `stagedBy` `stagedBy` char(30) NOT NULL DEFAULT '',
 CHANGE `notifyEmail` `notifyEmail` varchar(100) NOT NULL DEFAULT '';
 
 ALTER TABLE `zt_storyreview`
 CHANGE `reviewDate` `reviewDate` datetime NULL;
 
 ALTER TABLE `zt_task`
+CHANGE `design` `design` mediumint unsigned NOT NULL DEFAULT '0',
 CHANGE `estStarted` `estStarted` date NULL,
 CHANGE `realStarted` `realStarted` datetime NULL,
 CHANGE `finishedBy` `finishedBy` varchar(30) NOT NULL DEFAULT '',

@@ -541,6 +541,8 @@ class executionModel extends model
             $lib->type      = 'execution';
             $lib->main      = '1';
             $lib->acl       = 'default';
+            $lib->addedBy   = $this->app->user->account;
+            $lib->addedDate = helper::now();
             $this->dao->insert(TABLE_DOCLIB)->data($lib)->exec();
 
             $whitelist = explode(',', $sprint->whitelist);
