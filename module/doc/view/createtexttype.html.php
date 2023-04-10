@@ -111,7 +111,7 @@
                 <tr>
                   <th class="th-control text-top"><?php echo $lang->doclib->control;?></th>
                   <td colspan='3' class='aclBox'>
-                    <?php echo html::radio('acl', $lang->doc->aclList, 'open', "onchange='toggleAcl(this.value, \"doc\")'");?>
+                    <?php echo html::radio('acl', $lang->doc->aclList, $objectType == 'mine' ? 'private' : 'open', "onchange='toggleAcl(this.value, \"doc\")'");?>
                   </td>
                 </tr>
                 <tr id='whiteListBox' class='hidden'>

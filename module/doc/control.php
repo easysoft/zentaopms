@@ -430,6 +430,10 @@ class doc extends control
         {
             $objects = $this->loadModel('product')->getPairs();
         }
+        elseif($objectType == 'mine')
+        {
+            $this->lang->doc->aclList = $this->lang->doclib->mySpaceAclList;
+        }
         $moduleOptionMenu = $this->doc->getLibsOptionMenu($libs);
 
         $moduleID = $moduleID ? (int)$moduleID : (int)$this->cookie->lastDocModule;
