@@ -1,6 +1,5 @@
 window.footerGenerator = function()
 {
-    console.log('footerGenerator');
     const count = this.layout.allRows.filter((x) => x.data.type === "product").length;
     const statistic = summeryTpl.replace('%s', ' ' + count + ' ');
     return [{children: statistic, className: "text-dark"}, "flex", "pager"];
