@@ -42,6 +42,7 @@ class block extends control
         if($module == 'my')
         {
             $modules = $this->lang->block->moduleList;
+            unset($modules['doc']);
 
             list($programModule, $programMethod)     = explode('-', $this->config->programLink);
             list($productModule, $productMethod)     = explode('-', $this->config->productLink);
@@ -2031,6 +2032,94 @@ class block extends control
         $this->app->loadLang('program');
         $this->app->loadLang('execution');
         $this->view->projects = $this->loadModel('project')->getOverviewList('byStatus', $status, $orderBy, $count);
+    }
+
+    /**
+     * Print document statistic block.
+     *
+     * @access public
+     * @return void
+     */
+    public function printDocStatisticBlock()
+    {
+        $this->display();
+    }
+
+    /**
+     * Print document dynamic block.
+     *
+     * @access public
+     * @return void
+     */
+    public function printDocDynamicBlock()
+    {
+        $this->display();
+    }
+
+    /**
+     * Print my collection of documents block.
+     *
+     * @access public
+     * @return void
+     */
+    public function printMyCollectionBlock()
+    {
+        $this->display();
+    }
+
+    /**
+     * Print recent update block.
+     *
+     * @access public
+     * @return void
+     */
+    public function printRecentUpdateBlock()
+    {
+        $this->display();
+    }
+
+    /**
+     * Print view list block.
+     *
+     * @access public
+     * @return void
+     */
+    public function printViewListBlock()
+    {
+        $this->display();
+    }
+
+    /**
+     * Print collect list block.
+     *
+     * @access public
+     * @return void
+     */
+    public function printCollectListBlock()
+    {
+        $this->display();
+    }
+
+    /**
+     * Print product's document block.
+     *
+     * @access public
+     * @return void
+     */
+    public function printProductDocBlock()
+    {
+        $this->display();
+    }
+
+    /**
+     * Print project's document block.
+     *
+     * @access public
+     * @return void
+     */
+    public function printProjectDocBlock()
+    {
+        $this->display();
     }
 
     /**

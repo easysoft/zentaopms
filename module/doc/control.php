@@ -36,19 +36,7 @@ class doc extends control
      */
     public function index()
     {
-        $this->session->set('docList', $this->app->getURI(true), 'doc');
-        $this->app->loadClass('pager', $static = true);
-        $pager = new pager(0, 5, 1);
-
-        $this->view->title      = $this->lang->doc->common . $this->lang->colon . $this->lang->doc->index;
-        $this->view->position[] = $this->lang->doc->index;
-
-        $this->view->latestEditedDocs = $this->doc->getDocsByBrowseType('byediteddate', 0, 0, 'editedDate_desc, id_desc', $pager);
-        $this->view->myDocs           = $this->doc->getDocsByBrowseType('openedbyme', 0, 0, 'addedDate_desc', $pager);
-        $this->view->collectedDocs    = $this->doc->getDocsByBrowseType('collectedbyme', 0, 0, 'addedDate_desc', $pager);
-        $this->view->statisticInfo    = $this->doc->getStatisticInfo();
-        $this->view->users            = $this->user->getPairs('noletter');
-
+        $this->view->title = $this->lang->doc->common . $this->lang->colon . $this->lang->doc->index;
         $this->display();
     }
 

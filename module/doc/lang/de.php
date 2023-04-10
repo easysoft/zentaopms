@@ -147,7 +147,7 @@ $lang->doc->editCatalog   = 'Edit Catalog';
 $lang->doc->deleteCatalog = 'Delete Catalog';
 
 /* Methods list */
-$lang->doc->index            = 'Home';
+$lang->doc->index            = 'Dashboard';
 $lang->doc->createAB         = 'Create';
 $lang->doc->create           = 'Dokument hinzufügen';
 $lang->doc->edit             = 'Bearbeiten';
