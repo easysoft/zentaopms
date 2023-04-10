@@ -445,7 +445,7 @@ $(function()
             methodName = 'showFiles';
             linkParams = 'type=' + objectType + '&objectID=' + objectID;
         }
-        else if(objectType == 'mine' || objectType == 'view' || objectType == 'collect' || objectType == 'createdBy')
+        else if(objectType == 'mine' || objectType == 'view' || objectType == 'collect' || objectType == 'createdby')
         {
             var mySpaceType = 'mine';
             if(type == 'view' || type == 'collect' || type == 'createdBy') mySpaceType = type;

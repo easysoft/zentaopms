@@ -67,7 +67,7 @@ class doc extends control
      * @access public
      * @return void
      */
-    public function mySpace($type = 'mine', $libID = 0, $moduleID = 0, $browseType = 'all', $param = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function mySpace($type = 'mine', $libID = 0, $moduleID = 0, $browseType = 'all', $param = 0, $orderBy = 'status,id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         /* Save session, load module. */
         $uri = $this->app->getURI(true);
@@ -99,15 +99,25 @@ class doc extends control
         /* Append id for secend sort. */
         $sort = common::appendOrder($orderBy);
 
+        $docs = array();
+        if($type == 'mine')
+        {
+            $docs = $this->doc->getDocs($libID, $moduleID, $browseType, $orderBy, $pager);
+        }
+        elseif($type == 'view' or $type == 'collect' or $type == 'createdby')
+        {
+            $docs = $this->doc->getMineList($type, $browseType, $orderBy, $pager);
+        }
+
         $this->view->moduleID   = $moduleID;
-        $this->view->docs       = $this->doc->getDocsByBrowseType($browseType, $queryID, $moduleID, $sort, $pager);
+        $this->view->docs       = $docs;
         $this->view->users      = $this->user->getPairs('noletter');
         $this->view->orderBy    = $orderBy;
         $this->view->browseType = $browseType;
         $this->view->param      = $param;
         $this->view->libID      = $libID;
         $this->view->lib        = $this->doc->getLibById($libID);
-        $this->view->libTree    = $this->doc->getLibTree($type != 'mine' ? 0 : $libID, $libs, 'mine', 0);
+        $this->view->libTree    = $this->doc->getLibTree($type != 'mine' ? 0 : $libID, $libs, 'mine', $moduleID);
         $this->view->pager      = $pager;
         $this->view->type       = $type;
         $this->view->objectID   = 0;
@@ -1320,7 +1330,6 @@ class doc extends control
         $this->view->exportMethod   = $libType == 'api' ? 'export' : $type . '2export';
         $this->view->apiLibID       = key($apiLibs);
 
-
         $this->display();
     }
 
@@ -1392,8 +1401,13 @@ class doc extends control
 
         $spaceList = $this->lang->doc->spaceList;
         $typeList  = $this->lang->doc->types;
-        if(!common::hasPriv('doc', 'create')) unset($spaceList['mine'], $spaceList['custom'], $typeList['doc']);
-        if(!common::hasPriv('api', 'create')) unset($spaceList['api'], $typeList['api']);
+        if(!common::hasPriv('doc', 'create'))        unset($spaceList['mine'], $spaceList['custom'], $typeList['doc']);
+        if(!common::hasPriv('doc', 'mySpace'))       unset($spaceList['mine']);
+        if(!common::hasPriv('doc', 'productSpace'))  unset($spaceList['product']);
+        if(!common::hasPriv('doc', 'projectSpace'))  unset($spaceList['project']);
+        if(!common::hasPriv('doc', 'tableContents')) unset($spaceList['custom']);
+        if(!common::hasPriv('api', 'index'))         unset($spaceList['api']);
+        if(!common::hasPriv('api', 'create'))        unset($spaceList['api'], $typeList['api']);
 
         $products = $this->loadModel('product')->getPairs();
         $projects = $this->project->getPairsByProgram('', 'all', false, 'order_asc', 'kanban');

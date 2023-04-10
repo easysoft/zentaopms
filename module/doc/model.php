@@ -482,43 +482,9 @@ class docModel extends model
         if(empty($docs)) return array();
 
         /* Get projects, executions and products by docIdList. */
-        list($projects, $executions, $products) = $this->getObjectsByDoc(array_keys($docs));
-        $mineLibs    = $this->getAllLibsByType('mine');
-        $customLibs  = $this->getAllLibsByType('custom');
         $docContents = $this->dao->select('*')->from(TABLE_DOCCONTENT)->where('doc')->in(array_keys($docs))->orderBy('version,doc')->fetchAll('doc');
-
-        $modules = array();
-        $objects = array('product' => 'products', 'execution' => 'executions', 'project' => 'projects');
-        $this->loadModel('tree');
         foreach($docs as $index => $doc)
         {
-            if(!isset($modules[$doc->lib])) $modules[$doc->lib] = $this->tree->getOptionMenu($doc->lib, 'doc', 0, 0, 'nodeleted', 'all', ' > ');
-            $doc->moduleName = zget($modules[$doc->lib], $doc->module);
-            $doc->moduleName = ltrim($doc->moduleName, '/');
-            $doc->libName    = zget($allLibs, $doc->lib);
-            foreach($objects as $type => $object)
-            {
-                if(!empty($doc->{$type}))
-                {
-                    $doc->objectID   = $doc->{$type};
-                    $doc->objectName = ${$object}[$doc->{$type}];
-                    $doc->objectType = $type;
-                    break;
-                }
-            }
-            if(isset($mineLibs[$doc->lib]))
-            {
-                $doc->objectID   = 0;
-                $doc->objectName = $this->lang->doc->person;
-                $doc->objectType = 'mine';
-            }
-            elseif(isset($customLibs[$doc->lib]))
-            {
-                $doc->objectID   = 0;
-                $doc->objectName = $this->lang->doc->team;
-                $doc->objectType = 'custom';
-            }
-
             $docs[$index]->fileSize = 0;
             if(isset($files[$index]))
             {
@@ -638,7 +604,7 @@ class docModel extends model
      * @param  string     $orderBy
      * @param  object     $pager
      * @access public
-     * @return void
+     * @return array
      */
     public function getDocs($libID, $module, $browseType, $orderBy, $pager = null)
     {
@@ -652,6 +618,73 @@ class docModel extends model
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll('id');
+        $docs = $this->processCollector($docs);
+        return $docs;
+    }
+
+    /**
+     * Get mine list.
+     *
+     * @param  string    $type            view|collect|createdBy
+     * @param  string    $browseType      all|draft
+     * @param  string    $orderBy
+     * @param  object    $pager
+     * @access public
+     * @return array
+     */
+    public function getMineList($type, $browseType, $orderBy, $pager = null)
+    {
+        if($type == 'view' or $type == 'collect')
+        {
+            $docs = $this->dao->select('DISTINCT t1.*,t3.name as libName,t3.type as objectType')->from(TABLE_DOC)->alias('t1')
+                ->leftJoin(TABLE_DOCACTION)->alias('t2')->on("t1.id=t2.doc")
+                ->leftJoin(TABLE_DOCLIB)->alias('t3')->on("t1.lib=t3.id")
+                ->where('t1.deleted')->eq(0)
+                ->andWhere('t1.vision')->eq($this->config->vision)
+                ->andWhere('t2.action')->eq($type)
+                ->andWhere('t2.actor')->eq($this->app->user->account)
+                ->beginIF($browseType == 'all')->andWhere("(t1.status = 'normal' or (t1.status = 'draft' and t1.addedBy='{$this->app->user->account}'))")->fi()
+                ->beginIF($browseType == 'draft')->andWhere('t1.status')->eq('draft')->fi()
+                ->orderBy($orderBy)
+                ->page($pager, 't1.id')
+                ->fetchAll('id');
+        }
+        elseif($type == 'createdby')
+        {
+            $docs = $this->dao->select('DISTINCT t1.*,t2.name as libName,t2.type as objectType')->from(TABLE_DOC)->alias('t1')
+                ->leftJoin(TABLE_DOCLIB)->alias('t2')->on("t1.lib=t2.id")
+                ->where('t1.deleted')->eq(0)
+                ->andWhere('t1.vision')->eq($this->config->vision)
+                ->andWhere('t1.addedBy')->eq($this->app->user->account)
+                ->beginIF($browseType == 'draft')->andWhere('t1.status')->eq('draft')->fi()
+                ->orderBy($orderBy)
+                ->page($pager)
+                ->fetchAll('id');
+        }
+
+        $this->loadModel('tree');
+        $objects = array();
+        $modules = array();
+        list($objects['project'], $objects['execution'], $objects['product']) = $this->getObjectsByDoc(array_keys($docs));
+        foreach($docs as $docID => $doc)
+        {
+            if(!isset($modules[$doc->lib])) $modules[$doc->lib] = $this->tree->getOptionMenu($doc->lib, 'doc', 0, 0, 'nodeleted', 'all', ' > ');
+            $doc->moduleName = zget($modules[$doc->lib], $doc->module);
+            $doc->moduleName = ltrim($doc->moduleName, '/');
+
+            $doc->objectID   = zget($doc, $doc->objectType, 0);
+            $doc->objectName = '';
+            if(isset($objects[$doc->objectType]))
+            {
+                $doc->objectName = $objects[$doc->objectType][$doc->objectID];
+            }
+            else
+            {
+                if($doc->objectType == 'mine')   $doc->objectName = $this->lang->doc->person;
+                if($doc->objectType == 'custom') $doc->objectName = $this->lang->doc->team;
+            }
+        }
+
         $docs = $this->processCollector($docs);
         return $docs;
     }
@@ -3034,6 +3067,7 @@ class docModel extends model
             $myLib->objectID   = 0;
             $myLib->active     = 0;
             $myLib->hasAction  = false;
+            $myLib->active     = $libID ? 1 : 0;
             $myLib->children   = $libTree;
 
             $myView = new stdclass();
@@ -3063,7 +3097,11 @@ class docModel extends model
             $myCreation->hasAction  = false;
             $myCreation->active     = zget($this->app->rawParams, 'type', '') == 'createdBy' ? 1 : 0;
 
-            $libTree = array($myLib, $myView, $myCollection, $myCreation);
+            $libTree   = array();
+            $libTree[] = $myLib;
+            if(common::hasPriv('doc', 'myView'))       $libTree[] = $myView;
+            if(common::hasPriv('doc', 'myCollection')) $libTree[] = $myCollection;
+            if(common::hasPriv('doc', 'myCreation'))   $libTree[] = $myCreation;
         }
         return $libTree;
     }
