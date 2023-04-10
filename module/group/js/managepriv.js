@@ -147,7 +147,7 @@ function initDependTree(data)
         initialState: 'expand',
         itemCreator: function($li, item)
         {
-            $li.append('<div class="checkbox-primary"><input data-has-children="' + (item.children ? !!item.children.length : false) + '"' + (item.children ? '' : 'data-type="depend" data-privid="' + item.privID + '" data-relationpriv="' + item.relationPriv + '"') + 'type="checkbox" name="dependPrivs[]" value="' + item.relationPriv + '" title="' + item.title + '" id="dependPrivs[' + item.module + ']' + item.method + '" data-module="' + item.module + '" data-method="' + item.method + '"><label>' + item.title + '</label></div>');
+            $li.append('<div class="checkbox-primary"><input disabled="disabled" checked="checked" data-has-children="' + (item.children ? !!item.children.length : false) + '"' + (item.children ? '' : 'data-type="depend" data-privid="' + item.privID + '" data-relationpriv="' + item.relationPriv + '"') + 'type="checkbox" name="dependPrivs[]" value="' + item.relationPriv + '" title="' + item.title + '" id="dependPrivs[' + item.module + ']' + item.method + '" data-module="' + item.module + '" data-method="' + item.method + '"><label>' + item.title + '</label></div>');
         }
     });
     $('.menuTree.depend i.list-toggle').remove();
@@ -202,8 +202,8 @@ function updatePrivTree(privList)
                 $('.side .menuTree.recommend').closest('.priv-panel').find('.table-empty-tip').addClass('hidden');
             }
 
-            $('.menuTree.recommend i.list-toggle').remove();
-            $('.menuTree.recommend li.has-list').addClass('open');
+            $('.menuTree i.list-toggle').remove();
+            $('.menuTree li.has-list').addClass('open');
         }
     });
 }
