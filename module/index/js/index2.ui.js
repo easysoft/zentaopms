@@ -18,10 +18,10 @@
  * @property {number} zIndex
  * @property {string} currentTitle
  * @property {string} currentUrl
- * @property {boolean} [show]
  * @property {number} [zIndex]
  * @property {HTMLIframe} iframe
  * @property {jQuery<HTMLDivElement>} $app
+ * @property {jQuery<HTMLLIElement>} $bar
  * @typedef {ZentaoApp & ZentaoOpenedProps} ZentaoOpenedApp
  */
 
@@ -112,7 +112,7 @@ function openApp(url, code, forceReload)
         iframe.onload = iframe.onreadystatechange = function(e)
         {
             openedApp.$app.removeClass('loading');
-            triggerAppEvent(openedApp.code, 'load', [openedApp, e]);
+            triggerAppEvent(openedApp.code, 'loadapp', [openedApp, e]);
         };
     }
 
@@ -157,6 +157,7 @@ function openApp(url, code, forceReload)
             .attr({'data-app': code, id: 'appTab-' + code})
             .append($link)
             .appendTo($tabs);
+        openedApp.$bar = $tabItem;
     }
     const $lastTab = $tabs.find('li>a.active');
     if($lastTab.data('app') !== code)
@@ -239,18 +240,22 @@ function getLastApp(onlyShowed)
 {
     let lastShowIndex = 0;
     let lastApp = null;
-    for(let code in apps.openedMap)
+    Object.values(apps.openedMap).forEach(app =>
     {
-        var app = apps.openedMap[code];
         if((!onlyShowed || app.show) && lastShowIndex < app.zIndex && !app.closed)
         {
             lastShowIndex = app.zIndex;
             lastApp = app;
         }
-    }
+    });
     return lastApp;
 }
 
+/**
+ * Close app
+ * @param {string} code
+ * @returns {ZentaoOpenedApp|undefined|false}
+ */
 function closeApp(code)
 {
     code = code || apps.lastCode;
@@ -260,42 +265,48 @@ function closeApp(code)
     const iframe = app.iframe;
     if(iframe)
     {
-        if(iframe && iframe.contentDocument && iframe.contentWindow && iframe.contentWindow.$)
+        if(iframe && iframe.contentDocument && iframe.contentWindow && iframe.contentWindow.onCloseApp)
         {
-            var result = triggerAppEvent(code, 'closeapp.apps', [app]);
-            if(result === false) return 'cancel';
+            var result = iframe.contentWindow.onCloseApp();
+            if(result === false) return false;
         }
     }
 
     $('#appTabs a.active[data-app="' + code + '"]').parent().remove();
 
     app.closed = true;
-    hideApp(code);
-
     app.$app.remove();
     app.$bar.remove();
+
+    hideApp(code);
     delete apps.openedMap[code];
 
     triggerAppEvent(code, 'closeapp', app);
+    return app;
 }
 
+/**
+ * Hide app
+ * @param {string} code
+ * @returns {ZentaoOpenedApp|undefined}
+ */
 function hideApp(code)
 {
     code = code || apps.lastCode;
     const app = apps.openedMap[code];
     if(!app) return;
 
-    if(!app.show) return;
+    $('#menuNav a.active[data-app="' + code + '"]').removeClass('active');
+
     if(!app.closed) triggerAppEvent(code, 'hideapp', app);
 
     app.$app.hide();
-    app.show = false;
     apps.lastCode = null;
-
 
     /* Active last app */
     const lastApp = getLastApp(true) || getLastApp();
     showApp(lastApp ? lastApp.code : apps.defaultCode);
+    return app;
 }
 
 /**
@@ -615,8 +626,9 @@ $.get($.createLink('index', 'app'), html =>
 
 $.apps = $.extend(apps,
 {
-    openApp:   openApp,
-    reloadApp: reloadApp,
-    showApp:   showApp,
-    updateApp: updateApp
+    openApp:    openApp,
+    reloadApp:  reloadApp,
+    showApp:    showApp,
+    updateApp:  updateApp,
+    getLastApp: getLastApp,
 });
