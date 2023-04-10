@@ -170,7 +170,6 @@ RENDERCELL
 
 dtable
 (
-    set::className('shadow rounded'),
     set::cols($cols),
     set::data($data),
     set::footPager(usePager()),

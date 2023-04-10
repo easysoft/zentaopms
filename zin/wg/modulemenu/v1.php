@@ -68,7 +68,7 @@ class moduleMenu extends wg
         }
         return div
         (
-            setClass('module-menu'),
+            setClass('module-menu rounded shadow-sm'),
             h::header
             (
                 span

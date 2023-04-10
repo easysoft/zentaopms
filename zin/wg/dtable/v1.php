@@ -3,7 +3,7 @@ namespace zin;
 
 class dtable extends wg
 {
-    static $defineProps = 'className?:string="shadow rounded"';
+    static $defineProps = 'className?:string="shadow-sm rounded"';
 
     public static function getPageCSS()
     {
