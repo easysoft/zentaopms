@@ -289,7 +289,7 @@ $(function()
         if(isFirstLoad) ele.data('zui.tree').collapse();
 
         var $leaf = ele.find('li.active > a');
-        if($leaf.length && $('#fileTree').height() >= $('#sideBar').height()) $('#sideBar')[0].scrollTop = $($leaf[$leaf.length - 1]).offset().top;
+        if($leaf.length && $('#fileTree').height() >= $('#sideBar').height()) $('#sideBar')[0].scrollTop = $($leaf[$leaf.length - 1]).offset().top - 100;
 
         ele.on('click', '.icon-drop', function(e)
         {
