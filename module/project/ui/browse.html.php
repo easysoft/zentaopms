@@ -51,7 +51,7 @@ foreach($setting as $value)
                 'delete'    => array('icon'=> 'icon-trash',        'hint'=> '删除',       'text'  => '删除'),
                 'other'     => array('type'=> 'dropdown',          'hint'=> '其他操作',   'caret' => true),
                 'link'      => array('icon'=> 'icon-link',         'text'=> '关联产品',   'name'  => 'link'),
-                'more'      => array('icon'=> 'icon-ellipsis-v',   'hint'=> '更多',       'type'  => 'dropdown', 'caret' => false, 'className' => 'menu-dtable-actions'),
+                'more'      => array('icon'=> 'icon-ellipsis-v',   'hint'=> '更多',       'type'  => 'dropdown', 'caret' => false),
                 'whitelist' => array('icon'=> 'icon-shield-check', 'text'=> '项目白名单', 'name'  => 'whitelist'),
             );
             break;
