@@ -69,9 +69,11 @@ class programMenu extends wg
     protected function build()
     {
         $this->setMenuTreeProps();
+
         $activeKey = $this->prop('activeKey');
-        $title = $this->getTitle($activeKey);
-        $closeBtn = null;
+        $title     = $this->getTitle($activeKey);
+        $closeBtn  = null;
+
         if(!empty($activeKey))
         {
             $closeBtn = a

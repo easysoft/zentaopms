@@ -1,8 +1,6 @@
 <?php
 namespace zin;
 
-include_once './data.php';
-
 $cols = array_values($config->product->all->dtable->fieldList);
 
 /* TODO: implements extend fields. */
@@ -11,11 +9,11 @@ $extendFields = $this->product->getFlowExtendFields();
 $data         = array();
 $totalStories = 0;
 $programs     = array();
-foreach($productStructure as $programID => $program)
+foreach($productStructure as $proID => $program)
 {
-    if(isset($programLines[$programID]))
+    if(isset($programLines[$proID]))
     {
-        foreach($programLines[$programID] as $lineID => $lineName)
+        foreach($programLines[$proID] as $lineID => $lineName)
         {
             if(!isset($program[$lineID]))
             {
@@ -69,7 +67,7 @@ foreach($productStructure as $programID => $program)
                 $item->productLine       = $product->line ? $line['lineName'] :  '';
                 $item->execution         = rand(0, 10);
                 $item->feedback          = rand(0, 100);
-                $item->testCaseCoverRate = rand(0, 100);
+                $item->testCaseCoverage  = rand(0, 100);
                 $item->releasesOld       = rand(0, 10);
                 /* TODO attach extend fields. */
 
@@ -78,6 +76,20 @@ foreach($productStructure as $programID => $program)
         }
     }
 }
+
+$programMenuLink = createLink(
+    $this->app->rawModule,
+    $this->app->rawMethod,
+    array(
+        'browseType' => $browseType,
+        'orderBy'    => $orderBy,
+        'param'      => $param,
+        'recTotal'   => $recTotal,
+        'recPerPage' => $recPerPage,
+        'pageID'     => $pageID,
+        'programID'  => '%d'
+    )
+);
 
 featureBar
 (
@@ -90,11 +102,11 @@ featureBar
             (
                 array
                 (
-                    'title'     => $lang->program->all,
-                    'programs'  => $programs,
-                    'activeKey' => !empty($programs) ? $programs[0]->id : null,
-                    'closeLink' => '#',
-                    'onClickItem' => jsRaw('function(e){console.log(e)}')
+                    'title'       => $lang->program->all,
+                    'programs'    => $programs,
+                    'activeKey'   => !empty($programs) ? $programID : null,
+                    'closeLink'   => sprintf($programMenuLink, 0),
+                    'onClickItem' => jsRaw("function(data){window.programMenuOnClick(data, '$programMenuLink');}")
                 )
             )
         )
@@ -105,16 +117,7 @@ featureBar
         set::text($lang->product->edit),
         set::checked($this->cookie->editProject)
     ) : NULL,
-    li(searchToggle()),
-    li
-    (
-        btn
-        (
-            set::class('ghost'),
-            set::icon('fold-all'),
-            set::text($lang->sort)
-        )
-    )
+    li(searchToggle(set::open($browseType == 'bySearch')))
 );
 
 toolbar
@@ -143,30 +146,8 @@ toolbar
     )))
 );
 
-js
-(
-<<<RENDERCELL
-window.footerGenerator = function()
-{
-    const count = this.layout.allRows.filter((x) => x.data.type === "product").length;
-    const statistic = '{$lang->product->pageSummary}'.replace('%s', ' ' + count + ' ');
-    return [{children: statistic, className: "text-dark"}, "flex", "pager"];
-}
 
-window.renderReleaseCountCell = function(result, {col, row})
-{
-    if(!col || !row || col.name !== 'releases') return result;
-
-    var changed = row.data.releases - row.data.releasesOld;
-
-    if(changed === 0) result[0] = 0;
-    if(changed > 0)   result[0] = {html: row.data.releases + ' <span class="label size-sm circle primary-pale bd-primary">+' + changed + '</span>'};
-    if(changed < 0)   result[0] = {html: row.data.releases + ' <span class="label size-sm circle warning-pale bd-warning">' + changed + '</span>'};
-
-    return result;
-}
-RENDERCELL
-);
+jsVar('langSummary', $lang->product->pageSummary);
 
 dtable
 (
@@ -174,20 +155,7 @@ dtable
     set::data($data),
     set::footPager(usePager()),
     set::nested(true),
-    //set::onRenderCell(jsRaw('window.renderReleaseCountCell')),
-    set::onRenderCell(jsRaw('function(result, data){return window.renderReleaseCountCell(result, data);}')),
     set::footer(jsRaw('function(){return window.footerGenerator.call(this);}'))
-);
-
-sidebar
-(
-    moduleMenu
-    (
-        set::productID(1),
-        set::title('所有分类'),
-        set::activeKey('4'),
-        set::closeLink('#'),
-    )
 );
 
 render();

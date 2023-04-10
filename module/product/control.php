@@ -1275,13 +1275,13 @@ class product extends control
      * @access public
      * @return void
      */
-    public function all($browseType = 'noclosed', $orderBy = 'program_asc', $param = 0, $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function all($browseType = 'noclosed', $orderBy = 'program_asc', $param = 0, $recTotal = 0, $recPerPage = 20, $pageID = 1, $programID = 0)
     {
         /* Load module and set session. */
         $this->loadModel('program');
         $this->session->set('productList', $this->app->getURI(true), 'product');
 
-        $queryID  = ($browseType == 'bySearch') ? (int)$param : 0;
+        $queryID  = ($browseType == 'bySearch' or !empty($param)) ? (int)$param : 0;
 
         if($this->app->viewType == 'mhtml')
         {
@@ -1323,6 +1323,10 @@ class product extends control
         $this->view->browseType       = $browseType;
         $this->view->pager            = $pager;
         $this->view->showBatchEdit    = $this->cookie->showProductBatchEdit;
+        $this->view->param            = $param;
+        $this->view->recPerPage       = $recPerPage;
+        $this->view->pageID           = $pageID;
+        $this->view->programID        = $programID;
 
         //$this->display();
         $this->render();

@@ -157,12 +157,13 @@ $lang->product->unclosed          = '未关闭';
 $lang->product->unplan            = "未计划";
 $lang->product->viewByUser        = '按用户查看';
 $lang->product->assignedByMe      = '我指派';
+
 $lang->product->storyCompleteRate = '完成率';
 $lang->product->bugFixedRate      = '修复率';
 $lang->product->belongingLine     = '所属产品线';
 $lang->product->feedback          = '反馈';
-$lang->product->testCaseCoverRate = '用例覆盖率';
-$lang->product->activeBug         = 'Bug激活';
+$lang->product->testCaseCoverage  = '用例覆盖率';
+$lang->product->activatedBug      = 'Bug激活';
 
 /* Product Kanban. */
 $lang->product->myProduct             = '我负责的' . $lang->productCommon;

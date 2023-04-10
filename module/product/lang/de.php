@@ -29,6 +29,7 @@ $lang->product->updateOrder      = 'Ranking';
 $lang->product->all              = "{$lang->productCommon} List";
 $lang->product->manageLine       = "Manage {$lang->productCommon} Line";
 $lang->product->newLine          = "Create {$lang->productCommon} Line";
+$lang->product->editLine         = "Edit {$lang->productCommon} Line";
 $lang->product->export           = 'Exportiere Daten';
 $lang->product->dashboard        = 'Dashboard';
 $lang->product->changeProgram    = "{$lang->productCommon} confirmation of the scope of influence of adjustment of the program set";
@@ -156,6 +157,13 @@ $lang->product->unclosed       = 'Offen';
 $lang->product->unplan         = 'Warten';
 $lang->product->viewByUser     = 'By User';
 $lang->product->assignedByMe   = 'AssignedByMe';
+
+$lang->product->storyCompleteRate = 'Completion Rate';
+$lang->product->bugFixedRate      = 'Fixed Rate';
+$lang->product->belongingLine     = 'Belong To';
+$lang->product->feedback          = 'Feedback';
+$lang->product->testCaseCoverage  = 'Coverage';
+$lang->product->activatedBug      = 'Activated';
 
 /* Product Kanban. */
 $lang->product->myProduct             = 'Products Ownedbyme';
