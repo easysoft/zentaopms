@@ -612,17 +612,13 @@ class chartModel extends model
                 }
                 break;
             case 'string':
-                if($field)
+                if($field and $sql)
                 {
-                    $options = array();
-                    if($sql)
+                    $cols = $this->dbh->query($sql)->fetchAll();
+                    foreach($cols as $col)
                     {
-                        $cols = $this->dbh->query($sql)->fetchAll();
-                        foreach($cols as $col)
-                        {
-                            $data = $col->$field;
-                            $options[$data] = $data;
-                        }
+                        $data = $col->$field;
+                        $options[$data] = $data;
                     }
                 }
                 break;
