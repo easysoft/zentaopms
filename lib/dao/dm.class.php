@@ -130,7 +130,9 @@ class dm extends dao
             $pos = strpos($if, ')');
             $if  = substr($if, 0, $pos+1);
         }
-        if(strpos($field, 'sum(') == 0) $if = substr($if, 0, strlen($if)-1);
+
+        /* fix sum(if(..., 1, 0)) , count(if(..., 1, 0)) */
+        if(substr($if, strlen($if)-2) == '))' and (stripos($field, 'sum(') == 0 or stripos($field, 'count(') == 0)) $if = substr($if, 0, strlen($if)-1);
 
         $parts = explode(',', substr($if, 3, strlen($if)-4)); // remove 'if(' and ')'
         $case  = 'CASE WHEN ' . implode(',', array_slice($parts, 0, count($parts)-2)) . ' THEN ' . $parts[count($parts)-2] . ' ELSE ' . $parts[count($parts)-1] . ' END';
