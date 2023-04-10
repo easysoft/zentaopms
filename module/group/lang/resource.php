@@ -46,6 +46,7 @@ $lang->moduleOrder[108] = 'zanode';
 $lang->moduleOrder[110] = 'doc';
 $lang->moduleOrder[111] = 'screen';
 $lang->moduleOrder[112] = 'pivot';
+$lang->moduleOrder[113] = 'chart';
 $lang->moduleOrder[119] = 'report';
 
 $lang->moduleOrder[120] = 'company';
@@ -1799,6 +1800,12 @@ $lang->pivot->methodOrder[15] = 'projectDeviation';
 $lang->pivot->methodOrder[20] = 'bugCreate';
 $lang->pivot->methodOrder[25] = 'bugAssign';
 $lang->pivot->methodOrder[30] = 'workload';
+
+/* Chart. */
+$lang->resource->chart = new stdclass();
+$lang->resource->chart->preview = 'preview';
+
+$lang->chart->methodOrder[2] = 'preview';
 
 /* Search. */
 $lang->resource->search = new stdclass();
