@@ -45,7 +45,7 @@ $lang->demandpool->menu->browse  = array('link' => "{$lang->demand->common}|dema
 $lang->demandpool->menu->kanban  = array('link' => "看板|demand|kanban|poolID=%s");
 $lang->demandpool->menu->track   = array('link' => "矩阵图|demand|track|demandID=%s");
 $lang->demandpool->menu->insight = array('link' => "洞察|demand|insight|demandID=%s");
-$lang->demandpool->menu->view    = array('link' => "概况|demandpool|view|poolID=%s");
+$lang->demandpool->menu->view    = array('link' => "概况|demandpool|view|poolID=%s", 'alias' => 'edit');
 
 $lang->demandpool->menuOrder[5]  = 'browse';
 $lang->demandpool->menuOrder[10] = 'review';
