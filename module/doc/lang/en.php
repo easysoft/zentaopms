@@ -198,7 +198,7 @@ $lang->doc->showDoc           = 'Whether to display documents';
 global $config;
 /* Query condition list. */
 $lang->doc->allProduct    = 'All' . $lang->productCommon . 's';
-$lang->doc->allExecutions = 'All' . $lang->executionCommon . 's';
+$lang->doc->allExecutions = 'All' . $lang->execution->common . 's';
 $lang->doc->allProjects   = 'All' . $lang->projectCommon . 's';
 
 $lang->doc->libTypeList['product']   = $lang->productCommon . ' Library';

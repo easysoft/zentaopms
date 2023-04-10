@@ -55,7 +55,7 @@ class doc extends control
     /**
      * My space.
      *
-     * @param string $type mine|view|collect|createBy
+     * @param string $type mine|view|collect|createdBy
      * @param int    $libID
      * @param int    $moduleID
      * @param string $browseType all|draft|bysearch
@@ -75,6 +75,7 @@ class doc extends control
         $this->session->set('productList', $uri, 'product');
         $this->session->set('executionList', $uri, 'execution');
         $this->session->set('projectList', $uri, 'project');
+        $this->session->set('objectName', '', 'doc');
         $this->loadModel('search');
 
         list($libs, $libID, $object, $objectID, $objectDropdown) = $this->doc->setMenuByType('mine', 0, $libID);
@@ -84,7 +85,7 @@ class doc extends control
         $type       = strtolower($type);
         $queryID    = $browseType == 'bysearch' ? (int)$param : 0;
         $params     = "libID=$libID&moduleID=$moduleID&browseType=bySearch&param=myQueryID&orderBy=$orderBy";
-        if($this->app->rawMethod == 'mySpace') $param = "type=$type&" . $params;
+        if($this->app->rawMethod == 'myspace') $params = "type=$type&" . $params;
         $actionURL  = $this->createLink('doc', $this->app->rawMethod, $params);
 
         $this->doc->buildSearchForm($libID, $libs, $queryID, $actionURL, $type);

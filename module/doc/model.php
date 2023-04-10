@@ -1023,7 +1023,7 @@ class docModel extends model
 
             unset($this->config->doc->search['fields']['module']);
         }
-        elseif(in_array($type, array('product', 'project', 'execution', 'custom', 'mine')))
+        else
         {
             if(!isset($libs[$libID])) $libs[$libID] = $this->getLibById($libID);
 
@@ -1040,13 +1040,13 @@ class docModel extends model
             {
                 $this->config->doc->search['params']['execution']['values'] = array('' => '') + $this->loadModel('execution')->getPairs($this->session->project, 'sprint,stage', 'multiple,leaf,noprefix') + array('all' => $this->lang->doc->allExecutions);
             }
-            elseif($type == 'mine')
-            {
-                unset($this->config->doc->search['fields']['addedBy']);
-                unset($this->config->doc->search['fields']['editedBy']);
-            }
             else
             {
+                if($type == 'mine' or $type == 'createdby')
+                {
+                    unset($this->config->doc->search['fields']['addedBy']);
+                    if($type == 'mine') unset($this->config->doc->search['fields']['editedBy']);
+                }
                 unset($this->config->doc->search['fields']['execution']);
             }
 
@@ -1055,13 +1055,6 @@ class docModel extends model
             $this->config->doc->search['params']['lib']['values'] = $libPairs + array('all' => $this->lang->doclib->all);
             unset($this->config->doc->search['fields']['product']);
             unset($this->config->doc->search['fields']['module']);
-        }
-        else
-        {
-            $products = $this->product->getPairs('nocode', $this->session->project);
-            $this->config->doc->search['params']['execution']['values'] = array('' => '') + $this->loadModel('execution')->getPairs($this->session->project, 'sprint,stage', 'multiple,leaf,noprefix') + array('all' => $this->lang->doc->allExecutions);
-            $this->config->doc->search['params']['lib']['values']       = array('' => '', $libID => ($libID ? $libs[$libID] : 0), 'all' => $this->lang->doclib->all);
-            $this->config->doc->search['params']['product']['values']   = array('' => '') + $products + array('all' => $this->lang->doc->allProduct);
         }
 
         $this->config->doc->search['actionURL'] = $actionURL;
@@ -1231,7 +1224,8 @@ class docModel extends model
      */
     public function checkPrivDoc($object)
     {
-        if($this->app->user->admin) return true;
+        $libType = $this->dao->select('type')->from(TABLE_DOCLIB)->where('id')->eq($object->lib)->fetch('type');
+        if($this->app->user->admin and $libType != 'mine') return true;
 
         static $extraDocLibs;
         if($extraDocLibs === null) $extraDocLibs = $this->getPrivLibsByDoc();

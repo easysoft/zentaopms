@@ -65,7 +65,7 @@ body {margin-bottom: 25px;}
           <th class='c-object'><?php echo $lang->doc->object;?></th>
           <th class="c-module"><?php common::printOrderLink('module', $orderBy, $vars, $lang->doc->position);?></th>
           <?php endif;?>
-          <?php if(!in_array($type, array('mine', 'createby'))):?>
+          <?php if(!in_array($type, array('mine', 'createdby'))):?>
           <th class="c-user"><?php common::printOrderLink('addedBy', $orderBy, $vars, $lang->doc->addedByAB);?></th>
           <?php endif;?>
           <th class="c-date"><?php common::printOrderLink('addedDate', $orderBy, $vars, $lang->doc->addedDate);?></th>
@@ -135,7 +135,7 @@ body {margin-bottom: 25px;}
             ?>
           </td>
           <?php endif;?>
-          <?php if(!in_array($type, array('mine', 'createby'))):?>
+          <?php if(!in_array($type, array('mine', 'createdby'))):?>
           <td class="c-user"><?php echo zget($users, $doc->addedBy);?></td>
           <?php endif;?>
           <td class="c-datetime"><?php echo formatTime($doc->addedDate, 'Y-m-d');?></td>
