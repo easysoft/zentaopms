@@ -20,7 +20,7 @@
     if($period == $type)
     {
         $active = 'btn-active-text';
-        $label .= " <span class='label label-light label-badge'>{$pager->recTotal}</span>";
+        $label .= " <span class='label label-light label-badge'>{$recTotal}</span>";
     }
     echo html::a(inlink('dynamic', "projectID=$projectID&type=$period"), $label, '', "class='btn btn-link $active' id='{$period}'")
     ?>
