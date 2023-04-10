@@ -52,15 +52,13 @@ $('#subNavbar li').not('[data-id=<?php echo $group;?>]').removeClass('active');
           <div class='list-group'>
             <?php echo $sidebar;?>
           </div>
+          <?php if($this->config->edition == 'open'):?>
+          <div class='text biz-version'>
+            <span class='text-important'><?php echo (!empty($config->isINT)) ? $lang->bizVersionINT : $lang->bizVersion;?></span>
+          </div>
+          <?php endif;?>
         </div>
       </div>
-      <?php if($this->config->edition == 'open'):?>
-      <div class='panel panel-body' style='padding: 10px 6px'>
-        <div class='text biz-version'>
-          <span class='text-important'><?php echo (!empty($config->isINT)) ? $lang->bizVersionINT : $lang->bizVersion;?></span>
-        </div>
-      </div>
-      <?php endif;?>
     </div>
   </div>
   <div class='main-col'>
