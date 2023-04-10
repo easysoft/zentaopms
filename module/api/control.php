@@ -537,7 +537,7 @@ class api extends control
                 return print(js::locate($this->createLink('api', 'index'), 'parent.parent'));
             }
 
-            return print(js::locate($this->createLink('api', 'index'), 'parent'));
+            return print(js::reload('parent'));
         }
     }
 
