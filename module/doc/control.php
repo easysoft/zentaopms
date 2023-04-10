@@ -55,7 +55,7 @@ class doc extends control
     /**
      * My space.
      *
-     * @param string $type mine
+     * @param string $type mine|view|collect|createBy
      * @param int    $libID
      * @param int    $moduleID
      * @param string $browseType all|draft|bysearch
@@ -81,6 +81,7 @@ class doc extends control
 
         /* Build the search form. */
         $browseType = strtolower($browseType);
+        $type       = strtolower($type);
         $queryID    = $browseType == 'bysearch' ? (int)$param : 0;
         $params     = "libID=$libID&moduleID=$moduleID&browseType=bySearch&param=myQueryID&orderBy=$orderBy";
         if($this->app->rawMethod == 'mySpace') $param = "type=$type&" . $params;
@@ -110,7 +111,7 @@ class doc extends control
         $this->view->pager      = $pager;
         $this->view->type       = $type;
         $this->view->objectID   = 0;
-        $this->view->canExport  = 0;
+        $this->view->canExport  = common::hasPriv('doc', 'mine2export');
         $this->view->libType    = 'lib';
 
         $this->display();

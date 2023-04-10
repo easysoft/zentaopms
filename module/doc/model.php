@@ -377,8 +377,9 @@ class docModel extends model
      */
     public function getDocsByBrowseType($browseType, $queryID, $moduleID, $sort, $pager)
     {
-        $allLibs   = array_keys($this->getLibs('all'));
-        $docIdList = $this->getPrivDocs(0, $moduleID);
+        $allLibs      = $this->getLibs('all');
+        $allLibIDList = array_keys($allLibs);
+        $docIdList    = $this->getPrivDocs(0, $moduleID);
 
         $files = $this->dao->select('*')->from(TABLE_FILE)
             ->where('objectType')->eq('doc')
@@ -418,7 +419,7 @@ class docModel extends model
             $docs = $this->dao->select('*')->from(TABLE_DOC)
                 ->where('deleted')->eq(0)
                 ->andWhere($query)
-                ->andWhere('lib')->in($allLibs)
+                ->andWhere('lib')->in($allLibIDList)
                 ->beginIF($this->config->doc->notArticleType)->andWhere('type')->notIN($this->config->doc->notArticleType)->fi()
                 ->andWhere('addedBy', 1)->eq($this->app->user->account)
                 ->orWhere('id')->in(array_keys($docIDList))
@@ -431,7 +432,7 @@ class docModel extends model
         {
             $docs = $this->dao->select('*')->from(TABLE_DOC)
                 ->where('deleted')->eq(0)
-                ->andWhere('lib')->in($allLibs)
+                ->andWhere('lib')->in($allLibIDList)
                 ->beginIF($this->config->doc->notArticleType)->andWhere('type')->notIN($this->config->doc->notArticleType)->fi()
                 ->andWhere('addedBy')->eq($this->app->user->account)
                 ->orderBy($sort)
@@ -448,7 +449,7 @@ class docModel extends model
             $docs      = $this->dao->select('*')->from(TABLE_DOC)
                 ->where('deleted')->eq(0)
                 ->andWhere('id')->in(array_keys($docIDList))
-                ->andWhere('lib')->in($allLibs)
+                ->andWhere('lib')->in($allLibIDList)
                 ->beginIF($this->config->doc->notArticleType)->andWhere('type')->notIN($this->config->doc->notArticleType)->fi()
                 ->orderBy($sort)
                 ->page($pager)
@@ -460,7 +461,7 @@ class docModel extends model
                 ->where('deleted')->eq(0)
                 ->andWhere('id')->in($docIdList)
                 ->beginIF($this->config->doc->notArticleType)->andWhere('type')->notIN($this->config->doc->notArticleType)->fi()
-                ->andWhere('lib')->in($allLibs)
+                ->andWhere('lib')->in($allLibIDList)
                 ->orderBy('editedDate_desc')
                 ->page($pager)
                 ->fetchAll('id');
@@ -470,7 +471,7 @@ class docModel extends model
             $docs = $this->dao->select('t1.*')->from(TABLE_DOC)->alias('t1')
                 ->leftJoin(TABLE_DOCACTION)->alias('t2')->on("t1.id=t2.doc && t2.action='collect'")
                 ->where('t1.deleted')->eq(0)
-                ->andWhere('t1.lib')->in($allLibs)
+                ->andWhere('t1.lib')->in($allLibIDList)
                 ->beginIF($this->config->doc->notArticleType)->andWhere('t1.type')->notIN($this->config->doc->notArticleType)->fi()
                 ->andWhere('t2.actor')->eq($this->app->user->account)
                 ->orderBy($sort)
@@ -482,7 +483,8 @@ class docModel extends model
 
         /* Get projects, executions and products by docIdList. */
         list($projects, $executions, $products) = $this->getObjectsByDoc(array_keys($docs));
-
+        $mineLibs    = $this->getAllLibsByType('mine');
+        $customLibs  = $this->getAllLibsByType('custom');
         $docContents = $this->dao->select('*')->from(TABLE_DOCCONTENT)->where('doc')->in(array_keys($docs))->orderBy('version,doc')->fetchAll('doc');
 
         $modules = array();
@@ -493,6 +495,7 @@ class docModel extends model
             if(!isset($modules[$doc->lib])) $modules[$doc->lib] = $this->tree->getOptionMenu($doc->lib, 'doc', 0, 0, 'nodeleted', 'all', ' > ');
             $doc->moduleName = zget($modules[$doc->lib], $doc->module);
             $doc->moduleName = ltrim($doc->moduleName, '/');
+            $doc->libName    = zget($allLibs, $doc->lib);
             foreach($objects as $type => $object)
             {
                 if(!empty($doc->{$type}))
@@ -502,6 +505,18 @@ class docModel extends model
                     $doc->objectType = $type;
                     break;
                 }
+            }
+            if(isset($mineLibs[$doc->lib]))
+            {
+                $doc->objectID   = 0;
+                $doc->objectName = $this->lang->doc->person;
+                $doc->objectType = 'mine';
+            }
+            elseif(isset($customLibs[$doc->lib]))
+            {
+                $doc->objectID   = 0;
+                $doc->objectName = $this->lang->doc->team;
+                $doc->objectType = 'custom';
             }
 
             $docs[$index]->fileSize = 0;
