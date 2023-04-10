@@ -7,7 +7,6 @@ class programMenu extends wg
 
     protected static $defineProps = array
     (
-        'title?:string',
         'programs?:array',
         'activeClass?:string',
         'activeIcon?:string',
@@ -36,6 +35,19 @@ class programMenu extends wg
         return $parent;
     }
 
+    private function getTitle($activeKey)
+    {
+        global $lang;
+
+        if(empty($activeKey)) return $lang->program->all;
+
+        foreach($this->programs as $program)
+        {
+            if($program->id == $activeKey) return $program->name;
+        }
+        return $lang->program->all;
+    }
+
     private function getChildProgram($id)
     {
         return array_filter($this->programs, function($program) use($id) {return $program->parent == $id;});
@@ -58,6 +70,7 @@ class programMenu extends wg
     {
         $this->setMenuTreeProps();
         $activeKey = $this->prop('activeKey');
+        $title = $this->getTitle($activeKey);
         $closeBtn = null;
         if(!empty($activeKey))
         {
@@ -92,7 +105,7 @@ class programMenu extends wg
                         setClass('icon-container up'),
                         h::i(setClass('gg-chevron-up')),
                     ),
-                    span($this->prop('title'))
+                    span($title)
                 ),
                 $closeBtn
             ),
