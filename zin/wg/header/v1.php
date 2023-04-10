@@ -250,7 +250,6 @@ class header extends wg
                 setClass('circle'),
                 userAvatar
                 (
-                    setClass('border border-white border-opacity-50'),
                     set::circle(true),
                     set::size(28),
                     set::user($user)
