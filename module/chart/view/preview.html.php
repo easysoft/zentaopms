@@ -61,6 +61,11 @@
             <?php echo html::submitButton($lang->chart->preview, '', 'btn btn-primary');?>
           </div>
         </form>
+        <?php if($this->config->edition == 'open'):?>
+        <div class='text biz-version'>
+          <span class='text-important'><?php echo (!empty($config->isINT)) ? $lang->bizVersionINT : $lang->bizVersion;?></span>
+        </div>
+      <?php endif;?>
         <?php endif;?>
       </div>
     </div>
