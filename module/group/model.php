@@ -2092,7 +2092,8 @@ class groupModel extends model
             if(!isset($privList[$relatedPriv->type][$module])) $privList[$relatedPriv->type][$module] = array();
             $moduleCode = $managerList[$relatedPriv->parent]->type == 'package' ? $managerList[$managerList[$relatedPriv->parent]->parent]->code : $managerList[$relatedPriv->parent]->code;
             $privList[$relatedPriv->type][$module]['title']      = $modulePairs[$module];
-            $privList[$relatedPriv->type][$module]['children'][] = array('title' => $relatedPriv->name, 'relationPriv' => $privID);
+            $privList[$relatedPriv->type][$module]['id']         = $relatedPriv->parent;
+            $privList[$relatedPriv->type][$module]['children'][] = array('title' => $relatedPriv->name, 'relationPriv' => $privID, 'parent' => $relatedPriv->parent, 'module' => $relatedPriv->module, 'method' => $relatedPriv->method);
         }
 
         if(empty($type) or $type == 'depend')    $privList['depend']    = array_values($privList['depend']);

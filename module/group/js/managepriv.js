@@ -123,14 +123,13 @@ function initRecomendTree(data)
     $(".menuTree.recommend").tree(
     {
         data: data,
-        initialState: 'active',
+        initialState: 'expand',
         itemCreator: function($li, item)
         {
-            $li.append('<a class="priv-item" data-has-children="' + (item.children ? !!item.children.length : false) + '" href="#" title="' + item.title + '">' + item.title + (item.children ? '' : '<i class="icon icon-close hidden" data-type="depend" data-privid=' + item.privID + ' data-relationpriv=' + item.relationPriv + '></i>') +  '</a>');
-            // $li.append('<input data-has-children="' + (item.children ? !!item.children.length : false) + '"' + (item.children ? '' : 'data-type="depend" data-privid="' + item.privID + '" data-relationpriv="' + item.relationPriv + '"') + 'type="checkbox" name="recommendPrivs[]" value="' + item.id + '" title="' + item.title + '" id="recommendPrivs[' + item.id + ']"');
-            if(item.active) $li.addClass('active open in');
+            $li.append('<div class="checkbox-primary"><input data-has-children="' + (item.children ? !!item.children.length : false) + '"' + (item.children ? '' : 'data-type="recommend" data-privid="' + item.privID + '" data-relationpriv="' + item.relationPriv + '"') + 'type="checkbox" name="recommendPrivs[]" value="' + item.relationPriv + '" title="' + item.title + '" id="recommendPrivs[' + item.module + ']' + item.method + '" data-module="' + item.module + '" data-method="' + item.method + '"><label>' + item.title + '</label></div>');
         }
     });
+    $('.menuTree.recommend i.list-toggle').remove();
 }
 
 /**
@@ -170,6 +169,7 @@ function updatePrivTree(privList)
         {
             privList.push($(this).closest('.group-item').attr('data-id'));
         });
+        selectedPrivIdList = privList;
     }
 
     $.ajax(
@@ -203,6 +203,8 @@ function updatePrivTree(privList)
             }
 
             resizeContainer();
+            $('.menuTree.recommend i.list-toggle').remove();
+            $('.menuTree.recommend li.has-list').addClass('open');
         }
     });
 }
@@ -259,6 +261,54 @@ function resizeContainer()
     }
 }
 
+/**
+ * When recommend privs change.
+ *
+ * @param  object $item
+ * @param  bool   $checked
+ * @access public
+ * @return void
+ */
+function recommendChange($item, checked)
+{
+    var privModule  = $item.attr('data-module');
+    var privMethod  = $item.attr('data-method');
+    var $actionItem = $('#privList input[data-id="' + privModule + '-' + privMethod + '"]');
+    $actionItem.prop('checked', checked);
+    if(checked)
+    {
+        $item.attr('checked', 'checked');
+        $actionItem.attr('checked', 'checked');
+    }
+    else
+    {
+        $item.removeAttr('checked');
+        $actionItem.removeAttr('checked');
+    }
+    var moduleName = $actionItem.closest('tr').find('.module').attr('data-module');
+    var packageID  = $actionItem.closest('tr').find('.package').attr('data-package');
+    changeParentChecked($actionItem, moduleName, packageID);
+
+    var $parentItem = $item.closest('ul').closest('li').find('input[data-has-children="true"]');
+    if($item.closest('ul').find('input[type=checkbox]').length == $item.closest('ul').find('input[type=checkbox][checked=checked]').length)
+    {
+        $parentItem.attr('checked', 'checked');
+    }
+    else
+    {
+        $parentItem.removeAttr('checked');
+    }
+
+    var privID = $actionItem.closest('.group-item').attr('data-id');
+    if(privID != 0)
+    {
+        var index = selectedPrivIdList.indexOf(privID);
+
+        if(privID > 0 && index < 0 && checked) selectedPrivIdList.push(privID);
+        if(privID > 0 && index > -1 && !checked) selectedPrivIdList.splice(index, 1);
+    }
+}
+
 $(function()
 {
     selectedPrivIdList = Object.values(selectedPrivIdList);
@@ -300,6 +350,21 @@ $(function()
             updatePrivTree(selectedPrivIdList);
         }
     });
+
+    $('.side').on('click', '.recommend input[type=checkbox]', (function()
+    {
+        var checked = $(this).prop('checked');
+        if($(this).attr('data-has-children') == 'true')
+        {
+            $(this).closest('li').find('ul > li input[type=checkbox]').each(function(){
+                recommendChange($(this), checked);
+            });
+        }
+        else
+        {
+            recommendChange($(this), checked);
+        }
+    }));
 
     $('#submit').click(function()
     {

@@ -4,7 +4,7 @@
 #mainContainer > .main {flex: 1 1 75%; overflow-y: auto; min-height: 445px;}
 #mainContainer > .side {flex: 1 1 25%;}
 .priv-panel {background: #fff; padding: 10px 16px; box-shadow: 0 1px 1px rgb(0 0 0 / 5%), 0 2px 6px 0 rgb(0 0 0 / 5%); height: 240px;}
-.priv-panel > .panel-content {height: 200px; overflow-y: auto; min-height: 140px; padding-left: 4px;}
+.priv-panel > .panel-content {height: 200px; overflow-y: auto; min-height: 140px; padding-left: 4px; padding-top: 5px;}
 .priv-panel > .panel-bottom {padding-top: 20px;}
 .priv-panel > .panel-title {position: relative;}
 .priv-panel > .panel-title > .icon-help {position: absolute; top: 3px; margin-left: 8px;}
@@ -13,8 +13,13 @@
 
 /* tree */
 .tree ul > li {display: inline-block; width: 50%;}
+.menuTree li > ul {margin-bottom: 0px;}
+.menuTree > li.has-list.open:before {top: 25px;}
 .priv-item > .icon {padding-left: 5px;}
 .empty-tip {height: 100%;}
+.menuTree.recommend > li {padding-left: 0;}
+.menuTree.recommend > li.has-list.open:before {left: 7px;}
+.menuTree.recommend ul > li {padding-left: 20px; padding-top: 10px;}
 
 .table-bymodule select.form-control {height: 250px;}
 .group-item {display: block; width: 180px; float: left; font-size: 14px;}
