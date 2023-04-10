@@ -23,7 +23,6 @@ function page()        {return createWg('page',    func_get_args());}
 function fragment()    {return createWg('fragment',    func_get_args());}
 function btnGroup()    {return createWg('btnGroup', func_get_args());}
 function checkbox()    {return createWg('checkbox', func_get_args());}
-function pageMain()    {return createWg('pageMain', func_get_args());}
 function mainMenu()    {return createWg('mainMenu', func_get_args());}
 function row()         {return createWg('row', func_get_args());}
 function col()         {return createWg('col', func_get_args());}
@@ -51,7 +50,6 @@ function navbar()      {return createWg('navbar', func_get_args());}
 function main()        {return createWg('main', func_get_args());}
 function sidebar()     {return createWg('sidebar', func_get_args());}
 function featureBar()  {return createWg('featureBar', func_get_args());}
-function pageHeader()  {return createWg('pageHeader', func_get_args());}
 function pageHeading() {return createWg('pageHeading', func_get_args());}
 function pageNavbar()  {return createWg('pageNavbar', func_get_args());}
 function pageToolbar() {return createWg('pageToolbar', func_get_args());}
