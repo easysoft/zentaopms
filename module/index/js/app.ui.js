@@ -13,7 +13,7 @@ function activeNavbar(activeID)
 
 function renderPage(list)
 {
-    if(debug) console.log('[APP] ', 'update:', list);
+    if(debug) console.log('[APP] ', 'render:', list);
     list.forEach((item) =>
     {
         const name = item.name;
@@ -25,7 +25,6 @@ function renderPage(list)
         else if(name === '#configJS')  $('#configJS')[0].text = data;
         else if(name === '#pageJS')    $('#pageJS').replaceWith(data);
         else if(name === 'activeMenu') activeNavbar(data);
-        console.log('[APP] ', 'update:', {name, data});
     });
     $.apps.updateApp(currentAppCode, currentAppUrl, document.title);
 }
@@ -39,7 +38,7 @@ window.loadPage = function loadPage(url, callback)
 {
     url = url || defaultUrl;
     if(debug) console.log('[APP] ', 'load:', url);
-    const selector = $('#main').length ? '#main>*,#pageCSS>*,#pageJS,#configJS>*,title>*,activeMenu()' : 'body>*';
+    const selector = $('#main').length ? '#main>*,#pageCSS>*,#pageJS,#configJS>*,title>*,activeMenu()' : 'body>*,title>*';
     $.ajax(
     {
         url:      url,

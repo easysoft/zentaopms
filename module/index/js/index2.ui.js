@@ -136,6 +136,10 @@ function openApp(url, code, forceReload)
         reloadApp(code, url);
         openedApp.$app.toggleClass('open-from-hidden', openedApp.zIndex < apps.zIndex)
     }
+    else
+    {
+        updateApp(code, url, openedApp.currentTitle, 'show');
+    }
     openedApp.zIndex = ++apps.zIndex;
     openedApp.$app.show().css('z-index', openedApp.zIndex);
 
@@ -204,10 +208,26 @@ function reloadApp(code, url)
     app.currentUrl = url;
 }
 
-function updateApp(code, url, title)
+function updateApp(code, url, title, type)
 {
-    document.title = title;
-    if(debug) console.log('[APPS]', 'update:', code, url);
+    const app = apps.openedMap[code];
+    if(!app) return;
+
+    const state    = typeof code === 'object' ? code : {code: code, url: url, title: title, type: type};
+    const oldState = window.history.state;
+
+    if(title)
+    {
+        document.title   = title;
+        app.currentTitle = title;
+    }
+
+    if(oldState && oldState.code === code && oldState.url === url) return;
+
+    const displayUrl = $.createLink('index', 'index2', 'open=' + btoa(url));
+    app.currentUrl   = url;
+    window.history.pushState(state, title, displayUrl);
+    if(debug) console.log('[APPS]', 'update:', {code, url, title, type});
 }
 
 /**
@@ -570,6 +590,13 @@ $(document).on('click', '.open-in-app,.show-in-app', function(e)
     const options = {items: items, event: event, onClickItem: function(_item, _$item, e){e.preventDefault();}};
     zui.ContextMenu.show(options);
     event.preventDefault();
+});
+
+$(window).on('popstate', function(event)
+{
+    const state = event.state;
+    if(debug) console.log('[APPS]', 'popstate:', state);
+    openApp(state.url, state.code, state.type !== 'show');
 });
 
 $.get($.createLink('index', 'app'), html =>
