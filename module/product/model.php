@@ -2476,7 +2476,14 @@ class productModel extends model
         }
         elseif($module == 'feedback')
         {
-            return helper::createLink('feedback', 'browse', "browseType=byProduct&productID=%s");
+            if($this->config->vision == 'rnd')
+            {    
+                return helper::createLink('feedback', 'admin', "browseType=byProduct&productID=%s");
+            }    
+            elseif($this->config->vision == 'lite')
+            {    
+                return helper::createLink('feedback', 'browse', "browseType=byProduct&productID=%s");
+            }
         }
         elseif($module == 'ticket')
         {

@@ -55,7 +55,7 @@ class doc extends control
     /**
      * My space.
      *
-     * @param string $type mine
+     * @param string $type mine|view|collect|createBy
      * @param int    $libID
      * @param int    $moduleID
      * @param string $browseType all|draft|bysearch
@@ -81,6 +81,7 @@ class doc extends control
 
         /* Build the search form. */
         $browseType = strtolower($browseType);
+        $type       = strtolower($type);
         $queryID    = $browseType == 'bysearch' ? (int)$param : 0;
         $params     = "libID=$libID&moduleID=$moduleID&browseType=bySearch&param=myQueryID&orderBy=$orderBy";
         if($this->app->rawMethod == 'mySpace') $param = "type=$type&" . $params;
@@ -110,7 +111,7 @@ class doc extends control
         $this->view->pager      = $pager;
         $this->view->type       = $type;
         $this->view->objectID   = 0;
-        $this->view->canExport  = 0;
+        $this->view->canExport  = common::hasPriv('doc', 'mine2export');
         $this->view->libType    = 'lib';
 
         $this->display();
@@ -155,7 +156,8 @@ class doc extends control
         if($type == 'product') $objects = $this->product->getPairs();
         if($type == 'project')
         {
-            $objects = $this->project->getPairsByProgram('', 'all', false, 'order_asc', 'kanban');
+            $excludedModel = $this->config->vision == 'lite' ? '' : 'kanban';
+            $objects       = $this->project->getPairsByProgram('', 'all', false, 'order_asc', $excludedModel);
             if($this->app->tab == 'doc')
             {
                 $this->view->executionPairs = array(0 => '') + $this->execution->getPairs($objectID, 'all', 'multiple,leaf,noprefix');
@@ -409,7 +411,8 @@ class doc extends control
         $objects  = array();
         if($objectType == 'project')
         {
-            $objects = $this->project->getPairsByProgram('', 'all', false, 'order_asc', 'kanban');
+            $excludedModel = $this->config->vision == 'lite' ? '' : 'kanban';
+            $objects       = $this->project->getPairsByProgram('', 'all', false, 'order_asc', $excludedModel);
             if($lib->type == 'execution')
             {
                 $execution = $this->loadModel('execution')->getById($lib->execution);
@@ -427,6 +430,10 @@ class doc extends control
         elseif($objectType == 'product')
         {
             $objects = $this->loadModel('product')->getPairs();
+        }
+        elseif($objectType == 'mine')
+        {
+            $this->lang->doc->aclList = $this->lang->doclib->mySpaceAclList;
         }
         $moduleOptionMenu = $this->doc->getLibsOptionMenu($libs);
 

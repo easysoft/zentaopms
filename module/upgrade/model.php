@@ -8214,6 +8214,7 @@ class upgradeModel extends model
         $dimension              = new stdclass();
         $dimension->name        = $this->lang->dimension->default;
         $dimension->code        = 'efficiency';
+        $dimension->desc        = '';
         $dimension->createdBy   = 'system';
         $dimension->createdDate = helper::now();
 

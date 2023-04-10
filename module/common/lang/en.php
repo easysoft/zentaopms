@@ -301,7 +301,6 @@ $lang->product->kanban = $lang->productCommon . ' Kanban';
 $lang->project->report = 'Report';
 
 $lang->report->weekly       = 'Weekly';
-$lang->report->annual       = 'Annual Summary';
 $lang->report->notice       = new stdclass();
 $lang->report->notice->help = 'Note: The report is generated on the results of browsing the list. Click, e.g. AssignedToMe, then click Create Report to generate a report based on AssignedToMe list.';
 

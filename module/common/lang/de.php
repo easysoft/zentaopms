@@ -301,7 +301,6 @@ $lang->product->kanban = $lang->productCommon . ' Kanban';
 $lang->project->report = 'Report';
 
 $lang->report->weekly       = 'Weekly';
-$lang->report->annual       = 'Annual Summary';
 $lang->report->notice       = new stdclass();
 $lang->report->notice->help = 'Hinweis: Berichte wurde auf Basis der Suche generiert. Bitte suchen Sie in der Liste bevor Sie einen Bericht generieren.';
 

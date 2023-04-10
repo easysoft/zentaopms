@@ -36,7 +36,7 @@ $lang->doclib->aclListB['open']    = '公开';
 $lang->doclib->aclListB['custom']  = '自定义';
 $lang->doclib->aclListB['private'] = '私有';
 
-$lang->doclib->mySpaceAclList['private'] = "私有 <span class='acl-tip'>（仅创建者可访问）</span>";
+$lang->doclib->mySpaceAclList['private'] = "私有<span class='acl-tip text-muted'>（仅创建者可访问）</span>";
 
 $lang->doclib->aclList = array();
 $lang->doclib->aclList['open']    = "公开 <span class='acl-tip'>（有文档视图权限即可访问）</span>";
@@ -83,7 +83,7 @@ $lang->doc->url          = '文档URL';
 $lang->doc->files        = '附件';
 $lang->doc->addedBy      = '由谁添加';
 $lang->doc->addedByAB    = '创建者';
-$lang->doc->addedDate    = '创建时间';
+$lang->doc->addedDate    = '创建日期';
 $lang->doc->editedBy     = '修改者';
 $lang->doc->editedDate   = '修改日期';
 $lang->doc->lastEditedBy = '最后更新者';
@@ -122,6 +122,8 @@ $lang->doc->closed       = '已关闭';
 $lang->doc->saveDraft    = '存为草稿';
 $lang->doc->defaultSave  = '默认存入：';
 $lang->doc->position     = '所在位置';
+$lang->doc->person       = '个人';
+$lang->doc->team         = '团队';
 
 $lang->doc->moduleDoc     = '按模块浏览';
 $lang->doc->searchDoc     = '搜索';

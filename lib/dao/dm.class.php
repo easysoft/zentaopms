@@ -218,6 +218,20 @@ class dm extends dao
     }
 
     /**
+     * 创建ORDER BY部分。
+     * Create the order by part.
+     *
+     * @param  string $order
+     * @access public
+     * @return static|sql the sql object.
+     */
+    public function orderBy($order)
+    {
+        $order = str_replace('"', '', $order);
+        return parent::orderBy($order);
+    }
+
+    /**
      * 创建ON部分。
      * Create the on part.
      *

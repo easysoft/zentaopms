@@ -256,6 +256,7 @@ class dbh
     public function formatDmSQL($sql)
     {
         $sql       = trim($sql);
+        $sql       = str_replace(array('\r', '\n'), ' ', $sql);
         $actionPos = strpos($sql, ' ');
         $action    = strtoupper(substr($sql, 0, $actionPos));
         $setPos    = 0;

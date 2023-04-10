@@ -82,7 +82,7 @@
           <div class='panel-title'>
             <?php echo $chart->name;?>
             <?php if(!empty($chart->desc)):?>
-            <a data-toggle='tooltip' data-placement='auto' title=<?php echo $chart->desc;?>><i class='icon-help'></i></a>
+            <a data-toggle='tooltip' data-placement='auto' title='<?php echo $chart->desc;?>'><i class='icon-help'></i></a>
             <?php endif;?>
           </div>
         </div>
