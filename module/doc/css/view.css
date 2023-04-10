@@ -56,3 +56,7 @@
 .flex-content > #history {flex: 0 0 302px; position: relative;}
 .flex-content > #history > #closeIcon {position: absolute; right: 10px; top: 10px;}
 .panel {margin-bottom: 0;}
+
+.info .version, .info .crumbs {float: left;}
+.info .crumbs {font-size: 13px; margin-top: 5px; font-weight: normal;}
+.info .crumbs img {margin-right: 3px;}

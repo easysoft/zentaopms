@@ -169,12 +169,32 @@ class api extends control
             $this->view->actions  = $apiID ? $this->action->getList('api', $apiID) : array();
         }
 
+        /* Crumbs links array. */
+        $lib = zget($libs, $libID);
+        $type = $lib->product ? 'product' : ($lib->project ? 'project' : 'unlink');
+
+        $methodName = $type != 'unlink' ? $type . 'Space' : 'index';
+        if($this->app->tab == 'doc') $methodName = 'index';
+
+        $linkObject = zget($lib, $type, 0);
+        $linkParams = "libID=$lib->id";
+        if($methodName != 'index') $linkParams = "objectID=$linkObject&$linkParams";
+
+        $crumbs[]   = html::a(inLink($methodName, $linkParams), html::image("static/svg/interface.svg") . $lib->name);
+        $moduleList = $this->loadModel('tree')->getParents($api->module);
+        foreach($moduleList as $module)
+        {
+            $linkParams .= "&moduleID=$module->id";
+            $crumbs[]    = html::a(inLink($methodName, $linkParams), $module->name);
+        }
+
         $this->view->title          = $this->lang->api->pageTitle;
         $this->view->libs           = $libs;
         $this->view->isRelease      = $release > 0;
         $this->view->release        = $release;
         $this->view->libID          = $libID;
         $this->view->apiID          = $apiID;
+        $this->view->crumbs         = $crumbs;
         $this->view->users          = $this->user->getPairs('noclosed,noletter');
         $this->view->moduleTree     = $this->doc->getApiModuleTree($libID, $apiID, $release, $moduleID);
         $this->view->objectDropdown = $this->generateLibsDropMenu($libs[$libID], $release);
