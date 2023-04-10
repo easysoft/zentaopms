@@ -47,7 +47,7 @@ foreach($programs as $program)
     $data[] = $program;
 }
 
-jsVar('langWorkerDay', $lang->program->workerDay);
+jsVar('langManDay',    $lang->program->manDay);
 jsVar('langPostponed', $lang->project->statusList['delay']);
 jsVar('summeryTpl',    $summary);
 

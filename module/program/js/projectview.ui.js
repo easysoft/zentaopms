@@ -22,7 +22,7 @@ window.renderCell = function(result, {col, row})
 
     if(col.name === 'invested')
     {
-        result[0] = {html: '<div>' + row.data.invested + ' <small class="text-gray">' + langWorkerDay + '</small></div>', className:'flex items-end w-full items-end', style:{flexDirection:"column"}};
+        result[0] = {html: '<div>' + row.data.invested + ' <small class="text-gray">' + langManDay + '</small></div>', className:'flex items-end w-full items-end', style:{flexDirection:"column"}};
         return result;
     }
 

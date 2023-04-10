@@ -44,26 +44,26 @@ foreach($productStructure as $programID => $program)
 
         $totalStories = $program['finishClosedStories'] + $program['unclosedStories'];
 
-        $item->name              = $program['programName'];
-        $item->id                = 'program-' . $programID;
-        $item->type              = 'program';
-        $item->level             = 1;
-        $item->asParent          = true;
-        $item->feedback          = rand(0, 100);
-        $item->programName       = $program['programName'];
-        $item->draftStories      = $program['draftStories'];
-        $item->activeStories     = $program['activeStories'];
-        $item->changingStories   = $program['changingStories'];
-        $item->reviewingStories  = $program['reviewingStories'];
-        $item->closedReqRate     = ($totalStories == 0 ? 0 : round($program['finishClosedStories'] / $totalStories, 3) * 100);
-        $item->unResolvedBugs    = $program['unResolvedBugs'];
-        $item->fixedRate         = (($program['unResolvedBugs'] + $program['fixedBugs']) == 0 ? 0 : round($program['fixedBugs'] / ($program['unResolvedBugs'] + $program['fixedBugs']), 3) * 100);
-        $item->plans             = $program['plans'];
-        $item->releaseCount      = $program['releases'];
-        $item->releaseCountOld   = rand(0, 10);
-        $item->testCaseCoverRate = rand(0, 100);
-        $item->unclosedReqCount  = rand(0, 100);
-        $item->executionCount    = rand(0, 100);
+        $item->name             = $program['programName'];
+        $item->id               = 'program-' . $programID;
+        $item->type             = 'program';
+        $item->level            = 1;
+        $item->asParent         = true;
+        $item->feedback         = rand(0, 100);
+        $item->programName      = $program['programName'];
+        $item->draftStories     = $program['draftStories'];
+        $item->activeStories    = $program['activeStories'];
+        $item->changingStories  = $program['changingStories'];
+        $item->reviewingStories = $program['reviewingStories'];
+        $item->closedReqRate    = ($totalStories == 0 ? 0 : round($program['finishClosedStories'] / $totalStories, 3) * 100);
+        $item->unResolvedBugs   = $program['unResolvedBugs'];
+        $item->fixedRate        = (($program['unResolvedBugs'] + $program['fixedBugs']) == 0 ? 0 : round($program['fixedBugs'] / ($program['unResolvedBugs'] + $program['fixedBugs']), 3) * 100);
+        $item->plans            = $program['plans'];
+        $item->releaseCount     = $program['releases'];
+        $item->releaseCountOld  = rand(0, 10);
+        $item->testCaseCoverage = rand(0, 100);
+        $item->unclosedReqCount = rand(0, 100);
+        $item->executionCount   = rand(0, 100);
         /* TODO attach extend fields. */
 
         $data[] = $item;
@@ -78,26 +78,26 @@ foreach($productStructure as $programID => $program)
             $linesCount++;
 
             $item = new stdClass();
-            $item->name              = $line['lineName'];
-            $item->id                = 'productLine-' . $lineID;
-            $item->type              = 'productLine';
-            $item->asParent          = true;
-            $item->feedback          = rand(0, 100);
-            $item->parent            = 'program-' . $programID;
-            $item->programName       = $line['lineName'];
-            $item->draftStories      = $line['draftStories'];
-            $item->activeStories     = $line['activeStories'];
-            $item->changingStories   = $line['changingStories'];
-            $item->reviewingStories  = $line['reviewingStories'];
-            $item->closedReqRate     = ($totalStories == 0 ? 0 : round((isset($line['finishClosedStories']) ? $line['finishClosedStories'] : 0) / $totalStories, 3) * 100);
-            $item->unResolvedBugs    = $line['unResolvedBugs'];
-            $item->fixedRate         = ((isset($line['fixedBugs']) and ($line['unResolvedBugs'] + $line['fixedBugs'] != 0)) ? round($line['fixedBugs'] / ($line['unResolvedBugs'] + $line['fixedBugs']), 3) * 100 : 0);
-            $item->plans             = $line['plans'];
-            $item->releaseCount      = isset($line['releases']) ? $line['releases'] : 0;
-            $item->releaseCountOld   = rand(0, 10);
-            $item->testCaseCoverRate = rand(0, 100);
-            $item->unclosedReqCount  = rand(0, 100);
-            $item->executionCount    = rand(0, 100);
+            $item->name             = $line['lineName'];
+            $item->id               = 'productLine-' . $lineID;
+            $item->type             = 'productLine';
+            $item->asParent         = true;
+            $item->feedback         = rand(0, 100);
+            $item->parent           = 'program-' . $programID;
+            $item->programName      = $line['lineName'];
+            $item->draftStories     = $line['draftStories'];
+            $item->activeStories    = $line['activeStories'];
+            $item->changingStories  = $line['changingStories'];
+            $item->reviewingStories = $line['reviewingStories'];
+            $item->closedReqRate    = ($totalStories == 0 ? 0 : round((isset($line['finishClosedStories']) ? $line['finishClosedStories'] : 0) / $totalStories, 3) * 100);
+            $item->unResolvedBugs   = $line['unResolvedBugs'];
+            $item->fixedRate        = ((isset($line['fixedBugs']) and ($line['unResolvedBugs'] + $line['fixedBugs'] != 0)) ? round($line['fixedBugs'] / ($line['unResolvedBugs'] + $line['fixedBugs']), 3) * 100 : 0);
+            $item->plans            = $line['plans'];
+            $item->releaseCount     = isset($line['releases']) ? $line['releases'] : 0;
+            $item->releaseCountOld  = rand(0, 10);
+            $item->testCaseCoverage = rand(0, 100);
+            $item->unclosedReqCount = rand(0, 100);
+            $item->executionCount   = rand(0, 100);
             /* TODO attach extend fields. */
 
             $data[] = $item;
@@ -120,25 +120,25 @@ foreach($productStructure as $programID => $program)
                 }
                 $totalStories = $product->stories['finishClosed'] + $product->stories['unclosed'];
 
-                $item->name              = $product->name; /* TODO replace with <a> */
-                $item->id                = $product->id;
-                $item->type              = 'product';
-                $item->programName       = $product->name; /* TODO replace with <a> */
-                $item->feedback          = rand(0, 100);
-                $item->draftStories      = $product->stories['draft'];
-                $item->activeStories     = $product->stories['active'];
-                $item->changingStories   = $product->stories['changing'];
-                $item->reviewingStories  = $product->stories['reviewing'];
-                $item->closedReqRate     = ($totalStories == 0 ? 0 : round($product->stories['finishClosed'] / $totalStories, 3) * 100);
-                $item->unResolvedBugs    = $product->unResolved;
-                $item->fixedRate         = (($product->unResolved + $product->fixedBugs) == 0 ? 0 : round($product->fixedBugs / ($product->unResolved + $product->fixedBugs), 3) * 100);
-                $item->plans             = $product->plans;
-                $item->parent            = $product->line ? "productLine-$lineID" : ($product->program ? "program-$product->program" : '');
-                $item->releaseCount      = $product->releases;
-                $item->releaseCountOld   = rand(0, 10);
-                $item->testCaseCoverRate = rand(0, 100);
-                $item->unclosedReqCount  = rand(0, 100);
-                $item->executionCount    = rand(0, 100);
+                $item->name             = $product->name; /* TODO replace with <a> */
+                $item->id               = $product->id;
+                $item->type             = 'product';
+                $item->programName      = $product->name; /* TODO replace with <a> */
+                $item->feedback         = rand(0, 100);
+                $item->draftStories     = $product->stories['draft'];
+                $item->activeStories    = $product->stories['active'];
+                $item->changingStories  = $product->stories['changing'];
+                $item->reviewingStories = $product->stories['reviewing'];
+                $item->closedReqRate    = ($totalStories == 0 ? 0 : round($product->stories['finishClosed'] / $totalStories, 3) * 100);
+                $item->unResolvedBugs   = $product->unResolved;
+                $item->fixedRate        = (($product->unResolved + $product->fixedBugs) == 0 ? 0 : round($product->fixedBugs / ($product->unResolved + $product->fixedBugs), 3) * 100);
+                $item->plans            = $product->plans;
+                $item->parent           = $product->line ? "productLine-$lineID" : ($product->program ? "program-$product->program" : '');
+                $item->releaseCount     = $product->releases;
+                $item->releaseCountOld  = rand(0, 10);
+                $item->testCaseCoverage = rand(0, 100);
+                $item->unclosedReqCount = rand(0, 100);
+                $item->executionCount   = rand(0, 100);
                 /* TODO attach extend fields. */
 
                 $data[] = $item;

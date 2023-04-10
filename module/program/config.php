@@ -177,17 +177,17 @@ $config->program->productView->dtable->fieldList['executionCount']['width']    =
 $config->program->productView->dtable->fieldList['executionCount']['type']     = 'format';
 $config->program->productView->dtable->fieldList['executionCount']['sortType'] = true;
 
-$config->program->productView->dtable->fieldList['testCaseCoverRate']['name']     = 'testCaseCoverRate';
-$config->program->productView->dtable->fieldList['testCaseCoverRate']['title']    = $lang->program->testCaseCoverRate;
-$config->program->productView->dtable->fieldList['testCaseCoverRate']['minWidth'] = 100;
-$config->program->productView->dtable->fieldList['testCaseCoverRate']['type']     = 'circleProgress';
-$config->program->productView->dtable->fieldList['testCaseCoverRate']['sortType'] = true;
+$config->program->productView->dtable->fieldList['testCaseCoverage']['name']     = 'testCaseCoverage';
+$config->program->productView->dtable->fieldList['testCaseCoverage']['title']    = $lang->program->testCaseCoverage;
+$config->program->productView->dtable->fieldList['testCaseCoverage']['minWidth'] = 100;
+$config->program->productView->dtable->fieldList['testCaseCoverage']['type']     = 'circleProgress';
+$config->program->productView->dtable->fieldList['testCaseCoverage']['sortType'] = true;
 
-$config->program->productView->dtable->fieldList['bugActivedCount']['name']     = 'unResolvedBugs';
-$config->program->productView->dtable->fieldList['bugActivedCount']['title']    = $lang->program->bugActivedCount;
-$config->program->productView->dtable->fieldList['bugActivedCount']['minWidth'] = 60;
-$config->program->productView->dtable->fieldList['bugActivedCount']['type']     = 'format';
-$config->program->productView->dtable->fieldList['bugActivedCount']['sortType'] = true;
+$config->program->productView->dtable->fieldList['bugActivatedCount']['name']     = 'unResolvedBugs';
+$config->program->productView->dtable->fieldList['bugActivatedCount']['title']    = $lang->program->bugActivatedCount;
+$config->program->productView->dtable->fieldList['bugActivatedCount']['minWidth'] = 60;
+$config->program->productView->dtable->fieldList['bugActivatedCount']['type']     = 'format';
+$config->program->productView->dtable->fieldList['bugActivatedCount']['sortType'] = true;
 
 $config->program->productView->dtable->fieldList['fixedRate']['name']     = 'fixedRate';
 $config->program->productView->dtable->fieldList['fixedRate']['title']    = $lang->program->fixedRate;

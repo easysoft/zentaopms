@@ -127,12 +127,12 @@ $lang->program->createProduct    = '添加产品';
 $lang->program->createProject    = '添加项目';
 
 /* DTable columns of product view page. */
-$lang->program->unclosedReqCount = '需求未关闭';
-$lang->program->closedReqRate    = '需求完成率';
-$lang->program->testCaseCoverRate= '用例覆盖率';
-$lang->program->bugActivedCount  = 'Bug激活';
-$lang->program->fixedRate        = '修复率';
-$lang->program->feedback         = '反馈';
+$lang->program->unclosedReqCount  = '需求未关闭';
+$lang->program->closedReqRate     = '需求完成率';
+$lang->program->testCaseCoverage  = '用例覆盖率';
+$lang->program->bugActivatedCount = 'Bug激活';
+$lang->program->fixedRate         = '修复率';
+$lang->program->feedback          = '反馈';
 
 $lang->program->tip = new stdclass();
 $lang->program->tip->closed     = '该项目集已是关闭状态，无须关闭。';
@@ -198,7 +198,6 @@ $lang->program->kanban->normalReleases  = '正常的发布';
 $lang->program->kanban->laneColorList = array('#32C5FF', '#006AF1', '#9D28B2', '#FF8F26', '#FFC20E', '#00A78E', '#7FBB00', '#424BAC', '#C0E9FF', '#EC2761');
 
 $lang->program->defaultProgram = '默认项目集';
-
-$lang->program->projectView = '项目视角';
-$lang->program->productView = '产品视角';
-$lang->program->workerDay   = '人天';
+$lang->program->projectView    = '项目视角';
+$lang->program->productView    = '产品视角';
+$lang->program->manDay         = '人天';
