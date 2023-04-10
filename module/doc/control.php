@@ -1211,6 +1211,7 @@ class doc extends control
         $this->view->objectType     = $objectType;
         $this->view->type           = $type;
         $this->view->libID          = $libID;
+        $this->view->moduleID       = $doc->module;
         $this->view->lib            = isset($libs[$libID]) ? $libs[$libID] : new stdclass();
         $this->view->libs           = $this->doc->getLibsByObject($type, $objectID);
         $this->view->canBeChanged   = common::canModify($type, $object); // Determines whether an object is editable.
