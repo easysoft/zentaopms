@@ -36,7 +36,7 @@ $lang->doclib->aclListB['open']    = 'Public';
 $lang->doclib->aclListB['custom']  = 'Person.';
 $lang->doclib->aclListB['private'] = 'Privée';
 
-$lang->doclib->mySpaceAclList['private'] = "Private <span class='acl-tip'>(Only creators can access it)</span>";
+$lang->doclib->mySpaceAclList['private'] = "Private <span class='acl-tip text-muted'>(Only creators can access it)</span>";
 
 $lang->doclib->aclList = array();
 $lang->doclib->aclList['open']    = "Public <span class='acl-tip'>(Users who can access doccan access it)</span>";

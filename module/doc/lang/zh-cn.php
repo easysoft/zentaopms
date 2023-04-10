@@ -36,7 +36,7 @@ $lang->doclib->aclListB['open']    = '公开';
 $lang->doclib->aclListB['custom']  = '自定义';
 $lang->doclib->aclListB['private'] = '私有';
 
-$lang->doclib->mySpaceAclList['private'] = "私有 <span class='acl-tip'>（仅创建者可访问）</span>";
+$lang->doclib->mySpaceAclList['private'] = "私有<span class='acl-tip text-muted'>（仅创建者可访问）</span>";
 
 $lang->doclib->aclList = array();
 $lang->doclib->aclList['open']    = "公开 <span class='acl-tip'>（有文档视图权限即可访问）</span>";
