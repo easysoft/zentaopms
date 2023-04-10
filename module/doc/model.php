@@ -3012,21 +3012,23 @@ class docModel extends model
         if($type == 'mine')
         {
             $myLib = new stdclass();
-            $myLib->id          = 0;
-            $myLib->name        = $this->lang->doc->myLib;
-            $myLib->type        = 'lib';
-            $myLib->objectType  = 'mine';
-            $myLib->objectID    = 0;
-            $myLib->active      = 0;
-            $myLib->children    = $libTree;
+            $myLib->id         = 0;
+            $myLib->name       = $this->lang->doc->myLib;
+            $myLib->type       = 'min';
+            $myLib->objectType = 'doc';
+            $myLib->objectID   = 0;
+            $myLib->active     = 0;
+            $myLib->hasAction  = false;
+            $myLib->children   = $libTree;
 
             $myView = new stdclass();
-            $myView->id          = 0;
-            $myView->name        = $this->lang->doc->myView;
-            $myView->type        = 'view';
-            $myView->objectType  = 'doc';
-            $myView->objectID    = 0;
-            $myView->active      = zget($this->app->rawParams, 'type', '') == 'view' ? 1 : 0;
+            $myView->id         = 0;
+            $myView->name       = $this->lang->doc->myView;
+            $myView->type       = 'view';
+            $myView->objectType = 'doc';
+            $myView->objectID   = 0;
+            $myView->hasAction  = false;
+            $myView->active     = zget($this->app->rawParams, 'type', '') == 'view' ? 1 : 0;
 
             $myCollection = new stdclass();
             $myCollection->id         = 0;
@@ -3034,6 +3036,7 @@ class docModel extends model
             $myCollection->type       = 'collect';
             $myCollection->objectType = 'doc';
             $myCollection->objectID   = 0;
+            $myCollection->hasAction  = false;
             $myCollection->active     = zget($this->app->rawParams, 'type', '') == 'collect' ? 1 : 0;
 
             $myCreation = new stdclass();
@@ -3042,6 +3045,7 @@ class docModel extends model
             $myCreation->type       = 'createdBy';
             $myCreation->objectType = 'doc';
             $myCreation->objectID   = 0;
+            $myCreation->hasAction  = false;
             $myCreation->active     = zget($this->app->rawParams, 'type', '') == 'createdBy' ? 1 : 0;
 
             $libTree = array($myLib, $myView, $myCollection, $myCreation);
