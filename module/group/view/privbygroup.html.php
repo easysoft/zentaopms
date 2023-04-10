@@ -133,7 +133,7 @@
             <th class='<?php echo $i == 1 ? 'td-sm' : 'td-md';?> text-middle text-left package' data-module='<?php echo $moduleName;?>' data-package='<?php echo $packageID;?>' all-privs='<?php echo $packagePrivs;?>' select-privs='<?php echo $packageSelect;?>'>
               <div class="checkbox-primary checkbox-inline checkbox-left check-all">
                 <input type='checkbox' id='allCheckerModule<?php echo $moduleName;?>Package<?php echo $packageID;?>' value='1' <?php if($packagePrivs == $packageSelect) echo 'checked';?>>
-                <label class='text-left <?php if(!empty($packageSelect) and $packagePrivs != $packageSelect) echo 'checkbox-indeterminate-block';?>' for='allCheckerPackage<?php echo $packageID;?>'><?php echo zget($privPackages, $packageID, $lang->group->unassigned);?></label>
+                <label class='text-left <?php if(!empty($packageSelect) and $packagePrivs != $packageSelect) echo 'checkbox-indeterminate-block';?>' for='allCheckerPackage<?php echo $packageID;?>'><?php echo zget($privPackages, $packageID, $lang->group->other);?></label>
               </div>
             </th>
             <?php if(isset($lang->$moduleName->menus)):?>
@@ -160,22 +160,28 @@
       </table>
     </div>
     <div class="side">
-      <div class="priv-panel <?php if(count($relatedPrivData['depend']) == 0) echo 'hidden';?>">
+      <div class="priv-panel">
         <div class="panel-title">
           <?php echo $lang->group->dependentPrivs;?>
           <icon class='icon icon-help' data-toggle='popover' data-trigger='focus hover' data-placement='right' data-tip-class='text-muted popover-sm' data-content='<?php echo $lang->group->dependPrivTips;?>'></icon>
         </div>
         <div class="panel-content">
           <div class="menuTree depend menu-active-primary menu-hover-primary"></div>
+          <div class="table-empty-tip <?php if(count($relatedPrivData['depend']) > 0) echo 'hidden';?>">
+            <p><span class="text-muted"><?php echo $lang->noData;?></span></p>
+          </div>
         </div>
       </div>
-      <div class="priv-panel mt-m <?php if(count($relatedPrivData['recommend']) == 0) echo 'hidden';?>">
+      <div class="priv-panel mt-m">
         <div class="panel-title">
           <?php echo $lang->group->recommendPrivs;?>
           <icon class='icon icon-help' data-toggle='popover' data-trigger='focus hover' data-placement='right' data-tip-class='text-muted popover-sm' data-content='<?php echo $lang->group->recommendPrivTips;?>'></icon>
         </div>
         <div class="panel-content">
           <div class="menuTree recommend menu-active-primary menu-hover-primary"></div>
+          <div class="table-empty-tip <?php if(count($relatedPrivData['recommend']) > 0) echo 'hidden';?>">
+            <p><span class="text-muted"><?php echo $lang->noData;?></span></p>
+          </div>
         </div>
       </div>
     </div>

@@ -126,7 +126,7 @@ function initRecomendTree(data)
         initialState: 'expand',
         itemCreator: function($li, item)
         {
-            $li.append('<div class="checkbox-primary"><input data-has-children="' + (item.children ? !!item.children.length : false) + '"' + (item.children ? '' : 'data-type="recommend" data-privid="' + item.privID + '" data-relationpriv="' + item.relationPriv + '"') + 'type="checkbox" name="recommendPrivs[]" value="' + item.relationPriv + '" title="' + item.title + '" id="recommendPrivs[' + item.module + ']' + item.method + '" data-module="' + item.module + '" data-method="' + item.method + '"><label>' + item.title + '</label></div>');
+            $li.append('<div class="checkbox-primary ' + (item.children ? 'check-all' : '') + '"><input data-has-children="' + (item.children ? !!item.children.length : false) + '"' + (item.children ? '' : 'data-type="recommend" data-privid="' + item.privID + '" data-relationpriv="' + item.relationPriv + '"') + 'type="checkbox" name="recommendPrivs[]" value="' + item.relationPriv + '" title="' + item.title + '" id="recommendPrivs[' + item.module + ']' + item.method + '" data-module="' + item.module + '" data-method="' + item.method + '"><label>' + item.title + '</label></div>');
         }
     });
     $('.menuTree.recommend i.list-toggle').remove();
@@ -144,13 +144,13 @@ function initDependTree(data)
     $(".menuTree.depend").tree(
     {
         data: data,
-        initialState: 'active',
+        initialState: 'expand',
         itemCreator: function($li, item)
         {
-            $li.append('<a class="priv-item" data-has-children="' + (item.children ? !!item.children.length : false) + '" href="#" title="' + item.title + '">' + item.title + (item.children ? '' : '<i class="icon icon-close hidden" data-type="recommend" data-privid=' + item.privID + ' data-relationpriv=' + item.relationPriv + '></i>') + '</a>');
-            if(item.active) $li.addClass('active open in');
+            $li.append('<div class="checkbox-primary"><input data-has-children="' + (item.children ? !!item.children.length : false) + '"' + (item.children ? '' : 'data-type="depend" data-privid="' + item.privID + '" data-relationpriv="' + item.relationPriv + '"') + 'type="checkbox" name="dependPrivs[]" value="' + item.relationPriv + '" title="' + item.title + '" id="dependPrivs[' + item.module + ']' + item.method + '" data-module="' + item.module + '" data-method="' + item.method + '"><label>' + item.title + '</label></div>');
         }
     });
+    $('.menuTree.depend i.list-toggle').remove();
 }
 
 /**
@@ -183,26 +183,25 @@ function updatePrivTree(privList)
             if(data.depend == undefined || data.depend.length == 0)
             {
                 $('.side .menuTree.depend').empty();
-                $('.side .menuTree.depend').closest('.priv-panel').addClass('hidden');
+                $('.side .menuTree.depend').closest('.priv-panel').find('.table-empty-tip').removeClass('hidden');
             }
             else
             {
                 $(".menuTree.depend").data('zui.tree').reload(data.depend);
-                $('.side .menuTree.depend').closest('.priv-panel').removeClass('hidden');
+                $('.side .menuTree.depend').closest('.priv-panel').find('.table-empty-tip').addClass('hidden');
             }
 
             if(data.recommend == undefined || data.recommend.length == 0)
             {
                 $('.side .menuTree.recommend').empty();
-                $('.side .menuTree.recommend').closest('.priv-panel').addClass('hidden');
+                $('.side .menuTree.recommend').closest('.priv-panel').find('.table-empty-tip').removeClass('hidden');
             }
             else
             {
                 $(".menuTree.recommend").data('zui.tree').reload(data.recommend);
-                $('.side .menuTree.recommend').closest('.priv-panel').removeClass('hidden');
+                $('.side .menuTree.recommend').closest('.priv-panel').find('.table-empty-tip').addClass('hidden');
             }
 
-            resizeContainer();
             $('.menuTree.recommend i.list-toggle').remove();
             $('.menuTree.recommend li.has-list').addClass('open');
         }
@@ -240,28 +239,6 @@ function checkAllChange()
 }
 
 /**
- * Resize container flex.
- *
- * @access public
- * @return void
- */
-function resizeContainer()
-{
-    if($(".menuTree.depend").closest('.priv-panel').css('display') == 'none' && $(".menuTree.recommend").closest('.priv-panel').css('display') == 'none')
-    {
-        $('#mainContainer > .main').css('flex', '1 1 100%');
-        $('#mainContainer > .side').css('flex', '1 1 0%');
-        $('#mainContainer > .side').addClass('hidden');
-    }
-    else
-    {
-        $('#mainContainer > .main').css('flex', '1 1 75%');
-        $('#mainContainer > .side').css('flex', '1 1 25%');
-        $('#mainContainer > .side').removeClass('hidden');
-    }
-}
-
-/**
  * When recommend privs change.
  *
  * @param  object $item
@@ -289,14 +266,23 @@ function recommendChange($item, checked)
     var packageID  = $actionItem.closest('tr').find('.package').attr('data-package');
     changeParentChecked($actionItem, moduleName, packageID);
 
-    var $parentItem = $item.closest('ul').closest('li').find('input[data-has-children="true"]');
-    if($item.closest('ul').find('input[type=checkbox]').length == $item.closest('ul').find('input[type=checkbox][checked=checked]').length)
+    var $parentItem       = $item.closest('ul').closest('li').find('input[data-has-children="true"]');
+    var allItemLength     = $item.closest('ul').find('input[type=checkbox]').length;
+    var checkedItemLength = $item.closest('ul').find('input[type=checkbox][checked=checked]').length;
+    if(checkedItemLength == 0)
+    {
+        $parentItem.removeAttr('checked');
+        $parentItem.closest('.checkbox-primary').find('label').removeClass('checkbox-indeterminate-block');
+    }
+    else if(allItemLength == checkedItemLength)
     {
         $parentItem.attr('checked', 'checked');
+        $parentItem.closest('.checkbox-primary').find('label').removeClass('checkbox-indeterminate-block');
     }
     else
     {
         $parentItem.removeAttr('checked');
+        $parentItem.closest('.checkbox-primary').find('label').addClass('checkbox-indeterminate-block');
     }
 
     var privID = $actionItem.closest('.group-item').attr('data-id');
@@ -315,11 +301,9 @@ $(function()
 
     relatedPrivData = $.parseJSON(relatedPrivData);
     initDependTree(relatedPrivData.depend);
-    if(relatedPrivData.depend == undefined || relatedPrivData.depend == 0) $(".menuTree.depend").closest('.priv-panel').addClass('hidden');
+    if(relatedPrivData.depend == undefined || relatedPrivData.depend == 0) $(".menuTree.depend").closest('.priv-panel').find('.table-empty-tip').removeClass('hidden');
     initRecomendTree(relatedPrivData.recommend);
-    if(relatedPrivData.recommend == undefined || relatedPrivData.recommend == 0) $(".menuTree.recommend").closest('.priv-panel').addClass('hidden');
-
-    resizeContainer();
+    if(relatedPrivData.recommend == undefined || relatedPrivData.recommend == 0) $(".menuTree.recommend").closest('.priv-panel').find('.table-empty-tip').removeClass('hidden');
 
     $('#privList > tbody > tr > th .check-all').change(checkAllChange);
     $('.priv-footer .check-all').change(checkAllChange);

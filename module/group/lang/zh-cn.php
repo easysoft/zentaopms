@@ -107,6 +107,7 @@ $lang->group->all        = '所有权限';
 $lang->group->config     = '配置';
 $lang->group->unassigned = '未分配';
 $lang->group->view       = '视图';
+$lang->group->other      = '其他';
 
 if(!isset($lang->privpackage)) $lang->privpackage = new stdclass();
 $lang->privpackage->common = '权限包';
