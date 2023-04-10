@@ -168,6 +168,7 @@ class apiModel extends model
 
         $now  = helper::now();
         $data = fixer::input('post')
+            ->trim('name')
             ->skipSpecial('attribute')
             ->add('lib', $old->lib)
             ->add('editedBy', $this->app->user->account)
@@ -414,10 +415,7 @@ class apiModel extends model
                 foreach($rel->snap['modules'] as $module)
                 {
                     $tmp = explode(',', $module['path']);
-                    if(in_array($moduleID, $tmp))
-                    {
-                        $sub[] = $module['id'];
-                    }
+                    if(in_array($moduleID, $tmp)) $sub[] = $module['id'];
                 }
                 if($sub) $where .= 'and module in (' . implode(',', $sub) . ')';
             }
@@ -434,9 +432,7 @@ class apiModel extends model
             {
                 $where = 'lib = ' . $libID;
             }
-            $list = $this->dao->select('*')
-                ->from(TABLE_API)
-                ->where($where)
+            $list = $this->dao->select('*')->from(TABLE_API)->where($where)
                 ->andWhere('deleted')->eq(0)
                 ->page($pager)
                 ->fetchAll();

@@ -61,6 +61,9 @@ $lang->api->zentaoAPI        = "Zentao API v1";
 $lang->api->search           = "Search";
 $lang->api->allLibs          = "AllLibs";
 $lang->api->noLinked         = "No Linked";
+$lang->api->addCatalog       = 'Add Catalog';
+$lang->api->editCatalog      = 'Edit Catalog';
+$lang->api->deleteCatalog    = 'Delete Catalog';
 
 /* Common access control lang. */
 $lang->api->whiteList          = 'Whitelist';

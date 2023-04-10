@@ -177,6 +177,7 @@ $lang->repo->codeRepo     = 'Code Repo';
 $lang->screen->common     = 'Screen';
 $lang->report->common     = 'BI';
 $lang->pivot->common      = 'Pivot Table';
+$lang->chart->common      = 'Chart';
 $lang->system->common     = 'System';
 $lang->admin->common      = 'Admin';
 $lang->story->common      = 'Story';

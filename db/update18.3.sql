@@ -21,12 +21,12 @@ CREATE TABLE IF NOT EXISTS `zt_pivot`  (
   `desc` text NOT NULL,
   `sql` mediumtext NOT NULL,
   `fields` mediumtext NOT NULL,
-  `langs` mediumtext NOT NULL,
+  `langs` mediumtext NULL,
   `vars` mediumtext NOT NULL,
   `objects` mediumtext NULL,
   `settings` mediumtext NOT NULL,
   `filters` mediumtext NOT NULL,
-  `step` tinyint(1) unsigned NOT NULL,
+  `step` tinyint(1) unsigned NOT NULL DEFAULT '',
   `stage` enum('draft','published') NOT NULL DEFAULT 'draft',
   `builtin` enum('0', '1') NOT NULL DEFAULT '0',
   `createdBy` varchar(30) NOT NULL,
@@ -44,10 +44,11 @@ CREATE TABLE `zt_chart_back` SELECT * FROM `zt_chart`;
 ALTER TABLE `zt_chart` MODIFY `fields` mediumtext NOT NULL;
 ALTER TABLE `zt_chart` MODIFY `group` varchar(255) NOT NULL;
 ALTER TABLE `zt_chart` ADD `stage` enum('draft','published') NOT NULL DEFAULT 'draft' AFTER `sql`;
-ALTER TABLE `zt_chart` ADD `langs` text NOT NULL AFTER `fields`;
-ALTER TABLE `zt_chart` ADD `step` tinyint(1) unsigned NOT NULL AFTER `filters`;
+ALTER TABLE `zt_chart` ADD `langs` text NULL AFTER `fields`;
+ALTER TABLE `zt_chart` ADD `step` tinyint(1) unsigned NOT NULL DEFAULT '0' AFTER `filters`;
+ALTER TABLE `zt_chart` DROP `dataset`;
 
-ALTER TABLE `zt_dataview` ADD `langs` text NOT NULL AFTER `fields`;
+ALTER TABLE `zt_dataview` ADD `langs` text NULL AFTER `fields`;
 
 ALTER TABLE `zt_screen` ADD `status` enum('draft','published') NOT NULL DEFAULT 'draft' AFTER `scheme`;
 ALTER TABLE `zt_screen` ADD `builtin` enum('0', '1') NOT NULL DEFAULT '0' AFTER `status`;
@@ -150,6 +151,15 @@ SELECT t1.`group`, t1.`module`, 'editCatalog' FROM `zt_grouppriv` AS t1 WHERE t1
 
 INSERT IGNORE INTO `zt_grouppriv` (`group`, `module`, `method`)
 SELECT t1.`group`, t1.`module`, 'deleteCatalog' FROM `zt_grouppriv` AS t1 WHERE t1.`module` = 'doc' AND t1.`method` = 'catalog';
+
+INSERT IGNORE INTO `zt_grouppriv` (`group`, `module`, `method`)
+SELECT t1.`group`, 'api', 'addCatalog' FROM `zt_grouppriv` AS t1 WHERE t1.`module` = 'doc' AND t1.`method` = 'catalog';
+
+INSERT IGNORE INTO `zt_grouppriv` (`group`, `module`, `method`)
+SELECT t1.`group`, 'api', 'editCatalog' FROM `zt_grouppriv` AS t1 WHERE t1.`module` = 'doc' AND t1.`method` = 'catalog';
+
+INSERT IGNORE INTO `zt_grouppriv` (`group`, `module`, `method`)
+SELECT t1.`group`, 'api', 'deleteCatalog' FROM `zt_grouppriv` AS t1 WHERE t1.`module` = 'doc' AND t1.`method` = 'catalog';
 
 UPDATE `zt_grouppriv` SET `method` = 'mySpace' WHERE `module` = 'doc' AND `method` = 'browse';
 
@@ -738,3 +748,14 @@ CHANGE `editedDate` `editedDate` datetime NULL;
 ALTER TABLE `zt_zoutput`
 CHANGE `editedBy` `editedBy` varchar(30) NOT NULL DEFAULT '',
 CHANGE `editedDate` `editedDate` datetime NULL;
+
+CREATE TABLE IF NOT EXISTS `zt_docaction` (
+  `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
+  `doc` mediumint(8) unsigned NOT NULL,
+  `action` varchar(80) NOT NULL,
+  `actor` char(30) NOT NULL,
+  `date` datetime NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `doc` (`doc`),
+  KEY `actor` (`actor`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;

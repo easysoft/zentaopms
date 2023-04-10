@@ -398,4 +398,37 @@ class dbh
     {
         return $this->pdo->lastInsertId($name);
     }
+
+    /**
+     * Begin transaction.
+     *
+     * @access public
+     * @return bool
+     */
+    public function beginTransaction()
+    {
+        return $this->pdo->beginTransaction();
+    }
+
+    /**
+     * Roll back if transaction failed.
+     *
+     * @access public
+     * @return bool
+     */
+    public function rollBack()
+    {
+        return $this->pdo->rollBack();
+    }
+
+    /**
+     * Commit transaction.
+     *
+     * @access public
+     * @return bool
+     */
+    public function commit()
+    {
+        return $this->pdo->commit();
+    }
 }

@@ -19,10 +19,10 @@
   </div>
   <form method='post' class='form-ajax'>
     <table class='table table-form'>
-      <tr><th class='w-100px'></th><td></td><th class='w-100px'></th><td></td></tr>
+      <tr><th class='w-120px'></th><td></td><th class='w-100px'></th><td></td></tr>
       <tr>
         <th><?php echo $lang->doc->space?></th>
-        <td colspan='3'><?php echo html::radio('space', $spaceList, '', "onchange=changeSpace()");?></td>
+        <td colspan='3'><?php echo html::radio('space', $spaceList, key($spaceList), "onchange=changeSpace()");?></td>
       </tr>
       <tr id='docType'>
         <th><?php echo $lang->doc->type;?></th>
@@ -54,6 +54,8 @@
 </div>
 <?php js::set('holders', $lang->doc->placeholder);?>
 <script>
+$(function(){changeSpace()});
+
 /**
  * Change space.
  *
@@ -62,20 +64,26 @@
  */
 function changeSpace()
 {
-    var space   = $('[name=space]:checked').val();
-    var docType = $('[name=type]:checked').val();
-    console.log();
+    var space = $('[name=space]:checked').val();
     $('.apiTypeTR').toggleClass('hidden', space != 'api');
     $('.projectTR').toggleClass('hidden', space != 'project');
     $('.productTR').toggleClass('hidden', space != 'product');
-    $('#typeapi').removeAttr('disabled');
-    $('#typedoc').removeAttr('disabled');
-    if(space == 'mine' || space == 'custom') $('#typeapi').attr('disabled', 'disabled');
-    if(space == 'api') $('#typedoc').attr('disabled', 'disabled');
+    $('#typedoc').toggleClass('hidden', space == 'api');
+    $('#typeapi').toggleClass('hidden', space == 'mine' || space == 'custom');
+    $('#typedoc').closest('.radio-inline').toggleClass('hidden', space == 'api');
+    $('#typeapi').closest('.radio-inline').toggleClass('hidden', space == 'mine' || space == 'custom');
+
+    var docType = $('[name=type]:not(.hidden):checked').val();
     if(space == 'project' && docType) $('#project').change();
     if(space == 'product' && docType) $('#product').change();
     if((space == 'mine' || space == 'custom') && docType) loadDocLibs(space, docType);
     if(space == 'api' && docType) changeApiType();
+
+    if(!docType)
+    {
+        $('[name=type]:not(.hidden):first').prop('checked', true);
+        changeDocType();
+    }
 }
 
 /**
@@ -92,6 +100,11 @@ function changeApiType()
     if(apiType == 'project') $('#project').change();
     if(apiType == 'product') $('#product').change();
     if(apiType == 'nolink')  loadDocLibs('api', 'api');
+    if(apiType == '')
+    {
+        $('#moduleBox').html("<select id='module' name='module' class='form-control'><option value=''></option></select>");
+        $('#moduleBox #module').picker();
+    }
 }
 
 /**
@@ -102,40 +115,23 @@ function changeApiType()
  */
 function changeDocType()
 {
-    var docType = $('[name=type]:checked').val();
-    $('[name=space]').removeAttr('disabled');
+    var docType = $('[name=type]:not(.hidden):checked').val();
     $('.executionTH').removeClass('hidden');
     $('#executionBox').removeClass('hidden');
     if(docType == 'api')
     {
-        $('#spacemine').attr('disabled', 'disabled');
-        $('#spacecustom').attr('disabled', 'disabled');
         $('.executionTH').addClass('hidden');
         $('#executionBox').addClass('hidden');
         $('#project').attr('onchange', "loadObjectModules('project', this.value, '" + docType + "')");
     }
-    if(docType == 'doc')
+    else if(docType == 'doc')
     {
-        $('#spaceapi').attr('disabled', 'disabled');
         $('#project').attr('onchange', "loadExecutions(this.value)");
     }
     $('#product').attr('onchange', "loadObjectModules('product', this.value, '" + docType + "')");
 
     var space = $('[name=space]:checked').val();
-    if(space)
-    {
-        if(docType == 'doc' && space == 'api')
-        {
-            $('[name=space]:checked').prop('checked', false);
-            $('[name=space]:not(:disabled):first').prop('checked', true);
-        }
-        if(docType == 'api' && (space == 'mine' || space == 'custom'))
-        {
-            $('[name=space]:checked').prop('checked', false);
-            $('[name=space]:not(:disabled):first').prop('checked', true);
-        }
-        changeSpace();
-    }
+    if(space) changeSpace();
 
     $('#submit').removeAttr('disabled');
 }

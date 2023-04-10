@@ -121,6 +121,7 @@ $lang->doc->nextStep     = '下一步';
 $lang->doc->closed       = '已关闭';
 $lang->doc->saveDraft    = '存为草稿';
 $lang->doc->defaultSave  = '默认存入：';
+$lang->doc->position     = '所在位置';
 
 $lang->doc->moduleDoc     = '按模块浏览';
 $lang->doc->searchDoc     = '搜索';
@@ -137,6 +138,7 @@ $lang->doc->myDoc         = '我的文档';
 $lang->doc->myView        = '最近浏览';
 $lang->doc->myCollection  = '我的收藏';
 $lang->doc->myCreation    = '我创建的';
+$lang->doc->myLib         = '我的个人库';
 $lang->doc->tableContents = '目录';
 $lang->doc->addCatalog    = '添加目录';
 $lang->doc->editCatalog   = '编辑目录';

@@ -8977,4 +8977,27 @@ class upgradeModel extends model
 
         return $fieldSettings;
     }
+
+    /**
+     * Convert doc collect.
+     *
+     * @access public
+     * @return bool
+     */
+    public function convertDocCollect()
+    {
+        $this->loadModel('doc');
+
+        $stmt = $this->dao->select('id,collector')->from(TABLE_DOC)->where('collector')->ne('')->query();
+        while($doc = $stmt->fetch())
+        {
+            foreach(explode(',', $doc->collector) as $collector)
+            {
+                $collector = trim($collector);
+                if(empty($collector)) continue;
+                $this->doc->createAction($doc->id, 'collect', $collector);
+            }
+        }
+        return true;
+    }
 }

@@ -1,3 +1,4 @@
+.h-full-adjust {overflow-y: auto; height: calc(100vh - 100px);}
 .main-col .block-files .panel-heading {padding-right: 20px;}
 .main-col .block-files .panel-heading .panel-title {height: 35px; line-height: 30px;}
 .main-col .doc-title {display: flex; font-size: 16px; margin-bottom: 15px;}
@@ -31,7 +32,7 @@
 .outline-content a {color: #838A9D;}
 .outline-content li.text-ellipsis.active>a {font-weight: 700; color: #0c64eb;}
 #outline li.has-list.open:before {content: unset;}
-#fileTree {margin-bottom: 40px; max-height: calc(100vh - 180px); overflow: auto;}
+#fileTree {margin-bottom: 40px; max-height: calc(100vh - 160px); overflow: auto;}
 
 .title {font-size: 20px !important;}
 .article-content.comment {width: 100% !important;}
@@ -47,5 +48,10 @@
 .overflow-auto {overflow: auto;}
 .overflow-visible {overflow: visible;}
 .overflow-hidden {overflow: hidden;}
-#mainContent > .panel {margin-bottom: 0; height: calc(100vh - 125px); overflow-y: auto;}
+#mainContent > .panel {margin-bottom: 0; overflow-y: auto;}
 .detail-title .actions .ajaxCollect > img {width: 20px;}
+.actions > .text {color: #8c8c8c; font-size: 14px;}
+.flex-content {display: flex; width: 100%; height: 100%;}
+.flex-content > #content {flex: auto; overflow-y: auto;}
+.flex-content > #history {flex: 0 0 302px;;}
+.panel {margin-bottom: 0;}

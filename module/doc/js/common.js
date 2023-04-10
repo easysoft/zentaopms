@@ -10,6 +10,7 @@ function loadObjectModules(objectType, objectID, docType)
 {
     if(typeof docType == 'undefined') docType = 'doc';
     var link = createLink('doc', 'ajaxGetModules', 'objectType=' + objectType + '&objectID=' + objectID + '&type=' + docType);
+    if(objectType == 'execution' && objectID == 0) var link = createLink('doc', 'ajaxGetModules', 'objectType=project&objectID=' + $('#project').val() + '&type=' + docType);
     $('#moduleBox').load(link, function(){$('#moduleBox').find('select').picker(); $('#moduleLabel').remove();});
 }
 
@@ -342,25 +343,35 @@ function locateNewLib(type, objectID, libID)
  */
 function setSavePath()
 {
+    var getSubPath = function($obj)
+    {
+        var $td = $obj.parent();
+        var usePicker = $td.find('.picker').length == 1;
+        var subPath = $obj.find('option:checked').text();
+        if(usePicker) subPath = $td.find('.picker .picker-selection-text').text();
+        return subPath;
+    }
+
     savePath = defaultSave;
     if($('#modalBasicInfo #product').length == 1)
     {
-        savePath += $('#modalBasicInfo #product option:checked').text() + '/';
+        savePath += getSubPath($('#modalBasicInfo #product')) + '/';
     }
     else if($('#modalBasicInfo #project').length == 1 && $('#modalBasicInfo #execution').length == 0)
     {
-        savePath += $('#modalBasicInfo #project option:checked').text() + '/';
+        savePath += getSubPath($('#modalBasicInfo #project')) + '/';
     }
     else if($('#modalBasicInfo #project').length == 1 && $('#modalBasicInfo #execution').length == 1)
     {
-        if($('#modalBasicInfo #execution').val() == '') savePath += $('#modalBasicInfo #project option:checked').text() + '/';
-        if($('#modalBasicInfo #execution').val() != '') savePath += $('#modalBasicInfo #execution option:checked').text() + '/';
+        var executionID = $('#modalBasicInfo #execution').val();
+        if(executionID == '0' || executionID == '') savePath += getSubPath($('#modalBasicInfo #project')) + '/';
+        if(executionID != '0' && executionID != '') savePath += getSubPath($('#modalBasicInfo #execution')) + '/';
     }
     else if($('#modalBasicInfo #execution').length == 1)
     {
-        savePath += $('#modalBasicInfo #execution option:checked').text() + '/';
+        savePath += getSubPath($('#modalBasicInfo #execution')) + '/';
     }
-    savePath += $('#modalBasicInfo #module option:checked').text();
+    savePath += getSubPath($('#modalBasicInfo #module'));
 
     $('#savePath').html(savePath).attr('title', savePath);
 }
