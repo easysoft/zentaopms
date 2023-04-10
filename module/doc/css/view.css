@@ -6,7 +6,7 @@
 .main-col .doc-title .info {flex: 1 1 0;}
 .main-col .doc-title .version a {font-size: 13px; color: #8c8c8c;}
 .main-col .doc-title .version .dropdown-menu a:hover {color: #ffffff;}
-.main-col .doc-title .actions a + a {margin-left: 8px;}
+.main-col .doc-title .actions a + a {margin-left: 0px;}
 .main-col .doc-title .actions i {font-size: 15px; color: #8c8c8c;}
 #content .title {max-width: 54%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;}
 #content .detail-content {padding-left: 10px;}
@@ -56,3 +56,4 @@
 .flex-content > #content {flex: auto; overflow-y: auto;}
 .flex-content > #history {flex: 0 0 302px;;}
 .panel {margin-bottom: 0;}
+.detail {margin: 0 4px;}
