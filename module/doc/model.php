@@ -614,7 +614,7 @@ class docModel extends model
             ->andWhere('vision')->eq($this->config->vision)
             ->andWhere('id')->in($docIdList)
             ->beginIF($browseType == 'all')->andWhere("(status = 'normal' or (status = 'draft' and addedBy='{$this->app->user->account}'))")->fi()
-            ->beginIF($browseType == 'draft')->andWhere('status')->eq('draft')->fi()
+            ->beginIF($browseType == 'draft')->andWhere('status')->eq('draft')->andWhere('addedBy')->eq($this->app->user->account)->fi()
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll('id');
@@ -644,7 +644,7 @@ class docModel extends model
                 ->andWhere('t2.action')->eq($type)
                 ->andWhere('t2.actor')->eq($this->app->user->account)
                 ->beginIF($browseType == 'all')->andWhere("(t1.status = 'normal' or (t1.status = 'draft' and t1.addedBy='{$this->app->user->account}'))")->fi()
-                ->beginIF($browseType == 'draft')->andWhere('t1.status')->eq('draft')->fi()
+                ->beginIF($browseType == 'draft')->andWhere('t1.status')->eq('draft')->andWhere('t1.addedBy')->eq($this->app->user->account)->fi()
                 ->orderBy($orderBy)
                 ->page($pager, 't1.id')
                 ->fetchAll('id');
@@ -656,7 +656,7 @@ class docModel extends model
                 ->where('t1.deleted')->eq(0)
                 ->andWhere('t1.vision')->eq($this->config->vision)
                 ->andWhere('t1.addedBy')->eq($this->app->user->account)
-                ->beginIF($browseType == 'draft')->andWhere('t1.status')->eq('draft')->fi()
+                ->beginIF($browseType == 'draft')->andWhere('t1.status')->eq('draft')->andWhere('t1.addedBy')->eq($this->app->user->account)->fi()
                 ->orderBy($orderBy)
                 ->page($pager)
                 ->fetchAll('id');
