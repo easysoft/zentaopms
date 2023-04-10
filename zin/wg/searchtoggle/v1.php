@@ -3,6 +3,8 @@ namespace zin;
 
 class searchToggle extends wg
 {
+    protected static $defineProps = 'open?:bool';
+
     public static function getPageCSS()
     {
         return file_get_contents(__DIR__ . DS . 'css' . DS . 'v1.css');
@@ -21,7 +23,8 @@ class searchToggle extends wg
             set::class('ghost search-form-toggle'),
             set::icon('search'),
             set::text($lang->searchAB),
-            on::click('window.toggleSearchForm')
+            on::click('window.toggleSearchForm'),
+            $this->prop('open') ? h::jsCall('~window.toggleSearchForm') : NULL
         );
     }
 }
