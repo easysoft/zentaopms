@@ -138,6 +138,7 @@ $lang->doc->myDoc         = 'Mes Documents';
 $lang->doc->myView        = 'Recently Viewed';
 $lang->doc->myCollection  = 'Mes Favoris';
 $lang->doc->myCreation    = 'Created By';
+$lang->doc->myLib         = 'My Library';
 $lang->doc->tableContents = 'Catalog';
 $lang->doc->addCatalog    = 'Add Catalog';
 $lang->doc->editCatalog   = 'Edit Catalog';

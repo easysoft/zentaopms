@@ -106,7 +106,7 @@ class doc extends control
         $this->view->param      = $param;
         $this->view->libID      = $libID;
         $this->view->lib        = $this->doc->getLibById($libID);
-        $this->view->libTree    = $this->doc->getLibTree($libID, $libs, 'mine', 0);
+        $this->view->libTree    = $this->doc->getLibTree($type != 'mine' ? 0 : $libID, $libs, 'mine', 0);
         $this->view->pager      = $pager;
         $this->view->type       = $type;
         $this->view->objectID   = 0;

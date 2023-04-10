@@ -431,6 +431,8 @@ $(function()
      */
     function locatePage(libID, moduleID, type)
     {
+        if(!libID)    libID    = 0;
+        if(!moduleID) moduleID = 0;
         linkParams = linkParams.replace('%s', 'libID=' + libID + '&moduleID=' + moduleID);
         var methodName = '';
         if(config.currentModule == 'api')
@@ -443,10 +445,13 @@ $(function()
             methodName = 'showFiles';
             linkParams = 'type=' + objectType + '&objectID=' + objectID;
         }
-        else if(objectType == 'mine')
+        else if(objectType == 'mine' || objectType == 'view' || objectType == 'collect' || objectType == 'createdBy')
         {
+            var mySpaceType = 'mine';
+            if(type == 'view' || type == 'collect' || type == 'createdBy') mySpaceType = type;
+
             methodName = 'mySpace';
-            linkParams = 'type=mine&libID=' + libID;
+            linkParams = 'type='+ mySpaceType + '&libID=' + libID + '&moduleID=' + moduleID;
         }
         else if(['text', 'word', 'ppt', 'excel'].indexOf(type) !== -1)
         {
