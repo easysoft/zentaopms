@@ -1113,10 +1113,11 @@ class doc extends control
         $lib = $this->doc->getLibById($doc->lib);
         if(!empty($lib) and $lib->deleted == '1') $appendLib = $doc->id;
 
+
         $objectType = isset($lib->type) ? $lib->type : 'custom';
         $type       = $objectType == 'execution' && $this->app->tab != 'execution' ? 'project' : $objectType;
         $objectID   = isset($doc->{$type}) ? $doc->{$type} : 0;
-        list($libs, $libID, $object, $objectID) = $this->doc->setMenuByType($type, $objectID, $doc->lib, $appendLib);
+        list($libs, $libID, $object, $objectID, $objectDropdown) = $this->doc->setMenuByType($type, $objectID, $doc->lib, $appendLib);
 
         $moduleTree = $this->doc->getTreeMenu($type, $objectID, $libID, 0, $docID);
 
@@ -1201,23 +1202,24 @@ class doc extends control
         $doc       = $docID ? $doc : '';
         $spaceType = $objectType . 'Space';
 
-        $this->view->title        = isset($this->lang->doc->{$spaceType}) ? $this->lang->doc->{$spaceType} : $this->lang->doc->common;
-        $this->view->docID        = $docID;
-        $this->view->doc          = $doc;
-        $this->view->version      = $version;
-        $this->view->object       = $object;
-        $this->view->objectID     = $objectID;
-        $this->view->objectType   = $objectType;
-        $this->view->type         = $type;
-        $this->view->libID        = $libID;
-        $this->view->lib          = isset($libs[$libID]) ? $libs[$libID] : new stdclass();
-        $this->view->libs         = $this->doc->getLibsByObject($type, $objectID);
-        $this->view->canBeChanged = common::canModify($type, $object); // Determines whether an object is editable.
-        $this->view->actions      = $docID ? $this->action->getList('doc', $docID) : array();
-        $this->view->users        = $this->user->getPairs('noclosed,noletter');
-        $this->view->autoloadPage = $this->doc->checkAutoloadPage($doc);
-        $this->view->libTree      = $this->doc->getLibTree($libID, $libs, $type, $doc->module, $objectID);
-        $this->view->preAndNext   = $this->loadModel('common')->getPreAndNextObject('doc', $docID);
+        $this->view->title          = isset($this->lang->doc->{$spaceType}) ? $this->lang->doc->{$spaceType} : $this->lang->doc->common;
+        $this->view->docID          = $docID;
+        $this->view->doc            = $doc;
+        $this->view->version        = $version;
+        $this->view->object         = $object;
+        $this->view->objectID       = $objectID;
+        $this->view->objectType     = $objectType;
+        $this->view->type           = $type;
+        $this->view->libID          = $libID;
+        $this->view->lib            = isset($libs[$libID]) ? $libs[$libID] : new stdclass();
+        $this->view->libs           = $this->doc->getLibsByObject($type, $objectID);
+        $this->view->canBeChanged   = common::canModify($type, $object); // Determines whether an object is editable.
+        $this->view->actions        = $docID ? $this->action->getList('doc', $docID) : array();
+        $this->view->users          = $this->user->getPairs('noclosed,noletter');
+        $this->view->autoloadPage   = $this->doc->checkAutoloadPage($doc);
+        $this->view->libTree        = $this->doc->getLibTree($libID, $libs, $type, $doc->module, $objectID);
+        $this->view->preAndNext     = $this->loadModel('common')->getPreAndNextObject('doc', $docID);
+        $this->view->objectDropdown = $objectDropdown;
 
         $this->display();
     }
@@ -1416,7 +1418,7 @@ class doc extends control
         $this->view->objectType    = $objectType;
         $this->view->objectID      = $objectID;
         $this->view->module        = $module;
-        $this->view->method        = $method;
+        $this->view->method        = $method =='view' ? $objectType.'space' : $method;
         $this->view->normalObjects = $myObjects + $normalObjects;
         $this->view->closedObjects = $closedObjects;
         $this->view->objectsPinYin = common::convert2Pinyin($myObjects + $normalObjects + $closedObjects);

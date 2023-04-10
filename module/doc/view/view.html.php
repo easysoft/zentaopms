@@ -19,6 +19,11 @@
 <?php if($app->tab == 'execution'):;?>
 <style>.panel-body{min-height: 180px}</style>
 <?php endif;?>
+<div id="mainMenu" class="clearfix">
+  <div id="leftBar" class="btn-toolbar pull-left">
+  <?php echo $objectDropdown;?>
+  </div>
+</div>
 <div id='mainContent'class="fade flex">
   <?php if($libID):?>
     <div id='sideBar' class="panel side side-col col overflow-auto h-full-adjust">
