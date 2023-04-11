@@ -78,26 +78,23 @@ class doc extends control
 
         $this->doc->buildSearchForm($libID, $libs, $queryID, $actionURL, $type);
 
-        /* Set header and position. */
-        $this->view->title = $this->lang->doc->common;
-
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
         /* Append id for secend sort. */
         $sort = common::appendOrder($orderBy);
-
         $docs = array();
         if($type == 'mine')
         {
-            $docs = $libID ? $this->doc->getDocs($libID, $moduleID, $browseType, $orderBy, $pager) : array();
+            $docs = $browseType == 'bysearch' ? $this->doc->getDocsBySearch('mine', 0, $libID, $queryID, $orderBy, $pager) : $this->doc->getDocs($libID, $moduleID, $browseType, $orderBy, $pager);
         }
         elseif($type == 'view' or $type == 'collect' or $type == 'createdby')
         {
-            $docs = $this->doc->getMineList($type, $browseType, $orderBy, $pager);
+            $docs = $this->doc->getMineList($type, $browseType, $orderBy, $pager, $queryID);
         }
 
+        $this->view->title      = $this->lang->doc->common;
         $this->view->moduleID   = $moduleID;
         $this->view->docs       = $docs;
         $this->view->users      = $this->user->getPairs('noletter');
@@ -106,7 +103,7 @@ class doc extends control
         $this->view->param      = $param;
         $this->view->libID      = $libID;
         $this->view->lib        = $this->doc->getLibById($libID);
-        $this->view->libTree    = $this->doc->getLibTree($type != 'mine' ? 0 : $libID, $libs, 'mine', $moduleID);
+        $this->view->libTree    = $this->doc->getLibTree($type != 'mine' ? 0 : $libID, $libs, 'mine', $moduleID, 0, $browseType);
         $this->view->pager      = $pager;
         $this->view->type       = $type;
         $this->view->objectID   = 0;
