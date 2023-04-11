@@ -147,7 +147,7 @@ $lang->doc->editCatalog   = '编辑目录';
 $lang->doc->deleteCatalog = '删除目录';
 
 /* 方法列表。*/
-$lang->doc->index            = '文档主页';
+$lang->doc->index            = '仪表盘';
 $lang->doc->createAB         = '创建';
 $lang->doc->create           = '创建文档';
 $lang->doc->edit             = '编辑文档';
