@@ -20,6 +20,19 @@
 class dm extends dao
 {
     /**
+     * 设置$table属性。
+     * Set the $table property.
+     *
+     * @param  string $table
+     * @access public
+     * @return void
+     */
+    public function setTable($table)
+    {
+        $this->table = trim($table, '`');
+    }
+
+    /**
      * 类MySQL的DESC语法。
      * Desc table, show fields.
      *
@@ -36,7 +49,7 @@ class dm extends dao
         foreach($rawFields as $rawField)
         {
             $field = new stdClass();
-            $field->Field = $rawField->field;
+            $field->Field = $rawField->COLUMN_NAME;
             $fields[] = $field;
         }
         return $fields;
@@ -255,8 +268,7 @@ class dm extends dao
 
     public function getPKColumns()
     {
-        $table = trim($this->table, '`');
-        $sql   = "SELECT A.OWNER, A.TABLE_NAME, WM_CONCAT(B.COLUMN_NAME) PK_COLUMNS FROM ALL_CONSTRAINTS A, ALL_CONS_COLUMNS B where A.CONSTRAINT_type = 'P' AND A.OWNER = '{$this->config->db->name}' AND A.TABLE_NAME = '{$table}' AND B.OWNER = A.OWNER AND A.TABLE_NAME = B.TABLE_NAME GROUP BY A.OWNER, A.TABLE_NAME;";
+        $sql   = "SELECT A.OWNER, A.TABLE_NAME, WM_CONCAT(B.COLUMN_NAME) PK_COLUMNS FROM ALL_CONSTRAINTS A, ALL_CONS_COLUMNS B where A.CONSTRAINT_type = 'P' AND A.OWNER = '{$this->config->db->name}' AND A.TABLE_NAME = '{$this->table}' AND B.OWNER = A.OWNER AND A.TABLE_NAME = B.TABLE_NAME GROUP BY A.OWNER, A.TABLE_NAME;";
 
         $content = $this->dbh->query($sql)->fetch();
         return empty($content) ? false : $content->PK_COLUMNS;
@@ -285,7 +297,7 @@ class dm extends dao
 
         if($this->method == 'replace' && !empty($this->sqlobj->data))
         {
-            $insertSql = "INSERT INTO {$this->table} ";
+            $insertSql = "INSERT INTO \"{$this->table}\" ";
             $fields = '(';
             $values = 'VALUES(';
             foreach($this->sqlobj->data as $field => $value)
@@ -310,10 +322,10 @@ class dm extends dao
                 {
                     if(isset($this->sqlobj->data->{$pk})) $conditions[] = " \"{$pk}\" = '{$this->sqlobj->data->{$pk}}'";
                 }
-                $updateSql .= ' WHERE ' . implode(' AND ', $conditions);
+                if(!empty($conditions)) $updateSql .= ' WHERE ' . implode(' AND ', $conditions);
             }
 
-            $deleteSql = "DELETE FROM {$this->table} WHERE ";
+            $deleteSql = "DELETE FROM \"{$this->table}\" WHERE ";
             $ingore    = array();
             $ingore['`zt_config`'] = array('value');
             foreach($this->sqlobj->data as $field => $value)
@@ -418,7 +430,7 @@ EOT;
         foreach($rawFields as $rawField)
         {
             $firstPOS = strpos($rawField->data_type, '(');
-            $type     = substr($rawField->data_type, 0, $firstPOS > 0 ? $firstPOS : strlen($rawField->type));
+            $type     = substr($rawField->data_type, 0, $firstPOS > 0 ? $firstPOS : strlen($rawField->data_type));
             $type     = str_replace(array('big', 'small', 'medium', 'tiny', 'var'), '', $type);
             $field    = array();
 
@@ -449,7 +461,7 @@ EOT;
             {
                 $field['rule'] = 'skip';
             }
-            $fields[$rawField->field] = $field;
+            $fields[$rawField->column_name] = $field;
         }
         return $fields;
     }

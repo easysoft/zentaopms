@@ -192,7 +192,7 @@ class projectModel extends model
 
         if(!$project) return false;
 
-        if($project->end == '0000-00-00') $project->end = '';
+        if(helper::isZeroDate($project->end)) $project->end = '';
         $project = $this->loadModel('file')->replaceImgURL($project, 'desc');
         return $project;
     }
@@ -1875,15 +1875,16 @@ class projectModel extends model
      * Suspend project.
      *
      * @param  int    $projectID
+     * @param  string $type
      * @access public
      * @return void
      */
-    public function suspend($projectID)
+    public function suspend($projectID, $type = 'project')
     {
         $editorIdList = $this->config->project->editor->suspend['id'];
         if($this->app->rawModule == 'program') $editorIdList = $this->config->program->editor->suspend['id'];
 
-        $oldProject = $this->getById($projectID);
+        $oldProject = $this->getById($projectID, $type);
         $project    = fixer::input('post')
             ->add('id', $projectID)
             ->setDefault('status', 'suspended')
@@ -1911,12 +1912,13 @@ class projectModel extends model
      * Activate project.
      *
      * @param  int    $projectID
+     * @param  string $type
      * @access public
      * @return void
      */
-    public function activate($projectID)
+    public function activate($projectID, $type = 'project')
     {
-        $oldProject = $this->getById($projectID);
+        $oldProject = $this->getById($projectID, $type);
         $now        = helper::now();
 
         $editorIdList = $this->config->project->editor->activate['id'];
@@ -1928,7 +1930,7 @@ class projectModel extends model
             ->setDefault('status', 'doing')
             ->setDefault('lastEditedBy', $this->app->user->account)
             ->setDefault('lastEditedDate', $now)
-            ->setIF($oldProject->realBegan == '0000-00-00', 'realBegan', helper::today())
+            ->setIF(!helper::isZeroDate($oldProject->realBegan), 'realBegan', helper::today())
             ->stripTags($editorIdList, $this->config->allowedTags)
             ->remove('comment,readjustTime,readjustTask')
             ->get();
@@ -1999,12 +2001,13 @@ class projectModel extends model
      * Close project.
      *
      * @param  int    $projectID
+     * @param  string $type
      * @access public
      * @return array
      */
-    public function close($projectID)
+    public function close($projectID, $type = 'project')
     {
-        $oldProject = $this->getById($projectID);
+        $oldProject = $this->getById($projectID, $type);
         $now        = helper::now();
 
         $editorIdList = $this->config->project->editor->close['id'];
