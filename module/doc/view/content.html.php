@@ -73,7 +73,7 @@
             <?php endif;?>
           </div>
         </div>
-        <div class="table-row">
+        <div class="">
           <div class="detail-content article-content table-col">
             <?php if($doc->keywords):?>
             <p class='keywords'>
@@ -144,14 +144,6 @@
             <?php endif;?>
             <?php endforeach;?>
           </div>
-          <?php if(!empty($outline) and strip_tags($outline)):?>
-          <div id="outlineMenu" class="outline table-col">
-            <div class="outline-toggle"><i class="icon icon-angle-right"></i></div>
-            <div class="outline-content">
-              <?php echo $outline;?>
-            </div>
-          </div>
-          <?php endif;?>
         </div>
       </div>
       <?php echo $this->fetch('file', 'printFiles', array('files' => $doc->files, 'fieldset' => 'true', 'object' => $doc));?>
@@ -159,6 +151,14 @@
         <?php common::printPreAndNext($preAndNext);?>
       </div>
     </div>
+    <?php if(!empty($outline) and strip_tags($outline)):?>
+    <div id="outlineMenu" class="outline table-col">
+      <div class="outline-content">
+      <?php echo $outline;?>
+      </div>
+    </div>
+    <div class="outline-toggle"><i class="icon icon-angle-right"></i></div>
+    <?php endif;?>
     <div id="history" class='panel hidden' style="margin-left: 2px;">
       <?php
       $canBeChanged = common::canBeChanged('doc', $doc);
