@@ -56,7 +56,7 @@
             }?>
             <a id="hisTrigger" href="###" class="btn btn-link" title=<?php echo $lang->history?>><span class="icon icon-clock"></span></a>
 
-            <?php if($this->config->edition == 'max' and $this->app->tab == 'project'):?>
+            <?php if($config->vision == 'rnd' and $config->edition == 'max' and $app->tab == 'project'):?>
             <?php
             $canImportToPracticeLib  = (common::hasPriv('doc', 'importToPracticeLib')  and helper::hasFeature('practicelib'));
             $canImportToComponentLib = (common::hasPriv('doc', 'importToComponentLib') and helper::hasFeature('componentlib'));
