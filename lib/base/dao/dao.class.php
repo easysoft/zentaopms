@@ -1703,6 +1703,8 @@ class baseSQL
                     continue;
                 }
                 if(strpos($this->skipFields, ",$field,") !== false) continue;
+                if($field == 'id' and $this->method == 'update') continue;     // primary key not allowed in dmdb.
+
                 $this->sql .= "`$field` = " . $this->quote($value) . ',';
             }
         }

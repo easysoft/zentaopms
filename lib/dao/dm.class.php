@@ -255,7 +255,8 @@ class dm extends dao
 
     public function getPKColumns()
     {
-        $sql = "SELECT A.OWNER, A.TABLE_NAME, WM_CONCAT(B.COLUMN_NAME) PK_COLUMNS FROM ALL_CONSTRAINTS A, ALL_CONS_COLUMNS B where A.CONSTRAINT_type = 'P' AND A.OWNER = '{$this->config->db->user}' AND A.TABLE_NAME = '{$this->table}' AND B.OWNER = A.OWNER AND A.TABLE_NAME = B.TABLE_NAME GROUP BY A.OWNER, A.TABLE_NAME;";
+        $table = trim($this->table, '`');
+        $sql   = "SELECT A.OWNER, A.TABLE_NAME, WM_CONCAT(B.COLUMN_NAME) PK_COLUMNS FROM ALL_CONSTRAINTS A, ALL_CONS_COLUMNS B where A.CONSTRAINT_type = 'P' AND A.OWNER = '{$this->config->db->name}' AND A.TABLE_NAME = '{$table}' AND B.OWNER = A.OWNER AND A.TABLE_NAME = B.TABLE_NAME GROUP BY A.OWNER, A.TABLE_NAME;";
 
         $content = $this->dbh->query($sql)->fetch();
         return empty($content) ? false : $content->PK_COLUMNS;
@@ -300,8 +301,17 @@ class dm extends dao
             $insertSql .= $fields . ' ' . $values;
 
             $updateSql = str_replace('REPLACE', 'UPDATE', $sql);
-            $pk        = $this->getPKColumns();
-            if(!empty($pk) && isset($this->sqlobj->data->{$pk})) $updateSql .= " where {$pk} = '{$this->sqlobj->data->{$pk}}'";
+            $pks       = $this->getPKColumns();
+            if(!empty($pks))
+            {
+                $pks = explode(',', $pks);
+                $conditions = array();
+                foreach($pks as $pk)
+                {
+                    if(isset($this->sqlobj->data->{$pk})) $conditions[] = " \"{$pk}\" = '{$this->sqlobj->data->{$pk}}'";
+                }
+                $updateSql .= ' WHERE ' . implode(' AND ', $conditions);
+            }
 
             $deleteSql = "DELETE FROM {$this->table} WHERE ";
             $ingore    = array();

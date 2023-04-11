@@ -3857,6 +3857,8 @@ class executionModel extends model
                 $burn->estimate  -= (int)$finishedEstimate->estimate;
             }
 
+            $burn->product = 0;
+            $burn->task    = 0;
             if(isset($storyPoints[$executionID])) $burn->storyPoint = $storyPoints[$executionID]->storyPoint;
 
             $this->dao->replace(TABLE_BURN)->data($burn)->exec();
