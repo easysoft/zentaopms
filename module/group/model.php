@@ -439,6 +439,7 @@ class groupModel extends model
             $depentedPrivs = array();
             foreach($this->post->actions as $moduleName => $moduleActions)
             {
+                if(empty($moduleName) or empty($moduleActions)) continue;
                 $privIdList    = $this->dao->select('id')->from(TABLE_PRIV)->where('module')->eq($moduleName)->andWhere('method')->in($moduleActions)->fetchPairs();
                 $relationPrivs = $this->getPrivRelationsByIdList($privIdList, 'depend', 'idGroup');
                 $depentedPrivs = array_merge($depentedPrivs, array_keys(zget($relationPrivs, 'depend', array())));
