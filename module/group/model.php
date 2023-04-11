@@ -2100,7 +2100,7 @@ class groupModel extends model
             ->andWhere('t3.objectType')->eq('priv')
             ->andWhere('t2.edition')->like("%,{$this->config->edition},%")
             ->andWhere('t2.vision')->like("%,{$this->config->vision},%")
-            ->orderBy('t2.`order`_asc')
+            ->orderBy('t2.`order`_asc, t1.`type` desc')
             ->fetchAll('relationPriv');
 
         $privList = empty($type) ? array('depend' => array(), 'recommend' => array()) : array($type => array());
