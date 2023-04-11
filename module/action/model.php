@@ -1549,6 +1549,8 @@ class actionModel extends model
      */
     public function setObjectLink($action, $deptUsers, $shadowProducts, $project = null)
     {
+        $this->app->loadConfig('doc');
+
         $action->objectLink  = '';
         $action->objectLabel = zget($this->lang->action->objectTypes, $action->objectLabel);
 
@@ -1678,9 +1680,10 @@ class actionModel extends model
                     else
                     {
                         $method = 'tablecontents';
-                        if($docLib->type == 'product') $method = 'productspace';
-                        if(in_array($docLib->type, array('project', 'execution'))) $method = 'projectspace';
-                        $params = $method == 'tablecontents' ? sprintf($vars, $docLib->type, $docLib->objectID, $action->objectID, $appendLib) : "objectID={$docLib->objectID}&libID={$action->objectID}";
+                        if(isset($this->config->doc->spaceMethod[$docLib->type])) $method = $this->config->doc->spaceMethod[$docLib->type];
+                        if($method == 'myspace') $params = "type=mine&libID={$action->objectID}";
+                        if($method == 'tablecontents') $params = sprintf($vars, $docLib->type, $docLib->objectID, $action->objectID, $appendLib);
+                        if(!in_array($method, array('myspace', 'tablecontents'))) $params = "objectID={$docLib->objectID}&libID={$action->objectID}";
                         $action->objectLink = helper::createLink('doc', $method, $params);
                     }
                 }
