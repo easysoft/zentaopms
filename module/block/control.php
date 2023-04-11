@@ -2042,6 +2042,7 @@ class block extends control
      */
     public function printDocStatisticBlock()
     {
+        $this->view->statistic = $this->loadModel('doc')->getStatisticInfo();
     }
 
     /**

@@ -145,6 +145,11 @@ $lang->doc->tableContents = 'Directory';
 $lang->doc->addCatalog    = 'Add Catalog';
 $lang->doc->editCatalog   = 'Edit Catalog';
 $lang->doc->deleteCatalog = 'Delete Catalog';
+$lang->doc->docStatistic  = 'Statistic';
+$lang->doc->docCreated    = 'Created Documents';
+$lang->doc->docEdited     = 'Edited Documents';
+$lang->doc->docViews      = 'Page Views';
+$lang->doc->docCollects   = 'Collection';
 
 /* Methods list */
 $lang->doc->index            = 'Dashboard';
