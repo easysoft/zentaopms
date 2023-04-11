@@ -26,8 +26,6 @@
                 </ul>
               </div>
             </div>
-            <div class="user"></div>
-            <div class="time"></div>
           </div>
           <div class="actions">
             <span class='text'><?php echo$lang->doc->diff?></span>
@@ -75,13 +73,16 @@
         </div>
         <div class="">
           <div class="detail-content article-content table-col">
-            <?php if($doc->keywords):?>
-            <p class='keywords'>
-              <?php foreach($doc->keywords as $keywords):?>
-              <?php if($keywords) echo "<span class='label label-outline'>$keywords</span>";?>
-              <?php endforeach;?>
-            </p>
-            <?php endif;?>
+            <div class='info'>
+              <span class='user-time text-muted'><i class='icon icon-account'></i> <?php echo zget($users, $doc->editedBy) . " {$lang->colon} " . substr($doc->editedDate, 0, 10) . (common::checkNotCN() ? ' ' : '') . $lang->doc->update;?></span>
+              <?php if($doc->keywords):?>
+              <span class='keywords'>
+                <?php foreach($doc->keywords as $keywords):?>
+                <?php if($keywords) echo "<span class='label label-outline' title='{$keywords}'>{$keywords}</span>";?>
+                <?php endforeach;?>
+              </span>
+              <?php endif;?>
+            </div>
             <?php
             if($doc->type == 'url' and $autoloadPage)
             {

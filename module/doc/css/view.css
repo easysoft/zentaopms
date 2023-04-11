@@ -1,7 +1,7 @@
 .h-full-adjust {overflow-y: auto; height: calc(100vh - 120px);}
 .main-col .block-files .panel-heading {padding-right: 20px;}
 .main-col .block-files .panel-heading .panel-title {height: 35px; line-height: 30px;}
-.main-col .doc-title {display: flex; font-size: 16px; margin-bottom: 15px;}
+.main-col .doc-title {display: flex; font-size: 16px; margin-bottom: 10px;}
 .main-col .doc-title .title {margin-right: 10px; line-height: 32px; font-size: 25px;}
 .main-col .doc-title .info {flex: 1 1 0;}
 .main-col .doc-title .version a {font-size: 13px; color: #8c8c8c;}
@@ -9,7 +9,6 @@
 .main-col .doc-title .actions a + a {margin-left: 0px;}
 .main-col .doc-title .actions i {font-size: 15px; color: #8c8c8c;}
 #content .title {max-width: 54%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;}
-#content .detail-content {padding-left: 10px;}
 #mainContent .scrollbar-hover {max-height: 2000px; overflow: scroll;}
 #content .editor-preview {background: #fff}
 #content .CodeMirror{border: none}
@@ -20,7 +19,9 @@
 .hide-sidebar #sidebar>.sidebar-toggle>.icon:before {content: "\e314";}
 .detail.empty {line-height: 200px;}
 .main-col iframe {min-height: 380px;}
-.article-content .keywords {margin-bottom: 15px;}
+.article-content .info {margin-bottom: 15px; width:100%; overflow:hidden;}
+.article-content .info .user-time{margin-right: 16px}
+.article-content .info .keywords .label {padding-right:8px; padding-left:8px; color:#18A6FD; border-color:rgba(24, 166, 253, 0.25); height:22px; line-height:14px; margin-right:4px;}
 
 .article-content {width: 100%; display: inline-block;}
 /* .outline-toggle i.icon-angle-right, i.icon-angle-left {width: 18px; height: 18px; border-radius: 50%; position: absolute; padding-left: 2px; padding-top: 1px;} */
