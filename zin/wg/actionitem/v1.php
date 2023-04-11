@@ -51,8 +51,8 @@ class actionItem extends wg
     {
         $dropdown = new dropdown
         (
-            $this->props->skip('tagName,items,class,data-id,data-app,type,name,outerTag,outerProps,props,trigger,menuProps,url'),
-            set($this->props),
+            set($this->props->skip(array_keys(actionItem::getDefinedProps()))),
+            set($this->prop('props')),
             $this->children()
         );
         return $dropdown;
@@ -90,6 +90,7 @@ class actionItem extends wg
             set($tagName === 'a' ? array('href' => $url, 'target' => $target) : array('data-url' => $url, 'data-target' => $target)),
             setClass(array('active' => $active, 'disabled' => $disabled)),
             set($this->props->skip(array_keys(actionItem::getDefinedProps()))),
+            set($this->prop('props')),
             $icon ? icon($icon) : NULL,
             $text,
             $badge,
