@@ -407,8 +407,6 @@ class wg
         return $this->prop('id');
     }
 
-    protected function onCreated() {}
-
     public function toJsonData()
     {
         $data = array();
