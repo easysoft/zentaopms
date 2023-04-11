@@ -3350,4 +3350,22 @@ class docModel extends model
 
         return $otherEditing;
     }
+
+    /**
+     * Remove editing.
+     *
+     * @param  object  $doc
+     * @access public
+     * @return void
+     */
+    public function removeEditing($doc)
+    {
+        if(empty($doc->id) or empty($doc->editingDate)) return false;
+        $account     = $this->app->user->account;
+        $editingDate = json_decode($doc->editingDate, true);
+        if(!isset($editingDate[$account])) return false;
+
+        unset($editingDate[$account]);
+        $this->dao->update(TABLE_DOC)->set('editingDate')->eq(json_encode($editingDate))->where('id')->eq($doc->id)->exec();
+    }
 }

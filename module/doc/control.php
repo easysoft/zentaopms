@@ -1148,6 +1148,7 @@ class doc extends control
             if(!$doc) return print(js::error($this->lang->notFound));
 
             $this->doc->createAction($docID, 'view');
+            $this->doc->removeEditing($doc);
             if($doc->keywords)
             {
                 $doc->keywords = str_replace("，", ',', $doc->keywords);
