@@ -93,7 +93,14 @@ class doc extends control
         $docs = array();
         if($type == 'mine')
         {
-            $docs = $browseType == 'bysearch' ? $this->doc->getDocsBySearch('mine', 0, $libID, $queryID, $orderBy, $pager) : $this->doc->getDocs($libID, $moduleID, $browseType, $orderBy, $pager);
+            if($browseType != 'bysearch' and !$libID)
+            {
+                $docs = array();
+            }
+            else
+            {
+                $docs = $browseType == 'bysearch' ? $this->doc->getDocsBySearch('mine', 0, $libID, $queryID, $orderBy, $pager) : $this->doc->getDocs($libID, $moduleID, $browseType, $orderBy, $pager);
+            }
         }
         elseif($type == 'view' or $type == 'collect' or $type == 'createdby')
         {
