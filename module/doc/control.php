@@ -375,7 +375,7 @@ class doc extends control
 
             $fileAction = '';
             if(!empty($files)) $fileAction = $this->lang->addFiles . join(',', $files) . "\n";
-            $actionType = $_POST['status'] == 'draft' ? 'saveDraft' : 'releaseDoc';
+            $actionType = $_POST['status'] == 'draft' ? 'savedDraft' : 'releasedDoc';
             $this->action->create('doc', $docID, $actionType, $fileAction);
 
             if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $docID));
@@ -539,8 +539,8 @@ class doc extends control
                 if(!empty($changes))
                 {
                     $newType = $_POST['status'];
-                    if($doc->status == 'draft' and $newType == 'draft') $action = 'saveDraft';
-                    if($doc->status == 'draft' and $newType == 'normal') $action = 'releaseDoc';
+                    if($doc->status == 'draft' and $newType == 'draft') $action = 'savedDraft';
+                    if($doc->status == 'draft' and $newType == 'normal') $action = 'releasedDoc';
                     if($doc->status == 'normal' and $newType == 'normal') $action = 'Edited';
                 }
                 $fileAction = '';
@@ -767,10 +767,12 @@ class doc extends control
         if($action)
         {
             $this->doc->deleteAction($action->id);
+            $this->action->create('doc', $objectID, 'uncollected');
         }
         else
         {
             $this->doc->createAction($objectID, 'collect');
+            $this->action->create('doc', $objectID, 'collected');
         }
 
         return $this->send(array('status' => $action ? 'no' : 'yes'));

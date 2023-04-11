@@ -273,6 +273,10 @@ $lang->action->desc->unlinkbug   = '$date, 由 <strong>$actor</strong> 从计划
 $lang->action->desc->saveddraft  = '$date, 由 <strong>$actor</strong> 存为草稿 <strong>$extra</strong>。' . "\n";
 $lang->action->desc->releaseddoc = '$date, 由 <strong>$actor</strong> 发布 <strong>$extra</strong>。' . "\n";
 
+/* 用来描述文档收藏或取消收藏时的历史操作记录。*/
+$lang->action->desc->collected   = '$date, 由 <strong>$actor</strong> 收藏 <strong>$extra</strong>。' . "\n";
+$lang->action->desc->uncollected = '$date, 由 <strong>$actor</strong> 取消收藏 <strong>$extra</strong>。' . "\n";
+
 /* 用来显示动态信息。*/
 $lang->action->label                        = new stdclass();
 $lang->action->label->install               = '安装了';
@@ -434,6 +438,8 @@ $lang->action->label->editsnapshot          = '编辑了快照';
 $lang->action->label->deletesnapshot        = '编辑了快照';
 $lang->action->label->saveddraft            = '存为草稿';
 $lang->action->label->releaseddoc           = '发布了';
+$lang->action->label->collected             = '收藏了';
+$lang->action->label->uncollected           = '取消收藏了';
 
 /* 动态信息按照对象分组 */
 $lang->action->dynamicAction                    = new stdclass();
