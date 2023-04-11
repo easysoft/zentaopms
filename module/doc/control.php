@@ -375,7 +375,8 @@ class doc extends control
 
             $fileAction = '';
             if(!empty($files)) $fileAction = $this->lang->addFiles . join(',', $files) . "\n";
-            $this->action->create('doc', $docID, 'Created', $fileAction);
+            $actionType = $_POST['status'] == 'draft' ? 'saveDraft' : 'releaseDoc';
+            $this->action->create('doc', $docID, $actionType, $fileAction);
 
             if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $docID));
             $objectID = zget($lib, $lib->type, 0);
@@ -521,6 +522,8 @@ class doc extends control
      */
     public function edit($docID, $comment = false, $objectType = '', $objectID = 0, $libID = 0, $from = 'edit')
     {
+        $doc = $this->doc->getById($docID);
+
         if(!empty($_POST))
         {
             if($comment == false || $comment == 'false')
@@ -532,7 +535,14 @@ class doc extends control
             }
             if($this->post->comment != '' or !empty($changes) or !empty($files))
             {
-                $action     = !empty($changes) ? 'Edited' : 'Commented';
+                $action = 'Commented';
+                if(!empty($changes))
+                {
+                    $newType = $_POST['status'];
+                    if($doc->status == 'draft' and $newType == 'draft') $action = 'saveDraft';
+                    if($doc->status == 'draft' and $newType == 'normal') $action = 'releaseDoc';
+                    if($doc->status == 'normal' and $newType == 'normal') $action = 'Edited';
+                }
                 $fileAction = '';
                 if(!empty($files)) $fileAction = $this->lang->addFiles . join(',', $files) . "\n";
                 $actionID = $this->action->create('doc', $docID, $action, $fileAction . $this->post->comment);
@@ -554,7 +564,6 @@ class doc extends control
         }
 
         /* Get doc and set menu. */
-        $doc   = $this->doc->getById($docID);
         $libID = $doc->lib;
 
         if($doc->contentType == 'markdown') $this->config->doc->markdown->edit = array('id' => 'content', 'tools' => 'toolbar');

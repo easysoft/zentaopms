@@ -269,6 +269,10 @@ $lang->action->desc->linkbug     = '$date, <strong>$actor</strong> link bugs <st
 $lang->action->desc->unlinkstory = '$date, <strong>$actor</strong> remove stories <strong>$extra</strong> from plan.' . "\n";
 $lang->action->desc->unlinkbug   = '$date, <strong>$actor</strong> remove bugs <strong>$extra</strong> from plan.' . "\n";
 
+/* Describes the history of operations when a document is saved as a draft or released. */
+$lang->action->desc->saveddraft  = '$date, 由 <strong>$actor</strong> save draft <strong>$extra</strong>。' . "\n";
+$lang->action->desc->releaseddoc = '$date, 由 <strong>$actor</strong> released <strong>$extra</strong>。' . "\n";
+
 /* Used to display dynamic information. */
 $lang->action->label                        = new stdclass();
 $lang->action->label->install               = 'install ';
@@ -428,6 +432,8 @@ $lang->action->label->createdsnapshot       = 'create snapshot';
 $lang->action->label->restoredsnapshot      = 'create snapshot';
 $lang->action->label->editsnapshot          = 'edit snapshot';
 $lang->action->label->deletesnapshot        = 'deleted snapshot';
+$lang->action->label->saveddraft            = 'save draft';
+$lang->action->label->releaseddoc           = 'released';
 
 /* Dynamic information is grouped by object. */
 $lang->action->dynamicAction                    = new stdclass;
