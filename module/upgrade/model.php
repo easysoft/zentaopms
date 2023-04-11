@@ -2036,8 +2036,7 @@ class upgradeModel extends model
             $sqlToLower = strtolower($sql);
             if(strpos($sqlToLower, 'fulltext') !== false and strpos($sqlToLower, 'innodb') !== false and $mysqlVersion < 5.6)
             {
-                static::$errors[] = $this->lang->install->errorEngineInnodb;
-                return false;
+                $sql = str_replace('ENGINE=InnoDB', 'ENGINE=MyISAM', $sql);
             }
 
             $sql = str_replace('zt_', $this->config->db->prefix, $sql);

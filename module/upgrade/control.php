@@ -111,11 +111,13 @@ class upgrade extends control
     public function confirm()
     {
         if(strpos($this->post->fromVersion, 'lite') !== false) $this->post->fromVersion = $this->config->upgrade->liteVersion[$this->post->fromVersion];
+        $confirmSql = $this->upgrade->getConfirm($this->post->fromVersion);
+        $confirmSql = str_replace('ENGINE=InnoDB', 'ENGINE=MyISAM', $confirmSql);
 
         $this->session->set('step', '');
         $this->view->title       = $this->lang->upgrade->confirm;
         $this->view->position[]  = $this->lang->upgrade->common;
-        $this->view->confirm     = $this->upgrade->getConfirm($this->post->fromVersion);
+        $this->view->confirm     = $confirmSql;
         $this->view->fromVersion = $this->post->fromVersion;
         /* When sql is empty then skip it. */
         if(empty($this->view->confirm)) $this->locate(inlink('execute', "fromVersion={$this->post->fromVersion}"));
@@ -865,6 +867,7 @@ class upgrade extends control
     {
         set_time_limit(0);
         $alterSQL = $this->upgrade->checkConsistency();
+        $alterSQL = str_replace('ENGINE=InnoDB', 'ENGINE=MyISAM', $alterSQL);
         if(empty($alterSQL))
         {
             if(!$netConnect) $this->locate(inlink('selectVersion'));
