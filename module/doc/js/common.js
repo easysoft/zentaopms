@@ -147,7 +147,6 @@ $(document).ready(function()
         }
     });
 
-
     'use strict';
 
     var NAME = 'zui.splitRow'; // model name.

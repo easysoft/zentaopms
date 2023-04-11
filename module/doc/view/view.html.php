@@ -27,7 +27,7 @@
   <?php echo html::backButton("<i class='icon icon-back icon-sm'></i> " . $lang->goback, "id='backBtn'", 'btn btn-link')?>
   </div>
   <div id="crumbs" class="crumbs">
-    <?php echo implode(' > ', $crumbs);?>
+    <?php echo implode('<div class="separator"> > <div>', $crumbs);?>
   </div>
   <div class="btn-toolbar pull-right">
     <?php
