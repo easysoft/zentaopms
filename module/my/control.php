@@ -1614,7 +1614,7 @@ EOF;
 
         $date    = empty($date) ? '' : date('Y-m-d', $date);
         $actions = $this->loadModel('action')->getDynamic($this->app->user->account, $type, $orderBy, $pager, 'all', 'all', 'all', $date, $direction);
-        if(empty($recTotal)) $originTotal = $pager->recTotal;
+        if(empty($originTotal)) $originTotal = $pager->recTotal;
 
         /* Assign. */
         $this->view->type        = $type;

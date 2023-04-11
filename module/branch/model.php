@@ -105,6 +105,8 @@ class branchModel extends model
      */
     public function getPairs($productID, $params = '', $executionID = 0, $mergedBranches = '')
     {
+        if(!$productID) $productID = 0;
+
         $executionBranches = array();
         if($executionID)
         {

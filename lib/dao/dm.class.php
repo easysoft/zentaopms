@@ -123,12 +123,17 @@ class dm extends dao
     private function formatIfFunction($field)
     {
         preg_match('/if\(.+\)+/i', $field, $matches);
+
         $if = $matches[0];
         if(substr_count($if, '(') == 1)
         {
             $pos = strpos($if, ')');
             $if  = substr($if, 0, $pos+1);
         }
+
+        /* fix sum(if(..., 1, 0)) , count(if(..., 1, 0)) */
+        if(substr($if, strlen($if)-2) == '))' and (stripos($field, 'sum(') == 0 or stripos($field, 'count(') == 0)) $if = substr($if, 0, strlen($if)-1);
+
         $parts = explode(',', substr($if, 3, strlen($if)-4)); // remove 'if(' and ')'
         $case  = 'CASE WHEN ' . implode(',', array_slice($parts, 0, count($parts)-2)) . ' THEN ' . $parts[count($parts)-2] . ' ELSE ' . $parts[count($parts)-1] . ' END';
         $field = str_ireplace($if, $case, $field);
@@ -146,7 +151,7 @@ class dm extends dao
      * @access public
      * @return static|sql the sql object.
      */
-    public function where($arg1, $arg2 = null, $arg3 = null)
+    public function where($arg1 = '', $arg2 = null, $arg3 = null)
     {
         $arg1 = $this->formatWhere($arg1);
         return parent::where($arg1, $arg2, $arg3);
@@ -215,6 +220,20 @@ class dm extends dao
 
         $groupBy = implode(',', $groups);
         return parent::groupBy($groupBy);
+    }
+
+    /**
+     * 创建ORDER BY部分。
+     * Create the order by part.
+     *
+     * @param  string $order
+     * @access public
+     * @return static|sql the sql object.
+     */
+    public function orderBy($order)
+    {
+        $order = str_replace('"', '', $order);
+        return parent::orderBy($order);
     }
 
     /**

@@ -238,14 +238,13 @@ class projectModel extends model
             ->groupBy('t1.root')
             ->fetchAll('root');
 
-        $condition = 't2.project as project';
-        $estimates = $this->dao->select("$condition, sum(estimate) as estimate")->from(TABLE_TASK)->alias('t1')
+        $estimates = $this->dao->select("t2.project as project, sum(estimate) as estimate")->from(TABLE_TASK)->alias('t1')
             ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.execution = t2.id')
             ->where('t1.parent')->lt(1)
             ->andWhere('t2.project')->in($projectIdList)
             ->andWhere('t1.deleted')->eq(0)
             ->andWhere('t2.deleted')->eq(0)
-            ->groupBy('project')
+            ->groupBy('t2.project')
             ->fetchAll('project');
 
         $this->app->loadClass('pager', $static = true);
@@ -786,7 +785,7 @@ class projectModel extends model
         $finishedCount = $this->dao->select('count(id) as taskCount')->from(TABLE_TASK)->where('execution')->in(array_keys($executions))->andWhere('finishedBy')->ne('')->andWhere('deleted')->eq(0)->fetch('taskCount');
         $delayedCount  = $this->dao->select('count(id) as count')->from(TABLE_TASK)
             ->where('execution')->in(array_keys($executions))
-            ->andWhere('deadline')->ne('0000-00-00')
+            ->andWhere('deadline')->notZeroDate()
             ->andWhere('deadline')->lt(helper::today())
             ->andWhere('status')->in('wait,doing')
             ->andWhere('deleted')->eq(0)
@@ -1164,7 +1163,7 @@ class projectModel extends model
            ->leftJoin(TABLE_PROJECTSTORY)->alias('t2')->on('t1.id=t2.story')
            ->where('t1.deleted')->eq(0)
            ->beginIF($projectID)->andWhere('t2.project')->eq($projectID)->fi()
-           ->groupBy('product, branch')
+           ->groupBy('t2.product, t2.branch')
            ->fetchGroup('product', 'branch');
     }
 
@@ -1412,13 +1411,15 @@ class projectModel extends model
             }
 
             $lib = new stdclass();
-            $lib->project = $projectID;
-            $lib->name    = $this->lang->doclib->main['project'];
-            $lib->type    = 'project';
-            $lib->main    = '1';
-            $lib->acl     = 'default';
-            $lib->users   = ',' . implode(',', array_filter($authorizedUsers)) . ',';
-            $lib->vision  = zget($project, 'vision', 'rnd');
+            $lib->project   = $projectID;
+            $lib->name      = $this->lang->doclib->main['project'];
+            $lib->type      = 'project';
+            $lib->main      = '1';
+            $lib->acl       = 'default';
+            $lib->users     = ',' . implode(',', array_filter($authorizedUsers)) . ',';
+            $lib->vision    = zget($project, 'vision', 'rnd');
+            $lib->addedBy   = $this->app->user->account;
+            $lib->addedDate = helper::now();
             $this->dao->insert(TABLE_DOCLIB)->data($lib)->exec();
 
             if($project->hasProduct) $this->updateProducts($projectID);
@@ -1433,9 +1434,14 @@ class projectModel extends model
                 $product->program        = $project->parent ? current(array_filter(explode(',', $program->path))) : 0;
                 $product->acl            = $project->acl == 'open' ? 'open' : 'private';
                 $product->PO             = $project->PM;
+                $product->QD             = '';
+                $product->RD             = '';
+                $product->whitelist      = '';
                 $product->createdBy      = $this->app->user->account;
                 $product->createdDate    = helper::now();
                 $product->status         = 'normal';
+                $product->line           = 0;
+                $product->desc           = '';
                 $product->createdVersion = $this->config->version;
                 $product->vision         = zget($project, 'vision', 'rnd');
 
@@ -1449,6 +1455,8 @@ class projectModel extends model
                 $projectProduct = new stdclass();
                 $projectProduct->project = $projectID;
                 $projectProduct->product = $productID;
+                $projectProduct->branch  = 0;
+                $projectProduct->plan    = 0;
 
                 $this->dao->insert(TABLE_PROJECTPRODUCT)->data($projectProduct)->exec();
 
@@ -1457,11 +1465,13 @@ class projectModel extends model
                     /* Create doc lib. */
                     $this->app->loadLang('doc');
                     $lib = new stdclass();
-                    $lib->product = $productID;
-                    $lib->name    = $this->lang->doclib->main['product'];
-                    $lib->type    = 'product';
-                    $lib->main    = '1';
-                    $lib->acl     = 'default';
+                    $lib->product   = $productID;
+                    $lib->name      = $this->lang->doclib->main['product'];
+                    $lib->type      = 'product';
+                    $lib->main      = '1';
+                    $lib->acl       = 'default';
+                    $lib->addedBy   = $this->app->user->account;
+                    $lib->addedDate = helper::now();
                     $this->dao->insert(TABLE_DOCLIB)->data($lib)->exec();
                 }
             }
@@ -1812,7 +1822,7 @@ class projectModel extends model
             ->setDefault('lastEditedBy', $this->app->user->account)
             ->setDefault('lastEditedDate', $now)
             ->stripTags($editorIdList, $this->config->allowedTags)
-            ->remove('comment')->get();
+            ->remove('id,comment')->get();
 
         $project = $this->loadModel('file')->processImgURL($project, $editorIdList, $this->post->uid);
         $this->dao->update(TABLE_PROJECT)->data($project)

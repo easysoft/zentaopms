@@ -15,10 +15,17 @@ body {margin-bottom: 25px;}
 #docListForm th.c-id {width: 72px;}
 #docListForm th.c-user {width: 80px;}
 #docListForm th.c-actions {width: 84px; padding-left: 15px;}
-#docListForm .table .c-name > .doc-title {display: inline-block; max-width: 90%; overflow: hidden; background: transparent; padding-right:0px;}
+#docListForm .c-module, #docListForm .c-object {width: 120px; overflow: hidden; white-space: nowrap; text-overflow: clip;}
+#docListForm .table .c-name > .doc-title {display: inline-block; max-width: calc(100% - 80px); overflow: hidden; background: transparent; padding-right:0px;}
+#docListForm .table .c-name > span.doc-title {line-height: 0; vertical-align: inherit;}
 #docListForm .table .c-name > .draft {background-color:rgba(129, 102, 238, 0.12); color:#8166EE;}
 #docListForm .table .c-name > .ajaxCollect {float: right; position: relative; right: 10px; top: 0px;}
 #docListForm table.table > thead > tr {height: 32px;}
+#docListForm .checkbox-primary {line-height: 16px;}
+#docListForm table .checkbox-primary {top: -2px;}
+#docListForm .checkbox-primary > label {height: 16px; line-height: 16px; padding-left: 16px;}
+#docListForm .checkbox-primary > label:before {left: -1px; font-size: 10px;}
+#docListForm .checkbox-primary > label:after {width: 12px; height: 12px;}
 </style>
 <?php if(common::checkNotCN()):?>
 <style>
@@ -55,8 +62,11 @@ body {margin-bottom: 25px;}
             <?php common::printOrderLink('id', $orderBy, $vars, $lang->idAB);?>
           </th>
           <th class="c-name"><?php common::printOrderLink('title', $orderBy, $vars, $lang->doc->title);?></th>
-          <th class="c-module"><?php common::printOrderLink('module', $orderBy, $vars, $lang->doc->position);?></th>
           <?php if($type != 'mine'):?>
+          <th class='c-object'><?php echo $lang->doc->object;?></th>
+          <th class="c-module"><?php common::printOrderLink('module', $orderBy, $vars, $lang->doc->position);?></th>
+          <?php endif;?>
+          <?php if(!in_array($type, array('mine', 'createdby'))):?>
           <th class="c-user"><?php common::printOrderLink('addedBy', $orderBy, $vars, $lang->doc->addedByAB);?></th>
           <?php endif;?>
           <th class="c-date"><?php common::printOrderLink('addedDate', $orderBy, $vars, $lang->doc->addedDate);?></th>
@@ -101,8 +111,32 @@ body {margin-bottom: 25px;}
             <a data-url="<?php echo $this->createLink('doc', 'collect', "objectID=$doc->id&objectType=doc");?>" title="<?php echo $collectTitle;?>" class='btn btn-link ajaxCollect'><?php echo html::image("static/svg/{$star}.svg", "class='$star'");?></a>
           <?php endif;?>
           </td>
-          <td class="c-module"><?php echo $doc->moduleName;?></td>
           <?php if($type != 'mine'):?>
+          <td class="c-object" title='<?php echo $doc->objectName;?>'>
+            <?php $objectIcon = zget($config->doc->objectIconList, $doc->objectType);?>
+            <?php echo "<i class='icon $objectIcon'></i> " . $doc->objectName;?>
+          </td>
+          <td class="c-module">
+            <?php
+            $moduleDivide = $doc->moduleName ? ' > ' : '';
+            $moduleName   = $doc->libName . $moduleDivide . $doc->moduleName;
+            $spaceMethod  = zget($config->doc->spaceMethod, $doc->objectType);
+            $spaceParams  = "libID={$doc->lib}&moduleID={$doc->module}";
+            if(in_array($doc->objectType, array('product', 'project', 'execution', 'custom'))) $spaceParams = "objectID={$doc->objectID}&$spaceParams";
+            if(in_array($doc->objectType, array('mine', 'custom'))) $spaceParams = "type={$doc->objectType}&$spaceParams";
+
+            if(common::hasPriv('doc', $spaceMethod))
+            {
+                echo html::a($this->createLink('doc', $spaceMethod, $spaceParams), $moduleName, '', "title='$moduleName' data-app='{$this->app->tab}'");
+            }
+            else
+            {
+                echo "<span>$moduleName</span>";
+            }
+            ?>
+          </td>
+          <?php endif;?>
+          <?php if(!in_array($type, array('mine', 'createdby'))):?>
           <td class="c-user"><?php echo zget($users, $doc->addedBy);?></td>
           <?php endif;?>
           <td class="c-datetime"><?php echo formatTime($doc->addedDate, 'Y-m-d');?></td>

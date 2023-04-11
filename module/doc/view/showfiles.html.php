@@ -96,7 +96,8 @@
                 }
                 echo $commonTitle;
                 ?>
-                <a title='<?php if(isset($sourcePairs[$file->objectType][$file->objectID])) echo $sourcePairs[$file->objectType][$file->objectID];?>' href='<?php echo $this->createLink(($file->objectType == 'requirement' ? 'story' : $file->objectType), 'view', "objectID=$file->objectID", '', true);?>' class='iframe' data-width='90%'>
+                <?php $isonlybody = $file->objectType != 'doc';?>
+                <a title='<?php if(isset($sourcePairs[$file->objectType][$file->objectID])) echo $sourcePairs[$file->objectType][$file->objectID];?>' href='<?php echo $this->createLink(($file->objectType == 'requirement' ? 'story' : $file->objectType), 'view', "objectID=$file->objectID", '', $isonlybody);?>' class='<?php if($isonlybody) echo "iframe";?>' data-width='90%'>
                   <?php if(isset($sourcePairs[$file->objectType][$file->objectID])) echo $sourcePairs[$file->objectType][$file->objectID];?>
                 </a>
               </td>
@@ -159,7 +160,8 @@
                   }
                   echo $commonTitle;
                   ?>
-                  <a href='<?php echo $this->createLink(($file->objectType == 'requirement' ? 'story' : $file->objectType), 'view', "objectID=$file->objectID", '', true);?>' title='<?php if(isset($sourcePairs[$file->objectType][$file->objectID])) echo $sourcePairs[$file->objectType][$file->objectID];?>' class='iframe' data-width='90%'>
+                  <?php $isonlybody = $file->objectType != 'doc';?>
+                  <a href='<?php echo $this->createLink(($file->objectType == 'requirement' ? 'story' : $file->objectType), 'view', "objectID=$file->objectID", '', $isonlybody);?>' title='<?php if(isset($sourcePairs[$file->objectType][$file->objectID])) echo $sourcePairs[$file->objectType][$file->objectID];?>' class='<?php if($isonlybody) echo "iframe";?>' data-width='90%'>
                     <?php if(isset($sourcePairs[$file->objectType][$file->objectID])) echo $sourcePairs[$file->objectType][$file->objectID];?>
                   </a>
                 </div>

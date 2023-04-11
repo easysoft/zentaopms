@@ -8001,7 +8001,7 @@ class upgradeModel extends model
      */
     public function addDefaultModules4BI($type = 'report', $dimension = 1)
     {
-        $this->app->loadLang('report');
+        $this->app->loadLang('dimension');
 
         $group = new stdclass();
         $group->root  = $dimension;
@@ -8011,7 +8011,7 @@ class upgradeModel extends model
         $group->order = 10;
 
         $modules = array();
-        foreach($this->lang->crystal->moduleList as $module => $name)
+        foreach($this->lang->dimension->moduleList as $module => $name)
         {
             if(!$module || !$name) continue;
 
@@ -8214,6 +8214,7 @@ class upgradeModel extends model
         $dimension              = new stdclass();
         $dimension->name        = $this->lang->dimension->default;
         $dimension->code        = 'efficiency';
+        $dimension->desc        = '';
         $dimension->createdBy   = 'system';
         $dimension->createdDate = helper::now();
 

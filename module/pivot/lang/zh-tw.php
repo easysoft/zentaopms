@@ -101,8 +101,6 @@ $lang->pivot->testTaskName = '版本名稱';
 $lang->pivot->deadline     = '截止日期';
 
 $lang->pivot->deviationDesc = '按照已關閉執行統計偏差率（偏差率 = (總消耗 - 總預計) / 總預計），總預計為0時偏差率為n/a。';
-$lang->pivot->proVersion    = '<a href="https://api.zentao.net/goto.php?item=proversion&from=pivotpage" target="_blank">更多精彩，盡在專業版！</a>';
-$lang->pivot->proVersionEn  = '<a href="http://api.zentao.pm/goto.php?item=proversion&from=pivotpage" target="_blank">Try ZenTao Pro for more!</a>';
 $lang->pivot->workloadDesc  = '工作負載=用戶所有任務剩餘工時之和/選擇的時間天數*每天的工時。例如：起止時間設為1月1日~1月7日、工作日天數5天、每天工時8h，統計的是所有指派給該人員的未完成的任務，在5天內，每天8h的情況下的工作負載。';
 
 $lang->pivot->featureBar = array();

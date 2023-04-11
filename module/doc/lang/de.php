@@ -36,7 +36,7 @@ $lang->doclib->aclListB['open']    = 'Public';
 $lang->doclib->aclListB['custom']  = 'Custom';
 $lang->doclib->aclListB['private'] = 'Private';
 
-$lang->doclib->mySpaceAclList['private'] = "Private <span class='acl-tip'>(Only creators can access it)</span>";
+$lang->doclib->mySpaceAclList['private'] = "Private <span class='acl-tip text-muted'>(Only creators can access it)</span>";
 
 $lang->doclib->aclList = array();
 $lang->doclib->aclList['open']    = "Public <span class='acl-tip'>(Users who can access doccan access it)</span>";
@@ -122,6 +122,8 @@ $lang->doc->closed       = 'Closed';
 $lang->doc->saveDraft    = 'Save Draft';
 $lang->doc->defaultSave  = 'Default Save: ';
 $lang->doc->position     = 'Position';
+$lang->doc->person       = 'Person';
+$lang->doc->team         = 'Team';
 
 $lang->doc->moduleDoc     = 'Nach Modulen';
 $lang->doc->searchDoc     = 'Suche';
@@ -145,7 +147,7 @@ $lang->doc->editCatalog   = 'Edit Catalog';
 $lang->doc->deleteCatalog = 'Delete Catalog';
 
 /* Methods list */
-$lang->doc->index            = 'Home';
+$lang->doc->index            = 'Dashboard';
 $lang->doc->createAB         = 'Create';
 $lang->doc->create           = 'Dokument hinzufügen';
 $lang->doc->edit             = 'Bearbeiten';
@@ -196,7 +198,7 @@ $lang->doc->showDoc           = 'Whether to display documents';
 global $config;
 /* Query condition list. */
 $lang->doc->allProduct    = 'Alle' . $lang->productCommon;
-$lang->doc->allExecutions = 'Alle' . $lang->executionCommon;
+$lang->doc->allExecutions = 'Alle' . $lang->execution->common;
 $lang->doc->allProjects   = 'All' . $lang->projectCommon . 's';
 
 $lang->doc->libTypeList['product']   = $lang->productCommon . ' Bibliothek';

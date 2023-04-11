@@ -36,26 +36,14 @@ class doc extends control
      */
     public function index()
     {
-        $this->session->set('docList', $this->app->getURI(true), 'doc');
-        $this->app->loadClass('pager', $static = true);
-        $pager = new pager(0, 5, 1);
-
-        $this->view->title      = $this->lang->doc->common . $this->lang->colon . $this->lang->doc->index;
-        $this->view->position[] = $this->lang->doc->index;
-
-        $this->view->latestEditedDocs = $this->doc->getDocsByBrowseType('byediteddate', 0, 0, 'editedDate_desc, id_desc', $pager);
-        $this->view->myDocs           = $this->doc->getDocsByBrowseType('openedbyme', 0, 0, 'addedDate_desc', $pager);
-        $this->view->collectedDocs    = $this->doc->getDocsByBrowseType('collectedbyme', 0, 0, 'addedDate_desc', $pager);
-        $this->view->statisticInfo    = $this->doc->getStatisticInfo();
-        $this->view->users            = $this->user->getPairs('noletter');
-
+        $this->view->title = $this->lang->doc->common . $this->lang->colon . $this->lang->doc->index;
         $this->display();
     }
 
     /**
      * My space.
      *
-     * @param string $type mine
+     * @param string $type mine|view|collect|createdBy
      * @param int    $libID
      * @param int    $moduleID
      * @param string $browseType all|draft|bysearch
@@ -67,7 +55,7 @@ class doc extends control
      * @access public
      * @return void
      */
-    public function mySpace($type = 'mine', $libID = 0, $moduleID = 0, $browseType = 'all', $param = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function mySpace($type = 'mine', $libID = 0, $moduleID = 0, $browseType = 'all', $param = 0, $orderBy = 'status,id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         /* Save session, load module. */
         $uri = $this->app->getURI(true);
@@ -75,15 +63,17 @@ class doc extends control
         $this->session->set('productList', $uri, 'product');
         $this->session->set('executionList', $uri, 'execution');
         $this->session->set('projectList', $uri, 'project');
+        $this->session->set('objectName', '', 'doc');
         $this->loadModel('search');
 
         list($libs, $libID, $object, $objectID, $objectDropdown) = $this->doc->setMenuByType('mine', 0, $libID);
 
         /* Build the search form. */
         $browseType = strtolower($browseType);
+        $type       = strtolower($type);
         $queryID    = $browseType == 'bysearch' ? (int)$param : 0;
         $params     = "libID=$libID&moduleID=$moduleID&browseType=bySearch&param=myQueryID&orderBy=$orderBy";
-        if($this->app->rawMethod == 'mySpace') $param = "type=$type&" . $params;
+        if($this->app->rawMethod == 'myspace') $params = "type=$type&" . $params;
         $actionURL  = $this->createLink('doc', $this->app->rawMethod, $params);
 
         $this->doc->buildSearchForm($libID, $libs, $queryID, $actionURL, $type);
@@ -98,19 +88,29 @@ class doc extends control
         /* Append id for secend sort. */
         $sort = common::appendOrder($orderBy);
 
+        $docs = array();
+        if($type == 'mine')
+        {
+            $docs = $this->doc->getDocs($libID, $moduleID, $browseType, $orderBy, $pager);
+        }
+        elseif($type == 'view' or $type == 'collect' or $type == 'createdby')
+        {
+            $docs = $this->doc->getMineList($type, $browseType, $orderBy, $pager);
+        }
+
         $this->view->moduleID   = $moduleID;
-        $this->view->docs       = $this->doc->getDocsByBrowseType($browseType, $queryID, $moduleID, $sort, $pager);
+        $this->view->docs       = $docs;
         $this->view->users      = $this->user->getPairs('noletter');
         $this->view->orderBy    = $orderBy;
         $this->view->browseType = $browseType;
         $this->view->param      = $param;
         $this->view->libID      = $libID;
         $this->view->lib        = $this->doc->getLibById($libID);
-        $this->view->libTree    = $this->doc->getLibTree($type != 'mine' ? 0 : $libID, $libs, 'mine', 0);
+        $this->view->libTree    = $this->doc->getLibTree($type != 'mine' ? 0 : $libID, $libs, 'mine', $moduleID);
         $this->view->pager      = $pager;
         $this->view->type       = $type;
         $this->view->objectID   = 0;
-        $this->view->canExport  = 0;
+        $this->view->canExport  = ($this->config->edition != 'open' and common::hasPriv('doc', 'mine2export') and $type == 'mine');
         $this->view->libType    = 'lib';
 
         $this->display();
@@ -155,7 +155,8 @@ class doc extends control
         if($type == 'product') $objects = $this->product->getPairs();
         if($type == 'project')
         {
-            $objects = $this->project->getPairsByProgram('', 'all', false, 'order_asc', 'kanban');
+            $excludedModel = $this->config->vision == 'lite' ? '' : 'kanban';
+            $objects       = $this->project->getPairsByProgram('', 'all', false, 'order_asc', $excludedModel);
             if($this->app->tab == 'doc')
             {
                 $this->view->executionPairs = array(0 => '') + $this->execution->getPairs($objectID, 'all', 'multiple,leaf,noprefix');
@@ -409,7 +410,8 @@ class doc extends control
         $objects  = array();
         if($objectType == 'project')
         {
-            $objects = $this->project->getPairsByProgram('', 'all', false, 'order_asc', 'kanban');
+            $excludedModel = $this->config->vision == 'lite' ? '' : 'kanban';
+            $objects       = $this->project->getPairsByProgram('', 'all', false, 'order_asc', $excludedModel);
             if($lib->type == 'execution')
             {
                 $execution = $this->loadModel('execution')->getById($lib->execution);
@@ -427,6 +429,10 @@ class doc extends control
         elseif($objectType == 'product')
         {
             $objects = $this->loadModel('product')->getPairs();
+        }
+        elseif($objectType == 'mine')
+        {
+            $this->lang->doc->aclList = $this->lang->doclib->mySpaceAclList;
         }
         $moduleOptionMenu = $this->doc->getLibsOptionMenu($libs);
 
@@ -1202,24 +1208,45 @@ class doc extends control
         $doc       = $docID ? $doc : '';
         $spaceType = $objectType . 'Space';
 
-        $this->view->title          = isset($this->lang->doc->{$spaceType}) ? $this->lang->doc->{$spaceType} : $this->lang->doc->common;
-        $this->view->docID          = $docID;
-        $this->view->doc            = $doc;
-        $this->view->version        = $version;
-        $this->view->object         = $object;
-        $this->view->objectID       = $objectID;
-        $this->view->objectType     = $objectType;
-        $this->view->type           = $type;
-        $this->view->libID          = $libID;
-        $this->view->moduleID       = $doc->module;
-        $this->view->lib            = isset($libs[$libID]) ? $libs[$libID] : new stdclass();
-        $this->view->libs           = $this->doc->getLibsByObject($type, $objectID);
-        $this->view->canBeChanged   = common::canModify($type, $object); // Determines whether an object is editable.
-        $this->view->actions        = $docID ? $this->action->getList('doc', $docID) : array();
-        $this->view->users          = $this->user->getPairs('noclosed,noletter');
-        $this->view->autoloadPage   = $this->doc->checkAutoloadPage($doc);
-        $this->view->libTree        = $this->doc->getLibTree($libID, $libs, $type, $doc->module, $objectID);
-        $this->view->preAndNext     = $this->loadModel('common')->getPreAndNextObject('doc', $docID);
+        /* Crumbs links array. */
+        $methodName = in_array($type, array('product', 'project')) ? $objectType . 'Space' : 'tableContents';
+        $linkObject = zget($lib, $type, 0);
+        if($this->app->tab == 'execution' and $objectType == 'execution') $linkObject = zget($lib, 'execution', 0);
+
+        $linkParams = "objectID=$linkObject&libID=$lib->id";
+        if($this->app->tab == 'execution' or $objectType == 'custom')
+        {
+            $linkParams = "objectType=$objectType&$linkParams";
+            $methodName = 'tableContents';
+        }
+
+        $crumbs[] = html::a(inLink($methodName, $linkParams), html::image("static/svg/wiki-file-lib.svg") . $lib->name);
+
+        $moduleList = $this->loadModel('tree')->getParents($doc->module);
+        foreach($moduleList as $module)
+        {
+            $linkParams .= "&moduleID=$module->id";
+            $crumbs[]    = html::a(inLink($methodName, $linkParams), $module->name);
+        }
+
+        $this->view->title        = isset($this->lang->doc->{$spaceType}) ? $this->lang->doc->{$spaceType} : $this->lang->doc->common;
+        $this->view->docID        = $docID;
+        $this->view->doc          = $doc;
+        $this->view->version      = $version;
+        $this->view->object       = $object;
+        $this->view->objectID     = $objectID;
+        $this->view->objectType   = $objectType;
+        $this->view->type         = $type;
+        $this->view->libID        = $libID;
+        $this->view->crumbs       = $crumbs;
+        $this->view->lib          = isset($libs[$libID]) ? $libs[$libID] : new stdclass();
+        $this->view->libs         = $this->doc->getLibsByObject($type, $objectID);
+        $this->view->canBeChanged = common::canModify($type, $object); // Determines whether an object is editable.
+        $this->view->actions      = $docID ? $this->action->getList('doc', $docID) : array();
+        $this->view->users        = $this->user->getPairs('noclosed,noletter');
+        $this->view->autoloadPage = $this->doc->checkAutoloadPage($doc);
+        $this->view->libTree      = $this->doc->getLibTree($libID, $libs, $type, $doc->module, $objectID);
+        $this->view->preAndNext   = $this->loadModel('common')->getPreAndNextObject('doc', $docID);
         $this->view->objectDropdown = $objectDropdown;
 
         $this->display();
@@ -1295,6 +1322,9 @@ class doc extends control
         $apiObjectID   = $apiObjectType ? $objectID : 0;
         $apiLibs       = $apiObjectType ? $this->doc->getApiLibs(0, $apiObjectType, $apiObjectID) : array();
 
+        $canExport = $libType == 'api' ? common::hasPriv('api', 'export') : common::hasPriv('doc', $type . '2export');
+        if($this->config->edition == 'open') $canExport = false;
+
         $this->view->title          = $title;
         $this->view->type           = $type;
         $this->view->objectType     = $type;
@@ -1312,10 +1342,9 @@ class doc extends control
         $this->view->objectID       = $objectID;
         $this->view->orderBy        = $orderBy;
         $this->view->release        = $browseType == 'byrelease' ? $param : 0;
-        $this->view->canExport      = $libType == 'api' ? common::hasPriv('api', 'export') : common::hasPriv('doc', $type . '2export');
+        $this->view->canExport      = $canExport;
         $this->view->exportMethod   = $libType == 'api' ? 'export' : $type . '2export';
         $this->view->apiLibID       = key($apiLibs);
-
 
         $this->display();
     }
@@ -1388,8 +1417,13 @@ class doc extends control
 
         $spaceList = $this->lang->doc->spaceList;
         $typeList  = $this->lang->doc->types;
-        if(!common::hasPriv('doc', 'create')) unset($spaceList['mine'], $spaceList['custom'], $typeList['doc']);
-        if(!common::hasPriv('api', 'create')) unset($spaceList['api'], $typeList['api']);
+        if(!common::hasPriv('doc', 'create'))        unset($spaceList['mine'], $spaceList['custom'], $typeList['doc']);
+        if(!common::hasPriv('doc', 'mySpace'))       unset($spaceList['mine']);
+        if(!common::hasPriv('doc', 'productSpace'))  unset($spaceList['product']);
+        if(!common::hasPriv('doc', 'projectSpace'))  unset($spaceList['project']);
+        if(!common::hasPriv('doc', 'tableContents')) unset($spaceList['custom']);
+        if(!common::hasPriv('api', 'index'))         unset($spaceList['api']);
+        if(!common::hasPriv('api', 'create'))        unset($spaceList['api'], $typeList['api']);
 
         $products = $this->loadModel('product')->getPairs();
         $projects = $this->project->getPairsByProgram('', 'all', false, 'order_asc', 'kanban');

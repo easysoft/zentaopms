@@ -62,7 +62,7 @@ class bugModel extends model
         $bug = fixer::input('post')
             ->setDefault('openedBy', $this->app->user->account)
             ->setDefault('openedDate', $now)
-            ->setDefault('project,execution,story,task', 0)
+            ->setDefault('project,execution,story,task,duplicateBug,linkBug', 0)
             ->setDefault('openedBuild', '')
             ->setDefault('notifyEmail', '')
             ->setDefault('deadline', '0000-00-00')

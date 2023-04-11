@@ -62,6 +62,11 @@
           </div>
         </form>
         <?php endif;?>
+        <?php if($this->config->edition == 'open'):?>
+        <div class='text biz-version'>
+          <span class='text-important'><?php echo (!empty($config->isINT)) ? $lang->bizVersionINT : $lang->bizVersion;?></span>
+        </div>
+        <?php endif;?>
       </div>
     </div>
   </div>
@@ -82,7 +87,7 @@
           <div class='panel-title'>
             <?php echo $chart->name;?>
             <?php if(!empty($chart->desc)):?>
-            <a data-toggle='tooltip' data-placement='auto' title=<?php echo $chart->desc;?>><i class='icon-help'></i></a>
+            <a data-toggle='tooltip' data-placement='auto' title='<?php echo $chart->desc;?>'><i class='icon-help'></i></a>
             <?php endif;?>
           </div>
         </div>

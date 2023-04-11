@@ -36,7 +36,7 @@ $lang->doclib->aclListB['open']    = '公开';
 $lang->doclib->aclListB['custom']  = '自定义';
 $lang->doclib->aclListB['private'] = '私有';
 
-$lang->doclib->mySpaceAclList['private'] = "私有 <span class='acl-tip'>（仅创建者可访问）</span>";
+$lang->doclib->mySpaceAclList['private'] = "私有<span class='acl-tip text-muted'>（仅创建者可访问）</span>";
 
 $lang->doclib->aclList = array();
 $lang->doclib->aclList['open']    = "公开 <span class='acl-tip'>（有文档视图权限即可访问）</span>";
@@ -83,7 +83,7 @@ $lang->doc->url          = '文档URL';
 $lang->doc->files        = '附件';
 $lang->doc->addedBy      = '由谁添加';
 $lang->doc->addedByAB    = '创建者';
-$lang->doc->addedDate    = '创建时间';
+$lang->doc->addedDate    = '创建日期';
 $lang->doc->editedBy     = '修改者';
 $lang->doc->editedDate   = '修改日期';
 $lang->doc->lastEditedBy = '最后更新者';
@@ -122,6 +122,8 @@ $lang->doc->closed       = '已关闭';
 $lang->doc->saveDraft    = '存为草稿';
 $lang->doc->defaultSave  = '默认存入：';
 $lang->doc->position     = '所在位置';
+$lang->doc->person       = '个人';
+$lang->doc->team         = '团队';
 
 $lang->doc->moduleDoc     = '按模块浏览';
 $lang->doc->searchDoc     = '搜索';
@@ -145,7 +147,7 @@ $lang->doc->editCatalog   = '编辑目录';
 $lang->doc->deleteCatalog = '删除目录';
 
 /* 方法列表。*/
-$lang->doc->index            = '文档主页';
+$lang->doc->index            = '仪表盘';
 $lang->doc->createAB         = '创建';
 $lang->doc->create           = '创建文档';
 $lang->doc->edit             = '编辑文档';
@@ -196,7 +198,7 @@ $lang->doc->showDoc           = '是否显示文档';
 global $config;
 /* 查询条件列表 */
 $lang->doc->allProduct    = '所有' . $lang->productCommon;
-$lang->doc->allExecutions = '所有' . $lang->executionCommon;
+$lang->doc->allExecutions = '所有' . $lang->execution->common;
 $lang->doc->allProjects   = '所有' . $lang->projectCommon;
 
 $lang->doc->libTypeList['product']   = $lang->productCommon . '文档库';
