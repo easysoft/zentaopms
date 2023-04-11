@@ -3,12 +3,26 @@ const currentAppCode = window.name.substring(4);
 let currentAppUrl = defaultUrl;
 $.apps = $.extend({currentCode: currentAppCode}, parent.window.$.apps);
 
-function activeNavbar(activeID)
+const renderMap =
 {
-    const $active = $('#navbar .nav-item>a.active');
+    body:          (data) => $('body').html(data),
+    title:         (data) => document.title = data,
+    'main':        (data) => $('#main').html(data),
+    'featureBar':  (data) => $('#featureBar').html(data),
+    'pageCSS':     (data) => $('#pageCSS').html(data),
+    'configJS':    (data) => $('#configJS')[0].text = data,
+    'pageJS':      (data) => $('#pageJS').replaceWith(data),
+    activeFeature: (data) => activeNav(data, '#featureBar'),
+    activeMenu:    activeNav,
+};
+
+function activeNav(activeID, nav)
+{
+    const $nav    = $(nav || '#navbar');
+    const $active = $nav.find('.nav-item>a.active');
     if($active.data('id') === activeID) return;
     $active.removeClass('active');
-    $('#navbar .nav-item>a[data-id="' + activeID + '"]').addClass('active');
+    $nav.find('.nav-item>a[data-id="' + activeID + '"]').addClass('active');
 }
 
 function renderPage(list)
@@ -16,15 +30,8 @@ function renderPage(list)
     if(debug) console.log('[APP] ', 'render:', list);
     list.forEach((item) =>
     {
-        const name = item.name;
-        const data = item.data;
-        if(name === 'body')            $('body').html(data);
-        else if(name === 'title')      {document.title = data;}
-        else if(name === '#main')      $('#main').html(data);
-        else if(name === '#pageCSS')   $('#pageCSS').html(data);
-        else if(name === '#configJS')  $('#configJS')[0].text = data;
-        else if(name === '#pageJS')    $('#pageJS').replaceWith(data);
-        else if(name === 'activeMenu') activeNavbar(data);
+        const render = renderMap[item.name];
+        if(render) render(item.data);
     });
     $.apps.updateApp(currentAppCode, currentAppUrl, document.title);
 }
@@ -34,36 +41,46 @@ function loadTable(id)
 
 }
 
-window.loadPage = function loadPage(url, callback)
+window.fetchZinData = function fetchZinData(url, selector, options)
 {
-    url = url || defaultUrl;
-    if(debug) console.log('[APP] ', 'load:', url);
-    const selector = $('#main').length ? '#main>*,#pageCSS>*,#pageJS,#configJS>*,title>*,activeMenu()' : 'body>*,title>*';
+    options = typeof options === 'function' ? {success: options} : (options || {});
+
+    const target  = options.target || 'body';
+    const zinOptions = options.zinOptions;
     $.ajax(
     {
         url:      url,
         dataType: 'json',
-        headers:  {'X-ZIN-Options': JSON.stringify({selector: selector, type: 'list'})},
-        beforeSend: () =>
-        {
-            $('body').addClass('page-loading');
-        },
+        headers:  {'X-ZIN-Options': JSON.stringify($.extend({selector: selector, type: 'list'}, zinOptions))},
+        beforeSend: () => $(target).addClass('loading'),
         success: (data) =>
         {
-            currentAppUrl = url;
+            if(options.updateUrl !== false) currentAppUrl = url;
             renderPage(data);
-            // $(selector).html(data);
-            if(callback) callback(data);
+            $(document).trigger('pagerender.app');
+            if(options.success) options.success(data);
         },
-        error: () =>
+        error: (e) =>
         {
-            zui.Messager.show('ZIN: Load page failed from ' + url);
+            zui.Messager.show('ZIN: Fetch data failed from ' + url);
+            if(options.error) options.error(data);
         },
         complete: () =>
         {
-            $('body').removeClass('page-loading');
+            $(target).removeClass('loading');
+            if(options.complete) options.complete();
+            $(document).trigger('pageload.app');
         }
     });
+}
+
+
+window.loadPage = function loadPage(url)
+{
+    url = url || defaultUrl;
+    if(debug) console.log('[APP] ', 'load:', url);
+    const selector = $('#main').length ? '#main>*,#pageCSS>*,#pageJS,#configJS>*,title>*,activeMenu()' : 'body>*,title>*';
+    fetchZinData(url, selector);
 }
 
 function openPage(url)
