@@ -1436,10 +1436,13 @@ class project extends control
         $products = $this->product->getProducts($projectID, 'all', '', false);
         $products = array('' => '') + $products;
 
+
+        $fromModule = $this->app->tab == 'project' ? 'projectbuild' : 'project';
+        $fromMethod = $this->app->tab == 'project' ? 'browse' : 'build';
         /* Build the search form. */
         $type      = strtolower($type);
         $queryID   = ($type == 'bysearch') ? (int)$param : 0;
-        $actionURL = $this->createLink('project', 'build', "projectID=$projectID&type=bysearch&queryID=myQueryID");
+        $actionURL = $this->createLink($fromModule, $fromMethod, "projectID=$projectID&type=bysearch&queryID=myQueryID");
 
         $devel         = $project->model == 'waterfall' ? true : false;
         $executions    = $this->loadModel('execution')->getByProject($projectID, 'all', '', true, $devel);
@@ -1514,6 +1517,8 @@ class project extends control
         $this->view->buildPairs    = $this->loadModel('build')->getBuildPairs(0);
         $this->view->type          = $type;
         $this->view->showBranch    = $showBranch;
+        $this->view->fromModule    = $fromModule;
+        $this->view->fromMethod    = $fromMethod;
 
         $this->display();
     }

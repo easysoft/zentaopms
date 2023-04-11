@@ -681,7 +681,9 @@ class projectModel extends model
                 }
                 else
                 {
-                    $link = helper::createLink('project', 'build', "projectID=%s");
+                    $fromModule = $this->app->tab == 'project' ? 'projectbuild' : 'project';
+                    $fromMethod = $this->app->tab == 'project' ? 'browse' : 'build';
+                    $link = helper::createLink($fromModule, $fromMethod, "projectID=%s");
                 }
             }
             elseif($module == 'projectrelease')
