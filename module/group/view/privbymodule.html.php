@@ -55,3 +55,4 @@
 </div>
 <?php js::set('selectedPrivIdList', '[]');?>
 <?php js::set('relatedPrivData', '[]');?>
+<?php js::set('excludeIdList', '[]');?>

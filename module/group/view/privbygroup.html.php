@@ -203,6 +203,7 @@
 <?php js::set('menu', $menu);?>
 <?php js::set('relatedPrivData', json_encode($relatedPrivData));?>
 <?php js::set('selectedPrivIdList', $selectedPrivIdList);?>
+<?php js::set('excludeIdList', $excludePrivsIdList);?>
 <script>
 $(document).ready(function()
 {

@@ -2080,14 +2080,20 @@ class groupModel extends model
      * @access public
      * @return array
      */
-    public function getRelatedPrivs($privIdList, $type = '', $excludePrivs = array(), $appendIdList = '')
+    public function getRelatedPrivs($privIdList, $type = '', $excludePrivs = array(), $recommedSelect = array())
     {
         $relatedPrivs = $this->dao->select('t1.relationPriv,t1.type,t2.parent,t2.module,t2.method,t3.`key`,t3.value')->from(TABLE_PRIVRELATION)->alias('t1')
             ->leftJoin(TABLE_PRIV)->alias('t2')->on('t1.relationPriv=t2.id')
             ->leftJoin(TABLE_PRIVLANG)->alias('t3')->on('t1.relationPriv=t3.objectID')
-            ->where('(t1.priv')->in($privIdList)
-            ->orWhere('t1.relationPriv')->in($appendIdList)->markRight(1)
-            ->andWhere('t1.relationPriv')->notin($privIdList)
+            ->where('t1.priv')->in($privIdList)
+            ->andWhere('(t1.relationPriv')->notin($privIdList)
+
+            ->beginIF(!empty($recommedSelect))
+            ->orWhere('(t1.relationPriv')->in($recommedSelect)
+            ->andWhere('t1.type')->eq('recommend')->markRight(1)
+            ->fi()
+
+            ->markRight(1)
             ->beginIF(!empty($excludePrivs))->andWhere('t1.relationPriv')->notin($excludePrivs)->fi()
             ->beginIF(!empty($type))->andWhere('t1.type')->eq($type)->fi()
             ->andWhere('t3.objectType')->eq('priv')
@@ -2105,9 +2111,8 @@ class groupModel extends model
 
         foreach($relatedPrivs as $privID => $relatedPriv)
         {
-            $module = $relatedPriv->module;
+            $module = $managerList[$relatedPriv->parent]->type == 'package' ? $managerList[$managerList[$relatedPriv->parent]->parent]->code : $managerList[$relatedPriv->parent]->code;
             if(!isset($privList[$relatedPriv->type][$module])) $privList[$relatedPriv->type][$module] = array();
-            $moduleCode = $managerList[$relatedPriv->parent]->type == 'package' ? $managerList[$managerList[$relatedPriv->parent]->parent]->code : $managerList[$relatedPriv->parent]->code;
             $privList[$relatedPriv->type][$module]['title']      = $modulePairs[$module];
             $privList[$relatedPriv->type][$module]['id']         = $relatedPriv->parent;
             $privList[$relatedPriv->type][$module]['children'][] = array('title' => $relatedPriv->name, 'relationPriv' => $privID, 'parent' => $relatedPriv->parent, 'module' => $relatedPriv->module, 'method' => $relatedPriv->method);

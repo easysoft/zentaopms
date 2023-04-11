@@ -293,8 +293,9 @@ class group extends control
                 }
             }
 
-            $groupPrivsIdList = $this->group->getPrivsIdListByGroup($groupID);
-            $relatedPrivData  = $this->group->getRelatedPrivs($selectedPrivIdList, '', array_keys($groupPrivsIdList));
+            $groupPrivsIdList   = $this->group->getPrivsIdListByGroup($groupID);
+            $excludePrivsIdList = array_diff(array_keys($groupPrivsIdList), $selectedPrivIdList);
+            $relatedPrivData    = $this->group->getRelatedPrivs($selectedPrivIdList, '', $excludePrivsIdList);
 
             $this->view->privList           = $privList;
             $this->view->privMethods        = $privMethods;
@@ -302,6 +303,7 @@ class group extends control
             $this->view->privPackages       = $privPackages;
             $this->view->selectedPrivIdList = $selectedPrivIdList;
             $this->view->relatedPrivData    = $relatedPrivData;
+            $this->view->excludePrivsIdList = $excludePrivsIdList;
         }
         elseif($type == 'byModule')
         {
@@ -1071,8 +1073,10 @@ class group extends control
      */
     public function ajaxGetRelatedPrivs()
     {
-        $privIdList = zget($_POST, 'privList');
-        $privList   = $this->group->getRelatedPrivs($privIdList);
+        $privIdList     = zget($_POST, 'privList');
+        $recommedSelect = zget($_POST, 'recommedSelect');
+        $excludeIdList  = zget($_POST, 'excludeIdList');
+        $privList       = $this->group->getRelatedPrivs($privIdList, '', $excludeIdList, $recommedSelect);
         return print(json_encode($privList));
     }
 }
