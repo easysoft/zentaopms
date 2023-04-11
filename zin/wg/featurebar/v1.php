@@ -34,6 +34,8 @@ class featureBar extends wg
         $link         = $this->prop('link');
         $currentStory = $this->prop('currentStory', data('storyBrowseType', ''));
 
+        useData('activeFeature', $current);
+
         if(empty($link))
         {
             $linkParams = $this->prop('linkParams');
@@ -60,7 +62,8 @@ class featureBar extends wg
                     (
                         'text'   => $text,
                         'active' => $key == $currentStory,
-                        'url'    => ($callback instanceof \Closure) ? $callback($key, $text) : createLink($app->rawModule, $app->rawMethod)
+                        'url'    => ($callback instanceof \Closure) ? $callback($key, $text) : createLink($app->rawModule, $app->rawMethod),
+                        'props'  => ['data-id' => $key, 'data-load' => 'table']
                     );
                 }
 
@@ -71,7 +74,8 @@ class featureBar extends wg
                     'url'    => str_replace('{key}', $item->name, $link),
                     'badge'  => $isActive && !empty($recTotal) ? array('text' => $recTotal, 'class' => 'size-sm circle white') : NULL,
                     'type'   => 'dropdown',
-                    'items'  => $subItems
+                    'items'  => $subItems,
+                    'props'  => ['data-id' => $item->name, 'data-load' => 'table']
                 );
 
                 continue;
@@ -84,6 +88,7 @@ class featureBar extends wg
                 'active' => $isActive,
                 'url'    => str_replace('{key}', $item->name, $link),
                 'badge'  => $isActive && !empty($recTotal) ? array('text' => $recTotal, 'class' => 'size-sm circle white') : NULL,
+                'props'  => ['data-id' => $item->name, 'data-load' => 'table']
             );
         }
 
