@@ -11,6 +11,8 @@
 
 namespace zin;
 
+require_once dirname(__DIR__) . DS . 'utils' . DS . 'deep.func.php';
+
 class zin
 {
     public static $globalRenderList = array();
@@ -23,39 +25,12 @@ class zin
 
     public static function getData($namePath, $defaultValue = NULL)
     {
-        $names = explode('.', $namePath);
-        $data = &self::$data;
-        foreach($names as $name)
-        {
-            if(is_object($data))
-            {
-                if(!isset($data->$name)) return $defaultValue;
-                $data = &$data->$name;
-                continue;
-            }
-            if(!is_array($data) || !isset($data[$name])) return $defaultValue;
-            $data = &$data[$name];
-        }
-        return $data === NULL ? $defaultValue : $data;
+        return \zin\utils\deepGet(self::$data, $namePath, $defaultValue);
     }
 
     public static function setData($namePath, $value)
     {
-        $names = explode('.', $namePath);
-        $lastName = array_pop($names);
-        $data = &self::$data;
-        if(!empty($names))
-        {
-            foreach($names as $name)
-            {
-                if(!is_array($data)) return;
-
-                if(!isset($data[$name])) $data[$name] = array();
-                $data = &$data[$name];
-            }
-        }
-
-        $data[$lastName] = $value;
+        \zin\utils\deepSet(self::$data, $namePath, $value);
     }
 
     public static function enableGlobalRender()
