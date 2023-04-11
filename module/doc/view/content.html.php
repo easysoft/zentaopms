@@ -28,7 +28,6 @@
             </div>
             <div class="user"></div>
             <div class="time"></div>
-            <div class="crumbs"><?php echo implode(' > ', $crumbs);?></div>
           </div>
           <div class="actions">
             <span class='text'><?php echo$lang->doc->diff?></span>

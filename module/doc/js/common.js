@@ -147,6 +147,7 @@ $(document).ready(function()
         }
     });
 
+
     'use strict';
 
     var NAME = 'zui.splitRow'; // model name.
@@ -275,6 +276,7 @@ $(document).ready(function()
     $(function()
     {
         $('.split-row').splitRow();
+        updateCrumbs();
     });
 
     var $pageSetting = $('#pageSetting');
@@ -388,4 +390,31 @@ function submit(object)
     $(object).attr('type', 'submit');
     $('#dataform').submit();
     setTimeout(function(){$(object).attr('type', 'button').removeAttr('disabled')}, 2000);
+}
+
+/**
+ * Update crumbs.
+ *
+ * @access public
+ * @return void
+ */
+function updateCrumbs()
+{
+    var $crumbs       = $('#crumbs');
+    var $crumbItems   = $('#crumbs > a');
+    var crumbMaxWidth = 660;
+    if($crumbs.width < crumbMaxWidth || $crumbItems.length == 1) return;
+
+    /* last crumbItem width major */
+    var $lastChild = $($crumbItems[$crumbItems.length -1]);
+    var $separator = "<div class='separator'> > </div>"
+    var $ellipsis  = "<div class='ellipsis'> ... </div>"
+    if($lastChild.width() > $crumbs.width())
+    {
+        var $appendChild = $lastChild[0];
+        $crumbs.empty();
+        $crumbs.append($appendChild);
+        $crumbs.prepend($separator);
+        $crumbs.prepend($ellipsis);
+    }
 }

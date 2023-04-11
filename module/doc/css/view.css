@@ -49,7 +49,6 @@
 .overflow-auto {overflow: auto;}
 .overflow-visible {overflow: visible;}
 .overflow-hidden {overflow: hidden;}
-#mainContent > .panel {margin-bottom: 0; overflow-y: auto;}
 .detail-title .actions .ajaxCollect > img {width: 20px;}
 .actions > .text {color: #8c8c8c; font-size: 14px;}
 .flex-content {display: flex; width: 100%; height: 100%;}
@@ -58,7 +57,12 @@
 .flex-content > #history > #closeIcon {position: absolute; right: 10px; top: 10px;}
 .panel {margin-bottom: 0;}
 .detail {margin: 0 4px;}
+#mainContent > .panel {margin-bottom: 0; overflow-y: auto;}
 
 .info .version, .info .crumbs {float: left;}
-.info .crumbs {font-size: 13px; margin-top: 5px; font-weight: normal;}
-.info .crumbs img {margin-right: 3px;}
+.crumbs img {margin-right: 3px; margin-bottom: 4px;}
+.crumbs {float: left; display: flex;height: 32px; width: 670px; align-items: center; overflow: hidden;}
+.crumbs a {padding: 6px 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;}
+.crumbs .separator {flex: 0 0 15px; display: flex; justify-content: center; align-items: center;}
+.crumbs :last-child {flex: none;}
+
