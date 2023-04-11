@@ -200,8 +200,7 @@ $(document).ready(function()
  */
 function redirectParentWindow(libID)
 {
-    var link = createLink('api', 'index', 'libID=' + libID);
-    parent.location.href = link;
+    parent.location.reload();
 }
 
 try {

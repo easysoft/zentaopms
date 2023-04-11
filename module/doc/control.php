@@ -1219,6 +1219,27 @@ class doc extends control
         $doc       = $docID ? $doc : '';
         $spaceType = $objectType . 'Space';
 
+        /* Crumbs links array. */
+        $methodName = in_array($type, array('product', 'project')) ? $objectType . 'Space' : 'tableContents';
+        $linkObject = zget($lib, $type, 0);
+        if($this->app->tab == 'execution' and $objectType == 'execution') $linkObject = zget($lib, 'execution', 0);
+
+        $linkParams = "objectID=$linkObject&libID=$lib->id";
+        if($this->app->tab == 'execution' or $objectType == 'custom')
+        {
+            $linkParams = "objectType=$objectType&$linkParams";
+            $methodName = 'tableContents';
+        }
+
+        $crumbs[] = html::a(inLink($methodName, $linkParams), html::image("static/svg/wiki-file-lib.svg") . $lib->name);
+
+        $moduleList = $this->loadModel('tree')->getParents($doc->module);
+        foreach($moduleList as $module)
+        {
+            $linkParams .= "&moduleID=$module->id";
+            $crumbs[]    = html::a(inLink($methodName, $linkParams), $module->name);
+        }
+
         $this->view->title        = isset($this->lang->doc->{$spaceType}) ? $this->lang->doc->{$spaceType} : $this->lang->doc->common;
         $this->view->docID        = $docID;
         $this->view->doc          = $doc;
@@ -1228,6 +1249,7 @@ class doc extends control
         $this->view->objectType   = $objectType;
         $this->view->type         = $type;
         $this->view->libID        = $libID;
+        $this->view->crumbs       = $crumbs;
         $this->view->lib          = isset($libs[$libID]) ? $libs[$libID] : new stdclass();
         $this->view->libs         = $this->doc->getLibsByObject($type, $objectID);
         $this->view->canBeChanged = common::canModify($type, $object); // Determines whether an object is editable.
