@@ -159,3 +159,7 @@ form .table-data, #content .table-data {border: 1px solid #e2e2e3;}
 
 .paramsTable th {text-align: left!important; font-size: 14px;}
 .paramsTable td {text-align: left;}
+
+.info .version, .info .crumbs {float: left;}
+.info .crumbs {font-size: 13px; margin-top: 5px; font-weight: normal;}
+.info .crumbs img {margin-right: 3px;}

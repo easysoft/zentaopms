@@ -46,6 +46,7 @@ $lang->moduleOrder[108] = 'zanode';
 $lang->moduleOrder[110] = 'doc';
 $lang->moduleOrder[111] = 'screen';
 $lang->moduleOrder[112] = 'pivot';
+$lang->moduleOrder[113] = 'chart';
 $lang->moduleOrder[119] = 'report';
 
 $lang->moduleOrder[120] = 'company';
@@ -1826,6 +1827,12 @@ $lang->pivot->methodOrder[20] = 'bugCreate';
 $lang->pivot->methodOrder[25] = 'bugAssign';
 $lang->pivot->methodOrder[30] = 'workload';
 
+/* Chart. */
+$lang->resource->chart = new stdclass();
+$lang->resource->chart->preview = 'preview';
+
+$lang->chart->methodOrder[2] = 'preview';
+
 /* Search. */
 $lang->resource->search = new stdclass();
 $lang->resource->search->buildForm   = 'buildForm';
@@ -1924,6 +1931,9 @@ $lang->resource->api->deleteStruct  = 'deleteStruct';
 $lang->resource->api->create        = 'create';
 $lang->resource->api->edit          = 'edit';
 $lang->resource->api->delete        = 'delete';
+$lang->resource->api->addCatalog    = 'addCatalog';
+$lang->resource->api->editCatalog   = 'editCatalog';
+$lang->resource->api->deleteCatalog = 'deleteCatalog';
 
 $lang->resource->api->getModel     = 'getModel';
 $lang->resource->api->debug        = 'debug';
@@ -1943,9 +1953,12 @@ $lang->api->methodOrder[50] = 'deleteStruct';
 $lang->api->methodOrder[55] = 'create';
 $lang->api->methodOrder[60] = 'edit';
 $lang->api->methodOrder[65] = 'delete';
-$lang->api->methodOrder[70] = 'getModel';
-$lang->api->methodOrder[75] = 'debug';
-$lang->api->methodOrder[80] = 'sql';
+$lang->api->methodOrder[70]  = 'addCatalog';
+$lang->api->methodOrder[75] = 'editCatalog';
+$lang->api->methodOrder[80] = 'deleteCatalog';
+$lang->api->methodOrder[85] = 'getModel';
+$lang->api->methodOrder[90] = 'debug';
+$lang->api->methodOrder[95] = 'sql';
 
 $lang->resource->file = new stdclass();
 $lang->resource->file->download     = 'download';

@@ -1,3 +1,4 @@
+.h-full-adjust {overflow-y: auto; height: calc(100vh - 120px);}
 .main-col .block-files .panel-heading {padding-right: 20px;}
 .main-col .block-files .panel-heading .panel-title {height: 35px; line-height: 30px;}
 .main-col .doc-title {display: flex; font-size: 16px; margin-bottom: 15px;}
@@ -5,7 +6,7 @@
 .main-col .doc-title .info {flex: 1 1 0;}
 .main-col .doc-title .version a {font-size: 13px; color: #8c8c8c;}
 .main-col .doc-title .version .dropdown-menu a:hover {color: #ffffff;}
-.main-col .doc-title .actions a + a {margin-left: 8px;}
+.main-col .doc-title .actions a + a {margin-left: 0px;}
 .main-col .doc-title .actions i {font-size: 15px; color: #8c8c8c;}
 #content .title {max-width: 54%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;}
 #content .detail-content {padding-left: 10px;}
@@ -32,6 +33,7 @@
 .outline-content li.text-ellipsis.active>a {font-weight: 700; color: #0c64eb;}
 #outline li.has-list.open:before {content: unset;}
 #fileTree {margin-bottom: 40px; max-height: calc(100vh - 180px); overflow: auto;}
+#closeBtn {position: absolute; right: 10px; top: 10px;}
 
 .title {font-size: 20px !important;}
 .article-content.comment {width: 100% !important;}
@@ -47,5 +49,20 @@
 .overflow-auto {overflow: auto;}
 .overflow-visible {overflow: visible;}
 .overflow-hidden {overflow: hidden;}
-#mainContent > .panel {margin-bottom: 0; height: calc(100vh - 125px); overflow-y: auto;}
 .detail-title .actions .ajaxCollect > img {width: 20px;}
+.actions > .text {color: #8c8c8c; font-size: 14px;}
+.flex-content {display: flex; width: 100%; height: 100%;}
+.flex-content > #content {flex: auto; overflow-y: auto;}
+.flex-content > #history {flex: 0 0 302px; position: relative;}
+.flex-content > #history > #closeIcon {position: absolute; right: 10px; top: 10px;}
+.panel {margin-bottom: 0;}
+.detail {margin: 0 4px;}
+#mainContent > .panel {margin-bottom: 0; overflow-y: auto;}
+
+.info .version, .info .crumbs {float: left;}
+.crumbs img {margin-right: 3px; margin-bottom: 4px;}
+.crumbs {float: left; display: flex;height: 32px; width: 670px; align-items: center; overflow: hidden;}
+.crumbs a {padding: 6px 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;}
+.crumbs .separator {flex: 0 0 15px; display: flex; justify-content: center; align-items: center;}
+.crumbs :last-child {flex: none;}
+

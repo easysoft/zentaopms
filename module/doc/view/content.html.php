@@ -1,7 +1,7 @@
 <?php js::set('confirmDelete', $lang->doc->confirmDelete);?>
 <?php $sessionString = session_name() . '=' . session_id();?>
-<div id="mainContent" class="main-row">
-  <div class="main-col col-8">
+<div style="height:100%" id="h-full">
+  <div class="main-col col-8 flex-content">
     <div class="cell" id="content">
       <div class="detail no-padding">
         <div class="detail-title no-padding doc-title">
@@ -30,8 +30,13 @@
             <div class="time"></div>
           </div>
           <div class="actions">
+            <span class='text'><?php echo$lang->doc->diff?></span>
+            <?php echo html::a("javascript:fullScreen()", '<span class="icon-fullscreen"></span>', '', "title='{$lang->fullscreen}' class='btn btn-link fullscreen-btn'");?>
+            <?php if(common::hasPriv('doc', 'collect')):?>
+            <?php $star = strpos($doc->collector, ',' . $this->app->user->account . ',') !== false ? 'star' : 'star-empty';?>
+            <a data-url="<?php echo $this->createLink('doc', 'collect', "objectID=$doc->id&objectType=doc");?>" title="<?php echo $lang->doc->collect;?>" class='ajaxCollect btn btn-link'><?php echo html::image("static/svg/{$star}.svg", "class='$star'");?></a>
+            <?php endif;?>
             <?php
-            echo html::a("javascript:fullScreen()", '<i class="icon-fullscreen"></i>', '', "title='{$lang->fullscreen}' class='btn btn-link fullscreen-btn'");
             if(common::hasPriv('doc', 'edit'))
             {
                 $iframe   = '';
@@ -41,20 +46,16 @@
                     $iframe   = 'iframe';
                     $onlybody = 'true';
                 }
-                echo html::a(inlink('edit', "docID=$doc->id&comment=false&objectType=$objectType&objectID=$object->id&libID=$libID", '', $onlybody), '<i class="icon-edit"></i>', '', "title='{$lang->doc->edit}' class='btn btn-link $iframe' data-app='{$this->app->tab}'");
+                echo html::a(inlink('edit', "docID=$doc->id&comment=false&objectType=$objectType&objectID=$object->id&libID=$libID", '', $onlybody), '<span class="icon-edit"></span>', '', "title='{$lang->doc->edit}' class='btn btn-link $iframe' data-app='{$this->app->tab}'");
             }
             if(common::hasPriv('doc', 'delete'))
             {
                 $deleteURL = $this->createLink('doc', 'delete', "docID=$doc->id&confirm=yes&from=lib");
-                echo html::a("javascript:ajaxDeleteDoc(\"$deleteURL\", \"docList\", confirmDelete)", '<i class="icon-trash"></i>', '', "title='{$lang->doc->delete}' class='btn btn-link'");
-            }
-            ?>
-            <?php if(common::hasPriv('doc', 'collect')):?>
-            <?php $star = strpos($doc->collector, ',' . $this->app->user->account . ',') !== false ? 'star' : 'star-empty';?>
-            <a data-url="<?php echo $this->createLink('doc', 'collect', "objectID=$doc->id&objectType=doc");?>" title="<?php echo $lang->doc->collect;?>" class='ajaxCollect btn btn-link'><?php echo html::image("static/svg/{$star}.svg", "class='$star'");?></a>
-            <?php endif;?>
+                echo html::a("javascript:ajaxDeleteDoc(\"$deleteURL\", \"docList\", confirmDelete)", '<span class="icon-trash"></span>', '', "title='{$lang->doc->delete}' class='btn btn-link'");
+            }?>
+            <a id="hisTrigger" href="###" class="btn btn-link" title=<?php echo $lang->history?>><span class="icon icon-clock"></span></a>
 
-            <?php if($this->config->edition == 'max' and $this->app->tab == 'project'):?>
+            <?php if($config->vision == 'rnd' and $config->edition == 'max' and $app->tab == 'project'):?>
             <?php
             $canImportToPracticeLib  = (common::hasPriv('doc', 'importToPracticeLib')  and helper::hasFeature('practicelib'));
             $canImportToComponentLib = (common::hasPriv('doc', 'importToComponentLib') and helper::hasFeature('componentlib'));
@@ -62,7 +63,7 @@
             if($canImportToPracticeLib or $canImportToComponentLib)
             {
                 echo "<div class='btn-group' id='more' title='{$lang->import}'>";
-                echo html::a('javascript:;', "<i class='icon icon-diamond'></i>", '', "data-toggle='dropdown' class='btn btn-link'");
+                echo html::a('javascript:;', "<span class='icon icon-diamond'></span>", '', "data-toggle='dropdown' class='btn btn-link'");
                 echo "<ul class='dropdown-menu pull-right'>";
                 if($canImportToPracticeLib) echo '<li>' . html::a('#importToPracticeLib', $lang->doc->importToPracticeLib, '', 'data-toggle="modal"') . '</li>';
                 if($canImportToComponentLib) echo '<li>' . html::a('#importToComponentLib', $lang->doc->importToComponentLib, '', 'data-toggle="modal"') . '</li>';
@@ -158,68 +159,12 @@
         <?php common::printPreAndNext($preAndNext);?>
       </div>
     </div>
-    <div class='cell'>
+    <div id="history" class='panel hidden' style="margin-left: 2px;">
       <?php
       $canBeChanged = common::canBeChanged('doc', $doc);
       if($canBeChanged) $actionFormLink = $this->createLink('action', 'comment', "objectType=doc&objectID=$doc->id");
       ?>
       <?php include '../../common/view/action.html.php';?>
-    </div>
-  </div>
-  <div class="side-col col-4" id="sidebar">
-    <div class="sidebar-toggle"><i class="icon icon-angle-right"></i></div>
-    <?php if(!empty($doc->digest)):?>
-    <div class="cell" id='sidebarContent'>
-      <details class="detail" open>
-        <summary class="detail-title"><?php echo $lang->doc->digest;?></summary>
-        <div class="detail-content">
-          <?php echo !empty($doc->digest) ? $doc->digest : "<div class='text-center text-muted'>" . $lang->noData . '</div>';?>
-        </div>
-      </details>
-    </div>
-    <?php endif;?>
-    <div class="cell">
-      <details class="detail" open>
-        <summary class="detail-title"><?php echo $lang->doc->basicInfo;?></summary>
-        <div class="detail-content">
-          <table class="table table-data">
-            <tbody>
-              <?php if($doc->productName):?>
-              <tr>
-                <th class='c-product'><?php echo $lang->doc->product;?></th>
-                <td><?php echo $doc->productName;?></td>
-              </tr>
-              <?php endif;?>
-              <?php if($doc->executionName):?>
-              <tr>
-                <th class='c-execution'><?php echo $lang->doc->execution;?></th>
-                <td><?php echo $doc->executionName;?></td>
-              </tr>
-              <?php endif;?>
-              <tr>
-                <th class='c-lib'><?php echo $lang->doc->lib;?></th>
-                <td><?php echo $lib->name;?></td>
-              </tr>
-              <tr>
-                <th><?php echo $lang->doc->module;?></th>
-                <td><?php echo $doc->moduleName ? $doc->moduleName : '/';?></td>
-              </tr>
-              <tr>
-                <th><?php echo $lang->doc->addedDate;?></th>
-                <td><?php echo $doc->addedDate;?></td>
-              </tr>
-              <tr>
-                <th><?php echo $lang->doc->editedBy;?></th>
-                <td><?php echo zget($users, $doc->editedBy);?></td>
-              </tr>
-              <tr>
-                <th><?php echo $lang->doc->editedDate;?></th>
-                <td><?php echo $doc->editedDate;?></td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </details>
     </div>
   </div>
 </div>

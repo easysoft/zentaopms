@@ -519,10 +519,12 @@ $lang->doc->menuOrder[30] = 'custom';
 $lang->report->menu         = new stdclass();
 $lang->report->menu->screen = array('link' => "{$lang->screen->common}|screen|browse");
 $lang->report->menu->pivot  = array('link' => "{$lang->pivot->common}|pivot|preview");
+$lang->report->menu->chart  = array('link' => "{$lang->chart->common}|chart|preview");
 
 /* Report menu order. */
 $lang->report->menuOrder[5]  = 'screen';
 $lang->report->menuOrder[10] = 'pivot';
+$lang->report->menuOrder[15] = 'chart';
 
 /* Company menu.*/
 $lang->company->menu              = new stdclass();
@@ -631,6 +633,7 @@ $lang->navGroup->api    = 'doc';
 
 $lang->navGroup->screen   = 'report';
 $lang->navGroup->pivot    = 'report';
+$lang->navGroup->chart    = 'report';
 $lang->navGroup->bidesign = 'report';
 
 $lang->navGroup->qa            = 'qa';

@@ -596,7 +596,6 @@ class commonModel extends model
         if($config->systemMode == 'light') unset($lang->createIcons['program']);
 
         /* Check whether the creation permission is available, and print create buttons. */
-
         foreach($lang->createIcons as $objectType => $objectIcon)
         {
             $createMethod = 'create';
@@ -605,10 +604,9 @@ class commonModel extends model
             if($objectType == 'kanbanspace') $createMethod = 'createSpace';
             if(strpos('|bug|execution|kanbanspace|', "|$objectType|") !== false) $needPrintDivider = true;
 
-            if($objectType == 'doc' and !common::hasPriv('doc', 'tableContents')) continue;
-
             $hasPriv = common::hasPriv($module, $createMethod);
-            if($objectType == 'doc' and !$hasPriv and common::hasPriv('api', 'create')) $hasPriv = true;
+            if($hasPriv  and $objectType == 'doc' and !common::hasPriv('doc', 'tableContents')) $hasPriv = false;
+            if(!$hasPriv and $objectType == 'doc' and  common::hasPriv('api', 'create'))        $hasPriv = true;
             if(!$hasPriv) continue;
 
             /* Determines whether to print a divider. */

@@ -37,6 +37,18 @@ $config->doc->iconList['word']     = 'word';
 $config->doc->iconList['ppt']      = 'ppt';
 $config->doc->iconList['excel']    = 'excel';
 
+$config->doc->objectIconList['product']   = 'icon-product';
+$config->doc->objectIconList['project']   = 'icon-project';
+$config->doc->objectIconList['execution'] = 'icon-run';
+$config->doc->objectIconList['mine']      = 'icon-contacts';
+$config->doc->objectIconList['custom']    = 'icon-groups';
+
+$config->doc->spaceMethod['mine']      = 'myspace';
+$config->doc->spaceMethod['product']   = 'productspace';
+$config->doc->spaceMethod['project']   = 'projectspace';
+$config->doc->spaceMethod['execution'] = 'projectspace';
+$config->doc->spaceMethod['custom']    = 'tablecontents';
+
 $config->doc->search['module']               = 'doc';
 $config->doc->search['fields']['title']      = $lang->doc->title;
 $config->doc->search['fields']['id']         = $lang->doc->id;

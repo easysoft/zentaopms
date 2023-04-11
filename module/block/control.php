@@ -42,6 +42,7 @@ class block extends control
         if($module == 'my')
         {
             $modules = $this->lang->block->moduleList;
+            unset($modules['doc']);
 
             list($programModule, $programMethod)     = explode('-', $this->config->programLink);
             list($productModule, $productMethod)     = explode('-', $this->config->productLink);
@@ -748,7 +749,7 @@ class block extends control
         if(preg_match('/[^a-zA-Z0-9_]/', $this->params->type)) return;
 
         $this->view->projects  = $this->loadModel('project')->getPairsByProgram();
-        $this->view->testtasks = $this->dao->select('t1.id,t2.name as productName,t2.shadow,t3.name as buildName,t4.name as projectName')->from(TABLE_TESTTASK)->alias('t1')
+        $this->view->testtasks = $this->dao->select('t1.*,t2.name as productName,t2.shadow,t3.name as buildName,t4.name as projectName')->from(TABLE_TESTTASK)->alias('t1')
             ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product=t2.id')
             ->leftJoin(TABLE_BUILD)->alias('t3')->on('t1.build=t3.id')
             ->leftJoin(TABLE_PROJECT)->alias('t4')->on('t1.execution=t4.id')
@@ -2031,6 +2032,86 @@ class block extends control
         $this->app->loadLang('program');
         $this->app->loadLang('execution');
         $this->view->projects = $this->loadModel('project')->getOverviewList('byStatus', $status, $orderBy, $count);
+    }
+
+    /**
+     * Print document statistic block.
+     *
+     * @access public
+     * @return void
+     */
+    public function printDocStatisticBlock()
+    {
+    }
+
+    /**
+     * Print document dynamic block.
+     *
+     * @access public
+     * @return void
+     */
+    public function printDocDynamicBlock()
+    {
+    }
+
+    /**
+     * Print my collection of documents block.
+     *
+     * @access public
+     * @return void
+     */
+    public function printMyCollectionBlock()
+    {
+    }
+
+    /**
+     * Print recent update block.
+     *
+     * @access public
+     * @return void
+     */
+    public function printRecentUpdateBlock()
+    {
+    }
+
+    /**
+     * Print view list block.
+     *
+     * @access public
+     * @return void
+     */
+    public function printViewListBlock()
+    {
+    }
+
+    /**
+     * Print collect list block.
+     *
+     * @access public
+     * @return void
+     */
+    public function printCollectListBlock()
+    {
+    }
+
+    /**
+     * Print product's document block.
+     *
+     * @access public
+     * @return void
+     */
+    public function printProductDocBlock()
+    {
+    }
+
+    /**
+     * Print project's document block.
+     *
+     * @access public
+     * @return void
+     */
+    public function printProjectDocBlock()
+    {
     }
 
     /**

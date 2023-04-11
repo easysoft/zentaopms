@@ -8001,7 +8001,7 @@ class upgradeModel extends model
      */
     public function addDefaultModules4BI($type = 'report', $dimension = 1)
     {
-        $this->app->loadLang('report');
+        $this->app->loadLang('dimension');
 
         $group = new stdclass();
         $group->root  = $dimension;
@@ -8011,7 +8011,7 @@ class upgradeModel extends model
         $group->order = 10;
 
         $modules = array();
-        foreach($this->lang->crystal->moduleList as $module => $name)
+        foreach($this->lang->dimension->moduleList as $module => $name)
         {
             if(!$module || !$name) continue;
 
@@ -8212,8 +8212,9 @@ class upgradeModel extends model
         /* Create default dimension. */
         $this->app->loadLang('dimension');
         $dimension              = new stdclass();
-        $dimension->name        = $this->lang->dimension->default;
+        $dimension->name        = $this->lang->dimension->efficiency;
         $dimension->code        = 'efficiency';
+        $dimension->desc        = '';
         $dimension->createdBy   = 'system';
         $dimension->createdDate = helper::now();
 
@@ -8222,6 +8223,15 @@ class upgradeModel extends model
 
         $this->loadModel('upgrade')->addDefaultModules4BI('chart', $dimensionID);
         $this->loadModel('upgrade')->addDefaultModules4BI('pivot', $dimensionID);
+
+        $dimension              = new stdclass();
+        $dimension->name        = $this->lang->dimension->quality;
+        $dimension->code        = 'quality';
+        $dimension->desc        = '';
+        $dimension->createdBy   = 'system';
+        $dimension->createdDate = helper::now();
+
+        $this->dao->insert(TABLE_DIMENSION)->data($dimension)->exec();
 
         return !dao::isError();
     }
@@ -8976,5 +8986,28 @@ class upgradeModel extends model
         }
 
         return $fieldSettings;
+    }
+
+    /**
+     * Convert doc collect.
+     *
+     * @access public
+     * @return bool
+     */
+    public function convertDocCollect()
+    {
+        $this->loadModel('doc');
+
+        $stmt = $this->dao->select('id,collector')->from(TABLE_DOC)->where('collector')->ne('')->query();
+        while($doc = $stmt->fetch())
+        {
+            foreach(explode(',', $doc->collector) as $collector)
+            {
+                $collector = trim($collector);
+                if(empty($collector)) continue;
+                $this->doc->createAction($doc->id, 'collect', $collector);
+            }
+        }
+        return true;
     }
 }

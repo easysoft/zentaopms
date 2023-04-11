@@ -249,8 +249,8 @@ CREATE TABLE IF NOT EXISTS `zt_bug` (
   `id` mediumint(8) NOT NULL AUTO_INCREMENT,
   `project` mediumint(8) unsigned NOT NULL,
   `product` mediumint(8) unsigned NOT NULL DEFAULT '0',
-  `injection` mediumint(8) unsigned NOT NULL,
-  `identify` mediumint(8) unsigned NOT NULL,
+  `injection` mediumint(8) unsigned NOT NULL DEFAULT '0',
+  `identify` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `branch` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `module` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `execution` mediumint(8) unsigned NOT NULL DEFAULT '0',
@@ -267,15 +267,15 @@ CREATE TABLE IF NOT EXISTS `zt_bug` (
   `type` varchar(30) NOT NULL DEFAULT '',
   `os` varchar(255) NOT NULL DEFAULT '',
   `browser` varchar(255) NOT NULL DEFAULT '',
-  `hardware` varchar(30) NOT NULL,
+  `hardware` varchar(30) NOT NULL DEFAULT '',
   `found` varchar(30) NOT NULL DEFAULT '',
   `steps` mediumtext NOT NULL,
   `status` enum('active','resolved','closed') NOT NULL DEFAULT 'active',
   `subStatus` varchar(30) NOT NULL DEFAULT '',
   `color` char(7) NOT NULL,
   `confirmed` tinyint(1) NOT NULL DEFAULT '0',
-  `activatedCount` smallint(6) NOT NULL,
-  `activatedDate` datetime NOT NULL,
+  `activatedCount` smallint(6) NOT NULL DEFAULT '0',
+  `activatedDate` datetime NULL,
   `feedbackBy` varchar(100) NOT NULL,
   `notifyEmail` varchar(100) NOT NULL,
   `mailto` text,
@@ -297,12 +297,12 @@ CREATE TABLE IF NOT EXISTS `zt_bug` (
   `caseVersion` smallint(6) NOT NULL DEFAULT '1',
   `feedback` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `result` mediumint(8) unsigned NOT NULL,
-  `repo` mediumint(8) unsigned NOT NULL,
-  `mr` mediumint(8) unsigned NOT NULL,
-  `entry` text NOT NULL,
-  `lines` varchar(10) NOT NULL,
-  `v1` varchar(40) NOT NULL,
-  `v2` varchar(40) NOT NULL,
+  `repo` mediumint(8) unsigned NOT NULL DEFAULT '0',
+  `mr` mediumint(8) unsigned NOT NULL DEFAULT '0',
+  `entry` text NULL,
+  `lines` varchar(10) NOT NULL DEFAULT '',
+  `v1` varchar(40) NOT NULL DEFAULT '',
+  `v2` varchar(40) NOT NULL DEFAULT '',
   `repoType` varchar(30) NOT NULL DEFAULT '',
   `issueKey` varchar(50) NOT NULL DEFAULT '',
   `testtask` mediumint(8) unsigned NOT NULL,
@@ -442,9 +442,9 @@ CREATE TABLE IF NOT EXISTS `zt_chart` (
   `desc` text NOT NULL,
   `settings` mediumtext NOT NULL,
   `filters` mediumtext NOT NULL,
-  `step` tinyint(1) unsigned NOT NULL,
-  `fields` mediumtext NOT NULL,
-  `langs` text NOT NULL,
+  `step` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  `fields` mediumtext NULL,
+  `langs` text NULL,
   `sql` mediumtext,
   `stage` enum('draft','published') NOT NULL DEFAULT 'draft',
   `builtin` tinyint(1) unsigned NOT NULL,
@@ -481,8 +481,8 @@ CREATE TABLE IF NOT EXISTS `zt_dimension` (
   `desc` text NOT NULL,
   `createdBy` varchar(30) NOT NULL,
   `createdDate` datetime NOT NULL,
-  `editedBy` varchar(30) NOT NULL,
-  `editedDate` datetime NOT NULL,
+  `editedBy` varchar(30) NOT NULL DEFAULT '',
+  `editedDate` datetime NULL,
   `deleted` enum('0','1') NOT NULL default '0',
   PRIMARY KEY (`id`),
   KEY `code` (`code`)
@@ -584,7 +584,7 @@ CREATE TABLE IF NOT EXISTS `zt_dataview` (
   `view` varchar(57) NOT NULL,
   `sql` text NOT NULL,
   `fields` mediumtext NOT NULL,
-  `langs` text NOT NULL,
+  `langs` text NULL,
   `objects` mediumtext NOT NULL,
   `createdBy` varchar(30) NOT NULL,
   `createdDate` datetime NOT NULL,
@@ -685,6 +685,17 @@ CREATE TABLE IF NOT EXISTS `zt_doc` (
   KEY `product` (`product`),
   KEY `execution` (`execution`),
   KEY `lib` (`lib`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+-- DROP TABLE IF EXISTS `zt_docaction`;
+CREATE TABLE IF NOT EXISTS `zt_docaction` (
+  `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
+  `doc` mediumint(8) unsigned NOT NULL,
+  `action` varchar(80) NOT NULL,
+  `actor` char(30) NOT NULL,
+  `date` datetime NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `doc` (`doc`),
+  KEY `actor` (`actor`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_doccontent`;
 CREATE TABLE IF NOT EXISTS `zt_doccontent` (
@@ -991,8 +1002,8 @@ CREATE TABLE IF NOT EXISTS `zt_kanbanregion` (
   `order` mediumint(8) NOT NULL DEFAULT '0',
   `createdBy` char(30) NOT NULL,
   `createdDate` datetime NOT NULL,
-  `lastEditedBy` char(30) NOT NULL,
-  `lastEditedDate` datetime NOT NULL,
+  `lastEditedBy` char(30) NOT NULL DEFAULT '',
+  `lastEditedDate` datetime NULL,
   `deleted` enum('0', '1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -1569,7 +1580,7 @@ CREATE TABLE IF NOT EXISTS `zt_stakeholder` (
   `createdDate` date NOT NULL,
   `editedBy` char(30) NOT NULL DEFAULT '',
   `editedDate` date NULL,
-  `deleted` enum('0','1') NOT NULL,
+  `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `objectID` (`objectID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -1596,7 +1607,7 @@ CREATE TABLE IF NOT EXISTS `zt_story` (
   `subStatus` varchar(30) NOT NULL DEFAULT '',
   `color` char(7) NOT NULL,
   `stage` enum('','wait','planned','projected','developing','developed','testing','tested','verified','released','closed') NOT NULL DEFAULT 'wait',
-  `stagedBy` char(30) NOT NULL,
+  `stagedBy` char(30) NOT NULL DEFAULT '',
   `mailto` text,
   `lib` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `fromStory` mediumint(8) unsigned NOT NULL DEFAULT '0',
@@ -1686,7 +1697,7 @@ CREATE TABLE IF NOT EXISTS `zt_task` (
   `parent` mediumint(8) NOT NULL DEFAULT '0',
   `execution` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `module` mediumint(8) unsigned NOT NULL DEFAULT '0',
-  `design` mediumint(8) unsigned NOT NULL,
+  `design` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `story` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `storyVersion` smallint(6) NOT NULL DEFAULT '1',
   `designVersion` smallint(6) unsigned NOT NULL,
@@ -9705,7 +9716,6 @@ CREATE TABLE IF NOT EXISTS `zt_assetlib` (
   `createdDate` datetime NOT NULL,
   `editedBy` varchar(30) NOT NULL DEFAULT '',
   `editedDate` datetime NULL,
-  `registerDate`  datetime NULL,
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB CHARSET=utf8;
@@ -14044,13 +14054,13 @@ CREATE TABLE IF NOT EXISTS `zt_pivot`  (
   `name` text NOT NULL,
   `desc` text NOT NULL,
   `sql` mediumtext NOT NULL,
-  `fields` mediumtext NOT NULL,
-  `langs` mediumtext NOT NULL,
+  `fields` mediumtext NULL,
+  `langs` mediumtext NULL,
   `vars` mediumtext NOT NULL,
   `objects` mediumtext NULL,
   `settings` mediumtext NOT NULL,
   `filters` mediumtext NOT NULL,
-  `step` tinyint(1) unsigned NOT NULL,
+  `step` tinyint(1) unsigned NOT NULL DEFAULT '0',
   `stage` enum('draft','published') NOT NULL DEFAULT 'draft',
   `builtin` enum('0', '1') NOT NULL DEFAULT '0',
   `createdBy` varchar(30) NOT NULL,
@@ -14059,8 +14069,8 @@ CREATE TABLE IF NOT EXISTS `zt_pivot`  (
   `editedDate` datetime NOT NULL,
   `deleted` enum('0', '1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
-  KEY(`dimension`),
-  KEY(`group`)
+  KEY `dimension` (`dimension`),
+  KEY `group` (`group`)
 ) ENGINE = InnoDB DEFAULT CHARSET=utf8;
 
 -- DROP TABLE IF EXISTS `zt_sqlview`;

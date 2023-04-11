@@ -70,12 +70,12 @@
                 <?php if(strpos('product|project|execution', $type) !== false):?>
                 <tr>
                   <th><?php echo $lang->doc->project;?></th>
-                  <td class='required'><?php echo html::select($type, $objects, $objectID, "class='form-control chosen' onchange='loadObjectModules(\"{$type}\", this.value)'");?></td>
+                  <td class='required'><?php echo html::select($type, $objects, $objectID, "class='form-control picker-select' onchange='loadObjectModules(\"{$type}\", this.value)'");?></td>
                 </tr>
                 <?php endif;?>
                 <tr>
-                  <th class='w-100px'><?php echo $lang->doc->libAndModule?></th>
-                  <td colspan='3' class='required'><span id='moduleBox'><?php echo html::select('module', $moduleOptionMenu, $doc->lib . '_' . $doc->module, "class='form-control chosen'");?></span></td>
+                  <th class='w-110px'><?php echo $lang->doc->libAndModule?></th>
+                  <td colspan='3' class='required'><span id='moduleBox'><?php echo html::select('module', $moduleOptionMenu, $doc->lib . '_' . $doc->module, "class='form-control picker-select'");?></span></td>
                 </tr>
                 <tr>
                   <th><?php echo $lang->doc->keywords;?></th>

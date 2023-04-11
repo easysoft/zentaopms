@@ -187,8 +187,9 @@ $(function()
                 simplemde.value(String($('#markdownContent').val()));
                 simplemde.togglePreview();
             }
+            $('#docExport').attr('href', createLink('doc', exportMethod, 'libID=' + libID + '&docID=' + docID + '&version=' + $('#content .doc-title .version').data('version')));
         });
-    });
+    })
 
     $('#sidebar .icon.icon-angle-right').click(function()
     {
@@ -199,4 +200,28 @@ $(function()
     })
 
     $('.outline .outline-toggle i.icon-angle-right').trigger("click");
+    $('#history').append('<a id="closeBtn" href="###" class="btn btn-link"><i class="icon icon-close"></i></a>');
+    $('#hisTrigger').on('click', function()
+    {
+        var $history = $('#history');
+        var $icon = $(this);
+        if($history.hasClass('hidden'))
+        {
+            $history.removeClass('hidden');
+            $icon.addClass('text-primary');
+        }
+        else
+        {
+            $history.addClass('hidden');
+            $icon.removeClass('text-primary');
+        }
+    })
+
+    $('#history').find('.btn.pull-right').removeClass('pull-right')
+    $('#closeBtn').on('click', function()
+    {
+        $('#history').addClass('hidden');
+        $('#hisTrigger').removeClass('text-primary');
+    })
+    $('#history').find('.btn.pull-right').removeClass('pull-right');
 })

@@ -584,35 +584,49 @@ $lang->task->methodOrder[125] = 'import';
 
 /* Doc. */
 $lang->resource->doc = new stdclass();
-$lang->resource->doc->index         = 'index';
-$lang->resource->doc->browse        = 'browse';
-$lang->resource->doc->createLib     = 'createLib';
-$lang->resource->doc->editLib       = 'editLib';
-$lang->resource->doc->deleteLib     = 'deleteLib';
-$lang->resource->doc->create        = 'create';
-$lang->resource->doc->view          = 'view';
-$lang->resource->doc->edit          = 'edit';
-$lang->resource->doc->delete        = 'delete';
-$lang->resource->doc->deleteFile    = 'deleteFile';
-$lang->resource->doc->allLibs       = 'allLibs';
-$lang->resource->doc->objectLibs    = 'objectLibs';
-$lang->resource->doc->collect       = 'collectAction';
-$lang->resource->doc->tableContents = 'tableContents';
+$lang->resource->doc->index          = 'index';
+$lang->resource->doc->mySpace        = 'mySpace';
+$lang->resource->doc->myView         = 'myView';
+$lang->resource->doc->myCollection   = 'myCollection';
+$lang->resource->doc->myCreation     = 'myCreation';
+$lang->resource->doc->createLib      = 'createLib';
+$lang->resource->doc->editLib        = 'editLib';
+$lang->resource->doc->deleteLib      = 'deleteLib';
+$lang->resource->doc->create         = 'create';
+$lang->resource->doc->view           = 'view';
+$lang->resource->doc->edit           = 'edit';
+$lang->resource->doc->delete         = 'delete';
+$lang->resource->doc->deleteFile     = 'deleteFile';
+$lang->resource->doc->collect        = 'collectAction';
+$lang->resource->doc->projectSpace   = 'projectSpace';
+$lang->resource->doc->tableContents  = 'teamSpace';
+$lang->resource->doc->showFiles      = 'showFiles';
+$lang->resource->doc->addCatalog     = 'addCatalog';
+$lang->resource->doc->editCatalog    = 'editCatalog';
+$lang->resource->doc->deleteCatalog  = 'deleteCatalog';
+$lang->resource->doc->displaySetting = 'displaySetting';
 
-$lang->doc->methodOrder[0]  = 'index';
-$lang->doc->methodOrder[5]  = 'browse';
-$lang->doc->methodOrder[10] = 'createLib';
-$lang->doc->methodOrder[15] = 'editLib';
-$lang->doc->methodOrder[20] = 'deleteLib';
-$lang->doc->methodOrder[25] = 'create';
-$lang->doc->methodOrder[30] = 'view';
-$lang->doc->methodOrder[35] = 'edit';
-$lang->doc->methodOrder[40] = 'delete';
-$lang->doc->methodOrder[45] = 'deleteFile';
-$lang->doc->methodOrder[50] = 'allLibs';
-$lang->doc->methodOrder[55] = 'objectLibs';
-$lang->doc->methodOrder[60] = 'collect';
-$lang->doc->methodOrder[65] = 'tableContents';
+$lang->doc->methodOrder[5]   = 'index';
+$lang->doc->methodOrder[10]  = 'mySpace';
+$lang->doc->methodOrder[15]  = 'myView';
+$lang->doc->methodOrder[20]  = 'myCollection';
+$lang->doc->methodOrder[25]  = 'myCreation';
+$lang->doc->methodOrder[30]  = 'createLib';
+$lang->doc->methodOrder[35]  = 'editLib';
+$lang->doc->methodOrder[40]  = 'deleteLib';
+$lang->doc->methodOrder[45]  = 'create';
+$lang->doc->methodOrder[50]  = 'edit';
+$lang->doc->methodOrder[55]  = 'view';
+$lang->doc->methodOrder[60]  = 'delete';
+$lang->doc->methodOrder[65]  = 'deleteFile';
+$lang->doc->methodOrder[70]  = 'collect';
+$lang->doc->methodOrder[75]  = 'projectSpace';
+$lang->doc->methodOrder[80]  = 'tableContents';
+$lang->doc->methodOrder[85]  = 'showFiles';
+$lang->doc->methodOrder[90]  = 'addCatalog';
+$lang->doc->methodOrder[95]  = 'editCatalog';
+$lang->doc->methodOrder[100] = 'deleteCatalog';
+$lang->doc->methodOrder[105] = 'displaySetting';
 
 /* Mail. */
 $lang->resource->mail = new stdclass();
@@ -1171,8 +1185,12 @@ if($config->edition == 'biz' or $config->edition == 'max')
     $lang->tree->methodOrder[35] = 'editHost';
     $lang->host->methodOrder[40] = 'groupMaintenance';
 
-    $lang->resource->doc->diff    = 'diffAction';
-    $lang->resource->doc->catalog = 'catalogAction';
+    $lang->resource->doc->diff             = 'diffAction';
+    $lang->resource->doc->mine2export      = 'mine2export';
+    $lang->resource->doc->product2export   = 'product2export';
+    $lang->resource->doc->project2export   = 'project2export';
+    $lang->resource->doc->custom2export    = 'custom2export';
+    $lang->resource->doc->execution2export = 'execution2export';
 
     $lang->resource->my->review = 'review';
 

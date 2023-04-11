@@ -256,6 +256,7 @@ class dbh
     public function formatDmSQL($sql)
     {
         $sql       = trim($sql);
+        $sql       = str_replace(array('\r', '\n'), ' ', $sql);
         $actionPos = strpos($sql, ' ');
         $action    = strtoupper(substr($sql, 0, $actionPos));
         $setPos    = 0;
@@ -397,5 +398,38 @@ class dbh
     public function lastInsertId($name = null)
     {
         return $this->pdo->lastInsertId($name);
+    }
+
+    /**
+     * Begin transaction.
+     *
+     * @access public
+     * @return bool
+     */
+    public function beginTransaction()
+    {
+        return $this->pdo->beginTransaction();
+    }
+
+    /**
+     * Roll back if transaction failed.
+     *
+     * @access public
+     * @return bool
+     */
+    public function rollBack()
+    {
+        return $this->pdo->rollBack();
+    }
+
+    /**
+     * Commit transaction.
+     *
+     * @access public
+     * @return bool
+     */
+    public function commit()
+    {
+        return $this->pdo->commit();
     }
 }

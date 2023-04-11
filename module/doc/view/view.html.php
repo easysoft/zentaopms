@@ -16,16 +16,34 @@
 <?php js::set('docID', $docID);?>
 <?php js::set('linkParams', "objectID=$objectID&%s");?>
 <?php js::set('docLang', $lang->doc);?>
+<?php js::set('exportMethod', $exportMethod);?>
+<?php js::set('libID', $libID);?>
 <?php if($app->tab == 'execution'):;?>
 <style>.panel-body{min-height: 180px}</style>
 <?php endif;?>
+<div id="mainMenu" class="clearfix">
+  <div id="leftBar" class="btn-toolbar pull-left">
+  <?php echo $objectDropdown;?>
+  <?php echo html::backButton("<i class='icon icon-back icon-sm'></i> " . $lang->goback, "id='backBtn'", 'btn btn-link')?>
+  </div>
+  <div id="crumbs" class="crumbs">
+    <?php echo implode('<div class="separator"> > <div>', $crumbs);?>
+  </div>
+  <div class="btn-toolbar pull-right">
+    <?php
+    if($canExport) echo html::a($this->createLink('doc', $exportMethod, "libID=$libID&docID=$docID"), "<i class='icon-export muted'> </i>" . $lang->export, 'hiddenwin', "class='btn btn-link' id='docExport'");
+    if(common::hasPriv('api', 'create')) echo html::a($this->createLink('api', 'create', "libID=$libID&moduleID=$moduleID", '', true), '<i class="icon icon-plus"></i> ' . $lang->api->createApi, '', 'class="btn btn-primary iframe" data-width="95%"');
+    if(common::hasPriv('doc', 'create')) echo $this->doc->printCreateBtn($lib, $type, $objectID, $moduleID);
+    ?>
+  </div>
+</div>
 <div id='mainContent'class="fade flex">
   <?php if($libID):?>
-    <div id='sideBar' class="panel side side-col col overflow-auto">
+    <div id='sideBar' class="panel side side-col col overflow-auto h-full-adjust">
       <?php include 'lefttree.html.php';?>
     </div>
     <div class="sidebar-toggle flex-center"><i class="icon icon-angle-left"></i></div>
-    <div class="main-col" data-min-width="400">
+    <div class="main-col h-full-adjust" data-min-width="400">
       <?php if($docID):?>
         <?php include './content.html.php';?>
       <?php else:?>

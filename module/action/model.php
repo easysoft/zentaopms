@@ -1306,9 +1306,13 @@ class actionModel extends model
 
         $shadowProducts   = $this->dao->select('id')->from(TABLE_PRODUCT)->where('shadow')->eq(1)->fetchPairs();
         $projectMultiples = $this->dao->select('id,type,multiple')->from(TABLE_PROJECT)->where('id')->in($projectIdList)->fetchAll('id');
+        $docList          = $this->loadModel('doc')->getPrivDocs();
+        $docLibList       = $this->doc->getLibs();
 
         foreach($actions as $i => $action)
         {
+            if($action->objectType == 'doc' and !isset($docList[$action->objectID])) unset($actions[$i]);
+            if($action->objectType == 'doclib' and !isset($docLibList[$action->objectID])) unset($actions[$i]);
             if($action->objectType == 'product' AND isset($shadowProducts[$action->objectID]))
             {
                 unset($actions[$i]);
@@ -1548,6 +1552,8 @@ class actionModel extends model
      */
     public function setObjectLink($action, $deptUsers, $shadowProducts, $project = null)
     {
+        $this->app->loadConfig('doc');
+
         $action->objectLink  = '';
         $action->objectLabel = zget($this->lang->action->objectTypes, $action->objectLabel);
 
@@ -1677,9 +1683,10 @@ class actionModel extends model
                     else
                     {
                         $method = 'tablecontents';
-                        if($docLib->type == 'product') $method = 'productspace';
-                        if(in_array($docLib->type, array('project', 'execution'))) $method = 'projectspace';
-                        $params = $method == 'tablecontents' ? sprintf($vars, $docLib->type, $docLib->objectID, $action->objectID, $appendLib) : "objectID={$docLib->objectID}&libID={$action->objectID}";
+                        if(isset($this->config->doc->spaceMethod[$docLib->type])) $method = $this->config->doc->spaceMethod[$docLib->type];
+                        if($method == 'myspace') $params = "type=mine&libID={$action->objectID}";
+                        if($method == 'tablecontents') $params = sprintf($vars, $docLib->type, $docLib->objectID, $action->objectID, $appendLib);
+                        if(!in_array($method, array('myspace', 'tablecontents'))) $params = "objectID={$docLib->objectID}&libID={$action->objectID}";
                         $action->objectLink = helper::createLink('doc', $method, $params);
                     }
                 }

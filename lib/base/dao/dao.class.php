@@ -1703,6 +1703,8 @@ class baseSQL
                     continue;
                 }
                 if(strpos($this->skipFields, ",$field,") !== false) continue;
+                if($field == 'id' and $this->method == 'update') continue;     // primary key not allowed in dmdb.
+
                 $this->sql .= "`$field` = " . $this->quote($value) . ',';
             }
         }
@@ -1874,10 +1876,14 @@ class baseSQL
      * @access public
      * @return static|sql the sql object.
      */
-    public function where($arg1, $arg2 = null, $arg3 = null)
+    public function where($arg1 = '', $arg2 = null, $arg3 = null)
     {
         if($this->inCondition and !$this->conditionIsTrue) return $this;
-        if($arg3 !== null)
+        if(!$arg1)
+        {
+            $condition = '';
+        }
+        elseif($arg3 !== null)
         {
             $value     = $this->quote($arg3);
             $condition = "`$arg1` $arg2 " . $this->quote($arg3);
@@ -2102,6 +2108,34 @@ class baseSQL
     {
         if($this->inCondition and !$this->conditionIsTrue) return $this;
         $this->sql .= "NOT LIKE " . $this->quote($string);
+        return $this;
+    }
+
+    /**
+     * 不为空日期
+     * Create not zero date.
+     *
+     * @access public
+     * @return static|sql the sql object.
+     */
+    public function notZeroDate()
+    {
+        if($this->inCondition and !$this->conditionIsTrue) return $this;
+        $this->sql .= " > '1970-01-01' ";
+        return $this;
+    }
+
+    /**
+     * 不为空时间
+     * Create not zero datetime.
+     *
+     * @access public
+     * @return static|sql the sql object.
+     */
+    public function notZeroDatetime()
+    {
+        if($this->inCondition and !$this->conditionIsTrue) return $this;
+        $this->sql .= " > '1970-01-01 00:00:01' ";
         return $this;
     }
 

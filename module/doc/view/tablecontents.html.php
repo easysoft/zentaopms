@@ -12,7 +12,7 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php js::set('treeData', $libTree);?>
-<?php js::set('linkParams', "objectID=$objectID&%s&browseType=&orderBy=$orderBy");?>
+<?php js::set('linkParams', "objectID=$objectID&%s&browseType=&orderBy=$orderBy&param=0");?>
 <?php js::set('docLang', $lang->doc);?>
 <?php js::set('libType', $libType);?>
 <div id="mainMenu" class="clearfix">
@@ -23,7 +23,7 @@
     <?php foreach($lang->doc->featureBar['tableContents'] as $barType => $barName):?>
     <?php $active     = $barType == $browseType ? 'btn-active-text' : '';?>
     <?php $linkParams = $app->rawMethod == 'tablecontents' ? "type=$type&objectID=$objectID&libID=$libID&moduleID=$moduleID&browseType=$barType": "objectID=$objectID&libID=$libID&moduleID=$moduleID&browseType=$barType";?>
-    <?php echo html::a($this->createLink('doc', $app->rawMethod, $linkParams), $barName, '', "class='btn btn-link $active' id='{$barType}Tab'");?>
+    <?php echo html::a($this->createLink('doc', $app->rawMethod, $linkParams), "<span class='text'>{$barName}</span>" . ($active ? " <span class='label label-light label-badge'>{$pager->recTotal}</span>" : ''), '', "class='btn btn-link $active' id='{$barType}Tab'");?>
     <?php endforeach;?>
     <?php endif;?>
     <a class="btn btn-link querybox-toggle" id='bysearchTab'><i class="icon icon-search muted"></i> <?php echo $lang->doc->searchDoc;?></a>

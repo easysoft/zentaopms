@@ -36,7 +36,7 @@ $lang->doclib->aclListB['open']    = 'Public';
 $lang->doclib->aclListB['custom']  = 'Person.';
 $lang->doclib->aclListB['private'] = 'Privée';
 
-$lang->doclib->mySpaceAclList['private'] = "Private <span class='acl-tip'>(Only creators can access it)</span>";
+$lang->doclib->mySpaceAclList['private'] = "Private <span class='acl-tip text-muted'>(Only creators can access it)</span>";
 
 $lang->doclib->aclList = array();
 $lang->doclib->aclList['open']    = "Public <span class='acl-tip'>(Users who can access doccan access it)</span>";
@@ -70,14 +70,14 @@ $lang->doc->project      = $lang->projectCommon;
 $lang->doc->execution    = $lang->execution->common;
 $lang->doc->lib          = 'Bibliothèque';
 $lang->doc->module       = 'Catégorie';
-$lang->doc->libAndModule = 'Library & Catalog';
+$lang->doc->libAndModule = 'Library&Catalog';
 $lang->doc->object       = 'Object';
 $lang->doc->title        = 'Nom';
 $lang->doc->digest       = 'Résumé';
 $lang->doc->comment      = 'Commentaire';
 $lang->doc->type         = 'Type';
 $lang->doc->content      = 'Texte';
-$lang->doc->keywords     = 'Tags';
+$lang->doc->keywords     = 'Keywords';
 $lang->doc->status       = 'Status';
 $lang->doc->url          = 'URL';
 $lang->doc->files        = 'Fichiers';
@@ -121,6 +121,9 @@ $lang->doc->nextStep     = 'Next';
 $lang->doc->closed       = 'Closed';
 $lang->doc->saveDraft    = 'Save Draft';
 $lang->doc->defaultSave  = 'Default Save: ';
+$lang->doc->position     = 'Position';
+$lang->doc->person       = 'Person';
+$lang->doc->team         = 'Team';
 
 $lang->doc->moduleDoc     = 'Par Module';
 $lang->doc->searchDoc     = 'Rechercher';
@@ -137,13 +140,14 @@ $lang->doc->myDoc         = 'Mes Documents';
 $lang->doc->myView        = 'Recently Viewed';
 $lang->doc->myCollection  = 'Mes Favoris';
 $lang->doc->myCreation    = 'Created By';
+$lang->doc->myLib         = 'My Library';
 $lang->doc->tableContents = 'Catalog';
 $lang->doc->addCatalog    = 'Add Catalog';
 $lang->doc->editCatalog   = 'Edit Catalog';
 $lang->doc->deleteCatalog = 'Delete Catalog';
 
 /* Methods list */
-$lang->doc->index            = 'Accueil Documents';
+$lang->doc->index            = 'Dashboard';
 $lang->doc->createAB         = 'Create';
 $lang->doc->create           = 'Ajouter Document';
 $lang->doc->edit             = 'Editer Document';
@@ -194,7 +198,7 @@ $lang->doc->showDoc           = 'Whether to display documents';
 global $config;
 /* Query condition list. */
 $lang->doc->allProduct    = 'Tous les' . $lang->productCommon . 's';
-$lang->doc->allExecutions = 'Tous les' . $lang->executionCommon . 's';
+$lang->doc->allExecutions = 'Tous les' . $lang->execution->common . 's';
 $lang->doc->allProjects   = 'All' . $lang->projectCommon . 's';
 
 $lang->doc->libTypeList['product']   = $lang->productCommon . ' Library';

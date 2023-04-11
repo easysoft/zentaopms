@@ -541,6 +541,8 @@ class executionModel extends model
             $lib->type      = 'execution';
             $lib->main      = '1';
             $lib->acl       = 'default';
+            $lib->addedBy   = $this->app->user->account;
+            $lib->addedDate = helper::now();
             $this->dao->insert(TABLE_DOCLIB)->data($lib)->exec();
 
             $whitelist = explode(',', $sprint->whitelist);
@@ -2204,6 +2206,10 @@ class executionModel extends model
         {
             $link = helper::createLink('doc', $method, "type=execution&objectID=%s&from=execution");
         }
+        elseif($module == 'api')
+        {
+            $link = helper::createLink('doc', 'tableContents', "type=execution&objectID=%s&from=execution");
+        }
         elseif(in_array($module, array('issue', 'risk', 'opportunity', 'pssp', 'auditplan', 'nc', 'meeting')))
         {
             $link = helper::createLink($module, 'browse', "executionID=%s&from=execution");
@@ -3851,6 +3857,8 @@ class executionModel extends model
                 $burn->estimate  -= (int)$finishedEstimate->estimate;
             }
 
+            $burn->product = 0;
+            $burn->task    = 0;
             if(isset($storyPoints[$executionID])) $burn->storyPoint = $storyPoints[$executionID]->storyPoint;
 
             $this->dao->replace(TABLE_BURN)->data($burn)->exec();

@@ -23,13 +23,13 @@
 .input-tree {width: 120px;}
 .tree-icon {position: absolute; right: 0;}
 .tree li.has-input {overflow: hidden;}
+.tree li.has-input  > input {margin-left: 15px;}
 .img-lib {flex: 0 0 14px; height: 14px; margin-right: 5px;}
 .tree-icon {position: absolute; right: 0;}
 .tree li > a {max-width: 100%; padding: 2px;}
 .file-tree  a.show-icon > div,
 .file-tree  a.hover > div {padding-right: 15px;}
-.tree li.has-input {overflow: hidden;}
-.tree-text {overflow: hidden;}
+.tree-text {overflow: hidden; min-width: 50px;}
 i.btn-info, i.btn-info:hover {border: none; background: #fff; box-shadow: unset;}
 .tree-version-trigger {padding: 0 10px; width: 54px; border-radius: 5px; background: #F9F9F9; display: flex; align-items: center;}
 .tree-version-trigger > .text {overflow: hidden; flex: 0 0 30px;}
@@ -39,7 +39,7 @@ i.btn-info, i.btn-info:hover {border: none; background: #fff; box-shadow: unset;
 /* css for sidebar */
 .sidebar-toggle {flex: 0 0 16px;}
 .sidebar-toggle > .icon {width: 12px; height: 30px; margin-top: -10px; line-height: 30px; color: #fff; text-align: center; background: #7dcdfe; border-radius: 6px; cursor: pointer; padding-left: 0; padding-top: 0;}
-.bottom-btn-tree {position: fixed; bottom: 66px; left: 48px;}
+.bottom-btn-tree {position: absolute; bottom: 15px; left: 25px;}
 
 .spliter {flex: 0 0 12px;}
 .spliter-btn {height: 28px; width: 10px; background: #fff; position: absolute; top: 30%; left: -1px; border: 1px solid #D9D9D9; border-radius: 2px;}
@@ -92,39 +92,54 @@ js::set('canViewFiles', common::hasPriv('doc', 'showfiles'));
 <?php endif;?>
 
 <!-- Code for dropdown menu. -->
-<?php $canAddCatalog    = common::hasPriv('doc', 'addCatalog');?>
-<?php $canEditCatalog   = common::hasPriv('doc', 'editCatalog');?>
-<?php $canDeleteCatalog = common::hasPriv('doc', 'deleteCatalog');?>
-<?php $hasModulePriv    = $canAddCatalog || $canEditCatalog || $canDeleteCatalog;?>
-<?php js::set('canAddCatalog', $canAddCatalog);?>
-<?php js::set('canEditCatalog', $canEditCatalog);?>
-<?php js::set('canDeleteCatalog', $canDeleteCatalog);?>
-<?php js::set('hasModulePriv', $hasModulePriv);?>
-<?php js::set('hasLibPriv', $canAddCatalog || common::hasPriv($app->rawModule, 'editLib') || common::hasPriv($app->rawModule, 'deleteLib'));?>
+<?php
+$canAddCatalog['doc'] = common::hasPriv('doc', 'addCatalog');
+$canAddCatalog['api'] = common::hasPriv('api', 'addCatalog');
+
+$canEditCatalog['doc'] = common::hasPriv('doc', 'editCatalog');
+$canEditCatalog['api'] = common::hasPriv('api', 'editCatalog');
+
+$canDeleteCatalog['doc'] = common::hasPriv('doc', 'deleteCatalog');
+$canDeleteCatalog['api'] = common::hasPriv('api', 'deleteCatalog');
+
+$hasModulePriv['doc'] = $canAddCatalog['doc'] || $canEditCatalog['doc'] || $canDeleteCatalog['doc'];
+$hasModulePriv['api'] = $canAddCatalog['api'] || $canEditCatalog['api'] || $canDeleteCatalog['api'];
+
+$hasLibPriv['doc'] = $canAddCatalog['doc'] || common::hasPriv('doc', 'editLib') || common::hasPriv('doc', 'deleteLib');
+$hasLibPriv['api'] = $canAddCatalog['api'] || common::hasPriv('api', 'editLib') || common::hasPriv('api', 'deleteLib');
+
+js::set('canAddCatalog',    $canAddCatalog);
+js::set('canEditCatalog',   $canEditCatalog);
+js::set('canDeleteCatalog', $canDeleteCatalog);
+js::set('hasModulePriv',    $hasModulePriv);
+js::set('hasLibPriv',       $hasLibPriv);
+?>
 <div class='hidden' id='dropDownData'>
-  <ul class='libDorpdown'>
-    <?php if($canAddCatalog):?>
+  <?php foreach(array('doc', 'api') as $module):?>
+  <ul class='<?php echo $module;?>LibDorpdown'>
+    <?php if($canAddCatalog[$module]):?>
     <li data-method="addCataLib" data-has-children='%hasChildren%'  data-libid='%libID%' data-moduleid="%moduleID%" data-type="add"><a><i class="icon icon-icon-add-directory"></i><?php echo $lang->doc->libDropdown['addModule'];?></a></li>
     <?php endif;?>
-    <?php if(common::hasPriv($app->rawModule, 'editLib')):?>
+    <?php if(common::hasPriv($module, 'editLib')):?>
     <li data-method="editLib"><a href='<?php echo inlink('editLib', 'libID=%libID%');?>' data-toggle='modal' data-type='iframe'><i class="icon icon-edit"></i><?php echo $lang->doc->libDropdown['editLib'];?></a></li>
     <?php endif;?>
-    <?php if(common::hasPriv($app->rawModule, 'deleteLib')):?>
+    <?php if(common::hasPriv($module, 'deleteLib')):?>
     <li data-method="deleteLib"><a href='<?php echo inlink('deleteLib', 'libID=%libID%');?>' target='hiddenwin'><i class="icon icon-trash"></i><?php echo $lang->doc->libDropdown['deleteLib'];?></a></li>
     <?php endif;?>
   </ul>
-  <ul class='moduleDorpdown'>
-    <?php if($canAddCatalog):?>
+  <ul class='<?php echo $module;?>ModuleDorpdown'>
+    <?php if($canAddCatalog[$module]):?>
     <li data-method="addCataBro" data-type="add" data-id="%moduleID%"><a><i class="icon icon-icon-add-directory"></i><?php echo $lang->doc->libDropdown['addSameModule'];?></a></li>
     <li data-method="addCataChild" data-type="add" data-id="%moduleID%" data-has-children='%hasChildren%'><a><i class="icon icon-icon-add-directory"></i><?php echo $lang->doc->libDropdown['addSubModule'];?></a></li>
     <?php endif;?>
-    <?php if($canEditCatalog):?>
-    <li data-method="editCata" class='edit-module'><a data-href='<?php echo helper::createLink('doc', 'editCatalog', "moduleID=%moduleID%&type=$app->rawModule");?>'><i class="icon icon-edit"></i><?php echo $lang->doc->libDropdown['editModule'];?></a></li>
+    <?php if($canEditCatalog[$module]):?>
+    <li data-method="editCata" class='edit-module'><a data-href='<?php echo helper::createLink($module, 'editCatalog', "moduleID=%moduleID%&type=$app->rawModule");?>'><i class="icon icon-edit"></i><?php echo $lang->doc->libDropdown['editModule'];?></a></li>
     <?php endif;?>
-    <?php if($canDeleteCatalog):?>
-    <li data-method="deleteCata"><a href='<?php echo helper::createLink('doc', 'deleteCatalog', 'rootID=%libID%&moduleID=%moduleID%');?>' target='hiddenwin'><i class="icon icon-trash"></i><?php echo $lang->doc->libDropdown['delModule'];?></a></li>
+    <?php if($canDeleteCatalog[$module]):?>
+    <li data-method="deleteCata"><a href='<?php echo helper::createLink($module, 'deleteCatalog', 'rootID=%libID%&moduleID=%moduleID%');?>' target='hiddenwin'><i class="icon icon-trash"></i><?php echo $lang->doc->libDropdown['delModule'];?></a></li>
     <?php endif;?>
   </ul>
+  <?php endforeach;?>
 </div>
 <div class='hidden' data-id="ulTreeModal">
   <ul data-id="liTreeModal" class="menu-active-primary menu-hover-primary has-input">
@@ -160,9 +175,11 @@ $(function()
      */
     function renderDropdown(option)
     {
-        var libClass = '.libDorpdown';
-        if(option.type != 'dropDownLibrary') libClass = '.moduleDorpdown';
+        var moduleType = option.moduleType == 'lib' ? 'doc' : option.moduleType;
+        var libClass   = '.' + moduleType + 'LibDorpdown';
+        if(option.type != 'dropDownLibrary') libClass = '.' + moduleType + 'ModuleDorpdown';
         if($(libClass).find('li').length == 0) return '';
+
         var dropdown = '<ul class="dropdown-menu dropdown-in-tree" id="' + option.type + '" style="display: unset; left:' + option.left + 'px; top:' + option.top + 'px;">';
         dropdown += $(libClass).html().replace(/%libID%/g, option.libID).replace(/%moduleID%/g, option.moduleID).replace(/%hasChildren%/g, option.hasChildren);
         dropdown += '</ul>';
@@ -187,15 +204,15 @@ $(function()
         }
         else
         {
-            var libId;
+            var lib  = 0;
             var $lis = '<li><a href="###" data-id=0>' + versionLang + '</a></li>';
             for(i = 0; i< versions.length; i++)
             {
                 var version = versions[i];
                 $lis += '<li><a href="###"  data-id="' + version.id + '">' + version.version+ '</a></li>';
-                libId = version.lib;
+                lib   = version.lib;
             }
-            var $dropdown = '<ul id="versionSwitcher" data-lib-id = "' + libId + '" class="dropdown-menu dropdown-in-tree" style="display: unset; left:' + option.left + 'px; top:' + option.top + 'px;">';
+            var $dropdown = '<ul id="versionSwitcher" data-lib = "' + lib + '" class="dropdown-menu dropdown-in-tree" style="display: unset; left:' + option.left + 'px; top:' + option.top + 'px;">';
             $dropdown += $lis;
             $dropdown += '</ul>';
         }
@@ -255,7 +272,10 @@ $(function()
                     }
                     $item += '<div class="tree-version-trigger" data-id="' +  item.id + '"><div class="text">' + (versionName || versionLang) + '</div><div class="caret"></div></div>';
                 }
-                if((libClass != 'lib' && hasModulePriv) || (libClass == 'lib' && hasLibPriv)) $item += '<i class="icon icon-drop icon-ellipsis-v hidden tree-icon" data-isCatalogue="' + (libClass ? false : true) + '"></i>';
+
+                var moduleType = config.currentModule == 'api' ? 'api' : 'doc';
+                if(objectType) objectType.indexOf('api') === 0 ? 'api' : 'doc';
+                if((libClass != 'lib' && hasModulePriv[moduleType]) || (libClass == 'lib' && hasLibPriv[moduleType])) $item += '<i class="icon icon-drop icon-ellipsis-v hidden tree-icon" data-isCatalogue="' + (libClass ? false : true) + '"></i>';
                 $item += '</div>';
                 $item += '</a>';
                 if(item.versions) versionsData[item.id] = item.versions;
@@ -268,8 +288,8 @@ $(function()
 
         if(isFirstLoad) ele.data('zui.tree').collapse();
 
-        var $leaf = ele.find('li.active');
-        if($leaf.length) $leaf[$leaf.length - 1].scrollIntoView(false);
+        var $leaf = ele.find('li.active > a');
+        if($leaf.length && $('#fileTree').height() >= $('#sideBar').height()) $('#sideBar')[0].scrollTop = $($leaf[$leaf.length - 1]).offset().top - 100;
 
         ele.on('click', '.icon-drop', function(e)
         {
@@ -329,8 +349,9 @@ $(function()
             if($(this).data('type') == 'annex') return;
             if(!$(this).data('action')) return;
 
-            var libClass = '.libDorpdown';
-            if(!$(this).hasClass('lib')) libClass = '.moduleDorpdown';
+            var moduleType = $(this).data('type') == 'api' ? 'api' : 'doc';
+            var libClass   = '.' + moduleType + 'LibDorpdown';
+            if(!$(this).hasClass('lib')) libClass = '.' + moduleType + 'ModuleDorpdown';
 
             $(this).find('.icon').removeClass('hidden');
             $(this).addClass('show-icon');
@@ -360,7 +381,7 @@ $(function()
                 libID = $(this).closest('.lib').data('id');
             }
 
-            return lcatePage(libID, moduleID, $(this).data('type'));
+            return locatePage(libID, moduleID, $(this).data('type'));
         }).on('click', '.tree-version-trigger', function(e)
         {
             $('.dropdown-in-tree').remove();
@@ -408,8 +429,10 @@ $(function()
      * @access public
      * @return void
      */
-    function lcatePage(libID, moduleID, type)
+    function locatePage(libID, moduleID, type)
     {
+        if(!libID)    libID    = 0;
+        if(!moduleID) moduleID = 0;
         linkParams = linkParams.replace('%s', 'libID=' + libID + '&moduleID=' + moduleID);
         var methodName = '';
         if(config.currentModule == 'api')
@@ -422,10 +445,13 @@ $(function()
             methodName = 'showFiles';
             linkParams = 'type=' + objectType + '&objectID=' + objectID;
         }
-        else if(objectType == 'mine')
+        else if(objectType == 'mine' || objectType == 'view' || objectType == 'collect' || objectType == 'createdby')
         {
+            var mySpaceType = 'mine';
+            if(type == 'view' || type == 'collect' || type == 'createdBy') mySpaceType = type;
+
             methodName = 'mySpace';
-            linkParams = 'type=mine&libID=' + libID;
+            linkParams = 'type='+ mySpaceType + '&libID=' + libID + '&moduleID=' + moduleID;
         }
         else if(['text', 'word', 'ppt', 'excel'].indexOf(type) !== -1)
         {
@@ -509,7 +535,7 @@ $(function()
                 else
                 {
                     var $input   = $('[data-id=ulTreeModal]').html();
-                    var $rootDom = $('[data-id=' + item.libid + ']a');
+                    var $rootDom = $('[data-id=' + item.libid + ']a.lib');
                     var $li      = $rootDom.parent();
                     moduleData.isUpdate = true;
                     $rootDom.after($input);
@@ -548,9 +574,16 @@ $(function()
         }
     }).on('click', '#versionSwitcher a', function()
     {
-        var $item = $(this);
-        linkParams = linkParams.replace('%s', 'libID=' + $item.closest('ul').data('libId') + '&moduleID=0&apiID=0&version=0&release=' + $item.data('id'));
-        location.href = createLink(config.currentModule, 'index', linkParams);
+        var libID      = $(this).closest('#versionSwitcher').data('lib');
+        var moduleID   = $(this).data('id');
+        var params     = 'libID=' + libID + '&moduleID=0&apiID=0&version=0&release=' + moduleID;
+        var methodName = config.currentMethod;
+        if(config.currentModule == 'doc')
+        {
+            params     = linkParams.replace('%s', 'libID=' + libID + '&moduleID=' + moduleID).replace('browseType=&', 'browseType=byrelease&').replace('param=0', 'param=' + moduleID);
+            methodName = objectType + 'Space';
+        }
+        location.href = createLink(config.currentModule, methodName, params);
     }).on('blur', '.file-tree input.input-tree', function()
     {
         var $input = $(this);
@@ -583,7 +616,7 @@ $(function()
             }
 
             var module = result.module;
-            return lcatePage(module.root, module.id, 'doc');
+            return locatePage(module.root, module.id, 'doc');
         });
     }).on('keydown', '.file-tree input.input-tree', function(e)
     {

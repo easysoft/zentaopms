@@ -1,3 +1,4 @@
+body {overflow: hidden;}
 .doc-title {width:400px;}
 .doc-title input {border: unset; font-size: 18px; font-weight: bold; color: #3c4353; padding-left: 16px;}
 .doc-title .form-control:focus {border: unset; box-shadow: unset;}
