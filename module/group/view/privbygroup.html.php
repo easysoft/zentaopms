@@ -93,24 +93,6 @@
           <?php
           $moduleActions = !empty($lang->resource->{$moduleName}) ? $lang->resource->{$moduleName} : null;
 
-          /* Check method in select version. */
-          if($version)
-          {
-              $hasMethod = false;
-              foreach($privMethods as $module => $methods)
-              {
-                  foreach($methods as $method)
-                  {
-                      if(strpos($changelogs, ",$module-$method,") !== false)
-                      {
-                          $hasMethod = true;
-                          break;
-                      }
-                      if(!$hasMethod) continue;
-                  }
-              }
-          }
-
           $i = 1;
 
           $modulePrivs  = count($privList[$moduleName], 1) - count($selectPrivs[$moduleName], 1);

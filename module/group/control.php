@@ -199,25 +199,25 @@ class group extends control
      */
     public function managePriv($type = 'byGroup', $param = 0, $menu = '', $version = '')
     {
-        if($type == 'byGroup') $groupID = $param;
+        if($type == 'byGroup' or $type == 'byPackage') $groupID = $param;
 
         $this->view->type = $type;
         foreach($this->lang->resource as $moduleName => $action)
         {
-            if($this->group->checkMenuModule($menu, $moduleName) or $type != 'byGroup') $this->app->loadLang($moduleName);
+            if($this->group->checkMenuModule($menu, $moduleName) or ($type != 'byGroup' and $type != 'byPackage')) $this->app->loadLang($moduleName);
         }
 
         if(!empty($_POST))
         {
-            if($type == 'byGroup')  $result = $this->group->updatePrivByGroup($groupID, $menu, $version);
+            if($type == 'byGroup' or $type == 'byPackage')  $result = $this->group->updatePrivByGroup($groupID, $menu, $version);
             if($type == 'byModule') $result = $this->group->updatePrivByModule();
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            if($type == 'byGroup') return $this->send(array('result' => 'success', 'message' => ($result ? $this->lang->group->dependPrivsSaveTip : $this->lang->saveSuccess), 'locate' => 'reload'));
+            if($type == 'byGroup' or $type == 'byPackage') return $this->send(array('result' => 'success', 'message' => ($result ? $this->lang->group->dependPrivsSaveTip : $this->lang->saveSuccess), 'locate' => 'reload'));
             if($type == 'byModule') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
         }
 
-        if($type == 'byGroup')
+        if($type == 'byGroup' or $type == 'byPackage')
         {
             $this->group->sortResource();
             $group      = $this->group->getById($groupID);
@@ -234,12 +234,12 @@ class group extends control
             {
                 if(version_compare($currentVersion, $realVersion, '>=')) $changelog[] = join(',', $currentChangeLog);
             }
+            $changelogs = ',' . join(',', $changelog) . ',';
 
             $this->lang->custom->common = $this->lang->group->config;
             if($this->config->edition == 'max' and $this->config->vision == 'rnd' and isset($this->lang->baseline)) $this->lang->baseline->common = $this->lang->group->docTemplate;
 
             $this->view->group      = $group;
-            $this->view->changelogs = ',' . join(',', $changelog) . ',';
             $this->view->groupPrivs = $groupPrivs;
             $this->view->groupID    = $groupID;
             $this->view->menu       = $menu;
@@ -256,6 +256,8 @@ class group extends control
             $selectedPrivIdList = array();
             foreach($privs as $priv)
             {
+                if(!empty($version) and strpos($changelogs, ",{$priv->module}-{$priv->method},") === false) continue;
+
                 if(!isset($privList[$priv->parentCode])) $privList[$priv->parentCode] = array();
                 if(!isset($privList[$priv->parentCode][$priv->parent])) $privList[$priv->parentCode][$priv->parent] = array();
                 $privList[$priv->parentCode][$priv->parent][$priv->key] = $priv;
@@ -272,7 +274,8 @@ class group extends control
                 }
             }
 
-            $unassignedModule = array_diff(array_keys(get_object_vars($this->lang->resource)), array_keys($privList));
+            $modules          = $this->group->getMenuModules($menu, false);
+            $unassignedModule = array_diff(array_keys(get_object_vars($this->lang->resource)), array_keys($modules));
             foreach($unassignedModule as $index => $module)
             {
                 if(!$this->group->checkMenuModule($menu, $module)) continue;
