@@ -35,7 +35,7 @@
         </tr>
         <?php endif;?>
         <tr>
-          <th class='w-100px'><?php echo $lang->doc->libAndModule?></th>
+          <th class='w-110px'><?php echo $lang->doc->libAndModule?></th>
           <td colspan='3' class='required'><span id='moduleBox'><?php echo html::select('module', $moduleOptionMenu, $doc->lib . '_' . $doc->module, "class='form-control chosen'");?></span></td>
         </tr>
         <tr>

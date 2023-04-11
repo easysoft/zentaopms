@@ -60,7 +60,7 @@
             </button>
             <table class='table table-form' id="basicInfoBox">
               <tbody>
-                <tr><th class='w-100px'></th><td></td><th class='w-100px'></th><td></td></tr>
+                <tr><th class='w-110px'></th><td></td><th class='w-110px'></th><td></td></tr>
                 <tr>
                   <th><?php echo $lang->doc->title?></th>
                   <td colspan='3' id='copyTitle'></td>
@@ -86,7 +86,7 @@
                 </tr>
                 <?php endif;?>
                 <tr>
-                  <th class='w-100px'><?php echo $lang->doc->libAndModule?></th>
+                  <th class='w-110px'><?php echo $lang->doc->libAndModule?></th>
                   <td colspan='3' class='required'><span id='moduleBox'><?php echo html::select('module', $moduleOptionMenu, $moduleID, "class='form-control picker-select'");?></span></td>
                 </tr>
                 <tr>

@@ -26,6 +26,7 @@ body {margin-bottom: 25px;}
 #docListForm .checkbox-primary > label {height: 16px; line-height: 16px; padding-left: 16px;}
 #docListForm .checkbox-primary > label:before {left: -1px; font-size: 10px;}
 #docListForm .checkbox-primary > label:after {width: 12px; height: 12px;}
+.table-files .btn {padding: 0 2px;}
 </style>
 <?php if(common::checkNotCN()):?>
 <style>
