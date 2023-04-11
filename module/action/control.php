@@ -143,6 +143,22 @@ class action extends control
             foreach($trashes as $trash) $executionIdList[] = $trash->execution;
             $this->view->executionList = $this->execution->getByIdList($executionIdList, 'all');
         }
+
+        /* Process pivot name. */
+        foreach($trashes as $trash)
+        {
+            if($trash->objectType == 'pivot')
+            {
+                $pivotNames = json_decode($trash->objectName, true);
+                $trash->objectName = zget($pivotNames, $this->app->getClientLang(), '');
+                if(empty($trash->objectName))
+                {
+                    $pivotNames = array_filter($pivotNames);
+                    $trash->objectName = reset($pivotNames);
+                }
+            }
+        }
+
         /* Title and position. */
         $this->view->title      = $this->lang->action->trash;
         $this->view->position[] = $this->lang->action->trash;
