@@ -2042,7 +2042,6 @@ class block extends control
      */
     public function printDocStatisticBlock()
     {
-        $this->display();
     }
 
     /**
@@ -2053,7 +2052,6 @@ class block extends control
      */
     public function printDocDynamicBlock()
     {
-        $this->display();
     }
 
     /**
@@ -2064,7 +2062,6 @@ class block extends control
      */
     public function printMyCollectionBlock()
     {
-        $this->display();
     }
 
     /**
@@ -2075,7 +2072,6 @@ class block extends control
      */
     public function printRecentUpdateBlock()
     {
-        $this->display();
     }
 
     /**
@@ -2086,7 +2082,6 @@ class block extends control
      */
     public function printViewListBlock()
     {
-        $this->display();
     }
 
     /**
@@ -2097,7 +2092,6 @@ class block extends control
      */
     public function printCollectListBlock()
     {
-        $this->display();
     }
 
     /**
@@ -2108,7 +2102,6 @@ class block extends control
      */
     public function printProductDocBlock()
     {
-        $this->display();
     }
 
     /**
@@ -2119,7 +2112,6 @@ class block extends control
      */
     public function printProjectDocBlock()
     {
-        $this->display();
     }
 
     /**
