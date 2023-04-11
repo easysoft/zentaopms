@@ -23,7 +23,7 @@
 .input-tree {width: 120px;}
 .tree-icon {position: absolute; right: 0;}
 .tree li.has-input {overflow: hidden;}
-.tree li.has-input  > input {margin-left: 15px;}
+.tree li.has-input  > input.input-bro {margin-left: 15px;}
 .img-lib {flex: 0 0 14px; height: 14px; margin-right: 5px;}
 .tree-icon {position: absolute; right: 0;}
 .tree li > a {max-width: 100%; padding: 2px;}
@@ -549,7 +549,7 @@ $(function()
                 var $rootDom = $('#fileTree li[data-id=' + item.id + ']');
                 $rootDom.after($input);
                 $rootDom.closest('ul').find('.has-input').css('padding-left', '0');
-                $('#fileTree').find('input').focus();
+                $('#fileTree').find('input').addClass('input-bro').focus();
                 break;
             case 'addCataChild' :
                 moduleData.parentID = item.id;
