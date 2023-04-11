@@ -14,6 +14,7 @@ const renderMap =
     'pageJS':      (data) => $('#pageJS').replaceWith(data),
     activeFeature: (data) => activeNav(data, '#featureBar'),
     activeMenu:    activeNav,
+    table:         updateTable
 };
 
 function activeNav(activeID, nav)
@@ -25,6 +26,21 @@ function activeNav(activeID, nav)
     $nav.find('.nav-item>a[data-id="' + activeID + '"]').addClass('active');
 }
 
+function updateTable(data)
+{
+    const props = data.props;
+    const $table = $('#' + props.id).parent();
+    if(!$table.length) return;
+    const dtable = zui.DTable.get($table[0]);
+    Object.keys(props).forEach(prop =>
+    {
+        const value = props[prop];
+        if(typeof value === 'string' && value.startsWith('RAWJS<')) delete props[prop];
+    });
+    if(debug) console.log('[APP] ', 'update table:', {data, props});
+    dtable.render(props);
+}
+
 function renderPage(list)
 {
     if(debug) console.log('[APP] ', 'render:', list);
@@ -34,10 +50,6 @@ function renderPage(list)
         if(render) render(item.data);
     });
     $.apps.updateApp(currentAppCode, currentAppUrl, document.title);
-}
-
-function loadTable(id)
-{
 
 }
 
@@ -74,6 +86,13 @@ window.fetchZinData = function fetchZinData(url, selector, options)
     });
 }
 
+window.loadTable = function loadTable(url, id)
+{
+    id = id || $('.dtable').attr('id') || 'dtable';
+    if(!id) return;
+
+    fetchZinData(url, 'table/#' + id + ':type=json&data=props,#featureBar>*');
+}
 
 window.loadPage = function loadPage(url)
 {
@@ -99,7 +118,10 @@ $(document).on('click', (e) =>
 
     const url = $a.attr('href');
     if(!url) return;
-    openPage(url);
+
+    const loadTarget = $a.data('load');
+    if(loadTarget === 'table') loadTable(url);
+    else openPage(url);
     e.preventDefault();
 });
 
