@@ -145,7 +145,7 @@
             <?php endforeach;?>
           </div>
           <?php if(!empty($outline) and strip_tags($outline)):?>
-          <div class="outline table-col">
+          <div id="outlineMenu" class="outline table-col">
             <div class="outline-toggle"><i class="icon icon-angle-right"></i></div>
             <div class="outline-content">
               <?php echo $outline;?>
