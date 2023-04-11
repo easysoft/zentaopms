@@ -353,9 +353,12 @@ $lang->block->default['doc']['5']['title'] = 'Browse Leaderboard';
 $lang->block->default['doc']['5']['block'] = 'viewlist';
 $lang->block->default['doc']['5']['grid']  = 4;
 
-$lang->block->default['doc']['6']['title'] = $lang->productCommon . 'Document';
-$lang->block->default['doc']['6']['block'] = 'productdoc';
-$lang->block->default['doc']['6']['grid']  = 8;
+if($config->vision == 'rnd')
+{
+    $lang->block->default['doc']['6']['title'] = $lang->productCommon . 'Document';
+    $lang->block->default['doc']['6']['block'] = 'productdoc';
+    $lang->block->default['doc']['6']['grid']  = 8;
+}
 
 $lang->block->default['doc']['7']['title'] = 'Favorite Leaderboard';
 $lang->block->default['doc']['7']['block'] = 'collectlist';
