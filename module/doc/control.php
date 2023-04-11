@@ -91,7 +91,7 @@ class doc extends control
         $docs = array();
         if($type == 'mine')
         {
-            $docs = $this->doc->getDocs($libID, $moduleID, $browseType, $orderBy, $pager);
+            $docs = $libID ? $this->doc->getDocs($libID, $moduleID, $browseType, $orderBy, $pager) : array();
         }
         elseif($type == 'view' or $type == 'collect' or $type == 'createdby')
         {

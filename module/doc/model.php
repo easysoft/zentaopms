@@ -575,7 +575,8 @@ class docModel extends model
      */
     public function getObjectsByDoc($docIdList = array())
     {
-        if(empty($docIdList)) return array();
+        $projects = $executions = $products = array();
+        if(empty($docIdList)) return array($projects, $executions, $products);
 
         $projects = $this->dao->select('t1.id, t1.name')->from(TABLE_PROJECT)->alias('t1')
             ->leftJoin(TABLE_DOC)->alias('t2')->on('t1.id=t2.project')
@@ -3061,7 +3062,7 @@ class docModel extends model
             $myLib->objectID   = 0;
             $myLib->active     = 0;
             $myLib->hasAction  = false;
-            $myLib->active     = $libID ? 1 : 0;
+            $myLib->active     = zget($this->app->rawParams, 'type', '') == 'mine'  ? 1 : 0;
             $myLib->children   = $libTree;
 
             $myView = new stdclass();
