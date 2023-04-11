@@ -53,8 +53,9 @@ function parseWgSelector($selector)
         }
         elseif($type === 'option')
         {
-            $option = [];
-            parse_str($current, $option);
+            $options = [];
+            parse_str($current, $options);
+            foreach($options as $key => $value) $result[$key] = empty($value) ? true : $value;
         }
         else
         {
@@ -103,9 +104,9 @@ function parseWgSelector($selector)
     if(empty($result['class'])) $result['class'] = NULL;
     if(empty($result['name']))
     {
-        if(!empty($result['id']))  $result['name'] = $result['id'];
-        if(!empty($result['tag'])) $result['name'] = $result['tag'];
-        $result['name'] = $selector;
+        if(!empty($result['id']))      $result['name'] = $result['id'];
+        elseif(!empty($result['tag'])) $result['name'] = $result['tag'];
+        else                           $result['name'] = $selector;
     }
 
     return (object)$result;
