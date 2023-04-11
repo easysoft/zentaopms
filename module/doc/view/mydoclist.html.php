@@ -39,7 +39,7 @@ body {margin-bottom: 25px;}
   <p>
     <span class="text-muted"><?php echo $lang->doc->noDoc;?></span>
     <?php
-    if($browseType != 'bySearch' and $libID and (common::hasPriv('doc', 'create') or (common::hasPriv('api', 'create') and !$apiLibID)))
+    if($browseType != 'bysearch' and $libID and common::hasPriv('doc', 'create'))
     {
         echo $this->doc->printCreateBtn($lib, $type, $objectID, $moduleID, 'list');
     }

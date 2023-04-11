@@ -82,7 +82,7 @@ class docModel extends model
                 ->beginIF($type == 'all')->andWhere('deleted')->eq(0)->fi()
                 ->beginIF($excludeType)->andWhere('type')->notin($excludeType)->fi()
                 ->andWhere('vision')->eq($this->config->vision)
-                ->orderBy('`order`_asc, id_asc')
+                ->orderBy('id_asc')
                 ->query();
         }
         else
@@ -93,12 +93,13 @@ class docModel extends model
                 ->beginIF($type)->andWhere('type')->eq($type)->fi()
                 ->beginIF(!$type)->andWhere('type')->ne('api')->fi()
                 ->beginIF($objectID and strpos(',product,project,execution,', ",$type,") !== false)->andWhere($type)->eq($objectID)->fi()
-                ->orderBy("`order`_asc, id_asc")->query();
+                ->orderBy('id_asc')
+                ->query();
         }
 
         $products   = $this->loadModel('product')->getPairs();
-        $projects   = $this->loadModel('project')->getPairsByProgram();
-        $executions = $this->loadModel('execution')->getPairs(0, 'all', 'multiple,leaf');
+        $projects   = $this->loadModel('project')->getPairsByProgram('', 'all', false, 'order_asc', 'kanban');
+        $executions = $this->loadModel('execution')->getPairs(0, 'sprint,stage', 'multiple,leaf');
         $waterfalls = array();
         if(empty($objectID) and $type != 'product' and $type != 'project' and $type != 'custom')
         {
@@ -123,14 +124,18 @@ class docModel extends model
             {
                 if(strpos($extra, 'withObject') !== false)
                 {
+                    if($lib->product != 0) $lib->name = zget($products, $lib->product, '') . ' / ' . $lib->name;
                     if($lib->execution != 0)
                     {
                         $lib->name = zget($executions, $lib->execution, '') . ' / ' . $lib->name;
+                        $lib->name = ltrim($lib->name, '/');
                         if(!empty($waterfalls[$lib->execution])) $lib->name = $waterfalls[$lib->execution] . ' / ' . $lib->name;
                         $lib->name = trim($lib->name, '/');
                     }
-                    if($lib->product != 0) $lib->name = zget($products, $lib->product, '') . ' / ' . $lib->name;
-                    if($lib->project != 0) $lib->name = zget($projects, $lib->project, '') . ' / ' . $lib->name;
+
+                    if($lib->project != 0)     $lib->name = zget($projects, $lib->project, '') . ' / ' . $lib->name;
+                    if($lib->type == 'mine')   $lib->name = $this->lang->doc->person . ' / ' . $lib->name;
+                    if($lib->type == 'custom') $lib->name = $this->lang->doc->team . ' / ' . $lib->name;
                 }
 
                 $libPairs[$lib->id] = $lib->name;
@@ -633,19 +638,31 @@ class docModel extends model
      * @access public
      * @return array
      */
-    public function getMineList($type, $browseType, $orderBy, $pager = null)
+    public function getMineList($type, $browseType, $orderBy, $pager = null, $queryID = 0)
     {
+        $query = '';
+        if($browseType == 'bysearch')
+        {
+            $query = $this->buildQuery($type, $queryID);
+            $query = preg_replace('/(`\w+`)/', 't1.$1', $query);
+        }
+
+        $libs      = $this->getLibs();
+        $docIDList = $this->getPrivDocs(array_keys($libs));
         if($type == 'view' or $type == 'collect')
         {
             $docs = $this->dao->select('DISTINCT t1.*,t3.name as libName,t3.type as objectType')->from(TABLE_DOC)->alias('t1')
                 ->leftJoin(TABLE_DOCACTION)->alias('t2')->on("t1.id=t2.doc")
                 ->leftJoin(TABLE_DOCLIB)->alias('t3')->on("t1.lib=t3.id")
                 ->where('t1.deleted')->eq(0)
+                ->andWhere('t1.lib')->ne('')
                 ->andWhere('t1.vision')->eq($this->config->vision)
+                ->andWhere('t1.id')->in(array_keys($docIDList))
                 ->andWhere('t2.action')->eq($type)
                 ->andWhere('t2.actor')->eq($this->app->user->account)
-                ->beginIF($browseType == 'all')->andWhere("(t1.status = 'normal' or (t1.status = 'draft' and t1.addedBy='{$this->app->user->account}'))")->fi()
+                ->beginIF($browseType == 'all' or $browseType == 'bysearch')->andWhere("(t1.status = 'normal' or (t1.status = 'draft' and t1.addedBy='{$this->app->user->account}'))")->fi()
                 ->beginIF($browseType == 'draft')->andWhere('t1.status')->eq('draft')->andWhere('t1.addedBy')->eq($this->app->user->account)->fi()
+                ->beginIF($browseType == 'bysearch')->andWhere($query)->fi()
                 ->orderBy($orderBy)
                 ->page($pager, 't1.id')
                 ->fetchAll('id');
@@ -655,9 +672,12 @@ class docModel extends model
             $docs = $this->dao->select('DISTINCT t1.*,t2.name as libName,t2.type as objectType')->from(TABLE_DOC)->alias('t1')
                 ->leftJoin(TABLE_DOCLIB)->alias('t2')->on("t1.lib=t2.id")
                 ->where('t1.deleted')->eq(0)
+                ->andWhere('t1.lib')->ne('')
+                ->andWhere('t1.id')->in(array_keys($docIDList))
                 ->andWhere('t1.vision')->eq($this->config->vision)
                 ->andWhere('t1.addedBy')->eq($this->app->user->account)
                 ->beginIF($browseType == 'draft')->andWhere('t1.status')->eq('draft')->andWhere('t1.addedBy')->eq($this->app->user->account)->fi()
+                ->beginIF($browseType == 'bysearch')->andWhere($query)->fi()
                 ->orderBy($orderBy)
                 ->page($pager)
                 ->fetchAll('id');
@@ -1084,6 +1104,7 @@ class docModel extends model
                 unset($this->config->doc->search['fields']['execution']);
             }
 
+            if(in_array($type, array('view', 'collect', 'createdby'))) $libPairs = array('' => '') + $this->getLibs('all', 'withObject');
 
             $this->config->doc->search['module'] = $queryName;
             $this->config->doc->search['params']['lib']['values'] = $libPairs + array('all' => $this->lang->doclib->all);
@@ -1094,16 +1115,42 @@ class docModel extends model
         $this->config->doc->search['actionURL'] = $actionURL;
         $this->config->doc->search['queryID']   = $queryID;
 
-        /* Get the modules. */
-        $this->config->doc->search['params']['module']['values'] = $this->loadModel('tree')->getOptionMenu($libID, 'doc', $startModuleID = 0);
+        $this->loadModel('search')->setSearchParams($this->config->doc->search);
+    }
 
-        if($type == 'index' || $type == 'view' || ($this->app->rawMethod != 'contribute' and $libID == 0))
+    /**
+     * Build search query.
+     *
+     * @param  string $type
+     * @param  int    $queryID
+     * @access public
+     * @return string
+     */
+    public function buildQuery($type, $queryID = 0)
+    {
+        $queryName = $type . 'libDocQuery';
+        $queryForm = $type . 'libDocForm';
+        if($queryID)
         {
-            unset($this->config->doc->search['fields']['module']);
-            unset($this->config->doc->search['fields']['lib']);
+            $query = $this->loadModel('search')->getQuery($queryID);
+            if($query)
+            {
+                $this->session->set($queryName, $query->sql);
+                $this->session->set($queryForm, $query->form);
+            }
+            else
+            {
+                $this->session->set($queryName, ' 1 = 1');
+            }
+        }
+        else
+        {
+            if($this->session->$queryName == false) $this->session->set($queryName, ' 1 = 1');
         }
 
-        $this->loadModel('search')->setSearchParams($this->config->doc->search);
+        $query = $this->session->$queryName;
+        if(strpos($query, "`lib` = 'all'") !== false) $query = str_replace("`lib` = 'all'", '1', $query);
+        return $query;
     }
 
     /**
@@ -2783,32 +2830,10 @@ class docModel extends model
      */
     public function getDocsBySearch($type, $objectID, $libID, $queryID, $orderBy = 'id_desc', $pager = null)
     {
-        $queryName = $type . 'libDocQuery';
-        $queryForm = $type . 'libDocForm';
-        if($queryID)
-        {
-            $query = $this->loadModel('search')->getQuery($queryID);
-            if($query)
-            {
-                $this->session->set($queryName, $query->sql);
-                $this->session->set($queryForm, $query->form);
-            }
-            else
-            {
-                $this->session->set($queryName, ' 1 = 1');
-            }
-        }
-        else
-        {
-            if($this->session->$queryName == false) $this->session->set($queryName, ' 1 = 1');
-        }
-
-        $libs  = $this->getLibsByObject($type, $objectID);
-        $query = $this->session->$queryName;
-        if(strpos($query, "`lib` = 'all'") !== false) $query = str_replace("`lib` = 'all'", '1', $query);
-
+        $query     = $this->buildQuery($type, $queryID);
+        $libs      = $this->getLibsByObject($type, $objectID);
         $docIdList = $this->getPrivDocs(array_keys($libs));
-        $docs = $this->dao->select('*')->from(TABLE_DOC)
+        $docs      = $this->dao->select('*')->from(TABLE_DOC)
             ->where('deleted')->eq(0)
             ->andWhere($query)
             ->andWhere('lib')->in(array_keys($libs))
@@ -2933,6 +2958,7 @@ class docModel extends model
         $release = null;
         if($browseType == 'byrelease' and $param) $release = $this->loadModel('api')->getRelease(0, 'byId', $param);
 
+        $browseType   = strtolower($browseType);
         $libTree      = array($type => array());
         $apiLibs      = array();
         $apiLibIDList = array();
@@ -2950,7 +2976,7 @@ class docModel extends model
             $item->name       = $lib->name;
             $item->objectType = $type;
             $item->objectID   = $objectID;
-            $item->active     = $lib->id == $libID && $browseType != 'bySearch' ? 1 : 0;
+            $item->active     = $lib->id == $libID && $browseType != 'bysearch' ? 1 : 0;
             $item->children   = $this->getModuleTree($lib->id, $moduleID, $lib->type == 'api' ? 'api' : 'doc', 0, $releaseModule);
             $showDoc = $this->loadModel('setting')->getItem('owner=' . $this->app->user->account . '&module=doc&key=showDoc');
             $showDoc = $showDoc === '0' ? 0 : 1;
@@ -3090,7 +3116,7 @@ class docModel extends model
             $myCreation->objectType = 'doc';
             $myCreation->objectID   = 0;
             $myCreation->hasAction  = false;
-            $myCreation->active     = zget($this->app->rawParams, 'type', '') == 'createdBy' ? 1 : 0;
+            $myCreation->active     = zget($this->app->rawParams, 'type', '') == 'createdby' ? 1 : 0;
 
             $libTree   = array();
             $libTree[] = $myLib;
