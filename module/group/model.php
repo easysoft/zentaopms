@@ -465,6 +465,20 @@ class groupModel extends model
                 $data->method = $priv->method;
                 $this->dao->replace(TABLE_GROUPPRIV)->data($data)->exec();
             }
+            $recommendPrivs = $this->getPrivByIdList(zget($_POST, 'recommendPrivs'));
+            foreach($recommendPrivs as $privID => $priv)
+            {
+                if(in_array($priv->method, zget($_POST['actions'], $priv->module, array())))
+                {
+                    unset($recommendPrivs[$privID]);
+                    continue;
+                }
+                $data         = new stdclass();
+                $data->group  = $groupID;
+                $data->module = $priv->module;
+                $data->method = $priv->method;
+                $this->dao->replace(TABLE_GROUPPRIV)->data($data)->exec();
+            }
         }
         return !empty($depentedPrivs) ? true : false;
     }
@@ -2066,13 +2080,15 @@ class groupModel extends model
      * @access public
      * @return array
      */
-    public function getRelatedPrivs($privIdList, $type = '')
+    public function getRelatedPrivs($privIdList, $type = '', $excludePrivs = array(), $appendIdList = '')
     {
         $relatedPrivs = $this->dao->select('t1.relationPriv,t1.type,t2.parent,t2.module,t2.method,t3.`key`,t3.value')->from(TABLE_PRIVRELATION)->alias('t1')
             ->leftJoin(TABLE_PRIV)->alias('t2')->on('t1.relationPriv=t2.id')
             ->leftJoin(TABLE_PRIVLANG)->alias('t3')->on('t1.relationPriv=t3.objectID')
-            ->where('t1.priv')->in($privIdList)
+            ->where('(t1.priv')->in($privIdList)
+            ->orWhere('t1.relationPriv')->in($appendIdList)->markRight(1)
             ->andWhere('t1.relationPriv')->notin($privIdList)
+            ->beginIF(!empty($excludePrivs))->andWhere('t1.relationPriv')->notin($excludePrivs)->fi()
             ->beginIF(!empty($type))->andWhere('t1.type')->eq($type)->fi()
             ->andWhere('t3.objectType')->eq('priv')
             ->andWhere('t2.edition')->like("%,{$this->config->edition},%")
@@ -2117,5 +2133,20 @@ class groupModel extends model
             ->andWhere('t2.type')->eq('module')
             ->orderBy('order_asc')
             ->fetchAll('id');
+    }
+
+    /**
+     * Get privs id list by group.
+     *
+     * @param  int    $groupID
+     * @access public
+     * @return void
+     */
+    public function getPrivsIdListByGroup($groupID)
+    {
+        $actions    = $this->dao->select("CONCAT(module, '-',  method) AS action")->from(TABLE_GROUPPRIV)->where('`group`')->eq($groupID)->fetchPairs();
+        $actions    = implode("','", $actions);
+        $privIdList = $this->dao->select("*")->from(TABLE_PRIV)->where("CONCAT(module, '-',  method) IN ('$actions')")->fetchAll('id');
+        return $privIdList;
     }
 }

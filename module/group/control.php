@@ -293,7 +293,8 @@ class group extends control
                 }
             }
 
-            $relatedPrivData = $this->group->getRelatedPrivs($selectedPrivIdList);
+            $groupPrivsIdList = $this->group->getPrivsIdListByGroup($groupID);
+            $relatedPrivData  = $this->group->getRelatedPrivs($selectedPrivIdList, '', array_keys($groupPrivsIdList));
 
             $this->view->privList           = $privList;
             $this->view->privMethods        = $privMethods;

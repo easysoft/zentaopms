@@ -7,7 +7,7 @@
 .priv-panel .table-empty-tip {padding: calc(20% - 20px) 10px;}
 .priv-panel + .priv-panel .table-empty-tip {padding: calc(30% - 20px) 10px;}
 .priv-panel + .priv-panel {margin-top: 16px; height: calc(60% - 16px);}
-.priv-panel > .panel-content {height: calc(100% - 16px); overflow-y: auto; min-height: 140px; padding-left: 4px; padding-top: 5px;}
+.priv-panel > .panel-content {height: calc(100% - 25px); overflow-y: auto; min-height: 110px; padding-left: 4px; margin-top: 10px;}
 .priv-panel > .panel-bottom {padding-top: 20px;}
 .priv-panel > .panel-title {position: relative;}
 .priv-panel > .panel-title > .icon-help {position: absolute; top: 3px; margin-left: 8px;}

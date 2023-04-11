@@ -285,7 +285,7 @@ function recommendChange($item, checked)
         $parentItem.closest('.checkbox-primary').find('label').addClass('checkbox-indeterminate-block');
     }
 
-    var privID = $actionItem.closest('.group-item').attr('data-id');
+    var privID = $item.attr('data-relationpriv');
     if(privID != 0)
     {
         var index = selectedPrivIdList.indexOf(privID);
