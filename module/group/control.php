@@ -327,7 +327,7 @@ class group extends control
                 $unassignedPrivs = $this->group->getUnassignedPrivsByModule($moduleCode);
                 $packageGroup[$moduleCode] = isset($modules[$moduleCode]) ? $modulePackages : array();
                 $unassignedPrivPackages    = isset($modules[$moduleCode]) ? $modules[$moduleCode]->id : 0;
-                $packageGroup[$moduleCode] = $packageGroup[$moduleCode] + array($unassignedPrivPackages => $this->lang->group->unassigned);
+                $packageGroup[$moduleCode] = $packageGroup[$moduleCode] + array($unassignedPrivPackages => $this->lang->group->other);
             }
 
             $hasPrivModule = array();
