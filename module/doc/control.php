@@ -1247,6 +1247,7 @@ class doc extends control
         $this->view->autoloadPage = $this->doc->checkAutoloadPage($doc);
         $this->view->libTree      = $this->doc->getLibTree($libID, $libs, $type, $doc->module, $objectID);
         $this->view->preAndNext   = $this->loadModel('common')->getPreAndNextObject('doc', $docID);
+        $this->view->moduleID     = $doc->module;
         $this->view->objectDropdown = $objectDropdown;
 
         $this->display();

@@ -43,11 +43,11 @@ $config->doc->objectIconList['execution'] = 'icon-run';
 $config->doc->objectIconList['mine']      = 'icon-contacts';
 $config->doc->objectIconList['custom']    = 'icon-groups';
 
-$config->doc->spaceMethod['mine']      = 'mySpace';
-$config->doc->spaceMethod['product']   = 'productSpace';
-$config->doc->spaceMethod['project']   = 'projectSpace';
-$config->doc->spaceMethod['execution'] = 'projectSpace';
-$config->doc->spaceMethod['custom']    = 'tableContents';
+$config->doc->spaceMethod['mine']      = 'myspace';
+$config->doc->spaceMethod['product']   = 'productspace';
+$config->doc->spaceMethod['project']   = 'projectspace';
+$config->doc->spaceMethod['execution'] = 'projectspace';
+$config->doc->spaceMethod['custom']    = 'tablecontents';
 
 $config->doc->search['module']               = 'doc';
 $config->doc->search['fields']['title']      = $lang->doc->title;
