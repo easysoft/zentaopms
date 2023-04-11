@@ -55,8 +55,15 @@ class doc extends control
      * @access public
      * @return void
      */
-    public function mySpace($type = 'mine', $libID = 0, $moduleID = 0, $browseType = 'all', $param = 0, $orderBy = 'status,id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function mySpace($type = 'mine', $libID = 0, $moduleID = 0, $browseType = 'all', $param = 0, $orderBy = '', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
+        $browseType = strtolower($browseType);
+        $type       = strtolower($type);
+
+        if(empty($orderBy) and $type == 'mine') $orderBy = 'status,editedDate_desc';
+        if(empty($orderBy) and ($type == 'view' or $type == 'collect')) $orderBy = 'status,date_desc';
+        if(empty($orderBy) and ($type == 'createdby')) $orderBy = 'status,addedDate_desc';
+
         /* Save session, load module. */
         $uri = $this->app->getURI(true);
         $this->session->set('docList', $uri, 'doc');
@@ -70,8 +77,6 @@ class doc extends control
         list($libs, $libID, $object, $objectID, $objectDropdown) = $this->doc->setMenuByType('mine', 0, $libID);
 
         /* Build the search form. */
-        $browseType = strtolower($browseType);
-        $type       = strtolower($type);
         $queryID    = $browseType == 'bysearch' ? (int)$param : 0;
         $params     = "libID=$libID&moduleID=$moduleID&browseType=bySearch&param=myQueryID&orderBy=$orderBy";
         if($this->app->rawMethod == 'myspace') $params = "type=$type&" . $params;
@@ -618,6 +623,7 @@ class doc extends control
         $this->view->from             = $from;
         $this->view->files            = $this->loadModel('file')->getByObject('doc', $docID);
         $this->view->objectID         = $objectID;
+        $this->view->otherEditing     = $this->doc->checkOtherEditing($docID);
         $this->display();
     }
 

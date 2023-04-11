@@ -12,10 +12,11 @@ $config->doc->editlib->requiredFields   = 'name';
 $config->doc->create->requiredFields    = 'lib,title';
 $config->doc->edit->requiredFields      = 'title';
 
-$config->doc->customObjectLibs = 'files,customFiles';
-$config->doc->notArticleType   = '';
-$config->doc->officeTypes      = 'word,ppt,excel';
-$config->doc->textTypes        = 'html,markdown,text';
+$config->doc->customObjectLibs  = 'files,customFiles';
+$config->doc->notArticleType    = '';
+$config->doc->officeTypes       = 'word,ppt,excel';
+$config->doc->textTypes         = 'html,markdown,text';
+$config->doc->saveDraftInterval = '60';
 
 $config->doc->custom = new stdclass();
 $config->doc->custom->objectLibs = $config->doc->customObjectLibs;

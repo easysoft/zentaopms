@@ -82,7 +82,6 @@
             <?php
             echo html::hidden('contentType', $doc->contentType);
             echo html::hidden('type', $doc->type);
-            echo html::hidden('editedDate', $doc->editedDate);
             echo html::hidden('status', $doc->status);
             echo html::hidden('parent', $doc->parent);
             echo html::submitButton();

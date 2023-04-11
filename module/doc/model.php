@@ -923,14 +923,11 @@ class docModel extends model
     public function update($docID)
     {
         $oldDoc = $this->dao->select('*')->from(TABLE_DOC)->where('id')->eq((int)$docID)->fetch();
-        if(!empty($_POST['editedDate']) and $oldDoc->editedDate != $this->post->editedDate)
-        {
-            dao::$errors[] = $this->lang->error->editedByOther;
-            return false;
-        }
 
         if(!isset($_POST['lib']) and strpos($_POST['module'], '_') !== false) list($_POST['lib'], $_POST['module']) = explode('_', $_POST['module']);
-        $doc = fixer::input('post')->setDefault('module', 0)
+        $account = $this->app->user->account;
+        $now     = helper::now();
+        $doc     = fixer::input('post')->setDefault('module', 0)
             ->callFunc('title', 'trim')
             ->stripTags($this->config->doc->editor->edit['id'], $this->config->allowedTags)
             ->setDefault('users', '')
@@ -938,14 +935,18 @@ class docModel extends model
             ->setDefault('product', 0)
             ->setDefault('execution', 0)
             ->setDefault('mailto', '')
-            ->add('editedBy', $this->app->user->account)
-            ->add('editedDate', helper::now())
+            ->add('editedBy', $account)
+            ->add('editedDate', $now)
             ->cleanInt('project,product,execution,lib,module')
             ->join('groups', ',')
             ->join('users', ',')
             ->join('mailto', ',')
             ->remove('comment,files,labels,uid,contactListMenu')
             ->get();
+
+        $editingDate = $oldDoc->editingDate ? json_decode($oldDoc->editingDate, true) : array();
+        unset($editingDate[$account]);
+        $doc->editingDate = json_encode($editingDate);
 
         if($doc->acl == 'open') $doc->users = $doc->groups = '';
         if($doc->type == 'chapter' and $doc->parent)
@@ -1041,11 +1042,19 @@ class docModel extends model
      */
     public function saveDraft($docID)
     {
+        $docID   = (int)$docID;
+        $oldDoc  = $this->dao->select('id,editingDate')->from(TABLE_DOC)->where('id')->eq($docID)->fetch();
+        $account = $this->app->user->account;
+
         $data = fixer::input('post')->stripTags($this->config->doc->editor->edit['id'], $this->config->allowedTags)->get();
         $doc  = new stdclass();
         $doc->draft = $data->content;
 
-        $docType = $this->dao->select('type')->from(TABLE_DOCCONTENT)->where('doc')->eq((int)$docID)->orderBy('version_desc')->fetch();
+        $doc->editingDate = $oldDoc->editingDate ? json_decode($oldDoc->editingDate, true) : array();
+        $doc->editingDate[$account] = time();
+        $doc->editingDate = json_encode($doc->editingDate);
+
+        $docType = $this->dao->select('type')->from(TABLE_DOCCONTENT)->where('doc')->eq($docID)->orderBy('version_desc')->fetch();
         if($docType == 'markdown') $doc->draft = $this->post->content;
 
         $this->dao->update(TABLE_DOC)->data($doc)->where('id')->eq($docID)->exec();
@@ -3308,5 +3317,37 @@ class docModel extends model
             if(isset($actionGroup[$docID])) $doc->collector = ',' . implode(',', array_keys($actionGroup[$docID])) . ',';
         }
         return $docs;
+    }
+
+    /**
+     * Check other editing.
+     *
+     * @param  int    $docID
+     * @access public
+     * @return bool
+     */
+    public function checkOtherEditing($docID)
+    {
+        $now     = time();
+        $account = $this->app->user->account;
+        $docID   = (int)$docID;
+        $doc     = $this->dao->select('id,editingDate')->from(TABLE_DOC)->where('id')->eq($docID)->fetch();
+        if(empty($doc)) return false;
+
+        $editingDate  = $doc->editingDate ? json_decode($doc->editingDate, true) : array();
+        $otherEditing = false;
+        foreach($editingDate as $editingAccount => $timestamp)
+        {
+            if($editingAccount != $account and ($now - $timestamp) <= $this->config->doc->saveDraftInterval)
+            {
+                $otherEditing = true;
+                break;
+            }
+        }
+
+        $editingDate[$account] = $now;
+        $this->dao->update(TABLE_DOC)->set('editingDate')->eq(json_encode($editingDate))->where('id')->eq($docID)->exec();
+
+        return $otherEditing;
     }
 }
