@@ -2061,6 +2061,7 @@ class groupModel extends model
                 $priv = new stdclass();
                 $priv->module      = $module;
                 $priv->method      = $method;
+                $priv->action      = $key;
                 $priv->parent      = 0;
                 $priv->key         = "{$module}-{$methodLabel}";
                 $priv->parentCode  = $module;
