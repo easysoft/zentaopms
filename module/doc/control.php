@@ -64,6 +64,7 @@ class doc extends control
         $this->session->set('executionList', $uri, 'execution');
         $this->session->set('projectList', $uri, 'project');
         $this->session->set('objectName', '', 'doc');
+        $this->session->set('spaceType', 'mine', 'doc');
         $this->loadModel('search');
 
         list($libs, $libID, $object, $objectID, $objectDropdown) = $this->doc->setMenuByType('mine', 0, $libID);
@@ -1122,7 +1123,7 @@ class doc extends control
 
         $objectType = isset($lib->type) ? $lib->type : 'custom';
         $type       = $objectType == 'execution' && $this->app->tab != 'execution' ? 'project' : $objectType;
-        $objectID   = isset($doc->{$type}) ? $doc->{$type} : 0;
+        $objectID   = zget($doc, $type, 0);
         list($libs, $libID, $object, $objectID, $objectDropdown) = $this->doc->setMenuByType($type, $objectID, $doc->lib, $appendLib);
 
         $moduleTree = $this->doc->getTreeMenu($type, $objectID, $libID, 0, $docID);
@@ -1205,19 +1206,20 @@ class doc extends control
             }
         }
 
-        $doc       = $docID ? $doc : '';
-        $spaceType = $objectType . 'Space';
+        $doc = $docID ? $doc : '';
 
         /* Crumbs links array. */
         $methodName = in_array($type, array('product', 'project')) ? $objectType . 'Space' : 'tableContents';
-        $linkObject = zget($lib, $type, 0);
-        if($this->app->tab == 'execution' and $objectType == 'execution') $linkObject = zget($lib, 'execution', 0);
-
-        $linkParams = "objectID=$linkObject&libID=$lib->id";
+        $linkParams = "objectID={$objectID}&libID={$lib->id}";
         if($this->app->tab == 'execution' or $objectType == 'custom')
         {
             $linkParams = "objectType=$objectType&$linkParams";
             $methodName = 'tableContents';
+        }
+        if($type == 'mine')
+        {
+            $linkParams = "type=mine&libID={$lib->id}";
+            $methodName = 'mySpace';
         }
 
         $crumbs[] = html::a(inLink($methodName, $linkParams), html::image("static/svg/wiki-file-lib.svg") . $lib->name);
@@ -1225,30 +1227,33 @@ class doc extends control
         $moduleList = $this->loadModel('tree')->getParents($doc->module);
         foreach($moduleList as $module)
         {
-            $linkParams .= "&moduleID=$module->id";
-            $crumbs[]    = html::a(inLink($methodName, $linkParams), $module->name);
+            $withModuleParams = $linkParams . "&moduleID=$module->id";
+            $crumbs[] = html::a(inLink($methodName, $withModuleParams), $module->name);
         }
 
-        $this->view->title        = isset($this->lang->doc->{$spaceType}) ? $this->lang->doc->{$spaceType} : $this->lang->doc->common;
-        $this->view->docID        = $docID;
-        $this->view->doc          = $doc;
-        $this->view->version      = $version;
-        $this->view->object       = $object;
-        $this->view->objectID     = $objectID;
-        $this->view->objectType   = $objectType;
-        $this->view->type         = $type;
-        $this->view->libID        = $libID;
-        $this->view->crumbs       = $crumbs;
-        $this->view->lib          = isset($libs[$libID]) ? $libs[$libID] : new stdclass();
-        $this->view->libs         = $this->doc->getLibsByObject($type, $objectID);
-        $this->view->canBeChanged = common::canModify($type, $object); // Determines whether an object is editable.
-        $this->view->actions      = $docID ? $this->action->getList('doc', $docID) : array();
-        $this->view->users        = $this->user->getPairs('noclosed,noletter');
-        $this->view->autoloadPage = $this->doc->checkAutoloadPage($doc);
-        $this->view->libTree      = $this->doc->getLibTree($libID, $libs, $type, $doc->module, $objectID);
-        $this->view->preAndNext   = $this->loadModel('common')->getPreAndNextObject('doc', $docID);
-        $this->view->moduleID     = $doc->module;
+        $spaceType = $objectType . 'Space';
+        $this->view->title          = isset($this->lang->doc->{$spaceType}) ? $this->lang->doc->{$spaceType} : $this->lang->doc->common;
+        $this->view->docID          = $docID;
+        $this->view->doc            = $doc;
+        $this->view->version        = $version;
+        $this->view->object         = $object;
+        $this->view->objectID       = $objectID;
+        $this->view->objectType     = $objectType;
+        $this->view->type           = $type;
+        $this->view->libID          = $libID;
+        $this->view->crumbs         = $crumbs;
+        $this->view->lib            = isset($libs[$libID]) ? $libs[$libID] : new stdclass();
+        $this->view->libs           = $this->doc->getLibsByObject($type, $objectID);
+        $this->view->canBeChanged   = common::canModify($type, $object); // Determines whether an object is editable.
+        $this->view->actions        = $docID ? $this->action->getList('doc', $docID) : array();
+        $this->view->users          = $this->user->getPairs('noclosed,noletter');
+        $this->view->autoloadPage   = $this->doc->checkAutoloadPage($doc);
+        $this->view->libTree        = $this->doc->getLibTree($libID, $libs, $type, $doc->module, $objectID);
+        $this->view->preAndNext     = $this->loadModel('common')->getPreAndNextObject('doc', $docID);
+        $this->view->moduleID       = $doc->module;
         $this->view->objectDropdown = $objectDropdown;
+        $this->view->canExport      = ($this->config->edition != 'open' && common::hasPriv('doc', $type . '2export'));
+        $this->view->exportMethod   = $type . '2export';
 
         $this->display();
     }

@@ -1185,7 +1185,12 @@ if($config->edition == 'biz' or $config->edition == 'max')
     $lang->tree->methodOrder[35] = 'editHost';
     $lang->host->methodOrder[40] = 'groupMaintenance';
 
-    $lang->resource->doc->diff = 'diffAction';
+    $lang->resource->doc->diff             = 'diffAction';
+    $lang->resource->doc->mine2export      = 'mine2export';
+    $lang->resource->doc->product2export   = 'product2export';
+    $lang->resource->doc->project2export   = 'project2export';
+    $lang->resource->doc->custom2export    = 'custom2export';
+    $lang->resource->doc->execution2export = 'execution2export';
 
     $lang->resource->my->review = 'review';
 

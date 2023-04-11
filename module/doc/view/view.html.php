@@ -16,6 +16,8 @@
 <?php js::set('docID', $docID);?>
 <?php js::set('linkParams', "objectID=$objectID&%s");?>
 <?php js::set('docLang', $lang->doc);?>
+<?php js::set('exportMethod', $exportMethod);?>
+<?php js::set('libID', $libID);?>
 <?php if($app->tab == 'execution'):;?>
 <style>.panel-body{min-height: 180px}</style>
 <?php endif;?>
@@ -25,11 +27,11 @@
   <?php echo html::backButton("<i class='icon icon-back icon-sm'></i> " . $lang->goback, "id='backBtn'", 'btn btn-link')?>
   </div>
   <div class="btn-toolbar pull-right">
-  <?php
-      common::printLink('project', 'export', "", "<i class='icon-export muted'> </i>" . $lang->export, '', "class='btn btn-link export'");
-      if(common::hasPriv('api', 'create')) echo html::a($this->createLink('api', 'create',    "libID=$libID&moduleID=$moduleID", '', true), '<i class="icon icon-plus"></i> ' . $lang->api->createApi, '', 'class="btn btn-primary iframe" data-width="95%"');
-      if(common::hasPriv('doc', 'create')) echo $this->doc->printCreateBtn($lib, $type, $objectID, $moduleID);
-  ?>
+    <?php
+    if($canExport) echo html::a($this->createLink('doc', $exportMethod, "libID=$libID&docID=$docID"), "<i class='icon-export muted'> </i>" . $lang->export, 'hiddenwin', "class='btn btn-link' id='docExport'");
+    if(common::hasPriv('api', 'create')) echo html::a($this->createLink('api', 'create', "libID=$libID&moduleID=$moduleID", '', true), '<i class="icon icon-plus"></i> ' . $lang->api->createApi, '', 'class="btn btn-primary iframe" data-width="95%"');
+    if(common::hasPriv('doc', 'create')) echo $this->doc->printCreateBtn($lib, $type, $objectID, $moduleID);
+    ?>
   </div>
 </div>
 <div id='mainContent'class="fade flex">

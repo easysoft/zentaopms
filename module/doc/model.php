@@ -984,7 +984,7 @@ class docModel extends model
             if($files) $docContent->files .= ',' . join(',', array_keys($files));
             $docContent->files = trim($docContent->files, ',');
             if(isset($doc->digest)) $docContent->digest = $doc->digest;
-            if($doc->status == 'draft')
+            if($oldDoc->status == 'draft')
             {
                 $this->dao->update(TABLE_DOCCONTENT)->data($docContent)->where('id')->eq($oldDocContent->id)->exec();
             }

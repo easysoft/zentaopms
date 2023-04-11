@@ -187,6 +187,7 @@ $(function()
                 simplemde.value(String($('#markdownContent').val()));
                 simplemde.togglePreview();
             }
+            $('#docExport').attr('href', createLink('doc', exportMethod, 'libID=' + libID + '&docID=' + docID + '&version=' + $('#content .doc-title .version').data('version')));
         });
     })
 
