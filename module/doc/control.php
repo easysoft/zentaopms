@@ -181,8 +181,6 @@ class doc extends control
         elseif($type == 'mine')
         {
             $acl = 'private';
-            unset($this->lang->doclib->aclList['open']);
-            unset($this->lang->doclib->aclList['default']);
             $this->lang->doclib->aclList = $this->lang->doclib->mySpaceAclList['private'];
         }
 
@@ -267,20 +265,28 @@ class doc extends control
             $this->view->object = $execution;
         }
 
-        if($lib->type == 'custom') unset($this->lang->doclib->aclList['default']);
-        if($lib->type == 'api')
+        if($lib->type == 'custom')
+        {
+            unset($this->lang->doclib->aclList['default']);
+        }
+        elseif($lib->type == 'api')
         {
             $this->app->loadLang('api');
             $type = !empty($lib->product) ? 'product' : 'project';
             $this->lang->api->aclList['default'] = sprintf($this->lang->api->aclList['default'], $this->lang->{$type}->common);
         }
-        if($lib->type != 'custom')
+        elseif($lib->type == 'mine')
+        {
+            $this->lang->doclib->aclList = $this->lang->doclib->mySpaceAclList['private'];
+        }
+        elseif($lib->type != 'custom')
         {
             $type = isset($type) ? $type : $lib->type;
             $this->lang->doclib->aclList['default'] = sprintf($this->lang->doclib->aclList['default'], $this->lang->{$type}->common);
             $this->lang->doclib->aclList['private'] = sprintf($this->lang->doclib->privateACL, $this->lang->{$type}->common);
             unset($this->lang->doclib->aclList['open']);
         }
+
         if(!empty($lib->main)) unset($this->lang->doclib->aclList['private'], $this->lang->doclib->aclList['open']);
 
         $this->view->lib    = $lib;
@@ -593,6 +599,10 @@ class doc extends control
         elseif($objectType == 'product')
         {
             $objects = $this->loadModel('product')->getPairs();
+        }
+        elseif($objectType == 'mine')
+        {
+            $this->lang->doc->aclList = $this->lang->doclib->mySpaceAclList['private'];
         }
         $moduleOptionMenu = $this->doc->getLibsOptionMenu($libs);
 
