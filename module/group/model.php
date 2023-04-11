@@ -1522,7 +1522,7 @@ class groupModel extends model
         $modules = array_keys($modules);
         $modules = implode(',', $modules);
 
-        $privs = $this->dao->select("t1.id, t1.module, t1.method, CONCAT(t1.module, '-', t1.method) AS action, IF(t3.type = 'module', 0, t1.parent) as parent, t1.order, t2.`key`, t2.`value`, t2.desc, IF(t3.type = 'module', t3.code, t4.code) as parentCode, IF(t3.type = 'module', 0, INSTR('$modules', t4.code)) as moduleOrder")->from(TABLE_PRIV)->alias('t1')
+        $privs = $this->dao->select("t1.id, t1.module, t1.method, CONCAT(t1.module, '-', t1.method) AS action, IF(t3.type = 'module', 0, t1.parent) as parent, t1.order, t2.`key`, t2.`value`, t2.desc, IF(t3.type = 'module', t3.code, t4.code) as parentCode, IF(t3.type = 'module', 999, INSTR('$modules', t4.code)) as moduleOrder")->from(TABLE_PRIV)->alias('t1')
             ->leftJoin(TABLE_PRIVLANG)->alias('t2')->on('t1.id=t2.objectID')
             ->leftJoin(TABLE_PRIVMANAGER)->alias('t3')->on('t1.parent=t3.id')
             ->leftJoin(TABLE_PRIVMANAGER)->alias('t4')->on('t3.parent=t4.id')

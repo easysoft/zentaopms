@@ -83,7 +83,7 @@
         <thead>
           <tr class='text-center'>
             <th class='module'><?php echo $lang->group->module;?></th>
-            <th class='package'><?php echo '权限包';?></th>
+            <th class='package'><?php echo $lang->privpackage->common;?></th>
             <th class='method' colspan='2'><?php echo $lang->group->method;?></th>
           </tr>
         </thead>
@@ -147,7 +147,7 @@
               <?php foreach($privs as $privID => $priv):?>
               <div class="group-item" data-module='<?php echo $moduleName;?>' data-package='<?php echo $packageID;?>' data-id='<?php echo zget($priv, 'id', 0);?>'>
                 <div class="checkbox-primary">
-                  <?php echo html::checkbox("actions[$priv->module]", array($priv->method => $priv->name), isset($groupPrivs[$priv->module][$priv->method]) ? $priv->method : '', "title='{$priv->name}' id='actions[$priv->module]$priv->method' data-id='$privID'");?>
+                  <?php echo html::checkbox("actions[$priv->module]", array($priv->method => $priv->name), isset($groupPrivs[$priv->module][$priv->method]) ? $priv->method : '', "title='{$priv->name}' id='actions[$priv->module]$priv->method' data-id='$priv->action'");?>
                 </div>
               </div>
               <?php endforeach;?>
