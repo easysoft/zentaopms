@@ -11,6 +11,7 @@
 
 namespace zin;
 
+require_once dirname(__DIR__) . DS . 'utils' . DS . 'deep.func.php';
 require_once 'selector.func.php';
 
 class dom
@@ -27,6 +28,8 @@ class dom
     public $renderInner = false;
 
     public $renderType;
+
+    public $dataGetters = NULL;
 
     public $dataCommands;
 
@@ -147,7 +150,7 @@ class dom
     public function renderJson()
     {
         $list = $this->build();
-        if(empty($list)) return '';
+        if(empty($list)) return '{}';
 
         $output = [];
         foreach($list as $name => $item)
@@ -186,7 +189,7 @@ class dom
     public function renderList()
     {
         $list = $this->build();
-        if(empty($list)) return '';
+        if(empty($list)) return '[]';
 
         $output = [];
         foreach($list as $name => $item)
@@ -212,7 +215,7 @@ class dom
         {
             $renderType = $item->renderType;
             if(empty($renderType)) $renderType = $defaultType;
-            if($renderType === 'json') return $item->wg->toJsonData();
+            if($renderType === 'json') return dom::renderItemToJson($item);
             return dom::renderItemToHtml($item->build());
         }
 
@@ -232,7 +235,27 @@ class dom
             return $output;
         }
 
-        if($item instanceof dom) return $item->wg->toJsonData();
+        if($item instanceof dom)
+        {
+            $json = $item->wg->toJsonData();
+            if(!empty($item->dataGetters))
+            {
+                $output = [];
+                $props = explode(',', $item->dataGetters);
+                foreach($props as $prop)
+                {
+                    $prop = trim($prop);
+                    if(empty($prop)) continue;
+
+                    $parts    = explode(':', $prop, 2);
+                    $name     = $parts[0];
+                    $namePath = count($parts) > 1 ? $parts[1] : $parts[0];
+                    $output[$name] = \zin\utils\deepGet($json, $namePath);
+                }
+                return $output;
+            }
+            return $json;
+        }
         if($item instanceof wg)  return dom::renderDomItem($item, 'json');
         if(is_string($item))     return $item;
 
@@ -296,6 +319,7 @@ class dom
             {
                 $item->renderInner  = $selector->inner ?? false;
                 $item->renderType   = $selector->type ?? NULL;
+                $item->dataGetters  = $selector->data ?? NULL;
                 $filteredList[]     = $item->wg->gid;
                 $results[]          = $item;
             }
