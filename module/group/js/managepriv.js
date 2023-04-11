@@ -29,7 +29,7 @@ function setActions()
 {
     $('#actionBox select').val('');
 
-    var hasSelectedPackage = $('#packageBox select').not('.hidden').val().join(',');
+    var hasSelectedPackage = ',' + $('#packageBox select').not('.hidden').val().join(',') + ',';
 
     updatePrivList('package', hasSelectedPackage);
 

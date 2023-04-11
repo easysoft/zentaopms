@@ -1044,9 +1044,18 @@ class group extends control
         elseif($parentType == 'package')
         {
             $privList = $this->group->getPrivByParent(trim($parentList, ','));
+            foreach($privList as $privID => $priv)
+            {
+                $privList["{$priv->module}-{$priv->method}"] = $priv;
+                unset($privList[$privID]);
+            }
         }
 
         $privList = $this->group->getCustomPrivs($menu, $privList);
+        foreach($privList as $privKey => $priv)
+        {
+            if((isset($priv->parentCode) and $priv->parentCode != $module) or (strpos($parentList, ",{$priv->parent},") === false and $parentType == 'package')) unset($privList[$privKey]);
+        }
         $privList = $this->group->transformPrivLang($privList, true);
 
         return print(html::select('actions[]', $privList, '', "multiple='multiple' class='form-control'"));

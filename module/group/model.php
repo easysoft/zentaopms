@@ -1149,6 +1149,9 @@ class groupModel extends model
     public function initData()
     {
         $allResourceFile = "/home/hufangzhou/repo/zentaopms/module/group/lang/allresources.php";
+        $views   = $this->loadModel('setting')->getItem("owner=system&module=priv&key=views");
+        $views   = explode(',', $views);
+        $views[] = 'general';
         ///* 获取权限相关数据 */
         //if(!file_exists("$allResourceFile")) die("Please execute the commands: touch $allResourceFile; chmod 777 $allResourceFile");
 
@@ -1245,16 +1248,12 @@ class groupModel extends model
             /* 视图 */
             $viewOrder   = 1;
             $moduleOrder = 1;
-            //$this->dev->loadDefaultLang($lang, 'common', true);
             $this->lang->mainNav->general = "{$this->lang->navIcons['my']} {$this->lang->my->shortCommon}|my|index|";
-            foreach($this->lang->mainNav as $moduleMenu => $viewTitle)
+            foreach($views as $moduleMenu)
             {
-                if(!is_string($viewTitle)) continue;
                 $viewID = 0;
                 if($moduleMenu != 'general')
                 {
-                    //$viewTitle = strip_tags(substr($viewTitle, 0, strpos($viewTitle, '|')));
-
                     if(!$hasStored)
                     {
                         $viewData = new stdclass();
@@ -1288,13 +1287,11 @@ class groupModel extends model
                 }
 
                 /* 模块 */
-                $modules = $this->getMenuModules($moduleMenu);
-                foreach($modules as $moduleName)
+                $modules     = $this->getMenuModules($moduleMenu);
+                $viewModules = $this->setting->getItem("owner=system&module=priv&key={$moduleMenu}Modules");
+                $viewModules = explode(',', $viewModules);
+                foreach($viewModules as $moduleName)
                 {
-                    //$this->dev->loadDefaultLang($lang, $moduleName, true);
-
-                    $moduleList = $this->getMenuModules($moduleMenu, true);
-
                     if(!$hasStored)
                     {
                         $moduleData = new stdclass();
@@ -1440,6 +1437,7 @@ class groupModel extends model
             ->where('t1.id')->in($privIdList)
             ->andWhere('t2.lang')->eq($this->app->getClientLang())
             ->andWhere('t2.objectType')->eq('priv')
+            ->orderBy('order_asc')
             ->fetchAll('id');
     }
 
@@ -1469,7 +1467,7 @@ class groupModel extends model
             ->where('t3.id')->in($parentsIdList)
             ->andWhere('t2.lang')->eq($this->app->getClientLang())
             ->andWhere('t2.objectType')->eq('priv')
-            ->orderBy('`order`')
+            ->orderBy('t1.`order`')
             ->query();
 
         $privs = array();
@@ -1492,6 +1490,7 @@ class groupModel extends model
             ->andWhere('t1.edition')->like("%,{$this->config->edition},%")
             ->andWhere('t1.vision')->like("%,{$this->config->vision},%")
             ->andWhere('t2.`objectType`')->eq('priv')
+            ->orderBy('order_asc')
             ->fetchAll('id');
     }
 
@@ -2013,6 +2012,7 @@ class groupModel extends model
             else
             {
                 list($moduleName, $methodLang) = explode('-', $priv->key);
+                if($moduleName == 'requirement') $moduleName = 'story';
                 $this->app->loadLang($moduleName);
 
                 $priv->name = (!empty($moduleName) and !empty($methodLang) and isset($this->lang->{$moduleName}->$methodLang)) ? $this->lang->{$moduleName}->$methodLang : $priv->method;
@@ -2043,7 +2043,7 @@ class groupModel extends model
                 if(!$this->checkMenuModule($menu, $module)) continue;
                 if(!isset($this->lang->{$module}->{$methodLabel})) $this->app->loadLang($module);
 
-                $key = "{$module}-{$method}";
+                $key  = "{$module}-{$method}";
                 $priv = new stdclass();
                 $priv->module      = $module;
                 $priv->method      = $method;
@@ -2077,6 +2077,7 @@ class groupModel extends model
             ->andWhere('t3.objectType')->eq('priv')
             ->andWhere('t2.edition')->like("%,{$this->config->edition},%")
             ->andWhere('t2.vision')->like("%,{$this->config->vision},%")
+            ->orderBy('t2.`order`_asc')
             ->fetchAll('relationPriv');
 
         $privList = empty($type) ? array('depend' => array(), 'recommend' => array()) : array($type => array());
@@ -2114,6 +2115,7 @@ class groupModel extends model
             ->leftJoin(TABLE_PRIVMANAGER)->alias('t2')->on('t1.parent=t2.id')
             ->where('t2.`code`')->eq($module)
             ->andWhere('t2.type')->eq('module')
+            ->orderBy('order_asc')
             ->fetchAll('id');
     }
 }
