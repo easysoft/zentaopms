@@ -110,7 +110,7 @@ class doc extends control
         $this->view->pager      = $pager;
         $this->view->type       = $type;
         $this->view->objectID   = 0;
-        $this->view->canExport  = common::hasPriv('doc', 'mine2export');
+        $this->view->canExport  = ($this->config->edition != 'open' and common::hasPriv('doc', 'mine2export') and $type == 'mine');
         $this->view->libType    = 'lib';
 
         $this->display();
@@ -1320,6 +1320,9 @@ class doc extends control
         $apiObjectID   = $apiObjectType ? $objectID : 0;
         $apiLibs       = $apiObjectType ? $this->doc->getApiLibs(0, $apiObjectType, $apiObjectID) : array();
 
+        $canExport = $libType == 'api' ? common::hasPriv('api', 'export') : common::hasPriv('doc', $type . '2export');
+        if($this->config->edition == 'open') $canExport = false;
+
         $this->view->title          = $title;
         $this->view->type           = $type;
         $this->view->objectType     = $type;
@@ -1337,7 +1340,7 @@ class doc extends control
         $this->view->objectID       = $objectID;
         $this->view->orderBy        = $orderBy;
         $this->view->release        = $browseType == 'byrelease' ? $param : 0;
-        $this->view->canExport      = $libType == 'api' ? common::hasPriv('api', 'export') : common::hasPriv('doc', $type . '2export');
+        $this->view->canExport      = $canExport;
         $this->view->exportMethod   = $libType == 'api' ? 'export' : $type . '2export';
         $this->view->apiLibID       = key($apiLibs);
 
