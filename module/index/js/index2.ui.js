@@ -96,6 +96,7 @@ function openApp(url, code, forceReload)
             '<iframe',
                 'id="appIframe-' + code + '"',
                 'name="app-' + code + '"',
+                'class="fade"',
                 'allowfullscreen="true"',
                 'src="' + $.createLink('index', 'app', 'url=' + btoa(url)) + '"',
                 'frameborder="no"',
@@ -111,7 +112,9 @@ function openApp(url, code, forceReload)
 
         iframe.onload = iframe.onreadystatechange = function(e)
         {
-            openedApp.$app.removeClass('loading');
+            const finishLoad = () => $iframe.removeClass('loading').addClass('in');
+            iframe.contentWindow.$(iframe.contentDocument).one('pageload.app', finishLoad);
+            setTimeout(finishLoad, 10000);
             triggerAppEvent(openedApp.code, 'loadapp', [openedApp, e]);
         };
     }
