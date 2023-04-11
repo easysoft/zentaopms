@@ -198,7 +198,7 @@ $lang->doc->showDoc           = '是否显示文档';
 global $config;
 /* 查询条件列表 */
 $lang->doc->allProduct    = '所有' . $lang->productCommon;
-$lang->doc->allExecutions = '所有' . $lang->executionCommon;
+$lang->doc->allExecutions = '所有' . $lang->execution->common;
 $lang->doc->allProjects   = '所有' . $lang->projectCommon;
 
 $lang->doc->libTypeList['product']   = $lang->productCommon . '文档库';

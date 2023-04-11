@@ -17,6 +17,7 @@ body {margin-bottom: 25px;}
 #docListForm th.c-actions {width: 84px; padding-left: 15px;}
 #docListForm .c-module, #docListForm .c-object {width: 120px; overflow: hidden; white-space: nowrap; text-overflow: clip;}
 #docListForm .table .c-name > .doc-title {display: inline-block; max-width: calc(100% - 80px); overflow: hidden; background: transparent; padding-right:0px;}
+#docListForm .table .c-name > span.doc-title {line-height: 0; vertical-align: inherit;}
 #docListForm .table .c-name > .draft {background-color:rgba(129, 102, 238, 0.12); color:#8166EE;}
 #docListForm .table .c-name > .ajaxCollect {float: right; position: relative; right: 10px; top: 0px;}
 #docListForm table.table > thead > tr {height: 32px;}
@@ -65,7 +66,7 @@ body {margin-bottom: 25px;}
           <th class='c-object'><?php echo $lang->doc->object;?></th>
           <th class="c-module"><?php common::printOrderLink('module', $orderBy, $vars, $lang->doc->position);?></th>
           <?php endif;?>
-          <?php if(!in_array($type, array('mine', 'createby'))):?>
+          <?php if(!in_array($type, array('mine', 'createdby'))):?>
           <th class="c-user"><?php common::printOrderLink('addedBy', $orderBy, $vars, $lang->doc->addedByAB);?></th>
           <?php endif;?>
           <th class="c-date"><?php common::printOrderLink('addedDate', $orderBy, $vars, $lang->doc->addedDate);?></th>
@@ -135,7 +136,7 @@ body {margin-bottom: 25px;}
             ?>
           </td>
           <?php endif;?>
-          <?php if(!in_array($type, array('mine', 'createby'))):?>
+          <?php if(!in_array($type, array('mine', 'createdby'))):?>
           <td class="c-user"><?php echo zget($users, $doc->addedBy);?></td>
           <?php endif;?>
           <td class="c-datetime"><?php echo formatTime($doc->addedDate, 'Y-m-d');?></td>
