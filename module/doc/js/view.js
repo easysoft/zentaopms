@@ -199,6 +199,7 @@ $(function()
     })
 
     $('.outline .outline-toggle i.icon-angle-right').trigger("click");
+    $('#history').append('<a id="closeBtn" href="###" class="btn btn-link"><i class="icon icon-close"></i></a>');
     $('#hisTrigger').on('click', function()
     {
         var $history = $('#history');
@@ -216,10 +217,10 @@ $(function()
     })
 
     $('#history').find('.btn.pull-right').removeClass('pull-right')
-    $('#history').append('<a id="closeIcon" class="btn btn-link"><i class="icon icon-close"></i></a>');
-    $('#closeIcon').on('click', function()
+    $('#closeBtn').on('click', function()
     {
         $('#history').addClass('hidden');
         $('#hisTrigger').removeClass('text-primary');
     })
+    $('#history').find('.btn.pull-right').removeClass('pull-right');
 })

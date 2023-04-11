@@ -19,6 +19,19 @@
 <?php if($app->tab == 'execution'):;?>
 <style>.panel-body{min-height: 180px}</style>
 <?php endif;?>
+<div id="mainMenu" class="clearfix">
+  <div id="leftBar" class="btn-toolbar pull-left">
+  <?php echo $objectDropdown;?>
+  <?php echo html::backButton("<i class='icon icon-back icon-sm'></i> " . $lang->goback, "id='backBtn'", 'btn btn-link')?>
+  </div>
+  <div class="btn-toolbar pull-right">
+  <?php
+      common::printLink('project', 'export', "", "<i class='icon-export muted'> </i>" . $lang->export, '', "class='btn btn-link export'");
+      if(common::hasPriv('api', 'create')) echo html::a($this->createLink('api', 'create',    "libID=$libID&moduleID=$moduleID", '', true), '<i class="icon icon-plus"></i> ' . $lang->api->createApi, '', 'class="btn btn-primary iframe" data-width="95%"');
+      if(common::hasPriv('doc', 'create')) echo $this->doc->printCreateBtn($lib, $type, $objectID, $moduleID);
+  ?>
+  </div>
+</div>
 <div id='mainContent'class="fade flex">
   <?php if($libID):?>
     <div id='sideBar' class="panel side side-col col overflow-auto h-full-adjust">

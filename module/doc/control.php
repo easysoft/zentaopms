@@ -1119,10 +1119,11 @@ class doc extends control
         $lib = $this->doc->getLibById($doc->lib);
         if(!empty($lib) and $lib->deleted == '1') $appendLib = $doc->id;
 
+
         $objectType = isset($lib->type) ? $lib->type : 'custom';
         $type       = $objectType == 'execution' && $this->app->tab != 'execution' ? 'project' : $objectType;
         $objectID   = isset($doc->{$type}) ? $doc->{$type} : 0;
-        list($libs, $libID, $object, $objectID) = $this->doc->setMenuByType($type, $objectID, $doc->lib, $appendLib);
+        list($libs, $libID, $object, $objectID, $objectDropdown) = $this->doc->setMenuByType($type, $objectID, $doc->lib, $appendLib);
 
         $moduleTree = $this->doc->getTreeMenu($type, $objectID, $libID, 0, $docID);
 
@@ -1246,6 +1247,7 @@ class doc extends control
         $this->view->autoloadPage = $this->doc->checkAutoloadPage($doc);
         $this->view->libTree      = $this->doc->getLibTree($libID, $libs, $type, $doc->module, $objectID);
         $this->view->preAndNext   = $this->loadModel('common')->getPreAndNextObject('doc', $docID);
+        $this->view->objectDropdown = $objectDropdown;
 
         $this->display();
     }
@@ -1451,7 +1453,7 @@ class doc extends control
         $this->view->objectType    = $objectType;
         $this->view->objectID      = $objectID;
         $this->view->module        = $module;
-        $this->view->method        = $method;
+        $this->view->method        = $method =='view' ? $objectType.'space' : $method;
         $this->view->normalObjects = $myObjects + $normalObjects;
         $this->view->closedObjects = $closedObjects;
         $this->view->objectsPinYin = common::convert2Pinyin($myObjects + $normalObjects + $closedObjects);

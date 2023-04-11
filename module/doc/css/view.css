@@ -1,4 +1,4 @@
-.h-full-adjust {overflow-y: auto; height: calc(100vh - 100px);}
+.h-full-adjust {overflow-y: auto; height: calc(100vh - 120px);}
 .main-col .block-files .panel-heading {padding-right: 20px;}
 .main-col .block-files .panel-heading .panel-title {height: 35px; line-height: 30px;}
 .main-col .doc-title {display: flex; font-size: 16px; margin-bottom: 15px;}
@@ -6,7 +6,7 @@
 .main-col .doc-title .info {flex: 1 1 0;}
 .main-col .doc-title .version a {font-size: 13px; color: #8c8c8c;}
 .main-col .doc-title .version .dropdown-menu a:hover {color: #ffffff;}
-.main-col .doc-title .actions a + a {margin-left: 8px;}
+.main-col .doc-title .actions a + a {margin-left: 0px;}
 .main-col .doc-title .actions i {font-size: 15px; color: #8c8c8c;}
 #content .title {max-width: 54%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;}
 #content .detail-content {padding-left: 10px;}
@@ -32,7 +32,8 @@
 .outline-content a {color: #838A9D;}
 .outline-content li.text-ellipsis.active>a {font-weight: 700; color: #0c64eb;}
 #outline li.has-list.open:before {content: unset;}
-#fileTree {margin-bottom: 40px; max-height: calc(100vh - 160px); overflow: auto;}
+#fileTree {margin-bottom: 40px; max-height: calc(100vh - 180px); overflow: auto;}
+#closeBtn {position: absolute; right: 10px; top: 10px;}
 
 .title {font-size: 20px !important;}
 .article-content.comment {width: 100% !important;}
@@ -56,6 +57,7 @@
 .flex-content > #history {flex: 0 0 302px; position: relative;}
 .flex-content > #history > #closeIcon {position: absolute; right: 10px; top: 10px;}
 .panel {margin-bottom: 0;}
+.detail {margin: 0 4px;}
 
 .info .version, .info .crumbs {float: left;}
 .info .crumbs {font-size: 13px; margin-top: 5px; font-weight: normal;}
