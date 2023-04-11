@@ -8212,7 +8212,7 @@ class upgradeModel extends model
         /* Create default dimension. */
         $this->app->loadLang('dimension');
         $dimension              = new stdclass();
-        $dimension->name        = $this->lang->dimension->default;
+        $dimension->name        = $this->lang->dimension->efficiency;
         $dimension->code        = 'efficiency';
         $dimension->desc        = '';
         $dimension->createdBy   = 'system';
@@ -8223,6 +8223,15 @@ class upgradeModel extends model
 
         $this->loadModel('upgrade')->addDefaultModules4BI('chart', $dimensionID);
         $this->loadModel('upgrade')->addDefaultModules4BI('pivot', $dimensionID);
+
+        $dimension              = new stdclass();
+        $dimension->name        = $this->lang->dimension->quality;
+        $dimension->code        = 'quality';
+        $dimension->desc        = '';
+        $dimension->createdBy   = 'system';
+        $dimension->createdDate = helper::now();
+
+        $this->dao->insert(TABLE_DIMENSION)->data($dimension)->exec();
 
         return !dao::isError();
     }
