@@ -215,6 +215,8 @@ $(function()
             $icon.removeClass('text-primary');
         }
     })
+
+    $('#history').find('.btn.pull-right').removeClass('pull-right')
     $('#closeBtn').on('click', function()
     {
         $('#history').addClass('hidden');
