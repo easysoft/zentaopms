@@ -3342,6 +3342,25 @@ class docModel extends model
     }
 
     /**
+     * Get document dynamic.
+     *
+     * @param  object $pager
+     * @access public
+     * @return array
+     */
+    public function getDynamic($pager = null)
+    {
+        $actions = $this->dao->select('*')->from(TABLE_ACTION)
+            ->where('objectType')->in('doclib,doc')
+            ->andWhere('vision')->eq($this->config->vision)
+            ->orderBy('date_desc')
+            ->page($pager)
+            ->fetchAll();
+
+        return $this->loadModel('action')->transformActions($actions);
+    }
+
+    /**
      * Remove editing.
      *
      * @param  object  $doc

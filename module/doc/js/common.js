@@ -289,6 +289,8 @@ $(document).ready(function()
 
     $(document).on('mousedown', '.ajaxCollect', function (event)
     {
+        if(event.button != 0) return;
+
         var obj = $(this);
         var url = obj.data('url');
         $.get(url, function(response)

@@ -2053,6 +2053,12 @@ class block extends control
      */
     public function printDocDynamicBlock()
     {
+        /* Load pager. */
+        $this->app->loadClass('pager', $static = true);
+        $pager = new pager(0, 30, 1);
+
+        $this->view->actions = $this->loadModel('doc')->getDynamic($pager);
+        $this->view->users   = $this->loadModel('user')->getPairs('nodeleted|noletter|all');
     }
 
     /**

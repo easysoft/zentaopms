@@ -141,17 +141,16 @@ $(function()
 
     $('.outline').height($('.article-content').height());
 
-    $('#content').on('click', '.outline .outline-toggle i.icon-angle-right', function()
+    $('body').on('click', '.outline-toggle i.icon-angle-right', function()
     {
-        $('.article-content').css('width', '85%');
         $('.outline').css({'min-width' : '180px', 'border-left' : '2px solid #efefef'});
         $(this).removeClass('icon-angle-right').addClass('icon-angle-left').css('left', '-9px');
         $('.outline-content').show();
         if($('#sidebar>.cell').is(':visible')) $('#sidebar .icon.icon-angle-right').trigger("click");
-    }).on('click', '.outline .outline-toggle i.icon-angle-left', function()
+    }).on('click', '.outline-toggle i.icon-angle-left', function()
     {
-        $('.article-content').width('100%');
         $(this).removeClass('icon-angle-left').addClass('icon-angle-right');
+        $('.outline').css({'min-width' : '180px', 'border-left' : 'none'});
         $('.outline-content').hide();
     }).on('click', '#outline li', function(e)
     {

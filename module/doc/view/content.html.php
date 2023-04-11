@@ -26,8 +26,6 @@
                 </ul>
               </div>
             </div>
-            <div class="user"></div>
-            <div class="time"></div>
           </div>
           <div class="actions">
             <span class='text'><?php echo$lang->doc->diff?></span>
@@ -73,15 +71,18 @@
             <?php endif;?>
           </div>
         </div>
-        <div class="table-row">
+        <div class="">
           <div class="detail-content article-content table-col">
-            <?php if($doc->keywords):?>
-            <p class='keywords'>
-              <?php foreach($doc->keywords as $keywords):?>
-              <?php if($keywords) echo "<span class='label label-outline'>$keywords</span>";?>
-              <?php endforeach;?>
-            </p>
-            <?php endif;?>
+            <div class='info'>
+              <span class='user-time text-muted'><i class='icon icon-account'></i> <?php echo zget($users, $doc->editedBy) . " {$lang->colon} " . substr($doc->editedDate, 0, 10) . (common::checkNotCN() ? ' ' : '') . $lang->doc->update;?></span>
+              <?php if($doc->keywords):?>
+              <span class='keywords'>
+                <?php foreach($doc->keywords as $keywords):?>
+                <?php if($keywords) echo "<span class='label label-outline' title='{$keywords}'>{$keywords}</span>";?>
+                <?php endforeach;?>
+              </span>
+              <?php endif;?>
+            </div>
             <?php
             if($doc->type == 'url' and $autoloadPage)
             {
@@ -144,14 +145,6 @@
             <?php endif;?>
             <?php endforeach;?>
           </div>
-          <?php if(!empty($outline) and strip_tags($outline)):?>
-          <div id="outlineMenu" class="outline table-col">
-            <div class="outline-toggle"><i class="icon icon-angle-right"></i></div>
-            <div class="outline-content">
-              <?php echo $outline;?>
-            </div>
-          </div>
-          <?php endif;?>
         </div>
       </div>
       <?php echo $this->fetch('file', 'printFiles', array('files' => $doc->files, 'fieldset' => 'true', 'object' => $doc));?>
@@ -159,6 +152,14 @@
         <?php common::printPreAndNext($preAndNext);?>
       </div>
     </div>
+    <?php if(!empty($outline) and strip_tags($outline)):?>
+    <div id="outlineMenu" class="outline table-col">
+      <div class="outline-content">
+      <?php echo $outline;?>
+      </div>
+    </div>
+    <div class="outline-toggle"><i class="icon icon-angle-right"></i></div>
+    <?php endif;?>
     <div id="history" class='panel hidden' style="margin-left: 2px;">
       <?php
       $canBeChanged = common::canBeChanged('doc', $doc);

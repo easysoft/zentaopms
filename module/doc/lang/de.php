@@ -117,6 +117,7 @@ $lang->doc->main         = 'Main Document Library';
 $lang->doc->order        = 'Order';
 $lang->doc->doc          = 'Document';
 $lang->doc->updateOrder  = 'Update Order';
+$lang->doc->update       = 'Update';
 $lang->doc->nextStep     = 'Next';
 $lang->doc->closed       = 'Closed';
 $lang->doc->saveDraft    = 'Save Draft';
