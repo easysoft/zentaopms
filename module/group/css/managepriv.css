@@ -65,7 +65,7 @@ main#main {padding-bottom: 0px;}
 
 #privPackageList th.module {width: 112px; min-width: 112px; max-width: 112px; background-color: #EDEEF28C; font-weight: 600; padding-left: 20px; border-color: #FFF;}
 #privPackageList .module label {padding-left: 0; overflow: visible;}
-#privPackageList td.package-column {padding: 20px 16px; background-color: #FFF;}
+#privPackageList td.package-column {padding: 10px 16px; background-color: #FFF;}
 #privPackageList div.package {display: inline-block; width: calc(25% - 5px); padding: 10px 0;}
 #privPackageList .package + .package {padding: 0;}
 #privPackageList .package .check-all {display: inline-block;}
