@@ -19,7 +19,7 @@
   </div>
   <form method='post' class='form-ajax'>
     <table class='table table-form'>
-      <tr><th class='w-120px'></th><td></td><th class='w-100px'></th><td></td></tr>
+      <tr><th class='w-120px'></th><td></td><th class='w-100px'></th><td></td><td class='w-30px'></td></tr>
       <tr>
         <th><?php echo $lang->doc->space?></th>
         <td colspan='3'><?php echo html::radio('space', $spaceList, key($spaceList), "onchange=changeSpace()");?></td>
@@ -37,6 +37,7 @@
         <td class='required'><?php echo html::select('project', $projects, key($projects), "class='form-control picker-select'");?></td>
         <th class='executionTH'><?php echo $lang->doc->execution?></th>
         <td id='executionBox'><?php echo html::select('execution', array(), '', "class='form-control picker-select' data-placeholder='{$lang->doc->placeholder->execution}' onchange='loadObjectModules(\"execution\", this.value)'")?></td>
+        <td class='pl-0px'><i class='icon icon-help' title='<?php echo $lang->doc->placeholder->execution;?>'></i></td>
       </tr>
       <tr class='productTR hidden'>
         <th><?php echo $lang->doc->product;?></th>
