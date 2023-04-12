@@ -64,7 +64,7 @@ class docModel extends model
     /**
      * Get libraries.
      *
-     * @param  string $type
+     * @param  string $type all|includeDeleted|hasApi|mine|product|project|execution|custom
      * @param  string $extra
      * @param  string $appendLibs
      * @param  int    $objectID
@@ -90,7 +90,7 @@ class docModel extends model
             $stmt = $this->dao->select('*')->from(TABLE_DOCLIB)
                 ->where('deleted')->eq(0)
                 ->andWhere('vision')->eq($this->config->vision)
-                ->beginIF($type)->andWhere('type')->eq($type)->fi()
+                ->beginIF($type != 'hasApi')->andWhere('type')->eq($type)->fi()
                 ->beginIF(!$type)->andWhere('type')->ne('api')->fi()
                 ->beginIF($objectID and strpos(',product,project,execution,', ",$type,") !== false)->andWhere($type)->eq($objectID)->fi()
                 ->orderBy('id_asc')
@@ -717,7 +717,7 @@ class docModel extends model
      * @param  int    $module
      * @param  string $mode normal|all
      * @access public
-     * @return void
+     * @return array
      */
     public function getPrivDocs($libIdList = array(), $module = 0, $mode = 'normal')
     {
@@ -3361,7 +3361,7 @@ class docModel extends model
     public function getDynamic($pager = null)
     {
         $actions = $this->dao->select('*')->from(TABLE_ACTION)
-            ->where('objectType')->in('doclib,doc')
+            ->where('objectType')->in('doclib,doc,api')
             ->andWhere('vision')->eq($this->config->vision)
             ->orderBy('date_desc')
             ->page($pager)
