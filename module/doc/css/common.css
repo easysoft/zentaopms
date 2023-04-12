@@ -108,3 +108,4 @@ ol, ul {margin-bottom: 0}
 #aclBox .acl-tip {color: #838a9d;}
 .ajaxCollect > img.star-empty {margin-right: 0px;}
 #outlineMenu {background: #fff; position: absolute; height: calc(100vh - 200px)!important; overflow-y: auto; top: 50px; right: 20px;}
+.pl-0px {padding-left:0px !important;}
