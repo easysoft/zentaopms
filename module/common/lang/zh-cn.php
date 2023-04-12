@@ -258,7 +258,7 @@ $lang->personnel->common     = '人员';
 $lang->personnel->invest     = '投入人员';
 $lang->personnel->accessible = '可访问人员';
 
-$lang->stakeholder->common = '项目干系人';
+$lang->stakeholder->common = '干系人';
 $lang->release->common     = '发布';
 $lang->message->common     = '通知';
 $lang->mail->common        = '邮件';
