@@ -17,18 +17,12 @@
 .block-docstatistic .created {flex: 0 1 48%;}
 .block-docstatistic .edited {flex: 0 1 16%; padding-left: 20px;}
 .block-docstatistic .divider {border-right: 1px solid #eee; padding-right: 12%;}
-.block-docstatistic .title-line {height: 32px;}
-.block-docstatistic .panel-title {display: none;}
-.block-docstatistic .panel-body {margin-top: -32px; padding: 30px;}
-.block-docstatistic .tile-title {white-space: nowrap;}
+.block-docstatistic .panel-body {padding-top: 0;}
 
 .block-docstatistic.block-sm .flex {justify-content: start;}
 .block-docstatistic.block-sm .panel-body.flex {flex-direction: column;}
 .block-docstatistic.block-sm .divider {border-right: none;}
-.block-docstatistic.block-sm .panel-title {display: block;}
-.block-docstatistic.block-sm .statistic .title-line {display: none;}
 .block-docstatistic.block-sm .statistic .flex {margin-top: -28px;}
-.block-docstatistic.block-sm .title-line {height: 0; padding-top: 10px;}
 .block-docstatistic.block-sm .tile {padding: 10px 32px 20px;}
 .block-docstatistic.block-sm .panel-body {margin-top: 0px; padding: 10px;}
 .block-docstatistic.block-sm .flex-column .flex .tile:nth-child(1) {padding-left: 0;}
@@ -39,7 +33,6 @@
 <div class='panel-move-handler'></div>
 <div class="panel-body flex">
   <div class='flex flex-column statistic'>
-    <h4 class="title-line"><?php echo $lang->doc->docStatistic;?></h4>
     <div class='flex'>
       <div class="tile">
         <div class="tile-amount"><?php echo (int)$statistic->totalDocs;?></div>
@@ -52,7 +45,6 @@
     </div>
   </div>
   <div class='flex flex-column created'>
-    <h4 class="title-line"><?php echo $lang->doc->openedByMe;?></h4>
     <div class='flex'>
       <?php if(common::hasPriv('doc', 'mySpace')):?>
       <a class="tile" href="<?php echo $this->createLink('doc', 'mySpace', 'type=createdBy');?>">
@@ -77,7 +69,6 @@
     </div>
   </div>
   <div class='flex flex-column edited'>
-    <h4 class="title-line"><?php echo $lang->doc->editedByMe;?></h4>
     <div class='flex'>
       <div class="tile">
         <div class="tile-amount"><?php echo (int)$statistic->myEditedDocs;?></div>
