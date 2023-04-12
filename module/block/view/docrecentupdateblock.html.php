@@ -1,6 +1,6 @@
 <?php
 /**
- * The statistic view file of block module of ZenTaoPMS.
+ * The docrecentupdateblock view file of block module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
@@ -22,13 +22,18 @@
 .block-docrecentupdate .doc-list > .doc-box > .btn > h4 {padding-right: 5px;}
 .block-docrecentupdate .doc-list > .doc-item .file-icon {margin-right: 2px;}
 .block-docrecentupdate .doc-list > .doc-box .plug-title {height: 16px; overflow: hidden;}
+
+.block-docrecentupdate.block-sm .doc-list > .doc-box {flex: 0 1 100%;}
 </style>
 <?php $canView = common::hasPriv('doc', 'view');?>
 <div class="panel-body">
+  <?php if(!empty($docList)):?>
+    <div class='table-empty-tip'><p><span class='text-muted'><?php echo $lang->doc->noDoc;?></p></span></div>
+  <?php else:?>
   <div class="doc-list">
     <?php foreach($docList as $doc):?>
     <div class="doc-box">
-    <button class="btn shadow-primary-hover <?php if(!$canView or !in_array($doc->id, $pricDocs)) echo 'no-priv';?>" data-link='<?php echo $this->createLink("doc", "view", "docID=$doc->id");?>'>
+    <button class="btn shadow-primary-hover <?php if(!$canView) echo 'no-priv';?>" data-link='<?php echo $this->createLink("doc", "view", "docID=$doc->id");?>'>
         <span class='date-interval text-muted'>
           <?php
           $interval = $doc->editInterval;
@@ -48,7 +53,7 @@
           echo $editTip;
           ?>
         </span>
-        <h4 class="plug-title">
+        <h4 class="plug-title" title="<?php echo $doc->title;?>">
           <?php
           $docType = $doc->type == 'text' ? 'wiki-file' : $doc->type;
           echo html::image("static/svg/{$docType}.svg", "class='file-icon'");
@@ -60,6 +65,7 @@
     </div>
     <?php endforeach;?>
   </div>
+  <?php endif;?>
 </div>
 <script>
 $(function()

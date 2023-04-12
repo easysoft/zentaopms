@@ -382,13 +382,13 @@ class docModel extends model
      */
     public function getDocsByBrowseType($browseType, $queryID, $moduleID, $sort, $pager)
     {
-        $allLibs      = $this->getLibs('all');
-        $allLibIDList = array_keys($allLibs);
-        $docIdList    = $this->getPrivDocs(0, $moduleID);
+        $allLibs          = $this->getLibs('all');
+        $allLibIDList     = array_keys($allLibs);
+        $hasPrivDocIdList = $this->getPrivDocs(0, $moduleID);
 
         $files = $this->dao->select('*')->from(TABLE_FILE)
             ->where('objectType')->eq('doc')
-            ->andWhere('objectID')->in($docIdList)
+            ->andWhere('objectID')->in($hasPrivDocIdList)
             ->fetchGroup('objectID');
 
         if($browseType == "all")
@@ -418,6 +418,7 @@ class docModel extends model
             $query     = $this->getDocQuery($this->session->contributeDocQuery);
             $docIDList = $this->dao->select('objectID')->from(TABLE_ACTION)
                 ->where('objectType')->eq('doc')
+                ->andWhere('objectID')->in($hasPrivDocIdList)
                 ->andWhere('actor')->eq($this->app->user->account)
                 ->andWhere('action')->eq('edited')
                 ->fetchAll('objectID');
@@ -438,6 +439,7 @@ class docModel extends model
             $docs = $this->dao->select('*')->from(TABLE_DOC)
                 ->where('deleted')->eq(0)
                 ->andWhere('lib')->in($allLibIDList)
+                ->andWhere('id')->in($hasPrivDocIdList)
                 ->beginIF($this->config->doc->notArticleType)->andWhere('type')->notIN($this->config->doc->notArticleType)->fi()
                 ->andWhere('addedBy')->eq($this->app->user->account)
                 ->orderBy($sort)
@@ -449,6 +451,7 @@ class docModel extends model
             $docIDList = $this->dao->select('objectID')->from(TABLE_ACTION)
                 ->where('objectType')->eq('doc')
                 ->andWhere('actor')->eq($this->app->user->account)
+                ->andWhere('objectID')->in($hasPrivDocIdList)
                 ->andWhere('action')->eq('edited')
                 ->fetchAll('objectID');
             $docs      = $this->dao->select('*')->from(TABLE_DOC)
@@ -464,7 +467,7 @@ class docModel extends model
         {
             $docs = $this->dao->select('*')->from(TABLE_DOC)
                 ->where('deleted')->eq(0)
-                ->andWhere('id')->in($docIdList)
+                ->andWhere('id')->in($hasPrivDocIdList)
                 ->beginIF($this->config->doc->notArticleType)->andWhere('type')->notIN($this->config->doc->notArticleType)->fi()
                 ->andWhere('lib')->in($allLibIDList)
                 ->orderBy('editedDate_desc')
@@ -477,6 +480,7 @@ class docModel extends model
                 ->leftJoin(TABLE_DOCACTION)->alias('t2')->on("t1.id=t2.doc && t2.action='collect'")
                 ->where('t1.deleted')->eq(0)
                 ->andWhere('t1.lib')->in($allLibIDList)
+                ->andWhere('t1.id')->in($hasPrivDocIdList)
                 ->beginIF($this->config->doc->notArticleType)->andWhere('t1.type')->notIN($this->config->doc->notArticleType)->fi()
                 ->andWhere('t2.actor')->eq($this->app->user->account)
                 ->orderBy($sort)
@@ -768,6 +772,7 @@ class docModel extends model
             $loginLink = $this->config->requestType == 'GET' ? "?{$this->config->moduleVar}=user&{$this->config->methodVar}=login" : "user{$this->config->requestFix}login";
             if(strpos($this->server->http_referer, $loginLink) !== false) return print(js::locate(inlink('index')));
             helper::end(print(js::locate('back')));
+            die;
         }
 
         $docs = $this->processCollector(array($doc->id => $doc));
@@ -1266,7 +1271,7 @@ class docModel extends model
     {
         if(empty($object)) return false;
 
-        if($this->app->user->admin and $object->type != 'mine') return true;
+        if($this->app->user->admin and ($object->type != 'mine' or ($object->type == 'mine' and $object->addedBy == $this->app->user->account))) return true;
 
         if($object->acl == 'open') return true;
 
@@ -1324,10 +1329,11 @@ class docModel extends model
     public function checkPrivDoc($object)
     {
         if(!isset($object->lib)) return false;
+        if(isset($object->assetLibType) and $object->assetLibType) return true;
+        if($object->status == 'draft' and $object->addedBy != $this->app->user->account) return false;
+        if($object->status == 'normal' and $this->app->user->admin) return true;
 
         $lib = $this->getLibById($object->lib);
-        if($this->app->user->admin and !empty($lib) and $lib->type != 'mine') return true;
-
         if(!$this->checkPrivLib($lib)) return false;
         if(in_array($object->acl, array('open', 'public'))) return true;
 
@@ -1805,7 +1811,7 @@ class docModel extends model
             ->groupBy('root')
             ->fetchPairs();
 
-        $docs = $this->dao->select("`id`,`addedBy`,`lib`,`acl`,`users`,`groups`")->from(TABLE_DOC)
+        $docs = $this->dao->select("`id`,`addedBy`,`lib`,`acl`,`users`,`groups`,`status`")->from(TABLE_DOC)
             ->where('lib')->in($idList)
             ->andWhere('deleted')->eq(0)
             ->andWhere('module')->eq(0)
@@ -3358,9 +3364,21 @@ class docModel extends model
      */
     public function getDynamic($pager = null)
     {
+        $allLibs          = $this->getLibs('hasApi');
+        $hasPrivDocIdList = $this->getPrivDocs('', 0, 'all');
+        $apiList          = $this->loadModel('api')->getPrivApis();
+
         $actions = $this->dao->select('*')->from(TABLE_ACTION)
-            ->where('objectType')->in('doclib,doc,api')
-            ->andWhere('vision')->eq($this->config->vision)
+            ->where('vision')->eq($this->config->vision)
+            ->andWhere('((objectType')->eq('doclib')
+            ->andWhere('objectID')->in(array_keys($allLibs))
+            ->markRight(1)
+            ->orWhere('(objectType')->eq('doc')
+            ->andWhere('objectID')->in($hasPrivDocIdList)
+            ->markRight(1)
+            ->orWhere('(objectType')->eq('api')
+            ->andWhere('objectID')->in(array_keys($apiList))
+            ->markRight(2)
             ->orderBy('date_desc')
             ->page($pager)
             ->fetchAll();
