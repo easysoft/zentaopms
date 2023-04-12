@@ -11,30 +11,30 @@
  */
 ?>
 <style>
-.block-statistic .flex {display: flex; flex-wrap: nowrap; flex-direction: row; justify-content: space-between; flex: auto;}
-.block-statistic .flex-column {flex-direction: column; padding-left: 10px;}
-.block-statistic .statistic {flex: 0 1 32%;}
-.block-statistic .created {flex: 0 1 48%;}
-.block-statistic .edited {flex: 0 1 16%; padding-left: 20px;}
-.block-statistic .divider {border-right: 1px solid #eee; padding-right: 12%;}
-.block-statistic .title-line {height: 32px;}
-.block-statistic .panel-title {display: none;}
-.block-statistic .panel-body {margin-top: -32px; padding: 30px;}
-.block-statistic .tile-title {white-space: nowrap;}
+.block-docstatistic .flex {display: flex; flex-wrap: nowrap; flex-direction: row; justify-content: space-between; flex: auto;}
+.block-docstatistic .flex-column {flex-direction: column; padding-left: 10px;}
+.block-docstatistic .statistic {flex: 0 1 32%;}
+.block-docstatistic .created {flex: 0 1 48%;}
+.block-docstatistic .edited {flex: 0 1 16%; padding-left: 20px;}
+.block-docstatistic .divider {border-right: 1px solid #eee; padding-right: 12%;}
+.block-docstatistic .title-line {height: 32px;}
+.block-docstatistic .panel-title {display: none;}
+.block-docstatistic .panel-body {margin-top: -32px; padding: 30px;}
+.block-docstatistic .tile-title {white-space: nowrap;}
 
-.block-statistic.block-sm .flex {justify-content: start;}
-.block-statistic.block-sm .panel-body.flex {flex-direction: column;}
-.block-statistic.block-sm .divider {border-right: none;}
-.block-statistic.block-sm .panel-title {display: block;}
-.block-statistic.block-sm .statistic .title-line {display: none;}
-.block-statistic.block-sm .statistic .flex {margin-top: -28px;}
-.block-statistic.block-sm .title-line {height: 0; padding-top: 10px;}
-.block-statistic.block-sm .tile {padding: 10px 32px 20px;}
-.block-statistic.block-sm .panel-body {margin-top: 0px; padding: 10px;}
-.block-statistic.block-sm .flex-column .flex .tile:nth-child(1) {padding-left: 0;}
-.block-statistic.block-sm .edited {padding-left: 10px;}
-.block-statistic.block-sm .flex-column {border-bottom: 1px solid #eee;}
-.block-statistic.block-sm .flex-column:last-child {border-bottom: none;}
+.block-docstatistic.block-sm .flex {justify-content: start;}
+.block-docstatistic.block-sm .panel-body.flex {flex-direction: column;}
+.block-docstatistic.block-sm .divider {border-right: none;}
+.block-docstatistic.block-sm .panel-title {display: block;}
+.block-docstatistic.block-sm .statistic .title-line {display: none;}
+.block-docstatistic.block-sm .statistic .flex {margin-top: -28px;}
+.block-docstatistic.block-sm .title-line {height: 0; padding-top: 10px;}
+.block-docstatistic.block-sm .tile {padding: 10px 32px 20px;}
+.block-docstatistic.block-sm .panel-body {margin-top: 0px; padding: 10px;}
+.block-docstatistic.block-sm .flex-column .flex .tile:nth-child(1) {padding-left: 0;}
+.block-docstatistic.block-sm .edited {padding-left: 10px;}
+.block-docstatistic.block-sm .flex-column {border-bottom: 1px solid #eee;}
+.block-docstatistic.block-sm .flex-column:last-child {border-bottom: none;}
 </style>
 <div class='panel-move-handler'></div>
 <div class="panel-body flex">
