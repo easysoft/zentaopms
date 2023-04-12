@@ -55,8 +55,15 @@ class doc extends control
      * @access public
      * @return void
      */
-    public function mySpace($type = 'mine', $libID = 0, $moduleID = 0, $browseType = 'all', $param = 0, $orderBy = 'status,id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function mySpace($type = 'mine', $libID = 0, $moduleID = 0, $browseType = 'all', $param = 0, $orderBy = '', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
+        $browseType = strtolower($browseType);
+        $type       = strtolower($type);
+
+        if(empty($orderBy) and $type == 'mine') $orderBy = 'status,editedDate_desc';
+        if(empty($orderBy) and ($type == 'view' or $type == 'collect')) $orderBy = 'status,date_desc';
+        if(empty($orderBy) and ($type == 'createdby')) $orderBy = 'status,addedDate_desc';
+
         /* Save session, load module. */
         $uri = $this->app->getURI(true);
         $this->session->set('docList', $uri, 'doc');
@@ -70,8 +77,6 @@ class doc extends control
         list($libs, $libID, $object, $objectID, $objectDropdown) = $this->doc->setMenuByType('mine', 0, $libID);
 
         /* Build the search form. */
-        $browseType = strtolower($browseType);
-        $type       = strtolower($type);
         $queryID    = $browseType == 'bysearch' ? (int)$param : 0;
         $params     = "libID=$libID&moduleID=$moduleID&browseType=bySearch&param=myQueryID&orderBy=$orderBy";
         if($this->app->rawMethod == 'myspace') $params = "type=$type&" . $params;
@@ -88,7 +93,14 @@ class doc extends control
         $docs = array();
         if($type == 'mine')
         {
-            $docs = $browseType == 'bysearch' ? $this->doc->getDocsBySearch('mine', 0, $libID, $queryID, $orderBy, $pager) : $this->doc->getDocs($libID, $moduleID, $browseType, $orderBy, $pager);
+            if($browseType != 'bysearch' and !$libID)
+            {
+                $docs = array();
+            }
+            else
+            {
+                $docs = $browseType == 'bysearch' ? $this->doc->getDocsBySearch('mine', 0, $libID, $queryID, $orderBy, $pager) : $this->doc->getDocs($libID, $moduleID, $browseType, $orderBy, $pager);
+            }
         }
         elseif($type == 'view' or $type == 'collect' or $type == 'createdby')
         {
@@ -370,7 +382,8 @@ class doc extends control
 
             $fileAction = '';
             if(!empty($files)) $fileAction = $this->lang->addFiles . join(',', $files) . "\n";
-            $this->action->create('doc', $docID, 'Created', $fileAction);
+            $actionType = $_POST['status'] == 'draft' ? 'savedDraft' : 'releasedDoc';
+            $this->action->create('doc', $docID, $actionType, $fileAction);
 
             if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $docID));
             $objectID = zget($lib, $lib->type, 0);
@@ -516,6 +529,8 @@ class doc extends control
      */
     public function edit($docID, $comment = false, $objectType = '', $objectID = 0, $libID = 0, $from = 'edit')
     {
+        $doc = $this->doc->getById($docID);
+
         if(!empty($_POST))
         {
             if($comment == false || $comment == 'false')
@@ -527,7 +542,14 @@ class doc extends control
             }
             if($this->post->comment != '' or !empty($changes) or !empty($files))
             {
-                $action     = !empty($changes) ? 'Edited' : 'Commented';
+                $action = 'Commented';
+                if(!empty($changes))
+                {
+                    $newType = $_POST['status'];
+                    if($doc->status == 'draft' and $newType == 'draft') $action = 'savedDraft';
+                    if($doc->status == 'draft' and $newType == 'normal') $action = 'releasedDoc';
+                    if($doc->status == 'normal' and $newType == 'normal') $action = 'Edited';
+                }
                 $fileAction = '';
                 if(!empty($files)) $fileAction = $this->lang->addFiles . join(',', $files) . "\n";
                 $actionID = $this->action->create('doc', $docID, $action, $fileAction . $this->post->comment);
@@ -549,7 +571,6 @@ class doc extends control
         }
 
         /* Get doc and set menu. */
-        $doc   = $this->doc->getById($docID);
         $libID = $doc->lib;
 
         if($doc->contentType == 'markdown') $this->config->doc->markdown->edit = array('id' => 'content', 'tools' => 'toolbar');
@@ -618,6 +639,7 @@ class doc extends control
         $this->view->from             = $from;
         $this->view->files            = $this->loadModel('file')->getByObject('doc', $docID);
         $this->view->objectID         = $objectID;
+        $this->view->otherEditing     = $this->doc->checkOtherEditing($docID);
         $this->display();
     }
 
@@ -752,10 +774,12 @@ class doc extends control
         if($action)
         {
             $this->doc->deleteAction($action->id);
+            $this->action->create('doc', $objectID, 'uncollected');
         }
         else
         {
             $this->doc->createAction($objectID, 'collect');
+            $this->action->create('doc', $objectID, 'collected');
         }
 
         return $this->send(array('status' => $action ? 'no' : 'yes'));
@@ -1142,6 +1166,7 @@ class doc extends control
             if(!$doc) return print(js::error($this->lang->notFound));
 
             $this->doc->createAction($docID, 'view');
+            $this->doc->removeEditing($doc);
             if($doc->keywords)
             {
                 $doc->keywords = str_replace("，", ',', $doc->keywords);

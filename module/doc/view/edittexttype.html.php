@@ -44,7 +44,6 @@
                 <div class='contenthtml'><?php echo html::textarea('content', htmlSpecialString($doc->content), "style='width:100%;'");?></div>
                 <?php echo html::hidden('contentType', $doc->contentType);?>
                 <?php echo html::hidden('type', 'text');?>
-                <?php echo html::hidden('editedDate', $doc->editedDate);?>
                 <?php echo html::hidden('status', $doc->status);?>
               </div>
             </div>
@@ -129,6 +128,20 @@
     </div>
   </form>
 </div>
+<script>
+$(function()
+{
+    /* Automatically save document contents. */
+    setInterval("saveDraft()", <?php echo $config->doc->saveDraftInterval;?> * 1000);
+    <?php if($otherEditing):?>
+    bootbox.confirm(
+    {
+        message: '<?php echo $lang->doc->confirmOtherEditing;?>',
+        callback: function(result){if(!result) location.href='<?php echo $backLink;?>'}
+    });
+    <?php endif;?>
+})
+</script>
 <?php js::set('needUpdateContent', $doc->content != $doc->draft);?>
 <?php js::set('confirmUpdateContent', $lang->doc->confirmUpdateContent);?>
 <?php js::set('docID', $doc->id);?>

@@ -26,7 +26,7 @@ CREATE TABLE IF NOT EXISTS `zt_pivot`  (
   `objects` mediumtext NULL,
   `settings` mediumtext NOT NULL,
   `filters` mediumtext NOT NULL,
-  `step` tinyint(1) unsigned NOT NULL DEFAULT '',
+  `step` tinyint(1) unsigned NOT NULL,
   `stage` enum('draft','published') NOT NULL DEFAULT 'draft',
   `builtin` enum('0', '1') NOT NULL DEFAULT '0',
   `createdBy` varchar(30) NOT NULL,
@@ -46,7 +46,6 @@ ALTER TABLE `zt_chart` MODIFY `group` varchar(255) NOT NULL;
 ALTER TABLE `zt_chart` ADD `stage` enum('draft','published') NOT NULL DEFAULT 'draft' AFTER `sql`;
 ALTER TABLE `zt_chart` ADD `langs` text NULL AFTER `fields`;
 ALTER TABLE `zt_chart` ADD `step` tinyint(1) unsigned NOT NULL DEFAULT '0' AFTER `filters`;
-ALTER TABLE `zt_chart` DROP `dataset`;
 
 ALTER TABLE `zt_dataview` ADD `langs` text NULL AFTER `fields`;
 
@@ -773,5 +772,7 @@ CREATE TABLE IF NOT EXISTS `zt_docaction` (
   KEY `doc` (`doc`),
   KEY `actor` (`actor`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+ALTER TABLE `zt_doc` ADD `editingDate` text NULL AFTER `editedDate`;
 
 REPLACE INTO `zt_grouppriv` (`group`, `module`, `method`) SELECT `group`, 'projectbuild', 'browse' FROM `zt_grouppriv` WHERE `module` = 'project' AND `method` = 'build';

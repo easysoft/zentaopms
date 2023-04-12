@@ -660,6 +660,9 @@ class docModel extends model
                 ->andWhere('t1.id')->in(array_keys($docIDList))
                 ->andWhere('t2.action')->eq($type)
                 ->andWhere('t2.actor')->eq($this->app->user->account)
+                ->beginIF(!common::hasPriv('doc', 'productSpace'))->andWhere('t3.type')->ne('product')->fi()
+                ->beginIF(!common::hasPriv('doc', 'projectSpace'))->andWhere('t3.type')->notIN('project,execution')->fi()
+                ->beginIF(!common::hasPriv('doc', 'tableContents'))->andWhere('t3.type')->ne('custom')->fi()
                 ->beginIF($browseType == 'all' or $browseType == 'bysearch')->andWhere("(t1.status = 'normal' or (t1.status = 'draft' and t1.addedBy='{$this->app->user->account}'))")->fi()
                 ->beginIF($browseType == 'draft')->andWhere('t1.status')->eq('draft')->andWhere('t1.addedBy')->eq($this->app->user->account)->fi()
                 ->beginIF($browseType == 'bysearch')->andWhere($query)->fi()
@@ -676,6 +679,9 @@ class docModel extends model
                 ->andWhere('t1.id')->in(array_keys($docIDList))
                 ->andWhere('t1.vision')->eq($this->config->vision)
                 ->andWhere('t1.addedBy')->eq($this->app->user->account)
+                ->beginIF(!common::hasPriv('doc', 'productSpace'))->andWhere('t2.type')->ne('product')->fi()
+                ->beginIF(!common::hasPriv('doc', 'projectSpace'))->andWhere('t2.type')->notIN('project,execution')->fi()
+                ->beginIF(!common::hasPriv('doc', 'tableContents'))->andWhere('t2.type')->ne('custom')->fi()
                 ->beginIF($browseType == 'draft')->andWhere('t1.status')->eq('draft')->andWhere('t1.addedBy')->eq($this->app->user->account)->fi()
                 ->beginIF($browseType == 'bysearch')->andWhere($query)->fi()
                 ->orderBy($orderBy)
@@ -923,14 +929,11 @@ class docModel extends model
     public function update($docID)
     {
         $oldDoc = $this->dao->select('*')->from(TABLE_DOC)->where('id')->eq((int)$docID)->fetch();
-        if(!empty($_POST['editedDate']) and $oldDoc->editedDate != $this->post->editedDate)
-        {
-            dao::$errors[] = $this->lang->error->editedByOther;
-            return false;
-        }
 
         if(!isset($_POST['lib']) and strpos($_POST['module'], '_') !== false) list($_POST['lib'], $_POST['module']) = explode('_', $_POST['module']);
-        $doc = fixer::input('post')->setDefault('module', 0)
+        $account = $this->app->user->account;
+        $now     = helper::now();
+        $doc     = fixer::input('post')->setDefault('module', 0)
             ->callFunc('title', 'trim')
             ->stripTags($this->config->doc->editor->edit['id'], $this->config->allowedTags)
             ->setDefault('users', '')
@@ -938,14 +941,18 @@ class docModel extends model
             ->setDefault('product', 0)
             ->setDefault('execution', 0)
             ->setDefault('mailto', '')
-            ->add('editedBy', $this->app->user->account)
-            ->add('editedDate', helper::now())
+            ->add('editedBy', $account)
+            ->add('editedDate', $now)
             ->cleanInt('project,product,execution,lib,module')
             ->join('groups', ',')
             ->join('users', ',')
             ->join('mailto', ',')
             ->remove('comment,files,labels,uid,contactListMenu')
             ->get();
+
+        $editingDate = $oldDoc->editingDate ? json_decode($oldDoc->editingDate, true) : array();
+        unset($editingDate[$account]);
+        $doc->editingDate = json_encode($editingDate);
 
         if($doc->acl == 'open') $doc->users = $doc->groups = '';
         if($doc->type == 'chapter' and $doc->parent)
@@ -1041,11 +1048,19 @@ class docModel extends model
      */
     public function saveDraft($docID)
     {
+        $docID   = (int)$docID;
+        $oldDoc  = $this->dao->select('id,editingDate')->from(TABLE_DOC)->where('id')->eq($docID)->fetch();
+        $account = $this->app->user->account;
+
         $data = fixer::input('post')->stripTags($this->config->doc->editor->edit['id'], $this->config->allowedTags)->get();
         $doc  = new stdclass();
         $doc->draft = $data->content;
 
-        $docType = $this->dao->select('type')->from(TABLE_DOCCONTENT)->where('doc')->eq((int)$docID)->orderBy('version_desc')->fetch();
+        $doc->editingDate = $oldDoc->editingDate ? json_decode($oldDoc->editingDate, true) : array();
+        $doc->editingDate[$account] = time();
+        $doc->editingDate = json_encode($doc->editingDate);
+
+        $docType = $this->dao->select('type')->from(TABLE_DOCCONTENT)->where('doc')->eq($docID)->orderBy('version_desc')->fetch();
         if($docType == 'markdown') $doc->draft = $this->post->content;
 
         $this->dao->update(TABLE_DOC)->data($doc)->where('id')->eq($docID)->exec();
@@ -3308,5 +3323,74 @@ class docModel extends model
             if(isset($actionGroup[$docID])) $doc->collector = ',' . implode(',', array_keys($actionGroup[$docID])) . ',';
         }
         return $docs;
+    }
+
+    /**
+     * Check other editing.
+     *
+     * @param  int    $docID
+     * @access public
+     * @return bool
+     */
+    public function checkOtherEditing($docID)
+    {
+        $now     = time();
+        $account = $this->app->user->account;
+        $docID   = (int)$docID;
+        $doc     = $this->dao->select('id,editingDate')->from(TABLE_DOC)->where('id')->eq($docID)->fetch();
+        if(empty($doc)) return false;
+
+        $editingDate  = $doc->editingDate ? json_decode($doc->editingDate, true) : array();
+        $otherEditing = false;
+        foreach($editingDate as $editingAccount => $timestamp)
+        {
+            if($editingAccount != $account and ($now - $timestamp) <= $this->config->doc->saveDraftInterval)
+            {
+                $otherEditing = true;
+                break;
+            }
+        }
+
+        $editingDate[$account] = $now;
+        $this->dao->update(TABLE_DOC)->set('editingDate')->eq(json_encode($editingDate))->where('id')->eq($docID)->exec();
+
+        return $otherEditing;
+    }
+
+    /**
+     * Get document dynamic.
+     *
+     * @param  object $pager
+     * @access public
+     * @return array
+     */
+    public function getDynamic($pager = null)
+    {
+        $actions = $this->dao->select('*')->from(TABLE_ACTION)
+            ->where('objectType')->in('doclib,doc')
+            ->andWhere('vision')->eq($this->config->vision)
+            ->orderBy('date_desc')
+            ->page($pager)
+            ->fetchAll();
+
+        return $this->loadModel('action')->transformActions($actions);
+    }
+
+    /**
+     * Remove editing.
+     *
+     * @param  object  $doc
+     * @access public
+     * @return void
+     */
+    public function removeEditing($doc)
+    {
+        if(empty($doc->id) or empty($doc->editingDate)) return false;
+        $account     = $this->app->user->account;
+        $editingDate = json_decode($doc->editingDate, true);
+        if(!isset($editingDate[$account])) return false;
+
+        unset($editingDate[$account]);
+        $this->dao->update(TABLE_DOC)->set('editingDate')->eq(json_encode($editingDate))->where('id')->eq($doc->id)->exec();
     }
 }

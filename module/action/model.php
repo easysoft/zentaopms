@@ -1352,6 +1352,16 @@ class actionModel extends model
             {
                 $action->objectName = $action->extra;
             }
+            elseif($action->objectType == 'pivot')
+            {
+                $pivotNames = json_decode($action->objectName, true);
+                $action->objectName = zget($pivotNames, $this->app->getClientLang(), '');
+                if(empty($action->objectName))
+                {
+                    $pivotNames = array_filter($pivotNames);
+                    $action->objectName = reset($pivotNames);
+                }
+            }
 
             $projectID = isset($relatedProjects[$action->objectType][$action->objectID]) ? $relatedProjects[$action->objectType][$action->objectID] : 0;
 
