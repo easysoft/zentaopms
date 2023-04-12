@@ -32,7 +32,7 @@
   <?php
   if($canExport)
   {
-      $exportLink = $this->createLink('doc', 'mine2export', "libID=$libID&docID=0", 'html', true);
+      $exportLink = $this->createLink('doc', 'mine2export', "libID=$libID&moduleID=$moduleID", 'html', true);
       echo html::a($exportLink, "<i class='icon-export muted'> </i>" . $lang->export, '', "class='btn btn-link export' data-width='480px' id='mine2export'");
   }
 
