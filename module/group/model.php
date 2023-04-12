@@ -2084,9 +2084,14 @@ class groupModel extends model
      */
     public function getRelatedPrivs($privIdList, $type = '', $excludePrivs = array(), $recommedSelect = array())
     {
-        $relatedPrivs = $this->dao->select('t1.relationPriv,t1.type,t2.parent,t2.module,t2.method,t3.`key`,t3.value')->from(TABLE_PRIVRELATION)->alias('t1')
+        $modulePairs = $this->getPrivManagerPairs('module');
+        $modules     = array_keys($modulePairs);
+        $modules     = implode(',', $modules);
+        $relatedPrivs = $this->dao->select("t1.relationPriv,t1.type,t2.parent,t2.module,t2.method,t3.`key`,t3.value, IF(t4.type = 'module', 999, INSTR('$modules', t5.code)) as moduleOrder")->from(TABLE_PRIVRELATION)->alias('t1')
             ->leftJoin(TABLE_PRIV)->alias('t2')->on('t1.relationPriv=t2.id')
             ->leftJoin(TABLE_PRIVLANG)->alias('t3')->on('t1.relationPriv=t3.objectID')
+            ->leftJoin(TABLE_PRIVMANAGER)->alias('t4')->on('t2.parent=t4.id')
+            ->leftJoin(TABLE_PRIVMANAGER)->alias('t5')->on('t4.parent=t5.id')
             ->where('t1.priv')->in($privIdList)
             ->andWhere('(t1.relationPriv')->notin($privIdList)
 
@@ -2101,13 +2106,20 @@ class groupModel extends model
             ->andWhere('t3.objectType')->eq('priv')
             ->andWhere('t2.edition')->like("%,{$this->config->edition},%")
             ->andWhere('t2.vision')->like("%,{$this->config->vision},%")
-            ->orderBy('t2.`order`_asc, t1.`type` desc')
+            ->andWhere('((t4.type')->eq('package')
+            ->andWhere('t5.type')->eq('module')
+            ->beginIF(!empty($view) and $view != 'general')->andWhere('t5.code')->in($modules)->fi()
+            ->markRight(1)
+            ->orWhere('(t4.type')->eq('module')
+            ->andWhere('t5.type')->eq('view')
+            ->beginIF(!empty($view) and $view != 'general')->andWhere('t1.module')->in($modules)->fi()
+            ->markRight(2)
+            ->orderBy('moduleOrder asc, t2.`order`_asc, t1.`type` desc')
             ->fetchAll('relationPriv');
 
         $privList = empty($type) ? array('depend' => array(), 'recommend' => array()) : array($type => array());
         if(empty($relatedPrivs)) return $privList;
 
-        $modulePairs  = $this->getPrivManagerPairs('module');
         $managerList  = $this->dao->select('*')->from(TABLE_PRIVMANAGER)->fetchAll('id');
         $relatedPrivs = $this->transformPrivLang($relatedPrivs);
 
