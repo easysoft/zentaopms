@@ -258,8 +258,8 @@ $lang->doc->createList['word']     = 'Word';
 $lang->doc->createList['ppt']      = 'PPT';
 $lang->doc->createList['excel']    = 'Excel';
 
-$lang->doc->types['doc'] = 'WIKI文档';
-$lang->doc->types['api'] = '接口文档';
+$lang->doc->types['text'] = 'WIKI文档';
+$lang->doc->types['api']  = '接口文档';
 
 $lang->doc->contentTypeList['html']     = 'HTML';
 $lang->doc->contentTypeList['markdown'] = 'MarkDown';

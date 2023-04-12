@@ -771,6 +771,7 @@ class docModel extends model
             $loginLink = $this->config->requestType == 'GET' ? "?{$this->config->moduleVar}=user&{$this->config->methodVar}=login" : "user{$this->config->requestFix}login";
             if(strpos($this->server->http_referer, $loginLink) !== false) return print(js::locate(inlink('index')));
             helper::end(print(js::locate('back')));
+            die;
         }
 
         $docs = $this->processCollector(array($doc->id => $doc));
@@ -1325,6 +1326,7 @@ class docModel extends model
     public function checkPrivDoc($object)
     {
         if(!isset($object->lib)) return false;
+        if(isset($object->assetLibType) and $object->assetLibType) return true;
 
         $libType = $this->dao->select('type')->from(TABLE_DOCLIB)->where('id')->eq($object->lib)->fetch('type');
         if($this->app->user->admin and $libType != 'mine') return true;
