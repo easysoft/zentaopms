@@ -2042,6 +2042,7 @@ class block extends control
      */
     public function printDocStatisticBlock()
     {
+        $this->view->statistic = $this->loadModel('doc')->getStatisticInfo();
     }
 
     /**
@@ -2066,7 +2067,7 @@ class block extends control
      * @access public
      * @return void
      */
-    public function printMyCollectionBlock()
+    public function printDocMyCollectionBlock()
     {
     }
 
@@ -2076,8 +2077,24 @@ class block extends control
      * @access public
      * @return void
      */
-    public function printRecentUpdateBlock()
+    public function printDocRecentUpdateBlock()
     {
+        /* Load pager. */
+        $this->app->loadClass('pager', $static = true);
+        $pager = new pager(0, 6, 1);
+
+        $docList = $this->loadModel('doc')->getDocsByBrowseType('byediteddate', 0, 0, 'editedDate_desc', $pager);
+        $libList = array();
+        foreach($docList as $doc)
+        {
+            $doc->editedDate   = substr($doc->editedDate, 0, 10);
+            $doc->editInterval = helper::getDateInterval($doc->editedDate);
+
+            $libList[] = $doc->lib;
+        }
+
+        $this->view->pricDocs = $this->doc->getPrivDocs($libList);
+        $this->view->docList  = $docList;
     }
 
     /**
@@ -2086,7 +2103,7 @@ class block extends control
      * @access public
      * @return void
      */
-    public function printViewListBlock()
+    public function printDocViewListBlock()
     {
     }
 
@@ -2096,7 +2113,7 @@ class block extends control
      * @access public
      * @return void
      */
-    public function printCollectListBlock()
+    public function printDocCollectListBlock()
     {
     }
 

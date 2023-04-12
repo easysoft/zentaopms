@@ -334,7 +334,7 @@ $lang->block->default['full']['my']['10']['params']['count']   = '15';
 
 /* Doc module block. */
 $lang->block->default['doc']['1']['title'] = 'Statistic';
-$lang->block->default['doc']['1']['block'] = 'statistic';
+$lang->block->default['doc']['1']['block'] = 'docstatistic';
 $lang->block->default['doc']['1']['grid']  = 8;
 
 $lang->block->default['doc']['2']['title'] = 'Dynamic';
@@ -342,15 +342,15 @@ $lang->block->default['doc']['2']['block'] = 'docdynamic';
 $lang->block->default['doc']['2']['grid']  = 4;
 
 $lang->block->default['doc']['3']['title'] = 'My Collection';
-$lang->block->default['doc']['3']['block'] = 'mycollection';
+$lang->block->default['doc']['3']['block'] = 'docmycollection';
 $lang->block->default['doc']['3']['grid']  = 8;
 
-$lang->block->default['doc']['4']['title'] = 'Recently Update';
-$lang->block->default['doc']['4']['block'] = 'recentupdate';
+$lang->block->default['doc']['4']['title'] = 'Recently update';
+$lang->block->default['doc']['4']['block'] = 'docrecentupdate';
 $lang->block->default['doc']['4']['grid']  = 8;
 
 $lang->block->default['doc']['5']['title'] = 'Browse Leaderboard';
-$lang->block->default['doc']['5']['block'] = 'viewlist';
+$lang->block->default['doc']['5']['block'] = 'docviewlist';
 $lang->block->default['doc']['5']['grid']  = 4;
 
 if($config->vision == 'rnd')
@@ -361,7 +361,7 @@ if($config->vision == 'rnd')
 }
 
 $lang->block->default['doc']['7']['title'] = 'Favorite Leaderboard';
-$lang->block->default['doc']['7']['block'] = 'collectlist';
+$lang->block->default['doc']['7']['block'] = 'doccollectlist';
 $lang->block->default['doc']['7']['grid']  = 4;
 
 $lang->block->default['doc']['8']['title'] = $lang->projectCommon . 'Document';
@@ -453,14 +453,14 @@ $lang->block->modules['todo']->availableBlocks->list = 'Todo';
 
 $lang->block->modules['doc'] = new stdclass();
 $lang->block->modules['doc']->availableBlocks = new stdclass();
-$lang->block->modules['doc']->availableBlocks->statistic    = 'Statistic';
-$lang->block->modules['doc']->availableBlocks->docdynamic   = 'Dynamic';
-$lang->block->modules['doc']->availableBlocks->mycollection = 'My Collection';
-$lang->block->modules['doc']->availableBlocks->recentupdate = 'Recently Update';
-$lang->block->modules['doc']->availableBlocks->viewlist     = 'Browse Leaderboard';
-$lang->block->modules['doc']->availableBlocks->productdoc   = $lang->productCommon . 'Document';
-$lang->block->modules['doc']->availableBlocks->collectlist  = 'Favorite Leaderboard';
-$lang->block->modules['doc']->availableBlocks->projectdoc   = $lang->projectCommon . 'Document';
+$lang->block->modules['doc']->availableBlocks->docstatistic    = 'Statistic';
+$lang->block->modules['doc']->availableBlocks->docdynamic      = 'Dynamic';
+$lang->block->modules['doc']->availableBlocks->docmycollection = 'My Collection';
+$lang->block->modules['doc']->availableBlocks->docrecentupdate = 'Recently Update';
+$lang->block->modules['doc']->availableBlocks->docviewlist     = 'Browse Leaderboard';
+$lang->block->modules['doc']->availableBlocks->productdoc      = $lang->productCommon . 'Document';
+$lang->block->modules['doc']->availableBlocks->doccollectlist  = 'Favorite Leaderboard';
+$lang->block->modules['doc']->availableBlocks->projectdoc      = $lang->projectCommon . 'Document';
 
 $lang->block->orderByList = new stdclass();
 

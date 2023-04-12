@@ -32,7 +32,7 @@
   <?php
   if($canExport)
   {
-      $exportLink = $this->createLink('doc', 'mine2export', "libID=$libID&docID=0", 'html', true);
+      $exportLink = $this->createLink('doc', 'mine2export', "libID=$libID&moduleID=$moduleID", 'html', true);
       echo html::a($exportLink, "<i class='icon-export muted'> </i>" . $lang->export, '', "class='btn btn-link export' data-width='480px' id='mine2export'");
   }
 
@@ -41,7 +41,7 @@
       echo html::a(helper::createLink('doc', 'createLib', "type=mine"), '<i class="icon icon-plus"></i> ' . $this->lang->doc->createLib, '', 'class="btn btn-secondary iframe" data-width="800px"');
   }
 
-  if($libID and common::hasPriv('doc', 'create')) echo $this->doc->printCreateBtn($lib, 'mine', 0, 0);
+  if($libID and common::hasPriv('doc', 'create')) echo $this->doc->printCreateBtn($lib, 'mine', 0, $moduleID);
   ?>
   </div>
 </div>

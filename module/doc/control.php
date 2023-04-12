@@ -394,24 +394,7 @@ class doc extends control
             return $this->send($response);
         }
 
-        if($this->app->tab == 'product')
-        {
-            $this->product->setMenu($objectID);
-        }
-        elseif($this->app->tab == 'project')
-        {
-            $this->project->setMenu($this->session->project);
-        }
-        elseif($this->app->tab == 'execution')
-        {
-            $this->execution->setMenu($objectID);
-        }
-        else
-        {
-            $this->app->rawMethod = $objectType;
-        }
         unset($_GET['onlybody']);
-
         $this->config->showMainMenu = (strpos($this->config->doc->textTypes, $docType) === false or $from == 'template');
 
         $lib = $libID ? $this->doc->getLibByID($libID) : '';
@@ -578,31 +561,6 @@ class doc extends control
         $lib        = $this->doc->getLibByID($libID);
         $objectType = $lib->type;
         $objectID   = zget($lib, $objectType, 0);
-
-        /* Set menus. */
-        if($this->app->tab == 'product')
-        {
-            $this->product->setMenu($objectID);
-        }
-        else if($this->app->tab == 'project')
-        {
-            $this->project->setMenu($objectID);
-        }
-        else if($this->app->tab == 'execution')
-        {
-            $this->execution->setMenu($objectID);
-        }
-        else if($this->app->tab == 'my')
-        {
-            $this->lang->doc->menu                         = $this->lang->my->menu->contribute;
-            $this->lang->modulePageNav                     = '';
-            $this->lang->TRActions                         = '';
-            $this->lang->my->menu->contribute['subModule'] = 'doc';
-        }
-        else
-        {
-            $this->app->rawMethod = $objectType == 'execution' ? 'project' : $objectType;
-        }
 
         $libs    = $this->doc->getLibs($objectType, 'withObject', $libID, $objectID);
         $objects = array();
@@ -1142,7 +1100,7 @@ class doc extends control
     public function view($docID = 0, $version = 0, $appendLib = 0)
     {
         $doc = $this->doc->getById($docID);
-        if(!$doc)
+        if(!$doc or !isset($doc->id))
         {
             if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'fail', 'code' => 404, 'message' => '404 Not found'));
             return print(js::error($this->lang->notFound) . js::locate($this->inlink('index')));
@@ -1150,7 +1108,6 @@ class doc extends control
 
         $lib = $this->doc->getLibById($doc->lib);
         if(!empty($lib) and $lib->deleted == '1') $appendLib = $doc->id;
-
 
         $objectType = isset($lib->type) ? $lib->type : 'custom';
         $type       = $objectType == 'execution' && $this->app->tab != 'execution' ? 'project' : $objectType;
@@ -1162,9 +1119,6 @@ class doc extends control
         /* Get doc. */
         if($docID)
         {
-            $doc = $this->doc->getById($docID, $version, true);
-            if(!$doc) return print(js::error($this->lang->notFound));
-
             $this->doc->createAction($docID, 'view');
             $this->doc->removeEditing($doc);
             if($doc->keywords)

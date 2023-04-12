@@ -146,6 +146,15 @@ $lang->doc->tableContents = 'Directory';
 $lang->doc->addCatalog    = 'Add Catalog';
 $lang->doc->editCatalog   = 'Edit Catalog';
 $lang->doc->deleteCatalog = 'Delete Catalog';
+$lang->doc->docStatistic  = 'Statistic';
+$lang->doc->docCreated    = 'Created Documents';
+$lang->doc->docEdited     = 'Edited Documents';
+$lang->doc->docViews      = 'Page Views';
+$lang->doc->docCollects   = 'Collection';
+$lang->doc->todayUpdated  = "Today's update";
+$lang->doc->daysUpdated   = 'Updated %s days ago';
+$lang->doc->monthsUpdated = 'Updated %s months ago';
+$lang->doc->yearsUpdated  = 'Updated %s years ago';
 
 /* Methods list */
 $lang->doc->index            = 'Dashboard';
