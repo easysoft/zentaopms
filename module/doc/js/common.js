@@ -408,14 +408,15 @@ function updateCrumbs()
 
     /* last crumbItem width major */
     var $lastChild = $($crumbItems[$crumbItems.length -1]);
-    var $separator = "<div class='separator'> > </div>"
-    var $ellipsis  = "<div class='ellipsis'> ... </div>"
-    if($lastChild.width() > $crumbs.width())
+    var widthSum = 0 + $lastChild.width();
+    var separatorWidth = 20;
+    for(var i = 0; i < $crumbItems.length - 1; i++)
     {
-        var $appendChild = $lastChild[0];
-        $crumbs.empty();
-        $crumbs.append($appendChild);
-        $crumbs.prepend($separator);
-        $crumbs.prepend($ellipsis);
+        var crumbItem = $crumbItems[i];
+        var widthSum  = widthSum + $(crumbItem).width() + separatorWidth;
+        if(widthSum >= crumbMaxWidth)
+        {
+            $(crumbItem).addClass('flex-auto');
+        }
     }
 }
