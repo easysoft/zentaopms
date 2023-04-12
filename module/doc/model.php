@@ -1325,7 +1325,8 @@ class docModel extends model
         $lib = $this->getLibById($object->lib);
         if($this->app->user->admin and !empty($lib) and $lib->type != 'mine') return true;
 
-        if(in_array($object->acl, array('open', 'public')) and $this->checkPrivLib($lib)) return true;
+        if(!$this->checkPrivLib($lib)) return false;
+        if(in_array($object->acl, array('open', 'public'))) return true;
 
         $account = ",{$this->app->user->account},";
         if(isset($object->addedBy) and $object->addedBy == $this->app->user->account) return true;
