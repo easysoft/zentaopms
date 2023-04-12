@@ -440,6 +440,9 @@ ALTER TABLE `zt_meetingroom`
 CHANGE `editedBy` `editedBy` varchar(30) NOT NULL DEFAULT '',
 CHANGE `editedDate` `editedDate` datetime NULL;
 
+ALTER TABLE `zt_module`
+CHANGE `short` `short` varchar(30) NOT NULL DEFAULT '';
+
 ALTER TABLE `zt_mr`
 CHANGE `editedBy` `editedBy` varchar(30) NOT NULL DEFAULT '',
 CHANGE `editedDate` `editedDate` datetime NULL;

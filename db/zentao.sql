@@ -1097,7 +1097,7 @@ CREATE TABLE IF NOT EXISTS `zt_module` (
   `from` mediumint(8) unsigned NOT NULL default '0',
   `owner` varchar(30) NOT NULL,
   `collector` text NOT NULL,
-  `short` varchar(30) NOT NULL,
+  `short` varchar(30) NOT NULL DEFAULT '',
   `deleted` enum('0','1') NOT NULL default '0',
   PRIMARY KEY (`id`),
   KEY `root` (`root`),
