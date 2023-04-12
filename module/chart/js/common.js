@@ -17,11 +17,23 @@ function ajaxGetChart(check = true, chart = DataStorage.chart, echart = window.e
         var data = JSON.parse(resp);
         if(echart)
         {
+            echart.resize();
             echart.clear();
             echart.setOption(data, true);
             $('.btn-export').removeClass('hidden');
         }
     });
+}
+
+function resizeChart()
+{
+    var filterHeight = $('.main-col .cell #filterContent').height();
+    $('.main-col .cell #draw').css('height', 'calc(100% - ' + (filterHeight + 16) + 'px)')
+
+    if(echart)
+    {
+        echart.resize();
+    }
 }
 
 /**

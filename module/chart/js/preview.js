@@ -7,19 +7,24 @@ $(function()
     chartMap = new Map();
     if(charts.length > 0)
     {
-        charts.forEach(function(chart)
+        var chartPros = charts.map(function(chart)
         {
             var echartDom = $('#chartDraw' + chart.currentGroup + chart.id).get(0);
             var echart = echarts.init(echartDom);
             ajaxGetChart(false, chart, echart);
-            renderFilters(chart);
-
-            chartMap.set(chart.currentGroup + chart.id, chart);
+            chartMap.set(chart.cudrrentGroup + chart.id, chart);
+            return renderFilters(chart);
         });
+
+        Promise.all(chartPros).then(function()
+        {
+            console.log(11);
+            calcPreviewGrowFilter();
+            $('body').resize(() => {calcPreviewGrowFilter(true);});
+        });
+
     }
 
-    calcPreviewGrowFilter();
-    $('body').resize(() => {calcPreviewGrowFilter(true);});
 
     $('[data-toggle="tooltip"]').tooltip();
 })
@@ -184,19 +189,27 @@ function calcPreviewGrowFilter(resize = false)
 
 function renderFilters(chart)
 {
-    if(chart.filters.length == 0) return;
-
-    var fieldNames = {};
-    Object.keys(chart.fieldSettings).forEach(function(key){fieldNames[key] = chart.fieldSettings[key].name;});
-    $.post(createLink('chart', 'ajaxGetFilterForm', 'chartID=' + chart.id), {fieldList: fieldNames, fieldSettings: chart.fieldSettings, filters: chart.filters, langs: chart.langs}, function(resp)
+    return new Promise(function(resolve, reject)
     {
-        resp = JSON.parse(resp);
-        chart.filters.forEach(function(filter, index)
+        if(chart.filters.length == 0)
         {
-            var $filterItems = $('#filterItems' + chart.currentGroup + chart.id + ' .filter-items');
-            $filterItems.append(renderFilterItem(filter, resp, index));
+            resolve();
+            return;
+        }
+
+        var fieldNames = {};
+        Object.keys(chart.fieldSettings).forEach(function(key){fieldNames[key] = chart.fieldSettings[key].name;});
+        $.post(createLink('chart', 'ajaxGetFilterForm', 'chartID=' + chart.id), {fieldList: fieldNames, fieldSettings: chart.fieldSettings, filters: chart.filters, langs: chart.langs}, function(resp)
+        {
+            resp = JSON.parse(resp);
+            chart.filters.forEach(function(filter, index)
+            {
+                var $filterItems = $('#filterItems' + chart.currentGroup + chart.id + ' .filter-items');
+                $filterItems.append(renderFilterItem(filter, resp, index));
+            });
+            resolve();
         });
-    });
+    })
 }
 
 function renderFilterItem(filter, resp, index, step)
