@@ -75,7 +75,7 @@ class docModel extends model
      */
     public function getLibs($type = '', $extra = '', $appendLibs = '', $objectID = 0, $excludeType = '')
     {
-        if($type == 'all' or $type == 'includeDeleted')
+        if(in_array($type, array('all', 'includeDeleted', 'hasApi')))
         {
             $stmt = $this->dao->select('*')->from(TABLE_DOCLIB)
                 ->where('vision')->eq($this->config->vision)
@@ -90,7 +90,7 @@ class docModel extends model
             $stmt = $this->dao->select('*')->from(TABLE_DOCLIB)
                 ->where('deleted')->eq(0)
                 ->andWhere('vision')->eq($this->config->vision)
-                ->beginIF($type != 'hasApi')->andWhere('type')->eq($type)->fi()
+                ->beginIF($type)->andWhere('type')->eq($type)->fi()
                 ->beginIF(!$type)->andWhere('type')->ne('api')->fi()
                 ->beginIF($objectID and strpos(',product,project,execution,', ",$type,") !== false)->andWhere($type)->eq($objectID)->fi()
                 ->orderBy('id_asc')
