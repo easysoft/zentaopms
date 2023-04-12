@@ -178,6 +178,7 @@
   </div>
 </form>
 <?php endif;?>
+<?php js::set('type', $type);?>
 <?php js::set('groupID', $groupID);?>
 <?php js::set('menu', $menu);?>
 <?php js::set('relatedPrivData', json_encode($relatedPrivData));?>

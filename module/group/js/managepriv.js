@@ -1,6 +1,6 @@
 function showPriv(value)
 {
-  location.href = createLink('group', 'managePriv', "type=byGroup&param="+ groupID + "&menu=&version=" + value);
+  location.href = createLink('group', 'managePriv', "type=" + type + "&param="+ groupID + "&menu=&version=" + value);
 }
 
 /**
