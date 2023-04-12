@@ -1329,10 +1329,9 @@ class docModel extends model
     {
         if(!isset($object->lib)) return false;
         if(isset($object->assetLibType) and $object->assetLibType) return true;
+        if($object->status == 'draft' and $object->addedBy != $this->app->user->account) return false;
 
         $lib = $this->getLibById($object->lib);
-        if($this->app->user->admin and !empty($lib) and $lib->type != 'mine') return true;
-
         if(!$this->checkPrivLib($lib)) return false;
         if(in_array($object->acl, array('open', 'public'))) return true;
 
@@ -1810,7 +1809,7 @@ class docModel extends model
             ->groupBy('root')
             ->fetchPairs();
 
-        $docs = $this->dao->select("`id`,`addedBy`,`lib`,`acl`,`users`,`groups`")->from(TABLE_DOC)
+        $docs = $this->dao->select("`id`,`addedBy`,`lib`,`acl`,`users`,`groups`,`status`")->from(TABLE_DOC)
             ->where('lib')->in($idList)
             ->andWhere('deleted')->eq(0)
             ->andWhere('module')->eq(0)
@@ -3363,9 +3362,21 @@ class docModel extends model
      */
     public function getDynamic($pager = null)
     {
+        $allLibs          = $this->getLibs('hasApi');
+        $hasPrivDocIdList = $this->getPrivDocs('', 0, 'all');
+        $apiList          = $this->loadModel('api')->getPrivApis();
+
         $actions = $this->dao->select('*')->from(TABLE_ACTION)
-            ->where('objectType')->in('doclib,doc,api')
-            ->andWhere('vision')->eq($this->config->vision)
+            ->where('vision')->eq($this->config->vision)
+            ->andWhere('((objectType')->eq('doclib')
+            ->andWhere('objectID')->in(array_keys($allLibs))
+            ->markRight(1)
+            ->orWhere('(objectType')->eq('doc')
+            ->andWhere('objectID')->in($hasPrivDocIdList)
+            ->markRight(1)
+            ->orWhere('(objectType')->eq('api')
+            ->andWhere('objectID')->in(array_keys($apiList))
+            ->markRight(2)
             ->orderBy('date_desc')
             ->page($pager)
             ->fetchAll();
