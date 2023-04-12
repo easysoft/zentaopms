@@ -270,6 +270,7 @@ $lang->resource->projectplan->create = 'create';
 $lang->resource->projectplan->edit   = 'edit';
 $lang->resource->projectplan->view   = 'view';
 
+if(!isset($lang->projectplan)) $lang->projectplan = new stdclass();
 $lang->projectplan->methodOrder[5]  = 'browse';
 $lang->projectplan->methodOrder[10] = 'create';
 $lang->projectplan->methodOrder[15] = 'edit';
