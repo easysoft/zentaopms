@@ -373,6 +373,7 @@ class userModel extends model
                     $data          = new stdclass();
                     $data->account = $this->post->account;
                     $data->group   = $groupID;
+                    $data->project = '';
                     $this->dao->insert(TABLE_USERGROUP)->data($data)->exec();
                 }
             }
