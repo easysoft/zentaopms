@@ -63,7 +63,7 @@
 
 .info .version, .info .crumbs {float: left;}
 .crumbs img {margin-right: 3px; margin-bottom: 4px;}
-.crumbs {float: left; display: flex;height: 32px; width: 670px; align-items: center; overflow: hidden;}
+.crumbs {float: left; display: flex;height: 32px; width: 640px; align-items: center; overflow: hidden;}
 .crumbs .crumb-item {padding: 6px 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; flex: none; display: flex;}
 .crumb-item .separator {flex: 0 0 15px; display: flex; justify-content: center; align-items: center;}
 .crumb-item a {flex: none}
