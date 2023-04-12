@@ -402,21 +402,23 @@ function submit(object)
 function updateCrumbs()
 {
     var $crumbs       = $('#crumbs');
-    var $crumbItems   = $('#crumbs > a');
+    var $crumbItems   = $('#crumbs > .crumb-item');
     var crumbMaxWidth = 660;
     if($crumbs.width < crumbMaxWidth || $crumbItems.length == 1) return;
 
     /* last crumbItem width major */
     var $lastChild = $($crumbItems[$crumbItems.length -1]);
     var widthSum = 0 + $lastChild.width();
-    var separatorWidth = 20;
     for(var i = 0; i < $crumbItems.length - 1; i++)
     {
         var crumbItem = $crumbItems[i];
-        var widthSum  = widthSum + $(crumbItem).width() + separatorWidth;
+        var widthSum  = widthSum + $(crumbItem).width();
         if(widthSum >= crumbMaxWidth)
         {
-            $(crumbItem).addClass('flex-auto');
+            $(crumbItem).addClass('in-auto-box');
         }
     }
+    var $autoCrumbItems = $('#crumbs > .in-auto-box');
+    $lastChild.before('<div id="autoBox" class="flex-auto"><div class="ellipsis">...<div></div>');
+    $('#autoBox').prepend($autoCrumbItems);
 }
