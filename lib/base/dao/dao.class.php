@@ -317,6 +317,17 @@ class baseDAO
     }
 
     /**
+     * Show tables.
+     *
+     * @access public
+     * @return array
+     */
+    public function showTables()
+    {
+        return $this->query("SHOW TABLES")->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    /**
      * Desc table, show fields.
      *
      * @param  string $tableName
@@ -325,7 +336,11 @@ class baseDAO
      */
     public function descTable($tableName)
     {
-        return $this->query("DESC $tableName")->fetchAll();
+        $this->dbh->setAttribute(PDO::ATTR_CASE, PDO::CASE_LOWER);
+        $fields = $this->query("DESC $tableName")->fetchAll();
+        $this->dbh->setAttribute(PDO::ATTR_CASE, PDO::CASE_NATURAL);
+
+        return $fields;
     }
 
     /**

@@ -648,6 +648,18 @@ ALTER TABLE `zt_storyreview`
 CHANGE `reviewDate` `reviewDate` datetime NULL;
 
 ALTER TABLE `zt_task`
+CHANGE `designVersion` `designVersion` smallint unsigned NOT NULL DEFAULT '1',
+CHANGE `feedback` `feedback` mediumint unsigned NOT NULL DEFAULT '0',
+CHANGE `consumed` `consumed` float unsigned NOT NULL DEFAULT '0',
+CHANGE `assignedDate` `assignedDate` datetime NULL,
+CHANGE `planDuration` `planDuration` int NOT NULL DEFAULT '0',
+CHANGE `order` `order` mediumint unsigned NOT NULL DEFAULT '0',
+CHANGE `repo` `repo` mediumint unsigned NOT NULL DEFAULT '0',
+CHANGE `mr` `mr` mediumint unsigned NOT NULL DEFAULT '0',
+CHANGE `entry` `entry` varchar(255) COLLATE NOT NULL DEFAULT '',
+CHANGE `lines` `lines` varchar(10) COLLATE NOT NULL DEFAULT '',
+CHANGE `v1` `v1` varchar(40) NOT NULL DEFAULT '',
+CHANGE `v2` `v2` varchar(40)  NOT NULL DEFAULT '',
 CHANGE `design` `design` mediumint unsigned NOT NULL DEFAULT '0',
 CHANGE `estStarted` `estStarted` date NULL,
 CHANGE `realStarted` `realStarted` datetime NULL,
