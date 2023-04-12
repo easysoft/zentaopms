@@ -766,7 +766,7 @@ class docModel extends model
             echo(js::alert($this->lang->doc->accessDenied));
             $loginLink = $this->config->requestType == 'GET' ? "?{$this->config->moduleVar}=user&{$this->config->methodVar}=login" : "user{$this->config->requestFix}login";
             if(strpos($this->server->http_referer, $loginLink) !== false) return print(js::locate(inlink('index')));
-            return print(js::locate('back'));
+            helper::end(print(js::locate('back')));
         }
 
         $docs = $this->processCollector(array($doc->id => $doc));
@@ -1320,6 +1320,8 @@ class docModel extends model
      */
     public function checkPrivDoc($object)
     {
+        if(!isset($object->lib)) return false;
+
         $libType = $this->dao->select('type')->from(TABLE_DOCLIB)->where('id')->eq($object->lib)->fetch('type');
         if($this->app->user->admin and $libType != 'mine') return true;
 
@@ -2807,7 +2809,7 @@ class docModel extends model
     public function checkAutoloadPage($doc)
     {
         $autoloadPage = true;
-        if(!empty($doc) and $doc->type == 'url')
+        if(isset($doc->type) and $doc->type == 'url')
         {
             if(empty($doc->content)) return false;
 
@@ -2990,6 +2992,7 @@ class docModel extends model
                 $docIDList = $this->getPrivDocs($lib->id);
                 $docs      = $this->dao->select('*, title as name')->from(TABLE_DOC)
                     ->where('id')->in($docIDList)
+                    ->andWhere("(status = 'normal' or (status = 'draft' and addedBy='{$this->app->user->account}'))")
                     ->andWhere('deleted')->eq(0)
                     ->andWhere('module')->eq(0)
                     ->fetchAll('id');
@@ -3145,7 +3148,7 @@ class docModel extends model
      */
     public function printCreateBtn($lib, $type, $objectID, $moduleID, $from = '')
     {
-        if(!common::hasPriv('doc', 'create')) return null;
+        if(!common::hasPriv('doc', 'create') or !isset($lib->id)) return null;
 
         $class = $from == 'list' ? 'btn-info' : 'btn-primary';
         $html  = "<div class='dropdown btn-group createDropdown'>";
