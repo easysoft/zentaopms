@@ -177,7 +177,7 @@ class doc extends control
 
         if($type == 'execution')
         {
-            $objects   = $this->execution->getPairs(0, 'sprint,stage', 'multiple,leaf,noprefix');
+            $objects   = $this->execution->getPairs(0, 'sprint,stage', 'multiple,leaf,noprefix,withobject');
             $execution = $this->execution->getByID($objectID);
             if($execution->type == 'stage') $this->lang->doc->execution = str_replace($this->lang->executionCommon, $this->lang->project->stage, $this->lang->doc->execution);
         }

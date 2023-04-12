@@ -1605,11 +1605,11 @@ class executionModel extends model
     }
 
     /**
-     * Get project pairs.
+     * Get execution pairs.
      *
      * @param  int    $projectID
      * @param  string $type all|sprint|stage|kanban
-     * @param  string $mode all|noclosed|stagefilter|withdelete|multiple|leaf|order_asc|empty|noprefix
+     * @param  string $mode all|noclosed|stagefilter|withdelete|multiple|leaf|order_asc|empty|noprefix|withobject
      * @access public
      * @return array
      */
@@ -1657,6 +1657,10 @@ class executionModel extends model
         foreach($allExecutions as $exec) $parents[$exec->parent] = true;
 
         if(strpos($mode, 'order_asc') !== false) $executions = $this->resetExecutionSorts($executions);
+        if(strpos($mode, 'withobject') !== false)
+        {
+            $projectPairs = $this->dao->select('id,name')->from(TABLE_PROJECT)->fetchPairs('id');
+        }
 
         $pairs       = array();
         $noMultiples = array();
@@ -1675,6 +1679,8 @@ class executionModel extends model
             {
                 if(isset($allExecutions[$path])) $executionName .= '/' . $allExecutions[$path]->name;
             }
+
+            if(strpos($mode, 'withobject') !== false) $executionName = zget($projectPairs, $execution->project, '') . $executionName;
             if(strpos($mode, 'noprefix') !== false) $executionName = ltrim($executionName, '/');
 
             $pairs[$execution->id] = $executionName;
