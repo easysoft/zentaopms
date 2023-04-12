@@ -241,9 +241,9 @@ $lang->project->methodOrder[185] = 'manageRepo';
 
 $lang->resource->projectbuild = new stdclass();
 $lang->resource->projectbuild->browse           = 'browse';
+$lang->resource->projectbuild->view             = 'view';
 $lang->resource->projectbuild->create           = 'create';
 $lang->resource->projectbuild->edit             = 'edit';
-$lang->resource->projectbuild->view             = 'view';
 $lang->resource->projectbuild->delete           = 'delete';
 $lang->resource->projectbuild->linkStory        = 'linkStory';
 $lang->resource->projectbuild->unlinkStory      = 'unlinkStory';
@@ -253,9 +253,9 @@ $lang->resource->projectbuild->unlinkBug        = 'unlinkBug';
 $lang->resource->projectbuild->batchUnlinkBug   = 'batchUnlinkBug';
 
 $lang->projectbuild->methodOrder[5]  = 'browse';
-$lang->projectbuild->methodOrder[10] = 'create';
-$lang->projectbuild->methodOrder[15] = 'edit';
-$lang->projectbuild->methodOrder[20] = 'view';
+$lang->projectbuild->methodOrder[10] = 'view';
+$lang->projectbuild->methodOrder[15] = 'create';
+$lang->projectbuild->methodOrder[20] = 'edit';
 $lang->projectbuild->methodOrder[25] = 'delete';
 $lang->projectbuild->methodOrder[30] = 'linkStory';
 $lang->projectbuild->methodOrder[35] = 'unlinkStory';
@@ -270,10 +270,10 @@ $lang->resource->projectplan->create = 'create';
 $lang->resource->projectplan->edit   = 'edit';
 $lang->resource->projectplan->view   = 'view';
 
-$lang->projectbuild->methodOrder[5]  = 'browse';
-$lang->projectbuild->methodOrder[10] = 'create';
-$lang->projectbuild->methodOrder[15] = 'edit';
-$lang->projectbuild->methodOrder[20] = 'view';
+$lang->projectplan->methodOrder[5]  = 'browse';
+$lang->projectplan->methodOrder[10] = 'create';
+$lang->projectplan->methodOrder[15] = 'edit';
+$lang->projectplan->methodOrder[20] = 'view';
 
 /* Project Story. */
 $lang->resource->projectstory = new stdclass();
