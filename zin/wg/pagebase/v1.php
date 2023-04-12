@@ -50,9 +50,10 @@ class pageBase extends wg
         $title     = $this->props->get('title', data('title')) . " - $lang->zentaoPMS";
         $attrs     = $this->props->skip(array_keys(static::getDefinedProps()));
 
+        $jsConfig->zin = true;
         if($config->debug)
         {
-            $js[] = h::createJsVarCode('window.zin', ['page' => $this->toJsonData(), 'definedProps' => wg::$definedPropsMap, 'wgBlockMap' => wg::$wgToBlockMap]);
+            $js[] = h::createJsVarCode('window.zin', ['page' => $this->toJsonData(), 'definedProps' => wg::$definedPropsMap, 'wgBlockMap' => wg::$wgToBlockMap, 'config' => jsRaw('window.config')]);
             $js[] = 'console.log("[ZIN] ", window.zin)';
         }
         else
