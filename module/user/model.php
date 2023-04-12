@@ -515,6 +515,7 @@ class userModel extends model
                     $groups = new stdClass();
                     $groups->account = $user->account;
                     $groups->group   = $group;
+                    $groups->project = '';
                     $this->dao->insert(TABLE_USERGROUP)->data($groups)->exec();
                 }
             }
@@ -641,6 +642,7 @@ class userModel extends model
                     $data          = new stdclass();
                     $data->account = $this->post->account;
                     $data->group   = $groupID;
+                    $data->project = '';
                     $this->dao->replace(TABLE_USERGROUP)->data($data)->exec();
                 }
             }
