@@ -334,7 +334,7 @@ $lang->block->default['full']['my']['10']['params']['count']   = '15';
 
 /* Doc module block. */
 $lang->block->default['doc']['1']['title'] = '文档统计';
-$lang->block->default['doc']['1']['block'] = 'statistic';
+$lang->block->default['doc']['1']['block'] = 'docstatistic';
 $lang->block->default['doc']['1']['grid']  = 8;
 
 $lang->block->default['doc']['2']['title'] = '文档动态';
@@ -342,15 +342,15 @@ $lang->block->default['doc']['2']['block'] = 'docdynamic';
 $lang->block->default['doc']['2']['grid']  = 4;
 
 $lang->block->default['doc']['3']['title'] = '我的收藏';
-$lang->block->default['doc']['3']['block'] = 'mycollection';
+$lang->block->default['doc']['3']['block'] = 'docmycollection';
 $lang->block->default['doc']['3']['grid']  = 8;
 
 $lang->block->default['doc']['4']['title'] = '最近更新';
-$lang->block->default['doc']['4']['block'] = 'recentupdate';
+$lang->block->default['doc']['4']['block'] = 'docrecentupdate';
 $lang->block->default['doc']['4']['grid']  = 8;
 
 $lang->block->default['doc']['5']['title'] = '浏览排行榜';
-$lang->block->default['doc']['5']['block'] = 'viewlist';
+$lang->block->default['doc']['5']['block'] = 'docviewlist';
 $lang->block->default['doc']['5']['grid']  = 4;
 
 if($config->vision == 'rnd')
@@ -361,7 +361,7 @@ if($config->vision == 'rnd')
 }
 
 $lang->block->default['doc']['7']['title'] = '收藏排行榜';
-$lang->block->default['doc']['7']['block'] = 'collectlist';
+$lang->block->default['doc']['7']['block'] = 'doccollectlist';
 $lang->block->default['doc']['7']['grid']  = 4;
 
 $lang->block->default['doc']['8']['title'] = $lang->projectCommon . '文档';
@@ -453,14 +453,14 @@ $lang->block->modules['todo']->availableBlocks->list = '待办列表';
 
 $lang->block->modules['doc'] = new stdclass();
 $lang->block->modules['doc']->availableBlocks = new stdclass();
-$lang->block->modules['doc']->availableBlocks->statistic    = '文档统计';
-$lang->block->modules['doc']->availableBlocks->docdynamic   = '文档动态';
-$lang->block->modules['doc']->availableBlocks->mycollection = '我的收藏';
-$lang->block->modules['doc']->availableBlocks->recentupdate = '最近更新';
-$lang->block->modules['doc']->availableBlocks->viewlist     = '浏览排行榜';
-$lang->block->modules['doc']->availableBlocks->productdoc   = $lang->productCommon . '文档';
-$lang->block->modules['doc']->availableBlocks->collectlist  = '收藏排行榜';
-$lang->block->modules['doc']->availableBlocks->projectdoc   = $lang->projectCommon . '文档';
+$lang->block->modules['doc']->availableBlocks->docstatistic    = '文档统计';
+$lang->block->modules['doc']->availableBlocks->docdynamic      = '文档动态';
+$lang->block->modules['doc']->availableBlocks->docmycollection = '我的收藏';
+$lang->block->modules['doc']->availableBlocks->docrecentupdate = '最近更新';
+$lang->block->modules['doc']->availableBlocks->docviewlist     = '浏览排行榜';
+$lang->block->modules['doc']->availableBlocks->productdoc      = $lang->productCommon . '文档';
+$lang->block->modules['doc']->availableBlocks->doccollectlist  = '收藏排行榜';
+$lang->block->modules['doc']->availableBlocks->projectdoc      = $lang->projectCommon . '文档';
 
 $lang->block->orderByList = new stdclass();
 
