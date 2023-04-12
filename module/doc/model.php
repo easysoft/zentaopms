@@ -1323,7 +1323,7 @@ class docModel extends model
     public function checkPrivDoc($object)
     {
         $lib = $this->getLibById($object->lib);
-        if($this->app->user->admin and $lib->type != 'mine') return true;
+        if($this->app->user->admin and !empty($lib) and $lib->type != 'mine') return true;
 
         if(in_array($object->acl, array('open', 'public')) and $this->checkPrivLib($lib)) return true;
 
