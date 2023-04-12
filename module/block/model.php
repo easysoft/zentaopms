@@ -1090,7 +1090,7 @@ class blockModel extends model
      * @access public
      * @return bool
      */
-    public function getMyCollectionParams()
+    public function getDocMyCollectionParams()
     {
         return false;
     }
@@ -1101,7 +1101,7 @@ class blockModel extends model
      * @access public
      * @return bool
      */
-    public function getRecentUpdateParams()
+    public function getDocRecentUpdateParams()
     {
         return false;
     }
@@ -1112,7 +1112,7 @@ class blockModel extends model
      * @access public
      * @return bool
      */
-    public function getViewlistParams()
+    public function getDocViewlistParams()
     {
         return false;
     }
@@ -1134,7 +1134,7 @@ class blockModel extends model
      * @access public
      * @return bool
      */
-    public function getCollectListParams()
+    public function getDocCollectListParams()
     {
         return false;
     }

@@ -300,9 +300,9 @@ class block extends control
 
             $block->blockLink = $this->createLink('block', 'printBlock', "id=$block->id&module=$block->module");
             $block->moreLink  = '';
-            if(isset($this->lang->block->modules[$source]->moreLinkList->{$blockID}))
+            if(isset($this->config->block->modules[$source]->moreLinkList->{$blockID}))
             {
-                list($moduleName, $method, $vars) = explode('|', sprintf($this->lang->block->modules[$source]->moreLinkList->{$blockID}, isset($block->params->type) ? $block->params->type : ''));
+                list($moduleName, $method, $vars) = explode('|', sprintf($this->config->block->modules[$source]->moreLinkList->{$blockID}, isset($block->params->type) ? $block->params->type : ''));
 
                 /* The list assigned to me jumps to the work page when click more button. */
                 $block->moreLink = $this->createLink($moduleName, $method, $vars);
@@ -584,9 +584,9 @@ class block extends control
             }
 
             $this->view->moreLink = '';
-            if(isset($this->lang->block->modules[$module]->moreLinkList->{$code}))
+            if(isset($this->config->block->modules[$module]->moreLinkList->{$code}))
             {
-                list($moduleName, $method, $vars) = explode('|', sprintf($this->lang->block->modules[$module]->moreLinkList->{$code}, isset($params->type) ? $params->type : ''));
+                list($moduleName, $method, $vars) = explode('|', sprintf($this->config->block->modules[$module]->moreLinkList->{$code}, isset($params->type) ? $params->type : ''));
                 $this->view->moreLink = $this->createLink($moduleName, $method, $vars);
             }
 

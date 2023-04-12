@@ -576,40 +576,6 @@ $lang->block->typeList->testtask['blocked'] = 'Bloquées';
 $lang->block->typeList->testtask['done']    = 'Jouées';
 $lang->block->typeList->testtask['all']     = 'Toutes';
 
-$lang->block->modules['project']->moreLinkList = new stdclass();
-$lang->block->modules['project']->moreLinkList->recentproject  = "project|browse|";
-$lang->block->modules['project']->moreLinkList->statistic      = "project|browse|";
-$lang->block->modules['project']->moreLinkList->project        = "project|browse|";
-$lang->block->modules['project']->moreLinkList->cmmireport     = 'weekly|index|';
-$lang->block->modules['project']->moreLinkList->cmmiestimate   = 'workestimation|index|';
-$lang->block->modules['project']->moreLinkList->cmmiissue      = 'issue|browse|';
-$lang->block->modules['project']->moreLinkList->cmmirisk       = 'risk|browse|';
-$lang->block->modules['project']->moreLinkList->scrumlist      = "project|execution|";
-$lang->block->modules['project']->moreLinkList->scrumtest      = 'testtask|browse|';
-$lang->block->modules['project']->moreLinkList->scrumproduct   = 'product|all|';
-$lang->block->modules['project']->moreLinkList->sprint         = "project|execution|";
-$lang->block->modules['project']->moreLinkList->projectdynamic = "project|dynamic|";
-
-$lang->block->modules['product']->moreLinkList        = new stdclass();
-$lang->block->modules['product']->moreLinkList->list  = 'product|all|';
-$lang->block->modules['product']->moreLinkList->story = 'my|story|type=%s';
-
-$lang->block->modules['execution']->moreLinkList       = new stdclass();
-$lang->block->modules['execution']->moreLinkList->list = 'execution|all|status=%s&executionID=';
-$lang->block->modules['execution']->moreLinkList->task = 'my|task|type=%s';
-
-$lang->block->modules['qa']->moreLinkList           = new stdclass();
-$lang->block->modules['qa']->moreLinkList->bug      = 'my|bug|type=%s';
-$lang->block->modules['qa']->moreLinkList->case     = 'my|testcase|type=%s';
-$lang->block->modules['qa']->moreLinkList->testtask = 'testtask|browse|type=%s';
-
-$lang->block->modules['todo']->moreLinkList       = new stdclass();
-$lang->block->modules['todo']->moreLinkList->list = 'my|todo|type=all';
-
-$lang->block->modules['common']                        = new stdclass();
-$lang->block->modules['common']->moreLinkList          = new stdclass();
-$lang->block->modules['common']->moreLinkList->dynamic = 'company|dynamic|';
-
 $lang->block->welcomeList['06:00'] = 'Bonjour, %s';
 $lang->block->welcomeList['11:30'] = 'Bonjour, %s';
 $lang->block->welcomeList['13:30'] = 'Bonjour, %s';
