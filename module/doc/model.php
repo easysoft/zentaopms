@@ -1263,6 +1263,8 @@ class docModel extends model
      */
     public function checkPrivLib($object, $extra = '')
     {
+        if(empty($object)) return false;
+
         if($this->app->user->admin and $object->type != 'mine') return true;
 
         if($object->acl == 'open') return true;
@@ -1320,18 +1322,10 @@ class docModel extends model
      */
     public function checkPrivDoc($object)
     {
-        $libType = $this->dao->select('type')->from(TABLE_DOCLIB)->where('id')->eq($object->lib)->fetch('type');
-        if($this->app->user->admin and $libType != 'mine') return true;
+        $lib = $this->getLibById($object->lib);
+        if($this->app->user->admin and $lib->type != 'mine') return true;
 
-        static $extraDocLibs;
-        if($extraDocLibs === null) $extraDocLibs = $this->getPrivLibsByDoc();
-
-        static $libs;
-        if($libs === null) $libs = $this->getLibs('all');
-        if(isset($libs[$object->lib]) and isset($extraDocLibs[$object->lib])) unset($extraDocLibs[$object->lib]);
-
-        if($object->acl == 'open'   and !isset($extraDocLibs[$object->lib]) and isset($libs[$object->lib])) return true;
-        if($object->acl == 'public' and !isset($extraDocLibs[$object->lib]) and isset($libs[$object->lib])) return true;
+        if(in_array($object->acl, array('open', 'public')) and $this->checkPrivLib($lib)) return true;
 
         $account = ",{$this->app->user->account},";
         if(isset($object->addedBy) and $object->addedBy == $this->app->user->account) return true;
