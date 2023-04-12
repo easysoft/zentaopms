@@ -56,7 +56,7 @@
   }
   elseif($libID and common::hasPriv('doc', 'create'))
   {
-      echo $this->doc->printCreateBtn($lib, $type, $objectID, $moduleID);
+      echo $this->doc->printCreateBtn($lib, $moduleID);
   }
   ?>
   </div>

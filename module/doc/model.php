@@ -3144,17 +3144,16 @@ class docModel extends model
      * Print create document button.
      *
      * @param  object $lib
-     * @param  type   $type project|product|custom
-     * @param  int    $objectID
      * @param  int    $moduleID
      * @param  string $from list
      * @access public
      * @return string
      */
-    public function printCreateBtn($lib, $type, $objectID, $moduleID, $from = '')
+    public function printCreateBtn($lib, $moduleID, $from = '')
     {
         if(!common::hasPriv('doc', 'create') or !isset($lib->id)) return null;
 
+        $objectID = zget($lib, $lib->type, 0);
         $class = $from == 'list' ? 'btn-info' : 'btn-primary';
         $html  = "<div class='dropdown btn-group createDropdown'>";
         $html .= html::a(helper::createLink('doc', 'create', "objectType={$lib->type}&objectID=$objectID&libID={$lib->id}&moduleID=$moduleID&type=html"), "<i class='icon icon-plus'></i> {$this->lang->doc->create}", '', "class='btn $class'");
@@ -3168,7 +3167,7 @@ class docModel extends model
             $attr   = "data-app='{$this->app->tab}'";
             $class  = strpos($this->config->doc->officeTypes, $typeKey) !== false ? 'iframe' : '';
             $params = "objectType={$lib->type}&objectID=$objectID&libID={$lib->id}&moduleID=$moduleID&type=$typeKey";
-            if($typeKey == 'template') $params = "objectType=$type&objectID=$objectID&libID={$lib->id}&moduleID=$moduleID&type=html&from=template";
+            if($typeKey == 'template') $params = "objectType={$lib->type}&objectID=$objectID&libID={$lib->id}&moduleID=$moduleID&type=html&from=template";
 
             $html .= "<li>";
             $html .= html::a(helper::createLink('doc', 'create', $params, '', $class ? true : false), $typeName, '', "class='$class' $attr");

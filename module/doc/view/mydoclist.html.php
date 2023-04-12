@@ -41,7 +41,7 @@ body {margin-bottom: 25px;}
     <?php
     if($browseType != 'bysearch' and $libID and common::hasPriv('doc', 'create'))
     {
-        echo $this->doc->printCreateBtn($lib, $type, $objectID, $moduleID, 'list');
+        echo $this->doc->printCreateBtn($lib, $moduleID, 'list');
     }
     ?>
   </p>
