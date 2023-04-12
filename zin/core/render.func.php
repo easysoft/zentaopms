@@ -36,6 +36,9 @@ function render($wgName = 'page', $options = NULL)
         }
     }
 
+    global $app;
+    useData('zinErrors', $app->zinErrors ?? []);
+
     $wg = createWg($wgName, $args);
     $wg->display($options);
 }

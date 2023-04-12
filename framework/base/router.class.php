@@ -2917,10 +2917,19 @@ class baseRouter
         {
             if(!empty($this->config->debug) and $this->config->debug > 1)
             {
-                $cmd  = "vim +$line $file";
-                $size = strlen($cmd);
-                echo "<pre class='alert alert-danger'>$message: ";
-                echo "<input type='text' value='$cmd' size='$size' style='border:none; background:none;' onclick='this.select();' /></pre>";
+                if(isset($this->config->zin) || isset(getallheaders()['X-ZIN-Options']))
+                {
+                    if(!isset($this->zinErrors)) $this->zinErrors = [];
+                    $this->zinErrors[] = ['file' => $file, 'line' => $line, 'message' => $message];
+                }
+                else
+                {
+                    $cmd  = "vim +$line $file";
+                    $size = strlen($cmd);
+
+                    echo "<pre class='alert alert-danger'>$message: ";
+                    echo "<input type='text' value='$cmd' size='$size' style='border:none; background:none;' onclick='this.select();' /></pre>";
+                }
             }
         }
 
