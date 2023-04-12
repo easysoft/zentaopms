@@ -1271,7 +1271,7 @@ class docModel extends model
     {
         if(empty($object)) return false;
 
-        if($this->app->user->admin and $object->type != 'mine') return true;
+        if($this->app->user->admin and ($object->type != 'mine' or ($object->type == 'mine' and $object->addedBy == $this->app->user->account))) return true;
 
         if($object->acl == 'open') return true;
 
@@ -1331,6 +1331,7 @@ class docModel extends model
         if(!isset($object->lib)) return false;
         if(isset($object->assetLibType) and $object->assetLibType) return true;
         if($object->status == 'draft' and $object->addedBy != $this->app->user->account) return false;
+        if($object->status == 'normal' and $this->app->user->admin) return true;
 
         $lib = $this->getLibById($object->lib);
         if(!$this->checkPrivLib($lib)) return false;
