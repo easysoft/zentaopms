@@ -132,7 +132,7 @@ foreach($fieldParams as $fieldName => $param)
                 /* Print value. */
                 echo "<td id='valueBox$fieldNO' style='overflow:visible'>";
                 if(isset($config->moreLinks["field{$currentField}"])) $config->moreLinks["value$fieldNO"] = $config->moreLinks["field{$currentField}"];
-                if($param['control'] == 'select') echo html::select("value$fieldNO", $param['values'], $formSession["value$fieldNO"], "class='form-control searchSelect chosen' max_drop_width='400'");
+                if($param['control'] == 'select') echo html::select("value$fieldNO", $param['values'], $formSession["value$fieldNO"], "class='form-control searchSelect chosen' data-max_drop_width='0'");
                 if($param['control'] == 'input')
                 {
                     $fieldName  = $formSession["field$fieldNO"];
@@ -200,7 +200,7 @@ foreach($fieldParams as $fieldName => $param)
                     $selected = $formSession["value$fieldNO"];
                     if(!isset($param['values'][$selected])) $config->moreLinks["value$fieldNO"] = $config->moreLinks["field{$currentField}"];
                 }
-                if($param['control'] == 'select') echo html::select("value$fieldNO", $param['values'], $formSession["value$fieldNO"], "class='form-control searchSelect chosen'");
+                if($param['control'] == 'select') echo html::select("value$fieldNO", $param['values'], $formSession["value$fieldNO"], "class='form-control searchSelect chosen' data-max_drop_width='0'");
 
                 if($param['control'] == 'input')
                 {
@@ -218,7 +218,7 @@ foreach($fieldParams as $fieldName => $param)
                         $placeholder = "placeholder='{$lang->search->queryTips}'";;
                     }
 
-                    echo html::input("value$fieldNO", $fieldValue, "class='form-control $extraClass searchInput' $placeholder");
+                    echo html::input("value$fieldNO", $fieldValue, "class='form-control $extraClass searchInput' $placeholder data-max_drop_width='0'");
                 }
                 echo '</td>';
 
@@ -516,9 +516,7 @@ $(function()
                 $searchForm.find("#value" + fieldNO).picker(
                 {
                     chosenMode: true,
-                    dropWidth: 'auto',
-                    minAutoDropWidth: '100%',
-                    maxAutoDropWidth: 350
+                    dropWidth: '100%'
                 });
             }
         }
