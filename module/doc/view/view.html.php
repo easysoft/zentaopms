@@ -27,7 +27,12 @@
   <?php echo html::backButton("<i class='icon icon-back icon-sm'></i> " . $lang->goback, "id='backBtn'", 'btn btn-link')?>
   </div>
   <div id="crumbs" class="crumbs">
-    <?php echo implode('<div class="separator"> > </div>', $crumbs);?>
+    <?php foreach($crumbs as $crumbKey => $crumb):?>
+    <div class="crumb-item">
+    <?php if($crumbKey != 0) echo '<div class="separator"> > </div>'?>
+    <?php echo $crumb;?>
+    </div>
+    <?php endforeach;?>
   </div>
   <div class="btn-toolbar pull-right">
     <?php

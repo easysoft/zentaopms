@@ -2096,13 +2096,17 @@ class block extends control
         $pager = new pager(0, 6, 1);
 
         $docList = $this->loadModel('doc')->getDocsByBrowseType('byediteddate', 0, 0, 'editedDate_desc', $pager);
+        $libList = array();
         foreach($docList as $doc)
         {
             $doc->editedDate   = substr($doc->editedDate, 0, 10);
             $doc->editInterval = helper::getDateInterval($doc->editedDate);
+
+            $libList[] = $doc->lib;
         }
 
-        $this->view->docList = $docList;
+        $this->view->pricDocs = $this->doc->getPrivDocs($libList);
+        $this->view->docList  = $docList;
     }
 
     /**
