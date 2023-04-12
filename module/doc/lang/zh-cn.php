@@ -151,6 +151,10 @@ $lang->doc->docCreated    = '创建的文档';
 $lang->doc->docEdited     = '编辑的文档';
 $lang->doc->docViews      = '被浏览量';
 $lang->doc->docCollects   = '被收藏量';
+$lang->doc->todayUpdated  = '今天更新';
+$lang->doc->daysUpdated   = '%s天前更新';
+$lang->doc->monthsUpdated = '%s月前更新';
+$lang->doc->yearsUpdated  = '%s年前更新';
 
 /* 方法列表。*/
 $lang->doc->index            = '仪表盘';
