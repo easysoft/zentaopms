@@ -2067,7 +2067,7 @@ class block extends control
      * @access public
      * @return void
      */
-    public function printMyCollectionBlock()
+    public function printDocMyCollectionBlock()
     {
     }
 
@@ -2077,7 +2077,7 @@ class block extends control
      * @access public
      * @return void
      */
-    public function printRecentUpdateBlock()
+    public function printDocRecentUpdateBlock()
     {
     }
 
@@ -2087,7 +2087,7 @@ class block extends control
      * @access public
      * @return void
      */
-    public function printViewListBlock()
+    public function printDocViewListBlock()
     {
     }
 
@@ -2097,7 +2097,7 @@ class block extends control
      * @access public
      * @return void
      */
-    public function printCollectListBlock()
+    public function printDocCollectListBlock()
     {
     }
 
