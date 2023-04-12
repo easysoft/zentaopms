@@ -210,3 +210,79 @@ $config->project->includedPriv['testreport'] = array('create', 'view', 'delete',
 $config->project->includedPriv['auditplan']  = array('browse', 'create', 'edit', 'batchCreate', 'batchCheck', 'check', 'nc', 'result', 'assignTo');
 $config->project->includedPriv['execution']  = array('create', 'start', 'delete', 'calendar', 'effortCalendar', 'effort', 'taskEffort', 'computeTaskEffort', 'deleterelation', 'maintainrelation', 'relation', 'gantt');
 if($config->edition != 'max') $config->project->includedPriv['stakeholder'] = array('browse', 'create', 'batchCreate', 'edit', 'delete', 'view', 'communicate', 'expect', 'expectation', 'deleteExpect', 'createExpect', 'editExpect', 'viewExpect');
+
+$config->project->zin = new stdClass();
+$config->project->zin->datatable = new stdClass();
+$config->project->zin->datatable->fieldList = array();
+
+$config->project->zin->datatable->fieldList['name']['name']     = 'name';
+$config->project->zin->datatable->fieldList['name']['title']    = $lang->project->name;
+$config->project->zin->datatable->fieldList['name']['fixed']    = 'left';
+$config->project->zin->datatable->fieldList['name']['width']    = 408;
+$config->project->zin->datatable->fieldList['name']['sortType'] = true;
+
+$config->project->zin->datatable->fieldList['PM']['name']     = 'PM';
+$config->project->zin->datatable->fieldList['PM']['title']    = $lang->project->PM;
+$config->project->zin->datatable->fieldList['PM']['minWidth'] = 104;
+$config->project->zin->datatable->fieldList['PM']['type']     = 'avatarBtn';
+$config->project->zin->datatable->fieldList['PM']['flex']     = 1;
+$config->project->zin->datatable->fieldList['PM']['border']   = 'right';
+
+$config->project->zin->datatable->fieldList['storyCount']['name']     = 'storyCount';
+$config->project->zin->datatable->fieldList['storyCount']['title']    = $lang->project->storyCount;
+$config->project->zin->datatable->fieldList['storyCount']['minWidth'] = 94;
+$config->project->zin->datatable->fieldList['storyCount']['sortType'] = true;
+$config->project->zin->datatable->fieldList['storyCount']['type']     = 'format';
+$config->project->zin->datatable->fieldList['storyCount']['align']    = 'right';
+
+$config->project->zin->datatable->fieldList['executionCount']['name']     = 'executionCount';
+$config->project->zin->datatable->fieldList['executionCount']['title']    = $lang->project->executionCount;
+$config->project->zin->datatable->fieldList['executionCount']['minWidth'] = 94;
+$config->project->zin->datatable->fieldList['executionCount']['sortType'] = true;
+$config->project->zin->datatable->fieldList['executionCount']['type']     = 'format';
+$config->project->zin->datatable->fieldList['executionCount']['border']   = 'right';
+$config->project->zin->datatable->fieldList['executionCount']['align']    = 'center';
+
+$config->project->zin->datatable->fieldList['invested']['name']     = 'invested';
+$config->project->zin->datatable->fieldList['invested']['title']    = $lang->project->invested;
+$config->project->zin->datatable->fieldList['invested']['minWidth'] = 94;
+$config->project->zin->datatable->fieldList['invested']['sortType'] = true;
+$config->project->zin->datatable->fieldList['invested']['type']     = 'format';
+$config->project->zin->datatable->fieldList['invested']['border']   = 'right';
+$config->project->zin->datatable->fieldList['invested']['align']    = 'center';
+
+$config->project->zin->datatable->fieldList['begin']['name']     = 'begin';
+$config->project->zin->datatable->fieldList['begin']['title']    = $lang->project->begin;
+$config->project->zin->datatable->fieldList['begin']['width']    = 96;
+$config->project->zin->datatable->fieldList['begin']['sortType'] = true;
+
+$config->project->zin->datatable->fieldList['end']['name']     = 'end';
+$config->project->zin->datatable->fieldList['end']['title']    = $lang->project->end;
+$config->project->zin->datatable->fieldList['end']['width']    = 96;
+$config->project->zin->datatable->fieldList['end']['sortType'] = true;
+
+$config->project->zin->datatable->fieldList['progress']['name']     = 'progress';
+$config->project->zin->datatable->fieldList['progress']['title']    = $lang->project->progress;
+$config->project->zin->datatable->fieldList['progress']['width']    = 92;
+$config->project->zin->datatable->fieldList['progress']['type']     = 'circleProgress';
+$config->project->zin->datatable->fieldList['progress']['sortType'] = true;
+
+$config->project->zin->datatable->fieldList['actions']['name']       = 'actions';
+$config->project->zin->datatable->fieldList['actions']['title']      = $lang->actions;
+$config->project->zin->datatable->fieldList['actions']['fixed']      = 'right';
+$config->project->zin->datatable->fieldList['actions']['width']      = 160;
+$config->project->zin->datatable->fieldList['actions']['type']       = 'actions';
+$config->project->zin->datatable->fieldList['actions']['actionsMap'] = array(
+    'start'     => array('icon'=> 'icon-start',        'hint'=> $lang->project->start),
+    'close'     => array('icon'=> 'icon-off',          'hint'=> $lang->project->close),
+    'pause'     => array('icon'=> 'icon-pause',        'text'=> $lang->project->suspend),
+    'active'    => array('icon'=> 'icon-magic',        'text'=> $lang->project->activate),
+    'edit'      => array('icon'=> 'icon-edit',         'hint'=> $lang->project->edit),
+    'group'     => array('icon'=> 'icon-group',        'hint'=> $lang->project->teamMember),
+    'perm'      => array('icon'=> 'icon-lock',         'hint'=> $lang->project->group),
+    'delete'    => array('icon'=> 'icon-trash',        'hint'=> $lang->delete,                  'text'  => $lang->delete),
+    'other'     => array('type'=> 'dropdown',          'hint'=> $lang->project->other,          'caret' => true),
+    'link'      => array('icon'=> 'icon-link',         'text'=> $lang->project->manageProducts, 'name'  => 'link'),
+    'more'      => array('icon'=> 'icon-ellipsis-v',   'hint'=> $lang->more,                    'type'  => 'dropdown', 'caret' => false),
+    'whitelist' => array('icon'=> 'icon-shield-check', 'text'=> $lang->project->whitelist,      'name'  => 'whitelist')
+);

@@ -71,6 +71,9 @@ $lang->project->linkedRepo          = '已关联代码库';
 $lang->project->unlinkedRepo        = '未关联代码库';
 $lang->project->disableExecution    = '不启用迭代的项目';
 $lang->project->selectProduct       = '选择产品';
+$lang->project->executionCount      = '执行数';
+$lang->project->storyCount          = '需求规模';
+$lang->project->invested            = '已投入';
 
 /* Fields. */
 $lang->project->common             = '项目';
@@ -286,8 +289,9 @@ $lang->project->featureBar['browse']['all']       = '全部';
 $lang->project->featureBar['browse']['undone']    = '未完成';
 $lang->project->featureBar['browse']['wait']      = '未开始';
 $lang->project->featureBar['browse']['doing']     = '进行中';
-$lang->project->featureBar['browse']['suspended'] = '已挂起';
-$lang->project->featureBar['browse']['closed']    = '已关闭';
+$lang->project->featureBar['browse']['exceeded']  = '已逾期';
+$lang->project->featureBar['browse']['risky']     = '有风险';
+$lang->project->featureBar['browse']['more']      = '更多';
 
 $lang->project->featureBar['build']['all'] = '全部版本';
 
@@ -395,3 +399,9 @@ $lang->project->copyProject->daysTips           = '『可用工作日』应当�
 
 $lang->project->linkBranchStoryByPlanTips = "项目按计划关联需求时，只导入本项目所关联%s的激活状态的需求。";
 $lang->project->linkNormalStoryByPlanTips = "项目按计划关联需求时，只导入激活状态的需求。";
+
+$lang->project->moreSelects = array();
+$lang->project->moreSelects['suspended'] = '已挂起';
+$lang->project->moreSelects['closed']    = '已关闭';
+
+$lang->project->manDay = '人天';

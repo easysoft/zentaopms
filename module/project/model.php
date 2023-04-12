@@ -1197,6 +1197,32 @@ class projectModel extends model
     }
 
     /**
+     * Get the program tree of project.
+     * Copied from getTreeMenu().
+     *
+     * @param  int    $projectID
+     * @access public
+     * @return array
+     */
+    public function getProgramTree($projectID = 0)
+    {
+        $programs = array();
+        $stmt     = $this->dbh->query($this->buildMenuQuery($projectID));
+
+        while($project = $stmt->fetch())
+        {
+            $prog = new stdClass();
+            $prog->id = $project->id;
+            $prog->name = $project->name;
+            $prog->parent = $project->parent;
+
+            $programs[] = $prog;
+        }
+
+        return $programs;
+    }
+
+    /**
      * Create the manage link.
      *
      * @param  object    $project
@@ -2402,7 +2428,8 @@ class projectModel extends model
                 $item->id = sprintf('%03d', $project->id);
                 break;
             case 'name':
-                $item->name = $project->name;
+                $item->name  = $project->name;
+                $item->delay = isset($project->delay) ? $project->delay : 0;
                 break;
             case 'code':
                 $item->code = $project->code;
@@ -2445,6 +2472,10 @@ class projectModel extends model
                 $this->buildOperateMenuZin($project, $item, 'browse');
                 break;
         }
+
+        $item->storyCount     = rand(100, 100000) / 10.0;
+        $item->executionCount = rand(10, 200);
+        $item->invested       = rand(10, 100);
     }
 
     /**

@@ -71,6 +71,9 @@ $lang->project->linkedRepo          = 'Link Repo';
 $lang->project->unlinkedRepo        = 'Unlink Repo';
 $lang->project->disableExecution    = 'Project of disable iteration';
 $lang->project->selectProduct       = 'Select Product';
+$lang->project->executionCount      = 'Total Executions';
+$lang->project->storyCount          = 'Story Points';
+$lang->project->invested            = 'Invested';
 
 /* Fields. */
 $lang->project->common             = 'Projets';
@@ -180,6 +183,8 @@ $lang->project->branch             = 'Platform/Branch';
 $lang->project->plan               = 'Plan';
 $lang->project->createKanban       = 'Create Kanban';
 $lang->project->kanban             = 'Kanban';
+$lang->project->moreActions        = 'More Actions';
+$lang->project->other              = 'Other Actions';
 
 /* Project Kanban. */
 $lang->project->projectTypeList = array();
@@ -284,8 +289,9 @@ $lang->project->featureBar['browse']['all']       = 'All';
 $lang->project->featureBar['browse']['undone']    = 'Non Terminées';
 $lang->project->featureBar['browse']['wait']      = 'En Attente';
 $lang->project->featureBar['browse']['doing']     = 'En Cours';
-$lang->project->featureBar['browse']['suspended'] = 'Suspendues';
-$lang->project->featureBar['browse']['closed']    = 'Fermées';
+$lang->project->featureBar['browse']['exceeded']  = 'Exceeded';
+$lang->project->featureBar['browse']['risky']     = 'Risky';
+$lang->project->featureBar['browse']['more']      = 'More';
 
 $lang->project->featureBar['build']['all'] = 'Build List';
 
@@ -393,3 +399,9 @@ $lang->project->copyProject->daysTips           = '『Available working days』S
 
 $lang->project->linkBranchStoryByPlanTips = "When the project is scheduled to associate requirements, only the activated requirements associated with the %s of the project are imported.";
 $lang->project->linkNormalStoryByPlanTips = "When the project plans to associate requirements, only the requirements that are active are imported.";
+
+$lang->project->moreSelects = array();
+$lang->project->moreSelects['suspended'] = 'Suspendues';
+$lang->project->moreSelects['closed']    = 'Fermées';
+
+$lang->project->manDay = 'Man Day';
