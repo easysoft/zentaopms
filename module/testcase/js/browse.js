@@ -95,7 +95,7 @@ DtSort.Table = function(options)
 
     this.init();
 
-
+    var that = this;
     //解决表格展开折叠按钮单击导致checkbox自动选中功能，临时先放在这里
     this.$container.find("tr").on("click",'.table-nest-toggle', function(e)
     {
@@ -104,6 +104,7 @@ DtSort.Table = function(options)
         var $row = $(e.currentTarget).closest("tr");
         var dataId = $row.attr("data-id");
         table.toggleNestedRows(dataId,undefined,true);
+        that.measure();
     })
 }
 
@@ -172,8 +173,18 @@ DtSort.Table.prototype.measure = function()
     }
 }
 
+DtSort.Table.prototype.getNextEle = function(currentIndex)
+{
+    if(currentIndex+1 >= this.rowList.length) return -1;
+    for(var i=currentIndex+1; i<this.rowList.length;i++)
+    {
+        if(this.rowList[i].boundary.y > 0) return i;
+    }
+}
+
 DtSort.Table.prototype.pick = function(pos)
 {
+    if(pos == undefined) return;
     if(this.rowList.length == 0) return undefined;
 
     var hitIndex = -1;
@@ -185,14 +196,18 @@ DtSort.Table.prototype.pick = function(pos)
     {
         if(this.rowList[i].$dom.hasClass("table-nest-hide")) continue;
 
-        var boundary = {x:x, y:y, w:this.rowList[i].boundary.w, h:this.rowList[i].boundary.h};
-        if(boundary.x <= pos.x && pos.x <= boundary.x+boundary.w && boundary.y <= pos.y && pos.y <= boundary.y+boundary.h)
+        var boundary = this.rowList[i].boundary;
+        var maxH = boundary.y+boundary.h;
+        var nextIndex = this.getNextEle(i);
+        if(nextIndex != -1)
+        {
+            maxH = this.rowList[nextIndex].boundary.y;
+        }
+        if(boundary.y <= pos.y && pos.y < maxH)
         {
                 hitIndex = i;
                 break;
         }
-
-        y += boundary.h;
     }
 
     if(hitIndex < 0) return undefined;
@@ -221,7 +236,8 @@ DtSort.Table.prototype.mouseDown = function(pos)
 
 DtSort.Table.prototype.mouseMove = function(pos)
 {
-    var result = this.pick(pos);
+    if(this.downPosition == undefined) return ;
+    var result = this.pick(this.sourceRow == undefined ? this.downPosition : pos);
 
     if(this.mousePress == false || DtSort.tools.distance(this.downPosition,pos)<=this.options.moveBuffer)
     {
@@ -309,6 +325,7 @@ DtSort.Table.prototype.mouseUp = function(pos)
 
     this.sourceRow = undefined;
     this.targetRow = undefined;
+    this.downPosition = undefined;
 };
 
 DtSort.Table.prototype.getRowPos = function(row)
