@@ -27,6 +27,9 @@
 </style>
 <?php $canView = common::hasPriv('doc', 'view');?>
 <div class="panel-body">
+  <?php if(empty($docList)):?>
+    <div class='table-empty-tip'><p><span class='text-muted'><?php echo $lang->doc->noDoc;?></p></span></div>
+  <?php else:?>
   <div class="doc-list">
     <?php foreach($docList as $doc):?>
     <div class="doc-box">
@@ -62,6 +65,7 @@
     </div>
     <?php endforeach;?>
   </div>
+  <?php endif;?>
 </div>
 <script>
 $(function()
