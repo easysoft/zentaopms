@@ -137,16 +137,14 @@ class navbar extends wg
             $subModule = isset($menuItem->subModule) ? explode(',', $menuItem->subModule) : array();
             $class     = isset($menuItem->class) ? $menuItem->class : '';
             $exclude   = isset($menuItem->exclude) ? $menuItem->exclude : '';
+            $isActive  = false;
 
-            $isActive = false;
             if($menuItem->name == $currentModule and !str_contains(",$exclude,", ",$currentModule-$currentMethod,"))
             {
-                $activeMenu = $menuItem->name;
                 $isActive = true;
             }
             elseif($subModule and in_array($currentModule, $subModule) and !str_contains(",$exclude,", ",$currentModule-$currentMethod,"))
             {
-                $activeMenu = $menuItem->name;
                 $isActive = true;
             }
 
@@ -182,11 +180,12 @@ class navbar extends wg
 
                 if($module == $currentModule and ($method == $currentMethod or str_contains(",$alias,", ",$currentMethod,")) and !str_contains(",$exclude,", ",$currentMethod,"))
                 {
-                    $activeMenu = $menuItem->name;
-                    $isActive   = true;
+                    $isActive = true;
                 }
 
-                $dataApp  = (isset($lang->navGroup->$module) and $tab != $lang->navGroup->$module) ? $tab : NULL;
+                $dataApp = (isset($lang->navGroup->$module) and $tab != $lang->navGroup->$module) ? $tab : NULL;
+                if($isActive && empty($activeMenu)) $activeMenu = $menuItem->text;
+                else $isActive = false;
 
                 /* Print drop menus. */
                 if(isset($menuItem->dropMenu))
