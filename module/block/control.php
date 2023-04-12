@@ -2083,7 +2083,6 @@ class block extends control
             $libList[] = $doc->lib;
         }
 
-        $this->view->pricDocs = $this->doc->getPrivDocs($libList);
         $this->view->docList  = $docList;
     }
 
@@ -2109,7 +2108,6 @@ class block extends control
             $libList[] = $doc->lib;
         }
 
-        $this->view->pricDocs = $this->doc->getPrivDocs($libList);
         $this->view->docList  = $docList;
     }
 

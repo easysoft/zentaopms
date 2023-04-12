@@ -382,13 +382,13 @@ class docModel extends model
      */
     public function getDocsByBrowseType($browseType, $queryID, $moduleID, $sort, $pager)
     {
-        $allLibs      = $this->getLibs('all');
-        $allLibIDList = array_keys($allLibs);
-        $docIdList    = $this->getPrivDocs(0, $moduleID);
+        $allLibs          = $this->getLibs('all');
+        $allLibIDList     = array_keys($allLibs);
+        $hasPrivDocIdList = $this->getPrivDocs(0, $moduleID);
 
         $files = $this->dao->select('*')->from(TABLE_FILE)
             ->where('objectType')->eq('doc')
-            ->andWhere('objectID')->in($docIdList)
+            ->andWhere('objectID')->in($hasPrivDocIdList)
             ->fetchGroup('objectID');
 
         if($browseType == "all")
@@ -418,6 +418,7 @@ class docModel extends model
             $query     = $this->getDocQuery($this->session->contributeDocQuery);
             $docIDList = $this->dao->select('objectID')->from(TABLE_ACTION)
                 ->where('objectType')->eq('doc')
+                ->andWhere('objectID')->in($hasPrivDocIdList)
                 ->andWhere('actor')->eq($this->app->user->account)
                 ->andWhere('action')->eq('edited')
                 ->fetchAll('objectID');
@@ -438,6 +439,7 @@ class docModel extends model
             $docs = $this->dao->select('*')->from(TABLE_DOC)
                 ->where('deleted')->eq(0)
                 ->andWhere('lib')->in($allLibIDList)
+                ->andWhere('id')->in($hasPrivDocIdList)
                 ->beginIF($this->config->doc->notArticleType)->andWhere('type')->notIN($this->config->doc->notArticleType)->fi()
                 ->andWhere('addedBy')->eq($this->app->user->account)
                 ->orderBy($sort)
@@ -449,6 +451,7 @@ class docModel extends model
             $docIDList = $this->dao->select('objectID')->from(TABLE_ACTION)
                 ->where('objectType')->eq('doc')
                 ->andWhere('actor')->eq($this->app->user->account)
+                ->andWhere('objectID')->in($hasPrivDocIdList)
                 ->andWhere('action')->eq('edited')
                 ->fetchAll('objectID');
             $docs      = $this->dao->select('*')->from(TABLE_DOC)
@@ -464,7 +467,7 @@ class docModel extends model
         {
             $docs = $this->dao->select('*')->from(TABLE_DOC)
                 ->where('deleted')->eq(0)
-                ->andWhere('id')->in($docIdList)
+                ->andWhere('id')->in($hasPrivDocIdList)
                 ->beginIF($this->config->doc->notArticleType)->andWhere('type')->notIN($this->config->doc->notArticleType)->fi()
                 ->andWhere('lib')->in($allLibIDList)
                 ->orderBy('editedDate_desc')
@@ -477,6 +480,7 @@ class docModel extends model
                 ->leftJoin(TABLE_DOCACTION)->alias('t2')->on("t1.id=t2.doc && t2.action='collect'")
                 ->where('t1.deleted')->eq(0)
                 ->andWhere('t1.lib')->in($allLibIDList)
+                ->andWhere('t1.id')->in($hasPrivDocIdList)
                 ->beginIF($this->config->doc->notArticleType)->andWhere('t1.type')->notIN($this->config->doc->notArticleType)->fi()
                 ->andWhere('t2.actor')->eq($this->app->user->account)
                 ->orderBy($sort)
