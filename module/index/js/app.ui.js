@@ -5,6 +5,7 @@ $.apps = $.extend({currentCode: currentAppCode}, parent.window.$.apps);
 
 const renderMap =
 {
+    html:          updatePageWithHtml,
     body:          (data) => $('body').html(data),
     title:         (data) => document.title = data,
     'main':        (data) => $('#main').html(data),
@@ -14,8 +15,33 @@ const renderMap =
     'pageJS':      (data) => $('#pageJS').replaceWith(data),
     activeFeature: (data) => activeNav(data, '#featureBar'),
     activeMenu:    activeNav,
-    table:         updateTable
+    table:         updateTable,
+    zinErrors:     showZinErrors
 };
+
+function showZinErrors(data)
+{
+    if(debug && Array.isArray(data) && data.length) console.log('[ZIN]  errors:', data);
+}
+
+function updatePageWithHtml(data)
+{
+    const html = [];
+    const skipTags = new Set(['SCRIPT', 'META']);
+    $(data).each(function(idx, node)
+    {
+        const nodeName = node.nodeName;
+        if(nodeName === '#text') html.push(node.textContent);
+        else if(nodeName === 'SCRIPT' && node.innerText.startsWith('window.config={')) html.push(node.outerHTML);
+        else if(nodeName === 'TITLE') document.title = node.innerText;
+        else if(skipTags.has(nodeName)) return;
+        else html.push(node.outerHTML);
+    });
+    $('body').html(html.join(''));
+    window.zin = {config: window.config};
+    if(debug) console.log('[ZIN] ', window.zin);
+    if(debug) zui.Messager.show({content: 'ZIN: load an old page.', close: false});
+}
 
 function activeNav(activeID, nav)
 {
@@ -50,7 +76,6 @@ function renderPage(list)
         if(render) render(item.data);
     });
     $.apps.updateApp(currentAppCode, currentAppUrl, document.title);
-
 }
 
 window.fetchZinData = function fetchZinData(url, selector, options)
@@ -62,11 +87,11 @@ window.fetchZinData = function fetchZinData(url, selector, options)
     $.ajax(
     {
         url:      url,
-        dataType: 'json',
-        headers:  {'X-ZIN-Options': JSON.stringify($.extend({selector: selector, type: 'list'}, zinOptions))},
+        headers:  {'X-ZIN-Options': JSON.stringify($.extend({selector: selector + ',zinErrors()', type: 'list'}, zinOptions))},
         beforeSend: () => $(target).addClass('loading'),
         success: (data) =>
         {
+            try{data = JSON.parse(data);}catch(e){data = [{name: 'html', data: data}];}
             if(options.updateUrl !== false) currentAppUrl = url;
             renderPage(data);
             $(document).trigger('pagerender.app');
@@ -88,23 +113,29 @@ window.fetchZinData = function fetchZinData(url, selector, options)
 
 window.loadTable = function loadTable(url, id)
 {
+    url = url || currentAppUrl;
     id = id || $('.dtable').attr('id') || 'dtable';
     if(!id) return;
 
     fetchZinData(url, 'table/#' + id + ':type=json&data=props,#featureBar>*');
 }
 
-window.loadPage = function loadPage(url)
+window.loadPage = function loadPage(url, selector)
 {
     url = url || defaultUrl;
     if(debug) console.log('[APP] ', 'load:', url);
-    const selector = $('#main').length ? '#main>*,#pageCSS>*,#pageJS,#configJS>*,title>*,activeMenu()' : 'body>*,title>*';
+    selector = selector || ($('#main').length ? '#main>*,#pageCSS>*,#pageJS,#configJS>*,title>*,activeMenu()' : 'body>*,title>*');
     fetchZinData(url, selector);
 }
 
 function openPage(url)
 {
     if(debug) console.log('[APP] ', 'open:', url);
+    if(!window.config.zin)
+    {
+        location.href = $.createLink('index', 'app', 'url=' + btoa(url));
+        return;
+    }
     $.apps.reloadApp(currentAppCode, url);
 }
 
