@@ -10,6 +10,9 @@
 .block-dynamic .label-action {padding: 0 6px;}
 .block-dynamic .label-action + a {padding-left: 6px;}
 .timeline > li.active:before {left: -30px;}
+.timeline > li.collected:before, .timeline > li.releaseddoc:before {background-color: #FFF;}
+.timeline > li.collected > div:after {background-color: #FFAF65;}
+.timeline > li.releaseddoc > div:after {background-color: #66A2FF;}
 .timeline > li > div:after {left: -27px;}
 .timeline > li > div > .timeline-tag, .timeline > li > div > .timeline-text > .label-action {color: #838A9D;}
 .timeline > li > div > .timeline-text > a {color: #313C52;}
@@ -24,8 +27,9 @@
         $user = zget($users, $action->actor);
         if($action->action == 'login' or $action->action == 'logout') $action->objectName = $action->objectLabel = '';
         if($action->objectType == 'sonarqubeproject') $action->objectName = $action->extra;
-        $class = $action->major ? "class='active'" : '';
-        echo "<li $class><div>";
+        $class = $action->major ? 'active' : '';
+        if(in_array($action->action, array('releaseddoc', 'collected'))) $class .= " {$action->action}";
+        echo "<li class='$class'><div>";
         if($action->objectLink) printf($lang->block->dynamicInfo, $action->date, $user, $action->actionLabel, $action->objectLabel, $action->objectLink, $action->objectName, $action->objectName);
         if(!$action->objectLink) printf($lang->block->noLinkDynamic, $action->date, $action->objectName, $user, $action->actionLabel, $action->objectLabel, ' ' . $action->objectName);
         echo "</div></li>";

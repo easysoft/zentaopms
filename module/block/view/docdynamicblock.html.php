@@ -23,7 +23,8 @@
     foreach($actions as $action)
     {
         $user  = zget($users, $action->actor);
-        $class = in_array($action->action, array('releaseddoc', 'collected')) ? "active {$action->action}" : '';
+        $class = $action->major ? 'active' : '';
+        if(in_array($action->action, array('releaseddoc', 'collected'))) $class .= " {$action->action}";
         echo "<li class='$class'><div>";
         if($action->objectLink) printf($lang->block->dynamicInfo, $action->date, $user, $action->actionLabel, $action->objectLabel, $action->objectLink, $action->objectName, $action->objectName);
         if(!$action->objectLink) printf($lang->block->noLinkDynamic, $action->date, $action->objectName, $user, $action->actionLabel, $action->objectLabel, ' ' . $action->objectName);
