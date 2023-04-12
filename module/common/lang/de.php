@@ -222,7 +222,7 @@ $lang->app->serverLink    = 'Server Link';
 $lang->review->common     = 'Review';
 $lang->zahost->common     = 'ZAhost';
 $lang->zanode->common     = 'ZAnode';
-<<<<<<< HEAD
+$lang->dimension->common  = 'Dimension';
 $lang->contact->common    = 'Contacts';
 
 $lang->programstakeholder->common = 'Stakeholder';
@@ -253,9 +253,6 @@ $lang->productsettings->common    = 'Product setting';
 $lang->projectreview->common      = 'Review';
 $lang->projecttrack->common       = 'Matrix';
 $lang->projectqa->common          = 'QA';
-=======
-$lang->dimension->common  = 'Dimension';
->>>>>>> 4b5b9bd85a0cd1f809411844f774c655c6345465
 
 $lang->personnel->common     = 'Member';
 $lang->personnel->invest     = 'Investment';
