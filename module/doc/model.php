@@ -3146,7 +3146,7 @@ class docModel extends model
      */
     public function printCreateBtn($lib, $type, $objectID, $moduleID, $from = '')
     {
-        if(!common::hasPriv('doc', 'create')) return null;
+        if(!common::hasPriv('doc', 'create') or !isset($lib->id)) return null;
 
         $class = $from == 'list' ? 'btn-info' : 'btn-primary';
         $html  = "<div class='dropdown btn-group createDropdown'>";
