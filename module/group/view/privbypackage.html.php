@@ -79,9 +79,9 @@
 <form class="load-indicator main-form form-ajax" id="managePrivForm" method="post">
   <div id='mainContainer'>
     <div class='main main-content'>
-      <div class="btn-group hidden">
-        <?php echo html::a(inlink('managePriv', "type=byGroup&param=$groupID&menu=$menu&version=$version"), "<i class='icon-gantt-alt'></i> &nbsp;", '', "class='btn btn-icon switchBtn'");?>
-        <?php echo html::a(inlink('managePriv', "type=byPackage&param=$groupID&menu=$menu&version=$version"), "<i class='icon-gantt-alt'></i> &nbsp;", '', "class='btn btn-icon switchBtn text-primary'");?>
+      <div class="btn-group">
+        <?php echo html::a(inlink('managePriv', "type=byGroup&param=$groupID&menu=$menu&version=$version"), "<i class='icon-without-authority-pack'></i>", '', "class='btn btn-icon switchBtn'");?>
+        <?php echo html::a(inlink('managePriv', "type=byPackage&param=$groupID&menu=$menu&version=$version"), "<i class='icon-has-authority-pack'></i>", '', "class='btn btn-icon switchBtn text-primary'");?>
       </div>
       <table class='table table-hover table-striped table-bordered' id='privPackageList'>
         <thead>
