@@ -2069,6 +2069,18 @@ class block extends control
      */
     public function printDocMyCollectionBlock()
     {
+        /* Load pager. */
+        $this->app->loadClass('pager', $static = true);
+        $pager = new pager(0, 6, 1);
+
+        $docList = $this->loadModel('doc')->getDocsByBrowseType('collectedbyme', 0, 0, 'editedDate_desc', $pager);
+        foreach($docList as $doc)
+        {
+            $doc->editedDate   = substr($doc->editedDate, 0, 10);
+            $doc->editInterval = helper::getDateInterval($doc->editedDate);
+        }
+
+        $this->view->docList = $docList;
     }
 
     /**
