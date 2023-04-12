@@ -12,20 +12,27 @@
 ?>
 <style>
 .block-docrecentupdate .panel-body {padding: 0px 20px;}
-.block-docrecentupdate .doc-list {display: flex; flex-wrap: wrap; padding: 0 4px 4px 4px;}
+.block-docrecentupdate .doc-list {display: flex; flex-wrap: wrap; padding: 2px 4px 4px 4px;}
 .block-docrecentupdate .doc-list > .doc-item {flex: 1 1 26%; padding: 8px 10px; border: 1px solid #EDEEF2; border-radius: 4px; margin-right: 10px; margin-bottom: 16px; width: 0px; cursor: pointer;}
 .block-docrecentupdate .doc-list > .doc-item .date-interval {float: right; padding: 8px 0px;}
 .block-docrecentupdate .doc-list > .doc-item .file-icon {float: left; padding: 8px 4px;}
 .block-docrecentupdate .doc-list > .doc-item > .plug-title {height: 16px; overflow: hidden;}
 .block-docrecentupdate .doc-list > .doc-item .edit-date {overflow: hidden; height: 16px;}
+.block-docrecentupdate .no-doc {text-align: center; vertical-align: middle; height: 50px;}
 
 .block-docrecentupdate.block-sm .doc-list > .doc-item {flex: 1 1 100%;}
 </style>
+<?php $canView = common::hasPriv('doc', 'view');?>
 <div class="panel-body">
   <div class="plug">
+    <?php if($docList):?>
     <div class="doc-list">
       <?php foreach($docList as $doc):?>
-      <a class="doc-item shadow-primary-hover" href='<?php echo $this->createLink("doc", "view", "docID=$doc->id");?>'>
+      <?php if($canView):?>
+      <a class="doc-item shadow-primary-hover" href='<?php echo $this->createlink("doc", "view", "docid=$doc->id");?>'>
+      <?php else:?>
+      <div class="doc-item shadow-primary-hover">
+      <?php endif;?>
         <span class='date-interval text-muted'>
           <?php
           $interval = $doc->editInterval;
@@ -51,8 +58,15 @@
         ?>
         <h4 class="plug-title" title="<?php echo $doc->title;?>"><?php echo $doc->title;?></h4>
         <p class='edit-date text-muted'><?php echo $lang->doc->editedDate . (common::checkNotCN() ? ': ' : '：') . $doc->editedDate;?></p>
+      <?php if($canView):?>
       </a>
+      <?php else:?>
+      </div>
+      <?php endif;?>
       <?php endforeach;?>
     </div>
+    <?php else:?>
+    <div class='no-doc'><?php echo $lang->doc->noDoc;?></div>
+    <?php endif;?>
   </div>
 </div>
