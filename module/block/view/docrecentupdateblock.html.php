@@ -30,7 +30,7 @@
   <div class="doc-list">
     <?php foreach($docList as $doc):?>
     <div class="doc-box">
-    <button class="btn shadow-primary-hover <?php if(!$canView or !in_array($doc->id, $pricDocs)) echo 'no-priv';?>" data-link='<?php echo $this->createLink("doc", "view", "docID=$doc->id");?>'>
+    <button class="btn shadow-primary-hover <?php if(!$canView) echo 'no-priv';?>" data-link='<?php echo $this->createLink("doc", "view", "docID=$doc->id");?>'>
         <span class='date-interval text-muted'>
           <?php
           $interval = $doc->editInterval;
