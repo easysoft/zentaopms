@@ -3106,7 +3106,7 @@ class docModel extends model
             $myView->objectType = 'doc';
             $myView->objectID   = 0;
             $myView->hasAction  = false;
-            $myView->active     = $libType ? 1 : 0;
+            $myView->active     = $libType == 'view' ? 1 : 0;
 
             $myCollection = new stdclass();
             $myCollection->id         = 0;
@@ -3115,7 +3115,7 @@ class docModel extends model
             $myCollection->objectType = 'doc';
             $myCollection->objectID   = 0;
             $myCollection->hasAction  = false;
-            $myCollection->active     = $libType ? 1 : 0;
+            $myCollection->active     = $libType == 'collect' ? 1 : 0;
 
             $myCreation = new stdclass();
             $myCreation->id         = 0;
