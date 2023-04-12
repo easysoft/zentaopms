@@ -9,7 +9,7 @@ $(function()
     {
         var chartPros = charts.map(function(chart)
         {
-            var echartDom = $('#chartDraw' + chart.currentGroup + chart.id).get(0);
+            var echartDom = $('#chartDraw' + chart.currentGroup + '_' + chart.id).get(0);
             var echart = echarts.init(echartDom);
             ajaxGetChart(false, chart, echart);
             chartMap.set(chart.cudrrentGroup + chart.id, chart);
@@ -18,13 +18,11 @@ $(function()
 
         Promise.all(chartPros).then(function()
         {
-            console.log(11);
             calcPreviewGrowFilter();
             $('body').resize(() => {calcPreviewGrowFilter(true);});
         });
 
     }
-
 
     $('[data-toggle="tooltip"]').tooltip();
 })
@@ -132,12 +130,13 @@ function calcPreviewGrowFilter(resize = false)
         /* When body resize, resize echarts. */
         if(resize)
         {
-            var echartDom = $('#chartDraw' + chart.currentGroup + chart.id).get(0);
+            var echartDom = $('#chartDraw' + chart.currentGroup + '_' + chart.id).get(0);
             var echart = echarts.init(echartDom);
             echart.resize();
         }
 
-        var $filterItems = $('#filterItems' + chart.currentGroup + chart.id + ' .filter-items');
+        var $filterBox   = $('#filterItems' + chart.currentGroup + '_' + chart.id);
+        var $filterItems = $filterBox.find('.filter-items');
         /* When refreshing this page, ZenTao load this page twice, when the first load isn't complete, jump back to index and load the second time,
            the first load can't calc filter width, can't get the element using jQuery at first load. */
         var hasInit = true;
@@ -151,8 +150,12 @@ function calcPreviewGrowFilter(resize = false)
 
         var domWidth     = $filterItems[0].getBoundingClientRect().width;
         var nowWidth     = domWidth;
+        var lineWrap     = false;
         var nowCount     = 0;
         var canGrowTotal = 0;
+
+        $filterBox.find('.query-inside').addClass('hidden');
+        $filterBox.find('.query-outside').addClass('hidden');
         chart.filters.forEach(function(filter, index)
         {
             var nowItem      = '.filter-item-' + index;
@@ -174,6 +177,7 @@ function calcPreviewGrowFilter(resize = false)
                 canGrowTotal += nowCount;
                 nowWidth = domWidth - filterWidth;
                 nowCount = 1;
+                lineWrap = true;
             }
         });
 
@@ -184,6 +188,9 @@ function calcPreviewGrowFilter(resize = false)
             var nowItem = '.filter-item-' + index;
             if(canGrowTotal >= index + 1) $filterItems.find(nowItem).addClass('filter-item-grow');
         });
+
+        var queryType =(!lineWrap && nowWidth >= 60) ? '.query-inside' : '.query-outside';
+        $filterBox.find(queryType).removeClass('hidden');
     });
 }
 
@@ -202,11 +209,12 @@ function renderFilters(chart)
         $.post(createLink('chart', 'ajaxGetFilterForm', 'chartID=' + chart.id), {fieldList: fieldNames, fieldSettings: chart.fieldSettings, filters: chart.filters, langs: chart.langs}, function(resp)
         {
             resp = JSON.parse(resp);
+            var $filterItems = $('#filterItems' + chart.currentGroup + '_' + chart.id + ' .filter-items');
             chart.filters.forEach(function(filter, index)
             {
-                var $filterItems = $('#filterItems' + chart.currentGroup + chart.id + ' .filter-items');
                 $filterItems.append(renderFilterItem(filter, resp, index));
             });
+            $filterItems.append(queryDom);
             resolve();
         });
     })

@@ -20,6 +20,8 @@
 <?php js::set('WIDTH_INPUT',  $config->chart->widthInput);?>
 <?php js::set('WIDTH_DATE',   $config->chart->widthDate);?>
 <?php js::set('pickerHeight', $config->bi->pickerHeight);?>
+<?php $queryDom = "<div class='queryBtn query-inside hidden'> <button type='submit' id='submit' class='btn btn-primary btn-query' data-loading='Loading...'>{$lang->chart->query}</button></div>";?>
+<?php js::set('queryDom', $queryDom);?>
 
 <div id='mainMenu' class='clearfix main-position'>
   <div class='btn-toolBar pull-left parent-position'>
@@ -92,13 +94,13 @@
           </div>
         </div>
         <div class='panel-body'>
-          <div id="filterItems<?php echo $chart->currentGroup;?><?php echo $chart->id;?>" class='filterBox'>
+          <div id="filterItems<?php echo $chart->currentGroup . '_';?><?php echo $chart->id;?>" class='filterBox'>
             <div class='filter-items'></div>
             <?php if(!empty($chart->filters)):?>
-            <div class='queryBtn'><?php echo html::submitButton($lang->chart->query, "data-chart={$chart->currentGroup}{$chart->id}", 'btn btn-primary btn-query');?></div>
+            <div class='queryBtn query-outside'><?php echo html::submitButton($lang->chart->query, "data-chart={$chart->currentGroup}{$chart->id}", 'btn btn-primary btn-query');?></div>
             <?php endif;?>
           </div>
-          <div id="chartDraw<?php echo $chart->currentGroup;?><?php echo $chart->id;?>" data-group="<?php echo $chart->currentGroup;?>" data-id="<?php echo $chart->id;?>" class='echart-content'></div>
+          <div id="chartDraw<?php echo $chart->currentGroup . '_';?><?php echo $chart->id;?>" data-group="<?php echo $chart->currentGroup;?>" data-id="<?php echo $chart->id;?>" class='echart-content'></div>
         </div>
       </div>
       <?php endforeach;?>

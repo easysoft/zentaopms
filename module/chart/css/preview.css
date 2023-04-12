@@ -48,6 +48,6 @@
 .filter-items{display: flex; flex: 1; flex-wrap: wrap;}
 .filter-item{padding: 0 16px 5px 0;}
 .filter-item-grow{flex-grow: 1;}
-.queryBtn{display: flex; align-items: center; padding-bottom: 5px;}
+.queryBtn{display: flex; align-items: center; padding-bottom: 5px; flex-basis: 60px;}
 
 .filterBox .picker-selections{width: 128px; height: 32px; overflow: hidden; text-overflow: clip; white-space: nowrap;}
