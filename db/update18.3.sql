@@ -160,6 +160,12 @@ SELECT t1.`group`, 'api', 'editCatalog' FROM `zt_grouppriv` AS t1 WHERE t1.`modu
 INSERT IGNORE INTO `zt_grouppriv` (`group`, `module`, `method`)
 SELECT t1.`group`, 'api', 'deleteCatalog' FROM `zt_grouppriv` AS t1 WHERE t1.`module` = 'doc' AND t1.`method` = 'catalog';
 
+INSERT IGNORE INTO `zt_grouppriv` (`group`, `module`, `method`)
+SELECT t1.`group`, 'doc', 'create' FROM `zt_grouppriv` AS t1 WHERE t1.`module` = 'doc' AND t1.`method` = 'manageBook';
+
+INSERT IGNORE INTO `zt_grouppriv` (`group`, `module`, `method`)
+SELECT t1.`group`, 'doc', 'custom2export' FROM `zt_grouppriv` AS t1 WHERE t1.`module` = 'doc' AND t1.`method` = 'wiki2export';
+
 UPDATE `zt_grouppriv` SET `method` = 'mySpace' WHERE `module` = 'doc' AND `method` = 'browse';
 
 ALTER TABLE `zt_account`

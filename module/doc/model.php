@@ -75,13 +75,13 @@ class docModel extends model
      */
     public function getLibs($type = '', $extra = '', $appendLibs = '', $objectID = 0, $excludeType = '')
     {
-        if($type == 'all' or $type == 'includeDeleted')
+        if(in_array($type, array('all', 'includeDeleted', 'hasApi')))
         {
             $stmt = $this->dao->select('*')->from(TABLE_DOCLIB)
-                ->where('type')->ne('api')
+                ->where('vision')->eq($this->config->vision)
                 ->beginIF($type == 'all')->andWhere('deleted')->eq(0)->fi()
+                ->beginIF($type != 'hasApi')->andWhere('type')->ne('api')->fi()
                 ->beginIF($excludeType)->andWhere('type')->notin($excludeType)->fi()
-                ->andWhere('vision')->eq($this->config->vision)
                 ->orderBy('id_asc')
                 ->query();
         }
@@ -90,7 +90,7 @@ class docModel extends model
             $stmt = $this->dao->select('*')->from(TABLE_DOCLIB)
                 ->where('deleted')->eq(0)
                 ->andWhere('vision')->eq($this->config->vision)
-                ->beginIF($type != 'hasApi')->andWhere('type')->eq($type)->fi()
+                ->beginIF($type)->andWhere('type')->eq($type)->fi()
                 ->beginIF(!$type)->andWhere('type')->ne('api')->fi()
                 ->beginIF($objectID and strpos(',product,project,execution,', ",$type,") !== false)->andWhere($type)->eq($objectID)->fi()
                 ->orderBy('id_asc')
@@ -1268,6 +1268,8 @@ class docModel extends model
      */
     public function checkPrivLib($object, $extra = '')
     {
+        if(empty($object)) return false;
+
         if($this->app->user->admin and $object->type != 'mine') return true;
 
         if($object->acl == 'open') return true;
@@ -1328,18 +1330,11 @@ class docModel extends model
         if(!isset($object->lib)) return false;
         if(isset($object->assetLibType) and $object->assetLibType) return true;
 
-        $libType = $this->dao->select('type')->from(TABLE_DOCLIB)->where('id')->eq($object->lib)->fetch('type');
-        if($this->app->user->admin and $libType != 'mine') return true;
+        $lib = $this->getLibById($object->lib);
+        if($this->app->user->admin and !empty($lib) and $lib->type != 'mine') return true;
 
-        static $extraDocLibs;
-        if($extraDocLibs === null) $extraDocLibs = $this->getPrivLibsByDoc();
-
-        static $libs;
-        if($libs === null) $libs = $this->getLibs('all');
-        if(isset($libs[$object->lib]) and isset($extraDocLibs[$object->lib])) unset($extraDocLibs[$object->lib]);
-
-        if($object->acl == 'open'   and !isset($extraDocLibs[$object->lib])) return true;
-        if($object->acl == 'public' and !isset($extraDocLibs[$object->lib])) return true;
+        if(!$this->checkPrivLib($lib)) return false;
+        if(in_array($object->acl, array('open', 'public'))) return true;
 
         $account = ",{$this->app->user->account},";
         if(isset($object->addedBy) and $object->addedBy == $this->app->user->account) return true;
@@ -3094,15 +3089,18 @@ class docModel extends model
         if($type != 'project') $libTree = array_values($libTree[$type]);
         if($type == 'mine')
         {
+            $libType = zget($this->app->rawParams, 'type', '');
+            $libType = strtolower($libType);
+
             $myLib = new stdclass();
             $myLib->id         = 0;
             $myLib->name       = $this->lang->doc->myLib;
-            $myLib->type       = 'min';
+            $myLib->type       = 'mine';
             $myLib->objectType = 'doc';
             $myLib->objectID   = 0;
             $myLib->active     = 0;
             $myLib->hasAction  = false;
-            $myLib->active     = zget($this->app->rawParams, 'type', '') == 'mine'  ? 1 : 0;
+            $myLib->active     = $libType == 'mine'  ? 1 : 0;
             $myLib->children   = $libTree;
 
             $myView = new stdclass();
@@ -3112,7 +3110,7 @@ class docModel extends model
             $myView->objectType = 'doc';
             $myView->objectID   = 0;
             $myView->hasAction  = false;
-            $myView->active     = zget($this->app->rawParams, 'type', '') == 'view' ? 1 : 0;
+            $myView->active     = $libType == 'view' ? 1 : 0;
 
             $myCollection = new stdclass();
             $myCollection->id         = 0;
@@ -3121,7 +3119,7 @@ class docModel extends model
             $myCollection->objectType = 'doc';
             $myCollection->objectID   = 0;
             $myCollection->hasAction  = false;
-            $myCollection->active     = zget($this->app->rawParams, 'type', '') == 'collect' ? 1 : 0;
+            $myCollection->active     = $libType == 'collect' ? 1 : 0;
 
             $myCreation = new stdclass();
             $myCreation->id         = 0;
@@ -3130,7 +3128,7 @@ class docModel extends model
             $myCreation->objectType = 'doc';
             $myCreation->objectID   = 0;
             $myCreation->hasAction  = false;
-            $myCreation->active     = zget($this->app->rawParams, 'type', '') == 'createdby' ? 1 : 0;
+            $myCreation->active     = $libType == 'createdby' ? 1 : 0;
 
             $libTree   = array();
             $libTree[] = $myLib;
