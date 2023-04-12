@@ -382,6 +382,9 @@ function recommendChange($item, checked)
 
 $(function()
 {
+    var btnLeft = $('.main > table').width() - $('.main > .btn-group').width();
+    $('.main > .btn-group').css('left', btnLeft + 'px');
+    $('.main > .btn-group').removeClass('hidden');
     selectedPrivIdList = Object.values(selectedPrivIdList);
 
     recommedSelect = new Array();
