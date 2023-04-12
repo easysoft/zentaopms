@@ -114,6 +114,7 @@
                     <?php echo html::radio('acl', $lang->doc->aclList, $objectType == 'mine' ? 'private' : 'open', "onchange='toggleAcl(this.value, \"doc\")'");?>
                   </td>
                 </tr>
+                <?php if($objectType != 'mine'):?>
                 <tr id='whiteListBox' class='hidden'>
                   <th><?php echo $lang->doc->whiteList;?></th>
                   <td colspan='3'>
@@ -128,6 +129,7 @@
                     </div>
                   </td>
                 </tr>
+                <?php endif;?>
               </tbody>
               <tfoot>
                 <tr>

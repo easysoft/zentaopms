@@ -129,9 +129,9 @@ $lang->doc->team         = '团队';
 $lang->doc->moduleDoc     = '按模块浏览';
 $lang->doc->searchDoc     = '搜索';
 $lang->doc->fast          = '快速访问';
-$lang->doc->allDoc        = '所有文档';
-$lang->doc->openedByMe    = '由我创建';
-$lang->doc->editedByMe    = '由我编辑';
+$lang->doc->allDoc        = '全部文档';
+$lang->doc->openedByMe    = '我的创建';
+$lang->doc->editedByMe    = '我的编辑';
 $lang->doc->orderByOpen   = '最近添加';
 $lang->doc->orderByEdit   = '最近更新';
 $lang->doc->orderByVisit  = '最近访问';
@@ -146,6 +146,11 @@ $lang->doc->tableContents = '目录';
 $lang->doc->addCatalog    = '添加目录';
 $lang->doc->editCatalog   = '编辑目录';
 $lang->doc->deleteCatalog = '删除目录';
+$lang->doc->docStatistic  = '文档统计';
+$lang->doc->docCreated    = '创建的文档';
+$lang->doc->docEdited     = '编辑的文档';
+$lang->doc->docViews      = '被浏览量';
+$lang->doc->docCollects   = '被收藏量';
 
 /* 方法列表。*/
 $lang->doc->index            = '仪表盘';

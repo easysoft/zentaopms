@@ -2151,29 +2151,19 @@ class docModel extends model
     {
         $allLibs   = array_keys($this->getLibs('all'));
         $docIdList = $this->getPrivDocs($allLibs);
+        $myDocList = $this->dao->select('id')->from(TABLE_DOC)->where('addedBy')->eq($this->app->user->account)->fetchPairs('id');
 
-        $today         = date('Y-m-d');
-        $lately        = date('Y-m-d', strtotime('-3 day'));
-        $statisticInfo = $this->dao->select("count(id) as totalDocs, count(IF(editedDate like '{$today}%', 1, null)) as todayEditedDocs,
-            count(IF(editedDate > '{$lately}', 1, null)) as lastEditedDocs, count(IF(addedDate > '{$lately}', 1, null)) as lastAddedDocs,
-            count(IF(addedBy = '{$this->app->user->account}', 1, null)) as myDocs")->from(TABLE_DOC)
+        $today     = date('Y-m-d');
+        $statistic = $this->dao->select("count(id) as totalDocs, count(IF(editedDate like '{$today}%', 1, null)) as todayEditedDocs,
+            count(IF(editedBy = '{$this->app->user->account}', 1, null)) as myEditedDocs, count(IF(addedBy = '{$this->app->user->account}', 1, null)) as myDocs")->from(TABLE_DOC)
             ->where('deleted')->eq(0)
             ->andWhere('vision')->eq($this->config->vision)
             ->andWhere('id')->in($docIdList)
             ->fetch();
-        $statisticInfo->myCollection = $this->dao->select('count(*) as count')->from(TABLE_DOCACTION)
-            ->where('doc')->in($docIdList)
-            ->andWhere('action')->eq('collect')
-            ->andWhere('actor')->eq($this->app->user->account)
-            ->fetch('count');
 
-        $statisticInfo->pastEditedDocs       = $statisticInfo->totalDocs - $statisticInfo->todayEditedDocs;
-        $statisticInfo->lastEditedProgress   = $statisticInfo->totalDocs ? round($statisticInfo->lastEditedDocs / $statisticInfo->totalDocs, 2) * 100 : 0;
-        $statisticInfo->lastAddedProgress    = $statisticInfo->totalDocs ? round($statisticInfo->lastAddedDocs / $statisticInfo->totalDocs, 2) * 100 : 0;
-        $statisticInfo->myCollectionProgress = $statisticInfo->totalDocs ? round($statisticInfo->myCollection / $statisticInfo->totalDocs, 2) * 100 : 0;
-        $statisticInfo->myDocsProgress       = $statisticInfo->totalDocs ? round($statisticInfo->myDocs / $statisticInfo->totalDocs, 2) * 100 : 0;
+        $statistic->myDoc = $this->dao->select("count(IF(`action` = 'view', 1, null)) as docViews, count(IF(`action` = 'collect', 1, null)) as docCollects")->from(TABLE_DOCACTION)->where('doc')->in($myDocList)->fetch();
 
-        return $statisticInfo;
+        return $statistic;
     }
 
     /**

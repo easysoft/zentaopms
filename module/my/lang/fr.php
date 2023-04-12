@@ -185,8 +185,12 @@ $lang->my->featureBar['contribute']['requirement']['reviewedBy'] = 'ReviewedByMe
 $lang->my->featureBar['contribute']['requirement']['closedBy']   = 'ClosedByMe';
 $lang->my->featureBar['contribute']['requirement']['assignedBy'] = 'AssignedByMe';
 
+$lang->my->featureBar['contribute']['bug']['openedBy']   = 'CreatedByMe';
+$lang->my->featureBar['contribute']['bug']['resolvedBy'] = 'ResolvedByMe';
+$lang->my->featureBar['contribute']['bug']['closedBy']   = 'ClosedByMe';
+$lang->my->featureBar['contribute']['bug']['assignedBy'] = 'AssignedByMe';
+
 $lang->my->featureBar['contribute']['story'] = $lang->my->featureBar['contribute']['requirement'];
-$lang->my->featureBar['contribute']['bug']   = $lang->my->featureBar['contribute']['requirement'];
 
 $lang->my->featureBar['contribute']['testcase']['openedbyme'] = 'CreatedByMe';
 
