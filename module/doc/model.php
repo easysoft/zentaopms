@@ -1330,8 +1330,8 @@ class docModel extends model
         if($libs === null) $libs = $this->getLibs('all');
         if(isset($libs[$object->lib]) and isset($extraDocLibs[$object->lib])) unset($extraDocLibs[$object->lib]);
 
-        if($object->acl == 'open'   and !isset($extraDocLibs[$object->lib])) return true;
-        if($object->acl == 'public' and !isset($extraDocLibs[$object->lib])) return true;
+        if($object->acl == 'open'   and !isset($extraDocLibs[$object->lib]) and isset($libs[$object->lib])) return true;
+        if($object->acl == 'public' and !isset($extraDocLibs[$object->lib]) and isset($libs[$object->lib])) return true;
 
         $account = ",{$this->app->user->account},";
         if(isset($object->addedBy) and $object->addedBy == $this->app->user->account) return true;
