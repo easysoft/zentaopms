@@ -11,28 +11,26 @@
  */
 ?>
 <style>
-.block-docmycollection .panel-body {padding: 0px 20px;}
-.block-docmycollection .doc-list {display: flex; flex-wrap: wrap; padding: 2px 4px 4px 4px;}
-.block-docmycollection .doc-list > .doc-item {flex: 1 1 26%; padding: 8px 10px; border: 1px solid #EDEEF2; border-radius: 4px; margin-right: 10px; margin-bottom: 16px; width: 0px; cursor: pointer;}
-.block-docmycollection .doc-list > .doc-item .date-interval {float: right; padding: 8px 0px;}
-.block-docmycollection .doc-list > .doc-item .file-icon {float: left; padding: 8px 4px;}
-.block-docmycollection .doc-list > .doc-item > .plug-title {height: 16px; overflow: hidden;}
-.block-docmycollection .doc-list > .doc-item .edit-date {overflow: hidden; height: 16px;}
-.block-docmycollection .no-doc {text-align: center; vertical-align: middle; height: 50px;}
+.block-docmycollection .panel-body {padding: 0px 10px 20px;}
+.block-docmycollection .doc-list {display: flex; flex-wrap: wrap; padding: 0 4px 0 0;}
+.block-docmycollection .doc-list > .doc-box {border: unset; flex: 0 1 50%; padding: 8px;}
+.block-docmycollection .doc-list > .doc-box > button.btn {padding: 5px 10px; height: 100%; width: 100%; cursor: pointer; white-space: unset; text-align: unset; border: 1px solid rgba(227, 228, 233, 0.6)}
+.block-docmycollection .doc-list > .doc-box > .btn:hover {background: unset;}
+.block-docmycollection .doc-list > .doc-box > .btn.no-priv {cursor: not-allowed; pointer-events: unset;}
+.block-docmycollection .doc-list > .doc-box > .btn.no-priv p {pointer-events: none;}
+.block-docmycollection .doc-list > .doc-box .date-interval {float: right; padding: 8px 0px;}
+.block-docmycollection .doc-list > .doc-box > .btn > h4 {padding-right: 5px;}
+.block-docmycollection .doc-list > .doc-item .file-icon {margin-right: 2px;}
+.block-docmycollection .doc-list > .doc-box .plug-title {height: 16px; overflow: hidden;}
 
-.block-docmycollection.block-sm .doc-list > .doc-item {flex: 1 1 100%;}
+.block-docmycollection.block-sm .doc-list > .doc-box {flex: 0 1 100%;}
 </style>
 <?php $canView = common::hasPriv('doc', 'view');?>
 <div class="panel-body">
-  <div class="plug">
-    <?php if($docList):?>
-    <div class="doc-list">
-      <?php foreach($docList as $doc):?>
-      <?php if($canView):?>
-      <a class="doc-item shadow-primary-hover" href='<?php echo $this->createlink("doc", "view", "docid=$doc->id");?>'>
-      <?php else:?>
-      <div class="doc-item shadow-primary-hover">
-      <?php endif;?>
+  <div class="doc-list">
+    <?php foreach($docList as $doc):?>
+    <div class="doc-box">
+    <button class="btn shadow-primary-hover <?php if(!$canView or !in_array($doc->id, $pricDocs)) echo 'no-priv';?>" data-link='<?php echo $this->createLink("doc", "view", "docID=$doc->id");?>'>
         <span class='date-interval text-muted'>
           <?php
           $interval = $doc->editInterval;
@@ -52,21 +50,27 @@
           echo $editTip;
           ?>
         </span>
-        <?php
-        $docType = $doc->type == 'text' ? 'wiki-file' : $doc->type;
-        echo html::image("static/svg/{$docType}.svg", "class='file-icon'");
-        ?>
-        <h4 class="plug-title" title="<?php echo $doc->title;?>"><?php echo $doc->title;?></h4>
+        <h4 class="plug-title" title="<?php echo $doc->title;?>">
+          <?php
+          $docType = $doc->type == 'text' ? 'wiki-file' : $doc->type;
+          echo html::image("static/svg/{$docType}.svg", "class='file-icon'");
+          ?>
+          <?php echo $doc->title;?>
+        </h4>
         <p class='edit-date text-muted'><?php echo $lang->doc->editedDate . (common::checkNotCN() ? ': ' : '：') . $doc->editedDate;?></p>
-      <?php if($canView):?>
-      </a>
-      <?php else:?>
-      </div>
-      <?php endif;?>
-      <?php endforeach;?>
+      </button>
     </div>
-    <?php else:?>
-    <div class='no-doc'><?php echo $lang->doc->noDoc;?></div>
-    <?php endif;?>
+    <?php endforeach;?>
   </div>
 </div>
+<script>
+$(function()
+{
+    $('.doc-box .btn').on('click', function()
+    {
+        if($(this).hasClass('no-priv')) return;
+
+        location.href = $(this).data('link');
+    });
+});
+</script>

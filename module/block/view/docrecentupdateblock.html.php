@@ -22,6 +22,8 @@
 .block-docrecentupdate .doc-list > .doc-box > .btn > h4 {padding-right: 5px;}
 .block-docrecentupdate .doc-list > .doc-item .file-icon {margin-right: 2px;}
 .block-docrecentupdate .doc-list > .doc-box .plug-title {height: 16px; overflow: hidden;}
+
+.block-docrecentupdate.block-sm .doc-list > .doc-box {flex: 0 1 100%;}
 </style>
 <?php $canView = common::hasPriv('doc', 'view');?>
 <div class="panel-body">
@@ -48,7 +50,7 @@
           echo $editTip;
           ?>
         </span>
-        <h4 class="plug-title">
+        <h4 class="plug-title" title="<?php echo $doc->title;?>">
           <?php
           $docType = $doc->type == 'text' ? 'wiki-file' : $doc->type;
           echo html::image("static/svg/{$docType}.svg", "class='file-icon'");
