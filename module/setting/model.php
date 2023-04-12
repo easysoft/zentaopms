@@ -52,7 +52,7 @@ class settingModel extends model
         $item = $this->parseItemPath($path);
         if(empty($item)) return false;
 
-        $item->value = $value;
+        $item->value = strval($value);
         $this->dao->replace(TABLE_CONFIG)->data($item)->exec();
     }
 
