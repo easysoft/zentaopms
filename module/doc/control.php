@@ -408,7 +408,7 @@ class doc extends control
         if(empty($lib) and $libID) $lib = $this->doc->getLibByID($libID);
 
         $objects  = array();
-        if($objectType == 'project')
+        if($linkType == 'project')
         {
             $excludedModel = $this->config->vision == 'lite' ? '' : 'kanban';
             $objects       = $this->project->getPairsByProgram('', 'all', false, 'order_asc', $excludedModel);
@@ -421,16 +421,16 @@ class doc extends control
             }
             $this->view->executions = array(0 => '') + $this->loadModel('execution')->getPairs($objectID, 'sprint,stage', 'multiple,leaf,noprefix');
         }
-        elseif($objectType == 'execution')
+        elseif($linkType == 'execution')
         {
             $execution = $this->loadModel('execution')->getById($objectID);
             $objects   = $this->execution->getPairs($execution->project, 'sprint,stage', "multiple,leaf,noprefix");
         }
-        elseif($objectType == 'product')
+        elseif($linkType == 'product')
         {
             $objects = $this->loadModel('product')->getPairs();
         }
-        elseif($objectType == 'mine')
+        elseif($linkType == 'mine')
         {
             $this->lang->doc->aclList = $this->lang->doclib->mySpaceAclList;
         }
