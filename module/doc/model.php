@@ -651,7 +651,7 @@ class docModel extends model
         $docIDList = $this->getPrivDocs(array_keys($libs));
         if($type == 'view' or $type == 'collect')
         {
-            $docs = $this->dao->select('DISTINCT t1.*,t3.name as libName,t3.type as objectType')->from(TABLE_DOC)->alias('t1')
+            $docs = $this->dao->select('t1.*,t3.name as libName,t3.type as objectType,max(t2.`date`) as date')->from(TABLE_DOC)->alias('t1')
                 ->leftJoin(TABLE_DOCACTION)->alias('t2')->on("t1.id=t2.doc")
                 ->leftJoin(TABLE_DOCLIB)->alias('t3')->on("t1.lib=t3.id")
                 ->where('t1.deleted')->eq(0)
@@ -666,13 +666,14 @@ class docModel extends model
                 ->beginIF($browseType == 'all' or $browseType == 'bysearch')->andWhere("(t1.status = 'normal' or (t1.status = 'draft' and t1.addedBy='{$this->app->user->account}'))")->fi()
                 ->beginIF($browseType == 'draft')->andWhere('t1.status')->eq('draft')->andWhere('t1.addedBy')->eq($this->app->user->account)->fi()
                 ->beginIF($browseType == 'bysearch')->andWhere($query)->fi()
+                ->groupBy('t1.id')
                 ->orderBy($orderBy)
                 ->page($pager, 't1.id')
                 ->fetchAll('id');
         }
         elseif($type == 'createdby')
         {
-            $docs = $this->dao->select('DISTINCT t1.*,t2.name as libName,t2.type as objectType')->from(TABLE_DOC)->alias('t1')
+            $docs = $this->dao->select('t1.*,t2.name as libName,t2.type as objectType')->from(TABLE_DOC)->alias('t1')
                 ->leftJoin(TABLE_DOCLIB)->alias('t2')->on("t1.lib=t2.id")
                 ->where('t1.deleted')->eq(0)
                 ->andWhere('t1.lib')->ne('')
