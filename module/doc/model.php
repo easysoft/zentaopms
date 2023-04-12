@@ -78,10 +78,10 @@ class docModel extends model
         if($type == 'all' or $type == 'includeDeleted')
         {
             $stmt = $this->dao->select('*')->from(TABLE_DOCLIB)
-                ->where('type')->ne('api')
+                ->where('vision')->eq($this->config->vision)
                 ->beginIF($type == 'all')->andWhere('deleted')->eq(0)->fi()
+                ->beginIF($type != 'hasApi')->andWhere('type')->ne('api')->fi()
                 ->beginIF($excludeType)->andWhere('type')->notin($excludeType)->fi()
-                ->andWhere('vision')->eq($this->config->vision)
                 ->orderBy('id_asc')
                 ->query();
         }
@@ -3085,15 +3085,18 @@ class docModel extends model
         if($type != 'project') $libTree = array_values($libTree[$type]);
         if($type == 'mine')
         {
+            $libType = zget($this->app->rawParams, 'type', '');
+            $libType = strtolower($libType);
+
             $myLib = new stdclass();
             $myLib->id         = 0;
             $myLib->name       = $this->lang->doc->myLib;
-            $myLib->type       = 'min';
+            $myLib->type       = 'mine';
             $myLib->objectType = 'doc';
             $myLib->objectID   = 0;
             $myLib->active     = 0;
             $myLib->hasAction  = false;
-            $myLib->active     = zget($this->app->rawParams, 'type', '') == 'mine'  ? 1 : 0;
+            $myLib->active     = $libType == 'mine'  ? 1 : 0;
             $myLib->children   = $libTree;
 
             $myView = new stdclass();
@@ -3103,7 +3106,7 @@ class docModel extends model
             $myView->objectType = 'doc';
             $myView->objectID   = 0;
             $myView->hasAction  = false;
-            $myView->active     = zget($this->app->rawParams, 'type', '') == 'view' ? 1 : 0;
+            $myView->active     = $libType ? 1 : 0;
 
             $myCollection = new stdclass();
             $myCollection->id         = 0;
@@ -3112,7 +3115,7 @@ class docModel extends model
             $myCollection->objectType = 'doc';
             $myCollection->objectID   = 0;
             $myCollection->hasAction  = false;
-            $myCollection->active     = zget($this->app->rawParams, 'type', '') == 'collect' ? 1 : 0;
+            $myCollection->active     = $libType ? 1 : 0;
 
             $myCreation = new stdclass();
             $myCreation->id         = 0;
@@ -3121,7 +3124,7 @@ class docModel extends model
             $myCreation->objectType = 'doc';
             $myCreation->objectID   = 0;
             $myCreation->hasAction  = false;
-            $myCreation->active     = zget($this->app->rawParams, 'type', '') == 'createdby' ? 1 : 0;
+            $myCreation->active     = $libType == 'createdby' ? 1 : 0;
 
             $libTree   = array();
             $libTree[] = $myLib;
