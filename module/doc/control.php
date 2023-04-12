@@ -1142,7 +1142,7 @@ class doc extends control
     public function view($docID = 0, $version = 0, $appendLib = 0)
     {
         $doc = $this->doc->getById($docID);
-        if(!$doc)
+        if(!$doc or !isset($doc->id))
         {
             if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'fail', 'code' => 404, 'message' => '404 Not found'));
             return print(js::error($this->lang->notFound) . js::locate($this->inlink('index')));
@@ -1150,7 +1150,6 @@ class doc extends control
 
         $lib = $this->doc->getLibById($doc->lib);
         if(!empty($lib) and $lib->deleted == '1') $appendLib = $doc->id;
-
 
         $objectType = isset($lib->type) ? $lib->type : 'custom';
         $type       = $objectType == 'execution' && $this->app->tab != 'execution' ? 'project' : $objectType;
@@ -1162,9 +1161,6 @@ class doc extends control
         /* Get doc. */
         if($docID)
         {
-            $doc = $this->doc->getById($docID, $version, true);
-            if(!$doc) return print(js::error($this->lang->notFound));
-
             $this->doc->createAction($docID, 'view');
             $this->doc->removeEditing($doc);
             if($doc->keywords)
