@@ -448,7 +448,8 @@ $(function()
         else if(objectType == 'mine' || objectType == 'view' || objectType == 'collect' || objectType == 'createdby')
         {
             var mySpaceType = 'mine';
-            if(type == 'view' || type == 'collect' || type == 'createdBy') mySpaceType = type;
+            if(type == 'view' || type == 'collect') mySpaceType = type;
+            if(type == 'createdBy' || type == 'createdby') mySpaceType = 'createdby';
 
             methodName = 'mySpace';
             linkParams = 'type='+ mySpaceType + '&libID=' + libID + '&moduleID=' + moduleID;
