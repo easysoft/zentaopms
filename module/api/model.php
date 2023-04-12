@@ -1031,4 +1031,18 @@ class apiModel extends model
 
         return array($normalObjects, $closedObjects);
     }
+
+    /**
+     * Get priv Apis..
+     *
+     * @access public
+     * @return array
+     */
+    public function getPrivApis()
+    {
+        $libs = $this->loadModel('doc')->getLibs('api');
+        return $this->dao->select('id')->from(TABLE_API)
+            ->where('lib')->in(array_keys($libs))
+            ->fetchAll('id');
+    }
 }

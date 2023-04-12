@@ -34,7 +34,7 @@ class cron extends control
      */
     public function turnon($confirm = 'no')
     {
-        $turnon = empty($this->config->global->cron) ? 1 : 0;
+        $turnon = empty($this->config->global->cron) ? '1' : '0';
         if(!$turnon and $confirm == 'no') return print(js::confirm($this->lang->cron->confirmTurnon, inlink('turnon', "confirm=yes")));
         $this->loadModel('setting')->setItem('system.common.global.cron', $turnon);
         return print(js::reload('parent'));

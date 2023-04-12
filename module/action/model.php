@@ -1307,11 +1307,13 @@ class actionModel extends model
         $shadowProducts   = $this->dao->select('id')->from(TABLE_PRODUCT)->where('shadow')->eq(1)->fetchPairs();
         $projectMultiples = $this->dao->select('id,type,multiple')->from(TABLE_PROJECT)->where('id')->in($projectIdList)->fetchAll('id');
         $docList          = $this->loadModel('doc')->getPrivDocs();
-        $docLibList       = $this->doc->getLibs();
+        $apiList          = $this->loadModel('api')->getPrivApis();
+        $docLibList       = $this->doc->getLibs('hasApi');
 
         foreach($actions as $i => $action)
         {
             if($action->objectType == 'doc' and !isset($docList[$action->objectID])) unset($actions[$i]);
+            if($action->objectType == 'api' and !isset($apiList[$action->objectID])) unset($actions[$i]);
             if($action->objectType == 'doclib' and !isset($docLibList[$action->objectID])) unset($actions[$i]);
             if($action->objectType == 'product' AND isset($shadowProducts[$action->objectID]))
             {

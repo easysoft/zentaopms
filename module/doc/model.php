@@ -64,7 +64,7 @@ class docModel extends model
     /**
      * Get libraries.
      *
-     * @param  string $type
+     * @param  string $type all|includeDeleted|hasApi|mine|product|project|execution|custom
      * @param  string $extra
      * @param  string $appendLibs
      * @param  int    $objectID
@@ -90,7 +90,7 @@ class docModel extends model
             $stmt = $this->dao->select('*')->from(TABLE_DOCLIB)
                 ->where('deleted')->eq(0)
                 ->andWhere('vision')->eq($this->config->vision)
-                ->beginIF($type)->andWhere('type')->eq($type)->fi()
+                ->beginIF($type != 'hasApi')->andWhere('type')->eq($type)->fi()
                 ->beginIF(!$type)->andWhere('type')->ne('api')->fi()
                 ->beginIF($objectID and strpos(',product,project,execution,', ",$type,") !== false)->andWhere($type)->eq($objectID)->fi()
                 ->orderBy('id_asc')
@@ -660,6 +660,9 @@ class docModel extends model
                 ->andWhere('t1.id')->in(array_keys($docIDList))
                 ->andWhere('t2.action')->eq($type)
                 ->andWhere('t2.actor')->eq($this->app->user->account)
+                ->beginIF(!common::hasPriv('doc', 'productSpace'))->andWhere('t3.type')->ne('product')->fi()
+                ->beginIF(!common::hasPriv('doc', 'projectSpace'))->andWhere('t3.type')->notIN('project,execution')->fi()
+                ->beginIF(!common::hasPriv('doc', 'tableContents'))->andWhere('t3.type')->ne('custom')->fi()
                 ->beginIF($browseType == 'all' or $browseType == 'bysearch')->andWhere("(t1.status = 'normal' or (t1.status = 'draft' and t1.addedBy='{$this->app->user->account}'))")->fi()
                 ->beginIF($browseType == 'draft')->andWhere('t1.status')->eq('draft')->andWhere('t1.addedBy')->eq($this->app->user->account)->fi()
                 ->beginIF($browseType == 'bysearch')->andWhere($query)->fi()
@@ -676,6 +679,9 @@ class docModel extends model
                 ->andWhere('t1.id')->in(array_keys($docIDList))
                 ->andWhere('t1.vision')->eq($this->config->vision)
                 ->andWhere('t1.addedBy')->eq($this->app->user->account)
+                ->beginIF(!common::hasPriv('doc', 'productSpace'))->andWhere('t2.type')->ne('product')->fi()
+                ->beginIF(!common::hasPriv('doc', 'projectSpace'))->andWhere('t2.type')->notIN('project,execution')->fi()
+                ->beginIF(!common::hasPriv('doc', 'tableContents'))->andWhere('t2.type')->ne('custom')->fi()
                 ->beginIF($browseType == 'draft')->andWhere('t1.status')->eq('draft')->andWhere('t1.addedBy')->eq($this->app->user->account)->fi()
                 ->beginIF($browseType == 'bysearch')->andWhere($query)->fi()
                 ->orderBy($orderBy)
@@ -717,7 +723,7 @@ class docModel extends model
      * @param  int    $module
      * @param  string $mode normal|all
      * @access public
-     * @return void
+     * @return array
      */
     public function getPrivDocs($libIdList = array(), $module = 0, $mode = 'normal')
     {
@@ -3351,7 +3357,7 @@ class docModel extends model
     public function getDynamic($pager = null)
     {
         $actions = $this->dao->select('*')->from(TABLE_ACTION)
-            ->where('objectType')->in('doclib,doc')
+            ->where('objectType')->in('doclib,doc,api')
             ->andWhere('vision')->eq($this->config->vision)
             ->orderBy('date_desc')
             ->page($pager)

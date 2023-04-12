@@ -118,7 +118,7 @@ js::set('hasLibPriv',       $hasLibPriv);
   <?php foreach(array('doc', 'api') as $module):?>
   <ul class='<?php echo $module;?>LibDorpdown'>
     <?php if($canAddCatalog[$module]):?>
-    <li data-method="addCataLib" data-has-children='%hasChildren%'  data-libid='%libID%' data-moduleid="%moduleID%" data-type="add"><a><i class="icon icon-icon-add-directory"></i><?php echo $lang->doc->libDropdown['addModule'];?></a></li>
+    <li data-method="addCataLib" data-has-children='%hasChildren%'  data-libid='%libID%' data-moduleid="%moduleID%" data-type="add"><a><i class="icon icon-add-directory"></i><?php echo $lang->doc->libDropdown['addModule'];?></a></li>
     <?php endif;?>
     <?php if(common::hasPriv($module, 'editLib')):?>
     <li data-method="editLib"><a href='<?php echo inlink('editLib', 'libID=%libID%');?>' data-toggle='modal' data-type='iframe'><i class="icon icon-edit"></i><?php echo $lang->doc->libDropdown['editLib'];?></a></li>
@@ -129,8 +129,8 @@ js::set('hasLibPriv',       $hasLibPriv);
   </ul>
   <ul class='<?php echo $module;?>ModuleDorpdown'>
     <?php if($canAddCatalog[$module]):?>
-    <li data-method="addCataBro" data-type="add" data-id="%moduleID%"><a><i class="icon icon-icon-add-directory"></i><?php echo $lang->doc->libDropdown['addSameModule'];?></a></li>
-    <li data-method="addCataChild" data-type="add" data-id="%moduleID%" data-has-children='%hasChildren%'><a><i class="icon icon-icon-add-directory"></i><?php echo $lang->doc->libDropdown['addSubModule'];?></a></li>
+    <li data-method="addCataBro" data-type="add" data-id="%moduleID%"><a><i class="icon icon-add-directory"></i><?php echo $lang->doc->libDropdown['addSameModule'];?></a></li>
+    <li data-method="addCataChild" data-type="add" data-id="%moduleID%" data-has-children='%hasChildren%'><a><i class="icon icon-add-directory"></i><?php echo $lang->doc->libDropdown['addSubModule'];?></a></li>
     <?php endif;?>
     <?php if($canEditCatalog[$module]):?>
     <li data-method="editCata" class='edit-module'><a data-href='<?php echo helper::createLink($module, 'editCatalog', "moduleID=%moduleID%&type=$app->rawModule");?>'><i class="icon icon-edit"></i><?php echo $lang->doc->libDropdown['editModule'];?></a></li>
@@ -448,7 +448,8 @@ $(function()
         else if(objectType == 'mine' || objectType == 'view' || objectType == 'collect' || objectType == 'createdby')
         {
             var mySpaceType = 'mine';
-            if(type == 'view' || type == 'collect' || type == 'createdBy') mySpaceType = type;
+            if(type == 'view' || type == 'collect') mySpaceType = type;
+            if(type == 'createdBy' || type == 'createdby') mySpaceType = 'createdby';
 
             methodName = 'mySpace';
             linkParams = 'type='+ mySpaceType + '&libID=' + libID + '&moduleID=' + moduleID;
