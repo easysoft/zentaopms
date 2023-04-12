@@ -78,7 +78,7 @@ toolbar
         'text' => $lang->program->create,
         'icon' => 'plus',
         'class'=> 'btn primary',
-        'url'  => createLink('program', 'exportTable')
+        'url'  => createLink('program', 'create')
     ])),
 );
 
