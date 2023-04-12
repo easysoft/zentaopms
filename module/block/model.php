@@ -264,14 +264,14 @@ class blockModel extends model
             $blocks = $this->lang->block->default[$type]['project'];
 
             /* Mark project block has init. */
-            $this->loadModel('setting')->setItem("$account.$module.{$type}common.blockInited@$vision", true);
+            $this->loadModel('setting')->setItem("$account.$module.{$type}common.blockInited@$vision", '1');
         }
         else
         {
             $blocks = $module == 'my' ? $this->lang->block->default[$flow][$module] : $this->lang->block->default[$module];
 
             /* Mark this app has init. */
-            $this->loadModel('setting')->setItem("$account.$module.common.blockInited@$vision", true);
+            $this->loadModel('setting')->setItem("$account.$module.common.blockInited@$vision", '1');
         }
 
         $this->loadModel('setting')->setItem("$account.$module.block.initVersion", $this->config->block->version);
