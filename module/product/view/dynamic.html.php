@@ -78,7 +78,9 @@
         <?php if($direction == 'next') $actions = array_reverse($actions);?>
         <?php foreach($actions as $i => $action):?>
         <?php if(empty($firstAction)) $firstAction = $action;?>
-        <li <?php if($action->major) echo "class='active'";?>>
+        <?php $class = $action->major ? 'active' : '';?>
+        <?php if(in_array($action->action, array('releaseddoc', 'collected'))) $class .= " {$action->action}";?>
+        <li <?php if($action->major) echo "class='$class'";?>>
           <div>
             <span class="timeline-tag"><?php echo $action->time?></span>
             <span class="timeline-text">
