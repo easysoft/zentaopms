@@ -69,6 +69,7 @@ html[lang^='zh-'] .operatorWidth {width: 90px !important;}
 #save-query {float: unset !important; position: absolute; right: 50px;}
 #save-query .text {top: 0px;}
 #save-query .text:after {border-bottom: 0px solid #0c64eb;}
+#<?php echo $formId;?> [id^='valueBox'] > div.picker span.picker-selection-text {padding-right: 10px;}
 </style>
 <?php if($style != 'simple'):?>
   <div id='toggle-queries'>
