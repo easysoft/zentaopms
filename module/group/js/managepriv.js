@@ -166,9 +166,9 @@ function updatePrivTree(privList)
     if(privList == null)
     {
         privList = new Array();
-        $('#privList .group-item input:checked').each(function()
+        $('tbody .group-item input:checked').each(function()
         {
-            privList.push($(this).closest('.group-item').attr('data-id'));
+            if($(this).closest('popover-content').length == 0) privList.push($(this).closest('.group-item').attr('data-id'));
         });
         selectedPrivIdList = privList;
     }
@@ -178,7 +178,7 @@ function updatePrivTree(privList)
         url: createLink('group', 'ajaxGetRelatedPrivs'),
         dataType: 'json',
         method: 'post',
-        data: {"privList" : privList.toString(), "recommedSelect": recommedSelect.toString(), "excludeIdList": excludeIdList.toString()},
+        data: {"privList" : privList.toString(), "recommedSelect": recommedSelect.toString(), "excludeIdList": Object.values(excludeIdList).toString()},
         success: function(data)
         {
             if(data.depend == undefined || data.depend.length == 0)
@@ -221,6 +221,12 @@ function updatePrivTree(privList)
     });
 }
 
+/**
+ * When check all change.
+ *
+ * @access public
+ * @return void
+ */
 function checkAllChange()
 {
     var id      = $(this).find('input[type=checkbox]').attr('id');
@@ -232,9 +238,9 @@ function checkAllChange()
 
         if(checked) $('input[type=checkbox]').attr('checked', checked);
         if(!checked) $('input[type=checkbox]').removeAttr('checked');
-        $('#privList tbody .checkbox-indeterminate-block').removeClass('checkbox-indeterminate-block');
+        $('tbody .checkbox-indeterminate-block').removeClass('checkbox-indeterminate-block');
     }
-    else
+    else if($(this).closest('#privList').length > 0)
     {
         var moduleName = $(this).closest('th').attr('data-module');
         var packageID  = $(this).closest('th').hasClass('package') ? $(this).closest('th').attr('data-package') : '';
@@ -248,7 +254,68 @@ function checkAllChange()
 
         changeParentChecked($(this), moduleName, packageID);
     }
+    else if($(this).closest('#privPackageList').length > 0)
+    {
+        var moduleName = $(this).parent().attr('data-module');
+        var packageID  = $(this).parent().hasClass('package') ? $(this).parent().attr('data-package') : '';
+        var $children  = $(this).parent().hasClass('package') ? $(this).closest('td').find('[data-module=' + moduleName +'][data-package=' + packageID +']') : $(this).closest('tbody').find('[data-module=' + moduleName +']');
+
+        $children.find('input[type=checkbox]').prop('checked', checked);
+        $children.find('.checkbox-indeterminate-block').removeClass('checkbox-indeterminate-block');
+
+        if(checked) $children.find('input[type=checkbox]').attr('checked', checked);
+        if(!checked) $children.find('input[type=checkbox]').removeAttr('checked');
+
+        changeParentChecked($(this), moduleName, packageID);
+    }
     updatePrivTree(null);
+}
+
+/**
+ * Whrn group item change.
+ *
+ * @param  object $item
+ * @access public
+ * @return void
+ */
+function groupItemChange()
+{
+    var checked = $(this).prop('checked');
+    if(checked)
+    {
+        $(this).attr('checked', 'checked');
+    }
+    else
+    {
+        $(this).removeAttr('checked');
+    }
+    if($('#privPackageList').length > 0)
+    {
+        var dataid = $(this).attr('data-id');
+        var $priv  = $('#privPackageList').find('.privs.hidden .group-item input[data-id="' + dataid + '"]');
+        if(checked)
+        {
+            $priv.attr('checked', 'checked');
+        }
+        else
+        {
+            $priv.removeAttr('checked');
+        }
+    }
+    var moduleName = $(this).closest('.group-item').attr('data-module');
+    var packageID  = $(this).closest('.group-item').attr('data-package');
+    changeParentChecked($(this), moduleName, packageID);
+
+    var privID = $(this).closest('.group-item').attr('data-id');
+    if(privID != 0)
+    {
+        var index = selectedPrivIdList.indexOf(privID);
+
+        if(privID > 0 && index < 0 && checked) selectedPrivIdList.push(privID);
+        if(privID > 0 && index > -1 && !checked) selectedPrivIdList.splice(index, 1);
+
+        updatePrivTree(selectedPrivIdList);
+    }
 }
 
 /**
@@ -263,7 +330,7 @@ function recommendChange($item, checked)
 {
     var privModule  = $item.attr('data-module');
     var privMethod  = $item.attr('data-method');
-    var $actionItem = $('#privList input[data-id="' + privModule + '-' + privMethod + '"]');
+    var $actionItem = $('#privList').length > 0 ? $('#privList input[data-id="' + privModule + '-' + privMethod + '"]') : $('#privPackageList input[data-id="' + privModule + '-' + privMethod + '"]');
     $actionItem.prop('checked', checked);
     if(checked)
     {
@@ -326,34 +393,11 @@ $(function()
     if(relatedPrivData.recommend == undefined || relatedPrivData.recommend == 0) $(".menuTree.recommend").closest('.priv-panel').find('.table-empty-tip').removeClass('hidden');
 
     $('#privList > tbody > tr > th .check-all').change(checkAllChange);
+    $('#privPackageList > tbody > tr .check-all').change(checkAllChange);
     $('.priv-footer .check-all').change(checkAllChange);
 
-    $('#privList > tbody > tr > td input[type=checkbox]').change(function()
-    {
-        var checked = $(this).prop('checked');
-        if(checked)
-        {
-            $(this).attr('checked', 'checked');
-        }
-        else
-        {
-            $(this).removeAttr('checked');
-        }
-        var moduleName = $(this).closest('.group-item').attr('data-module');
-        var packageID  = $(this).closest('.group-item').attr('data-package');
-        changeParentChecked($(this), moduleName, packageID);
-
-        var privID = $(this).closest('.group-item').attr('data-id');
-        if(privID != 0)
-        {
-            var index = selectedPrivIdList.indexOf(privID);
-
-            if(privID > 0 && index < 0 && checked) selectedPrivIdList.push(privID);
-            if(privID > 0 && index > -1 && !checked) selectedPrivIdList.splice(index, 1);
-
-            updatePrivTree(selectedPrivIdList);
-        }
-    });
+    $('#privList tbody > tr .group-item input[type=checkbox]').change(groupItemChange);
+    $('#privPackageList .package-column').on('click', '.privs.popover input[type=checkbox]', groupItemChange);
 
     $('.side').on('click', '.recommend input[type=checkbox]', (function()
     {
@@ -368,10 +412,36 @@ $(function()
         {
             recommendChange($(this), checked);
         }
+        updatePrivTree(selectedPrivIdList);
     }));
 
-    $('#submit').click(function()
+    $('#privPackageList .list-toggle.icon').click(function()
     {
-        $('#managePrivForm').submit();
+        var opened = $(this).closest('.package').hasClass('open');
+
+        $('#privPackageList .package').removeClass('open');
+        $('.privs.popover').remove();
+
+        if(!opened)
+        {
+             $(this).closest('.package').addClass('open');
+            var moduleName     = $(this).closest('.package').attr('data-module');
+            var packageID      = $(this).closest('.package').attr('data-package');
+            var perRowPackages = Math.floor($(this).closest('td').width() / $(this).closest('td').find('.package').width());
+            var packageIndex   = $(this).closest('.package').index() / 2 ;
+            var appendIndex    = (Math.floor(packageIndex / perRowPackages) + 1) * perRowPackages - 1;
+
+            var $privs     = $(".privs.hidden[data-module='" + moduleName + "'][data-package='" + packageID + "']")
+            var $showPrivs = $('<div class="privs popover bottom" data-module="' + moduleName + '" data-package="' + packageID + '">'
+              + $privs.html().replace(/actions/g, 'showPrivs')
+              + '</div>');
+
+            var position = $(this).closest('td').find('.package').width() * (packageIndex % perRowPackages) + 30;
+
+            $showPrivs.find('.arrow').css('left', position + 'px');
+
+            if($(this).closest('td').find('.package').eq(appendIndex).length > 0) $(this).closest('td').find('.package').eq(appendIndex).after($showPrivs);
+            if($(this).closest('td').find('.package').eq(appendIndex).length == 0) $(this).closest('td').find('.package').eq(-1).after($showPrivs);
+        }
     });
 });
