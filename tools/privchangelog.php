@@ -1,8 +1,8 @@
 <?php
+if(empty($argv[1]) or empty($argv[2])) die("Please enter the since and until version. Usage: php privchangelog 16.5 18.3.");
+
 $sinceVersion = $argv[1];
 $untilVersion = $argv[2];
-
-if(empty($sinceVersion) or empty($untilVersion)) die("Please enter the since and until version. Usage: php privchangelog 16.5 18.3.");
 
 include '../module/misc/lang/zh-cn.php';
 
@@ -25,16 +25,8 @@ foreach($releaseDates as $version => $releaseDate)
 {
     if($version == $oldVersion) continue;
 
-    $oldVersionCommit = trim(shell_exec("git log --oneline --until='$oldDate' --pretty=format:'%h'  $resourceFile | head -n 1"), "\n");
-    $newVersionCommit = trim(shell_exec("git log --oneline --until='$releaseDate' --pretty=format:'%h'  $resourceFile | head -n 1"), "\n");
-    if($oldVersionCommit == $newVersionCommit)
-    {
-        $oldDate    = $releaseDate;
-        $oldVersion = $version;
-        continue;
-    }
+    $addPrivileges = trim(shell_exec("git diff --ignore-space-change zentaopms_{$oldVersion} zentaopms_{$version} -- $resourceFile | grep '+\$lang->resource' | grep -v 'stdclass'"), "\n");
 
-    $addPrivileges = trim(shell_exec("git diff --ignore-space-change {$oldVersionCommit} {$newVersionCommit} -- $resourceFile | grep '+\$lang->resource' | grep -v 'stdclass'"), "\n");
     $addPrivileges = str_replace('+$lang', '$lang', $addPrivileges);
     if(empty($addPrivileges))
     {
