@@ -9,8 +9,13 @@
 function loadObjectModules(objectType, objectID, docType)
 {
     if(typeof docType == 'undefined') docType = 'doc';
+    if(objectType == 'execution' && objectID == 0)
+    {
+        objectType = 'project';
+        objectID   = $('#project').val();
+    }
+    if(objectID == undefined) objectID = 0;
     var link = createLink('doc', 'ajaxGetModules', 'objectType=' + objectType + '&objectID=' + objectID + '&type=' + docType);
-    if(objectType == 'execution' && objectID == 0) var link = createLink('doc', 'ajaxGetModules', 'objectType=project&objectID=' + $('#project').val() + '&type=' + docType);
     $('#moduleBox').load(link, function(){$('#moduleBox').find('select').picker(); $('#moduleLabel').remove();});
 }
 
