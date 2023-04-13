@@ -34,7 +34,7 @@ class holidayModel extends model
     public function getList($year = '', $type = 'all')
     {
         return $this->dao->select('*')->from(TABLE_HOLIDAY)
-            ->where('1')
+            ->where('1=1')
             ->beginIf(!empty($year))
             ->andWhere('year', true)->eq($year)
             ->orWhere('begin')->like("$year-%")

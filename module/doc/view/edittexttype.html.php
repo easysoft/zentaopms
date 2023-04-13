@@ -18,7 +18,7 @@
 .container {padding: 0 !important;}
 #mainContent {padding: 0 !important;}
 </style>
-<?php $backLink = $app->session->docList ? $app->session->docList : $this->createLink('doc', 'objectlibs', "type=$type&objectID=$objectID&libID={$lib->id}&docID={$doc->id}") . "#app={$this->app->tab}";?>
+<?php $backLink = $app->session->docList ? $app->session->docList : $this->createLink('doc', 'view', "docID={$doc->id}") . "#app={$this->app->tab}";?>
 <div id="mainContent" class="main-content">
   <form class="load-indicator main-form form-ajax" id="dataform" method='post' enctype='multipart/form-data'>
     <table class='table table-form'>
@@ -70,12 +70,12 @@
                 <?php if(strpos('product|project|execution', $type) !== false):?>
                 <tr>
                   <th><?php echo $lang->doc->project;?></th>
-                  <td class='required'><?php echo html::select($type, $objects, $objectID, "class='form-control chosen' onchange='loadObjectModules(\"{$type}\", this.value)'");?></td>
+                  <td class='required'><?php echo html::select($type, $objects, $objectID, "class='form-control picker-select' onchange='loadObjectModules(\"{$type}\", this.value)'");?></td>
                 </tr>
                 <?php endif;?>
                 <tr>
                   <th class='w-100px'><?php echo $lang->doc->libAndModule?></th>
-                  <td colspan='3' class='required'><span id='moduleBox'><?php echo html::select('module', $moduleOptionMenu, $doc->lib . '_' . $doc->module, "class='form-control chosen'");?></span></td>
+                  <td colspan='3' class='required'><span id='moduleBox'><?php echo html::select('module', $moduleOptionMenu, $doc->lib . '_' . $doc->module, "class='form-control picker-select'");?></span></td>
                 </tr>
                 <tr>
                   <th><?php echo $lang->doc->keywords;?></th>

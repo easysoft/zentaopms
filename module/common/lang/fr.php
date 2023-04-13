@@ -48,6 +48,8 @@ $lang->tutorialAB     = 'Tutorial';
 $lang->runInfo        = "<div class='row'><div class='u-1 a-center' id='debugbar'>Time %s MS, Memory %s KB, Query %s.  </div></div>";
 $lang->agreement      = "J'ai lu et j'accepte les termes et conditions de la <a href='http://zpl.pub/page/zplv12.html' target='_blank'> Z PUBLIC LICENSE 1.2 </a>. <span class='text-danger'>Sans autorisation, je ne dois pas supprimer, masquer ou couvrir les logos / liens de ZenTao.</span>";
 $lang->designedByAIUX = "<a href='https://api.zentao.net/goto.php?item=aiux' class='link-aiux' target='_blank'><i class='icon icon-aiux'></i> AIUX</a>";
+$lang->bizVersion     = '<a href="https://www.zentao.net/page/enterprise.html" target="_blank">Essayez ZenTao Biz pour en savoir plus!</a>';
+$lang->bizVersionINT  = '<a href="https://www.zentao.pm/page/vs.html" target="_blank">Essayez ZenTao Biz pour en savoir plus!</a>';
 
 $lang->reset              = 'Réinitialiser';
 $lang->cancel             = 'Annuler';
@@ -177,6 +179,7 @@ $lang->repo->codeRepo     = 'Code Repo';
 $lang->screen->common     = 'Screen';
 $lang->report->common     = 'BI';
 $lang->pivot->common      = 'Pivot Table';
+$lang->chart->common      = 'Chart';
 $lang->system->common     = 'System';
 $lang->admin->common      = 'Admin';
 $lang->story->common      = 'Story';
@@ -300,7 +303,6 @@ $lang->product->kanban = $lang->productCommon . ' Kanban';
 $lang->project->report = 'Report';
 
 $lang->report->weekly       = 'Weekly';
-$lang->report->annual       = 'Annual Summary';
 $lang->report->notice       = new stdclass();
 $lang->report->notice->help = 'Note : Le rapport est généré à partir des résultats de la liste consultée. Par exemple, cliquez sur AssignedToMe, puis Générer Rapport pour obtenir un rapport basé sur la liste de ce qui vous est assigné.';
 

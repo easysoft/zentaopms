@@ -1,25 +1,58 @@
-.versions .dropdown-menu {max-height: 260px; overflow-y: auto;}
-.table-data > tbody > tr > th.w-80px {width: 80px;}
-.detail-content .file-image {position: relative; padding: 0 10px; margin-right: 10px;}
-.detail-content .file-image > span.right-icon {position: absolute; right: -10px; top: 0;}
-#urlIframe {border: 0px;}
+.h-full-adjust {overflow-y: auto; height: calc(100vh - 100px);}
+.main-col .block-files .panel-heading {padding-right: 20px;}
+.main-col .block-files .panel-heading .panel-title {height: 35px; line-height: 30px;}
+.main-col .doc-title {display: flex; font-size: 16px; margin-bottom: 15px;}
+.main-col .doc-title .title {margin-right: 10px; line-height: 32px; font-size: 25px;}
+.main-col .doc-title .info {flex: 1 1 0;}
+.main-col .doc-title .version a {font-size: 13px; color: #8c8c8c;}
+.main-col .doc-title .version .dropdown-menu a:hover {color: #ffffff;}
+.main-col .doc-title .actions a + a {margin-left: 8px;}
+.main-col .doc-title .actions i {font-size: 15px; color: #8c8c8c;}
+#content .title {max-width: 54%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;}
+#content .detail-content {padding-left: 10px;}
+#mainContent .scrollbar-hover {max-height: 2000px; overflow: scroll;}
+#content .editor-preview {background: #fff}
+#content .CodeMirror{border: none}
+#sidebar {width: 275px;}
+#sidebar>.cell {width: 100%;}
+#sidebar>.sidebar-toggle {left: 3px; right: auto;}
+.hide-sidebar #sidebar>.cell {display: none;}
+.hide-sidebar #sidebar>.sidebar-toggle>.icon:before {content: "\e314";}
+.detail.empty {line-height: 200px;}
+.main-col iframe {min-height: 380px;}
+.article-content .keywords {margin-bottom: 15px;}
 
-#urlCard {border: 1px solid #ccc; width: 100%; min-height: 100px; padding: 8px; border-radius: 4px; margin: 103px 0;
-  -webkit-box-shadow: 0 1px 1px rgba(0,0,0,.05), 0 2px 6px 0 rgba(0,0,0,.045);
-  box-shadow: 0 1px 1px rgba(0,0,0,.05), 0 2px 6px 0 rgba(0,0,0,.045);
-}
-#urlCard .url-icon {float: left; width: 45px; height: 45px; margin-right: 5px;}
-#urlCard .url-content {padding-left: 55px;}
-#urlCard .url-title {font-weight:bold; font-size: 16px; min-height: 20px;}
-#urlCard .url-href a {color: #888;}
+.article-content {width: 100%; display: inline-block;}
+.outline {position: relative;}
+.outline .outline-toggle i.icon-angle-right, i.icon-angle-left {width: 18px; height: 18px; border-radius: 50%; position: absolute; padding-left: 2px; padding-top: 1px;}
+.outline .outline-toggle i.icon-angle-right:before {content: "\e314"; cursor: pointer;}
+.outline .outline-toggle i.icon-angle-left:before {content: "\e315"; cursor: pointer;}
+.outline ul li {list-style: none;}
+.outline-content {display: none; padding-top: 18px;}
+.outline-content a {color: #838A9D;}
+.outline-content li.text-ellipsis.active>a {font-weight: 700; color: #0c64eb;}
+#outline li.has-list.open:before {content: unset;}
+#fileTree {margin-bottom: 40px; max-height: calc(100vh - 160px); overflow: auto;}
 
-.main-row > .side-col {transition: width .2s;}
-.main-row > .main-col .article-content {transition: max-width; margin: 0 auto !important;}
-.main-row > .side-col > .cell {transition: opacity .2s; margin-bottom: 10px;}
-.doc-fullscreen .main-row > .side-col {width: 0; position: relative; overflow: hidden;}
-.doc-fullscreen .fullscreen-btn > .icon-fullscreen:before {content: '\e972';}
-.right-icon a {color: #1183fb;}
-.cell th,td {word-break: break-word;}
-.main-actions {width: 100% !important;}
-.main-col .editor-preview {background: #fff}
-.main-col .CodeMirror{border: none}
+.title {font-size: 20px !important;}
+.article-content.comment {width: 100% !important;}
+
+.flex {display: flex;}
+.flex-none {flex: none;}
+.flex-auto {flex: auto;}
+.flex-full > .panel {box-shadow: none;}
+.float-r {float: right;}
+.h-full {height: 100%;}
+.w-full {width: 100%;}
+.overflow-x-auto {overflow-x: auto;}
+.overflow-auto {overflow: auto;}
+.overflow-visible {overflow: visible;}
+.overflow-hidden {overflow: hidden;}
+#mainContent > .panel {margin-bottom: 0; overflow-y: auto;}
+.detail-title .actions .ajaxCollect > img {width: 20px;}
+.actions > .text {color: #8c8c8c; font-size: 14px;}
+.flex-content {display: flex; width: 100%; height: 100%;}
+.flex-content > #content {flex: auto; overflow-y: auto;}
+.flex-content > #history {flex: 0 0 302px; position: relative;}
+.flex-content > #history > #closeIcon {position: absolute; right: 10px; top: 10px;}
+.panel {margin-bottom: 0;}

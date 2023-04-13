@@ -258,7 +258,6 @@ $lang->product->kanban = $lang->productCommon . '看板';
 $lang->project->report = '報告';
 
 $lang->report->weekly       = '周報';
-$lang->report->annual       = '年度總結';
 $lang->report->notice       = new stdclass();
 $lang->report->notice->help = '註：統計報表的數據來源於列表頁面的檢索結果，生成統計報表前請先在列表頁面進行檢索。比如列表頁面我們檢索的是%tab%，那麼報表就是基于之前檢索的%tab%的結果集進行統計。';
 

@@ -3,7 +3,10 @@
 <script>$('#mainMenu #<?php echo $tab;?>').addClass('btn-active-text')</script>
 <?php endif;?>
 <?php if($app->rawMethod == 'api'):?>
-<style>.api-tip-icon.icon-help:before {margin-top: 10px; margin-left: -14px; font-size: 12px;}</style>
+<style>
+.api-tip-icon.icon-help:before {margin-top: 8px; margin-left: -4px;}
+[lang^=zh] .api-tip-icon.icon-help:before {margin-left: -10px;}
+</style>
 <div id='mainMenu' class='clearfix menu-secondary'>
   <div class="btn-toolbar pull-left">
     <?php

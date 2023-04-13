@@ -174,14 +174,13 @@ class testcase extends control
             $scenes     = $this->testcase->getList($productParam,$branch, $moduleID, $caseIdList, null, 'child', array_keys($topObjects),$browseType, $queryCondition);
         }
 
-        /* Save SQL for execution. */
-        $this->loadModel('common')->saveQueryCondition($queryCondition, 'testcase', false);
+        /* save session .*/
+        $this->loadModel('common')->saveQueryCondition($this->testcase->dao->get(), 'testcase', false);
 
         /* Get summary. */
         $indCount   = 0;
         $topCount   = 0;
         $casesCount = 0;
-        // print_r($scenes);die;
         foreach($scenes as $scene)
         {
             if($scene->isCase == '2' and $scene->parent == 0) $topCount ++;

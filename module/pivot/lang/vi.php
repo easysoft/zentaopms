@@ -93,7 +93,6 @@ $lang->pivot->conditions    = 'Lọc theo:';
 $lang->pivot->closedProduct = $lang->productCommon . ' đã đóng';
 $lang->pivot->overduePlan   = 'Kế hoạch quá hạn';
 
-/* daily reminder. */
 $lang->pivot->idAB         = 'ID';
 $lang->pivot->bugTitle     = 'Tên Bug';
 $lang->pivot->taskName     = 'Tên nhiệm vụ';
@@ -102,8 +101,6 @@ $lang->pivot->testTaskName = 'Tên yêu cầu';
 $lang->pivot->deadline     = 'Hạn chót';
 
 $lang->pivot->deviationDesc = 'According to the Closed Execution Deviation Rate = ((Total Cost - Total Estimate) / Total Estimate), the Deviation Rate is n/a when the Total Estimate is 0.';
-$lang->pivot->proVersion    = '<a href="https://api.zentao.net/goto.php?item=proversion&from=pivotpage" target="_blank">Hãy thử ZenTao Pro để biết thêm!</a>';
-$lang->pivot->proVersionEn  = '<a href="http://api.zentao.pm/goto.php?item=proversion&from=pivotpage" target="_blank">Hãy thử ZenTao Pro để biết thêm!</a>';
 $lang->pivot->workloadDesc  = 'Workload = the total left hours of all tasks of the user / selected days * hours per day.
 For example: the begin and end date is January 1st to January 7th, and the total work days is 5 days, 8 hours per day. The Work load is all unfinished tasks assigned to this user to be finished in 5 days, 8 hours per day.';
 

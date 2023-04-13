@@ -46,6 +46,7 @@ $lang->moduleOrder[108] = 'zanode';
 $lang->moduleOrder[110] = 'doc';
 $lang->moduleOrder[111] = 'screen';
 $lang->moduleOrder[112] = 'pivot';
+$lang->moduleOrder[113] = 'chart';
 $lang->moduleOrder[119] = 'report';
 
 $lang->moduleOrder[120] = 'company';
@@ -1395,30 +1396,31 @@ $lang->job->methodOrder[25] = 'exec';
 
 /* Doc. */
 $lang->resource->doc = new stdclass();
-$lang->resource->doc->index         = 'index';
-$lang->resource->doc->browse        = 'mySpace';
-$lang->resource->doc->myView        = 'myView';
-$lang->resource->doc->myCollection  = 'myCollection';
-$lang->resource->doc->myCreation    = 'myCreation';
-$lang->resource->doc->createLib     = 'createLib';
-$lang->resource->doc->editLib       = 'editLib';
-$lang->resource->doc->deleteLib     = 'deleteLib';
-$lang->resource->doc->create        = 'create';
-$lang->resource->doc->edit          = 'edit';
-$lang->resource->doc->view          = 'view';
-$lang->resource->doc->delete        = 'delete';
-$lang->resource->doc->deleteFile    = 'deleteFile';
-$lang->resource->doc->collect       = 'collectAction';
-$lang->resource->doc->productSpace  = 'productSpace';
-$lang->resource->doc->projectSpace  = 'projectSpace';
-$lang->resource->doc->tableContents = 'teamSpace';
-$lang->resource->doc->showFiles     = 'showFiles';
-$lang->resource->doc->addCatalog    = 'addCatalog';
-$lang->resource->doc->editCatalog   = 'editCatalog';
-$lang->resource->doc->deleteCatalog = 'deleteCatalog';
+$lang->resource->doc->index          = 'index';
+$lang->resource->doc->mySpace        = 'mySpace';
+$lang->resource->doc->myView         = 'myView';
+$lang->resource->doc->myCollection   = 'myCollection';
+$lang->resource->doc->myCreation     = 'myCreation';
+$lang->resource->doc->createLib      = 'createLib';
+$lang->resource->doc->editLib        = 'editLib';
+$lang->resource->doc->deleteLib      = 'deleteLib';
+$lang->resource->doc->create         = 'create';
+$lang->resource->doc->edit           = 'edit';
+$lang->resource->doc->view           = 'view';
+$lang->resource->doc->delete         = 'delete';
+$lang->resource->doc->deleteFile     = 'deleteFile';
+$lang->resource->doc->collect        = 'collectAction';
+$lang->resource->doc->productSpace   = 'productSpace';
+$lang->resource->doc->projectSpace   = 'projectSpace';
+$lang->resource->doc->tableContents  = 'teamSpace';
+$lang->resource->doc->showFiles      = 'showFiles';
+$lang->resource->doc->addCatalog     = 'addCatalog';
+$lang->resource->doc->editCatalog    = 'editCatalog';
+$lang->resource->doc->deleteCatalog  = 'deleteCatalog';
+$lang->resource->doc->displaySetting = 'displaySetting';
 
 $lang->doc->methodOrder[5]   = 'index';
-$lang->doc->methodOrder[10]  = 'browse';
+$lang->doc->methodOrder[10]  = 'mySpace';
 $lang->doc->methodOrder[15]  = 'myView';
 $lang->doc->methodOrder[20]  = 'myCollection';
 $lang->doc->methodOrder[25]  = 'myCreation';
@@ -1438,6 +1440,7 @@ $lang->doc->methodOrder[90]  = 'showFiles';
 $lang->doc->methodOrder[95]  = 'addCatalog';
 $lang->doc->methodOrder[100] = 'editCatalog';
 $lang->doc->methodOrder[105] = 'deleteCatalog';
+$lang->doc->methodOrder[110] = 'displaySetting';
 
 /* Mail. */
 $lang->resource->mail = new stdclass();
@@ -1825,8 +1828,11 @@ $lang->pivot->methodOrder[20] = 'bugCreate';
 $lang->pivot->methodOrder[25] = 'bugAssign';
 $lang->pivot->methodOrder[30] = 'workload';
 
-/* Report. */
-$lang->resource->report = new stdclass();
+/* Chart. */
+$lang->resource->chart = new stdclass();
+$lang->resource->chart->preview = 'preview';
+
+$lang->chart->methodOrder[2] = 'preview';
 
 /* Search. */
 $lang->resource->search = new stdclass();
@@ -1926,6 +1932,9 @@ $lang->resource->api->deleteStruct  = 'deleteStruct';
 $lang->resource->api->create        = 'create';
 $lang->resource->api->edit          = 'edit';
 $lang->resource->api->delete        = 'delete';
+$lang->resource->api->addCatalog    = 'addCatalog';
+$lang->resource->api->editCatalog   = 'editCatalog';
+$lang->resource->api->deleteCatalog = 'deleteCatalog';
 
 $lang->resource->api->getModel     = 'getModel';
 $lang->resource->api->debug        = 'debug';
@@ -1945,9 +1954,12 @@ $lang->api->methodOrder[50] = 'deleteStruct';
 $lang->api->methodOrder[55] = 'create';
 $lang->api->methodOrder[60] = 'edit';
 $lang->api->methodOrder[65] = 'delete';
-$lang->api->methodOrder[70] = 'getModel';
-$lang->api->methodOrder[75] = 'debug';
-$lang->api->methodOrder[80] = 'sql';
+$lang->api->methodOrder[70]  = 'addCatalog';
+$lang->api->methodOrder[75] = 'editCatalog';
+$lang->api->methodOrder[80] = 'deleteCatalog';
+$lang->api->methodOrder[85] = 'getModel';
+$lang->api->methodOrder[90] = 'debug';
+$lang->api->methodOrder[95] = 'sql';
 
 $lang->resource->file = new stdclass();
 $lang->resource->file->download     = 'download';

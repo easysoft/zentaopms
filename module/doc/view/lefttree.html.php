@@ -23,19 +23,23 @@
 .input-tree {width: 120px;}
 .tree-icon {position: absolute; right: 0;}
 .tree li.has-input {overflow: hidden;}
-.img-lib {flex: 0 0 14px; height: 14px;}
+.tree li.has-input  > input {margin-left: 15px;}
+.img-lib {flex: 0 0 14px; height: 14px; margin-right: 5px;}
 .tree-icon {position: absolute; right: 0;}
 .tree li > a {max-width: 100%; padding: 2px;}
-.file-tree  a.show-icon > div {padding-right: 15px;}
-.tree li.has-input {overflow: hidden;}
-.tree-text {margin-left: 5px; overflow: hidden;}
+.file-tree  a.show-icon > div,
+.file-tree  a.hover > div {padding-right: 15px;}
+.tree-text {overflow: hidden; min-width: 50px;}
 i.btn-info, i.btn-info:hover {border: none; background: #fff; box-shadow: unset;}
-.tree-version-trigger {padding: 0 10px; width: 54px; border-radius: 5px; background: #F9F9F9;}
+.tree-version-trigger {padding: 0 10px; width: 54px; border-radius: 5px; background: #F9F9F9; display: flex; align-items: center;}
+.tree-version-trigger > .text {overflow: hidden; flex: 0 0 30px;}
+.file-tree > .bd-b {border-bottom: 1px solid #EDEEF2;}
+.file-tree > .tree-child {padding: 5px 0; position: relative;}
 
 /* css for sidebar */
 .sidebar-toggle {flex: 0 0 16px;}
 .sidebar-toggle > .icon {width: 12px; height: 30px; margin-top: -10px; line-height: 30px; color: #fff; text-align: center; background: #7dcdfe; border-radius: 6px; cursor: pointer; padding-left: 0; padding-top: 0;}
-.bottom-btn-tree {position: fixed; width: 150px; bottom: 40px;}
+.bottom-btn-tree {position: absolute; bottom: 15px; left: 25px;}
 
 .spliter {flex: 0 0 12px;}
 .spliter-btn {height: 28px; width: 10px; background: #fff; position: absolute; top: 30%; left: -1px; border: 1px solid #D9D9D9; border-radius: 2px;}
@@ -50,6 +54,7 @@ i.btn-info, i.btn-info:hover {border: none; background: #fff; box-shadow: unset;
 #leftBar .selectBox #currentItem {width: 150px; display: flex; align-items: center;}
 [lang^=zh] #leftBar .selectBox #currentItem {width: 180px;}
 #leftBar .selectBox #currentItem > .text {overflow: hidden; text-align: left; flex: 0 1 100%;}
+.dropdown-in-tree {max-height: 293px; overflow-y: auto;}
 </style>
 
 <?php
@@ -57,56 +62,84 @@ i.btn-info, i.btn-info:hover {border: none; background: #fff; box-shadow: unset;
 js::set('release', isset($release) ? $release : 0);
 js::set('versionLang', $lang->build->common);
 
-
 /* ObjectType and objectID used for other space. */
 js::set('objectType', isset($type) ? $type : '');
 js::set('objectID',   isset($objectID) ? $objectID : '');
 js::set('isFirstLoad', isset($isFirstLoad) ? $isFirstLoad: '');
+js::set('canViewFiles', common::hasPriv('doc', 'showfiles'));
 ?>
 
-<div id="fileTree" class="file-tree">
+<div id="fileTree" class="file-tree menu-active-primary menu-hover-primary">
 <?php if(isset($type) and $type == 'project'):?>
-<div class="project-tree">
+  <div class="project-tree bd-b tree-child">
     <div class="title"><i class="icon icon-project btn-info"> </i><?php echo $lang->projectCommon?></div>
     <div id="projectTree" data-id="project"></div>
-</div>
-<div class="execution-tree">
+  </div>
+  <div class="execution-tree bd-b tree-child">
     <div class="title"><i class="icon icon-run btn-info"> </i><?php echo $lang->execution->common?></div>
     <div id="executionTree" data-id="execution"></div>
-</div>
-<div class="annex-tree">
+  </div>
+  <div class="annex-tree tree-child">
     <div class="title"><i class="icon icon-paper-clip btn-info"> </i><?php echo $lang->files?></div>
     <div id="annexTree" data-id="annex"></div>
-</div>
+  </div>
 <?php endif;?>
 </div>
-<div class="text-center bottom-btn-tree hidden">
-    <?php common::printLink('project', 'programTitle', '', $lang->doc->customShowLibs, '', "class='btn btn-info btn-wide iframe'", true, true);?>
+<?php if($app->rawMethod == 'view' and common::hasPriv('doc', 'displaySetting')):?>
+<div class="text-center bottom-btn-tree">
+  <?php common::printLink('doc', 'displaySetting', '', $lang->doc->displaySetting, '', "class='btn btn-info btn-wide iframe' data-width='400px'", true, true);?>
 </div>
+<?php endif;?>
 
 <!-- Code for dropdown menu. -->
-<?php js::set('hasLibPriv', common::hasPriv('tree', 'browse') || common::hasPriv($app->rawModule, 'editLib') || common::hasPriv($app->rawModule, 'deleteLib'));?>
-<?php js::set('hasModulePriv', common::hasPriv('tree', 'browse'));?>
+<?php
+$canAddCatalog['doc'] = common::hasPriv('doc', 'addCatalog');
+$canAddCatalog['api'] = common::hasPriv('api', 'addCatalog');
+
+$canEditCatalog['doc'] = common::hasPriv('doc', 'editCatalog');
+$canEditCatalog['api'] = common::hasPriv('api', 'editCatalog');
+
+$canDeleteCatalog['doc'] = common::hasPriv('doc', 'deleteCatalog');
+$canDeleteCatalog['api'] = common::hasPriv('api', 'deleteCatalog');
+
+$hasModulePriv['doc'] = $canAddCatalog['doc'] || $canEditCatalog['doc'] || $canDeleteCatalog['doc'];
+$hasModulePriv['api'] = $canAddCatalog['api'] || $canEditCatalog['api'] || $canDeleteCatalog['api'];
+
+$hasLibPriv['doc'] = $canAddCatalog['doc'] || common::hasPriv('doc', 'editLib') || common::hasPriv('doc', 'deleteLib');
+$hasLibPriv['api'] = $canAddCatalog['api'] || common::hasPriv('api', 'editLib') || common::hasPriv('api', 'deleteLib');
+
+js::set('canAddCatalog',    $canAddCatalog);
+js::set('canEditCatalog',   $canEditCatalog);
+js::set('canDeleteCatalog', $canDeleteCatalog);
+js::set('hasModulePriv',    $hasModulePriv);
+js::set('hasLibPriv',       $hasLibPriv);
+?>
 <div class='hidden' id='dropDownData'>
-  <ul class='libDorpdown'>
-    <?php if(common::hasPriv('tree', 'browse')):?>
+  <?php foreach(array('doc', 'api') as $module):?>
+  <ul class='<?php echo $module;?>LibDorpdown'>
+    <?php if($canAddCatalog[$module]):?>
     <li data-method="addCataLib" data-has-children='%hasChildren%'  data-libid='%libID%' data-moduleid="%moduleID%" data-type="add"><a><i class="icon icon-icon-add-directory"></i><?php echo $lang->doc->libDropdown['addModule'];?></a></li>
     <?php endif;?>
-    <?php if(common::hasPriv($app->rawModule, 'editLib')):?>
+    <?php if(common::hasPriv($module, 'editLib')):?>
     <li data-method="editLib"><a href='<?php echo inlink('editLib', 'libID=%libID%');?>' data-toggle='modal' data-type='iframe'><i class="icon icon-edit"></i><?php echo $lang->doc->libDropdown['editLib'];?></a></li>
     <?php endif;?>
-    <?php if(common::hasPriv($app->rawModule, 'deleteLib')):?>
+    <?php if(common::hasPriv($module, 'deleteLib')):?>
     <li data-method="deleteLib"><a href='<?php echo inlink('deleteLib', 'libID=%libID%');?>' target='hiddenwin'><i class="icon icon-trash"></i><?php echo $lang->doc->libDropdown['deleteLib'];?></a></li>
     <?php endif;?>
   </ul>
-  <ul class='moduleDorpdown'>
-    <?php if(common::hasPriv('tree', 'browse')):?>
+  <ul class='<?php echo $module;?>ModuleDorpdown'>
+    <?php if($canAddCatalog[$module]):?>
     <li data-method="addCataBro" data-type="add" data-id="%moduleID%"><a><i class="icon icon-icon-add-directory"></i><?php echo $lang->doc->libDropdown['addSameModule'];?></a></li>
     <li data-method="addCataChild" data-type="add" data-id="%moduleID%" data-has-children='%hasChildren%'><a><i class="icon icon-icon-add-directory"></i><?php echo $lang->doc->libDropdown['addSubModule'];?></a></li>
-    <li data-method="editCata" class='edit-module'><a data-href='<?php echo helper::createLink('tree', 'edit', "moduleID=%moduleID%&type=$app->rawModule");?>'><i class="icon icon-edit"></i><?php echo $lang->doc->libDropdown['editModule'];?></a></li>
-    <li data-method="deleteCata"><a href='<?php echo helper::createLink('tree', 'delete', 'rootID=%libID%&moduleID=%moduleID%');?>' target='hiddenwin'><i class="icon icon-trash"></i><?php echo $lang->doc->libDropdown['delModule'];?></a></li>
+    <?php endif;?>
+    <?php if($canEditCatalog[$module]):?>
+    <li data-method="editCata" class='edit-module'><a data-href='<?php echo helper::createLink($module, 'editCatalog', "moduleID=%moduleID%&type=$app->rawModule");?>'><i class="icon icon-edit"></i><?php echo $lang->doc->libDropdown['editModule'];?></a></li>
+    <?php endif;?>
+    <?php if($canDeleteCatalog[$module]):?>
+    <li data-method="deleteCata"><a href='<?php echo helper::createLink($module, 'deleteCatalog', 'rootID=%libID%&moduleID=%moduleID%');?>' target='hiddenwin'><i class="icon icon-trash"></i><?php echo $lang->doc->libDropdown['delModule'];?></a></li>
     <?php endif;?>
   </ul>
+  <?php endforeach;?>
 </div>
 <div class='hidden' data-id="ulTreeModal">
   <ul data-id="liTreeModal" class="menu-active-primary menu-hover-primary has-input">
@@ -142,9 +175,11 @@ $(function()
      */
     function renderDropdown(option)
     {
-        var libClass = '.libDorpdown';
-        if(option.type != 'dropDownLibrary') libClass = '.moduleDorpdown';
+        var moduleType = option.moduleType == 'lib' ? 'doc' : option.moduleType;
+        var libClass   = '.' + moduleType + 'LibDorpdown';
+        if(option.type != 'dropDownLibrary') libClass = '.' + moduleType + 'ModuleDorpdown';
         if($(libClass).find('li').length == 0) return '';
+
         var dropdown = '<ul class="dropdown-menu dropdown-in-tree" id="' + option.type + '" style="display: unset; left:' + option.left + 'px; top:' + option.top + 'px;">';
         dropdown += $(libClass).html().replace(/%libID%/g, option.libID).replace(/%moduleID%/g, option.moduleID).replace(/%hasChildren%/g, option.hasChildren);
         dropdown += '</ul>';
@@ -169,15 +204,15 @@ $(function()
         }
         else
         {
-            var libId;
+            var lib  = 0;
             var $lis = '<li><a href="###" data-id=0>' + versionLang + '</a></li>';
             for(i = 0; i< versions.length; i++)
             {
                 var version = versions[i];
                 $lis += '<li><a href="###"  data-id="' + version.id + '">' + version.version+ '</a></li>';
-                libId = version.lib;
+                lib   = version.lib;
             }
-            var $dropdown = '<ul id="versionSwitcher" data-lib-id = "' + libId + '" class="dropdown-menu dropdown-in-tree" style="display: unset; left:' + option.left + 'px; top:' + option.top + 'px;">';
+            var $dropdown = '<ul id="versionSwitcher" data-lib = "' + lib + '" class="dropdown-menu dropdown-in-tree" style="display: unset; left:' + option.left + 'px; top:' + option.top + 'px;">';
             $dropdown += $lis;
             $dropdown += '</ul>';
         }
@@ -198,7 +233,11 @@ $(function()
             'annex': 'annex',
             'api': 'interface',
             'lib': 'wiki-file-lib',
-            'execution': 'wiki-file-lib'
+            'execution': 'wiki-file-lib',
+            'text': 'wiki-file',
+            'word': 'word',
+            'ppt': 'ppt',
+            'excel': 'excel'
         };
         ele.tree(
         {
@@ -207,6 +246,9 @@ $(function()
             itemCreator: function($li, item)
             {
                 if(typeof item.hasAction == 'undefined') item.hasAction = true;
+                if(typeof item.active == 'undefined') item.active = 0;
+                if(typeof docID != 'undefined' && item.id == docID) item.active = 1;
+                if(['text', 'word', 'ppt', 'excel'].indexOf(item.type) !== -1) item.hasAction = false;
 
                 var objectType = config.currentModule == 'api' ? item.objectType : item.type;
                 var libClass = ['lib', 'annex', 'api', 'execution'].indexOf(objectType) !== -1 ? 'lib' : '';
@@ -215,7 +257,8 @@ $(function()
                 var $item    = '<a href="' + link + '" style="position: relative" data-has-children="' + hasChild + '" title="' + item.name + '" data-id="' + item.id + '" class="' + libClass + '" data-type="' + item.type + '" data-action="' + item.hasAction + '">';
 
                 $item += '<div class="text h-full w-full flex-start overflow-hidden">';
-                if(libClass == 'lib' && (item.type == 'execution' && item.hasAction)) $item += '<div class="img-lib" style="background-image:url(static/svg/' + imgObj[item.type || 'lib'] + '.svg)"></div>';
+                if((libClass == 'lib' && item.type != 'execution') || (item.type == 'execution' && item.hasAction)) $item += '<div class="img-lib" style="background-image:url(static/svg/' + imgObj[item.type || 'lib'] + '.svg)"></div>';
+                if(['text', 'word', 'ppt', 'excel'].indexOf(item.type) !== -1) $item += '<div class="img-lib" style="background-image:url(static/svg/' + imgObj[item.type] + '.svg)"></div>';
                 $item += '<div class="tree-text">';
                 $item += item.name;
                 $item += '</div>';
@@ -227,9 +270,12 @@ $(function()
                     {
                         if(item.versions[i].id == release) versionName = item.versions[i].version;
                     }
-                    $item += '<div class="tree-version-trigger" data-id="' +  item.id + '">' + (versionName || versionLang) + '<span class="caret"></span></div>';
+                    $item += '<div class="tree-version-trigger" data-id="' +  item.id + '"><div class="text">' + (versionName || versionLang) + '</div><div class="caret"></div></div>';
                 }
-                if((libClass != 'lib' && hasModulePriv) || (libClass == 'lib' && hasLibPriv)) $item += '<i class="icon icon-drop icon-ellipsis-v hidden tree-icon" data-isCatalogue="' + (libClass ? false : true) + '"></i>';
+
+                var moduleType = config.currentModule == 'api' ? 'api' : 'doc';
+                if(objectType) objectType.indexOf('api') === 0 ? 'api' : 'doc';
+                if((libClass != 'lib' && hasModulePriv[moduleType]) || (libClass == 'lib' && hasLibPriv[moduleType])) $item += '<i class="icon icon-drop icon-ellipsis-v hidden tree-icon" data-isCatalogue="' + (libClass ? false : true) + '"></i>';
                 $item += '</div>';
                 $item += '</a>';
                 if(item.versions) versionsData[item.id] = item.versions;
@@ -239,19 +285,25 @@ $(function()
                 if(item.active) $li.addClass('active');
             }
         });
-        if(isFirstLoad !== 'false') ele.data('zui.tree').collapse();
-        var $leaf = ele.find('li.active');
-        if($leaf.length) $leaf[$leaf.length - 1].scrollIntoView(true);
+
+        if(isFirstLoad) ele.data('zui.tree').collapse();
+
+        var $leaf = ele.find('li.active > a');
+        if($leaf.length && $('#fileTree').height() >= $('#sideBar').height()) $('#sideBar')[0].scrollTop = $($leaf[$leaf.length - 1]).offset().top;
 
         ele.on('click', '.icon-drop', function(e)
         {
-            $('.dropdown-in-tree').css('display', 'none');
-            var isCatalogue = $(this).attr('data-isCatalogue') === 'false' ? false : true;
+            var $icon = $(this);
+            $('.icon-drop').addClass('hidden');
+            $(this).removeClass('hidden');
+            $('#fileTree').find('a.hover').removeClass('hover');
+            $('.dropdown-in-tree').remove();
+            var isCatalogue = $icon.attr('data-isCatalogue') === 'false' ? false : true;
             var dropDownID  = isCatalogue ? 'dropDownCatalogue' : 'dropDownLibrary';
             var libID       = 0;
             var moduleID    = 0;
             var parentID    = 0;
-            var $module     = $(this).closest('a');
+            var $module     = $icon.closest('a');
             var hasChildren = $module.data('has-children');
             var moduleType  = '';
             if($module.hasClass('lib'))
@@ -287,19 +339,65 @@ $(function()
             };
 
             var dropDown = renderDropdown(option);
-            $(this).closest('body').append(dropDown);
+            $icon.closest('body').append(dropDown);
+            $('.dropdown-in-tree').attr('data-tree-id', $(this).closest('.tree').attr('id'));
+            $icon.closest('a').addClass('hover');
 
             e.stopPropagation();
+        }).on('mousemove', 'a', function()
+        {
+            if($(this).data('type') == 'annex') return;
+            if(!$(this).data('action')) return;
+
+            var moduleType = $(this).data('type') == 'api' ? 'api' : 'doc';
+            var libClass   = '.' + moduleType + 'LibDorpdown';
+            if(!$(this).hasClass('lib')) libClass = '.' + moduleType + 'ModuleDorpdown';
+
+            $(this).find('.icon').removeClass('hidden');
+            $(this).addClass('show-icon');
+            if($(libClass).find('li').length == 0) return false;
+
+        }).on('mouseout', 'a', function()
+        {
+            if(!$(this).closest('a').hasClass('hover')) $(this).find('.icon').addClass('hidden');
+            $(this).removeClass('show-icon');
+        }).on('click', 'a', function()
+        {
+            if($(this).data('type') == 'execution') return;
+
+            var isLib    = $(this).hasClass('lib');
+            var moduleID = $(this).data('id');
+            var libID    = 0;
+
+            if(isLib)
+            {
+                if($(this).data('type') == 'annex' && !canViewFiles) return false;
+
+                libID    = moduleID;
+                moduleID = 0;
+            }
+            else
+            {
+                libID = $(this).closest('.lib').data('id');
+            }
+
+            return locatePage(libID, moduleID, $(this).data('type'));
         }).on('click', '.tree-version-trigger', function(e)
         {
-            $('.dropdown-in-tree').css('display', 'none');
+            $('.dropdown-in-tree').remove();
+            var offset = $(this).offset();
             var option = {
-                left     : e.pageX,
-                top      : e.pageY,
+                left     : offset.left,
+                top      : offset.top + 20,
                 versions : versionsData[$(this).data('id')]
             };
             var dropDown = renderDropVersion(option);
             $(this).closest('body').append(dropDown);
+            $('#versionSwitcher').find('a[data-id=' + release + ']').parent().addClass('active');
+
+            $('.dropdown-in-tree').attr('data-tree-id', $(this).closest('.tree').attr('id'));
+            $(this).closest('a').addClass('hover');
+
             e.stopPropagation();
         });
     }
@@ -322,45 +420,6 @@ $(function()
         }
     }
 
-    $('li.has-list > ul, #fileTree').addClass("menu-active-primary menu-hover-primary");
-
-    $('#fileTree').on('mousemove', 'a', function()
-    {
-        if($(this).data('type') == 'annex') return;
-        if(!$(this).data('action')) return;
-
-        var libClass = '.libDorpdown';
-        if(!$(this).hasClass('lib')) libClass = '.moduleDorpdown';
-
-        $(this).find('.icon').removeClass('hidden');
-        $(this).addClass('show-icon');   if($(libClass).find('li').length == 0) return false;
-
-    }).on('mouseout', 'a', function()
-    {
-        $(this).find('.icon').addClass('hidden');
-        $(this).removeClass('show-icon');
-    }).on('click', 'a', function()
-    {
-        if(!$(this).data('action')) return;
-        var isLib    = $(this).hasClass('lib');
-        var moduleID = $(this).data('id');
-        var libID    = 0;
-
-        if(isLib)
-        {
-            if($(this).data('type') == 'annex' && !canViewFiles) return false;
-
-            libID    = moduleID;
-            moduleID = 0;
-        }
-        else
-        {
-            libID = $(this).closest('.lib').data('id');
-        }
-
-        return lcatePage(libID, moduleID, $(this).data('type'));
-    });
-
     /**
      * Lcate page.
      *
@@ -370,8 +429,10 @@ $(function()
      * @access public
      * @return void
      */
-    function lcatePage(libID, moduleID, type)
+    function locatePage(libID, moduleID, type)
     {
+        if(!libID)    libID    = 0;
+        if(!moduleID) moduleID = 0;
         linkParams = linkParams.replace('%s', 'libID=' + libID + '&moduleID=' + moduleID);
         var methodName = '';
         if(config.currentModule == 'api')
@@ -384,6 +445,19 @@ $(function()
             methodName = 'showFiles';
             linkParams = 'type=' + objectType + '&objectID=' + objectID;
         }
+        else if(objectType == 'mine' || objectType == 'view' || objectType == 'collect' || objectType == 'createdby')
+        {
+            var mySpaceType = 'mine';
+            if(type == 'view' || type == 'collect' || type == 'createdBy') mySpaceType = type;
+
+            methodName = 'mySpace';
+            linkParams = 'type='+ mySpaceType + '&libID=' + libID + '&moduleID=' + moduleID;
+        }
+        else if(['text', 'word', 'ppt', 'excel'].indexOf(type) !== -1)
+        {
+            methodName = 'view';
+            linkParams = 'docID=' + moduleID;
+        }
         else
         {
             methodName = objectType == 'execution' || objectType == 'custom' ? 'tableContents' : objectType + 'Space';
@@ -395,7 +469,18 @@ $(function()
 
     $('body').on('click', function()
     {
-        $('.dropdown-in-tree').remove();
+        var $dropdown = $('.dropdown-in-tree');
+        if($dropdown.length)
+        {
+            var dropdown = $dropdown.data();
+            var $hoverItem = $('#' + $dropdown.data('treeId')).find('a.hover');
+            if($hoverItem.length)
+            {
+                $hoverItem.removeClass('hover');
+                $hoverItem.find('.icon').addClass('hidden');
+            }
+            $dropdown.remove();
+        }
     }).on('click', '.sidebar-toggle', function()
     {
         var $icon = $(this).find('.icon');
@@ -412,9 +497,12 @@ $(function()
             $('#sideBar').addClass('hidden');
         }
 
-        var $docListForm = $('#docListForm').data('zui.table');
-        $docListForm.fixHeader();
-        $docListForm.fixFooter();
+        if($('#docListForm').length > 0)
+        {
+            var $docListForm = $('#docListForm').data('zui.table');
+            $docListForm.fixHeader();
+            $docListForm.fixFooter();
+        }
     }).on('click', '.dropdown-in-tree li', function(e)
     {
         var item = $(this).data();
@@ -447,7 +535,7 @@ $(function()
                 else
                 {
                     var $input   = $('[data-id=ulTreeModal]').html();
-                    var $rootDom = $('[data-id=' + item.libid + ']a');
+                    var $rootDom = $('[data-id=' + item.libid + ']a.lib');
                     var $li      = $rootDom.parent();
                     moduleData.isUpdate = true;
                     $rootDom.after($input);
@@ -486,9 +574,16 @@ $(function()
         }
     }).on('click', '#versionSwitcher a', function()
     {
-        var $item = $(this);
-        linkParams = linkParams.replace('%s', 'libID=' + $item.closest('ul').data('libId') + '&moduleID=0&apiID=0&version=0&release=' + $item.data('id'));
-        location.href = createLink(config.currentModule, 'index', linkParams);
+        var libID      = $(this).closest('#versionSwitcher').data('lib');
+        var moduleID   = $(this).data('id');
+        var params     = 'libID=' + libID + '&moduleID=0&apiID=0&version=0&release=' + moduleID;
+        var methodName = config.currentMethod;
+        if(config.currentModule == 'doc')
+        {
+            params     = linkParams.replace('%s', 'libID=' + libID + '&moduleID=' + moduleID).replace('browseType=&', 'browseType=byrelease&').replace('param=0', 'param=' + moduleID);
+            methodName = objectType + 'Space';
+        }
+        location.href = createLink(config.currentModule, methodName, params);
     }).on('blur', '.file-tree input.input-tree', function()
     {
         var $input = $(this);
@@ -521,7 +616,7 @@ $(function()
             }
 
             var module = result.module;
-            return lcatePage(module.root, module.id, 'doc');
+            return locatePage(module.root, module.id, 'doc');
         });
     }).on('keydown', '.file-tree input.input-tree', function(e)
     {

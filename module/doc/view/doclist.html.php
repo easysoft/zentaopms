@@ -16,6 +16,7 @@ body {margin-bottom: 25px;}
 #docListForm th.c-user {width: 80px;}
 #docListForm th.c-actions {width: 84px; padding-left: 15px;}
 #docListForm .checkbox-primary {line-height: 16px;}
+#docListForm table .checkbox-primary {top: -2px;}
 #docListForm .checkbox-primary > label {height: 16px; line-height: 16px; padding-left: 16px;}
 #docListForm .checkbox-primary > label:before {left: -1px; font-size: 10px;}
 #docListForm .checkbox-primary > label:after {width: 12px; height: 12px;}
@@ -82,9 +83,9 @@ body {margin-bottom: 25px;}
           <?php
           $docType = $doc->type == 'text' ? 'wiki-file' : $doc->type;
           $icon    = html::image("static/svg/{$docType}.svg", "class='file-icon'");
-          if(common::hasPriv('doc', 'objectLibs'))
+          if(common::hasPriv('doc', 'view'))
           {
-              echo html::a($this->createLink('doc', 'objectLibs', "type=$type&objectID=$objectID&libID=$doc->lib&docID=$doc->id"), $icon . $doc->title, '', "title='{$doc->title}' class='doc-title' data-app='{$this->app->tab}'");
+              echo html::a($this->createLink('doc', 'view', "docID=$doc->id"), $icon . $doc->title, '', "title='{$doc->title}' class='doc-title' data-app='{$this->app->tab}'");
           }
           else
           {

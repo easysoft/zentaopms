@@ -48,6 +48,8 @@ $lang->tutorialAB     = '新手引导';
 $lang->runInfo        = "<div class='row'><div class='u-1 a-center' id='debugbar'>时间: %s 毫秒, 内存: %s KB, 查询: %s.  </div></div>";
 $lang->agreement      = "已阅读并同意。<span class='text-danger'>未经许可，不得去除、隐藏或遮掩禅道软件的任何标志及链接。</span>";
 $lang->designedByAIUX = "<a href='https://api.zentao.net/goto.php?item=aiux' class='link-aiux' target='_blank'><i class='icon icon-aiux'></i> 艾体验设计</a>";
+$lang->bizVersion     = '<a href="https://www.zentao.net/page/enterprise.html" target="_blank">更多精彩，尽在企业版！</a>';
+$lang->bizVersionINT  = '<a href="https://www.zentao.pm/page/vs.html" target="_blank">更多精彩，尽在企业版！</a>';
 
 $lang->reset              = '重填';
 $lang->cancel             = '取消';
@@ -177,6 +179,7 @@ $lang->repo->codeRepo     = '代码库';
 $lang->screen->common     = '大屏';
 $lang->report->common     = 'BI';
 $lang->pivot->common      = '透视表';
+$lang->chart->common      = '图表';
 $lang->system->common     = '组织';
 $lang->admin->common      = '后台';
 $lang->story->common      = $lang->SRCommon;
@@ -300,7 +303,6 @@ $lang->product->kanban = $lang->productCommon . '看板';
 $lang->project->report = '报告';
 
 $lang->report->weekly       = '周报';
-$lang->report->annual       = '年度总结';
 $lang->report->notice       = new stdclass();
 $lang->report->notice->help = '注：统计报表的数据来源于列表页面的检索结果，生成统计报表前请先在列表页面进行检索。比如列表页面我们检索的是%tab%，那么报表就是基于之前检索的%tab%的结果集进行统计。';
 

@@ -7,13 +7,6 @@ $config->report->dailyreminder->task     = true;
 $config->report->dailyreminder->todo     = true;
 $config->report->dailyreminder->testTask = true;
 
-global $lang;
-$config->report->pivotMenu = array();
-$config->report->pivotMenu['product'] = array('link' => "{$lang->product->common}|report|preview|dimension=&group=product");
-$config->report->pivotMenu['project'] = array('link' => "{$lang->project->common}|report|preview|dimension=&group=project");
-$config->report->pivotMenu['test']    = array('link' => "{$lang->qa->common}|report|preview|dimension=&group=test");
-$config->report->pivotMenu['staff']   = array('link' => "{$lang->system->common}|report|preview|dimension=&group=staff");
-
 $config->report->annualData['minMonth']     = 2;
 $config->report->annualData['colors']       = array('#0075A9', '#22AC38', '#CAAC32', '#2B4D6D', '#0071a4', '#00a0e9', '#7ecef4');
 $config->report->annualData['itemMinWidth'] = array(1 => 3, 2 => 5, 3 => 7, 4 => 9, 5 => 11);

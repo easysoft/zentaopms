@@ -506,7 +506,7 @@ class admin extends control
 
             if(stripos($table, 'searchindex') !== false)
             {
-                $mysqlVersion = $this->loadModel('install')->getMysqlVersion();
+                $mysqlVersion = $this->loadModel('install')->getDatabaseVersion();
                 if($mysqlVersion < 5.6) continue;
             }
 

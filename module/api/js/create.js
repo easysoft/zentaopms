@@ -84,3 +84,17 @@ var app = new Vue({
         }
     }
 })
+
+/**
+ * locate link in parent.
+ *
+ * @param  int $apiID
+ * @access public
+ * @return void
+ */
+function parentLocate(apiID)
+{
+    config.onlybody = 'no';
+    var link = createLink('api', 'index', 'libID=0&moduleID=0&apiID=' + apiID) + '#app=doc';
+    window.parent.$.apps.open(link);
+}

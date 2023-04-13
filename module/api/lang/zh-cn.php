@@ -61,6 +61,9 @@ $lang->api->zentaoAPI        = "禅道API文档v1";
 $lang->api->search           = "搜索";
 $lang->api->allLibs          = "全部库";
 $lang->api->noLinked         = "无关联";
+$lang->api->addCatalog       = '添加目录';
+$lang->api->editCatalog      = '编辑目录';
+$lang->api->deleteCatalog    = '删除目录';
 
 /* Common access control lang. */
 $lang->api->whiteList          = '白名单';
@@ -87,6 +90,7 @@ $lang->struct->desc            = '描述';
 $lang->struct->descPlaceholder = '参数说明';
 $lang->struct->action          = '操作';
 $lang->struct->addSubField     = '添加子字段';
+$lang->struct->list            = '数据结构列表';
 
 $lang->struct->typeOptions = array(
     'formData' => 'FormData',

@@ -2008,7 +2008,7 @@ class upgradeModel extends model
         if(!file_exists($sqlFile)) return false;
 
         $this->saveLogs('Run Method ' . __FUNCTION__);
-        $mysqlVersion = $this->loadModel('install')->getMysqlVersion();
+        $mysqlVersion = $this->loadModel('install')->getDatabaseVersion();
         $ignoreCode   = '|1050|1054|1060|1091|1061|';
 
         /* Read the sql file to lines, remove the comment lines, then join theme by ';'. */
@@ -8001,7 +8001,7 @@ class upgradeModel extends model
      */
     public function addDefaultModules4BI($type = 'report', $dimension = 1)
     {
-        $this->app->loadLang('report');
+        $this->app->loadLang('dimension');
 
         $group = new stdclass();
         $group->root  = $dimension;
@@ -8011,7 +8011,7 @@ class upgradeModel extends model
         $group->order = 10;
 
         $modules = array();
-        foreach($this->lang->crystal->moduleList as $module => $name)
+        foreach($this->lang->dimension->moduleList as $module => $name)
         {
             if(!$module || !$name) continue;
 
@@ -8214,6 +8214,7 @@ class upgradeModel extends model
         $dimension              = new stdclass();
         $dimension->name        = $this->lang->dimension->default;
         $dimension->code        = 'efficiency';
+        $dimension->desc        = '';
         $dimension->createdBy   = 'system';
         $dimension->createdDate = helper::now();
 
@@ -8976,5 +8977,28 @@ class upgradeModel extends model
         }
 
         return $fieldSettings;
+    }
+
+    /**
+     * Convert doc collect.
+     *
+     * @access public
+     * @return bool
+     */
+    public function convertDocCollect()
+    {
+        $this->loadModel('doc');
+
+        $stmt = $this->dao->select('id,collector')->from(TABLE_DOC)->where('collector')->ne('')->query();
+        while($doc = $stmt->fetch())
+        {
+            foreach(explode(',', $doc->collector) as $collector)
+            {
+                $collector = trim($collector);
+                if(empty($collector)) continue;
+                $this->doc->createAction($doc->id, 'collect', $collector);
+            }
+        }
+        return true;
     }
 }
