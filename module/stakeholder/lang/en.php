@@ -23,12 +23,10 @@ $lang->stakeholder->deleteExpect = 'Delete Expectation';
 $lang->stakeholder->editExpect   = 'Edit Expectation';
 $lang->stakeholder->viewExpect   = 'Expectation Info';
 $lang->stakeholder->issue        = 'Issue Management';
-$lang->stakeholder->viewIssue    = 'Active Issues';
 $lang->stakeholder->userIssue    = 'Stakeholder Issues';
 $lang->stakeholder->deleted      = 'Deleted';
 
-$lang->stakeholder->viewAction      = 'View Stakeholder';
-$lang->stakeholder->viewIssueAction = 'Issue List';
+$lang->stakeholder->viewAction = 'View Stakeholder';
 
 /* Fields. */
 $lang->stakeholder->id          = 'ID';
