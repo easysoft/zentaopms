@@ -1164,7 +1164,6 @@ $lang->testreport->methodOrder[15] = 'delete';
 $lang->testreport->methodOrder[20] = 'edit';
 
 $lang->resource->testsuite = new stdclass();
-$lang->resource->testsuite->index            = 'index';
 $lang->resource->testsuite->browse           = 'browse';
 $lang->resource->testsuite->create           = 'create';
 $lang->resource->testsuite->view             = 'view';
@@ -1174,7 +1173,6 @@ $lang->resource->testsuite->linkCase         = 'linkCase';
 $lang->resource->testsuite->unlinkCase       = 'unlinkCaseAction';
 $lang->resource->testsuite->batchUnlinkCases = 'batchUnlinkCases';
 
-$lang->testsuite->methodOrder[0]  = 'index';
 $lang->testsuite->methodOrder[5]  = 'browse';
 $lang->testsuite->methodOrder[10] = 'create';
 $lang->testsuite->methodOrder[15] = 'view';

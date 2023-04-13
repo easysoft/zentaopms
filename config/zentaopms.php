@@ -231,6 +231,7 @@ $config->openMethods[] = 'zanode.nodelist';
 $config->openMethods[] = 'action.restoreStages';
 $config->openMethods[] = 'execution.browse';
 $config->openMethods[] = 'testcase.showImport';
+$config->openMethods[] = 'testsuite.index';
 
 $config->openModules = array();
 $config->openModules[] = 'install';

@@ -9,7 +9,6 @@
  * @version     $Id: zh-cn.php 4490 2013-02-27 03:27:05Z wyd621@gmail.com $
  * @link        http://www.zentao.net
  */
-$lang->testsuite->index            = "Suite Home";
 $lang->testsuite->create           = "Create Suite";
 $lang->testsuite->delete           = "Delete Suite";
 $lang->testsuite->view             = "Suite Detail";
