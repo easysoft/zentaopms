@@ -3,7 +3,6 @@ global $config;
 
 $lang->custom->common               = 'Personnalisation';
 $lang->custom->id                   = 'ID';
-$lang->custom->index                = 'Accueil';
 $lang->custom->set                  = 'Personnaliser';
 $lang->custom->restore              = 'Réinitialiser';
 $lang->custom->key                  = 'Clé';

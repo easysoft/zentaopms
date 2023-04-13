@@ -1411,7 +1411,6 @@ $lang->mail->methodOrder[50] = 'resend';
 
 /* Custom. */
 $lang->resource->custom = new stdclass();
-$lang->resource->custom->index              = 'index';
 $lang->resource->custom->set                = 'set';
 $lang->resource->custom->product            = 'productName';
 $lang->resource->custom->execution          = 'executionCommon';
@@ -1431,7 +1430,6 @@ $lang->resource->custom->hours              = 'hours';
 $lang->resource->custom->percent            = 'percent';
 $lang->resource->custom->limitTaskDate      = 'beginAndEndDate';
 
-$lang->custom->methodOrder[5]  = 'index';
 $lang->custom->methodOrder[10] = 'set';
 $lang->custom->methodOrder[15] = 'product';
 $lang->custom->methodOrder[20] = 'execution';

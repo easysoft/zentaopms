@@ -235,6 +235,7 @@ $config->openMethods[] = 'testsuite.index';
 $config->openMethods[] = 'caselib.index';
 $config->openMethods[] = 'company.index';
 $config->openMethods[] = 'user.cropAvatar';
+$config->openMethods[] = 'custom.index';
 
 $config->openModules = array();
 $config->openModules[] = 'install';
