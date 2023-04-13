@@ -10,6 +10,8 @@
  * @link        http://www.zentao.net
  */
 $lang->admin->index           = '后台管理首页';
+$lang->admin->sso             = 'ZDOO集成';
+$lang->admin->ssoAction       = 'ZDOO集成';
 $lang->admin->safeIndex       = '安全';
 $lang->admin->checkWeak       = '弱口令检查';
 $lang->admin->certifyMobile   = '认证手机';
