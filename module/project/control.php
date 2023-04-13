@@ -1141,20 +1141,6 @@ class project extends control
     }
 
     /**
-     * Project qa dashboard.
-     *
-     * @param  int $projectID
-     * @access public
-     * @return void
-     */
-    public function qa($projectID = 0)
-    {
-        $this->project->setMenu($projectID);
-        $this->view->title = $this->lang->project->qa;
-        $this->display();
-    }
-
-    /**
      * Project bug list.
      *
      * @param  int    $projectID
