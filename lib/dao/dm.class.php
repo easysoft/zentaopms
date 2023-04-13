@@ -135,7 +135,7 @@ class dm extends dao
         }
 
         /* Format alias. */
-        if($alias and ctype_alnum($alias)) $alias = '"' . $alias . '"';
+        if($alias and !is_numeric($alias) and ctype_alnum($alias)) $alias = '"' . $alias . '"';
 
         return $originField . ' ' .  $alias;
     }
