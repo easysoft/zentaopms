@@ -37,16 +37,7 @@ $(function()
         }
     }, 100)
 
-    $('#top-submit').click(function()
-    {
-        $(this).addClass('disabled');
-        $('form').submit();
-    })
-
     $('#subNavbar li[data-id="doc"]').addClass('active');
-
-    /* Automatically save document contents. */
-    setInterval("saveDraft()", 60 * 1000);
 
     $(document).on("mouseup", 'span[data-name="fullscreen"]', function()
     {

@@ -554,6 +554,7 @@ class groupModel extends model
                 $data          = new stdclass();
                 $data->account = $account;
                 $data->group   = $groupID;
+                $data->project = '';
                 $this->dao->insert(TABLE_USERGROUP)->data($data)->exec();
             }
         }

@@ -1131,7 +1131,7 @@ class programModel extends model
      */
     public function hasUnfinished($program)
     {
-        $unfinished = $this->dao->select("count(IF(id != {$program->id}, true, null)) as count")->from(TABLE_PROJECT)
+        $unfinished = $this->dao->select("count(IF(id != {$program->id}, 1, null)) as count")->from(TABLE_PROJECT)
             ->where('type')->in('program, project')
             ->andWhere('path')->like($program->path . '%')
             ->andWhere('status')->ne('closed')

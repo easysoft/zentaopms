@@ -8210,20 +8210,23 @@ class upgradeModel extends model
     public function createDefaultDimension()
     {
         /* Create default dimension. */
-        $this->app->loadLang('dimension');
-        $dimension              = new stdclass();
-        $dimension->name        = $this->lang->dimension->default;
-        $dimension->code        = 'efficiency';
-        $dimension->desc        = '';
-        $dimension->createdBy   = 'system';
-        $dimension->createdDate = helper::now();
+        $this->loadModel('dimension');
+        foreach($this->config->dimension->defaultDimension as $dimensionName)
+        {
+            $dimension              = new stdclass();
+            $dimension->name        = $this->lang->dimension->{$dimensionName};
+            $dimension->code        = $dimensionName;
+            $dimension->desc        = '';
+            $dimension->createdBy   = 'system';
+            $dimension->createdDate = helper::now();
 
-        $this->dao->insert(TABLE_DIMENSION)->data($dimension)->exec();
-        $dimensionID = $this->dao->lastInsertID();
+            $this->dao->insert(TABLE_DIMENSION)->data($dimension)->exec();
+            $dimensionID = $this->dao->lastInsertID();
 
-        $this->loadModel('upgrade')->addDefaultModules4BI('chart', $dimensionID);
-        $this->loadModel('upgrade')->addDefaultModules4BI('pivot', $dimensionID);
+            $this->addDefaultModules4BI('chart', $dimensionID);
+            $this->addDefaultModules4BI('pivot', $dimensionID);
 
+        }
         return !dao::isError();
     }
 
@@ -8683,7 +8686,6 @@ class upgradeModel extends model
                 }
 
                 $data->settings = json_encode(array($settings));
-                $data->filters  = json_encode($filters);
 
                 if(isset($dataviewList[$chart->dataset]))
                 {
@@ -8695,6 +8697,41 @@ class upgradeModel extends model
                 {
                     $fieldSettings = $this->getFieldSettings($chart->sql);
                     $data->fields = json_encode($fieldSettings);
+                }
+
+                if(!empty($filters))
+                {
+                    $where = array();
+                    $operatorMap = array('in' => 'IN', 'notin' => 'NOT IN', 'notnull' => 'IS NOT NULL', 'null' => 'IS NULL');
+                    foreach($filters as $filter)
+                    {
+                        $operator = zget($operatorMap, $filter->operator);
+                        $value    = '';
+                        if(!in_array($filter->operator, array('null', 'notnull')))
+                        {
+                            if(!is_array($filter->value))
+                            {
+                                $value = "'" . $filter->value . "'";
+                            }
+                            else
+                            {
+                                $values = array();
+                                foreach($filter->value as $v) $values[] = $type == 'number' ? $v : "'" . $v . "'";
+                                $value = '(' . implode(',', $values) . ')';
+                            }
+                        }
+
+                        $where[] = $filter->field . ' ' . $operator . ' ' . $value;
+                    }
+
+                    if(stripos($data->sql, 'where') === false)
+                    {
+                        $data->sql .= ' WHERE ' . implode(' AND ', $where);
+                    }
+                    else
+                    {
+                        $data->sql .= ' ' . implode(' AND ', $where);
+                    }
                 }
 
                 $this->dao->update(TABLE_CHART)->data($data)->autoCheck()->where('id')->eq($chart->id)->exec();
@@ -8754,6 +8791,7 @@ class upgradeModel extends model
 
         $pivotSettings = new stdclass();
         $tableSettings = json_decode($table->settings);
+        $filters       = array();
         if($tableSettings)
         {
             $index = 1;
@@ -8784,7 +8822,8 @@ class upgradeModel extends model
             $pivotSettings->columns = $columns;
 
             $pivot->settings = json_encode($pivotSettings);
-            $pivot->filters  = json_encode($tableSettings->filter);
+
+            if(!empty($tableSettings->filter)) $filters = $tableSettings->filter;
         }
 
         if(isset($dataviewList[$table->dataset]))
@@ -8797,6 +8836,41 @@ class upgradeModel extends model
         {
             $fieldSettings = $this->getFieldSettings($table->sql);
             $pivot->fields = json_encode($fieldSettings);
+        }
+
+        if(!empty($filters))
+        {
+            $where = array();
+            $operatorMap = array('in' => 'IN', 'notin' => 'NOT IN', 'notnull' => 'IS NOT NULL', 'null' => 'IS NULL');
+            foreach($filters as $filter)
+            {
+                $operator = zget($operatorMap, $filter->operator);
+                $value    = '';
+                if(!in_array($filter->operator, array('null', 'notnull')))
+                {
+                    if(!is_array($filter->value))
+                    {
+                        $value = "'" . $filter->value . "'";
+                    }
+                    else
+                    {
+                        $values = array();
+                        foreach($filter->value as $v) $values[] = $type == 'number' ? $v : "'" . $v . "'";
+                        $value = '(' . implode(',', $values) . ')';
+                    }
+                }
+
+                $where[] = $filter->field . ' ' . $operator . ' ' . $value;
+            }
+
+            if(stripos($pivot->sql, 'where') === false)
+            {
+                $pivot->sql .= ' WHERE ' . implode(' AND ', $where);
+            }
+            else
+            {
+                $pivot->sql .= ' ' . implode(' AND ', $where);
+            }
         }
 
         /* Process fieldSettings. */
@@ -8821,8 +8895,7 @@ class upgradeModel extends model
     {
         $reports = $this->dao->select('*')->from(TABLE_REPORT)->fetchAll();
 
-        $modulePairs = $this->dao->select('id, name')->from(TABLE_MODULE)->where('type')->eq('report')->fetchPairs();
-        $groupNames  = $this->dao->select('name, id')->from(TABLE_MODULE)->where('type')->eq('pivot')->fetchPairs();
+        $groupCollectors = $this->dao->select('collector, id')->from(TABLE_MODULE)->where('type')->eq('pivot')->fetchPairs();
 
         $this->loadModel('pivot');
 
@@ -8841,14 +8914,15 @@ class upgradeModel extends model
             $data->createdDate = $report->addedDate;
 
             /* Process group. */
-            $modules = explode($report->module, ',');
+            $modules = explode(',', $report->module);
             $groups  = array();
             foreach($modules as $module)
             {
-                $moduleName = zget($modulePairs, $module, '');
-                if(isset($groupNames[$moduleName]))
+                if(!$module) continue;
+
+                if(isset($groupCollectors[$module]))
                 {
-                    $groups[] = $groupNames[$moduleName];
+                    $groups[] = $groupCollectors[$module];
                 }
                 else
                 {

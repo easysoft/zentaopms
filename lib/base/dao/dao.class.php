@@ -317,6 +317,17 @@ class baseDAO
     }
 
     /**
+     * Show tables.
+     *
+     * @access public
+     * @return array
+     */
+    public function showTables()
+    {
+        return $this->query("SHOW TABLES")->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    /**
      * Desc table, show fields.
      *
      * @param  string $tableName
@@ -325,7 +336,11 @@ class baseDAO
      */
     public function descTable($tableName)
     {
-        return $this->query("DESC $tableName")->fetchAll();
+        $this->dbh->setAttribute(PDO::ATTR_CASE, PDO::CASE_LOWER);
+        $fields = $this->query("DESC $tableName")->fetchAll();
+        $this->dbh->setAttribute(PDO::ATTR_CASE, PDO::CASE_NATURAL);
+
+        return $fields;
     }
 
     /**
@@ -1703,6 +1718,8 @@ class baseSQL
                     continue;
                 }
                 if(strpos($this->skipFields, ",$field,") !== false) continue;
+                if($field == 'id' and $this->method == 'update') continue;     // primary key not allowed in dmdb.
+
                 $this->sql .= "`$field` = " . $this->quote($value) . ',';
             }
         }
@@ -1874,10 +1891,14 @@ class baseSQL
      * @access public
      * @return static|sql the sql object.
      */
-    public function where($arg1, $arg2 = null, $arg3 = null)
+    public function where($arg1 = '', $arg2 = null, $arg3 = null)
     {
         if($this->inCondition and !$this->conditionIsTrue) return $this;
-        if($arg3 !== null)
+        if(!$arg1)
+        {
+            $condition = '';
+        }
+        elseif($arg3 !== null)
         {
             $value     = $this->quote($arg3);
             $condition = "`$arg1` $arg2 " . $this->quote($arg3);
@@ -2102,6 +2123,34 @@ class baseSQL
     {
         if($this->inCondition and !$this->conditionIsTrue) return $this;
         $this->sql .= "NOT LIKE " . $this->quote($string);
+        return $this;
+    }
+
+    /**
+     * 不为空日期
+     * Create not zero date.
+     *
+     * @access public
+     * @return static|sql the sql object.
+     */
+    public function notZeroDate()
+    {
+        if($this->inCondition and !$this->conditionIsTrue) return $this;
+        $this->sql .= " > '1970-01-01' ";
+        return $this;
+    }
+
+    /**
+     * 不为空时间
+     * Create not zero datetime.
+     *
+     * @access public
+     * @return static|sql the sql object.
+     */
+    public function notZeroDatetime()
+    {
+        if($this->inCondition and !$this->conditionIsTrue) return $this;
+        $this->sql .= " > '1970-01-01 00:00:01' ";
         return $this;
     }
 

@@ -238,6 +238,8 @@ class kanbanModel extends model
         $lane->lastEditedTime = helper::now();
         $lane->color          = '#7ec5ff';
         $lane->order          = 1;
+        $lane->groupby        = '';
+        $lane->extra          = '';
 
         $this->dao->insert(TABLE_KANBANLANE)->data($lane)->exec();
         $laneID = $this->dao->lastInsertId();
@@ -266,6 +268,7 @@ class kanbanModel extends model
             $column->order  = $order;
             $column->limit  = -1;
             $column->color  = '#333';
+            $column->type   = '';
 
             $this->createColumn($regionID, $column);
             $order ++;
@@ -2488,6 +2491,10 @@ class kanbanModel extends model
         {
             $lane->type      = $type;
             $lane->execution = $executionID;
+            $lane->region    = 0;
+            $lane->group     = 0;
+            $lane->groupby   = '';
+            $lane->extra     = '';
             $this->dao->insert(TABLE_KANBANLANE)->data($lane)->exec();
 
             $laneID = $this->dao->lastInsertId();
@@ -2514,9 +2521,10 @@ class kanbanModel extends model
             foreach($this->lang->kanban->storyColumn as $colType => $name)
             {
                 $data = new stdClass();
-                $data->name  = $name;
-                $data->color = '#333';
-                $data->type  = $colType;
+                $data->name   = $name;
+                $data->color  = '#333';
+                $data->type   = $colType;
+                $data->region = 0;
 
                 if(strpos(',developing,developed,', $colType) !== false) $data->parent = $devColumnID;
                 if(strpos(',testing,tested,', $colType) !== false)       $data->parent = $testColumnID;
@@ -2543,9 +2551,10 @@ class kanbanModel extends model
             foreach($this->lang->kanban->bugColumn as $colType => $name)
             {
                 $data = new stdClass();
-                $data->name  = $name;
-                $data->color = '#333';
-                $data->type  = $colType;
+                $data->name   = $name;
+                $data->color  = '#333';
+                $data->type   = $colType;
+                $data->region = 0;
                 if(strpos(',fixing,fixed,', $colType) !== false)   $data->parent = $resolvingColumnID;
                 if(strpos(',testing,tested,', $colType) !== false) $data->parent = $testColumnID;
                 if(strpos(',resolving,test,', $colType) !== false) $data->parent = -1;
@@ -2571,9 +2580,10 @@ class kanbanModel extends model
             foreach($this->lang->kanban->taskColumn as $colType => $name)
             {
                 $data = new stdClass();
-                $data->name  = $name;
-                $data->color = '#333';
-                $data->type  = $colType;
+                $data->name   = $name;
+                $data->color  = '#333';
+                $data->type   = $colType;
+                $data->region = 0;
                 if(strpos(',developing,developed,', $colType) !== false) $data->parent = $devColumnID;
                 if($colType == 'develop') $data->parent = -1;
 

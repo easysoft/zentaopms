@@ -264,14 +264,14 @@ class blockModel extends model
             $blocks = $this->lang->block->default[$type]['project'];
 
             /* Mark project block has init. */
-            $this->loadModel('setting')->setItem("$account.$module.{$type}common.blockInited@$vision", true);
+            $this->loadModel('setting')->setItem("$account.$module.{$type}common.blockInited@$vision", '1');
         }
         else
         {
             $blocks = $module == 'my' ? $this->lang->block->default[$flow][$module] : $this->lang->block->default[$module];
 
             /* Mark this app has init. */
-            $this->loadModel('setting')->setItem("$account.$module.common.blockInited@$vision", true);
+            $this->loadModel('setting')->setItem("$account.$module.common.blockInited@$vision", '1');
         }
 
         $this->loadModel('setting')->setItem("$account.$module.block.initVersion", $this->config->block->version);
@@ -558,6 +558,7 @@ class blockModel extends model
         if($module == 'project')   return $this->getProjectStatisticParams();
         if($module == 'execution') return $this->getExecutionStatisticParams();
         if($module == 'qa')        return $this->getQaStatisticParams();
+        if($module == 'doc')       return $this->getDocStatisticParams();
 
         $params = new stdclass();
         $params = $this->appendCountParams($params);
@@ -626,6 +627,17 @@ class blockModel extends model
         $params->type['control'] = 'select';
 
         return json_encode($params);
+    }
+
+    /**
+     * Get document statistic params.
+     *
+     * @access public
+     * @return bool
+     */
+    public function getDocStatisticParams()
+    {
+        return false;
     }
 
     /**
@@ -718,7 +730,7 @@ class blockModel extends model
 
         $params = $this->appendCountParams();
         $params->type['name']    = $this->lang->block->type;
-        $params->type['options'] = $this->lang->issue->labelList;
+        $params->type['options'] = $this->lang->issue->featureBar['browse'];
         $params->type['control'] = 'select';
 
         $params->orderBy['name']    = $this->lang->block->orderBy;
@@ -1057,6 +1069,83 @@ class blockModel extends model
      * @return string
      */
     public function getSprintParams($module = '')
+    {
+        return false;
+    }
+
+    /**
+     * Get document dynamic params.
+     *
+     * @access public
+     * @return bool
+     */
+    public function getDocDynamicParams()
+    {
+        return false;
+    }
+
+    /**
+     * Get my collection params.
+     *
+     * @access public
+     * @return bool
+     */
+    public function getDocMyCollectionParams()
+    {
+        return false;
+    }
+
+    /**
+     * Get recent update params.
+     *
+     * @access public
+     * @return bool
+     */
+    public function getDocRecentUpdateParams()
+    {
+        return false;
+    }
+
+    /**
+     * Get view list params.
+     *
+     * @access public
+     * @return bool
+     */
+    public function getDocViewlistParams()
+    {
+        return false;
+    }
+
+    /**
+     * Get product document params.
+     *
+     * @access public
+     * @return bool
+     */
+    public function getProductDocParams()
+    {
+        return false;
+    }
+
+    /**
+     * Get collect list params.
+     *
+     * @access public
+     * @return bool
+     */
+    public function getDocCollectListParams()
+    {
+        return false;
+    }
+
+    /**
+     * Get project document params.
+     *
+     * @access public
+     * @return bool
+     */
+    public function getProjectDocParams()
     {
         return false;
     }

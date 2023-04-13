@@ -627,7 +627,7 @@ class commonModel extends model
                     $params       = "objectType=&objectID=0&libID=0";
                     $createMethod = 'selectLibType';
                     $isOnlyBody   = true;
-                    $attr         = "class='iframe' data-width='700px'";
+                    $attr         = "class='iframe' data-width='750px'";
                     break;
                 case 'project':
                     $params = "model=scrum&programID=0&copyProjectID=0&extra=from=global";
@@ -2396,7 +2396,7 @@ EOF;
         $hasField = false;
         foreach($fields as $fieldObj)
         {
-            if($field == $fieldObj->Field)
+            if($field == $fieldObj->field)
             {
                 $hasField = true;
                 break;

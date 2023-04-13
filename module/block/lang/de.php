@@ -332,6 +332,42 @@ $lang->block->default['full']['my']['10']['grid']   = 8;
 $lang->block->default['full']['my']['10']['params']['orderBy'] = 'id_desc';
 $lang->block->default['full']['my']['10']['params']['count']   = '15';
 
+/* Doc module block. */
+$lang->block->default['doc']['1']['title'] = 'Statistic';
+$lang->block->default['doc']['1']['block'] = 'docstatistic';
+$lang->block->default['doc']['1']['grid']  = 8;
+
+$lang->block->default['doc']['2']['title'] = 'Dynamic';
+$lang->block->default['doc']['2']['block'] = 'docdynamic';
+$lang->block->default['doc']['2']['grid']  = 4;
+
+$lang->block->default['doc']['3']['title'] = 'My Collection';
+$lang->block->default['doc']['3']['block'] = 'docmycollection';
+$lang->block->default['doc']['3']['grid']  = 8;
+
+$lang->block->default['doc']['4']['title'] = 'Recently update';
+$lang->block->default['doc']['4']['block'] = 'docrecentupdate';
+$lang->block->default['doc']['4']['grid']  = 8;
+
+$lang->block->default['doc']['5']['title'] = 'Browse Leaderboard';
+$lang->block->default['doc']['5']['block'] = 'docviewlist';
+$lang->block->default['doc']['5']['grid']  = 4;
+
+if($config->vision == 'rnd')
+{
+    $lang->block->default['doc']['6']['title'] = $lang->productCommon . 'Document';
+    $lang->block->default['doc']['6']['block'] = 'productdoc';
+    $lang->block->default['doc']['6']['grid']  = 8;
+}
+
+$lang->block->default['doc']['7']['title'] = 'Favorite Leaderboard';
+$lang->block->default['doc']['7']['block'] = 'doccollectlist';
+$lang->block->default['doc']['7']['grid']  = 4;
+
+$lang->block->default['doc']['8']['title'] = $lang->projectCommon . 'Document';
+$lang->block->default['doc']['8']['block'] = 'projectdoc';
+$lang->block->default['doc']['8']['grid']  = 8;
+
 $lang->block->count   = 'Count';
 $lang->block->type    = 'Type';
 $lang->block->orderBy = 'Order by';
@@ -360,6 +396,7 @@ $lang->block->moduleList['project']   = $lang->projectCommon;
 $lang->block->moduleList['execution'] = $lang->execution->common;
 $lang->block->moduleList['qa']        = 'QA';
 $lang->block->moduleList['todo']      = 'Todos';
+$lang->block->moduleList['doc']       = 'Doc';
 
 $lang->block->modules['project'] = new stdclass();
 $lang->block->modules['project']->availableBlocks = new stdclass();
@@ -413,6 +450,17 @@ $lang->block->modules['qa']->availableBlocks->testtask = 'Testaufgaben';
 $lang->block->modules['todo'] = new stdclass();
 $lang->block->modules['todo']->availableBlocks = new stdclass();
 $lang->block->modules['todo']->availableBlocks->list = 'Todos';
+
+$lang->block->modules['doc'] = new stdclass();
+$lang->block->modules['doc']->availableBlocks = new stdclass();
+$lang->block->modules['doc']->availableBlocks->statistic    = 'Statistic';
+$lang->block->modules['doc']->availableBlocks->docdynamic   = 'Dynamic';
+$lang->block->modules['doc']->availableBlocks->mycollection = 'My Collection';
+$lang->block->modules['doc']->availableBlocks->recentupdate = 'Recently Update';
+$lang->block->modules['doc']->availableBlocks->viewlist     = 'Browse Leaderboard';
+$lang->block->modules['doc']->availableBlocks->productdoc   = $lang->productCommon . 'Document';
+$lang->block->modules['doc']->availableBlocks->collectlist  = 'Favorite Leaderboard';
+$lang->block->modules['doc']->availableBlocks->projectdoc   = $lang->projectCommon . 'Document';
 
 $lang->block->orderByList = new stdclass();
 
@@ -527,40 +575,6 @@ $lang->block->typeList->testtask['doing']   = 'In Arbeit';
 $lang->block->typeList->testtask['blocked'] = 'Blockiert';
 $lang->block->typeList->testtask['done']    = 'Erledigt';
 $lang->block->typeList->testtask['all']     = 'Alle';
-
-$lang->block->modules['project']->moreLinkList = new stdclass();
-$lang->block->modules['project']->moreLinkList->recentproject  = "project|browse|";
-$lang->block->modules['project']->moreLinkList->statistic      = "project|browse|";
-$lang->block->modules['project']->moreLinkList->project        = "project|browse|";
-$lang->block->modules['project']->moreLinkList->cmmireport     = 'weekly|index|';
-$lang->block->modules['project']->moreLinkList->cmmiestimate   = 'workestimation|index|';
-$lang->block->modules['project']->moreLinkList->cmmiissue      = 'issue|browse|';
-$lang->block->modules['project']->moreLinkList->cmmirisk       = 'risk|browse|';
-$lang->block->modules['project']->moreLinkList->scrumlist      = "project|execution|";
-$lang->block->modules['project']->moreLinkList->scrumtest      = 'testtask|browse|';
-$lang->block->modules['project']->moreLinkList->scrumproduct   = 'product|all|';
-$lang->block->modules['project']->moreLinkList->sprint         = "project|execution|";
-$lang->block->modules['project']->moreLinkList->projectdynamic = "project|dynamic|";
-
-$lang->block->modules['product']->moreLinkList        = new stdclass();
-$lang->block->modules['product']->moreLinkList->list  = 'product|all|';
-$lang->block->modules['product']->moreLinkList->story = 'my|story|type=%s';
-
-$lang->block->modules['execution']->moreLinkList       = new stdclass();
-$lang->block->modules['execution']->moreLinkList->list = 'execution|all|status=%s&executionID=';
-$lang->block->modules['execution']->moreLinkList->task = 'my|task|type=%s';
-
-$lang->block->modules['qa']->moreLinkList           = new stdclass();
-$lang->block->modules['qa']->moreLinkList->bug      = 'my|bug|type=%s';
-$lang->block->modules['qa']->moreLinkList->case     = 'my|testcase|type=%s';
-$lang->block->modules['qa']->moreLinkList->testtask = 'testtask|browse|type=%s';
-
-$lang->block->modules['todo']->moreLinkList       = new stdclass();
-$lang->block->modules['todo']->moreLinkList->list = 'my|todo|type=all';
-
-$lang->block->modules['common']                        = new stdclass();
-$lang->block->modules['common']->moreLinkList          = new stdclass();
-$lang->block->modules['common']->moreLinkList->dynamic = 'company|dynamic|';
 
 $lang->block->welcomeList['06:00'] = 'Guten Morgen, %s';
 $lang->block->welcomeList['11:30'] = 'Guten Tag, %s';

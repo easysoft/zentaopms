@@ -20,6 +20,7 @@
                   </ul>
                 </div>
               </div>
+              <div class="crumbs"><?php echo implode(' > ', $crumbs);?></div>
             </div>
             <div class="actions">
               <?php echo html::a("javascript:fullScreen()", '<span class="icon-fullscreen"></span>', '', "title='{$lang->fullscreen}' class='btn btn-link fullscreen-btn'");?>

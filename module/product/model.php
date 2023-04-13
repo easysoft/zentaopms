@@ -798,11 +798,13 @@ class productModel extends model
             /* Create doc lib. */
             $this->app->loadLang('doc');
             $lib = new stdclass();
-            $lib->product = $productID;
-            $lib->name    = $this->lang->doclib->main['product'];
-            $lib->type    = 'product';
-            $lib->main    = '1';
-            $lib->acl     = 'default';
+            $lib->product   = $productID;
+            $lib->name      = $this->lang->doclib->main['product'];
+            $lib->type      = 'product';
+            $lib->main      = '1';
+            $lib->acl       = 'default';
+            $lib->addedBy   = $this->app->user->account;
+            $lib->addedDate = helper::now();
             $this->dao->insert(TABLE_DOCLIB)->data($lib)->exec();
 
             return $productID;
@@ -2477,11 +2479,11 @@ class productModel extends model
         elseif($module == 'feedback')
         {
             if($this->config->vision == 'rnd')
-            {    
+            {
                 return helper::createLink('feedback', 'admin', "browseType=byProduct&productID=%s");
-            }    
+            }
             elseif($this->config->vision == 'lite')
-            {    
+            {
                 return helper::createLink('feedback', 'browse', "browseType=byProduct&productID=%s");
             }
         }

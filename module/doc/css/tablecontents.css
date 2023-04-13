@@ -15,7 +15,7 @@
 #mainContent #createDropdown {display: inline-block;}
 #mainContent #createDropdown ul {position: absolute;}
 #pageNav .dropdown-menu {max-height: inherit;}
-#mainContent > .panel {margin-bottom: 0; height: calc(100vh - 125px); overflow-y: auto;}
+#mainContent > .panel {margin-bottom: 0; height: calc(100vh - 130px); overflow-y: auto;}
 #mainContent > .main-col {padding-left: 0;}
 #swapper {margin-right: 15px;}
 
@@ -32,7 +32,6 @@
 span.item>a {padding-left: 6px;}
 span.dotted-line+a {display: block;}
 #modules li.doc:before, .chapterNode:before, .independent:before {content: " "; width: 100%; border-bottom: 1px dashed #b5b9c5; position: absolute; top: 13px; right: 0; left: 30px;}
-.doc-title ,.item{display: inline-block !important; position: relative; padding-right: 10px; max-width:80%; white-space: nowrap; text-overflow: clip; overflow: hidden;}
 #modules i.icon-file-text {color: #D0D2D6; font-size: 14px;}
 
 .sortable-sorting .module-name > a {cursor: move;}
@@ -48,6 +47,7 @@ span.dotted-line+a {display: block;}
 li.drag-shadow ul {display: none!important;}
 
 .table .c-name > .doc-title {display: inline-block; max-width: calc(100% - 80px); overflow: hidden; background: transparent; padding-right:0px;}
+.table .c-name > span.doc-title {line-height: 0; vertical-align: inherit;}
 .table .c-name > .draft {background-color:rgba(129, 102, 238, 0.12); color:#8166EE;}
 .table .c-name > .ajaxCollect {float: right; position: relative; right: 10px; top: 0px;}
 table.table > thead > tr {height: 32px;}

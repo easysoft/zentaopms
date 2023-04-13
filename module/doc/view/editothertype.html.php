@@ -35,7 +35,7 @@
         </tr>
         <?php endif;?>
         <tr>
-          <th class='w-100px'><?php echo $lang->doc->libAndModule?></th>
+          <th class='w-110px'><?php echo $lang->doc->libAndModule?></th>
           <td colspan='3' class='required'><span id='moduleBox'><?php echo html::select('module', $moduleOptionMenu, $doc->lib . '_' . $doc->module, "class='form-control chosen'");?></span></td>
         </tr>
         <tr>
@@ -82,7 +82,6 @@
             <?php
             echo html::hidden('contentType', $doc->contentType);
             echo html::hidden('type', $doc->type);
-            echo html::hidden('editedDate', $doc->editedDate);
             echo html::hidden('status', $doc->status);
             echo html::hidden('parent', $doc->parent);
             echo html::submitButton();

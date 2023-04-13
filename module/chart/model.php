@@ -477,7 +477,12 @@ class chartModel extends model
             $series[]   = array('name' => $seriesName, 'data' => $yData, 'type' => 'bar', 'stack' => $stack);
         }
 
-        $options = array('series' => $series, 'legend' => $legend, 'xAxis' => $xaxis, 'yAxis' => $yaxis, 'tooltip' => array('trigger' => 'axis'));
+        $dataZoomX = '[{"type":"inside","startValue":0,"endValue":5,"minValueSpan":10,"maxValueSpan":10,"xAxisIndex":[0],"zoomOnMouseWheel":false,"moveOnMouseWheel":true,"moveOnMouseMove":true},{"type":"slider","realtime":true,"startValue":0,"endValue":5,"zoomLock":true,"brushSelect":false,"width":"80%","height":"5","xAxisIndex":[0],"fillerColor":"#33aaff","borderColor":"#33aaff00","backgroundColor":"#cfcfcf00","handleSize":0,"showDataShadow":false,"showDetail":false,"bottom":"0","left":"10%"}]';
+        $dataZoomY = '[{"type":"inside","startValue":0,"endValue":5,"minValueSpan":10,"maxValueSpan":10,"yAxisIndex":[0],"zoomOnMouseWheel":false,"moveOnMouseWheel":true,"moveOnMouseMove":true},{"type":"slider","realtime":true,"startValue":0,"endValue":5,"zoomLock":true,"brushSelect":false,"width":5,"height":"80%","yAxisIndex":[0],"fillerColor":"#33aaff","borderColor":"#33aaff00","backgroundColor":"#cfcfcf00","handleSize":0,"showDataShadow":false,"showDetail":false,"top":"10%","right":0}]';
+        $isY = in_array($settings['type'], array('cluBarY', 'stackedBarY'));
+        $dataZoom = $isY ? json_decode($dataZoomY, true) : json_decode($dataZoomX, true);
+
+        $options = array('series' => $series, 'legend' => $legend, 'xAxis' => $xaxis, 'yAxis' => $yaxis, 'tooltip' => array('trigger' => 'axis'), 'dataZoom' => $dataZoom);
         return $options;
     }
 
@@ -625,6 +630,59 @@ class chartModel extends model
         }
 
         return $options;
+    }
+
+    public function getFilterFormat($filters)
+    {
+        $filterFormat = array();
+        foreach($filters as $filter)
+        {
+            $field = $filter['field'];
+            if(!isset($filter['default'])) continue;
+
+            $default = $filter['default'];
+            switch($filter['type'])
+            {
+                case 'select':
+                    if(empty($default)) break;
+                    if(!is_array($default)) $default = array($default);
+                    $default = array_filter($default, function($val){return !empty($val);});
+                    $value = "('" . implode("', '", $default) . "')";
+                    $filterFormat[$field] = array('operator' => 'IN', 'value' => $value);
+                    break;
+                case 'input':
+                    $filterFormat[$field] = array('operator' => 'like', 'value' => "'%$default%'");
+                    break;
+                case 'date':
+                case 'datetime':
+                    $begin = $default['begin'];
+                    $end   = $default['end'];
+
+                    if(empty($begin) or empty($end)) break;
+
+                    $value = "'$begin' and '$end'";
+                    $filterFormat[$field] = array('operator' => 'BETWEEN', 'value' => $value);
+                    break;
+                case 'condition':
+                    $operator = $filter['operator'];
+                    $value    = $filter['value'];
+
+                    if(in_array($operator, array('IN', 'NOT IN')))
+                    {
+                        $valueArr = explode(',', $value);
+                        foreach($valueArr as $key => $val) $valueArr[$key] = '"' . $val . '"';
+                        $value = '(' . implode(',', $valueArr) . ')';
+                    }
+                    elseif(in_array($operator, array('IS NOT NULL', 'IS NULL')))
+                    {
+                        $value = '';
+                    }
+                    $filterFormat[$field] = array('operator' => $operator, 'value' => $value);
+                    break;
+            }
+        }
+
+        return $filterFormat;
     }
 }
 

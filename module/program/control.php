@@ -291,7 +291,7 @@ class program extends control
             $hasUnfinished = $this->program->hasUnfinished($program);
             if($hasUnfinished) return print(js::error($this->lang->program->closeErrorMessage));
 
-            $changes = $this->project->close($programID);
+            $changes = $this->project->close($programID, 'program');
             if(dao::isError()) return print(js::error(dao::getError()));
 
             if($this->post->comment != '' or !empty($changes))
@@ -362,7 +362,7 @@ class program extends control
 
         if(!empty($_POST))
         {
-            $changes = $this->project->activate($programID);
+            $changes = $this->project->activate($programID, 'program');
             if(dao::isError()) return print(js::error(dao::getError()));
 
             if($this->post->comment != '' or !empty($changes))
@@ -400,7 +400,7 @@ class program extends control
 
         if(!empty($_POST))
         {
-            $changes = $this->project->suspend($programID);
+            $changes = $this->project->suspend($programID, 'program');
             if(dao::isError()) return print(js::error(dao::getError()));
 
             if($this->post->comment != '' or !empty($changes))

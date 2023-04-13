@@ -332,6 +332,42 @@ $lang->block->default['full']['my']['10']['grid']   = 8;
 $lang->block->default['full']['my']['10']['params']['orderBy'] = 'id_desc';
 $lang->block->default['full']['my']['10']['params']['count']   = '15';
 
+/* Doc module block. */
+$lang->block->default['doc']['1']['title'] = '文档统计';
+$lang->block->default['doc']['1']['block'] = 'docstatistic';
+$lang->block->default['doc']['1']['grid']  = 8;
+
+$lang->block->default['doc']['2']['title'] = '文档动态';
+$lang->block->default['doc']['2']['block'] = 'docdynamic';
+$lang->block->default['doc']['2']['grid']  = 4;
+
+$lang->block->default['doc']['3']['title'] = '我的收藏';
+$lang->block->default['doc']['3']['block'] = 'docmycollection';
+$lang->block->default['doc']['3']['grid']  = 8;
+
+$lang->block->default['doc']['4']['title'] = '最近更新';
+$lang->block->default['doc']['4']['block'] = 'docrecentupdate';
+$lang->block->default['doc']['4']['grid']  = 8;
+
+$lang->block->default['doc']['5']['title'] = '浏览排行榜';
+$lang->block->default['doc']['5']['block'] = 'docviewlist';
+$lang->block->default['doc']['5']['grid']  = 4;
+
+if($config->vision == 'rnd')
+{
+    $lang->block->default['doc']['6']['title'] = $lang->productCommon . '文档';
+    $lang->block->default['doc']['6']['block'] = 'productdoc';
+    $lang->block->default['doc']['6']['grid']  = 8;
+}
+
+$lang->block->default['doc']['7']['title'] = '收藏排行榜';
+$lang->block->default['doc']['7']['block'] = 'doccollectlist';
+$lang->block->default['doc']['7']['grid']  = 4;
+
+$lang->block->default['doc']['8']['title'] = $lang->projectCommon . '文档';
+$lang->block->default['doc']['8']['block'] = 'projectdoc';
+$lang->block->default['doc']['8']['grid']  = 8;
+
 $lang->block->count   = '数量';
 $lang->block->type    = '类型';
 $lang->block->orderBy = '排序';
@@ -360,6 +396,7 @@ $lang->block->moduleList['project']   = $lang->projectCommon;
 $lang->block->moduleList['execution'] = $lang->execution->common;
 $lang->block->moduleList['qa']        = '测试';
 $lang->block->moduleList['todo']      = '待办';
+$lang->block->moduleList['doc']       = '文档';
 
 $lang->block->modules['project'] = new stdclass();
 $lang->block->modules['project']->availableBlocks = new stdclass();
@@ -413,6 +450,17 @@ $lang->block->modules['qa']->availableBlocks->testtask  = '版本列表';
 $lang->block->modules['todo'] = new stdclass();
 $lang->block->modules['todo']->availableBlocks = new stdclass();
 $lang->block->modules['todo']->availableBlocks->list = '待办列表';
+
+$lang->block->modules['doc'] = new stdclass();
+$lang->block->modules['doc']->availableBlocks = new stdclass();
+$lang->block->modules['doc']->availableBlocks->docstatistic    = '文档统计';
+$lang->block->modules['doc']->availableBlocks->docdynamic      = '文档动态';
+$lang->block->modules['doc']->availableBlocks->docmycollection = '我的收藏';
+$lang->block->modules['doc']->availableBlocks->docrecentupdate = '最近更新';
+$lang->block->modules['doc']->availableBlocks->docviewlist     = '浏览排行榜';
+$lang->block->modules['doc']->availableBlocks->productdoc      = $lang->productCommon . '文档';
+$lang->block->modules['doc']->availableBlocks->doccollectlist  = '收藏排行榜';
+$lang->block->modules['doc']->availableBlocks->projectdoc      = $lang->projectCommon . '文档';
 
 $lang->block->orderByList = new stdclass();
 
@@ -527,40 +575,6 @@ $lang->block->typeList->testtask['doing']   = '测试中版本';
 $lang->block->typeList->testtask['blocked'] = '阻塞版本';
 $lang->block->typeList->testtask['done']    = '已测版本';
 $lang->block->typeList->testtask['all']     = '全部';
-
-$lang->block->modules['project']->moreLinkList = new stdclass();
-$lang->block->modules['project']->moreLinkList->recentproject  = 'project|browse|';
-$lang->block->modules['project']->moreLinkList->statistic      = 'project|browse|';
-$lang->block->modules['project']->moreLinkList->project        = 'project|browse|';
-$lang->block->modules['project']->moreLinkList->cmmireport     = 'weekly|index|';
-$lang->block->modules['project']->moreLinkList->cmmiestimate   = 'workestimation|index|';
-$lang->block->modules['project']->moreLinkList->cmmiissue      = 'issue|browse|';
-$lang->block->modules['project']->moreLinkList->cmmirisk       = 'risk|browse|';
-$lang->block->modules['project']->moreLinkList->scrumlist      = 'project|execution|';
-$lang->block->modules['project']->moreLinkList->scrumtest      = 'project|testtask|';
-$lang->block->modules['project']->moreLinkList->scrumproduct   = 'product|all|';
-$lang->block->modules['project']->moreLinkList->sprint         = 'project|execution|';
-$lang->block->modules['project']->moreLinkList->projectdynamic = 'project|dynamic|';
-
-$lang->block->modules['product']->moreLinkList        = new stdclass();
-$lang->block->modules['product']->moreLinkList->list  = 'product|all|';
-$lang->block->modules['product']->moreLinkList->story = 'my|story|type=%s';
-
-$lang->block->modules['execution']->moreLinkList       = new stdclass();
-$lang->block->modules['execution']->moreLinkList->list = 'execution|all|status=%s&executionID=';
-$lang->block->modules['execution']->moreLinkList->task = 'my|task|type=%s';
-
-$lang->block->modules['qa']->moreLinkList           = new stdclass();
-$lang->block->modules['qa']->moreLinkList->bug      = 'my|bug|type=%s';
-$lang->block->modules['qa']->moreLinkList->case     = 'my|testcase|type=%s';
-$lang->block->modules['qa']->moreLinkList->testtask = 'testtask|browse|type=%s';
-
-$lang->block->modules['todo']->moreLinkList       = new stdclass();
-$lang->block->modules['todo']->moreLinkList->list = 'my|todo|type=all';
-
-$lang->block->modules['common']                        = new stdclass();
-$lang->block->modules['common']->moreLinkList          = new stdclass();
-$lang->block->modules['common']->moreLinkList->dynamic = 'company|dynamic|';
 
 $lang->block->welcomeList['06:00'] = '%s，早上好！';
 $lang->block->welcomeList['11:30'] = '%s，中午好！';

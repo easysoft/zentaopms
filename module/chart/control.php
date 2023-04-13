@@ -176,52 +176,7 @@ class chart extends control
 
         $chart = $this->chart->getByID($chartID);
 
-        $filterFormat = array();
-        foreach($filters as $filter)
-        {
-            $field = $filter['field'];
-            if(!isset($filter['default'])) continue;
-
-            $default = $filter['default'];
-            switch($filter['type'])
-            {
-                case 'select':
-                    if(empty($default)) break;
-                    $default = array_filter($default, function($val){return !empty($val);});
-                    $value = "('" . implode("', '", $default) . "')";
-                    $filterFormat[$field] = array('operator' => 'IN', 'value' => $value);
-                    break;
-                case 'input':
-                    $filterFormat[$field] = array('operator' => 'like', 'value' => "'%$default%'");
-                    break;
-                case 'date':
-                case 'datetime':
-                    $begin = $default['begin'];
-                    $end   = $default['end'];
-
-                    if(empty($begin) or empty($end)) break;
-
-                    $value = "'$begin' and '$end'";
-                    $filterFormat[$field] = array('operator' => 'BETWEEN', 'value' => $value);
-                    break;
-                case 'condition':
-                    $operator = $filter['operator'];
-                    $value    = $filter['value'];
-
-                    if(in_array($operator, array('IN', 'NOT IN')))
-                    {
-                        $valueArr = explode(',', $value);
-                        foreach($valueArr as $key => $val) $valueArr[$key] = '"' . $val . '"';
-                        $value = '(' . implode(',', $valueArr) . ')';
-                    }
-                    elseif(in_array($operator, array('IS NOT NULL', 'IS NULL')))
-                    {
-                        $value = '';
-                    }
-                    $filterFormat[$field] = array('operator' => $operator, 'value' => $value);
-                    break;
-            }
-        }
+        $filterFormat = $this->chart->getFilterFormat($filters);
 
         $sql    = str_replace(';', '', "$post->sql");
         $fields = $post->fieldSettings;
