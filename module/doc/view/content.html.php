@@ -158,7 +158,7 @@
       <?php echo $outline;?>
       </div>
     </div>
-    <div class="outline-toggle"><i class="icon icon-angle-right"></i></div>
+    <div class="outline-toggle"><i class="icon icon-menu-arrow-left"></i></div>
     <?php endif;?>
     <div id="history" class='panel hidden' style="margin-left: 2px;">
       <?php

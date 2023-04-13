@@ -22,12 +22,10 @@
           <tr>
             <th><?php echo $lang->jenkins->name; ?></th>
             <td class='required'><?php echo html::input('name', '', "class='form-control'"); ?></td>
-            <td></td>
           </tr>
           <tr>
             <th><?php echo $lang->jenkins->url; ?></th>
             <td class='required'><?php echo html::input('url', '', "class='form-control'"); ?></td>
-            <td></td>
           </tr>
           <tr>
             <th><?php echo $lang->jenkins->account;?></th>
@@ -35,13 +33,11 @@
           </tr>
           <tr>
             <th><?php echo $lang->jenkins->token;?></th>
-            <td><?php echo html::input('token', '', "class='form-control'");?></td>
-            <td><?php echo $lang->jenkins->tokenFirst;?></td>
+            <td><?php echo html::input('token', '', "class='form-control' placeholder='{$lang->jenkins->tokenFirst}'");?></td>
           </tr>
           <tr>
             <th><?php echo $lang->jenkins->password;?></th>
-            <td><?php echo html::password('password', '', "class='form-control'");?></td>
-            <td><?php echo $lang->jenkins->tips;?></td>
+            <td><?php echo html::password('password', '', "class='form-control' placeholder='{$lang->jenkins->tips}'");?></td>
           </tr>
           <tr>
             <td colspan='2' class='text-center form-actions'>

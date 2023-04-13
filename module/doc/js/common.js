@@ -29,7 +29,12 @@ function loadObjectModules(objectType, objectID, docType)
 function loadExecutions(projectID)
 {
     var link = createLink('project', 'ajaxGetExecutions', "projectID=" + projectID + "&executionID=0&mode=multiple,leaf,noprefix&type=sprint,stage");
-    $('#executionBox').load(link, function(){$('#executionBox').find('select').attr('data-placeholder', holders.execution).attr('onchange', "loadObjectModules('execution', this.value)").picker()});
+    $('#executionBox').load(link, function()
+    {
+        var $extension = $('#executionBox').find('select');
+        $extension.attr('data-placeholder', holders.execution).attr('onchange', "loadObjectModules('execution', this.value)").picker();
+        if($extension.hasClass('disabled')) $('#executionBox').find('.picker').addClass('disabled');
+    });
     loadObjectModules('project', projectID);
 }
 
@@ -421,9 +426,10 @@ function updateCrumbs()
         if(widthSum >= crumbMaxWidth)
         {
             $(crumbItem).addClass('in-auto-box');
+            var $autoCrumbItems = $('#crumbs > .in-auto-box');
+            $lastChild.before('<div id="autoBox" class="flex-auto"><div class="ellipsis">...<div></div>');
+            $('#autoBox').prepend($autoCrumbItems);
+            return;
         }
     }
-    var $autoCrumbItems = $('#crumbs > .in-auto-box');
-    $lastChild.before('<div id="autoBox" class="flex-auto"><div class="ellipsis">...<div></div>');
-    $('#autoBox').prepend($autoCrumbItems);
 }
