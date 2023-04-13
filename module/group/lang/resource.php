@@ -1183,7 +1183,6 @@ $lang->testsuite->methodOrder[35] = 'unlinkCase';
 $lang->testsuite->methodOrder[40] = 'batchUnlinkCases';
 
 $lang->resource->caselib = new stdclass();
-$lang->resource->caselib->index            = 'index';
 $lang->resource->caselib->browse           = 'browseAction';
 $lang->resource->caselib->create           = 'create';
 $lang->resource->caselib->edit             = 'edit';
@@ -1195,7 +1194,6 @@ $lang->resource->caselib->exportTemplate   = 'exportTemplate';
 $lang->resource->caselib->import           = 'importAction';
 $lang->resource->caselib->showImport       = 'showImport';
 
-$lang->caselib->methodOrder[0]  = 'index';
 $lang->caselib->methodOrder[5]  = 'browse';
 $lang->caselib->methodOrder[10] = 'create';
 $lang->caselib->methodOrder[15] = 'edit';

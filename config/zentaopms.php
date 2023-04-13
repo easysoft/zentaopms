@@ -232,6 +232,7 @@ $config->openMethods[] = 'action.restoreStages';
 $config->openMethods[] = 'execution.browse';
 $config->openMethods[] = 'testcase.showImport';
 $config->openMethods[] = 'testsuite.index';
+$config->openMethods[] = 'caselib.index';
 
 $config->openModules = array();
 $config->openModules[] = 'install';

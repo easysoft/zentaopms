@@ -12,7 +12,6 @@
 $lang->caselib->common = '用例库';
 $lang->caselib->all    = '所有用例库';
 
-$lang->caselib->index           = "用例库首页";
 $lang->caselib->create          = "创建用例库";
 $lang->caselib->edit            = '编辑用例库';
 $lang->caselib->browse          = '浏览用例库';
