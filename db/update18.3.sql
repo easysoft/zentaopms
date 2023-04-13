@@ -770,6 +770,17 @@ CHANGE `assignedTo` `assignedTo` varchar(30) NOT NULL DEFAULT '',
 CHANGE `assignedDate` `assignedDate` datetime NULL;
 
 ALTER TABLE `zt_workflow`
+CHANGE `parent` `parent` varchar(30) NOT NULL DEFAULT '',
+CHANGE `child` `child` varchar(30) NOT NULL DEFAULT '',
+CHANGE `position` `position` varchar(30) NOT NULL DEFAULT '',
+CHANGE `titleField` `titleField` varchar(30) NOT NULL DEFAULT '',
+CHANGE `contentField` `contentField` text NULL,
+CHANGE `flowchart` `flowchart` text NULL,
+CHANGE `js` `js` text NULL,
+CHANGE `css` `css` text NULL,
+CHANGE `order` `order` smallint unsigned NOT NULL DEFAULT '0',
+CHANGE `administrator` `administrator` text NULL,
+CHANGE `desc` `desc` text NULL,
 CHANGE `editedBy` `editedBy` varchar(30) NOT NULL DEFAULT '',
 CHANGE `editedDate` `editedDate` datetime NULL;
 
