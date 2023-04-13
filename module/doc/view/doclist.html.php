@@ -42,7 +42,6 @@ body {margin-bottom: 25px;}
 </div>
 <?php else:?>
 <?php $vars = "objectID=$objectID&$libID=$libID&moduleID=$moduleID&browseType=$browseType&orderBy=%s&param=$param&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}";?>
-<?php if($app->rawMethod == 'tablecontents') $vars = "type=$type&" . $vars;?>
 <div>
   <form class='main-table' method='post' id='docListForm'>
     <table class="table table-files has-sort-head">

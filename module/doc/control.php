@@ -1282,7 +1282,7 @@ class doc extends control
         $queryID = $browseType == 'bySearch' ? (int)$param : 0;
         $params  = "objectID=$objectID&libID=$libID&moduleID=0&browseType=bySearch&orderBy=$orderBy&param=myQueryID";
         if($this->app->rawMethod == 'tablecontents') $params = "type=$type&" . $params;
-        $actionURL = $this->createLink('doc', $this->app->rawMethod, $params);
+        $actionURL = $this->createLink($this->app->rawModule, $this->app->rawMethod, $params);
         if($libType == 'api')
         {
             $this->loadModel('api')->buildSearchForm($lib, $queryID, $actionURL, $libs, $type);
