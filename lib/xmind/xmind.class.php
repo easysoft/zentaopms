@@ -9,7 +9,18 @@
  * @version     $Id$
  * @link        http://www.zentao.net
  */
-class xmind{
+class xmind
+{
+    /**
+     * Create Module Node.
+     *
+     * @param  DOMDocument $xmlDoc
+     * @param  array       $context
+     * @param  DOMElement  $productNode
+     * @param  array       $moduleNodes
+     * @access public
+     * @return void
+     */
     function createModuleNode($xmlDoc, $context, $productNode, &$moduleNodes)
     {
         $config     = $context['config'];
@@ -17,25 +28,36 @@ class xmind{
 
         foreach($moduleList as $key => $name)
         {
-            $suffix      =  $config['module'].':'.$key;
-            $moduleNode  =  $this->createNode($xmlDoc, $name, $suffix, array('nodeType' => 'module'));
+            $suffix     = $config['module'].':'.$key;
+            $moduleNode = $this->createNode($xmlDoc, $name, $suffix, array('nodeType' => 'module'));
             $productNode->appendChild($moduleNode);
 
             $moduleNodes[$key] = $moduleNode;
         }
     }
 
+    /**
+     * Create Scene Node.
+     *
+     * @param  DOMDocument $xmlDoc
+     * @param  array       $context
+     * @param  DOMElement  $productNode
+     * @param  array       $moduleNodes
+     * @param  array       $sceneNodes
+     * @access public
+     * @return void
+     */
     function createSceneNode($xmlDoc, $context, $productNode, &$moduleNodes, &$sceneNodes)
     {
-        $sceneMaps  = $context['sceneMaps'];
-        $config     = $context['config'];
+        $sceneMaps = $context['sceneMaps'];
+        $config    = $context['config'];
 
-        $topScenes  = $context['topScenes'];
+        $topScenes = $context['topScenes'];
 
         foreach($topScenes as $scene)
         {
             $suffix    = $config['scene'].':'.$scene->sceneID;
-            $sceneNode =  $this->createNode($xmlDoc, $scene->sceneName, $suffix, array('nodeType' => 'scene'));
+            $sceneNode = $this->createNode($xmlDoc, $scene->sceneName, $suffix, array('nodeType' => 'scene'));
 
             $this->createNextChildScenesNode($scene, $sceneNode, $xmlDoc, $context, $moduleNodes, $sceneNodes);
 
@@ -53,10 +75,22 @@ class xmind{
         }
     }
 
+    /**
+     * Create Next Child Scene Node.
+     *
+     * @param  object      $parentScene
+     * @param  object      $parentNode
+     * @param  DOMDocument $xmlDoc
+     * @param  array       $context
+     * @param  array       $moduleNodes
+     * @param  array       $sceneNodes
+     * @access public
+     * @return void
+     */
     function createNextChildScenesNode($parentScene,$parentNode, $xmlDoc, $context, &$moduleNodes, &$sceneNodes)
     {
-        $sceneMaps  = $context['sceneMaps'];
-        $config     = $context['config'];
+        $sceneMaps = $context['sceneMaps'];
+        $config    = $context['config'];
 
         foreach($sceneMaps as $key => $scene)
         {
@@ -72,6 +106,17 @@ class xmind{
         }
     }
 
+    /**
+     * Create Test Case Node.
+     *
+     * @param  DOMDocument $xmlDoc
+     * @param  array       $context
+     * @param  object      $productNode
+     * @param  array       $moduleNodes
+     * @param  array       $sceneNodes
+     * @access public
+     * @return void
+     */
     function createTestcaseNode($xmlDoc, $context, $productNode, &$moduleNodes, &$sceneNodes)
     {
         $caseList = $context['caseList'];
@@ -84,11 +129,21 @@ class xmind{
             if(!isset($parentNode)) $parentNode = $moduleNodes[$case->moduleID];
             if(!isset($parentNode)) $parentNode = $productNode;
 
-            $this->createTestcaseNodeImpl($case, $xmlDoc, $context, $parentNode);
+            $this->createOneTestcaseNode($case, $xmlDoc, $context, $parentNode);
         }
     }
 
-    function createTestcaseNodeImpl($case, $xmlDoc, $context, $parentNode)
+    /**
+     * Create One Test Case Node.
+     *
+     * @param  object      $case
+     * @param  DOMDocument $xmlDoc
+     * @param  array       $context
+     * @param  object      $parentNode
+     * @access public
+     * @return void
+     */
+    function createOneTestcaseNode($case, $xmlDoc, $context, $parentNode)
     {
         $caseList = $context['caseList'];
         $stepList = $context['stepList'];
@@ -131,6 +186,14 @@ class xmind{
         }
     }
 
+    /**
+     * Find Substep List By Step.
+     *
+     * @param  object $step
+     * @param  array  $stepList
+     * @access public
+     * @return array
+     */
     function findSubStepListByStep($step,$stepList)
     {
         $subList = array();
@@ -145,6 +208,14 @@ class xmind{
         return $subList;
     }
 
+    /**
+     * Find Top Step List By Case.
+     *
+     * @param  object $case
+     * @param  array  $stepList
+     * @access public
+     * @return array
+     */
     public function findTopStepListByCase($case,$stepList)
     {
         $topList = array();
@@ -159,18 +230,28 @@ class xmind{
         return $topList;
     }
 
+    /**
+     * Create Xmind Node.
+     *
+     * @param  DOMDocument $xmlDoc
+     * @param  string      $text
+     * @param  string      $suffix
+     * @param  array       $attrs
+     * @access public
+     * @return object
+     */
     public function createNode($xmlDoc, $text, $suffix = '', $attrs=array())
     {
         $node = $xmlDoc->createElement('node');
 
-        $textAttr      =  $xmlDoc->createAttribute('TEXT');
-        $textAttrValue =  $xmlDoc->createTextNode($this->toText($text,$suffix));
+        $textAttr      = $xmlDoc->createAttribute('TEXT');
+        $textAttrValue = $xmlDoc->createTextNode($this->toText($text,$suffix));
 
         $textAttr->appendChild($textAttrValue);
         $node->appendChild($textAttr);
 
-        $positionAttr      =  $xmlDoc->createAttribute("POSITION");
-        $positionAttrValue =  $xmlDoc->createTextNode('right');
+        $positionAttr      = $xmlDoc->createAttribute("POSITION");
+        $positionAttrValue = $xmlDoc->createTextNode('right');
 
         $positionAttr->appendChild($positionAttrValue);
         $node->appendChild($positionAttr);
@@ -187,12 +268,28 @@ class xmind{
         return $node;
     }
 
+    /**
+     * Add suffix before string.
+     *
+     * @param  string $str
+     * @param  string $suffix
+     * @access public
+     * @return string
+     */
     public function toText($str, $suffix)
     {
         if(empty($suffix)) return $str;
         return $str . '['.$suffix.']';
     }
 
+    /**
+     * Get Substring Between Mark1 And Mark2 From Kw.
+     *
+     * @param  string $str
+     * @param  string $suffix
+     * @access public
+     * @return string
+     */
     function getBetween($kw1, $mark1, $mark2)
     {
         $kw = $kw1;
@@ -206,6 +303,14 @@ class xmind{
         return $kw;
     }
 
+    /**
+     * Judgment ends with a string.
+     *
+     * @param  string $haystack
+     * @param  string $needle
+     * @access public
+     * @return string
+     */
     function endsWith($haystack, $needle)
     {
         return $needle === '' || substr_compare($haystack, $needle, -strlen($needle)) === 0;

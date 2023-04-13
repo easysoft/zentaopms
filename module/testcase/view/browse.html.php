@@ -62,13 +62,13 @@ js::set('langNormal',       $lang->testcase->normal);
     <?php $useDatatable = '';?>
     <div class="table-empty-tip">
       <p>
-        <?php if($this->cookie->onlyScene){ ?>
+        <?php if($this->cookie->onlyScene): ?>
           <span class="text-muted"><?php echo $lang->testcase->noScene;?></span>
           <?php if((empty($productID) or common::canModify('product', $product)) and common::hasPriv('testcase', 'createScene') and $browseType != 'bysuite'):?>
           <?php $initModule = isset($moduleID) ? (int)$moduleID : 0;?>
           <?php  echo html::a($this->createLink('testcase', 'createScene', "productID=$productID&branch=$branch&moduleID=$initModule"), "<i class='icon icon-plus'></i> " . $lang->testcase->newScene, '', "class='btn btn-info' data-app='{$this->app->tab}'");?>
            <?php endif;?>
-        <?php }else{ ?>
+        <?php else: ?>
           <span class="text-muted"><?php echo $lang->testcase->noCase;?></span>
           <?php if((empty($productID) or common::canModify('product', $product)) and common::hasPriv('testcase', 'create') and $browseType != 'bysuite'):?>
           <?php $initModule = isset($moduleID) ? (int)$moduleID : 0;?>
@@ -78,7 +78,7 @@ js::set('langNormal',       $lang->testcase->normal);
           <?php if(common::hasPriv('testsuite', 'linkCase') and $browseType == 'bysuite'):?>
           <?php echo html::a($this->createLink('testsuite', 'linkCase', "suiteID=$param"), "<i class='icon icon-plus'></i> " . $lang->testsuite->linkCase, '', "class='btn btn-info' data-app='{$this->app->tab}'");?>
           <?php endif;?>
-        <?php } ?>
+        <?php endif ?>
       </p>
     </div>
     <?php else:?>

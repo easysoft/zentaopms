@@ -2641,6 +2641,24 @@ class testcase extends control
         $this->display();
     }
 
+    /**
+     * Ajax Get module scenes.
+     *
+     * @param  int    $productID
+     * @param  int    $branch
+     * @param  int    $moduleID
+     * @param  int    $stype
+     * @param  int    $storyID
+     * @param  bool   $onlyOption
+     * @param  string $status
+     * @param  string $limit
+     * @param  string $type
+     * @param  int    $hasParent
+     * @param  string $number
+     * @param  int    $currentScene
+     * @access public
+     * @return void
+     */
     public function ajaxGetModuleScenes($productID, $branch = 0, $moduleID = 0, $stype = 1, $storyID = 0, $onlyOption = 'false', $status = '', $limit = 0, $type = 'full', $hasParent = 1, $number = '', $currentScene = 0)
     {
         $optionMenu = $this->testcase->getSceneMenu($productID, $moduleID, 'case', 0, $branch, $currentScene);
@@ -2649,6 +2667,21 @@ class testcase extends control
         die($output);
     }
 
+    /**
+     * Ajax Get Option Menu.
+     *
+     * @param  int    $rootID
+     * @param  string $viewType
+     * @param  int    $branch
+     * @param  int    $rootModuleID
+     * @param  string $returnType
+     * @param  string $fieldID
+     * @param  bool   $needManage
+     * @param  string $extra
+     * @param  int    $currentModuleID
+     * @access public
+     * @return void
+     */
     public function ajaxGetOptionMenu($rootID, $viewType = 'story', $branch = 0, $rootModuleID = 0, $returnType = 'html', $fieldID = '', $needManage = false, $extra = '', $currentModuleID = 0)
     {
         $this->loadModel('tree');
@@ -2708,6 +2741,24 @@ class testcase extends control
         if($returnType == 'json') die(json_encode($optionMenu));
     }
 
+    /**
+     * Ajax Get scenes.
+     *
+     * @param  int    $productID
+     * @param  int    $branch
+     * @param  int    $moduleID
+     * @param  int    $stype
+     * @param  int    $storyID
+     * @param  bool   $onlyOption
+     * @param  string $status
+     * @param  string $limit
+     * @param  string $type
+     * @param  int    $hasParent
+     * @param  string $number
+     * @param  int    $currentScene
+     * @access public
+     * @return void
+     */
     public function ajaxGetScenesForBC($productID, $branch = 0, $moduleID = 0, $stype = 1, $storyID = 0, $onlyOption = 'false', $status = '', $limit = 0, $type = 'full', $hasParent = 1, $number = '', $currentScene = 0)
     {
         $optionMenu = $this->testcase->getSceneMenu($productID, $moduleID, 'case', 0, $branch, $currentScene);
@@ -2725,6 +2776,13 @@ class testcase extends control
         die($output);
     }
 
+    /**
+     * Batch Change Scene.
+     *
+     * @param  int $sceneId
+     * @access public
+     * @return void
+     */
     public function batchChangeScene($sceneId)
     {
         if($this->post->caseIDList)
@@ -2757,6 +2815,12 @@ class testcase extends control
         echo js::locate($this->session->caseList, 'parent');
     }
 
+    /**
+     * Change Scene.
+     *
+     * @access public
+     * @return void
+     */
     public function changeScene()
     {
         $now       = helper::now();
@@ -2842,6 +2906,14 @@ class testcase extends control
         }
     }
 
+    /**
+     * Delete Scene.
+     *
+     * @param  int    $sceneId
+     * @param  string $confirm
+     * @access public
+     * @return void
+     */
     public function deleteScene($sceneID, $confirm = 'no')
     {
         $scene = $this->dao->select('*')->from(VIEW_SCENECASE)->where('id')->eq($sceneID)->andWhere('isCase')->eq(2)->fetch();
@@ -2875,6 +2947,14 @@ class testcase extends control
         echo js::reload('parent');
     }
 
+    /**
+     * Edit Scene.
+     *
+     * @param  int $sceneId
+     * @param  int $executionID
+     * @access public
+     * @return void
+     */
     public function editScene($sceneID, $executionID = 0)
     {
         $this->loadModel('story');
@@ -3032,6 +3112,16 @@ class testcase extends control
                 ->exec();
         }
     }
+
+    /**
+     * Export Xmind.
+     *
+     * @param  int $productID
+     * @param  int $moduleID
+     * @param  int $branch
+     * @access public
+     * @return void
+     */
     public function exportXMind($productID, $moduleID, $branch)
     {
         if($_POST)
@@ -3098,12 +3188,24 @@ class testcase extends control
         $this->display();
     }
 
+    /**
+     * Get Xmind Config.
+     *
+     * @access public
+     * @return void
+     */
     public function getXmindConfig()
     {
         $result = $this->testcase->getXmindConfig();
         $this->send($result);
     }
 
+    /**
+     * Get Xmind Content.
+     *
+     * @access public
+     * @return void
+     */
     public function getXmindImport()
     {
         $folder = $this->session->xmindImport;
@@ -3125,6 +3227,14 @@ class testcase extends control
         }
     }
 
+    /**
+     * Import Xmind.
+     *
+     * @param  int $productID
+     * @param  int $branch
+     * @access public
+     * @return void
+     */
     public function importXMind($productID, $branch)
     {
         if($_FILES)
@@ -3194,6 +3304,15 @@ class testcase extends control
         $this->display();
     }
 
+    /**
+     * Fetch By Xml.
+     *
+     * @param  string $extractFolder
+     * @param  int    $productID
+     * @param  int    $branch
+     * @access public
+     * @return void
+     */
     function fetchByXML($extractFolder, $productID, $branch)
     {
         $filePath = $extractFolder."/content.xml";
@@ -3226,6 +3345,15 @@ class testcase extends control
         return array('result'=>'success','pId'=>$pId, 'type'=>'xml');
     }
 
+    /**
+     * Fetch By Json.
+     *
+     * @param  string $extractFolder
+     * @param  int    $productID
+     * @param  int    $branch
+     * @access public
+     * @return void
+     */
     function fetchByJSON($extractFolder, $productID, $branch)
     {
         $filePath = $extractFolder."/content.json";
@@ -3259,12 +3387,24 @@ class testcase extends control
         return array('result'=>'success','pId'=>$pId,'type'=>'json');
     }
 
+    /**
+     * Save Xmind Config.
+     *
+     * @access public
+     * @return void
+     */
     public function saveXmindConfig()
     {
         $result = $this->testcase->saveXmindConfig();
         $this->send($result);
     }
 
+    /**
+     * Save Imported Xmind.
+     *
+     * @access public
+     * @return void
+     */
     public function saveXmindImport()
     {
         if(!empty($_POST))
@@ -3276,6 +3416,14 @@ class testcase extends control
         $this->send(array('result' => 'fail', 'message' => $this->lang->errorSaveXmind));
     }
 
+    /**
+     * Show Imported Xmind.
+     *
+     * @param  int $productID
+     * @param  int $branch
+     * @access public
+     * @return void
+     */
     public function showXMindImport($productID,$branch)
     {
         $product  = $this->product->getById($productID);
