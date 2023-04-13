@@ -17,7 +17,6 @@ $lang->stakeholder->add          = '新建';
 $lang->stakeholder->communicate  = '沟通记录';
 $lang->stakeholder->expect       = '期望内容';
 $lang->stakeholder->progress     = '达成进展';
-$lang->stakeholder->createExpect = '添加期望';
 $lang->stakeholder->editExpect   = '编辑期望';
 $lang->stakeholder->viewExpect   = '期望信息';
 $lang->stakeholder->issue        = '问题管理';
