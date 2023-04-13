@@ -197,20 +197,6 @@ class gitlab extends control
     }
 
     /**
-     * Bind product and gitlab projects.
-     *
-     * @param  int    $gitlabID
-     * @access public
-     * @return void
-     */
-    public function bindProduct($gitlabID)
-    {
-        $this->view->projectPairs = $this->gitlab->getProjectPairs($gitlabID);
-        $this->view->title        = $this->lang->gitlab->bindProduct;
-        $this->display();
-    }
-
-    /**
      * Delete a gitlab.
      *
      * @param  int    $id

@@ -1469,7 +1469,6 @@ $lang->resource->gitlab->view                 = 'view';
 $lang->resource->gitlab->importIssue          = 'importIssue';
 $lang->resource->gitlab->delete               = 'delete';
 $lang->resource->gitlab->bindUser             = 'bindUser';
-$lang->resource->gitlab->bindProduct          = 'bindProduct';
 $lang->resource->gitlab->browseProject        = 'browseProject';
 $lang->resource->gitlab->createProject        = 'createProject';
 $lang->resource->gitlab->editProject          = 'editProject';

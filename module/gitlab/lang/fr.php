@@ -7,7 +7,6 @@ $lang->gitlab->edit              = 'Edit GitLab';
 $lang->gitlab->view              = 'View GitLab';
 $lang->gitlab->bindUser          = 'Bind User';
 $lang->gitlab->webhook           = 'Webhook';
-$lang->gitlab->bindProduct       = "Import {$lang->productCommon}";
 $lang->gitlab->importIssue       = 'Import Issue';
 $lang->gitlab->delete            = 'Delete GitLab';
 $lang->gitlab->confirmDelete     = 'Do you want to delete this GitLab server?';

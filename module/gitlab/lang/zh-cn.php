@@ -7,7 +7,6 @@ $lang->gitlab->edit              = '编辑GitLab';
 $lang->gitlab->view              = '查看GitLab';
 $lang->gitlab->bindUser          = '绑定用户';
 $lang->gitlab->webhook           = 'Webhook';
-$lang->gitlab->bindProduct       = "关联{$lang->productCommon}";
 $lang->gitlab->importIssue       = '关联issue';
 $lang->gitlab->delete            = '删除GitLab';
 $lang->gitlab->confirmDelete     = '确认删除该GitLab吗？';
