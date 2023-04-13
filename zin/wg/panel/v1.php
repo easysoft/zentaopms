@@ -5,7 +5,7 @@ class panel extends wg
 {
     protected static $defineProps = array
     (
-        'class?: string="rounded-md shadow ring-0 canvas"',
+        'class?: string="rounded shadow ring-0 canvas"',
         'size?: string',
         'title?: string',
         'titleClass?: string',
@@ -54,7 +54,7 @@ class panel extends wg
         (
             setClass('panel-heading', $this->prop('headingClass')),
             set($this->prop('headingProps')),
-            empty($title) ? NULL : div(setClass('panel-title', $this->prop('titleClass', empty($size) ? NULL : "size-$size")), $title, set($this->prop('titleProps'))),
+            empty($title) ? NULL : div(setClass('panel-title', $this->prop('titleClass', empty($size) ? NULL : "text-$size")), $title, set($this->prop('titleProps'))),
             $headingBlock,
             $actions
         );
