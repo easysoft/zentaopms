@@ -1855,7 +1855,7 @@ class treeModel extends model
             if(empty($module->name)) helper::end(js::alert(sprintf($this->lang->error->notempty, $this->lang->doc->catalogName)));
         }
 
-        $modules = $self->type == 'story' ? $this->getOptionMenu($self->root, 'story', 0, 'all') : '';
+        $modules = $self->type == 'story' ? $this->getOptionMenu($self->root, 'story', 0, 'all') : array();
 
         $parent = $this->getById($this->post->parent);
         $childs = $this->getAllChildId($moduleID);

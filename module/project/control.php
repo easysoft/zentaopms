@@ -1040,6 +1040,7 @@ class project extends control
         $period  = $type == 'account' ? 'all'  : $type;
         $date    = empty($date) ? '' : date('Y-m-d', $date);
         $actions = $this->loadModel('action')->getDynamic($account, $period, $orderBy, $pager, 'all', $projectID, 'all', $date, $direction);
+        if(empty($recTotal)) $recTotal = count($actions);
 
         /* The header and position. */
         $project = $this->project->getByID($projectID);
@@ -1059,6 +1060,7 @@ class project extends control
         $this->view->param      = $param;
         $this->view->dateGroups = $this->action->buildDateGroup($actions, $direction, $type);
         $this->view->direction  = $direction;
+        $this->view->recTotal   = $recTotal;
         $this->display();
     }
 
@@ -2346,12 +2348,13 @@ class project extends control
      * @param  int    $projectID
      * @param  int    $executionID
      * @param  string $mode
+     * @param  string $type
      * @access public
      * @return void
      */
-    public function ajaxGetExecutions($projectID, $executionID = 0, $mode = '')
+    public function ajaxGetExecutions($projectID, $executionID = 0, $mode = '', $type = 'all')
     {
-        $executions = array('' => '') + $this->loadModel('execution')->getPairs($projectID, 'all', $mode);
+        $executions = array('' => '') + $this->loadModel('execution')->getPairs($projectID, $type, $mode);
 
         if($this->app->getViewType() == 'json') return print(json_encode($executionList));
         return print(html::select('execution', $executions, $executionID, "class='form-control'"));

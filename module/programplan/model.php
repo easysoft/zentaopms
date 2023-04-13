@@ -745,9 +745,9 @@ class programplanModel extends model
 
             $datas[] = $plan;
         }
-        
+
         if(empty($datas))
-        {            
+        {
             dao::$errors['message'][] = sprintf($this->lang->error->notempty, $this->lang->programplan->name);
             return false;
         }
@@ -969,6 +969,8 @@ class programplanModel extends model
                     $lib->type      = 'execution';
                     $lib->main      = '1';
                     $lib->acl       = 'default';
+                    $lib->addedBy   = $this->app->user->account;
+                    $lib->addedDate = helper::now();
                     $this->dao->insert(TABLE_DOCLIB)->data($lib)->exec();
 
                     /* Add creators and PM to stage teams and project teams. */

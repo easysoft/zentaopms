@@ -44,7 +44,6 @@
                 <div class='contenthtml'><?php echo html::textarea('content', htmlSpecialString($doc->content), "style='width:100%;'");?></div>
                 <?php echo html::hidden('contentType', $doc->contentType);?>
                 <?php echo html::hidden('type', 'text');?>
-                <?php echo html::hidden('editedDate', $doc->editedDate);?>
                 <?php echo html::hidden('status', $doc->status);?>
               </div>
             </div>
@@ -69,12 +68,12 @@
               <tbody>
                 <?php if(strpos('product|project|execution', $type) !== false):?>
                 <tr>
-                  <th><?php echo $lang->doc->project;?></th>
+                  <th><?php echo $lang->doc->{$type};?></th>
                   <td class='required'><?php echo html::select($type, $objects, $objectID, "class='form-control picker-select' onchange='loadObjectModules(\"{$type}\", this.value)'");?></td>
                 </tr>
                 <?php endif;?>
                 <tr>
-                  <th class='w-100px'><?php echo $lang->doc->libAndModule?></th>
+                  <th class='w-110px'><?php echo $lang->doc->libAndModule?></th>
                   <td colspan='3' class='required'><span id='moduleBox'><?php echo html::select('module', $moduleOptionMenu, $doc->lib . '_' . $doc->module, "class='form-control picker-select'");?></span></td>
                 </tr>
                 <tr>
@@ -102,6 +101,7 @@
                     <?php echo html::radio('acl', $lang->doc->aclList, $doc->acl, "onchange='toggleAcl(this.value, \"doc\")'")?>
                   </td>
                 </tr>
+                <?php if($lib->type != 'mine'):?>
                 <tr id='whiteListBox' class='<?php if($doc->acl == 'open') echo 'hidden';?>'>
                   <th><?php echo $lang->doc->whiteList;?></th>
                   <td colspan='3'>
@@ -116,6 +116,7 @@
                     </div>
                   </td>
                 </tr>
+                <?php endif;?>
               </tbody>
               <tfoot>
                 <tr>
@@ -129,6 +130,20 @@
     </div>
   </form>
 </div>
+<script>
+$(function()
+{
+    /* Automatically save document contents. */
+    setInterval("saveDraft()", <?php echo $config->doc->saveDraftInterval;?> * 1000);
+    <?php if($otherEditing):?>
+    bootbox.confirm(
+    {
+        message: '<?php echo $lang->doc->confirmOtherEditing;?>',
+        callback: function(result){if(!result) location.href='<?php echo $backLink;?>'}
+    });
+    <?php endif;?>
+})
+</script>
 <?php js::set('needUpdateContent', $doc->content != $doc->draft);?>
 <?php js::set('confirmUpdateContent', $lang->doc->confirmUpdateContent);?>
 <?php js::set('docID', $doc->id);?>

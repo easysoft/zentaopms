@@ -28,6 +28,7 @@ class testcasesEntry extends entry
         $this->app->cookie->showAutoCase  = 1;
 
         $type     = $this->param('status', 'all');
+        $branch   = $this->param('branch', '');
         $param    = 0;
         $moduleID = $this->param('module', 0);
         if($moduleID)
@@ -36,8 +37,12 @@ class testcasesEntry extends entry
             $param = $moduleID;
         }
 
+        $this->app->cookie->caseModule = 0;
+        $this->app->cookie->caseSuite  = 0;
+        $this->app->cookie->preBranch  = $branch;
+
         $control = $this->loadController('testcase', 'browse');
-        $control->browse($productID, $this->param('branch', ''), $type, $param, '', $this->param('order', 'id_desc'), 0, $this->param('limit', 20), $this->param('page', 1));
+        $control->browse($productID, $this->param('branch', ''), $type, $param, $this->param('caseType', ''), $this->param('order', 'id_desc'), 0, $this->param('limit', 20), $this->param('page', 1));
 
         $data = $this->getData();
 

@@ -23,7 +23,7 @@
 .input-tree {width: 120px;}
 .tree-icon {position: absolute; right: 0;}
 .tree li.has-input {overflow: hidden;}
-.tree li.has-input  > input {margin-left: 15px;}
+.tree li.has-input  > input.input-bro {margin-left: 15px;}
 .img-lib {flex: 0 0 14px; height: 14px; margin-right: 5px;}
 .tree-icon {position: absolute; right: 0;}
 .tree li > a {max-width: 100%; padding: 2px;}
@@ -118,7 +118,7 @@ js::set('hasLibPriv',       $hasLibPriv);
   <?php foreach(array('doc', 'api') as $module):?>
   <ul class='<?php echo $module;?>LibDorpdown'>
     <?php if($canAddCatalog[$module]):?>
-    <li data-method="addCataLib" data-has-children='%hasChildren%'  data-libid='%libID%' data-moduleid="%moduleID%" data-type="add"><a><i class="icon icon-icon-add-directory"></i><?php echo $lang->doc->libDropdown['addModule'];?></a></li>
+    <li data-method="addCataLib" data-has-children='%hasChildren%'  data-libid='%libID%' data-moduleid="%moduleID%" data-type="add"><a><i class="icon icon-add-directory"></i><?php echo $lang->doc->libDropdown['addModule'];?></a></li>
     <?php endif;?>
     <?php if(common::hasPriv($module, 'editLib')):?>
     <li data-method="editLib"><a href='<?php echo inlink('editLib', 'libID=%libID%');?>' data-toggle='modal' data-type='iframe'><i class="icon icon-edit"></i><?php echo $lang->doc->libDropdown['editLib'];?></a></li>
@@ -129,8 +129,8 @@ js::set('hasLibPriv',       $hasLibPriv);
   </ul>
   <ul class='<?php echo $module;?>ModuleDorpdown'>
     <?php if($canAddCatalog[$module]):?>
-    <li data-method="addCataBro" data-type="add" data-id="%moduleID%"><a><i class="icon icon-icon-add-directory"></i><?php echo $lang->doc->libDropdown['addSameModule'];?></a></li>
-    <li data-method="addCataChild" data-type="add" data-id="%moduleID%" data-has-children='%hasChildren%'><a><i class="icon icon-icon-add-directory"></i><?php echo $lang->doc->libDropdown['addSubModule'];?></a></li>
+    <li data-method="addCataBro" data-type="add" data-id="%moduleID%"><a><i class="icon icon-add-directory"></i><?php echo $lang->doc->libDropdown['addSameModule'];?></a></li>
+    <li data-method="addCataChild" data-type="add" data-id="%moduleID%" data-has-children='%hasChildren%'><a><i class="icon icon-add-directory"></i><?php echo $lang->doc->libDropdown['addSubModule'];?></a></li>
     <?php endif;?>
     <?php if($canEditCatalog[$module]):?>
     <li data-method="editCata" class='edit-module'><a data-href='<?php echo helper::createLink($module, 'editCatalog', "moduleID=%moduleID%&type=$app->rawModule");?>'><i class="icon icon-edit"></i><?php echo $lang->doc->libDropdown['editModule'];?></a></li>
@@ -289,7 +289,7 @@ $(function()
         if(isFirstLoad) ele.data('zui.tree').collapse();
 
         var $leaf = ele.find('li.active > a');
-        if($leaf.length && $('#fileTree').height() >= $('#sideBar').height()) $('#sideBar')[0].scrollTop = $($leaf[$leaf.length - 1]).offset().top;
+        if($leaf.length && $('#fileTree').height() >= $('#sideBar').height()) $('#sideBar')[0].scrollTop = $($leaf[$leaf.length - 1]).offset().top - 100;
 
         ele.on('click', '.icon-drop', function(e)
         {
@@ -448,7 +448,8 @@ $(function()
         else if(objectType == 'mine' || objectType == 'view' || objectType == 'collect' || objectType == 'createdby')
         {
             var mySpaceType = 'mine';
-            if(type == 'view' || type == 'collect' || type == 'createdBy') mySpaceType = type;
+            if(type == 'view' || type == 'collect') mySpaceType = type;
+            if(type == 'createdBy' || type == 'createdby') mySpaceType = 'createdby';
 
             methodName = 'mySpace';
             linkParams = 'type='+ mySpaceType + '&libID=' + libID + '&moduleID=' + moduleID;
@@ -549,7 +550,7 @@ $(function()
                 var $rootDom = $('#fileTree li[data-id=' + item.id + ']');
                 $rootDom.after($input);
                 $rootDom.closest('ul').find('.has-input').css('padding-left', '0');
-                $('#fileTree').find('input').focus();
+                $('#fileTree').find('input').addClass('input-bro').focus();
                 break;
             case 'addCataChild' :
                 moduleData.parentID = item.id;

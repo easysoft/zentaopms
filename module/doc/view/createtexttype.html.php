@@ -60,33 +60,34 @@
             </button>
             <table class='table table-form' id="basicInfoBox">
               <tbody>
-                <tr><th class='w-100px'></th><td></td><th class='w-100px'></th><td></td></tr>
+                <tr><th class='w-110px'></th><td></td><th class='w-110px'></th><td></td><td class='w-30px'></td></tr>
                 <tr>
                   <th><?php echo $lang->doc->title?></th>
                   <td colspan='3' id='copyTitle'></td>
                 </tr>
-                <?php if($objectType == 'project'):?>
+                <?php if($linkType == 'project'):?>
                 <tr>
                   <th><?php echo $lang->doc->project;?></th>
                   <td class='required'><?php echo html::select('project', $objects, isset($execution) ? $execution->project : $objectID, "class='form-control picker-select' onchange=loadExecutions(this.value)");?></td>
                   <?php if($this->app->tab == 'doc' and $config->vision == 'rnd'):?>
                   <th><?php echo $lang->doc->execution?></th>
                   <td id='executionBox'><?php echo html::select('execution', $executions, isset($execution) ? $objectID : '', "class='form-control chosen' data-placeholder='{$lang->doc->placeholder->execution}' onchange='loadObjectModules(\"execution\", this.value)'")?></td>
+                  <td class='pl-0px'><i class='icon icon-help' title='<?php echo $lang->doc->placeholder->execution;?>'></i></td>
                   <?php endif;?>
                 </tr>
-                <?php elseif($objectType == 'execution'):?>
+                <?php elseif($linkType == 'execution'):?>
                 <tr>
                   <th><?php echo $lang->doc->execution;?></th>
                   <td class='required'><?php echo html::select('execution', $objects, $objectID, "class='form-control picker-select' onchange='loadObjectModules(\"execution\", this.value)'");?></td>
                 </tr>
-                <?php elseif($objectType == 'product'):?>
+                <?php elseif($linkType == 'product'):?>
                 <tr>
                   <th><?php echo $lang->doc->product;?></th>
                   <td class='required'><?php echo html::select('product', $objects, $objectID, "class='form-control picker-select' onchange='loadObjectModules(\"product\", this.value)'");?></td>
                 </tr>
                 <?php endif;?>
                 <tr>
-                  <th class='w-100px'><?php echo $lang->doc->libAndModule?></th>
+                  <th class='w-110px'><?php echo $lang->doc->libAndModule?></th>
                   <td colspan='3' class='required'><span id='moduleBox'><?php echo html::select('module', $moduleOptionMenu, $moduleID, "class='form-control picker-select'");?></span></td>
                 </tr>
                 <tr>
@@ -114,6 +115,7 @@
                     <?php echo html::radio('acl', $lang->doc->aclList, $objectType == 'mine' ? 'private' : 'open', "onchange='toggleAcl(this.value, \"doc\")'");?>
                   </td>
                 </tr>
+                <?php if($objectType != 'mine'):?>
                 <tr id='whiteListBox' class='hidden'>
                   <th><?php echo $lang->doc->whiteList;?></th>
                   <td colspan='3'>
@@ -128,6 +130,7 @@
                     </div>
                   </td>
                 </tr>
+                <?php endif;?>
               </tbody>
               <tfoot>
                 <tr>

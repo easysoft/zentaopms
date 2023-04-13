@@ -9,8 +9,13 @@
 function loadObjectModules(objectType, objectID, docType)
 {
     if(typeof docType == 'undefined') docType = 'doc';
+    if(objectType == 'execution' && objectID == 0)
+    {
+        objectType = 'project';
+        objectID   = $('#project').val();
+    }
+    if(objectID == undefined) objectID = 0;
     var link = createLink('doc', 'ajaxGetModules', 'objectType=' + objectType + '&objectID=' + objectID + '&type=' + docType);
-    if(objectType == 'execution' && objectID == 0) var link = createLink('doc', 'ajaxGetModules', 'objectType=project&objectID=' + $('#project').val() + '&type=' + docType);
     $('#moduleBox').load(link, function(){$('#moduleBox').find('select').picker(); $('#moduleLabel').remove();});
 }
 
@@ -23,7 +28,7 @@ function loadObjectModules(objectType, objectID, docType)
  */
 function loadExecutions(projectID)
 {
-    var link = createLink('project', 'ajaxGetExecutions', "projectID=" + projectID + "&executionID=0&mode=multiple,leaf,noprefix");
+    var link = createLink('project', 'ajaxGetExecutions', "projectID=" + projectID + "&executionID=0&mode=multiple,leaf,noprefix&type=sprint,stage");
     $('#executionBox').load(link, function(){$('#executionBox').find('select').attr('data-placeholder', holders.execution).attr('onchange', "loadObjectModules('execution', this.value)").picker()});
     loadObjectModules('project', projectID);
 }
@@ -275,6 +280,7 @@ $(document).ready(function()
     $(function()
     {
         $('.split-row').splitRow();
+        updateCrumbs();
     });
 
     var $pageSetting = $('#pageSetting');
@@ -288,6 +294,8 @@ $(document).ready(function()
 
     $(document).on('mousedown', '.ajaxCollect', function (event)
     {
+        if(event.button != 0) return;
+
         var obj = $(this);
         var url = obj.data('url');
         $.get(url, function(response)
@@ -388,4 +396,34 @@ function submit(object)
     $(object).attr('type', 'submit');
     $('#dataform').submit();
     setTimeout(function(){$(object).attr('type', 'button').removeAttr('disabled')}, 2000);
+}
+
+/**
+ * Update crumbs.
+ *
+ * @access public
+ * @return void
+ */
+function updateCrumbs()
+{
+    var $crumbs       = $('#crumbs');
+    var $crumbItems   = $('#crumbs > .crumb-item');
+    var crumbMaxWidth = 660;
+    if($crumbs.width < crumbMaxWidth || $crumbItems.length == 1) return;
+
+    /* last crumbItem width major */
+    var $lastChild = $($crumbItems[$crumbItems.length -1]);
+    var widthSum = 0 + $lastChild.width();
+    for(var i = 0; i < $crumbItems.length - 1; i++)
+    {
+        var crumbItem = $crumbItems[i];
+        var widthSum  = widthSum + $(crumbItem).width();
+        if(widthSum >= crumbMaxWidth)
+        {
+            $(crumbItem).addClass('in-auto-box');
+        }
+    }
+    var $autoCrumbItems = $('#crumbs > .in-auto-box');
+    $lastChild.before('<div id="autoBox" class="flex-auto"><div class="ellipsis">...<div></div>');
+    $('#autoBox').prepend($autoCrumbItems);
 }

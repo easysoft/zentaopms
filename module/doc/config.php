@@ -12,10 +12,11 @@ $config->doc->editlib->requiredFields   = 'name';
 $config->doc->create->requiredFields    = 'lib,title';
 $config->doc->edit->requiredFields      = 'title';
 
-$config->doc->customObjectLibs = 'files,customFiles';
-$config->doc->notArticleType   = '';
-$config->doc->officeTypes      = 'word,ppt,excel';
-$config->doc->textTypes        = 'html,markdown,text';
+$config->doc->customObjectLibs  = 'files,customFiles';
+$config->doc->notArticleType    = '';
+$config->doc->officeTypes       = 'word,ppt,excel';
+$config->doc->textTypes         = 'html,markdown,text';
+$config->doc->saveDraftInterval = '60';
 
 $config->doc->custom = new stdclass();
 $config->doc->custom->objectLibs = $config->doc->customObjectLibs;
@@ -43,11 +44,11 @@ $config->doc->objectIconList['execution'] = 'icon-run';
 $config->doc->objectIconList['mine']      = 'icon-contacts';
 $config->doc->objectIconList['custom']    = 'icon-groups';
 
-$config->doc->spaceMethod['mine']      = 'mySpace';
-$config->doc->spaceMethod['product']   = 'productSpace';
-$config->doc->spaceMethod['project']   = 'projectSpace';
-$config->doc->spaceMethod['execution'] = 'projectSpace';
-$config->doc->spaceMethod['custom']    = 'tableContents';
+$config->doc->spaceMethod['mine']      = 'myspace';
+$config->doc->spaceMethod['product']   = 'productspace';
+$config->doc->spaceMethod['project']   = 'projectspace';
+$config->doc->spaceMethod['execution'] = 'projectspace';
+$config->doc->spaceMethod['custom']    = 'tablecontents';
 
 $config->doc->search['module']               = 'doc';
 $config->doc->search['fields']['title']      = $lang->doc->title;

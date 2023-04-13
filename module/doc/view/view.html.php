@@ -16,9 +16,31 @@
 <?php js::set('docID', $docID);?>
 <?php js::set('linkParams', "objectID=$objectID&%s");?>
 <?php js::set('docLang', $lang->doc);?>
+<?php js::set('exportMethod', $exportMethod);?>
+<?php js::set('libID', $libID);?>
 <?php if($app->tab == 'execution'):;?>
 <style>.panel-body{min-height: 180px}</style>
 <?php endif;?>
+<div id="mainMenu" class="clearfix">
+  <div id="leftBar" class="btn-toolbar pull-left">
+  <?php echo $objectDropdown;?>
+  <?php echo html::backButton("<i class='icon icon-back icon-sm'></i> " . $lang->goback, "id='backBtn'", 'btn btn-link')?>
+  </div>
+  <div id="crumbs" class="crumbs">
+    <?php foreach($crumbs as $crumbKey => $crumb):?>
+    <div class="crumb-item">
+    <?php if($crumbKey != 0) echo '<div class="separator"> > </div>'?>
+    <?php echo $crumb;?>
+    </div>
+    <?php endforeach;?>
+  </div>
+  <div class="btn-toolbar pull-right">
+    <?php
+    if($canExport) echo html::a($this->createLink('doc', $exportMethod, "libID=$libID&moduleID=0&docID=$docID"), "<i class='icon-export muted'> </i>" . $lang->export, 'hiddenwin', "class='btn btn-link' id='docExport'");
+    if(common::hasPriv('doc', 'create')) echo $this->doc->printCreateBtn($lib, $moduleID);
+    ?>
+  </div>
+</div>
 <div id='mainContent'class="fade flex">
   <?php if($libID):?>
     <div id='sideBar' class="panel side side-col col overflow-auto h-full-adjust">
