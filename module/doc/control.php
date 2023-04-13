@@ -540,9 +540,11 @@ class doc extends control
             }
 
             $link     = $this->session->docList ? $this->session->docList : $this->createLink('doc', 'index');
+            $oldLib   = $doc->lib;
             $doc      = $this->doc->getById($docID);
             $lib      = $this->doc->getLibById($doc->lib);
             $objectID = zget($lib, $lib->type, 0);
+            if($oldLib != $doc->lib) $link = $this->createLink('doc', 'view', "docID={$docID}");
 
             if(!empty($objectType) and $objectType != 'doc' and $doc->type != 'chapter' and $doc->type != 'article')
             {
