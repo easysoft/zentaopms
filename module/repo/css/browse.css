@@ -13,6 +13,7 @@
 #dropMenuRepo > div.table-row > div > div > ul > li > div {padding-left: 20px;}
 #dropMenuRepo > div.table-row > div > div > ul > li > ul {padding-left: 10px;}
 #repoList .hide-in-search .hidden {display: block !important; visibility: inherit !important;}
+#mainMenu .btn-limit {max-width: unset !important;}
 
 #branchList {line-height: 25px;}
 #branchList .hide-in-search, #branchList .tree ul {padding-left: 20px;}

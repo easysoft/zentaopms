@@ -46,6 +46,11 @@ $lang->repo->httpClone       = 'Clone with HTTP';
 $lang->repo->cloneUrl        = 'Clone URL';
 $lang->repo->linkTask        = 'Link Task';
 $lang->repo->unlinkedTasks   = 'Unlinked Tasks';
+$lang->repo->importAction    = 'Import Repo';
+$lang->repo->import          = 'Import';
+$lang->repo->importName      = 'Name after import';
+$lang->repo->importServer    = 'Please select a server';
+$lang->repo->gitlabList      = 'Gitlab Repo';
 
 $lang->repo->submit     = 'Submit';
 $lang->repo->cancel     = 'Cancel';
