@@ -226,9 +226,9 @@ CREATE TABLE IF NOT EXISTS `zt_block` (
   `height` smallint(5) unsigned NOT NULL DEFAULT '0',
   `hidden` tinyint(1) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
-  UNIQUE KEY `account_vision_module_type_order` (`account`,`vision`,`module`,`type`,`order`),
   KEY `account` (`account`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+CREATE UNIQUE INDEX `account_vision_module_type_order` ON `zt_block`(`account`,`vision`,`module`,`type`,`order`);
 -- DROP TABLE IF EXISTS `zt_branch`;
 CREATE TABLE IF NOT EXISTS `zt_branch` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
@@ -428,9 +428,9 @@ CREATE TABLE IF NOT EXISTS `zt_cfd` (
   `name` char(30) NOT NULL,
   `count` smallint NOT NULL,
   `date` date NOT NULL,
-  PRIMARY KEY  (`id`),
-  UNIQUE KEY `execution_type_name_date` (`execution`,`type`,`name`,`date`)
+  PRIMARY KEY  (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+CREATE UNIQUE INDEX `execution_type_name_date` ON `zt_cfd`(`execution`,`type`,`name`,`date`);
 -- DROP TABLE IF EXISTS `zt_chart`;
 CREATE TABLE IF NOT EXISTS `zt_chart` (
   `id` mediumint unsigned NOT NULL AUTO_INCREMENT,
@@ -529,9 +529,9 @@ CREATE TABLE IF NOT EXISTS `zt_config` (
   `section` char(30) NOT NULL default '',
   `key` char(30) NOT NULL default '',
   `value` longtext NOT NULL,
-  PRIMARY KEY  (`id`),
-  UNIQUE KEY `unique` (`vision`,`owner`,`module`,`section`,`key`)
+  PRIMARY KEY  (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
+CREATE UNIQUE INDEX `unique` ON `zt_config`(`vision`,`owner`,`module`,`section`,`key`);
 -- DROP TABLE IF EXISTS `zt_cron`;
 CREATE TABLE IF NOT EXISTS `zt_cron` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
@@ -638,9 +638,9 @@ CREATE TABLE IF NOT EXISTS `zt_designspec` (
   `version` smallint(6) NOT NULL,
   `name` varchar(255) NOT NULL,
   `desc` mediumtext NOT NULL,
-  `files` varchar(255) NOT NULL,
-  UNIQUE KEY `design` (`design`,`version`)
+  `files` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+CREATE UNIQUE INDEX `design` ON `zt_designspec`(`design`,`version`);
 -- DROP TABLE IF EXISTS `zt_doc`;
 CREATE TABLE IF NOT EXISTS `zt_doc` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
@@ -708,9 +708,9 @@ CREATE TABLE IF NOT EXISTS `zt_doccontent` (
   `files` text NOT NULL,
   `type` varchar(10) NOT NULL,
   `version` smallint(5) unsigned NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `doc_version` (`doc`,`version`)
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+CREATE UNIQUE INDEX `doc_version` ON `zt_doccontent`(`doc`,`version`);
 -- DROP TABLE IF EXISTS `zt_doclib`;
 CREATE TABLE IF NOT EXISTS `zt_doclib` (
   `id` smallint(5) unsigned NOT NULL auto_increment,
@@ -808,10 +808,10 @@ CREATE TABLE IF NOT EXISTS `zt_extension` (
   `files` mediumtext NOT NULL,
   `status` varchar(20) NOT NULL,
   PRIMARY KEY  (`id`),
-  UNIQUE KEY `code` (`code`),
   KEY `name` (`name`),
   KEY `installedTime` (`installedTime`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+CREATE UNIQUE INDEX `code` ON `zt_extension`(`code`);
 -- DROP TABLE IF EXISTS `zt_file`;
 CREATE TABLE IF NOT EXISTS `zt_file` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
@@ -846,9 +846,10 @@ CREATE TABLE IF NOT EXISTS `zt_group` (
 CREATE TABLE IF NOT EXISTS `zt_grouppriv` (
   `group` mediumint(8) unsigned NOT NULL default '0',
   `module` char(30) NOT NULL default '',
-  `method` char(30) NOT NULL default '',
-  UNIQUE KEY `group` (`group`,`module`,`method`)
+  `method` char(30) NOT NULL default ''
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+CREATE UNIQUE INDEX `group` ON `zt_grouppriv`(`group`,`module`,`method`);
+
 -- DROP TABLE IF EXISTS `zt_holiday`;
 CREATE TABLE IF NOT EXISTS `zt_holiday` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
@@ -1013,9 +1014,10 @@ CREATE TABLE IF NOT EXISTS `zt_kanbancell` (
   `column` mediumint(8) NOT NULL,
   `type` char(30) NOT NULL,
   `cards` text NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `card_group` (`kanban`,`type`,`lane`,`column`)
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+CREATE UNIQUE INDEX `card_group` ON `zt_kanbancell`(`kanban`,`type`,`lane`,`column`);
+
 -- DROP TABLE IF EXISTS `zt_kanbangroup`;
 CREATE TABLE IF NOT EXISTS `zt_kanbangroup` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
@@ -1065,9 +1067,10 @@ CREATE TABLE IF NOT EXISTS `zt_lang` (
   `value` text NOT NULL,
   `system` enum('0','1') NOT NULL default '1',
   `vision` varchar(10) NOT NULL DEFAULT 'rnd',
-  PRIMARY KEY  (`id`),
-  UNIQUE KEY `lang` (`lang`,`module`,`section`,`key`,`vision`)
+  PRIMARY KEY  (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
+CREATE UNIQUE INDEX `lang` ON `zt_lang`(`lang`,`module`,`section`,`key`,`vision`);
+
 -- DROP TABLE IF EXISTS `zt_log`;
 CREATE TABLE IF NOT EXISTS `zt_log` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
@@ -1199,9 +1202,10 @@ CREATE TABLE IF NOT EXISTS `zt_pipeline` (
 CREATE TABLE IF NOT EXISTS `zt_planstory` (
   `plan` mediumint(8) unsigned NOT NULL,
   `story` mediumint(8) unsigned NOT NULL,
-  `order` mediumint(9) NOT NULL,
-  UNIQUE KEY `plan_story` (`plan`,`story`)
+  `order` mediumint(9) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+CREATE UNIQUE INDEX `plan_story` ON `zt_planstory`(`plan`,`story`);
+
 -- DROP TABLE IF EXISTS `zt_product`;
 CREATE TABLE IF NOT EXISTS `zt_product` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
@@ -1328,9 +1332,9 @@ CREATE TABLE IF NOT EXISTS `zt_projectadmin` (
   `programs` text NOT NULL,
   `projects` text NOT NULL,
   `products` text NOT NULL,
-  `executions` text NOT NULL,
-  UNIQUE KEY `group_account` (`group`, `account`)
+  `executions` text NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+CREATE UNIQUE INDEX `group_account` ON `zt_projectadmin`(`group`, `account`);
 -- DROP TABLE IF EXISTS `zt_projectcase`;
 CREATE TABLE IF NOT EXISTS `zt_projectcase` (
   `project` mediumint(8) unsigned NOT NULL DEFAULT '0',
@@ -1338,9 +1342,9 @@ CREATE TABLE IF NOT EXISTS `zt_projectcase` (
   `case` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `count` mediumint(8) unsigned NOT NULL DEFAULT '1',
   `version` smallint(6) NOT NULL DEFAULT '1',
-  `order` smallint(6) unsigned NOT NULL,
-  UNIQUE KEY `project` (`project`,`case`)
+  `order` smallint(6) unsigned NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+CREATE UNIQUE INDEX `project` ON `zt_projectcase`(`project`,`case`);
 -- DROP TABLE IF EXISTS `zt_projectproduct`;
 CREATE TABLE IF NOT EXISTS `zt_projectproduct` (
   `project` mediumint(8) unsigned NOT NULL,
@@ -1356,9 +1360,9 @@ CREATE TABLE IF NOT EXISTS `zt_projectspec` (
   `name` varchar(255) NOT NULL,
   `milestone` enum('0','1') NOT NULL DEFAULT '0',
   `begin` date NOT NULL,
-  `end` date NOT NULL,
-  UNIQUE KEY `project` (`project`,`version`)
+  `end` date NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+CREATE UNIQUE INDEX `project` ON `zt_projectspec`(`project`,`version`);
 -- DROP TABLE IF EXISTS `zt_projectstory`;
 CREATE TABLE IF NOT EXISTS `zt_projectstory` (
   `project` mediumint(8) unsigned NOT NULL default '0',
@@ -1367,9 +1371,9 @@ CREATE TABLE IF NOT EXISTS `zt_projectstory` (
   `story` mediumint(8) unsigned NOT NULL default '0',
   `version` smallint(6) NOT NULL default '1',
   `order` smallint(6) unsigned NOT NULL,
-  UNIQUE KEY `project` (`project`,`story`),
   KEY `story` (`story`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+CREATE UNIQUE INDEX `project` ON `zt_projectstory`(`project`,`story`);
 -- DROP TABLE IF EXISTS `zt_relation`;
 CREATE TABLE IF NOT EXISTS `zt_relation` (
   `id` int(8) NOT NULL AUTO_INCREMENT,
@@ -1384,9 +1388,9 @@ CREATE TABLE IF NOT EXISTS `zt_relation` (
   `BID` mediumint(8) NOT NULL,
   `BVersion` char(30) NOT NULL,
   `extra` char(30) NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `relation` (`product`,`relation`,`AType`,`BType`, `AID`, `BID`)
+  PRIMARY KEY (`id`)
 ) ENGINE='InnoDB' DEFAULT CHARSET=utf8;
+CREATE UNIQUE INDEX `relation` ON `zt_relation`(`product`,`relation`,`AType`,`BType`, `AID`, `BID`);
 -- DROP TABLE IF EXISTS `zt_release`;
 CREATE TABLE IF NOT EXISTS `zt_release` (
   `id` mediumint(8) unsigned NOT NULL auto_increment,
@@ -1448,10 +1452,10 @@ CREATE TABLE IF NOT EXISTS `zt_repobranch` (
   `repo` mediumint(8) unsigned NOT NULL,
   `revision` mediumint(8) unsigned NOT NULL,
   `branch` varchar(255) NOT NULL,
-  UNIQUE KEY `repo_revision_branch` (`repo`,`revision`,`branch`),
   KEY `branch` (`branch`),
   KEY `revision` (`revision`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+CREATE UNIQUE INDEX `repo_revision_branch` ON `zt_repobranch`(`repo`,`revision`,`branch`);
 -- DROP TABLE IF EXISTS `zt_repofiles`;
 CREATE TABLE IF NOT EXISTS `zt_repofiles` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
@@ -1514,10 +1518,10 @@ CREATE TABLE IF NOT EXISTS `zt_searchindex` (
   `addedDate` datetime NOT NULL,
   `editedDate` datetime NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `object` (`objectType`,`objectID`),
   KEY `addedDate` (`addedDate`),
   FULLTEXT KEY `title_content` (`title`, `content`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+CREATE UNIQUE INDEX `object` ON `zt_searchindex`(`objectType`,`objectID`);
 -- DROP TABLE IF EXISTS `zt_stage`;
 CREATE TABLE IF NOT EXISTS `zt_stage` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
@@ -1615,9 +1619,9 @@ CREATE TABLE IF NOT EXISTS `zt_storyreview` (
   `version` smallint(6) NOT NULL,
   `reviewer` varchar(30) NOT NULL,
   `result` varchar(30) NOT NULL,
-  `reviewDate` datetime NULL,
-  UNIQUE KEY `story` (`story`,`version`,`reviewer`)
+  `reviewDate` datetime NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+CREATE UNIQUE INDEX `story` ON `zt_storyreview`(`story`,`version`,`reviewer`);
 -- DROP TABLE IF EXISTS `zt_storyestimate`;
 CREATE TABLE IF NOT EXISTS `zt_storyestimate` (
   `story` mediumint(9) NOT NULL,
@@ -1625,9 +1629,9 @@ CREATE TABLE IF NOT EXISTS `zt_storyestimate` (
   `estimate` text NOT NULL,
   `average` float NOT NULL,
   `openedBy` varchar(30) NOT NULL,
-  `openedDate` datetime NOT NULL,
-  UNIQUE KEY `story` (`story`,`round`)
+  `openedDate` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+CREATE UNIQUE INDEX `story` ON `zt_storyestimate`(`story`,`round`);
 -- DROP TABLE IF EXISTS `zt_storyspec`;
 CREATE TABLE IF NOT EXISTS `zt_storyspec` (
   `story` mediumint(9) NOT NULL,
@@ -1635,26 +1639,26 @@ CREATE TABLE IF NOT EXISTS `zt_storyspec` (
   `title` varchar(255) NOT NULL,
   `spec` mediumtext NOT NULL,
   `verify` mediumtext NOT NULL,
-  `files` text NOT NULL,
-  UNIQUE KEY `story` (`story`,`version`)
+  `files` text NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+CREATE UNIQUE INDEX `story` ON `zt_storyspec`(`story`,`version`);
 -- DROP TABLE IF EXISTS `zt_storystage`;
 CREATE TABLE IF NOT EXISTS `zt_storystage` (
   `story` mediumint(8) unsigned NOT NULL,
   `branch` mediumint(8) unsigned NOT NULL,
   `stage` varchar(50) NOT NULL,
   `stagedBy` char(30) NOT NULL,
-  UNIQUE KEY `story_branch` (`story`,`branch`),
   KEY `story` (`story`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+CREATE UNIQUE INDEX `story_branch` ON `zt_storystage`(`story`,`branch`);
 -- DROP TABLE IF EXISTS `zt_suitecase`;
 CREATE TABLE IF NOT EXISTS `zt_suitecase` (
   `suite` mediumint(8) unsigned NOT NULL,
   `product` mediumint(8) unsigned NOT NULL,
   `case` mediumint(8) unsigned NOT NULL,
-  `version` smallint(5) unsigned NOT NULL,
-  UNIQUE KEY `suitecase` (`suite`,`case`)
+  `version` smallint(5) unsigned NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+CREATE UNIQUE INDEX `suitecase` ON `zt_suitecase`(`suite`,`case`);
 -- DROP TABLE IF EXISTS `zt_task`;
 CREATE TABLE IF NOT EXISTS `zt_task` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
@@ -1737,9 +1741,9 @@ CREATE TABLE IF NOT EXISTS `zt_taskspec` (
   `version` smallint(6) NOT NULL,
   `name` varchar(255) NOT NULL,
   `estStarted` date NOT NULL,
-  `deadline` date NOT NULL,
-  UNIQUE KEY `task` (`task`,`version`)
+  `deadline` date NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+CREATE UNIQUE INDEX `task` ON `zt_taskspec`(`task`,`version`);
 -- DROP TABLE IF EXISTS `zt_taskteam`;
 CREATE TABLE `zt_taskteam` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
@@ -1770,9 +1774,9 @@ CREATE TABLE IF NOT EXISTS `zt_team` (
   `consumed` decimal(12,2) unsigned NOT NULL DEFAULT '0.00',
   `left` decimal(12,2) unsigned NOT NULL DEFAULT '0.00',
   `order` tinyint(3) NOT NULL DEFAULT '0',
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `team` (`root`,`type`,`account`)
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+CREATE UNIQUE INDEX `team` ON `zt_team`(`root`,`type`,`account`);
 -- DROP TABLE IF EXISTS `zt_testreport`;
 CREATE TABLE IF NOT EXISTS `zt_testreport` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
@@ -1830,9 +1834,9 @@ CREATE TABLE IF NOT EXISTS `zt_testrun` (
   `lastRunDate` datetime NULL,
   `lastRunResult` char(30) NOT NULL DEFAULT '',
   `status` char(30) NOT NULL,
-  PRIMARY KEY  (`id`),
-  UNIQUE KEY `task` (`task`,`case`)
+  PRIMARY KEY  (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+CREATE UNIQUE INDEX `task` ON `zt_testrun`(`task`,`case`);
 -- DROP TABLE IF EXISTS `zt_testsuite`;
 CREATE TABLE IF NOT EXISTS `zt_testsuite` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
@@ -1957,12 +1961,12 @@ CREATE TABLE IF NOT EXISTS `zt_user` (
   `clientStatus` enum('online','away','busy','offline','meeting') NOT NULL DEFAULT 'offline',
   `clientLang` varchar(10) NOT NULL DEFAULT 'zh-cn',
   PRIMARY KEY (`id`),
-  UNIQUE KEY `account` (`account`),
   KEY `dept` (`dept`),
   KEY `email` (`email`),
   KEY `commiter` (`commiter`),
   KEY `deleted` (`deleted`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
+CREATE UNIQUE INDEX `account` ON `zt_user`(`account`);
 -- DROP TABLE IF EXISTS `zt_usercontact`;
 CREATE TABLE IF NOT EXISTS `zt_usercontact` (
   `id` mediumint(8) unsigned NOT NULL auto_increment,
@@ -1976,9 +1980,9 @@ CREATE TABLE IF NOT EXISTS `zt_usercontact` (
 CREATE TABLE IF NOT EXISTS `zt_usergroup` (
   `account` char(30) NOT NULL default '',
   `group` mediumint(8) unsigned NOT NULL default '0',
-  `project` text NOT NULL,
-  UNIQUE KEY `account` (`account`,`group`)
+  `project` text NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+CREATE UNIQUE INDEX `account` ON `zt_usergroup`(`account`,`group`);
 -- DROP TABLE IF EXISTS `zt_userquery`;
 CREATE TABLE IF NOT EXISTS `zt_userquery` (
   `id` mediumint(8) unsigned NOT NULL auto_increment,
@@ -2010,9 +2014,9 @@ CREATE TABLE IF NOT EXISTS `zt_userview` (
   `programs` mediumtext NOT NULL,
   `products` mediumtext NOT NULL,
   `projects` mediumtext NOT NULL,
-  `sprints` mediumtext NOT NULL,
-  UNIQUE KEY `account` (`account`)
+  `sprints` mediumtext NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+CREATE UNIQUE INDEX `account` ON `zt_userview`(`account`);
 -- DROP TABLE IF EXISTS `zt_weeklyreport`;
 CREATE TABLE IF NOT EXISTS `zt_weeklyreport`(
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
@@ -2026,9 +2030,9 @@ CREATE TABLE IF NOT EXISTS `zt_weeklyreport`(
   `staff` smallint(5) unsigned NOT NULL,
   `progress` varchar(255) NOT NULL,
   `workload` varchar(255) NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `week` (`project`,`weekStart`)
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+CREATE UNIQUE INDEX `week` ON `zt_weeklyreport`(`project`,`weekStart`);
 -- DROP TABLE IF EXISTS `zt_webhook`;
 CREATE TABLE IF NOT EXISTS `zt_webhook` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
@@ -6586,9 +6590,9 @@ CREATE TABLE IF NOT EXISTS `zt_im_chatuser` (
   KEY `user` (`user`),
   KEY `order` (`order`),
   KEY `star` (`star`),
-  KEY `hide` (`hide`),
-  UNIQUE KEY `chatuser` (`cgid`, `user`)
+  KEY `hide` (`hide`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+CREATE UNIQUE INDEX `chatuser` ON `zt_im_chatuser`(`cgid`, `user`);
 
 -- DROP TABLE IF EXISTS `zt_im_client`;
 CREATE TABLE IF NOT EXISTS `zt_im_client` (
@@ -6671,7 +6675,6 @@ CREATE TABLE IF NOT EXISTS `zt_im_chat_message_index` (
   `endDate` datetime NULL,
   `count` mediumint(8) unsigned NOT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `chattable` (`gid`,`tableName`),
   KEY `start` (`start`),
   KEY `end` (`end`),
   KEY `startDate` (`startDate`),
@@ -6679,14 +6682,15 @@ CREATE TABLE IF NOT EXISTS `zt_im_chat_message_index` (
   KEY `chatstartindex` (`gid`,`startIndex`),
   KEY `chatendindex` (`gid`,`endIndex`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+CREATE UNIQUE INDEX `chattable` ON `zt_im_chat_message_index`(`gid`,`tableName`);
 
 -- DROP TABLE IF EXISTS `zt_im_messagestatus`;
 CREATE TABLE IF NOT EXISTS `zt_im_messagestatus` (
   `user` mediumint(8) NOT NULL DEFAULT 0,
   `message` int(11) unsigned NOT NULL,
-  `status` enum('waiting','sent','readed','deleted') NOT NULL DEFAULT 'waiting',
-  UNIQUE KEY `user` (`user`,`message`)
+  `status` enum('waiting','sent','readed','deleted') NOT NULL DEFAULT 'waiting'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+CREATE UNIQUE INDEX `user` ON `zt_im_messagestatus`(`user`,`message`);
 
 -- DROP TABLE IF EXISTS `zt_im_queue`;
 CREATE TABLE IF NOT EXISTS `zt_im_queue` (
@@ -6738,9 +6742,9 @@ CREATE TABLE IF NOT EXISTS `zt_im_userdevice` (
   PRIMARY KEY (`id`),
   KEY `user` (`user`),
   KEY `lastLogin` (`lastLogin`),
-  KEY `lastLogout` (`lastLogout`),
-  UNIQUE KEY `userdevice` (`user`, `device`)
+  KEY `lastLogout` (`lastLogout`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
+CREATE UNIQUE INDEX `userdevice` ON `zt_im_userdevice`(`user`, `device`);
 
 INSERT INTO `zt_cron` (`m`, `h`, `dom`, `mon`, `dow`, `command`, `remark`, `type`, `buildin`, `status`) VALUES ('30', '23', '*', '*', '*', 'moduleName=execution&methodName=computeTaskEffort', '计算任务剩余工时', 'zentao', '1', 'normal');
 INSERT INTO `zt_cron` (`m`, `h`, `dom`, `mon`, `dow`, `command`, `remark`, `type`, `buildin`, `status`) VALUES ('30', '7', '*', '*', '*', 'moduleName=effort&methodName=remindNotRecord', '提醒录入日志', 'zentao', '1', 'stop');
@@ -7184,9 +7188,9 @@ CREATE TABLE IF NOT EXISTS `zt_report` (
   `desc` text NOT NULL,
   `addedBy` char(30) NOT NULL,
   `addedDate` datetime NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `code` (`code`)
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+CREATE UNIQUE INDEX `code` ON `zt_report`(`code`);
 
 CREATE OR REPLACE VIEW `ztv_executionsummary` AS select `zt_task`.`execution` AS `execution`,sum(if((`zt_task`.`parent` >= '0'),`zt_task`.`estimate`,0)) AS `estimate`,sum(if((`zt_task`.`parent` >= '0'),`zt_task`.`consumed`,0)) AS `consumed`,sum(if(((`zt_task`.`status` <> 'cancel') and (`zt_task`.`status` <> 'closed') and (`zt_task`.`parent` >= '0')),`zt_task`.`left`,0)) AS `left`,count(0) AS `number`,sum(if(((`zt_task`.`status` <> 'done') and (`zt_task`.`status` <> 'closed')),1,0)) AS `undone`,sum((if((`zt_task`.`parent` >= '0'),`zt_task`.`consumed`,0) + if(((`zt_task`.`status` <> 'cancel') and (`zt_task`.`status` <> 'closed') and (`zt_task`.`parent` >= '0')),`zt_task`.`left`,0))) AS `totalReal` from `zt_task` where (`zt_task`.`deleted` = '0') group by `zt_task`.`execution`;
 CREATE OR REPLACE VIEW `ztv_projectsummary` AS select `zt_task`.`project` AS `project`,sum(if((`zt_task`.`parent` >= '0'),`zt_task`.`estimate`,0)) AS `estimate`,sum(if((`zt_task`.`parent` >= '0'),`zt_task`.`consumed`,0)) AS `consumed`,sum(if(((`zt_task`.`status` <> 'cancel') and (`zt_task`.`status` <> 'closed') and (`zt_task`.`parent` >= '0')),`zt_task`.`left`,0)) AS `left`,count(0) AS `number`,sum(if(((`zt_task`.`status` <> 'done') and (`zt_task`.`status` <> 'closed')),1,0)) AS `undone`,sum((if((`zt_task`.`parent` >= '0'),`zt_task`.`consumed`,0) + if(((`zt_task`.`status` <> 'cancel') and (`zt_task`.`status` <> 'closed') and (`zt_task`.`parent` >= '0')),`zt_task`.`left`,0))) AS `totalReal` from `zt_task` where (`zt_task`.`deleted` = '0') group by `zt_task`.`project`;
@@ -7401,12 +7405,12 @@ CREATE TABLE IF NOT EXISTS `zt_ticketrelation` (
   KEY `ticketId` (`ticketId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- DROP TABLE IF EXISTS `zt_feedbackproduct`;
+-- DROP TABLE IF EXISTS `zt_feedbackview`;
 CREATE TABLE IF NOT EXISTS `zt_feedbackview` (
   `account` char(30) NOT NULL,
-  `product` mediumint(8) unsigned NOT NULL,
-  UNIQUE KEY `account_product` (`account`,`product`)
+  `product` mediumint(8) unsigned NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+CREATE UNIQUE INDEX `account_product` ON `zt_feedbackview`(`account`,`product`);
 
 -- DROP TABLE IF EXISTS `zt_serverroom`;
 CREATE TABLE IF NOT EXISTS `zt_serverroom` (
@@ -7586,9 +7590,9 @@ CREATE TABLE IF NOT EXISTS `zt_attend` (
   KEY `status` (`status`),
   KEY `reason` (`reason`),
   KEY `reviewStatus` (`reviewStatus`),
-  KEY `reviewedBy` (`reviewedBy`),
-  UNIQUE KEY `attend` (`date`,`account`)
+  KEY `reviewedBy` (`reviewedBy`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+CREATE UNIQUE INDEX `attend` ON `zt_attend`(`date`,`account`);
 -- DROP TABLE IF EXISTS `zt_attendstat`;
 CREATE TABLE IF NOT EXISTS `zt_attendstat` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
@@ -7612,9 +7616,9 @@ CREATE TABLE IF NOT EXISTS `zt_attendstat` (
   PRIMARY KEY (`id`),
   KEY `account` (`account`),
   KEY `month` (`month`),
-  KEY `status` (`status`),
-  UNIQUE KEY `attend` (`month`,`account`)
+  KEY `status` (`status`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+CREATE UNIQUE INDEX `attend` ON `zt_attendstat`(`month`,`account`);
 -- DROP TABLE IF EXISTS `zt_overtime`;
 CREATE TABLE IF NOT EXISTS `zt_overtime` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
@@ -7751,9 +7755,9 @@ CREATE TABLE IF NOT EXISTS `zt_deployproduct` (
   `deploy` mediumint(8) unsigned NOT NULL,
   `product` mediumint(8) unsigned NOT NULL,
   `release` mediumint(8) unsigned NOT NULL,
-  `package` varchar(255) NOT NULL,
-  UNIQUE KEY `deploy_product_release` (`deploy`,`product`,`release`)
+  `package` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+CREATE UNIQUE INDEX `deploy_product_release` ON `zt_deployproduct`(`deploy`,`product`,`release`);
 -- DROP TABLE IF EXISTS `zt_deploystep`;
 CREATE TABLE IF NOT EXISTS `zt_deploystep` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
@@ -8902,12 +8906,12 @@ CREATE TABLE IF NOT EXISTS `zt_workflow` (
   `editedBy` varchar(30) NOT NULL DEFAULT '',
   `editedDate` datetime NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `unique` (`app`,`module`,`vision`),
   KEY `type` (`type`),
   KEY `app` (`app`),
   KEY `module` (`module`),
   KEY `order` (`order`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+CREATE UNIQUE INDEX `unique` ON `zt_workflow`(`app`,`module`,`vision`);
 
 -- DROP TABLE IF EXISTS `zt_workflowaction`;
 CREATE TABLE IF NOT EXISTS `zt_workflowaction` (
@@ -8943,11 +8947,11 @@ CREATE TABLE IF NOT EXISTS `zt_workflowaction` (
   `editedBy` varchar(30) NOT NULL DEFAULT '',
   `editedDate` datetime NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `unique` (`module`,`action`,`vision`),
   KEY `module` (`module`),
   KEY `action` (`action`),
   KEY `order` (`order`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+CREATE UNIQUE INDEX `unique` ON `zt_workflowaction`(`module`,`action`,`vision`);
 
 -- DROP TABLE IF EXISTS `zt_workflowdatasource`;
 CREATE TABLE IF NOT EXISTS `zt_workflowdatasource` (
@@ -9000,9 +9004,9 @@ CREATE TABLE IF NOT EXISTS `zt_workflowfield` (
   PRIMARY KEY (`id`),
   KEY `module` (`module`),
   KEY `field` (`field`),
-  KEY `order` (`order`),
-  UNIQUE KEY `unique` (`module`, `field`)
+  KEY `order` (`order`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+CREATE UNIQUE INDEX `unique` ON `zt_workflowfield`(`module`, `field`);
 
 -- DROP TABLE IF EXISTS `zt_workflowlayout`;
 CREATE TABLE IF NOT EXISTS `zt_workflowlayout` (
@@ -9020,11 +9024,11 @@ CREATE TABLE IF NOT EXISTS `zt_workflowlayout` (
   `layoutRules` varchar(255) NOT NULL,
   `vision` varchar(10) NOT NULL DEFAULT 'rnd',
   PRIMARY KEY (`id`),
-  UNIQUE KEY `unique` (`module`,`action`,`field`,`vision`),
   KEY `module` (`module`),
   KEY `action` (`action`),
   KEY `order` (`order`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+CREATE UNIQUE INDEX `unique` ON `zt_workflowlayout`(`module`,`action`,`field`,`vision`);
 
 -- DROP TABLE IF EXISTS `zt_workflowlabel`;
 CREATE TABLE IF NOT EXISTS `zt_workflowlabel` (
@@ -9053,9 +9057,9 @@ CREATE TABLE IF NOT EXISTS `zt_workflowlinkdata` (
   `linkedType` varchar(30) NOT NULL,
   `linkedID` mediumint(8) unsigned NOT NULL,
   `createdBy` varchar(30) NOT NULL,
-  `createdDate` datetime NOT NULL,
-  UNIQUE KEY `unique` (`objectType`, `objectID`, `linkedType`, `linkedID`)
+  `createdDate` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+CREATE UNIQUE INDEX `unique` ON `zt_workflowlinkdata`(`objectType`, `objectID`, `linkedType`, `linkedID`);
 
 -- DROP TABLE IF EXISTS `zt_workflowrelation`;
 CREATE TABLE IF NOT EXISTS `zt_workflowrelation` (
@@ -9083,9 +9087,9 @@ CREATE TABLE IF NOT EXISTS `zt_workflowrelationlayout` (
   KEY `prev` (`prev`),
   KEY `next` (`next`),
   KEY `action` (`action`),
-  KEY `order` (`order`),
-  UNIQUE KEY `unique` (`prev`, `next`, `action`, `field`)
+  KEY `order` (`order`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+CREATE UNIQUE INDEX `unique` ON `zt_workflowrelationlayout`(`prev`, `next`, `action`, `field`);
 
 -- DROP TABLE IF EXISTS `zt_workflowrule`;
 CREATE TABLE IF NOT EXISTS `zt_workflowrule` (
@@ -9132,10 +9136,10 @@ CREATE TABLE IF NOT EXISTS `zt_workflowversion` (
   `table` text NOT NULL,
   `datas` text NOT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `moduleversion` (`module`, `version`),
   KEY `module` (`module`),
   KEY `version` (`version`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+CREATE UNIQUE INDEX `moduleversion` ON `zt_workflowversion`(`module`, `version`);
 
 -- DROP TABLE IF EXISTS `zt_workflowreport`;
 CREATE TABLE IF NOT EXISTS `zt_workflowreport` (
@@ -9377,9 +9381,9 @@ CREATE TABLE IF NOT EXISTS `zt_intervention` (
   `createdBy` char(30) NOT NULL,
   `createdDate` date NOT NULL,
   `deleted` enum('0','1') NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `project` (`project`,`activity`)
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+CREATE UNIQUE INDEX `project` ON `zt_intervention`(`project`,`activity`);
 
 -- DROP TABLE IF EXISTS `zt_activity`;
 CREATE TABLE IF NOT EXISTS `zt_activity` (
@@ -9617,9 +9621,9 @@ CREATE TABLE IF NOT EXISTS `zt_basicmeas` (
   `editedDate` datetime NULL,
   `order` mediumint(8) UNSIGNED NOT NULL DEFAULT 0,
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `code` (`code`)
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+CREATE UNIQUE INDEX `code` ON `zt_basicmeas`(`code`);
 
 -- DROP TABLE IF EXISTS `zt_budget`;
 CREATE TABLE IF NOT EXISTS `zt_budget` (
@@ -9872,9 +9876,9 @@ CREATE TABLE IF NOT EXISTS `zt_reviewresult` (
   `remainIssue` char(30) NOT NULL,
   `createdDate` date NOT NULL,
   `consumed` float NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `reviewer` (`review`,`reviewer`,`type`)
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+CREATE UNIQUE INDEX `reviewer` ON `zt_reviewresult`(`review`,`reviewer`,`type`);
 
 -- DROP TABLE IF EXISTS `zt_reviewissue`;
 CREATE TABLE IF NOT EXISTS `zt_reviewissue` (
@@ -10055,9 +10059,9 @@ CREATE TABLE IF NOT EXISTS `zt_risk` (
 -- DROP TABLE IF EXISTS `zt_riskissue`;
 CREATE TABLE IF NOT EXISTS `zt_riskissue` (
   `risk` mediumint(8) unsigned NOT NULL,
-  `issue` mediumint(8) unsigned NOT NULL,
-  UNIQUE KEY `risk_issue` (`risk`,`issue`)
+  `issue` mediumint(8) unsigned NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+CREATE UNIQUE INDEX `risk_issue` ON `zt_riskissue`(`risk`,`issue`);
 
 -- DROP TABLE IF EXISTS `zt_opportunity`;
 CREATE TABLE IF NOT EXISTS `zt_opportunity` (
@@ -10139,9 +10143,9 @@ CREATE TABLE IF NOT EXISTS `zt_gapanalysis` (
   `editedBy` varchar(30) NOT NULL DEFAULT '',
   `editedDate` datetime NULL,
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `project_account` (`project`,`account`)
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+CREATE UNIQUE INDEX `project_account` ON `zt_gapanalysis`(`project`,`account`);
 
 REPLACE INTO `zt_grouppriv` (`group`, `module`, `method`) VALUES
 (1,'activity','assignTo'),
