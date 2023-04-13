@@ -35,6 +35,10 @@ class cronModel extends model
         return $this->dao->select('*')->from(TABLE_CRON)
             ->where('1=1')
             ->beginIF(strpos($params, 'nostop') !== false)->andWhere('status')->ne('stop')->fi()
+            ->beginIF($this->config->edition != 'max')
+            ->andWhere('command')->ne('moduleName=measurement&methodName=initCrontabQueue')
+            ->andWhere('command')->ne('moduleName=measurement&methodName=execCrontabQueue')
+            ->fi()
             ->fetchAll('id');
     }
 
@@ -138,7 +142,7 @@ class cronModel extends model
     public function getLastTime()
     {
         $cron = $this->dao->select('*')->from(TABLE_CRON)->orderBy('lastTime desc')->limit(1)->fetch();
-        return isset($cron->lastTime) ? $cron->lastTime : $cron->lasttime;
+        return isset($cron->lastTime) ? $cron->lastTime : '0000-00-00 00:00:00';
     }
 
     /**

@@ -21,6 +21,7 @@ $lang->dev->paramMailto    = "User account. Separate accounts by ','.";
 $lang->dev->noteEditor     = "The editor is disabled for security reasons. To use this feature, Please turn on.";
 $lang->dev->noteTranslate  = "The translation is disabled for security reasons. To use this feature, please go to the official website to download and install the plugin of <a href='https://www.zentao.net/extension-viewExt-151.html' target='_blank'>translation</a>.";
 $lang->dev->confirmRestore = 'Do you want to reset?';
+$lang->dev->apiTips        = 'Every page can be called through the JSON interface';
 
 $lang->dev->language    = 'Language: %s';
 $lang->dev->default     = 'Default';
@@ -200,6 +201,9 @@ if($config->systemMode != 'ALM') unset($lang->dev->groupList['program']);
 $lang->dev->endGroupList['admin']  = 'Admin';
 $lang->dev->endGroupList['system'] = 'System';
 $lang->dev->endGroupList['other']  = 'Andere';
+
+$lang->dev->featureBar['api']['restapi'] = 'RESTful';
+$lang->dev->featureBar['api']['index']   = 'Built In';
 
 $lang->dev->featureBar['langItem']['common']  = 'Common';
 $lang->dev->featureBar['langItem']['first']   = 'First Menu';

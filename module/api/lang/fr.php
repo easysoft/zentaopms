@@ -13,7 +13,7 @@ $lang->api->common   = 'API';
 $lang->api->getModel = 'Super Model API';
 $lang->api->sql      = 'SQL Query API';
 
-$lang->api->index            = 'Home';
+$lang->api->index            = 'API Space';
 $lang->api->editLib          = 'Edit';
 $lang->api->releases         = 'Release';
 $lang->api->deleteRelease    = 'Delete Release';
@@ -39,7 +39,6 @@ $lang->api->noModule         = 'No directory in the API library. Please add the 
 $lang->api->post             = 'Se référer à la liste si POST Debug';
 $lang->api->noUniqueName     = 'The API library name exists.';
 $lang->api->noUniqueVersion  = 'The version exists.';
-$lang->api->version          = 'Version';
 $lang->api->createStruct     = 'Create Data Structure';
 $lang->api->editStruct       = 'Edit Data Structure';
 $lang->api->deleteStruct     = 'Delete Data Structure';
@@ -61,12 +60,16 @@ $lang->api->defaultVersion   = "Current Version";
 $lang->api->zentaoAPI        = "Zentao API v1";
 $lang->api->search           = "Search";
 $lang->api->allLibs          = "AllLibs";
+$lang->api->noLinked         = "No Linked";
+$lang->api->addCatalog       = 'Add Catalog';
+$lang->api->editCatalog      = 'Edit Catalog';
+$lang->api->deleteCatalog    = 'Delete Catalog';
 
 /* Common access control lang. */
 $lang->api->whiteList          = 'Whitelist';
-$lang->api->aclList['open']    = 'Open';
-$lang->api->aclList['private'] = 'Private';
-$lang->api->aclList['custom']  = 'Custom';
+$lang->api->aclList['open']    = "Public <span class='acl-tip'>(Users who can access doccan access it)</span>";
+$lang->api->aclList['default'] = "Default <span class='acl-tip'>(Users who can access the selected %s can access it)</span>";
+$lang->api->aclList['private'] = "Private <span class='acl-tip'> (Only the one who created it or users in the whiltelist can access it)</span>";
 $lang->api->group              = 'Group';
 $lang->api->user               = 'User';
 
@@ -87,6 +90,7 @@ $lang->struct->desc            = 'Description';
 $lang->struct->descPlaceholder = 'Parameter Description';
 $lang->struct->action          = 'Action';
 $lang->struct->addSubField     = 'Add Subfield';
+$lang->struct->list            = 'Data Structure List';
 
 $lang->struct->typeOptions = array(
     'formData' => 'FormData',
@@ -148,6 +152,10 @@ $lang->api->default            = 'Default';
 $lang->api->desc               = 'Description';
 $lang->api->customType         = 'Custom Structure';
 $lang->api->format             = 'Format';
+$lang->api->libType            = 'Api Library Type';
+$lang->api->product            = $lang->productCommon;
+$lang->api->project            = $lang->projectCommon;
+
 $lang->api->methodOptions      = array(
     'GET'     => 'GET',
     'POST'    => 'POST',
@@ -168,6 +176,11 @@ $lang->api->requestTypeOptions = array();
 $lang->api->requestTypeOptions['application/json']                  = 'application/json';
 $lang->api->requestTypeOptions['application/x-www-form-urlencoded'] = 'application/x-www-form-urlencoded';
 $lang->api->requestTypeOptions['multipart/form-data']               = 'multipart/form-data';
+
+$lang->api->libTypeList = array();
+$lang->api->libTypeList['product'] = $lang->productCommon . ' Api Library';
+$lang->api->libTypeList['project'] = $lang->projectCommon . ' Api Library';
+$lang->api->libTypeList['nolink']  = 'No Linked Api Library';
 
 $lang->api->statusOptions      = array(
     'done'   => 'Done',

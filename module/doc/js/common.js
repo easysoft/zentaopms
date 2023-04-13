@@ -1,14 +1,31 @@
 /**
- * Load modules by libID.
+ * Load modules by objectID and objectType.
  *
- * @param  int    $libID
+ * @param  string   $objectType
+ * @param  int      $objectID
  * @access public
  * @return void
  */
-function loadModules(libID)
+function loadObjectModules(objectType, objectID, docType)
 {
-    var link = createLink('doc', 'ajaxGetModules', 'libID=' + libID);
-    $('#moduleBox').load(link, function(){$('#moduleBox').find('select').chosen()});
+    if(typeof docType == 'undefined') docType = 'doc';
+    var link = createLink('doc', 'ajaxGetModules', 'objectType=' + objectType + '&objectID=' + objectID + '&type=' + docType);
+    if(objectType == 'execution' && objectID == 0) var link = createLink('doc', 'ajaxGetModules', 'objectType=project&objectID=' + $('#project').val() + '&type=' + docType);
+    $('#moduleBox').load(link, function(){$('#moduleBox').find('select').picker(); $('#moduleLabel').remove();});
+}
+
+/**
+ * Load executions.
+ *
+ * @param  int $projectID
+ * @access public
+ * @return void
+ */
+function loadExecutions(projectID)
+{
+    var link = createLink('project', 'ajaxGetExecutions', "projectID=" + projectID + "&executionID=0&mode=multiple,leaf,noprefix");
+    $('#executionBox').load(link, function(){$('#executionBox').find('select').attr('data-placeholder', holders.execution).attr('onchange', "loadObjectModules('execution', this.value)").picker()});
+    loadObjectModules('project', projectID);
 }
 
 /**
@@ -22,35 +39,25 @@ function loadModules(libID)
 function toggleAcl(acl, type)
 {
     var libID = $('#lib').val();
-    if(acl == 'custom')
+    if($('#lib').length == 0 && $('#module').length > 0)
+    {
+        var moduleID = $('#module').val();
+        if(moduleID.indexOf('_') >= 0) libID = moduleID.substr(0, moduleID.indexOf('_'));
+    }
+    if(acl == 'private')
     {
         $('#whiteListBox').removeClass('hidden');
         $('#groupBox').removeClass('hidden');
-        if(type == 'doc') loadWhitelist(libID);
-    }
-    else if(acl == 'private')
-    {
-        $('#whiteListBox').removeClass('hidden');
-        $('#groupBox').addClass('hidden');
-        if(type == 'doc')
-        {
-            loadWhitelist(libID);
-            $('#whiteListBox').addClass('hidden');
-        }
     }
     else
     {
         $('#whiteListBox').addClass('hidden');
-        if(type == 'doc') loadWhitelist(libID);
+        $('#groupBox').addClass('hidden');
     }
 
     if(type == 'lib')
     {
-        var libType = $('input[name="type"]:checked').val();
-        var notice  = typeof(noticeAcl[libType][acl]) != 'undefined' ? noticeAcl[libType][acl] : '';
-        $('#noticeAcl').html(notice);
-
-        if((libType == 'custom' || libType == 'api' || libType == 'book') && acl == 'private') $('#whiteListBox').addClass('hidden');
+        if(libType == 'book' && acl == 'private') $('#whiteListBox').addClass('hidden');
 
         if(libType == 'project' && typeof(doclibID) != 'undefined')
         {
@@ -63,10 +70,11 @@ function toggleAcl(acl, type)
             })
         }
     }
-    else
+    else if(type == 'doc')
     {
-        var notice  = typeof(noticeAcl[acl]) != 'undefined' ? noticeAcl[acl] : '';
-        $('#noticeAcl').html(notice);
+        $('#whiteListBox').toggleClass('hidden', acl == 'open');
+        $('#groupBox').toggleClass('hidden', acl == 'open');
+        loadWhitelist(libID);
     }
 }
 
@@ -82,9 +90,8 @@ function loadDocModule(libID)
     var link = createLink('doc', 'ajaxGetChild', 'libID=' + libID);
     $.post(link, function(data)
     {
-        $('#module').replaceWith(data);
-        $('#module_chosen').remove();
-        $('#module').chosen();
+        $('#moduleBox').html(data);
+        $('#module').picker();
     });
 
     loadWhitelist(libID);
@@ -279,23 +286,106 @@ $(document).ready(function()
         }).on('click', function(e){e.stopPropagation()});
     }
 
-    $(document).on('mousedown', '.ajaxCollect', function (event) {
+    $(document).on('mousedown', '.ajaxCollect', function (event)
+    {
         var obj = $(this);
         var url = obj.data('url');
         $.get(url, function(response)
         {
             if(response.status == 'yes')
             {
-                obj.children('i').removeClass().addClass('icon icon-star text-yellow');
+                obj.children('img').attr('src', 'static/svg/star.svg');
                 obj.parent().prev().children('.file-name').children('i').remove('.icon');
                 obj.parent().prev().children('.file-name').prepend('<i class="icon icon-star text-yellow"></i> ');
             }
             else
             {
-                obj.children('i').removeClass().addClass('icon icon-star-empty');
+                obj.children('img').attr('src', 'static/svg/star-empty.svg');
                 obj.parent().prev().children('.file-name').children('i').remove(".icon");
             }
         }, 'json');
         return false;
     });
 });
+
+/**
+ * locateNewLib
+ *
+ * @param  string $type product|project|execution|custom|mine
+ * @param  int    $objectID
+ * @param  int    $libID
+ * @access public
+ * @return void
+ */
+function locateNewLib(type, objectID, libID)
+{
+    var method = 'tableContents';
+    var params = 'type=' + type + '&objectID=' + objectID + '&libID=' + libID;
+    if(type == 'product' || type == 'project')
+    {
+        method = type + 'Space';
+        params = 'objectID=' + objectID + '&libID=' + libID;
+    }
+    else if(type == 'mine')
+    {
+        method = 'mySpace';
+        params = 'type=mine&libID=' + libID;
+    }
+
+    location.href = createLink('doc', method, params);
+}
+
+/**
+ * Set save path.
+ *
+ * @access public
+ * @return void
+ */
+function setSavePath()
+{
+    var getSubPath = function($obj)
+    {
+        var $td = $obj.parent();
+        var usePicker = $td.find('.picker').length == 1;
+        var subPath = $obj.find('option:checked').text();
+        if(usePicker) subPath = $td.find('.picker .picker-selection-text').text();
+        return subPath;
+    }
+
+    savePath = defaultSave;
+    if($('#modalBasicInfo #product').length == 1)
+    {
+        savePath += getSubPath($('#modalBasicInfo #product')) + '/';
+    }
+    else if($('#modalBasicInfo #project').length == 1 && $('#modalBasicInfo #execution').length == 0)
+    {
+        savePath += getSubPath($('#modalBasicInfo #project')) + '/';
+    }
+    else if($('#modalBasicInfo #project').length == 1 && $('#modalBasicInfo #execution').length == 1)
+    {
+        var executionID = $('#modalBasicInfo #execution').val();
+        if(executionID == '0' || executionID == '') savePath += getSubPath($('#modalBasicInfo #project')) + '/';
+        if(executionID != '0' && executionID != '') savePath += getSubPath($('#modalBasicInfo #execution')) + '/';
+    }
+    else if($('#modalBasicInfo #execution').length == 1)
+    {
+        savePath += getSubPath($('#modalBasicInfo #execution')) + '/';
+    }
+    savePath += getSubPath($('#modalBasicInfo #module'));
+
+    $('#savePath').html(savePath).attr('title', savePath);
+}
+
+/**
+ * Submit form.
+ *
+ * @param  object $object
+ * @access public
+ * @return void
+ */
+function submit(object)
+{
+    $(object).attr('type', 'submit');
+    $('#dataform').submit();
+    setTimeout(function(){$(object).attr('type', 'button').removeAttr('disabled')}, 2000);
+}

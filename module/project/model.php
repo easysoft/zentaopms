@@ -238,14 +238,13 @@ class projectModel extends model
             ->groupBy('t1.root')
             ->fetchAll('root');
 
-        $condition = 't2.project as project';
-        $estimates = $this->dao->select("$condition, sum(estimate) as estimate")->from(TABLE_TASK)->alias('t1')
+        $estimates = $this->dao->select("t2.project as project, sum(estimate) as estimate")->from(TABLE_TASK)->alias('t1')
             ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.execution = t2.id')
             ->where('t1.parent')->lt(1)
             ->andWhere('t2.project')->in($projectIdList)
             ->andWhere('t1.deleted')->eq(0)
             ->andWhere('t2.deleted')->eq(0)
-            ->groupBy('project')
+            ->groupBy('t2.project')
             ->fetchAll('project');
 
         $this->app->loadClass('pager', $static = true);
@@ -318,7 +317,7 @@ class projectModel extends model
             ->andWhere('t2.deleted')->eq(0)
             ->groupBy('root')->fetchPairs();
 
-        $hours = $this->dao->select('t2.parent as project, ROUND(SUM(t1.consumed), 1) AS consumed, ROUND(SUM(t1.estimate), 1) AS estimate')->from(TABLE_TASK)->alias('t1')
+        $hours = $this->dao->select('t2.project, ROUND(SUM(t1.consumed), 1) AS consumed, ROUND(SUM(t1.estimate), 1) AS estimate')->from(TABLE_TASK)->alias('t1')
             ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.execution = t2.id')
             ->where('t2.project')->in($projectIdList)
             ->andWhere('t2.deleted')->eq(0)
@@ -404,7 +403,7 @@ class projectModel extends model
             ->where('t1.project')->in($projectIdList)
             ->andWhere('t1.deleted')->eq(0)
             ->andWhere('t2.deleted')->eq(0)
-            ->groupBy('project')
+            ->groupBy('t1.project')
             ->fetchAll('project');
     }
 
@@ -426,12 +425,12 @@ class projectModel extends model
             ->andWhere('t2.model')->eq('waterfall')
             ->fetchGroup('project', 'id');
 
-        $totalHour = $this->dao->select('t1.project, t1.execution, ROUND(SUM(if(t1.status !="closed" && t1.status !="cancel", `left`, 0)), 2) AS totalLeft, ROUND(SUM(consumed), 1) AS totalConsumed')->from(TABLE_TASK)->alias('t1')
+        $totalHour = $this->dao->select("t1.project, t1.execution, ROUND(SUM(if(t1.status !='closed' && t1.status !='cancel', `left`, 0)), 2) AS totalLeft, ROUND(SUM(consumed), 1) AS totalConsumed")->from(TABLE_TASK)->alias('t1')
             ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.execution = t2.id')
             ->where('t2.project')->in(array_keys($projectList))
             ->andWhere('t1.deleted')->eq(0)
             ->andWhere('t1.parent')->lt(1)
-            ->groupBy('t1.execution')
+            ->groupBy('t1.project,t1.execution')
             ->fetchGroup('project', 'execution');
 
         $progressList = array();
@@ -670,9 +669,9 @@ class projectModel extends model
             {
                 $link = helper::createLink($module, 'browse', "repoID=&branchID=&objectID=%s") . '#app=project';
             }
-            elseif($module == 'doc')
+            elseif($module == 'doc' or $module == 'api')
             {
-                $link = helper::createLink($module, 'tablecontents', "type=project&objectID=%s") . '#app=project';
+                $link = helper::createLink($module, 'projectSpace', "objectID=%s") . '#app=project';
             }
             elseif($module == 'build')
             {
@@ -1254,7 +1253,7 @@ class projectModel extends model
             ->add('type', 'project')
             ->join('whitelist', ',')
             ->stripTags($this->config->project->editor->create['id'], $this->config->allowedTags)
-            ->remove('products,branch,plans,delta,newProduct,productName,future,contactListMenu,teamMembers')
+            ->remove('uid,products,branch,plans,delta,newProduct,productName,future,contactListMenu,teamMembers')
             ->get();
         if(!isset($this->config->setCode) or $this->config->setCode == 0) unset($project->code);
 
@@ -1416,7 +1415,7 @@ class projectModel extends model
             $lib->name    = $this->lang->doclib->main['project'];
             $lib->type    = 'project';
             $lib->main    = '1';
-            $lib->acl     = $project->acl != 'program' ? $project->acl : 'custom';
+            $lib->acl     = 'default';
             $lib->users   = ',' . implode(',', array_filter($authorizedUsers)) . ',';
             $lib->vision  = zget($project, 'vision', 'rnd');
             $this->dao->insert(TABLE_DOCLIB)->data($lib)->exec();

@@ -3,8 +3,8 @@ $.extend(
 {
     ajaxForm: function(formID, callback)
     {
-        form = $(formID); 
-        var options = 
+        form = $(formID);
+        var options =
         {
             target  : null,
             timeout : config.timeout,
@@ -111,7 +111,7 @@ $.extend(
                 }
 
                 /**
-                 * The response.result is fail. 
+                 * The response.result is fail.
                  */
 
                 /* The result.message is just a string. */
@@ -138,7 +138,7 @@ $.extend(
                         errorMSG += '</div>';
 
                         /* Append error message, set style and set the focus events. */
-                        $('#' + errorLabel).remove(); 
+                        $('#' + errorLabel).remove();
                         var isInputGroup = $(errorOBJ).closest('.input-group').size();
                         var $showOBJ     = isInputGroup ? $(errorOBJ).closest('.input-group').parent() : $(errorOBJ).parent();
                         $showOBJ.append(errorMSG);
@@ -153,7 +153,7 @@ $.extend(
                                 if(!triggered[i])
                                 {
                                     $(this).removeAttr('style')
-                                    $('#' + errorLabel).remove(); 
+                                    $('#' + errorLabel).remove();
                                     triggered[i] = true;
                                 }
                             });
@@ -164,7 +164,7 @@ $.extend(
                             if(!triggered[i])
                             {
                                 $(this).removeAttr('style')
-                                $('#' + errorLabel).remove(); 
+                                $('#' + errorLabel).remove();
                                 triggered[i] = true;
                             }
                         });
@@ -187,7 +187,7 @@ $.extend(
 
         /* Call ajaxSubmit to sumit the form. */
         form.submit(function()
-        { 
+        {
             $(this).trigger('clearplaceholder');
             $(this).ajaxSubmit(options);
             return false;    // Prevent the submitting event of the browser.
@@ -199,7 +199,7 @@ $.extend(
     {
         $(formID).find(':submit').attr('disabled', true);
     },
-    
+
     /* Enable a form. */
     enableForm:function(formID)
     {

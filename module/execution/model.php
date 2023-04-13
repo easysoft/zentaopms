@@ -535,6 +535,7 @@ class executionModel extends model
             /* Create doc lib. */
             $this->app->loadLang('doc');
             $lib = new stdclass();
+            $lib->project   = $sprintProject;
             $lib->execution = $executionID;
             $lib->name      = $type == 'stage' ? str_replace($this->lang->executionCommon, $this->lang->project->stage, $this->lang->doclib->main['execution']) : $this->lang->doclib->main['execution'];
             $lib->type      = 'execution';
@@ -1606,7 +1607,7 @@ class executionModel extends model
      *
      * @param  int    $projectID
      * @param  string $type all|sprint|stage|kanban
-     * @param  string $mode all|noclosed|stagefilter|withdelete|multiple|leaf|order_asc or empty
+     * @param  string $mode all|noclosed|stagefilter|withdelete|multiple|leaf|order_asc|empty|noprefix
      * @access public
      * @return array
      */
@@ -1624,20 +1625,20 @@ class executionModel extends model
             /* Waterfall execution, when all phases are closed, in reverse order of date. */
             if(in_array($executionModel, array('waterfall', 'waterfallplus')))
             {
-                $summary = $this->dao->select('count(id) as executions, sum(IF(INSTR("closed", status) < 1, 0, 1)) as closedExecutions')->from(TABLE_EXECUTION)->where('project')->eq($projectID)->andWhere('deleted')->eq('0')->fetch();
+                $summary = $this->dao->select("count(id) as executions, sum(IF(INSTR('closed', status) < 1, 0, 1)) as closedExecutions")->from(TABLE_EXECUTION)->where('project')->eq($projectID)->andWhere('deleted')->eq('0')->fetch();
                 if($summary->executions == $summary->closedExecutions) $orderBy = 'sortStatus_asc,begin_desc,id_asc';
             }
         }
 
         /* Order by status's content whether or not done */
-        $executions = $this->dao->select('*, IF(INSTR("done,closed", status) < 2, 0, 1) AS isDone, INSTR("doing,wait,suspended,closed", status) AS sortStatus')->from(TABLE_EXECUTION)
+        $executions = $this->dao->select("*, IF(INSTR('done,closed', status) < 2, 0, 1) AS isDone, INSTR('doing,wait,suspended,closed', status) AS sortStatus")->from(TABLE_EXECUTION)
             ->where('deleted')->eq(0)
             ->andWhere('vision')->eq($this->config->vision)
             ->beginIF(!$this->session->multiple and $this->app->tab == 'execution')->andWhere('multiple')->eq('1')->fi()
             ->beginIF(strpos($mode, 'multiple') !== false)->andWhere('multiple')->eq('1')->fi()
             ->beginIF($type == 'all')->andWhere('type')->in('stage,sprint,kanban')->fi()
             ->beginIF($projectID)->andWhere('project')->eq($projectID)->fi()
-            ->beginIF($type != 'all')->andWhere('type')->eq($type)->fi()
+            ->beginIF($type != 'all')->andWhere('type')->in($type)->fi()
             ->beginIF(strpos($mode, 'withdelete') === false)->andWhere('deleted')->eq(0)->fi()
             ->beginIF(!$this->app->user->admin and strpos($mode, 'all') === false)->andWhere('id')->in($this->app->user->view->sprints)->fi()
             ->orderBy($orderBy)
@@ -1672,6 +1673,7 @@ class executionModel extends model
             {
                 if(isset($allExecutions[$path])) $executionName .= '/' . $allExecutions[$path]->name;
             }
+            if(strpos($mode, 'noprefix') !== false) $executionName = ltrim($executionName, '/');
 
             $pairs[$execution->id] = $executionName;
         }
@@ -1761,7 +1763,7 @@ class executionModel extends model
         }
         else
         {
-            return $this->dao->select('*, IF(INSTR(" done,closed", status) < 2, 0, 1) AS isDone')->from(TABLE_EXECUTION)
+            return $this->dao->select("*, IF(INSTR(' done,closed', status) < 2, 0, 1) AS isDone")->from(TABLE_EXECUTION)
                 ->where('deleted')->eq(0)
                 ->andWhere('vision')->eq($this->config->vision)
                 ->beginIF($type == 'all')->andWhere('type')->in('sprint,stage,kanban')->fi()
@@ -1811,7 +1813,7 @@ class executionModel extends model
         }
         else
         {
-            return $this->dao->select('t1.*, IF(INSTR(" done,closed", t1.status) < 2, 0, 1) AS isDone')->from(TABLE_EXECUTION)->alias('t1')
+            return $this->dao->select("t1.*, IF(INSTR(' done,closed', t1.status) < 2, 0, 1) AS isDone")->from(TABLE_EXECUTION)->alias('t1')
                 ->leftJoin(TABLE_TEAM)->alias('t2')->on('t2.root=t1.id')
                 ->where('t1.deleted')->eq(0)
                 ->beginIF(!$this->app->user->admin)->andWhere('t1.id')->in($this->app->user->view->sprints)->fi()
@@ -2201,6 +2203,10 @@ class executionModel extends model
         elseif($module == 'doc')
         {
             $link = helper::createLink('doc', $method, "type=execution&objectID=%s&from=execution");
+        }
+        elseif($module == 'api')
+        {
+            $link = helper::createLink('doc', 'tableContents', "type=execution&objectID=%s&from=execution");
         }
         elseif(in_array($module, array('issue', 'risk', 'opportunity', 'pssp', 'auditplan', 'nc', 'meeting')))
         {

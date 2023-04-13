@@ -48,6 +48,8 @@ $lang->tutorialAB     = 'Tutorial';
 $lang->runInfo        = "<div class='row'><div class='u-1 a-center' id='debugbar'>Time %s MS, Memory %s KB, Query %s.  </div></div>";
 $lang->agreement      = "I have read and agreed to the terms and conditions of <a href='http://zpl.pub/page/zplv12.html' target='_blank'> Z PUBLIC LICENSE 1.2 </a>. <span class='text-danger'>Without authorization, I should not remove, hide or cover any logos/links of ZenTao.</span>";
 $lang->designedByAIUX = "<a href='https://api.zentao.net/goto.php?item=aiux' class='link-aiux' target='_blank'><i class='icon icon-aiux'></i> AIUX</a>";
+$lang->bizVersion     = '<a href="https://www.zentao.net/page/enterprise.html" target="_blank">Testen Sie ZenTao Biz für mehr Informationen!</a>';
+$lang->bizVersionINT  = '<a href="https://www.zentao.pm/page/vs.html" etarget="_blank">Testen Sie ZenTao Biz für mehr Informationen!</a>';
 
 $lang->reset              = 'Zurücksetzen';
 $lang->cancel             = 'Abbrechen';
@@ -177,6 +179,7 @@ $lang->repo->codeRepo     = 'Code Repo';
 $lang->screen->common     = 'Screen';
 $lang->report->common     = 'BI';
 $lang->pivot->common      = 'Pivot Table';
+$lang->chart->common      = 'Chart';
 $lang->system->common     = 'System';
 $lang->admin->common      = 'Admin';
 $lang->story->common      = 'Story';
@@ -219,6 +222,7 @@ $lang->app->serverLink    = 'Server Link';
 $lang->review->common     = 'Review';
 $lang->zahost->common     = 'ZAhost';
 $lang->zanode->common     = 'ZAnode';
+$lang->dimension->common  = 'Dimension';
 
 $lang->personnel->common     = 'Member';
 $lang->personnel->invest     = 'Investment';
@@ -276,17 +280,22 @@ $lang->project->kanban = $lang->projectCommon . ' Kanban';
 $lang->execution->executionKanban = "{$lang->execution->common} Kanban";
 $lang->execution->all             = "{$lang->execution->common} List";
 
-$lang->doc->recent    = 'Recent';
-$lang->doc->my        = 'My';
-$lang->doc->favorite  = 'Favorite';
-$lang->doc->product   = $lang->productCommon;
-$lang->doc->project   = $lang->projectCommon;
-$lang->doc->api       = 'API';
-$lang->doc->execution = $lang->execution->common;
-$lang->doc->custom    = 'Custom';
-$lang->doc->wiki      = 'WIKI';
-$lang->doc->apiDoc    = 'API Docuemnt';
-$lang->doc->apiStruct = 'Data Structure';
+$lang->doc->recent        = 'Recent';
+$lang->doc->my            = 'My';
+$lang->doc->favorite      = 'Favorite';
+$lang->doc->product       = $lang->productCommon;
+$lang->doc->project       = $lang->projectCommon;
+$lang->doc->api           = 'API';
+$lang->doc->execution     = $lang->execution->common;
+$lang->doc->custom        = 'Custom';
+$lang->doc->wiki          = 'WIKI';
+$lang->doc->apiDoc        = 'API Docuemnt';
+$lang->doc->apiStruct     = 'Data Structure';
+$lang->doc->mySpace       = 'My Space';
+$lang->doc->productSpace  = "{$lang->productCommon} Space";
+$lang->doc->projectSpace  = "{$lang->projectCommon} Space";
+$lang->doc->apiSpace      = 'API Space';
+$lang->doc->teamSpace     = 'Team Space';
 
 $lang->product->list   = $lang->productCommon . ' List';
 $lang->product->kanban = $lang->productCommon . ' Kanban';
@@ -294,7 +303,6 @@ $lang->product->kanban = $lang->productCommon . ' Kanban';
 $lang->project->report = 'Report';
 
 $lang->report->weekly       = 'Weekly';
-$lang->report->annual       = 'Annual Summary';
 $lang->report->notice       = new stdclass();
 $lang->report->notice->help = 'Hinweis: Berichte wurde auf Basis der Suche generiert. Bitte suchen Sie in der Liste bevor Sie einen Bericht generieren.';
 

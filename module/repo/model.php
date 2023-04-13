@@ -851,7 +851,7 @@ class repoModel extends model
             ->beginIF($begin)->andWhere('t1.time')->ge($begin)->fi()
             ->beginIF($end)->andWhere('t1.time')->le($end)->fi()
             ->orderBy('time desc');
-        if($entry == '/' or empty($entry))$comments->page($pager, 't1.id');
+        if($entry == '/' or empty($entry)) $comments->page($pager, 't1.id');
         $comments = $comments->fetchAll('revision');
 
         foreach($comments as $repoComment)

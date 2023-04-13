@@ -132,10 +132,11 @@ class treeModel extends model
      * @param  int|array $branch
      * @param  string    $param
      * @param  string    $grade
+     * @param  string    $divide /|>
      * @access public
      * @return void
      */
-    public function getOptionMenu($rootID, $type = 'story', $startModule = 0, $branch = 0, $param = 'nodeleted', $grade = 'all')
+    public function getOptionMenu($rootID, $type = 'story', $startModule = 0, $branch = 0, $param = 'nodeleted', $grade = 'all', $divide = '/')
     {
         if(empty($branch) and !is_array($branch)) $branch = 0;
         if(defined('TUTORIAL'))
@@ -197,7 +198,7 @@ class treeModel extends model
             foreach($modules as $module)
             {
                 $branchName = (isset($product) and $product->type != 'normal' and $module->branch === BRANCH_MAIN) ? $this->lang->branch->main : $branch;
-                $this->buildTreeArray($treeMenu, $modules, $module, (empty($branchName)) ? '/' : "/$branchName/");
+                $this->buildTreeArray($treeMenu, $modules, $module, (empty($branchName)) ? '/' : "/$branchName/", $divide);
             }
         }
 
@@ -373,16 +374,16 @@ class treeModel extends model
      * @access public
      * @return void
      */
-    public function buildTreeArray(& $treeMenu, $modules, $module, $moduleName = '/')
+    public function buildTreeArray(& $treeMenu, $modules, $module, $moduleName = '/', $divide = '/')
     {
         $parentModules = explode(',', $module->path);
         foreach($parentModules as $parentModuleID)
         {
             if(empty($parentModuleID)) continue;
             if(empty($modules[$parentModuleID])) continue;
-            $moduleName .= $modules[$parentModuleID]->name . '/';
+            $moduleName .= $modules[$parentModuleID]->name . $divide;
         }
-        $moduleName = rtrim($moduleName, '/');
+        $moduleName = rtrim($moduleName, $divide);
         $moduleName .= "|$module->id\n";
 
         if(isset($treeMenu[$module->id]) and !empty($treeMenu[$module->id]))
@@ -1834,8 +1835,25 @@ class treeModel extends model
         $changes = common::createChanges($self, $module);
         if(!isset($_POST['branch'])) $module->branch = $self->branch;
 
+        if($self)
+        {
+            $self->parent = $module->parent;
+            if($self->root) $module->root = $self->root;
+        }
+
         $repeatName = $this->checkUnique($self, array("id{$self->id}" => $module->name), array("id{$self->id}" => $module->branch));
-        if($repeatName) helper::end(js::alert(sprintf($this->lang->tree->repeatName, $repeatName)));
+        if($repeatName)
+        {
+            $tips = in_array($self->type, array('doc', 'api')) ? $this->lang->tree->repeatDirName : $this->lang->tree->repeatName;
+            helper::end(js::alert(sprintf($tips, $repeatName)));
+        }
+
+        if((empty($module->root) or empty($module->name)) and in_array($self->type, array('doc', 'api')))
+        {
+            $this->app->loadLang('doc');
+            if(empty($module->root)) helper::end(js::alert(sprintf($this->lang->error->notempty, $this->lang->doc->lib)));
+            if(empty($module->name)) helper::end(js::alert(sprintf($this->lang->error->notempty, $this->lang->doc->catalogName)));
+        }
 
         $modules = $self->type == 'story' ? $this->getOptionMenu($self->root, 'story', 0, 'all') : '';
 
@@ -2015,6 +2033,9 @@ class treeModel extends model
             case 'ticket':
                 $this->dao->update(TABLE_TICKET)->set('module')->eq($module->parent)->where('module')->in($childs)->exec();
                 $cookieName = 'ticketModule';
+                break;
+            case 'doc':
+                $this->dao->update(TABLE_DOC)->set('`module`')->eq($module->parent)->where('`module`')->in($childs)->exec();
                 break;
         }
         if(strpos($this->session->{$module->type . 'List'}, 'param=' . $moduleID)) $this->session->set($module->type . 'List', str_replace('param=' . $moduleID, 'param=0', $this->session->{$module->type . 'List'}));
@@ -2296,5 +2317,128 @@ class treeModel extends model
         $this->lang->module        = new stdclass();
         $this->lang->module->name  = $this->lang->tree->wordName;
         $this->lang->module->short = $this->lang->tree->short;
+    }
+
+    /**
+     * Create module.
+     *
+     * @access public
+     * @return bool|object
+     */
+    public function createModule()
+    {
+        $data = fixer::input('post')
+            ->setDefault('name', '')
+            ->setDefault('createType', 'child')
+            ->setDefault('objectID', 0)
+            ->setDefault('order', 10)
+            ->get();
+
+        $module         = new stdClass();
+        $module->root   = zget($data, 'libID', 0);
+        $module->type   = zget($data, 'moduleType', 'doc');
+        $module->parent = zget($data, 'parentID', 0);
+        $module->name   = strip_tags(trim($data->name));
+        $module->branch = 0;
+        $module->short  = '';
+        $module->order  = $data->order;
+
+        if(empty($module->name))
+        {
+            dao::$errors[] = sprintf($this->lang->error->notempty, $this->lang->tree->dir);
+            return false;
+        }
+
+        if($data->createType == 'same')
+        {
+            $baseModule = $this->getByID($data->objectID);
+            if(!empty($baseModule))
+            {
+                $module->parent = $baseModule->parent;
+                $module->order  = $baseModule->order;
+            }
+        }
+        elseif($data->createType == 'child')
+        {
+            $maxOrder = $this->dao->select('`order`')->from(TABLE_MODULE)
+                ->where('root')->eq($module->root)
+                ->andWhere('parent')->eq($module->parent)
+                ->andWhere('type')->eq($module->type)
+                ->orderBy('order_desc')
+                ->limit(1)
+                ->fetch('order');
+
+            $module->order = (int)$maxOrder + 10;
+        }
+
+        $repeatName = $this->checkUnique($module);
+        if($repeatName)
+        {
+            dao::$errors[] = sprintf($this->lang->tree->repeatDirName, $repeatName);
+            return false;
+        }
+
+        $parent = $this->getByID($module->parent);
+        $module->grade = $module->parent ? $parent->grade + 1 : 1;
+        $this->dao->insert(TABLE_MODULE)->data($module)->exec();
+        $moduleID = $this->dao->lastInsertID();
+
+        if($data->createType == 'same')
+        {
+            $this->dao->update(TABLE_MODULE)
+                ->set('`order` = `order` + 10')
+                ->where('`root`')->eq($module->root)
+                ->andWhere('`parent`')->eq($module->parent)
+                ->andWhere('`type`')->eq($module->type)
+                ->andWhere('`order`')->gt($module->order)
+                ->exec();
+
+            $module->order += 10;
+        }
+
+        $modulePath = "$moduleID,";
+        if($module->parent) $modulePath = $parent->path . $modulePath;
+        $this->dao->update(TABLE_MODULE)->set('`path`')->eq($modulePath)->set('`order`')->eq($module->order)->where('id')->eq($moduleID)->limit(1)->exec();
+
+        return $this->getByID($moduleID);
+    }
+
+    /**
+     * Get group pairs.
+     *
+     * @param  int    $dimensionID
+     * @param  int    $parentGroup
+     * @param  int    $grade
+     * @param  string $type
+     * @access public
+     * @return array
+     */
+    public function getGroupPairs($dimensionID = 0, $parentGroup = 0, $grade = 2, $type = 'chart')
+    {
+        $groups = $this->dao->select('id,name,grade,parent')->from(TABLE_MODULE)
+            ->where('root')->eq($dimensionID)
+            ->beginIF(!empty($parentGroup))->andWhere('root')->eq($dimensionID)->fi()
+            ->andWhere('type')->eq($type)
+            ->andWhere('deleted')->eq(0)
+            ->orderBy('order')
+            ->fetchGroup('grade', 'id');
+
+        $groupPairs = array();
+        if(!empty($groups[1]))
+        {
+            foreach($groups[1] as $parentGroup)
+            {
+                if($grade == 1) $groupPairs[$parentGroup->id] = $parentGroup->name;
+                if($grade == 2 and !empty($groups[2]))
+                {
+                    foreach($groups[2] as $childGroup)
+                    {
+                        if($parentGroup->id == $childGroup->parent) $groupPairs[$childGroup->id] = '/' . $parentGroup->name . '/' . $childGroup->name;
+                    }
+                }
+            }
+        }
+
+        return $groupPairs;
     }
 }

@@ -285,6 +285,7 @@ class buildModel extends model
         $this->app->loadLang('branch');
         foreach($allBuilds as $id => $build)
         {
+            if($build->branch === '') $build->branch = 0;
             if(empty($build->releaseID) and (strpos($params, 'nodone') !== false) and ($build->objectStatus === 'done')) continue;
             if((strpos($params, 'noterminate') !== false) and ($build->releaseStatus === 'terminate')) continue;
             if((strpos($params, 'withexecution') !== false) and $build->execution and isset($executions[$build->execution])) continue;
@@ -439,7 +440,7 @@ class buildModel extends model
                     if(!isset($relationBranch[$branch])) $relationBranch[$branch] = $branch;
                 }
             }
-            $build->branch = implode(',', $relationBranch);
+            if($relationBranch) $build->branch = implode(',', $relationBranch);
         }
 
         $product = $this->loadModel('product')->getByID($build->product);

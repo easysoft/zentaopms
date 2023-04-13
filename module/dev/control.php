@@ -15,11 +15,15 @@ class dev extends control
     /**
      * Get API of system.
      *
+     * @param  string $module
+     * @param  int    $apiID
      * @access public
      * @return void
      */
-    public function api($module = '')
+    public function api($module = 'restapi', $apiID = 1)
     {
+        if($module == 'restapi') return print($this->fetch('dev', 'restAPI', "apiID=$apiID"));
+
         $this->view->title          = $this->lang->dev->api;
         $this->view->position[]     = html::a(inlink('api'), $this->lang->dev->common);
         $this->view->position[]     = $this->lang->dev->api;
@@ -29,6 +33,30 @@ class dev extends control
         $this->view->selectedModule = $module;
         $this->view->apis           = $module ? $this->dev->getAPIs($module) : array();
         $this->view->moduleTree     = $this->dev->getTree($module, 'module');
+        $this->display();
+    }
+
+    /**
+     * Get rest api list.
+     *
+     * @param  int    $apiID
+     * @access public
+     * @return void
+     */
+    public function restAPI($apiID = 1)
+    {
+        list($api, $typeList, $menu) = $this->dev->getAPIData($apiID);
+        if($api)
+        {
+            $moduleID  = $api->module;
+            $api->desc = htmlspecialchars_decode($api->desc);
+        }
+        $this->view->title          = $this->lang->dev->api;
+        $this->view->selectedModule = 'restapi';
+        $this->view->moduleTree     = $menu;
+        $this->view->typeList       = $typeList;
+        $this->view->api            = $api;
+        $this->view->apiID          = $apiID;
         $this->display();
     }
 

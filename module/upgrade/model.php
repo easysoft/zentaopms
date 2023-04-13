@@ -593,6 +593,10 @@ class upgradeModel extends model
             case '18_2':
                 $this->loadModel('setting')->setSN();
                 break;
+            case '18_3':
+                $this->changeBookToCustomLib();
+                $this->createDefaultDimension();
+                break;
         }
 
         $this->deletePatch();
@@ -750,7 +754,6 @@ class upgradeModel extends model
                 $this->processFeedbackModule();
                 break;
             case 'biz8_3':
-                $this->createDefaultDimension();
                 $this->processDataset();
                 $this->updateDatasetPriv();
                 $this->processChart();
@@ -2005,7 +2008,7 @@ class upgradeModel extends model
         if(!file_exists($sqlFile)) return false;
 
         $this->saveLogs('Run Method ' . __FUNCTION__);
-        $mysqlVersion = $this->loadModel('install')->getMysqlVersion();
+        $mysqlVersion = $this->loadModel('install')->getDatabaseVersion();
         $ignoreCode   = '|1050|1054|1060|1091|1061|';
 
         /* Read the sql file to lines, remove the comment lines, then join theme by ';'. */
@@ -7998,7 +8001,7 @@ class upgradeModel extends model
      */
     public function addDefaultModules4BI($type = 'report', $dimension = 1)
     {
-        $this->app->loadLang('report');
+        $this->app->loadLang('dimension');
 
         $group = new stdclass();
         $group->root  = $dimension;
@@ -8008,7 +8011,7 @@ class upgradeModel extends model
         $group->order = 10;
 
         $modules = array();
-        foreach($this->lang->crystal->moduleList as $module => $name)
+        foreach($this->lang->dimension->moduleList as $module => $name)
         {
             if(!$module || !$name) continue;
 
@@ -8211,6 +8214,7 @@ class upgradeModel extends model
         $dimension              = new stdclass();
         $dimension->name        = $this->lang->dimension->default;
         $dimension->code        = 'efficiency';
+        $dimension->desc        = '';
         $dimension->createdBy   = 'system';
         $dimension->createdDate = helper::now();
 
@@ -8515,6 +8519,52 @@ class upgradeModel extends model
                 ->exec();
         }
 
+        return true;
+    }
+
+    /**
+     * Change book to custom lib.
+     *
+     * @access public
+     * @return void
+     */
+    public function changeBookToCustomLib()
+    {
+        $libs = $this->dao->select('id,id')->from(TABLE_DOCLIB)->where('`type`')->eq('book')->fetchPairs();
+        foreach($libs as $libID)
+        {
+            $chapterModulePairs = array();
+            $chapters           = $this->dao->select('*')->from(TABLE_DOC)->where('lib')->eq($libID)->andWhere('`type`')->eq('chapter')->orderBy('`grade` asc, `order` asc')->fetchGroup('grade', 'id');
+            foreach($chapters as $grade => $gradeChapters)
+            {
+                foreach($gradeChapters as $id => $chapter)
+                {
+                    $module = new stdclass();
+                    $module->root    = $chapter->lib;
+                    $module->name    = $chapter->title;
+                    $module->parent  = zget($chapterModulePairs, $chapter->parent);
+                    $module->grade   = $chapter->grade;
+                    $module->order   = $chapter->order;
+                    $module->type    = 'doc';
+                    $module->deleted = $chapter->deleted;
+
+                    $this->dao->insert(TABLE_MODULE)->data($module)->exec();
+                    $moduleID = $this->dao->lastInsertID();
+
+                    $chapterModulePairs[$id] = $moduleID;
+
+                    $path = explode(',', $chapter->path);
+                    $path = array_filter($path);
+                    foreach($path as $index => $chapterID) $path[$index] = zget($chapterModulePairs, $chapterID);
+                    $path = implode(',', $path);
+                    $this->dao->update(TABLE_MODULE)->set('`path`')->eq(",{$path},")->where('id')->eq($moduleID)->exec();
+
+                    $this->dao->update(TABLE_DOC)->set('`module`')->eq($moduleID)->set('`parent`')->eq($moduleID)->set("`path` = REPLACE(`path`, '{$chapter->path}', ',{$path},')")->set('`type`')->eq('text')->where('`parent`')->eq($id)->andWhere('`type`')->eq('article')->exec();
+                }
+            }
+            $this->dao->update(TABLE_DOCLIB)->set('`type`')->eq('custom')->where('id')->eq($libID)->exec();
+            $this->dao->update(TABLE_DOC)->set('`type`')->eq('text')->where('`lib`')->eq($libID)->andWhere('grade')->eq(1)->andWhere('`type`')->eq('article')->exec();
+        }
         return true;
     }
 
@@ -8927,5 +8977,28 @@ class upgradeModel extends model
         }
 
         return $fieldSettings;
+    }
+
+    /**
+     * Convert doc collect.
+     *
+     * @access public
+     * @return bool
+     */
+    public function convertDocCollect()
+    {
+        $this->loadModel('doc');
+
+        $stmt = $this->dao->select('id,collector')->from(TABLE_DOC)->where('collector')->ne('')->query();
+        while($doc = $stmt->fetch())
+        {
+            foreach(explode(',', $doc->collector) as $collector)
+            {
+                $collector = trim($collector);
+                if(empty($collector)) continue;
+                $this->doc->createAction($doc->id, 'collect', $collector);
+            }
+        }
+        return true;
     }
 }

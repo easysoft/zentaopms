@@ -387,8 +387,7 @@ class tree extends control
         if(!empty($_POST))
         {
             $this->tree->update($moduleID);
-            echo js::alert($this->lang->tree->successSave);
-            die(js::reload('parent'));
+            return print(js::reload('parent'));
         }
 
         $module = $this->tree->getById($moduleID);
@@ -506,11 +505,11 @@ class tree extends control
         {
             $module      = $this->tree->getByID($moduleID);
             $confirmLang = $this->lang->tree->confirmDelete;
-            if($module->type == 'doc') $confirmLang = $this->lang->tree->confirmDeleteMenu;
+            if($module->type == 'doc' or $module->type == 'api') $confirmLang = $this->lang->tree->confirmDeleteMenu;
             if($module->type == 'line') $confirmLang = $this->lang->tree->confirmDeleteLine;
             if($module->type == 'host') $confirmLang = $this->lang->tree->confirmDeleteHost;
             if(strpos($this->config->tree->groupTypes, ",$module->type,") !== false) $confirmLang = $this->lang->tree->confirmDeleteGroup;
-            die(js::confirm($confirmLang, $this->createLink('tree', 'delete', "rootID=$rootID&moduleID=$moduleID&confirm=yes")));
+            return print(js::confirm($confirmLang, $this->createLink($this->app->rawModule, $this->app->rawMethod, "rootID=$rootID&moduleID=$moduleID&confirm=yes")));
         }
         else
         {
@@ -688,5 +687,21 @@ class tree extends control
         $this->view->actions = $this->loadModel('action')->getList('module', $productID);
         $this->view->users   = $this->loadModel('user')->getPairs('noletter');
         $this->display();
+    }
+
+    /**
+     * Create module by ajax.
+     *
+     * @access public
+     * @return void
+     */
+    public function ajaxCreateModule()
+    {
+        if(!helper::isAjaxRequest()) return $this->send(array('result' => 'fail', 'message' => ''));;
+
+        $module = $this->tree->createModule();
+        if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+        return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'module' => $module));
     }
 }

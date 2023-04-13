@@ -48,7 +48,7 @@ $lang->mainNav->admin     = "{$lang->navIcons['admin']} {$lang->admin->common}|a
 
 $lang->dividerMenu = ',kanban,oa,admin,';
 
-$lang->mainNav->menuOrder[5] = 'my';
+$lang->mainNav->menuOrder[5]  = 'my';
 $lang->mainNav->menuOrder[10] = 'program';
 $lang->mainNav->menuOrder[15] = 'product';
 $lang->mainNav->menuOrder[20] = 'project';
@@ -168,7 +168,7 @@ $lang->product->menu->release     = array('link' => "{$lang->release->common}|re
 $lang->product->menu->roadmap     = array('link' => "{$lang->roadmap}|product|roadmap|productID=%s");
 $lang->product->menu->requirement = array('link' => "{$lang->URCommon}|product|browse|productID=%s&branch=&browseType=unclosed&param=0&storyType=requirement", 'alias' => 'batchedit', 'subModule' => 'story');
 $lang->product->menu->track       = array('link' => "{$lang->track}|product|track|productID=%s");
-$lang->product->menu->doc         = array('link' => "{$lang->doc->common}|doc|tableContents|type=product&objectID=%s", 'subModule' => 'doc');
+$lang->product->menu->doc         = array('link' => "{$lang->doc->common}|doc|productSpace|objectID=%s", 'subModule' => 'doc,api');
 $lang->product->menu->dynamic     = array('link' => "{$lang->dynamic}|product|dynamic|productID=%s");
 $lang->product->menu->settings    = array('link' => "{$lang->settings}|product|view|productID=%s", 'subModule' => 'tree,branch', 'alias' => 'edit,whitelist,addwhitelist');
 
@@ -186,8 +186,6 @@ $lang->product->menuOrder[50] = 'dynamic';
 $lang->product->menuOrder[55] = 'settings';
 $lang->product->menuOrder[60] = 'create';
 $lang->product->menuOrder[65] = 'all';
-
-$lang->product->menu->doc['subMenu'] = new stdclass();
 
 $lang->product->menu->settings['subMenu'] = new stdclass();
 $lang->product->menu->settings['subMenu']->view      = array('link' => "{$lang->overview}|product|view|productID=%s", 'alias' => 'edit');
@@ -209,7 +207,7 @@ $lang->scrum->menu->execution   = array('link' => "$lang->executionCommon|projec
 $lang->scrum->menu->storyGroup  = array('link' => "{$lang->common->story}|projectstory|story|projectID=%s&product=%s",'class' => 'dropdown dropdown-hover', 'exclude' => 'tree-browse');
 $lang->scrum->menu->story       = array('link' => "$lang->SRCommon|projectstory|story|projectID=%s", 'subModule' => 'projectstory,tree', 'alias' => 'story,track');
 $lang->scrum->menu->projectplan = array('link' => "{$lang->productplan->shortCommon}|projectplan|browse|productID=%s", 'subModule' => 'productplan');
-$lang->scrum->menu->doc         = array('link' => "{$lang->doc->common}|doc|tableContents|type=project&objectID=%s", 'subModule' => 'doc');
+$lang->scrum->menu->doc         = array('link' => "{$lang->doc->common}|doc|projectSpace|objectID=%s", 'subModule' => 'doc,api');
 $lang->scrum->menu->qa          = array('link' => "{$lang->qa->common}|project|bug|projectID=%s", 'subModule' => 'testcase,testtask,bug,testreport', 'alias' => 'bug,testtask,testcase,testreport', 'exclude' => 'execution-create,execution-batchedit');
 $lang->scrum->menu->devops      = array('link' => "{$lang->repo->common}|repo|browse|repoID=0&branchID=&objectID=%s", 'subModule' => 'repo');
 $lang->scrum->menu->build       = array('link' => "{$lang->build->common}|project|build|project=%s", 'subModule' => 'projectbuild');
@@ -237,8 +235,6 @@ $lang->scrum->menuOrder[40] = 'release';
 $lang->scrum->menuOrder[45] = 'dynamic';
 $lang->scrum->menuOrder[55] = 'settings';
 
-$lang->scrum->menu->doc['subMenu'] = new stdclass();
-
 $lang->scrum->menu->qa['subMenu'] = new stdclass();
 //$lang->scrum->menu->qa['subMenu']->index      = array('link' => "$lang->dashboard|project|qa|projectID=%s");
 $lang->scrum->menu->qa['subMenu']->bug        = array('link' => "{$lang->bug->common}|project|bug|projectID=%s", 'subModule' => 'bug');
@@ -264,7 +260,7 @@ $lang->waterfall->menu->storyGroup = array('link' => "{$lang->common->story}|pro
 $lang->waterfall->menu->story      = array('link' => "$lang->SRCommon|projectstory|story|projectID=%s", 'subModule' => 'projectstory,tree', 'alias' => 'story', 'exclude' => 'projectstory-track');
 $lang->waterfall->menu->design     = array('link' => "{$lang->design->common}|design|browse|project=%s");
 $lang->waterfall->menu->qa         = array('link' => "{$lang->qa->common}|project|bug|projectID=%s", 'subModule' => 'testcase,testtask,bug,testreport', 'alias' => 'bug,testtask,testcase,testreport');
-$lang->waterfall->menu->doc        = array('link' => "{$lang->doc->common}|doc|tableContents|type=project&objectID=%s");
+$lang->waterfall->menu->doc        = array('link' => "{$lang->doc->common}|doc|projectSpace|objectID=%s");
 $lang->waterfall->menu->devops     = array('link' => "{$lang->repo->common}|repo|browse|repoID=0&branchID=&objectID=%s", 'subModule' => 'repo');
 $lang->waterfall->menu->build      = array('link' => "{$lang->build->common}|project|build|project=%s", 'subModule' => 'projectbuild');
 $lang->waterfall->menu->release    = array('link' => "{$lang->release->common}|projectrelease|browse|project=%s", 'subModule' => 'projectrelease');
@@ -288,8 +284,6 @@ $lang->waterfall->menuOrder[60] = 'doc';
 $lang->waterfall->menuOrder[65] = 'build';
 $lang->waterfall->menuOrder[70] = 'release';
 $lang->waterfall->menuOrder[80] = 'dynamic';
-
-$lang->waterfall->menu->doc['subMenu'] = new stdclass();
 
 $lang->waterfall->menu->programplan['subMenu'] = new stdclass();
 $lang->waterfall->menu->programplan['subMenu']->lists = array('link' => "{$lang->stage->list}|programplan|browse|projectID=%s&productID=0&type=lists", 'alias' => 'create');
@@ -371,8 +365,6 @@ $lang->execution->menuOrder[55] = 'build';
 $lang->execution->menuOrder[60] = 'release';
 $lang->execution->menuOrder[65] = 'action';
 $lang->execution->menuOrder[70] = 'settings';
-
-$lang->execution->menu->doc['subMenu'] = new stdclass();
 
 $lang->execution->menu->view['subMenu']            = new stdclass();
 $lang->execution->menu->view['subMenu']->groupTask = "$lang->groupView|execution|grouptask|executionID=%s";
@@ -507,45 +499,32 @@ $lang->kanban->menu = new stdclass();
 /* Doc menu. */
 $lang->doc->menu = new stdclass();
 $lang->doc->menu->dashboard = array('link' => "{$lang->dashboard}|doc|index");
-$lang->doc->menu->recent    = array('link' => "{$lang->doc->recent}|doc|browse|browseTyp=byediteddate", 'alias' => 'recent');
-$lang->doc->menu->my        = array('link' => "{$lang->doc->my}|doc|browse|browseTyp=openedbyme", 'alias' => 'my');
-$lang->doc->menu->collect   = array('link' => "{$lang->doc->favorite}|doc|browse|browseTyp=collectedbyme", 'alias' => 'collect');
-$lang->doc->menu->product   = array('link' => "{$lang->doc->product}|doc|tableContents|type=product", 'alias' => 'showfiles,product');
-$lang->doc->menu->api       = array('link' => "{$lang->doc->api}|api|index", 'alias' => 'api');
-$lang->doc->menu->project   = array('link' => "{$lang->doc->project}|doc|tableContents|type=project", 'alias' => 'showfiles,project');
-$lang->doc->menu->execution = array('link' => "{$lang->doc->execution}|doc|tableContents|type=execution", 'alias' => 'showfiles,execution');
-$lang->doc->menu->custom    = array('link' => "{$lang->doc->custom}|doc|tableContents|type=custom", 'alias' => 'custom');
+$lang->doc->menu->my        = array('link' => "{$lang->doc->mySpace}|doc|mySpace|type=mine", 'alias' => 'myspace');
+$lang->doc->menu->product   = array('link' => "{$lang->doc->productSpace}|doc|productSpace|", 'alias' => 'productspace');
+$lang->doc->menu->project   = array('link' => "{$lang->doc->projectSpace}|doc|projectSpace|", 'alias' => 'projectspace');
+$lang->doc->menu->api       = array('link' => "{$lang->doc->apiSpace}|api|index", 'alias' => 'api');
+$lang->doc->menu->custom    = array('link' => "{$lang->doc->teamSpace}|doc|tableContents|type=custom", 'alias' => 'tablecontents');
 
 $lang->doc->dividerMenu = ',product,';
 
 /* Doc menu order. */
 $lang->doc->menuOrder[5]  = 'dashboard';
-$lang->doc->menuOrder[10] = 'recent';
-$lang->doc->menuOrder[15] = 'my';
-$lang->doc->menuOrder[20] = 'collect';
-$lang->doc->menuOrder[25] = 'product';
-$lang->doc->menuOrder[30] = 'project';
-$lang->doc->menuOrder[35] = 'execution';
-$lang->doc->menuOrder[36] = 'api';
-$lang->doc->menuOrder[40] = 'custom';
-
-$lang->doc->menu->product['subMenu']   = new stdclass();
-$lang->doc->menu->project['subMenu']   = new stdclass();
-$lang->doc->menu->execution['subMenu'] = new stdclass();
-$lang->doc->menu->custom['subMenu']    = new stdclass();
-
-$lang->doc->menu->api['subMenu'] = new stdclass();
-$lang->doc->menu->api['subMenu']->index  = array('link' => "{$lang->doc->apiDoc}|api|index|libID=%s", 'alias' => 'create,edit');
-$lang->doc->menu->api['subMenu']->struct = array('link' => "{$lang->doc->apiStruct}|api|struct|libID=%s", 'alias' => 'createstruct,editstruct');
+$lang->doc->menuOrder[10] = 'my';
+$lang->doc->menuOrder[15] = 'product';
+$lang->doc->menuOrder[20] = 'project';
+$lang->doc->menuOrder[25] = 'api';
+$lang->doc->menuOrder[30] = 'custom';
 
 /* Report menu.*/
 $lang->report->menu         = new stdclass();
 $lang->report->menu->screen = array('link' => "{$lang->screen->common}|screen|browse");
 $lang->report->menu->pivot  = array('link' => "{$lang->pivot->common}|pivot|preview");
+$lang->report->menu->chart  = array('link' => "{$lang->chart->common}|chart|preview");
 
 /* Report menu order. */
 $lang->report->menuOrder[5]  = 'screen';
 $lang->report->menuOrder[10] = 'pivot';
+$lang->report->menuOrder[15] = 'chart';
 
 /* Company menu.*/
 $lang->company->menu              = new stdclass();
@@ -634,6 +613,7 @@ $lang->navGroup->api    = 'doc';
 
 $lang->navGroup->screen = 'report';
 $lang->navGroup->pivot  = 'report';
+$lang->navGroup->chart  = 'report';
 
 $lang->navGroup->qa            = 'qa';
 $lang->navGroup->bug           = 'qa';

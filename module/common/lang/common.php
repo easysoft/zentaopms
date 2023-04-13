@@ -44,6 +44,7 @@ $lang->user        = new stdclass();
 $lang->screen      = new stdclass();
 $lang->report      = new stdclass();
 $lang->pivot       = new stdclass();
+$lang->chart       = new stdclass();
 $lang->repo        = new stdclass();
 $lang->jenkins     = new stdclass();
 $lang->gitlab      = new stdclass();
@@ -91,6 +92,7 @@ $lang->app         = new stdclass();
 $lang->zahost      = new stdclass();
 $lang->zanode      = new stdclass();
 $lang->holiday     = new stdclass();
+$lang->dimension   = new stdclass();
 
 $lang->projectbuild   = new stdclass();
 $lang->projectrelease = new stdclass();

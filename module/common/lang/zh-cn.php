@@ -48,6 +48,8 @@ $lang->tutorialAB     = '新手引导';
 $lang->runInfo        = "<div class='row'><div class='u-1 a-center' id='debugbar'>时间: %s 毫秒, 内存: %s KB, 查询: %s.  </div></div>";
 $lang->agreement      = "已阅读并同意。<span class='text-danger'>未经许可，不得去除、隐藏或遮掩禅道软件的任何标志及链接。</span>";
 $lang->designedByAIUX = "<a href='https://api.zentao.net/goto.php?item=aiux' class='link-aiux' target='_blank'><i class='icon icon-aiux'></i> 艾体验设计</a>";
+$lang->bizVersion     = '<a href="https://www.zentao.net/page/enterprise.html" target="_blank">更多精彩，尽在企业版！</a>';
+$lang->bizVersionINT  = '<a href="https://www.zentao.pm/page/vs.html" target="_blank">更多精彩，尽在企业版！</a>';
 
 $lang->reset              = '重填';
 $lang->cancel             = '取消';
@@ -177,6 +179,7 @@ $lang->repo->codeRepo     = '代码库';
 $lang->screen->common     = '大屏';
 $lang->report->common     = 'BI';
 $lang->pivot->common      = '透视表';
+$lang->chart->common      = '图表';
 $lang->system->common     = '组织';
 $lang->admin->common      = '后台';
 $lang->story->common      = $lang->SRCommon;
@@ -219,6 +222,7 @@ $lang->app->serverLink    = '服务器链接';
 $lang->review->common     = '审批';
 $lang->zahost->common     = '宿主机';
 $lang->zanode->common     = '执行节点';
+$lang->dimension->common  = '维度';
 
 $lang->personnel->common     = '人员';
 $lang->personnel->invest     = '投入人员';
@@ -276,17 +280,22 @@ $lang->project->kanban = $lang->projectCommon . '看板';
 $lang->execution->executionKanban = "{$lang->execution->common}看板";
 $lang->execution->all             = "{$lang->execution->common}列表";
 
-$lang->doc->recent    = '最近文档';
-$lang->doc->my        = '我的文档';
-$lang->doc->favorite  = '我的收藏';
-$lang->doc->product   = $lang->productCommon . '库';
-$lang->doc->project   = $lang->projectCommon . '库';
-$lang->doc->api       = '接口库';
-$lang->doc->execution = "{$lang->execution->common}库";
-$lang->doc->custom    = '自定义库';
-$lang->doc->wiki      = 'WIKI';
-$lang->doc->apiDoc    = '文档';
-$lang->doc->apiStruct = '数据结构';
+$lang->doc->recent        = '最近文档';
+$lang->doc->my            = '我的文档';
+$lang->doc->favorite      = '我的收藏';
+$lang->doc->product       = $lang->productCommon . '库';
+$lang->doc->project       = $lang->projectCommon . '库';
+$lang->doc->api           = '接口库';
+$lang->doc->execution     = "{$lang->execution->common}库";
+$lang->doc->custom        = '自定义库';
+$lang->doc->wiki          = 'WIKI';
+$lang->doc->apiDoc        = '文档';
+$lang->doc->apiStruct     = '数据结构';
+$lang->doc->mySpace       = '我的空间';
+$lang->doc->productSpace  = "{$lang->productCommon}空间";
+$lang->doc->projectSpace  = "{$lang->projectCommon}空间";
+$lang->doc->apiSpace      = '接口空间';
+$lang->doc->teamSpace     = '团队空间';
 
 $lang->product->list   = $lang->productCommon . '列表';
 $lang->product->kanban = $lang->productCommon . '看板';
@@ -294,7 +303,6 @@ $lang->product->kanban = $lang->productCommon . '看板';
 $lang->project->report = '报告';
 
 $lang->report->weekly       = '周报';
-$lang->report->annual       = '年度总结';
 $lang->report->notice       = new stdclass();
 $lang->report->notice->help = '注：统计报表的数据来源于列表页面的检索结果，生成统计报表前请先在列表页面进行检索。比如列表页面我们检索的是%tab%，那么报表就是基于之前检索的%tab%的结果集进行统计。';
 
