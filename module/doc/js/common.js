@@ -421,9 +421,10 @@ function updateCrumbs()
         if(widthSum >= crumbMaxWidth)
         {
             $(crumbItem).addClass('in-auto-box');
+            var $autoCrumbItems = $('#crumbs > .in-auto-box');
+            $lastChild.before('<div id="autoBox" class="flex-auto"><div class="ellipsis">...<div></div>');
+            $('#autoBox').prepend($autoCrumbItems);
+            return;
         }
     }
-    var $autoCrumbItems = $('#crumbs > .in-auto-box');
-    $lastChild.before('<div id="autoBox" class="flex-auto"><div class="ellipsis">...<div></div>');
-    $('#autoBox').prepend($autoCrumbItems);
 }

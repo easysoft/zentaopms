@@ -141,15 +141,15 @@ $(function()
 
     $('.outline').height($('.article-content').height());
 
-    $('body').on('click', '.outline-toggle i.icon-angle-right', function()
+    $('body').on('click', '.outline-toggle i.icon-menu-arrow-left', function()
     {
         $('.outline').css({'min-width' : '180px', 'border-left' : '2px solid #efefef'});
-        $(this).removeClass('icon-angle-right').addClass('icon-angle-left').css('left', '-9px');
+        $(this).removeClass('icon-menu-arrow-left').addClass('icon-menu-arrow-right').css('left', '-9px');
         $('.outline-content').show();
-        if($('#sidebar>.cell').is(':visible')) $('#sidebar .icon.icon-angle-right').trigger("click");
-    }).on('click', '.outline-toggle i.icon-angle-left', function()
+        if($('#sidebar>.cell').is(':visible')) $('#sidebar .icon.icon-menu-arrow-right').trigger("click");
+    }).on('click', '.outline-toggle i.icon-menu-arrow-right', function()
     {
-        $(this).removeClass('icon-angle-left').addClass('icon-angle-right');
+        $(this).removeClass('icon-menu-arrow-right').addClass('icon-menu-arrow-left');
         $('.outline').css({'min-width' : '180px', 'border-left' : 'none'});
         $('.outline-content').hide();
     }).on('click', '#outline li', function(e)
@@ -190,15 +190,14 @@ $(function()
         });
     })
 
-    $('#sidebar .icon.icon-angle-right').click(function()
+    $('#sidebar .icon.icon-menu-arrow-left').click(function()
     {
         if($('#sidebar>.cell').is(':hidden') && $('.outline-content').is(':visible'))
         {
-            $('.outline .outline-toggle i.icon-angle-left').trigger("click");
+            $('.outline .outline-toggle i.icon-menu-arrow-right').trigger("click");
         }
     })
 
-    $('.outline .outline-toggle i.icon-angle-right').trigger("click");
     $('#history').append('<a id="closeBtn" href="###" class="btn btn-link"><i class="icon icon-close"></i></a>');
     $('#hisTrigger').on('click', function()
     {
@@ -226,4 +225,9 @@ $(function()
         $('#hisTrigger').removeClass('text-primary');
     })
     $('#history').find('.btn.pull-right').removeClass('pull-right');
+    if($('.files-list').length)
+    {
+        $('#content .detail-content.article-content').css('height', 'calc(100vh - 300px)');
+    }
+    $('.outline .outline-toggle i.icon-menu-arrow-left').trigger("click");
 })

@@ -24,7 +24,7 @@
 .tree-icon {position: absolute; right: 0;}
 .tree li.has-input {overflow: hidden;}
 .tree li.has-input  > input.input-bro {margin-left: 15px;}
-.img-lib {flex: 0 0 14px; height: 14px; margin-right: 5px;}
+.img-lib {flex: 0 0 14px; height: 14px; margin-right: 5px; margin-bottom: 5px;}
 .tree-icon {position: absolute; right: 0;}
 .tree li > a {max-width: 100%; padding: 2px;}
 .file-tree  a.show-icon > div,
