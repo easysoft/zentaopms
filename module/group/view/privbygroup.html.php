@@ -108,7 +108,9 @@
         <th class='text-middle text-right thWidth'>
           <div class="checkbox-primary checkbox-inline checkbox-right check-all">
             <input type='checkbox' id='allChecker<?php echo $moduleName;?>'>
-            <label class='text-right' for='allChecker<?php echo $moduleName;?>'><?php echo $lang->$moduleName->common;?></label>
+            <?php $moduleTitle = $lang->$moduleName->common;?>
+            <?php if(in_array($moduleName, array('doc', 'api'))) $moduleTitle = $lang->$moduleName->manage;?>
+            <label class='text-right' for='allChecker<?php echo $moduleName;?>'><?php echo $moduleTitle;?></label>
           </div>
         </th>
         <?php if(isset($lang->$moduleName->menus)):?>

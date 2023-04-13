@@ -12,6 +12,7 @@
 $lang->api->common   = 'API接口';
 $lang->api->getModel = '超级model调用接口';
 $lang->api->sql      = 'SQL查询接口';
+$lang->api->manage   = '接口管理';
 
 $lang->api->index            = '接口空间';
 $lang->api->editLib          = '编辑库';
