@@ -128,15 +128,15 @@
           <div class="panel block-docs" style="height: 240px">
             <div class="panel-heading">
             <div class="panel-title"><?php echo $lang->execution->doclib;?></div>
-              <?php if(common::hasPriv('doc', 'objectLibs')):?>
+              <?php if(common::hasPriv('execution', 'doc')):?>
               <nav class="panel-actions nav nav-default">
-                <li><?php common::printLink('doc', 'objectLibs', "type=execution&executionID=$execution->id&from=execution", strtoupper($lang->more), '', "title=$lang->more");?></li>
+                <li><?php common::printLink('doc', 'tableContents', "type=execution&executionID=$execution->id", strtoupper($lang->more), '', "title=$lang->more");?></li>
               </nav>
               <?php endif;?>
             </div>
             <div class="panel-body">
               <div class="row row-grid">
-                <?php if(common::hasPriv('doc', 'objectLibs')):?>
+                <?php if(common::hasPriv('execution', 'doc')):?>
                 <?php $i = 0;?>
                 <?php foreach($docLibs as $libID => $docLib):?>
                 <?php if($i > 8) break;?>
@@ -144,7 +144,7 @@
                   <?php if($libID == 'files'):?>
                   <?php echo html::a($this->createLink('doc', 'showFiles', "type=execution&objectID=$execution->id"), "<i class='icon icon-folder text-yellow'></i> " . $docLib->name);?>
                   <?php else:?>
-                  <?php echo html::a($this->createLink('doc', 'objectLibs', "type=execution&objectID={$execution->id}&libID=$libID"), "<i class='icon icon-folder text-yellow'></i> " . $docLib->name, '', "data-app='execution' title='$docLib->name'");?>
+                  <?php echo html::a($this->createLink('doc', 'tableContents', "type=execution&objectID={$execution->id}&libID=$libID"), "<i class='icon icon-folder text-yellow'></i> " . $docLib->name, '', "data-app='execution' title='$docLib->name'");?>
                   <?php endif;?>
                 </div>
                 <?php $i++;?>

@@ -1829,7 +1829,7 @@ class execution extends control
 
             if($this->app->tab == 'doc')
             {
-                return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink('doc', 'objectLibs', "type=execution")));
+                return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink('doc', 'projectSpace', "objectID=$executionID")));
             }
 
             if(!empty($projectID) and strpos(',kanban,agileplus,waterfallplus,', ",$project->model,") !== false)
@@ -4183,7 +4183,7 @@ class execution extends control
      */
     public function doc($executionID)
     {
-        $this->locate($this->createLink('doc', 'objectLibs', "type=execution&objectID=$executionID&from=execution"));
+        $this->locate($this->createLink('doc', 'tableContents', "type=execution&objectID=$executionID"));
     }
 
     /**

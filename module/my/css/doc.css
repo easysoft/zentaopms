@@ -9,3 +9,5 @@ body {margin-bottom: 25px;}
 #docList.table .c-name > span.doc-title {line-height: 0; vertical-align: inherit;}
 #docList.table .c-name > .draft {background-color:rgba(129, 102, 238, 0.12); color:#8166EE;}
 #docList .btn {padding: 0 2px;}
+.btn.ajaxCollect {width: 20px; padding: 0 6px;}
+.btn.ajaxCollect > img {width: 20px;}
