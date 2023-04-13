@@ -26,7 +26,7 @@
         <small> <?php echo $lang->arrow . ' ' . $lang->doc->edit;?></small>
       </h2>
     </div>
-    <form class='load-indicator main-form form-ajax' method='post' enctype='multipart/form-data' id='dataform'>
+    <form class='load-indicator main-form form-ajax form-watched' method='post' enctype='multipart/form-data' id='dataform'>
       <table class='table table-form'>
         <?php if(strpos('product|project|execution', $type) !== false):?>
         <tr>

@@ -54,7 +54,7 @@ class docModel extends model
             ->andWhere('project')->eq(0)
             ->andWhere('execution')->eq(0)
             ->fi()
-            ->orderBy('`order`_asc, id_desc')
+            ->orderBy('order_asc, id_asc')
             ->fetchAll('id');
 
         $libs = array_filter($libs, array($this, 'checkPrivLib'));
@@ -852,7 +852,7 @@ class docModel extends model
         $now = helper::now();
         $doc = fixer::input('post')
             ->callFunc('title', 'trim')
-            ->setDefault('content', '')
+            ->setDefault('content,template,templateType,chapterType', '')
             ->add('addedBy', $this->app->user->account)
             ->add('addedDate', $now)
             ->add('editedBy', $this->app->user->account)
@@ -891,6 +891,7 @@ class docModel extends model
         $docContent->title   = $doc->title;
         $docContent->content = $doc->contentType == 'html' ? $doc->content : $doc->contentMarkdown;
         $docContent->type    = $doc->contentType;
+        $docContent->digest  = '';
         $docContent->version = 1;
         unset($doc->contentMarkdown, $doc->contentType, $doc->url);
 
