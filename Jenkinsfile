@@ -19,7 +19,7 @@ pipeline {
     MIDDLE_IMAGE_REPO = "hub.qc.oop.cc/zentao-ztf"
     MIDDLE_IMAGE_TAG = """${sh(
                             returnStdout: true,
-                            script: 'echo $BUILD_ID'
+                            script: 'echo $BUILD_ID-${GIT_COMMIT}'
     ).trim()}"""
   }
 
