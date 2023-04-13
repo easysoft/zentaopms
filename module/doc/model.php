@@ -386,11 +386,6 @@ class docModel extends model
         $allLibIDList     = array_keys($allLibs);
         $hasPrivDocIdList = $this->getPrivDocs(0, $moduleID);
 
-        $files = $this->dao->select('*')->from(TABLE_FILE)
-            ->where('objectType')->eq('doc')
-            ->andWhere('objectID')->in($hasPrivDocIdList)
-            ->fetchGroup('objectID');
-
         if($browseType == "all")
         {
             $docs = $this->getDocs(0, 0, $browseType, $sort, $pager);
@@ -422,13 +417,14 @@ class docModel extends model
                 ->andWhere('actor')->eq($this->app->user->account)
                 ->andWhere('action')->eq('edited')
                 ->fetchAll('objectID');
-            $docs = $this->dao->select('*')->from(TABLE_DOC)
-                ->where('deleted')->eq(0)
+            $docs = $this->dao->select('t1.*, t2.name as libName, t2.type as objectType')->from(TABLE_DOC)->alias('t1')
+                ->leftJoin(TABLE_DOCLIB)->alias('t2')->on("t1.lib=t2.id")
+                ->where('t1.deleted')->eq(0)
                 ->andWhere($query)
-                ->andWhere('lib')->in($allLibIDList)
-                ->beginIF($this->config->doc->notArticleType)->andWhere('type')->notIN($this->config->doc->notArticleType)->fi()
-                ->andWhere('addedBy', 1)->eq($this->app->user->account)
-                ->orWhere('id')->in(array_keys($docIDList))
+                ->andWhere('t1.lib')->in($allLibIDList)
+                ->beginIF($this->config->doc->notArticleType)->andWhere('t1.type')->notIN($this->config->doc->notArticleType)->fi()
+                ->andWhere('t1.addedBy', 1)->eq($this->app->user->account)
+                ->orWhere('t1.id')->in(array_keys($docIDList))
                 ->markRight(1)
                 ->orderBy($sort)
                 ->page($pager)
@@ -436,12 +432,13 @@ class docModel extends model
         }
         elseif($browseType == "openedbyme")
         {
-            $docs = $this->dao->select('*')->from(TABLE_DOC)
-                ->where('deleted')->eq(0)
-                ->andWhere('lib')->in($allLibIDList)
-                ->andWhere('id')->in($hasPrivDocIdList)
-                ->beginIF($this->config->doc->notArticleType)->andWhere('type')->notIN($this->config->doc->notArticleType)->fi()
-                ->andWhere('addedBy')->eq($this->app->user->account)
+            $docs = $this->dao->select('t1.*, t2.name as libName, t2.type as objectType')->from(TABLE_DOC)->alias('t1')
+                ->leftJoin(TABLE_DOCLIB)->alias('t2')->on("t1.lib=t2.id")
+                ->where('t1.deleted')->eq(0)
+                ->andWhere('t1.lib')->in($allLibIDList)
+                ->andWhere('t1.id')->in($hasPrivDocIdList)
+                ->beginIF($this->config->doc->notArticleType)->andWhere('t1.type')->notIN($this->config->doc->notArticleType)->fi()
+                ->andWhere('t1.addedBy')->eq($this->app->user->account)
                 ->orderBy($sort)
                 ->page($pager)
                 ->fetchAll('id');
@@ -454,11 +451,13 @@ class docModel extends model
                 ->andWhere('objectID')->in($hasPrivDocIdList)
                 ->andWhere('action')->eq('edited')
                 ->fetchAll('objectID');
-            $docs      = $this->dao->select('*')->from(TABLE_DOC)
-                ->where('deleted')->eq(0)
-                ->andWhere('id')->in(array_keys($docIDList))
-                ->andWhere('lib')->in($allLibIDList)
-                ->beginIF($this->config->doc->notArticleType)->andWhere('type')->notIN($this->config->doc->notArticleType)->fi()
+
+            $docs = $this->dao->select('t1.*, t2.name as libName, t2.type as objectType')->from(TABLE_DOC)->alias('t1')
+                ->leftJoin(TABLE_DOCLIB)->alias('t2')->on("t1.lib=t2.id")
+                ->where('t1.deleted')->eq(0)
+                ->andWhere('t1.id')->in(array_keys($docIDList))
+                ->andWhere('t1.lib')->in($allLibIDList)
+                ->beginIF($this->config->doc->notArticleType)->andWhere('t1.type')->notIN($this->config->doc->notArticleType)->fi()
                 ->orderBy($sort)
                 ->page($pager)
                 ->fetchAll('id');
@@ -490,44 +489,27 @@ class docModel extends model
 
         if(empty($docs)) return array();
 
-        /* Get projects, executions and products by docIdList. */
-        $docContents = $this->dao->select('*')->from(TABLE_DOCCONTENT)->where('doc')->in(array_keys($docs))->orderBy('version,doc')->fetchAll('doc');
-        foreach($docs as $index => $doc)
+        if(in_array($browseType, array('bySearch', 'openedbyme', 'editedbyme')))
         {
-            $docs[$index]->fileSize = 0;
-            if(isset($files[$index]))
+            $objects = array();
+            list($objects['project'], $objects['execution'], $objects['product']) = $this->getObjectsByDoc(array_keys($docs));
+            foreach($docs as $docID => $doc)
             {
-                $docContent = $docContents[$index];
-                $fileSize   = 0;
-                foreach($files[$index] as $file)
+                $doc->objectID   = zget($doc, $doc->objectType, 0);
+                $doc->objectName = '';
+                if(isset($objects[$doc->objectType]))
                 {
-                    if(strpos(",{$docContent->files},", ",{$file->id},") === false) continue;
-                    $fileSize += $file->size;
-                }
-
-                if($fileSize < 1024)
-                {
-                    $fileSize .= 'B';
-                }
-                elseif($fileSize < 1024 * 1024)
-                {
-                    $fileSize = round($fileSize / 1024, 2) . 'KB';
-                }
-                elseif($fileSize < 1024 * 1024 * 1024)
-                {
-                    $fileSize = round($fileSize / 1024 / 1024, 2) . 'MB';
+                    $doc->objectName = $objects[$doc->objectType][$doc->objectID];
                 }
                 else
                 {
-                    $fileSize = round($fileSize / 1024 / 1024 / 1024, 2) . 'G';
+                    if($doc->objectType == 'mine')   $doc->objectName = $this->lang->doc->person;
+                    if($doc->objectType == 'custom') $doc->objectName = $this->lang->doc->team;
                 }
-
-                $docs[$index]->fileSize = $fileSize;
             }
         }
 
-        $docs = $this->processCollector($docs);
-        return $docs;
+        return $this->processCollector($docs);
     }
 
     /**
@@ -1092,7 +1074,7 @@ class docModel extends model
             $products = $this->product->getPairs();
 
             $this->config->doc->search['params']['project']['values']   = array('' => '') + $this->loadModel('project')->getPairsByProgram('', 'all', false, 'order_asc', 'kanban') + array('all' => $this->lang->doc->allProjects);
-            $this->config->doc->search['params']['execution']['values'] = array('' => '') + $this->loadModel('execution')->getPairs(0, 'sprint,stage', 'multiple,leaf,noprefix') + array('all' => $this->lang->doc->allExecutions);
+            $this->config->doc->search['params']['execution']['values'] = array('' => '') + $this->loadModel('execution')->getPairs(0, 'sprint,stage', 'multiple,leaf,noprefix,withobject') + array('all' => $this->lang->doc->allExecutions);
             $this->config->doc->search['params']['lib']['values']       = array('' => '') + $this->loadModel('doc')->getLibs('all', 'withObject') + array('all' => $this->lang->doclib->all);
             $this->config->doc->search['params']['product']['values']   = array('' => '') + $products + array('all' => $this->lang->doc->allProduct);
 
