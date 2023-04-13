@@ -2243,7 +2243,6 @@ INSERT INTO `zt_grouppriv` (`group`, `module`, `method`) VALUES
 (1,'dev','api'),
 (1,'dev','db'),
 (1,'dev','editor'),
-(1,'dev','translate'),
 (1,'doc','allLibs'),
 (1,'doc','mySpace'),
 (1,'doc','myView'),
