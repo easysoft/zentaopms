@@ -229,6 +229,7 @@ $config->openMethods[] = 'task.editteam';
 $config->openMethods[] = 'feedback.mergeproductmodule';
 $config->openMethods[] = 'zanode.nodelist';
 $config->openMethods[] = 'action.restoreStages';
+$config->openMethods[] = 'execution.browse';
 
 $config->openModules = array();
 $config->openModules[] = 'install';

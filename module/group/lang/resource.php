@@ -796,7 +796,6 @@ $lang->kanban->methodorder[225] = 'activateSpace';
 /* Execution. */
 $lang->resource->execution = new stdclass();
 $lang->resource->execution->view              = 'view';
-$lang->resource->execution->browse            = 'browse';
 $lang->resource->execution->create            = 'createExec';
 $lang->resource->execution->edit              = 'editAction';
 $lang->resource->execution->batchedit         = 'batchEditAction';
@@ -855,7 +854,6 @@ $lang->resource->execution->kanban            = 'RDKanban';
 $lang->resource->execution->setKanban         = 'setKanban';
 
 $lang->execution->methodOrder[5]   = 'view';
-$lang->execution->methodOrder[10]  = 'browse';
 $lang->execution->methodOrder[15]  = 'create';
 $lang->execution->methodOrder[20]  = 'edit';
 $lang->execution->methodOrder[25]  = 'batchedit';
