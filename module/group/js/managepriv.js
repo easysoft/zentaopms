@@ -380,8 +380,23 @@ function recommendChange($item, checked)
     }
 }
 
+/**
+ * Change btn position.
+ *
+ * @access public
+ * @return void
+ */
+function positionBtn()
+{
+    var btnLeft = $('.main.main-content > table').width() - 63;
+    $('.main.main-content > .btn-group').css('left', btnLeft).css('visibility', 'unset');
+}
+
 $(function()
 {
+    positionBtn();
+    $('.main.main-content').resize(positionBtn);
+
     selectedPrivIdList = Object.values(selectedPrivIdList);
 
     recommedSelect = new Array();
