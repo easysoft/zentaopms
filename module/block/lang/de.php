@@ -341,11 +341,11 @@ $lang->block->default['doc']['2']['title'] = 'Dynamic';
 $lang->block->default['doc']['2']['block'] = 'docdynamic';
 $lang->block->default['doc']['2']['grid']  = 4;
 
-$lang->block->default['doc']['3']['title'] = 'My Collection';
+$lang->block->default['doc']['3']['title'] = 'My Collection Document';
 $lang->block->default['doc']['3']['block'] = 'docmycollection';
 $lang->block->default['doc']['3']['grid']  = 8;
 
-$lang->block->default['doc']['4']['title'] = 'Recently update';
+$lang->block->default['doc']['4']['title'] = 'Recently Update Document';
 $lang->block->default['doc']['4']['block'] = 'docrecentupdate';
 $lang->block->default['doc']['4']['grid']  = 8;
 
