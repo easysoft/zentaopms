@@ -1210,13 +1210,13 @@ class doc extends control
             $methodName = 'mySpace';
         }
 
-        $crumbs[] = html::a(inLink($methodName, $linkParams), html::image("static/svg/wiki-file-lib.svg") . $lib->name);
+        $crumbs[] = html::a(inLink($methodName, $linkParams), html::image("static/svg/wiki-file-lib.svg") . $lib->name, '', 'title =' . $lib -> name);
 
         $moduleList = $this->loadModel('tree')->getParents($doc->module);
         foreach($moduleList as $module)
         {
             $withModuleParams = $linkParams . "&moduleID=$module->id";
-            $crumbs[] = html::a(inLink($methodName, $withModuleParams), $module->name);
+            $crumbs[] = html::a(inLink($methodName, $withModuleParams), $module->name . '&nbsp', '', 'title =' . $module->name);
         }
 
         $spaceType = $objectType . 'Space';

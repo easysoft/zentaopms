@@ -29,7 +29,7 @@
   <div id="crumbs" class="crumbs">
     <?php foreach($crumbs as $crumbKey => $crumb):?>
     <div class="crumb-item">
-    <?php if($crumbKey != 0) echo '<div class="separator"> > </div>'?>
+    <?php if($crumbKey != 0) echo '<div class="separator">> </div>'?>
     <?php echo $crumb;?>
     </div>
     <?php endforeach;?>
