@@ -175,7 +175,7 @@ $lang->project->product            = $lang->productCommon;
 $lang->project->branch             = 'Platform/Branch';
 $lang->project->plan               = 'Plan';
 $lang->project->createKanban       = 'Create Kanban';
-$lang->project->kanban             = 'Kanban';
+$lang->project->kanban             = 'Project Kanban';
 
 /* Project Kanban. */
 $lang->project->projectTypeList = array();

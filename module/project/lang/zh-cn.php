@@ -175,7 +175,7 @@ $lang->project->product            = "所属{$lang->productCommon}";
 $lang->project->branch             = '平台/分支';
 $lang->project->plan               = '所属计划';
 $lang->project->createKanban       = '添加看板';
-$lang->project->kanban             = '看板';
+$lang->project->kanban             = '项目看板';
 
 /* Project Kanban. */
 $lang->project->projectTypeList = array();
