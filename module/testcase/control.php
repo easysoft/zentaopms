@@ -2556,7 +2556,7 @@ class testcase extends control
     }
 
     /**
-     * Create Scene.
+     * Create scene.
      *
      * @param  int    $productID
      * @param  int    $branch
@@ -2642,7 +2642,7 @@ class testcase extends control
     }
 
     /**
-     * Ajax Get module scenes.
+     * Ajax get module scenes.
      *
      * @param  int    $productID
      * @param  int    $branch
