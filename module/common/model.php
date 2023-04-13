@@ -2396,7 +2396,7 @@ EOF;
         $hasField = false;
         foreach($fields as $fieldObj)
         {
-            if($field == $fieldObj->Field)
+            if($field == $fieldObj->field)
             {
                 $hasField = true;
                 break;

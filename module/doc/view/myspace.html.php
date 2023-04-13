@@ -41,7 +41,7 @@
       echo html::a(helper::createLink('doc', 'createLib', "type=mine"), '<i class="icon icon-plus"></i> ' . $this->lang->doc->createLib, '', 'class="btn btn-secondary iframe" data-width="800px"');
   }
 
-  if($libID and common::hasPriv('doc', 'create')) echo $this->doc->printCreateBtn($lib, 'mine', 0, $moduleID);
+  if($libID and common::hasPriv('doc', 'create')) echo $this->doc->printCreateBtn($lib, $moduleID);
   ?>
   </div>
 </div>

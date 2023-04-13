@@ -65,7 +65,7 @@
                   <th><?php echo $lang->doc->title?></th>
                   <td colspan='3' id='copyTitle'></td>
                 </tr>
-                <?php if($objectType == 'project'):?>
+                <?php if($linkType == 'project'):?>
                 <tr>
                   <th><?php echo $lang->doc->project;?></th>
                   <td class='required'><?php echo html::select('project', $objects, isset($execution) ? $execution->project : $objectID, "class='form-control picker-select' onchange=loadExecutions(this.value)");?></td>
@@ -75,12 +75,12 @@
                   <td class='pl-0px'><i class='icon icon-help' title='<?php echo $lang->doc->placeholder->execution;?>'></i></td>
                   <?php endif;?>
                 </tr>
-                <?php elseif($objectType == 'execution'):?>
+                <?php elseif($linkType == 'execution'):?>
                 <tr>
                   <th><?php echo $lang->doc->execution;?></th>
                   <td class='required'><?php echo html::select('execution', $objects, $objectID, "class='form-control picker-select' onchange='loadObjectModules(\"execution\", this.value)'");?></td>
                 </tr>
-                <?php elseif($objectType == 'product'):?>
+                <?php elseif($linkType == 'product'):?>
                 <tr>
                   <th><?php echo $lang->doc->product;?></th>
                   <td class='required'><?php echo html::select('product', $objects, $objectID, "class='form-control picker-select' onchange='loadObjectModules(\"product\", this.value)'");?></td>

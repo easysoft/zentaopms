@@ -18,9 +18,8 @@ class devModel extends model
     public function getTables()
     {
         $this->dbh->setAttribute(PDO::ATTR_CASE, PDO::CASE_LOWER);
-        $sql = "SHOW TABLES";
         $tables = array();
-        $datatables = $this->dbh->query($sql)->fetchAll(PDO::FETCH_ASSOC);
+        $datatables = $this->dao->showTables();
         foreach($datatables as $table)
         {
             $table = current($table);
@@ -62,10 +61,7 @@ class devModel extends model
 
         try
         {
-            $this->dbh->setAttribute(PDO::ATTR_CASE, PDO::CASE_LOWER);
-            $sql = "DESC $table";
-            $rawFields = $this->dbh->query($sql)->fetchAll();
-            $this->dbh->setAttribute(PDO::ATTR_CASE, PDO::CASE_NATURAL);
+            $rawFields = $this->dao->descTable($table);
         }
         catch (PDOException $e)
         {

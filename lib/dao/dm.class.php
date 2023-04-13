@@ -33,6 +33,18 @@ class dm extends dao
     }
 
     /**
+     * Show tables.
+     *
+     * @access public
+     * @return array
+     */
+    public function showTables()
+    {
+        $sql = "SELECT \"table_name\" FROM all_tables WHERE OWNER = '{$this->config->db->name}'";
+        return $this->query($sql)->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    /**
      * 类MySQL的DESC语法。
      * Desc table, show fields.
      *
@@ -42,14 +54,16 @@ class dm extends dao
      */
     public function descTable($tableName)
     {
-        $sql = "select * from all_tab_columns where table_name='{$this->table}'";
+        $sql = "select * from all_tab_columns where table_name = '$tableName'";
         $rawFields = $this->dbh->rawQuery($sql)->fetchAll();
 
         $fields = array();
         foreach($rawFields as $rawField)
         {
             $field = new stdClass();
-            $field->Field = $rawField->COLUMN_NAME;
+            $field->field = $rawField->column_name;
+            $field->type  = $rawField->data_type;
+            $field->null  = $rawField->nullable;
             $fields[] = $field;
         }
         return $fields;
