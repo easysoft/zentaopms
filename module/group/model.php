@@ -1164,12 +1164,12 @@ class groupModel extends model
      */
     public function initData()
     {
-        $allResourceFile = "/home/hufangzhou/repo/zentaopms/module/group/lang/allresources.php";
+        $allResourceFile = $this->app->getModuleRoot() . "/group/lang/allresources.php";
         $views   = $this->loadModel('setting')->getItem("owner=system&module=priv&key=views");
         $views   = explode(',', $views);
         $views[] = 'general';
-        ///* 获取权限相关数据 */
-        //if(!file_exists("$allResourceFile")) die("Please execute the commands: touch $allResourceFile; chmod 777 $allResourceFile");
+        /* 获取权限相关数据 */
+        if(!file_exists("$allResourceFile")) die("Please execute the commands: touch $allResourceFile; chmod 777 $allResourceFile");
 
         //$resourceContents = file_get_contents($allResourceFile);
         //if(!$resourceContents) file_put_contents($allResourceFile, "<?php\n\$views = array();\n\$resources = array();\n");
