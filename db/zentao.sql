@@ -2131,7 +2131,6 @@ INSERT INTO `zt_grouppriv` (`group`, `module`, `method`) VALUES
 (1,'action','hideOne'),
 (1,'action','trash'),
 (1,'action','undelete'),
-(1,'admin','checkDB'),
 (1,'admin','checkWeak'),
 (1,'admin','index'),
 (1,'admin','register'),
