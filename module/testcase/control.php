@@ -2400,11 +2400,11 @@ class testcase extends control
 
             if(dao::isError()) return print(js::error(dao::getError()));
 
-            if(!empty($_POST['syncToZentao']))
-                $this->zanode->syncCasesToZentao($_POST['scriptPath']);
+            // if(!empty($_POST['syncToZentao']))
+            //     $this->zanode->syncCasesToZentao($_POST['scriptPath']);
             
-            $nodeID = $_POST['node'];
-            $node   = $this->zanode->getNodeByID($_POST['node']);
+            // $nodeID = $_POST['node'];
+            // $node   = $this->zanode->getNodeByID($_POST['node']);
 
             $locatelink = $this->createLink('testcase', 'browse', "productID={$_POST['product']}");
             $locatelink = str_replace(array('?onlybody=yes', '&onlybody=yes'), '', $locatelink);
