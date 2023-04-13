@@ -390,7 +390,7 @@ class wg
         }
     }
 
-    public function getUndefinedProps()
+    public function getRestProps()
     {
         return $this->props->skip(array_keys(static::getDefinedProps()));
     }
