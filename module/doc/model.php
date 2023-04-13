@@ -54,7 +54,7 @@ class docModel extends model
             ->andWhere('project')->eq(0)
             ->andWhere('execution')->eq(0)
             ->fi()
-            ->orderBy('`order`_asc, id_desc')
+            ->orderBy('order_asc, id_asc')
             ->fetchAll('id');
 
         $libs = array_filter($libs, array($this, 'checkPrivLib'));
