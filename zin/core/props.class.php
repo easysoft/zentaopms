@@ -73,6 +73,21 @@ class props extends \zin\utils\dataset
         return $this;
     }
 
+    protected function getVal($prop)
+    {
+        if($prop === 'class' || $prop === '.')
+        {
+            if(!$this->class->count()) return NULL;
+            return $this->class->toStr();
+        }
+        if($prop === 'style' || $prop === '~')
+        {
+            if(!$this->style->count(true)) return NULL;
+            return $this->style->toStr();
+        }
+        return parent::getVal($prop);
+    }
+
     public function reset($name, $value = NULL)
     {
         if(is_array($name))
