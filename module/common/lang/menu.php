@@ -250,7 +250,6 @@ $lang->scrum->menu->settings['subMenu']->whitelist   = array('link' => "{$lang->
 $lang->scrum->menu->settings['subMenu']->stakeholder = array('link' => "{$lang->stakeholder->common}|stakeholder|browse|project=%s", 'subModule' => 'stakeholder');
 $lang->scrum->menu->settings['subMenu']->group       = array('link' => "{$lang->priv}|project|group|project=%s", 'alias' => 'group,manageview,managepriv');
 $lang->scrum->menu->settings['subMenu']->module      = array('link' => "{$lang->module}|tree|browse|product=%s&view=story");
-//$lang->scrum->menu->settings['subMenu']->managerepo  = array('link' => "{$lang->repo->codeRepo}|project|managerepo|project=%s");
 
 /* Waterfall menu. */
 $lang->waterfall->menu = new stdclass();
@@ -727,7 +726,6 @@ if(!helper::hasFeature('devops'))
     unset($lang->waterfall->menu->devops, $lang->waterfall->menuOrder[35]);
     unset($lang->execution->menu->devops, $lang->execution->menuOrder[45]);
     unset($lang->project->noMultiple->scrum->menu->devops, $lang->project->noMultiple->scrum->menuOrder[35]);
-    unset($lang->scrum->menu->settings['subMenu']->managerepo);
 }
 
 if(!helper::hasFeature('kanban'))

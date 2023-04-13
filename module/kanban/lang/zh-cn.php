@@ -7,7 +7,6 @@ $lang->kanban->editSpace           = '设置空间';
 $lang->kanban->closeSpace          = '关闭空间';
 $lang->kanban->deleteSpace         = '删除空间';
 $lang->kanban->activateSpace       = '激活空间';
-$lang->kanban->sortSpace           = '空间排序';
 $lang->kanban->edit                = '编辑看板';
 $lang->kanban->view                = '查看看板';
 $lang->kanban->activate            = '激活看板';
