@@ -156,6 +156,9 @@ $(function()
     {
         $('#outline li.active').removeClass('active');
         $(e.target).closest('li').addClass('active');
+    }).on('click', '.comment-edit-form .btn-hide-form', function()
+    {
+        $('.comment-edit-form #submit').attr('disabled', false);
     });
 
     $('#outline li.has-list').addClass('open in');
