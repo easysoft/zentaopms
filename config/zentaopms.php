@@ -230,6 +230,7 @@ $config->openMethods[] = 'feedback.mergeproductmodule';
 $config->openMethods[] = 'zanode.nodelist';
 $config->openMethods[] = 'action.restoreStages';
 $config->openMethods[] = 'execution.browse';
+$config->openMethods[] = 'testcase.showImport';
 
 $config->openModules = array();
 $config->openModules[] = 'install';

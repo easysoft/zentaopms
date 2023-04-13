@@ -1055,7 +1055,6 @@ $lang->resource->testcase->batchDelete             = 'batchDelete';
 $lang->resource->testcase->export                  = 'exportAction';
 $lang->resource->testcase->exportTemplate          = 'exportTemplate';
 $lang->resource->testcase->import                  = 'importAction';
-$lang->resource->testcase->showImport              = 'showImport';
 $lang->resource->testcase->confirmChange           = 'confirmChange';
 $lang->resource->testcase->confirmStoryChange      = 'confirmStoryChange';
 $lang->resource->testcase->batchChangeModule       = 'batchChangeModule';
