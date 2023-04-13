@@ -226,4 +226,8 @@ $(function()
         $('#hisTrigger').removeClass('text-primary');
     })
     $('#history').find('.btn.pull-right').removeClass('pull-right');
+    if($('.files-list').length)
+    {
+        $('#content .detail-content.article-content').css('height', 'calc(100vh - 300px)');
+    }
 })
