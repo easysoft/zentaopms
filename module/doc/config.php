@@ -48,7 +48,7 @@ $config->doc->spaceMethod['mine']      = 'myspace';
 $config->doc->spaceMethod['product']   = 'productspace';
 $config->doc->spaceMethod['project']   = 'projectspace';
 $config->doc->spaceMethod['execution'] = 'projectspace';
-$config->doc->spaceMethod['custom']    = 'tablecontents';
+$config->doc->spaceMethod['custom']    = 'teamspace';
 
 $config->doc->search['module']               = 'doc';
 $config->doc->search['fields']['title']      = $lang->doc->title;
