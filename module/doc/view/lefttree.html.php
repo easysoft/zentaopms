@@ -543,7 +543,9 @@ $(function()
                     $rootDom.after($input);
                     $li.addClass('open in has-list');
                 }
-                $rootDom.parent().find('input').focus();
+                $input = $rootDom.parent().find('input');
+                $input.focus();
+                if($input.length && $('#fileTree').height() >= $('#sideBar').height()) $('#sideBar')[0].scrollTop = $($input[$input.length - 1]).offset().top - 100;
                 break;
             case 'addCataBro' :
                 moduleData.createType = 'same';
@@ -571,7 +573,9 @@ $(function()
                 }
 
                 $rootDom.append($input);
-                $rootDom.find('input').focus();
+                $input = $rootDom.find('input');
+                $input.focus();
+                if($input.length && $('#fileTree').height() >= $('#sideBar').height()) $('#sideBar')[0].scrollTop = $($input[$input.length - 1]).offset().top - 100;
                 break;
         }
     }).on('click', '#versionSwitcher a', function()
