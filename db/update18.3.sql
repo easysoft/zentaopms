@@ -785,6 +785,17 @@ CHANGE `editedBy` `editedBy` varchar(30) NOT NULL DEFAULT '',
 CHANGE `editedDate` `editedDate` datetime NULL;
 
 ALTER TABLE `zt_workflowaction`
+CHANGE `order` `order` smallint unsigned NOT NULL DEFAULT '0',
+CHANGE `virtual` `virtual` tinyint unsigned NOT NULL DEFAULT '0',
+CHANGE `conditions` `conditions` text NULL,
+CHANGE `verifications` `verifications` text NULL,
+CHANGE `hooks` `hooks` text NULL,
+CHANGE `linkages` `linkages` text NULL,
+CHANGE `js` `js` text NULL,
+CHANGE `css` `css` text NULL,
+CHANGE `toList` `toList` char(255) NOT NULL DEFAULT '',
+CHANGE `blocks` `blocks` text NULL,
+CHANGE `desc` `desc` text NULL,
 CHANGE `editedBy` `editedBy` varchar(30) NOT NULL DEFAULT '',
 CHANGE `editedDate` `editedDate` datetime NULL;
 
