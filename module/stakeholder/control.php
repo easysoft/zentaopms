@@ -368,26 +368,6 @@ class stakeholder extends control
     }
 
     /**
-     * Stakeholder issues.
-     *
-     * @access public
-     * @return void
-    */
-    public function issue()
-    {
-        $this->loadModel('issue');
-
-        if(common::hasPriv('issue', 'create')) $this->lang->TRActions = html::a($this->createLink('issue', 'create', 'from=stakeholder'), "<i class='icon icon-sm icon-plus'></i> " . $this->lang->issue->create, '', "class='btn btn-primary'");
-
-        $this->view->title      = $this->lang->stakeholder->common . $this->lang->colon . $this->lang->stakeholder->issue;
-        $this->view->position[] = $this->lang->stakeholder->issue;
-
-        $this->view->users    = $this->loadModel('company')->getCompanyUserPairs();
-        $this->view->issues   = $this->stakeholder->getIssues();
-        $this->display();
-    }
-
-    /**
      * Add communication record.
      *
      * @access public
