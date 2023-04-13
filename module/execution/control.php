@@ -4183,7 +4183,7 @@ class execution extends control
      */
     public function doc($executionID)
     {
-        $this->locate($this->createLink('doc', 'tableContents', "type=execution&objectID=$executionID"));
+        echo $this->fetch('doc', 'tableContents', "type=execution&objectID=$executionID");
     }
 
     /**

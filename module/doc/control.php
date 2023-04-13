@@ -654,7 +654,7 @@ class doc extends control
 
                     if($from == 'lib')
                     {
-                        $method   = 'tableContents';
+                        $method   = 'teamSpace';
                         $objectID = 0;
                         if($objectType == 'product')
                         {
@@ -671,7 +671,6 @@ class doc extends control
                             $objectID = $doc->execution;
                         }
                         $params = "objectID={$objectID}&libID={$doc->lib}";
-                        if($method == 'tableContents') $params = "type=$objectType&" . $params;
                         $response['locate'] = $this->createLink('doc', $method, $params);
                     }
                 }
@@ -1197,20 +1196,22 @@ class doc extends control
         $doc = $docID ? $doc : '';
 
         /* Crumbs links array. */
-        $methodName = in_array($type, array('product', 'project')) ? $objectType . 'Space' : 'tableContents';
+        $moduleName = 'doc';
+        $methodName = in_array($type, array('product', 'project')) ? $objectType . 'Space' : 'teamSpace';
         $linkParams = "objectID={$objectID}&libID={$lib->id}";
-        if($this->app->tab == 'execution' or $objectType == 'custom')
+        if($this->app->tab == 'execution')
         {
-            $linkParams = "objectType=$objectType&$linkParams";
-            $methodName = 'tableContents';
+            $moduleName = 'execution';
+            $methodName = 'doc';
+            $linkParams = "executionID=$objectID";
         }
-        if($type == 'mine')
+        elseif($type == 'mine')
         {
             $linkParams = "type=mine&libID={$lib->id}";
             $methodName = 'mySpace';
         }
 
-        $crumbs[] = html::a(inLink($methodName, $linkParams), html::image("static/svg/wiki-file-lib.svg") . $lib->name, '', 'title =' . $lib -> name);
+        $crumbs[] = html::a($this->createLink($moduleName, $methodName, $linkParams), html::image("static/svg/wiki-file-lib.svg") . $lib->name, '', 'title =' . $lib -> name);
 
         $moduleList = $this->loadModel('tree')->getParents($doc->module);
         foreach($moduleList as $module)
@@ -1384,6 +1385,26 @@ class doc extends control
     }
 
     /**
+     * Show team space.
+     *
+     * @param  int    $objectID
+     * @param  int    $libID
+     * @param  int    $moduleID
+     * @param  string $browseType    all|draft|bysearch
+     * @param  string $orderBy
+     * @param  int    $param
+     * @param  int    $recTotal
+     * @param  int    $recPerPage
+     * @param  int    $pageID
+     * @access public
+     * @return void
+     */
+    public function teamSpace($objectID = 0, $libID = 0, $moduleID = 0, $browseType = 'all', $orderBy = 'status,id_desc', $param = 0, $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    {
+        echo $this->fetch('doc', 'tableContents', "type=custom&objectID=$objectID&libID=$libID&moduleID=$moduleID&browseType=$browseType&orderBy=$orderBy&param=$param&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID");
+    }
+
+    /**
      * Select lib type.
      *
      * @access public
@@ -1411,13 +1432,13 @@ class doc extends control
 
         $spaceList = $this->lang->doc->spaceList;
         $typeList  = $this->lang->doc->types;
-        if(!common::hasPriv('doc', 'create'))        unset($spaceList['mine'], $spaceList['custom'], $typeList['doc']);
-        if(!common::hasPriv('doc', 'mySpace'))       unset($spaceList['mine']);
-        if(!common::hasPriv('doc', 'productSpace'))  unset($spaceList['product']);
-        if(!common::hasPriv('doc', 'projectSpace'))  unset($spaceList['project']);
-        if(!common::hasPriv('doc', 'tableContents')) unset($spaceList['custom']);
-        if(!common::hasPriv('api', 'index'))         unset($spaceList['api']);
-        if(!common::hasPriv('api', 'create'))        unset($spaceList['api'], $typeList['api']);
+        if(!common::hasPriv('doc', 'create'))       unset($spaceList['mine'], $spaceList['custom'], $typeList['doc']);
+        if(!common::hasPriv('doc', 'mySpace'))      unset($spaceList['mine']);
+        if(!common::hasPriv('doc', 'productSpace')) unset($spaceList['product']);
+        if(!common::hasPriv('doc', 'projectSpace')) unset($spaceList['project']);
+        if(!common::hasPriv('doc', 'teamSpace'))    unset($spaceList['custom']);
+        if(!common::hasPriv('api', 'index'))        unset($spaceList['api']);
+        if(!common::hasPriv('api', 'create'))       unset($spaceList['api'], $typeList['api']);
 
         $products = $this->loadModel('product')->getPairs();
         $projects = $this->project->getPairsByProgram('', 'all', false, 'order_asc', 'kanban');

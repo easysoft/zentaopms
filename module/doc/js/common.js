@@ -327,12 +327,11 @@ $(document).ready(function()
  */
 function locateNewLib(type, objectID, libID)
 {
-    var method = 'tableContents';
-    var params = 'type=' + type + '&objectID=' + objectID + '&libID=' + libID;
+    var method = 'teamSpace';
+    var params = 'objectID=' + objectID + '&libID=' + libID;
     if(type == 'product' || type == 'project')
     {
         method = type + 'Space';
-        params = 'objectID=' + objectID + '&libID=' + libID;
     }
     else if(type == 'mine')
     {

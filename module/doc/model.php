@@ -648,7 +648,7 @@ class docModel extends model
                 ->andWhere('t2.actor')->eq($this->app->user->account)
                 ->beginIF(!common::hasPriv('doc', 'productSpace'))->andWhere('t3.type')->ne('product')->fi()
                 ->beginIF(!common::hasPriv('doc', 'projectSpace'))->andWhere('t3.type')->notIN('project,execution')->fi()
-                ->beginIF(!common::hasPriv('doc', 'tableContents'))->andWhere('t3.type')->ne('custom')->fi()
+                ->beginIF(!common::hasPriv('doc', 'teamSpace'))->andWhere('t3.type')->ne('custom')->fi()
                 ->beginIF($browseType == 'all' or $browseType == 'bysearch')->andWhere("(t1.status = 'normal' or (t1.status = 'draft' and t1.addedBy='{$this->app->user->account}'))")->fi()
                 ->beginIF($browseType == 'draft')->andWhere('t1.status')->eq('draft')->andWhere('t1.addedBy')->eq($this->app->user->account)->fi()
                 ->beginIF($browseType == 'bysearch')->andWhere($query)->fi()
@@ -668,7 +668,7 @@ class docModel extends model
                 ->andWhere('t1.addedBy')->eq($this->app->user->account)
                 ->beginIF(!common::hasPriv('doc', 'productSpace'))->andWhere('t2.type')->ne('product')->fi()
                 ->beginIF(!common::hasPriv('doc', 'projectSpace'))->andWhere('t2.type')->notIN('project,execution')->fi()
-                ->beginIF(!common::hasPriv('doc', 'tableContents'))->andWhere('t2.type')->ne('custom')->fi()
+                ->beginIF(!common::hasPriv('doc', 'teamSpace'))->andWhere('t2.type')->ne('custom')->fi()
                 ->beginIF($browseType == 'draft')->andWhere('t1.status')->eq('draft')->andWhere('t1.addedBy')->eq($this->app->user->account)->fi()
                 ->beginIF($browseType == 'bysearch')->andWhere($query)->fi()
                 ->orderBy($orderBy)
@@ -2500,12 +2500,12 @@ class docModel extends model
 
             foreach($moduleDocs[0] as $doc)
             {
-                if(!$docID and $currentMethod != 'tablecontents') $docID = $doc->id;
+                if(!$docID and $currentMethod != 'teamspace') $docID = $doc->id;
 
                 $class = common::hasPriv('doc', 'updateOrder') ? ' sortDoc' : '';
                 $treeMenu[0] .= '<li' . " class='" . ($doc->id == $docID ? 'active' : 'doc') . "$class'" . " data-id=$doc->id>";
 
-                if($currentMethod == 'tablecontents')
+                if($currentMethod == 'teamspace')
                 {
                     $treeMenu[0] .= '<div class="tree-group"><span class="tail-info">' . zget($users, $doc->editedBy) . ' &nbsp;' . $doc->editedDate . '</span>';
                 }
@@ -2577,11 +2577,11 @@ class docModel extends model
                 }
                 else
                 {
-                    if(!$docID and $currentMethod != 'tablecontents') $docID = $doc->id;
+                    if(!$docID and $currentMethod != 'teamspace') $docID = $doc->id;
                     $class = common::hasPriv('doc', 'updateOrder') ? ' sortDoc' : '';
                     $treeMenu[$module->id] .= '<li' . " class='" . ($doc->id == $docID ? 'active' : 'doc') . "$class'" . " data-id=$doc->id>";
 
-                    if($currentMethod == 'tablecontents')
+                    if($currentMethod == 'teamspace')
                     {
                         $treeMenu[$module->id] .= '<div class="tree-group"><span class="tail-info">' . zget($users, $doc->editedBy) . ' &nbsp;' . $doc->editedDate . '</span>';
                     }
@@ -2599,7 +2599,7 @@ class docModel extends model
                         }
                         $treeMenu[$module->id] .= '</div>';
                     }
-                    elseif($currentMethod == 'tablecontents')
+                    elseif($currentMethod == 'teamspace')
                     {
                         $class = common::hasPriv('doc', 'updateOrder') ? 'sortDoc' : '';
                         $treeMenu[$module->id] .= html::a(inlink('view', "docID={$doc->id}"), "<i class='icon icon-file-text text-muted'></i> &nbsp;" . $doc->title, '', "data-app='{$this->app->tab}' class='doc-title $class' title='{$doc->title}'");
@@ -2623,7 +2623,7 @@ class docModel extends model
         {
             $moduleClass = common::hasPriv('tree', 'updateOrder') ? 'sort-module' : '';
             $li          = "<div class='tree-group'><span class='module-name'><a class='$moduleClass' title='{$module->name}'>" . $module->name . '</a></span>';
-            if($currentMethod != 'tablecontents')
+            if($currentMethod != 'teamspace')
             {
                 if(common::hasPriv('tree', 'edit') or common::hasPriv('tree', 'browse') or common::hasPriv('tree', 'browse') or common::hasPriv('tree', 'updateOrder'))
                 {

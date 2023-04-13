@@ -130,7 +130,7 @@
             <div class="panel-title"><?php echo $lang->execution->doclib;?></div>
               <?php if(common::hasPriv('execution', 'doc')):?>
               <nav class="panel-actions nav nav-default">
-                <li><?php common::printLink('doc', 'tableContents', "type=execution&executionID=$execution->id", strtoupper($lang->more), '', "title=$lang->more");?></li>
+                <li><?php common::printLink('execution', 'doc', "executionID=$execution->id", strtoupper($lang->more), '', "title=$lang->more");?></li>
               </nav>
               <?php endif;?>
             </div>
@@ -144,7 +144,7 @@
                   <?php if($libID == 'files'):?>
                   <?php echo html::a($this->createLink('doc', 'showFiles', "type=execution&objectID=$execution->id"), "<i class='icon icon-folder text-yellow'></i> " . $docLib->name);?>
                   <?php else:?>
-                  <?php echo html::a($this->createLink('doc', 'tableContents', "type=execution&objectID={$execution->id}&libID=$libID"), "<i class='icon icon-folder text-yellow'></i> " . $docLib->name, '', "data-app='execution' title='$docLib->name'");?>
+                  <?php echo html::a($this->createLink('execution', 'doc', "objectID={$execution->id}&libID=$libID"), "<i class='icon icon-folder text-yellow'></i> " . $docLib->name, '', "data-app='execution' title='$docLib->name'");?>
                   <?php endif;?>
                 </div>
                 <?php $i++;?>

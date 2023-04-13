@@ -754,7 +754,7 @@ $lang->action->label->testtask     = 'Recette|testtask|view|caseID=%s';
 $lang->action->label->testsuite    = 'Cahier Recette|testsuite|view|suiteID=%s';
 $lang->action->label->caselib      = 'Library Recette|testsuite|libview|libID=%s';
 $lang->action->label->todo         = 'Agenda|todo|view|todoID=%s';
-$lang->action->label->doclib       = 'Bibliothèque|doc|browse|libID=%s';
+$lang->action->label->doclib       = 'Bibliothèque|doc|teamspace|objectID=%s&libID=%s';
 $lang->action->label->doc          = 'Document|doc|view|docID=%s';
 $lang->action->label->user         = 'Utilisateur|user|view|account=%s';
 $lang->action->label->testreport   = 'Rapport|testreport|view|report=%s';
