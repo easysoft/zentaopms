@@ -332,7 +332,6 @@ $lang->resource->stakeholder->view         = 'viewAction';
 $lang->resource->stakeholder->issue        = 'issue';
 $lang->resource->stakeholder->communicate  = 'communicate';
 $lang->resource->stakeholder->expect       = 'expect';
-$lang->resource->stakeholder->viewExpect   = 'viewExpect';
 $lang->resource->stakeholder->userIssue    = 'userIssue';
 
 $lang->stakeholder->methodOrder[5]  = 'browse';
@@ -344,7 +343,6 @@ $lang->stakeholder->methodOrder[30] = 'view';
 $lang->stakeholder->methodOrder[35] = 'issue';
 $lang->stakeholder->methodOrder[45] = 'communicate';
 $lang->stakeholder->methodOrder[50] = 'expect';
-$lang->stakeholder->methodOrder[75] = 'viewExpect';
 $lang->stakeholder->methodOrder[80] = 'userIssue';
 
 /* Design. */

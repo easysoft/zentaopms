@@ -17,7 +17,6 @@ $lang->stakeholder->add          = '新建';
 $lang->stakeholder->communicate  = '沟通记录';
 $lang->stakeholder->expect       = '期望内容';
 $lang->stakeholder->progress     = '达成进展';
-$lang->stakeholder->viewExpect   = '期望信息';
 $lang->stakeholder->issue        = '问题管理';
 $lang->stakeholder->userIssue    = '干系人问题列表';
 $lang->stakeholder->deleted      = '已删除';
