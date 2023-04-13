@@ -1020,16 +1020,17 @@ class gitlabModel extends model
     /**
      * Get single project by API.
      *
-     * @param  int $gitlabID
-     * @param  int $projectID
+     * @param  int    $gitlabID
+     * @param  int    $projectID
+     * @param  bool   $useUser
      * @access public
      * @return object
      */
-    public function apiGetSingleProject($gitlabID, $projectID)
+    public function apiGetSingleProject($gitlabID, $projectID, $useUser = false)
     {
         if(isset($this->projects[$gitlabID][$projectID])) return $this->projects[$gitlabID][$projectID];
 
-        $url = sprintf($this->getApiRoot($gitlabID, false), "/projects/$projectID");
+        $url = sprintf($this->getApiRoot($gitlabID, $useUser), "/projects/$projectID");
         $this->projects[$gitlabID][$projectID] = json_decode(commonModel::http($url, $data = null, $optionsi = array(), $headers = array(), $dataType = 'data', $method = 'POST', $timeout = 30, $httpCode = false, $log = false));
         return $this->projects[$gitlabID][$projectID];
     }
