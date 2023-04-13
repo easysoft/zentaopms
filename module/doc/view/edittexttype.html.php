@@ -20,7 +20,7 @@
 </style>
 <?php $backLink = $app->session->docList ? $app->session->docList : $this->createLink('doc', 'view', "docID={$doc->id}") . "#app={$this->app->tab}";?>
 <div id="mainContent" class="main-content">
-  <form class="load-indicator main-form form-ajax" id="dataform" method='post' enctype='multipart/form-data'>
+  <form class="load-indicator main-form form-ajax form-watched" id="dataform" method='post' enctype='multipart/form-data'>
     <table class='table table-form'>
       <tbody>
         <tr id='headerBox'>
