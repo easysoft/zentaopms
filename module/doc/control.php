@@ -1361,6 +1361,9 @@ class doc extends control
      */
     public function productSpace($objectID = 0, $libID = 0, $moduleID = 0, $browseType = 'all', $orderBy = 'status,id_desc', $param = 0, $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
+        $products = $this->product->getPairs('nocode', 0, '', 'all');
+        $objectID = $this->product->saveState($objectID, $products);
+
         echo $this->fetch('doc', 'tableContents', "type=product&objectID=$objectID&libID=$libID&moduleID=$moduleID&browseType=$browseType&orderBy=$orderBy&param=$param&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID");
     }
 
@@ -1381,6 +1384,9 @@ class doc extends control
      */
     public function projectSpace($objectID = 0, $libID = 0, $moduleID = 0, $browseType = 'all', $orderBy = 'status,id_desc', $param = 0, $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
+        $projects = $this->project->getPairsByProgram();
+        $objectID = $this->project->saveState($objectID, $projects);
+
         echo $this->fetch('doc', 'tableContents', "type=project&objectID=$objectID&libID=$libID&moduleID=$moduleID&browseType=$browseType&orderBy=$orderBy&param=$param&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID");
     }
 
