@@ -170,16 +170,13 @@ class productModel extends model
     {
         if(defined('TUTORIAL')) return $productID;
 
-        $product = $this->getById($productID);
-
         if($productID == 0 and $this->cookie->preProductID and isset($products[$this->cookie->preProductID])) $productID = $this->cookie->preProductID;
         if($productID == 0 and $this->session->product == '') $productID = key($products);
-        if(!empty($product) and $product->shadow) $productID = key($products);
         $this->session->set('product', (int)$productID, $this->app->tab);
 
         if(!isset($products[$this->session->product]))
         {
-            if(!empty($product) and $product->id != $productID) $product = $this->getById($productID);
+            $product = $this->getById($productID);
 
             if(empty($product) or $product->deleted == 1) $productID = key($products);
             $this->session->set('product', (int)$productID, $this->app->tab);
