@@ -147,6 +147,7 @@ class testcase extends control
         $this->app->loadClass('pager', $static = true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
         $sort  = common::appendOrder($orderBy);
+        /* Get test cases. */
         $cases = $this->testcase->getTestCases($productID, $branch, $browseType, $browseType == 'bysearch' ? $queryID : $suiteID, $moduleID, $caseType, $sort, null);
 
         $caseIdList = array();
@@ -257,7 +258,6 @@ class testcase extends control
         $this->view->moduleName      = $moduleID ? $tree->name : $this->lang->tree->all;
         $this->view->moduleID        = $moduleID;
         $this->view->projectType     = !empty($projectID) ? $this->dao->select('model')->from(TABLE_PROJECT)->where('id')->eq($projectID)->fetch('model') : '';
-        // $this->view->summary         = $this->testcase->summary($cases);
         $this->view->summary         = $summary;
         $this->view->pager           = $pager;
         $this->view->users           = $this->user->getPairs('noletter');
@@ -586,7 +586,7 @@ class testcase extends control
         }
 
         $currentModuleID = $moduleID ? (int)$moduleID : (int)$this->cookie->lastCaseModule;
-        $currentSceneID = (int)$this->cookie->lastCaseScene;
+        $currentSceneID  = (int)$this->cookie->lastCaseScene;
         if($testcaseID > 0) $currentSceneID = $scene;
         /* Get the status of stories are not closed. */
         $modules = array();
@@ -2846,7 +2846,7 @@ class testcase extends control
     {
         $scene = $this->dao->select('*')->from(VIEW_SCENECASE)->where('id')->eq($sceneID)->andWhere('isCase')->eq(2)->fetch();
 
-        if($confirm == 'no') return print(js::confirm(sprintf(addslashes($this->lang->testcase->confirmDeleteScene),addslashes($scene->title)), $this->createLink('testcase', 'deleteScene', "sceneID=$sceneID&confirm=yes")));
+        if($confirm == 'no') return print(js::confirm(sprintf($this->lang->testcase->confirmDeleteScene,addslashes($scene->title)), $this->createLink('testcase', 'deleteScene', "sceneID=$sceneID&confirm=yes")));
 
         $childrenCount = $this->dao->select('count(*) as count')->from(VIEW_SCENECASE)->where('parent')->eq($sceneID)->andWhere('deleted')->eq(0)->fetch('count');
         if($childrenCount)
@@ -3036,6 +3036,7 @@ class testcase extends control
     {
         if($_POST)
         {
+            $this->classXmind = $this->app->loadClass('xmind');
             if (isset($_POST['imodule'])) $imoduleID = $_POST['imodule'];
 
             $configResult = $this->testcase->saveXmindConfig();
@@ -3067,7 +3068,7 @@ class testcase extends control
 
             $productNode   = $xmlDoc->createElement('node');
             $textAttr      = $xmlDoc->createAttribute('TEXT');
-            $textAttrValue = $xmlDoc->createTextNode($this->toText("$productName", $productID));
+            $textAttrValue = $xmlDoc->createTextNode($this->classXmind->toText("$productName", $productID));
 
             $textAttr->appendChild($textAttrValue);
             $productNode->appendChild($textAttr);
@@ -3076,9 +3077,9 @@ class testcase extends control
             $sceneNodes  = array();
             $moduleNodes = array();
 
-            $this->createModuleNode($xmlDoc, $context, $productNode, $moduleNodes);
-            $this->createSceneNode($xmlDoc, $context, $productNode, $moduleNodes, $sceneNodes);
-            $this->createTestcaseNode($xmlDoc, $context, $productNode, $moduleNodes, $sceneNodes);
+            $this->classXmind->createModuleNode($xmlDoc, $context, $productNode, $moduleNodes);
+            $this->classXmind->createSceneNode($xmlDoc, $context, $productNode, $moduleNodes, $sceneNodes);
+            $this->classXmind->createTestcaseNode($xmlDoc, $context, $productNode, $moduleNodes, $sceneNodes);
 
             $xmlStr = $xmlDoc->saveXML();
             $this->fetch('file', 'sendDownHeader', array('fileName' => $productName, 'mm', $xmlStr));
@@ -3095,189 +3096,6 @@ class testcase extends control
         $this->view->moduleOptionMenu = $this->tree->getOptionMenu($productID, $viewType = 'case', $startModuleID = 0, ($branch === 'all' or !isset($branches[$branch])) ? 0 : $branch);
 
         $this->display();
-    }
-
-    function createModuleNode($xmlDoc, $context, $productNode, &$moduleNodes)
-    {
-        $config     = $context['config'];
-        $moduleList = $context['moduleList'];
-
-        foreach($moduleList as $key => $name)
-        {
-            $suffix      =  $config['module'].':'.$key;
-            $moduleNode  =  $this->createNode($xmlDoc, $name, $suffix, array('nodeType' => 'module'));
-            $productNode->appendChild($moduleNode);
-
-            $moduleNodes[$key] = $moduleNode;
-        }
-    }
-
-    function createSceneNode($xmlDoc, $context, $productNode, &$moduleNodes, &$sceneNodes)
-    {
-        $sceneMaps  = $context['sceneMaps'];
-        $config     = $context['config'];
-
-        $topScenes  = $context['topScenes'];
-
-        foreach($topScenes as $scene)
-        {
-            $suffix    = $config['scene'].':'.$scene->sceneID;
-            $sceneNode =  $this->createNode($xmlDoc, $scene->sceneName, $suffix, array('nodeType' => 'scene'));
-
-            $this->createNextChildScenesNode($scene, $sceneNode, $xmlDoc, $context, $moduleNodes, $sceneNodes);
-
-            if(isset($moduleNodes[$scene->moduleID]))
-            {
-                $moduleNode = $moduleNodes[$scene->moduleID];
-                $moduleNode->appendChild($sceneNode);
-            }
-            else
-            {
-                $productNode->appendChild($sceneNode);
-            }
-
-            $sceneNodes[$scene->sceneID] = $sceneNode;
-        }
-    }
-
-    function createNextChildScenesNode($parentScene,$parentNode, $xmlDoc, $context, &$moduleNodes, &$sceneNodes)
-    {
-        $sceneMaps  = $context['sceneMaps'];
-        $config     = $context['config'];
-
-        foreach($sceneMaps as $key => $scene)
-        {
-            if($scene->parentID != $parentScene->sceneID + CHANGEVALUE) continue;
-
-            $suffix    = $config['scene'].':'.$scene->sceneID;
-            $sceneNode = $this->createNode($xmlDoc, $scene->sceneName, $suffix, array('nodeType'=>'scene'));
-
-            $this->createNextChildScenesNode($scene, $sceneNode, $xmlDoc, $context, $moduleNodes, $sceneNodes);
-
-            $parentNode->appendChild($sceneNode);
-            $sceneNodes[$scene->sceneID] = $sceneNode;
-        }
-    }
-
-    function createTestcaseNode($xmlDoc, $context, $productNode, &$moduleNodes, &$sceneNodes)
-    {
-        $caseList = $context['caseList'];
-
-        foreach($caseList as $case)
-        {
-            if(empty($case->testcaseID)) continue;
-
-            $parentNode = $sceneNodes[$case->sceneID];
-            if(!isset($parentNode)) $parentNode = $moduleNodes[$case->moduleID];
-            if(!isset($parentNode)) $parentNode = $productNode;
-
-            $this->createTestcaseNodeImpl($case, $xmlDoc, $context, $parentNode);
-        }
-    }
-
-    function createTestcaseNodeImpl($case, $xmlDoc, $context, $parentNode)
-    {
-        $caseList = $context['caseList'];
-        $stepList = $context['stepList'];
-        $config   = $context['config'];
-        $suffix   = $config['case'].':'.$case->testcaseID.','.$config['pri'].':'.$case->pri;
-        $caseNode = $this->createNode($xmlDoc, $case->name, $suffix, array('nodeType'=>'testcase'));
-
-        $parentNode->appendChild($caseNode);
-
-        $topStepList = $this->findTopStepListByCase($case, $stepList);
-
-        foreach($topStepList as $step)
-        {
-            $subStepList = $this->findSubStepListByStep($step,$stepList);
-
-            $suffix   = count($subStepList) > 0 ? $config['group'] : '';
-            $stepNode = $this->createNode($xmlDoc, $step->desc, $suffix, array('nodeType' => 'step'));
-            $caseNode->appendChild($stepNode);
-
-            if(count($subStepList))
-            {
-                foreach($subStepList as $sub)
-                {
-                    $subNode = $this->createNode($xmlDoc, $sub->desc, '', array('nodeType'=>'substep'));
-                    $stepNode->appendChild($subNode);
-
-                    if(!empty($sub->expect))
-                    {
-                        $expectNode = $this->createNode($xmlDoc, $sub->expect, '', array('nodeType'=>'expect'));
-                        $subNode->appendChild($expectNode);
-                    }
-                }
-            }
-
-            if(count($subStepList) == 0 && !empty($step->expect))
-            {
-                $expectNode = $this->createNode($xmlDoc, $step->expect, '', array('nodeType'=>'expect'));
-                $stepNode->appendChild($expectNode);
-            }
-        }
-    }
-
-    function findSubStepListByStep($step,$stepList)
-    {
-        $subList = array();
-        foreach($stepList as $one)
-        {
-            if($one->parentID == $step->stepID)
-            {
-                $subList[] = $one;
-            }
-        }
-
-        return $subList;
-    }
-
-    public function findTopStepListByCase($case,$stepList)
-    {
-        $topList = array();
-        foreach($stepList as $step)
-        {
-            if($step->parentID == '0' && $step->testcaseID == $case->testcaseID)
-            {
-                $topList[] = $step;
-            }
-        }
-
-        return $topList;
-    }
-
-    public function createNode($xmlDoc, $text, $suffix = '', $attrs=array())
-    {
-        $node = $xmlDoc->createElement('node');
-
-        $textAttr      =  $xmlDoc->createAttribute('TEXT');
-        $textAttrValue =  $xmlDoc->createTextNode($this->toText($text,$suffix));
-
-        $textAttr->appendChild($textAttrValue);
-        $node->appendChild($textAttr);
-
-        $positionAttr      =  $xmlDoc->createAttribute("POSITION");
-        $positionAttrValue =  $xmlDoc->createTextNode('right');
-
-        $positionAttr->appendChild($positionAttrValue);
-        $node->appendChild($positionAttr);
-
-        foreach($attrs as $key => $value)
-        {
-            $attr      = $xmlDoc->createAttribute($key);
-            $attrValue = $xmlDoc->createTextNode($value);
-
-            $attr->appendChild($attrValue);
-            $node->appendChild($attr);
-        }
-
-        return $node;
-    }
-
-    public function toText($str, $suffix)
-    {
-        if(empty($suffix)) return $str;
-        return $str . '['.$suffix.']';
     }
 
     public function getXmindConfig()
@@ -3311,6 +3129,7 @@ class testcase extends control
     {
         if($_FILES)
         {
+            $this->classXmind = $this->app->loadClass('xmind');
             if($_FILES['file']['size'] == 0)  return print(js::alert($this->lang->testcase->errorFileNotEmpty));
 
             $configResult = $this->testcase->saveXmindConfig();
@@ -3386,9 +3205,9 @@ class testcase extends control
         }
 
         $pId = $productID;
-        if($this->endsWith($title,"]") == true)
+        if($this->classXmind->endsWith($title,"]") == true)
         {
-            $tmpId = $this->getBetween($title,"[","]");
+            $tmpId = $this->classXmind->getBetween($title,"[","]");
             if(empty($tmpId) == false)
             {
                 $projectCount = $this->dao->select('count(*) as count')
@@ -3419,9 +3238,9 @@ class testcase extends control
         }
 
         $pId = $productID;
-        if($this->endsWith($title,"]") == true)
+        if($this->classXmind->endsWith($title,"]") == true)
         {
-            $tmpId = $this->getBetween($title,"[","]");
+            $tmpId = $this->classXmind->getBetween($title,"[","]");
             if(empty($tmpId) == false)
             {
                 $projectCount = $this->dao->select('count(*) as count')
@@ -3438,24 +3257,6 @@ class testcase extends control
         }
 
         return array('result'=>'success','pId'=>$pId,'type'=>'json');
-    }
-
-    function getBetween($kw1, $mark1, $mark2)
-    {
-        $kw = $kw1;
-        $kw = '123' . $kw . '123';
-        $st = strripos($kw, $mark1);
-        $ed = strripos($kw, $mark2);
-
-        if(($st == false || $ed == false) || $st >= $ed) return 0;
-
-        $kw = substr($kw, ($st + 1), ($ed - $st - 1));
-        return $kw;
-    }
-
-    function endsWith($haystack, $needle)
-    {
-        return $needle === '' || substr_compare($haystack, $needle, -strlen($needle)) === 0;
     }
 
     public function saveXmindConfig()

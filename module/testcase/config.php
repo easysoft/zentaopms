@@ -236,7 +236,6 @@ $config->testcase->datatable->fieldList['actions']['width']    = '180';
 $config->testcase->datatable->fieldList['actions']['required'] = 'yes';
 $config->testcase->datatable->fieldList['actions']['sort']     = 'no';
 
-
 $config->testcase->search['module']          = 'testcase';
 $config->testcase->search['fields']['scene'] = $lang->testcase->iScene;
 $config->testcase->search['params']['scene'] = array('operator' => 'belong',  'control' => 'select', 'values' => '');

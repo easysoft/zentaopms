@@ -169,7 +169,6 @@ UNION
     2 AS `isCase`
   FROM `zt_scene`;
 
-UPDATE `zt_screen` SET `name` = '燃尽图大屏' WHERE `id` = '5';
 CREATE TABLE `zt_chart_back` SELECT * FROM `zt_chart`;
 
 ALTER TABLE `zt_chart` MODIFY `fields` mediumtext NULL;

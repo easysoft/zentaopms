@@ -101,66 +101,57 @@
         <?php $module = $action->objectType == 'case' ? 'testcase' : $action->objectType;?>
         <tr>
           <td><?php echo zget($lang->action->objectTypes, $action->objectType, '');?></td>
+          <td><?php echo $action->objectID;?></td>
           <?php if($action->objectType == 'scene'){  ?>
-            <?php 
-              //$showid = substr($action->objectID,1);
-              //$showid = preg_replace('/^0+/', '', $showid); 
+          <td class='text-left'>
+            <?php echo $action->objectName;?>
+          </td>
+          <?php }else{  ?>
+          <td class='text-left'>
+            <?php
+            $params     = $action->objectType == 'user' ? "account={$action->objectName}" : "id={$action->objectID}";
+            $methodName = 'view';
+            if($module == 'caselib')
+            {
+                $methodName = 'view';
+                $module     = 'caselib';
+            }
+            if($module == 'basicmeas')
+            {
+                $module     = 'measurement';
+                $methodName = 'setSQL';
+                $params     = "id={$action->objectID}";
+            }
+            if($action->objectType == 'api')
+            {
+                $params     = "libID=0&moduelID=0&apiID={$action->objectID}";
+                $methodName = 'index';
+            }
+            if(strpos('traincourse,traincontents', $module) !== false)
+            {
+                $methodName = $module == 'traincourse' ? 'viewcourse' : 'viewchapter';
+                $module     = 'traincourse';
+            }
+            if(isset($config->action->customFlows[$action->objectType]))
+            {
+                $flow   = $config->action->customFlows[$action->objectType];
+                $module = $flow->module;
+            }
+            if(strpos($this->config->action->noLinkModules, ",{$module},") !== false)
+            {
+                echo $action->objectName;
+            }
+            else
+            {
+                $tab     = '';
+                $canView = common::hasPriv($module, $methodName);
+                if($action->objectType == 'meeting') $tab = $action->project ? "data-app='project'" : "data-app='my'";
+                if($module == 'requirement') $module = 'story';
+                echo $canView ? html::a($this->createLink($module, $methodName, $params), $action->objectName, '_self', "title='{$action->objectName}' $tab") : "<span title='$action->objectName'>$action->objectName</span>";
+            }
             ?>
-            <td><?php echo $action->objectID;?></td>
-            <?php }else{  ?>
-              <td><?php echo $action->objectID;?></td>
-            <?php }  ?>
-
-            <?php if($action->objectType == 'scene'){  ?>
-            <td class='text-left'>
-              <?php echo $action->objectName;?>
-            </td>
-            <?php }else{  ?>
-            <td class='text-left'>
-              <?php
-              $params     = $action->objectType == 'user' ? "account={$action->objectName}" : "id={$action->objectID}";
-              $methodName = 'view';
-              if($module == 'caselib')
-              {
-                  $methodName = 'view';
-                  $module     = 'caselib';
-              }
-              if($module == 'basicmeas')
-              {
-                  $module     = 'measurement';
-                  $methodName = 'setSQL';
-                  $params     = "id={$action->objectID}";
-              }
-              if($action->objectType == 'api')
-              {
-                  $params     = "libID=0&moduelID=0&apiID={$action->objectID}";
-                  $methodName = 'index';
-              }
-              if(strpos('traincourse,traincontents', $module) !== false)
-              {
-                  $methodName = $module == 'traincourse' ? 'viewcourse' : 'viewchapter';
-                  $module     = 'traincourse';
-              }
-              if(isset($config->action->customFlows[$action->objectType]))
-              {
-                  $flow   = $config->action->customFlows[$action->objectType];
-                  $module = $flow->module;
-              }
-              if(strpos($this->config->action->noLinkModules, ",{$module},") !== false)
-              {
-                  echo $action->objectName;
-              }
-              else
-              {
-                  $tab     = '';
-                  $canView = common::hasPriv($module, $methodName);
-                  if($action->objectType == 'meeting') $tab = $action->project ? "data-app='project'" : "data-app='my'";
-                  if($module == 'requirement') $module = 'story';
-                  echo $canView ? html::a($this->createLink($module, $methodName, $params), $action->objectName, '_self', "title='{$action->objectName}' $tab") : "<span title='$action->objectName'>$action->objectName</span>";
-              }
-              ?>
-            </td>
-          <?php }  ?>
+          </td>
+        <?php }  ?>
           <?php if($currentObjectType == 'execution'):?>
           <td class="c-name flex" title="<?php echo $projectList[$action->project]->name;?>">
             <span class="text-ellipsis"><?php echo $projectList[$action->project]->name;?></span>

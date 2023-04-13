@@ -75,7 +75,6 @@ class datatableModel extends model
 
         $module = zget($this->config->datatable->moduleAlias, "$module-$method", $module);
         if(!isset($this->config->$module)) $this->loadModel($module);
-        $setting = "";
         if(isset($this->config->datatable->$datatableId->$key))
         {
             if($datatableId == 'testcaseBrowse' && $key == 'tablecols' && $this->cookie->onlyScene)

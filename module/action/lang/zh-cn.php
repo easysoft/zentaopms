@@ -810,7 +810,6 @@ $lang->action->search->objectTypeList['testsuite']   = '套件';
 $lang->action->search->objectTypeList['caselib']     = '公共库';
 $lang->action->search->objectTypeList['testreport']  = '报告';
 
-
 /* 用来在动态显示中显示动作 */
 $lang->action->search->label['']                      = '';
 $lang->action->search->label['created']               = $lang->action->label->created;
