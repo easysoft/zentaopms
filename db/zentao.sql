@@ -2135,6 +2135,7 @@ INSERT INTO `zt_grouppriv` (`group`, `module`, `method`) VALUES
 (1,'admin','index'),
 (1,'admin','register'),
 (1,'admin','safe'),
+(1,'admin','sso'),
 (1,'admin','ztCompany'),
 (1,'api','debug'),
 (1,'api','getModel'),
