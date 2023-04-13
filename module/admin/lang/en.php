@@ -10,7 +10,6 @@
  * @link        http://www.zentao.net
  */
 $lang->admin->index           = 'Admin Home';
-$lang->admin->checkDB         = 'Check Database';
 $lang->admin->safeIndex       = 'Security';
 $lang->admin->checkWeak       = 'Check Weak Password';
 $lang->admin->certifyMobile   = 'Verify your cellphone';

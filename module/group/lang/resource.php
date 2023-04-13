@@ -1826,7 +1826,6 @@ $lang->search->methodOrder[35] = 'buildIndex';
 /* Admin. */
 $lang->resource->admin = new stdclass();
 $lang->resource->admin->index           = 'index';
-$lang->resource->admin->checkDB         = 'checkDB';
 $lang->resource->admin->safe            = 'safeIndex';
 $lang->resource->admin->checkWeak       = 'checkWeak';
 $lang->resource->admin->register        = 'register';
@@ -1835,7 +1834,6 @@ $lang->resource->admin->resetPWDSetting = 'resetPWDSetting';
 $lang->resource->admin->tableEngine     = 'tableEngine';
 
 $lang->admin->methodOrder[0]  = 'index';
-$lang->admin->methodOrder[5]  = 'checkDB';
 $lang->admin->methodOrder[10] = 'safeIndex';
 $lang->admin->methodOrder[15] = 'checkWeak';
 $lang->admin->methodOrder[25] = 'register';
