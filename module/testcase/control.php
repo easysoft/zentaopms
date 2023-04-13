@@ -2668,7 +2668,7 @@ class testcase extends control
     }
 
     /**
-     * Ajax Get Option Menu.
+     * Ajax get option menu.
      *
      * @param  int    $rootID
      * @param  string $viewType
@@ -2742,7 +2742,7 @@ class testcase extends control
     }
 
     /**
-     * Ajax Get scenes.
+     * Ajax get scenes.
      *
      * @param  int    $productID
      * @param  int    $branch
@@ -2777,7 +2777,7 @@ class testcase extends control
     }
 
     /**
-     * Batch Change Scene.
+     * Batch change scene.
      *
      * @param  int $sceneId
      * @access public
@@ -2816,7 +2816,7 @@ class testcase extends control
     }
 
     /**
-     * Change Scene.
+     * Change scene.
      *
      * @access public
      * @return void
@@ -2907,7 +2907,7 @@ class testcase extends control
     }
 
     /**
-     * Delete Scene.
+     * Delete scene.
      *
      * @param  int    $sceneId
      * @param  string $confirm
@@ -2948,7 +2948,7 @@ class testcase extends control
     }
 
     /**
-     * Edit Scene.
+     * Edit scene.
      *
      * @param  int $sceneId
      * @param  int $executionID
@@ -3114,7 +3114,7 @@ class testcase extends control
     }
 
     /**
-     * Export Xmind.
+     * Export xmind.
      *
      * @param  int $productID
      * @param  int $moduleID
@@ -3189,7 +3189,7 @@ class testcase extends control
     }
 
     /**
-     * Get Xmind Config.
+     * Get xmind config.
      *
      * @access public
      * @return void
@@ -3201,7 +3201,7 @@ class testcase extends control
     }
 
     /**
-     * Get Xmind Content.
+     * Get xmind content.
      *
      * @access public
      * @return void
@@ -3228,7 +3228,7 @@ class testcase extends control
     }
 
     /**
-     * Import Xmind.
+     * Import xmind.
      *
      * @param  int $productID
      * @param  int $branch
@@ -3305,7 +3305,7 @@ class testcase extends control
     }
 
     /**
-     * Fetch By Xml.
+     * Fetch by xml.
      *
      * @param  string $extractFolder
      * @param  int    $productID
@@ -3346,7 +3346,7 @@ class testcase extends control
     }
 
     /**
-     * Fetch By Json.
+     * Fetch by json.
      *
      * @param  string $extractFolder
      * @param  int    $productID
@@ -3388,7 +3388,7 @@ class testcase extends control
     }
 
     /**
-     * Save Xmind Config.
+     * Save xmind config.
      *
      * @access public
      * @return void
@@ -3400,7 +3400,7 @@ class testcase extends control
     }
 
     /**
-     * Save Imported Xmind.
+     * Save imported xmind.
      *
      * @access public
      * @return void
@@ -3417,7 +3417,7 @@ class testcase extends control
     }
 
     /**
-     * Show Imported Xmind.
+     * Show imported xmind.
      *
      * @param  int $productID
      * @param  int $branch

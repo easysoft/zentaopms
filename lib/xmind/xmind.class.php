@@ -12,7 +12,7 @@
 class xmind
 {
     /**
-     * Create Module Node.
+     * Create module node.
      *
      * @param  DOMDocument $xmlDoc
      * @param  array       $context
@@ -37,7 +37,7 @@ class xmind
     }
 
     /**
-     * Create Scene Node.
+     * Create scene node.
      *
      * @param  DOMDocument $xmlDoc
      * @param  array       $context
@@ -76,7 +76,7 @@ class xmind
     }
 
     /**
-     * Create Next Child Scene Node.
+     * Create next child scene node.
      *
      * @param  object      $parentScene
      * @param  object      $parentNode
@@ -107,7 +107,7 @@ class xmind
     }
 
     /**
-     * Create Test Case Node.
+     * Create test case node.
      *
      * @param  DOMDocument $xmlDoc
      * @param  array       $context
@@ -134,7 +134,7 @@ class xmind
     }
 
     /**
-     * Create One Test Case Node.
+     * Create one test case node.
      *
      * @param  object      $case
      * @param  DOMDocument $xmlDoc
@@ -187,7 +187,7 @@ class xmind
     }
 
     /**
-     * Find Substep List By Step.
+     * Find substep list by step.
      *
      * @param  object $step
      * @param  array  $stepList
@@ -209,7 +209,7 @@ class xmind
     }
 
     /**
-     * Find Top Step List By Case.
+     * Find top step list by case.
      *
      * @param  object $case
      * @param  array  $stepList
@@ -231,7 +231,7 @@ class xmind
     }
 
     /**
-     * Create Xmind Node.
+     * Create xmind node.
      *
      * @param  DOMDocument $xmlDoc
      * @param  string      $text
@@ -283,7 +283,7 @@ class xmind
     }
 
     /**
-     * Get Substring Between Mark1 And Mark2 From Kw.
+     * Get substring between mark1 and mark2 from kw.
      *
      * @param  string $str
      * @param  string $suffix

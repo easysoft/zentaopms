@@ -2871,7 +2871,7 @@ class testcaseModel extends model
     }
 
     /**
-     * Batch Change Scene.
+     * Batch change scene.
      *
      * @param  array $caseIDList
      * @param  int   $sceneId
@@ -3132,7 +3132,7 @@ class testcaseModel extends model
     }
 
     /**
-     * Build Menu Query.
+     * Build menu query.
      *
      * @param  int    $rootID
      * @param  int    $moduleID
@@ -3164,7 +3164,7 @@ class testcaseModel extends model
     }
 
     /**
-     * Build Operate Browse Scene Menu.
+     * Build operate browse scene menu.
      *
      * @param  object $scene
      * @access public
@@ -3189,7 +3189,7 @@ class testcaseModel extends model
     }
 
     /**
-     * Search Form Add Scene.
+     * Search form add scene.
      *
      * @param  int    $productID
      * @param  array  $products
@@ -3239,7 +3239,7 @@ class testcaseModel extends model
     }
 
     /**
-     * Build Tree Array.
+     * Build tree array.
      *
      * @param  array  $treeMenu
      * @param  array  $scenes
@@ -3349,7 +3349,7 @@ class testcaseModel extends model
     }
 
     /**
-     * Get All Children Id.
+     * Get all children id.
      *
      * @param  int $sceneID
      * @access public
@@ -3369,7 +3369,7 @@ class testcaseModel extends model
     }
 
     /**
-     * Search Cases Has Scene.
+     * Search cases has scene.
      *
      * @param  int    $productID
      * @param  int    $queryID
@@ -3527,7 +3527,7 @@ class testcaseModel extends model
     }
 
     /**
-     * Search Cases Has Scene.
+     * Search cases has scene.
      *
      * @param  int $viewID
      * @access public
@@ -3553,7 +3553,7 @@ class testcaseModel extends model
     }
 
     /**
-     * Get Scene Menu.
+     * Get scene menu.
      *
      * @param  int    $rootID
      * @param  int    $moduleID
@@ -3631,7 +3631,7 @@ class testcaseModel extends model
     }
 
     /**
-     * Get Scene Name.
+     * Get scene name.
      *
      * @param  array $moduleIdList
      * @param  bool  $allPath
@@ -3674,7 +3674,7 @@ class testcaseModel extends model
     }
 
     /**
-     * Get Cases Which Has Scene.
+     * Get cases which has scene.
      *
      * @param  int    $productID
      * @param  int    $branch
@@ -3753,7 +3753,7 @@ class testcaseModel extends model
     }
 
     /**
-     * Print Table Head.
+     * Print table head.
      *
      * @param  object $col
      * @param  string $orderBy
@@ -3825,7 +3825,7 @@ class testcaseModel extends model
     }
 
     /**
-     * Update Scene.
+     * Update scene.
      *
      * @param  int $sceneID
      * @access public
@@ -3945,7 +3945,7 @@ class testcaseModel extends model
     }
 
     /**
-     * Get Xmind File Content.
+     * Get xmind file content.
      *
      * @param  string $fileName
      * @access public
@@ -3960,7 +3960,7 @@ class testcaseModel extends model
     }
 
     /**
-     * Save Xmind File Content To Database.
+     * Save xmind file content to database.
      *
      * @access public
      * @return array
@@ -4009,7 +4009,7 @@ class testcaseModel extends model
     }
 
     /**
-     * Save Test Case.
+     * Save test case.
      *
      * @param  array $testcaseData
      * @param  array $sceneIds
@@ -4150,7 +4150,7 @@ class testcaseModel extends model
     }
 
     /**
-     * Save Scene.
+     * Save scene.
      *
      * @param  array $sceneData
      * @param  array $sceneIds
@@ -4232,7 +4232,7 @@ class testcaseModel extends model
     }
 
     /**
-     * Get Export Data.
+     * Get export data.
      *
      * @param  int $productID
      * @param  int $moduleID
@@ -4260,7 +4260,7 @@ class testcaseModel extends model
     }
 
     /**
-     * Get Module By Product.
+     * Get module by product.
      *
      * @param  int $productID
      * @param  int $moduleID
@@ -4289,7 +4289,7 @@ class testcaseModel extends model
     }
 
     /**
-     * Get Case By Product And Module.
+     * Get case by product and module.
      *
      * @param  int $productID
      * @param  int $moduleID
@@ -4321,7 +4321,7 @@ class testcaseModel extends model
     }
 
     /**
-     * Get Step By Product And Module.
+     * Get step by product and module.
      *
      * @param  int $productID
      * @param  int $moduleID
@@ -4349,7 +4349,7 @@ class testcaseModel extends model
     }
 
     /**
-     * Get Scene By Product And Module.
+     * Get scene by product and module.
      *
      * @param  int $productID
      * @param  int $moduleID
@@ -4378,7 +4378,7 @@ class testcaseModel extends model
     }
 
     /**
-     * Check Config.
+     * Check config.
      *
      * @param  string $str
      * @access public
@@ -4390,7 +4390,7 @@ class testcaseModel extends model
     }
 
     /**
-     * Save Xmind Config.
+     * Save xmind config.
      *
      * @access public
      * @return array
@@ -4476,7 +4476,7 @@ class testcaseModel extends model
     }
 
     /**
-     * Get Xmind Config.
+     * Get xmind config.
      *
      * @access public
      * @return array
@@ -4502,7 +4502,7 @@ class testcaseModel extends model
     }
 
     /**
-     * Convert Xml To Array.
+     * Convert xml to array.
      *
      * @param  object $xml
      * @param  array  $options
