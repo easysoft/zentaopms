@@ -474,7 +474,6 @@ $lang->resource->product->updateOrder     = 'orderAction';
 $lang->resource->product->all             = 'list';
 $lang->resource->product->kanban          = 'kanban';
 $lang->resource->product->manageLine      = 'manageLine';
-$lang->resource->product->build           = 'build';
 $lang->resource->product->export          = 'exportAction';
 $lang->resource->product->whitelist       = 'whitelist';
 $lang->resource->product->addWhitelist    = 'addWhitelist';
@@ -498,11 +497,10 @@ $lang->product->methodOrder[70]  = 'updateOrder';
 $lang->product->methodOrder[75]  = 'all';
 $lang->product->methodOrder[80]  = 'kanban';
 $lang->product->methodOrder[85]  = 'manageLine';
-$lang->product->methodOrder[90]  = 'build';
-$lang->product->methodOrder[95]  = 'export';
-$lang->product->methodOrder[100] = 'whitelist';
-$lang->product->methodOrder[105] = 'addWhitelist';
-$lang->product->methodOrder[110] = 'unbindWhitelist';
+$lang->product->methodOrder[90]  = 'export';
+$lang->product->methodOrder[95] = 'whitelist';
+$lang->product->methodOrder[100] = 'addWhitelist';
+$lang->product->methodOrder[105] = 'unbindWhitelist';
 
 /* Branch. */
 $lang->resource->branch = new stdclass();

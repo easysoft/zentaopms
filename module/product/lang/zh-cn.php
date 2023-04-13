@@ -60,7 +60,6 @@ $lang->product->builds      = '版本数';
 $lang->product->roadmap     = "{$lang->productCommon}路线图";
 $lang->product->doc         = '文档列表';
 $lang->product->project     = $lang->executionCommon . '列表';
-$lang->product->build       = '版本列表';
 $lang->product->moreProduct = "更多{$lang->productCommon}";
 $lang->product->projectInfo = "所有与此{$lang->productCommon}关联的我参与的{$lang->projectCommon}";
 $lang->product->progress    = "{$lang->productCommon}完成度";

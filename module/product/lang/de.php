@@ -60,7 +60,6 @@ $lang->product->builds      = 'Builds';
 $lang->product->roadmap     = 'Roadmap';
 $lang->product->doc         = 'Dok';
 $lang->product->project     = $lang->executionCommon . 'Liste';
-$lang->product->build       = 'Build';
 $lang->product->moreProduct = "More {$lang->productCommon}";
 $lang->product->projectInfo = "My {$lang->projectCommon}s that are linked to this {$lang->productCommon} are listed below.";
 $lang->product->progress    = "Progress";
