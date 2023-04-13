@@ -119,7 +119,7 @@ form .table-data, #content .table-data {border: 1px solid #e2e2e3;}
 .main-col .doc-title .info {flex: 1 1 0;}
 .main-col .doc-title .version a {font-size: 13px; color: #8c8c8c;}
 .main-col .doc-title .version .dropdown-menu a:hover {color: #ffffff;}
-.main-col .doc-title .actions {min-width: 120px; display: inline-block;}
+.main-col .doc-title .actions {display: inline-block;}
 .main-col .doc-title .actions a + a {margin-left: 8px;}
 .main-col .doc-title .actions i {font-size: 15px; color: #8c8c8c;}
 #content h2.title {margin: 0; font-size: 17px;}
@@ -159,3 +159,7 @@ form .table-data, #content .table-data {border: 1px solid #e2e2e3;}
 
 .paramsTable th {text-align: left!important; font-size: 14px;}
 .paramsTable td {text-align: left;}
+
+.info .version, .info .crumbs {float: left;}
+.info .crumbs {font-size: 13px; margin-top: 5px; font-weight: normal;}
+.info .crumbs img {margin-right: 3px;}

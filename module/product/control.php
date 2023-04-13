@@ -268,7 +268,7 @@ class product extends control
         {
             $stories = $this->product->getStories($productID, $branchID, $browseType, $queryID, $moduleID, $storyType, $sort, $pager);
         }
-        $queryCondition = $this->dao->get();
+        $queryCondition = $this->story->dao->get();
 
         /* Display status of branch. */
         $branchOption    = array();
@@ -877,6 +877,7 @@ class product extends control
         $period  = $type == 'account' ? 'all'  : $type;
         $date    = empty($date) ? '' : date('Y-m-d', $date);
         $actions = $this->loadModel('action')->getDynamic($account, $period, $orderBy, $pager, $productID, 'all', 'all', $date, $direction);
+        if(empty($recTotal)) $recTotal = count($actions);
 
         /* The header and position. */
         $this->view->title      = $this->products[$productID] . $this->lang->colon . $this->lang->product->dynamic;
@@ -896,6 +897,7 @@ class product extends control
         $this->view->pager      = $pager;
         $this->view->dateGroups = $this->action->buildDateGroup($actions, $direction, $type);
         $this->view->direction  = $direction;
+        $this->view->recTotal   = $recTotal;
         $this->display();
     }
 

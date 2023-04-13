@@ -6,10 +6,17 @@
  * @access public
  * @return void
  */
-function loadObjectModules(objectType, objectID)
+function loadObjectModules(objectType, objectID, docType)
 {
-    var link = createLink('doc', 'ajaxGetModules', 'objectType=' + objectType + '&objectID=' + objectID);
-    $('#moduleBox').load(link, function(){$('#moduleBox').find('select').chosen()});
+    if(typeof docType == 'undefined') docType = 'doc';
+    if(objectType == 'execution' && objectID == 0)
+    {
+        objectType = 'project';
+        objectID   = $('#project').val();
+    }
+    if(objectID == undefined) objectID = 0;
+    var link = createLink('doc', 'ajaxGetModules', 'objectType=' + objectType + '&objectID=' + objectID + '&type=' + docType);
+    $('#moduleBox').load(link, function(){$('#moduleBox').find('select').picker(); $('#moduleLabel').remove();});
 }
 
 /**
@@ -21,8 +28,8 @@ function loadObjectModules(objectType, objectID)
  */
 function loadExecutions(projectID)
 {
-    var link = createLink('project', 'ajaxGetExecutions', "projectID=" + projectID + "&executionID=0&mode=multiple,leaf,noprefix");
-    $('#executionBox').load(link, function(){$('#executionBox').find('select').attr('data-placeholder', holders.execution).attr('onchange', "loadObjectModules('execution', this.value)").chosen()});
+    var link = createLink('project', 'ajaxGetExecutions', "projectID=" + projectID + "&executionID=0&mode=multiple,leaf,noprefix&type=sprint,stage");
+    $('#executionBox').load(link, function(){$('#executionBox').find('select').attr('data-placeholder', holders.execution).attr('onchange', "loadObjectModules('execution', this.value)").picker()});
     loadObjectModules('project', projectID);
 }
 
@@ -273,6 +280,7 @@ $(document).ready(function()
     $(function()
     {
         $('.split-row').splitRow();
+        updateCrumbs();
     });
 
     var $pageSetting = $('#pageSetting');
@@ -286,6 +294,8 @@ $(document).ready(function()
 
     $(document).on('mousedown', '.ajaxCollect', function (event)
     {
+        if(event.button != 0) return;
+
         var obj = $(this);
         var url = obj.data('url');
         $.get(url, function(response)
@@ -306,9 +316,31 @@ $(document).ready(function()
     });
 });
 
+/**
+ * locateNewLib
+ *
+ * @param  string $type product|project|execution|custom|mine
+ * @param  int    $objectID
+ * @param  int    $libID
+ * @access public
+ * @return void
+ */
 function locateNewLib(type, objectID, libID)
 {
-    location.href = createLink('doc', 'tableContents', 'type=' + type + '&objectID=' + objectID + '&libID=' + libID);
+    var method = 'tableContents';
+    var params = 'type=' + type + '&objectID=' + objectID + '&libID=' + libID;
+    if(type == 'product' || type == 'project')
+    {
+        method = type + 'Space';
+        params = 'objectID=' + objectID + '&libID=' + libID;
+    }
+    else if(type == 'mine')
+    {
+        method = 'mySpace';
+        params = 'type=mine&libID=' + libID;
+    }
+
+    location.href = createLink('doc', method, params);
 }
 
 /**
@@ -319,25 +351,35 @@ function locateNewLib(type, objectID, libID)
  */
 function setSavePath()
 {
+    var getSubPath = function($obj)
+    {
+        var $td = $obj.parent();
+        var usePicker = $td.find('.picker').length == 1;
+        var subPath = $obj.find('option:checked').text();
+        if(usePicker) subPath = $td.find('.picker .picker-selection-text').text();
+        return subPath;
+    }
+
     savePath = defaultSave;
     if($('#modalBasicInfo #product').length == 1)
     {
-        savePath += $('#modalBasicInfo #product option:checked').text() + '/';
+        savePath += getSubPath($('#modalBasicInfo #product')) + '/';
     }
     else if($('#modalBasicInfo #project').length == 1 && $('#modalBasicInfo #execution').length == 0)
     {
-        savePath += $('#modalBasicInfo #project option:checked').text() + '/';
+        savePath += getSubPath($('#modalBasicInfo #project')) + '/';
     }
     else if($('#modalBasicInfo #project').length == 1 && $('#modalBasicInfo #execution').length == 1)
     {
-        if($('#modalBasicInfo #execution').val() == '') savePath += $('#modalBasicInfo #project option:checked').text() + '/';
-        if($('#modalBasicInfo #execution').val() != '') savePath += $('#modalBasicInfo #execution option:checked').text() + '/';
+        var executionID = $('#modalBasicInfo #execution').val();
+        if(executionID == '0' || executionID == '') savePath += getSubPath($('#modalBasicInfo #project')) + '/';
+        if(executionID != '0' && executionID != '') savePath += getSubPath($('#modalBasicInfo #execution')) + '/';
     }
     else if($('#modalBasicInfo #execution').length == 1)
     {
-        savePath += $('#modalBasicInfo #execution option:checked').text() + '/';
+        savePath += getSubPath($('#modalBasicInfo #execution')) + '/';
     }
-    savePath += $('#modalBasicInfo #module option:checked').text();
+    savePath += getSubPath($('#modalBasicInfo #module'));
 
     $('#savePath').html(savePath).attr('title', savePath);
 }
@@ -354,4 +396,34 @@ function submit(object)
     $(object).attr('type', 'submit');
     $('#dataform').submit();
     setTimeout(function(){$(object).attr('type', 'button').removeAttr('disabled')}, 2000);
+}
+
+/**
+ * Update crumbs.
+ *
+ * @access public
+ * @return void
+ */
+function updateCrumbs()
+{
+    var $crumbs       = $('#crumbs');
+    var $crumbItems   = $('#crumbs > .crumb-item');
+    var crumbMaxWidth = 660;
+    if($crumbs.width < crumbMaxWidth || $crumbItems.length == 1) return;
+
+    /* last crumbItem width major */
+    var $lastChild = $($crumbItems[$crumbItems.length -1]);
+    var widthSum = 0 + $lastChild.width();
+    for(var i = 0; i < $crumbItems.length - 1; i++)
+    {
+        var crumbItem = $crumbItems[i];
+        var widthSum  = widthSum + $(crumbItem).width();
+        if(widthSum >= crumbMaxWidth)
+        {
+            $(crumbItem).addClass('in-auto-box');
+        }
+    }
+    var $autoCrumbItems = $('#crumbs > .in-auto-box');
+    $lastChild.before('<div id="autoBox" class="flex-auto"><div class="ellipsis">...<div></div>');
+    $('#autoBox').prepend($autoCrumbItems);
 }

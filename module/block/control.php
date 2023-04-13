@@ -42,6 +42,7 @@ class block extends control
         if($module == 'my')
         {
             $modules = $this->lang->block->moduleList;
+            unset($modules['doc']);
 
             list($programModule, $programMethod)     = explode('-', $this->config->programLink);
             list($productModule, $productMethod)     = explode('-', $this->config->productLink);
@@ -299,9 +300,9 @@ class block extends control
 
             $block->blockLink = $this->createLink('block', 'printBlock', "id=$block->id&module=$block->module");
             $block->moreLink  = '';
-            if(isset($this->lang->block->modules[$source]->moreLinkList->{$blockID}))
+            if(isset($this->config->block->modules[$source]->moreLinkList->{$blockID}))
             {
-                list($moduleName, $method, $vars) = explode('|', sprintf($this->lang->block->modules[$source]->moreLinkList->{$blockID}, isset($block->params->type) ? $block->params->type : ''));
+                list($moduleName, $method, $vars) = explode('|', sprintf($this->config->block->modules[$source]->moreLinkList->{$blockID}, isset($block->params->type) ? $block->params->type : ''));
 
                 /* The list assigned to me jumps to the work page when click more button. */
                 $block->moreLink = $this->createLink($moduleName, $method, $vars);
@@ -583,9 +584,9 @@ class block extends control
             }
 
             $this->view->moreLink = '';
-            if(isset($this->lang->block->modules[$module]->moreLinkList->{$code}))
+            if(isset($this->config->block->modules[$module]->moreLinkList->{$code}))
             {
-                list($moduleName, $method, $vars) = explode('|', sprintf($this->lang->block->modules[$module]->moreLinkList->{$code}, isset($params->type) ? $params->type : ''));
+                list($moduleName, $method, $vars) = explode('|', sprintf($this->config->block->modules[$module]->moreLinkList->{$code}, isset($params->type) ? $params->type : ''));
                 $this->view->moreLink = $this->createLink($moduleName, $method, $vars);
             }
 
@@ -748,7 +749,7 @@ class block extends control
         if(preg_match('/[^a-zA-Z0-9_]/', $this->params->type)) return;
 
         $this->view->projects  = $this->loadModel('project')->getPairsByProgram();
-        $this->view->testtasks = $this->dao->select('distinct t1.*,t2.name as productName,t2.shadow,t3.name as buildName,t4.name as projectName')->from(TABLE_TESTTASK)->alias('t1')
+        $this->view->testtasks = $this->dao->select('t1.*,t2.name as productName,t2.shadow,t3.name as buildName,t4.name as projectName')->from(TABLE_TESTTASK)->alias('t1')
             ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product=t2.id')
             ->leftJoin(TABLE_BUILD)->alias('t3')->on('t1.build=t3.id')
             ->leftJoin(TABLE_PROJECT)->alias('t4')->on('t1.execution=t4.id')
@@ -1637,12 +1638,12 @@ class block extends control
         $yesterday     = date(DT_DATE1, strtotime('yesterday'));
         $testtasks     = $this->dao->select('*')->from(TABLE_TESTTASK)->where('product')->in($productIdList)->andWhere('project')->ne(0)->andWhere('deleted')->eq(0)->orderBy('id')->fetchAll('product');
         $bugs          = $this->dao->select("product, count(id) as total,
-            count(assignedTo = '{$this->app->user->account}' or null) as assignedToMe,
-            count(status != 'closed' or null) as unclosed,
-            count((status != 'closed' and status != 'resolved') or null) as unresolved,
-            count((confirmed = '0' and toStory = '0') or null) as unconfirmed,
-            count((resolvedDate >= '$yesterday' and resolvedDate < '$today') or null) as yesterdayResolved,
-            count((closedDate >= '$yesterday' and closedDate < '$today') or null) as yesterdayClosed")
+            count(IF(assignedTo = '{$this->app->user->account}', 1, null)) as assignedToMe,
+            count(IF(status != 'closed', 1, null)) as unclosed,
+            count(IF(status != 'closed' and status != 'resolved', 1, null)) as unresolved,
+            count(IF(confirmed = '0' and toStory = '0', 1, null)) as unconfirmed,
+            count(IF(resolvedDate >= '$yesterday' and resolvedDate < '$today', 1, null)) as yesterdayResolved,
+            count(IF(closedDate >= '$yesterday' and closedDate < '$today', 1, null)) as yesterdayClosed")
             ->from(TABLE_BUG)
             ->where('product')->in($productIdList)
             ->andWhere('execution')->in(array_keys($executions))
@@ -1650,13 +1651,18 @@ class block extends control
             ->groupBy('product')
             ->fetchAll('product');
 
-        $confirmedBugs = $this->dao->select('count(product) as product')->from(TABLE_ACTION)
+        $confirmedBugs = $this->dao->select('product')->from(TABLE_ACTION)
             ->where('objectType')->eq('bug')
             ->andWhere('action')->eq('bugconfirmed')
             ->andWhere('date')->ge($yesterday)
             ->andWhere('date')->lt($today)
-            ->groupBy('product')
-            ->fetchPairs('product', 'product');
+            ->fetchAll();
+        $productConfirmedBugs = array();
+        foreach($confirmedBugs as $bug)
+        {
+            if(!isset($productConfirmedBugs[$bug->product])) $productConfirmedBugs[$bug->product] = 0;
+            $productConfirmedBugs[$bug->product]++;
+        }
 
         foreach($products as $productID => $product)
         {
@@ -1668,7 +1674,7 @@ class block extends control
             $product->unconfirmed        = empty($bug) ? 0 : $bug->unconfirmed;
             $product->yesterdayResolved  = empty($bug) ? 0 : $bug->yesterdayResolved;
             $product->yesterdayClosed    = empty($bug) ? 0 : $bug->yesterdayClosed;
-            $product->yesterdayConfirmed = empty($confirmedBugs[",$productID,"]) ? 0 : $confirmedBugs[",$productID,"];
+            $product->yesterdayConfirmed = empty($productConfirmedBugs[",$productID,"]) ? 0 : $productConfirmedBugs[",$productID,"];
 
             $product->assignedRate    = $product->total ? round($product->assignedToMe  / $product->total * 100, 2) : 0;
             $product->unresolvedRate  = $product->total ? round($product->unresolved    / $product->total * 100, 2) : 0;
@@ -2026,6 +2032,123 @@ class block extends control
         $this->app->loadLang('program');
         $this->app->loadLang('execution');
         $this->view->projects = $this->loadModel('project')->getOverviewList('byStatus', $status, $orderBy, $count);
+    }
+
+    /**
+     * Print document statistic block.
+     *
+     * @access public
+     * @return void
+     */
+    public function printDocStatisticBlock()
+    {
+        $this->view->statistic = $this->loadModel('doc')->getStatisticInfo();
+    }
+
+    /**
+     * Print document dynamic block.
+     *
+     * @access public
+     * @return void
+     */
+    public function printDocDynamicBlock()
+    {
+        /* Load pager. */
+        $this->app->loadClass('pager', $static = true);
+        $pager = new pager(0, 30, 1);
+
+        $this->view->actions = $this->loadModel('doc')->getDynamic($pager);
+        $this->view->users   = $this->loadModel('user')->getPairs('nodeleted|noletter|all');
+    }
+
+    /**
+     * Print my collection of documents block.
+     *
+     * @access public
+     * @return void
+     */
+    public function printDocMyCollectionBlock()
+    {
+        /* Load pager. */
+        $this->app->loadClass('pager', $static = true);
+        $pager = new pager(0, 6, 1);
+
+        $docList = $this->loadModel('doc')->getDocsByBrowseType('collectedbyme', 0, 0, 'editedDate_desc', $pager);
+        $libList = array();
+        foreach($docList as $doc)
+        {
+            $doc->editedDate   = substr($doc->editedDate, 0, 10);
+            $doc->editInterval = helper::getDateInterval($doc->editedDate);
+
+            $libList[] = $doc->lib;
+        }
+
+        $this->view->docList  = $docList;
+    }
+
+    /**
+     * Print recent update block.
+     *
+     * @access public
+     * @return void
+     */
+    public function printDocRecentUpdateBlock()
+    {
+        /* Load pager. */
+        $this->app->loadClass('pager', $static = true);
+        $pager = new pager(0, 6, 1);
+
+        $docList = $this->loadModel('doc')->getDocsByBrowseType('byediteddate', 0, 0, 'editedDate_desc', $pager);
+        $libList = array();
+        foreach($docList as $doc)
+        {
+            $doc->editedDate   = substr($doc->editedDate, 0, 10);
+            $doc->editInterval = helper::getDateInterval($doc->editedDate);
+
+            $libList[] = $doc->lib;
+        }
+
+        $this->view->docList  = $docList;
+    }
+
+    /**
+     * Print view list block.
+     *
+     * @access public
+     * @return void
+     */
+    public function printDocViewListBlock()
+    {
+    }
+
+    /**
+     * Print collect list block.
+     *
+     * @access public
+     * @return void
+     */
+    public function printDocCollectListBlock()
+    {
+    }
+
+    /**
+     * Print product's document block.
+     *
+     * @access public
+     * @return void
+     */
+    public function printProductDocBlock()
+    {
+    }
+
+    /**
+     * Print project's document block.
+     *
+     * @access public
+     * @return void
+     */
+    public function printProjectDocBlock()
+    {
     }
 
     /**

@@ -596,7 +596,6 @@ class commonModel extends model
         if($config->systemMode == 'light') unset($lang->createIcons['program']);
 
         /* Check whether the creation permission is available, and print create buttons. */
-
         foreach($lang->createIcons as $objectType => $objectIcon)
         {
             $createMethod = 'create';
@@ -605,102 +604,98 @@ class commonModel extends model
             if($objectType == 'kanbanspace') $createMethod = 'createSpace';
             if(strpos('|bug|execution|kanbanspace|', "|$objectType|") !== false) $needPrintDivider = true;
 
-            if(common::hasPriv($module, $createMethod))
+            $hasPriv = common::hasPriv($module, $createMethod);
+            if($hasPriv  and $objectType == 'doc' and !common::hasPriv('doc', 'tableContents')) $hasPriv = false;
+            if(!$hasPriv and $objectType == 'doc' and  common::hasPriv('api', 'create'))        $hasPriv = true;
+            if(!$hasPriv) continue;
+
+            /* Determines whether to print a divider. */
+            if($needPrintDivider and $showCreateList)
             {
-                if($objectType == 'doc' and !common::hasPriv('doc', 'tableContents')) continue;
+                $html .= '<li class="divider"></li>';
+                $needPrintDivider = false;
+            }
 
-                /* Determines whether to print a divider. */
-                if($needPrintDivider and $showCreateList)
-                {
-                    $html            .= '<li class="divider"></li>';
-                    $needPrintDivider = false;
-                }
+            $showCreateList = true;
+            $isOnlyBody     = false;
+            $attr           = '';
 
-                $showCreateList = true;
-                $isOnlyBody     = false;
-                $attr           = '';
-
-                $params = '';
-                switch($objectType)
-                {
-                    case 'doc':
-                        $params       = "objectType=&objectID=0&libID=0";
-                        $createMethod = 'selectLibType';
-                        $isOnlyBody   = true;
-                        $attr         = "class='iframe' data-width='700px'";
-                        break;
-                    case 'project':
+            $params = '';
+            switch($objectType)
+            {
+                case 'doc':
+                    $params       = "objectType=&objectID=0&libID=0";
+                    $createMethod = 'selectLibType';
+                    $isOnlyBody   = true;
+                    $attr         = "class='iframe' data-width='750px'";
+                    break;
+                case 'project':
+                    $params = "model=scrum&programID=0&copyProjectID=0&extra=from=global";
+                    if($config->vision == 'lite')
+                    {
+                        $params = "model=kanban";
+                    }
+                    elseif(!defined('TUTORIAL'))
+                    {
+                        $params       = "programID=0&from=global";
+                        $createMethod = 'createGuide';
+                        $attr         = 'data-toggle="modal"';
+                    }
+                    break;
+                case 'bug':
+                    $params = "productID=$productID&branch=&extras=from=global";
+                    break;
+                case 'story':
+                    if(!$productID and $config->vision == 'lite')
+                    {
+                        $module = 'project';
+                        $params = "model=kanban";
+                    }
+                    else
+                    {
+                        $params = "productID=$productID&branch=0&moduleID=0&storyID=0&objectID=0&bugID=0&planID=0&todoID=0&extra=from=global";
                         if($config->vision == 'lite')
                         {
-                            $params = "model=kanban";
-                        }
-                        else if(!defined('TUTORIAL'))
-                        {
-                            $params       = "programID=0&from=global";
-                            $createMethod = 'createGuide';
-                            $attr         = 'data-toggle="modal"';
-                        }
-                        else
-                        {
-                            $params = "model=scrum&programID=0&copyProjectID=0&extra=from=global";
-                        }
+                            $projectID = isset($_SESSION['project']) ? $_SESSION['project'] : 0;
+                            $projects  = $app->dbh->query("SELECT t2.id FROM " . TABLE_PROJECTPRODUCT . " AS t1 LEFT JOIN " . TABLE_PROJECT . " AS t2 ON t1.project = t2.id WHERE t1.`product` = '{$productID}' and t2.`type` = 'project' and t2.id " . helper::dbIN($app->user->view->projects) . " ORDER BY `order` desc")->fetchAll();
 
-                        break;
-                    case 'bug':
-                        $params = "productID=$productID&branch=&extras=from=global";
-                        break;
-                    case 'story':
-                        if(!$productID and $config->vision == 'lite')
-                        {
-                            $module = 'project';
-                            $params = "model=kanban";
+                            $projectIdList = array();
+                            foreach($projects as $project) $projectIdList[$project->id] = $project->id;
+                            if($projectID and !isset($projectIdList[$projectID])) $projectID = 0;
+                            if(empty($projectID)) $projectID = key($projectIdList);
+
+                            $params = "productID={$productID}&branch=0&moduleID=0&storyID=0&objectID={$projectID}&bugID=0&planID=0&todoID=0&extra=from=global";
                         }
-                        else
-                        {
-                            $params = "productID=$productID&branch=0&moduleID=0&storyID=0&objectID=0&bugID=0&planID=0&todoID=0&extra=from=global";
-                            if($config->vision == 'lite')
-                            {
-                                $projectID = isset($_SESSION['project']) ? $_SESSION['project'] : 0;
-                                $projects  = $app->dbh->query("SELECT t2.id FROM " . TABLE_PROJECTPRODUCT . " AS t1 LEFT JOIN " . TABLE_PROJECT . " AS t2 ON t1.project = t2.id WHERE t1.`product` = '{$productID}' and t2.`type` = 'project' and t2.id " . helper::dbIN($app->user->view->projects) . " ORDER BY `order` desc")->fetchAll();
+                    }
 
-                                $projectIdList = array();
-                                foreach($projects as $project) $projectIdList[$project->id] = $project->id;
-                                if($projectID and !isset($projectIdList[$projectID])) $projectID = 0;
-                                if(empty($projectID)) $projectID = key($projectIdList);
-
-                                $params = "productID={$productID}&branch=0&moduleID=0&storyID=0&objectID={$projectID}&bugID=0&planID=0&todoID=0&extra=from=global";
-                            }
-                        }
-
-                        break;
-                    case 'task':
-                        $params = "executionID=0&storyID=0&moduleID=0&taskID=0&todoID=0&extra=from=global";
-                        break;
-                    case 'testcase':
-                        $params = "productID=$productID&branch=&moduleID=0&from=&param=0&storyID=0&extras=from=global";
-                        break;
-                    case 'execution':
-                        $projectID = isset($_SESSION['project']) ? $_SESSION['project'] : 0;
-                        $params = "projectID={$projectID}&executionID=0&copyExecutionID=0&planID=0&confirm=no&productID=0&extra=from=global";
-                        break;
-                    case 'product':
-                        $params = "programID=&extra=from=global";
-                        break;
-                    case 'program':
-                        $params = "parentProgramID=0&extra=from=global";
-                        break;
-                    case 'kanbanspace':
-                        $isOnlyBody = true;
-                        $attr       = "class='iframe' data-width='75%'";
-                        break;
-                    case 'kanban':
-                        $isOnlyBody = true;
-                        $attr       = "class='iframe' data-width='75%'";
-                        break;
-                }
-
-                $html .= '<li>' . html::a(helper::createLink($module, $createMethod, $params, '', $isOnlyBody), "<i class='icon icon-$objectIcon'></i> " . $lang->createObjects[$objectType], '', "$attr data-app=''") . '</li>';
+                    break;
+                case 'task':
+                    $params = "executionID=0&storyID=0&moduleID=0&taskID=0&todoID=0&extra=from=global";
+                    break;
+                case 'testcase':
+                    $params = "productID=$productID&branch=&moduleID=0&from=&param=0&storyID=0&extras=from=global";
+                    break;
+                case 'execution':
+                    $projectID = isset($_SESSION['project']) ? $_SESSION['project'] : 0;
+                    $params = "projectID={$projectID}&executionID=0&copyExecutionID=0&planID=0&confirm=no&productID=0&extra=from=global";
+                    break;
+                case 'product':
+                    $params = "programID=&extra=from=global";
+                    break;
+                case 'program':
+                    $params = "parentProgramID=0&extra=from=global";
+                    break;
+                case 'kanbanspace':
+                    $isOnlyBody = true;
+                    $attr       = "class='iframe' data-width='75%'";
+                    break;
+                case 'kanban':
+                    $isOnlyBody = true;
+                    $attr       = "class='iframe' data-width='75%'";
+                    break;
             }
+
+            $html .= '<li>' . html::a(helper::createLink($module, $createMethod, $params, '', $isOnlyBody), "<i class='icon icon-$objectIcon'></i> " . $lang->createObjects[$objectType], '', "$attr data-app=''") . '</li>';
         }
 
         if(!$showCreateList) return '';
@@ -1048,6 +1043,27 @@ class commonModel extends model
                     if(common::hasPriv($currentModule, $method))
                     {
                         $display       = true;
+                        $currentMethod = $method;
+                        if(!isset($menu['target'])) break; // Try to jump to the method without opening a new window.
+                    }
+                }
+            }
+
+            /* Check whether the menu of this group have permissions. If yes, point to them. */
+            if($display == false and isset($lang->$group->menu))
+            {
+                foreach($lang->$group->menu as $menu)
+                {
+                    if(!isset($menu['link'])) continue;
+
+                    $linkPart = explode('|', $menu['link']);
+                    if(count($linkPart) < 3) continue;
+                    list($label, $module, $method) = $linkPart;
+
+                    if(common::hasPriv($module, $method))
+                    {
+                        $display       = true;
+                        $currentModule = $module;
                         $currentMethod = $method;
                         if(!isset($menu['target'])) break; // Try to jump to the method without opening a new window.
                     }
@@ -1792,7 +1808,7 @@ EOF;
 
         global $lang, $app;
 
-        $object = $app->dbh->query('SELECT project,type FROM ' . TABLE_EXECUTION . " WHERE `id` = '$executionID'")->fetch();
+        $object = $app->dbh->query('SELECT project,`type` FROM ' . TABLE_EXECUTION . " WHERE `id` = '$executionID'")->fetch();
         if(empty($object)) return;
 
         $executionPairs = array();
@@ -2376,11 +2392,11 @@ EOF;
      */
     public function checkField($table, $field)
     {
-        $fields   = $this->dao->query("DESC $table")->fetchAll();
+        $fields   = $this->dao->descTable($table);
         $hasField = false;
         foreach($fields as $fieldObj)
         {
-            if($field == $fieldObj->Field)
+            if($field == $fieldObj->field)
             {
                 $hasField = true;
                 break;

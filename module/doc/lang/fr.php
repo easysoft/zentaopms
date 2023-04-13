@@ -36,6 +36,8 @@ $lang->doclib->aclListB['open']    = 'Public';
 $lang->doclib->aclListB['custom']  = 'Person.';
 $lang->doclib->aclListB['private'] = 'Privée';
 
+$lang->doclib->mySpaceAclList['private'] = "Private <span class='acl-tip text-muted'>(Only creators can access it)</span>";
+
 $lang->doclib->aclList = array();
 $lang->doclib->aclList['open']    = "Public <span class='acl-tip'>(Users who can access doccan access it)</span>";
 $lang->doclib->aclList['default'] = "Default <span class='acl-tip'>(Users who can access the selected %s or users in the whiltelist can access it)</span>";
@@ -68,14 +70,14 @@ $lang->doc->project      = $lang->projectCommon;
 $lang->doc->execution    = $lang->execution->common;
 $lang->doc->lib          = 'Bibliothèque';
 $lang->doc->module       = 'Catégorie';
-$lang->doc->libAndModule = 'Library & Catalog';
+$lang->doc->libAndModule = 'Library&Catalog';
 $lang->doc->object       = 'Object';
 $lang->doc->title        = 'Nom';
 $lang->doc->digest       = 'Résumé';
 $lang->doc->comment      = 'Commentaire';
 $lang->doc->type         = 'Type';
 $lang->doc->content      = 'Texte';
-$lang->doc->keywords     = 'Tags';
+$lang->doc->keywords     = 'Keywords';
 $lang->doc->status       = 'Status';
 $lang->doc->url          = 'URL';
 $lang->doc->files        = 'Fichiers';
@@ -115,10 +117,14 @@ $lang->doc->main         = 'Main Document Library';
 $lang->doc->order        = 'Order';
 $lang->doc->doc          = 'Document';
 $lang->doc->updateOrder  = 'Update Order';
+$lang->doc->update       = 'Update';
 $lang->doc->nextStep     = 'Next';
 $lang->doc->closed       = 'Closed';
 $lang->doc->saveDraft    = 'Save Draft';
 $lang->doc->defaultSave  = 'Default Save: ';
+$lang->doc->position     = 'Position';
+$lang->doc->person       = 'Person';
+$lang->doc->team         = 'Team';
 
 $lang->doc->moduleDoc     = 'Par Module';
 $lang->doc->searchDoc     = 'Rechercher';
@@ -135,13 +141,23 @@ $lang->doc->myDoc         = 'Mes Documents';
 $lang->doc->myView        = 'Recently Viewed';
 $lang->doc->myCollection  = 'Mes Favoris';
 $lang->doc->myCreation    = 'Created By';
+$lang->doc->myLib         = 'My Library';
 $lang->doc->tableContents = 'Catalog';
 $lang->doc->addCatalog    = 'Add Catalog';
 $lang->doc->editCatalog   = 'Edit Catalog';
 $lang->doc->deleteCatalog = 'Delete Catalog';
+$lang->doc->docStatistic  = 'Statistic';
+$lang->doc->docCreated    = 'Created Documents';
+$lang->doc->docEdited     = 'Edited Documents';
+$lang->doc->docViews      = 'Page Views';
+$lang->doc->docCollects   = 'Collection';
+$lang->doc->todayUpdated  = "Today's update";
+$lang->doc->daysUpdated   = 'Updated %s days ago';
+$lang->doc->monthsUpdated = 'Updated %s months ago';
+$lang->doc->yearsUpdated  = 'Updated %s years ago';
 
 /* Methods list */
-$lang->doc->index            = 'Accueil Documents';
+$lang->doc->index            = 'Dashboard';
 $lang->doc->createAB         = 'Create';
 $lang->doc->create           = 'Ajouter Document';
 $lang->doc->edit             = 'Editer Document';
@@ -164,8 +180,8 @@ $lang->doc->cancelCollection = 'Retirer des Favoris';
 $lang->doc->deleteFile       = 'Supprimer Fichier';
 $lang->doc->menuTitle        = 'Menu';
 $lang->doc->api              = 'API';
-
-$lang->doc->collectAction = 'Add Favorite';
+$lang->doc->displaySetting   = 'Display Settings';
+$lang->doc->collectAction    = 'Add Favorite';
 
 $lang->doc->libName           = 'Bibliothèque de Documents';
 $lang->doc->libType           = 'Catégorie';
@@ -187,11 +203,12 @@ $lang->doc->titlePlaceholder  = 'Veuillez saisir le titre';
 $lang->doc->confirm           = 'Confirm';
 $lang->doc->docSummary        = 'Total: <strong>%s</strong>.';
 $lang->doc->docCheckedSummary = 'Seleted: <strong>%total%</strong>.';
+$lang->doc->showDoc           = 'Whether to display documents';
 
 global $config;
 /* Query condition list. */
 $lang->doc->allProduct    = 'Tous les' . $lang->productCommon . 's';
-$lang->doc->allExecutions = 'Tous les' . $lang->executionCommon . 's';
+$lang->doc->allExecutions = 'Tous les' . $lang->execution->common . 's';
 $lang->doc->allProjects   = 'All' . $lang->projectCommon . 's';
 
 $lang->doc->libTypeList['product']   = $lang->productCommon . ' Library';
@@ -216,6 +233,18 @@ $lang->doc->statusList['draft']  = "Draft";
 $lang->doc->aclList['open']    = "Public <span class='text-gray'>(Access with library permissions)</span>";
 $lang->doc->aclList['private'] = "Privé <span class='text-gray'>(Only creators and whitelist users can access)</span>";
 
+$lang->doc->space = 'Space';
+$lang->doc->spaceList['mine']    = 'My Space';
+$lang->doc->spaceList['product'] = $lang->productCommon . ' Space';
+$lang->doc->spaceList['project'] = $lang->projectCommon . ' Space';
+$lang->doc->spaceList['api']     = 'API Space';
+$lang->doc->spaceList['custom']  = 'Team Space';
+
+$lang->doc->apiType = 'API Type';
+$lang->doc->apiTypeList['product'] = $lang->productCommon . ' API';
+$lang->doc->apiTypeList['project'] = $lang->projectCommon . ' API';
+$lang->doc->apiTypeList['nolink']  = 'No Link API';
+
 $lang->doc->typeList['html']     = 'Html';
 $lang->doc->typeList['markdown'] = 'Markdown';
 $lang->doc->typeList['url']      = 'URL';
@@ -224,14 +253,13 @@ $lang->doc->typeList['ppt']      = 'PPT';
 $lang->doc->typeList['excel']    = 'Excel';
 
 $lang->doc->createList['html']     = 'Create Document';
-$lang->doc->createList['api']      = 'Create API';
 $lang->doc->createList['template'] = 'Create By Template';
 $lang->doc->createList['word']     = 'Word';
 $lang->doc->createList['ppt']      = 'PPT';
 $lang->doc->createList['excel']    = 'Excel';
 
-$lang->doc->types['text'] = 'Text';
-$lang->doc->types['url']  = 'URL';
+$lang->doc->types['doc'] = 'WIKI';
+$lang->doc->types['api'] = 'API';
 
 $lang->doc->contentTypeList['html']     = 'HTML';
 $lang->doc->contentTypeList['markdown'] = 'MarkDown';
@@ -253,8 +281,8 @@ $lang->doc->fastMenuIconList['collectedbyme'] = 'icon-folder-star';
 $lang->doc->customObjectLibs['files']       = 'Montrer Bibliothèque des Pièces jointes';
 $lang->doc->customObjectLibs['customFiles'] = 'Montrer Library Personnelle';
 
-$lang->doc->orderLib = 'Paramétrage Rang';
-$lang->doc->customShowLibs = 'Paramétrage Affichage';
+$lang->doc->orderLib                       = 'Paramétrage Rang';
+$lang->doc->customShowLibs                 = 'Paramétrage Affichage';
 $lang->doc->customShowLibsList['zero']     = 'Montrer Bibliothèques Vides';
 $lang->doc->customShowLibsList['children'] = 'Montrer sous-catégorie de Documents';
 $lang->doc->customShowLibsList['unclosed'] = "Montrer {$lang->executionCommon}s actifs seulement";
@@ -269,6 +297,7 @@ $lang->doc->confirmDelete        = "Voulez-vous supprimer ce document ?";
 $lang->doc->confirmDeleteLib     = "Voulez-vous supprimer cette Bibliothèque ?";
 $lang->doc->confirmDeleteBook    = "Do you want to delete this book?";
 $lang->doc->confirmDeleteChapter = "Do you want to delete this chapter?";
+$lang->doc->confirmOtherEditing  = "This document is currently editing. Continuing to edit will overwrite the content edited by others. Do you want to continue?";
 $lang->doc->errorEditSystemDoc   = "Vous n'avez pas besoin de changer de système de Bibliothèque.";
 $lang->doc->errorEmptyProduct    = "Aucun {$lang->productCommon}. Il ne peut pas être créé.";
 $lang->doc->errorEmptyProject    = "Aucun {$lang->executionCommon}. Il ne peut pas être créé.";
@@ -328,3 +357,6 @@ $lang->doc->libDropdown['delModule']     = 'Delete Directory';
 
 $lang->doc->featureBar['tableContents']['all']   = 'All';
 $lang->doc->featureBar['tableContents']['draft'] = 'Draft';
+
+$lang->doc->showDocList[1] = 'Yes';
+$lang->doc->showDocList[0] = 'No';

@@ -257,7 +257,7 @@ class productplanModel extends model
     {
         $this->app->loadLang('branch');
 
-        $date  = date('Y-m-d');
+        $date = date('Y-m-d');
 
         $branchQuery = '';
         if($branch !== '' and $branch != 'all')
@@ -523,7 +523,7 @@ class productplanModel extends model
             ->setIF($this->post->future || empty($_POST['end']), 'end', $this->config->productplan->future)
             ->setDefault('createdBy', $this->app->user->account)
             ->setDefault('createdDate', helper::now())
-            ->setDefault('branch', 0)
+            ->setDefault('branch,order', 0)
             ->join('branch', ',')
             ->remove('delta,uid,future')
             ->get();

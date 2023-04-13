@@ -595,7 +595,7 @@ class baseHelper
      */
     static public function isZeroDate($date)
     {
-        return (empty($date) or substr($date, 0, 4) == '0000');
+        return (empty($date) or substr($date, 0, 4) <= '1970');
     }
 
     /**
@@ -1008,7 +1008,7 @@ if (!function_exists('getallheaders')) {
     function getallheaders()
     {
         $headers = array();
-        foreach ($_SERVER as $name => $value) 
+        foreach ($_SERVER as $name => $value)
         {
             if (substr($name, 0, 5) == 'HTTP_')
             {

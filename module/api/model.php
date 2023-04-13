@@ -168,6 +168,7 @@ class apiModel extends model
 
         $now  = helper::now();
         $data = fixer::input('post')
+            ->trim('name')
             ->skipSpecial('attribute')
             ->add('lib', $old->lib)
             ->add('editedBy', $this->app->user->account)
@@ -414,10 +415,7 @@ class apiModel extends model
                 foreach($rel->snap['modules'] as $module)
                 {
                     $tmp = explode(',', $module['path']);
-                    if(in_array($moduleID, $tmp))
-                    {
-                        $sub[] = $module['id'];
-                    }
+                    if(in_array($moduleID, $tmp)) $sub[] = $module['id'];
                 }
                 if($sub) $where .= 'and module in (' . implode(',', $sub) . ')';
             }
@@ -434,9 +432,7 @@ class apiModel extends model
             {
                 $where = 'lib = ' . $libID;
             }
-            $list = $this->dao->select('*')
-                ->from(TABLE_API)
-                ->where($where)
+            $list = $this->dao->select('*')->from(TABLE_API)->where($where)
                 ->andWhere('deleted')->eq(0)
                 ->page($pager)
                 ->fetchAll();
@@ -780,11 +776,13 @@ class apiModel extends model
 
         /* Insert doclib. */
         $lib = new stdclass();
-        $lib->type    = 'api';
-        $lib->name    = $name;
-        $lib->baseUrl = $baseUrl;
-        $lib->acl     = 'open';
-        $lib->users   = ',' . $currentAccount . ',';
+        $lib->type      = 'api';
+        $lib->name      = $name;
+        $lib->baseUrl   = $baseUrl;
+        $lib->acl       = 'open';
+        $lib->users     = ',' . $currentAccount . ',';
+        $lib->addedBy   = $currentAccount;
+        $lib->addedDate = helper::now();
         $this->dao->insert(TABLE_DOCLIB)->data($lib)->autoCheck()
             ->batchCheck($this->config->api->createlib->requiredFields, 'notempty')
             ->check('name', 'unique', "`type` = 'api'")
@@ -994,6 +992,7 @@ class apiModel extends model
             ->andWhere('t1.vision')->eq($this->config->vision)
             ->andWhere('t1.deleted')->eq(0)
             ->andWhere('t2.id')->in(array_keys($libs))
+            ->orderBy('id_desc')
             ->fetchAll('id');
 
         foreach($products as $id => $product)
@@ -1015,7 +1014,7 @@ class apiModel extends model
             ->andWhere('t1.deleted')->eq(0)
             ->beginIF(!$this->app->user->admin)->andWhere('t1.id')->in($this->app->user->view->projects)->fi()
             ->andWhere('t2.id')->in(array_keys($libs))
-            ->orderBy('t1.hasProduct_asc')
+            ->orderBy('t1.hasProduct_asc, id_desc')
             ->fetchAll('id');
 
         foreach($projects as $id => $project)
@@ -1034,34 +1033,28 @@ class apiModel extends model
     }
 
     /**
-     * Get lib tree.
+     * Get priv Apis..
      *
-     * @param  int    $libID
-     * @param  int    $libs
-     * @param  int    $moduleID
-     * @param  int    $objectID
-     * @param  string $browseType bySearch
+     * @param  string $mode all
      * @access public
      * @return array
      */
-    public function getLibTree($libID, $libs, $moduleID, $objectID = 0, $browseType = '')
+    public function getPrivApis($mode = '')
     {
-        $libTree  = $this->loadModel('doc')->getLibTree($libID, $libs, 'api', $moduleID, $objectID, $browseType);
-        $releases = $this->getReleaseByQuery(array_keys($libs), null, 'lib_asc, id_desc');
+        $libs = $this->dao->select('*')->from(TABLE_DOCLIB)
+            ->where('type')->eq('api')
+            ->andWhere('vision')->eq($this->config->vision)
+            ->fetchAll('id');
 
-        foreach($libTree as &$tree)
+        $this->loadModel('doc');
+        foreach($libs as $libID => $lib)
         {
-            $tree->versions    = array();
-            foreach($releases as $index => $release)
-            {
-                if($tree->id == $release->lib)
-                {
-                    $tree->versions[] = $release;
-                    unset($releases[$index]);
-                }
-            }
+            if(!$this->doc->checkPrivLib($lib)) unset($libs[$libID]);
         }
 
-        return $libTree;
+        return $this->dao->select('id')->from(TABLE_API)
+            ->where('lib')->in(array_keys($libs))
+            ->beginIF($mode != 'all')->andWhere('deleted')->eq(0)->fi()
+            ->fetchAll('id');
     }
 }

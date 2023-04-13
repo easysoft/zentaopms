@@ -186,8 +186,12 @@ $lang->my->featureBar['contribute']['requirement']['reviewedBy'] = '由我评审
 $lang->my->featureBar['contribute']['requirement']['closedBy']   = '由我关闭';
 $lang->my->featureBar['contribute']['requirement']['assignedBy'] = '由我指派';
 
+$lang->my->featureBar['contribute']['bug']['openedBy']   = '由我创建';
+$lang->my->featureBar['contribute']['bug']['resolvedBy'] = '由我解决';
+$lang->my->featureBar['contribute']['bug']['closedBy']   = '由我关闭';
+$lang->my->featureBar['contribute']['bug']['assignedBy'] = '由我指派';
+
 $lang->my->featureBar['contribute']['story'] = $lang->my->featureBar['contribute']['requirement'];
-$lang->my->featureBar['contribute']['bug']   = $lang->my->featureBar['contribute']['requirement'];
 
 $lang->my->featureBar['contribute']['testcase']['openedbyme'] = '我建的用例';
 

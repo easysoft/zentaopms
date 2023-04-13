@@ -36,6 +36,8 @@ $lang->doclib->aclListB['open']    = '公开';
 $lang->doclib->aclListB['custom']  = '自定义';
 $lang->doclib->aclListB['private'] = '私有';
 
+$lang->doclib->mySpaceAclList['private'] = "私有<span class='acl-tip text-muted'>（仅创建者可访问）</span>";
+
 $lang->doclib->aclList = array();
 $lang->doclib->aclList['open']    = "公开 <span class='acl-tip'>（有文档视图权限即可访问）</span>";
 $lang->doclib->aclList['default'] = "默认 <span class='acl-tip'>（有所选%s访问权限用户可以访问）</span>";
@@ -81,7 +83,7 @@ $lang->doc->url          = '文档URL';
 $lang->doc->files        = '附件';
 $lang->doc->addedBy      = '由谁添加';
 $lang->doc->addedByAB    = '创建者';
-$lang->doc->addedDate    = '创建时间';
+$lang->doc->addedDate    = '创建日期';
 $lang->doc->editedBy     = '修改者';
 $lang->doc->editedDate   = '修改日期';
 $lang->doc->lastEditedBy = '最后更新者';
@@ -115,17 +117,21 @@ $lang->doc->main         = '文档主库';
 $lang->doc->order        = '排序';
 $lang->doc->doc          = '文档';
 $lang->doc->updateOrder  = '更新排序';
+$lang->doc->update       = '更新';
 $lang->doc->nextStep     = '下一步';
 $lang->doc->closed       = '已关闭';
 $lang->doc->saveDraft    = '存为草稿';
 $lang->doc->defaultSave  = '默认存入：';
+$lang->doc->position     = '所在位置';
+$lang->doc->person       = '个人';
+$lang->doc->team         = '团队';
 
 $lang->doc->moduleDoc     = '按模块浏览';
 $lang->doc->searchDoc     = '搜索';
 $lang->doc->fast          = '快速访问';
-$lang->doc->allDoc        = '所有文档';
-$lang->doc->openedByMe    = '由我创建';
-$lang->doc->editedByMe    = '由我编辑';
+$lang->doc->allDoc        = '全部文档';
+$lang->doc->openedByMe    = '我的创建';
+$lang->doc->editedByMe    = '我的编辑';
 $lang->doc->orderByOpen   = '最近添加';
 $lang->doc->orderByEdit   = '最近更新';
 $lang->doc->orderByVisit  = '最近访问';
@@ -135,13 +141,23 @@ $lang->doc->myDoc         = '我的文档';
 $lang->doc->myView        = '最近浏览';
 $lang->doc->myCollection  = '我的收藏';
 $lang->doc->myCreation    = '我创建的';
+$lang->doc->myLib         = '我的个人库';
 $lang->doc->tableContents = '目录';
 $lang->doc->addCatalog    = '添加目录';
 $lang->doc->editCatalog   = '编辑目录';
 $lang->doc->deleteCatalog = '删除目录';
+$lang->doc->docStatistic  = '文档统计';
+$lang->doc->docCreated    = '创建的文档';
+$lang->doc->docEdited     = '编辑的文档';
+$lang->doc->docViews      = '被浏览量';
+$lang->doc->docCollects   = '被收藏量';
+$lang->doc->todayUpdated  = '今天更新';
+$lang->doc->daysUpdated   = '%s天前更新';
+$lang->doc->monthsUpdated = '%s月前更新';
+$lang->doc->yearsUpdated  = '%s年前更新';
 
 /* 方法列表。*/
-$lang->doc->index            = '文档主页';
+$lang->doc->index            = '仪表盘';
 $lang->doc->createAB         = '创建';
 $lang->doc->create           = '创建文档';
 $lang->doc->edit             = '编辑文档';
@@ -164,8 +180,8 @@ $lang->doc->cancelCollection = '取消收藏';
 $lang->doc->deleteFile       = '删除附件';
 $lang->doc->menuTitle        = '目录';
 $lang->doc->api              = '接口';
-
-$lang->doc->collectAction = '收藏文档';
+$lang->doc->displaySetting   = '显示设置';
+$lang->doc->collectAction    = '收藏文档';
 
 $lang->doc->libName           = '库名称';
 $lang->doc->libType           = '库类型';
@@ -187,11 +203,12 @@ $lang->doc->titlePlaceholder  = '请输入标题';
 $lang->doc->confirm           = '确认';
 $lang->doc->docSummary        = '本页共 <strong>%s</strong> 个文档。';
 $lang->doc->docCheckedSummary = '共选中 <strong>%total%</strong> 个文档。';
+$lang->doc->showDoc           = '是否显示文档';
 
 global $config;
 /* 查询条件列表 */
 $lang->doc->allProduct    = '所有' . $lang->productCommon;
-$lang->doc->allExecutions = '所有' . $lang->executionCommon;
+$lang->doc->allExecutions = '所有' . $lang->execution->common;
 $lang->doc->allProjects   = '所有' . $lang->projectCommon;
 
 $lang->doc->libTypeList['product']   = $lang->productCommon . '文档库';
@@ -216,6 +233,18 @@ $lang->doc->statusList['draft']  = "草稿";
 $lang->doc->aclList['open']    = "公开<span class='text-gray'>（有所属库权限即可访问）</span>";
 $lang->doc->aclList['private'] = "私有<span class='text-gray'>（仅创建者和白名单用户可访问）</span>";
 
+$lang->doc->space = '所属空间';
+$lang->doc->spaceList['mine']    = '我的空间';
+$lang->doc->spaceList['product'] = $lang->productCommon . '空间';
+$lang->doc->spaceList['project'] = $lang->projectCommon . '空间';
+$lang->doc->spaceList['api']     = '接口空间';
+$lang->doc->spaceList['custom']  = '团队空间';
+
+$lang->doc->apiType = '接口类型';
+$lang->doc->apiTypeList['product'] = $lang->productCommon . '接口';
+$lang->doc->apiTypeList['project'] = $lang->projectCommon . '接口';
+$lang->doc->apiTypeList['nolink']  = '无关联接口';
+
 $lang->doc->typeList['html']     = '富文本';
 $lang->doc->typeList['markdown'] = 'Markdown';
 $lang->doc->typeList['url']      = '链接';
@@ -229,8 +258,8 @@ $lang->doc->createList['word']     = 'Word';
 $lang->doc->createList['ppt']      = 'PPT';
 $lang->doc->createList['excel']    = 'Excel';
 
-$lang->doc->types['text'] = '文档';
-$lang->doc->types['url']  = '链接';
+$lang->doc->types['doc'] = 'WIKI文档';
+$lang->doc->types['api'] = '接口文档';
 
 $lang->doc->contentTypeList['html']     = 'HTML';
 $lang->doc->contentTypeList['markdown'] = 'MarkDown';
@@ -268,6 +297,7 @@ $lang->doc->confirmDelete        = "您确定删除该文档吗？";
 $lang->doc->confirmDeleteLib     = "您确定删除该文档库吗？";
 $lang->doc->confirmDeleteBook    = "您确定删除该手册吗？";
 $lang->doc->confirmDeleteChapter = "您确定删除该章节吗？";
+$lang->doc->confirmOtherEditing  = "该文档正在编辑中，如果继续编辑将覆盖他人编辑内容，是否继续？";
 $lang->doc->errorEditSystemDoc   = "系统文档库无需修改。";
 $lang->doc->errorEmptyProduct    = "没有{$lang->productCommon}，无法创建文档";
 $lang->doc->errorEmptyProject    = "没有{$lang->executionCommon}，无法创建文档";
@@ -327,3 +357,6 @@ $lang->doc->libDropdown['delModule']     = '删除目录';
 
 $lang->doc->featureBar['tableContents']['all']   = '全部';
 $lang->doc->featureBar['tableContents']['draft'] = '草稿';
+
+$lang->doc->showDocList[1] = '是';
+$lang->doc->showDocList[0] = '否';

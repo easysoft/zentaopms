@@ -230,6 +230,7 @@ class storyModel extends model
             ->setDefault('plan,verify,notifyEmail', '')
             ->setDefault('openedBy', $this->app->user->account)
             ->setDefault('openedDate', $now)
+            ->setDefault('estimate', 0)
             ->setIF($this->post->assignedTo, 'assignedDate', $now)
             ->setIF($this->post->plan > 0, 'stage', 'planned')
             ->setIF($this->post->estimate, 'estimate', (float)$this->post->estimate)

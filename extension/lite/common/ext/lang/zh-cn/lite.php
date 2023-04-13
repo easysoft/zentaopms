@@ -83,7 +83,7 @@ $lang->kanbanProject->menu            = new stdclass();
 $lang->kanbanProject->menu->index     = array('link' => "{$lang->dashboard}|project|index|project=%s");
 $lang->kanbanProject->menu->execution = array('link' => "$lang->executionKanban|project|execution|status=all&projectID=%s", 'subModule' => 'execution,task');
 $lang->kanbanProject->menu->story     = array('link' => "{$lang->project->target}|projectstory|story|projectID=%s", 'subModule' => 'projectstory,tree,story', 'alias' => 'story,track');
-$lang->kanbanProject->menu->doc       = array('link' => "{$lang->doc->common}|doc|tableContents|type=project&objectID=%s", 'subModule' => 'doc');
+$lang->kanbanProject->menu->doc       = array('link' => "{$lang->doc->common}|doc|projectSpace|objectID=%s", 'subModule' => 'doc');
 $lang->kanbanProject->menu->dynamic   = array('link' => "$lang->dynamic|project|dynamic|project=%s");
 $lang->kanbanProject->menu->settings  = array('link' => "$lang->settings|project|view|project=%s", 'subModule' => 'stakeholder', 'alias' => 'edit,manageproducts,group,managemembers,manageview,managepriv,whitelist,addwhitelist,team');
 
@@ -117,8 +117,8 @@ $lang->SRCommon = '目标';
 /* Doc menu. */
 $lang->doc->menu            = new stdclass();
 $lang->doc->menu->dashboard = array('link' => "{$lang->dashboard}|doc|index");
-$lang->doc->menu->my        = array('link' => "{$lang->doc->mySpace}|doc|browse|browseTyp=openedbyme", 'alias' => 'my');
-$lang->doc->menu->project   = array('link' => "{$lang->doc->projectSpace}|doc|tableContents|type=project", 'alias' => 'showfiles,project');
+$lang->doc->menu->my        = array('link' => "{$lang->doc->mySpace}|doc|mySpace|type=mine", 'alias' => 'my');
+$lang->doc->menu->project   = array('link' => "{$lang->doc->projectSpace}|doc|projectSpace", 'alias' => 'showfiles,project');
 $lang->doc->menu->custom    = array('link' => "{$lang->doc->teamSpace}|doc|tableContents|type=custom", 'alias' => 'custom');
 
 $lang->doc->dividerMenu = ',project,';

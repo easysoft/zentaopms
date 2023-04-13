@@ -325,7 +325,8 @@ class releaseModel extends model
         $oldRelease = $this->getById($releaseID);
 
         $release = fixer::input('post')->stripTags($this->config->release->editor->edit['id'], $this->config->allowedTags)
-            ->setDefault('build',  '')
+            ->setDefault('build', '')
+            ->setIF($this->post->build == false, 'build', 0)
             ->setDefault('mailto', '')
             ->setDefault('deleteFiles', array())
             ->join('build', ',')

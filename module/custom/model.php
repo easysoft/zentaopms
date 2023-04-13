@@ -1001,7 +1001,7 @@ class customModel extends model
         $disabledFeatures = rtrim($disabledFeatures, ',');
         $this->loadModel('setting')->setItem('system.common.disabledFeatures', $disabledFeatures);
 
-        $URAndSR = strpos(",$disabledFeatures,", ',productUR,') === false ? 1 : 0;
+        $URAndSR = strpos(",$disabledFeatures,", ',productUR,') === false ? '1' : '0';
         $this->setting->setItem('system.custom.URAndSR', $URAndSR);
 
         $this->processMeasrecordCron();

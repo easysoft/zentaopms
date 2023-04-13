@@ -100,7 +100,7 @@ class userModel extends model
         unset($this->config->user->moreLink);
 
         $users = $this->dao->select($fields)->from(TABLE_USER)
-            ->where('1')
+            ->where('1=1')
             ->beginIF(strpos($params, 'nodeleted') !== false or empty($this->config->user->showDeleted))->andWhere('deleted')->eq('0')->fi()
             ->beginIF(strpos($params, 'all') === false)->andWhere('type')->eq($type)->fi()
             ->beginIF($accounts)->andWhere('account')->in($accounts)->fi()
@@ -373,6 +373,7 @@ class userModel extends model
                     $data          = new stdclass();
                     $data->account = $this->post->account;
                     $data->group   = $groupID;
+                    $data->project = '';
                     $this->dao->insert(TABLE_USERGROUP)->data($data)->exec();
                 }
             }
@@ -515,6 +516,7 @@ class userModel extends model
                     $groups = new stdClass();
                     $groups->account = $user->account;
                     $groups->group   = $group;
+                    $groups->project = '';
                     $this->dao->insert(TABLE_USERGROUP)->data($groups)->exec();
                 }
             }
@@ -641,6 +643,7 @@ class userModel extends model
                     $data          = new stdclass();
                     $data->account = $this->post->account;
                     $data->group   = $groupID;
+                    $data->project = '';
                     $this->dao->replace(TABLE_USERGROUP)->data($data)->exec();
                 }
             }

@@ -660,7 +660,7 @@ class adminModel extends model
     public function genDateUsed()
     {
         $firstUseDate = $this->dao->select('date')->from(TABLE_ACTION)
-            ->where('date')->gt('0000-00-00')
+            ->where('date')->gt('1970-01-01')
             ->andWhere('actor')->eq($this->app->user->account)
             ->orderBy('date_asc')
             ->limit('1')

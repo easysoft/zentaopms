@@ -141,17 +141,16 @@ $(function()
 
     $('.outline').height($('.article-content').height());
 
-    $('#content').on('click', '.outline .outline-toggle i.icon-angle-right', function()
+    $('body').on('click', '.outline-toggle i.icon-angle-right', function()
     {
-        $('.article-content').css('width', '85%');
         $('.outline').css({'min-width' : '180px', 'border-left' : '2px solid #efefef'});
         $(this).removeClass('icon-angle-right').addClass('icon-angle-left').css('left', '-9px');
         $('.outline-content').show();
         if($('#sidebar>.cell').is(':visible')) $('#sidebar .icon.icon-angle-right').trigger("click");
-    }).on('click', '.outline .outline-toggle i.icon-angle-left', function()
+    }).on('click', '.outline-toggle i.icon-angle-left', function()
     {
-        $('.article-content').width('100%');
         $(this).removeClass('icon-angle-left').addClass('icon-angle-right');
+        $('.outline').css({'min-width' : '180px', 'border-left' : 'none'});
         $('.outline-content').hide();
     }).on('click', '#outline li', function(e)
     {
@@ -187,8 +186,9 @@ $(function()
                 simplemde.value(String($('#markdownContent').val()));
                 simplemde.togglePreview();
             }
+            $('#docExport').attr('href', createLink('doc', exportMethod, 'libID=' + libID + '&moduleID=0&docID=' + docID + '&version=' + $('#content .doc-title .version').data('version')));
         });
-    });
+    })
 
     $('#sidebar .icon.icon-angle-right').click(function()
     {
@@ -199,4 +199,31 @@ $(function()
     })
 
     $('.outline .outline-toggle i.icon-angle-right').trigger("click");
+    $('#history').append('<a id="closeBtn" href="###" class="btn btn-link"><i class="icon icon-close"></i></a>');
+    $('#hisTrigger').on('click', function()
+    {
+        var $history = $('#history');
+        var $icon = $(this);
+        if($history.hasClass('hidden'))
+        {
+            $history.removeClass('hidden');
+            $('#outlineMenu').addClass('hidden');
+            $icon.addClass('text-primary');
+        }
+        else
+        {
+            $history.addClass('hidden');
+            $('#outlineMenu').removeClass('hidden');
+            $icon.removeClass('text-primary');
+        }
+    })
+
+    $('#history').find('.btn.pull-right').removeClass('pull-right');
+    $('#closeBtn').on('click', function()
+    {
+        $('#history').addClass('hidden');
+        $('#outlineMenu').removeClass('hidden');
+        $('#hisTrigger').removeClass('text-primary');
+    })
+    $('#history').find('.btn.pull-right').removeClass('pull-right');
 })

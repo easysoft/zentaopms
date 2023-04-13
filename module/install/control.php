@@ -264,7 +264,7 @@ class install extends control
             $this->setting->setItem('system.common.global.flow', $this->post->flow);
             $this->setting->setItem('system.common.safe.mode', '1');
             $this->setting->setItem('system.common.safe.changeWeak', '1');
-            $this->setting->setItem('system.common.global.cron', 1);
+            $this->setting->setItem('system.common.global.cron', '1');
 
             $httpType = (isset($_SERVER["HTTPS"]) && $_SERVER["HTTPS"] == 'on') ? 'https' : 'http';
             if(isset($_SERVER['HTTP_X_FORWARDED_PROTO']) and strtolower($_SERVER['HTTP_X_FORWARDED_PROTO']) == 'https') $httpType = 'https';

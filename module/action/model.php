@@ -1058,7 +1058,7 @@ class actionModel extends model
         extract($beginAndEnd);
 
         /* Build has priv condition. */
-        $condition  = 1;
+        $condition  = '1=1';
         $executions = array();
         if(!$this->app->user->admin)
         {
@@ -1133,6 +1133,12 @@ class actionModel extends model
 
         $noMultipleExecutions = $this->dao->select('id')->from(TABLE_PROJECT)->where('multiple')->eq(0)->andWhere('type')->in('sprint,kanban')->fetchPairs('id', 'id');
 
+        $condition = "(`objectType` IN ('doc', 'doclib') OR ($condition)) AND `objectType` NOT IN ('program', 'effort', 'execution')";
+        if($noMultipleExecutions) $condition .= " OR (`objectID` NOT " . helper::dbIN($noMultipleExecutions) . " AND `objectType` = 'execution')";
+        $condition .= " OR (`objectID` in ($programCondition) AND `objectType` = 'program')";
+        $condition .= " OR (`objectID` in ($efforts) AND `objectType` = 'effort')";
+        $condition  = "($condition)";
+
         /* Get actions. */
         $actions = $this->dao->select('*')->from(TABLE_ACTION)
             ->where('objectType')->notIN($this->config->action->ignoreObjectType4Dynamic)
@@ -1145,7 +1151,7 @@ class actionModel extends model
             ->beginIF(is_numeric($productID))->andWhere('product')->like("%,$productID,%")->fi()
             ->andWhere()
             ->markLeft(1)
-            ->where(1)
+            ->where('1=1')
             ->beginIF(is_numeric($projectID))->andWhere('project')->eq($projectID)->fi()
             ->beginIF(!empty($executions))->andWhere('execution')->in(array_keys($executions))->fi()
             ->beginIF(is_numeric($executionID))->andWhere('execution')->eq($executionID)->fi()
@@ -1156,13 +1162,10 @@ class actionModel extends model
             ->beginIF($productID == 'notzero')->andWhere('product')->gt(0)->andWhere('product')->notlike('%,0,%')->fi()
             ->beginIF($projectID == 'notzero')->andWhere('project')->gt(0)->fi()
             ->beginIF($executionID == 'notzero')->andWhere('execution')->gt(0)->fi()
-            ->beginIF($productID == 'all' or $projectID == 'all' or $executionID == 'all')->andWhere("IF((objectType!= 'doc' && objectType!= 'doclib'), ($condition), '1=1')")->fi()
-            ->beginIF($noMultipleExecutions)->andWhere("IF(`objectType` = 'execution', `objectID` NOT " . helper::dbIN($noMultipleExecutions) . ", '1=1')")->fi()
+            ->andWhere($condition)
             ->beginIF($actionCondition)->andWhere("($actionCondition)")->fi()
             /* Filter out client login/logout actions. */
             ->andWhere('action')->notin('disconnectxuanxuan,reconnectxuanxuan,loginxuanxuan,logoutxuanxuan,editmr,removemr')
-            ->andWhere("IF((objectType = 'program'), (objectID in ($programCondition)), '1=1')")
-            ->andWhere("IF((objectType = 'effort'), (objectID in ($efforts)), '1=1')")
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll();
@@ -1318,9 +1321,15 @@ class actionModel extends model
 
         $shadowProducts   = $this->dao->select('id')->from(TABLE_PRODUCT)->where('shadow')->eq(1)->fetchPairs();
         $projectMultiples = $this->dao->select('id,type,multiple')->from(TABLE_PROJECT)->where('id')->in($projectIdList)->fetchAll('id');
+        $docList          = $this->loadModel('doc')->getPrivDocs('', 0, 'all');
+        $apiList          = $this->loadModel('api')->getPrivApis();
+        $docLibList       = $this->doc->getLibs('hasApi');
 
         foreach($actions as $i => $action)
         {
+            if($action->objectType == 'doc' and !isset($docList[$action->objectID])) unset($actions[$i]);
+            if($action->objectType == 'api' and !isset($apiList[$action->objectID])) unset($actions[$i]);
+            if($action->objectType == 'doclib' and !isset($docLibList[$action->objectID])) unset($actions[$i]);
             if($action->objectType == 'product' AND isset($shadowProducts[$action->objectID]))
             {
                 unset($actions[$i]);
@@ -1359,6 +1368,16 @@ class actionModel extends model
             elseif($action->objectType == 'mr' and $action->action == 'deleted')
             {
                 $action->objectName = $action->extra;
+            }
+            elseif($action->objectType == 'pivot')
+            {
+                $pivotNames = json_decode($action->objectName, true);
+                $action->objectName = zget($pivotNames, $this->app->getClientLang(), '');
+                if(empty($action->objectName))
+                {
+                    $pivotNames = array_filter($pivotNames);
+                    $action->objectName = reset($pivotNames);
+                }
             }
 
             $projectID = isset($relatedProjects[$action->objectType][$action->objectID]) ? $relatedProjects[$action->objectType][$action->objectID] : 0;
@@ -1557,6 +1576,8 @@ class actionModel extends model
      */
     public function setObjectLink($action, $deptUsers, $shadowProducts, $project = null)
     {
+        $this->app->loadConfig('doc');
+
         $action->objectLink  = '';
         $action->objectLabel = zget($this->lang->action->objectTypes, $action->objectLabel);
 
@@ -1686,9 +1707,10 @@ class actionModel extends model
                     else
                     {
                         $method = 'tablecontents';
-                        if($docLib->type == 'product') $method = 'productspace';
-                        if(in_array($docLib->type, array('project', 'execution'))) $method = 'projectspace';
-                        $params = $method == 'tablecontents' ? sprintf($vars, $docLib->type, $docLib->objectID, $action->objectID, $appendLib) : "objectID={$docLib->objectID}&libID={$action->objectID}";
+                        if(isset($this->config->doc->spaceMethod[$docLib->type])) $method = $this->config->doc->spaceMethod[$docLib->type];
+                        if($method == 'myspace') $params = "type=mine&libID={$action->objectID}";
+                        if($method == 'tablecontents') $params = sprintf($vars, $docLib->type, $docLib->objectID, $action->objectID, $appendLib);
+                        if(!in_array($method, array('myspace', 'tablecontents'))) $params = "objectID={$docLib->objectID}&libID={$action->objectID}";
                         $action->objectLink = helper::createLink('doc', $method, $params);
                     }
                 }

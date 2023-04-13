@@ -12,20 +12,48 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/kindeditor.html.php';?>
+<?php js::set('treeData', $libTree);?>
+<?php js::set('docID', $docID);?>
+<?php js::set('linkParams', "objectID=$objectID&%s");?>
+<?php js::set('docLang', $lang->doc);?>
+<?php js::set('exportMethod', $exportMethod);?>
+<?php js::set('libID', $libID);?>
 <?php if($app->tab == 'execution'):;?>
 <style>.panel-body{min-height: 180px}</style>
 <?php endif;?>
-<div class="cell<?php if($type == 'bySearch') echo ' show';?>" id="queryBox" data-module=<?php echo $type . 'Doc';?>></div>
-<div class="fade main-row split-row" id="mainRow">
+<div id="mainMenu" class="clearfix">
+  <div id="leftBar" class="btn-toolbar pull-left">
+  <?php echo $objectDropdown;?>
+  <?php echo html::backButton("<i class='icon icon-back icon-sm'></i> " . $lang->goback, "id='backBtn'", 'btn btn-link')?>
+  </div>
+  <div id="crumbs" class="crumbs">
+    <?php foreach($crumbs as $crumbKey => $crumb):?>
+    <div class="crumb-item">
+    <?php if($crumbKey != 0) echo '<div class="separator"> > </div>'?>
+    <?php echo $crumb;?>
+    </div>
+    <?php endforeach;?>
+  </div>
+  <div class="btn-toolbar pull-right">
+    <?php
+    if($canExport) echo html::a($this->createLink('doc', $exportMethod, "libID=$libID&moduleID=0&docID=$docID"), "<i class='icon-export muted'> </i>" . $lang->export, 'hiddenwin', "class='btn btn-link' id='docExport'");
+    if(common::hasPriv('doc', 'create')) echo $this->doc->printCreateBtn($lib, $moduleID);
+    ?>
+  </div>
+</div>
+<div id='mainContent'class="fade flex">
   <?php if($libID):?>
-    <?php include './side.html.php';?>
-    <div class="main-col" data-min-width="400">
+    <div id='sideBar' class="panel side side-col col overflow-auto h-full-adjust">
+      <?php include 'lefttree.html.php';?>
+    </div>
+    <div class="sidebar-toggle flex-center"><i class="icon icon-angle-left"></i></div>
+    <div class="main-col h-full-adjust" data-min-width="400">
       <?php if($docID):?>
         <?php include './content.html.php';?>
       <?php else:?>
       <div class="cell">
         <div class="detail empty text-center">
-        <?php echo $type == 'book' ? $lang->doc->noArticle : $lang->doc->noDoc;?>
+        <?php echo $lang->doc->noDoc;?>
         </div>
       </div>
       <?php endif;?>
@@ -33,8 +61,8 @@
   <?php else:?>
     <div class="cell">
       <div class="detail empty text-center">
-        <?php echo $type == 'book' ? $lang->doc->noBook : $lang->doc->noLib;?>
-        <?php if($type != 'book') echo html::a($this->createLink('doc', 'createLib', "type={$objectType}&objectID=$object->id"), "<i class='icon icon-plus'></i> " . $lang->doc->createLib, '', "class='btn btn-info iframe'");?>
+        <?php echo $lang->doc->noLib;?>
+        <?php echo html::a($this->createLink('doc', 'createLib', "type={$objectType}&objectID=$object->id"), "<i class='icon icon-plus'></i> " . $lang->doc->createLib, '', "class='btn btn-info iframe'");?>
       </div>
     </div>
   <?php endif;?>

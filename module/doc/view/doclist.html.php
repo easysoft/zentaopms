@@ -16,9 +16,11 @@ body {margin-bottom: 25px;}
 #docListForm th.c-user {width: 80px;}
 #docListForm th.c-actions {width: 84px; padding-left: 15px;}
 #docListForm .checkbox-primary {line-height: 16px;}
+#docListForm table .checkbox-primary {top: -2px;}
 #docListForm .checkbox-primary > label {height: 16px; line-height: 16px; padding-left: 16px;}
 #docListForm .checkbox-primary > label:before {left: -1px; font-size: 10px;}
 #docListForm .checkbox-primary > label:after {width: 12px; height: 12px;}
+.table-files .btn {padding: 0 2px;}
 </style>
 <?php if(common::checkNotCN()):?>
 <style>
@@ -33,7 +35,7 @@ body {margin-bottom: 25px;}
     <?php
     if($browseType != 'bySearch' and $libID and (common::hasPriv('doc', 'create') or (common::hasPriv('api', 'create') and !$apiLibID)))
     {
-        echo $this->doc->printCreateBtn($lib, $type, $objectID, $moduleID, 'list');
+        echo $this->doc->printCreateBtn($lib, $moduleID, 'list');
     }
     ?>
   </p>
