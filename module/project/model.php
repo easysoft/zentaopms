@@ -2858,7 +2858,6 @@ class projectModel extends model
         else
         {
             unset($lang->project->menu->settings['subMenu']->module);
-            unset($lang->project->menu->settings['subMenu']->managerepo);
             unset($lang->project->menu->projectplan);
         }
 
@@ -2995,7 +2994,6 @@ class projectModel extends model
         else
         {
             unset($this->lang->project->menu->settings['subMenu']->module);
-            unset($this->lang->project->menu->settings['subMenu']->managerepo);
             unset($this->lang->project->menu->projectplan);
         }
 
@@ -3168,79 +3166,6 @@ class projectModel extends model
         }
 
         return $menu;
-    }
-
-    /**
-     * Update linked repos. This method only for project without product.
-     *
-     * @param  int    $projectID
-     * @param  array  $repos
-     * @access public
-     * @return void
-     */
-    public function updateRepoRelations($projectID, $repos)
-    {
-        $this->loadModel('action');
-        $this->loadModel('product');
-
-        $linkedRepos = $this->dao->select('*')->from(TABLE_REPO)
-            ->where('deleted')->eq(0)
-            ->andWhere("CONCAT(',', projects, ',')")->like("%,$projectID,%")
-            ->fetchAll('id');
-
-        /* 1. Delete old relations. */
-        /* Get relations should be deleted. */
-        $shouldDeleteRepos = array_diff(array_keys($linkedRepos), $repos);
-        foreach($shouldDeleteRepos as $repoID)
-        {
-            /* Remove project id form this repo. */
-            $repo        = zget($linkedRepos, $repoID, null);
-            $oldProjects = explode(',', $repo->projects);
-            $newProjects = array_filter($oldProjects, function($oldProjectID) use ($projectID)
-            {
-                return $projectID != $oldProjectID;
-            });
-
-            /* Remove products */
-            $shadowProduct = $this->loadModel('product')->getShadowProductByProject($projectID);
-            $oldProducts   = explode(',', $repo->product);
-            $newProducts   = array_filter($oldProducts, function($oldProductID)use($shadowProduct)
-            {
-                return $oldProductID != $shadowProduct->id;
-            });
-
-            $this->dao->update(TABLE_REPO)
-                ->set('product')->eq(implode(',', $newProducts))
-                ->set('projects')->eq(implode(',', $newProjects))
-                ->where('id')->eq($repo->id)->exec();
-
-            /* Save action log. */
-            $this->action->create('project', $projectID, 'unlinkedRepo', $repo->name);
-        }
-
-        /* 2. Add new relations. */
-        $products      = $this->product->getProductPairsByProject($projectID); // There will be only one (shadow) product for project without product.
-        $addedProducts = array_keys($products);
-
-        $addedRepos = array_diff($repos, array_keys($linkedRepos));
-        $newRepos   = $this->dao->select('*')->from(TABLE_REPO)->where('id')->in($addedRepos)->fetchAll();
-        foreach($newRepos as $repo)
-        {
-            $oldProducts = explode(',', $repo->product);
-            $newProducts = array_merge($oldProducts, $addedProducts);
-            $newProducts = array_unique($newProducts);
-
-            $oldProjects   = explode(',', $repo->projects);
-            $oldProjects[] = $projectID;
-            $newProjects   = array_unique($oldProjects);
-
-            $this->dao->update(TABLE_REPO)
-                ->set('product')->eq(implode(',', $newProducts))
-                ->set('projects')->eq(implode(',', $newProjects))
-                ->where('id')->eq($repo->id)->exec();
-
-            $this->action->create('project', $projectID, 'linkedRepo', '', $repo->name);
-        }
     }
 
     /**

@@ -65,9 +65,6 @@ $lang->project->budgetNumber        = '『Budget』must be numbers.';
 $lang->project->budgetGe0           = '『Budget』must be greater than or equal to 0.';
 $lang->project->allProjects         = "All {$lang->projectCommon}s";
 $lang->project->ignore              = 'Ignore';
-$lang->project->manageRepo          = 'Manage Repo';
-$lang->project->linkedRepo          = 'Link Repo';
-$lang->project->unlinkedRepo        = 'Unlink Repo';
 $lang->project->disableExecution    = "{$lang->projectCommon} of disable {$lang->executionCommon}";
 $lang->project->selectProduct       = "Select {$lang->productCommon}";
 

@@ -197,7 +197,6 @@ $lang->resource->project->updateOrder       = 'updateOrder';
 $lang->resource->project->team              = 'teamAction';
 $lang->resource->project->unlinkMember      = 'unlinkMember';
 $lang->resource->project->programTitle      = 'moduleOpen';
-$lang->resource->project->manageRepo        = 'manageRepo';
 
 $lang->project->methodOrder[0]   = 'index';
 $lang->project->methodOrder[5]   = 'browse';
@@ -235,7 +234,6 @@ $lang->project->methodOrder[160] = 'export';
 $lang->project->methodOrder[165] = 'updateOrder';
 $lang->project->methodOrder[170] = 'team';
 $lang->project->methodOrder[175] = 'unlinkMember';
-$lang->project->methodOrder[180] = 'manageRepo';
 
 $lang->resource->projectbuild = new stdclass();
 $lang->resource->projectbuild->browse           = 'browse';
