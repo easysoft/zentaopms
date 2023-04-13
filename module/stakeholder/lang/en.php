@@ -17,7 +17,6 @@ $lang->stakeholder->add          = 'Create';
 $lang->stakeholder->communicate  = 'Communications';
 $lang->stakeholder->expect       = 'Expectation';
 $lang->stakeholder->progress     = 'Progress';
-$lang->stakeholder->expectation  = 'Manage Expectation';
 $lang->stakeholder->createExpect = 'Add Expectation';
 $lang->stakeholder->deleteExpect = 'Delete Expectation';
 $lang->stakeholder->editExpect   = 'Edit Expectation';
