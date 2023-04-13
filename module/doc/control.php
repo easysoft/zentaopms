@@ -70,7 +70,6 @@ class doc extends control
         $this->session->set('productList', $uri, 'product');
         $this->session->set('executionList', $uri, 'execution');
         $this->session->set('projectList', $uri, 'project');
-        $this->session->set('objectName', '', 'doc');
         $this->session->set('spaceType', 'mine', 'doc');
         $this->loadModel('search');
 
@@ -1300,7 +1299,7 @@ class doc extends control
         if($libType == 'api')
         {
             $this->loadModel('api');
-            $this->session->set('objectName', $this->lang->doc->api, 'admin');
+            $this->session->set('objectName', $this->lang->doc->api, 'doc');
 
             $this->view->libs    = $libs;
             $this->view->apiID   = 0;
@@ -1309,8 +1308,7 @@ class doc extends control
         }
         else
         {
-            if(in_array($type, array('product', 'project'))) $this->session->set('objectName', $this->lang->doc->common, 'admin');
-            if($this->config->vision == 'lite' or in_array($type, array('execution', 'custom'))) $this->session->set('objectName', '', 'admin');
+            if(in_array($type, array('product', 'project'))) $this->session->set('objectName', $this->lang->doc->common, 'doc');
             $this->view->docs = $browseType == 'bySearch' ? $this->doc->getDocsBySearch($type, $objectID, $libID, $queryID, $orderBy, $pager) : $this->doc->getDocs($libID, $moduleID, $browseType, $orderBy, $pager);
         }
 
