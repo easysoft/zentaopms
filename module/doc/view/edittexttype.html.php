@@ -148,7 +148,6 @@ $(function()
 <?php js::set('confirmUpdateContent', $lang->doc->confirmUpdateContent);?>
 <?php js::set('docID', $doc->id);?>
 <?php js::set('draft', $doc->draft);?>
-<?php js::set('holders', $lang->doc->placeholder);?>
 <?php js::set('type', 'doc');?>
 <?php js::set('defaultSave', $lang->doc->defaultSave);?>
 <?php js::set('titleNotEmpty', sprintf($lang->error->notempty, $lang->doc->title));?>

@@ -36,7 +36,7 @@
         <th><?php echo $lang->doc->project;?></th>
         <td class='required'><?php echo html::select('project', $projects, key($projects), "class='form-control picker-select'");?></td>
         <th class='executionTH'><?php echo $lang->doc->execution?></th>
-        <td id='executionBox'><?php echo html::select('execution', array(), '', "class='form-control picker-select' data-placeholder='{$lang->doc->placeholder->execution}' onchange='loadObjectModules(\"execution\", this.value)'")?></td>
+        <td id='executionBox'><?php echo html::select('execution', array(), '', "class='form-control picker-select' onchange='loadObjectModules(\"execution\", this.value)'")?></td>
         <td class='executionHelp pl-0px'><i class='icon icon-help' title='<?php echo $lang->doc->placeholder->execution;?>'></i></td>
       </tr>
       <tr class='productTR hidden'>
@@ -53,7 +53,6 @@
     </table>
   </form>
 </div>
-<?php js::set('holders', $lang->doc->placeholder);?>
 <script>
 $(function(){changeSpace()});
 
@@ -73,6 +72,7 @@ function changeSpace()
     $('#typeapi').toggleClass('hidden', space == 'mine' || space == 'custom');
     $('#typedoc').closest('.radio-inline').toggleClass('hidden', space == 'api');
     $('#typeapi').closest('.radio-inline').toggleClass('hidden', space == 'mine' || space == 'custom');
+    $('#docType').toggleClass('hidden', $('#docType [name=type]:not(.hidden)').length == 1);
 
     var docType = $('[name=type]:not(.hidden):checked').val();
     if(space == 'project' && docType) $('#project').change();

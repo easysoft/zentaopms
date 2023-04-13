@@ -341,7 +341,7 @@ $lang->doc->noticeAcl['doc']['private'] = '只有创建者自己可以访问。'
 
 $lang->doc->placeholder = new stdclass();
 $lang->doc->placeholder->url       = '相应的链接地址';
-$lang->doc->placeholder->execution = '执行为空时，创建文件在项目库下';
+$lang->doc->placeholder->execution = '执行为空时，创建文档在项目库下';
 
 $lang->doc->summary = "本页共 <strong>%s</strong> 个附件，共计 <strong>%s</strong>，其中<strong>%s</strong>。";
 $lang->doc->ge      = '个';

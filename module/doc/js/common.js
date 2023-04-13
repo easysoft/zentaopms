@@ -32,7 +32,7 @@ function loadExecutions(projectID)
     $('#executionBox').load(link, function()
     {
         var $extension = $('#executionBox').find('select');
-        $extension.attr('data-placeholder', holders.execution).attr('onchange', "loadObjectModules('execution', this.value)").picker();
+        $extension.attr('onchange', "loadObjectModules('execution', this.value)").picker();
         if($extension.hasClass('disabled')) $('#executionBox').find('.picker').addClass('disabled');
     });
     loadObjectModules('project', projectID);
