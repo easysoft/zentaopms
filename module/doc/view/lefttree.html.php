@@ -545,7 +545,6 @@ $(function()
                 }
                 $input = $rootDom.parent().find('input');
                 $input.focus();
-                if($input.length && $('#fileTree').height() >= $('#sideBar').height()) $('#sideBar')[0].scrollTop = $($input[$input.length - 1]).offset().top - 100;
                 break;
             case 'addCataBro' :
                 moduleData.createType = 'same';
@@ -553,7 +552,8 @@ $(function()
                 var $rootDom = $('#fileTree li[data-id=' + item.id + ']');
                 $rootDom.after($input);
                 $rootDom.closest('ul').find('.has-input').css('padding-left', '0');
-                $('#fileTree').find('input').addClass('input-bro').focus();
+                $input = $('#fileTree').find('input').addClass('input-bro');
+                $input.focus();
                 break;
             case 'addCataChild' :
                 moduleData.parentID = item.id;
@@ -571,11 +571,9 @@ $(function()
                     moduleData.isUpdate = true;
                     $rootDom.addClass('open in has-list');
                 }
-
                 $rootDom.append($input);
                 $input = $rootDom.find('input');
                 $input.focus();
-                if($input.length && $('#fileTree').height() >= $('#sideBar').height()) $('#sideBar')[0].scrollTop = $($input[$input.length - 1]).offset().top - 100;
                 break;
         }
     }).on('click', '#versionSwitcher a', function()
