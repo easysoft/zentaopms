@@ -412,14 +412,15 @@ class doc extends control
         {
             $excludedModel = $this->config->vision == 'lite' ? '' : 'kanban';
             $objects       = $this->project->getPairsByProgram('', 'all', false, 'order_asc', $excludedModel);
+            $this->view->executions = array();
             if($lib->type == 'execution')
             {
                 $execution = $this->loadModel('execution')->getById($lib->execution);
                 $objectID  = $execution->project;
                 $libs      = $this->doc->getLibs('execution', $extra = "withObject,$unclosed", $libID, $lib->execution);
-                $this->view->execution = $execution;
+                $this->view->execution  = $execution;
+                $this->view->executions = array(0 => '') + $this->execution->getPairs($objectID, 'sprint,stage', 'multiple,leaf,noprefix');
             }
-            $this->view->executions = array(0 => '') + $this->loadModel('execution')->getPairs($objectID, 'sprint,stage', 'multiple,leaf,noprefix');
         }
         elseif($linkType == 'execution')
         {
