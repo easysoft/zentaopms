@@ -196,7 +196,6 @@ $lang->kanban->columnName         = 'Column Name';
 $lang->kanban->columnColor        = 'Column Color';
 $lang->kanban->moveUp             = 'Swimlane Up';
 $lang->kanban->moveDown           = 'Swimlane Down';
-$lang->kanban->laneMove           = 'Swimlane Move';
 $lang->kanban->laneGroup          = 'Lane Group';
 $lang->kanban->cardsSort          = 'Cards Sortting';
 $lang->kanban->more               = 'More';

@@ -196,7 +196,6 @@ $lang->kanban->columnName         = '看板列名称';
 $lang->kanban->columnColor        = '看板列颜色';
 $lang->kanban->moveUp             = '泳道上移';
 $lang->kanban->moveDown           = '泳道下移';
-$lang->kanban->laneMove           = '泳道移动';
 $lang->kanban->laneGroup          = '泳道分组';
 $lang->kanban->cardsSort          = '卡片排序';
 $lang->kanban->more               = '更多';
