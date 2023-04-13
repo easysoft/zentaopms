@@ -576,7 +576,7 @@ $(function()
 
     $('#caseTableList').on('click', '.row-case', function(e)
     {
-        var $row      = $(this);
+        var $row = $(this);
         $row.toggleClass('checked');
 
         updateChildrenCheckboxes($row);
@@ -632,7 +632,7 @@ $(function()
         var selectedCaseNum = 0;
         for(var i=0; i<trList.length; i++)
         {
-            var $tr = $(trList[i]);
+            var $tr      = $(trList[i]);
             var dataType = $tr.attr("data-itype");
             if(dataType != "1") continue;
             var $cbx = $tr.find(".checkbox-primary").find("input");

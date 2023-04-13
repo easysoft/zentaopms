@@ -2870,6 +2870,14 @@ class testcaseModel extends model
         return $modules;
     }
 
+    /**
+     * Batch Change Scene.
+     *
+     * @param  array $caseIDList
+     * @param  int   $sceneId
+     * @access public
+     * @return array
+     */
     public function batchChangeScene($caseIDList, $sceneId)
     {
         $now        = helper::now();
@@ -3123,6 +3131,17 @@ class testcaseModel extends model
         return $allChanges;
     }
 
+    /**
+     * Build Menu Query.
+     *
+     * @param  int    $rootID
+     * @param  int    $moduleID
+     * @param  string $type
+     * @param  int    $startScene
+     * @param  string $branch
+     * @access public
+     * @return object
+     */
     public function buildMenuQuery($rootID, $moduleID, $type, $startScene = 0, $branch = 'all')
     {
         /* Set the start module. */
@@ -3144,6 +3163,13 @@ class testcaseModel extends model
             ->get();
     }
 
+    /**
+     * Build Operate Browse Scene Menu.
+     *
+     * @param  object $scene
+     * @access public
+     * @return string
+     */
     public function buildOperateBrowseSceneMenu($scene)
     {
         $canBeChanged = common::canBeChanged('case', $scene);
@@ -3162,6 +3188,18 @@ class testcaseModel extends model
         return $menu;
     }
 
+    /**
+     * Search Form Add Scene.
+     *
+     * @param  int    $productID
+     * @param  array  $products
+     * @param  int    $queryID
+     * @param  string $actionURL
+     * @param  int    $projectID
+     * @param  int    $moduleID
+     * @access public
+     * @return void
+     */
     public function buildSearchFormAddScene($productID, $products, $queryID, $actionURL, $projectID = 0,$moduleID = 0)
     {
         $product = ($this->app->tab == 'project' and empty($productID)) ? $products : array($productID => $products[$productID]) + array('all' => $this->lang->testcase->allProduct);
@@ -3200,6 +3238,16 @@ class testcaseModel extends model
         $this->loadModel('search')->setSearchParams($this->config->testcase->search);
     }
 
+    /**
+     * Build Tree Array.
+     *
+     * @param  array  $treeMenu
+     * @param  array  $scenes
+     * @param  object $scene
+     * @param  string $sceneName
+     * @access public
+     * @return void
+     */
     public function buildTreeArray(& $treeMenu, $scenes, $scene, $sceneName = '/')
     {
         $parentScenes = explode(',', $scene->path);
@@ -3243,7 +3291,7 @@ class testcaseModel extends model
      * Create scene.
      *
      * @access public
-     * @return void
+     * @return array
      */
     public function createScene()
     {
@@ -3300,6 +3348,13 @@ class testcaseModel extends model
         }
     }
 
+    /**
+     * Get All Children Id.
+     *
+     * @param  int $sceneID
+     * @access public
+     * @return object
+     */
     public function getAllChildId($sceneID)
     {
         if($sceneID == 0) return array();
@@ -3313,6 +3368,18 @@ class testcaseModel extends model
             ->fetchPairs();
     }
 
+    /**
+     * Search Cases Has Scene.
+     *
+     * @param  int    $productID
+     * @param  int    $queryID
+     * @param  string $orderBy
+     * @param  object $pager
+     * @param  int    $branch
+     * @param  string $auto
+     * @access public
+     * @return object
+     */
     public function getBySearchHasScene($productID, $queryID, $orderBy, $pager = null, $branch = 0, $auto = 'no')
     {
         if($queryID)
@@ -3459,6 +3526,13 @@ class testcaseModel extends model
         return $queryFunction($modules, $type, $objectIdList, $branch)->orderBy($orderBy)->page($pager)->fetchAll('id');
     }
 
+    /**
+     * Search Cases Has Scene.
+     *
+     * @param  int $viewID
+     * @access public
+     * @return string
+     */
     public function getParents($viewID)
     {
         if($viewID == 0) return '/';
@@ -3478,6 +3552,19 @@ class testcaseModel extends model
         return substr($scenePath,34);
     }
 
+    /**
+     * Get Scene Menu.
+     *
+     * @param  int    $rootID
+     * @param  int    $moduleID
+     * @param  string $type
+     * @param  int    $startScene
+     * @param  int    $branch
+     * @param  int    $currentScene
+     * @param  bool   $emptyMenu
+     * @access public
+     * @return array
+     */
     public function getSceneMenu($rootID, $moduleID, $type = '', $startScene = 0, $branch = 0, $currentScene = 0, $emptyMenu = false)
     {
         if(empty($branch)) $branch = 0;
@@ -3543,6 +3630,15 @@ class testcaseModel extends model
         return $lastMenu;
     }
 
+    /**
+     * Get Scene Name.
+     *
+     * @param  array $moduleIdList
+     * @param  bool  $allPath
+     * @param  bool  $branchPath
+     * @access public
+     * @return array
+     */
     public function getScenesName($moduleIdList, $allPath = true, $branchPath = false)
     {
         if(!$allPath) return $this->dao->select('id, title')->from(VIEW_SCENECASE)->where('id')->in($moduleIdList)->andWhere('deleted')->eq(0)->fetchPairs('id', 'title');
@@ -3577,6 +3673,20 @@ class testcaseModel extends model
         return $modulePairs;
     }
 
+    /**
+     * Get Cases Which Has Scene.
+     *
+     * @param  int    $productID
+     * @param  int    $branch
+     * @param  string $browseType
+     * @param  int    $queryID
+     * @param  int    $moduleID
+     * @param  string $sort
+     * @param  object $pager
+     * @param  string $auto
+     * @access public
+     * @return array
+     */
     public function getTestCaseHasScene($productID, $branch, $browseType, $queryID, $moduleID, $sort, $pager, $auto = 'no')
     {
         /* Set modules and browse type. */
@@ -3629,10 +3739,29 @@ class testcaseModel extends model
         return $cases;
     }
 
+    /**
+     * Substr string.
+     *
+     * @param  string $text
+     * @param  int    $length
+     * @access public
+     * @return string
+     */
     public function istrcut($text, $length)
     {
         return (mb_strlen($text, 'utf8') > $length) ? mb_substr($text, 0, $length, 'utf8').'...' : $text;
     }
+
+    /**
+     * Print Table Head.
+     *
+     * @param  object $col
+     * @param  string $orderBy
+     * @param  string $vars
+     * @param  bool   $checkBox
+     * @access public
+     * @return string
+     */
     public function printHead($col, $orderBy, $vars, $checkBox = true)
     {
         $id = $col->id;
@@ -3695,6 +3824,13 @@ class testcaseModel extends model
         }
     }
 
+    /**
+     * Update Scene.
+     *
+     * @param  int $sceneID
+     * @access public
+     * @return string
+     */
     public function updateScene($sceneID)
     {
         /* Get original data. */
@@ -3808,6 +3944,13 @@ class testcaseModel extends model
         return array('status' => 'updated', 'id' => $sceneID);
     }
 
+    /**
+     * Get Xmind File Content.
+     *
+     * @param  string $fileName
+     * @access public
+     * @return string
+     */
     public function getXmindImport($fileName)
     {
         $xmlNode  = simplexml_load_file($fileName);
@@ -3816,6 +3959,12 @@ class testcaseModel extends model
         return json_encode($testData);
     }
 
+    /**
+     * Save Xmind File Content To Database.
+     *
+     * @access public
+     * @return array
+     */
     public function saveXmindImport()
     {
         $this->dao->begin();
@@ -3859,6 +4008,14 @@ class testcaseModel extends model
         return array("result"=>"success","message"=>1);
     }
 
+    /**
+     * Save Test Case.
+     *
+     * @param  array $testcaseData
+     * @param  array $sceneIds
+     * @access public
+     * @return array
+     */
     public function saveTestcase($testcaseData, $sceneIds)
     {
         $tmpPId = $testcaseData["tmpPId"];
@@ -3992,6 +4149,14 @@ class testcaseModel extends model
         return array('result' => 'success', 'message' => 1,'testcaseID'=>$testcaseID);
     }
 
+    /**
+     * Save Scene.
+     *
+     * @param  array $sceneData
+     * @param  array $sceneIds
+     * @access public
+     * @return array
+     */
     public function saveScene($sceneData, $sceneIds)
     {
         $id      = isset($sceneData["id"]) ? $sceneData["id"] : -1;
@@ -4066,6 +4231,15 @@ class testcaseModel extends model
         return array('result' => 'success', 'message' => 1,"sceneID"=>$sceneID);
     }
 
+    /**
+     * Get Export Data.
+     *
+     * @param  int $productID
+     * @param  int $moduleID
+     * @param  int $branch
+     * @access public
+     * @return array
+     */
     public function getXmindExport($productID, $moduleID, $branch)
     {
         $caseList   = $this->getCaseByProductAndModule($productID, $moduleID);
@@ -4085,6 +4259,15 @@ class testcaseModel extends model
             );
     }
 
+    /**
+     * Get Module By Product.
+     *
+     * @param  int $productID
+     * @param  int $moduleID
+     * @param  int $branch
+     * @access public
+     * @return array
+     */
     function getModuleByProductAndModel($productID, $moduleID, $branch)
     {
         $moduleList = array();
@@ -4105,6 +4288,14 @@ class testcaseModel extends model
         return $moduleList;
     }
 
+    /**
+     * Get Case By Product And Module.
+     *
+     * @param  int $productID
+     * @param  int $moduleID
+     * @access public
+     * @return array
+     */
     function getCaseByProductAndModule($productID, $moduleID)
     {
         $fields = "t2.id as productID,"
@@ -4129,6 +4320,14 @@ class testcaseModel extends model
         return $caseList;
     }
 
+    /**
+     * Get Step By Product And Module.
+     *
+     * @param  int $productID
+     * @param  int $moduleID
+     * @access public
+     * @return array
+     */
     function getStepByProductAndModule($productID, $moduleID)
     {
         $fields = "t1.id as testcaseID,"
@@ -4149,6 +4348,14 @@ class testcaseModel extends model
         return $stepList;
     }
 
+    /**
+     * Get Scene By Product And Module.
+     *
+     * @param  int $productID
+     * @param  int $moduleID
+     * @access public
+     * @return array
+     */
     function getSceneByProductAndModule($productID, $moduleID)
     {
         $sceneList = $this->dao->select('id as sceneID, title as sceneName, path, parent as parentID, product as productID, module as moduleID')
@@ -4170,11 +4377,24 @@ class testcaseModel extends model
         return array('sceneMaps'=>$sceneMaps,'topScenes'=>$topScenes);
     }
 
+    /**
+     * Check Config.
+     *
+     * @param  string $str
+     * @access public
+     * @return bool
+     */
     function checkConfigValue($str)
     {
         return preg_match("/^[a-zA-Z]{1,10}$/",$str);
     }
 
+    /**
+     * Save Xmind Config.
+     *
+     * @access public
+     * @return array
+     */
     function saveXmindConfig()
     {
         $configList = array();
@@ -4255,6 +4475,12 @@ class testcaseModel extends model
         return array("result" => "success", "message" => 1);
     }
 
+    /**
+     * Get Xmind Config.
+     *
+     * @access public
+     * @return array
+     */
     function getXmindConfig()
     {
         $configItems = $this->dao->select("`key`,value")->from(TABLE_CONFIG)
@@ -4275,6 +4501,14 @@ class testcaseModel extends model
         return $config;
     }
 
+    /**
+     * Convert Xml To Array.
+     *
+     * @param  object $xml
+     * @param  array  $options
+     * @access public
+     * @return array
+     */
     function xmlToArray($xml, $options = array())
     {
         $defaults = array(
