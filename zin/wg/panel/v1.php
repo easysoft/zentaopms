@@ -91,7 +91,7 @@ class panel extends wg
         return div
         (
             setClass('panel', $class, empty($size) ? NULL : "size-$size"),
-            set($this->props->skip(array_keys(static::getDefinedProps()))),
+            set($this->getUndefinedProps()),
 
             $this->buildHeading(),
             $this->buildBody(),

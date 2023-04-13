@@ -390,6 +390,11 @@ class wg
         }
     }
 
+    public function getUndefinedProps()
+    {
+        return $this->props->skip(array_keys(static::getDefinedProps()));
+    }
+
     public function type()
     {
         return get_called_class();
