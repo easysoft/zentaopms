@@ -91,7 +91,7 @@ $lang->index->methodOrder[0] = 'index';
 /* My module. */
 $lang->resource->my = new stdclass();
 $lang->resource->my->index           = 'indexAction';
-$lang->resource->my->todo            = 'todo';
+$lang->resource->my->todo            = 'todoAction';
 $lang->resource->my->calendar        = 'calendarAction';
 $lang->resource->my->work            = 'workAction';
 $lang->resource->my->audit           = 'audit';
