@@ -539,8 +539,8 @@ $lang->changelog['16.3'][] = 'sonarqube-reportView';
 $lang->changelog['16.4'][] = 'sonarqube-createProject';
 $lang->changelog['16.4'][] = 'sonarqube-browseIssue';
 
-$lang->changelog['16.5_beta1'][] = 'productplan-batchChangeStatus';
-$lang->changelog['16.5_beta1'][] = 'custom-required';
+$lang->changelog['16.5.beta1'][] = 'productplan-batchChangeStatus';
+$lang->changelog['16.5.beta1'][] = 'custom-required';
 
 $lang->changelog['17.0.beta1'][] = 'doc-updateOrder';
 
