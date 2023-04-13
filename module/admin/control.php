@@ -257,43 +257,6 @@ class admin extends control
     }
 
     /**
-     * Config sso for ranzhi.
-     *
-     * @access public
-     * @return void
-     */
-    public function sso()
-    {
-        if(!empty($_POST))
-        {
-            $ssoConfig = new stdclass();
-            $ssoConfig->turnon   = $this->post->turnon;
-            $ssoConfig->redirect = $this->post->redirect;
-            $ssoConfig->addr     = $this->post->addr;
-            $ssoConfig->code     = trim($this->post->code);
-            $ssoConfig->key      = trim($this->post->key);
-
-            if(!$ssoConfig->turnon) $ssoConfig->redirect = $ssoConfig->turnon;
-            $this->loadModel('setting')->setItems('system.sso', $ssoConfig);
-            if(dao::isError()) return print(js::error(dao::getError()));
-            return print($this->locate(inlink('sso')));
-        }
-
-        $this->loadModel('sso');
-        if(!isset($this->config->sso)) $this->config->sso = new stdclass();
-
-        $this->view->title      = $this->lang->admin->sso;
-        $this->view->position[] = $this->lang->admin->sso;
-
-        $this->view->turnon   = isset($this->config->sso->turnon)   ? $this->config->sso->turnon   : 1;
-        $this->view->redirect = isset($this->config->sso->redirect) ? $this->config->sso->redirect : 0;
-        $this->view->addr     = isset($this->config->sso->addr)     ? $this->config->sso->addr     : '';
-        $this->view->key      = isset($this->config->sso->key)      ? $this->config->sso->key      : '';
-        $this->view->code     = isset($this->config->sso->code)     ? $this->config->sso->code     : '';
-        $this->display();
-    }
-
-    /**
      * Set closed features config.
      *
      * @access public

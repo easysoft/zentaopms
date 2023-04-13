@@ -11,8 +11,6 @@
  */
 $lang->admin->index           = 'Admin Home';
 $lang->admin->checkDB         = 'Check Database';
-$lang->admin->sso             = 'Zdoo';
-$lang->admin->ssoAction       = 'Link Zdoo';
 $lang->admin->safeIndex       = 'Security';
 $lang->admin->checkWeak       = 'Check Weak Password';
 $lang->admin->certifyMobile   = 'Verify your cellphone';
