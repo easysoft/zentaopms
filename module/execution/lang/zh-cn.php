@@ -228,7 +228,6 @@ $lang->execution->testtask                  = '测试单';
 $lang->execution->burn                      = '燃尽图';
 $lang->execution->computeBurn               = '更新燃尽图';
 $lang->execution->computeCFD                = '更新累积流图';
-$lang->execution->burnData                  = '燃尽图数据';
 $lang->execution->fixFirst                  = '修改首天工时';
 $lang->execution->team                      = '团队成员';
 $lang->execution->doc                       = '文档列表';

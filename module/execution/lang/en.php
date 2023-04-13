@@ -228,7 +228,6 @@ $lang->execution->testtask                  = 'Request';
 $lang->execution->burn                      = 'Burndown';
 $lang->execution->computeBurn               = 'Update';
 $lang->execution->computeCFD                = 'Compute Cumulative Flow diagrams';
-$lang->execution->burnData                  = 'Burndown Data';
 $lang->execution->fixFirst                  = 'Edit 1st-Day Estimates';
 $lang->execution->team                      = 'Members';
 $lang->execution->doc                       = 'Document';
