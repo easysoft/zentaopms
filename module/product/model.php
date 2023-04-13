@@ -1769,14 +1769,14 @@ class productModel extends model
         $bugs     = $this->dao->select('count(*) AS count')->from(TABLE_BUG)->where('product')->eq($productID)->andWhere('deleted')->eq(0)->fetch();
         $docs     = $this->dao->select('count(*) AS count')->from(TABLE_DOC)->where('product')->eq($productID)->andWhere('deleted')->eq(0)->fetch();
         $releases = $this->dao->select('count(*) AS count')->from(TABLE_RELEASE)->where('deleted')->eq(0)->andWhere('product')->eq($productID)->fetch();
-        $projects = $this->dao->select('count("t1.*") AS count')->from(TABLE_PROJECTPRODUCT)->alias('t1')
+        $projects = $this->dao->select('count(*) AS count')->from(TABLE_PROJECTPRODUCT)->alias('t1')
             ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
             ->where('t2.deleted')->eq(0)
             ->andWhere('t1.product')->eq($productID)
             ->andWhere('t2.type')->eq('project')
             ->fetch();
 
-        $executions = $this->dao->select('count("t1.*") AS count')->from(TABLE_PROJECTPRODUCT)->alias('t1')
+        $executions = $this->dao->select('count(*) AS count')->from(TABLE_PROJECTPRODUCT)->alias('t1')
             ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
             ->where('t2.deleted')->eq(0)
             ->andWhere('t1.product')->eq($productID)

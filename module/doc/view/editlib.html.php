@@ -26,7 +26,7 @@
       <?php echo $lib->type != 'book' ? $lang->doc->editLib : $lang->doc->editBook;?>
     </h2>
   </div>
-  <form method='post' class='load-indicator main-form form-ajax'>
+  <form method='post' class='load-indicator main-form form-ajax form-watched'>
     <table class='table table-form'>
       <?php if(in_array($lib->type, array('product', 'project', 'execution'))):?>
       <tr>

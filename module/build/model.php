@@ -414,11 +414,8 @@ class buildModel extends model
         $build->bugs    = '';
 
         $build = fixer::input('post')
-            ->setDefault('project', 0)
-            ->setDefault('execution', 0)
-            ->setDefault('product', 0)
-            ->setDefault('branch', 0)
-            ->setDefault('builds', '')
+            ->setDefault('project,execution,product,branch', 0)
+            ->setDefault('builds,stories,bugs', '')
             ->cleanInt('product')
             ->add('createdBy', $this->app->user->account)
             ->add('createdDate', helper::now())

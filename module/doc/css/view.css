@@ -71,3 +71,5 @@
 #autoBox {display: flex; overflow: hidden; text-overflow: ellipsis; padding-right: 15px; position: relative;}
 #autoBox > .ellipsis {position: absolute; top: 3px; right: 0; width: 10px; background: #F4F5F7; height: 100%;}
 .detail+.detail {padding-top: 0;}
+.comment-edit-form .form-actions {display: flex;}
+
