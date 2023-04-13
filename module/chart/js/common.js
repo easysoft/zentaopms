@@ -44,7 +44,19 @@ function resizeChart()
  */
 function initPicker($row, pickerName = 'picker-select')
 {
-    $row.find('.' + pickerName).picker({'maxDropHeight': pickerHeight});
+    $row.find('.' + pickerName).picker(
+    {
+        maxDropHeight: pickerHeight,
+        onReady: function()
+        {
+            if(!$row.find('.picker')) return;
+            if(window.getComputedStyle($row.find('.picker').find('.picker-selections')[0]).getPropertyValue('width') !== 'auto')
+            {
+                var pickerWidth = $row.find('.picker')[0].getBoundingClientRect().width;
+                $row.find('.picker').find('.picker-selections').css('width', pickerWidth);
+            }
+        }
+    });
     $row.find("." + pickerName).each(function(index)
     {
        if($(this).hasClass('required')) $(this).siblings("div .picker").addClass('required');
