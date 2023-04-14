@@ -1567,7 +1567,7 @@ $lang->gogs->methodOrder[30] = 'bindUser';
 
 /* Gitea. */
 $lang->resource->gitea = new stdclass();
-$lang->resource->gitea->browse   = 'browse';
+$lang->resource->gitea->browse   = 'browseAction';
 $lang->resource->gitea->create   = 'create';
 $lang->resource->gitea->edit     = 'edit';
 $lang->resource->gitea->view     = 'view';
