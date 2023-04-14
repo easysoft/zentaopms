@@ -9075,8 +9075,12 @@ class upgradeModel extends model
         $this->loadModel('doc');
 
         $users = $this->dao->select('account')->from(TABLE_USER)->fetchPairs('account', 'account');
-        $stmt  = $this->dao->select('id,collector')->from(TABLE_DOC)->where('collector')->ne('')->query();
-        while($doc = $stmt->fetch())
+        $docs  = $this->dao->select('id,collector')->from(TABLE_DOC)->where('collector')->ne('')->query();
+
+        $this->dao->update(TABLE_DOC)->set('collector')->eq(0)->where('collector')->eq('')->exec();
+        $this->dao->exec("ALTER TABLE " . TABLE_DOC . " CHANGE `collector` `collects` smallint unsigned NOT NULL DEFAULT '0'");
+
+        foreach($docs as $doc)
         {
             foreach(explode(',', $doc->collector) as $collector)
             {
@@ -9086,9 +9090,6 @@ class upgradeModel extends model
                 $this->doc->createAction($doc->id, 'collect', $collector);
             }
         }
-
-        $this->dao->update(TABLE_DOC)->set('collector')->eq(0)->where('collector')->eq('')->exec();
-        $this->dao->exec("ALTER TABLE " . TABLE_DOC . " CHANGE `collector` `collects` smallint unsigned NOT NULL DEFAULT '0'");
 
         return true;
     }
