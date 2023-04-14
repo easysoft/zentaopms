@@ -28,7 +28,6 @@
             </div>
           </div>
           <div class="actions">
-            <span class='text'><?php echo$lang->doc->diff?></span>
             <?php echo html::a("javascript:fullScreen()", '<span class="icon-fullscreen"></span>', '', "title='{$lang->fullscreen}' class='btn btn-link fullscreen-btn'");?>
             <?php if(common::hasPriv('doc', 'collect')):?>
             <?php $star = strpos($doc->collector, ',' . $this->app->user->account . ',') !== false ? 'star' : 'star-empty';?>

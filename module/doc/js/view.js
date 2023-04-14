@@ -8,6 +8,12 @@ $(function()
     })
 
     $('.menu-actions > a').blur(function() {$(this).css('background', 'none');})
+
+    $('.comment-edit-form').ajaxForm({
+        success: function(data) {
+            location.reload();
+        }
+    })
 })
 
 /**
