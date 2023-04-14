@@ -184,7 +184,7 @@ class navbar extends wg
                 }
 
                 $dataApp = (isset($lang->navGroup->$module) and $tab != $lang->navGroup->$module) ? $tab : NULL;
-                if($isActive && empty($activeMenu)) $activeMenu = $menuItem->text;
+                if($isActive && empty($activeMenu)) $activeMenu = $menuItem->name;
                 else $isActive = false;
 
                 /* Print drop menus. */
