@@ -461,9 +461,12 @@ $(function()
         }
         else
         {
-            type       = type.toLowerCase();
             methodName = spaceMethod[objectType] ? spaceMethod[objectType] : 'teamSpace';
-            if(['mine', 'view', 'collect', 'createdby'].indexOf(objectType) !== -1) linkParams = 'type=' + type + '&' + linkParams;
+            if(['mine', 'view', 'collect', 'createdby'].indexOf(objectType) !== -1)
+            {
+                type = ['view', 'collect', 'createdby'].indexOf(type.toLowerCase()) !== -1 ? type.toLowerCase() : 'mine';
+                linkParams = 'type=' + type + '&' + linkParams;
+            }
         }
 
         location.href = createLink(moduleName, methodName, linkParams);
