@@ -448,15 +448,6 @@ $(function()
             methodName = 'showFiles';
             linkParams = 'type=' + objectType + '&objectID=' + objectID;
         }
-        else if(objectType == 'mine' || objectType == 'view' || objectType == 'collect' || objectType == 'createdby')
-        {
-            var mySpaceType = 'mine';
-            if(type == 'view' || type == 'collect') mySpaceType = type;
-            if(type == 'createdBy' || type == 'createdby') mySpaceType = 'createdby';
-
-            methodName = 'myspace';
-            linkParams = 'type='+ mySpaceType + '&libID=' + libID + '&moduleID=' + moduleID;
-        }
         else if(['text', 'word', 'ppt', 'excel'].indexOf(type) !== -1)
         {
             methodName = 'view';
@@ -466,11 +457,13 @@ $(function()
         {
             moduleName = 'execution';
             methodName = 'doc';
-            linkParam  = 'executionID=0';
+            linkParams = 'executionID=0';
         }
         else
         {
+            type       = type.toLowerCase();
             methodName = spaceMethod[objectType] ? spaceMethod[objectType] : 'teamSpace';
+            if(['mine', 'view', 'collect', 'createdby'].indexOf(objectType) !== -1) linkParams = 'type=' + type + '&' + linkParams;
         }
 
         location.href = createLink(moduleName, methodName, linkParams);
