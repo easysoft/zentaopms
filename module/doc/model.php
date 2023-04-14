@@ -657,13 +657,26 @@ class docModel extends model
                 ->page($pager, 't1.id')
                 ->fetchAll('id');
         }
-        elseif($type == 'createdby')
+        elseif($type == 'createdby' || $type == 'editedby')
         {
+            $docIDList = array_keys($docIDList);
+            if($type == 'editedby')
+            {
+                $editDocs = $this->dao->select('objectID')->from(TABLE_ACTION)
+                    ->where('objectType')->eq('doc')
+                    ->andWhere('action')->eq('edited')
+                    ->andWhere('actor')->eq($this->app->user->account)
+                    ->andWhere('vision')->eq($this->config->vision)
+                    ->fetchPairs();
+
+                $docIDList = array_intersect($docIDList, $editDocs);
+            }
+
             $docs = $this->dao->select('t1.*,t2.name as libName,t2.type as objectType')->from(TABLE_DOC)->alias('t1')
                 ->leftJoin(TABLE_DOCLIB)->alias('t2')->on("t1.lib=t2.id")
                 ->where('t1.deleted')->eq(0)
                 ->andWhere('t1.lib')->ne('')
-                ->andWhere('t1.id')->in(array_keys($docIDList))
+                ->andWhere('t1.id')->in($docIDList)
                 ->andWhere('t1.vision')->eq($this->config->vision)
                 ->andWhere('t1.addedBy')->eq($this->app->user->account)
                 ->beginIF(!common::hasPriv('doc', 'productSpace'))->andWhere('t2.type')->ne('product')->fi()
@@ -3118,6 +3131,15 @@ class docModel extends model
             $myCreation->objectID   = 0;
             $myCreation->hasAction  = false;
             $myCreation->active     = $libType == 'createdby' ? 1 : 0;
+
+            $myCreation = new stdclass();
+            $myCreation->id         = 0;
+            $myCreation->name       = $this->lang->doc->myEdited;
+            $myCreation->type       = 'editedBy';
+            $myCreation->objectType = 'doc';
+            $myCreation->objectID   = 0;
+            $myCreation->hasAction  = false;
+            $myCreation->active     = $libType == 'editedby' ? 1 : 0;
 
             $libTree   = array();
             $libTree[] = $myLib;

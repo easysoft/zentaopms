@@ -141,6 +141,7 @@ $lang->doc->myDoc         = 'My Documents';
 $lang->doc->myView        = 'Recently Viewed';
 $lang->doc->myCollection  = 'My Favorites';
 $lang->doc->myCreation    = 'Created By';
+$lang->doc->myEdited      = 'Edited By';
 $lang->doc->myLib         = 'My Library';
 $lang->doc->tableContents = 'Directory';
 $lang->doc->addCatalog    = 'Add Catalog';

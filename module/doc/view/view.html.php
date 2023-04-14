@@ -30,6 +30,7 @@
   <div class="btn-toolbar pull-right">
     <?php
     if($canExport) echo html::a($this->createLink('doc', $exportMethod, "libID=$libID&moduleID=0&docID=$docID"), "<i class='icon-export muted'> </i>" . $lang->export, 'hiddenwin', "class='btn btn-link' id='docExport'");
+    if(common::hasPriv('api', 'createLib')) echo html::a($this->createLink('api', 'createLib',     "type=" . ($objectType ? $objectType : 'nolink') . "&objectID=$objectID"), '<i class="icon icon-plus"></i> ' . $lang->api->createLib, '', 'class="btn btn-secondary iframe" data-width="800px"');
     if(common::hasPriv('doc', 'create')) echo $this->doc->printCreateBtn($lib, $moduleID);
     ?>
   </div>

@@ -463,9 +463,9 @@ $(function()
         else
         {
             methodName = spaceMethod[objectType] ? spaceMethod[objectType] : 'teamSpace';
-            if(['mine', 'view', 'collect', 'createdby'].indexOf(objectType) !== -1)
+            if(['mine', 'view', 'collect', 'createdby', 'editedby'].indexOf(objectType) !== -1)
             {
-                type = ['view', 'collect', 'createdby'].indexOf(type.toLowerCase()) !== -1 ? type.toLowerCase() : 'mine';
+                type = ['view', 'collect', 'createdby', 'editedby'].indexOf(type.toLowerCase()) !== -1 ? type.toLowerCase() : 'mine';
                 linkParams = 'type=' + type + '&' + linkParams;
             }
         }
