@@ -2119,6 +2119,11 @@ class block extends control
      */
     public function printDocViewListBlock()
     {
+        /* Load pager. */
+        $this->app->loadClass('pager', $static = true);
+        $pager = new pager(0, 6, 1);
+
+        $this->view->docList = $this->loadModel('doc')->getMineList('view', 'all', 'views_desc', $pager);
     }
 
     /**
