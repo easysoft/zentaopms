@@ -2753,6 +2753,11 @@ class docModel extends model
             $object         = $this->dao->select('id,name,status')->from($table)->where('id')->eq($objectID)->fetch();
             $objectTitle    = zget($objects, $objectID, '');
             $objectDropdown = $this->select($type, $objectTitle, $objectID);
+            if($type == 'execution' and isset($libs[$libID]))
+            {
+                $objectTitle    = zget($libs[$libID], 'name', '');
+                $objectDropdown = "<div id='sidebarHeader'><div class='title' title='{$objectTitle}'>{$objectTitle}</div></div>";
+            }
 
             if(empty($object))
             {

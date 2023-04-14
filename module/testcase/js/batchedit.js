@@ -159,3 +159,62 @@ $(document).on('change', 'select', function()
         $(this).trigger("change");
     }
 });
+
+function loadStories2(productID, moduleID, num)
+{
+    var branchIDName = (config.currentMethod == 'batchcreate' || config.currentMethod == 'showimport') ? '#branch' : '#branches';
+    var branchID     = $(branchIDName + num).val();
+    var storyLink    = createLink('story', 'ajaxGetProductStories', 'productID=' + productID + '&branch=' + branchID + '&moduleID=' + moduleID + '&storyID=0&onlyOption=false&status=noclosed&limit=50&type=full&hasParent=1&executionID=0&number=' + num);
+    $.get(storyLink, function(stories)
+    {
+        if(!stories) stories = '<select id="story' + num + '" name="story[' + num + ']" class="form-control"></select>';
+        if(config.currentMethod == 'batchcreate')
+        {
+            for(var i = num; i < 10 ; i ++)
+            {
+                if(i != num && $('#module' + i).val() != 'ditto') break;
+                var nowStories = stories.replaceAll('story' + num, 'story' + i);
+                $('#story' + i).replaceWith(nowStories);
+                $('#story' + i + "_chosen").remove();
+                $('#story' + i).next('.picker').remove();
+                $('#story' + i).attr('name', 'story[' + i + ']');
+                $('#story' + i).chosen();
+            }
+        }
+        else
+        {
+            $('#story' + num).replaceWith(stories);
+            $('#story' + num + "_chosen").remove();
+            $('#story' + num).next('.picker').remove();
+            $('#story' + num).attr('name', 'story[' + num + ']');
+            $('#story' + num).chosen();
+        }
+    });
+
+    branch = 0;
+    link = createLink('testcase', 'ajaxGetModuleScenes', 'productID=' + productID + '&branch=' + branch + '&moduleID=' + moduleID + '&stype=2&storyID=0&onlyOption=false&status=noclosed&limit=50&type=full&hasParent=1&number=' + num);
+    $.get(link, function(scenes){
+        if(!scenes) scenes = '<select id="scene' + num + '" name="scene[' + num + ']" class="form-control"></select>';
+        if(config.currentMethod == 'batchcreate')
+        {
+            for(var i = num; i < 10 ; i ++)
+            {
+                if(i != num && $('#module' + i).val() != 'ditto') break;
+                var nowScenes = scenes.replaceAll('scene' + num, 'scene' + i);
+                $('#scene' + i).replaceWith(nowScenes);
+                $('#scene' + i + "_chosen").remove();
+                $('#scene' + i).next('.picker').remove();
+                $('#scene' + i).attr('name', 'scene[' + i + ']');
+                $('#scene' + i).chosen();
+            }
+        }
+        else
+        {
+            $('#scene' + num).replaceWith(scenes);
+            $('#scene' + num + "_chosen").remove();
+            $('#scene' + num).next('.picker').remove();
+            $('#scene' + num).attr('name', 'scene[' + num + ']');
+            $('#scene' + num).chosen();
+        }
+    });
+}

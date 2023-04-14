@@ -6,9 +6,6 @@ $(function()
     setTimeout(function(){$('.CodeMirror').height($(document).height() - 112);}, 100);
     $('iframe.ke-edit-iframe').contents().find('.article-content').css('padding', '20px 20px 0 20px');
 
-    setSavePath();
-    $('#modalBasicInfo').on('hide.zui.modal', function(){setSavePath();});
-
     $('#saveDraft').click(function()
     {
         if($('#editorTitle').val() == '')

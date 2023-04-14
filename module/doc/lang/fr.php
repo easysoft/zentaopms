@@ -121,7 +121,6 @@ $lang->doc->update       = 'Update';
 $lang->doc->nextStep     = 'Next';
 $lang->doc->closed       = 'Closed';
 $lang->doc->saveDraft    = 'Save Draft';
-$lang->doc->defaultSave  = 'Default Save: ';
 $lang->doc->position     = 'Position';
 $lang->doc->person       = 'Person';
 $lang->doc->team         = 'Team';

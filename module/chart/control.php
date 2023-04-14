@@ -65,6 +65,7 @@ class chart extends control
         $filters       = $this->post->filters;
         $fieldSettings = $this->post->fieldSettings;
         $langs         = $this->post->langs;
+        $sql           = $this->post->sql;
         $clientLang    = $this->app->getClientLang();
 
         $fieldPairs = array();
@@ -91,7 +92,7 @@ class chart extends control
             if($type == 'select')
             {
                 $fieldSetting = $fieldSettings[$field];
-                $options      = $this->chart->getSysOptions(zget($fieldSetting, 'type', ''), zget($fieldSetting, 'object', ''), zget($fieldSetting, 'field', ''));
+                $options      = $this->chart->getSysOptions(zget($fieldSetting, 'type', ''), zget($fieldSetting, 'object', ''), zget($fieldSetting, 'field', ''), $sql);
             }
 
             $filterHtml = array();

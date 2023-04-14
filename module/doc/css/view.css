@@ -1,8 +1,8 @@
-.h-full-adjust {overflow-y: auto; height: calc(100vh - 120px);}
+.h-full-adjust {overflow-y: auto; height: calc(100vh - 125px);}
 .main-col .block-files .panel-heading {padding-right: 20px;}
 .main-col .block-files .panel-heading .panel-title {height: 35px; line-height: 30px;}
 .main-col .doc-title {display: flex; font-size: 16px; margin-bottom: 10px;}
-.main-col .doc-title .title {margin-right: 10px; line-height: 32px; font-size: 25px;}
+.main-col .doc-title .title {margin-right: 10px; line-height: 32px; font-size: 20px;}
 .main-col .doc-title .info {flex: 1 1 0;}
 .main-col .doc-title .version a {font-size: 13px; color: #8c8c8c;}
 .main-col .doc-title .version .dropdown-menu a:hover {color: #ffffff;}
@@ -31,15 +31,15 @@
 .outline-toggle {position: absolute; right: 20px; top: 50px;}
 .outline-toggle i.icon-angle-right:before {content: "\e314"; cursor: pointer;}
 .outline-toggle i.icon-angle-left:before {content: "\e315"; cursor: pointer;}
+.outline-toggle {position: absolute; right: 55px; top: 50px;}
 .outline ul li {list-style: none;}
 .outline-content {display: none; padding-top: 18px;}
 .outline-content a {color: #838A9D;}
-.outline-content li.text-ellipsis.active>a {font-weight: 700; color: #0c64eb;}
+.outline-content li.text-ellipsis.active>a {font-weight: 700;}
 #outline li.has-list.open:before {content: unset;}
 #fileTree {margin-bottom: 40px; max-height: calc(100vh - 180px); overflow: auto;}
 #closeBtn {position: absolute; right: 10px; top: 10px;}
 
-.title {font-size: 20px !important;}
 .article-content.comment {width: 100% !important;}
 
 .flex {display: flex;}

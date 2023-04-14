@@ -285,7 +285,6 @@ $(document).ready(function()
     $(function()
     {
         $('.split-row').splitRow();
-        updateCrumbs();
     });
 
     var $pageSetting = $('#pageSetting');
@@ -345,47 +344,6 @@ function locateNewLib(type, objectID, libID)
     }
 
     location.href = createLink('doc', method, params);
-}
-
-/**
- * Set save path.
- *
- * @access public
- * @return void
- */
-function setSavePath()
-{
-    var getSubPath = function($obj)
-    {
-        var $td = $obj.parent();
-        var usePicker = $td.find('.picker').length == 1;
-        var subPath = $obj.find('option:checked').text();
-        if(usePicker) subPath = $td.find('.picker .picker-selection-text').text();
-        return subPath;
-    }
-
-    savePath = defaultSave;
-    if($('#modalBasicInfo #product').length == 1)
-    {
-        savePath += getSubPath($('#modalBasicInfo #product')) + '/';
-    }
-    else if($('#modalBasicInfo #project').length == 1 && $('#modalBasicInfo #execution').length == 0)
-    {
-        savePath += getSubPath($('#modalBasicInfo #project')) + '/';
-    }
-    else if($('#modalBasicInfo #project').length == 1 && $('#modalBasicInfo #execution').length == 1)
-    {
-        var executionID = $('#modalBasicInfo #execution').val();
-        if(executionID == '0' || executionID == '') savePath += getSubPath($('#modalBasicInfo #project')) + '/';
-        if(executionID != '0' && executionID != '') savePath += getSubPath($('#modalBasicInfo #execution')) + '/';
-    }
-    else if($('#modalBasicInfo #execution').length == 1)
-    {
-        savePath += getSubPath($('#modalBasicInfo #execution')) + '/';
-    }
-    savePath += getSubPath($('#modalBasicInfo #module'));
-
-    $('#savePath').html(savePath).attr('title', savePath);
 }
 
 /**

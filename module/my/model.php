@@ -416,12 +416,15 @@ class myModel extends model
             ->orderBy('order_asc')
             ->fetchPairs();
 
+        $scene = $this->loadModel('testcase')->getSceneMenu(0, 0);
+
         $queryName = $type == 'contribute' ? 'contributeTestcase' : 'workTestcase';
         $this->app->loadConfig('testcase');
         $this->config->testcase->search['module']                      = $queryName;
         $this->config->testcase->search['queryID']                     = $queryID;
         $this->config->testcase->search['actionURL']                   = $actionURL;
         $this->config->testcase->search['params']['product']['values'] = array('' => '') + $products;
+        $this->config->testcase->search['params']['scene']['values']   = array('' => '') + $scene;
         $this->config->testcase->search['params']['lib']['values']     = array('' => '') + $this->loadModel('caselib')->getLibraries();
 
         unset($this->config->testcase->search['fields']['module']);
@@ -1380,24 +1383,26 @@ class myModel extends model
         if(empty($actionField)) $actionField = 'date';
         $orderBy = $actionField . '_' . $direction;
 
-        $condition = "(action = 'reviewed' or action = 'approvalreview')";
+        $condition = "(`action` = 'reviewed' or `action` = 'approvalreview')";
         if($browseType == 'createdbyme')
         {
             $condition  = "(objectType in('story','case','feedback') and action = 'submitreview') OR ";
             $condition .= "(objectType = 'review' and action = 'opened') OR ";
             $condition .= "(objectType = 'attend' and action = 'commited') OR ";
-            $condition .= "(action = 'approvalsubmit') OR ";
+            $condition .= "(`action` = 'approvalsubmit') OR ";
             $condition .= "(objectType in('leave','makeup','overtime','lieu') and action = 'created')";
             $condition  = "($condition)";
         }
-
-        $actions = $this->dao->select('objectType,objectID,actor,action,MAX(`date`) as `date`,extra')->from(TABLE_ACTION)
+        $actionIdList = $this->dao->select('MAX(`id`) as `id`')->from(TABLE_ACTION)
             ->where('actor')->eq($this->app->user->account)
             ->andWhere('vision')->eq($this->config->vision)
             ->andWhere($condition)
             ->groupBy('objectType,objectID')
             ->orderBy($orderBy)
-            ->page($pager, 'objectType,objectID')
+            ->page($pager)
+            ->fetchPairs();
+        $actions = $this->dao->select('objectType,objectID,actor,action,`date`,extra')->from(TABLE_ACTION)
+            ->where('id')->in($actionIdList)
             ->fetchAll();
         $objectTypeList = array();
         foreach($actions as $action) $objectTypeList[$action->objectType][] = $action->objectID;

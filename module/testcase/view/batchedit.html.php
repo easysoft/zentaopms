@@ -57,6 +57,9 @@
             <th class='c-branch'><?php echo $lang->testcase->branch;?></th>
             <?php endif;?>
             <th class='c-module<?php echo zget($visibleFields, 'module', ' hidden') . zget($requiredFields, 'module', '', ' required');?>'><?php echo $lang->testcase->module;?></th>
+            <?php if(!$isLibCase):?>
+            <th class='c-scene<?php echo zget($visibleFields, 'scene', ' hidden') . zget($requiredFields, 'scene', '', ' required');?>'><?php echo $lang->testcase->scene;?></th>
+            <?php endif;?>
             <th class='c-story<?php echo zget($visibleFields, 'story', ' hidden') . zget($requiredFields, 'story', '', ' required');?>'><?php echo $lang->testcase->story;?></th>
             <th class='text-left c-title required'><?php echo $lang->testcase->title;?></th>
             <th class='c-type required'><?php echo $lang->testcase->type;?></th>
@@ -96,7 +99,10 @@
               <?php echo html::select("branches[$caseID]", !empty($disabled) ? array() : $branchTagOption[$branchProductID], $productType != 'normal' ? $cases[$caseID]->branch : '', "class='form-control chosen' onchange='loadBranches($branchProductID, this.value, $caseID, {$cases[$caseID]->branch})', $disabled");?>
             </td>
             <?php endif;?>
-            <td class='text-left<?php echo zget($visibleFields, 'module', ' hidden')?>' style='overflow:visible'><?php echo html::select("modules[$caseID]", zget($modulePairs, $caseID, array(0 => '/')), $cases[$caseID]->module, "class='form-control chosen' onchange='loadStories($productID, this.value, $caseID)'");?></td>
+            <td class='text-left<?php echo zget($visibleFields, 'module', ' hidden')?>' style='overflow:visible'><?php echo html::select("modules[$caseID]", zget($modulePairs, $caseID, array(0 => '/')), $cases[$caseID]->module, "class='form-control chosen' onchange='loadStories2($productID, this.value, $caseID)'");?></td>
+            <?php if(!$isLibCase):?>
+            <td class='text-left<?php echo zget($visibleFields, 'scene', ' hidden')?>' style='overflow:visible'><?php echo html::select("scene[$caseID]", zget($scenePairs, $caseID, array(0 => '/')), $cases[$caseID]->scene, "class='form-control chosen' data-drop_direction='down'");?></td>
+            <?php endif;?>
             <td class='text-left<?php echo zget($visibleFields, 'story', ' hidden')?>' style='overflow:visible'><?php echo html::select("story[$caseID]", $stories, $cases[$caseID]->story, "class='form-control picker-select'");?></td>
             <td style='overflow:visible' title='<?php echo $cases[$caseID]->title?>'>
               <div class='input-group'>
