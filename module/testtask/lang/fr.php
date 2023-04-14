@@ -60,7 +60,7 @@ $lang->testtask->compile          = 'Compile';
 $lang->testtask->duration         = 'Duration';
 
 $lang->testtask->viewAction     = "View Request";
-$lang->testtask->casesAction    = 'View Case';
+$lang->testtask->casesAction    = 'Browse Cases List';
 $lang->testtask->activateAction = "Activer Campagne";
 $lang->testtask->blockAction    = "Bloquer Campagne";
 $lang->testtask->closeAction    = "Clôturer Campagne";

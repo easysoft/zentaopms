@@ -60,7 +60,7 @@ $lang->testtask->compile          = '构建';
 $lang->testtask->duration         = '持续时间';
 
 $lang->testtask->viewAction     = "测试单概况";
-$lang->testtask->casesAction    = '查看用例';
+$lang->testtask->casesAction    = '浏览用例列表';
 $lang->testtask->activateAction = "激活测试单";
 $lang->testtask->blockAction    = "阻塞测试单";
 $lang->testtask->closeAction    = "关闭测试单";
