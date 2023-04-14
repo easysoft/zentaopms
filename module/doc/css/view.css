@@ -27,7 +27,7 @@
 .article-content {width: 100%; display: inline-block;}
 .article-content img {margin: 0;}
 .article-content.comment .comment-content {width: 94%;}
-#outlineMenu {max-width: 200px;}
+#outlineMenu {max-width: 200px; overflow-x: auto;}
 #outlineMenu .tree li > a {text-overflow: clip;}
 .outline-toggle {position: absolute; right: 20px; top: 50px;}
 .outline-toggle i.icon-angle-right:before {content: "\e314"; cursor: pointer;}
