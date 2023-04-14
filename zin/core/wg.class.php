@@ -195,7 +195,16 @@ class wg
         return $child;
     }
 
-    protected function onSetProp($name, $value) {}
+    protected function onSetProp($prop, $value)
+    {
+        if($prop === 'id' && $value === '$GID') $value = $this->gid;
+        $this->props->set($prop, $value);
+    }
+
+    protected function onGetProp($prop, $defaultValue)
+    {
+        return $this->props->get($prop, $defaultValue);
+    }
 
     public function add($item, $blockName = 'children')
     {
@@ -323,12 +332,12 @@ class wg
             $values = array();
             foreach($name as $index => $propName)
             {
-                $values[] = $this->props->get($propName, is_array($defaultValue) ? (isset($defaultValue[$propName]) ? $defaultValue[$propName] : $defaultValue[$index]) : $defaultValue);
+                $values[] = $this->onGetProp($propName, is_array($defaultValue) ? (isset($defaultValue[$propName]) ? $defaultValue[$propName] : $defaultValue[$index]) : $defaultValue);
             }
             return $values;
         }
 
-        return $this->props->get($name, $defaultValue);
+        return $this->onGetProp($name, $defaultValue);
     }
 
     /**
@@ -357,17 +366,7 @@ class wg
             return;
         }
 
-        $result = $this->onSetProp($prop, $value);
-        if($result === false) return $this;
-        if(is_array($result))
-        {
-            $prop = $result[0];
-            $value = $result[1];
-        }
-
-        if($prop === 'id' && $value === '$GID') $value = $this->gid;
-
-        $this->props->set($prop, $value);
+        $this->onSetProp($prop, $value);
         return $this;
     }
 
