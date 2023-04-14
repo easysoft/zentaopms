@@ -6,6 +6,7 @@ $lang->mr->view         = "Survey";
 $lang->mr->create       = "Create";
 $lang->mr->apiCreate    = "Interface: Create";
 $lang->mr->browse       = "Browse";
+$lang->mr->browseAction = "{$lang->mr->common} List";
 $lang->mr->list         = "List";
 $lang->mr->edit         = "Edit";
 $lang->mr->delete       = "Delete";

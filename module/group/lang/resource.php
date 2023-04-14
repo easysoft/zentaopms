@@ -1581,7 +1581,7 @@ $lang->sonarqube->methodOrder[50] = 'browseIssue';
 /* merge request. */
 $lang->resource->mr = new stdclass();
 $lang->resource->mr->create    = 'create';
-$lang->resource->mr->browse    = 'browse';
+$lang->resource->mr->browse    = 'browseAction';
 $lang->resource->mr->edit      = 'edit';
 $lang->resource->mr->delete    = 'delete';
 $lang->resource->mr->view      = 'view';
