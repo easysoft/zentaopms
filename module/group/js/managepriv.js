@@ -343,7 +343,7 @@ function recommendChange($item, checked)
         $actionItem.removeAttr('checked');
     }
     var moduleName = $actionItem.closest('tr').find('.package').attr('data-module');
-    var packageID  = $actionItem.closest('tr').find('.package').attr('data-package');
+    var packageID  = $('#privList').length > 0 ? $actionItem.closest('tr').find('.package').attr('data-package') : $actionItem.closest('.privs').attr('data-package');
     changeParentChecked($actionItem, moduleName, packageID);
 
     var $parentItem       = $item.closest('ul').closest('li').find('input[data-has-children="true"]');
