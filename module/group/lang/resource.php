@@ -1487,7 +1487,7 @@ $lang->svn->methodOrder[15] = 'apiSync';
 
 /* GitLab. */
 $lang->resource->gitlab = new stdclass();
-$lang->resource->gitlab->browse               = 'browse';
+$lang->resource->gitlab->browse               = 'browseAction';
 $lang->resource->gitlab->create               = 'create';
 $lang->resource->gitlab->edit                 = 'edit';
 $lang->resource->gitlab->view                 = 'view';
