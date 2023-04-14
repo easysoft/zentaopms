@@ -748,14 +748,6 @@ class docModel extends model
             ->fetch();
 
         if(!$doc) return false;
-        if(!$this->checkPrivDoc($doc))
-        {
-            echo(js::alert($this->lang->doc->accessDenied));
-            $loginLink = $this->config->requestType == 'GET' ? "?{$this->config->moduleVar}=user&{$this->config->methodVar}=login" : "user{$this->config->requestFix}login";
-            if(strpos($this->server->http_referer, $loginLink) !== false) return print(js::locate(inlink('index')));
-            helper::end(print(js::locate('back')));
-            die;
-        }
 
         $docs = $this->processCollector(array($doc->id => $doc));
         $doc  = $docs[$doc->id];

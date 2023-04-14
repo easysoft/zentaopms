@@ -541,16 +541,25 @@ class doc extends control
                 if(!empty($changes)) $this->action->logHistory($actionID, $changes);
             }
 
-            $link     = $this->session->docList ? $this->session->docList : $this->createLink('doc', 'index');
+            $link     = $this->createLink('doc', 'view', "docID={$docID}") . "#app={$this->app->tab}";
             $oldLib   = $doc->lib;
             $doc      = $this->doc->getById($docID);
             $lib      = $this->doc->getLibById($doc->lib);
             $objectID = zget($lib, $lib->type, 0);
-            if($oldLib != $doc->lib) $link = $this->createLink('doc', 'view', "docID={$docID}");
-
-            if(!empty($objectType) and $objectType != 'doc' and $doc->type != 'chapter' and $doc->type != 'article')
+            if(!$this->doc->checkPrivDoc($doc))
             {
-                $link = $this->createLink('doc', 'view', "docID=$docID") . "#app={$this->app->tab}";
+                $moduleName = 'doc';
+                if($this->app->tab == 'execution')
+                {
+                    $moduleName = 'execution';
+                    $methodName = 'doc';
+                }
+                else
+                {
+                    $methodName = zget($this->config->doc->spaceMethod, $lib->type);
+                }
+                $params = "objectID=$objectID&libID={$doc->lib}";
+                $link   = $this->createLink($moduleName, $methodName, $params);
             }
 
             if(isonlybody()) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
@@ -1103,6 +1112,14 @@ class doc extends control
     public function view($docID = 0, $version = 0, $appendLib = 0)
     {
         $doc = $this->doc->getById($docID);
+        if(!$this->doc->checkPrivDoc($doc))
+        {
+            echo(js::alert($this->lang->doc->accessDenied));
+            $loginLink = $this->config->requestType == 'GET' ? "?{$this->config->moduleVar}=user&{$this->config->methodVar}=login" : "user{$this->config->requestFix}login";
+            if(strpos($this->server->http_referer, $loginLink) !== false) return print(js::locate(inlink('index')));
+            helper::end(print(js::locate('back')));
+        }
+
         if(!$doc or !isset($doc->id))
         {
             if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'fail', 'code' => 404, 'message' => '404 Not found'));
