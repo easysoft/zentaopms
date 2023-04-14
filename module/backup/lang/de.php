@@ -1,6 +1,6 @@
 <?php
 $lang->backup->common      = 'Sicherung';
-$lang->backup->index       = 'Start';
+$lang->backup->index       = 'Backup List';
 $lang->backup->history     = 'Verlauf';
 $lang->backup->delete      = 'Löschen';
 $lang->backup->backup      = 'Sichern';
