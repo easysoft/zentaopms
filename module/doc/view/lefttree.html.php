@@ -483,13 +483,13 @@ $(function()
             if($hoverItem.length)
             {
                 $hoverItem.removeClass('hover');
-                $hoverItem.find('.icon').addClass('hidden');
+                $hoverItem.find('.icon-drop').addClass('hidden');
             }
             $dropdown.remove();
         }
     }).on('click', '.sidebar-toggle', function()
     {
-        var $icon = $(this).find('.icon');
+        var $icon = $(this).find('.icon-drop');
         if($('#sideBar').hasClass('hidden'))
         {
             $icon.addClass('icon-angle-left');
