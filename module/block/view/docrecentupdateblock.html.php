@@ -13,12 +13,12 @@
 <style>
 .block-docrecentupdate .panel-body {padding: 0px 10px 20px;}
 .block-docrecentupdate .doc-list {display: flex; flex-wrap: wrap; padding: 0 4px 0 0;}
-.block-docrecentupdate .doc-list > .doc-box {border: unset; flex: 0 1 33%; padding: 8px;}
-.block-docrecentupdate .doc-list > .doc-box > button.btn {padding: 5px 10px; height: 100%; width: 100%; cursor: pointer; white-space: unset; text-align: unset; border: 1px solid rgba(227, 228, 233, 0.6)}
+.block-docrecentupdate .doc-list > .doc-box {border: unset; flex: 0 1 33%; padding: 8px; width: 0;}
+.block-docrecentupdate .doc-list > .doc-box > button.btn {padding: 5px 10px; height: 100%; width: 100%; cursor: pointer; white-space: nowrap; text-align: unset; border: 1px solid rgba(227, 228, 233, 0.6)}
 .block-docrecentupdate .doc-list > .doc-box > .btn:hover {background: unset;}
 .block-docrecentupdate .doc-list > .doc-box > .btn.no-priv {cursor: not-allowed; pointer-events: unset;}
 .block-docrecentupdate .doc-list > .doc-box > .btn.no-priv p {pointer-events: none;}
-.block-docrecentupdate .doc-list > .doc-box .date-interval {float: right; padding: 8px 0px;}
+.block-docrecentupdate .doc-list > .doc-box .date-interval {float: right; padding: 8px 0 8px 12px;}
 .block-docrecentupdate .doc-list > .doc-box > .btn > h4 {padding-right: 5px;}
 .block-docrecentupdate .doc-list > .doc-box .file-icon {margin-right: 2px; width: 14px;}
 .block-docrecentupdate .doc-list > .doc-box .plug-title {height: 16px; overflow: hidden;}

@@ -24,8 +24,8 @@
 .tree-icon {position: absolute; right: 0;}
 .tree li.has-input {overflow: hidden;}
 .tree li.has-input  > input.input-bro {margin-left: 15px;}
-.img-lib {flex: 0 0 14px; height: 14px; margin-right: 5px; margin-bottom: 5px;}
-.file-icon {width: 14px;}
+.img-lib {flex: 0 0 14px; height: 14px; margin-right: 5px; margin-bottom: 2px;}
+.file-icon {width: 14px; margin-bottom: 4px;}
 .tree-icon {position: absolute; right: 0;}
 .tree li > a {max-width: 100%; padding: 2px;}
 .file-tree  a.show-icon > div,
@@ -543,7 +543,8 @@ $(function()
                     $rootDom.after($input);
                     $li.addClass('open in has-list');
                 }
-                $rootDom.parent().find('input').focus();
+                $input = $rootDom.parent().find('input');
+                $input.focus();
                 break;
             case 'addCataBro' :
                 moduleData.createType = 'same';
@@ -551,7 +552,8 @@ $(function()
                 var $rootDom = $('#fileTree li[data-id=' + item.id + ']');
                 $rootDom.after($input);
                 $rootDom.closest('ul').find('.has-input').css('padding-left', '0');
-                $('#fileTree').find('input').addClass('input-bro').focus();
+                $input = $('#fileTree').find('input').addClass('input-bro');
+                $input.focus();
                 break;
             case 'addCataChild' :
                 moduleData.parentID = item.id;
@@ -569,9 +571,9 @@ $(function()
                     moduleData.isUpdate = true;
                     $rootDom.addClass('open in has-list');
                 }
-
                 $rootDom.append($input);
-                $rootDom.find('input').focus();
+                $input = $rootDom.find('input');
+                $input.focus();
                 break;
         }
     }).on('click', '#versionSwitcher a', function()

@@ -20,7 +20,7 @@ body {margin-bottom: 25px;}
 #docListForm .checkbox-primary > label {height: 16px; line-height: 16px; padding-left: 16px;}
 #docListForm .checkbox-primary > label:before {left: -1px; font-size: 10px;}
 #docListForm .checkbox-primary > label:after {width: 12px; height: 12px;}
-.table-files .btn {padding: 0 2px;}
+.table-files .btn {padding: 2px;}
 </style>
 <?php if(common::checkNotCN()):?>
 <style>
@@ -42,7 +42,6 @@ body {margin-bottom: 25px;}
 </div>
 <?php else:?>
 <?php $vars = "objectID=$objectID&$libID=$libID&moduleID=$moduleID&browseType=$browseType&orderBy=%s&param=$param&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}";?>
-<?php if($app->rawMethod == 'tablecontents') $vars = "type=$type&" . $vars;?>
 <div>
   <form class='main-table' method='post' id='docListForm'>
     <table class="table table-files has-sort-head">

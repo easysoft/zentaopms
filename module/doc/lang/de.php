@@ -125,6 +125,7 @@ $lang->doc->defaultSave  = 'Default Save: ';
 $lang->doc->position     = 'Position';
 $lang->doc->person       = 'Person';
 $lang->doc->team         = 'Team';
+$lang->doc->manage       = 'Document Management';
 
 $lang->doc->moduleDoc     = 'Nach Modulen';
 $lang->doc->searchDoc     = 'Suche';

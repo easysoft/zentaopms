@@ -32,7 +32,7 @@ function loadExecutions(projectID)
     $('#executionBox').load(link, function()
     {
         var $extension = $('#executionBox').find('select');
-        $extension.attr('data-placeholder', holders.execution).attr('onchange', "loadObjectModules('execution', this.value)").picker();
+        $extension.attr('onchange', "loadObjectModules('execution', this.value)").picker();
         if($extension.hasClass('disabled')) $('#executionBox').find('.picker').addClass('disabled');
     });
     loadObjectModules('project', projectID);
@@ -332,12 +332,11 @@ $(document).ready(function()
  */
 function locateNewLib(type, objectID, libID)
 {
-    var method = 'tableContents';
-    var params = 'type=' + type + '&objectID=' + objectID + '&libID=' + libID;
+    var method = 'teamSpace';
+    var params = 'objectID=' + objectID + '&libID=' + libID;
     if(type == 'product' || type == 'project')
     {
         method = type + 'Space';
-        params = 'objectID=' + objectID + '&libID=' + libID;
     }
     else if(type == 'mine')
     {

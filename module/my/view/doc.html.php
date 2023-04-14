@@ -34,23 +34,22 @@
   </div>
   <?php else:?>
   <div class="cell<?php if($type == 'bySearch') echo ' show';?>" id="queryBox" data-module=<?php echo 'contributeDoc';?>></div>
-  <form id='projectForm' class="main-table" method='post' data-ride='table' data-checkable='false'>
+  <form id='docForm' class="main-table" method='post' data-ride='table'>
     <table class='table table-fixed' id='docList'>
       <thead>
         <tr>
           <th class="c-id"><?php echo $lang->doc->id;?></th>
           <th class="c-name"><?php echo $lang->doc->title;?></th>
-          <th class="c-name c-object"><?php echo $lang->doc->object;?></th>
-          <th class="c-num"><?php echo $lang->doc->size;?></th>
+          <th class="c-object"><?php echo $lang->doc->object;?></th>
           <?php if($type != 'openedbyme'):?>
           <th class="c-user"><?php echo $lang->doc->addedByAB;?></th>
           <?php endif;?>
-          <th class="c-datetime"><?php echo $lang->doc->addedDate;?></th>
+          <th class="c-date"><?php echo $lang->doc->addedDate;?></th>
           <?php if($type == 'openedbyme'):?>
-          <th class="c-user"><?php echo $lang->doc->lastEditedBy;?></th>
+          <th class="c-user"><?php echo $lang->doc->editedBy;?></th>
           <?php endif;?>
-          <th class="c-datetime"><?php echo $lang->doc->editedDate;?></th>
-          <th class="c-actions-3 text-center"><?php echo $lang->actions;?></th>
+          <th class="c-date"><?php echo $lang->doc->editedDate;?></th>
+          <th class="c-actions"><?php echo $lang->actions;?></th>
         </tr>
       </thead>
       <tbody id='docTableList'>
@@ -59,29 +58,38 @@
         <?php $collectTitle = strpos($doc->collector, ',' . $this->app->user->account . ',') !== false ? $lang->doc->cancelCollection : $lang->doc->collect;?>
         <tr>
           <td class="c-id"><?php echo $doc->id;?></td>
-          <td class="c-name"><?php echo html::a($this->createLink('doc', 'view', "docID=$doc->id&version=0&from={$lang->navGroup->doc}", '', true), "<i class='icon icon-file-text text-muted'></i> &nbsp;" . $doc->title, '', "title='{$doc->title}' class='iframe' data-width='90%'");?></td>
-          <td class='c-name'>
-            <?php if(!empty($doc->objectType)):?>
-            <?php echo $lang->{$doc->objectType}->common . ' : ';?>
-            <a title='<?php echo $doc->objectName;?>' href='<?php echo $this->createLink($doc->objectType, 'view', "objectID=$doc->objectID");?>' data-app="<?php echo $doc->objectType;?>">
-              <?php echo $doc->objectName;?>
-            </a>
-            <?php endif;?>
+          <td class="c-name" title='<?php echo $doc->title;?>'>
+          <?php
+          $docType = $doc->type == 'text' ? 'wiki-file' : $doc->type;
+          $icon    = html::image("static/svg/{$docType}.svg", "class='file-icon'");
+          if(common::hasPriv('doc', 'view'))
+          {
+              echo html::a($this->createLink('doc', 'view', "docID=$doc->id"), $icon . $doc->title, '', "title='{$doc->title}' class='doc-title' data-app='doc'");
+          }
+          else
+          {
+              echo "<span class='doc-title'>$icon {$doc->title}</span>";
+          }
+          ?>
+          <?php if($doc->status == 'draft') echo "<span class='label label-badge draft'>{$lang->doc->draft}</span>";?>
+          <?php if(common::canBeChanged('doc', $doc) and common::hasPriv('doc', 'collect')):?>
+            <a data-url="<?php echo $this->createLink('doc', 'collect', "objectID=$doc->id&objectType=doc");?>" title="<?php echo $collectTitle;?>" class='btn btn-link ajaxCollect'><?php echo html::image("static/svg/{$star}.svg", "class='$star'");?></a>
+          <?php endif;?>
           </td>
-          <td class="c-num"><?php echo $doc->fileSize ? $doc->fileSize : '-';?></td>
+          <td class="c-object" title='<?php echo $doc->objectName;?>'>
+            <?php $objectIcon = zget($config->doc->objectIconList, $doc->objectType);?>
+            <?php echo "<i class='icon $objectIcon'></i> " . $doc->objectName;?>
+          </td>
           <?php if($type != 'openedbyme'):?>
           <td class="c-user"><?php echo zget($users, $doc->addedBy);?></td>
           <?php endif;?>
-          <td class="c-datetime"><?php echo formatTime($doc->addedDate, 'y-m-d');?></td>
+          <td class="c-date"><?php echo formatTime($doc->addedDate, 'Y-m-d');?></td>
           <?php if($type == 'openedbyme'):?>
           <td class="c-user"><?php echo zget($users, $doc->editedBy);?></td>
           <?php endif;?>
-          <td class="c-datetime"><?php echo formatTime($doc->editedDate, 'y-m-d');?></td>
+          <td class="c-date"><?php echo formatTime($doc->editedDate, 'Y-m-d');?></td>
           <td class="c-actions">
             <?php if(common::canBeChanged('doc', $doc)):?>
-            <?php if(common::hasPriv('doc', 'collect')):?>
-            <a data-url="<?php echo $this->createLink('doc', 'collect', "objectID=$doc->id&objectType=doc");?>" title="<?php echo $collectTitle;?>" class='btn btn-link ajaxCollect'><?php echo html::image("static/svg/{$star}.svg");?></a>
-            <?php endif;?>
             <?php common::printLink('doc', 'edit', "docID=$doc->id&comment=false&from={$lang->navGroup->doc}", "<i class='icon icon-edit'></i>", '', "title='{$lang->edit}' class='btn btn-link' data-app='doc'", true, false)?>
             <?php common::printLink('doc', 'delete', "docID=$doc->id&confirm=no&from={$lang->navGroup->doc}", "<i class='icon icon-trash'></i>", 'hiddenwin', "title='{$lang->delete}' class='btn btn-link'")?>
             <?php endif;?>

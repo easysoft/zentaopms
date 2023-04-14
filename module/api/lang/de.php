@@ -12,6 +12,7 @@
 $lang->api->common   = 'API';
 $lang->api->getModel = 'Super Model API';
 $lang->api->sql      = 'SQL Query API';
+$lang->api->manage   = 'API management';
 
 $lang->api->index            = 'API Space';
 $lang->api->editLib          = 'Edit';
@@ -108,7 +109,7 @@ $lang->api->structAddedBy      = 'CreatedBy';
 $lang->api->structAddedDate    = 'Created';
 $lang->api->name               = 'API Library Name';
 $lang->api->baseUrl            = 'Base URL';
-$lang->api->baseUrlDesc        = 'Site or path, e.g., api.zentao.com or /v1.';
+$lang->api->baseUrlDesc        = 'Site or path, e.g., http://api.zentao.com or /v1.';
 $lang->api->desc               = 'Beschreibung';
 $lang->api->control            = 'Access Control';
 $lang->api->noLib              = 'No API library yet.';

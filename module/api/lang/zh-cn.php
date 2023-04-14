@@ -12,6 +12,7 @@
 $lang->api->common   = 'API接口';
 $lang->api->getModel = '超级model调用接口';
 $lang->api->sql      = 'SQL查询接口';
+$lang->api->manage   = '接口管理';
 
 $lang->api->index            = '接口空间';
 $lang->api->editLib          = '编辑库';
@@ -108,7 +109,7 @@ $lang->api->structAddedBy      = '创建人';
 $lang->api->structAddedDate    = '创建时间';
 $lang->api->name               = '库名称';
 $lang->api->baseUrl            = '请求基础路径';
-$lang->api->baseUrlDesc        = '网址或者路径，比如 test.zentao.net 或者 /v1';
+$lang->api->baseUrlDesc        = '网址或者路径，比如 http://test.zentao.net 或者 /v1';
 $lang->api->desc               = '描述';
 $lang->api->control            = '访问控制';
 $lang->api->noLib              = '暂时没有库。';
