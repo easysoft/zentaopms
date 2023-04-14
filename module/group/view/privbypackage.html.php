@@ -103,7 +103,9 @@
             <th class='text-middle text-left module' data-module='<?php echo $moduleName;?>' all-privs='<?php echo $modulePrivs;?>' select-privs='<?php echo $moduleSelect;?>'>
               <div class="checkbox-primary checkbox-inline checkbox-left check-all">
                 <input type='checkbox' id='allChecker<?php echo $moduleName;?>' value='1' <?php if(!empty($moduleSelect) and $modulePrivs == $moduleSelect) echo 'checked';?>>
-                <label class='text-left <?php if(!empty($moduleSelect) and $modulePrivs != $moduleSelect) echo 'checkbox-indeterminate-block';?>' for='allChecker<?php echo $moduleName;?>'><?php echo $lang->$moduleName->common;?></label>
+                <?php $moduleTitle = $lang->$moduleName->common;?>
+                <?php if(in_array($moduleName, array('doc', 'api'))) $moduleTitle = $lang->$moduleName->manage;?>
+                <label class='text-left <?php if(!empty($moduleSelect) and $modulePrivs != $moduleSelect) echo 'checkbox-indeterminate-block';?>' for='allChecker<?php echo $moduleName;?>'><?php echo $moduleTitle;?></label>
               </div>
             </th>
             <td class='td-sm text-middle text-left package-column' data-module='<?php echo $moduleName;?>'>

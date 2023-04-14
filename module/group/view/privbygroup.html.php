@@ -76,7 +76,6 @@
     </div>
   </div>
 </div>
-<<<<<<< HEAD
 <form class="load-indicator main-form form-ajax" id="managePrivForm" method="post">
   <div id='mainContainer'>
     <div class='main main-content'>
