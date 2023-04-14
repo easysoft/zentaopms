@@ -439,9 +439,11 @@ $(function()
 
         if(!opened)
         {
-             $(this).closest('.package').addClass('open');
+            $(this).closest('.package').addClass('open');
             var moduleName     = $(this).closest('.package').attr('data-module');
             var packageID      = $(this).closest('.package').attr('data-package');
+
+            /* The privs should be inserted after which permission package. */
             var perRowPackages = Math.floor($(this).closest('td').width() / $(this).closest('td').find('.package').width());
             var packageIndex   = $(this).closest('.package').index() / 2 ;
             var appendIndex    = (Math.floor(packageIndex / perRowPackages) + 1) * perRowPackages - 1;
@@ -451,12 +453,20 @@ $(function()
               + $privs.html().replace(/actions/g, 'showPrivs')
               + '</div>');
 
+            /* Calculate the triangle position of privs popover. */
             var position = $(this).closest('td').find('.package').width() * (packageIndex % perRowPackages) + 30;
 
             $showPrivs.find('.arrow').css('left', position + 'px');
 
-            if($(this).closest('td').find('.package').eq(appendIndex).length > 0) $(this).closest('td').find('.package').eq(appendIndex).after($showPrivs);
-            if($(this).closest('td').find('.package').eq(appendIndex).length == 0) $(this).closest('td').find('.package').eq(-1).after($showPrivs);
+            if($(this).closest('td').find('.package').eq(appendIndex).length == 0)
+            {
+                $(this).closest('td').find('.package').eq(-1).after($showPrivs);
+                $showPrivs.css('margin-bottom', '0');
+            }
+            else
+            {
+                $(this).closest('td').find('.package').eq(appendIndex).after($showPrivs);
+            }
         }
     });
 });

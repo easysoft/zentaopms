@@ -2,7 +2,7 @@
 #mainContainer {display: flex; gap: 16px; height: calc(100vh - 165px);}
 #mainContainer > .main {flex: 1 1 75%; overflow-y: auto; padding: 0px; border: 1px solid #FFF; box-sizing: content-box;}
 #mainContainer > .side {flex: 1 1 25%;}
-#mainContainer .main .btn-group {position: absolute; visibility: hidden; top: 2px; display: inline-block; z-index: 12;}
+#mainContainer .main .btn-group {position: absolute; visibility: hidden; top: 2px; display: inline-block; z-index: 2;}
 .priv-panel {background: #fff; padding: 10px 16px; box-shadow: 0 1px 1px rgb(0 0 0 / 5%), 0 2px 6px 0 rgb(0 0 0 / 5%);}
 .priv-panel {height: 40%;}
 .priv-panel .table-empty-tip {padding: calc(15% - 10px) 10px;}
@@ -76,7 +76,7 @@ main#main {padding-bottom: 0px;}
 #privPackageList .package.open .list-toggle {transform: rotate(90deg);}
 #privPackageList .package.open .list-toggle:before {transform: rotate(90deg);}
 #privPackageList .group-item {display: inline-block; width: 158px; margin-bottom: 15px;}
-#privPackageList .privs {padding: 20px 20px 0 20px; margin: 10px 0px;border: 1px solid #F5F6F8; background-color: #F9FAFB; position: relative; display: block; max-width: unset; box-shadow: unset; margin-top: 0px; z-index: 1;}
+#privPackageList .privs {padding: 20px 20px 0 20px; margin: 10px 0px;border: 1px solid #F5F6F8; background-color: #F9FAFB; position: relative; display: block; max-width: unset; box-shadow: unset; z-index: 1;}
 #privPackageList .popover .popover-content {display: inline-block; padding: 0;}
 #privPackageList .popover .arrow {border-bottom-color: #F5F6F8; top: -10px;}
 #privPackageList .popover .arrow:after {border-bottom-color: #F9FAFB;}
