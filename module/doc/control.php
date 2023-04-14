@@ -74,6 +74,7 @@ class doc extends control
         $this->session->set('spaceType', 'mine', 'doc');
         $this->loadModel('search');
 
+        if($moduleID) $libID = $this->tree->getById($moduleID)->root;
         list($libs, $libID, $object, $objectID, $objectDropdown) = $this->doc->setMenuByType('mine', 0, $libID);
 
         /* Build the search form. */
@@ -1272,6 +1273,7 @@ class doc extends control
         $this->session->set('spaceType', $type, 'doc');
         $this->session->set('docList', $uri, 'doc');
 
+        if($moduleID) $libID = $this->tree->getById($moduleID)->root;
         $isFirstLoad = $libID == 0 ? true : false;
         if(empty($browseType)) $browseType = 'all';
         list($libs, $libID, $object, $objectID, $objectDropdown) = $this->doc->setMenuByType($type, $objectID, $libID);
