@@ -4,12 +4,13 @@ $lang->backup->index       = '备份列表';
 $lang->backup->history     = '备份历史';
 $lang->backup->delete      = '删除备份';
 $lang->backup->backup      = '开始备份';
-$lang->backup->restore     = '还原备份';
+$lang->backup->restore     = '还原';
 $lang->backup->change      = '保留时间';
 $lang->backup->changeAB    = '修改';
 $lang->backup->rmPHPHeader = '去除安全设置';
 $lang->backup->setting     = '设置';
 
+$lang->backup->restoreAction = '还原备份';
 $lang->backup->settingAction = '备份设置';
 
 $lang->backup->time     = '备份时间';

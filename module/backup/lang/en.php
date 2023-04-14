@@ -4,12 +4,13 @@ $lang->backup->index       = 'Backup List';
 $lang->backup->history     = 'History';
 $lang->backup->delete      = 'Delete Backup';
 $lang->backup->backup      = 'Backup';
-$lang->backup->restore     = 'Restore Backup';
+$lang->backup->restore     = 'Restore';
 $lang->backup->change      = 'Edit Expiration';
 $lang->backup->changeAB    = 'Edit';
 $lang->backup->rmPHPHeader = 'Remove PHP header';
 $lang->backup->setting     = 'Settings';
 
+$lang->backup->restoreAction = 'Restore Backup';
 $lang->backup->settingAction = 'Backup Settings';
 
 $lang->backup->time     = 'Date';
