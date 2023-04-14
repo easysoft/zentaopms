@@ -25,6 +25,7 @@
 .article-content .info .keywords .label {padding-right:8px; padding-left:8px; color:#18A6FD; border-color:rgba(24, 166, 253, 0.25); height:22px; line-height:14px; margin-right:4px;}
 
 .article-content {width: 100%; display: inline-block;}
+.article-content img {margin: 0;}
 .article-content.comment .comment-content {width: 94%;}
 #outlineMenu {max-width: 200px;}
 #outlineMenu .tree li > a {text-overflow: clip;}
