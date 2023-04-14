@@ -960,7 +960,7 @@ class mr extends control
         $projects = $scm == 'gitlab' ? $this->$scm->apiGetForks($hostID, $projectID) : array();
 
         /* Second step: get project itself. */
-        $projects[] = $this->$scm->apiGetSingleProject($hostID, $projectID);
+        $projects[] = $this->$scm->apiGetSingleProject($hostID, $projectID, true);
 
         /* Last step: find its upstream recursively. */
         $project = $this->$scm->apiGetUpstream($hostID, $projectID);

@@ -139,7 +139,7 @@ class repo extends control
 
         $this->app->loadLang('action');
 
-        if($this->app->tab == 'project')
+        if($this->app->tab == 'project' or $this->app->tab == 'execution')
         {
             $products = $this->loadModel('product')->getProductPairsByProject($objectID);
         }
@@ -154,7 +154,7 @@ class repo extends control
         $this->view->users           = $this->loadModel('user')->getPairs('noletter|noempty|nodeleted|noclosed');
         $this->view->products        = $products;
         $this->view->projects        = $this->loadModel('product')->getProjectPairsByProductIDList(array_keys($products));
-        $this->view->relatedProjects = $this->app->tab == 'project' ? array($objectID) : array();
+        $this->view->relatedProjects = ($this->app->tab == 'project' or $this->app->tab == 'execution') ? array($objectID) : array();
         $this->view->serviceHosts    = $this->loadModel('gitlab')->getPairs();
         $this->view->objectID        = $objectID;
 
@@ -1383,6 +1383,50 @@ class repo extends control
     }
 
     /**
+     * Import repos.
+     *
+     * @param int $server
+     * @access public
+     * @return void
+     */
+    public function import($server = 0)
+    {
+        if($_POST)
+        {
+            $this->repo->batchCreate();
+
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->repo->createLink('maintain')));
+        }
+
+        $gitlabList = $this->loadModel('gitlab')->getList();
+        $gitlab     = empty($server) ? array_shift($gitlabList) : $this->gitlab->getById($server);
+
+        $repoList = array();
+        if(!empty($gitlab))
+        {
+            $repoList      = $this->gitlab->apiGetProjects($gitlab->id);
+            $existRepoList = $this->dao->select('serviceProject,name')->from(TABLE_REPO)
+                ->where('SCM')->eq(ucfirst($gitlab->type))
+                ->andWhere('serviceHost')->eq($gitlab->id)
+                ->fetchPairs();
+            foreach($repoList as $key => $repo)
+            {
+                if(isset($existRepoList[$repo->id])) unset($repoList[$key]);
+            }
+        }
+
+        $products = $this->loadModel('product')->getPairs('', 0, '', 'all');
+
+        $this->view->gitlabPairs = $this->gitlab->getPairs();
+        $this->view->products = $products;
+        $this->view->projects = $this->product->getProjectPairsByProductIDList(array_keys($products));
+        $this->view->gitlab   = $gitlab;
+        $this->view->repoList = array_values($repoList);
+        $this->display();
+    }
+
+    /**
      * Ajax sync comment.
      *
      * @param  int    $repoID
@@ -1705,12 +1749,19 @@ class repo extends control
             ->setDefault('projects', array())
             ->get();
 
+        $productIds = $postData->products;
+        if(empty($productIds))
+        {
+            $products   = $this->loadModel('product')->getPairs('', 0, '', 'all');
+            $productIds = array_keys($products);
+        }
         /* Get all projects that can be accessed. */
-        $accessProjects = $this->loadModel('product')->getProjectPairsByProductIDList($postData->products);
+        $accessProjects = $this->loadModel('product')->getProjectPairsByProductIDList($productIds);
 
         $selectedProjects = array_intersect(array_keys($accessProjects), $postData->projects);
 
-        return print (html::select('projects[]', $accessProjects, $selectedProjects, "class='form-control chosen' multiple"));
+        $name = isset($postData->number) ? "projects[{$postData->number}][]" : 'projects[]';
+        return print (html::select($name, $accessProjects, $selectedProjects, "class='form-control chosen' multiple"));
     }
 
     /**

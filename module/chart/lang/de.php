@@ -4,7 +4,7 @@ $lang->chart->query     = 'Query';
 $lang->chart->toDesign  = 'To Design';
 
 $lang->chart->group       = 'Group';
-$lang->chart->field       = 'Field';
+$lang->chart->field       = 'Related Field';
 $lang->chart->agg         = 'Aggregate';
 $lang->chart->chooseField = 'Choose field';
 $lang->chart->aggType     = 'Aggregate type';

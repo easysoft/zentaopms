@@ -56,11 +56,16 @@ class testcaseEntry extends entry
         $stepType = array();
         if(isset($this->requestBody->steps))
         {
-            foreach($this->requestBody->steps as $step)
+            foreach($this->requestBody->steps as $key => $step)
             {
+                if(empty($step->type)) $step->type = 'step';
+                if(!in_array($step->type, array('step', 'item', 'group'))) $step->type = 'step';
+
+                if($step->type == 'group' && (empty($this->requestBody->steps[$key + 1]->type) || $this->requestBody->steps[$key + 1]->type != 'item')) $step->type = 'step';
+
                 $steps[]    = $step->desc;
                 $expects[]  = $step->expect;
-                $stepType[] = 'item';
+                $stepType[] = $step->type;
             }
         }
 

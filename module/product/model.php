@@ -170,16 +170,13 @@ class productModel extends model
     {
         if(defined('TUTORIAL')) return $productID;
 
-        $product = $this->getById($productID);
-
         if($productID == 0 and $this->cookie->preProductID and isset($products[$this->cookie->preProductID])) $productID = $this->cookie->preProductID;
         if($productID == 0 and $this->session->product == '') $productID = key($products);
-        if(!empty($product) and $product->shadow) $productID = key($products);
         $this->session->set('product', (int)$productID, $this->app->tab);
 
         if(!isset($products[$this->session->product]))
         {
-            if(!empty($product) and $product->id != $productID) $product = $this->getById($productID);
+            $product = $this->getById($productID);
 
             if(empty($product) or $product->deleted == 1) $productID = key($products);
             $this->session->set('product', (int)$productID, $this->app->tab);
@@ -1779,14 +1776,14 @@ class productModel extends model
         $bugs     = $this->dao->select('count(*) AS count')->from(TABLE_BUG)->where('product')->eq($productID)->andWhere('deleted')->eq(0)->fetch();
         $docs     = $this->dao->select('count(*) AS count')->from(TABLE_DOC)->where('product')->eq($productID)->andWhere('deleted')->eq(0)->fetch();
         $releases = $this->dao->select('count(*) AS count')->from(TABLE_RELEASE)->where('deleted')->eq(0)->andWhere('product')->eq($productID)->fetch();
-        $projects = $this->dao->select('count("t1.*") AS count')->from(TABLE_PROJECTPRODUCT)->alias('t1')
+        $projects = $this->dao->select('count(*) AS count')->from(TABLE_PROJECTPRODUCT)->alias('t1')
             ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
             ->where('t2.deleted')->eq(0)
             ->andWhere('t1.product')->eq($productID)
             ->andWhere('t2.type')->eq('project')
             ->fetch();
 
-        $executions = $this->dao->select('count("t1.*") AS count')->from(TABLE_PROJECTPRODUCT)->alias('t1')
+        $executions = $this->dao->select('count(*) AS count')->from(TABLE_PROJECTPRODUCT)->alias('t1')
             ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
             ->where('t2.deleted')->eq(0)
             ->andWhere('t1.product')->eq($productID)

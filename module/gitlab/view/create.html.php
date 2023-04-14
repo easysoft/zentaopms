@@ -23,7 +23,6 @@
           <tr>
             <th><?php echo $lang->gitlab->name;?></th>
             <td class='required'><?php echo html::input('name', '', "class='form-control' placeholder='{$lang->gitlab->placeholder->name}'");?></td>
-            <td class="tips-git"></td>
           </tr>
           <tr>
             <th><?php echo $lang->gitlab->url;?></th>

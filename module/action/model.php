@@ -1709,7 +1709,6 @@ class actionModel extends model
                         $method = 'tablecontents';
                         if(isset($this->config->doc->spaceMethod[$docLib->type])) $method = $this->config->doc->spaceMethod[$docLib->type];
                         if($method == 'myspace') $params = "type=mine&libID={$action->objectID}";
-                        if($method == 'tablecontents') $params = sprintf($vars, $docLib->type, $docLib->objectID, $action->objectID, $appendLib);
                         if(!in_array($method, array('myspace', 'tablecontents'))) $params = "objectID={$docLib->objectID}&libID={$action->objectID}";
                         $action->objectLink = helper::createLink('doc', $method, $params);
                     }
@@ -1944,6 +1943,29 @@ class actionModel extends model
         {
             $release = $this->dao->select('*')->from(TABLE_RELEASE)->where('id')->eq($action->objectID)->fetch();
             if($release->shadow) $this->dao->update(TABLE_BUILD)->set('deleted')->eq(0)->where('id')->eq($release->shadow)->exec();
+        }
+
+        if($action->objectType == 'case')
+        {
+            $case = $this->dao->select('*')->from(TABLE_CASE)->where('id')->eq($action->objectID)->fetch();
+            if($case->scene)
+            {
+                $scene = $this->dao->select('*')->from(VIEW_SCENECASE)->where('id')->eq($case->scene)->fetch();
+                if($scene->deleted)
+                {
+                    return print(js::error($this->lang->action->refusecase));
+                }
+            }
+        }
+
+        if($action->objectType == 'scene')
+        {
+            $scene = $this->dao->select('*')->from("zt_scene")->where('id')->eq($action->objectID)->fetch();
+            if($scene->parent)
+            {
+                $scenerow = $this->dao->select('*')->from(VIEW_SCENECASE)->where('id')->eq($scene->parent)->fetch();
+                if($scenerow->deleted) return print(js::error($this->lang->action->refusescene));
+            }
         }
 
         /* Update deleted field in object table. */

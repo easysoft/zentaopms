@@ -48,6 +48,9 @@ $lang->action->byQuery     = 'Search';
 $lang->action->undeleteAction = 'Reset Data';
 $lang->action->hideOneAction  = 'Hide Data';
 
+$lang->action->refusecase  = 'Before restoring the use case, please restore the scene to which the use case belongs';
+$lang->action->refusescene = ' Before restoring the use case, please restore the parent scene of this scene ';
+
 $lang->action->trashTips          = 'Note: Les suppressions dans ZenTao sont purement logiques.';
 $lang->action->textDiff           = 'Text Format';
 $lang->action->original           = 'Original Format';
@@ -156,6 +159,7 @@ $lang->action->objectTypes['stage']            = 'Stage';
 $lang->action->objectTypes['patch']            = 'Patch';
 $lang->action->objectTypes['repo']             = 'Repo';
 $lang->action->objectTypes['dataview']         = 'Data View';
+$lang->action->objectTypes['scene']            = 'Scene';
 
 /* Used to describe operation history. */
 $lang->action->desc = new stdclass();
@@ -754,7 +758,7 @@ $lang->action->label->testtask     = 'Recette|testtask|view|caseID=%s';
 $lang->action->label->testsuite    = 'Cahier Recette|testsuite|view|suiteID=%s';
 $lang->action->label->caselib      = 'Library Recette|testsuite|libview|libID=%s';
 $lang->action->label->todo         = 'Agenda|todo|view|todoID=%s';
-$lang->action->label->doclib       = 'Bibliothèque|doc|browse|libID=%s';
+$lang->action->label->doclib       = 'Bibliothèque|doc|teamspace|objectID=%s&libID=%s';
 $lang->action->label->doc          = 'Document|doc|view|docID=%s';
 $lang->action->label->user         = 'Utilisateur|user|view|account=%s';
 $lang->action->label->testreport   = 'Rapport|testreport|view|report=%s';

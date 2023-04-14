@@ -235,3 +235,15 @@ $config->testcase->datatable->fieldList['actions']['fixed']    = 'right';
 $config->testcase->datatable->fieldList['actions']['width']    = '180';
 $config->testcase->datatable->fieldList['actions']['required'] = 'yes';
 $config->testcase->datatable->fieldList['actions']['sort']     = 'no';
+
+$config->testcase->search['module']          = 'testcase';
+$config->testcase->search['fields']['scene'] = $lang->testcase->iScene;
+$config->testcase->search['params']['scene'] = array('operator' => 'belong',  'control' => 'select', 'values' => '');
+
+$config->testcase->createscene = new stdclass();
+$config->testcase->createscene->requiredFields = 'title';
+
+$config->testcase->customBatchCreateFields   = 'module,scene,stage,story,pri,precondition,keywords,review';
+$config->testcase->customBatchEditFields     = 'module,scene,story,stage,precondition,status,pri,keywords';
+$config->testcase->custom->batchCreateFields = 'module,scene,story,%s';
+$config->testcase->custom->batchEditFields   = 'branch,module,scene,stage,status,pri,story';

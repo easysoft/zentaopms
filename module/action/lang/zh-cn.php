@@ -48,6 +48,9 @@ $lang->action->byQuery     = '搜索';
 $lang->action->undeleteAction = '还原数据';
 $lang->action->hideOneAction  = '隐藏数据';
 
+$lang->action->refusecase  = '还原用例之前，请先还原该用例所属场景';
+$lang->action->refusescene = '还原场景之前，请先还原该场景的父场景';
+
 $lang->action->trashTips          = '提示：为了保证系统的完整性，禅道系统的删除都是标记删除。';
 $lang->action->textDiff           = '文本格式';
 $lang->action->original           = '原始格式';
@@ -156,6 +159,8 @@ $lang->action->objectTypes['stage']            = '阶段';
 $lang->action->objectTypes['patch']            = '补丁';
 $lang->action->objectTypes['repo']             = '代码库';
 $lang->action->objectTypes['dataview']         = '中间表';
+$lang->action->objectTypes['scene']            = '场景';
+
 
 /* 用来描述操作历史记录。*/
 $lang->action->desc = new stdclass();
@@ -754,7 +759,7 @@ $lang->action->label->testtask     = '测试单|testtask|view|caseID=%s';
 $lang->action->label->testsuite    = '测试套件|testsuite|view|suiteID=%s';
 $lang->action->label->caselib      = '用例库|caselib|view|libID=%s';
 $lang->action->label->todo         = '待办|todo|view|todoID=%s';
-$lang->action->label->doclib       = '文档库|doc|tablecontents|type=%s&objectID=%s&libID=%s';
+$lang->action->label->doclib       = '文档库|doc|teamspace|objectID=%s&libID=%s';
 $lang->action->label->doc          = '文档|doc|view|docID=%s';
 $lang->action->label->user         = '用户|user|view|account=%s';
 $lang->action->label->testreport   = '报告|testreport|view|report=%s';

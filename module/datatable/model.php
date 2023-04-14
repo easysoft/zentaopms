@@ -75,7 +75,17 @@ class datatableModel extends model
 
         $module = zget($this->config->datatable->moduleAlias, "$module-$method", $module);
         if(!isset($this->config->$module)) $this->loadModel($module);
-        if(isset($this->config->datatable->$datatableId->$key)) $setting = json_decode($this->config->datatable->$datatableId->$key);
+        if(isset($this->config->datatable->$datatableId->$key))
+        {
+            if($datatableId == 'testcaseBrowse' && $key == 'tablecols' && $this->cookie->onlyScene)
+            {
+                $setting = json_decode('[{"id":"id","order":1,"show":true,"width":"70px","fixed":"left"},{"id":"title","order":2,"show":true,"width":"auto","fixed":"left"},{"id":"openedBy","order":8,"show":true,"width":"80px","fixed":"no"},{"id":"openedDate","order":9,"show":true,"width":"90px","fixed":"no"},{"id":"lastEditedBy","order":16,"show":true,"width":"80px","fixed":"no"},{"id":"lastEditedDate","order":17,"show":true,"width":"90px","fixed":"no"},{"id":"actions","order":23,"show":true,"width":"150px","fixed":"right"}]');
+            }
+            else
+            {
+                $setting = json_decode($this->config->datatable->$datatableId->$key);
+            }
+        }
 
         $fieldList = $this->getFieldList($module);
         if(empty($setting))

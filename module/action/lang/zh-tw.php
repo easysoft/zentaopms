@@ -46,6 +46,9 @@ $lang->action->comment     = '備註';
 $lang->action->undeleteAction = '還原數據';
 $lang->action->hideOneAction  = '隱藏數據';
 
+$lang->action->refusecase  = 'Before restoring the use case, please restore the scene to which the use case belongs';
+$lang->action->refusescene = ' Before restoring the use case, please restore the parent scene of this scene ';
+
 $lang->action->trashTips      = '提示：為了保證系統的完整性，禪道系統的刪除都是標記刪除。';
 $lang->action->textDiff       = '文本格式';
 $lang->action->original       = '原始格式';
@@ -136,6 +139,7 @@ $lang->action->objectTypes['kanbancolumn']     = '看板列';
 $lang->action->objectTypes['kanbancard']       = '看板卡片';
 $lang->action->objectTypes['repo']             = '代码库';
 $lang->action->objectTypes['dataview']         = '数据表';
+$lang->action->objectTypes['scene']            = 'Scene';
 
 /* 用來描述操作歷史記錄。*/
 $lang->action->desc = new stdclass();

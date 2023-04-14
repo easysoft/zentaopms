@@ -605,7 +605,6 @@ class commonModel extends model
             if(strpos('|bug|execution|kanbanspace|', "|$objectType|") !== false) $needPrintDivider = true;
 
             $hasPriv = common::hasPriv($module, $createMethod);
-            if($hasPriv  and $objectType == 'doc' and !common::hasPriv('doc', 'tableContents')) $hasPriv = false;
             if(!$hasPriv and $objectType == 'doc' and  common::hasPriv('api', 'create'))        $hasPriv = true;
             if(!$hasPriv) continue;
 

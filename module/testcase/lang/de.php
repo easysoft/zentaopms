@@ -266,3 +266,82 @@ $lang->testcase->featureBar['browse']['group']       = 'Group View';
 $lang->testcase->featureBar['browse']['zerocase']    = 'Zero Case Story';
 $lang->testcase->featureBar['browse']['suite']       = 'Suite';
 $lang->testcase->featureBar['browse']['autocase']    = $lang->testcase->showAutoCase;
+
+$lang->testcase->importXmind     = "Import XMIND";
+$lang->testcase->exportXmind     = "Export XMIND";
+$lang->testcase->getXmindImport  = "Get Mindmap";
+$lang->testcase->showXMindImport = "Display Mindmap";
+$lang->testcase->saveXmindImport = "Save Mindmap";
+
+$lang->testcase->xmindImport           = "Imort XMIND";
+$lang->testcase->xmindExport           = "Export XMIND";
+$lang->testcase->xmindImportEdit       = "XMIND Edit";
+$lang->testcase->errorFileNotEmpty     = 'The uploaded file cannot be empty';
+$lang->testcase->errorXmindUpload      = 'Upload failed';
+$lang->testcase->errorFileFormat       = 'File format error';
+$lang->testcase->moduleSelector        = 'Module Selection';
+$lang->testcase->errorImportBadProduct = 'Product does not exist, import error';
+$lang->testcase->errorSceneNotExist    = 'Scene [%d] not exists';
+
+$lang->testcase->save  = 'Save';
+$lang->testcase->close = 'Close';
+
+$lang->testcase->xmindImportSetting = 'Import Characteristic Character Settings';
+$lang->testcase->xmindExportSetting = 'Export Characteristic Character Settings';
+
+$lang->testcase->settingModule = 'Module';
+$lang->testcase->settingScene  = 'Scene';
+$lang->testcase->settingCase   = 'Testcase';
+$lang->testcase->settingPri    = 'Priority';
+$lang->testcase->settingGroup  = 'Step Group';
+
+$lang->testcase->caseNotExist = 'The test case in the imported file was not recognized and the import failed';
+$lang->testcase->saveFail     = 'Save failed';
+$lang->testcase->set2Scene    = 'Set as Scene';
+$lang->testcase->set2Testcase = 'Set as Testcase';
+$lang->testcase->clearSetting = 'Clear Settings';
+$lang->testcase->setModule    = 'Set scene module';
+$lang->testcase->pickModule   = 'Please select a module';
+$lang->testcase->clearBefore  = 'Clear previous scenes';
+$lang->testcase->clearAfter   = 'Clear the following scenes';
+$lang->testcase->clearCurrent = 'Clear the current scene';
+$lang->testcase->removeGroup  = 'Remove Group';
+$lang->testcase->set2Group    = 'Set as Group';
+
+$lang->testcase->exportTemplet = 'Export Template';
+
+$lang->testcase->createScene      = "Add Scene";
+$lang->testcase->changeScene      = "Drag to change the scene which it belongs";
+$lang->testcase->batchChangeScene = "Batch change scene";
+$lang->testcase->updateOrder      = "Drag Sort";
+$lang->testcase->differentProduct = "Different product";
+
+$lang->testcase->newScene                    = "Add Scene";
+$lang->testcase->sceneTitle                  = 'Scene Title';
+$lang->testcase->parentScene                 = "Parent Scene";
+$lang->testcase->scene                       = "Scene";
+$lang->testcase->summary                     = 'Total %d Top Scene，%d Independent test case.';
+$lang->testcase->summaryScene                = 'Total %d Top Scene.';
+$lang->testcase->deleteScene                 = 'Delete Scene';
+$lang->testcase->editScene                   = 'Edit Scene';
+$lang->testcase->hasChildren                 = 'This scene has sub scene or test cases. Do you want to delete them all?';
+$lang->testcase->confirmDeleteScene          = 'Are you sure you want to delete the scene: \"%s\"?';
+$lang->testcase->sceneb                      = "Scene";
+$lang->testcase->onlyScene                   = 'Only Scene';
+$lang->testcase->iScene                      = 'Scene';
+$lang->testcase->generalTitle                = 'Title';
+$lang->testcase->noScene                     = 'No Scene';
+$lang->testcase->rowIndex                    = 'Row Index';
+$lang->testcase->nestTotal                   = 'nest total';
+$lang->testcase->normal                      = 'normal';
+
+/* Translation for drag modal message box. */
+$lang->testcase->dragModalTitle       = 'Drag and drop operation selection';
+$lang->testcase->dragModalMessage     = '<p>There are two possible situations for the current operation: </p><p>1) Adjust the sequence.<br/> 2) Change its scenario, meanwhile its module will be changed accordingly.</p><p>Please select the operation you want to perform.</p>';
+$lang->testcase->dragModalChangeScene = 'Change its scene';
+$lang->testcase->dragModalChangeOrder = 'Reorder';
+
+$lang->testcase->confirmBatchDeleteSceneCase = 'Are you sure you want to delete these scene or test cases in batch?';
+
+$lang->scene = new stdclass();
+$lang->scene->title = 'Scene Title';

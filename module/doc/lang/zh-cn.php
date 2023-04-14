@@ -25,7 +25,7 @@ $lang->doclib->privateACL = "私有 <span class='acl-tip'>（仅创建者和有%
 $lang->doclib->tip = new stdclass();
 $lang->doclib->tip->selectExecution = "执行为空时，创建的库为{$lang->projectCommon}库";
 
-$lang->doclib->type['wiki'] = 'WIKI文档库';
+$lang->doclib->type['wiki'] = 'Wiki文档库';
 $lang->doclib->type['api']  = '接口库';
 
 $lang->doclib->aclListA = array();
@@ -121,10 +121,10 @@ $lang->doc->update       = '更新';
 $lang->doc->nextStep     = '下一步';
 $lang->doc->closed       = '已关闭';
 $lang->doc->saveDraft    = '存为草稿';
-$lang->doc->defaultSave  = '默认存入：';
 $lang->doc->position     = '所在位置';
 $lang->doc->person       = '个人';
 $lang->doc->team         = '团队';
+$lang->doc->manage       = '文档管理';
 
 $lang->doc->moduleDoc     = '按模块浏览';
 $lang->doc->searchDoc     = '搜索';
@@ -141,6 +141,7 @@ $lang->doc->myDoc         = '我的文档';
 $lang->doc->myView        = '最近浏览';
 $lang->doc->myCollection  = '我的收藏';
 $lang->doc->myCreation    = '我创建的';
+$lang->doc->myEdited      = '我编辑的';
 $lang->doc->myLib         = '我的个人库';
 $lang->doc->tableContents = '目录';
 $lang->doc->addCatalog    = '添加目录';
@@ -252,13 +253,12 @@ $lang->doc->typeList['word']     = 'Word';
 $lang->doc->typeList['ppt']      = 'PPT';
 $lang->doc->typeList['excel']    = 'Excel';
 
-$lang->doc->createList['html']     = '创建文档';
-$lang->doc->createList['template'] = '由模板创建';
+$lang->doc->createList['template'] = 'Wiki文档';
 $lang->doc->createList['word']     = 'Word';
 $lang->doc->createList['ppt']      = 'PPT';
 $lang->doc->createList['excel']    = 'Excel';
 
-$lang->doc->types['doc'] = 'WIKI文档';
+$lang->doc->types['doc'] = 'Wiki文档';
 $lang->doc->types['api'] = '接口文档';
 
 $lang->doc->contentTypeList['html']     = 'HTML';
@@ -307,7 +307,7 @@ $lang->doc->versionNotFount      = '该版本文档不存在';
 $lang->doc->noDoc                = '暂时没有文档。';
 $lang->doc->noArticle            = '暂时没有文章。';
 $lang->doc->noLib                = '暂时没有库。';
-$lang->doc->noBook               = 'WIKI库还未创建手册，请新建 ：）';
+$lang->doc->noBook               = 'Wiki库还未创建手册，请新建 ：）';
 $lang->doc->cannotCreateOffice   = '<p>对不起，企业版才能创建%s文档。<p><p>试用企业版，请联系我们：4006-8899-23 &nbsp; 0532-86893032。</p>';
 $lang->doc->notSetOffice         = "创建%s文档，需要配置<a href='%s'>Office转换设置</a>。";
 $lang->doc->noSearchedDoc        = '没有搜索到任何文档。';
@@ -341,7 +341,7 @@ $lang->doc->noticeAcl['doc']['private'] = '只有创建者自己可以访问。'
 
 $lang->doc->placeholder = new stdclass();
 $lang->doc->placeholder->url       = '相应的链接地址';
-$lang->doc->placeholder->execution = '执行为空时，创建文件在项目库下';
+$lang->doc->placeholder->execution = '执行为空时，创建文档在项目库下';
 
 $lang->doc->summary = "本页共 <strong>%s</strong> 个附件，共计 <strong>%s</strong>，其中<strong>%s</strong>。";
 $lang->doc->ge      = '个';

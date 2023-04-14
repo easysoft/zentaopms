@@ -22,14 +22,13 @@
 <?php echo html::a(helper::createLink('doc', 'createLib', "type=custom&objectID=$objectID"), '<i class="icon icon-plus"></i> ' . $lang->doc->createLib, '', 'class="iframe hidden createCustomLib"');?>
 <?php endif;?>
 <div id="mainContent" class="main-content">
-  <form class="load-indicator main-form form-ajax" id="dataform" method='post' enctype='multipart/form-data'>
+  <form class="load-indicator main-form form-ajax form-watched" id="dataform" method='post' enctype='multipart/form-data'>
     <table class='table table-form'>
       <tbody>
         <tr id='headerBox'>
           <td width='90px'><?php echo html::backButton("<i class='icon icon-back icon-sm'></i> " . $lang->goback, "id='backBtn'", 'btn btn-secondary');?></td>
           <td class="doc-title" colspan='3'><?php echo html::input('title', '', "placeholder='{$lang->doc->titlePlaceholder}' id='editorTitle' class='form-control' required");?></td>
           <td class="text-right btn-tools">
-            <span id='savePath' class='text-gray'></span>
             <?php echo html::commonButton($lang->doc->saveDraft, "id='saveDraft' data-placement='bottom'", "btn btn-secondary");?>
             <?php echo html::a('#modalBasicInfo', $lang->release->common, '', "data-toggle='modal' id='basicInfoLink' class='btn btn-primary'");?>
           </td>
@@ -71,7 +70,7 @@
                   <td class='required'><?php echo html::select('project', $objects, isset($execution) ? $execution->project : $objectID, "class='form-control picker-select' onchange=loadExecutions(this.value)");?></td>
                   <?php if($this->app->tab == 'doc' and $config->vision == 'rnd'):?>
                   <th><?php echo $lang->doc->execution?></th>
-                  <td id='executionBox'><?php echo html::select('execution', $executions, isset($execution) ? $objectID : '', "class='form-control chosen' data-placeholder='{$lang->doc->placeholder->execution}' onchange='loadObjectModules(\"execution\", this.value)'")?></td>
+                  <td id='executionBox'><?php echo html::select('execution', $executions, isset($execution) ? $objectID : '', "class='form-control chosen' onchange='loadObjectModules(\"execution\", this.value)'")?></td>
                   <td class='pl-0px'><i class='icon icon-help' title='<?php echo $lang->doc->placeholder->execution;?>'></i></td>
                   <?php endif;?>
                 </tr>
@@ -149,13 +148,12 @@
 </div>
 <?php js::set('textType', $config->doc->textTypes);?>
 <?php js::set('docType', $docType);?>
-<?php js::set('holders', $lang->doc->placeholder);?>
+<?php js::set('objectType', $objectType);?>
 <?php js::set('type', 'doc');?>
 <?php js::set('requiredFields', ',' . $config->doc->create->requiredFields . ',');?>
 <?php js::set('libNotEmpty', sprintf($lang->error->notempty, $lang->doc->lib));?>
 <?php js::set('keywordsNotEmpty', sprintf($lang->error->notempty, $lang->doc->keywords));?>
 <?php js::set('from', $from);?>
-<?php js::set('defaultSave', $lang->doc->defaultSave);?>
 <?php js::set('titleNotEmpty', sprintf($lang->error->notempty, $lang->doc->title));?>
 <?php js::set('contentNotEmpty', sprintf($lang->error->notempty, $lang->doc->content));?>
 <?php include '../../common/view/footer.lite.html.php';?>
