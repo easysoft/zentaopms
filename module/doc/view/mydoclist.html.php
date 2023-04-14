@@ -97,7 +97,7 @@ body {margin-bottom: 25px;}
           </td>
           <td class="c-name" title='<?php echo $doc->title;?>'>
           <?php
-          $docType = $doc->type == 'text' ? 'wiki-file' : $doc->type;
+          $docType = zget($config->doc->iconList, $doc->type);
           $icon    = html::image("static/svg/{$docType}.svg", "class='file-icon'");
           if(common::hasPriv('doc', 'view'))
           {

@@ -253,8 +253,7 @@ $lang->doc->typeList['word']     = 'Word';
 $lang->doc->typeList['ppt']      = 'PPT';
 $lang->doc->typeList['excel']    = 'Excel';
 
-$lang->doc->createList['html']     = '创建文档';
-$lang->doc->createList['template'] = '由模板创建';
+$lang->doc->createList['template'] = 'Wiki文档';
 $lang->doc->createList['word']     = 'Word';
 $lang->doc->createList['ppt']      = 'PPT';
 $lang->doc->createList['excel']    = 'Excel';

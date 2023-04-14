@@ -112,3 +112,5 @@ ol, ul {margin-bottom: 0}
 #outlineMenu {background: #fff; position: absolute; height: calc(100vh - 180px)!important; overflow-y: auto; top: 50px; right: 25px;}
 .pl-0px {padding-left:0px !important;}
 .icon {cursor: pointer;}
+
+#mainMenu .pull-right .createDropdown li > a .file-icon {margin-bottom: 1px;}

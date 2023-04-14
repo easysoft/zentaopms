@@ -3144,21 +3144,18 @@ class docModel extends model
 
         foreach($this->lang->doc->createList as $typeKey => $typeName)
         {
-            if($this->config->edition != 'max' and $typeKey == 'template') continue;
-
-            $attr   = "data-app='{$this->app->tab}'";
-            $class  = strpos($this->config->doc->officeTypes, $typeKey) !== false ? 'iframe' : '';
-            $params = "objectType={$lib->type}&objectID=$objectID&libID={$lib->id}&moduleID=$moduleID&type=$typeKey";
-            if($typeKey == 'template') $params = "objectType={$lib->type}&objectID=$objectID&libID={$lib->id}&moduleID=$moduleID&type=html&from=template";
+            $docType  = zget($this->config->doc->iconList, $typeKey);
+            $icon     = html::image("static/svg/{$docType}.svg", "class='file-icon'");
+            $attr     = "data-app='{$this->app->tab}'";
+            $class    = strpos($this->config->doc->officeTypes, $typeKey) !== false ? 'iframe' : '';
+            $params   = "objectType={$lib->type}&objectID=$objectID&libID={$lib->id}&moduleID=$moduleID&type=$typeKey";
+            if($typeKey == 'template' and $this->config->edition == 'max') $params = "objectType={$lib->type}&objectID=$objectID&libID={$lib->id}&moduleID=$moduleID&type=html&from=template";
 
             $html .= "<li>";
-            $html .= html::a(helper::createLink('doc', 'create', $params, '', $class ? true : false), $typeName, '', "class='$class' $attr");
+            $html .= html::a(helper::createLink('doc', 'create', $params, '', $class ? true : false), $icon . ' ' . $typeName, '', "class='$class' $attr");
             $html .= "</li>";
 
-            $printDivider = false;
-            if($typeKey == 'template') $printDivider = true;
-            if($this->config->edition != 'max' and $typeKey == 'html') $printDivider = true;
-            if($printDivider) $html .= '<li class="divider"></li>';
+            if($typeKey == 'template') $html .= '<li class="divider"></li>';
         }
 
         $html .= '</ul></div>';
