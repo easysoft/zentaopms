@@ -27,6 +27,8 @@ $lang->dept->order        = "Ordre du Compartiment";
 $lang->dept->dragAndSort  = "Déplacez pour classer";
 $lang->dept->noDepartment = "No Department";
 
+$lang->dept->manageChildAction = "Manage Subordinate Department";
+
 $lang->dept->confirmDelete = " Confirmez que vous voulez bien supprimer ce Compartiment ?";
 $lang->dept->successSave   = " Sauvé !";
 $lang->dept->repeatDepart  = " Il y a un nom de département en double, êtes-vous sûr de l'ajouter ?";

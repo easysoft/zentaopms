@@ -27,6 +27,8 @@ $lang->dept->order        = "Department Order";
 $lang->dept->dragAndSort  = "Drag to order";
 $lang->dept->noDepartment = "No Department";
 
+$lang->dept->manageChildAction = "Manage Subordinate Department";
+
 $lang->dept->confirmDelete = " Do you want to delete this department?";
 $lang->dept->successSave   = " Saved!";
 $lang->dept->repeatDepart  = " There is a duplicate department name, are you sure to add it?";

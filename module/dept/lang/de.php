@@ -27,6 +27,8 @@ $lang->dept->order        = "Rank";
 $lang->dept->dragAndSort  = "Verschieben und sortieren";
 $lang->dept->noDepartment = "No Department";
 
+$lang->dept->manageChildAction = "Manage Subordinate Department";
+
 $lang->dept->confirmDelete = " Möchten Sie diese Abteilung löschen?";
 $lang->dept->successSave   = " Gespeichert!";
 $lang->dept->repeatDepart  = " Es gibt einen doppelten Abteilungsnamen, möchten Sie ihn wirklich hinzufügen?";

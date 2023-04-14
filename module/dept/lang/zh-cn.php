@@ -27,6 +27,8 @@ $lang->dept->order        = "排序";
 $lang->dept->dragAndSort  = "拖动排序";
 $lang->dept->noDepartment = "无部门";
 
+$lang->dept->manageChildAction = "维护下级部门";
+
 $lang->dept->confirmDelete = " 您确定删除该部门吗？";
 $lang->dept->successSave   = " 修改成功。";
 $lang->dept->repeatDepart  = " 存在部门名称重复，您确认添加吗？";

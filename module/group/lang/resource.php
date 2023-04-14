@@ -1645,7 +1645,7 @@ $lang->company->methodOrder[25] = 'dynamic';
 $lang->resource->dept = new stdclass();
 $lang->resource->dept->browse      = 'browse';
 $lang->resource->dept->updateOrder = 'updateOrder';
-$lang->resource->dept->manageChild = 'manageChild';
+$lang->resource->dept->manageChild = 'manageChildAction';
 $lang->resource->dept->edit        = 'edit';
 $lang->resource->dept->delete      = 'delete';
 
