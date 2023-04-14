@@ -1809,6 +1809,9 @@ $lang->resource->chart->preview = 'preview';
 
 $lang->chart->methodOrder[2] = 'preview';
 
+/* Report . */
+$lang->resource->report = new stdclass();
+
 /* Search. */
 $lang->resource->search = new stdclass();
 $lang->resource->search->buildForm   = 'buildForm';
