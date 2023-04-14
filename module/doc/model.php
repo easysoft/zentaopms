@@ -2765,6 +2765,11 @@ class docModel extends model
         {
             $libs = $this->getLibsByObject($type, 0, '', $appendLib);
             if($libID == 0 and !empty($libs)) $libID = reset($libs)->id;
+            if(isset($libs[$libID]))
+            {
+                $objectTitle    = zget($libs[$libID], 'name', '');
+                $objectDropdown = "<div id='sidebarHeader'><div class='title' title='{$objectTitle}'>{$objectTitle}</div></div>";
+            }
 
             $object     = new stdclass();
             $object->id = 0;
