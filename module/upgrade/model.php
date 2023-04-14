@@ -9075,9 +9075,9 @@ class upgradeModel extends model
         $this->loadModel('doc');
 
         $users = $this->dao->select('account')->from(TABLE_USER)->fetchPairs('account', 'account');
-        $docs  = $this->dao->select('id,collector')->from(TABLE_DOC)->where('collector')->ne('')->query();
+        $docs  = $this->dao->select('id,collector')->from(TABLE_DOC)->where('collector')->ne('')->fetchAll();
 
-        $this->dao->update(TABLE_DOC)->set('collector')->eq(0)->where('collector')->eq('')->exec();
+        $this->dao->update(TABLE_DOC)->set('collector')->eq(0)->exec();
         $this->dao->exec("ALTER TABLE " . TABLE_DOC . " CHANGE `collector` `collects` smallint unsigned NOT NULL DEFAULT '0'");
 
         foreach($docs as $doc)
