@@ -36,19 +36,28 @@ function resizeChart()
     }
 }
 
+function waitForRepaint(callback)
+{
+    window.requestAnimationFrame(function()
+    {
+        window.requestAnimationFrame(callback);
+    });
+}
+
 /**
  * Init picker.
  *
  * @access public
  * @return void
  */
-function initPicker($row, pickerName = 'picker-select')
+function initPicker($row, pickerName = 'picker-select', onready = false)
 {
     $row.find('.' + pickerName).picker(
     {
         maxDropHeight: pickerHeight,
         onReady: function()
         {
+            if(!onready) return;
             if(!$row.find('.picker')) return;
             if(window.getComputedStyle($row.find('.picker').find('.picker-selections')[0]).getPropertyValue('width') !== 'auto')
             {
