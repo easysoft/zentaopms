@@ -2735,26 +2735,30 @@ class docModel extends model
         $objectDropdown = '';
         if(in_array($type, array('project', 'product', 'execution')))
         {
-            $objects  = $this->getOrderedObjects($type);
-            $objectID = $this->loadModel($type)->saveState($objectID, $objects);
-            $table    = $this->config->objectTables[$type];
-            $libs     = $this->getLibsByObject($type, $objectID, '', $appendLib);
-
-            if(($libID == 0 or !isset($libs[$libID])) and !empty($libs)) $libID = reset($libs)->id;
-            $object         = $this->dao->select('id,name,status')->from($table)->where('id')->eq($objectID)->fetch();
-            $objectTitle    = zget($objects, $objectID, '');
-            $objectDropdown = $this->select($type, $objectTitle, $objectID);
-            if($type == 'execution' and isset($libs[$libID]))
-            {
-                $objectTitle    = zget($libs[$libID], 'name', '');
-                $objectDropdown = "<div id='sidebarHeader'><div class='title' title='{$objectTitle}'>{$objectTitle}</div></div>";
-            }
+            $table  = $this->config->objectTables[$type];
+            $object = $this->dao->select('id,name,status')->from($table)->where('id')->eq($objectID)->fetch();
 
             if(empty($object))
             {
                 $param = ($type == 'project' and $this->config->vision == 'lite') ? 'model=kanban' : '';
                 $methodName = ($type == 'project' and $this->config->vision != 'lite') ? 'createGuide' : 'create';
                 return print(js::locate(helper::createLink($type, $methodName, $param)));
+            }
+
+            $objects  = $this->getOrderedObjects($type);
+            $objectID = $this->loadModel($type)->saveState($objectID, $objects);
+            $libs     = $this->getLibsByObject($type, $objectID, '', $appendLib);
+            if(($libID == 0 or !isset($libs[$libID])) and !empty($libs)) $libID = reset($libs)->id;
+
+            $objectTitle = zget($objects, $objectID, '');
+            if($this->app->tab != 'doc' and isset($libs[$libID]))
+            {
+                $objectTitle    = zget($libs[$libID], 'name', '');
+                $objectDropdown = "<div id='sidebarHeader'><div class='title' title='{$objectTitle}'>{$objectTitle}</div></div>";
+            }
+            else
+            {
+                $objectDropdown = $this->select($type, $objectTitle, $objectID);
             }
         }
         else
