@@ -145,13 +145,13 @@ $(function()
     {
         $('.outline').css({'min-width' : '180px', 'border-left' : '2px solid #efefef'});
         $(this).removeClass('icon-menu-arrow-left').addClass('icon-menu-arrow-right').css('left', '-9px');
-        $('.outline-content').show();
+        $('.outline').removeClass('hidden');
         if($('#sidebar>.cell').is(':visible')) $('#sidebar .icon.icon-menu-arrow-right').trigger("click");
     }).on('click', '.outline-toggle i.icon-menu-arrow-right', function()
     {
         $(this).removeClass('icon-menu-arrow-right').addClass('icon-menu-arrow-left');
         $('.outline').css({'min-width' : '180px', 'border-left' : 'none'});
-        $('.outline-content').hide();
+        $('.outline').addClass('hidden');
     }).on('click', '#outline li', function(e)
     {
         $('#outline li.active').removeClass('active');
