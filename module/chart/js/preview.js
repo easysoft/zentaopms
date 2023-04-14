@@ -159,14 +159,15 @@ function calcPreviewGrowFilter(resize = false)
         chart.filters.forEach(function(filter, index)
         {
             var nowItem      = '.filter-item-' + index;
-            var leftPadding  = parseInt($filterItems.find(nowItem).css('padding-left'));
-            var rightPadding = parseInt($filterItems.find(nowItem).css('padding-right'));
-            var spanWidth    = $filterItems.find(nowItem).find('.input-group-addon').first()[0].getBoundingClientRect().width;
+            var $nowDom      = $filterItems.find(nowItem);
+            var leftPadding  = parseInt($nowDom.css('padding-left'));
+            var rightPadding = parseInt($nowDom.css('padding-right'));
+            var spanWidth    = $nowDom.find('.input-group-addon').first()[0].getBoundingClientRect().width;
             var filterWidth  = ((filter.type == 'input' || filter.type == 'select') ? WIDTH_INPUT : WIDTH_DATE) + (spanWidth + leftPadding + rightPadding);
 
             /* Clear the flex-basis and set flex-basic again. */
-            $filterItems.find(nowItem).css('flex-basis', '');
-            $filterItems.find(nowItem).css('flex-basis', filterWidth);
+            $nowDom.css('flex-basis', '');
+            $nowDom.css('flex-basis', filterWidth);
             if(nowWidth - filterWidth >= 0)
             {
                 nowWidth -= filterWidth;
@@ -185,12 +186,27 @@ function calcPreviewGrowFilter(resize = false)
         $filterItems.children().removeClass('filter-item-grow');
         chart.filters.forEach(function(filter, index)
         {
-            var nowItem = '.filter-item-' + index;
-            if(canGrowTotal >= index + 1) $filterItems.find(nowItem).addClass('filter-item-grow');
+            var $nowDom = $filterItems.find('.filter-item-' + index);
+            if(canGrowTotal >= index + 1) $nowDom.addClass('filter-item-grow');
+            if(filter.type == 'select' && $nowDom.find('.picker').length) $nowDom.find('.picker').find('.picker-selections').css('width', WIDTH_INPUT);
         });
 
         var queryType =(!lineWrap && nowWidth >= 60) ? '.query-inside' : '.query-outside';
         $filterBox.find(queryType).removeClass('hidden');
+
+        /* Set picker-selection width, default 128px. */
+        waitForRepaint(function()
+        {
+            chart.filters.forEach(function(filter, index)
+            {
+                var $nowDom = $filterItems.find('.filter-item-' + index);
+                if(filter.type == 'select' && $nowDom.find('.picker').length)
+                {
+                    var pickerWidth = $nowDom.hasClass('filter-item-grow') ? $nowDom.find('.picker')[0].getBoundingClientRect().width : WIDTH_INPUT;
+                    $nowDom.find('.picker').find('.picker-selections').css('width', pickerWidth);
+                }
+            });
+        });
     });
 }
 
@@ -206,7 +222,7 @@ function renderFilters(chart)
 
         var fieldNames = {};
         Object.keys(chart.fieldSettings).forEach(function(key){fieldNames[key] = chart.fieldSettings[key].name;});
-        $.post(createLink('chart', 'ajaxGetFilterForm', 'chartID=' + chart.id), {fieldList: fieldNames, fieldSettings: chart.fieldSettings, filters: chart.filters, langs: chart.langs}, function(resp)
+        $.post(createLink('chart', 'ajaxGetFilterForm', 'chartID=' + chart.id), {fieldList: fieldNames, fieldSettings: chart.fieldSettings, filters: chart.filters, langs: chart.langs, sql: chart.sql}, function(resp)
         {
             resp = JSON.parse(resp);
             var $filterItems = $('#filterItems' + chart.currentGroup + '_' + chart.id + ' .filter-items');
@@ -230,7 +246,7 @@ function renderFilterItem(filter, resp, index, step)
         search: resp[index].item
     };
     var html = $($.zui.formatString(tpl, data))
-    initPicker(html);
+    initPicker(html, 'picker-select', true);
     initDatepicker(html);
     return html;
 }
