@@ -12,7 +12,7 @@ $lang->job->dirChange     = '目录改动';
 $lang->job->buildTag      = '打标签';
 $lang->job->execSuccess   = '执行成功';
 
-$lang->job->browseAction = '构建任务列表';
+$lang->job->browseAction = '流水线列表';
 
 $lang->job->id              = 'ID';
 $lang->job->name            = '名称';

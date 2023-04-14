@@ -12,7 +12,7 @@ $lang->job->dirChange     = 'Directory Changed';
 $lang->job->buildTag      = 'Build Tag';
 $lang->job->execSuccess   = 'Build success';
 
-$lang->job->browseAction = 'Job List';
+$lang->job->browseAction = 'Pipeline List';
 
 $lang->job->id              = 'ID';
 $lang->job->name            = 'Name';
