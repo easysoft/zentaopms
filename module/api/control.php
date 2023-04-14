@@ -872,7 +872,7 @@ class api extends control
 
             $response['result'] = 'success';
             $response['status'] = $status;
-            $response['url']    = $result['url'];
+            $response['url']    = htmlspecialchars($result['url']);
             $response['data']   = $data;
             return print(json_encode($response));
         }
