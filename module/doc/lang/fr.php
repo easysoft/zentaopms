@@ -25,7 +25,7 @@ $lang->doclib->privateACL = "Private <span class='acl-tip'>(Only creators and wh
 $lang->doclib->tip = new stdclass();
 $lang->doclib->tip->selectExecution = "When execution is empty, the library created is the {$lang->projectCommon} library";
 
-$lang->doclib->type['wiki'] = 'WIKI';
+$lang->doclib->type['wiki'] = 'Wiki';
 $lang->doclib->type['api']  = 'API';
 
 $lang->doclib->aclListA = array();
@@ -252,13 +252,12 @@ $lang->doc->typeList['word']     = 'Word';
 $lang->doc->typeList['ppt']      = 'PPT';
 $lang->doc->typeList['excel']    = 'Excel';
 
-$lang->doc->createList['html']     = 'Create Document';
-$lang->doc->createList['template'] = 'Create By Template';
+$lang->doc->createList['template'] = 'Wiki';
 $lang->doc->createList['word']     = 'Word';
 $lang->doc->createList['ppt']      = 'PPT';
 $lang->doc->createList['excel']    = 'Excel';
 
-$lang->doc->types['doc'] = 'WIKI';
+$lang->doc->types['doc'] = 'Wiki';
 $lang->doc->types['api'] = 'API';
 
 $lang->doc->contentTypeList['html']     = 'HTML';
@@ -307,7 +306,7 @@ $lang->doc->versionNotFount      = "N'existe pas dans ce build.";
 $lang->doc->noDoc                = 'Aucun documents. ';
 $lang->doc->noArticle            = 'No articles.';
 $lang->doc->noLib                = 'No libraries.';
-$lang->doc->noBook               = 'The WIKI library has not created a manual, please create a new one :)';
+$lang->doc->noBook               = 'The Wiki library has not created a manual, please create a new one :)';
 $lang->doc->cannotCreateOffice   = 'Désolé, %s peut seulement être créé dans Série ZenTao Biz ou plus. Coordonnées Philip@easysoft.ltd En savoir plus sur les séries zentao biz et zentao Max.';
 $lang->doc->notSetOffice         = "<p>To create a %s document, you need to configure <a href='%s' target='_parent'>office convert</a>.<p>";
 $lang->doc->noSearchedDoc        = 'Aucun documents trouvé.';

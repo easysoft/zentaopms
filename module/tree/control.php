@@ -401,7 +401,12 @@ class tree extends control
             $this->view->optionMenu = $this->tree->getOptionMenu($module->root, $module->type, 0, $module->branch, 'noMainBranch|nodeleted');
         }
 
-        if($type == 'doc') $this->view->libs = $this->loadModel('doc')->getLibs('all', $extra = 'withObject', '', 0, 'book');
+        if($type == 'doc')
+        {
+            $docLib   = $this->loadModel('doc')->getLibById($module->root);
+            $objectID = isset($docLib->{$docLib->type}) ? $docLib->{$docLib->type} : 0;
+            $this->view->libs = $this->doc->getLibs($docLib->type, '', '', $objectID, 'book');
+        }
 
         $this->view->module = $module;
         $this->view->type   = $type;

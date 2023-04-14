@@ -748,14 +748,6 @@ class docModel extends model
             ->fetch();
 
         if(!$doc) return false;
-        if(!$this->checkPrivDoc($doc))
-        {
-            echo(js::alert($this->lang->doc->accessDenied));
-            $loginLink = $this->config->requestType == 'GET' ? "?{$this->config->moduleVar}=user&{$this->config->methodVar}=login" : "user{$this->config->requestFix}login";
-            if(strpos($this->server->http_referer, $loginLink) !== false) return print(js::locate(inlink('index')));
-            helper::end(print(js::locate('back')));
-            die;
-        }
 
         $docs = $this->processCollector(array($doc->id => $doc));
         $doc  = $docs[$doc->id];
@@ -2732,7 +2724,6 @@ class docModel extends model
      */
     public function setMenuByType($type, $objectID, $libID, $appendLib = 0)
     {
-        $this->session->set('docList', $this->app->getURI(true), $this->app->tab);
         if(empty($type))
         {
             $doclib   = $this->getLibById($libID);
@@ -2744,26 +2735,30 @@ class docModel extends model
         $objectDropdown = '';
         if(in_array($type, array('project', 'product', 'execution')))
         {
-            $objects  = $this->getOrderedObjects($type);
-            $objectID = $this->loadModel($type)->saveState($objectID, $objects);
-            $table    = $this->config->objectTables[$type];
-            $libs     = $this->getLibsByObject($type, $objectID, '', $appendLib);
-
-            if(($libID == 0 or !isset($libs[$libID])) and !empty($libs)) $libID = reset($libs)->id;
-            $object         = $this->dao->select('id,name,status')->from($table)->where('id')->eq($objectID)->fetch();
-            $objectTitle    = zget($objects, $objectID, '');
-            $objectDropdown = $this->select($type, $objectTitle, $objectID);
-            if($type == 'execution' and isset($libs[$libID]))
-            {
-                $objectTitle    = zget($libs[$libID], 'name', '');
-                $objectDropdown = "<div id='sidebarHeader'><div class='title' title='{$objectTitle}'>{$objectTitle}</div></div>";
-            }
+            $table  = $this->config->objectTables[$type];
+            $object = $this->dao->select('id,name,status')->from($table)->where('id')->eq($objectID)->fetch();
 
             if(empty($object))
             {
                 $param = ($type == 'project' and $this->config->vision == 'lite') ? 'model=kanban' : '';
                 $methodName = ($type == 'project' and $this->config->vision != 'lite') ? 'createGuide' : 'create';
                 return print(js::locate(helper::createLink($type, $methodName, $param)));
+            }
+
+            $objects  = $this->getOrderedObjects($type);
+            $objectID = $this->loadModel($type)->saveState($objectID, $objects);
+            $libs     = $this->getLibsByObject($type, $objectID, '', $appendLib);
+            if(($libID == 0 or !isset($libs[$libID])) and !empty($libs)) $libID = reset($libs)->id;
+
+            $objectTitle = zget($objects, $objectID, '');
+            if($this->app->tab != 'doc' and isset($libs[$libID]))
+            {
+                $objectTitle    = zget($libs[$libID], 'name', '');
+                $objectDropdown = "<div id='sidebarHeader'><div class='title' title='{$objectTitle}'>{$objectTitle}</div></div>";
+            }
+            else
+            {
+                $objectDropdown = $this->select($type, $objectTitle, $objectID);
             }
         }
         else
@@ -3155,21 +3150,18 @@ class docModel extends model
 
         foreach($this->lang->doc->createList as $typeKey => $typeName)
         {
-            if($this->config->edition != 'max' and $typeKey == 'template') continue;
-
-            $attr   = "data-app='{$this->app->tab}'";
-            $class  = strpos($this->config->doc->officeTypes, $typeKey) !== false ? 'iframe' : '';
-            $params = "objectType={$lib->type}&objectID=$objectID&libID={$lib->id}&moduleID=$moduleID&type=$typeKey";
-            if($typeKey == 'template') $params = "objectType={$lib->type}&objectID=$objectID&libID={$lib->id}&moduleID=$moduleID&type=html&from=template";
+            $docType  = zget($this->config->doc->iconList, $typeKey);
+            $icon     = html::image("static/svg/{$docType}.svg", "class='file-icon'");
+            $attr     = "data-app='{$this->app->tab}'";
+            $class    = strpos($this->config->doc->officeTypes, $typeKey) !== false ? 'iframe' : '';
+            $params   = "objectType={$lib->type}&objectID=$objectID&libID={$lib->id}&moduleID=$moduleID&type=$typeKey";
+            if($typeKey == 'template' and $this->config->edition == 'max') $params = "objectType={$lib->type}&objectID=$objectID&libID={$lib->id}&moduleID=$moduleID&type=html&from=template";
 
             $html .= "<li>";
-            $html .= html::a(helper::createLink('doc', 'create', $params, '', $class ? true : false), $typeName, '', "class='$class' $attr");
+            $html .= html::a(helper::createLink('doc', 'create', $params, '', $class ? true : false), $icon . ' ' . $typeName, '', "class='$class' $attr");
             $html .= "</li>";
 
-            $printDivider = false;
-            if($typeKey == 'template') $printDivider = true;
-            if($this->config->edition != 'max' and $typeKey == 'html') $printDivider = true;
-            if($printDivider) $html .= '<li class="divider"></li>';
+            if($typeKey == 'template') $html .= '<li class="divider"></li>';
         }
 
         $html .= '</ul></div>';

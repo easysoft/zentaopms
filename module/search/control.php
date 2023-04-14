@@ -49,7 +49,7 @@ class search extends control
         $_SESSION['searchParams']['module'] = $module;
         $this->search->initSession($module, $fields, $params);
 
-        if(($module == 'trash' or substr($module, -3) == 'Doc') and $this->session->objectName)
+        if(in_array($module, $this->config->search->searchObject) and $this->session->objectName)
         {
             $space = common::checkNotCN() ? ' ' : '';
             $this->lang->search->common = $this->lang->search->common . $space . $this->session->objectName;

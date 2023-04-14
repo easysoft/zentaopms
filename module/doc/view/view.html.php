@@ -24,7 +24,8 @@
 <div id="mainMenu" class="clearfix">
   <div id="leftBar" class="btn-toolbar pull-left">
   <?php echo $objectDropdown;?>
-  <?php echo html::backButton("<i class='icon icon-back icon-sm'></i> " . $lang->goback, "id='backBtn'", 'btn btn-link')?>
+  <?php $gobackLink = $this->session->docList ? $this->session->docList : inlink('teamSpace', "objectID=0&libID=$libID");?>
+  <?php echo html::a($gobackLink, "<i class='icon-back'></i> " . $lang->goback, '', "class='btn btn-link'");?>
   </div>
   <div class="btn-toolbar pull-right">
     <?php
