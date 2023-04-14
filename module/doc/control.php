@@ -1212,15 +1212,6 @@ class doc extends control
             $methodName = 'mySpace';
         }
 
-        $crumbs[] = html::a($this->createLink($moduleName, $methodName, $linkParams), html::image("static/svg/wiki-file-lib.svg") . $lib->name, '', 'title =' . $lib -> name);
-
-        $moduleList = $this->loadModel('tree')->getParents($doc->module);
-        foreach($moduleList as $module)
-        {
-            $withModuleParams = $linkParams . "&moduleID=$module->id";
-            $crumbs[] = html::a(inLink($methodName, $withModuleParams), $module->name . '&nbsp', '', 'title =' . $module->name);
-        }
-
         $spaceType = $objectType . 'Space';
         $this->view->title          = isset($this->lang->doc->{$spaceType}) ? $this->lang->doc->{$spaceType} : $this->lang->doc->common;
         $this->view->docID          = $docID;
@@ -1231,7 +1222,6 @@ class doc extends control
         $this->view->objectType     = $objectType;
         $this->view->type           = $type;
         $this->view->libID          = $libID;
-        $this->view->crumbs         = $crumbs;
         $this->view->lib            = isset($libs[$libID]) ? $libs[$libID] : new stdclass();
         $this->view->libs           = $this->doc->getLibsByObject($type, $objectID);
         $this->view->canBeChanged   = common::canModify($type, $object); // Determines whether an object is editable.
