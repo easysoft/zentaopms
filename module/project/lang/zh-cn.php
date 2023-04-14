@@ -56,6 +56,7 @@ $lang->project->testreport          = '测试报告';
 $lang->project->selectProgram       = '项目集筛选';
 $lang->project->teamMember          = '团队成员';
 $lang->project->unlinkMember        = '移除成员';
+$lang->project->unlinkMemberAction  = '移除团队成员';
 $lang->project->copyTeamTitle       = "选择一个{$lang->projectCommon}团队来复制";
 $lang->project->daysGreaterProject  = "可用工日不能大于{$lang->projectCommon}的可用工日『%s』";
 $lang->project->errorHours          = '可用工时/天不能大于『24』';

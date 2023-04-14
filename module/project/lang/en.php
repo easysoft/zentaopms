@@ -56,6 +56,7 @@ $lang->project->testreport          = 'Test Report';
 $lang->project->selectProgram       = 'Program filtering';
 $lang->project->teamMember          = 'Team Member';
 $lang->project->unlinkMember        = 'Remove Member';
+$lang->project->unlinkMemberAction  = 'Remove Team Member';
 $lang->project->copyTeamTitle       = "Select a {$lang->projectCommon} team to copy";
 $lang->project->daysGreaterProject  = "Days cannot be greater than days of {$lang->projectCommon}『%s』";
 $lang->project->errorHours          = 'Hours/Day cannot be greater than『24』';

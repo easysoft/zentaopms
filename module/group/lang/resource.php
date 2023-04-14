@@ -195,7 +195,7 @@ $lang->resource->project->execution         = 'execution';
 $lang->resource->project->export            = 'export';
 $lang->resource->project->updateOrder       = 'updateOrder';
 $lang->resource->project->team              = 'teamAction';
-$lang->resource->project->unlinkMember      = 'unlinkMember';
+$lang->resource->project->unlinkMember      = 'unlinkMemberAction';
 $lang->resource->project->programTitle      = 'moduleOpen';
 
 $lang->project->methodOrder[0]   = 'index';
