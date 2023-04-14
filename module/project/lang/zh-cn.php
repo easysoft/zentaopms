@@ -28,6 +28,7 @@ $lang->project->addProduct          = "新建{$lang->productCommon}";
 $lang->project->manageGroupMember   = '维护分组用户';
 $lang->project->moduleSetting       = '列表设置';
 $lang->project->moduleOpen          = '显示项目集名';
+$lang->project->moduleOpenAction    = '显示项目集名设置';
 $lang->project->dynamic             = '动态';
 $lang->project->execution           = '执行列表';
 $lang->project->bug                 = 'Bug列表';

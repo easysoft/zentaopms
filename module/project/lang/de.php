@@ -28,6 +28,7 @@ $lang->project->addProduct          = "Add {$lang->productCommon}";
 $lang->project->manageGroupMember   = 'Manage Group';
 $lang->project->moduleSetting       = 'List Settings';
 $lang->project->moduleOpen          = 'Program Name';
+$lang->project->moduleOpenAction    = 'Program Name Settings';
 $lang->project->dynamic             = 'Dynamic';
 $lang->project->execution           = 'Execution';
 $lang->project->bug                 = 'Bug List';
