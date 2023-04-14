@@ -56,6 +56,7 @@ i.btn-info, i.btn-info:hover {border: none; background: #fff; box-shadow: unset;
 [lang^=zh] #leftBar .selectBox #currentItem {width: 180px;}
 #leftBar .selectBox #currentItem > .text {overflow: hidden; text-align: left; flex: 0 1 100%;}
 .dropdown-in-tree {max-height: 293px; overflow-y: auto;}
+.before-tree-item {flex: 0 0 14px; margin-right: 5px;}
 </style>
 
 <?php
@@ -68,6 +69,7 @@ js::set('objectType', isset($type) ? $type : '');
 js::set('objectID',   isset($objectID) ? $objectID : '');
 js::set('isFirstLoad', isset($isFirstLoad) ? $isFirstLoad: '');
 js::set('canViewFiles', common::hasPriv('doc', 'showfiles'));
+js::set('spaceMethod', $config->doc->spaceMethod);
 ?>
 
 <div id="fileTree" class="file-tree menu-active-primary menu-hover-primary">
@@ -233,7 +235,7 @@ $(function()
         var imgObj = {
             'annex': 'annex',
             'api': 'interface',
-            'lib': 'wiki-file-lib',
+            'lib': 'wiki',
             'execution': 'wiki-file-lib',
             'text': 'wiki-file',
             'word': 'word',
@@ -258,7 +260,7 @@ $(function()
                 var $item    = '<a href="' + link + '" style="position: relative" data-has-children="' + hasChild + '" title="' + item.name + '" data-id="' + item.id + '" class="' + libClass + '" data-type="' + item.type + '" data-action="' + item.hasAction + '">';
 
                 $item += '<div class="text h-full w-full flex-start overflow-hidden">';
-                if((libClass == 'lib' && item.type != 'execution') || (item.type == 'execution' && item.hasAction)) $item += '<div class="img-lib" style="background-image:url(static/svg/' + imgObj[item.type || 'lib'] + '.svg)"></div>';
+                if((libClass == 'lib' && item.type != 'execution') || (item.type == 'execution' && item.hasAction)) $item += '<i class="before-tree-item icon icon-' + imgObj[item.type] +'-lib"></i>';
                 if(['text', 'word', 'ppt', 'excel'].indexOf(item.type) !== -1) $item += '<div class="img-lib" style="background-image:url(static/svg/' + imgObj[item.type] + '.svg)"></div>';
                 $item += '<div class="tree-text">';
                 $item += item.name;
@@ -354,13 +356,13 @@ $(function()
             var libClass   = '.' + moduleType + 'LibDorpdown';
             if(!$(this).hasClass('lib')) libClass = '.' + moduleType + 'ModuleDorpdown';
 
-            $(this).find('.icon').removeClass('hidden');
+            $(this).find('.icon-drop').removeClass('hidden');
             $(this).addClass('show-icon');
             if($(libClass).find('li').length == 0) return false;
 
         }).on('mouseout', 'a', function()
         {
-            if(!$(this).closest('a').hasClass('hover')) $(this).find('.icon').addClass('hidden');
+            if(!$(this).closest('a').hasClass('hover')) $(this).find('.icon-drop').addClass('hidden');
             $(this).removeClass('show-icon');
         }).on('click', 'a', function()
         {
@@ -435,6 +437,7 @@ $(function()
         if(!libID)    libID    = 0;
         if(!moduleID) moduleID = 0;
         linkParams = linkParams.replace('%s', 'libID=' + libID + '&moduleID=' + moduleID);
+        var moduleName = config.currentModule;
         var methodName = '';
         if(config.currentModule == 'api')
         {
@@ -446,27 +449,28 @@ $(function()
             methodName = 'showFiles';
             linkParams = 'type=' + objectType + '&objectID=' + objectID;
         }
-        else if(objectType == 'mine' || objectType == 'view' || objectType == 'collect' || objectType == 'createdby')
-        {
-            var mySpaceType = 'mine';
-            if(type == 'view' || type == 'collect') mySpaceType = type;
-            if(type == 'createdBy' || type == 'createdby') mySpaceType = 'createdby';
-
-            methodName = 'mySpace';
-            linkParams = 'type='+ mySpaceType + '&libID=' + libID + '&moduleID=' + moduleID;
-        }
         else if(['text', 'word', 'ppt', 'excel'].indexOf(type) !== -1)
         {
             methodName = 'view';
             linkParams = 'docID=' + moduleID;
         }
+        else if(objectType == 'execution')
+        {
+            moduleName = 'execution';
+            methodName = 'doc';
+            linkParams = 'executionID=0';
+        }
         else
         {
-            methodName = objectType == 'execution' || objectType == 'custom' ? 'tableContents' : objectType + 'Space';
-            linkParams = objectType == 'execution' || objectType == 'custom' ? 'type=' + objectType + '&' + linkParams : linkParams;
+            methodName = spaceMethod[objectType] ? spaceMethod[objectType] : 'teamSpace';
+            if(['mine', 'view', 'collect', 'createdby', 'editedby'].indexOf(objectType) !== -1)
+            {
+                type = ['view', 'collect', 'createdby', 'editedby'].indexOf(type.toLowerCase()) !== -1 ? type.toLowerCase() : 'mine';
+                linkParams = 'type=' + type + '&' + linkParams;
+            }
         }
 
-        location.href = createLink(config.currentModule, methodName, linkParams);
+        location.href = createLink(moduleName, methodName, linkParams);
     }
 
     $('body').on('click', function()
@@ -479,13 +483,13 @@ $(function()
             if($hoverItem.length)
             {
                 $hoverItem.removeClass('hover');
-                $hoverItem.find('.icon').addClass('hidden');
+                $hoverItem.find('.icon-drop').addClass('hidden');
             }
             $dropdown.remove();
         }
     }).on('click', '.sidebar-toggle', function()
     {
-        var $icon = $(this).find('.icon');
+        var $icon = $(this).find('.icon-drop');
         if($('#sideBar').hasClass('hidden'))
         {
             $icon.addClass('icon-angle-left');

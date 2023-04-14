@@ -61,7 +61,7 @@ $lang->api->defaultVersion   = "当前版本";
 $lang->api->zentaoAPI        = "禅道API文档v1";
 $lang->api->search           = "搜索";
 $lang->api->allLibs          = "全部库";
-$lang->api->noLinked         = "无关联";
+$lang->api->noLinked         = "未关联{$lang->productCommon}和{$lang->projectCommon}";
 $lang->api->addCatalog       = '添加目录';
 $lang->api->editCatalog      = '编辑目录';
 $lang->api->deleteCatalog    = '删除目录';
@@ -181,7 +181,7 @@ $lang->api->requestTypeOptions['multipart/form-data']               = 'multipart
 $lang->api->libTypeList = array();
 $lang->api->libTypeList['product'] = $lang->productCommon . '接口库';
 $lang->api->libTypeList['project'] = $lang->projectCommon . '接口库';
-$lang->api->libTypeList['nolink']  = '无关联接口库';
+$lang->api->libTypeList['nolink']  = '独立接口库';
 
 $lang->api->statusOptions      = array(
     'done'   => '开发完成',

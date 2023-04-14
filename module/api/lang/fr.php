@@ -61,7 +61,7 @@ $lang->api->defaultVersion   = "Current Version";
 $lang->api->zentaoAPI        = "Zentao API v1";
 $lang->api->search           = "Search";
 $lang->api->allLibs          = "AllLibs";
-$lang->api->noLinked         = "No Linked";
+$lang->api->noLinked         = "No Linked {$lang->productCommon} and {$lang->projectCommon}";
 $lang->api->addCatalog       = 'Add Catalog';
 $lang->api->editCatalog      = 'Edit Catalog';
 $lang->api->deleteCatalog    = 'Delete Catalog';
@@ -181,7 +181,7 @@ $lang->api->requestTypeOptions['multipart/form-data']               = 'multipart
 $lang->api->libTypeList = array();
 $lang->api->libTypeList['product'] = $lang->productCommon . ' Api Library';
 $lang->api->libTypeList['project'] = $lang->projectCommon . ' Api Library';
-$lang->api->libTypeList['nolink']  = 'No Linked Api Library';
+$lang->api->libTypeList['nolink']  = 'Independent Api Library';
 
 $lang->api->statusOptions      = array(
     'done'   => 'Done',

@@ -63,6 +63,7 @@ class doc extends control
         if(empty($orderBy) and $type == 'mine') $orderBy = 'status,editedDate_desc';
         if(empty($orderBy) and ($type == 'view' or $type == 'collect')) $orderBy = 'status,date_desc';
         if(empty($orderBy) and ($type == 'createdby')) $orderBy = 'status,addedDate_desc';
+        if(empty($orderBy) and ($type == 'editedby')) $orderBy = 'status,editedDate_desc';
 
         /* Save session, load module. */
         $uri = $this->app->getURI(true);
@@ -70,10 +71,10 @@ class doc extends control
         $this->session->set('productList', $uri, 'product');
         $this->session->set('executionList', $uri, 'execution');
         $this->session->set('projectList', $uri, 'project');
-        $this->session->set('objectName', '', 'doc');
         $this->session->set('spaceType', 'mine', 'doc');
         $this->loadModel('search');
 
+        if($moduleID) $libID = $this->tree->getById($moduleID)->root;
         list($libs, $libID, $object, $objectID, $objectDropdown) = $this->doc->setMenuByType('mine', 0, $libID);
         if($type != 'mine')
         {
@@ -81,13 +82,14 @@ class doc extends control
             if($type == 'view')      $objectTitle = $this->lang->doc->myView;
             if($type == 'collect')   $objectTitle = $this->lang->doc->myCollection;
             if($type == 'createdby') $objectTitle = $this->lang->doc->myCreation;
+            if($type == 'editedby')  $objectTitle = $this->lang->doc->myEdited;
             if($objectTitle) $objectDropdown = "<div id='sidebarHeader'><div class='title' title='{$objectTitle}'>{$objectTitle}</div></div>";
         }
 
         /* Build the search form. */
         $queryID    = $browseType == 'bysearch' ? (int)$param : 0;
         $params     = "libID=$libID&moduleID=$moduleID&browseType=bySearch&param=myQueryID&orderBy=$orderBy";
-        if($this->app->rawMethod == 'myspace') $params = "type=$type&" . $params;
+        if($this->app->rawMethod == 'myspace') $params = "type=$type&$params";
         $actionURL  = $this->createLink('doc', $this->app->rawMethod, $params);
 
         $this->doc->buildSearchForm($libID, $libs, $queryID, $actionURL, $type);
@@ -110,7 +112,7 @@ class doc extends control
                 $docs = $browseType == 'bysearch' ? $this->doc->getDocsBySearch('mine', 0, $libID, $queryID, $orderBy, $pager) : $this->doc->getDocs($libID, $moduleID, $browseType, $orderBy, $pager);
             }
         }
-        elseif($type == 'view' or $type == 'collect' or $type == 'createdby')
+        elseif($type == 'view' or $type == 'collect' or $type == 'createdby' or $type == 'editedby')
         {
             $docs = $this->doc->getMineList($type, $browseType, $orderBy, $pager, $queryID);
         }
@@ -548,16 +550,25 @@ class doc extends control
                 if(!empty($changes)) $this->action->logHistory($actionID, $changes);
             }
 
-            $link     = $this->session->docList ? $this->session->docList : $this->createLink('doc', 'index');
+            $link     = $this->createLink('doc', 'view', "docID={$docID}") . "#app={$this->app->tab}";
             $oldLib   = $doc->lib;
             $doc      = $this->doc->getById($docID);
             $lib      = $this->doc->getLibById($doc->lib);
             $objectID = zget($lib, $lib->type, 0);
-            if($oldLib != $doc->lib) $link = $this->createLink('doc', 'view', "docID={$docID}");
-
-            if(!empty($objectType) and $objectType != 'doc' and $doc->type != 'chapter' and $doc->type != 'article')
+            if(!$this->doc->checkPrivDoc($doc))
             {
-                $link = $this->createLink('doc', 'view', "docID=$docID") . "#app={$this->app->tab}";
+                $moduleName = 'doc';
+                if($this->app->tab == 'execution')
+                {
+                    $moduleName = 'execution';
+                    $methodName = 'doc';
+                }
+                else
+                {
+                    $methodName = zget($this->config->doc->spaceMethod, $lib->type);
+                }
+                $params = "objectID=$objectID&libID={$doc->lib}";
+                $link   = $this->createLink($moduleName, $methodName, $params);
             }
 
             if(isonlybody()) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
@@ -1110,6 +1121,14 @@ class doc extends control
     public function view($docID = 0, $version = 0, $appendLib = 0)
     {
         $doc = $this->doc->getById($docID);
+        if(!$this->doc->checkPrivDoc($doc))
+        {
+            echo(js::alert($this->lang->doc->accessDenied));
+            $loginLink = $this->config->requestType == 'GET' ? "?{$this->config->moduleVar}=user&{$this->config->methodVar}=login" : "user{$this->config->requestFix}login";
+            if(strpos($this->server->http_referer, $loginLink) !== false) return print(js::locate(inlink('index')));
+            helper::end(print(js::locate('back')));
+        }
+
         if(!$doc or !isset($doc->id))
         {
             if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'fail', 'code' => 404, 'message' => '404 Not found'));
@@ -1264,11 +1283,14 @@ class doc extends control
      */
     public function tableContents($type = 'custom', $objectID = 0, $libID = 0, $moduleID = 0, $browseType = 'all', $orderBy = 'status,id_desc', $param = 0, $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
-        $isFirstLoad = $libID == 0 ? true : false;
-        $this->session->set('createProjectLocate', $this->app->getURI(true), 'doc');
-        $this->session->set('structList', $this->app->getURI(true), 'doc');
+        $uri = $this->app->getURI(true);
+        $this->session->set('createProjectLocate', $uri, 'doc');
+        $this->session->set('structList', $uri, 'doc');
         $this->session->set('spaceType', $type, 'doc');
+        $this->session->set('docList', $uri, 'doc');
 
+        if($moduleID) $libID = $this->tree->getById($moduleID)->root;
+        $isFirstLoad = $libID == 0 ? true : false;
         if(empty($browseType)) $browseType = 'all';
         list($libs, $libID, $object, $objectID, $objectDropdown) = $this->doc->setMenuByType($type, $objectID, $libID);
 
@@ -1298,7 +1320,7 @@ class doc extends control
         if($libType == 'api')
         {
             $this->loadModel('api');
-            $this->session->set('objectName', $this->lang->doc->api, 'admin');
+            $this->session->set('objectName', $this->lang->doc->api, 'doc');
 
             $this->view->libs    = $libs;
             $this->view->apiID   = 0;
@@ -1307,8 +1329,7 @@ class doc extends control
         }
         else
         {
-            if(in_array($type, array('product', 'project'))) $this->session->set('objectName', $this->lang->doc->common, 'admin');
-            if($this->config->vision == 'lite' or in_array($type, array('execution', 'custom'))) $this->session->set('objectName', '', 'admin');
+            if(in_array($type, array('product', 'project'))) $this->session->set('objectName', $this->lang->doc->common, 'doc');
             $this->view->docs = $browseType == 'bySearch' ? $this->doc->getDocsBySearch($type, $objectID, $libID, $queryID, $orderBy, $pager) : $this->doc->getDocs($libID, $moduleID, $browseType, $orderBy, $pager);
         }
 

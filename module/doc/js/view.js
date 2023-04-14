@@ -8,6 +8,12 @@ $(function()
     })
 
     $('.menu-actions > a').blur(function() {$(this).css('background', 'none');})
+
+    $('.comment-edit-form').ajaxForm({
+        success: function(data) {
+            location.reload();
+        }
+    })
 })
 
 /**
@@ -204,13 +210,11 @@ $(function()
         if($history.hasClass('hidden'))
         {
             $history.removeClass('hidden');
-            $('#outlineMenu').addClass('hidden');
             $icon.addClass('text-primary');
         }
         else
         {
             $history.addClass('hidden');
-            $('#outlineMenu').removeClass('hidden');
             $icon.removeClass('text-primary');
         }
     })
@@ -219,7 +223,6 @@ $(function()
     $('#closeBtn').on('click', function()
     {
         $('#history').addClass('hidden');
-        $('#outlineMenu').removeClass('hidden');
         $('#hisTrigger').removeClass('text-primary');
     })
     $('#history').find('.btn.pull-right').removeClass('pull-right');

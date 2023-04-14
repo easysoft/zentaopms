@@ -28,7 +28,6 @@
             </div>
           </div>
           <div class="actions">
-            <span class='text'><?php echo$lang->doc->diff?></span>
             <?php echo html::a("javascript:fullScreen()", '<span class="icon-fullscreen"></span>', '', "title='{$lang->fullscreen}' class='btn btn-link fullscreen-btn'");?>
             <?php if(common::hasPriv('doc', 'collect')):?>
             <?php $star = strpos($doc->collector, ',' . $this->app->user->account . ',') !== false ? 'star' : 'star-empty';?>
@@ -74,7 +73,8 @@
         <div class="">
           <div class="detail-content article-content table-col">
             <div class='info'>
-              <span class='user-time text-muted'><i class='icon icon-account'></i> <?php echo zget($users, $doc->editedBy) . " {$lang->colon} " . substr($doc->editedDate, 0, 10) . (common::checkNotCN() ? ' ' : '') . $lang->doc->update;?></span>
+              <span class='user-time text-muted'><i class='icon icon-contacts'></i> <?php echo zget($users, $doc->addedBy) . " {$lang->colon} " . substr($doc->addedDate, 0, 10) . (common::checkNotCN() ? ' ' : '') . $lang->doc->createAB;?></span>
+              <span class='user-time text-muted'><i class='icon icon-eye'></i> <?php echo $doc->views;?></span>
               <?php if($doc->keywords):?>
               <span class='keywords'>
                 <?php foreach($doc->keywords as $keywords):?>
