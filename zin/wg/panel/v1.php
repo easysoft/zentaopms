@@ -12,7 +12,7 @@ class panel extends wg
         'titleProps?: array',
         'headingClass?: string',
         'headingProps?: array',
-        'actions?: array',
+        'headingActions?: array',
         'bodyClass?: string',
         'bodyProps?: array',
         'footerActions?: array',
@@ -23,14 +23,14 @@ class panel extends wg
     static $defineBlocks = array
     (
         'heading' => array(),
-        'actions' => array('map' => 'toolbar'),
+        'headingActions' => array('map' => 'toolbar'),
         'footer'  => array('map' => 'nav')
     );
 
-    protected function buildActions()
+    protected function buildHeadingActions()
     {
-        $actionsBlock = $this->block('actions');
-        $actions      = $this->prop('actions');
+        $actionsBlock = $this->block('headingActions');
+        $actions      = $this->prop('headingActions');
 
         if(empty($actions) && empty($actionsBlock)) return NULL;
 
@@ -46,7 +46,7 @@ class panel extends wg
     {
         list($title, $size) = $this->prop(['title', 'size']);
         $headingBlock       = $this->block('heading');
-        $actions            = $this->buildActions();
+        $actions            = $this->buildHeadingActions();
 
         if(empty($title) && empty($headingBlock) && empty($actions)) return NULL;
 
