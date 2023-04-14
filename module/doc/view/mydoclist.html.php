@@ -34,6 +34,7 @@ body {margin-bottom: 25px;}
 #docListForm th.c-user {width: 102px !important;}
 </style>
 <?php endif;?>
+<?php js::set('isMyCollection', $type == 'collect' ? 1 : 0);?>
 <?php if(empty($docs)):?>
 <div class="table-empty-tip">
   <p>
@@ -192,5 +193,11 @@ $(function()
             return checkedTotal ? checkedSummary.replace('%total%', checkedTotal) : pageSummary;
         }
     });
+
+    $('.ajaxCollect').click(function()
+    {
+        if(isMyCollection) window.location.reload();
+    });
+
 });
 </script>
