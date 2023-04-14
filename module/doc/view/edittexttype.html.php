@@ -148,6 +148,5 @@ $(function()
 <?php js::set('docID', $doc->id);?>
 <?php js::set('draft', $doc->draft);?>
 <?php js::set('type', 'doc');?>
-<?php js::set('defaultSave', $lang->doc->defaultSave);?>
 <?php js::set('titleNotEmpty', sprintf($lang->error->notempty, $lang->doc->title));?>
 <?php include '../../common/view/footer.html.php';?>
