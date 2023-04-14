@@ -614,6 +614,7 @@ $lang->navGroup->api    = 'doc';
 $lang->navGroup->screen = 'bi';
 $lang->navGroup->pivot  = 'bi';
 $lang->navGroup->chart  = 'bi';
+$lang->navGroup->report = 'bi';
 
 $lang->navGroup->qa            = 'qa';
 $lang->navGroup->bug           = 'qa';
