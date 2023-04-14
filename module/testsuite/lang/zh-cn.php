@@ -10,7 +10,7 @@
  * @link        http://www.zentao.net
  */
 $lang->testsuite->create           = "建套件";
-$lang->testsuite->delete           = "删除";
+$lang->testsuite->delete           = "删除套件";
 $lang->testsuite->view             = "概况";
 $lang->testsuite->edit             = "编辑套件";
 $lang->testsuite->browse           = "套件列表";
