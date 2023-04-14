@@ -45,6 +45,7 @@ $lang->action->create      = 'Ajouter commentaire';
 $lang->action->comment     = 'Commentaire';
 $lang->action->byQuery     = 'Search';
 
+$lang->action->trashAction    = 'Recycle List';
 $lang->action->undeleteAction = 'Reset Data';
 $lang->action->hideOneAction  = 'Hide Data';
 

@@ -1956,7 +1956,7 @@ $lang->holiday->methodOrder[20] = 'import';
 
 /* Action. */
 $lang->resource->action = new stdclass();
-$lang->resource->action->trash    = 'trash';
+$lang->resource->action->trash    = 'trashAction';
 $lang->resource->action->undelete = 'undeleteAction';
 $lang->resource->action->hideOne  = 'hideOneAction';
 $lang->resource->action->hideAll  = 'hideAll';
