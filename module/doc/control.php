@@ -63,6 +63,7 @@ class doc extends control
         if(empty($orderBy) and $type == 'mine') $orderBy = 'status,editedDate_desc';
         if(empty($orderBy) and ($type == 'view' or $type == 'collect')) $orderBy = 'status,date_desc';
         if(empty($orderBy) and ($type == 'createdby')) $orderBy = 'status,addedDate_desc';
+        if(empty($orderBy) and ($type == 'editedby')) $orderBy = 'status,editedDate_desc';
 
         /* Save session, load module. */
         $uri = $this->app->getURI(true);
@@ -81,13 +82,14 @@ class doc extends control
             if($type == 'view')      $objectTitle = $this->lang->doc->myView;
             if($type == 'collect')   $objectTitle = $this->lang->doc->myCollection;
             if($type == 'createdby') $objectTitle = $this->lang->doc->myCreation;
+            if($type == 'editedby')  $objectTitle = $this->lang->doc->myEdited;
             if($objectTitle) $objectDropdown = "<div id='sidebarHeader'><div class='title' title='{$objectTitle}'>{$objectTitle}</div></div>";
         }
 
         /* Build the search form. */
         $queryID    = $browseType == 'bysearch' ? (int)$param : 0;
         $params     = "libID=$libID&moduleID=$moduleID&browseType=bySearch&param=myQueryID&orderBy=$orderBy";
-        if($this->app->rawMethod == 'myspace') $params = "type=$type&" . $params;
+        if($this->app->rawMethod == 'myspace') $params = "type=$type&$params";
         $actionURL  = $this->createLink('doc', $this->app->rawMethod, $params);
 
         $this->doc->buildSearchForm($libID, $libs, $queryID, $actionURL, $type);
@@ -110,7 +112,7 @@ class doc extends control
                 $docs = $browseType == 'bysearch' ? $this->doc->getDocsBySearch('mine', 0, $libID, $queryID, $orderBy, $pager) : $this->doc->getDocs($libID, $moduleID, $browseType, $orderBy, $pager);
             }
         }
-        elseif($type == 'view' or $type == 'collect' or $type == 'createdby')
+        elseif($type == 'view' or $type == 'collect' or $type == 'createdby' or $type == 'editedby')
         {
             $docs = $this->doc->getMineList($type, $browseType, $orderBy, $pager, $queryID);
         }
