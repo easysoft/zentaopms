@@ -2732,7 +2732,6 @@ class docModel extends model
      */
     public function setMenuByType($type, $objectID, $libID, $appendLib = 0)
     {
-        $this->session->set('docList', $this->app->getURI(true), $this->app->tab);
         if(empty($type))
         {
             $doclib   = $this->getLibById($libID);

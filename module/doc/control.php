@@ -1266,11 +1266,13 @@ class doc extends control
      */
     public function tableContents($type = 'custom', $objectID = 0, $libID = 0, $moduleID = 0, $browseType = 'all', $orderBy = 'status,id_desc', $param = 0, $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
-        $isFirstLoad = $libID == 0 ? true : false;
-        $this->session->set('createProjectLocate', $this->app->getURI(true), 'doc');
-        $this->session->set('structList', $this->app->getURI(true), 'doc');
+        $uri = $this->app->getURI(true);
+        $this->session->set('createProjectLocate', $uri, 'doc');
+        $this->session->set('structList', $uri, 'doc');
         $this->session->set('spaceType', $type, 'doc');
+        $this->session->set('docList', $uri, 'doc');
 
+        $isFirstLoad = $libID == 0 ? true : false;
         if(empty($browseType)) $browseType = 'all';
         list($libs, $libID, $object, $objectID, $objectDropdown) = $this->doc->setMenuByType($type, $objectID, $libID);
 
