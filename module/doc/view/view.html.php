@@ -26,14 +26,6 @@
   <?php echo $objectDropdown;?>
   <?php echo html::backButton("<i class='icon icon-back icon-sm'></i> " . $lang->goback, "id='backBtn'", 'btn btn-link')?>
   </div>
-  <div id="crumbs" class="crumbs">
-    <?php foreach($crumbs as $crumbKey => $crumb):?>
-    <div class="crumb-item">
-    <?php if($crumbKey != 0) echo '<div class="separator">> </div>'?>
-    <?php echo $crumb;?>
-    </div>
-    <?php endforeach;?>
-  </div>
   <div class="btn-toolbar pull-right">
     <?php
     if($canExport) echo html::a($this->createLink('doc', $exportMethod, "libID=$libID&moduleID=0&docID=$docID"), "<i class='icon-export muted'> </i>" . $lang->export, 'hiddenwin', "class='btn btn-link' id='docExport'");
