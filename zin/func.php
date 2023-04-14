@@ -13,13 +13,14 @@ namespace zin;
 
 require_once __DIR__ . DS . 'core' . DS . 'h.func.php';
 require_once __DIR__ . DS . 'core' . DS . 'render.func.php';
-require_once __DIR__ . DS . 'zui' . DS . 'zui.class.php';
+require_once __DIR__ . DS . 'zui' . DS . 'zui.func.php';
 require_once __DIR__ . DS . 'zentao' . DS . 'zentao.func.php';
 
 function icon()        {return createWg('icon', func_get_args());}
 function btn()         {return createWg('btn', func_get_args());}
 function pageBase()    {return createWg('pageBase', func_get_args());}
 function page()        {return createWg('page',    func_get_args());}
+function form()        {return createWg('form',    func_get_args());}
 function fragment()    {return createWg('fragment',    func_get_args());}
 function btnGroup()    {return createWg('btnGroup', func_get_args());}
 function checkbox()    {return createWg('checkbox', func_get_args());}
