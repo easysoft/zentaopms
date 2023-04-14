@@ -1,4 +1,5 @@
 <?php include $app->getModuleRoot() . 'common/view/header.html.php';?>
+<?php js::set('firstGuide', $firstGuide);?>
 <div id="mainContent">
   <?php if(empty($screens)):?>
   <div class="table-empty-tip">
@@ -40,5 +41,18 @@
     <?php endforeach;?>
   </div>
   <?php endif;?>
+</div>
+
+<div class="modal fade" id="firstGuide">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-body">
+        <div class="background-img"></div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-wide btn-primary" data-dismiss="modal"><?php echo $lang->close;?></button>
+      </div>
+    </div>
+  </div>
 </div>
 <?php include $app->getModuleRoot() . 'common/view/footer.html.php';?>
