@@ -402,33 +402,3 @@ function submit(object)
     setTimeout(function(){$(object).attr('type', 'button').removeAttr('disabled')}, 2000);
 }
 
-/**
- * Update crumbs.
- *
- * @access public
- * @return void
- */
-function updateCrumbs()
-{
-    var $crumbs       = $('#crumbs');
-    var $crumbItems   = $('#crumbs > .crumb-item');
-    var crumbMaxWidth = 660;
-    if($crumbs.width < crumbMaxWidth || $crumbItems.length == 1) return;
-
-    /* last crumbItem width major */
-    var $lastChild = $($crumbItems[$crumbItems.length -1]);
-    var widthSum = 0 + $lastChild.width();
-    for(var i = 0; i < $crumbItems.length - 1; i++)
-    {
-        var crumbItem = $crumbItems[i];
-        var widthSum  = widthSum + $(crumbItem).width();
-        if(widthSum >= crumbMaxWidth)
-        {
-            $(crumbItem).addClass('in-auto-box');
-            var $autoCrumbItems = $('#crumbs > .in-auto-box');
-            $lastChild.before('<div id="autoBox" class="flex-auto"><div class="ellipsis">...<div></div>');
-            $('#autoBox').prepend($autoCrumbItems);
-            return;
-        }
-    }
-}
