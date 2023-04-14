@@ -114,25 +114,18 @@ class zahostModel extends model
      */
     public function ping($address)
     {
-        if (strcasecmp(PHP_OS, 'WINNT') === 0)
+        if(!filter_var($address, FILTER_VALIDATE_IP) && !filter_var(gethostbyname($address), FILTER_VALIDATE_IP)) return false;
+
+        if(strcasecmp(PHP_OS, 'WINNT') === 0)
         {
             exec("ping -n 1 {$address}", $outcome, $status);
         }
-        elseif (strcasecmp(PHP_OS, 'Linux') === 0)
+        elseif(strcasecmp(PHP_OS, 'Linux') === 0)
         {
             exec("ping -c 1 {$address}", $outcome, $status);
         }
 
-        if (0 == $status)
-        {
-            $status = true;
-        }
-        else
-        {
-            $status = false;
-        }
-
-        return $status;
+        return 0 == $status;
     }
 
     /**
@@ -193,7 +186,8 @@ class zahostModel extends model
      */
     public function getImageList($hostID, $browseType = 'all', $param = 0, $orderBy = 'id', $pager = null)
     {
-        $imageList    = json_decode(commonModel::http($this->config->zahost->imageListUrl, array(), array()));
+        $imageList = json_decode(commonModel::http($this->config->zahost->imageListUrl, array(), array()));
+        if(empty($imageList)) return array();
 
         $downloadedImageList = $this->dao->select('*')->from(TABLE_IMAGE)
             ->where('host')->eq($hostID)

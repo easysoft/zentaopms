@@ -1060,6 +1060,19 @@ $lang->resource->testcase->batchConfirmStoryChange = 'batchConfirmStoryChange';
 $lang->resource->testcase->importToLib             = 'importToLib';
 $lang->resource->testcase->automation              = 'automation';
 
+$lang->resource->testcase->createScene      = 'createScene';
+$lang->resource->testcase->editScene        = 'editScene';
+$lang->resource->testcase->deleteScene      = 'deleteScene';
+$lang->resource->testcase->changeScene      = 'changeScene';
+$lang->resource->testcase->batchChangeScene = 'batchChangeScene';
+$lang->resource->testcase->updateOrder      = 'updateOrder';
+
+$lang->resource->testcase->importXmind     = 'importXmind';
+$lang->resource->testcase->saveXmindImport = 'saveXmindImport';
+$lang->resource->testcase->exportXmind     = 'exportXmind';
+$lang->resource->testcase->getXmindImport  = 'getXmindImport';
+$lang->resource->testcase->showXMindImport = 'showXMindImport';
+
 $lang->testcase->methodOrder[0]   = 'index';
 $lang->testcase->methodOrder[5]   = 'browse';
 $lang->testcase->methodOrder[10]  = 'groupCase';
@@ -1091,6 +1104,18 @@ $lang->testcase->methodOrder[135] = 'batchConfirmStoryChange';
 $lang->testcase->methodOrder[140] = 'importToLib';
 $lang->testcase->methodOrder[145] = 'automation';
 $lang->testcase->methodOrder[150] = 'showScript';
+
+$lang->testcase->methodOrder[155] = 'createScene';
+$lang->testcase->methodOrder[160] = 'editScene';
+$lang->testcase->methodOrder[165] = 'deleteScene';
+$lang->testcase->methodOrder[170] = 'changeScene';
+$lang->testcase->methodOrder[175] = 'batchChangeScene';
+$lang->testcase->methodOrder[180] = 'updateOrder';
+$lang->testcase->methodOrder[185] = 'importXmind';
+$lang->testcase->methodOrder[190] = 'getXmindImport';
+$lang->testcase->methodOrder[195] = 'showXMindImport';
+$lang->testcase->methodOrder[200] = 'exportXmind';
+$lang->testcase->methodOrder[205] = 'saveXmindImport';
 
 /* Test task. */
 $lang->resource->testtask = new stdclass();
@@ -1271,26 +1296,28 @@ $lang->resource->repo->linkStory       = 'linkStory';
 $lang->resource->repo->linkBug         = 'linkBug';
 $lang->resource->repo->linkTask        = 'linkTask';
 $lang->resource->repo->unlink          = 'unlink';
+$lang->resource->repo->import          = 'importAction';
 
-$lang->repo->methodOrder[5]  = 'create';
-$lang->repo->methodOrder[10] = 'edit';
-$lang->repo->methodOrder[15] = 'delete';
-$lang->repo->methodOrder[20] = 'showSyncCommit';
-$lang->repo->methodOrder[25] = 'maintain';
-$lang->repo->methodOrder[30] = 'browse';
-$lang->repo->methodOrder[35] = 'view';
-$lang->repo->methodOrder[40] = 'diff';
-$lang->repo->methodOrder[45] = 'log';
-$lang->repo->methodOrder[50] = 'revision';
-$lang->repo->methodOrder[55] = 'blame';
-$lang->repo->methodOrder[60] = 'download';
-$lang->repo->methodOrder[65] = 'setRules';
-$lang->repo->methodOrder[70] = 'apiGetRepoByUrl';
-$lang->repo->methodOrder[75] = 'downloadCode';
-$lang->repo->methodOrder[80] = 'linkStory';
-$lang->repo->methodOrder[85] = 'linkBug';
-$lang->repo->methodOrder[90] = 'linkTask';
-$lang->repo->methodOrder[95] = 'unlink';
+$lang->repo->methodOrder[5]   = 'create';
+$lang->repo->methodOrder[10]  = 'edit';
+$lang->repo->methodOrder[15]  = 'delete';
+$lang->repo->methodOrder[20]  = 'showSyncCommit';
+$lang->repo->methodOrder[25]  = 'maintain';
+$lang->repo->methodOrder[30]  = 'browse';
+$lang->repo->methodOrder[35]  = 'view';
+$lang->repo->methodOrder[40]  = 'diff';
+$lang->repo->methodOrder[45]  = 'log';
+$lang->repo->methodOrder[50]  = 'revision';
+$lang->repo->methodOrder[55]  = 'blame';
+$lang->repo->methodOrder[60]  = 'download';
+$lang->repo->methodOrder[65]  = 'setRules';
+$lang->repo->methodOrder[70]  = 'apiGetRepoByUrl';
+$lang->repo->methodOrder[75]  = 'downloadCode';
+$lang->repo->methodOrder[80]  = 'linkStory';
+$lang->repo->methodOrder[85]  = 'linkBug';
+$lang->repo->methodOrder[90]  = 'linkTask';
+$lang->repo->methodOrder[95]  = 'unlink';
+$lang->repo->methodOrder[100] = 'import';
 
 $lang->resource->ci = new stdclass();
 $lang->resource->ci->commitResult       = 'commitResult';
@@ -1351,7 +1378,7 @@ $lang->resource->doc->deleteFile     = 'deleteFile';
 $lang->resource->doc->collect        = 'collectAction';
 $lang->resource->doc->productSpace   = 'productSpace';
 $lang->resource->doc->projectSpace   = 'projectSpace';
-$lang->resource->doc->tableContents  = 'teamSpace';
+$lang->resource->doc->teamSpace      = 'teamSpace';
 $lang->resource->doc->showFiles      = 'showFiles';
 $lang->resource->doc->addCatalog     = 'addCatalog';
 $lang->resource->doc->editCatalog    = 'editCatalog';
@@ -1374,7 +1401,7 @@ $lang->doc->methodOrder[65]  = 'deleteFile';
 $lang->doc->methodOrder[70]  = 'collect';
 $lang->doc->methodOrder[75]  = 'productSpace';
 $lang->doc->methodOrder[80]  = 'projectSpace';
-$lang->doc->methodOrder[85]  = 'tableContents';
+$lang->doc->methodOrder[85]  = 'teamSpace';
 $lang->doc->methodOrder[90]  = 'showFiles';
 $lang->doc->methodOrder[95]  = 'addCatalog';
 $lang->doc->methodOrder[100] = 'editCatalog';
@@ -1789,6 +1816,9 @@ $lang->resource->chart = new stdclass();
 $lang->resource->chart->preview = 'preview';
 
 $lang->chart->methodOrder[2] = 'preview';
+
+/* Report . */
+$lang->resource->report = new stdclass();
 
 /* Search. */
 $lang->resource->search = new stdclass();

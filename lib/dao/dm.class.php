@@ -135,7 +135,7 @@ class dm extends dao
         }
 
         /* Format alias. */
-        if($alias and ctype_alnum($alias)) $alias = '"' . $alias . '"';
+        if($alias and !is_numeric($alias) and ctype_alnum($alias)) $alias = '"' . $alias . '"';
 
         return $originField . ' ' .  $alias;
     }
@@ -298,6 +298,8 @@ class dm extends dao
      */
     public function exec($sql = '')
     {
+        if(!empty(dao::$errors)) return new PDOStatement();   // If any error, return an empty statement object to make sure the remain method to execute.
+
         if($sql)
         {
             $this->sqlobj = new sql();

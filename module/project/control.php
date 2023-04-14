@@ -2339,16 +2339,19 @@ class project extends control
      * @param  int    $projectID
      * @param  int    $executionID
      * @param  string $mode
-     * @param  string $type
+     * @param  string $type       all|sprint|stage|kanban
      * @access public
      * @return void
      */
     public function ajaxGetExecutions($projectID, $executionID = 0, $mode = '', $type = 'all')
     {
+        $project    = $this->project->getById($projectID);
         $executions = array('' => '') + $this->loadModel('execution')->getPairs($projectID, $type, $mode);
 
         if($this->app->getViewType() == 'json') return print(json_encode($executionList));
-        return print(html::select('execution', $executions, $executionID, "class='form-control'"));
+
+        $disabled = $project->multiple ? '' : 'disabled';
+        return print(html::select('execution', $executions, $executionID, "class='form-control $disabled' $disabled"));
     }
 
     /**

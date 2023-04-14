@@ -189,6 +189,11 @@ class searchModel extends model
                     $allDepts = $this->loadModel('dept')->getAllChildId($value);
                     $condition = helper::dbIN($allDepts);
                 }
+                elseif($this->post->$fieldName == 'scene')
+                {
+                    $allScenes = $value === '0' ? array() : ($value === '' ? array(0) : $this->loadModel('testcase')->getAllChildId($value));
+                    if(count($allScenes)) $condition = helper::dbIN($allScenes);
+                }
                 else
                 {
                     $condition = ' = ' . $this->dbh->quote($value) . ' ';

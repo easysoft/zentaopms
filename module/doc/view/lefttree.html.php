@@ -24,7 +24,8 @@
 .tree-icon {position: absolute; right: 0;}
 .tree li.has-input {overflow: hidden;}
 .tree li.has-input  > input.input-bro {margin-left: 15px;}
-.img-lib {flex: 0 0 14px; height: 14px; margin-right: 5px;}
+.img-lib {flex: 0 0 14px; height: 14px; margin-right: 5px; margin-bottom: 2px;}
+.file-icon {width: 14px; margin-bottom: 4px;}
 .tree-icon {position: absolute; right: 0;}
 .tree li > a {max-width: 100%; padding: 2px;}
 .file-tree  a.show-icon > div,
@@ -67,6 +68,7 @@ js::set('objectType', isset($type) ? $type : '');
 js::set('objectID',   isset($objectID) ? $objectID : '');
 js::set('isFirstLoad', isset($isFirstLoad) ? $isFirstLoad: '');
 js::set('canViewFiles', common::hasPriv('doc', 'showfiles'));
+js::set('spaceMethod', $config->doc->spaceMethod);
 ?>
 
 <div id="fileTree" class="file-tree menu-active-primary menu-hover-primary">
@@ -434,6 +436,7 @@ $(function()
         if(!libID)    libID    = 0;
         if(!moduleID) moduleID = 0;
         linkParams = linkParams.replace('%s', 'libID=' + libID + '&moduleID=' + moduleID);
+        var moduleName = config.currentModule;
         var methodName = '';
         if(config.currentModule == 'api')
         {
@@ -445,27 +448,28 @@ $(function()
             methodName = 'showFiles';
             linkParams = 'type=' + objectType + '&objectID=' + objectID;
         }
-        else if(objectType == 'mine' || objectType == 'view' || objectType == 'collect' || objectType == 'createdby')
-        {
-            var mySpaceType = 'mine';
-            if(type == 'view' || type == 'collect') mySpaceType = type;
-            if(type == 'createdBy' || type == 'createdby') mySpaceType = 'createdby';
-
-            methodName = 'mySpace';
-            linkParams = 'type='+ mySpaceType + '&libID=' + libID + '&moduleID=' + moduleID;
-        }
         else if(['text', 'word', 'ppt', 'excel'].indexOf(type) !== -1)
         {
             methodName = 'view';
             linkParams = 'docID=' + moduleID;
         }
+        else if(objectType == 'execution')
+        {
+            moduleName = 'execution';
+            methodName = 'doc';
+            linkParams = 'executionID=0';
+        }
         else
         {
-            methodName = objectType == 'execution' || objectType == 'custom' ? 'tableContents' : objectType + 'Space';
-            linkParams = objectType == 'execution' || objectType == 'custom' ? 'type=' + objectType + '&' + linkParams : linkParams;
+            methodName = spaceMethod[objectType] ? spaceMethod[objectType] : 'teamSpace';
+            if(['mine', 'view', 'collect', 'createdby'].indexOf(objectType) !== -1)
+            {
+                type = ['view', 'collect', 'createdby'].indexOf(type.toLowerCase()) !== -1 ? type.toLowerCase() : 'mine';
+                linkParams = 'type=' + type + '&' + linkParams;
+            }
         }
 
-        location.href = createLink(config.currentModule, methodName, linkParams);
+        location.href = createLink(moduleName, methodName, linkParams);
     }
 
     $('body').on('click', function()
@@ -542,7 +546,8 @@ $(function()
                     $rootDom.after($input);
                     $li.addClass('open in has-list');
                 }
-                $rootDom.parent().find('input').focus();
+                $input = $rootDom.parent().find('input');
+                $input.focus();
                 break;
             case 'addCataBro' :
                 moduleData.createType = 'same';
@@ -550,7 +555,8 @@ $(function()
                 var $rootDom = $('#fileTree li[data-id=' + item.id + ']');
                 $rootDom.after($input);
                 $rootDom.closest('ul').find('.has-input').css('padding-left', '0');
-                $('#fileTree').find('input').addClass('input-bro').focus();
+                $input = $('#fileTree').find('input').addClass('input-bro');
+                $input.focus();
                 break;
             case 'addCataChild' :
                 moduleData.parentID = item.id;
@@ -568,9 +574,9 @@ $(function()
                     moduleData.isUpdate = true;
                     $rootDom.addClass('open in has-list');
                 }
-
                 $rootDom.append($input);
-                $rootDom.find('input').focus();
+                $input = $rootDom.find('input');
+                $input.focus();
                 break;
         }
     }).on('click', '#versionSwitcher a', function()

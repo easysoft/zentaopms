@@ -1,1 +1,3 @@
 .icon-help{line-height: 34px;}
+#osNamePhysicsContainer{display: flex;}
+#osNamePhysicsContainer select{margin-right: 5px;}

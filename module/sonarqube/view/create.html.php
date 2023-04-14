@@ -22,7 +22,6 @@
           <tr>
             <th class='c-name'><?php echo $lang->sonarqube->name;?></th>
             <td class='c-input'><?php echo html::input('name', '', "class='form-control' placeholder='{$lang->sonarqube->placeholder->name}'");?></td>
-            <td class="tips-git"></td>
           </tr>
           <tr>
             <th><?php echo $lang->sonarqube->url;?></th>

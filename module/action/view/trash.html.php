@@ -102,6 +102,11 @@
         <tr>
           <td><?php echo zget($lang->action->objectTypes, $action->objectType, '');?></td>
           <td><?php echo $action->objectID;?></td>
+          <?php if($action->objectType == 'scene'): ?>
+          <td class='text-left'>
+            <?php echo $action->objectName;?>
+          </td>
+          <?php else: ?>
           <td class='text-left'>
             <?php
             $params     = $action->objectType == 'user' ? "account={$action->objectName}" : "id={$action->objectID}";
@@ -146,6 +151,7 @@
             }
             ?>
           </td>
+        <?php endif ?>
           <?php if($currentObjectType == 'execution'):?>
           <td class="c-name flex" title="<?php echo $projectList[$action->project]->name;?>">
             <span class="text-ellipsis"><?php echo $projectList[$action->project]->name;?></span>

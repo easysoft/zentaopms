@@ -9,7 +9,7 @@ $lang->navIcons['qa']        = "<i class='icon icon-test'></i>";
 $lang->navIcons['devops']    = "<i class='icon icon-devops'></i>";
 $lang->navIcons['kanban']    = "<i class='icon icon-kanban'></i>";
 $lang->navIcons['doc']       = "<i class='icon icon-doc'></i>";
-$lang->navIcons['report']    = "<i class='icon icon-statistic'></i>";
+$lang->navIcons['bi']        = "<i class='icon icon-statistic'></i>";
 $lang->navIcons['system']    = "<i class='icon icon-group'></i>";
 $lang->navIcons['admin']     = "<i class='icon icon-cog-outline'></i>";
 
@@ -42,7 +42,7 @@ $lang->mainNav->qa        = "{$lang->navIcons['qa']} {$lang->qa->common}|qa|inde
 $lang->mainNav->devops    = "{$lang->navIcons['devops']} DevOps|repo|browse|";
 $lang->mainNav->kanban    = "{$lang->navIcons['kanban']} {$lang->kanban->common}|kanban|space|";
 $lang->mainNav->doc       = "{$lang->navIcons['doc']} {$lang->doc->common}|doc|index|";
-$lang->mainNav->report    = "{$lang->navIcons['report']} {$lang->report->common}|screen|browse|";
+$lang->mainNav->bi        = "{$lang->navIcons['bi']} {$lang->bi->common}|screen|browse|";
 $lang->mainNav->system    = "{$lang->navIcons['system']} {$lang->system->common}|my|team|";
 $lang->mainNav->admin     = "{$lang->navIcons['admin']} {$lang->admin->common}|admin|index|";
 
@@ -57,7 +57,7 @@ $lang->mainNav->menuOrder[30] = 'qa';
 $lang->mainNav->menuOrder[35] = 'devops';
 $lang->mainNav->menuOrder[40] = 'kanban';
 $lang->mainNav->menuOrder[45] = 'doc';
-$lang->mainNav->menuOrder[50] = 'report';
+$lang->mainNav->menuOrder[50] = 'bi';
 $lang->mainNav->menuOrder[55] = 'system';
 $lang->mainNav->menuOrder[60] = 'admin';
 
@@ -339,7 +339,7 @@ $lang->execution->menu->storyGroup = array('link' => "{$lang->common->story}|exe
 $lang->execution->menu->story      = array('link' => "$lang->SRCommon|execution|story|executionID=%s", 'subModule' => 'story', 'alias' => 'storykanban,linkstory');
 $lang->execution->menu->qa         = array('link' => "{$lang->qa->common}|execution|bug|executionID=%s", 'subModule' => 'bug,testcase,testtask,testreport', 'alias' => 'qa,bug,testcase,testtask,testreport');
 $lang->execution->menu->devops     = array('link' => "{$lang->repo->common}|repo|browse|repoID=0&branchID=&objectID=%s", 'subModule' => 'repo');
-$lang->execution->menu->doc        = array('link' => "{$lang->doc->common}|doc|tableContents|type=execution&objectID=%s", 'subModule' => 'doc');
+$lang->execution->menu->doc        = array('link' => "{$lang->doc->common}|execution|doc|objectID=%s", 'subModule' => 'doc');
 $lang->execution->menu->build      = array('link' => "{$lang->build->common}|execution|build|executionID=%s", 'subModule' => 'build');
 $lang->execution->menu->action     = array('link' => "$lang->dynamic|execution|dynamic|executionID=%s");
 $lang->execution->menu->settings   = array('link' => "$lang->settings|execution|view|executionID=%s", 'subModule' => 'personnel', 'alias' => 'edit,manageproducts,team,whitelist,addwhitelist,managemembers', 'class' => 'dropdown dropdown-hover');
@@ -488,7 +488,7 @@ $lang->devops->menu->set['subMenu']->repo      = array('link' => "{$lang->devops
 $lang->devops->menu->set['subMenu']->gitlab    = array('link' => 'GitLab|gitlab|browse', 'subModule' => 'gitlab');
 $lang->devops->menu->set['subMenu']->gogs      = array('link' => 'Gogs|gogs|browse', 'subModule' => 'gogs');
 $lang->devops->menu->set['subMenu']->gitea     = array('link' => 'Gitea|gitea|browse', 'subModule' => 'gitea');
-$lang->devops->menu->set['subMenu']->jenkins   = array('link' => 'Jenkins|jenkins|browse', 'subModule' => '');
+$lang->devops->menu->set['subMenu']->jenkins   = array('link' => 'Jenkins|jenkins|browse', 'subModule' => 'jenkins');
 $lang->devops->menu->set['subMenu']->sonarqube = array('link' => 'SonarQube|sonarqube|browse', 'subModule' => 'sonarqube');
 $lang->devops->menu->set['subMenu']->setrules  = array('link' => "{$lang->devops->rules}|repo|setrules");
 
@@ -502,7 +502,7 @@ $lang->doc->menu->my        = array('link' => "{$lang->doc->mySpace}|doc|mySpace
 $lang->doc->menu->product   = array('link' => "{$lang->doc->productSpace}|doc|productSpace|", 'alias' => 'productspace');
 $lang->doc->menu->project   = array('link' => "{$lang->doc->projectSpace}|doc|projectSpace|", 'alias' => 'projectspace');
 $lang->doc->menu->api       = array('link' => "{$lang->doc->apiSpace}|api|index", 'alias' => 'api');
-$lang->doc->menu->custom    = array('link' => "{$lang->doc->teamSpace}|doc|tableContents|type=custom", 'alias' => 'tablecontents');
+$lang->doc->menu->custom    = array('link' => "{$lang->doc->teamSpace}|doc|teamSpace|", 'alias' => 'teamspace');
 
 $lang->doc->dividerMenu = ',product,';
 
@@ -514,16 +514,16 @@ $lang->doc->menuOrder[20] = 'project';
 $lang->doc->menuOrder[25] = 'api';
 $lang->doc->menuOrder[30] = 'custom';
 
-/* Report menu.*/
-$lang->report->menu         = new stdclass();
-$lang->report->menu->screen = array('link' => "{$lang->screen->common}|screen|browse");
-$lang->report->menu->pivot  = array('link' => "{$lang->pivot->common}|pivot|preview");
-$lang->report->menu->chart  = array('link' => "{$lang->chart->common}|chart|preview");
+/* BI menu.*/
+$lang->bi->menu         = new stdclass();
+$lang->bi->menu->screen = array('link' => "{$lang->screen->common}|screen|browse");
+$lang->bi->menu->pivot  = array('link' => "{$lang->pivot->common}|pivot|preview");
+$lang->bi->menu->chart  = array('link' => "{$lang->chart->common}|chart|preview");
 
-/* Report menu order. */
-$lang->report->menuOrder[5]  = 'screen';
-$lang->report->menuOrder[10] = 'pivot';
-$lang->report->menuOrder[15] = 'chart';
+/* BI menu order. */
+$lang->bi->menuOrder[5]  = 'screen';
+$lang->bi->menuOrder[10] = 'pivot';
+$lang->bi->menuOrder[15] = 'chart';
 
 /* Company menu.*/
 $lang->company->menu              = new stdclass();
@@ -630,10 +630,11 @@ $lang->navGroup->doc    = 'doc';
 $lang->navGroup->doclib = 'doc';
 $lang->navGroup->api    = 'doc';
 
-$lang->navGroup->screen   = 'report';
-$lang->navGroup->pivot    = 'report';
-$lang->navGroup->chart    = 'report';
-$lang->navGroup->bidesign = 'report';
+$lang->navGroup->screen   = 'bi';
+$lang->navGroup->pivot    = 'bi';
+$lang->navGroup->chart    = 'bi';
+$lang->navGroup->bidesign = 'bi';
+$lang->navGroup->report   = 'bi';
 
 $lang->navGroup->qa            = 'qa';
 $lang->navGroup->bug           = 'qa';

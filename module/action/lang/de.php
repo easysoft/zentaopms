@@ -49,6 +49,9 @@ $lang->action->trashAction    = 'Recycle List';
 $lang->action->undeleteAction = 'Reset Data';
 $lang->action->hideOneAction  = 'Hide Data';
 
+$lang->action->refusecase  = 'Before restoring the use case, please restore the scene to which the use case belongs';
+$lang->action->refusescene = ' Before restoring the use case, please restore the parent scene of this scene ';
+
 $lang->action->trashTips          = 'Hinweis: Alle Löschungen in ZenTao sind logische Löschungen.';
 $lang->action->textDiff           = 'Text Format';
 $lang->action->original           = 'Original Format';
@@ -159,6 +162,7 @@ $lang->action->objectTypes['repo']             = 'Repo';
 $lang->action->objectTypes['dataview']         = 'Data View';
 $lang->action->objectTypes['privpackage']      = 'Priv Package';
 $lang->action->objectTypes['privlang']         = 'Priv';
+$lang->action->objectTypes['scene']            = 'Scene';
 
 /* Used to describe operation history. */
 $lang->action->desc = new stdclass();
@@ -757,7 +761,7 @@ $lang->action->label->testtask     = 'Testaufgaben|testtask|view|caseID=%s';
 $lang->action->label->testsuite    = 'Test Suite|testsuite|view|suiteID=%s';
 $lang->action->label->caselib      = 'Fallbibliothek|testsuite|libview|libID=%s';
 $lang->action->label->todo         = 'Todo|todo|view|todoID=%s';
-$lang->action->label->doclib       = 'Dok Bibliothek|doc|browse|libID=%s';
+$lang->action->label->doclib       = 'Dok Bibliothek|doc|teamspace|objectID=%s&libID=%s';
 $lang->action->label->doc          = 'Dok|doc|view|docID=%s';
 $lang->action->label->user         = 'Benutzer|user|view|account=%s';
 $lang->action->label->testreport   = 'Berichte|testreport|view|report=%s';

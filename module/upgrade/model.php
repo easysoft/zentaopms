@@ -8434,7 +8434,7 @@ class upgradeModel extends model
                 $component->chartConfig = $chartConfig;
                 $component->option      = json_decode(zget($this->config->screen->chartOption, $chartType));
                 if(isset($component->option->title->text)) $component->option->title->text = $chart->name;
-                $component = $this->screen->getChartOption($component);
+                $component = $this->screen->getChartOption($chart, $component, json_decode($chart->filters, true));
             }
 
             $componentList[] = $component;

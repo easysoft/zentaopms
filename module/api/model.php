@@ -986,13 +986,13 @@ class apiModel extends model
         $normalObjects = $closedObjects = array();
 
         $libs     = $this->loadModel('doc')->getApiLibs();
-        $products = $this->dao->select('t1.id, t1.name, t1.status')->from(TABLE_PRODUCT)->alias('t1')
+        $products = $this->dao->select('t1.id, t1.order, t1.name, t1.status')->from(TABLE_PRODUCT)->alias('t1')
             ->leftjoin(TABLE_DOCLIB)->alias('t2')->on('t2.product=t1.id')
             ->where('t2.id')->gt(0)
             ->andWhere('t1.vision')->eq($this->config->vision)
             ->andWhere('t1.deleted')->eq(0)
             ->andWhere('t2.id')->in(array_keys($libs))
-            ->orderBy('id_desc')
+            ->orderBy('order_asc')
             ->fetchAll('id');
 
         foreach($products as $id => $product)
@@ -1007,14 +1007,14 @@ class apiModel extends model
             }
         }
 
-        $projects = $this->dao->select('t1.id, t1.name, t1.status')->from(TABLE_PROJECT)->alias('t1')
+        $projects = $this->dao->select('t1.id, t1.order, t1.name, t1.status')->from(TABLE_PROJECT)->alias('t1')
             ->leftjoin(TABLE_DOCLIB)->alias('t2')->on('t2.project=t1.id')
             ->where('t2.id')->gt(0)
             ->andWhere('t1.vision')->eq($this->config->vision)
             ->andWhere('t1.deleted')->eq(0)
             ->beginIF(!$this->app->user->admin)->andWhere('t1.id')->in($this->app->user->view->projects)->fi()
             ->andWhere('t2.id')->in(array_keys($libs))
-            ->orderBy('t1.hasProduct_asc, id_desc')
+            ->orderBy('t1.hasProduct_asc, order_asc')
             ->fetchAll('id');
 
         foreach($projects as $id => $project)

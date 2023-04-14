@@ -1959,7 +1959,7 @@ class projectModel extends model
         {
             $beginTimeStamp = strtotime($project->begin);
             $tasks = $this->dao->select('id,estStarted,deadline,status')->from(TABLE_TASK)
-                ->where('deadline')->ne('0000-00-00')
+                ->where('deadline')->notZeroDate()
                 ->andWhere('status')->in('wait,doing')
                 ->andWhere('project')->eq($projectID)
                 ->fetchAll();

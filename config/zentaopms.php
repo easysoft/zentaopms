@@ -364,6 +364,10 @@ define('TABLE_DASHBOARD', '`' . $config->db->prefix . 'dashboard`');
 define('TABLE_DATASET',   '`' . $config->db->prefix . 'dataset`');
 define('TABLE_DATAVIEW',  '`' . $config->db->prefix . 'dataview`');
 define('TABLE_DIMENSION', '`' . $config->db->prefix . 'dimension`');
+define('TABLE_SCENE',    '`' . $config->db->prefix . 'scene`');
+define('VIEW_SCENECASE', '`ztv_scenecase`');
+
+define('CHANGEVALUE', 100000000);
 
 define('TABLE_PRIV',         '`' . $config->db->prefix . 'priv`');
 define('TABLE_PRIVLANG',     '`' . $config->db->prefix . 'privlang`');
@@ -428,6 +432,7 @@ $config->objectTables['priv']         = TABLE_PRIV;
 $config->objectTables['privlang']     = TABLE_PRIVLANG;
 $config->objectTables['privpackage']  = TABLE_PRIVPACKAGE;
 $config->objectTables['privrelation'] = TABLE_PRIVRELATION;
+$config->objectTables['scene']        = TABLE_SCENE;
 
 $config->newFeatures      = array('introduction', 'tutorial', 'youngBlueTheme', 'visions');
 $config->disabledFeatures = '';

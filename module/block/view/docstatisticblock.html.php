@@ -11,7 +11,7 @@
  */
 ?>
 <style>
-.block-docstatistic .flex {display: flex; flex-wrap: nowrap; flex-direction: row; justify-content: space-between; flex: auto;}
+.block-docstatistic .flex {display: flex; flex-wrap: nowrap; flex-direction: row; justify-content: space-around; flex: auto;}
 .block-docstatistic .flex-column {flex-direction: column; padding-left: 10px;}
 .block-docstatistic .statistic {flex: 0 1 32%;}
 .block-docstatistic .created {flex: 0 1 48%;}

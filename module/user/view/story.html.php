@@ -68,7 +68,7 @@
           <td class='text-left nobr'><?php echo html::a($storyLink, $story->title, '', "class='iframe'");?></td>
           <td><span class='<?php echo "label-pri label-pri-{$story->pri} pri" . zget($lang->story->priList, $story->pri, $story->pri);?>'><?php echo zget($lang->story->priList, $story->pri, $story->pri);?></span></td>
           <td class='status-story status-<?php echo $story->status;?>'><?php echo $this->processStatus('story', $story);?></td>
-          <td><?php echo $story->productTitle;?></td>
+          <td class="nobr"><?php echo $story->productTitle;?></td>
           <?php if($storyType != 'requirement' and $this->config->vision != 'lite'):?>
           <td class='nobr' title='<?php echo $story->planTitle;?>'><?php echo $story->planTitle;?></td>
           <?php endif;?>
