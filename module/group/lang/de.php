@@ -11,6 +11,7 @@
  */
 $lang->group->common             = 'Berechtigungen';
 $lang->group->browse             = 'Gruppen Rechte';
+$lang->group->browseAction       = 'Group List';
 $lang->group->create             = 'Gruppe hinzufügen';
 $lang->group->edit               = 'Bearbeiten';
 $lang->group->copy               = 'Kopieren';

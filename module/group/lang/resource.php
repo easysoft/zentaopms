@@ -1657,7 +1657,7 @@ $lang->dept->methodOrder[25] = 'delete';
 
 /* Group. */
 $lang->resource->group = new stdclass();
-$lang->resource->group->browse              = 'browse';
+$lang->resource->group->browse              = 'browseAction';
 $lang->resource->group->create              = 'create';
 $lang->resource->group->edit                = 'edit';
 $lang->resource->group->copy                = 'copy';

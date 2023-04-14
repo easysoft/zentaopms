@@ -11,6 +11,7 @@
  */
 $lang->group->common             = '权限分组';
 $lang->group->browse             = '浏览分组';
+$lang->group->browseAction       = '分组列表';
 $lang->group->create             = '新增分组';
 $lang->group->edit               = '编辑分组';
 $lang->group->copy               = '复制分组';

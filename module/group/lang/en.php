@@ -11,6 +11,7 @@
  */
 $lang->group->common             = 'Privilege';
 $lang->group->browse             = 'Privilege Group';
+$lang->group->browseAction       = 'Group List';
 $lang->group->create             = 'Create Group';
 $lang->group->edit               = 'Edit Group';
 $lang->group->copy               = 'Copy Group';
