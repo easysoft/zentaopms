@@ -20,13 +20,13 @@ window.renderReleaseCountCell = function(result, {col, row})
 
     if(col.name === 'storyCount')
     {
-        result[result.length] = {html:'<span class="label size-xs ghost p-0">SP</span>'};
+        result[result.length] = {html:'<span class="text-gray text-xs">SP</span>'};
         return result;
     }
 
     if(col.name === 'invested')
     {
-        result[result.length] = {html:'<span class="label size-xs ghost p-0">' + langManDay + '</span>'};
+        result[result.length] = {html:'<span class="text-gray text-xs">' + langManDay + '</span>'};
         return result;
     }
 
