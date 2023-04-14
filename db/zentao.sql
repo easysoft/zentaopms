@@ -669,7 +669,7 @@ CREATE TABLE IF NOT EXISTS `zt_doc` (
   `from` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `fromVersion` smallint(6) NOT NULL DEFAULT '1',
   `draft` longtext NOT NULL,
-  `collector` text NULL,
+  `collects` smallint(5) unsigned NOT NULL DEFAULT '0',
   `addedBy` varchar(30) NOT NULL,
   `addedDate` datetime NOT NULL,
   `assignedTo` varchar(30) NOT NULL DEFAULT '',

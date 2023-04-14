@@ -3271,7 +3271,7 @@ class docModel extends model
             if($action == 'collect')
             {
                 $collectCount = $this->dao->select('count(*) as count')->from(TABLE_DOCACTION)->where('doc')->eq($docID)->andWhere('action')->eq('collect')->fetch('count');
-                $this->dao->update(TABLE_DOC)->set('collector')->eq($collectCount)->where('id')->eq($docID)->exec();
+                $this->dao->update(TABLE_DOC)->set('collects')->eq($collectCount)->where('id')->eq($docID)->exec();
             }
 
             return $actionID;
@@ -3307,7 +3307,7 @@ class docModel extends model
         if($action->action == 'collect')
         {
             $collectCount = $this->dao->select('count(*) as count')->from(TABLE_DOCACTION)->where('doc')->eq($action->doc)->andWhere('action')->eq('collect')->fetch('count');
-            $this->dao->update(TABLE_DOC)->set('collector')->eq($collectCount)->where('id')->eq($action->doc)->exec();
+            $this->dao->update(TABLE_DOC)->set('collects')->eq($collectCount)->where('id')->eq($action->doc)->exec();
         }
     }
 
