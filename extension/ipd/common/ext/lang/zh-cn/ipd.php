@@ -5,8 +5,8 @@ $lang->demandpool->common = '需求池';
 $lang->demand = new stdclass();
 $lang->demand->common = '需求';
 
-$lang->projectInit = new stdclass();
-$lang->projectInit->common = '立项';
+$lang->charter = new stdclass();
+$lang->charter->common = '立项';
 
 $lang->navIcons['demandpool'] = "<i class='icon icon-bars'></i>";
 
@@ -15,7 +15,7 @@ $lang->mainNav              = new stdclass();
 $lang->mainNav->my          = "{$lang->navIcons['my']} {$lang->my->shortCommon}|my|index|";
 $lang->mainNav->demandpool  = "{$lang->navIcons['demandpool']} {$lang->demandpool->common}|demandpool|browse|";
 $lang->mainNav->product     = "{$lang->navIcons['product']} {$lang->productCommon}|product|all|";
-$lang->mainNav->projectInit = "{$lang->navIcons['project']} {$lang->projectInit->common}|$productModule|$productMethod|";
+$lang->mainNav->charter     = "{$lang->navIcons['project']} {$lang->charter->common}|charter|browse|";
 $lang->mainNav->doc         = "{$lang->navIcons['doc']} {$lang->doc->common}|doc|index|";
 $lang->mainNav->admin       = "{$lang->navIcons['admin']} {$lang->admin->common}|admin|index|";
 
@@ -31,7 +31,7 @@ if($config->edition != 'open')
 $lang->mainNav->menuOrder[5]  = 'my';
 $lang->mainNav->menuOrder[10] = 'demandpool';
 $lang->mainNav->menuOrder[15] = 'product';
-$lang->mainNav->menuOrder[20] = 'projectInit';
+$lang->mainNav->menuOrder[20] = 'charter';
 $lang->mainNav->menuOrder[25] = 'feedback';
 $lang->mainNav->menuOrder[30] = 'doc';
 $lang->mainNav->menuOrder[35] = 'admin';
@@ -75,3 +75,10 @@ $lang->product->menuOrder[20] = 'settings';
 
 unset($lang->product->homeMenu->home);
 unset($lang->product->homeMenu->kanban);
+
+$lang->charter->menu           = new stdclass();
+$lang->charter->menu->all      = array('link' => "全部|charter|browse|browseType=all");
+$lang->charter->menu->wait     = array('link' => "待立项|charter|browse|browseType=wait");
+$lang->charter->menu->launched = array('link' => "已立项|charter|browse|browseType=launched");
+$lang->charter->menu->failed   = array('link' => "未通过|charter|browse|browseType=failed");
+$lang->charter->menu->settings = array('link' => "{$lang->settings}|charter|view|charterID=%s", 'subModule' => 'tree,branch', 'alias' => 'edit,whitelist,addwhitelist');
