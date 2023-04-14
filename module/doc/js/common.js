@@ -285,7 +285,6 @@ $(document).ready(function()
     $(function()
     {
         $('.split-row').splitRow();
-        updateCrumbs();
     });
 
     var $pageSetting = $('#pageSetting');
