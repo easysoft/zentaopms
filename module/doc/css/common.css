@@ -114,3 +114,4 @@ ol, ul {margin-bottom: 0}
 .icon {cursor: pointer;}
 
 #mainMenu .pull-right .createDropdown li > a .file-icon {margin-bottom: 1px;}
+#queryBox .btn-save-form, #queryBox #toggle-queries{display: none;}
