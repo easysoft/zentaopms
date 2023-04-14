@@ -1551,7 +1551,7 @@ $lang->gitlab->methodOrder[155] = 'deleteTag';
 
 /* Gogs. */
 $lang->resource->gogs = new stdclass();
-$lang->resource->gogs->browse   = 'browse';
+$lang->resource->gogs->browse   = 'browseAction';
 $lang->resource->gogs->create   = 'create';
 $lang->resource->gogs->edit     = 'edit';
 $lang->resource->gogs->view     = 'view';
