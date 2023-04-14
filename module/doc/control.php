@@ -75,6 +75,14 @@ class doc extends control
         $this->loadModel('search');
 
         list($libs, $libID, $object, $objectID, $objectDropdown) = $this->doc->setMenuByType('mine', 0, $libID);
+        if($type != 'mine')
+        {
+            $objectTitle = '';
+            if($type == 'view')      $objectTitle = $this->lang->doc->myView;
+            if($type == 'collect')   $objectTitle = $this->lang->doc->myCollection;
+            if($type == 'createdby') $objectTitle = $this->lang->doc->myCreation;
+            if($objectTitle) $objectDropdown = "<div id='sidebarHeader'><div class='title' title='{$objectTitle}'>{$objectTitle}</div></div>";
+        }
 
         /* Build the search form. */
         $queryID    = $browseType == 'bysearch' ? (int)$param : 0;
@@ -107,21 +115,22 @@ class doc extends control
             $docs = $this->doc->getMineList($type, $browseType, $orderBy, $pager, $queryID);
         }
 
-        $this->view->title      = $this->lang->doc->common;
-        $this->view->moduleID   = $moduleID;
-        $this->view->docs       = $docs;
-        $this->view->users      = $this->user->getPairs('noletter');
-        $this->view->orderBy    = $orderBy;
-        $this->view->browseType = $browseType;
-        $this->view->param      = $param;
-        $this->view->libID      = $libID;
-        $this->view->lib        = $this->doc->getLibById($libID);
-        $this->view->libTree    = $this->doc->getLibTree($type != 'mine' ? 0 : $libID, $libs, 'mine', $moduleID, 0, $browseType);
-        $this->view->pager      = $pager;
-        $this->view->type       = $type;
-        $this->view->objectID   = 0;
-        $this->view->canExport  = ($this->config->edition != 'open' and common::hasPriv('doc', 'mine2export') and $type == 'mine');
-        $this->view->libType    = 'lib';
+        $this->view->title          = $this->lang->doc->common;
+        $this->view->moduleID       = $moduleID;
+        $this->view->docs           = $docs;
+        $this->view->users          = $this->user->getPairs('noletter');
+        $this->view->orderBy        = $orderBy;
+        $this->view->browseType     = $browseType;
+        $this->view->param          = $param;
+        $this->view->libID          = $libID;
+        $this->view->lib            = $this->doc->getLibById($libID);
+        $this->view->libTree        = $this->doc->getLibTree($type != 'mine' ? 0 : $libID, $libs, 'mine', $moduleID, 0, $browseType);
+        $this->view->pager          = $pager;
+        $this->view->type           = $type;
+        $this->view->objectID       = 0;
+        $this->view->canExport      = ($this->config->edition != 'open' and common::hasPriv('doc', 'mine2export') and $type == 'mine');
+        $this->view->libType        = 'lib';
+        $this->view->objectDropdown = $objectDropdown;
 
         $this->display();
     }
