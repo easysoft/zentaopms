@@ -7,7 +7,6 @@ $(function()
     $('iframe.ke-edit-iframe').contents().find('.article-content').css('padding', '20px 20px 0 20px');
 
     if(objectType == 'project') loadExecutions($('#project').val());
-    setSavePath();
 
     /* Change for show create error. */
     $('#contentBox #content').attr('id', 'contentHTML');
@@ -16,7 +15,6 @@ $(function()
     {
         $('#modalBasicInfo #copyTitle').html($('.doc-title #editorTitle').val().replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;"));
     });
-    $('#modalBasicInfo').on('hide.zui.modal', function(){setSavePath();});
 
     $('#saveDraft').click(function()
     {

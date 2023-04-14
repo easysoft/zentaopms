@@ -199,7 +199,7 @@ class zanodemodel extends model
         
         if(!empty($result) and $result->code == 'success')
         {
-            $this->dao->update(TABLE_HOST)->set('status')->eq(static::STATUS_CREATING_IMG)->where('id')->eq($node->id)->exec();
+            $this->dao->update(TABLE_ZAHOST)->set('status')->eq(static::STATUS_CREATING_IMG)->where('id')->eq($node->id)->exec();
             return $newID;
         }
 
@@ -259,7 +259,7 @@ class zanodemodel extends model
         if(!empty($result) and $result->code == 'success')
         {
             $this->loadModel('action')->create('zanode', $zanodeID, 'createdSnapshot', '', $data->name);
-            $this->dao->update(TABLE_HOST)->set('status')->eq(static::STATUS_CREATING_SNAP)->where('id')->eq($node->id)->exec();
+            $this->dao->update(TABLE_ZAHOST)->set('status')->eq(static::STATUS_CREATING_SNAP)->where('id')->eq($node->id)->exec();
 
             return $newID;
         }
@@ -309,7 +309,7 @@ class zanodemodel extends model
 
         if(!empty($result) and $result->code == 'success')
         {
-            $this->dao->update(TABLE_HOST)->set('status')->eq(static::STATUS_CREATING_SNAP)->where('id')->eq($node->id)->exec();
+            $this->dao->update(TABLE_ZAHOST)->set('status')->eq(static::STATUS_CREATING_SNAP)->where('id')->eq($node->id)->exec();
 
             return $newID;
         }
@@ -383,7 +383,7 @@ class zanodemodel extends model
 
         if(!empty($result) and $result->code == 'success')
         {
-            $this->dao->update(TABLE_HOST)->set('status')->eq('restoring')->where('id')->eq($node->id)->exec();
+            $this->dao->update(TABLE_ZAHOST)->set('status')->eq('restoring')->where('id')->eq($node->id)->exec();
             $this->loadModel('action')->create('zanode', $zanodeID, 'restoredsnapshot', '', $snap->name);
             return true;
         }

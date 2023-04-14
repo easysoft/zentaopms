@@ -114,25 +114,18 @@ class zahostModel extends model
      */
     public function ping($address)
     {
-        if (strcasecmp(PHP_OS, 'WINNT') === 0)
+        if(!filter_var($address, FILTER_VALIDATE_IP) && !filter_var(gethostbyname($address), FILTER_VALIDATE_IP)) return false;
+
+        if(strcasecmp(PHP_OS, 'WINNT') === 0)
         {
             exec("ping -n 1 {$address}", $outcome, $status);
         }
-        elseif (strcasecmp(PHP_OS, 'Linux') === 0)
+        elseif(strcasecmp(PHP_OS, 'Linux') === 0)
         {
             exec("ping -c 1 {$address}", $outcome, $status);
         }
 
-        if (0 == $status)
-        {
-            $status = true;
-        }
-        else
-        {
-            $status = false;
-        }
-
-        return $status;
+        return 0 == $status;
     }
 
     /**

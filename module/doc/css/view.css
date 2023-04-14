@@ -1,8 +1,8 @@
-.h-full-adjust {overflow-y: auto; height: calc(100vh - 120px);}
+.h-full-adjust {overflow-y: auto; height: calc(100vh - 125px);}
 .main-col .block-files .panel-heading {padding-right: 20px;}
 .main-col .block-files .panel-heading .panel-title {height: 35px; line-height: 30px;}
 .main-col .doc-title {display: flex; font-size: 16px; margin-bottom: 10px;}
-.main-col .doc-title .title {margin-right: 10px; line-height: 32px; font-size: 25px;}
+.main-col .doc-title .title {margin-right: 10px; line-height: 32px; font-size: 20px;}
 .main-col .doc-title .info {flex: 1 1 0;}
 .main-col .doc-title .version a {font-size: 13px; color: #8c8c8c;}
 .main-col .doc-title .version .dropdown-menu a:hover {color: #ffffff;}
@@ -25,18 +25,15 @@
 .article-content .info .keywords .label {padding-right:8px; padding-left:8px; color:#18A6FD; border-color:rgba(24, 166, 253, 0.25); height:22px; line-height:14px; margin-right:4px;}
 
 .article-content {width: 100%; display: inline-block;}
-.outline-toggle {position: absolute; right: 20px; top: 50px;}
-.outline-toggle i.icon-angle-right:before {content: "\e314"; cursor: pointer;}
-.outline-toggle i.icon-angle-left:before {content: "\e315"; cursor: pointer;}
+.outline-toggle {position: absolute; right: 55px; top: 50px;}
 .outline ul li {list-style: none;}
 .outline-content {display: none; padding-top: 18px;}
 .outline-content a {color: #838A9D;}
-.outline-content li.text-ellipsis.active>a {font-weight: 700; color: #0c64eb;}
+.outline-content li.text-ellipsis.active>a {font-weight: 700;}
 #outline li.has-list.open:before {content: unset;}
 #fileTree {margin-bottom: 40px; max-height: calc(100vh - 180px); overflow: auto;}
 #closeBtn {position: absolute; right: 10px; top: 10px;}
 
-.title {font-size: 20px !important;}
 .article-content.comment {width: 100% !important;}
 
 .flex {display: flex;}
@@ -61,12 +58,6 @@
 #mainContent > .panel {margin-bottom: 0; overflow-y: auto;}
 #mainContent > .main-col{flex: auto;}
 
-.info .version, .info .crumbs {float: left;}
-.crumbs img {margin-right: 3px; margin-bottom: 4px;}
-.crumbs {float: left; display: flex;height: 32px; width: 640px; align-items: center; overflow: hidden;}
-.crumbs .crumb-item {padding: 6px 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; flex: none; display: flex;}
-.crumb-item .separator {flex: 0 0 15px; display: flex; justify-content: center; align-items: center;}
-.crumb-item a {flex: none}
 .main-col {position: relative;}
 #autoBox {display: flex; overflow: hidden; text-overflow: ellipsis; padding-right: 15px; position: relative;}
 #autoBox > .ellipsis {position: absolute; top: 3px; right: 0; width: 10px; background: #F4F5F7; height: 100%;}

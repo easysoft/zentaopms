@@ -28,7 +28,6 @@
           <td class="doc-title" colspan='3'><?php echo html::input('title', $doc->title, "placeholder='{$lang->doc->titlePlaceholder}'' id='editorTitle' class='form-control' required");?></td>
           <td class="text-right btn-tools">
             <?php if($doc->status == 'draft'):?>
-            <span id='savePath' class='text-gray'></span>
             <?php echo html::commonButton($lang->doc->saveDraft, "id='saveDraft'", "btn btn-secondary");?>
             <?php echo html::commonButton($lang->release->common, "id='saveRelease'", "btn btn-primary");?>
             <?php else:?>
@@ -149,6 +148,5 @@ $(function()
 <?php js::set('docID', $doc->id);?>
 <?php js::set('draft', $doc->draft);?>
 <?php js::set('type', 'doc');?>
-<?php js::set('defaultSave', $lang->doc->defaultSave);?>
 <?php js::set('titleNotEmpty', sprintf($lang->error->notempty, $lang->doc->title));?>
 <?php include '../../common/view/footer.html.php';?>

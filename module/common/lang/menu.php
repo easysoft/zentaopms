@@ -9,7 +9,7 @@ $lang->navIcons['qa']        = "<i class='icon icon-test'></i>";
 $lang->navIcons['devops']    = "<i class='icon icon-devops'></i>";
 $lang->navIcons['kanban']    = "<i class='icon icon-kanban'></i>";
 $lang->navIcons['doc']       = "<i class='icon icon-doc'></i>";
-$lang->navIcons['report']    = "<i class='icon icon-statistic'></i>";
+$lang->navIcons['bi']        = "<i class='icon icon-statistic'></i>";
 $lang->navIcons['system']    = "<i class='icon icon-group'></i>";
 $lang->navIcons['admin']     = "<i class='icon icon-cog-outline'></i>";
 
@@ -42,7 +42,7 @@ $lang->mainNav->qa        = "{$lang->navIcons['qa']} {$lang->qa->common}|qa|inde
 $lang->mainNav->devops    = "{$lang->navIcons['devops']} DevOps|repo|browse|";
 $lang->mainNav->kanban    = "{$lang->navIcons['kanban']} {$lang->kanban->common}|kanban|space|";
 $lang->mainNav->doc       = "{$lang->navIcons['doc']} {$lang->doc->common}|doc|index|";
-$lang->mainNav->report    = "{$lang->navIcons['report']} {$lang->report->common}|screen|browse|";
+$lang->mainNav->bi        = "{$lang->navIcons['bi']} {$lang->bi->common}|screen|browse|";
 $lang->mainNav->system    = "{$lang->navIcons['system']} {$lang->system->common}|my|team|";
 $lang->mainNav->admin     = "{$lang->navIcons['admin']} {$lang->admin->common}|admin|index|";
 
@@ -57,7 +57,7 @@ $lang->mainNav->menuOrder[30] = 'qa';
 $lang->mainNav->menuOrder[35] = 'devops';
 $lang->mainNav->menuOrder[40] = 'kanban';
 $lang->mainNav->menuOrder[45] = 'doc';
-$lang->mainNav->menuOrder[50] = 'report';
+$lang->mainNav->menuOrder[50] = 'bi';
 $lang->mainNav->menuOrder[55] = 'system';
 $lang->mainNav->menuOrder[60] = 'admin';
 
@@ -515,16 +515,16 @@ $lang->doc->menuOrder[20] = 'project';
 $lang->doc->menuOrder[25] = 'api';
 $lang->doc->menuOrder[30] = 'custom';
 
-/* Report menu.*/
-$lang->report->menu         = new stdclass();
-$lang->report->menu->screen = array('link' => "{$lang->screen->common}|screen|browse");
-$lang->report->menu->pivot  = array('link' => "{$lang->pivot->common}|pivot|preview");
-$lang->report->menu->chart  = array('link' => "{$lang->chart->common}|chart|preview");
+/* BI menu.*/
+$lang->bi->menu         = new stdclass();
+$lang->bi->menu->screen = array('link' => "{$lang->screen->common}|screen|browse");
+$lang->bi->menu->pivot  = array('link' => "{$lang->pivot->common}|pivot|preview");
+$lang->bi->menu->chart  = array('link' => "{$lang->chart->common}|chart|preview");
 
-/* Report menu order. */
-$lang->report->menuOrder[5]  = 'screen';
-$lang->report->menuOrder[10] = 'pivot';
-$lang->report->menuOrder[15] = 'chart';
+/* BI menu order. */
+$lang->bi->menuOrder[5]  = 'screen';
+$lang->bi->menuOrder[10] = 'pivot';
+$lang->bi->menuOrder[15] = 'chart';
 
 /* Company menu.*/
 $lang->company->menu              = new stdclass();
@@ -611,9 +611,10 @@ $lang->navGroup->doc    = 'doc';
 $lang->navGroup->doclib = 'doc';
 $lang->navGroup->api    = 'doc';
 
-$lang->navGroup->screen = 'report';
-$lang->navGroup->pivot  = 'report';
-$lang->navGroup->chart  = 'report';
+$lang->navGroup->screen = 'bi';
+$lang->navGroup->pivot  = 'bi';
+$lang->navGroup->chart  = 'bi';
+$lang->navGroup->report = 'bi';
 
 $lang->navGroup->qa            = 'qa';
 $lang->navGroup->bug           = 'qa';

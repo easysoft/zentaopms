@@ -19,6 +19,7 @@
 <?php js::set('treeData', $libTree)?>
 <div id="mainMenu" class="clearfix">
   <div id="leftBar" class="btn-toolbar pull-left">
+    <?php echo $objectDropdown;?>
     <?php if(!empty($libTree)):?>
     <?php foreach($lang->doc->featureBar['tableContents'] as $barType => $barName):?>
     <?php $active     = $barType == $browseType ? 'btn-active-text' : '';?>

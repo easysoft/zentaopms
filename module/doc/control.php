@@ -76,6 +76,14 @@ class doc extends control
 
         if($moduleID) $libID = $this->tree->getById($moduleID)->root;
         list($libs, $libID, $object, $objectID, $objectDropdown) = $this->doc->setMenuByType('mine', 0, $libID);
+        if($type != 'mine')
+        {
+            $objectTitle = '';
+            if($type == 'view')      $objectTitle = $this->lang->doc->myView;
+            if($type == 'collect')   $objectTitle = $this->lang->doc->myCollection;
+            if($type == 'createdby') $objectTitle = $this->lang->doc->myCreation;
+            if($objectTitle) $objectDropdown = "<div id='sidebarHeader'><div class='title' title='{$objectTitle}'>{$objectTitle}</div></div>";
+        }
 
         /* Build the search form. */
         $queryID    = $browseType == 'bysearch' ? (int)$param : 0;
@@ -108,21 +116,22 @@ class doc extends control
             $docs = $this->doc->getMineList($type, $browseType, $orderBy, $pager, $queryID);
         }
 
-        $this->view->title      = $this->lang->doc->common;
-        $this->view->moduleID   = $moduleID;
-        $this->view->docs       = $docs;
-        $this->view->users      = $this->user->getPairs('noletter');
-        $this->view->orderBy    = $orderBy;
-        $this->view->browseType = $browseType;
-        $this->view->param      = $param;
-        $this->view->libID      = $libID;
-        $this->view->lib        = $this->doc->getLibById($libID);
-        $this->view->libTree    = $this->doc->getLibTree($type != 'mine' ? 0 : $libID, $libs, 'mine', $moduleID, 0, $browseType);
-        $this->view->pager      = $pager;
-        $this->view->type       = $type;
-        $this->view->objectID   = 0;
-        $this->view->canExport  = ($this->config->edition != 'open' and common::hasPriv('doc', 'mine2export') and $type == 'mine');
-        $this->view->libType    = 'lib';
+        $this->view->title          = $this->lang->doc->common;
+        $this->view->moduleID       = $moduleID;
+        $this->view->docs           = $docs;
+        $this->view->users          = $this->user->getPairs('noletter');
+        $this->view->orderBy        = $orderBy;
+        $this->view->browseType     = $browseType;
+        $this->view->param          = $param;
+        $this->view->libID          = $libID;
+        $this->view->lib            = $this->doc->getLibById($libID);
+        $this->view->libTree        = $this->doc->getLibTree($type != 'mine' ? 0 : $libID, $libs, 'mine', $moduleID, 0, $browseType);
+        $this->view->pager          = $pager;
+        $this->view->type           = $type;
+        $this->view->objectID       = 0;
+        $this->view->canExport      = ($this->config->edition != 'open' and common::hasPriv('doc', 'mine2export') and $type == 'mine');
+        $this->view->libType        = 'lib';
+        $this->view->objectDropdown = $objectDropdown;
 
         $this->display();
     }
@@ -387,7 +396,6 @@ class doc extends control
             $this->action->create('doc', $docID, $actionType, $fileAction);
 
             if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $docID));
-            $objectID = zget($lib, $lib->type, 0);
             $params   = "docID=" . $docResult['id'];
             $link     = isonlybody() ? 'parent' : $this->createLink('doc', 'view', $params);
             $response = array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $link);
@@ -1230,15 +1238,6 @@ class doc extends control
             $methodName = 'mySpace';
         }
 
-        $crumbs[] = html::a($this->createLink($moduleName, $methodName, $linkParams), html::image("static/svg/wiki-file-lib.svg") . $lib->name, '', 'title =' . $lib -> name);
-
-        $moduleList = $this->loadModel('tree')->getParents($doc->module);
-        foreach($moduleList as $module)
-        {
-            $withModuleParams = $linkParams . "&moduleID=$module->id";
-            $crumbs[] = html::a(inLink($methodName, $withModuleParams), $module->name . '&nbsp', '', 'title =' . $module->name);
-        }
-
         $spaceType = $objectType . 'Space';
         $this->view->title          = isset($this->lang->doc->{$spaceType}) ? $this->lang->doc->{$spaceType} : $this->lang->doc->common;
         $this->view->docID          = $docID;
@@ -1249,7 +1248,6 @@ class doc extends control
         $this->view->objectType     = $objectType;
         $this->view->type           = $type;
         $this->view->libID          = $libID;
-        $this->view->crumbs         = $crumbs;
         $this->view->lib            = isset($libs[$libID]) ? $libs[$libID] : new stdclass();
         $this->view->libs           = $this->doc->getLibsByObject($type, $objectID);
         $this->view->canBeChanged   = common::canModify($type, $object); // Determines whether an object is editable.
