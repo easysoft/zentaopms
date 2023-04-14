@@ -1380,24 +1380,26 @@ class myModel extends model
         if(empty($actionField)) $actionField = 'date';
         $orderBy = $actionField . '_' . $direction;
 
-        $condition = "(action = 'reviewed' or action = 'approvalreview')";
+        $condition = "(`action` = 'reviewed' or `action` = 'approvalreview')";
         if($browseType == 'createdbyme')
         {
             $condition  = "(objectType in('story','case','feedback') and action = 'submitreview') OR ";
             $condition .= "(objectType = 'review' and action = 'opened') OR ";
             $condition .= "(objectType = 'attend' and action = 'commited') OR ";
-            $condition .= "(action = 'approvalsubmit') OR ";
+            $condition .= "(`action` = 'approvalsubmit') OR ";
             $condition .= "(objectType in('leave','makeup','overtime','lieu') and action = 'created')";
             $condition  = "($condition)";
         }
-
-        $actions = $this->dao->select('objectType,objectID,actor,action,MAX(`date`) as `date`,extra')->from(TABLE_ACTION)
+        $actionIdList = $this->dao->select('MAX(`id`) as `id`')->from(TABLE_ACTION)
             ->where('actor')->eq($this->app->user->account)
             ->andWhere('vision')->eq($this->config->vision)
             ->andWhere($condition)
             ->groupBy('objectType,objectID')
             ->orderBy($orderBy)
-            ->page($pager, 'objectType,objectID')
+            ->page($pager)
+            ->fetchPairs();
+        $actions = $this->dao->select('objectType,objectID,actor,action,`date`,extra')->from(TABLE_ACTION)
+            ->where('id')->in($actionIdList)
             ->fetchAll();
         $objectTypeList = array();
         foreach($actions as $action) $objectTypeList[$action->objectType][] = $action->objectID;
