@@ -29,7 +29,7 @@
 .outline ul li {list-style: none;}
 .outline-content {display: none; padding-top: 18px;}
 .outline-content a {color: #838A9D;}
-.outline-content li.text-ellipsis.active>a {font-weight: 700; color: #0c64eb;}
+.outline-content li.text-ellipsis.active>a {font-weight: 700;}
 #outline li.has-list.open:before {content: unset;}
 #fileTree {margin-bottom: 40px; max-height: calc(100vh - 180px); overflow: auto;}
 #closeBtn {position: absolute; right: 10px; top: 10px;}
