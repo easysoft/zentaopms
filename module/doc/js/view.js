@@ -164,6 +164,7 @@ $(function()
 
     $('#outline li.has-list').addClass('open in');
     $('#outline li.has-list>i+ul').prev('i').remove();
+    $('.outline-toggle i.icon-menu-arrow-left').trigger('click');
 
     $(document).on('click', '.detail-content a', function(event)
     {
@@ -194,13 +195,6 @@ $(function()
         });
     })
 
-    $('#sidebar .icon.icon-menu-arrow-left').click(function()
-    {
-        if($('#sidebar>.cell').is(':hidden') && $('.outline-content').is(':visible'))
-        {
-            $('.outline .outline-toggle i.icon-menu-arrow-right').trigger("click");
-        }
-    })
 
     $('#history').append('<a id="closeBtn" href="###" class="btn btn-link"><i class="icon icon-close"></i></a>');
     $('#hisTrigger').on('click', function()
