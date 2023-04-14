@@ -2119,6 +2119,11 @@ class block extends control
      */
     public function printDocViewListBlock()
     {
+        /* Load pager. */
+        $this->app->loadClass('pager', $static = true);
+        $pager = new pager(0, 6, 1);
+
+        $this->view->docList = $this->loadModel('doc')->getDocsByBrowseType('all', 0, 0,'views_desc', $pager);
     }
 
     /**
@@ -2129,6 +2134,11 @@ class block extends control
      */
     public function printDocCollectListBlock()
     {
+        /* Load pager. */
+        $this->app->loadClass('pager', $static = true);
+        $pager = new pager(0, 6, 1);
+
+        $this->view->docList = $this->loadModel('doc')->getDocsByBrowseType('all', 0, 0, 'collects_desc', $pager);
     }
 
     /**

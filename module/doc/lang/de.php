@@ -156,6 +156,8 @@ $lang->doc->todayUpdated  = "Today's update";
 $lang->doc->daysUpdated   = 'Updated %s days ago';
 $lang->doc->monthsUpdated = 'Updated %s months ago';
 $lang->doc->yearsUpdated  = 'Updated %s years ago';
+$lang->doc->viewCount     = '%s Visits';
+$lang->doc->collectCount  = '%s Collections';
 
 /* Methods list */
 $lang->doc->index            = 'Dashboard';
