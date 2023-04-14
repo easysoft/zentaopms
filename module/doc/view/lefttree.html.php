@@ -56,7 +56,7 @@ i.btn-info, i.btn-info:hover {border: none; background: #fff; box-shadow: unset;
 [lang^=zh] #leftBar .selectBox #currentItem {width: 180px;}
 #leftBar .selectBox #currentItem > .text {overflow: hidden; text-align: left; flex: 0 1 100%;}
 .dropdown-in-tree {max-height: 293px; overflow-y: auto;}
-.before-tree-item {flex: 0 0 14px; margin-right: 5px;}
+.before-tree-item {flex: 0 0 14px; margin-right: 5px; margin-bottom: 2px;}
 </style>
 
 <?php
