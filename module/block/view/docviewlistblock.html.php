@@ -12,8 +12,8 @@
 ?>
 <style>
 .block-docviewlist .panel-body {padding-top: 0px;}
-.block-docviewlist .doc-list > .doc-title {display: flex; overflow: hidden; text-overflow: clip; white-space: nowrap; padding: 10px 0;}
-.block-docviewlist .doc-list > .doc-title > .label-rank {margin-right: 10px; padding-top: 1px; border: unset;}
+.block-docviewlist .doc-list > .doc-title {display: flex; overflow: hidden; text-overflow: clip; white-space: nowrap; padding: 8px 0;}
+.block-docviewlist .doc-list > .doc-title > .label-rank {margin-right: 10px; padding-top: 1px; border: unset; color: #2E7FFF; background-color: #D5E5FF;}
 .block-docviewlist .doc-list > .doc-title > .label-rank-1 {color: #FC5959; background-color: #FFE2D9;}
 .block-docviewlist .doc-list > .doc-title > .label-rank-2 {color: #FF8058; background-color: #FFE2D9;}
 .block-docviewlist .doc-list > .doc-title > .label-rank-3 {color: #FF9F46; background-color: #FFECDB;}

@@ -156,6 +156,7 @@ $lang->doc->daysUpdated   = '%s天前更新';
 $lang->doc->monthsUpdated = '%s月前更新';
 $lang->doc->yearsUpdated  = '%s年前更新';
 $lang->doc->viewCount     = '%s次浏览';
+$lang->doc->collectCount  = '%s次收藏';
 
 /* 方法列表。*/
 $lang->doc->index            = '仪表盘';
