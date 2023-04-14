@@ -728,29 +728,16 @@ class screenModel extends model
         {
             if($chart->sql)
             {
-                $settings = json_decode($chart->settings);
+                $settings   = json_decode($chart->settings);
+                $sourceData = 0;
                 if($settings and isset($settings->metric))
                 {
-                    $sourceData = array();
-
-                    $sql     = $this->setFilterSQL($chart);
-                    $results = $this->dao->query($sql)->fetchAll();
-                    $group = $settings->group[0]->field;
-
-                    $groupCount = array();
-                    foreach($results as $result)
-                    {
-                        if($settings->metric[0]->agg == 'count')
-                        {
-                            if(!isset($groupCount[$result->$group])) $groupCount[$result->$group] = 0;
-                            $groupCount[$result->$group]++;
-                        }
-                    }
-
-                    foreach($groupCount as $groupValue => $groupCount) $sourceData[$groupValue] = $groupCount;
+                    $sql        = $this->setFilterSQL($chart);
+                    $result     = $this->dao->query($sql)->fetch();
+                    $group      = $settings->group[0]->field;
+                    $sourceData = zget($result, $group, 0);
                 }
-                $doneData = round((array_sum($sourceData) != 0 and !empty($sourceData['done'])) ? $sourceData['done'] / array_sum($sourceData) : 0, 4);
-                $component->option->dataset = $doneData;
+                $component->option->dataset = $sourceData;
             }
 
             return $this->setComponentDefaults($component);
