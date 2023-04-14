@@ -68,6 +68,7 @@ js::set('objectType', isset($type) ? $type : '');
 js::set('objectID',   isset($objectID) ? $objectID : '');
 js::set('isFirstLoad', isset($isFirstLoad) ? $isFirstLoad: '');
 js::set('canViewFiles', common::hasPriv('doc', 'showfiles'));
+js::set('spaceMethod', $config->doc->spaceMethod);
 ?>
 
 <div id="fileTree" class="file-tree menu-active-primary menu-hover-primary">
@@ -435,6 +436,7 @@ $(function()
         if(!libID)    libID    = 0;
         if(!moduleID) moduleID = 0;
         linkParams = linkParams.replace('%s', 'libID=' + libID + '&moduleID=' + moduleID);
+        var moduleName = config.currentModule;
         var methodName = '';
         if(config.currentModule == 'api')
         {
@@ -452,7 +454,7 @@ $(function()
             if(type == 'view' || type == 'collect') mySpaceType = type;
             if(type == 'createdBy' || type == 'createdby') mySpaceType = 'createdby';
 
-            methodName = 'mySpace';
+            methodName = 'myspace';
             linkParams = 'type='+ mySpaceType + '&libID=' + libID + '&moduleID=' + moduleID;
         }
         else if(['text', 'word', 'ppt', 'excel'].indexOf(type) !== -1)
@@ -460,13 +462,18 @@ $(function()
             methodName = 'view';
             linkParams = 'docID=' + moduleID;
         }
+        else if(objectType == 'execution')
+        {
+            moduleName = 'execution';
+            methodName = 'doc';
+            linkParam  = 'executionID=0';
+        }
         else
         {
-            methodName = objectType == 'execution' || objectType == 'custom' ? 'tableContents' : objectType + 'Space';
-            linkParams = objectType == 'execution' || objectType == 'custom' ? 'type=' + objectType + '&' + linkParams : linkParams;
+            methodName = spaceMethod[objectType] ? spaceMethod[objectType] : 'teamSpace';
         }
 
-        location.href = createLink(config.currentModule, methodName, linkParams);
+        location.href = createLink(moduleName, methodName, linkParams);
     }
 
     $('body').on('click', function()
