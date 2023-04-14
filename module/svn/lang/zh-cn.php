@@ -13,4 +13,4 @@
 $lang->svn->common  = 'Subversion';
 $lang->svn->cat     = '查看源代码';
 $lang->svn->diff    = '比较源代码';
-$lang->svn->apiSync = '接口：同步svn日志';
+$lang->svn->apiSync = '接口：同步SVN日志';
