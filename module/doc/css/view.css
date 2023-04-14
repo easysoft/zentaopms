@@ -21,7 +21,7 @@
 .main-col iframe {min-height: 380px;}
 .article-content {margin-top: 0px}
 .article-content .info {margin-bottom: 15px; width:100%; overflow:hidden;}
-.article-content .info .user-time{margin-right: 16px}
+.article-content .info .user-time{margin-right: 4px}
 .article-content .info .keywords .label {padding-right:8px; padding-left:8px; color:#18A6FD; border-color:rgba(24, 166, 253, 0.25); height:22px; line-height:14px; margin-right:4px;}
 
 .article-content {width: 100%; display: inline-block;}
