@@ -12,7 +12,7 @@
 $lang->admin->index           = 'Admin Home';
 $lang->admin->sso             = 'Zdoo';
 $lang->admin->ssoAction       = 'Link Zdoo';
-$lang->admin->safeIndex       = 'Security';
+$lang->admin->safeIndex       = 'Password Security Setting';
 $lang->admin->checkWeak       = 'Check Weak Password';
 $lang->admin->certifyMobile   = 'Verify your cellphone';
 $lang->admin->certifyEmail    = 'Verify your Email';
