@@ -70,3 +70,8 @@
 .detail+.detail {padding-top: 0;}
 .comment-edit-form .form-actions {display: flex;}
 
+#content .detail-content.article-content::-webkit-scrollbar,
+#outlineMenu::-webkit-scrollbar {height: 0px; width: 0px; background: transparent;}
+
+#content .detail-content.article-content::-moz-scrollbar,
+#outlineMenu::-moz-scrollbar {height: 0px; width: 0px; background: transparent;}

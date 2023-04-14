@@ -56,6 +56,7 @@ i.btn-info, i.btn-info:hover {border: none; background: #fff; box-shadow: unset;
 [lang^=zh] #leftBar .selectBox #currentItem {width: 180px;}
 #leftBar .selectBox #currentItem > .text {overflow: hidden; text-align: left; flex: 0 1 100%;}
 .dropdown-in-tree {max-height: 293px; overflow-y: auto;}
+.before-tree-item {flex: 0 0 14px; margin-right: 5px;}
 </style>
 
 <?php
@@ -234,7 +235,7 @@ $(function()
         var imgObj = {
             'annex': 'annex',
             'api': 'interface',
-            'lib': 'wiki-file-lib',
+            'lib': 'wiki',
             'execution': 'wiki-file-lib',
             'text': 'wiki-file',
             'word': 'word',
@@ -259,7 +260,7 @@ $(function()
                 var $item    = '<a href="' + link + '" style="position: relative" data-has-children="' + hasChild + '" title="' + item.name + '" data-id="' + item.id + '" class="' + libClass + '" data-type="' + item.type + '" data-action="' + item.hasAction + '">';
 
                 $item += '<div class="text h-full w-full flex-start overflow-hidden">';
-                if((libClass == 'lib' && item.type != 'execution') || (item.type == 'execution' && item.hasAction)) $item += '<div class="img-lib" style="background-image:url(static/svg/' + imgObj[item.type || 'lib'] + '.svg)"></div>';
+                if((libClass == 'lib' && item.type != 'execution') || (item.type == 'execution' && item.hasAction)) $item += '<i class="before-tree-item icon icon-' + imgObj[item.type] +'-lib"></i>';
                 if(['text', 'word', 'ppt', 'excel'].indexOf(item.type) !== -1) $item += '<div class="img-lib" style="background-image:url(static/svg/' + imgObj[item.type] + '.svg)"></div>';
                 $item += '<div class="tree-text">';
                 $item += item.name;
@@ -355,13 +356,13 @@ $(function()
             var libClass   = '.' + moduleType + 'LibDorpdown';
             if(!$(this).hasClass('lib')) libClass = '.' + moduleType + 'ModuleDorpdown';
 
-            $(this).find('.icon').removeClass('hidden');
+            $(this).find('.icon-drop').removeClass('hidden');
             $(this).addClass('show-icon');
             if($(libClass).find('li').length == 0) return false;
 
         }).on('mouseout', 'a', function()
         {
-            if(!$(this).closest('a').hasClass('hover')) $(this).find('.icon').addClass('hidden');
+            if(!$(this).closest('a').hasClass('hover')) $(this).find('.icon-drop').addClass('hidden');
             $(this).removeClass('show-icon');
         }).on('click', 'a', function()
         {
@@ -482,13 +483,13 @@ $(function()
             if($hoverItem.length)
             {
                 $hoverItem.removeClass('hover');
-                $hoverItem.find('.icon').addClass('hidden');
+                $hoverItem.find('.icon-drop').addClass('hidden');
             }
             $dropdown.remove();
         }
     }).on('click', '.sidebar-toggle', function()
     {
-        var $icon = $(this).find('.icon');
+        var $icon = $(this).find('.icon-drop');
         if($('#sideBar').hasClass('hidden'))
         {
             $icon.addClass('icon-angle-left');
