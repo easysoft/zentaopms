@@ -3,7 +3,19 @@ namespace zin;
 
 class checkbox extends wg
 {
-    protected static $defineProps = 'text?:string, checked?:bool, name?:string, primary:bool=true, id:string, disabled?:bool, type:string="checkbox", value?:string, typeClass?:string';
+    protected static $defineProps =
+    [
+        'text?: string',
+        'checked?: bool',
+        'name?: string',
+        'primary: bool=true',
+        'id: string',
+        'disabled?: bool',
+        'type: string="checkbox"',
+        'value?: string',
+        'typeClass?: string',
+        'rootClass?: string'
+    ];
 
     public function onAddChild($child)
     {
@@ -16,19 +28,20 @@ class checkbox extends wg
 
     protected function buildPrimary()
     {
-        list($id, $text, $name, $checked, $disabled, $type, $typeClass) = $this->prop(array('id', 'text', 'name', 'checked', 'disabled', 'type', 'typeClass'));
+        list($id, $text, $name, $checked, $disabled, $type, $typeClass, $rootClass, $value) = $this->prop(array('id', 'text', 'name', 'checked', 'disabled', 'type', 'typeClass', 'rootClass', 'value'));
 
         if(empty($typeClass)) $typeClass = $type;
-        if(empty($id)) $id = $this->gid;
+        if(empty($id))        $id        = $name . '_' . $value;
 
         return div
         (
-            setClass("$typeClass-primary", array('checked' => $checked, 'disabled' => $disabled)),
+            setClass("$typeClass-primary", $rootClass, array('disabled' => $disabled)),
             h::input
             (
                 set::type($type),
                 set::id($id),
-                set($this->props->skip('text,primary,typeClass,id')),
+                set::name($name),
+                set($this->props->skip('text,primary,typeClass,rootClass,id')),
             ),
             h::label
             (
