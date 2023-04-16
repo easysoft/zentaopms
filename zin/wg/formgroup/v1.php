@@ -14,18 +14,21 @@ class formGroup extends wg
 
         if($required === 'auto') $required = isFieldRequired($name);
 
-        if(is_string($control)) $control = ['type' => $control];
-        elseif(empty($control)) $control = [];
+        if(is_string($control)) $control = ['type' => $control, 'name' => $name];
+        elseif(empty($control) && $name !== NULL) $control = ['name' => $name];
 
-        if($required !== NULL)  $control['required'] = $required;
-        if($name !== NULL)      $control['name']     = $name;
-        if($value !== NULL)     $control['value']    = $value;
-        if($disabled !== NULL)  $control['disabled'] = $disabled;
-        if($options !== NULL)   $control['options']  = $options;
+        if(!empty($control))
+        {
+            if($required !== NULL)  $control['required'] = $required;
+            if($name !== NULL)      $control['name']     = $name;
+            if($value !== NULL)     $control['value']    = $value;
+            if($disabled !== NULL)  $control['disabled'] = $disabled;
+            if($options !== NULL)   $control['options']  = $options;
+        }
 
         return div
         (
-            set::class('form-group', $required ? 'required' : NULL, $label === false ? 'no-label' : NULL, empty($width) ? NULL : 'grow-0'),
+            set::class('form-group', $required ? 'required' : NULL, ($label === false || $label === NULL) ? 'no-label' : NULL, empty($width) ? NULL : 'grow-0'),
             zui::width($width),
             set($this->getRestProps()),
             empty($label) ? null : new formLabel
