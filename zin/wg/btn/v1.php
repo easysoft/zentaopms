@@ -16,7 +16,8 @@ class btn extends wg
         'trailingIcon?:string',
         'caret?:string|bool',
         'hint?:string',
-        'type?:string'
+        'type?:string',
+        'btnType?:string'
     );
 
     public function onAddChild($child)
@@ -37,7 +38,7 @@ class btn extends wg
 
         if(empty($url))
         {
-            $props['type'] = $this->prop('type', 'button');
+            $props['type'] = $this->prop('btnType') ?? 'button';
             if(!isset($props['data-url']))    $props['data-url']    = $url;
             if(!isset($props['data-target'])) $props['data-target'] = $target;
         }
@@ -71,6 +72,8 @@ class btn extends wg
 
     private function getClassList()
     {
+        $url           = $this->prop('url');
+        $type          = $this->prop('type');
         $caret         = $this->prop('caret');
         $text          = $this->prop('text');
         $icon          = $this->prop('icon');
@@ -85,6 +88,9 @@ class btn extends wg
             'btn-caret' => $onlyCaret,
             'square'    => $this->prop('square')
         );
+
+        if(!empty($type))    $classList[$type] = true;
+        elseif(!empty($url)) $classList['btn-default'] = true;
 
         $size = $this->prop('size');
         if(!empty($size)) $classList["size-$size"] = true;
