@@ -389,7 +389,17 @@ CHANGE `reviewedBy` `reviewedBy` varchar(255) NOT NULL DEFAULT '',
 CHANGE `reviewedDate` `reviewedDate` date NULL,
 CHANGE `lastEditedDate` `lastEditedDate` datetime NULL,
 CHANGE `lastRunner` `lastRunner` varchar(30) NOT NULL DEFAULT '',
-CHANGE `lastRunDate` `lastRunDate` datetime NULL;
+CHANGE `lastRunDate` `lastRunDate` datetime NULL,
+CHANGE `frame` `frame` varchar(10) NOT NULL DEFAULT '',
+CHANGE `stage` `stage` varchar(255) NOT NULL DEFAULT '',
+CHANGE `howRun` `howRun` varchar(30) NOT NULL DEFAULT '',
+CHANGE `script` `script` longtext NULL,
+CHANGE `scriptStatus` `scriptStatus` varchar(30) NOT NULL DEFAULT '',
+CHANGE `scriptLocation` `scriptLocation` varchar(255) NOT NULL DEFAULT '',
+CHANGE `linkCase` `linkCase` varchar(255) NOT NULL DEFAULT '',
+CHANGE `fromBug` `fromBug` mediumint unsigned NOT NULL DEFAULT '0',
+CHANGE `fromCaseID` `fromCaseID` mediumint unsigned NOT NULL DEFAULT '0',
+CHANGE `lastRunResult` `lastRunResult` char(30) NOT NULL DEFAULT '';
 
 ALTER TABLE `zt_chart`
 CHANGE `editedBy` `editedBy` varchar(30) NOT NULL DEFAULT '',

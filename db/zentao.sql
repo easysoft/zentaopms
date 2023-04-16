@@ -373,14 +373,14 @@ CREATE TABLE IF NOT EXISTS `zt_case` (
   `pri` tinyint(3) unsigned NOT NULL default '3',
   `type` char(30) NOT NULL default '1',
   `auto` varchar(10) NOT NULL default 'no',
-  `frame` varchar(10) NOT NULL,
-  `stage` varchar(255) NOT NULL,
-  `howRun` varchar(30) NOT NULL,
-  `script` longtext NOT NULL,
+  `frame` varchar(10) NOT NULL DEFAULT '',
+  `stage` varchar(255) NOT NULL DEFAULT '',
+  `howRun` varchar(30) NOT NULL DEFAULT '',
+  `script` longtext NULL,
   `scriptedBy` varchar(30) NOT NULL DEFAULT '',
   `scriptedDate` date NULL,
-  `scriptStatus` varchar(30) NOT NULL,
-  `scriptLocation` varchar(255) NOT NULL,
+  `scriptStatus` varchar(30) NOT NULL DEFAULT '',
+  `scriptLocation` varchar(255) NOT NULL DEFAULT '',
   `status` char(30) NOT NULL default '1',
   `subStatus` varchar(30) NOT NULL default '',
   `color` char(7) NOT NULL,
@@ -393,14 +393,14 @@ CREATE TABLE IF NOT EXISTS `zt_case` (
   `lastEditedBy` char(30) NOT NULL default '',
   `lastEditedDate` datetime NULL,
   `version` tinyint(3) unsigned NOT NULL default '0',
-  `linkCase` varchar(255) NOT NULL,
-  `fromBug` mediumint(8) unsigned NOT NULL,
-  `fromCaseID` mediumint(8) unsigned NOT NULL,
+  `linkCase` varchar(255) NOT NULL DEFAULT '',
+  `fromBug` mediumint(8) unsigned NOT NULL DEFAULT 0,
+  `fromCaseID` mediumint(8) unsigned NOT NULL DEFAULT 0,
   `fromCaseVersion` mediumint(8) unsigned NOT NULL default '1',
   `deleted` enum('0','1') NOT NULL default '0',
   `lastRunner` varchar(30) NOT NULL DEFAULT '',
   `lastRunDate` datetime NULL,
-  `lastRunResult` char(30) NOT NULL,
+  `lastRunResult` char(30) NOT NULL DEFAULT '',
   `scene` int(11) NOT NULL default '0',
   `sort` int(11) NOT NULL default '0',
   PRIMARY KEY (`id`),
@@ -2379,22 +2379,39 @@ CREATE TABLE IF NOT EXISTS `zt_report` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 CREATE UNIQUE INDEX `code` ON `zt_report`(`code`);
 
-CREATE OR REPLACE VIEW `ztv_executionsummary` AS select `zt_task`.`execution` AS `execution`,sum(if((`zt_task`.`parent` >= '0'),`zt_task`.`estimate`,0)) AS `estimate`,sum(if((`zt_task`.`parent` >= '0'),`zt_task`.`consumed`,0)) AS `consumed`,sum(if(((`zt_task`.`status` <> 'cancel') and (`zt_task`.`status` <> 'closed') and (`zt_task`.`parent` >= '0')),`zt_task`.`left`,0)) AS `left`,count(0) AS `number`,sum(if(((`zt_task`.`status` <> 'done') and (`zt_task`.`status` <> 'closed')),1,0)) AS `undone`,sum((if((`zt_task`.`parent` >= '0'),`zt_task`.`consumed`,0) + if(((`zt_task`.`status` <> 'cancel') and (`zt_task`.`status` <> 'closed') and (`zt_task`.`parent` >= '0')),`zt_task`.`left`,0))) AS `totalReal` from `zt_task` where (`zt_task`.`deleted` = '0') group by `zt_task`.`execution`;
-CREATE OR REPLACE VIEW `ztv_projectsummary` AS select `zt_task`.`project` AS `project`,sum(if((`zt_task`.`parent` >= '0'),`zt_task`.`estimate`,0)) AS `estimate`,sum(if((`zt_task`.`parent` >= '0'),`zt_task`.`consumed`,0)) AS `consumed`,sum(if(((`zt_task`.`status` <> 'cancel') and (`zt_task`.`status` <> 'closed') and (`zt_task`.`parent` >= '0')),`zt_task`.`left`,0)) AS `left`,count(0) AS `number`,sum(if(((`zt_task`.`status` <> 'done') and (`zt_task`.`status` <> 'closed')),1,0)) AS `undone`,sum((if((`zt_task`.`parent` >= '0'),`zt_task`.`consumed`,0) + if(((`zt_task`.`status` <> 'cancel') and (`zt_task`.`status` <> 'closed') and (`zt_task`.`parent` >= '0')),`zt_task`.`left`,0))) AS `totalReal` from `zt_task` where (`zt_task`.`deleted` = '0') group by `zt_task`.`project`;
+-- DROP VIEW IF EXISTS `ztv_executionsummary`;
+CREATE OR REPLACE VIEW `ztv_executionsummary` AS select `zt_task`.`execution` AS `execution`,sum(if((`zt_task`.`parent` >= '0'),`zt_task`.`estimate`,0)) AS `estimate`,sum(if((`zt_task`.`parent` >= '0'),`zt_task`.`consumed`,0)) AS `consumed`,sum(if(((`zt_task`.`status` <> 'cancel') and (`zt_task`.`status` <> 'closed') and (`zt_task`.`parent` >= '0')),`zt_task`.`left`,0)) AS `left`,count(0) AS `number`,sum(if(((`zt_task`.`status` <> 'done') and (`zt_task`.`status` <> 'closed')),1,0)) AS `undone`,sum(if(`zt_task`.`parent` >= '0',`zt_task`.`consumed`,0) + if(`zt_task`.`status` <> 'cancel' and `zt_task`.`status` <> 'closed' and `zt_task`.`parent` >= '0',`zt_task`.`left`,0)) AS `totalReal` from `zt_task` where (`zt_task`.`deleted` = '0') group by `zt_task`.`execution`;
+-- DROP VIEW IF EXISTS `ztv_projectsummary`;
+CREATE OR REPLACE VIEW `ztv_projectsummary` AS select `zt_task`.`project` AS `project`,sum(if(`zt_task`.`parent` >= '0',`zt_task`.`estimate`,0)) AS `estimate`,sum(if(`zt_task`.`parent` >= '0',`zt_task`.`consumed`,0)) AS `consumed`,sum(if((`zt_task`.`status` <> 'cancel') and (`zt_task`.`status` <> 'closed') and (`zt_task`.`parent` >= '0'),`zt_task`.`left`,0)) AS `left`,count(0) AS `number`,sum(if(((`zt_task`.`status` <> 'done') and (`zt_task`.`status` <> 'closed')),1,0)) AS `undone`,sum(if(`zt_task`.`parent` >= '0',`zt_task`.`consumed`,0) + if(`zt_task`.`status` <> 'cancel' and `zt_task`.`status` <> 'closed' and `zt_task`.`parent` >= '0',`zt_task`.`left`,0)) AS `totalReal` from `zt_task` where (`zt_task`.`deleted` = '0') group by `zt_task`.`project`;
+-- DROP VIEW IF EXISTS `ztv_projectstories`;
 CREATE OR REPLACE VIEW `ztv_projectstories` AS select `t1`.`project` AS `execution`,count('*') AS `stories`,sum(if((`t2`.`status` = 'closed'),0,1)) AS `undone` from ((`zt_projectstory` `t1` left join `zt_story` `t2` on((`t1`.`story` = `t2`.`id`))) left join `zt_project` `t3` on((`t1`.`project` = `t3`.`id`))) where ((`t2`.`deleted` = '0') and (`t3`.`type` in ('sprint','stage'))) group by `t1`.`project`;
+-- DROP VIEW IF EXISTS `ztv_projectteams`;
 CREATE OR REPLACE VIEW `ztv_projectteams` AS select `zt_team`.`root` AS `execution`,count('*') AS `teams` from `zt_team` where (`zt_team`.`type` = 'execution') group by `zt_team`.`root`;
+-- DROP VIEW IF EXISTS `ztv_projectbugs`;
 CREATE OR REPLACE VIEW `ztv_projectbugs` AS select `zt_bug`.`execution` AS `execution`,count(0) AS `bugs`,sum(if((`zt_bug`.`resolution` = ''),0,1)) AS `resolutions`,sum(if((`zt_bug`.`severity` <= 2),1,0)) AS `seriousBugs` from `zt_bug` where (`zt_bug`.`deleted` = '0') group by `zt_bug`.`execution`;
+-- DROP VIEW IF EXISTS `ztv_productbugs`;
 CREATE OR REPLACE VIEW `ztv_productbugs` AS select `zt_bug`.`product` AS `product`,count(0) AS `bugs`,sum(if((`zt_bug`.`resolution` = ''),0,1)) AS `resolutions`,sum(if((`zt_bug`.`severity` <= 2),1,0)) AS `seriousBugs` from `zt_bug` where (`zt_bug`.`deleted` = '0') group by `zt_bug`.`product`;
+-- DROP VIEW IF EXISTS `ztv_productstories`;
 CREATE OR REPLACE VIEW `ztv_productstories` AS select `zt_story`.`product` AS `product`,count('*') AS `stories`,sum(if((`zt_story`.`status` = 'closed'),0,1)) AS `undone` from `zt_story` where (`zt_story`.`deleted` = '0') group by `zt_story`.`product`;
+-- DROP VIEW IF EXISTS `ztv_dayuserlogin`;
 CREATE OR REPLACE VIEW `ztv_dayuserlogin` AS select count(*) AS `userlogin`,left(`zt_action`.`date`,10) AS `day` from `zt_action` where ((`zt_action`.`objectType` = 'user') and (`zt_action`.`action` = 'login')) group by left(`zt_action`.`date`,10);
+-- DROP VIEW IF EXISTS `ztv_dayeffort`;
 CREATE OR REPLACE VIEW `ztv_dayeffort` AS select round(sum(`zt_effort`.`consumed`),1) AS `consumed`,`zt_effort`.`date` AS `date` from `zt_effort` group by `zt_effort`.`date`;
+-- DROP VIEW IF EXISTS `ztv_daystoryopen`;
 CREATE OR REPLACE VIEW `ztv_daystoryopen` AS select count(*) AS `storyopen`,left(`zt_action`.`date`,10) AS `day` from `zt_action` where ((`zt_action`.`objectType` = 'story') and (`zt_action`.`action` = 'opened')) group by left(`zt_action`.`date`,10);
+-- DROP VIEW IF EXISTS `ztv_daystoryclose`;
 CREATE OR REPLACE VIEW `ztv_daystoryclose` AS select count(*) AS `storyclose`,left(`zt_action`.`date`,10) AS `day` from `zt_action` where ((`zt_action`.`objectType` = 'story') and (`zt_action`.`action` = 'closed')) group by left(`zt_action`.`date`,10);
+-- DROP VIEW IF EXISTS `ztv_daytaskopen`;
 CREATE OR REPLACE VIEW `ztv_daytaskopen` AS select count(*) AS `taskopen`,left(`zt_action`.`date`,10) AS `day` from `zt_action` where ((`zt_action`.`objectType` = 'task') and (`zt_action`.`action` = 'opened')) group by left(`zt_action`.`date`,10);
+-- DROP VIEW IF EXISTS `ztv_daytaskfinish`;
 CREATE OR REPLACE VIEW `ztv_daytaskfinish` AS select count(*) AS `taskfinish`,left(`zt_action`.`date`,10) AS `day` from `zt_action` where ((`zt_action`.`objectType` = 'task') and (`zt_action`.`action` = 'finished')) group by left(`zt_action`.`date`,10);
+-- DROP VIEW IF EXISTS `ztv_daybugopen`;
 CREATE OR REPLACE VIEW `ztv_daybugopen` AS select count(*) AS `bugopen`,left(`zt_action`.`date`,10) AS `day` from `zt_action` where ((`zt_action`.`objectType` = 'bug') and (`zt_action`.`action` = 'opened')) group by left(`zt_action`.`date`,10);
+-- DROP VIEW IF EXISTS `ztv_daybugresolve`;
 CREATE OR REPLACE VIEW `ztv_daybugresolve` AS select count(*) AS `bugresolve`,left(`zt_action`.`date`,10) AS `day` from `zt_action` where ((`zt_action`.`objectType` = 'bug') and (`zt_action`.`action` = 'resolved')) group by left(`zt_action`.`date`,10);
+-- DROP VIEW IF EXISTS `ztv_dayactions`;
 CREATE OR REPLACE VIEW `ztv_dayactions` AS select count(*) AS `actions`,left(`zt_action`.`date`,10) AS `day` from `zt_action` group by left(`zt_action`.`date`,10);
+-- DROP VIEW IF EXISTS `ztv_normalproduct`;
 CREATE OR REPLACE VIEW `ztv_normalproduct` AS SELECT * FROM `zt_product` WHERE `shadow` = 0;
 
 --REPLACE INTO `zt_report` (`code`, `name`, `module`, `sql`, `vars`, `langs`, `params`, `step`, `desc`, `addedBy`, `addedDate`) VALUES
@@ -13386,14 +13403,8 @@ CREATE OR REPLACE VIEW `ztv_scenecase` AS SELECT
   `zt_case`.`scene` AS `scene`,
   ifnull(`zt_scene`.`grade` + 1 , 1) AS `grade`,
   ifnull(
-    concat(
-      `zt_scene`.`path`,
-      `zt_case`.`id`,
-      ','
-    ),
-    CONVERT(
-      concat(',' , `zt_case`.`id` , ',') USING utf8
-    )
+    concat( `zt_scene`.`path`, `zt_case`.`id`, ','),
+    concat(',' , `zt_case`.`id` , ',')
   ) AS `path`,
   1 AS `isCase`
 FROM (`zt_case` LEFT JOIN `zt_scene` ON( `zt_case`.`scene` = `zt_scene`.`id`+100000000))

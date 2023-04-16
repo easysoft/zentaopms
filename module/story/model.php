@@ -342,6 +342,7 @@ class storyModel extends model
                         $reviewData->story    = $storyID;
                         $reviewData->version  = 1;
                         $reviewData->reviewer = $reviewer;
+                        $reviewData->result   = '';
                         $this->dao->insert(TABLE_STORYREVIEW)->data($reviewData)->exec();
                     }
                 }
@@ -3384,13 +3385,13 @@ class storyModel extends model
      */
     public function getRevertStoryIDList($productID)
     {
-        $review =  $this->dao->select('objectID')->from(TABLE_ACTION)
+        $review = $this->dao->select('objectID')->from(TABLE_ACTION)
             ->where('product')->like("%,$productID,%")
             ->andWhere('action')->eq('reviewed')
             ->andWhere('objectType')->eq('story')
             ->andWhere('extra')->eq('Revert')
             ->groupBy('objectID')
-            ->orderBy('id_desc')
+            ->orderBy('objectID_desc')
             ->fetchPairs();
         return $review;
     }

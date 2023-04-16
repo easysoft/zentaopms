@@ -3587,10 +3587,10 @@ class taskModel extends model
      */
     public function getDataOffinishedTasksPerDay()
     {
-        $tasks = $this->dao->select('id, DATE_FORMAT(finishedDate, "%Y-%m-%d") AS date')->from(TABLE_TASK)->alias('t1')
+        $tasks = $this->dao->select("id, DATE_FORMAT(`finishedDate`, '%Y-%m-%d') AS `date`")->from(TABLE_TASK)
             ->where($this->reportCondition())
-            ->having('date != "0000-00-00"')
-            ->orderBy('date asc')
+            ->andWhere('finishedDate')->notZeroDatetime()
+            ->orderBy('finishedDate asc')
             ->fetchAll('id');
         if(!$tasks) return array();
 
