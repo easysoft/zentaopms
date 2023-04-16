@@ -18,7 +18,7 @@ class form extends panel
 
     protected static $defaultProps =
     [
-        'class'         => 'rounded-md shadow ring-0 canvas',
+        'class'         => 'rounded-md shadow ring-0 canvas px-4 pb-4 mb-4',
         'size'          => 'lg',
         'grid'          => true,
         'method'        => 'post',
