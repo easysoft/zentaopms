@@ -1,43 +1,50 @@
 <?php
 namespace zin;
 
+require_once dirname(__DIR__) . DS . 'btn' . DS . 'v1.php';
+require_once dirname(__DIR__) . DS . 'input' . DS . 'v1.php';
+require_once dirname(__DIR__) . DS . 'inputcontrol' . DS . 'v1.php';
+
 class inputGroup extends wg
 {
     protected static $defineProps = 'items?:array';
 
     public function onBuildItem($item)
     {
-        $type = $item['type'];
-        unset($item['type']);
-        $item = inherit(item(set($item)));
+        if(is_string($item)) $item = new item(set(['type' => 'addon', 'text' => $item]));
+        elseif(is_array($item)) $item = new item(set($item));
+        elseif(!($item instanceof wg)) return $item;
 
-        if($type === 'addon')
-        {
-            return inputAddon($item);
-        }
+        $type = $item->prop('type');
 
-        if($type === 'btn')
-        {
-            return inputBtn($item);
-        }
+        if($type === 'addon') return h::span(setClass('input-group-addon'), set($item->props->skip('type,text')), $item->prop('text'));
 
-        if($type === 'input')
+        if($type === 'btn') return new btn(set($item->props->skip('type')));
+
+        if($type === 'inputControl')
         {
-            return input(
-                $item,
-                setClass('form-control'),
+            $propNames = array_keys(inputControl::getDefinedProps());
+            return new inputControl
+            (
+                set($item->props->pick($propNames)),
+                new input(set($item->props->skip(array_merge($propNames, ['type']))))
             );
         }
+
+        return new input(inherit($item));
     }
 
     protected function build()
     {
-        $items = $this->prop('items');
-        return div(
+        $items    = $this->prop('items');
+        $children = $this->children();
+
+        return div
+        (
             setClass('input-group'),
-            set($this->props->skip(array_keys(static::getDefinedProps()))),
+            set($this->getRestProps()),
             is_array($items) ? array_map(array($this, 'onBuildItem'), $items) : NULL,
-            $this->children()
+            is_array($children) ? array_map(array($this, 'onBuildItem'), $children) : NULL,
         );
     }
 }
