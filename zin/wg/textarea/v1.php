@@ -7,7 +7,7 @@ class textarea extends wg
     [
         'name: string',
         'id?: string',
-        'className?: string',
+        'class?: string',
         'value?: string',
         'required?: bool',
         'placeholder?: string',
@@ -17,8 +17,8 @@ class textarea extends wg
 
     static $defaultProps =
     [
-        'className' => 'form-control',
-        'rows' => 4
+        'class' => 'form-control',
+        'rows' => 10
     ];
 
     protected function build()
