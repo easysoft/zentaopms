@@ -32,14 +32,24 @@ class select extends wg
             $item['selected'] = in_array($value, $valueList);
         }
 
-        $item = array_filter($item, function($v) {return $v !== false;});
         return h::option(set($item), $text);
+    }
+
+    public function isMultiple()
+    {
+        $multiple = $this->prop('multiple');
+        if($multiple === NULL)
+        {
+            $name = $this->prop('name');
+            $multiple = str_contains($name, '[');
+        }
+        return $multiple;
     }
 
     public function getValueList()
     {
         $value = $this->prop('value');
-        if($this->prop('multiple')) return is_array($value) ? $value : explode(',', $value);
+        if($this->isMultiple()) return is_array($value) ? $value : explode(',', $value);
         return [$value];
     }
 
@@ -62,7 +72,8 @@ class select extends wg
         return h::select
         (
             setClass('form-control'),
-            set($this->props->skip(['items', 'options', 'value'])),
+            set::multiple($this->isMultiple()),
+            set($this->props->skip(['items', 'options', 'value', 'multiple'])),
             $items,
             $this->children()
         );
