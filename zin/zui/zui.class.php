@@ -63,12 +63,12 @@ class zui extends wg
 
     public static function skin($name, $flag = true, $falseValue = NULL, $cssProp = NULL)
     {
+        if($flag === NULL) return NULL;
+
         if(is_array($flag))
         {
-            array_map(function($value) use($name, $cssProp) {return zui::skin($name, $value, NULL, $cssProp);}, $flag);
+            return array_map(function($value) use($name, $cssProp) {return zui::skin($name, $value, NULL, $cssProp);}, $flag);
         }
-
-        if($flag === NULL) return NULL;
 
         if($flag === false)
         {
