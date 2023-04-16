@@ -48,3 +48,14 @@ function hasPriv($module, $method, $object = null, $vars = '')
 {
     return common::hasPriv($module, $method, $object, $vars);
 }
+
+function isFieldRequired($name)
+{
+    global $config, $app;
+    $moduleName = $app->moduleName;
+    $methodName = $app->methodName;
+    $required   = false;
+    if(isset($config->$moduleName->$methodName->requiredFields)) $required = in_array($name, explode(',', $config->$moduleName->$methodName->requiredFields));
+
+    return $required;
+}
