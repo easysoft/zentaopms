@@ -28,6 +28,10 @@ function select()      {return createWg('select', func_get_args());}
 function formLabel()   {return createWg('formLabel', func_get_args());}
 function formGroup()   {return createWg('formGroup', func_get_args());}
 function formRow()     {return createWg('formRow', func_get_args());}
+function inputControl(){return createWg('inputControl', func_get_args());}
+function inputGroup()  {return createWg('inputGroup', func_get_args());}
+function checkList()   {return createWg('checkList', func_get_args());}
+function radioList()   {return createWg('radioList', func_get_args());}
 
 function icon()        {return createWg('icon', func_get_args());}
 function btn()         {return createWg('btn', func_get_args());}
@@ -65,9 +69,6 @@ function modalDialog() {return createWg('modalDialog', func_get_args());}
 function tabs()        {return createWg('tabs', func_get_args());}
 function panel()       {return createWg('panel', func_get_args());}
 function tooltip()     {return createWg('tooltip', func_get_args());}
-function inputAddon()  {return createWg('inputAddon', func_get_args());}
-function inputGroup()  {return createWg('inputGroup', func_get_args());}
-function inputBtn()    {return createWg('inputBtn', func_get_args());}
 function toolbar()     {return createWg('toolbar', func_get_args());}
 function searchForm()  {return createWg('searchForm', func_get_args());}
 function searchToggle(){return createWg('searchToggle', func_get_args());}
