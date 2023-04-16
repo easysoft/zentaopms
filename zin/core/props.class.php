@@ -172,13 +172,23 @@ class props extends \zin\utils\dataset
 
         foreach($this->data as $name => $value)
         {
+            /* Handle boolean attributes */
+            if(in_array($name, static::$booleanAttrs)) $value = $value ? true : NULL;
+
             /* Skip any null value or events setting */
             if($value === NULL || in_array($name, $skipProps) || $name[0] === '@') continue;
 
             /* Convert non-string to json */
-            if(!is_string($value)) $value = json_encode($value);
+            if($value === true && !str_starts_with($name, 'data-'))
+            {
+                $pairs[] = $name;
+            }
+            else
+            {
+                if(!is_string($value)) $value = json_encode($value);
 
-            $pairs[] = $name . '="' . htmlspecialchars($value) . '"';
+                $pairs[] = $name . '="' . htmlspecialchars($value) . '"';
+            }
         }
 
         return implode(' ', $pairs);
@@ -232,4 +242,6 @@ class props extends \zin\utils\dataset
         $props->class  = clone $this->class;
         return $props;
     }
+
+    public static $booleanAttrs = ['allowfullscreen', 'async', 'autofocus', 'autoplay', 'checked', 'controls', 'default', 'defer', 'disabled', 'formnovalidate', 'inert', 'ismap', 'itemscope', 'loop', 'multiple', 'muted', 'nomodule', 'novalidate', 'open', 'playsinline', 'readonly', 'required', 'reversed', 'selected'];
 }
