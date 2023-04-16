@@ -80,7 +80,7 @@ class zui extends wg
             if(str_starts_with($flag, '(')) $flag = substr($flag, 1, -1);
             return setStyle($cssProp, $flag);
         }
-        return setClass($flag === true ? $name : "$name-$flag", $flag);
+        return setClass($flag === true ? $name : "$name-$flag");
     }
 
     public static function rounded($value = true)
