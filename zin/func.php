@@ -16,6 +16,9 @@ require_once __DIR__ . DS . 'core' . DS . 'render.func.php';
 require_once __DIR__ . DS . 'zui' . DS . 'zui.func.php';
 require_once __DIR__ . DS . 'zentao' . DS . 'zentao.func.php';
 
+/* Form */
+function input()       {return createWg('input', func_get_args());}
+function textarea()    {return createWg('textarea', func_get_args());}
 function icon()        {return createWg('icon', func_get_args());}
 function btn()         {return createWg('btn', func_get_args());}
 function pageBase()    {return createWg('pageBase', func_get_args());}

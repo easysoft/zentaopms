@@ -38,7 +38,5 @@ function h5()       {return call_user_func_array('\zin\h::h5', func_get_args());
 function h6()       {return call_user_func_array('\zin\h::h6', func_get_args());}
 function ul()       {return call_user_func_array('\zin\h::ul', func_get_args());}
 function li()       {return call_user_func_array('\zin\h::li', func_get_args());}
-function input()    {return call_user_func_array('\zin\h::input', func_get_args());}
-function textarea() {return call_user_func_array('\zin\h::textarea', func_get_args());}
 
 function jsRaw()    {return call_user_func_array('\zin\h::jsRaw', func_get_args());}
