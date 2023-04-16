@@ -148,7 +148,7 @@ $(document).on('click', (e) =>
     if(!$a.length || $a.data('toggle') || $a.hasClass('not-in-app') || $a.attr('target') === '_blank') return;
 
     const url = $a.attr('href');
-    if(!url) return;
+    if(!url || url.startsWith('javascript') || url.startsWith('#')) return;
 
     const loadTarget = $a.data('load');
     if(loadTarget === 'table') loadTable(url);
