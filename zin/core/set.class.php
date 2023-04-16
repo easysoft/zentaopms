@@ -22,4 +22,9 @@ class set
         if($prop === '_' && is_array($value)) return directive('prop', $value);
         return directive('prop', array($prop => $value));
     }
+
+    public static function class(...$args)
+    {
+        return directive('prop', ['class' => $args]);
+    }
 }
