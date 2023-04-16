@@ -3,25 +3,67 @@ namespace zin;
 
 class select extends wg
 {
-    protected static $defineProps = 'items:array';
+    static $defineProps =
+    [
+        'name: string',
+        'id?: string',
+        'class?: string="form-control"',
+        'value?: string',
+        'required?: bool',
+        'disabled?: bool',
+        'multiple?: bool',
+        'items?: array',
+        'options?: array',
+        'size?: number',
+    ];
 
     public function onBuildItem($item)
     {
-        $text = $item['text'];
+        if($item instanceof item) $item = $item->props->toJsonData();
+
+        $text  = isset($item['text']) ? $item['text'] : '';
         unset($item['text']);
+
+        if(!isset($item['selected']))
+        {
+            $value     = isset($item['value']) ? $item['value'] : '';
+            $valueList = $this->getValueList();
+
+            $item['selected'] = in_array($value, $valueList);
+        }
+
         $item = array_filter($item, function($v) {return $v !== false;});
-        if(!($item instanceof item)) $item = item(set($item));
-        return h::option(inherit($item), $text);
+        return h::option(set($item), $text);
+    }
+
+    public function getValueList()
+    {
+        $value = $this->prop('value');
+        if($this->prop('multiple')) return is_array($value) ? $value : explode(',', $value);
+        return [$value];
     }
 
     protected function build()
     {
-        $items = $this->prop('items');
+        list($items, $options) = $this->prop(['items', 'options']);
+        if(is_array($options)) $items = $options;
+
+        if(!empty($items))
+        {
+            $valueList = $this->getValueList();
+            foreach($items as $key => $item)
+            {
+                if(!is_array($item)) $item = ['text' => $item, 'value' => $key];
+                if(!isset($item['selected'])) $item['selected'] = in_array($item['value'], $valueList);
+                $items[$key] = $this->onBuildItem($item);
+            }
+        }
+
         return h::select
         (
             setClass('form-control'),
-            set($this->props->skip(array_keys(static::getDefinedProps()), true)),
-            is_array($items) ? array_map(array($this, 'onBuildItem'), $items) : NULL,
+            set($this->props->skip(['items', 'options', 'value'])),
+            $items,
             $this->children()
         );
     }

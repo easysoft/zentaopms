@@ -19,14 +19,22 @@ require_once __DIR__ . DS . 'zentao' . DS . 'zentao.func.php';
 /* Form */
 function input()       {return createWg('input', func_get_args());}
 function textarea()    {return createWg('textarea', func_get_args());}
+function radio()       {return createWg('radio', func_get_args());}
+function switcher()    {return createWg('switcher', func_get_args());}
+function checkbox()    {return createWg('checkbox', func_get_args());}
+function form()        {return createWg('form',    func_get_args());}
+function control()     {return createWg('control', func_get_args());}
+function select()      {return createWg('select', func_get_args());}
+function formLabel()   {return createWg('formLabel', func_get_args());}
+function formGroup()   {return createWg('formGroup', func_get_args());}
+function formRow()     {return createWg('formRow', func_get_args());}
+
 function icon()        {return createWg('icon', func_get_args());}
 function btn()         {return createWg('btn', func_get_args());}
 function pageBase()    {return createWg('pageBase', func_get_args());}
 function page()        {return createWg('page',    func_get_args());}
-function form()        {return createWg('form',    func_get_args());}
 function fragment()    {return createWg('fragment',    func_get_args());}
 function btnGroup()    {return createWg('btnGroup', func_get_args());}
-function checkbox()    {return createWg('checkbox', func_get_args());}
 function mainMenu()    {return createWg('mainMenu', func_get_args());}
 function row()         {return createWg('row', func_get_args());}
 function col()         {return createWg('col', func_get_args());}
@@ -38,15 +46,6 @@ function nav()         {return createWg('nav', func_get_args());}
 function label()       {return createWg('label', func_get_args());}
 function dtable()      {return createWg('dtable', func_get_args());}
 function menu()        {return createWg('menu', func_get_args());}
-function radio()       {return createWg('radio', func_get_args());}
-function switcher()    {return createWg('switcher', func_get_args());}
-function select()      {return createWg('select', func_get_args());}
-function formLabel()   {return createWg('formLabel', func_get_args());}
-function formGroup()   {return createWg('formGroup', func_get_args());}
-function formCell()    {return createWg('formCell', func_get_args());}
-function formGrid()    {return createWg('formGrid', func_get_args());}
-function formRow()     {return createWg('formRow', func_get_args());}
-function formInput()   {return createWg('formInput', func_get_args());}
 function dropdown()    {return createWg('dropdown', func_get_args());}
 function header()      {return createWg('header', func_get_args());}
 function heading()     {return createWg('heading', func_get_args());}

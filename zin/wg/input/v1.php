@@ -8,16 +8,19 @@ class input extends wg
         'type: string',
         'name: string',
         'id?: string',
-        'className?: string',
+        'class?: string',
         'value?: string',
         'required?: bool',
         'placeholder?: string',
+        'autofocus?: bool',
+        'autocomplete?: bool',
+        'disabled?: bool',
     ];
 
     static $defaultProps =
     [
         'type' => 'text',
-        'className' => 'form-control',
+        'class' => 'form-control',
     ];
 
     protected function build()
