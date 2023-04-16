@@ -328,6 +328,21 @@ class baseDAO
     }
 
     /**
+     * Get table engines.
+     *
+     * @access public
+     * @return array
+     */
+    public function getTableEngines()
+    {
+        $tables = $this->query("SHOW TABLE STATUS WHERE `Engine` is not null")->fetchAll();
+        $tableEngines = array();
+        foreach($tables as $table) $tableEngines[$table->Name] = $table->Engine;
+
+        return $tableEngines;
+    }
+
+    /**
      * Desc table, show fields.
      *
      * @param  string $tableName

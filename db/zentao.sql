@@ -751,8 +751,8 @@ CREATE TABLE IF NOT EXISTS `zt_effort` (
   `date` date NOT NULL,
   `left` float NOT NULL,
   `consumed` float NOT NULL,
-  `begin` smallint(4) unsigned zerofill NOT NULL,
-  `end` smallint(4) unsigned zerofill NOT NULL,
+  `begin` smallint(4) unsigned zerofill NOT NULL DEFAULT '0',
+  `end` smallint(4) unsigned zerofill NOT NULL DEFAULT '0',
   `extra` text,
   `order` tinyint(3) unsigned NOT NULL DEFAULT '0',
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
@@ -994,7 +994,7 @@ CREATE TABLE IF NOT EXISTS `zt_kanbancard` (
   `progress` float unsigned NOT NULL DEFAULT '0',
   `color` char(7) NOT NULL,
   `acl` char(30) NOT NULL DEFAULT 'open',
-  `whitelist` text NOT NULL,
+  `whitelist` text NULL,
   `order` mediumint(8) NOT NULL DEFAULT '0',
   `archived` enum('0', '1') NOT NULL DEFAULT '0',
   `createdBy` char(30) NOT NULL,
@@ -1677,12 +1677,12 @@ CREATE TABLE IF NOT EXISTS `zt_task` (
   `fromIssue` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `name` varchar(255) NOT NULL,
   `type` varchar(20) NOT NULL,
-  `mode` varchar(10) NOT NULL,
+  `mode` varchar(10) NOT NULL DEFAULT '',
   `pri` tinyint(3) unsigned NOT NULL DEFAULT '0',
   `estimate` float unsigned NOT NULL,
   `consumed` float unsigned NOT NULL DEFAULT '0',
   `left` float unsigned NOT NULL,
-  `deadline` date NOT NULL,
+  `deadline` date NULL,
   `status` enum('wait','doing','done','pause','cancel','closed') NOT NULL DEFAULT 'wait',
   `subStatus` varchar(30) NOT NULL DEFAULT '',
   `color` char(7) NOT NULL,
@@ -1742,8 +1742,8 @@ CREATE TABLE IF NOT EXISTS `zt_taskspec` (
   `task` mediumint(8) NOT NULL,
   `version` smallint(6) NOT NULL,
   `name` varchar(255) NOT NULL,
-  `estStarted` date NOT NULL,
-  `deadline` date NOT NULL
+  `estStarted` date NULL,
+  `deadline` date NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 CREATE UNIQUE INDEX `task` ON `zt_taskspec`(`task`,`version`);
 -- DROP TABLE IF EXISTS `zt_taskteam`;

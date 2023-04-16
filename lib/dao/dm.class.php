@@ -45,6 +45,22 @@ class dm extends dao
     }
 
     /**
+     * Get table engines.
+     *
+     * @access public
+     * @return array
+     */
+    public function getTableEngines()
+    {
+        $tables = $this->query("SELECT \"table_name\" FROM all_tables WHERE OWNER = '{$this->config->db->name}'")->fetchAll();
+
+        $tableEngines = array();
+        foreach($tables as $table) $tableEngines[$table->table_name] = 'InnoDB';
+
+        return $tableEngines;
+    }
+
+    /**
      * 类MySQL的DESC语法。
      * Desc table, show fields.
      *
