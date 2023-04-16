@@ -480,6 +480,42 @@ class baseHTML
     }
 
     /**
+     * Get goback link.
+     * 获取返回按钮链接
+     */
+    public static function getGobackLink()
+    {
+        global $app, $config;
+
+        $gobackLink   = '';
+        $referer      = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '';
+        $refererParts = parse_url($referer);
+
+        if($config->requestType == 'PATH_INFO' and empty($refererParts)) return $gobackLink;
+        if($config->requestType == 'GET' and !isset($refererParts['query'])) return $gobackLink;
+
+        $tab        = $app->tab;
+        $gobackList = isset($_COOKIE['goback']) ? json_decode($_COOKIE['goback'], true) : array();
+        $gobackLink = isset($gobackList[$tab]) ? $gobackList[$tab] : '';
+
+        /* Make sure href is opened in the same tab. */
+        if(!empty($gobackLink)) $gobackLink .= "#app=$tab";
+
+        /* If the link of the referer is not the link of the current page or the link of the index,  the cookie and gobackLink will be updated. */
+        $currentModule = $app->getModuleName();
+        $currentMethod = $app->getMethodName();
+        $refererLink   = $config->requestType == 'PATH_INFO' ? $refererParts['path'] : $refererParts['query'];
+        if(!preg_match("/(m=|\/)(index|search|$currentModule)(&f=|-)(index|buildquery|$currentMethod)(&|-|\.)?/", strtolower($refererLink)))
+        {
+            $gobackList[$tab] = $referer;
+            $gobackLink       = $referer;
+            setcookie('goback', json_encode($gobackList), $config->cookieLife, $config->webRoot, '', $config->cookieSecure, false);
+        }
+
+        return empty($gobackLink) ? 'javascript:history.go(-1)' : $gobackLink;
+    }
+
+    /**
      * 创建返回按钮。
      * Back button.
      *
