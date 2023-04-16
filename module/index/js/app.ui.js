@@ -87,7 +87,7 @@ window.fetchZinData = function fetchZinData(url, selector, options)
     $.ajax(
     {
         url:      url,
-        headers:  {'X-ZIN-Options': JSON.stringify($.extend({selector: selector + ',zinErrors()', type: 'list'}, zinOptions))},
+        headers:  {'X-ZIN-Options': JSON.stringify($.extend({selector: selector + ',zinErrors()', type: 'list'}, zinOptions)), 'X-ZIN-App': currentAppCode},
         beforeSend: () => $(target).addClass('loading'),
         success: (data) =>
         {
