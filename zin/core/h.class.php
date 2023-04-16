@@ -147,6 +147,11 @@ class h extends wg
         return static::create('input', prop('type', 'text'), func_get_args());
     }
 
+    public static function formHidden($name, $value, ...$args)
+    {
+        return static::create('input', prop('type', 'hidden'), set::name($name), set::value($value), $args);
+    }
+
     public static function checkbox()
     {
         return static::create('input', prop('type', 'checkbox'), func_get_args());
