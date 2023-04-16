@@ -582,7 +582,7 @@ class storyModel extends model
             $story->source     = $stories->source[$i];
             $story->category   = $stories->category[$i];
             $story->pri        = $stories->pri[$i];
-            $story->estimate   = $stories->estimate[$i];
+            $story->estimate   = $stories->estimate[$i] ? $stories->estimate[$i] : 0;
             $story->spec       = $stories->spec[$i];
             $story->verify     = $stories->verify[$i];
             $story->status     = $saveDraft ? 'draft' : ((empty($stories->reviewer[$i]) and !$forceReview) ? 'active' : 'reviewing');

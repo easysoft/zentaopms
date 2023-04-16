@@ -1620,7 +1620,7 @@ CREATE TABLE IF NOT EXISTS `zt_storyreview` (
   `story` mediumint(9) NOT NULL,
   `version` smallint(6) NOT NULL,
   `reviewer` varchar(30) NOT NULL,
-  `result` varchar(30) NOT NULL,
+  `result` varchar(30) NOT NULL DEFAULT '',
   `reviewDate` datetime NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 CREATE UNIQUE INDEX `story` ON `zt_storyreview`(`story`,`version`,`reviewer`);
@@ -1641,7 +1641,7 @@ CREATE TABLE IF NOT EXISTS `zt_storyspec` (
   `title` varchar(255) NOT NULL,
   `spec` mediumtext NOT NULL,
   `verify` mediumtext NOT NULL,
-  `files` text NOT NULL
+  `files` text NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 CREATE UNIQUE INDEX `story` ON `zt_storyspec`(`story`,`version`);
 -- DROP TABLE IF EXISTS `zt_storystage`;

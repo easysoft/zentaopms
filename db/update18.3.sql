@@ -819,7 +819,10 @@ CHANGE `duplicateStory` `duplicateStory` mediumint unsigned NOT NULL DEFAULT '0'
 CHANGE `notifyEmail` `notifyEmail` varchar(100) NOT NULL DEFAULT '';
 
 ALTER TABLE `zt_storyreview`
+CHANGE `result` `result` varchar(30) NOT NULL DEFAULT '',
 CHANGE `reviewDate` `reviewDate` datetime NULL;
+ALTER TABLE `zt_storyspec`
+CHANGE `files` `files` text NULL;
 
 ALTER TABLE `zt_task`
 CHANGE `designVersion` `designVersion` smallint unsigned NOT NULL DEFAULT '1',
