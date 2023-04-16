@@ -5,7 +5,10 @@ require_once dirname(__DIR__) . DS . 'input' . DS . 'v1.php';
 require_once dirname(__DIR__) . DS . 'textarea' . DS . 'v1.php';
 require_once dirname(__DIR__) . DS . 'editor' . DS . 'v1.php';
 require_once dirname(__DIR__) . DS . 'checkbox' . DS . 'v1.php';
+require_once dirname(__DIR__) . DS . 'checkList' . DS . 'v1.php';
+require_once dirname(__DIR__) . DS . 'radioList' . DS . 'v1.php';
 require_once dirname(__DIR__) . DS . 'select' . DS . 'v1.php';
+require_once dirname(__DIR__) . DS . 'inputcontrol' . DS . 'v1.php';
 
 class control extends wg
 {
@@ -29,7 +32,72 @@ class control extends wg
 
     protected function buildTextarea()
     {
-        return textarea(set($this->props->skip('type')));
+        return new textarea(set($this->props->skip('type')));
+    }
+
+    protected function buildInputControl()
+    {
+        $controlProps = [];
+        $allProps     = $this->props->skip('type');
+        $propsNames   = array_keys(inputControl::getDefinedProps());
+
+        foreach($propsNames as $propName)
+        {
+            if(isset($allProps[$propName]))
+            {
+                $controlProps[$propName] = $allProps[$propName];
+                unset($allProps[$propName]);
+            }
+        }
+
+        return new inputControl
+        (
+            set($controlProps),
+            new input(set($allProps)),
+        );
+    }
+
+    protected function buildCheckbox()
+    {
+        if($this->hasProp('options')) return $this->buildCheckList();
+        return new checkList
+        (
+            new checkbox(set($this->props->skip('type')))
+        );
+    }
+
+    protected function buildCheckList()
+    {
+        return new checkList
+        (
+            set($this->props->skip('type'))
+        );
+    }
+
+    protected function buildRadioList()
+    {
+        return new radioList
+        (
+            set($this->props->skip('type'))
+        );
+    }
+
+    protected function buildCheckListInline()
+    {
+        return new checkList
+        (
+            set::inline(true),
+            set($this->props->skip('type'))
+        );
+    }
+
+    protected function buildRadioListInline()
+    {
+        return new radioList
+        (
+            set::inline(true),
+            set($this->props->skip('type'))
+        );
     }
 
     protected function build()
@@ -37,11 +105,10 @@ class control extends wg
         $type = $this->prop('type');
         if(empty($type))
         {
-            if($this->hasProp('options')) $type = 'select';
-            else $type = 'text';
+            $type = $this->hasProp('options') ? 'select' : 'text';
         }
 
-        $methodName = "build{$type}Item";
+        $methodName = "build{$type}";
         if(method_exists($this, $methodName)) return $this->$methodName();
 
         $wgName = "\\zin\\$type";
