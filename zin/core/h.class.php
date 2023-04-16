@@ -34,7 +34,7 @@ class h extends wg
         $selfClose = $this->props->get('selfClose');
         if($selfClose !== NULL) return $selfClose;
 
-        return in_array($this->getTagName(), array('area', 'base', 'br', 'col', 'command', 'embed', 'hr', 'img', 'input', 'keygen', 'link', 'meta', 'param', 'source', 'track', 'wbr'));
+        return in_array($this->getTagName(), static::$selfCloseTags);
     }
 
     public function build()
@@ -294,4 +294,6 @@ class h extends wg
         }
         return [$code, $args];
     }
+
+    public static $selfCloseTags = ['area', 'base', 'br', 'col', 'command', 'embed', 'hr', 'img', 'input', 'keygen', 'link', 'meta', 'param', 'source', 'track', 'wbr'];
 }
