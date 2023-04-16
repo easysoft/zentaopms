@@ -13,7 +13,7 @@ class input extends wg
         'required?: bool',
         'placeholder?: string',
         'autofocus?: bool',
-        'autocomplete?: bool',
+        'autocomplete?: bool=false',
         'disabled?: bool',
     ];
 
@@ -25,6 +25,8 @@ class input extends wg
 
     protected function build()
     {
-        return h::input(set($this->props));
+        $props = $this->props->toJsonData();
+        if(is_bool($props['autocomplete'])) $props['autocomplete'] = $props['autocomplete'] ? 'on' : 'off';
+        return h::input(set($props));
     }
 }
