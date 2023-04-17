@@ -639,6 +639,13 @@ CHANGE `activateDate` `activateDate` date NULL,
 CHANGE `editedBy` `editedBy` varchar(30) NOT NULL DEFAULT '',
 CHANGE `editedDate` `editedDate` datetime NULL;
 
+ALTER TABLE `zt_notify`
+CHANGE `objectID` `objectID` mediumint unsigned NOT NULL DEFAULT '0',
+CHANGE `ccList` `ccList` text NULL,
+CHANGE `subject` `subject` varchar(255) NOT NULL DEFAULT '',
+CHANGE `sendTime` `sendTime` datetime NULL,
+CHANGE `failReason` `failReason` text NULL;
+
 ALTER TABLE `zt_opportunity`
 CHANGE `assignedTo` `assignedTo` varchar(30) NOT NULL DEFAULT '',
 CHANGE `assignedDate` `assignedDate` date NULL,

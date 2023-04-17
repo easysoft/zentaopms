@@ -1159,17 +1159,17 @@ CREATE TABLE IF NOT EXISTS `zt_mrapproval` (
 CREATE TABLE IF NOT EXISTS `zt_notify` (
   `id` mediumint unsigned NOT NULL AUTO_INCREMENT,
   `objectType` varchar(50) NOT NULL,
-  `objectID` mediumint unsigned NOT NULL,
+  `objectID` mediumint unsigned NOT NULL DEFAULT '0',
   `action` mediumint NOT NULL,
   `toList` varchar(255) NOT NULL,
-  `ccList` text NOT NULL,
-  `subject` varchar(255) NOT NULL,
+  `ccList` text NULL,
+  `subject` varchar(255) NOT NULL DEFAULT '',
   `data` text NOT NULL,
   `createdBy` char(30) NOT NULL,
   `createdDate` datetime NOT NULL,
-  `sendTime` datetime NOT NULL,
+  `sendTime` datetime NULL,
   `status` varchar(10) NOT NULL DEFAULT 'wait',
-  `failReason` text NOT NULL,
+  `failReason` text NULL,
   PRIMARY KEY (`id`),
   KEY `objectType_toList_status` (`objectType`,`toList`,`status`)
 ) ENGINE='InnoDB' COLLATE 'utf8_general_ci';
