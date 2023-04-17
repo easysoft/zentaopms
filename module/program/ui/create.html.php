@@ -41,7 +41,7 @@ form
             set::label($lang->program->budget),
             set::control(['type' => 'inputControl', 'prefix' => $lang->project->currencySymbol[$currency], 'prefixWidth' => 'icon']),
             on::change('budgetOverrunTips'),
-            h::input(set(['type' => 'hidden', 'name' => 'budgetUnit', 'value' => $currency]))
+            formHidden('budgetUnit', $currency),
         ),
         formGroup
         (

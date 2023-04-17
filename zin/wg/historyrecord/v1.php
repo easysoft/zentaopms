@@ -13,7 +13,7 @@ class historyRecord extends wg
     private function buildHistoriesList()
     {
         global $app, $lang;
-        $actions    = $this->prop('actions');
+        $actions    = $this->prop('actions') ?? data('actions');
         $users      = $this->prop('users');
         $methodName = $this->prop('methodName');
         $historiesListView = h::ol(setClass('histories-list'));
