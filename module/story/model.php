@@ -4170,9 +4170,12 @@ class storyModel extends model
      */
     public function getDataOfStorysPerModule()
     {
-        $datas = $this->dao->select('module as name, count(module) as value, product, branch')->from(TABLE_STORY)
+        $datas = $this->dao->select('module as name, count(module) as value, product, branch')
+            ->from(TABLE_STORY)
             ->where($this->reportCondition())
-            ->groupBy('module')->orderBy('value DESC')->fetchAll('name');
+            ->groupBy('module,product,branch')
+            ->orderBy('value DESC')
+            ->fetchAll('name');
         if(!$datas) return array();
 
         $branchIDList = array();
