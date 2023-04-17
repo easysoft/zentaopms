@@ -121,7 +121,7 @@ $lang->install->chmodLinux   = '需要修改目录 "%s" 的权限。<br />命令
 
 $lang->install->timezone       = '时区设置';
 $lang->install->defaultLang    = '默认语言';
-$lang->install->dbDriver       = 'Database Driver';
+$lang->install->dbDriver       = '数据库类型';
 $lang->install->dbHost         = '数据库服务器';
 $lang->install->dbHostNote     = '如果127.0.0.1无法访问，尝试使用localhost';
 $lang->install->dbPort         = '服务器端口';
