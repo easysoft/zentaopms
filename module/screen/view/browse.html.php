@@ -1,5 +1,5 @@
 <?php include $app->getModuleRoot() . 'common/view/header.html.php';?>
-<?php js::set('firstGuide', $firstGuide);?>
+<?php js::set('showGuide', $showGuide ? 1 : 0);?>
 <div id="mainContent">
   <?php if(empty($screens)):?>
   <div class="table-empty-tip">

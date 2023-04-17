@@ -1,5 +1,5 @@
 $(function()
 {
-    if(!firstGuide) $('#firstGuide').modal();
+    if(showGuide) $('#firstGuide').modal();
 });
 
