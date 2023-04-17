@@ -2079,6 +2079,7 @@ class groupModel extends model
                 if(isset($allPrivs[$module][$method])) continue;
                 if(!$this->checkMenuModule($menu, $module)) continue;
                 if(!isset($this->lang->{$module}->{$methodLabel})) $this->app->loadLang($module);
+                if(isset($this->lang->$module->menus) and $method == 'browse') continue;
 
                 $key  = "{$module}-{$method}";
                 $priv = new stdclass();

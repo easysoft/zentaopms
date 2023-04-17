@@ -119,18 +119,42 @@
                   <input type='checkbox' id='allCheckerModule<?php echo $moduleName;?>Package<?php echo $packageID;?>' value='1' <?php if($packagePrivs == $packageSelect) echo 'checked';?>>
                   <label class='text-left <?php if(!empty($packageSelect) and $packagePrivs != $packageSelect) echo 'checkbox-indeterminate-block';?>' for='allCheckerPackage<?php echo $packageID;?>'><?php echo zget($privPackages, $packageID, $lang->group->other);?></label>
                 </div>
-                <i class="list-toggle icon"></i>
+                <i class="priv-toggle icon"></i>
               </div>
               <div class="privs hidden" data-module='<?php echo $moduleName;?>' data-package='<?php echo $packageID;?>'>
                 <div class="arrow"></div>
                 <div class='popover-content'>
-                <?php foreach($privs as $privID => $priv):?>
+                  <?php if(isset($lang->$moduleName->menus)):?>
+                  <?php
+                  $menusPrivs  = count($lang->$moduleName->menus);
+                  $menusSelect = count(array_intersect(array_keys($lang->$moduleName->menus), array_keys(zget($groupPrivs, $moduleName, array()))));
+                  ?>
+                  <div class="group-item" data-id='0' data-module='<?php echo $moduleName;?>' data-package='0'>
+                    <div class="checkbox-primary checkbox-inline checkbox-left check-all">
+                      <input type='checkbox' value='browse' <?php if($menusPrivs == $menusSelect) echo 'checked';?>>
+                      <label class='text-left <?php if(!empty($menusSelect) and $menusPrivs != $menusSelect) echo 'checkbox-indeterminate-block';?>' for='actions[<?php echo $moduleName;?>]browse'><?php echo $lang->$moduleName->browse;?></label>
+                    </div>
+                    <i class="priv-toggle icon"></i>
+                    <div class='menus-privs hidden data-module='<?php echo $moduleName;?>' data-package='<?php echo $packageID;?>''>
+                      <div class="arrow"></div>
+                      <div class='popover-content'>
+                        <?php foreach($lang->$moduleName->menus as $method => $name):?>
+                        <div class="group-item menus-item" data-id='<?php echo "$moduleName-$method";?>' data-module='<?php echo $moduleName;?>' data-package='0'>
+                          <?php echo html::checkbox("actions[$moduleName]", array($method => $name), isset($groupPrivs[$moduleName][$method]) ? $groupPrivs[$moduleName][$method] : '', "title='{$name}' id='actions[$moduleName]$method' data-id='$moduleName-$method'");?>
+                        </div>
+                        <?php endforeach;?>
+                      </div>
+                    </div>
+                  </div>
+                  <?php endif;?>
+                  <?php foreach($privs as $privID => $priv):?>
+                  <?php if(!empty($lang->$moduleName->menus) and ($priv->method == 'browse' or in_array($priv->method, array_keys($lang->$moduleName->menus)))) continue;?>
                   <div class="group-item" data-id='<?php echo zget($priv, 'id', 0);?>' data-module='<?php echo $moduleName;?>' data-package='<?php echo $packageID;?>'>
                     <div class="checkbox-primary">
                       <?php echo html::checkbox("actions[$priv->module]", array($priv->method => $priv->name), isset($groupPrivs[$priv->module][$priv->method]) ? $priv->method : '', "title='{$priv->name}' id='actions[$priv->module]$priv->method' data-id='$priv->action'");?>
                     </div>
                   </div>
-                <?php endforeach;?>
+                  <?php endforeach;?>
               </div>
               </div>
               <?php endforeach;?>
@@ -186,45 +210,3 @@
 <?php js::set('relatedPrivData', json_encode($relatedPrivData));?>
 <?php js::set('selectedPrivIdList', $selectedPrivIdList);?>
 <?php js::set('excludeIdList', $excludePrivsIdList);?>
-<script>
-$(document).ready(function()
-{
-    $(".icon-help").popover();
-
-    /**
-     * 隐藏列表标签。
-     * Hide tabs except the browse list tab.
-     */
-    $('.menus input[name^=actions]:not(input[value=browse])').parent('.checkbox-primary').hide();
-
-    /**
-     * 切换列表标签的显示。
-     * Toggle display of tabs except the browse list tab.
-     */
-    $('.menus .icon-plus').click(function()
-    {
-        $(this).toggleClass('icon-minus', 'icon-plus');
-        $('.menus input[name^=actions]:not(input[value=browse])').parent('.checkbox-primary').toggle();
-    })
-
-    /**
-     * 勾选浏览列表标签时，自动勾选下面的所有标签。
-     * Check all tabs when the Browse list tab is selected.
-     */
-    $('.menus input[value=browse]').change(function()
-    {
-        $(this).parents('.menus').find('[name^=actions]').prop('checked', $(this).prop('checked'));
-    });
-
-    /**
-     * 勾选浏览列表标签下面的任意一个标签时，自动勾选浏览列表标签。
-     * Check the browse list tab when any one of the tabs is selected.
-     */
-    $('.menus input[name^=actions]:not(input[value=browse])').click(function()
-    {
-        var $parent = $(this).parents('.menus');
-
-        $parent.find('input[value=browse]').prop('checked', $parent.find('input[name^=actions]:not(input[value=browse]):checked').length > 0);
-    })
-});
-</script>

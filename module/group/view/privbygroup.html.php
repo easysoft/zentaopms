@@ -97,7 +97,7 @@
           <?php
           $i = 1;
 
-          $modulePrivs  = count($privList[$moduleName], 1) - count($selectPrivs[$moduleName], 1) - (isset($lang->$moduleName->menus) ? 1 : 0);
+          $modulePrivs  = count($privList[$moduleName], 1) - count($selectPrivs[$moduleName], 1);
           $moduleSelect = array_sum($selectPrivs[$moduleName]);
           ?>
           <?php foreach($packages as $packageID => $privs):?>
@@ -113,7 +113,7 @@
             </th>
             <?php endif;?>
             <?php
-            $packagePrivs  = count($privs) - (isset($lang->$moduleName->menus) ? 1 : 0);
+            $packagePrivs  = count($privs);
             $packageSelect = $selectPrivs[$moduleName][$packageID];
             ?>
             <th class='<?php echo $i == 1 ? 'td-sm' : 'td-md';?> text-middle text-left package' data-module='<?php echo $moduleName;?>' data-package='<?php echo $packageID;?>' all-privs='<?php echo $packagePrivs;?>' select-privs='<?php echo $packageSelect;?>'>
@@ -138,7 +138,7 @@
             <?php endif;?>
             <td id='<?php echo $moduleName;?>' class='pv-10px' colspan='<?php echo !empty($lang->$moduleName->menus) ? 1 : 2?>'>
               <?php foreach($privs as $privID => $priv):?>
-              <?php if(!empty($lang->$moduleName->menus) and $priv->method == 'browse') continue;?>
+              <?php if(!empty($lang->$moduleName->menus) and ($priv->method == 'browse' or in_array($priv->method, array_keys($lang->$moduleName->menus)))) continue;?>
               <div class="group-item" data-module='<?php echo $moduleName;?>' data-package='<?php echo $packageID;?>' data-id='<?php echo zget($priv, 'id', 0);?>'>
                 <div class="checkbox-primary">
                   <?php echo html::checkbox("actions[$priv->module]", array($priv->method => $priv->name), isset($groupPrivs[$priv->module][$priv->method]) ? $priv->method : '', "title='{$priv->name}' id='actions[$priv->module]$priv->method' data-id='$priv->action'");?>

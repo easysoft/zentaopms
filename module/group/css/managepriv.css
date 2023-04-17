@@ -52,8 +52,8 @@
 #privList tbody > tr > td {padding: 4px 20px 20px 20px;}
 #privList .group-item {margin-top: 16px;}
 #privList .group-item .checkbox-inline label {padding-left: 3px;}
-#privList.table-bordered td, #privList.table-bordered th {border-top-style: dashed; border-bottom-style: dashed; border-color: #FFF;}
-#privList.table-bordered td, #privList.table-bordered thead th:last-child {border-color: #F5F6F8;}
+.table-bordered td, .table-bordered th {border-top-style: dashed; border-bottom-style: dashed; border-color: #FFF;}
+.table-bordered td, .table-bordered thead th:last-child {border-color: #F5F6F8;}
 .check-all>label.checkbox-indeterminate-block:before {content: ' '; opacity: 1; transform: scale(1);}
 .priv-footer {padding: 14px; z-index: 11; box-shadow: inset 0 0px 0px rgb(0 0 0 / 10%), 0 0 5px rgb(0 0 0 / 10%); position: relative; min-height: 40px; background: #fff; border-radius: 0 0 4px 4px;}
 .priv-footer .btn {margin 0px; padding-top: 7px;}
@@ -69,14 +69,17 @@ main#main {padding-bottom: 0px;}
 #privPackageList div.package {display: inline-block; width: calc(25% - 5px); padding: 10px 0;}
 #privPackageList .package + .package {padding: 0;}
 #privPackageList .package .check-all {display: inline-block; height: 20px;}
-#privPackageList .package input {margin-left: 0px; left: 0px; height: 20px;}
+#privPackageList .package input {margin-top: 0px; margin-left: 0px; left: 0px; height: 20px;}
 #privPackageList .package label {padding-left: 0; display: inline-block;}
-#privPackageList .package .list-toggle {width: 20px; font-size: 14px; line-height: 20px; color: #cbd0db; text-align: center; cursor: pointer; -webkit-transition: all .2s; -o-transition: all .2s; transition: all .2s; vertical-align: top;}
-#privPackageList .package .list-toggle:before {content: "\f0da";}
-#privPackageList .package.open .list-toggle {transform: rotate(90deg);}
-#privPackageList .package.open .list-toggle:before {transform: rotate(90deg);}
-#privPackageList .group-item {display: inline-block; width: 158px; margin-bottom: 15px;}
-#privPackageList .privs {padding: 20px 20px 0 20px; margin: 10px 0px;border: 1px solid #F5F6F8; background-color: #F9FAFB; position: relative; display: block; max-width: unset; box-shadow: unset; z-index: 1;}
+#privPackageList .privs, #privPackageList .menus-privs {padding: 20px 20px 0 20px; margin: 10px 0px;border: 1px solid #D9DBE1; background-color: #F9FAFB; position: relative; display: block; max-width: unset; box-shadow: unset; z-index: 1;}
+#privPackageList .menus-privs {margin-top: 35px; border-style: dashed;}
 #privPackageList .popover .popover-content {display: inline-block; padding: 0;}
-#privPackageList .popover .arrow {border-bottom-color: #F5F6F8; top: -10px;}
+#privPackageList .popover .arrow {border-bottom-color: #D9DBE1; top: -10px;}
 #privPackageList .popover .arrow:after {border-bottom-color: #F9FAFB;}
+#privPackageList .group-item .checkbox-inline label {padding-left: 0}
+#privPackageList .group-item {display: inline-block; width: 158px; margin-bottom: 15px;}
+#privPackageList .group-item > .checkbox-primary {display: inline-block;}
+#privPackageList .priv-toggle.icon {width: 12px; height: 12px; position: relative; display: inline-block; color: #9EA3B0; margin-left: 4px;}
+#privPackageList .priv-toggle.icon:before {content: "\e925"; font-size: 12px; min-width: unset; transform: scale(0.5); font-weight: 900;}
+#privPackageList .priv-toggle.icon:after {position: absolute; top: 0px; right: 0px; bottom: 0px; left: 0px; display: inline-block; content: ""; border: 1px solid; border-radius: 10%;}
+#privPackageList .priv-toggle.icon.open:before {content: "\e926";}
