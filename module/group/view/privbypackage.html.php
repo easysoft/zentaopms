@@ -123,7 +123,7 @@
               </div>
               <div class="privs hidden" data-module='<?php echo $moduleName;?>' data-package='<?php echo $packageID;?>'>
                 <div class="arrow"></div>
-                <div class = 'popover-content'>
+                <div class='popover-content'>
                 <?php foreach($privs as $privID => $priv):?>
                   <div class="group-item" data-id='<?php echo zget($priv, 'id', 0);?>' data-module='<?php echo $moduleName;?>' data-package='<?php echo $packageID;?>'>
                     <div class="checkbox-primary">
