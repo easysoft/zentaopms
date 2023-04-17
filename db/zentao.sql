@@ -1528,7 +1528,7 @@ CREATE UNIQUE INDEX `object` ON `zt_searchindex`(`objectType`,`objectID`);
 CREATE TABLE IF NOT EXISTS `zt_stage` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
-  `percent` varchar(255) NOT NULL,
+  `percent` varchar(255) NOT NULL DEFAULT '',
   `type` varchar(255) NOT NULL,
   `projectType` varchar(255) NOT NULL,
   `createdBy` varchar(30) NOT NULL,
