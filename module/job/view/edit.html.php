@@ -20,6 +20,7 @@
 <?php js::set('jkTask', $job->pipeline);?>
 <?php js::set('job', $job);?>
 <?php js::set('frameList', $lang->job->frameList);?>
+<?php js::set('jenkinsPipeline', $job->engine == 'jenkins' ? $job->pipeline : '');?>
 
 <div id='mainContent' class='main-row'>
   <div class='main-content'>
@@ -128,13 +129,17 @@
           <?php if($job->engine == 'jenkins'):?>
           <tr id="jenkinsServerTR">
             <th><?php echo $lang->job->server;?></th>
-            <td colspan='2' class='required'>
+            <td colspan='2'>
               <div class='table-row'>
-                <div class='table-col'><?php echo html::select('jkServer', $jenkinsServerList, $job->server, "class='form-control chosen'");?></div>
+                <div class='table-col'><?php echo html::select('jkServer', $jenkinsServerList, $job->server, "class='form-control chosen'"); ?></div>
                 <div class='table-col'>
                   <div class='input-group'>
                     <span class='input-group-addon'><?php echo $lang->job->pipeline;?></span>
-                    <?php echo html::select('jkTask', array('' => ''), $job->pipeline, "class='form-control chosen'");?>
+                    <div class='dropdown'>
+                    <?php echo html::hidden('jkTask');?>
+                    <button data-toggle='dropdown' type='button' class='btn jktask-label required text-right'  title=''><span class='text'><?php echo $job->pipeline;?></span> <span class='caret' style='margin-bottom: -1px'></span></button>
+                    <div id='dropMenuTasks' class='dropdown-menu search-list' data-ride='searchList' data-url=''></div>
+                    </div>
                   </div>
                 </div>
               </div>
