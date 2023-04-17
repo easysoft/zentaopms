@@ -141,6 +141,7 @@ $lang->doc->myDoc         = 'Mes Documents';
 $lang->doc->myView        = 'Recently Viewed';
 $lang->doc->myCollection  = 'Mes Favoris';
 $lang->doc->myCreation    = 'Created By';
+$lang->doc->myEdited      = 'Edited By';
 $lang->doc->myLib         = 'My Library';
 $lang->doc->tableContents = 'Catalog';
 $lang->doc->addCatalog    = 'Add Catalog';
@@ -155,6 +156,8 @@ $lang->doc->todayUpdated  = "Today's update";
 $lang->doc->daysUpdated   = 'Updated %s days ago';
 $lang->doc->monthsUpdated = 'Updated %s months ago';
 $lang->doc->yearsUpdated  = 'Updated %s years ago';
+$lang->doc->viewCount     = '%s Visits';
+$lang->doc->collectCount  = '%s Collections';
 
 /* Methods list */
 $lang->doc->index            = 'Dashboard';

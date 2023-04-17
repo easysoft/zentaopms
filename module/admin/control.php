@@ -460,7 +460,7 @@ class admin extends control
     public function tableEngine()
     {
         $this->view->title = $this->lang->admin->tableEngine;
-        $this->view->tableEngines = $this->loadModel('misc')->getTableEngines();
+        $this->view->tableEngines = $this->dao->getTableEngines();
         $this->display();
     }
 

@@ -155,7 +155,7 @@ function calcPreviewGrowFilter(resize = false)
         var canGrowTotal = 0;
 
         $filterBox.find('.query-inside').addClass('hidden');
-        $filterBox.find('.query-outside').addClass('hidden');
+        $filterBox.find('.query-outside').addClass('visibility-hidden');
         chart.filters.forEach(function(filter, index)
         {
             var nowItem      = '.filter-item-' + index;
@@ -191,8 +191,8 @@ function calcPreviewGrowFilter(resize = false)
             if(filter.type == 'select' && $nowDom.find('.picker').length) $nowDom.find('.picker').find('.picker-selections').css('width', WIDTH_INPUT);
         });
 
-        var queryType =(!lineWrap && nowWidth >= 60) ? '.query-inside' : '.query-outside';
-        $filterBox.find(queryType).removeClass('hidden');
+        if(!lineWrap && nowWidth >= 60) $filterBox.find('.query-inside').removeClass('hidden');
+        else $filterBox.find('.query-outside').removeClass('visibility-hidden');
 
         /* Set picker-selection width, default 128px. */
         waitForRepaint(function()

@@ -45,6 +45,22 @@ class dm extends dao
     }
 
     /**
+     * Get table engines.
+     *
+     * @access public
+     * @return array
+     */
+    public function getTableEngines()
+    {
+        $tables = $this->query("SELECT \"table_name\" FROM all_tables WHERE OWNER = '{$this->config->db->name}'")->fetchAll();
+
+        $tableEngines = array();
+        foreach($tables as $table) $tableEngines[$table->table_name] = 'InnoDB';
+
+        return $tableEngines;
+    }
+
+    /**
      * 类MySQL的DESC语法。
      * Desc table, show fields.
      *
@@ -118,7 +134,7 @@ class dm extends dao
 
         if(stripos($originField, 'if(') !== false)
         {
-            $originField = $this->formatIfFunction($originField);
+            $originField = $this->dbh->formatDmIfFunction($originField);
         }
         elseif(strcasecmp($originField, 'distinct') !== 0)
         {
@@ -147,6 +163,7 @@ class dm extends dao
      * @access private
      * @return string
      */
+    /*
     private function formatIfFunction($field)
     {
         preg_match('/if\(.+\)+/i', $field, $matches);
@@ -158,7 +175,7 @@ class dm extends dao
             $if  = substr($if, 0, $pos+1);
         }
 
-        /* fix sum(if(..., 1, 0)) , count(if(..., 1, 0)) */
+        // * fix sum(if(..., 1, 0)) , count(if(..., 1, 0)) * //
         if(substr($if, strlen($if)-2) == '))' and (stripos($field, 'sum(') == 0 or stripos($field, 'count(') == 0)) $if = substr($if, 0, strlen($if)-1);
 
         $parts = explode(',', substr($if, 3, strlen($if)-4)); // remove 'if(' and ')'
@@ -167,6 +184,7 @@ class dm extends dao
 
         return $field;
     }
+     */
 
     /**
      * 创建WHERE部分。

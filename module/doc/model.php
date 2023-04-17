@@ -657,13 +657,26 @@ class docModel extends model
                 ->page($pager, 't1.id')
                 ->fetchAll('id');
         }
-        elseif($type == 'createdby')
+        elseif($type == 'createdby' || $type == 'editedby')
         {
+            $docIDList = array_keys($docIDList);
+            if($type == 'editedby')
+            {
+                $editDocs = $this->dao->select('objectID')->from(TABLE_ACTION)
+                    ->where('objectType')->eq('doc')
+                    ->andWhere('action')->eq('edited')
+                    ->andWhere('actor')->eq($this->app->user->account)
+                    ->andWhere('vision')->eq($this->config->vision)
+                    ->fetchPairs();
+
+                $docIDList = array_intersect($docIDList, $editDocs);
+            }
+
             $docs = $this->dao->select('t1.*,t2.name as libName,t2.type as objectType')->from(TABLE_DOC)->alias('t1')
                 ->leftJoin(TABLE_DOCLIB)->alias('t2')->on("t1.lib=t2.id")
                 ->where('t1.deleted')->eq(0)
                 ->andWhere('t1.lib')->ne('')
-                ->andWhere('t1.id')->in(array_keys($docIDList))
+                ->andWhere('t1.id')->in($docIDList)
                 ->andWhere('t1.vision')->eq($this->config->vision)
                 ->andWhere('t1.addedBy')->eq($this->app->user->account)
                 ->beginIF(!common::hasPriv('doc', 'productSpace'))->andWhere('t2.type')->ne('product')->fi()
@@ -3119,6 +3132,15 @@ class docModel extends model
             $myCreation->hasAction  = false;
             $myCreation->active     = $libType == 'createdby' ? 1 : 0;
 
+            $myCreation = new stdclass();
+            $myCreation->id         = 0;
+            $myCreation->name       = $this->lang->doc->myEdited;
+            $myCreation->type       = 'editedBy';
+            $myCreation->objectType = 'doc';
+            $myCreation->objectID   = 0;
+            $myCreation->hasAction  = false;
+            $myCreation->active     = $libType == 'editedby' ? 1 : 0;
+
             $libTree   = array();
             $libTree[] = $myLib;
             if(common::hasPriv('doc', 'myView'))       $libTree[] = $myView;
@@ -3249,7 +3271,7 @@ class docModel extends model
             if($action == 'collect')
             {
                 $collectCount = $this->dao->select('count(*) as count')->from(TABLE_DOCACTION)->where('doc')->eq($docID)->andWhere('action')->eq('collect')->fetch('count');
-                $this->dao->update(TABLE_DOC)->set('collector')->eq($collectCount)->where('id')->eq($docID)->exec();
+                $this->dao->update(TABLE_DOC)->set('collects')->eq($collectCount)->where('id')->eq($docID)->exec();
             }
 
             return $actionID;
@@ -3285,7 +3307,7 @@ class docModel extends model
         if($action->action == 'collect')
         {
             $collectCount = $this->dao->select('count(*) as count')->from(TABLE_DOCACTION)->where('doc')->eq($action->doc)->andWhere('action')->eq('collect')->fetch('count');
-            $this->dao->update(TABLE_DOC)->set('collector')->eq($collectCount)->where('id')->eq($action->doc)->exec();
+            $this->dao->update(TABLE_DOC)->set('collects')->eq($collectCount)->where('id')->eq($action->doc)->exec();
         }
     }
 
@@ -3301,7 +3323,7 @@ class docModel extends model
         $actionGroup = $this->dao->select('*')->from(TABLE_DOCACTION)->where('doc')->in(array_keys($docs))->andWhere('action')->eq('collect')->fetchGroup('doc', 'actor');
         foreach($docs as $docID => $doc)
         {
-            $doc->collector = '';
+            $doc->collector   = '';
             if(isset($actionGroup[$docID])) $doc->collector = ',' . implode(',', array_keys($actionGroup[$docID])) . ',';
         }
         return $docs;

@@ -277,10 +277,36 @@ class dbh
                 if(strpos($sql, '\\\\') !== FALSE) $sql = str_replace('\\\\', '\\', $sql);
                 break;
             case 'CREATE':
-                if(stripos($sql, 'CREATE OR REPLACE VIEW ') === 0) return '';
                 if(stripos($sql, 'CREATE VIEW') === 0) return '';
                 if(stripos($sql, 'CREATE FUNCTION') === 0) return '';
-                if(stripos($sql, 'CREATE UNIQUE INDEX') === 0)
+
+                if(stripos($sql, 'CREATE OR REPLACE VIEW ') === 0)
+                {
+                    // Modify if function.
+                    $fieldsBegin = stripos($sql, 'select');
+                    $fieldsEnd   = stripos($sql, 'from');
+                    $fields      = substr($sql, $fieldsBegin+6, $fieldsEnd-$fieldsBegin-6);
+                    $fieldList   = preg_split("/,(?![^(]+\))/", $fields);
+                    foreach($fieldList as $key => $field)
+                    {
+                        $aliasPos = stripos($field, ' AS ');
+                        $subField = substr($field, 0, $aliasPos);
+                        if(stripos($field, 'SUM(') === 0) $subField = substr($subField, 4, -1);
+
+                        $fieldParts = preg_split("/\+(?![^(]+\))/", $subField);
+                        foreach($fieldParts as $pkey => $fieldPart)
+                        {
+                            $originField = trim($fieldPart);
+                            if(stripos($originField, 'if(') === false) continue;
+                            $fieldParts[$pkey] = $this->formatDmIfFunction($originField);
+                        }
+                        $fieldList[$key] = str_replace($subField, implode(' + ', $fieldParts), $field);
+                    }
+                    $fields = implode(',', $fieldList);
+                    $sql = substr($sql, 0, $fieldsBegin+6) . $fields . substr($sql, $fieldsEnd);
+                    return str_replace('CREATE OR REPLACE VIEW ', 'CREATE VIEW ', $sql);
+                }
+                elseif(stripos($sql, 'CREATE UNIQUE INDEX') === 0)
                 {
                     preg_match('/ON\ +[0-9a-zA-Z\_\.]+\`([0-9a-zA-Z\_]+)\`/', $sql, $matches);
                     $tableName = explode('_', $matches[1]);
@@ -335,6 +361,34 @@ class dbh
             default:
                 return $sql;
         }
+    }
+
+    /**
+     * Format if function of dmdb.
+     *
+     * @param  string $field
+     * @access private
+     * @return string
+     */
+    public function formatDmIfFunction($field)
+    {
+        preg_match('/if\(.+\)+/i', $field, $matches);
+
+        $if = $matches[0];
+        if(substr_count($if, '(') == 1)
+        {
+            $pos = strpos($if, ')');
+            $if  = substr($if, 0, $pos+1);
+        }
+
+        /* fix sum(if(..., 1, 0)) , count(if(..., 1, 0)) */
+        if(substr($if, strlen($if)-2) == '))' and (stripos($field, 'sum(') == 0 or stripos($field, 'count(') == 0)) $if = substr($if, 0, strlen($if)-1);
+
+        $parts = explode(',', substr($if, 3, strlen($if)-4)); // remove 'if(' and ')'
+        $case  = 'CASE WHEN ' . implode(',', array_slice($parts, 0, count($parts)-2)) . ' THEN ' . $parts[count($parts)-2] . ' ELSE ' . $parts[count($parts)-1] . ' END';
+        $field = str_ireplace($if, $case, $field);
+
+        return $field;
     }
 
     /**

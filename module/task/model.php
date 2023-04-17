@@ -35,8 +35,8 @@ class taskModel extends model
         }
 
         $executionID    = (int)$executionID;
-        $estStarted     = '0000-00-00';
-        $deadline       = '0000-00-00';
+        $estStarted     = null;
+        $deadline       = null;
         $assignedTo     = '';
         $taskIdList     = array();
         $taskDatas      = array();
@@ -113,8 +113,6 @@ class taskModel extends model
             ->setDefault('project', $this->getProjectID($executionID))
             ->setIF($this->post->estimate != false, 'left', $this->post->estimate)
             ->setIF($this->post->story != false, 'storyVersion', $this->loadModel('story')->getVersion($this->post->story))
-            ->setDefault('estStarted', '0000-00-00')
-            ->setDefault('deadline', '0000-00-00')
             ->setIF(strpos($requiredFields, 'estStarted') !== false, 'estStarted', helper::isZeroDate($this->post->estStarted) ? '' : $this->post->estStarted)
             ->setIF(strpos($requiredFields, 'deadline') !== false, 'deadline', helper::isZeroDate($this->post->deadline) ? '' : $this->post->deadline)
             ->setIF(strpos($requiredFields, 'estimate') !== false, 'estimate', $this->post->estimate)
@@ -205,8 +203,9 @@ class taskModel extends model
             $taskSpec->task       = $taskID;
             $taskSpec->version    = $task->version;
             $taskSpec->name       = $task->name;
-            $taskSpec->estStarted = $task->estStarted;
-            $taskSpec->deadline   = $task->deadline;
+
+            if($task->estStarted) $taskSpec->estStarted = $task->estStarted;
+            if($task->deadline)   $taskSpec->deadline   = $task->deadline;
 
             $this->dao->insert(TABLE_TASKSPEC)->data($taskSpec)->autoCheck()->exec();
             if(dao::isError()) return false;
@@ -353,8 +352,8 @@ class taskModel extends model
         $module     = 0;
         $type       = '';
         $assignedTo = '';
-        $estStarted = '0000-00-00';
-        $deadline   = '0000-00-00';
+        $estStarted = null;
+        $deadline   = null;
 
         /* Get task data. */
         $extendFields = $this->getFlowExtendFields();
@@ -388,8 +387,8 @@ class taskModel extends model
             $data[$i]->name       = $tasks->name[$i];
             $data[$i]->desc       = nl2br($tasks->desc[$i]);
             $data[$i]->pri        = $tasks->pri[$i];
-            $data[$i]->estimate   = $tasks->estimate[$i];
-            $data[$i]->left       = $tasks->estimate[$i];
+            $data[$i]->estimate   = $tasks->estimate[$i] ? $tasks->estimate[$i] : 0;
+            $data[$i]->left       = $tasks->estimate[$i] ? $tasks->estimate[$i] : 0;
             $data[$i]->project    = $projectID;
             $data[$i]->execution  = $executionID;
             $data[$i]->estStarted = $estStarted;
@@ -482,8 +481,8 @@ class taskModel extends model
             $taskSpec->task       = $taskID;
             $taskSpec->version    = $task->version;
             $taskSpec->name       = $task->name;
-            $taskSpec->estStarted = $task->estStarted;
-            $taskSpec->deadline   = $task->deadline;
+            if($task->estStarted) $taskSpec->estStarted = $task->estStarted;
+            if($task->deadline)   $taskSpec->deadline   = $task->deadline;
 
             $this->dao->insert(TABLE_TASKSPEC)->data($taskSpec)->autoCheck()->exec();
             if(dao::isError()) return false;
@@ -3587,10 +3586,10 @@ class taskModel extends model
      */
     public function getDataOffinishedTasksPerDay()
     {
-        $tasks = $this->dao->select('id, DATE_FORMAT(finishedDate, "%Y-%m-%d") AS date')->from(TABLE_TASK)->alias('t1')
+        $tasks = $this->dao->select("id, DATE_FORMAT(`finishedDate`, '%Y-%m-%d') AS `date`")->from(TABLE_TASK)
             ->where($this->reportCondition())
-            ->having('date != "0000-00-00"')
-            ->orderBy('date asc')
+            ->andWhere('finishedDate')->notZeroDatetime()
+            ->orderBy('finishedDate asc')
             ->fetchAll('id');
         if(!$tasks) return array();
 

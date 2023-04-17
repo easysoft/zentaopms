@@ -141,6 +141,7 @@ $lang->doc->myDoc         = '我的文档';
 $lang->doc->myView        = '最近浏览';
 $lang->doc->myCollection  = '我的收藏';
 $lang->doc->myCreation    = '我创建的';
+$lang->doc->myEdited      = '我编辑的';
 $lang->doc->myLib         = '我的个人库';
 $lang->doc->tableContents = '目录';
 $lang->doc->addCatalog    = '添加目录';
@@ -155,6 +156,8 @@ $lang->doc->todayUpdated  = '今天更新';
 $lang->doc->daysUpdated   = '%s天前更新';
 $lang->doc->monthsUpdated = '%s月前更新';
 $lang->doc->yearsUpdated  = '%s年前更新';
+$lang->doc->viewCount     = '%s次浏览';
+$lang->doc->collectCount  = '%s次收藏';
 
 /* 方法列表。*/
 $lang->doc->index            = '仪表盘';

@@ -389,7 +389,17 @@ CHANGE `reviewedBy` `reviewedBy` varchar(255) NOT NULL DEFAULT '',
 CHANGE `reviewedDate` `reviewedDate` date NULL,
 CHANGE `lastEditedDate` `lastEditedDate` datetime NULL,
 CHANGE `lastRunner` `lastRunner` varchar(30) NOT NULL DEFAULT '',
-CHANGE `lastRunDate` `lastRunDate` datetime NULL;
+CHANGE `lastRunDate` `lastRunDate` datetime NULL,
+CHANGE `frame` `frame` varchar(10) NOT NULL DEFAULT '',
+CHANGE `stage` `stage` varchar(255) NOT NULL DEFAULT '',
+CHANGE `howRun` `howRun` varchar(30) NOT NULL DEFAULT '',
+CHANGE `script` `script` longtext NULL,
+CHANGE `scriptStatus` `scriptStatus` varchar(30) NOT NULL DEFAULT '',
+CHANGE `scriptLocation` `scriptLocation` varchar(255) NOT NULL DEFAULT '',
+CHANGE `linkCase` `linkCase` varchar(255) NOT NULL DEFAULT '',
+CHANGE `fromBug` `fromBug` mediumint unsigned NOT NULL DEFAULT '0',
+CHANGE `fromCaseID` `fromCaseID` mediumint unsigned NOT NULL DEFAULT '0',
+CHANGE `lastRunResult` `lastRunResult` char(30) NOT NULL DEFAULT '';
 
 ALTER TABLE `zt_chart`
 CHANGE `editedBy` `editedBy` varchar(30) NOT NULL DEFAULT '',
@@ -451,6 +461,10 @@ CHANGE `editedDate` `editedDate` datetime NULL;
 ALTER TABLE `zt_durationestimation`
 CHANGE `editedBy` `editedBy` varchar(30) NOT NULL DEFAULT '',
 CHANGE `editedDate` `editedDate` datetime NULL;
+
+ALTER TABLE `zt_effort`
+CHANGE `begin` `begin` smallint(4) unsigned zerofill NOT NULL DEFAULT '0',
+CHANGE `end` `end` smallint(4) unsigned zerofill NOT NULL DEFAULT '0';
 
 ALTER TABLE `zt_entry`
 CHANGE `editedBy` `editedBy` varchar(30) NOT NULL DEFAULT '',
@@ -550,6 +564,7 @@ CHANGE `activatedDate` `activatedDate` datetime NULL;
 ALTER TABLE `zt_kanbancard`
 CHANGE `begin` `begin` date NULL,
 CHANGE `end` `end` date NULL,
+CHANGE `whitelist` `whitelist` text NULL,
 CHANGE `lastEditedBy` `lastEditedBy` char(30) NOT NULL DEFAULT '',
 CHANGE `lastEditedDate` `lastEditedDate` datetime NULL,
 CHANGE `archivedBy` `archivedBy` char(30) NOT NULL DEFAULT '',
@@ -804,11 +819,16 @@ CHANGE `duplicateStory` `duplicateStory` mediumint unsigned NOT NULL DEFAULT '0'
 CHANGE `notifyEmail` `notifyEmail` varchar(100) NOT NULL DEFAULT '';
 
 ALTER TABLE `zt_storyreview`
+CHANGE `result` `result` varchar(30) NOT NULL DEFAULT '',
 CHANGE `reviewDate` `reviewDate` datetime NULL;
+ALTER TABLE `zt_storyspec`
+CHANGE `files` `files` text NULL;
 
 ALTER TABLE `zt_task`
 CHANGE `designVersion` `designVersion` smallint unsigned NOT NULL DEFAULT '1',
 CHANGE `feedback` `feedback` mediumint unsigned NOT NULL DEFAULT '0',
+CHANGE `mode` `mode` varchar(10) NOT NULL DEFAULT '',
+CHANGE `deadline` `deadline` date NULL,
 CHANGE `consumed` `consumed` float unsigned NOT NULL DEFAULT '0',
 CHANGE `assignedDate` `assignedDate` datetime NULL,
 CHANGE `planDuration` `planDuration` int NOT NULL DEFAULT '0',
@@ -834,6 +854,10 @@ CHANGE `closedReason` `closedReason` varchar(30) NOT NULL DEFAULT '',
 CHANGE `lastEditedBy` `lastEditedBy` varchar(30) NOT NULL DEFAULT '',
 CHANGE `lastEditedDate` `lastEditedDate` datetime NULL,
 CHANGE `activatedDate` `activatedDate` datetime NULL;
+
+ALTER TABLE `zt_taskspec`
+CHANGE `estStarted` `estStarted` date NULL,
+CHANGE `deadline` `deadline` date NULL;
 
 ALTER TABLE `zt_team`
 CHANGE `position` `position` varchar(30) NOT NULL DEFAULT '',

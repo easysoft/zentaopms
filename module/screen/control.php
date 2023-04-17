@@ -22,9 +22,15 @@ class screen extends control
     {
         $dimensionID = $this->loadModel('dimension')->setSwitcherMenu($dimensionID);
 
-        $this->view->title     = $this->lang->screen->common;
-        $this->view->screens   = $this->screen->getList($dimensionID);
-        $this->view->dimension = $dimensionID;
+        $this->loadModel('setting');
+        $currentUser = $this->app->user->account;
+        $firstGuide  = $this->setting->getItem("owner={$currentUser}&module=bi&key=firstGuide");
+        if(empty($firstGuide)) $this->setting->setItem("{$currentUser}.bi.firstGuide", 1);
+
+        $this->view->firstGuide = !empty($firstGuide);
+        $this->view->title      = $this->lang->screen->common;
+        $this->view->screens    = $this->screen->getList($dimensionID);
+        $this->view->dimension  = $dimensionID;
         $this->display();
     }
 
