@@ -57,6 +57,16 @@ i.btn-info, i.btn-info:hover {border: none; background: #fff; box-shadow: unset;
 #leftBar .selectBox #currentItem > .text {overflow: hidden; text-align: left; flex: 0 1 100%;}
 .dropdown-in-tree {max-height: 293px; overflow-y: auto;}
 .before-tree-item {flex: 0 0 14px; margin-right: 5px; margin-bottom: 2px;}
+
+/* Catalog sort style. */
+.sortable-sorting li >.tree-group {opacity: .5;}
+.sortable-sorting .drop-here .tree-group {background-color: #fff3e0;}
+.sortable-sorting .drop-here .tree-group > * {opacity: .1;}
+.sortable-sorting .drag-shadow .tree-group {opacity: 1!important;}
+.sortable-sorting .drag-shadow .tree-actions {visibility: hidden;}
+.is-sorting > li > .tree-group {opacity: 1; border-radius: 4px;}
+.is-sorting > li ul {display: none!important;}
+li.drag-shadow ul {display: none!important;}
 </style>
 
 <?php
@@ -70,6 +80,7 @@ js::set('objectID',   isset($objectID) ? $objectID : '');
 js::set('isFirstLoad', isset($isFirstLoad) ? $isFirstLoad: '');
 js::set('canViewFiles', common::hasPriv('doc', 'showfiles'));
 js::set('spaceMethod', $config->doc->spaceMethod);
+js::set('canSortCatalog', common::hasPriv('doc', 'sortCatalog'));
 ?>
 
 <div id="fileTree" class="file-tree menu-active-primary menu-hover-primary">
@@ -253,15 +264,18 @@ $(function()
                 if(typeof docID != 'undefined' && item.id == docID) item.active = 1;
                 if(['text', 'word', 'ppt', 'excel'].indexOf(item.type) !== -1) item.hasAction = false;
 
-                var objectType = config.currentModule == 'api' ? item.objectType : item.type;
-                var libClass = ['lib', 'annex', 'api', 'execution'].indexOf(objectType) !== -1 ? 'lib' : '';
-                var hasChild = item.children ? !!item.children.length : false;
-                var link     = item.type != 'execution' || item.hasAction ? '###' : '#';
-                var $item    = '<a href="' + link + '" style="position: relative" data-has-children="' + hasChild + '" title="' + item.name + '" data-id="' + item.id + '" class="' + libClass + '" data-type="' + item.type + '" data-action="' + item.hasAction + '">';
+                var objectType  = config.currentModule == 'api' ? item.objectType : item.type;
+                var libClass    = ['lib', 'annex', 'api', 'execution'].indexOf(objectType) !== -1 ? 'lib' : '';
+                var moduleClass = item.type == 'doc' ? 'calalog' : '';
+                var sortClass   = item.type == 'doc' && canSortCatalog ? ' sort-module' : '';
+                var hasChild    = item.children ? !!item.children.length : false;
+                var link        = item.type != 'execution' || item.hasAction ? '###' : '#';
+                var $item       = '<a href="' + link + '" style="position: relative" data-has-children="' + hasChild + '" title="' + item.name + '" data-id="' + item.id + '" class="' + libClass + sortClass + '" data-type="' + item.type + '" data-action="' + item.hasAction + '">';
 
                 $item += '<div class="text h-full w-full flex-start overflow-hidden">';
                 if((libClass == 'lib' && item.type != 'execution') || (item.type == 'execution' && item.hasAction)) $item += '<i class="before-tree-item icon icon-' + imgObj[item.type] +'-lib"></i>';
                 if(['text', 'word', 'ppt', 'excel'].indexOf(item.type) !== -1) $item += '<div class="img-lib" style="background-image:url(static/svg/' + imgObj[item.type] + '.svg)"></div>';
+                if(sortClass) $item += '<i class="icon icon-move"></i>';
                 $item += '<div class="tree-text">';
                 $item += item.name;
                 $item += '</div>';
@@ -284,8 +298,21 @@ $(function()
                 if(item.versions) versionsData[item.id] = item.versions;
 
                 $li.append($item);
-                $li.addClass(libClass);
+                $li.addClass(libClass).addClass(moduleClass).attr('data-order', item.order);
                 if(item.active) $li.addClass('active');
+            },
+            sortable:
+            {
+                lazy: true,
+                nested: true,
+                canMoveHere: function($ele, $target)
+                {
+                    if($ele && $target && $ele.parent().closest('li').attr('data-id') !== $target.
+                },
+                start: function(e)
+                {
+                    orderModule = e.element.data('id');
+                }
             }
         });
 
