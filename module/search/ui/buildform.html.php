@@ -118,33 +118,18 @@ $opts->formSession     = $formSession;
 $opts->module          = $module;
 $opts->actionURL       = $actionURL;
 $opts->groupItems      = $groupItems;
-
-/* Delete query callback function. */
-$opts->onDeleteQuery = jsRaw
-(
-    "function(event, queryID)".
-    "{".
-    "    var deleteQueryURL = '{$opts->deleteQueryURL}';".
-    "    event.stopPropagation();".
-    "    fetch(deleteQueryURL.replace('myQueryID', queryID), {method:'POST'})".
-    "        .then((response) => {".
-    "            if (!response.ok) throw new Error('HTTP error! Status: ' + response.status);".
-    "            return response.text();".
-    "        })".
-    "        .then((text) => {".
-    "            if(text === 'success') event.target.closest('div').remove();".
-    "            else throw new Error('Failed: ' + text);".
-    "        });".
-    "}"
-);
+$opts->onDeleteQuery   = jsRaw('window.onDeleteQuery');
 
 if(empty($opts->savedQuery)) unset($opts->savedQuery);
 
-jsVar('options',      isset($options) ? $options : null);
-jsVar('canSaveQuery', !empty($_SESSION[$module . 'Query']));
-jsVar('formSession',  $_SESSION[$module . 'Form']);
-jsVar('onMenuBar',    $onMenuBar);
-
 zui::searchform(set($opts), set::_to('#searchFormPanel'), set::className('shadow'));
+
+jsVar('onDeleteQueryURL', $opts->deleteQueryURL);
+jsVar('options',          isset($options) ? $options : null);
+jsVar('canSaveQuery',     !empty($_SESSION[$module . 'Query']));
+jsVar('formSession',      $_SESSION[$module . 'Form']);
+jsVar('onMenuBar',        $onMenuBar);
+
+js($pageJS);
 
 render('fragment');

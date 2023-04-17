@@ -34,7 +34,7 @@ function parseWgSelector($selector)
         $len            = strlen($selector);
     }
     $selector = str_replace('> *', '>*', $selector);
-    if(str_ends_with($selector, '>*'))
+    if(substr($selector, strlen($selector) - 2) == '>*')
     {
         $result['inner'] = true;
         $selector = substr($selector, 0, strlen($selector) - 2);

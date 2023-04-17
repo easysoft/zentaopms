@@ -11,7 +11,6 @@ window.programMenuOnClick = function(data, url)
 
 window.renderReleaseCountCell = function(result, {col, row})
 {
-    console.log(col, row);
     if(col.name === 'name')
     {
         if(row.data.delay > 0) result[result.length] = {html:'<span class="label size-sm circle danger-pale">' + langPostponed + '</span>', className:'flex items-end w-full', style:{flexDirection:"column"}};
