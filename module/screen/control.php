@@ -27,7 +27,7 @@ class screen extends control
 
         /* BI guide. */
         $lang     = (strpos($this->app->getClientLang(), 'zh') !== false) ? 'zh' : 'en';
-        $version  = !($this->config->edition == 'biz' or $this->config->edition == 'max') ? 'biz' : 'pms';
+        $version  = ($this->config->edition == 'biz' or $this->config->edition == 'max') ? 'biz' : 'pms';
         $imageURL = "static/images/bi_guide_{$version}_{$lang}.png";
 
         $currentUser = $this->app->user->account;
