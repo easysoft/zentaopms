@@ -199,12 +199,13 @@ UPDATE `zt_grouppriv` SET `module` = 'pivot', `method` = 'browse' WHERE `module`
 UPDATE `zt_grouppriv` SET `module` = 'screen' WHERE `module` = 'report' AND `method` IN ('annualData','allAnnualData');
 DELETE FROM `zt_grouppriv` WHERE `module` = 'report' AND `method` = 'index';
 
-REPLACE INTO `zt_grouppriv` (`group`, `module`, `method`) SELECT `group`, `module`, 'view' FROM `zt_grouppriv` WHERE `module` = 'chart' AND `method` = 'browse';
+REPLACE INTO `zt_grouppriv` (`group`, `module`, `method`) SELECT `group`, `module`, 'preview' FROM `zt_grouppriv` WHERE `module` = 'chart' AND `method` = 'browse';
 REPLACE INTO `zt_grouppriv` (`group`, `module`, `method`) SELECT `group`, `module`, 'export' FROM `zt_grouppriv` WHERE `module` = 'chart' AND `method` IN ('browse', 'design');
 
 REPLACE INTO `zt_grouppriv` (`group`, `module`, `method`) SELECT `group`, 'screen', `method` FROM `zt_grouppriv` WHERE `module` = 'dashboard';
+REPLACE INTO `zt_grouppriv` (`group`, `module`, `method`) SELECT `group`, 'screen', 'publish' FROM `zt_grouppriv` WHERE `module` = 'screen' AND `method` = 'design';
 
-REPLACE INTO `zt_grouppriv` (`group`, `module`, `method`) SELECT `group`, 'dataview', 'design' FROM `zt_grouppriv` WHERE `module` = 'dataset' AND `method` IN ('create', 'edit');
+REPLACE INTO `zt_grouppriv` (`group`, `module`, `method`) SELECT `group`, 'dataview', 'query' FROM `zt_grouppriv` WHERE `module` = 'dataset' AND `method` IN ('create', 'edit');
 UPDATE `zt_grouppriv` SET `module` = 'dataview' WHERE `module` = 'dataset' AND `method` IN ('browse', 'create', 'edit', 'delete');
 DELETE FROM `zt_grouppriv` WHERE `module` = 'dataset' AND `method` = 'view';
 DELETE FROM `zt_grouppriv` WHERE `module` = 'dashboard';
