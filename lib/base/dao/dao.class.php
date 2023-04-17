@@ -1799,6 +1799,7 @@ class baseSQL
             if(strpos($set, '=') ===  false)
             {
                 $set = str_replace(',', '', $set);
+                $set = '`' . str_replace('`', '', $set) . '`';
             }
 
             $this->sql .= $this->isFirstSet ? " $set" : ", $set";
