@@ -170,6 +170,7 @@ $lang->doc->createBook       = 'Create Book';
 $lang->doc->browse           = 'Liste';
 $lang->doc->view             = 'Details';
 $lang->doc->diff             = 'Diff';
+$lang->doc->cancelDiff       = 'Cancel diff';
 $lang->doc->diffAction       = 'Diff Document';
 $lang->doc->sort             = 'Sortierung';
 $lang->doc->manageType       = 'Kategorie verwalten';

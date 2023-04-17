@@ -78,6 +78,7 @@ $lang->doc->createBook       = 'Create Book';
 $lang->doc->browse           = 'Document danh sách';
 $lang->doc->view             = 'Document Detail';
 $lang->doc->diff             = 'Diff';
+$lang->doc->cancelDiff       = 'Cancel diff';
 $lang->doc->diffAction       = 'Diff tài liệu';
 $lang->doc->sort             = 'Đánh giá tài liệu';
 $lang->doc->manageType       = 'Quản lý danh mục';

@@ -82,3 +82,17 @@
 #editorBox > .btn-group > button {margin: 2px 6px 0 4px; color: #838A9D;}
 #editorMenu {max-height: 200px; overflow: auto;}
 #editorMenu > li {color: #838A9D; font-weight: 400; padding: 5px 12px;}
+.doc-version-menu {padding: 10px 5px;}
+#changeBtn > i {font-size: 24px;}
+
+#docVersionMenu > .drop-body {max-height: 200px; overflow-y: auto;}
+#docVersionMenu > .drop-body > li.li-item {display: flex; position: relative;}
+#docVersionMenu > .drop-body > li.li-item > .checkbox-primary {display: none; position: absolute; top: 4px; left: 10px;}
+#docVersionMenu > .drop-body > li > a {flex: 1; padding-left: 20px; height: 30px; display: flex; align-items: center;}
+#docVersionMenu > .drop-bottom > button {margin-right: 10px; display: none;}
+
+#docVersionMenu.diff > .drop-body > li.li-item > .checkbox-primary {display: unset!important;}
+#docVersionMenu.diff > .drop-body > li > a {padding-left:30px!important;}
+#docVersionMenu.diff > .drop-title > #changeBtn {opacity: 0;}
+#docVersionMenu.diff > .drop-bottom > button {display: unset!important;}
+
