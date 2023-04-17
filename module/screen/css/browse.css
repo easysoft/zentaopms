@@ -35,6 +35,6 @@
 
 #firstGuide .modal-dialog {width: 750px !important;}
 #firstGuide .modal-body {padding: 0 !important;}
-#firstGuide .background-img {height: 430px !important; background: url('static/images/bi_guide_zh.png') no-repeat; background-size: 100%;}
+#firstGuide .background-img {height: 430px !important;}
 #firstGuide .modal-footer {text-align: center !important; border-top: none !important; padding: 24px 0px !important;}
 #firstGuide .btn-wide {min-width: 90px !important;}
