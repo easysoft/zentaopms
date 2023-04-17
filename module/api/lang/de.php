@@ -64,6 +64,7 @@ $lang->api->allLibs          = "AllLibs";
 $lang->api->noLinked         = "No Linked {$lang->productCommon} and {$lang->projectCommon}";
 $lang->api->addCatalog       = 'Add Catalog';
 $lang->api->editCatalog      = 'Edit Catalog';
+$lang->api->sortCatalog      = 'Catalog Sorting';
 $lang->api->deleteCatalog    = 'Delete Catalog';
 
 /* Common access control lang. */
