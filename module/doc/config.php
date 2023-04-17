@@ -50,6 +50,7 @@ $config->doc->spaceMethod['mine']      = 'myspace';
 $config->doc->spaceMethod['view']      = 'myspace';
 $config->doc->spaceMethod['collect']   = 'myspace';
 $config->doc->spaceMethod['createdby'] = 'myspace';
+$config->doc->spaceMethod['editedby']  = 'myspace';
 $config->doc->spaceMethod['product']   = 'productspace';
 $config->doc->spaceMethod['project']   = 'projectspace';
 $config->doc->spaceMethod['execution'] = 'projectspace';
