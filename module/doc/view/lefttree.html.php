@@ -59,14 +59,15 @@ i.btn-info, i.btn-info:hover {border: none; background: #fff; box-shadow: unset;
 .before-tree-item {flex: 0 0 14px; margin-right: 5px; margin-bottom: 2px;}
 
 /* Catalog sort style. */
-.sortable-sorting li >.tree-group {opacity: .5;}
-.sortable-sorting .drop-here .tree-group {background-color: #fff3e0;}
-.sortable-sorting .drop-here .tree-group > * {opacity: .1;}
-.sortable-sorting .drag-shadow .tree-group {opacity: 1!important;}
-.sortable-sorting .drag-shadow .tree-actions {visibility: hidden;}
-.is-sorting > li > .tree-group {opacity: 1; border-radius: 4px;}
-.is-sorting > li ul {display: none!important;}
-li.drag-shadow ul {display: none!important;}
+.sortable-sorting .catalog > a {cursor: move;}
+.sortable-sorting li .flex-start {opacity: 0.5;}
+.sortable-sorting .drop-here .flex-start {background-color: #fff3e0;}
+.sortable-sorting .drop-here .flex-start > * {opacity: 0.1;}
+.sortable-sorting .drag-shadow .flex-start {opacity: 1 !important;}
+.sortable-sorting .drag-shadow .icon-drop {visibility: hidden;}
+.is-sorting > li .flex-start {opacity: 1; border-radius: 4px;}
+.is-sorting > li ul {display: none !important;}
+li.drag-shadow ul {display: none !important;}
 </style>
 
 <?php
@@ -266,7 +267,7 @@ $(function()
 
                 var objectType  = config.currentModule == 'api' ? item.objectType : item.type;
                 var libClass    = ['lib', 'annex', 'api', 'execution'].indexOf(objectType) !== -1 ? 'lib' : '';
-                var moduleClass = item.type == 'doc' ? 'calalog' : '';
+                var moduleClass = item.type == 'doc' ? 'catalog' : '';
                 var sortClass   = item.type == 'doc' && canSortCatalog ? ' sort-module' : '';
                 var hasChild    = item.children ? !!item.children.length : false;
                 var link        = item.type != 'execution' || item.hasAction ? '###' : '#';
@@ -275,7 +276,6 @@ $(function()
                 $item += '<div class="text h-full w-full flex-start overflow-hidden">';
                 if((libClass == 'lib' && item.type != 'execution') || (item.type == 'execution' && item.hasAction)) $item += '<i class="before-tree-item icon icon-' + imgObj[item.type] +'-lib"></i>';
                 if(['text', 'word', 'ppt', 'excel'].indexOf(item.type) !== -1) $item += '<div class="img-lib" style="background-image:url(static/svg/' + imgObj[item.type] + '.svg)"></div>';
-                if(sortClass) $item += '<i class="icon icon-move"></i>';
                 $item += '<div class="tree-text">';
                 $item += item.name;
                 $item += '</div>';
@@ -644,10 +644,11 @@ $(function()
     {
         if(e.keyCode == 13) $(this).trigger('blur');
     });
+
     /* Make modules tree sortable */
     $('#fileTree').sortable(
     {
-        trigger: 'a.sort-module > div > .icon-move',
+        trigger: 'a.sort-module',
         dropToClass: 'sort-to',
         stopPropagation: true,
         nested: true,
@@ -655,11 +656,7 @@ $(function()
         dragCssClass: 'drop-here',
         canMoveHere: function($ele, $target)
         {
-            var maxTop = $('#fileTree').height() - $ele.height();
-            if(parseFloat($('.drag-shadow').css('top')) < 0) $('.drag-shadow').css('top', '0');
-            if(parseFloat($('.drag-shadow').css('left')) != 0) $('.drag-shadow').css('left', '0');
-            if(parseFloat($('.drag-shadow').css('top')) > maxTop) $('.drag-shadow').css('top', maxTop + 'px');
-            return true;
+            if($ele && $target && $ele.parent().closest('li').attr('data-id') !== $target.parent().closest('li').attr('data-id')) return false;
         },
         targetSelector: function($ele, $root)
         {
