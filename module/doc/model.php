@@ -411,6 +411,7 @@ class docModel extends model
             }
 
             $query     = $this->getDocQuery($this->session->contributeDocQuery);
+            $query     = preg_replace('/(`\w+`)/', 't1.$1', $query);
             $docIDList = $this->dao->select('objectID')->from(TABLE_ACTION)
                 ->where('objectType')->eq('doc')
                 ->andWhere('objectID')->in($hasPrivDocIdList)
