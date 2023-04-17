@@ -20,15 +20,24 @@ class screen extends control
      */
     public function browse($dimensionID = 0)
     {
+        $this->app->loadLang('admin');
+        $this->loadModel('setting');
+
         $dimensionID = $this->loadModel('dimension')->setSwitcherMenu($dimensionID);
 
-        $this->loadModel('setting');
+        /* BI guide. */
+        $lang     = (strpos($this->app->getClientLang(), 'zh') !== false) ? 'zh' : 'en';
+        $version  = !($this->config->edition == 'biz' or $this->config->edition == 'max') ? 'biz' : 'pms';
+        $imageURL = "static/images/bi_guide_{$version}_{$lang}.png";
+
         $currentUser = $this->app->user->account;
-        $firstGuide  = $this->setting->getItem("owner={$currentUser}&module=bi&key=firstGuide");
-        if(empty($firstGuide)) $this->setting->setItem("{$currentUser}.bi.firstGuide", 1);
+        $moduleKey   = $version . 'firstGuide';
+        $firstGuide  = $this->setting->getItem("owner={$currentUser}&module=bi&key={$moduleKey}");
+        if(empty($firstGuide)) $this->setting->setItem("{$currentUser}.bi.{$moduleKey}", 1);
 
         $this->view->firstGuide = !empty($firstGuide);
-        $this->view->langSuffix = (strpos($this->app->getClientLang(), 'zh') !== false) ? 'zh' : 'en';
+        $this->view->imageURL   = $imageURL;
+        $this->view->version    = $version;
         $this->view->title      = $this->lang->screen->common;
         $this->view->screens    = $this->screen->getList($dimensionID);
         $this->view->dimension  = $dimensionID;
