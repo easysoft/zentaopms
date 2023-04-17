@@ -768,6 +768,19 @@ class docModel extends model
         $version    = $version ? $version : $doc->version;
         $docContent = $this->dao->select('*')->from(TABLE_DOCCONTENT)->where('doc')->eq($doc->id)->andWhere('version')->eq($version)->fetch();
 
+        $doc->releasedBy   = '';
+        $doc->releasedDate = '';
+        if($doc->status == 'normal')
+        {
+            $releaseInfo = $this->dao->select('*')->from(TABLE_ACTION)
+                ->where('objectType')->eq('doc')
+                ->andWhere('objectID')->eq($docID)
+                ->andWhere('action')->eq('releaseddoc')
+                ->fetch();
+            $doc->releasedBy   = $releaseInfo ? $releaseInfo->actor : $doc->addedBy;
+            $doc->releasedDate = $releaseInfo ? $releaseInfo->date : $doc->addedDate;
+        }
+
         /* When file change then version add one. */
         $files    = $this->loadModel('file')->getByObject('doc', $docID);
         $docFiles = array();
@@ -3408,5 +3421,35 @@ class docModel extends model
 
         unset($editingDate[$account]);
         $this->dao->update(TABLE_DOC)->set('editingDate')->eq(json_encode($editingDate))->where('id')->eq($doc->id)->exec();
+    }
+
+    /**
+     * Get editors by doc id.
+     *
+     * @param  int    $docID
+     * @access public
+     * @return array
+     */
+    public function getEditors($docID = 0)
+    {
+        if(!$docID) return array();
+        $actions = $this->dao->select('*')->from(TABLE_ACTION)
+            ->where('objectType')->eq('doc')
+            ->andWhere('objectID')->eq((int)$docID)
+            ->andWhere('action')->in('edited')
+            ->orderBy('date_desc')
+            ->fetchAll('id');
+
+        $editors = array();
+        foreach($actions as $action)
+        {
+            $editor = new stdclass();
+            $editor->account = $action->actor;
+            $editor->date    = $action->date;
+
+            $editors[] = $editor;
+        }
+
+        return $editors;
     }
 }
