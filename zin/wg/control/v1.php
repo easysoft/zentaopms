@@ -5,8 +5,8 @@ require_once dirname(__DIR__) . DS . 'input' . DS . 'v1.php';
 require_once dirname(__DIR__) . DS . 'textarea' . DS . 'v1.php';
 require_once dirname(__DIR__) . DS . 'editor' . DS . 'v1.php';
 require_once dirname(__DIR__) . DS . 'checkbox' . DS . 'v1.php';
-require_once dirname(__DIR__) . DS . 'checkList' . DS . 'v1.php';
-require_once dirname(__DIR__) . DS . 'radioList' . DS . 'v1.php';
+require_once dirname(__DIR__) . DS . 'checklist' . DS . 'v1.php';
+require_once dirname(__DIR__) . DS . 'radiolist' . DS . 'v1.php';
 require_once dirname(__DIR__) . DS . 'select' . DS . 'v1.php';
 require_once dirname(__DIR__) . DS . 'inputcontrol' . DS . 'v1.php';
 

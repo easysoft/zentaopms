@@ -5,8 +5,8 @@ page
     to::header(''),
     form
     (
-        //set::target('hiddenwin'),
         set::method('post'),
+        set::actions(null),
         div
         (
             setClass('flex flex-row justify-between'),
