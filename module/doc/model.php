@@ -1126,7 +1126,7 @@ class docModel extends model
                 unset($this->config->doc->search['fields']['execution']);
             }
 
-            if(in_array($type, array('view', 'collect', 'createdby'))) $libPairs = array('' => '') + $this->getLibs('all', 'withObject');
+            if(in_array($type, array('view', 'collect', 'createdby', 'editedby'))) $libPairs = array('' => '') + $this->getLibs('all', 'withObject');
 
             $this->config->doc->search['module'] = $queryName;
             $this->config->doc->search['params']['lib']['values'] = $libPairs + array('all' => $this->lang->doclib->all);
@@ -3147,20 +3147,21 @@ class docModel extends model
             $myCreation->hasAction  = false;
             $myCreation->active     = $libType == 'createdby' ? 1 : 0;
 
-            $myCreation = new stdclass();
-            $myCreation->id         = 0;
-            $myCreation->name       = $this->lang->doc->myEdited;
-            $myCreation->type       = 'editedBy';
-            $myCreation->objectType = 'doc';
-            $myCreation->objectID   = 0;
-            $myCreation->hasAction  = false;
-            $myCreation->active     = $libType == 'editedby' ? 1 : 0;
+            $myEdition = new stdclass();
+            $myEdition->id         = 0;
+            $myEdition->name       = $this->lang->doc->myEdited;
+            $myEdition->type       = 'editedBy';
+            $myEdition->objectType = 'doc';
+            $myEdition->objectID   = 0;
+            $myEdition->hasAction  = false;
+            $myEdition->active     = $libType == 'editedby' ? 1 : 0;
 
             $libTree   = array();
             $libTree[] = $myLib;
             if(common::hasPriv('doc', 'myView'))       $libTree[] = $myView;
             if(common::hasPriv('doc', 'myCollection')) $libTree[] = $myCollection;
             if(common::hasPriv('doc', 'myCreation'))   $libTree[] = $myCreation;
+            if(common::hasPriv('doc', 'myEdition'))    $libTree[] = $myEdition;
         }
         return $libTree;
     }
