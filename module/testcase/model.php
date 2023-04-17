@@ -772,7 +772,7 @@ class testcaseModel extends model
      */
     public function getPairsByProduct($productID, $branch = 0)
     {
-        return $this->dao->select('id, concat_ws(":", id, title) as title')->from(TABLE_CASE)
+        return $this->dao->select("id, concat_ws(':', id, title) as title")->from(TABLE_CASE)
             ->where('deleted')->eq(0)
             ->andWhere('product')->eq($productID)
             ->beginIF($branch)->andWhere('branch')->in($branch)->fi()
@@ -2334,7 +2334,7 @@ class testcaseModel extends model
                 if ($isCase == 1) echo $case->stepNumber;
                 break;
             case 'actions':
-                if ($isCase == 1) 
+                if ($isCase == 1)
                 {
                     $case->browseType = $browseType;
                     echo $this->buildOperateMenu($case, 'browse');
