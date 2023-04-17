@@ -926,6 +926,7 @@ class actionModel extends model
             }
         }
 
+        $action->date = substr($action->date, 0, 19);
         if($this->app->getViewType() == 'mhtml') $action->date = date('m-d H:i', strtotime($action->date));
 
         /* Cycle actions, replace vars. */
