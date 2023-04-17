@@ -47,9 +47,11 @@
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-body">
-        <?php $url   = 'static/images/bi_guide_' . $langSuffix . '.png';?>
-        <?php $style = "background: url($url) no-repeat; background-size: 100%";?>
-        <div class="background-img" <?php echo "style='$style'";?>></div>
+        <div class="background-img" <?php echo "style='background: url($imageURL) no-repeat; background-size: 100%'";?>>
+          <?php if($version == 'pms'):?>
+            <a href="<?php echo $lang->admin->bizInfoURL;?>" class="clickable-area" target="_blank"></a>
+          <?php endif;?>
+        </div>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-wide btn-primary" data-dismiss="modal"><?php echo $lang->close;?></button>
