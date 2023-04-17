@@ -143,7 +143,7 @@ class productplanModel extends model
                     ->where('1=1')
                     ->beginIF(strpos($param, 'noproduct') === false or !empty($product))->andWhere('t1.product')->eq($product)->fi()
                     ->andWhere('t2.deleted')->eq(0)
-                    ->andWhere('t1.plan')->like(",$planID,")
+                    ->andWhere('t1.plan')->like("%,$planID,%")
                     ->andWhere('t2.type')->in('sprint,stage,kanban')
                     ->orderBy('project_desc')
                     ->fetchAll('project');
