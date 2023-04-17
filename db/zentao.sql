@@ -1754,7 +1754,7 @@ CREATE TABLE `zt_taskteam` (
   `estimate` decimal(12,2) NOT NULL,
   `consumed` decimal(12,2) NOT NULL,
   `left` decimal(12,2) NOT NULL,
-  `transfer` char(30) NOT NULL DEFAUT '',
+  `transfer` char(30) NOT NULL DEFAULT '',
   `status` enum('wait','doing','done') NOT NULL DEFAULT 'wait',
   `order` tinyint(3) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
