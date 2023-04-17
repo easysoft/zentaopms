@@ -484,6 +484,10 @@ ALTER TABLE `zt_entry`
 CHANGE `editedBy` `editedBy` varchar(30) NOT NULL DEFAULT '',
 CHANGE `editedDate` `editedDate` datetime NULL;
 
+ALTER TABLE `zt_extension`
+CHANGE `dirs` `dirs` mediumtext NULL,
+CHANGE `files` `files` mediumtext NULL;
+
 ALTER TABLE `zt_feedback`
 CHANGE `reviewedBy` `reviewedBy` varchar(255) NOT NULL DEFAULT '',
 CHANGE `reviewedDate` `reviewedDate` datetime NULL,
