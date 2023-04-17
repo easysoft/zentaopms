@@ -70,8 +70,10 @@ class dm extends dao
      */
     public function descTable($tableName)
     {
+        $this->dbh->setAttribute(PDO::ATTR_CASE, PDO::CASE_LOWER);
         $sql = "select * from all_tab_columns where table_name = '$tableName'";
         $rawFields = $this->dbh->rawQuery($sql)->fetchAll();
+        $this->dbh->setAttribute(PDO::ATTR_CASE, PDO::CASE_NATURAL);
 
         $fields = array();
         foreach($rawFields as $rawField)

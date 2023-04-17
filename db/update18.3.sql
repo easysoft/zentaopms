@@ -564,6 +564,8 @@ CHANGE `activatedDate` `activatedDate` datetime NULL;
 ALTER TABLE `zt_kanbancard`
 CHANGE `begin` `begin` date NULL,
 CHANGE `end` `end` date NULL,
+CHANGE `fromID` `fromID` mediumint unsigned NOT NULL DEFAULT '0',
+CHANGE `fromType` `fromType` varchar(30) NOT NULL DEFAULT '',
 CHANGE `whitelist` `whitelist` text NULL,
 CHANGE `lastEditedBy` `lastEditedBy` char(30) NOT NULL DEFAULT '',
 CHANGE `lastEditedDate` `lastEditedDate` datetime NULL,
