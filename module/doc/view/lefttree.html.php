@@ -301,19 +301,6 @@ $(function()
                 $li.addClass(libClass).addClass(moduleClass).attr('data-order', item.order);
                 if(item.active) $li.addClass('active');
             },
-            sortable:
-            {
-                lazy: true,
-                nested: true,
-                canMoveHere: function($ele, $target)
-                {
-                    if($ele && $target && $ele.parent().closest('li').attr('data-id') !== $target.
-                },
-                start: function(e)
-                {
-                    orderModule = e.element.data('id');
-                }
-            }
         });
 
         if(isFirstLoad) ele.data('zui.tree').collapse();
@@ -656,6 +643,42 @@ $(function()
     }).on('keydown', '.file-tree input.input-tree', function(e)
     {
         if(e.keyCode == 13) $(this).trigger('blur');
+    });
+    /* Make modules tree sortable */
+    $('#fileTree').sortable(
+    {
+        trigger: 'a.sort-module > div > .icon-move',
+        dropToClass: 'sort-to',
+        stopPropagation: true,
+        nested: true,
+        selector: 'li',
+        dragCssClass: 'drop-here',
+        canMoveHere: function($ele, $target)
+        {
+            var maxTop = $('#fileTree').height() - $ele.height();
+            if(parseFloat($('.drag-shadow').css('top')) < 0) $('.drag-shadow').css('top', '0');
+            if(parseFloat($('.drag-shadow').css('left')) != 0) $('.drag-shadow').css('left', '0');
+            if(parseFloat($('.drag-shadow').css('top')) > maxTop) $('.drag-shadow').css('top', maxTop + 'px');
+            return true;
+        },
+        targetSelector: function($ele, $root)
+        {
+            var $ul = $ele.closest('ul');
+            setTimeout(function()
+            {
+                if($('#fileTree').hasClass('sortable-sorting')) $ul.addClass('is-sorting');
+            }, 100);
+
+            return $ul.children('li.catalog');
+        },
+        always: function()
+        {
+            $('#fileTree,#fileTree .is-sorting').removeClass('is-sorting');
+        },
+        finish: function(e)
+        {
+            if(!e.changed) return;
+        }
     });
 })
 </script>
