@@ -1754,9 +1754,9 @@ CREATE TABLE `zt_taskteam` (
   `estimate` decimal(12,2) NOT NULL,
   `consumed` decimal(12,2) NOT NULL,
   `left` decimal(12,2) NOT NULL,
-  `transfer` char(30) NOT NULL,
+  `transfer` char(30) NOT NULL DEFAUT '',
   `status` enum('wait','doing','done') NOT NULL DEFAULT 'wait',
-  `order` tinyint(3) NOT NULL,
+  `order` tinyint(3) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `task` (`task`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;

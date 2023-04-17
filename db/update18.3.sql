@@ -881,6 +881,10 @@ ALTER TABLE `zt_taskspec`
 CHANGE `estStarted` `estStarted` date NULL,
 CHANGE `deadline` `deadline` date NULL;
 
+ALTER TABLE `zt_taskteam`
+CHANGE `transfer` `transfer` char(30) NOT NULL DEFAULT '',
+CHANGE `order` `order` tinyint NOT NULL DEFAULT '0';
+
 ALTER TABLE `zt_team`
 CHANGE `position` `position` varchar(30) NOT NULL DEFAULT '',
 CHANGE `join` `join` date NULL;

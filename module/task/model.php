@@ -944,8 +944,8 @@ class taskModel extends model
             $member->order    = $row;
             $member->account  = $account;
             $member->estimate = zget($this->post->teamEstimate, $row, 0);
-            $member->consumed = zget($this->post->teamConsumed, $row, 0);
-            $member->left     = zget($this->post->teamLeft, $row, 0);
+            $member->consumed = $this->post->teamConsumed ? zget($this->post->teamConsumed, $row, 0) : 0;
+            $member->left     = $this->post->teamLeft ? zget($this->post->teamLeft, $row, 0) : 0;
             $member->status   = 'wait';
             if($taskStatus == 'wait' and $member->estimate > 0 and $member->left == 0) $member->left = $member->estimate;
             if($taskStatus == 'done') $member->left = 0;
