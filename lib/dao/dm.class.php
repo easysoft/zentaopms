@@ -298,12 +298,18 @@ class dm extends dao
         return parent::on($condition);
     }
 
-    public function getPKColumns()
+    /**
+     * 获取唯一索引的列。
+     * Get unique columns.
+     *
+     * @access public
+     * @return array
+     */
+    public function getUniqueColumns()
     {
-        $sql   = "SELECT A.OWNER, A.TABLE_NAME, WM_CONCAT(B.COLUMN_NAME) PK_COLUMNS FROM ALL_CONSTRAINTS A, ALL_CONS_COLUMNS B where A.CONSTRAINT_type = 'P' AND A.OWNER = '{$this->config->db->name}' AND A.TABLE_NAME = '{$this->table}' AND B.OWNER = A.OWNER AND A.TABLE_NAME = B.TABLE_NAME GROUP BY A.OWNER, A.TABLE_NAME;";
+        $sql = "SELECT * from dba_ind_columns WHERE index_owner = '{$this->config->db->name}' AND index_name IN (SELECT index_name FROM dba_indexes WHERE table_name='{$this->table}' AND INDEX_TYPE = 'NORMAL' AND UNIQUENESS = 'UNIQUE' AND INDEX_NAME NOT IN (SELECT INDEX_NAME FROM DBA_CONSTRAINTS WHERE CONSTRAINT_TYPE = 'P'))";
 
-        $content = $this->dbh->query($sql)->fetch();
-        return empty($content) ? false : $content->PK_COLUMNS;
+        return $this->dbh->query($sql)->fetchAll();
     }
 
     /**
@@ -347,17 +353,18 @@ class dm extends dao
             $insertSql .= $fields . ' ' . $values;
 
             $updateSql = str_replace('REPLACE', 'UPDATE', $sql);
-            $pks       = $this->getPKColumns();
-            if(!empty($pks))
+            $cols      = $this->getUniqueColumns();
+
+            /* No unique keys, no replace. */
+            if(empty($cols)) return false;
+
+            $conditions = array();
+            foreach($cols as $col)
             {
-                $pks = explode(',', $pks);
-                $conditions = array();
-                foreach($pks as $pk)
-                {
-                    if(isset($this->sqlobj->data->{$pk})) $conditions[] = " \"{$pk}\" = '{$this->sqlobj->data->{$pk}}'";
-                }
-                if(!empty($conditions)) $updateSql .= ' WHERE ' . implode(' AND ', $conditions);
+                $pk = $col->COLUMN_NAME;
+                if(isset($this->sqlobj->data->{$pk})) $conditions[] = " \"{$pk}\" = '{$this->sqlobj->data->{$pk}}'";
             }
+            if(!empty($conditions)) $updateSql .= ' WHERE ' . implode(' AND ', $conditions);
 
             $deleteSql = "DELETE FROM \"{$this->table}\" WHERE ";
             $ingore    = array();
