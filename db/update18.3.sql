@@ -378,6 +378,11 @@ CHANGE `closedDate` `closedDate` datetime NULL,
 CHANGE `lastEditedDate` `lastEditedDate` datetime NULL;
 
 ALTER TABLE `zt_build`
+CHANGE `scmPath` `scmPath` char(255) NOT NULL DEFAULT '',
+CHANGE `filePath` `filePath` char(255) NOT NULL DEFAULT '',
+CHANGE `stories` `stories` text NULL,
+CHANGE `bugs` `bugs` text NULL,
+CHANGE `desc` `desc` mediumtext NULL,
 CHANGE `project` `project` mediumint unsigned NOT NULL DEFAULT '0';
 
 ALTER TABLE `zt_case`
@@ -709,6 +714,10 @@ CHANGE `suspendedDate` `suspendedDate` date NULL,
 CHANGE `team` `team` varchar(90) NOT NULL DEFAULT '',
 CHANGE `whitelist` `whitelist` text NULL,
 CHANGE `order` `order` mediumint unsigned NOT NULL DEFAULT '0';
+
+ALTER TABLE `zt_release`
+CHANGE `project` `project` varchar(255) NOT NULL DEFAULT '0',
+CHANGE `leftBugs` `leftBugs` text NULL;
 
 ALTER TABLE `zt_researchplan`
 CHANGE `editedBy` `editedBy` varchar(30) NOT NULL DEFAULT '',
