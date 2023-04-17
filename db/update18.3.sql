@@ -948,6 +948,14 @@ CHANGE `birthday` `birthday` date NULL,
 CHANGE `join` `join` date NULL,
 CHANGE `locked` `locked` datetime NULL;
 
+ALTER TABLE `zt_webhook`
+CHANGE `products` `products` text NULL,
+CHANGE `executions` `executions` text NULL,
+CHANGE `params` `params` varchar(100) NOT NULL DEFAULT '',
+CHANGE `actions` `actions` text NULL,
+CHANGE `editedBy` `editedBy` varchar(30) NOT NULL DEFAULT '',
+CHANGE `editedDate` `editedDate` datetime NULL;
+
 ALTER TABLE `zt_workestimation`
 CHANGE `editedBy` `editedBy` varchar(30) NOT NULL DEFAULT '',
 CHANGE `editedDate` `editedDate` datetime NULL,
