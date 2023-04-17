@@ -4534,7 +4534,7 @@ class storyModel extends model
                 $title   = $isClick ? '' : $this->lang->story->changeTip;
                 $menu   .= $this->buildMenu('story', 'change', $params . "&from=$story->from&storyType=$story->type", $story, $type, 'alter', '', 'showinonlybody', false, '', $title);
 
-                if((($story->openedBy == $this->app->user->account or $story->submitedBy == $this->app->user->account) and $story->status != 'reviewing') or $story->status == 'active')
+                if($story->status != 'reviewing')
                 {
                     $menu .= $this->buildMenu('story', 'submitReview', "storyID=$story->id&storyType=$story->type", $story, $type, 'confirm', '', 'iframe', true, "data-width='50%'");
                 }
@@ -4651,7 +4651,7 @@ class storyModel extends model
         if($type == 'view')
         {
             $menu .= $this->buildMenu('story', 'change', $params . "&from=&storyType=$story->type", $story, $type, 'alter', '', 'showinonlybody');
-            if((($story->openedBy == $this->app->user->account or $story->submitedBy == $this->app->user->account) and $story->status != 'reviewing') or $story->status == 'active') $menu .= $this->buildMenu('story', 'submitReview', $params . "&storyType=$story->type", $story, $type, 'confirm', '', 'showinonlybody iframe', true, "data-width='50%'");
+            if($story->status != 'reviewing') $menu .= $this->buildMenu('story', 'submitReview', $params . "&storyType=$story->type", $story, $type, 'confirm', '', 'showinonlybody iframe', true, "data-width='50%'");
 
             $title = $story->status == 'changing' ? $this->lang->story->recallChange : $this->lang->story->recall;
             $menu .= $this->buildMenu('story', 'recall', $params . "&from=view&confirm=no&storyType=$story->type", $story, $type, 'undo', 'hiddenwin', 'showinonlybody', false, '', $title);
