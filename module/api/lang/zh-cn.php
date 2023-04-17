@@ -64,6 +64,7 @@ $lang->api->allLibs          = "全部库";
 $lang->api->noLinked         = "未关联{$lang->productCommon}和{$lang->projectCommon}";
 $lang->api->addCatalog       = '添加目录';
 $lang->api->editCatalog      = '编辑目录';
+$lang->api->sortCatalog      = '目录排序';
 $lang->api->deleteCatalog    = '删除目录';
 
 /* Common access control lang. */

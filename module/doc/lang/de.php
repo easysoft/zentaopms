@@ -148,6 +148,7 @@ $lang->doc->tableContents = 'Catalog';
 $lang->doc->addCatalog    = 'Add Catalog';
 $lang->doc->editCatalog   = 'Edit Catalog';
 $lang->doc->deleteCatalog = 'Delete Catalog';
+$lang->doc->sortCatalog   = 'Catalog Sorting';
 $lang->doc->docStatistic  = 'Statistic';
 $lang->doc->docCreated    = 'Created Documents';
 $lang->doc->docEdited     = 'Edited Documents';

@@ -2927,6 +2927,7 @@ class docModel extends model
             $item->name     = $module->name;
             $item->type     = $module->type == 'api' ? 'apiDoc' : $module->type;
             $item->active   = $module->id == $moduleID ? 1 : 0;
+            $item->order    = $module->order;
             $item->children = $this->getModuleTree($rootID, $moduleID, $type, $module->id, $modules);
             $showDoc = $this->loadModel('setting')->getItem('owner=' . $this->app->user->account . '&module=doc&key=showDoc');
             $showDoc = $showDoc === '0' ? 0 : 1;
@@ -2997,6 +2998,7 @@ class docModel extends model
             $item->id         = $lib->id;
             $item->type       = $lib->type == 'api' ? 'api' : 'lib';
             $item->name       = $lib->name;
+            $item->order      = $lib->order;
             $item->objectType = $type;
             $item->objectID   = $objectID;
             $item->active     = $lib->id == $libID && $browseType != 'bysearch' ? 1 : 0;

@@ -290,6 +290,9 @@ INSERT IGNORE INTO `zt_grouppriv` (`group`, `module`, `method`)
 SELECT t1.`group`, t1.`module`, 'editCatalog' FROM `zt_grouppriv` AS t1 WHERE t1.`module` = 'doc' AND t1.`method` = 'catalog';
 
 INSERT IGNORE INTO `zt_grouppriv` (`group`, `module`, `method`)
+SELECT t1.`group`, t1.`module`, 'sortCatalog' FROM `zt_grouppriv` AS t1 WHERE t1.`module` = 'doc' AND t1.`method` = 'catalog';
+
+INSERT IGNORE INTO `zt_grouppriv` (`group`, `module`, `method`)
 SELECT t1.`group`, t1.`module`, 'deleteCatalog' FROM `zt_grouppriv` AS t1 WHERE t1.`module` = 'doc' AND t1.`method` = 'catalog';
 
 INSERT IGNORE INTO `zt_grouppriv` (`group`, `module`, `method`)
@@ -297,6 +300,9 @@ SELECT t1.`group`, 'api', 'addCatalog' FROM `zt_grouppriv` AS t1 WHERE t1.`modul
 
 INSERT IGNORE INTO `zt_grouppriv` (`group`, `module`, `method`)
 SELECT t1.`group`, 'api', 'editCatalog' FROM `zt_grouppriv` AS t1 WHERE t1.`module` = 'doc' AND t1.`method` = 'catalog';
+
+INSERT IGNORE INTO `zt_grouppriv` (`group`, `module`, `method`)
+SELECT t1.`group`, 'api', 'sortCatalog' FROM `zt_grouppriv` AS t1 WHERE t1.`module` = 'doc' AND t1.`method` = 'catalog';
 
 INSERT IGNORE INTO `zt_grouppriv` (`group`, `module`, `method`)
 SELECT t1.`group`, 'api', 'deleteCatalog' FROM `zt_grouppriv` AS t1 WHERE t1.`module` = 'doc' AND t1.`method` = 'catalog';
