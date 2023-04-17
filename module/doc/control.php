@@ -1261,6 +1261,7 @@ class doc extends control
         $this->view->objectDropdown = $objectDropdown;
         $this->view->canExport      = ($this->config->edition != 'open' && common::hasPriv('doc', $type . '2export'));
         $this->view->exportMethod   = $type . '2export';
+        $this->view->editors        = $this->doc->getEditors($docID);
 
         $this->display();
     }

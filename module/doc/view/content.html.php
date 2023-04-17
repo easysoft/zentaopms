@@ -69,11 +69,42 @@
             ?>
             <?php endif;?>
           </div>
+          <?php if(!empty($editors)):?>
+          <div id='editorBox'>
+            <div class="btn-group">
+              <?php
+              $space       = common::checkNotCN() ? ' ' : '';
+              $firstEditor = current($editors);
+              $editorInfo  = zget($users, $firstEditor->account) . ' ' . substr($firstEditor->date, 0, 10) . $space . $lang->doc->update;
+
+              array_shift($editors);
+              ?>
+              <button class="btn pull-right btn-link" data-toggle="dropdown">
+                <span class="text"><?php echo $editorInfo;?></span>
+                <?php if(!empty($editors)):?>
+                <span class="caret"></span>
+                <?php endif;?>
+              </button>
+              <?php if(!empty($editors)):?>
+              <ul class="dropdown-menu" id='editorMenu'>
+              <?php
+              foreach($editors as $editor)
+              {
+                  $editorInfo = zget($users, $editor->account) . ' ' . substr($editor->date, 0, 10) . $space . $lang->doc->update;
+                  echo "<li>$editorInfo</li>";
+              }
+              ?>
+              </ul>
+              <?php endif;?>
+            </div>
+          </div>
+          <?php endif;?>
         </div>
         <div class="">
           <div class="detail-content article-content table-col">
             <div class='info'>
-              <span class='user-time text-muted'><i class='icon icon-contacts'></i> <?php echo zget($users, $doc->addedBy) . " {$lang->colon} " . substr($doc->addedDate, 0, 10) . (common::checkNotCN() ? ' ' : '') . $lang->doc->createAB;?></span>
+              <?php $createInfo = $doc->status == 'draft' ? zget($users, $doc->addedBy) . " {$lang->colon} " . substr($doc->addedDate, 0, 10) . (common::checkNotCN() ? ' ' : '') . $lang->doc->createAB : zget($users, $doc->releasedBy) . " {$lang->colon} " . substr($doc->releasedDate, 0, 10) . (common::checkNotCN() ? ' ' : '') . $lang->doc->release;?>
+              <span class='user-time text-muted'><i class='icon icon-contacts'></i> <?php echo $createInfo;?></span>
               <!-- <span data-url="<?php echo $this->createLink('doc', 'collect', "objectID=$doc->id&objectType=doc");?>" title="<?php echo $lang->doc->collect;?>" class='user-time ajaxCollect text-muted'><?php echo html::image("static/svg/{$star}.svg", "class='$star'");?> <?php echo $doc->collects;?></span> -->
               <span class='user-time text-muted'><i class='icon-star'></i> <?php echo $doc->collects;?></span>
               <span class='user-time text-muted'><i class='icon-eye'></i> <?php echo $doc->views;?></span>
