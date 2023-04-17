@@ -28,6 +28,7 @@ class screen extends control
         if(empty($firstGuide)) $this->setting->setItem("{$currentUser}.bi.firstGuide", 1);
 
         $this->view->firstGuide = !empty($firstGuide);
+        $this->view->langSuffix = (strpos($this->app->getClientLang(), 'zh') !== false) ? 'zh' : 'en';
         $this->view->title      = $this->lang->screen->common;
         $this->view->screens    = $this->screen->getList($dimensionID);
         $this->view->dimension  = $dimensionID;
