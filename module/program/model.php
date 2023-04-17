@@ -1669,7 +1669,7 @@ class programModel extends model
         if($program) return $program->id;
 
         $account  = isset($this->app->user->account) ? $this->app->user->account : '';
-        $minBegin = $this->dao->select('min("begin") as min')->from(TABLE_PROJECT)->where('deleted')->eq(0)->fetch('min');
+        $minBegin = $this->dao->select('min(begin) as min')->from(TABLE_PROJECT)->where('deleted')->eq(0)->fetch('min');
 
         $program = new stdclass();
         $program->name          = $this->lang->program->defaultProgram;
