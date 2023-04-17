@@ -2055,6 +2055,25 @@ class groupModel extends model
         $allPrivs = $this->dao->select('module,method')->from(TABLE_PRIV)->fetchGroup('module', 'method');
         foreach($this->lang->resource as $module => $methods)
         {
+            if(isset($this->lang->$module->menus))
+            {
+                foreach($this->lang->$module->menus as $method => $value)
+                {
+                    $key  = "{$module}-{$method}";
+                    $priv = new stdclass();
+                    $priv->module      = $module;
+                    $priv->method      = $method;
+                    $priv->action      = $key;
+                    $priv->parent      = 0;
+                    $priv->key         = "{$module}-{$method}";
+                    $priv->parentCode  = $module;
+                    $priv->moduleOrder = 0;
+                    $priv->name        = $value;
+
+                    $privs[$key] = $priv;
+                }
+            }
+
             foreach($methods as $method => $methodLabel)
             {
                 if(isset($allPrivs[$module][$method])) continue;

@@ -73,6 +73,11 @@ function changeParentChecked($item, moduleName, packageID)
     var moduleAllPrivs    = $item.closest('tbody').find('.group-item[data-module=' + moduleName +']').length;
     var moduleSelectPrivs = $item.closest('tbody').find('.group-item[data-module=' + moduleName +']').find('[checked=checked]').length;
     var $moduleItem       = $item.closest('tbody').find('.module[data-module=' + moduleName +']');
+    if($item.closest('tbody').find('.menus.' + moduleName).length > 0)
+    {
+        moduleAllPrivs    += $item.closest('tbody').find('.menus.' + moduleName + ' input[name^=actions]:not(input[value=browse])').length;
+        moduleSelectPrivs += $item.closest('tbody').find('.menus.' + moduleName + ' input[name^=actions][checked=checked]:not(input[value=browse])').length;
+    }
     if(moduleSelectPrivs == 0)
     {
         $moduleItem.find('input[type=checkbox]').removeAttr('checked');
@@ -94,6 +99,11 @@ function changeParentChecked($item, moduleName, packageID)
     var packageAllPrivs    = $item.closest('tbody').find('.group-item[data-module=' + moduleName +'][data-package=' + packageID +']').length;
     var packageSelectPrivs = $item.closest('tbody').find('.group-item[data-module=' + moduleName +'][data-package=' + packageID +']').find('[checked=checked]').length;
     var $packageItem       = $item.closest('tbody').find('.package[data-module=' + moduleName +'][data-package=' + packageID +']');
+    if($item.closest('tbody').find('.menus.' + moduleName).length > 0)
+    {
+        packageAllPrivs    += $item.closest('tbody').find('.menus.' + moduleName + ' input[name^=actions]:not(input[value=browse])').length;
+        packageSelectPrivs += $item.closest('tbody').find('.menus.' + moduleName + ' input[name^=actions][checked=checked]:not(input[value=browse])').length;
+    }
     if(packageSelectPrivs == 0)
     {
         $packageItem.find('input[type=checkbox]').removeAttr('checked');

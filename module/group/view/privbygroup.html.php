@@ -97,7 +97,7 @@
           <?php
           $i = 1;
 
-          $modulePrivs  = count($privList[$moduleName], 1) - count($selectPrivs[$moduleName], 1);
+          $modulePrivs  = count($privList[$moduleName], 1) - count($selectPrivs[$moduleName], 1) - (isset($lang->$moduleName->menus) ? 1 : 0);
           $moduleSelect = array_sum($selectPrivs[$moduleName]);
           ?>
           <?php foreach($packages as $packageID => $privs):?>
@@ -113,24 +113,32 @@
             </th>
             <?php endif;?>
             <?php
-            $packagePrivs  = count($privs);
+            $packagePrivs  = count($privs) - (isset($lang->$moduleName->menus) ? 1 : 0);
             $packageSelect = $selectPrivs[$moduleName][$packageID];
             ?>
             <th class='<?php echo $i == 1 ? 'td-sm' : 'td-md';?> text-middle text-left package' data-module='<?php echo $moduleName;?>' data-package='<?php echo $packageID;?>' all-privs='<?php echo $packagePrivs;?>' select-privs='<?php echo $packageSelect;?>'>
               <div class="checkbox-primary checkbox-inline checkbox-left check-all">
-                <input type='checkbox' id='allCheckerModule<?php echo $moduleName;?>Package<?php echo $packageID;?>' value='1' <?php if($packagePrivs == $packageSelect) echo 'checked';?>>
+                <input type='checkbox' id='allCheckerModule<?php echo $moduleName;?>Package<?php echo $packageID;?>' value='browse' <?php if($packagePrivs == $packageSelect) echo 'checked';?>>
                 <label class='text-left <?php if(!empty($packageSelect) and $packagePrivs != $packageSelect) echo 'checkbox-indeterminate-block';?>' for='allCheckerPackage<?php echo $packageID;?>'><?php echo zget($privPackages, $packageID, $lang->group->other);?></label>
               </div>
             </th>
             <?php if(isset($lang->$moduleName->menus)):?>
-            <td class='menus'>
-              <?php echo html::checkbox("actions[$moduleName]", array('browse' => $lang->$moduleName->browse), isset($groupPrivs[$moduleName]) ? $groupPrivs[$moduleName] : '');?>
+            <?php
+            $menusPrivs  = count($lang->$moduleName->menus);
+            $menusSelect = count(array_intersect(array_keys($lang->$moduleName->menus), array_keys(zget($groupPrivs, $moduleName, array()))));
+            ?>
+            <td class='menus <?php echo $moduleName;?>' all-privs='<?php echo $menusPrivs;?>' select-privs='<?php echo $menusSelect;?>' data-module='<?php echo $moduleName;?>' data-package='0'>
+              <div class="checkbox-primary checkbox-inline checkbox-left check-all">
+                <input type='checkbox' value='browse' <?php if($menusPrivs == $menusSelect) echo 'checked';?>>
+                <label class='text-left <?php if(!empty($menusSelect) and $menusPrivs != $menusSelect) echo 'checkbox-indeterminate-block';?>' for='actions[<?php echo $moduleName;?>]browse'><?php echo $lang->$moduleName->browse;?></label>
+              </div>
               <a href='javascript:;'><i class='icon icon-plus'></i></a>
-              <?php echo html::checkbox("actions[$moduleName]", $lang->$moduleName->menus, isset($groupPrivs[$moduleName]) ? $groupPrivs[$moduleName] : '');?>
+              <?php echo html::checkbox("actions[$moduleName]", $lang->$moduleName->menus, isset($groupPrivs[$moduleName]) ? $groupPrivs[$moduleName] : array());?>
             </td>
             <?php endif;?>
             <td id='<?php echo $moduleName;?>' class='pv-10px' colspan='<?php echo !empty($lang->$moduleName->menus) ? 1 : 2?>'>
               <?php foreach($privs as $privID => $priv):?>
+              <?php if(!empty($lang->$moduleName->menus) and $priv->method == 'browse') continue;?>
               <div class="group-item" data-module='<?php echo $moduleName;?>' data-package='<?php echo $packageID;?>' data-id='<?php echo zget($priv, 'id', 0);?>'>
                 <div class="checkbox-primary">
                   <?php echo html::checkbox("actions[$priv->module]", array($priv->method => $priv->name), isset($groupPrivs[$priv->module][$priv->method]) ? $priv->method : '', "title='{$priv->name}' id='actions[$priv->module]$priv->method' data-id='$priv->action'");?>
@@ -218,7 +226,17 @@ $(document).ready(function()
      */
     $('.menus input[value=browse]').change(function()
     {
-        $(this).parents('.menus').find('[name^=actions]').prop('checked', $(this).prop('checked'));
+        var checked = $(this).prop('checked');
+        if(checked)
+        {
+            $(this).parents('.menus').find('[name^=actions]').attr('checked', 'checked');
+        }
+        else
+        {
+            $(this).parents('.menus').find('[name^=actions]').removeAttr('checked');
+        }
+        $(this).closest('.menus').find('.checkbox-indeterminate-block').removeClass('checkbox-indeterminate-block');
+        changeParentChecked($(this), $(this).closest('td').attr('data-module'), $(this).closest('td').attr('data-package'));
     });
 
     /**
@@ -227,9 +245,31 @@ $(document).ready(function()
      */
     $('.menus input[name^=actions]:not(input[value=browse])').click(function()
     {
-        var $parent = $(this).parents('.menus');
+        var checked = $(this).prop('checked');
+        if(!checked) $(this).removeAttr('checked');
+        if(checked)  $(this).attr('checked', 'checked');
 
-        $parent.find('input[value=browse]').prop('checked', $parent.find('input[name^=actions]:not(input[value=browse]):checked').length > 0);
+        var $parent     = $(this).parents('.menus');
+        var $browse     = $parent.find('.check-all');
+        var selectPrivs = $parent.find('.checkbox-primary').not('.check-all').find('[checked=checked]').length;
+        var allPrivs    = $parent.find('.checkbox-primary').not('.check-all').length;
+
+        if(allPrivs > 0 && selectPrivs == allPrivs)
+        {
+            $browse.find('input').attr('checked', 'checked');
+            $browse.find('.checkbox-indeterminate-block').removeClass('checkbox-indeterminate-block');
+        }
+        else if(selectPrivs == 0)
+        {
+            $browse.find('input').removeAttr('checked');
+            $browse.find('.checkbox-indeterminate-block').removeClass('checkbox-indeterminate-block');
+        }
+        else
+        {
+            $browse.find('input').removeAttr('checked');
+            $browse.find('label').addClass('checkbox-indeterminate-block');
+        }
+        changeParentChecked($(this), $(this).closest('td').attr('data-module'), $(this).closest('td').attr('data-package'));
     })
 });
 </script>
