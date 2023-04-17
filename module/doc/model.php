@@ -737,7 +737,7 @@ class docModel extends model
             ->query();
 
         $docIdList = array();
-        while ($doc = $stmt->fetch())
+        while($doc = $stmt->fetch())
         {
             if($this->checkPrivDoc($doc)) $docIdList[$doc->id] = $doc->id;
         }

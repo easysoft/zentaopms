@@ -2149,6 +2149,31 @@ class block extends control
      */
     public function printProductDocBlock()
     {
+        $this->loadModel('doc');
+
+        /* Set project status and count. */
+        $count         = isset($this->params->count) ? (int)$this->params->count : 15;
+        $products      = $this->loadModel('product')->getList(0, 'all');
+        $involveds     = $this->product->getList(0, 'involved');
+        $productIdList = array_merge(array_keys($products), array_keys($involveds));
+
+        $stmt = $this->dao->select('*')->from(TABLE_DOC)
+            ->where('deleted')->eq(0)
+            ->andWhere('product')->in($productIdList)
+            ->orderBy('product,editedDate_desc')
+            ->query();
+        $docGroup = array();
+        while($doc = $stmt->fetch())
+        {
+            if(!isset($docGroup[$doc->product])) $docGroup[$doc->product] = array();
+            if(count($docGroup[$doc->product]) > $count) break;
+            if($this->doc->checkPrivDoc($doc)) $docGroup[$doc->product][$doc->id] = $doc;
+        }
+
+        $this->view->users     = $this->loadModel('user')->getPairs('noletter');
+        $this->view->products  = $products;
+        $this->view->involveds = $involveds;
+        $this->view->docGroup  = $docGroup;
     }
 
     /**
