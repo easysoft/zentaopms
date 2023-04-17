@@ -538,7 +538,7 @@ class chartModel extends model
                 $wheres = array();
                 foreach($filters as $field => $filter)
                 {
-                    $wheres[] = "$field {$filter['operator']} {$filter['value']}";
+                    $wheres[] = "`$field` {$filter['operator']} {$filter['value']}";
                 }
 
                 $whereStr = implode(' and ', $wheres);
