@@ -216,7 +216,7 @@ CREATE TABLE IF NOT EXISTS `zt_block` (
   `account` char(30) NOT NULL,
   `vision` varchar(10) NOT NULL DEFAULT 'rnd',
   `module` varchar(20) NOT NULL,
-  `type` char(30) NOT NULL,
+  `type` char(30) NOT NULL DEFAULT '',
   `title` varchar(100) NOT NULL,
   `source` varchar(20) NOT NULL,
   `block` varchar(30) NOT NULL,

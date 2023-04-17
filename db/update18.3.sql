@@ -352,6 +352,9 @@ ALTER TABLE `zt_basicmeas`
 CHANGE `editedBy` `editedBy` varchar(30) NOT NULL DEFAULT '',
 CHANGE `editedDate` `editedDate` datetime NULL;
 
+ALTER TABLE `zt_block`
+CHANGE `type` `type` char(30) NOT NULL DEFAULT '';
+
 ALTER TABLE `zt_branch`
 CHANGE `closedDate` `closedDate` date NULL;
 
