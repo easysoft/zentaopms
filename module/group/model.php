@@ -430,13 +430,13 @@ class groupModel extends model
         }
         else
         {
-            $privs = $this->getPrivsListByView($menu);
-            $privs = $this->getCustomPrivs($menu, $privs);
-            if(!empty($privs))
+            $privs = !empty($menu) ? $this->getPrivsListByView($menu) : array();
+            $privs = !empty($menu) ? $this->getCustomPrivs($menu, $privs) : array();
+            if(!empty($privs) or empty($menu))
             {
                 $this->dao->delete()->from(TABLE_GROUPPRIV)
                     ->where('`group`')->eq($groupID)
-                    ->andWhere("CONCAT(module, '-', method)")->in(array_keys($privs))
+                    ->beginIF(!empty($menu))->andWhere("CONCAT(module, '-', method)")->in(array_keys($privs))->fi()
                     ->exec();
             }
         }
