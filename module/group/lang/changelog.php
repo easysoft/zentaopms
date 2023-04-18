@@ -668,7 +668,6 @@ $lang->changelog['18.4'][] = 'doc-mySpace';
 $lang->changelog['18.4'][] = 'doc-myView';
 $lang->changelog['18.4'][] = 'doc-myCollection';
 $lang->changelog['18.4'][] = 'doc-myCreation';
-$lang->changelog['18.4'][] = 'doc-view';
 $lang->changelog['18.4'][] = 'doc-productSpace';
 $lang->changelog['18.4'][] = 'doc-projectSpace';
 $lang->changelog['18.4'][] = 'doc-teamSpace';
