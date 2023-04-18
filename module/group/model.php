@@ -1098,7 +1098,7 @@ class groupModel extends model
     }
 
     /**
-     * Init Privs.
+     * Super Model: Init Privs.
      *
      * @param  bool   $onlyUpdateModule
      * @access public
@@ -1171,32 +1171,18 @@ class groupModel extends model
     }
 
     /**
-     * Init Data for priv package.
+     * Super Model: Init Data for priv package.
      *
      * @access public
      * @return void
      */
     public function initData()
     {
-        $allResourceFile = $this->app->getModuleRoot() . "/group/lang/allresources.php";
+        $allResourceFile = $this->app->getModuleRoot() . 'group/lang/allresources.php';
+
         $views   = $this->loadModel('setting')->getItem("owner=system&module=priv&key=views");
         $views   = explode(',', $views);
         $views[] = 'general';
-        /* 获取权限相关数据 */
-        if(!file_exists("$allResourceFile")) die("Please execute the commands: touch $allResourceFile; chmod 777 $allResourceFile");
-
-        //$resourceContents = file_get_contents($allResourceFile);
-        //if(!$resourceContents) file_put_contents($allResourceFile, "<?php\n\$views = array();\n\$resources = array();\n");
-
-        //$this->sortResource();
-        //$resource = json_decode(json_encode($this->lang->resource), true);
-        //$resource = serialize($resource);
-        //$view     = array_keys(json_decode(json_encode($this->lang->mainNav), true));
-        //$view     = serialize($view);
-
-        //file_put_contents($allResourceFile, "\$views['{$this->config->edition}']['{$this->config->vision}']='$view';\n", FILE_APPEND);
-        //file_put_contents($allResourceFile, "\$resources['{$this->config->edition}']['{$this->config->vision}']='$resource';\n", FILE_APPEND);
-        //die;
 
         $this->dbh->exec("ALTER TABLE " . TABLE_PRIVLANG . " CHANGE `priv` `objectID` mediumint(8) unsigned NOT NULL;");
         $this->dbh->exec("ALTER TABLE " . TABLE_PRIVLANG . " ADD `objectType` enum('priv','manager') NOT NULL DEFAULT 'priv' AFTER `objectID`;");
@@ -1221,7 +1207,8 @@ class groupModel extends model
         $this->loadModel('dev');
 
         /* 插入权限所有语言项 */
-        $privList = $this->dao->select('*')->from(TABLE_PRIV)->fetchAll('id');
+        $storedPrivs = array();
+        $privList    = $this->dao->select('*')->from(TABLE_PRIV)->fetchAll('id');
         foreach($privList as $privID => $priv)
         {
             foreach($this->config->langs as $lang => $langValue)
@@ -1237,6 +1224,26 @@ class groupModel extends model
                 $privLang->desc       = '';
                 $this->dao->replace(TABLE_PRIVLANG)->data($privLang)->exec();
             }
+
+            $storedPrivs["{$priv->moduleName}-{$priv->methodName}"] = $priv;
+        }
+
+        $originResource = json_decode(json_encode($this->lang->resource), true);
+        $originPrivs    = array();
+        foreach($originResource as $moduleName => $methods)
+        {
+            foreach($methods as $methodName => $methodLang)
+            {
+                $originPrivs["$moduleName-$methodName"] = "$moduleName-$methodName";
+            }
+        }
+
+        /* 删掉语言项中不存在的权限 */
+        foreach($storedPrivs as $moduleMethod => $storedPriv)
+        {
+            if(!empty($originPrivs[$moduleMethod])) continue;
+            $this->dao->delete()->from(TABLE_PRIV)->where('id')->eq($storedPriv->id)->exec();
+            $this->dao->delete()->from(TABLE_PRIVLANG)->where('objectType')->eq('priv')->andWhere('objectID')->eq($storedPriv->id)->exec();
         }
 
         /* 迁移权限包数据   privpackage => privmanager */
@@ -1431,6 +1438,31 @@ class groupModel extends model
         $this->dbh->exec('ALTER TABLE ' . TABLE_PRIVMANAGER . ' CHANGE `parent` `parent` mediumint(8) unsigned NOT NULL;');
         $this->dbh->exec('DROP TABLE IF EXISTS ' . TABLE_PRIVPACKAGE . ';');
 
+        die('success');
+    }
+
+    /**
+     * Super Model: Init system view, module and privileges.
+     *
+     * @access public
+     * @return void
+     */
+    public function initSystemResources()
+    {
+        $allResourceFile = $this->app->getModuleRoot() . 'group/lang/allresources.php';
+        if(!file_exists("$allResourceFile")) die("Please execute the commands: touch $allResourceFile; chmod 777 $allResourceFile");
+
+        $resourceContents = file_get_contents($allResourceFile);
+        if(!$resourceContents) file_put_contents($allResourceFile, "<?php\n\$views     = array();\n\$resources = array();\n");
+
+        $this->sortResource();
+        $resource = json_decode(json_encode($this->lang->resource), true);
+        $resource = serialize($resource);
+        $view     = array_keys(json_decode(json_encode($this->lang->mainNav), true));
+        $view     = serialize($view);
+
+        file_put_contents($allResourceFile, "\$views['{$this->config->edition}']['{$this->config->vision}'] = '$view';\n", FILE_APPEND);
+        file_put_contents($allResourceFile, "\$resources['{$this->config->edition}']['{$this->config->vision}'] = '$resource';\n", FILE_APPEND);
         die('success');
     }
 
