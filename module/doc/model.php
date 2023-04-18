@@ -1340,8 +1340,9 @@ class docModel extends model
         if($object->status == 'draft' and $object->addedBy != $this->app->user->account) return false;
         if($object->status == 'normal' and $this->app->user->admin) return true;
 
-        $lib = $this->getLibById($object->lib);
-        if(!$this->checkPrivLib($lib)) return false;
+        static $libs = array();
+        if(!isset($libs[$object->lib])) $libs[$object->lib] = $this->getLibById($object->lib);
+        if(!$this->checkPrivLib($libs[$object->lib])) return false;
         if(in_array($object->acl, array('open', 'public'))) return true;
 
         $account = ",{$this->app->user->account},";
@@ -3189,7 +3190,7 @@ class docModel extends model
         $objectID = zget($lib, $lib->type, 0);
         $class = $from == 'list' ? 'btn-info' : 'btn-primary';
         $html  = "<div class='dropdown btn-group createDropdown'>";
-        $html .= html::a(helper::createLink('doc', 'create', "objectType={$lib->type}&objectID=$objectID&libID={$lib->id}&moduleID=$moduleID&type=html"), "<i class='icon icon-plus'></i> {$this->lang->doc->create}", '', "class='btn $class'");
+        $html .= html::a(helper::createLink('doc', 'create', "objectType={$lib->type}&objectID=$objectID&libID={$lib->id}&moduleID=$moduleID&type=html"), "<i class='icon icon-plus'></i> {$this->lang->doc->create}", '', "class='btn $class' data-app='{$this->app->tab}'");
         $html .= "<button type='button' class='btn $class dropdown-toggle' data-toggle='dropdown'><span class='caret'></span></button>";
         $html .= "<ul class='dropdown-menu pull-right'>";
 

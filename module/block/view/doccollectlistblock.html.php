@@ -17,7 +17,8 @@
 .block-doccollectlist .doc-list > .doc-title > .label-rank-1 {color: #FC5959; background-color: #FFE2D9;}
 .block-doccollectlist .doc-list > .doc-title > .label-rank-2 {color: #FF8058; background-color: #FFE2D9;}
 .block-doccollectlist .doc-list > .doc-title > .label-rank-3 {color: #FF9F46; background-color: #FFECDB;}
-.block-doccollectlist .doc-list > .doc-title > .doc-name {overflow: hidden; max-width: calc(100% - 110px);}
+.block-doccollectlist .doc-list > .doc-title > .doc-name {overflow: hidden; max-width: calc(100% - 130px);}
+[lang^=zh] .block-doccollectlist .doc-list > .doc-title > .doc-name {max-width: calc(100% - 110px);}
 .block-doccollectlist .doc-list > .doc-title > .label-collect-count {margin-left: 10px;}
 .block-doccollectlist .doc-list > .doc-title > .label-collect-count > .icon-flame {margin-bottom: 3px;}
 .block-doccollectlist .doc-list > .doc-title > .label-collect-count > .icon-flame.gray {filter: grayscale(100%);}

@@ -1379,9 +1379,9 @@ CREATE UNIQUE INDEX `project` ON `zt_projectstory`(`project`,`story`);
 -- DROP TABLE IF EXISTS `zt_relation`;
 CREATE TABLE IF NOT EXISTS `zt_relation` (
   `id` int(8) NOT NULL AUTO_INCREMENT,
-  `project` mediumint(8) NOT NULL,
-  `product` mediumint(8) NOT NULL,
-  `execution` mediumint(8) NOT NULL,
+  `project` mediumint(8) NOT NULL DEFAULT '0',
+  `product` mediumint(8) NOT NULL DEFAULT '0',
+  `execution` mediumint(8) NOT NULL DEFAULT '0',
   `AType` char(30) NOT NULL,
   `AID` mediumint(8) NOT NULL,
   `AVersion` char(30) NOT NULL,
@@ -1389,7 +1389,7 @@ CREATE TABLE IF NOT EXISTS `zt_relation` (
   `BType` char(30) NOT NULL,
   `BID` mediumint(8) NOT NULL,
   `BVersion` char(30) NOT NULL,
-  `extra` char(30) NOT NULL,
+  `extra` char(30) NOT NULL DEFAULT '',
   PRIMARY KEY (`id`)
 ) ENGINE='InnoDB' DEFAULT CHARSET=utf8;
 CREATE UNIQUE INDEX `relation` ON `zt_relation`(`product`,`relation`,`AType`,`BType`, `AID`, `BID`);

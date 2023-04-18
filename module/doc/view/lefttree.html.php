@@ -8,8 +8,7 @@
 #main {margin-bottom: 0;}
 
 /* css for mian */
-#mainContent > #sideBar {flex: 0 0 150px; overflow-x: auto; padding-right: 5px;}
-[lang^=zh] #mainContent > #sideBar {flex: 0 0 180px;}
+#mainContent > #sideBar {flex: 0 0 180px; overflow-x: auto; padding-right: 5px;}
 
 /* css for tree */
 #fileTree .title {font-size: 16px; height: 20px; margin-top: 5px; margin-bottom: 5px;}
@@ -262,6 +261,7 @@ $(function()
             initialState: 'active',
             itemCreator: function($li, item)
             {
+                if(item.type == 'apiDoc' && release) item.hasAction = false;
                 if(typeof item.hasAction == 'undefined') item.hasAction = true;
                 if(typeof item.active == 'undefined') item.active = 0;
                 if(typeof docID != 'undefined' && item.id == docID) item.active = 1;
@@ -271,7 +271,7 @@ $(function()
                 var libClass    = ['lib', 'annex', 'api', 'execution'].indexOf(objectType) !== -1 ? 'lib' : '';
                 var moduleClass = item.type == 'doc' || item.type == 'apiDoc' ? 'catalog' : '';
                 var sortClass   = '';
-                if(config.currentMethod != 'view' && ((item.type == 'doc' && canSortDocCatalog) || (item.type == 'apiDoc' && canSortAPICatalog))) sortClass = 'sort-module';
+                if(config.currentMethod != 'view' && ((item.type == 'doc' && canSortDocCatalog) || (item.type == 'apiDoc' && canSortAPICatalog && !release))) sortClass = 'sort-module';
 
                 var hasChild = item.children ? !!item.children.length : false;
                 var link     = item.type != 'execution' || item.hasAction ? '###' : '#';

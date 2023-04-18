@@ -304,7 +304,7 @@ class projectModel extends model
             ->beginIF($queryType == 'bystatus' and $param != 'all' and $param != 'undone')->andWhere('status')->eq($param)->fi()
             ->beginIF($queryType == 'byid')->andWhere('id')->eq($param)->fi()
             ->orderBy($orderBy)
-            ->limit($limit)
+            ->beginIF($limit)->limit($limit)->fi()
             ->fetchAll('id');
 
         if(empty($projects)) return array();
