@@ -486,7 +486,6 @@ $(function()
         {
             moduleName = 'execution';
             methodName = 'doc';
-            linkParams = 'executionID=0';
         }
         else
         {
