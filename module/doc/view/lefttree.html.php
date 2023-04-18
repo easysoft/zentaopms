@@ -261,6 +261,7 @@ $(function()
             initialState: 'active',
             itemCreator: function($li, item)
             {
+                if(item.type == 'apiDoc' && release) item.hasAction = false;
                 if(typeof item.hasAction == 'undefined') item.hasAction = true;
                 if(typeof item.active == 'undefined') item.active = 0;
                 if(typeof docID != 'undefined' && item.id == docID) item.active = 1;
@@ -270,7 +271,7 @@ $(function()
                 var libClass    = ['lib', 'annex', 'api', 'execution'].indexOf(objectType) !== -1 ? 'lib' : '';
                 var moduleClass = item.type == 'doc' || item.type == 'apiDoc' ? 'catalog' : '';
                 var sortClass   = '';
-                if(config.currentMethod != 'view' && ((item.type == 'doc' && canSortDocCatalog) || (item.type == 'apiDoc' && canSortAPICatalog))) sortClass = 'sort-module';
+                if(config.currentMethod != 'view' && ((item.type == 'doc' && canSortDocCatalog) || (item.type == 'apiDoc' && canSortAPICatalog && !release))) sortClass = 'sort-module';
 
                 var hasChild = item.children ? !!item.children.length : false;
                 var link     = item.type != 'execution' || item.hasAction ? '###' : '#';
@@ -502,6 +503,7 @@ $(function()
 
     $('body').on('click', function()
     {
+        $('a.sort-module').removeClass('dragging-shadow');
         var $dropdown = $('.dropdown-in-tree');
         if($dropdown.length)
         {
@@ -516,7 +518,7 @@ $(function()
         }
     }).on('click', '.sidebar-toggle', function()
     {
-        var $icon = $(this).find('.icon-drop');
+        var $icon = $(this).find('.icon');
         if($('#sideBar').hasClass('hidden'))
         {
             $icon.addClass('icon-angle-left');
@@ -671,6 +673,7 @@ $(function()
         start: function()
         {
             $('#dropDownCatalogue').remove();
+            $('a.sort-module').removeClass('dragging-shadow');
         },
         canMoveHere: function($ele, $target)
         {

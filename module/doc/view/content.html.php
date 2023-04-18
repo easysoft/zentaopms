@@ -14,9 +14,13 @@
           <div class="info">
             <?php $version = $version ? $version : $doc->version;?>
             <div class="version" data-version='<?php echo $version;?>'>
-              <div class='btn-group'>
-                <a href='javascript:;' class='btn btn-link btn-limit text-ellipsis' data-toggle='dropdown' style="max-width: 120px;">
-                  #<?php echo $version;?>
+              <div id="diffBtnGroup" class='btn-group exchangeDiffGroup'>
+                <a href='javascript:;' class='btn btn-link btn-limit text-ellipsis left-dom' data-toggle='dropdown' style="max-width: 120px;">
+                  V<?php echo $version;?>
+                  <span class="caret"></span>
+                </a>
+                <i id="exchangeDiffBtn" class="icon icon-exchange right-dom"></i>
+                <a href='javascript:;' class='btn btn-link btn-limit text-ellipsis right-dom' data-toggle='dropdown' style="max-width: 120px;">
                   <span class="caret"></span>
                 </a>
                 <ul id="docVersionMenu" class='dropdown-menu doc-version-menu' style='width: 250px; overflow-y:auto'>
@@ -75,7 +79,8 @@
           </div>
           <?php if(!empty($editors)):?>
           <div id='editorBox'>
-            <div class="btn-group">
+            <?php $groupClass = count($editors) == 1 ? 'noDropdown' : '';?>
+            <div class="btn-group <?php echo $groupClass;?>">
               <?php
               $space       = common::checkNotCN() ? ' ' : '';
               $firstEditor = current($editors);
@@ -83,22 +88,22 @@
 
               array_shift($editors);
               ?>
-              <button class="btn btn-link dropdown-toggle" data-toggle="dropdown">
-                <span class="text"><?php echo $editorInfo;?></span>
-                <?php if(!empty($editors)):?>
-                <span class="caret"></span>
-                <?php endif;?>
-              </button>
               <?php if(!empty($editors)):?>
+              <button class="btn btn-link dropdown-toggle" data-toggle="dropdown">
+                <span class="text" title='<?php echo $editorInfo;?>'><?php echo $editorInfo;?></span>
+                <span class="caret"></span>
+              </button>
               <ul class="dropdown-menu" id='editorMenu'>
               <?php
               foreach($editors as $editor)
               {
                   $editorInfo = zget($users, $editor->account) . ' ' . substr($editor->date, 0, 10) . $space . $lang->doc->update;
-                  echo "<li>$editorInfo</li>";
+                  echo "<li title='$editorInfo'>$editorInfo</li>";
               }
               ?>
               </ul>
+              <?php else:?>
+              <span class="text" title='<?php echo $editorInfo;?>'><?php echo $editorInfo;?></span>
               <?php endif;?>
             </div>
           </div>

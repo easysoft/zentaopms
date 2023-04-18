@@ -236,6 +236,9 @@ $config->openMethods[] = 'caselib.index';
 $config->openMethods[] = 'company.index';
 $config->openMethods[] = 'user.cropAvatar';
 $config->openMethods[] = 'custom.index';
+$config->openMethods[] = 'testcase.getXmindImport';
+$config->openMethods[] = 'testcase.showXMindImport';
+$config->openMethods[] = 'testcase.saveXmindImport';
 
 $config->openModules = array();
 $config->openModules[] = 'install';

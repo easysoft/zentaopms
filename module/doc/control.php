@@ -158,6 +158,7 @@ class doc extends control
 
                 if($type == 'execution' and $this->post->execution) $objectID = $this->post->execution;
                 if($type == 'custom') $objectID = 0;
+                $type = $type == 'execution' && $this->app->tab != 'execution' ? 'project' : $type;
 
                 $this->action->create('docLib', $libID, 'Created');
 
@@ -184,7 +185,6 @@ class doc extends control
                 $this->view->project        = $this->project->getById($objectID);
             }
         }
-
 
         if($type == 'execution')
         {
@@ -540,17 +540,17 @@ class doc extends control
                 if(!empty($changes))
                 {
                     $newType = $_POST['status'];
-                    if($doc->status == 'draft' and $newType == 'draft') $action = 'savedDraft';
                     if($doc->status == 'draft' and $newType == 'normal') $action = 'releasedDoc';
-                    if($doc->status == 'normal' and $newType == 'normal') $action = 'Edited';
+                    if($doc->status == $newType) $action = 'Edited';
                 }
+
                 $fileAction = '';
                 if(!empty($files)) $fileAction = $this->lang->addFiles . join(',', $files) . "\n";
                 $actionID = $this->action->create('doc', $docID, $action, $fileAction . $this->post->comment);
                 if(!empty($changes)) $this->action->logHistory($actionID, $changes);
             }
 
-            $link     = $this->createLink('doc', 'view', "docID={$docID}") . "#app={$this->app->tab}";
+            $link     = $this->createLink('doc', 'view', "docID={$docID}");
             $oldLib   = $doc->lib;
             $doc      = $this->doc->getById($docID);
             $lib      = $this->doc->getLibById($doc->lib);
@@ -1221,26 +1221,7 @@ class doc extends control
             }
         }
 
-        $doc = $docID ? $doc : '';
-
-        /* Crumbs links array. */
-        $moduleName = 'doc';
-        $methodName = in_array($type, array('product', 'project')) ? $objectType . 'Space' : 'teamSpace';
-        $linkParams = "objectID={$objectID}&libID={$lib->id}";
-        if($this->app->tab == 'execution')
-        {
-            $moduleName = 'execution';
-            $methodName = 'doc';
-            $linkParams = "executionID=$objectID";
-        }
-        elseif($type == 'mine')
-        {
-            $linkParams = "type=mine&libID={$lib->id}";
-            $methodName = 'mySpace';
-        }
-
-        $spaceType = $objectType . 'Space';
-        $this->view->title          = isset($this->lang->doc->{$spaceType}) ? $this->lang->doc->{$spaceType} : $this->lang->doc->common;
+        $this->view->title          = $this->lang->doc->common . $this->lang->colon . $doc->title;
         $this->view->docID          = $docID;
         $this->view->doc            = $doc;
         $this->view->version        = $version;
