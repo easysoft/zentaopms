@@ -18,8 +18,6 @@ function setWgVer($ver, $names = NULL)
     global $config;
     $zinConfig = $config->zin;
 
-    a($zinConfig);
-
     if(is_string($names)) $names = explode(',', $names);
     if(!is_array($names)) return;
 
