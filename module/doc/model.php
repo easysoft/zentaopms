@@ -3276,6 +3276,11 @@ class docModel extends model
         if(empty($account))$account = $this->app->user->account;
         if($action == 'collect') $this->dao->delete()->from(TABLE_DOCACTION)->where('doc')->eq($docID)->andWhere('action')->eq('collect')->andWhere('actor')->eq($account)->exec();
 
+        if($action == 'view')
+        {
+            $lastView = $this->dao->select('date')->from(TABLE_DOCACTION)->where('doc')->eq($docID)->andWhere('action')->eq('view')->andWhere('actor')->eq($account)->orderBy('id_desc')->fetch('date');
+            if($lastView and (time() - strtotime($lastView) < 4)) return false;
+        }
         $data  = new stdclass();
         $data->doc    = $docID;
         $data->action = $action;
