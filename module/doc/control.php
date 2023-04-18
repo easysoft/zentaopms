@@ -158,6 +158,7 @@ class doc extends control
 
                 if($type == 'execution' and $this->post->execution) $objectID = $this->post->execution;
                 if($type == 'custom') $objectID = 0;
+                $type = $type == 'execution' && $this->app->tab != 'execution' ? 'project' : $type;
 
                 $this->action->create('docLib', $libID, 'Created');
 
@@ -184,7 +185,6 @@ class doc extends control
                 $this->view->project        = $this->project->getById($objectID);
             }
         }
-
 
         if($type == 'execution')
         {
@@ -550,7 +550,7 @@ class doc extends control
                 if(!empty($changes)) $this->action->logHistory($actionID, $changes);
             }
 
-            $link     = $this->createLink('doc', 'view', "docID={$docID}") . "#app={$this->app->tab}";
+            $link     = $this->createLink('doc', 'view', "docID={$docID}");
             $oldLib   = $doc->lib;
             $doc      = $this->doc->getById($docID);
             $lib      = $this->doc->getLibById($doc->lib);
