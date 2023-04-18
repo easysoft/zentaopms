@@ -300,6 +300,8 @@ class group extends control
             $excludePrivsIdList = array_diff(array_keys($groupPrivsIdList), $selectedPrivIdList);
             $relatedPrivData    = $this->group->getRelatedPrivs($selectedPrivIdList, '', $excludePrivsIdList);
 
+            unset($privList['index']['index']);
+
             $this->view->privList           = $privList;
             $this->view->privMethods        = $privMethods;
             $this->view->selectPrivs        = $selectPrivs;

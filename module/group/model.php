@@ -29,7 +29,15 @@ class groupModel extends model
         }
         $this->lang->error->unique = $this->lang->group->repeat;
         $this->dao->insert(TABLE_GROUP)->data($group)->batchCheck($this->config->group->create->requiredFields, 'notempty')->check('name', 'unique')->exec();
-        return $this->dao->lastInsertId();
+        $groupID = $this->dao->lastInsertId();
+
+        $data         = new stdclass();
+        $data->group  = $groupID;
+        $data->module = 'index';
+        $data->method = 'index';
+        $this->dao->replace(TABLE_GROUPPRIV)->data($data)->exec();
+
+        return $groupID;
     }
 
     /**
@@ -432,6 +440,12 @@ class groupModel extends model
                     ->exec();
             }
         }
+
+        $data         = new stdclass();
+        $data->group  = $groupID;
+        $data->module = 'index';
+        $data->method = 'index';
+        $this->dao->replace(TABLE_GROUPPRIV)->data($data)->exec();
 
         /* Insert new. */
         if($this->post->actions)
