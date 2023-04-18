@@ -738,6 +738,12 @@ CHANGE `team` `team` varchar(90) NOT NULL DEFAULT '',
 CHANGE `whitelist` `whitelist` text NULL,
 CHANGE `order` `order` mediumint unsigned NOT NULL DEFAULT '0';
 
+ALTER TABLE `zt_relation`
+CHANGE `project` `project` mediumint NOT NULL DEFAULT '0',
+CHANGE `product` `product` mediumint NOT NULL DEFAULT '0',
+CHANGE `execution` `execution` mediumint NOT NULL DEFAULT '0',
+CHANGE `extra` `extra` char(30) NOT NULL DEFAULT '';
+
 ALTER TABLE `zt_release`
 CHANGE `project` `project` varchar(255) NOT NULL DEFAULT '0',
 CHANGE `leftBugs` `leftBugs` text NULL;

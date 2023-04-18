@@ -10,6 +10,7 @@ $lang->project->view                = "{$lang->projectCommon} View";
 $lang->project->batchEdit           = "Batch Edit {$lang->projectCommon}s";
 $lang->project->browse              = $lang->projectCommon;
 $lang->project->all                 = 'All';
+$lang->project->involved            = "My Involved";
 $lang->project->start               = 'Start';
 $lang->project->finish              = 'Finish';
 $lang->project->suspend             = 'Suspend';

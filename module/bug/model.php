@@ -1216,7 +1216,7 @@ class bugModel extends model
         if($bug->resolvedBuild and $bug->resolvedBuild != 'trunk')
         {
             $testtaskID = (int) $this->dao->select('id')->from(TABLE_TESTTASK)->where('build')->eq($bug->resolvedBuild)->orderBy('id_desc')->limit(1)->fetch('id');
-            if($testtaskID and empty($oldBug->testtask)) $bug->testtask = $testtask;
+            if($testtaskID and empty($oldBug->testtask)) $bug->testtask = $testtaskID;
         }
 
         $this->dao->update(TABLE_BUG)->data($bug, 'buildName,createBuild,buildExecution,comment')
