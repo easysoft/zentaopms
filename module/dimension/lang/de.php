@@ -1,7 +1,8 @@
 <?php
 $lang->dimension->common     = 'Dimension';
-$lang->dimension->efficiency = 'Efficiency';
-$lang->dimension->quality    = 'Quality';
+$lang->dimension->macro      = 'Macro management';
+$lang->dimension->efficiency = 'Efficiency management';
+$lang->dimension->quality    = 'Quality management';
 
 $lang->dimension->moduleList['']        = '';
 $lang->dimension->moduleList['product'] = $lang->productCommon;
