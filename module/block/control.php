@@ -1929,7 +1929,7 @@ class block extends control
 
                 foreach($objects as $k => $task)
                 {
-                    if(in_array($task->status, array('closed', 'cancel', 'pause'))) unset($objects[$k]);
+                    if(in_array($task->status, array('closed', 'cancel'))) unset($objects[$k]);
                 }
                 if($limitCount > 0) $objects = array_slice($objects, 0, $limitCount);
             }
