@@ -328,7 +328,7 @@ class doc extends control
      * @access public
      * @return void
      */
-    public function deleteLib($libID, $confirm = 'no', $type = 'lib', $from = 'tableContents')
+    public function deleteLib($libID, $confirm = 'no', $type = 'lib', $from = 'teamSpace')
     {
         if($libID == 'product' or $libID == 'execution') return;
         if($confirm == 'no')
@@ -341,18 +341,7 @@ class doc extends control
             if(!empty($lib->main)) return print(js::alert($this->lang->doc->errorMainSysLib));
 
             $this->doc->delete(TABLE_DOCLIB, $libID);
-            if($this->app->tab == 'doc' and $from == 'tableContents') return print(js::reload('parent'));
-
-            $objectType = $lib->type;
-            $objectID   = strpos(',product,project,execution,', ",$objectType,") !== false ? $lib->{$objectType} : 0;
-            if(in_array($this->app->tab, array('project', 'doc')) and $objectType == 'execution')
-            {
-                $objectType = 'project';
-                $objectID   = $lib->project;
-            }
-            $browseLink = $this->createLink('doc', $from, "type=$objectType&objectID=$objectID");
-
-            return print(js::locate($browseLink, 'parent'));
+            return print(js::reload('parent'));
         }
     }
 
