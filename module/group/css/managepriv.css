@@ -83,3 +83,5 @@ main#main {padding-bottom: 0px;}
 #privPackageList .priv-toggle.icon:before {content: "\e925"; font-size: 12px; min-width: unset; transform: scale(0.5); font-weight: 900;}
 #privPackageList .priv-toggle.icon:after {position: absolute; top: 0px; right: 0px; bottom: 0px; left: 0px; display: inline-block; content: ""; border: 1px solid; border-radius: 10%;}
 #privPackageList .priv-toggle.icon.open:before {content: "\e926";}
+
+.table-bymodule select option:hover {color: #fff;}
