@@ -87,3 +87,17 @@ function initDatepicker($obj, callback)
 
     if(typeof callback == 'function') callback($obj);
 }
+
+/**
+ * Attr date check.
+ *
+ * @param  object $obj
+ * @access public
+ * @return void
+ */
+function attrDateCheck($obj)
+{
+    $obj.find('.form-date').attr('onchange', 'checkDate(this, this.value)');
+    $obj.find('.form-datetime').attr('onchange', 'checkDate(this, this.value)');
+}
+

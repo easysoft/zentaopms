@@ -411,6 +411,7 @@ class docModel extends model
             }
 
             $query     = $this->getDocQuery($this->session->contributeDocQuery);
+            $query     = preg_replace('/(`\w+`)/', 't1.$1', $query);
             $docIDList = $this->dao->select('objectID')->from(TABLE_ACTION)
                 ->where('objectType')->eq('doc')
                 ->andWhere('objectID')->in($hasPrivDocIdList)
@@ -3147,22 +3148,23 @@ class docModel extends model
             $myCreation->hasAction  = false;
             $myCreation->active     = $libType == 'createdby' ? 1 : 0;
 
-            $myEdition = new stdclass();
-            $myEdition->id         = 0;
-            $myEdition->name       = $this->lang->doc->myEdited;
-            $myEdition->type       = 'editedBy';
-            $myEdition->objectType = 'doc';
-            $myEdition->objectID   = 0;
-            $myEdition->hasAction  = false;
-            $myEdition->active     = $libType == 'editedby' ? 1 : 0;
+            $myEdited = new stdclass();
+            $myEdited->id         = 0;
+            $myEdited->name       = $this->lang->doc->myEdited;
+            $myEdited->type       = 'editedBy';
+            $myEdited->objectType = 'doc';
+            $myEdited->objectID   = 0;
+            $myEdited->hasAction  = false;
+            $myEdited->active     = $libType == 'editedby' ? 1 : 0;
 
             $libTree   = array();
             $libTree[] = $myLib;
             if(common::hasPriv('doc', 'myView'))       $libTree[] = $myView;
             if(common::hasPriv('doc', 'myCollection')) $libTree[] = $myCollection;
             if(common::hasPriv('doc', 'myCreation'))   $libTree[] = $myCreation;
-            if(common::hasPriv('doc', 'myEdition'))    $libTree[] = $myEdition;
+            if(common::hasPriv('doc', 'myEdited'))     $libTree[] = $myEdited;
         }
+
         return $libTree;
     }
 
