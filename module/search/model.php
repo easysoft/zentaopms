@@ -1609,8 +1609,10 @@ class searchModel extends model
         $result->text     = $lang->search->saveCondition;
         $result->hasPriv  = common::hasPriv('search', 'saveQuery');
         $result->config   = array(
-            'data-toggle' => 'modal',
-            'data-url'    => helper::createLink('search', 'saveQuery', array('module' => $module)),
+            'data-toggle'    => 'modal',
+            'data-type'      => 'ajax',
+            'data-data-type' => 'html',
+            'data-url'       => helper::createLink('search', 'saveQuery', array('module' => $module)),
         );
 
         return $result;
