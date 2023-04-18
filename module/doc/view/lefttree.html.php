@@ -517,7 +517,7 @@ $(function()
         }
     }).on('click', '.sidebar-toggle', function()
     {
-        var $icon = $(this).find('.icon-drop');
+        var $icon = $(this).find('.icon');
         if($('#sideBar').hasClass('hidden'))
         {
             $icon.addClass('icon-angle-left');
