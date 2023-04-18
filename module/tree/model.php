@@ -1838,7 +1838,7 @@ class treeModel extends model
         if($self)
         {
             $self->parent = $module->parent;
-            if($self->root) $module->root = $self->root;
+            if($self->root and !isset($module->root)) $module->root = $self->root;
         }
 
         $repeatName = $this->checkUnique($self, array("id{$self->id}" => $module->name), array("id{$self->id}" => $module->branch));
@@ -1927,6 +1927,7 @@ class treeModel extends model
         $this->dao->update(TABLE_STORY)->set('product')->eq($newRoot)->where('module')->in($childIdList)->exec();
         $this->dao->update(TABLE_BUG)->set('product')->eq($newRoot)->where('module')->in($childIdList)->exec();
         $this->dao->update(TABLE_CASE)->set('product')->eq($newRoot)->where('module')->in($childIdList)->exec();
+        $this->dao->update(TABLE_DOC)->set('lib')->eq($newRoot)->where('module')->in($childIdList)->exec();
 
         if($type != 'story') return;
 

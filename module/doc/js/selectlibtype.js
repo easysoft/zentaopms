@@ -9,20 +9,17 @@
  */
 function redirectParentWindow(objectType, libID, moduleID, docType)
 {
+    config.onlybody = 'no';
+
+    var link = '';
     if(docType == 'api')
     {
-        parent.$.closeModal(function()
-        {
-            new parent.$.zui.ModalTrigger({
-                iframe : createLink('api', 'create', 'libID=' + libID + '&moduleID=' + moduleID),
-                width: '85%'
-            }).show();
-        });
-        return false;
+        link = createLink('api', 'create', 'libID=' + libID + '&moduleID=' + moduleID);
     }
-
-    config.onlybody = 'no';
-    var link = createLink('doc', 'create', 'objectType=' + objectType + '&objectID=0&libID=' + libID + '&moduleID=' + moduleID + '&docType=' + docType) + '#app=doc';
+    else
+    {
+        link = createLink('doc', 'create', 'objectType=' + objectType + '&objectID=0&libID=' + libID + '&moduleID=' + moduleID + '&docType=' + docType) + '#app=doc';
+    }
     window.parent.$.apps.open(link);
 }
 

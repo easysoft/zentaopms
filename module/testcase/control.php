@@ -123,6 +123,7 @@ class testcase extends control
             $hasProduct     = $this->dao->findById($projectID)->from(TABLE_PROJECT)->fetch('hasProduct');
             if(!$hasProduct) unset($this->config->testcase->search['fields']['product']);
 
+            $branch = intval($branch) > 0 ? $branch : 'all';
             $this->loadModel('project')->setMenu($projectID);
         }
         else
@@ -136,6 +137,8 @@ class testcase extends control
         $this->session->set('moduleID', $moduleID);
         $this->session->set('browseType', $browseType);
         $this->session->set('orderBy', $orderBy);
+        $this->session->set('testcaseOrderBy', '`sort` asc', $this->app->tab);
+        $this->session->set('testcaseOrderBy', '`sort` asc');
 
         /* Load lang. */
         $this->app->loadLang('testtask');
@@ -144,21 +147,60 @@ class testcase extends control
         $this->app->loadClass('pager', $static = true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
         $sort  = common::appendOrder($orderBy);
-
         /* Get test cases. */
-        $cases = $this->testcase->getTestCases($productID, $branch, $browseType, $browseType == 'bysearch' ? $queryID : $suiteID, $moduleID, $caseType, $sort, $pager);
-        if(empty($cases) and $pageID > 1)
+        $cases = $this->testcase->getTestCases($productID, $branch, $browseType, $browseType == 'bysearch' ? $queryID : $suiteID, $moduleID, $caseType, $sort, null);
+
+        $caseIdList = array();
+        if(!empty($cases))
         {
-            $pager = pager::init(0, $recPerPage, 1);
-            $cases = $this->testcase->getTestCases($productID, $branch, $browseType, $browseType == 'bysearch' ? $queryID : $suiteID, $moduleID, $caseType, $sort, $pager);
+            foreach($cases as $case) $caseIdList[] = $case->id;
+        }
+        /* Get top level cases and scenes.*/
+        $productParam = $productID;
+        if(intval($productID) <= 0)
+        {
+            $productParam = array_keys($this->products);
+            if(count($productParam) > 1) unset($productParam[0]);
+        }
+
+        $queryCondition = '';
+        $topObjects     =  $this->testcase->getList($productParam,$branch, $moduleID, $caseIdList, $pager, 'top', array(), $browseType);
+
+        /* Get children cases and scenes.*/
+        $scenes = $this->testcase->getList($productParam, $branch,$moduleID, $caseIdList, null, 'child', array_keys($topObjects), $browseType, $queryCondition);
+        if(empty($topObjects) and $pageID > 1)
+        {
+            $pager      = pager::init(0, $recPerPage, 1);
+            $topObjects = $this->testcase->getList($productParam,$branch, $moduleID, $caseIdList, $pager,'top',array(),$browseType);
+            $scenes     = $this->testcase->getList($productParam,$branch, $moduleID, $caseIdList, null, 'child', array_keys($topObjects),$browseType, $queryCondition);
         }
 
         /* save session .*/
         $this->loadModel('common')->saveQueryCondition($this->testcase->dao->get(), 'testcase', false);
 
+        /* Get summary. */
+        $indCount   = 0;
+        $topCount   = 0;
+        $casesCount = 0;
+        foreach($scenes as $scene)
+        {
+            if($scene->isCase == '2' and $scene->parent == 0) $topCount ++;
+            if($scene->isCase == '1' and $scene->parent == 0) $indCount ++;
+            if($scene->isCase == '1') $casesCount ++;
+        }
+
+        if($this->cookie->onlyScene)
+        {
+            $summary = sprintf($this->lang->testcase->summaryScene, $topCount);
+        }
+        else
+        {
+            $summary = sprintf($this->lang->testcase->summary, $topCount, $indCount);
+        }
+
         /* Process case for check story changed. */
-        $cases = $this->loadModel('story')->checkNeedConfirm($cases);
-        $cases = $this->testcase->appendData($cases);
+        $scenes = $this->loadModel('story')->checkNeedConfirm($scenes);
+        $scenes = $this->testcase->appendData($scenes);
 
         /* Build the search form. */
         $currentModule = $this->app->tab == 'project' ? 'project'  : 'testcase';
@@ -211,11 +253,12 @@ class testcase extends control
         $this->view->product         = $product;
         $this->view->productName     = $this->products[$productID];
         $this->view->modules         = $this->tree->getOptionMenu($productID, $viewType = 'case', $startModuleID = 0, $branch == 'all' ? '0' : $branch);
+        $this->view->iscenes         = $this->testcase->getSceneMenu($productID, $moduleID, $viewType = 'case', $startSceneID = 0,  0);
         $this->view->moduleTree      = $moduleTree;
         $this->view->moduleName      = $moduleID ? $tree->name : $this->lang->tree->all;
         $this->view->moduleID        = $moduleID;
         $this->view->projectType     = !empty($projectID) ? $this->dao->select('model')->from(TABLE_PROJECT)->where('id')->eq($projectID)->fetch('model') : '';
-        $this->view->summary         = $this->testcase->summary($cases);
+        $this->view->summary         = $summary;
         $this->view->pager           = $pager;
         $this->view->users           = $this->user->getPairs('noletter');
         $this->view->orderBy         = $orderBy;
@@ -233,6 +276,8 @@ class testcase extends control
         $this->view->showBranch      = $showBranch;
         $this->view->libraries       = $this->loadModel('caselib')->getLibraries();
         $this->view->automation      = $this->loadModel('zanode')->getAutomationByProduct($productID);
+        $this->view->scenes          = $scenes;
+        $this->view->casesCount      = $casesCount;
 
         $this->display();
     }
@@ -399,6 +444,7 @@ class testcase extends control
             $response['result'] = 'success';
 
             setcookie('lastCaseModule', (int)$this->post->module, $this->config->cookieLife, $this->config->webRoot, '', $this->config->cookieSecure, false);
+            setcookie('lastCaseScene', (int)$this->post->scene, $this->config->cookieLife, $this->config->webRoot, '', $this->config->cookieSecure, false);
             $caseResult = $this->testcase->create($bugID);
             if(!$caseResult or dao::isError())
             {
@@ -444,6 +490,7 @@ class testcase extends control
         $type         = 'feature';
         $stage        = '';
         $pri          = 3;
+        $scene        = 0;
         $caseTitle    = '';
         $precondition = '';
         $keywords     = '';
@@ -459,6 +506,7 @@ class testcase extends control
             $type         = $testcase->type ? $testcase->type : 'feature';
             $stage        = $testcase->stage;
             $pri          = $testcase->pri;
+            $scene        = $testcase->scene;
             $storyID      = $testcase->story;
             $caseTitle    = $testcase->title;
             $precondition = $testcase->precondition;
@@ -538,6 +586,8 @@ class testcase extends control
         }
 
         $currentModuleID = $moduleID ? (int)$moduleID : (int)$this->cookie->lastCaseModule;
+        $currentSceneID  = (int)$this->cookie->lastCaseScene;
+        if($testcaseID > 0) $currentSceneID = $scene;
         /* Get the status of stories are not closed. */
         $modules = array();
         if($currentModuleID)
@@ -572,6 +622,7 @@ class testcase extends control
         $this->view->productName      = $this->products[$productID];
         $this->view->moduleOptionMenu = $this->tree->getOptionMenu($productID, $viewType = 'case', $startModuleID = 0, ($branch === 'all' or !isset($branches[$branch])) ? 0 : $branch);
         $this->view->currentModuleID  = $currentModuleID;
+        $this->view->currentSceneID   = $currentSceneID;
         $this->view->gobackLink       = (isset($output['from']) and $output['from'] == 'global') ? $this->createLink('testcase', 'browse', "productID=$productID") : '';
         $this->view->stories          = $stories;
         $this->view->caseTitle        = $caseTitle;
@@ -589,6 +640,7 @@ class testcase extends control
         $this->view->product          = $product;
         $this->view->branches         = $branches;
         $this->view->auto             = $auto;
+        $this->view->sceneOptionMenu  = $this->testcase->getSceneMenu($productID, $moduleID, $viewType = 'case', $startSceneID = 0, ($branch === 'all' or !isset($branches[$branch])) ? 0 : $branch);
 
         $this->display();
     }
@@ -692,6 +744,8 @@ class testcase extends control
         $moduleOptionMenu          = $this->tree->getOptionMenu($productID, 'case', 0, $branch === 'all' ? 0 : $branch);
         $moduleOptionMenu['ditto'] = $this->lang->testcase->ditto;
 
+        $sceneOptionMenu = $this->testcase->getSceneMenu($productID, $moduleID, $viewType = 'case', $startSceneID = 0, ($branch === 'all' or !isset($branches[$branch])) ? 0 : $branch);
+        $sceneOptionMenu['ditto'] = $this->lang->testcase->ditto;
 
         $this->view->customFields = $customFields;
         $this->view->showFields   = $showFields;
@@ -707,6 +761,8 @@ class testcase extends control
         $this->view->productName      = $this->products[$productID];
         $this->view->moduleOptionMenu = $moduleOptionMenu;
         $this->view->currentModuleID  = $currentModuleID;
+        $this->view->sceneOptionMenu  = $sceneOptionMenu;
+        $this->view->currentSceneID   = 0;
         $this->view->branch           = $branch;
         $this->view->branches         = $branches;
         $this->view->needReview       = $this->testcase->forceNotReview() == true ? 0 : 1;
@@ -1014,6 +1070,10 @@ class testcase extends control
             $this->view->moduleOptionMenu = $moduleOptionMenu;
             $this->view->stories          = $stories;
         }
+
+        $sceneOptionMenu = $this->testcase->getSceneMenu($productID, $case->module, $viewType = 'case', $startSceneID = 0,  0 );
+        if(!isset($sceneOptionMenu[$case->scene])) $sceneOptionMenu += $this->testcase->getScenesName($case->scene);
+
         $forceNotReview = $this->testcase->forceNotReview();
         if($forceNotReview) unset($this->lang->testcase->statusList['wait']);
 
@@ -1025,6 +1085,8 @@ class testcase extends control
         $this->view->isLibCase       = $isLibCase;
         $this->view->forceNotReview  = $forceNotReview;
         $this->view->testtasks       = $testtasks;
+        $this->view->sceneOptionMenu = $sceneOptionMenu;
+        $this->view->currentSceneID  = $case->scene;
 
         $this->display();
     }
@@ -1194,7 +1256,14 @@ class testcase extends control
             }
         }
 
+        $scenePairs = array(0 => '/');
+        foreach($cases as $case)
+        {
+            $scenePairs[$case->id] = $this->testcase->getSceneMenu($productID, $case->module, $viewType = 'case', $startSceneID = 0, ($branch === 'all' or !isset($branches[$branch])) ? 0 : $branch);;
+        }
+
         /* Assign. */
+        $this->view->scenePairs     = $scenePairs;
         $this->view->position[]     = $this->lang->testcase->common;
         $this->view->position[]     = $this->lang->testcase->batchEdit;
         $this->view->caseIDList     = $caseIDList;
@@ -1316,7 +1385,18 @@ class testcase extends control
         if(!$this->post->caseIDList) return print(js::locate($this->session->caseList));
         $caseIDList = array_unique($this->post->caseIDList);
 
-        foreach($caseIDList as $caseID) $this->testcase->delete(TABLE_CASE, $caseID);
+        foreach($caseIDList as $caseID)
+        {
+            $vs = $this->dao->findById((int)$caseID)->from(VIEW_SCENECASE)->fetch();
+            if($vs->isCase == 2)
+            {
+                $this->testcase->delete(TABLE_SCENE, $caseID-CHANGEVALUE);
+            }
+            else
+            {
+                $this->testcase->delete(TABLE_CASE, $caseID);
+            }
+        }
         echo js::locate($this->session->caseList);
     }
 
@@ -1363,11 +1443,25 @@ class testcase extends control
             unset($_POST['caseIDList']);
             $allChanges = $this->testcase->batchChangeModule($caseIDList, $moduleID);
             if(dao::isError()) return print(js::error(dao::getError()));
-            foreach($allChanges as $caseID => $changes)
+
+            if (!empty($allChanges[1]))
             {
-                $this->loadModel('action');
-                $actionID = $this->action->create('case', $caseID, 'Edited');
-                $this->action->logHistory($actionID, $changes);
+                foreach($allChanges[1] as $caseID => $changes)
+                {
+                    $this->loadModel('action');
+                    $actionID = $this->action->create('case', $caseID, 'Edited');
+                    $this->action->logHistory($actionID, $changes);
+                }
+            }
+
+            if (!empty($allChanges[0]))
+            {
+                foreach($allChanges[0] as $sceneID => $changes)
+                {
+                    $this->loadModel('action');
+                    $actionID = $this->action->create('scene', $sceneID, 'Edited');
+                    $this->action->logHistory($actionID, $changes);
+                }
             }
         }
 
@@ -2400,8 +2494,11 @@ class testcase extends control
 
             if(dao::isError()) return print(js::error(dao::getError()));
 
-            $nodeID = $_POST['node'];
-            $node   = $this->zanode->getNodeByID($_POST['node']);
+            // if(!empty($_POST['syncToZentao']))
+            //     $this->zanode->syncCasesToZentao($_POST['scriptPath']);
+            
+            // $nodeID = $_POST['node'];
+            // $node   = $this->zanode->getNodeByID($_POST['node']);
 
             $locatelink = $this->createLink('testcase', 'browse', "productID={$_POST['product']}");
             $locatelink = str_replace(array('?onlybody=yes', '&onlybody=yes'), '', $locatelink);
@@ -2456,5 +2553,910 @@ class testcase extends control
     public function ajaxGetReviewCount()
     {
         echo $this->dao->select('count(id) as count')->from(TABLE_CASE)->where('status')->eq('wait')->fetch('count');
+    }
+
+    /**
+     * Create scene.
+     *
+     * @param  int    $productID
+     * @param  int    $branch
+     * @param  int    $moduleID
+     * @param  string $from
+     * @param  string $param
+     * @param  int    $storyID
+     * @param  string $extras
+     * @access public
+     * @return void
+     */
+    public function createScene($productID, $branch = '', $moduleID = 0, $from = '', $param = 0, $storyID = 0, $extras = '')
+    {
+        if(!empty($_POST))
+        {
+            $response['result'] = 'success';
+            setcookie('lastCaseScene', (int)$this->post->parent, $this->config->cookieLife, $this->config->webRoot, '', $this->config->cookieSecure, false);
+
+            $sceneResult = $this->testcase->createScene();
+            if(!$sceneResult or dao::isError())
+            {
+                $response['result']  = 'fail';
+                $response['message'] = dao::getError();
+                return $this->send($response);
+            }
+
+            $sceneID = $sceneResult['id'];
+            $this->loadModel('action');
+            $this->action->create('scene', $sceneID, 'Opened');
+
+            $useSession          = $this->app->tab != 'qa' and $this->session->caseList and strpos($this->session->caseList, 'dynamic') === false;
+            $response['locate']  = $useSession ? $this->session->caseList : $this->createLink('testcase', 'browse', "root={$this->post->product}&branch=$branch&type=byModule&param=" . $this->post->module);
+            $response['message'] = $this->lang->saveSuccess;
+
+            return $this->send($response);
+        }
+
+        /* Set menu. */
+        if(empty($this->products)) $this->locate($this->createLink('product', 'create'));
+        $this->qa->setMenu($this->products, $productID, $branch);
+
+        /* Set branch. */
+        $product = $this->product->getById($productID);
+        if(!isset($this->products[$productID])) $this->products[$productID] = $product->name;
+        if($this->app->tab == 'execution' or $this->app->tab == 'project')
+        {
+            $objectID        = $this->app->tab == 'project' ? $this->session->project : $executionID;
+            $productBranches = (isset($product->type) and $product->type != 'normal') ? $this->execution->getBranchByProduct($productID, $objectID, 'noclosed|withMain') : array();
+            $branches        = isset($productBranches[$productID]) ? $productBranches[$productID] : array();
+            $branch          = key($branches);
+        }
+        else
+        {
+            $branches = (isset($product->type) and $product->type != 'normal') ? $this->loadModel('branch')->getPairs($productID, 'active') : array();
+        }
+
+        $currentModuleID = $moduleID ? (int)$moduleID : (int)$this->cookie->lastCaseModule;
+        $currentParentID = (int)$this->cookie->lastCaseScene;
+
+        $modules = array();
+        if($currentModuleID)
+        {
+            $productModules = $this->tree->getOptionMenu($productID, 'story');
+            $storyModuleID  = array_key_exists($currentModuleID, $productModules) ? $currentModuleID : 0;
+            $modules        = $this->loadModel('tree')->getStoryModule($storyModuleID);
+            $modules        = $this->tree->getAllChildID($modules);
+        }
+
+        $this->view->title            = $this->products[$productID] . $this->lang->colon . $this->lang->testcase->newScene;
+        $this->view->productID        = $productID;
+        $this->view->currentModuleID  = $currentModuleID;
+        $this->view->currentParentID  = $currentParentID;
+        $this->view->gobackLink       = (isset($output['from']) and $output['from'] == 'global') ? $this->createLink('testcase', 'browse', "productID=$productID") : '';
+        $this->view->showFields       = $this->config->testcase->custom->createFields;
+        $this->view->moduleOptionMenu = $this->tree->getOptionMenu($productID, $viewType = 'case', $startModuleID = 0, ($branch === 'all' or !isset($branches[$branch])) ? 0 : $branch);
+        $this->view->branch           = $branch;
+        $this->view->product          = $product;
+        $this->view->branches         = $branches;
+        $this->view->sceneTitle       = '';
+        $this->view->sceneOptionMenu  = $this->testcase->getSceneMenu($productID, $moduleID, $viewType = 'case', $startSceneID = 0, ($branch === 'all' or !isset($branches[$branch])) ? 0 : $branch);
+
+        $this->display();
+    }
+
+    /**
+     * Ajax get module scenes.
+     *
+     * @param  int    $productID
+     * @param  int    $branch
+     * @param  int    $moduleID
+     * @param  int    $stype
+     * @param  int    $storyID
+     * @param  bool   $onlyOption
+     * @param  string $status
+     * @param  string $limit
+     * @param  string $type
+     * @param  int    $hasParent
+     * @param  string $number
+     * @param  int    $currentScene
+     * @access public
+     * @return void
+     */
+    public function ajaxGetModuleScenes($productID, $branch = 0, $moduleID = 0, $stype = 1, $storyID = 0, $onlyOption = 'false', $status = '', $limit = 0, $type = 'full', $hasParent = 1, $number = '', $currentScene = 0)
+    {
+        $optionMenu = $this->testcase->getSceneMenu($productID, $moduleID, 'case', 0, $branch, $currentScene);
+        $output     = ($stype == 1) ? html::select("parent", $optionMenu, "", "class='form-control'") : $output = html::select("scene".$number, $optionMenu, array('' => ''), "class='form-control'");
+
+        die($output);
+    }
+
+    /**
+     * Ajax get option menu.
+     *
+     * @param  int    $rootID
+     * @param  string $viewType
+     * @param  int    $branch
+     * @param  int    $rootModuleID
+     * @param  string $returnType
+     * @param  string $fieldID
+     * @param  bool   $needManage
+     * @param  string $extra
+     * @param  int    $currentModuleID
+     * @access public
+     * @return void
+     */
+    public function ajaxGetOptionMenu($rootID, $viewType = 'story', $branch = 0, $rootModuleID = 0, $returnType = 'html', $fieldID = '', $needManage = false, $extra = '', $currentModuleID = 0)
+    {
+        $this->loadModel('tree');
+
+        if($viewType == 'task')
+        {
+            $optionMenu = $this->tree->getTaskOptionMenu($rootID, 0, 0, $extra);
+        }
+        else
+        {
+            $optionMenu = $this->tree->getOptionMenu($rootID, $viewType, $rootModuleID, $branch);
+        }
+
+        if($returnType == 'html')
+        {
+            if($viewType == 'line')
+            {
+                $lineID = $this->dao->select('id')->from(TABLE_MODULE)->where('type')->eq('line')->andWhere('deleted')->eq(0)->orderBy('id_desc')->limit(1)->fetch('id');
+                $output = html::select("line", $optionMenu, $lineID, "class='form-control'");
+                $output .= "<span class='input-group-addon' style='border-radius: 0px 2px 2px 0px; border-right-width: 1px;'>";
+                $output .= html::a($this->createLink('tree', 'browse', "rootID=$rootID&view=$viewType&currentModuleID=0&branch=$branch", '', true), $viewType == 'line' ? $this->lang->tree->manageLine : $this->lang->tree->manage, '', "class='text-primary' data-toggle='modal' data-type='iframe' data-width='95%'");
+                $output .= '</span>';
+            }
+            else
+            {
+                $changeFunc = '';
+                if($viewType == 'bug' or $viewType == 'case') $changeFunc = "onchange='loadModuleRelatedNew()'";
+                if($viewType == 'task') $changeFunc = "";
+                $field = $fieldID ? "modules[$fieldID]" : 'module';
+
+                $currentModule   = $this->tree->getById($currentModuleID);
+                $currentModuleID = (isset($currentModule->branch) and $currentModule->branch == 0) ? $currentModuleID : 0;
+
+                $output = html::select("$field", $optionMenu, $currentModuleID, "class='form-control' $changeFunc");
+                if(count($optionMenu) == 1 and $needManage)
+                {
+                    $output .= "<span class='input-group-addon'>";
+                    $output .= html::a($this->createLink('tree', 'browse', "rootID=$rootID&view=$viewType&currentModuleID=0&branch=$branch", '', true), $this->lang->tree->manage, '', "class='text-primary' data-toggle='modal' data-type='iframe' data-width='95%'");
+                    $output .= '&nbsp; ';
+                    $output .= html::a("javascript:void(0)", $this->lang->refreshIcon, '', "class='refresh' onclick='loadProductModulesNew($rootID)'");
+                    $output .= '</span>';
+                }
+            }
+            die($output);
+        }
+
+        if($returnType == 'mhtml')
+        {
+            $changeFunc = '';
+            if($viewType == 'bug' or $viewType == 'case') $changeFunc = "onchange='loadModuleRelatedNew()'";
+            if($viewType == 'task') $changeFunc = "";
+            $field  = $fieldID ? "modules[$fieldID]" : 'module';
+            $output = html::select("$field", $optionMenu, '', "class='input' $changeFunc");
+            die($output);
+        }
+
+        if($returnType == 'json') die(json_encode($optionMenu));
+    }
+
+    /**
+     * Ajax get scenes.
+     *
+     * @param  int    $productID
+     * @param  int    $branch
+     * @param  int    $moduleID
+     * @param  int    $stype
+     * @param  int    $storyID
+     * @param  bool   $onlyOption
+     * @param  string $status
+     * @param  string $limit
+     * @param  string $type
+     * @param  int    $hasParent
+     * @param  string $number
+     * @param  int    $currentScene
+     * @access public
+     * @return void
+     */
+    public function ajaxGetScenesForBC($productID, $branch = 0, $moduleID = 0, $stype = 1, $storyID = 0, $onlyOption = 'false', $status = '', $limit = 0, $type = 'full', $hasParent = 1, $number = '', $currentScene = 0)
+    {
+        $optionMenu = $this->testcase->getSceneMenu($productID, $moduleID, 'case', 0, $branch, $currentScene);
+        $optionMenu['ditto'] = $this->lang->testcase->ditto;
+
+        if($stype == 1)
+        {
+            $output = html::select("parent", $optionMenu, "", "class='form-control'");
+        }
+        else
+        {
+            $output = html::select("scene" . $number, $optionMenu, array('' => ''), "class='form-control'");
+        }
+
+        die($output);
+    }
+
+    /**
+     * Batch change scene.
+     *
+     * @param  int $sceneId
+     * @access public
+     * @return void
+     */
+    public function batchChangeScene($sceneId)
+    {
+        if($this->post->caseIDList)
+        {
+            $caseIDList = $this->post->caseIDList;
+            $caseIDList = array_unique($caseIDList);
+            unset($_POST['caseIDList']);
+            $allChanges = $this->testcase->batchChangeScene($caseIDList, $sceneId);
+            if(dao::isError()) return print(js::error(dao::getError()));
+
+            if(!empty($allChanges[1]))
+            {
+                foreach($allChanges[1] as $caseID => $changes)
+                {
+                    $this->loadModel('action');
+                    $actionID = $this->action->create('case', $caseID, 'Edited');
+                }
+            }
+
+            if(!empty($allChanges[0]))
+            {
+                foreach($allChanges[0] as $sceneID => $changes)
+                {
+                    $this->loadModel('action');
+                    $actionID = $this->action->create('scene', $sceneID - CHANGEVALUE, 'Edited');
+                }
+            }
+        }
+
+        echo js::locate($this->session->caseList, 'parent');
+    }
+
+    /**
+     * Change scene.
+     *
+     * @access public
+     * @return void
+     */
+    public function changeScene()
+    {
+        $now       = helper::now();
+        $currentID = $this->post->sourceId;
+        $targetId  = $this->post->targetId;
+
+        $targetScene  = $this->dao->findById((int)$targetId)->from(VIEW_SCENECASE)->fetch();
+        $currentScene = $this->dao->findById((int)$currentID)->from(VIEW_SCENECASE)->fetch();
+
+        $product = $targetScene->product;
+        $module  = $targetScene->module;
+        if($targetScene->isCase == 2)
+        {
+            if($currentScene->isCase == 2)
+            {
+                $childPath = $targetScene->path . "$currentID,";
+                $grade     = $targetScene->grade + 1;
+
+                $this->dao->update(TABLE_SCENE)->set('parent')->eq($targetId)
+                    ->set('path')->eq($childPath)
+                    ->set('grade')->eq($grade)
+                    ->set('product')->eq($product)
+                    ->set('module')->eq($module)
+                    ->set('lastEditedBy')->eq($this->app->user->account)
+                    ->set('lastEditedDate')->eq($now)
+                    ->where('id')->eq($currentID-CHANGEVALUE)
+                    ->exec();
+
+                $children = $this->dao->select('*')->from(VIEW_SCENECASE)
+                    ->where('deleted')->eq(0)
+                    ->andWhere('path')->like("%,$currentID,%")
+                    ->orderBy('grade')
+                    ->fetchAll('id');
+
+                foreach($children as $id => $childScene)
+                {
+                    if($id && $id != $currentID)
+                    {
+                        if($childScene->parent)
+                        {
+                            $parentScene = $this->dao->findById((int)$childScene->parent-CHANGEVALUE)->from(TABLE_SCENE)->fetch();
+                            if($childScene->isCase == 2)
+                            {
+                                if($childScene->grade > $currentScene->grade)
+                                {
+                                    $childPath = $parentScene->path . "$id,";
+                                    $grade     = $parentScene->grade + 1;
+
+                                    $this->dao->update(TABLE_SCENE)->set('path')->eq($childPath)
+                                        ->set('grade')->eq($grade)
+                                        ->set('product')->eq($parentScene->product)
+                                        ->set('module')->eq($parentScene->module)
+                                        ->set('lastEditedBy')->eq($this->app->user->account)
+                                        ->set('lastEditedDate')->eq($now)
+                                        ->where('id')->eq($id - CHANGEVALUE)
+                                        ->exec();
+                                }
+                            }
+                            else
+                            {
+                                $this->dao->update(TABLE_CASE)
+                                    ->set('product')->eq($parentScene->product)
+                                    ->set('module')->eq($parentScene->module)
+                                    ->set('lastEditedBy')->eq($this->app->user->account)
+                                    ->set('lastEditedDate')->eq($now)
+                                    ->where('id')->eq($id)
+                                    ->exec();
+                            }
+                        }
+                    }
+                }
+            }
+            else
+            {
+                $this->dao->update(TABLE_CASE)->set('scene')->eq($targetId)
+                    ->set('product')->eq($product)
+                    ->set('module')->eq($module)
+                    ->set('lastEditedBy')->eq($this->app->user->account)
+                    ->set('lastEditedDate')->eq($now)
+                    ->where('id')->eq($currentID)
+                    ->exec();
+            }
+        }
+    }
+
+    /**
+     * Delete scene.
+     *
+     * @param  int    $sceneId
+     * @param  string $confirm
+     * @access public
+     * @return void
+     */
+    public function deleteScene($sceneID, $confirm = 'no')
+    {
+        $scene = $this->dao->select('*')->from(VIEW_SCENECASE)->where('id')->eq($sceneID)->andWhere('isCase')->eq(2)->fetch();
+
+        if($confirm == 'no') return print(js::confirm(sprintf($this->lang->testcase->confirmDeleteScene,addslashes($scene->title)), $this->createLink('testcase', 'deleteScene', "sceneID=$sceneID&confirm=yes")));
+
+        $childrenCount = $this->dao->select('count(*) as count')->from(VIEW_SCENECASE)->where('parent')->eq($sceneID)->andWhere('deleted')->eq(0)->fetch('count');
+        if($childrenCount)
+        {
+            if($confirm != "wait") return print(js::confirm(sprintf($this->lang->testcase->hasChildren), $this->createLink('testcase', 'deleteScene', "sceneID=$sceneID&confirm=wait")));
+            $all = $this->dao->select('id,isCase')->from(VIEW_SCENECASE)->where('path')->like($scene->path . '%')->andWhere('deleted')->eq(0)->fetchAll();
+
+            foreach($all as $v)
+            {
+                if($v->isCase == 2)
+                {
+                    $this->testcase->delete(TABLE_SCENE, $v->id - CHANGEVALUE);
+                }
+                else
+                {
+                    $this->testcase->delete(TABLE_CASE, $v->id);
+                }
+            }
+        }
+        else
+        {
+
+            $this->testcase->delete(TABLE_SCENE, $sceneID-CHANGEVALUE);
+        }
+
+        echo js::reload('parent');
+    }
+
+    /**
+     * Edit scene.
+     *
+     * @param  int $sceneId
+     * @param  int $executionID
+     * @access public
+     * @return void
+     */
+    public function editScene($sceneID, $executionID = 0)
+    {
+        $this->loadModel('story');
+
+        /* Update scene. */
+        if(!empty($_POST))
+        {
+            $changes = array();
+            $files   = array();
+
+            $sceneResult = $this->testcase->updateScene($sceneID);
+            if(!$sceneResult or dao::isError())
+            {
+                $response['result']  = 'fail';
+                $response['message'] = dao::getError();
+                return $this->send($response);
+            }
+
+            $this->loadModel('action');
+            $sceneID = $sceneResult['id'];
+
+            $this->action->create('scene', $sceneID - CHANGEVALUE, 'Edited');
+            $this->executeHooks($sceneID);
+
+            if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'success', 'data' => $sceneID));
+
+            $scene   = $this->dao->findById((int)$sceneID - CHANGEVALUE)->from(TABLE_SCENE)->fetch();
+            $product = $scene->product;
+            $this->executeHooks($product);
+
+            setcookie('caseModule', $scene->module, 0, $this->config->webRoot, '', $this->config->cookieSecure, false);
+
+            if(!$scene->module) return print(js::locate($this->createLink('testcase', 'browse', "productID=$product"), 'parent'));
+
+            return print(js::locate($this->createLink('testcase', 'browse', "root=$product&branch=0&type=byModule&param={$scene->module}"), 'parent'));
+        }
+
+        /* Get scene. */
+        $scene = $this->dao->select('*')->from(VIEW_SCENECASE)->where('id')->eq($sceneID)->andWhere('isCase')->eq(2)->fetch();
+
+        if(!$scene) return print(js::error($this->lang->notFound) . js::locate('back'));
+
+        $productID = $scene->product;
+        $product   = $this->product->getById($productID);
+        if(!isset($this->products[$productID])) $this->products[$productID] = $product->name;
+
+        $title      = $this->products[$productID] . $this->lang->colon . $this->lang->testcase->editScene;
+        $position[] = html::a($this->createLink('testcase', 'browse', "productID=$productID"), $this->products[$productID]);
+
+        /* Set menu. */
+        if($this->app->tab == 'project') $this->loadModel('project')->setMenu(null);
+        if($this->app->tab == 'qa') $this->testcase->setMenu($this->products, $productID, $scene->branch);
+
+        /* Display status of branch. */
+        $branches = $this->loadModel('branch')->getList($productID, isset($objectID) ? $objectID : 0, 'all');
+        $branchTagOption = array();
+        foreach($branches as $branchInfo)
+        {
+            $branchTagOption[$branchInfo->id] = $branchInfo->name . ($branchInfo->status == 'closed' ? ' (' . $this->lang->branch->statusList['closed'] . ')' : '');
+        }
+
+        if(!isset($branchTagOption[$scene->branch]))
+        {
+            $caseBranch = $this->branch->getById($scene->branch, $scene->product, '');
+            $branchTagOption[$scene->branch] = $scene->branch == BRANCH_MAIN ? $caseBranch : ($caseBranch->name . ($caseBranch->status == 'closed' ? ' (' . $this->lang->branch->statusList['closed'] . ')' : ''));
+        }
+
+        $moduleOptionMenu = $this->tree->getOptionMenu($productID, $viewType = 'case', $startModuleID = 0, $scene->branch);
+
+        if(!isset($moduleOptionMenu[$scene->module])) $moduleOptionMenu += $this->tree->getModulesName($scene->module);
+
+        if($scene->module)
+        {
+            $sceneOptionMenu = $this->testcase->getSceneMenu($productID, $scene->module, $viewType = 'case', $startSceneID = 0,  $scene->branch, $sceneID);
+        }
+        else
+        {
+            $sceneOptionMenu = $this->testcase->getSceneMenu($productID, 0, $viewType = 'case', $startSceneID = 0,  $scene->branch, $sceneID);
+        }
+
+        if(!isset($sceneOptionMenu[$scene->parent])) $sceneOptionMenu += $this->testcase->getScenesName($scene->parent);
+
+        /* Get product and branches. */
+        if($this->app->tab == 'execution' or $this->app->tab == 'project')
+        {
+            $objectID = $this->app->tab == 'project' ? $scene->project : $executionID;
+        }
+
+        $this->view->productID        = $productID;
+        $this->view->product          = $product;
+        $this->view->products         = $this->products;
+        $this->view->branchTagOption  = $branchTagOption;
+        $this->view->productName      = $this->products[$productID];
+        $this->view->moduleOptionMenu = $moduleOptionMenu;
+        $this->view->sceneOptionMenu  = $sceneOptionMenu;
+        $this->view->stories          = $this->story->getProductStoryPairs($productID, $scene->branch, 0, 'all','id_desc', 0, 'full', 'story', false);
+
+        $forceNotReview = $this->testcase->forceNotReview();
+        if($forceNotReview) unset($this->lang->testcase->statusList['wait']);
+
+        $this->view->title           = $title;
+        $this->view->branch          = 0;
+        $this->view->currentModuleID = $scene->module;
+        $this->view->currentParentID = $scene->parent;
+        $this->view->users           = $this->user->getPairs('noletter');
+
+        $this->view->actions         = $this->loadModel('action')->getList('case', $sceneID);
+        $this->view->gobackLink      = (isset($output['from']) and $output['from'] == 'global') ? $this->createLink('testcase', 'browse', "productID=$productID") : '';
+        $this->view->forceNotReview  = $forceNotReview;
+        $this->view->scene           = $scene;
+        $this->view->executionID     = $executionID;
+
+        $this->display();
+    }
+
+    /**
+     * Update order.
+     *
+     * @access public
+     * @return void
+     */
+    public function updateOrder()
+    {
+        $idList  = explode(',', trim($this->post->scenes, ','));
+        $orderBy = $this->post->orderBy;
+        if(strpos($orderBy, 'sort') === false) return false;
+
+        /* Get list of original scenes and cases, and sort with orderBy param. */
+        $scenesMap = $this->dao->select('id,sort,isCase')->from(VIEW_SCENECASE)->where('id')->in($idList)->orderBy($orderBy)->fetchAll('id');
+
+        foreach($scenesMap as $scene)
+        {
+            /* Compare with sorted list from front-end. */
+            $newID = array_shift($idList);
+            if($scene->id == $newID) continue;
+
+            /* Change sort value of scene. */
+            if ($scenesMap[$newID]->isCase == 2)
+            {
+                $this->dao->update(TABLE_SCENE)
+                    ->set('sort')->eq($scene->sort)
+                    ->set('lastEditedBy')->eq($this->app->user->account)
+                    ->set('lastEditedDate')->eq(helper::now())
+                    ->where('id')->eq($newID - CHANGEVALUE)
+                    ->exec();
+                continue;
+            }
+
+            /* Change sort value of case. */
+            $this->dao->update(TABLE_CASE)
+                ->set('sort')->eq($scene->sort)
+                ->set('lastEditedBy')->eq($this->app->user->account)
+                ->set('lastEditedDate')->eq(helper::now())
+                ->where('id')->eq($newID)
+                ->exec();
+        }
+    }
+
+    /**
+     * Export xmind.
+     *
+     * @param  int $productID
+     * @param  int $moduleID
+     * @param  int $branch
+     * @access public
+     * @return void
+     */
+    public function exportXMind($productID, $moduleID, $branch)
+    {
+        if($_POST)
+        {
+            $this->classXmind = $this->app->loadClass('xmind');
+            if (isset($_POST['imodule'])) $imoduleID = $_POST['imodule'];
+
+            $configResult = $this->testcase->saveXmindConfig();
+            if($configResult['result'] == 'fail') return print(js::alert($configResult['message']));
+
+            $context = $this->testcase->getXmindExport($productID, $imoduleID, $branch);
+
+            $xmlDoc = new DOMDocument('1.0', 'UTF-8');
+            $xmlDoc->formatOutput = true;
+
+            $versionAttr       =  $xmlDoc->createAttribute('version');
+            $versionAttrValue  =  $xmlDoc->createTextNode('1.0.1');
+            $versionAttr->appendChild($versionAttrValue);
+
+            $mapNode = $xmlDoc->createElement('map');
+            $mapNode->appendChild($versionAttr);
+            $xmlDoc->appendChild($mapNode);
+
+            $productName = '';
+            if(count($context['caseList']))
+            {
+                $productName = $context['caseList'][0]->productName;
+            }
+            else
+            {
+                $product     = $this->product->getById($productID);
+                $productName = $product->name;
+            }
+
+            $productNode   = $xmlDoc->createElement('node');
+            $textAttr      = $xmlDoc->createAttribute('TEXT');
+            $textAttrValue = $xmlDoc->createTextNode($this->classXmind->toText("$productName", $productID));
+
+            $textAttr->appendChild($textAttrValue);
+            $productNode->appendChild($textAttr);
+            $mapNode->appendChild($productNode);
+
+            $sceneNodes  = array();
+            $moduleNodes = array();
+
+            $this->classXmind->createModuleNode($xmlDoc, $context, $productNode, $moduleNodes);
+            $this->classXmind->createSceneNode($xmlDoc, $context, $productNode, $moduleNodes, $sceneNodes);
+            $this->classXmind->createTestcaseNode($xmlDoc, $context, $productNode, $moduleNodes, $sceneNodes);
+
+            $xmlStr = $xmlDoc->saveXML();
+            $this->fetch('file', 'sendDownHeader', array('fileName' => $productName, 'mm', $xmlStr));
+        }
+
+        $tree    = $moduleID ? $this->tree->getByID($moduleID) : '';
+        $product = $this->product->getById($productID);
+        $config  = $this->testcase->getXmindConfig();
+
+        $this->view->settings         = $config;
+        $this->view->moduleName       = $tree != '' ? $tree->name : '/';
+        $this->view->productName      = $product->name;
+        $this->view->moduleID         = $moduleID;
+        $this->view->moduleOptionMenu = $this->tree->getOptionMenu($productID, $viewType = 'case', $startModuleID = 0, ($branch === 'all' or !isset($branches[$branch])) ? 0 : $branch);
+
+        $this->display();
+    }
+
+    /**
+     * Get xmind config.
+     *
+     * @access public
+     * @return void
+     */
+    public function getXmindConfig()
+    {
+        $result = $this->testcase->getXmindConfig();
+        $this->send($result);
+    }
+
+    /**
+     * Get xmind content.
+     *
+     * @access public
+     * @return void
+     */
+    public function getXmindImport()
+    {
+        $folder = $this->session->xmindImport;
+        $type   = $this->session->xmindImportType;
+
+        if($type == 'xml')
+        {
+            $xmlPath = "$folder/content.xml";
+            $results = $this->testcase->getXmindImport($xmlPath);
+
+            echo $results;
+        }
+        else
+        {
+            $jsonPath = "$folder/content.json";
+            $jsonStr = file_get_contents($jsonPath);
+
+            echo $jsonStr;
+        }
+    }
+
+    /**
+     * Import xmind.
+     *
+     * @param  int $productID
+     * @param  int $branch
+     * @access public
+     * @return void
+     */
+    public function importXMind($productID, $branch)
+    {
+        if($_FILES)
+        {
+            $this->classXmind = $this->app->loadClass('xmind');
+            if($_FILES['file']['size'] == 0)  return print(js::alert($this->lang->testcase->errorFileNotEmpty));
+
+            $configResult = $this->testcase->saveXmindConfig();
+            if($configResult['result'] == 'fail') return print(js::alert($configResult['message']));
+
+            $tmpName  = $_FILES['file']['tmp_name'];
+            $fileName = $_FILES['file']['name'];
+            $extName  = trim(strtolower(pathinfo($fileName, PATHINFO_EXTENSION)));
+            if($extName != 'xmind') return print(js::alert($this->lang->testcase->errorFileFormat));
+
+            $newPureName  = $this->app->user->id."-xmind";
+            $importFolder = $this->app->getTmpRoot() . "import";
+            if(!is_dir($importFolder)) mkdir($importFolder, 0755, true);
+
+            $dest = $this->app->getTmpRoot() . "import/".$newPureName.$extName;
+            if(!move_uploaded_file($tmpName, $dest)) return print(js::alert($this->lang->testcase->errorXmindUpload));
+
+            $extractFolder   =  $this->app->getTmpRoot() . "import/".$newPureName;
+            $this->classFile = $this->app->loadClass('zfile');
+            if(is_dir($extractFolder)) $this->classFile->removeDir($extractFolder);
+
+            $this->app->loadClass('pclzip', true);
+            $zip = new pclzip($dest);
+
+            $files      = $zip->listContent();
+            $removePath = $files[0]['filename'];
+            if($zip->extract(PCLZIP_OPT_PATH, $extractFolder, PCLZIP_OPT_REMOVE_PATH, $removePath) == 0)
+            {
+                return print(js::alert($this->lang->testcase->errorXmindUpload));
+            }
+
+            $this->classFile->removeFile($dest);
+
+            $jsonPath = $extractFolder."/content.json";
+            if(file_exists($jsonPath) == true)
+            {
+
+                $fetchResult = $this->fetchByJSON($extractFolder, $productID, $branch);
+            }
+            else
+            {
+                $fetchResult = $this->fetchByXML($extractFolder, $productID, $branch);
+            }
+
+            if($fetchResult['result'] == 'fail')
+            {
+                return print(js::alert($fetchResult['message']));
+            }
+
+            $this->session->set('xmindImport', $extractFolder);
+            $this->session->set('xmindImportType', $fetchResult['type']);
+
+            $pId = $fetchResult['pId'];
+
+            return print(js::locate($this->createLink('testcase', 'showXmindImport', "productID=$pId&branch=$branch"), 'parent.parent'));
+        }
+
+        $config = $this->testcase->getXmindConfig();
+
+        $this->view->settings    = $config;
+
+        $this->display();
+    }
+
+    /**
+     * Fetch by xml.
+     *
+     * @param  string $extractFolder
+     * @param  int    $productID
+     * @param  int    $branch
+     * @access public
+     * @return void
+     */
+    function fetchByXML($extractFolder, $productID, $branch)
+    {
+        $filePath = $extractFolder."/content.xml";
+        $xmlNode = simplexml_load_file($filePath);
+        $title = $xmlNode->sheet->topic->title;
+        if(strlen($title) == 0)
+        {
+            return array('result'=>'fail','message'=>$this->lang->testcase->errorXmindUpload);
+        }
+
+        $pId = $productID;
+        if($this->classXmind->endsWith($title,"]") == true)
+        {
+            $tmpId = $this->classXmind->getBetween($title,"[","]");
+            if(empty($tmpId) == false)
+            {
+                $projectCount = $this->dao->select('count(*) as count')
+                    ->from(TABLE_PRODUCT)
+                    ->where('id')
+                    ->eq((int)$tmpId)
+                    ->andWhere('deleted')->eq('0')
+                    ->fetch('count');
+
+                if((int)$projectCount == 0) return array('result'=>'fail','message'=>$this->lang->testcase->errorImportBadProduct);
+
+                $pId = $tmpId;
+            }
+        }
+
+        return array('result'=>'success','pId'=>$pId, 'type'=>'xml');
+    }
+
+    /**
+     * Fetch by json.
+     *
+     * @param  string $extractFolder
+     * @param  int    $productID
+     * @param  int    $branch
+     * @access public
+     * @return void
+     */
+    function fetchByJSON($extractFolder, $productID, $branch)
+    {
+        $filePath = $extractFolder."/content.json";
+        $jsonStr = file_get_contents($filePath);
+        $jsonDatas = json_decode($jsonStr, true);
+        $title = $jsonDatas[0]['rootTopic']['title'];
+        if(strlen($title) == 0)
+        {
+            return array('result'=>'fail','message'=>$this->lang->testcase->errorXmindUpload);
+        }
+
+        $pId = $productID;
+        if($this->classXmind->endsWith($title,"]") == true)
+        {
+            $tmpId = $this->classXmind->getBetween($title,"[","]");
+            if(empty($tmpId) == false)
+            {
+                $projectCount = $this->dao->select('count(*) as count')
+                    ->from(TABLE_PRODUCT)
+                    ->where('id')
+                    ->eq((int)$tmpId)
+                    ->andWhere('deleted')->eq('0')
+                    ->fetch('count');
+
+                if((int)$projectCount == 0) return array('result'=>'fail','message'=>$this->lang->testcase->errorImportBadProduct);
+
+                $pId = $tmpId;
+            }
+        }
+
+        return array('result'=>'success','pId'=>$pId,'type'=>'json');
+    }
+
+    /**
+     * Save xmind config.
+     *
+     * @access public
+     * @return void
+     */
+    public function saveXmindConfig()
+    {
+        $result = $this->testcase->saveXmindConfig();
+        $this->send($result);
+    }
+
+    /**
+     * Save imported xmind.
+     *
+     * @access public
+     * @return void
+     */
+    public function saveXmindImport()
+    {
+        if(!empty($_POST))
+        {
+            $result = $this->testcase->saveXmindImport();
+            return $this->send($result);
+        }
+
+        $this->send(array('result' => 'fail', 'message' => $this->lang->errorSaveXmind));
+    }
+
+    /**
+     * Show imported xmind.
+     *
+     * @param  int $productID
+     * @param  int $branch
+     * @access public
+     * @return void
+     */
+    public function showXMindImport($productID,$branch)
+    {
+        $product  = $this->product->getById($productID);
+        $branches = (isset($product->type) and $product->type != 'normal') ? $this->loadModel('branch')->getPairs($productID, 'active') : array();
+        $config   = $this->testcase->getXmindConfig();
+
+        /* Set menu. */
+        if($this->app->tab == 'project') $this->loadModel('project')->setMenu(null);
+        if($this->app->tab == 'qa') $this->testcase->setMenu($this->products, $productID, $branch);
+
+        $jsLng = array();
+        $jsLng['caseNotExist'] = $this->lang->testcase->caseNotExist;
+        $jsLng['saveFail']     = $this->lang->testcase->saveFail;
+        $jsLng['set2Scene']    = $this->lang->testcase->set2Scene;
+        $jsLng['set2Testcase'] = $this->lang->testcase->set2Testcase;
+        $jsLng['clearSetting'] = $this->lang->testcase->clearSetting;
+        $jsLng['setModule']    = $this->lang->testcase->setModule;
+        $jsLng['pickModule']   = $this->lang->testcase->pickModule;
+        $jsLng['clearBefore']  = $this->lang->testcase->clearBefore;
+        $jsLng['clearAfter']   = $this->lang->testcase->clearAfter;
+        $jsLng['clearCurrent'] = $this->lang->testcase->clearCurrent;
+        $jsLng['removeGroup']  = $this->lang->testcase->removeGroup;
+        $jsLng['set2Group']    = $this->lang->testcase->set2Group;
+
+        $this->view->title            = $this->lang->testcase->xmindImport;
+        $this->view->settings         = $config;
+        $this->view->productID        = $productID;
+        $this->view->branch           = $branch;
+        $this->view->product          = $product;
+        $this->view->moduleOptionMenu = $this->tree->getOptionMenu($productID, $viewType = 'case', $startModuleID = 0, ($branch === 'all' or !isset($branches[$branch])) ? 0 : $branch);
+        $this->view->gobackLink       = $this->createLink('testcase', 'browse', "productID=$productID");
+        $this->view->jsLng            = $jsLng;
+
+        $this->display();
     }
 }

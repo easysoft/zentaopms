@@ -87,8 +87,7 @@ $filter->bug->export              = new stdclass();
 $filter->caselib->create          = new stdclass();
 $filter->doc->create              = new stdclass();
 $filter->doc->browse              = new stdclass();
-$filter->doc->alllibs             = new stdclass();
-$filter->doc->objectlibs          = new stdclass();
+$filter->doc->view                = new stdclass();
 $filter->doc->tablecontents       = new stdclass();
 $filter->doc->productspace        = new stdclass();
 $filter->doc->projectspace        = new stdclass();
@@ -219,12 +218,12 @@ $filter->caselib->create->cookie['lastLibCaseModule'] = 'int';
 
 $filter->doc->create->cookie['lastDocModule']               = 'int';
 $filter->doc->browse->cookie['browseType']                  = 'reg::browseType';
-$filter->doc->alllibs->cookie['browseType']                 = 'reg::browseType';
-$filter->doc->objectlibs->cookie['browseType']              = 'reg::browseType';
-$filter->doc->objectlibs->cookie['preProductID']            = 'int';
-$filter->doc->objectlibs->cookie['preBranch']               = 'reg::word';
+$filter->doc->view->cookie['browseType']                    = 'reg::browseType';
+$filter->doc->view->cookie['preBranch']                     = 'reg::word';
 $filter->doc->default->cookie['from']                       = 'code';
 $filter->doc->default->cookie['product']                    = 'int';
+$filter->doc->default->cookie['preProductID']               = 'int';
+$filter->doc->default->cookie['lastProject']                = 'int';
 $filter->doc->showfiles->cookie['docFilesViewType']         = 'code';
 $filter->doc->tablecontents->cookie['preProductID']         = 'int';
 $filter->doc->tablecontents->cookie['preBranch']            = 'reg::word';
@@ -357,6 +356,10 @@ $filter->testtask->cases->cookie['preTaskID']      = 'int';
 $filter->testtask->cases->cookie['taskCaseModule'] = 'int';
 $filter->testtask->default->cookie['lastProduct']  = 'int';
 $filter->testtask->default->cookie['preProductID'] = 'int';
+$filter->testcase->browse->cookie['onlyScene']     = 'code';
+
+if(empty($filter->project->testcase)) $filter->project->testcase = new stdclass();
+$filter->project->testcase->cookie = array('onlyScene' => 'code');
 
 $filter->todo->export->cookie['checkedItem'] = 'reg::checked';
 

@@ -25,7 +25,7 @@ $lang->doclib->privateACL = "Private <span class='acl-tip'>(Only creators and wh
 $lang->doclib->tip = new stdclass();
 $lang->doclib->tip->selectExecution = "When execution is empty, the library created is the {$lang->projectCommon} library";
 
-$lang->doclib->type['wiki'] = 'WIKI';
+$lang->doclib->type['wiki'] = 'Wiki';
 $lang->doclib->type['api']  = 'API';
 
 $lang->doclib->aclListA = array();
@@ -121,10 +121,10 @@ $lang->doc->update       = 'Update';
 $lang->doc->nextStep     = 'Next';
 $lang->doc->closed       = 'Closed';
 $lang->doc->saveDraft    = 'Save Draft';
-$lang->doc->defaultSave  = 'Default Save: ';
 $lang->doc->position     = 'Position';
 $lang->doc->person       = 'Person';
 $lang->doc->team         = 'Team';
+$lang->doc->manage       = 'Document Management';
 
 $lang->doc->moduleDoc     = 'Nach Modulen';
 $lang->doc->searchDoc     = 'Suche';
@@ -141,6 +141,7 @@ $lang->doc->myDoc         = 'Meine Dokumente';
 $lang->doc->myView        = 'Recently Viewed';
 $lang->doc->myCollection  = 'Meine Favoriten';
 $lang->doc->myCreation    = 'Created By';
+$lang->doc->myEdited      = 'Edited By';
 $lang->doc->myLib         = 'My Library';
 $lang->doc->tableContents = 'Catalog';
 $lang->doc->addCatalog    = 'Add Catalog';
@@ -252,13 +253,12 @@ $lang->doc->typeList['word']     = 'Word';
 $lang->doc->typeList['ppt']      = 'PPT';
 $lang->doc->typeList['excel']    = 'Excel';
 
-$lang->doc->createList['html']     = 'Create Document';
-$lang->doc->createList['template'] = 'Create By Template';
+$lang->doc->createList['template'] = 'Wiki';
 $lang->doc->createList['word']     = 'Word';
 $lang->doc->createList['ppt']      = 'PPT';
 $lang->doc->createList['excel']    = 'Excel';
 
-$lang->doc->types['doc'] = 'WIKI';
+$lang->doc->types['doc'] = 'Wiki';
 $lang->doc->types['api'] = 'API';
 
 $lang->doc->contentTypeList['html']     = 'HTML';
@@ -307,7 +307,7 @@ $lang->doc->versionNotFount      = 'Existiert nicht in diesem Build.';
 $lang->doc->noDoc                = 'Keine Dokumente. ';
 $lang->doc->noArticle            = 'No articles.';
 $lang->doc->noLib                = 'No libraries.';
-$lang->doc->noBook               = 'The WIKI library has not created a manual, please create a new one :)';
+$lang->doc->noBook               = 'The Wiki library has not created a manual, please create a new one :)';
 $lang->doc->cannotCreateOffice   = 'Sorry, %s file can only be created in ZenTao Biz Series or above. Contact Philip@easysoft.ltd to know more about ZenTao Biz Series and ZenTao Max Series.';
 $lang->doc->notSetOffice         = "<p>To create a %s document, you need to configure <a href='%s' target='_parent'>office convert</a>.<p>";
 $lang->doc->noSearchedDoc        = 'Nichts gesucht.';

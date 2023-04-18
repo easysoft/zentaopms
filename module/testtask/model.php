@@ -1903,11 +1903,13 @@ class testtaskModel extends model
 
                     $caseID  = $case->id;
                     $oldCase = $this->dao->select('*')->from(TABLE_CASE)->where('id')->eq($caseID)->fetch();
-                    $this->dao->update(TABLE_CASE)->data($case)->where('id')->eq($caseID)->exec();
-
+                    $case->version    = $oldCase->version;
+                    $case->openedDate = $oldCase->openedDate;
+                    
                     $changes = common::createChanges($oldCase, $case);
                     if($changes)
                     {
+                        $this->dao->update(TABLE_CASE)->data($case)->where('id')->eq($caseID)->exec();
                         $actionID = $this->action->create('case', $caseID, 'Edited');
                         $this->action->logHistory($actionID, $changes);
                     }
@@ -2344,7 +2346,7 @@ class testtaskModel extends model
 
                     $caseStep = new stdclass();
                     $caseStep->type   = 'step';
-                    $caseStep->desc   = '';
+                    $caseStep->desc   = $step->name;
                     $caseStep->expect = $step->checkPoints[0]->expect;
 
                     $case->steps[] = $caseStep;

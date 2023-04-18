@@ -579,11 +579,12 @@
                       <?php
                       if(isset($story->linkStoryTitles))
                       {
+                          $iframe = isonlybody() ? '' : 'iframe';
                           foreach($story->linkStoryTitles as $linkStoryID => $linkStoryTitle)
                           {
                               if($app->user->admin or strpos(",{$app->user->view->products},", ",{$storyProducts[$linkStoryID]},") !== false)
                               {
-                                  $storyLink = html::a($this->createLink('story', 'view', "storyID=$linkStoryID&version=0&param=0&storyType=$story->type", '', true), "#$linkStoryID $linkStoryTitle", '', "class='iframe' data-width='80%' title='$linkStoryTitle'") . '<br />';
+                                  $storyLink = html::a($this->createLink('story', 'view', "storyID=$linkStoryID&version=0&param=0&storyType=$story->type", '', true), "#$linkStoryID $linkStoryTitle", '', "class='{$iframe}' data-width='80%' title='$linkStoryTitle'") . '<br />';
                               }
                               else
                               {

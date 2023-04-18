@@ -596,6 +596,7 @@ class upgradeModel extends model
             case '18_3':
                 $this->changeBookToCustomLib();
                 $this->createDefaultDimension();
+                $this->convertDocCollect();
                 break;
         }
 
@@ -8435,7 +8436,7 @@ class upgradeModel extends model
                 $component->chartConfig = $chartConfig;
                 $component->option      = json_decode(zget($this->config->screen->chartOption, $chartType));
                 if(isset($component->option->title->text)) $component->option->title->text = $chart->name;
-                $component = $this->screen->getChartOption($component);
+                $component = $this->screen->getChartOption($chart, $component, json_decode($chart->filters, true));
             }
 
             $componentList[] = $component;
@@ -9061,18 +9062,34 @@ class upgradeModel extends model
      */
     public function convertDocCollect()
     {
+        $this->saveLogs('Run Method ' . __FUNCTION__);
+        $desc   = $this->dao->query('DESC ' . TABLE_DOC)->fetchAll();
+        $fields = array();
+        foreach($desc as $field)
+        {
+            $fieldName = $field->Field;
+            $fields[$fieldName] = $fieldName;
+        }
+        if(!isset($fields['collector'])) return true;
+
         $this->loadModel('doc');
 
-        $stmt = $this->dao->select('id,collector')->from(TABLE_DOC)->where('collector')->ne('')->query();
+        $users = $this->dao->select('account')->from(TABLE_USER)->fetchPairs('account', 'account');
+        $stmt  = $this->dao->select('id,collector')->from(TABLE_DOC)->where('collector')->ne('')->query();
         while($doc = $stmt->fetch())
         {
             foreach(explode(',', $doc->collector) as $collector)
             {
                 $collector = trim($collector);
                 if(empty($collector)) continue;
+                if(!isset($users[$collector])) continue;
                 $this->doc->createAction($doc->id, 'collect', $collector);
             }
         }
+
+        $this->dao->update(TABLE_DOC)->set('collector')->eq(0)->where('collector')->eq('')->exec();
+        $this->dao->exec("ALTER TABLE " . TABLE_DOC . " CHANGE `collector` `collects` smallint unsigned NOT NULL DEFAULT '0'");
+
         return true;
     }
 }

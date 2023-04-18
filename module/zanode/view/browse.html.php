@@ -53,7 +53,7 @@
           <tr>
             <th class='c-id'><?php common::printOrderLink('t1.id', $orderBy, $vars, $lang->idAB); ?></th>
             <th class='c-name'><?php common::printOrderLink('t1.name', $orderBy, $vars, $lang->zanode->name); ?></th>
-            <th class='c-type hidden'><?php common::printOrderLink('t1.type', $orderBy, $vars, $lang->zahost->type); ?></th>
+            <th class='c-type'><?php common::printOrderLink('t1.type', $orderBy, $vars, $lang->zahost->type); ?></th>
             <th class='c-ip'><?php common::printOrderLink('t1.extranet', $orderBy, $vars, $lang->zanode->extranet); ?></th>
             <th class='c-cpu'><?php common::printOrderLink('t1.cpuCores', $orderBy, $vars, $lang->zanode->cpuCores); ?></th>
             <th class='c-memory'><?php common::printOrderLink('t1.memory', $orderBy, $vars, $lang->zanode->memory); ?></th>
@@ -69,7 +69,7 @@
             <tr>
               <td><?php echo $node->id; ?></td>
               <td title='<?php echo $node->name ?>'><?php echo html::a($this->inlink('view', "id=$node->id"), $node->name, '', ""); ?></td>
-              <td class='hidden'><?php echo zget($this->lang->zanode->typeList, $node->type); ?></td>
+              <td><?php echo $node->hostType == 'physics' ? $this->lang->zanode->typeList['physics'] : $this->lang->zanode->typeList['node']; ?></td>
               <td><?php echo $node->extranet; ?></td>
               <td><?php echo zget($config->zanode->os->cpuCores, $node->cpuCores); ?></td>
               <td><?php echo $node->memory . $this->lang->zahost->unitList['GB']; ?></td>
@@ -80,26 +80,26 @@
               <td class='c-actions'>
                 <?php
                 $suspendAttr  = "title='{$lang->zanode->suspend}' target='hiddenwin'";
-                $suspendAttr .= $node->type == 'physics' || $node->status != 'running' ? ' class="btn disabled"' : "class='btn' target='hiddenwin' onclick='if(confirm(\"{$lang->zanode->confirmSuspend}\")==false) return false;'";
+                $suspendAttr .= $node->hostType == 'physics' || $node->status != 'running' ? ' class="btn disabled"' : "class='btn' target='hiddenwin' onclick='if(confirm(\"{$lang->zanode->confirmSuspend}\")==false) return false;'";
 
                 $resumeAttr  = "title='{$lang->zanode->resume}' target='hiddenwin'";
-                $resumeAttr .= $node->type == 'physics' || $node->status == 'running' || $node->status == 'wait' ? ' class="btn disabled"' : "class='btn' target='hiddenwin' onclick='if(confirm(\"{$lang->zanode->confirmResume}\")==false) return false;'";
+                $resumeAttr .= $node->hostType == 'physics' || $node->status == 'running' || $node->status == 'wait' ? ' class="btn disabled"' : "class='btn' target='hiddenwin' onclick='if(confirm(\"{$lang->zanode->confirmResume}\")==false) return false;'";
 
                 $rebootAttr  = "title='{$lang->zanode->reboot}' target='hiddenwin'";
-                $rebootAttr .= $node->type == 'physics' || $node->status == 'shutoff' || $node->status == 'wait' ? ' class="btn disabled"' : "class='btn' target='hiddenwin' onclick='if(confirm(\"{$lang->zanode->confirmReboot}\")==false) return false;'";
+                $rebootAttr .= $node->hostType == 'physics' || in_array($node->status, array('wait', 'creating_img', 'creating_snap', 'restoring', 'shutoff')) ? ' class="btn disabled"' : "class='btn' target='hiddenwin' onclick='if(confirm(\"{$lang->zanode->confirmReboot}\")==false) return false;'";
 
                 $closeAttr = "title='{$lang->zanode->shutdown}'";
-                $closeAttr .= $node->type == 'physics' || $node->status == 'wait' ? ' class="btn disabled"' : ' class="btn iframe"';
+                $closeAttr .= $node->hostType == 'physics' || in_array($node->status, array('wait', 'creating_img', 'creating_snap', 'restoring')) ? ' class="btn disabled"' : ' class="btn iframe"';
 
                 $startAttr = "title='{$lang->zanode->boot}'";
-                $startAttr .= $node->type == 'physics' || $node->status == 'wait' ? ' class="btn disabled"' : ' class="btn iframe"';
+                $startAttr .= $node->hostType == 'physics' || in_array($node->status, array('wait', 'creating_img', 'creating_snap', 'restoring')) ? ' class="btn disabled"' : ' class="btn iframe"';
 
                 $snapshotAttr = "title='{$lang->zanode->createSnapshot}'";
-                $snapshotAttr .= $node->type == 'physics' || $node->status != 'running' ? ' class="btn disabled"' : ' class="btn iframe"';
+                $snapshotAttr .= $node->hostType == 'physics' || $node->status != 'running' ? ' class="btn disabled"' : ' class="btn iframe"';
 
-                $imageAttr = $node->status != 'running' ? ' class="btn btn-action iframe createImage disabled"' : ' class="btn btn-action iframe createImage"';
+                $imageAttr = $node->hostType == 'physics' || $node->status != 'running' && $node->status != 'creating_img' ? ' class="btn btn-action iframe createImage disabled"' : ' class="btn btn-action iframe createImage"';
 
-                common::printLink('zanode', 'getVNC', "id={$node->id}", "<i class='icon icon-remote'></i> ", (in_array($node->status ,array('running', 'launch', 'wait')) ? '_blank' : ''), "title='{$lang->zanode->getVNC}' class='btn desktop  " . (in_array($node->status ,array('running', 'launch', 'wait')) ? '':'disabled') . "'", '');
+                common::printLink('zanode', 'getVNC', "id={$node->id}", "<i class='icon icon-remote'></i> ", (in_array($node->status ,array('running', 'launch', 'wait')) ? '_blank' : ''), "title='{$lang->zanode->getVNC}' class='btn desktop  " . ($node->hostType == '' && in_array($node->status ,array('running', 'launch', 'wait')) ? '':'disabled') . "'", '');
                 if($node->status == "suspend")
                 {
                     common::printLink('zanode', 'resume', "zanodeID={$node->id}", "<i class='icon icon-resume'></i> ", '', $resumeAttr);
@@ -119,7 +119,7 @@
                 }
 
                 common::printLink('zanode', 'reboot', "zanodeID={$node->id}", "<i class='icon icon-restart'></i> ", '', $rebootAttr);
-                common::printLink('zanode', 'createSnapshot', "zanodeID={$node->id}", "<i class='icon icon-plus'></i> ", '', $snapshotAttr, true, true);
+                common::printLink('zanode', 'createSnapshot', "zanodeID={$node->id}", "<img src='static/svg/snapshot.svg' /> ", '', $snapshotAttr, true, true);
 
                 if(common::hasPriv('zanode', 'createImage') or common::hasPriv('zanode', 'destroy'))
                 {

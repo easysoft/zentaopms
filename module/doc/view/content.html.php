@@ -28,7 +28,6 @@
             </div>
           </div>
           <div class="actions">
-            <span class='text'><?php echo$lang->doc->diff?></span>
             <?php echo html::a("javascript:fullScreen()", '<span class="icon-fullscreen"></span>', '', "title='{$lang->fullscreen}' class='btn btn-link fullscreen-btn'");?>
             <?php if(common::hasPriv('doc', 'collect')):?>
             <?php $star = strpos($doc->collector, ',' . $this->app->user->account . ',') !== false ? 'star' : 'star-empty';?>
@@ -74,7 +73,10 @@
         <div class="">
           <div class="detail-content article-content table-col">
             <div class='info'>
-              <span class='user-time text-muted'><i class='icon icon-account'></i> <?php echo zget($users, $doc->editedBy) . " {$lang->colon} " . substr($doc->editedDate, 0, 10) . (common::checkNotCN() ? ' ' : '') . $lang->doc->update;?></span>
+              <span class='user-time text-muted'><i class='icon icon-contacts'></i> <?php echo zget($users, $doc->addedBy) . " {$lang->colon} " . substr($doc->addedDate, 0, 10) . (common::checkNotCN() ? ' ' : '') . $lang->doc->createAB;?></span>
+              <!-- <span data-url="<?php echo $this->createLink('doc', 'collect', "objectID=$doc->id&objectType=doc");?>" title="<?php echo $lang->doc->collect;?>" class='user-time ajaxCollect text-muted'><?php echo html::image("static/svg/{$star}.svg", "class='$star'");?> <?php echo $doc->collects;?></span> -->
+              <span class='user-time text-muted'><i class='icon-star'></i> <?php echo $doc->collects;?></span>
+              <span class='user-time text-muted'><i class='icon-eye'></i> <?php echo $doc->views;?></span>
               <?php if($doc->keywords):?>
               <span class='keywords'>
                 <?php foreach($doc->keywords as $keywords):?>
@@ -158,7 +160,7 @@
       <?php echo $outline;?>
       </div>
     </div>
-    <div class="outline-toggle"><i class="icon icon-angle-right"></i></div>
+    <div class="outline-toggle"><i class="icon icon-menu-arrow-left"></i></div>
     <?php endif;?>
     <div id="history" class='panel hidden' style="margin-left: 2px;">
       <?php

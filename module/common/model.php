@@ -605,7 +605,6 @@ class commonModel extends model
             if(strpos('|bug|execution|kanbanspace|', "|$objectType|") !== false) $needPrintDivider = true;
 
             $hasPriv = common::hasPriv($module, $createMethod);
-            if($hasPriv  and $objectType == 'doc' and !common::hasPriv('doc', 'tableContents')) $hasPriv = false;
             if(!$hasPriv and $objectType == 'doc' and  common::hasPriv('api', 'create'))        $hasPriv = true;
             if(!$hasPriv) continue;
 
@@ -1771,7 +1770,7 @@ EOF;
             }
             if($type == 'button')
             {
-                if($method != 'edit' and $method != 'copy' and $method != 'delete')
+                if($method != 'edit' and $method != 'copy' and $method != 'delete' and ($method != 'review' and $module != 'charter'))
                 {
                     return html::a($link, "<i class='$class'></i> " . "<span class='text'>{$title}</span>", $target, "class='btn btn-link $extraClass' $misc", true);
                 }

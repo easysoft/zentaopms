@@ -280,6 +280,12 @@ class dbh
                 if(stripos($sql, 'CREATE OR REPLACE VIEW ') === 0) return '';
                 if(stripos($sql, 'CREATE VIEW') === 0) return '';
                 if(stripos($sql, 'CREATE FUNCTION') === 0) return '';
+                if(stripos($sql, 'CREATE UNIQUE INDEX') === 0)
+                {
+                    preg_match('/ON\ +[0-9a-zA-Z\_\.]+\`([0-9a-zA-Z\_]+)\`/', $sql, $matches);
+                    $tableName = explode('_', $matches[1]);
+                    $sql       = preg_replace('/INDEX\ +\`/', 'INDEX `' . strtolower($tableName[1]) . '_', $sql);
+                }
             case 'ALTER':
                 $sql = $this->formatField($sql);
                 $sql = $this->formatAttr($sql);

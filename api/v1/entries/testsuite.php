@@ -21,7 +21,7 @@ class testsuiteEntry extends entry
     public function get($testsuiteID)
     {
         $control = $this->loadController('testsuite', 'view');
-        $control->view($testsuiteID, $this->param('version', 0));
+        $control->view($testsuiteID, $this->param('order', 'id_desc'), 0, $this->param('limit', 20), $this->param('page', 1));
 
         $data = $this->getData();
         if(!$data or (isset($data->message) and $data->message == '404 Not found')) return $this->send404();

@@ -341,11 +341,11 @@ $lang->block->default['doc']['2']['title'] = '文档动态';
 $lang->block->default['doc']['2']['block'] = 'docdynamic';
 $lang->block->default['doc']['2']['grid']  = 4;
 
-$lang->block->default['doc']['3']['title'] = '我的收藏';
+$lang->block->default['doc']['3']['title'] = '我收藏的文档';
 $lang->block->default['doc']['3']['block'] = 'docmycollection';
 $lang->block->default['doc']['3']['grid']  = 8;
 
-$lang->block->default['doc']['4']['title'] = '最近更新';
+$lang->block->default['doc']['4']['title'] = '最近更新的文档';
 $lang->block->default['doc']['4']['block'] = 'docrecentupdate';
 $lang->block->default['doc']['4']['grid']  = 8;
 

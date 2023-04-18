@@ -24,19 +24,13 @@
 <div id="mainMenu" class="clearfix">
   <div id="leftBar" class="btn-toolbar pull-left">
   <?php echo $objectDropdown;?>
-  <?php echo html::backButton("<i class='icon icon-back icon-sm'></i> " . $lang->goback, "id='backBtn'", 'btn btn-link')?>
-  </div>
-  <div id="crumbs" class="crumbs">
-    <?php foreach($crumbs as $crumbKey => $crumb):?>
-    <div class="crumb-item">
-    <?php if($crumbKey != 0) echo '<div class="separator"> > </div>'?>
-    <?php echo $crumb;?>
-    </div>
-    <?php endforeach;?>
+  <?php $gobackLink = $this->session->docList ? $this->session->docList : inlink('teamSpace', "objectID=0&libID=$libID");?>
+  <?php echo html::a($gobackLink, "<i class='icon-back'></i> " . $lang->goback, '', "class='btn btn-link'");?>
   </div>
   <div class="btn-toolbar pull-right">
     <?php
     if($canExport) echo html::a($this->createLink('doc', $exportMethod, "libID=$libID&moduleID=0&docID=$docID"), "<i class='icon-export muted'> </i>" . $lang->export, 'hiddenwin', "class='btn btn-link' id='docExport'");
+    if(common::hasPriv('api', 'createLib')) echo html::a($this->createLink('api', 'createLib',     "type=" . ($objectType ? $objectType : 'nolink') . "&objectID=$objectID"), '<i class="icon icon-plus"></i> ' . $lang->api->createLib, '', 'class="btn btn-secondary iframe" data-width="800px"');
     if(common::hasPriv('doc', 'create')) echo $this->doc->printCreateBtn($lib, $moduleID);
     ?>
   </div>
