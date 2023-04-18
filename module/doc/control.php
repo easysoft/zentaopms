@@ -341,7 +341,20 @@ class doc extends control
             if(!empty($lib->main)) return print(js::alert($this->lang->doc->errorMainSysLib));
 
             $this->doc->delete(TABLE_DOCLIB, $libID);
-            return print(js::reload('parent'));
+            if($this->app->tab == 'doc' and $from == 'teamSpace') return print(js::reload('parent'));
+
+            $objectType = $lib->type;
+            $objectID   = strpos(',product,project,execution,', ",$objectType,") !== false ? $lib->{$objectType} : 0;
+            $moduleName = 'doc';
+            $methodName = zget($this->config->doc->spaceMethod, $objectType);
+            if($this->app->tab == 'execution' and $objectType == 'execution')
+            {
+                $moduleName = 'execution';
+                $methodName = 'doc';
+            }
+            $browseLink = $this->createLink($moduleName, $methodName, "objectID=$objectID");
+
+            return print(js::locate($browseLink, 'parent'));
         }
     }
 
