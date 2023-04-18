@@ -3,155 +3,203 @@ namespace zin;
 
 class historyRecord extends wg
 {
-    protected static $defineProps = 'actions:array,users:array,methodName:string';
+    protected static $defineProps = [
+        'actions?:array',
+        'users?:array',
+        'methodName?:string'
+    ];
 
     public static function getPageCSS()
     {
         return file_get_contents(__DIR__ . DS . 'css' . DS . 'v1.css');
     }
 
+    private function checkEditCommentPriv($action)
+    {
+        global $app;
+        $methodName = $this->prop('methodName') ?? data('methodName');
+
+        return (!isset($canBeChanged) || !empty($canBeChanged))
+            && end($actions) == $action
+            && trim($action->comment) !== ''
+            && str_contains(',view,objectlibs,viewcard,', ",$methodName,")
+            && $action->actor == $app->user->account
+            && common::hasPriv('action', 'editComment');
+    }
+
+    private function createExpandBtn($i)
+    {
+        global $lang;
+
+        return button
+        (
+            setClass('btn btn-mini switch-btn btn-icon btn-expand'),
+            set::type('button'),
+            set::title($lang->switchDisplay),
+            h::i(setClass('change-show icon icon-plus icon-sm')),
+            on::click(<<<EXPAND
+            var changeBox = document.querySelector("#changeBox$i");
+            var icon = e.target.querySelector('.icon');
+            console.log(icon);
+            icon.classList.toggle('icon-plus');
+            icon.classList.toggle('icon-minus');
+            if (icon.classList.contains('icon-plus')) {
+                changeBox.classList.remove('show');
+            } else {
+                changeBox.classList.add('show');
+            }
+            EXPAND),
+        );
+    }
+
+    private function createEditCommentBtn()
+    {
+        global $lang;
+
+        return button
+        (
+            setClass('btn btn-link btn-icon btn-sm btn-edit-comment'),
+            set::title($lang->action->editComment),
+            h::i(setClass('icon icon-pencil')),
+        );
+    }
+
+    private function createHistoryChangesView($action, $i)
+    {
+        global $app;
+
+        return div
+        (
+            setClass('history-changes'),
+            set::id("changeBox$i"),
+            html($app->loadTarget('action')->renderChanges($action->objectType, $action->history)),
+        );
+    }
+
+    private function createActionItemView($action, $i)
+    {
+        global $app;
+
+        return li
+        (
+            set::value($i),
+            html($app->loadTarget('action')->renderAction($action))
+        );
+    }
+
+    private function generateComment($action)
+    {
+        if(str_contains($action->comment, '<pre class="prettyprint lang-html">'))
+        {
+            $before   = explode('<pre class="prettyprint lang-html">', $action->comment);
+            $after    = explode('</pre>', $before[1]);
+            $htmlCode = $after[0];
+            return $before[0] . htmlspecialchars($htmlCode) . $after[1];
+        }
+
+        return strip_tags($action->comment) === $action->comment
+            ? nl2br($action->comment)
+            : $action->comment;
+    }
+
+    private function createCommentView($action)
+    {
+        $comment = $this->generateComment($action);
+
+        return div
+        (
+            setClass('article-content comment'),
+            div
+            (
+                setClass('comment-content'),
+                $comment,
+            ),
+        );
+    }
+
+    private function createCommentEditForm($action)
+    {
+        global $lang;
+
+        return form
+        (
+            setClass('comment-edit-form'),
+            set::method('post'),
+            set::action(createLink('action', 'editComment', "actionID=$action->id")),
+            div
+            (
+                setClass('form-group'),
+                textarea
+                (
+                    htmlSpecialString($action->comment),
+                    set::name('lastComment'),
+                    set::rows('8'),
+                    set::autofocus('autofocus'),
+                ),
+            ),
+            div
+            (
+                setClass('form-group form-actions'),
+                button
+                (
+                    setClass('btn btn-wide btn-primary'),
+                    set::type('submit'),
+                    set::id('submit'),
+                    $lang->save,
+                ),
+                button
+                (
+                    setClass('btn btn-wide btn-hide-form'),
+                    $lang->close,
+                ),
+            ),
+        );
+    }
+
     private function buildHistoriesList()
     {
-        global $app, $lang;
         $actions    = $this->prop('actions') ?? data('actions');
-        $users      = $this->prop('users');
-        $methodName = $this->prop('methodName');
+        $users      = $this->prop('users') ?? data('users');
         $historiesListView = h::ol(setClass('histories-list'));
         $i = 0;
+
         foreach($actions as $action)
         {
-            $canEditComment = (!isset($canBeChanged) || !empty($canBeChanged))
-                && end($actions) == $action
-                && trim($action->comment) !== ''
-                && str_contains(',view,objectlibs,viewcard,', ",$methodName,")
-                && $action->actor == $app->user->account
-                && common::hasPriv('action', 'editComment');
+            if($action->action === 'assigned' || $action->action === 'toaudit')
+                $action->extra = zget($users, $action->extra);
 
             $action->actor = zget($users, $action->actor);
+            if(str_contains($action->actor, ':'))
+                $action->actor = substr($action->actor, strpos($action->actor, ':') + 1);
 
-            if($action->action == 'assigned' || $action->action == 'toaudit') $action->extra = zget($users, $action->extra);
-            if(str_contains($action->actor, ':')) $action->actor = substr($action->actor, strpos($action->actor, ':') + 1);
-
-            $actionItemView = li
-            (
-                set::value(++$i),
-                html($app->loadTarget('action')->renderAction($action))
-            );
+            $i++;
+            $actionItemView = $this->createActionItemView($action, $i);
 
             if(!empty($action->history))
             {
-                $actionItemView->add
-                (
-                    button
-                    (
-                        setClass('btn btn-mini switch-btn btn-icon btn-expand'),
-                        set::type('button'),
-                        set::title($lang->switchDisplay),
-                        h::i(setClass('change-show icon icon-plus icon-sm')),
-                        on::click(<<<EXPAND
-                        var changeBox = document.querySelector("#changeBox$i");
-                        var icon = e.target.querySelector('.icon');
-                        console.log(icon);
-                        icon.classList.toggle('icon-plus');
-                        icon.classList.toggle('icon-minus');
-                        if (icon.classList.contains('icon-plus')) {
-                            changeBox.classList.remove('show');
-                        } else {
-                            changeBox.classList.add('show');
-                        }
-                        EXPAND),
-                    )
-                );
-                $actionItemView->add
-                (
-                    div
-                    (
-                        setClass('history-changes'),
-                        set::id("changeBox$i"),
-                        html($app->loadTarget('action')->renderChanges($action->objectType, $action->history)),
-                    )
-                );
+                $allExpandBtn = $this->createExpandBtn($i);
+                $actionItemView->add($allExpandBtn);
+
+                $historyChangesView = $this->createHistoryChangesView($action, $i);
+                $actionItemView->add($historyChangesView);
             }
             if(strlen(trim(($action->comment))) !== 0)
             {
-                if($canEditComment)
-                {
-                    $actionItemView->add
-                    (
-                        button
-                        (
-                            setClass('btn btn-link btn-icon btn-sm btn-edit-comment'),
-                            set::title($lang->action->editComment),
-                            h::i(setClass('icon icon-pencil')),
-                        )
-                    );
-                }
-
-                $comment = null;
-                if(str_contains($action->comment, '<pre class="prettyprint lang-html">'))
-                {
-                    $before   = explode('<pre class="prettyprint lang-html">', $action->comment);
-                    $after    = explode('</pre>', $before[1]);
-                    $htmlCode = $after[0];
-                    $comment  = $before[0] . htmlspecialchars($htmlCode) . $after[1];
-                }
-                else
-                {
-                    $comment = strip_tags($action->comment) == $action->comment
-                        ? nl2br($action->comment)
-                        : $action->comment;
-                }
-
-                $actionItemView->add
-                (
-                    div
-                    (
-                        setClass('article-content comment'),
-                        div
-                        (
-                            setClass('comment-content'),
-                            $comment,
-                        ),
-                    )
-                );
+                $canEditComment = $this->checkEditCommentPriv($action);
 
                 if($canEditComment)
                 {
-                    $actionItemView->add(
-                        form
-                        (
-                            setClass('comment-edit-form'),
-                            set::method('post'),
-                            set::action(createLink('action', 'editComment', "actionID=$action->id")),
-                            div
-                            (
-                                setClass('form-group'),
-                                textarea
-                                (
-                                    htmlSpecialString($action->comment),
-                                    set::name('lastComment'),
-                                    set::rows('8'),
-                                    set::autofocus('autofocus'),
-                                ),
-                            ),
-                            div
-                            (
-                                setClass('form-group form-actions'),
-                                button
-                                (
-                                    setClass('btn btn-wide btn-primary'),
-                                    set::type('submit'),
-                                    set::id('submit'),
-                                    $lang->save,
-                                ),
-                                button
-                                (
-                                    setClass('btn btn-wide btn-hide-form'),
-                                    $lang->close,
-                                ),
-                            ),
-                        ),
-                    );
+                    $editCommentBtn = $this->createEditCommentBtn();
+                    $actionItemView->add($editCommentBtn);
+                }
+
+                $commentView = $this->createCommentView($action);
+                $actionItemView->add($commentView);
+
+                if($canEditComment)
+                {
+                    $commentEditForm = $this->createCommentEditForm($action);
+                    $actionItemView->add($commentEditForm);
                 }
             }
             $historiesListView->add($actionItemView);
