@@ -79,9 +79,8 @@
 #hostory::-moz-scrollbar {height: 0px; width: 0px; background: transparent;}
 .main-col iframe {min-height: unset;}
 
-#editorBox > .btn-group {top: 6px; max-width: 170px;}
-#editorBox > .btn-group.noDropdown {overflow: hidden;}
-#editorBox > .btn-group > button {margin: -5px 12px 0 4px; color: #838A9D;}
+#editorBox > .btn-group.noDropdown {top: 6px; overflow: hidden;}
+#editorBox > .btn-group > button {margin: 2px 12px 0 4px; color: #838A9D;}
 #editorBox > .btn-group > span.text {color: #838A9D; font-weight: 400; padding: 5px 12px; overflow: hidden; text-overflow: clip; white-space: nowrap; font-size: 13px;}
 #editorMenu {max-height: 200px; overflow-y: auto; overflow-x: hidden; margin-left: 4px; max-width: 100%;}
 [lang^=zh] #editorMenu {max-width: calc(100% - 10px);}
