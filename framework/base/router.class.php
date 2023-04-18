@@ -1040,12 +1040,13 @@ class baseRouter
      */
     public function setOpenApp()
     {
+        $module  = $this->rawModule;
         $tab     = '';
         $headers = getallheaders();
 
         if(isset($headers['X-ZIN-App'])) $tab = $headers['X-ZIN-App'];
-        elseif(isset($_COOKIE['tab']) && $_COOKIE['tab'] && preg_match('/^\w+$/', $_COOKIE['tab']))       $tab = $_COOKIE['tab'];
         elseif(isset($this->lang->navGroup)) $tab = zget($this->lang->navGroup, $module, 'my');
+        elseif(isset($_COOKIE['tab']) && $_COOKIE['tab'] && preg_match('/^\w+$/', $_COOKIE['tab'])) $tab = $_COOKIE['tab'];
 
         $this->tab = empty($tab) ? 'my' : $tab;
     }
