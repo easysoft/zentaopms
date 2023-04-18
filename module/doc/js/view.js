@@ -136,38 +136,6 @@ document.addEventListener('msfullscreenChange', function (e)
 
 $(function()
 {
-    var arrVersionDiff = [];
-    var isVersionDiff  = false;
-    function refreshCheckbox()
-    {
-        var $inputs = $('#docVersionMenu .checkbox-primary input');
-        if(arrVersionDiff.length == 2)
-        {
-            for(var i = 0; i < $inputs.length; i++)
-            {
-                var $input = $($inputs[i]);
-                if(!$input.prop('checked'))
-                {
-                    $input.addClass('disabled');
-                    $input.attr('disabled', true);
-                    $input.closest('.checkbox-primary').addClass('disabled');
-                }
-            }
-        }
-        else if(arrVersionDiff.length < 2)
-        {
-            for(var i = 0; i < $inputs.length; i++)
-            {
-                var $input = $($inputs[i]);
-                if(!$input.prop('checked'))
-                {
-                    $input.removeClass('disabled');
-                    $input.attr('disabled', false);
-                    $input.closest('.checkbox-primary').removeClass('disabled');
-                }
-            }
-        }
-    }
 
     $(document).keydown(function(event)
     {
@@ -206,77 +174,6 @@ $(function()
     {
         $('#docVersionMenu').addClass('diff');
         e.stopPropagation();
-    }).on('click', '#docVersionMenu .drop-bottom', function(e)
-    {
-        var data = $(e.target).data();
-        e.stopPropagation();
-        if(data.id == 'cancel')
-        {
-            arrVersionDiff = [];
-            $('#docVersionMenu').removeClass('diff');
-        }
-        else if(data.id == 'confirm')
-        {
-            if(arrVersionDiff.length == 2)
-            {
-                var $btnGroup = $('#diffBtnGroup');
-                $btnGroup.addClass('show-diff');
-                var oldV = arrVersionDiff[0].version;
-                var newV = arrVersionDiff[1].version;
-                if(newV < oldV)
-                {
-                    var tmpArr = [newV, oldV];
-                    newV       = tmpArr[1];
-                    oldV       = tmpArr[0];
-                }
-                if(isVersionDiff)
-                {
-                    var tmpArr = [newV, oldV];
-                    newV       = tmpArr[1];
-                    oldV       = tmpArr[0];
-                }
-                var leftDom  = $btnGroup.find('a.left-dom').html('V' + oldV + '<span class="caret"></span>');
-                var rightDom = $btnGroup.find('a.right-dom').html('V' + newV + '<span class="caret"></span>');
-            }
-            $(this.closest('.open.btn-group')).removeClass('open');
-        }
-    }).on('click', '#docVersionMenu .checkbox-primary', function()
-    {
-        var $input  = $(this).find('input');
-        var isCheck = $input.prop('checked');
-        var data    = $input.data();
-        if(isCheck)
-        {
-            if(arrVersionDiff.length)
-            {
-                if(arrVersionDiff[0].version != data.version) arrVersionDiff.push(data);
-            }
-            else
-            {
-                arrVersionDiff[0] = data;
-            }
-        }
-        else
-        {
-            if(arrVersionDiff.length == 0) return;
-            if(arrVersionDiff.length == 1)
-            {
-                arrVersionDiff = [];
-                return;
-            }
-            else if(arrVersionDiff[0].version === data.version)
-            {
-                var pushItem = arrVersionDiff[1];
-            }
-            else
-            {
-                var pushItem = arrVersionDiff[0];
-            }
-            var newArr     = [];
-            newArr.push(pushItem);
-            arrVersionDiff = newArr;
-        }
-        refreshCheckbox();
     }).on('click', '#hisTrigger', function()
     {
         var $history = $('#history');
@@ -295,24 +192,6 @@ $(function()
     {
         $('#history').addClass('hidden');
         $('#hisTrigger').removeClass('text-primary');
-    }).on('click', '#exchangeDiffBtn', function()
-    {
-        isVersionDiff = !isVersionDiff;
-        var $btn      = $(this);
-        var $btnGroup = $btn.closest('#diffBtnGroup');
-        var $leftBtn  = $btnGroup.find('.btn-link.left-dom');
-        var $rightBtn = $btnGroup.find('.btn-link.right-dom');
-        var tmpArr    = [$leftBtn.html(), $rightBtn.html()];
-        $rightBtn.html(tmpArr[0]);
-        $leftBtn.html(tmpArr[1]);
-        if(isVersionDiff)
-        {
-            $btn.addClass('text-primary');
-        }
-        else
-        {
-            $btn.removeClass('text-primary');
-        }
     });
 
     $('#outline li.has-list').addClass('open in');
