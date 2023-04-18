@@ -8,8 +8,7 @@
 #main {margin-bottom: 0;}
 
 /* css for mian */
-#mainContent > #sideBar {flex: 0 0 150px; overflow-x: auto; padding-right: 5px;}
-[lang^=zh] #mainContent > #sideBar {flex: 0 0 180px;}
+#mainContent > #sideBar {flex: 0 0 180px; overflow-x: auto; padding-right: 5px;}
 
 /* css for tree */
 #fileTree .title {font-size: 16px; height: 20px; margin-top: 5px; margin-bottom: 5px;}
