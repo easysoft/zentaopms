@@ -83,7 +83,7 @@
 
               array_shift($editors);
               ?>
-              <button class="btn pull-right btn-link" data-toggle="dropdown">
+              <button class="btn btn-link dropdown-toggle" data-toggle="dropdown">
                 <span class="text"><?php echo $editorInfo;?></span>
                 <?php if(!empty($editors)):?>
                 <span class="caret"></span>
