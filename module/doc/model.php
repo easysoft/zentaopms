@@ -1127,7 +1127,7 @@ class docModel extends model
                 unset($this->config->doc->search['fields']['execution']);
             }
 
-            if(in_array($type, array('view', 'collect', 'createdby'))) $libPairs = array('' => '') + $this->getLibs('all', 'withObject');
+            if(in_array($type, array('view', 'collect', 'createdby', 'editedby'))) $libPairs = array('' => '') + $this->getLibs('all', 'withObject');
 
             $this->config->doc->search['module'] = $queryName;
             $this->config->doc->search['params']['lib']['values'] = $libPairs + array('all' => $this->lang->doclib->all);

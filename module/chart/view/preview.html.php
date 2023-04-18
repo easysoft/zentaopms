@@ -20,7 +20,7 @@
 <?php js::set('WIDTH_INPUT',  $config->chart->widthInput);?>
 <?php js::set('WIDTH_DATE',   $config->chart->widthDate);?>
 <?php js::set('pickerHeight', $config->bi->pickerHeight);?>
-<?php $queryDom = "<div class='queryBtn query-inside hidden'> <button type='submit' id='submit' class='btn btn-primary btn-query' data-loading='Loading...'>{$lang->chart->query}</button></div>";?>
+<?php $queryDom = "<div class='queryBtn query-inside hidden'> <button type='submit' id='submit' onclick='queryData(this)' class='btn btn-primary btn-query' data-loading='Loading...'>{$lang->chart->query}</button></div>";?>
 <?php js::set('queryDom', $queryDom);?>
 
 <div id='mainMenu' class='clearfix main-position'>
@@ -36,7 +36,7 @@
   </div>
   <?php if($this->config->edition == 'biz' or $this->config->edition == 'max'):?>
   <div class='btn-toolbar pull-right child-position'>
-    <?php common::printLink('chart', 'exportChart', '', "<i class='icon icon-export muted'> </i> " . $lang->export, '', "class='btn btn-link btn-export' id='exportchart'");?>
+    <?php common::printLink('chart', 'export', '', "<i class='icon icon-export muted'> </i> " . $lang->export, '', "class='btn btn-link btn-export' id='exportchart'");?>
     <?php common::printLink('chart', 'browse', '', $lang->chart->toDesign, '', "class='btn btn-primary '");?>
   </div>
   <?php endif;?>
@@ -94,10 +94,10 @@
           </div>
         </div>
         <div class='panel-body'>
-          <div id="filterItems<?php echo $chart->currentGroup . '_';?><?php echo $chart->id;?>" class='filterBox'>
+          <div id="filterItems<?php echo $chart->currentGroup . '_';?><?php echo $chart->id;?>" data-chart="<?php echo $chart->currentGroup . '_' . $chart->id?>"class='filterBox'>
             <div class='filter-items'></div>
             <?php if(!empty($chart->filters)):?>
-            <div class='queryBtn query-outside'><?php echo html::submitButton($lang->chart->query, "data-chart={$chart->currentGroup}{$chart->id}", 'btn btn-primary btn-query');?></div>
+            <div class='queryBtn query-outside'><?php echo html::submitButton($lang->chart->query, "onclick='queryData(this)'", 'btn btn-primary btn-query');?></div>
             <?php endif;?>
           </div>
           <div id="chartDraw<?php echo $chart->currentGroup . '_';?><?php echo $chart->id;?>" data-group="<?php echo $chart->currentGroup;?>" data-id="<?php echo $chart->id;?>" class='echart-content'></div>
