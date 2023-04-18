@@ -229,6 +229,9 @@ $config->openMethods[] = 'task.editteam';
 $config->openMethods[] = 'feedback.mergeproductmodule';
 $config->openMethods[] = 'zanode.nodelist';
 $config->openMethods[] = 'action.restoreStages';
+$config->openMethods[] = 'testcase.getXmindImport';
+$config->openMethods[] = 'testcase.showXMindImport';
+$config->openMethods[] = 'testcase.saveXmindImport';
 
 $config->openModules = array();
 $config->openModules[] = 'install';
