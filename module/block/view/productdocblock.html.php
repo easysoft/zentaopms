@@ -12,7 +12,7 @@
 .block-productdoc .nav-secondary > li {position: relative;}
 .block-productdoc .nav-secondary > li > a {font-size: 14px; color: #838A9D; position: relative; box-shadow: none; padding-left: 20px; white-space: nowrap; text-overflow: ellipsis; overflow: hidden; transition: all .2s;}
 .block-productdoc .nav-secondary > li > a:first-child {padding-right: 36px;}
-.block-productdoc .nav-secondary > li.active > a:first-child {color: #3C4353; background: transparent; box-shadow: none;}
+.block-productdoc .nav-secondary > li.active > a:first-child {color: #3C4353; box-shadow: none;}
 .block-productdoc .nav-secondary > li.active > a:first-child:hover,
 .block-productdoc .nav-secondary > li.active > a:first-child:focus,
 .block-productdoc .nav-secondary > li > a:first-child:hover {box-shadow: none; border-radius: 4px 0 0 4px;}
@@ -52,6 +52,11 @@
 
 .block-productdoc #productType {position: absolute;top: 6px;left: 120px;}
 .block-productdoc #productType .btn {border:0px;}
+
+.block-productdoc .table .c-name > .doc-title {display: inline-block; overflow: hidden; background: transparent; padding-right:0px;}
+.block-productdoc .table .c-name > span.doc-title {line-height: 0; vertical-align: inherit;}
+.block-productdoc .table .c-name[data-status=draft] > .doc-title {max-width: calc(100% - 35px);}
+.block-productdoc .table .c-name > .draft {background-color:rgba(129, 102, 238, 0.12); color:#8166EE;}
 </style>
 <script>
 <?php $blockNavId = 'nav-' . uniqid(); ?>
@@ -104,10 +109,10 @@ function changeProductType(type)
 
 </script>
 <div class="dropdown" id='productType'>
-  <button class="btn" type="button" data-toggle="dropdown"><?php echo $lang->product->all;?> <span class="caret"></span></button>
+  <button class="btn" type="button" data-toggle="dropdown"><?php echo $lang->product->involved;?> <span class="caret"></span></button>
   <ul class="dropdown-menu">
-    <li><a href="javascript:changeProductType('all')" data-type='all'><?php echo $lang->product->all;?></a></li>
     <li><a href="javascript:changeProductType('involved')" data-type='involved'><?php echo $lang->product->involved;?></a></li>
+    <li><a href="javascript:changeProductType('all')" data-type='all'><?php echo $lang->product->all;?></a></li>
   </ul>
 </div>
 <div class="panel-body">
@@ -118,21 +123,23 @@ function changeProductType(type)
     </div>
     <?php else:?>
     <div class="col col-nav">
-      <ul class="nav nav-stacked nav-secondary scrollbar-hover products">
+      <ul class="nav nav-stacked nav-secondary scrollbar-hover involveds">
         <li class='switch-icon prev'><a><i class='icon icon-arrow-left'></i></a></li>
-        <?php $selected = key($products);?>
-        <?php foreach($products as $product):?>
-        <li <?php if($product->id == $selected) echo "class='active' id='activeProduct'";?> productID='<?php echo $product->id;?>'>
+        <?php $selected = key($involveds);?>
+        <?php foreach($involveds as $product):?>
+        <li <?php if($product->id == $selected) echo "class='active' id='activeProduct'";?> productid='<?php echo $product->id;?>'>
           <a href="###" title="<?php echo $product->name?>" data-target='<?php echo "#tab3{$blockNavId}Content{$product->id}";?>' data-toggle="tab"><?php echo $product->name;?></a>
+          <?php echo html::a(helper::createLink('doc', 'productSpace', "productID=$product->id"), "<i class='icon-arrow-right text-primary'></i>", '', "class='btn-view'");?>
         </li>
         <?php endforeach;?>
         <li class='switch-icon next'><a><i class='icon icon-arrow-right'></i></a></li>
       </ul>
-      <ul class="nav nav-stacked nav-secondary scrollbar-hover involveds hidden">
+      <ul class="nav nav-stacked nav-secondary scrollbar-hover products hidden">
         <li class='switch-icon prev'><a><i class='icon icon-arrow-left'></i></a></li>
-        <?php foreach($involveds as $product):?>
-        <li productID='<?php echo $product->id;?>'>
+        <?php foreach($products as $product):?>
+        <li productid='<?php echo $product->id;?>'>
           <a href="###" title="<?php echo $product->name?>" data-target='<?php echo "#tab3{$blockNavId}Content{$product->id}";?>' data-toggle="tab"><?php echo $product->name;?></a>
+          <?php echo html::a(helper::createLink('doc', 'productSpace', "productID=$product->id"), "<i class='icon-arrow-right text-primary'></i>", '', "class='btn-view'");?>
         </li>
         <?php endforeach;?>
         <li class='switch-icon next'><a><i class='icon icon-arrow-right'></i></a></li>
@@ -155,7 +162,7 @@ function changeProductType(type)
             <tbody>
               <?php foreach($docGroup[$product->id] as $doc):?>
               <tr>
-                <td class='c-name'>
+                <td class='c-name' data-status='<?php echo $doc->status?>'>
                   <?php
                   $docType = zget($config->doc->iconList, $doc->type);
                   $icon    = html::image("static/svg/{$docType}.svg", "class='file-icon'");
@@ -167,6 +174,7 @@ function changeProductType(type)
                   {
                       echo "<span class='doc-title'>$icon {$doc->title}</span>";
                   }
+                  if($doc->status == 'draft') echo "<span class='label label-badge draft'>{$lang->doc->draft}</span>";
                   ?>
                 </td>
                 <td class='c-user'><?php echo zget($users, $doc->addedBy);?></td>

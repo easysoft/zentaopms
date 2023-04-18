@@ -20,6 +20,7 @@ $schema->joins['project'] = 'release.project = project.id';
 $schema->joins['build']   = 'release.build   = build.id';
 
 $schema->fields = array();
+$schema->fields['id']       = array('type' => 'number', 'name' => $this->lang->release->id);
 $schema->fields['product']  = array('type' => 'object', 'name' => $this->lang->release->product, 'object' => 'product', 'show' => 'product.name');
 $schema->fields['project']  = array('type' => 'object', 'name' => $this->lang->release->project, 'object' => 'project', 'show' => 'project.name');
 $schema->fields['build']    = array('type' => 'object', 'name' => $this->lang->release->build,   'object' => 'build',   'show' => 'build.name');
