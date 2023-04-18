@@ -619,7 +619,7 @@ class baseDAO
             {
                 if(strpos($skipFields, ",$field,") !== false) continue;
                 $fields .= "`{$field}`,";
-                if(is_string($value)) $value = $this->sqlobj->quote($value);
+                if(is_string($value) or $value === null) $value = $this->sqlobj->quote($value);
                 $values .= $value . ',';
             }
             $fields = substr($fields, 0, -1);

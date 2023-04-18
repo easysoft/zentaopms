@@ -1125,7 +1125,8 @@ class blockModel extends model
      */
     public function getProductDocParams()
     {
-        return false;
+        $params = $this->appendCountParams();
+        return json_encode($params);
     }
 
     /**

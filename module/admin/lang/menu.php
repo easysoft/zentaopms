@@ -45,16 +45,16 @@ $lang->admin->menuList->convert['link']  = 'convert|convertjira';
 $lang->admin->menuList->convert['order'] = 50;
 
 $lang->admin->menuList->system['subMenu']['mode']        = array('link' => "{$lang->custom->mode}|custom|mode|");
-$lang->admin->menuList->system['subMenu']['backup']      = array('link' => "{$lang->backup->common}|backup|index|");
 $lang->admin->menuList->system['subMenu']['trash']       = array('link' => "{$lang->action->trash}|action|trash|");
 $lang->admin->menuList->system['subMenu']['safe']        = array('link' => "{$lang->security}|admin|safe|", 'alias' => 'checkweak,resetpwdsetting', 'links' => array('admin|resetpwdsetting|', 'admin|checkweak|'));
 $lang->admin->menuList->system['subMenu']['cron']        = array('link' => "{$lang->admin->cron}|cron|index|", 'subModule' => 'cron');
 $lang->admin->menuList->system['subMenu']['timezone']    = array('link' => "{$lang->timezone}|custom|timezone|");
 $lang->admin->menuList->system['subMenu']['buildindex']  = array('link' => "{$lang->admin->buildIndex}|search|buildindex|");
 $lang->admin->menuList->system['subMenu']['tableengine'] = array('link' => "{$lang->admin->tableEngine}|admin|tableengine|");
+if($this->config->db->driver == 'mysql') $lang->admin->menuList->system['subMenu']['backup']      = array('link' => "{$lang->backup->common}|backup|index|");
 
 $lang->admin->menuList->system['menuOrder']['5']  = 'mode';
-$lang->admin->menuList->system['menuOrder']['10'] = 'backup';
+if($this->config->db->driver == 'mysql') $lang->admin->menuList->system['menuOrder']['10'] = 'backup';
 $lang->admin->menuList->system['menuOrder']['15'] = 'trash';
 $lang->admin->menuList->system['menuOrder']['30'] = 'safe';
 $lang->admin->menuList->system['menuOrder']['35'] = 'cron';

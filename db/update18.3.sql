@@ -275,6 +275,9 @@ INSERT IGNORE INTO `zt_grouppriv` (`group`, `module`, `method`)
 SELECT t1.`group`, t1.`module`, 'myCreation' FROM `zt_grouppriv` AS t1 WHERE t1.`module` = 'doc' AND t1.`method` = 'browse';
 
 INSERT IGNORE INTO `zt_grouppriv` (`group`, `module`, `method`)
+SELECT t1.`group`, t1.`module`, 'myEdited' FROM `zt_grouppriv` AS t1 WHERE t1.`module` = 'doc' AND t1.`method` = 'browse';
+
+INSERT IGNORE INTO `zt_grouppriv` (`group`, `module`, `method`)
 SELECT t1.`group`, t1.`module`, 'productSpace' FROM `zt_grouppriv` AS t1 WHERE t1.`module` = 'doc' AND t1.`method` = 'tableContents';
 
 INSERT IGNORE INTO `zt_grouppriv` (`group`, `module`, `method`)
@@ -483,6 +486,10 @@ CHANGE `end` `end` smallint(4) unsigned zerofill NOT NULL DEFAULT '0';
 ALTER TABLE `zt_entry`
 CHANGE `editedBy` `editedBy` varchar(30) NOT NULL DEFAULT '',
 CHANGE `editedDate` `editedDate` datetime NULL;
+
+ALTER TABLE `zt_extension`
+CHANGE `dirs` `dirs` mediumtext NULL,
+CHANGE `files` `files` mediumtext NULL;
 
 ALTER TABLE `zt_feedback`
 CHANGE `reviewedBy` `reviewedBy` varchar(255) NOT NULL DEFAULT '',

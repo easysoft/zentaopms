@@ -276,8 +276,10 @@ class productModel extends model
      */
     public function getList($programID = 0, $status = 'all', $limit = 0, $line = 0, $shadow = 0)
     {
-        $products = $this->dao->select('t1.*')->from(TABLE_PRODUCT)->alias('t1')
+        $products = $this->dao->select('DISTINCT t1.*')->from(TABLE_PRODUCT)->alias('t1')
             ->leftJoin(TABLE_PROGRAM)->alias('t2')->on('t1.program = t2.id')
+            ->leftJoin(TABLE_PROJECTPRODUCT)->alias('t3')->on('t3.product = t1.id')
+            ->leftJoin(TABLE_TEAM)->alias('t4')->on("t4.root = t3.project && t4.type='project'")
             ->where('t1.deleted')->eq(0)
             ->beginIF($shadow !== 'all')->andWhere('t1.shadow')->eq((int)$shadow)->fi()
             ->beginIF($programID)->andWhere('t1.program')->eq($programID)->fi()
@@ -291,6 +293,7 @@ class productModel extends model
             ->orWhere('t1.QD')->eq($this->app->user->account)
             ->orWhere('t1.RD')->eq($this->app->user->account)
             ->orWhere('t1.createdBy')->eq($this->app->user->account)
+            ->orWhere('t4.account')->eq($this->app->user->account)
             ->markRight(1)
             ->fi()
             ->beginIF($status == 'review')

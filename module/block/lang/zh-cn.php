@@ -357,6 +357,7 @@ if($config->vision == 'rnd')
 {
     $lang->block->default['doc']['6']['title'] = $lang->productCommon . '文档';
     $lang->block->default['doc']['6']['block'] = 'productdoc';
+    $lang->block->default['doc']['6']['params']['count'] = '20';
     $lang->block->default['doc']['6']['grid']  = 8;
 }
 
@@ -366,6 +367,7 @@ $lang->block->default['doc']['7']['grid']  = 4;
 
 $lang->block->default['doc']['8']['title'] = $lang->projectCommon . '文档';
 $lang->block->default['doc']['8']['block'] = 'projectdoc';
+$lang->block->default['doc']['8']['params']['count'] = '20';
 $lang->block->default['doc']['8']['grid']  = 8;
 
 $lang->block->count   = '数量';
