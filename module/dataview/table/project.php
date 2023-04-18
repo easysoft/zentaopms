@@ -12,6 +12,7 @@ $schema->tables['project']   = 'zt_project';
 $schema->joins = array();
 
 $schema->fields = array();
+$schema->fields['id']          = array('type' => 'number', 'name' => $this->lang->project->id);
 $schema->fields['name']        = array('type' => 'string', 'name' => $this->lang->project->name);
 $schema->fields['code']        = array('type' => 'string', 'name' => $this->lang->project->code);
 $schema->fields['model']       = array('type' => 'option', 'name' => $this->lang->project->model, 'options' => $this->lang->project->modelList);
@@ -26,5 +27,9 @@ $schema->fields['QD']          = array('type' => 'user',   'name' => $this->lang
 $schema->fields['RD']          = array('type' => 'user',   'name' => $this->lang->project->RD);
 $schema->fields['openedBy']    = array('type' => 'user',   'name' => $this->lang->project->openedBy);
 $schema->fields['openedDate']  = array('type' => 'date',   'name' => $this->lang->project->openedDate);
+$schema->fields['realBegan']   = array('type' => 'date',   'name' => $this->lang->project->realBegan);
+$schema->fields['realEnd']     = array('type' => 'date',   'name' => $this->lang->project->realEnd);
+$schema->fields['closedBy']    = array('type' => 'user',   'name' => $this->lang->project->closedBy);
+$schema->fields['closedDate']  = array('type' => 'date',   'name' => $this->lang->project->closedDate);
 
 $schema->objects = array();
