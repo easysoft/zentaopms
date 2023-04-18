@@ -341,6 +341,11 @@ CHANGE `editedBy` `editedBy` varchar(30) NOT NULL DEFAULT '',
 CHANGE `editedDate` `editedDate` datetime NULL;
 
 ALTER TABLE `zt_attend`
+CHANGE `signIn` `signIn` time NULL,
+CHANGE `signOut` `signOut` time NULL,
+CHANGE `manualIn` `manualIn` time NULL,
+CHANGE `manualOut` `manualOut` time NULL,
+CHANGE `desc` `desc` text NULL,
 CHANGE `reviewedBy` `reviewedBy` char(30) NULL DEFAULT '',
 CHANGE `reviewedDate` `reviewedDate` datetime NULL;
 
