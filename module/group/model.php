@@ -2069,7 +2069,7 @@ class groupModel extends model
         $allPrivs = $this->dao->select('module,method')->from(TABLE_PRIV)->fetchGroup('module', 'method');
         foreach($this->lang->resource as $module => $methods)
         {
-            if(isset($this->lang->$module->menus))
+            if(isset($this->lang->$module->menus) and (empty($menu) or $menu == 'general'))
             {
                 foreach($this->lang->$module->menus as $method => $value)
                 {

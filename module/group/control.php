@@ -274,25 +274,28 @@ class group extends control
                 }
             }
 
-            $modules          = $this->group->getMenuModules($menu, false);
-            $unassignedModule = array_diff(array_keys(get_object_vars($this->lang->resource)), array_keys($modules));
-            foreach($unassignedModule as $index => $module)
+            if(empty($menu) or $menu == 'general')
             {
-                if(!$this->group->checkMenuModule($menu, $module)) continue;
-
-                $selectPrivs[$module] = array();
-                $selectPrivs[$module][0] = 0;
-
-                foreach($this->lang->resource->{$module} as $method => $methodLabel)
+                $modules          = $this->group->getMenuModules($menu, false);
+                $unassignedModule = array_diff(array_keys(get_object_vars($this->lang->resource)), array_keys($modules));
+                foreach($unassignedModule as $index => $module)
                 {
-                    if(isset($privMethods[$module][$method])) continue;
-                    $privMethods[$module][$method] = $method;
+                    if(!$this->group->checkMenuModule($menu, $module)) continue;
 
-                    $privList[$module][0]["{$module}-$method"] = new stdclass();
-                    $privList[$module][0]["{$module}-$method"]->module = $module;
-                    $privList[$module][0]["{$module}-$method"]->method = $method;
-                    $privList[$module][0]["{$module}-$method"]->name   = $this->lang->{$module}->{$methodLabel};
-                    if(!empty($groupPrivs[$module][$method])) $selectPrivs[$module][0] ++;
+                    $selectPrivs[$module] = array();
+                    $selectPrivs[$module][0] = 0;
+
+                    foreach($this->lang->resource->{$module} as $method => $methodLabel)
+                    {
+                        if(isset($privMethods[$module][$method])) continue;
+                        $privMethods[$module][$method] = $method;
+
+                        $privList[$module][0]["{$module}-$method"] = new stdclass();
+                        $privList[$module][0]["{$module}-$method"]->module = $module;
+                        $privList[$module][0]["{$module}-$method"]->method = $method;
+                        $privList[$module][0]["{$module}-$method"]->name   = $this->lang->{$module}->{$methodLabel};
+                        if(!empty($groupPrivs[$module][$method])) $selectPrivs[$module][0] ++;
+                    }
                 }
             }
 
