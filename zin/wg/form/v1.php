@@ -15,17 +15,17 @@ class form extends panel
         'target?: string',
         'items?: array',
         'grid?: bool',
-        'labelWidth?: number'
+        'labelWidth?: number',
     ];
 
     protected static $defaultProps =
     [
-        'class'         => 'rounded-md shadow ring-0 canvas px-4 pb-4 mb-4',
+        'class'         => 'panel-form rounded-md shadow ring-0 canvas px-4 pb-4 mb-4 mx-auto',
         'size'          => 'lg',
         'grid'          => true,
         'method'        => 'post',
         'target'        => 'ajax',
-        'actions'       => ['save', 'back']
+        'actions'       => ['save', 'back'],
     ];
 
     protected function created()
@@ -62,7 +62,7 @@ class form extends panel
 
         return toolbar
         (
-            set::class('form-actions form-group gap-4'),
+            set::class('form-actions form-group gap-4 no-label'),
             set::items($actions)
         );
     }
