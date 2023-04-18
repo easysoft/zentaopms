@@ -495,6 +495,7 @@ $(function()
                 type = ['view', 'collect', 'createdby', 'editedby'].indexOf(type.toLowerCase()) !== -1 ? type.toLowerCase() : 'mine';
                 linkParams = 'type=' + type + '&' + linkParams;
             }
+            if(type == 'apiDoc') linkParams = linkParams.replace('browseType=&', 'browseType=byrelease&').replace('param=0', 'param=<?php echo isset($release) ? $release : 0;?>');
         }
 
         location.href = createLink(moduleName, methodName, linkParams);
@@ -615,7 +616,8 @@ $(function()
         var methodName = config.currentMethod;
         if(config.currentModule == 'doc')
         {
-            params     = linkParams.replace('%s', 'libID=' + libID + '&moduleID=' + moduleID).replace('browseType=&', 'browseType=byrelease&').replace('param=0', 'param=' + moduleID);
+            params = linkParams.replace('%s', 'libID=' + libID + '&moduleID=0').replace('browseType=&', 'browseType=byrelease&').replace('param=0', 'param=' + moduleID);
+            if(methodName == 'view') params = linkParams.replace('%s', 'libID=' + libID + '&moduleID=0&browseType=byrelease&orderBy=&status,id_desc&param=' + moduleID);
             methodName = objectType + 'Space';
         }
         location.href = createLink(config.currentModule, methodName, params);

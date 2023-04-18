@@ -1,7 +1,8 @@
 <?php
 $lang->dimension->common     = '维度';
-$lang->dimension->efficiency = '效能';
-$lang->dimension->quality    = '质量';
+$lang->dimension->macro      = '宏观管理维度';
+$lang->dimension->efficiency = '效能管理维度';
+$lang->dimension->quality    = '质量管理维度';
 
 $lang->dimension->moduleList['']        = '';
 $lang->dimension->moduleList['product'] = $lang->productCommon;

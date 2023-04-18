@@ -22,7 +22,7 @@
 .article-content {margin-top: 0px}
 .article-content .info {margin-bottom: 15px; width:100%; overflow:hidden;}
 .article-content .info .user-time{margin-right: 4px}
-.article-content .info .keywords .label {padding-right:8px; padding-left:8px; color:#18A6FD; border-color:rgba(24, 166, 253, 0.25); height:22px; line-height:14px; margin-right:4px;}
+.article-content .info .keywords .label {padding: 2px 8px; color:#18A6FD; border-color:rgba(24, 166, 253, 0.25); height: 18px; line-height:14px; margin-right:4px;}
 
 .article-content {width: 100%; display: inline-block;}
 .article-content img {margin: 0;}
@@ -95,3 +95,6 @@
 #docVersionMenu.diff > .drop-body > li > a {padding-left:30px!important;}
 #docVersionMenu.diff > .drop-title > #changeBtn {opacity: 0;}
 #docVersionMenu.diff > .drop-bottom > button {display: unset!important;}
+
+.user-time .icon-star {font-size: 12px; line-height: 1.8;}
+.user-time .icon-star:before {vertical-align: top;}
