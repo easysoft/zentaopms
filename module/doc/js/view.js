@@ -136,6 +136,39 @@ document.addEventListener('msfullscreenChange', function (e)
 
 $(function()
 {
+    var arrVersionDiff = [];
+    var isVersionDiff  = false;
+    function refreshCheckbox()
+    {
+        var $inputs = $('#docVersionMenu .checkbox-primary input');
+        if(arrVersionDiff.length == 2)
+        {
+            for(var i = 0; i < $inputs.length; i++)
+            {
+                var $input = $($inputs[i]);
+                if(!$input.prop('checked'))
+                {
+                    $input.addClass('disabled');
+                    $input.attr('disabled', true);
+                    $input.closest('.checkbox-primary').addClass('disabled');
+                }
+            }
+        }
+        else if(arrVersionDiff.length < 2)
+        {
+            for(var i = 0; i < $inputs.length; i++)
+            {
+                var $input = $($inputs[i]);
+                if(!$input.prop('checked'))
+                {
+                    $input.removeClass('disabled');
+                    $input.attr('disabled', false);
+                    $input.closest('.checkbox-primary').removeClass('disabled');
+                }
+            }
+        }
+    }
+
     $(document).keydown(function(event)
     {
         if($.cookie('isFullScreen') == 1)
@@ -172,19 +205,45 @@ $(function()
     }).on('click', '#docVersionMenu #changeBtn', function(e)
     {
         $('#docVersionMenu').addClass('diff');
-        e.stopPropagation()
+        e.stopPropagation();
     }).on('click', '#docVersionMenu .drop-bottom', function(e)
     {
         var data = $(e.target).data();
         e.stopPropagation();
         if(data.id == 'cancel')
         {
+            arrVersionDiff = [];
             $('#docVersionMenu').removeClass('diff');
         }
         else if(data.id == 'confirm')
         {
-            $(this.closest('.open .btn-group')).removeClass('open');
+            $(this.closest('.open.btn-group')).removeClass('open');
         }
+    }).on('click', '#docVersionMenu .checkbox-primary', function()
+    {
+        var $input  = $(this).find('input');
+        var isCheck = $input.prop('checked');
+        var data    = $input.data();
+        if(isCheck)
+        {
+            arrVersionDiff.push(data);
+        }
+        else
+        {
+            if(arrVersionDiff[0].version === data.version)
+            {
+                var pushItem = arrVersionDiff[1];
+            }
+            else
+            {
+                var pushItem = arrVersionDiff[0];
+            }
+            var newArr = [];
+            newArr.push(pushItem);
+            arrVersionDiff = newArr;
+        }
+
+        refreshCheckbox()
     });
 
     $('#outline li.has-list').addClass('open in');
@@ -243,7 +302,7 @@ $(function()
     {
         $('#history').addClass('hidden');
         $('#hisTrigger').removeClass('text-primary');
-    })
+    });
     $('#history').find('.btn.pull-right').removeClass('pull-right');
     if($('.files-list').length) $('#content .detail-content.article-content').css('height', 'calc(100vh - 300px)');
     $('.outline .outline-toggle i.icon-menu-arrow-left').trigger("click");
