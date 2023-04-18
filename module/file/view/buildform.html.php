@@ -31,7 +31,6 @@ js::set('maxUploadSize', $maxUploadSize);
 </div>
 
 <script>
-var totalSize = 0;
 maxUploadSize = unitConversion(maxUploadSize);
 
 /**
@@ -51,19 +50,42 @@ function unitConversion(maxUploadSize)
 }
 
 /**
+ * Get all files total size.
+ *
+ * @return int
+ */
+function getTotalSize()
+{
+    var totalSize = 0;
+
+    $('input[type="file"]').each(function(index, element)
+    {
+        if (element.multiple) return;
+
+        if (!element.files) return;
+
+        if (!element.files[0]) return;
+
+        totalSize += element.files[0].size;
+    });
+
+    return totalSize;
+}
+
+/**
  * Check danger extension and file size.
  *
+ * TODO Rename.
  * @param  object $file
  * @access public
  * @return void
  */
 function checkDangerExtension(file)
 {
-    var fileName = $(file).val();
-    var index    = fileName.lastIndexOf(".");
-    var fileSize = $(file)[0].files[0].size;
-
-    totalSize += fileSize;
+    var fileName  = $(file).val();
+    var index     = fileName.lastIndexOf(".");
+    var fileSize  = $(file)[0].files[0].size;
+    var totalSize = getTotalSize();
 
     if(index >= 0)
     {
@@ -85,7 +107,6 @@ function checkDangerExtension(file)
         if(totalSize >= maxUploadSize)
         {
             alert(<?php echo json_encode(sprintf($lang->file->errorFileSize, $maxUploadSize));?>);
-            totalSize -= fileSize;
             $(file).val('');
             return false;
         }

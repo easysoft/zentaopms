@@ -341,11 +341,11 @@ $lang->block->default['doc']['2']['title'] = 'Dynamic';
 $lang->block->default['doc']['2']['block'] = 'docdynamic';
 $lang->block->default['doc']['2']['grid']  = 4;
 
-$lang->block->default['doc']['3']['title'] = 'My Collection';
+$lang->block->default['doc']['3']['title'] = 'My Collection Document';
 $lang->block->default['doc']['3']['block'] = 'docmycollection';
 $lang->block->default['doc']['3']['grid']  = 8;
 
-$lang->block->default['doc']['4']['title'] = 'Recently update';
+$lang->block->default['doc']['4']['title'] = 'Recently Update Document';
 $lang->block->default['doc']['4']['block'] = 'docrecentupdate';
 $lang->block->default['doc']['4']['grid']  = 8;
 
@@ -355,7 +355,7 @@ $lang->block->default['doc']['5']['grid']  = 4;
 
 if($config->vision == 'rnd')
 {
-    $lang->block->default['doc']['6']['title'] = $lang->productCommon . 'Document';
+    $lang->block->default['doc']['6']['title'] = $lang->productCommon . ' Document';
     $lang->block->default['doc']['6']['block'] = 'productdoc';
     $lang->block->default['doc']['6']['grid']  = 8;
 }
@@ -364,7 +364,7 @@ $lang->block->default['doc']['7']['title'] = 'Favorite Leaderboard';
 $lang->block->default['doc']['7']['block'] = 'doccollectlist';
 $lang->block->default['doc']['7']['grid']  = 4;
 
-$lang->block->default['doc']['8']['title'] = $lang->projectCommon . 'Document';
+$lang->block->default['doc']['8']['title'] = $lang->projectCommon . ' Document';
 $lang->block->default['doc']['8']['block'] = 'projectdoc';
 $lang->block->default['doc']['8']['grid']  = 8;
 

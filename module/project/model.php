@@ -304,7 +304,7 @@ class projectModel extends model
             ->beginIF($queryType == 'bystatus' and $param != 'all' and $param != 'undone')->andWhere('status')->eq($param)->fi()
             ->beginIF($queryType == 'byid')->andWhere('id')->eq($param)->fi()
             ->orderBy($orderBy)
-            ->limit($limit)
+            ->beginIF($limit)->limit($limit)->fi()
             ->fetchAll('id');
 
         if(empty($projects)) return array();
@@ -1550,8 +1550,8 @@ class projectModel extends model
 
         if(!empty($executionsCount) and $oldProject->multiple)
         {
-            $minExecutionBegin = $this->dao->select('begin as minBegin')->from(TABLE_PROJECT)->where('project')->eq($project->id)->andWhere('deleted')->eq('0')->orderBy('begin_asc')->fetch();
-            $maxExecutionEnd   = $this->dao->select('end as maxEnd')->from(TABLE_PROJECT)->where('project')->eq($project->id)->andWhere('deleted')->eq('0')->orderBy('end_desc')->fetch();
+            $minExecutionBegin = $this->dao->select('`begin` as minBegin')->from(TABLE_PROJECT)->where('project')->eq($project->id)->andWhere('deleted')->eq('0')->orderBy('begin_asc')->fetch();
+            $maxExecutionEnd   = $this->dao->select('`end` as maxEnd')->from(TABLE_PROJECT)->where('project')->eq($project->id)->andWhere('deleted')->eq('0')->orderBy('end_desc')->fetch();
             if($minExecutionBegin and $project->begin > $minExecutionBegin->minBegin) dao::$errors['begin'] = sprintf($this->lang->project->begigLetterExecution, $minExecutionBegin->minBegin);
             if($maxExecutionEnd and $project->end < $maxExecutionEnd->maxEnd) dao::$errors['end'] = sprintf($this->lang->project->endGreateExecution, $maxExecutionEnd->maxEnd);
             if(dao::isError()) return false;
@@ -1957,7 +1957,7 @@ class projectModel extends model
         {
             $beginTimeStamp = strtotime($project->begin);
             $tasks = $this->dao->select('id,estStarted,deadline,status')->from(TABLE_TASK)
-                ->where('deadline')->ne('0000-00-00')
+                ->where('deadline')->notZeroDate()
                 ->andWhere('status')->in('wait,doing')
                 ->andWhere('project')->eq($projectID)
                 ->fetchAll();

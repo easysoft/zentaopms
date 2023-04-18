@@ -11,7 +11,7 @@ $(document).ready(function()
         var html = "<select id='frame' name='frame' class='form-control chosen'>";
         for(frame in frameList)
         {
-            if(job.engine == 'jenkins' || frame != 'sonarqube') 
+            if(job.engine == 'jenkins' || frame != 'sonarqube')
             {
                 html += "<option value='" + frame + "'";
                 if(frame == job.frame) html += " selected";
@@ -157,26 +157,27 @@ $(document).ready(function()
     $('#jkServer').change(function()
     {
         var jenkinsID = $(this).val();
-        $('#jenkinsServerTR #jkTask').remove();
-        $('#jenkinsServerTR #jkTask_chosen').remove();
+        $('#jenkinsServerTR .dropdown,#jenkinsServerTR .input-group-addon').hide();
         $('#jenkinsServerTR .input-group').append("<div class='load-indicator loading'></div>");
-        $.getJSON(createLink('jenkins', 'ajaxGetJenkinsTasks', 'jenkinsID=' + jenkinsID), function(tasks)
-        {
-            html = "<select id='jkTask' name='jkTask' class='form-control'>";
-            for(taskKey in tasks)
-            {
-                var task = tasks[taskKey];
-                html += "<option value='" + taskKey + "'>" + task + "</option>";
-            }
-            html += '</select>';
-            $('#jenkinsServerTR .loading').remove();
-            $('#jenkinsServerTR .input-group').append(html);
+        setJenkinsJob('', '');
 
-            $('#jenkinsServerTR #jkTask').val(jkTask).chosen();
-        })
+        $.get(createLink('jenkins', 'ajaxGetJenkinsTasks', 'jenkinsID=' + jenkinsID), function(tasks)
+        {
+            $('#jenkinsServerTR .loading').remove();
+            $('#dropMenuTasks').html(tasks);
+            $('#jenkinsServerTR .dropdown,.input-group-addon').show();
+
+            if(jenkinsPipeline)
+            {
+                if(jenkinsPipeline.substr(0, 5) != '/job/') jenkinsPipeline = '/job/' + jenkinsPipeline + '/';
+                document.getElementById(jenkinsPipeline).click();
+                jenkinsPipeline = '';
+            }
+        });
 
         /* There has been a problem with handling the prompt label. */
         $('#jkTaskLabel').remove();
+        $('.jktask-label').addClass('text-right');
     })
 
     $(document).on('change', '#frame', function()
@@ -260,3 +261,18 @@ $(document).ready(function()
     $('#sonarqubeServer').change();
     $('#triggerType').change();
 });
+
+/**
+ * Set jenkins job.
+ *
+ * @param string $name
+ * @param string $task
+ * @access public
+ * @return void
+ */
+function setJenkinsJob(name, task)
+{
+    if(name) $('.jktask-label').removeClass('text-right');
+    $('#jkTask').val(task);
+    $('.jktask-label .text').html(name);
+}

@@ -276,8 +276,8 @@ class project extends control
 
             if($objectType == 'program')
             {
-                $minChildBegin = $this->dao->select('begin as minBegin')->from(TABLE_PROGRAM)->where('id')->ne($objectID)->andWhere('deleted')->eq(0)->andWhere('path')->like("%,{$objectID},%")->orderBy('begin_asc')->fetch('minBegin');
-                $maxChildEnd   = $this->dao->select('end as maxEnd')->from(TABLE_PROGRAM)->where('id')->ne($objectID)->andWhere('deleted')->eq(0)->andWhere('path')->like("%,{$objectID},%")->andWhere('end')->ne('0000-00-00')->orderBy('end_desc')->fetch('maxEnd');
+                $minChildBegin = $this->dao->select('`begin` as minBegin')->from(TABLE_PROGRAM)->where('id')->ne($objectID)->andWhere('deleted')->eq(0)->andWhere('path')->like("%,{$objectID},%")->orderBy('begin_asc')->fetch('tminBegin');
+                $maxChildEnd   = $this->dao->select('`end` as maxEnd')->from(TABLE_PROGRAM)->where('id')->ne($objectID)->andWhere('deleted')->eq(0)->andWhere('path')->like("%,{$objectID},%")->andWhere('end')->ne('0000-00-00')->orderBy('end_desc')->fetch('maxEnd');
             }
         }
 
@@ -2348,16 +2348,19 @@ class project extends control
      * @param  int    $projectID
      * @param  int    $executionID
      * @param  string $mode
-     * @param  string $type
+     * @param  string $type       all|sprint|stage|kanban
      * @access public
      * @return void
      */
     public function ajaxGetExecutions($projectID, $executionID = 0, $mode = '', $type = 'all')
     {
+        $project    = $this->project->getById($projectID);
         $executions = array('' => '') + $this->loadModel('execution')->getPairs($projectID, $type, $mode);
 
         if($this->app->getViewType() == 'json') return print(json_encode($executionList));
-        return print(html::select('execution', $executions, $executionID, "class='form-control'"));
+
+        $disabled = $project->multiple ? '' : 'disabled';
+        return print(html::select('execution', $executions, $executionID, "class='form-control $disabled' $disabled"));
     }
 
     /**

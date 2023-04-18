@@ -20,7 +20,7 @@
 </style>
 <?php $backLink = $app->session->docList ? $app->session->docList : $this->createLink('doc', 'view', "docID={$doc->id}") . "#app={$this->app->tab}";?>
 <div id="mainContent" class="main-content">
-  <form class="load-indicator main-form form-ajax" id="dataform" method='post' enctype='multipart/form-data'>
+  <form class="load-indicator main-form form-ajax form-watched" id="dataform" method='post' enctype='multipart/form-data'>
     <table class='table table-form'>
       <tbody>
         <tr id='headerBox'>
@@ -28,7 +28,6 @@
           <td class="doc-title" colspan='3'><?php echo html::input('title', $doc->title, "placeholder='{$lang->doc->titlePlaceholder}'' id='editorTitle' class='form-control' required");?></td>
           <td class="text-right btn-tools">
             <?php if($doc->status == 'draft'):?>
-            <span id='savePath' class='text-gray'></span>
             <?php echo html::commonButton($lang->doc->saveDraft, "id='saveDraft'", "btn btn-secondary");?>
             <?php echo html::commonButton($lang->release->common, "id='saveRelease'", "btn btn-primary");?>
             <?php else:?>
@@ -148,8 +147,6 @@ $(function()
 <?php js::set('confirmUpdateContent', $lang->doc->confirmUpdateContent);?>
 <?php js::set('docID', $doc->id);?>
 <?php js::set('draft', $doc->draft);?>
-<?php js::set('holders', $lang->doc->placeholder);?>
 <?php js::set('type', 'doc');?>
-<?php js::set('defaultSave', $lang->doc->defaultSave);?>
 <?php js::set('titleNotEmpty', sprintf($lang->error->notempty, $lang->doc->title));?>
 <?php include '../../common/view/footer.html.php';?>

@@ -2119,6 +2119,11 @@ class block extends control
      */
     public function printDocViewListBlock()
     {
+        /* Load pager. */
+        $this->app->loadClass('pager', $static = true);
+        $pager = new pager(0, 6, 1);
+
+        $this->view->docList = $this->loadModel('doc')->getDocsByBrowseType('all', 0, 0,'views_desc', $pager);
     }
 
     /**
@@ -2129,6 +2134,11 @@ class block extends control
      */
     public function printDocCollectListBlock()
     {
+        /* Load pager. */
+        $this->app->loadClass('pager', $static = true);
+        $pager = new pager(0, 6, 1);
+
+        $this->view->docList = $this->loadModel('doc')->getDocsByBrowseType('all', 0, 0, 'collects_desc', $pager);
     }
 
     /**
@@ -2139,6 +2149,31 @@ class block extends control
      */
     public function printProductDocBlock()
     {
+        $this->loadModel('doc');
+
+        /* Set project status and count. */
+        $count         = isset($this->params->count) ? (int)$this->params->count : 15;
+        $products      = $this->loadModel('product')->getOrderedProducts('all');
+        $involveds     = $this->product->getOrderedProducts('involved');
+        $productIdList = array_merge(array_keys($products), array_keys($involveds));
+
+        $stmt = $this->dao->select('id,product,lib,title,type,addedBy,addedDate,editedDate,status,acl,groups,users,deleted')->from(TABLE_DOC)->alias('t1')
+            ->where('deleted')->eq(0)
+            ->andWhere('product')->in($productIdList)
+            ->orderBy('product,status,editedDate_desc')
+            ->query();
+        $docGroup = array();
+        while($doc = $stmt->fetch())
+        {
+            if(!isset($docGroup[$doc->product])) $docGroup[$doc->product] = array();
+            if(count($docGroup[$doc->product]) > $count) break;
+            if($this->doc->checkPrivDoc($doc)) $docGroup[$doc->product][$doc->id] = $doc;
+        }
+
+        $this->view->users     = $this->loadModel('user')->getPairs('noletter');
+        $this->view->products  = $products;
+        $this->view->involveds = $involveds;
+        $this->view->docGroup  = $docGroup;
     }
 
     /**
@@ -2149,6 +2184,38 @@ class block extends control
      */
     public function printProjectDocBlock()
     {
+        $this->loadModel('doc');
+        $this->app->loadLang('project');
+
+        /* Set project status and count. */
+        $count         = isset($this->params->count) ? (int)$this->params->count : 15;
+        $involveds     = $this->loadModel('program')->getProjectList('0', 'all', 0, 'order_asc', null, 0, $involved = 1);
+        $projects      = $this->program->getProjectList('0', 'all', 0, 'order_asc');
+        $projectIdList = array_merge(array_keys($projects), array_keys($involveds));
+
+        $stmt = $this->dao->select('t1.id,t1.lib,t1.title,t1.type,t1.addedBy,t1.addedDate,t1.editedDate,t1.status,t1.acl,t1.groups,t1.users,t1.deleted,if(t1.project = 0, t2.project, t1.project) as project')->from(TABLE_DOC)->alias('t1')
+            ->leftJoin(TABLE_EXECUTION)->alias('t2')->on('t1.execution=t2.id')
+            ->where('t1.deleted')->eq(0)
+            ->andWhere('t2.deleted', true)->eq(0)
+            ->orWhere('t2.deleted is null')
+            ->markRight(1)
+            ->andWhere('t1.project',true)->in($projectIdList)
+            ->orWhere('t2.project',true)->in($projectIdList)
+            ->markRight(1)
+            ->orderBy('project,t1.status,t1.editedDate_desc')
+            ->query();
+        $docGroup = array();
+        while($doc = $stmt->fetch())
+        {
+            if(!isset($docGroup[$doc->project])) $docGroup[$doc->project] = array();
+            if(count($docGroup[$doc->project]) > $count) break;
+            if($this->doc->checkPrivDoc($doc)) $docGroup[$doc->project][$doc->id] = $doc;
+        }
+
+        $this->view->users     = $this->loadModel('user')->getPairs('noletter');
+        $this->view->projects  = $projects;
+        $this->view->involveds = $involveds;
+        $this->view->docGroup  = $docGroup;
     }
 
     /**

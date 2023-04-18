@@ -21,11 +21,45 @@ class screen extends control
     public function browse($dimensionID = 0)
     {
         $dimensionID = $this->loadModel('dimension')->setSwitcherMenu($dimensionID);
+        $this->checkShowGuide();
 
-        $this->view->title     = $this->lang->screen->common;
-        $this->view->screens   = $this->screen->getList($dimensionID);
-        $this->view->dimension = $dimensionID;
+        $this->view->title      = $this->lang->screen->common;
+        $this->view->screens    = $this->screen->getList($dimensionID);
+        $this->view->dimension  = $dimensionID;
         $this->display();
+    }
+
+    /**
+     * Check whether show guide.
+     *
+     * @access public
+     * @return void
+     */
+    public function checkShowGuide()
+    {
+        $this->app->loadLang('admin');
+        $this->loadModel('setting');
+
+        $isUpdate = $this->setting->getItem("owner=system&module=bi&key=update2BI");
+        if(empty($isUpdate))
+        {
+            $this->view->showGuide = false;
+            return;
+        }
+
+        $lang     = (strpos($this->app->getClientLang(), 'zh') !== false) ? 'zh' : 'en';
+        $version  = ($this->config->edition == 'biz' or $this->config->edition == 'max') ? 'biz' : 'pms';
+        $imageURL = "static/images/bi_guide_{$version}_{$lang}.png";
+
+        $moduleKey   = $version . 'Guide';
+        $guides      = $this->setting->getItem("owner=system&module=bi&key={$moduleKey}");
+        $haveSeen    = explode(',', $guides);
+        $afterSeen   = array_merge($haveSeen, array($this->app->user->account));
+        $this->setting->setItem("system.bi.{$moduleKey}", implode(',', array_unique($afterSeen)));
+
+        $this->view->showGuide  = in_array($this->app->user->account, $haveSeen) ? false : true;
+        $this->view->imageURL   = $imageURL;
+        $this->view->version    = $version;
     }
 
     /**

@@ -2212,10 +2212,6 @@ class executionModel extends model
         {
             $link = helper::createLink('doc', $method, "type=execution&objectID=%s&from=execution");
         }
-        elseif($module == 'api')
-        {
-            $link = helper::createLink('doc', 'tableContents', "type=execution&objectID=%s&from=execution");
-        }
         elseif(in_array($module, array('issue', 'risk', 'opportunity', 'pssp', 'auditplan', 'nc', 'meeting')))
         {
             $link = helper::createLink($module, 'browse', "executionID=%s&from=execution");
@@ -2787,7 +2783,7 @@ class executionModel extends model
      */
     public function getToImport($executionIds, $type, $model = '')
     {
-        return $this->dao->select('t1.id,concat_ws(" / ", t2.name, t1.name) as name')->from(TABLE_EXECUTION)->alias('t1')
+        return $this->dao->select("t1.id,concat_ws(' / ', t2.name, t1.name) as name")->from(TABLE_EXECUTION)->alias('t1')
             ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t2.id=t1.project')
             ->where('t1.id')->in($executionIds)
             ->beginIF(!$this->app->user->admin)->andWhere('t1.id')->in($this->app->user->view->sprints)->fi()

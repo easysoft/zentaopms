@@ -6,3 +6,11 @@
 #pipelineBox {width: 385px;}
 #svnDirBox .input-group {width: unset !important;}
 #jenkinsServerTR .input-group-addon {border-left-width: 0 !important;}
+#jenkinsServerTR .dropdown {position: relative;}
+#jenkinsServerTR .table-col:first-child {width: 375px;}
+
+#paramName {width: 324px;}
+#paramValue {width: 181px;}
+#paramDiv .table-row {table-layout: unset;}
+.jktask-label {width: 326px; border-radius: 0px 4px 4px 0px;}
+.search-list {max-width: 500px;}

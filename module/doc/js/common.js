@@ -29,7 +29,12 @@ function loadObjectModules(objectType, objectID, docType)
 function loadExecutions(projectID)
 {
     var link = createLink('project', 'ajaxGetExecutions', "projectID=" + projectID + "&executionID=0&mode=multiple,leaf,noprefix&type=sprint,stage");
-    $('#executionBox').load(link, function(){$('#executionBox').find('select').attr('data-placeholder', holders.execution).attr('onchange', "loadObjectModules('execution', this.value)").picker()});
+    $('#executionBox').load(link, function()
+    {
+        var $extension = $('#executionBox').find('select');
+        $extension.attr('onchange', "loadObjectModules('execution', this.value)").picker();
+        if($extension.hasClass('disabled')) $('#executionBox').find('.picker').addClass('disabled');
+    });
     loadObjectModules('project', projectID);
 }
 
@@ -280,7 +285,6 @@ $(document).ready(function()
     $(function()
     {
         $('.split-row').splitRow();
-        updateCrumbs();
     });
 
     var $pageSetting = $('#pageSetting');
@@ -327,12 +331,17 @@ $(document).ready(function()
  */
 function locateNewLib(type, objectID, libID)
 {
-    var method = 'tableContents';
-    var params = 'type=' + type + '&objectID=' + objectID + '&libID=' + libID;
+    var method = 'teamSpace';
+    var params = 'objectID=' + objectID + '&libID=' + libID;
+    var module = 'doc';
     if(type == 'product' || type == 'project')
     {
         method = type + 'Space';
-        params = 'objectID=' + objectID + '&libID=' + libID;
+    }
+    else if(type == 'execution')
+    {
+        module = 'execution';
+        method = 'doc';
     }
     else if(type == 'mine')
     {
@@ -340,48 +349,7 @@ function locateNewLib(type, objectID, libID)
         params = 'type=mine&libID=' + libID;
     }
 
-    location.href = createLink('doc', method, params);
-}
-
-/**
- * Set save path.
- *
- * @access public
- * @return void
- */
-function setSavePath()
-{
-    var getSubPath = function($obj)
-    {
-        var $td = $obj.parent();
-        var usePicker = $td.find('.picker').length == 1;
-        var subPath = $obj.find('option:checked').text();
-        if(usePicker) subPath = $td.find('.picker .picker-selection-text').text();
-        return subPath;
-    }
-
-    savePath = defaultSave;
-    if($('#modalBasicInfo #product').length == 1)
-    {
-        savePath += getSubPath($('#modalBasicInfo #product')) + '/';
-    }
-    else if($('#modalBasicInfo #project').length == 1 && $('#modalBasicInfo #execution').length == 0)
-    {
-        savePath += getSubPath($('#modalBasicInfo #project')) + '/';
-    }
-    else if($('#modalBasicInfo #project').length == 1 && $('#modalBasicInfo #execution').length == 1)
-    {
-        var executionID = $('#modalBasicInfo #execution').val();
-        if(executionID == '0' || executionID == '') savePath += getSubPath($('#modalBasicInfo #project')) + '/';
-        if(executionID != '0' && executionID != '') savePath += getSubPath($('#modalBasicInfo #execution')) + '/';
-    }
-    else if($('#modalBasicInfo #execution').length == 1)
-    {
-        savePath += getSubPath($('#modalBasicInfo #execution')) + '/';
-    }
-    savePath += getSubPath($('#modalBasicInfo #module'));
-
-    $('#savePath').html(savePath).attr('title', savePath);
+    location.href = createLink(module, method, params);
 }
 
 /**
@@ -398,32 +366,3 @@ function submit(object)
     setTimeout(function(){$(object).attr('type', 'button').removeAttr('disabled')}, 2000);
 }
 
-/**
- * Update crumbs.
- *
- * @access public
- * @return void
- */
-function updateCrumbs()
-{
-    var $crumbs       = $('#crumbs');
-    var $crumbItems   = $('#crumbs > .crumb-item');
-    var crumbMaxWidth = 660;
-    if($crumbs.width < crumbMaxWidth || $crumbItems.length == 1) return;
-
-    /* last crumbItem width major */
-    var $lastChild = $($crumbItems[$crumbItems.length -1]);
-    var widthSum = 0 + $lastChild.width();
-    for(var i = 0; i < $crumbItems.length - 1; i++)
-    {
-        var crumbItem = $crumbItems[i];
-        var widthSum  = widthSum + $(crumbItem).width();
-        if(widthSum >= crumbMaxWidth)
-        {
-            $(crumbItem).addClass('in-auto-box');
-        }
-    }
-    var $autoCrumbItems = $('#crumbs > .in-auto-box');
-    $lastChild.before('<div id="autoBox" class="flex-auto"><div class="ellipsis">...<div></div>');
-    $('#autoBox').prepend($autoCrumbItems);
-}

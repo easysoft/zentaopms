@@ -926,6 +926,7 @@ class actionModel extends model
             }
         }
 
+        $action->date = substr($action->date, 0, 19);
         if($this->app->getViewType() == 'mhtml') $action->date = date('m-d H:i', strtotime($action->date));
 
         /* Cycle actions, replace vars. */
@@ -1694,7 +1695,6 @@ class actionModel extends model
                         $method = 'tablecontents';
                         if(isset($this->config->doc->spaceMethod[$docLib->type])) $method = $this->config->doc->spaceMethod[$docLib->type];
                         if($method == 'myspace') $params = "type=mine&libID={$action->objectID}";
-                        if($method == 'tablecontents') $params = sprintf($vars, $docLib->type, $docLib->objectID, $action->objectID, $appendLib);
                         if(!in_array($method, array('myspace', 'tablecontents'))) $params = "objectID={$docLib->objectID}&libID={$action->objectID}";
                         $action->objectLink = helper::createLink('doc', $method, $params);
                     }

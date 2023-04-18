@@ -12,6 +12,7 @@
 $lang->api->common   = 'API';
 $lang->api->getModel = 'Super Model API';
 $lang->api->sql      = 'SQL Query API';
+$lang->api->manage   = 'API management';
 
 $lang->api->index            = 'API Space';
 $lang->api->editLib          = 'Edit';
@@ -60,9 +61,10 @@ $lang->api->defaultVersion   = "Current Version";
 $lang->api->zentaoAPI        = "Zentao API v1";
 $lang->api->search           = "Search";
 $lang->api->allLibs          = "AllLibs";
-$lang->api->noLinked         = "No Linked";
+$lang->api->noLinked         = "No Linked {$lang->productCommon} and {$lang->projectCommon}";
 $lang->api->addCatalog       = 'Add Catalog';
 $lang->api->editCatalog      = 'Edit Catalog';
+$lang->api->sortCatalog      = 'Catalog Sorting';
 $lang->api->deleteCatalog    = 'Delete Catalog';
 
 /* Common access control lang. */
@@ -108,7 +110,7 @@ $lang->api->structAddedBy      = 'CreatedBy';
 $lang->api->structAddedDate    = 'Created';
 $lang->api->name               = 'API Library Name';
 $lang->api->baseUrl            = 'Base URL';
-$lang->api->baseUrlDesc        = 'Site or path, e.g., api.zentao.com or /v1.';
+$lang->api->baseUrlDesc        = 'Site or path, e.g., http://api.zentao.com or /v1.';
 $lang->api->desc               = 'Description';
 $lang->api->control            = 'Access Control';
 $lang->api->noLib              = 'No API library yet.';
@@ -180,7 +182,7 @@ $lang->api->requestTypeOptions['multipart/form-data']               = 'multipart
 $lang->api->libTypeList = array();
 $lang->api->libTypeList['product'] = $lang->productCommon . ' Api Library';
 $lang->api->libTypeList['project'] = $lang->projectCommon . ' Api Library';
-$lang->api->libTypeList['nolink']  = 'No Linked Api Library';
+$lang->api->libTypeList['nolink']  = 'Independent Api Library';
 
 $lang->api->statusOptions      = array(
     'done'   => 'Done',

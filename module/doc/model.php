@@ -54,7 +54,7 @@ class docModel extends model
             ->andWhere('project')->eq(0)
             ->andWhere('execution')->eq(0)
             ->fi()
-            ->orderBy('`order`_asc, id_desc')
+            ->orderBy('order_asc, id_asc')
             ->fetchAll('id');
 
         $libs = array_filter($libs, array($this, 'checkPrivLib'));
@@ -386,11 +386,6 @@ class docModel extends model
         $allLibIDList     = array_keys($allLibs);
         $hasPrivDocIdList = $this->getPrivDocs(0, $moduleID);
 
-        $files = $this->dao->select('*')->from(TABLE_FILE)
-            ->where('objectType')->eq('doc')
-            ->andWhere('objectID')->in($hasPrivDocIdList)
-            ->fetchGroup('objectID');
-
         if($browseType == "all")
         {
             $docs = $this->getDocs(0, 0, $browseType, $sort, $pager);
@@ -416,19 +411,21 @@ class docModel extends model
             }
 
             $query     = $this->getDocQuery($this->session->contributeDocQuery);
+            $query     = preg_replace('/(`\w+`)/', 't1.$1', $query);
             $docIDList = $this->dao->select('objectID')->from(TABLE_ACTION)
                 ->where('objectType')->eq('doc')
                 ->andWhere('objectID')->in($hasPrivDocIdList)
                 ->andWhere('actor')->eq($this->app->user->account)
                 ->andWhere('action')->eq('edited')
                 ->fetchAll('objectID');
-            $docs = $this->dao->select('*')->from(TABLE_DOC)
-                ->where('deleted')->eq(0)
+            $docs = $this->dao->select('t1.*, t2.name as libName, t2.type as objectType')->from(TABLE_DOC)->alias('t1')
+                ->leftJoin(TABLE_DOCLIB)->alias('t2')->on("t1.lib=t2.id")
+                ->where('t1.deleted')->eq(0)
                 ->andWhere($query)
-                ->andWhere('lib')->in($allLibIDList)
-                ->beginIF($this->config->doc->notArticleType)->andWhere('type')->notIN($this->config->doc->notArticleType)->fi()
-                ->andWhere('addedBy', 1)->eq($this->app->user->account)
-                ->orWhere('id')->in(array_keys($docIDList))
+                ->andWhere('t1.lib')->in($allLibIDList)
+                ->beginIF($this->config->doc->notArticleType)->andWhere('t1.type')->notIN($this->config->doc->notArticleType)->fi()
+                ->andWhere('t1.addedBy', 1)->eq($this->app->user->account)
+                ->orWhere('t1.id')->in(array_keys($docIDList))
                 ->markRight(1)
                 ->orderBy($sort)
                 ->page($pager)
@@ -436,12 +433,13 @@ class docModel extends model
         }
         elseif($browseType == "openedbyme")
         {
-            $docs = $this->dao->select('*')->from(TABLE_DOC)
-                ->where('deleted')->eq(0)
-                ->andWhere('lib')->in($allLibIDList)
-                ->andWhere('id')->in($hasPrivDocIdList)
-                ->beginIF($this->config->doc->notArticleType)->andWhere('type')->notIN($this->config->doc->notArticleType)->fi()
-                ->andWhere('addedBy')->eq($this->app->user->account)
+            $docs = $this->dao->select('t1.*, t2.name as libName, t2.type as objectType')->from(TABLE_DOC)->alias('t1')
+                ->leftJoin(TABLE_DOCLIB)->alias('t2')->on("t1.lib=t2.id")
+                ->where('t1.deleted')->eq(0)
+                ->andWhere('t1.lib')->in($allLibIDList)
+                ->andWhere('t1.id')->in($hasPrivDocIdList)
+                ->beginIF($this->config->doc->notArticleType)->andWhere('t1.type')->notIN($this->config->doc->notArticleType)->fi()
+                ->andWhere('t1.addedBy')->eq($this->app->user->account)
                 ->orderBy($sort)
                 ->page($pager)
                 ->fetchAll('id');
@@ -454,11 +452,13 @@ class docModel extends model
                 ->andWhere('objectID')->in($hasPrivDocIdList)
                 ->andWhere('action')->eq('edited')
                 ->fetchAll('objectID');
-            $docs      = $this->dao->select('*')->from(TABLE_DOC)
-                ->where('deleted')->eq(0)
-                ->andWhere('id')->in(array_keys($docIDList))
-                ->andWhere('lib')->in($allLibIDList)
-                ->beginIF($this->config->doc->notArticleType)->andWhere('type')->notIN($this->config->doc->notArticleType)->fi()
+
+            $docs = $this->dao->select('t1.*, t2.name as libName, t2.type as objectType')->from(TABLE_DOC)->alias('t1')
+                ->leftJoin(TABLE_DOCLIB)->alias('t2')->on("t1.lib=t2.id")
+                ->where('t1.deleted')->eq(0)
+                ->andWhere('t1.id')->in(array_keys($docIDList))
+                ->andWhere('t1.lib')->in($allLibIDList)
+                ->beginIF($this->config->doc->notArticleType)->andWhere('t1.type')->notIN($this->config->doc->notArticleType)->fi()
                 ->orderBy($sort)
                 ->page($pager)
                 ->fetchAll('id');
@@ -490,44 +490,27 @@ class docModel extends model
 
         if(empty($docs)) return array();
 
-        /* Get projects, executions and products by docIdList. */
-        $docContents = $this->dao->select('*')->from(TABLE_DOCCONTENT)->where('doc')->in(array_keys($docs))->orderBy('version,doc')->fetchAll('doc');
-        foreach($docs as $index => $doc)
+        if(in_array($browseType, array('bySearch', 'openedbyme', 'editedbyme')))
         {
-            $docs[$index]->fileSize = 0;
-            if(isset($files[$index]))
+            $objects = array();
+            list($objects['project'], $objects['execution'], $objects['product']) = $this->getObjectsByDoc(array_keys($docs));
+            foreach($docs as $docID => $doc)
             {
-                $docContent = $docContents[$index];
-                $fileSize   = 0;
-                foreach($files[$index] as $file)
+                $doc->objectID   = zget($doc, $doc->objectType, 0);
+                $doc->objectName = '';
+                if(isset($objects[$doc->objectType]))
                 {
-                    if(strpos(",{$docContent->files},", ",{$file->id},") === false) continue;
-                    $fileSize += $file->size;
-                }
-
-                if($fileSize < 1024)
-                {
-                    $fileSize .= 'B';
-                }
-                elseif($fileSize < 1024 * 1024)
-                {
-                    $fileSize = round($fileSize / 1024, 2) . 'KB';
-                }
-                elseif($fileSize < 1024 * 1024 * 1024)
-                {
-                    $fileSize = round($fileSize / 1024 / 1024, 2) . 'MB';
+                    $doc->objectName = $objects[$doc->objectType][$doc->objectID];
                 }
                 else
                 {
-                    $fileSize = round($fileSize / 1024 / 1024 / 1024, 2) . 'G';
+                    if($doc->objectType == 'mine')   $doc->objectName = $this->lang->doc->person;
+                    if($doc->objectType == 'custom') $doc->objectName = $this->lang->doc->team;
                 }
-
-                $docs[$index]->fileSize = $fileSize;
             }
         }
 
-        $docs = $this->processCollector($docs);
-        return $docs;
+        return $this->processCollector($docs);
     }
 
     /**
@@ -666,7 +649,7 @@ class docModel extends model
                 ->andWhere('t2.actor')->eq($this->app->user->account)
                 ->beginIF(!common::hasPriv('doc', 'productSpace'))->andWhere('t3.type')->ne('product')->fi()
                 ->beginIF(!common::hasPriv('doc', 'projectSpace'))->andWhere('t3.type')->notIN('project,execution')->fi()
-                ->beginIF(!common::hasPriv('doc', 'tableContents'))->andWhere('t3.type')->ne('custom')->fi()
+                ->beginIF(!common::hasPriv('doc', 'teamSpace'))->andWhere('t3.type')->ne('custom')->fi()
                 ->beginIF($browseType == 'all' or $browseType == 'bysearch')->andWhere("(t1.status = 'normal' or (t1.status = 'draft' and t1.addedBy='{$this->app->user->account}'))")->fi()
                 ->beginIF($browseType == 'draft')->andWhere('t1.status')->eq('draft')->andWhere('t1.addedBy')->eq($this->app->user->account)->fi()
                 ->beginIF($browseType == 'bysearch')->andWhere($query)->fi()
@@ -675,18 +658,31 @@ class docModel extends model
                 ->page($pager, 't1.id')
                 ->fetchAll('id');
         }
-        elseif($type == 'createdby')
+        elseif($type == 'createdby' || $type == 'editedby')
         {
+            $docIDList = array_keys($docIDList);
+            if($type == 'editedby')
+            {
+                $editDocs = $this->dao->select('objectID')->from(TABLE_ACTION)
+                    ->where('objectType')->eq('doc')
+                    ->andWhere('action')->in('edited,saveddraft')
+                    ->andWhere('actor')->eq($this->app->user->account)
+                    ->andWhere('vision')->eq($this->config->vision)
+                    ->fetchPairs();
+
+                $docIDList = array_intersect($docIDList, $editDocs);
+            }
+
             $docs = $this->dao->select('t1.*,t2.name as libName,t2.type as objectType')->from(TABLE_DOC)->alias('t1')
                 ->leftJoin(TABLE_DOCLIB)->alias('t2')->on("t1.lib=t2.id")
                 ->where('t1.deleted')->eq(0)
                 ->andWhere('t1.lib')->ne('')
-                ->andWhere('t1.id')->in(array_keys($docIDList))
+                ->andWhere('t1.id')->in($docIDList)
                 ->andWhere('t1.vision')->eq($this->config->vision)
-                ->andWhere('t1.addedBy')->eq($this->app->user->account)
+                ->beginIF($type == 'createdby')->andWhere('t1.addedBy')->eq($this->app->user->account)->fi()
                 ->beginIF(!common::hasPriv('doc', 'productSpace'))->andWhere('t2.type')->ne('product')->fi()
                 ->beginIF(!common::hasPriv('doc', 'projectSpace'))->andWhere('t2.type')->notIN('project,execution')->fi()
-                ->beginIF(!common::hasPriv('doc', 'tableContents'))->andWhere('t2.type')->ne('custom')->fi()
+                ->beginIF(!common::hasPriv('doc', 'teamSpace'))->andWhere('t2.type')->ne('custom')->fi()
                 ->beginIF($browseType == 'draft')->andWhere('t1.status')->eq('draft')->andWhere('t1.addedBy')->eq($this->app->user->account)->fi()
                 ->beginIF($browseType == 'bysearch')->andWhere($query)->fi()
                 ->orderBy($orderBy)
@@ -734,7 +730,7 @@ class docModel extends model
     {
         $modules = $module && $mode == 'children' ? $this->loadModel('tree')->getAllChildID($module) : $module;
         $stmt = $this->dao->select('*')->from(TABLE_DOC)
-            ->where('1=1')
+            ->where('vision')->eq($this->config->vision)
             ->beginIF(!empty($modules))->andWhere('module')->in($modules)->fi()
             ->beginIF($mode == 'normal')->andWhere('deleted')->eq(0)->fi()
             ->beginIF($this->config->doc->notArticleType)->andWhere('type')->notIN($this->config->doc->notArticleType)->fi()
@@ -742,7 +738,7 @@ class docModel extends model
             ->query();
 
         $docIdList = array();
-        while ($doc = $stmt->fetch())
+        while($doc = $stmt->fetch())
         {
             if($this->checkPrivDoc($doc)) $docIdList[$doc->id] = $doc->id;
         }
@@ -766,20 +762,25 @@ class docModel extends model
             ->fetch();
 
         if(!$doc) return false;
-        if(!$this->checkPrivDoc($doc))
-        {
-            echo(js::alert($this->lang->doc->accessDenied));
-            $loginLink = $this->config->requestType == 'GET' ? "?{$this->config->moduleVar}=user&{$this->config->methodVar}=login" : "user{$this->config->requestFix}login";
-            if(strpos($this->server->http_referer, $loginLink) !== false) return print(js::locate(inlink('index')));
-            helper::end(print(js::locate('back')));
-            die;
-        }
 
         $docs = $this->processCollector(array($doc->id => $doc));
         $doc  = $docs[$doc->id];
 
         $version    = $version ? $version : $doc->version;
         $docContent = $this->dao->select('*')->from(TABLE_DOCCONTENT)->where('doc')->eq($doc->id)->andWhere('version')->eq($version)->fetch();
+
+        $doc->releasedBy   = '';
+        $doc->releasedDate = '';
+        if($doc->status == 'normal')
+        {
+            $releaseInfo = $this->dao->select('*')->from(TABLE_ACTION)
+                ->where('objectType')->eq('doc')
+                ->andWhere('objectID')->eq($docID)
+                ->andWhere('action')->eq('releaseddoc')
+                ->fetch();
+            $doc->releasedBy   = $releaseInfo ? $releaseInfo->actor : $doc->addedBy;
+            $doc->releasedDate = $releaseInfo ? $releaseInfo->date : $doc->addedDate;
+        }
 
         /* When file change then version add one. */
         $files    = $this->loadModel('file')->getByObject('doc', $docID);
@@ -852,7 +853,7 @@ class docModel extends model
         $now = helper::now();
         $doc = fixer::input('post')
             ->callFunc('title', 'trim')
-            ->setDefault('content', '')
+            ->setDefault('content,template,templateType,chapterType', '')
             ->add('addedBy', $this->app->user->account)
             ->add('addedDate', $now)
             ->add('editedBy', $this->app->user->account)
@@ -891,6 +892,7 @@ class docModel extends model
         $docContent->title   = $doc->title;
         $docContent->content = $doc->contentType == 'html' ? $doc->content : $doc->contentMarkdown;
         $docContent->type    = $doc->contentType;
+        $docContent->digest  = '';
         $docContent->version = 1;
         unset($doc->contentMarkdown, $doc->contentType, $doc->url);
 
@@ -1092,7 +1094,7 @@ class docModel extends model
             $products = $this->product->getPairs();
 
             $this->config->doc->search['params']['project']['values']   = array('' => '') + $this->loadModel('project')->getPairsByProgram('', 'all', false, 'order_asc', 'kanban') + array('all' => $this->lang->doc->allProjects);
-            $this->config->doc->search['params']['execution']['values'] = array('' => '') + $this->loadModel('execution')->getPairs(0, 'sprint,stage', 'multiple,leaf,noprefix') + array('all' => $this->lang->doc->allExecutions);
+            $this->config->doc->search['params']['execution']['values'] = array('' => '') + $this->loadModel('execution')->getPairs(0, 'sprint,stage', 'multiple,leaf,noprefix,withobject') + array('all' => $this->lang->doc->allExecutions);
             $this->config->doc->search['params']['lib']['values']       = array('' => '') + $this->loadModel('doc')->getLibs('all', 'withObject') + array('all' => $this->lang->doclib->all);
             $this->config->doc->search['params']['product']['values']   = array('' => '') + $products + array('all' => $this->lang->doc->allProduct);
 
@@ -1125,7 +1127,7 @@ class docModel extends model
                 unset($this->config->doc->search['fields']['execution']);
             }
 
-            if(in_array($type, array('view', 'collect', 'createdby'))) $libPairs = array('' => '') + $this->getLibs('all', 'withObject');
+            if(in_array($type, array('view', 'collect', 'createdby', 'editedby'))) $libPairs = array('' => '') + $this->getLibs('all', 'withObject');
 
             $this->config->doc->search['module'] = $queryName;
             $this->config->doc->search['params']['lib']['values'] = $libPairs + array('all' => $this->lang->doclib->all);
@@ -1333,8 +1335,9 @@ class docModel extends model
         if($object->status == 'draft' and $object->addedBy != $this->app->user->account) return false;
         if($object->status == 'normal' and $this->app->user->admin) return true;
 
-        $lib = $this->getLibById($object->lib);
-        if(!$this->checkPrivLib($lib)) return false;
+        static $libs = array();
+        if(!isset($libs[$object->lib])) $libs[$object->lib] = $this->getLibById($object->lib);
+        if(!$this->checkPrivLib($libs[$object->lib])) return false;
         if(in_array($object->acl, array('open', 'public'))) return true;
 
         $account = ",{$this->app->user->account},";
@@ -2153,19 +2156,26 @@ class docModel extends model
      */
     public function getStatisticInfo()
     {
-        $allLibs   = array_keys($this->getLibs('all'));
-        $docIdList = $this->getPrivDocs($allLibs);
-        $myDocList = $this->dao->select('id')->from(TABLE_DOC)->where('addedBy')->eq($this->app->user->account)->fetchPairs('id');
-
         $today     = date('Y-m-d');
-        $statistic = $this->dao->select("count(id) as totalDocs, count(IF(editedDate like '{$today}%', 1, null)) as todayEditedDocs,
-            count(IF(editedBy = '{$this->app->user->account}', 1, null)) as myEditedDocs, count(IF(addedBy = '{$this->app->user->account}', 1, null)) as myDocs")->from(TABLE_DOC)
-            ->where('deleted')->eq(0)
-            ->andWhere('vision')->eq($this->config->vision)
-            ->andWhere('id')->in($docIdList)
-            ->fetch();
+        $statistic = new stdclass();
+        $statistic->totalDocs       = $this->dao->select('count(*) as count')->from(TABLE_DOC)->where('deleted')->eq('0')->fetch('count');
+        $statistic->todayEditedDocs = $this->dao->select('count(DISTINCT objectID) as count')->from(TABLE_ACTION)
+            ->where('objectType')->eq('doc')
+            ->andWhere('action')->eq('edited')
+            ->andWhere('actor')->eq($this->app->user->account)
+            ->andWhere('LEFT(date, 10)')->eq($today)
+            ->fetch('count');
+        $statistic->myEditedDocs = $this->dao->select('count(DISTINCT objectID) as count')->from(TABLE_ACTION)
+            ->where('objectType')->eq('doc')
+            ->andWhere('action')->eq('edited')
+            ->andWhere('actor')->eq($this->app->user->account)
+            ->fetch('count');
 
-        $statistic->myDoc = $this->dao->select("count(IF(`action` = 'view', 1, null)) as docViews, count(IF(`action` = 'collect', 1, null)) as docCollects")->from(TABLE_DOCACTION)->where('doc')->in($myDocList)->fetch();
+        $my = $this->dao->select("count(*) as myDocs, SUM(views) as docViews, SUM(collects) as docCollects")->from(TABLE_DOC)->where('addedBy')->eq($this->app->user->account)->andWhere('deleted')->eq(0)->fetch();
+        $statistic->myDocs = $my->myDocs;
+        $statistic->myDoc  = new stdclass();
+        $statistic->myDoc->docViews    = $my->docViews;
+        $statistic->myDoc->docCollects = $my->docCollects;
 
         return $statistic;
     }
@@ -2518,12 +2528,12 @@ class docModel extends model
 
             foreach($moduleDocs[0] as $doc)
             {
-                if(!$docID and $currentMethod != 'tablecontents') $docID = $doc->id;
+                if(!$docID and $currentMethod != 'teamspace') $docID = $doc->id;
 
                 $class = common::hasPriv('doc', 'updateOrder') ? ' sortDoc' : '';
                 $treeMenu[0] .= '<li' . " class='" . ($doc->id == $docID ? 'active' : 'doc') . "$class'" . " data-id=$doc->id>";
 
-                if($currentMethod == 'tablecontents')
+                if($currentMethod == 'teamspace')
                 {
                     $treeMenu[0] .= '<div class="tree-group"><span class="tail-info">' . zget($users, $doc->editedBy) . ' &nbsp;' . $doc->editedDate . '</span>';
                 }
@@ -2595,11 +2605,11 @@ class docModel extends model
                 }
                 else
                 {
-                    if(!$docID and $currentMethod != 'tablecontents') $docID = $doc->id;
+                    if(!$docID and $currentMethod != 'teamspace') $docID = $doc->id;
                     $class = common::hasPriv('doc', 'updateOrder') ? ' sortDoc' : '';
                     $treeMenu[$module->id] .= '<li' . " class='" . ($doc->id == $docID ? 'active' : 'doc') . "$class'" . " data-id=$doc->id>";
 
-                    if($currentMethod == 'tablecontents')
+                    if($currentMethod == 'teamspace')
                     {
                         $treeMenu[$module->id] .= '<div class="tree-group"><span class="tail-info">' . zget($users, $doc->editedBy) . ' &nbsp;' . $doc->editedDate . '</span>';
                     }
@@ -2617,7 +2627,7 @@ class docModel extends model
                         }
                         $treeMenu[$module->id] .= '</div>';
                     }
-                    elseif($currentMethod == 'tablecontents')
+                    elseif($currentMethod == 'teamspace')
                     {
                         $class = common::hasPriv('doc', 'updateOrder') ? 'sortDoc' : '';
                         $treeMenu[$module->id] .= html::a(inlink('view', "docID={$doc->id}"), "<i class='icon icon-file-text text-muted'></i> &nbsp;" . $doc->title, '', "data-app='{$this->app->tab}' class='doc-title $class' title='{$doc->title}'");
@@ -2641,7 +2651,7 @@ class docModel extends model
         {
             $moduleClass = common::hasPriv('tree', 'updateOrder') ? 'sort-module' : '';
             $li          = "<div class='tree-group'><span class='module-name'><a class='$moduleClass' title='{$module->name}'>" . $module->name . '</a></span>';
-            if($currentMethod != 'tablecontents')
+            if($currentMethod != 'teamspace')
             {
                 if(common::hasPriv('tree', 'edit') or common::hasPriv('tree', 'browse') or common::hasPriv('tree', 'browse') or common::hasPriv('tree', 'updateOrder'))
                 {
@@ -2749,7 +2759,6 @@ class docModel extends model
      */
     public function setMenuByType($type, $objectID, $libID, $appendLib = 0)
     {
-        $this->session->set('docList', $this->app->getURI(true), $this->app->tab);
         if(empty($type))
         {
             $doclib   = $this->getLibById($libID);
@@ -2761,15 +2770,8 @@ class docModel extends model
         $objectDropdown = '';
         if(in_array($type, array('project', 'product', 'execution')))
         {
-            $objects  = $this->getOrderedObjects($type);
-            $objectID = $this->loadModel($type)->saveState($objectID, $objects);
-            $table    = $this->config->objectTables[$type];
-            $libs     = $this->getLibsByObject($type, $objectID, '', $appendLib);
-
-            if(($libID == 0 or !isset($libs[$libID])) and !empty($libs)) $libID = reset($libs)->id;
-            $object         = $this->dao->select('id,name,status')->from($table)->where('id')->eq($objectID)->fetch();
-            $objectTitle    = zget($objects, $objectID, '');
-            $objectDropdown = $this->select($type, $objectTitle, $objectID);
+            $table  = $this->config->objectTables[$type];
+            $object = $this->dao->select('id,name,status')->from($table)->where('id')->eq($objectID)->fetch();
 
             if(empty($object))
             {
@@ -2777,11 +2779,32 @@ class docModel extends model
                 $methodName = ($type == 'project' and $this->config->vision != 'lite') ? 'createGuide' : 'create';
                 return print(js::locate(helper::createLink($type, $methodName, $param)));
             }
+
+            $objects  = $this->getOrderedObjects($type);
+            $objectID = $this->loadModel($type)->saveState($objectID, $objects);
+            $libs     = $this->getLibsByObject($type, $objectID, '', $appendLib);
+            if(($libID == 0 or !isset($libs[$libID])) and !empty($libs)) $libID = reset($libs)->id;
+
+            $objectTitle = zget($objects, $objectID, '');
+            if($this->app->tab != 'doc' and isset($libs[$libID]))
+            {
+                $objectTitle    = zget($libs[$libID], 'name', '');
+                $objectDropdown = "<div id='sidebarHeader'><div class='title' title='{$objectTitle}'>{$objectTitle}</div></div>";
+            }
+            else
+            {
+                $objectDropdown = $this->select($type, $objectTitle, $objectID);
+            }
         }
         else
         {
             $libs = $this->getLibsByObject($type, 0, '', $appendLib);
             if($libID == 0 and !empty($libs)) $libID = reset($libs)->id;
+            if(isset($libs[$libID]))
+            {
+                $objectTitle    = zget($libs[$libID], 'name', '');
+                $objectDropdown = "<div id='sidebarHeader'><div class='title' title='{$objectTitle}'>{$objectTitle}</div></div>";
+            }
 
             $object     = new stdclass();
             $object->id = 0;
@@ -2913,6 +2936,7 @@ class docModel extends model
             $item->name     = $module->name;
             $item->type     = $module->type == 'api' ? 'apiDoc' : $module->type;
             $item->active   = $module->id == $moduleID ? 1 : 0;
+            $item->order    = $module->order;
             $item->children = $this->getModuleTree($rootID, $moduleID, $type, $module->id, $modules);
             $showDoc = $this->loadModel('setting')->getItem('owner=' . $this->app->user->account . '&module=doc&key=showDoc');
             $showDoc = $showDoc === '0' ? 0 : 1;
@@ -2983,6 +3007,7 @@ class docModel extends model
             $item->id         = $lib->id;
             $item->type       = $lib->type == 'api' ? 'api' : 'lib';
             $item->name       = $lib->name;
+            $item->order      = $lib->order;
             $item->objectType = $type;
             $item->objectID   = $objectID;
             $item->active     = $lib->id == $libID && $browseType != 'bysearch' ? 1 : 0;
@@ -3131,12 +3156,23 @@ class docModel extends model
             $myCreation->hasAction  = false;
             $myCreation->active     = $libType == 'createdby' ? 1 : 0;
 
+            $myEdited = new stdclass();
+            $myEdited->id         = 0;
+            $myEdited->name       = $this->lang->doc->myEdited;
+            $myEdited->type       = 'editedBy';
+            $myEdited->objectType = 'doc';
+            $myEdited->objectID   = 0;
+            $myEdited->hasAction  = false;
+            $myEdited->active     = $libType == 'editedby' ? 1 : 0;
+
             $libTree   = array();
             $libTree[] = $myLib;
             if(common::hasPriv('doc', 'myView'))       $libTree[] = $myView;
             if(common::hasPriv('doc', 'myCollection')) $libTree[] = $myCollection;
             if(common::hasPriv('doc', 'myCreation'))   $libTree[] = $myCreation;
+            if(common::hasPriv('doc', 'myEdited'))     $libTree[] = $myEdited;
         }
+
         return $libTree;
     }
 
@@ -3156,27 +3192,24 @@ class docModel extends model
         $objectID = zget($lib, $lib->type, 0);
         $class = $from == 'list' ? 'btn-info' : 'btn-primary';
         $html  = "<div class='dropdown btn-group createDropdown'>";
-        $html .= html::a(helper::createLink('doc', 'create', "objectType={$lib->type}&objectID=$objectID&libID={$lib->id}&moduleID=$moduleID&type=html"), "<i class='icon icon-plus'></i> {$this->lang->doc->create}", '', "class='btn $class'");
+        $html .= html::a(helper::createLink('doc', 'create', "objectType={$lib->type}&objectID=$objectID&libID={$lib->id}&moduleID=$moduleID&type=html"), "<i class='icon icon-plus'></i> {$this->lang->doc->create}", '', "class='btn $class' data-app='{$this->app->tab}'");
         $html .= "<button type='button' class='btn $class dropdown-toggle' data-toggle='dropdown'><span class='caret'></span></button>";
         $html .= "<ul class='dropdown-menu pull-right'>";
 
         foreach($this->lang->doc->createList as $typeKey => $typeName)
         {
-            if($this->config->edition != 'max' and $typeKey == 'template') continue;
-
-            $attr   = "data-app='{$this->app->tab}'";
-            $class  = strpos($this->config->doc->officeTypes, $typeKey) !== false ? 'iframe' : '';
-            $params = "objectType={$lib->type}&objectID=$objectID&libID={$lib->id}&moduleID=$moduleID&type=$typeKey";
-            if($typeKey == 'template') $params = "objectType={$lib->type}&objectID=$objectID&libID={$lib->id}&moduleID=$moduleID&type=html&from=template";
+            $docType  = zget($this->config->doc->iconList, $typeKey);
+            $icon     = html::image("static/svg/{$docType}.svg", "class='file-icon'");
+            $attr     = "data-app='{$this->app->tab}'";
+            $class    = strpos($this->config->doc->officeTypes, $typeKey) !== false ? 'iframe' : '';
+            $params   = "objectType={$lib->type}&objectID=$objectID&libID={$lib->id}&moduleID=$moduleID&type=$typeKey";
+            if($typeKey == 'template' and $this->config->edition == 'max') $params = "objectType={$lib->type}&objectID=$objectID&libID={$lib->id}&moduleID=$moduleID&type=html&from=template";
 
             $html .= "<li>";
-            $html .= html::a(helper::createLink('doc', 'create', $params, '', $class ? true : false), $typeName, '', "class='$class' $attr");
+            $html .= html::a(helper::createLink('doc', 'create', $params, '', $class ? true : false), $icon . ' ' . $typeName, '', "class='$class' $attr");
             $html .= "</li>";
 
-            $printDivider = false;
-            if($typeKey == 'template') $printDivider = true;
-            if($this->config->edition != 'max' and $typeKey == 'html') $printDivider = true;
-            if($printDivider) $html .= '<li class="divider"></li>';
+            if($typeKey == 'template') $html .= '<li class="divider"></li>';
         }
 
         $html .= '</ul></div>';
@@ -3251,6 +3284,11 @@ class docModel extends model
         if(empty($account))$account = $this->app->user->account;
         if($action == 'collect') $this->dao->delete()->from(TABLE_DOCACTION)->where('doc')->eq($docID)->andWhere('action')->eq('collect')->andWhere('actor')->eq($account)->exec();
 
+        if($action == 'view')
+        {
+            $lastView = $this->dao->select('date')->from(TABLE_DOCACTION)->where('doc')->eq($docID)->andWhere('action')->eq('view')->andWhere('actor')->eq($account)->orderBy('id_desc')->fetch('date');
+            if($lastView and (time() - strtotime($lastView) < 4)) return false;
+        }
         $data  = new stdclass();
         $data->doc    = $docID;
         $data->action = $action;
@@ -3264,7 +3302,7 @@ class docModel extends model
             if($action == 'collect')
             {
                 $collectCount = $this->dao->select('count(*) as count')->from(TABLE_DOCACTION)->where('doc')->eq($docID)->andWhere('action')->eq('collect')->fetch('count');
-                $this->dao->update(TABLE_DOC)->set('collector')->eq($collectCount)->where('id')->eq($docID)->exec();
+                $this->dao->update(TABLE_DOC)->set('collects')->eq($collectCount)->where('id')->eq($docID)->exec();
             }
 
             return $actionID;
@@ -3300,7 +3338,7 @@ class docModel extends model
         if($action->action == 'collect')
         {
             $collectCount = $this->dao->select('count(*) as count')->from(TABLE_DOCACTION)->where('doc')->eq($action->doc)->andWhere('action')->eq('collect')->fetch('count');
-            $this->dao->update(TABLE_DOC)->set('collector')->eq($collectCount)->where('id')->eq($action->doc)->exec();
+            $this->dao->update(TABLE_DOC)->set('collects')->eq($collectCount)->where('id')->eq($action->doc)->exec();
         }
     }
 
@@ -3316,7 +3354,7 @@ class docModel extends model
         $actionGroup = $this->dao->select('*')->from(TABLE_DOCACTION)->where('doc')->in(array_keys($docs))->andWhere('action')->eq('collect')->fetchGroup('doc', 'actor');
         foreach($docs as $docID => $doc)
         {
-            $doc->collector = '';
+            $doc->collector   = '';
             if(isset($actionGroup[$docID])) $doc->collector = ',' . implode(',', array_keys($actionGroup[$docID])) . ',';
         }
         return $docs;
@@ -3401,5 +3439,35 @@ class docModel extends model
 
         unset($editingDate[$account]);
         $this->dao->update(TABLE_DOC)->set('editingDate')->eq(json_encode($editingDate))->where('id')->eq($doc->id)->exec();
+    }
+
+    /**
+     * Get editors by doc id.
+     *
+     * @param  int    $docID
+     * @access public
+     * @return array
+     */
+    public function getEditors($docID = 0)
+    {
+        if(!$docID) return array();
+        $actions = $this->dao->select('*')->from(TABLE_ACTION)
+            ->where('objectType')->eq('doc')
+            ->andWhere('objectID')->eq((int)$docID)
+            ->andWhere('action')->in('edited')
+            ->orderBy('date_desc')
+            ->fetchAll('id');
+
+        $editors = array();
+        foreach($actions as $action)
+        {
+            $editor = new stdclass();
+            $editor->account = $action->actor;
+            $editor->date    = $action->date;
+
+            $editors[] = $editor;
+        }
+
+        return $editors;
     }
 }

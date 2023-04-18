@@ -29,6 +29,11 @@ class screenModel extends model
     {
         parent::__construct();
         $this->filter = new stdclass();
+        $this->filter->screen  = '';
+        $this->filter->year    = '';
+        $this->filter->dept    = '';
+        $this->filter->account = '';
+        $this->filter->charts  = array();
     }
 
     /**
@@ -314,7 +319,7 @@ class screenModel extends model
                 switch($key)
                 {
                     case 'year':
-                        $conditions[] = $field . ' = ' . $this->filter->$key;
+                        $conditions[] = $field . " = '" . $this->filter->$key . "'";
                         break;
                     case 'dept':
                         if($this->filter->dept and !$this->filter->account)
@@ -693,6 +698,46 @@ class screenModel extends model
                 $component->option->dataset = $doneData;
                 $component->option->series[0]->data[0]->value  = array($doneData);
                 $component->option->series[0]->data[1]->value  = array(1 - $doneData);
+            }
+
+            return $this->setComponentDefaults($component);
+        }
+    }
+
+    /**
+     * Build water polo chart.
+     *
+     * @param  object $component
+     * @param  object $chart
+     * @access public
+     * @return object
+     */
+    public function buildWaterPolo($component, $chart)
+    {
+        if(!$chart->settings)
+        {
+            $component->request     = json_decode('{"requestDataType":0,"requestHttpType":"get","requestUrl":"","requestIntervalUnit":"second","requestContentType":0,"requestParamsBodyType":"none","requestSQLContent":{"sql":"select * from  where"},"requestParams":{"Body":{"form-data":{},"x-www-form-urlencoded":{},"json":"","xml":""},"Header":{},"Params":{}}}');
+            $component->events      = json_decode('{"baseEvent":{},"advancedEvents":{}}');
+            $component->key         = "PieCircle";
+            $component->chartConfig = json_decode('{"key":"WaterPolo","chartKey":"VWaterPolo","conKey":"VCWaterPolo","title":"水球图","category":"Mores","categoryName":"更多","package":"Charts","chartFrame":"common","image":"water_WaterPolo.png"}');
+            $component->option      = json_decode('{"type":"nomal","series":[{"type":"liquidFill","radius":"90%","roseType":false}],"backgroundColor":"rgba(0,0,0,0)"}');
+
+            return $this->setComponentDefaults($component);
+        }
+        else
+        {
+            if($chart->sql)
+            {
+                $settings   = json_decode($chart->settings);
+                $sourceData = 0;
+                if($settings and isset($settings->metric))
+                {
+                    $sql        = $this->setFilterSQL($chart);
+                    $result     = $this->dao->query($sql)->fetch();
+                    $group      = $settings->group[0]->field;
+                    $sourceData = zget($result, $group, 0);
+                }
+                $component->option->dataset = $sourceData;
             }
 
             return $this->setComponentDefaults($component);

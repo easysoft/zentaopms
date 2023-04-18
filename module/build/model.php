@@ -250,6 +250,7 @@ class buildModel extends model
         if(strpos($params, 'notrunk') === false) $sysBuilds = $sysBuilds + array('trunk' => $this->lang->trunk);
         if($buildIdList)
         {
+            $buildIdList = str_replace('trunk', '0', $buildIdList);
             $selectedBuilds = $this->dao->select('id, name')->from(TABLE_BUILD)
                 ->where('id')->in($buildIdList)
                 ->beginIF($products)->andWhere('product')->in($products)->fi()
@@ -268,7 +269,7 @@ class buildModel extends model
             ->leftJoin(TABLE_RELEASE)->alias('t3')->on("FIND_IN_SET(t1.id,t3.build)")
             ->leftJoin(TABLE_PRODUCT)->alias('t4')->on('t1.product = t4.id')
             ->where('1=1')
-            ->andWhere('t1.id')->notIN($shadows)
+            ->beginIf(!empty($shaows))->andWhere('t1.id')->notIN($shadows)->fi()
             ->beginIF(strpos($params, 'hasdeleted') === false)->andWhere('t1.deleted')->eq(0)->fi()
             ->beginIF(strpos($params, 'hasproject') !== false)->andWhere('t1.project')->ne(0)->fi()
             ->beginIF(strpos($params, 'singled') !== false)->andWhere('t1.execution')->ne(0)->fi()
@@ -414,11 +415,8 @@ class buildModel extends model
         $build->bugs    = '';
 
         $build = fixer::input('post')
-            ->setDefault('project', 0)
-            ->setDefault('execution', 0)
-            ->setDefault('product', 0)
-            ->setDefault('branch', 0)
-            ->setDefault('builds', '')
+            ->setDefault('project,execution,product,branch', 0)
+            ->setDefault('builds,stories,bugs', '')
             ->cleanInt('product')
             ->add('createdBy', $this->app->user->account)
             ->add('createdDate', helper::now())

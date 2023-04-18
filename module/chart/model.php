@@ -477,8 +477,8 @@ class chartModel extends model
             $series[]   = array('name' => $seriesName, 'data' => $yData, 'type' => 'bar', 'stack' => $stack);
         }
 
-        $dataZoomX = '[{"type":"inside","startValue":0,"endValue":5,"minValueSpan":10,"maxValueSpan":10,"xAxisIndex":[0],"zoomOnMouseWheel":false,"moveOnMouseWheel":true,"moveOnMouseMove":true},{"type":"slider","realtime":true,"startValue":0,"endValue":5,"zoomLock":true,"brushSelect":false,"width":"80%","height":"5","xAxisIndex":[0],"fillerColor":"#33aaff","borderColor":"#33aaff00","backgroundColor":"#cfcfcf00","handleSize":0,"showDataShadow":false,"showDetail":false,"bottom":"0","left":"10%"}]';
-        $dataZoomY = '[{"type":"inside","startValue":0,"endValue":5,"minValueSpan":10,"maxValueSpan":10,"yAxisIndex":[0],"zoomOnMouseWheel":false,"moveOnMouseWheel":true,"moveOnMouseMove":true},{"type":"slider","realtime":true,"startValue":0,"endValue":5,"zoomLock":true,"brushSelect":false,"width":5,"height":"80%","yAxisIndex":[0],"fillerColor":"#33aaff","borderColor":"#33aaff00","backgroundColor":"#cfcfcf00","handleSize":0,"showDataShadow":false,"showDetail":false,"top":"10%","right":0}]';
+        $dataZoomX = '[{"type":"inside","startValue":0,"endValue":5,"minValueSpan":10,"maxValueSpan":10,"xAxisIndex":[0],"zoomOnMouseWheel":false,"moveOnMouseWheel":true,"moveOnMouseMove":true},{"type":"slider","realtime":true,"startValue":0,"endValue":5,"zoomLock":true,"brushSelect":false,"width":"80%","height":"5","xAxisIndex":[0],"fillerColor":"#ccc","borderColor":"#33aaff00","backgroundColor":"#cfcfcf00","handleSize":0,"showDataShadow":false,"showDetail":false,"bottom":"0","left":"10%"}]';
+        $dataZoomY = '[{"type":"inside","startValue":0,"endValue":5,"minValueSpan":10,"maxValueSpan":10,"yAxisIndex":[0],"zoomOnMouseWheel":false,"moveOnMouseWheel":true,"moveOnMouseMove":true},{"type":"slider","realtime":true,"startValue":0,"endValue":5,"zoomLock":true,"brushSelect":false,"width":5,"height":"80%","yAxisIndex":[0],"fillerColor":"#ccc","borderColor":"#33aaff00","backgroundColor":"#cfcfcf00","handleSize":0,"showDataShadow":false,"showDetail":false,"top":"10%","right":0}]';
         $isY = in_array($settings['type'], array('cluBarY', 'stackedBarY'));
         $dataZoom = $isY ? json_decode($dataZoomY, true) : json_decode($dataZoomX, true);
 
@@ -538,7 +538,7 @@ class chartModel extends model
                 $wheres = array();
                 foreach($filters as $field => $filter)
                 {
-                    $wheres[] = "$field {$filter['operator']} {$filter['value']}";
+                    $wheres[] = "`$field` {$filter['operator']} {$filter['value']}";
                 }
 
                 $whereStr = implode(' and ', $wheres);
@@ -604,8 +604,9 @@ class chartModel extends model
                 if($field)
                 {
                     $path = $this->app->getModuleRoot() . 'dataview' . DS . 'table' . DS . "$object.php";
-                    include $path;
+                    if(!is_file($path)) return;
 
+                    include $path;
                     $options = $schema->fields[$field]['options'];
                 }
                 break;

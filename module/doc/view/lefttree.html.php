@@ -8,8 +8,7 @@
 #main {margin-bottom: 0;}
 
 /* css for mian */
-#mainContent > #sideBar {flex: 0 0 150px; overflow-x: auto; padding-right: 5px;}
-[lang^=zh] #mainContent > #sideBar {flex: 0 0 180px;}
+#mainContent > #sideBar {flex: 0 0 180px; overflow-x: auto; padding-right: 5px;}
 
 /* css for tree */
 #fileTree .title {font-size: 16px; height: 20px; margin-top: 5px; margin-bottom: 5px;}
@@ -24,7 +23,8 @@
 .tree-icon {position: absolute; right: 0;}
 .tree li.has-input {overflow: hidden;}
 .tree li.has-input  > input.input-bro {margin-left: 15px;}
-.img-lib {flex: 0 0 14px; height: 14px; margin-right: 5px;}
+.img-lib {flex: 0 0 14px; height: 14px; margin-right: 5px; margin-bottom: 2px;}
+.file-icon {width: 14px; margin-bottom: 4px;}
 .tree-icon {position: absolute; right: 0;}
 .tree li > a {max-width: 100%; padding: 2px;}
 .file-tree  a.show-icon > div,
@@ -55,6 +55,19 @@ i.btn-info, i.btn-info:hover {border: none; background: #fff; box-shadow: unset;
 [lang^=zh] #leftBar .selectBox #currentItem {width: 180px;}
 #leftBar .selectBox #currentItem > .text {overflow: hidden; text-align: left; flex: 0 1 100%;}
 .dropdown-in-tree {max-height: 293px; overflow-y: auto;}
+.before-tree-item {flex: 0 0 14px; margin-right: 5px; margin-bottom: 2px;}
+
+/* Catalog sort style. */
+.sortable-sorting .catalog > a {cursor: move;}
+.sortable-sorting li .flex-start {opacity: 0.5;}
+.sortable-sorting .drop-here .flex-start {background-color: #fff3e0;}
+.sortable-sorting .drop-here .flex-start > * {opacity: 0.1;}
+.sortable-sorting .drag-shadow .flex-start {opacity: 1 !important;}
+.sortable-sorting .drag-shadow .icon-drop {visibility: hidden;}
+.is-sorting > li .flex-start {opacity: 1; border-radius: 4px;}
+.is-sorting > li ul {display: none !important;}
+li.drag-shadow ul {display: none !important;}
+#fileTree a.dragging-shadow {box-shadow: 0 1px 1px rgba(0,0,0,.05), 0 2px 6px 0 rgba(0,0,0,0.1);}
 </style>
 
 <?php
@@ -67,6 +80,9 @@ js::set('objectType', isset($type) ? $type : '');
 js::set('objectID',   isset($objectID) ? $objectID : '');
 js::set('isFirstLoad', isset($isFirstLoad) ? $isFirstLoad: '');
 js::set('canViewFiles', common::hasPriv('doc', 'showfiles'));
+js::set('spaceMethod', $config->doc->spaceMethod);
+js::set('canSortDocCatalog', common::hasPriv('doc', 'sortCatalog'));
+js::set('canSortAPICatalog', common::hasPriv('api', 'sortCatalog'));
 ?>
 
 <div id="fileTree" class="file-tree menu-active-primary menu-hover-primary">
@@ -232,7 +248,7 @@ $(function()
         var imgObj = {
             'annex': 'annex',
             'api': 'interface',
-            'lib': 'wiki-file-lib',
+            'lib': 'wiki',
             'execution': 'wiki-file-lib',
             'text': 'wiki-file',
             'word': 'word',
@@ -245,19 +261,24 @@ $(function()
             initialState: 'active',
             itemCreator: function($li, item)
             {
+                if(item.type == 'apiDoc' && release) item.hasAction = false;
                 if(typeof item.hasAction == 'undefined') item.hasAction = true;
                 if(typeof item.active == 'undefined') item.active = 0;
                 if(typeof docID != 'undefined' && item.id == docID) item.active = 1;
                 if(['text', 'word', 'ppt', 'excel'].indexOf(item.type) !== -1) item.hasAction = false;
 
-                var objectType = config.currentModule == 'api' ? item.objectType : item.type;
-                var libClass = ['lib', 'annex', 'api', 'execution'].indexOf(objectType) !== -1 ? 'lib' : '';
+                var objectType  = config.currentModule == 'api' ? item.objectType : item.type;
+                var libClass    = ['lib', 'annex', 'api', 'execution'].indexOf(objectType) !== -1 ? 'lib' : '';
+                var moduleClass = item.type == 'doc' || item.type == 'apiDoc' ? 'catalog' : '';
+                var sortClass   = '';
+                if(config.currentMethod != 'view' && ((item.type == 'doc' && canSortDocCatalog) || (item.type == 'apiDoc' && canSortAPICatalog && !release))) sortClass = 'sort-module';
+
                 var hasChild = item.children ? !!item.children.length : false;
                 var link     = item.type != 'execution' || item.hasAction ? '###' : '#';
-                var $item    = '<a href="' + link + '" style="position: relative" data-has-children="' + hasChild + '" title="' + item.name + '" data-id="' + item.id + '" class="' + libClass + '" data-type="' + item.type + '" data-action="' + item.hasAction + '">';
+                var $item    = '<a href="' + link + '" style="position: relative" data-has-children="' + hasChild + '" title="' + item.name + '" data-id="' + item.id + '" class="' + libClass + sortClass + '" data-type="' + item.type + '" data-action="' + item.hasAction + '">';
 
                 $item += '<div class="text h-full w-full flex-start overflow-hidden">';
-                if((libClass == 'lib' && item.type != 'execution') || (item.type == 'execution' && item.hasAction)) $item += '<div class="img-lib" style="background-image:url(static/svg/' + imgObj[item.type || 'lib'] + '.svg)"></div>';
+                if((libClass == 'lib' && item.type != 'execution') || (item.type == 'execution' && item.hasAction)) $item += '<i class="before-tree-item icon icon-' + imgObj[item.type] +'-lib"></i>';
                 if(['text', 'word', 'ppt', 'excel'].indexOf(item.type) !== -1) $item += '<div class="img-lib" style="background-image:url(static/svg/' + imgObj[item.type] + '.svg)"></div>';
                 $item += '<div class="tree-text">';
                 $item += item.name;
@@ -281,9 +302,9 @@ $(function()
                 if(item.versions) versionsData[item.id] = item.versions;
 
                 $li.append($item);
-                $li.addClass(libClass);
+                $li.addClass(libClass).addClass(moduleClass).attr('data-order', item.order).attr('data-type', item.type);
                 if(item.active) $li.addClass('active');
-            }
+            },
         });
 
         if(isFirstLoad) ele.data('zui.tree').collapse();
@@ -353,13 +374,13 @@ $(function()
             var libClass   = '.' + moduleType + 'LibDorpdown';
             if(!$(this).hasClass('lib')) libClass = '.' + moduleType + 'ModuleDorpdown';
 
-            $(this).find('.icon').removeClass('hidden');
+            $(this).find('.icon-drop').removeClass('hidden');
             $(this).addClass('show-icon');
             if($(libClass).find('li').length == 0) return false;
 
         }).on('mouseout', 'a', function()
         {
-            if(!$(this).closest('a').hasClass('hover')) $(this).find('.icon').addClass('hidden');
+            if(!$(this).closest('a').hasClass('hover')) $(this).find('.icon-drop').addClass('hidden');
             $(this).removeClass('show-icon');
         }).on('click', 'a', function()
         {
@@ -382,6 +403,16 @@ $(function()
             }
 
             return locatePage(libID, moduleID, $(this).data('type'));
+        }).on('mousedown', 'a.sort-module', function()
+        {
+            var $element = $(this);
+            setTimeout(function()
+            {
+                $element.addClass('dragging-shadow');
+            }, 500);
+        }).on('mouseup', 'a.sort-module', function()
+        {
+            $('a.sort-module').removeClass('dragging-shadow');
         }).on('click', '.tree-version-trigger', function(e)
         {
             $('.dropdown-in-tree').remove();
@@ -434,6 +465,7 @@ $(function()
         if(!libID)    libID    = 0;
         if(!moduleID) moduleID = 0;
         linkParams = linkParams.replace('%s', 'libID=' + libID + '&moduleID=' + moduleID);
+        var moduleName = config.currentModule;
         var methodName = '';
         if(config.currentModule == 'api')
         {
@@ -445,31 +477,33 @@ $(function()
             methodName = 'showFiles';
             linkParams = 'type=' + objectType + '&objectID=' + objectID;
         }
-        else if(objectType == 'mine' || objectType == 'view' || objectType == 'collect' || objectType == 'createdby')
-        {
-            var mySpaceType = 'mine';
-            if(type == 'view' || type == 'collect') mySpaceType = type;
-            if(type == 'createdBy' || type == 'createdby') mySpaceType = 'createdby';
-
-            methodName = 'mySpace';
-            linkParams = 'type='+ mySpaceType + '&libID=' + libID + '&moduleID=' + moduleID;
-        }
         else if(['text', 'word', 'ppt', 'excel'].indexOf(type) !== -1)
         {
             methodName = 'view';
             linkParams = 'docID=' + moduleID;
         }
+        else if(objectType == 'execution')
+        {
+            moduleName = 'execution';
+            methodName = 'doc';
+        }
         else
         {
-            methodName = objectType == 'execution' || objectType == 'custom' ? 'tableContents' : objectType + 'Space';
-            linkParams = objectType == 'execution' || objectType == 'custom' ? 'type=' + objectType + '&' + linkParams : linkParams;
+            methodName = spaceMethod[objectType] ? spaceMethod[objectType] : 'teamSpace';
+            if(['mine', 'view', 'collect', 'createdby', 'editedby'].indexOf(objectType) !== -1)
+            {
+                type = ['view', 'collect', 'createdby', 'editedby'].indexOf(type.toLowerCase()) !== -1 ? type.toLowerCase() : 'mine';
+                linkParams = 'type=' + type + '&' + linkParams;
+            }
+            if(type == 'apiDoc') linkParams = linkParams.replace('browseType=&', 'browseType=byrelease&').replace('param=0', 'param=<?php echo isset($release) ? $release : 0;?>');
         }
 
-        location.href = createLink(config.currentModule, methodName, linkParams);
+        location.href = createLink(moduleName, methodName, linkParams);
     }
 
     $('body').on('click', function()
     {
+        $('a.sort-module').removeClass('dragging-shadow');
         var $dropdown = $('.dropdown-in-tree');
         if($dropdown.length)
         {
@@ -478,7 +512,7 @@ $(function()
             if($hoverItem.length)
             {
                 $hoverItem.removeClass('hover');
-                $hoverItem.find('.icon').addClass('hidden');
+                $hoverItem.find('.icon-drop').addClass('hidden');
             }
             $dropdown.remove();
         }
@@ -542,7 +576,8 @@ $(function()
                     $rootDom.after($input);
                     $li.addClass('open in has-list');
                 }
-                $rootDom.parent().find('input').focus();
+                $input = $rootDom.parent().find('input');
+                $input.focus();
                 break;
             case 'addCataBro' :
                 moduleData.createType = 'same';
@@ -550,7 +585,8 @@ $(function()
                 var $rootDom = $('#fileTree li[data-id=' + item.id + ']');
                 $rootDom.after($input);
                 $rootDom.closest('ul').find('.has-input').css('padding-left', '0');
-                $('#fileTree').find('input').addClass('input-bro').focus();
+                $input = $('#fileTree').find('input').addClass('input-bro');
+                $input.focus();
                 break;
             case 'addCataChild' :
                 moduleData.parentID = item.id;
@@ -568,9 +604,9 @@ $(function()
                     moduleData.isUpdate = true;
                     $rootDom.addClass('open in has-list');
                 }
-
                 $rootDom.append($input);
-                $rootDom.find('input').focus();
+                $input = $rootDom.find('input');
+                $input.focus();
                 break;
         }
     }).on('click', '#versionSwitcher a', function()
@@ -581,7 +617,8 @@ $(function()
         var methodName = config.currentMethod;
         if(config.currentModule == 'doc')
         {
-            params     = linkParams.replace('%s', 'libID=' + libID + '&moduleID=' + moduleID).replace('browseType=&', 'browseType=byrelease&').replace('param=0', 'param=' + moduleID);
+            params = linkParams.replace('%s', 'libID=' + libID + '&moduleID=0').replace('browseType=&', 'browseType=byrelease&').replace('param=0', 'param=' + moduleID);
+            if(methodName == 'view') params = linkParams.replace('%s', 'libID=' + libID + '&moduleID=0&browseType=byrelease&orderBy=&status,id_desc&param=' + moduleID);
             methodName = objectType + 'Space';
         }
         location.href = createLink(config.currentModule, methodName, params);
@@ -622,6 +659,65 @@ $(function()
     }).on('keydown', '.file-tree input.input-tree', function(e)
     {
         if(e.keyCode == 13) $(this).trigger('blur');
+    });
+
+    /* Make modules tree sortable */
+    $('#fileTree').sortable(
+    {
+        trigger: 'a.sort-module',
+        dropToClass: 'sort-to',
+        stopPropagation: true,
+        nested: true,
+        selector: 'li',
+        dragCssClass: 'drop-here',
+        start: function()
+        {
+            $('#dropDownCatalogue').remove();
+            $('a.sort-module').removeClass('dragging-shadow');
+        },
+        canMoveHere: function($ele, $target)
+        {
+            if($ele && $target && $ele.parent().closest('li').attr('data-id') !== $target.parent().closest('li').attr('data-id')) return false;
+        },
+        targetSelector: function($ele, $root)
+        {
+            var $ul = $ele.closest('ul');
+            setTimeout(function()
+            {
+                if($('#fileTree').hasClass('sortable-sorting')) $ul.addClass('is-sorting');
+            }, 100);
+
+            return $ul.children('li.catalog');
+        },
+        always: function()
+        {
+            $('#fileTree,#fileTree .is-sorting').removeClass('is-sorting');
+        },
+        finish: function(e)
+        {
+            $('a.sort-module').removeClass('dragging-shadow');
+            if(!e.changed) return;
+
+            var orders     = {};
+            var link       = '';
+            var module     = e.list.context;
+            var moduleType = $(module).attr('data-type');
+            $('#fileTree').find("li[data-type='" + moduleType + "'].catalog").each(function()
+            {
+                var $li = $(this);
+                var item = $li.data();
+                orders['orders[' + item.id + ']'] = $li.attr('data-order') || item.order;
+            });
+
+            var moduleName = moduleType == 'apiDoc' ? 'api' : 'doc';
+            link = createLink(moduleName, 'sortCatalog');
+
+            $.post(link, orders, function(data){}).error(function()
+            {
+                bootbox.alert(lang.timeout);
+            });
+
+        }
     });
 })
 </script>

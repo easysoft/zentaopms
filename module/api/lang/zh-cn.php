@@ -12,6 +12,7 @@
 $lang->api->common   = 'API接口';
 $lang->api->getModel = '超级model调用接口';
 $lang->api->sql      = 'SQL查询接口';
+$lang->api->manage   = '接口管理';
 
 $lang->api->index            = '接口空间';
 $lang->api->editLib          = '编辑库';
@@ -60,9 +61,10 @@ $lang->api->defaultVersion   = "当前版本";
 $lang->api->zentaoAPI        = "禅道API文档v1";
 $lang->api->search           = "搜索";
 $lang->api->allLibs          = "全部库";
-$lang->api->noLinked         = "无关联";
+$lang->api->noLinked         = "未关联{$lang->productCommon}和{$lang->projectCommon}";
 $lang->api->addCatalog       = '添加目录';
 $lang->api->editCatalog      = '编辑目录';
+$lang->api->sortCatalog      = '目录排序';
 $lang->api->deleteCatalog    = '删除目录';
 
 /* Common access control lang. */
@@ -108,7 +110,7 @@ $lang->api->structAddedBy      = '创建人';
 $lang->api->structAddedDate    = '创建时间';
 $lang->api->name               = '库名称';
 $lang->api->baseUrl            = '请求基础路径';
-$lang->api->baseUrlDesc        = '网址或者路径，比如 test.zentao.net 或者 /v1';
+$lang->api->baseUrlDesc        = '网址或者路径，比如 http://test.zentao.net 或者 /v1';
 $lang->api->desc               = '描述';
 $lang->api->control            = '访问控制';
 $lang->api->noLib              = '暂时没有库。';
@@ -180,7 +182,7 @@ $lang->api->requestTypeOptions['multipart/form-data']               = 'multipart
 $lang->api->libTypeList = array();
 $lang->api->libTypeList['product'] = $lang->productCommon . '接口库';
 $lang->api->libTypeList['project'] = $lang->projectCommon . '接口库';
-$lang->api->libTypeList['nolink']  = '无关联接口库';
+$lang->api->libTypeList['nolink']  = '独立接口库';
 
 $lang->api->statusOptions      = array(
     'done'   => '开发完成',

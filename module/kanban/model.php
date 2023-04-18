@@ -483,7 +483,8 @@ class kanbanModel extends model
             ->add('assignedDate', $now)
             ->add('color', '#fff')
             ->trim('name,estimate')
-            ->setDefault('estimate', 0)
+            ->setDefault('estimate,fromID', 0)
+            ->setDefault('fromType', '')
             ->stripTags($this->config->kanban->editor->createcard['id'], $this->config->allowedTags)
             ->join('assignedTo', ',')
             ->setIF(is_numeric($this->post->estimate), 'estimate', (float)$this->post->estimate)
@@ -503,6 +504,9 @@ class kanbanModel extends model
         }
 
         $card = $this->loadModel('file')->processImgURL($card, $this->config->kanban->editor->createcard['id'], $this->post->uid);
+
+        if(!$card->begin) unset($card->begin);
+        if(!$card->end)   unset($card->end);
 
         $this->dao->insert(TABLE_KANBANCARD)->data($card)->autoCheck()
             ->checkIF($card->estimate != '', 'estimate', 'float')

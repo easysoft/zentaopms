@@ -36,15 +36,36 @@ function resizeChart()
     }
 }
 
+function waitForRepaint(callback)
+{
+    window.requestAnimationFrame(function()
+    {
+        window.requestAnimationFrame(callback);
+    });
+}
+
 /**
  * Init picker.
  *
  * @access public
  * @return void
  */
-function initPicker($row, pickerName = 'picker-select')
+function initPicker($row, pickerName = 'picker-select', onready = false)
 {
-    $row.find('.' + pickerName).picker({'maxDropHeight': pickerHeight});
+    $row.find('.' + pickerName).picker(
+    {
+        maxDropHeight: pickerHeight,
+        onReady: function()
+        {
+            if(!onready) return;
+            if(!$row.find('.picker')) return;
+            if(window.getComputedStyle($row.find('.picker').find('.picker-selections')[0]).getPropertyValue('width') !== 'auto')
+            {
+                var pickerWidth = $row.find('.picker')[0].getBoundingClientRect().width;
+                $row.find('.picker').find('.picker-selections').css('width', pickerWidth);
+            }
+        }
+    });
     $row.find("." + pickerName).each(function(index)
     {
        if($(this).hasClass('required')) $(this).siblings("div .picker").addClass('required');
@@ -66,3 +87,17 @@ function initDatepicker($obj, callback)
 
     if(typeof callback == 'function') callback($obj);
 }
+
+/**
+ * Attr date check.
+ *
+ * @param  object $obj
+ * @access public
+ * @return void
+ */
+function attrDateCheck($obj)
+{
+    $obj.find('.form-date').attr('onchange', 'checkDate(this, this.value)');
+    $obj.find('.form-datetime').attr('onchange', 'checkDate(this, this.value)');
+}
+

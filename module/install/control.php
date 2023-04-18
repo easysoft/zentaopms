@@ -296,13 +296,17 @@ class install extends control
      */
     public function step6()
     {
-        $installFileDeleted = unlink($this->app->getAppRoot() . 'www/install.php');
+        $canDelFile  = is_writable($this->app->getAppRoot() . 'www');
+        $installFile = $this->app->getAppRoot() . 'www/install.php';
+        $upgradeFile = $this->app->getAppRoot() . 'www/upgrade.php';
+        $installFileDeleted = $canDelFile && is_writable($installFile) ? unlink($installFile) : false;
+
+        if($canDelFile and is_writable($upgradeFile)) unlink($upgradeFile);
+        unset($_SESSION['installing']);
+        session_destroy();
+
         $this->view->installFileDeleted = $installFileDeleted;
         $this->view->title              = $this->lang->install->success;
         $this->display();
-
-        unlink($this->app->getAppRoot() . 'www/upgrade.php');
-        unset($_SESSION['installing']);
-        session_destroy();
     }
 }

@@ -758,7 +758,7 @@ $lang->action->label->testtask     = 'Testaufgaben|testtask|view|caseID=%s';
 $lang->action->label->testsuite    = 'Test Suite|testsuite|view|suiteID=%s';
 $lang->action->label->caselib      = 'Fallbibliothek|testsuite|libview|libID=%s';
 $lang->action->label->todo         = 'Todo|todo|view|todoID=%s';
-$lang->action->label->doclib       = 'Dok Bibliothek|doc|browse|libID=%s';
+$lang->action->label->doclib       = 'Dok Bibliothek|doc|teamspace|objectID=%s&libID=%s';
 $lang->action->label->doc          = 'Dok|doc|view|docID=%s';
 $lang->action->label->user         = 'Benutzer|user|view|account=%s';
 $lang->action->label->testreport   = 'Berichte|testreport|view|report=%s';

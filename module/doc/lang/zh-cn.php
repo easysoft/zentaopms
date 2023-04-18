@@ -25,7 +25,7 @@ $lang->doclib->privateACL = "私有 <span class='acl-tip'>（仅创建者和有%
 $lang->doclib->tip = new stdclass();
 $lang->doclib->tip->selectExecution = "执行为空时，创建的库为{$lang->projectCommon}库";
 
-$lang->doclib->type['wiki'] = 'WIKI文档库';
+$lang->doclib->type['wiki'] = 'Wiki文档库';
 $lang->doclib->type['api']  = '接口库';
 
 $lang->doclib->aclListA = array();
@@ -60,7 +60,7 @@ $lang->doclib->nameList['custom'] = '自定义文档库名称';
 $lang->doclib->apiNameUnique = array();
 $lang->doclib->apiNameUnique['product'] = '同一' . $lang->productCommon . '下的接口库中';
 $lang->doclib->apiNameUnique['project'] = '同一' . $lang->projectCommon . '下的接口库中';
-$lang->doclib->apiNameUnique['nolink']  = '无关联接口库中';
+$lang->doclib->apiNameUnique['nolink']  = '独立接口库中';
 
 /* 字段列表。*/
 $lang->doc->common       = '文档';
@@ -121,10 +121,11 @@ $lang->doc->update       = '更新';
 $lang->doc->nextStep     = '下一步';
 $lang->doc->closed       = '已关闭';
 $lang->doc->saveDraft    = '存为草稿';
-$lang->doc->defaultSave  = '默认存入：';
 $lang->doc->position     = '所在位置';
 $lang->doc->person       = '个人';
 $lang->doc->team         = '团队';
+$lang->doc->manage       = '文档管理';
+$lang->doc->release      = '发布';
 
 $lang->doc->moduleDoc     = '按模块浏览';
 $lang->doc->searchDoc     = '搜索';
@@ -141,11 +142,13 @@ $lang->doc->myDoc         = '我的文档';
 $lang->doc->myView        = '最近浏览';
 $lang->doc->myCollection  = '我的收藏';
 $lang->doc->myCreation    = '我创建的';
+$lang->doc->myEdited      = '我编辑的';
 $lang->doc->myLib         = '我的个人库';
 $lang->doc->tableContents = '目录';
 $lang->doc->addCatalog    = '添加目录';
 $lang->doc->editCatalog   = '编辑目录';
 $lang->doc->deleteCatalog = '删除目录';
+$lang->doc->sortCatalog   = '目录排序';
 $lang->doc->docStatistic  = '文档统计';
 $lang->doc->docCreated    = '创建的文档';
 $lang->doc->docEdited     = '编辑的文档';
@@ -155,6 +158,8 @@ $lang->doc->todayUpdated  = '今天更新';
 $lang->doc->daysUpdated   = '%s天前更新';
 $lang->doc->monthsUpdated = '%s月前更新';
 $lang->doc->yearsUpdated  = '%s年前更新';
+$lang->doc->viewCount     = '%s次浏览';
+$lang->doc->collectCount  = '%s次收藏';
 
 /* 方法列表。*/
 $lang->doc->index            = '仪表盘';
@@ -166,6 +171,7 @@ $lang->doc->createBook       = '创建手册';
 $lang->doc->browse           = '文档列表';
 $lang->doc->view             = '文档详情';
 $lang->doc->diff             = '对比';
+$lang->doc->cancelDiff       = '取消对比';
 $lang->doc->diffAction       = '对比文档';
 $lang->doc->sort             = '文档排序';
 $lang->doc->manageType       = '维护目录';
@@ -243,7 +249,7 @@ $lang->doc->spaceList['custom']  = '团队空间';
 $lang->doc->apiType = '接口类型';
 $lang->doc->apiTypeList['product'] = $lang->productCommon . '接口';
 $lang->doc->apiTypeList['project'] = $lang->projectCommon . '接口';
-$lang->doc->apiTypeList['nolink']  = '无关联接口';
+$lang->doc->apiTypeList['nolink']  = '独立接口';
 
 $lang->doc->typeList['html']     = '富文本';
 $lang->doc->typeList['markdown'] = 'Markdown';
@@ -252,13 +258,12 @@ $lang->doc->typeList['word']     = 'Word';
 $lang->doc->typeList['ppt']      = 'PPT';
 $lang->doc->typeList['excel']    = 'Excel';
 
-$lang->doc->createList['html']     = '创建文档';
-$lang->doc->createList['template'] = '由模板创建';
+$lang->doc->createList['template'] = 'Wiki文档';
 $lang->doc->createList['word']     = 'Word';
 $lang->doc->createList['ppt']      = 'PPT';
 $lang->doc->createList['excel']    = 'Excel';
 
-$lang->doc->types['doc'] = 'WIKI文档';
+$lang->doc->types['doc'] = 'Wiki文档';
 $lang->doc->types['api'] = '接口文档';
 
 $lang->doc->contentTypeList['html']     = 'HTML';
@@ -307,7 +312,7 @@ $lang->doc->versionNotFount      = '该版本文档不存在';
 $lang->doc->noDoc                = '暂时没有文档。';
 $lang->doc->noArticle            = '暂时没有文章。';
 $lang->doc->noLib                = '暂时没有库。';
-$lang->doc->noBook               = 'WIKI库还未创建手册，请新建 ：）';
+$lang->doc->noBook               = 'Wiki库还未创建手册，请新建 ：）';
 $lang->doc->cannotCreateOffice   = '<p>对不起，企业版才能创建%s文档。<p><p>试用企业版，请联系我们：4006-8899-23 &nbsp; 0532-86893032。</p>';
 $lang->doc->notSetOffice         = "创建%s文档，需要配置<a href='%s'>Office转换设置</a>。";
 $lang->doc->noSearchedDoc        = '没有搜索到任何文档。';
@@ -341,7 +346,7 @@ $lang->doc->noticeAcl['doc']['private'] = '只有创建者自己可以访问。'
 
 $lang->doc->placeholder = new stdclass();
 $lang->doc->placeholder->url       = '相应的链接地址';
-$lang->doc->placeholder->execution = '执行为空时，创建文件在项目库下';
+$lang->doc->placeholder->execution = '执行为空时，创建文档在项目库下';
 
 $lang->doc->summary = "本页共 <strong>%s</strong> 个附件，共计 <strong>%s</strong>，其中<strong>%s</strong>。";
 $lang->doc->ge      = '个';

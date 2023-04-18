@@ -778,9 +778,10 @@ class extensionModel extends model
     {
         $code      = $extension;
         $extension = $this->getInfoFromPackage($extension);
-        $extension->status = 'available';
-        $extension->code   = $code;
-        $extension->type   = empty($type) ? $extension->type : $type;
+        $extension->status        = 'available';
+        $extension->code          = $code;
+        $extension->type          = empty($type) ? $extension->type : $type;
+        $extension->installedTime = helper::now();
 
         $this->dao->replace(TABLE_EXTENSION)->data($extension)->exec();
     }
