@@ -2842,7 +2842,11 @@ class storyModel extends model
         }
 
         $releases = $this->dao->select('*')->from(TABLE_RELEASE)->where("CONCAT(',', stories, ',')")->like("%,$storyID,%")->andWhere('deleted')->eq(0)->fetchPairs('branch', 'branch');
-        foreach($releases as $branch) $stages[$branch] = 'released';
+        foreach($releases as $branches)
+        {
+            $branches = trim($branches, ',');
+            foreach(explode(',', $branches) as $branch) $stages[$branch] = 'released';
+        }
 
         $currentStory = $this->dao->findById($storyID)->from(TABLE_STORY)->fetch();
         if($story->stage != $currentStory->stage)
