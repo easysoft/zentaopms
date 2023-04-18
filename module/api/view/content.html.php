@@ -27,11 +27,10 @@
               <?php
               if(!$isRelease)
               {
-                if(common::hasPriv('api', 'edit'))   echo html::a(inlink('edit', "apiID=$api->id"), '<i class="icon-edit"></i>', '', "title='{$lang->api->edit}' class='btn btn-link' data-app='{$this->app->tab}'");
-                if(common::hasPriv('api', 'delete')) echo html::a(inLink('api', 'delete', "apiID=$api->id"), '<i class="icon-trash"></i>', '', "title='{$lang->api->delete}' class='btn btn-link' target='hiddenwin'");
+                if(common::hasPriv('api', 'edit'))   echo html::a($this->createLink('api', 'edit', "apiID=$api->id"), '<i class="icon-edit"></i>', '', "title='{$lang->api->edit}' class='btn btn-link' data-app='{$this->app->tab}'");
+                if(common::hasPriv('api', 'delete')) echo html::a($this->createLink('api', 'delete', "apiID=$api->id"), '<i class="icon-trash"></i>', '', "title='{$lang->api->delete}' class='btn btn-link' target='hiddenwin'");
               }
               ?>
-              <a id="hisTrigger" href="###" class="btn btn-link" title=<?php echo $lang->history?>><span class="icon icon-clock"></span></a>
             </div>
           </div>
         </div>
