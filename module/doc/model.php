@@ -665,7 +665,7 @@ class docModel extends model
             {
                 $editDocs = $this->dao->select('objectID')->from(TABLE_ACTION)
                     ->where('objectType')->eq('doc')
-                    ->andWhere('action')->eq('edited')
+                    ->andWhere('action')->in('edited,saveddraft')
                     ->andWhere('actor')->eq($this->app->user->account)
                     ->andWhere('vision')->eq($this->config->vision)
                     ->fetchPairs();

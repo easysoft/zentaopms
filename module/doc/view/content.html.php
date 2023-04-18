@@ -108,8 +108,7 @@
           <div class="detail-content article-content table-col">
             <div class='info'>
               <?php $createInfo = $doc->status == 'draft' ? zget($users, $doc->addedBy) . " {$lang->colon} " . substr($doc->addedDate, 0, 10) . (common::checkNotCN() ? ' ' : '') . $lang->doc->createAB : zget($users, $doc->releasedBy) . " {$lang->colon} " . substr($doc->releasedDate, 0, 10) . (common::checkNotCN() ? ' ' : '') . $lang->doc->release;?>
-              <span class='user-time text-muted'><i class='icon icon-contacts'></i> <?php echo $createInfo;?></span>
-              <!-- <span data-url="<?php echo $this->createLink('doc', 'collect', "objectID=$doc->id&objectType=doc");?>" title="<?php echo $lang->doc->collect;?>" class='user-time ajaxCollect text-muted'><?php echo html::image("static/svg/{$star}.svg", "class='$star'");?> <?php echo $doc->collects;?></span> -->
+              <span class='user-time text-muted'><i class='icon-contacts'></i> <?php echo $createInfo;?></span>
               <span class='user-time text-muted'><i class='icon-star'></i> <?php echo $doc->collects;?></span>
               <span class='user-time text-muted'><i class='icon-eye'></i> <?php echo $doc->views;?></span>
               <?php if($doc->keywords):?>
