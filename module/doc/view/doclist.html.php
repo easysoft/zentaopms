@@ -79,7 +79,7 @@ body {margin-bottom: 25px;}
             <?php printf('%03d', $doc->id);?>
           </td>
           </td>
-          <td class="c-name" title='<?php echo $doc->title;?>'>
+          <td class="c-name" title='<?php echo $doc->title;?>' data-status='<?php echo $doc->status?>'>
           <?php
           $docType = zget($config->doc->iconList, $doc->type);
           $icon    = html::image("static/svg/{$docType}.svg", "class='file-icon'");
