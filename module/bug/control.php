@@ -60,14 +60,14 @@ class bug extends control
             else
             {
                 $mode     = ($this->app->methodName == 'create' and empty($this->config->CRProduct)) ? 'noclosed' : '';
-                $products = $this->product->getPairs($mode, 0, 'program_asc', 'all');
+                $products = $this->product->getPairs($mode, 0, '', 'all');
             }
             if(empty($products) and !helper::isAjaxRequest()) return print($this->locate($this->createLink('product', 'showErrorNone', "moduleName=$tab&activeMenu=bug&objectID=$objectID")));
         }
         else
         {
             $mode     = (empty($this->config->CRProduct)) ? 'noclosed' : '';
-            $products = $this->product->getPairs($mode, 0, 'program_asc', 'all');
+            $products = $this->product->getPairs($mode, 0, '', 'all');
         }
         $this->view->products = $this->products = $products;
     }
@@ -581,7 +581,7 @@ class bug extends control
         if(empty($moduleOptionMenu)) return print(js::locate(helper::createLink('tree', 'browse', "productID=$productID&view=story")));
 
         /* Get products and projects. */
-        $products = $this->config->CRProduct ? $this->products : $this->product->getPairs('noclosed', 0, 'program_asc', 'all');
+        $products = $this->config->CRProduct ? $this->products : $this->product->getPairs('noclosed', 0, '', 'all');
         $projects = array(0 => '');
         if($executionID)
         {

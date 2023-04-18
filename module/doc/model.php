@@ -665,7 +665,7 @@ class docModel extends model
             {
                 $editDocs = $this->dao->select('objectID')->from(TABLE_ACTION)
                     ->where('objectType')->eq('doc')
-                    ->andWhere('action')->eq('edited')
+                    ->andWhere('action')->in('edited,saveddraft')
                     ->andWhere('actor')->eq($this->app->user->account)
                     ->andWhere('vision')->eq($this->config->vision)
                     ->fetchPairs();
@@ -679,7 +679,7 @@ class docModel extends model
                 ->andWhere('t1.lib')->ne('')
                 ->andWhere('t1.id')->in($docIDList)
                 ->andWhere('t1.vision')->eq($this->config->vision)
-                ->andWhere('t1.addedBy')->eq($this->app->user->account)
+                ->beginIF($type == 'createdby')->andWhere('t1.addedBy')->eq($this->app->user->account)->fi()
                 ->beginIF(!common::hasPriv('doc', 'productSpace'))->andWhere('t2.type')->ne('product')->fi()
                 ->beginIF(!common::hasPriv('doc', 'projectSpace'))->andWhere('t2.type')->notIN('project,execution')->fi()
                 ->beginIF(!common::hasPriv('doc', 'teamSpace'))->andWhere('t2.type')->ne('custom')->fi()
@@ -3276,6 +3276,11 @@ class docModel extends model
         if(empty($account))$account = $this->app->user->account;
         if($action == 'collect') $this->dao->delete()->from(TABLE_DOCACTION)->where('doc')->eq($docID)->andWhere('action')->eq('collect')->andWhere('actor')->eq($account)->exec();
 
+        if($action == 'view')
+        {
+            $lastView = $this->dao->select('date')->from(TABLE_DOCACTION)->where('doc')->eq($docID)->andWhere('action')->eq('view')->andWhere('actor')->eq($account)->orderBy('id_desc')->fetch('date');
+            if($lastView and (time() - strtotime($lastView) < 4)) return false;
+        }
         $data  = new stdclass();
         $data->doc    = $docID;
         $data->action = $action;
