@@ -409,7 +409,7 @@ $(function()
             setTimeout(function()
             {
                 $element.addClass('dragging-shadow');
-            }, 100);
+            }, 500);
         }).on('mouseup', 'a.sort-module', function()
         {
             $('a.sort-module').removeClass('dragging-shadow');
@@ -667,6 +667,10 @@ $(function()
         nested: true,
         selector: 'li',
         dragCssClass: 'drop-here',
+        start: function()
+        {
+            $('#dropDownCatalogue').remove();
+        },
         canMoveHere: function($ele, $target)
         {
             if($ele && $target && $ele.parent().closest('li').attr('data-id') !== $target.parent().closest('li').attr('data-id')) return false;
