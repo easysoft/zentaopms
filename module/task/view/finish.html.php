@@ -91,7 +91,7 @@
           <td>
             <div class='datepicker-wrapper'>
             <?php
-            $realStarted = $task->realStarted;
+            $realStarted = substr($task->realStarted, 0, 19);
             $readonly    = 'readonly';
             if(helper::isZeroDate($realStarted))
             {

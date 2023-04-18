@@ -60,7 +60,7 @@ $lang->doclib->nameList['custom'] = '自定义文档库名称';
 $lang->doclib->apiNameUnique = array();
 $lang->doclib->apiNameUnique['product'] = '同一' . $lang->productCommon . '下的接口库中';
 $lang->doclib->apiNameUnique['project'] = '同一' . $lang->projectCommon . '下的接口库中';
-$lang->doclib->apiNameUnique['nolink']  = '无关联接口库中';
+$lang->doclib->apiNameUnique['nolink']  = '独立接口库中';
 
 /* 字段列表。*/
 $lang->doc->common       = '文档';
@@ -249,7 +249,7 @@ $lang->doc->spaceList['custom']  = '团队空间';
 $lang->doc->apiType = '接口类型';
 $lang->doc->apiTypeList['product'] = $lang->productCommon . '接口';
 $lang->doc->apiTypeList['project'] = $lang->projectCommon . '接口';
-$lang->doc->apiTypeList['nolink']  = '无关联接口';
+$lang->doc->apiTypeList['nolink']  = '独立接口';
 
 $lang->doc->typeList['html']     = '富文本';
 $lang->doc->typeList['markdown'] = 'Markdown';

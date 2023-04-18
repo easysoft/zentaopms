@@ -31,12 +31,17 @@ $schema->fields['title']        = array('type' => 'string', 'name' => $this->lan
 $schema->fields['status']       = array('type' => 'option', 'name' => $this->lang->story->status, 'options' => $this->lang->story->statusList);
 $schema->fields['stage']        = array('type' => 'option', 'name' => $this->lang->story->stage, 'options' => $this->lang->story->stageList);
 $schema->fields['pri']          = array('type' => 'option', 'name' => $this->lang->story->pri, 'options' => $this->lang->story->priList);
+$schema->fields['source']       = array('type' => 'option', 'name' => $this->lang->story->source, 'options' => $this->lang->story->sourceList);
+$schema->fields['category']     = array('type' => 'option', 'name' => $this->lang->story->category, 'options' => $this->lang->story->categoryList);
 $schema->fields['product']      = array('type' => 'object', 'name' => $this->lang->story->product, 'object' => 'product', 'show' => 'product.name');
 $schema->fields['storymodule']  = array('type' => 'object', 'name' => $this->lang->story->module, 'object' => 'storymodule', 'show' => 'storymodule.name');
 $schema->fields['closedDate']   = array('type' => 'date',   'name' => $this->lang->story->closedDate);
 $schema->fields['closedReason'] = array('type' => 'option', 'name' => $this->lang->story->closedReason, 'options' => $this->lang->story->reasonList);
 $schema->fields['openedBy']     = array('type' => 'user',   'name' => $this->lang->story->openedBy);
 $schema->fields['openedDate']   = array('type' => 'date',   'name' => $this->lang->story->openedDate);
+$schema->fields['assignedTo']   = array('type' => 'user',   'name' => $this->lang->story->assignedTo);
+$schema->fields['changedBy']    = array('type' => 'user',   'name' => $this->lang->story->changedBy);
+$schema->fields['closedBy']     = array('type' => 'user',   'name' => $this->lang->story->closedBy);
 
 $schema->objects = array();
 

@@ -1148,7 +1148,8 @@ class blockModel extends model
      */
     public function getProjectDocParams()
     {
-        return false;
+        $params = $this->appendCountParams();
+        return json_encode($params);
     }
 
     /**
