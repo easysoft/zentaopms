@@ -28,11 +28,10 @@ function render($wgName = 'page', $options = NULL)
 
     if($options === NULL)
     {
-        $headers = getallheaders();
-        if(isset($headers['X-ZIN-Options']) && !empty($headers['X-ZIN-Options']))
+        if(isset($_SERVER['HTTP_X_ZIN_OPTIONS']) && !empty($_SERVER['HTTP_X_ZIN_OPTIONS']))
         {
-            $setting = $headers['X-ZIN-Options'];
-            $options = $setting[0] === '{' ? json_decode($headers['X-ZIN-Options'], true) : ['selector' => $setting];
+            $setting = $_SERVER['HTTP_X_ZIN_OPTIONS'];
+            $options = $setting[0] === '{' ? json_decode($setting, true) : ['selector' => $setting];
         }
     }
 

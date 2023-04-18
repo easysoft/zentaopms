@@ -1042,9 +1042,8 @@ class baseRouter
     {
         $module  = $this->rawModule;
         $tab     = '';
-        $headers = getallheaders();
 
-        if(isset($headers['X-ZIN-App'])) $tab = $headers['X-ZIN-App'];
+        if(isset($_SERVER['HTTP_X_ZIN_APP'])) $tab = $_SERVER['HTTP_X_ZIN_APP'];
         elseif(isset($this->lang->navGroup)) $tab = zget($this->lang->navGroup, $module, 'my');
         elseif(isset($_COOKIE['tab']) && $_COOKIE['tab'] && preg_match('/^\w+$/', $_COOKIE['tab'])) $tab = $_COOKIE['tab'];
 
@@ -2922,7 +2921,7 @@ class baseRouter
         {
             if(!empty($this->config->debug) and $this->config->debug > 1)
             {
-                if(isset($this->config->zin) || isset(getallheaders()['X-ZIN-Options']))
+                if(isset($this->config->zin) || isset($_SERVER['HTTP_X_ZIN_OPTIONS']))
                 {
                     if(!isset($this->zinErrors)) $this->zinErrors = [];
                     $this->zinErrors[] = ['file' => $file, 'line' => $line, 'message' => $message];
