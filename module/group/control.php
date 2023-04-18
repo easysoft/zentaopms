@@ -239,18 +239,18 @@ class group extends control
             $this->lang->custom->common = $this->lang->group->config;
             if($this->config->edition == 'max' and $this->config->vision == 'rnd' and isset($this->lang->baseline)) $this->lang->baseline->common = $this->lang->group->docTemplate;
 
+            $modules          = $this->group->getPrivManagerPairs('module', $menu);
             $this->view->group      = $group;
             $this->view->groupPrivs = $groupPrivs;
             $this->view->groupID    = $groupID;
             $this->view->menu       = $menu;
             $this->view->version    = $version;
 
-            $privs        = $this->group->getPrivsListByView($menu);
-            $privPackages = $this->group->getPrivManagerPairs('package');
-            $privLang     = $this->group->transformPrivLang($privs);
-            $privs        = $this->group->getCustomPrivs($menu, $privs);
+            $privs    = $this->group->getPrivsListByView($menu);
+            $privLang = $this->group->transformPrivLang($privs);
+            $privs    = $this->group->getCustomPrivs($menu, $privs);
 
-            $privList           = array();
+            $privList           = $modules;
             $privMethods        = array();
             $selectPrivs        = array();
             $selectedPrivIdList = array();
@@ -259,6 +259,7 @@ class group extends control
                 if(!empty($version) and strpos($changelogs, ",{$priv->module}-{$priv->method},") === false) continue;
 
                 if(!isset($privList[$priv->parentCode])) $privList[$priv->parentCode] = array();
+                if(!is_array($privList[$priv->parentCode])) $privList[$priv->parentCode] = array();
                 if(!isset($privList[$priv->parentCode][$priv->parent])) $privList[$priv->parentCode][$priv->parent] = array();
                 $privList[$priv->parentCode][$priv->parent][$priv->key] = $priv;
 
@@ -273,10 +274,13 @@ class group extends control
                     if(isset($priv->id)) $selectedPrivIdList[$priv->id] = $priv->id;
                 }
             }
+            foreach($privList as $module => $privs)
+            {
+                if(!is_array($privList[$module])) unset($privList[$module]);
+            }
 
             if(empty($menu) or $menu == 'general')
             {
-                $modules          = $this->group->getMenuModules($menu, false);
                 $unassignedModule = array_diff(array_keys(get_object_vars($this->lang->resource)), array_keys($modules));
                 foreach($unassignedModule as $index => $module)
                 {
@@ -303,12 +307,12 @@ class group extends control
             $excludePrivsIdList = array_diff(array_keys($groupPrivsIdList), $selectedPrivIdList);
             $relatedPrivData    = $this->group->getRelatedPrivs($selectedPrivIdList, '', $excludePrivsIdList);
 
-            unset($privList['index']['index']);
+            unset($privList['index']);
 
             $this->view->privList           = $privList;
             $this->view->privMethods        = $privMethods;
             $this->view->selectPrivs        = $selectPrivs;
-            $this->view->privPackages       = $privPackages;
+            $this->view->privPackages       = $this->group->getPrivManagerPairs('package');
             $this->view->selectedPrivIdList = $selectedPrivIdList;
             $this->view->relatedPrivData    = $relatedPrivData;
             $this->view->excludePrivsIdList = $excludePrivsIdList;
