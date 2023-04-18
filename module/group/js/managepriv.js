@@ -70,8 +70,8 @@ function updatePrivList(parentType, parentList)
  */
 function changeParentChecked($item, moduleName, packageID)
 {
-    var moduleAllPrivs    = $item.closest('tbody').find('.group-item[data-module=' + moduleName +']').length;
-    var moduleSelectPrivs = $item.closest('tbody').find('.group-item[data-module=' + moduleName +']').find('[checked=checked]').length;
+    var moduleAllPrivs    = $item.closest('tbody').find('.group-item[data-module=' + moduleName +']:not(.menus-browse)').length;
+    var moduleSelectPrivs = $item.closest('tbody').find('.group-item[data-module=' + moduleName +']:not(.menus-browse)').find('[checked=checked]').length;
     var $moduleItem       = $item.closest('tbody').find('.module[data-module=' + moduleName +']');
     if($item.closest('tbody').find('.menus.' + moduleName).length > 0)
     {
@@ -96,8 +96,8 @@ function changeParentChecked($item, moduleName, packageID)
 
     if(packageID == '') return;
 
-    var packageAllPrivs    = $item.closest('tbody').find('.group-item[data-module=' + moduleName +'][data-package=' + packageID +']').length;
-    var packageSelectPrivs = $item.closest('tbody').find('.group-item[data-module=' + moduleName +'][data-package=' + packageID +']').find('[checked=checked]').length;
+    var packageAllPrivs    = $item.closest('tbody').find('.group-item[data-module=' + moduleName +'][data-package=' + packageID +']:not(.menus-browse)').length;
+    var packageSelectPrivs = $item.closest('tbody').find('.group-item[data-module=' + moduleName +'][data-package=' + packageID +']:not(.menus-browse)').find('[checked=checked]').length;
     var $packageItem       = $item.closest('tbody').find('.package[data-module=' + moduleName +'][data-package=' + packageID +']');
     if($item.closest('tbody').find('.menus.' + moduleName).length > 0)
     {
@@ -520,7 +520,6 @@ $(function()
 
     $('#privPackageList .package-column').on('click', '.menus-privs input[type=checkbox]', (function()
     {
-        groupItemChange();
         var $menusPrivs  = $(this).closest('.popover-content').find('.menus-item');
         var $parentPrivs = $(this).closest('.privs').find('.checkbox-primary.check-all');
         var allPrivs     = $menusPrivs.length;
@@ -541,16 +540,16 @@ $(function()
             $parentPrivs.find('input').removeAttr('checked');
             $parentPrivs.find('label').addClass('checkbox-indeterminate-block');
         }
+        groupItemChange();
     }));
 
     $('#privPackageList .package-column').on('click', '.privs .check-all', (function()
     {
         var checked   = $(this).find('input[type=checkbox]').prop('checked');
-        var $children = $(this).closest('.privs').find('.menus-privs .menus-item');
+        var $children = $(this).closest('.package-column').find('.menus-privs .menus-item');
         if(checked)
         {
             $children.find('input').attr('checked', 'checked');
-            $children.find('label').removeClass('checkbox-indeterminate-block');
         }
         else
         {

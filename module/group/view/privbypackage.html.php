@@ -129,7 +129,7 @@
                   $menusPrivs  = count($lang->$moduleName->menus);
                   $menusSelect = count(array_intersect(array_keys($lang->$moduleName->menus), array_keys(zget($groupPrivs, $moduleName, array()))));
                   ?>
-                  <div class="group-item" data-id='0' data-module='<?php echo $moduleName;?>' data-package='0'>
+                  <div class="group-item menus-browse" data-id='0' data-module='<?php echo $moduleName;?>' data-package='0'>
                     <div class="checkbox-primary checkbox-inline checkbox-left check-all">
                       <input type='checkbox' value='browse' <?php if($menusPrivs == $menusSelect) echo 'checked';?>>
                       <label class='text-left <?php if(!empty($menusSelect) and $menusPrivs != $menusSelect) echo 'checkbox-indeterminate-block';?>' for='actions[<?php echo $moduleName;?>]browse'><?php echo $lang->$moduleName->browse;?></label>
