@@ -333,9 +333,15 @@ function locateNewLib(type, objectID, libID)
 {
     var method = 'teamSpace';
     var params = 'objectID=' + objectID + '&libID=' + libID;
+    var module = 'doc';
     if(type == 'product' || type == 'project')
     {
         method = type + 'Space';
+    }
+    else if(type == 'execution')
+    {
+        module = 'execution';
+        method = 'doc';
     }
     else if(type == 'mine')
     {
@@ -343,7 +349,7 @@ function locateNewLib(type, objectID, libID)
         params = 'type=mine&libID=' + libID;
     }
 
-    location.href = createLink('doc', method, params);
+    location.href = createLink(module, method, params);
 }
 
 /**
