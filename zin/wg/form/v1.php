@@ -2,6 +2,7 @@
 namespace zin;
 
 require_once dirname(__DIR__) . DS . 'panel' . DS . 'v1.php';
+require_once dirname(__DIR__) . DS . 'formgroup' . DS . 'v1.php';
 require_once dirname(__DIR__) . DS . 'formrow' . DS . 'v1.php';
 
 class form extends panel
@@ -9,6 +10,7 @@ class form extends panel
     protected static $defineProps =
     [
         'method?: string',
+        'url?: string',
         'actions?: array',
         'target?: string',
         'items?: array',
@@ -67,7 +69,7 @@ class form extends panel
 
     protected function buildForm()
     {
-        list($items, $grid, $labelWidth) = $this->prop(['items', 'grid', 'labelWidth']);
+        list($items, $grid, $labelWidth, $url, $target, $method) = $this->prop(['items', 'grid', 'labelWidth', 'url', 'target', 'method']);
 
         $actions = $this->buildFormActions();
         if($grid && !empty($actions)) $actions = div(setClass('form-row'), $actions);
@@ -86,7 +88,8 @@ class form extends panel
 
         return h::form
         (
-            setClass('form', $grid ? 'form-grid' : NULL),
+            setClass('form', $grid ? 'form-grid' : NULL, $target === 'ajax' ? 'form-ajax' : ''),
+            set(['action' => $url, 'target' => $target === 'ajax' ? NULL : $target, 'method' => $method]),
             empty($labelWidth) ? NULL : setCssVar('form-label-width', $labelWidth),
             $list,
             $actions
