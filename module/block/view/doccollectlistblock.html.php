@@ -37,7 +37,7 @@
       }
       else
       {
-          echo "<span class='doc-title'>$icon {$doc->title}</span>";
+          echo "<span class='doc-title'>{$doc->title}</span>";
       }
       ?>
       <div class='label-collect-count'>
