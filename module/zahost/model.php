@@ -139,6 +139,8 @@ class zahostModel extends model
     {
         $address = str_replace(array('https://', 'http://'), '', $address);
 
+        if(!validater::checkDomain($address) && !validater::checkIP($address)) return false;
+
         if ($this->ping($address)) return true;
 
         foreach(array(80, 443, $this->config->zahost->defaultPort) as $port)
