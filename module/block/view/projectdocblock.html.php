@@ -1,14 +1,14 @@
 <style>
 .block-projectdoc .nav-stacked {overflow:auto; height:220px; max-height:220px; }
 .block-projectdoc .panel-heading {border-bottom:1px solid #ddd;}
-.block-projectdoc .panel-body {padding-top: 0; height:240px; padding-right:0px; overflow-x:hidden !important;}
+.block-projectdoc .panel-body {padding-top: 0; height:240px; padding-right:0px; padding-bottom:0px;}
 .block-projectdoc .tab-content {padding-right:0px;}
 .block-projectdoc .tab-pane {max-height:220px; overflow:auto;}
 .block-projectdoc table.tablesorter th{border-bottom:0px !important;}
 .block-projectdoc .tile {margin-bottom: 30px;}
 .block-projectdoc .tile-title {font-size: 18px; color: #A6AAB8;}
 .block-projectdoc .tile-amount {font-size: 48px; margin-bottom: 10px;}
-.block-projectdoc .col-nav {border-right: 1px solid #EBF2FB; width: 210px; padding: 0;}
+.block-projectdoc .col-nav {border-right: 1px solid #EBF2FB; width: 210px; padding: 8px 0 0 0;}
 .block-projectdoc .nav-secondary > li {position: relative;}
 .block-projectdoc .nav-secondary > li > a {font-size: 14px; color: #838A9D; position: relative; box-shadow: none; padding-left: 20px; white-space: nowrap; text-overflow: ellipsis; overflow: hidden; transition: all .2s;}
 .block-projectdoc .nav-secondary > li > a:first-child {padding-right: 36px;}
@@ -22,13 +22,13 @@
 .block-projectdoc .nav-secondary > li.active > a.btn-view {box-shadow: none;}
 .block-projectdoc .nav-secondary > li.switch-icon {display: none;}
 .block-projectdoc.block-sm .nav-stacked {height:auto;}
-.block-projectdoc.block-sm .panel-body {padding-bottom: 10px; position: relative; padding-top: 45px; border-radius: 3px; height:275px;}
+.block-projectdoc.block-sm .panel-body {padding: 45px 8px 10px 8px; position: relative; border-radius: 3px; height:275px;}
 .block-projectdoc.block-sm .panel-body > .table-row,
 .block-projectdoc.block-sm .panel-body > .table-row > .col {display: block; width: auto;}
 .block-projectdoc.block-sm .panel-body > .table-row > .tab-content {padding: 0; margin: 0 -5px;}
 .block-projectdoc.block-sm .tab-pane > .table-row > .col-5 {width: 125px;}
 .block-projectdoc.block-sm .tab-pane > .table-row > .col-5 > .table-row {padding: 5px 0;}
-.block-projectdoc.block-sm .col-nav {border-left: none; position: absolute; top: 0; left: 15px; right: 15px; background: #f5f5f5;}
+.block-projectdoc.block-sm .col-nav {border-left: none; position: absolute; top: 0; left: 15px; right: 15px; background: #f5f5f5; padding:0px; margin-top:5px;}
 .block-projectdoc.block-sm .nav-secondary {display: table; width: 100%; padding: 0; table-layout: fixed;}
 .block-projectdoc.block-sm .nav-secondary > li {display: none;}
 .block-projectdoc.block-sm .nav-secondary > li.switch-icon,
@@ -63,7 +63,7 @@
 $(function()
 {
     <?php if(!$longBlock):?>
-    $(document).on('click', '.col-nav .switch-icon', function(e)
+    $(document).on('click', '.block-projectdoc<?php echo "#block{$block->id}";?> .col-nav .switch-icon', function(e)
     {
         var $nav = $(this).closest('.nav');
         var isPrev = $(this).is('.prev');
@@ -75,44 +75,40 @@ $(function()
     });
     <?php endif;?>
 
-    if($('.block-projectdoc #projectType').length > 1);
+    if($('.block-projectdoc<?php echo "#block{$block->id}";?> #projectType').length > 1);
     {
-        count = $('.block-projectdoc #projectType').length;
-        $('.block-projectdoc #projectType').each(function()
+        count = $('.block-projectdoc<?php echo "#block{$block->id}";?> #projectType').length;
+        $('.block-projectdoc<?php echo "#block{$block->id}";?> #projectType').each(function()
         {
             if(count == 1) return;
             $(this).remove();
             count --;
         })
     }
-
-    var $projectList = $('#activeProject');
-    if($projectList.length)
-    {
-        var projectList = $projectList[0];
-        $(".col ul.nav").animate({scrollTop: projectList.offsetTop}, "slow");
-    }
 });
 
-function changeProjectType(type)
+function change<?php echo "block{$block->id}";?>ProjectType(type)
 {
-    $('.block-projectdoc .nav.projects').toggleClass('hidden', type != 'all');
-    $('.block-projectdoc .nav.involveds').toggleClass('hidden', type != 'involved');
-    $('.block-projectdoc #projectType .btn').html($('.block-projectdoc #projectType [data-type=' + type + ']').html() + " <span class='caret'></span>");
-    var name = type == 'all' ? '.block-projectdoc .projects' : '.block-projectdoc .involveds';
+    $('.block-projectdoc<?php echo "#block{$block->id}";?> .nav.projects').toggleClass('hidden', type != 'all');
+    $('.block-projectdoc<?php echo "#block{$block->id}";?> .nav.involveds').toggleClass('hidden', type != 'involved');
+    $('.block-projectdoc<?php echo "#block{$block->id}";?> #projectType .btn').html($('.block-projectdoc<?php echo "#block{$block->id}";?> #projectType [data-type=' + type + ']').html() + " <span class='caret'></span>");
+    var name = type == 'all' ? '.block-projectdoc<?php echo "#block{$block->id}";?> .projects' : '.block-projectdoc<?php echo "#block{$block->id}";?> .involveds';
     var $obj = $(name + ' li.active').length > 0 ? $(name + ' .active:first').find('a') : $(name + ' li:not(.switch-icon):first').find('a');
     $(name + ' li').removeClass('active');
     $obj.closest('li').addClass('active');
-    $('.block-projectdoc .tab-pane').removeClass('active').removeClass('in');
-    $('.block-projectdoc .tab-pane' + $obj.data('target')).addClass('active').addClass('in');
+    $('.block-projectdoc<?php echo "#block{$block->id}";?> .tab-pane').removeClass('active').removeClass('in');
+    $('.block-projectdoc<?php echo "#block{$block->id}";?> .tab-pane' + $obj.data('target')).addClass('active').addClass('in');
+
+    $('.block-projectdoc<?php echo "#block{$block->id}";?> #projectType .dropdown-menu li').removeClass('active');
+    $('.block-projectdoc<?php echo "#block{$block->id}";?> #projectType .dropdown-menu li a[data-type=' + type + ']').closest('li').addClass('active');
 }
 
 </script>
 <div class="dropdown" id='projectType'>
   <button class="btn" type="button" data-toggle="dropdown"><?php echo $lang->project->involved;?> <span class="caret"></span></button>
   <ul class="dropdown-menu">
-    <li><a href="javascript:changeProjectType('involved')" data-type='involved'><?php echo $lang->project->involved;?></a></li>
-    <li><a href="javascript:changeProjectType('all')" data-type='all'><?php echo $lang->project->all;?></a></li>
+    <li class='active'><a href="javascript:change<?php echo "block{$block->id}";?>ProjectType('involved')" data-type='involved'><?php echo $lang->project->involved;?></a></li>
+    <li><a href="javascript:change<?php echo "block{$block->id}";?>ProjectType('all')" data-type='all'><?php echo $lang->project->all;?></a></li>
   </ul>
 </div>
 <div class="panel-body">
@@ -172,7 +168,7 @@ function changeProjectType(type)
                   }
                   else
                   {
-                      echo "<span class='doc-title'>$icon {$doc->title}</span>";
+                      echo "<span class='doc-title' title='{$doc->title}'>$icon {$doc->title}</span>";
                   }
                   if($doc->status == 'draft') echo "<span class='label label-badge draft'>{$lang->doc->draft}</span>";
                   ?>

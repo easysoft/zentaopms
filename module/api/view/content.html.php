@@ -27,8 +27,8 @@
               <?php
               if(!$isRelease)
               {
-                if(common::hasPriv('api', 'edit'))   echo html::a($this->createLink('api', 'edit', "apiID=$api->id"), '<i class="icon-edit"></i>', '', "title='{$lang->api->edit}' class='btn btn-link' data-app='{$this->app->tab}'");
-                if(common::hasPriv('api', 'delete')) echo html::a($this->createLink('api', 'delete', "apiID=$api->id"), '<i class="icon-trash"></i>', '', "title='{$lang->api->delete}' class='btn btn-link' target='hiddenwin'");
+                  if(common::hasPriv('api', 'edit'))   echo html::a($this->createLink('api', 'edit', "apiID=$api->id"), '<i class="icon-edit"></i>', '', "title='{$lang->api->edit}' class='btn btn-link' data-app='{$this->app->tab}'");
+                  if(common::hasPriv('api', 'delete')) echo html::a($this->createLink('api', 'delete', "apiID=$api->id"), '<i class="icon-trash"></i>', '', "title='{$lang->api->delete}' class='btn btn-link' target='hiddenwin'");
               }
               ?>
             </div>
@@ -56,8 +56,7 @@
               <td><?php echo $lang->api->boolList[$param['required']];?></td>
               <td><?php echo $param['desc'];?></td>
             <tr>
-            <?php endforeach;
-            ;?>
+            <?php endforeach;?>
             </tbody>
           </table>
           <?php endif;?>
