@@ -730,7 +730,7 @@ class docModel extends model
     {
         $modules = $module && $mode == 'children' ? $this->loadModel('tree')->getAllChildID($module) : $module;
         $stmt = $this->dao->select('*')->from(TABLE_DOC)
-            ->where('1=1')
+            ->where('vision')->eq($this->config->vision)
             ->beginIF(!empty($modules))->andWhere('module')->in($modules)->fi()
             ->beginIF($mode == 'normal')->andWhere('deleted')->eq(0)->fi()
             ->beginIF($this->config->doc->notArticleType)->andWhere('type')->notIN($this->config->doc->notArticleType)->fi()
@@ -2156,19 +2156,26 @@ class docModel extends model
      */
     public function getStatisticInfo()
     {
-        $allLibs   = array_keys($this->getLibs('all'));
-        $docIdList = $this->getPrivDocs($allLibs);
-        $myDocList = $this->dao->select('id')->from(TABLE_DOC)->where('addedBy')->eq($this->app->user->account)->fetchPairs('id');
-
         $today     = date('Y-m-d');
-        $statistic = $this->dao->select("count(id) as totalDocs, count(IF(editedDate like '{$today}%', 1, null)) as todayEditedDocs,
-            count(IF(editedBy = '{$this->app->user->account}', 1, null)) as myEditedDocs, count(IF(addedBy = '{$this->app->user->account}', 1, null)) as myDocs")->from(TABLE_DOC)
-            ->where('deleted')->eq(0)
-            ->andWhere('vision')->eq($this->config->vision)
-            ->andWhere('id')->in($docIdList)
-            ->fetch();
+        $statistic = new stdclass();
+        $statistic->totalDocs       = $this->dao->select('count(*) as count')->from(TABLE_DOC)->where('deleted')->eq('0')->fetch('count');
+        $statistic->todayEditedDocs = $this->dao->select('count(DISTINCT objectID) as count')->from(TABLE_ACTION)
+            ->where('objectType')->eq('doc')
+            ->andWhere('action')->eq('edited')
+            ->andWhere('actor')->eq($this->app->user->account)
+            ->andWhere('LEFT(date, 10)')->eq($today)
+            ->fetch('count');
+        $statistic->myEditedDocs = $this->dao->select('count(DISTINCT objectID) as count')->from(TABLE_ACTION)
+            ->where('objectType')->eq('doc')
+            ->andWhere('action')->eq('edited')
+            ->andWhere('actor')->eq($this->app->user->account)
+            ->fetch('count');
 
-        $statistic->myDoc = $this->dao->select("count(IF(`action` = 'view', 1, null)) as docViews, count(IF(`action` = 'collect', 1, null)) as docCollects")->from(TABLE_DOCACTION)->where('doc')->in($myDocList)->fetch();
+        $my = $this->dao->select("count(*) as myDocs, SUM(views) as docViews, SUM(collects) as docCollects")->from(TABLE_DOC)->where('addedBy')->eq($this->app->user->account)->andWhere('deleted')->eq(0)->fetch();
+        $statistic->myDocs = $my->myDocs;
+        $statistic->myDoc  = new stdclass();
+        $statistic->myDoc->docViews    = $my->docViews;
+        $statistic->myDoc->docCollects = $my->docCollects;
 
         return $statistic;
     }
