@@ -14,9 +14,13 @@
           <div class="info">
             <?php $version = $version ? $version : $doc->version;?>
             <div class="version" data-version='<?php echo $version;?>'>
-              <div class='btn-group'>
-                <a href='javascript:;' class='btn btn-link btn-limit text-ellipsis' data-toggle='dropdown' style="max-width: 120px;">
-                  #<?php echo $version;?>
+              <div id="diffBtnGroup" class='btn-group exchangeDiffGroup'>
+                <a href='javascript:;' class='btn btn-link btn-limit text-ellipsis left-dom' data-toggle='dropdown' style="max-width: 120px;">
+                  V<?php echo $version;?>
+                  <span class="caret"></span>
+                </a>
+                <i id="exchangeDiffBtn" class="icon icon-exchange right-dom"></i>
+                <a href='javascript:;' class='btn btn-link btn-limit text-ellipsis right-dom' data-toggle='dropdown' style="max-width: 120px;">
                   <span class="caret"></span>
                 </a>
                 <ul id="docVersionMenu" class='dropdown-menu doc-version-menu' style='width: 250px; overflow-y:auto'>

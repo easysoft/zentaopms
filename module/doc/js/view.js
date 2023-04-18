@@ -217,6 +217,27 @@ $(function()
         }
         else if(data.id == 'confirm')
         {
+            if(arrVersionDiff.length == 2)
+            {
+                var $btnGroup = $('#diffBtnGroup');
+                $btnGroup.addClass('show-diff');
+                var oldV = arrVersionDiff[0].version;
+                var newV = arrVersionDiff[1].version;
+                if(newV < oldV)
+                {
+                    var tmpArr = [newV, oldV];
+                    newV       = tmpArr[1];
+                    oldV       = tmpArr[0];
+                }
+                if(isVersionDiff)
+                {
+                    var tmpArr = [newV, oldV];
+                    newV       = tmpArr[1];
+                    oldV       = tmpArr[0];
+                }
+                var leftDom  = $btnGroup.find('a.left-dom').html('V' + oldV + '<span class="caret"></span>');
+                var rightDom = $btnGroup.find('a.right-dom').html('V' + newV + '<span class="caret"></span>');
+            }
             $(this.closest('.open.btn-group')).removeClass('open');
         }
     }).on('click', '#docVersionMenu .checkbox-primary', function()
@@ -226,11 +247,24 @@ $(function()
         var data    = $input.data();
         if(isCheck)
         {
-            arrVersionDiff.push(data);
+            if(arrVersionDiff.length)
+            {
+                if(arrVersionDiff[0].version != data.version) arrVersionDiff.push(data);
+            }
+            else
+            {
+                arrVersionDiff[0] = data;
+            }
         }
         else
         {
-            if(arrVersionDiff[0].version === data.version)
+            if(arrVersionDiff.length == 0) return;
+            if(arrVersionDiff.length == 1)
+            {
+                arrVersionDiff = [];
+                return;
+            }
+            else if(arrVersionDiff[0].version === data.version)
             {
                 var pushItem = arrVersionDiff[1];
             }
@@ -238,12 +272,11 @@ $(function()
             {
                 var pushItem = arrVersionDiff[0];
             }
-            var newArr = [];
+            var newArr     = [];
             newArr.push(pushItem);
             arrVersionDiff = newArr;
         }
-
-        refreshCheckbox()
+        refreshCheckbox();
     }).on('click', '#hisTrigger', function()
     {
         var $history = $('#history');
@@ -262,6 +295,24 @@ $(function()
     {
         $('#history').addClass('hidden');
         $('#hisTrigger').removeClass('text-primary');
+    }).on('click', '#exchangeDiffBtn', function()
+    {
+        isVersionDiff = !isVersionDiff;
+        var $btn      = $(this);
+        var $btnGroup = $btn.closest('#diffBtnGroup');
+        var $leftBtn  = $btnGroup.find('.btn-link.left-dom');
+        var $rightBtn = $btnGroup.find('.btn-link.right-dom');
+        var tmpArr    = [$leftBtn.html(), $rightBtn.html()];
+        $rightBtn.html(tmpArr[0]);
+        $leftBtn.html(tmpArr[1]);
+        if(isVersionDiff)
+        {
+            $btn.addClass('text-primary');
+        }
+        else
+        {
+            $btn.removeClass('text-primary');
+        }
     });
 
     $('#outline li.has-list').addClass('open in');
