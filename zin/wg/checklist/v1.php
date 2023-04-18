@@ -12,7 +12,6 @@ class checkList extends wg
         'name?: string',
         'value?: string|array',
         'items?: array',
-        'options?: array',
         'inline?: bool'
     ];
 
@@ -41,8 +40,7 @@ class checkList extends wg
 
     protected function build()
     {
-        list($items, $options, $inline) = $this->prop(['items', 'options', 'inline']);
-        if(is_array($options)) $items = $options;
+        list($items, $inline) = $this->prop(['items', 'inline']);
 
         if(!empty($items))
         {

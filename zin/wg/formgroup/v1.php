@@ -6,11 +6,11 @@ require_once dirname(__DIR__) . DS . 'control' . DS . 'v1.php';
 
 class formGroup extends wg
 {
-    protected static $defineProps = 'name?: string, label?:string|bool, labelClass?: string, labelClass?: string, required?:bool|string="auto", tip?: string, tipClass?: string|array, tipProps: array, control?: array|string, width?: string, strong?: bool, value?: string|array, disabled?: bool, options?: array';
+    protected static $defineProps = 'name?: string, label?:string|bool, labelClass?: string, labelClass?: string, required?:bool|string="auto", tip?: string, tipClass?: string|array, tipProps: array, control?: array|string, width?: string, strong?: bool, value?: string|array, disabled?: bool, items?: array';
 
     protected function build()
     {
-        list($name, $label, $labelClass, $labelProps, $required, $tip, $tipClass, $tipProps, $control, $width, $strong, $value, $disabled, $options) = $this->prop(['name', 'label', 'labelClass', 'labelProps', 'required', 'tip', 'tipClass', 'tipProps', 'control', 'width', 'strong', 'value', 'disabled', 'options']);
+        list($name, $label, $labelClass, $labelProps, $required, $tip, $tipClass, $tipProps, $control, $width, $strong, $value, $disabled, $items) = $this->prop(['name', 'label', 'labelClass', 'labelProps', 'required', 'tip', 'tipClass', 'tipProps', 'control', 'width', 'strong', 'value', 'disabled', 'items']);
 
         if($required === 'auto') $required = isFieldRequired($name);
 
@@ -23,7 +23,7 @@ class formGroup extends wg
             if($name !== NULL)      $control['name']     = $name;
             if($value !== NULL)     $control['value']    = $value;
             if($disabled !== NULL)  $control['disabled'] = $disabled;
-            if($options !== NULL)   $control['options']  = $options;
+            if($items !== NULL)     $control['items']  = $items;
         }
 
         return div

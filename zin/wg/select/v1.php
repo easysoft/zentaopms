@@ -13,7 +13,6 @@ class select extends wg
         'disabled?: bool',
         'multiple?: bool',
         'items?: array',
-        'options?: array',
         'size?: number',
     ];
 
@@ -55,8 +54,7 @@ class select extends wg
 
     protected function build()
     {
-        list($items, $options) = $this->prop(['items', 'options']);
-        if(is_array($options)) $items = $options;
+        list($items) = $this->prop(['items']);
 
         if(!empty($items))
         {
@@ -73,7 +71,7 @@ class select extends wg
         (
             setClass('form-control'),
             set::multiple($this->isMultiple()),
-            set($this->props->skip(['items', 'options', 'value', 'multiple'])),
+            set($this->props->skip(['items', 'value', 'multiple'])),
             $items,
             $this->children()
         );

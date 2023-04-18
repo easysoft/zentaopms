@@ -22,7 +22,7 @@ class control extends wg
         'placeholder?: string',
         'disabled?: bool',
         'form?: string',
-        'options?: array'
+        'items?: array'
     ];
 
     protected function created()
@@ -59,7 +59,7 @@ class control extends wg
 
     protected function buildCheckbox()
     {
-        if($this->hasProp('options')) return $this->buildCheckList();
+        if($this->hasProp('items')) return $this->buildCheckList();
         return new checkList
         (
             new checkbox(set($this->props->skip('type')))
@@ -105,7 +105,7 @@ class control extends wg
         $type = $this->prop('type');
         if(empty($type))
         {
-            $type = $this->hasProp('options') ? 'select' : 'text';
+            $type = $this->hasProp('items') ? 'select' : 'text';
         }
 
         $methodName = "build{$type}";

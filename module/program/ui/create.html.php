@@ -15,7 +15,7 @@ form
         set::label($lang->program->parent),
         set::disabled($parentID),
         set::value($parentID),
-        set::options($parents),
+        set::items($parents),
         on::change('setBudgetTipsAndAclList')
     ),
     formGroup
@@ -30,7 +30,7 @@ form
         set::width('1/4'),
         set::name('PM'),
         set::label($lang->program->PM),
-        set::options($pmUsers)
+        set::items($pmUsers)
     ),
     formRow
     (
@@ -81,7 +81,7 @@ form
         (
             set::name('delta'),
             set::class('pl-4'),
-            set::control(['type' => 'radioList', 'inline' => true, 'rootClass' => 'ml-4', 'options' => $lang->program->endList]),
+            set::control(['type' => 'radioList', 'inline' => true, 'rootClass' => 'ml-4', 'items' => $lang->program->endList]),
             on::change('computeEndDate')
         ),
     ),
@@ -98,7 +98,7 @@ form
         set::name('acl'),
         set::label($lang->project->acl),
         set::value('private'),
-        set::options($aclList),
+        set::items($aclList),
         set::control('radioList'),
         on::change('setWhite')
     )
