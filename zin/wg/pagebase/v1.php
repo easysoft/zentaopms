@@ -33,7 +33,7 @@ class pageBase extends wg
 
     protected function build()
     {
-        global $lang, $config;
+        global $lang, $config, $app;
 
         $zui  = $this->prop('zui');
         $head = $this->buildHead();
@@ -72,6 +72,7 @@ class pageBase extends wg
                 $this->block('headBefore'),
                 $zui ? h::importCss($config->zin->zuiPath . 'zui.zentao.css', set::id('zuiCSS')) : null,
                 $zui ? h::importJs($config->zin->zuiPath . 'zui.zentao.umd.cjs', set::id('zuiJS')) : null,
+                $zui ? h::importJs($app->getWebRoot() . 'js/zui3/zin.js', set::id('zinJS')) : null,
                 $head,
             ),
             h::body
