@@ -827,6 +827,7 @@ class bugModel extends model
             /* Process the data if the value is 'ditto'. */
             foreach($bugIDList as $bugID)
             {
+                if(!isset($data->assignedTos[$bugID])) $data->assignedTos[$bugID] = 'closed';
                 if($data->types[$bugID]       == 'ditto') $data->types[$bugID]       = isset($prev['type'])       ? $prev['type']       : '';
                 if($data->severities[$bugID]  == 'ditto') $data->severities[$bugID]  = isset($prev['severity'])   ? $prev['severity']   : 3;
                 if($data->pris[$bugID]        == 'ditto') $data->pris[$bugID]        = isset($prev['pri'])        ? $prev['pri']        : 0;
@@ -869,7 +870,7 @@ class bugModel extends model
                 $bug->plan           = empty($data->plans[$bugID]) ? 0 : $data->plans[$bugID];
                 $bug->branch         = empty($data->branches[$bugID]) ? 0 : $data->branches[$bugID];
                 $bug->module         = $data->modules[$bugID];
-                $bug->assignedTo     = $bug->status == 'closed' ? $oldBug->assignedTo : $data->assignedTos[$bugID];
+                $bug->assignedTo     = $oldBug->status == 'closed' ? $oldBug->assignedTo : $data->assignedTos[$bugID];
                 $bug->deadline       = $data->deadlines[$bugID];
                 $bug->resolvedBy     = $data->resolvedBys[$bugID];
                 $bug->keywords       = $data->keywords[$bugID];
@@ -929,7 +930,7 @@ class bugModel extends model
 
                 if(!dao::isError())
                 {
-                    if(!empty($bug->resolvedBy)) $this->loadModel('score')->create('bug', 'resolve', $bugID);
+                    if(!empty($bug->resolvedBy)) $this->loadModel('score')->create('bug', 'resolve', $bug);
 
                     $this->executeHooks($bugID);
 
