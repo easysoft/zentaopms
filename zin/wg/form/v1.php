@@ -39,9 +39,9 @@ class form extends panel
             $item = item(set($item));
         }
 
-        if($this->prop('grid')) return new formGroup(inherit($item));
+        if($this->prop('grid')) return new formRow(inherit($item));
 
-        return new formRow(inherit($item));
+        return new formGroup(inherit($item));
     }
 
     protected function buildFormActions()
