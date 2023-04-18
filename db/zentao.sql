@@ -964,7 +964,7 @@ CREATE TABLE IF NOT EXISTS `zt_kanban` (
 -- DROP TABLE IF EXISTS `zt_kanbanregion`;
 CREATE TABLE IF NOT EXISTS `zt_kanbanregion` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
-  `space` mediumint(8) unsigned NOT NULL,
+  `space` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `kanban` mediumint(8) unsigned NOT NULL,
   `name` varchar(255) NOT NULL,
   `order` mediumint(8) NOT NULL DEFAULT '0',

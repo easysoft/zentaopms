@@ -604,6 +604,7 @@ ALTER TABLE `zt_kanbanlane`
 CHANGE `lastEditedTime` `lastEditedTime` datetime NULL;
 
 ALTER TABLE `zt_kanbanregion`
+CHANGE `space` `space` mediumint unsigned NOT NULL DEFAULT '0';
 CHANGE `lastEditedBy` `lastEditedBy` char(30) NOT NULL DEFAULT '',
 CHANGE `lastEditedDate` `lastEditedDate` datetime NULL;
 
