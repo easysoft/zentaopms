@@ -355,7 +355,7 @@ $lang->block->default['doc']['5']['grid']  = 4;
 
 if($config->vision == 'rnd')
 {
-    $lang->block->default['doc']['6']['title'] = $lang->productCommon . 'Document';
+    $lang->block->default['doc']['6']['title'] = $lang->productCommon . ' Document';
     $lang->block->default['doc']['6']['block'] = 'productdoc';
     $lang->block->default['doc']['6']['grid']  = 8;
 }
@@ -364,7 +364,7 @@ $lang->block->default['doc']['7']['title'] = 'Favorite Leaderboard';
 $lang->block->default['doc']['7']['block'] = 'doccollectlist';
 $lang->block->default['doc']['7']['grid']  = 4;
 
-$lang->block->default['doc']['8']['title'] = $lang->projectCommon . 'Document';
+$lang->block->default['doc']['8']['title'] = $lang->projectCommon . ' Document';
 $lang->block->default['doc']['8']['block'] = 'projectdoc';
 $lang->block->default['doc']['8']['grid']  = 8;
 
