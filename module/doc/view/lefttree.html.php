@@ -503,6 +503,7 @@ $(function()
 
     $('body').on('click', function()
     {
+        $('a.sort-module').removeClass('dragging-shadow');
         var $dropdown = $('.dropdown-in-tree');
         if($dropdown.length)
         {
@@ -672,6 +673,7 @@ $(function()
         start: function()
         {
             $('#dropDownCatalogue').remove();
+            $('a.sort-module').removeClass('dragging-shadow');
         },
         canMoveHere: function($ele, $target)
         {
