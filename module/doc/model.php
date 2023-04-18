@@ -3148,21 +3148,23 @@ class docModel extends model
             $myCreation->hasAction  = false;
             $myCreation->active     = $libType == 'createdby' ? 1 : 0;
 
-            $myCreation = new stdclass();
-            $myCreation->id         = 0;
-            $myCreation->name       = $this->lang->doc->myEdited;
-            $myCreation->type       = 'editedBy';
-            $myCreation->objectType = 'doc';
-            $myCreation->objectID   = 0;
-            $myCreation->hasAction  = false;
-            $myCreation->active     = $libType == 'editedby' ? 1 : 0;
+            $myEdited = new stdclass();
+            $myEdited->id         = 0;
+            $myEdited->name       = $this->lang->doc->myEdited;
+            $myEdited->type       = 'editedBy';
+            $myEdited->objectType = 'doc';
+            $myEdited->objectID   = 0;
+            $myEdited->hasAction  = false;
+            $myEdited->active     = $libType == 'editedby' ? 1 : 0;
 
             $libTree   = array();
             $libTree[] = $myLib;
             if(common::hasPriv('doc', 'myView'))       $libTree[] = $myView;
             if(common::hasPriv('doc', 'myCollection')) $libTree[] = $myCollection;
             if(common::hasPriv('doc', 'myCreation'))   $libTree[] = $myCreation;
+            if(common::hasPriv('doc', 'myEdited'))     $libTree[] = $myEdited;
         }
+
         return $libTree;
     }
 
