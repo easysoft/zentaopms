@@ -502,6 +502,7 @@ $(function()
 
     $('body').on('click', function()
     {
+        $('a.sort-module').removeClass('dragging-shadow');
         var $dropdown = $('.dropdown-in-tree');
         if($dropdown.length)
         {
@@ -516,7 +517,7 @@ $(function()
         }
     }).on('click', '.sidebar-toggle', function()
     {
-        var $icon = $(this).find('.icon-drop');
+        var $icon = $(this).find('.icon');
         if($('#sideBar').hasClass('hidden'))
         {
             $icon.addClass('icon-angle-left');
@@ -671,6 +672,7 @@ $(function()
         start: function()
         {
             $('#dropDownCatalogue').remove();
+            $('a.sort-module').removeClass('dragging-shadow');
         },
         canMoveHere: function($ele, $target)
         {
