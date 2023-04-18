@@ -1837,8 +1837,14 @@ class treeModel extends model
 
         if($self)
         {
-            $self->parent = $module->parent;
             if($self->root and !isset($module->root)) $module->root = $self->root;
+            if($self->parent != $module->parent or $self->root != $module->root)
+            {
+                $maxOrder = $this->dao->select('MAX(`order`) AS `order`')->from(TABLE_MODULE)->where('parent')->eq($module->parent)->andWhere('root')->eq($module->root)->fetch('order');
+                $module->order = $maxOrder ? ++ $maxOrder : $self->order;
+            }
+
+            if($module->parent) $self->parent = $module->parent;
         }
 
         $repeatName = $this->checkUnique($self, array("id{$self->id}" => $module->name), array("id{$self->id}" => $module->branch));

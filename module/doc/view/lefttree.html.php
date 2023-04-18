@@ -270,11 +270,12 @@ $(function()
                 var objectType  = config.currentModule == 'api' ? item.objectType : item.type;
                 var libClass    = ['lib', 'annex', 'api', 'execution'].indexOf(objectType) !== -1 ? 'lib' : '';
                 var moduleClass = item.type == 'doc' || item.type == 'apiDoc' ? 'catalog' : '';
-                var sortClass   = item.type == 'doc' && canSortDocCatalog ? ' sort-module' : '';
-                if(item.type == 'apiDoc' && canSortAPICatalog) sortClass = 'sort-module';
-                var hasChild    = item.children ? !!item.children.length : false;
-                var link        = item.type != 'execution' || item.hasAction ? '###' : '#';
-                var $item       = '<a href="' + link + '" style="position: relative" data-has-children="' + hasChild + '" title="' + item.name + '" data-id="' + item.id + '" class="' + libClass + sortClass + '" data-type="' + item.type + '" data-action="' + item.hasAction + '">';
+                var sortClass   = '';
+                if(config.currentMethod != 'view' && ((item.type == 'doc' && canSortDocCatalog) || (item.type == 'apiDoc' && canSortAPICatalog))) sortClass = 'sort-module';
+
+                var hasChild = item.children ? !!item.children.length : false;
+                var link     = item.type != 'execution' || item.hasAction ? '###' : '#';
+                var $item    = '<a href="' + link + '" style="position: relative" data-has-children="' + hasChild + '" title="' + item.name + '" data-id="' + item.id + '" class="' + libClass + sortClass + '" data-type="' + item.type + '" data-action="' + item.hasAction + '">';
 
                 $item += '<div class="text h-full w-full flex-start overflow-hidden">';
                 if((libClass == 'lib' && item.type != 'execution') || (item.type == 'execution' && item.hasAction)) $item += '<i class="before-tree-item icon icon-' + imgObj[item.type] +'-lib"></i>';
@@ -301,7 +302,7 @@ $(function()
                 if(item.versions) versionsData[item.id] = item.versions;
 
                 $li.append($item);
-                $li.addClass(libClass).addClass(moduleClass).attr('data-order', item.order);
+                $li.addClass(libClass).addClass(moduleClass).attr('data-order', item.order).attr('data-type', item.type);
                 if(item.active) $li.addClass('active');
             },
         });
@@ -687,7 +688,28 @@ $(function()
         },
         finish: function(e)
         {
+            $('a.sort-module').removeClass('dragging-shadow');
             if(!e.changed) return;
+
+            var orders     = {};
+            var link       = '';
+            var module     = e.list.context;
+            var moduleType = $(module).attr('data-type');
+            $('#fileTree').find("li[data-type='" + moduleType + "'].catalog").each(function()
+            {
+                var $li = $(this);
+                var item = $li.data();
+                orders['orders[' + item.id + ']'] = $li.attr('data-order') || item.order;
+            });
+
+            var moduleName = moduleType == 'apiDoc' ? 'api' : 'doc';
+            link = createLink(moduleName, 'sortCatalog');
+
+            $.post(link, orders, function(data){}).error(function()
+            {
+                bootbox.alert(lang.timeout);
+            });
+
         }
     });
 })
