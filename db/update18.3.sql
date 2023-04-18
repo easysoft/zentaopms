@@ -604,6 +604,7 @@ ALTER TABLE `zt_kanbanlane`
 CHANGE `lastEditedTime` `lastEditedTime` datetime NULL;
 
 ALTER TABLE `zt_kanbanregion`
+CHANGE `space` `space` mediumint unsigned NOT NULL DEFAULT '0';
 CHANGE `lastEditedBy` `lastEditedBy` char(30) NOT NULL DEFAULT '',
 CHANGE `lastEditedDate` `lastEditedDate` datetime NULL;
 
@@ -1034,8 +1035,15 @@ CHANGE `editedBy` `editedBy` varchar(30) NOT NULL DEFAULT '',
 CHANGE `editedDate` `editedDate` datetime NULL;
 
 ALTER TABLE `zt_workflowlabel`
+CHANGE `orderBy` `orderBy` text NULL;
 CHANGE `editedBy` `editedBy` char(30) NOT NULL DEFAULT '',
 CHANGE `editedDate` `editedDate` datetime NULL;
+
+ALTER TABLE `zt_workflowlayout`
+CHANGE `position` `position` text NULL,
+CHANGE `summary` `summary` varchar(20) NOT NULL DEFAULT '',
+CHANGE `defaultValue` `defaultValue` text NULL,
+CHANGE `layoutRules` `layoutRules` varchar(255) NOT NULL DEFAULT '';
 
 ALTER TABLE `zt_workflowrule`
 CHANGE `editedBy` `editedBy` char(30) NOT NULL DEFAULT '',
