@@ -7,13 +7,13 @@ require_once dirname(__DIR__) . DS . 'inputcontrol' . DS . 'v1.php';
 
 class inputGroup extends wg
 {
-    protected static $defineProps = 'items?:array';
+    protected static $defineProps = 'items?:array, seg?:bool';
 
     public function onBuildItem($item)
     {
         if(is_string($item)) $item = new item(set(['type' => 'addon', 'text' => $item]));
         elseif(is_array($item)) $item = new item(set($item));
-        elseif(!($item instanceof wg)) return $item;
+        elseif($item instanceof wg) return $item;
 
         $type = $item->prop('type');
 
@@ -36,12 +36,12 @@ class inputGroup extends wg
 
     protected function build()
     {
-        $items    = $this->prop('items');
+        list($items, $seg) = $this->prop(['items', 'seg']);
         $children = $this->children();
 
         return div
         (
-            setClass('input-group'),
+            setClass('input-group', $seg ? 'input-group-segment' : NULL),
             set($this->getRestProps()),
             is_array($items) ? array_map(array($this, 'onBuildItem'), $items) : NULL,
             is_array($children) ? array_map(array($this, 'onBuildItem'), $children) : NULL,
