@@ -358,6 +358,8 @@ if($config->vision == 'rnd')
     $lang->block->default['doc']['6']['title'] = $lang->productCommon . ' Document';
     $lang->block->default['doc']['6']['block'] = 'productdoc';
     $lang->block->default['doc']['6']['grid']  = 8;
+
+    $lang->block->default['doc']['6']['params']['count'] = '20';
 }
 
 $lang->block->default['doc']['7']['title'] = 'Favorite Leaderboard';
@@ -367,6 +369,8 @@ $lang->block->default['doc']['7']['grid']  = 4;
 $lang->block->default['doc']['8']['title'] = $lang->projectCommon . ' Document';
 $lang->block->default['doc']['8']['block'] = 'projectdoc';
 $lang->block->default['doc']['8']['grid']  = 8;
+
+$lang->block->default['doc']['8']['params']['count'] = '20';
 
 $lang->block->count   = 'Count';
 $lang->block->type    = 'Type';
@@ -458,7 +462,7 @@ $lang->block->modules['doc']->availableBlocks->docdynamic      = 'Dynamic';
 $lang->block->modules['doc']->availableBlocks->docmycollection = 'My Collection';
 $lang->block->modules['doc']->availableBlocks->docrecentupdate = 'Recently Update';
 $lang->block->modules['doc']->availableBlocks->docviewlist     = 'Browse Leaderboard';
-$lang->block->modules['doc']->availableBlocks->productdoc      = $lang->productCommon . 'Document';
+if($config->vision == 'rnd')$lang->block->modules['doc']->availableBlocks->productdoc      = $lang->productCommon . 'Document';
 $lang->block->modules['doc']->availableBlocks->doccollectlist  = 'Favorite Leaderboard';
 $lang->block->modules['doc']->availableBlocks->projectdoc      = $lang->projectCommon . 'Document';
 

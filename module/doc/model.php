@@ -423,6 +423,7 @@ class docModel extends model
                 ->where('t1.deleted')->eq(0)
                 ->andWhere($query)
                 ->andWhere('t1.lib')->in($allLibIDList)
+                ->andWhere('t1.vision')->in($this->config->vision)
                 ->beginIF($this->config->doc->notArticleType)->andWhere('t1.type')->notIN($this->config->doc->notArticleType)->fi()
                 ->andWhere('t1.addedBy', 1)->eq($this->app->user->account)
                 ->orWhere('t1.id')->in(array_keys($docIDList))
@@ -440,6 +441,7 @@ class docModel extends model
                 ->andWhere('t1.id')->in($hasPrivDocIdList)
                 ->beginIF($this->config->doc->notArticleType)->andWhere('t1.type')->notIN($this->config->doc->notArticleType)->fi()
                 ->andWhere('t1.addedBy')->eq($this->app->user->account)
+                ->andWhere('t1.vision')->in($this->config->vision)
                 ->orderBy($sort)
                 ->page($pager)
                 ->fetchAll('id');
@@ -458,6 +460,7 @@ class docModel extends model
                 ->where('t1.deleted')->eq(0)
                 ->andWhere('t1.id')->in(array_keys($docIDList))
                 ->andWhere('t1.lib')->in($allLibIDList)
+                ->andWhere('t1.vision')->in($this->config->vision)
                 ->beginIF($this->config->doc->notArticleType)->andWhere('t1.type')->notIN($this->config->doc->notArticleType)->fi()
                 ->orderBy($sort)
                 ->page($pager)
@@ -470,6 +473,7 @@ class docModel extends model
                 ->andWhere('id')->in($hasPrivDocIdList)
                 ->beginIF($this->config->doc->notArticleType)->andWhere('type')->notIN($this->config->doc->notArticleType)->fi()
                 ->andWhere('lib')->in($allLibIDList)
+                ->andWhere('vision')->in($this->config->vision)
                 ->orderBy('editedDate_desc')
                 ->page($pager)
                 ->fetchAll('id');
@@ -483,6 +487,7 @@ class docModel extends model
                 ->andWhere('t1.id')->in($hasPrivDocIdList)
                 ->beginIF($this->config->doc->notArticleType)->andWhere('t1.type')->notIN($this->config->doc->notArticleType)->fi()
                 ->andWhere('t2.actor')->eq($this->app->user->account)
+                ->andWhere('t1.vision')->in($this->config->vision)
                 ->orderBy($sort)
                 ->page($pager)
                 ->fetchAll('id');

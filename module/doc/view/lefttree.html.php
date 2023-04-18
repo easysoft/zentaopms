@@ -255,6 +255,7 @@ $(function()
             'ppt': 'ppt',
             'excel': 'excel'
         };
+
         ele.tree(
         {
             data: treeData,
@@ -662,7 +663,8 @@ $(function()
     });
 
     /* Make modules tree sortable */
-    $('#fileTree').sortable(
+    var $treeDom = objectType == 'project' ? $('#projectTree, #executionTree') :$('#fileTree');
+    $treeDom.sortable(
     {
         trigger: 'a.sort-module',
         dropToClass: 'sort-to',
