@@ -199,12 +199,13 @@ UPDATE `zt_grouppriv` SET `module` = 'pivot', `method` = 'browse' WHERE `module`
 UPDATE `zt_grouppriv` SET `module` = 'screen' WHERE `module` = 'report' AND `method` IN ('annualData','allAnnualData');
 DELETE FROM `zt_grouppriv` WHERE `module` = 'report' AND `method` = 'index';
 
-REPLACE INTO `zt_grouppriv` (`group`, `module`, `method`) SELECT `group`, `module`, 'view' FROM `zt_grouppriv` WHERE `module` = 'chart' AND `method` = 'browse';
+REPLACE INTO `zt_grouppriv` (`group`, `module`, `method`) SELECT `group`, `module`, 'preview' FROM `zt_grouppriv` WHERE `module` = 'chart' AND `method` = 'browse';
 REPLACE INTO `zt_grouppriv` (`group`, `module`, `method`) SELECT `group`, `module`, 'export' FROM `zt_grouppriv` WHERE `module` = 'chart' AND `method` IN ('browse', 'design');
 
 REPLACE INTO `zt_grouppriv` (`group`, `module`, `method`) SELECT `group`, 'screen', `method` FROM `zt_grouppriv` WHERE `module` = 'dashboard';
+REPLACE INTO `zt_grouppriv` (`group`, `module`, `method`) SELECT `group`, 'screen', 'publish' FROM `zt_grouppriv` WHERE `module` = 'screen' AND `method` = 'design';
 
-REPLACE INTO `zt_grouppriv` (`group`, `module`, `method`) SELECT `group`, 'dataview', 'design' FROM `zt_grouppriv` WHERE `module` = 'dataset' AND `method` IN ('create', 'edit');
+REPLACE INTO `zt_grouppriv` (`group`, `module`, `method`) SELECT `group`, 'dataview', 'query' FROM `zt_grouppriv` WHERE `module` = 'dataset' AND `method` IN ('create', 'edit');
 UPDATE `zt_grouppriv` SET `module` = 'dataview' WHERE `module` = 'dataset' AND `method` IN ('browse', 'create', 'edit', 'delete');
 DELETE FROM `zt_grouppriv` WHERE `module` = 'dataset' AND `method` = 'view';
 DELETE FROM `zt_grouppriv` WHERE `module` = 'dashboard';
@@ -274,6 +275,9 @@ INSERT IGNORE INTO `zt_grouppriv` (`group`, `module`, `method`)
 SELECT t1.`group`, t1.`module`, 'myCreation' FROM `zt_grouppriv` AS t1 WHERE t1.`module` = 'doc' AND t1.`method` = 'browse';
 
 INSERT IGNORE INTO `zt_grouppriv` (`group`, `module`, `method`)
+SELECT t1.`group`, t1.`module`, 'myEdited' FROM `zt_grouppriv` AS t1 WHERE t1.`module` = 'doc' AND t1.`method` = 'browse';
+
+INSERT IGNORE INTO `zt_grouppriv` (`group`, `module`, `method`)
 SELECT t1.`group`, t1.`module`, 'productSpace' FROM `zt_grouppriv` AS t1 WHERE t1.`module` = 'doc' AND t1.`method` = 'tableContents';
 
 INSERT IGNORE INTO `zt_grouppriv` (`group`, `module`, `method`)
@@ -289,6 +293,9 @@ INSERT IGNORE INTO `zt_grouppriv` (`group`, `module`, `method`)
 SELECT t1.`group`, t1.`module`, 'editCatalog' FROM `zt_grouppriv` AS t1 WHERE t1.`module` = 'doc' AND t1.`method` = 'catalog';
 
 INSERT IGNORE INTO `zt_grouppriv` (`group`, `module`, `method`)
+SELECT t1.`group`, t1.`module`, 'sortCatalog' FROM `zt_grouppriv` AS t1 WHERE t1.`module` = 'doc' AND t1.`method` = 'catalog';
+
+INSERT IGNORE INTO `zt_grouppriv` (`group`, `module`, `method`)
 SELECT t1.`group`, t1.`module`, 'deleteCatalog' FROM `zt_grouppriv` AS t1 WHERE t1.`module` = 'doc' AND t1.`method` = 'catalog';
 
 INSERT IGNORE INTO `zt_grouppriv` (`group`, `module`, `method`)
@@ -296,6 +303,9 @@ SELECT t1.`group`, 'api', 'addCatalog' FROM `zt_grouppriv` AS t1 WHERE t1.`modul
 
 INSERT IGNORE INTO `zt_grouppriv` (`group`, `module`, `method`)
 SELECT t1.`group`, 'api', 'editCatalog' FROM `zt_grouppriv` AS t1 WHERE t1.`module` = 'doc' AND t1.`method` = 'catalog';
+
+INSERT IGNORE INTO `zt_grouppriv` (`group`, `module`, `method`)
+SELECT t1.`group`, 'api', 'sortCatalog' FROM `zt_grouppriv` AS t1 WHERE t1.`module` = 'doc' AND t1.`method` = 'catalog';
 
 INSERT IGNORE INTO `zt_grouppriv` (`group`, `module`, `method`)
 SELECT t1.`group`, 'api', 'deleteCatalog' FROM `zt_grouppriv` AS t1 WHERE t1.`module` = 'doc' AND t1.`method` = 'catalog';
@@ -476,6 +486,10 @@ CHANGE `end` `end` smallint(4) unsigned zerofill NOT NULL DEFAULT '0';
 ALTER TABLE `zt_entry`
 CHANGE `editedBy` `editedBy` varchar(30) NOT NULL DEFAULT '',
 CHANGE `editedDate` `editedDate` datetime NULL;
+
+ALTER TABLE `zt_extension`
+CHANGE `dirs` `dirs` mediumtext NULL,
+CHANGE `files` `files` mediumtext NULL;
 
 ALTER TABLE `zt_feedback`
 CHANGE `reviewedBy` `reviewedBy` varchar(255) NOT NULL DEFAULT '',
@@ -879,6 +893,10 @@ CHANGE `activatedDate` `activatedDate` datetime NULL;
 ALTER TABLE `zt_taskspec`
 CHANGE `estStarted` `estStarted` date NULL,
 CHANGE `deadline` `deadline` date NULL;
+
+ALTER TABLE `zt_taskteam`
+CHANGE `transfer` `transfer` char(30) NOT NULL DEFAULT '',
+CHANGE `order` `order` tinyint NOT NULL DEFAULT '0';
 
 ALTER TABLE `zt_team`
 CHANGE `position` `position` varchar(30) NOT NULL DEFAULT '',

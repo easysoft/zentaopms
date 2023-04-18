@@ -597,6 +597,7 @@ class upgradeModel extends model
                 $this->changeBookToCustomLib();
                 $this->createDefaultDimension();
                 $this->convertDocCollect();
+                $this->addBIUpdateMark();
                 break;
         }
 
@@ -8203,7 +8204,6 @@ class upgradeModel extends model
     /**
      * Process report modules.
      *
-     * @param  array  $modules
      * @access public
      * @return bool
      */
@@ -8228,6 +8228,17 @@ class upgradeModel extends model
 
         }
         return !dao::isError();
+    }
+
+    /**
+     * Add update2BI mark to zt_config.
+     *
+     * @access public
+     * @return bool
+     */
+    public function addBIUpdateMark()
+    {
+        $this->loadModel('setting')->setItem("system.bi.update2BI", 1);
     }
 
     /**

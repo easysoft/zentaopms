@@ -311,7 +311,11 @@ class dm extends dao
     {
         $sql = "SELECT * from dba_ind_columns WHERE index_owner = '{$this->config->db->name}' AND index_name IN (SELECT index_name FROM dba_indexes WHERE table_name='{$this->table}' AND INDEX_TYPE = 'NORMAL' AND UNIQUENESS = 'UNIQUE' AND INDEX_NAME NOT IN (SELECT INDEX_NAME FROM DBA_CONSTRAINTS WHERE CONSTRAINT_TYPE = 'P'))";
 
-        return $this->dbh->query($sql)->fetchAll();
+        $columns = $this->dbh->query($sql)->fetchAll();
+
+        $cols = array();
+        foreach($columns as $col) $cols[$col->COLUMN_NAME] = $col;
+        return $cols;
     }
 
     /**
@@ -345,7 +349,7 @@ class dm extends dao
             foreach($this->sqlobj->data as $field => $value)
             {
                 $fields .= "`{$field}`,";
-                if(is_string($value)) $value = $this->sqlobj->quote($value);
+                if(is_string($value) or $value === null) $value = $this->sqlobj->quote($value);
                 $values .= $value . ',';
             }
             $fields = substr($fields, 0, -1);
@@ -361,10 +365,9 @@ class dm extends dao
             if(empty($cols)) return false;
 
             $conditions = array();
-            foreach($cols as $col)
+            foreach($cols as $colName => $col)
             {
-                $pk = $col->COLUMN_NAME;
-                if(isset($this->sqlobj->data->{$pk})) $conditions[] = " \"{$pk}\" = '{$this->sqlobj->data->{$pk}}'";
+                if(isset($this->sqlobj->data->{$colName})) $conditions[] = " \"{$colName}\" = '{$this->sqlobj->data->{$colName}}'";
             }
             if(!empty($conditions)) $updateSql .= ' WHERE ' . implode(' AND ', $conditions);
 
@@ -374,6 +377,7 @@ class dm extends dao
             foreach($this->sqlobj->data as $field => $value)
             {
                 if(isset($ingore[$this->table]) and in_array($field, $ingore[$this->table])) continue;
+                if(!isset($cols[$field])) continue;
                 $deleteSql .= "`{$field}` = ";
                 $deleteSql .= is_string($value) ? "'{$value}'" : $value;
                 $deleteSql .= ' AND ';

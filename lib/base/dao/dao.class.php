@@ -619,7 +619,7 @@ class baseDAO
             {
                 if(strpos($skipFields, ",$field,") !== false) continue;
                 $fields .= "`{$field}`,";
-                if(is_string($value)) $value = $this->sqlobj->quote($value);
+                if(is_string($value) or $value === null) $value = $this->sqlobj->quote($value);
                 $values .= $value . ',';
             }
             $fields = substr($fields, 0, -1);
@@ -1788,21 +1788,22 @@ class baseSQL
     {
         if($this->inCondition and !$this->conditionIsTrue) return $this;
 
-        if($this->method == 'update')
+        if($this->method == 'insert')
+        {
+            $this->setField = $value;
+            $this->data->$value = '';
+        }
+        else
         {
             /* Add ` to avoid keywords of mysql. */
-            if(strpos($set, '=') ===false)
+            if(strpos($set, '=') ===  false)
             {
                 $set = str_replace(',', '', $set);
+                $set = '`' . str_replace('`', '', $set) . '`';
             }
 
             $this->sql .= $this->isFirstSet ? " $set" : ", $set";
             if($this->isFirstSet) $this->isFirstSet = false;
-        }
-        elseif($this->method == 'insert')
-        {
-            $this->setField = $value;
-            $this->data->$value = '';
         }
 
         return $this;

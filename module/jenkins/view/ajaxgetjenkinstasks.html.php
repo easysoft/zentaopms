@@ -83,7 +83,7 @@
         </li>
         <?php else:?>
         <li data-idx='<?php echo $task;?>' data-id='<?php echo $task;?>'>
-          <a href='###' id='<?php echo $task;?>' class='text-ellipsis' onclick='setJenkinsJob("<?php echo $task;?>","<?php echo $groupName;?>")' title='<?php echo $task;?>' data-key='<?php echo $task;?>' ><?php echo $task;?></a>
+          <a href='###' id='<?php echo $groupName;?>' class='text-ellipsis' onclick='setJenkinsJob("<?php echo $task;?>","<?php echo $groupName;?>")' title='<?php echo $task;?>' data-key='<?php echo $task;?>' ><?php echo $task;?></a>
         </li>
         <?php endif;?>
       <?php endforeach;?>

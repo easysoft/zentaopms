@@ -57,6 +57,17 @@ i.btn-info, i.btn-info:hover {border: none; background: #fff; box-shadow: unset;
 #leftBar .selectBox #currentItem > .text {overflow: hidden; text-align: left; flex: 0 1 100%;}
 .dropdown-in-tree {max-height: 293px; overflow-y: auto;}
 .before-tree-item {flex: 0 0 14px; margin-right: 5px; margin-bottom: 2px;}
+
+/* Catalog sort style. */
+.sortable-sorting .catalog > a {cursor: move;}
+.sortable-sorting li .flex-start {opacity: 0.5;}
+.sortable-sorting .drop-here .flex-start {background-color: #fff3e0;}
+.sortable-sorting .drop-here .flex-start > * {opacity: 0.1;}
+.sortable-sorting .drag-shadow .flex-start {opacity: 1 !important;}
+.sortable-sorting .drag-shadow .icon-drop {visibility: hidden;}
+.is-sorting > li .flex-start {opacity: 1; border-radius: 4px;}
+.is-sorting > li ul {display: none !important;}
+li.drag-shadow ul {display: none !important;}
 </style>
 
 <?php
@@ -70,6 +81,7 @@ js::set('objectID',   isset($objectID) ? $objectID : '');
 js::set('isFirstLoad', isset($isFirstLoad) ? $isFirstLoad: '');
 js::set('canViewFiles', common::hasPriv('doc', 'showfiles'));
 js::set('spaceMethod', $config->doc->spaceMethod);
+js::set('canSortCatalog', common::hasPriv('doc', 'sortCatalog'));
 ?>
 
 <div id="fileTree" class="file-tree menu-active-primary menu-hover-primary">
@@ -253,11 +265,13 @@ $(function()
                 if(typeof docID != 'undefined' && item.id == docID) item.active = 1;
                 if(['text', 'word', 'ppt', 'excel'].indexOf(item.type) !== -1) item.hasAction = false;
 
-                var objectType = config.currentModule == 'api' ? item.objectType : item.type;
-                var libClass = ['lib', 'annex', 'api', 'execution'].indexOf(objectType) !== -1 ? 'lib' : '';
-                var hasChild = item.children ? !!item.children.length : false;
-                var link     = item.type != 'execution' || item.hasAction ? '###' : '#';
-                var $item    = '<a href="' + link + '" style="position: relative" data-has-children="' + hasChild + '" title="' + item.name + '" data-id="' + item.id + '" class="' + libClass + '" data-type="' + item.type + '" data-action="' + item.hasAction + '">';
+                var objectType  = config.currentModule == 'api' ? item.objectType : item.type;
+                var libClass    = ['lib', 'annex', 'api', 'execution'].indexOf(objectType) !== -1 ? 'lib' : '';
+                var moduleClass = item.type == 'doc' ? 'catalog' : '';
+                var sortClass   = item.type == 'doc' && canSortCatalog ? ' sort-module' : '';
+                var hasChild    = item.children ? !!item.children.length : false;
+                var link        = item.type != 'execution' || item.hasAction ? '###' : '#';
+                var $item       = '<a href="' + link + '" style="position: relative" data-has-children="' + hasChild + '" title="' + item.name + '" data-id="' + item.id + '" class="' + libClass + sortClass + '" data-type="' + item.type + '" data-action="' + item.hasAction + '">';
 
                 $item += '<div class="text h-full w-full flex-start overflow-hidden">';
                 if((libClass == 'lib' && item.type != 'execution') || (item.type == 'execution' && item.hasAction)) $item += '<i class="before-tree-item icon icon-' + imgObj[item.type] +'-lib"></i>';
@@ -284,9 +298,9 @@ $(function()
                 if(item.versions) versionsData[item.id] = item.versions;
 
                 $li.append($item);
-                $li.addClass(libClass);
+                $li.addClass(libClass).addClass(moduleClass).attr('data-order', item.order);
                 if(item.active) $li.addClass('active');
-            }
+            },
         });
 
         if(isFirstLoad) ele.data('zui.tree').collapse();
@@ -629,6 +643,39 @@ $(function()
     }).on('keydown', '.file-tree input.input-tree', function(e)
     {
         if(e.keyCode == 13) $(this).trigger('blur');
+    });
+
+    /* Make modules tree sortable */
+    $('#fileTree').sortable(
+    {
+        trigger: 'a.sort-module',
+        dropToClass: 'sort-to',
+        stopPropagation: true,
+        nested: true,
+        selector: 'li',
+        dragCssClass: 'drop-here',
+        canMoveHere: function($ele, $target)
+        {
+            if($ele && $target && $ele.parent().closest('li').attr('data-id') !== $target.parent().closest('li').attr('data-id')) return false;
+        },
+        targetSelector: function($ele, $root)
+        {
+            var $ul = $ele.closest('ul');
+            setTimeout(function()
+            {
+                if($('#fileTree').hasClass('sortable-sorting')) $ul.addClass('is-sorting');
+            }, 100);
+
+            return $ul.children('li.catalog');
+        },
+        always: function()
+        {
+            $('#fileTree,#fileTree .is-sorting').removeClass('is-sorting');
+        },
+        finish: function(e)
+        {
+            if(!e.changed) return;
+        }
     });
 })
 </script>
