@@ -2040,8 +2040,8 @@ $lang->cron->methodOrder[30] = 'delete';
 $lang->cron->methodOrder[35] = 'openProcess';
 
 $lang->resource->dev = new stdclass();
-$lang->resource->dev->api       = 'api';
-$lang->resource->dev->db        = 'db';
+$lang->resource->dev->api = 'api';
+$lang->resource->dev->db  = 'db';
 
 $lang->dev->methodOrder[5]  = 'api';
 $lang->dev->methodOrder[10] = 'db';
@@ -2061,9 +2061,7 @@ $lang->editor->methodOrder[20] = 'newPage';
 $lang->editor->methodOrder[25] = 'save';
 $lang->editor->methodOrder[30] = 'delete';
 
-// 新增
-$lang->resource->contact = new stdclass();
-
+$lang->resource->contact            = new stdclass();
 $lang->resource->programstakeholder = new stdclass();
 $lang->resource->researchplan       = new stdclass();
 $lang->resource->workestimation     = new stdclass();
@@ -2129,7 +2127,7 @@ if(!$inUpgrade)
     }
     if(!helper::hasFeature('product_track')) unset($lang->resource->product->track);
     if(!helper::hasFeature('product_roadmap')) unset($lang->resource->product->roadmap);
-    if(!helper::hasFeature('waterfall_track') and !helper::hasFeature('waterfallplus_track'))  unset($lang->resource->projectstory->track);
+    if((!helper::hasFeature('waterfall_track') and !helper::hasFeature('waterfallplus_track')) or $config->edition != 'max')  unset($lang->resource->projectstory->track);
     if(!helper::hasFeature('devops'))
     {
         unset($lang->resource->repo);
