@@ -700,6 +700,7 @@ CHANGE `assignedTo` `assignedTo` varchar(30) NOT NULL DEFAULT '',
 CHANGE `reviewers` `reviewers` text NULL;
 
 ALTER TABLE `zt_pipeline`
+CHANGE `password` `password` varchar(255) NULL,
 CHANGE `editedBy` `editedBy` varchar(30) NOT NULL DEFAULT '',
 CHANGE `editedDate` `editedDate` datetime NULL;
 
