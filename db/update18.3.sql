@@ -601,6 +601,9 @@ CHANGE `assignedBy` `assignedBy` char(30) NOT NULL DEFAULT '',
 CHANGE `assignedDate` `assignedDate` datetime NULL;
 
 ALTER TABLE `zt_kanbanlane`
+ALTER TABLE `zt_kanbanlane`
+CHANGE `groupby` `groupby` char(30) NOT NULL DEFAULT '',
+CHANGE `extra` `extra` char(30) NOT NULL DEFAULT '',
 CHANGE `lastEditedTime` `lastEditedTime` datetime NULL;
 
 ALTER TABLE `zt_kanbanregion`
