@@ -13,7 +13,7 @@ jsVar('weekend', $config->execution->weekend);
 
 useData('title', $parentID ? $lang->program->children : $lang->program->create);
 
-form
+formPanel
 (
     on::change('#parent', 'onParentChange'),
     on::change('#budget', 'onBudgetChange'),

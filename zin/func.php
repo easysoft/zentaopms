@@ -22,7 +22,8 @@ function textarea()       {return createWg('textarea', func_get_args());}
 function radio()          {return createWg('radio', func_get_args());}
 function switcher()       {return createWg('switcher', func_get_args());}
 function checkbox()       {return createWg('checkbox', func_get_args());}
-function form()           {return createWg('form',    func_get_args());}
+function form()           {return createWg('form',  func_get_args());}
+function formPanel()      {return createWg('formPanel', func_get_args());}
 function control()        {return createWg('control', func_get_args());}
 function select()         {return createWg('select', func_get_args());}
 function formLabel()      {return createWg('formLabel', func_get_args());}

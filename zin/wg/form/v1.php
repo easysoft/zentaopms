@@ -1,11 +1,10 @@
 <?php
 namespace zin;
 
-require_once dirname(__DIR__) . DS . 'panel' . DS . 'v1.php';
 require_once dirname(__DIR__) . DS . 'formgroup' . DS . 'v1.php';
 require_once dirname(__DIR__) . DS . 'formrow' . DS . 'v1.php';
 
-class form extends panel
+class form extends wg
 {
     protected static $defineProps =
     [
@@ -20,18 +19,11 @@ class form extends panel
 
     protected static $defaultProps =
     [
-        'class'         => 'panel-form rounded-md shadow ring-0 canvas px-4 pb-4 mb-4 mx-auto',
-        'size'          => 'lg',
         'grid'          => true,
         'method'        => 'post',
         'target'        => 'ajax',
         'actions'       => ['save', 'back'],
     ];
-
-    protected function created()
-    {
-        $this->setDefaultProps(['title' => data('title')]);
-    }
 
     public function onBuildItem($item)
     {
@@ -67,7 +59,7 @@ class form extends panel
         );
     }
 
-    protected function buildForm()
+    protected function build()
     {
         list($items, $grid, $labelWidth, $url, $target, $method) = $this->prop(['items', 'grid', 'labelWidth', 'url', 'target', 'method']);
 
@@ -90,18 +82,10 @@ class form extends panel
         (
             setClass('form', $grid ? 'form-grid' : NULL, $target === 'ajax' ? 'form-ajax' : ''),
             set(['action' => $url, 'target' => $target === 'ajax' ? NULL : $target, 'method' => $method]),
+            set($this->getRestProps()),
             empty($labelWidth) ? NULL : setCssVar('form-label-width', $labelWidth),
             $list,
             $actions
-        );
-    }
-
-    protected function buildBody()
-    {
-        return div
-        (
-            setClass('panel-body'),
-            $this->buildForm(),
         );
     }
 }
