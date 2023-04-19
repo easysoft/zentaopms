@@ -46,7 +46,7 @@ span.dotted-line+a {display: block;}
 .is-sorting > li ul {display: none!important;}
 li.drag-shadow ul {display: none!important;}
 
-.table .c-name > .doc-title {display: inline-block; overflow: hidden; background: transparent; padding-right:0px;}
+.table .c-name > .doc-title {display: inline-block; overflow: hidden; background: transparent; padding-right:0px; max-width: calc(100% - 40px);}
 .table .c-name > span.doc-title {line-height: 0; vertical-align: inherit;}
 .table .c-name[data-status=draft] > .doc-title {max-width: calc(100% - 80px);}
 .table .c-name > .draft {background-color:rgba(129, 102, 238, 0.12); color:#8166EE;}
