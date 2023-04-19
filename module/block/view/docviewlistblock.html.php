@@ -27,7 +27,7 @@
   <?php if(empty($docList)):?>
     <div class='table-empty-tip'><p><span class='text-muted'><?php echo $lang->doc->noDoc;?></p></span></div>
   <?php else:?>
-  <div class="doc-list">
+  <div class="doc-list table-row">
     <?php $rank = 1;?>
     <?php foreach($docList as $doc):?>
     <div class='doc-title'>
