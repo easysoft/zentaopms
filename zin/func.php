@@ -17,21 +17,26 @@ require_once __DIR__ . DS . 'zui' . DS . 'zui.func.php';
 require_once __DIR__ . DS . 'zentao' . DS . 'zentao.func.php';
 
 /* Form */
-function input()       {return createWg('input', func_get_args());}
-function textarea()    {return createWg('textarea', func_get_args());}
-function radio()       {return createWg('radio', func_get_args());}
-function switcher()    {return createWg('switcher', func_get_args());}
-function checkbox()    {return createWg('checkbox', func_get_args());}
-function form()        {return createWg('form',    func_get_args());}
-function control()     {return createWg('control', func_get_args());}
-function select()      {return createWg('select', func_get_args());}
-function formLabel()   {return createWg('formLabel', func_get_args());}
-function formGroup()   {return createWg('formGroup', func_get_args());}
-function formRow()     {return createWg('formRow', func_get_args());}
-function inputControl(){return createWg('inputControl', func_get_args());}
-function inputGroup()  {return createWg('inputGroup', func_get_args());}
-function checkList()   {return createWg('checkList', func_get_args());}
-function radioList()   {return createWg('radioList', func_get_args());}
+function input()          {return createWg('input', func_get_args());}
+function textarea()       {return createWg('textarea', func_get_args());}
+function radio()          {return createWg('radio', func_get_args());}
+function switcher()       {return createWg('switcher', func_get_args());}
+function checkbox()       {return createWg('checkbox', func_get_args());}
+function form()           {return createWg('form',    func_get_args());}
+function control()        {return createWg('control', func_get_args());}
+function select()         {return createWg('select', func_get_args());}
+function formLabel()      {return createWg('formLabel', func_get_args());}
+function formGroup()      {return createWg('formGroup', func_get_args());}
+function formRow()        {return createWg('formRow', func_get_args());}
+function inputControl()   {return createWg('inputControl', func_get_args());}
+function inputGroup()     {return createWg('inputGroup', func_get_args());}
+function checkList()      {return createWg('checkList', func_get_args());}
+function radioList()      {return createWg('radioList', func_get_args());}
+function colorPicker()    {return createWg('colorPicker', func_get_args());}
+function datePicker()     {return createWg('datePicker', func_get_args());}
+function datetimePicker() {return createWg('datetimePicker', func_get_args());}
+function timePicker()     {return createWg('timePicker', func_get_args());}
+function fileInput()      {return createWg('fileInput', func_get_args());}
 
 function icon()        {return createWg('icon', func_get_args());}
 function btn()         {return createWg('btn', func_get_args());}
