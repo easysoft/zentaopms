@@ -132,6 +132,7 @@ $lang->doc->moduleDoc     = '按模块浏览';
 $lang->doc->searchDoc     = '搜索';
 $lang->doc->fast          = '快速访问';
 $lang->doc->allDoc        = '全部文档';
+$lang->doc->allVersion    = '全部版本';
 $lang->doc->openedByMe    = '我的创建';
 $lang->doc->editedByMe    = '我的编辑';
 $lang->doc->orderByOpen   = '最近添加';

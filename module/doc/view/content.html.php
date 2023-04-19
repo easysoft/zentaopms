@@ -24,7 +24,7 @@
                   <span class="caret"></span>
                 </a>
                 <ul id="docVersionMenu" class='dropdown-menu doc-version-menu' style='width: 250px; overflow-y:auto'>
-                  <li class="drop-title flex-between"><div><?php echo $lang->doc->allDoc?></div></li>
+                  <li class="drop-title flex-between"><div><?php echo $lang->doc->allVersion?></div></li>
                   <div class="drop-body menu-active-primary menu-hover-primary">
                   <?php for($itemVersion = $doc->version; $itemVersion > 0; $itemVersion--):?>
                     <li class="li-item <?php if($itemVersion == $version) echo 'active';?>"><div class="checkbox-primary"><input type="checkbox" <?php echo "data-id=".$doc->id." data-version=".$itemVersion;?> ></input><label for=""></label></div><a href='javascript:void(0)' data-url='<?php echo $this->createLink('doc', 'view', "docID=$doc->id&version=$itemVersion"); ?>'>#<?php echo $itemVersion;?></a></li>

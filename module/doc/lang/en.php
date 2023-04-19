@@ -132,6 +132,7 @@ $lang->doc->moduleDoc     = 'By Module';
 $lang->doc->searchDoc     = 'Search';
 $lang->doc->fast          = 'Quick Entry';
 $lang->doc->allDoc        = 'All Documents';
+$lang->doc->allVersion    = 'All Versions';
 $lang->doc->openedByMe    = 'My';
 $lang->doc->editedByMe    = 'Edited By Me';
 $lang->doc->orderByOpen   = 'Recent Added';
