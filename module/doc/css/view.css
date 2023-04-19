@@ -85,7 +85,7 @@
 #editorMenu {max-height: 200px; overflow-y: auto; overflow-x: hidden; margin-left: 4px; max-width: 100%;}
 [lang^=zh] #editorMenu {max-width: calc(100% - 10px);}
 #editorMenu > li {color: #838A9D; font-weight: 400; padding: 5px 12px; text-overflow: clip; white-space: nowrap;}
-.doc-version-menu {padding: 10px 5px;}
+.doc-version-menu {padding: 10px 0;}
 #changeBtn > i {font-size: 24px;}
 
 #docVersionMenu > .drop-body {max-height: 200px; overflow-y: auto;}
