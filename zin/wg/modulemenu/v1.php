@@ -5,7 +5,11 @@ class moduleMenu extends wg
 {
     private $modules = [];
 
-    protected static $defineProps = 'productID:number';
+    protected static $defineProps = [
+        'productID:number',
+        'activeKey:number',
+        'closeLink:string'
+    ];
 
     public static function getPageCSS()
     {
@@ -43,12 +47,20 @@ class moduleMenu extends wg
         $this->setDefaultProps(array('activeClass' => 'active'));
     }
 
+    private function getTitle($activeKey)
+    {
+        foreach($this->modules as $module)
+            if($module->id == $activeKey)
+                return $module->name;
+    }
+
     protected function build()
     {
         global $app;
         $lang = $app->loadLang('datatable')->datatable;
         $this->setMenuTreeProps();
         $activeKey = $this->prop('activeKey');
+        $title = $this->getTitle($activeKey);
         $closeBtn = null;
         if(!empty($activeKey))
         {
@@ -70,7 +82,7 @@ class moduleMenu extends wg
                 span
                 (
                     setClass('module-title'),
-                    $this->prop('title')
+                    $title
                 ),
                 $closeBtn
             ),
