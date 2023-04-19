@@ -3,40 +3,34 @@ namespace zin;
 
 class moduleMenu extends wg
 {
-    private $modules = array();
+    private $modules = [];
 
-    protected static $defineProps = array
-    (
-        'productID:number',
-        'moduleSettingText?:string="模块设置"',
-        'displaySettingText?:string="显示设置"',
-    );
+    protected static $defineProps = 'productID:number';
 
     public static function getPageCSS()
     {
         return file_get_contents(__DIR__ . DS . 'css' . DS . 'v1.css');
     }
 
-    private function buildMenuTree($parent, $parentID)
+    private function buildMenuTree($parentItems, $parentID)
     {
         $children = $this->getChildModule($parentID);
-        if(count($children) === 0) return array();
+        if(count($children) === 0) return [];
 
         foreach($children as $child)
         {
-            $item = array('key' => $child->id, 'text' => $child->name, 'items' => array());
+            $item = array('key' => $child->id, 'text' => $child->name, 'items' => []);
             $items = $this->buildMenuTree($item['items'], $child->id);
             if(count($items) !== 0) $item['items'] = $items;
-            else                    unset($item['items']);
-            $parent[] = $item;
+            else unset($item['items']);
+            $parentItems[] = $item;
         }
-
-        return $parent;
+        return $parentItems;
     }
 
     private function getChildModule($id)
     {
-        return array_filter($this->modules, function($module) use($id) {return $module->parent == $id;});
+        return array_filter($this->modules, fn($module) => $module->parent == $id);
     }
 
     private function setMenuTreeProps()
@@ -45,12 +39,14 @@ class moduleMenu extends wg
         $id = $this->prop('productID');
         $this->setProp('productID', null);
         $this->modules = $app->loadTarget('tree')->getProductStructure($id, 'story');
-        $this->setProp('items', $this->buildMenuTree(array(), 0));
+        $this->setProp('items', $this->buildMenuTree([], 0));
         $this->setDefaultProps(array('activeClass' => 'active'));
     }
 
     protected function build()
     {
+        global $app;
+        $lang = $app->loadLang('datatable')->datatable;
         $this->setMenuTreeProps();
         $activeKey = $this->prop('activeKey');
         $closeBtn = null;
@@ -90,12 +86,12 @@ class moduleMenu extends wg
                     setClass('btn'),
                     setStyle('background', '#EEF5FF'),
                     setStyle('border', 'none'),
-                    $this->prop('moduleSettingText')
+                    $lang->moduleSetting
                 ),
                 a
                 (
                     setClass('btn white'),
-                    $this->prop('displaySettingText')
+                    $lang->displaySetting
                 ),
             )
         );
