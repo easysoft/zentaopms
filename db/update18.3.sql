@@ -490,6 +490,11 @@ CHANGE `editedBy` `editedBy` varchar(30) NOT NULL DEFAULT '',
 CHANGE `editedDate` `editedDate` datetime NULL;
 
 ALTER TABLE `zt_effort`
+CHANGE `left` `left` float NOT NULL DEFAULT '0',
+CHANGE `consumed` `consumed` float NOT NULL DEFAULT '0',
+CHANGE `product` `product` text NULL,
+CHANGE `project` `project` mediumint unsigned NOT NULL DEFAULT '0',
+CHANGE `execution` `execution` mediumint unsigned NOT NULL DEFAULT '0',
 CHANGE `begin` `begin` smallint(4) unsigned zerofill NOT NULL DEFAULT '0',
 CHANGE `end` `end` smallint(4) unsigned zerofill NOT NULL DEFAULT '0';
 
@@ -1050,6 +1055,8 @@ CHANGE `editedBy` `editedBy` char(30) NOT NULL DEFAULT '',
 CHANGE `editedDate` `editedDate` datetime NULL;
 
 ALTER TABLE `zt_workflowfield`
+CHANGE `default` `default` varchar(100) NOT NULL DEFAULT '',
+CHANGE `rules` `rules` varchar(255) NOT NULL DEFAULT '',
 CHANGE `expression` `expression` text NULL,
 CHANGE `placeholder` `placeholder` varchar(100) NOT NULL DEFAULT '',
 CHANGE `desc` `desc` text NULL,
