@@ -224,8 +224,8 @@ class release extends control
         $leftBugPager = new pager($type == 'leftBug' ? $recTotal : 0, $recPerPage, $type == 'leftBug' ? $pageID : 1);
 
         $leftBugs = $this->dao->select("*, IF(`severity` = 0, {$this->config->maxPriValue}, `severity`) as severityOrder")->from(TABLE_BUG)
-            ->where('id')->in($release->leftBugs)
-            ->andWhere('deleted')->eq(0)
+            ->where('deleted')->eq(0)
+            ->beginIF($release->leftBugs)->andWhere('id')->in($release->leftBugs)->fi()
             ->beginIF($type == 'leftBug')->orderBy($sort)->fi()
             ->page($leftBugPager)
             ->fetchAll();

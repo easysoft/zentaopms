@@ -261,7 +261,7 @@
                     }
                     else
                     {
-                        echo $task->assignedTo ? $task->assignedToRealName . $lang->at . $task->assignedDate : $lang->noData;
+                        echo $task->assignedTo ? $task->assignedToRealName . $lang->at . substr($task->assignedDate, 0, 19) : $lang->noData;
                     }
                     ?>
                   </td>
@@ -386,7 +386,7 @@
               </tr>
               <tr>
                 <th><?php echo $lang->task->realStarted;?></th>
-                <td><?php echo helper::isZeroDate($task->realStarted) ? '' : $task->realStarted; ?> </td>
+                <td><?php echo helper::isZeroDate($task->realStarted) ? '' : substr($task->realStarted, 0, 19); ?> </td>
               </tr>
               <tr>
                 <th><?php echo $lang->task->deadline;?></th>

@@ -1,14 +1,14 @@
 <style>
 .block-productdoc .nav-stacked {overflow:auto; height:220px; max-height:220px; }
 .block-productdoc .panel-heading {border-bottom:1px solid #ddd;}
-.block-productdoc .panel-body {padding-top: 0; height:240px; padding-right:0px; overflow-x:hidden !important;}
+.block-productdoc .panel-body {padding-top: 0; height:240px; padding-right:0px; padding-bottom:0px;}
 .block-productdoc .tab-content {padding-right:0px;}
 .block-productdoc .tab-pane {max-height:220px; overflow:auto;}
 .block-productdoc table.tablesorter th{border-bottom:0px !important;}
 .block-productdoc .tile {margin-bottom: 30px;}
 .block-productdoc .tile-title {font-size: 18px; color: #A6AAB8;}
 .block-productdoc .tile-amount {font-size: 48px; margin-bottom: 10px;}
-.block-productdoc .col-nav {border-right: 1px solid #EBF2FB; width: 210px; padding: 0;}
+.block-productdoc .col-nav {border-right: 1px solid #EBF2FB; width: 210px; padding: 5px 0 0 0; }
 .block-productdoc .nav-secondary > li {position: relative;}
 .block-productdoc .nav-secondary > li > a {font-size: 14px; color: #838A9D; position: relative; box-shadow: none; padding-left: 20px; white-space: nowrap; text-overflow: ellipsis; overflow: hidden; transition: all .2s;}
 .block-productdoc .nav-secondary > li > a:first-child {padding-right: 36px;}
@@ -22,13 +22,13 @@
 .block-productdoc .nav-secondary > li.active > a.btn-view {box-shadow: none;}
 .block-productdoc .nav-secondary > li.switch-icon {display: none;}
 .block-productdoc.block-sm .nav-stacked {height:auto;}
-.block-productdoc.block-sm .panel-body {padding-bottom: 10px; position: relative; padding-top: 45px; border-radius: 3px; height:275px;}
+.block-productdoc.block-sm .panel-body {position: relative; border-radius: 3px; height:275px; padding: 45px 8px 10px 8px}
 .block-productdoc.block-sm .panel-body > .table-row,
 .block-productdoc.block-sm .panel-body > .table-row > .col {display: block; width: auto;}
 .block-productdoc.block-sm .panel-body > .table-row > .tab-content {padding: 0; margin: 0 -5px;}
 .block-productdoc.block-sm .tab-pane > .table-row > .col-5 {width: 125px;}
 .block-productdoc.block-sm .tab-pane > .table-row > .col-5 > .table-row {padding: 5px 0;}
-.block-productdoc.block-sm .col-nav {border-left: none; position: absolute; top: 0; left: 15px; right: 15px; background: #f5f5f5;}
+.block-productdoc.block-sm .col-nav {border-left: none; position: absolute; top: 0; left: 15px; right: 15px; background: #f5f5f5; padding: 0px; margin-top:5px;}
 .block-productdoc.block-sm .nav-secondary {display: table; width: 100%; padding: 0; table-layout: fixed;}
 .block-productdoc.block-sm .nav-secondary > li {display: none;}
 .block-productdoc.block-sm .nav-secondary > li.switch-icon,
@@ -58,12 +58,12 @@
 .block-productdoc .table .c-name[data-status=draft] > .doc-title {max-width: calc(100% - 35px);}
 .block-productdoc .table .c-name > .draft {background-color:rgba(129, 102, 238, 0.12); color:#8166EE;}
 </style>
-<script>
 <?php $blockNavId = 'nav-' . uniqid(); ?>
+<script>
 $(function()
 {
     <?php if(!$longBlock):?>
-    $(document).on('click', '.col-nav .switch-icon', function(e)
+    $(document).on('click', '.block-productdoc<?php echo "#block{$block->id}";?> .col-nav .switch-icon', function(e)
     {
         var $nav = $(this).closest('.nav');
         var isPrev = $(this).is('.prev');
@@ -75,44 +75,40 @@ $(function()
     });
     <?php endif;?>
 
-    if($('.block-productdoc #productType').length > 1);
+    if($('.block-productdoc<?php echo "#block{$block->id}";?> #productType').length > 1);
     {
-        count = $('.block-productdoc #productType').length;
-        $('.block-productdoc #productType').each(function()
+        count = $('.block-productdoc<?php echo "#block{$block->id}";?> #productType').length;
+        $('.block-productdoc<?php echo "#block{$block->id}";?> #productType').each(function()
         {
             if(count == 1) return;
             $(this).remove();
             count --;
         })
     }
-
-    var $productList = $('#activeProduct');
-    if($productList.length)
-    {
-        var productList = $productList[0];
-        $(".col ul.nav").animate({scrollTop: productList.offsetTop}, "slow");
-    }
 });
 
-function changeProductType(type)
+function change<?php echo "block{$block->id}";?>ProductType(type)
 {
-    $('.nav.products').toggleClass('hidden', type != 'all');
-    $('.nav.involveds').toggleClass('hidden', type != 'involved');
-    $('#productType .btn').html($('#productType [data-type=' + type + ']').html() + " <span class='caret'></span>");
-    var name = type == 'all' ? '.products' : '.involveds';
+    $('.block-productdoc<?php echo "#block{$block->id}";?> .nav.products').toggleClass('hidden', type != 'all');
+    $('.block-productdoc<?php echo "#block{$block->id}";?> .nav.involveds').toggleClass('hidden', type != 'involved');
+    $('.block-productdoc<?php echo "#block{$block->id}";?> #productType .btn').html($('.block-productdoc<?php echo "#block{$block->id}";?> #productType [data-type=' + type + ']').html() + " <span class='caret'></span>");
+    var name = type == 'all' ? '.block-productdoc<?php echo "#block{$block->id}";?> .products' : '.block-productdoc<?php echo "#block{$block->id}";?> .involveds';
     var $obj = $(name + ' li.active').length > 0 ? $(name + ' .active:first').find('a') : $(name + ' li:not(.switch-icon):first').find('a');
     $(name + ' li').removeClass('active');
     $obj.closest('li').addClass('active');
-    $('.block-productdoc .tab-pane').removeClass('active').removeClass('in');
-    $('.block-productdoc .tab-pane' + $obj.data('target')).addClass('active').addClass('in');
+    $('.block-productdoc<?php echo "#block{$block->id}";?> .tab-pane').removeClass('active').removeClass('in');
+    $('.block-productdoc<?php echo "#block{$block->id}";?> .tab-pane' + $obj.data('target')).addClass('active').addClass('in');
+
+    $('.block-productdoc<?php echo "#block{$block->id}";?> #productType .dropdown-menu li').removeClass('active');
+    $('.block-productdoc<?php echo "#block{$block->id}";?> #productType .dropdown-menu li a[data-type=' + type + ']').closest('li').addClass('active');
 }
 
 </script>
 <div class="dropdown" id='productType'>
   <button class="btn" type="button" data-toggle="dropdown"><?php echo $lang->product->involved;?> <span class="caret"></span></button>
   <ul class="dropdown-menu">
-    <li><a href="javascript:changeProductType('involved')" data-type='involved'><?php echo $lang->product->involved;?></a></li>
-    <li><a href="javascript:changeProductType('all')" data-type='all'><?php echo $lang->product->all;?></a></li>
+    <li class='active'><a href="javascript:change<?php echo "block{$block->id}";?>ProductType('involved')" data-type='involved'><?php echo $lang->product->involved;?></a></li>
+    <li><a href="javascript:change<?php echo "block{$block->id}";?>ProductType('all')" data-type='all'><?php echo $lang->product->all;?></a></li>
   </ul>
 </div>
 <div class="panel-body">
@@ -172,7 +168,7 @@ function changeProductType(type)
                   }
                   else
                   {
-                      echo "<span class='doc-title'>$icon {$doc->title}</span>";
+                      echo "<span class='doc-title' title='{$doc->title}'>$icon {$doc->title}</span>";
                   }
                   if($doc->status == 'draft') echo "<span class='label label-badge draft'>{$lang->doc->draft}</span>";
                   ?>

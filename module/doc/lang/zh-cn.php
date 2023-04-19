@@ -86,6 +86,7 @@ $lang->doc->addedByAB    = '创建者';
 $lang->doc->addedDate    = '创建日期';
 $lang->doc->editedBy     = '修改者';
 $lang->doc->editedDate   = '修改日期';
+$lang->doc->editingDate  = '正在修改者和时间';
 $lang->doc->lastEditedBy = '最后更新者';
 $lang->doc->version      = '版本号';
 $lang->doc->basicInfo    = '基本信息';
