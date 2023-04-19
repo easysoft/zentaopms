@@ -9081,7 +9081,8 @@ class upgradeModel extends model
             $fieldName = $field->Field;
             $fields[$fieldName] = $fieldName;
         }
-        if(!isset($fields['collector'])) return true;
+
+        if(!isset($fields['collector']) or isset($fields['collects'])) return true;
 
         $this->loadModel('doc');
 
