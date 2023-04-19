@@ -79,11 +79,11 @@ class groupModel extends model
     public function copyPriv($fromGroup, $toGroup)
     {
         $privs = $this->dao->findByGroup($fromGroup)->from(TABLE_GROUPPRIV)->fetchAll();
-        foreach($privs as $priv)
+        foreach($privs as $key => $priv)
         {
-            $priv->group = $toGroup;
-            $this->dao->replace(TABLE_GROUPPRIV)->data($priv)->exec();
+            $privs[$key]->group = $toGroup;
         }
+        $this->insertPrivs($privs);
     }
 
     /**
@@ -437,6 +437,7 @@ class groupModel extends model
         /* Insert new. */
         if($this->post->actions)
         {
+            $privs = array();
             foreach($this->post->actions as $moduleName => $moduleActions)
             {
                 foreach($moduleActions as $actionName)
@@ -445,10 +446,38 @@ class groupModel extends model
                     $data->group  = $groupID;
                     $data->module = $moduleName;
                     $data->method = $actionName;
-                    $this->dao->replace(TABLE_GROUPPRIV)->data($data)->exec();
+                    $privs[]      = $data;
                 }
             }
+            $this->insertPrivs($privs);
         }
+        return true;
+    }
+
+    /**
+     * Insert privs.
+     *
+     * @param  array $privs
+     * @access protected
+     * @return bool
+     */
+    protected function insertPrivs($privs)
+    {
+        $groups = array();
+        foreach($privs as $priv) $groups[$priv->group] = $priv->group;
+
+        $privMap  = array();
+        $privList = $this->dao->select('group,module,method')->from(TABLE_GROUPPRIV)->where('group')->in($groups)->fetchAll();
+        foreach($privList as $priv) $privMap[$priv->group . '-' . $priv->module . '-' . $priv->method] = true;
+
+        foreach($privs as $priv)
+        {
+            if(!isset($privMap[$priv->group . '-' . $priv->module . '-' . $priv->method]))
+            {
+                $this->dao->insert(TABLE_GROUPPRIV)->data($priv)->exec();
+            }
+        }
+
         return true;
     }
 
@@ -517,6 +546,7 @@ class groupModel extends model
     {
         if($this->post->module == false or $this->post->actions == false or $this->post->groups == false) return false;
 
+        $privs = array();
         foreach($this->post->actions as $action)
         {
             foreach($this->post->groups as $group)
@@ -525,10 +555,11 @@ class groupModel extends model
                 $data->group  = $group;
                 $data->module = $this->post->module;
                 $data->method = $action;
-                $this->dao->replace(TABLE_GROUPPRIV)->data($data)->exec();
+                $privs[]      = $data;
             }
         }
-        return true;
+
+        return $this->insertPrivs($privs);
     }
 
     /**
