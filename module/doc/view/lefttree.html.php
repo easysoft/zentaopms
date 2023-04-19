@@ -313,6 +313,7 @@ $(function()
         var $leaf = ele.find('li.active > a');
         if($leaf.length && $('#fileTree').height() >= $('#sideBar').height()) $('#sideBar')[0].scrollTop = $($leaf[$leaf.length - 1]).offset().top - 100;
 
+        var visibleSort = false;
         ele.on('click', '.icon-drop', function(e)
         {
             var $icon = $(this);
@@ -406,13 +407,16 @@ $(function()
             return locatePage(libID, moduleID, $(this).data('type'));
         }).on('mousedown', 'a.sort-module', function()
         {
+            visibleSort = true;
             var $element = $(this);
             setTimeout(function()
             {
-                $element.addClass('dragging-shadow');
+                console.log(visibleSort)
+                if(visibleSort) $element.addClass('dragging-shadow');
             }, 500);
         }).on('mouseup', 'a.sort-module', function()
         {
+            visibleSort = false;
             $('a.sort-module').removeClass('dragging-shadow');
         }).on('click', '.tree-version-trigger', function(e)
         {
@@ -672,8 +676,10 @@ $(function()
         nested: true,
         selector: 'li',
         dragCssClass: 'drop-here',
+        noShadow: false,
         start: function()
         {
+            visibleSort = false;
             $('#dropDownCatalogue').remove();
             $('a.sort-module').removeClass('dragging-shadow');
         },
@@ -697,7 +703,9 @@ $(function()
         },
         finish: function(e)
         {
-            $('a.sort-module').removeClass('dragging-shadow');
+            visibleSort = false;
+            e.target.siblings().find('a.sort-module').removeClass('dragging-shadow');
+
             if(!e.changed) return;
 
             var orders     = {};
