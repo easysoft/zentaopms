@@ -411,7 +411,6 @@ $(function()
             var $element = $(this);
             setTimeout(function()
             {
-                console.log(visibleSort)
                 if(visibleSort) $element.addClass('dragging-shadow');
             }, 500);
         }).on('mouseup', 'a.sort-module', function()
