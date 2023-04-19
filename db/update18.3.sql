@@ -485,6 +485,11 @@ CHANGE `editedBy` `editedBy` varchar(30) NOT NULL DEFAULT '',
 CHANGE `editedDate` `editedDate` datetime NULL;
 
 ALTER TABLE `zt_effort`
+CHANGE `left` `left` float NOT NULL DEFAULT '0',
+CHANGE `consumed` `consumed` float NOT NULL DEFAULT '0',
+CHANGE `product` `product` text NULL,
+CHANGE `project` `project` mediumint unsigned NOT NULL DEFAULT '0',
+CHANGE `execution` `execution` mediumint unsigned NOT NULL DEFAULT '0',
 CHANGE `begin` `begin` smallint(4) unsigned zerofill NOT NULL DEFAULT '0',
 CHANGE `end` `end` smallint(4) unsigned zerofill NOT NULL DEFAULT '0';
 
