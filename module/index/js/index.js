@@ -441,6 +441,8 @@
         var iframe    = app.$iframe[0];
         var isSameUrl = iframe && url && iframe.contentWindow.location.href.endsWith(url);
 
+        app.$app.trigger('beforereloadapp');
+
         /* Add hook to page before reload it */
         if (iframe && iframe.contentWindow.beforeAppReload)
         {
