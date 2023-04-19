@@ -2062,11 +2062,14 @@ class groupModel extends model
         $parentType = $type == 'package' ? 'module' : 'view';
         $parent     = !empty($parent) ? $this->dao->select('id as parent')->from(TABLE_PRIVMANAGER)->where('type')->eq($parentType)->andWhere('code')->eq($parent)->fetch('parent') : 0;
 
+        $moduleLang = $type == 'module' ? $this->getMenuModules('', true) : array();
+
         $managers = $this->dao->select('t1.id,t1.code,t2.key,t2.value')
             ->from(TABLE_PRIVMANAGER)->alias('t1')
             ->leftJoin(TABLE_PRIVLANG)->alias('t2')->on('t1.id=t2.objectID')
             ->where('t1.type')->eq($type)
             ->andWhere('t2.objectType')->eq('manager')
+            ->beginIF($type == 'module')->andWhere('code')->in(array_keys($moduleLang))->fi()
             ->beginIF(!empty($parent))->andWhere('t1.parent')->eq($parent)->fi()
             ->andWhere('t1.edition')->like("%,{$this->config->edition},%")
             ->andWhere('t1.vision')->like("%,{$this->config->vision},%")
@@ -2074,7 +2077,6 @@ class groupModel extends model
             ->orderBy('order asc')
             ->fetchAll('id');
 
-        $moduleLang = $type == 'module' ? $this->getMenuModules('', true) : array();
         $pairs      = array();
         foreach($managers as $managerID => $manager)
         {
@@ -2109,6 +2111,13 @@ class groupModel extends model
                 list($moduleName, $methodLang) = explode('-', $priv->key);
                 if($moduleName == 'requirement') $moduleName = 'story';
                 $this->app->loadLang($moduleName);
+
+                $hasLang = (!empty($moduleName) and !empty($methodLang) and isset($this->lang->resource->{$priv->module}) and isset($this->lang->resource->{$priv->module}->{$priv->method}));
+                if(!$hasLang)
+                {
+                    unset($privs[$moduleMethod]);
+                    continue;
+                }
 
                 $priv->name = (!empty($moduleName) and !empty($methodLang) and isset($this->lang->{$moduleName}->$methodLang)) ? $this->lang->{$moduleName}->$methodLang : $priv->method;
             }
@@ -2179,6 +2188,9 @@ class groupModel extends model
      * Get related privs.
      *
      * @param  array  $privIdList
+     * @param  string $type
+     * @param  array  $excludePrivs
+     * @param  array  $recommedSelect
      * @access public
      * @return array
      */
@@ -2193,6 +2205,7 @@ class groupModel extends model
             ->leftJoin(TABLE_PRIVMANAGER)->alias('t4')->on('t2.parent=t4.id')
             ->leftJoin(TABLE_PRIVMANAGER)->alias('t5')->on('t4.parent=t5.id')
             ->where('t1.priv')->in($privIdList)
+            ->andWhere('t5.code')->in(array_keys($modulePairs))
             ->andWhere('(t1.relationPriv')->notin($privIdList)
 
             ->beginIF(!empty($recommedSelect))

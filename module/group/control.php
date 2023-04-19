@@ -247,9 +247,9 @@ class group extends control
             $this->view->menu       = $menu;
             $this->view->version    = $version;
 
-            $privs    = $this->group->getPrivsListByView($menu);
-            $privLang = $this->group->transformPrivLang($privs);
-            $privs    = $this->group->getCustomPrivs($menu, $privs);
+            $privs = $this->group->getPrivsListByView($menu);
+            $privs = $this->group->transformPrivLang($privs);
+            $privs = $this->group->getCustomPrivs($menu, $privs);
 
             $privList           = $modules;
             $privMethods        = array();
