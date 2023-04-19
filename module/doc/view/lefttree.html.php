@@ -497,7 +497,7 @@ $(function()
             if(['mine', 'view', 'collect', 'createdby', 'editedby'].indexOf(objectType) !== -1)
             {
                 type = ['view', 'collect', 'createdby', 'editedby'].indexOf(type.toLowerCase()) !== -1 ? type.toLowerCase() : 'mine';
-                linkParams = 'type=' + type + '&' + linkParams;
+                linkParams = 'type=' + type + '&libID=' + libID + '&moduleID=' + moduleID;
             }
             if(type == 'apiDoc') linkParams = linkParams.replace('browseType=&', 'browseType=byrelease&').replace('param=0', 'param=<?php echo isset($release) ? $release : 0;?>');
         }
