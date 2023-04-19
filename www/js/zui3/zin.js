@@ -92,6 +92,8 @@
 
     function renderPartial(info)
     {
+        if(window.config.onRenderPage && window.config.onRenderPage(info)) return;
+
         const render = renderMap[info.name];
         if(render) return render(info.data);
 
@@ -204,6 +206,11 @@
             return;
         }
         $.apps.reloadApp(currentCode, url);
+    }
+
+    function onRenderPage(callback)
+    {
+        window.config.onRenderPage = callback;
     }
 
     /**
