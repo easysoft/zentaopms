@@ -3127,7 +3127,7 @@ class docModel extends model
         if($type != 'project') $libTree = array_values($libTree[$type]);
         if($type == 'mine')
         {
-            $libType = zget($this->app->rawParams, 'type', '');
+            $libType = $this->app->rawMethod == 'view' ? 'mine' : zget($this->app->rawParams, 'type', '');
             $libType = strtolower($libType);
 
             $myLib = new stdclass();
@@ -3138,7 +3138,7 @@ class docModel extends model
             $myLib->objectID   = 0;
             $myLib->active     = 0;
             $myLib->hasAction  = false;
-            $myLib->active     = $libType == 'mine'  ? 1 : 0;
+            $myLib->active     = $libType == 'mine' ? 1 : 0;
             $myLib->children   = $libTree;
 
             $myView = new stdclass();

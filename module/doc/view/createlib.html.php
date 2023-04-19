@@ -36,7 +36,8 @@
               <th><?php echo $lang->doc->execution?></th>
               <td>
                 <?php $disabled = $project->multiple ? '' : 'disabled';?>
-                <?php echo html::select('execution', $executionPairs, 0, "class='form-control chosen' data-drop-direction='down' data-placeholder='{$lang->doclib->tip->selectExecution}' $disabled")?>
+                <?php echo html::select('execution', $executionPairs, 0, "class='form-control chosen' data-drop-direction='down' $disabled")?>
+                <i class='icon icon-help' title='<?php echo $lang->doclib->tip->selectExecution;?>'></i>
               </td>
             </tr>
             <?php endif;?>
