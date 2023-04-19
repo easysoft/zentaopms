@@ -6,3 +6,5 @@ form {margin-bottom: 50px;}
 
 #groups_chosen.chosen-container .chosen-results, #users_chosen.chosen-container .chosen-results {max-height: 160px;}
 #aclBox > th {vertical-align: top; padding-top: 17px;}
+tr.executionBox > td {display: flex; width: 103%;}
+tr.executionBox > td > .icon-help {margin: 8px 0 0 5px;}
