@@ -760,7 +760,7 @@ class upgradeModel extends model
                 $this->updateDatasetPriv();
                 $this->processChart();
                 $this->processReport();
-                //$this->processDashboard();
+                $this->processDashboard();
         }
     }
 
