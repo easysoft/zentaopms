@@ -227,12 +227,9 @@ class productModel extends model
 
         echo(js::alert($tips));
 
-        if(!$this->server->http_referer) return print(js::locate(helper::createLink('product', 'index')));
-
         $loginLink = $this->config->requestType == 'GET' ? "?{$this->config->moduleVar}=user&{$this->config->methodVar}=login" : "user{$this->config->requestFix}login";
-        if(strpos($this->server->http_referer, $loginLink) !== false) return print(js::locate(helper::createLink('product', 'index')));
 
-        echo js::locate('back');
+        echo js::locate(helper::createLink('product', 'all'));
     }
 
     /**
