@@ -13,9 +13,18 @@ class inputControl extends wg
         'suffixWidth?: string|number',
     ];
 
+    public static $defineBlocks =
+    [
+        'prefix' => [],
+        'suffix' => [],
+    ];
+
     protected function build()
     {
         list($prefix, $suffix, $prefixWidth, $suffixWidth) = $this->prop(['prefix', 'suffix', 'prefixWidth', 'suffixWidth']);
+
+        if(empty($prefix)) $prefix = $this->block('prefix');
+        if(empty($suffix)) $suffix = $this->block('suffix');
 
         $class = ['input-control'];
         $vars  = [];
