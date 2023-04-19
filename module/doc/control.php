@@ -328,7 +328,7 @@ class doc extends control
      * @access public
      * @return void
      */
-    public function deleteLib($libID, $confirm = 'no', $type = 'lib', $from = 'tableContents')
+    public function deleteLib($libID, $confirm = 'no', $type = 'lib', $from = 'teamSpace')
     {
         if($libID == 'product' or $libID == 'execution') return;
         if($confirm == 'no')
@@ -341,16 +341,18 @@ class doc extends control
             if(!empty($lib->main)) return print(js::alert($this->lang->doc->errorMainSysLib));
 
             $this->doc->delete(TABLE_DOCLIB, $libID);
-            if($this->app->tab == 'doc' and $from == 'tableContents') return print(js::reload('parent'));
+            if($this->app->tab == 'doc' and $from == 'teamSpace') return print(js::reload('parent'));
 
             $objectType = $lib->type;
             $objectID   = strpos(',product,project,execution,', ",$objectType,") !== false ? $lib->{$objectType} : 0;
-            if(in_array($this->app->tab, array('project', 'doc')) and $objectType == 'execution')
+            $moduleName = 'doc';
+            $methodName = zget($this->config->doc->spaceMethod, $objectType);
+            if($this->app->tab == 'execution' and $objectType == 'execution')
             {
-                $objectType = 'project';
-                $objectID   = $lib->project;
+                $moduleName = 'execution';
+                $methodName = 'doc';
             }
-            $browseLink = $this->createLink('doc', $from, "type=$objectType&objectID=$objectID");
+            $browseLink = $this->createLink($moduleName, $methodName, "objectID=$objectID");
 
             return print(js::locate($browseLink, 'parent'));
         }
@@ -1052,7 +1054,7 @@ class doc extends control
         if(empty($viewType)) $viewType = !empty($_COOKIE['docFilesViewType']) ? $this->cookie->docFilesViewType : 'list';
         setcookie('docFilesViewType', $viewType, $this->config->cookieLife, $this->config->webRoot, '', false, true);
 
-        $objects = $this->doc->getOrderedObjects($type);
+        $objects = $this->doc->getOrderedObjects($type, 'nomerge', $objectID);
         list($libs, $libID, $object, $objectID, $objectDropdown) = $this->doc->setMenuByType($type, $objectID, 0);
 
         $table  = $this->config->objectTables[$type];
@@ -1143,8 +1145,6 @@ class doc extends control
         $objectID   = zget($doc, $type, 0);
         list($libs, $libID, $object, $objectID, $objectDropdown) = $this->doc->setMenuByType($type, $objectID, $doc->lib, $appendLib);
 
-        $moduleTree = $this->doc->getTreeMenu($type, $objectID, $libID, 0, $docID);
-
         /* Get doc. */
         if($docID)
         {
@@ -1220,6 +1220,8 @@ class doc extends control
                 $this->view->outline = $outline;
             }
         }
+
+        if($this->app->tab != 'execution' and !empty($doc->execution)) $object = $this->execution->getByID($doc->execution);
 
         $this->view->title          = $this->lang->doc->common . $this->lang->colon . $doc->title;
         $this->view->docID          = $docID;
@@ -1471,7 +1473,7 @@ class doc extends control
      */
     public function ajaxGetDropMenu($objectType, $objectID, $module, $method)
     {
-        list($myObjects, $normalObjects, $closedObjects) = $this->doc->getOrderedObjects($objectType, 'nomerge');
+        list($myObjects, $normalObjects, $closedObjects) = $this->doc->getOrderedObjects($objectType, 'nomerge', $objectID);
 
         $this->view->objectType    = $objectType;
         $this->view->objectID      = $objectID;

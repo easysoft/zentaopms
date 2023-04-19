@@ -58,7 +58,7 @@
         <?php $collectTitle = strpos($doc->collector, ',' . $this->app->user->account . ',') !== false ? $lang->doc->cancelCollection : $lang->doc->collect;?>
         <tr>
           <td class="c-id"><?php echo $doc->id;?></td>
-          <td class="c-name" title='<?php echo $doc->title;?>'>
+          <td class="c-name" title='<?php echo $doc->title;?>' data-status='<?php echo $doc->status;?>'>
           <?php
           $docType = $doc->type == 'text' ? 'wiki-file' : $doc->type;
           $icon    = html::image("static/svg/{$docType}.svg", "class='file-icon'");

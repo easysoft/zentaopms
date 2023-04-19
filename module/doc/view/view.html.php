@@ -27,20 +27,24 @@
   <?php $gobackLink = $this->session->docList ? $this->session->docList : inlink('teamSpace', "objectID=0&libID=$libID");?>
   <?php echo html::a($gobackLink, "<i class='icon-back'></i> " . $lang->goback, '', "class='btn btn-link'");?>
   </div>
+  <?php if(empty($object->deleted)):?>
   <div class="btn-toolbar pull-right">
     <?php
     if($canExport) echo html::a($this->createLink('doc', $exportMethod, "libID=$libID&moduleID=0&docID=$docID"), "<i class='icon-export muted'> </i>" . $lang->export, 'hiddenwin', "class='btn btn-link' id='docExport'");
-    if(common::hasPriv('api', 'createLib')) echo html::a($this->createLink('api', 'createLib',     "type=" . ($objectType ? $objectType : 'nolink') . "&objectID=$objectID"), '<i class="icon icon-plus"></i> ' . $lang->api->createLib, '', 'class="btn btn-secondary iframe" data-width="800px"');
+    if(common::hasPriv('doc', 'createLib')) echo html::a($this->createLink('doc', 'createLib', "type=" . ($objectType ? $objectType : 'nolink') . "&objectID=$objectID"), '<i class="icon icon-plus"></i> ' . $lang->api->createLib, '', 'class="btn btn-secondary iframe" data-width="800px"');
     if(common::hasPriv('doc', 'create')) echo $this->doc->printCreateBtn($lib, $moduleID);
     ?>
   </div>
+  <?php endif;?>
 </div>
 <div id='mainContent'class="fade flex">
   <?php if($libID):?>
+    <?php if(empty($object->deleted)):?>
     <div id='sideBar' class="panel side side-col col overflow-auto h-full-adjust">
       <?php include 'lefttree.html.php';?>
     </div>
     <div class="sidebar-toggle flex-center"><i class="icon icon-angle-left"></i></div>
+    <?php endif;?>
     <div class="main-col h-full-adjust" data-min-width="400">
       <?php if($docID):?>
         <?php include './content.html.php';?>

@@ -1678,15 +1678,17 @@ class docModel extends model
      *
      * @param  string $objectType
      * @param  string $returnType nomerge|merge
+     * @param  int    $append
      * @access public
      * @return array
      */
-    public function getOrderedObjects($objectType = 'product', $returnType = 'merge')
+    public function getOrderedObjects($objectType = 'product', $returnType = 'merge', $append = 0)
     {
         $myObjects = $normalObjects = $closedObjects = array();
         if($objectType == 'product')
         {
             $products = $this->loadModel('product')->getList();
+            if($append and !isset($products[$append])) $products[$append] = $this->product->getByID($append);
             foreach($products as $id => $product)
             {
                 if($product->status == 'normal' and $product->PO == $this->app->user->account)
@@ -1718,8 +1720,9 @@ class docModel extends model
                     ->leftjoin(TABLE_DOCLIB)->alias('t2')->on('t2.project=t1.id')
                     ->where("CONCAT(',', t2.users, ',')")->like("%,{$this->app->user->account},%")
                     ->andWhere('t1.vision')->eq($this->config->vision)
-                    ->beginIF($this->config->vision == 'rnd')->andWhere('model')->ne('kanban')->fi()
                     ->andWhere('t1.deleted')->eq(0)
+                    ->beginIF($this->config->vision == 'rnd')->andWhere('model')->ne('kanban')->fi()
+                    ->beginIF($append)->orWhere('t1.id')->eq($append)->fi()
                     ->beginIF(!$this->app->user->admin)->andWhere('t1.id')->in($this->app->user->view->projects)->fi()
                     ->fetchPairs();
             }
@@ -1730,6 +1733,7 @@ class docModel extends model
                 ->andWhere('deleted')->eq(0)
                 ->beginIF($this->config->vision == 'rnd')->andWhere('model')->ne('kanban')->fi()
                 ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->projects)->fi()
+                ->beginIF($append)->orWhere('id')->eq($append)->fi()
                 ->orderBy('order_asc')
                 ->fetchAll('id');
 
@@ -1766,6 +1770,7 @@ class docModel extends model
                 ->andWhere('multiple')->eq('1')
                 ->andWhere('vision')->eq($this->config->vision)
                 ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->sprints)->fi()
+                ->beginIF($append)->orWhere('id')->eq($append)->fi()
                 ->orderBy('order_asc')
                 ->fetchAll('id');
 
@@ -2774,10 +2779,11 @@ class docModel extends model
         if($this->app->tab == 'doc' and $type == 'execution') $type = 'project';
 
         $objectDropdown = '';
+        $appendObject   = $objectID;
         if(in_array($type, array('project', 'product', 'execution')))
         {
             $table  = $this->config->objectTables[$type];
-            $object = $this->dao->select('id,name,status')->from($table)->where('id')->eq($objectID)->fetch();
+            $object = $this->dao->select('id,name,status,deleted')->from($table)->where('id')->eq($objectID)->fetch();
 
             if(empty($object))
             {
@@ -2786,7 +2792,7 @@ class docModel extends model
                 return print(js::locate(helper::createLink($type, $methodName, $param)));
             }
 
-            $objects  = $this->getOrderedObjects($type);
+            $objects  = $this->getOrderedObjects($type, 'merge', $objectID);
             $objectID = $this->loadModel($type)->saveState($objectID, $objects);
             $libs     = $this->getLibsByObject($type, $objectID, '', $appendLib);
             if(($libID == 0 or !isset($libs[$libID])) and !empty($libs)) $libID = reset($libs)->id;
@@ -2799,7 +2805,7 @@ class docModel extends model
             }
             else
             {
-                $objectDropdown = $this->select($type, $objectTitle, $objectID);
+                $objectDropdown = $this->select($type, $objectTitle, $appendObject);
             }
         }
         else
