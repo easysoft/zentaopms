@@ -155,9 +155,7 @@ class api extends control
      */
     public function view($libID, $apiID, $moduleID = 0, $release = 0, $version = 0)
     {
-        $from = strpos($this->server->http_referer, 'space') ? 'doc' : 'api';
-
-        $this->setMenu($libID);
+        if(!strpos($this->server->http_referer, 'space') and !strpos($this->server->http_referer, 'index') and !strpos($this->server->http_referer, 'view')) setCookie("docSpaceParam", '', $this->config->cookieLife, $this->config->webRoot, '', false, true);
 
         /* Get all api doc libraries. */
         $libs = $this->doc->getApiLibs($libID);
