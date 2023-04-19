@@ -47,7 +47,7 @@ class form extends wg
         foreach($actions as $key => $action)
         {
             if($action === 'save')       $actions[$key] = ['text' => $lang->save, 'btnType' => 'submit', 'type' => 'primary'];
-            elseif($action === 'back')   $actions[$key] = ['text' => $lang->goback, 'url' => \html::getGobackLink()];
+            elseif($action === 'back')   $actions[$key] = ['text' => $lang->goback, 'url' => html::getGobackLink()];
             elseif($action === 'cancel') $actions[$key] = ['text' => $lang->cancel, 'url' => 'javascript:history.go(-1)'];
             elseif(is_string($action))   $actions[$key] = ['text' => $action];
         }

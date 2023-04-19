@@ -7,6 +7,10 @@ class helper extends \helper
 {
 }
 
+class html extends \html
+{
+}
+
 class commonModel extends \commonModel
 {
 }
