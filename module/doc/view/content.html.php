@@ -26,8 +26,8 @@
                 <ul id="docVersionMenu" class='dropdown-menu doc-version-menu' style='width: 250px; overflow-y:auto'>
                   <li class="drop-title flex-between"><div><?php echo $lang->doc->allDoc?></div></li>
                   <div class="drop-body menu-active-primary menu-hover-primary">
-                  <?php for($version = $doc->version; $version > 0; $version--):?>
-                    <li class="li-item"><div class="checkbox-primary"><input type="checkbox" <?php echo "data-id=".$doc->id." data-version=".$version;?> ></input><label for=""></label></div><a href='javascript:void(0)' data-url='<?php echo $this->createLink('doc', 'view', "docID=$doc->id&version=$version"); ?>'>#<?php echo $version;?></a></li>
+                  <?php for($itemVersion = $doc->version; $itemVersion > 0; $itemVersion--):?>
+                    <li class="li-item <?php if($itemVersion == $version) echo 'active';?>"><div class="checkbox-primary"><input type="checkbox" <?php echo "data-id=".$doc->id." data-version=".$itemVersion;?> ></input><label for=""></label></div><a href='javascript:void(0)' data-url='<?php echo $this->createLink('doc', 'view', "docID=$doc->id&version=$itemVersion"); ?>'>#<?php echo $itemVersion;?></a></li>
                   <?php endfor;?>
                   </div>
                   <li class="drop-bottom"><button data-id="confirm" class="btn btn-primary"><?php echo $lang->confirm?></button><button data-id="cancel" class="btn"><?php echo $lang->doc->cancelDiff?></button></li>
