@@ -41,8 +41,11 @@ class api extends control
      */
     public function index($libID = 0, $moduleID = 0, $apiID = 0, $version = 0, $release = 0, $appendLib = 0, $browseType = '', $param = 0)
     {
-        $this->session->set('spaceType', 'api', 'doc');
-        $this->session->set('structList', $this->app->getURI(true), 'doc');
+        if(!$apiID)
+        {
+            $this->session->set('spaceType', 'api', 'doc');
+            $this->session->set('structList', inLink('index', "libID=$libID&moduleID=$moduleID"), 'doc');
+        }
 
         $this->setMenu($libID);
         $objectType  = $this->objectType;
@@ -151,6 +154,8 @@ class api extends control
      */
     public function view($libID, $apiID, $moduleID = 0, $release = 0, $version = 0)
     {
+        $from = strpos($this->server->http_referer, 'space') ? 'doc' : 'api';
+
         $this->setMenu($libID);
 
         /* Get all api doc libraries. */
@@ -188,6 +193,25 @@ class api extends control
             $crumbs[]    = html::a(inLink($methodName, $linkParams), $module->name);
         }
 
+        $objectID = $this->objectID;
+        if(strpos($this->server->http_referer, 'space'))
+        {
+            $docParam   = json_decode($this->cookie->docSpaceParam);
+            $type       = $docParam->type;
+            $objectID   = $docParam->objectID;
+            $libID      = $docParam->libID;
+            $moduleID   = $docParam->moduleID;
+            $browseType = $docParam->browseType;
+            $param      = $docParam->param;
+            list($libs, $libID, $object, $objectID, $objectDropdown) = $this->doc->setMenuByType($type, $objectID, $libID);
+
+            $libTree = $this->doc->getLibTree($libID, $libs, $type, $moduleID, $objectID, $browseType, $param);
+        }
+        else
+        {
+            $objectDropdown = $this->generateLibsDropMenu($libs[$libID], $release);
+            $libTree = $this->doc->getLibTree($libID, $libs, 'api', $moduleID);
+        }
         $this->view->title          = $this->lang->api->pageTitle;
         $this->view->libs           = $libs;
         $this->view->isRelease      = $release > 0;
@@ -197,11 +221,10 @@ class api extends control
         $this->view->crumbs         = $crumbs;
         $this->view->moduleID       = $moduleID;
         $this->view->objectType     = $type;
-        $this->view->objectID       = $this->objectID;
+        $this->view->objectID       = $objectID;
         $this->view->users          = $this->user->getPairs('noclosed,noletter');
-        $this->view->libTree        = $this->doc->getLibTree($libID, $libs, 'api', $moduleID);
-        $this->view->moduleTree     = $this->doc->getApiModuleTree($libID, $apiID, $release, $moduleID);
-        $this->view->objectDropdown = $this->generateLibsDropMenu($libs[$libID], $release);
+        $this->view->libTree        = $libTree;
+        $this->view->objectDropdown = $objectDropdown;
         $this->display();
     }
 
@@ -756,7 +779,10 @@ class api extends control
             $this->lang->doc->menu->api['exclude'] = 'api-' . $this->app->rawMethod;
             $this->lang->doc->menu->{$this->session->spaceType}['subModule'] = 'api';
         }
-
+        else
+        {
+            $this->lang->doc->menu->{$this->session->spaceType}['alias'] .= ',' . $this->app->rawMethod;
+        }
     }
 
     /**

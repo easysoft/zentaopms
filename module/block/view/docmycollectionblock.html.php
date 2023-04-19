@@ -20,7 +20,7 @@
 .block-docmycollection .doc-list > .doc-box > .btn.no-priv p {pointer-events: none;}
 .block-docmycollection .doc-list > .doc-box .date-interval {float: right; padding: 8px 0 8px 12px;}
 .block-docmycollection .doc-list > .doc-box > .btn > h4 {padding-right: 5px;}
-.block-docmycollection .doc-list > .doc-box .file-icon {margin-right: 2px;}
+.block-docmycollection .doc-list > .doc-box .file-icon {margin-right: 2px; margin-bottom: 2px;}
 .block-docmycollection .doc-list > .doc-box .plug-title {height: 16px; overflow: hidden;}
 
 .block-docmycollection.block-sm .doc-list > .doc-box {flex: 0 1 100%;}

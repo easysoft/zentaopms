@@ -18,7 +18,7 @@
 <div id="mainMenu" class="clearfix">
   <div id="leftBar" class="btn-toolbar pull-left">
     <?php echo $objectDropdown;?>
-    <?php $gobackLink = $this->session->docList ? $this->session->apiList : inlink('index', "libID=$libID&moduleID=$moduleID");?>
+    <?php $gobackLink = $this->session->structList ? $this->session->structList : inlink('index', "libID=$libID&moduleID=$moduleID");?>
     <?php echo html::a($gobackLink, "<i class='icon-back'></i> " . $lang->goback, '', "class='btn btn-link'");?>
   </div>
   <div class="btn-toolbar pull-right">
@@ -27,7 +27,8 @@
     if($libTree and common::hasPriv('api', 'releases'))      echo html::a($this->createLink('api', 'releases',      "libID=$libID", 'html', true), "<i class='icon-version muted'> </i>" . $lang->api->releases, '', "class='btn btn-link iframe' data-width='800px'");
     if($libTree and common::hasPriv('api', 'createRelease')) echo html::a($this->createLink('api', 'createRelease', "libID=$libID"), "<i class='icon-publish muted'> </i>" . $lang->api->createRelease, '', "class='btn btn-link iframe' data-width='800px'");
     if($libTree and common::hasPriv('api', 'export') and $config->edition != 'open') echo html::a($this->createLink('api', 'export', "libID=$libID&version=$version&release=$release&moduleID=$moduleID", 'html', true), "<i class='icon-export muted'> </i>" . $lang->export, '', "class='btn btn-link export' data-width='480px' id='export'");
-    if(common::hasPriv('api', 'createLib')) echo html::a($this->createLink('api', 'createLib',     "type=" . ($objectType ? $objectType : 'nolink') . "&objectID=$objectID"), '<i class="icon icon-plus"></i> ' . $lang->api->createLib, '', 'class="btn btn-secondary iframe" data-width="800px"');
+    if($objectType == 'api' and common::hasPriv('api', 'createLib')) echo html::a($this->createLink('api', 'createLib',     "type=" . ($objectType ? $objectType : 'nolink') . "&objectID=$objectID"), '<i class="icon icon-plus"></i> ' . $lang->api->createLib, '', 'class="btn btn-secondary iframe" data-width="800px"');
+    if($objectType != 'api' and common::hasPriv('doc', 'createLib')) echo html::a($this->createLink('doc', 'createLib', "type=" . ($objectType ? $objectType : 'nolink') . "&objectID=$objectID"), '<i class="icon icon-plus"></i> ' . $lang->api->createLib, '', 'class="btn btn-secondary iframe" data-width="800px"');
     if($libTree and common::hasPriv('api', 'create')) echo html::a($this->createLink('api', 'create',        "libID=$libID&moduleID=$moduleID"), '<i class="icon icon-plus"></i> ' . $lang->api->createApi, '', 'class="btn btn-primary"');
   ?>
   </div>
