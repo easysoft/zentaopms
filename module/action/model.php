@@ -412,6 +412,11 @@ class actionModel extends model
                 $title = $this->dao->select('title')->from(TABLE_PRODUCTPLAN)->where('id')->eq($action->extra)->fetch('title');
                 if($title) $action->extra = common::hasPriv('productplan', 'view') ? html::a(helper::createLink('productplan', 'view', "planID=$action->extra"), $title) : $title;
             }
+            elseif($actionName == 'linked2roadmap' and $action->objectType == 'story')
+            {
+                $name = $this->dao->select('name')->from(TABLE_ROADMAP)->where('id')->eq($action->extra)->fetch('name');
+                if($name) $action->extra = common::hasPriv('roadmap', 'view') ? html::a(helper::createLink('roadmap', 'view', "roadmapID=$action->extra"), $name) : $name;
+            }
             elseif($actionName == 'linked2build')
             {
                 $name = $this->dao->select('name')->from(TABLE_BUILD)->where('id')->eq($action->extra)->fetch('name');
@@ -475,6 +480,11 @@ class actionModel extends model
             {
                 $title = $this->dao->select('title')->from(TABLE_PRODUCTPLAN)->where('id')->eq($action->extra)->fetch('title');
                 if($title) $action->extra = common::hasPriv('productplan', 'view') ? html::a(helper::createLink('productplan', 'view', "planID=$action->extra"), "#$action->extra " . $title) : "#$action->extra " . $title;
+            }
+            elseif($actionName == 'unlinkedfromroadmap' and $action->objectType == 'story')
+            {
+                $name = $this->dao->select('name')->from(TABLE_ROADMAP)->where('id')->eq($action->extra)->fetch('name');
+                if($name) $action->extra = common::hasPriv('roadmap', 'view') ? html::a(helper::createLink('roadmap', 'view', "roadmapID=$action->extra"), "#$action->extra " . $name) : "#$action->extra " . $name;
             }
             elseif($actionName == 'unlinkedfromtesttask')
             {
