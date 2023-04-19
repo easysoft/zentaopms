@@ -760,7 +760,7 @@ class upgradeModel extends model
                 $this->updateDatasetPriv();
                 $this->processChart();
                 $this->processReport();
-                $this->processDashboard();
+                //$this->processDashboard();
         }
     }
 
@@ -8502,7 +8502,13 @@ class upgradeModel extends model
                 $component->chartConfig = $chartConfig;
                 $component->option      = json_decode(zget($this->config->screen->chartOption, $chartType));
                 if(isset($component->option->title->text)) $component->option->title->text = $chart->name;
-                $component = $this->screen->getChartOption($chart, $component, json_decode($chart->filters, true));
+
+                $chart->fields   = json_encode($chart->fieldSettings);
+                $chart->settings = json_encode($chart->settings);
+                $chart->langs    = json_encode($chart->langs);
+
+                $chartFilters = !empty($chart->filters) ? json_decode($chart->filters, true) : array();
+                $component    = $this->screen->getChartOption($chart, $component, $chartFilters);
             }
 
             $componentList[] = $component;
@@ -9033,37 +9039,40 @@ class upgradeModel extends model
             }
 
             /* Process settings. */
-            $params   = json_decode($report->params);
-            $settings = new stdclass();
-            $settings->group1      = $params->group1;
-            $settings->group2      = $params->group2;
-            $settings->columnTotal = 'sum';
-
-            $columns = array();
-            foreach($params->reportField as $index => $field)
+            if($report->params)
             {
-                $column = new stdclass();
-                $column->field      = $field;
-                $column->slice      = $field;
-                $column->stat       = isset($params->reportType) ? zget($params->reportType, $index, 'noStat') : 'noStat';
-                $column->showTotal  = (isset($params->reportTotal) && zget($params->reportTotal, $index, '') == '1') ? 'sum' : 'noShow';
-                $column->showMode   = (isset($params->percent) && zget($params->percent, $index, '') == '1' && isset($params->contrast) && zget($params->contrast, $index, '') == 'crystalTotal') ? 'total' : 'default';
-                $column->monopolize = isset($params->showAlone) ? zget($params->showAlone, $index, '0') : '0';
+                $params = json_decode($report->params);
 
-                if($column->stat == 'sum')
+                $settings = new stdclass();
+                $settings->group1      = $params->group1;
+                $settings->group2      = $params->group2;
+                $settings->columnTotal = 'sum';
+
+                $columns = array();
+                foreach($params->reportField as $index => $field)
                 {
-                    $sumAppend = isset($params->sumAppend) ? zget($params->sumAppend, $index, $field) : $field;
+                    $column = new stdclass();
+                    $column->field      = $field;
+                    $column->slice      = $field;
+                    $column->stat       = isset($params->reportType) ? zget($params->reportType, $index, 'noStat') : 'noStat';
+                    $column->showTotal  = (isset($params->reportTotal) && zget($params->reportTotal, $index, '') == '1') ? 'sum' : 'noShow';
+                    $column->showMode   = (isset($params->percent) && zget($params->percent, $index, '') == '1' && isset($params->contrast) && zget($params->contrast, $index, '') == 'crystalTotal') ? 'total' : 'default';
+                    $column->monopolize = isset($params->showAlone) ? zget($params->showAlone, $index, '0') : '0';
 
-                    if($sumAppend == $field) $column->slice = 'noSlice';
-                    if($sumAppend != $field) $column->field = $sumAppend;
+                    if($column->stat == 'sum')
+                    {
+                        $sumAppend = isset($params->sumAppend) ? zget($params->sumAppend, $index, $field) : $field;
+
+                        if($sumAppend == $field) $column->slice = 'noSlice';
+                        if($sumAppend != $field) $column->field = $sumAppend;
+                    }
+
+                    $columns[] = $column;
                 }
-
-                $columns[] = $column;
+                $settings->columns = $columns;
             }
-            $settings->columns = $columns;
 
             /* Process fieldSettings. */
-
             $sql = $data->sql;
             if(!empty($filters))
             {

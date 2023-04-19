@@ -429,7 +429,6 @@ $config->delete['18_4'][] = 'module/report/js/bugcreate.js';
 $config->delete['18_4'][] = 'module/report/js/productsummary.js';
 $config->delete['18_4'][] = 'module/report/js/projectdeviation.js';
 $config->delete['18_4'][] = 'module/report/js/workload.js';
-$config->delete['18_4'][] = 'module/report/view/blockreportlist.html.php';
 $config->delete['18_4'][] = 'module/report/view/bugassign.html.php';
 $config->delete['18_4'][] = 'module/report/view/bugcreate.html.php';
 $config->delete['18_4'][] = 'module/report/view/preview.html.php';
