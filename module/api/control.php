@@ -195,7 +195,11 @@ class api extends control
         $this->view->libID          = $libID;
         $this->view->apiID          = $apiID;
         $this->view->crumbs         = $crumbs;
+        $this->view->moduleID       = $moduleID;
+        $this->view->objectType     = $type;
+        $this->view->objectID       = $this->objectID;
         $this->view->users          = $this->user->getPairs('noclosed,noletter');
+        $this->view->libTree        = $this->doc->getLibTree($libID, $libs, 'api', $moduleID);
         $this->view->moduleTree     = $this->doc->getApiModuleTree($libID, $apiID, $release, $moduleID);
         $this->view->objectDropdown = $this->generateLibsDropMenu($libs[$libID], $release);
         $this->display();

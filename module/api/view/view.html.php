@@ -11,48 +11,35 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
+<?php include '../../common/view/kindeditor.html.php';?>
 <?php js::set('confirmDelete', $lang->api->confirmDelete);?>
-<div class="cell<?php if($browseType == 'bySearch') echo ' show';?>" id="queryBox" data-module=<?php echo 'api';?>></div>
-<div class="fade main-row split-row" id="mainRow">
-  <?php if($libID):?>
-  <?php $sideWidth = common::checkNotCN() ? '270' : '238';?>
-  <div class="side-col" style="width:<?php echo $sideWidth;?>px" data-min-width="<?php echo $sideWidth;?>">
-    <div class="cell" style="min-height: 286px; overflow: visible;">
-      <div id='title'>
-        <li class='menu-title'>
-          <div class="title"><?php echo $this->lang->api->module;?></div>
-        </li>
-        <?php
-        $canTreeBrowse   = common::hasPriv('tree', 'browse');
-        $canViewReleases = common::hasPriv('api', 'releases');
-        $canEditLib      = common::hasPriv('api', 'editLib');
-        $canDeleteLib    = common::hasPriv('api', 'deleteLib');
-        $haveMoreButton  = ($canTreeBrowse or $canViewReleases or $canEditLib or $canDeleteLib);
-
-        if(!$isRelease and $haveMoreButton)
-        {
-            echo "<div class='menu-actions'>";
-            echo html::a('javascript:;', "<i class='icon icon-ellipsis-v'></i>", '', "data-toggle='dropdown' class='btn btn-link'");
-            echo "<ul class='dropdown-menu pull-right'>";
-            if($canTreeBrowse) echo '<li>' . html::a($this->createLink('tree', 'browse', "rootID=$libID&view=api", '', true), '<i class="icon-cog-outline"></i> ' . $this->lang->api->manageType, '', "class='iframe' data-width='1200px'") . '</li>';
-            if($canViewReleases) echo '<li>' . html::a($this->createLink('api', 'releases', "libID=$libID", '', true), '<i class="icon-version"></i> ' . $this->lang->api->managePublish, '', "class='iframe'") . '</li>';
-            echo "<li class='divider'></li>";
-            if($canEditLib) echo '<li>' . html::a($this->createLink('api', 'editLib', "rootID=$libID"), '<i class="icon-edit"></i> ' . $lang->api->editLib, '', "class='iframe'") . '</li>';
-            if($canDeleteLib) echo '<li>' . html::a($this->createLink('api', 'deleteLib', "rootID=$libID"), '<i class="icon-trash"></i> ' . $lang->api->deleteLib, 'hiddenwin') . '</li>';
-            echo '</ul></div>';
-        }
-        ?>
-      </div>
-      <?php if(!$moduleTree):?>
-      <hr class="space">
-      <?php if(!$isRelease):?>
-      <div class="text-center text-muted tips"><?php echo $lang->api->noModule;?></div>
-      <?php endif;?>
-      <?php endif;?>
-      <?php echo $moduleTree;?>
-    </div>
+<?php js::set('treeData', $libTree);?>
+<style>.panel-body{min-height: 180px}</style>
+<div id="mainMenu" class="clearfix">
+  <div id="leftBar" class="btn-toolbar pull-left">
+    <?php echo $objectDropdown;?>
+    <?php $gobackLink = $this->session->docList ? $this->session->apiList : inlink('index', "libID=$libID&moduleID=$moduleID");?>
+    <?php echo html::a($gobackLink, "<i class='icon-back'></i> " . $lang->goback, '', "class='btn btn-link'");?>
   </div>
-  <?php endif;?>
-  <?php include 'apilist.html.php';?>
+  <div class="btn-toolbar pull-right">
+  <?php
+    if($libTree and common::hasPriv('api', 'struct'))        echo html::a($this->createLink('api', 'struct',        "libID=$libID"), "<i class='icon-treemap muted'> </i>" . $lang->api->struct, '', "class='btn btn-link'");
+    if($libTree and common::hasPriv('api', 'releases'))      echo html::a($this->createLink('api', 'releases',      "libID=$libID", 'html', true), "<i class='icon-version muted'> </i>" . $lang->api->releases, '', "class='btn btn-link iframe' data-width='800px'");
+    if($libTree and common::hasPriv('api', 'createRelease')) echo html::a($this->createLink('api', 'createRelease', "libID=$libID"), "<i class='icon-publish muted'> </i>" . $lang->api->createRelease, '', "class='btn btn-link iframe' data-width='800px'");
+    if($libTree and common::hasPriv('api', 'export') and $config->edition != 'open') echo html::a($this->createLink('api', 'export', "libID=$libID&version=$version&release=$release&moduleID=$moduleID", 'html', true), "<i class='icon-export muted'> </i>" . $lang->export, '', "class='btn btn-link export' data-width='480px' id='export'");
+    if(common::hasPriv('api', 'createLib')) echo html::a($this->createLink('api', 'createLib',     "type=" . ($objectType ? $objectType : 'nolink') . "&objectID=$objectID"), '<i class="icon icon-plus"></i> ' . $lang->api->createLib, '', 'class="btn btn-secondary iframe" data-width="800px"');
+    if($libTree and common::hasPriv('api', 'create')) echo html::a($this->createLink('api', 'create',        "libID=$libID&moduleID=$moduleID"), '<i class="icon icon-plus"></i> ' . $lang->api->createApi, '', 'class="btn btn-primary"');
+  ?>
+  </div>
+</div>
+<div id='mainContent' class="fade flex">
+  <div id='sideBar' class="panel side side-col col overflow-auto" data-min-width="150">
+    <?php include '../../doc/view/lefttree.html.php';?>
+  </div>
+  <div class="sidebar-toggle flex-center"><i class="icon icon-angle-left"></i></div>
+  <div class="main-col flex-full overflow-visible flex-auto overflow-visible" data-min-width="500">
+    <div class="cell<?php if($browseType == 'bySearch') echo ' show';?>" style="min-width: 400px" id="queryBox" data-module='api'></div>
+    <?php include 'apilist.html.php';?>
+  </div>
 </div>
 <?php include '../../common/view/footer.html.php';?>
