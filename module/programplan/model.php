@@ -733,15 +733,16 @@ class programplanModel extends model
             if($setPercent) $plan->percent = $percents[$key];
             $plan->attribute  = (empty($parentID) or $parentAttribute == 'mix') ? $attributes[$key] : $parentAttribute;
             $plan->milestone  = $milestone[$key];
-            $plan->begin      = empty($begin[$key]) ? '0000-00-00' : $begin[$key];
-            $plan->end        = empty($end[$key]) ? '0000-00-00' : $end[$key];
-            $plan->realBegan  = empty($realBegan[$key]) ? '0000-00-00' : $realBegan[$key];
-            $plan->realEnd    = empty($realEnd[$key]) ? '0000-00-00' : $realEnd[$key];
             $plan->output     = empty($output[$key]) ? '' : implode(',', $output[$key]);
             $plan->acl        = empty($parentID) ? $acl[$key] : $parentACL;
             $plan->PM         = empty($PM[$key]) ? '' : $PM[$key];
             $plan->desc       = empty($desc[$key]) ? '' : $desc[$key];
             $plan->hasProduct = $project->hasProduct;
+
+            if(!empty($begin[$key]))     $plan->begin     = $begin[$key];
+            if(!empty($end[$key]))       $plan->end       = $end[$key];
+            if(!empty($realBegan[$key])) $plan->realBegan = $realBegan[$key];
+            if(!empty($realEnd[$key]))   $plan->realEnd   = $realEnd[$key];
 
             $datas[] = $plan;
         }
@@ -1163,14 +1164,14 @@ class programplanModel extends model
         $this->lang->project->code = $this->lang->execution->code;
 
         $relatedExecutionsID = $this->loadModel('execution')->getRelatedExecutions($planID);
-        $relatedExecutionsID = !empty($relatedExecutionsID) ? implode(',', array_keys($relatedExecutionsID)) : '';
+        $relatedExecutionsID = !empty($relatedExecutionsID) ? implode(',', array_keys($relatedExecutionsID)) : '0';
 
         $this->dao->update(TABLE_PROJECT)->data($plan)
             ->autoCheck()
             ->batchCheck($this->config->programplan->edit->requiredFields, 'notempty')
             ->checkIF($plan->end != '0000-00-00', 'end', 'ge', $plan->begin)
-            ->checkIF($plan->percent != false, 'percent', 'float')
-            ->checkIF(!empty($plan->name), 'name', 'unique', "id in ('{$relatedExecutionsID}') and type in ('sprint','stage') and `project` = {$oldPlan->project} and `deleted` = '0'" . ($parentStage ? " and `parent` = {$oldPlan->parent}" : ''))
+            ->checkIF(!empty($plan->percent), 'percent', 'float')
+            ->checkIF(!empty($plan->name), 'name', 'unique', "id in ({$relatedExecutionsID}) and type in ('sprint','stage') and `project` = {$oldPlan->project} and `deleted` = '0'" . ($parentStage ? " and `parent` = {$oldPlan->parent}" : ''))
             ->checkIF(!empty($plan->code) and $setCode, 'code', 'unique', "id != $planID and type in ('sprint','stage','kanban') and `deleted` = '0'")
             ->where('id')->eq($planID)
             ->exec();

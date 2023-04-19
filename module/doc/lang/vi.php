@@ -57,6 +57,7 @@ $lang->doc->moduleDoc     = 'By Module';
 $lang->doc->searchDoc     = 'Tìm kiếm';
 $lang->doc->fast          = 'Quick Entry';
 $lang->doc->allDoc        = 'Tất cả tài liệu';
+$lang->doc->allVersion    = 'All Versions';
 $lang->doc->openedByMe    = 'Của bạn';
 $lang->doc->editedByMe    = 'Edited By Me';
 $lang->doc->orderByOpen   = 'Recent Added';

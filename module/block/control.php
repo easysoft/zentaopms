@@ -2200,10 +2200,32 @@ class block extends control
         $this->session->set('docList', $this->createLink('doc', 'index'), 'doc');
 
         /* Set project status and count. */
-        $count         = isset($this->params->count) ? (int)$this->params->count : 15;
-        $involveds     = $this->loadModel('program')->getProjectList('0', 'all', 0, 'order_asc', null, 0, $involved = 1);
-        $projects      = $this->program->getProjectList('0', 'all', 0, 'order_asc');
-        $projectIdList = array_merge(array_keys($projects), array_keys($involveds));
+        $count    = isset($this->params->count) ? (int)$this->params->count : 15;
+        $projects = $this->dao->select('*')->from(TABLE_PROJECT)
+            ->where('deleted')->eq('0')
+            ->andWhere('vision')->eq($this->config->vision)
+            ->andWhere('type')->eq('project')
+            ->andWhere('model')->ne('kanban')
+            ->beginIF(!$this->app->user->admin)->andWhere('t1.id')->in($this->app->user->view->projects)->fi()
+            ->orderBy('order_asc,id_desc')
+            ->fetchAll('id');
+
+        $involveds = $this->dao->select('t1.*')->from(TABLE_PROJECT)->alias('t1')
+            ->leftJoin(TABLE_TEAM)->alias('t2')->on('t1.id=t2.root')
+            ->where('t1.deleted')->eq('0')
+            ->andWhere('t1.vision')->eq($this->config->vision)
+            ->andWhere('t1.type')->eq('project')
+            ->andWhere('t1.model')->ne('kanban')
+            ->andWhere('t2.type')->eq('project')
+            ->beginIF(!$this->app->user->admin)->andWhere('t1.id')->in($this->app->user->view->projects)->fi()
+            ->andWhere('t1.openedBy', true)->eq($this->app->user->account)
+            ->orWhere('t1.PM')->eq($this->app->user->account)
+            ->orWhere('t2.account')->eq($this->app->user->account)
+            ->markRight(1)
+            ->orderBy('t1.order_asc,t1.id_desc')
+            ->fetchAll('id');
+
+        $projectIdList = array_keys($projects);
 
         $stmt = $this->dao->select('t1.id,t1.lib,t1.title,t1.type,t1.addedBy,t1.addedDate,t1.editedDate,t1.status,t1.acl,t1.groups,t1.users,t1.deleted,if(t1.project = 0, t2.project, t1.project) as project')->from(TABLE_DOC)->alias('t1')
             ->leftJoin(TABLE_EXECUTION)->alias('t2')->on('t1.execution=t2.id')
@@ -2211,8 +2233,8 @@ class block extends control
             ->andWhere('t2.deleted', true)->eq(0)
             ->orWhere('t2.deleted is null')
             ->markRight(1)
-            ->andWhere('t1.project',true)->in($projectIdList)
-            ->orWhere('t2.project',true)->in($projectIdList)
+            ->andWhere('t1.project', true)->in($projectIdList)
+            ->orWhere('t2.project')->in($projectIdList)
             ->markRight(1)
             ->orderBy('project,t1.status,t1.editedDate_desc')
             ->query();

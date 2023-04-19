@@ -53,6 +53,7 @@ html[lang="de"] .block-productdoc .c-user{width: 105px;}
 
 .block-productdoc #productType {position: absolute;top: 6px;left: 120px;}
 .block-productdoc #productType .btn {border:0px;}
+.block-productdoc #productType .btn:hover {background-color:#f5f5f5;}
 
 .block-productdoc .table .c-name > .doc-title {display: inline-block; overflow: hidden; background: transparent; padding-right:0px;}
 .block-productdoc .table .c-name > span.doc-title {line-height: 0; vertical-align: inherit;}

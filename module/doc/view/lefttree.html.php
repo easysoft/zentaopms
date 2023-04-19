@@ -12,21 +12,21 @@
 
 /* css for tree */
 #fileTree .title {font-size: 16px; height: 20px; margin-top: 5px; margin-bottom: 5px;}
-#fileTree .tree li.has-list.open:before {content: unset;}
-#fileTree .tree li > a {max-width: 100%; padding: 2px;}
+#fileTree.tree li.has-list.open:before {content: unset;}
+#fileTree.tree li > a {max-width: 100%; padding: 2px;}
 .file-tree  a {height: 30px;}
 .flex-between {display: flex; align-items: center; justify-content: space-between;}
 .flex-center {display: flex; align-items: center; justify-content: center;}
 .flex-start {display: flex; align-items: center;}
-#fileTree .tree li > .list-toggle {top: 4px;}
+#fileTree.tree li > .list-toggle {top: 4px;}
 .input-tree {width: 120px;}
 .tree-icon {position: absolute; right: 0;}
-#fileTree .tree li.has-input {overflow: hidden;}
-#fileTree .tree li.has-input  > input.input-bro {margin-left: 15px;}
+#fileTree.tree li.has-input {overflow: hidden;}
+#fileTree.tree li.has-input  > input.input-bro {margin-left: 15px;}
 .img-lib {flex: 0 0 14px; height: 14px; margin-right: 5px; margin-bottom: 2px;}
 .file-icon {width: 14px; margin-bottom: 4px;}
 .tree-icon {position: absolute; right: 0;}
-#fileTree .tree li > a {max-width: 100%; padding: 2px;}
+#fileTree.tree li > a {max-width: 100%; padding: 2px;}
 .file-tree  a.show-icon > div,
 .file-tree  a.hover > div {padding-right: 15px;}
 .tree-text {overflow: hidden; min-width: 50px;}
