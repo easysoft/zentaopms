@@ -1045,6 +1045,8 @@ CHANGE `editedBy` `editedBy` char(30) NOT NULL DEFAULT '',
 CHANGE `editedDate` `editedDate` datetime NULL;
 
 ALTER TABLE `zt_workflowfield`
+CHANGE `default` `default` varchar(100) NOT NULL DEFAULT '',
+CHANGE `rules` `rules` varchar(255) NOT NULL DEFAULT '',
 CHANGE `expression` `expression` text NULL,
 CHANGE `placeholder` `placeholder` varchar(100) NOT NULL DEFAULT '',
 CHANGE `desc` `desc` text NULL,
