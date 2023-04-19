@@ -1,3 +1,4 @@
+DELETE FROM `zt_chart` where id = '1048';
 DROP TABLE IF EXISTS `zt_dimension`;
 CREATE TABLE IF NOT EXISTS `zt_dimension` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
