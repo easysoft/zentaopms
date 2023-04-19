@@ -134,6 +134,7 @@ $lang->testcase->groupCase               = "Nach Gruppe";
 $lang->testcase->zeroCase                = "Storys ohne Fälle";
 $lang->testcase->import                  = "Importieren";
 $lang->testcase->importAction            = "Import Case";
+$lang->testcase->importCaseAction        = "Import Case";
 $lang->testcase->fileImport              = "Importiere CSV";
 $lang->testcase->importFromLib           = "Import aus Bibliothek";
 $lang->testcase->showImport              = "Import Anzeigen";
