@@ -606,6 +606,9 @@ CHANGE `assignedBy` `assignedBy` char(30) NOT NULL DEFAULT '',
 CHANGE `assignedDate` `assignedDate` datetime NULL;
 
 ALTER TABLE `zt_kanbanlane`
+ALTER TABLE `zt_kanbanlane`
+CHANGE `groupby` `groupby` char(30) NOT NULL DEFAULT '',
+CHANGE `extra` `extra` char(30) NOT NULL DEFAULT '',
 CHANGE `lastEditedTime` `lastEditedTime` datetime NULL;
 
 ALTER TABLE `zt_kanbanregion`
@@ -705,6 +708,7 @@ CHANGE `assignedTo` `assignedTo` varchar(30) NOT NULL DEFAULT '',
 CHANGE `reviewers` `reviewers` text NULL;
 
 ALTER TABLE `zt_pipeline`
+CHANGE `password` `password` varchar(255) NULL,
 CHANGE `editedBy` `editedBy` varchar(30) NOT NULL DEFAULT '',
 CHANGE `editedDate` `editedDate` datetime NULL;
 
@@ -769,6 +773,14 @@ CHANGE `editedDate` `editedDate` datetime NULL;
 ALTER TABLE `zt_researchreport`
 CHANGE `editedBy` `editedBy` varchar(30) NOT NULL DEFAULT '',
 CHANGE `editedDate` `editedDate` datetime NULL;
+
+ALTER TABLE `zt_repo`
+CHANGE `commits` `commits` mediumint unsigned NOT NULL DEFAULT '0';
+CHANGE `account` `account` varchar(30) NOT NULL DEFAULT '',
+CHANGE `password` `password` varchar(30) NOT NULL DEFAULT '';
+CHANGE `lastSync` `lastSync` datetime NULL,
+CHANGE `job` `job` mediumint unsigned NOT NULL DEFAULT '0',
+CHANGE `deleted` `deleted` tinyint(1) NOT NULL DEFAULT '0';
 
 ALTER TABLE `zt_review`
 CHANGE `reviewedBy` `reviewedBy` varchar(255) NOT NULL DEFAULT '',
