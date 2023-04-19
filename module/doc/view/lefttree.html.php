@@ -182,6 +182,7 @@ $(function()
     };
 
     var versionsData = {};
+    var visibleSort  = false;
 
     /**
      * Render Dropdown dom.
@@ -313,7 +314,6 @@ $(function()
         var $leaf = ele.find('li.active > a');
         if($leaf.length && $('#fileTree').height() >= $('#sideBar').height()) $('#sideBar')[0].scrollTop = $($leaf[$leaf.length - 1]).offset().top - 100;
 
-        var visibleSort = false;
         ele.on('click', '.icon-drop', function(e)
         {
             var $icon = $(this);
