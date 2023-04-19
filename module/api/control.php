@@ -148,14 +148,14 @@ class api extends control
      * @param  int    $libID
      * @param  int    $apiID
      * @param  int    $moduleID
-     * @param  int    $release
      * @param  int    $version
+     * @param  int    $release
      * @access public
      * @return void
      */
-    public function view($libID, $apiID, $moduleID = 0, $release = 0, $version = 0)
+    public function view($libID, $apiID, $moduleID = 0, $version = 0, $release = 0)
     {
-        if(!strpos($this->server->http_referer, 'space') and !strpos($this->server->http_referer, 'index') and !strpos($this->server->http_referer, 'view')) setCookie("docSpaceParam", '', $this->config->cookieLife, $this->config->webRoot, '', false, true);
+        if(!strpos($this->server->http_referer, 'space') and !strpos($this->server->http_referer, 'api')) setCookie("docSpaceParam", '', $this->config->cookieLife, $this->config->webRoot, '', false, true);
 
         /* Get all api doc libraries. */
         $libs = $this->doc->getApiLibs($libID);
@@ -207,6 +207,7 @@ class api extends control
         $this->view->libs           = $libs;
         $this->view->isRelease      = $release > 0;
         $this->view->release        = $release;
+        $this->view->version        = $version;
         $this->view->libID          = $libID;
         $this->view->apiID          = $apiID;
         $this->view->moduleID       = $moduleID;

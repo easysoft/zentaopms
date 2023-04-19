@@ -256,7 +256,6 @@ $(function()
             'ppt'       : 'ppt',
             'excel'     : 'excel'
         };
-        console.log(treeData)
 
         ele.tree(
         {
