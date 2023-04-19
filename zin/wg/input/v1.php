@@ -25,9 +25,10 @@ class input extends wg
 
     protected function build()
     {
-        $props = $this->props->toJsonData();
+        $props    = $this->props->skip('required');
+        $required = $this->prop('required');
         if(!$this->hasProp('id') && isset($props['name'])) $props['id'] = $props['name'];
         if(is_bool($props['autocomplete'])) $props['autocomplete'] = $props['autocomplete'] ? 'on' : 'off';
-        return h::input(set($props));
+        return h::input(set($props), $required ? setClass('is-required') : NULL);
     }
 }
