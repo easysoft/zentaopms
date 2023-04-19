@@ -163,22 +163,22 @@ foreach(explode(',', $config->story->create->requiredFields) as $field)
           <?php endif;?>
           <tr class='sourceBox <?php echo $hiddenSource;?>'>
             <th><?php echo $lang->story->source;?></th>
-            <td colspan='2'>
+            <td colspan='<?php echo $showFeedbackBox ? 1 : 2;?>'>
               <?php echo html::select('source', $lang->story->sourceList, $source, "class='form-control chosen'");?>
             </td>
-            <td colspan="2" class="sourceTd">
+            <td colspan="<?php echo $showFeedbackBox ? 1 : 2;?>" class="sourceTd">
               <div class="input-group">
                 <div class='input-group-addon' id='sourceNoteBox'><?php echo $lang->story->sourceNote;?></div>
                 <?php echo html::input('sourceNote', $sourceNote, "class='form-control'");?>
               </div>
             </td>
-            <td colspan="2" id='feedbackBox' class='hidden'>
+            <td colspan="2" id='feedbackBox' class='<?php if(!$showFeedbackBox) echo 'hidden';?>'>
               <div class="input-group">
                 <div class="input-group">
                   <div class="input-group-addon" style="min-width: 77px;"><?php echo $lang->story->feedbackBy;?></div>
-                  <?php echo html::input('feedbackBy', '', "class='form-control'");?>
+                  <?php echo html::input('feedbackBy', $feedbackBy, "class='form-control'");?>
                   <span class='input-group-addon'><?php echo $lang->story->notifyEmail;?></span>
-                  <?php echo html::input('notifyEmail', '', "class='form-control'");?>
+                  <?php echo html::input('notifyEmail', $notifyEmail, "class='form-control'");?>
                 </div>
               </div>
             </td>
@@ -189,7 +189,7 @@ foreach(explode(',', $config->story->create->requiredFields) as $field)
             <td colspan='2' id='assignedToBox'>
               <?php echo html::select('assignedTo', $hiddenProduct ? $teamUsers : $users, '', "class='form-control picker-select'");?>
             </td>
-            <td colspan="2" class="sourceTd <?php echo $hiddenSource?> sourceBox">
+            <td colspan="<?php echo $showFeedbackBox ? 1 : 2;?>" class="sourceTd <?php echo $hiddenSource?> sourceBox">
               <div class="input-group">
                 <div class="input-group">
                   <div class="input-group-addon" style="min-width: 77px;"><?php echo $lang->story->source;?></div>

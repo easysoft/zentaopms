@@ -2166,7 +2166,7 @@ class block extends control
         while($doc = $stmt->fetch())
         {
             if(!isset($docGroup[$doc->product])) $docGroup[$doc->product] = array();
-            if(count($docGroup[$doc->product]) > $count) break;
+            if(count($docGroup[$doc->product]) >= $count) continue;
             if($this->doc->checkPrivDoc($doc)) $docGroup[$doc->product][$doc->id] = $doc;
         }
 
@@ -2208,7 +2208,7 @@ class block extends control
         while($doc = $stmt->fetch())
         {
             if(!isset($docGroup[$doc->project])) $docGroup[$doc->project] = array();
-            if(count($docGroup[$doc->project]) > $count) break;
+            if(count($docGroup[$doc->project]) >= $count) continue;
             if($this->doc->checkPrivDoc($doc)) $docGroup[$doc->project][$doc->id] = $doc;
         }
 

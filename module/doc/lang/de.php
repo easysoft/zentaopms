@@ -86,6 +86,7 @@ $lang->doc->addedByAB    = 'CreatedBy';
 $lang->doc->addedDate    = 'CreatedDate';
 $lang->doc->editedBy     = 'Bearbeitet von';
 $lang->doc->editedDate   = 'UpdatedDate';
+$lang->doc->editingDate  = 'Editing user and time';
 $lang->doc->lastEditedBy = 'Last Editor';
 $lang->doc->version      = 'Version';
 $lang->doc->basicInfo    = 'Basis Info';
