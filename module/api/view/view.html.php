@@ -14,6 +14,7 @@
 <?php include '../../common/view/kindeditor.html.php';?>
 <?php js::set('confirmDelete', $lang->api->confirmDelete);?>
 <?php js::set('treeData', $libTree);?>
+<?php js::set('apiID', $apiID);?>
 <style>.panel-body{min-height: 180px}</style>
 <div id="mainMenu" class="clearfix">
   <div id="leftBar" class="btn-toolbar pull-left">

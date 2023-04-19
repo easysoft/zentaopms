@@ -247,15 +247,16 @@ $(function()
     function initTree(ele, treeData)
     {
         var imgObj = {
-            'annex': 'annex',
-            'api': 'interface',
-            'lib': 'wiki',
-            'execution': 'wiki-file-lib',
-            'text': 'wiki-file',
-            'word': 'word',
-            'ppt': 'ppt',
-            'excel': 'excel'
+            'annex'     : 'annex',
+            'api'       : 'interface',
+            'lib'       : 'wiki',
+            'execution' : 'wiki-file-lib',
+            'text'      : 'wiki-file',
+            'word'      : 'word',
+            'ppt'       : 'ppt',
+            'excel'     : 'excel'
         };
+        console.log(treeData)
 
         ele.tree(
         {
@@ -443,6 +444,8 @@ $(function()
     }
     else
     {
+        config.currentModule = 'doc';
+        config.currentMethod = 'projectspace';
         initTree($('#projectTree'), treeData.project);
         initTree($('#annexTree'), treeData.annex);
         if(treeData.execution&& treeData.execution.length)

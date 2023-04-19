@@ -45,6 +45,7 @@ class api extends control
         {
             $this->session->set('spaceType', 'api', 'doc');
             $this->session->set('structList', inLink('index', "libID=$libID&moduleID=$moduleID"), 'doc');
+            setCookie("docSpaceParam", '', $this->config->cookieLife, $this->config->webRoot, '', false, true);
         }
 
         $this->setMenu($libID);
@@ -185,16 +186,8 @@ class api extends control
         $linkParams = "libID=$lib->id";
         if($methodName != 'index') $linkParams = "objectID=$linkObject&$linkParams";
 
-        $crumbs[]   = html::a(inLink($methodName, $linkParams), html::image("static/svg/interface.svg") . $lib->name);
-        $moduleList = $this->loadModel('tree')->getParents($api->module);
-        foreach($moduleList as $module)
-        {
-            $linkParams .= "&moduleID=$module->id";
-            $crumbs[]    = html::a(inLink($methodName, $linkParams), $module->name);
-        }
-
         $objectID = $this->objectID;
-        if(strpos($this->server->http_referer, 'space'))
+        if($this->cookie->docSpaceParam)
         {
             $docParam   = json_decode($this->cookie->docSpaceParam);
             $type       = $docParam->type;
@@ -218,9 +211,9 @@ class api extends control
         $this->view->release        = $release;
         $this->view->libID          = $libID;
         $this->view->apiID          = $apiID;
-        $this->view->crumbs         = $crumbs;
         $this->view->moduleID       = $moduleID;
         $this->view->objectType     = $type;
+        $this->view->type           = $type;
         $this->view->objectID       = $objectID;
         $this->view->users          = $this->user->getPairs('noclosed,noletter');
         $this->view->libTree        = $libTree;
@@ -680,7 +673,7 @@ class api extends control
             }
             else
             {
-                return print(js::locate(inlink('index', "libID=$api->lib&module=$api->module"), 'parent'));
+                return print(js::locate($this->session->structList ? $this->session->structList : inlink('index', "libID=$api->lib&module=$api->module"), 'parent'));
             }
         }
     }
