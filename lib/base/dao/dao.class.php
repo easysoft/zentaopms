@@ -1601,6 +1601,7 @@ class baseSQL
     {
         global $dbh;
         $this->dbh        = $dbh;
+        $this->data       = new stdclass();
         $this->magicQuote = (version_compare(phpversion(), '5.4', '<') and function_exists('get_magic_quotes_gpc') and get_magic_quotes_gpc());
     }
 
@@ -1790,8 +1791,8 @@ class baseSQL
 
         if($this->method == 'insert')
         {
-            $this->setField = $value;
-            $this->data->$value = '';
+            $this->setField = $set;
+            $this->data->$set = '';
         }
         else
         {
@@ -2093,7 +2094,7 @@ class baseSQL
     public function in($ids)
     {
         if($this->inCondition and !$this->conditionIsTrue) return $this;
-        $this->sql .= helper::dbIN($ids);
+        $this->sql .= $ids === NULL ? ' IS NULL' : helper::dbIN($ids);
         return $this;
     }
 

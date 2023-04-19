@@ -744,6 +744,9 @@ CHANGE `team` `team` varchar(90) NOT NULL DEFAULT '',
 CHANGE `whitelist` `whitelist` text NULL,
 CHANGE `order` `order` mediumint unsigned NOT NULL DEFAULT '0';
 
+ALTER TABLE `zt_projectstory`
+CHANGE `branch` `branch` mediumint unsigned NOT NULL DEFAULT '0';
+
 ALTER TABLE `zt_relation`
 CHANGE `project` `project` mediumint NOT NULL DEFAULT '0',
 CHANGE `product` `product` mediumint NOT NULL DEFAULT '0',
@@ -924,6 +927,8 @@ CHANGE `lastEditedBy` `lastEditedBy` char(30) NOT NULL DEFAULT '',
 CHANGE `lastEditedDate` `lastEditedDate` datetime NULL;
 
 ALTER TABLE `zt_testtask`
+CHANGE `report` `report` text NULL,
+CHANGE `testreport` `testreport` mediumint unsigned NOT NULL DEFAULT '0',
 CHANGE `realFinishedDate` `realFinishedDate` datetime NULL;
 
 ALTER TABLE `zt_ticket`
