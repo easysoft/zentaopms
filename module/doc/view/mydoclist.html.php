@@ -17,7 +17,7 @@ body {margin-bottom: 25px;}
 #docListForm th.c-actions {width: 84px; padding-left: 15px;}
 #docListForm .c-module, #docListForm .c-object {width: 120px; overflow: hidden; white-space: nowrap; text-overflow: clip;}
 #docListForm .c-object {width: 180px;}
-#docListForm .table .c-name > .doc-title {display: inline-block; overflow: hidden; background: transparent; padding-right:0px;}
+#docListForm .table .c-name > .doc-title {display: inline-block; overflow: hidden; background: transparent; padding-right:0px; max-width: calc(100% - 40px);}
 #docListForm .table .c-name > span.doc-title {line-height: 0; vertical-align: inherit;}
 #docListForm .table .c-name[data-status=draft] > .doc-title {max-width: calc(100% - 80px);}
 #docListForm .table .c-name > .draft {background-color:rgba(129, 102, 238, 0.12); color:#8166EE;}

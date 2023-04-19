@@ -2150,6 +2150,7 @@ class block extends control
     public function printProductDocBlock()
     {
         $this->loadModel('doc');
+        $this->session->set('docList', $this->createLink('doc', 'index'), 'doc');
 
         /* Set project status and count. */
         $count         = isset($this->params->count) ? (int)$this->params->count : 15;
@@ -2170,9 +2171,19 @@ class block extends control
             if($this->doc->checkPrivDoc($doc)) $docGroup[$doc->product][$doc->id] = $doc;
         }
 
+        $hasDataProducts = $hasDataInvolveds = array();
+        foreach($products as $productID => $product)
+        {
+            if(isset($docGroup[$productID]) and count($docGroup[$productID]) > 0)
+            {
+                $hasDataProducts[$productID] = $product;
+                if(isset($involveds[$productID])) $hasDataInvolveds[$productID] = $product;
+            }
+        }
+
         $this->view->users     = $this->loadModel('user')->getPairs('noletter');
-        $this->view->products  = $products;
-        $this->view->involveds = $involveds;
+        $this->view->products  = $hasDataProducts;
+        $this->view->involveds = $hasDataInvolveds;
         $this->view->docGroup  = $docGroup;
     }
 
@@ -2186,6 +2197,7 @@ class block extends control
     {
         $this->loadModel('doc');
         $this->app->loadLang('project');
+        $this->session->set('docList', $this->createLink('doc', 'index'), 'doc');
 
         /* Set project status and count. */
         $count         = isset($this->params->count) ? (int)$this->params->count : 15;
@@ -2212,9 +2224,19 @@ class block extends control
             if($this->doc->checkPrivDoc($doc)) $docGroup[$doc->project][$doc->id] = $doc;
         }
 
+        $hasDataProjects = $hasDataInvolveds = array();
+        foreach($projects as $projectID => $project)
+        {
+            if(isset($docGroup[$projectID]) and count($docGroup[$projectID]) > 0)
+            {
+                $hasDataProjects[$projectID] = $project;
+                if(isset($involveds[$projectID])) $hasDataInvolveds[$projectID] = $project;
+            }
+        }
+
         $this->view->users     = $this->loadModel('user')->getPairs('noletter');
-        $this->view->projects  = $projects;
-        $this->view->involveds = $involveds;
+        $this->view->projects  = $hasDataProjects;
+        $this->view->involveds = $hasDataInvolveds;
         $this->view->docGroup  = $docGroup;
     }
 

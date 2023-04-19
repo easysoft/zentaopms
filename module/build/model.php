@@ -253,7 +253,7 @@ class buildModel extends model
             $buildIdList = str_replace('trunk', '0', $buildIdList);
             $selectedBuilds = $this->dao->select('id, name')->from(TABLE_BUILD)
                 ->where('id')->in($buildIdList)
-                ->beginIF($products)->andWhere('product')->in($products)->fi()
+                ->beginIF($products)->andWhere('product')->in(array_keys($products))->fi()
                 ->beginIF($objectType === 'execution' and $objectID)->andWhere('execution')->eq($objectID)->fi()
                 ->beginIF($objectType === 'project' and $objectID)->andWhere('project')->eq($objectID)->fi()
                 ->beginIF(strpos($params, 'hasdeleted') === false)->andWhere('deleted')->eq(0)->fi()
@@ -261,7 +261,8 @@ class buildModel extends model
         }
         $branchPairs = $this->dao->select('id,name')->from(TABLE_BRANCH)->fetchPairs();
 
-        $shadows   = $this->dao->select('shadow')->from(TABLE_RELEASE)->where('product')->in($products)->fetchPairs('shadow', 'shadow');
+        $productIdList = is_array($products) ? array_keys($products) : $products;
+        $shadows   = $this->dao->select('shadow')->from(TABLE_RELEASE)->where('product')->in($productIdList)->fetchPairs('shadow', 'shadow');
         $branchs   = strpos($params, 'separate') === false ? "0,$branch" : $branch;
         $allBuilds = $this->dao->select('t1.id, t1.name, t1.branch, t1.execution, t1.date, t1.deleted, t2.status as objectStatus, t3.id as releaseID, t3.status as releaseStatus, t4.type as productType')->from(TABLE_BUILD)->alias('t1')
             ->beginIF($objectType === 'execution')->leftJoin(TABLE_EXECUTION)->alias('t2')->on('t1.execution = t2.id')->fi()
@@ -273,7 +274,7 @@ class buildModel extends model
             ->beginIF(strpos($params, 'hasdeleted') === false)->andWhere('t1.deleted')->eq(0)->fi()
             ->beginIF(strpos($params, 'hasproject') !== false)->andWhere('t1.project')->ne(0)->fi()
             ->beginIF(strpos($params, 'singled') !== false)->andWhere('t1.execution')->ne(0)->fi()
-            ->beginIF($products)->andWhere('t1.product')->in($products)->fi()
+            ->beginIF($products)->andWhere('t1.product')->in($productIdList)->fi()
             ->beginIF($objectType === 'execution' and $objectID)->andWhere('t1.execution')->eq($objectID)->fi()
             ->beginIF($objectType === 'project' and $objectID)->andWhere('t1.project')->eq($objectID)->fi()
             ->orderBy('t1.date desc, t1.id desc')->fetchAll('id');
@@ -334,7 +335,7 @@ class buildModel extends model
                 ->leftJoin(TABLE_BRANCH)->alias('t3')->on('FIND_IN_SET(t3.id, t1.branch)')
                 ->leftJoin(TABLE_PRODUCT)->alias('t4')->on('t1.product=t4.id')
                 ->where('t2.id')->in($buildIdList)
-                ->andWhere('t1.product')->in($products)
+                ->andWhere('t1.product')->in($productIdList)
                 ->andWhere('t1.deleted')->eq(0)
                 ->andWhere('t1.shadow')->ne(0)
                 ->fetchAll('id');

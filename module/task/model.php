@@ -128,6 +128,8 @@ class taskModel extends model
             ->stripTags($this->config->task->editor->create['id'], $this->config->allowedTags)
             ->join('mailto', ',')
             ->remove('after,files,labels,assignedTo,uid,storyEstimate,storyDesc,storyPri,team,teamSource,teamEstimate,teamConsumed,teamLeft,teamMember,multiple,teams,contactListMenu,selectTestStory,testStory,testPri,testEstStarted,testDeadline,testAssignedTo,testEstimate,sync,otherLane,region,lane,estStartedDitto,deadlineDitto')
+            ->removeIF(empty($this->post->estStarted), 'estStarted')
+            ->removeIF(empty($this->post->deadline), 'deadline')
             ->add('version', 1)
             ->get();
 
@@ -2318,7 +2320,7 @@ class taskModel extends model
             ->setDefault('assignedTo', '')
             ->setDefault('status', 'doing')
             ->setDefault('finishedBy, canceledBy, closedBy, closedReason', '')
-            ->setDefault('finishedDate, canceledDate, closedDate', '0000-00-00 00:00:00')
+            ->setDefault('finishedDate, canceledDate, closedDate', null)
             ->setDefault('lastEditedBy',   $this->app->user->account)
             ->setDefault('lastEditedDate', helper::now())
             ->setDefault('assignedDate', helper::now())
@@ -2403,6 +2405,12 @@ class taskModel extends model
             ->andWhere('t1.vision')->eq($this->config->vision)
             ->fetch();
         if(!$task) return false;
+        $task->openedDate     = substr($task->openedDate, 0, 19);
+        $task->finishedDate   = substr($task->finishedDate, 0, 19);
+        $task->canceledDate   = substr($task->canceledDate, 0, 19);
+        $task->closedDate     = substr($task->closedDate, 0, 19);
+        $task->lastEditedDate = substr($task->lastEditedDate, 0, 19);
+        $task->realStarted    = substr($task->realStarted, 0, 19);
 
         $children = $this->dao->select('*')->from(TABLE_TASK)->where('parent')->eq($taskID)->andWhere('deleted')->eq(0)->fetchAll('id');
         $task->children = $children;

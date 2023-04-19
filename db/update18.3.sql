@@ -253,6 +253,11 @@ INNER JOIN  zt_project AS t2 ON t1.`project` = t2.`id`
 SET t1.`addedDate` = t2.`openedDate`, t1.`addedBy` = t2.`openedBy`
 WHERE t1.`type` = 'project' AND t1.`main` = '1';
 
+UPDATE zt_doc AS t1
+INNER JOIN  zt_project AS t2 ON t1.`execution` = t2.`id`
+SET t1.`project` = t2.`project`
+WHERE t1.`execution` != '0' AND t1.`project` = '0';
+
 /* Update the execution master library. */
 UPDATE zt_doclib AS t1
 INNER JOIN  zt_project AS t2 ON t1.`execution` = t2.`id`
@@ -485,6 +490,11 @@ CHANGE `editedBy` `editedBy` varchar(30) NOT NULL DEFAULT '',
 CHANGE `editedDate` `editedDate` datetime NULL;
 
 ALTER TABLE `zt_effort`
+CHANGE `left` `left` float NOT NULL DEFAULT '0',
+CHANGE `consumed` `consumed` float NOT NULL DEFAULT '0',
+CHANGE `product` `product` text NULL,
+CHANGE `project` `project` mediumint unsigned NOT NULL DEFAULT '0',
+CHANGE `execution` `execution` mediumint unsigned NOT NULL DEFAULT '0',
 CHANGE `begin` `begin` smallint(4) unsigned zerofill NOT NULL DEFAULT '0',
 CHANGE `end` `end` smallint(4) unsigned zerofill NOT NULL DEFAULT '0';
 
@@ -601,6 +611,9 @@ CHANGE `assignedBy` `assignedBy` char(30) NOT NULL DEFAULT '',
 CHANGE `assignedDate` `assignedDate` datetime NULL;
 
 ALTER TABLE `zt_kanbanlane`
+ALTER TABLE `zt_kanbanlane`
+CHANGE `groupby` `groupby` char(30) NOT NULL DEFAULT '',
+CHANGE `extra` `extra` char(30) NOT NULL DEFAULT '',
 CHANGE `lastEditedTime` `lastEditedTime` datetime NULL;
 
 ALTER TABLE `zt_kanbanregion`
@@ -700,6 +713,7 @@ CHANGE `assignedTo` `assignedTo` varchar(30) NOT NULL DEFAULT '',
 CHANGE `reviewers` `reviewers` text NULL;
 
 ALTER TABLE `zt_pipeline`
+CHANGE `password` `password` varchar(255) NULL,
 CHANGE `editedBy` `editedBy` varchar(30) NOT NULL DEFAULT '',
 CHANGE `editedDate` `editedDate` datetime NULL;
 
@@ -764,6 +778,14 @@ CHANGE `editedDate` `editedDate` datetime NULL;
 ALTER TABLE `zt_researchreport`
 CHANGE `editedBy` `editedBy` varchar(30) NOT NULL DEFAULT '',
 CHANGE `editedDate` `editedDate` datetime NULL;
+
+ALTER TABLE `zt_repo`
+CHANGE `commits` `commits` mediumint unsigned NOT NULL DEFAULT '0';
+CHANGE `account` `account` varchar(30) NOT NULL DEFAULT '',
+CHANGE `password` `password` varchar(30) NOT NULL DEFAULT '';
+CHANGE `lastSync` `lastSync` datetime NULL,
+CHANGE `job` `job` mediumint unsigned NOT NULL DEFAULT '0',
+CHANGE `deleted` `deleted` tinyint(1) NOT NULL DEFAULT '0';
 
 ALTER TABLE `zt_review`
 CHANGE `reviewedBy` `reviewedBy` varchar(255) NOT NULL DEFAULT '',
@@ -1033,6 +1055,8 @@ CHANGE `editedBy` `editedBy` char(30) NOT NULL DEFAULT '',
 CHANGE `editedDate` `editedDate` datetime NULL;
 
 ALTER TABLE `zt_workflowfield`
+CHANGE `default` `default` varchar(100) NOT NULL DEFAULT '',
+CHANGE `rules` `rules` varchar(255) NOT NULL DEFAULT '',
 CHANGE `expression` `expression` text NULL,
 CHANGE `placeholder` `placeholder` varchar(100) NOT NULL DEFAULT '',
 CHANGE `desc` `desc` text NULL,

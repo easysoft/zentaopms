@@ -133,6 +133,10 @@ class projectModel extends model
                 $this->session->set('project', key($projects), $this->app->tab);
                 $this->accessDenied();
             }
+            else
+            {
+                $this->session->set('project', key($projects), $this->app->tab);
+            }
         }
 
         return $this->session->project;

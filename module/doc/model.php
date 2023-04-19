@@ -639,8 +639,6 @@ class docModel extends model
             $query = preg_replace('/(`\w+`)/', 't1.$1', $query);
         }
 
-        $libs      = $this->getLibs();
-        $docIDList = $this->getPrivDocs(array_keys($libs));
         if($type == 'view' or $type == 'collect')
         {
             $docs = $this->dao->select('t1.*,t3.name as libName,t3.type as objectType,max(t2.`date`) as date')->from(TABLE_DOC)->alias('t1')
@@ -649,7 +647,6 @@ class docModel extends model
                 ->where('t1.deleted')->eq(0)
                 ->andWhere('t1.lib')->ne('')
                 ->andWhere('t1.vision')->eq($this->config->vision)
-                ->andWhere('t1.id')->in(array_keys($docIDList))
                 ->andWhere('t2.action')->eq($type)
                 ->andWhere('t2.actor')->eq($this->app->user->account)
                 ->beginIF(!common::hasPriv('doc', 'productSpace'))->andWhere('t3.type')->ne('product')->fi()
@@ -665,26 +662,24 @@ class docModel extends model
         }
         elseif($type == 'createdby' || $type == 'editedby')
         {
-            $docIDList = array_keys($docIDList);
+            $docIdList = array();
             if($type == 'editedby')
             {
-                $editDocs = $this->dao->select('objectID')->from(TABLE_ACTION)
+                $docIdList = $this->dao->select('objectID')->from(TABLE_ACTION)
                     ->where('objectType')->eq('doc')
-                    ->andWhere('action')->in('edited,saveddraft')
+                    ->andWhere('action')->in('edited')
                     ->andWhere('actor')->eq($this->app->user->account)
                     ->andWhere('vision')->eq($this->config->vision)
                     ->fetchPairs();
-
-                $docIDList = array_intersect($docIDList, $editDocs);
             }
 
             $docs = $this->dao->select('t1.*,t2.name as libName,t2.type as objectType')->from(TABLE_DOC)->alias('t1')
                 ->leftJoin(TABLE_DOCLIB)->alias('t2')->on("t1.lib=t2.id")
                 ->where('t1.deleted')->eq(0)
                 ->andWhere('t1.lib')->ne('')
-                ->andWhere('t1.id')->in($docIDList)
                 ->andWhere('t1.vision')->eq($this->config->vision)
                 ->beginIF($type == 'createdby')->andWhere('t1.addedBy')->eq($this->app->user->account)->fi()
+                ->beginIF($type == 'editedby')->andWhere('t1.id')->in($docIdList)->fi()
                 ->beginIF(!common::hasPriv('doc', 'productSpace'))->andWhere('t2.type')->ne('product')->fi()
                 ->beginIF(!common::hasPriv('doc', 'projectSpace'))->andWhere('t2.type')->notIN('project,execution')->fi()
                 ->beginIF(!common::hasPriv('doc', 'teamSpace'))->andWhere('t2.type')->ne('custom')->fi()
@@ -1683,15 +1678,17 @@ class docModel extends model
      *
      * @param  string $objectType
      * @param  string $returnType nomerge|merge
+     * @param  int    $append
      * @access public
      * @return array
      */
-    public function getOrderedObjects($objectType = 'product', $returnType = 'merge')
+    public function getOrderedObjects($objectType = 'product', $returnType = 'merge', $append = 0)
     {
         $myObjects = $normalObjects = $closedObjects = array();
         if($objectType == 'product')
         {
             $products = $this->loadModel('product')->getList();
+            if($append and !isset($products[$append])) $products[$append] = $this->product->getByID($append);
             foreach($products as $id => $product)
             {
                 if($product->status == 'normal' and $product->PO == $this->app->user->account)
@@ -1723,8 +1720,9 @@ class docModel extends model
                     ->leftjoin(TABLE_DOCLIB)->alias('t2')->on('t2.project=t1.id')
                     ->where("CONCAT(',', t2.users, ',')")->like("%,{$this->app->user->account},%")
                     ->andWhere('t1.vision')->eq($this->config->vision)
-                    ->beginIF($this->config->vision == 'rnd')->andWhere('model')->ne('kanban')->fi()
                     ->andWhere('t1.deleted')->eq(0)
+                    ->beginIF($this->config->vision == 'rnd')->andWhere('model')->ne('kanban')->fi()
+                    ->beginIF($append)->orWhere('t1.id')->eq($append)->fi()
                     ->beginIF(!$this->app->user->admin)->andWhere('t1.id')->in($this->app->user->view->projects)->fi()
                     ->fetchPairs();
             }
@@ -1735,6 +1733,7 @@ class docModel extends model
                 ->andWhere('deleted')->eq(0)
                 ->beginIF($this->config->vision == 'rnd')->andWhere('model')->ne('kanban')->fi()
                 ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->projects)->fi()
+                ->beginIF($append)->orWhere('id')->eq($append)->fi()
                 ->orderBy('order_asc')
                 ->fetchAll('id');
 
@@ -1771,6 +1770,7 @@ class docModel extends model
                 ->andWhere('multiple')->eq('1')
                 ->andWhere('vision')->eq($this->config->vision)
                 ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->sprints)->fi()
+                ->beginIF($append)->orWhere('id')->eq($append)->fi()
                 ->orderBy('order_asc')
                 ->fetchAll('id');
 
@@ -2163,20 +2163,26 @@ class docModel extends model
     {
         $today     = date('Y-m-d');
         $statistic = new stdclass();
-        $statistic->totalDocs       = $this->dao->select('count(*) as count')->from(TABLE_DOC)->where('deleted')->eq('0')->fetch('count');
-        $statistic->todayEditedDocs = $this->dao->select('count(DISTINCT objectID) as count')->from(TABLE_ACTION)
-            ->where('objectType')->eq('doc')
-            ->andWhere('action')->eq('edited')
-            ->andWhere('actor')->eq($this->app->user->account)
-            ->andWhere('LEFT(date, 10)')->eq($today)
+        $statistic->totalDocs       = $this->dao->select('count(*) as count')->from(TABLE_DOC)->where('deleted')->eq('0')->andWhere('vision')->eq($this->config->vision)->fetch('count');
+        $statistic->todayEditedDocs = $this->dao->select('count(DISTINCT objectID) as count')->from(TABLE_ACTION)->alias('t1')
+            ->leftJoin(TABLE_DOC)->alias('t2')->on("t1.objectID=t2.id and t1.objectType='doc'")
+            ->where('t1.objectType')->eq('doc')
+            ->andWhere('t1.action')->eq('edited')
+            ->andWhere('t1.actor')->eq($this->app->user->account)
+            ->andWhere('t1.vision')->eq($this->config->vision)
+            ->andWhere('LEFT(t1.date, 10)')->eq($today)
+            ->andWhere('t2.deleted')->eq(0)
             ->fetch('count');
-        $statistic->myEditedDocs = $this->dao->select('count(DISTINCT objectID) as count')->from(TABLE_ACTION)
-            ->where('objectType')->eq('doc')
-            ->andWhere('action')->eq('edited')
-            ->andWhere('actor')->eq($this->app->user->account)
+        $statistic->myEditedDocs = $this->dao->select('count(DISTINCT objectID) as count')->from(TABLE_ACTION)->alias('t1')
+            ->leftJoin(TABLE_DOC)->alias('t2')->on("t1.objectID=t2.id and t1.objectType='doc'")
+            ->where('t1.objectType')->eq('doc')
+            ->andWhere('t1.action')->eq('edited')
+            ->andWhere('t1.actor')->eq($this->app->user->account)
+            ->andWhere('t1.vision')->eq($this->config->vision)
+            ->andWhere('t2.deleted')->eq(0)
             ->fetch('count');
 
-        $my = $this->dao->select("count(*) as myDocs, SUM(views) as docViews, SUM(collects) as docCollects")->from(TABLE_DOC)->where('addedBy')->eq($this->app->user->account)->andWhere('deleted')->eq(0)->fetch();
+        $my = $this->dao->select("count(*) as myDocs, SUM(views) as docViews, SUM(collects) as docCollects")->from(TABLE_DOC)->where('addedBy')->eq($this->app->user->account)->andWhere('deleted')->eq(0)->andWhere('vision')->eq($this->config->vision)->andWhere('lib')->ne(0)->fetch();
         $statistic->myDocs = $my->myDocs;
         $statistic->myDoc  = new stdclass();
         $statistic->myDoc->docViews    = $my->docViews;
@@ -2773,10 +2779,11 @@ class docModel extends model
         if($this->app->tab == 'doc' and $type == 'execution') $type = 'project';
 
         $objectDropdown = '';
+        $appendObject   = $objectID;
         if(in_array($type, array('project', 'product', 'execution')))
         {
             $table  = $this->config->objectTables[$type];
-            $object = $this->dao->select('id,name,status')->from($table)->where('id')->eq($objectID)->fetch();
+            $object = $this->dao->select('id,name,status,deleted')->from($table)->where('id')->eq($objectID)->fetch();
 
             if(empty($object))
             {
@@ -2785,7 +2792,7 @@ class docModel extends model
                 return print(js::locate(helper::createLink($type, $methodName, $param)));
             }
 
-            $objects  = $this->getOrderedObjects($type);
+            $objects  = $this->getOrderedObjects($type, 'merge', $objectID);
             $objectID = $this->loadModel($type)->saveState($objectID, $objects);
             $libs     = $this->getLibsByObject($type, $objectID, '', $appendLib);
             if(($libID == 0 or !isset($libs[$libID])) and !empty($libs)) $libID = reset($libs)->id;
@@ -2798,7 +2805,7 @@ class docModel extends model
             }
             else
             {
-                $objectDropdown = $this->select($type, $objectTitle, $objectID);
+                $objectDropdown = $this->select($type, $objectTitle, $appendObject);
             }
         }
         else

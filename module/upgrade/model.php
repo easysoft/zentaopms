@@ -8579,6 +8579,8 @@ class upgradeModel extends model
             $this->dao->update(TABLE_DOCLIB)->set('`type`')->eq('custom')->where('id')->eq($libID)->exec();
             $this->dao->update(TABLE_DOC)->set('`type`')->eq('text')->where('`lib`')->eq($libID)->andWhere('grade')->eq(1)->andWhere('`type`')->eq('article')->exec();
         }
+
+        $this->dao->update(TABLE_DOC)->set('`type`')->eq('text')->where('`type`')->eq('book')->exec();
         return true;
     }
 
@@ -9080,7 +9082,8 @@ class upgradeModel extends model
             $fieldName = $field->Field;
             $fields[$fieldName] = $fieldName;
         }
-        if(!isset($fields['collector'])) return true;
+
+        if(!isset($fields['collector']) or isset($fields['collects'])) return true;
 
         $this->loadModel('doc');
 
