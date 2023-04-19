@@ -254,6 +254,7 @@ $lang->productsettings->common    = '产品设置';
 $lang->projectreview->common      = '评审';
 $lang->projecttrack->common       = '矩阵';
 $lang->projectqa->common          = '测试';
+$lang->holidayseason->common      = '节假日';
 
 $lang->personnel->common     = '人员';
 $lang->personnel->invest     = '投入人员';

@@ -137,6 +137,7 @@ $lang->productsettings    = new stdclass();
 $lang->projectreview      = new stdclass();
 $lang->projecttrack       = new stdclass();
 $lang->projectqa          = new stdclass();
+$lang->holidayseason      = new stdclass();
 
 $lang->projectbuild   = new stdclass();
 $lang->projectrelease = new stdclass();

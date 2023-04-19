@@ -254,6 +254,7 @@ $lang->productsettings->common    = 'Product setting';
 $lang->projectreview->common      = 'Review';
 $lang->projecttrack->common       = 'Matrix';
 $lang->projectqa->common          = 'QA';
+$lang->holidayseason->common      = 'Holiday';
 
 $lang->personnel->common     = 'Member';
 $lang->personnel->invest     = 'Investment';
