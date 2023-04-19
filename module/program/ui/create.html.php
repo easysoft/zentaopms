@@ -1,13 +1,24 @@
 <?php
 namespace zin;
 
-$parentID = isset($parentProgram->id) ? $parentProgram->id : 0;
-$currency = $parentID ? $parentProgram->budgetUnit : $config->project->defaultCurrency;
-$aclList  = $parentProgram ? $lang->program->subAclList : $lang->program->aclList;
+$parentID          = isset($parentProgram->id) ? $parentProgram->id : 0;
+$currency          = $parentID ? $parentProgram->budgetUnit : $config->project->defaultCurrency;
+$aclList           = $parentProgram ? $lang->program->subAclList : $lang->program->aclList;
+$budgetPlaceholder = $parentProgram ? $lang->program->parentBudget . zget($lang->project->currencySymbol, $parentProgram->budgetUnit) . $budgetLeft : '';
+$budgetAvaliable   = !$parentID || $budgetLeft;
+
+jsVar('lang', ['budgetOverrun' => $lang->project->budgetOverrun, 'currencySymbol' => $lang->project->currencySymbol, 'ignore' => $lang->program->ignore]);
+jsVar('LONG_TIME', LONG_TIME);
+jsVar('weekend', $config->execution->weekend);
+
 useData('title', $parentID ? $lang->program->children : $lang->program->create);
 
 form
 (
+    on::change('#parent', 'onParentChange'),
+    on::change('#budget', 'onBudgetChange'),
+    on::change('#future', 'onFutureChange'),
+    on::change('#acl',    'onAclChange'),
     formGroup
     (
         set::width('1/2'),
@@ -16,7 +27,6 @@ form
         set::disabled($parentID),
         set::value($parentID),
         set::items($parents),
-        on::change('setBudgetTipsAndAclList')
     ),
     formGroup
     (
@@ -34,20 +44,39 @@ form
     ),
     formRow
     (
+        set::id('budgetRow'),
         formGroup
         (
-            set::width('1/4'),
-            set::name('budget'),
+            set::width('1/2'),
             set::label($lang->program->budget),
-            set::control(['type' => 'inputControl', 'prefix' => $lang->project->currencySymbol[$currency], 'prefixWidth' => 'icon']),
-            on::change('budgetOverrunTips'),
-            formHidden('budgetUnit', $currency),
+            inputGroup
+            (
+                set::seg(true),
+                input
+                (
+                    set::name('budget'),
+                    set::placeholder($budgetPlaceholder),
+                    set::disabled(!$budgetAvaliable),
+                    set('data-budget-left', $budgetLeft),
+                    set('data-currency-symbol', $parentProgram ? zget($lang->project->currencySymbol, $parentProgram->budgetUnit) : NULL),
+                ),
+                select
+                (
+                    zui::width('1/3'),
+                    set::name('budgetUnit'),
+                    set::disabled($parentID || !$budgetAvaliable),
+                    set::items($budgetUnitList),
+                    set::value($currency)
+                )
+            )
         ),
+        formHidden('budgetUnit', $currency),
         formGroup
         (
             set::name('future'),
             set::value('1'),
-            set::control(['type' => 'checkbox', 'rootClass' => 'ml-4', 'text' => $lang->project->future])
+            set::disabled(!$budgetAvaliable),
+            set::control(['type' => 'checkbox', 'rootClass' => 'ml-4', 'text' => $lang->project->future, 'checked' => !$budgetAvaliable])
         ),
     ),
     formRow
@@ -59,8 +88,10 @@ form
             set::required(true),
             inputGroup
             (
+                set::seg(true),
                 input
                 (
+                    set::type('date'),
                     set::name('begin'),
                     set::value(date('Y-m-d')),
                     set::placeholder($lang->project->begin),
@@ -70,6 +101,7 @@ form
                 $lang->project->to,
                 input
                 (
+                    set::type('date'),
                     set::name('end'),
                     set::placeholder($lang->project->end),
                     set::required(true),
@@ -96,11 +128,21 @@ form
     formGroup
     (
         set::name('acl'),
-        set::label($lang->project->acl),
+        set::label($lang->program->acl),
         set::value('private'),
         set::items($aclList),
         set::control('radioList'),
-        on::change('setWhite')
+    ),
+    formRow
+    (
+        set::id('whitelistRow'),
+        formGroup
+        (
+            set::width('3/4'),
+            set::name('whitelist'),
+            set::label($lang->whitelist),
+            set::control('select')
+        )
     )
 );
 
