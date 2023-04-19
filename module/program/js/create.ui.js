@@ -3,7 +3,6 @@ window.onParentChange = (event) =>
     const parentID = $(event.target).val();
     const url = $.createLink('program', 'create', parentID ? ('parentProgramID=' + parentID) : '');
     loadPage(url, '#budgetRow>*, #acl');
-    console.log('>', parentID, url);
 };
 
 window.onBudgetChange = (event) =>
@@ -27,7 +26,7 @@ window.onFutureChange = (event) =>
 window.outOfDateTip = function()
 {
     console.warn('The method outOfDateTip is not implemented.');
-}
+};
 
 /**
  * Compute delta of two days.
@@ -104,7 +103,7 @@ window.computeWorkDays = function(currentID)
         computeEndDate();
     }
     outOfDateTip();
-}
+};
 
 /**
  * Compute the end date for project.
@@ -135,7 +134,7 @@ window.computeEndDate = function(delta)
     const endDate = zui.formatDate(beginDate.getTime() + ((delta - 1) * zui.TIME_DAY), 'yyyy-MM-dd');
     $('#end').val(endDate);
     computeWorkDays();
-}
+};
 
 window.onAclChange = () =>
 {
