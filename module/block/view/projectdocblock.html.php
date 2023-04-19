@@ -53,6 +53,7 @@ html[lang="de"] .block-projectdoc .c-user{width: 105px;}
 
 .block-projectdoc #projectType {position: absolute;top: 6px;left: 120px;}
 .block-projectdoc #projectType .btn {border:0px;}
+.block-projectdoc #projectType .btn:hover {background-color:#f5f5f5;}
 
 .block-projectdoc .table .c-name > .doc-title {display: inline-block; overflow: hidden; background: transparent; padding-right:0px;}
 .block-projectdoc .table .c-name > span.doc-title {line-height: 0; vertical-align: inherit;}
