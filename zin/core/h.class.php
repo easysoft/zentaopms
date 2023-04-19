@@ -77,30 +77,33 @@ class h extends wg
 
         $id = $this->id();
         $code = array($this->getTagName() === 'html' ? 'const ele = document;' : 'const ele = document.getElementById("' . (empty($id) ? $this->gid : $id) . '");');
-        foreach($events as $event => $options)
+        foreach($events as $event => $bindingList)
         {
-            if(is_string($options)) $options = array('handler' => $options);
-            $selector = isset($options['selector']) ? $options['selector'] : NULL;
-            $handler  = isset($options['handler']) ? trim($options['handler']) : '';
-            $stop  = isset($options['stop']) ? $options['stop'] : NULL;
-            $prevent  = isset($options['prevent']) ? $options['prevent'] : NULL;
-            $self  = isset($options['self']) ? $options['self'] : NULL;
-            unset($options['selector']);
-            unset($options['handler']);
-            unset($options['stop']);
-            unset($options['prevent']);
-            unset($options['self']);
-            $code[] = "ele.addEventListener('$event', function(e) {";
+            foreach($bindingList as $binding)
+            {
+                $code[] = "ele.addEventListener('$event', function(e) {";
+                if(is_string($binding)) $binding = (object)array('handler' => $binding);
+                $selector = isset($binding->selector) ? $binding->selector : NULL;
+                $handler  = isset($binding->handler) ? trim($binding->handler) : '';
+                $stop  = isset($binding->stop) ? $binding->stop : NULL;
+                $prevent  = isset($binding->prevent) ? $binding->prevent : NULL;
+                $self  = isset($binding->self) ? $binding->self : NULL;
+                unset($binding->selector);
+                unset($binding->handler);
+                unset($binding->stop);
+                unset($binding->prevent);
+                unset($binding->self);
 
-            if($selector) $code[] = "if(!e.target.closest('$selector')) return;";
-            if($self)     $code[] = "if(ele !== e.target) return;";
-            if($stop)     $code[] = "e.stopPropagation();";
-            if($prevent)  $code[] = "e.preventDefault();";
+                if($selector) $code[] = "if(!e.target.closest('$selector')) return;";
+                if($self)     $code[] = "if(ele !== e.target) return;";
+                if($stop)     $code[] = "e.stopPropagation();";
+                if($prevent)  $code[] = "e.preventDefault();";
 
-            if(preg_match('/^[$A-Z_][0-9A-Z_$\[\]."\']*$/i', $handler)) $code[] = "($handler)(e);";
-            else $code[] = $handler;
+                if(preg_match('/^[$A-Z_][0-9A-Z_$\[\]."\']*$/i', $handler)) $code[] = "($handler)(e);";
+                else $code[] = $handler;
 
-            $code[] = '}' . (empty($options) ? '' : (', ' . json_encode($options))) . ');';
+                $code[] = '}' . (empty($binding) ? '' : (', ' . json_encode($binding))) . ');';
+            }
         }
         return static::js($code);
     }

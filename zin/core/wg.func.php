@@ -84,7 +84,7 @@ function on($name, $handler, $options = NULL)
         if(str_contains($flags, 'prevent')) $options['prevent'] = true;
         if(str_contains($flags, 'self'))    $options['self']    = true;
     }
-    return set("@$name", $options);
+    return set("@$name", (object)$options);
 }
 
 function html(/* string ...$lines */)

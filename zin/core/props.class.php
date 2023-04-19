@@ -106,11 +106,15 @@ class props extends \zin\utils\dataset
     {
         if(is_array($name))
         {
-            foreach($name as $key => $value) parent::setVal("@$key", $value);
+            foreach($name as $key => $value) $this->bindEvent($key, $value);
             return;
         }
 
-        parent::setVal("@$name", $callback);
+        $events = parent::getVal("@$name") ?? [];
+        if(is_array($callback)) $events   = array_merge($events, $callback);
+        else                    $events[] = $callback;
+
+        parent::setVal("@$name", $events);
     }
 
     public function events()
