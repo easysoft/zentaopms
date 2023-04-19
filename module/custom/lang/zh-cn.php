@@ -62,6 +62,7 @@ $lang->custom->percent              = $lang->stage->percent;
 $lang->custom->setPercent           = "是否启用{$lang->stage->percent}";
 $lang->custom->beginAndEndDate      = '起止日期';
 $lang->custom->beginAndEndDateRange = '起止日期范围';
+$lang->custom->limitTaskDateAction  = '设置起止日期必填';
 
 $lang->custom->unitList['efficiency'] = '工时/';
 $lang->custom->unitList['manhour']    = '人时/';

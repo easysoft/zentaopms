@@ -1289,7 +1289,7 @@ class groupModel extends model
             foreach($views as $moduleMenu)
             {
                 $viewID = 0;
-                if($moduleMenu != 'general')
+                if($moduleMenu != 'general' and isset($this->lang->mainNav->{$moduleMenu}))
                 {
                     if(!$hasStored)
                     {
@@ -1332,7 +1332,7 @@ class groupModel extends model
                     if(!$hasStored)
                     {
                         $moduleData = new stdclass();
-                        $moduleData->parent = $viewID;
+                        $moduleData->parent = (isset($this->lang->navGroup->{$moduleName}) and !in_array($moduleMenu, array('misc', 'conference'))) ? $viewPairs[$moduleMenu] : 0;
                         $moduleData->code   = $moduleName;
                         $moduleData->type   = 'module';
                         $moduleData->order  = $moduleOrder * 10;

@@ -1448,7 +1448,7 @@ $lang->resource->custom->kanban             = 'kanban';
 $lang->resource->custom->code               = 'code';
 $lang->resource->custom->hours              = 'hours';
 $lang->resource->custom->percent            = 'percent';
-$lang->resource->custom->limitTaskDate      = 'beginAndEndDate';
+$lang->resource->custom->limitTaskDate      = 'limitTaskDateAction';
 
 $lang->custom->methodOrder[10] = 'set';
 $lang->custom->methodOrder[15] = 'product';
