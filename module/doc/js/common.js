@@ -15,8 +15,10 @@ function loadObjectModules(objectType, objectID, docType)
         objectID   = $('#project').val();
     }
     if(objectID == undefined) objectID = 0;
-    var link = createLink('doc', 'ajaxGetModules', 'objectType=' + objectType + '&objectID=' + objectID + '&type=' + docType);
-    $('#moduleBox').load(link, function(){$('#moduleBox').find('select').picker(); $('#moduleLabel').remove();});
+
+    var link     = createLink('doc', 'ajaxGetModules', 'objectType=' + objectType + '&objectID=' + objectID + '&type=' + docType);
+    var selected = $('#module').val();
+    $('#moduleBox').load(link, function(){$('#moduleBox').find('select').val(selected).picker(); $('#moduleLabel').remove();});
 }
 
 /**
