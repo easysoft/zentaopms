@@ -97,7 +97,7 @@ class pivotModel extends model
     public function getExecutions($begin = 0, $end = 0)
     {
         $permission = common::hasPriv('pivot', 'showProject') or $this->app->user->admin;
-        $tasks      = $this->dao->select('t1.*, IF(t3.multiple = "1", t2.name, "") as executionName, t3.name as projectName, t2.multiple')->from(TABLE_TASK)->alias('t1')
+        $tasks      = $this->dao->select("t1.*, IF(t3.multiple = '1', t2.name, '') as executionName, t3.name as projectName, t2.multiple")->from(TABLE_TASK)->alias('t1')
             ->leftJoin(TABLE_EXECUTION)->alias('t2')->on('t1.execution = t2.id')
             ->leftJoin(TABLE_PROJECT)->alias('t3')->on('t1.project = t3.id')
             ->where('t1.status')->ne('cancel')
