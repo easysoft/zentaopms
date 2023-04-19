@@ -55,7 +55,7 @@ class checkList extends wg
 
         return div
         (
-            setClass($inline ? 'check-list-inline' : 'check-list'),
+            setClass($inline ? 'flex gap-4' : null),
             set($this->getRestProps()),
             $items,
             $this->children()
