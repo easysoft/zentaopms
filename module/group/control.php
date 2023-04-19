@@ -284,7 +284,7 @@ class group extends control
                 $unassignedModule = array_diff(array_keys(get_object_vars($this->lang->resource)), array_keys($modules));
                 foreach($unassignedModule as $index => $module)
                 {
-                    if(!$this->group->checkMenuModule($menu, $module)) continue;
+                    if(!$this->group->checkMenuModule($menu, $module) or isset($privList[$module])) continue;
 
                     $selectPrivs[$module] = array();
                     $selectPrivs[$module][0] = 0;
