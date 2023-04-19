@@ -63,19 +63,6 @@ html[lang="de"] .block-projectdoc .c-user{width: 105px;}
 <?php $blockNavId = 'nav-' . uniqid(); ?>
 $(function()
 {
-    <?php if(!$longBlock):?>
-    $(document).on('click', '.block-projectdoc<?php echo "#block{$block->id}";?> .col-nav .switch-icon', function(e)
-    {
-        var $nav = $(this).closest('.nav');
-        var isPrev = $(this).is('.prev');
-        var $activeItem = $nav.children('.active');
-        var $next = $activeItem[isPrev ? 'prev' : 'next']('li:not(.switch-icon)');
-        if ($next.length) $next.find('a[data-toggle="tab"]').trigger('click');
-        else $nav.children('li:not(.switch-icon)')[isPrev ? 'last' : 'first']().find('a[data-toggle="tab"]').trigger('click');
-        e.preventDefault();
-    });
-    <?php endif;?>
-
     if($('.block-projectdoc<?php echo "#block{$block->id}";?> #projectType').length > 1);
     {
         count = $('.block-projectdoc<?php echo "#block{$block->id}";?> #projectType').length;
@@ -87,6 +74,18 @@ $(function()
         })
     }
 });
+
+function switch<?php echo "block{$block->id}";?>Project(obj)
+{
+    var $this = $(obj);
+    var $nav = $this.closest('.nav');
+    var isPrev = $this.is('.prev');
+    var $activeItem = $nav.children('.active');
+    var $next = $activeItem[isPrev ? 'prev' : 'next']('li:not(.switch-icon)');
+    if($next.length > 0)  $next.find('a[data-toggle="tab"]').trigger('click');
+    if($next.length == 0) $nav.children('li:not(.switch-icon)')[isPrev ? 'last' : 'first']().find('a[data-toggle="tab"]').trigger('click');
+    return false;
+}
 
 function change<?php echo "block{$block->id}";?>ProjectType(type)
 {
@@ -121,7 +120,7 @@ function change<?php echo "block{$block->id}";?>ProjectType(type)
     <?php else:?>
     <div class="col col-nav">
       <ul class="nav nav-stacked nav-secondary scrollbar-hover involveds">
-        <li class='switch-icon prev'><a><i class='icon icon-arrow-left'></i></a></li>
+        <li class='switch-icon prev'><a href='###' onclick='switch<?php echo "block{$block->id}";?>Project(this)'><i class='icon icon-arrow-left'></i></a></li>
         <?php $selected = key($involveds);?>
         <?php foreach($involveds as $project):?>
         <li <?php if($project->id == $selected) echo "class='active' id='activeProject'";?> projectid='<?php echo $project->id;?>'>
@@ -129,17 +128,17 @@ function change<?php echo "block{$block->id}";?>ProjectType(type)
           <?php echo html::a(helper::createLink('doc', 'projectSpace', "projectID=$project->id"), "<i class='icon-arrow-right text-primary'></i>", '', "class='btn-view'");?>
         </li>
         <?php endforeach;?>
-        <li class='switch-icon next'><a><i class='icon icon-arrow-right'></i></a></li>
+        <li class='switch-icon next'><a href='###' onclick='switch<?php echo "block{$block->id}";?>Project(this)'><i class='icon icon-arrow-right'></i></a></li>
       </ul>
       <ul class="nav nav-stacked nav-secondary scrollbar-hover projects hidden">
-        <li class='switch-icon prev'><a><i class='icon icon-arrow-left'></i></a></li>
+        <li class='switch-icon prev'><a href='###' onclick='switch<?php echo "block{$block->id}";?>Project(this)'><i class='icon icon-arrow-left'></i></a></li>
         <?php foreach($projects as $project):?>
         <li projectid='<?php echo $project->id;?>'>
           <a href="###" title="<?php echo $project->name?>" data-target='<?php echo "#tab3{$blockNavId}Content{$project->id}";?>' data-toggle="tab"><?php echo $project->name;?></a>
           <?php echo html::a(helper::createLink('doc', 'projectSpace', "projectID=$project->id"), "<i class='icon-arrow-right text-primary'></i>", '', "class='btn-view'");?>
         </li>
         <?php endforeach;?>
-        <li class='switch-icon next'><a><i class='icon icon-arrow-right'></i></a></li>
+        <li class='switch-icon next'><a href='###' onclick='switch<?php echo "block{$block->id}";?>Project(this)'><i class='icon icon-arrow-right'></i></a></li>
       </ul>
     </div>
     <div class="col tab-content">
