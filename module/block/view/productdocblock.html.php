@@ -49,6 +49,7 @@
 .block-productdoc .lastIteration {padding-top: 6px;}
 
 .forty-percent {width: 40%;}
+html[lang="de"] .block-productdoc .c-user{width: 105px;}
 
 .block-productdoc #productType {position: absolute;top: 6px;left: 120px;}
 .block-productdoc #productType .btn {border:0px;}

@@ -2150,6 +2150,7 @@ class block extends control
     public function printProductDocBlock()
     {
         $this->loadModel('doc');
+        $this->session->set('docList', $this->createLink('doc', 'index'), 'doc');
 
         /* Set project status and count. */
         $count         = isset($this->params->count) ? (int)$this->params->count : 15;
@@ -2196,6 +2197,7 @@ class block extends control
     {
         $this->loadModel('doc');
         $this->app->loadLang('project');
+        $this->session->set('docList', $this->createLink('doc', 'index'), 'doc');
 
         /* Set project status and count. */
         $count         = isset($this->params->count) ? (int)$this->params->count : 15;
