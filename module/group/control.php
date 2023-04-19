@@ -239,7 +239,8 @@ class group extends control
             $this->lang->custom->common = $this->lang->group->config;
             if($this->config->edition == 'max' and $this->config->vision == 'rnd' and isset($this->lang->baseline)) $this->lang->baseline->common = $this->lang->group->docTemplate;
 
-            $modules          = $this->group->getPrivManagerPairs('module', $menu);
+            $modules = $this->group->getPrivManagerPairs('module', $menu);
+
             $this->view->group      = $group;
             $this->view->groupPrivs = $groupPrivs;
             $this->view->groupID    = $groupID;

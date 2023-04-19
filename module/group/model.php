@@ -1181,7 +1181,7 @@ class groupModel extends model
         $allResourceFile = $this->app->getModuleRoot() . 'group/lang/allresources.php';
 
         $views   = $this->loadModel('setting')->getItem("owner=system&module=priv&key=views");
-        $views   = explode(',', $views);
+        $views   = array_filter(explode(',', $views));
         $views[] = 'general';
 
         $this->dbh->exec("ALTER TABLE " . TABLE_PRIVLANG . " CHANGE `priv` `objectID` mediumint(8) unsigned NOT NULL;");
@@ -1326,7 +1326,7 @@ class groupModel extends model
                 /* 模块 */
                 $modules     = $this->getMenuModules($moduleMenu);
                 $viewModules = $this->setting->getItem("owner=system&module=priv&key={$moduleMenu}Modules");
-                $viewModules = explode(',', $viewModules);
+                $viewModules = array_filter(explode(',', $viewModules));
                 foreach($viewModules as $moduleName)
                 {
                     if(!$hasStored)
@@ -1587,6 +1587,8 @@ class groupModel extends model
             ->beginIF(!empty($view) and $view != 'general')->andWhere('t3.code')->in($modules)->fi()
             ->beginIF(!empty($view) and $view == 'general')->andWhere('t3.parent')->eq('0')->fi()
             ->markRight(2)
+            ->andWhere('t1.edition')->like("%,{$this->config->edition},%")
+            ->andWhere('t1.vision')->like("%,{$this->config->vision},%")
             ->orderBy("moduleOrder asc, t3.order asc, `order` asc")
             ->page($pager)
             ->fetchAll('action');
@@ -2050,7 +2052,7 @@ class groupModel extends model
             $key = $type == 'package' ? $managerID : $manager->code;
             if(!empty($manager->value)) $pairs[$key] = $manager->value;
             if(empty($manager->value) and $type == 'view')   $pairs[$key] = $this->lang->{$manager->key}->common;
-            if(empty($manager->value) and $type == 'module') $pairs[$key] = zget($moduleLang, $manager->key);
+            if(empty($manager->value) and $type == 'module') $pairs[$key] = isset($moduleLang[$manager->key]) ? $moduleLang[$manager->key] : $this->lang->{$manager->key}->common;
         }
         return $pairs;
     }
