@@ -109,7 +109,7 @@
           </div>
           <?php endif;?>
         </div>
-        <div class="">
+        <div id="diffContain">
           <div class="detail-content article-content table-col">
             <div class='info'>
               <?php $createInfo = $doc->status == 'draft' ? zget($users, $doc->addedBy) . " {$lang->colon} " . substr($doc->addedDate, 0, 10) . (common::checkNotCN() ? ' ' : '') . $lang->doc->createAB : zget($users, $doc->releasedBy) . " {$lang->colon} " . substr($doc->releasedDate, 0, 10) . (common::checkNotCN() ? ' ' : '') . $lang->doc->release;?>
