@@ -67,11 +67,14 @@ class select extends wg
             }
         }
 
+        $props = $this->props->skip(['items', 'value', 'multiple']);
+        if(!$this->hasProp('id') && isset($props['name'])) $props['id'] = $props['name'];
+
         return h::select
         (
             setClass('form-control'),
             set::multiple($this->isMultiple()),
-            set($this->props->skip(['items', 'value', 'multiple'])),
+            set($props),
             $items,
             $this->children()
         );
