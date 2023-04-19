@@ -1789,12 +1789,14 @@ class baseSQL
     {
         if($this->inCondition and !$this->conditionIsTrue) return $this;
 
-        if($this->method == 'insert')
+        /* DMDB replace will use $this->data. */
+        if($this->method == 'insert' or $this->method == 'replace')
         {
             $this->setField = $set;
             $this->data->$set = '';
         }
-        else
+
+        if($this->method != 'insert')
         {
             /* Add ` to avoid keywords of mysql. */
             if(strpos($set, '=') ===  false)
@@ -1977,12 +1979,13 @@ class baseSQL
     {
         if($this->inCondition and !$this->conditionIsTrue) return $this;
 
-        if($this->method == 'insert')
+        if($this->method == 'insert' or $this->method == 'replace')
         {
             $field = $this->setField;
             $this->data->$field = $value;
         }
-        else
+
+        if($this->method != 'insert')
         {
             $this->sql .= " = " . $this->quote($value);
         }
