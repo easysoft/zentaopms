@@ -8223,11 +8223,66 @@ class upgradeModel extends model
             $this->dao->insert(TABLE_DIMENSION)->data($dimension)->exec();
             $dimensionID = $this->dao->lastInsertID();
 
-            $this->addDefaultModules4BI('chart', $dimensionID);
-            $this->addDefaultModules4BI('pivot', $dimensionID);
+            $chartModules = $this->addDefaultModules4BI('chart', $dimensionID);
+            $this->addSecondModule4BI($dimensionID, $dimensionName, 'chart', $chartModules);
+
+            $pivotModules = $this->addDefaultModules4BI('pivot', $dimensionID);
+            $this->addSecondModule4BI($dimensionID, $dimensionName, 'pivot', $pivotModules);
 
         }
         return !dao::isError();
+    }
+
+    /**
+     * Add second modules for bi, move buildin chart and pivot to second modules.
+     *
+     * @access public
+     * @return bool
+     */
+    public function addSecondModule4BI($dimensionID, $dimensionName, $module, $modules)
+    {
+        $this->loadModel('dimension');
+
+        $listIndex     = $module . 'Upgrade';
+        $secondModules = $this->config->dimension->secondModuleList[$dimensionName][$module];
+        $updateInfos   = $this->config->dimension->secondModuleList[$dimensionName][$listIndex];
+
+        foreach($modules as $moduleName => $parentID)
+        {
+            $insertModules = isset($secondModules[$moduleName]) ? explode(',', $secondModules[$moduleName]) : array();
+            if(empty($insertModules)) continue;
+
+            $i = 1;
+            foreach($insertModules as $moduleCode)
+            {
+                $data = new stdclass();
+                $data->root   = $dimensionID;
+                $data->name   = $this->lang->dimension->modules[$moduleCode];
+                $data->parent = $parentID;
+                $data->grade  = 2;
+                $data->order  = 10 * $i;
+                $data->type   = $module;
+                $i ++;
+
+                $this->dao->insert(TABLE_MODULE)->data($data)->exec();
+                $lastGroupID = $this->dao->lastInsertID();
+
+                $path = ',' . $parentID . ',' . $lastGroupID . ',';
+                $this->dao->update(TABLE_MODULE)->set("`path`")->eq($path)->where('id')->eq($lastGroupID)->exec();
+
+                $updateArr = isset($updateInfos[$moduleName][$moduleCode]) ? $updateInfos[$moduleName][$moduleCode] : array();
+                if(!empty($updateArr))
+                {
+                    foreach($updateArr as $type => $idString)
+                    {
+                        $table  = $type == 'chart' ? TABLE_CHART : TABLE_PIVOT;
+                        $idList = explode(',', $idString);
+
+                        $this->dao->update($table)->set('group')->eq($lastGroupID)->set('dimension')->eq($dimensionID)->where('id')->in($idList)->exec();
+                    }
+                }
+            }
+        }
     }
 
     /**

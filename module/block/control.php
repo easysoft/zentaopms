@@ -2206,7 +2206,7 @@ class block extends control
             ->andWhere('vision')->eq($this->config->vision)
             ->andWhere('type')->eq('project')
             ->andWhere('model')->ne('kanban')
-            ->beginIF(!$this->app->user->admin)->andWhere('t1.id')->in($this->app->user->view->projects)->fi()
+            ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->projects)->fi()
             ->orderBy('order_asc,id_desc')
             ->fetchAll('id');
 

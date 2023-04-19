@@ -1401,11 +1401,11 @@ class myModel extends model
             ->andWhere('vision')->eq($this->config->vision)
             ->andWhere($condition)
             ->groupBy('objectType,objectID')
-            ->orderBy($orderBy)
             ->page($pager)
             ->fetchPairs();
         $actions = $this->dao->select('objectType,objectID,actor,action,`date`,extra')->from(TABLE_ACTION)
             ->where('id')->in($actionIdList)
+            ->orderBy($orderBy)
             ->fetchAll();
         $objectTypeList = array();
         foreach($actions as $action) $objectTypeList[$action->objectType][] = $action->objectID;

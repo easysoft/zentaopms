@@ -248,12 +248,13 @@ class buildModel extends model
         $selectedBuilds = array();
         if(strpos($params, 'noempty') === false) $sysBuilds = array('' => '');
         if(strpos($params, 'notrunk') === false) $sysBuilds = $sysBuilds + array('trunk' => $this->lang->trunk);
+        $productIdList = is_array($products) ? array_keys($products) : $products;
         if($buildIdList)
         {
             $buildIdList = str_replace('trunk', '0', $buildIdList);
             $selectedBuilds = $this->dao->select('id, name')->from(TABLE_BUILD)
                 ->where('id')->in($buildIdList)
-                ->beginIF($products)->andWhere('product')->in(array_keys($products))->fi()
+                ->beginIF($products)->andWhere('product')->in($productIdList)->fi()
                 ->beginIF($objectType === 'execution' and $objectID)->andWhere('execution')->eq($objectID)->fi()
                 ->beginIF($objectType === 'project' and $objectID)->andWhere('project')->eq($objectID)->fi()
                 ->beginIF(strpos($params, 'hasdeleted') === false)->andWhere('deleted')->eq(0)->fi()
@@ -261,7 +262,6 @@ class buildModel extends model
         }
         $branchPairs = $this->dao->select('id,name')->from(TABLE_BRANCH)->fetchPairs();
 
-        $productIdList = is_array($products) ? array_keys($products) : $products;
         $shadows   = $this->dao->select('shadow')->from(TABLE_RELEASE)->where('product')->in($productIdList)->fetchPairs('shadow', 'shadow');
         $branchs   = strpos($params, 'separate') === false ? "0,$branch" : $branch;
         $allBuilds = $this->dao->select('t1.id, t1.name, t1.branch, t1.execution, t1.date, t1.deleted, t2.status as objectStatus, t3.id as releaseID, t3.status as releaseStatus, t4.type as productType')->from(TABLE_BUILD)->alias('t1')

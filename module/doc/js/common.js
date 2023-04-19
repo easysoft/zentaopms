@@ -367,4 +367,3 @@ function submit(object)
     $('#dataform').submit();
     setTimeout(function(){$(object).attr('type', 'button').removeAttr('disabled')}, 2000);
 }
-
