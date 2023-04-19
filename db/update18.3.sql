@@ -769,6 +769,14 @@ ALTER TABLE `zt_researchreport`
 CHANGE `editedBy` `editedBy` varchar(30) NOT NULL DEFAULT '',
 CHANGE `editedDate` `editedDate` datetime NULL;
 
+ALTER TABLE `zt_repo`
+CHANGE `commits` `commits` mediumint unsigned NOT NULL DEFAULT '0';
+CHANGE `account` `account` varchar(30) NOT NULL DEFAULT '',
+CHANGE `password` `password` varchar(30) NOT NULL DEFAULT '';
+CHANGE `lastSync` `lastSync` datetime NULL,
+CHANGE `job` `job` mediumint unsigned NOT NULL DEFAULT '0',
+CHANGE `deleted` `deleted` tinyint(1) NOT NULL DEFAULT '0';
+
 ALTER TABLE `zt_review`
 CHANGE `reviewedBy` `reviewedBy` varchar(255) NOT NULL DEFAULT '',
 CHANGE `auditedBy` `auditedBy` varchar(255) NOT NULL DEFAULT '',
