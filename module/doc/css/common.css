@@ -1,3 +1,4 @@
+.drop-title {padding: 0 15px;}
 .split-row > .side-col,
 .split-row > .main-col {padding: 0;}
 .col-spliter {width: 20px; position: relative; z-index: 10; cursor: ew-resize;}
