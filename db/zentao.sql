@@ -383,7 +383,7 @@ CREATE TABLE IF NOT EXISTS `zt_case` (
   `scriptLocation` varchar(255) NOT NULL DEFAULT '',
   `status` char(30) NOT NULL default '1',
   `subStatus` varchar(30) NOT NULL default '',
-  `color` char(7) NOT NULL,
+  `color` char(7) NOT NULL DEFAULT '',
   `frequency` enum('1','2','3') NOT NULL default '1',
   `order` tinyint(30) unsigned NOT NULL default '0',
   `openedBy` char(30) NOT NULL default '',
