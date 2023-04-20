@@ -470,7 +470,7 @@ class groupModel extends model
             $depentedPrivs = $this->getPrivByIdList($depentedPrivs);
             foreach($depentedPrivs as $privID => $priv)
             {
-                if(in_array($priv->method, $_POST['actions'][$priv->module]))
+                if(empty($_POST['actions'][$priv->module]) or in_array($priv->method, $_POST['actions'][$priv->module]))
                 {
                     unset($depentedPrivs[$privID]);
                     continue;
