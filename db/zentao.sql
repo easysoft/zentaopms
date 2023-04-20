@@ -284,7 +284,7 @@ CREATE TABLE IF NOT EXISTS `zt_bug` (
   `openedBuild` varchar(255) NOT NULL,
   `assignedTo` varchar(30) NOT NULL DEFAULT '',
   `assignedDate` datetime NULL,
-  `deadline` date NOT NULL,
+  `deadline` date NULL,
   `resolvedBy` varchar(30) NOT NULL DEFAULT '',
   `resolution` varchar(30) NOT NULL DEFAULT '',
   `resolvedBuild` varchar(30) NOT NULL DEFAULT '',
