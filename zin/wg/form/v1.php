@@ -61,7 +61,7 @@ class form extends wg
 
     protected function build()
     {
-        list($items, $grid, $labelWidth, $url, $target, $method) = $this->prop(['items', 'grid', 'labelWidth', 'url', 'target', 'method']);
+        list($items, $grid, $labelWidth, $url, $target, $method, $id) = $this->prop(['items', 'grid', 'labelWidth', 'url', 'target', 'method', 'id']);
 
         $actions = $this->buildFormActions();
         if($grid && !empty($actions)) $actions = div(setClass('form-row'), $actions);
@@ -77,15 +77,22 @@ class form extends wg
                 if($item instanceof formGroup) $list[$key] = new formRow($item);
             }
         }
+        $isAjax = $target === 'ajax';
+        if($isAjax)
+        {
+            $target = NULL;
+            if(empty($id)) $id = $this->gid;
+        }
 
         return h::form
         (
-            setClass('form', $grid ? 'form-grid' : NULL, $target === 'ajax' ? 'form-ajax' : ''),
-            set(['action' => $url, 'target' => $target === 'ajax' ? NULL : $target, 'method' => $method]),
+            set::class('form', $grid ? 'form-grid' : NULL, $isAjax ? 'form-ajax' : ''),
+            set(['id' => $id, 'action' => $url, 'target' => $target, 'method' => $method]),
             set($this->getRestProps()),
             empty($labelWidth) ? NULL : setCssVar('form-label-width', $labelWidth),
             $list,
-            $actions
+            $actions,
+            $isAjax ? zui::ajaxForm(set::_to("#$id")) : NULL
         );
     }
 }
