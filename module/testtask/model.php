@@ -563,7 +563,7 @@ class testtaskModel extends model
             ->on('t1.case = t2.id')
             ->where('t1.task')->eq($taskID)
             ->andWhere('t2.deleted')->eq(0)
-            ->groupBy('name')
+            ->groupBy('t1.lastRunResult')
             ->orderBy('value DESC')
             ->fetchAll('name');
 
@@ -588,7 +588,7 @@ class testtaskModel extends model
             ->leftJoin(TABLE_CASE)->alias('t2')->on('t1.case = t2.id')
             ->where('t1.task')->eq($taskID)
             ->andWhere('t2.deleted')->eq(0)
-            ->groupBy('name')
+            ->groupBy('t2.type')
             ->orderBy('value desc')
             ->fetchAll('name');
         if(!$datas) return array();
@@ -611,7 +611,7 @@ class testtaskModel extends model
             ->leftJoin(TABLE_CASE)->alias('t2')->on('t1.case = t2.id')
             ->where('t1.task')->eq($taskID)
             ->andWhere('t2.deleted')->eq(0)
-            ->groupBy('name')
+            ->groupBy('t2.module')
             ->orderBy('value desc')
             ->fetchAll('name');
         if(!$datas) return array();
@@ -635,7 +635,7 @@ class testtaskModel extends model
             ->leftJoin(TABLE_CASE)->alias('t2')->on('t1.case = t2.id')
             ->where('t1.task')->eq($taskID)
             ->andWhere('t2.deleted')->eq(0)
-            ->groupBy('name')
+            ->groupBy('t1.lastRunner')
             ->orderBy('value DESC')
             ->fetchAll('name');
         if(!$datas) return array();
@@ -1905,7 +1905,7 @@ class testtaskModel extends model
                     $oldCase = $this->dao->select('*')->from(TABLE_CASE)->where('id')->eq($caseID)->fetch();
                     $case->version    = $oldCase->version;
                     $case->openedDate = $oldCase->openedDate;
-                    
+
                     $changes = common::createChanges($oldCase, $case);
                     if($changes)
                     {

@@ -22,7 +22,7 @@ class testreportModel extends model
         $execution = $this->loadModel('execution')->getByID($this->post->execution);
         $data = fixer::input('post')
             ->stripTags($this->config->testreport->editor->create['id'], $this->config->allowedTags)
-            ->setDefault('project', $execution->type == 'project' ? $execution->id : $execution->project)
+            ->setDefault('project', empty($execution) ? 0 : ($execution->type == 'project' ? $execution->id : $execution->project))
             ->add('createdBy', $this->app->user->account)
             ->add('createdDate', helper::now())
             ->join('stories', ',')
@@ -482,7 +482,7 @@ class testreportModel extends model
             ->andWhere('t1.`case`')->in($cases)
             ->andWhere('t1.date')->ge($begin)
             ->andWhere('t1.date')->le($end . " 23:59:59")
-            ->groupBy('name')
+            ->groupBy('t1.caseResult')
             ->orderBy('value DESC')
             ->fetchAll('name');
 
@@ -514,7 +514,7 @@ class testreportModel extends model
             ->andWhere('t1.`case`')->in($cases)
             ->andWhere('t1.date')->ge($begin)
             ->andWhere('t1.date')->le($end . " 23:59:59")
-            ->groupBy('name')
+            ->groupBy('t1.lastRunner')
             ->orderBy('value DESC')
             ->fetchAll('name');
 

@@ -1782,9 +1782,9 @@ CREATE UNIQUE INDEX `team` ON `zt_team`(`root`,`type`,`account`);
 -- DROP TABLE IF EXISTS `zt_testreport`;
 CREATE TABLE IF NOT EXISTS `zt_testreport` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
-  `project` mediumint(8) unsigned NOT NULL,
-  `product` mediumint(8) unsigned NOT NULL,
-  `execution` mediumint(8) unsigned NOT NULL,
+  `project` mediumint(8) unsigned NOT NULL DEFAULT '0',
+  `product` mediumint(8) unsigned NOT NULL DEFAULT '0',
+  `execution` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `tasks` varchar(255) NOT NULL,
   `builds` varchar(255) NOT NULL,
   `title` varchar(255) NOT NULL,
@@ -1792,15 +1792,15 @@ CREATE TABLE IF NOT EXISTS `zt_testreport` (
   `end` date NOT NULL,
   `owner` char(30) NOT NULL,
   `members` text NOT NULL,
-  `stories` text NOT NULL,
-  `bugs` text NOT NULL,
-  `cases` text NOT NULL,
-  `report` text NOT NULL,
+  `stories` text NULL,
+  `bugs` text NULL,
+  `cases` text NULL,
+  `report` text NULL,
   `objectType` varchar(20) NOT NULL,
   `objectID` mediumint(8) unsigned NOT NULL,
   `createdBy` char(30) NOT NULL,
   `createdDate` datetime NOT NULL,
-  `deleted` enum('0','1') NOT NULL,
+  `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_testresult`;
