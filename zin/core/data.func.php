@@ -11,27 +11,42 @@
 
 namespace zin;
 
-function data($name, $defaultValue = NULL)
+function setPageData($name, $value)
+{
+    if(is_array($value) && $name === NULL)
+    {
+        foreach ($value as $key => $val) zin::setData($key, $val);
+        return;
+    }
+    zin::setData($name, $value);
+}
+
+function getPageData($name)
 {
     if(is_array($name))
     {
         $values = array();
-        foreach($name as $index => $propName)
+        foreach($name as $propName)
         {
-            $values[] = zin::getData($propName, is_array($defaultValue) ? (isset($defaultValue[$propName]) ? $defaultValue[$propName] : $defaultValue[$index]) : $defaultValue);
+            $values[] = zin::getData($propName);
         }
         return $values;
     }
 
-    return zin::getData($name, $defaultValue);
+    return zin::getData($name);
 }
 
+function data(...$args)
+{
+    if(count($args) >= 2) return setPageData($args[0], $args[1]);
+    return getPageData($args[0]);
+}
+
+/**
+ * Set page data
+ * @deprecated Use data($name, $value) insteadOf useData($name, $value)
+ */
 function useData($name, $value)
 {
-    if(is_array($name))
-    {
-        foreach($name as $key => $value) zin::setData($key, $value);
-        return;
-    }
-    return zin::setData($name, $value);
+    return setPageData($name, $value);
 }

@@ -9,7 +9,7 @@ class heading extends wg
 
     protected function buildAppName()
     {
-        list($tab, $lang) = data(array('app.tab', 'lang'));
+        list($tab, $lang) = data(['app.tab', 'lang']);
         $icon = zget($lang->navIcons, $tab, '');
 
         if(!in_array($tab, array('program', 'product', 'project')))
@@ -25,7 +25,7 @@ class heading extends wg
             if($tab == 'product')                      $currentMethod = 'all';
         }
 
-        $url = helper::createLink($currentModule, $currentMethod);
+        $url = createLink($currentModule, $currentMethod);
         return item
         (
             set::url($url),

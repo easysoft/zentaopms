@@ -32,14 +32,14 @@ class featureBar extends wg
         $recTotal     = data('recTotal');
         $items        = array();
         $link         = $this->prop('link');
-        $currentStory = $this->prop('currentStory', data('storyBrowseType', ''));
+        $currentStory = $this->prop('currentStory', data('storyBrowseType') ?? '');
 
-        useData('activeFeature', $current);
+        data('activeFeature', $current);
 
         if(empty($link))
         {
             $linkParams = $this->prop('linkParams');
-            if(empty($linkParams)) $linkParams = 'browseType={key}&orderBy=' . data('orderBy', '');
+            if(empty($linkParams)) $linkParams = 'browseType={key}&orderBy=' . data('orderBy') ?? '';
             $link = createLink($currentModule, $currentMethod, $linkParams);
         }
 

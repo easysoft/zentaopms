@@ -40,8 +40,8 @@ class pageBase extends wg
         $body = $this->buildBody();
 
         $context   = context::current();
-        $css       = array_merge([data('pageCSS', '')], $context->getCssList());
-        $js        = array_merge($context->getJsList(), [data('pageJS', '')]);
+        $css       = array_merge([data('pageCSS') ?? ''], $context->getCssList());
+        $js        = array_merge($context->getJsList(), [data('pageJS') ?? '']);
         $imports   = $context->getImportList();
         $jsConfig  = \js::getJSConfigVars();
         $bodyProps = $this->prop('bodyProps');
