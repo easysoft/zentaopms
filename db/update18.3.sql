@@ -712,6 +712,13 @@ CHANGE `activatedDate` `activatedDate` datetime NULL;
 ALTER TABLE `zt_kanbancard`
 CHANGE `begin` `begin` date NULL,
 CHANGE `end` `end` date NULL,
+CHANGE `name` `name` varchar(255) NOT NULL DEFAULT '',
+CHANGE `pri` `pri` mediumint unsigned NOT NULL DEFAULT '0',
+CHANGE `assignedTo` `assignedTo` text NULL,
+CHANGE `desc` `desc` mediumtext NULL,
+CHANGE `estimate` `estimate` float unsigned NOT NULL DEFAULT '0',
+CHANGE `color` `color` char(7) NOT NULL DEFAULT '',
+
 CHANGE `fromID` `fromID` mediumint unsigned NOT NULL DEFAULT '0',
 CHANGE `fromType` `fromType` varchar(30) NOT NULL DEFAULT '',
 CHANGE `whitelist` `whitelist` text NULL,
