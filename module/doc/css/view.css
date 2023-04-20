@@ -55,7 +55,7 @@
 .overflow-auto {overflow: auto;}
 .overflow-visible {overflow: visible;}
 .overflow-hidden {overflow: hidden;}
-.detail-title .actions .ajaxCollect > img {width: 20px;}
+.detail-title .actions .ajaxCollect > img {width: 20px; height: 20px;}
 .actions > .text {color: #8c8c8c; font-size: 14px;}
 .flex-content {display: flex; width: 100%; height: 100%;}
 .flex-content > #content {flex: auto; overflow-y: auto;}
