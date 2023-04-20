@@ -467,7 +467,7 @@ class groupModel extends model
         foreach($privs as $priv) $groups[$priv->group] = $priv->group;
 
         $privMap  = array();
-        $privList = $this->dao->select('group,module,method')->from(TABLE_GROUPPRIV)->where('group')->in($groups)->fetchAll();
+        $privList = $this->dao->select('`group`,module,method')->from(TABLE_GROUPPRIV)->where('group')->in($groups)->fetchAll();
         foreach($privList as $priv) $privMap[$priv->group . '-' . $priv->module . '-' . $priv->method] = true;
 
         foreach($privs as $priv)
