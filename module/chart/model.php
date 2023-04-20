@@ -100,10 +100,14 @@ class chartModel extends model
         if(!$groups) return array('', array());
 
         $chartGroups = array();
+        $this->loadModel('screen');
         foreach($groups as $group)
         {
             $chartGroups[$group->id] = $this->dao->select('*')->from(TABLE_CHART)
                 ->where('deleted')->eq(0)
+                ->andWhere('builtin', true)->eq('0')
+                ->orWhere('id')->in($this->config->screen->builtinChart)
+                ->markRight(1)
                 ->andWhere("FIND_IN_SET($group->id, `group`)")
                 ->andWhere('stage')->ne('draft')
                 ->orderBy($orderBy)
