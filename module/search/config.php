@@ -152,7 +152,7 @@ $config->search->recPerPage = 10;
 $config->search->summaryLength = 120;
 $config->search->maxFileSize   = 1024;
 
-if($config->vision == 'lite')
+if($config->vision == 'rnd')
 {
     $config->search->searchObject = array('trash', 'productlibDoc', 'productapiDoc', 'projectlibDoc', 'projectapiDoc');
 }
