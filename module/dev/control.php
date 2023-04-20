@@ -97,20 +97,6 @@ class dev extends control
     }
 
     /**
-     * Translate.
-     *
-     * @access public
-     * @return void
-     */
-    public function translate()
-    {
-        $this->view->title      = $this->lang->dev->translate;
-        $this->view->position[] = $this->lang->dev->translate;
-
-        $this->display();
-    }
-
-    /**
      *  Custom menu lang item.
      *
      * @param  string $type       common|first|second|third|tag

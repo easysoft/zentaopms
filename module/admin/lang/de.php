@@ -10,10 +10,9 @@
  * @link        http://www.zentao.net
  */
 $lang->admin->index           = 'Admin Home';
-$lang->admin->checkDB         = 'Datenbank prüfen';
 $lang->admin->sso             = 'SSO';
 $lang->admin->ssoAction       = 'Link Zdoo';
-$lang->admin->safeIndex       = 'Sicherheit';
+$lang->admin->safeIndex       = 'Password Security Setting';
 $lang->admin->checkWeak       = 'Schwache Passwörter prüfen';
 $lang->admin->certifyMobile   = 'Prüfen Sie die Mobilnummer';
 $lang->admin->certifyEmail    = 'Prüfen Sie die Emailadresse';

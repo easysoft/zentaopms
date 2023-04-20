@@ -1424,7 +1424,6 @@ class actionModel extends model
             {
                 $objectName     = array();
                 $relatedProject = array();
-
                 if(strpos(",{$this->config->action->needGetProjectType},", ",{$objectType},") !== false)
                 {
                     $objectInfo = $this->dao->select("id, project, $field AS name")->from($table)->where('id')->in($objectIdList)->fetchAll();
@@ -1479,6 +1478,10 @@ class actionModel extends model
                     $this->app->loadLang('branch');
                     $objectName = $this->dao->select("id,name")->from(TABLE_BRANCH)->where('id')->in($objectIdList)->fetchPairs();
                     if(in_array(BRANCH_MAIN, $objectIdList)) $objectName[BRANCH_MAIN] = $this->lang->branch->main;
+                }
+                elseif($objectType == 'privlang')
+                {
+                    $objectName = $this->dao->select("objectID AS id, $field AS name")->from($table)->where('objectID')->in($objectIdList)->andWhere('objectType')->eq('priv')->fetchPairs();
                 }
                 else
                 {
@@ -1712,6 +1715,14 @@ class actionModel extends model
         {
             if($action->project)   $action->objectLink = common::hasPriv('project', 'team')   ? helper::createLink('project',   'team', 'projectID=' . $action->project) : '';
             if($action->execution) $action->objectLink = common::hasPriv('execution', 'team') ? helper::createLink('execution', 'team', 'executionID=' . $action->execution) : '';
+        }
+        elseif($action->objectType == 'privpackage')
+        {
+            $action->objectLink = '';
+        }
+        elseif($action->objectType == 'privlang')
+        {
+            $action->objectLink = '';
         }
 
         if($action->objectType == 'stakeholder' and $action->project == 0) $action->objectLink = '';

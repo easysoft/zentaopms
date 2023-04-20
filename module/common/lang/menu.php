@@ -74,7 +74,7 @@ $lang->my->menu->execution  = array('link' => "{$lang->execution->common}|my|exe
 $lang->my->menu->contribute = array('link' => "$lang->contribute|my|contribute|mode=task");
 $lang->my->menu->dynamic    = array('link' => "$lang->dynamic|my|dynamic|");
 $lang->my->menu->score      = array('link' => "{$lang->score->shortCommon}|my|score|", 'subModule' => 'score');
-$lang->my->menu->contacts   = array('link' => "$lang->contact|my|managecontacts|");
+$lang->my->menu->contacts   = array('link' => "{$lang->contact->common}|my|managecontacts|");
 
 /* My menu order. */
 $lang->my->menuOrder[5]  = 'index';
@@ -210,7 +210,7 @@ $lang->scrum->menu->projectplan = array('link' => "{$lang->productplan->shortCom
 $lang->scrum->menu->doc         = array('link' => "{$lang->doc->common}|doc|projectSpace|objectID=%s", 'subModule' => 'doc,api');
 $lang->scrum->menu->qa          = array('link' => "{$lang->qa->common}|project|bug|projectID=%s", 'subModule' => 'testcase,testtask,bug,testreport', 'alias' => 'bug,testtask,testcase,testreport', 'exclude' => 'execution-create,execution-batchedit');
 $lang->scrum->menu->devops      = array('link' => "{$lang->repo->common}|repo|browse|repoID=0&branchID=&objectID=%s", 'subModule' => 'repo');
-$lang->scrum->menu->build       = array('link' => "{$lang->build->common}|project|build|project=%s", 'subModule' => 'projectbuild');
+$lang->scrum->menu->build       = array('link' => "{$lang->build->common}|projectbuild|browse|project=%s", 'subModule' => 'projectbuild');
 $lang->scrum->menu->release     = array('link' => "{$lang->release->common}|projectrelease|browse|project=%s", 'subModule' => 'projectrelease');
 $lang->scrum->menu->dynamic     = array('link' => "$lang->dynamic|project|dynamic|project=%s");
 $lang->scrum->menu->settings    = array('link' => "$lang->settings|project|view|project=%s", 'subModule' => 'tree,stakeholder', 'alias' => 'edit,manageproducts,group,managemembers,manageview,managepriv,whitelist,addwhitelist,team', 'exclude' => 'tree-browsetask');
@@ -250,7 +250,6 @@ $lang->scrum->menu->settings['subMenu']->whitelist   = array('link' => "{$lang->
 $lang->scrum->menu->settings['subMenu']->stakeholder = array('link' => "{$lang->stakeholder->common}|stakeholder|browse|project=%s", 'subModule' => 'stakeholder');
 $lang->scrum->menu->settings['subMenu']->group       = array('link' => "{$lang->priv}|project|group|project=%s", 'alias' => 'group,manageview,managepriv');
 $lang->scrum->menu->settings['subMenu']->module      = array('link' => "{$lang->module}|tree|browse|product=%s&view=story");
-//$lang->scrum->menu->settings['subMenu']->managerepo  = array('link' => "{$lang->repo->codeRepo}|project|managerepo|project=%s");
 
 /* Waterfall menu. */
 $lang->waterfall->menu = new stdclass();
@@ -262,7 +261,7 @@ $lang->waterfall->menu->design     = array('link' => "{$lang->design->common}|de
 $lang->waterfall->menu->qa         = array('link' => "{$lang->qa->common}|project|bug|projectID=%s", 'subModule' => 'testcase,testtask,bug,testreport', 'alias' => 'bug,testtask,testcase,testreport');
 $lang->waterfall->menu->doc        = array('link' => "{$lang->doc->common}|doc|projectSpace|objectID=%s");
 $lang->waterfall->menu->devops     = array('link' => "{$lang->repo->common}|repo|browse|repoID=0&branchID=&objectID=%s", 'subModule' => 'repo');
-$lang->waterfall->menu->build      = array('link' => "{$lang->build->common}|project|build|project=%s", 'subModule' => 'projectbuild');
+$lang->waterfall->menu->build      = array('link' => "{$lang->build->common}|projectbuild|browse|project=%s", 'subModule' => 'projectbuild');
 $lang->waterfall->menu->release    = array('link' => "{$lang->release->common}|projectrelease|browse|project=%s", 'subModule' => 'projectrelease');
 $lang->waterfall->menu->dynamic    = array('link' => "$lang->dynamic|project|dynamic|project=%s");
 $lang->waterfall->menu->settings   = array('link' => "$lang->settings|project|view|project=%s", 'subModule' => 'stakeholder', 'alias' => 'edit,manageproducts,group,managemembers,manageview,managepriv,whitelist,addwhitelist,team', 'exclude' => 'tree-browsetask');
@@ -306,7 +305,7 @@ $lang->waterfall->menu->design['subMenu']->bysearch = array('link' => '<a href="
 $lang->kanbanProject = new stdclass();
 $lang->kanbanProject->menu = new stdclass();
 $lang->kanbanProject->menu->index    = array('link' => "{$lang->kanban->common}|project|index|project=%s");
-$lang->kanbanProject->menu->build    = array('link' => "{$lang->build->common}|project|build|project=%s", 'subModule' => 'projectbuild');
+$lang->kanbanProject->menu->build    = array('link' => "{$lang->build->common}|projectbuild|browse|project=%s", 'subModule' => 'projectbuild');
 $lang->kanbanProject->menu->settings = array('link' => "$lang->settings|project|view|project=%s", 'subModule' => 'tree,stakeholder', 'alias' => 'edit,manageproducts,group,managemembers,manageview,managepriv,whitelist,addwhitelist,team');
 
 $lang->kanbanProject->dividerMenu = '';
@@ -559,27 +558,35 @@ $lang->system->menuOrder[15] = 'dynamic';
 $lang->system->menuOrder[20] = 'view';
 
 /* Nav group.*/
-$lang->navGroup         = new stdclass();
-$lang->navGroup->my     = 'my';
-$lang->navGroup->effort = 'my';
-$lang->navGroup->score  = 'my';
-$lang->navGroup->todo   = 'my';
+$lang->navGroup = new stdclass();
+$lang->navGroup->my               = 'my';
+$lang->navGroup->effort           = 'my';
+$lang->navGroup->score            = 'my';
+$lang->navGroup->todo             = 'my';
+$lang->navGroup->contact          = 'my';
+$lang->navGroup->personalsettings = 'my';
 
-$lang->navGroup->program   = 'program';
-$lang->navGroup->personnel = 'program';
+$lang->navGroup->program            = 'program';
+$lang->navGroup->personnel          = 'program';
+$lang->navGroup->programstakeholder = 'program';
 
-$lang->navGroup->product     = 'product';
-$lang->navGroup->productplan = 'product';
-$lang->navGroup->release     = 'product';
-$lang->navGroup->branch      = 'product';
-$lang->navGroup->story       = 'product';
-$lang->navGroup->requirement = 'product';
+$lang->navGroup->product         = 'product';
+$lang->navGroup->productplan     = 'product';
+$lang->navGroup->release         = 'product';
+$lang->navGroup->branch          = 'product';
+$lang->navGroup->story           = 'product';
+$lang->navGroup->requirement     = 'product';
+$lang->navGroup->productsettings = 'product';
 
-$lang->navGroup->project     = 'project';
-$lang->navGroup->deploy      = 'project';
-$lang->navGroup->programplan = 'project';
-$lang->navGroup->design      = 'project';
-$lang->navGroup->stakeholder = 'project';
+$lang->navGroup->project         = 'project';
+$lang->navGroup->deploy          = 'project';
+$lang->navGroup->programplan     = 'project';
+$lang->navGroup->design          = 'project';
+$lang->navGroup->stakeholder     = 'project';
+$lang->navGroup->projectsettings = 'project';
+$lang->navGroup->projectreview   = 'project';
+$lang->navGroup->projecttrack    = 'project';
+$lang->navGroup->projectqa       = 'project';
 
 $lang->navGroup->projectbuild   = 'project';
 $lang->navGroup->projectstory   = 'project';
@@ -594,12 +601,24 @@ $lang->navGroup->projectrelease = 'project';
 $lang->navGroup->build          = 'project';
 $lang->navGroup->measrecord     = 'project';
 $lang->navGroup->milestone      = 'project';
+$lang->navGroup->researchplan   = 'project';
+$lang->navGroup->workestimation = 'project';
+$lang->navGroup->gapanalysis    = 'project';
 
-$lang->navGroup->execution    = 'execution';
-$lang->navGroup->task         = 'execution';
-$lang->navGroup->build        = 'execution';
-$lang->navGroup->team         = 'execution';
+$lang->navGroup->execution         = 'execution';
+$lang->navGroup->task              = 'execution';
+$lang->navGroup->build             = 'execution';
+$lang->navGroup->team              = 'execution';
+$lang->navGroup->executionview     = 'execution';
+$lang->navGroup->executiongantt    = 'execution';
+$lang->navGroup->executionkanban   = 'execution';
+$lang->navGroup->executionburn     = 'execution';
+$lang->navGroup->executioncfd      = 'execution';
+$lang->navGroup->executionstory    = 'execution';
+$lang->navGroup->executionqa       = 'execution';
+$lang->navGroup->executionsettings = 'execution';
 
+$lang->navGroup->managespace  = 'kanban';
 $lang->navGroup->kanbanspace  = 'kanban';
 $lang->navGroup->kanban       = 'kanban';
 $lang->navGroup->kanbanregion = 'kanban';
@@ -611,10 +630,11 @@ $lang->navGroup->doc    = 'doc';
 $lang->navGroup->doclib = 'doc';
 $lang->navGroup->api    = 'doc';
 
-$lang->navGroup->screen = 'bi';
-$lang->navGroup->pivot  = 'bi';
-$lang->navGroup->chart  = 'bi';
-$lang->navGroup->report = 'bi';
+$lang->navGroup->screen   = 'bi';
+$lang->navGroup->pivot    = 'bi';
+$lang->navGroup->chart    = 'bi';
+$lang->navGroup->bidesign = 'bi';
+$lang->navGroup->report   = 'bi';
 
 $lang->navGroup->qa            = 'qa';
 $lang->navGroup->bug           = 'qa';
@@ -643,8 +663,16 @@ $lang->navGroup->ci               = 'devops';
 $lang->navGroup->svn              = 'devops';
 $lang->navGroup->git              = 'devops';
 $lang->navGroup->app              = 'devops';
+$lang->navGroup->pipeline         = 'devops';
+$lang->navGroup->devopssetting    = 'devops';
 
-$lang->navGroup->company = 'system';
+$lang->navGroup->company        = 'system';
+$lang->navGroup->systemteam     = 'system';
+$lang->navGroup->systemschedule = 'system';
+$lang->navGroup->systemeffort   = 'system';
+$lang->navGroup->systemdynamic  = 'system';
+$lang->navGroup->systemcompany  = 'system';
+$lang->navGroup->dataaccess     = 'system';
 
 $lang->navGroup->attend   = 'attend';
 $lang->navGroup->leave    = 'attend';
@@ -652,29 +680,36 @@ $lang->navGroup->makeup   = 'attend';
 $lang->navGroup->overtime = 'attend';
 $lang->navGroup->lieu     = 'attend';
 
-$lang->navGroup->admin     = 'admin';
-$lang->navGroup->dept      = 'admin';
-$lang->navGroup->user      = 'admin';
-$lang->navGroup->group     = 'admin';
-$lang->navGroup->dept      = 'admin';
-$lang->navGroup->webhook   = 'admin';
-$lang->navGroup->sms       = 'admin';
-$lang->navGroup->message   = 'admin';
-$lang->navGroup->custom    = 'admin';
-$lang->navGroup->cron      = 'admin';
-$lang->navGroup->backup    = 'admin';
-$lang->navGroup->mail      = 'admin';
-$lang->navGroup->dev       = 'admin';
-$lang->navGroup->editor    = 'admin';
-$lang->navGroup->entry     = 'admin';
-$lang->navGroup->extension = 'admin';
-$lang->navGroup->action    = 'admin';
-$lang->navGroup->convert   = 'admin';
-$lang->navGroup->stage     = 'admin';
+$lang->navGroup->admin         = 'admin';
+$lang->navGroup->dept          = 'admin';
+$lang->navGroup->user          = 'admin';
+$lang->navGroup->group         = 'admin';
+$lang->navGroup->dept          = 'admin';
+$lang->navGroup->webhook       = 'admin';
+$lang->navGroup->sms           = 'admin';
+$lang->navGroup->message       = 'admin';
+$lang->navGroup->custom        = 'admin';
+$lang->navGroup->cron          = 'admin';
+$lang->navGroup->backup        = 'admin';
+$lang->navGroup->mail          = 'admin';
+$lang->navGroup->dev           = 'admin';
+$lang->navGroup->editor        = 'admin';
+$lang->navGroup->entry         = 'admin';
+$lang->navGroup->extension     = 'admin';
+$lang->navGroup->action        = 'admin';
+$lang->navGroup->convert       = 'admin';
+$lang->navGroup->stage         = 'admin';
+$lang->navGroup->featureswitch = 'admin';
+$lang->navGroup->importdata    = 'admin';
+$lang->navGroup->systemsetting = 'admin';
+$lang->navGroup->staffmanage   = 'admin';
+$lang->navGroup->modelconfig   = 'admin';
+$lang->navGroup->featureconfig = 'admin';
+$lang->navGroup->doctemplate   = 'admin';
+$lang->navGroup->notifysetting = 'admin';
+$lang->navGroup->holidayseason = 'admin';
 
-$lang->navGroup->search  = 'search';
 $lang->navGroup->index   = 'index';
-$lang->navGroup->tree    = 'tree';
 $lang->navGroup->misc    = 'misc';
 $lang->navGroup->upgrade = 'upgrade';
 
@@ -693,7 +728,6 @@ if(!helper::hasFeature('devops'))
     unset($lang->waterfall->menu->devops, $lang->waterfall->menuOrder[35]);
     unset($lang->execution->menu->devops, $lang->execution->menuOrder[45]);
     unset($lang->project->noMultiple->scrum->menu->devops, $lang->project->noMultiple->scrum->menuOrder[35]);
-    unset($lang->scrum->menu->settings['subMenu']->managerepo);
 }
 
 if(!helper::hasFeature('kanban'))

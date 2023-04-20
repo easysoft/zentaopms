@@ -5,14 +5,14 @@ $lang->job->create        = 'Create Pipeline';
 $lang->job->edit          = 'Edit Pipeline';
 $lang->job->exec          = 'Execute Pipeline';
 $lang->job->runPipeline   = 'Run pipeline';
-$lang->job->view          = 'Execute Details';
+$lang->job->view          = 'Pipeline Details';
 $lang->job->delete        = 'Delete Pipeline';
 $lang->job->confirmDelete = 'Voullez-vous supprimer ce job ?';
 $lang->job->dirChange     = 'Directory Changed';
 $lang->job->buildTag      = 'Build Tag';
 $lang->job->execSuccess   = 'Build success';
 
-$lang->job->browseAction = 'Job List';
+$lang->job->browseAction = 'Pipeline List';
 
 $lang->job->id              = 'ID';
 $lang->job->name            = 'Nom';

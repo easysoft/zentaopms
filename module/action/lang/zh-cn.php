@@ -45,6 +45,7 @@ $lang->action->create      = '添加备注';
 $lang->action->comment     = '备注';
 $lang->action->byQuery     = '搜索';
 
+$lang->action->trashAction    = '回收站列表';
 $lang->action->undeleteAction = '还原数据';
 $lang->action->hideOneAction  = '隐藏数据';
 
@@ -159,8 +160,8 @@ $lang->action->objectTypes['stage']            = '阶段';
 $lang->action->objectTypes['patch']            = '补丁';
 $lang->action->objectTypes['repo']             = '代码库';
 $lang->action->objectTypes['dataview']         = '中间表';
+$lang->action->objectTypes['privlang']         = '权限';
 $lang->action->objectTypes['scene']            = '场景';
-
 
 /* 用来描述操作历史记录。*/
 $lang->action->desc = new stdclass();

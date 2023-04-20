@@ -229,6 +229,13 @@ $config->openMethods[] = 'task.editteam';
 $config->openMethods[] = 'feedback.mergeproductmodule';
 $config->openMethods[] = 'zanode.nodelist';
 $config->openMethods[] = 'action.restoreStages';
+$config->openMethods[] = 'execution.browse';
+$config->openMethods[] = 'testcase.showImport';
+$config->openMethods[] = 'testsuite.index';
+$config->openMethods[] = 'caselib.index';
+$config->openMethods[] = 'company.index';
+$config->openMethods[] = 'user.cropAvatar';
+$config->openMethods[] = 'custom.index';
 $config->openMethods[] = 'testcase.getXmindImport';
 $config->openMethods[] = 'testcase.showXMindImport';
 $config->openMethods[] = 'testcase.saveXmindImport';
@@ -365,6 +372,11 @@ define('VIEW_SCENECASE', '`ztv_scenecase`');
 
 define('CHANGEVALUE', 100000000);
 
+define('TABLE_PRIV',         '`' . $config->db->prefix . 'priv`');
+define('TABLE_PRIVLANG',     '`' . $config->db->prefix . 'privlang`');
+define('TABLE_PRIVMANAGER',  '`' . $config->db->prefix . 'privmanager`');
+define('TABLE_PRIVRELATION', '`' . $config->db->prefix . 'privrelation`');
+
 $config->objectTables['product']      = TABLE_PRODUCT;
 $config->objectTables['productplan']  = TABLE_PRODUCTPLAN;
 $config->objectTables['story']        = TABLE_STORY;
@@ -418,6 +430,10 @@ $config->objectTables['zahost']       = TABLE_ZAHOST;
 $config->objectTables['zanode']       = TABLE_ZAHOST;
 $config->objectTables['automation']   = TABLE_AUTOMATION;
 $config->objectTables['stepResult']   = TABLE_TESTRUN;
+$config->objectTables['priv']         = TABLE_PRIV;
+$config->objectTables['privlang']     = TABLE_PRIVLANG;
+$config->objectTables['privmanager']  = TABLE_PRIVMANAGER;
+$config->objectTables['privrelation'] = TABLE_PRIVRELATION;
 $config->objectTables['scene']        = TABLE_SCENE;
 
 $config->newFeatures      = array('introduction', 'tutorial', 'youngBlueTheme', 'visions');
@@ -428,8 +444,8 @@ $config->pipelineTypeList = array('gitlab', 'gogs', 'gitea', 'jenkins', 'sonarqu
 
 /* Program privs.*/
 $config->programPriv = new stdclass();
-$config->programPriv->noSprint      = array('task', 'story', 'tree', 'project', 'execution', 'build', 'bug', 'testcase', 'testreport', 'doc', 'repo', 'stakeholder', 'projectrelease', 'requirement');
-$config->programPriv->scrum         = array('story', 'requirement', 'productplan', 'tree', 'projectplan', 'projectstory', 'projectrelease', 'project', 'execution', 'build', 'bug', 'testcase', 'testreport', 'doc', 'repo', 'meeting', 'stakeholder', 'testtask');
+$config->programPriv->noSprint      = array('task', 'story', 'tree', 'project', 'execution', 'projectbuild', 'bug', 'testcase', 'testreport', 'doc', 'repo', 'stakeholder', 'projectrelease', 'requirement');
+$config->programPriv->scrum         = array('story', 'requirement', 'productplan', 'tree', 'projectplan', 'projectstory', 'projectrelease', 'project', 'execution', 'projectbuild', 'bug', 'testcase', 'testreport', 'doc', 'repo', 'meeting', 'stakeholder', 'testtask');
 $config->programPriv->waterfall     = array_merge($config->programPriv->scrum, array('workestimation', 'durationestimation', 'budget', 'programplan', 'review', 'reviewissue', 'weekly', 'cm', 'milestone', 'design', 'issue', 'risk', 'opportunity', 'measrecord', 'auditplan', 'trainplan', 'gapanalysis', 'pssp', 'researchplan', 'researchreport'));
 $config->programPriv->agileplus     = $config->programPriv->scrum;
 $config->programPriv->waterfallplus = $config->programPriv->waterfall;

@@ -794,7 +794,7 @@ class buildModel extends model
         global $app;
         $tab = $app->tab;
 
-        $module = $build->execution ? 'build' : 'projectbuild';
+        $module = $this->app->tab == 'project' ? 'projectbuild' : 'build';
         if($type == 'browse')
         {
             $executionID = $tab == 'execution' ? $extraParams['executionID'] : $build->execution;

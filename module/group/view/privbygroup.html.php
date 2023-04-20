@@ -16,7 +16,7 @@
     <a href='javascript:;' class='btn btn-link btn-active-text'><span class='text'><?php echo $group->name;?></span></a>
   </div>
 </div>
-<div id='mainContent' class='main-content'>
+<div id='mainContent' class='main main-content'>
   <form class="load-indicator main-form form-ajax" id="managePrivForm" method="post">
     <table class='table table-hover table-striped table-bordered'>
       <thead>
@@ -38,7 +38,7 @@
         <th class='text-right'></th>
         <td class='form-actions'>
           <?php echo html::submitButton('', "onclick='setNoChecked()'");?>
-          <?php echo html::a($this->inlink('browse'), $lang->goback, '', "class='btn btn-back btn-wide'");?>
+          <?php echo html::a($this->inlink('browse'), $lang->cancel, '', "class='btn btn-back btn-wide'");?>
           <?php echo html::hidden('noChecked'); // Save the value of no checked.?>
         </td>
       </tr>
@@ -68,92 +68,143 @@
     if($i >= $config->group->maxToolBarCount) echo '</ul></div>';
     ?>
 
-    <?php $active = $menu == 'other' ? 'btn-active-text' : '';?>
-    <?php echo html::a(inlink('managePriv', sprintf($params, 'other')), "<span class='text'>{$lang->group->other}</span>", '', "class='btn btn-link $active'");?>
+    <?php $active = $menu == 'general' ? 'btn-active-text' : '';?>
+    <?php echo html::a(inlink('managePriv', sprintf($params, 'general')), "<span class='text'>{$lang->group->general}</span>", '', "class='btn btn-link $active'");?>
 
     <div class='input-control space w-150px'>
       <?php echo html::select('version', $this->lang->group->versions, $version, "onchange=showPriv(this.value) class='form-control chosen'");?>
     </div>
   </div>
 </div>
-<div id='mainContent' class='main-content'>
-  <form class="load-indicator main-form form-ajax" id="managePrivForm" method="post" target='hiddenwin'>
-    <table class='table table-hover table-striped table-bordered' id='privList'>
-      <thead>
-        <tr class='text-center'>
-          <th class='thWidth'><?php echo $lang->group->module;?></th>
-          <th colspan='2'><?php echo $lang->group->method;?></th>
-        </tr>
-      </thead>
-      <?php foreach($lang->resource as $moduleName => $moduleActions):?>
-      <?php if(!count((array)$moduleActions)) continue;?>
-      <?php if(!$this->group->checkMenuModule($menu, $moduleName)) continue;?>
-      <?php
-      /* Check method in select version. */
-      if($version)
-      {
-          $hasMethod = false;
-          foreach($moduleActions as $action => $actionLabel)
-          {
-              if(strpos($changelogs, ",$moduleName-$actionLabel,") !== false)
-              {
-                  $hasMethod = true;
-                  break;
-              }
-          }
-          if(!$hasMethod) continue;
-      }
-      ?>
-      <tr class='<?php echo cycle('even, bg-gray');?>'>
-        <th class='text-middle text-right thWidth'>
-          <div class="checkbox-primary checkbox-inline checkbox-right check-all">
-            <input type='checkbox' id='allChecker<?php echo $moduleName;?>'>
-            <?php $moduleTitle = $lang->$moduleName->common;?>
-            <?php if(in_array($moduleName, array('doc', 'api'))) $moduleTitle = $lang->$moduleName->manage;?>
-            <label class='text-right' for='allChecker<?php echo $moduleName;?>'><?php echo $moduleTitle;?></label>
-          </div>
-        </th>
-        <?php if(isset($lang->$moduleName->menus)):?>
-        <td class='menus'>
-          <?php echo html::checkbox("actions[$moduleName]", array('browse' => $lang->$moduleName->browse), isset($groupPrivs[$moduleName]) ? $groupPrivs[$moduleName] : '');?>
-          <a href='javascript:;'><i class='icon icon-plus'></i></a>
-          <?php echo html::checkbox("actions[$moduleName]", $lang->$moduleName->menus, isset($groupPrivs[$moduleName]) ? $groupPrivs[$moduleName] : '');?>
-        </td>
-        <?php endif;?>
-        <td id='<?php echo $moduleName;?>' class='pv-10px' colspan='<?php echo !empty($lang->$moduleName->menus) ? 1 : 2?>'>
-          <?php $i = 1;?>
-          <?php foreach($moduleActions as $action => $actionLabel):?>
-          <?php if(!empty($lang->$moduleName->menus) and $action == 'browse') continue;;?>
-          <?php if(!empty($version) and strpos($changelogs, ",$moduleName-$actionLabel,") === false) continue;?>
-          <div class='group-item'>
-            <?php echo html::checkbox("actions[{$moduleName}]", array($action => $lang->$moduleName->$actionLabel), isset($groupPrivs[$moduleName][$action]) ? $action : '', "title='{$lang->$moduleName->$actionLabel}'", 'inline');?>
-          </div>
+<form class="load-indicator main-form form-ajax" id="managePrivForm" method="post">
+  <div id='mainContainer'>
+    <div class='main main-content'>
+      <div class="btn-group">
+        <?php echo html::a(inlink('managePriv', "type=byGroupbyPackage&param=$groupID&menu=$menu&version=$version"), "<i class='icon-without-authority-pack'></i>", '', "class='btn btn-icon switchBtn text-primary'");?>
+        <?php echo html::a(inlink('managePriv', "type=byPackage&param=$groupID&menu=$menu&version=$version"), "<i class='icon-has-authority-pack'></i>", '', "class='btn btn-icon switchBtn'");?>
+      </div>
+      <table class='table table-hover table-striped table-bordered' id='privList'>
+        <thead>
+          <tr class='text-center'>
+            <th class='module'><?php echo $lang->group->module;?></th>
+            <th class='package'><?php echo $lang->privpackage->common;?></th>
+            <th class='method' colspan='2'><?php echo $lang->group->method;?></th>
+          </tr>
+        </thead>
+        <tbody>
+          <?php foreach($privList as $moduleName => $packages):?>
+          <?php if(!count((array)$packages)) continue;?>
+          <?php
+          $i = 1;
+
+          $modulePrivs  = count($privList[$moduleName], 1) - count($selectPrivs[$moduleName], 1);
+          $moduleSelect = array_sum($selectPrivs[$moduleName]);
+          ?>
+          <?php foreach($packages as $packageID => $privs):?>
+          <tr class='<?php echo cycle('even, bg-gray');?>'>
+            <?php if($i == 1):?>
+            <th class='text-middle text-left module' rowspan="<?php echo $i == 1 ? count($packages) : 1;?>" data-module='<?php echo $moduleName;?>' all-privs='<?php echo $modulePrivs;?>' select-privs='<?php echo $moduleSelect;?>'>
+              <div class="checkbox-primary checkbox-inline checkbox-left check-all">
+                <input type='checkbox' id='allChecker<?php echo $moduleName;?>' value='1' <?php if(!empty($moduleSelect) and $modulePrivs == $moduleSelect) echo 'checked';?>>
+                <?php $moduleTitle = $lang->$moduleName->common;?>
+                <?php if(in_array($moduleName, array('doc', 'api'))) $moduleTitle = $lang->$moduleName->manage;?>
+                <label class='text-left <?php if(!empty($moduleSelect) and $modulePrivs != $moduleSelect) echo 'checkbox-indeterminate-block';?>' for='allChecker<?php echo $moduleName;?>'><?php echo $moduleTitle;?></label>
+              </div>
+            </th>
+            <?php endif;?>
+            <?php
+            $packagePrivs  = count($privs);
+            $packageSelect = $selectPrivs[$moduleName][$packageID];
+            ?>
+            <th class='<?php echo $i == 1 ? 'td-sm' : 'td-md';?> text-middle text-left package' data-module='<?php echo $moduleName;?>' data-package='<?php echo $packageID;?>' all-privs='<?php echo $packagePrivs;?>' select-privs='<?php echo $packageSelect;?>'>
+              <div class="checkbox-primary checkbox-inline checkbox-left check-all">
+                <input type='checkbox' id='allCheckerModule<?php echo $moduleName;?>Package<?php echo $packageID;?>' value='browse' <?php if($packagePrivs == $packageSelect) echo 'checked';?>>
+                <label class='text-left <?php if(!empty($packageSelect) and $packagePrivs != $packageSelect) echo 'checkbox-indeterminate-block';?>' for='allCheckerPackage<?php echo $packageID;?>'><?php echo zget($privPackages, $packageID, $lang->group->other);?></label>
+              </div>
+            </th>
+            <?php if(isset($lang->$moduleName->menus)):?>
+            <?php
+            $menusPrivs  = count($lang->$moduleName->menus);
+            $menusSelect = count(array_intersect(array_keys($lang->$moduleName->menus), array_keys(zget($groupPrivs, $moduleName, array()))));
+            ?>
+            <td class='menus <?php echo $moduleName;?>' all-privs='<?php echo $menusPrivs;?>' select-privs='<?php echo $menusSelect;?>' data-module='<?php echo $moduleName;?>' data-package='0'>
+              <div class="checkbox-primary checkbox-inline checkbox-left check-all">
+                <input type='checkbox' value='browse' <?php if($menusPrivs == $menusSelect) echo 'checked';?>>
+                <label class='text-left <?php if(!empty($menusSelect) and $menusPrivs != $menusSelect) echo 'checkbox-indeterminate-block';?>' for='actions[<?php echo $moduleName;?>]browse'><?php echo $lang->$moduleName->browse;?></label>
+              </div>
+              <a href='javascript:;'><i class='icon icon-plus'></i></a>
+              <?php echo html::checkbox("actions[$moduleName]", $lang->$moduleName->menus, isset($groupPrivs[$moduleName]) ? $groupPrivs[$moduleName] : array());?>
+            </td>
+            <?php endif;?>
+            <td id='<?php echo $moduleName;?>' class='pv-10px' colspan='<?php echo !empty($lang->$moduleName->menus) ? 1 : 2?>'>
+              <?php foreach($privs as $privID => $priv):?>
+              <?php if(!empty($lang->$moduleName->menus) and ($priv->method == 'browse' or in_array($priv->method, array_keys($lang->$moduleName->menus)))) continue;?>
+              <div class="group-item" data-module='<?php echo $moduleName;?>' data-package='<?php echo $packageID;?>' data-id='<?php echo zget($priv, 'id', 0);?>'>
+                <div class="checkbox-primary">
+                  <?php echo html::checkbox("actions[$priv->module]", array($priv->method => $priv->name), isset($groupPrivs[$priv->module][$priv->method]) ? $priv->method : '', "title='{$priv->name}' id='actions[$priv->module]$priv->method' data-id='$priv->action'");?>
+                </div>
+              </div>
+              <?php endforeach;?>
+            </td>
+          </tr>
+          <?php $i ++;?>
           <?php endforeach;?>
-        </td>
-      </tr>
-      <?php endforeach;?>
-      <tr>
-        <th class='text-right'>
-          <div class="checkbox-primary checkbox-inline checkbox-right check-all">
-            <input type='checkbox' id='allChecker'>
-            <label class='text-right' for='allChecker'><?php echo $lang->selectAll;?></label>
+          <?php endforeach;?>
+        </tbody>
+      </table>
+    </div>
+    <div class="side">
+      <div class="priv-panel">
+        <div class="panel-title">
+          <?php echo $lang->group->dependentPrivs;?>
+          <icon class='icon icon-help' data-toggle='popover' data-trigger='focus hover' data-placement='right' data-tip-class='text-muted popover-sm' data-content='<?php echo $lang->group->dependPrivTips;?>'></icon>
+        </div>
+        <div class="panel-content">
+          <div class="menuTree depend menu-active-primary menu-hover-primary"></div>
+          <div class="table-empty-tip <?php if(count($relatedPrivData['depend']) > 0) echo 'hidden';?>">
+            <p><span class="text-muted"><?php echo $lang->noData;?></span></p>
           </div>
-        </th>
-        <td class='form-actions' colspan='2'>
-          <?php echo html::submitButton('', "onclick='setNoChecked()'", 'btn btn-wide btn-primary');?>
-          <?php echo html::a($this->inlink('browse'), $lang->goback, '', "class='btn btn-back btn-wide'");?>
-          <?php echo html::hidden('noChecked'); // Save the value of no checked.?>
-        </td>
-      </tr>
-    </table>
-  </form>
-</div>
+        </div>
+      </div>
+      <div class="priv-panel mt-m">
+        <div class="panel-title">
+          <?php echo $lang->group->recommendPrivs;?>
+          <icon class='icon icon-help' data-toggle='popover' data-trigger='focus hover' data-placement='right' data-tip-class='text-muted popover-sm' data-content='<?php echo $lang->group->recommendPrivTips;?>'></icon>
+        </div>
+        <div class="panel-content">
+          <div class="menuTree recommend menu-active-primary menu-hover-primary"></div>
+          <div class="table-empty-tip <?php if(count($relatedPrivData['recommend']) > 0) echo 'hidden';?>">
+            <p><span class="text-muted"><?php echo $lang->noData;?></span></p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class='priv-footer'>
+    <div class='text-center text-middle'>
+      <div class="checkbox-primary checkbox-inline check-all">
+        <input type='checkbox' id='allChecker'>
+        <label class='text-right' for='allChecker'><?php echo $lang->selectAll;?></label>
+      </div>
+      <?php echo html::hidden('actions[][]');?>
+      <?php echo html::submitButton($lang->save, "onclick='setNoChecked()'", 'btn btn-primary btn-wide');?>
+      <?php echo html::a($this->createLink('group', 'browse'), $lang->cancel, '', 'class="btn btn-wide"');?>
+      <?php echo html::hidden('noChecked'); // Save the value of no checked.?>
+    </div>
+  </div>
+</form>
 <?php endif;?>
+<?php js::set('type', $type);?>
 <?php js::set('groupID', $groupID);?>
 <?php js::set('menu', $menu);?>
+<?php js::set('relatedPrivData', json_encode($relatedPrivData));?>
+<?php js::set('selectedPrivIdList', $selectedPrivIdList);?>
+<?php js::set('excludeIdList', $excludePrivsIdList);?>
 <script>
 $(document).ready(function()
 {
+    $(".icon-help").popover();
+
     /**
      * 隐藏列表标签。
      * Hide tabs except the browse list tab.
@@ -176,7 +227,17 @@ $(document).ready(function()
      */
     $('.menus input[value=browse]').change(function()
     {
-        $(this).parents('.menus').find('[name^=actions]').prop('checked', $(this).prop('checked'));
+        var checked = $(this).prop('checked');
+        if(checked)
+        {
+            $(this).parents('.menus').find('[name^=actions]').attr('checked', 'checked');
+        }
+        else
+        {
+            $(this).parents('.menus').find('[name^=actions]').removeAttr('checked');
+        }
+        $(this).closest('.menus').find('.checkbox-indeterminate-block').removeClass('checkbox-indeterminate-block');
+        changeParentChecked($(this), $(this).closest('td').attr('data-module'), $(this).closest('td').attr('data-package'));
     });
 
     /**
@@ -185,9 +246,31 @@ $(document).ready(function()
      */
     $('.menus input[name^=actions]:not(input[value=browse])').click(function()
     {
-        var $parent = $(this).parents('.menus');
+        var checked = $(this).prop('checked');
+        if(!checked) $(this).removeAttr('checked');
+        if(checked)  $(this).attr('checked', 'checked');
 
-        $parent.find('input[value=browse]').prop('checked', $parent.find('input[name^=actions]:not(input[value=browse]):checked').length > 0);
+        var $parent     = $(this).parents('.menus');
+        var $browse     = $parent.find('.check-all');
+        var selectPrivs = $parent.find('.checkbox-primary').not('.check-all').find('[checked=checked]').length;
+        var allPrivs    = $parent.find('.checkbox-primary').not('.check-all').length;
+
+        if(allPrivs > 0 && selectPrivs == allPrivs)
+        {
+            $browse.find('input').attr('checked', 'checked');
+            $browse.find('.checkbox-indeterminate-block').removeClass('checkbox-indeterminate-block');
+        }
+        else if(selectPrivs == 0)
+        {
+            $browse.find('input').removeAttr('checked');
+            $browse.find('.checkbox-indeterminate-block').removeClass('checkbox-indeterminate-block');
+        }
+        else
+        {
+            $browse.find('input').removeAttr('checked');
+            $browse.find('label').addClass('checkbox-indeterminate-block');
+        }
+        changeParentChecked($(this), $(this).closest('td').attr('data-module'), $(this).closest('td').attr('data-package'));
     })
 });
 </script>

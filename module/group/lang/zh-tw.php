@@ -53,7 +53,7 @@ $lang->group->option   = '選項';
 $lang->group->inside   = '組內用戶';
 $lang->group->outside  = '組外用戶';
 $lang->group->limited  = '受限用戶組';
-$lang->group->other    = '其他模組';
+$lang->group->general  = '通用';
 $lang->group->all      = '所有權限';
 
 $lang->group->copyOptions['copyPriv'] = '複製權限';

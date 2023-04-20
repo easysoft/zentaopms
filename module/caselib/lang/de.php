@@ -12,7 +12,6 @@
 $lang->caselib->common = 'Case Library';
 $lang->caselib->all    = 'All Case Libraries';
 
-$lang->caselib->index           = "Library Home";
 $lang->caselib->create          = "Create Case Library";
 $lang->caselib->edit            = 'Edit Case Library';
 $lang->caselib->browse          = 'View Cases in Library';

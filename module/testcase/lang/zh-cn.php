@@ -134,6 +134,7 @@ $lang->testcase->groupCase               = "分组浏览用例";
 $lang->testcase->zeroCase                = "零用例{$lang->common->story}";
 $lang->testcase->import                  = "导入";
 $lang->testcase->importAction            = "导入用例";
+$lang->testcase->importCaseAction        = "导入用例";
 $lang->testcase->fileImport              = "导入CSV";
 $lang->testcase->importFromLib           = "从用例库中导入";
 $lang->testcase->showImport              = "显示导入内容";

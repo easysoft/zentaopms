@@ -20,12 +20,14 @@ $lang->dept->manager      = "Manager";
 $lang->dept->name         = "Department Name";
 $lang->dept->browse       = "Manage Department";
 $lang->dept->manage       = "Manage Department";
-$lang->dept->updateOrder  = "Rank Department";
+$lang->dept->updateOrder  = "Department Ranking";
 $lang->dept->add          = "Add Department";
 $lang->dept->grade        = "Department Grade";
 $lang->dept->order        = "Department Order";
 $lang->dept->dragAndSort  = "Drag to order";
 $lang->dept->noDepartment = "No Department";
+
+$lang->dept->manageChildAction = "Manage Subordinate Department";
 
 $lang->dept->confirmDelete = " Do you want to delete this department?";
 $lang->dept->successSave   = " Saved!";

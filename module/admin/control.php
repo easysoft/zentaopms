@@ -206,23 +206,6 @@ class admin extends control
     }
 
     /**
-     * Check all tables.
-     *
-     * @access public
-     * @return void
-     */
-    public function checkDB()
-    {
-        $tables = $this->dbh->query("show full tables where Table_Type != 'VIEW'")->fetchAll(PDO::FETCH_ASSOC);
-        foreach($tables as $table)
-        {
-            $tableName = current($table);
-            $result = $this->dbh->query("REPAIR TABLE $tableName")->fetch();
-            echo "Repairing TABLE: " . $result->Table . (defined('IN_SHELL') ? "\t" : "&nbsp;&nbsp;&nbsp;&nbsp;") . $result->Msg_type . ":" . $result->Msg_text . (defined('IN_SHELL') ? "\n" : "<br />\n");
-        }
-    }
-
-    /**
      * Account safe.
      *
      * @access public

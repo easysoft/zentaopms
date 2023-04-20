@@ -244,13 +244,14 @@ function copyStoryTitle()
 /* Set the assignedTos field. */
 function setOwners(result)
 {
-    $("#multipleBox").removeAttr("checked");
-    $('.team-group').addClass('hidden');
-    $('.modeBox').addClass('hidden');
-    $('#assignedTo, #assignedTo_chosen').removeClass('hidden');
-    $('#assignedTo').next('.picker').removeClass('hidden');
     if(result == 'affair')
     {
+        $("#multipleBox").removeAttr("checked");
+        $('.team-group').addClass('hidden');
+        $('.modeBox').addClass('hidden');
+        $('#assignedTo, #assignedTo_chosen').removeClass('hidden');
+        $('#assignedTo').next('.picker').removeClass('hidden');
+
         $('#assignedTo').attr('multiple', 'multiple');
         $('#assignedTo').chosen('destroy');
         $('#assignedTo').chosen();

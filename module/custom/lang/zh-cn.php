@@ -3,7 +3,6 @@ global $config;
 
 $lang->custom->common               = '自定义';
 $lang->custom->id                   = '编号';
-$lang->custom->index                = '首页';
 $lang->custom->set                  = '自定义配置';
 $lang->custom->restore              = '恢复默认';
 $lang->custom->key                  = '键';
@@ -63,6 +62,7 @@ $lang->custom->percent              = $lang->stage->percent;
 $lang->custom->setPercent           = "是否启用{$lang->stage->percent}";
 $lang->custom->beginAndEndDate      = '起止日期';
 $lang->custom->beginAndEndDateRange = '起止日期范围';
+$lang->custom->limitTaskDateAction  = '设置起止日期必填';
 
 $lang->custom->unitList['efficiency'] = '工时/';
 $lang->custom->unitList['manhour']    = '人时/';

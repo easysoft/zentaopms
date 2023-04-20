@@ -3,7 +3,6 @@ $lang->dev->common       = '二次开发';
 $lang->dev->api          = '接口文档';
 $lang->dev->db           = '数据字典';
 $lang->dev->editor       = '编辑器';
-$lang->dev->translate    = '翻译';
 $lang->dev->dbList       = '数据库';
 $lang->dev->moduleList   = '模块列表';
 $lang->dev->params       = '参数列表';
@@ -19,7 +18,6 @@ $lang->dev->paramDate      = '日期格式：YY-mm-dd，如：2019-01-01';
 $lang->dev->paramColor     = '颜色格式：#RGB，如：#3da7f5';
 $lang->dev->paramMailto    = "填写帐号，多个账号用','分隔。";
 $lang->dev->noteEditor     = "编辑器功能存在部分安全问题，如需使用该功能，可在此开启。";
-$lang->dev->noteTranslate  = "翻译功能因为安全原因被禁用。使用该功能，请到官网下载安装 <a href='https://www.zentao.net/extension-viewExt-151.html' target='_blank'>翻译</a> 插件。";
 $lang->dev->confirmRestore = '是否要恢复默认？';
 $lang->dev->apiTips        = '可访问的每个页面都可通过JSON接口调取';
 
