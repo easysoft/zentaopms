@@ -1525,7 +1525,7 @@ EOT;
     /**
      * Check dbName is valide.
      *
-     * @param  int    $string
+     * @param  string $dbName
      * @access public
      * @return bool
      */
