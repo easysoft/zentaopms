@@ -880,6 +880,8 @@ ALTER TABLE `zt_projectstory`
 CHANGE `branch` `branch` mediumint unsigned NOT NULL DEFAULT '0';
 
 ALTER TABLE `zt_relation`
+CHANGE `AVersion` `AVersion` char(30) NOT NULL DEFAULT '',
+CHANGE `BVersion` `BVersion` char(30) NOT NULL DEFAULT '',
 CHANGE `project` `project` mediumint NOT NULL DEFAULT '0',
 CHANGE `product` `product` mediumint NOT NULL DEFAULT '0',
 CHANGE `execution` `execution` mediumint NOT NULL DEFAULT '0',

@@ -1384,11 +1384,11 @@ CREATE TABLE IF NOT EXISTS `zt_relation` (
   `execution` mediumint(8) NOT NULL DEFAULT '0',
   `AType` char(30) NOT NULL,
   `AID` mediumint(8) NOT NULL,
-  `AVersion` char(30) NOT NULL,
+  `AVersion` char(30) NOT NULL DEFAULT '',
   `relation` char(30) NOT NULL,
   `BType` char(30) NOT NULL,
   `BID` mediumint(8) NOT NULL,
-  `BVersion` char(30) NOT NULL,
+  `BVersion` char(30) NOT NULL DEFAULT '',
   `extra` char(30) NOT NULL DEFAULT '',
   PRIMARY KEY (`id`)
 ) ENGINE='InnoDB' DEFAULT CHARSET=utf8;
