@@ -915,13 +915,16 @@ class storyModel extends model
             }
         }
 
-        /* Unchanged product when editing requirements on site. */
-        $storyProjectID = $this->dao->select('t2.hasProduct')->from(TABLE_PROJECTPRODUCT)->alias('t1')
-            ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
-            ->where('t1.product')->eq($oldStory->product)
-            ->andWhere('t2.deleted')->eq(0)
-            ->fetch();
-        $_POST['product'] = !$storyProjectID->hasProduct ? $oldStory->product : $this->post->product;
+        if($this->config->vision != 'ipd')
+        {
+            /* Unchanged product when editing requirements on site. */
+            $storyProjectID = $this->dao->select('t2.hasProduct')->from(TABLE_PROJECTPRODUCT)->alias('t1')
+                ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
+                ->where('t1.product')->eq($oldStory->product)
+                ->andWhere('t2.deleted')->eq(0)
+                ->fetch();
+            $_POST['product'] = !$storyProjectID->hasProduct ? $oldStory->product : $this->post->product;
+        }
 
         $story = fixer::input('post')
             ->cleanInt('product,module,pri,duplicateStory')
