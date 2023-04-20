@@ -1480,7 +1480,7 @@ class actionModel extends model
                 }
                 elseif($objectType == 'privlang')
                 {
-                    $objectName = $this->dao->select("priv AS id, $field AS name")->from($table)->where('priv')->in($objectIdList)->fetchPairs();
+                    $objectName = $this->dao->select("objectID AS id, $field AS name")->from($table)->where('objectID')->in($objectIdList)->andWhere('objectType')->eq('priv')->fetchPairs();
                 }
                 else
                 {

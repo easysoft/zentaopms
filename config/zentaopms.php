@@ -374,7 +374,6 @@ define('CHANGEVALUE', 100000000);
 
 define('TABLE_PRIV',         '`' . $config->db->prefix . 'priv`');
 define('TABLE_PRIVLANG',     '`' . $config->db->prefix . 'privlang`');
-define('TABLE_PRIVPACKAGE',  '`' . $config->db->prefix . 'privpackage`');
 define('TABLE_PRIVMANAGER',  '`' . $config->db->prefix . 'privmanager`');
 define('TABLE_PRIVRELATION', '`' . $config->db->prefix . 'privrelation`');
 
@@ -433,7 +432,7 @@ $config->objectTables['automation']   = TABLE_AUTOMATION;
 $config->objectTables['stepResult']   = TABLE_TESTRUN;
 $config->objectTables['priv']         = TABLE_PRIV;
 $config->objectTables['privlang']     = TABLE_PRIVLANG;
-$config->objectTables['privpackage']  = TABLE_PRIVPACKAGE;
+$config->objectTables['privmanager']  = TABLE_PRIVMANAGER;
 $config->objectTables['privrelation'] = TABLE_PRIVRELATION;
 $config->objectTables['scene']        = TABLE_SCENE;
 

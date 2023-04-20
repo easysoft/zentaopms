@@ -160,7 +160,6 @@ $lang->action->objectTypes['stage']            = '阶段';
 $lang->action->objectTypes['patch']            = '补丁';
 $lang->action->objectTypes['repo']             = '代码库';
 $lang->action->objectTypes['dataview']         = '中间表';
-$lang->action->objectTypes['privpackage']      = '权限包';
 $lang->action->objectTypes['privlang']         = '权限';
 $lang->action->objectTypes['scene']            = '场景';
 
