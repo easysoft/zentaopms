@@ -1,3 +1,7 @@
+SET global log_bin_trust_function_creators = 1;
+SET global sql_mode = '';
+USE `__TABLE__`;
+
 -- DROP TABLE IF EXISTS `zt_acl`;
 CREATE TABLE IF NOT EXISTS `zt_acl` (
   `id` mediumint(9) NOT NULL AUTO_INCREMENT,
@@ -14234,9 +14238,6 @@ CREATE TABLE IF NOT EXISTS `zt_sqlview` (
   `deleted` enum('0','1') NOT NULL default '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-SET global log_bin_trust_function_creators = 1;
-SET global sql_mode = '';
-USE `__TABLE__`;
 
 DROP FUNCTION IF EXISTS `get_monday`;
 CREATE FUNCTION `get_monday`(day date) RETURNS date
