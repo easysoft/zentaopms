@@ -1273,6 +1273,15 @@ class doc extends control
         $this->session->set('spaceType', $type, 'doc');
         $this->session->set('docList', $uri, 'doc');
 
+        $docSpaceParam = new stdclass();
+        $docSpaceParam->type       = $type;
+        $docSpaceParam->objectID   = $objectID;
+        $docSpaceParam->libID      = $libID;
+        $docSpaceParam->moduleID   = $moduleID;
+        $docSpaceParam->browseType = $browseType;
+        $docSpaceParam->param      = $param;
+        setCookie("docSpaceParam", json_encode($docSpaceParam), $this->config->cookieLife, $this->config->webRoot, '', false, true);
+
         if($moduleID) $libID = $this->tree->getById($moduleID)->root;
         $isFirstLoad = $libID == 0 ? true : false;
         if(empty($browseType)) $browseType = 'all';
