@@ -86,6 +86,8 @@ class screenModel extends model
         $this->filter->account = $account;
         $this->filter->charts  = array();
 
+        if(!$screen->builtin or in_array($screen->id, $this->config->screen->builtinScreen)) return $this->genNewChartData($screen, $year, $dept, $account);
+
         $config = new stdclass();
         $config->width            = 1300;
         $config->height           = 1080;
@@ -125,6 +127,653 @@ class screenModel extends model
         $chartData->requestGlobalConfig =  json_decode('{ "requestDataPond": [], "requestOriginUrl": "", "requestInterval": 30, "requestIntervalUnit": "second", "requestParams": { "Body": { "form-data": {}, "x-www-form-urlencoded": {}, "json": "", "xml": "" }, "Header": {}, "Params": {} } }');
 
         return $chartData;
+    }
+
+    /**
+     * Generate chartData of new screen.
+     *
+     * @param  object $screen
+     * @param  string $year
+     * @param  string $dept
+     * @param  string $account
+     * @access public
+     * @return object
+     */
+    public function genNewChartData($screen, $year, $dept, $account)
+    {
+        $this->loadModel('pivot');
+        $scheme = json_decode($screen->scheme);
+
+        foreach($scheme->componentList as $component)
+        {
+            if(!empty($component->isGroup))
+            {
+                foreach($component->groupList as $key => $groupComponent)
+                {
+                    if(isset($groupComponent->key) and $groupComponent->key === 'Select') $groupComponent = $this->buildSelect($groupComponent);
+                }
+            }
+            else
+            {
+                if(isset($component->key) and $component->key === 'Select') $component = $this->buildSelect($component);
+            }
+        }
+
+        foreach($scheme->componentList as $component)
+        {
+            if(!empty($component->isGroup))
+            {
+                foreach($component->groupList as $key => $groupComponent)
+                {
+                    $groupComponent = $this->getLatestChart($groupComponent);
+                }
+            }
+            else
+            {
+                $component = $this->getLatestChart($component);
+            }
+        }
+
+        return $scheme;
+    }
+
+    /**
+     * Get the latest chart.
+     *
+     * @param  object  $component
+     * @access public
+     * @return void
+     */
+    public function getLatestChart($component)
+    {
+        if(isset($component->key) and $component->key === 'Select') return $component;
+        $chartID = zget($component->chartConfig, 'sourceID', '');
+        if(!$chartID) return $component;
+
+        $type  = $component->chartConfig->package == 'Tables' ? 'pivot' : 'chart';
+        $table = $type == 'chart' ? TABLE_CHART : TABLE_PIVOT;
+        $chart = $this->dao->select('*')->from($table)->where('id')->eq($chartID)->fetch();
+
+        return $this->genComponentData($chart, $type, $component);
+    }
+
+    /**
+     * Generate a component of screen.
+     *
+     * @param  object $chart
+     * @param  string $type
+     * @param  object $component
+     * @access public
+     * @return object
+     */
+    public function genComponentData($chart, $type = 'chart', $component = null, $filters = '')
+    {
+        $chart = clone($chart);
+        if($type == 'pivot' and $chart)
+        {
+            $chart = $this->loadModel('pivot')->processPivot($chart);
+            $chart->settings = json_encode($chart->settings);
+        }
+
+        if(empty($filters) and !empty($chart->filters))
+        {
+            if($type == 'pivot')
+            {
+                list($sql, $filters) = $this->loadModel($type)->getFilterFormat($chart->sql, json_decode($chart->filters, true));
+                $chart->sql = $sql;
+            }
+            else
+            {
+                $filters = $this->loadModel($type)->getFilterFormat(json_decode($chart->filters, true));
+            }
+        }
+
+        list($component, $typeChanged) = $this->initComponent($chart, $type, $component);
+
+        if(empty($chart) || ($chart->stage == 'draft' || $chart->deleted === '1'))
+        {
+            $component->option = new stdclass();
+            if($type == 'chart')
+            {
+                $component->option->title = new stdclass();
+                $component->option->title->text = sprintf($this->lang->screen->noChartData, $chart->name);
+                $component->option->title->left = 'center';
+                $component->option->title->top  = '50%';
+
+                $component->option->xAxis = new stdclass();
+                $component->option->xAxis->show = false;
+                $component->option->yAxis = new stdclass();
+                $component->option->yAxis->show = false;
+            }
+            else if($type == 'pivot')
+            {
+                $component->option->ineffective = 1;
+                $component->option->header      = array();
+                $component->option->align       = array('center');
+                $component->option->headerBGC   = 'transparent';
+                $component->option->oddRowBGC   = 'transparent';
+                $component->option->evenRowBGC  = 'transparent';
+                $component->option->columnWidth = array();
+                $component->option->rowspan     = array();
+                $component->option->colspan     = array();
+                $component->option->rowNum      = 1;
+                $component->option->dataset     = array(array(sprintf($this->lang->screen->noPivotData, $chart->name)));
+            }
+            return $component;
+        }
+
+        $component = $this->getChartOption($chart, $component, $filters);
+
+        $component->chartConfig->dataset  = $component->option->dataset;
+        $component->chartConfig->fields   = json_decode($chart->fields);
+        $component->chartConfig->filters  = $this->getChartFilters($chart);
+
+        if($type == 'chart' && (!$chart->builtin or in_array($chart->id, $this->config->screen->builtinChart)))
+        {
+            if(!empty($component->option->series))
+            {
+                $defaultSeries = $component->option->series;
+                if($component->type == 'radar')
+                {
+                    $component->option->radar->indicator = $component->option->dataset->radarIndicator;
+                    $defaultSeries[0]->data = $component->option->dataset->seriesData;
+
+                    $legends = array();
+                    foreach($component->option->dataset->seriesData as $seriesData) $legends[] = $seriesData->name;
+                    $component->option->legend->data = $legends;
+                }
+                else
+                {
+                    $series = array();
+                    for($i = 1; $i < count($component->option->dataset->dimensions); $i ++) $series[] = $defaultSeries[0];
+                    $component->option->series = $series;
+                }
+            }
+        }
+
+        return $component;
+    }
+
+    /**
+     * Get chart option.
+     *
+     * @param  object $chart
+     * @param  object $component
+     * @param  array  $filters
+     * @access public
+     * @return object
+     */
+    public function getChartOption($chart, $component, $filters = '')
+    {
+        switch($component->type)
+        {
+            case 'line':
+                return $this->getLineChartOption($component, $chart, $filters);
+            case 'cluBarY':
+            case 'stackedBarY':
+            case 'cluBarX':
+            case 'stackedBar':
+            case 'bar':
+                return $this->getBarChartOption($component, $chart, $filters);
+            case 'piecircle':
+                return $this->buildPieCircleChart($component, $chart);
+            case 'pie':
+                return $this->getPieChartOption($component, $chart, $filters);
+            case 'table':
+                return $this->getTableChartOption($component, $chart, $filters);
+            case 'radar':
+                return $this->getRadarChartOption($component, $chart, $filters);
+            case 'card':
+                return $this->buildCardChart($component, $chart);
+            case 'waterpolo':
+                return $this->buildWaterPolo($component, $chart);
+            default:
+                return '';
+        }
+    }
+
+    /**
+     * Get bar chart option.
+     *
+     * @param  object $component
+     * @param  object $chart
+     * @access public
+     * @return object
+     */
+    public function getBarChartOption($component, $chart, $filters = '')
+    {
+        if($chart->sql)
+        {
+            $settings = json_decode($chart->settings, true);
+            $langs    = json_decode($chart->langs, true);
+            $settings = $settings[0];
+
+            list($group, $metrics, $aggs, $xLabels, $yStats) = $this->loadModel('chart')->getMultiData($settings, $chart->sql, $filters);
+
+            $fields     = json_decode($chart->fields);
+            $dimensions = array($settings['xaxis'][0]['field']);
+            $sourceData = array();
+            $clientLang = $this->app->getClientLang();
+            foreach($yStats as $index => $dataList)
+            {
+                $field     = zget($fields, $metrics[$index]);
+                $fieldName = $field->name; 
+                if(isset($langs[$field->field]) and !empty($langs[$field->field][$clientLang])) $fieldName = $langs[$field->field][$clientLang];
+                $field = $fieldName . '(' . zget($this->lang->chart->aggList, $aggs[$index]) . ')';
+                $dimensions[] = $field;
+
+                foreach($dataList as $valueField => $value)
+                {
+                    if(empty($sourceData[$valueField]))
+                    {
+                        $sourceData[$valueField] = new stdclass();
+                        $sourceData[$valueField]->{$settings['xaxis'][0]['field']} = $valueField;
+                    }
+                    $sourceData[$valueField]->{$field} = $value;
+                }
+            }
+            $component->option->dataset->dimensions = $dimensions;
+            $component->option->dataset->source     = array_values($sourceData);
+        }
+
+        $component = $this->setComponentDefaults($component);
+
+        return $component;
+    }
+
+    /**
+     * Get line chart option.
+     *
+     * @param  object $component
+     * @param  object $chart
+     * @access public
+     * @return object
+     */
+    public function getLineChartOption($component, $chart, $filters = '')
+    {
+        if($chart->sql)
+        {
+            $settings = json_decode($chart->settings, true);
+            $langs    = json_decode($chart->langs, true);
+            $settings = $settings[0];
+
+            list($group, $metrics, $aggs, $xLabels, $yStats) = $this->loadModel('chart')->getMultiData($settings, $chart->sql, $filters);
+
+            $fields     = json_decode($chart->fields);
+            $dimensions = array($settings['xaxis'][0]['field']);
+            $sourceData = array();
+            $clientLang = $this->app->getClientLang();
+            foreach($yStats as $index => $dataList)
+            {
+                $field     = zget($fields, $metrics[$index]);
+                $fieldName = $field->name;
+                if(isset($langs[$field->field]) and !empty($langs[$field->field][$clientLang])) $fieldName = $langs[$field->field][$clientLang];
+                $field = $fieldName . '(' . zget($this->lang->chart->aggList, $aggs[$index]) . ')';
+                $dimensions[] = $field;
+
+                foreach($dataList as $valueField => $value)
+                {
+                    if(empty($sourceData[$valueField]))
+                    {
+                        $sourceData[$valueField] = new stdclass();
+                        $sourceData[$valueField]->{$settings['xaxis'][0]['field']} = $valueField;
+                    }
+                    $sourceData[$valueField]->{$field} = $value;
+                }
+            }
+
+            /* Completing empty values. */
+            foreach($sourceData as $lineData)
+            {
+                foreach($dimensions as $dimension)
+                {
+                    if(empty($lineData->{$dimension})) $lineData->{$dimension} = 0;
+                }
+            }
+
+            $component->option->dataset->dimensions = $dimensions;
+            $component->option->dataset->source     = array_values($sourceData);
+        }
+
+        return $this->setComponentDefaults($component);
+    }
+
+    /**
+     * Get pie chart option.
+     *
+     * @param  object $component
+     * @param  object $chart
+     * @access public
+     * @return object
+     */
+    public function getPieChartOption($component, $chart, $filters = '')
+    {
+        if($chart->sql)
+        {
+            $settings = json_decode($chart->settings, true);
+            $settings = $settings[0];
+
+            $options = $this->loadModel('chart')->genPie(json_decode($chart->fields, true), $settings, $chart->sql, $filters);
+
+            if($settings['group'][0]['field'] == $settings['metric'][0]['field']) $settings['group'][0]['field'] = $settings['group'][0]['field'] . '1';
+            $dimensions = array($settings['group'][0]['field'], $settings['metric'][0]['field']);
+            $sourceData = array();
+            foreach($options['series'] as $dataList)
+            {
+                $field = $settings['metric'][0]['field'];
+                foreach($dataList['data'] as $data)
+                {
+                    $fieldValue = $data['name'];
+                    if(empty($sourceData[$fieldValue]))
+                    {
+                        $sourceData[$fieldValue] = new stdclass();
+                        $sourceData[$fieldValue]->{$settings['group'][0]['field']} = (string)$fieldValue;
+                    }
+                    $sourceData[$fieldValue]->{$field} = $data['value'];
+                }
+            }
+
+            if(empty($sourceData)) $dimensions = array();
+
+            $component->option->dataset->dimensions = $dimensions;
+            $component->option->dataset->source     = array_values($sourceData);
+        }
+
+        return $this->setComponentDefaults($component);
+    }
+
+    /**
+     * Get radar chart option.
+     *
+     * @param  object $component
+     * @param  object $chart
+     * @access public
+     * @return object
+     */
+    public function getRadarChartOption($component, $chart, $filters = '')
+    {
+        $indicator  = array();
+        $seriesData = array();
+        if($chart->sql)
+        {
+            $settings = json_decode($chart->settings, true);
+            $langs    = json_decode($chart->langs, true);
+            $settings = $settings[0];
+
+            list($group, $metrics, $aggs, $xLabels, $yStats) = $this->loadModel('chart')->getMultiData($settings, $chart->sql, $filters);
+
+            $fields         = json_decode($chart->fields);
+            $radarIndicator = array();
+            $seriesData     = array();
+            $max            = 0;
+            $clientLang     = $this->app->getClientLang();
+            foreach($yStats as $index => $dataList)
+            {
+                $field     = zget($fields, $metrics[$index]);
+                $fieldName = $field->name; 
+
+                if(isset($langs[$field->field]) and !empty($langs[$field->field][$clientLang])) $fieldName = $langs[$field->field][$clientLang];
+                $field = $fieldName . '(' . zget($this->lang->chart->aggList, $aggs[$index]) . ')';
+
+                $seriesData[$index] = new stdclass();
+                $seriesData[$index]->name = $field;
+
+                $values = array();
+                foreach($dataList as $valueField => $value)
+                {
+                    $values[] = (float)$value;
+                    $max = $max < $value ? (float)$value : (float)$max;
+                }
+                $seriesData[$index]->value = $values;
+            }
+
+            if(!empty($dataList))
+            {
+                foreach($dataList as $valueField => $value)
+                {
+                    $indicator = new stdclass();
+                    $indicator->name   = $valueField;
+                    $indicator->max    = $max;
+                    $radarIndicator[]  = $indicator;;
+                }
+            }
+            $component->option->dataset->radarIndicator = $radarIndicator;
+            $component->option->dataset->seriesData     = $seriesData;
+        }
+
+        return $this->setComponentDefaults($component);
+    }
+
+
+    /**
+     * Get table chart option.
+     *
+     * @param  object $component
+     * @param  object $chart
+     * @access public
+     * @return object
+     */
+    public function getTableChartOption($component, $chart, $filters = '')
+    {
+        if($chart->sql)
+        {
+            $settings = json_decode($chart->settings, true);
+            $fields   = json_decode($chart->fields, true);
+            $langs    = json_decode($chart->langs, true);
+            list($options, $config) = $this->loadModel('pivot')->genSheet($fields, $settings, $chart->sql, $filters, $langs);
+
+            $colspan = array();
+            if($options->columnTotal and $options->columnTotal == 'sum' and !empty($options->array))
+            {
+                $optionsData = $options->array;
+                $count       = count($optionsData);
+                foreach($optionsData as $index => $data)
+                {
+                    if($index == ($count - 1))
+                    {
+                        $newData = array('total' => $this->lang->pivot->step2->total);
+                        foreach($options->groups as $field) unset($data[$field]);
+                        $newData += $data;
+                        $optionsData[$index] = $newData;
+                    }
+                }
+                $options->array = $optionsData;
+                $colspan[$count - 1][0] = count($options->groups);
+            }
+
+            $dataset = array();
+            foreach($options->array as $data) $dataset[] = array_values($data);
+
+            foreach($config as $i => $data)
+            {
+                foreach($data as $j => $rowspan)
+                {
+                    for($k = 1; $k < $rowspan; $k ++)
+                    {
+                        if(isset($dataset[$i + $k][$j])) unset($dataset[$i + $k][$j]);
+                    }
+                }
+            }
+
+            $align   = array();
+            $headers = array();
+            foreach($options->cols as $cols)
+            {
+                $count  = 1;
+                $header = array();
+                foreach($cols as $data)
+                {
+                    $header[] = $data;
+                    if($count == 1) $align[] = 'center';
+                }
+                $headers[] = $header;
+                $count ++;
+            }
+
+            if(!isset($component->chartConfig->tableInfo)) $component->chartConfig->tableInfo = new stdclass();
+            $component->option->header      = $component->chartConfig->tableInfo->header      = $headers;
+            $component->option->align       = $component->chartConfig->tableInfo->align       = $align;
+            $component->option->columnWidth = $component->chartConfig->tableInfo->columnWidth = array();
+            $component->option->rowspan     = $component->chartConfig->tableInfo->rowspan     = $config;
+            $component->option->colspan     = $component->chartConfig->tableInfo->colspan     = $colspan;
+            $component->option->dataset     = $dataset;
+        }
+
+        return $this->setComponentDefaults($component);
+    }
+
+    /**
+     * Get chart filters
+     *
+     * @param object $chart
+     * @access public
+     * @return void
+     */
+    public function getChartFilters($chart)
+    {
+        $filters = json_decode($chart->filters, true);
+        $fields  = json_decode($chart->fields, true);
+
+        if(empty($filters)) return array();
+
+        $this->loadModel('pivot');
+
+        $screenFilters = array();
+        foreach($filters as $filter)
+        {
+            $isQuery = (isset($filter['from']) and $filter['from'] == 'query');
+
+            if($isQuery)
+            {
+                if($filter['type'] == 'date' or $filter['type'] == 'datetime')
+                {
+                    if(isset($filter['default']))
+                    {
+                        $default = $this->pivot->processDateVar($filter['default']);
+
+                        $filter['default'] = empty($default) ? null : strtotime($default) * 1000;
+                    }
+                }
+
+                if($filter['type'] == 'select')
+                {
+                    $options = $this->getSysOptions($filter['typeOption']);
+                    $screenOptions = array();
+                    foreach($options as $value => $label)
+                    {
+                        $screenOptions[] = array('label' => $label, 'value' => $value);
+                    }
+                    $filter['options'] = $screenOptions;
+                }
+
+                $screenFilters[] = $filter;
+                continue;
+            }
+
+            if($filter['type'] == 'date' or $filter['type'] == 'datetime')
+            {
+                if(isset($filter['default']))
+                {
+                    $default = $filter['default'];
+                    $begin   = $default['begin'];
+                    $end     = $default['end'];
+
+                    if(empty($begin) and empty($end))
+                    {
+                        $filter['default'] = null;
+                    }
+                    else if(empty($begin) or empty($end))
+                    {
+                        $filter['default'] = empty($begin) ? strtotime($end) * 1000 : strtotime($begin) * 1000;
+                    }
+                    else
+                    {
+                        $filter['default'] = array(strtotime($begin) * 1000, strtotime($end) * 1000);
+                    }
+                }
+                else
+                {
+                    $filter['default'] = null;
+                }
+            }
+
+            if($filter['type'] == 'select')
+            {
+                $field = zget($fields, $filter['field']);
+                $options = $this->getSysOptions($field['type'], $field['object'], $field['field'], $chart->sql);
+                $screenOptions = array();
+                foreach($options as $value => $label)
+                {
+                    $screenOptions[] = array('label' => $label, 'value' => $value);
+                }
+                $filter['options'] = $screenOptions;
+            }
+
+            $screenFilters[] = $filter;
+        }
+
+        return $screenFilters;
+    }
+
+    /**
+     * Get system options.
+     *
+     * @param string $type
+     * @access public
+     * @return array
+     */
+    public function getSysOptions($type, $object = '', $field = '', $sql = '')
+    {
+        $options = array();
+        switch($type)
+        {
+            case 'user':
+                $options = $this->loadModel('user')->getPairs();
+                break;
+            case 'product':
+                $options = $this->loadModel('product')->getPairs();
+                break;
+            case 'project':
+                $options = $this->loadModel('project')->getPairsByProgram();
+                break;
+            case 'execution':
+                $options = $this->loadModel('execution')->getPairs();
+                break;
+            case 'dept':
+                $options = $this->loadModel('dept')->getOptionMenu(0);
+                break;
+            case 'option':
+                if($field)
+                {
+                    $path = $this->app->getExtensionRoot() . 'biz' . DS . 'dataview' . DS . 'table' . DS . "$object.php";
+                    include $path;
+
+                    $options = $schema->fields[$field]['options'];
+                }
+                break;
+            case 'object':
+                if($field)
+                {
+                    $table   = zget($this->config->objectTables, $object);
+                    $options = $this->dao->select("id, {$field}")->from($table)->fetchPairs();
+                }
+                break;
+            case 'string':
+                if($field)
+                {
+                    if($sql)
+                    {
+                        $cols = $this->dbh->query($sql)->fetchAll();
+                        foreach($cols as $col)
+                        {
+                            $data = $col->$field;
+                            $options[$data] = $data;
+                        }
+                    }
+                }
+                break;
+        }
+        return $options;
     }
 
     /**
@@ -894,5 +1543,65 @@ class screenModel extends model
             $executionData[$executionID] = $execution;
         }
         return $executionData;
+    }
+
+    /**
+     * Init component.
+     *
+     * @param  object $chart
+     * @param  string $type
+     * @param  object $component
+     * @access public
+     * @return void
+     */
+    public function initComponent($chart, $type, $component = null)
+    {
+        if(!$component) $component = new stdclass();
+        if(!$chart) return $component;
+
+        $settings = is_string($chart->settings) ? json_decode($chart->settings) : $chart->settings;
+
+        if(!isset($component->id))       $component->id       = $chart->id;
+        if(!isset($component->sourceID)) $component->sourceID = $chart->id;
+        if(!isset($component->title))    $component->title    = $chart->name;
+
+        if($type == 'chart') $chartType = ($chart->builtin and !in_array($chart->id, $this->config->screen->builtinChart)) ? $chart->type : $settings[0]->type;
+        if($type == 'pivot') $chartType = 'table';
+        $component->type = $chartType;
+
+        $typeChanged = false;
+
+        // Get type is changed or not.
+        if(isset($component->chartConfig))
+        {
+            foreach($this->config->screen->chartConfig as $type => $chartConfig)
+            {
+                $chartConfig = json_decode($chartConfig, true);
+                if($chartConfig['key'] == $component->chartConfig->key) $componentType = $type;
+            }
+
+            $typeChanged = $chartType != $componentType;
+        }
+
+        // New component type or change component type.
+        if(!isset($component->chartConfig) or $typeChanged)
+        {
+            $chartConfig = json_decode(zget($this->config->screen->chartConfig, $chartType));
+            if(empty($chartConfig)) return null;
+
+            $component->chartConfig = $chartConfig;
+        }
+
+        if(!isset($component->option) or $typeChanged)
+        {
+            $component->option = json_decode(zget($this->config->screen->chartOption, $component->type));
+            $component->option->dataset = new stdclass();
+        }
+
+        if(!isset($component->option->dataset)) $component->option->dataset = new stdclass();
+        $component->chartConfig->title    = $chart->name;
+        $component->chartConfig->sourceID = $component->sourceID;
+
+        return array($component, $typeChanged);
     }
 }
