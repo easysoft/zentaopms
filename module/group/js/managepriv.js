@@ -42,7 +42,6 @@ function setNoChecked()
     {
         if(!$(this).prop('checked') && $(this).attr('data-id') != undefined) noCheckValue = noCheckValue + ',' + $(this).attr('data-id');
     });
-  debugger
     $('#noChecked').val(noCheckValue);
 }
 
