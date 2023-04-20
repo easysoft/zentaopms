@@ -717,7 +717,7 @@ CHANGE `pri` `pri` mediumint unsigned NOT NULL DEFAULT '0',
 CHANGE `assignedTo` `assignedTo` text NULL,
 CHANGE `desc` `desc` mediumtext NULL,
 CHANGE `estimate` `estimate` float unsigned NOT NULL DEFAULT '0',
-CHANGE `color` `color` char(7) NOT NULL DEFAULT '',
+CHANGE `color` `color` char(7) NOT NULL DEFAULT '';
 
 ALTER TABLE `zt_kanbancolumn`
 CHANGE `type` `type` char(30) NOT NULL DEFAULT '';
