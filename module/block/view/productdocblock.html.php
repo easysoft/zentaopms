@@ -51,7 +51,7 @@
 .forty-percent {width: 40%;}
 html[lang="de"] .block-productdoc .c-user{width: 105px;}
 
-.block-productdoc #productType {position: absolute;top: 6px;left: 120px;}
+.block-productdoc #productType {position: absolute;top: 8px;left: 120px;}
 .block-productdoc #productType .btn {border:0px;}
 .block-productdoc #productType .btn:hover {background-color:#f5f5f5;}
 

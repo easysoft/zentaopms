@@ -51,7 +51,7 @@
 .forty-percent {width: 40%;}
 html[lang="de"] .block-projectdoc .c-user{width: 105px;}
 
-.block-projectdoc #projectType {position: absolute;top: 6px;left: 120px;}
+.block-projectdoc #projectType {position: absolute;top: 8px;left: 120px;}
 .block-projectdoc #projectType .btn {border:0px;}
 .block-projectdoc #projectType .btn:hover {background-color:#f5f5f5;}
 
