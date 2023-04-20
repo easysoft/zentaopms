@@ -2139,6 +2139,8 @@ if(!$inUpgrade)
         unset($lang->resource->mr);
     }
     if(!helper::hasFeature('kanban')) unset($lang->resource->kanban);
+
+    if(!$config->systemScore) unset($lang->resource->my->score);
 }
 
 include (dirname(__FILE__) . '/changelog.php');
