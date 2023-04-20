@@ -404,4 +404,12 @@ $lang->project->moreSelects = array();
 $lang->project->moreSelects['suspended'] = '已挂起';
 $lang->project->moreSelects['closed']    = '已关闭';
 
-$lang->project->manDay = '人天';
+$lang->project->manDay            = '人天';
+$lang->project->day               = '天';
+$lang->project->newProduct        = '新产品';
+$lang->project->associatePlan     = '关联计划';
+$lang->project->editorPlaceholder = '可以在编辑器直接贴图。快捷键：Command C+V';
+$lang->project->tenThousandYuan   = '万元';
+$lang->project->planDate          = '计划日期';
+$lang->project->inputProjectName  = '输入项目名称';
+$lang->project->inputProjectCode  = '输入项目代号';

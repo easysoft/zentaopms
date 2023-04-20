@@ -66,7 +66,8 @@ class wg
 
         $this->gid = self::nextGid();
         $this->setDefaultProps(static::getDefaultProps());
-        $this->add(func_get_args());        $this->created();
+        $this->add(func_get_args());
+        $this->created();
 
         zin::renderInGlobal($this);
         static::checkPageResources();

@@ -6,11 +6,28 @@ require_once dirname(__DIR__) . DS . 'control' . DS . 'v1.php';
 
 class formGroup extends wg
 {
-    protected static $defineProps = 'name?: string, label?:string|bool, labelClass?: string, labelClass?: string, required?:bool|string="auto", tip?: string, tipClass?: string|array, tipProps: array, control?: array|string, width?: string, strong?: bool, value?: string|array, disabled?: bool, items?: array';
+    protected static $defineProps = array
+    (
+        'name?: string',
+        'label?:string|bool',
+        'labelClass?: string',
+        'labelClass?: string',
+        'required?:bool|string="auto"',
+        'tip?: string',
+        'tipClass?: string|array',
+        'tipProps: array',
+        'control?: array|string',
+        'width?: string',
+        'strong?: bool',
+        'value?: string|array',
+        'disabled?: bool',
+        'items?: array',
+        'placeholder?: string'
+    );
 
     protected function build()
     {
-        list($name, $label, $labelClass, $labelProps, $required, $tip, $tipClass, $tipProps, $control, $width, $strong, $value, $disabled, $items) = $this->prop(['name', 'label', 'labelClass', 'labelProps', 'required', 'tip', 'tipClass', 'tipProps', 'control', 'width', 'strong', 'value', 'disabled', 'items']);
+        list($name, $label, $labelClass, $labelProps, $required, $tip, $tipClass, $tipProps, $control, $width, $strong, $value, $disabled, $items, $placeholder) = $this->prop(['name', 'label', 'labelClass', 'labelProps', 'required', 'tip', 'tipClass', 'tipProps', 'control', 'width', 'strong', 'value', 'disabled', 'items', 'placeholder']);
 
         if($required === 'auto') $required = isFieldRequired($name);
 
@@ -19,11 +36,12 @@ class formGroup extends wg
 
         if(!empty($control))
         {
-            if($required !== NULL)  $control['required'] = $required;
-            if($name !== NULL)      $control['name']     = $name;
-            if($value !== NULL)     $control['value']    = $value;
-            if($disabled !== NULL)  $control['disabled'] = $disabled;
-            if($items !== NULL)     $control['items']  = $items;
+            if($required !== NULL)    $control['required']    = $required;
+            if($name !== NULL)        $control['name']        = $name;
+            if($value !== NULL)       $control['value']       = $value;
+            if($disabled !== NULL)    $control['disabled']    = $disabled;
+            if($items !== NULL)       $control['items']       = $items;
+            if($placeholder !== NULL) $control['placeholder'] = $placeholder;
         }
 
         return div
