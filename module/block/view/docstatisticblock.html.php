@@ -15,7 +15,7 @@
 .block-docstatistic .flex-column {flex-direction: column; padding-left: 10px;}
 .block-docstatistic .statistic {flex: 0 1 32%;}
 .block-docstatistic .created {flex: 0 1 48%;}
-.block-docstatistic .edited {flex: 0 1 16%; padding-left: 20px;}
+.block-docstatistic .edited {flex: 0 1 16%; padding-left: 0px;}
 .block-docstatistic .divider {border-right: 1px solid #eee; padding-right: 12%;}
 .block-docstatistic .panel-body {padding-top: 0;}
 
