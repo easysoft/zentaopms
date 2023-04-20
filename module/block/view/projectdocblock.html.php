@@ -113,7 +113,7 @@ function change<?php echo "block{$block->id}";?>ProjectType(type)
   </ul>
 </div>
 <div class="panel-body">
-  <div class="table-row">
+  <div class="table-row block-statistic">
     <?php if(empty($projects) and empty($involveds)):?>
     <div class="table-empty-tip">
       <p><span class="text-muted"><?php echo $lang->block->emptyTip;?></span></p>
