@@ -1285,6 +1285,7 @@ class groupModel extends model
             $packageData->parent = $package->module;
             $packageData->type   = 'package';
             $packageData->order  = $package->order;
+            $packageData->vision = ',rnd,lite,';
 
             $this->dao->insert(TABLE_PRIVMANAGER)->data($packageData)->exec();
 
