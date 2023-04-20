@@ -44,7 +44,7 @@ $('#toTaskButton').on('click', function()
     if(projectID && executionID != 0)
     {
         $('#cancelButton').click();
-        link = createLink('task', 'create', 'executionID=' + executionID + '&storyID=0&moduleID=0&taskID=0&todoID=0&extra=projectID=' + projectID + '&bugID=' + bugID);
+        var link = createLink('task', 'create', 'executionID=' + executionID + '&storyID=0&moduleID=0&taskID=0&todoID=0&extra=projectID=' + projectID + '&bugID=' + bugID);
         window.parent.$.apps.open(link, $('#execution').data('multiple') == 0 ? 'project' : 'execution');
     }
     else if(projectID == 0)
