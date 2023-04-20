@@ -8703,6 +8703,8 @@ class upgradeModel extends model
 
         foreach($charts as $chart)
         {
+            $isQuoteDataset = isset($dataviewList[$chart->dataset]);
+
             if($chart->type == 'table')
             {
                $pivotID = $this->upgradeToPivotTable($chart, $dataviewList);
@@ -8715,6 +8717,19 @@ class upgradeModel extends model
                 $data->stage     = 'published';
                 $data->step      = 4;
                 $data->type      = $chart->type == 'bar' ? 'cluBarX' : $chart->type;
+
+                if(isset($dataviewList[$chart->dataset]))
+                {
+                    $dataview     = $dataviewList[$chart->dataset];
+                    $data->sql    = 'SELECT * FROM ' . $dataview->view;
+                    $data->fields = isset($dataview->fields) ? $dataview->fields : '';
+                }
+                elseif($chart->sql)
+                {
+                    $fieldSettings = $this->getFieldSettings($chart->sql);
+                    $data->fields = json_encode($fieldSettings);
+                }
+
 
                 $settings = json_decode($chart->settings);
 
@@ -8729,11 +8744,44 @@ class upgradeModel extends model
                         unset($settings->filter);
                     }
 
+                    if(isset($settings->xaxis))
+                    {
+                        $xaxisFields = $settings->xaxis;
+                        foreach($xaxisFields as $xaxisIndex => $xaxisField)
+                        {
+                            if($isQuoteDataset && strpos($xaxisField->field, '.') !== false)
+                            {
+                                $xaxisField->field = str_replace('.', '_', $xaxisField->field);
+
+                                $xaxisFields[$xaxisIndex] = $xaxisField;
+                            }
+                        }
+                        $settings->xaxis = $xaxisFields;
+                    }
+
+                    if(isset($settings->group))
+                    {
+                        $groupFields = $settings->group;
+                        foreach($groupFields as $groupIndex => $groupField)
+                        {
+                            if($isQuoteDataset && strpos($groupField->field, '.') !== false)
+                            {
+                                $groupField->field = str_replace('.', '_', $groupField->field);
+
+                                $groupFields[$groupIndex] = $groupField;
+                            }
+                        }
+
+                        $settings->group = $groupFields;
+                    }
+
                     if(isset($settings->yaxis))
                     {
                         $yaxisFields = $settings->yaxis;
                         foreach($yaxisFields as $yaxisIndex => $yaxisField)
                         {
+                            if($isQuoteDataview && strpos($yaxisField->field, '.') !== false) $yaxisField->field = str_replace('.', '_', $yaxisField->field);
+
                             if($yaxisField->valOrAgg == 'value')          $yaxisField->valOrAgg = 'sum';
                             if($yaxisField->valOrAgg == 'count_distinct') $yaxisField->valOrAgg = 'distinct';
                             if($yaxisField->valOrAgg == 'value_all')      $yaxisField->valOrAgg = 'count';
@@ -8749,6 +8797,8 @@ class upgradeModel extends model
                         $metricFields = $settings->metric;
                         foreach($metricFields as $metricIndex => $metricField)
                         {
+                            if($isQuoteDataview && strpos($metricField->field, '.') !== false) $metricField->field = str_replace('.', '_', $metricField->field);
+
                             if($metricField->valOrAgg == 'value')          $metricField->valOrAgg = 'sum';
                             if($metricField->valOrAgg == 'count_distinct') $metricField->valOrAgg = 'distinct';
                             if($metricField->valOrAgg == 'value_all')      $metricField->valOrAgg = 'count';
@@ -8762,16 +8812,10 @@ class upgradeModel extends model
 
                 $data->settings = json_encode(array($settings));
 
-                if(isset($dataviewList[$chart->dataset]))
+                if(empty($data->settings))
                 {
-                    $dataview     = $dataviewList[$chart->dataset];
-                    $data->sql    = 'SELECT * FROM ' . $dataview->view;
-                    $data->fields = isset($dataview->fields) ? $dataview->fields : '';
-                }
-                elseif($chart->sql)
-                {
-                    $fieldSettings = $this->getFieldSettings($chart->sql);
-                    $data->fields = json_encode($fieldSettings);
+                    $data->step   = 1;
+                    $data->status = 'draft';
                 }
 
                 if(!empty($filters))
@@ -8812,6 +8856,7 @@ class upgradeModel extends model
                 $this->dao->update(TABLE_CHART)->data($data)->autoCheck()->where('id')->eq($chart->id)->exec();
             }
 
+            /* Update chart id in dashboard. */
             foreach($dashboardLayoutPairs as $dashboardID => $layout)
             {
                 $layout = json_decode($layout);
@@ -8850,6 +8895,8 @@ class upgradeModel extends model
 
         if(!$defaultPivotGroupID) $defaultPivotGroupID = $this->createDefaultGroup('pivot');
 
+        $isQuoteDataset = isset($dataviewList[$table->dataset]);
+
         $pivot = new stdclass();
         $pivot->dimension   = 1;
         $pivot->group       = $defaultPivotGroupID;
@@ -8875,7 +8922,7 @@ class upgradeModel extends model
                 if($index > 3) continue;
 
                 $groupKey = "group{$index}";
-                $pivotSettings->$groupKey = $group->field;
+                $pivotSettings->$groupKey = ($isQuoteDataset && strpos($group->field, '.') !== false) ? str_replace('.', '_', $group->field) : $group->field;
 
                 $index ++;
             }
@@ -8884,7 +8931,7 @@ class upgradeModel extends model
             foreach($tableSettings->column as $index => $tableColumn)
             {
                 $column = new stdclass();
-                $column->field = $tableColumn->field;
+                $column->field = ($isQuoteDataset && strpos($tableColumn->field, '.') !== false) ? str_replace('.', '_', $tableColumn->field) : $tableColumn->field;
                 $column->stat  = $tableColumn->valOrAgg;
 
                 if($column->stat == 'value')          $column->stat = 'sum';
@@ -8903,7 +8950,7 @@ class upgradeModel extends model
 
         if(isset($dataviewList[$table->dataset]))
         {
-            $dataview     = $dataviewList[$table->dataset];
+            $dataview      = $dataviewList[$table->dataset];
             $pivot->sql    = 'SELECT * FROM ' . $dataview->view;
             $pivot->fields = isset($dataview->fields) ? $dataview->fields : '';
         }
@@ -9039,11 +9086,11 @@ class upgradeModel extends model
             }
 
             /* Process settings. */
+            $settings = new stdclass();
             if($report->params)
             {
                 $params = json_decode($report->params);
 
-                $settings = new stdclass();
                 $settings->group1      = $params->group1;
                 $settings->group2      = $params->group2;
                 $settings->columnTotal = 'sum';
