@@ -2,6 +2,6 @@
 namespace zin;
 
 set::zui(true);
-jsVar('window.defaultAppUrl', empty($defaultUrl) ? '${DEFAULT_URL}' : $defaultUrl);
+jsVar('window.defaultAppUrl', $defaultUrl);
 
 render('pagebase');
