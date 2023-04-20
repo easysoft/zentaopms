@@ -1621,7 +1621,7 @@ class actionModel extends model
                 elseif($action->objectType == 'api')
                 {
                     $api = $this->dao->select('id,lib,module')->from(TABLE_API)->where('id')->eq($action->objectID)->fetch();
-                    $params = sprintf($vars, $api->lib, $api->module, $api->id);
+                    $params = sprintf($vars, $api->lib, $api->id, $api->module);
                 }
                 elseif($action->objectType == 'branch')
                 {

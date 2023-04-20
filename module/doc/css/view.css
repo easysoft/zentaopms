@@ -8,6 +8,7 @@
 .main-col .doc-title .version .dropdown-menu a:hover {color: #ffffff;}
 .main-col .doc-title .actions a + a {margin-left: 0px;}
 .main-col .doc-title .actions i {font-size: 15px; color: #8c8c8c;}
+.main-col .doc-title .actions a > span {color: #9EA3B0;}
 #content .title {max-width: 54%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;}
 #mainContent .scrollbar-hover {max-height: 2000px; overflow: scroll;}
 #content .editor-preview {background: #fff}

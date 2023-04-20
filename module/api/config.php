@@ -24,6 +24,7 @@ $config->api->editor->createlib     = array('id' => 'desc', 'tools' => 'simpleTo
 $config->api->editor->editlib       = array('id' => 'desc', 'tools' => 'simpleTools');
 $config->api->editor->create        = array('id' => 'desc', 'tools' => 'simpleTools');
 $config->api->editor->edit          = array('id' => 'desc', 'tools' => 'simpleTools');
+$config->api->editor->view          = array('id' => 'comment,lastComment', 'tools' => 'simple');
 $config->api->editor->createRelease = array('id' => 'desc', 'tools' => 'simpleTools');
 $config->api->editor->createstruct  = array('id' => 'desc', 'tools' => 'simpleTools');
 $config->api->editor->editstruct    = array('id' => 'desc', 'tools' => 'simpleTools');

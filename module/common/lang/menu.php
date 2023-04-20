@@ -502,7 +502,7 @@ $lang->doc->menu->dashboard = array('link' => "{$lang->dashboard}|doc|index");
 $lang->doc->menu->my        = array('link' => "{$lang->doc->mySpace}|doc|mySpace|type=mine", 'alias' => 'myspace');
 $lang->doc->menu->product   = array('link' => "{$lang->doc->productSpace}|doc|productSpace|", 'alias' => 'productspace');
 $lang->doc->menu->project   = array('link' => "{$lang->doc->projectSpace}|doc|projectSpace|", 'alias' => 'projectspace');
-$lang->doc->menu->api       = array('link' => "{$lang->doc->apiSpace}|api|index", 'alias' => 'api');
+$lang->doc->menu->api       = array('link' => "{$lang->doc->apiSpace}|api|index", 'alias' => '', 'exclude' => 'index');
 $lang->doc->menu->custom    = array('link' => "{$lang->doc->teamSpace}|doc|teamSpace|", 'alias' => 'teamspace');
 
 $lang->doc->dividerMenu = ',product,';

@@ -27,7 +27,7 @@
       <tbody>
         <tr id='headerBox'>
           <td width='90px'><?php echo html::backButton("<i class='icon icon-back icon-sm'></i> " . $lang->goback, "id='backBtn'", 'btn btn-secondary');?></td>
-          <td class="doc-title" colspan='3'><?php echo html::input('title', '', "placeholder='{$lang->doc->titlePlaceholder}' id='editorTitle' class='form-control' required");?></td>
+          <td class="doc-title" colspan='3'><?php echo html::input('title', '', "placeholder='{$lang->doc->titlePlaceholder}' id='editorTitle' class='form-control' required maxlength='100'");?></td>
           <td class="text-right btn-tools">
             <?php echo html::commonButton($lang->doc->saveDraft, "id='saveDraft' data-placement='bottom'", "btn btn-secondary");?>
             <?php echo html::a('#modalBasicInfo', $lang->release->common, '', "data-toggle='modal' id='basicInfoLink' class='btn btn-primary'");?>
