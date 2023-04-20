@@ -1391,6 +1391,7 @@ class repo extends control
      */
     public function import($server = 0)
     {
+        if($this->viewType !== 'json') $this->commonAction();
         if($_POST)
         {
             $this->repo->batchCreate();

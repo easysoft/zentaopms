@@ -15,8 +15,10 @@ function loadObjectModules(objectType, objectID, docType)
         objectID   = $('#project').val();
     }
     if(objectID == undefined) objectID = 0;
-    var link = createLink('doc', 'ajaxGetModules', 'objectType=' + objectType + '&objectID=' + objectID + '&type=' + docType);
-    $('#moduleBox').load(link, function(){$('#moduleBox').find('select').picker(); $('#moduleLabel').remove();});
+
+    var link     = createLink('doc', 'ajaxGetModules', 'objectType=' + objectType + '&objectID=' + objectID + '&type=' + docType);
+    var selected = $('#module').val();
+    $('#moduleBox').load(link, function(){$('#moduleBox').find('select').val(selected).picker(); $('#moduleLabel').remove();});
 }
 
 /**
@@ -333,9 +335,15 @@ function locateNewLib(type, objectID, libID)
 {
     var method = 'teamSpace';
     var params = 'objectID=' + objectID + '&libID=' + libID;
+    var module = 'doc';
     if(type == 'product' || type == 'project')
     {
         method = type + 'Space';
+    }
+    else if(type == 'execution')
+    {
+        module = 'execution';
+        method = 'doc';
     }
     else if(type == 'mine')
     {
@@ -343,7 +351,7 @@ function locateNewLib(type, objectID, libID)
         params = 'type=mine&libID=' + libID;
     }
 
-    location.href = createLink('doc', method, params);
+    location.href = createLink(module, method, params);
 }
 
 /**
@@ -359,4 +367,3 @@ function submit(object)
     $('#dataform').submit();
     setTimeout(function(){$(object).attr('type', 'button').removeAttr('disabled')}, 2000);
 }
-

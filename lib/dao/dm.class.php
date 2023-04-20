@@ -45,6 +45,22 @@ class dm extends dao
     }
 
     /**
+     * Get table engines.
+     *
+     * @access public
+     * @return array
+     */
+    public function getTableEngines()
+    {
+        $tables = $this->query("SELECT \"table_name\" FROM all_tables WHERE OWNER = '{$this->config->db->name}'")->fetchAll();
+
+        $tableEngines = array();
+        foreach($tables as $table) $tableEngines[$table->table_name] = 'InnoDB';
+
+        return $tableEngines;
+    }
+
+    /**
      * 类MySQL的DESC语法。
      * Desc table, show fields.
      *
@@ -54,8 +70,10 @@ class dm extends dao
      */
     public function descTable($tableName)
     {
+        $this->dbh->setAttribute(PDO::ATTR_CASE, PDO::CASE_LOWER);
         $sql = "select * from all_tab_columns where table_name = '$tableName'";
         $rawFields = $this->dbh->rawQuery($sql)->fetchAll();
+        $this->dbh->setAttribute(PDO::ATTR_CASE, PDO::CASE_NATURAL);
 
         $fields = array();
         foreach($rawFields as $rawField)
@@ -118,7 +136,7 @@ class dm extends dao
 
         if(stripos($originField, 'if(') !== false)
         {
-            $originField = $this->formatIfFunction($originField);
+            $originField = $this->dbh->formatDmIfFunction($originField);
         }
         elseif(strcasecmp($originField, 'distinct') !== 0)
         {
@@ -147,6 +165,7 @@ class dm extends dao
      * @access private
      * @return string
      */
+    /*
     private function formatIfFunction($field)
     {
         preg_match('/if\(.+\)+/i', $field, $matches);
@@ -158,7 +177,7 @@ class dm extends dao
             $if  = substr($if, 0, $pos+1);
         }
 
-        /* fix sum(if(..., 1, 0)) , count(if(..., 1, 0)) */
+        // * fix sum(if(..., 1, 0)) , count(if(..., 1, 0)) * //
         if(substr($if, strlen($if)-2) == '))' and (stripos($field, 'sum(') == 0 or stripos($field, 'count(') == 0)) $if = substr($if, 0, strlen($if)-1);
 
         $parts = explode(',', substr($if, 3, strlen($if)-4)); // remove 'if(' and ')'
@@ -167,6 +186,7 @@ class dm extends dao
 
         return $field;
     }
+     */
 
     /**
      * 创建WHERE部分。
@@ -280,12 +300,22 @@ class dm extends dao
         return parent::on($condition);
     }
 
-    public function getPKColumns()
+    /**
+     * 获取唯一索引的列。
+     * Get unique columns.
+     *
+     * @access public
+     * @return array
+     */
+    public function getUniqueColumns()
     {
-        $sql   = "SELECT A.OWNER, A.TABLE_NAME, WM_CONCAT(B.COLUMN_NAME) PK_COLUMNS FROM ALL_CONSTRAINTS A, ALL_CONS_COLUMNS B where A.CONSTRAINT_type = 'P' AND A.OWNER = '{$this->config->db->name}' AND A.TABLE_NAME = '{$this->table}' AND B.OWNER = A.OWNER AND A.TABLE_NAME = B.TABLE_NAME GROUP BY A.OWNER, A.TABLE_NAME;";
+        $sql = "SELECT * from dba_ind_columns WHERE index_owner = '{$this->config->db->name}' AND index_name IN (SELECT index_name FROM dba_indexes WHERE table_name='{$this->table}' AND INDEX_TYPE = 'NORMAL' AND UNIQUENESS = 'UNIQUE' AND INDEX_NAME NOT IN (SELECT INDEX_NAME FROM DBA_CONSTRAINTS WHERE CONSTRAINT_TYPE = 'P'))";
 
-        $content = $this->dbh->query($sql)->fetch();
-        return empty($content) ? false : $content->PK_COLUMNS;
+        $columns = $this->dbh->query($sql)->fetchAll();
+
+        $cols = array();
+        foreach($columns as $col) $cols[$col->COLUMN_NAME] = $col;
+        return $cols;
     }
 
     /**
@@ -319,7 +349,7 @@ class dm extends dao
             foreach($this->sqlobj->data as $field => $value)
             {
                 $fields .= "`{$field}`,";
-                if(is_string($value)) $value = $this->sqlobj->quote($value);
+                if(is_string($value) or $value === null) $value = $this->sqlobj->quote($value);
                 $values .= $value . ',';
             }
             $fields = substr($fields, 0, -1);
@@ -329,17 +359,17 @@ class dm extends dao
             $insertSql .= $fields . ' ' . $values;
 
             $updateSql = str_replace('REPLACE', 'UPDATE', $sql);
-            $pks       = $this->getPKColumns();
-            if(!empty($pks))
+            $cols      = $this->getUniqueColumns();
+
+            /* No unique keys, no replace. */
+            if(empty($cols)) return false;
+
+            $conditions = array();
+            foreach($cols as $colName => $col)
             {
-                $pks = explode(',', $pks);
-                $conditions = array();
-                foreach($pks as $pk)
-                {
-                    if(isset($this->sqlobj->data->{$pk})) $conditions[] = " \"{$pk}\" = '{$this->sqlobj->data->{$pk}}'";
-                }
-                if(!empty($conditions)) $updateSql .= ' WHERE ' . implode(' AND ', $conditions);
+                if(isset($this->sqlobj->data->{$colName})) $conditions[] = " \"{$colName}\" = '{$this->sqlobj->data->{$colName}}'";
             }
+            if(!empty($conditions)) $updateSql .= ' WHERE ' . implode(' AND ', $conditions);
 
             $deleteSql = "DELETE FROM \"{$this->table}\" WHERE ";
             $ingore    = array();
@@ -347,6 +377,7 @@ class dm extends dao
             foreach($this->sqlobj->data as $field => $value)
             {
                 if(isset($ingore[$this->table]) and in_array($field, $ingore[$this->table])) continue;
+                if(!isset($cols[$field])) continue;
                 $deleteSql .= "`{$field}` = ";
                 $deleteSql .= is_string($value) ? "'{$value}'" : $value;
                 $deleteSql .= ' AND ';

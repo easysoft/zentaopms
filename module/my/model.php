@@ -511,6 +511,8 @@ class myModel extends model
             unset($this->config->execution->search['fields']['canceledBy']);
             unset($this->config->execution->search['fields']['closedDate']);
             unset($this->config->execution->search['fields']['canceledDate']);
+            unset($this->config->execution->search['params']['status']['values']['cancel']);
+            unset($this->config->execution->search['params']['status']['values']['closed']);
         }
 
         $projects = $this->loadModel('project')->getPairsByProgram();
@@ -598,7 +600,8 @@ class myModel extends model
             ->andWhere('(t2.status')->ne('suspended')->orWhere('t4.status')->ne('suspended')->markRight(1)
             ->beginIF($moduleName == 'workTask')
             ->beginIF(!empty($assignedToMatches))->andWhere("(t1.$assignedToCondition or (t1.mode = 'multi' and t5.`account` $operatorAndAccount and t1.status != 'closed' and t5.status != 'done') )")->fi()
-            ->beginIF(empty($assignedToMatches))->andWhere("t1.assignedTo")->eq($account)->fi()
+            ->beginIF(empty($assignedToMatches))->andWhere("(t1.assignedTo = '{$account}' or (t1.mode = 'multi' and t5.`account` = '{$account}' and t1.status != 'closed' and t5.status != 'done') )")->fi()
+            ->andWhere('t1.status')->notin('closed,cancel')
             ->fi()
             ->beginIF($moduleName == 'contributeTask')
             ->andWhere('t1.openedBy', 1)->eq($account)
@@ -1441,11 +1444,11 @@ class myModel extends model
             ->andWhere('vision')->eq($this->config->vision)
             ->andWhere($condition)
             ->groupBy('objectType,objectID')
-            ->orderBy($orderBy)
             ->page($pager)
             ->fetchPairs();
         $actions = $this->dao->select('objectType,objectID,actor,action,`date`,extra')->from(TABLE_ACTION)
             ->where('id')->in($actionIdList)
+            ->orderBy($orderBy)
             ->fetchAll();
         $objectTypeList = array();
         foreach($actions as $action) $objectTypeList[$action->objectType][] = $action->objectID;

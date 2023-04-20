@@ -60,7 +60,7 @@ $lang->doclib->nameList['custom'] = '自定义文档库名称';
 $lang->doclib->apiNameUnique = array();
 $lang->doclib->apiNameUnique['product'] = '同一' . $lang->productCommon . '下的接口库中';
 $lang->doclib->apiNameUnique['project'] = '同一' . $lang->projectCommon . '下的接口库中';
-$lang->doclib->apiNameUnique['nolink']  = '无关联接口库中';
+$lang->doclib->apiNameUnique['nolink']  = '独立接口库中';
 
 /* 字段列表。*/
 $lang->doc->common       = '文档';
@@ -86,6 +86,7 @@ $lang->doc->addedByAB    = '创建者';
 $lang->doc->addedDate    = '创建日期';
 $lang->doc->editedBy     = '修改者';
 $lang->doc->editedDate   = '修改日期';
+$lang->doc->editingDate  = '正在修改者和时间';
 $lang->doc->lastEditedBy = '最后更新者';
 $lang->doc->version      = '版本号';
 $lang->doc->basicInfo    = '基本信息';
@@ -125,11 +126,13 @@ $lang->doc->position     = '所在位置';
 $lang->doc->person       = '个人';
 $lang->doc->team         = '团队';
 $lang->doc->manage       = '文档管理';
+$lang->doc->release      = '发布';
 
 $lang->doc->moduleDoc     = '按模块浏览';
 $lang->doc->searchDoc     = '搜索';
 $lang->doc->fast          = '快速访问';
 $lang->doc->allDoc        = '全部文档';
+$lang->doc->allVersion    = '全部版本';
 $lang->doc->openedByMe    = '我的创建';
 $lang->doc->editedByMe    = '我的编辑';
 $lang->doc->orderByOpen   = '最近添加';
@@ -147,6 +150,7 @@ $lang->doc->tableContents = '目录';
 $lang->doc->addCatalog    = '添加目录';
 $lang->doc->editCatalog   = '编辑目录';
 $lang->doc->deleteCatalog = '删除目录';
+$lang->doc->sortCatalog   = '目录排序';
 $lang->doc->docStatistic  = '文档统计';
 $lang->doc->docCreated    = '创建的文档';
 $lang->doc->docEdited     = '编辑的文档';
@@ -156,6 +160,8 @@ $lang->doc->todayUpdated  = '今天更新';
 $lang->doc->daysUpdated   = '%s天前更新';
 $lang->doc->monthsUpdated = '%s月前更新';
 $lang->doc->yearsUpdated  = '%s年前更新';
+$lang->doc->viewCount     = '%s次浏览';
+$lang->doc->collectCount  = '%s次收藏';
 
 /* 方法列表。*/
 $lang->doc->index            = '仪表盘';
@@ -167,6 +173,7 @@ $lang->doc->createBook       = '创建手册';
 $lang->doc->browse           = '文档列表';
 $lang->doc->view             = '文档详情';
 $lang->doc->diff             = '对比';
+$lang->doc->cancelDiff       = '取消对比';
 $lang->doc->diffAction       = '对比文档';
 $lang->doc->sort             = '文档排序';
 $lang->doc->manageType       = '维护目录';
@@ -244,7 +251,7 @@ $lang->doc->spaceList['custom']  = '团队空间';
 $lang->doc->apiType = '接口类型';
 $lang->doc->apiTypeList['product'] = $lang->productCommon . '接口';
 $lang->doc->apiTypeList['project'] = $lang->projectCommon . '接口';
-$lang->doc->apiTypeList['nolink']  = '无关联接口';
+$lang->doc->apiTypeList['nolink']  = '独立接口';
 
 $lang->doc->typeList['html']     = '富文本';
 $lang->doc->typeList['markdown'] = 'Markdown';

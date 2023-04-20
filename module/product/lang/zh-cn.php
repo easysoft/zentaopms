@@ -28,6 +28,7 @@ $lang->product->closed           = '已关闭';
 $lang->product->closedProduct    = "已关闭的{$lang->productCommon}";
 $lang->product->updateOrder      = '排序';
 $lang->product->all              = "所有{$lang->productCommon}";
+$lang->product->involved         = "我参与的{$lang->productCommon}";
 $lang->product->manageLine       = "维护产品线";
 $lang->product->newLine          = "新建产品线";
 $lang->product->export           = '导出数据';

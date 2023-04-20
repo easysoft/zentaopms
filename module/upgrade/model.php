@@ -597,6 +597,7 @@ class upgradeModel extends model
                 $this->changeBookToCustomLib();
                 $this->createDefaultDimension();
                 $this->convertDocCollect();
+                $this->addBIUpdateMark();
                 break;
         }
 
@@ -8204,7 +8205,6 @@ class upgradeModel extends model
     /**
      * Process report modules.
      *
-     * @param  array  $modules
      * @access public
      * @return bool
      */
@@ -8224,11 +8224,77 @@ class upgradeModel extends model
             $this->dao->insert(TABLE_DIMENSION)->data($dimension)->exec();
             $dimensionID = $this->dao->lastInsertID();
 
-            $this->addDefaultModules4BI('chart', $dimensionID);
-            $this->addDefaultModules4BI('pivot', $dimensionID);
+            $chartModules = $this->addDefaultModules4BI('chart', $dimensionID);
+            $this->addSecondModule4BI($dimensionID, $dimensionName, 'chart', $chartModules);
+
+            $pivotModules = $this->addDefaultModules4BI('pivot', $dimensionID);
+            $this->addSecondModule4BI($dimensionID, $dimensionName, 'pivot', $pivotModules);
 
         }
         return !dao::isError();
+    }
+
+    /**
+     * Add second modules for bi, move buildin chart and pivot to second modules.
+     *
+     * @access public
+     * @return bool
+     */
+    public function addSecondModule4BI($dimensionID, $dimensionName, $module, $modules)
+    {
+        $this->loadModel('dimension');
+
+        $listIndex     = $module . 'Upgrade';
+        $secondModules = $this->config->dimension->secondModuleList[$dimensionName][$module];
+        $updateInfos   = $this->config->dimension->secondModuleList[$dimensionName][$listIndex];
+
+        foreach($modules as $moduleName => $parentID)
+        {
+            $insertModules = isset($secondModules[$moduleName]) ? explode(',', $secondModules[$moduleName]) : array();
+            if(empty($insertModules)) continue;
+
+            $i = 1;
+            foreach($insertModules as $moduleCode)
+            {
+                $data = new stdclass();
+                $data->root   = $dimensionID;
+                $data->name   = $this->lang->dimension->modules[$moduleCode];
+                $data->parent = $parentID;
+                $data->grade  = 2;
+                $data->order  = 10 * $i;
+                $data->type   = $module;
+                $i ++;
+
+                $this->dao->insert(TABLE_MODULE)->data($data)->exec();
+                $lastGroupID = $this->dao->lastInsertID();
+
+                $path = ',' . $parentID . ',' . $lastGroupID . ',';
+                $this->dao->update(TABLE_MODULE)->set("`path`")->eq($path)->where('id')->eq($lastGroupID)->exec();
+
+                $updateArr = isset($updateInfos[$moduleName][$moduleCode]) ? $updateInfos[$moduleName][$moduleCode] : array();
+                if(!empty($updateArr))
+                {
+                    foreach($updateArr as $type => $idString)
+                    {
+                        $table  = $type == 'chart' ? TABLE_CHART : TABLE_PIVOT;
+                        $idList = explode(',', $idString);
+
+                        $this->dao->update($table)->set('group')->eq($lastGroupID)->set('dimension')->eq($dimensionID)->where('id')->in($idList)->exec();
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * Add update2BI mark to zt_config.
+     *
+     * @access public
+     * @return bool
+     */
+    public function addBIUpdateMark()
+    {
+        $this->loadModel('setting')->setItem("system.bi.update2BI", 1);
     }
 
     /**
@@ -8436,7 +8502,13 @@ class upgradeModel extends model
                 $component->chartConfig = $chartConfig;
                 $component->option      = json_decode(zget($this->config->screen->chartOption, $chartType));
                 if(isset($component->option->title->text)) $component->option->title->text = $chart->name;
-                $component = $this->screen->getChartOption($chart, $component, json_decode($chart->filters, true));
+
+                $chart->fields   = json_encode($chart->fieldSettings);
+                $chart->settings = json_encode($chart->settings);
+                $chart->langs    = json_encode($chart->langs);
+
+                $chartFilters = !empty($chart->filters) ? json_decode($chart->filters, true) : array();
+                $component    = $this->screen->getChartOption($chart, $component, $chartFilters);
             }
 
             $componentList[] = $component;
@@ -8569,6 +8641,8 @@ class upgradeModel extends model
             $this->dao->update(TABLE_DOCLIB)->set('`type`')->eq('custom')->where('id')->eq($libID)->exec();
             $this->dao->update(TABLE_DOC)->set('`type`')->eq('text')->where('`lib`')->eq($libID)->andWhere('grade')->eq(1)->andWhere('`type`')->eq('article')->exec();
         }
+
+        $this->dao->update(TABLE_DOC)->set('`type`')->eq('text')->where('`type`')->eq('book')->exec();
         return true;
     }
 
@@ -8965,37 +9039,40 @@ class upgradeModel extends model
             }
 
             /* Process settings. */
-            $params   = json_decode($report->params);
-            $settings = new stdclass();
-            $settings->group1      = $params->group1;
-            $settings->group2      = $params->group2;
-            $settings->columnTotal = 'sum';
-
-            $columns = array();
-            foreach($params->reportField as $index => $field)
+            if($report->params)
             {
-                $column = new stdclass();
-                $column->field      = $field;
-                $column->slice      = $field;
-                $column->stat       = isset($params->reportType) ? zget($params->reportType, $index, 'noStat') : 'noStat';
-                $column->showTotal  = (isset($params->reportTotal) && zget($params->reportTotal, $index, '') == '1') ? 'sum' : 'noShow';
-                $column->showMode   = (isset($params->percent) && zget($params->percent, $index, '') == '1' && isset($params->contrast) && zget($params->contrast, $index, '') == 'crystalTotal') ? 'total' : 'default';
-                $column->monopolize = isset($params->showAlone) ? zget($params->showAlone, $index, '0') : '0';
+                $params = json_decode($report->params);
 
-                if($column->stat == 'sum')
+                $settings = new stdclass();
+                $settings->group1      = $params->group1;
+                $settings->group2      = $params->group2;
+                $settings->columnTotal = 'sum';
+
+                $columns = array();
+                foreach($params->reportField as $index => $field)
                 {
-                    $sumAppend = isset($params->sumAppend) ? zget($params->sumAppend, $index, $field) : $field;
+                    $column = new stdclass();
+                    $column->field      = $field;
+                    $column->slice      = $field;
+                    $column->stat       = isset($params->reportType) ? zget($params->reportType, $index, 'noStat') : 'noStat';
+                    $column->showTotal  = (isset($params->reportTotal) && zget($params->reportTotal, $index, '') == '1') ? 'sum' : 'noShow';
+                    $column->showMode   = (isset($params->percent) && zget($params->percent, $index, '') == '1' && isset($params->contrast) && zget($params->contrast, $index, '') == 'crystalTotal') ? 'total' : 'default';
+                    $column->monopolize = isset($params->showAlone) ? zget($params->showAlone, $index, '0') : '0';
 
-                    if($sumAppend == $field) $column->slice = 'noSlice';
-                    if($sumAppend != $field) $column->field = $sumAppend;
+                    if($column->stat == 'sum')
+                    {
+                        $sumAppend = isset($params->sumAppend) ? zget($params->sumAppend, $index, $field) : $field;
+
+                        if($sumAppend == $field) $column->slice = 'noSlice';
+                        if($sumAppend != $field) $column->field = $sumAppend;
+                    }
+
+                    $columns[] = $column;
                 }
-
-                $columns[] = $column;
+                $settings->columns = $columns;
             }
-            $settings->columns = $columns;
 
             /* Process fieldSettings. */
-
             $sql = $data->sql;
             if(!empty($filters))
             {
@@ -9070,13 +9147,18 @@ class upgradeModel extends model
             $fieldName = $field->Field;
             $fields[$fieldName] = $fieldName;
         }
-        if(!isset($fields['collector'])) return true;
+
+        if(!isset($fields['collector']) or isset($fields['collects'])) return true;
 
         $this->loadModel('doc');
 
         $users = $this->dao->select('account')->from(TABLE_USER)->fetchPairs('account', 'account');
-        $stmt  = $this->dao->select('id,collector')->from(TABLE_DOC)->where('collector')->ne('')->query();
-        while($doc = $stmt->fetch())
+        $docs  = $this->dao->select('id,collector')->from(TABLE_DOC)->where('collector')->ne('')->fetchAll();
+
+        $this->dao->update(TABLE_DOC)->set('collector')->eq(0)->exec();
+        $this->dao->exec("ALTER TABLE " . TABLE_DOC . " CHANGE `collector` `collects` smallint unsigned NOT NULL DEFAULT '0'");
+
+        foreach($docs as $doc)
         {
             foreach(explode(',', $doc->collector) as $collector)
             {
@@ -9086,9 +9168,6 @@ class upgradeModel extends model
                 $this->doc->createAction($doc->id, 'collect', $collector);
             }
         }
-
-        $this->dao->update(TABLE_DOC)->set('collector')->eq(0)->where('collector')->eq('')->exec();
-        $this->dao->exec("ALTER TABLE " . TABLE_DOC . " CHANGE `collector` `collects` smallint unsigned NOT NULL DEFAULT '0'");
 
         return true;
     }

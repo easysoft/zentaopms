@@ -10,6 +10,7 @@ $lang->project->view                = "{$lang->projectCommon}概况";
 $lang->project->batchEdit           = '批量编辑';
 $lang->project->browse              = "{$lang->projectCommon}列表";
 $lang->project->all                 = "所有{$lang->projectCommon}";
+$lang->project->involved            = "我参与的{$lang->projectCommon}";
 $lang->project->start               = "启动{$lang->projectCommon}";
 $lang->project->finish              = "完成{$lang->projectCommon}";
 $lang->project->suspend             = "挂起{$lang->projectCommon}";

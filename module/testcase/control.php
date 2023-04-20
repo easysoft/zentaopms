@@ -3208,6 +3208,7 @@ class testcase extends control
      */
     public function getXmindImport()
     {
+        if(!commonModel::hasPriv("testcase", "importXmind")) $this->loadModel('common')->deny('testcase', 'importXmind');
         $folder = $this->session->xmindImport;
         $type   = $this->session->xmindImportType;
 
@@ -3407,6 +3408,7 @@ class testcase extends control
      */
     public function saveXmindImport()
     {
+        if(!commonModel::hasPriv("testcase", "importXmind")) $this->loadModel('common')->deny('testcase', 'importXmind');
         if(!empty($_POST))
         {
             $result = $this->testcase->saveXmindImport();
@@ -3426,6 +3428,7 @@ class testcase extends control
      */
     public function showXMindImport($productID,$branch)
     {
+        if(!commonModel::hasPriv("testcase", "importXmind")) $this->loadModel('common')->deny('testcase', 'importXmind');
         $product  = $this->product->getById($productID);
         $branches = (isset($product->type) and $product->type != 'normal') ? $this->loadModel('branch')->getPairs($productID, 'active') : array();
         $config   = $this->testcase->getXmindConfig();

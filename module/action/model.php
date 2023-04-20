@@ -951,6 +951,7 @@ class actionModel extends model
             }
         }
 
+        $action->date = substr($action->date, 0, 19);
         if($this->app->getViewType() == 'mhtml') $action->date = date('m-d H:i', strtotime($action->date));
 
         /* Cycle actions, replace vars. */
@@ -1645,7 +1646,7 @@ class actionModel extends model
                 elseif($action->objectType == 'api')
                 {
                     $api = $this->dao->select('id,lib,module')->from(TABLE_API)->where('id')->eq($action->objectID)->fetch();
-                    $params = sprintf($vars, $api->lib, $api->module, $api->id);
+                    $params = sprintf($vars, $api->lib, $api->id, $api->module);
                 }
                 elseif($action->objectType == 'branch')
                 {

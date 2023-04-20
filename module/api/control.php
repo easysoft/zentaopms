@@ -41,8 +41,12 @@ class api extends control
      */
     public function index($libID = 0, $moduleID = 0, $apiID = 0, $version = 0, $release = 0, $appendLib = 0, $browseType = '', $param = 0)
     {
-        $this->session->set('spaceType', 'api', 'doc');
-        $this->session->set('structList', $this->app->getURI(true), 'doc');
+        if(!$apiID)
+        {
+            $this->session->set('spaceType', 'api', 'doc');
+            $this->session->set('structList', inLink('index', "libID=$libID&moduleID=$moduleID"), 'doc');
+            setCookie("docSpaceParam", '', $this->config->cookieLife, $this->config->webRoot, '', false, true);
+        }
 
         $this->setMenu($libID);
         $objectType  = $this->objectType;
@@ -144,14 +148,14 @@ class api extends control
      * @param  int    $libID
      * @param  int    $apiID
      * @param  int    $moduleID
-     * @param  int    $release
      * @param  int    $version
+     * @param  int    $release
      * @access public
      * @return void
      */
-    public function view($libID, $apiID, $moduleID = 0, $release = 0, $version = 0)
+    public function view($libID, $apiID, $moduleID = 0, $version = 0, $release = 0)
     {
-        $this->setMenu($libID);
+        if(!strpos($this->server->http_referer, 'space') and !strpos($this->server->http_referer, 'api')) setCookie("docSpaceParam", '', $this->config->cookieLife, $this->config->webRoot, '', false, true);
 
         /* Get all api doc libraries. */
         $libs = $this->doc->getApiLibs($libID);
@@ -180,24 +184,39 @@ class api extends control
         $linkParams = "libID=$lib->id";
         if($methodName != 'index') $linkParams = "objectID=$linkObject&$linkParams";
 
-        $crumbs[]   = html::a(inLink($methodName, $linkParams), html::image("static/svg/interface.svg") . $lib->name);
-        $moduleList = $this->loadModel('tree')->getParents($api->module);
-        foreach($moduleList as $module)
+        $objectID = $this->objectID;
+        if($this->cookie->docSpaceParam)
         {
-            $linkParams .= "&moduleID=$module->id";
-            $crumbs[]    = html::a(inLink($methodName, $linkParams), $module->name);
-        }
+            $docParam   = json_decode($this->cookie->docSpaceParam);
+            $type       = $docParam->type;
+            $objectID   = $docParam->objectID;
+            $libID      = $docParam->libID;
+            $moduleID   = $docParam->moduleID;
+            $browseType = $docParam->browseType;
+            $param      = $docParam->param;
+            list($libs, $libID, $object, $objectID, $objectDropdown) = $this->doc->setMenuByType($type, $objectID, $libID);
 
+            $libTree = $this->doc->getLibTree($libID, $libs, $type, $moduleID, $objectID, $browseType, $param);
+        }
+        else
+        {
+            $objectDropdown = $this->generateLibsDropMenu($libs[$libID], $release);
+            $libTree = $this->doc->getLibTree($libID, $libs, 'api', $moduleID);
+        }
         $this->view->title          = $this->lang->api->pageTitle;
         $this->view->libs           = $libs;
         $this->view->isRelease      = $release > 0;
         $this->view->release        = $release;
+        $this->view->version        = $version;
         $this->view->libID          = $libID;
         $this->view->apiID          = $apiID;
-        $this->view->crumbs         = $crumbs;
+        $this->view->moduleID       = $moduleID;
+        $this->view->objectType     = $type;
+        $this->view->type           = $type;
+        $this->view->objectID       = $objectID;
         $this->view->users          = $this->user->getPairs('noclosed,noletter');
-        $this->view->moduleTree     = $this->doc->getApiModuleTree($libID, $apiID, $release, $moduleID);
-        $this->view->objectDropdown = $this->generateLibsDropMenu($libs[$libID], $release);
+        $this->view->libTree        = $libTree;
+        $this->view->objectDropdown = $objectDropdown;
         $this->display();
     }
 
@@ -653,7 +672,7 @@ class api extends control
             }
             else
             {
-                return print(js::locate(inlink('index', "libID=$api->lib&module=$api->module"), 'parent'));
+                return print(js::locate($this->session->structList ? $this->session->structList : inlink('index', "libID=$api->lib&module=$api->module"), 'parent'));
             }
         }
     }
@@ -752,7 +771,10 @@ class api extends control
             $this->lang->doc->menu->api['exclude'] = 'api-' . $this->app->rawMethod;
             $this->lang->doc->menu->{$this->session->spaceType}['subModule'] = 'api';
         }
-
+        else
+        {
+            $this->lang->doc->menu->{$this->session->spaceType}['alias'] .= ',' . $this->app->rawMethod;
+        }
     }
 
     /**
@@ -982,5 +1004,26 @@ class api extends control
     public function deleteCatalog($rootID, $moduleID, $confirm = 'no')
     {
         echo $this->fetch('tree', 'delete', "rootID=$rootID&moduleID=$moduleID&confirm=$confirm");
+    }
+
+    /**
+     * Catalog sort.
+     *
+     * @access public
+     * @return void
+     */
+    public function sortCatalog()
+    {
+        if($_SERVER['REQUEST_METHOD'] == 'POST')
+        {
+            foreach($_POST['orders'] as $id => $order)
+            {
+                $this->dao->update(TABLE_MODULE)->set('`order`')->eq($order)->where('id')->eq($id)->andWhere('type')->eq('api')->exec();
+            }
+
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            return $this->send(array('result' => 'success'));
+        }
+
     }
 }

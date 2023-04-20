@@ -17,8 +17,9 @@ body {margin-bottom: 25px;}
 #docListForm th.c-actions {width: 84px; padding-left: 15px;}
 #docListForm .c-module, #docListForm .c-object {width: 120px; overflow: hidden; white-space: nowrap; text-overflow: clip;}
 #docListForm .c-object {width: 180px;}
-#docListForm .table .c-name > .doc-title {display: inline-block; max-width: calc(100% - 80px); overflow: hidden; background: transparent; padding-right:0px;}
+#docListForm .table .c-name > .doc-title {display: inline-block; overflow: hidden; background: transparent; padding-right:0px; max-width: calc(100% - 40px);}
 #docListForm .table .c-name > span.doc-title {line-height: 0; vertical-align: inherit;}
+#docListForm .table .c-name[data-status=draft] > .doc-title {max-width: calc(100% - 80px);}
 #docListForm .table .c-name > .draft {background-color:rgba(129, 102, 238, 0.12); color:#8166EE;}
 #docListForm .table .c-name > .ajaxCollect {float: right; position: relative; right: 10px; top: 0px; padding: 0 6px;}
 #docListForm table.table > thead > tr {height: 32px;}
@@ -95,24 +96,23 @@ body {margin-bottom: 25px;}
             <?php endif;?>
             <?php printf('%03d', $doc->id);?>
           </td>
-          </td>
-          <td class="c-name" title='<?php echo $doc->title;?>'>
-          <?php
-          $docType = zget($config->doc->iconList, $doc->type);
-          $icon    = html::image("static/svg/{$docType}.svg", "class='file-icon'");
-          if(common::hasPriv('doc', 'view'))
-          {
-              echo html::a($this->createLink('doc', 'view', "docID=$doc->id"), $icon . $doc->title, '', "title='{$doc->title}' class='doc-title' data-app='{$this->app->tab}'");
-          }
-          else
-          {
-              echo "<span class='doc-title'>$icon {$doc->title}</span>";
-          }
-          ?>
-          <?php if($doc->status == 'draft') echo "<span class='label label-badge draft'>{$lang->doc->draft}</span>";?>
-          <?php if(common::canBeChanged('doc', $doc) and common::hasPriv('doc', 'collect') and $libType and $libType != 'api'):?>
+          <td class="c-name" title='<?php echo $doc->title;?>' data-status='<?php echo $doc->status?>'>
+            <?php
+            $docType = zget($config->doc->iconList, $doc->type);
+            $icon    = html::image("static/svg/{$docType}.svg", "class='file-icon'");
+            if(common::hasPriv('doc', 'view'))
+            {
+                echo html::a($this->createLink('doc', 'view', "docID=$doc->id"), $icon . $doc->title, '', "title='{$doc->title}' class='doc-title' data-app='{$this->app->tab}'");
+            }
+            else
+            {
+                echo "<span class='doc-title'>$icon {$doc->title}</span>";
+            }
+            ?>
+            <?php if($doc->status == 'draft') echo "<span class='label label-badge draft'>{$lang->doc->draft}</span>";?>
+            <?php if(common::canBeChanged('doc', $doc) and common::hasPriv('doc', 'collect') and $libType and $libType != 'api'):?>
             <a data-url="<?php echo $this->createLink('doc', 'collect', "objectID=$doc->id&objectType=doc");?>" title="<?php echo $collectTitle;?>" class='btn btn-link ajaxCollect'><?php echo html::image("static/svg/{$star}.svg", "class='$star'");?></a>
-          <?php endif;?>
+            <?php endif;?>
           </td>
           <?php if($type != 'mine'):?>
           <td class="c-object" title='<?php echo $doc->objectName;?>'>

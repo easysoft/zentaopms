@@ -136,6 +136,7 @@ document.addEventListener('msfullscreenChange', function (e)
 
 $(function()
 {
+
     $(document).keydown(function(event)
     {
         if($.cookie('isFullScreen') == 1)
@@ -166,10 +167,35 @@ $(function()
     }).on('click', '.comment-edit-form .btn-hide-form', function()
     {
         $('.comment-edit-form #submit').attr('disabled', false);
+    }).on('click', '#docVersionMenu.diff > .drop-body > li', function(e)
+    {
+        e.stopPropagation();
+    }).on('click', '#docVersionMenu #changeBtn', function(e)
+    {
+        $('#docVersionMenu').addClass('diff');
+        e.stopPropagation();
+    }).on('click', '#hisTrigger', function()
+    {
+        var $history = $('#history');
+        var $icon = $(this);
+        if($history.hasClass('hidden'))
+        {
+            $history.removeClass('hidden');
+            $icon.addClass('text-primary');
+        }
+        else
+        {
+            $history.addClass('hidden');
+            $icon.removeClass('text-primary');
+        }
+    }).on('click', '#closeBtn', function()
+    {
+        $('#history').addClass('hidden');
+        $('#hisTrigger').removeClass('text-primary');
     });
 
     $('#outline li.has-list').addClass('open in');
-    $('#outline li.has-list>i+ul').prev('i').remove();
+    $('#outline li.has-list > i + ul').prev('i').remove();
     $('.outline-toggle i.icon-menu-arrow-left').trigger('click');
 
     $(document).on('click', '.detail-content a', function(event)
@@ -190,7 +216,7 @@ $(function()
             if($.cookie('isFullScreen') == 1) fullScreen();
             $('#content [data-ride="tree"]').tree();
             $('#outline li.has-list').addClass('open in');
-            $('#outline li.has-list>i+ul').prev('i').remove();
+            $('#outline li.has-list > i + ul').prev('i').remove();
             if($('#markdownContent').val())
             {
                 var simplemde = new SimpleMDE({element: $("#markdownContent")[0],toolbar:false, status: false});
@@ -198,37 +224,13 @@ $(function()
                 simplemde.togglePreview();
             }
             $('#docExport').attr('href', createLink('doc', exportMethod, 'libID=' + libID + '&moduleID=0&docID=' + docID + '&version=' + $('#content .doc-title .version').data('version')));
+            if($('.files-list').length) $('#content .detail-content.article-content').css('height', 'calc(100vh - 300px)');
         });
     })
 
-
     $('#history').append('<a id="closeBtn" href="###" class="btn btn-link"><i class="icon icon-close"></i></a>');
-    $('#hisTrigger').on('click', function()
-    {
-        var $history = $('#history');
-        var $icon = $(this);
-        if($history.hasClass('hidden'))
-        {
-            $history.removeClass('hidden');
-            $icon.addClass('text-primary');
-        }
-        else
-        {
-            $history.addClass('hidden');
-            $icon.removeClass('text-primary');
-        }
-    })
 
     $('#history').find('.btn.pull-right').removeClass('pull-right');
-    $('#closeBtn').on('click', function()
-    {
-        $('#history').addClass('hidden');
-        $('#hisTrigger').removeClass('text-primary');
-    })
-    $('#history').find('.btn.pull-right').removeClass('pull-right');
-    if($('.files-list').length)
-    {
-        $('#content .detail-content.article-content').css('height', 'calc(100vh - 300px)');
-    }
+    if($('.files-list').length) $('#content .detail-content.article-content').css('height', 'calc(100vh - 300px)');
     $('.outline .outline-toggle i.icon-menu-arrow-left').trigger("click");
 })

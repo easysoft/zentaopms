@@ -158,6 +158,7 @@ class doc extends control
 
                 if($type == 'execution' and $this->post->execution) $objectID = $this->post->execution;
                 if($type == 'custom') $objectID = 0;
+                $type = $type == 'execution' && $this->app->tab != 'execution' ? 'project' : $type;
 
                 $this->action->create('docLib', $libID, 'Created');
 
@@ -184,7 +185,6 @@ class doc extends control
                 $this->view->project        = $this->project->getById($objectID);
             }
         }
-
 
         if($type == 'execution')
         {
@@ -328,7 +328,7 @@ class doc extends control
      * @access public
      * @return void
      */
-    public function deleteLib($libID, $confirm = 'no', $type = 'lib', $from = 'tableContents')
+    public function deleteLib($libID, $confirm = 'no', $type = 'lib', $from = 'teamSpace')
     {
         if($libID == 'product' or $libID == 'execution') return;
         if($confirm == 'no')
@@ -341,16 +341,18 @@ class doc extends control
             if(!empty($lib->main)) return print(js::alert($this->lang->doc->errorMainSysLib));
 
             $this->doc->delete(TABLE_DOCLIB, $libID);
-            if($this->app->tab == 'doc' and $from == 'tableContents') return print(js::reload('parent'));
+            if($this->app->tab == 'doc' and $from == 'teamSpace') return print(js::reload('parent'));
 
             $objectType = $lib->type;
             $objectID   = strpos(',product,project,execution,', ",$objectType,") !== false ? $lib->{$objectType} : 0;
-            if(in_array($this->app->tab, array('project', 'doc')) and $objectType == 'execution')
+            $moduleName = 'doc';
+            $methodName = zget($this->config->doc->spaceMethod, $objectType);
+            if($this->app->tab == 'execution' and $objectType == 'execution')
             {
-                $objectType = 'project';
-                $objectID   = $lib->project;
+                $moduleName = 'execution';
+                $methodName = 'doc';
             }
-            $browseLink = $this->createLink('doc', $from, "type=$objectType&objectID=$objectID");
+            $browseLink = $this->createLink($moduleName, $methodName, "objectID=$objectID");
 
             return print(js::locate($browseLink, 'parent'));
         }
@@ -540,17 +542,17 @@ class doc extends control
                 if(!empty($changes))
                 {
                     $newType = $_POST['status'];
-                    if($doc->status == 'draft' and $newType == 'draft') $action = 'savedDraft';
                     if($doc->status == 'draft' and $newType == 'normal') $action = 'releasedDoc';
-                    if($doc->status == 'normal' and $newType == 'normal') $action = 'Edited';
+                    if($doc->status == $newType) $action = 'Edited';
                 }
+
                 $fileAction = '';
                 if(!empty($files)) $fileAction = $this->lang->addFiles . join(',', $files) . "\n";
                 $actionID = $this->action->create('doc', $docID, $action, $fileAction . $this->post->comment);
                 if(!empty($changes)) $this->action->logHistory($actionID, $changes);
             }
 
-            $link     = $this->createLink('doc', 'view', "docID={$docID}") . "#app={$this->app->tab}";
+            $link     = $this->createLink('doc', 'view', "docID={$docID}");
             $oldLib   = $doc->lib;
             $doc      = $this->doc->getById($docID);
             $lib      = $this->doc->getLibById($doc->lib);
@@ -1052,7 +1054,7 @@ class doc extends control
         if(empty($viewType)) $viewType = !empty($_COOKIE['docFilesViewType']) ? $this->cookie->docFilesViewType : 'list';
         setcookie('docFilesViewType', $viewType, $this->config->cookieLife, $this->config->webRoot, '', false, true);
 
-        $objects = $this->doc->getOrderedObjects($type);
+        $objects = $this->doc->getOrderedObjects($type, 'nomerge', $objectID);
         list($libs, $libID, $object, $objectID, $objectDropdown) = $this->doc->setMenuByType($type, $objectID, 0);
 
         $table  = $this->config->objectTables[$type];
@@ -1143,8 +1145,6 @@ class doc extends control
         $objectID   = zget($doc, $type, 0);
         list($libs, $libID, $object, $objectID, $objectDropdown) = $this->doc->setMenuByType($type, $objectID, $doc->lib, $appendLib);
 
-        $moduleTree = $this->doc->getTreeMenu($type, $objectID, $libID, 0, $docID);
-
         /* Get doc. */
         if($docID)
         {
@@ -1221,26 +1221,9 @@ class doc extends control
             }
         }
 
-        $doc = $docID ? $doc : '';
+        if($this->app->tab != 'execution' and !empty($doc->execution)) $object = $this->execution->getByID($doc->execution);
 
-        /* Crumbs links array. */
-        $moduleName = 'doc';
-        $methodName = in_array($type, array('product', 'project')) ? $objectType . 'Space' : 'teamSpace';
-        $linkParams = "objectID={$objectID}&libID={$lib->id}";
-        if($this->app->tab == 'execution')
-        {
-            $moduleName = 'execution';
-            $methodName = 'doc';
-            $linkParams = "executionID=$objectID";
-        }
-        elseif($type == 'mine')
-        {
-            $linkParams = "type=mine&libID={$lib->id}";
-            $methodName = 'mySpace';
-        }
-
-        $spaceType = $objectType . 'Space';
-        $this->view->title          = isset($this->lang->doc->{$spaceType}) ? $this->lang->doc->{$spaceType} : $this->lang->doc->common;
+        $this->view->title          = $this->lang->doc->common . $this->lang->colon . $doc->title;
         $this->view->docID          = $docID;
         $this->view->doc            = $doc;
         $this->view->version        = $version;
@@ -1261,6 +1244,7 @@ class doc extends control
         $this->view->objectDropdown = $objectDropdown;
         $this->view->canExport      = ($this->config->edition != 'open' && common::hasPriv('doc', $type . '2export'));
         $this->view->exportMethod   = $type . '2export';
+        $this->view->editors        = $this->doc->getEditors($docID);
 
         $this->display();
     }
@@ -1288,6 +1272,15 @@ class doc extends control
         $this->session->set('structList', $uri, 'doc');
         $this->session->set('spaceType', $type, 'doc');
         $this->session->set('docList', $uri, 'doc');
+
+        $docSpaceParam = new stdclass();
+        $docSpaceParam->type       = $type;
+        $docSpaceParam->objectID   = $objectID;
+        $docSpaceParam->libID      = $libID;
+        $docSpaceParam->moduleID   = $moduleID;
+        $docSpaceParam->browseType = $browseType;
+        $docSpaceParam->param      = $param;
+        setCookie("docSpaceParam", json_encode($docSpaceParam), $this->config->cookieLife, $this->config->webRoot, '', false, true);
 
         if($moduleID) $libID = $this->tree->getById($moduleID)->root;
         $isFirstLoad = $libID == 0 ? true : false;
@@ -1489,7 +1482,7 @@ class doc extends control
      */
     public function ajaxGetDropMenu($objectType, $objectID, $module, $method)
     {
-        list($myObjects, $normalObjects, $closedObjects) = $this->doc->getOrderedObjects($objectType, 'nomerge');
+        list($myObjects, $normalObjects, $closedObjects) = $this->doc->getOrderedObjects($objectType, 'nomerge', $objectID);
 
         $this->view->objectType    = $objectType;
         $this->view->objectID      = $objectID;
@@ -1565,5 +1558,26 @@ class doc extends control
         $this->view->showDoc = $showDoc === '0' ? '0' : '1';
 
         $this->display();
+    }
+
+    /**
+     * Catalog sort.
+     *
+     * @access public
+     * @return void
+     */
+    public function sortCatalog()
+    {
+        if($_SERVER['REQUEST_METHOD'] == 'POST')
+        {
+            foreach($_POST['orders'] as $id => $order)
+            {
+                $this->dao->update(TABLE_MODULE)->set('`order`')->eq($order)->where('id')->eq($id)->andWhere('type')->eq('doc')->exec();
+            }
+
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            return $this->send(array('result' => 'success'));
+        }
+
     }
 }

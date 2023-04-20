@@ -2119,6 +2119,11 @@ class block extends control
      */
     public function printDocViewListBlock()
     {
+        /* Load pager. */
+        $this->app->loadClass('pager', $static = true);
+        $pager = new pager(0, 6, 1);
+
+        $this->view->docList = $this->loadModel('doc')->getDocsByBrowseType('all', 0, 0,'views_desc', $pager);
     }
 
     /**
@@ -2129,6 +2134,11 @@ class block extends control
      */
     public function printDocCollectListBlock()
     {
+        /* Load pager. */
+        $this->app->loadClass('pager', $static = true);
+        $pager = new pager(0, 6, 1);
+
+        $this->view->docList = $this->loadModel('doc')->getDocsByBrowseType('all', 0, 0, 'collects_desc', $pager);
     }
 
     /**
@@ -2139,6 +2149,42 @@ class block extends control
      */
     public function printProductDocBlock()
     {
+        $this->loadModel('doc');
+        $this->session->set('docList', $this->createLink('doc', 'index'), 'doc');
+
+        /* Set project status and count. */
+        $count         = isset($this->params->count) ? (int)$this->params->count : 15;
+        $products      = $this->loadModel('product')->getOrderedProducts('all');
+        $involveds     = $this->product->getOrderedProducts('involved');
+        $productIdList = array_merge(array_keys($products), array_keys($involveds));
+
+        $stmt = $this->dao->select('id,product,lib,title,type,addedBy,addedDate,editedDate,status,acl,groups,users,deleted')->from(TABLE_DOC)->alias('t1')
+            ->where('deleted')->eq(0)
+            ->andWhere('product')->in($productIdList)
+            ->orderBy('product,status,editedDate_desc')
+            ->query();
+        $docGroup = array();
+        while($doc = $stmt->fetch())
+        {
+            if(!isset($docGroup[$doc->product])) $docGroup[$doc->product] = array();
+            if(count($docGroup[$doc->product]) >= $count) continue;
+            if($this->doc->checkPrivDoc($doc)) $docGroup[$doc->product][$doc->id] = $doc;
+        }
+
+        $hasDataProducts = $hasDataInvolveds = array();
+        foreach($products as $productID => $product)
+        {
+            if(isset($docGroup[$productID]) and count($docGroup[$productID]) > 0)
+            {
+                $hasDataProducts[$productID] = $product;
+                if(isset($involveds[$productID])) $hasDataInvolveds[$productID] = $product;
+            }
+        }
+
+        $this->view->users     = $this->loadModel('user')->getPairs('noletter');
+        $this->view->products  = $hasDataProducts;
+        $this->view->involveds = $hasDataInvolveds;
+        $this->view->docGroup  = $docGroup;
     }
 
     /**
@@ -2149,6 +2195,71 @@ class block extends control
      */
     public function printProjectDocBlock()
     {
+        $this->loadModel('doc');
+        $this->app->loadLang('project');
+        $this->session->set('docList', $this->createLink('doc', 'index'), 'doc');
+
+        /* Set project status and count. */
+        $count    = isset($this->params->count) ? (int)$this->params->count : 15;
+        $projects = $this->dao->select('*')->from(TABLE_PROJECT)
+            ->where('deleted')->eq('0')
+            ->andWhere('vision')->eq($this->config->vision)
+            ->andWhere('type')->eq('project')
+            ->andWhere('model')->ne('kanban')
+            ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->projects)->fi()
+            ->orderBy('order_asc,id_desc')
+            ->fetchAll('id');
+
+        $involveds = $this->dao->select('t1.*')->from(TABLE_PROJECT)->alias('t1')
+            ->leftJoin(TABLE_TEAM)->alias('t2')->on('t1.id=t2.root')
+            ->where('t1.deleted')->eq('0')
+            ->andWhere('t1.vision')->eq($this->config->vision)
+            ->andWhere('t1.type')->eq('project')
+            ->andWhere('t1.model')->ne('kanban')
+            ->andWhere('t2.type')->eq('project')
+            ->beginIF(!$this->app->user->admin)->andWhere('t1.id')->in($this->app->user->view->projects)->fi()
+            ->andWhere('t1.openedBy', true)->eq($this->app->user->account)
+            ->orWhere('t1.PM')->eq($this->app->user->account)
+            ->orWhere('t2.account')->eq($this->app->user->account)
+            ->markRight(1)
+            ->orderBy('t1.order_asc,t1.id_desc')
+            ->fetchAll('id');
+
+        $projectIdList = array_keys($projects);
+
+        $stmt = $this->dao->select('t1.id,t1.lib,t1.title,t1.type,t1.addedBy,t1.addedDate,t1.editedDate,t1.status,t1.acl,t1.groups,t1.users,t1.deleted,if(t1.project = 0, t2.project, t1.project) as project')->from(TABLE_DOC)->alias('t1')
+            ->leftJoin(TABLE_EXECUTION)->alias('t2')->on('t1.execution=t2.id')
+            ->where('t1.deleted')->eq(0)
+            ->andWhere('t2.deleted', true)->eq(0)
+            ->orWhere('t2.deleted is null')
+            ->markRight(1)
+            ->andWhere('t1.project', true)->in($projectIdList)
+            ->orWhere('t2.project')->in($projectIdList)
+            ->markRight(1)
+            ->orderBy('project,t1.status,t1.editedDate_desc')
+            ->query();
+        $docGroup = array();
+        while($doc = $stmt->fetch())
+        {
+            if(!isset($docGroup[$doc->project])) $docGroup[$doc->project] = array();
+            if(count($docGroup[$doc->project]) >= $count) continue;
+            if($this->doc->checkPrivDoc($doc)) $docGroup[$doc->project][$doc->id] = $doc;
+        }
+
+        $hasDataProjects = $hasDataInvolveds = array();
+        foreach($projects as $projectID => $project)
+        {
+            if(isset($docGroup[$projectID]) and count($docGroup[$projectID]) > 0)
+            {
+                $hasDataProjects[$projectID] = $project;
+                if(isset($involveds[$projectID])) $hasDataInvolveds[$projectID] = $project;
+            }
+        }
+
+        $this->view->users     = $this->loadModel('user')->getPairs('noletter');
+        $this->view->projects  = $hasDataProjects;
+        $this->view->involveds = $hasDataInvolveds;
+        $this->view->docGroup  = $docGroup;
     }
 
     /**

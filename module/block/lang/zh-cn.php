@@ -358,6 +358,8 @@ if($config->vision == 'rnd')
     $lang->block->default['doc']['6']['title'] = $lang->productCommon . '文档';
     $lang->block->default['doc']['6']['block'] = 'productdoc';
     $lang->block->default['doc']['6']['grid']  = 8;
+
+    $lang->block->default['doc']['6']['params']['count'] = '20';
 }
 
 $lang->block->default['doc']['7']['title'] = '收藏排行榜';
@@ -367,6 +369,8 @@ $lang->block->default['doc']['7']['grid']  = 4;
 $lang->block->default['doc']['8']['title'] = $lang->projectCommon . '文档';
 $lang->block->default['doc']['8']['block'] = 'projectdoc';
 $lang->block->default['doc']['8']['grid']  = 8;
+
+$lang->block->default['doc']['8']['params']['count'] = '20';
 
 $lang->block->count   = '数量';
 $lang->block->type    = '类型';
@@ -458,7 +462,7 @@ $lang->block->modules['doc']->availableBlocks->docdynamic      = '文档动态';
 $lang->block->modules['doc']->availableBlocks->docmycollection = '我的收藏';
 $lang->block->modules['doc']->availableBlocks->docrecentupdate = '最近更新';
 $lang->block->modules['doc']->availableBlocks->docviewlist     = '浏览排行榜';
-$lang->block->modules['doc']->availableBlocks->productdoc      = $lang->productCommon . '文档';
+if($config->vision == 'rnd') $lang->block->modules['doc']->availableBlocks->productdoc      = $lang->productCommon . '文档';
 $lang->block->modules['doc']->availableBlocks->doccollectlist  = '收藏排行榜';
 $lang->block->modules['doc']->availableBlocks->projectdoc      = $lang->projectCommon . '文档';
 

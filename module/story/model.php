@@ -342,6 +342,7 @@ class storyModel extends model
                         $reviewData->story    = $storyID;
                         $reviewData->version  = 1;
                         $reviewData->reviewer = $reviewer;
+                        $reviewData->result   = '';
                         $this->dao->insert(TABLE_STORYREVIEW)->data($reviewData)->exec();
                     }
                 }
@@ -581,7 +582,7 @@ class storyModel extends model
             $story->source     = $stories->source[$i];
             $story->category   = $stories->category[$i];
             $story->pri        = $stories->pri[$i];
-            $story->estimate   = $stories->estimate[$i];
+            $story->estimate   = $stories->estimate[$i] ? $stories->estimate[$i] : 0;
             $story->spec       = $stories->spec[$i];
             $story->verify     = $stories->verify[$i];
             $story->status     = $saveDraft ? 'draft' : ((empty($stories->reviewer[$i]) and !$forceReview) ? 'active' : 'reviewing');
@@ -3385,13 +3386,13 @@ class storyModel extends model
      */
     public function getRevertStoryIDList($productID)
     {
-        $review =  $this->dao->select('objectID')->from(TABLE_ACTION)
+        $review = $this->dao->select('objectID')->from(TABLE_ACTION)
             ->where('product')->like("%,$productID,%")
             ->andWhere('action')->eq('reviewed')
             ->andWhere('objectType')->eq('story')
             ->andWhere('extra')->eq('Revert')
             ->groupBy('objectID')
-            ->orderBy('id_desc')
+            ->orderBy('objectID_desc')
             ->fetchPairs();
         return $review;
     }
@@ -4170,9 +4171,12 @@ class storyModel extends model
      */
     public function getDataOfStorysPerModule()
     {
-        $datas = $this->dao->select('module as name, count(module) as value, product, branch')->from(TABLE_STORY)
+        $datas = $this->dao->select('module as name, count(module) as value, product, branch')
+            ->from(TABLE_STORY)
             ->where($this->reportCondition())
-            ->groupBy('module')->orderBy('value DESC')->fetchAll('name');
+            ->groupBy('module,product,branch')
+            ->orderBy('value DESC')
+            ->fetchAll('name');
         if(!$datas) return array();
 
         $branchIDList = array();

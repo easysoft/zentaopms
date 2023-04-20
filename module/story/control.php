@@ -333,21 +333,23 @@ class story extends control
 
         if($storyID > 0)
         {
-            $story      = $this->story->getByID($storyID);
-            $planID     = $story->plan;
-            $source     = $story->source;
-            $sourceNote = $story->sourceNote;
-            $color      = $story->color;
-            $pri        = $story->pri;
-            $productID  = $story->product;
-            $moduleID   = $story->module;
-            $estimate   = $story->estimate;
-            $title      = $story->title;
-            $spec       = htmlSpecialString($story->spec);
-            $verify     = htmlSpecialString($story->verify);
-            $keywords   = $story->keywords;
-            $mailto     = $story->mailto;
-            $category   = $story->category;
+            $story       = $this->story->getByID($storyID);
+            $planID      = $story->plan;
+            $source      = $story->source;
+            $sourceNote  = $story->sourceNote;
+            $color       = $story->color;
+            $pri         = $story->pri;
+            $productID   = $story->product;
+            $moduleID    = $story->module;
+            $estimate    = $story->estimate;
+            $title       = $story->title;
+            $spec        = htmlSpecialString($story->spec);
+            $verify      = htmlSpecialString($story->verify);
+            $keywords    = $story->keywords;
+            $mailto      = $story->mailto;
+            $category    = $story->category;
+            $feedbackBy  = $story->feedbackBy;
+            $notifyEmail = $story->notifyEmail;
         }
 
         if($bugID > 0)
@@ -483,6 +485,9 @@ class story extends control
         $this->view->needReview       = ($this->app->user->account == $product->PO or $objectID > 0 or $this->config->story->needReview == 0 or !$this->story->checkForceReview()) ? "checked='checked'" : "";
         $this->view->type             = $storyType;
         $this->view->category         = !empty($category) ? $category : 'feature';
+        $this->view->feedbackBy       = !empty($feedbackBy) ? $feedbackBy : '';
+        $this->view->notifyEmail      = !empty($notifyEmail) ? $notifyEmail : '';
+        $this->view->showFeedbackBox  = in_array($source, $this->config->story->feedbackSource);
 
         $this->display();
     }

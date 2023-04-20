@@ -538,7 +538,7 @@ class chartModel extends model
                 $wheres = array();
                 foreach($filters as $field => $filter)
                 {
-                    $wheres[] = "$field {$filter['operator']} {$filter['value']}";
+                    $wheres[] = "`$field` {$filter['operator']} {$filter['value']}";
                 }
 
                 $whereStr = implode(' and ', $wheres);
@@ -570,6 +570,8 @@ class chartModel extends model
      */
     public static function isClickable($chart, $action)
     {
+        global $config;
+        if($chart->builtin and in_array($chart->id, $config->screen->builtinChart)) return false;
         return true;
     }
 
@@ -604,8 +606,9 @@ class chartModel extends model
                 if($field)
                 {
                     $path = $this->app->getModuleRoot() . 'dataview' . DS . 'table' . DS . "$object.php";
-                    include $path;
+                    if(!is_file($path)) return;
 
+                    include $path;
                     $options = $schema->fields[$field]['options'];
                 }
                 break;

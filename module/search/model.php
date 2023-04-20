@@ -375,7 +375,7 @@ class searchModel extends model
      */
     public function getQuery($queryID)
     {
-        $query = $this->dao->findByID($queryID)->from(TABLE_USERQUERY)->fetch();
+        $query = $this->dao->findByID((int)$queryID)->from(TABLE_USERQUERY)->fetch();
         if(!$query) return false;
 
         /* Decode html encode. */

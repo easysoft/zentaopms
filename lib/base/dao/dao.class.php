@@ -328,6 +328,21 @@ class baseDAO
     }
 
     /**
+     * Get table engines.
+     *
+     * @access public
+     * @return array
+     */
+    public function getTableEngines()
+    {
+        $tables = $this->query("SHOW TABLE STATUS WHERE `Engine` is not null")->fetchAll();
+        $tableEngines = array();
+        foreach($tables as $table) $tableEngines[$table->Name] = $table->Engine;
+
+        return $tableEngines;
+    }
+
+    /**
      * Desc table, show fields.
      *
      * @param  string $tableName
@@ -604,7 +619,7 @@ class baseDAO
             {
                 if(strpos($skipFields, ",$field,") !== false) continue;
                 $fields .= "`{$field}`,";
-                if(is_string($value)) $value = $this->sqlobj->quote($value);
+                if(is_string($value) or $value === null) $value = $this->sqlobj->quote($value);
                 $values .= $value . ',';
             }
             $fields = substr($fields, 0, -1);
@@ -1586,6 +1601,7 @@ class baseSQL
     {
         global $dbh;
         $this->dbh        = $dbh;
+        $this->data       = new stdclass();
         $this->magicQuote = (version_compare(phpversion(), '5.4', '<') and function_exists('get_magic_quotes_gpc') and get_magic_quotes_gpc());
     }
 
@@ -1773,21 +1789,24 @@ class baseSQL
     {
         if($this->inCondition and !$this->conditionIsTrue) return $this;
 
-        if($this->method == 'update')
+        /* DMDB replace will use $this->data. */
+        if($this->method == 'insert' or $this->method == 'replace')
+        {
+            $this->setField = $set;
+            $this->data->$set = '';
+        }
+
+        if($this->method != 'insert')
         {
             /* Add ` to avoid keywords of mysql. */
-            if(strpos($set, '=') ===false)
+            if(strpos($set, '=') ===  false)
             {
                 $set = str_replace(',', '', $set);
+                $set = '`' . str_replace('`', '', $set) . '`';
             }
 
             $this->sql .= $this->isFirstSet ? " $set" : ", $set";
             if($this->isFirstSet) $this->isFirstSet = false;
-        }
-        elseif($this->method == 'insert')
-        {
-            $this->setField = $value;
-            $this->data->$value = '';
         }
 
         return $this;
@@ -1960,12 +1979,13 @@ class baseSQL
     {
         if($this->inCondition and !$this->conditionIsTrue) return $this;
 
-        if($this->method == 'insert')
+        if($this->method == 'insert' or $this->method == 'replace')
         {
             $field = $this->setField;
             $this->data->$field = $value;
         }
-        else
+
+        if($this->method != 'insert')
         {
             $this->sql .= " = " . $this->quote($value);
         }
@@ -2077,7 +2097,7 @@ class baseSQL
     public function in($ids)
     {
         if($this->inCondition and !$this->conditionIsTrue) return $this;
-        $this->sql .= helper::dbIN($ids);
+        $this->sql .= $ids === NULL ? ' IS NULL' : helper::dbIN($ids);
         return $this;
     }
 

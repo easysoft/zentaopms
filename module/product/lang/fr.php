@@ -28,6 +28,7 @@ $lang->product->closed           = 'Fermés';
 $lang->product->closedProduct    = "Closed {$lang->productCommon}";
 $lang->product->updateOrder      = 'Ordre';
 $lang->product->all              = "{$lang->productCommon} List";
+$lang->product->involved         = "My Involved";
 $lang->product->manageLine       = "Manage Product Line";
 $lang->product->newLine          = "Create Product Line";
 $lang->product->export           = 'Export';

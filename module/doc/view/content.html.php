@@ -14,15 +14,23 @@
           <div class="info">
             <?php $version = $version ? $version : $doc->version;?>
             <div class="version" data-version='<?php echo $version;?>'>
-              <div class='btn-group'>
-                <a href='javascript:;' class='btn btn-link btn-limit text-ellipsis' data-toggle='dropdown' style="max-width: 120px;">
-                  #<?php echo $version;?>
+              <div id="diffBtnGroup" class='btn-group exchangeDiffGroup'>
+                <a href='javascript:;' class='btn btn-link btn-limit text-ellipsis left-dom' data-toggle='dropdown' style="max-width: 120px;">
+                  V<?php echo $version;?>
                   <span class="caret"></span>
                 </a>
-                <ul class='dropdown-menu doc-version-menu' style='max-height:240px; max-width: 300px; overflow-y:auto'>
-                <?php for($version = $doc->version; $version > 0; $version--): ?>
-                  <li><a href='javascript:void(0)' data-url='<?php echo $this->createLink('doc', 'view', "docID=$doc->id&version=$version"); ?>'>#<?php echo $version; ?></a></li>
-                <?php endfor; ?>
+                <i id="exchangeDiffBtn" class="icon icon-exchange right-dom"></i>
+                <a href='javascript:;' class='btn btn-link btn-limit text-ellipsis right-dom' data-toggle='dropdown' style="max-width: 120px;">
+                  <span class="caret"></span>
+                </a>
+                <ul id="docVersionMenu" class='dropdown-menu doc-version-menu' style='width: 250px; overflow-y:auto'>
+                  <li class="drop-title flex-between dropdown-header not-clear-menu"><div><?php echo $lang->doc->allVersion?></div></li>
+                  <div class="drop-body menu-active-primary menu-hover-primary">
+                  <?php for($itemVersion = $doc->version; $itemVersion > 0; $itemVersion--):?>
+                    <li class="li-item <?php if($itemVersion == $version) echo 'active';?>"><div class="checkbox-primary"><input type="checkbox" <?php echo "data-id=".$doc->id." data-version=".$itemVersion;?> ></input><label for=""></label></div><a href='javascript:void(0)' data-url='<?php echo $this->createLink('doc', 'view', "docID=$doc->id&version=$itemVersion"); ?>'>#<?php echo $itemVersion;?></a></li>
+                  <?php endfor;?>
+                  </div>
+                  <li class="drop-bottom"><button data-id="confirm" class="btn btn-primary"><?php echo $lang->confirm?></button><button data-id="cancel" class="btn"><?php echo $lang->doc->cancelDiff?></button></li>
                 </ul>
               </div>
             </div>
@@ -69,12 +77,43 @@
             ?>
             <?php endif;?>
           </div>
+          <?php if(!empty($editors)):?>
+          <div id='editorBox'>
+            <?php $groupClass = count($editors) == 1 ? 'noDropdown' : '';?>
+            <div class="btn-group <?php echo $groupClass;?>">
+              <?php
+              $space       = common::checkNotCN() ? ' ' : '';
+              $firstEditor = current($editors);
+              $editorInfo  = zget($users, $firstEditor->account) . ' ' . substr($firstEditor->date, 0, 10) . $space . $lang->doc->update;
+
+              array_shift($editors);
+              ?>
+              <?php if(!empty($editors)):?>
+              <button class="btn btn-link dropdown-toggle" data-toggle="dropdown">
+                <span class="text" title='<?php echo $editorInfo;?>'><?php echo $editorInfo;?></span>
+                <span class="caret"></span>
+              </button>
+              <ul class="dropdown-menu" id='editorMenu'>
+              <?php
+              foreach($editors as $editor)
+              {
+                  $editorInfo = zget($users, $editor->account) . ' ' . substr($editor->date, 0, 10) . $space . $lang->doc->update;
+                  echo "<li title='$editorInfo'>$editorInfo</li>";
+              }
+              ?>
+              </ul>
+              <?php else:?>
+              <span class="text" title='<?php echo $editorInfo;?>'><?php echo $editorInfo;?></span>
+              <?php endif;?>
+            </div>
+          </div>
+          <?php endif;?>
         </div>
-        <div class="">
+        <div id="diffContain">
           <div class="detail-content article-content table-col">
             <div class='info'>
-              <span class='user-time text-muted'><i class='icon icon-contacts'></i> <?php echo zget($users, $doc->addedBy) . " {$lang->colon} " . substr($doc->addedDate, 0, 10) . (common::checkNotCN() ? ' ' : '') . $lang->doc->createAB;?></span>
-              <!-- <span data-url="<?php echo $this->createLink('doc', 'collect', "objectID=$doc->id&objectType=doc");?>" title="<?php echo $lang->doc->collect;?>" class='user-time ajaxCollect text-muted'><?php echo html::image("static/svg/{$star}.svg", "class='$star'");?> <?php echo $doc->collects;?></span> -->
+              <?php $createInfo = $doc->status == 'draft' ? zget($users, $doc->addedBy) . " {$lang->colon} " . substr($doc->addedDate, 0, 10) . (common::checkNotCN() ? ' ' : '') . $lang->doc->createAB : zget($users, $doc->releasedBy) . " {$lang->colon} " . substr($doc->releasedDate, 0, 10) . (common::checkNotCN() ? ' ' : '') . $lang->doc->release;?>
+              <span class='user-time text-muted'><i class='icon-contacts'></i> <?php echo $createInfo;?></span>
               <span class='user-time text-muted'><i class='icon-star'></i> <?php echo $doc->collects;?></span>
               <span class='user-time text-muted'><i class='icon-eye'></i> <?php echo $doc->views;?></span>
               <?php if($doc->keywords):?>

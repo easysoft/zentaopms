@@ -772,7 +772,7 @@ class testcaseModel extends model
      */
     public function getPairsByProduct($productID, $branch = 0)
     {
-        return $this->dao->select('id, concat_ws(":", id, title) as title')->from(TABLE_CASE)
+        return $this->dao->select("id, concat_ws(':', id, title) as title")->from(TABLE_CASE)
             ->where('deleted')->eq(0)
             ->andWhere('product')->eq($productID)
             ->beginIF($branch)->andWhere('branch')->in($branch)->fi()
@@ -2334,7 +2334,7 @@ class testcaseModel extends model
                 if ($isCase == 1) echo $case->stepNumber;
                 break;
             case 'actions':
-                if ($isCase == 1) 
+                if ($isCase == 1)
                 {
                     $case->browseType = $browseType;
                     echo $this->buildOperateMenu($case, 'browse');
@@ -2383,7 +2383,7 @@ class testcaseModel extends model
         else
         {
             $caseBugs = $this->dao->select('count(*) as count, `case`')->from(TABLE_BUG)->where('`result`')->in($caseIdList)->andWhere('deleted')->eq(0)->groupBy('`case`')->fetchPairs('case', 'count');
-            $results  = $this->dao->select('count(*) as count, `case`')->from(TABLE_TESTRESULT)->where('`run`')->in($caseIdList)->groupBy('`run`')->fetchPairs('case', 'count');
+            $results  = $this->dao->select('count(*) as count, `case`')->from(TABLE_TESTRESULT)->where('`run`')->in($caseIdList)->groupBy('`case`')->fetchPairs('case', 'count');
 
             $caseFails = $this->dao->select('count(*) as count, `case`')->from(TABLE_TESTRESULT)
                 ->where('caseResult')->eq('fail')
