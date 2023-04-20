@@ -389,7 +389,7 @@ class testtaskModel extends model
     public function getAllLinkableCases($task, $query, $linkedCases, $pager)
     {
         return $this->dao->select('*')->from(TABLE_CASE)->where($query)
-                ->andWhere('id')->notIN($linkedCases)
+                ->beginIF(!empty($linkedCases))->andWhere('id')->notIN($linkedCases)->fi()
                 ->andWhere('status')->ne('wait')
                 ->andWhere('type')->ne('unit')
                 ->beginIF($task->branch !== '')->andWhere('branch')->in("0,$task->branch")->fi()
@@ -423,7 +423,7 @@ class testtaskModel extends model
                 ->beginIF($this->lang->navGroup->testtask != 'qa')->andWhere('t1.project')->eq($this->session->project)->fi()
                 ->andWhere('t1.product')->eq($productID)
                 ->andWhere('t1.status')->ne('wait')
-                ->beginIF($linkedCases)->andWhere('t1.id')->notIN($linkedCases)->fi()
+                ->beginIF(!empty($linkedCases))->andWhere('t1.id')->notIN($linkedCases)->fi()
                 ->beginIF($task->branch !== '')->andWhere('t1.branch')->in("0,$task->branch")->fi()
                 ->andWhere('t1.story')->in(trim($stories, ','))
                 ->andWhere('t1.deleted')->eq(0)

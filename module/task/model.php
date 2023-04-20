@@ -524,8 +524,8 @@ class taskModel extends model
             if($oldParentTask->parent == 0 and $oldParentTask->consumed > 0)
             {
                 $clonedTask = clone $oldParentTask;
-                unset($clonedTask->id);
                 $clonedTask->parent = $parentID;
+                unset($clonedTask->id);
                 $this->dao->insert(TABLE_TASK)->data($clonedTask)->autoCheck()->exec();
 
                 $clonedTaskID = $this->dao->lastInsertID();
@@ -641,14 +641,14 @@ class taskModel extends model
         $tasks = $this->dao->select('estStarted, realStarted, deadline')->from(TABLE_TASK)->where('parent')->eq($taskID)->andWhere('status')->ne('cancel')->andWhere('deleted')->eq(0)->fetchAll();
         if(empty($tasks)) return true;
 
+        $earliestEstStarted  = '';
+        $earliestRealStarted = '';
+        $latestDeadline      = '';
         foreach($tasks as $task)
         {
-            $estStarted  = formatTime($task->estStarted);
-            $realStarted = formatTime($task->realStarted);
-            $deadline    = formatTime($task->deadline);
-            if(!isset($earliestEstStarted) or (!empty($estStarted) and $earliestEstStarted > $estStarted))     $earliestEstStarted  = $estStarted;
-            if(!isset($earliestRealStarted) or (!empty($realStarted) and $earliestRealStarted > $realStarted)) $earliestRealStarted = $realStarted;
-            if(!isset($latestDeadline) or (!empty($deadline) and $latestDeadline < $deadline))                 $latestDeadline      = $deadline;
+            if(!helper::isZeroDate($task->estStarted)  and (empty($earliestEstStarted)   or $earliestEstStarted  > $task->estStarted))  $earliestEstStarted  = $task->estStarted;
+            if(!helper::isZeroDate($task->realStarted) and (empty($earliestRealStarted)  or $earliestRealStarted > $task->realStarted)) $earliestRealStarted = $task->realStarted;
+            if(!helper::isZeroDate($task->deadline)    and (empty($latestDeadline)       or $latestDeadline      < $task->deadline))    $latestDeadline      = $task->deadline;
         }
 
         $newTask = new stdClass();
