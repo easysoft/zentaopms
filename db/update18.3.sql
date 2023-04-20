@@ -332,8 +332,11 @@ REPLACE INTO `zt_grouppriv` (`group`, `module`, `method`) SELECT `group`, `modul
 REPLACE INTO `zt_grouppriv` (`group`, `module`, `method`) SELECT `group`, 'screen', `method` FROM `zt_grouppriv` WHERE `module` = 'dashboard';
 REPLACE INTO `zt_grouppriv` (`group`, `module`, `method`) SELECT `group`, 'screen', 'publish' FROM `zt_grouppriv` WHERE `module` = 'screen' AND `method` = 'design';
 
+REPLACE INTO `zt_grouppriv` (`group`, `module`, `method`) SELECT `group`, 'dataview', 'browse' FROM `zt_grouppriv` WHERE `module` = 'dataset' AND `method` IN ('browse', 'view');
+REPLACE INTO `zt_grouppriv` (`group`, `module`, `method`) SELECT `group`, 'dataview', 'create' FROM `zt_grouppriv` WHERE `module` = 'dataset' AND `method` = 'create';
+REPLACE INTO `zt_grouppriv` (`group`, `module`, `method`) SELECT `group`, 'dataview', 'edit' FROM `zt_grouppriv` WHERE `module` = 'dataset' AND `method` = 'edit';
+REPLACE INTO `zt_grouppriv` (`group`, `module`, `method`) SELECT `group`, 'dataview', 'delete' FROM `zt_grouppriv` WHERE `module` = 'dataset' AND `method` = 'delete';
 REPLACE INTO `zt_grouppriv` (`group`, `module`, `method`) SELECT `group`, 'dataview', 'query' FROM `zt_grouppriv` WHERE `module` = 'dataset' AND `method` IN ('create', 'edit');
-UPDATE `zt_grouppriv` SET `module` = 'dataview' WHERE `module` = 'dataset' AND `method` IN ('browse', 'create', 'edit', 'delete');
 DELETE FROM `zt_grouppriv` WHERE `module` = 'dataset' AND `method` = 'view';
 DELETE FROM `zt_grouppriv` WHERE `module` = 'dashboard';
 

@@ -757,7 +757,6 @@ class upgradeModel extends model
                 break;
             case 'biz8_3':
                 $this->processDataset();
-                $this->updateDatasetPriv();
                 $this->processChart();
                 $this->processReport();
                 $this->processDashboard();
@@ -8150,58 +8149,6 @@ class upgradeModel extends model
     }
 
     /**
-     * Update dataset priv.
-     *
-     * @access public
-     * @return bool
-     */
-    public function updateDatasetPriv()
-    {
-        $datasetPrivList = $this->dao->select('*')->from(TABLE_GROUPPRIV)->where('module')->eq('dataset')->fetchAll();
-        foreach($datasetPrivList as $datasetPriv)
-        {
-            if($datasetPriv->method == 'view')
-            {
-                $this->dao->delete()->from(TABLE_GROUPPRIV)
-                    ->where('module')->eq('dataset')
-                    ->andWhere('method')->eq('view')
-                    ->andWhere('`group`')->eq($datasetPriv->group)
-                    ->exec();
-
-                $browsePriv = $this->dao->select('*')->from(TABLE_GROUPPRIV)
-                    ->where('module')->eq('dataset')
-                    ->andWhere('method')->eq('browse')
-                    ->andWhere('`group`')->eq($datasetPriv->group)
-                    ->fetchAll();
-                if(empty($browsePriv))
-                {
-                    $data = new stdClass();
-                    $data->group  = $datasetPriv->group;
-                    $data->module = 'dataview';
-                    $data->method = 'browse';
-                    $this->dao->insert(TABLE_GROUPPRIV)->data($data)->exec();
-                }
-            }
-
-            if($datasetPriv->method == 'edit')
-            {
-                $data = new stdClass();
-                $data->group  = $datasetPriv->group;
-                $data->module = 'dataview';
-                $data->method = 'query';
-                $this->dao->insert(TABLE_GROUPPRIV)->data($data)->exec();
-            }
-        }
-
-        $this->dao->update(TABLE_GROUPPRIV)->set('module')->eq('dataview')
-            ->where('module')->eq('dataset')
-            ->andWhere('method')->in('browse,create,edit,delete')
-            ->exec();
-
-        return true;
-    }
-
-    /**
      * Process report modules.
      *
      * @access public
@@ -8702,8 +8649,6 @@ class upgradeModel extends model
 
         foreach($charts as $chart)
         {
-            $isQuoteDataset = isset($dataviewList[$chart->dataset]);
-
             if($chart->type == 'table')
             {
                $pivotID = $this->upgradeToPivotTable($chart, $dataviewList);
@@ -8743,12 +8688,14 @@ class upgradeModel extends model
                         unset($settings->filter);
                     }
 
+                    $isQuoteDataview = isset($dataviewList[$chart->dataset]);
+
                     if(isset($settings->xaxis))
                     {
                         $xaxisFields = $settings->xaxis;
                         foreach($xaxisFields as $xaxisIndex => $xaxisField)
                         {
-                            if($isQuoteDataset && strpos($xaxisField->field, '.') !== false)
+                            if($isQuoteDataview && strpos($xaxisField->field, '.') !== false)
                             {
                                 $xaxisField->field = str_replace('.', '_', $xaxisField->field);
 
@@ -8763,7 +8710,7 @@ class upgradeModel extends model
                         $groupFields = $settings->group;
                         foreach($groupFields as $groupIndex => $groupField)
                         {
-                            if($isQuoteDataset && strpos($groupField->field, '.') !== false)
+                            if($isQuoteDataview && strpos($groupField->field, '.') !== false)
                             {
                                 $groupField->field = str_replace('.', '_', $groupField->field);
 
@@ -8894,8 +8841,6 @@ class upgradeModel extends model
 
         if(!$defaultPivotGroupID) $defaultPivotGroupID = $this->createDefaultGroup('pivot');
 
-        $isQuoteDataset = isset($dataviewList[$table->dataset]);
-
         $pivot = new stdclass();
         $pivot->dimension   = 1;
         $pivot->group       = $defaultPivotGroupID;
@@ -8915,13 +8860,15 @@ class upgradeModel extends model
         $filters       = array();
         if($tableSettings)
         {
+            $isQuoteDataview = isset($dataviewList[$table->dataset]);
+
             $index = 1;
             foreach($tableSettings->group as $index => $group)
             {
                 if($index > 3) continue;
 
                 $groupKey = "group{$index}";
-                $pivotSettings->$groupKey = ($isQuoteDataset && strpos($group->field, '.') !== false) ? str_replace('.', '_', $group->field) : $group->field;
+                $pivotSettings->$groupKey = ($isQuoteDataview && strpos($group->field, '.') !== false) ? str_replace('.', '_', $group->field) : $group->field;
 
                 $index ++;
             }
@@ -8930,7 +8877,7 @@ class upgradeModel extends model
             foreach($tableSettings->column as $index => $tableColumn)
             {
                 $column = new stdclass();
-                $column->field = ($isQuoteDataset && strpos($tableColumn->field, '.') !== false) ? str_replace('.', '_', $tableColumn->field) : $tableColumn->field;
+                $column->field = ($isQuoteDataview && strpos($tableColumn->field, '.') !== false) ? str_replace('.', '_', $tableColumn->field) : $tableColumn->field;
                 $column->stat  = $tableColumn->valOrAgg;
 
                 if($column->stat == 'value')          $column->stat = 'sum';
