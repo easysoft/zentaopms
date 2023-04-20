@@ -2,6 +2,7 @@
     let DEBUG         = true;
     const currentCode = window.name.substring(4);
     const isInAppTab  = parent.window !== window;
+    const fetchTasks  = new Map();
     let currentAppUrl = '';
 
     $.apps = $.extend(
@@ -153,19 +154,28 @@
         $target.toggleClass('loading', isLoading);
     }
 
-    function fetchZinData(url, selectors, options)
+    /**
+     * Request data from remote server
+     * @param {Object} options
+     * @param {string} options.id
+     * @param {string} options.url
+     * @param {string} options.selectors
+     * @param {string} [options.target]
+     * @param {{selector: string, type: string}} [options.zinOptions]
+     * @param {function} [options.success]
+     * @param {function} [options.error]
+     * @param {function} [options.complete]
+     * @param {function} [onFinish]
+     */
+    function requestContent(options, onFinish)
     {
-        if(typeof options === 'string') options = {id: options};
-        options = typeof options === 'function' ? {success: options} : (options || {});
-
-        const target  = options.target || '#main';
-        const zinOptions = options.zinOptions;
-        selectors = Array.isArray(selectors) ? selectors : selectors.split(',');
-        if(DEBUG) selectors.push('zinErrors()');
-        $.ajax(
+        const target    = options.target || '#main';
+        const selectors = Array.isArray(options.selectors) ? options.selectors : options.selectors.split(',');
+        const url       = options.url;
+        return $.ajax(
         {
             url:      url,
-            headers:  {'X-ZIN-Options': JSON.stringify($.extend({selector: selectors, type: 'list'}, zinOptions)), 'X-ZIN-App': currentCode},
+            headers:  {'X-ZIN-Options': JSON.stringify($.extend({selector: selectors, type: 'list'}, options.zinOptions)), 'X-ZIN-App': currentCode},
             beforeSend: () => toggleLoading(target, true),
             success: (data) =>
             {
@@ -175,11 +185,15 @@
                 renderPage(data);
                 $(document).trigger('pagerender.app');
                 if(options.success) options.success(data);
+                if(onFinish) onFinish(null, data);
             },
-            error: () =>
+            error: (xhr, type, error) =>
             {
+                if(type === 'abort') return console.log('[ZIN] ', 'Abord fetch data from ' + url, {xhr, type, error});;
+                if(DEBUG) console.error('[ZIN] ', 'Fetch data failed from ' + url, {xhr, type, error});
                 zui.Messager.show('ZIN: Fetch data failed from ' + url);
                 if(options.error) options.error(data);
+                if(onFinish) onFinish(error);
             },
             complete: () =>
             {
@@ -190,16 +204,51 @@
         });
     }
 
+    function fetchContent(url, selectors, options)
+    {
+        if(typeof url === 'object')
+        {
+            options = url;
+            url = options.url;
+            selectors = options.selectors;
+        }
+        if(typeof options === 'string') options = {id: options};
+        else if(typeof options === 'function') options = {success: options};
+
+        selectors = Array.isArray(selectors) ? selectors.join(',') : selectors;
+        const id = options.id || selectors;
+        options = $.extend({}, options, {url: url, selectors: selectors, id: id});
+
+        const task = fetchTasks.get(id) || {url: url, selectors: selectors, options: options};
+        if(task.xhr)
+        {
+            if(task.url === url) return;
+            task.xhr.abort();
+            task.xhr = null;
+        }
+        fetchTasks.set(id, task);
+        if(task.timerID) clearTimeout(task.timerID);
+        task.timerID = setTimeout(() =>
+        {
+            task.timerID = 0;
+            task.xhr = requestContent(options, () =>
+            {
+                task.xhr = null;
+                fetchTasks.delete(id);
+            });
+        }, options.delayTime || 0);
+    }
+
     function loadTable(url, id)
     {
         url = url || currentAppUrl;
         id = id || $('.dtable').attr('id') || 'dtable';
         if(!id) return;
 
-        fetchZinData(url, 'table/#' + id + ':type=json&data=props,#featureBar>*', '#' + id);
+        fetchContent(url, 'table/#' + id + ':type=json&data=props,#featureBar>*', {id: '#' + id, target: '#' + id});
     }
 
-    function loadPage(url, selector)
+    function loadPage(url, selector, id)
     {
         url = url || currentAppUrl;
         if (!selector && url.includes(' ')) {
@@ -208,7 +257,13 @@
             selector = parts[1];
         }
         if(DEBUG) console.log('[APP] ', 'load:', url);
-        fetchZinData(url, selector || ($('#main').length ? '#main>*,#pageCSS>*,#pageJS,#configJS>*,title>*,activeMenu()' : 'body>*,title>*'), selector || 'page');
+        id = id || selector || 'page';
+        if(!selector)
+        {
+            selector = ($('#main').length ? '#main>*,#pageCSS>*,#pageJS,#configJS>*,title>*,activeMenu()' : 'body>*,title>*');
+            if(DEBUG) selector += ',zinErrors()';
+        }
+        fetchContent(url, selector, id);
     }
 
     function loadCurrentPage(selector)
@@ -333,7 +388,7 @@
         return result;
     }
 
-    $.extend(window, {fetchZinData: fetchZinData, loadTable: loadTable, loadPage: loadPage, loadCurrentPage: loadCurrentPage, parseSelector: parseSelector, onRenderPage: onRenderPage, toggleLoading: toggleLoading});
+    $.extend(window, {fetchContent: fetchContent, loadTable: loadTable, loadPage: loadPage, loadCurrentPage: loadCurrentPage, parseSelector: parseSelector, onRenderPage: onRenderPage, toggleLoading: toggleLoading});
 
     /* Transfer click event to parent */
     $(document).on('click', (e) =>
