@@ -187,6 +187,11 @@
     function loadPage(url, selector)
     {
         url = url || currentAppUrl || defaultUrl;
+        if (!selector && url.includes(' ')) {
+            const parts = url.split(' ', 2);
+            url = parts[0];
+            selector = parts[1];
+        }
         if(debug) console.log('[APP] ', 'load:', url);
         selector = selector || ($('#main').length ? '#main>*,#pageCSS>*,#pageJS,#configJS>*,title>*,activeMenu()' : 'body>*,title>*');
         fetchZinData(url, selector);
@@ -314,7 +319,7 @@
         return result;
     }
 
-    $.extend(window, {fetchZinData: fetchZinData, loadTable: loadTable, loadPage: loadPage, loadCurrentPage: loadCurrentPage, parseSelector: parseSelector});
+    $.extend(window, {fetchZinData: fetchZinData, loadTable: loadTable, loadPage: loadPage, loadCurrentPage: loadCurrentPage, parseSelector: parseSelector, onRenderPage: onRenderPage});
 
     /* Transfer click event to parent */
     $(document).on('click', (e) =>
