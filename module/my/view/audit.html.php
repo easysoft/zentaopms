@@ -89,7 +89,7 @@
           ?>
         </td>
         <td class='c-type'><?php echo $typeName;?></td>
-        <td class='c-time text-left'><?php echo $review->time?></td>
+        <td class='c-time text-left'><?php echo substr($review->time, 0, 19);?></td>
         <?php if($rawMethod == 'contribute' and $browseType == 'reviewedbyme'):?>
         <?php
         $reviewResultList = array();
@@ -98,7 +98,7 @@
         ?>
         <td class='c-status'><?php echo zget($reviewResultList, $review->result);?></td>
         <?php endif;?>
-        <td class='c-status'><?php echo zget($statusList, $review->status, '')?></td>
+        <td class='c-status'><?php echo zget($statusList, $review->status, '');?></td>
         <?php if($rawMethod == 'audit'):?>
         <td class='c-actions text-left'>
           <?php
