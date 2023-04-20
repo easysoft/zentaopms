@@ -1408,16 +1408,16 @@ $lang->doc->methodOrder[120] = 'displaySetting';
 
 /* Mail. */
 $lang->resource->mail = new stdclass();
-$lang->resource->mail->index  = 'index';
-$lang->resource->mail->detect = 'detectAction';
-$lang->resource->mail->edit   = 'edit';
-$lang->resource->mail->save   = 'saveAction';
-$lang->resource->mail->test   = 'test';
-$lang->resource->mail->reset  = 'resetAction';
-$lang->resource->mail->browse = 'browse';
-$lang->resource->mail->delete = 'delete';
-$lang->resource->mail->resend = 'resendAction';
-$lang->resource->mail->batchDelete   = 'batchDelete';
+$lang->resource->mail->index       = 'index';
+$lang->resource->mail->detect      = 'detectAction';
+$lang->resource->mail->edit        = 'edit';
+$lang->resource->mail->save        = 'saveAction';
+$lang->resource->mail->test        = 'test';
+$lang->resource->mail->reset       = 'resetAction';
+$lang->resource->mail->browse      = 'browse';
+$lang->resource->mail->delete      = 'delete';
+$lang->resource->mail->resend      = 'resendAction';
+$lang->resource->mail->batchDelete = 'batchDelete';
 
 $lang->mail->methodOrder[5]  = 'index';
 $lang->mail->methodOrder[10] = 'detect';

@@ -609,17 +609,16 @@ $lang->doc->methodOrder[105] = 'displaySetting';
 
 /* Mail. */
 $lang->resource->mail = new stdclass();
-$lang->resource->mail->index  = 'index';
-$lang->resource->mail->detect = 'detectAction';
-$lang->resource->mail->edit   = 'edit';
-$lang->resource->mail->save   = 'saveAction';
-$lang->resource->mail->test   = 'test';
-$lang->resource->mail->reset  = 'resetAction';
-$lang->resource->mail->browse = 'browse';
-$lang->resource->mail->delete = 'delete';
-$lang->resource->mail->resend = 'resendAction';
-$lang->resource->mail->batchDelete   = 'batchDelete';
-$lang->resource->mail->sendcloudUser = 'sendcloudUser';
+$lang->resource->mail->index       = 'index';
+$lang->resource->mail->detect      = 'detectAction';
+$lang->resource->mail->edit        = 'edit';
+$lang->resource->mail->save        = 'saveAction';
+$lang->resource->mail->test        = 'test';
+$lang->resource->mail->reset       = 'resetAction';
+$lang->resource->mail->browse      = 'browse';
+$lang->resource->mail->delete      = 'delete';
+$lang->resource->mail->resend      = 'resendAction';
+$lang->resource->mail->batchDelete = 'batchDelete';
 
 $lang->mail->methodOrder[5]  = 'index';
 $lang->mail->methodOrder[10] = 'detect';
@@ -631,7 +630,6 @@ $lang->mail->methodOrder[35] = 'browse';
 $lang->mail->methodOrder[40] = 'delete';
 $lang->mail->methodOrder[45] = 'batchDelete';
 $lang->mail->methodOrder[50] = 'resend';
-$lang->mail->methodOrder[60] = 'sendcloudUser';
 
 /* Custom. */
 $lang->resource->custom = new stdclass();
