@@ -165,7 +165,7 @@ function change<?php echo "block{$block->id}";?>ProjectType(type)
                   $icon    = html::image("static/svg/{$docType}.svg", "class='file-icon'");
                   if(common::hasPriv('doc', 'view'))
                   {
-                      echo html::a($this->createLink('doc', 'view', "docID=$doc->id"), $icon . $doc->title, '', "title='{$doc->title}' class='doc-title' data-app='{$this->app->tab}'");
+                      echo html::a($this->createLink('doc', 'view', "docID=$doc->id"), $icon . $doc->title, '', "title='{$doc->title}' class='doc-title text-primary' data-app='{$this->app->tab}'");
                   }
                   else
                   {
