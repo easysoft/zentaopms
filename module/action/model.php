@@ -1409,6 +1409,7 @@ class actionModel extends model
         $objectNames     = array();
         $relatedProjects = array();
         $requirements    = array();
+        $objectTypes     = array();
 
         foreach($actions as $object) $objectTypes[$object->objectType][$object->objectID] = $object->objectID;
         foreach($objectTypes as $objectType => $objectIdList)
