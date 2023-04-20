@@ -1035,16 +1035,24 @@ ALTER TABLE `zt_testreport`
 CHANGE `project` `project` mediumint unsigned NOT NULL DEFAULT '0',
 CHANGE `product` `product` mediumint unsigned NOT NULL DEFAULT '0',
 CHANGE `execution` `execution` mediumint unsigned NOT NULL DEFAULT '0',
-CHANGE `stories` `stories` text COLLATE 'utf8mb3_general_ci' NULL,
-CHANGE `bugs` `bugs` text COLLATE 'utf8mb3_general_ci' NULL,
-CHANGE `cases` `cases` text COLLATE 'utf8mb3_general_ci' NULL,
-CHANGE `report` `report` text COLLATE 'utf8mb3_general_ci' NULL,
-CHANGE `deleted` `deleted` enum('0','1') COLLATE 'utf8mb3_general_ci' NOT NULL DEFAULT '0';
+CHANGE `stories` `stories` text NULL,
+CHANGE `bugs` `bugs` text NULL,
+CHANGE `cases` `cases` text NULL,
+CHANGE `report` `report` text NULL,
+CHANGE `deleted` `deleted` enum('0','1') NOT NULL DEFAULT '0';
 
 ALTER TABLE `zt_testrun`
 CHANGE `lastRunner` `lastRunner` varchar(30) NOT NULL DEFAULT '',
 CHANGE `lastRunDate` `lastRunDate` datetime NULL,
 CHANGE `lastRunResult` `lastRunResult` char(30) NOT NULL DEFAULT '';
+
+ALTER TABLE `zt_testresult`
+CHANGE `job` `job` mediumint unsigned NOT NULL DEFAULT '0',
+CHANGE `compile` `compile` mediumint unsigned NOT NULL DEFAULT '0',
+CHANGE `ZTFResult` `ZTFResult` text NULL,
+CHANGE `duration` `duration` float NOT NULL DEFAULT '0',
+CHANGE `xml` `xml` text NULL,
+CHANGE `deploy` `deploy` mediumint unsigned NOT NULL DEFAULT '0';
 
 ALTER TABLE `zt_testsuite`
 CHANGE `project` `project` mediumint unsigned NOT NULL DEFAULT '0',

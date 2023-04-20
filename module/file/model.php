@@ -123,14 +123,14 @@ class fileModel extends model
      * Save upload.
      *
      * @param  string $objectType
-     * @param  string $objectID
+     * @param  int    $objectID
      * @param  string $extra
      * @param  string $filesName
      * @param  string $labelsName
      * @access public
      * @return array
      */
-    public function saveUpload($objectType = '', $objectID = '', $extra = '', $filesName = 'files', $labelsName = 'labels')
+    public function saveUpload($objectType = '', $objectID = 0, $extra = '', $filesName = 'files', $labelsName = 'labels')
     {
         $fileTitles = array();
         $now        = helper::today();
