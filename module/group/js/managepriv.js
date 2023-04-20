@@ -38,10 +38,10 @@ function setActions()
 function setNoChecked()
 {
     var noCheckValue = '';
-    $(':checkbox').each(function()
+    $('tbody .group-item > div > div > input').each(function()
     {
-        if(!$(this).prop('checked') && $(this).next('span').attr('id') != undefined) noCheckValue = noCheckValue + ',' + $(this).next('span').attr('id');
-    })
+        if(!$(this).prop('checked') && $(this).attr('data-id') != undefined) noCheckValue = noCheckValue + ',' + $(this).attr('data-id');
+    });
     $('#noChecked').val(noCheckValue);
 }
 
