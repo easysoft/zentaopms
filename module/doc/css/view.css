@@ -30,10 +30,9 @@
 .article-content.comment .comment-content {width: 94%;}
 #outlineMenu {max-width: 200px; overflow-x: auto;}
 #outlineMenu .tree li > a {text-overflow: clip;}
-.outline-toggle {position: absolute; right: 20px; top: 50px;}
 .outline-toggle i.icon-angle-right:before {content: "\e314"; cursor: pointer;}
 .outline-toggle i.icon-angle-left:before {content: "\e315"; cursor: pointer;}
-.outline-toggle {position: absolute; right: 55px; top: 50px; background: #fff;}
+.outline-toggle {position: absolute; right: 15px; top: 50px; background: #fff; padding: 5px 20px 5px 15px;}
 .outline ul li {list-style: none;}
 .outline-content {display: none; padding-top: 18px;}
 .outline-content a {color: #838A9D;}

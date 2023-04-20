@@ -1122,7 +1122,7 @@ class doc extends control
      */
     public function view($docID = 0, $version = 0, $appendLib = 0)
     {
-        $doc = $this->doc->getById($docID);
+        $doc = $this->doc->getById($docID, $version, true);
         if(!$this->doc->checkPrivDoc($doc))
         {
             echo(js::alert($this->lang->doc->accessDenied));
