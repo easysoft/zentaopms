@@ -390,7 +390,7 @@ class chartModel extends model
         $optionList = $this->getSysOptions($fields[$group]['type'], $fields[$group]['object'], $fields[$group]['field']);
         foreach($xLabels as $index => $xLabel) $xLabels[$index] = isset($optionList[$xLabel]) ? $optionList[$xLabel] : $xLabel;
 
-        $xaxis      = array('type' => 'category', 'data' => $xLabels);
+        $xaxis      = array('type' => 'category', 'data' => $xLabels, 'boundaryGap' => false);
         $yaxis      = array('type' => 'value');
         $legend     = new stdclass();
         $series     = array();
@@ -448,7 +448,7 @@ class chartModel extends model
         $optionList = $this->getSysOptions($fields[$group]['type'], $fields[$group]['object'], $fields[$group]['field']);
         foreach($xLabels as $index => $xLabel) $xLabels[$index] = isset($optionList[$xLabel]) ? $optionList[$xLabel] : $xLabel;
 
-        $xaxis  = array('type' => 'category', 'data' => $xLabels, 'axisLabel' => array('interval' => 0));
+        $xaxis  = array('type' => 'category', 'data' => $xLabels, 'axisLabel' => array('interval' => 0), 'boundaryGap' => false);
         $yaxis  = array('type' => 'value');
         $legend = new stdclass();
 
