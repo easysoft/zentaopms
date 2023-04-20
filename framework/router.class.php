@@ -274,7 +274,7 @@ class router extends baseRouter
         {
             $sql         = new sql();
             $account     = $sql->quote($account);
-            $userSetting = $this->dbh->query('SELECT `key`, `value` FROM ' . TABLE_CONFIG . "WHERE `owner`= $account AND `module`='common' and `key` in ('programLink', 'productLink', 'projectLink', 'executionLink', 'URSR')")->fetchAll();
+            $userSetting = $this->dbh->query('SELECT `key`, `value` FROM ' . TABLE_CONFIG . " WHERE `owner`= $account AND `module`='common' and `key` in ('programLink', 'productLink', 'projectLink', 'executionLink', 'URSR')")->fetchAll();
         }
 
         foreach($userSetting as $setting)
