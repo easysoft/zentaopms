@@ -269,7 +269,7 @@ $(function()
                 if(typeof docID != 'undefined' && item.id == docID) item.active = 1;
                 if(['text', 'word', 'ppt', 'excel'].indexOf(item.type) !== -1) item.hasAction = false;
 
-                var objectType  = config.currentModule == 'api' ? item.objectType : item.type;
+                var objectType  = config.currentModule == 'api' && ['project', 'product', 'execution'].indexOf(item.objectType) === false ? item.objectType : item.type;
                 var libClass    = ['lib', 'annex', 'api', 'execution'].indexOf(objectType) !== -1 ? 'lib' : '';
                 var moduleClass = item.type == 'doc' || item.type == 'apiDoc' ? 'catalog' : '';
                 var sortClass   = '';
