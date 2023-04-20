@@ -83,6 +83,7 @@ class form extends wg
             $target = NULL;
             if(empty($id)) $id = $this->gid;
         }
+        if(empty($url)) $url = $_SERVER['REQUEST_URI'];
 
         return h::form
         (
