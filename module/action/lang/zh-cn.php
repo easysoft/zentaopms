@@ -772,7 +772,7 @@ $lang->action->label->risk         = '风险|risk|view|riskID=%s';
 $lang->action->label->issue        = '问题|issue|view|issueID=%s';
 $lang->action->label->design       = '设计|design|view|designID=%s';
 $lang->action->label->stakeholder  = '干系人|stakeholder|view|userID=%s';
-$lang->action->label->api          = '接口|api|index|libID=%s&moduleID=%s&apiID=%s';
+$lang->action->label->api          = '接口|api|view|libID=%s&apiID=%s&moduleID=%s';
 $lang->action->label->kanbanspace  = '看板空间|kanban|space|browseType=%s';
 $lang->action->label->kanbanregion = '看板区域|kanban|view|kanbanID=%s';
 $lang->action->label->kanban       = '看板|kanban|view|kanbanID=%s';

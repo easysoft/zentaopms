@@ -98,7 +98,7 @@ $config->dimension->chartUpgrade['efficiency']['staff']['cost']      = array('ch
 
 $config->dimension->chartUpgrade['efficiency']['project'] = array();
 $config->dimension->chartUpgrade['efficiency']['project']['progress']  = array('chart' => '10114,10115');
-$config->dimension->chartUpgrade['efficiency']['project']['cost']      = array();
+$config->dimension->chartUpgrade['efficiency']['project']['cost']      = array('chart' => '10022');
 $config->dimension->chartUpgrade['efficiency']['project']['timelimit'] = array('chart' => '10014,10015,10016,10017,10020,10021,10018,10019');
 
 $config->dimension->chartUpgrade['quality'] = array();

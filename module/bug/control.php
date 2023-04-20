@@ -857,7 +857,7 @@ class bug extends control
         $this->view->stories          = $stories;
         $this->view->builds           = $builds;
         $this->view->users            = $this->user->getPairs('devfirst|noclosed');
-        $this->view->projects         = array('' => '') + $this->product->getProjectPairsByProduct($productID, $branch ? "0,$branch" : 0, 'id_desc', $projectID);
+        $this->view->projects         = array('' => '') + $this->product->getProjectPairsByProduct($productID, $branch ? "0,$branch" : 0);
         $this->view->projectID        = $projectID;
         $this->view->executions       = array('' => '') + $this->product->getExecutionPairsByProduct($productID, $branch ? "0,$branch" : 0, 'id_desc', $projectID, 'multiple,stagefilter');
         $this->view->executionID      = $executionID;

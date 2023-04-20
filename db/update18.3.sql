@@ -50,10 +50,10 @@ CREATE TABLE IF NOT EXISTS `zt_scene` (
   `module` mediumint(8) unsigned NOT NULL DEFAULT 0,
   `title` varchar(255) NOT NULL,
   `sort` int(11) unsigned NOT NULL DEFAULT 0,
-  `openedBy` char(30) NOT NULL DEFAULT '''''',
+  `openedBy` char(30) NOT NULL DEFAULT '',
   `openedDate` datetime DEFAULT NULL,
   `lastEditedBy` char(30) NOT NULL DEFAULT '',
-  `lastEditedDate` datetime NOT NULL,
+  `lastEditedDate` datetime NULL,
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   `parent` int(11) DEFAULT NULL,
   `grade` tinyint(3) DEFAULT NULL,
@@ -260,7 +260,7 @@ REPLACE INTO `zt_chart` (`id`, `name`, `dimension`, `type`, `group`, `stage`, `d
 (10019,'年度完成项目-单位工时交付需求规模数对比图',2,'pie',0,'published','','[{\"type\":\"cluBarX\",\"xaxis\":[{\"field\":\"project\",\"name\":\"\\u6240\\u5c5e\\u9879\\u76ee\",\"group\":\"\"}],\"yaxis\":[{\"field\":\"\\u5355\\u4f4d\\u65f6\\u95f4\\u4ea4\\u4ed8\\u9700\\u6c42\\u89c4\\u6a21\\u6570\",\"name\":\"\\u5355\\u4f4d\\u65f6\\u95f4\\u4ea4\\u4ed8\\u9700\\u6c42\\u89c4\\u6a21\\u6570\",\"valOrAgg\":\"sum\"}]}]','[{\"field\":\"project\",\"type\":\"input\",\"name\":\"\\u6240\\u5c5e\\u9879\\u76ee\",\"default\":\"\"}]','{\"project\":{\"name\":\"\\u6240\\u5c5e\\u9879\\u76ee\",\"object\":\"project\",\"field\":\"project\",\"type\":\"string\"},\"\\u6545\\u4e8b\\u70b9\":{\"name\":\"\\u6545\\u4e8b\\u70b9\",\"object\":\"project\",\"field\":\"\\u6545\\u4e8b\\u70b9\",\"type\":\"number\"},\"\\u5de5\\u65f6\":{\"name\":\"\\u5de5\\u65f6\",\"object\":\"project\",\"field\":\"\\u5de5\\u65f6\",\"type\":\"number\"},\"\\u5355\\u4f4d\\u65f6\\u95f4\\u4ea4\\u4ed8\\u9700\\u6c42\\u89c4\\u6a21\\u6570\":{\"name\":\"\\u5355\\u4f4d\\u65f6\\u95f4\\u4ea4\\u4ed8\\u9700\\u6c42\\u89c4\\u6a21\\u6570\",\"object\":\"project\",\"field\":\"\\u5355\\u4f4d\\u65f6\\u95f4\\u4ea4\\u4ed8\\u9700\\u6c42\\u89c4\\u6a21\\u6570\",\"type\":\"number\"}}','','select tt.*,\ntt.`故事点` / tt.`工时` as \'单位时间交付需求规模数\'\nfrom (\nselect\nt1.name as project, \n(\n	select round(sum(t3.estimate), 1) from zt_projectstory t2\n	left join zt_story t3 on t3.id= t2.story and t3.status=\'closed\' and t3.closedReason = \'done\'\n	where t2.project = t1.id\n) as \'故事点\',\n(\n	select round(sum(t5.consumed), 1) from zt_project t4\n	left join zt_task t5 on t5.execution = t4.id and t5.deleted = \'0\' and t5.parent in (0, -1)\n  where t4.project = t1.id and t4.type = \'sprint\'\n) as \'工时\'\nfrom zt_project t1\nwhere t1.status = \'closed\'\nand t1.deleted = \'0\'\nand t1.type = \'project\'\ngroup by t1.id) tt','1','','admin','2023-04-06 13:41:05','admin','2023-04-06 13:41:05','0'),
 (10020,'年度完成项目-项目完成分布图',2,'pie',0,'published','','[{\"type\":\"pie\",\"group\":[{\"field\":\"\\u9879\\u76ee\\u5b8c\\u6210\\u60c5\\u51b5\",\"name\":\"\\u9879\\u76ee\\u5b8c\\u6210\\u60c5\\u51b5\",\"group\":\"\"}],\"metric\":[{\"field\":\"id\",\"name\":\"\\u9879\\u76eeID\",\"valOrAgg\":\"count\"}]}]','[{\"field\":\"closedDate\",\"type\":\"date\",\"name\":\"\\u5173\\u95ed\\u65e5\\u671f\",\"default\":{\"begin\":\"\",\"end\":\"\"}}]','{\"id\":{\"name\":\"\\u9879\\u76eeID\",\"object\":\"project\",\"field\":\"id\",\"type\":\"number\"},\"\\u9879\\u76ee\\u5b8c\\u6210\\u60c5\\u51b5\":{\"name\":\"\\u9879\\u76ee\\u5b8c\\u6210\\u60c5\\u51b5\",\"object\":\"project\",\"field\":\"\\u9879\\u76ee\\u5b8c\\u6210\\u60c5\\u51b5\",\"type\":\"string\"},\"closedDate\":{\"name\":\"\\u5173\\u95ed\\u65e5\\u671f\",\"object\":\"project\",\"field\":\"closedDate\",\"type\":\"date\"}}','','select\nt1.id,\n(case when t1.realEnd<t1.end then \'提前完成项目\' when t1.realEnd=t1.end then \'正常完成项目\' else \'延期完成项目\' end) \'项目完成情况\',\nt1.closedDate\nfrom(\nselect\nid,\nclosedDate,\nend,\nif(left(realEnd, 4) = \'0000\', closedDate, realEnd) as realEnd\nfrom\nzt_project\nwhere deleted=\'0\'\nand status=\'closed\'\nand type=\'project\') t1','1','','admin','2023-04-06 12:22:34','admin','2023-04-06 12:22:34','0'),
 (10021,'年度完成项目-执行完成分布图',2,'pie',0,'published','','[{\"type\":\"pie\",\"group\":[{\"field\":\"\\u6267\\u884c\\u5b8c\\u6210\\u60c5\\u51b5\",\"name\":\"\\u6267\\u884c\\u5b8c\\u6210\\u60c5\\u51b5\",\"group\":\"\"}],\"metric\":[{\"field\":\"id\",\"name\":\"\\u9879\\u76eeID\",\"valOrAgg\":\"count\"}]}]','[{\"field\":\"closedDate\",\"type\":\"date\",\"name\":\"\\u5173\\u95ed\\u65e5\\u671f\",\"default\":{\"begin\":\"\",\"end\":\"\"}}]','{\"id\":{\"name\":\"\\u9879\\u76eeID\",\"object\":\"project\",\"field\":\"id\",\"type\":\"number\"},\"\\u6267\\u884c\\u5b8c\\u6210\\u60c5\\u51b5\":{\"name\":\"\\u6267\\u884c\\u5b8c\\u6210\\u60c5\\u51b5\",\"object\":\"project\",\"field\":\"\\u6267\\u884c\\u5b8c\\u6210\\u60c5\\u51b5\",\"type\":\"string\"},\"closedDate\":{\"name\":\"\\u5173\\u95ed\\u65e5\\u671f\",\"object\":\"project\",\"field\":\"closedDate\",\"type\":\"date\"}}','','select\nt1.id,\n(case when t1.realEnd<t1.end then \'提前完成执行\' when t1.realEnd=t1.end then \'正常完成执行\' else \'延期完成执行\' end) \'执行完成情况\',\nt1.closedDate\nfrom(\nselect\nid,\nclosedDate,\nend,\nif(left(realEnd, 4) = \'0000\', closedDate, realEnd) as realEnd\nfrom\nzt_project\nwhere deleted=\'0\'\nand status=\'closed\'\nand type=\'sprint\') t1','1','','admin','2023-04-06 12:19:58','admin','2023-04-06 12:22:34','0'),
-(10022,'年度完成项目-完成项目工时偏差率条形图',2,'cluBarY',0,'published','','[{\"type\":\"cluBarY\",\"xaxis\":[{\"field\":\"name\",\"name\":\"\\u4efb\\u52a1\\u540d\\u79f0\",\"group\":\"\"}],\"yaxis\":[{\"field\":\"rate\",\"name\":\"rate\",\"valOrAgg\":\"sum\"}]}]','[{\"field\":\"closedDate\",\"type\":\"date\",\"name\":\"\\u5173\\u95ed\\u65f6\\u95f4\",\"default\":{\"begin\":\"\",\"end\":\"\"}}]','{\"name\":{\"name\":\"\\u4efb\\u52a1\\u540d\\u79f0\",\"object\":\"task\",\"field\":\"name\",\"type\":\"string\"},\"id\":{\"name\":\"\\u7f16\\u53f7\",\"object\":\"task\",\"field\":\"id\",\"type\":\"number\"},\"closedDate\":{\"name\":\"\\u5173\\u95ed\\u65f6\\u95f4\",\"object\":\"task\",\"field\":\"closedDate\",\"type\":\"date\"},\"estimate\":{\"name\":\"\\u6700\\u521d\\u9884\\u8ba1\",\"object\":\"task\",\"field\":\"estimate\",\"type\":\"string\"},\"consumed\":{\"name\":\"\\u603b\\u8ba1\\u6d88\\u8017\",\"object\":\"task\",\"field\":\"consumed\",\"type\":\"string\"},\"left\":{\"name\":\"\\u9884\\u8ba1\\u5269\\u4f59\",\"object\":\"task\",\"field\":\"left\",\"type\":\"string\"},\"deviation\":{\"name\":\"deviation\",\"object\":\"task\",\"field\":\"deviation\",\"type\":\"number\"},\"rate\":{\"name\":\"rate\",\"object\":\"task\",\"field\":\"rate\",\"type\":\"number\"}}','{\"name\":{\"zh-cn\":\"\\u4efb\\u52a1\\u540d\\u79f0\",\"zh-tw\":\"\",\"en\":\"\",\"de\":\"\",\"fr\":\"\"},\"id\":{\"zh-cn\":\"\\u7f16\\u53f7\",\"zh-tw\":\"\",\"en\":\"\",\"de\":\"\",\"fr\":\"\"},\"closedDate\":{\"zh-cn\":\"\\u5173\\u95ed\\u65f6\\u95f4\",\"zh-tw\":\"\",\"en\":\"\",\"de\":\"\",\"fr\":\"\"},\"estimate\":{\"zh-cn\":\"\\u6700\\u521d\\u9884\\u8ba1\",\"zh-tw\":\"\",\"en\":\"\",\"de\":\"\",\"fr\":\"\"},\"consumed\":{\"zh-cn\":\"\\u603b\\u8ba1\\u6d88\\u8017\",\"zh-tw\":\"\",\"en\":\"\",\"de\":\"\",\"fr\":\"\"},\"left\":{\"zh-cn\":\"\\u9884\\u8ba1\\u5269\\u4f59\",\"zh-tw\":\"\",\"en\":\"\",\"de\":\"\",\"fr\":\"\"},\"deviation\":{\"zh-cn\":\"deviation\",\"zh-tw\":\"\",\"en\":\"\",\"de\":\"\",\"fr\":\"\"},\"rate\":{\"zh-cn\":\"\\u5de5\\u65f6\\u504f\\u5dee\\u7387\",\"zh-tw\":\"\",\"en\":\"\",\"de\":\"\",\"fr\":\"\"}}','select\n*,\nround(tt.deviation/tt.estimate,3) rate\nfrom(\nselect\nt1.name,\nt1.id,\nt1.closedDate,\nt2.estimate estimate,\nt2.consumed consumed,\nt2.`left`,\nt2.consumed-t2.estimate deviation\nfrom\nzt_project t1\nleft join\n(select\nproject,\nsum(estimate) estimate,\nsum(consumed) consumed,\nsum(`left`) `left`\nfrom\nzt_task\ngroup by project) t2\non t1.id=t2.project\nwhere t1.deleted=\'0\'\nand t1.status=\'closed\'\nand t1.type=\'project\') tt','1','','admin','2023-04-06 12:16:04','admin','2023-04-06 12:16:04','0'),
+(10022,'年度完成项目-完成项目工时偏差条形图',2,'cluBarY',0,'published','','[{\"type\":\"cluBarY\",\"xaxis\":[{\"field\":\"name\",\"name\":\"\\u4efb\\u52a1\\u540d\\u79f0\",\"group\":\"\"}],\"yaxis\":[{\"field\":\"rate\",\"name\":\"rate\",\"valOrAgg\":\"sum\"}]}]','[{\"field\":\"closedDate\",\"type\":\"date\",\"name\":\"\\u5173\\u95ed\\u65f6\\u95f4\",\"default\":{\"begin\":\"\",\"end\":\"\"}}]','{\"name\":{\"name\":\"\\u4efb\\u52a1\\u540d\\u79f0\",\"object\":\"task\",\"field\":\"name\",\"type\":\"string\"},\"id\":{\"name\":\"\\u7f16\\u53f7\",\"object\":\"task\",\"field\":\"id\",\"type\":\"number\"},\"closedDate\":{\"name\":\"\\u5173\\u95ed\\u65f6\\u95f4\",\"object\":\"task\",\"field\":\"closedDate\",\"type\":\"date\"},\"estimate\":{\"name\":\"\\u6700\\u521d\\u9884\\u8ba1\",\"object\":\"task\",\"field\":\"estimate\",\"type\":\"string\"},\"consumed\":{\"name\":\"\\u603b\\u8ba1\\u6d88\\u8017\",\"object\":\"task\",\"field\":\"consumed\",\"type\":\"string\"},\"left\":{\"name\":\"\\u9884\\u8ba1\\u5269\\u4f59\",\"object\":\"task\",\"field\":\"left\",\"type\":\"string\"},\"deviation\":{\"name\":\"deviation\",\"object\":\"task\",\"field\":\"deviation\",\"type\":\"number\"},\"rate\":{\"name\":\"rate\",\"object\":\"task\",\"field\":\"rate\",\"type\":\"number\"}}','{\"name\":{\"zh-cn\":\"\\u4efb\\u52a1\\u540d\\u79f0\",\"zh-tw\":\"\",\"en\":\"\",\"de\":\"\",\"fr\":\"\"},\"id\":{\"zh-cn\":\"\\u7f16\\u53f7\",\"zh-tw\":\"\",\"en\":\"\",\"de\":\"\",\"fr\":\"\"},\"closedDate\":{\"zh-cn\":\"\\u5173\\u95ed\\u65f6\\u95f4\",\"zh-tw\":\"\",\"en\":\"\",\"de\":\"\",\"fr\":\"\"},\"estimate\":{\"zh-cn\":\"\\u6700\\u521d\\u9884\\u8ba1\",\"zh-tw\":\"\",\"en\":\"\",\"de\":\"\",\"fr\":\"\"},\"consumed\":{\"zh-cn\":\"\\u603b\\u8ba1\\u6d88\\u8017\",\"zh-tw\":\"\",\"en\":\"\",\"de\":\"\",\"fr\":\"\"},\"left\":{\"zh-cn\":\"\\u9884\\u8ba1\\u5269\\u4f59\",\"zh-tw\":\"\",\"en\":\"\",\"de\":\"\",\"fr\":\"\"},\"deviation\":{\"zh-cn\":\"deviation\",\"zh-tw\":\"\",\"en\":\"\",\"de\":\"\",\"fr\":\"\"},\"rate\":{\"zh-cn\":\"\\u5de5\\u65f6\\u504f\\u5dee\\u7387\",\"zh-tw\":\"\",\"en\":\"\",\"de\":\"\",\"fr\":\"\"}}','select\n*,\nround(tt.deviation/tt.estimate,3) rate\nfrom(\nselect\nt1.name,\nt1.id,\nt1.closedDate,\nt2.estimate estimate,\nt2.consumed consumed,\nt2.`left`,\nt2.consumed-t2.estimate deviation\nfrom\nzt_project t1\nleft join\n(select\nproject,\nsum(estimate) estimate,\nsum(consumed) consumed,\nsum(`left`) `left`\nfrom\nzt_task\ngroup by project) t2\non t1.id=t2.project\nwhere t1.deleted=\'0\'\nand t1.status=\'closed\'\nand t1.type=\'project\') tt','1','','admin','2023-04-06 12:16:04','admin','2023-04-06 12:16:04','0'),
 (10101,'年度进行中项目-进行中的项目数',2,'card',0,'published','','{\"value\": {\"type\": \"agg\", \"field\": \"id\", \"agg\": \"count\"}, \"title\": {\"type\": \"text\", \"name\": \"\"}, \"type\": \"value\"}','[]','','','SELECT id FROM zt_project WHERE deleted = \'0\' AND status = \'doing\' AND type = \'project\'','1','','admin','2022-12-07 14:59:41','','2022-12-07 14:59:41','0'),
 (10102,'年度进行中项目-进行中的迭代数',2,'card',0,'published','','{\"value\": {\"type\": \"agg\", \"field\": \"id\", \"agg\": \"count\"}, \"title\": {\"type\": \"text\", \"name\": \"\"}, \"type\": \"value\"}','[]','','','SELECT id,type FROM zt_project WHERE deleted = \'0\' AND status = \'doing\' AND type IN (\'sprint\', \'stage\', \'kanban\') AND multiple = \'1\'','1','','admin','2022-12-07 14:59:41','admin','2022-12-07 14:59:41','0'),
 (10103,'年度进行中项目-进展顺利项目数',2,'card',0,'published','','{\"value\": {\"type\": \"agg\", \"field\": \"id\", \"agg\": \"count\"}, \"title\": {\"type\": \"text\", \"name\": \"\"}, \"type\": \"value\"}','[]','','','SELECT t1.id, t1.name, IFNULL(prograss, 0) AS prograss, ROUND(DATEDIFF(NOW(), t1.`begin`) / DATEDIFF(t1.`end`, t1.`begin`) * 100, 2)  AS planPrograss,LEFT(t1.`end`, 4) AS endYear\nFROM zt_project AS t1\nLEFT JOIN (\n    SELECT t22.project,\n    ROUND(IF(SUM(t22.consumed) + SUM(IF(t22.status != \'closed\' && t22.status != \'cancel\', t22.`left`, 0)) > 0, SUM(t22.consumed) / (SUM(t22.consumed) + SUM(IF(t22.status != \'closed\' && t22.status != \'cancel\', t22.`left`, 0))), 0) * 100, 2) AS prograss\n    FROM zt_project AS t21\n    LEFT JOIN zt_task AS t22 ON t21.id = t22.execution\n    WHERE t21.deleted = \'0\' AND t21.type IN (\'sprint\', \'kanban\')\n    AND t22.deleted = \'0\' AND t22.parent < 1\n    GROUP BY t22.project\n    UNION\n    SELECT  t.project, ROUND(SUM(t.prograss * (t.percent / 100)), 2) as prograss\n    FROM (\n        SELECT t21.id,t21.percent, t22.project,\n        IF(SUM(t22.consumed) + SUM(IF(t22.status != \'closed\' && t22.status != \'cancel\', t22.`left`, 0)) > 0, ROUND(SUM(t22.consumed) / (SUM(t22.consumed) + SUM(IF(t22.status != \'closed\' && t22.status != \'cancel\', t22.`left`, 0))) * 1000 / 1000 * 100, 2), 0)  AS prograss\n        FROM zt_project AS t21\n        LEFT JOIN zt_task AS t22 ON t21.id = t22.execution\n        WHERE t21.deleted = \'0\' AND t21.type = \'stage\'\n        AND t22.deleted = \'0\' AND t22.parent < 1\n        AND t22.id IS NOT NULL\n        GROUP BY t21.id, t21.percent, t22.project\n    ) t\n    GROUP BY t.project\n) AS t2 ON t1.id = t2.project \nWHERE t1.deleted = \'0\'\nAND t1.status = \'doing\' \nAND t1.type = \'project\'\nAND ((IFNULL(prograss, 0) >= (DATEDIFF(NOW(), t1.`begin`) / DATEDIFF(t1.`end`, t1.`begin`) * 100) AND LEFT(t1.`end`, 4) != \'2059\' AND DATEDIFF(`end`, NOW()) >= 0) OR LEFT(t1.`end`, 4) = \'2059\' )','1','','admin','2022-12-07 14:59:41','admin','2022-12-07 14:59:41','0'),
@@ -510,9 +510,19 @@ CHANGE `repo` `repo` mediumint unsigned NOT NULL DEFAULT '0',
 CHANGE `mr` `mr` mediumint unsigned NOT NULL DEFAULT '0',
 CHANGE `entry` `entry` text NULL,
 CHANGE `lines` `lines` varchar(10) NOT NULL DEFAULT '',
+CHANGE `feedbackBy` `feedbackBy` varchar(100) NOT NULL DEFAULT '',
+CHANGE `notifyEmail` `notifyEmail` varchar(100) NOT NULL DEFAULT '',
 CHANGE `v1` `v1` varchar(40) NOT NULL DEFAULT '',
 CHANGE `v2` `v2` varchar(40) NOT NULL DEFAULT '',
+
+CHANGE `duplicateBug` `duplicateBug` mediumint unsigned NOT NULL DEFAULT '0',
+CHANGE `linkBug` `linkBug` varchar(255) NOT NULL DEFAULT '',
+CHANGE `case` `case` mediumint unsigned NOT NULL DEFAULT '0',
+CHANGE `result` `result` mediumint unsigned NOT NULL DEFAULT '0',
+CHANGE `testtask` `testtask` mediumint unsigned NOT NULL DEFAULT '0',
+
 CHANGE `identify` `identify` mediumint unsigned NOT NULL DEFAULT '0',
+CHANGE `deadline` `deadline` date NULL,
 CHANGE `activatedCount` `activatedCount` smallint NOT NULL DEFAULT '0',
 CHANGE `activatedDate` `activatedDate` datetime NULL,
 CHANGE `assignedDate` `assignedDate` datetime NULL,
@@ -538,6 +548,7 @@ CHANGE `reviewedDate` `reviewedDate` date NULL,
 CHANGE `lastEditedDate` `lastEditedDate` datetime NULL,
 CHANGE `lastRunner` `lastRunner` varchar(30) NOT NULL DEFAULT '',
 CHANGE `lastRunDate` `lastRunDate` datetime NULL,
+CHANGE `color` `color` char(7) NOT NULL DEFAULT '',
 CHANGE `frame` `frame` varchar(10) NOT NULL DEFAULT '',
 CHANGE `stage` `stage` varchar(255) NOT NULL DEFAULT '',
 CHANGE `howRun` `howRun` varchar(30) NOT NULL DEFAULT '',
@@ -550,6 +561,7 @@ CHANGE `fromCaseID` `fromCaseID` mediumint unsigned NOT NULL DEFAULT '0',
 CHANGE `lastRunResult` `lastRunResult` char(30) NOT NULL DEFAULT '';
 
 ALTER TABLE `zt_chart`
+CHANGE `dataset` `dataset` varchar(30) NOT NULL DEFAULT '0',
 CHANGE `editedBy` `editedBy` varchar(30) NOT NULL DEFAULT '',
 CHANGE `editedDate` `editedDate` datetime NULL;
 
@@ -575,6 +587,10 @@ CHANGE `finishedBy` `finishedBy` char(30) NOT NULL DEFAULT '',
 CHANGE `finishedDate` `finishedDate` datetime NULL;
 
 ALTER TABLE `zt_design`
+CHANGE `commit` `commit` text NULL,
+CHANGE `commitedBy` `commitedBy` varchar(30) NOT NULL DEFAULT '',
+CHANGE `status` `status` varchar(30) NOT NULL DEFAULT '',
+CHANGE `version` `version` smallint NOT NULL DEFAULT '0',
 CHANGE `editedBy` `editedBy` varchar(30) NOT NULL DEFAULT '',
 CHANGE `editedDate` `editedDate` datetime NULL,
 CHANGE `assignedTo` `assignedTo` varchar(30) NOT NULL DEFAULT '',
@@ -585,11 +601,16 @@ ALTER TABLE `zt_doc` ADD `editingDate` text NULL AFTER `editedDate`;
 ALTER TABLE `zt_doc`
 CHANGE `views` `views` smallint unsigned NOT NULL DEFAULT '0',
 CHANGE `collector` `collector` text NULL,
+CHANGE `groups` `groups` varchar(255) NOT NULL DEFAULT '',
+CHANGE `users` `users` text NULL,
 CHANGE `assignedTo` `assignedTo` varchar(30) NOT NULL DEFAULT '',
 CHANGE `assignedDate` `assignedDate` datetime NULL,
 CHANGE `approvedDate` `approvedDate` date NULL,
 CHANGE `editedBy` `editedBy` varchar(30) NOT NULL DEFAULT '',
 CHANGE `editedDate` `editedDate` datetime NULL;
+
+ALTER TABLE `zt_doccontent`
+CHANGE `digest` `digest` varchar(255) NOT NULL DEFAULT '';
 
 ALTER TABLE `zt_doclib`
 CHANGE `product` `product` mediumint unsigned NOT NULL DEFAULT '0',
@@ -648,6 +669,25 @@ CHANGE `editedBy` `editedBy` varchar(30) NOT NULL DEFAULT '',
 CHANGE `editedDate` `editedDate` datetime NULL;
 
 ALTER TABLE `zt_host`
+CHANGE `mac` `mac` varchar(128) NOT NULL DEFAULT '',
+CHANGE `desc` `desc` text NULL,
+CHANGE `tokenTime` `tokenTime` datetime NULL,
+CHANGE `heartbeat` `heartbeat` datetime NULL,
+CHANGE `vnc` `vnc` int NOT NULL DEFAULT '0',
+CHANGE `ztf` `ztf` int NOT NULL DEFAULT '0',
+CHANGE `zd` `zd` int NOT NULL DEFAULT '0',
+CHANGE `ssh` `ssh` int NOT NULL DEFAULT '0',
+CHANGE `serverRoom` `serverRoom` mediumint unsigned NOT NULL DEFAULT '0',
+CHANGE `serverModel` `serverModel` varchar(256) NOT NULL DEFAULT '',
+CHANGE `hardwareType` `hardwareType` varchar(64) NOT NULL DEFAULT '',
+CHANGE `cpuBrand` `cpuBrand` varchar(128) NOT NULL DEFAULT '',
+CHANGE `cpuModel` `cpuModel` varchar(128) NOT NULL DEFAULT '',
+CHANGE `cpuNumber` `cpuNumber` varchar(16) NOT NULL DEFAULT '',
+CHANGE `cpuCores` `cpuCores` varchar(30) NOT NULL DEFAULT '',
+CHANGE `intranet` `intranet` varchar(128) NOT NULL DEFAULT '',
+CHANGE `extranet` `extranet` varchar(128) NOT NULL DEFAULT '',
+CHANGE `osName` `osName` varchar(64) NOT NULL DEFAULT '',
+CHANGE `osVersion` `osVersion` varchar(64) NOT NULL DEFAULT '',
 CHANGE `editedBy` `editedBy` varchar(30) NOT NULL DEFAULT '',
 CHANGE `editedDate` `editedDate` datetime NULL;
 
@@ -721,6 +761,16 @@ CHANGE `activatedDate` `activatedDate` datetime NULL;
 ALTER TABLE `zt_kanbancard`
 CHANGE `begin` `begin` date NULL,
 CHANGE `end` `end` date NULL,
+CHANGE `name` `name` varchar(255) NOT NULL DEFAULT '',
+CHANGE `pri` `pri` mediumint unsigned NOT NULL DEFAULT '0',
+CHANGE `assignedTo` `assignedTo` text NULL,
+CHANGE `desc` `desc` mediumtext NULL,
+CHANGE `estimate` `estimate` float unsigned NOT NULL DEFAULT '0',
+CHANGE `color` `color` char(7) NOT NULL DEFAULT '',
+
+ALTER TABLE `zt_kanbancolumn`
+CHANGE `type` `type` char(30) NOT NULL DEFAULT '';
+
 CHANGE `fromID` `fromID` mediumint unsigned NOT NULL DEFAULT '0',
 CHANGE `fromType` `fromType` varchar(30) NOT NULL DEFAULT '',
 CHANGE `whitelist` `whitelist` text NULL,
@@ -882,6 +932,8 @@ ALTER TABLE `zt_projectstory`
 CHANGE `branch` `branch` mediumint unsigned NOT NULL DEFAULT '0';
 
 ALTER TABLE `zt_relation`
+CHANGE `AVersion` `AVersion` char(30) NOT NULL DEFAULT '',
+CHANGE `BVersion` `BVersion` char(30) NOT NULL DEFAULT '',
 CHANGE `project` `project` mediumint NOT NULL DEFAULT '0',
 CHANGE `product` `product` mediumint NOT NULL DEFAULT '0',
 CHANGE `execution` `execution` mediumint NOT NULL DEFAULT '0',
@@ -1059,12 +1111,33 @@ ALTER TABLE `zt_team`
 CHANGE `position` `position` varchar(30) NOT NULL DEFAULT '',
 CHANGE `join` `join` date NULL;
 
+ALTER TABLE `zt_testreport`
+CHANGE `project` `project` mediumint unsigned NOT NULL DEFAULT '0',
+CHANGE `product` `product` mediumint unsigned NOT NULL DEFAULT '0',
+CHANGE `execution` `execution` mediumint unsigned NOT NULL DEFAULT '0',
+CHANGE `stories` `stories` text NULL,
+CHANGE `bugs` `bugs` text NULL,
+CHANGE `cases` `cases` text NULL,
+CHANGE `report` `report` text NULL,
+CHANGE `deleted` `deleted` enum('0','1') NOT NULL DEFAULT '0';
+
 ALTER TABLE `zt_testrun`
 CHANGE `lastRunner` `lastRunner` varchar(30) NOT NULL DEFAULT '',
 CHANGE `lastRunDate` `lastRunDate` datetime NULL,
 CHANGE `lastRunResult` `lastRunResult` char(30) NOT NULL DEFAULT '';
 
+ALTER TABLE `zt_testresult`
+CHANGE `job` `job` mediumint unsigned NOT NULL DEFAULT '0',
+CHANGE `compile` `compile` mediumint unsigned NOT NULL DEFAULT '0',
+CHANGE `ZTFResult` `ZTFResult` text NULL,
+CHANGE `duration` `duration` float NOT NULL DEFAULT '0',
+CHANGE `xml` `xml` text NULL,
+CHANGE `deploy` `deploy` mediumint unsigned NOT NULL DEFAULT '0';
+
 ALTER TABLE `zt_testsuite`
+CHANGE `project` `project` mediumint unsigned NOT NULL DEFAULT '0',
+CHANGE `product` `product` mediumint unsigned NOT NULL DEFAULT '0',
+CHANGE `deleted` `deleted` enum('0','1') NOT NULL DEFAULT '0',
 CHANGE `lastEditedBy` `lastEditedBy` char(30) NOT NULL DEFAULT '',
 CHANGE `lastEditedDate` `lastEditedDate` datetime NULL;
 

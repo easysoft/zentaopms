@@ -51,14 +51,14 @@
 .forty-percent {width: 40%;}
 html[lang="de"] .block-projectdoc .c-user{width: 105px;}
 
-.block-projectdoc #projectType {position: absolute;top: 6px;left: 120px;}
+.block-projectdoc #projectType {position: absolute;top: 8px;left: 120px;}
 .block-projectdoc #projectType .btn {border:0px;}
 .block-projectdoc #projectType .btn:hover {background-color:#f5f5f5;}
 
-.block-projectdoc .table .c-name > .doc-title {display: inline-block; overflow: hidden; background: transparent; padding-right:0px;}
-.block-projectdoc .table .c-name > span.doc-title {line-height: 0; vertical-align: inherit;}
-.block-projectdoc .table .c-name[data-status=draft] > .doc-title {max-width: calc(100% - 35px);}
-.block-projectdoc .table .c-name > .draft {background-color:rgba(129, 102, 238, 0.12); color:#8166EE;}
+.block-projectdoc .table .c-title > .doc-title {display: inline-block; overflow: hidden; background: transparent; padding-right:0px;}
+.block-projectdoc .table .c-title > span.doc-title {line-height: 0; vertical-align: inherit;}
+.block-projectdoc .table .c-title[data-status=draft] > .doc-title {max-width: calc(100% - 35px);}
+.block-projectdoc .table .c-title > .draft {background-color:rgba(129, 102, 238, 0.12); color:#8166EE;}
 </style>
 <script>
 <?php $blockNavId = 'nav-' . uniqid(); ?>
@@ -113,7 +113,7 @@ function change<?php echo "block{$block->id}";?>ProjectType(type)
   </ul>
 </div>
 <div class="panel-body">
-  <div class="table-row">
+  <div class="table-row block-statistic">
     <?php if(empty($projects) and empty($involveds)):?>
     <div class="table-empty-tip">
       <p><span class="text-muted"><?php echo $lang->block->emptyTip;?></span></p>
@@ -159,7 +159,7 @@ function change<?php echo "block{$block->id}";?>ProjectType(type)
             <tbody>
               <?php foreach($docGroup[$project->id] as $doc):?>
               <tr>
-                <td class='c-name' data-status='<?php echo $doc->status?>'>
+                <td class='c-title' data-status='<?php echo $doc->status?>'>
                   <?php
                   $docType = zget($config->doc->iconList, $doc->type);
                   $icon    = html::image("static/svg/{$docType}.svg", "class='file-icon'");

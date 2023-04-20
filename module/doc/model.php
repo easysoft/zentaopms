@@ -2391,6 +2391,11 @@ class docModel extends model
 
         $currentModule = $this->app->rawModule;
         $currentMethod = $this->app->rawMethod;
+        if($currentModule == 'api' and $currentMethod == 'index')
+        {
+            $currentModule = 'doc';
+            $currentMethod = $type . 'Space';
+        }
 
         $dropMenuLink = helper::createLink('doc', 'ajaxGetDropMenu', "objectType=$type&objectID=$objectID&module=$currentModule&method=$currentMethod");
         $output  = "<div class='btn-group selectBox' id='swapper'><button data-toggle='dropdown' type='button' class='btn' id='currentItem' title='{$objectTitle}'><span class='text'>{$objectTitle}</span> <span class='caret' style='margin-bottom: -1px'></span></button><div id='dropMenu' class='dropdown-menu search-list' data-ride='searchList' data-url='$dropMenuLink'>";

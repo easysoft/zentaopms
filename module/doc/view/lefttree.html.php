@@ -74,6 +74,7 @@ li.drag-shadow ul {display: none !important;}
 /* Release used for api space. */
 js::set('release', isset($release) ? $release : 0);
 js::set('versionLang', $lang->build->common);
+js::set('spaceType', $this->session->spaceType);
 
 /* ObjectType and objectID used for other space. */
 js::set('objectType', isset($type) ? $type : '');
@@ -247,14 +248,14 @@ $(function()
     function initTree(ele, treeData)
     {
         var imgObj = {
-            'annex': 'annex',
-            'api': 'interface',
-            'lib': 'wiki',
-            'execution': 'wiki-file-lib',
-            'text': 'wiki-file',
-            'word': 'word',
-            'ppt': 'ppt',
-            'excel': 'excel'
+            'annex'     : 'annex',
+            'api'       : 'interface',
+            'lib'       : 'wiki',
+            'execution' : 'wiki-file-lib',
+            'text'      : 'wiki-file',
+            'word'      : 'word',
+            'ppt'       : 'ppt',
+            'excel'     : 'excel'
         };
 
         ele.tree(
@@ -269,7 +270,7 @@ $(function()
                 if(typeof docID != 'undefined' && item.id == docID) item.active = 1;
                 if(['text', 'word', 'ppt', 'excel'].indexOf(item.type) !== -1) item.hasAction = false;
 
-                var objectType  = config.currentModule == 'api' ? item.objectType : item.type;
+                var objectType  = config.currentModule == 'api' && ['project', 'product', 'execution'].indexOf(item.objectType) === false ? item.objectType : item.type;
                 var libClass    = ['lib', 'annex', 'api', 'execution'].indexOf(objectType) !== -1 ? 'lib' : '';
                 var moduleClass = item.type == 'doc' || item.type == 'apiDoc' ? 'catalog' : '';
                 var sortClass   = '';
@@ -312,7 +313,7 @@ $(function()
         if(isFirstLoad) ele.data('zui.tree').collapse();
 
         var $leaf = ele.find('li.active > a');
-        if($leaf.length && $('#fileTree').height() >= $('#sideBar').height()) $('#sideBar')[0].scrollTop = $($leaf[$leaf.length - 1]).offset().top - 100;
+        if($leaf.length && $('#fileTree').height() >= $('#sideBar').height() && $($leaf[$leaf.length - 1]).offset().top > $('#sideBar').height()) $('#sideBar')[0].scrollTop = $($leaf[$leaf.length - 1]).offset().top - 200;
 
         ele.on('click', '.icon-drop', function(e)
         {
@@ -443,6 +444,8 @@ $(function()
     }
     else
     {
+        config.currentModule = 'doc';
+        config.currentMethod = 'projectspace';
         initTree($('#projectTree'), treeData.project);
         initTree($('#annexTree'), treeData.annex);
         if(treeData.execution&& treeData.execution.length)
@@ -469,9 +472,10 @@ $(function()
         if(!libID)    libID    = 0;
         if(!moduleID) moduleID = 0;
         linkParams = linkParams.replace('%s', 'libID=' + libID + '&moduleID=' + moduleID);
-        var moduleName = config.currentModule;
+        if(spaceType != 'api' && config.currentModule == 'api') linkParams = 'objectID=' + objectID + '&' + linkParams;
+        var moduleName = spaceType == 'api' ? 'api' : 'doc';
         var methodName = '';
-        if(config.currentModule == 'api')
+        if(spaceType == 'api')
         {
             methodName = 'index';
             linkParams =  linkParams.substring(1);

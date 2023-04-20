@@ -163,3 +163,23 @@ form .table-data, #content .table-data {border: 1px solid #e2e2e3;}
 .info .version, .info .crumbs {float: left;}
 .info .crumbs {font-size: 13px; margin-top: 5px; font-weight: normal;}
 .info .crumbs img {margin-right: 3px;}
+
+.lib {width: unset; margin-bottom: unset;}
+.flex {display: flex;}
+.flex-none {flex: none;}
+.flex-auto {flex: auto;}
+.flex-full > .panel {box-shadow: none;}
+.float-r {float: right;}
+.h-full {height: 100%;}
+.w-full {width: 100%;}
+.overflow-x-auto {overflow-x: auto;}
+.overflow-auto {overflow: auto;}
+.overflow-visible {overflow: visible;}
+.overflow-hidden {overflow: hidden;}
+.img-lib {width: 14px; height: 14px; margin-bottom: 2px; flex: 0 0 14px;}
+#mainContent {padding-top: 0; padding-bottom: 0;}
+#mainContent #createDropdown {display: inline-block;}
+#mainContent #createDropdown ul {position: absolute;}
+#pageNav .dropdown-menu {max-height: inherit;}
+#mainContent > .panel {margin-bottom: 0; height: calc(100vh - 125px); overflow-y: auto;}
+#mainContent > .main-col {padding-left: 0;}

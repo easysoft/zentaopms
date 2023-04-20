@@ -2,13 +2,10 @@ VERSION     = $(shell head -n 1 VERSION)
 XUANVERSION = $(shell head -n 1 xuanxuan/XUANVERSION)
 XVERSION    = $(shell head -n 1 xuanxuan/XVERSION)
 
-#XUANPATH     := $(XUANXUAN_SRC_PATH)
-#BUILD_PATH   := $(if $(ZENTAO_BUILD_PATH),$(ZENTAO_BUILD_PATH),$(shell pwd))
-#RELEASE_PATH := $(if $(ZENTAO_RELEASE_PATH),$(ZENTAO_RELEASE_PATH),$(shell pwd))
-XUANPATH      := /home/gitlab-runner/ci/gitlab/xuan/
-XUAN_WEB_PATH := /home/gitlab-runner/ci/packages/web
-BUILD_PATH    := /home/z/ci/pip_build/
-RELEASE_PATH  := /home/z/ci/pip_release/
+XUANPATH      := $(XUANXUAN_SRC_PATH)
+BUILD_PATH    := $(if $(ZENTAO_BUILD_PATH),$(ZENTAO_BUILD_PATH),$(shell pwd))
+RELEASE_PATH  := $(if $(ZENTAO_RELEASE_PATH),$(ZENTAO_RELEASE_PATH),$(shell pwd))
+XUAN_WEB_PATH := $(ZENTAO_BUILD_PATH)/web
 
 all:
 	make clean
@@ -257,6 +254,7 @@ enrpm:
 	cp ~/rpmbuild/RPMS/noarch/zentaoalm-${VERSION}-1.noarch.rpm ./
 	rm -rf ~/rpmbuild
 ciCommon:
+	make clean
 	git pull
 	make common
 
@@ -307,19 +305,45 @@ cizip:
 	rm -rf tmp/ *.sh zentaobiz* zentaomax* $(RELEASE_PATH)/ZenTaoALM.$(VERSION)*.zip $(RELEASE_PATH)/ZenTaoPMS.$(VERSION)*.zip  $(RELEASE_PATH)/pmsPack/*.zip
 	mv ZenTaoPMS.$(VERSION).zip ZenTaoALM.$(VERSION).int.zip $(RELEASE_PATH)
 	mv ZenTaoALM.$(VERSION).int.php*.zip ZenTaoPMS.$(VERSION).php*.zip $(RELEASE_PATH)/pmsPack
-ci:
+syspack:
+	php tools/packDeb.php $(VERSION)
+	sh deb.sh
+	rm -rf tmp/ deb.sh
+	php tools/packRpm.php $(VERSION)
+	sh rpm.sh
+	rm -rf tmp/ rpm.sh
+commitBuild:
 	make ciCommon
 	php tools/packZip.php $(VERSION)
 	sh zip.sh
-	rm -rf tmp/
-	php tools/packDeb.php $(VERSION)
-	sh deb.sh
-	rm -rf tmp/
-	php tools/packRpm.php $(VERSION)
-	sh rpm.sh
-	rm -rf tmp/
+	rm -rf tmp/ zip.sh
+commitClear:
+	rm -rf zentaobiz* zentaomax* $(RELEASE_PATH)/pmsPack/*.zip
+commitMove:
+	mv ZenTaoALM.$(VERSION).int.php*.zip ZenTaoPMS.$(VERSION).php*.zip $(RELEASE_PATH)/pmsPack
+releaseBuild:
+	make commitBuild
+	make syspack
+releaseClear:
+	make commitClear
+	rm -rf $(RELEASE_PATH)/pmsPack/deb/* $(RELEASE_PATH)/pmsPack/rpm/*
+releaseMove:
+	make commitMove
+	mv *.deb $(RELEASE_PATH)/pmsPack/deb/
+	mv *.rpm $(RELEASE_PATH)/pmsPack/rpm/
+commitCi:
+	make commitBuild
+	make commitClear
+	make commitMove
+releaseCi:
+	make releaseBuild
+	make releaseClear
+	make releaseMove
+ci:
+	make commitBuild
+	make syspack
 	rm -rf zentaobiz* zentaomax* $(RELEASE_PATH)/ZenTaoALM.$(VERSION)*.zip $(RELEASE_PATH)/ZenTaoPMS.$(VERSION)*.zip $(RELEASE_PATH)/*.deb $(RELEASE_PATH)/*.rpm *.sh $(RELEASE_PATH)/pmsPack/*.zip $(RELEASE_PATH)/pmsPack/deb/* $(RELEASE_PATH)/pmsPack/rpm/*
 	mv ZenTaoPMS.$(VERSION).zip ZenTaoALM.$(VERSION).int.zip $(RELEASE_PATH)
 	mv ZenTaoALM.$(VERSION).int.php*.zip ZenTaoPMS.$(VERSION).php*.zip $(RELEASE_PATH)/pmsPack
-	mv *.deb $(RELEASE_PATH)/pmsPack/deb
-	mv *.rpm $(RELEASE_PATH)/pmsPack/rpm
+	mv *.deb $(RELEASE_PATH)/pmsPack/deb/
+	mv *.rpm $(RELEASE_PATH)/pmsPack/rpm/

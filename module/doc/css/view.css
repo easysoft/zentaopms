@@ -8,7 +8,8 @@
 .main-col .doc-title .version .dropdown-menu a:hover {color: #ffffff;}
 .main-col .doc-title .actions a + a {margin-left: 0px;}
 .main-col .doc-title .actions i {font-size: 15px; color: #8c8c8c;}
-#content .title {max-width: 54%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;}
+#content .title {max-width: 40%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;}
+.main-col .doc-title .actions a > span {color: #9EA3B0;}
 #mainContent .scrollbar-hover {max-height: 2000px; overflow: scroll;}
 #content .editor-preview {background: #fff}
 #content .CodeMirror{border: none}
@@ -32,7 +33,7 @@
 .outline-toggle {position: absolute; right: 20px; top: 50px;}
 .outline-toggle i.icon-angle-right:before {content: "\e314"; cursor: pointer;}
 .outline-toggle i.icon-angle-left:before {content: "\e315"; cursor: pointer;}
-.outline-toggle {position: absolute; right: 55px; top: 50px;}
+.outline-toggle {position: absolute; right: 55px; top: 50px; background: #fff;}
 .outline ul li {list-style: none;}
 .outline-content {display: none; padding-top: 18px;}
 .outline-content a {color: #838A9D;}
@@ -54,7 +55,7 @@
 .overflow-auto {overflow: auto;}
 .overflow-visible {overflow: visible;}
 .overflow-hidden {overflow: hidden;}
-.detail-title .actions .ajaxCollect > img {width: 20px;}
+.detail-title .actions .ajaxCollect > img {width: 20px; height: 20px;}
 .actions > .text {color: #8c8c8c; font-size: 14px;}
 .flex-content {display: flex; width: 100%; height: 100%;}
 .flex-content > #content {flex: auto; overflow-y: auto;}

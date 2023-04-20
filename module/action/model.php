@@ -53,6 +53,7 @@ class actionModel extends model
         if($objectType == 'story' and strpos(',reviewpassed,reviewrejected,reviewclarified,reviewreverted,synctwins,', ",$actionType,") !== false) $action->actor = $this->lang->action->system;
 
         /* Use purifier to process comment. Fix bug #2683. */
+        if(empty($comment)) $comment = '';
         $action->comment = fixer::stripDataTags($comment);
 
         /* Process action. */
@@ -1624,7 +1625,7 @@ class actionModel extends model
                 elseif($action->objectType == 'api')
                 {
                     $api = $this->dao->select('id,lib,module')->from(TABLE_API)->where('id')->eq($action->objectID)->fetch();
-                    $params = sprintf($vars, $api->lib, $api->module, $api->id);
+                    $params = sprintf($vars, $api->lib, $api->id, $api->module);
                 }
                 elseif($action->objectType == 'branch')
                 {
