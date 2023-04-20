@@ -55,10 +55,10 @@ html[lang="de"] .block-projectdoc .c-user{width: 105px;}
 .block-projectdoc #projectType .btn {border:0px;}
 .block-projectdoc #projectType .btn:hover {background-color:#f5f5f5;}
 
-.block-projectdoc .table .c-name > .doc-title {display: inline-block; overflow: hidden; background: transparent; padding-right:0px;}
-.block-projectdoc .table .c-name > span.doc-title {line-height: 0; vertical-align: inherit;}
-.block-projectdoc .table .c-name[data-status=draft] > .doc-title {max-width: calc(100% - 35px);}
-.block-projectdoc .table .c-name > .draft {background-color:rgba(129, 102, 238, 0.12); color:#8166EE;}
+.block-projectdoc .table .c-title > .doc-title {display: inline-block; overflow: hidden; background: transparent; padding-right:0px;}
+.block-projectdoc .table .c-title > span.doc-title {line-height: 0; vertical-align: inherit;}
+.block-projectdoc .table .c-title[data-status=draft] > .doc-title {max-width: calc(100% - 35px);}
+.block-projectdoc .table .c-title > .draft {background-color:rgba(129, 102, 238, 0.12); color:#8166EE;}
 </style>
 <script>
 <?php $blockNavId = 'nav-' . uniqid(); ?>
@@ -159,13 +159,13 @@ function change<?php echo "block{$block->id}";?>ProjectType(type)
             <tbody>
               <?php foreach($docGroup[$project->id] as $doc):?>
               <tr>
-                <td class='c-name' data-status='<?php echo $doc->status?>'>
+                <td class='c-title' data-status='<?php echo $doc->status?>'>
                   <?php
                   $docType = zget($config->doc->iconList, $doc->type);
                   $icon    = html::image("static/svg/{$docType}.svg", "class='file-icon'");
                   if(common::hasPriv('doc', 'view'))
                   {
-                      echo html::a($this->createLink('doc', 'view', "docID=$doc->id"), $icon . $doc->title, '', "title='{$doc->title}' class='doc-title text-primary' data-app='{$this->app->tab}'");
+                      echo html::a($this->createLink('doc', 'view', "docID=$doc->id"), $icon . $doc->title, '', "title='{$doc->title}' class='doc-title' data-app='{$this->app->tab}'");
                   }
                   else
                   {
