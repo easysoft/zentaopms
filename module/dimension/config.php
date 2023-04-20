@@ -89,11 +89,11 @@ $config->dimension->chartUpgrade['macro']['project']['story']     = array('chart
 $config->dimension->chartUpgrade['efficiency'] = array();
 $config->dimension->chartUpgrade['efficiency']['staff'] = array();
 $config->dimension->chartUpgrade['efficiency']['staff']['project']   = array('chart' => '10000,10001,10002,10101,10103,10105,10107');
-$config->dimension->chartUpgrade['efficiency']['staff']['execution'] = array('chart' => '10007,10008,10009,10102,10104,10106,10107');
+$config->dimension->chartUpgrade['efficiency']['staff']['execution'] = array('chart' => '10007,10008,10009,10102,10104,10106,10108');
 $config->dimension->chartUpgrade['efficiency']['staff']['release']   = array('chart' => '10005');
 $config->dimension->chartUpgrade['efficiency']['staff']['story']     = array('chart' => '10003,10004,10109,10111');
 $config->dimension->chartUpgrade['efficiency']['staff']['task']      = array('chart' => '10010,10110');
-$config->dimension->chartUpgrade['efficiency']['staff']['bug']       = array('chart' => '1070');
+$config->dimension->chartUpgrade['efficiency']['staff']['bug']       = array('chart' => '10006');
 $config->dimension->chartUpgrade['efficiency']['staff']['cost']      = array('chart' => '10011,10012,10013,10112,10113');
 
 $config->dimension->chartUpgrade['efficiency']['project'] = array();
@@ -108,8 +108,8 @@ $config->dimension->chartUpgrade['quality']['staff']['bug']      = array('chart'
 $config->dimension->chartUpgrade['quality']['staff']['testcase'] = array('chart' => '10203');
 
 $config->dimension->chartUpgrade['quality']['test'] = array();
-$config->dimension->chartUpgrade['quality']['test']['bug']      = array('chart' => '10209,10210,1014,10211,10219,10212,10218,10214,10220,10213,10216');
-$config->dimension->chartUpgrade['quality']['test']['testcase'] = array('chart' => '10208,10215');
+$config->dimension->chartUpgrade['quality']['test']['bug']      = array('chart' => '10209,10210,10217,10211,10219,10212,10218,10214,10220,10213,10216');
+$config->dimension->chartUpgrade['quality']['test']['testcase'] = array('chart' => '10207,10208,10215');
 
 $config->dimension->secondModuleList = array();
 $config->dimension->secondModuleList['macro']      = array('pivot' => $config->dimension->pivotModuleList['macro'],      'pivotUpgrade' => $config->dimension->pivotUpgrade['macro'],      'chart' => $config->dimension->chartModuleList['macro'],      'chartUpgrade' => $config->dimension->chartUpgrade['macro']);

@@ -58,9 +58,9 @@ class testresultsEntry extends entry
         if(!$caseID) return $this->sendError(400, 'Need case id.');
 
         $case    = $this->loadModel('testcase')->getByID($caseID);
-        $runID   = $this->param('runID', 0);
+        $taskID  = $this->param('testtask', 0);
         $version = $this->param('version', $case->version);
-        $steps   = $this->getStepIDList($runID, $caseID, $version);
+        list($runID, $steps) = $this->getStepIDList($taskID, $caseID, $version);
 
         $this->setPost('case',  $caseID);
         $this->setPost('version', $version);
@@ -95,19 +95,20 @@ class testresultsEntry extends entry
     /**
      * Get steps key.
      *
-     * @param  int    $runID
+     * @param  int    $taskID
      * @access public
      * @return array
      */
-    public function getStepIDList($runID, $caseID, $version)
+    public function getStepIDList($taskID, $caseID, $version)
     {
-        if($runID)
+        if($taskID)
         {
-            $run = $this->testtask->getRunById($runID);
+            $run = $this->loadModel('testtask')->getRunByCase($taskID, $caseID);
         }
         else
         {
             $run = new stdclass();
+            $run->id   = 0;
             $run->case = $this->loadModel('testcase')->getById($caseID, $version);
         }
 
@@ -120,6 +121,6 @@ class testresultsEntry extends entry
             }
         }
 
-        return array_keys($run->case->steps);
+        return array($run->id, array_keys($run->case->steps));
     }
 }

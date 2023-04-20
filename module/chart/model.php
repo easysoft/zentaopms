@@ -193,6 +193,8 @@ class chartModel extends model
         $max    = 0;
         foreach($yStats as $yStat)
         {
+            if(empty($yStat)) continue;
+
             $data = array();
             foreach($xLabels as $xLabel)
             {
@@ -418,7 +420,9 @@ class chartModel extends model
             $series[]   = array('name' => $seriesName, 'data' => $yData, 'type' => 'line');
         }
 
-        $options = array('series' => $series, 'legend' => $legend, 'xAxis' => $xaxis, 'yAxis' => $yaxis, 'tooltip' => array('trigger' => 'axis'));
+        $grid = array('left' => '3%', 'right' => '4%', 'bottom' => '3%', 'containLabel' => true);
+
+        $options = array('series' => $series, 'grid' => $grid, 'legend' => $legend, 'xAxis' => $xaxis, 'yAxis' => $yaxis, 'tooltip' => array('trigger' => 'axis'));
         return $options;
     }
 
@@ -486,7 +490,9 @@ class chartModel extends model
         $isY = in_array($settings['type'], array('cluBarY', 'stackedBarY'));
         $dataZoom = $isY ? json_decode($dataZoomY, true) : json_decode($dataZoomX, true);
 
-        $options = array('series' => $series, 'legend' => $legend, 'xAxis' => $xaxis, 'yAxis' => $yaxis, 'tooltip' => array('trigger' => 'axis'), 'dataZoom' => $dataZoom);
+        $grid = array('left' => '3%', 'right' => '4%', 'bottom' => '3%', 'containLabel' => true);
+
+        $options = array('series' => $series, 'grid' => $grid, 'legend' => $legend, 'xAxis' => $xaxis, 'yAxis' => $yaxis, 'tooltip' => array('trigger' => 'axis'), 'dataZoom' => $dataZoom);
         return $options;
     }
 

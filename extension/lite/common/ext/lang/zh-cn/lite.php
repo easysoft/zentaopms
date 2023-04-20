@@ -117,9 +117,9 @@ $lang->SRCommon = '目标';
 /* Doc menu. */
 $lang->doc->menu            = new stdclass();
 $lang->doc->menu->dashboard = array('link' => "{$lang->dashboard}|doc|index");
-$lang->doc->menu->my        = array('link' => "{$lang->doc->mySpace}|doc|mySpace|type=mine", 'alias' => 'my');
+$lang->doc->menu->my        = array('link' => "{$lang->doc->mySpace}|doc|mySpace|type=mine", 'alias' => 'myspace');
 $lang->doc->menu->project   = array('link' => "{$lang->doc->projectSpace}|doc|projectSpace", 'alias' => 'showfiles,project');
-$lang->doc->menu->custom    = array('link' => "{$lang->doc->teamSpace}|doc|tableContents|type=custom", 'alias' => 'custom');
+$lang->doc->menu->custom    = array('link' => "{$lang->doc->teamSpace}|doc|teamSpace|", 'alias' => 'teamspace');
 
 $lang->doc->dividerMenu = ',project,';
 
