@@ -2077,7 +2077,7 @@ class groupModel extends model
             ->orderBy('order asc')
             ->fetchAll('id');
 
-        $pairs      = array();
+        $pairs = array();
         foreach($managers as $managerID => $manager)
         {
             $key = $type == 'package' ? $managerID : $manager->code;

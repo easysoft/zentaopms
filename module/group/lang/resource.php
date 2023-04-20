@@ -1703,7 +1703,7 @@ $lang->resource->group->batchDeleteRelation = 'batchDeleteRelation';
 $lang->resource->group->createPriv          = 'createPriv';
 $lang->resource->group->editPriv            = 'editPriv';
 $lang->resource->group->deletePriv          = 'deletePriv';
-$lang->resource->group->batchChangePackage  = 'batchChangePackage';
+//$lang->resource->group->batchChangePackage  = 'batchChangePackage';
 
 $lang->group->methodOrder[5]   = 'browse';
 $lang->group->methodOrder[10]  = 'create';
