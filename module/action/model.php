@@ -53,6 +53,7 @@ class actionModel extends model
         if($objectType == 'story' and strpos(',reviewpassed,reviewrejected,reviewclarified,reviewreverted,synctwins,', ",$actionType,") !== false) $action->actor = $this->lang->action->system;
 
         /* Use purifier to process comment. Fix bug #2683. */
+        if(empty($comment)) $comment = '';
         $action->comment = fixer::stripDataTags($comment);
 
         /* Process action. */
