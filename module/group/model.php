@@ -2276,7 +2276,9 @@ class groupModel extends model
      */
     public function getPrivsIdListByGroup($groupID)
     {
-        $actions    = $this->dao->select("CONCAT(module, '-',  method) AS action")->from(TABLE_GROUPPRIV)->where('`group`')->eq($groupID)->fetchPairs();
+        $modulePairs = $this->getPrivManagerPairs('module');
+        $modules     = array_keys($modulePairs);
+        $actions    = $this->dao->select("CONCAT(module, '-',  method) AS action")->from(TABLE_GROUPPRIV)->where('`group`')->eq($groupID)->andWhere('module')->in($modules)->fetchPairs();
         $actions    = implode("','", $actions);
         $privIdList = $this->dao->select("*")->from(TABLE_PRIV)->where("CONCAT(module, '-',  method) IN ('$actions')")->fetchAll('id');
         return $privIdList;

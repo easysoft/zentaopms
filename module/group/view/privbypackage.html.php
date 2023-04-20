@@ -198,8 +198,9 @@
         <label class='text-right' for='allChecker'><?php echo $lang->selectAll;?></label>
       </div>
       <?php echo html::hidden('actions[][]');?>
-      <?php echo html::submitButton($lang->save, '', 'btn btn-primary btn-wide');?>
+      <?php echo html::submitButton($lang->save, "onclick='setNoChecked()'", 'btn btn-primary btn-wide');?>
       <?php echo html::a($this->createLink('group', 'browse'), $lang->cancel, '', 'class="btn btn-wide"');?>
+      <?php echo html::hidden('noChecked'); // Save the value of no checked.?>
     </div>
   </div>
 </form>
