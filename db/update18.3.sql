@@ -50,10 +50,10 @@ CREATE TABLE IF NOT EXISTS `zt_scene` (
   `module` mediumint(8) unsigned NOT NULL DEFAULT 0,
   `title` varchar(255) NOT NULL,
   `sort` int(11) unsigned NOT NULL DEFAULT 0,
-  `openedBy` char(30) NOT NULL DEFAULT '''''',
+  `openedBy` char(30) NOT NULL DEFAULT '',
   `openedDate` datetime DEFAULT NULL,
   `lastEditedBy` char(30) NOT NULL DEFAULT '',
-  `lastEditedDate` datetime NOT NULL,
+  `lastEditedDate` datetime NULL,
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   `parent` int(11) DEFAULT NULL,
   `grade` tinyint(3) DEFAULT NULL,
@@ -502,6 +502,7 @@ CHANGE `fromCaseID` `fromCaseID` mediumint unsigned NOT NULL DEFAULT '0',
 CHANGE `lastRunResult` `lastRunResult` char(30) NOT NULL DEFAULT '';
 
 ALTER TABLE `zt_chart`
+CHANGE `dataset` `dataset` varchar(30) NOT NULL DEFAULT '0',
 CHANGE `editedBy` `editedBy` varchar(30) NOT NULL DEFAULT '',
 CHANGE `editedDate` `editedDate` datetime NULL;
 
@@ -600,6 +601,25 @@ CHANGE `editedBy` `editedBy` varchar(30) NOT NULL DEFAULT '',
 CHANGE `editedDate` `editedDate` datetime NULL;
 
 ALTER TABLE `zt_host`
+CHANGE `mac` `mac` varchar(128) NOT NULL DEFAULT '',
+CHANGE `desc` `desc` text NULL,
+CHANGE `tokenTime` `tokenTime` datetime NULL,
+CHANGE `heartbeat` `heartbeat` datetime NULL,
+CHANGE `vnc` `vnc` int NOT NULL DEFAULT '0',
+CHANGE `ztf` `ztf` int NOT NULL DEFAULT '0',
+CHANGE `zd` `zd` int NOT NULL DEFAULT '0',
+CHANGE `ssh` `ssh` int NOT NULL DEFAULT '0',
+CHANGE `serverRoom` `serverRoom` mediumint unsigned NOT NULL DEFAULT '0',
+CHANGE `serverModel` `serverModel` varchar(256) NOT NULL DEFAULT '',
+CHANGE `hardwareType` `hardwareType` varchar(64) NOT NULL DEFAULT '',
+CHANGE `cpuBrand` `cpuBrand` varchar(128) NOT NULL DEFAULT '',
+CHANGE `cpuModel` `cpuModel` varchar(128) NOT NULL DEFAULT '',
+CHANGE `cpuNumber` `cpuNumber` varchar(16) NOT NULL DEFAULT '',
+CHANGE `cpuCores` `cpuCores` varchar(30) NOT NULL DEFAULT '',
+CHANGE `intranet` `intranet` varchar(128) NOT NULL DEFAULT '',
+CHANGE `extranet` `extranet` varchar(128) NOT NULL DEFAULT '',
+CHANGE `osName` `osName` varchar(64) NOT NULL DEFAULT '',
+CHANGE `osVersion` `osVersion` varchar(64) NOT NULL DEFAULT '',
 CHANGE `editedBy` `editedBy` varchar(30) NOT NULL DEFAULT '',
 CHANGE `editedDate` `editedDate` datetime NULL;
 
@@ -1017,6 +1037,9 @@ CHANGE `lastRunDate` `lastRunDate` datetime NULL,
 CHANGE `lastRunResult` `lastRunResult` char(30) NOT NULL DEFAULT '';
 
 ALTER TABLE `zt_testsuite`
+CHANGE `project` `project` mediumint unsigned NOT NULL DEFAULT '0',
+CHANGE `product` `product` mediumint unsigned NOT NULL DEFAULT '0',
+CHANGE `deleted` `deleted` enum('0','1') NOT NULL DEFAULT '0',
 CHANGE `lastEditedBy` `lastEditedBy` char(30) NOT NULL DEFAULT '',
 CHANGE `lastEditedDate` `lastEditedDate` datetime NULL;
 
