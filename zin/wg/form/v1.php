@@ -87,7 +87,7 @@ class form extends wg
 
         return h::form
         (
-            set::class('form', $grid ? 'form-grid' : NULL, $isAjax ? 'form-ajax' : ''),
+            set::class('form load-indicator', $grid ? 'form-grid' : NULL, $isAjax ? 'form-ajax' : ''),
             set(['id' => $id, 'action' => $url, 'target' => $target, 'method' => $method]),
             set($this->getRestProps()),
             empty($labelWidth) ? NULL : setCssVar('form-label-width', $labelWidth),
