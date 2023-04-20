@@ -193,6 +193,8 @@ class chartModel extends model
         $max    = 0;
         foreach($yStats as $yStat)
         {
+            if(empty($yStat)) continue;
+
             $data = array();
             foreach($xLabels as $xLabel)
             {
