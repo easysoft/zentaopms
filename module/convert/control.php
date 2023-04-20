@@ -274,6 +274,7 @@ class convert extends control
             if($method == 'db')
             {
                 $dbName = $this->post->dbName;
+                if(!$this->convert->checkDBName($dbName)) die('Invalid database name.');
                 if(!$dbName)
                 {
                     $response['result']  = 'fail';
@@ -456,7 +457,7 @@ class convert extends control
             if(isset($result['finished']) and $result['finished'])
             {
                 return print $this->send(array('result' => 'finished', 'message' => $this->lang->convert->jira->importSuccessfully));
-            }   
+            }
             else
             {
                 $type = zget($this->lang->convert->jira->objectList, $result['type'], $result['type']);
