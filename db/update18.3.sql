@@ -529,6 +529,10 @@ CHANGE `finishedBy` `finishedBy` char(30) NOT NULL DEFAULT '',
 CHANGE `finishedDate` `finishedDate` datetime NULL;
 
 ALTER TABLE `zt_design`
+CHANGE `commit` `commit` text NULL,
+CHANGE `commitedBy` `commitedBy` varchar(30) NOT NULL DEFAULT '',
+CHANGE `status` `status` varchar(30) NOT NULL DEFAULT '',
+CHANGE `version` `version` smallint NOT NULL DEFAULT '0',
 CHANGE `editedBy` `editedBy` varchar(30) NOT NULL DEFAULT '',
 CHANGE `editedDate` `editedDate` datetime NULL,
 CHANGE `assignedTo` `assignedTo` varchar(30) NOT NULL DEFAULT '',

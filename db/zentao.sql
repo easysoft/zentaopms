@@ -615,11 +615,11 @@ CREATE TABLE IF NOT EXISTS `zt_design` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
   `project` varchar(255) NOT NULL,
   `product` varchar(255) NOT NULL,
-  `commit` text NOT NULL,
-  `commitedBy` varchar(30) NOT NULL,
+  `commit` text NULL,
+  `commitedBy` varchar(30) NOT NULL DEFAULT '',
   `execution` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `name` varchar(255) NOT NULL,
-  `status` varchar(30) NOT NULL,
+  `status` varchar(30) NOT NULL DEFAULT '',
   `createdBy` varchar(30) NOT NULL,
   `createdDate` datetime NOT NULL,
   `editedBy` varchar(30) NOT NULL DEFAULT '',
@@ -630,7 +630,7 @@ CREATE TABLE IF NOT EXISTS `zt_design` (
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   `story` char(30) NOT NULL,
   `desc` mediumtext NOT NULL,
-  `version` smallint(6) NOT NULL,
+  `version` smallint(6) NOT NULL DEFAULT '0',
   `type` char(30) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
