@@ -13,7 +13,7 @@ namespace zin;
 
 function setPageData($name, $value)
 {
-    if(is_array($value) && $name === NULL)
+    if(is_array($value) && empty($name))
     {
         foreach ($value as $key => $val) zin::setData($key, $val);
         return;
