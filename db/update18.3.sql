@@ -539,11 +539,16 @@ ALTER TABLE `zt_doc` ADD `editingDate` text NULL AFTER `editedDate`;
 ALTER TABLE `zt_doc`
 CHANGE `views` `views` smallint unsigned NOT NULL DEFAULT '0',
 CHANGE `collector` `collector` text NULL,
+CHANGE `groups` `groups` varchar(255) NOT NULL DEFAULT '',
+CHANGE `users` `users` text NULL,
 CHANGE `assignedTo` `assignedTo` varchar(30) NOT NULL DEFAULT '',
 CHANGE `assignedDate` `assignedDate` datetime NULL,
 CHANGE `approvedDate` `approvedDate` date NULL,
 CHANGE `editedBy` `editedBy` varchar(30) NOT NULL DEFAULT '',
 CHANGE `editedDate` `editedDate` datetime NULL;
+
+ALTER TABLE `zt_doccontent`
+CHANGE `digest` `digest` varchar(255) NOT NULL DEFAULT '';
 
 ALTER TABLE `zt_doclib`
 CHANGE `product` `product` mediumint unsigned NOT NULL DEFAULT '0',
