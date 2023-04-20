@@ -74,6 +74,7 @@ li.drag-shadow ul {display: none !important;}
 /* Release used for api space. */
 js::set('release', isset($release) ? $release : 0);
 js::set('versionLang', $lang->build->common);
+js::set('spaceType', $this->session->spaceType);
 
 /* ObjectType and objectID used for other space. */
 js::set('objectType', isset($type) ? $type : '');
@@ -471,9 +472,10 @@ $(function()
         if(!libID)    libID    = 0;
         if(!moduleID) moduleID = 0;
         linkParams = linkParams.replace('%s', 'libID=' + libID + '&moduleID=' + moduleID);
-        var moduleName = config.currentModule;
+        if(spaceType != 'api' && config.currentModule == 'api') linkParams = 'objectID=' + objectID + '&' + linkParams;
+        var moduleName = spaceType == 'api' ? 'api' : 'doc';
         var methodName = '';
-        if(config.currentModule == 'api')
+        if(spaceType == 'api')
         {
             methodName = 'index';
             linkParams =  linkParams.substring(1);
