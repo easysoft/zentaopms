@@ -8970,7 +8970,7 @@ class upgradeModel extends model
     {
         $reports = $this->dao->select('*')->from(TABLE_REPORT)->fetchAll();
 
-        $groupCollectors = $this->dao->select('collector, id')->from(TABLE_MODULE)->where('type')->eq('pivot')->fetchPairs();
+        $groupCollectors = $this->dao->select('collector, id')->from(TABLE_MODULE)->where('type')->eq('pivot')->andWhere('root')->eq(1)->fetchPairs();
 
         $this->loadModel('pivot');
 
