@@ -1526,6 +1526,8 @@ class groupModel extends model
         return $this->dao->select('t1.*,t2.key,t2.value,t2.desc')->from(TABLE_PRIV)->alias('t1')
             ->leftJoin(TABLE_PRIVLANG)->alias('t2')->on('t1.id=t2.objectID')
             ->where('t1.id')->in($privIdList)
+            ->andWhere('t1.edition')->like("%,{$this->config->edition},%")
+            ->andWhere('t1.vision')->like("%,{$this->config->vision},%")
             ->andWhere('t2.lang')->eq($this->app->getClientLang())
             ->andWhere('t2.objectType')->eq('priv')
             ->orderBy('order_asc')
@@ -1556,6 +1558,8 @@ class groupModel extends model
             ->leftJoin(TABLE_PRIVLANG)->alias('t2')->on('t1.id=t2.objectID')
             ->leftJoin(TABLE_PRIVMANAGER)->alias('t3')->on('t1.parent=t3.id')
             ->where('t3.id')->in($parentsIdList)
+            ->andWhere('t1.edition')->like("%,{$this->config->edition},%")
+            ->andWhere('t1.vision')->like("%,{$this->config->vision},%")
             ->andWhere('t2.lang')->eq($this->app->getClientLang())
             ->andWhere('t2.objectType')->eq('priv')
             ->orderBy('t1.`order`')
@@ -1719,6 +1723,8 @@ class groupModel extends model
             ->leftJoin(TABLE_PRIVPACKAGE)->alias('t3')->on('t1.parent=t3.id')
             ->where('1=1')
             ->andWhere($privQuery)
+            ->andWhere('t1.edition')->like("%,{$this->config->edition},%")
+            ->andWhere('t1.vision')->like("%,{$this->config->vision},%")
             ->andWhere('t2.lang')->eq($this->app->getClientLang())
             ->orderBy("moduleOrder asc, t3.order asc, `order` asc")
             ->page($pager)
@@ -1740,6 +1746,8 @@ class groupModel extends model
             ->leftJoin(TABLE_PRIV)->alias('t2')->on('t1.relationPriv=t2.id')
             ->leftJoin(TABLE_PRIVLANG)->alias('t3')->on('t2.id=t3.objectID')
             ->where('t1.priv')->eq($priv)
+            ->andWhere('t2.edition')->like("%,{$this->config->edition},%")
+            ->andWhere('t2.vision')->like("%,{$this->config->vision},%")
             ->andWhere('t3.objectType')->eq('priv')
             ->beginIF(!empty($type))->andWhere('t1.type')->eq($type)->fi()
             ->beginIF($module)->andWhere('t2.module')->eq($module)->fi()
@@ -1765,6 +1773,8 @@ class groupModel extends model
             ->leftJoin(TABLE_PRIV)->alias('t2')->on('t1.relationPriv=t2.id')
             ->leftJoin(TABLE_PRIVLANG)->alias('t3')->on('t2.id=t3.objectID')
             ->where('t1.priv')->in($privs)
+            ->andWhere('t2.edition')->like("%,{$this->config->edition},%")
+            ->andWhere('t2.vision')->like("%,{$this->config->vision},%")
             ->andWhere('t3.objectType')->eq('priv')
             ->beginIF(!empty($type))->andWhere('t1.type')->eq($type)->fi()
             ->fetchGroup('type', 'relationPriv');
@@ -2262,6 +2272,8 @@ class groupModel extends model
         return $this->dao->select('t1.*')->from(TABLE_PRIV)->alias('t1')
             ->leftJoin(TABLE_PRIVMANAGER)->alias('t2')->on('t1.parent=t2.id')
             ->where('t2.`code`')->eq($module)
+            ->andWhere('t1.edition')->like("%,{$this->config->edition},%")
+            ->andWhere('t1.vision')->like("%,{$this->config->vision},%")
             ->andWhere('t2.type')->eq('module')
             ->orderBy('order_asc')
             ->fetchAll('id');
@@ -2280,7 +2292,11 @@ class groupModel extends model
         $modules     = array_keys($modulePairs);
         $actions    = $this->dao->select("CONCAT(module, '-',  method) AS action")->from(TABLE_GROUPPRIV)->where('`group`')->eq($groupID)->andWhere('module')->in($modules)->fetchPairs();
         $actions    = implode("','", $actions);
-        $privIdList = $this->dao->select("*")->from(TABLE_PRIV)->where("CONCAT(module, '-',  method) IN ('$actions')")->fetchAll('id');
+        $privIdList = $this->dao->select("*")->from(TABLE_PRIV)
+            ->where("CONCAT(module, '-',  method) IN ('$actions')")
+            ->andWhere('edition')->like("%,{$this->config->edition},%")
+            ->andWhere('vision')->like("%,{$this->config->vision},%")
+            ->fetchAll('id');
         return $privIdList;
     }
 }
