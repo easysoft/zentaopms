@@ -178,7 +178,8 @@ function updatePrivTree(privList)
         privList = new Array();
         $('tbody .group-item input:checked').each(function()
         {
-            if($(this).closest('popover-content').length == 0) privList.push($(this).closest('.group-item').attr('data-id'));
+            var privID = $(this).closest('.group-item').attr('data-id');
+            if($(this).closest('popover-content').length == 0 && privList.indexOf(privID) < 0) privList.push(privID);
         });
         selectedPrivIdList = privList;
     }
