@@ -299,6 +299,7 @@ class group extends control
                         $privList[$module][0]["{$module}-$method"]->module = $module;
                         $privList[$module][0]["{$module}-$method"]->method = $method;
                         $privList[$module][0]["{$module}-$method"]->name   = $this->lang->{$module}->{$methodLabel};
+                        $privList[$module][0]["{$module}-$method"]->action = "{$module}-{$method}";
                         if(!empty($groupPrivs[$module][$method])) $selectPrivs[$module][0] ++;
                     }
                 }
