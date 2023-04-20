@@ -718,10 +718,6 @@ CHANGE `assignedTo` `assignedTo` text NULL,
 CHANGE `desc` `desc` mediumtext NULL,
 CHANGE `estimate` `estimate` float unsigned NOT NULL DEFAULT '0',
 CHANGE `color` `color` char(7) NOT NULL DEFAULT '';
-
-ALTER TABLE `zt_kanbancolumn`
-CHANGE `type` `type` char(30) NOT NULL DEFAULT '';
-
 CHANGE `fromID` `fromID` mediumint unsigned NOT NULL DEFAULT '0',
 CHANGE `fromType` `fromType` varchar(30) NOT NULL DEFAULT '',
 CHANGE `whitelist` `whitelist` text NULL,
@@ -731,6 +727,9 @@ CHANGE `archivedBy` `archivedBy` char(30) NOT NULL DEFAULT '',
 CHANGE `archivedDate` `archivedDate` datetime NULL,
 CHANGE `assignedBy` `assignedBy` char(30) NOT NULL DEFAULT '',
 CHANGE `assignedDate` `assignedDate` datetime NULL;
+
+ALTER TABLE `zt_kanbancolumn`
+CHANGE `type` `type` char(30) NOT NULL DEFAULT '';
 
 ALTER TABLE `zt_kanbanlane`
 CHANGE `groupby` `groupby` char(30) NOT NULL DEFAULT '',
