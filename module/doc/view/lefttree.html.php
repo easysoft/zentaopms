@@ -472,6 +472,7 @@ $(function()
         if(!libID)    libID    = 0;
         if(!moduleID) moduleID = 0;
         linkParams = linkParams.replace('%s', 'libID=' + libID + '&moduleID=' + moduleID);
+        if(config.currentModule == 'api' && config.currentMethod == 'view') spaceType = 'api';
         if(spaceType != 'api' && config.currentModule == 'api') linkParams = 'objectID=' + objectID + '&' + linkParams;
         var moduleName = spaceType == 'api' ? 'api' : 'doc';
         var methodName = '';
