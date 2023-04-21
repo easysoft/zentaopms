@@ -11,7 +11,6 @@
             <span class='label label-danger'><?php echo $lang->doc->deleted;?></span>
             <?php endif;?>
           </div>
-
           <?php if($doc->status != 'draft'):?>
           <div class="info">
             <?php $version = $version ? $version : $doc->version;?>
@@ -38,8 +37,6 @@
             </div>
           </div>
           <?php endif;?>
-
-
           <div class="actions">
             <?php echo html::a("javascript:fullScreen()", '<span class="icon-fullscreen"></span>', '', "title='{$lang->fullscreen}' class='btn btn-link fullscreen-btn'");?>
             <?php if(common::hasPriv('doc', 'collect')):?>
