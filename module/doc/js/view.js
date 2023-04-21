@@ -126,7 +126,7 @@ function adjustPageTitleWidth()
 {
     var $titleContent = $('.detail-title.doc-title');
     var titleWidth    = $titleContent.width() - $titleContent.find('.info').width() - $titleContent.find('.actions').width() - $titleContent.find('#editorBox').width();
-    $titleContent.find('.flex-left > .title').css('max-width', '0 0' + titleWidth + 'px');
+    $titleContent.find('.flex-left > .title').css('max-width', titleWidth + 'px');
 }
 
 document.addEventListener('fullscreenchange', function (e)
@@ -242,6 +242,7 @@ $(function()
             }
             $('#docExport').attr('href', createLink('doc', exportMethod, 'libID=' + libID + '&moduleID=0&docID=' + docID + '&version=' + $('#content .doc-title .version').data('version')));
             if($('.files-list').length) $('#content .detail-content.article-content').css('height', 'calc(100vh - 300px)');
+            adjustPageTitleWidth();
         });
     })
 

@@ -25,7 +25,7 @@
                 <a href='javascript:;' class='btn btn-link btn-limit text-ellipsis right-dom' data-toggle='dropdown' style="max-width: 120px;">
                   <span class="caret"></span>
                 </a>
-                <ul id="docVersionMenu" class='dropdown-menu doc-version-menu' style='width: 250px; overflow-y:auto'>
+                <ul id="docVersionMenu" class='dropdown-menu doc-version-menu' style='width: 260px; overflow-y:auto'>
                   <li class="drop-title flex-between dropdown-header not-clear-menu"><div><?php echo $lang->doc->allVersion?></div></li>
                   <div class="drop-body menu-active-primary menu-hover-primary">
                   <?php for($itemVersion = $doc->version; $itemVersion > 0; $itemVersion--):?>
