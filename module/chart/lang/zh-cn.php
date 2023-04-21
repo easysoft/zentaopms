@@ -33,13 +33,7 @@ $lang->chart->aggList['max']      = '最大值';
 $lang->chart->aggList['min']      = '最小值';
 
 $lang->chart->typeList = array();
-$lang->chart->typeList['table']       = '报表';
-$lang->chart->typeList['agg']         = '计数';
-$lang->chart->typeList['value']       = '取值';
-$lang->chart->typeList['bar']         = '柱状图';
-$lang->chart->typeList['piecircle']   = '环形饼图';
 $lang->chart->typeList['pie']         = '饼图';
-$lang->chart->typeList['card']        = '卡片';
 $lang->chart->typeList['line']        = '折线图';
 $lang->chart->typeList['radar']       = '雷达图';
 $lang->chart->typeList['cluBarY']     = '簇状条形图';

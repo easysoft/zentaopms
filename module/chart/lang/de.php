@@ -33,11 +33,6 @@ $lang->chart->aggList['max']      = 'MAX';
 $lang->chart->aggList['min']      = 'MIN';
 
 $lang->chart->typeList = array();
-$lang->chart->typeList['table']       = 'Table';
-$lang->chart->typeList['agg']         = 'Agg';
-$lang->chart->typeList['value']       = 'Value';
-$lang->chart->typeList['bar']         = 'Bar';
-$lang->chart->typeList['piecircle']   = 'Circle Pie';
 $lang->chart->typeList['pie']         = 'Pie';
 $lang->chart->typeList['line']        = 'Line';
 $lang->chart->typeList['radar']       = 'Radar';
