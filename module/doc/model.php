@@ -437,7 +437,7 @@ class docModel extends model
             $docs = $this->dao->select('t1.*, t2.name as libName, t2.type as objectType')->from(TABLE_DOC)->alias('t1')
                 ->leftJoin(TABLE_DOCLIB)->alias('t2')->on("t1.lib=t2.id")
                 ->where('t1.deleted')->eq(0)
-                ->andWhere('t1.lib')->in($allLibIDList)
+                ->andWhere('t1.lib')->ne('')
                 ->andWhere('t1.id')->in($hasPrivDocIdList)
                 ->beginIF($this->config->doc->notArticleType)->andWhere('t1.type')->notIN($this->config->doc->notArticleType)->fi()
                 ->andWhere('t1.addedBy')->eq($this->app->user->account)
@@ -448,18 +448,18 @@ class docModel extends model
         }
         elseif($browseType == 'editedbyme')
         {
-            $docIDList = $this->dao->select('objectID')->from(TABLE_ACTION)
+            $docIdList = $this->dao->select('objectID')->from(TABLE_ACTION)
                 ->where('objectType')->eq('doc')
                 ->andWhere('actor')->eq($this->app->user->account)
-                ->andWhere('objectID')->in($hasPrivDocIdList)
                 ->andWhere('action')->eq('edited')
+                ->andWhere('vision')->eq($this->config->vision)
                 ->fetchAll('objectID');
 
             $docs = $this->dao->select('t1.*, t2.name as libName, t2.type as objectType')->from(TABLE_DOC)->alias('t1')
                 ->leftJoin(TABLE_DOCLIB)->alias('t2')->on("t1.lib=t2.id")
                 ->where('t1.deleted')->eq(0)
-                ->andWhere('t1.id')->in(array_keys($docIDList))
-                ->andWhere('t1.lib')->in($allLibIDList)
+                ->andWhere('t1.id')->in(array_keys($docIdList))
+                ->andWhere('t1.lib')->ne('')
                 ->andWhere('t1.vision')->in($this->config->vision)
                 ->beginIF($this->config->doc->notArticleType)->andWhere('t1.type')->notIN($this->config->doc->notArticleType)->fi()
                 ->orderBy($sort)
@@ -483,7 +483,7 @@ class docModel extends model
             $docs = $this->dao->select('t1.*')->from(TABLE_DOC)->alias('t1')
                 ->leftJoin(TABLE_DOCACTION)->alias('t2')->on("t1.id=t2.doc && t2.action='collect'")
                 ->where('t1.deleted')->eq(0)
-                ->andWhere('t1.lib')->in($allLibIDList)
+                ->andWhere('t1.lib')->ne('')
                 ->andWhere('t1.id')->in($hasPrivDocIdList)
                 ->beginIF($this->config->doc->notArticleType)->andWhere('t1.type')->notIN($this->config->doc->notArticleType)->fi()
                 ->andWhere('t2.actor')->eq($this->app->user->account)
@@ -2184,7 +2184,7 @@ class docModel extends model
             ->andWhere('t2.deleted')->eq(0)
             ->fetch('count');
 
-        $my = $this->dao->select("count(*) as myDocs, SUM(views) as docViews, SUM(collects) as docCollects")->from(TABLE_DOC)->where('addedBy')->eq($this->app->user->account)->andWhere('deleted')->eq(0)->andWhere('vision')->eq($this->config->vision)->andWhere('lib')->ne(0)->fetch();
+        $my = $this->dao->select("count(*) as myDocs, SUM(views) as docViews, SUM(collects) as docCollects")->from(TABLE_DOC)->where('addedBy')->eq($this->app->user->account)->andWhere('deleted')->eq(0)->andWhere('vision')->eq($this->config->vision)->andWhere('lib')->ne('')->fetch();
         $statistic->myDocs = $my->myDocs;
         $statistic->myDoc  = new stdclass();
         $statistic->myDoc->docViews    = $my->docViews;
