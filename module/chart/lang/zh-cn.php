@@ -31,3 +31,12 @@ $lang->chart->aggList['avg']      = '平均值';
 $lang->chart->aggList['sum']      = '求和';
 $lang->chart->aggList['max']      = '最大值';
 $lang->chart->aggList['min']      = '最小值';
+
+$lang->chart->typeList = array();
+$lang->chart->typeList['pie']         = '饼图';
+$lang->chart->typeList['line']        = '折线图';
+$lang->chart->typeList['radar']       = '雷达图';
+$lang->chart->typeList['cluBarY']     = '簇状条形图';
+$lang->chart->typeList['stackedBarY'] = '堆积条形图';
+$lang->chart->typeList['cluBarX']     = '簇状柱形图';
+$lang->chart->typeList['stackedBar']  = '堆积柱形图';

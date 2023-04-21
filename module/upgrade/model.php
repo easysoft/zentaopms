@@ -8384,13 +8384,12 @@ class upgradeModel extends model
      */
     public function processDashboard()
     {
-        $dimension  = $this->dao->select('id')->from(TABLE_DIMENSION)->where('code')->eq('efficiency')->fetch('id');
         $dashboards = $this->dao->select('*')->from(TABLE_DASHBOARD)->fetchAll();
         foreach($dashboards as $dashboard)
         {
             $screen = new stdclass();
             $screen->name        = $dashboard->name;
-            $screen->dimension   = $dimension ? $dimension : 0;
+            $screen->dimension   = 1;
             $screen->desc        = $dashboard->desc;
             $screen->scheme      = $this->processDashboardLayout($dashboard);
             $screen->deleted     = $dashboard->deleted;
@@ -8963,7 +8962,7 @@ class upgradeModel extends model
     {
         $reports = $this->dao->select('*')->from(TABLE_REPORT)->fetchAll();
 
-        $groupCollectors = $this->dao->select('collector, id')->from(TABLE_MODULE)->where('type')->eq('pivot')->andWhere('root')->eq(1)->fetchPairs();
+        $groupCollectors = $this->dao->select('collector, id')->from(TABLE_MODULE)->where('type')->eq('pivot')->andWhere('root')->eq(1)->andWhere('collector')->ne('')->fetchPairs();
 
         $this->loadModel('pivot');
 
@@ -8982,12 +8981,10 @@ class upgradeModel extends model
             $data->createdDate = $report->addedDate;
 
             /* Process group. */
-            $modules = explode(',', $report->module);
+            $modules = explode(',', trim($report->module, ','));
             $groups  = array();
             foreach($modules as $module)
             {
-                if(!$module) continue;
-
                 if(isset($groupCollectors[$module]))
                 {
                     $groups[] = $groupCollectors[$module];

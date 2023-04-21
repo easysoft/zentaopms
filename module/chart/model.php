@@ -580,8 +580,7 @@ class chartModel extends model
      */
     public static function isClickable($chart, $action)
     {
-        global $config;
-        if($chart->builtin and in_array($chart->id, $config->screen->builtinChart)) return false;
+        if($chart->builtin) return false;
         return true;
     }
 
