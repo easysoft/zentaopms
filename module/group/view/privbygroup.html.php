@@ -203,8 +203,6 @@
 <script>
 $(document).ready(function()
 {
-    $(".icon-help").popover();
-
     /**
      * 隐藏列表标签。
      * Hide tabs except the browse list tab.

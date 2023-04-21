@@ -405,6 +405,8 @@ function positionBtn()
 
 $(function()
 {
+    if($(".side .icon-help").length > 0) $(".side .icon-help").popover();
+
     positionBtn();
     $('.main.main-content').resize(positionBtn);
 
