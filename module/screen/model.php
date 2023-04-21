@@ -773,6 +773,8 @@ class screenModel extends model
                 }
                 break;
         }
+
+        $options = array_filter($options);
         return $options;
     }
 
