@@ -1606,4 +1606,50 @@ class screenModel extends model
 
         return array($component, $typeChanged);
     }
+
+    /**
+     * Check if the Chart is in use.
+     *
+     * @param  int    $chartID
+     * @param  string $type
+     * @access public
+     * @return void
+     */
+    public function checkIFChartInUse($chartID, $type = 'chart')
+    {
+        static $screenList = array();
+        if(empty($screenList)) $screenList = $this->dao->select('scheme')->from(TABLE_SCREEN)->where('deleted')->eq(0)->andWhere('status')->eq('published')->fetchAll();
+
+        foreach($screenList as $screen)
+        {
+            $scheme = json_decode($screen->scheme);
+            if(empty($scheme->componentList)) continue;
+
+            foreach($scheme->componentList as $component)
+            {
+                if(!empty($component->isGroup))
+                {
+                    foreach($component->groupList as $key => $groupComponent)
+                    {
+                        if(!isset($groupComponent->chartConfig)) continue;
+
+                        $sourceID   = zget($groupComponent->chartConfig, 'sourceID', '');
+                        $sourceType = zget($groupComponent->chartConfig, 'package', '') == 'Tables' ? 'pivot' : 'chart';
+
+                        if($chartID == $sourceID and $type == $sourceType) return true;
+                    }
+                }
+                else
+                {
+                    if(!isset($component->chartConfig)) continue;
+
+                    $sourceID   = zget($component->chartConfig, 'sourceID', '');
+                    $sourceType = zget($component->chartConfig, 'package', '') == 'Tables' ? 'pivot' : 'chart';
+                    if($chartID == $sourceID and $type == $sourceType) return true;
+                }
+
+            }
+        }
+        return false;
+    }
 }
