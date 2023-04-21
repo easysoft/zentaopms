@@ -220,6 +220,7 @@ $config->project->zin->datatable->fieldList['name']['title']    = $lang->project
 $config->project->zin->datatable->fieldList['name']['fixed']    = 'left';
 $config->project->zin->datatable->fieldList['name']['width']    = 408;
 $config->project->zin->datatable->fieldList['name']['sortType'] = true;
+$config->project->zin->datatable->fieldList['name']['type']     = 'link';
 
 $config->project->zin->datatable->fieldList['PM']['name']     = 'PM';
 $config->project->zin->datatable->fieldList['PM']['title']    = $lang->project->PM;

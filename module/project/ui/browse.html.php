@@ -5,6 +5,7 @@ $dataUrl = createLink('project', 'close', ['onlybody' => 'yes', 'projectID' => '
 $dataUrl = "'$dataUrl'.replace('{rowID}', row.id)";
 
 $config->project->zin->datatable->fieldList['actions']['actionsMap']['close']['buildProps'] = jsRaw("function(_result, info) {var row = info.row; return {'data-toggle': 'modal', 'data-type': 'ajax', 'data-url': $dataUrl, 'data-data-type': 'html'}; }");
+$config->project->zin->datatable->fieldList['name']['linkTemplate'] = createLink('project', 'index', 'projectID={id}');
 $cols        = array_values($config->project->zin->datatable->fieldList);
 $programTree = $this->project->getProgramTree(0, array('projectmodel', 'createManageLink'), 0, 'list');
 $usersAvatar = $this->user->getAvatarPairs('');
