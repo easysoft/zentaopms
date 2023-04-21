@@ -396,7 +396,8 @@
         if(isInAppTab) window.parent.$('body').trigger('click');
 
         const $a = $(e.target).closest('a');
-        if(!$a.length || $a.data('toggle') || $a.hasClass('not-in-app') || $a.attr('target') === '_blank') return;
+        if(!$a.length || $a.attr('target') === '_blank') return;
+        if($a.data('toggle') || $a.hasClass('not-in-app')) return e.preventDefault();
 
         const url = $a.attr('href');
         if(!url || url.startsWith('javascript') || url.startsWith('#')) return;
