@@ -62,6 +62,8 @@ class pivotModel extends model
     public function getList($dimensionID = 0, $groupID = 0, $orderBy = 'id_desc', $pager = null)
     {
         $this->loadModel('screen');
+
+        $pivots = array();
         if($groupID)
         {
             $groups = $this->dao->select('id')->from(TABLE_MODULE)
@@ -70,27 +72,47 @@ class pivotModel extends model
                 ->andWhere('path')->like("%,$groupID,%")
                 ->fetchPairs('id');
 
-            $pivots = array();
+            $conditions = '';
             foreach($groups as $groupID)
             {
-                $pivots += $this->dao->select('*')->from(TABLE_PIVOT)
-                    ->where('deleted')->eq(0)
-                    ->beginIF(!empty($groupID))->andWhere("FIND_IN_SET($groupID, `group`)")->fi()
-                    ->beginIF(!empty($dimensionID))->andWhere('dimension')->eq($dimensionID)->fi()
-                    ->orderBy($orderBy)
-                    ->page($pager)
-                    ->fetchAll('id');
+                $conditions .= " FIND_IN_SET($groupID, `group`) or";
             }
+            $conditions = trim($conditions, 'or');
+
+            $pivots += $this->dao->select('*')->from(TABLE_PIVOT)
+                ->where('deleted')->eq(0)
+                ->beginIF($conditions)->andWhere("({$conditions})")->fi()
+                ->beginIF(!empty($dimensionID))->andWhere('dimension')->eq($dimensionID)->fi()
+                ->orderBy($orderBy)
+                ->fetchAll();
+
+            $pivots += $this->dao->select('*')->from(TABLE_CHART)
+                ->where('deleted')->eq(0)
+                ->andWhere('type')->eq('table')
+                ->beginIF($conditions)->andWhere("({$conditions})")->fi()
+                ->beginIF(!empty($dimensionID))->andWhere('dimension')->eq($dimensionID)->fi()
+                ->orderBy($orderBy)
+                ->fetchAll();
         }
         else
         {
-            $pivots = $this->dao->select('*')->from(TABLE_PIVOT)
+            $pivots += $this->dao->select('*')->from(TABLE_PIVOT)
                 ->where('deleted')->eq(0)
                 ->beginIF(!empty($dimensionID))->andWhere('dimension')->eq($dimensionID)->fi()
                 ->orderBy($orderBy)
-                ->page($pager)
-                ->fetchAll('id');
+                ->fetchAll();
+
+            $pivots += $this->dao->select('*')->from(TABLE_CHART)
+                ->where('deleted')->eq(0)
+                ->andWhere('type')->eq('table')
+                ->beginIF(!empty($dimensionID))->andWhere('dimension')->eq($dimensionID)->fi()
+                ->orderBy($orderBy)
+                ->fetchAll();
         }
+
+        $pager->setRecTotal(count($pivots));
+        $pager->setPageTotal();
+        if($pager->pageID > $pager->pageTotal) $pager->setPageID($pager->pageTotal);
 
         return $this->processPivot($pivots, false);
     }
@@ -137,29 +159,31 @@ class pivotModel extends model
             if(!empty($pivot->sql))      $pivots[$index]->sql = trim(str_replace(';', '', $pivot->sql));
             if(!empty($pivot->settings)) $pivots[$index]->settings = json_decode($pivot->settings, true);
 
-            $pivot->names = '';
-            $pivot->descs = '';
-            if(!empty($pivot->name))
+            if(empty($pivot->type))
             {
-                $pivotNames   = json_decode($pivot->name, true);
-                $pivot->name  = zget($pivotNames, $this->app->getClientLang(), '');
-                $pivot->names = $pivotNames;
-
-                if(!$pivot->name)
+                $pivot->names = '';
+                $pivot->descs = '';
+                if(!empty($pivot->name))
                 {
-                    $pivotNames  = array_filter($pivotNames);
-                    $pivot->name = reset($pivotNames);
+                    $pivotNames   = json_decode($pivot->name, true);
+                    $pivot->name  = zget($pivotNames, $this->app->getClientLang(), '');
+                    $pivot->names = $pivotNames;
+
+                    if(!$pivot->name)
+                    {
+                        $pivotNames  = array_filter($pivotNames);
+                        $pivot->name = reset($pivotNames);
+                    }
                 }
-            }
 
-            if(!empty($pivot->desc))
-            {
-                $pivotDescs   = json_decode($pivot->desc, true);
-                $pivot->desc  = zget($pivotDescs, $this->app->getClientLang(), '');
-                $pivot->descs = $pivotDescs;
+                if(!empty($pivot->desc))
+                {
+                    $pivotDescs   = json_decode($pivot->desc, true);
+                    $pivot->desc  = zget($pivotDescs, $this->app->getClientLang(), '');
+                    $pivot->descs = $pivotDescs;
+                }
+                $pivots[$index]->used = $this->screen->checkIFChartInUse($pivot->id, 'pivot', $screenList);
             }
-
-            $pivots[$index]->used = $this->screen->checkIFChartInUse($pivot->id, 'pivot', $screenList);
         }
 
         return $isObject ? reset($pivots) : $pivots;
