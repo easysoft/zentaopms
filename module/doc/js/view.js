@@ -251,5 +251,4 @@ $(function()
     if($('.files-list').length) $('#content .detail-content.article-content').css('height', 'calc(100vh - 300px)');
     $('.outline .outline-toggle i.icon-menu-arrow-left').trigger("click");
     adjustPageTitleWidth();
-}
 })
