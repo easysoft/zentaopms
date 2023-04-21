@@ -9,16 +9,17 @@
  * @version     $Id: zh-cn.php 5080 2013-07-10 00:46:59Z wyd621@gmail.com $
  * @link        http://www.zentao.net
  */
-$lang->pivot->index       = '透视表首页';
-$lang->pivot->list        = '透视表';
-$lang->pivot->preview     = '查看透视表';
-$lang->pivot->create      = '创建透视表';
-$lang->pivot->edit        = '编辑透视表';
-$lang->pivot->browse      = '浏览透视表';
-$lang->pivot->delete      = '删除透视表';
-$lang->pivot->design      = '设计透视表';
-$lang->pivot->export      = '导出透视表';
-$lang->pivot->query       = '查询';
+$lang->pivot->index        = '透视表首页';
+$lang->pivot->list         = '透视表';
+$lang->pivot->preview      = '查看透视表';
+$lang->pivot->create       = '创建透视表';
+$lang->pivot->edit         = '编辑透视表';
+$lang->pivot->browse       = '浏览透视表';
+$lang->pivot->delete       = '删除透视表';
+$lang->pivot->design       = '设计透视表';
+$lang->pivot->export       = '导出透视表';
+$lang->pivot->query        = '查询';
+$lang->pivot->browseAction = '进入透视表设计';
 
 $lang->pivot->id          = 'ID';
 $lang->pivot->name        = '名称';

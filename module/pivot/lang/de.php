@@ -1,14 +1,15 @@
 <?php
-$lang->pivot->index       = 'Home';
-$lang->pivot->list        = 'Liste';
-$lang->pivot->preview     = 'View pivot';
-$lang->pivot->create      = 'Create pivot';
-$lang->pivot->edit        = 'Edit pivot';
-$lang->pivot->browse      = 'Browse pivot';
-$lang->pivot->delete      = 'Delete pivot';
-$lang->pivot->design      = 'Design pivot';
-$lang->pivot->export      = 'Export pivot';
-$lang->pivot->query       = 'Query';
+$lang->pivot->index        = 'Home';
+$lang->pivot->list         = 'Liste';
+$lang->pivot->preview      = 'View pivot';
+$lang->pivot->create       = 'Create pivot';
+$lang->pivot->edit         = 'Edit pivot';
+$lang->pivot->browse       = 'Browse pivot';
+$lang->pivot->delete       = 'Delete pivot';
+$lang->pivot->design       = 'Design pivot';
+$lang->pivot->export       = 'Export pivot';
+$lang->pivot->query        = 'Query';
+$lang->pivot->browseAction = 'Design in Pivot Table';
 
 $lang->pivot->id          = 'ID';
 $lang->pivot->name        = 'Name';
