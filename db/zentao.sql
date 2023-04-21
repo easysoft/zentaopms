@@ -1212,16 +1212,16 @@ CREATE UNIQUE INDEX `plan_story` ON `zt_planstory`(`plan`,`story`);
 -- DROP TABLE IF EXISTS `zt_priv`;
 CREATE TABLE IF NOT EXISTS `zt_priv` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
-  `module` varchar(30) NOT NULL,
-  `method` varchar(30) NOT NULL,
-  `package` mediumint(8) unsigned NOT NULL,
+  `module` varchar(30) NOT NULL DEFAULT '',
+  `method` varchar(30) NOT NULL DEFAULT '',
+  `parent` mediumint(8) unsigned NOT NULL,
   `edition` varchar(30) NOT NULL DEFAULT ',open,biz,max,',
   `vision` varchar(30) NOT NULL DEFAULT ',rnd,',
   `system` enum('0','1') NOT NULL DEFAULT '0',
   `order` mediumint(8) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `priv` (`module`,`method`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=1768 DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_privmanager`;
 CREATE TABLE IF NOT EXISTS `zt_privmanager` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
