@@ -8384,13 +8384,12 @@ class upgradeModel extends model
      */
     public function processDashboard()
     {
-        $dimension  = $this->dao->select('id')->from(TABLE_DIMENSION)->where('code')->eq('efficiency')->fetch('id');
         $dashboards = $this->dao->select('*')->from(TABLE_DASHBOARD)->fetchAll();
         foreach($dashboards as $dashboard)
         {
             $screen = new stdclass();
             $screen->name        = $dashboard->name;
-            $screen->dimension   = $dimension ? $dimension : 0;
+            $screen->dimension   = 1;
             $screen->desc        = $dashboard->desc;
             $screen->scheme      = $this->processDashboardLayout($dashboard);
             $screen->deleted     = $dashboard->deleted;
