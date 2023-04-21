@@ -5,6 +5,7 @@
     <div class="cell" id="content">
       <div class="detail no-padding">
         <div class="detail-title no-padding doc-title">
+          <div class="flex-left">
           <div class="title" title="<?php echo $doc->title;?>">
             <?php echo $doc->title;?>
             <?php if($doc->deleted):?>
@@ -37,6 +38,7 @@
             </div>
           </div>
           <?php endif;?>
+          </div>
           <div class="actions">
             <?php echo html::a("javascript:fullScreen()", '<span class="icon-fullscreen"></span>', '', "title='{$lang->fullscreen}' class='btn btn-link fullscreen-btn'");?>
             <?php if(common::hasPriv('doc', 'collect')):?>
