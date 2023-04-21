@@ -1322,3 +1322,2622 @@ CREATE TABLE IF NOT EXISTS `zt_docaction` (
     KEY `actor` (`actor`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+/* Refactor sql. */
+ALTER TABLE `zt_acl`
+CHANGE `account` `account` char(30) NOT NULL DEFAULT '',
+CHANGE `objectType` `objectType` char(30) NOT NULL DEFAULT '',
+CHANGE `objectID` `objectID` mediumint(9) NOT NULL DEFAULT '0',
+CHANGE `type` `type` char(40) NOT NULL DEFAULT 'whitelist',
+CHANGE `source` `source` char(30) NOT NULL DEFAULT '';
+
+ALTER TABLE `zt_action`
+CHANGE `objectType` `objectType` varchar(30) NOT NULL DEFAULT '',
+CHANGE `objectID` `objectID` mediumint(8) unsigned NOT NULL DEFAULT '0',
+CHANGE `project` `project` mediumint(8) unsigned NOT NULL DEFAULT '0',
+CHANGE `execution` `execution` mediumint(8) unsigned NOT NULL DEFAULT '0',
+CHANGE `actor` `actor` varchar(100) NOT NULL DEFAULT '',
+CHANGE `action` `action` varchar(80) NOT NULL DEFAULT '',
+CHANGE `date` `date` datetime NULL,
+CHANGE `read` `read` enum('0','1') NOT NULL DEFAULT '0',
+CHANGE `vision` `vision` varchar(10) NOT NULL DEFAULT 'rnd',
+CHANGE `efforted` `efforted` tinyint(1) NOT NULL DEFAULT '0';
+
+ALTER TABLE `zt_api_lib_release`
+CHANGE `lib` `lib` int UNSIGNED NOT NULL DEFAULT 0,
+CHANGE `desc` `desc` varchar(255) NOT NULL DEFAULT '',
+CHANGE `version` `version` varchar(255) NOT NULL DEFAULT '',
+CHANGE `addedBy` `addedBy` varchar(30) NOT NULL DEFAULT 0,
+CHANGE `addedDate` `addedDate` datetime NULL;
+
+ALTER TABLE `zt_api`
+CHANGE `product` `product` varchar(255) NOT NULL DEFAULT '',
+CHANGE `lib` `lib` int UNSIGNED NOT NULL DEFAULT 0,
+CHANGE `module` `module` int UNSIGNED NOT NULL DEFAULT 0,
+CHANGE `title` `title` varchar(100) NOT NULL DEFAULT '',
+CHANGE `path` `path` varchar(255) NOT NULL DEFAULT '',
+CHANGE `protocol` `protocol` varchar(10)  NOT NULL DEFAULT '',
+CHANGE `method` `method` varchar(10)  NOT NULL DEFAULT '',
+CHANGE `requestType` `requestType` varchar(100) NOT NULL DEFAULT '',
+CHANGE `responseType` `responseType` varchar(100) NOT NULL DEFAULT '',
+CHANGE `status` `status` varchar(20)  NOT NULL DEFAULT '',
+CHANGE `version` `version` smallint UNSIGNED NOT NULL DEFAULT 0,
+CHANGE `addedBy` `addedBy` varchar(30)  NOT NULL DEFAULT 0,
+CHANGE `addedDate` `addedDate` datetime NULL,
+CHANGE `editedBy` `editedBy` varchar(30) NOT NULL DEFAULT '',
+CHANGE `editedDate` `editedDate` datetime NULL,
+CHANGE `deleted` `deleted` enum ('0', '1') NOT NULL DEFAULT '0';
+
+ALTER TABLE `zt_apispec`
+CHANGE `doc` `doc` int UNSIGNED NOT NULL DEFAULT 0,
+CHANGE `module` `module` int UNSIGNED NOT NULL DEFAULT 0,
+CHANGE `title` `title` varchar(100) NOT NULL DEFAULT '',
+CHANGE `path` `path` varchar(255) NOT NULL DEFAULT '',
+CHANGE `protocol` `protocol` varchar(10)  NOT NULL DEFAULT '',
+CHANGE `method` `method` varchar(10)  NOT NULL DEFAULT '',
+CHANGE `requestType` `requestType` varchar(100) NOT NULL DEFAULT '',
+CHANGE `responseType` `responseType` varchar(100) NOT NULL DEFAULT '',
+CHANGE `status` `status` varchar(20)  NOT NULL DEFAULT '',
+CHANGE `version` `version` smallint UNSIGNED NOT NULL DEFAULT 0,
+CHANGE `addedBy` `addedBy` varchar(30) NOT NULL DEFAULT 0,
+CHANGE `addedDate` `addedDate` datetime NULL;
+
+ALTER TABLE `zt_apistruct`
+CHANGE `lib` `lib` int UNSIGNED NOT NULL DEFAULT 0,
+CHANGE `name` `name` varchar(30)  NOT NULL DEFAULT '',
+CHANGE `type` `type` varchar(50)  NOT NULL DEFAULT '',
+CHANGE `version` `version` smallint unsigned NOT NULL DEFAULT 0,
+CHANGE `addedBy` `addedBy` varchar(30) NOT NULL DEFAULT 0,
+CHANGE `addedDate` `addedDate` datetime NULL,
+CHANGE `editedBy` `editedBy` varchar(30) NOT NULL DEFAULT '',
+CHANGE `editedDate` `editedDate` datetime NULL,
+CHANGE `deleted` `deleted` enum ('0', '1') NOT NULL DEFAULT '0';
+
+ALTER TABLE `zt_apistruct_spec`
+CHANGE `name` `name` varchar(255) NOT NULL DEFAULT '',
+CHANGE `type` `type` varchar(50)  NOT NULL DEFAULT '',
+CHANGE `desc` `desc` varchar(255) NOT NULL DEFAULT '',
+CHANGE `version` `version` smallint unsigned NOT NULL DEFAULT 0,
+CHANGE `addedBy` `addedBy` varchar(30) NOT NULL DEFAULT 0,
+CHANGE `addedDate` `addedDate` datetime NULL;
+
+ALTER TABLE `zt_approval`
+CHANGE `flow` `flow` mediumint(8) NOT NULL DEFAULT '0',
+CHANGE `objectType` `objectType` varchar(30) NOT NULL DEFAULT '',
+CHANGE `objectID` `objectID` mediumint(9) NOT NULL DEFAULT '0',
+CHANGE `version` `version` mediumint(9) NOT NULL DEFAULT '0',
+CHANGE `status` `status` varchar(20) NOT NULL DEFAULT 'doing',
+CHANGE `result` `result` varchar(20) NOT NULL DEFAULT '',
+CHANGE `createdBy` `createdBy` char(30) NOT NULL DEFAULT '',
+CHANGE `createdDate` `createdDate` datetime NULL,
+CHANGE `deleted` `deleted` tinyint(4) NOT NULL DEFAULT '0';
+
+ALTER TABLE `zt_approvalflow`
+CHANGE `name` `name` varchar(255) NOT NULL DEFAULT '',
+CHANGE `code` `code` varchar(100) NOT NULL DEFAULT '',
+CHANGE `version` `version` mediumint(8) NOT NULL DEFAULT '1',
+CHANGE `createdBy` `createdBy` varchar(30) NOT NULL DEFAULT '',
+CHANGE `createdDate` `createdDate` datetime NULL,
+CHANGE `type` `type` varchar(30) NOT NULL DEFAULT '',
+CHANGE `deleted` `deleted` tinyint(4) NOT NULL DEFAULT '0';
+
+ALTER TABLE `zt_approvalflowobject`
+CHANGE `root` `root` int(8) NOT NULL DEFAULT '0',
+CHANGE `flow` `flow` int(8) NOT NULL DEFAULT '0',
+CHANGE `objectType` `objectType` char(30) NOT NULL DEFAULT '',
+CHANGE `objectID` `objectID` mediumint(9) NOT NULL DEFAULT '0',
+CHANGE `extra` `extra` varchar(255) NOT NULL DEFAULT '';
+
+ALTER TABLE `zt_approvalflowspec`
+CHANGE `flow` `flow` mediumint(8) NOT NULL DEFAULT '0',
+CHANGE `version` `version` mediumint(8) NOT NULL DEFAULT '0',
+CHANGE `createdBy` `createdBy` varchar(30) NOT NULL DEFAULT '',
+CHANGE `createdDate` `createdDate` datetime NULL;
+
+ALTER TABLE `zt_approvalnode`
+CHANGE `approval` `approval` mediumint(8) NOT NULL DEFAULT '0',
+CHANGE `title` `title` varchar(255) NOT NULL DEFAULT '',
+CHANGE `account` `account` char(30) NOT NULL DEFAULT '',
+CHANGE `node` `node` varchar(100) NOT NULL DEFAULT '',
+CHANGE `reviewType` `reviewType` varchar(100)  NOT NULL DEFAULT 'manual',
+CHANGE `multipleType` `multipleType` enum('and','or') NOT NULL DEFAULT 'and',
+CHANGE `status` `status` varchar(20) NOT NULL DEFAULT 'wait',
+CHANGE `result` `result` varchar(10) NOT NULL DEFAULT '',
+CHANGE `date` `date` date NULL,
+CHANGE `reviewedBy` `reviewedBy` char(30) NOT NULL DEFAULT '',
+CHANGE `reviewedDate` `reviewedDate` datetime NULL;
+
+ALTER TABLE `zt_approvalobject`
+CHANGE `approval` `approval` int(8) NOT NULL DEFAULT '0',
+CHANGE `objectType` `objectType` char(30) NOT NULL DEFAULT '',
+CHANGE `objectID` `objectID` mediumint(8) NOT NULL DEFAULT '0',
+CHANGE `extra` `extra` varchar(255) NOT NULL DEFAULT '';
+
+ALTER TABLE `zt_approvalrole`
+CHANGE `code` `code` char(30) NOT NULL DEFAULT '',
+CHANGE `name` `name` varchar(255) NOT NULL DEFAULT '',
+CHANGE `deleted` `deleted` enum('0','1') NOT NULL DEFAULT '0';
+
+ALTER TABLE `zt_block`
+CHANGE `account` `account` char(30) NOT NULL DEFAULT '',
+CHANGE `vision` `vision` varchar(10) NOT NULL DEFAULT 'rnd',
+CHANGE `module` `module` varchar(20) NOT NULL DEFAULT '',
+CHANGE `type` `type` char(30) NOT NULL DEFAULT '',
+CHANGE `title` `title` varchar(100) NOT NULL DEFAULT '',
+CHANGE `source` `source` varchar(20) NOT NULL DEFAULT '',
+CHANGE `block` `block` varchar(30) NOT NULL DEFAULT '',
+CHANGE `order` `order` tinyint(3) unsigned NOT NULL DEFAULT '0',
+CHANGE `grid` `grid` tinyint(3) unsigned NOT NULL DEFAULT '0',
+CHANGE `height` `height` smallint(5) unsigned NOT NULL DEFAULT '0',
+CHANGE `hidden` `hidden` tinyint(1) unsigned NOT NULL DEFAULT '0';
+
+ALTER TABLE `zt_branch`
+CHANGE `product` `product` mediumint(8) unsigned NOT NULL DEFAULT '0',
+CHANGE `name` `name` varchar(255) NOT NULL DEFAULT '',
+CHANGE `default` `default` enum ('0', '1') NOT NULL DEFAULT '0',
+CHANGE `status` `status` enum ('active', 'closed') NOT NULL DEFAULT 'active',
+CHANGE `desc` `desc` varchar(255) NOT NULL DEFAULT '',
+CHANGE `createdDate` `createdDate` date NULL,
+CHANGE `closedDate` `closedDate` date NULL,
+CHANGE `order` `order` smallint unsigned NOT NULL DEFAULT '0',
+CHANGE `deleted` `deleted` enum('0','1') NOT NULL DEFAULT '0';
+
+ALTER TABLE `zt_bug`
+CHANGE `project` `project` mediumint(8) unsigned NOT NULL DEFAULT '0',
+CHANGE `product` `product` mediumint(8) unsigned NOT NULL DEFAULT '0',
+CHANGE `injection` `injection` mediumint(8) unsigned NOT NULL DEFAULT '0',
+CHANGE `identify` `identify` mediumint(8) unsigned NOT NULL DEFAULT '0',
+CHANGE `branch` `branch` mediumint(8) unsigned NOT NULL DEFAULT '0',
+CHANGE `module` `module` mediumint(8) unsigned NOT NULL DEFAULT '0',
+CHANGE `execution` `execution` mediumint(8) unsigned NOT NULL DEFAULT '0',
+CHANGE `plan` `plan` mediumint(8) unsigned NOT NULL DEFAULT '0',
+CHANGE `story` `story` mediumint(8) unsigned NOT NULL DEFAULT '0',
+CHANGE `storyVersion` `storyVersion` smallint(6) NOT NULL DEFAULT '1',
+CHANGE `task` `task` mediumint(8) unsigned NOT NULL DEFAULT '0',
+CHANGE `toTask` `toTask` mediumint(8) unsigned NOT NULL DEFAULT '0',
+CHANGE `toStory` `toStory` mediumint(8) NOT NULL DEFAULT '0',
+CHANGE `title` `title` varchar(255) NOT NULL DEFAULT '',
+CHANGE `keywords` `keywords` varchar(255) NOT NULL DEFAULT '',
+CHANGE `severity` `severity` tinyint(4) NOT NULL DEFAULT '0',
+CHANGE `pri` `pri` tinyint(3) unsigned NOT NULL DEFAULT '0',
+CHANGE `type` `type` varchar(30) NOT NULL DEFAULT '',
+CHANGE `os` `os` varchar(255) NOT NULL DEFAULT '',
+CHANGE `browser` `browser` varchar(255) NOT NULL DEFAULT '',
+CHANGE `hardware` `hardware` varchar(30) NOT NULL DEFAULT '',
+CHANGE `found` `found` varchar(30) NOT NULL DEFAULT '',
+CHANGE `status` `status` enum('active','resolved','closed') NOT NULL DEFAULT 'active',
+CHANGE `subStatus` `subStatus` varchar(30) NOT NULL DEFAULT '',
+CHANGE `color` `color` char(7) NOT NULL DEFAULT '',
+CHANGE `confirmed` `confirmed` tinyint(1) NOT NULL DEFAULT '0',
+CHANGE `activatedCount` `activatedCount` smallint(6) NOT NULL DEFAULT '0',
+CHANGE `activatedDate` `activatedDate` datetime NULL,
+CHANGE `feedbackBy` `feedbackBy` varchar(100) NOT NULL DEFAULT '',
+CHANGE `notifyEmail` `notifyEmail` varchar(100) NOT NULL DEFAULT '',
+CHANGE `openedBy` `openedBy` varchar(30) NOT NULL DEFAULT '',
+CHANGE `openedDate` `openedDate` datetime NULL,
+CHANGE `openedBuild` `openedBuild` varchar(255) NOT NULL DEFAULT '',
+CHANGE `assignedTo` `assignedTo` varchar(30) NOT NULL DEFAULT '',
+CHANGE `assignedDate` `assignedDate` datetime NULL,
+CHANGE `deadline` `deadline` date NULL,
+CHANGE `resolvedBy` `resolvedBy` varchar(30) NOT NULL DEFAULT '',
+CHANGE `resolution` `resolution` varchar(30) NOT NULL DEFAULT '',
+CHANGE `resolvedBuild` `resolvedBuild` varchar(30) NOT NULL DEFAULT '',
+CHANGE `resolvedDate` `resolvedDate` datetime NULL,
+CHANGE `closedBy` `closedBy` varchar(30) NOT NULL DEFAULT '',
+CHANGE `closedDate` `closedDate` datetime NULL,
+CHANGE `duplicateBug` `duplicateBug` mediumint(8) unsigned NOT NULL DEFAULT '0',
+CHANGE `linkBug` `linkBug` varchar(255) NOT NULL DEFAULT '',
+CHANGE `case` `case` mediumint(8) unsigned NOT NULL DEFAULT '0',
+CHANGE `caseVersion` `caseVersion` smallint(6) NOT NULL DEFAULT '1',
+CHANGE `feedback` `feedback` mediumint(8) unsigned NOT NULL DEFAULT '0',
+CHANGE `result` `result` mediumint(8) unsigned NOT NULL DEFAULT '0',
+CHANGE `repo` `repo` mediumint(8) unsigned NOT NULL DEFAULT '0',
+CHANGE `mr` `mr` mediumint(8) unsigned NOT NULL DEFAULT '0',
+CHANGE `lines` `lines` varchar(10) NOT NULL DEFAULT '',
+CHANGE `v1` `v1` varchar(40) NOT NULL DEFAULT '',
+CHANGE `v2` `v2` varchar(40) NOT NULL DEFAULT '',
+CHANGE `repoType` `repoType` varchar(30) NOT NULL DEFAULT '',
+CHANGE `issueKey` `issueKey` varchar(50) NOT NULL DEFAULT '',
+CHANGE `testtask` `testtask` mediumint(8) unsigned NOT NULL DEFAULT '0',
+CHANGE `lastEditedBy` `lastEditedBy` varchar(30) NOT NULL DEFAULT '',
+CHANGE `lastEditedDate` `lastEditedDate` datetime NULL,
+CHANGE `deleted` `deleted` enum('0','1') NOT NULL DEFAULT '0';
+
+ALTER TABLE `zt_build`
+CHANGE `branch` `branch` varchar(255) NOT NULL DEFAULT '0',
+CHANGE `builds` `builds` varchar(255) NOT NULL DEFAULT '',
+CHANGE `name` `name` char(150) NOT NULL DEFAULT '',
+CHANGE `scmPath` `scmPath` char(255) NOT NULL DEFAULT '',
+CHANGE `filePath` `filePath` char(255) NOT NULL DEFAULT '',
+CHANGE `date` `date` date NULL,
+CHANGE `createdBy` `createdBy` varchar(30) NOT NULL DEFAULT '',
+CHANGE `createdDate` `createdDate` datetime NULL;
+
+ALTER TABLE `zt_burn`
+CHANGE `product` `product` mediumint(8) unsigned NOT NULL DEFAULT '0',
+CHANGE `storyPoint` `storyPoint` float NOT NULL DEFAULT '0';
+
+ALTER TABLE `zt_case`
+CHANGE `title` `title` varchar(255) NOT NULL DEFAULT '',
+CHANGE `keywords` `keywords` varchar(255) NOT NULL DEFAULT '',
+CHANGE `frame` `frame` varchar(10) NOT NULL DEFAULT '',
+CHANGE `stage` `stage` varchar(255) NOT NULL DEFAULT '',
+CHANGE `howRun` `howRun` varchar(30) NOT NULL DEFAULT '',
+CHANGE `scriptedBy` `scriptedBy` varchar(30) NOT NULL DEFAULT '',
+CHANGE `scriptedDate` `scriptedDate` date NULL,
+CHANGE `scriptStatus` `scriptStatus` varchar(30) NOT NULL DEFAULT '',
+CHANGE `scriptLocation` `scriptLocation` varchar(255) NOT NULL DEFAULT '',
+CHANGE `color` `color` char(7) NOT NULL DEFAULT '',
+CHANGE `openedDate` `openedDate` datetime NULL,
+CHANGE `reviewedBy` `reviewedBy` varchar(255) NOT NULL DEFAULT '',
+CHANGE `reviewedDate` `reviewedDate` date NULL,
+CHANGE `lastEditedDate` `lastEditedDate` datetime NULL,
+CHANGE `linkCase` `linkCase` varchar(255) NOT NULL DEFAULT '',
+CHANGE `fromBug` `fromBug` mediumint(8) unsigned NOT NULL DEFAULT 0,
+CHANGE `fromCaseID` `fromCaseID` mediumint(8) unsigned NOT NULL DEFAULT 0,
+CHANGE `lastRunner` `lastRunner` varchar(30) NOT NULL DEFAULT '',
+CHANGE `lastRunDate` `lastRunDate` datetime NULL,
+CHANGE `lastRunResult` `lastRunResult` char(30) NOT NULL DEFAULT '';
+
+ALTER TABLE `zt_casestep`
+CHANGE `type` `type` varchar(10) NOT NULL DEFAULT 'step';
+
+ALTER TABLE `zt_cfd`
+CHANGE `execution` `execution` int(8) NOT NULL DEFAULT '0',
+CHANGE `type` `type` char(30) NOT NULL DEFAULT '',
+CHANGE `name` `name` char(30) NOT NULL DEFAULT '',
+CHANGE `count` `count` smallint NOT NULL DEFAULT '0',
+CHANGE `date` `date` date NULL;
+
+ALTER TABLE `zt_chart`
+CHANGE `name` `name` varchar(255) NOT NULL DEFAULT '',
+CHANGE `dimension` `dimension` mediumint(8) unsigned NOT NULL DEFAULT '0',
+CHANGE `type` `type` varchar(30) NOT NULL DEFAULT '',
+CHANGE `group` `group` varchar(255) NOT NULL DEFAULT '',
+CHANGE `dataset` `dataset` varchar(30) NOT NULL DEFAULT '0',
+CHANGE `step` `step` tinyint(1) unsigned NOT NULL DEFAULT '0',
+CHANGE `stage` `stage` enum('draft','published') NOT NULL DEFAULT 'draft',
+CHANGE `builtin` `builtin` tinyint(1) unsigned NOT NULL DEFAULT '0',
+CHANGE `createdBy` `createdBy` char(30) NOT NULL DEFAULT '',
+CHANGE `createdDate` `createdDate` datetime NULL,
+CHANGE `editedBy` `editedBy` varchar(30) NOT NULL DEFAULT '',
+CHANGE `editedDate` `editedDate` datetime NULL,
+CHANGE `deleted` `deleted` tinyint NOT NULL DEFAULT '0';
+
+ALTER TABLE `zt_screen`
+CHANGE `dimension` `dimension` mediumint(8) unsigned NOT NULL DEFAULT '0',
+CHANGE `name` `name` varchar(255) NOT NULL DEFAULT '',
+CHANGE `status` `status` enum('draft','published') NOT NULL DEFAULT 'draft',
+CHANGE `builtin` `builtin` enum('0', '1') NOT NULL DEFAULT '0',
+CHANGE `createdBy` `createdBy` char(30) NOT NULL DEFAULT '',
+CHANGE `createdDate` `createdDate` datetime NULL,
+CHANGE `editedBy` `editedBy` char(30) NOT NULL DEFAULT '',
+CHANGE `editedDate` `editedDate` datetime NULL,
+CHANGE `deleted` `deleted` enum('0','1') NOT NULL DEFAULT '0';
+
+ALTER TABLE `zt_dimension`
+CHANGE `name` `name` varchar(90) NOT NULL DEFAULT '',
+CHANGE `code` `code` varchar(45) NOT NULL DEFAULT '',
+CHANGE `createdBy` `createdBy` varchar(30) NOT NULL DEFAULT '',
+CHANGE `createdDate` `createdDate` datetime NULL,
+CHANGE `editedBy` `editedBy` varchar(30) NOT NULL DEFAULT '',
+CHANGE `editedDate` `editedDate` datetime NULL;
+
+ALTER TABLE `zt_compile`
+CHANGE `name` `name` varchar(50) NOT NULL DEFAULT '',
+CHANGE `job` `job` mediumint(8) unsigned NOT NULL DEFAULT '0',
+CHANGE `queue` `queue` mediumint(8) NOT NULL DEFAULT '0',
+CHANGE `status` `status` varchar(255) NOT NULL DEFAULT '',
+CHANGE `atTime` `atTime` varchar(10) NOT NULL DEFAULT '',
+CHANGE `testtask` `testtask` mediumint(8) unsigned NOT NULL DEFAULT '0',
+CHANGE `tag` `tag` varchar(255) NOT NULL DEFAULT '',
+CHANGE `times` `times` tinyint(3) unsigned NOT NULL DEFAULT '0',
+CHANGE `createdBy` `createdBy` varchar(30) NOT NULL DEFAULT '',
+CHANGE `createdDate` `createdDate` datetime NULL,
+CHANGE `updateDate` `updateDate` datetime NULL,
+CHANGE `deleted` `deleted` enum('0','1') NOT NULL DEFAULT '0';
+
+ALTER TABLE `zt_config`
+CHANGE `vision` `vision` varchar(10) NOT NULL DEFAULT '',
+CHANGE `module` `module` varchar(30) NOT NULL DEFAULT '';
+
+ALTER TABLE `zt_cron`
+CHANGE `m` `m` varchar(20) NOT NULL DEFAULT '',
+CHANGE `h` `h` varchar(20) NOT NULL DEFAULT '',
+CHANGE `dom` `dom` varchar(20) NOT NULL DEFAULT '',
+CHANGE `mon` `mon` varchar(20) NOT NULL DEFAULT '',
+CHANGE `dow` `dow` varchar(20) NOT NULL DEFAULT '',
+CHANGE `remark` `remark` varchar(255) NOT NULL DEFAULT '',
+CHANGE `type` `type` varchar(20) NOT NULL DEFAULT '',
+CHANGE `buildin` `buildin` tinyint(1) NOT NULL DEFAULT '0',
+CHANGE `status` `status` varchar(20) NOT NULL DEFAULT '',
+CHANGE `lastTime` `lastTime` datetime NULL;
+
+ALTER TABLE `zt_dashboard`
+CHANGE `name` `name` varchar(255) NOT NULL DEFAULT '',
+CHANGE `module` `module` mediumint NOT NULL DEFAULT '0',
+CHANGE `createdBy` `createdBy` varchar(30) NOT NULL DEFAULT '',
+CHANGE `createdDate` `createdDate` datetime NULL,
+CHANGE `deleted` `deleted` tinyint NOT NULL DEFAULT '0';
+
+ALTER TABLE `zt_dataset`
+CHANGE `name` `name` varchar(155) NOT NULL DEFAULT '',
+CHANGE `createdBy` `createdBy` varchar(30) NOT NULL DEFAULT '',
+CHANGE `createdDate` `createdDate` datetime NULL,
+CHANGE `deleted` `deleted` tinyint NOT NULL DEFAULT '0';
+
+ALTER TABLE `zt_dataview`
+CHANGE `group` `group` mediumint(8) unsigned NOT NULL DEFAULT '0',
+CHANGE `name` `name` varchar(155) NOT NULL DEFAULT '',
+CHANGE `code` `code` varchar(50) NOT NULL DEFAULT '',
+CHANGE `view` `view` varchar(57) NOT NULL DEFAULT '',
+CHANGE `createdBy` `createdBy` varchar(30) NOT NULL DEFAULT '',
+CHANGE `createdDate` `createdDate` datetime NULL,
+CHANGE `editedDate` `editedDate` datetime NULL,
+CHANGE `deleted` `deleted` tinyint NOT NULL DEFAULT '0';
+
+ALTER TABLE `zt_dept`
+CHANGE `name` `name` char(60) NOT NULL DEFAULT '';
+
+ALTER TABLE `zt_design`
+CHANGE `project` `project` varchar(255) NOT NULL DEFAULT '',
+CHANGE `product` `product` varchar(255) NOT NULL DEFAULT '',
+CHANGE `commitedBy` `commitedBy` varchar(30) NOT NULL DEFAULT '',
+CHANGE `execution` `execution` mediumint(8) unsigned NOT NULL DEFAULT '0',
+CHANGE `name` `name` varchar(255) NOT NULL DEFAULT '',
+CHANGE `status` `status` varchar(30) NOT NULL DEFAULT '',
+CHANGE `createdBy` `createdBy` varchar(30) NOT NULL DEFAULT '',
+CHANGE `createdDate` `createdDate` datetime NULL,
+CHANGE `editedBy` `editedBy` varchar(30) NOT NULL DEFAULT '',
+CHANGE `editedDate` `editedDate` datetime NULL,
+CHANGE `assignedTo` `assignedTo` varchar(30) NOT NULL DEFAULT '',
+CHANGE `assignedBy` `assignedBy` varchar(30) NOT NULL DEFAULT '',
+CHANGE `assignedDate` `assignedDate` datetime NULL,
+CHANGE `deleted` `deleted` enum('0','1') NOT NULL DEFAULT '0',
+CHANGE `story` `story` char(30) NOT NULL DEFAULT '',
+CHANGE `version` `version` smallint(6) NOT NULL DEFAULT '0',
+CHANGE `type` `type` char(30) NOT NULL DEFAULT '';
+
+ALTER TABLE `zt_designspec`
+CHANGE `design` `design` mediumint(8) NOT NULL DEFAULT '0',
+CHANGE `version` `version` smallint(6) NOT NULL DEFAULT '0',
+CHANGE `name` `name` varchar(255) NOT NULL DEFAULT '',
+CHANGE `files` `files` varchar(255) NOT NULL DEFAULT '';
+
+ALTER TABLE `zt_doc`
+CHANGE `vision` `vision` varchar(10) NOT NULL DEFAULT 'rnd',
+CHANGE `project` `project` mediumint(8) unsigned NOT NULL DEFAULT '0',
+CHANGE `product` `product` mediumint(8) unsigned NOT NULL DEFAULT '0',
+CHANGE `execution` `execution` mediumint(8) unsigned NOT NULL DEFAULT '0',
+CHANGE `lib` `lib` varchar(30) NOT NULL DEFAULT '',
+CHANGE `template` `template` varchar(30) NOT NULL DEFAULT '',
+CHANGE `templateType` `templateType` varchar(30) NOT NULL DEFAULT '',
+CHANGE `chapterType` `chapterType` varchar(30) NOT NULL DEFAULT '',
+CHANGE `module` `module` varchar(30) NOT NULL DEFAULT '',
+CHANGE `title` `title` varchar(255) NOT NULL DEFAULT '',
+CHANGE `keywords` `keywords` varchar(255) NOT NULL DEFAULT '',
+CHANGE `type` `type` varchar(30) NOT NULL DEFAULT '',
+CHANGE `status` `status` varchar(30) COLLATE 'utf8_general_ci' NOT NULL DEFAULT 'normal',
+CHANGE `parent` `parent` smallint(5) unsigned NOT NULL DEFAULT '0',
+CHANGE `path` `path` char(255) NOT NULL DEFAULT '',
+CHANGE `grade` `grade` tinyint(3) unsigned NOT NULL DEFAULT '0',
+CHANGE `order` `order` smallint(5) unsigned NOT NULL DEFAULT '0',
+CHANGE `views` `views` smallint(5) unsigned NOT NULL DEFAULT '0',
+CHANGE `assetLib` `assetLib` mediumint(8) unsigned NOT NULL DEFAULT '0',
+CHANGE `assetLibType` `assetLibType` varchar(30) NOT NULL DEFAULT '',
+CHANGE `from` `from` mediumint(8) unsigned NOT NULL DEFAULT '0',
+CHANGE `fromVersion` `fromVersion` smallint(6) NOT NULL DEFAULT '1',
+CHANGE `collects` `collects` smallint(5) unsigned NOT NULL DEFAULT '0',
+CHANGE `addedBy` `addedBy` varchar(30) NOT NULL DEFAULT '',
+CHANGE `addedDate` `addedDate` datetime NULL,
+CHANGE `assignedTo` `assignedTo` varchar(30) NOT NULL DEFAULT '',
+CHANGE `assignedDate` `assignedDate` datetime NULL,
+CHANGE `approvedDate` `approvedDate` date NULL,
+CHANGE `editedBy` `editedBy` varchar(30) NOT NULL DEFAULT '',
+CHANGE `editedDate` `editedDate` datetime NULL,
+CHANGE `acl` `acl` varchar(10) NOT NULL DEFAULT 'open',
+CHANGE `groups` `groups` varchar(255) NOT NULL DEFAULT '',
+CHANGE `version` `version` smallint(5) unsigned NOT NULL DEFAULT '1',
+CHANGE `deleted` `deleted` enum('0','1') NOT NULL DEFAULT '0';
+
+ALTER TABLE `zt_docaction`
+CHANGE `doc` `doc` mediumint(8) unsigned NOT NULL DEFAULT '0',
+CHANGE `action` `action` varchar(80) NOT NULL DEFAULT '',
+CHANGE `actor` `actor` char(30) NOT NULL DEFAULT '',
+CHANGE `date` `date` datetime NULL;
+
+ALTER TABLE `zt_doccontent`
+CHANGE `doc` `doc` mediumint(8) unsigned NOT NULL DEFAULT '0',
+CHANGE `title` `title` varchar(255) NOT NULL DEFAULT '',
+CHANGE `digest` `digest` varchar(255) NOT NULL DEFAULT '',
+CHANGE `type` `type` varchar(10) NOT NULL DEFAULT '',
+CHANGE `version` `version` smallint(5) unsigned NOT NULL DEFAULT '0';
+
+ALTER TABLE `zt_doclib`
+CHANGE `type` `type` varchar(30) NOT NULL DEFAULT '',
+CHANGE `vision` `vision` varchar(10) NOT NULL DEFAULT 'rnd',
+CHANGE `product` `product` mediumint(8) unsigned NOT NULL DEFAULT '0',
+CHANGE `project` `project` mediumint(8) unsigned NOT NULL DEFAULT '0',
+CHANGE `execution` `execution` mediumint(8) unsigned NOT NULL DEFAULT '0',
+CHANGE `name` `name` varchar(60) NOT NULL DEFAULT '',
+CHANGE `baseUrl` `baseUrl` varchar(255) NOT NULL DEFAULT '',
+CHANGE `acl` `acl` varchar(10) NOT NULL DEFAULT 'open',
+CHANGE `groups` `groups` varchar(255) NOT NULL DEFAULT '',
+CHANGE `main` `main` enum('0','1') NOT NULL DEFAULT '0',
+CHANGE `order` `order` tinyint(5) unsigned NOT NULL DEFAULT '0',
+CHANGE `addedBy` `addedBy` varchar(30) NOT NULL DEFAULT '',
+CHANGE `addedDate` `addedDate` datetime NULL,
+CHANGE `deleted` `deleted` enum('0','1') NOT NULL DEFAULT '0';
+
+ALTER TABLE `zt_effort`
+CHANGE `objectType` `objectType` varchar(30) NOT NULL DEFAULT '',
+CHANGE `objectID` `objectID` mediumint(8) unsigned NOT NULL DEFAULT '0',
+CHANGE `project` `project` mediumint(8) unsigned NOT NULL DEFAULT '0',
+CHANGE `execution` `execution` mediumint(8) unsigned NOT NULL DEFAULT '0',
+CHANGE `account` `account` varchar(30) NOT NULL DEFAULT '',
+CHANGE `vision` `vision` varchar(10) NOT NULL DEFAULT 'rnd',
+CHANGE `date` `date` date NULL,
+CHANGE `left` `left` float NOT NULL DEFAULT '0',
+CHANGE `consumed` `consumed` float NOT NULL DEFAULT '0',
+CHANGE `begin` `begin` smallint(4) unsigned zerofill NOT NULL DEFAULT '0',
+CHANGE `end` `end` smallint(4) unsigned zerofill NOT NULL DEFAULT '0',
+CHANGE `order` `order` tinyint(3) unsigned NOT NULL DEFAULT '0',
+CHANGE `deleted` `deleted` enum('0','1') NOT NULL DEFAULT '0';
+
+ALTER TABLE `zt_entry`
+CHANGE `name` `name` varchar(50) NOT NULL DEFAULT '',
+CHANGE `account` `account` varchar(30) NOT NULL DEFAULT '',
+CHANGE `code` `code` varchar(20) NOT NULL DEFAULT '',
+CHANGE `key` `key` varchar(32) NOT NULL DEFAULT '',
+CHANGE `freePasswd` `freePasswd` enum('0','1') NOT NULL DEFAULT '0',
+CHANGE `ip` `ip` varchar(100) NOT NULL DEFAULT '',
+CHANGE `createdBy` `createdBy` varchar(30) NOT NULL DEFAULT '',
+CHANGE `createdDate` `createdDate` datetime NULL,
+CHANGE `calledTime` `calledTime` int(10) unsigned NOT NULL DEFAULT '0',
+CHANGE `editedBy` `editedBy` varchar(30) NOT NULL DEFAULT '',
+CHANGE `editedDate` `editedDate` datetime NULL,
+CHANGE `deleted` `deleted` enum('0', '1') NOT NULL DEFAULT '0';
+
+ALTER TABLE `zt_expect`
+CHANGE `userID` `userID` mediumint(8) NOT NULL DEFAULT '0',
+CHANGE `project` `project` mediumint(8) NOT NULL DEFAULT 0,
+CHANGE `createdBy` `createdBy` char(30) NOT NULL DEFAULT '',
+CHANGE `createdDate` `createdDate` date NULL,
+CHANGE `deleted` `deleted` enum('0','1') NOT NULL DEFAULT '0';
+
+ALTER TABLE `zt_extension`
+CHANGE `name` `name` varchar(150) NOT NULL DEFAULT '',
+CHANGE `code` `code` varchar(30) NOT NULL DEFAULT '',
+CHANGE `version` `version` varchar(50) NOT NULL DEFAULT '',
+CHANGE `author` `author` varchar(100) NOT NULL DEFAULT '',
+CHANGE `site` `site` varchar(150) NOT NULL DEFAULT '',
+CHANGE `zentaoCompatible` `zentaoCompatible` varchar(100) NOT NULL DEFAULT '',
+CHANGE `installedTime` `installedTime` datetime NULL,
+CHANGE `depends` `depends` varchar(100) NOT NULL DEFAULT '',
+CHANGE `status` `status` varchar(20) NOT NULL DEFAULT '';
+
+ALTER TABLE `zt_file`
+CHANGE `pathname` `pathname` char(100) NOT NULL DEFAULT '',
+CHANGE `title` `title` varchar(255) NOT NULL DEFAULT '',
+CHANGE `extension` `extension` char(30) NOT NULL DEFAULT '',
+CHANGE `size` `size` int(10) unsigned NOT NULL DEFAULT '0',
+CHANGE `objectType` `objectType` char(30) NOT NULL DEFAULT '',
+CHANGE `objectID` `objectID` mediumint(9) NOT NULL DEFAULT '0',
+CHANGE `addedBy` `addedBy` char(30) NOT NULL DEFAULT '',
+CHANGE `addedDate` `addedDate` datetime NULL,
+CHANGE `downloads` `downloads` mediumint(8) unsigned NOT NULL DEFAULT '0',
+CHANGE `extra` `extra` varchar(255) NOT NULL DEFAULT '',
+CHANGE `deleted` `deleted` enum('0','1') NOT NULL DEFAULT '0';
+
+ALTER TABLE `zt_group`
+CHANGE `project` `project` mediumint(8) unsigned NOT NULL DEFAULT '0',
+CHANGE `vision` `vision` varchar(10) NOT NULL DEFAULT 'rnd',
+CHANGE `name` `name` char(30) NOT NULL DEFAULT '',
+CHANGE `role` `role` char(30) NOT NULL DEFAULT '',
+CHANGE `desc` `desc` char(255) NOT NULL DEFAULT '',
+CHANGE `developer` `developer` enum('0','1') NOT NULL DEFAULT '1';
+
+ALTER TABLE `zt_holiday`
+CHANGE `name` `name` varchar(30) NOT NULL DEFAULT '',
+CHANGE `type` `type` enum('holiday', 'working') NOT NULL DEFAULT 'holiday',
+CHANGE `year` `year` char(4) NOT NULL DEFAULT '',
+CHANGE `begin` `begin` date NULL,
+CHANGE `end` `end` date NULL;
+
+ALTER TABLE `zt_job`
+CHANGE `name` `name` varchar(50) NOT NULL DEFAULT '',
+CHANGE `repo` `repo` mediumint(8) unsigned NOT NULL DEFAULT '0',
+CHANGE `product` `product` mediumint(8) unsigned NOT NULL DEFAULT '0',
+CHANGE `frame` `frame` varchar(20) NOT NULL DEFAULT '',
+CHANGE `engine` `engine` varchar(20) NOT NULL DEFAULT '',
+CHANGE `server` `server` mediumint(8) unsigned NOT NULL DEFAULT '0',
+CHANGE `pipeline` `pipeline` varchar(500) NOT NULL DEFAULT '',
+CHANGE `triggerType` `triggerType` varchar(255) NOT NULL DEFAULT '',
+CHANGE `sonarqubeServer` `sonarqubeServer` mediumint(8) unsigned NOT NULL DEFAULT '0',
+CHANGE `projectKey` `projectKey` varchar(255) NOT NULL DEFAULT '',
+CHANGE `svnDir` `svnDir` varchar(255) NOT NULL DEFAULT '',
+CHANGE `atDay` `atDay` varchar(255) NOT NULL DEFAULT '',
+CHANGE `atTime` `atTime` varchar(10) NOT NULL DEFAULT '',
+CHANGE `comment` `comment` varchar(255) NOT NULL DEFAULT '',
+CHANGE `createdBy` `createdBy` varchar(30) NOT NULL DEFAULT '',
+CHANGE `createdDate` `createdDate` datetime NULL,
+CHANGE `editedBy` `editedBy` varchar(30) NOT NULL DEFAULT '',
+CHANGE `editedDate` `editedDate` datetime NULL,
+CHANGE `lastExec` `lastExec` datetime NULL,
+CHANGE `lastStatus` `lastStatus` varchar(255) NOT NULL DEFAULT '',
+CHANGE `lastTag` `lastTag` varchar(255) NOT NULL DEFAULT '',
+CHANGE `lastSyncDate` `lastSyncDate` datetime NULL,
+CHANGE `deleted` `deleted` enum('0','1') NOT NULL DEFAULT '0';
+
+ALTER TABLE `zt_kanbanspace`
+CHANGE `name` `name` varchar(255) NOT NULL DEFAULT '',
+CHANGE `type` `type` varchar(50) NOT NULL DEFAULT '',
+CHANGE `owner` `owner` varchar(30) NOT NULL DEFAULT '',
+CHANGE `acl` `acl` char(30) NOT NULL DEFAULT 'open',
+CHANGE `order` `order` mediumint(8) NOT NULL DEFAULT '0',
+CHANGE `createdBy` `createdBy` char(30) NOT NULL DEFAULT '',
+CHANGE `createdDate` `createdDate` datetime NULL,
+CHANGE `lastEditedBy` `lastEditedBy` char(30) NOT NULL DEFAULT '',
+CHANGE `lastEditedDate` `lastEditedDate` datetime NULL,
+CHANGE `closedBy` `closedBy` char(30) NOT NULL DEFAULT '',
+CHANGE `closedDate` `closedDate` datetime NULL,
+CHANGE `activatedBy` `activatedBy` char(30) NOT NULL DEFAULT '',
+CHANGE `activatedDate` `activatedDate` datetime NULL,
+CHANGE `deleted` `deleted` enum('0', '1') NOT NULL DEFAULT '0';
+
+ALTER TABLE `zt_kanban`
+CHANGE `space` `space` mediumint(8) unsigned NOT NULL DEFAULT '0',
+CHANGE `name` `name` varchar(255) NOT NULL DEFAULT '',
+CHANGE `owner` `owner` varchar(30) NOT NULL DEFAULT '',
+CHANGE `acl` `acl` char(30) NOT NULL DEFAULT 'open',
+CHANGE `archived` `archived` enum('0', '1') NOT NULL DEFAULT '1',
+CHANGE `performable` `performable` enum ('0', '1') NOT NULL DEFAULT '0',
+CHANGE `order` `order` mediumint(8) NOT NULL DEFAULT '0',
+CHANGE `showWIP` `showWIP` enum('0','1') NOT NULL DEFAULT '1',
+CHANGE `fluidBoard` `fluidBoard` enum('0','1') NOT NULL DEFAULT '0',
+CHANGE `colWidth` `colWidth` smallint(4) NOT NULL DEFAULT '264',
+CHANGE `minColWidth` `minColWidth` smallint(4) NOT NULL DEFAULT '200',
+CHANGE `maxColWidth` `maxColWidth` smallint(4) NOT NULL DEFAULT '384',
+CHANGE `object` `object` varchar(255) NOT NULL DEFAULT '',
+CHANGE `createdBy` `createdBy` char(30) NOT NULL DEFAULT '',
+CHANGE `createdDate` `createdDate` datetime NULL,
+CHANGE `lastEditedBy` `lastEditedBy` char(30) NOT NULL DEFAULT '',
+CHANGE `lastEditedDate` `lastEditedDate` datetime NULL,
+CHANGE `closedBy` `closedBy` char(30) NOT NULL DEFAULT '',
+CHANGE `closedDate` `closedDate` datetime NULL,
+CHANGE `activatedBy` `activatedBy` char(30) NOT NULL DEFAULT '',
+CHANGE `activatedDate` `activatedDate` datetime NULL,
+CHANGE `deleted` `deleted` enum('0', '1') NOT NULL DEFAULT '0';
+
+ALTER TABLE `zt_kanbanregion`
+CHANGE `space` `space` mediumint(8) unsigned NOT NULL DEFAULT '0',
+CHANGE `kanban` `kanban` mediumint(8) unsigned NOT NULL DEFAULT '0',
+CHANGE `name` `name` varchar(255) NOT NULL DEFAULT '',
+CHANGE `order` `order` mediumint(8) NOT NULL DEFAULT '0',
+CHANGE `createdBy` `createdBy` char(30) NOT NULL DEFAULT '',
+CHANGE `createdDate` `createdDate` datetime NULL,
+CHANGE `lastEditedBy` `lastEditedBy` char(30) NOT NULL DEFAULT '',
+CHANGE `lastEditedDate` `lastEditedDate` datetime NULL,
+CHANGE `deleted` `deleted` enum('0', '1') NOT NULL DEFAULT '0';
+
+ALTER TABLE `zt_kanbancard`
+CHANGE `kanban` `kanban` mediumint(8) unsigned NOT NULL DEFAULT '0',
+CHANGE `region` `region` mediumint(8) unsigned NOT NULL DEFAULT '0',
+CHANGE `group` `group` mediumint(8) unsigned NOT NULL DEFAULT '0',
+CHANGE `fromID` `fromID` mediumint(8) unsigned NOT NULL DEFAULT '0',
+CHANGE `fromType` `fromType` varchar(30) NOT NULL DEFAULT '',
+CHANGE `name` `name` varchar(255) NOT NULL DEFAULT '',
+CHANGE `status` `status` varchar(30) NOT NULL DEFAULT 'doing',
+CHANGE `pri` `pri` mediumint(8) unsigned NOT NULL DEFAULT '0',
+CHANGE `begin` `begin` date NULL,
+CHANGE `end` `end` date NULL,
+CHANGE `estimate` `estimate` float unsigned NOT NULL DEFAULT '0',
+CHANGE `progress` `progress` float unsigned NOT NULL DEFAULT '0',
+CHANGE `color` `color` char(7) NOT NULL DEFAULT '',
+CHANGE `acl` `acl` char(30) NOT NULL DEFAULT 'open',
+CHANGE `order` `order` mediumint(8) NOT NULL DEFAULT '0',
+CHANGE `archived` `archived` enum('0', '1') NOT NULL DEFAULT '0',
+CHANGE `createdBy` `createdBy` char(30) NOT NULL DEFAULT '',
+CHANGE `createdDate` `createdDate` datetime NULL,
+CHANGE `lastEditedBy` `lastEditedBy` char(30) NOT NULL DEFAULT '',
+CHANGE `lastEditedDate` `lastEditedDate` datetime NULL,
+CHANGE `archivedBy` `archivedBy` char(30) NOT NULL DEFAULT '',
+CHANGE `archivedDate` `archivedDate` datetime NULL,
+CHANGE `assignedBy` `assignedBy` char(30) NOT NULL DEFAULT '',
+CHANGE `assignedDate` `assignedDate` datetime NULL,
+CHANGE `deleted` `deleted` enum('0', '1') NOT NULL DEFAULT '0';
+
+ALTER TABLE `zt_kanbancell`
+CHANGE `kanban` `kanban` mediumint(8) NOT NULL DEFAULT '0',
+CHANGE `lane` `lane` mediumint(8) NOT NULL DEFAULT '0',
+CHANGE `column` `column` mediumint(8) NOT NULL DEFAULT '0',
+CHANGE `type` `type` char(30) NOT NULL DEFAULT '';
+
+ALTER TABLE `zt_kanbangroup`
+CHANGE `kanban` `kanban` mediumint(8) unsigned NOT NULL DEFAULT '0',
+CHANGE `region` `region` mediumint(8) unsigned NOT NULL DEFAULT '0',
+CHANGE `order` `order` smallint(6) NOT NULL DEFAULT '0';
+
+ALTER TABLE `zt_kanbanlane`
+CHANGE `execution` `execution` mediumint(8) NOT NULL DEFAULT '0',
+CHANGE `type` `type` char(30) NOT NULL DEFAULT '',
+CHANGE `region` `region` mediumint(8) unsigned NOT NULL DEFAULT '0',
+CHANGE `group` `group` mediumint(8) unsigned NOT NULL DEFAULT '0',
+CHANGE `groupby` `groupby` char(30) NOT NULL DEFAULT '',
+CHANGE `extra` `extra` char(30) NOT NULL DEFAULT '',
+CHANGE `name` `name` varchar(255) NOT NULL DEFAULT '',
+CHANGE `color` `color` char(30) NOT NULL DEFAULT '',
+CHANGE `order` `order` smallint(6) NOT NULL DEFAULT '0',
+CHANGE `lastEditedTime` `lastEditedTime` datetime NULL;
+
+ALTER TABLE `zt_kanbancolumn`
+CHANGE `parent` `parent` mediumint(8) NOT NULL DEFAULT '0',
+CHANGE `type` `type` char(30) NOT NULL DEFAULT '',
+CHANGE `region` `region` mediumint(8) unsigned NOT NULL DEFAULT '0',
+CHANGE `group` `group` mediumint(8) NOT NULL DEFAULT '0',
+CHANGE `name` `name` varchar(255) NOT NULL DEFAULT '',
+CHANGE `color` `color` char(30) NOT NULL DEFAULT '',
+CHANGE `limit` `limit` smallint(6) NOT NULL DEFAULT '-1',
+CHANGE `order` `order` mediumint(8) NOT NULL DEFAULT '0',
+CHANGE `archived` `archived` enum('0', '1') NOT NULL DEFAULT '0';
+
+ALTER TABLE `zt_lang`
+CHANGE `lang` `lang` varchar(30) NOT NULL DEFAULT '',
+CHANGE `module` `module` varchar(30) NOT NULL DEFAULT '',
+CHANGE `section` `section` varchar(50) NOT NULL DEFAULT '',
+CHANGE `key` `key` varchar(60) NOT NULL DEFAULT '',
+CHANGE `vision` `vision` varchar(10) NOT NULL DEFAULT 'rnd';
+
+ALTER TABLE `zt_log`
+CHANGE `objectType` `objectType` varchar(30) NOT NULL DEFAULT '',
+CHANGE `objectID` `objectID` mediumint(8) unsigned NOT NULL DEFAULT '0',
+CHANGE `action` `action` mediumint(8) unsigned NOT NULL DEFAULT '0',
+CHANGE `date` `date` datetime NULL,
+CHANGE `url` `url` varchar(255) NOT NULL DEFAULT '',
+CHANGE `contentType` `contentType` varchar(30) NOT NULL DEFAULT '';
+
+ALTER TABLE `zt_module`
+CHANGE `type` `type` char(30) NOT NULL DEFAULT '',
+CHANGE `owner` `owner` varchar(30) NOT NULL DEFAULT '',
+CHANGE `short` `short` varchar(30) NOT NULL DEFAULT '';
+
+ALTER TABLE `zt_mr`
+CHANGE `hostID` `hostID` mediumint(8) unsigned NOT NULL DEFAULT '0',
+CHANGE `sourceProject` `sourceProject` varchar(50) NOT NULL DEFAULT '',
+CHANGE `sourceBranch` `sourceBranch` varchar(100) NOT NULL DEFAULT '',
+CHANGE `targetProject` `targetProject` varchar(50) NOT NULL DEFAULT '',
+CHANGE `targetBranch` `targetBranch` varchar(100) NOT NULL DEFAULT '',
+CHANGE `mriid` `mriid` int unsigned NOT NULL DEFAULT '0',
+CHANGE `title` `title` varchar(255) NOT NULL DEFAULT '',
+CHANGE `assignee` `assignee` varchar(255) NOT NULL DEFAULT '',
+CHANGE `reviewer` `reviewer` varchar(255) NOT NULL DEFAULT '',
+CHANGE `approver` `approver` varchar(255) NOT NULL DEFAULT '',
+CHANGE `createdBy` `createdBy` varchar(30) NOT NULL DEFAULT '',
+CHANGE `createdDate` `createdDate` datetime NULL,
+CHANGE `editedBy` `editedBy` varchar(30) NOT NULL DEFAULT '',
+CHANGE `editedDate` `editedDate` datetime NULL,
+CHANGE `deleted` `deleted` enum('0','1') NOT NULL DEFAULT '0',
+CHANGE `status` `status` char(30) NOT NULL DEFAULT '',
+CHANGE `mergeStatus` `mergeStatus` char(30) NOT NULL DEFAULT '',
+CHANGE `approvalStatus` `approvalStatus` char(30) NOT NULL DEFAULT '',
+CHANGE `needApproved` `needApproved` enum('0','1') NOT NULL DEFAULT '0',
+CHANGE `needCI` `needCI` enum('0','1') NOT NULL DEFAULT '0',
+CHANGE `repoID` `repoID` mediumint(8) unsigned NOT NULL DEFAULT '0',
+CHANGE `jobID` `jobID` mediumint(8) unsigned NOT NULL DEFAULT '0',
+CHANGE `compileID` `compileID` mediumint(8) unsigned NOT NULL DEFAULT '0',
+CHANGE `compileStatus` `compileStatus` char(30) NOT NULL DEFAULT '',
+CHANGE `removeSourceBranch` `removeSourceBranch` enum('0','1') NOT NULL DEFAULT '0',
+CHANGE `squash` `squash` enum('0','1') NOT NULL DEFAULT '0',
+CHANGE `synced` `synced` enum('0','1') COLLATE 'utf8_general_ci' NOT NULL DEFAULT '1',
+CHANGE `syncError` `syncError` varchar(255) NOT NULL DEFAULT '',
+CHANGE `hasNoConflict` `hasNoConflict` enum('0','1') COLLATE 'utf8_general_ci' NOT NULL DEFAULT '0';
+
+ALTER TABLE `zt_mrapproval`
+CHANGE `mrID` `mrID` mediumint(8) unsigned NOT NULL DEFAULT '0',
+CHANGE `account` `account` varchar(255) NOT NULL DEFAULT '',
+CHANGE `date` `date` datetime NULL,
+CHANGE `action` `action` char(30) NOT NULL DEFAULT '';
+
+ALTER TABLE `zt_notify`
+CHANGE `objectType` `objectType` varchar(50) NOT NULL DEFAULT '',
+CHANGE `objectID` `objectID` mediumint unsigned NOT NULL DEFAULT '0',
+CHANGE `action` `action` mediumint NOT NULL DEFAULT '0',
+CHANGE `toList` `toList` varchar(255) NOT NULL DEFAULT '',
+CHANGE `subject` `subject` varchar(255) NOT NULL DEFAULT '',
+CHANGE `createdBy` `createdBy` char(30) NOT NULL DEFAULT '',
+CHANGE `createdDate` `createdDate` datetime NULL,
+CHANGE `sendTime` `sendTime` datetime NULL,
+CHANGE `status` `status` varchar(10) NOT NULL DEFAULT 'wait';
+
+ALTER TABLE `zt_oauth`
+CHANGE `account` `account` varchar(30) NOT NULL DEFAULT '',
+CHANGE `openID` `openID` varchar(255) NOT NULL DEFAULT '',
+CHANGE `providerType` `providerType` varchar(30) NOT NULL DEFAULT '',
+CHANGE `providerID` `providerID` mediumint(8) unsigned NOT NULL DEFAULT '0';
+
+ALTER TABLE `zt_pipeline`
+CHANGE `type` `type` char(30) NOT NULL DEFAULT '',
+CHANGE `name` `name` varchar(50) NOT NULL DEFAULT '',
+CHANGE `createdBy` `createdBy` varchar(30) NOT NULL DEFAULT '',
+CHANGE `createdDate` `createdDate` datetime NULL,
+CHANGE `editedBy` `editedBy` varchar(30) NOT NULL DEFAULT '',
+CHANGE `editedDate` `editedDate` datetime NULL,
+CHANGE `deleted` `deleted` enum('0','1') NOT NULL DEFAULT '0';
+
+ALTER TABLE `zt_planstory`
+CHANGE `plan` `plan` mediumint(8) unsigned NOT NULL DEFAULT '0',
+CHANGE `story` `story` mediumint(8) unsigned NOT NULL DEFAULT '0',
+CHANGE `order` `order` mediumint(9) NOT NULL DEFAULT '0';
+
+ALTER TABLE `zt_priv`
+CHANGE `module` `module` varchar(30) NOT NULL DEFAULT '',
+CHANGE `method` `method` varchar(30) NOT NULL DEFAULT '',
+CHANGE `edition` `edition` varchar(30) NOT NULL DEFAULT ',open,biz,max,',
+CHANGE `vision` `vision` varchar(30) NOT NULL DEFAULT ',rnd,',
+CHANGE `system` `system` enum('0','1') NOT NULL DEFAULT '0';
+
+ALTER TABLE `zt_privmanager`
+CHANGE `type` `type` enum('view','module','package') NOT NULL DEFAULT 'package',
+CHANGE `edition` `edition` varchar(30) NOT NULL DEFAULT ',open,biz,max,',
+CHANGE `vision` `vision` varchar(30) NOT NULL DEFAULT ',rnd,';
+
+ALTER TABLE `zt_privlang`
+CHANGE `objectType` `objectType` enum('priv','manager') NOT NULL DEFAULT 'priv';
+
+ALTER TABLE `zt_product`
+CHANGE `program` `program` mediumint(8) unsigned NOT NULL DEFAULT '0',
+CHANGE `name` `name` varchar(110) NOT NULL DEFAULT '',
+CHANGE `code` `code` varchar(45) NOT NULL DEFAULT '',
+CHANGE `shadow` `shadow` tinyint(1) unsigned NOT NULL DEFAULT 0,
+CHANGE `bind` `bind` enum('0','1') NOT NULL DEFAULT '0',
+CHANGE `line` `line` mediumint(8) NOT NULL DEFAULT '0',
+CHANGE `type` `type` varchar(30) NOT NULL DEFAULT 'normal',
+CHANGE `status` `status` varchar(30) NOT NULL DEFAULT '',
+CHANGE `subStatus` `subStatus` varchar(30) NOT NULL DEFAULT '',
+CHANGE `PO` `PO` varchar(30) NOT NULL DEFAULT '',
+CHANGE `QD` `QD` varchar(30) NOT NULL DEFAULT '',
+CHANGE `RD` `RD` varchar(30) NOT NULL DEFAULT '',
+CHANGE `feedback` `feedback` varchar(30) NOT NULL DEFAULT '',
+CHANGE `ticket` `ticket` varchar(30) NOT NULL DEFAULT '',
+CHANGE `acl` `acl` enum('open','private','custom') NOT NULL DEFAULT 'open',
+CHANGE `createdBy` `createdBy` varchar(30) NOT NULL DEFAULT '',
+CHANGE `createdDate` `createdDate` datetime NULL,
+CHANGE `createdVersion` `createdVersion` varchar(20) NOT NULL DEFAULT '',
+CHANGE `order` `order` mediumint(8) unsigned NOT NULL DEFAULT 0,
+CHANGE `vision` `vision` varchar(10) NOT NULL DEFAULT 'rnd',
+CHANGE `deleted` `deleted` enum('0','1') NOT NULL DEFAULT '0';
+
+ALTER TABLE `zt_productplan`
+CHANGE `product` `product` mediumint(8) unsigned NOT NULL DEFAULT '0',
+CHANGE `branch` `branch` varchar(255) NOT NULL DEFAULT '0',
+CHANGE `parent` `parent` mediumint(9) NOT NULL DEFAULT '0',
+CHANGE `title` `title` varchar(90) NOT NULL DEFAULT '',
+CHANGE `begin` `begin` date NULL,
+CHANGE `end` `end` date NULL,
+CHANGE `closedReason` `closedReason` varchar(20) NOT NULL DEFAULT '',
+CHANGE `createdBy` `createdBy` varchar(30) NOT NULL DEFAULT '',
+CHANGE `createdDate` `createdDate` datetime NULL;
+
+ALTER TABLE `zt_project`
+CHANGE `project` `project` mediumint(8) NOT NULL DEFAULT 0,
+CHANGE `model` `model` char(30) NOT NULL DEFAULT '',
+CHANGE `type` `type` char(30) NOT NULL DEFAULT 'sprint',
+CHANGE `lifetime` `lifetime` char(30) NOT NULL DEFAULT '',
+CHANGE `budget` `budget` varchar(30) NOT NULL DEFAULT '0',
+CHANGE `budgetUnit` `budgetUnit` char(30) NOT NULL DEFAULT 'CNY',
+CHANGE `attribute` `attribute` varchar(30) NOT NULL DEFAULT '',
+CHANGE `percent` `percent` float unsigned NOT NULL DEFAULT '0',
+CHANGE `milestone` `milestone` enum('0','1') NOT NULL DEFAULT '0',
+CHANGE `auth` `auth` char(30) NOT NULL DEFAULT '',
+CHANGE `parent` `parent` mediumint(8) unsigned NOT NULL DEFAULT '0',
+CHANGE `path` `path` varchar(255) NOT NULL DEFAULT '',
+CHANGE `grade` `grade` tinyint(3) unsigned NOT NULL DEFAULT '0',
+CHANGE `name` `name` varchar(90) NOT NULL DEFAULT '',
+CHANGE `code` `code` varchar(45) NOT NULL DEFAULT '',
+CHANGE `hasProduct` `hasProduct` tinyint(1) unsigned NOT NULL DEFAULT 1,
+CHANGE `begin` `begin` date NULL,
+CHANGE `end` `end` date NULL,
+CHANGE `realBegan` `realBegan` date NULL,
+CHANGE `realEnd` `realEnd` date NULL,
+CHANGE `days` `days` smallint(5) unsigned NOT NULL DEFAULT 0,
+CHANGE `status` `status` varchar(10) NOT NULL DEFAULT '',
+CHANGE `subStatus` `subStatus` varchar(30) NOT NULL DEFAULT '',
+CHANGE `pri` `pri` enum('1','2','3','4') NOT NULL DEFAULT '1',
+CHANGE `version` `version` smallint(6) NOT NULL DEFAULT 0,
+CHANGE `parentVersion` `parentVersion` smallint(6) NOT NULL DEFAULT 0,
+CHANGE `planDuration` `planDuration` int(11) NOT NULL DEFAULT 0,
+CHANGE `realDuration` `realDuration` int(11) NOT NULL DEFAULT 0,
+CHANGE `openedBy` `openedBy` varchar(30) NOT NULL DEFAULT '',
+CHANGE `openedDate` `openedDate` datetime NULL,
+CHANGE `openedVersion` `openedVersion` varchar(20) NOT NULL DEFAULT '',
+CHANGE `lastEditedBy` `lastEditedBy` varchar(30) NOT NULL DEFAULT '',
+CHANGE `lastEditedDate` `lastEditedDate` datetime NULL,
+CHANGE `closedBy` `closedBy` varchar(30) NOT NULL DEFAULT '',
+CHANGE `closedDate` `closedDate` datetime NULL,
+CHANGE `canceledBy` `canceledBy` varchar(30) NOT NULL DEFAULT '',
+CHANGE `canceledDate` `canceledDate` datetime NULL,
+CHANGE `suspendedDate` `suspendedDate` date NULL,
+CHANGE `PO` `PO` varchar(30) NOT NULL DEFAULT '',
+CHANGE `PM` `PM` varchar(30) NOT NULL DEFAULT '',
+CHANGE `QD` `QD` varchar(30) NOT NULL DEFAULT '',
+CHANGE `RD` `RD` varchar(30) NOT NULL DEFAULT '',
+CHANGE `team` `team` varchar(90) NOT NULL DEFAULT '',
+CHANGE `acl` `acl` char(30) NOT NULL DEFAULT 'open',
+CHANGE `order` `order` mediumint(8) unsigned NOT NULL DEFAULT '0',
+CHANGE `vision` `vision` varchar(10) NOT NULL DEFAULT 'rnd',
+CHANGE `division` `division` enum('0','1') NOT NULL DEFAULT '1',
+CHANGE `fluidBoard` `fluidBoard` enum('0','1') NOT NULL DEFAULT '0',
+CHANGE `multiple` `multiple` enum('0','1') NOT NULL DEFAULT '1',
+CHANGE `colWidth` `colWidth` smallint(4) NOT NULL DEFAULT '264',
+CHANGE `minColWidth` `minColWidth` smallint(4) NOT NULL DEFAULT '200',
+CHANGE `maxColWidth` `maxColWidth` smallint(4) NOT NULL DEFAULT '384',
+CHANGE `deleted` `deleted` enum('0','1') NOT NULL DEFAULT '0';
+
+ALTER TABLE `zt_projectadmin`
+CHANGE `group` `group` smallint(6) NOT NULL DEFAULT '0',
+CHANGE `account` `account` char(30) NOT NULL DEFAULT '';
+
+ALTER TABLE `zt_projectcase`
+CHANGE `project` `project` mediumint(8) unsigned NOT NULL DEFAULT '0',
+CHANGE `product` `product` mediumint(8) unsigned NOT NULL DEFAULT '0',
+CHANGE `case` `case` mediumint(8) unsigned NOT NULL DEFAULT '0',
+CHANGE `count` `count` mediumint(8) unsigned NOT NULL DEFAULT '1',
+CHANGE `version` `version` smallint(6) NOT NULL DEFAULT '1',
+CHANGE `order` `order` smallint(6) unsigned NOT NULL DEFAULT '0';
+
+ALTER TABLE `zt_projectproduct`
+CHANGE `product` `product` mediumint(8) unsigned NOT NULL DEFAULT '0',
+CHANGE `branch` `branch` mediumint(8) unsigned NOT NULL DEFAULT '0',
+CHANGE `plan` `plan` varchar(255) NOT NULL DEFAULT '';
+
+ALTER TABLE `zt_projectspec`
+CHANGE `project` `project` mediumint(8) NOT NULL DEFAULT '0',
+CHANGE `version` `version` smallint(6) NOT NULL DEFAULT '0',
+CHANGE `name` `name` varchar(255) NOT NULL DEFAULT '',
+CHANGE `milestone` `milestone` enum('0','1') NOT NULL DEFAULT '0',
+CHANGE `begin` `begin` date NULL,
+CHANGE `end` `end` date NULL;
+
+ALTER TABLE `zt_projectstory`
+CHANGE `product` `product` mediumint(8) unsigned NOT NULL DEFAULT '0',
+CHANGE `branch` `branch` mediumint(8) unsigned NOT NULL DEFAULT '0',
+CHANGE `order` `order` smallint(6) unsigned NOT NULL DEFAULT '0';
+
+ALTER TABLE `zt_relation`
+CHANGE `project` `project` mediumint(8) NOT NULL DEFAULT '0',
+CHANGE `product` `product` mediumint(8) NOT NULL DEFAULT '0',
+CHANGE `execution` `execution` mediumint(8) NOT NULL DEFAULT '0',
+CHANGE `AType` `AType` char(30) NOT NULL DEFAULT '',
+CHANGE `AID` `AID` mediumint(8) NOT NULL DEFAULT '0',
+CHANGE `AVersion` `AVersion` char(30) NOT NULL DEFAULT '',
+CHANGE `relation` `relation` char(30) NOT NULL DEFAULT '',
+CHANGE `BType` `BType` char(30) NOT NULL DEFAULT '',
+CHANGE `BID` `BID` mediumint(8) NOT NULL DEFAULT '0',
+CHANGE `BVersion` `BVersion` char(30) NOT NULL DEFAULT '',
+CHANGE `extra` `extra` char(30) NOT NULL DEFAULT '';
+
+ALTER TABLE `zt_release`
+CHANGE `build` `build` varchar(255) NOT NULL DEFAULT '',
+CHANGE `date` `date` date NULL,
+CHANGE `createdBy` `createdBy` varchar(30) NOT NULL DEFAULT '',
+CHANGE `createdDate` `createdDate` datetime NULL;
+
+ALTER TABLE `zt_repo`
+CHANGE `product` `product` varchar(255) NOT NULL DEFAULT '',
+CHANGE `projects` `projects` varchar(255) NOT NULL DEFAULT '',
+CHANGE `name` `name` varchar(255) NOT NULL DEFAULT '',
+CHANGE `path` `path` varchar(255) NOT NULL DEFAULT '',
+CHANGE `prefix` `prefix` varchar(100) NOT NULL DEFAULT '',
+CHANGE `encoding` `encoding` varchar(20) NOT NULL DEFAULT '',
+CHANGE `SCM` `SCM` varchar(10) NOT NULL DEFAULT '',
+CHANGE `client` `client` varchar(100) NOT NULL DEFAULT '',
+CHANGE `serviceHost` `serviceHost` varchar(50) NOT NULL DEFAULT '',
+CHANGE `serviceProject` `serviceProject` varchar(100) NOT NULL DEFAULT '',
+CHANGE `commits` `commits` mediumint(8) unsigned NOT NULL DEFAULT '0',
+CHANGE `account` `account` varchar(30) NOT NULL DEFAULT '',
+CHANGE `password` `password` varchar(30) NOT NULL DEFAULT '',
+CHANGE `encrypt` `encrypt` varchar(30) NOT NULL DEFAULT 'plain',
+CHANGE `synced` `synced` tinyint(1) NOT NULL DEFAULT '0',
+CHANGE `lastSync` `lastSync` datetime NULL,
+CHANGE `extra` `extra` char(30) NOT NULL DEFAULT '',
+CHANGE `preMerge` `preMerge` enum('0','1') COLLATE 'utf8_general_ci' NOT NULL DEFAULT '0',
+CHANGE `job` `job` mediumint unsigned NOT NULL DEFAULT '0',
+CHANGE `deleted` `deleted` tinyint(1) NOT NULL DEFAULT '0';
+
+ALTER TABLE `zt_repobranch`
+CHANGE `repo` `repo` mediumint(8) unsigned NOT NULL DEFAULT '0',
+CHANGE `revision` `revision` mediumint(8) unsigned NOT NULL DEFAULT '0',
+CHANGE `branch` `branch` varchar(255) NOT NULL DEFAULT '';
+
+ALTER TABLE `zt_repofiles`
+CHANGE `repo` `repo` mediumint(8) unsigned NOT NULL DEFAULT '0',
+CHANGE `revision` `revision` mediumint(8) unsigned NOT NULL DEFAULT '0',
+CHANGE `path` `path` varchar(255) NOT NULL DEFAULT '',
+CHANGE `oldPath` `oldPath` varchar(255) NOT NULL DEFAULT '',
+CHANGE `parent` `parent` varchar(255) NOT NULL DEFAULT '',
+CHANGE `type` `type` varchar(20) NOT NULL DEFAULT '',
+CHANGE `action` `action` char(1) NOT NULL DEFAULT '';
+
+ALTER TABLE `zt_repohistory`
+CHANGE `repo` `repo` mediumint(9) NOT NULL DEFAULT '0',
+CHANGE `revision` `revision` varchar(40) NOT NULL DEFAULT '',
+CHANGE `commit` `commit` mediumint(8) unsigned NOT NULL DEFAULT '0',
+CHANGE `committer` `committer` varchar(100) NOT NULL DEFAULT '',
+CHANGE `time` `time` datetime NULL;
+
+ALTER TABLE `zt_score`
+CHANGE `account` `account` varchar(30) NOT NULL DEFAULT '',
+CHANGE `module` `module` varchar(30) NOT NULL DEFAULT '',
+CHANGE `method` `method` varchar(30) NOT NULL DEFAULT '',
+CHANGE `desc` `desc` varchar(250) NOT NULL DEFAULT '',
+CHANGE `before` `before` int(11) NOT NULL DEFAULT '0',
+CHANGE `score` `score` int(11) NOT NULL DEFAULT '0',
+CHANGE `after` `after` int(11) NOT NULL DEFAULT '0',
+CHANGE `time` `time` datetime NULL;
+
+ALTER TABLE `zt_searchdict`
+CHANGE `value` `value` char(3) NOT NULL DEFAULT '';
+
+ALTER TABLE `zt_searchindex`
+CHANGE `vision` `vision` varchar(10) NOT NULL DEFAULT 'rnd',
+CHANGE `objectType` `objectType` char(20) NOT NULL DEFAULT '',
+CHANGE `objectID` `objectID` mediumint(9) NOT NULL DEFAULT '0',
+CHANGE `addedDate` `addedDate` datetime NULL,
+CHANGE `editedDate` `editedDate` datetime NULL;
+
+ALTER TABLE `zt_stage`
+CHANGE `name` `name` varchar(255) NOT NULL DEFAULT '',
+CHANGE `percent` `percent` varchar(255) NOT NULL DEFAULT '',
+CHANGE `type` `type` varchar(255) NOT NULL DEFAULT '',
+CHANGE `projectType` `projectType` varchar(255) NOT NULL DEFAULT '',
+CHANGE `createdBy` `createdBy` varchar(30) NOT NULL DEFAULT '',
+CHANGE `createdDate` `createdDate` datetime NULL,
+CHANGE `editedBy` `editedBy` varchar(30) NOT NULL DEFAULT '',
+CHANGE `editedDate` `editedDate` datetime NULL,
+CHANGE `deleted` `deleted` enum('0','1') NOT NULL DEFAULT '0';
+
+ALTER TABLE `zt_stakeholder`
+CHANGE `objectID` `objectID` mediumint(8) NOT NULL DEFAULT '0',
+CHANGE `objectType` `objectType` char(30) NOT NULL DEFAULT '',
+CHANGE `user` `user` char(30) NOT NULL DEFAULT '',
+CHANGE `type` `type` char(30) NOT NULL DEFAULT '',
+CHANGE `from` `from` char(30) NOT NULL DEFAULT '',
+CHANGE `createdBy` `createdBy` char(30) NOT NULL DEFAULT '',
+CHANGE `createdDate` `createdDate` date NULL,
+CHANGE `editedBy` `editedBy` char(30) NOT NULL DEFAULT '',
+CHANGE `editedDate` `editedDate` date NULL,
+CHANGE `deleted` `deleted` enum('0','1') NOT NULL DEFAULT '0';
+
+ALTER TABLE `zt_story`
+CHANGE `vision` `vision` varchar(10) NOT NULL DEFAULT 'rnd',
+CHANGE `parent` `parent` mediumint(9) NOT NULL DEFAULT '0',
+CHANGE `product` `product` mediumint(8) unsigned NOT NULL DEFAULT '0',
+CHANGE `branch` `branch` mediumint(8) unsigned NOT NULL DEFAULT '0',
+CHANGE `module` `module` mediumint(8) unsigned NOT NULL DEFAULT '0',
+CHANGE `source` `source` varchar(20) NOT NULL DEFAULT '',
+CHANGE `sourceNote` `sourceNote` varchar(255) NOT NULL DEFAULT '',
+CHANGE `fromBug` `fromBug` mediumint(8) unsigned NOT NULL DEFAULT '0',
+CHANGE `feedback` `feedback` mediumint(8) unsigned NOT NULL DEFAULT '0',
+CHANGE `title` `title` varchar(255) NOT NULL DEFAULT '',
+CHANGE `keywords` `keywords` varchar(255) NOT NULL DEFAULT '',
+CHANGE `type` `type` varchar(30) NOT NULL DEFAULT 'story',
+CHANGE `category` `category` varchar(30) NOT NULL DEFAULT 'feature',
+CHANGE `pri` `pri` tinyint(3) unsigned NOT NULL DEFAULT '3',
+CHANGE `status` `status` enum('','changing','active','draft','reviewing','closed') NOT NULL DEFAULT '',
+CHANGE `subStatus` `subStatus` varchar(30) NOT NULL DEFAULT '',
+CHANGE `color` `color` char(7) NOT NULL DEFAULT '',
+CHANGE `stage` `stage` enum('','wait','planned','projected','developing','developed','testing','tested','verified','released','closed') NOT NULL DEFAULT 'wait',
+CHANGE `stagedBy` `stagedBy` char(30) NOT NULL DEFAULT '',
+CHANGE `lib` `lib` mediumint(8) unsigned NOT NULL DEFAULT '0',
+CHANGE `fromStory` `fromStory` mediumint(8) unsigned NOT NULL DEFAULT '0',
+CHANGE `fromVersion` `fromVersion` smallint(6) NOT NULL DEFAULT '1',
+CHANGE `openedBy` `openedBy` varchar(30) NOT NULL DEFAULT '',
+CHANGE `openedDate` `openedDate` datetime NULL,
+CHANGE `assignedTo` `assignedTo` varchar(30) NOT NULL DEFAULT '',
+CHANGE `assignedDate` `assignedDate` datetime NULL,
+CHANGE `approvedDate` `approvedDate` date NULL,
+CHANGE `lastEditedBy` `lastEditedBy` varchar(30) NOT NULL DEFAULT '',
+CHANGE `lastEditedDate` `lastEditedDate` datetime NULL,
+CHANGE `changedBy` `changedBy` varchar(30) NOT NULL DEFAULT '',
+CHANGE `changedDate` `changedDate` datetime NULL,
+CHANGE `reviewedBy` `reviewedBy` varchar(255) NOT NULL DEFAULT '',
+CHANGE `reviewedDate` `reviewedDate` datetime NULL,
+CHANGE `closedBy` `closedBy` varchar(30) NOT NULL DEFAULT '',
+CHANGE `closedDate` `closedDate` datetime NULL,
+CHANGE `closedReason` `closedReason` varchar(30) NOT NULL DEFAULT '',
+CHANGE `activatedDate` `activatedDate` datetime NULL,
+CHANGE `toBug` `toBug` mediumint(8) unsigned NOT NULL DEFAULT '0',
+CHANGE `childStories` `childStories` varchar(255) NOT NULL DEFAULT '',
+CHANGE `linkStories` `linkStories` varchar(255) NOT NULL DEFAULT '',
+CHANGE `linkRequirements` `linkRequirements` varchar(255) NOT NULL DEFAULT '',
+CHANGE `twins` `twins` varchar(255) NOT NULL DEFAULT '',
+CHANGE `duplicateStory` `duplicateStory` mediumint(8) unsigned NOT NULL DEFAULT '0',
+CHANGE `version` `version` smallint(6) NOT NULL DEFAULT '1',
+CHANGE `storyChanged` `storyChanged` enum('0','1') NOT NULL DEFAULT '0',
+CHANGE `feedbackBy` `feedbackBy` varchar(100) NOT NULL DEFAULT '',
+CHANGE `notifyEmail` `notifyEmail` varchar(100) NOT NULL DEFAULT '',
+CHANGE `URChanged` `URChanged` enum('0','1') NOT NULL DEFAULT '0',
+CHANGE `deleted` `deleted` enum('0','1') NOT NULL DEFAULT '0';
+
+ALTER TABLE `zt_storyreview`
+CHANGE `story` `story` mediumint(9) NOT NULL DEFAULT '0',
+CHANGE `version` `version` smallint(6) NOT NULL DEFAULT '0',
+CHANGE `reviewer` `reviewer` varchar(30) NOT NULL DEFAULT '',
+CHANGE `result` `result` varchar(30) NOT NULL DEFAULT '',
+CHANGE `reviewDate` `reviewDate` datetime NULL;
+
+ALTER TABLE `zt_storyestimate`
+CHANGE `story` `story` mediumint(9) NOT NULL DEFAULT '0',
+CHANGE `round` `round` smallint(6) NOT NULL DEFAULT '0',
+CHANGE `openedBy` `openedBy` varchar(30) NOT NULL DEFAULT '',
+CHANGE `openedDate` `openedDate` datetime NULL;
+
+ALTER TABLE `zt_storyspec`
+CHANGE `story` `story` mediumint(9) NOT NULL DEFAULT '0',
+CHANGE `version` `version` smallint(6) NOT NULL DEFAULT '0',
+CHANGE `title` `title` varchar(255) NOT NULL DEFAULT '';
+
+ALTER TABLE `zt_storystage`
+CHANGE `story` `story` mediumint(8) unsigned NOT NULL DEFAULT '0',
+CHANGE `branch` `branch` mediumint(8) unsigned NOT NULL DEFAULT '0',
+CHANGE `stage` `stage` varchar(50) NOT NULL DEFAULT '',
+CHANGE `stagedBy` `stagedBy` char(30) NOT NULL DEFAULT '';
+
+ALTER TABLE `zt_suitecase`
+CHANGE `suite` `suite` mediumint(8) unsigned NOT NULL DEFAULT '0',
+CHANGE `product` `product` mediumint(8) unsigned NOT NULL DEFAULT '0',
+CHANGE `case` `case` mediumint(8) unsigned NOT NULL DEFAULT '0',
+CHANGE `version` `version` smallint(5) unsigned NOT NULL DEFAULT '0';
+
+ALTER TABLE `zt_task`
+CHANGE `project` `project` mediumint(8) unsigned NOT NULL DEFAULT '0',
+CHANGE `parent` `parent` mediumint(8) NOT NULL DEFAULT '0',
+CHANGE `execution` `execution` mediumint(8) unsigned NOT NULL DEFAULT '0',
+CHANGE `module` `module` mediumint(8) unsigned NOT NULL DEFAULT '0',
+CHANGE `design` `design` mediumint(8) unsigned NOT NULL DEFAULT '0',
+CHANGE `story` `story` mediumint(8) unsigned NOT NULL DEFAULT '0',
+CHANGE `storyVersion` `storyVersion` smallint(6) NOT NULL DEFAULT '1',
+CHANGE `designVersion` `designVersion` smallint(6) unsigned NOT NULL DEFAULT '1',
+CHANGE `fromBug` `fromBug` mediumint(8) unsigned NOT NULL DEFAULT '0',
+CHANGE `feedback` `feedback` mediumint(8) unsigned NOT NULL DEFAULT '0',
+CHANGE `fromIssue` `fromIssue` mediumint(8) unsigned NOT NULL DEFAULT '0',
+CHANGE `name` `name` varchar(255) NOT NULL DEFAULT '',
+CHANGE `type` `type` varchar(20) NOT NULL DEFAULT '',
+CHANGE `mode` `mode` varchar(10) NOT NULL DEFAULT '',
+CHANGE `pri` `pri` tinyint(3) unsigned NOT NULL DEFAULT '0',
+CHANGE `consumed` `consumed` float unsigned NOT NULL DEFAULT '0',
+CHANGE `deadline` `deadline` date NULL,
+CHANGE `status` `status` enum('wait','doing','done','pause','cancel','closed') NOT NULL DEFAULT 'wait',
+CHANGE `subStatus` `subStatus` varchar(30) NOT NULL DEFAULT '',
+CHANGE `color` `color` char(7) NOT NULL DEFAULT '',
+CHANGE `version` `version` smallint(6) NOT NULL DEFAULT '0',
+CHANGE `openedBy` `openedBy` varchar(30) NOT NULL DEFAULT '',
+CHANGE `openedDate` `openedDate` datetime NULL,
+CHANGE `assignedTo` `assignedTo` varchar(30) NOT NULL DEFAULT '',
+CHANGE `assignedDate` `assignedDate` datetime NULL,
+CHANGE `estStarted` `estStarted` date NULL,
+CHANGE `realStarted` `realStarted` datetime NULL,
+CHANGE `finishedBy` `finishedBy` varchar(30) NOT NULL DEFAULT '',
+CHANGE `finishedDate` `finishedDate` datetime NULL,
+CHANGE `canceledBy` `canceledBy` varchar(30) NOT NULL DEFAULT '',
+CHANGE `canceledDate` `canceledDate` datetime NULL,
+CHANGE `closedBy` `closedBy` varchar(30) NOT NULL DEFAULT '',
+CHANGE `closedDate` `closedDate` datetime NULL,
+CHANGE `planDuration` `planDuration` int(11) NOT NULL DEFAULT '0',
+CHANGE `realDuration` `realDuration` int(11) NOT NULL DEFAULT '0',
+CHANGE `closedReason` `closedReason` varchar(30) NOT NULL DEFAULT '',
+CHANGE `lastEditedBy` `lastEditedBy` varchar(30) NOT NULL DEFAULT '',
+CHANGE `lastEditedDate` `lastEditedDate` datetime NULL,
+CHANGE `activatedDate` `activatedDate` datetime NULL,
+CHANGE `order` `order` mediumint(8) unsigned NOT NULL DEFAULT '0',
+CHANGE `repo` `repo` mediumint(8) unsigned NOT NULL DEFAULT '0',
+CHANGE `mr` `mr` mediumint(8) unsigned NOT NULL DEFAULT '0',
+CHANGE `entry` `entry` varchar(255) NOT NULL DEFAULT '',
+CHANGE `lines` `lines` varchar(10) NOT NULL DEFAULT '',
+CHANGE `v1` `v1` varchar(40) NOT NULL DEFAULT '',
+CHANGE `v2` `v2` varchar(40) NOT NULL DEFAULT '',
+CHANGE `deleted` `deleted` enum('0','1') NOT NULL DEFAULT '0',
+CHANGE `vision` `vision` varchar(10) NOT NULL DEFAULT 'rnd';
+
+ALTER TABLE `zt_taskestimate`
+CHANGE `date` `date` date NULL,
+CHANGE `order` `order` tinyint(3) unsigned NOT NULL DEFAULT 0;
+
+ALTER TABLE `zt_taskspec`
+CHANGE `task` `task` mediumint(8) NOT NULL DEFAULT '0',
+CHANGE `version` `version` smallint(6) NOT NULL DEFAULT '0',
+CHANGE `name` `name` varchar(255) NOT NULL DEFAULT '',
+CHANGE `estStarted` `estStarted` date NULL,
+CHANGE `deadline` `deadline` date NULL;
+
+ALTER TABLE `zt_taskteam`
+CHANGE `task` `task` mediumint(8) unsigned NOT NULL DEFAULT '0',
+CHANGE `account` `account` char(30) NOT NULL DEFAULT '',
+CHANGE `estimate` `estimate` decimal(12,2) NOT NULL DEFAULT '0.00',
+CHANGE `consumed` `consumed` decimal(12,2) NOT NULL DEFAULT '0.00',
+CHANGE `left` `left` decimal(12,2) NOT NULL DEFAULT '0.00',
+CHANGE `transfer` `transfer` char(30) NOT NULL DEFAULT '',
+CHANGE `status` `status` enum('wait','doing','done') NOT NULL DEFAULT 'wait',
+CHANGE `order` `order` tinyint(3) NOT NULL DEFAULT '0';
+
+ALTER TABLE `zt_team`
+CHANGE `root` `root` mediumint(8) unsigned NOT NULL DEFAULT '0',
+CHANGE `type` `type` enum('project','task','execution') NOT NULL DEFAULT 'project',
+CHANGE `account` `account` char(30) NOT NULL DEFAULT '',
+CHANGE `role` `role` char(30) NOT NULL DEFAULT '',
+CHANGE `position` `position` varchar(30) NOT NULL DEFAULT '',
+CHANGE `limited` `limited` char(8) NOT NULL DEFAULT 'no',
+CHANGE `join` `join` date NULL,
+CHANGE `days` `days` smallint(5) unsigned NOT NULL DEFAULT '0',
+CHANGE `hours` `hours` float(3,1) unsigned NOT NULL DEFAULT '0.0',
+CHANGE `estimate` `estimate` decimal(12,2) unsigned NOT NULL DEFAULT '0.00',
+CHANGE `consumed` `consumed` decimal(12,2) unsigned NOT NULL DEFAULT '0.00',
+CHANGE `left` `left` decimal(12,2) unsigned NOT NULL DEFAULT '0.00',
+CHANGE `order` `order` tinyint(3) NOT NULL DEFAULT '0';
+
+ALTER TABLE `zt_testreport`
+CHANGE `project` `project` mediumint(8) unsigned NOT NULL DEFAULT '0',
+CHANGE `product` `product` mediumint(8) unsigned NOT NULL DEFAULT '0',
+CHANGE `execution` `execution` mediumint(8) unsigned NOT NULL DEFAULT '0',
+CHANGE `tasks` `tasks` varchar(255) NOT NULL DEFAULT '',
+CHANGE `builds` `builds` varchar(255) NOT NULL DEFAULT '',
+CHANGE `title` `title` varchar(255) NOT NULL DEFAULT '',
+CHANGE `begin` `begin` date NULL,
+CHANGE `end` `end` date NULL,
+CHANGE `owner` `owner` char(30) NOT NULL DEFAULT '',
+CHANGE `objectType` `objectType` varchar(20) NOT NULL DEFAULT '',
+CHANGE `objectID` `objectID` mediumint(8) unsigned NOT NULL DEFAULT '0',
+CHANGE `createdBy` `createdBy` char(30) NOT NULL DEFAULT '',
+CHANGE `createdDate` `createdDate` datetime NULL,
+CHANGE `deleted` `deleted` enum('0','1') NOT NULL DEFAULT '0';
+
+ALTER TABLE `zt_testresult`
+CHANGE `run` `run` mediumint(8) unsigned NOT NULL DEFAULT '0',
+CHANGE `case` `case` mediumint(8) unsigned NOT NULL DEFAULT '0',
+CHANGE `version` `version` smallint(5) unsigned NOT NULL DEFAULT '0',
+CHANGE `job` `job` mediumint(8) unsigned NOT NULL DEFAULT '0',
+CHANGE `compile` `compile` mediumint(8) unsigned NOT NULL DEFAULT '0',
+CHANGE `caseResult` `caseResult` char(30) NOT NULL DEFAULT '',
+CHANGE `node` `node` int(8) unsigned NOT NULL DEFAULT '0',
+CHANGE `lastRunner` `lastRunner` varchar(30) NOT NULL DEFAULT '',
+CHANGE `date` `date` datetime NULL,
+CHANGE `duration` `duration` float NOT NULL DEFAULT '0',
+CHANGE `deploy` `deploy` mediumint(8) unsigned NOT NULL DEFAULT '0';
+
+ALTER TABLE `zt_testrun`
+CHANGE `lastRunner` `lastRunner` varchar(30) NOT NULL DEFAULT '',
+CHANGE `lastRunDate` `lastRunDate` datetime NULL,
+CHANGE `lastRunResult` `lastRunResult` char(30) NOT NULL DEFAULT '',
+CHANGE `status` `status` char(30) NOT NULL DEFAULT '';
+
+ALTER TABLE `zt_testsuite`
+CHANGE `project` `project` mediumint(8) unsigned NOT NULL DEFAULT '0',
+CHANGE `product` `product` mediumint(8) unsigned NOT NULL DEFAULT '0',
+CHANGE `name` `name` varchar(255) NOT NULL DEFAULT '',
+CHANGE `type` `type` varchar(20) NOT NULL DEFAULT '',
+CHANGE `order` `order` smallint unsigned NOT NULL DEFAULT '0',
+CHANGE `addedBy` `addedBy` char(30) NOT NULL DEFAULT '',
+CHANGE `addedDate` `addedDate` datetime NULL,
+CHANGE `lastEditedBy` `lastEditedBy` char(30) NOT NULL DEFAULT '',
+CHANGE `lastEditedDate` `lastEditedDate` datetime NULL,
+CHANGE `deleted` `deleted` enum('0','1') NOT NULL DEFAULT '0';
+
+ALTER TABLE `zt_testtask`
+CHANGE `project` `project` mediumint(8) unsigned NOT NULL DEFAULT '0',
+CHANGE `product` `product` mediumint(8) unsigned NOT NULL DEFAULT '0',
+CHANGE `name` `name` char(90) NOT NULL DEFAULT '',
+CHANGE `build` `build` char(30) NOT NULL DEFAULT '',
+CHANGE `type` `type` varchar(255) NOT NULL DEFAULT '',
+CHANGE `owner` `owner` varchar(30) NOT NULL DEFAULT '',
+CHANGE `begin` `begin` date NULL,
+CHANGE `end` `end` date NULL,
+CHANGE `realFinishedDate` `realFinishedDate` datetime NULL,
+CHANGE `status` `status` enum('blocked','doing','wait','done') NOT NULL DEFAULT 'wait',
+CHANGE `testreport` `testreport` mediumint(8) unsigned NOT NULL DEFAULT '0',
+CHANGE `auto` `auto` varchar(10) NOT NULL DEFAULT 'no',
+CHANGE `createdBy` `createdBy` varchar(30) NOT NULL DEFAULT '',
+CHANGE `createdDate` `createdDate` datetime NULL;
+
+ALTER TABLE `zt_todo`
+CHANGE `account` `account` char(30) NOT NULL DEFAULT '',
+CHANGE `date` `date` date NULL,
+CHANGE `begin` `begin` smallint(4) unsigned zerofill NOT NULL DEFAULT '0',
+CHANGE `end` `end` smallint(4) unsigned zerofill NOT NULL DEFAULT '0',
+CHANGE `feedback` `feedback` mediumint(8) unsigned NOT NULL DEFAULT '0',
+CHANGE `type` `type` char(15) NOT NULL DEFAULT '',
+CHANGE `cycle` `cycle` tinyint(3) unsigned NOT NULL DEFAULT '0',
+CHANGE `idvalue` `idvalue` mediumint(8) unsigned NOT NULL DEFAULT '0',
+CHANGE `pri` `pri` tinyint(3) unsigned NOT NULL DEFAULT '0',
+CHANGE `name` `name` char(150) NOT NULL DEFAULT '',
+CHANGE `status` `status` enum('wait','doing','done','closed') NOT NULL DEFAULT 'wait',
+CHANGE `private` `private` tinyint(1) NOT NULL DEFAULT '0',
+CHANGE `config` `config` varchar(255) NOT NULL DEFAULT '',
+CHANGE `assignedTo` `assignedTo` varchar(30) NOT NULL DEFAULT '',
+CHANGE `assignedBy` `assignedBy` varchar(30) NOT NULL DEFAULT '',
+CHANGE `assignedDate` `assignedDate` datetime NULL,
+CHANGE `finishedBy` `finishedBy` varchar(30) NOT NULL DEFAULT '',
+CHANGE `finishedDate` `finishedDate` datetime NULL,
+CHANGE `closedBy` `closedBy` varchar(30) NOT NULL DEFAULT '',
+CHANGE `closedDate` `closedDate` datetime NULL,
+CHANGE `deleted` `deleted` enum('0','1') NOT NULL DEFAULT '0',
+CHANGE `vision` `vision` varchar(10) NOT NULL DEFAULT 'rnd';
+
+ALTER TABLE `zt_user`
+CHANGE `company` `company` mediumint(8) unsigned NOT NULL DEFAULT '0',
+CHANGE `type` `type` char(30) NOT NULL DEFAULT 'inside',
+CHANGE `dept` `dept` mediumint(8) unsigned NOT NULL DEFAULT '0',
+CHANGE `account` `account` char(30) NOT NULL DEFAULT '',
+CHANGE `password` `password` char(32) NOT NULL DEFAULT '',
+CHANGE `role` `role` char(10) NOT NULL DEFAULT '',
+CHANGE `realname` `realname` varchar(100) NOT NULL DEFAULT '',
+CHANGE `pinyin` `pinyin` varchar(255) NOT NULL DEFAULT '',
+CHANGE `nickname` `nickname` char(60) NOT NULL DEFAULT '',
+CHANGE `commiter` `commiter` varchar(100) NOT NULL DEFAULT '',
+CHANGE `birthday` `birthday` date NULL,
+CHANGE `gender` `gender` enum('f','m') NOT NULL DEFAULT 'f',
+CHANGE `email` `email` char(90) NOT NULL DEFAULT '',
+CHANGE `skype` `skype` char(90) NOT NULL DEFAULT '',
+CHANGE `qq` `qq` char(20) NOT NULL DEFAULT '',
+CHANGE `mobile` `mobile` char(11) NOT NULL DEFAULT '',
+CHANGE `phone` `phone` char(20) NOT NULL DEFAULT '',
+CHANGE `weixin` `weixin` varchar(90) NOT NULL DEFAULT '',
+CHANGE `dingding` `dingding` varchar(90) NOT NULL DEFAULT '',
+CHANGE `slack` `slack` varchar(90) NOT NULL DEFAULT '',
+CHANGE `whatsapp` `whatsapp` varchar(90) NOT NULL DEFAULT '',
+CHANGE `address` `address` char(120) NOT NULL DEFAULT '',
+CHANGE `zipcode` `zipcode` char(10) NOT NULL DEFAULT '',
+CHANGE `join` `join` date NULL,
+CHANGE `visits` `visits` mediumint(8) unsigned NOT NULL DEFAULT '0',
+CHANGE `visions` `visions` varchar(20) NOT NULL DEFAULT 'rnd,lite',
+CHANGE `ip` `ip` char(15) NOT NULL DEFAULT '',
+CHANGE `last` `last` int(10) unsigned NOT NULL DEFAULT '0',
+CHANGE `fails` `fails` tinyint(5) NOT NULL DEFAULT '0',
+CHANGE `locked` `locked` datetime NULL,
+CHANGE `feedback` `feedback` enum('0','1') NOT NULL DEFAULT '0',
+CHANGE `ranzhi` `ranzhi` char(30) NOT NULL DEFAULT '',
+CHANGE `ldap` `ldap` char(30) NOT NULL DEFAULT '',
+CHANGE `score` `score` int(11) NOT NULL DEFAULT '0',
+CHANGE `scoreLevel` `scoreLevel` int(11) NOT NULL DEFAULT '0',
+CHANGE `resetToken` `resetToken` varchar(50) NOT NULL DEFAULT '',
+CHANGE `deleted` `deleted` enum('0','1') NOT NULL DEFAULT '0',
+CHANGE `clientStatus` `clientStatus` enum('online','away','busy','offline','meeting') NOT NULL DEFAULT 'offline',
+CHANGE `clientLang` `clientLang` varchar(10) NOT NULL DEFAULT 'zh-cn';
+
+ALTER TABLE `zt_usercontact`
+CHANGE `account` `account` char(30) NOT NULL DEFAULT '',
+CHANGE `listName` `listName` varchar(60) NOT NULL DEFAULT '';
+
+ALTER TABLE `zt_userquery`
+CHANGE `account` `account` char(30) NOT NULL DEFAULT '',
+CHANGE `module` `module` varchar(30) NOT NULL DEFAULT '',
+CHANGE `title` `title` varchar(90) NOT NULL DEFAULT '',
+CHANGE `shortcut` `shortcut` enum('0','1') NOT NULL DEFAULT '0',
+CHANGE `common` `common` enum('0','1') NOT NULL DEFAULT '0';
+
+ALTER TABLE `zt_usertpl`
+CHANGE `account` `account` char(30) NOT NULL DEFAULT '',
+CHANGE `type` `type` char(30) NOT NULL DEFAULT '',
+CHANGE `title` `title` varchar(150) NOT NULL DEFAULT '',
+CHANGE `public` `public` enum('0', '1') NOT NULL DEFAULT '0';
+
+ALTER TABLE `zt_userview`
+CHANGE `account` `account` char(30) NOT NULL DEFAULT '';
+
+ALTER TABLE `zt_weeklyreport`
+CHANGE `project` `project` mediumint(8) unsigned NOT NULL DEFAULT '0',
+CHANGE `weekStart` `weekStart` date NULL,
+CHANGE `staff` `staff` smallint(5) unsigned NOT NULL DEFAULT '0',
+CHANGE `progress` `progress` varchar(255) NOT NULL DEFAULT '',
+CHANGE `workload` `workload` varchar(255) NOT NULL DEFAULT '';
+
+ALTER TABLE `zt_webhook`
+CHANGE `type` `type` varchar(15) NOT NULL DEFAULT 'default',
+CHANGE `name` `name` varchar(50) NOT NULL DEFAULT '',
+CHANGE `url` `url` varchar(255) NOT NULL DEFAULT '',
+CHANGE `domain` `domain` varchar(255) NOT NULL DEFAULT '',
+CHANGE `secret` `secret` varchar(255) NOT NULL DEFAULT '',
+CHANGE `contentType` `contentType` varchar(30) NOT NULL DEFAULT 'application/json',
+CHANGE `sendType` `sendType` enum('sync','async') NOT NULL DEFAULT 'sync',
+CHANGE `params` `params` varchar(100) NOT NULL DEFAULT '',
+CHANGE `createdBy` `createdBy` varchar(30) NOT NULL DEFAULT '',
+CHANGE `createdDate` `createdDate` datetime NULL,
+CHANGE `editedBy` `editedBy` varchar(30) NOT NULL DEFAULT '',
+CHANGE `editedDate` `editedDate` datetime NULL,
+CHANGE `deleted` `deleted` enum('0', '1') NOT NULL DEFAULT '0';
+
+ALTER TABLE `zt_im_chat`
+CHANGE `gid` `gid` char(40) NOT NULL DEFAULT '',
+CHANGE `name` `name` varchar(60) NOT NULL DEFAULT '',
+CHANGE `type` `type` varchar(20) NOT NULL DEFAULT 'group',
+CHANGE `admins` `admins` varchar(255) NOT NULL DEFAULT '',
+CHANGE `committers` `committers` varchar(255) NOT NULL DEFAULT '',
+CHANGE `subject` `subject` mediumint(8) unsigned NOT NULL DEFAULT 0,
+CHANGE `public` `public` enum('0', '1') NOT NULL DEFAULT '0',
+CHANGE `createdBy` `createdBy` varchar(30) NOT NULL DEFAULT '',
+CHANGE `createdDate` `createdDate` datetime NULL,
+CHANGE `ownedBy` `ownedBy` varchar(30) NOT NULL DEFAULT '',
+CHANGE `editedBy` `editedBy` varchar(30) NOT NULL DEFAULT '',
+CHANGE `editedDate` `editedDate` datetime NULL,
+CHANGE `mergedDate` `mergedDate` datetime NULL,
+CHANGE `lastActiveTime` `lastActiveTime` datetime NULL,
+CHANGE `lastMessage` `lastMessage` int(11) unsigned NOT NULL DEFAULT 0,
+CHANGE `lastMessageIndex` `lastMessageIndex` int(11) unsigned NOT NULL DEFAULT 0,
+CHANGE `dismissDate` `dismissDate` datetime NULL,
+CHANGE `adminInvite` `adminInvite` enum('0','1') NOT NULL DEFAULT '0',
+CHANGE `archiveDate` `archiveDate` datetime NULL;
+
+ALTER TABLE `zt_im_chatuser`
+CHANGE `cgid` `cgid` char(40) NOT NULL DEFAULT '',
+CHANGE `user` `user` mediumint(8) NOT NULL DEFAULT 0,
+CHANGE `order` `order` smallint(5) NOT NULL DEFAULT 0,
+CHANGE `star` `star` enum('0', '1') NOT NULL DEFAULT '0',
+CHANGE `hide` `hide` enum('0', '1') NOT NULL DEFAULT '0',
+CHANGE `mute` `mute` enum('0', '1') NOT NULL DEFAULT '0',
+CHANGE `freeze` `freeze` enum('0', '1') NOT NULL DEFAULT '0',
+CHANGE `join` `join` datetime NULL,
+CHANGE `quit` `quit` datetime NULL,
+CHANGE `category` `category` varchar(40) NOT NULL DEFAULT '',
+CHANGE `lastReadMessage` `lastReadMessage` int(11) unsigned NOT NULL DEFAULT 0,
+CHANGE `lastReadMessageIndex` `lastReadMessageIndex` int(11) unsigned NOT NULL DEFAULT 0;
+
+ALTER TABLE `zt_im_client`
+CHANGE `version` `version` char(30) NOT NULL DEFAULT '',
+CHANGE `desc` `desc` varchar(100) NOT NULL DEFAULT '',
+CHANGE `strategy` `strategy` varchar(10) NOT NULL DEFAULT '',
+CHANGE `createdDate` `createdDate` datetime NULL,
+CHANGE `createdBy` `createdBy` varchar(30) NOT NULL DEFAULT '',
+CHANGE `editedDate` `editedDate` datetime NULL,
+CHANGE `editedBy` `editedBy` varchar(30) NOT NULL DEFAULT '',
+CHANGE `status` `status` enum('released','wait') NOT NULL DEFAULT 'wait';
+
+ALTER TABLE `zt_im_message`
+CHANGE `gid` `gid` char(40) NOT NULL DEFAULT '',
+CHANGE `cgid` `cgid` char(40) NOT NULL DEFAULT '',
+CHANGE `user` `user` varchar(30) NOT NULL DEFAULT '',
+CHANGE `date` `date` datetime NULL,
+CHANGE `index` `index` int(11) unsigned NOT NULL DEFAULT 0,
+CHANGE `type` `type` enum('normal','broadcast','notify','bulletin','botcommand') NOT NULL DEFAULT 'normal',
+CHANGE `contentType` `contentType` enum('text', 'plain', 'emotion', 'image', 'file', 'object', 'code') NOT NULL DEFAULT 'text',
+CHANGE `deleted` `deleted` enum('0','1') NOT NULL DEFAULT '0';
+
+ALTER TABLE `zt_im_message_backup`
+CHANGE `gid` `gid` char(40) NOT NULL DEFAULT '',
+CHANGE `cgid` `cgid` char(40) NOT NULL DEFAULT '',
+CHANGE `user` `user` varchar(30) NOT NULL DEFAULT '',
+CHANGE `date` `date` datetime NULL,
+CHANGE `index` `index` int(11) unsigned NOT NULL DEFAULT 0,
+CHANGE `type` `type` enum('normal', 'broadcast', 'notify') NOT NULL DEFAULT 'normal',
+CHANGE `contentType` `contentType` enum('text', 'plain', 'emotion', 'image', 'file', 'object', 'code') NOT NULL DEFAULT 'text',
+CHANGE `deleted` `deleted` enum('0','1') NOT NULL DEFAULT '0';
+
+ALTER TABLE `zt_im_message_index`
+CHANGE `tableName` `tableName` char(64) NOT NULL DEFAULT '',
+CHANGE `start` `start` int(11) unsigned NOT NULL DEFAULT '0',
+CHANGE `end` `end` int(11) unsigned NOT NULL DEFAULT '0',
+CHANGE `startDate` `startDate` datetime NULL,
+CHANGE `endDate` `endDate` datetime NULL;
+
+ALTER TABLE `zt_im_chat_message_index`
+CHANGE `gid` `gid` char(40) NOT NULL DEFAULT '',
+CHANGE `tableName` `tableName` char(64) NOT NULL DEFAULT '',
+CHANGE `start` `start` int(11) unsigned NOT NULL DEFAULT '0',
+CHANGE `end` `end` int(11) unsigned NOT NULL DEFAULT '0',
+CHANGE `startIndex` `startIndex` int(11) unsigned NOT NULL DEFAULT '0',
+CHANGE `endIndex` `endIndex` int(11) unsigned NOT NULL DEFAULT '0',
+CHANGE `startDate` `startDate` datetime NULL,
+CHANGE `endDate` `endDate` datetime NULL,
+CHANGE `count` `count` mediumint(8) unsigned NOT NULL DEFAULT '0';
+
+ALTER TABLE `zt_im_messagestatus`
+CHANGE `user` `user` mediumint(8) NOT NULL DEFAULT 0,
+CHANGE `message` `message` int(11) unsigned NOT NULL DEFAULT '0',
+CHANGE `status` `status` enum('waiting','sent','readed','deleted') NOT NULL DEFAULT 'waiting';
+
+ALTER TABLE `zt_im_queue`
+CHANGE `type` `type` char(30) NOT NULL DEFAULT '',
+CHANGE `addDate` `addDate` datetime NULL,
+CHANGE `processDate` `processDate` datetime NULL,
+CHANGE `status` `status` char(30) NOT NULL DEFAULT '';
+
+ALTER TABLE `zt_im_conference`
+CHANGE `rid` `rid` char(40) NOT NULL DEFAULT '',
+CHANGE `cgid` `cgid` char(40) NOT NULL DEFAULT '',
+CHANGE `status` `status` enum('closed','open') NOT NULL DEFAULT 'closed',
+CHANGE `openedBy` `openedBy` mediumint(8) NOT NULL DEFAULT 0,
+CHANGE `openedDate` `openedDate` datetime NULL;
+
+ALTER TABLE `zt_im_conferenceaction`
+CHANGE `rid` `rid` char(40) NOT NULL DEFAULT '',
+CHANGE `type` `type` enum('create','invite','join','leave','close','publish') NOT NULL DEFAULT 'create',
+CHANGE `user` `user` mediumint(8) NOT NULL DEFAULT 0,
+CHANGE `date` `date` datetime NULL,
+CHANGE `device` `device` char(40) NOT NULL DEFAULT 'default';
+
+ALTER TABLE `zt_im_userdevice`
+CHANGE `user` `user` mediumint(8) NOT NULL DEFAULT 0,
+CHANGE `device` `device` char(40) NOT NULL DEFAULT 'default',
+CHANGE `deviceID` `deviceID` char(40) NOT NULL DEFAULT '',
+CHANGE `token` `token` char(64) NOT NULL DEFAULT '',
+CHANGE `validUntil` `validUntil` datetime NULL,
+CHANGE `lastLogin` `lastLogin` datetime NULL,
+CHANGE `lastLogout` `lastLogout` datetime NULL;
+
+ALTER TABLE `zt_report`
+CHANGE `code` `code` varchar(100) NOT NULL DEFAULT '',
+CHANGE `module` `module` varchar(100) NOT NULL DEFAULT '',
+CHANGE `step` `step` tinyint(1) NOT NULL DEFAULT '2',
+CHANGE `addedBy` `addedBy` char(30) NOT NULL DEFAULT '',
+CHANGE `addedDate` `addedDate` datetime NULL;
+
+ALTER TABLE `zt_feedback`
+CHANGE `product` `product` mediumint(8) unsigned NOT NULL DEFAULT '0',
+CHANGE `module` `module` mediumint(8) unsigned NOT NULL DEFAULT '0',
+CHANGE `title` `title` varchar(255) NOT NULL DEFAULT '',
+CHANGE `type` `type` char(30) NOT NULL DEFAULT '',
+CHANGE `solution` `solution` char(30) NOT NULL DEFAULT '',
+CHANGE `pri` `pri` tinyint unsigned NOT NULL DEFAULT 2,
+CHANGE `status` `status` varchar(30) NOT NULL DEFAULT '',
+CHANGE `public` `public` enum('0','1') NOT NULL DEFAULT '0',
+CHANGE `notify` `notify` enum('0','1') NOT NULL DEFAULT '0',
+CHANGE `notifyEmail` `notifyEmail` varchar(100) NOT NULL DEFAULT '',
+CHANGE `source` `source` varchar(255) NOT NULL DEFAULT '',
+CHANGE `result` `result` mediumint(8) unsigned NOT NULL DEFAULT '0',
+CHANGE `faq` `faq` mediumint(8) unsigned NOT NULL DEFAULT '0',
+CHANGE `openedBy` `openedBy` char(30) NOT NULL DEFAULT '',
+CHANGE `openedDate` `openedDate` datetime NULL,
+CHANGE `reviewedBy` `reviewedBy` varchar(255) NOT NULL DEFAULT '',
+CHANGE `reviewedDate` `reviewedDate` datetime NULL,
+CHANGE `processedBy` `processedBy` char(30) NOT NULL DEFAULT '',
+CHANGE `processedDate` `processedDate` datetime NULL,
+CHANGE `closedBy` `closedBy` char(30) NOT NULL DEFAULT '',
+CHANGE `closedDate` `closedDate` datetime NULL,
+CHANGE `closedReason` `closedReason` varchar(30) NOT NULL DEFAULT '',
+CHANGE `editedBy` `editedBy` char(30) NOT NULL DEFAULT '',
+CHANGE `editedDate` `editedDate` datetime NULL,
+CHANGE `assignedTo` `assignedTo` varchar(255) NOT NULL DEFAULT '',
+CHANGE `assignedDate` `assignedDate` datetime NULL,
+CHANGE `activatedBy` `activatedBy` varchar(30) NOT NULL DEFAULT '',
+CHANGE `activatedDate` `activatedDate` datetime NULL,
+CHANGE `feedbackBy` `feedbackBy` varchar(100) NOT NULL DEFAULT '',
+CHANGE `repeatFeedback` `repeatFeedback` mediumint(8) NOT NULL DEFAULT 0,
+CHANGE `mailto` `mailto` varchar(255) NOT NULL DEFAULT '',
+CHANGE `deleted` `deleted` enum('0','1') NOT NULL DEFAULT '0';
+
+ALTER TABLE `zt_ticket`
+CHANGE `product` `product` mediumint(8) unsigned NOT NULL DEFAULT '0',
+CHANGE `module` `module` mediumint(8) unsigned NOT NULL DEFAULT '0',
+CHANGE `title` `title` varchar(255) NOT NULL DEFAULT '',
+CHANGE `type` `type` varchar(30) NOT NULL DEFAULT '',
+CHANGE `openedBuild` `openedBuild` varchar(255) NOT NULL DEFAULT '',
+CHANGE `feedback` `feedback` mediumint(8) NOT NULL DEFAULT '0',
+CHANGE `assignedTo` `assignedTo` varchar(255) NOT NULL DEFAULT '',
+CHANGE `assignedDate` `assignedDate` datetime NULL,
+CHANGE `realStarted` `realStarted` datetime NULL,
+CHANGE `startedBy` `startedBy` varchar(255) NOT NULL DEFAULT '',
+CHANGE `startedDate` `startedDate` datetime NULL,
+CHANGE `deadline` `deadline` date NULL,
+CHANGE `pri` `pri` tinyint unsigned NOT NULL DEFAULT '0',
+CHANGE `status` `status` varchar(30) NOT NULL DEFAULT '',
+CHANGE `openedBy` `openedBy` varchar(30) NOT NULL DEFAULT '',
+CHANGE `openedDate` `openedDate` datetime NULL,
+CHANGE `activatedCount` `activatedCount` int(10) NOT NULL DEFAULT '0',
+CHANGE `activatedBy` `activatedBy` varchar(30) NOT NULL DEFAULT '',
+CHANGE `activatedDate` `activatedDate` datetime NULL,
+CHANGE `closedBy` `closedBy` varchar(30) NOT NULL DEFAULT '',
+CHANGE `closedDate` `closedDate` datetime NULL,
+CHANGE `closedReason` `closedReason` varchar(30) NOT NULL DEFAULT '',
+CHANGE `finishedBy` `finishedBy` varchar(30) NOT NULL DEFAULT '',
+CHANGE `finishedDate` `finishedDate` datetime NULL,
+CHANGE `resolvedBy` `resolvedBy` varchar(30) NOT NULL DEFAULT '',
+CHANGE `resolvedDate` `resolvedDate` datetime NULL,
+CHANGE `editedBy` `editedBy` varchar(30) NOT NULL DEFAULT '',
+CHANGE `editedDate` `editedDate` datetime NULL,
+CHANGE `keywords` `keywords` varchar(255) NOT NULL DEFAULT '',
+CHANGE `repeatTicket` `repeatTicket` mediumint(8) NOT NULL DEFAULT '0',
+CHANGE `mailto` `mailto` varchar(255) NOT NULL DEFAULT '',
+CHANGE `deleted` `deleted` enum('0','1') NOT NULL DEFAULT '0';
+
+ALTER TABLE `zt_ticketsource`
+CHANGE `ticketId` `ticketId` mediumint(8) unsigned NOT NULL DEFAULT '0',
+CHANGE `customer` `customer` varchar(100) NOT NULL DEFAULT '',
+CHANGE `contact` `contact` varchar(100) NOT NULL DEFAULT '',
+CHANGE `notifyEmail` `notifyEmail` varchar(100) NOT NULL DEFAULT '',
+CHANGE `createdDate` `createdDate` datetime NULL;
+
+ALTER TABLE `zt_ticketrelation`
+CHANGE `ticketId` `ticketId` mediumint unsigned NOT NULL DEFAULT '0',
+CHANGE `objectId` `objectId` mediumint NOT NULL DEFAULT '0',
+CHANGE `objectType` `objectType` varchar(100) NOT NULL DEFAULT '';
+
+ALTER TABLE `zt_feedbackview`
+CHANGE `account` `account` char(30) NOT NULL DEFAULT '',
+CHANGE `product` `product` mediumint(8) unsigned NOT NULL DEFAULT '0';
+
+ALTER TABLE `zt_serverroom`
+CHANGE `name` `name` varchar(128) NOT NULL DEFAULT '',
+CHANGE `city` `city` varchar(128) NOT NULL DEFAULT '',
+CHANGE `line` `line` varchar(20) NOT NULL DEFAULT '',
+CHANGE `bandwidth` `bandwidth` varchar(128) NOT NULL DEFAULT '',
+CHANGE `provider` `provider` varchar(128) NOT NULL DEFAULT '',
+CHANGE `owner` `owner` varchar(30) NOT NULL DEFAULT '',
+CHANGE `createdBy` `createdBy` char(30) NOT NULL DEFAULT '',
+CHANGE `createdDate` `createdDate` datetime NULL,
+CHANGE `editedBy` `editedBy` char(30) NOT NULL DEFAULT '',
+CHANGE `editedDate` `editedDate` datetime NULL,
+CHANGE `deleted` `deleted` enum('0','1') NOT NULL DEFAULT '0';
+
+ALTER TABLE `zt_account`
+CHANGE `name` `name` varchar(255) NOT NULL DEFAULT '',
+CHANGE `type` `type` varchar(255) NOT NULL DEFAULT '',
+CHANGE `provider` `provider` varchar(255) NOT NULL DEFAULT '',
+CHANGE `adminURI` `adminURI` varchar(255) NOT NULL DEFAULT '',
+CHANGE `account` `account` varchar(255) NOT NULL DEFAULT '',
+CHANGE `password` `password` varchar(255) NOT NULL DEFAULT '',
+CHANGE `email` `email` varchar(255) NOT NULL DEFAULT '',
+CHANGE `mobile` `mobile` varchar(255) NOT NULL DEFAULT '',
+CHANGE `createdBy` `createdBy` varchar(30) NOT NULL DEFAULT '',
+CHANGE `createdDate` `createdDate` datetime NULL,
+CHANGE `editedBy` `editedBy` varchar(30) NOT NULL DEFAULT '',
+CHANGE `editedDate` `editedDate` datetime NULL,
+CHANGE `status` `status` varchar(30) NOT NULL DEFAULT '',
+CHANGE `deleted` `deleted` enum('0','1') NOT NULL DEFAULT '0';
+
+ALTER TABLE `zt_host`
+CHANGE `name` `name` varchar(255) NOT NULL DEFAULT '',
+CHANGE `type` `type` varchar(30) NOT NULL DEFAULT 'normal',
+CHANGE `hostType` `hostType` varchar(30) NOT NULL DEFAULT '',
+CHANGE `mac` `mac` varchar(128) NOT NULL DEFAULT '',
+CHANGE `memory` `memory` varchar(30) NOT NULL DEFAULT '',
+CHANGE `diskSize` `diskSize` varchar(30) NOT NULL DEFAULT '',
+CHANGE `status` `status` varchar(50) NOT NULL DEFAULT '',
+CHANGE `secret` `secret` varchar(50) NOT NULL DEFAULT '',
+CHANGE `tokenSN` `tokenSN` varchar(50) NOT NULL DEFAULT '',
+CHANGE `tokenTime` `tokenTime` datetime NULL,
+CHANGE `oldTokenSN` `oldTokenSN` varchar(50) NOT NULL DEFAULT '',
+CHANGE `vsoft` `vsoft` varchar(30) NOT NULL DEFAULT '',
+CHANGE `heartbeat` `heartbeat` datetime NULL,
+CHANGE `zap` `zap` varchar(10) NOT NULL DEFAULT '',
+CHANGE `provider` `provider` varchar(255) NOT NULL DEFAULT '',
+CHANGE `vnc` `vnc` int(11) NOT NULL DEFAULT '0',
+CHANGE `ztf` `ztf` int(11) NOT NULL DEFAULT '0',
+CHANGE `zd` `zd` int(11) NOT NULL DEFAULT '0',
+CHANGE `ssh` `ssh` int(11) NOT NULL DEFAULT '0',
+CHANGE `parent` `parent` int(11) unsigned NOT NULL DEFAULT '0',
+CHANGE `image` `image` int(11) unsigned NOT NULL DEFAULT '0',
+CHANGE `admin` `admin` smallint(5) unsigned NOT NULL DEFAULT '0',
+CHANGE `serverRoom` `serverRoom` mediumint(8) unsigned NOT NULL DEFAULT '0',
+CHANGE `serverModel` `serverModel` varchar(256) NOT NULL DEFAULT '',
+CHANGE `hardwareType` `hardwareType` varchar(64) NOT NULL DEFAULT '',
+CHANGE `cpuBrand` `cpuBrand` varchar(128) NOT NULL DEFAULT '',
+CHANGE `cpuModel` `cpuModel` varchar(128) NOT NULL DEFAULT '',
+CHANGE `cpuNumber` `cpuNumber` varchar(16) NOT NULL DEFAULT '',
+CHANGE `cpuCores` `cpuCores` varchar(30) NOT NULL DEFAULT '',
+CHANGE `intranet` `intranet` varchar(128) NOT NULL DEFAULT '',
+CHANGE `extranet` `extranet` varchar(128) NOT NULL DEFAULT '',
+CHANGE `osName` `osName` varchar(64) NOT NULL DEFAULT '',
+CHANGE `osVersion` `osVersion` varchar(64) NOT NULL DEFAULT '',
+CHANGE `group` `group` varchar(128) NOT NULL DEFAULT '',
+CHANGE `createdBy` `createdBy` varchar(30) NOT NULL DEFAULT '',
+CHANGE `createdDate` `createdDate` datetime NULL,
+CHANGE `editedBy` `editedBy` varchar(30) NOT NULL DEFAULT '',
+CHANGE `editedDate` `editedDate` datetime NULL,
+CHANGE `deleted` `deleted` enum('0','1') NOT NULL DEFAULT '0';
+
+ALTER TABLE `zt_image`
+CHANGE `host` `host` int(11) unsigned NOT NULL DEFAULT 0,
+CHANGE `name` `name` varchar(64) NOT NULL DEFAULT '',
+CHANGE `localName` `localName` varchar(64) NOT NULL DEFAULT '',
+CHANGE `address` `address` varchar(64) NOT NULL DEFAULT '',
+CHANGE `path` `path` varchar(64) NOT NULL DEFAULT '',
+CHANGE `status` `status` varchar(20) NOT NULL DEFAULT '',
+CHANGE `osName` `osName` varchar(32) NOT NULL DEFAULT '',
+CHANGE `from` `from` varchar(10) NOT NULL DEFAULT 'zentao',
+CHANGE `md5` `md5` varchar(64) NOT NULL DEFAULT '',
+CHANGE `createdBy` `createdBy` varchar(30) NOT NULL DEFAULT '',
+CHANGE `createdDate` `createdDate` datetime NULL,
+CHANGE `restoreDate` `restoreDate` datetime NULL;
+
+ALTER TABLE `zt_automation`
+CHANGE `node` `node` int(11) unsigned NOT NULL DEFAULT 0,
+CHANGE `product` `product` int(11) unsigned NOT NULL DEFAULT 0,
+CHANGE `scriptPath` `scriptPath` varchar(255) NOT NULL DEFAULT '',
+CHANGE `createdBy` `createdBy` varchar(30) NOT NULL DEFAULT '',
+CHANGE `createdDate` `createdDate` datetime NULL;
+
+ALTER TABLE `zt_service`
+CHANGE `name` `name` varchar(255) NOT NULL DEFAULT '',
+CHANGE `external` `external` enum('0','1') NOT NULL DEFAULT '0',
+CHANGE `port` `port` smallint(5) unsigned NOT NULL DEFAULT '0',
+CHANGE `entry` `entry` varchar(255) NOT NULL DEFAULT '',
+CHANGE `deploy` `deploy` varchar(255) NOT NULL DEFAULT '',
+CHANGE `version` `version` varchar(64) NOT NULL DEFAULT '',
+CHANGE `color` `color` char(7) NOT NULL DEFAULT '',
+CHANGE `dept` `dept` varchar(128) NOT NULL DEFAULT '',
+CHANGE `devel` `devel` varchar(30) NOT NULL DEFAULT '',
+CHANGE `qa` `qa` varchar(30) NOT NULL DEFAULT '',
+CHANGE `ops` `ops` varchar(30) NOT NULL DEFAULT '',
+CHANGE `softName` `softName` varchar(128) NOT NULL DEFAULT '',
+CHANGE `softVersion` `softVersion` varchar(128) NOT NULL DEFAULT '',
+CHANGE `type` `type` varchar(20) NOT NULL DEFAULT '',
+CHANGE `createdBy` `createdBy` char(30) NOT NULL DEFAULT '',
+CHANGE `createdDate` `createdDate` datetime NULL,
+CHANGE `editedBy` `editedBy` char(30) NOT NULL DEFAULT '',
+CHANGE `editedDate` `editedDate` datetime NULL,
+CHANGE `deleted` `deleted` enum('0','1') NOT NULL DEFAULT '0';
+
+ALTER TABLE `zt_attend`
+CHANGE `account` `account` char(30) NOT NULL DEFAULT '',
+CHANGE `date` `date` date NULL,
+CHANGE `status` `status` varchar(30) NOT NULL DEFAULT '',
+CHANGE `ip` `ip` varchar(15) NOT NULL DEFAULT '',
+CHANGE `device` `device` varchar(30) NOT NULL DEFAULT '',
+CHANGE `client` `client` varchar(20) NOT NULL DEFAULT '',
+CHANGE `reason` `reason` varchar(30) NOT NULL DEFAULT '',
+CHANGE `reviewedBy` `reviewedBy` char(30) NOT NULL DEFAULT '',
+CHANGE `reviewedDate` `reviewedDate` datetime NULL;
+
+ALTER TABLE `zt_attendstat`
+CHANGE `account` `account` char(30) NOT NULL DEFAULT '',
+CHANGE `month` `month` char(10) NOT NULL DEFAULT '',
+CHANGE `normal` `normal` decimal(12,2) NOT NULL DEFAULT 0.00,
+CHANGE `late` `late` decimal(12,2) NOT NULL DEFAULT 0.00,
+CHANGE `early` `early` decimal(12,2) NOT NULL DEFAULT 0.00,
+CHANGE `absent` `absent` decimal(12,2) NOT NULL DEFAULT 0.00,
+CHANGE `trip` `trip` decimal(12,2) NOT NULL DEFAULT 0.00,
+CHANGE `egress` `egress` decimal(12,2) NOT NULL DEFAULT 0.00,
+CHANGE `lieu` `lieu` decimal(12,2) NOT NULL DEFAULT 0.00,
+CHANGE `paidLeave` `paidLeave` decimal(12,2) NOT NULL DEFAULT 0.00,
+CHANGE `unpaidLeave` `unpaidLeave` decimal(12,2) NOT NULL DEFAULT 0.00,
+CHANGE `timeOvertime` `timeOvertime` decimal(12,2) NOT NULL DEFAULT 0.00,
+CHANGE `restOvertime` `restOvertime` decimal(12,2) NOT NULL DEFAULT 0.00,
+CHANGE `holidayOvertime` `holidayOvertime` decimal(12,2) NOT NULL DEFAULT 0.00,
+CHANGE `deserve` `deserve` decimal(12,2) NOT NULL DEFAULT 0.00,
+CHANGE `actual` `actual` decimal(12,2) NOT NULL DEFAULT 0.00,
+CHANGE `status` `status` char(30) NOT NULL DEFAULT '';
+
+ALTER TABLE `zt_overtime`
+CHANGE `year` `year` char(4) NOT NULL DEFAULT '',
+CHANGE `begin` `begin` date NULL,
+CHANGE `end` `end` date NULL,
+CHANGE `hours` `hours` float(4,1) unsigned NOT NULL DEFAULT '0.0',
+CHANGE `leave` `leave` varchar(255) NOT NULL DEFAULT '',
+CHANGE `type` `type` varchar(30) NOT NULL DEFAULT '',
+CHANGE `status` `status` varchar(30) NOT NULL DEFAULT '',
+CHANGE `rejectReason` `rejectReason` varchar(100) NOT NULL DEFAULT '',
+CHANGE `createdBy` `createdBy` char(30) NOT NULL DEFAULT '',
+CHANGE `createdDate` `createdDate` datetime NULL,
+CHANGE `reviewedBy` `reviewedBy` char(30) NOT NULL DEFAULT '',
+CHANGE `reviewedDate` `reviewedDate` datetime NULL,
+CHANGE `level` `level` tinyint(3) NOT NULL DEFAULT '0',
+CHANGE `assignedTo` `assignedTo` varchar(30) NOT NULL DEFAULT '';
+
+ALTER TABLE `zt_holiday`
+CHANGE `name` `name` varchar(30) NOT NULL DEFAULT '',
+CHANGE `type` `type` enum('holiday', 'working') NOT NULL DEFAULT 'holiday',
+CHANGE `year` `year` char(4) NOT NULL DEFAULT '',
+CHANGE `begin` `begin` date NULL,
+CHANGE `end` `end` date NULL;
+
+ALTER TABLE `zt_leave`
+CHANGE `year` `year` char(4) NOT NULL DEFAULT '',
+CHANGE `begin` `begin` date NULL,
+CHANGE `end` `end` date NULL,
+CHANGE `hours` `hours` float(4,1) unsigned NOT NULL DEFAULT '0.0',
+CHANGE `backDate` `backDate` datetime NULL,
+CHANGE `type` `type` varchar(30) NOT NULL DEFAULT '',
+CHANGE `status` `status` varchar(30) NOT NULL DEFAULT '',
+CHANGE `createdBy` `createdBy` char(30) NOT NULL DEFAULT '',
+CHANGE `createdDate` `createdDate` datetime NULL,
+CHANGE `reviewedBy` `reviewedBy` char(30) NOT NULL DEFAULT '',
+CHANGE `reviewedDate` `reviewedDate` datetime NULL,
+CHANGE `level` `level` tinyint(3) NOT NULL DEFAULT '0',
+CHANGE `assignedTo` `assignedTo` varchar(30) NOT NULL DEFAULT '';
+
+ALTER TABLE `zt_lieu`
+CHANGE `year` `year` char(4) NOT NULL DEFAULT '',
+CHANGE `begin` `begin` date NULL,
+CHANGE `end` `end` date NULL,
+CHANGE `hours` `hours` float(4,1) unsigned NOT NULL DEFAULT '0.0',
+CHANGE `overtime` `overtime` char(255) NOT NULL DEFAULT '',
+CHANGE `trip` `trip` char(255) NOT NULL DEFAULT '',
+CHANGE `status` `status` varchar(30) NOT NULL DEFAULT '',
+CHANGE `createdBy` `createdBy` char(30) NOT NULL DEFAULT '',
+CHANGE `createdDate` `createdDate` datetime NULL,
+CHANGE `reviewedBy` `reviewedBy` char(30) NOT NULL DEFAULT '',
+CHANGE `reviewedDate` `reviewedDate` datetime NULL,
+CHANGE `level` `level` tinyint(3) NOT NULL DEFAULT '0',
+CHANGE `assignedTo` `assignedTo` varchar(30) NOT NULL DEFAULT '';
+
+ALTER TABLE `zt_trip`
+CHANGE `type` `type` enum('trip', 'egress') NOT NULL DEFAULT 'trip',
+CHANGE `customers` `customers` varchar(20) NOT NULL DEFAULT '',
+CHANGE `name` `name` char(30) NOT NULL DEFAULT '',
+CHANGE `year` `year` char(4) NOT NULL DEFAULT '',
+CHANGE `begin` `begin` date NULL,
+CHANGE `end` `end` date NULL,
+CHANGE `from` `from` char(50) NOT NULL DEFAULT '',
+CHANGE `to` `to` char(50) NOT NULL DEFAULT '',
+CHANGE `createdBy` `createdBy` char(30) NOT NULL DEFAULT '',
+CHANGE `createdDate` `createdDate` datetime NULL;
+
+ALTER TABLE `zt_deploy`
+CHANGE `begin` `begin` datetime NULL,
+CHANGE `end` `end` datetime NULL,
+CHANGE `name` `name` varchar(255) NOT NULL DEFAULT '',
+CHANGE `status` `status` varchar(20) NOT NULL DEFAULT '',
+CHANGE `owner` `owner` char(30) NOT NULL DEFAULT '',
+CHANGE `createdBy` `createdBy` char(30) NOT NULL DEFAULT '',
+CHANGE `createdDate` `createdDate` datetime NULL,
+CHANGE `result` `result` varchar(20) NOT NULL DEFAULT '';
+
+ALTER TABLE `zt_deployproduct`
+CHANGE `deploy` `deploy` mediumint(8) unsigned NOT NULL DEFAULT '0',
+CHANGE `product` `product` mediumint(8) unsigned NOT NULL DEFAULT '0',
+CHANGE `release` `release` mediumint(8) unsigned NOT NULL DEFAULT '0',
+CHANGE `package` `package` varchar(255) NOT NULL DEFAULT '';
+
+ALTER TABLE `zt_deploystep`
+CHANGE `deploy` `deploy` mediumint(8) unsigned NOT NULL DEFAULT '0',
+CHANGE `title` `title` varchar(255) NOT NULL DEFAULT '',
+CHANGE `begin` `begin` datetime NULL,
+CHANGE `end` `end` datetime NULL,
+CHANGE `stage` `stage` varchar(30) NOT NULL DEFAULT '',
+CHANGE `status` `status` varchar(30) NOT NULL DEFAULT '',
+CHANGE `assignedTo` `assignedTo` char(30) NOT NULL DEFAULT '',
+CHANGE `assignedDate` `assignedDate` datetime NULL,
+CHANGE `finishedBy` `finishedBy` char(30) NOT NULL DEFAULT '',
+CHANGE `finishedDate` `finishedDate` datetime NULL,
+CHANGE `createdBy` `createdBy` char(30) NOT NULL DEFAULT '',
+CHANGE `createdDate` `createdDate` datetime NULL;
+
+ALTER TABLE `zt_deployscope`
+CHANGE `deploy` `deploy` mediumint(8) unsigned NOT NULL DEFAULT '0',
+CHANGE `service` `service` mediumint(8) unsigned NOT NULL DEFAULT '0';
+
+ALTER TABLE `zt_traincourse`
+CHANGE `code` `code` varchar(50) NOT NULL DEFAULT '',
+CHANGE `category` `category` mediumint(8) NOT NULL DEFAULT '0',
+CHANGE `name` `name` varchar(255) NOT NULL DEFAULT '',
+CHANGE `status` `status` varchar(10) NOT NULL DEFAULT '',
+CHANGE `createdBy` `createdBy` varchar(255) NOT NULL DEFAULT '',
+CHANGE `createdDate` `createdDate` date NULL,
+CHANGE `editedBy` `editedBy` varchar(255) NOT NULL DEFAULT '',
+CHANGE `editedDate` `editedDate` date NULL,
+CHANGE `deleted` `deleted` enum('0','1') NOT NULL DEFAULT '0';
+
+ALTER TABLE `zt_traincontents`
+CHANGE `code` `code` varchar(50) NOT NULL DEFAULT '',
+CHANGE `name` `name` varchar(255) NOT NULL DEFAULT '',
+CHANGE `type` `type` varchar(30) NOT NULL DEFAULT '',
+CHANGE `parent` `parent` mediumint(8) unsigned NOT NULL DEFAULT '0',
+CHANGE `path` `path` char(255) NOT NULL DEFAULT '',
+CHANGE `order` `order` mediumint(8) NOT NULL DEFAULT '0',
+CHANGE `createdBy` `createdBy` char(30) NOT NULL DEFAULT '',
+CHANGE `createdDate` `createdDate` datetime NULL,
+CHANGE `editedBy` `editedBy` varchar(30) NOT NULL DEFAULT '',
+CHANGE `editedDate` `editedDate` datetime NULL,
+CHANGE `deleted` `deleted` tinyint(1) NOT NULL DEFAULT '0';
+
+ALTER TABLE `zt_traincategory`
+CHANGE `name` `name` char(30) NOT NULL DEFAULT '',
+CHANGE `parent` `parent` mediumint(8) unsigned NOT NULL DEFAULT '0',
+CHANGE `path` `path` char(255) NOT NULL DEFAULT '',
+CHANGE `grade` `grade` tinyint(3) NOT NULL DEFAULT '0',
+CHANGE `order` `order` mediumint(8) NOT NULL DEFAULT '0',
+CHANGE `deleted` `deleted` enum('0', '1') NOT NULL DEFAULT '0';
+
+ALTER TABLE `zt_trainrecords`
+CHANGE `objectId` `objectId` mediumint(8) unsigned NOT NULL DEFAULT '0',
+CHANGE `objectType` `objectType` varchar(10) NOT NULL DEFAULT '',
+CHANGE `status` `status` varchar(10) NOT NULL DEFAULT '';
+
+ALTER TABLE `zt_faq`
+CHANGE `module` `module` mediumint(9) NOT NULL DEFAULT '0',
+CHANGE `product` `product` mediumint(9) NOT NULL DEFAULT '0',
+CHANGE `question` `question` varchar(255) NOT NULL DEFAULT '',
+CHANGE `addedtime` `addedtime` datetime NULL;
+
+ALTER TABLE `zt_domain`
+CHANGE `domain` `domain` varchar(255) NOT NULL DEFAULT '',
+CHANGE `adminURI` `adminURI` varchar(255) NOT NULL DEFAULT '',
+CHANGE `resolverURI` `resolverURI` varchar(255) NOT NULL DEFAULT '',
+CHANGE `register` `register` varchar(255) NOT NULL DEFAULT '',
+CHANGE `expiredDate` `expiredDate` datetime NULL,
+CHANGE `renew` `renew` varchar(255) NOT NULL DEFAULT '',
+CHANGE `account` `account` varchar(255) NOT NULL DEFAULT '',
+CHANGE `createdBy` `createdBy` varchar(30) NOT NULL DEFAULT '',
+CHANGE `createdDate` `createdDate` datetime NULL,
+CHANGE `editedBy` `editedBy` varchar(30) NOT NULL DEFAULT '',
+CHANGE `editedDate` `editedDate` datetime NULL,
+CHANGE `deleted` `deleted` enum('0','1') NOT NULL DEFAULT '0';
+
+ALTER TABLE `zt_workflow`
+CHANGE `parent` `parent` varchar(30) NOT NULL DEFAULT '',
+CHANGE `child` `child` varchar(30) NOT NULL DEFAULT '',
+CHANGE `type` `type` varchar(10) NOT NULL DEFAULT 'flow',
+CHANGE `navigator` `navigator` varchar(10) NOT NULL DEFAULT '',
+CHANGE `app` `app` varchar(20) NOT NULL DEFAULT '',
+CHANGE `position` `position` varchar(30) NOT NULL DEFAULT '',
+CHANGE `module` `module` varchar(30) NOT NULL DEFAULT '',
+CHANGE `table` `table` varchar(50) NOT NULL DEFAULT '',
+CHANGE `name` `name` varchar(30) NOT NULL DEFAULT '',
+CHANGE `titleField` `titleField` varchar(30) NOT NULL DEFAULT '',
+CHANGE `order` `order` smallint(5) unsigned NOT NULL DEFAULT '0',
+CHANGE `buildin` `buildin` tinyint(1) unsigned NOT NULL DEFAULT '0',
+CHANGE `version` `version` varchar(10) NOT NULL DEFAULT '1.0',
+CHANGE `status` `status` varchar(10) NOT NULL DEFAULT 'wait',
+CHANGE `vision` `vision` varchar(10) NOT NULL DEFAULT 'rnd',
+CHANGE `approval` `approval` enum('enabled','disabled') NOT NULL DEFAULT 'disabled',
+CHANGE `createdBy` `createdBy` varchar(30) NOT NULL DEFAULT '',
+CHANGE `createdDate` `createdDate` datetime NULL,
+CHANGE `editedBy` `editedBy` varchar(30) NOT NULL DEFAULT '',
+CHANGE `editedDate` `editedDate` datetime NULL;
+
+ALTER TABLE `zt_workflowaction`
+CHANGE `module` `module` varchar(30) NOT NULL DEFAULT '',
+CHANGE `action` `action` varchar(50) NOT NULL DEFAULT '',
+CHANGE `method` `method` varchar(50) NOT NULL DEFAULT '',
+CHANGE `name` `name` varchar(50) NOT NULL DEFAULT '',
+CHANGE `type` `type` enum('single','batch') NOT NULL DEFAULT 'single',
+CHANGE `batchMode` `batchMode` enum('same','different') NOT NULL DEFAULT 'different',
+CHANGE `extensionType` `extensionType` varchar(10) NOT NULL DEFAULT 'override' COMMENT 'none | extend | override',
+CHANGE `open` `open` varchar(20) NOT NULL DEFAULT '',
+CHANGE `position` `position` enum('menu','browseandview','browse','view') NOT NULL DEFAULT 'browseandview',
+CHANGE `layout` `layout` char(20) NOT NULL DEFAULT '',
+CHANGE `show` `show` enum('dropdownlist','direct') NOT NULL DEFAULT 'dropdownlist',
+CHANGE `order` `order` smallint(5) unsigned NOT NULL DEFAULT '0',
+CHANGE `buildin` `buildin` tinyint(1) unsigned NOT NULL DEFAULT '0',
+CHANGE `role` `role` varchar(10) NOT NULL DEFAULT 'custom',
+CHANGE `virtual` `virtual` tinyint(1) unsigned NOT NULL DEFAULT '0',
+CHANGE `toList` `toList` char(255) NOT NULL DEFAULT '',
+CHANGE `status` `status` varchar(10) NOT NULL DEFAULT 'enable',
+CHANGE `vision` `vision` varchar(10) NOT NULL DEFAULT 'rnd',
+CHANGE `createdBy` `createdBy` varchar(30) NOT NULL DEFAULT '',
+CHANGE `createdDate` `createdDate` datetime NULL,
+CHANGE `editedBy` `editedBy` varchar(30) NOT NULL DEFAULT '',
+CHANGE `editedDate` `editedDate` datetime NULL;
+
+ALTER TABLE `zt_workflowdatasource`
+CHANGE `type` `type` enum('system','sql','func','option','lang','category') NOT NULL DEFAULT 'option',
+CHANGE `name` `name` varchar(30) NOT NULL DEFAULT '',
+CHANGE `code` `code` varchar(30) NOT NULL DEFAULT '',
+CHANGE `view` `view` varchar(20) NOT NULL DEFAULT '',
+CHANGE `keyField` `keyField` varchar(50) NOT NULL DEFAULT '',
+CHANGE `valueField` `valueField` varchar(50) NOT NULL DEFAULT '',
+CHANGE `buildin` `buildin` tinyint(1) unsigned NOT NULL DEFAULT '0',
+CHANGE `vision` `vision` varchar(10) NOT NULL DEFAULT 'rnd',
+CHANGE `createdBy` `createdBy` char(30) NOT NULL DEFAULT '',
+CHANGE `createdDate` `createdDate` datetime NULL,
+CHANGE `editedBy` `editedBy` char(30) NOT NULL DEFAULT '',
+CHANGE `editedDate` `editedDate` datetime NULL;
+
+ALTER TABLE `zt_workflowfield`
+CHANGE `module` `module` varchar(30) NOT NULL DEFAULT '',
+CHANGE `field` `field`  varchar(50) NOT NULL DEFAULT '',
+CHANGE `type` `type` varchar(20) NOT NULL DEFAULT 'varchar',
+CHANGE `length` `length` varchar(10) NOT NULL DEFAULT '',
+CHANGE `name` `name` varchar(50) NOT NULL DEFAULT '',
+CHANGE `control` `control` varchar(20) NOT NULL DEFAULT '',
+CHANGE `default` `default` varchar(100) NOT NULL DEFAULT '',
+CHANGE `rules` `rules` varchar(255) NOT NULL DEFAULT '',
+CHANGE `placeholder` `placeholder` varchar(100) NOT NULL DEFAULT '',
+CHANGE `order` `order` smallint(5) unsigned NOT NULL DEFAULT '0',
+CHANGE `searchOrder` `searchOrder` smallint(5) unsigned NOT NULL DEFAULT '0',
+CHANGE `exportOrder` `exportOrder` smallint(5) unsigned NOT NULL DEFAULT '0',
+CHANGE `canExport` `canExport` enum('0', '1') NOT NULL DEFAULT '0',
+CHANGE `canSearch` `canSearch` enum('0', '1') NOT NULL DEFAULT '0',
+CHANGE `isValue` `isValue` enum('0', '1') NOT NULL DEFAULT '0',
+CHANGE `readonly` `readonly` enum('0', '1') NOT NULL DEFAULT '0',
+CHANGE `buildin` `buildin` tinyint(1) unsigned NOT NULL DEFAULT '0',
+CHANGE `role` `role` varchar(10) NOT NULL DEFAULT 'custom',
+CHANGE `createdBy` `createdBy` varchar(30) NOT NULL DEFAULT '',
+CHANGE `createdDate` `createdDate` datetime NULL,
+CHANGE `editedBy` `editedBy` varchar(30) NOT NULL DEFAULT '',
+CHANGE `editedDate` `editedDate` datetime NULL;
+
+ALTER TABLE `zt_workflowlayout`
+CHANGE `module` `module` varchar(30) NOT NULL DEFAULT '',
+CHANGE `action` `action` varchar(50) NOT NULL DEFAULT '',
+CHANGE `field` `field` varchar(50) NOT NULL DEFAULT '',
+CHANGE `order` `order` smallint(5) unsigned NOT NULL DEFAULT '0',
+CHANGE `width` `width` smallint(5) NOT NULL DEFAULT '0',
+CHANGE `readonly` `readonly` enum('0','1') NOT NULL DEFAULT '0',
+CHANGE `mobileShow` `mobileShow` enum('0','1') NOT NULL DEFAULT '1',
+CHANGE `summary` `summary` varchar(20) NOT NULL DEFAULT '',
+CHANGE `layoutRules` `layoutRules` varchar(255) NOT NULL DEFAULT '',
+CHANGE `vision` `vision` varchar(10) NOT NULL DEFAULT 'rnd';
+
+ALTER TABLE `zt_workflowlabel`
+CHANGE `module` `module` varchar(30) NOT NULL DEFAULT '',
+CHANGE `action` `action` varchar(30) NOT NULL DEFAULT 'browse',
+CHANGE `code` `code` varchar(30) NOT NULL DEFAULT '',
+CHANGE `label` `label` varchar(255) NOT NULL DEFAULT '',
+CHANGE `order` `order` tinyint(3) NOT NULL DEFAULT '0',
+CHANGE `buildin` `buildin` tinyint(1) unsigned NOT NULL DEFAULT '0',
+CHANGE `role` `role` varchar(10) NOT NULL DEFAULT 'custom',
+CHANGE `createdBy` `createdBy` char(30) NOT NULL DEFAULT '',
+CHANGE `createdDate` `createdDate` datetime NULL,
+CHANGE `editedBy` `editedBy` char(30) NOT NULL DEFAULT '',
+CHANGE `editedDate` `editedDate` datetime NULL;
+
+ALTER TABLE `zt_workflowlinkdata`
+CHANGE `objectType` `objectType` varchar(30) NOT NULL DEFAULT '',
+CHANGE `objectID` `objectID` mediumint(8) unsigned NOT NULL DEFAULT '0',
+CHANGE `linkedType` `linkedType` varchar(30) NOT NULL DEFAULT '',
+CHANGE `linkedID` `linkedID` mediumint(8) unsigned NOT NULL DEFAULT '0',
+CHANGE `createdBy` `createdBy` varchar(30) NOT NULL DEFAULT '',
+CHANGE `createdDate` `createdDate` datetime NULL;
+
+ALTER TABLE `zt_workflowrelation`
+CHANGE `prev` `prev` varchar(30) NOT NULL DEFAULT '',
+CHANGE `next` `next` varchar(30) NOT NULL DEFAULT '',
+CHANGE `field` `field` varchar(50) NOT NULL DEFAULT '',
+CHANGE `actions` `actions` varchar(20) NOT NULL DEFAULT '',
+CHANGE `buildin` `buildin` enum('0', '1') NOT NULL DEFAULT '0',
+CHANGE `createdBy` `createdBy` char(30) NOT NULL DEFAULT '',
+CHANGE `createdDate` `createdDate` datetime NULL;
+
+ALTER TABLE `zt_workflowrelationlayout`
+CHANGE `prev` `prev` varchar(30) NOT NULL DEFAULT '',
+CHANGE `next` `next` varchar(30) NOT NULL DEFAULT '',
+CHANGE `action` `action` varchar(50) NOT NULL DEFAULT '',
+CHANGE `field` `field` varchar(50) NOT NULL DEFAULT '',
+CHANGE `order` `order` smallint(5) unsigned NOT NULL DEFAULT '0';
+
+ALTER TABLE `zt_workflowrule`
+CHANGE `type` `type` enum('system', 'regex', 'func') NOT NULL DEFAULT 'regex',
+CHANGE `name` `name` varchar(30) NOT NULL DEFAULT '',
+CHANGE `createdBy` `createdBy` char(30) NOT NULL DEFAULT '',
+CHANGE `createdDate` `createdDate` datetime NULL,
+CHANGE `editedBy` `editedBy` char(30) NOT NULL DEFAULT '',
+CHANGE `editedDate` `editedDate` datetime NULL;
+
+ALTER TABLE `zt_workflowsql`
+CHANGE `module` `module` varchar(30) NOT NULL DEFAULT '',
+CHANGE `field` `field` varchar(50) NOT NULL DEFAULT '',
+CHANGE `action` `action` varchar(50) NOT NULL DEFAULT '',
+CHANGE `createdBy` `createdBy` varchar(30) NOT NULL DEFAULT '',
+CHANGE `createdDate` `createdDate` datetime NULL,
+CHANGE `editedBy` `editedBy` varchar(30) NOT NULL DEFAULT '',
+CHANGE `editedDate` `editedDate` datetime NULL;
+
+ALTER TABLE `zt_workflowversion`
+CHANGE `module` `module` varchar(30) NOT NULL DEFAULT '',
+CHANGE `version` `version` varchar(10) NOT NULL DEFAULT '';
+
+ALTER TABLE `zt_workflowreport`
+CHANGE `type` `type` enum('pie', 'line', 'bar') NOT NULL DEFAULT 'pie' COMMENT 'report type',
+CHANGE `countType` `countType` enum('sum', 'count') NOT NULL DEFAULT 'sum' COMMENT 'report count method',
+CHANGE `displayType` `displayType` enum('value', 'percent') NOT NULL DEFAULT 'value' COMMENT 'report display method',
+CHANGE `order` `order` smallint(5) unsigned NOT NULL DEFAULT '0',
+CHANGE `createdBy` `createdBy` varchar(30) NOT NULL DEFAULT '',
+CHANGE `createdDate` `createdDate` datetime NULL;
+
+ALTER TABLE `zt_durationestimation`
+CHANGE `project` `project` mediumint(8) unsigned NOT NULL DEFAULT '0',
+CHANGE `stage` `stage` mediumint(9) NOT NULL DEFAULT '0',
+CHANGE `workload` `workload` varchar(255) NOT NULL DEFAULT '',
+CHANGE `worktimeRate` `worktimeRate` varchar(255) NOT NULL DEFAULT '',
+CHANGE `people` `people` varchar(255) NOT NULL DEFAULT '',
+CHANGE `startDate` `startDate` date NULL,
+CHANGE `endDate` `endDate` date NULL,
+CHANGE `createdBy` `createdBy` varchar(30) NOT NULL DEFAULT '',
+CHANGE `createdDate` `createdDate` datetime NULL,
+CHANGE `editedBy` `editedBy` varchar(30) NOT NULL DEFAULT '',
+CHANGE `editedDate` `editedDate` datetime NULL,
+CHANGE `deleted` `deleted` enum('0','1') NOT NULL DEFAULT '0';
+
+ALTER TABLE `zt_workestimation`
+CHANGE `project` `project` mediumint(8) unsigned NOT NULL DEFAULT '0',
+CHANGE `scale` `scale` decimal(10,2) unsigned NOT NULL DEFAULT '0.00',
+CHANGE `productivity` `productivity` decimal(10,2) unsigned NOT NULL DEFAULT '0.00',
+CHANGE `duration` `duration` decimal(10,2) unsigned NOT NULL DEFAULT '0.00',
+CHANGE `unitLaborCost` `unitLaborCost` decimal(10,2) unsigned NOT NULL DEFAULT '0.00',
+CHANGE `totalLaborCost` `totalLaborCost` decimal(10,2) unsigned NOT NULL DEFAULT '0.00',
+CHANGE `createdBy` `createdBy` varchar(30) NOT NULL DEFAULT '',
+CHANGE `createdDate` `createdDate` datetime NULL,
+CHANGE `editedBy` `editedBy` varchar(30) NOT NULL DEFAULT '',
+CHANGE `editedDate` `editedDate` datetime NULL,
+CHANGE `assignedTo` `assignedTo` varchar(30) NOT NULL DEFAULT '',
+CHANGE `assignedDate` `assignedDate` datetime NULL,
+CHANGE `deleted` `deleted` enum('0','1') NOT NULL DEFAULT '0',
+CHANGE `dayHour` `dayHour` decimal(10,2) NOT NULL DEFAULT '0.00';
+
+ALTER TABLE `zt_intervention`
+CHANGE `project` `project` mediumint(8) unsigned NOT NULL DEFAULT '0',
+CHANGE `activity` `activity` mediumint(8) NOT NULL DEFAULT '0',
+CHANGE `status` `status` char(30) NOT NULL DEFAULT '',
+CHANGE `begin` `begin` date NULL,
+CHANGE `realBegin` `realBegin` date NULL,
+CHANGE `situation` `situation` varchar(255) NOT NULL DEFAULT '',
+CHANGE `createdBy` `createdBy` char(30) NOT NULL DEFAULT '',
+CHANGE `createdDate` `createdDate` date NULL;
+
+ALTER TABLE `zt_activity`
+CHANGE `process` `process` mediumint(9) NOT NULL DEFAULT '0',
+CHANGE `name` `name` varchar(255) NOT NULL DEFAULT '',
+CHANGE `optional` `optional` varchar(255) NOT NULL DEFAULT '',
+CHANGE `tailorNorm` `tailorNorm` varchar(255) NOT NULL DEFAULT '',
+CHANGE `assignedTo` `assignedTo` varchar(30) NOT NULL DEFAULT '',
+CHANGE `status` `status` varchar(30) NOT NULL DEFAULT '',
+CHANGE `createdBy` `createdBy` varchar(30) NOT NULL DEFAULT '',
+CHANGE `createdDate` `createdDate` datetime NULL,
+CHANGE `editedBy` `editedBy` varchar(30) NOT NULL DEFAULT '',
+CHANGE `editedDate` `editedDate` datetime NULL,
+CHANGE `assignedBy` `assignedBy` varchar(30) NOT NULL DEFAULT '',
+CHANGE `assignedDate` `assignedDate` datetime NULL,
+CHANGE `deleted` `deleted` enum('0','1') NOT NULL DEFAULT '0';
+
+ALTER TABLE `zt_auditcl`
+CHANGE `model` `model` char(30) NOT NULL DEFAULT 'waterfall',
+CHANGE `practiceArea` `practiceArea` char(30) NOT NULL DEFAULT '',
+CHANGE `type` `type` char(30) NOT NULL DEFAULT '',
+CHANGE `title` `title` varchar(255) NOT NULL DEFAULT '',
+CHANGE `objectType` `objectType` char(30) NOT NULL DEFAULT '',
+CHANGE `objectID` `objectID` int(10) NOT NULL DEFAULT '0',
+CHANGE `assignedTo` `assignedTo` varchar(30) NOT NULL DEFAULT '',
+CHANGE `status` `status` varchar(30) NOT NULL DEFAULT '',
+CHANGE `createdBy` `createdBy` varchar(30) NOT NULL DEFAULT '',
+CHANGE `createdDate` `createdDate` datetime NULL,
+CHANGE `editedBy` `editedBy` varchar(30) NOT NULL DEFAULT '',
+CHANGE `editedDate` `editedDate` datetime NULL,
+CHANGE `assignedBy` `assignedBy` varchar(30) NOT NULL DEFAULT '',
+CHANGE `assignedDate` `assignedDate` datetime NULL,
+CHANGE `deleted` `deleted` enum('0','1') NOT NULL DEFAULT '0';
+
+ALTER TABLE `zt_auditplan`
+CHANGE `dateType` `dateType` char(30) NOT NULL DEFAULT '',
+CHANGE `objectID` `objectID` mediumint(9) NOT NULL DEFAULT '0',
+CHANGE `objectType` `objectType` char(30) NOT NULL DEFAULT '',
+CHANGE `process` `process` mediumint(9) NOT NULL DEFAULT '0',
+CHANGE `processType` `processType` char(30) NOT NULL DEFAULT '',
+CHANGE `checkDate` `checkDate` date NULL,
+CHANGE `checkedBy` `checkedBy` varchar(30) NOT NULL DEFAULT '',
+CHANGE `realCheckDate` `realCheckDate` date NULL,
+CHANGE `result` `result` char(30) NOT NULL DEFAULT '',
+CHANGE `project` `project` mediumint(8) unsigned NOT NULL DEFAULT '0',
+CHANGE `execution` `execution` mediumint(8) unsigned NOT NULL DEFAULT '0',
+CHANGE `assignedTo` `assignedTo` varchar(30) NOT NULL DEFAULT '',
+CHANGE `status` `status` varchar(30) NOT NULL DEFAULT '',
+CHANGE `createdBy` `createdBy` varchar(30) NOT NULL DEFAULT '',
+CHANGE `createdDate` `createdDate` datetime NULL,
+CHANGE `editedBy` `editedBy` varchar(30) NOT NULL DEFAULT '',
+CHANGE `editedDate` `editedDate` datetime NULL,
+CHANGE `assignedBy` `assignedBy` varchar(30) NOT NULL DEFAULT '',
+CHANGE `assignedDate` `assignedDate` datetime NULL,
+CHANGE `deleted` `deleted` enum('0','1') NOT NULL DEFAULT '0',
+CHANGE `checkBy` `checkBy` varchar(30) NOT NULL DEFAULT '';
+
+ALTER TABLE `zt_auditresult`
+CHANGE `auditplan` `auditplan` mediumint(8) NOT NULL DEFAULT '0',
+CHANGE `listID` `listID` mediumint(8) NOT NULL DEFAULT '0',
+CHANGE `result` `result` char(30) NOT NULL DEFAULT '',
+CHANGE `checkedBy` `checkedBy` varchar(30) NOT NULL DEFAULT '',
+CHANGE `checkedDate` `checkedDate` date NULL,
+CHANGE `assignedTo` `assignedTo` varchar(30) NOT NULL DEFAULT '',
+CHANGE `status` `status` varchar(30) NOT NULL DEFAULT '',
+CHANGE `createdBy` `createdBy` varchar(30) NOT NULL DEFAULT '',
+CHANGE `createdDate` `createdDate` datetime NULL,
+CHANGE `editedBy` `editedBy` varchar(30) NOT NULL DEFAULT '',
+CHANGE `editedDate` `editedDate` datetime NULL,
+CHANGE `assignedBy` `assignedBy` varchar(30) NOT NULL DEFAULT '',
+CHANGE `assignedDate` `assignedDate` datetime NULL,
+CHANGE `deleted` `deleted` enum('0','1') NOT NULL DEFAULT '0';
+
+ALTER TABLE `zt_nc`
+CHANGE `project` `project` mediumint(8) unsigned NOT NULL DEFAULT '0',
+CHANGE `auditplan` `auditplan` mediumint(8) NOT NULL DEFAULT '0',
+CHANGE `listID` `listID` mediumint(8) NOT NULL DEFAULT '0',
+CHANGE `title` `title` varchar(255) NOT NULL DEFAULT '',
+CHANGE `type` `type` char(30) NOT NULL DEFAULT '',
+CHANGE `status` `status` varchar(30) NOT NULL DEFAULT 'active',
+CHANGE `severity` `severity` char(30) NOT NULL DEFAULT '',
+CHANGE `deadline` `deadline` date NULL,
+CHANGE `resolvedBy` `resolvedBy` varchar(30) NOT NULL DEFAULT '',
+CHANGE `resolution` `resolution` char(30) NOT NULL DEFAULT '',
+CHANGE `resolvedDate` `resolvedDate` date NULL,
+CHANGE `closedBy` `closedBy` varchar(30) NOT NULL DEFAULT '',
+CHANGE `closedDate` `closedDate` date NULL,
+CHANGE `parent` `parent` mediumint(8) unsigned NOT NULL DEFAULT '0',
+CHANGE `assignedTo` `assignedTo` varchar(30) NOT NULL DEFAULT '',
+CHANGE `assignedDate` `assignedDate` date NULL,
+CHANGE `activateDate` `activateDate` date NULL,
+CHANGE `createdBy` `createdBy` varchar(30) NOT NULL DEFAULT '',
+CHANGE `createdDate` `createdDate` datetime NULL,
+CHANGE `editedBy` `editedBy` varchar(30) NOT NULL DEFAULT '',
+CHANGE `editedDate` `editedDate` datetime NULL,
+CHANGE `deleted` `deleted` enum('0','1') NOT NULL DEFAULT '0';
+
+ALTER TABLE `zt_zoutput`
+CHANGE `activity` `activity` mediumint(8) NOT NULL DEFAULT '0',
+CHANGE `name` `name` varchar(255) NOT NULL DEFAULT '',
+CHANGE `optional` `optional` char(20) NOT NULL DEFAULT '',
+CHANGE `tailorNorm` `tailorNorm` varchar(255) NOT NULL DEFAULT '',
+CHANGE `status` `status` varchar(30) NOT NULL DEFAULT '',
+CHANGE `createdBy` `createdBy` varchar(30) NOT NULL DEFAULT '',
+CHANGE `createdDate` `createdDate` datetime NULL,
+CHANGE `editedBy` `editedBy` varchar(30) NOT NULL DEFAULT '',
+CHANGE `editedDate` `editedDate` datetime NULL,
+CHANGE `deleted` `deleted` enum('0','1') NOT NULL DEFAULT '0';
+
+ALTER TABLE `zt_process`
+CHANGE `model` `model` char(30) NOT NULL DEFAULT 'waterfall',
+CHANGE `name` `name` varchar(255) NOT NULL DEFAULT '',
+CHANGE `type` `type` char(30) NOT NULL DEFAULT '',
+CHANGE `abbr` `abbr` char(30) NOT NULL DEFAULT '',
+CHANGE `assignedTo` `assignedTo` varchar(30) NOT NULL DEFAULT '',
+CHANGE `status` `status` varchar(30) NOT NULL DEFAULT '',
+CHANGE `order` `order` mediumint(9) NOT NULL DEFAULT '0',
+CHANGE `createdBy` `createdBy` varchar(30) NOT NULL DEFAULT '',
+CHANGE `createdDate` `createdDate` datetime NULL,
+CHANGE `editedBy` `editedBy` varchar(30) NOT NULL DEFAULT '',
+CHANGE `editedDate` `editedDate` datetime NULL,
+CHANGE `assignedBy` `assignedBy` varchar(30) NOT NULL DEFAULT '',
+CHANGE `assignedDate` `assignedDate` datetime NULL,
+CHANGE `deleted` `deleted` enum('0','1') NOT NULL DEFAULT '0';
+
+ALTER TABLE `zt_programactivity`
+CHANGE `project` `project` mediumint(8) unsigned NOT NULL DEFAULT '0',
+CHANGE `execution` `execution` mediumint(8) unsigned NOT NULL DEFAULT '0',
+CHANGE `process` `process` mediumint(8) NOT NULL DEFAULT '0',
+CHANGE `activity` `activity` mediumint(8) NOT NULL DEFAULT '0',
+CHANGE `name` `name` varchar(255) NOT NULL DEFAULT '',
+CHANGE `reason` `reason` varchar(255) NOT NULL DEFAULT '',
+CHANGE `result` `result` char(30) NOT NULL DEFAULT '',
+CHANGE `linkedBy` `linkedBy` char(30) NOT NULL DEFAULT '',
+CHANGE `createdBy` `createdBy` char(30) NOT NULL DEFAULT '',
+CHANGE `createdDate` `createdDate` date NULL,
+CHANGE `deleted` `deleted` enum('0','1') NOT NULL DEFAULT '0';
+
+ALTER TABLE `zt_programoutput`
+CHANGE `project` `project` mediumint(8) unsigned NOT NULL DEFAULT '0',
+CHANGE `execution` `execution` mediumint(8) unsigned NOT NULL DEFAULT '0',
+CHANGE `process` `process` mediumint(8) NOT NULL DEFAULT '0',
+CHANGE `activity` `activity` mediumint(8) NOT NULL DEFAULT '0',
+CHANGE `output` `output` mediumint(8) NOT NULL DEFAULT '0',
+CHANGE `name` `name` varchar(255) NOT NULL DEFAULT '',
+CHANGE `reason` `reason` varchar(255) NOT NULL DEFAULT '',
+CHANGE `result` `result` char(30) NOT NULL DEFAULT '',
+CHANGE `linkedBy` `linkedBy` char(30) NOT NULL DEFAULT '',
+CHANGE `createdBy` `createdBy` char(30) NOT NULL DEFAULT '',
+CHANGE `createdDate` `createdDate` date NULL,
+CHANGE `deleted` `deleted` enum('0','1') NOT NULL DEFAULT '0';
+
+ALTER TABLE `zt_programprocess`
+CHANGE `project` `project` mediumint(8) unsigned NOT NULL DEFAULT '0',
+CHANGE `process` `process` mediumint(8) NOT NULL DEFAULT '0',
+CHANGE `name` `name` varchar(255) NOT NULL DEFAULT '',
+CHANGE `type` `type` char(30) NOT NULL DEFAULT '',
+CHANGE `abbr` `abbr` char(30) NOT NULL DEFAULT '',
+CHANGE `reason` `reason` varchar(255) NOT NULL DEFAULT '',
+CHANGE `linkedBy` `linkedBy` char(30) NOT NULL DEFAULT '',
+CHANGE `createdBy` `createdBy` char(30) NOT NULL DEFAULT '',
+CHANGE `createdDate` `createdDate` date NULL,
+CHANGE `deleted` `deleted` enum('0','1') NOT NULL DEFAULT '0';
+
+ALTER TABLE `zt_basicmeas`
+CHANGE `purpose` `purpose` varchar(50) NOT NULL DEFAULT '',
+CHANGE `scope` `scope` char(30) NOT NULL DEFAULT '',
+CHANGE `object` `object` char(30) NOT NULL DEFAULT '',
+CHANGE `name` `name` varchar(90) NOT NULL DEFAULT '',
+CHANGE `code` `code` char(30) NOT NULL DEFAULT '',
+CHANGE `unit` `unit` varchar(10) NOT NULL DEFAULT '',
+CHANGE `source` `source` varchar(255) NOT NULL DEFAULT '',
+CHANGE `collectType` `collectType` varchar(30) NOT NULL DEFAULT '',
+CHANGE `execTime` `execTime` varchar(30) NOT NULL DEFAULT '',
+CHANGE `collectedBy` `collectedBy` varchar(10) NOT NULL DEFAULT '',
+CHANGE `createdBy` `createdBy` varchar(30) NOT NULL DEFAULT '',
+CHANGE `createdDate` `createdDate` datetime NULL,
+CHANGE `editedBy` `editedBy` varchar(30) NOT NULL DEFAULT '',
+CHANGE `editedDate` `editedDate` datetime NULL,
+CHANGE `order` `order` mediumint(8) UNSIGNED NOT NULL DEFAULT 0,
+CHANGE `deleted` `deleted` enum('0','1') NOT NULL DEFAULT '0';
+
+ALTER TABLE `zt_budget`
+CHANGE `project` `project` mediumint(8) unsigned NOT NULL DEFAULT '0',
+CHANGE `stage` `stage` char(30) NOT NULL DEFAULT '',
+CHANGE `subject` `subject` mediumint(8) NOT NULL DEFAULT '0',
+CHANGE `amount` `amount` char(30) NOT NULL DEFAULT '',
+CHANGE `name` `name` varchar(255) NOT NULL DEFAULT '',
+CHANGE `createdBy` `createdBy` char(30) NOT NULL DEFAULT '',
+CHANGE `createdDate` `createdDate` date NULL,
+CHANGE `lastEditedBy` `lastEditedBy` char(30) NOT NULL DEFAULT '',
+CHANGE `lastEditedDate` `lastEditedDate` date NULL,
+CHANGE `deleted` `deleted` enum('0','1') NOT NULL DEFAULT '0';
+
+ALTER TABLE `zt_researchplan`
+CHANGE `project` `project` mediumint(8) unsigned NOT NULL DEFAULT '0',
+CHANGE `name` `name` varchar(255) NOT NULL DEFAULT '',
+CHANGE `customer` `customer` varchar(255) NOT NULL DEFAULT '',
+CHANGE `stakeholder` `stakeholder` varchar(255) NOT NULL DEFAULT '',
+CHANGE `objective` `objective` varchar(255) NOT NULL DEFAULT '',
+CHANGE `begin` `begin` datetime NULL,
+CHANGE `end` `end` datetime NULL,
+CHANGE `location` `location` varchar(255) NOT NULL DEFAULT '',
+CHANGE `team` `team` varchar(255) NOT NULL DEFAULT '',
+CHANGE `method` `method` enum('','videoConference','interview','questionnaire','telephoneInterview') NOT NULL DEFAULT '',
+CHANGE `createdBy` `createdBy` varchar(30) NOT NULL DEFAULT '',
+CHANGE `createdDate` `createdDate` datetime NULL,
+CHANGE `editedBy` `editedBy` varchar(30) NOT NULL DEFAULT '',
+CHANGE `editedDate` `editedDate` datetime NULL,
+CHANGE `deleted` `deleted` enum('0','1') NOT NULL DEFAULT '0';
+
+ALTER TABLE `zt_researchreport`
+CHANGE `project` `project` mediumint(8) unsigned NOT NULL DEFAULT '0',
+CHANGE `relatedPlan` `relatedPlan` mediumint(8) unsigned NOT NULL DEFAULT '0',
+CHANGE `title` `title` varchar(255) NOT NULL DEFAULT '',
+CHANGE `author` `author` varchar(30) NOT NULL DEFAULT '',
+CHANGE `customer` `customer` varchar(255) NOT NULL DEFAULT '',
+CHANGE `researchObjects` `researchObjects` varchar(255) NOT NULL DEFAULT '',
+CHANGE `begin` `begin` datetime NULL,
+CHANGE `end` `end` datetime NULL,
+CHANGE `location` `location` varchar(255) NOT NULL DEFAULT '',
+CHANGE `method` `method` enum('','videoConference','interview','questionnaire','telephoneInterview') NOT NULL DEFAULT '',
+CHANGE `createdBy` `createdBy` varchar(30) NOT NULL DEFAULT '',
+CHANGE `createdDate` `createdDate` datetime NULL,
+CHANGE `editedBy` `editedBy` varchar(30) NOT NULL DEFAULT '',
+CHANGE `editedDate` `editedDate` datetime NULL,
+CHANGE `deleted` `deleted` enum('0','1') NOT NULL DEFAULT '0';
+
+ALTER TABLE `zt_meeting`
+CHANGE `project` `project` mediumint(8) NOT NULL DEFAULT '0',
+CHANGE `execution` `execution` mediumint(8) NOT NULL DEFAULT '0',
+CHANGE `name` `name` varchar(255) NOT NULL DEFAULT '',
+CHANGE `type` `type` varchar(255) NOT NULL DEFAULT '',
+CHANGE `dept` `dept` mediumint(8) NOT NULL DEFAULT '0',
+CHANGE `mode` `mode` varchar(255) NOT NULL DEFAULT '',
+CHANGE `host` `host` varchar(30) NOT NULL DEFAULT '',
+CHANGE `date` `date` date NULL,
+CHANGE `room` `room` int NOT NULL DEFAULT '0',
+CHANGE `minutedBy` `minutedBy` varchar(30) NOT NULL DEFAULT '',
+CHANGE `minutedDate` `minutedDate` datetime NULL,
+CHANGE `objectType` `objectType` varchar(30) NOT NULL DEFAULT '',
+CHANGE `objectID` `objectID` mediumint(8) NOT NULL DEFAULT '0',
+CHANGE `createdBy` `createdBy` varchar(30) NOT NULL DEFAULT '',
+CHANGE `createdDate` `createdDate` datetime NULL,
+CHANGE `editedBy` `editedBy` varchar(30) NOT NULL DEFAULT '',
+CHANGE `editedDate` `editedDate` datetime NULL,
+CHANGE `deleted` `deleted` enum('0','1') NOT NULL DEFAULT '0';
+
+ALTER TABLE `zt_meetingroom`
+CHANGE `name` `name` varchar(255) NOT NULL DEFAULT '',
+CHANGE `position` `position` varchar(30) NOT NULL DEFAULT '',
+CHANGE `seats` `seats` int NOT NULL DEFAULT '0',
+CHANGE `equipment` `equipment` varchar(255) NOT NULL DEFAULT '',
+CHANGE `openTime` `openTime` varchar(255) NOT NULL DEFAULT '',
+CHANGE `createdBy` `createdBy` varchar(30) NOT NULL DEFAULT '',
+CHANGE `createdDate` `createdDate` datetime NULL,
+CHANGE `editedBy` `editedBy` varchar(30) NOT NULL DEFAULT '',
+CHANGE `editedDate` `editedDate` datetime NULL,
+CHANGE `deleted` `deleted` enum('0','1') NOT NULL DEFAULT '0';
+
+ALTER TABLE `zt_assetlib`
+CHANGE `name` `name` varchar(255) NOT NULL DEFAULT '',
+CHANGE `type` `type` varchar(255) NOT NULL DEFAULT '',
+CHANGE `order` `order` SMALLINT UNSIGNED NOT NULL DEFAULT '0',
+CHANGE `createdBy` `createdBy` varchar(30) NOT NULL DEFAULT '',
+CHANGE `createdDate` `createdDate` datetime NULL,
+CHANGE `editedBy` `editedBy` varchar(30) NOT NULL DEFAULT '',
+CHANGE `editedDate` `editedDate` datetime NULL,
+CHANGE `deleted` `deleted` enum('0','1') NOT NULL DEFAULT '0';
+
+ALTER TABLE `zt_meastemplate`
+CHANGE `model` `model` char(30) NOT NULL DEFAULT '',
+CHANGE `name` `name` varchar(255) NOT NULL DEFAULT '',
+CHANGE `createdBy` `createdBy` char(30) NOT NULL DEFAULT '',
+CHANGE `createdDate` `createdDate` date NULL,
+CHANGE `deleted` `deleted` enum('0','1') NOT NULL DEFAULT '0';
+
+ALTER TABLE `zt_programreport`
+CHANGE `template` `template` mediumint(8) NOT NULL DEFAULT '0',
+CHANGE `project` `project` mediumint(8) unsigned NOT NULL DEFAULT '0',
+CHANGE `name` `name` varchar(255) NOT NULL DEFAULT '',
+CHANGE `createdBy` `createdBy` char(30) NOT NULL DEFAULT '',
+CHANGE `createdDate` `createdDate` date NULL,
+CHANGE `deleted` `deleted` enum('0','1') NOT NULL DEFAULT '0';
+
+ALTER TABLE `zt_measrecords`
+CHANGE `type` `type` varchar(30) NOT NULL DEFAULT '',
+CHANGE `mid` `mid` mediumint(8) NOT NULL DEFAULT '0',
+CHANGE `measCode` `measCode` char(50) NOT NULL DEFAULT '',
+CHANGE `project` `project` mediumint(8) unsigned NOT NULL DEFAULT '0',
+CHANGE `product` `product` mediumint(8) unsigned NOT NULL DEFAULT '0',
+CHANGE `execution` `execution` mediumint(8) unsigned NOT NULL DEFAULT '0',
+CHANGE `year` `year` char(4) NOT NULL DEFAULT '',
+CHANGE `month` `month` char(6) NOT NULL DEFAULT '',
+CHANGE `week` `week` char(8) NOT NULL DEFAULT '',
+CHANGE `day` `day` char(8) NOT NULL DEFAULT '',
+CHANGE `value` `value` varchar(255) NOT NULL DEFAULT '',
+CHANGE `date` `date` date NULL;
+
+ALTER TABLE `zt_object`
+CHANGE `project` `project` mediumint(8) unsigned NOT NULL DEFAULT '0',
+CHANGE `product` `product` mediumint(8) NOT NULL DEFAULT '0',
+CHANGE `from` `from` mediumint(8) NOT NULL DEFAULT '0',
+CHANGE `title` `title` varchar(255) NOT NULL DEFAULT '',
+CHANGE `category` `category` char(30) NOT NULL DEFAULT '',
+CHANGE `version` `version` varchar(255) NOT NULL DEFAULT '',
+CHANGE `storyEst` `storyEst` char(30) NOT NULL DEFAULT '',
+CHANGE `taskEst` `taskEst` char(30) NOT NULL DEFAULT '',
+CHANGE `requestEst` `requestEst` char(30) NOT NULL DEFAULT '',
+CHANGE `testEst` `testEst` char(30) NOT NULL DEFAULT '',
+CHANGE `devEst` `devEst` char(30) NOT NULL DEFAULT '',
+CHANGE `designEst` `designEst` char(30) NOT NULL DEFAULT '',
+CHANGE `createdBy` `createdBy` char(30) NOT NULL DEFAULT '',
+CHANGE `createdDate` `createdDate` date NULL,
+CHANGE `deleted` `deleted` enum('0','1') NOT NULL DEFAULT '0';
+
+ALTER TABLE `zt_review`
+CHANGE `project` `project` mediumint(8) unsigned NOT NULL DEFAULT '0',
+CHANGE `title` `title` varchar(255) NOT NULL DEFAULT '',
+CHANGE `object` `object` mediumint(8) NOT NULL DEFAULT '0',
+CHANGE `template` `template` mediumint(8) NOT NULL DEFAULT '0',
+CHANGE `doc` `doc` mediumint(8) NOT NULL DEFAULT '0',
+CHANGE `docVersion` `docVersion` smallint(6) NOT NULL DEFAULT '0',
+CHANGE `status` `status` char(30) NOT NULL DEFAULT '',
+CHANGE `reviewedBy` `reviewedBy` varchar(255) NOT NULL DEFAULT '',
+CHANGE `auditedBy` `auditedBy` varchar(255) NOT NULL DEFAULT '',
+CHANGE `createdBy` `createdBy` char(30) NOT NULL DEFAULT '',
+CHANGE `createdDate` `createdDate` date NULL,
+CHANGE `deadline` `deadline` date NULL,
+CHANGE `lastReviewedBy` `lastReviewedBy` varchar(255) NOT NULL DEFAULT '',
+CHANGE `lastReviewedDate` `lastReviewedDate` date NULL,
+CHANGE `lastAuditedBy` `lastAuditedBy` varchar(255) NOT NULL DEFAULT '',
+CHANGE `lastAuditedDate` `lastAuditedDate` date NULL,
+CHANGE `lastEditedBy` `lastEditedBy` varchar(255) NOT NULL DEFAULT '',
+CHANGE `lastEditedDate` `lastEditedDate` date NULL,
+CHANGE `result` `result` char(30) NOT NULL DEFAULT '',
+CHANGE `auditResult` `auditResult` char(30) NOT NULL DEFAULT '',
+CHANGE `deleted` `deleted` enum('0','1') NOT NULL DEFAULT '0';
+
+ALTER TABLE `zt_reviewcl`
+CHANGE `title` `title` varchar(255) NOT NULL DEFAULT '',
+CHANGE `object` `object` char(30) NOT NULL DEFAULT '',
+CHANGE `category` `category` char(30) NOT NULL DEFAULT '',
+CHANGE `type` `type` varchar(255) NOT NULL DEFAULT '',
+CHANGE `assignedTo` `assignedTo` varchar(30) NOT NULL DEFAULT '',
+CHANGE `status` `status` varchar(30) NOT NULL DEFAULT '',
+CHANGE `createdBy` `createdBy` varchar(30) NOT NULL DEFAULT '',
+CHANGE `createdDate` `createdDate` datetime NULL,
+CHANGE `editedBy` `editedBy` varchar(30) NOT NULL DEFAULT '',
+CHANGE `editedDate` `editedDate` datetime NULL,
+CHANGE `assignedBy` `assignedBy` varchar(30) NOT NULL DEFAULT '',
+CHANGE `assignedDate` `assignedDate` datetime NULL,
+CHANGE `deleted` `deleted` enum('0','1') NOT NULL DEFAULT '0';
+
+ALTER TABLE `zt_reviewresult`
+CHANGE `review` `review` mediumint(8) NOT NULL DEFAULT '0',
+CHANGE `type` `type` char(30) NOT NULL DEFAULT 'review',
+CHANGE `result` `result` char(30) NOT NULL DEFAULT '',
+CHANGE `reviewer` `reviewer` char(30) NOT NULL DEFAULT '',
+CHANGE `remainIssue` `remainIssue` char(30) NOT NULL DEFAULT '',
+CHANGE `createdDate` `createdDate` date NULL;
+
+ALTER TABLE `zt_reviewissue`
+CHANGE `project` `project` mediumint(8) unsigned NOT NULL DEFAULT '0',
+CHANGE `review` `review` mediumint(8) NOT NULL DEFAULT '0',
+CHANGE `approval` `approval` mediumint(8) NOT NULL DEFAULT '0',
+CHANGE `injection` `injection` mediumint(8) NOT NULL DEFAULT '0',
+CHANGE `identify` `identify` mediumint(8) NOT NULL DEFAULT '0',
+CHANGE `type` `type` char(30) NOT NULL DEFAULT 'review',
+CHANGE `listID` `listID` mediumint(8) NOT NULL DEFAULT '0',
+CHANGE `title` `title` varchar(255) NOT NULL DEFAULT '',
+CHANGE `opinion` `opinion` varchar(255) NOT NULL DEFAULT '',
+CHANGE `status` `status` char(30) NOT NULL DEFAULT '',
+CHANGE `resolution` `resolution` char(30) NOT NULL DEFAULT '',
+CHANGE `resolutionBy` `resolutionBy` CHAR(30) NOT NULL DEFAULT '',
+CHANGE `createdBy` `createdBy` char(30) NOT NULL DEFAULT '',
+CHANGE `createdDate` `createdDate` date NULL,
+CHANGE `deleted` `deleted` enum('0','1') NOT NULL DEFAULT '0';
+
+ALTER TABLE `zt_reviewlist`
+CHANGE `title` `title` varchar(255) NOT NULL DEFAULT '',
+CHANGE `object` `object` char(30) NOT NULL DEFAULT '',
+CHANGE `category` `category` char(30) NOT NULL DEFAULT '',
+CHANGE `assignedTo` `assignedTo` varchar(30) NOT NULL DEFAULT '',
+CHANGE `status` `status` varchar(30) NOT NULL DEFAULT '',
+CHANGE `createdBy` `createdBy` varchar(30) NOT NULL DEFAULT '',
+CHANGE `createdDate` `createdDate` datetime NULL,
+CHANGE `editedBy` `editedBy` varchar(30) NOT NULL DEFAULT '',
+CHANGE `editedDate` `editedDate` datetime NULL,
+CHANGE `assignedBy` `assignedBy` varchar(30) NOT NULL DEFAULT '',
+CHANGE `assignedDate` `assignedDate` datetime NULL,
+CHANGE `deleted` `deleted` enum('0','1') NOT NULL DEFAULT '0';
+
+ALTER TABLE `zt_cmcl`
+CHANGE `type` `type` char(30) NOT NULL DEFAULT '',
+CHANGE `projectType` `projectType` varchar(255) NOT NULL DEFAULT '',
+CHANGE `title` `title` int(11) NOT NULL DEFAULT '0',
+CHANGE `assignedTo` `assignedTo` varchar(30) NOT NULL DEFAULT '',
+CHANGE `status` `status` varchar(30) NOT NULL DEFAULT '',
+CHANGE `order` `order` int(11) NOT NULL DEFAULT '0',
+CHANGE `createdBy` `createdBy` varchar(30) NOT NULL DEFAULT '',
+CHANGE `createdDate` `createdDate` datetime NULL,
+CHANGE `editedBy` `editedBy` varchar(30) NOT NULL DEFAULT '',
+CHANGE `editedDate` `editedDate` datetime NULL,
+CHANGE `deleted` `deleted` enum('0','1') NOT NULL DEFAULT '0';
+
+ALTER TABLE `zt_solutions`
+CHANGE `project` `project` mediumint(8) unsigned NOT NULL DEFAULT '0',
+CHANGE `execution` `execution` mediumint(8) unsigned NOT NULL DEFAULT '0',
+CHANGE `type` `type` char(30) NOT NULL DEFAULT '',
+CHANGE `addedBy` `addedBy` varchar(30) NOT NULL DEFAULT '',
+CHANGE `addedDate` `addedDate` date NULL,
+CHANGE `editedBy` `editedBy` varchar(30) NOT NULL DEFAULT '',
+CHANGE `editedDate` `editedDate` date NULL,
+CHANGE `deleted` `deleted` enum('0','1') NOT NULL DEFAULT '0';
+
+ALTER TABLE `zt_measqueue`
+CHANGE `type` `type` varchar(30) NOT NULL DEFAULT '',
+CHANGE `mid` `mid` mediumint(8) unsigned NOT NULL DEFAULT '0',
+CHANGE `status` `status` varchar(255) NOT NULL DEFAULT '',
+CHANGE `execTime` `execTime` varchar(10) NOT NULL DEFAULT '',
+CHANGE `createdBy` `createdBy` varchar(30) NOT NULL DEFAULT '',
+CHANGE `createdDate` `createdDate` datetime NULL,
+CHANGE `updateDate` `updateDate` datetime NULL,
+CHANGE `deleted` `deleted` enum('0','1') NOT NULL DEFAULT '0';
+
+ALTER TABLE `zt_issue`
+CHANGE `resolvedBy` `resolvedBy` varchar(30) NOT NULL DEFAULT '',
+CHANGE `project` `project` varchar(255) NOT NULL DEFAULT '',
+CHANGE `execution` `execution` mediumint(8) unsigned NOT NULL DEFAULT '0',
+CHANGE `title` `title` varchar(255) NOT NULL DEFAULT '',
+CHANGE `pri` `pri` char(30) NOT NULL DEFAULT '',
+CHANGE `severity` `severity` char(30) NOT NULL DEFAULT '',
+CHANGE `type` `type` char(30) NOT NULL DEFAULT '',
+CHANGE `activity` `activity` varchar(255) NOT NULL DEFAULT '',
+CHANGE `deadline` `deadline` date NULL,
+CHANGE `resolution` `resolution` char(30) NOT NULL DEFAULT '',
+CHANGE `objectID` `objectID` varchar(255) NOT NULL DEFAULT '',
+CHANGE `resolvedDate` `resolvedDate` date NULL,
+CHANGE `status` `status` varchar(30) NOT NULL DEFAULT '',
+CHANGE `owner` `owner` varchar(255) NOT NULL DEFAULT '',
+CHANGE `createdBy` `createdBy` varchar(30) NOT NULL DEFAULT '',
+CHANGE `createdDate` `createdDate` datetime NULL,
+CHANGE `editedBy` `editedBy` varchar(30) NOT NULL DEFAULT '',
+CHANGE `editedDate` `editedDate` datetime NULL,
+CHANGE `activateBy` `activateBy` varchar(30) NOT NULL DEFAULT '',
+CHANGE `activateDate` `activateDate` date NULL,
+CHANGE `closedBy` `closedBy` varchar(30) NOT NULL DEFAULT '',
+CHANGE `closedDate` `closedDate` date NULL,
+CHANGE `assignedTo` `assignedTo` varchar(30) NOT NULL DEFAULT '',
+CHANGE `assignedBy` `assignedBy` varchar(30) NOT NULL DEFAULT '',
+CHANGE `assignedDate` `assignedDate` datetime NULL,
+CHANGE `approvedDate` `approvedDate` date NULL,
+CHANGE `deleted` `deleted` enum('0','1') NOT NULL DEFAULT '0';
+
+ALTER TABLE `zt_risk`
+CHANGE `project` `project` varchar(255) NOT NULL DEFAULT '',
+CHANGE `execution` `execution` mediumint(8) unsigned NOT NULL DEFAULT '0',
+CHANGE `name` `name` varchar(255) NOT NULL DEFAULT '',
+CHANGE `source` `source` char(30) NOT NULL DEFAULT '',
+CHANGE `category` `category` char(30) NOT NULL DEFAULT '',
+CHANGE `strategy` `strategy` char(30) NOT NULL DEFAULT '',
+CHANGE `status` `status` varchar(30) NOT NULL DEFAULT 'active',
+CHANGE `impact` `impact` char(30) NOT NULL DEFAULT '',
+CHANGE `probability` `probability` char(30) NOT NULL DEFAULT '',
+CHANGE `rate` `rate` char(30) NOT NULL DEFAULT '',
+CHANGE `pri` `pri` char(30) NOT NULL DEFAULT '',
+CHANGE `identifiedDate` `identifiedDate` date NULL,
+CHANGE `plannedClosedDate` `plannedClosedDate` date NULL,
+CHANGE `actualClosedDate` `actualClosedDate` date NULL,
+CHANGE `createdBy` `createdBy` varchar(30) NOT NULL DEFAULT '',
+CHANGE `createdDate` `createdDate` datetime NULL,
+CHANGE `editedBy` `editedBy` varchar(30) NOT NULL DEFAULT '',
+CHANGE `editedDate` `editedDate` datetime NULL,
+CHANGE `resolvedBy` `resolvedBy` varchar(30) NOT NULL DEFAULT '',
+CHANGE `activateBy` `activateBy` varchar(30) NOT NULL DEFAULT '',
+CHANGE `activateDate` `activateDate` date NULL,
+CHANGE `assignedTo` `assignedTo` varchar(30) NOT NULL DEFAULT '',
+CHANGE `closedBy` `closedBy` varchar(30) NOT NULL DEFAULT '',
+CHANGE `closedDate` `closedDate` date NULL,
+CHANGE `cancelBy` `cancelBy` varchar(30) NOT NULL DEFAULT '',
+CHANGE `cancelDate` `cancelDate` date NULL,
+CHANGE `cancelReason` `cancelReason` char(30) NOT NULL DEFAULT '',
+CHANGE `hangupBy` `hangupBy` varchar(30) NOT NULL DEFAULT '',
+CHANGE `hangupDate` `hangupDate` date NULL,
+CHANGE `trackedBy` `trackedBy` varchar(30) NOT NULL DEFAULT '',
+CHANGE `trackedDate` `trackedDate` date NULL,
+CHANGE `assignedDate` `assignedDate` date NULL,
+CHANGE `approvedDate` `approvedDate` date NULL,
+CHANGE `deleted` `deleted` enum('0','1') NOT NULL DEFAULT '0';
+
+ALTER TABLE `zt_riskissue`
+CHANGE `risk` `risk` mediumint(8) unsigned NOT NULL DEFAULT '0',
+CHANGE `issue` `issue` mediumint(8) unsigned NOT NULL DEFAULT '0';
+
+ALTER TABLE `zt_opportunity`
+CHANGE `project` `project` mediumint(8) unsigned NOT NULL DEFAULT '0',
+CHANGE `execution` `execution` mediumint(8) unsigned NOT NULL DEFAULT '0',
+CHANGE `name` `name` varchar(255) NOT NULL DEFAULT '',
+CHANGE `source` `source` char(30) NOT NULL DEFAULT '',
+CHANGE `type` `type` char(30) NOT NULL DEFAULT '',
+CHANGE `strategy` `strategy` char(30) NOT NULL DEFAULT '',
+CHANGE `status` `status` varchar(30) NOT NULL DEFAULT 'active',
+CHANGE `impact` `impact` mediumint(8) NOT NULL DEFAULT '0',
+CHANGE `chance` `chance` mediumint(8) NOT NULL DEFAULT '0',
+CHANGE `ratio` `ratio` mediumint(8) NOT NULL DEFAULT '0',
+CHANGE `pri` `pri` char(30) NOT NULL DEFAULT '',
+CHANGE `identifiedDate` `identifiedDate` date NULL,
+CHANGE `assignedTo` `assignedTo` varchar(30) NOT NULL DEFAULT '',
+CHANGE `assignedDate` `assignedDate` date NULL,
+CHANGE `approvedDate` `approvedDate` date NULL,
+CHANGE `plannedClosedDate` `plannedClosedDate` date NULL,
+CHANGE `actualClosedDate` `actualClosedDate` date NULL,
+CHANGE `createdBy` `createdBy` varchar(30) NOT NULL DEFAULT '',
+CHANGE `createdDate` `createdDate` datetime NULL,
+CHANGE `editedBy` `editedBy` varchar(30) NOT NULL DEFAULT '',
+CHANGE `editedDate` `editedDate` datetime NULL,
+CHANGE `activatedBy` `activatedBy` varchar(30) NOT NULL DEFAULT '',
+CHANGE `activatedDate` `activatedDate` datetime NULL,
+CHANGE `closedBy` `closedBy` varchar(30) NOT NULL DEFAULT '',
+CHANGE `closedDate` `closedDate` datetime NULL,
+CHANGE `canceledBy` `canceledBy` varchar(30) NOT NULL DEFAULT '',
+CHANGE `canceledDate` `canceledDate` datetime NULL,
+CHANGE `cancelReason` `cancelReason` char(30) NOT NULL DEFAULT '',
+CHANGE `hangupedBy` `hangupedBy` varchar(30) NOT NULL DEFAULT '',
+CHANGE `hangupedDate` `hangupedDate` datetime NULL,
+CHANGE `resolvedBy` `resolvedBy` varchar(30) NOT NULL DEFAULT '',
+CHANGE `resolvedDate` `resolvedDate` datetime NULL,
+CHANGE `lastCheckedBy` `lastCheckedBy` varchar(30) NOT NULL DEFAULT '',
+CHANGE `lastCheckedDate` `lastCheckedDate` datetime NULL,
+CHANGE `deleted` `deleted` enum('0','1') NOT NULL DEFAULT '0';
+
+ALTER TABLE `zt_trainplan`
+CHANGE `project` `project` mediumint(8) unsigned NOT NULL DEFAULT '0',
+CHANGE `name` `name` varchar(255) NOT NULL DEFAULT '',
+CHANGE `begin` `begin` date NULL,
+CHANGE `end` `end` date NULL,
+CHANGE `place` `place` varchar(255) NOT NULL DEFAULT '',
+CHANGE `lecturer` `lecturer` varchar(20) NOT NULL DEFAULT '',
+CHANGE `type` `type` enum('inside','outside') NOT NULL DEFAULT 'inside',
+CHANGE `status` `status` varchar(20) NOT NULL DEFAULT '',
+CHANGE `createdDate` `createdDate` datetime NULL,
+CHANGE `editedBy` `editedBy` varchar(30) NOT NULL DEFAULT '',
+CHANGE `editedDate` `editedDate` datetime NULL,
+CHANGE `deleted` `deleted` enum('0','1') NOT NULL DEFAULT '0';
+
+ALTER TABLE `zt_gapanalysis`
+CHANGE `project` `project` mediumint(8) unsigned NOT NULL DEFAULT '0',
+CHANGE `account` `account` varchar(30) NOT NULL DEFAULT '',
+CHANGE `role` `role` varchar(20) NOT NULL DEFAULT '',
+CHANGE `needTrain` `needTrain` enum('no','yes') NOT NULL DEFAULT 'no',
+CHANGE `createdDate` `createdDate` datetime NULL,
+CHANGE `editedBy` `editedBy` varchar(30) NOT NULL DEFAULT '',
+CHANGE `editedDate` `editedDate` datetime NULL,
+CHANGE `deleted` `deleted` enum('0','1') NOT NULL DEFAULT '0';
+
+ALTER TABLE `zt_scene`
+CHANGE `product` `product` mediumint(8) unsigned NOT NULL DEFAULT 0,
+CHANGE `branch` `branch` mediumint(8) unsigned NOT NULL DEFAULT 0,
+CHANGE `module` `module` mediumint(8) unsigned NOT NULL DEFAULT 0,
+CHANGE `title` `title` varchar(255) NOT NULL DEFAULT '',
+CHANGE `sort` `sort` int(11) unsigned NOT NULL DEFAULT 0,
+CHANGE `openedBy` `openedBy` char(30) NOT NULL DEFAULT '',
+CHANGE `openedDate` `openedDate` datetime NULL,
+CHANGE `lastEditedBy` `lastEditedBy` char(30) NOT NULL DEFAULT '',
+CHANGE `lastEditedDate` `lastEditedDate` datetime NULL,
+CHANGE `deleted` `deleted` enum('0','1') NOT NULL DEFAULT '0',
+CHANGE `parent` `parent` int(11) NOT NULL DEFAULT '0',
+CHANGE `grade` `grade` tinyint(3) NOT NULL DEFAULT '0',
+CHANGE `path` `path` varchar(1000) NOT NULL DEFAULT '';
+
+ALTER TABLE `zt_pivot`
+CHANGE `dimension` `dimension` mediumint(8) unsigned NOT NULL DEFAULT 0,
+CHANGE `group` `group` varchar(255) NOT NULL DEFAULT '',
+CHANGE `step` `step` tinyint(1) unsigned NOT NULL DEFAULT '0',
+CHANGE `stage` `stage` enum('draft','published') NOT NULL DEFAULT 'draft',
+CHANGE `builtin` `builtin` enum('0', '1') NOT NULL DEFAULT '0',
+CHANGE `createdBy` `createdBy` varchar(30) NOT NULL DEFAULT '',
+CHANGE `createdDate` `createdDate` datetime NULL,
+CHANGE `editedBy` `editedBy` varchar(30) NOT NULL DEFAULT '',
+CHANGE `editedDate` `editedDate` datetime NULL,
+CHANGE `deleted` `deleted` enum('0', '1') NOT NULL DEFAULT '0';
+
+ALTER TABLE `zt_sqlview`
+CHANGE `name` `name` varchar(90) NOT NULL DEFAULT '',
+CHANGE `code` `code` varchar(45) NOT NULL DEFAULT '',
+CHANGE `createdBy` `createdBy` varchar(30) NOT NULL DEFAULT '',
+CHANGE `createdDate` `createdDate` datetime NULL,
+CHANGE `editedBy` `editedBy` varchar(30) NOT NULL DEFAULT '',
+CHANGE `editedDate` `editedDate` datetime NULL;
+
