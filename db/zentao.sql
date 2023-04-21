@@ -662,7 +662,7 @@ CREATE TABLE IF NOT EXISTS `zt_doc` (
   `title` varchar(255) NOT NULL DEFAULT '',
   `keywords` varchar(255) NOT NULL DEFAULT '',
   `type` varchar(30) NOT NULL DEFAULT '',
-  `status` varchar(30) NOT NULL DEFAULT '',
+  `status` varchar(30) COLLATE 'utf8_general_ci' NOT NULL DEFAULT 'normal',
   `parent` smallint(5) unsigned NOT NULL DEFAULT '0',
   `path` char(255) NOT NULL DEFAULT '',
   `grade` tinyint(3) unsigned NOT NULL DEFAULT '0',
