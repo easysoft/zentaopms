@@ -113,8 +113,8 @@ class projectModel extends model
         if(defined('TUTORIAL')) return $projectID;
 
         if($projectID == 0 and $this->cookie->lastProject) $projectID = $this->cookie->lastProject;
-        if($projectID == 0 and (int)$this->session->project == 0) $projectID = key($projects);
-        if($projectID == 0) $projectID = key($projects);
+        if($projectID == 0 and (int)$this->session->project == 0) $projectID = (int)key($projects);
+        if($projectID == 0) $projectID = (int)key($projects);
 
         $this->session->set('project', (int)$projectID, $this->app->tab);
 
@@ -130,12 +130,12 @@ class projectModel extends model
                     return $this->session->project;
                 }
 
-                $this->session->set('project', key($projects), $this->app->tab);
+                $this->session->set('project', (int)key($projects), $this->app->tab);
                 $this->accessDenied();
             }
             else
             {
-                $this->session->set('project', key($projects), $this->app->tab);
+                $this->session->set('project', (int)key($projects), $this->app->tab);
             }
         }
 
