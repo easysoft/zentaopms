@@ -148,7 +148,7 @@
               <?php if($story->parent <= 0):?>
               <tr class="<?php if($hiddenProduct) echo 'hidden';?>">
                 <th class='thWidth'><?php echo $lang->story->product;?></th>
-                <td>
+                <td id='productBox'>
                   <div class='input-group'>
                     <?php echo html::select('product', $products, $story->product, "onchange='loadProduct(this.value);' class='form-control chosen control-product'");?>
                     <span class='input-group-addon fix-border fix-padding'></span>
