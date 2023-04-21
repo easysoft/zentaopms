@@ -15,6 +15,8 @@ class form extends wg
         'items?: array',
         'grid?: bool',
         'labelWidth?: number',
+        'submitBtnText?: string',
+        'cancelBtnText?: string',
     ];
 
     protected static $defaultProps =
@@ -22,7 +24,7 @@ class form extends wg
         'grid'          => true,
         'method'        => 'post',
         'target'        => 'ajax',
-        'actions'       => ['save', 'back'],
+        'actions'       => ['submit', 'cancel'],
     ];
 
     public function onBuildItem($item)
@@ -46,9 +48,8 @@ class form extends wg
         global $lang;
         foreach($actions as $key => $action)
         {
-            if($action === 'save')       $actions[$key] = ['text' => $lang->save, 'btnType' => 'submit', 'type' => 'primary'];
-            elseif($action === 'back')   $actions[$key] = ['text' => $lang->goback, 'url' => html::getGobackLink()];
-            elseif($action === 'cancel') $actions[$key] = ['text' => $lang->cancel, 'url' => 'javascript:history.go(-1)'];
+            if($action === 'submit')     $actions[$key] = ['text' => $this->prop('submitBtnText') ?? $lang->save, 'btnType' => 'submit', 'type' => 'primary'];
+            elseif($action === 'cancel') $actions[$key] = ['text' => $this->prop('cancelBtnText') ?? $lang->goback, 'url' => html::getGobackLink()];
             elseif(is_string($action))   $actions[$key] = ['text' => $action];
         }
 
