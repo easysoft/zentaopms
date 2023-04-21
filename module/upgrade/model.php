@@ -8963,7 +8963,7 @@ class upgradeModel extends model
     {
         $reports = $this->dao->select('*')->from(TABLE_REPORT)->fetchAll();
 
-        $groupCollectors = $this->dao->select('collector, id')->from(TABLE_MODULE)->where('type')->eq('pivot')->andWhere('root')->eq(1)->fetchPairs();
+        $groupCollectors = $this->dao->select('collector, id')->from(TABLE_MODULE)->where('type')->eq('pivot')->andWhere('root')->eq(1)->andWhere('collector')->ne('')->fetchPairs();
 
         $this->loadModel('pivot');
 
@@ -8982,12 +8982,10 @@ class upgradeModel extends model
             $data->createdDate = $report->addedDate;
 
             /* Process group. */
-            $modules = explode(',', $report->module);
+            $modules = explode(',', trim($report->module, ','));
             $groups  = array();
             foreach($modules as $module)
             {
-                if(!$module) continue;
-
                 if(isset($groupCollectors[$module]))
                 {
                     $groups[] = $groupCollectors[$module];
