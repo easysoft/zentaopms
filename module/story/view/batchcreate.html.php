@@ -30,7 +30,7 @@
     </div>
   </div>
   <?php
-  $visibleFields  = array();
+  if(!isset($visibleFields)) $visibleFields  = array();
   $requiredFields = array();
   foreach(explode(',', $showFields) as $field)
   {
