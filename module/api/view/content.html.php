@@ -15,7 +15,7 @@
                   </a>
                   <ul class='dropdown-menu api-version-menu menu-active-primary menu-hover-primary' style='max-height:240px; max-width: 300px; overflow-y:auto'>
                     <?php for($itemVersion = $api->version; $itemVersion > 0; $itemVersion--):?>
-                    <li class="active"><a href='javascript:void(0)' data-url='<?php echo $this->createLink('api', 'index', "libID={$api->lib}&moduleID=0&apiID=$apiID&version=$itemVersion&release=$release");?>'>V<?php echo $itemVersion;?></a></li>
+                    <li <?php if($version == $itemVersion) echo 'class=active';?> ><a href='javascript:void(0)' data-url='<?php echo $this->createLink('api', 'index', "libID={$api->lib}&moduleID=0&apiID=$apiID&version=$itemVersion&release=$release");?>'>V<?php echo $itemVersion;?></a></li>
                     <?php endfor;?>
                   </ul>
                 </div>
