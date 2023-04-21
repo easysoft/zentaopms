@@ -1,4 +1,5 @@
 <style>
+.tree li.has-list.open:before {display: none;}
 .tree-group {position: relative;}
 .tree-group > .module-name {white-space: nowrap; overflow: hidden; text-overflow: ellipsis; width: 100%; display: block;}
 .tree li.has-list.open:before {left: 6px;}
