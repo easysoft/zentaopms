@@ -9,17 +9,6 @@ $('#subNavbar li').not('[data-id=<?php echo $group;?>]').removeClass('active');
 <?php js::set('dimension', $dimension);?>
 <?php js::set('group', $group);?>
 
-<?php if($this->config->edition == 'open'):?>
-<div id="mainMenu" class='clearfix'>
-  <div class="btn-toolbar pull-left">
-    <?php foreach($lang->pivot->featureBar['preview'] as $key => $label):?>
-    <?php $active = ($key == $group) ? ' btn-active-text' : '';?>
-    <?php echo html::a(inlink('preview', "dimension=$dimension&group=$key"), "<span class='text'>$label</span>", '', "class='btn btn-link {$active}'");?>
-    <?php endforeach;?>
-  </div>
-</div>
-<?php endif;?>
-<?php if($this->config->edition == 'biz' or $this->config->edition == 'max'):?>
 <div id='mainMenu' class='clearfix main-position'>
   <div class="btn-toolbar pull-left parent-position">
     <?php foreach($lang->pivot->featureBar['preview'] as $key => $label):?>
@@ -27,13 +16,16 @@ $('#subNavbar li').not('[data-id=<?php echo $group;?>]').removeClass('active');
     <?php echo html::a(inlink('preview', "dimension=$dimension&group=$key"), "<span class='text'>$label</span>", '', "class='btn btn-link {$active}'");?>
     <?php endforeach;?>
   </div>
+  <?php if($this->config->edition == 'biz' or $this->config->edition == 'max'):?>
   <div class='btn-toolbar pull-right child-position'>
     <?php if(common::hasPriv('pivot', 'export')):?>
     <a href="#" class="btn btn-link btn-export hidden" data-toggle="modal" data-target="#export"><?php echo '<i class="icon-export muted"> </i>' . $lang->export;?></a>
     <?php endif;?>
     <?php common::printLink('pivot', 'browse', '', $lang->pivot->toDesign, '', "class='btn btn-primary'");?>
   </div>
+  <?php endif;?>
 </div>
+<?php if($this->config->edition == 'biz' or $this->config->edition == 'max'):?>
 <?php $pivotPath = $this->app->getModuleExtPath('', 'pivot', 'view');?>
 <?php include $pivotPath['common'] . 'exportdata.html.php';?>
 <?php endif;?>
