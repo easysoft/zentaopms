@@ -108,3 +108,4 @@
 .exchangeDiffGroup .right-dom {display: none;}
 .exchangeDiffGroup.show-diff .right-dom {display: unset;}
 .btn-limit {padding-left: 10px; padding-right: 20px;}
+.tree li>.list-toggle {top: 5px; left: -4px;}
