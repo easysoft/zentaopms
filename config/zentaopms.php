@@ -367,8 +367,8 @@ define('TABLE_DASHBOARD', '`' . $config->db->prefix . 'dashboard`');
 define('TABLE_DATASET',   '`' . $config->db->prefix . 'dataset`');
 define('TABLE_DATAVIEW',  '`' . $config->db->prefix . 'dataview`');
 define('TABLE_DIMENSION', '`' . $config->db->prefix . 'dimension`');
-define('TABLE_SCENE',    '`' . $config->db->prefix . 'scene`');
-define('VIEW_SCENECASE', '`ztv_scenecase`');
+define('TABLE_SCENE',     '`' . $config->db->prefix . 'scene`');
+define('VIEW_SCENECASE',  '`ztv_scenecase`');
 
 define('CHANGEVALUE', 100000000);
 
