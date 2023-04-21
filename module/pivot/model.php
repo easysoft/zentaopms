@@ -75,9 +75,6 @@ class pivotModel extends model
             {
                 $pivots += $this->dao->select('*')->from(TABLE_PIVOT)
                     ->where('deleted')->eq(0)
-                    ->andWhere('builtin', true)->eq('0')
-                    ->orWhere('id')->in($this->config->screen->builtinPivot)
-                    ->markRight(1)
                     ->beginIF(!empty($groupID))->andWhere("FIND_IN_SET($groupID, `group`)")->fi()
                     ->beginIF(!empty($dimensionID))->andWhere('dimension')->eq($dimensionID)->fi()
                     ->orderBy($orderBy)
@@ -89,9 +86,6 @@ class pivotModel extends model
         {
             $pivots = $this->dao->select('*')->from(TABLE_PIVOT)
                 ->where('deleted')->eq(0)
-                ->andWhere('builtin', true)->eq('0')
-                ->orWhere('id')->in($this->config->screen->builtinPivot)
-                ->markRight(1)
                 ->beginIF(!empty($dimensionID))->andWhere('dimension')->eq($dimensionID)->fi()
                 ->orderBy($orderBy)
                 ->page($pager)
@@ -1988,8 +1982,7 @@ class pivotModel extends model
      */
     public static function isClickable($pivot, $action)
     {
-        global $config;
-        if($pivot->builtin and in_array($pivot->id, $config->screen->builtinPivot)) return false;
+        if($pivot->builtin) return false;
         return true;
     }
 

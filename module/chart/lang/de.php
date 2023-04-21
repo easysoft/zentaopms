@@ -31,3 +31,17 @@ $lang->chart->aggList['avg']      = 'AVG';
 $lang->chart->aggList['sum']      = 'SUM';
 $lang->chart->aggList['max']      = 'MAX';
 $lang->chart->aggList['min']      = 'MIN';
+
+$lang->chart->typeList = array();
+$lang->chart->typeList['table']       = 'Table';
+$lang->chart->typeList['agg']         = 'Agg';
+$lang->chart->typeList['value']       = 'Value';
+$lang->chart->typeList['bar']         = 'Bar';
+$lang->chart->typeList['piecircle']   = 'Circle Pie';
+$lang->chart->typeList['pie']         = 'Pie';
+$lang->chart->typeList['line']        = 'Line';
+$lang->chart->typeList['radar']       = 'Radar';
+$lang->chart->typeList['cluBarY']     = 'clustered Bar Y';
+$lang->chart->typeList['stackedBarY'] = 'stacked Bar Y';
+$lang->chart->typeList['cluBarX']     = 'clustered Bar X';
+$lang->chart->typeList['stackedBar']  = 'stacked Bar';
