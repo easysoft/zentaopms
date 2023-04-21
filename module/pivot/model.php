@@ -2081,6 +2081,29 @@ class pivotModel extends model
 
         echo $table;
     }
+
+    /**
+     * replace defined table names.
+     *
+     * @param  string $sql
+     * @access public
+     * @return string
+     */
+    public function replaceTableNames($sql)
+    {
+        if(preg_match_all("/TABLE_[A-Z]+/", $sql, $out))
+        {
+            rsort($out[0]);
+            foreach($out[0] as $table)
+            {
+                if(!defined($table)) continue;
+                $sql = str_replace($table, trim(constant($table), '`'), $sql);
+            }
+        }
+        $sql = preg_replace("/= *'\!/U", "!='", $sql);
+        return $sql;
+    }
+
 }
 
 /**
