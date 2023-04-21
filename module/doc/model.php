@@ -2184,7 +2184,7 @@ class docModel extends model
             ->andWhere('t2.deleted')->eq(0)
             ->fetch('count');
 
-        $my = $this->dao->select("count(*) as myDocs, SUM(views) as docViews, SUM(collects) as docCollects")->from(TABLE_DOC)->where('addedBy')->eq($this->app->user->account)->andWhere('deleted')->eq(0)->andWhere('vision')->eq($this->config->vision)->andWhere('lib')->ne(0)->fetch();
+        $my = $this->dao->select("count(*) as myDocs, SUM(views) as docViews, SUM(collects) as docCollects")->from(TABLE_DOC)->where('addedBy')->eq($this->app->user->account)->andWhere('deleted')->eq(0)->andWhere('vision')->eq($this->config->vision)->andWhere('lib')->ne('')->fetch();
         $statistic->myDocs = $my->myDocs;
         $statistic->myDoc  = new stdclass();
         $statistic->myDoc->docViews    = $my->docViews;
