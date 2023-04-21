@@ -1455,6 +1455,21 @@ class pivotModel extends model
             $this->getColumnConfig($groupRows, $configs, $groups, $index, $haveNext);
         }
 
+        /* Get group field lang */
+        foreach($groups as $group)
+        {
+            $options = $this->getSysOptions($fields[$group]['type'], $fields[$group]['object'], $fields[$group]['field'], $sql);
+            foreach($groupsRow as $row)
+            {
+                if(isset($row->$group))
+                {
+                    $value = $row->$group;
+                    $lang  = isset($options[$value]) ? $options[$value] : $value;
+                    $row->$group = $lang;
+                }
+            }
+        }
+
         $data              = new stdclass();
         $data->groups      = $groups;
         $data->cols        = $cols;
@@ -2049,13 +2064,6 @@ class pivotModel extends model
         }
         $table .= "</thead>";
 
-        $optionList = array();
-        foreach($data->groups as $group)
-        {
-            if(!isset($optionList[$group])) $optionList[$group] = array();
-            if(isset($fields[$group])) $optionList[$group] = $this->getSysOptions($fields[$group]['type'], $fields[$group]['object'], $fields[$group]['field'], $sql);
-        }
-
         /* Init table tbody. */
         $table .= "<tbody>";
         $rowCount = 0;
@@ -2076,8 +2084,6 @@ class pivotModel extends model
                 if($isGroup)
                 {
                     $groupName = $data->cols[0][$j]->name;
-                    if(!isset($optionList[$groupName])) continue;
-                    if(isset($optionList[$groupName][$lineValue])) $lineValue = $optionList[$groupName][$lineValue];
                 }
                 if(is_numeric($lineValue)) $lineValue = round($lineValue, 2);
 
