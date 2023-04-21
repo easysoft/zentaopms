@@ -51,14 +51,14 @@ class prepareUpdate
     public function initZT()
     {
         $this->internalZT = new stdclass();
-        $this->internalZT->apiRoot  = 'https://back.zcorp.cc/pms/api.php/v1';
-        $this->internalZT->account  = 'hufangzhou';
-        $this->internalZT->password = 'kgZZBrRtiPTxVjkl6W3R';
+        $this->internalZT->apiRoot  = '';
+        $this->internalZT->account  = '';
+        $this->internalZT->password = '';
         $this->internalZT->token    = $this->getZTToken();
 
-        $this->internalZT->pmsProductID = '79';
-        $this->internalZT->bizProductID = '68';
-        $this->internalZT->maxProductID = '125';
+        $this->internalZT->pmsProductID = '';
+        $this->internalZT->bizProductID = '';
+        $this->internalZT->maxProductID = '';
 
         $this->getLatestVersion();
     }
