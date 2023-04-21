@@ -2,9 +2,6 @@
 
 namespace zin;
 
-global $lang;
-global $app;
-
 set::itemID($project->id);
 set::title($project->name);
 
@@ -18,7 +15,7 @@ form
         set::label($app->loadLang('program')->program->realEnd),
         set::required(true),
         set::name('realEnd'),
-        set::control(['type' => 'date']),
+        set::control('date'),
     ),
     formGroup
     (
