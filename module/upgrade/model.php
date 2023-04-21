@@ -1099,7 +1099,7 @@ class upgradeModel extends model
              case '18_1':
                 $confirmContent .= file_get_contents($this->getUpgradeFile('18.1'));
              case '18_2':
-                $confirmContent .= file_get_contents($this->getUpgradeFile('18.2')); // confirm insert position.
+                $confirmContent .= file_get_contents($this->getUpgradeFile('18.2'));
              case '18_3':
                 $confirmContent .= file_get_contents($this->getUpgradeFile('18.3')); // confirm insert position.
         }
@@ -8090,10 +8090,26 @@ class upgradeModel extends model
                 if($field['type'] == 'object' and isset($field['show']))
                 {
                     $key = str_replace('.', '_', $field['show']);
-                    $relatedField = substr($field['show'], strpos($field['show'], '.') + 1);
-                }
-                if(!isset($fields[$key])) $fields[$key] = array();
+                    $relatedField  = substr($field['show'], strpos($field['show'], '.') + 1);
+                    $relatedObject = isset($field['object']) ? $field['object'] : '';
+                    if(!empty($relatedObject) and isset($table->schema->objects[$relatedObject]))
+                    {
+                        foreach($table->schema->objects[$relatedObject] as $fieldID => $fieldName)
+                        {
+                            if($fieldID == $relatedField) continue;
 
+                            $objects  = $table->schema->objects[$relatedObject];
+                            $addField = "{$relatedObject}_{$fieldID}";
+                            $fields[$addField] = array();
+                            $fields[$addField]['name']   = isset($objects[$fieldID]['name']) ? $objects[$fieldID]['name'] : $addField;
+                            $fields[$addField]['field']  = $fieldID;
+                            $fields[$addField]['object'] = $relatedObject;
+                            $fields[$addField]['type']   = 'object';
+                        }
+                    }
+                }
+
+                if(!isset($fields[$key])) $fields[$key] = array();
                 $fields[$key]['name']   = $field['name'];
                 $fields[$key]['field']  = empty($relatedField) ? $key : $relatedField;
                 $fields[$key]['object'] = isset($field['object']) ? $field['object'] : $code;
