@@ -4,7 +4,7 @@ namespace zin;
 $dataUrl = createLink('project', 'close', ['onlybody' => 'yes', 'projectID' => '{rowID}']);
 $dataUrl = "'$dataUrl'.replace('{rowID}', row.id)";
 
-$config->project->zin->datatable->fieldList['actions']['actionsMap']['close']['buildProps'] = jsRaw("function(_result, info) {var row = info.row; console.log(111); return {'data-toggle': 'modal', 'data-type': 'ajax', 'data-url': $dataUrl, 'data-data-type': 'html'}; }");
+$config->project->zin->datatable->fieldList['actions']['actionsMap']['close']['buildProps'] = jsRaw("function(_result, info) {var row = info.row; return {'data-toggle': 'modal', 'data-type': 'ajax', 'data-url': $dataUrl, 'data-data-type': 'html'}; }");
 $cols        = array_values($config->project->zin->datatable->fieldList);
 $programTree = $this->project->getProgramTree(0, array('projectmodel', 'createManageLink'), 0, 'list');
 $usersAvatar = $this->user->getAvatarPairs('');
@@ -123,7 +123,7 @@ dtable
     set::data($data),
     set::footPager(usePager()),
     set::onRenderCell(jsRaw('function(result, data){ return window.renderReleaseCountCell(result, data); }')),
-    set::footer(jsRaw('function(){return window.footerGenerator.call(this);}'))
+    set::footer(jsRaw('window.footerGenerator'))
 );
 
 render();

@@ -1,16 +1,15 @@
 window.onParentChange = (event) =>
 {
     const parentID = $(event.target).val();
-    const url = $.createLink('program', 'create', parentID ? ('parentProgramID=' + parentID) : '');
+    const url      = $.createLink('program', 'create', parentID ? ('parentProgramID=' + parentID) : '');
     loadPage(url, '#budgetRow>*, #acl');
 };
 
 window.onBudgetChange = (event) =>
 {
-    const $budget = $(event.target);
+    const $budget       = $(event.target);
     const currentBudget = $budget.val();
-    const budgetLeft = $budget.data('budget-left');
-    console.log('onBudgetChange', currentBudget);
+    const budgetLeft    = $budget.data('budget-left');
     if(currentBudget > budgetLeft)
     {
         $('<div class="form-tip text-warning" id="budgetTip"></div>').text(lang.budgetOverrun + $budget.data('currency-symbol') + budgetLeft).append($('<a class="text-inherit ml-2 underline"></a>').text(lang.ignore).on('click', () => $('#budgetTip').remove())).appendTo($budget.closest('.form-group'));
