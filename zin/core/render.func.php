@@ -36,8 +36,9 @@ function render($wgName = 'page', $options = NULL)
     }
 
     global $app;
-    useData('zinErrors', $app->zinErrors ?? []);
+    data('zinErrors', $app->zinErrors ?? []);
 
     $wg = createWg($wgName, $args);
+    if($wgName !== 'page' && $wgName !== 'pagebase') $wg = fragment($wg);
     $wg->display($options);
 }
