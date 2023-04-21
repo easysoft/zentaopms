@@ -4,105 +4,49 @@ namespace zin;
 global $lang;
 
 $items = [];
-foreach($members as $key => $value) {
+foreach($members as $key => $value)
+{
     $items[] = ['text' => $value, 'value' => $key];
 }
 
-div
+set::itemID($task->id);
+set::title($task->name);
+
+form
 (
-    setClass('modal assignto-dialog'),
-    div
+    formGroup
     (
-        setClass('modal-dialog'),
+        set::label($lang->assignedToAB),
+        set::name('assignedTo'),
+        set::control(['type' => 'select', 'items' => $items]),
+    ),
+    formGroup
+    (
+        set::label($lang->task->left),
         div
         (
-            setClass('modal-content'),
-            div
+            setClass('input-control has-suffix'),
+            input
             (
-                setClass('modal-header'),
-                label(data('task.id')),
-                div
-                (
-                    setClass('modal-title'),
-                    data('task.name'),
-                ),
-                btn
-                (
-                    setClass('square ghost'),
-                    set('data-dismiss', 'modal'),
-                    span(setClass('close'))
-                ),
-                div(setClass('modal-divider'))
+                set::type('number'),
+                set::min(0),
+                set::name('left'),
+                set::id('left'),
             ),
-            div
+            h::label
             (
-                setClass('modal-body'),
-                formGrid
-                (
-                    set::method('POST'),
-                    formGroup
-                    (
-                        formLabel($lang->assignedToAB),
-                        formCell
-                        (
-                            select
-                            (
-                                set::name('assignedTo'),
-                                set::id('assignedTo'),
-                                set::items($items)
-                            ),
-                        )
-                    ),
-                    formGroup
-                    (
-                        formLabel($lang->task->left),
-                        formCell
-                        (
-                            div
-                            (
-                                setClass('input-control has-suffix'),
-                                formInput
-                                (
-                                    set::type('number'),
-                                    set::min(0),
-                                    set::name('left'),
-                                    set::id('left'),
-                                ),
-                                h::label
-                                (
-                                    setClass('input-control-suffix'),
-                                    $lang->workingHour
-                                )
-                            )
-                        )
-                    ),
-                    formGroup
-                    (
-                        formLabel($lang->comment),
-                        formCell
-                        (
-                            textarea
-                            (
-                                setClass('form-control'),
-                                set::name('comment'),
-                                set::id('comment')
-                            )
-                        )
-                    ),
-                    formGroup
-                    (
-                        setClass('justify-center'),
-                        button
-                        (
-                            set::type('submit'),
-                            setClass('btn primary'),
-                            $lang->save
-                        )
-                    )
-                )
+                setClass('input-control-suffix'),
+                $lang->workingHour
             )
         )
-    )
+    ),
+    formGroup
+    (
+        set::label($lang->comment),
+        set::name('comment'),
+        set::control(['type' => 'textarea']),
+    ),
+    set::actions(['save'])
 );
 
-render();
+render('modalDialog');
