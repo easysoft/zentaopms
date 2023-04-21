@@ -37,7 +37,7 @@
             <?php endif;?>
             <tr class='objectBox'>
               <th><?php echo $lang->doc->{$type}?></th>
-              <td class='required'><?php echo html::select($type, $objects, $objectID, "class='form-control chosen' data-drop-direction='down'")?></td>
+              <td class='required'><?php echo html::select($type, $objects, $objectID, "class='form-control picker-select' data-drop-direction='bottom'")?></td>
             </tr>
             <?php if($app->tab == 'doc' and $type == 'project'):?>
             <tr class='executionBox'>
