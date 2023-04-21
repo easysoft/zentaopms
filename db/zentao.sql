@@ -2972,7 +2972,7 @@ CREATE TABLE IF NOT EXISTS `zt_traincontents` (
   `type` varchar(30) NOT NULL DEFAULT '',
   `parent` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `path` char(255) NOT NULL DEFAULT '',
-  `desc` text NOT NULL,
+  `desc` text NULL,
   `order` mediumint(8) NOT NULL DEFAULT '0',
   `createdBy` char(30) NOT NULL DEFAULT '',
   `createdDate` datetime NULL,
