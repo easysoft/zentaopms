@@ -40,6 +40,7 @@
 #outline li.has-list.open:before {content: unset;}
 #fileTree {margin-bottom: 40px; max-height: calc(100vh - 180px); overflow: auto;}
 #closeBtn {position: absolute; right: 10px; top: 10px;}
+.actions > .btn-group {display: inline-block;}
 
 .article-content.comment {width: 100% !important;}
 

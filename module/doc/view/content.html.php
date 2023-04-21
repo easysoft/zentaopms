@@ -41,6 +41,24 @@
             <?php $star = strpos($doc->collector, ',' . $this->app->user->account . ',') !== false ? 'star' : 'star-empty';?>
             <a data-url="<?php echo $this->createLink('doc', 'collect', "objectID=$doc->id&objectType=doc");?>" title="<?php echo $lang->doc->collect;?>" class='ajaxCollect btn btn-link'><?php echo html::image("static/svg/{$star}.svg", "class='$star'");?></a>
             <?php endif;?>
+
+            <?php if($config->vision == 'rnd' and $config->edition == 'max' and $app->tab == 'project'):?>
+            <?php
+            $canImportToPracticeLib  = (common::hasPriv('doc', 'importToPracticeLib')  and helper::hasFeature('practicelib'));
+            $canImportToComponentLib = (common::hasPriv('doc', 'importToComponentLib') and helper::hasFeature('componentlib'));
+
+            if($canImportToPracticeLib or $canImportToComponentLib)
+            {
+                echo "<div class='btn-group inline'>";
+                echo html::a('javascript:;', "<span class='icon icon-diamond'></span>", '', "data-toggle='dropdown' id='more' title='{$lang->import}' class='btn btn-link'");
+                echo "<ul class='dropdown-menu pull-right'>";
+                if($canImportToPracticeLib) echo '<li>' . html::a('#importToPracticeLib', $lang->doc->importToPracticeLib, '', 'data-toggle="modal"') . '</li>';
+                if($canImportToComponentLib) echo '<li>' . html::a('#importToComponentLib', $lang->doc->importToComponentLib, '', 'data-toggle="modal"') . '</li>';
+                echo '</ul></div>';
+            }
+            ?>
+            <?php endif;?>
+
             <?php
             if(common::hasPriv('doc', 'edit'))
             {
@@ -59,23 +77,6 @@
                 echo html::a("javascript:ajaxDeleteDoc(\"$deleteURL\", \"docList\", confirmDelete)", '<span class="icon-trash"></span>', '', "title='{$lang->doc->delete}' class='btn btn-link'");
             }?>
             <a id="hisTrigger" href="###" class="btn btn-link" title=<?php echo $lang->history?>><span class="icon icon-clock"></span></a>
-
-            <?php if($config->vision == 'rnd' and $config->edition == 'max' and $app->tab == 'project'):?>
-            <?php
-            $canImportToPracticeLib  = (common::hasPriv('doc', 'importToPracticeLib')  and helper::hasFeature('practicelib'));
-            $canImportToComponentLib = (common::hasPriv('doc', 'importToComponentLib') and helper::hasFeature('componentlib'));
-
-            if($canImportToPracticeLib or $canImportToComponentLib)
-            {
-                echo "<div class='btn-group' id='more' title='{$lang->import}'>";
-                echo html::a('javascript:;', "<span class='icon icon-diamond'></span>", '', "data-toggle='dropdown' class='btn btn-link'");
-                echo "<ul class='dropdown-menu pull-right'>";
-                if($canImportToPracticeLib) echo '<li>' . html::a('#importToPracticeLib', $lang->doc->importToPracticeLib, '', 'data-toggle="modal"') . '</li>';
-                if($canImportToComponentLib) echo '<li>' . html::a('#importToComponentLib', $lang->doc->importToComponentLib, '', 'data-toggle="modal"') . '</li>';
-                echo '</ul></div>';
-            }
-            ?>
-            <?php endif;?>
           </div>
           <?php if(!empty($editors)):?>
           <div id='editorBox'>
