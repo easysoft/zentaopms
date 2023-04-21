@@ -100,4 +100,9 @@ $(function()
     {
         $('#parent_chosen').find('div').css('width', $('#parent_chosen').width())
     });
+
+    $('#productBox').click(function()
+    {
+        $('#productBox .chosen-container').find('div').css('width', $('#productBox').width())
+    });
 })
