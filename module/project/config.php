@@ -211,71 +211,71 @@ $config->project->includedPriv['auditplan']  = array('browse', 'create', 'edit',
 $config->project->includedPriv['execution']  = array('create', 'start', 'delete', 'calendar', 'effortCalendar', 'effort', 'taskEffort', 'computeTaskEffort', 'deleterelation', 'maintainrelation', 'relation', 'gantt');
 if($config->edition != 'max') $config->project->includedPriv['stakeholder'] = array('browse', 'create', 'batchCreate', 'edit', 'delete', 'view', 'communicate', 'expect', 'expectation', 'deleteExpect', 'createExpect', 'editExpect', 'viewExpect');
 
-$config->project->zin = new stdClass();
-$config->project->zin->datatable = new stdClass();
-$config->project->zin->datatable->fieldList = array();
+$config->project->browseTable = new stdClass();
+$config->project->browseTable->cols = array();
 
-$config->project->zin->datatable->fieldList['name']['name']     = 'name';
-$config->project->zin->datatable->fieldList['name']['title']    = $lang->project->name;
-$config->project->zin->datatable->fieldList['name']['fixed']    = 'left';
-$config->project->zin->datatable->fieldList['name']['width']    = 408;
-$config->project->zin->datatable->fieldList['name']['sortType'] = true;
-$config->project->zin->datatable->fieldList['name']['type']     = 'link';
+$config->project->browseTable->cols['name']['name']         = 'name';
+$config->project->browseTable->cols['name']['title']        = $lang->project->name;
+$config->project->browseTable->cols['name']['fixed']        = 'left';
+$config->project->browseTable->cols['name']['width']        = 408;
+$config->project->browseTable->cols['name']['sortType']     = true;
+$config->project->browseTable->cols['name']['type']         = 'link';
+$config->project->browseTable->cols['name']['linkTemplate'] = helper::createLink('project', 'index', 'projectID={id}');
 
-$config->project->zin->datatable->fieldList['PM']['name']     = 'PM';
-$config->project->zin->datatable->fieldList['PM']['title']    = $lang->project->PM;
-$config->project->zin->datatable->fieldList['PM']['minWidth'] = 104;
-$config->project->zin->datatable->fieldList['PM']['type']     = 'avatarBtn';
-$config->project->zin->datatable->fieldList['PM']['flex']     = 1;
-$config->project->zin->datatable->fieldList['PM']['border']   = 'right';
+$config->project->browseTable->cols['PM']['name']     = 'PM';
+$config->project->browseTable->cols['PM']['title']    = $lang->project->PM;
+$config->project->browseTable->cols['PM']['minWidth'] = 104;
+$config->project->browseTable->cols['PM']['type']     = 'avatarBtn';
+$config->project->browseTable->cols['PM']['flex']     = 1;
+$config->project->browseTable->cols['PM']['border']   = 'right';
 
-$config->project->zin->datatable->fieldList['storyCount']['name']     = 'storyCount';
-$config->project->zin->datatable->fieldList['storyCount']['title']    = $lang->project->storyCount;
-$config->project->zin->datatable->fieldList['storyCount']['minWidth'] = 94;
-$config->project->zin->datatable->fieldList['storyCount']['sortType'] = true;
-$config->project->zin->datatable->fieldList['storyCount']['type']     = 'format';
-$config->project->zin->datatable->fieldList['storyCount']['align']    = 'right';
+$config->project->browseTable->cols['storyCount']['name']     = 'storyCount';
+$config->project->browseTable->cols['storyCount']['title']    = $lang->project->storyCount;
+$config->project->browseTable->cols['storyCount']['minWidth'] = 94;
+$config->project->browseTable->cols['storyCount']['sortType'] = true;
+$config->project->browseTable->cols['storyCount']['type']     = 'format';
+$config->project->browseTable->cols['storyCount']['align']    = 'right';
 
-$config->project->zin->datatable->fieldList['executionCount']['name']     = 'executionCount';
-$config->project->zin->datatable->fieldList['executionCount']['title']    = $lang->project->executionCount;
-$config->project->zin->datatable->fieldList['executionCount']['minWidth'] = 94;
-$config->project->zin->datatable->fieldList['executionCount']['sortType'] = true;
-$config->project->zin->datatable->fieldList['executionCount']['type']     = 'format';
-$config->project->zin->datatable->fieldList['executionCount']['border']   = 'right';
-$config->project->zin->datatable->fieldList['executionCount']['align']    = 'center';
+$config->project->browseTable->cols['executionCount']['name']     = 'executionCount';
+$config->project->browseTable->cols['executionCount']['title']    = $lang->project->executionCount;
+$config->project->browseTable->cols['executionCount']['minWidth'] = 94;
+$config->project->browseTable->cols['executionCount']['sortType'] = true;
+$config->project->browseTable->cols['executionCount']['type']     = 'format';
+$config->project->browseTable->cols['executionCount']['border']   = 'right';
+$config->project->browseTable->cols['executionCount']['align']    = 'center';
 
-$config->project->zin->datatable->fieldList['invested']['name']     = 'invested';
-$config->project->zin->datatable->fieldList['invested']['title']    = $lang->project->invested;
-$config->project->zin->datatable->fieldList['invested']['minWidth'] = 94;
-$config->project->zin->datatable->fieldList['invested']['sortType'] = true;
-$config->project->zin->datatable->fieldList['invested']['type']     = 'format';
-$config->project->zin->datatable->fieldList['invested']['border']   = 'right';
-$config->project->zin->datatable->fieldList['invested']['align']    = 'center';
+$config->project->browseTable->cols['invested']['name']     = 'invested';
+$config->project->browseTable->cols['invested']['title']    = $lang->project->invested;
+$config->project->browseTable->cols['invested']['minWidth'] = 94;
+$config->project->browseTable->cols['invested']['sortType'] = true;
+$config->project->browseTable->cols['invested']['type']     = 'format';
+$config->project->browseTable->cols['invested']['border']   = 'right';
+$config->project->browseTable->cols['invested']['align']    = 'center';
 
-$config->project->zin->datatable->fieldList['begin']['name']     = 'begin';
-$config->project->zin->datatable->fieldList['begin']['title']    = $lang->project->begin;
-$config->project->zin->datatable->fieldList['begin']['width']    = 96;
-$config->project->zin->datatable->fieldList['begin']['sortType'] = true;
+$config->project->browseTable->cols['begin']['name']     = 'begin';
+$config->project->browseTable->cols['begin']['title']    = $lang->project->begin;
+$config->project->browseTable->cols['begin']['width']    = 96;
+$config->project->browseTable->cols['begin']['sortType'] = true;
 
-$config->project->zin->datatable->fieldList['end']['name']     = 'end';
-$config->project->zin->datatable->fieldList['end']['title']    = $lang->project->end;
-$config->project->zin->datatable->fieldList['end']['width']    = 96;
-$config->project->zin->datatable->fieldList['end']['sortType'] = true;
+$config->project->browseTable->cols['end']['name']     = 'end';
+$config->project->browseTable->cols['end']['title']    = $lang->project->end;
+$config->project->browseTable->cols['end']['width']    = 96;
+$config->project->browseTable->cols['end']['sortType'] = true;
 
-$config->project->zin->datatable->fieldList['progress']['name']     = 'progress';
-$config->project->zin->datatable->fieldList['progress']['title']    = $lang->project->progress;
-$config->project->zin->datatable->fieldList['progress']['width']    = 92;
-$config->project->zin->datatable->fieldList['progress']['type']     = 'circleProgress';
-$config->project->zin->datatable->fieldList['progress']['sortType'] = true;
+$config->project->browseTable->cols['progress']['name']     = 'progress';
+$config->project->browseTable->cols['progress']['title']    = $lang->project->progress;
+$config->project->browseTable->cols['progress']['width']    = 92;
+$config->project->browseTable->cols['progress']['type']     = 'circleProgress';
+$config->project->browseTable->cols['progress']['sortType'] = true;
 
-$config->project->zin->datatable->fieldList['actions']['name']       = 'actions';
-$config->project->zin->datatable->fieldList['actions']['title']      = $lang->actions;
-$config->project->zin->datatable->fieldList['actions']['fixed']      = 'right';
-$config->project->zin->datatable->fieldList['actions']['width']      = 160;
-$config->project->zin->datatable->fieldList['actions']['type']       = 'actions';
-$config->project->zin->datatable->fieldList['actions']['actionsMap'] = array(
+$config->project->browseTable->cols['actions']['name']       = 'actions';
+$config->project->browseTable->cols['actions']['title']      = $lang->actions;
+$config->project->browseTable->cols['actions']['fixed']      = 'right';
+$config->project->browseTable->cols['actions']['width']      = 160;
+$config->project->browseTable->cols['actions']['type']       = 'actions';
+$config->project->browseTable->cols['actions']['actionsMap'] = array(
     'start'     => array('icon'=> 'icon-start',        'hint'=> $lang->project->start),
-    'close'     => array('icon'=> 'icon-off',          'hint'=> $lang->project->close),
+    'close'     => array('icon'=> 'icon-off',          'hint'=> $lang->project->close, 'data-toggle' => 'modal', 'url' => helper::createLink('project', 'close', 'projectID={id}')),
     'pause'     => array('icon'=> 'icon-pause',        'text'=> $lang->project->suspend),
     'active'    => array('icon'=> 'icon-magic',        'text'=> $lang->project->activate),
     'edit'      => array('icon'=> 'icon-edit',         'hint'=> $lang->project->edit),
