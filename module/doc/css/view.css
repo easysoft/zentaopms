@@ -1,7 +1,7 @@
 .h-full-adjust {overflow-y: auto; height: calc(100vh - 125px);}
 .main-col .block-files .panel-heading {padding-right: 20px;}
 .main-col .block-files .panel-heading .panel-title {height: 35px; line-height: 30px;}
-.main-col .doc-title {display: flex; font-size: 16px; margin-bottom: 10px;}
+.main-col .doc-title {display: flex; font-size: 16px; margin-bottom: 10px; justify-content: space-between;}
 .main-col .doc-title .title {margin-right: 10px; line-height: 32px; font-size: 20px;}
 .main-col .doc-title .info {flex: 1 1 0;}
 .main-col .doc-title .version a {font-size: 13px; color: #8c8c8c;}
@@ -40,6 +40,7 @@
 #outline li.has-list.open:before {content: unset;}
 #fileTree {margin-bottom: 40px; max-height: calc(100vh - 180px); overflow: auto;}
 #closeBtn {position: absolute; right: 10px; top: 10px;}
+.actions > .btn-group {display: inline-block;}
 
 .article-content.comment {width: 100% !important;}
 
