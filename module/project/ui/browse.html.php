@@ -1,11 +1,15 @@
 <?php
 namespace zin;
 
+$dataUrl = createLink('project', 'close', ['onlybody' => 'yes', 'projectID' => '{rowID}']);
+$dataUrl = "'$dataUrl'.replace('{rowID}', row.id)";
+
+$config->project->zin->datatable->fieldList['actions']['actionsMap']['close']['buildProps'] = jsRaw("function(_result, info) {var row = info.row; console.log(111); return {'data-toggle': 'modal', 'data-type': 'ajax', 'data-url': $dataUrl, 'data-data-type': 'html'}; }");
 $cols        = array_values($config->project->zin->datatable->fieldList);
 $programTree = $this->project->getProgramTree(0, array('projectmodel', 'createManageLink'), 0, 'list');
 $usersAvatar = $this->user->getAvatarPairs('');
 
-$data           = array();
+$data           = [];
 $setting        = $this->datatable->getSetting('project');
 $waitCount      = 0;
 $doingCount     = 0;
@@ -31,7 +35,7 @@ $programMenuLink = createLink
 (
     $this->app->rawModule,
     $this->app->rawMethod,
-    array(
+    [
         'programID'  => '%d',
         'browseType' => $browseType,
         'param'      => $param,
@@ -39,7 +43,7 @@ $programMenuLink = createLink
         'recTotal'   => $recTotal,
         'recPerPage' => $recPerPage,
         'pageID'     => $pageID
-    )
+    ]
 );
 
 $featureBarItemLink = createLink($this->app->rawModule, $this->app->rawMethod, array
@@ -53,7 +57,9 @@ $featureBarItemLink = createLink($this->app->rawModule, $this->app->rawMethod, a
     'pageID'     => $pageID
 ));
 
-$summary = $browseType == 'all' ? sprintf($lang->project->allSummary, count($projectStats), $waitCount, $doingCount, $suspendedCount, $closedCount) : sprintf($lang->project->summary, count($projectStats));
+$summary = $browseType == 'all'
+    ? sprintf($lang->project->allSummary, count($projectStats), $waitCount, $doingCount, $suspendedCount, $closedCount)
+    : sprintf($lang->project->summary, count($projectStats));
 $summary = str_replace('<strong>', '', str_replace('</strong>', '', $summary));
 
 jsVar('langPostponed', $this->lang->project->statusList['delay']);
@@ -68,28 +74,26 @@ featureBar
             setStyle(array('margin-right' => '20px')),
             set
             (
-                array
-                (
+                [
                     'title'       => $lang->program->all,
                     'programs'    => $programTree,
                     'activeKey'   => !empty($programs) ? $programID : null,
                     'closeLink'   => sprintf($programMenuLink, 0),
                     'onClickItem' => jsRaw("function(data){window.programMenuOnClick(data, '$programMenuLink');}")
-                )
+                ]
             )
         )
     ),
     set::link($featureBarItemLink),
-    set::moreMenuLinkCallback(function($key, $text) use($featureBarItemLink)
-    {
-        return str_replace('{key}', $key, $featureBarItemLink);
-    }),
-    hasPriv('project', 'batchEdit') ? item
-    (
-        set::type('checkbox'),
-        set::text($lang->project->edit),
-        set::checked($this->cookie->showProjectBatchEdit)
-    ) : NULL,
+    set::moreMenuLinkCallback(fn($key) => str_replace('{key}', $key, $featureBarItemLink)),
+    hasPriv('project', 'batchEdit')
+        ? item
+        (
+            set::type('checkbox'),
+            set::text($lang->project->edit),
+            set::checked($this->cookie->showProjectBatchEdit)
+        )
+        : NULL,
     li(searchToggle(set::open($browseType == 'bysearch')))
 );
 

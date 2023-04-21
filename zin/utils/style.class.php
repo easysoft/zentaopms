@@ -168,6 +168,6 @@ class style extends dataset
      */
     static public function formatVarName($name)
     {
-        return str_starts_with($name, '--') ? $name : "--$name";
+        return \zin\str_starts_with($name, '--') ? $name : "--$name";
     }
 }

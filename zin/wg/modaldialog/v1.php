@@ -3,8 +3,7 @@ namespace zin;
 
 class modalDialog extends wg
 {
-    static $defineProps = array
-    (
+    static $defineProps = [
         'title?: string',
         'headerClass?: string',
         'headerProps?: array',
@@ -13,21 +12,20 @@ class modalDialog extends wg
         'footerActions?: array',
         'footerClass?: string',
         'footerProps?: array',
-    );
+    ];
 
-    static $defineBlocks = array
-    (
-        'header' => array(),
-        'actions' => array(),
-        'footer' => array('map' => 'toolbar')
-    );
+    static $defineBlocks = [
+        'header' => [],
+        'actions' => [],
+        'footer' => ['map' => 'toolbar']
+    ];
 
     protected function buildHeader()
     {
         $title       = $this->prop('title');
         $headerBlock = $this->block('header');
 
-        if(empty($title) && empty($headerBlock)) return;
+        if(empty($title) && empty($headerBlock)) return null;
 
         return div
         (

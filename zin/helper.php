@@ -80,3 +80,18 @@ if(!function_exists('str_starts_with'))
         return strpos($haystack, $needle) === 0;
     }
 }
+
+if(!function_exists('str_ends_with'))
+{
+    /**
+     * Checks if a string starts with a given substring
+     *
+     * @param string $haystack
+     * @param string $needle
+     * @return bool
+     */
+    function str_ends_with($haystack, $needle)
+    {
+        return strpos($haystack, $needle) === strlen($haystack) - 1;
+    }
+}
