@@ -5357,7 +5357,7 @@ class storyModel extends model
         {
             if(!$this->session->storyOnlyCondition)
             {
-                preg_match_all('/' . TABLE_STORY .' AS ([\w]+) /', $this->session->storyQueryCondition, $matches);
+                preg_match_all('/[`"]' . trim(TABLE_STORY, '`') .'[`"] AS ([\w]+) /', $this->session->storyQueryCondition, $matches);
                 if(isset($matches[1][0])) return 'id in (' . preg_replace('/SELECT .* FROM/', "SELECT {$matches[1][0]}.id FROM", $this->session->storyQueryCondition) . ')';
             }
             return $this->session->storyQueryCondition;
