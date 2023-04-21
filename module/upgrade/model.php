@@ -8860,7 +8860,6 @@ class upgradeModel extends model
         $pivot->dimension   = 1;
         $pivot->group       = $defaultPivotGroupID;
         $pivot->stage       = 'published';
-        $pivot->desc        = $table->desc;
         $pivot->step        = 4;
         $pivot->sql         = $table->sql;
         $pivot->createdBy   = $table->createdBy;
@@ -8869,6 +8868,10 @@ class upgradeModel extends model
         $name = array();
         $name['zh-cn'] = $table->name;
         $pivot->name   = json_encode($name);
+
+        $desc = array();
+        $desc['zh-cn'] = $table->desc;
+        $pivot->desc   = json_encode($desc);
 
         $pivotSettings = new stdclass();
         $tableSettings = json_decode($table->settings);
