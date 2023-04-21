@@ -62,8 +62,6 @@ class pivotModel extends model
     public function getList($dimensionID = 0, $groupID = 0, $orderBy = 'id_desc', $pager = null)
     {
         $this->loadModel('screen');
-
-        $pivots = array();
         if($groupID)
         {
             $groups = $this->dao->select('id')->from(TABLE_MODULE)
@@ -79,35 +77,39 @@ class pivotModel extends model
             }
             $conditions = trim($conditions, 'or');
 
-            $pivots += $this->dao->select('*')->from(TABLE_PIVOT)
+            $pivots = $this->dao->select('*')->from(TABLE_PIVOT)
                 ->where('deleted')->eq(0)
                 ->beginIF($conditions)->andWhere("({$conditions})")->fi()
                 ->beginIF(!empty($dimensionID))->andWhere('dimension')->eq($dimensionID)->fi()
                 ->orderBy($orderBy)
                 ->fetchAll();
 
-            $pivots += $this->dao->select('*')->from(TABLE_CHART)
+            $charts = $this->dao->select('*')->from(TABLE_CHART)
                 ->where('deleted')->eq(0)
                 ->andWhere('type')->eq('table')
                 ->beginIF($conditions)->andWhere("({$conditions})")->fi()
                 ->beginIF(!empty($dimensionID))->andWhere('dimension')->eq($dimensionID)->fi()
                 ->orderBy($orderBy)
                 ->fetchAll();
+
+            $pivots = array_merge($pivots, $charts);
         }
         else
         {
-            $pivots += $this->dao->select('*')->from(TABLE_PIVOT)
+            $pivots = $this->dao->select('*')->from(TABLE_PIVOT)
                 ->where('deleted')->eq(0)
                 ->beginIF(!empty($dimensionID))->andWhere('dimension')->eq($dimensionID)->fi()
                 ->orderBy($orderBy)
                 ->fetchAll();
 
-            $pivots += $this->dao->select('*')->from(TABLE_CHART)
+            $charts = $this->dao->select('*')->from(TABLE_CHART)
                 ->where('deleted')->eq(0)
                 ->andWhere('type')->eq('table')
                 ->beginIF(!empty($dimensionID))->andWhere('dimension')->eq($dimensionID)->fi()
                 ->orderBy($orderBy)
                 ->fetchAll();
+
+            $pivots = array_merge($pivots, $charts);
         }
 
         $pager->setRecTotal(count($pivots));
