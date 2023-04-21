@@ -21,7 +21,7 @@ class btnGroup extends wg
         $disabled = $this->prop('disabled');
         $size     = $this->prop('size');
 
-        $classList = 'btn-grouop';
+        $classList = 'btn-group';
         if(!empty($disabled)) $classList .= ' disabled';
         if(!empty($size))     $classList .= " size-$size";
 
