@@ -1321,3 +1321,4 @@ CREATE TABLE IF NOT EXISTS `zt_docaction` (
     KEY `doc` (`doc`),
     KEY `actor` (`actor`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
