@@ -142,6 +142,7 @@ class personnelModel extends model
         {
             $user = zget($users, $account, '');
 
+            if(empty($user)) continue;
             if(!empty($user) and !isset($personnelList[$user->role])) $personnelList[$user->role] = array();
 
             $personnelList[$user->role][$account]['realname']   = $user ? $user->realname : $account;

@@ -1182,8 +1182,16 @@ CHANGE `editedBy` `editedBy` varchar(255) NOT NULL DEFAULT '',
 CHANGE `editedDate` `editedDate` date NULL;
 
 ALTER TABLE `zt_traincontents`
+CHANGE `code` `code` varchar(50) NOT NULL DEFAULT '',
+CHANGE `name` `name` varchar(255) NOT NULL DEFAULT '',
+CHANGE `type` `type` varchar(30) NOT NULL DEFAULT '',
+CHANGE `desc` `desc` text NULL,
+CHANGE `order` `order` mediumint(8) NOT NULL DEFAULT '0',
+CHANGE `createdBy` `createdBy` char(30) NOT NULL DEFAULT '',
+CHANGE `createdDate` `createdDate` datetime NULL,
 CHANGE `editedBy` `editedBy` varchar(30) NOT NULL DEFAULT '',
-CHANGE `editedDate` `editedDate` datetime NULL;
+CHANGE `editedDate` `editedDate` datetime NULL,
+CHANGE `deleted` `deleted` tinyint(1) NOT NULL DEFAULT '0';
 
 ALTER TABLE `zt_trainplan`
 CHANGE `editedBy` `editedBy` varchar(30) NOT NULL DEFAULT '',
@@ -1289,6 +1297,19 @@ CHANGE `editedDate` `editedDate` datetime NULL;
 ALTER TABLE `zt_zoutput`
 CHANGE `editedBy` `editedBy` varchar(30) NOT NULL DEFAULT '',
 CHANGE `editedDate` `editedDate` datetime NULL;
+
+ALTER TABLE `zt_traincategory`
+CHANGE `grade` `grade` tinyint(3) NOT NULL DEFAULT '0',
+CHANGE `order` `order` mediumint(8) NOT NULL DEFAULT '0';
+
+ALTER TABLE `zt_file`
+CHANGE `pathname` `pathname` char(100) NOT NULL DEFAULT '',
+CHANGE `title` `title` varchar(255) NOT NULL DEFAULT '',
+CHANGE `extension` `extension` char(30) NOT NULL DEFAULT '',
+CHANGE `objectType` `objectType` char(30) NOT NULL DEFAULT '',
+CHANGE `objectID` `objectID` mediumint(9) NOT NULL DEFAULT '0',
+CHANGE `addedDate` `addedDate` datetime NULL,
+CHANGE `extra` `extra` varchar(255) NOT NULL DEFAULT '';
 
 CREATE TABLE IF NOT EXISTS `zt_docaction` (
     `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
