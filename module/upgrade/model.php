@@ -757,7 +757,6 @@ class upgradeModel extends model
                 break;
             case 'biz8_3':
                 $this->processDataset();
-                $this->updateDatasetPriv();
                 $this->processChart();
                 $this->processReport();
                 $this->processDashboard();
@@ -1100,7 +1099,7 @@ class upgradeModel extends model
              case '18_1':
                 $confirmContent .= file_get_contents($this->getUpgradeFile('18.1'));
              case '18_2':
-                $confirmContent .= file_get_contents($this->getUpgradeFile('18.2')); // confirm insert position.
+                $confirmContent .= file_get_contents($this->getUpgradeFile('18.2'));
              case '18_3':
                 $confirmContent .= file_get_contents($this->getUpgradeFile('18.3')); // confirm insert position.
         }
@@ -2038,8 +2037,7 @@ class upgradeModel extends model
             $sqlToLower = strtolower($sql);
             if(strpos($sqlToLower, 'fulltext') !== false and strpos($sqlToLower, 'innodb') !== false and $mysqlVersion < 5.6)
             {
-                static::$errors[] = $this->lang->install->errorEngineInnodb;
-                return false;
+                $sql = str_replace('ENGINE=InnoDB', 'ENGINE=MyISAM', $sql);
             }
 
             $sql = str_replace('zt_', $this->config->db->prefix, $sql);
@@ -8092,10 +8090,26 @@ class upgradeModel extends model
                 if($field['type'] == 'object' and isset($field['show']))
                 {
                     $key = str_replace('.', '_', $field['show']);
-                    $relatedField = substr($field['show'], strpos($field['show'], '.') + 1);
-                }
-                if(!isset($fields[$key])) $fields[$key] = array();
+                    $relatedField  = substr($field['show'], strpos($field['show'], '.') + 1);
+                    $relatedObject = isset($field['object']) ? $field['object'] : '';
+                    if(!empty($relatedObject) and isset($table->schema->objects[$relatedObject]))
+                    {
+                        foreach($table->schema->objects[$relatedObject] as $fieldID => $fieldName)
+                        {
+                            if($fieldID == $relatedField) continue;
 
+                            $objects  = $table->schema->objects[$relatedObject];
+                            $addField = "{$relatedObject}_{$fieldID}";
+                            $fields[$addField] = array();
+                            $fields[$addField]['name']   = isset($objects[$fieldID]['name']) ? $objects[$fieldID]['name'] : $addField;
+                            $fields[$addField]['field']  = $fieldID;
+                            $fields[$addField]['object'] = $relatedObject;
+                            $fields[$addField]['type']   = 'object';
+                        }
+                    }
+                }
+
+                if(!isset($fields[$key])) $fields[$key] = array();
                 $fields[$key]['name']   = $field['name'];
                 $fields[$key]['field']  = empty($relatedField) ? $key : $relatedField;
                 $fields[$key]['object'] = isset($field['object']) ? $field['object'] : $code;
@@ -8146,58 +8160,6 @@ class upgradeModel extends model
             $dataviewID = $this->dao->lastInsertID();
             if(!empty($dataview->view) and !empty($dataview->sql)) $this->dataview->createViewInDB($dataviewID, $dataview->view, $dataview->sql);
         }
-
-        return true;
-    }
-
-    /**
-     * Update dataset priv.
-     *
-     * @access public
-     * @return bool
-     */
-    public function updateDatasetPriv()
-    {
-        $datasetPrivList = $this->dao->select('*')->from(TABLE_GROUPPRIV)->where('module')->eq('dataset')->fetchAll();
-        foreach($datasetPrivList as $datasetPriv)
-        {
-            if($datasetPriv->method == 'view')
-            {
-                $this->dao->delete()->from(TABLE_GROUPPRIV)
-                    ->where('module')->eq('dataset')
-                    ->andWhere('method')->eq('view')
-                    ->andWhere('`group`')->eq($datasetPriv->group)
-                    ->exec();
-
-                $browsePriv = $this->dao->select('*')->from(TABLE_GROUPPRIV)
-                    ->where('module')->eq('dataset')
-                    ->andWhere('method')->eq('browse')
-                    ->andWhere('`group`')->eq($datasetPriv->group)
-                    ->fetchAll();
-                if(empty($browsePriv))
-                {
-                    $data = new stdClass();
-                    $data->group  = $datasetPriv->group;
-                    $data->module = 'dataview';
-                    $data->method = 'browse';
-                    $this->dao->insert(TABLE_GROUPPRIV)->data($data)->exec();
-                }
-            }
-
-            if($datasetPriv->method == 'edit')
-            {
-                $data = new stdClass();
-                $data->group  = $datasetPriv->group;
-                $data->module = 'dataview';
-                $data->method = 'query';
-                $this->dao->insert(TABLE_GROUPPRIV)->data($data)->exec();
-            }
-        }
-
-        $this->dao->update(TABLE_GROUPPRIV)->set('module')->eq('dataview')
-            ->where('module')->eq('dataset')
-            ->andWhere('method')->in('browse,create,edit,delete')
-            ->exec();
 
         return true;
     }
@@ -8438,13 +8400,12 @@ class upgradeModel extends model
      */
     public function processDashboard()
     {
-        $dimension  = $this->dao->select('id')->from(TABLE_DIMENSION)->where('code')->eq('efficiency')->fetch('id');
         $dashboards = $this->dao->select('*')->from(TABLE_DASHBOARD)->fetchAll();
         foreach($dashboards as $dashboard)
         {
             $screen = new stdclass();
             $screen->name        = $dashboard->name;
-            $screen->dimension   = $dimension ? $dimension : 0;
+            $screen->dimension   = 1;
             $screen->desc        = $dashboard->desc;
             $screen->scheme      = $this->processDashboardLayout($dashboard);
             $screen->deleted     = $dashboard->deleted;
@@ -8716,6 +8677,19 @@ class upgradeModel extends model
                 $data->step      = 4;
                 $data->type      = $chart->type == 'bar' ? 'cluBarX' : $chart->type;
 
+                if(isset($dataviewList[$chart->dataset]))
+                {
+                    $dataview     = $dataviewList[$chart->dataset];
+                    $data->sql    = 'SELECT * FROM ' . $dataview->view;
+                    $data->fields = isset($dataview->fields) ? $dataview->fields : '';
+                }
+                elseif($chart->sql)
+                {
+                    $fieldSettings = $this->getFieldSettings($chart->sql);
+                    $data->fields = json_encode($fieldSettings);
+                }
+
+
                 $settings = json_decode($chart->settings);
 
                 if($settings)
@@ -8729,11 +8703,46 @@ class upgradeModel extends model
                         unset($settings->filter);
                     }
 
+                    $isQuoteDataview = isset($dataviewList[$chart->dataset]);
+
+                    if(isset($settings->xaxis))
+                    {
+                        $xaxisFields = $settings->xaxis;
+                        foreach($xaxisFields as $xaxisIndex => $xaxisField)
+                        {
+                            if($isQuoteDataview && strpos($xaxisField->field, '.') !== false)
+                            {
+                                $xaxisField->field = str_replace('.', '_', $xaxisField->field);
+
+                                $xaxisFields[$xaxisIndex] = $xaxisField;
+                            }
+                        }
+                        $settings->xaxis = $xaxisFields;
+                    }
+
+                    if(isset($settings->group))
+                    {
+                        $groupFields = $settings->group;
+                        foreach($groupFields as $groupIndex => $groupField)
+                        {
+                            if($isQuoteDataview && strpos($groupField->field, '.') !== false)
+                            {
+                                $groupField->field = str_replace('.', '_', $groupField->field);
+
+                                $groupFields[$groupIndex] = $groupField;
+                            }
+                        }
+
+                        $settings->group = $groupFields;
+                    }
+
                     if(isset($settings->yaxis))
                     {
                         $yaxisFields = $settings->yaxis;
                         foreach($yaxisFields as $yaxisIndex => $yaxisField)
                         {
+                            if($isQuoteDataview && strpos($yaxisField->field, '.') !== false) $yaxisField->field = str_replace('.', '_', $yaxisField->field);
+
                             if($yaxisField->valOrAgg == 'value')          $yaxisField->valOrAgg = 'sum';
                             if($yaxisField->valOrAgg == 'count_distinct') $yaxisField->valOrAgg = 'distinct';
                             if($yaxisField->valOrAgg == 'value_all')      $yaxisField->valOrAgg = 'count';
@@ -8749,6 +8758,8 @@ class upgradeModel extends model
                         $metricFields = $settings->metric;
                         foreach($metricFields as $metricIndex => $metricField)
                         {
+                            if($isQuoteDataview && strpos($metricField->field, '.') !== false) $metricField->field = str_replace('.', '_', $metricField->field);
+
                             if($metricField->valOrAgg == 'value')          $metricField->valOrAgg = 'sum';
                             if($metricField->valOrAgg == 'count_distinct') $metricField->valOrAgg = 'distinct';
                             if($metricField->valOrAgg == 'value_all')      $metricField->valOrAgg = 'count';
@@ -8762,16 +8773,10 @@ class upgradeModel extends model
 
                 $data->settings = json_encode(array($settings));
 
-                if(isset($dataviewList[$chart->dataset]))
+                if(empty($data->settings))
                 {
-                    $dataview     = $dataviewList[$chart->dataset];
-                    $data->sql    = 'SELECT * FROM ' . $dataview->view;
-                    $data->fields = isset($dataview->fields) ? $dataview->fields : '';
-                }
-                elseif($chart->sql)
-                {
-                    $fieldSettings = $this->getFieldSettings($chart->sql);
-                    $data->fields = json_encode($fieldSettings);
+                    $data->step   = 1;
+                    $data->status = 'draft';
                 }
 
                 if(!empty($filters))
@@ -8812,6 +8817,7 @@ class upgradeModel extends model
                 $this->dao->update(TABLE_CHART)->data($data)->autoCheck()->where('id')->eq($chart->id)->exec();
             }
 
+            /* Update chart id in dashboard. */
             foreach($dashboardLayoutPairs as $dashboardID => $layout)
             {
                 $layout = json_decode($layout);
@@ -8869,13 +8875,15 @@ class upgradeModel extends model
         $filters       = array();
         if($tableSettings)
         {
+            $isQuoteDataview = isset($dataviewList[$table->dataset]);
+
             $index = 1;
             foreach($tableSettings->group as $index => $group)
             {
                 if($index > 3) continue;
 
                 $groupKey = "group{$index}";
-                $pivotSettings->$groupKey = $group->field;
+                $pivotSettings->$groupKey = ($isQuoteDataview && strpos($group->field, '.') !== false) ? str_replace('.', '_', $group->field) : $group->field;
 
                 $index ++;
             }
@@ -8884,7 +8892,7 @@ class upgradeModel extends model
             foreach($tableSettings->column as $index => $tableColumn)
             {
                 $column = new stdclass();
-                $column->field = $tableColumn->field;
+                $column->field = ($isQuoteDataview && strpos($tableColumn->field, '.') !== false) ? str_replace('.', '_', $tableColumn->field) : $tableColumn->field;
                 $column->stat  = $tableColumn->valOrAgg;
 
                 if($column->stat == 'value')          $column->stat = 'sum';
@@ -8903,7 +8911,7 @@ class upgradeModel extends model
 
         if(isset($dataviewList[$table->dataset]))
         {
-            $dataview     = $dataviewList[$table->dataset];
+            $dataview      = $dataviewList[$table->dataset];
             $pivot->sql    = 'SELECT * FROM ' . $dataview->view;
             $pivot->fields = isset($dataview->fields) ? $dataview->fields : '';
         }
@@ -8970,7 +8978,7 @@ class upgradeModel extends model
     {
         $reports = $this->dao->select('*')->from(TABLE_REPORT)->fetchAll();
 
-        $groupCollectors = $this->dao->select('collector, id')->from(TABLE_MODULE)->where('type')->eq('pivot')->fetchPairs();
+        $groupCollectors = $this->dao->select('collector, id')->from(TABLE_MODULE)->where('type')->eq('pivot')->andWhere('root')->eq(1)->andWhere('collector')->ne('')->fetchPairs();
 
         $this->loadModel('pivot');
 
@@ -8989,12 +8997,10 @@ class upgradeModel extends model
             $data->createdDate = $report->addedDate;
 
             /* Process group. */
-            $modules = explode(',', $report->module);
+            $modules = explode(',', trim($report->module, ','));
             $groups  = array();
             foreach($modules as $module)
             {
-                if(!$module) continue;
-
                 if(isset($groupCollectors[$module]))
                 {
                     $groups[] = $groupCollectors[$module];
@@ -9039,11 +9045,11 @@ class upgradeModel extends model
             }
 
             /* Process settings. */
+            $settings = new stdclass();
             if($report->params)
             {
                 $params = json_decode($report->params);
 
-                $settings = new stdclass();
                 $settings->group1      = $params->group1;
                 $settings->group2      = $params->group2;
                 $settings->columnTotal = 'sum';

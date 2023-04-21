@@ -86,6 +86,12 @@ class storyModel extends model
         $story->children = array();
         if($story->parent == '-1') $story->children = $this->dao->select('*')->from(TABLE_STORY)->where('parent')->eq($storyID)->andWhere('deleted')->eq(0)->fetchAll('id');
 
+        $story->openedDate    = substr($story->openedDate, 0, 19);
+        $story->assignedDate  = substr($story->assignedDate, 0, 19);
+        $story->reviewedDate  = substr($story->reviewedDate, 0, 19);
+        $story->closedDate    = substr($story->closedDate, 0, 19);
+        $story->lastEditedDate= substr($story->lastEditedDate, 0, 19);
+
         return $story;
     }
 
@@ -2846,7 +2852,11 @@ class storyModel extends model
         }
 
         $releases = $this->dao->select('*')->from(TABLE_RELEASE)->where("CONCAT(',', stories, ',')")->like("%,$storyID,%")->andWhere('deleted')->eq(0)->fetchPairs('branch', 'branch');
-        foreach($releases as $branch) $stages[$branch] = 'released';
+        foreach($releases as $branches)
+        {
+            $branches = trim($branches, ',');
+            foreach(explode(',', $branches) as $branch) $stages[$branch] = 'released';
+        }
 
         $currentStory = $this->dao->findById($storyID)->from(TABLE_STORY)->fetch();
         if($story->stage != $currentStory->stage)
@@ -5367,7 +5377,7 @@ class storyModel extends model
         {
             if(!$this->session->storyOnlyCondition)
             {
-                preg_match_all('/' . TABLE_STORY .' AS ([\w]+) /', $this->session->storyQueryCondition, $matches);
+                preg_match_all('/[`"]' . trim(TABLE_STORY, '`') .'[`"] AS ([\w]+) /', $this->session->storyQueryCondition, $matches);
                 if(isset($matches[1][0])) return 'id in (' . preg_replace('/SELECT .* FROM/', "SELECT {$matches[1][0]}.id FROM", $this->session->storyQueryCondition) . ')';
             }
             return $this->session->storyQueryCondition;

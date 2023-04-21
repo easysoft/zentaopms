@@ -2597,6 +2597,22 @@ CREATE TABLE `zt_score` (
   KEY `model` (`module`),
   KEY `method` (`method`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+CREATE TABLE IF NOT EXISTS `zt_screen` (
+  `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
+  `dimension` mediumint(8) unsigned NOT NULL DEFAULT '0',
+  `name` varchar(255) NOT NULL DEFAULT '',
+  `desc` mediumtext NOT NULL,
+  `cover` mediumtext NOT NULL,
+  `scheme` mediumtext NOT NULL,
+  `status` enum('draft','published') NOT NULL DEFAULT 'draft',
+  `builtin` enum('0', '1') NOT NULL DEFAULT '0',
+  `createdBy` char(30) NOT NULL DEFAULT '',
+  `createdDate` datetime NULL,
+  `editedBy` char(30) NOT NULL DEFAULT '',
+  `editedDate` datetime NULL,
+  `deleted` enum('0','1') NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 CREATE TABLE `zt_searchdict` (
   `key` smallint(5) unsigned NOT NULL,
   `value` char(3) NOT NULL,

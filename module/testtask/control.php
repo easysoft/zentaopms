@@ -1114,7 +1114,6 @@ class testtask extends control
         $this->config->testcase->search['params']['scene']['values']   = $this->testcase->getSceneMenu($productID, 0, $viewType = 'case', $startSceneID = 0,  0);
         $this->config->testcase->search['style']                       = 'simple';
 
-
         $build   = $this->loadModel('build')->getByID($task->build);
         $stories = array();
         if($build)

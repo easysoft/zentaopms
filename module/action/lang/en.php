@@ -45,6 +45,7 @@ $lang->action->create      = 'Add Comment';
 $lang->action->comment     = 'Comment';
 $lang->action->byQuery     = 'Search';
 
+$lang->action->trashAction    = 'Recycle List';
 $lang->action->undeleteAction = 'Reset Data';
 $lang->action->hideOneAction  = 'Hide Data';
 
@@ -159,6 +160,7 @@ $lang->action->objectTypes['stage']            = 'Stage';
 $lang->action->objectTypes['patch']            = 'Patch';
 $lang->action->objectTypes['repo']             = 'Repo';
 $lang->action->objectTypes['dataview']         = 'Data View';
+$lang->action->objectTypes['privlang']         = 'Priv';
 $lang->action->objectTypes['scene']            = 'Scene';
 
 /* Used to describe operation history. */

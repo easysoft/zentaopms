@@ -5864,6 +5864,13 @@ class executionModel extends model
         $_POST['status']    = $project->status;
         $_POST['acl']       = 'open';
 
+        /* Handle extend fields. */
+        $extendFields = $this->loadModel('project')->getFlowExtendFields();
+        foreach($extendFields as $field)
+        {
+            $_POST[$field->field] = $product->field;
+        }
+
         if(isset($this->config->setCode) and $this->config->setCode == 1) $_POST['code'] = $project->code;
 
         $projectProducts = $this->dao->select('*')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($projectID)->fetchAll();

@@ -1483,7 +1483,7 @@ class myModel extends model
             $review = new stdclass();
             $review->id     = $object->id;
             $review->type   = $objectType;
-            $review->time   = $action->date;
+            $review->time   = substr($action->date, 0, 19);
             $review->result = strtolower($action->extra);
             $review->status = $objectType == 'attend' ? $object->reviewStatus : ((isset($object->status) and !isset($flows[$objectType])) ? $object->status : 'done');
             if(strpos($review->result, ',') !== false) list($review->result) = explode(',', $review->result);

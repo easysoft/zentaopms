@@ -1141,20 +1141,6 @@ class project extends control
     }
 
     /**
-     * Project qa dashboard.
-     *
-     * @param  int $projectID
-     * @access public
-     * @return void
-     */
-    public function qa($projectID = 0)
-    {
-        $this->project->setMenu($projectID);
-        $this->view->title = $this->lang->project->qa;
-        $this->display();
-    }
-
-    /**
      * Project bug list.
      *
      * @param  int    $projectID
@@ -1436,10 +1422,13 @@ class project extends control
         $products = $this->product->getProducts($projectID, 'all', '', false);
         $products = array('' => '') + $products;
 
+
+        $fromModule = $this->app->tab == 'project' ? 'projectbuild' : 'project';
+        $fromMethod = $this->app->tab == 'project' ? 'browse' : 'build';
         /* Build the search form. */
         $type      = strtolower($type);
         $queryID   = ($type == 'bysearch') ? (int)$param : 0;
-        $actionURL = $this->createLink('project', 'build', "projectID=$projectID&type=bysearch&queryID=myQueryID");
+        $actionURL = $this->createLink($fromModule, $fromMethod, "projectID=$projectID&type=bysearch&queryID=myQueryID");
 
         $devel         = $project->model == 'waterfall' ? true : false;
         $executions    = $this->loadModel('execution')->getByProject($projectID, 'all', '', true, $devel);
@@ -1514,6 +1503,8 @@ class project extends control
         $this->view->buildPairs    = $this->loadModel('build')->getBuildPairs(0);
         $this->view->type          = $type;
         $this->view->showBranch    = $showBranch;
+        $this->view->fromModule    = $fromModule;
+        $this->view->fromMethod    = $fromMethod;
 
         $this->display();
     }
@@ -2387,37 +2378,5 @@ class project extends control
         {
             return print(html::select('project', $projectPairs, $execution->project, "class='form-control' onchange='loadProductExecutions({$execution->project}, this.value)'"));
         }
-    }
-
-    /**
-     * Link projects and code repositories.
-     *
-     * @param  int    $projectID
-     * @access public
-     * @return void
-     */
-    public function manageRepo($projectID)
-    {
-        $this->project->setMenu($projectID);
-
-        if($_POST)
-        {
-            $postData = fixer::input('post')->setDefault('repos', array())->get();
-
-            $this->project->updateRepoRelations($projectID, $postData->repos);
-            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => $this->lang->project->linkRepoFailed));
-
-            $locateLink = inLink('manageRepo', "projectID=$projectID");
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $locateLink));
-        }
-
-        $this->view->title         = $this->lang->project->manageRepo;
-        $this->view->allRepos      = $this->loadModel('repo')->getRepoPairs('');
-        $this->view->linkedRepos   = $this->project->linkedRepoPairs($projectID);
-        $this->view->unlinkedRepos = array();
-
-        foreach($this->view->allRepos as $repoID => $repoName) if(!isset($this->view->linkedRepos[$repoID])) $this->view->unlinkedRepos[$repoID] = $repoName;
-
-        $this->display();
     }
 }

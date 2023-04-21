@@ -20,12 +20,14 @@ $lang->dept->manager      = "负责人";
 $lang->dept->name         = "部门名称";
 $lang->dept->browse       = "部门维护";
 $lang->dept->manage       = "维护部门";
-$lang->dept->updateOrder  = "更新排序";
+$lang->dept->updateOrder  = "部门排序";
 $lang->dept->add          = "添加部门";
 $lang->dept->grade        = "部门级别";
 $lang->dept->order        = "排序";
 $lang->dept->dragAndSort  = "拖动排序";
 $lang->dept->noDepartment = "无部门";
+
+$lang->dept->manageChildAction = "维护下级部门";
 
 $lang->dept->confirmDelete = " 您确定删除该部门吗？";
 $lang->dept->successSave   = " 修改成功。";

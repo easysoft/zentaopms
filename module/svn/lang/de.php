@@ -13,4 +13,4 @@
 $lang->svn->common  = 'Subversion';
 $lang->svn->cat     = 'Code anzeigen';
 $lang->svn->diff    = 'Diff Code';
-$lang->svn->apiSync = 'API: Sync svn Logs';
+$lang->svn->apiSync = 'API: Sync SVN Logs';

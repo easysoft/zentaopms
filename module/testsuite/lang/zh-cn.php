@@ -9,9 +9,8 @@
  * @version     $Id: zh-cn.php 4490 2013-02-27 03:27:05Z wyd621@gmail.com $
  * @link        http://www.zentao.net
  */
-$lang->testsuite->index            = "套件首页";
 $lang->testsuite->create           = "建套件";
-$lang->testsuite->delete           = "删除";
+$lang->testsuite->delete           = "删除套件";
 $lang->testsuite->view             = "概况";
 $lang->testsuite->edit             = "编辑套件";
 $lang->testsuite->browse           = "套件列表";

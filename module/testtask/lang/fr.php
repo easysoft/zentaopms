@@ -16,7 +16,7 @@ $lang->testtask->delete           = "Supprimer Campagne";
 $lang->testtask->importUnitResult = "Import T.U. Résult";
 $lang->testtask->importUnit       = "Import Unit Result"; //Fix bug custom required testtask.
 $lang->testtask->browseUnits      = "Liste des tests unitaires";
-$lang->testtask->unitCases        = "Cas de test unitaires";
+$lang->testtask->unitCases        = "Browse Unit Cases List";
 $lang->testtask->view             = "Détail Campagne";
 $lang->testtask->edit             = "Editer Campagne";
 $lang->testtask->browse           = "Tester Campagne";
@@ -60,7 +60,7 @@ $lang->testtask->compile          = 'Compile';
 $lang->testtask->duration         = 'Duration';
 
 $lang->testtask->viewAction     = "View Request";
-$lang->testtask->casesAction    = 'View Case';
+$lang->testtask->casesAction    = 'Browse Cases List';
 $lang->testtask->activateAction = "Activer Campagne";
 $lang->testtask->blockAction    = "Bloquer Campagne";
 $lang->testtask->closeAction    = "Clôturer Campagne";

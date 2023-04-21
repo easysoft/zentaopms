@@ -27,9 +27,17 @@
         <form method='post' class='main-form form-ajax no-stash form-watched' enctype='multipart/form-data' >
           <table class='table table-form'>
             <?php if(in_array($type, array('product', 'project', 'execution'))):?>
+            <?php if(in_array($type, array('product', 'project'))):?>
+            <tr <?php if($config->vision == 'lite') echo 'class="hidden"'?>>
+              <th><?php echo $lang->doc->libType;?></th>
+              <td>
+                <span><?php echo html::radio('libType', $lang->doclib->type, 'wiki', "onchange='changeDoclibAcl(this.value)'")?></span>
+              </td>
+            </tr>
+            <?php endif;?>
             <tr class='objectBox'>
               <th><?php echo $lang->doc->{$type}?></th>
-              <td class='required'><?php echo html::select($type, $objects, $objectID, "class='form-control chosen' data-drop-direction='down'")?></td>
+              <td class='required'><?php echo html::select($type, $objects, $objectID, "class='form-control picker-select' data-drop-direction='bottom'")?></td>
             </tr>
             <?php if($app->tab == 'doc' and $type == 'project'):?>
             <tr class='executionBox'>
@@ -38,14 +46,6 @@
                 <?php $disabled = $project->multiple ? '' : 'disabled';?>
                 <?php echo html::select('execution', $executionPairs, 0, "class='form-control chosen' data-drop-direction='down' $disabled")?>
                 <i class='icon icon-help' title='<?php echo $lang->doclib->tip->selectExecution;?>'></i>
-              </td>
-            </tr>
-            <?php endif;?>
-            <?php if(in_array($type, array('product', 'project'))):?>
-            <tr <?php if($config->vision == 'lite') echo 'class="hidden"'?>>
-              <th><?php echo $lang->doc->libType;?></th>
-              <td>
-                <span><?php echo html::radio('libType', $lang->doclib->type, 'wiki', "onchange='changeDoclibAcl(this.value)'")?></span>
               </td>
             </tr>
             <?php endif;?>

@@ -61,7 +61,7 @@ $lang->my->menu           = new stdclass();
 $lang->my->menu->index    = array('link' => "$lang->dashboard|my|index");
 $lang->my->menu->calendar = array('link' => "$lang->calendar|my|calendar|", 'subModule' => 'todo', 'alias' => 'todo');
 $lang->my->menu->task     = array('link' => "{$lang->task->common}|my|contribute|mode=task&type=assignedTo", 'subModule' => 'task');
-$lang->my->menu->contacts = array('link' => "$lang->contact|my|managecontacts|");
+$lang->my->menu->contacts = array('link' => "{$lang->contact->common}|my|managecontacts|");
 
 global $config;
 if($config->edition != 'open') $lang->my->menu->effort = array('link' => '日志|effort|calendar|', 'exclude' => 'my-todo');
@@ -117,9 +117,9 @@ $lang->SRCommon = '目标';
 /* Doc menu. */
 $lang->doc->menu            = new stdclass();
 $lang->doc->menu->dashboard = array('link' => "{$lang->dashboard}|doc|index");
-$lang->doc->menu->my        = array('link' => "{$lang->doc->mySpace}|doc|mySpace|type=mine", 'alias' => 'my');
+$lang->doc->menu->my        = array('link' => "{$lang->doc->mySpace}|doc|mySpace|type=mine", 'alias' => 'myspace');
 $lang->doc->menu->project   = array('link' => "{$lang->doc->projectSpace}|doc|projectSpace", 'alias' => 'showfiles,project');
-$lang->doc->menu->custom    = array('link' => "{$lang->doc->teamSpace}|doc|tableContents|type=custom", 'alias' => 'custom');
+$lang->doc->menu->custom    = array('link' => "{$lang->doc->teamSpace}|doc|teamSpace|", 'alias' => 'teamspace');
 
 $lang->doc->dividerMenu = ',project,';
 

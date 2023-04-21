@@ -1182,7 +1182,7 @@ class commonModel extends model
                         if(isset($menuItem->link['module'])) $module = $menuItem->link['module'];
                         if(isset($menuItem->link['method'])) $method = $menuItem->link['method'];
                     }
-                    if($module == $currentModule and ($method == $currentMethod or strpos(",$alias,", ",$currentMethod,") !== false) and strpos(",$exclude,", ",$currentModule-$currentMethod,") === false)
+                    if($module == $currentModule and ($method == $currentMethod or strpos(",$alias,", ",$currentMethod,") !== false) and strpos(",$exclude,", ",$currentMethod,") === false)
                     {
                         $activeMenu = $menuItem->name;
                         $active = 'active';

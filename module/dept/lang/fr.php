@@ -20,12 +20,14 @@ $lang->dept->manager      = "Responsable";
 $lang->dept->name         = "Nom du Compartiment";
 $lang->dept->browse       = "Consulter Compartiment";
 $lang->dept->manage       = "Gérer Compartiment";
-$lang->dept->updateOrder  = "Rang Compartiment";
+$lang->dept->updateOrder  = "Department Ranking";
 $lang->dept->add          = "Ajout Compartiment";
 $lang->dept->grade        = "Grade du Compartiment";
 $lang->dept->order        = "Ordre du Compartiment";
 $lang->dept->dragAndSort  = "Déplacez pour classer";
 $lang->dept->noDepartment = "No Department";
+
+$lang->dept->manageChildAction = "Manage Subordinate Department";
 
 $lang->dept->confirmDelete = " Confirmez que vous voulez bien supprimer ce Compartiment ?";
 $lang->dept->successSave   = " Sauvé !";

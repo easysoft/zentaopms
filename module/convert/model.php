@@ -45,6 +45,7 @@ class convertModel extends model
      */
     public function dbExists($dbName = '')
     {
+        if(!$this->checkDBName($dbName)) die('Invalid database name.');
         $statement = $this->dbh->prepare('SHOW DATABASES like ?');
         $statement->execute(array($dbName));
         return $statement->fetch();
@@ -1519,5 +1520,18 @@ EOT;
             $filePath = $this->app->getTmpRoot() . 'jirafile/' . $fileName . '.xml';
             if(file_exists($filePath)) @unlink($filePath);
         }
+    }
+
+    /**
+     * Check dbName is valide.
+     *
+     * @param  string $dbName
+     * @access public
+     * @return bool
+     */
+    public function checkDBName($dbName)
+    {
+        if(preg_match('/^[a-zA-Z][a-zA-Z0-9_]*$/', $dbName)) return true;
+        return false;
     }
 }

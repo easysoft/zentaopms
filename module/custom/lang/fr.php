@@ -3,7 +3,6 @@ global $config;
 
 $lang->custom->common               = 'Personnalisation';
 $lang->custom->id                   = 'ID';
-$lang->custom->index                = 'Accueil';
 $lang->custom->set                  = 'Personnaliser';
 $lang->custom->restore              = 'Réinitialiser';
 $lang->custom->key                  = 'Clé';
@@ -63,6 +62,7 @@ $lang->custom->percent              = $lang->stage->percent;
 $lang->custom->setPercent           = "Enable or Disable {$lang->stage->percent}";
 $lang->custom->beginAndEndDate      = 'Begin & End';
 $lang->custom->beginAndEndDateRange = 'The Range Of Begin & End';
+$lang->custom->limitTaskDateAction  = 'Set start and end date required';
 
 $lang->custom->unitList['efficiency'] = 'Working Hours/';
 $lang->custom->unitList['manhour']    = 'Man-hour/';

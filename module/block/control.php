@@ -1929,7 +1929,7 @@ class block extends control
 
                 foreach($objects as $k => $task)
                 {
-                    if(in_array($task->status, array('closed', 'cancel', 'pause'))) unset($objects[$k]);
+                    if(in_array($task->status, array('closed', 'cancel'))) unset($objects[$k]);
                 }
                 if($limitCount > 0) $objects = array_slice($objects, 0, $limitCount);
             }
@@ -2205,7 +2205,7 @@ class block extends control
             ->where('deleted')->eq('0')
             ->andWhere('vision')->eq($this->config->vision)
             ->andWhere('type')->eq('project')
-            ->andWhere('model')->ne('kanban')
+            ->beginIF($this->config->vision == 'rnd')->andWhere('model')->ne('kanban')->fi()
             ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->projects)->fi()
             ->orderBy('order_asc,id_desc')
             ->fetchAll('id');
@@ -2215,7 +2215,7 @@ class block extends control
             ->where('t1.deleted')->eq('0')
             ->andWhere('t1.vision')->eq($this->config->vision)
             ->andWhere('t1.type')->eq('project')
-            ->andWhere('t1.model')->ne('kanban')
+            ->beginIF($this->config->vision == 'rnd')->andWhere('t1.model')->ne('kanban')->fi()
             ->andWhere('t2.type')->eq('project')
             ->beginIF(!$this->app->user->admin)->andWhere('t1.id')->in($this->app->user->view->projects)->fi()
             ->andWhere('t1.openedBy', true)->eq($this->app->user->account)

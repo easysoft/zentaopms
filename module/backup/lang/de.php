@@ -1,6 +1,6 @@
 <?php
 $lang->backup->common      = 'Sicherung';
-$lang->backup->index       = 'Start';
+$lang->backup->index       = 'Backup List';
 $lang->backup->history     = 'Verlauf';
 $lang->backup->delete      = 'Löschen';
 $lang->backup->backup      = 'Sichern';
@@ -10,6 +10,7 @@ $lang->backup->changeAB    = 'Bearbeiten';
 $lang->backup->rmPHPHeader = 'Remove PHP header';
 $lang->backup->setting     = 'Settings';
 
+$lang->backup->restoreAction = 'Restore Backup';
 $lang->backup->settingAction = 'Backup Settings';
 
 $lang->backup->time     = 'Datum';

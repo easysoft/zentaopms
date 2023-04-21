@@ -3,7 +3,6 @@ $lang->dev->common       = 'Entwicklung';
 $lang->dev->api          = 'API Document';
 $lang->dev->db           = 'Data Dictionary';
 $lang->dev->editor       = 'Bearbeiter';
-$lang->dev->translate    = 'Translate';
 $lang->dev->dbList       = 'Datenbank';
 $lang->dev->moduleList   = 'Module';
 $lang->dev->params       = 'Parameter';
@@ -19,7 +18,6 @@ $lang->dev->paramDate      = 'Date format: YY-mm-dd, e.g 2019-01-01';
 $lang->dev->paramColor     = 'Color format: #RGB, e.g. #3da7f5';
 $lang->dev->paramMailto    = "User account. Separate accounts by ','.";
 $lang->dev->noteEditor     = "The editor is disabled for security reasons. To use this feature, Please turn on.";
-$lang->dev->noteTranslate  = "The translation is disabled for security reasons. To use this feature, please go to the official website to download and install the plugin of <a href='https://www.zentao.net/extension-viewExt-151.html' target='_blank'>translation</a>.";
 $lang->dev->confirmRestore = 'Do you want to reset?';
 $lang->dev->apiTips        = 'Every page can be called through the JSON interface';
 

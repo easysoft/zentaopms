@@ -1,7 +1,7 @@
 <?php
 $lang->sonarqube = new stdclass;
 $lang->sonarqube->common            = 'SonarQube';
-$lang->sonarqube->browse            = 'SonarQube Browse';
+$lang->sonarqube->browse            = 'SonarQube List';
 $lang->sonarqube->search            = 'Search';
 $lang->sonarqube->create            = 'Create SonarQube';
 $lang->sonarqube->edit              = 'Edit SonarQube';

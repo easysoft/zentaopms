@@ -32,7 +32,7 @@
       $appid           = isset($_GET['entry']) ? "class='app-btn' data-id='{$this->get->entry}'" : '';
       $buildViewLink   = $this->createLink('build', 'view', "buildID={$build->id}");
       $productViewLink = $this->createLink('product', 'browse', "productID={$build->product}");
-      $projectViewLink = $this->createLink('project', 'build', "projectID={$build->project}");
+      $projectViewLink = $this->createLink('projectbuild', 'browse', "projectID={$build->project}");
       ?>
       <tr <?php echo $appid?>>
         <td class='text-center'><?php echo sprintf('%03d', $build->id);?></td>

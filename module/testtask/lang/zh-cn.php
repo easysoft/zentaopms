@@ -16,7 +16,7 @@ $lang->testtask->delete           = "删除测试单";
 $lang->testtask->importUnitResult = "导入单元测试结果";
 $lang->testtask->importUnit       = "导入单元测试"; //Fix bug custom required testtask.
 $lang->testtask->browseUnits      = "单元测试列表";
-$lang->testtask->unitCases        = "单元测试用例";
+$lang->testtask->unitCases        = "浏览单元测试用例列表";
 $lang->testtask->view             = "概况";
 $lang->testtask->edit             = "编辑测试单";
 $lang->testtask->browse           = "测试单列表";
@@ -60,7 +60,7 @@ $lang->testtask->compile          = '构建';
 $lang->testtask->duration         = '持续时间';
 
 $lang->testtask->viewAction     = "测试单概况";
-$lang->testtask->casesAction    = '查看用例';
+$lang->testtask->casesAction    = '浏览用例列表';
 $lang->testtask->activateAction = "激活测试单";
 $lang->testtask->blockAction    = "阻塞测试单";
 $lang->testtask->closeAction    = "关闭测试单";

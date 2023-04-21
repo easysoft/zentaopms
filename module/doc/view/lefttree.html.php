@@ -1,4 +1,5 @@
 <style>
+.tree li.has-list.open:before {display: none;}
 .tree-group {position: relative;}
 .tree-group > .module-name {white-space: nowrap; overflow: hidden; text-overflow: ellipsis; width: 100%; display: block;}
 .tree li.has-list.open:before {left: 6px;}
@@ -74,6 +75,7 @@ li.drag-shadow ul {display: none !important;}
 /* Release used for api space. */
 js::set('release', isset($release) ? $release : 0);
 js::set('versionLang', $lang->build->common);
+js::set('spaceType', $this->session->spaceType);
 
 /* ObjectType and objectID used for other space. */
 js::set('objectType', isset($type) ? $type : '');
@@ -471,9 +473,11 @@ $(function()
         if(!libID)    libID    = 0;
         if(!moduleID) moduleID = 0;
         linkParams = linkParams.replace('%s', 'libID=' + libID + '&moduleID=' + moduleID);
-        var moduleName = config.currentModule;
+        if(config.currentModule == 'api' && config.currentMethod == 'view') spaceType = 'api';
+        if(spaceType != 'api' && config.currentModule == 'api') linkParams = 'objectID=' + objectID + '&' + linkParams;
+        var moduleName = spaceType == 'api' ? 'api' : 'doc';
         var methodName = '';
-        if(config.currentModule == 'api')
+        if(spaceType == 'api')
         {
             methodName = 'index';
             linkParams =  linkParams.substring(1);

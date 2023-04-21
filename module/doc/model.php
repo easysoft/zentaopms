@@ -98,7 +98,7 @@ class docModel extends model
         }
 
         $products   = $this->loadModel('product')->getPairs();
-        $projects   = $this->loadModel('project')->getPairsByProgram('', 'all', false, 'order_asc', 'kanban');
+        $projects   = $this->loadModel('project')->getPairsByProgram('', 'all', false, 'order_asc', $this->config->vision == 'rnd' ? 'kanban' : '');
         $executions = $this->loadModel('execution')->getPairs(0, 'sprint,stage', 'multiple,leaf');
         $waterfalls = array();
         if(empty($objectID) and $type != 'product' and $type != 'project' and $type != 'custom')
@@ -606,6 +606,8 @@ class docModel extends model
      */
     public function getDocs($libID, $module, $browseType, $orderBy, $pager = null)
     {
+        if(empty($libID)) return array();
+
         $docIdList = $this->getPrivDocs($libID, $module, 'children');
         $docs = $this->dao->select('*')->from(TABLE_DOC)
             ->where('deleted')->eq(0)
@@ -1093,7 +1095,7 @@ class docModel extends model
             $this->config->doc->search['module'] = 'contributeDoc';
             $products = $this->product->getPairs();
 
-            $this->config->doc->search['params']['project']['values']   = array('' => '') + $this->loadModel('project')->getPairsByProgram('', 'all', false, 'order_asc', 'kanban') + array('all' => $this->lang->doc->allProjects);
+            $this->config->doc->search['params']['project']['values']   = array('' => '') + $this->loadModel('project')->getPairsByProgram('', 'all', false, 'order_asc', $this->config->vision == 'rnd' ? 'kanban' : '') + array('all' => $this->lang->doc->allProjects);
             $this->config->doc->search['params']['execution']['values'] = array('' => '') + $this->loadModel('execution')->getPairs(0, 'sprint,stage', 'multiple,leaf,noprefix,withobject') + array('all' => $this->lang->doc->allExecutions);
             $this->config->doc->search['params']['lib']['values']       = array('' => '') + $this->loadModel('doc')->getLibs('all', 'withObject') + array('all' => $this->lang->doclib->all);
             $this->config->doc->search['params']['product']['values']   = array('' => '') + $products + array('all' => $this->lang->doc->allProduct);
@@ -1766,7 +1768,7 @@ class docModel extends model
 
             $executions = $this->dao->select('*')->from(TABLE_EXECUTION)
                 ->where('deleted')->eq(0)
-                ->andWhere('type')->in('sprint,stage,kanban')
+                ->andWhere('type')->in('sprint,stage')
                 ->andWhere('multiple')->eq('1')
                 ->andWhere('vision')->eq($this->config->vision)
                 ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->sprints)->fi()
@@ -1779,7 +1781,7 @@ class docModel extends model
             {
                 if($execution->type == 'stage' and $execution->grade != 1)
                 {
-                    $parentExecutions = $this->dao->select('id,name')->from(TABLE_EXECUTION)->where('id')->in(trim($execution->path, ','))->andWhere('type')->in('stage,kanban,sprint')->orderBy('grade')->fetchPairs();
+                    $parentExecutions = $this->dao->select('id,name')->from(TABLE_EXECUTION)->where('id')->in(trim($execution->path, ','))->andWhere('type')->in('stage,sprint')->orderBy('grade')->fetchPairs();
                     $execution->name  = implode('/', $parentExecutions);
                 }
                 $execution->name = zget($projectPairs, $execution->project) . ' / ' . $execution->name;
@@ -3206,12 +3208,13 @@ class docModel extends model
     {
         if(!common::hasPriv('doc', 'create') or !isset($lib->id)) return null;
 
-        $objectID = zget($lib, $lib->type, 0);
-        $class = $from == 'list' ? 'btn-info' : 'btn-primary';
-        $html  = "<div class='dropdown btn-group createDropdown'>";
-        $html .= html::a(helper::createLink('doc', 'create', "objectType={$lib->type}&objectID=$objectID&libID={$lib->id}&moduleID=$moduleID&type=html"), "<i class='icon icon-plus'></i> {$this->lang->doc->create}", '', "class='btn $class' data-app='{$this->app->tab}'");
-        $html .= "<button type='button' class='btn $class dropdown-toggle' data-toggle='dropdown'><span class='caret'></span></button>";
-        $html .= "<ul class='dropdown-menu pull-right'>";
+        $objectID      = zget($lib, $lib->type, 0);
+        $templateParam = $this->config->edition == 'max' ? '&from=template' : '';
+        $class         = $from == 'list' ? 'btn-info' : 'btn-primary';
+        $html          = "<div class='dropdown btn-group createDropdown'>";
+        $html         .= html::a(helper::createLink('doc', 'create', "objectType={$lib->type}&objectID=$objectID&libID={$lib->id}&moduleID=$moduleID&type=html$templateParam"), "<i class='icon icon-plus'></i> {$this->lang->doc->create}", '', "class='btn $class' data-app='{$this->app->tab}'");
+        $html         .= "<button type='button' class='btn $class dropdown-toggle' data-toggle='dropdown'><span class='caret'></span></button>";
+        $html         .= "<ul class='dropdown-menu pull-right'>";
 
         foreach($this->lang->doc->createList as $typeKey => $typeName)
         {

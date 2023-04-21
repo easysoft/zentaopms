@@ -58,7 +58,7 @@ tbody tr td:first-child input {display: none;}
   </div>
   <?php endif;?>
 </div>
-<?php $module = $build->execution ? 'build' : 'projectbuild';?>
+<?php $module = $this->app->tab == 'project' ? 'projectbuild' : 'build';?>
 <div id='mainContent' class='main-content'>
   <div class='tabs' id='tabsNav'>
   <?php $countStories = count($stories); $countBugs = count($bugs); $countGeneratedBugs = count($generatedBugs);?>

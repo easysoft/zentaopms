@@ -13,4 +13,4 @@
 $lang->git->common  = 'Git';
 $lang->git->cat     = '查看源代码';
 $lang->git->diff    = '比较源代码';
-$lang->git->apiSync = '接口：同步git日志';
+$lang->git->apiSync = '接口：同步Git日志';

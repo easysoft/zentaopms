@@ -7,7 +7,7 @@
  */
 function changeProduct(productID)
 {
-    link = createLink('project', 'build', 'projectID=' + projectID + '&type=product&param=' + productID);
+    link = createLink(fromModule, fromMethod, 'projectID=' + projectID + '&type=product&param=' + productID);
     location.href = link;
 }
 

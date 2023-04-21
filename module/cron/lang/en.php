@@ -2,7 +2,7 @@
 $lang->cron->common       = 'Cron';
 $lang->cron->id           = 'ID';
 $lang->cron->buildin      = 'Build In';
-$lang->cron->index        = 'Cron Home';
+$lang->cron->index        = 'Cron List';
 $lang->cron->list         = 'Task';
 $lang->cron->create       = 'Add';
 $lang->cron->createAction = 'Add Cron';

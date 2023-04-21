@@ -100,10 +100,14 @@ class chartModel extends model
         if(!$groups) return array('', array());
 
         $chartGroups = array();
+        $this->loadModel('screen');
         foreach($groups as $group)
         {
             $chartGroups[$group->id] = $this->dao->select('*')->from(TABLE_CHART)
                 ->where('deleted')->eq(0)
+                ->andWhere('builtin', true)->eq('0')
+                ->orWhere('id')->in($this->config->screen->builtinChart)
+                ->markRight(1)
                 ->andWhere("FIND_IN_SET($group->id, `group`)")
                 ->andWhere('stage')->ne('draft')
                 ->orderBy($orderBy)
@@ -189,6 +193,8 @@ class chartModel extends model
         $max    = 0;
         foreach($yStats as $yStat)
         {
+            if(empty($yStat)) continue;
+
             $data = array();
             foreach($xLabels as $xLabel)
             {
@@ -390,7 +396,7 @@ class chartModel extends model
         $optionList = $this->getSysOptions($fields[$group]['type'], $fields[$group]['object'], $fields[$group]['field']);
         foreach($xLabels as $index => $xLabel) $xLabels[$index] = isset($optionList[$xLabel]) ? $optionList[$xLabel] : $xLabel;
 
-        $xaxis      = array('type' => 'category', 'data' => $xLabels);
+        $xaxis      = array('type' => 'category', 'data' => $xLabels, 'boundaryGap' => false);
         $yaxis      = array('type' => 'value');
         $legend     = new stdclass();
         $series     = array();
@@ -414,7 +420,9 @@ class chartModel extends model
             $series[]   = array('name' => $seriesName, 'data' => $yData, 'type' => 'line');
         }
 
-        $options = array('series' => $series, 'legend' => $legend, 'xAxis' => $xaxis, 'yAxis' => $yaxis, 'tooltip' => array('trigger' => 'axis'));
+        $grid = array('left' => '3%', 'right' => '4%', 'bottom' => '3%', 'containLabel' => true);
+
+        $options = array('series' => $series, 'grid' => $grid, 'legend' => $legend, 'xAxis' => $xaxis, 'yAxis' => $yaxis, 'tooltip' => array('trigger' => 'axis'));
         return $options;
     }
 
@@ -448,7 +456,7 @@ class chartModel extends model
         $optionList = $this->getSysOptions($fields[$group]['type'], $fields[$group]['object'], $fields[$group]['field']);
         foreach($xLabels as $index => $xLabel) $xLabels[$index] = isset($optionList[$xLabel]) ? $optionList[$xLabel] : $xLabel;
 
-        $xaxis  = array('type' => 'category', 'data' => $xLabels, 'axisLabel' => array('interval' => 0));
+        $xaxis  = array('type' => 'category', 'data' => $xLabels, 'axisLabel' => array('interval' => 0), 'boundaryGap' => false);
         $yaxis  = array('type' => 'value');
         $legend = new stdclass();
 
@@ -482,7 +490,9 @@ class chartModel extends model
         $isY = in_array($settings['type'], array('cluBarY', 'stackedBarY'));
         $dataZoom = $isY ? json_decode($dataZoomY, true) : json_decode($dataZoomX, true);
 
-        $options = array('series' => $series, 'legend' => $legend, 'xAxis' => $xaxis, 'yAxis' => $yaxis, 'tooltip' => array('trigger' => 'axis'), 'dataZoom' => $dataZoom);
+        $grid = array('left' => '3%', 'right' => '4%', 'bottom' => '3%', 'containLabel' => true);
+
+        $options = array('series' => $series, 'grid' => $grid, 'legend' => $legend, 'xAxis' => $xaxis, 'yAxis' => $yaxis, 'tooltip' => array('trigger' => 'axis'), 'dataZoom' => $dataZoom);
         return $options;
     }
 
@@ -570,8 +580,7 @@ class chartModel extends model
      */
     public static function isClickable($chart, $action)
     {
-        global $config;
-        if($chart->builtin and in_array($chart->id, $config->screen->builtinChart)) return false;
+        if($chart->builtin) return false;
         return true;
     }
 

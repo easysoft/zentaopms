@@ -5,6 +5,7 @@ global $config;
 $lang->my->index           = 'Home';
 $lang->my->data            = 'My Data';
 $lang->my->todo            = 'My Todos';
+$lang->my->todoAction      = 'Schedule List';
 $lang->my->calendar        = 'Schedule';
 $lang->my->work            = 'Work';
 $lang->my->contribute      = 'Contribute';
