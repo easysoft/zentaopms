@@ -20,6 +20,7 @@ function usePager()
     $setting->recPerPage = $pager->recPerPage;
     $setting->linkCreator = createLink($pager->moduleName, $pager->methodName, $params);
     $setting->items = array();
+    $setting->btnProps= ['data-load' => 'table'];
 
     if($pager->recTotal == 0)
     {
