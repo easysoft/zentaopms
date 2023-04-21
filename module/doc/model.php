@@ -3206,12 +3206,13 @@ class docModel extends model
     {
         if(!common::hasPriv('doc', 'create') or !isset($lib->id)) return null;
 
-        $objectID = zget($lib, $lib->type, 0);
-        $class = $from == 'list' ? 'btn-info' : 'btn-primary';
-        $html  = "<div class='dropdown btn-group createDropdown'>";
-        $html .= html::a(helper::createLink('doc', 'create', "objectType={$lib->type}&objectID=$objectID&libID={$lib->id}&moduleID=$moduleID&type=html"), "<i class='icon icon-plus'></i> {$this->lang->doc->create}", '', "class='btn $class' data-app='{$this->app->tab}'");
-        $html .= "<button type='button' class='btn $class dropdown-toggle' data-toggle='dropdown'><span class='caret'></span></button>";
-        $html .= "<ul class='dropdown-menu pull-right'>";
+        $objectID      = zget($lib, $lib->type, 0);
+        $templateParam = $this->config->edition == 'max' ? '&from=template' : '';
+        $class         = $from == 'list' ? 'btn-info' : 'btn-primary';
+        $html          = "<div class='dropdown btn-group createDropdown'>";
+        $html         .= html::a(helper::createLink('doc', 'create', "objectType={$lib->type}&objectID=$objectID&libID={$lib->id}&moduleID=$moduleID&type=html$templateParam"), "<i class='icon icon-plus'></i> {$this->lang->doc->create}", '', "class='btn $class' data-app='{$this->app->tab}'");
+        $html         .= "<button type='button' class='btn $class dropdown-toggle' data-toggle='dropdown'><span class='caret'></span></button>";
+        $html         .= "<ul class='dropdown-menu pull-right'>";
 
         foreach($this->lang->doc->createList as $typeKey => $typeName)
         {
