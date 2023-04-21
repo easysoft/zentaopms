@@ -529,7 +529,7 @@ class baseHTML
             if(!isset($matches[2])) $matches[2] = $config->default->method;
             if(!in_array($matches[1], array($config->default->module, 'search')) or !in_array($matches[2], array($config->default->method, 'buildquery')))
             {
-                if($matches[1] != $currentModule or $matches[2] != $currentMethod)
+                if($matches[1] != 'index' and ($matches[1] != $currentModule or $matches[4] != $currentMethod))
                 {
                     $gobackList[$tab] = $referer;
                     $gobackLink       = $referer;

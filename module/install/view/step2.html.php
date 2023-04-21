@@ -36,6 +36,8 @@
             <th><?php echo $lang->install->dbDriver;?></th>
             <td><?php echo html::select('dbDriver', $lang->install->dbDriverList, 'mysql', "class='form-control'");?></td><td></td>
           </tr>
+          <?php else:?>
+            <?php echo html::hidden('dbDriver', 'mysql');?>
           <?php endif;?>
           <tr>
             <th><?php echo $lang->install->dbHost;?></th>
