@@ -157,7 +157,7 @@ pipeline {
           failure{
               container('xuanimbot') {
                   sh 'git config --global --add safe.directory $(pwd)'
-                  sh '/usr/local/bin/xuanimbot  --users "$(git show -s --format=%an)" --title "unittest" --url "${RUN_DISPLAY_URL}" --content "Unit test failed" --debug --custom'
+                  sh '/usr/local/bin/xuanimbot  --users "$(git show -s --format=%an)" --title "unittest" --url "${RUN_DISPLAY_URL}" --content "Unit test failed" --debug --custom'
               }
           }
         }
