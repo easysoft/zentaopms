@@ -271,7 +271,7 @@
         return loadPage(currentAppUrl, selector);
     }
 
-    function openPage(url)
+    function openPage(url, appCode)
     {
         if(DEBUG) console.log('[APP] ', 'open:', url);
         if(!window.config.zin)
@@ -279,7 +279,7 @@
             location.href = $.createLink('index', 'app', 'url=' + btoa(url));
             return;
         }
-        $.apps.reloadApp(currentCode, url);
+        $.apps.reloadApp(appCode || currentAppUrl, url);
     }
 
     function onRenderPage(callback)
