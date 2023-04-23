@@ -274,7 +274,7 @@
                 <?php endif;?>
                 <tr>
                   <th><?php echo $lang->task->type;?></th>
-                  <td><?php echo $lang->task->typeList[$task->type];?></td>
+                  <td><?php echo zget($this->lang->task->typeList, $task->type, $task->type);?></td>
                 </tr>
                 <tr>
                   <th><?php echo $lang->task->status;?></th>
