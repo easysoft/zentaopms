@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * ZenTaoPHP的control类。
  * The control class file of ZenTaoPHP framework.
@@ -17,7 +17,7 @@
  *
  * @package framework
  */
-include dirname(__FILE__) . '/base/control.class.php';
+include __DIR__ . '/base/control.class.php';
 class control extends baseControl
 {
     /**
@@ -29,7 +29,7 @@ class control extends baseControl
      * @access public
      * @return void
      */
-    public function __construct($moduleName = '', $methodName = '', $appName = '')
+    public function __construct(string $moduleName = '', string $methodName = '', string $appName = '')
     {
         parent::__construct($moduleName, $methodName, $appName);
 
@@ -56,7 +56,7 @@ class control extends baseControl
      */
     public function extendExportFields()
     {
-        if(isset($this->config->{$this->moduleName}) and strpos($this->methodName, 'export') !== false)
+        if(isset($this->config->{$this->moduleName}) and str_contains((string) $this->methodName, 'export'))
         {
             if(isset($this->config->{$this->moduleName}->exportFields) or isset($this->config->{$this->moduleName}->list->exportFields))
             {
@@ -145,7 +145,7 @@ class control extends baseControl
             {
                 foreach($labels as $label)
                 {
-                    $code = str_replace('browse', '', $label->code);
+                    $code = str_replace('browse', '', (string) $label->code);
                     $this->app->user->rights['rights'][$module][$code] = 1;
                 }
             }
@@ -165,7 +165,7 @@ class control extends baseControl
      * @access public
      * @return object|bool 如果没有model文件，返回false，否则返回model对象。If no model file, return false, else return the model object.
      */
-    public function loadModel($moduleName = '', $appName = '')
+    public function loadModel(string $moduleName = '', string $appName = ''): object|bool
     {
         return parent::loadModel($moduleName);
     }
@@ -181,7 +181,7 @@ class control extends baseControl
      * @access public
      * @return object|bool 如果没有model文件，返回false，否则返回model对象。If no model file, return false, else return the model object.
      */
-    public function loadZen($moduleName = '', $appName = '')
+    public function loadZen(string $moduleName = '', string $appName = ''): object|bool
     {
         return parent::loadZen($moduleName);
     }
@@ -204,16 +204,16 @@ class control extends baseControl
      * @access public
      * @return void
      */
-    public function loadExtension($extensionName, $moduleName = '')
+    public function loadExtension(string $extensionName, string $moduleName = '')
     {
         if(empty($extensionName)) return false;
         if(empty($moduleName)) $moduleName = $this->moduleName;
 
-        $moduleName    = strtolower($moduleName);
+        $moduleName    = strtolower((string) $moduleName);
         $extensionName = strtolower($extensionName);
 
         $type      = 'model';
-        $className = strtolower(get_class($this));
+        $className = strtolower(static::class);
         if($className == $moduleName . 'zen' || $className == 'ext' . $moduleName . 'zen') $type = 'zen';
 
         /* 设置扩展类的名字。Set the extension class name. */
@@ -252,7 +252,7 @@ class control extends baseControl
      * @access public
      * @return string  the view file
      */
-    public function setViewFile($moduleName, $methodName)
+    public function setViewFile(string $moduleName, string $methodName)
     {
         $moduleName = strtolower(trim($moduleName));
         $methodName = strtolower(trim($methodName));
@@ -309,7 +309,7 @@ class control extends baseControl
                 $viewFile = $commonExtViewFile;
             }
 
-            if(!is_file($viewFile)) $viewFile = dirname(dirname($viewExtPath['common'])) . DS . 'view' . DS . $this->devicePrefix . $methodName . ".{$viewType}.php";
+            if(!is_file($viewFile)) $viewFile = dirname((string) $viewExtPath['common'], 2) . DS . 'view' . DS . $this->devicePrefix . $methodName . ".{$viewType}.php";
             if(!is_file($viewFile)) die(js::error($this->lang->notPage) . js::locate('back'));
 
             /* Get ext hook files. */
@@ -341,7 +341,7 @@ class control extends baseControl
      * @access public
      * @return void
      */
-    public function parseDefault($moduleName, $methodName)
+    public function parseDefault(string $moduleName, string $methodName)
     {
         /**
          * 设置视图文件。(PHP7有一个bug，不能直接$viewFile = $this->setViewFile())。
@@ -407,7 +407,7 @@ class control extends baseControl
      * @access  public
      * @return  string  the parsed html.
      */
-    public function fetch($moduleName = '', $methodName = '', $params = array(), $appName = '')
+    public function fetch(string $moduleName = '', string $methodName = '', array|string $params = array(), string $appName = '')
     {
         if($moduleName != $this->moduleName) $this->app->fetchModule = $moduleName;
 
@@ -418,11 +418,11 @@ class control extends baseControl
      * Build operate menu of a method.
      *
      * @param  object $object    product|project|productplan|release|build|story|task|bug|testtask|testcase|testsuite
-     * @param  string $displayOn view|browse
+     * @param  string $type view|browse
      * @access public
      * @return string
      */
-    public function buildOperateMenu($object, $type = 'view')
+    public function buildOperateMenu(object $object, string $type = 'view')
     {
         if(!isset($this->config->bizVersion)) return false;
 
@@ -437,7 +437,7 @@ class control extends baseControl
      * @access public
      * @return void
      */
-    public function executeHooks($objectID)
+    public function executeHooks(int $objectID)
     {
         if(!isset($this->config->bizVersion)) return false;
 
@@ -448,7 +448,6 @@ class control extends baseControl
     /**
      * Set workflow export fields
      *
-     * @param  array  $fields
      * @access public
      * @return array
      */
@@ -476,12 +475,12 @@ class control extends baseControl
      * @access public
      * @return void
      */
-    public function printExtendFields($object, $type, $extras = '', $print = true, $moduleName = '', $methodName = '')
+    public function printExtendFields(object|string $object, string $type, string $extras = '', bool $print = true, string $moduleName = '', string $methodName = '')
     {
         if(!isset($this->config->bizVersion)) return false;
 
-        $moduleName = $moduleName ? $moduleName : $this->app->getModuleName();
-        $methodName = $methodName ? $methodName : $this->app->getMethodName();
+        $moduleName = $moduleName ?: $this->app->getModuleName();
+        $methodName = $methodName ?: $this->app->getMethodName();
         $fields     = $this->loadModel('flow')->printFields($moduleName, $methodName, $object, $type, $extras);
         if(!$print) return $fields;
 
@@ -496,7 +495,7 @@ class control extends baseControl
      * @access public
      * @return string
      */
-    public function processStatus($module, $record)
+    public function processStatus(string $module, object $record)
     {
         $moduleName = $this->moduleName;
 
@@ -508,9 +507,8 @@ class control extends baseControl
      *
      * @param  string    $viewFile
      * @access public
-     * @return bool|string
      */
-    public function printViewFile($viewFile)
+    public function printViewFile(string $viewFile): bool|string
     {
         if(!file_exists($viewFile)) return false;
 
@@ -558,7 +556,7 @@ class control extends baseControl
             if(empty($field->show)) continue;
             if(!isset($layouts[$field->field])) continue;
 
-            $fieldRules = explode(',', trim($field->rules, ','));
+            $fieldRules = explode(',', trim((string) $field->rules, ','));
             $fieldRules = array_unique($fieldRules);
             foreach($fieldRules as $ruleID)
             {
@@ -570,7 +568,7 @@ class control extends baseControl
                 {
                     $requiredFields .= ",{$field->field}";
                     if($field->control == 'radio' or $field->control == 'checkbox') $mustPostFields .= ",{$field->field}";
-                    if(strpos($field->type, 'int') !== false and $field->control == 'select') $numberFields .= ",{$field->field}";
+                    if(str_contains((string) $field->type, 'int') and $field->control == 'select') $numberFields .= ",{$field->field}";
                 }
                 elseif($rule->type == 'system' and isset($_POST[$field->field]))
                 {
@@ -622,11 +620,11 @@ class control extends baseControl
                 {
                     $message[$requiredField][] = sprintf($this->lang->error->notempty, $fields[$requiredField]->name);
                 }
-                elseif(strpos(",{$numberFields},", ",{$requiredField},") !== false and empty($_POST[$requiredField]))
+                elseif(str_contains(",{$numberFields},", ",{$requiredField},") and empty($_POST[$requiredField]))
                 {
                     $message[$requiredField][] = sprintf($this->lang->error->notempty, $fields[$requiredField]->name);
                 }
-                elseif(strpos(",{$mustPostFields},", ",{$requiredField},") !== false and !isset($_POST[$requiredField]))
+                elseif(str_contains(",{$mustPostFields},", ",{$requiredField},") and !isset($_POST[$requiredField]))
                 {
                     $message[$requiredField][] = sprintf($this->lang->error->notempty, $fields[$requiredField]->name);
                 }
@@ -643,7 +641,7 @@ class control extends baseControl
      * @access public
      * @return mixed
      */
-    public function __call($method, $arguments)
+    public function __call(string $method, array $arguments)
     {
         $moduleName = $this->app->getModuleName();
         $zenClass   = $moduleName . 'Zen';
@@ -661,7 +659,7 @@ class control extends baseControl
      * @access public
      * @return mixed
      */
-    public static function __callStatic($method, $arguments)
+    public static function __callStatic(string $method, array $arguments)
     {
         global $app;
         $moduleName = $app->getModuleName();

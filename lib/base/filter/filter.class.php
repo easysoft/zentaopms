@@ -1006,9 +1006,9 @@ class baseFixer
     /**
      * Special array
      *
-     * @param mix $data
+     * @param mixed $data
      * @access public
-     * @return mix
+     * @return mixed
      */
     public function specialArray($data)
     {

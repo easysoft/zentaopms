@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * ZenTaoPHP的model类。
  * The model class file of ZenTaoPHP framework.
@@ -17,7 +17,7 @@
  *
  * @package framework
  */
-include dirname(__FILE__) . '/base/model.class.php';
+include __DIR__ . '/base/model.class.php';
 class model extends baseModel
 {
     /**
@@ -31,7 +31,7 @@ class model extends baseModel
      * @access public
      * @return object|bool  the model object or false if model file not exists.
      */
-    public function loadModel($moduleName, $appName = '')
+    public function loadModel($moduleName, $appName = ''): object|bool
     {
         return parent::loadModel($moduleName);
     }
@@ -47,7 +47,7 @@ class model extends baseModel
      * @access public
      * @return object|bool  the model object or false if model file not exists.
      */
-    public function loadTao($moduleName, $appName = '')
+    public function loadTao($moduleName, $appName = ''): object|bool
     {
         return parent::loadTao($moduleName);
     }
@@ -64,7 +64,7 @@ class model extends baseModel
     public function delete($table, $id)
     {
         $this->dao->update($table)->set('deleted')->eq(1)->where('id')->eq($id)->exec();
-        $object = preg_replace('/^' . preg_quote($this->config->db->prefix) . '/', '', trim($table, '`'));
+        $object = preg_replace('/^' . preg_quote((string) $this->config->db->prefix) . '/', '', trim($table, '`'));
         $this->loadModel('action')->create($object, $id, 'deleted', '', $extra = ACTIONMODEL::CAN_UNDELETED);
 
         return true;
@@ -91,9 +91,9 @@ class model extends baseModel
 
     public function buildMenu($moduleName, $methodName, $params, $data, $type = 'view', $icon = '', $target = '', $class = '', $onlyBody = false, $misc = '' , $title = '', $returnHtml = true)
     {
-        if(strpos($moduleName, '.') !== false) list($appName, $moduleName) = explode('.', $moduleName);
+        if(str_contains($moduleName, '.')) [$appName, $moduleName] = explode('.', $moduleName);
 
-        if(strpos($methodName, '_') !== false && strpos($methodName, '_') > 0) list($module, $method) = explode('_', $methodName);
+        if(str_contains($methodName, '_') && strpos($methodName, '_') > 0) [$module, $method] = explode('_', $methodName);
 
         if(empty($module)) $module = $moduleName;
         if(empty($method)) $method = $methodName;
@@ -119,7 +119,7 @@ class model extends baseModel
 
             if($action->extensionType == 'override') return $this->loadModel('flow')->buildActionMenu($moduleName, $action, $data, $type);
 
-            $conditions = json_decode($action->conditions);
+            $conditions = json_decode((string) $action->conditions);
             if($conditions and $action->extensionType == 'extend')
             {
                 if($icon != 'copy' and $methodName != 'create') $title = $action->name;
@@ -158,7 +158,7 @@ class model extends baseModel
         if(!isset($this->config->bizVersion)) return '';
 
         $moduleName = $module;
-        if(strpos($module, '.') !== false) list($appName, $moduleName) = explode('.', $module);
+        if(str_contains($module, '.')) [$appName, $moduleName] = explode('.', $module);
 
         static $actions;
         static $relations;
@@ -182,7 +182,7 @@ class model extends baseModel
             $flow = $this->loadModel('workflow', 'flow')->getByModule($moduleName);
             if($flow->approval == 'enabled' && !empty($data->approval))
             {
-                $extraClass = strpos(',testsuite,build,release,productplan,', ",{$moduleName},") !== false ? 'btn-link' : '';
+                $extraClass = str_contains(',testsuite,build,release,productplan,', ",{$moduleName},") ? 'btn-link' : '';
                 $approvalProgressMenu .= "<div class='divider'></div>";
                 $approvalProgressMenu .= baseHTML::a(helper::createLink('approval', 'progress', "approvalID={$data->approval}", '', true), $this->lang->flow->approvalProgress, "class='btn {$extraClass} iframe'");
             }
@@ -193,7 +193,7 @@ class model extends baseModel
         {
             foreach($actions as $action)
             {
-                if(strpos($action->position, $type) === false || $action->show != $show) continue;
+                if(!str_contains((string) $action->position, $type) || $action->show != $show) continue;
 
                 $menu .= $this->flow->buildActionMenu($moduleName, $action, $data, $type, $relations);
             }
@@ -205,7 +205,7 @@ class model extends baseModel
             $dropdownMenu = '';
             foreach($actions as $action)
             {
-                if(strpos($action->position, $type) === false) continue;
+                if(!str_contains((string) $action->position, $type)) continue;
 
                 if($type == 'view' || $action->show == 'direct')         $menu         .= $this->flow->buildActionMenu($moduleName, $action, $data, $type, $relations);
                 if($type == 'browse' && $action->show == 'dropdownlist') $dropdownMenu .= $this->flow->buildActionMenu($moduleName, $action, $data, $type, $relations);
@@ -313,7 +313,7 @@ class model extends baseModel
      * @access public
      * @return void
      */
-    public function executeHooks($objectID)
+    public function executeHooks(int $objectID)
     {
         if(!isset($this->config->bizVersion)) return false;
 
@@ -368,7 +368,7 @@ class model extends baseModel
     {
         global $app;
 
-        $moduleName = strtolower(get_called_class());
+        $moduleName = strtolower(static::class);
 
         preg_match_all('/^(ext)?(\w+)model/', $moduleName, $matches);
         if(isset($matches[2][0]))

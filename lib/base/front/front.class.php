@@ -23,7 +23,6 @@ class baseHTML
      * 生成title标签。
      * Create the title tag.
      *
-     * @param  mixed $title
      * @static
      * @access public
      * @return string.
@@ -112,7 +111,7 @@ class baseHTML
         $newline = $newline ? "\n" : '';
 
         /* Make sure href is opened in the same tab. */
-        if(strpos($misc, 'data-app=') === false)
+        if(!str_contains($misc, 'data-app='))
         {
             global $app, $lang;
             $module  = $app->rawModule;
@@ -168,9 +167,9 @@ class baseHTML
 
         /* The begin. */
         $id = $name;
-        if(strpos($name, '[') !== false) $id = trim(str_replace(']', '', str_replace('[', '', $name)));
+        if(str_contains($name, '[')) $id = trim(str_replace(']', '', str_replace('[', '', $name)));
         $id = "id='{$id}'";
-        if(strpos($attrib, 'id=') !== false) $id = '';
+        if(str_contains($attrib, 'id=')) $id = '';
 
         $string = "<select name='$name' {$id} $attrib>\n";
 
@@ -179,7 +178,7 @@ class baseHTML
         $selectedItems = ",$selectedItems,";
         foreach($options as $key => $value)
         {
-            $selected = strpos($selectedItems, ",$key,") !== false ? " selected='selected'" : '';
+            $selected = str_contains($selectedItems, ",$key,") ? " selected='selected'" : '';
             $string  .= "<option value='$key'$selected>$value</option>\n";
         }
 
@@ -205,7 +204,7 @@ class baseHTML
 
         /* The begin. */
         $id = $name;
-        if(strpos($name, '[') !== false) $id = trim(str_replace(']', '', str_replace('[', '', $name)));
+        if(str_contains($name, '[')) $id = trim(str_replace(']', '', str_replace('[', '', $name)));
         $string = "<select name='$name' id='$id' $attrib>\n";
 
         /* The options. */
@@ -215,7 +214,7 @@ class baseHTML
             $string .= "<optgroup label='$groupName'>\n";
             foreach($options as $key => $value)
             {
-                $selected = strpos($selectedItems, ",$key,") !== false ? " selected='selected'" : '';
+                $selected = str_contains($selectedItems, ",$key,") ? " selected='selected'" : '';
                 $string  .= "<option value='$key'$selected>$value</option>\n";
             }
             $string .= "</optgroup>\n";
@@ -288,7 +287,7 @@ class baseHTML
             if($isBlock) $string .= "<div class='checkbox'><label>";
             else $string .= "<label class='checkbox-inline'>";
             $string .= "<input type='checkbox' name='{$name}[]' value='$key' ";
-            $string .= (strpos($checked, ",$key,") !== false) ? " checked ='checked'" : "";
+            $string .= (str_contains($checked, ",$key,")) ? " checked ='checked'" : "";
             $string .= $attrib;
             $string .= " id='$name$key' /> ";
             $string .= $value;
@@ -312,7 +311,7 @@ class baseHTML
     static public function input($name, $value = "", $attrib = "")
     {
         $id = "id='$name'";
-        if(strpos($attrib, 'id=') !== false) $id = '';
+        if(str_contains($attrib, 'id=')) $id = '';
         $value = str_replace("'", '&#039;', $value);
         return "<input type='text' name='$name' {$id} value='$value' $attrib />\n";
     }
@@ -367,7 +366,7 @@ class baseHTML
     {
         $id = "id='$name'";
         $id = str_replace(array('[', ']'), "", $id);
-        if(strpos($attrib, 'id=') !== false) $id = '';
+        if(str_contains($attrib, 'id=')) $id = '';
         return "<textarea name='$name' $id $attrib>$value</textarea>\n";
     }
 
@@ -459,7 +458,7 @@ class baseHTML
         global $lang;
 
         $label = empty($label) ? $lang->save : $label;
-        $misc .= strpos($misc, 'data-loading') === false ? " data-loading='$lang->loading'" : '';
+        $misc .= !str_contains($misc, 'data-loading') ? " data-loading='$lang->loading'" : '';
 
         return " <button type='submit' id='submit' class='$class' $misc>$label</button>";
     }
@@ -502,9 +501,9 @@ class baseHTML
         if(empty($label)) $label = $lang->goback;
 
         $gobackLink   = "<a href='javascript:history.go(-1)' class='btn btn-back $class' $misc>{$label}</a>";
-        $tab          = isset($_COOKIE['tab']) ? $_COOKIE['tab'] : '';
-        $referer      = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '';
-        $refererParts = parse_url($referer);
+        $tab          = $_COOKIE['tab'] ?? '';
+        $referer      = $_SERVER['HTTP_REFERER'] ?? '';
+        $refererParts = parse_url((string) $referer);
 
         if($config->requestType == 'PATH_INFO' and empty($refererParts)) return $gobackLink;
         if($config->requestType == 'GET' and !isset($refererParts['query'])) return $gobackLink;
@@ -512,11 +511,11 @@ class baseHTML
         $refererLink   = $config->requestType == 'PATH_INFO' ? $refererParts['path'] : $refererParts['query'];
         $currentModule = $app->getModuleName();
         $currentMethod = $app->getMethodName();
-        $gobackList    = isset($_COOKIE['goback']) ? json_decode($_COOKIE['goback'], true) : array();
-        $gobackLink    = isset($gobackList[$tab]) ? $gobackList[$tab] : '';
+        $gobackList    = isset($_COOKIE['goback']) ? json_decode((string) $_COOKIE['goback'], true) : array();
+        $gobackLink    = $gobackList[$tab] ?? '';
 
         /* Make sure href is opened in the same tab. */
-        if(strpos($misc, 'data-app=') === false)
+        if(!str_contains($misc, 'data-app='))
         {
             $module  = $app->rawModule;
             $dataApp = (isset($lang->navGroup->$module) and $lang->navGroup->$module != $app->tab) ? "data-app='{$app->tab}'" : '';
@@ -588,9 +587,8 @@ class baseHTML
      *
      * @static
      * @access public
-     * @return string
      */
-    public static function closeButton()
+    public static function closeButton(): string
     {
         return "<button type='button' class='close' data-dismiss='modal' aria-hidden='true'>&times;</button>";
     }
@@ -751,9 +749,8 @@ EOT;
      * @access public
      * @static
      * @access public
-     * @return void
      */
-    public static function printStars($stars)
+    public static function printStars($stars): void
     {
         $redStars   = 0;
         $halfStars  = 0;
@@ -793,7 +790,7 @@ class baseJS
      * @access public
      * @return string
      */
-    public static function import($url, $ieParam = '')
+    public static function import($url, $ieParam = ''): void
     {
         global $config;
         $pathInfo = parse_url($url);
@@ -812,9 +809,8 @@ class baseJS
      * @param  bool   $full
      * @static
      * @access public
-     * @return string
      */
-    static public function start($full = true)
+    static public function start($full = true): string
     {
         if($full) return "<html><meta charset='utf-8'/><style>body{background:white}</style><script>";
         return "<script>";
@@ -829,7 +825,7 @@ class baseJS
      * @access public
      * @return void
      */
-    static public function end($newline = true)
+    static public function end($newline = true): string
     {
         if($newline) return "\n</script>\n";
         return "</script>\n";
@@ -874,7 +870,7 @@ class baseJS
      * @access public
      * @return void
      */
-    static public function close()
+    static public function close(): string
     {
         return static::start() . "window.close()" . static::end();
     }
@@ -883,13 +879,12 @@ class baseJS
      * 显示错误信息。
      * Show error info.
      *
-     * @param  string|array $message
      * @param  bool         $full
      * @static
      * @access public
      * @return string
      */
-    static public function error($message, $full = true)
+    static public function error(string|array $message, $full = true)
     {
         global $app;
 
@@ -924,9 +919,8 @@ class baseJS
      *
      * @static
      * @access public
-     * @return string
      */
-    static public function resetForm()
+    static public function resetForm(): string
     {
         return static::start() . 'if(window.parent) window.parent.$.enableForm();' . static::end();
     }
@@ -973,7 +967,7 @@ class baseJS
         {
             $confirmAction = "history.back(-1);";
         }
-        elseif(strpos($okTarget, '$.apps.open') !== false)
+        elseif(str_contains($okTarget, '$.apps.open'))
         {
             $confirmAction = "$okTarget('$okURL', '$okOpenApp');";
         }
@@ -987,7 +981,7 @@ class baseJS
         {
             $cancleAction = "history.back(-1);";
         }
-        elseif(strpos($cancleTarget, '$.apps.open') !== false)
+        elseif(str_contains($cancleTarget, '$.apps.open'))
         {
             $cancleAction = "$cancleTarget('$cancleURL', '$cancleOpenApp');";
         }
@@ -995,7 +989,7 @@ class baseJS
         {
             $cancleAction = "$cancleTarget.location = '$cancleURL';";
         }
-        if(strpos($_SERVER['HTTP_USER_AGENT'], 'xuanxuan') === false)
+        if(!str_contains((string) $_SERVER['HTTP_USER_AGENT'], 'xuanxuan'))
         {
             $js .= <<<EOT
 if(confirm("$message"))
@@ -1040,7 +1034,7 @@ EOT;
 
         if($app->viewType == 'json')
         {
-            $data = strtolower($url) == 'back' ? array('locate' => 'back') : array('locate' => common::getSysURL() . $url);
+            $data = strtolower((string) $url) == 'back' ? array('locate' => 'back') : array('locate' => common::getSysURL() . $url);
 
             $output = array();
             $output['status'] = 'success';
@@ -1051,18 +1045,18 @@ EOT;
         }
 
         $js  = static::start();
-        if(strtolower($url) == "back")
+        if(strtolower((string) $url) == "back")
         {
             $js .= "history.back(-1);\n";
         }
-        elseif($target === 'app' or strpos($target, '$.apps.open') !== false)
+        elseif($target === 'app' or str_contains($target, '$.apps.open'))
         {
             $js .= "parent.$target('$url')";
         }
         else
         {
             /* Can not locate the url that has '#app', so remove it. */
-            if(strpos($url, '#app=') !== false) $url = substr($url, 0, strpos($url, '#app='));
+            if(str_contains((string) $url, '#app=')) $url = substr((string) $url, 0, strpos((string) $url, '#app='));
             $js .= "$target.location='$url';\n";
         }
         return $js . static::end();
@@ -1074,9 +1068,8 @@ EOT;
      *
      * @static
      * @access public
-     * @return string
      */
-    static public function closeWindow()
+    static public function closeWindow(): string
     {
         return static::start(). "window.close();" . static::end();
     }
@@ -1180,7 +1173,7 @@ EOT;
         $clientLang      = $app->getClientLang();
         $runMode         = defined('RUN_MODE') ? RUN_MODE : '';
         $requiredFields  = '';
-        if(isset($config->$moduleName->$methodName->requiredFields)) $requiredFields = str_replace(' ', '', $config->$moduleName->$methodName->requiredFields);
+        if(isset($config->$moduleName->$methodName->requiredFields)) $requiredFields = str_replace(' ', '', (string) $config->$moduleName->$methodName->requiredFields);
 
         $jsConfig = new stdclass();
         $jsConfig->webRoot        = $config->webRoot;
@@ -1199,21 +1192,21 @@ EOT;
         $jsConfig->clientLang     = $clientLang;
         $jsConfig->requiredFields = $requiredFields;
         $jsConfig->router         = $app->server->SCRIPT_NAME;
-        $jsConfig->save           = isset($lang->save) ? $lang->save : '';
+        $jsConfig->save           = $lang->save ?? '';
         $jsConfig->runMode        = $runMode;
-        $jsConfig->timeout        = isset($config->timeout) ? $config->timeout : '';
-        $jsConfig->pingInterval   = isset($config->pingInterval) ? $config->pingInterval : '';
+        $jsConfig->timeout        = $config->timeout ?? '';
+        $jsConfig->pingInterval   = $config->pingInterval ?? '';
         $jsConfig->onlybody       = zget($_GET, 'onlybody', 'no');
         $jsConfig->tabSession     = $config->tabSession;
         if($config->tabSession and helper::isWithTID()) $jsConfig->tid = zget($_GET, 'tid', '');
 
         $jsLang = new stdclass();
-        $jsLang->submitting   = isset($lang->loading) ? $lang->loading : '';
+        $jsLang->submitting   = $lang->loading ?? '';
         $jsLang->save         = $jsConfig->save;
-        $jsLang->expand       = isset($lang->expand)  ? $lang->expand  : '';
-        $jsLang->timeout      = isset($lang->timeout) ? $lang->timeout : '';
-        $jsLang->confirmDraft = isset($lang->confirmDraft) ? $lang->confirmDraft : '';
-        $jsLang->resume       = isset($lang->resume)  ? $lang->resume  : '';
+        $jsLang->expand       = $lang->expand ?? '';
+        $jsLang->timeout      = $lang->timeout ?? '';
+        $jsLang->confirmDraft = $lang->confirmDraft ?? '';
+        $jsLang->resume       = $lang->resume ?? '';
         $jsLang->program      = zget($lang->program, 'common', '');
         $jsLang->project      = zget($lang->project, 'common', '');
         $jsLang->product      = zget($lang->product, 'common', '');
@@ -1246,7 +1239,7 @@ EOT;
      * @access public
      * @return string
      */
-    static public function execute($code)
+    static public function execute($code): void
     {
         $js = static::start($full = false);
         $js .= $code;
@@ -1264,7 +1257,7 @@ EOT;
      * @access public
      * @return string
      */
-    static public function set($key, $value)
+    static public function set($key, $value): void
     {
         global $config;
         $prefix = (isset($config->framework->jsWithPrefix) and $config->framework->jsWithPrefix == false) ? '' : 'v.';
@@ -1326,9 +1319,8 @@ class baseCSS
      *
      * @param  string $url
      * @access public
-     * @return void
      */
-    public static function import($url, $attrib = '')
+    public static function import($url, $attrib = ''): void
     {
         global $config;
         if(!empty($attrib)) $attrib = ' ' . $attrib;
@@ -1342,9 +1334,8 @@ class baseCSS
      * @param  string    $css
      * @static
      * @access public
-     * @return void
      */
-    public static function internal($css)
+    public static function internal($css): void
     {
         echo "<style>$css</style>";
     }
