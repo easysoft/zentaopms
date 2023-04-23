@@ -22,11 +22,7 @@ class formPanel extends panel
     protected static $defaultProps =
     [
         'class'         => 'panel-form rounded-md shadow ring-0 canvas px-4 pb-4 mb-4 mx-auto',
-        'size'          => 'lg',
-        'grid'          => true,
-        'method'        => 'post',
-        'target'        => 'ajax',
-        'actions'       => ['save', 'back'],
+        'size'          => 'lg'
     ];
 
     protected function created()
