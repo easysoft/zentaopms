@@ -1042,6 +1042,19 @@ class baseRouter
      */
     public function setOpenApp()
     {
+        if(isset($this->config->zin))
+        {
+            $module  = $this->rawModule;
+            $tab     = '';
+
+            if(isset($_SERVER['HTTP_X_ZIN_APP'])) $tab = $_SERVER['HTTP_X_ZIN_APP'];
+            elseif(isset($this->lang->navGroup)) $tab = zget($this->lang->navGroup, $module, 'my');
+            elseif(isset($_COOKIE['tab']) && $_COOKIE['tab'] && preg_match('/^\w+$/', $_COOKIE['tab'])) $tab = $_COOKIE['tab'];
+
+            $this->tab = empty($tab) ? 'my' : $tab;
+            return;
+        }
+
         $module    = $this->rawModule;
         $this->tab = 'my';
         if(isset($this->lang->navGroup)) $this->tab = zget($this->lang->navGroup, $module, 'my');
@@ -2520,7 +2533,7 @@ class baseRouter
         foreach($configFiles as $configFile)
         {
             if(in_array($configFile, $loadedConfigs)) continue;
-            if(file_exists($configFile)) include $configFile;
+            if(is_string($configFile) && file_exists($configFile)) include $configFile;
             $loadedConfigs[] = $configFile;
         }
 
@@ -2871,10 +2884,19 @@ class baseRouter
         {
             if(!empty($this->config->debug) and $this->config->debug > 1)
             {
-                $cmd  = "vim +$line $file";
-                $size = strlen($cmd);
-                echo "<pre class='alert alert-danger'>$message: ";
-                echo "<input type='text' value='$cmd' size='$size' style='border:none; background:none;' onclick='this.select();' /></pre>";
+                if(isset($this->config->zin) || isset($_SERVER['HTTP_X_ZIN_OPTIONS']))
+                {
+                    if(!isset($this->zinErrors)) $this->zinErrors = [];
+                    $this->zinErrors[] = ['file' => $file, 'line' => $line, 'message' => $message];
+                }
+                else
+                {
+                    $cmd  = "vim +$line $file";
+                    $size = strlen($cmd);
+
+                    echo "<pre class='alert alert-danger'>$message: ";
+                    echo "<input type='text' value='$cmd' size='$size' style='border:none; background:none;' onclick='this.select();' /></pre>";
+                }
             }
         }
 

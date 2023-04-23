@@ -422,11 +422,12 @@ class project extends control
         $this->view->projectType    = $projectType;
         $this->view->param          = $param;
         $this->view->orderBy        = $orderBy;
-        $this->view->recTotal       = $recTotal;
+        $this->view->recTotal       = $pager->recTotal;
         $this->view->recPerPage     = $recPerPage;
         $this->view->pageID         = $pageID;
         $this->view->showBatchEdit  = $this->cookie->showProjectBatchEdit;
         $this->view->allProjectsNum = $this->loadModel('program')->getProjectStats($programID, 'all');
+        $this->view->actionURL      = $actionURL;
 
         $this->display();
     }

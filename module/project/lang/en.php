@@ -70,6 +70,12 @@ $lang->project->allProjects         = "All {$lang->projectCommon}s";
 $lang->project->ignore              = 'Ignore';
 $lang->project->disableExecution    = "{$lang->projectCommon} of disable {$lang->executionCommon}";
 $lang->project->selectProduct       = "Select {$lang->productCommon}";
+$lang->project->manageRepo          = 'Manage Repo';
+$lang->project->linkedRepo          = 'Link Repo';
+$lang->project->unlinkedRepo        = 'Unlink Repo';
+$lang->project->executionCount      = 'Total Executions';
+$lang->project->storyCount          = 'Story Points';
+$lang->project->invested            = 'Invested';
 
 /* Fields. */
 $lang->project->common             = $lang->projectCommon;
@@ -178,7 +184,9 @@ $lang->project->product            = $lang->productCommon;
 $lang->project->branch             = 'Platform/Branch';
 $lang->project->plan               = 'Plan';
 $lang->project->createKanban       = 'Create Kanban';
-$lang->project->kanban             = 'Project Kanban';
+$lang->project->kanban             = 'Kanban';
+$lang->project->moreActions        = 'More Actions';
+$lang->project->other              = 'Other Actions';
 
 /* Project Kanban. */
 $lang->project->projectTypeList = array();
@@ -226,6 +234,14 @@ $lang->project->summary                = "Total {$lang->projectCommon}s: <strong
 $lang->project->allSummary             = "Total {$lang->projectCommon}s: <strong>%s</strong>, Wait: <strong>%s</strong>, Doing: <strong>%s</strong>, Suspended: <strong>%s</strong>, Closed: <strong>%s</strong>.";
 $lang->project->checkedSummary         = 'Seleted: <strong>%total%</strong>.';
 $lang->project->checkedAllSummary      = 'Seleted: <strong>%total%</strong>, Wait: <strong>%wait%</strong>, Doing: <strong>%doing%</strong>, Suspended: <strong>%suspended%</strong>, Closed: <strong>%closed%</strong>.';
+
+$lang->project->tip = new stdclass();
+$lang->project->tip->closed     = 'The project has been closed. Re-close is not available.';
+$lang->project->tip->notSuspend = 'The project has been closed. Suspend is not available.';
+$lang->project->tip->suspended  = 'The project has been suspended. Re-suspend is not available.';
+$lang->project->tip->actived    = 'The project has been activated. Re-activated is not available.';
+$lang->project->tip->group      = "It's a Kanban project. Editing privilege group is not available.";
+$lang->project->tip->whitelist  = "It's a public project with open permissions. No need to edit whitelists.";
 
 $lang->project->tenThousand    = 'Ten Thousand';
 $lang->project->hundredMillion = 'Hundred Million';
@@ -277,8 +293,9 @@ $lang->project->featureBar['browse']['all']       = 'All';
 $lang->project->featureBar['browse']['undone']    = 'Unfinished';
 $lang->project->featureBar['browse']['wait']      = 'Waiting';
 $lang->project->featureBar['browse']['doing']     = 'Doing';
-$lang->project->featureBar['browse']['suspended'] = 'Suspended';
-$lang->project->featureBar['browse']['closed']    = 'Closed';
+$lang->project->featureBar['browse']['exceeded']  = 'Exceeded';
+$lang->project->featureBar['browse']['risky']     = 'Risky';
+$lang->project->featureBar['browse']['more']      = 'More';
 
 $lang->project->featureBar['index']['all']       = 'All';
 $lang->project->featureBar['index']['undone']    = 'Unfinished';
@@ -425,3 +442,9 @@ $lang->project->featureBar['dynamic']['thisWeek']  = 'This Week';
 $lang->project->featureBar['dynamic']['lastWeek']  = 'Last Week';
 $lang->project->featureBar['dynamic']['thisMonth'] = 'This Month';
 $lang->project->featureBar['dynamic']['lastMonth'] = 'Last Month';
+
+$lang->project->moreSelects = array();
+$lang->project->moreSelects['suspended'] = 'Suspended';
+$lang->project->moreSelects['closed']    = 'Closed';
+
+$lang->project->manDay = 'Man Day';

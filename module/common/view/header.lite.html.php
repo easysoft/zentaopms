@@ -26,15 +26,17 @@ $commonLang   = array('zh-cn', 'zh-tw', 'en', 'fr', 'de');
 
       css::import($themeRoot . 'zui/css/min.css?t=' . $timestamp);
       css::import($defaultTheme . 'style.css?t=' . $timestamp);
-
       css::import($langTheme);
+
       if(strpos($clientTheme, 'default') === false) css::import($clientTheme . 'style.css?t=' . $timestamp);
 
       js::import($jsRoot . 'jquery/lib.js');
       js::import($jsRoot . 'zui/min.js?t=' . $timestamp);
+
       if(!in_array($clientLang, $commonLang)) js::import($jsRoot . 'zui/lang.' . $clientLang . '.min.js?t=' . $timestamp);
       js::import($jsRoot . 'my.full.js?t=' . $timestamp);
 
+      if(isset($config->zinTool)) js::import($jsRoot . 'zui3/zintool.js');
   }
   else
   {
@@ -84,7 +86,7 @@ if(file_exists($xuanExtFile)) include $xuanExtFile;
 <?php
 $bodyClass = $this->app->getViewType() == 'xhtml' ? 'allow-self-open' : '';
 if(isset($pageBodyClass)) $bodyClass = $bodyClass . ' ' . $pageBodyClass;
-if($this->moduleName == 'index' && $this->methodName == 'index') $bodyClass .= ' menu-' . ($this->cookie->hideMenu ? 'hide' : 'show');
+if($this->app->moduleName == 'index' && $this->app->methodName == 'index') $bodyClass .= ' menu-' . ($this->cookie->hideMenu ? 'hide' : 'show');
 if(strpos($_SERVER['HTTP_USER_AGENT'], 'xuanxuan') !== false) $bodyClass .= ' xxc-embed';
 ?>
 <body class='<?php echo $bodyClass; ?>'>

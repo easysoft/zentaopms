@@ -1409,4 +1409,243 @@ class searchModel extends model
 
         return $object;
     }
+
+    /**
+     * Set search form options.
+     *
+     * @param  array $fields
+     * @param  array $fieldParams
+     * @param  array $queries
+     * @access public
+     * @return object
+     */
+    public function setOptions($fields, $fieldParams, $queries = array())
+    {
+        $options = new stdclass();
+        $options->operators         = array();
+        $options->fields            = array();
+        $options->savedQueryTitle   = $this->lang->search->savedQuery;
+        $options->andOr             = array();
+        $options->groupName         = array($this->lang->search->group1, $this->lang->search->group2);
+        $options->searchBtnText     = $this->lang->search->common;
+        $options->resetBtnText      = $this->lang->search->reset;
+        $options->saveSearchBtnText = $this->lang->search->saveCondition;
+        foreach($this->lang->search->andor as $value => $title)
+        {
+            $andOr = new stdclass();
+            $andOr->value = $value;
+            $andOr->title = $title;
+
+            $options->andOr[] = $andOr;
+        }
+
+        foreach($this->lang->search->operators as $value => $title)
+        {
+            $operator = new stdclass();
+            $operator->value = $value;
+            $operator->title = $title;
+
+            $options->operators[] = $operator;
+        }
+
+        foreach($fieldParams as $field => $param)
+        {
+            $data = new stdclass();
+            $data->label    = $fields[$field];
+            $data->name     = $field;
+            $data->control  = $param['control'];
+            $data->operator = $param['operator'];
+
+            if($field == 'id') $data->placeholder = $this->lang->search->queryTips;
+            if(!empty($param['values']) and is_array($param['values'])) $data->values = $param['values'];
+
+            $options->fields[] = $data;
+        }
+
+        $savedQuery = array();
+        foreach($queries as $query)
+        {
+            if(empty($query->id)) continue;
+            $savedQuery[] = $query;
+        }
+
+        if(!empty($savedQuery)) $options->savedQuery = $savedQuery;
+
+        $options->formConfig  = new stdclass();
+        $options->formConfig->method = 'post';
+        $options->formConfig->action = helper::createLink('search', 'buildQuery');
+        $options->formConfig->target = 'hiddenwin';
+
+        $options->saveSearch = new stdclass();
+        $options->saveSearch->text = $this->lang->search->saveCondition;
+
+        return $options;
+    }
+
+    /**
+     * Build search form options.
+     *
+     * @param  array $module
+     * @param  array $fieldParams
+     * @param  array $fieldsMap
+     * @param  array $queries
+     * @access public
+     * @return object
+     */
+    public function buildSearchFormOptions($module, $fieldParams, $fields, $queries)
+    {
+        $opts = new stdClass();
+        $opts->formConfig = static::buildFormConfig();
+        $opts->fields     = static::buildFormFields($fieldParams, $fields);
+        $opts->operators  = static::buildFormOperators($this->lang->search->operators);
+        $opts->andOr      = static::buildFormAndOrs($this->lang->search->andor);
+        $opts->saveSearch = static::buildFormSaveSearch($module);
+        $opts->savedQuery = static::buildFormSavedQuery($queries, $this->app->user->account);
+
+        return $opts;
+    }
+
+    /**
+     * Form Configuration of buildForm action.
+     *
+     * @access public
+     * @return object
+     */
+    public static function buildFormConfig()
+    {
+        $config = new stdClass();
+        $config->action = helper::createLink('search', 'buildQuery');
+        $config->method = 'post';
+
+        return $config;
+    }
+
+    /**
+     * Fields options of buildForm action.
+     *
+     * @param  array $fieldParams
+     * @param  array $fieldsMap
+     * @access public
+     * @return array
+     */
+    public static function buildFormFields($fieldParams, $fieldsMap)
+    {
+        $fields = array();
+
+        foreach($fieldParams as $name => $param)
+        {
+            $field = new stdClass();
+            $field->label        = isset($fieldsMap[$name]) ? $fieldsMap[$name] : '';
+            $field->name         = $name;
+            $field->control      = $param['control'];
+            $field->operator     = $param['operator'];
+            $field->defaultValue = '';
+            $field->placeholder  = '';
+            $field->values       = $param['values'];
+
+            $fields[] = $field;
+        }
+
+        return $fields;
+    }
+
+    /**
+     * Operators of buildForm action.
+     *
+     * @param  array $operators
+     * @access public
+     * @return array
+     */
+    public static function buildFormOperators($operators)
+    {
+        $ops = array();
+
+        foreach($operators as $val => $title)
+        {
+            $op = new stdClass();
+            $op->value = $val;
+            $op->title = $title;
+
+            $ops[] = $op;
+        }
+
+        return $ops;
+    }
+
+    /**
+     * AndOr options of buildForm action.
+     *
+     * @param  array $andOrs
+     * @access public
+     * @return array
+     */
+    public static function buildFormAndOrs($andOrs)
+    {
+        $result = array();
+
+        foreach($andOrs as $val => $title)
+        {
+            $item = new stdClass();
+            $item->value = $val;
+            $item->title = $title;
+
+            $result[] = $item;
+        }
+
+        return $result;
+    }
+
+    /**
+     * Save Search button of buildForm action.
+     *
+     * @param  array $module
+     * @access public
+     * @return object
+     */
+    public static function buildFormSaveSearch($module)
+    {
+        global $lang;
+
+        $result = new stdClass();
+        $result->text     = $lang->search->saveCondition;
+        $result->hasPriv  = common::hasPriv('search', 'saveQuery');
+        $result->config   = array(
+            'data-toggle'    => 'modal',
+            'data-type'      => 'ajax',
+            'data-data-type' => 'html',
+            'data-url'       => helper::createLink('search', 'saveQuery', array('module' => $module)),
+        );
+
+        return $result;
+    }
+
+    /**
+     * Saved Queries list of buildForm action.
+     *
+     * @param  array $queries
+     * @param  array $account
+     * @access public
+     * @return array
+     */
+    public static function buildFormSavedQuery($queries, $account)
+    {
+        $result = array();
+        if(empty($queries)) return $result;
+
+        $hasPriv = common::hasPriv('search', 'deleteQuery');
+        foreach($queries as $query)
+        {
+            if(!is_object($query)) continue;
+
+            $item = new stdClass();
+            $item->id      = $query->id;
+            $item->title   = $query->title;
+            $item->account = $query->account;
+            $item->hasPriv = ($hasPriv && $account == $query->account);
+
+            $result[] = $item;
+        }
+
+        return $result;
+    }
 }

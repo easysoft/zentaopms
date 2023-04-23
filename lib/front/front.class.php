@@ -422,7 +422,7 @@ class js extends baseJS
      * @access public
      * @return string
      */
-    static public function start($full = true)
+    static public function start($full = true): string
     {
         if($full)
         {

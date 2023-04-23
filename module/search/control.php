@@ -11,6 +11,8 @@
  */
 class search extends control
 {
+    public $search;
+
     /**
      * Determine whether to display the effort object.
      *
@@ -64,7 +66,18 @@ class search extends control
         $this->view->queryID      = $queryID;
         $this->view->style        = empty($style) ? 'full' : $style;
         $this->view->onMenuBar    = empty($onMenuBar) ? 'no' : $onMenuBar;
-        $this->display();
+        $this->view->formSession  = $_SESSION[$module . 'Form'];
+        $this->view->fields       = $fields;
+
+        if($module == 'program')
+        {
+            $this->view->options = $this->search->setOptions($fields, $this->view->fieldParams, $this->view->queries);
+            $this->render();
+        }
+        else
+        {
+            $this->display();
+        }
     }
 
     /**
@@ -114,6 +127,11 @@ class search extends control
             $data     = fixer::input('post')->get();
             $shortcut = empty($data->onMenuBar) ? 0 : 1;
 
+            if($this->viewType == 'json')
+            {
+                echo 'success';
+                return;
+            }
             return print(js::closeModal('parent.parent', '', "function(){parent.parent.loadQueries($queryID, $shortcut, '{$data->title}')}"));
         }
 

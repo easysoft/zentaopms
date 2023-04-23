@@ -214,4 +214,81 @@ $config->project->includedPriv['repo']       = array('create', 'showSyncCommit',
 $config->project->includedPriv['testreport'] = array('create', 'view', 'delete', 'edit', 'export');
 $config->project->includedPriv['auditplan']  = array('browse', 'create', 'edit', 'batchCreate', 'batchCheck', 'check', 'nc', 'result', 'assignTo');
 $config->project->includedPriv['execution']  = array('create', 'start', 'delete', 'calendar', 'effortCalendar', 'effort', 'taskEffort', 'computeTaskEffort', 'deleterelation', 'maintainrelation', 'relation', 'gantt');
-if($config->edition != 'max') $config->project->includedPriv['stakeholder'] = array('browse', 'create', 'batchCreate', 'edit', 'delete', 'view', 'communicate', 'expect');
+if($config->edition != 'max') $config->project->includedPriv['stakeholder'] = array('browse', 'create', 'batchCreate', 'edit', 'delete', 'view', 'communicate', 'expect', 'expectation', 'deleteExpect', 'createExpect', 'editExpect', 'viewExpect');
+
+$config->project->browseTable = new stdClass();
+$config->project->browseTable->cols = array();
+
+$config->project->browseTable->cols['name']['name']         = 'name';
+$config->project->browseTable->cols['name']['title']        = $lang->project->name;
+$config->project->browseTable->cols['name']['fixed']        = 'left';
+$config->project->browseTable->cols['name']['width']        = 408;
+$config->project->browseTable->cols['name']['sortType']     = true;
+$config->project->browseTable->cols['name']['type']         = 'link';
+$config->project->browseTable->cols['name']['linkTemplate'] = helper::createLink('project', 'index', 'projectID={id}');
+
+$config->project->browseTable->cols['PM']['name']     = 'PM';
+$config->project->browseTable->cols['PM']['title']    = $lang->project->PM;
+$config->project->browseTable->cols['PM']['minWidth'] = 104;
+$config->project->browseTable->cols['PM']['type']     = 'avatarBtn';
+$config->project->browseTable->cols['PM']['flex']     = 1;
+$config->project->browseTable->cols['PM']['border']   = 'right';
+
+$config->project->browseTable->cols['storyCount']['name']     = 'storyCount';
+$config->project->browseTable->cols['storyCount']['title']    = $lang->project->storyCount;
+$config->project->browseTable->cols['storyCount']['minWidth'] = 94;
+$config->project->browseTable->cols['storyCount']['sortType'] = true;
+$config->project->browseTable->cols['storyCount']['type']     = 'format';
+$config->project->browseTable->cols['storyCount']['align']    = 'right';
+
+$config->project->browseTable->cols['executionCount']['name']     = 'executionCount';
+$config->project->browseTable->cols['executionCount']['title']    = $lang->project->executionCount;
+$config->project->browseTable->cols['executionCount']['minWidth'] = 94;
+$config->project->browseTable->cols['executionCount']['sortType'] = true;
+$config->project->browseTable->cols['executionCount']['type']     = 'format';
+$config->project->browseTable->cols['executionCount']['border']   = 'right';
+$config->project->browseTable->cols['executionCount']['align']    = 'center';
+
+$config->project->browseTable->cols['invested']['name']     = 'invested';
+$config->project->browseTable->cols['invested']['title']    = $lang->project->invested;
+$config->project->browseTable->cols['invested']['minWidth'] = 94;
+$config->project->browseTable->cols['invested']['sortType'] = true;
+$config->project->browseTable->cols['invested']['type']     = 'format';
+$config->project->browseTable->cols['invested']['border']   = 'right';
+$config->project->browseTable->cols['invested']['align']    = 'center';
+
+$config->project->browseTable->cols['begin']['name']     = 'begin';
+$config->project->browseTable->cols['begin']['title']    = $lang->project->begin;
+$config->project->browseTable->cols['begin']['width']    = 96;
+$config->project->browseTable->cols['begin']['sortType'] = true;
+
+$config->project->browseTable->cols['end']['name']     = 'end';
+$config->project->browseTable->cols['end']['title']    = $lang->project->end;
+$config->project->browseTable->cols['end']['width']    = 96;
+$config->project->browseTable->cols['end']['sortType'] = true;
+
+$config->project->browseTable->cols['progress']['name']     = 'progress';
+$config->project->browseTable->cols['progress']['title']    = $lang->project->progress;
+$config->project->browseTable->cols['progress']['width']    = 92;
+$config->project->browseTable->cols['progress']['type']     = 'circleProgress';
+$config->project->browseTable->cols['progress']['sortType'] = true;
+
+$config->project->browseTable->cols['actions']['name']       = 'actions';
+$config->project->browseTable->cols['actions']['title']      = $lang->actions;
+$config->project->browseTable->cols['actions']['fixed']      = 'right';
+$config->project->browseTable->cols['actions']['width']      = 160;
+$config->project->browseTable->cols['actions']['type']       = 'actions';
+$config->project->browseTable->cols['actions']['actionsMap'] = array(
+    'start'     => array('icon'=> 'icon-start',        'hint'=> $lang->project->start),
+    'close'     => array('icon'=> 'icon-off',          'hint'=> $lang->project->close, 'data-toggle' => 'modal', 'url' => helper::createLink('project', 'close', 'projectID={id}')),
+    'pause'     => array('icon'=> 'icon-pause',        'text'=> $lang->project->suspend),
+    'active'    => array('icon'=> 'icon-magic',        'text'=> $lang->project->activate),
+    'edit'      => array('icon'=> 'icon-edit',         'hint'=> $lang->project->edit),
+    'group'     => array('icon'=> 'icon-group',        'hint'=> $lang->project->teamMember),
+    'perm'      => array('icon'=> 'icon-lock',         'hint'=> $lang->project->group),
+    'delete'    => array('icon'=> 'icon-trash',        'hint'=> $lang->delete,                  'text'  => $lang->delete),
+    'other'     => array('type'=> 'dropdown',          'hint'=> $lang->project->other,          'caret' => true),
+    'link'      => array('icon'=> 'icon-link',         'text'=> $lang->project->manageProducts, 'name'  => 'link'),
+    'more'      => array('icon'=> 'icon-ellipsis-v',   'hint'=> $lang->more,                    'type'  => 'dropdown', 'caret' => false),
+    'whitelist' => array('icon'=> 'icon-shield-check', 'text'=> $lang->project->whitelist,      'name'  => 'whitelist')
+);

@@ -31,6 +31,7 @@ $lang->search->onMenuBar     = 'Show in Menu';
 $lang->search->custom        = 'Custom';
 $lang->search->setCommon     = 'Set as public query criteria';
 $lang->search->saveCondition = 'Save search options';
+$lang->search->setCondName   = 'Please enter a save condition name';
 
 $lang->search->account  = 'Account';
 $lang->search->module   = 'Module';

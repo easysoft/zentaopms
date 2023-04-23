@@ -106,6 +106,7 @@ class program extends control
         $this->view->PMList       = $PMList;
         $this->view->progressList = $this->program->getProgressList();
         $this->view->hasProject   = $hasProject;
+        $this->view->param        = $param;
 
         $this->display();
     }
@@ -776,5 +777,161 @@ class program extends control
     {
         $data = fixer::input('post')->get();
         $this->loadModel('setting')->updateItem("{$this->app->user->account}.program.showAllProjects", $data->showAllProjects);
+    }
+
+    /**
+     * Project View list.
+     * copied from browse()
+     *
+     * @param  string  $status
+     * @param  string  $orderBy
+     * @param  int     $recTotal
+     * @param  int     $recPerPage
+     * @param  int     $pageID
+     * @param  int     $param
+     * @access public
+     * @return void
+     */
+    public function projectView($status = 'unclosed', $orderBy = 'order_asc', $recTotal = 0, $recPerPage = 10, $pageID = 1, $param = 0)
+    {
+        if(common::hasPriv('program', 'create')) $this->lang->pageActions = html::a($this->createLink('program', 'create'), "<i class='icon icon-plus'></i> " . $this->lang->program->create, '', "class='btn btn-primary create-program-btn'");
+
+        $this->session->set('programList', $this->app->getURI(true), 'program');
+        $this->session->set('projectList', $this->app->getURI(true), 'program');
+        $this->session->set('createProjectLocate', $this->app->getURI(true), 'program');
+
+        $this->app->loadClass('pager', true);
+        $pager = new pager($recTotal, $recPerPage, $pageID);
+
+        $programType = $this->cookie->programType ? $this->cookie->programType : 'bylist';
+
+        if($programType === 'bygrid')
+        {
+            $programs = $this->program->getProgramStats($status, 20, $orderBy);
+        }
+        else
+        {
+            if(strtolower($status) == 'bysearch')
+            {
+                $queryID  = (int)$param;
+                $programs = $this->program->getListBySearch($orderBy, $queryID);
+            }
+            else
+            {
+                /* Get top programs and projects. */
+                $topObjects = $this->program->getList($status == 'unclosed' ? 'doing,suspended,wait' : $status, $orderBy, $pager, 'top');
+                if(!$topObjects) $topObjects = array(0);
+                $programs   = $this->program->getList($status == 'closed' ? 'closed' : 'all', $orderBy, NULL, 'child', array_keys($topObjects));
+
+                /* Get summary. */
+                $topCount = $indCount = 0;
+                foreach($programs as $program)
+                {
+                    if($program->type == 'program' and $program->parent == 0) $topCount ++;
+                    if($program->type == 'project' and $program->parent == 0) $indCount ++;
+                }
+                $summary = sprintf($this->lang->program->summary, $topCount, $indCount);
+            }
+        }
+
+        /* Get PM id list. */
+        $accounts = array();
+        $hasProject = false;
+        foreach($programs as $program)
+        {
+            if(!empty($program->PM) and !in_array($program->PM, $accounts)) $accounts[] = $program->PM;
+            if($hasProject === false and $program->type != 'program') $hasProject = true;
+        }
+        $PMList = $this->loadModel('user')->getListByAccounts($accounts, 'account');
+
+        /* Build the search form. */
+        $actionURL = $this->createLink('program', 'browse', "status=bySearch&orderBy={$orderBy}&recTotal={$recTotal}&recPerPage={$recPerPage}&pageID={$pageID}&param=myQueryID");
+        $this->config->program->search['actionURL'] = $actionURL;
+        $this->loadModel('search')->setSearchParams($this->config->program->search);
+
+        $this->view->title      = $this->lang->program->projectView;
+        $this->view->position[] = $this->lang->program->browse;
+
+        $this->view->programs     = $programs;
+        $this->view->status       = $status;
+        $this->view->orderBy      = $orderBy;
+        $this->view->summary      = isset($summary) ? $summary : '';
+        $this->view->pager        = $pager;
+        $this->view->users        = $this->user->getPairs('noletter');
+        $this->view->userIdPairs  = $this->user->getPairs('noletter|showid');
+        $this->view->usersAvatar  = $this->user->getAvatarPairs('');
+        $this->view->programType  = $programType;
+        $this->view->PMList       = $PMList;
+        $this->view->progressList = $this->program->getProgressList();
+        $this->view->hasProject   = $hasProject;
+        $this->view->param        = $param;
+        $this->view->recTotal     = $pager->recTotal;
+
+        $this->render();
+    }
+
+    /**
+     * Product View list.
+     * copied from all() function of product module.
+     *
+     * @param  string  $browseType
+     * @param  string  $orderBy
+     * @param  int     $recTotal
+     * @param  int     $recPerPage
+     * @param  int     $pageID
+     * @param  int     $param
+     * @access public
+     * @return void
+     */
+    public function productView($browseType = 'unclosed', $orderBy = 'program_asc', $param = 0, $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    {
+        /* Load module and set session. */
+        $this->loadModel('product');
+        $this->loadModel('user');
+        $this->session->set('productView', $this->app->getURI(true), 'program');
+
+        $queryID  = ($browseType == 'bySearch') ? (int)$param : 0;
+
+        if($this->app->viewType == 'mhtml')
+        {
+            $productID = $this->product->saveState(0, $this->products);
+            $this->product->setMenu($productID);
+        }
+
+        $this->app->loadClass('pager', true);
+        $pager = new pager($recTotal, $recPerPage, $pageID);
+
+        /* Process product structure. */
+        if($this->config->systemMode == 'light' and $orderBy == 'program_asc') $orderBy = 'order_asc';
+        $productStats     = $this->product->getStats($orderBy, $pager, $browseType, '', 'story', '', $queryID);
+        $productStructure = $this->product->statisticProgram($productStats);
+        $productLines     = $this->dao->select('*')->from(TABLE_MODULE)->where('type')->eq('line')->andWhere('deleted')->eq(0)->orderBy('`order` asc')->fetchAll();
+        $programLines     = array();
+
+        foreach($productLines as $productLine)
+        {
+            if(!isset($programLines[$productLine->root])) $programLines[$productLine->root] = array();
+            $programLines[$productLine->root][$productLine->id] = $productLine->name;
+        }
+
+        $actionURL = $this->createLink('product', 'all', "browseType=bySearch&orderBy=order_asc&queryID=myQueryID");
+        $this->product->buildProductSearchForm($param, $actionURL);
+
+        $this->view->title            = $this->lang->product->common;
+        $this->view->position[]       = $this->lang->product->common;
+        $this->view->recTotal         = $pager->recTotal;
+        $this->view->productStats     = $productStats;
+        $this->view->productStructure = $productStructure;
+        $this->view->productLines     = $productLines;
+        $this->view->programLines     = $programLines;
+        $this->view->users            = $this->user->getPairs('noletter');
+        $this->view->userIdPairs      = $this->user->getPairs('noletter|showid');
+        $this->view->usersAvatar      = $this->user->getAvatarPairs('');
+        $this->view->orderBy          = $orderBy;
+        $this->view->browseType       = $browseType;
+        $this->view->pager            = $pager;
+        $this->view->showBatchEdit    = $this->cookie->showProductBatchEdit;
+
+        $this->render();
     }
 }

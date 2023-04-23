@@ -1219,6 +1219,32 @@ class projectModel extends model
     }
 
     /**
+     * Get the program tree of project.
+     * Copied from getTreeMenu().
+     *
+     * @param  int    $projectID
+     * @access public
+     * @return array
+     */
+    public function getProgramTree($projectID = 0)
+    {
+        $programs = array();
+        $stmt     = $this->dbh->query($this->buildMenuQuery($projectID));
+
+        while($project = $stmt->fetch())
+        {
+            $prog = new stdClass();
+            $prog->id = $project->id;
+            $prog->name = $project->name;
+            $prog->parent = $project->parent;
+
+            $programs[] = $prog;
+        }
+
+        return $programs;
+    }
+
+    /**
      * Create the manage link.
      *
      * @param  object    $project
@@ -2378,6 +2404,124 @@ class projectModel extends model
     }
 
     /**
+     * Print datatable cell for ZIN.
+     *
+     * @param  object $col
+     * @param  object $project
+     * @param  array  $users
+     * @param  object $item
+     * @param  int    $programID
+     * @access public
+     * @return void
+     */
+    public function printCellZin($col, $project, $users, &$item, $programID = 0)
+    {
+        if(!$col->show) return;
+
+        $canOrder     = common::hasPriv('project', 'updateOrder');
+        $canBatchEdit = common::hasPriv('project', 'batchEdit');
+        $account      = $this->app->user->account;
+        $id           = $col->id;
+        $projectLink  = helper::createLink('project', 'index', "projectID=$project->id", '', '', $project->id);
+
+        $title = '';
+        $class = "c-$id" . (in_array($id, array('budget', 'teamCount', 'estimate', 'consume')) ? ' c-number' : '');
+
+        if($id == 'id') $class .= ' cell-id';
+
+        if($id == 'code')
+        {
+            $class .= ' c-name';
+            $title  = "title={$project->code}";
+        }
+        elseif($id == 'name')
+        {
+            $class .= ' text-left';
+            $title  = "title='{$project->name}'";
+        }
+        elseif($id == 'PM')
+        {
+            $class .= ' c-manager';
+        }
+
+        if($id == 'end')
+        {
+            $project->end = $project->end == LONG_TIME ? $this->lang->project->longTime : $project->end;
+            $class .= ' c-name';
+            $title  = "title='{$project->end}'";
+        }
+
+        if($id == 'budget')
+        {
+            $projectBudget = $this->getBudgetWithUnit($project->budget);
+            $budgetTitle   = $project->budget != 0 ? zget($this->lang->project->currencySymbol, $project->budgetUnit) . ' ' . $projectBudget : $this->lang->project->future;
+
+            $title = "title='$budgetTitle'";
+        }
+
+        if($id == 'estimate') $title = "title='{$project->hours->totalEstimate} {$this->lang->execution->workHour}'";
+        if($id == 'consume')  $title = "title='{$project->hours->totalConsumed} {$this->lang->execution->workHour}'";
+        if($id == 'surplus')  $title = "title='{$project->hours->totalLeft} {$this->lang->execution->workHour}'";
+
+        /* TODO attach flow cells. */
+        /* if($this->config->edition != 'open') $this->loadModel('flow')->printFlowCell('project', $project, $id); */
+        switch($id)
+        {
+            case 'id':
+                $item->id = sprintf('%03d', $project->id);
+                break;
+            case 'name':
+                $item->name  = $project->name;
+                $item->delay = isset($project->delay) ? $project->delay : 0;
+                break;
+            case 'code':
+                $item->code = $project->code;
+                break;
+            case 'PM':
+                $item->PM = $project->PM;
+                break;
+            case 'begin':
+                $item->begin = $project->begin;
+                break;
+            case 'end':
+                $item->end = $project->end;
+                break;
+            case 'status':
+                $item->status = zget($this->lang->project->statusList, $project->status);
+                break;
+            case 'hasProduct':
+                $item->hasProduct = zget($this->lang->project->projectTypeList, $project->hasProduct);
+                break;
+            case 'budget':
+                $item->budget = $budgetTitle;
+                break;
+            case 'teamCount':
+                $item->teamCount = $project->teamCount;
+                break;
+            case 'estimate':
+                $item->estimate = $project->hours->totalEstimate . $this->lang->execution->workHourUnit;
+                break;
+            case 'consume':
+                $item->consume = $project->hours->totalConsumed . $this->lang->execution->workHourUnit;
+                break;
+            case 'surplus':
+                $item->surplus = $project->hours->totalLeft     . $this->lang->execution->workHourUnit;
+                break;
+            case 'progress':
+                $item->progress = $project->hours->progress;
+                break;
+            case 'actions':
+                $project->programID = $programID;
+                $this->buildOperateMenuZin($project, $item, 'browse');
+                break;
+        }
+
+        $item->storyCount     = rand(100, 100000) / 10.0;
+        $item->executionCount = rand(10, 200);
+        $item->invested       = rand(10, 100);
+    }
+
+    /**
      * Convert budget unit.
      *
      * @param  int    $budget
@@ -3066,6 +3210,21 @@ class projectModel extends model
      * Build project action menu.
      *
      * @param  object $project
+     * @param  object $item
+     * @param  string $type
+     * @access public
+     * @return string
+     */
+    public function buildOperateMenuZin($project, &$item, $type = 'view')
+    {
+        $function = 'buildOperate' . ucfirst($type) . 'MenuZin';
+        return $this->$function($project, $item);
+    }
+
+    /**
+     * Build project action menu.
+     *
+     * @param  object $project
      * @param  string $type
      * @access public
      * @return string
@@ -3104,6 +3263,52 @@ class projectModel extends model
         $menu .= $this->buildMenu('project', 'delete', "project=$project->id&confirm=no&from=view", $project, 'button', 'trash', 'hiddenwin', '', '', '', $this->lang->delete);
 
         return $menu;
+    }
+
+    /**
+     * Build project browse action menu.
+     *
+     * @param  object $project
+     * @param  object $item
+     * @access public
+     * @return string
+     */
+    public function buildOperateBrowseMenuZin($project, &$item)
+    {
+        $item->actions = array();
+        $moduleName    = 'project';
+
+        if($project->status == 'wait' || $project->status == 'suspended') $item->actions[] = 'start';
+        if($project->status == 'doing')  $item->actions[] = 'close';
+        if($project->status == 'closed') $item->actions[] = 'active';
+
+        if(common::hasPriv($moduleName, 'suspend') || (common::hasPriv($moduleName, 'close') && $project->status != 'doing') || (common::hasPriv($moduleName, 'activate') && $project->status != 'closed'))
+        {
+            $menu  = 'pause';
+            $comma = ',';
+            if($project->status != 'doing')  $menu .= $comma . 'close';
+            if($project->status != 'closed') $menu .= $comma . 'active';
+
+            $item->actions[] = 'other:' . $menu;
+        }
+
+        $item->actions[] = 'edit';
+
+        if($this->config->vision != 'lite')
+        {
+            $item->actions[] = 'group';
+            $item->actions[] = 'perm';
+
+            if(common::hasPriv($moduleName, 'manageProducts') || common::hasPriv($moduleName, 'whitelist') || common::hasPriv($moduleName, 'delete'))
+            {
+                $item->actions[] = 'more:link,whitelist,delete';
+            }
+            return;
+        }
+
+        $item->actions[] = 'group';
+        $item->actions[] = 'whitelist';
+        $item->actions[] = 'delete';
     }
 
     /**

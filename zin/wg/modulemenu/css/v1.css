@@ -1,0 +1,67 @@
+.module-menu {
+    max-height: 100%;
+    display: flex;
+    flex-direction: column;
+    border-radius: 2px;
+}
+
+.module-menu > header {
+    height: 40px;
+    display: flex;
+    align-items: center;
+    padding-left: 12px;
+    flex: none;
+}
+
+.module-menu .module-title {
+    font-size: 13;
+    line-height: 20px;
+    font-weight: bold;
+}
+
+.module-menu > header span {
+    margin-right: 12px;
+}
+
+.module-menu > header i {
+    padding: 2px;
+}
+
+.module-menu > main {
+    display: flex;
+    flex: 1 1 auto;
+    overflow: hidden;
+    flex-direction: column;
+}
+
+.module-menu > main > .menu {
+    border: none;
+    box-shadow: none;
+    flex: 1 1 auto;
+    overflow-y: auto;
+}
+
+.setting-btns {
+    display: flex;
+    flex-direction: column;
+    padding: 10px 30px;
+    gap: 8px;
+}
+
+.module-menu .menu-item > a:hover {
+    background: #EFF5FF;
+    color: #313C52;
+}
+
+.module-menu,
+.module-menu .has-nested-menu > .menu.menu-nested {
+    background-color: #fff;
+}
+
+.module-menu .menu {
+    padding: 0;
+}
+
+.module-menu .menu-item.active {
+    color: #2e7fff;
+}

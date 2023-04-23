@@ -9,6 +9,7 @@ $lang->program->status         = '状态';
 $lang->program->PM             = '负责人';
 $lang->program->budget         = '预算';
 $lang->program->budgetUnit     = '预算单位';
+$lang->program->invested       = '已投入';
 $lang->program->begin          = '计划开始';
 $lang->program->end            = '计划完成';
 $lang->program->realBegin      = '实际开始';
@@ -85,6 +86,10 @@ $lang->program->changePRJUnit           = "更新{$lang->projectCommon}预算单
 $lang->program->showNotCurrentProjects  = "显示非当前项目集的{$lang->projectCommon}信息";
 
 $lang->program->progress         = "{$lang->projectCommon}进度";
+$lang->program->other                   = '其他';
+
+$lang->program->progress         = '项目进度';
+$lang->program->progressAB       = '进度';
 $lang->program->children         = '添加子项目集';
 $lang->program->allInvest        = '项目集总投入';
 $lang->program->teamCount        = '总人数';
@@ -118,6 +123,25 @@ $lang->program->accessDenied       = '你无权访问该项目集';
 $lang->program->beyondParentBudget = '已超出所属项目集的剩余预算';
 $lang->program->checkedProjects    = '已选择%s项';
 $lang->program->budgetOverrun      = '项目集的预算超出了父项目集的剩余预算：';
+
+/* ToolBar. */
+$lang->program->createProduct    = '添加产品';
+$lang->program->createProject    = '添加项目';
+
+/* DTable columns of product view page. */
+$lang->program->unclosedReqCount  = '需求未关闭';
+$lang->program->closedReqRate     = '需求完成率';
+$lang->program->testCaseCoverage  = '用例覆盖率';
+$lang->program->bugActivatedCount = 'Bug激活';
+$lang->program->fixedRate         = '修复率';
+$lang->program->feedback          = '反馈';
+
+$lang->program->tip = new stdclass();
+$lang->program->tip->closed     = '该项目集已是关闭状态，无须关闭。';
+$lang->program->tip->notSuspend = '该项目集已关闭，不可进行挂起操作。';
+$lang->program->tip->suspended  = '该项目集已是挂起状态，无须挂起。';
+$lang->program->tip->actived    = '该项目集已是激活状态，无须激活。';
+$lang->program->tip->notCreate  = '该项目集已关闭，不可进行添加子项目集的操作。';
 
 $lang->program->endList[31]  = '一个月';
 $lang->program->endList[93]  = '三个月';
@@ -162,6 +186,16 @@ $lang->program->featureBar['project']['doing']     = '进行中';
 $lang->program->featureBar['project']['suspended'] = '已挂起';
 $lang->program->featureBar['project']['closed']    = '已关闭';
 
+$lang->program->featureBar['productview']['all']      = '全部';
+$lang->program->featureBar['productview']['unclosed'] = '未关闭';
+$lang->program->featureBar['productview']['end']      = '结束';
+
+$lang->program->featureBar['projectview']['all']      = '全部';
+$lang->program->featureBar['projectview']['unclosed'] = '未关闭';
+$lang->program->featureBar['projectview']['wait']     = '未开始';
+$lang->program->featureBar['projectview']['doing']    = '进行中';
+$lang->program->featureBar['projectview']['more']     = '更多';
+
 $lang->program->kanban = new stdclass();
 $lang->program->kanban->common             = '项目集看板';
 $lang->program->kanban->typeList['my']     = '我参与的项目集';
@@ -177,3 +211,6 @@ $lang->program->kanban->normalReleases  = '正常的发布';
 $lang->program->kanban->laneColorList = array('#32C5FF', '#006AF1', '#9D28B2', '#FF8F26', '#FFC20E', '#00A78E', '#7FBB00', '#424BAC', '#C0E9FF', '#EC2761');
 
 $lang->program->defaultProgram = '默认项目集';
+$lang->program->projectView    = '项目视角';
+$lang->program->productView    = '产品视角';
+$lang->program->manDay         = '人天';

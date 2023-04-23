@@ -10,6 +10,10 @@
  * @link  http://www.zentao.net
  */
 $lang->search->common        = 'Tìm kiếm';
+$lang->search->id            = 'ID';
+$lang->search->editedDate    = 'Edited Date';
+$lang->search->key           = 'Key';
+$lang->search->value         = 'Value';
 $lang->search->reset         = 'Thiết lập lại';
 $lang->search->saveQuery     = 'Lưu truy vấn';
 $lang->search->myQuery       = 'My truy vấn';
@@ -25,6 +29,9 @@ $lang->search->me            = 'Của bạn';
 $lang->search->noQuery       = 'Không có truy vấn được lưu nào!';
 $lang->search->onMenuBar     = 'Hiện trong Menu';
 $lang->search->custom        = 'Tùy biến';
+$lang->search->setCommon     = 'Set as public query criteria';
+$lang->search->saveCondition = 'Save search options';
+$lang->search->setCondName   = 'Please enter a save condition name';
 
 $lang->search->account  = 'Tài khoản';
 $lang->search->module   = 'Module';
@@ -52,23 +59,24 @@ $lang->search->null = 'Null';
 $lang->userquery        = new stdclass();
 $lang->userquery->title = 'Title';
 
-$lang->searchObjects['todo']   = 'Việc làm';
-$lang->searchObjects['effort'] = 'Chấm công';
+$lang->searchObjects['todo']      = 'Việc làm';
+$lang->searchObjects['effort']    = 'Chấm công';
 $lang->searchObjects['testsuite'] = 'Test Suite';
 
 $lang->search->objectType = 'Loại đối tượng';
 $lang->search->objectID   = 'ID đối tượng';
-$lang->search->content = 'Nội dung';
+$lang->search->content    = 'Nội dung';
 $lang->search->addedDate  = 'Ngày thêm';
 
-$lang->search->index   = 'Full Text Search';
+$lang->search->index      = 'Full Text Search';
 $lang->search->buildIndex = 'Rebuild Index';
-$lang->search->preview = 'Preview';
+$lang->search->preview    = 'Preview';
 
-$lang->search->result   = 'Kết quả tìm kiếm';
+$lang->search->result            = 'Kết quả tìm kiếm';
 $lang->search->buildSuccessfully = 'Tìm kiếm khởi tạo chỉ mục.';
-$lang->search->executeInfo    = '%s kết quả tìm kiếm trong %s giây';
+$lang->search->executeInfo       = '%s kết quả tìm kiếm trong %s giây';
 $lang->search->buildResult       = "Create index %s and created <strong class='%scount'>%s</strong> records.";
+$lang->search->queryTips         = "Separate ids with comma";
 
 $lang->search->modules['all']         = 'Tất cả';
 $lang->search->modules['task']        = 'Nhiệm vụ';
@@ -89,10 +97,12 @@ $lang->search->modules['program']     = 'Program';
 $lang->search->modules['project']     = 'Project';
 $lang->search->modules['execution']   = $lang->executionCommon;
 $lang->search->modules['story']       = 'Story';
+$lang->search->modules['requirement'] = $lang->URCommon;
 
 $lang->search->objectTypeList['story']            = $lang->SRCommon;
 $lang->search->objectTypeList['requirement']      = $lang->URCommon;
 $lang->search->objectTypeList['stage']            = 'stage';
 $lang->search->objectTypeList['sprint']           = $lang->executionCommon;
+$lang->search->objectTypeList['kanban']           = 'kanban';
 $lang->search->objectTypeList['commonIssue']      = 'Issue';
 $lang->search->objectTypeList['stakeholderIssue'] = 'Stakeholder Issue';

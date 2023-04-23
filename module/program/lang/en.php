@@ -9,6 +9,7 @@ $lang->program->status         = 'Status';
 $lang->program->PM             = 'Manager';
 $lang->program->budget         = 'Budget';
 $lang->program->budgetUnit     = 'Budget Unit';
+$lang->program->invested       = 'Invested';
 $lang->program->begin          = 'Begin';
 $lang->program->end            = 'End';
 $lang->program->realBegin      = 'Actual Begin';
@@ -85,6 +86,7 @@ $lang->program->changePRJUnit           = 'Update the budget unit of the ' . $la
 $lang->program->showNotCurrentProjects  = "Display {$lang->projectCommon} information of non current program";
 
 $lang->program->progress         = 'Progress';
+$lang->program->progressAB       = 'Progress';
 $lang->program->children         = 'Add Child';
 $lang->program->allInvest        = 'Input';
 $lang->program->teamCount        = 'Team';
@@ -119,6 +121,25 @@ $lang->program->beyondParentBudget = 'The remaining budget of the owned program 
 $lang->program->checkedProjects    = 'Seleted %s items';
 $lang->program->budgetOverrun      = "The program's budget exceeds the remaining budget of the parent program:";
 
+/* ToolBar. */
+$lang->program->createProduct    = 'Create Product';
+$lang->program->createProject    = 'Create Project';
+
+/* DTable columns of product view page. */
+$lang->program->unclosedReqCount  = 'Unclosed';
+$lang->program->closedReqRate     = 'Closed Rate';
+$lang->program->testCaseCoverage  = 'Coverage';
+$lang->program->bugActivatedCount = 'Activated';
+$lang->program->fixedRate         = 'Fixed';
+$lang->program->feedback          = 'Feedback';
+
+$lang->program->tip = new stdclass();
+$lang->program->tip->closed     = 'The program has been closed. Re-close is not available.';
+$lang->program->tip->notSuspend = 'The program has been closed. Suspend is not available.';
+$lang->program->tip->suspended  = 'The program has been suspended. Re-suspended is not available.';
+$lang->program->tip->actived    = 'The program has been activated. Re-activated is not available.';
+$lang->program->tip->notCreate  = 'The program has been closed. Adding sub-programs is not available.';
+
 $lang->program->endList[31]  = 'One month';
 $lang->program->endList[93]  = 'Trimester';
 $lang->program->endList[186] = 'Half year';
@@ -151,6 +172,15 @@ $lang->program->featureBar['browse']['doing']     = 'Doing';
 $lang->program->featureBar['browse']['suspended'] = 'Suspended';
 $lang->program->featureBar['browse']['closed']    = 'Closed';
 
+$lang->program->featureBar['productview']['all']      = 'All';
+$lang->program->featureBar['productview']['unclosed'] = 'Unclosed';
+$lang->program->featureBar['productview']['end']      = 'End';
+
+$lang->program->featureBar['projectview']['all']      = 'All';
+$lang->program->featureBar['projectview']['unclosed'] = 'Unclosed';
+$lang->program->featureBar['projectview']['wait']     = 'Waiting';
+$lang->program->featureBar['projectview']['doing']    = 'Doing';
+$lang->program->featureBar['projectview']['more']     = 'More';
 $lang->program->featureBar['product']['all']      = 'All';
 $lang->program->featureBar['product']['noclosed'] = 'Open';
 $lang->program->featureBar['product']['closed']   = 'Closed';
@@ -176,4 +206,7 @@ $lang->program->kanban->normalReleases  = 'Normal Releases';
 
 $lang->program->kanban->laneColorList = array('#32C5FF', '#006AF1', '#9D28B2', '#FF8F26', '#FFC20E', '#00A78E', '#7FBB00', '#424BAC', '#C0E9FF', '#EC2761');
 
-$lang->program->defaultProgram = 'Default program';
+$lang->program->defaultProgram = 'Default Program';
+$lang->program->projectView    = 'Project View';
+$lang->program->productView    = 'Product View';
+$lang->program->manDay         = 'Man Day';

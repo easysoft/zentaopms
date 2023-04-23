@@ -291,7 +291,7 @@ class router extends baseRouter
         if($this->dbh and !empty($this->config->db->name))
         {
             $productProject = $this->dbh->query('SELECT `value` FROM ' . TABLE_CONFIG . "WHERE `owner`='system' AND `module`='custom' AND `key`='productProject'")->fetch();
-            if($productProject)
+            if(is_string($productProject))
             {
                 list($productCommon, $projectCommon) = explode('_', $productProject);
                 $lang->productCommon = isset($this->config->productCommonList[$this->clientLang][(int)$productCommon]) ? $this->config->productCommonList[$this->clientLang][(int)$productCommon] : $this->config->productCommonList['en'][0];
