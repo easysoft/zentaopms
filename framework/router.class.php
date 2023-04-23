@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * 此文件包括ZenTaoPHP框架的三个类：router, config, lang。
  * The router, config and lang class file of ZenTaoPHP framework.
@@ -17,7 +17,7 @@
  *
  * @package framework
  */
-include dirname(__FILE__) . '/base/router.class.php';
+include __DIR__ . '/base/router.class.php';
 class router extends baseRouter
 {
     /**
@@ -96,7 +96,7 @@ class router extends baseRouter
      * @access  public
      * @return  bool|object the lang object or false.
      */
-    public function loadLang($moduleName, $appName = '')
+    public function loadLang($moduleName, $appName = ''): bool|object
     {
         global $lang;
         if(!is_object($lang)) $lang = new language();
@@ -114,12 +114,12 @@ class router extends baseRouter
             {
                 $customMenus = $this->dbh->query('SELECT * FROM' . TABLE_LANG . "WHERE `module`='common' AND `section`='mainNav' AND `lang`='{$this->clientLang}' AND `vision`='{$this->config->vision}'")->fetchAll();
             }
-            catch(PDOException $exception){}
+            catch(PDOException){}
 
             foreach($customMenus as $menu)
             {
                 $menuKey = $menu->key;
-                if(isset($lang->mainNav->$menuKey)) $lang->mainNav->$menuKey = zget($lang->navIcons, $menuKey, '') . " {$menu->value}" . substr($lang->mainNav->$menuKey, strpos($lang->mainNav->$menuKey, '|'));
+                if(isset($lang->mainNav->$menuKey)) $lang->mainNav->$menuKey = zget($lang->navIcons, $menuKey, '') . " {$menu->value}" . substr((string) $lang->mainNav->$menuKey, strpos((string) $lang->mainNav->$menuKey, '|'));
             }
         }
 
@@ -162,7 +162,7 @@ class router extends baseRouter
                     if(isset($nullKey))$lang->{$moduleName}->{$section}[$nullKey] = $nullValue;
                     foreach($fields as $key => $value)
                     {
-                        if($section == 'priList' and $key > 0 and trim($value) === '') continue; // Fix bug #23538.
+                        if($section == 'priList' and $key > 0 and trim((string) $value) === '') continue; // Fix bug #23538.
 
                         if(!isset($lang->{$moduleName})) $lang->{$moduleName} = new stdclass();
                         if(!isset($lang->{$moduleName}->{$section})) $lang->{$moduleName}->{$section} = array();
@@ -255,20 +255,20 @@ class router extends baseRouter
         /* Set productCommon, projectCommon and hourCommon. Default english lang. */
         $lang->productCommon   = $this->config->productCommonList[$this->clientLang][PRODUCT_KEY];
         $lang->projectCommon   = $this->config->projectCommonList[$this->clientLang][PROJECT_KEY];
-        $lang->iterationCommon = isset($this->config->executionCommonList[$this->clientLang][(int)$iterationKey]) ? $this->config->executionCommonList[$this->clientLang][(int)$iterationKey] : $this->config->executionCommonList['en'][(int)$iterationKey];
-        $lang->executionCommon = isset($this->config->executionCommonList[$this->clientLang][(int)$projectKey]) ? $this->config->executionCommonList[$this->clientLang][(int)$projectKey] : $this->config->executionCommonList['en'][(int)$projectKey];
-        $lang->hourCommon      = isset($this->config->hourPointCommonList[$this->clientLang][(int)$hourKey]) ? $this->config->hourPointCommonList[$this->clientLang][(int)$hourKey] : $this->config->hourPointCommonList['en'][(int)$hourKey];
+        $lang->iterationCommon = $this->config->executionCommonList[$this->clientLang][(int)$iterationKey] ?? $this->config->executionCommonList['en'][(int)$iterationKey];
+        $lang->executionCommon = $this->config->executionCommonList[$this->clientLang][(int)$projectKey] ?? $this->config->executionCommonList['en'][(int)$projectKey];
+        $lang->hourCommon      = $this->config->hourPointCommonList[$this->clientLang][(int)$hourKey] ?? $this->config->hourPointCommonList['en'][(int)$hourKey];
 
         /* User preference init. */
         $config->URSR          = $URSR;
-        $config->URAndSR       = ($URAndSR and strpos(",{$config->disabledFeatures},", ',productUR,') === false);
+        $config->URAndSR       = ($URAndSR and !str_contains(",{$config->disabledFeatures},", ',productUR,'));
         $config->programLink   = 'program-browse';
         $config->productLink   = 'product-all';
         $config->projectLink   = 'project-browse';
         $config->executionLink = 'execution-task';
 
         /* Get user preference. */
-        $account     = isset($this->session->user->account) ? $this->session->user->account : '';
+        $account     = $this->session->user->account ?? '';
         $userSetting = array();
         if($this->dbh and !empty($this->config->db->name) and $account)
         {
@@ -293,7 +293,6 @@ class router extends baseRouter
             $productProject = $this->dbh->query('SELECT `value` FROM ' . TABLE_CONFIG . "WHERE `owner`='system' AND `module`='custom' AND `key`='productProject'")->fetch();
             if($productProject)
             {
-                $productProject = $productProject->value;
                 list($productCommon, $projectCommon) = explode('_', $productProject);
                 $lang->productCommon = isset($this->config->productCommonList[$this->clientLang][(int)$productCommon]) ? $this->config->productCommonList[$this->clientLang][(int)$productCommon] : $this->config->productCommonList['en'][0];
             }
@@ -309,14 +308,14 @@ class router extends baseRouter
                 $SRPairs  = array();
                 foreach($URSRList as $id => $value)
                 {
-                    $URSR = json_decode($value->value);
+                    $URSR = json_decode((string) $value->value);
                     $URPairs[$value->key] = $URSR->URName;
                     $SRPairs[$value->key] = $URSR->SRName;
                 }
 
                 /* Set default story concept and init UR and SR concept. */
-                $lang->URCommon = isset($URPairs[$config->URSR]) ? $URPairs[$config->URSR] : reset($URPairs);
-                $lang->SRCommon = isset($SRPairs[$config->URSR]) ? $SRPairs[$config->URSR] : reset($SRPairs);
+                $lang->URCommon = $URPairs[$config->URSR] ?? reset($URPairs);
+                $lang->SRCommon = $SRPairs[$config->URSR] ?? reset($SRPairs);
             }
 
             /* Replace common lang. */
@@ -325,7 +324,7 @@ class router extends baseRouter
             {
                 $customMenus = $this->dbh->query('SELECT * FROM' . TABLE_LANG . "WHERE `module`='common' AND `lang`='{$this->clientLang}' AND `section`='' AND `vision`='{$config->vision}'")->fetchAll();
             }
-            catch(PDOException $exception){}
+            catch(PDOException){}
             foreach($customMenus as $menu) if(isset($lang->{$menu->key})) $lang->{$menu->key} = $menu->value;
         }
     }
@@ -342,6 +341,7 @@ class router extends baseRouter
      */
     public function saveError($level, $message, $file, $line)
     {
+        $fatalLevel = array();
         $fatalLevel[E_ERROR]      = E_ERROR;
         $fatalLevel[E_PARSE]      = E_PARSE;
         $fatalLevel[E_CORE_ERROR] = E_CORE_ERROR;
@@ -363,6 +363,7 @@ class router extends baseRouter
      */
     public function loadModuleConfig($moduleName, $appName = '')
     {
+        $extConfigPath = array();
         global $config;
         if($config and (!isset($config->$moduleName) or !is_object($config->$moduleName))) $config->$moduleName = new stdclass();
 
@@ -560,6 +561,8 @@ class router extends baseRouter
      */
     public function setFlowURI($moduleName, $methodName)
     {
+        $query = null;
+        $path = null;
         $this->rawURI = $this->URI;
 
         $this->setModuleName($moduleName);
@@ -568,7 +571,7 @@ class router extends baseRouter
         if($this->config->requestType != 'GET')
         {
             /* e.g. $this->URI = /$module-close-1.html. */
-            $params = explode($this->config->requestFix, $this->URI);       // $params = array($module, 'close', 1);
+            $params = explode($this->config->requestFix, (string) $this->URI);       // $params = array($module, 'close', 1);
 
             /* Remove module and method. */
             $params = array_slice($params, 2);                              // $params = array(1);
@@ -589,9 +592,9 @@ class router extends baseRouter
         {
             /* Extract $path and $query from $params. */
             /* e.g. $tshi->URI = /index.php?m=$module&f=close&id=1. */
-            $params = parse_url($this->URI);                        // $params = array('path' => '/index.php', 'query' => m=$module&f=close&id=1;
+            $params = parse_url((string) $this->URI);                        // $params = array('path' => '/index.php', 'query' => m=$module&f=close&id=1;
             extract($params);                                       // $path = '/index.php'; $query = 'm=$module&f=close&id=1';
-            parse_str($query, $params);                             // $params = array('m' => $module, 'f' => 'close', 'id' => 1);
+            parse_str((string) $query, $params);                             // $params = array('m' => $module, 'f' => 'close', 'id' => 1);
 
             /* Remove module and method. */
             unset($params[$this->config->moduleVar]);               // $params = array('f' => 'close', 'id' => 1);

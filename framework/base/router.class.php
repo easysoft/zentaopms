@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * 此文件包括ZenTaoPHP框架的三个类：baseRouter, config, lang。
  * The router, config and lang class file of ZenTaoPHP framework.
@@ -372,7 +372,7 @@ class baseRouter
      * @access public
      * @return void
      */
-    public function __construct($appName = 'demo', $appRoot = '')
+    public function __construct(string $appName = 'demo', string $appRoot = '')
     {
         $this->setPathFix();
         $this->setBasePath();
@@ -391,6 +391,7 @@ class baseRouter
 
         $this->loadClass('front',  $static = true);
         $this->loadClass('filter', $static = true);
+        $this->loadClass('form',   $static = true);
         $this->loadClass('dbh',    $static = true);
         $this->loadClass('dao',    $static = true);
         $this->loadClass('mobile', $static = true);
@@ -428,9 +429,9 @@ class baseRouter
      * @access public
      * @return static   the app object
      */
-    public static function createApp($appName = 'demo', $appRoot = '', $className = '')
+    public static function createApp(string $appName = 'demo', string $appRoot = '', string $className = '')
     {
-        if(empty($className)) $className = __CLASS__;
+        if(empty($className)) $className = self::class;
         return new $className($appName, $appRoot);
     }
 
@@ -444,7 +445,7 @@ class baseRouter
      * @access public
      * @return void
      */
-    public function setAppName($appName)
+    public function setAppName(string $appName)
     {
         $this->appName = $appName;
     }
@@ -470,7 +471,7 @@ class baseRouter
      */
     public function setBasePath()
     {
-        $this->basePath = realpath(dirname(dirname(dirname(__FILE__)))) . DS;
+        $this->basePath = realpath(dirname(__FILE__, 3)) . DS;
     }
 
     /**
@@ -506,7 +507,7 @@ class baseRouter
      * @access public
      * @return void
      */
-    public function setAppRoot($appName = 'demo', $appRoot = '')
+    public function setAppRoot(string $appName = 'demo', string $appRoot = '')
     {
         if(empty($appRoot))  $this->appRoot = $this->basePath . 'app' . DS . $appName . DS;
         if(!empty($appRoot)) $this->appRoot = realpath($appRoot) . DS;
@@ -582,7 +583,7 @@ class baseRouter
      */
     public function setWwwRoot()
     {
-        $this->wwwRoot = rtrim(dirname($_SERVER['SCRIPT_FILENAME']), DS) . DS;
+        $this->wwwRoot = rtrim(dirname((string) $_SERVER['SCRIPT_FILENAME']), DS) . DS;
     }
 
     /**
@@ -621,9 +622,9 @@ class baseRouter
         if(isset($_SERVER['REQUEST_URI']))
         {
             $URI = $_SERVER['REQUEST_URI'];
-            if(strpos($URI, '?') !== false)
+            if(str_contains((string) $URI, '?'))
             {
-                $parsedURL = parse_url($URI);
+                $parsedURL = parse_url((string) $URI);
                 if(isset($parsedURL['query']))
                 {
                     parse_str($parsedURL['query'], $parsedQuery);
@@ -647,12 +648,12 @@ class baseRouter
         if($this->config->framework->filterCSRF)
         {
             $httpType = (isset($_SERVER["HTTPS"]) && $_SERVER["HTTPS"] == 'on') ? 'https' : 'http';
-            if(isset($_SERVER['HTTP_X_FORWARDED_PROTO']) and strtolower($_SERVER['HTTP_X_FORWARDED_PROTO']) == 'https') $httpType = 'https';
-            if(isset($_SERVER['REQUEST_SCHEME']) and strtolower($_SERVER['REQUEST_SCHEME']) == 'https') $httpType = 'https';
+            if(isset($_SERVER['HTTP_X_FORWARDED_PROTO']) and strtolower((string) $_SERVER['HTTP_X_FORWARDED_PROTO']) == 'https') $httpType = 'https';
+            if(isset($_SERVER['REQUEST_SCHEME']) and strtolower((string) $_SERVER['REQUEST_SCHEME']) == 'https') $httpType = 'https';
 
             $httpHost = zget($_SERVER, 'HTTP_HOST', '');
             $apiMode  = (defined('RUN_MODE') && RUN_MODE == 'api') || isset($_GET[$this->config->sessionVar]);
-            if(!$apiMode && (empty($httpHost) or strpos($this->server->http_referer, "$httpType://$httpHost") !== 0)) $_FILES = $_POST = array();
+            if(!$apiMode && (empty($httpHost) or !str_starts_with((string) $this->server->http_referer, "$httpType://$httpHost"))) $_FILES = $_POST = array();
         }
 
         $_FILES  = validater::filterFiles();
@@ -710,7 +711,7 @@ class baseRouter
     {
         if(isset($this->config->edition)) return $this->config->edition;
 
-        $edition = substr($this->config->version, 0, 3);
+        $edition = substr((string) $this->config->version, 0, 3);
         if(in_array($edition, array('pro', 'biz', 'max'))) return $this->config->edition = $edition;
         $this->config->edition = 'open';
     }
@@ -739,16 +740,16 @@ class baseRouter
             $user = $this->dbh->query("SELECT * FROM " . TABLE_USER . " WHERE account = $account AND deleted = '0' LIMIT 1")->fetch();
             if(!empty($user->visions))
             {
-                $userVisions = explode(',', $user->visions);
+                $userVisions = explode(',', (string) $user->visions);
                 if(!in_array($vision, $userVisions)) $vision = '';
-                if(empty($vision)) list($vision) = $userVisions;
+                if(empty($vision)) [$vision] = $userVisions;
             }
         }
 
-        list($defaultVision) = explode(',', trim($this->config->visions, ','));
-        if($vision and strpos($this->config->visions, ",{$vision},") === false) $vision = $defaultVision;
+        [$defaultVision] = explode(',', trim((string) $this->config->visions, ','));
+        if($vision and !str_contains((string) $this->config->visions, ",{$vision},")) $vision = $defaultVision;
 
-        $this->config->vision = $vision ? $vision : $defaultVision;
+        $this->config->vision = $vision ?: $defaultVision;
     }
 
     /**
@@ -774,7 +775,7 @@ class baseRouter
      */
     public function setErrorHandler()
     {
-        set_error_handler(array($this, 'saveError'));
+        set_error_handler($this->saveError(...));
         register_shutdown_function(array($this, 'shutdown'));
     }
 
@@ -1001,12 +1002,12 @@ class baseRouter
             {
                 $ztSessionHandler = new ztSessionHandler($_GET['tid']);
                 session_set_save_handler(
-                    array($ztSessionHandler, "open"),
-                    array($ztSessionHandler, "close"),
-                    array($ztSessionHandler, "read"),
-                    array($ztSessionHandler, "write"),
-                    array($ztSessionHandler, "destroy"),
-                    array($ztSessionHandler, "gc")
+                    $ztSessionHandler->open(...),
+                    $ztSessionHandler->close(...),
+                    $ztSessionHandler->read(...),
+                    $ztSessionHandler->write(...),
+                    $ztSessionHandler->destroy(...),
+                    $ztSessionHandler->gc(...)
                 );
             }
         }
@@ -1044,7 +1045,7 @@ class baseRouter
         $module    = $this->rawModule;
         $this->tab = 'my';
         if(isset($this->lang->navGroup)) $this->tab = zget($this->lang->navGroup, $module, 'my');
-        if(isset($_COOKIE['tab']) and $_COOKIE['tab'] and preg_match('/^\w+$/', $_COOKIE['tab'])) $this->tab = $_COOKIE['tab'];
+        if(isset($_COOKIE['tab']) and $_COOKIE['tab'] and preg_match('/^\w+$/', (string) $_COOKIE['tab'])) $this->tab = $_COOKIE['tab'];
     }
 
     /**
@@ -1075,7 +1076,7 @@ class baseRouter
             $this->clientLang = $this->config->default->lang;
         }
 
-        setcookie('lang', $this->clientLang, $this->config->cookieLife, $this->config->webRoot, '', $this->config->cookieSecure, false);
+        setcookie('lang', (string) $this->clientLang, array('expires' => $this->config->cookieLife, 'path' => (string) $this->config->webRoot, 'domain' => '', 'secure' => $this->config->cookieSecure, 'httponly' => false));
         if(!isset($_COOKIE['lang'])) $_COOKIE['lang'] = $this->clientLang;
 
         return true;
@@ -1093,12 +1094,12 @@ class baseRouter
         if(empty($_SERVER['HTTP_ACCEPT_LANGUAGE'])) return '';
 
         $raw  = $_SERVER['HTTP_ACCEPT_LANGUAGE'];
-        $pos  = strpos($raw, ',');
-        $lang = $pos === false ? $raw : substr($raw, 0, $pos);
+        $pos  = strpos((string) $raw, ',');
+        $lang = $pos === false ? $raw : substr((string) $raw, 0, $pos);
 
         /* Fix clientLang for ie >= 10. https://www.drupal.org/node/365615. */
-        if(stripos($lang, 'hans')) $lang = 'zh-cn';
-        if(stripos($lang, 'hant')) $lang = 'zh-tw';
+        if(stripos((string) $lang, 'hans')) $lang = 'zh-cn';
+        if(stripos((string) $lang, 'hant')) $lang = 'zh-tw';
         return $lang;
     }
 
@@ -1129,7 +1130,7 @@ class baseRouter
             $this->clientTheme = $this->config->default->theme;
         }
 
-        setcookie('theme', $this->clientTheme, $this->config->cookieLife, $this->config->webRoot, '', $this->config->cookieSecure, false);
+        setcookie('theme', (string) $this->clientTheme, array('expires' => $this->config->cookieLife, 'path' => (string) $this->config->webRoot, 'domain' => '', 'secure' => $this->config->cookieSecure, 'httponly' => false));
         if(!isset($_COOKIE['theme'])) $_COOKIE['theme'] = $this->clientTheme;
 
         return true;
@@ -1149,13 +1150,13 @@ class baseRouter
         if($this->cookie->device == 'mobile')  $this->clientDevice = 'mobile';
         if($this->cookie->device == 'desktop') $this->clientDevice = 'desktop';
 
-        if(empty($this->cookie->device) || strpos('mobile,desktop', $this->cookie->device) === false)
+        if(empty($this->cookie->device) || !str_contains('mobile,desktop', (string) $this->cookie->device))
         {
             $mobile = new mobile();
             $this->clientDevice = ($mobile->isMobile() and !$mobile->isTablet()) ? 'mobile' : 'desktop';
         }
 
-        setcookie('device', $this->clientDevice, $this->config->cookieLife, $this->config->webRoot, '', $this->config->cookieSecure, true);
+        setcookie('device', $this->clientDevice, array('expires' => $this->config->cookieLife, 'path' => (string) $this->config->webRoot, 'domain' => '', 'secure' => $this->config->cookieSecure, 'httponly' => true));
         if(!isset($_COOKIE['device'])) $_COOKIE['device'] = $this->clientDevice;
 
         return $this->clientDevice;
@@ -1253,7 +1254,7 @@ class baseRouter
             {
                 $this->URI      = substr($pathInfo, 0, $dotPos);
                 $this->viewType = substr($pathInfo, $dotPos + 1);
-                if(strpos($this->config->views, ',' . $this->viewType . ',') === false)
+                if(!str_contains((string) $this->config->views, ',' . $this->viewType . ','))
                 {
                     $this->viewType = $this->config->default->view;
                 }
@@ -1293,9 +1294,9 @@ class baseRouter
         elseif(isset($this->URI))
         {
             $value = $this->URI;
-            $subpath = str_replace($_SERVER['DOCUMENT_ROOT'], '', dirname($_SERVER['SCRIPT_FILENAME']));
+            $subpath = str_replace($_SERVER['DOCUMENT_ROOT'], '', dirname((string) $_SERVER['SCRIPT_FILENAME']));
             if($subpath != '/') $subpath = '/' . $subpath;
-            if($subpath != '' and $subpath != '/' and strpos($value, $subpath) === 0) $value = substr($value, strlen($subpath));
+            if($subpath != '' and $subpath != '/' and str_starts_with($value, $subpath)) $value = substr($value, strlen($subpath));
         }
         else
         {
@@ -1303,12 +1304,12 @@ class baseRouter
             if(empty($value)) $value = @getenv('ORIG_PATH_INFO');
         }
 
-        if(strpos($value, $_SERVER['SCRIPT_NAME']) !== false) $value = str_replace($_SERVER['SCRIPT_NAME'], '', $value);
-        if(strpos($value, '?') === false) return trim($value, '/');
+        if(str_contains((string) $value, (string) $_SERVER['SCRIPT_NAME'])) $value = str_replace($_SERVER['SCRIPT_NAME'], '', (string) $value);
+        if(!str_contains((string) $value, '?')) return trim((string) $value, '/');
 
-        $value    = parse_url($value);
-        $pathInfo = trim(zget($value, 'path', ''), '/');
-        if(trim($pathInfo, '/') == trim($this->config->webRoot, '/')) $pathInfo = '';
+        $value    = parse_url((string) $value);
+        $pathInfo = trim((string) zget($value, 'path', ''), '/');
+        if(trim($pathInfo, '/') == trim((string) $this->config->webRoot, '/')) $pathInfo = '';
 
         return $pathInfo;
     }
@@ -1325,7 +1326,7 @@ class baseRouter
         if(isset($_GET[$this->config->viewVar]))
         {
             $this->viewType = $_GET[$this->config->viewVar];
-            if(strpos($this->config->views, ',' . $this->viewType . ',') === false) $this->viewType = $this->config->default->view;
+            if(!str_contains((string) $this->config->views, ',' . $this->viewType . ',')) $this->viewType = $this->config->default->view;
         }
         else
         {
@@ -1382,7 +1383,7 @@ class baseRouter
      * @access public
      * @return object|bool  the common model object or false if not exits.
      */
-    public function loadCommon()
+    public function loadCommon(): object|bool
     {
         $this->setModuleName('common');
         $commonModelFile = $this->setModelFile('common');
@@ -1405,7 +1406,7 @@ class baseRouter
      * @access  public
      * @return  void
      */
-    public function setModuleName($moduleName = '')
+    public function setModuleName(string $moduleName = '')
     {
         if($this->checkModuleName($moduleName)) $this->moduleName = strtolower($moduleName);
     }
@@ -1420,7 +1421,7 @@ class baseRouter
      * @access  public
      * @return  bool
      */
-    public function setControlFile($exitIfNone = true)
+    public function setControlFile(bool $exitIfNone = true)
     {
         $this->controlFile = $this->getModulePath() . 'control.php';
         if(file_exists($this->controlFile)) return true;
@@ -1435,7 +1436,7 @@ class baseRouter
      * @access public
      * @return void
      */
-    public function setMethodName($methodName = '')
+    public function setMethodName(string $methodName = '')
     {
         if($this->checkMethodName($methodName)) $this->methodName = strtolower($methodName);
     }
@@ -1475,13 +1476,13 @@ class baseRouter
 
             /* Check file is encode by ioncube. */
             $isEncrypted = false;
-            if(strpos($file2Included, 'extension' . DS . $this->config->edition . DS) !== false)
+            if(str_contains($file2Included, 'extension' . DS . $this->config->edition . DS))
             {
                 $fp = fopen($file2Included, 'r');
                 $line1 = fgets($fp);
                 $line2 = fgets($fp);
                 fclose($fp);
-                if(strpos($line1, '<?php //') === 0 and strpos($line2, "if(!extension_loaded('ionCube Loader'))") === 0) $isEncrypted = true;
+                if(str_starts_with($line1, '<?php //') and str_starts_with($line2, "if(!extension_loaded('ionCube Loader'))")) $isEncrypted = true;
             }
 
             /*
@@ -1581,7 +1582,7 @@ class baseRouter
      * @access public
      * @return string the module path
      */
-    public function getModulePath($appName = '', $moduleName = '')
+    public function getModulePath(string $appName = '', string $moduleName = '')
     {
         if($moduleName == '') $moduleName = $this->moduleName;
         $moduleName = strtolower($moduleName);
@@ -1631,7 +1632,7 @@ class baseRouter
      * @access  public
      * @return  string the extension path.
      */
-    public function getModuleExtPath($appName, $moduleName, $ext)
+    public function getModuleExtPath(string $appName, string $moduleName, string $ext)
     {
         $saasExtPath = $this->getExtensionRoot() . 'saas' . DS . $moduleName . DS . 'ext' . DS . $ext . DS;
 
@@ -1666,7 +1667,7 @@ class baseRouter
      * @access public
      * @return bool
      */
-    public function checkModuleName($var, $exit = true)
+    public function checkModuleName(string $var, bool $exit = true)
     {
         global $filter;
         static $checkedModule = array();
@@ -1689,7 +1690,7 @@ class baseRouter
      * @access public
      * @return bool
      */
-    public function checkMethodName($var, $exit = true)
+    public function checkMethodName(string $var, bool $exit = true)
     {
         global $filter;
         $rule = $filter->default->methodName;
@@ -1784,7 +1785,7 @@ class baseRouter
      * @access public
      * @return string the model file
      */
-    public function setModelFile($moduleName, $appName = '')
+    public function setModelFile(string $moduleName, string $appName = '')
     {
         return $this->setTargetFile($moduleName, $appName);
     }
@@ -1799,7 +1800,7 @@ class baseRouter
      * @access public
      * @return string the target file
      */
-    public function setTargetFile($moduleName, $appName = '', $class = 'model')
+    public function setTargetFile(string $moduleName, string $appName = '', string $class = 'model')
     {
         if($appName == '') $appName = $this->getAppName();
 
@@ -1856,12 +1857,12 @@ class baseRouter
      * @param  array     $extFiles
      * @param  array     $hookFiles
      * @param  array     $apiFiles
-     * @param  string    $targetExtPaths
+     * @param  array     $targetExtPaths
      * @param  string    $mainTargetFile
      * @access public
      * @return bool
      */
-    public function needTargetFileUpdate($mergedTargetFile, $extFiles, $hookFiles, $apiFiles, $targetExtPaths, $mainTargetFile)
+    public function needTargetFileUpdate(string $mergedTargetFile, array $extFiles, array $hookFiles, array $apiFiles, array $targetExtPaths, string $mainTargetFile)
     {
         $lastTime = file_exists($mergedTargetFile) ? filemtime($mergedTargetFile) : 0;
 
@@ -1897,7 +1898,7 @@ class baseRouter
      * @access public
      * @return void
      */
-    public function mergeTargetExtFiles($moduleName, $extFiles, $mergedTargetDir, $class = 'model')
+    public function mergeTargetExtFiles(string $moduleName, array $extFiles, string $mergedTargetDir, string $class = 'model')
     {
         /* 设置类名。Set the class names. */
         $targetClass    = $moduleName . ucfirst($class);
@@ -1911,7 +1912,7 @@ class baseRouter
 
         /* 将扩展文件的代码合并到代码中。Cycle all the extension files and merge them into target lines. */
         $extTargets = array();
-        foreach($extFiles  as $extFile)  $extTargets[basename($extFile)] = $extFile;
+        foreach($extFiles  as $extFile)  $extTargets[basename((string) $extFile)] = $extFile;
         foreach($extTargets as $extTarget) $targetLines .= self::removePHPTAG($extTarget);
 
         /* 做个标记，方便后面替换代码使用。Make a mark for replacing codes. */
@@ -1943,7 +1944,7 @@ class baseRouter
      * @access public
      * @return void
      */
-    public function mergeTargetHookFiles($moduleName, $mainTargetFile, $targetLines, $hookFiles, $mergedTargetDir, $mergedTargetFile, $apiFiles, $class = 'model')
+    public function mergeTargetHookFiles(string $moduleName, string $mainTargetFile, string $targetLines, array $hookFiles, string $mergedTargetDir, string $mergedTargetFile, array $apiFiles, string $class = 'model')
     {
         /* 定义相关变量。Init vars. */
         $targetClass    = $moduleName . ucfirst($class);
@@ -1957,8 +1958,8 @@ class baseRouter
         foreach($apiFiles as $apiFile)
         {
             /* 通过文件名获得其对应的方法名。Get methods according it's filename. */
-            $fileName = baseName($apiFile);
-            list($method) = explode('.', $fileName);
+            $fileName = baseName((string) $apiFile);
+            [$method] = explode('.', $fileName);
 
             $url = self::extractAPIURL($apiFile);
             if($url) $hookCodes[$method][] = "return helper::requestAPI('$url');";
@@ -1966,8 +1967,8 @@ class baseRouter
         foreach($hookFiles as $hookFile)
         {
             /* 通过文件名获得其对应的方法名。Get methods according it's filename. */
-            $fileName = baseName($hookFile);
-            list($method) = explode('.', $fileName);
+            $fileName = baseName((string) $hookFile);
+            [$method] = explode('.', $fileName);
             $hookCodes[$method][] = self::removePHPTAG($hookFile);
         }
 
@@ -2008,10 +2009,11 @@ class baseRouter
      * @access public
      * @return string
      */
-    static public function removePHPTAG($fileName)
+    static public function removePHPTAG(string $fileName): string
     {
         $code = trim(file_get_contents($fileName));
-        if(strpos($code, '<?php') === 0)     $code = ltrim($code, '<?php');
+        if(str_starts_with($code, '<?php declare(strict_types=1);'))     $code = ltrim($code, '<?php declare(strict_types=1);');
+        if(str_starts_with($code, '<?php'))     $code = ltrim($code, '<?php');
         if(strrpos($code, '?' . '>')   !== false) $code = rtrim($code, '?' . '>');
         return trim($code);
     }
@@ -2024,7 +2026,7 @@ class baseRouter
      * @access public
      * @return string
      */
-    static public function extractAPIURL($fileName)
+    static public function extractAPIURL(string $fileName): string
     {
         global $config;
 
@@ -2032,7 +2034,7 @@ class baseRouter
         $lines = file($fileName);
         foreach($lines as $line)
         {
-            $line = trim($line);
+            $line = trim((string) $line);
 
             if(empty($line)) continue;
             if(preg_match('/^https?\:\/\//', $line))
@@ -2052,8 +2054,10 @@ class baseRouter
      * @access public
      * @return void
      */
-    public function sendAPI($apiFile)
+    public function sendAPI(string $apiFile)
     {
+        $css = null;
+        $js = null;
         $extension = substr($apiFile, strrpos($apiFile, '.') + 1);
         if($extension != '302' and $extension != 'api') return false;
 
@@ -2061,7 +2065,7 @@ class baseRouter
         $url   = '';
         foreach($lines as $line)
         {
-            $line = trim($line);
+            $line = trim((string) $line);
 
             if(empty($line)) continue;
             if(preg_match('/^https?\:\/\//', $line))
@@ -2072,7 +2076,7 @@ class baseRouter
         }
         if(empty($url)) return false;
 
-        $url .= (strpos($url, '?') !== false ? '&' : '?') . $this->config->sessionVar . '=' . session_id() . '&account=' . $_SESSION['user']->account;
+        $url .= (str_contains($url, '?') ? '&' : '?') . $this->config->sessionVar . '=' . session_id() . '&account=' . $_SESSION['user']->account;
         if($extension == '302')
         {
             header("location: $url");
@@ -2126,7 +2130,7 @@ class baseRouter
              * 根据$requestFix分割符，分割网址。
              * There's the request separator, split the URI by it.
              **/
-            if(strpos($this->URI, $this->config->requestFix) !== false)
+            if(str_contains($this->URI, (string) $this->config->requestFix))
             {
                 $items = explode($this->config->requestFix, $this->URI);
                 $this->setModuleName($items[0]);
@@ -2166,8 +2170,8 @@ class baseRouter
      */
     public function setRouteByGET()
     {
-        $moduleName = isset($_GET[$this->config->moduleVar]) ? strtolower($_GET[$this->config->moduleVar]) : $this->config->default->module;
-        $methodName = isset($_GET[$this->config->methodVar]) ? strtolower($_GET[$this->config->methodVar]) : $this->config->default->method;
+        $moduleName = isset($_GET[$this->config->moduleVar]) ? strtolower((string) $_GET[$this->config->moduleVar]) : $this->config->default->module;
+        $methodName = isset($_GET[$this->config->methodVar]) ? strtolower((string) $_GET[$this->config->methodVar]) : $this->config->default->method;
         $this->setModuleName($moduleName);
         $this->setMethodName($methodName);
         $this->setControlFile();
@@ -2204,7 +2208,7 @@ class baseRouter
             echo $endResponseException->getContent();
         }
 
-        return isset($module) ? $module : false;
+        return $module ?? false;
     }
 
     /**
@@ -2217,7 +2221,7 @@ class baseRouter
      * @access public
      * @return object|bool 如果没有model文件，返回false，否则返回model对象。If no model file, return false, else return the model object.
      */
-    public function loadTarget($moduleName = '', $appName = '', $class = 'model')
+    public function loadTarget(string $moduleName = '', string $appName = '', string $class = 'model'): object|bool
     {
         if(empty($moduleName)) $moduleName = $this->moduleName;
         if(empty($appName)) $appName = $this->appName;
@@ -2267,7 +2271,7 @@ class baseRouter
      * @access  public
      * @return  void
      */
-    public function setParamsByPathInfo($defaultParams = array(), $type = '')
+    public function setParamsByPathInfo(array $defaultParams = array(), string $type = '')
     {
         $params = array();
         if($type != 'fetch')
@@ -2302,7 +2306,7 @@ class baseRouter
      * @access  public
      * @return  void
      */
-    public function setParamsByGET($defaultParams, $type = '')
+    public function setParamsByGET(array $defaultParams, string $type = '')
     {
         $params = array();
         if($type != 'fetch')
@@ -2331,7 +2335,7 @@ class baseRouter
      * @access  public
      * @return  array the merged params.
      */
-    public function mergeParams($defaultParams, $passedParams)
+    public function mergeParams(array $defaultParams, array $passedParams)
     {
         global $filter;
 
@@ -2341,7 +2345,7 @@ class baseRouter
         unset($passedParams['HTTP_X_REQUESTED_WITH']);
 
         /* Check params from URL. */
-        $nameRule = isset($filter->{$this->moduleName}->{$this->methodName}->paramName)  ? $filter->{$this->moduleName}->{$this->methodName}->paramName  : $filter->default->paramName;
+        $nameRule = $filter->{$this->moduleName}->{$this->methodName}->paramName ?? $filter->default->paramName;
         foreach($passedParams as $param => $value)
         {
             if(!validater::checkByRule($param, $nameRule)) die('Bad Request!');
@@ -2360,7 +2364,7 @@ class baseRouter
         {
             if(isset($passedParams[$i]))
             {
-                $defaultParams[$key] = strip_tags($passedParams[$i]);
+                $defaultParams[$key] = strip_tags((string) $passedParams[$i]);
             }
             else
             {
@@ -2432,7 +2436,7 @@ class baseRouter
      * @access  public
      * @return  object|bool the instance of the class or just true.
      */
-    public function loadClass($className, $static = false)
+    public function loadClass(string $className, bool $static = false): object|bool
     {
         $className = strtolower($className);
 
@@ -2446,10 +2450,10 @@ class baseRouter
         if($static) return true;
 
         /* 实例化该类(Instance it) */
-        global $$className;
+        global ${$className};
         if(!class_exists($className)) $this->triggerError("the class $className not found in $classFile", __FILE__, __LINE__, $exit = true);
-        if(!is_object($$className)) $$className = new $className();
-        return $$className;
+        if(!is_object(${$className})) ${$className} = new $className();
+        return ${$className};
     }
 
     /**
@@ -2501,7 +2505,7 @@ class baseRouter
      * @access  public
      * @return  void
      */
-    public function loadModuleConfig($moduleName, $appName = '')
+    public function loadModuleConfig(string $moduleName, string $appName = '')
     {
         global $config;
 
@@ -2536,7 +2540,7 @@ class baseRouter
      * @access public
      * @return void
      */
-    public  function mergeConfig($dbConfig, $moduleName = 'common')
+    public  function mergeConfig(array $dbConfig, string $moduleName = 'common')
     {
         global $config;
 
@@ -2585,7 +2589,7 @@ class baseRouter
         $view->URAndSR       = zget($this->config->custom, 'URAndSR', '0');
         $view->maxUploadSize = strtoupper(ini_get('upload_max_filesize'));
 
-        $this->session->set('random', mt_rand(0, 10000));
+        $this->session->set('random', random_int(0, 10000));
         $view->sessionName = session_name();
         $view->sessionID   = session_id();
         $view->random      = $this->session->random;
@@ -2604,7 +2608,7 @@ class baseRouter
      * @access  public
      * @return  string.
      */
-    private function getMainLangFile($moduleName, $appName = '')
+    private function getMainLangFile(string $moduleName, string $appName = '')
     {
         $path = $moduleName . DS . 'lang' . DS . $this->clientLang . '.php';
 
@@ -2649,7 +2653,7 @@ class baseRouter
      * @access  public
      * @return  bool|object the lang object or false.
      */
-    public function loadLang($moduleName, $appName = '')
+    public function loadLang(string $moduleName, string $appName = ''): bool|object
     {
         /* 计算最终要加载的语言文件。 Get the lang files to be loaded. */
         $langFilesToLoad = $this->getMainAndExtFiles($moduleName, $appName, 'lang');
@@ -2694,10 +2698,10 @@ class baseRouter
      *
      * @param  object    $params    the database params.
      * @access public
-     * @return object|bool
      */
-    public function connectByPDO($params)
+    public function connectByPDO(object $params): object|bool
     {
+        $dsn = null;
         if(!isset($params->driver)) self::triggerError('no pdo driver defined, it should be mysql or sqlite', __FILE__, __LINE__, $exit = true);
         if(!isset($params->user)) return false;
         try
@@ -2771,8 +2775,9 @@ class baseRouter
      * @access public
      * @return void
      */
-    public function triggerError($message, $file, $line, $exit = false)
+    public function triggerError(string $message, string $file, int $line, bool $exit = false)
     {
+        $function = null;
         /* 设置错误信息(Set the error info) */
         $message = htmlSpecialString($message);
         if(preg_match('/[^\x00-\x80]/', $message)) $message = helper::convertEncoding($message, 'gbk');
@@ -2805,7 +2810,7 @@ class baseRouter
      * @access public
      * @return void
      */
-    public function saveError($level, $message, $file, $line)
+    public function saveError(int $level, string $message, string $file, int $line)
     {
         if(empty($this->config->debug))  return true;
         if(!is_dir($this->logRoot))      return true;
@@ -2815,9 +2820,9 @@ class baseRouter
          * 删除设定时间之前的日志。
          * Delete the log before the set time.
          **/
-        if(mt_rand(0, 10) == 1)
+        if(random_int(0, 10) == 1)
         {
-            $logDays = isset($this->config->framework->logDays) ? $this->config->framework->logDays : 14;
+            $logDays = $this->config->framework->logDays ?? 14;
             $dayTime = time() - $logDays * 24 * 3600;
             foreach(glob($this->getLogRoot() . '*') as $logFile)
             {
@@ -2829,7 +2834,7 @@ class baseRouter
          * 忽略该错误：Redefining already defined constructor。
          * Skip the error: Redefining already defined constructor.
          **/
-        if(strpos($message, 'Redefining') !== false) return true;
+        if(str_contains($message, 'Redefining')) return true;
 
         /*
          * 设置错误信息。
@@ -2917,7 +2922,7 @@ class baseRouter
      * @access public
      * @return bool
      */
-    public function isContainer()
+    public function isContainer(): bool
     {
         return strtolower(getenv('IS_CONTAINER')) == 'true';
     }
@@ -2931,8 +2936,9 @@ class baseRouter
      * @access public
      * @return array
      */
-    public function getMainAndExtFiles($moduleName, $appName = '', $type = 'lang')
+    public function getMainAndExtFiles(string $moduleName, string $appName = '', string $type = 'lang')
     {
+        $clientLang = null;
         /* 初始化变量。Init vars. */
         $modulePath  = $this->getModulePath($appName, $moduleName);
         $extFiles    = array();
@@ -2948,6 +2954,11 @@ class baseRouter
             $mainFile = $modulePath . $type . '.php';
         }
         if($mainFile) $filesToLoad[] = $mainFile;
+
+        if($type == 'config')
+        {
+            $filesToLoad[] = helper::ls($modulePath . DS . 'config', '.php');
+        }
 
         /* 获取扩展文件。If extensionLevel > 0, get extension files. */
         if($this->config->framework->extensionLevel > 0)
@@ -2998,7 +3009,7 @@ class config
      * @access  public
      * @return  void
      */
-    public function set($key, $value)
+    public function set(string $key, $value)
     {
         helper::setMember('config', $key, $value);
     }
@@ -3027,7 +3038,7 @@ class language
      * @access  public
      * @return  void
      */
-    public function set($key, $value)
+    public function set(string $key, $value)
     {
         helper::setMember('lang', $key, $value);
     }
@@ -3041,10 +3052,10 @@ class language
      * @access  public
      * @return  void
      */
-    public function show($obj, $key)
+    public function show(object $obj, string $key)
     {
         $obj = (array)$obj;
-        echo isset($obj[$key]) ? $obj[$key] : '';
+        echo $obj[$key] ?? '';
     }
 }
 
@@ -3064,7 +3075,7 @@ class super
      * @access  public
      * @return  void
      */
-    public function __construct($scope, $tab = '')
+    public function __construct(string $scope, string $tab = '')
     {
         $this->scope = $scope;
         $this->tab   = $tab;
@@ -3080,7 +3091,7 @@ class super
      * @access  public
      * @return  void
      */
-    public function set($key, $value, $tab = '')
+    public function set(string $key, $value, string $tab = '')
     {
         if($this->scope == 'post')
         {
@@ -3121,7 +3132,7 @@ class super
      * @access public
      * @return mixed|bool     return the value of the key or false.
      */
-    public function __get($key)
+    public function __get(string $key)
     {
         if($this->scope == 'post')
         {
@@ -3228,7 +3239,6 @@ class EndResponseException extends \Exception
 class ztSessionHandler
 {
     public $sessSavePath;
-    public $tagID;
     public $sessionFile;
     public $sessionID;
     public $rawID;
@@ -3241,9 +3251,8 @@ class ztSessionHandler
      * @access public
      * @return void
      */
-    public function __construct($tagID = '')
+    public function __construct(public string $tagID = '')
     {
-        $this->tagID = $tagID;
         ini_set('session.save_handler', 'files');
         register_shutdown_function('session_write_close');
     }
@@ -3266,7 +3275,7 @@ class ztSessionHandler
      * @access public
      * @return string
      */
-    public function getSessionFile($id)
+    public function getSessionFile(string $id): string
     {
         if(!empty($this->sessionFile)) return $this->sessionFile;
 
@@ -3291,7 +3300,7 @@ class ztSessionHandler
      * @return bool
      */
     #[\ReturnTypeWillChange]
-    public function open($savePath, $sessionName)
+    public function open(string $savePath, string $sessionName): bool
     {
         $this->sessSavePath = $savePath;
         return true;
@@ -3304,7 +3313,7 @@ class ztSessionHandler
      * @return bool
      */
     #[\ReturnTypeWillChange]
-    public function close()
+    public function close(): bool
     {
         return true;
     }
@@ -3314,10 +3323,10 @@ class ztSessionHandler
      *
      * @param  string    $id
      * @access public
-     * @return bool
+     * @return string
      */
     #[\ReturnTypeWillChange]
-    public function read($id)
+    public function read(string $id): string
     {
         $sessFile = $this->getSessionFile($id);
         if(!file_exists($sessFile))
@@ -3337,7 +3346,7 @@ class ztSessionHandler
      * @return bool
      */
     #[\ReturnTypeWillChange]
-    public function write($id, $sessData)
+    public function write(string $id, string $sessData): bool
     {
         $sessFile = $this->getSessionFile($id);
         touch($sessFile);
@@ -3346,10 +3355,10 @@ class ztSessionHandler
 
         if(file_put_contents($sessFile, $sessData, LOCK_EX))
         {
-            if(strpos($sessData, 'user|') !== false)
+            if(str_contains($sessData, 'user|'))
             {
                 $rawSessContent = (string) file_get_contents($this->rawFile, false, null, 0, 1024 * 2);
-                if(strpos($rawSessContent, 'user|') === false) file_put_contents($this->rawFile, $sessData, LOCK_EX);
+                if(!str_contains($rawSessContent, 'user|')) file_put_contents($this->rawFile, $sessData, LOCK_EX);
             }
 
             return true;
@@ -3365,7 +3374,7 @@ class ztSessionHandler
      * @return bool
      */
     #[\ReturnTypeWillChange]
-    public function destroy($id)
+    public function destroy(string $id): bool
     {
         $sessFile = $this->getSessionFile($id);
         if(file_exists($sessFile)) unlink($sessFile);
@@ -3383,7 +3392,7 @@ class ztSessionHandler
      * @return bool
      */
     #[\ReturnTypeWillChange]
-    public function gc($maxlifeTime)
+    public function gc(int $maxlifeTime): bool
     {
         $time = time();
         foreach(glob("$this->sessSavePath/sess_*") as $fileName)

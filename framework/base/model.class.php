@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * ZenTaoPHP的baseModel类。
  * The baseModel class file of ZenTaoPHP framework.
@@ -135,7 +135,7 @@ class baseModel
      * @access public
      * @return void
      */
-    public function __construct($appName = '')
+    public function __construct(string $appName = '')
     {
         global $app, $config, $lang, $dbh;
         $this->app     = $app;
@@ -156,7 +156,7 @@ class baseModel
          * Load the tao file auto.
          */
         $taoClass      = $moduleName . 'Tao';
-        $selfClass     = get_class($this);
+        $selfClass     = static::class;
         $parentClasses = class_parents($this);
         if($selfClass != $taoClass && !isset($parentClasses[$taoClass])) $this->loadTao($moduleName, $this->appName);
     }
@@ -177,9 +177,9 @@ class baseModel
      * @access public
      * @return string the module name.
      */
-    public function getModuleName()
+    public function getModuleName(): string
     {
-        $className     = get_class($this);
+        $className     = static::class;
         $parentClasses = class_parents($this);
         if(count($parentClasses) > 2) $className = current(array_slice($parentClasses, -3, 1));
         if(strtolower(substr($className, -5)) == 'model') $className = strtolower(substr($className, 0, strlen($className) - 5));
@@ -213,7 +213,7 @@ class baseModel
      * @access public
      * @return object|bool 如果没有model文件，返回false，否则返回model对象。If no model file, return false, else return the model object.
      */
-    public function loadModel($moduleName, $appName = '')
+    public function loadModel(string $moduleName, string $appName = ''): object|bool
     {
         $model = $this->app->loadTarget($moduleName, $appName);
         if(!$model) return false;
@@ -233,7 +233,7 @@ class baseModel
      * @access public
      * @return object|bool 如果没有tao文件，返回false，否则返回tao对象。If no tao file, return false, else return the tao object.
      */
-    public function loadTao($moduleName, $appName = '')
+    public function loadTao(string $moduleName, string $appName = ''): object|bool
     {
         $tao = $this->app->loadTarget($moduleName, $appName, 'tao');
         if(!$tao) return false;
@@ -259,9 +259,9 @@ class baseModel
      * @param  string $extensionName
      * @param  string $moduleName
      * @access public
-     * @return void
+     * @return mixed
      */
-    public function loadExtension($extensionName, $moduleName = '')
+    public function loadExtension(string $extensionName, string $moduleName = ''): mixed
     {
         if(empty($extensionName)) return false;
         if(empty($moduleName)) $moduleName = $this->getModuleName();
@@ -270,7 +270,7 @@ class baseModel
         $extensionName = strtolower($extensionName);
 
         $type      = 'model';
-        $className = strtolower(get_class($this));
+        $className = strtolower(static::class);
         if($className == $moduleName . 'tao' || $className == 'ext' . $moduleName . 'tao') $type = 'tao';
 
         /* 设置扩展类的名字。Set the extension class name. */

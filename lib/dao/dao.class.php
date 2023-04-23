@@ -11,7 +11,7 @@
  *  May you share freely, never taking more than you give.
  */
 
-helper::import(dirname(dirname(__FILE__)) . '/base/dao/dao.class.php');
+helper::import(dirname(__FILE__, 2) . '/base/dao/dao.class.php');
 /**
  * DAO类。
  * DAO, data access object.
@@ -40,6 +40,8 @@ class dao extends baseDAO
 
         if(!is_object($data)) $data = (object)$data;
 
+        if(get_class($data) == 'form') $data = $data->data;
+
         if(isset($config->bizVersion))
         {
             $app->loadLang('workflow');
@@ -48,7 +50,7 @@ class dao extends baseDAO
             /* Check current module is buildin workflow. */
             if(isset($config->workflow->buildin->modules))
             {
-                $currentModule = $app->fetchModule ? $app->fetchModule : $app->rawModule;
+                $currentModule = $app->fetchModule ?: $app->rawModule;
                 foreach($config->workflow->buildin->modules as $appModules)
                 {
                     if(!empty($appModules->$currentModule))
@@ -118,9 +120,9 @@ class dao extends baseDAO
         {
             if(isset($data->{$field->field}))
             {
-                if($field->options && is_string($field->options) && strpos(',user,dept,', ",$field->options,") !== false)
+                if($field->options && is_string($field->options) && str_contains(',user,dept,', ",$field->options,"))
                 {
-                    if(!is_array($data->{$field->field})) $data->{$field->field} = explode(',', $data->{$field->field});
+                    if(!is_array($data->{$field->field})) $data->{$field->field} = explode(',', (string) $data->{$field->field});
                     foreach($data->{$field->field} as $key => $value)
                     {
                         $data->{$field->field}[$key] = $this->getParamRealValue($value);
@@ -137,7 +139,7 @@ class dao extends baseDAO
             }
             else
             {
-                if(strpos(',radio,checkbox,multi-select,', ",$field->control,") !== false) $data->{$field->field} = '';
+                if(str_contains(',radio,checkbox,multi-select,', ",$field->control,")) $data->{$field->field} = '';
             }
         }
 
@@ -164,20 +166,17 @@ class dao extends baseDAO
         {
             $dept    = zget($app->user, 'dept', '');
             $manager = $this->dbh->query("SELECT manager FROM " . TABLE_DEPT . " WHERE `id` = '{$dept}'")->fetch(PDO::FETCH_OBJ);
-            $this->deptManager = $manager ? trim($manager->manager, ',') : '';
+            $this->deptManager = $manager ? trim((string) $manager->manager, ',') : '';
         }
 
-        switch((string)$param)
-        {
-            case 'today'       : return date('Y-m-d');
-            case 'now'         :
-            case 'currentTime' : return date('Y-m-d H:i:s');
-            case 'actor'       :
-            case 'currentUser' : return $app->user->account;
-            case 'currentDept' : return $app->user->dept ? $app->user->dept : $param;
-            case 'deptManager' : return $this->deptManager ? $this->deptManager : $param;
-            default            : return $param;
-        }
+        return match ((string)$param) {
+            'today' => date('Y-m-d'),
+            'now', 'currentTime' => date('Y-m-d H:i:s'),
+            'actor', 'currentUser' => $app->user->account,
+            'currentDept' => $app->user->dept ?: $param,
+            'deptManager' => $this->deptManager ?: $param,
+            default => $param,
+        };
     }
 
     /**
@@ -213,7 +212,7 @@ class dao extends baseDAO
                 continue;
             }
 
-            $ruleIDs = explode(',', trim($field->rules, ',') . ',' . trim($field->layoutRules, ','));
+            $ruleIDs = explode(',', trim((string) $field->rules, ',') . ',' . trim((string) $field->layoutRules, ','));
             $ruleIDs = array_unique($ruleIDs);
 
             $fieldRules = array();

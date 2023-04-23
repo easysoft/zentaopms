@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * ZenTaoPHP的baseControl类。
  * The baseControl class file of ZenTaoPHP framework.
@@ -186,7 +186,7 @@ class baseControl
      * @access public
      * @return void
      */
-    public function __construct($moduleName = '', $methodName = '', $appName = '')
+    public function __construct(string $moduleName = '', string $methodName = '', string $appName = '')
     {
         /*
          * 将全局变量设为baseControl类的成员变量，方便baseControl的派生类调用。
@@ -198,7 +198,7 @@ class baseControl
         $this->lang     = $lang;
         $this->dbh      = $dbh;
         $this->viewType = $this->app->getViewType();
-        $this->appName  = $appName ? $appName : $this->app->getAppName();
+        $this->appName  = $appName ?: $this->app->getAppName();
 
         /**
          * 设置当前模块，读取该模块的model类。
@@ -257,7 +257,7 @@ class baseControl
          * Load the zen file auto.
          */
         $zenClass      = $this->moduleName . 'Zen';
-        $selfClass     = get_class($this);
+        $selfClass     = static::class;
         $parentClasses = class_parents($this);
         if($selfClass != $zenClass && !isset($parentClasses[$zenClass])) $this->loadZen($this->moduleName, $appName);
     }
@@ -272,9 +272,9 @@ class baseControl
      * @access  public
      * @return  void
      */
-    public function setModuleName($moduleName = '')
+    public function setModuleName(string $moduleName = '')
     {
-        $this->moduleName = $moduleName ? strtolower($moduleName) : $this->app->getModuleName();
+        $this->moduleName = $moduleName ? strtolower((string) $moduleName) : $this->app->getModuleName();
     }
 
     /**
@@ -285,7 +285,7 @@ class baseControl
      * @access  public
      * @return  void
      */
-    public function setMethodName($methodName = '')
+    public function setMethodName(string $methodName = '')
     {
         $this->methodName = $methodName ? strtolower($methodName) : $this->app->getMethodName();
     }
@@ -301,7 +301,7 @@ class baseControl
      * @access public
      * @return object|bool 如果没有model文件，返回false，否则返回model对象。If no model file, return false, else return the model object.
      */
-    public function loadModel($moduleName = '', $appName = '')
+    public function loadModel(string $moduleName = '', string $appName = ''): object|bool
     {
         $model = $this->app->loadTarget($moduleName, $appName);
 
@@ -333,7 +333,7 @@ class baseControl
      * @access public
      * @return object|bool 如果没有zen文件，返回false，否则返回zen对象。If no zen file, return false, else return the zen object.
      */
-    public function loadZen($moduleName = '', $appName = '')
+    public function loadZen(string $moduleName = '', string $appName = ''): object|bool
     {
         $zen = $this->app->loadTarget($moduleName, $appName, 'zen');
         if(!$zen) return false;
@@ -396,7 +396,7 @@ class baseControl
      * @access public
      * @return string  the view file
      */
-    public function setViewFile($moduleName, $methodName)
+    public function setViewFile(string $moduleName, string $methodName)
     {
         $moduleName = strtolower(trim($moduleName));
         $methodName = strtolower(trim($methodName));
@@ -434,13 +434,13 @@ class baseControl
      * @access public
      * @return string|bool  If extension view file exists, return the path. Else return fasle.
      */
-    public function getExtViewFile($viewFile)
+    public function getExtViewFile(string $viewFile): string|bool
     {
         /**
          * 首先找sitecode下的扩展文件，如果没有，再找ext下的扩展文件。
          * Find extViewFile in ext/_$siteCode/view first, then try ext/view/.
          */
-        $moduleName = basename(dirname(dirname(realpath($viewFile))));
+        $moduleName = basename(dirname(realpath($viewFile), 2));
         $extPath    = $this->app->getModuleExtPath('', $moduleName, 'view');
 
         $checkedOrder = array('site', 'saas', 'custom', 'vision', 'xuan', 'common');
@@ -470,7 +470,7 @@ class baseControl
      * @access public
      * @return string
      */
-    public function getCSS($moduleName, $methodName)
+    public function getCSS(string $moduleName, string $methodName): string
     {
         $moduleName = strtolower(trim($moduleName));
         $methodName = strtolower(trim($methodName));
@@ -479,7 +479,7 @@ class baseControl
         $cssExtPath = $this->app->getModuleExtPath($this->appName, $moduleName, 'css');
 
         $clientLang = $this->app->getClientLang();
-        $notCNLang  = strpos('|zh-cn|zh-tw|', "|{$clientLang}|") === false;
+        $notCNLang  = !str_contains('|zh-cn|zh-tw|', "|{$clientLang}|");
 
         $css          = '';
         $devicePrefix = $this->devicePrefix;
@@ -531,15 +531,15 @@ class baseControl
      * @access public
      * @return string
      */
-    public function getExtCSS($files)
+    public function getExtCSS(array $files): string
     {
         $clientLang = $this->app->getClientLang();
-        $notCNLang  = strpos('|zh-cn|zh-tw|', "|{$clientLang}|") === false;
+        $notCNLang  = !str_contains('|zh-cn|zh-tw|', "|{$clientLang}|");
 
         $filePairs = array();
         foreach($files as $cssFile)
         {
-            $fileName             = basename($cssFile);
+            $fileName             = basename((string) $cssFile);
             $filePairs[$fileName] = $cssFile;
         }
 
@@ -551,11 +551,11 @@ class baseControl
             {
                 /* Method extension css file. like module/story/ext/css/create/effort.css. */
                 $css .= file_get_contents($cssFile);
-                list($code) = explode('.', $fileName);
+                [$code] = explode('.', $fileName);
             }
             else
             {
-                list($code) = explode('.', $fileName);
+                [$code] = explode('.', $fileName);
                 if(isset($usedCodes[$code])) continue;
             }
 
@@ -584,7 +584,7 @@ class baseControl
      * @access public
      * @return string
      */
-    public function getJS($moduleName, $methodName)
+    public function getJS(string $moduleName, string $methodName): string
     {
         $moduleName = strtolower(trim($moduleName));
         $methodName = strtolower(trim($methodName));
@@ -627,7 +627,7 @@ class baseControl
      * @access  public
      * @return  void
      */
-    public function assign($name, $value)
+    public function assign(string $name, $value)
     {
         $this->view->$name = $value;
     }
@@ -653,7 +653,7 @@ class baseControl
      * @access public
      * @return string the parsed result.
      */
-    public function parse($moduleName = '', $methodName = '')
+    public function parse(string $moduleName = '', string $methodName = ''): string
     {
         if(empty($moduleName)) $moduleName = $this->moduleName;
         if(empty($methodName)) $methodName = $this->methodName;
@@ -673,8 +673,9 @@ class baseControl
      * @access public
      * @return void
      */
-    public function parseJSON($moduleName, $methodName)
+    public function parseJSON(string $moduleName, string $methodName)
     {
+        $output = array();
         unset($this->view->app);
         unset($this->view->config);
         unset($this->view->lang);
@@ -701,7 +702,7 @@ class baseControl
      * @access public
      * @return void
      */
-    public function parseDefault($moduleName, $methodName)
+    public function parseDefault(string $moduleName, string $methodName)
     {
         /**
          * 设置视图文件。(PHP7有一个bug，不能直接$viewFile = $this->setViewFile())。
@@ -753,13 +754,13 @@ class baseControl
      * Get the output of one module's one method as a string, thus in one module's method, can fetch other module's content.
      * If the module name is empty, then use the current module and method. If set, use the user defined module and method.
      *
-     * @param  string $moduleName module name.
-     * @param  string $methodName method name.
-     * @param  array  $params     params.
+     * @param  string        $moduleName module name.
+     * @param  string        $methodName method name.
+     * @param  array|string  $params     params.
      * @access  public
      * @return  string  the parsed html.
      */
-    public function fetch($moduleName = '', $methodName = '', $params = array(), $appName = '')
+    public function fetch(string $moduleName = '', string $methodName = '', array|string $params = array(), string $appName = '')
     {
         /**
          * 如果模块名为空，则调用该模块、该方法。
@@ -811,28 +812,28 @@ class baseControl
 
             if(!empty($actionExtPath['common']))
             {
-                $commonActionExtFile = $actionExtPath['common'] . strtolower($methodName) . '.php';
+                $commonActionExtFile = $actionExtPath['common'] . strtolower((string) $methodName) . '.php';
                 if(file_exists($commonActionExtFile)) $file2Included = $commonActionExtFile;
             }
 
             if(!empty($actionExtPath['xuan']))
             {
-                $commonActionExtFile = $actionExtPath['xuan'] . strtolower($methodName) . '.php';
+                $commonActionExtFile = $actionExtPath['xuan'] . strtolower((string) $methodName) . '.php';
                 if(file_exists($commonActionExtFile)) $file2Included = $commonActionExtFile;
             }
 
             if(!empty($actionExtPath['vision']))
             {
-                $commonActionExtFile = $actionExtPath['vision'] . strtolower($methodName) . '.php';
+                $commonActionExtFile = $actionExtPath['vision'] . strtolower((string) $methodName) . '.php';
                 if(file_exists($commonActionExtFile)) $file2Included = $commonActionExtFile;
             }
 
-            $commonActionExtFile = $actionExtPath['custom'] . strtolower($methodName) . '.php';
+            $commonActionExtFile = $actionExtPath['custom'] . strtolower((string) $methodName) . '.php';
             if(file_exists($commonActionExtFile)) $file2Included = $commonActionExtFile;
 
             if(!empty($actionExtPath['saas']))
             {
-                $commonActionExtFile = $actionExtPath['saas'] . strtolower($methodName) . '.php';
+                $commonActionExtFile = $actionExtPath['saas'] . strtolower((string) $methodName) . '.php';
                 if(file_exists($commonActionExtFile)) $file2Included = $commonActionExtFile;
             }
 
@@ -842,12 +843,12 @@ class baseControl
                  * 设置站点扩展。
                  * every site has it's extension.
                  */
-                $siteActionExtFile = $actionExtPath['site'] . strtolower($methodName) . '.php';
+                $siteActionExtFile = $actionExtPath['site'] . strtolower((string) $methodName) . '.php';
                 $file2Included     = file_exists($siteActionExtFile) ? $siteActionExtFile : $file2Included;
             }
 
             /* If class name is my{$moduleName} then set classNameToFetch for include this file. */
-            if(strpos($file2Included, DS . 'ext' . DS) !== false and stripos(file_get_contents($file2Included), "class my{$moduleName} extends $moduleName") !== false) $classNameToFetch = "my{$moduleName}";
+            if(str_contains($file2Included, DS . 'ext' . DS) and stripos(file_get_contents($file2Included), "class my{$moduleName} extends $moduleName") !== false) $classNameToFetch = "my{$moduleName}";
         }
 
         /**
@@ -912,7 +913,7 @@ class baseControl
      * @access  public
      * @return  void
      */
-    public function display($moduleName = '', $methodName = '')
+    public function display(string $moduleName = '', string $methodName = '')
     {
         if(empty($this->output)) $this->parse($moduleName, $methodName);
         echo $this->output;
@@ -922,12 +923,11 @@ class baseControl
      * 直接输出data数据，通常用于ajax请求中。
      * Send data directly, for ajax requests.
      *
-     * @param  mixed  $data
      * @param  string $type
      * @access public
      * @return void
      */
-    public function send($data, $type = 'json')
+    public function send($data, string $type = 'json')
     {
         if($type != 'json') die();
 
@@ -970,9 +970,9 @@ class baseControl
         if(isset($data['result']) and $data['result'] == 'success')
         {
             if(!empty($data['message'])) echo js::alert($data['message']);
-            $locate = isset($data['locate']) ? $data['locate'] : (isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '');
+            $locate = $data['locate'] ?? $_SERVER['HTTP_REFERER'] ?? '';
             if(!empty($locate)) die(js::locate($locate));
-            die(isset($data['message']) ? $data['message'] : 'success');
+            die($data['message'] ?? 'success');
         }
 
         if(isset($data['result']) and $data['result'] == 'fail')
@@ -982,9 +982,9 @@ class baseControl
                 if(is_string($data['message']))
                 {
                     echo js::alert($data['message']);
-                    $locate = isset($data['locate']) ? $data['locate'] : (isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '');
+                    $locate = $data['locate'] ?? $_SERVER['HTTP_REFERER'] ?? '';
                     if (!empty($locate)) die(js::locate($locate));
-                    die(isset($data['message']) ? $data['message'] : 'fail');
+                    die($data['message'] ?? 'fail');
                 }
 
                 $message = json_decode(json_encode($data['message']), true);
@@ -998,7 +998,6 @@ class baseControl
     /**
      * return error json
      *
-     * @param  mixed $error
      * @return void
      * @author thanatos thanatos915@163.com
      */
@@ -1014,7 +1013,7 @@ class baseControl
      * @return void
      * @author thanatos thanatos915@163.com
      */
-    public function sendSuccess($data)
+    public function sendSuccess(array $data)
     {
         $data['result'] = 'success';
         if(empty($data['message'])) $data['message'] = $this->lang->saveSuccess;
@@ -1029,11 +1028,11 @@ class baseControl
      * @param  string       $methodName method name
      * @param  string|array $vars       the params passed, can be array(key=>value) or key1=value1&key2=value2
      * @param  string       $viewType   the view type
-     * @param  string       $onlybody   remove header and footer or not in iframe
+     * @param  bool         $onlybody   remove header and footer or not in iframe
      * @access  public
      * @return  string the link string.
      */
-    public function createLink($moduleName, $methodName = 'index', $vars = array(), $viewType = '', $onlybody = false)
+    public function createLink(string $moduleName, string $methodName = 'index', string|array $vars = array(), string $viewType = '', bool $onlybody = false): string
     {
         if(empty($moduleName)) $moduleName = $this->moduleName;
         return helper::createLink($moduleName, $methodName, $vars, $viewType, $onlybody);
@@ -1046,10 +1045,11 @@ class baseControl
      * @param  string       $methodName method name
      * @param  string|array $vars       the params passed, can be array(key=>value) or key1=value1&key2=value2
      * @param  string       $viewType   the view type
+     * @param  bool         $onlybody   remove header and footer or not in iframe
      * @access  public
      * @return  string  the link string.
      */
-    public function inlink($methodName = 'index', $vars = array(), $viewType = '', $onlybody = false)
+    public function inlink(string $methodName = 'index', string|array $vars = array(), string $viewType = '', bool $onlybody = false)
     {
         return helper::createLink($this->moduleName, $methodName, $vars, $viewType, $onlybody);
     }

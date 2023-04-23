@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * ZenTaoAPI的helper类。
  * The helper class file of ZenTao API.
@@ -10,10 +10,10 @@
  *  May you find forgiveness for yourself and forgive others.
  *  May you share freely, never taking more than you give.
  */
-include dirname(dirname(__FILE__)) . '/base/helper.class.php';
+include dirname(__FILE__, 2) . '/base/helper.class.php';
 class helper extends baseHelper
 {
-    public static function getViewType($source = false)
+    public static function getViewType(bool $source = false)
     {
         global $config, $app;
         if($config->requestType != 'GET')
@@ -21,10 +21,10 @@ class helper extends baseHelper
             $pathInfo = $app->getPathInfo();
             if(!empty($pathInfo))
             {
-                $dotPos = strrpos($pathInfo, '.');
+                $dotPos = strrpos((string) $pathInfo, '.');
                 if($dotPos)
                 {
-                    $viewType = substr($pathInfo, $dotPos + 1);
+                    $viewType = substr((string) $pathInfo, $dotPos + 1);
                 }
                 else
                 {
@@ -46,8 +46,8 @@ class helper extends baseHelper
         }
         if($source and isset($viewType)) return $viewType;
 
-        if(isset($viewType) and strpos($config->views, ',' . $viewType . ',') === false) $viewType = $config->default->view;
-        return isset($viewType) ? $viewType : $config->default->view;
+        if(isset($viewType) and !str_contains((string) $config->views, ',' . $viewType . ',')) $viewType = $config->default->view;
+        return $viewType ?? $config->default->view;
     }
 
     /**
@@ -58,19 +58,19 @@ class helper extends baseHelper
      * @access public
      * @return bool
      */
-    public static function hasFeature($feature)
+    public static function hasFeature(string $feature)
     {
         global $config;
 
-        if(strpos($feature, '_') !== false)
+        if(str_contains($feature, '_'))
         {
             $code = explode('_', $feature);
             $code = $code[0] . ucfirst($code[1]);
-            return strpos(",$config->disabledFeatures,", ",{$code},") === false;
+            return !str_contains(",$config->disabledFeatures,", ",{$code},");
         }
         else
         {
-            if($feature == 'product' or $feature == 'scrum' or $feature == 'waterfall') return strpos(",$config->disabledFeatures,", ",{$feature},") === false;
+            if($feature == 'product' or $feature == 'scrum' or $feature == 'waterfall') return !str_contains(",$config->disabledFeatures,", ",{$feature},");
 
             $hasFeature = false;
             foreach($config->featureGroup as $group => $modules)
@@ -90,7 +90,7 @@ class helper extends baseHelper
                     }
                 }
             }
-            return $hasFeature && strpos(",$config->disabledFeatures,", ",{$feature},") === false;
+            return $hasFeature && !str_contains(",$config->disabledFeatures,", ",{$feature},");
         }
     }
 
@@ -103,13 +103,13 @@ class helper extends baseHelper
      * @access public
      * @return string
      */
-    public static function jsonEncode4Parse($data, $options = 0)
+    public static function jsonEncode4Parse(array $data, int $options = 0)
     {
         $json = json_encode($data);
         if($options) $json = str_replace(array("'", '"'), array('\u0027', '\u0022'), $json);
 
-        $escapers     = array("\\",  "/",   "\"", "'", "\n",  "\r",  "\t", "\x08", "\x0c", "\\\\u");
-        $replacements = array("\\\\", "\\/", "\\\"", "\'", "\\n", "\\r", "\\t",  "\\f",  "\\b", "\\u");
+        $escapers     = array("\\", "/", "\"", "'", "\n", "\r", "\t", "\x08", "\x0c", "\\\\u");
+        $replacements = array("\\\\", "\\/", "\\\"", "\'", "\\n", "\\r", "\\t", "\\f", "\\b", "\\u");
         return str_replace($escapers, $replacements, $json);
     }
 
@@ -123,7 +123,7 @@ class helper extends baseHelper
      * @access public
      * @return string
      */
-    public static function convertEncoding($string, $fromEncoding, $toEncoding = 'utf-8')
+    public static function convertEncoding(string $string, string $fromEncoding, string $toEncoding = 'utf-8')
     {
         $toEncoding = str_replace('utf8', 'utf-8', $toEncoding);
         if(function_exists('mb_convert_encoding'))
@@ -133,7 +133,7 @@ class helper extends baseHelper
             if($position !== false) $toEncoding = substr($toEncoding, 0, $position);
 
             /* Check string encoding. */
-            $encodings = array_merge(array('GB2312','GBK','BIG5'), mb_list_encodings());
+            $encodings = array_merge(array('GB2312', 'GBK', 'BIG5'), mb_list_encodings());
             $encoding  = strtolower(mb_detect_encoding($string, $encodings));
             if($encoding == $toEncoding) return $string;
             return mb_convert_encoding($string, $toEncoding, $encoding);
@@ -155,10 +155,8 @@ class helper extends baseHelper
      *
      * @param string $begin
      * @param string $end
-     *
-     * @return bool|float
      */
-    public static function workDays($begin, $end)
+    public static function workDays(string $begin, string $end): bool|float
     {
         $begin = strtotime($begin);
         $end   = strtotime($end);
@@ -180,7 +178,7 @@ class helper extends baseHelper
      * @access public
      * @return string
      */
-    public static function unify($string, $to = ',')
+    public static function unify(string $string, string $to = ',')
     {
         $labels = array('_', '、', ' ', '-', '?', '@', '&', '%', '~', '`', '+', '*', '/', '\\', '，', '。');
         $string = str_replace($labels, $to, $string);
@@ -190,27 +188,29 @@ class helper extends baseHelper
     /**
      * Create url of issue.
      *
-     * @param  string $module
-     * @param  string $method
-     * @param  string $vars
+     * @param  string       $module
+     * @param  string       $method
+     * @param  string|array $vars
+     * @param  string       $viewType
+     * @param  bool         $onlyBody
      * @static
      * @access public
      * @return string
      */
-    static public function createLink($moduleName, $methodName = 'index', $vars = '', $viewType = 'json', $onlyBody = false)
+    static public function createLink(string $moduleName, string $methodName = 'index', string|array $vars = '', string $viewType = 'json', bool $onlyBody = false)
     {
         global $config;
         $link = parent::createLink($moduleName, $methodName, $vars, $viewType);
-        $pos  = strpos($link, '.php');
+        $pos  = strpos((string) $link, '.php');
 
         /* The requestTypes are: GET, PATH_INFO2, PATH_INFO */
         if($config->requestType == 'GET')
         {
-            $link = $config->webRoot . 'index' . substr($link, $pos);
+            $link = $config->webRoot . 'index' . substr((string) $link, $pos);
         }
         elseif($config->requestType == 'PATH_INFO2')
         {
-            $link = substr($link, $pos + 4);
+            $link = substr((string) $link, $pos + 4);
         }
         return common::getSysURL() . $link;
     }
@@ -221,9 +221,9 @@ class helper extends baseHelper
  * Check exist onlybody param.
  *
  * @access public
- * @return void
+ * @return bool
  */
-function isonlybody()
+function isonlybody(): bool
 {
     return helper::inOnlyBodyMode();
 }
@@ -231,12 +231,12 @@ function isonlybody()
 /**
  * Format time.
  *
- * @param  int    $time
+ * @param  string $time
  * @param  string $format
  * @access public
- * @return void
+ * @return string
  */
-function formatTime($time, $format = '')
+function formatTime(string $time, string $format = '')
 {
     $time = str_replace('0000-00-00', '', $time);
     $time = str_replace('00:00:00', '', $time);
@@ -248,11 +248,11 @@ function formatTime($time, $format = '')
 /**
  * Fix for session error.
  *
- * @param  int    $class
+ * @param  string    $class
  * @access protected
  * @return void
  */
-function autoloader($class)
+function autoloader(string $class)
 {
     if(!class_exists($class))
     {
