@@ -70,6 +70,12 @@ $lang->project->allProjects         = "所有{$lang->projectCommon}";
 $lang->project->ignore              = '忽略';
 $lang->project->disableExecution    = "不启用{$lang->executionCommon}的{$lang->projectCommon}";
 $lang->project->selectProduct       = "选择{$lang->productCommon}";
+$lang->project->manageRepo          = '关联代码库';
+$lang->project->linkedRepo          = '已关联代码库';
+$lang->project->unlinkedRepo        = '未关联代码库';
+$lang->project->executionCount      = '执行数';
+$lang->project->storyCount          = '需求规模';
+$lang->project->invested            = '已投入';
 
 /* Fields. */
 $lang->project->common             = "{$lang->projectCommon}";
@@ -179,6 +185,7 @@ $lang->project->branch             = '平台/分支';
 $lang->project->plan               = '所属计划';
 $lang->project->createKanban       = '添加看板';
 $lang->project->kanban             = '项目看板';
+$lang->project->moreActions        = '更多操作';
 
 /* Project Kanban. */
 $lang->project->projectTypeList = array();
@@ -226,6 +233,14 @@ $lang->project->summary                = "本页共 <strong>%s</strong> 个{$lan
 $lang->project->allSummary             = "本页共 <strong>%s</strong> 个{$lang->projectCommon}，未开始 <strong>%s</strong>，进行中 <strong>%s</strong>，已挂起 <strong>%s</strong>，已关闭 <strong>%s</strong> 。";
 $lang->project->checkedSummary         = "选中 <strong>%total%</strong> 个{$lang->projectCommon}。";
 $lang->project->checkedAllSummary      = "选中 <strong>%total%</strong> 个{$lang->projectCommon}，未开始 <strong>%wait%</strong>，进行中 <strong>%doing%</strong>，已挂起 <strong>%suspended%</strong>，已关闭 <strong>%closed%</strong> 。";
+
+$lang->project->tip = new stdclass();
+$lang->project->tip->closed     = '该项目已是关闭状态，无须关闭。';
+$lang->project->tip->notSuspend = '该项目已关闭，不可进行挂起操作。';
+$lang->project->tip->suspended  = '该项目已是挂起状态，无须挂起。';
+$lang->project->tip->actived    = '该项目已是激活状态，无须激活。';
+$lang->project->tip->group      = '该项目是看板项目，无法进行项目权限分组。';
+$lang->project->tip->whitelist  = '该项目是公开项目，无须维护白名单。';
 
 $lang->project->tenThousand    = '万';
 $lang->project->hundredMillion = '亿';
@@ -277,8 +292,9 @@ $lang->project->featureBar['browse']['all']       = '全部';
 $lang->project->featureBar['browse']['undone']    = '未完成';
 $lang->project->featureBar['browse']['wait']      = '未开始';
 $lang->project->featureBar['browse']['doing']     = '进行中';
-$lang->project->featureBar['browse']['suspended'] = '已挂起';
-$lang->project->featureBar['browse']['closed']    = '已关闭';
+$lang->project->featureBar['browse']['exceeded']  = '已逾期';
+$lang->project->featureBar['browse']['risky']     = '有风险';
+$lang->project->featureBar['browse']['more']      = '更多';
 
 $lang->project->featureBar['index']['all']       = '全部';
 $lang->project->featureBar['index']['undone']    = '未完成';
@@ -425,3 +441,17 @@ $lang->project->featureBar['dynamic']['thisWeek']  = '本周';
 $lang->project->featureBar['dynamic']['lastWeek']  = '上周';
 $lang->project->featureBar['dynamic']['thisMonth'] = '本月';
 $lang->project->featureBar['dynamic']['lastMonth'] = '上月';
+
+$lang->project->moreSelects = array();
+$lang->project->moreSelects['suspended'] = '已挂起';
+$lang->project->moreSelects['closed']    = '已关闭';
+
+$lang->project->manDay            = '人天';
+$lang->project->day               = '天';
+$lang->project->newProduct        = '新产品';
+$lang->project->associatePlan     = '关联计划';
+$lang->project->editorPlaceholder = '可以在编辑器直接贴图。快捷键：Command C+V';
+$lang->project->tenThousandYuan   = '万元';
+$lang->project->planDate          = '计划日期';
+$lang->project->inputProjectName  = '输入项目名称';
+$lang->project->inputProjectCode  = '输入项目代号';

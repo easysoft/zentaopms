@@ -393,19 +393,20 @@ class baseControl
      *
      * @param  string $moduleName module name
      * @param  string $methodName method name
+     * @param  string $viewDir
      * @access public
      * @return string  the view file
      */
-    public function setViewFile($moduleName, $methodName)
+    public function setViewFile($moduleName, $methodName, $viewDir = 'view')
     {
         $moduleName = strtolower(trim($moduleName));
         $methodName = strtolower(trim($methodName));
 
         $modulePath  = $this->app->getModulePath($this->appName, $moduleName);
-        $viewExtPath = $this->app->getModuleExtPath($this->appName, $moduleName, 'view');
+        $viewExtPath = $this->app->getModuleExtPath($this->appName, $moduleName, $viewDir);
 
         $viewType     = $this->viewType == 'mhtml' ? 'html' : $this->viewType;
-        $mainViewFile = $modulePath . 'view' . DS . $this->devicePrefix . $methodName . '.' . $viewType . '.php';
+        $mainViewFile = $modulePath . $viewDir . DS . $this->devicePrefix . $methodName . '.' . $viewType . '.php';
         $viewFile     = $mainViewFile;
 
         if(!empty($viewExtPath))
@@ -470,7 +471,7 @@ class baseControl
      * @access public
      * @return string
      */
-    public function getCSS($moduleName, $methodName)
+    public function getCSS($moduleName, $methodName, $suffix = '')
     {
         $moduleName = strtolower(trim($moduleName));
         $methodName = strtolower(trim($methodName));
@@ -486,21 +487,21 @@ class baseControl
         $mainCssPath  = $modulePath . 'css' . DS;
 
         /* Common css file. like module/story/css/common.css. */
-        $mainCssFile = $mainCssPath . $devicePrefix . 'common.css';
+        $mainCssFile = $mainCssPath . $devicePrefix . "common{$suffix}.css";
         if(is_file($mainCssFile)) $css .= file_get_contents($mainCssFile);
 
         /* Common css file with lang. like module/story/css/common.en.css. */
-        $mainCssLangFile = $mainCssPath . $devicePrefix . "common.{$clientLang}.css";
+        $mainCssLangFile = $mainCssPath . $devicePrefix . "common.{$clientLang}{$suffix}.css";
         if(!file_exists($mainCssLangFile) and $notCNLang) $mainCssLangFile = $mainCssPath . $devicePrefix . "common.en.css";
         if(is_file($mainCssLangFile)) $css .= file_get_contents($mainCssLangFile);
 
         /* Method css file. like module/story/css/create.css. */
-        $methodCssFile = $mainCssPath . $devicePrefix . $methodName . '.css';
+        $methodCssFile = $mainCssPath . $devicePrefix . $methodName . "$suffix.css";
         if(is_file($methodCssFile)) $css .= file_get_contents($methodCssFile);
 
         /* Method css file with lang. like module/story/css/create.en.css. */
-        $methodCssLangFile = $mainCssPath . $devicePrefix . "{$methodName}.{$clientLang}.css";
-        if(!file_exists($methodCssLangFile) and $notCNLang) $methodCssLangFile = $mainCssPath . $devicePrefix . "{$methodName}.en.css";
+        $methodCssLangFile = $mainCssPath . $devicePrefix . "{$methodName}{$suffix}.{$clientLang}.css";
+        if(!file_exists($methodCssLangFile) and $notCNLang) $methodCssLangFile = $mainCssPath . $devicePrefix . "{$methodName}{$suffix}.en.css";
         if(is_file($methodCssLangFile)) $css .= file_get_contents($methodCssLangFile);
 
         if(!empty($cssExtPath))
@@ -584,7 +585,7 @@ class baseControl
      * @access public
      * @return string
      */
-    public function getJS($moduleName, $methodName)
+    public function getJS($moduleName, $methodName, $suffix = '')
     {
         $moduleName = strtolower(trim($moduleName));
         $methodName = strtolower(trim($methodName));
@@ -593,8 +594,8 @@ class baseControl
         $jsExtPath  = $this->app->getModuleExtPath($this->appName, $moduleName, 'js');
 
         $js           = '';
-        $mainJsFile   = $modulePath . 'js' . DS . $this->devicePrefix . 'common.js';
-        $methodJsFile = $modulePath . 'js' . DS . $this->devicePrefix . $methodName . '.js';
+        $mainJsFile   = $modulePath . 'js' . DS . $this->devicePrefix . "common{$suffix}.js";
+        $methodJsFile = $modulePath . 'js' . DS . $this->devicePrefix . $methodName . $suffix . '.js';
         if(file_exists($mainJsFile)) $js .= file_get_contents($mainJsFile);
         if(is_file($methodJsFile)) $js .= file_get_contents($methodJsFile);
 
@@ -914,8 +915,94 @@ class baseControl
      */
     public function display($moduleName = '', $methodName = '')
     {
+        if($this->config->debug && $this->viewType === 'html' && (!isset($_GET['zin']) || $_GET['zin'] != '0'))
+        {
+            if(empty($moduleName)) $moduleName = $this->moduleName;
+            if(empty($methodName)) $methodName = $this->methodName;
+            $modulePath   = $this->app->getModulePath($this->appName, $moduleName);
+            $viewType     = $this->viewType == 'mhtml' ? 'html' : $this->viewType;
+            $mainViewFile = $modulePath . 'ui' . DS . $this->devicePrefix . $methodName . '.' . $viewType . '.php';
+            if(file_exists($mainViewFile)) return $this->render($moduleName, $methodName);
+        }
+
         if(empty($this->output)) $this->parse($moduleName, $methodName);
         echo $this->output;
+    }
+
+    /**
+     * 向浏览器输出内容。
+     * Print the content of the view.
+     *
+     * @param  string $moduleName module name
+     * @param  string $methodName method name
+     * @access  public
+     * @return  void
+     */
+    public function render($moduleName = '', $methodName = '')
+    {
+        if(isset($_GET['zin']) && $_GET['zin'] == '0')
+        {
+            $this->display($moduleName, $methodName);
+            return;
+        }
+
+        define('ZIN', true);
+
+        if(empty($moduleName)) $moduleName = $this->moduleName;
+        if(empty($methodName)) $methodName = $this->methodName;
+
+        include $this->app->getBasePath() . 'zin' . DS . 'zin.php';
+
+        /**
+         * 设置视图文件。(PHP7有一个bug，不能直接$viewFile = $this->setViewFile())。
+         * Set viewFile. (Can't assign $viewFile = $this->setViewFile() directly because one php7's bug.)
+         */
+        $results = $this->setViewFile($moduleName, $methodName, 'ui');
+
+        $viewFile = $results;
+        if(is_array($results)) extract($results);
+
+        /**
+         * 获得当前页面的CSS和JS。
+         * Get css and js codes for current method.
+         */
+        $css = $this->getCSS($moduleName, $methodName, '.ui');
+        $js  = $this->getJS($moduleName, $methodName, '.ui');
+        if($css) $this->view->pageCSS = $css;
+        if($js) $this->view->pageJS = $js;
+
+        /**
+         * 切换到视图文件所在的目录，以保证视图文件里面的include语句能够正常运行。
+         * Change the dir to the view file to keep the relative paths work.
+         */
+        $currentPWD = getcwd();
+        chdir(dirname($viewFile));
+
+        /**
+         * Set zin context data
+         */
+        \zin\zin::$data = (array)$this->view;
+
+        /**
+         * 使用extract安定ob方法渲染$viewFile里面的代码。
+         * Use extract and ob functions to eval the codes in $viewFile.
+         */
+        extract(\zin\zin::$data);
+
+        include $viewFile;
+        /*
+        extract((array)$this->view);
+        ob_start();
+        if(isset($hookFiles)) foreach($hookFiles as $hookFile) if(file_exists($hookFile)) include $hookFile;
+        $this->output .= ob_get_contents();
+        ob_end_clean();
+         */
+
+        /**
+         * 渲染完毕后，再切换回之前的路径。
+         * At the end, chang the dir to the previous.
+         */
+        chdir($currentPWD);
     }
 
     /**

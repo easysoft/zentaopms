@@ -70,6 +70,13 @@ $lang->project->allProjects         = "All {$lang->projectCommon}s";
 $lang->project->ignore              = 'Ignore';
 $lang->project->disableExecution    = "{$lang->projectCommon} of disable {$lang->executionCommon}";
 $lang->project->selectProduct       = "Select {$lang->productCommon}";
+$lang->project->ignore              = 'Ignorer';
+$lang->project->manageRepo          = 'Manage Repo';
+$lang->project->linkedRepo          = 'Link Repo';
+$lang->project->unlinkedRepo        = 'Unlink Repo';
+$lang->project->executionCount      = 'Total Executions';
+$lang->project->storyCount          = 'Story Points';
+$lang->project->invested            = 'Invested';
 
 /* Fields. */
 $lang->project->common             = $lang->projectCommon;
@@ -228,6 +235,14 @@ $lang->project->checkedSummary         = 'Seleted: <strong>%total%</strong>.';
 $lang->project->checkedAllSummary      = 'Seleted: <strong>%total%</strong>, Wait: <strong>%wait%</strong>, Doing: <strong>%doing%</strong>, Suspended: <strong>%suspended%</strong>, Closed: <strong>%closed%</strong>.';
 
 $lang->project->tenThousand    = 'Ten Thousand';
+$lang->project->tip = new stdclass();
+$lang->project->tip->closed     = 'The project has been closed. Re-close is not available.';
+$lang->project->tip->notSuspend = 'The project has been closed. Suspend is not available.';
+$lang->project->tip->suspended  = 'The project has been suspended. Re-suspend is not available.';
+$lang->project->tip->actived    = 'The project has been activated. Re-activated is not available.';
+$lang->project->tip->group      = "It's a Kanban project. Editing privilege group is not available.";
+$lang->project->tip->whitelist  = "It's a public project with open permissions. No need to edit whitelists.";
+
 $lang->project->hundredMillion = 'Hundred Million';
 
 $lang->project->unitList['CNY'] = 'RMB';
@@ -425,3 +440,9 @@ $lang->project->featureBar['dynamic']['thisWeek']  = 'This Week';
 $lang->project->featureBar['dynamic']['lastWeek']  = 'Last Week';
 $lang->project->featureBar['dynamic']['thisMonth'] = 'This Month';
 $lang->project->featureBar['dynamic']['lastMonth'] = 'Last Month';
+
+$lang->project->moreSelects = array();
+$lang->project->moreSelects['suspended'] = 'Suspendues';
+$lang->project->moreSelects['closed']    = 'Fermées';
+
+$lang->project->manDay = 'Man Day';

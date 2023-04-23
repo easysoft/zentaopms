@@ -1,0 +1,41 @@
+#menu {position: fixed; left: 0; top: 0; bottom: 0; background: var(--zt-menu-bg, var(--color-slate-800)); width: var(--zt-menu-width, 96px); color: rgba(var(--color-canvas-rgb), .8); transition: width .2s; user-select: none;}
+#menu .nav {flex-direction: column; align-items: stretch;}
+#menu .nav > li {display: block; height: var(--zt-menu-height, 38px); padding: 4px 12px; transition: padding .2s;}
+#menu .nav > .divider {background: var(--color-canvas); opacity: .12; height: 1px; padding: 0; margin: 6px 12px;}
+#menu .nav > li > a {color: inherit; display: flex; align-items: center; gap: 8px; padding: 0 6px; height: calc(var(--zt-menu-height, 38px) - 8px); transition: color .2s, background-color .2s; border-radius: var(--radius-md);}
+#menu .nav > li > a.active,
+#menu .nav > li > a:hover {background: var(--zt-menu-hover-bg, var(--color-primary-500)); color: var(--color-canvas);}
+#menu .nav > li > a > .text {white-space: nowrap;}
+
+#menuNav {padding: 6px 0; position: absolute; left: 0; right: 0; top: 0; bottom: 46px;}
+#menuFooter {position: absolute; bottom: 6px; left: 0; right: 0;}
+
+#menuMoreNav {display: none;}
+.show-more-nav #menuMoreNav {display: block;}
+
+.hide-menu #menu {width: var(--zt-menu-fold-width, 40px);}
+.hide-menu #menu .nav > li {padding: 4px}
+.hide-menu #menu .nav > .divider {padding: 0; margin: 6px}
+.hide-menu #menu .nav > li > a {justify-content: center;}
+.hide-menu #menu .nav > li > a > .text {display: none;}
+.hide-menu #menu .menu-toggle > .icon {transform: rotate(180deg);}
+
+#apps {position: fixed; left: var(--zt-menu-width, 96px); top: 0; bottom: var(--zt-apps-bar-height, 40px); right: 0; background-color: var(--zt-page-bg); transition: left .2s;}
+.hide-menu #apps {left: var(--zt-menu-fold-width, 40px);}
+
+#appsBar {position: fixed; left: var(--zt-menu-width, 96px); bottom: 0; right: 0; height: var(--zt-apps-bar-height, 40px); background: var(--zt-apps-bar-bg, var(--color-canvas)); box-shadow: 0 -2px 12px rgba(0,0,0,.02); transition: left .2s;}
+.hide-menu #appsBar {left: var(--zt-menu-fold-width, 40px);}
+#appTabs {position: absolute; left: 4px; right: 280px; top: 0; bottom: 0; user-select: none;}
+#appTabs > li > a {border-radius: var(--radius-md); opacity: .7;}
+#appTabs > li + li::before {display: block; content: ' '; position: absolute; left: 0; top: 8px; bottom: 8px; width: 1px; background: var(--color-inverse); opacity: .12;}
+#appTabs > li > a.active {color: inherit; opacity: 1; color: var(--color-primary-500)}
+#appsToolbar {position: absolute; right: 4px; width: 280px; top: 0; bottom: 0; display: flex; justify-content: flex-end;}
+#appsToolbar > .btn {color: inherit}
+#appsToolbar > .btn-zentao > .icon {color: var(--color-primary-400)}
+
+.app-container {position: absolute; left: 0; top: 0; right: 0; bottom: 0; overflow: hidden; transition-duration: .3s; background: var(--zt-page-bg) linear-gradient(180deg, var(--zt-header-bg) 0, var(--zt-header-bg) 48px, rgba(255,0,0,0) 48px) no-repeat;}
+.app-container.loading:before {background-color: rgba(0,0,0,.1);}
+.app-container.loading:before, .ap p-container.loading::after {transition-delay: 3s;}
+.app-container.loading.open-from-hidden {transition-delay: 0s;}
+.app-container.loading.open-from-hidden > iframe {opacity: 0;}
+.app-container > iframe {width: 100%; height: 100%; background: inherit;}

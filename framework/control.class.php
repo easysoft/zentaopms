@@ -249,19 +249,20 @@ class control extends baseControl
      *
      * @param  string   $moduleName    module name
      * @param  string   $methodName    method name
+     * @param  string   $viewDir
      * @access public
      * @return string  the view file
      */
-    public function setViewFile($moduleName, $methodName)
+    public function setViewFile($moduleName, $methodName, $viewDir = 'view')
     {
         $moduleName = strtolower(trim($moduleName));
         $methodName = strtolower(trim($methodName));
 
         $modulePath  = $this->app->getModulePath($this->appName, $moduleName);
-        $viewExtPath = $this->app->getModuleExtPath($this->appName, $moduleName, 'view');
+        $viewExtPath = $this->app->getModuleExtPath($this->appName, $moduleName, $viewDir);
 
         $viewType     = ($this->viewType == 'mhtml' or $this->viewType == 'xhtml') ? 'html' : $this->viewType;
-        $mainViewFile = $modulePath . 'view' . DS . $this->devicePrefix . $methodName . '.' . $viewType . '.php';
+        $mainViewFile = $modulePath . $viewDir . DS . $this->devicePrefix . $methodName . '.' . $viewType . '.php';
 
         /* If the main view file doesn't exist, set the device prefix to empty and reset the main view file. */
         if(!file_exists($mainViewFile) and $this->app->clientDevice != 'mobile')

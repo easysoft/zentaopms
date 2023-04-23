@@ -1130,6 +1130,41 @@ class productModel extends model
     }
 
     /**
+     * Build form fields.
+     *
+     * @param  array $fields
+     * @param  object $project
+     * @access public
+     * @return void
+     */
+    public function buildFormFields($fields, $product = null)
+    {
+        $this->loadModel('user');
+        $poUsers = $this->user->getPairs('nodeleted|pofirst|noclosed',  '', $this->config->maxCount);
+        $qdUsers = $this->user->getPairs('nodeleted|qdfirst|noclosed',  '', $this->config->maxCount);
+        $rdUsers = $this->user->getPairs('nodeleted|devfirst|noclosed', '', $this->config->maxCount);
+        $users   = $this->user->getPairs('nodeleted|noclosed');
+
+        foreach($fields as $field => $attr)
+        {
+            if(isset($attr['options']) and $attr['options'] == 'users') $fields[$field]['options'] = $users;
+            $fields[$field]['name']  = $field;
+            $fields[$field]['title'] = $this->lang->product->$field;
+            if($product and isset($product->$field)) $fields[$field]['default'] = $product->$field;
+        }
+
+        $fields['program']['options'] = array('') + $this->loadModel('program')->getTopPairs('', 'noclosed');
+        $fields['PO']['options']      = $poUsers;
+        $fields['QD']['options']      = $qdUsers;
+        $fields['RD']['options']      = $rdUsers;
+
+        if($product and $product->program)$fields['line']['options'] = array('') + $this->getLinePairs($product->program);
+        if(empty($product->program) or $this->config->systemMode != 'ALM') unset($fields['line']);
+
+        return $fields;
+    }
+
+    /**
      * Build search form.
      *
      * @param  int    $productID
@@ -2224,6 +2259,7 @@ class productModel extends model
                 /* Program name. */
                 $productStructure[$product->program]['programName'] = $product->programName;
                 $productStructure[$product->program]['programPM']   = $product->programPM;
+                $productStructure[$product->program]['id']          = $product->program;
                 $productStructure[$product->program] = $this->statisticData('program', $productStructure, $product);
             }
         }
@@ -2654,5 +2690,114 @@ class productModel extends model
         }
 
         return $statsData;
+    }
+
+    public function buildRows($productStructure, $params = array())
+    {
+        $programLines = zget($params, 'programLines', array());
+        $users        = zget($params, 'users', array());
+        $usersAvatar  = zget($params, 'usersAvatar', array());
+        $userIdPairs  = zget($params, 'userIdPairs', array());
+
+        $rows = array();
+        foreach($productStructure as $programID => $program)
+        {
+            if($programID and $this->config->systemMode == 'ALM') $rows[] = $this->buildRowData($programID, $program, 'program', $params);
+
+            if(isset($programLines[$programID]))
+            {
+                foreach($programLines[$programID] as $lineID => $lineName)
+                {
+                    if(!isset($program[$lineID]))
+                    {
+                        $program[$lineID] = array();
+                        $program[$lineID]['product']  = '';
+                        $program[$lineID]['lineName'] = $lineName;
+                    }
+                }
+            }
+
+            foreach($program as $lineID => $line)
+            {
+                $showLine = (isset($line['lineName']) and $this->config->systemMode == 'ALM');
+                if($showLine)
+                {
+                    $params['parent'] = 'program_' . $programID;
+                    $rows[] = $this->buildRowData($lineID, $line, 'line', $params);
+                }
+
+                if(isset($line['products']) and is_array($line['products']))
+                {
+                    foreach($line['products'] as $productID => $product)
+                    {
+                        $params['parent'] = $showLine ? 'line_' . $lineID : 'program_' . $programID;
+                        $rows[] = $this->buildRowData($productID, $product, 'product', $params);
+                    }
+                }
+            }
+        }
+
+        return $rows;
+    }
+
+    public function buildRowData($id, $data, $type = 'program', $params = array())
+    {
+        $programLines = zget($params, 'programLines', array());
+        $users        = zget($params, 'users', array());
+        $usersAvatar  = zget($params, 'usersAvatar', array());
+        $userIdPairs  = zget($params, 'userIdPairs', array());
+
+        $row = new stdclass();
+        $row->id = $id;
+        if($type == 'program') $row->id = 'program_' . $id;
+        if($type == 'line')    $row->id = 'line_' . $id;
+
+        $row->name = '';
+        if($type == 'program') $row->name = zget($data, 'programName', '');
+        if($type == 'line')    $row->name = zget($data, 'lineName', '');
+        if($type == 'product') $row->name = common::hasPriv('product', 'browse') ? html::a(helper::createLink('product', 'browse', 'productID=' . $id), $data->name) : $data->name;
+
+        $row->draftStories     = zget($data, 'draftStories', 0);
+        $row->activeStories    = zget($data, 'activeStories', 0);
+        $row->changingStories  = zget($data, 'changingStories', 0);
+        $row->reviewingStories = zget($data, 'reviewingStories', 0);
+        $row->unResolvedBugs   = zget($data, 'unResolvedBugs', 0);
+        $row->plans            = zget($data, 'plans', 0);
+        $row->releases         = zget($data, 'releases', 0);
+
+        $totalStories = zget($data, 'finishClosedStories', 0) + zget($data, 'unclosedStories', 0);
+        $totalBugs    = zget($data, 'unResolvedBugs', 0)      + zget($data, 'fixedBugs', 0);
+        $row->storyCompleteRate = $totalStories == 0 ? 0 : (round(zget($data, 'finishClosedStories', 0) / $totalStories, 3) * 100) . '%';
+        $row->bugFixedRate      = $totalBugs == 0 ? 0 : (round(zget($data, 'fixedBugs', 0) / $totalBugs, 3) * 100) . '%';
+        $row->actions           = $type == 'product' ? $this->buildOperateMenu($data, 'list') : '';
+        $row->parent            = $type == 'program' ? '' : zget($params, 'parent', '');
+        $row->type              = $type;
+
+        if($type == 'product')
+        {
+            $row->draftStories     = $data->stories['draft'];
+            $row->activeStories    = $data->stories['active'];
+            $row->changingStories  = $data->stories['changing'];
+            $row->reviewingStories = $data->stories['reviewing'];
+            $row->unResolvedBugs   = $data->unResolved;
+
+            $totalStories = $data->stories['finishClosed'] + $data->stories['unclosed'];
+            $totalBugs    = $data->unResolved + $data->fixedBugs;
+            $row->storyCompleteRate = $totalStories == 0 ? 0 : (round($data->stories['finishClosed'] / $totalStories, 3) * 100) . '%';
+            $row->bugFixedRate      = $totalBugs == 0 ? 0 : (round($data->fixedBugs / $totalBugs, 3) * 100) . '%';
+
+        }
+
+        $row->PO       = '';
+        $row->POAvatar = '';
+        if(($type == 'program' and !empty($data['programPM'])) or ($type == 'product' and !empty($data->PO)))
+        {
+            if($type == 'program') $PO = $data['programPM'];
+            if($type == 'product') $PO = $data->PO;
+            $row->PO       = zget($users, $PO);
+            $row->POAvatar = zget($usersAvatar, $PO);
+        }
+
+        return $row;
     }
 }

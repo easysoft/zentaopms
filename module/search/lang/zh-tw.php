@@ -29,6 +29,9 @@ $lang->search->me            = '自己';
 $lang->search->noQuery       = '還沒有保存查詢！';
 $lang->search->onMenuBar     = '顯示在菜單欄';
 $lang->search->custom        = '自定義';
+$lang->search->setCommon     = '設為公共查詢條件';
+$lang->search->saveCondition = '保存搜索條件';
+$lang->search->setCondName   = '請輸入保存條件名稱';
 
 $lang->search->account  = '用戶名';
 $lang->search->module   = '模組';
@@ -73,6 +76,7 @@ $lang->search->result            = '搜索結果';
 $lang->search->buildSuccessfully = '初始化搜索索引成功';
 $lang->search->executeInfo       = '為您找到相關結果%s個，耗時%s秒';
 $lang->search->buildResult       = "創建 %s 索引, 已創建  <strong class='%scount'>%s</strong> 條記錄；";
+$lang->search->queryTips         = "多個id可用英文逗號分隔";
 
 $lang->search->modules['all']         = '全部';
 $lang->search->modules['task']        = '任務';
@@ -92,11 +96,13 @@ $lang->search->modules['productplan'] = '計劃';
 $lang->search->modules['program']     = '項目集';
 $lang->search->modules['project']     = '項目';
 $lang->search->modules['execution']   = $lang->executionCommon;
-$lang->search->modules['story']       = '需求';
+$lang->search->modules['story']       = $lang->SRCommon;
+$lang->search->modules['requirement'] = $lang->URCommon;
 
 $lang->search->objectTypeList['story']            = $lang->SRCommon;
 $lang->search->objectTypeList['requirement']      = $lang->URCommon;
 $lang->search->objectTypeList['stage']            = '階段';
 $lang->search->objectTypeList['sprint']           = $lang->executionCommon;
+$lang->search->objectTypeList['kanban']           = '看板';
 $lang->search->objectTypeList['commonIssue']      = '問題';
 $lang->search->objectTypeList['stakeholderIssue'] = '干係人問題';
