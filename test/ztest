@@ -2,6 +2,8 @@
 <?php
 include 'lib/utils.php';
 
+$moduleList = array('mapi', 'action', 'admin', 'block', 'branch', 'bug', 'build', 'caselib', 'ci', 'company', 'compile', 'cron', 'custom', 'datatable', 'dept', 'design', 'dev', 'entry', 'doc', 'file', 'execution', 'git', 'group', 'jenkins', 'job', 'kanban', 'message', 'my', 'personnel', 'product', 'projectstory', 'projectrelease', 'release', 'productplan', 'program', 'programplan', 'project', 'pipeline', 'holiday', 'report', 'score', 'sso', 'setting', 'stage', 'stakeholder', 'search', 'story', 'task', 'testcase', 'todo', 'tutorial', 'mail', 'tree', 'user', 'weekly', 'gitlab', 'gitea', 'gogs', 'webhook', 'repo');
+
 $P1 = array('action', 'admin', 'api', 'block', 'branch', 'bug', 'build', 'caselib', 'ci', 'company', 'compile', 'cron', 'custom', 'datatable','holiday');
 $P2 = array('dev', 'doc', 'entry', 'execution', 'extension', 'file');
 $P3 = array('kanban', 'mail', 'message', 'misc', 'mr', 'my', 'personnel', 'pipeline', 'product', 'productplan');
@@ -12,8 +14,14 @@ $P7 = array('git', 'gitea', 'gitlab', 'jenkins', 'gogs');
 
 if(count($argv) <= 1) die(printUsage());
 
-switch($argv[1])
+if(in_array($argv[1], $moduleList))
 {
+    ztfRun($argv[1]);
+}
+else
+{
+    switch($argv[1])
+    {
     case 'init':
         zdRun();
         break;
@@ -27,191 +35,11 @@ switch($argv[1])
     case 'api':
         ztfRun('api');
         break;
-    case 'mapi':
-        ztfRun('model/api');
-        break;
     case 'control':
         ztfRun('control');
         break;
-    case 'action':
-        ztfRun('model/action');
-        break;
-    case 'admin':
-        ztfRun('model/admin');
-        break;
-    case 'block':
-        ztfRun('model/block');
-        break;
-    case 'branch':
-        ztfRun('model/branch');
-        break;
-    case 'bug':
-        ztfRun('model/bug');
-        break;
-    case 'build':
-        ztfRun('model/build');
-        break;
-    case 'caselib':
-        ztfRun('model/caselib');
-        break;
-    case 'ci':
-        ztfRun('model/ci');
-        break;
-    case 'company':
-        ztfRun('model/company');
-        break;
-    case 'compile':
-        ztfRun('model/compile');
-        break;
-    case 'cron':
-        ztfRun('model/cron');
-        break;
-    case 'custom':
-        ztfRun('model/custom');
-        break;
-    case 'datatable':
-        ztfRun('model/datatable');
-        break;
-    case 'dept':
-        ztfRun('model/dept');
-        break;
-    case 'design':
-        ztfRun('model/design');
-        break;
-    case 'dev':
-        ztfRun('model/dev');
-        break;
-    case 'entry':
-        ztfRun('model/entry');
-        break;
-    case 'doc':
-        ztfRun('model/doc');
-        break;
-    case 'file':
-        ztfRun('model/file');
-        break;
-    case 'execution':
-        ztfRun('model/execution');
-        break;
-    case 'git':
-        ztfRun('model/git');
-        break;
-    case 'group':
-        ztfRun('model/group');
-        break;
-    case 'jenkins':
-        ztfRun('model/jenkins');
-        break;
-    case 'job':
-        ztfRun('model/job');
-        break;
-    case 'kanban':
-        ztfRun('model/kanban');
-        break;
-    case 'message':
-        ztfRun('model/message');
-        break;
     case 'model':
         ztfRun('model');
-        break;
-    case 'my':
-        ztfRun('model/my');
-        break;
-    case 'personnel':
-        ztfRun('model/personnel');
-        break;
-    case 'product':
-        ztfRun('model/product');
-        break;
-    case 'projectstory':
-        ztfRun('model/projectstory');
-        break;
-    case 'projectrelease':
-        ztfRun('model/projectrelease');
-        break;
-    case 'release':
-        ztfRun('model/release');
-        break;
-    case 'productplan':
-        ztfRun('model/productplan');
-        break;
-    case 'program':
-        ztfRun('model/program');
-        break;
-    case 'programplan':
-        ztfRun('model/programplan');
-        break;
-    case 'project':
-        ztfRun('model/project');
-        break;
-    case 'pipeline':
-        ztfRun('model/pipeline');
-        break;
-    case 'holiday':
-        ztfRun('model/holiday');
-        break;
-    case 'report':
-        ztfRun('model/report');
-        break;
-    case 'score':
-        ztfRun('model/score');
-        break;
-    case 'sso':
-        ztfRun('model/sso');
-        break;
-    case 'setting':
-        ztfRun('model/setting');
-        break;
-    case 'stage':
-        ztfRun('model/stage');
-        break;
-    case 'stakeholder':
-        ztfRun('model/stakeholder');
-        break;
-    case 'search':
-        ztfRun('model/search');
-        break;
-    case 'story':
-        ztfRun('model/story');
-        break;
-    case 'task':
-        ztfRun('model/task');
-        break;
-    case 'testcase':
-        ztfRun('model/testcase');
-        break;
-    case 'todo':
-        ztfRun('model/todo');
-        break;
-    case 'tutorial':
-        ztfRun('model/tutorial');
-        break;
-    case 'mail':
-        ztfRun('model/mail');
-        break;
-    case 'tree':
-        ztfRun('model/tree');
-        break;
-    case 'user':
-        ztfRun('model/user');
-        break;
-    case 'weekly':
-        ztfRun('model/weekly');
-        break;
-    case 'gitlab':
-        ztfRun('model/gitlab');
-        break;
-    case 'gitea':
-        ztfRun('model/gitea');
-        break;
-    case 'gogs':
-        ztfRun('model/gogs');
-        break;
-    case 'webhook':
-        ztfRun('model/webhook');
-        break;
-    case 'repo':
-        ztfRun('model/repo');
         break;
     case 'P1':
         ztfRun($P1);
@@ -238,4 +66,6 @@ switch($argv[1])
     default:
         ztfExtract($argv[1]);
         system("php " . $argv[1]);
+    }
 }
+

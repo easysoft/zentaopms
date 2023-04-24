@@ -13,6 +13,7 @@
 define('RUNTIME_ROOT', dirname(dirname(__FILE__)) . '/runtime/');
 define('LIB_ROOT', dirname(dirname(__FILE__)) . '/lib/');
 define('TEST_BASEHPATH', dirname(dirname(__FILE__)));
+define('BASE_ROOT', dirname(dirname(dirname(__FILE__))));
 
 include LIB_ROOT . 'init.php';
 
@@ -46,12 +47,24 @@ function ztfRun($dir)
     global $config;
 
     $ztfPath = RUNTIME_ROOT . 'ztf';
-    $modelPath = TEST_BASEHPATH . '/model';
 
     $runTestPath = '';
-    if(is_array($dir))
+    if($dir == 'model')
     {
-        foreach($dir as $model) $runTestPath .= " $modelPath/$model";
+        $dir = implode(' ', getCaseModelDir());
+    }
+    elseif($dir == 'api')
+    {
+        $dir = TEST_BASEHPATH . '/api';
+    }
+    elseif(is_array($dir))
+    {
+        foreach($dir as $model) $runTestPath .= ' ' . BASE_ROOT . "/module/$model/test/model";
+    }
+    else
+    {
+        if($dir == 'mapi') $dir = 'api';
+        $dir = BASE_ROOT . "/module/$dir/test/model";
     }
 
     if($runTestPath) $dir = $runTestPath;
@@ -71,9 +84,29 @@ function ztfExtract($dir)
     global $config;
 
     $ztfPath = RUNTIME_ROOT . 'ztf';
-    $testPath = TEST_BASEHPATH;
-    $command = "$ztfPath extract $testPath/$dir";
+
+    if($dir == 'model') $dir = implode(' ', getCaseModelDir());
+    if($dir == 'api')   $dir = TEST_BASEHPATH . '/api';
+
+    $command = "$ztfPath extract $dir";
     system($command);
+}
+
+function getCaseModelDir()
+{
+    $moduleList = scandir(BASE_ROOT . '/module');
+    foreach($moduleList as $index => $module)
+    {
+        if($module == '.' or $module == '..') unset($moduleList[$index]);
+    }
+
+    $dirs = array();
+    foreach($moduleList as $index => $module)
+    {
+        $dirs[$index] = BASE_ROOT . "/module/$module/test/model";
+    }
+
+    return $dirs;
 }
 
 /**
