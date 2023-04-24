@@ -266,6 +266,15 @@ $lang->waterfall->menu->release    = array('link' => "{$lang->release->common}|p
 $lang->waterfall->menu->dynamic    = array('link' => "$lang->dynamic|project|dynamic|project=%s");
 $lang->waterfall->menu->settings   = array('link' => "$lang->settings|project|view|project=%s", 'subModule' => 'stakeholder', 'alias' => 'edit,manageproducts,group,managemembers,manageview,managepriv,whitelist,addwhitelist,team', 'exclude' => 'tree-browsetask');
 
+$lang->waterfall->menu->settings['subMenu']              = new stdclass();
+$lang->waterfall->menu->settings['subMenu']->view        = array('link' => "$lang->overview|project|view|project=%s", 'alias' => 'edit');
+$lang->waterfall->menu->settings['subMenu']->products    = array('link' => "{$lang->productCommon}|project|manageProducts|project=%s", 'alias' => 'manageproducts');
+$lang->waterfall->menu->settings['subMenu']->members     = array('link' => "{$lang->team->common}|project|team|project=%s", 'alias' => 'managemembers,team');
+$lang->waterfall->menu->settings['subMenu']->whitelist   = array('link' => "{$lang->whitelist}|project|whitelist|project=%s", 'subModule' => 'personnel');
+$lang->waterfall->menu->settings['subMenu']->stakeholder = array('link' => "{$lang->stakeholder->common}|stakeholder|browse|project=%s", 'subModule' => 'stakeholder');
+$lang->waterfall->menu->settings['subMenu']->group       = array('link' => "{$lang->priv}|project|group|project=%s", 'alias' => 'group,manageview,managepriv');
+$lang->waterfall->menu->settings['subMenu']->module      = array('link' => "{$lang->module}|tree|browse|product=%s&view=story");
+
 $lang->waterfall->dividerMenu = ',programplan,build,dynamic,';
 
 $lang->waterfall->menu->storyGroup['dropMenu'] = $lang->scrum->menu->storyGroup['dropMenu'];
