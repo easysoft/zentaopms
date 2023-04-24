@@ -353,13 +353,14 @@ function isonlybody(): bool
 /**
  * Format time.
  *
- * @param  string $time
- * @param  string $format
+ * @param  string|null $time
+ * @param  string      $format
  * @access public
  * @return string
  */
-function formatTime(string $time, string $format = ''): string
+function formatTime(string|null $time, string $format = ''): string
 {
+    if($time === null) return '';
     $time = str_replace('0000-00-00', '', $time);
     $time = str_replace('00:00:00', '', $time);
     if(trim($time) == '') return '';
