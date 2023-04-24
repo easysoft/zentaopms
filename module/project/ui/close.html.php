@@ -26,6 +26,6 @@ form
 
 h::hr(setClass('my-5'));
 
-historyRecord();
+history();
 
 render('modalDialog');

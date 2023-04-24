@@ -77,4 +77,4 @@ function searchForm()  {return createWg('searchForm', func_get_args());}
 function searchToggle(){return createWg('searchToggle', func_get_args());}
 function programMenu() {return createWg('programMenu', func_get_args());}
 function moduleMenu()  {return createWg('moduleMenu', func_get_args());}
-function historyRecord()  {return createWg('historyRecord', func_get_args());}
+function history()     {return createWg('history', func_get_args());}
