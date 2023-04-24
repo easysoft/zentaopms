@@ -84,7 +84,7 @@ function setLane(regionID, num)
  */
 function loadExecutionBuilds(productID, executionID, index)
 {
-    var branch = $('#branches' + index).val();
+    var branch = $('#branches' + index).val() ? $('#branches' + index).val() : 0;
     if(executionID == 'ditto')
     {
         for(var i = index - 1; i > 0, executionID == 'ditto'; i--)
