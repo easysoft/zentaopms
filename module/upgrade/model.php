@@ -8725,12 +8725,10 @@ class upgradeModel extends model
                         $groupFields = $settings->group;
                         foreach($groupFields as $groupIndex => $groupField)
                         {
-                            if($isQuoteDataview && strpos($groupField->field, '.') !== false)
-                            {
-                                $groupField->field = str_replace('.', '_', $groupField->field);
+                            if(isset($groupField->dateGroup))                                 $groupField->group = $groupField->dateGroup;
+                            if($isQuoteDataview && strpos($groupField->field, '.') !== false) $groupField->field = str_replace('.', '_', $groupField->field);
 
-                                $groupFields[$groupIndex] = $groupField;
-                            }
+                            $groupFields[$groupIndex] = $groupField;
                         }
 
                         $settings->group = $groupFields;
@@ -8769,14 +8767,13 @@ class upgradeModel extends model
                         }
                         $settings->metric = $metricFields;
                     }
+
+                    $data->settings = json_encode(array($settings));
                 }
-
-                $data->settings = json_encode(array($settings));
-
-                if(empty($data->settings))
+                else
                 {
-                    $data->step   = 1;
-                    $data->status = 'draft';
+                    $data->step  = 1;
+                    $data->stage = 'draft';
                 }
 
                 if(!empty($filters))
@@ -8907,10 +8904,15 @@ class upgradeModel extends model
             }
             $pivotSettings->columns = $columns;
 
-            $pivot->settings = json_encode($pivotSettings);
-
             if(!empty($tableSettings->filter)) $filters = $tableSettings->filter;
         }
+        else
+        {
+            $pivot->stage = 'draft';
+            $pivot->step  = 1;
+        }
+
+        $pivot->settings = json_encode($pivotSettings);
 
         if(isset($dataviewList[$table->dataset]))
         {
@@ -9049,6 +9051,7 @@ class upgradeModel extends model
 
             /* Process settings. */
             $settings = new stdclass();
+            $settings->columns = array();
             if($report->params)
             {
                 $params = json_decode($report->params);
@@ -9079,6 +9082,11 @@ class upgradeModel extends model
                     $columns[] = $column;
                 }
                 $settings->columns = $columns;
+            }
+            else
+            {
+                $data->stage = 'draft';
+                $data->step  = 1;
             }
 
             /* Process fieldSettings. */
