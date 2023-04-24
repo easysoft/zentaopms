@@ -24,7 +24,8 @@ function render($wgName = 'page', $options = NULL)
 
     if(is_string($wgName) && isset(zin::$globalRenderMap[$wgName])) $wgName = zin::$globalRenderMap[$wgName];
 
-    if($wgName === 'page' || $wgName === 'pagebase') $args[] = set::display(false);
+    $isFullPage = str_starts_with($wgName, 'page');
+    if($isFullPage) $args[] = set::display(false);
 
     if($options === NULL)
     {
@@ -39,6 +40,6 @@ function render($wgName = 'page', $options = NULL)
     data('zinErrors', $app->zinErrors ?? []);
 
     $wg = createWg($wgName, $args);
-    if($wgName !== 'page' && $wgName !== 'pagebase') $wg = fragment($wg);
+    if(!$isFullPage) $wg = fragment($wg);
     $wg->display($options);
 }
