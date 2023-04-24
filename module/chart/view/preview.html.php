@@ -45,7 +45,7 @@
 <div id="mainContent" class='main-row'>
   <div class='side-col col-lg'>
     <div class='panel'>
-      <div class='panel-heading'>
+      <div class='panel-heading overflow-hidden'>
         <div class='panel-title'><?php echo isset($group->name) ? $group->name : '';?></div>
       </div>
       <div class='panel-body'>

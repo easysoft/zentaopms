@@ -5,3 +5,4 @@
 #pivotGroups li>a, #pivotGroups ul>li>a {overflow: hidden; white-space: nowrap;}
 .biz-version {padding-top: 10px;}
 .biz-version a {color: #81511C;}
+.overflow-hidden {overflow: hidden;}
