@@ -72,7 +72,7 @@ class chartModel extends model
         if(!empty($chart->sql))      $chart->sql      = trim(str_replace(';', '', $chart->sql));
         if(!empty($chart->settings)) $chart->settings = json_decode($chart->settings, true);
 
-        if(!empty($chart->settings) and is_array($chart->settings))
+        if(empty($chart->type) and !empty($chart->settings) and is_array($chart->settings))
         {
             $firstSetting = current($chart->settings);
             if(isset($firstSetting['type'])) $chart->type = $firstSetting['type'];
