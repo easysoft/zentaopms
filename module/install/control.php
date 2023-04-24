@@ -299,9 +299,9 @@ class install extends control
         $canDelFile  = is_writable($this->app->getAppRoot() . 'www');
         $installFile = $this->app->getAppRoot() . 'www/install.php';
         $upgradeFile = $this->app->getAppRoot() . 'www/upgrade.php';
-        $installFileDeleted = $canDelFile && is_writable($installFile) ? unlink($installFile) : false;
+        $installFileDeleted = ($canDelFile and file_exists($installFile)) ? unlink($installFile) : false;
 
-        if($canDelFile and is_writable($upgradeFile)) unlink($upgradeFile);
+        if($canDelFile and file_exists($upgradeFile)) unlink($upgradeFile);
         unset($_SESSION['installing']);
         session_destroy();
 
