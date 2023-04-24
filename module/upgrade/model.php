@@ -9051,7 +9051,7 @@ class upgradeModel extends model
 
             /* Process settings. */
             $settings = new stdclass();
-            $settings->columns = array();
+            $columns  = array();
             if($report->params)
             {
                 $params = json_decode($report->params);
@@ -9060,7 +9060,6 @@ class upgradeModel extends model
                 $settings->group2      = $params->group2;
                 $settings->columnTotal = 'sum';
 
-                $columns = array();
                 foreach($params->reportField as $index => $field)
                 {
                     $column = new stdclass();
@@ -9081,13 +9080,23 @@ class upgradeModel extends model
 
                     $columns[] = $column;
                 }
-                $settings->columns = $columns;
             }
             else
             {
+                $column = new stdclass();
+                $column->field     = '';
+                $column->stat      = '';
+                $column->slice     = 'noSlice';
+                $column->showMode  = 'default';
+                $column->showTotal = 'noShow';
+
+                $columns[] = $column;
+
                 $data->stage = 'draft';
                 $data->step  = 1;
             }
+
+            $settings->columns = $columns;
 
             /* Process fieldSettings. */
             $sql = $data->sql;
@@ -9118,12 +9127,13 @@ class upgradeModel extends model
         if(!$sql) return array();
 
         $this->loadModel('dataview');
+        $this->loadModel('chart');
 
         $columns      = $this->dataview->getColumns($sql);
         $columnFields = array();
         foreach($columns as $column => $type) $columnFields[$column] = $column;
 
-        $tableAndFields = $this->dataview->getTables($sql);
+        $tableAndFields = $this->chart->getTables($sql);
         $tables         = $tableAndFields['tables'];
         $fields         = $tableAndFields['fields'];
 
