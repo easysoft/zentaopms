@@ -38,6 +38,7 @@ function datePicker()     {return createWg('datePicker', func_get_args());}
 function datetimePicker() {return createWg('datetimePicker', func_get_args());}
 function timePicker()     {return createWg('timePicker', func_get_args());}
 function fileInput()      {return createWg('fileInput', func_get_args());}
+function pageForm()       {return createWg('pageForm', func_get_args());}
 
 function icon()        {return createWg('icon', func_get_args());}
 function btn()         {return createWg('btn', func_get_args());}
