@@ -35,7 +35,7 @@ function createLink($moduleName, $methodName = 'index', $vars = array(), $viewTy
 
 function inLink($methodName = 'index', $vars = '', $viewType = '', $onlybody = false)
 {
-    return inlink($methodName, $vars, $viewType, $onlybody);
+    return \inlink($methodName, $vars, $viewType, $onlybody);
 }
 
 function zget($var, $key, $valueWhenNone = false, $valueWhenExists = false)
@@ -50,7 +50,7 @@ function getWebRoot($full = false)
 
 function hasPriv($module, $method, $object = null, $vars = '')
 {
-    return common::hasPriv($module, $method, $object, $vars);
+    return \common::hasPriv($module, $method, $object, $vars);
 }
 
 function isFieldRequired($name)
