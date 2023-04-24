@@ -63,9 +63,6 @@ function navbar()      {return createWg('navbar', func_get_args());}
 function main()        {return createWg('main', func_get_args());}
 function sidebar()     {return createWg('sidebar', func_get_args());}
 function featureBar()  {return createWg('featureBar', func_get_args());}
-function pageHeading() {return createWg('pageHeading', func_get_args());}
-function pageNavbar()  {return createWg('pageNavbar', func_get_args());}
-function pageToolbar() {return createWg('pageToolbar', func_get_args());}
 function avatar()      {return createWg('avatar', func_get_args());}
 function userAvatar()  {return createWg('userAvatar', func_get_args());}
 function pager()       {return createWg('pager', func_get_args());}
@@ -80,5 +77,4 @@ function searchForm()  {return createWg('searchForm', func_get_args());}
 function searchToggle(){return createWg('searchToggle', func_get_args());}
 function programMenu() {return createWg('programMenu', func_get_args());}
 function moduleMenu()  {return createWg('moduleMenu', func_get_args());}
-function assigntoDialog() {return createWg('assigntoDialog', func_get_args());}
 function historyRecord()  {return createWg('historyRecord', func_get_args());}
