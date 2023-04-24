@@ -352,7 +352,7 @@ CREATE TABLE IF NOT EXISTS `zt_burn` (
   `execution` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `product` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `task` mediumint(8) unsigned NOT NULL DEFAULT '0',
-  `date` date NOT NULL default '0000-00-00',
+  `date` date NOT NULL,
   `estimate` float NOT NULL,
   `left` float NOT NULL,
   `consumed` float NOT NULL,
