@@ -18,10 +18,9 @@ class inputGroup extends wg
         $type = $item->prop('type');
 
         if($type === 'addon') return h::span(setClass('input-group-addon'), set($item->props->skip('type,text')), $item->prop('text'));
+        if($type === 'btn')   return new btn(set($item->props->skip('type')));
 
-        if($type === 'btn') return new btn(set($item->props->skip('type')));
-
-        if($type === 'inputControl')
+        if($type)
         {
             $propNames = array_keys(inputControl::getDefinedProps());
             return new inputControl
