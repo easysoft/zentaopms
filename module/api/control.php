@@ -768,7 +768,7 @@ class api extends control
 
         if(in_array($this->session->spaceType, array('product', 'project')))
         {
-            $this->lang->doc->menu->api['exclude'] = 'api-' . $this->app->rawMethod;
+            $this->lang->doc->menu->api['exclude'] = 'api-' . $this->app->rawMethod . ',' . $this->app->rawMethod;
             $this->lang->doc->menu->{$this->session->spaceType}['subModule'] = 'api';
         }
         else
