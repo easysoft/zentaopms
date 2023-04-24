@@ -77,6 +77,7 @@ js::set('release', isset($release) ? $release : 0);
 js::set('versionLang', $lang->build->common);
 js::set('spaceType', $this->session->spaceType);
 js::set('rawModule', $this->app->rawModule);
+js::set('rawMethod', $this->app->rawMethod);
 
 /* ObjectType and objectID used for other space. */
 js::set('objectType', isset($type) ? $type : '');
@@ -474,7 +475,7 @@ $(function()
         if(!libID)    libID    = 0;
         if(!moduleID) moduleID = 0;
         linkParams = linkParams.replace('%s', 'libID=' + libID + '&moduleID=' + moduleID);
-        if(config.currentModule == 'api' && config.currentMethod == 'view') spaceType = 'api';
+        if(rawModule == 'api' && rawMethod== 'view') spaceType = 'api';
         if(spaceType != 'api' && rawModule == 'api') linkParams = 'objectID=' + objectID + '&' + linkParams;
         var moduleName = spaceType == 'api' ? 'api' : 'doc';
         var methodName = '';
