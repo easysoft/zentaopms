@@ -5,7 +5,6 @@
 .parent-position{padding-right: 180px;}
 .biz-version {padding-top: 10px;}
 .biz-version a {color: #81511C;}
-.overflow-hidden {overflow: hidden;}
 
 #chartGroups li {overflow: hidden; white-space: nowrap;}
 #chartGroups .checkbox-primary {margin-left: 8px; display: inline-block;}

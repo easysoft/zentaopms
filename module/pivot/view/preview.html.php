@@ -37,7 +37,7 @@ $('#subNavbar li').not('[data-id=<?php echo $groupID;?>]').removeClass('active')
     </div>
     <div class="cell">
       <div class='panel'>
-        <div class='panel-heading overflow-hidden'>
+        <div class='panel-heading text-ellipsis'>
           <div class='panel-title'><?php echo isset($group->name) ? $group->name : '';?></div>
         </div>
         <div class='panel-body'>
