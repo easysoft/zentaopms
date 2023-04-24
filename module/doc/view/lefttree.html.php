@@ -76,6 +76,8 @@ li.drag-shadow ul {display: none !important;}
 js::set('release', isset($release) ? $release : 0);
 js::set('versionLang', $lang->build->common);
 js::set('spaceType', $this->session->spaceType);
+js::set('rawModule', $this->app->rawModule);
+js::set('rawMethod', $this->app->rawMethod);
 
 /* ObjectType and objectID used for other space. */
 js::set('objectType', isset($type) ? $type : '');
@@ -151,7 +153,7 @@ js::set('hasLibPriv',       $hasLibPriv);
     <li data-method="addCataChild" data-type="add" data-id="%moduleID%" data-has-children='%hasChildren%'><a><i class="icon icon-add-directory"></i><?php echo $lang->doc->libDropdown['addSubModule'];?></a></li>
     <?php endif;?>
     <?php if($canEditCatalog[$module]):?>
-    <li data-method="editCata" class='edit-module'><a data-href='<?php echo helper::createLink($module, 'editCatalog', "moduleID=%moduleID%&type=$app->rawModule");?>'><i class="icon icon-edit"></i><?php echo $lang->doc->libDropdown['editModule'];?></a></li>
+    <li data-method="editCata" class='edit-module'><a data-href='<?php echo helper::createLink($module, 'editCatalog', "moduleID=%moduleID%&type=" . ($app->rawModule == 'api' ? 'api' : 'doc'));?>'><i class="icon icon-edit"></i><?php echo $lang->doc->libDropdown['editModule'];?></a></li>
     <?php endif;?>
     <?php if($canDeleteCatalog[$module]):?>
     <li data-method="deleteCata"><a href='<?php echo helper::createLink($module, 'deleteCatalog', 'rootID=%libID%&moduleID=%moduleID%');?>' target='hiddenwin'><i class="icon icon-trash"></i><?php echo $lang->doc->libDropdown['delModule'];?></a></li>
@@ -473,8 +475,8 @@ $(function()
         if(!libID)    libID    = 0;
         if(!moduleID) moduleID = 0;
         linkParams = linkParams.replace('%s', 'libID=' + libID + '&moduleID=' + moduleID);
-        if(config.currentModule == 'api' && config.currentMethod == 'view') spaceType = 'api';
-        if(spaceType != 'api' && config.currentModule == 'api') linkParams = 'objectID=' + objectID + '&' + linkParams;
+        if(rawModule == 'api' && rawMethod== 'view') spaceType = 'api';
+        if(spaceType != 'api' && rawModule == 'api') linkParams = 'objectID=' + objectID + '&' + linkParams;
         var moduleName = spaceType == 'api' ? 'api' : 'doc';
         var methodName = '';
         if(spaceType == 'api')
@@ -624,7 +626,7 @@ $(function()
         var libID      = $(this).closest('#versionSwitcher').data('lib');
         var moduleID   = $(this).data('id');
         var params     = 'libID=' + libID + '&moduleID=0&apiID=0&version=0&release=' + moduleID;
-        var methodName = config.currentMethod;
+        var methodName = rawMethod;
         if(config.currentModule == 'doc')
         {
             params = linkParams.replace('%s', 'libID=' + libID + '&moduleID=0').replace('browseType=&', 'browseType=byrelease&').replace('param=0', 'param=' + moduleID);

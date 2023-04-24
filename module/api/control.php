@@ -52,6 +52,15 @@ class api extends control
         $objectType  = $this->objectType;
         $objectID    = $this->objectID;
         $isFirstLoad = $libID ? false : true;
+        if($libID)
+        {
+            $lib = $this->doc->getLibById($libID);
+            if($objectType == 'nolink' and !$objectID and ($lib->product or $lib->project))
+            {
+                $objectType = $lib->product ? 'product' : 'project';
+                $objectID   = $lib->product ? $lib->product : $lib->project;
+            }
+        }
 
         if($release)
         {
@@ -158,7 +167,7 @@ class api extends control
         if(!strpos($this->server->http_referer, 'space') and !strpos($this->server->http_referer, 'api')) setCookie("docSpaceParam", '', $this->config->cookieLife, $this->config->webRoot, '', false, true);
 
         /* Get all api doc libraries. */
-        $libs = $this->doc->getApiLibs($libID);
+        $libs = $this->doc->getApiLibs($libID, $this->objectType, $this->objectID);
         $api  = $this->api->getLibById($apiID, $version, $release);
         if($api)
         {
@@ -174,7 +183,7 @@ class api extends control
         }
 
         /* Crumbs links array. */
-        $lib = zget($libs, $libID);
+        $lib  = zget($libs, $libID);
         $type = $lib->product ? 'product' : ($lib->project ? 'project' : 'unlink');
 
         $methodName = $type != 'unlink' ? $type . 'Space' : 'index';
@@ -768,7 +777,7 @@ class api extends control
 
         if(in_array($this->session->spaceType, array('product', 'project')))
         {
-            $this->lang->doc->menu->api['exclude'] = 'api-' . $this->app->rawMethod;
+            $this->lang->doc->menu->api['exclude'] = 'api-' . $this->app->rawMethod . ',' . $this->app->rawMethod;
             $this->lang->doc->menu->{$this->session->spaceType}['subModule'] = 'api';
         }
         else
