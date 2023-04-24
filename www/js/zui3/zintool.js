@@ -173,7 +173,7 @@ function getPageInfo(win)
         if(toolbar.length) info.toolbar = toolbar;
     }
 
-    const $table = $('#mainContent .table').first();
+    const $table = $('#mainContent .table:not(.table-form)').first();
     if($table.length)
     {
         if($('#mainContent .datatable').length)
@@ -440,7 +440,7 @@ function getPageTemplate(info)
 
     lines.push('\n\n/* ====== Define the page structure with zin widgets ====== */\n');
 
-    if(featureBar)
+    if(featureBar && featureBar.items)
     {
         widgets.push('featureBar');
         lines.push
@@ -448,7 +448,8 @@ function getPageTemplate(info)
             '/* zin: Define the feature bar on main menu */',
             'featureBar',
             '(',
-                indentLines([
+                indentLines(
+                [
                     featureBar.current ? 'set::current($browseType)' : null,
                     featureBar.linkParams ? `set::linkParams(${JSON.stringify(featureBar.linkParams)}),` : null,
                     ...featureBar.items.map(item => genItemStatement(item))
@@ -479,8 +480,8 @@ function getPageTemplate(info)
             '/* zin: Define the sidebar in main content */',
             'sidebar',
             '(',
-                info.sidebar.type + '()',
-            '); // Sidebar is not work yet',
+            `    ${info.sidebar.type}`,
+            ');',
             ''
         );
     }
@@ -590,6 +591,8 @@ function zin(win)
         }
     });
     $dialog.find('.modal-dialog').width(1200).find('pre>code').text(template);
+    if(!window.prettyPrint) $.getScript(config.webRoot + 'js/kindeditor/plugins/code/prettify.js', () => window.prettyPrint());
+    else window.prettyPrint();
 }
 
 $(function()
