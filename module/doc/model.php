@@ -101,7 +101,7 @@ class docModel extends model
         $projects   = $this->loadModel('project')->getPairsByProgram('', 'all', false, 'order_asc', $this->config->vision == 'rnd' ? 'kanban' : '');
         $executions = $this->loadModel('execution')->getPairs(0, 'sprint,stage', 'multiple,leaf');
         $waterfalls = array();
-        if(empty($objectID) and $type != 'product' and $type != 'project' and $type != 'custom')
+        if(empty($objectID) and $type == 'execution')
         {
             $waterfalls = $this->dao->select('t1.id,t2.name')->from(TABLE_EXECUTION)->alias('t1')
                 ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project=t2.id')
@@ -645,6 +645,9 @@ class docModel extends model
             $query = preg_replace('/(`\w+`)/', 't1.$1', $query);
         }
 
+        $allLibs          = $this->getLibs('all');
+        $allLibIDList     = array_keys($allLibs);
+        $hasPrivDocIdList = $this->getPrivDocs($allLibIDList);
         if($type == 'view' or $type == 'collect')
         {
             $docs = $this->dao->select('t1.*,t3.name as libName,t3.type as objectType,max(t2.`date`) as date')->from(TABLE_DOC)->alias('t1')
@@ -661,6 +664,7 @@ class docModel extends model
                 ->beginIF($browseType == 'all' or $browseType == 'bysearch')->andWhere("(t1.status = 'normal' or (t1.status = 'draft' and t1.addedBy='{$this->app->user->account}'))")->fi()
                 ->beginIF($browseType == 'draft')->andWhere('t1.status')->eq('draft')->andWhere('t1.addedBy')->eq($this->app->user->account)->fi()
                 ->beginIF($browseType == 'bysearch')->andWhere($query)->fi()
+                ->beginIF(!empty($hasPrivDocIdList))->andWhere('t1.id')->in($hasPrivDocIdList)->fi()
                 ->groupBy('t1.id')
                 ->orderBy($orderBy)
                 ->page($pager, 't1.id')
@@ -691,6 +695,7 @@ class docModel extends model
                 ->beginIF(!common::hasPriv('doc', 'teamSpace'))->andWhere('t2.type')->ne('custom')->fi()
                 ->beginIF($browseType == 'draft')->andWhere('t1.status')->eq('draft')->andWhere('t1.addedBy')->eq($this->app->user->account)->fi()
                 ->beginIF($browseType == 'bysearch')->andWhere($query)->fi()
+                ->beginIF(!empty($hasPrivDocIdList))->andWhere('t1.id')->in($hasPrivDocIdList)->fi()
                 ->orderBy($orderBy)
                 ->page($pager)
                 ->fetchAll('id');
@@ -1279,8 +1284,8 @@ class docModel extends model
     {
         if(empty($object)) return false;
 
-        if($this->app->user->admin and ($object->type != 'mine' or ($object->type == 'mine' and $object->addedBy == $this->app->user->account))) return true;
-
+        if($object->type == 'mine' and $object->addedBy == $this->app->user->account) return true;
+        if($this->app->user->admin and $object->type != 'mine') return true;
         if($object->acl == 'open') return true;
 
         $account = ',' . $this->app->user->account . ',';
