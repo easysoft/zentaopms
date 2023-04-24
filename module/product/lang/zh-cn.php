@@ -250,3 +250,7 @@ $lang->product->featureBar['dynamic']['thisWeek']  = '本周';
 $lang->product->featureBar['dynamic']['lastWeek']  = '上周';
 $lang->product->featureBar['dynamic']['thisMonth'] = '本月';
 $lang->product->featureBar['dynamic']['lastMonth'] = '上月';
+
+$lang->product->belongingLine    = '所属产品线';
+$lang->product->testCaseCoverage = '用例覆盖率';
+$lang->product->activatedBug     = 'Bug激活';
