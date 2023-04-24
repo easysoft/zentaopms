@@ -3319,7 +3319,7 @@ class executionModel extends model
             $data->branch  = $storyList[$storyID]->branch;
             $data->story   = $storyID;
             $data->version = $versions[$storyID];
-            $data->order   = ++$lastOrder;
+            $data->order   = (int)++$lastOrder;
             $this->dao->replace(TABLE_PROJECTSTORY)->data($data)->exec();
 
             $this->story->setStage($storyID);
