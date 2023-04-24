@@ -2078,6 +2078,7 @@ EOF;
             if(strtolower($key) == 'assigneddate')    continue;
             if(strtolower($key) == 'editedby')        continue;
             if(strtolower($key) == 'editeddate')      continue;
+            if(strtolower($key) == 'editingdate')     continue;
             if(strtolower($key) == 'uid')             continue;
             if(strtolower($key) == 'finisheddate'     and $value == '') continue;
             if(strtolower($key) == 'canceleddate'     and $value == '') continue;
