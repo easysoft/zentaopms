@@ -1602,9 +1602,8 @@ class groupModel extends model
     {
         $modules = $this->getPrivManagerPairs('module', $view);
         $modules = array_keys($modules);
-        $modules = implode(',', $modules);
 
-        $privs = $this->dao->select("t1.id, t1.module, t1.method, CONCAT(t1.module, '-', t1.method) AS action, IF(t3.type = 'module', 0, t1.parent) as parent, t1.order, t2.`key`, t2.`value`, t2.desc, IF(t3.type = 'module', t3.code, t4.code) as parentCode, IF(t3.type = 'module', 999, INSTR('$modules', t4.code)) as moduleOrder")->from(TABLE_PRIV)->alias('t1')
+        $privs = $this->dao->select("t1.id, t1.module, t1.method, CONCAT(t1.module, '-', t1.method) AS action, IF(t3.type = 'module', 0, t1.parent) as parent, t1.order, t2.`key`, t2.`value`, t2.desc, IF(t3.type = 'module', t3.code, t4.code) as parentCode")->from(TABLE_PRIV)->alias('t1')
             ->leftJoin(TABLE_PRIVLANG)->alias('t2')->on('t1.id=t2.objectID')
             ->leftJoin(TABLE_PRIVMANAGER)->alias('t3')->on('t1.parent=t3.id')
             ->leftJoin(TABLE_PRIVMANAGER)->alias('t4')->on('t3.parent=t4.id')
@@ -1623,10 +1622,12 @@ class groupModel extends model
             ->markRight(2)
             ->andWhere('t1.edition')->like("%,{$this->config->edition},%")
             ->andWhere('t1.vision')->like("%,{$this->config->vision},%")
-            ->orderBy("moduleOrder asc, t3.order asc, `order` asc")
+            ->orderBy("t3.order asc, `order` asc")
             ->page($pager)
-            ->fetchAll('action');
-        return $privs;
+            ->fetchGroup('parentCode', 'action');
+
+        $privList = array(); foreach($modules as $module) $privList = array_merge($privList, zget($privs, $module, array()));
+        return $privList;
     }
 
     /**
@@ -2209,8 +2210,7 @@ class groupModel extends model
     {
         $modulePairs = $this->getPrivManagerPairs('module');
         $modules     = array_keys($modulePairs);
-        $modules     = implode(',', $modules);
-        $relatedPrivs = $this->dao->select("t1.relationPriv,t1.type,t2.parent,t2.module,t2.method,t2.`order`,t3.`key`,t3.value, IF(t4.type = 'module', 999, INSTR('$modules', t5.code)) as moduleOrder")->from(TABLE_PRIVRELATION)->alias('t1')
+        $privs = $this->dao->select("t1.relationPriv,t1.type,t2.parent,t2.module,t2.method,t2.`order`,t3.`key`,t3.value, IF(t4.type = 'module', t4.code, t5.code) as parentCode")->from(TABLE_PRIVRELATION)->alias('t1')
             ->leftJoin(TABLE_PRIV)->alias('t2')->on('t1.relationPriv=t2.id')
             ->leftJoin(TABLE_PRIVLANG)->alias('t3')->on('t1.relationPriv=t3.objectID')
             ->leftJoin(TABLE_PRIVMANAGER)->alias('t4')->on('t2.parent=t4.id')
@@ -2238,8 +2238,11 @@ class groupModel extends model
             ->andWhere('t5.type')->eq('view')
             ->beginIF(!empty($view) and $view != 'general')->andWhere('t1.module')->in($modules)->fi()
             ->markRight(2)
-            ->orderBy('moduleOrder asc, t2.`order`_asc, t1.`type` desc')
-            ->fetchAll('relationPriv');
+            ->orderBy('t2.`order`_asc, t1.`type` desc')
+            ->fetchGroup('parentCode', 'relationPriv');
+
+        $relatedPrivs = array();
+        foreach($modules as $module) $relatedPrivs = array_merge($relatedPrivs, zget($privs, $module, array()));
 
         $privList = empty($type) ? array('depend' => array(), 'recommend' => array()) : array($type => array());
         if(empty($relatedPrivs)) return $privList;
