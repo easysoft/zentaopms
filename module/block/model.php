@@ -13,12 +13,71 @@ declare(strict_types=1);
 class blockModel extends model
 {
     /**
-     * Save params
+     * Get a block by blockID. 
+     * 根据区块ID获取区块信息.
+     *
+     * @param  int    $blockID
+     * @access public
+     * @return object
+     */
+    public function getByID(int $blockID) : object | bool
+    {
+        $block = $this->blockTao->getByID($blockID);
+        if(empty($block)) return new stdclass();
+
+        $block->params = json_decode($block->params);
+        if($block->block == 'html') $block->params->html = $this->loadModel('file')->setImgSize($block->params->html);
+        return $block;
+    }
+
+    /**
+     * Get max order number by block module. 
+     * 获取对应模块下区块的最大排序号.
+     *
+     * @param  string $appName
+     * @access public
+     * @return int
+     */
+    public function getMaxOrderByModule(string $module) : int
+    {
+        return $this->blockTao->getMaxOrderByModule($module);
+    }
+
+    /**
+     * Get block list for account.
+     * 获取区块列表.
+     *
+     * @param  string $module
+     * @param  string $type
+     * @param  int    $hidden
+     * @access public
+     * @return array | bool
+     */
+    public function getList(string $module, string $type = '', int $hidden = 0) : array | bool
+    {
+        return $this->blockTao->getList($module, $type, $hidden);
+    }
+
+    /**
+     * Get hidden blocks
+     * 获取隐藏的区块列表.
+     *
+     * @param  string $module
+     * @access public
+     * @return array | bool
+     */
+    public function getHiddenBlocks(string $module) : array | bool
+    {
+        return $this->blockTao->getList($module, $type = '', $hidden = 1);
+    }
+
+    /**
+     * Save a block.
      *
      * @param  int    $id
+     * @param  string $source
      * @param  string $type
-     * @param  string $appName
-     * @param  int    $blockID
+     * @param  string $module
      * @access public
      * @return void
      */
@@ -29,7 +88,7 @@ class blockModel extends model
             ->add('account', $this->app->user->account)
             ->stripTags('html', $this->config->allowedTags)
             ->setIF($id, 'id', $id)
-            ->add('order', $block ? $block->order : ($this->getLastKey($module) + 1))
+            ->add('order', $block ? $block->order : ($this->getMaxOrderByModule($module) + 1))
             ->add('module', $module)
             ->add('hidden', 0)
             ->setDefault('grid', '4')
@@ -64,95 +123,6 @@ class blockModel extends model
         $data->params = helper::jsonEncode($data->params);
         $this->dao->replace(TABLE_BLOCK)->data($data)->exec();
         if(!dao::isError()) $this->loadModel('score')->create('block', 'set');
-    }
-
-    /**
-     * Get a block by blockID. 
-     * 根据区块ID获取区块信息.
-     *
-     * @param  int    $blockID
-     * @access public
-     * @return object
-     */
-    public function getByID(int $blockID) : object | bool
-    {
-        $block = $this->blockTao->getByID($blockID);
-        if(empty($block)) return new stdclass();
-
-        $block->params = json_decode($block->params);
-        if($block->block == 'html') $block->params->html = $this->loadModel('file')->setImgSize($block->params->html);
-        return $block;
-    }
-
-    /**
-     * Get saved block config.
-     *
-     * @param  int    $id
-     * @access public
-     * @return object
-     */
-    public function getBlock($id)
-    {
-        $block = $this->dao->select('*')->from(TABLE_BLOCK)
-            ->where('`id`')->eq($id)
-            ->andWhere('account')->eq($this->app->user->account)
-            ->fetch();
-        if(empty($block)) return false;
-
-        $block->params = json_decode($block->params);
-        if(empty($block->params)) $block->params = new stdclass();
-        return $block;
-    }
-
-    /**
-     * Get last key.
-     *
-     * @param  string $appName
-     * @access public
-     * @return int
-     */
-    public function getLastKey($module = 'my')
-    {
-        $order = $this->dao->select('`order`')->from(TABLE_BLOCK)
-            ->where('module')->eq($module)
-            ->andWhere('account')->eq($this->app->user->account)
-            ->orderBy('order desc')
-            ->limit(1)
-            ->fetch('order');
-        return $order ? $order : 0;
-    }
-
-    /**
-     * Get block list for account.
-     *
-     * @param  string $appName
-     * @access public
-     * @return void
-     */
-    public function getBlockList($module = 'my', $type = '')
-    {
-        return $this->dao->select('*')->from(TABLE_BLOCK)->where('account')->eq($this->app->user->account)
-            ->andWhere('module')->eq($module)
-            ->andWhere('vision')->eq($this->config->vision)
-            ->andWhere('hidden')->eq(0)
-            ->beginIF($type)->andWhere('type')->eq($type)->fi()
-            ->orderBy('`order`')
-            ->fetchAll('id');
-    }
-
-    /**
-     * Get hidden blocks
-     *
-     * @access public
-     * @return array
-     */
-    public function getHiddenBlocks($module = 'my')
-    {
-        return $this->dao->select('*')->from(TABLE_BLOCK)->where('account')->eq($this->app->user->account)
-            ->andWhere('module')->eq($module)
-            ->andWhere('hidden')->eq(1)
-            ->orderBy('`order`')
-            ->fetchAll('order');
     }
 
     /**

@@ -72,7 +72,7 @@ class block extends control
             if(strpos(",$closedBlock,", ",|contribute,") === false and $this->config->vision == 'rnd') $modules['contribute'] = $this->lang->block->contribute;
             $modules = array('' => '') + $modules;
 
-            $hiddenBlocks = $this->block->getHiddenBlocks();
+            $hiddenBlocks = $this->block->getHiddenBlocks('my');
             foreach($hiddenBlocks as $block) $modules['hiddenBlock' . $block->id] = $block->title;
             $this->view->modules = $modules;
         }
@@ -189,7 +189,7 @@ class block extends control
     public function sort($orders, $module = 'my')
     {
         $orders    = explode(',', $orders);
-        $blockList = $this->block->getBlockList($module);
+        $blockList = $this->block->getList($module);
 
         foreach ($orders as $order => $blockID)
         {
@@ -244,7 +244,7 @@ class block extends control
     public function dashboard($module, $type = '', $projectID = 0)
     {
         if($this->loadModel('user')->isLogon()) $this->session->set('blockModule', $module);
-        $blocks = $this->block->getBlockList($module, $type);
+        $blocks = $this->block->getList($module, $type);
         $vision = $this->config->vision;
 
         $section = 'common';
