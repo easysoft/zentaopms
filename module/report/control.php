@@ -240,7 +240,7 @@ class report extends control
             }
         }
 
-        $this->view->title  = sprintf($this->lang->report->annualData->title, ($userID ? zget($users, $userID, '') : (($dept !== '') ? substr($depts[$dept], strrpos($depts[$dept], '/') + 1) : $depts[''])), $year);
+        $this->view->title  = sprintf($this->lang->report->annualData->title, ($userID ? zget($users, $userID, '') : (($dept !== '') ? substr($depts[$dept], strrpos($depts[$dept], '/') + 1) : '')), $year);
         $this->view->data               = $data;
         $this->view->year               = $year;
         $this->view->users              = $users;
