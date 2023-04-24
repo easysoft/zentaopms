@@ -233,6 +233,7 @@ function getPageInfo(win)
             if(rowData.id === undefined) rowData.id = idx;
             rowData.id = String(rowData.id);
             setting.data.push(rowData);
+            if(setting.data.length > 5) return;
         });
 
         const tableJs = $('#mainContent [data-ride="table"]').data('zui.table');
@@ -410,9 +411,9 @@ function getPageTemplate(info)
     /** @type {string[]} */
     const lines = [];
 
-    const {featureBar, toolbar, dtable} = info;
+    const {featureBar = {}, toolbar, dtable} = info;
     const variables = [];
-    const widgets = [];
+    const widgets   = [];
     if(featureBar && featureBar.current)
     {
         lines.push
@@ -476,10 +477,10 @@ function getPageTemplate(info)
         lines.push
         (
             '/* zin: Define the sidebar in main content */',
-            '/* sidebar',
+            'sidebar',
             '(',
-                genSetStatement('type', info.sidebar.type, 1),
-            '); */ // Sidebar is not work yet',
+                info.sidebar.type + '()',
+            '); // Sidebar is not work yet',
             ''
         );
     }
@@ -548,7 +549,11 @@ function getPageTemplate(info)
 
 function zin(win)
 {
-    win = win || window;
+    if(!win)
+    {
+        if(config.currentModule === 'index' && config.currentMethod === 'index') win = $.apps.getLastApp().$iframe[0].contentWindow;
+        else win = window;
+    }
 
     if(!win.config) return $.zui.messager.danger('zin: Current page is not supported yet, may be it rendered by zin already!');
 
@@ -556,29 +561,29 @@ function zin(win)
     if(!pageInfo) return $.zui.messager.danger('zin: Current page is not supported temporarily.');
 
     const template = getPageTemplate(pageInfo);
-    console.log('> pageInfo', pageInfo);
-    console.log('> template', template);
+    console.log('> [ZIN-TOOL] pageInfo', pageInfo);
+    console.log('> [ZIN-TOOL] template', template);
 
     const $dialog = bootbox.dialog(
     {
-        title: 'zin 视图模版',
+        title: '<strong><i class="icon icon-magic"></i> zin view file</strong>',
         message: `<div class="strong">module/${pageInfo.moduleName}/ui/${pageInfo.methodName}.html.php</div><pre class="prettyprint"><code></code></pre>`,
         size: 'large',
         buttons:
         {
             copy:
             {
-                label: '复制到剪贴板',
+                label: 'Copy to clipboard',
                 className: 'btn-primary',
                 callback: () =>
                 {
                     navigator.clipboard.writeText(template);
-                    $.zui.messager.success(`zin 视图模版已复制到剪贴板，请创建文件 module/${pageInfo.moduleName}/ui/${pageInfo.methodName}.html.php 并粘贴`);
+                    $.zui.messager.success(`zin view file copied to clipboard, you can create file module/${pageInfo.moduleName}/ui/${pageInfo.methodName}.html.php and paste to it`);
                 }
             },
             close:
             {
-                label: '关闭',
+                label: 'Close',
                 className: 'btn-default',
                 callback: () => {}
             },
