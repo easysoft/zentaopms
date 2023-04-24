@@ -384,6 +384,12 @@ INNER JOIN  zt_project AS t2 ON t1.`project` = t2.`id`
 SET t1.`addedDate` = t2.`openedDate`, t1.`addedBy` = t2.`openedBy`
 WHERE t1.`type` = 'project' AND t1.`main` = '1';
 
+/* Update the execution document. */
+UPDATE zt_doc AS t1
+LEFT JOIN zt_project t2 ON t1.`execution` = t2.`id`
+SET t1.`project` = t2.`project`
+WHERE t1.`execution` != '0' AND t1.`project` = '0' AND t2.`project` != '0';
+
 /* Update the execution master library. */
 UPDATE zt_doclib AS t1
 INNER JOIN  zt_project AS t2 ON t1.`execution` = t2.`id`
