@@ -626,7 +626,7 @@ $(function()
         var libID      = $(this).closest('#versionSwitcher').data('lib');
         var moduleID   = $(this).data('id');
         var params     = 'libID=' + libID + '&moduleID=0&apiID=0&version=0&release=' + moduleID;
-        var methodName = config.currentMethod;
+        var methodName = rawMethod;
         if(config.currentModule == 'doc')
         {
             params = linkParams.replace('%s', 'libID=' + libID + '&moduleID=0').replace('browseType=&', 'browseType=byrelease&').replace('param=0', 'param=' + moduleID);
