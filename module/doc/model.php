@@ -2830,7 +2830,7 @@ class docModel extends model
         else
         {
             $libs = $this->getLibsByObject($type, 0, '', $appendLib);
-            if($libID == 0 and !empty($libs)) $libID = reset($libs)->id;
+            if(($libID == 0 or !isset($libs[$libID])) and !empty($libs)) $libID = reset($libs)->id;
             if(isset($libs[$libID]))
             {
                 $objectTitle    = zget($libs[$libID], 'name', '');

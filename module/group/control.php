@@ -197,7 +197,7 @@ class group extends control
      * @access public
      * @return void
      */
-    public function managePriv($type = 'byGroup', $param = 0, $menu = '', $version = '')
+    public function managePriv($type = 'byPackage', $param = 0, $menu = '', $version = '')
     {
         if($type == 'byGroup' or $type == 'byPackage') $groupID = $param;
 

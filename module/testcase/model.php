@@ -4516,7 +4516,7 @@ class testcaseModel extends model
             'removeNamespace'    => true, // Remove namespace from resulting keys
             'namespaceSeparator' => ':', // Change separator to something other than a colon
             'attributePrefix'    => '', // Distinguish between attributes and nodes with the same name
-            'alwaysArray'        => [], // Array of XML tag names which should always become arrays
+            'alwaysArray'        => array(), // Array of XML tag names which should always become arrays
             'autoArray'          => true, // Create arrays for tags which appear more than once
             'textContent'        => 'text', // Key used for the text content of elements
             'autoText'           => true, // Skip textContent key if node has no attributes or child nodes
@@ -4529,7 +4529,7 @@ class testcaseModel extends model
         $namespaces[''] = null; // Add empty base namespace
 
         /* Get attributes from all namespaces. */
-        $attributesArray = [];
+        $attributesArray = array();
         foreach($namespaces as $prefix => $namespace)
         {
             if($options['removeNamespace']) $prefix = '';
@@ -4545,7 +4545,7 @@ class testcaseModel extends model
         }
 
         // Get child nodes from all namespaces
-        $tagsArray = [];
+        $tagsArray = array();
         foreach($namespaces as $prefix => $namespace)
         {
             if($options['removeNamespace']) $prefix = '';
