@@ -138,7 +138,7 @@ class wg
             $this,
             [$before, $children, $portals, $after],
             $selectors,
-            (!empty($options) && isset($options['type'])) ? $options['type'] : 'html',
+            (!empty($options) && isset($options['type'])) ? $options['type'] : 'html', // TODO: () may not work in lower php
             (!empty($options) && isset($options['data'])) ? $options['data'] : NULL,
         );
     }
@@ -183,8 +183,47 @@ class wg
 
     protected function build()
     {
-        return  $this->children();
+        return $this->children();
     }
+
+    public function buildEvents()
+    {
+        $events = $this->props->events();
+        if(empty($events)) return NULL;
+
+        $id   = $this->id();
+        $code = array($this->shortType() === 'html' ? 'const ele = document;' : 'const ele = document.getElementById("' . (empty($id) ? $this->gid : $id) . '");');
+        foreach($events as $event => $bindingList)
+        {
+            foreach($bindingList as $binding)
+            {
+                $code[]   = "ele?.addEventListener('$event', function(e){";
+                if(is_string($binding)) $binding = (object)array('handler' => $binding);
+                $selector = isset($binding->selector) ? $binding->selector : NULL;
+                $handler  = isset($binding->handler) ? trim($binding->handler) : '';
+                $stop     = isset($binding->stop) ? $binding->stop : NULL;
+                $prevent  = isset($binding->prevent) ? $binding->prevent : NULL;
+                $self     = isset($binding->self) ? $binding->self : NULL;
+                unset($binding->selector);
+                unset($binding->handler);
+                unset($binding->stop);
+                unset($binding->prevent);
+                unset($binding->self);
+
+                if($selector) $code[] = "if(!e.target.closest('$selector')) return;";
+                if($self)     $code[] = "if(ele !== e.target) return;";
+                if($stop)     $code[] = "e.stopPropagation();";
+                if($prevent)  $code[] = "e.preventDefault();";
+
+                if(preg_match('/^[$A-Z_][0-9A-Z_$\[\]."\']*$/i', $handler)) $code[] = "($handler)(e);";
+                else $code[] = $handler;
+
+                $code[] = '}' . (empty($binding) ? '' : (', ' . json_encode($binding))) . ');';
+            }
+        }
+        return h::createJsScopeCode($code);
+    }
+
 
     protected function onAddBlock($child, $name)
     {
@@ -199,6 +238,11 @@ class wg
     protected function onSetProp($prop, $value)
     {
         if($prop === 'id' && $value === '$GID') $value = $this->gid;
+        if($prop[0] === '@')
+        {
+            $this->setDefaultProps(['id' => '$GID']);
+            context::current()->addWgWithEvents($this);
+        }
         $this->props->set($prop, $value);
     }
 
