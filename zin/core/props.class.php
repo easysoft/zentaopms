@@ -213,7 +213,7 @@ class props extends \zin\utils\dataset
         $data = $this->toJsonData();
         foreach($data as $name => $value)
         {
-            if($value === NULL || in_array($name, $skipProps)) unset($data[$name]);
+            if($value === NULL || $name[0] === '@' || in_array($name, $skipProps)) unset($data[$name]);
             if($skipFalse && $value === false) unset($data[$name]);
         }
 
