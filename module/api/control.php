@@ -52,11 +52,14 @@ class api extends control
         $objectType  = $this->objectType;
         $objectID    = $this->objectID;
         $isFirstLoad = $libID ? false : true;
-        $lib         = $this->doc->getLibById($libID);
-        if($objectType == 'nolink' and !$objectID and ($lib->product or $lib->project))
+        if($libID)
         {
-            $objectType = $lib->product ? 'product' : 'project';
-            $objectID   = $lib->product ? $lib->product : $lib->project;
+            $lib = $this->doc->getLibById($libID);
+            if($objectType == 'nolink' and !$objectID and ($lib->product or $lib->project))
+            {
+                $objectType = $lib->product ? 'product' : 'project';
+                $objectID   = $lib->product ? $lib->product : $lib->project;
+            }
         }
 
         if($release)
