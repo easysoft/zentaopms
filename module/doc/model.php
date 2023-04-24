@@ -386,15 +386,18 @@ class docModel extends model
      */
     public function getDocsByBrowseType($browseType, $queryID, $moduleID, $sort, $pager)
     {
-        $allLibs          = $this->getLibs('all');
-        $allLibIDList     = array_keys($allLibs);
-        $hasPrivDocIdList = $this->getPrivDocs(0, $moduleID);
-
-        if($browseType == "all")
+        if($browseType == 'all')
         {
             $docs = $this->getDocs(0, 0, $browseType, $sort, $pager);
         }
-        elseif($browseType == 'bySearch')
+        else
+        {
+            $allLibs          = $this->getLibs('all');
+            $allLibIDList     = array_keys($allLibs);
+            $hasPrivDocIdList = $this->getPrivDocs($allLibIDList, $moduleID);
+        }
+
+        if($browseType == 'bySearch')
         {
             if($queryID)
             {
@@ -610,7 +613,7 @@ class docModel extends model
      */
     public function getDocs($libID, $module, $browseType, $orderBy, $pager = null)
     {
-        if(empty($libID)) return array();
+        if(empty($libID) and $browseType != 'all') return array();
 
         $docIdList = $this->getPrivDocs($libID, $module, 'children');
         $docs = $this->dao->select('*')->from(TABLE_DOC)
