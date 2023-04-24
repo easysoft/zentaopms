@@ -13,7 +13,7 @@
  * @link        http://www.zentao.net
  */
 /* Set the error reporting. */
-error_reporting(E_ALL & E_STRICT);
+error_reporting(E_ALL);
 
 $testPath      = dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'test' . DIRECTORY_SEPARATOR;
 $frameworkRoot = dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'framework' . DIRECTORY_SEPARATOR;
@@ -70,6 +70,11 @@ if(!empty($config->test->account) and !empty($config->test->password) and !empty
     $token = $rest->post('/tokens', array('account' => $config->test->account, 'password' => $config->test->password));
     $token = $token->body;
 }
+if($argv[1] == '-extract')
+{
+    parseScript();
+    exit;
+}
 /**
  * Save variable to $_result.
  *
@@ -114,6 +119,78 @@ function p($keys = '', $delimiter = ',')
     echo ">> " . implode(';', $values) . "\n";
 
     return true;
+}
+
+/**
+ * extract ZTF note.
+ *
+ * @access public
+ * @return void
+ */
+function parseScript()
+{
+    $debugInfo = debug_backtrace();
+    if(!empty($debugInfo))
+    {
+        $file     = $debugInfo[count($debugInfo)-1]['file'];
+        $contents = file_get_contents($file);
+        $translatedList = array();
+        preg_match_all("/r\((.*?)\)\s*&&\s*p\((.*?)\)\s*&&\s*e\((.*?)\);/", $contents, $matches);
+        $rParams = !empty($matches[1]) ? $matches[1] : array();
+        $pParams = !empty($matches[2]) ? $matches[2] : array();
+        $eParams = !empty($matches[3]) ? $matches[3] : array();
+        $rParams = is_array($rParams) ? $rParams : array($rParams);
+        $pParams = is_array($pParams) ? $pParams : array($pParams);
+        $eParams = is_array($eParams) ? $eParams : array($eParams);
+        foreach($rParams as $param)
+        {
+            $param                = trim($param, "'");
+            $objArrowCount        = substr_count($param, '->');
+            $rParamsStructureList = explode('->', $param);
+
+            if($objArrowCount == 1)
+            {
+                $moduleName  = substr($rParamsStructureList[0], 1);
+                $method      = $rParamsStructureList[1];
+                $methodName  = substr(explode('(', $method)[0], 0, -4);
+                $methodParam = substr(explode('(', $method)[1], 0, -1);
+            }
+            elseif($objArrowCount == 2)
+            {
+                $moduleName  = $rParamsStructureList[1];
+                $method      = $rParamsStructureList[2];
+                $methodName  = explode('(', $method)[0];
+                $methodParam = trim(substr(explode('(', $method)[1], 0, -1), ")");
+                $methodParam = trim($methodParam, "'");
+            }
+            else
+            {
+                $moduleName  = $param;
+                $methodName  = 0;
+                $methodParam = 0;
+            }
+
+
+            if ($methodName === 0 && $methodParam === 0)
+            {
+                $translatedList['r'][] = "测试参数{$moduleName}";
+            }
+            else
+            {
+                $translatedList['r'][] = "测试模块{$moduleName}方法{$methodName}参数为{$methodParam}";
+            }
+        }
+
+        foreach($pParams as $pParam)
+        {
+            $translatedList['p'][] = "的输出" . trim($pParam, "'");
+        }
+
+        foreach($translatedList['r'] as $index => $translated)
+        {
+            echo $translated . $translatedList['p'][$index] . PHP_EOL;
+        }
+    }
 }
 
 /**
