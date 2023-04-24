@@ -167,7 +167,7 @@ class api extends control
         if(!strpos($this->server->http_referer, 'space') and !strpos($this->server->http_referer, 'api')) setCookie("docSpaceParam", '', $this->config->cookieLife, $this->config->webRoot, '', false, true);
 
         /* Get all api doc libraries. */
-        $libs = $this->doc->getApiLibs($libID);
+        $libs = $this->doc->getApiLibs($libID, $this->objectType, $this->objectID);
         $api  = $this->api->getLibById($apiID, $version, $release);
         if($api)
         {
@@ -183,7 +183,7 @@ class api extends control
         }
 
         /* Crumbs links array. */
-        $lib = zget($libs, $libID);
+        $lib  = zget($libs, $libID);
         $type = $lib->product ? 'product' : ($lib->project ? 'project' : 'unlink');
 
         $methodName = $type != 'unlink' ? $type . 'Space' : 'index';

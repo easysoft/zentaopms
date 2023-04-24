@@ -47,13 +47,13 @@ class docModel extends model
         $libs = $this->dao->select('*')->from(TABLE_DOCLIB)
             ->where('deleted')->eq(0)
             ->andWhere('type')->eq('api')
-            ->beginIF(!empty($appendLib))->orWhere('id')->eq($appendLib)->fi()
-            ->beginIF(!empty($objectType) && $objectID > 0 and $objectType != 'nolink')->andWhere($objectType)->eq($objectID)->fi()
+            ->beginIF(!empty($objectType) and $objectID > 0 and $objectType != 'nolink')->andWhere($objectType)->eq($objectID)->fi()
             ->beginIF($objectType == 'nolink')
             ->andWhere('product')->eq(0)
             ->andWhere('project')->eq(0)
             ->andWhere('execution')->eq(0)
             ->fi()
+            ->beginIF(!empty($appendLib))->orWhere('id')->eq($appendLib)->fi()
             ->orderBy('order_asc, id_asc')
             ->fetchAll('id');
 
