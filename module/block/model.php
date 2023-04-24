@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * The model file of block module of ZenTaoPMS.
  *
@@ -66,21 +67,19 @@ class blockModel extends model
     }
 
     /**
-     * Get block by ID.
+     * Get a block by blockID. 
+     * 根据区块ID获取区块信息.
      *
      * @param  int    $blockID
      * @access public
      * @return object
      */
-    public function getByID($blockID)
+    public function getByID(int $blockID) : object | bool
     {
-        $block = $this->dao->select('*')->from(TABLE_BLOCK)
-            ->where('id')->eq($blockID)
-            ->fetch();
-        if(empty($block)) return false;
+        $block = $this->blockTao->getByID($blockID);
+        if(empty($block)) return new stdclass();
 
         $block->params = json_decode($block->params);
-        if(empty($block->params)) $block->params = new stdclass();
         if($block->block == 'html') $block->params->html = $this->loadModel('file')->setImgSize($block->params->html);
         return $block;
     }
