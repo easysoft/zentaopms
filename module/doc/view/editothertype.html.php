@@ -30,7 +30,7 @@
       <table class='table table-form'>
         <?php if(strpos('product|project|execution', $type) !== false):?>
         <tr>
-          <th><?php echo $lang->doc->project;?></th>
+          <th><?php echo $lang->doc->{$type};?></th>
           <td class='required'><?php echo html::select($type, $objects, $objectID, "class='form-control chosen' onchange='loadObjectModules(\"{$type}\", this.value)'");?></td>
         </tr>
         <?php endif;?>
