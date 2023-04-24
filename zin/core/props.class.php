@@ -211,10 +211,10 @@ class props extends \zin\utils\dataset
         if(is_string($skipProps)) $skipProps = explode(',', $skipProps);
 
         $data = $this->toJsonData();
-        if($skipFalse) $data = array_filter($data, function($v) {return $v !== false;});
         foreach($data as $name => $value)
         {
             if($value === NULL || in_array($name, $skipProps)) unset($data[$name]);
+            if($skipFalse && $value === false) unset($data[$name]);
         }
 
         return $data;

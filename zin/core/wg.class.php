@@ -138,7 +138,7 @@ class wg
             $this,
             [$before, $children, $portals, $after],
             $selectors,
-            (!empty($options) && isset($options['type'])) ? $options['type'] : 'html',
+            (!empty($options) && isset($options['type'])) ? $options['type'] : 'html', // TODO: () may not work in lower php
             (!empty($options) && isset($options['data'])) ? $options['data'] : NULL,
         );
     }
@@ -183,7 +183,7 @@ class wg
 
     protected function build()
     {
-        return  $this->children();
+        return $this->children();
     }
 
     protected function onAddBlock($child, $name)

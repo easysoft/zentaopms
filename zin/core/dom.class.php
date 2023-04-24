@@ -123,7 +123,7 @@ class dom
      */
     public function build()
     {
-        $list  = [];
+        $list     = [];
         $children = $this->renderInner ? $this->wg->children() : $this->children;
 
         if(empty($children)) return $list;
@@ -241,7 +241,7 @@ class dom
             if(!empty($item->dataGetters))
             {
                 $output = [];
-                $props = explode(',', $item->dataGetters);
+                $props  = explode(',', $item->dataGetters);
                 foreach($props as $prop)
                 {
                     $prop = trim($prop);
