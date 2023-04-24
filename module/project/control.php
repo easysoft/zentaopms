@@ -2345,12 +2345,17 @@ class project extends control
      */
     public function ajaxGetExecutions($projectID, $executionID = 0, $mode = '', $type = 'all')
     {
-        $project    = $this->project->getById($projectID);
-        $executions = array('' => '') + $this->loadModel('execution')->getPairs($projectID, $type, $mode);
+        $disabled   = '';
+        $executions = array('' => '');
+
+        if($projectID)
+        {
+            $project    = $this->project->getById($projectID);
+            $executions = array('' => '') + $this->loadModel('execution')->getPairs($projectID, $type, $mode);
+            if(!empty($project->multiple)) $disabled = 'disabled';
+        }
 
         if($this->app->getViewType() == 'json') return print(json_encode($executionList));
-
-        $disabled = $project->multiple ? '' : 'disabled';
         return print(html::select('execution', $executions, $executionID, "class='form-control $disabled' $disabled"));
     }
 
