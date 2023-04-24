@@ -647,7 +647,7 @@ class docModel extends model
 
         $allLibs          = $this->getLibs('all');
         $allLibIDList     = array_keys($allLibs);
-        $hasPrivDocIdList = $this->getPrivDocs();
+        $hasPrivDocIdList = $this->getPrivDocs($allLibIDList);
         if($type == 'view' or $type == 'collect')
         {
             $docs = $this->dao->select('t1.*,t3.name as libName,t3.type as objectType,max(t2.`date`) as date')->from(TABLE_DOC)->alias('t1')
