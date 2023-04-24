@@ -945,7 +945,7 @@ CHANGE `extra` `extra` char(30) NOT NULL DEFAULT '';
 
 ALTER TABLE `zt_release`
 CHANGE `project` `project` varchar(255) NOT NULL DEFAULT '0',
-CHANGE `leftBugs` `leftBugs` text NULL;
+CHANGE `leftBugs` `leftBugs` text NULL,
 CHANGE `notify` `notify` varchar(255) NOT NULL default '';
 
 ALTER TABLE `zt_researchplan`
