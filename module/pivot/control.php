@@ -71,7 +71,7 @@ class pivot extends control
             
             $pivot->sql = $sql;
 
-            $processSqlData = $this->loadModel('dataview')->getTables($sql);
+            $processSqlData = $this->loadModel('chart')->getTables($sql);
             $sql = $processSqlData['sql'];
 
             list($data, $configs) = $this->pivot->genSheet(json_decode(json_encode($pivot->fieldSettings), true), $pivot->settings, $sql, $filterFormat, json_decode($pivot->langs, true));
