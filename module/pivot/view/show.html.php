@@ -46,7 +46,7 @@
       <?php endif;?>
     </div>
     <div id='datagirdInfo' class='datagrid datagrid-padding'>
-      <?php $sql = $this->loadModel('dataview')->parseSqlVars($pivot->sql, $pivot->filters);?>
+      <?php $sql = $this->loadModel('chart')->parseSqlVars($pivot->sql, $pivot->filters);?>
       <?php $this->pivot->buildPivotTable($data, $configs, json_decode(json_encode($pivot->fieldSettings), true), $sql);?>
     </div>
   </div>
