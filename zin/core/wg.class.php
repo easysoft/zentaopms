@@ -192,12 +192,12 @@ class wg
         if(empty($events)) return NULL;
 
         $id   = $this->id();
-        $code = array($this->shortType() === 'html' ? 'const ele = document;' : 'const ele = document.getElementById("' . (empty($id) ? $this->gid : $id) . '");');
+        $code = array($this->shortType() === 'html' ? 'const ele = document;' : 'const ele = document.getElementById("' . (empty($id) ? $this->gid : $id) . '");if(!ele)return;');
         foreach($events as $event => $bindingList)
         {
             foreach($bindingList as $binding)
             {
-                $code[]   = "ele?.addEventListener('$event', function(e){";
+                $code[]   = "ele.addEventListener('$event', function(e){";
                 if(is_string($binding)) $binding = (object)array('handler' => $binding);
                 $selector = isset($binding->selector) ? $binding->selector : NULL;
                 $handler  = isset($binding->handler) ? trim($binding->handler) : '';
