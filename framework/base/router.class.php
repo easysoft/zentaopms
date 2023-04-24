@@ -2946,7 +2946,7 @@ class baseRouter
      */
     public function isContainer(): bool
     {
-        return strtolower(getenv('IS_CONTAINER')) == 'true';
+        return strtolower((string)getenv('IS_CONTAINER')) == 'true';
     }
 
     /**

@@ -73,16 +73,44 @@ class context extends \zin\utils\dataset
         return $this->addToList('jsVar', h::createJsVarCode($name, $value));
     }
 
+    public function addWgWithEvents($wg)
+    {
+        $list = $this->getWgWithEventsList();
+        if(in_array($wg, $list)) return $this;
+        return $this->addToList('wgWithEvents', $wg);
+    }
+
+    public function getWgWithEventsList()
+    {
+        return $this->getList('wgWithEvents');
+    }
+
     public function addJSCall()
     {
         $code = call_user_func_array('\zin\h::createJsCallCode', func_get_args());
-        \a(array('code', $code, $this->getJsList()));
         return $this->addToList('jsCall', $code);
+    }
+
+    public function getEventsBindings()
+    {
+        $wgs   = $this->getList('wgWithEvents');
+        $codes = [];
+        foreach($wgs as $wg)
+        {
+            if(!method_exists($wg, 'buildEvents'))
+            {
+                \a(['> getEventsBindings', 'no buildEvents', $wg]);
+                continue;
+            }
+            $code = $wg->buildEvents();
+            if(!empty($code)) $codes[] = $code;
+        }
+        return $codes;
     }
 
     public function getJsList()
     {
-        return array_merge($this->getList('jsVar'), $this->getList('js'), $this->getList('jsCall'));
+        return array_merge($this->getList('jsVar'), $this->getList('js'), $this->getEventsBindings(), $this->getList('jsCall'));
     }
 
     public static $map = array();

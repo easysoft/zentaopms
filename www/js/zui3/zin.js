@@ -251,7 +251,8 @@
     function loadPage(url, selector, id)
     {
         url = url || currentAppUrl;
-        if (!selector && url.includes(' ')) {
+        if (!selector && url.includes(' '))
+        {
             const parts = url.split(' ', 2);
             url = parts[0];
             selector = parts[1];

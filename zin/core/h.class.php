@@ -39,11 +39,9 @@ class h extends wg
 
     public function build()
     {
-        $events = $this->buildEvents();
+        if($this->isSelfClose()) return array($this->buildSelfCloseTag());
 
-        if($this->isSelfClose()) return array($this->buildSelfCloseTag(), $events);
-
-        return array($this->buildTagBegin(), parent::build(), $this->getPortals(), $this->buildTagEnd(), $events);
+        return array($this->buildTagBegin(), parent::build(), $this->getPortals(), $this->buildTagEnd());
     }
 
     public function toJsonData()
@@ -68,44 +66,6 @@ class h extends wg
         $propStr = $this->props->toStr(array_keys(static::getDefinedProps()));
         if($this->props->hasEvent() && empty($this->id()) && $this->getTagName() !== 'html') $propStr = "$propStr id='$this->gid'";
         return empty($propStr) ? '' : " $propStr";
-    }
-
-    protected function buildEvents()
-    {
-        $events = $this->props->events();
-        if(empty($events)) return NULL;
-
-        $id = $this->id();
-        $code = array($this->getTagName() === 'html' ? 'const ele = document;' : 'const ele = document.getElementById("' . (empty($id) ? $this->gid : $id) . '");');
-        foreach($events as $event => $bindingList)
-        {
-            foreach($bindingList as $binding)
-            {
-                $code[] = "ele.addEventListener('$event', function(e) {";
-                if(is_string($binding)) $binding = (object)array('handler' => $binding);
-                $selector = isset($binding->selector) ? $binding->selector : NULL;
-                $handler  = isset($binding->handler) ? trim($binding->handler) : '';
-                $stop  = isset($binding->stop) ? $binding->stop : NULL;
-                $prevent  = isset($binding->prevent) ? $binding->prevent : NULL;
-                $self  = isset($binding->self) ? $binding->self : NULL;
-                unset($binding->selector);
-                unset($binding->handler);
-                unset($binding->stop);
-                unset($binding->prevent);
-                unset($binding->self);
-
-                if($selector) $code[] = "if(!e.target.closest('$selector')) return;";
-                if($self)     $code[] = "if(ele !== e.target) return;";
-                if($stop)     $code[] = "e.stopPropagation();";
-                if($prevent)  $code[] = "e.preventDefault();";
-
-                if(preg_match('/^[$A-Z_][0-9A-Z_$\[\]."\']*$/i', $handler)) $code[] = "($handler)(e);";
-                else $code[] = $handler;
-
-                $code[] = '}' . (empty($binding) ? '' : (', ' . json_encode($binding))) . ');';
-            }
-        }
-        return static::js($code);
     }
 
     protected function buildSelfCloseTag()
@@ -227,7 +187,7 @@ class h extends wg
 
         list($code, $args) = h::splitRawCode($args);
         if(empty($code)) return NULL;
-        return static::create('script', html('(function(){'. implode("\n", $code) . '}())'), ...$args);
+        return static::create('script', html(h::createJsScopeCode($code)), ...$args);
     }
 
     public static function jsVar($name, $value, ...$directives)
@@ -276,6 +236,12 @@ class h extends wg
             else $jsCode .= "const $var=" . $val . ';';
         }
         return $jsCode;
+    }
+
+    public static function createJsScopeCode(string|array $codes): string
+    {
+        if(is_array($codes)) $codes = implode("\n", $codes);
+        return "(function(){\n$codes\n}());";
     }
 
     public static function jsRaw()
