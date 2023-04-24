@@ -1,0 +1,27 @@
+#!/usr/bin/env php
+<?php
+include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
+include dirname(dirname(dirname(__FILE__))) . '/class/admin.class.php';
+su('admin');
+
+/**
+
+title=测试 adminModel->bindByAPI();
+cid=1
+pid=1
+
+正常测试 >> success;wxm11,j8a5qCRTleJh9Gv4
+错误密码测试 >> fail;登录失败，请检查您的用户名或密码是否填写正确。
+post数据为空测试 >> fail;登录失败，请检查您的用户名或密码是否填写正确。
+
+*/
+
+$admin = new adminTest();
+
+$paramInfo = array('account' => 'wxm11', 'password' => '123qweasd', 'sn' => 'c8aa3269e181f2b9258ce96625de1497', 'site' => 'http://zentaopmsdemo.com');
+$errorPwd  = array('account' => 'wxm11', 'password' => '123', 'sn' => 'c8aa3269e181f2b9258ce96625de1497', 'site' => 'http://zentaopmsdemo.com');
+$emptyPost = array();
+
+r($admin->bindByAPITest($errorPwd))  && p('result;message')              && e('fail;登录失败，请检查您的用户名或密码是否填写正确。'); //错误密码测试
+r($admin->bindByAPITest($emptyPost)) && p('result;message')              && e('fail;登录失败，请检查您的用户名或密码是否填写正确。'); //post数据为空测试
+r($admin->bindByAPITest($paramInfo)) && p('result;data:account,private') && e('success;wxm11,j8a5qCRTleJh9Gv4');                      //正常测试
