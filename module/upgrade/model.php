@@ -9127,12 +9127,13 @@ class upgradeModel extends model
         if(!$sql) return array();
 
         $this->loadModel('dataview');
+        $this->loadModel('chart');
 
         $columns      = $this->dataview->getColumns($sql);
         $columnFields = array();
         foreach($columns as $column => $type) $columnFields[$column] = $column;
 
-        $tableAndFields = $this->dataview->getTables($sql);
+        $tableAndFields = $this->chart->getTables($sql);
         $tables         = $tableAndFields['tables'];
         $fields         = $tableAndFields['fields'];
 
