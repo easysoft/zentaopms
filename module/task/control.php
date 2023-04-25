@@ -983,7 +983,7 @@ class task extends control
             $story = $this->story->getById($task->story, $task->storyVersion);
             $task->storySpec   = empty($story) ? '' : $this->loadModel('file')->setImgSize($story->spec);
             $task->storyVerify = empty($story) ? '' : $this->loadModel('file')->setImgSize($story->verify);
-            $task->storyFiles  = $story->files;
+            $task->storyFiles  = empty($story) ? '' : $story->files;
         }
 
         if($task->team) $this->lang->task->assign = $this->lang->task->transfer;
