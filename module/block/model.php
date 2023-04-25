@@ -775,7 +775,7 @@ class blockModel extends model
 
         $params = $this->appendCountParams();
         $params->type['name']    = $this->lang->block->type;
-        $params->type['options'] = $this->lang->issue->labelList;
+        $params->type['options'] = $this->lang->issue->typeList;
         $params->type['control'] = 'select';
 
         $params->orderBy['name']    = $this->lang->block->orderBy;
