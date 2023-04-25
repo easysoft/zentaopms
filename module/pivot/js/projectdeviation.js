@@ -31,6 +31,6 @@ function changeDate(begin, end)
     }
 
     var params = window.btoa('begin=' + begin + '&end=' + end);
-    var link = createLink('pivot', 'preview', 'dimension=' + dimension + '&group=' + group + '&module=pivot&method=projectdeviation&params=' + params);
+    var link = createLink('pivot', 'preview', 'dimension=' + dimension + '&group=' + groupID + '&module=pivot&method=projectdeviation&params=' + params);
     location.href = link;
 }
