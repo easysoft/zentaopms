@@ -244,6 +244,7 @@ class productModel extends model
      */
     public function getById($productID)
     {
+        $productID = (int)$productID;
         if(defined('TUTORIAL')) return $this->loadModel('tutorial')->getProduct();
         $product = $this->dao->findById($productID)->from(TABLE_PRODUCT)->fetch();
         if(!$product) return false;
