@@ -18,6 +18,8 @@ class checkList extends wg
     public function getValueList()
     {
         $value = $this->prop('value');
+        if(is_null($value)) return array();
+
         if($this->prop('type') === 'checkbox') return is_array($value) ? $value : explode(',', $value);
         return [$value];
     }
