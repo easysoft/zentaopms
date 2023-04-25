@@ -1399,7 +1399,7 @@ class userModel extends model
         if($this->session->{"{$account}.loginLocked"} and (time() - strtotime($this->session->{"{$account}.loginLocked"})) <= $this->config->user->lockMinutes * 60) return true;
 
         $user = $this->dao->select('locked')->from(TABLE_USER)->where('account')->eq($account)->fetch();
-        if(empty($user)) return false;
+        if(empty($user) or is_null($user->locked)) return false;
 
         if((time() - strtotime($user->locked)) > $this->config->user->lockMinutes * 60) return false;
         return true;
@@ -1414,7 +1414,7 @@ class userModel extends model
      */
     public function cleanLocked($account)
     {
-        $this->dao->update(TABLE_USER)->set('fails')->eq(0)->set('locked')->eq('0000-00-00 00:00:00')->where('account')->eq($account)->exec();
+        $this->dao->update(TABLE_USER)->set('fails')->eq(0)->set('locked = null')->where('account')->eq($account)->exec();
 
         unset($_SESSION['loginFails']);
         unset($_SESSION["{$account}.loginLocked"]);
