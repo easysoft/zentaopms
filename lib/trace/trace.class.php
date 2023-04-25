@@ -71,6 +71,9 @@ class trace
             if($type == 'sqlExplain') continue;
             $lines .= $this->console($type, empty($content) ? array() : $content);
         }
+
+        $lines .= $this->printSQLProfile();
+
         $js = <<<JS
 
 <script type='text/javascript'>
@@ -114,6 +117,20 @@ JS;
         }
         $line[] = "console.groupEnd();";
         return implode(PHP_EOL, $line);
+    }
+
+    protected function printSQLProfile()
+    {
+        $lines = array();
+
+        $profiling = $this->dao->dbh->query('SHOW PROFILES')->fetchAll(PDO::FETCH_ASSOC);
+        if(empty($profiling)) return '';
+
+        $lines[] = 'console.groupCollapsed("SQL Profile")';
+        $lines[] = 'console.table(' . json_encode($profiling) . ')';
+        $lines[] = 'console.groupEnd()';
+
+        return implode(PHP_EOL, $lines);
     }
 
     public function __toString(): string
