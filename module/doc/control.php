@@ -603,7 +603,7 @@ class doc extends control
         }
         elseif($objectType == 'mine')
         {
-            $this->lang->doc->aclList = $this->lang->doclib->mySpaceAclList['private'];
+            $this->lang->doc->aclList = $this->lang->doclib->mySpaceAclList;
         }
         $moduleOptionMenu = $this->doc->getLibsOptionMenu($libs);
 
@@ -650,16 +650,7 @@ class doc extends control
             $this->doc->delete(TABLE_DOC, $docID);
 
             /* Delete doc files. */
-            $this->loadModel('file');
-            foreach($doc->files as $fileID => $file)
-            {
-                $file = $this->file->getById($fileID);
-                $this->dao->delete()->from(TABLE_FILE)->where('id')->eq($fileID)->exec();
-                $this->loadModel('action')->create($file->objectType, $file->objectID, 'deletedFile', '', $extra=$file->title);
-
-                $fileRecord = $this->dao->select('id')->from(TABLE_FILE)->where('pathname')->eq($file->pathname)->fetch();
-                if(empty($fileRecord)) $this->file->unlinkFile($file);
-            }
+            if($doc->files) $this->dao->update(TABLE_FILE)->set('deleted')->eq('1')->where('id')->in(array_keys($doc->files))->exec();
 
             /* if ajax request, send result. */
             if($this->server->ajax)
