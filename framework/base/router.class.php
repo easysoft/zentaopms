@@ -416,6 +416,8 @@ class baseRouter
         if($this->config->framework->autoConnectDB) $this->connectDB();
         if($this->config->framework->multiLanguage) $this->setClientLang();
 
+        $this->setupProfiling();
+
         $this->setEdition();
         $this->setVision();
 
@@ -719,6 +721,39 @@ class baseRouter
     public function setDebug()
     {
         if(!empty($this->config->debug)) error_reporting(E_ALL & ~ E_STRICT);
+    }
+
+    /**
+     * 配置数据库性能采样。
+     * Setup database profiling.
+     *
+     * @access protected
+     * @return void
+     */
+    protected function setupProfiling()
+    {
+        if(!empty($this->config->debug) && $this->config->debug >= 3) $this->dbh->exec('SET profiling = 1');
+    }
+
+    /**
+     * 输出数据库性能采样结果(Server-Timing)。
+     * Output database profiling(Server-Timing).
+     *
+     * @access protected
+     * @return void
+     */
+    protected function outputProfiling()
+    {
+        if(empty($this->config->debug) || $this->config->debug < 3) return;
+
+        /* MySQL profiling. */
+        $profiling = $this->dbh->query('SHOW PROFILES')->fetchAll(PDO::FETCH_ASSOC);
+        foreach($profiling as $prof)
+        {
+            header('Server-Timing: db;desc="SQL: ' . $prof['Query'] . '";dur=' . $prof['Duration'] * 1000, false);
+        }
+
+        header('Server-Timing: app;desc="PHP: Total";dur=' . (getTime() - $this->startTime) * 1000, false);
     }
 
     /**
@@ -2233,13 +2268,18 @@ class baseRouter
     public function loadModule()
     {
         try {
-            if(is_null($this->params) and !$this->setParams()) return false;
+            if(is_null($this->params) and !$this->setParams())
+            {
+                $this->outputProfiling();
+                return false;
+            }
 
             /* 调用该方法   Call the method. */
             $module = $this->control;
 
             call_user_func_array(array($module, $this->methodName), $this->params);
             $this->checkAPIFile();
+            $this->outputProfiling();
             return $module;
         } catch (EndResponseException $endResponseException) {
             echo $endResponseException->getContent();
