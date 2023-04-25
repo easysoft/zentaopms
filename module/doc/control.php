@@ -1309,7 +1309,7 @@ class doc extends control
             $this->view->libs    = $libs;
             $this->view->apiID   = 0;
             $this->view->release = 0;
-            $this->view->apiList = $browseType == 'bySearch' ? $this->api->getApiListBySearch($libID, $queryID, $type, array_keys($libs)) : $this->api->getListByModuleId($libID, $moduleID, 0, $pager);
+            $this->view->apiList = $browseType == 'bySearch' ? $this->api->getApiListBySearch($libID, $queryID, $type, array_keys($libs)) : $this->api->getListByModuleId($libID, $moduleID, $param, $pager);
         }
         else
         {
