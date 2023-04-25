@@ -65,6 +65,13 @@ if(!function_exists('str_contains'))
         return strpos($haystack, $needle) !== false;
     }
 }
+else
+{
+    function str_contains($haystack, $needle)
+    {
+        return \str_contains($haystack, $needle);
+    }
+}
 
 if(!function_exists('str_starts_with'))
 {
@@ -80,11 +87,18 @@ if(!function_exists('str_starts_with'))
         return strpos($haystack, $needle) === 0;
     }
 }
+else
+{
+    function str_starts_with($haystack, $needle)
+    {
+        return \str_starts_with($haystack, $needle);
+    }
+}
 
 if(!function_exists('str_ends_with'))
 {
     /**
-     * Checks if a string starts with a given substring
+     * Checks if a string starts with a given substring.
      *
      * @param string $haystack
      * @param string $needle
@@ -93,5 +107,12 @@ if(!function_exists('str_ends_with'))
     function str_ends_with($haystack, $needle)
     {
         return strpos($haystack, $needle) === strlen($haystack) - 1;
+    }
+}
+else
+{
+    function str_ends_with($haystack, $needle)
+    {
+        return \str_ends_with($haystack, $needle);
     }
 }
