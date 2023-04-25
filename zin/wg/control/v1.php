@@ -9,6 +9,7 @@ require_once dirname(__DIR__) . DS . 'checklist' . DS . 'v1.php';
 require_once dirname(__DIR__) . DS . 'radiolist' . DS . 'v1.php';
 require_once dirname(__DIR__) . DS . 'select' . DS . 'v1.php';
 require_once dirname(__DIR__) . DS . 'inputcontrol' . DS . 'v1.php';
+require_once dirname(__DIR__) . DS . 'picker' . DS . 'v1.php';
 
 class control extends wg
 {
@@ -105,7 +106,7 @@ class control extends wg
         $type = $this->prop('type');
         if(empty($type))
         {
-            $type = $this->hasProp('items') ? 'select' : 'text';
+            $type = $this->hasProp('items') ? 'picker' : 'text';
         }
 
         $methodName = "build{$type}";
