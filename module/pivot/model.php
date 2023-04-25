@@ -112,9 +112,16 @@ class pivotModel extends model
             $pivots = array_merge($pivots, $charts);
         }
 
-        $pager->setRecTotal(count($pivots));
-        $pager->setPageTotal();
-        if($pager->pageID > $pager->pageTotal) $pager->setPageID($pager->pageTotal);
+        if(!empty($pager))
+        {
+            $pager->setRecTotal(count($pivots));
+            $pager->setPageTotal();
+            if($pager->pageID > $pager->pageTotal) $pager->setPageID($pager->pageTotal);
+
+            $pivots = array_chunk($pivots, $pager->recPerPage);
+            $pivots = $pivots[$pager->pageID - 1];
+
+        }
 
         return $this->processPivot($pivots, false);
     }
