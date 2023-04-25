@@ -4341,7 +4341,7 @@ class testcaseModel extends model
             ->leftJoin(TABLE_CASESTEP)->alias('t2')->on('t1.id = t2.`case` and t1.version = t2.version')
             ->where('t1.deleted')->eq(0)
             ->andWhere('t1.product')->eq($productID)
-            ->andWhere('t2.id')->ne('null')
+            ->andWhere('t2.id')->gt('0')
             ->beginIF($moduleID > 0)->andWhere('t1.module')->eq($moduleID)->fi()
             ->fetchAll();
 
