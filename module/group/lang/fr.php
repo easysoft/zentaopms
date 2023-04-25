@@ -118,6 +118,13 @@ $lang->privpackage->module = 'Module';
 $lang->privpackage->desc   = 'Priv Package Desc';
 $lang->privpackage->belong = 'Priv Package';
 
+if(!isset($lang->privlang)) $lang->privlang = new stdclass();
+$lang->privlang->value  = 'Name';
+$lang->privlang->desc   = 'Desc';
+$lang->privlang->module = 'Module';
+$lang->privlang->method = 'Method';
+$lang->privlang->parent = 'Module/Package';
+
 $lang->group->copyOptions['copyPriv'] = 'Copier Privilèges';
 $lang->group->copyOptions['copyUser'] = 'Copier Utilisateurs';
 
