@@ -1939,6 +1939,7 @@ class docModel extends model
 
         $files = $this->dao->select('*')->from(TABLE_FILE)->alias('t1')
             ->where('size')->gt('0')
+            ->andWhere('deleted')->eq('0')
             ->andWhere("(objectType = '$type' and objectID = $objectID)", true)
             ->orWhere("(objectType = 'doc' and objectID in ($docIdList))")
             ->orWhere("(objectType = 'bug' and objectID in ($bugIdList))")

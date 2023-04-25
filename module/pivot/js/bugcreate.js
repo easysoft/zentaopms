@@ -18,6 +18,6 @@ function changeParams(obj)
     }
 
     var params = window.btoa('begin=' + begin + '&end=' + end + '&product=' + product + '&execution=' + execution);
-    var link = createLink('pivot', 'preview', 'dimension=' + dimension + '&group=' + group + '&module=pivot&method=bugcreate&params=' + params);
+    var link = createLink('pivot', 'preview', 'dimension=' + dimension + '&group=' + groupID + '&module=pivot&method=bugcreate&params=' + params);
     location.href = link;
 }

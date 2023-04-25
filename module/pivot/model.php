@@ -112,9 +112,16 @@ class pivotModel extends model
             $pivots = array_merge($pivots, $charts);
         }
 
-        $pager->setRecTotal(count($pivots));
-        $pager->setPageTotal();
-        if($pager->pageID > $pager->pageTotal) $pager->setPageID($pager->pageTotal);
+        if(!empty($pager))
+        {
+            $pager->setRecTotal(count($pivots));
+            $pager->setPageTotal();
+            if($pager->pageID > $pager->pageTotal) $pager->setPageID($pager->pageTotal);
+
+            $pivots = array_chunk($pivots, $pager->recPerPage);
+            $pivots = $pivots[$pager->pageID - 1];
+
+        }
 
         return $this->processPivot($pivots, false);
     }
@@ -1390,19 +1397,16 @@ class pivotModel extends model
 
         /* Process rows. */
         $connectSQL = '';
-        if(empty($settings['filterType']) or $settings['filterType'] == 'result')
+        if(!empty($filters) && !isset($filters[0]['from']))
         {
-            if(!empty($filters))
+            $wheres = array();
+            foreach($filters as $field => $filter)
             {
-                $wheres = array();
-                foreach($filters as $field => $filter)
-                {
-                    $wheres[] = "tt.`$field` {$filter['operator']} {$filter['value']}";
-                }
-
-                $whereStr    = implode(' and ', $wheres);
-                $connectSQL .= " where $whereStr";
+                $wheres[] = "tt.`$field` {$filter['operator']} {$filter['value']}";
             }
+
+            $whereStr    = implode(' and ', $wheres);
+            $connectSQL .= " where $whereStr";
         }
 
         $groupSQL = " group by $groupList";
@@ -1411,36 +1415,39 @@ class pivotModel extends model
         $number       = 0;
         $groupsRow    = array();
         $showColTotal = zget($settings, 'columnTotal', 'noShow');
-        foreach($settings['columns'] as $column)
+        if(isset($settings['columns']))
         {
-            $stat   = $column['stat'];
-            $field  = $column['field'];
-            $slice  = zget($column, 'slice', 'noSlice');
-            $uuName = $field . $number;
-            $number ++;
-
-            if($stat == 'distinct')
+            foreach($settings['columns'] as $column)
             {
-                $columnSQL = "count(distinct tt.`$field`) as `$uuName`";
-            }
-            else
-            {
-                $columnSQL = "$stat(tt.`$field`) as `$uuName`";
-            }
+                $stat   = $column['stat'];
+                $field  = $column['field'];
+                $slice  = zget($column, 'slice', 'noSlice');
+                $uuName = $field . $number;
+                $number ++;
 
-            if($slice != 'noSlice') $columnSQL = "select $groupList,`$slice`,$columnSQL from ($sql) tt" . $connectSQL . $groupSQL . ",tt.`$slice`" . $orderSQL . ",tt.`$slice`";
-            if($slice == 'noSlice') $columnSQL = "select $groupList,$columnSQL from ($sql) tt" . $connectSQL . $groupSQL . $orderSQL;
+                if($stat == 'distinct')
+                {
+                    $columnSQL = "count(distinct tt.`$field`) as `$uuName`";
+                }
+                else
+                {
+                    $columnSQL = "$stat(tt.`$field`) as `$uuName`";
+                }
 
-            $columnRows = $this->dao->query($columnSQL)->fetchAll();
+                if($slice != 'noSlice') $columnSQL = "select $groupList,`$slice`,$columnSQL from ($sql) tt" . $connectSQL . $groupSQL . ",tt.`$slice`" . $orderSQL . ",tt.`$slice`";
+                if($slice == 'noSlice') $columnSQL = "select $groupList,$columnSQL from ($sql) tt" . $connectSQL . $groupSQL . $orderSQL;
 
-            $cols = $this->getTableHeader($columnRows, $column, $fields, $cols, $sql, $langs);
-            if($slice != 'noSlice') $columnRows = $this->processSliceData($columnRows, $groups, $slice, $uuName);
-            $columnRows = $this->processShowData($columnRows, $groups, $column, $showColTotal, $uuName);
+                $columnRows = $this->dao->query($columnSQL)->fetchAll();
 
-            foreach($columnRows as $key => $row)
-            {
-                if(!isset($groupsRow[$key])) $groupsRow[$key] = new stdclass();
-                $groupsRow[$key] = (object)array_merge((array)$groupsRow[$key], (array)$row);
+                $cols = $this->getTableHeader($columnRows, $column, $fields, $cols, $sql, $langs);
+                if($slice != 'noSlice') $columnRows = $this->processSliceData($columnRows, $groups, $slice, $uuName);
+                $columnRows = $this->processShowData($columnRows, $groups, $column, $showColTotal, $uuName);
+
+                foreach($columnRows as $key => $row)
+                {
+                    if(!isset($groupsRow[$key])) $groupsRow[$key] = new stdclass();
+                    $groupsRow[$key] = (object)array_merge((array)$groupsRow[$key], (array)$row);
+                }
             }
         }
 
