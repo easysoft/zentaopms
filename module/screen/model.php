@@ -745,7 +745,7 @@ class screenModel extends model
             case 'option':
                 if($field)
                 {
-                    $path = $this->app->getExtensionRoot() . 'biz' . DS . 'dataview' . DS . 'table' . DS . "$object.php";
+                    $path = $this->app->getModuleRoot() . 'dataview' . DS . 'table' . DS . "$object.php";
                     include $path;
 
                     $options = $schema->fields[$field]['options'];
