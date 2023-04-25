@@ -911,8 +911,8 @@ class transferModel extends model
         {
             $selectKey = 'id';
             if($model == 'testcase') $model = 'case';
-            if(strpos($queryCondition, "`{$this->config->db->prefix}$model` AS t1") !== false) $selectKey = 't1.id';
-            if(strpos($queryCondition, "`{$this->config->db->prefix}$model` AS t2") !== false) $selectKey = 't2.id';
+            preg_match_all('/[`"]' . $this->config->db->prefix . $model .'[`"] AS ([\w]+) /', $queryCondition, $matches);
+            if(isset($matches[1][0])) $selectKey = "{$matches[1][0]}.id";
 
             $stmt = $this->dbh->query($queryCondition . ($this->post->exportType == 'selected' ? " AND $selectKey IN({$this->cookie->checkedItem})" : ''));
             while($row = $stmt->fetch())
