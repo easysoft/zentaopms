@@ -27,7 +27,7 @@ public function getPairs($mode = '', $programID = 0, $append = '', $shadow = 0)
 
     $products = $this->dao->select('*,  IF(INSTR(" closed", status) < 2, 0, 1) AS isClosed')
         ->from(TABLE_PRODUCT)
-        ->where(1)
+        ->where('1 = 1')
         ->beginIF(strpos($mode, 'all') === false)->andWhere('deleted')->eq(0)->fi()
         ->beginIF($programID)->andWhere('program')->eq($programID)->fi()
         ->beginIF(strpos($mode, 'noclosed') !== false)->andWhere('status')->ne('closed')->fi()
