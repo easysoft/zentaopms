@@ -930,7 +930,8 @@ class baseControl
         $trace = '';
         if($this->config->debug && $this->config->debug >= 2)
         {
-            $trace = $this->app->loadClass('trace')->output();
+            $trace = $this->app->loadClass('trace');
+            $trace = $trace->output();
         }
         echo $this->output . $trace;
     }
