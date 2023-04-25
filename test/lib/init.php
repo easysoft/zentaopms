@@ -59,10 +59,13 @@ $config->zdPath      = dirname(dirname(__FILE__)) . '/tools/zd';
 
 /* init testDB. */
 include $testPath . 'config/config.php';
-include $testPath. 'lib/db.class.php';
-include $testPath. 'lib/yaml.class.php';
-include $testPath. 'lib/rest.php';
-$db   = new db();
+include $testPath . 'lib/db.class.php';
+include $testPath . 'lib/yaml.class.php';
+include $testPath . 'lib/rest.php';
+
+if(getenv('DB_ZENTAOPMS_UNIT')) $config->db->name = getenv('DB_ZENTAOPMS_UNIT');
+
+$db = new db();
 
 if(!empty($config->test->account) and !empty($config->test->password) and !empty($config->test->base))
 {
