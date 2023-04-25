@@ -2250,13 +2250,13 @@ class groupModel extends model
         $managerList  = $this->dao->select('*')->from(TABLE_PRIVMANAGER)->fetchAll('id');
         $relatedPrivs = $this->transformPrivLang($relatedPrivs);
 
-        foreach($relatedPrivs as $privID => $relatedPriv)
+        foreach($relatedPrivs as $relatedPriv)
         {
             $module = $managerList[$relatedPriv->parent]->type == 'package' ? $managerList[$managerList[$relatedPriv->parent]->parent]->code : $managerList[$relatedPriv->parent]->code;
             if(!isset($privList[$relatedPriv->type][$module])) $privList[$relatedPriv->type][$module] = array();
             $privList[$relatedPriv->type][$module]['title']      = $modulePairs[$module];
             $privList[$relatedPriv->type][$module]['id']         = $relatedPriv->parent;
-            $privList[$relatedPriv->type][$module]['children'][] = array('title' => $relatedPriv->name, 'relationPriv' => $privID, 'parent' => $relatedPriv->parent, 'module' => $relatedPriv->module, 'method' => $relatedPriv->method);
+            $privList[$relatedPriv->type][$module]['children'][] = array('title' => $relatedPriv->name, 'relationPriv' => $relatedPriv->relationPriv, 'parent' => $relatedPriv->parent, 'module' => $relatedPriv->module, 'method' => $relatedPriv->method);
         }
 
         if(empty($type) or $type == 'depend')    $privList['depend']    = array_values($privList['depend']);
