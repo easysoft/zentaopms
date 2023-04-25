@@ -1449,6 +1449,7 @@ class doc extends control
         if(!common::hasPriv('doc', 'teamSpace'))    unset($spaceList['custom']);
         if(!common::hasPriv('api', 'index'))        unset($spaceList['api']);
         if(!common::hasPriv('api', 'create'))       unset($spaceList['api'], $typeList['api']);
+        if($this->config->vision == 'lite')         unset($spaceList['api'], $spaceList['product'], $typeList['api']);
 
         $products = $this->loadModel('product')->getPairs();
         $projects = $this->project->getPairsByProgram('', 'all', false, 'order_asc', 'kanban');
