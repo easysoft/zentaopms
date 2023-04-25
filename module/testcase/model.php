@@ -1969,7 +1969,7 @@ class testcaseModel extends model
                         if($step->version != $case->version) continue;
                         $oldStepID     = $step->id;
                         $step->case    = $libCaseID;
-                        $step->version = $libCase->version;
+                        $step->version = zget($libCase, 'version', '0');
                         unset($step->id);
 
                         $this->dao->insert(TABLE_CASESTEP)->data($step)->exec();
