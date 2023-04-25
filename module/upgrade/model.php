@@ -8167,10 +8167,11 @@ class upgradeModel extends model
     /**
      * Process report modules.
      *
+     * @param  $runMode  install|upgrade
      * @access public
      * @return bool
      */
-    public function createDefaultDimension()
+    public function createDefaultDimension($runMode = 'upgrade')
     {
         /* Create default dimension. */
         $this->loadModel('dimension');
@@ -8190,10 +8191,30 @@ class upgradeModel extends model
             $this->addSecondModule4BI($dimensionID, $dimensionName, 'chart', $chartModules);
 
             $pivotModules = $this->addDefaultModules4BI('pivot', $dimensionID);
+            if($runMode == 'install' and $dimensionID == 1) $this->updatePivotGroup($pivotModules);
             $this->addSecondModule4BI($dimensionID, $dimensionName, 'pivot', $pivotModules);
 
         }
         return !dao::isError();
+    }
+
+    /**
+     * Update zentao.sql or update18.3.sql file insert pivot data's group.
+     *
+     * @access public
+     * @return bool
+     */
+    public function updatePivotGroup($pivotModules)
+    {
+        $pivots = $this->dao->select('*')->from(TABLE_PIVOT)->where('id')->notin('1000,1001,1002')->fetchAll('id');
+        foreach($pivots as $pivotID => $pivot)
+        {
+            $insertGroup = array();
+            $modules = explode(',', $pivot->group);
+            foreach($modules as $module) $insertGroup[] = $pivotModules[$module];
+
+            $this->dao->update(TABLE_PIVOT)->set('`group`')->eq(implode(',', $insertGroup))->where('id')->eq($pivotID)->exec();
+        }
     }
 
     /**
