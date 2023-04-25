@@ -911,7 +911,7 @@ class docModel extends model
         unset($doc->contentMarkdown, $doc->contentType, $doc->url);
 
         $requiredFields = $this->config->doc->create->requiredFields;
-        if($doc->status == 'draft') $requiredFields = '';
+        if($doc->status == 'draft') $requiredFields = 'title';
         if(strpos("url|word|ppt|excel", $this->post->type) !== false) $requiredFields = trim(str_replace(",content,", ",", ",{$requiredFields},"), ',');
 
         $checkContent = strpos(",$requiredFields,", ',content,') !== false;
@@ -1007,7 +1007,7 @@ class docModel extends model
         }
 
         $requiredFields = $this->config->doc->edit->requiredFields;
-        if($doc->status == 'draft') $requiredFields = '';
+        if($doc->status == 'draft') $requiredFields = 'title';
         if(strpos(",$requiredFields,", ',content,') !== false)
         {
             $requiredFields = trim(str_replace(',content,', ',', ",$requiredFields,"), ',');
