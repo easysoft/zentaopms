@@ -27,6 +27,30 @@
  */
 
 /**
+ * @typedef {Object} ZinFormGroup
+ * @property {string} type
+ * @property {string} [label]
+ * @property {string} [labelClass]
+ * @property {string|number} [labelWidth]
+ * @property {string} [tip]
+ * @property {string} [tipClass]
+ * @property {string} [value]
+ * @property {string} [placeholder]
+ * @property {string} [class]
+ * @property {string|ZinFormControl} [control]
+ * @property {string} [name]
+ * @property {string} [readonly]
+ * @property {string} [disabled]
+ * @property {string} [required]
+ */
+
+/**
+ * @typedef {Object} ZinFormRow
+ * @property {ZinFormGroup[]} items
+ * @property {string} [width]
+ */
+
+/**
  * @typedef {Object} ZinPageInfo
  * @property {string} url
  * @property {string} title
@@ -38,6 +62,8 @@
  * @property {ZinDtableProps} dtable
  * @property {boolean} tableCustomCols
  * @property {{type: string}} sidebar
+ * @property {{title: string, toolbar: ZinItemProps[]}} mainHeader 
+ * @property {{submitBtnText?: string, rows: ZinFormRow[]}} form 
  */
 
 function getIconName(iconClass)
@@ -79,8 +105,9 @@ function getZinItemProps($item, props)
         const items = [];
         $item.children().each(function()
         {
-            if($(this).hasClass('dropdown-menu')) return;
-            items.push(getZinItemProps($(this)));
+            const $this = $(this);
+            if(!$this.is('a,.btn')) return;
+            items.push(getZinItemProps($this));
         });
         return {type: 'btnGroup', items, ...props};
     }
@@ -118,6 +145,330 @@ function getZinItemProps($item, props)
     return item;
 }
 
+function getFeatureBarInfo($)
+{
+    const $featureBar = $('#mainMenu .btn-toolbar.pull-left,#mainMenu .btn-toolBar.pull-left');
+    if(!$featureBar.length) return;
+    const featureBar = {items: []};
+    $featureBar.children().each(function()
+    {
+        const $this = $(this);
+        const id = $this.attr('id') || '';
+        if($this.is('.querybox-toggle'))
+        {
+            featureBar.items.push({type: 'searchToggle'});
+            return;
+        }
+
+        if($this.is('.checkbox-primary'))
+        {
+            featureBar.items.push({type: 'checkbox', text: $this.find('label').text().trim() || $this.text().trim()});
+            return;
+        }
+        if($this.is('a.btn'))
+        {
+            if($this.hasClass('btn-active-text')) featureBar.current = id ? id.replace('Tab', '') : ($this.find('.text').text().trim() || $this.text().trim());
+            return;
+        }
+    });
+    if(!featureBar.items.length) return;
+    return featureBar;
+}
+
+function getToolbarInfo($)
+{
+    const $toolbar = $('#mainMenu .btn-toolbar.pull-right');
+    if(!$toolbar.length) return;
+    const toolbar = [];
+    $toolbar.children().each(function()
+    {
+        toolbar.push(getZinItemProps($(this)));
+    });
+    return toolbar.length ? toolbar : null;
+}
+
+function getTableInfo($)
+{
+    const info = {};
+    const $table = $('#mainContent .table:not(.table-form)').first();
+    if(!$table.length) return;
+    if($('#mainContent .datatable').length)
+    {
+        return alert('zin: Please switch the table to simple table mode');
+    }
+    const colTypesMap =
+    {
+        name: 'link',
+        pri: 'pri',
+        id: 'id',
+        status: 'status',
+        actions: 'actions',
+        progress: 'circleProgress',
+        assignedTo: 'avatarBtn',
+    };
+    const getColName = ($cell) => ($cell.attr('class').toLowerCase().split(' ').find(x => x.startsWith('c-')) || '').replace('c-', '');
+    /**
+     * @type {ZinDtableProps}
+     */
+    const setting = {cols: [], data: [], plugins: [], footer: []};
+    let flexed = false;
+    $table.find('thead>tr:first>th').each(function()
+    {
+        const $this = $(this);
+        const data  = $this.data();
+        const title = $this.attr('title') || $this.text().trim();
+        const name = getColName($this) || title;
+        if(!flexed && data.flex) flexed = true;
+        const col =
+        {
+            title,
+            name,
+            width: data.width.endsWith('px') ? Number.parseInt(data.width, 10) : 200,
+            flex: data.width === 'auto' ? 1 : 0,
+            fixed: data.flex ? false : (flexed ? 'right' : 'left'),
+            type: colTypesMap[name],
+            sortType: !!$this.find('a.sort-up,a.sort-down,a.header').length
+        };
+        setting.cols.push(col);
+    });
+
+    $table.find('tbody>tr').each(function(idx)
+    {
+        const $this = $(this);
+        const rowData = $this.data();
+        $this.children('td').each(function()
+        {
+            $td = $(this);
+            const name = getColName($td);
+            if(name && rowData[name] === undefined)
+            {
+                rowData[name] = $td.text().trim();
+                if(name === 'progress' && rowData[name]) rowData[name] = rowData[name].replace('%', 0);
+            }
+        });
+        if(rowData.id === undefined) rowData.id = idx;
+        rowData.id = String(rowData.id);
+        setting.data.push(rowData);
+        if(setting.data.length > 5) return;
+    });
+
+    const tableJs = $('#mainContent [data-ride="table"]').data('zui.table');
+    if(tableJs)
+    {
+        if(tableJs.options.checkable) setting.plugins.push('checkable');
+        if(tableJs.options.sortable) setting.plugins.push('sortable');
+        if(tableJs.options.nested || $table.find('tbody>tr.table-parent,tbody>tr.has-child').length) setting.plugins.push('nested');
+    }
+    else
+    {
+        if($table.find('td .checkbox-primary').length) setting.plugins.push('checkable');
+        if($table.hasClass('has-sort-head')) setting.plugins.push('sortable');
+        if($table.find('tbody>tr.table-parent,tbody>tr.has-child').length) setting.plugins.push('nested');
+    }
+    if(setting.plugins.includes('checkable'))
+    {
+        const idCol = setting.cols.find(x => x.name === 'id');
+        if(idCol) idCol.checkbox = true;
+    }
+    if(setting.plugins.includes('nested') && !setting.cols.find(x => x.nestedToggle))
+    {
+        const nameCol = setting.cols.find(x => x.name === 'name');
+        if(nameCol) nameCol.nestedToggle = true;
+    }
+
+    const $footer = $('#mainContent .table-footer');
+    if($footer.length)
+    {
+        if(setting.plugins.includes('checkable')) setting.footer.push('checkbox', 'divider');
+
+        const $actions = $footer.find('.table-actions,.btn-toolbar');
+        if($actions.length)
+        {
+            const actions = [];
+            $actions.children().each(function()
+            {
+                actions.push(getZinItemProps($(this)));
+            });
+            if(actions.length) setting.footer.push('toolbar');
+            setting.footToolbar = {items: actions.filter(Boolean)};
+            setting.footer.push('toolbar');
+        }
+
+        const $statistic = $footer.find('.table-statistic');
+        if($statistic.length) setting.footer.push($statistic.text().trim());
+
+        const $pager = $footer.find('.pager');
+        if($pager.length)
+        {
+            setting.footer.push('flex', 'pager');
+            setting.footPager = true;
+        }
+    }
+
+    info.dtable = setting;
+    info.layout = 'list';
+    info.sidebar = $('#sidebar').length ? {type: 'moduleTree'} : undefined;
+
+    if($('#tableCustomBtn').length) info.tableCustomCols = true;
+    return info;
+}
+
+function getMainHeaderInfo($)
+{
+    const $mainHeader = $('#mainContent .main-header');
+    if(!$mainHeader.length) return;
+   
+    const mainHeader = {title: $mainHeader.find('h2').text().trim()};
+    const $toolbar = $mainHeader.find('.btn-toolbar');
+    if($toolbar.length)
+    {
+        const toolbar = [];
+        $toolbar.children().each(function()
+        {
+            toolbar.push(getZinItemProps($(this)));
+        });
+        mainHeader.toolbar = toolbar.filter(Boolean);
+    }
+    return mainHeader;
+}
+
+function getFormGroupProps($control)
+{
+    if($control.hasClass('input-group'))
+    { 
+        const info = {type: 'inputGroup', items: []};
+        $control.children('.form-control,.input-group-addon,.input-group-btn').each(function()
+        {
+            const $this = $(this);
+            if($this.hasClass('form-control'))           info.items.push(getFormGroupProps($this));
+            else if($this.hasClass('input-group-addon')) info.items.push({type: 'addon', text: $this.text().trim()});
+            else if($this.hasClass('input-group-btn'))   info.items.push({type: 'btn', ...getZinItemProps($this)});
+        });
+        return info;
+    }
+    if($control.hasClass('file-input-list'))
+    {
+        const $file = $control.find('input[type="file"]');
+        return {type: 'file', name: $control.attr('name') || $file.attr('name'), multiple: $file.prop('multiple')};
+    }
+    if($control.hasClass('checkbox-primary'))
+    {
+        const $checkboxes = $control.find('input[type="checkbox"]');
+        const info = {type: 'check-list', name: $control.attr('name') || $checkboxes.attr('name'), items: [], inline: true};
+        $checkboxes.each(function()
+        {
+            const $checkbox = $(this);
+            info.items.push({checked: $checkbox.prop('checked'), value: $checkbox.val(), disabled: $checkbox.prop('disabled')});
+            if(info.items.length > 5) return;
+        });
+        return info;
+    }
+    if($control.hasClass('radio') || $control.hasClass('radio-inline'))
+    {
+        const $radioes = $control.closest('td').find('input[type="radio"]');
+        const info = {type: 'radio-list', inline: $control.hasClass('radio-inline'), name: $radioes.attr('name'), items: []};
+        $radioes.each(function()
+        {
+            const $radio = $(this);
+            info.items.push({checked: $radio.prop('checked'), value: $radio.val(), disabled: $radio.prop('disabled')});
+            if(info.items.length > 5) return;
+        });
+        return info;
+    }
+
+    const info = {name: $control.attr('name'), id: $control.attr('id'), placeholder: $control.attr('placeholder'), value: $control.val(), disabled: $control.prop('disabled'), type: $control.is('input') ? $control.attr('type') : null};
+    if($control.attr('onchange')) info.onchange = $control.attr('onchange').split('(').shift().trim();
+    if($control.is('textarea'))
+    {
+        info.rows = +$control.attr('rows') || null;
+        info.type = $control.data('keditor') ? 'editor' : 'textarea';
+        return info;
+    }
+    if($control.is('select'))
+    {
+        info.items = [];
+        info.type = $control.prop('multiple') ? {type: 'picker', multiple: true} : 'picker';
+        $control.children().each(function()
+        {
+            const $option = $(this);
+            info.items.push({value: $option.attr('value'), text: $option.text().trim()});
+            if(info.items.length > 5) return;
+        });
+        return info;
+    }
+    if($control.is('.form-date,.form-time,.form-datetime'))
+    {
+        info.type = $control.hasClass('form-date') ? 'date' : $control.hasClass('form-time') ? 'time' : 'datetime';
+    }
+    return info;
+}
+
+function getFormInfo($)
+{
+    const $form = $('#mainContent').find('.table-form,.main-form>.table');
+    if(!$form.length) return;
+
+    const form = {items: [], grid: 4, vars: [], hiddens: []};
+    const $submit = $form.find('#submit');
+    if($submit.length)
+    {
+        form.grid = +$submit.closest('td').attr('colspan') || 1;
+        form.submitBtnText = $submit.text().trim();
+        if(form.submitBtnText === '保存') form.submitBtnText = null;
+    }
+    $form.find('tbody>tr').each(function()
+    {
+        const $tr = $(this);
+        if($tr.find('#submit').length) return;
+        let label = '';
+        const formRow = {items: [], hidden: $tr.is(':hidden')};
+        $tr.children().each(function()
+        {
+            const $thd = $(this);
+            if($thd.is('th'))
+            {
+                label = $thd.text().trim();
+            }
+            else
+            {
+                const $control = $thd.find('.form-control,.input-group,textarea.kindeditor,.file-input-list,.checkbox-primary,.radio,.radio-inline').first();
+                if(!$control.length) return;
+
+                const colspan = +$thd.attr('colspan') || 1;
+                const width = colspan !== form.grid ? `${colspan}/${form.grid}` : null;
+                const formGroup = {label: label, required: $thd.hasClass('required'), width: width, value: ''};
+                $.extend(formGroup, getFormGroupProps($control));
+                if(!formGroup.name && formGroup.type !== 'inputGroup') return;
+                if(formGroup.items)
+                {
+                    if(formGroup.name)
+                    {
+                        form.vars.push({name: `${formGroup.name.replace('[]', '')}Options`, value: formGroup.items.slice(0, Math.min(formGroup.items.length, 5))});
+                    }
+                    else if(formGroup.type === 'inputGroup')
+                    {
+                        formGroup.items.forEach(item =>
+                        {
+                            if(item.items && item.name) form.vars.push({name: `${item.name.replace('[]', '')}Options`, value: item.items.slice(0, Math.min(item.items.length, 5))}); 
+                        });
+                    }
+                }
+                formRow.items.push(formGroup);
+                label = '';
+            }
+        });
+        if(formRow.items.length) form.items.push(formRow);
+    });
+
+    $form.find('input[type="hidden"]').each(function()
+    {
+        const $input = $(this);
+        form.hiddens.push({name: $input.attr('name'), value: $input.val()});
+    });
+
+    return {form, layout: 'form'};
+}
+
 /**
  * Get page info for zin
  * @param {Window} win
@@ -126,177 +477,16 @@ function getZinItemProps($item, props)
 function getPageInfo(win)
 {
     const {document, config, $} = win;
-    const info =
+    return $.extend(
     {
         url: win.location.href,
         title: document.title.replace(' - 禅道', ''),
         moduleName: config.currentModule,
         methodName: config.currentMethod,
-    };
-
-    const $featureBar = $('#mainMenu .btn-toolbar.pull-left,#mainMenu .btn-toolBar.pull-left');
-    if($featureBar.length)
-    {
-        const featureBar = {items: []};
-        $featureBar.children().each(function()
-        {
-            const $this = $(this);
-            const id = $this.attr('id') || '';
-            if($this.is('.querybox-toggle'))
-            {
-                featureBar.items.push({type: 'searchToggle'});
-                return;
-            }
-
-            if($this.is('.checkbox-primary'))
-            {
-                featureBar.items.push({type: 'checkbox', text: $this.find('label').text().trim() || $this.text().trim()});
-                return;
-            }
-            if($this.is('a.btn'))
-            {
-                if($this.hasClass('btn-active-text')) featureBar.current = id ? id.replace('Tab', '') : ($this.find('.text').text().trim() || $this.text().trim());
-                return;
-            }
-        });
-        info.featureBar = featureBar;
-    }
-
-    const $toolbar = $('#mainMenu .btn-toolbar.pull-right');
-    if($toolbar.length)
-    {
-        const toolbar = [];
-        $toolbar.children().each(function()
-        {
-            toolbar.push(getZinItemProps($(this)));
-        });
-        if(toolbar.length) info.toolbar = toolbar;
-    }
-
-    const $table = $('#mainContent .table:not(.table-form)').first();
-    if($table.length)
-    {
-        if($('#mainContent .datatable').length)
-        {
-            return alert('zin: Please switch the table to simple table mode');
-        }
-        const colTypesMap =
-        {
-            name: 'link',
-            pri: 'pri',
-            id: 'id',
-            status: 'status',
-            actions: 'actions',
-            progress: 'circleProgress',
-            assignedTo: 'avatarBtn',
-        };
-        const getColName = ($cell) => ($cell.attr('class').toLowerCase().split(' ').find(x => x.startsWith('c-')) || '').replace('c-', '');
-        /**
-         * @type {ZinDtableProps}
-         */
-        const setting = {cols: [], data: [], plugins: [], footer: []};
-        let flexed = false;
-        $table.find('thead>tr:first>th').each(function()
-        {
-            const $this = $(this);
-            const data  = $this.data();
-            const title = $this.attr('title') || $this.text().trim();
-            const name = getColName($this) || title;
-            if(!flexed && data.flex) flexed = true;
-            const col =
-            {
-                title,
-                name,
-                width: data.width.endsWith('px') ? Number.parseInt(data.width, 10) : 200,
-                flex: data.width === 'auto' ? 1 : 0,
-                fixed: data.flex ? false : (flexed ? 'right' : 'left'),
-                type: colTypesMap[name],
-                sortType: !!$this.find('a.sort-up,a.sort-down,a.header').length
-            };
-            setting.cols.push(col);
-        });
-
-        $table.find('tbody>tr').each(function(idx)
-        {
-            const $this = $(this);
-            const rowData = $this.data();
-            $this.children('td').each(function()
-            {
-                $td = $(this);
-                const name = getColName($td);
-                if(name && rowData[name] === undefined)
-                {
-                    rowData[name] = $td.text().trim();
-                    if(name === 'progress' && rowData[name]) rowData[name] = rowData[name].replace('%', 0);
-                }
-            });
-            if(rowData.id === undefined) rowData.id = idx;
-            rowData.id = String(rowData.id);
-            setting.data.push(rowData);
-            if(setting.data.length > 5) return;
-        });
-
-        const tableJs = $('#mainContent [data-ride="table"]').data('zui.table');
-        if(tableJs)
-        {
-            if(tableJs.options.checkable) setting.plugins.push('checkable');
-            if(tableJs.options.sortable) setting.plugins.push('sortable');
-            if(tableJs.options.nested || $table.find('tbody>tr.table-parent,tbody>tr.has-child').length) setting.plugins.push('nested');
-        }
-        else
-        {
-            if($table.find('td .checkbox-primary').length) setting.plugins.push('checkable');
-            if($table.hasClass('has-sort-head')) setting.plugins.push('sortable');
-            if($table.find('tbody>tr.table-parent,tbody>tr.has-child').length) setting.plugins.push('nested');
-        }
-        if(setting.plugins.includes('checkable'))
-        {
-            const idCol = setting.cols.find(x => x.name === 'id');
-            if(idCol) idCol.checkbox = true;
-        }
-        if(setting.plugins.includes('nested') && !setting.cols.find(x => x.nestedToggle))
-        {
-            const nameCol = setting.cols.find(x => x.name === 'name');
-            if(nameCol) nameCol.nestedToggle = true;
-        }
-
-        const $footer = $('#mainContent .table-footer');
-        if($footer.length)
-        {
-            if(setting.plugins.includes('checkable')) setting.footer.push('checkbox', 'divider');
-
-            const $actions = $footer.find('.table-actions,.btn-toolbar');
-            if($actions.length)
-            {
-                const actions = [];
-                $actions.children().each(function()
-                {
-                    actions.push(getZinItemProps($(this)));
-                });
-                if(actions.length) setting.footer.push('toolbar');
-                setting.footToolbar = {items: actions.filter(Boolean)};
-                setting.footer.push('toolbar');
-            }
-
-            const $statistic = $footer.find('.table-statistic');
-            if($statistic.length) setting.footer.push($statistic.text().trim());
-
-            const $pager = $footer.find('.pager');
-            if($pager.length)
-            {
-                setting.footer.push('flex', 'pager');
-                setting.footPager = true;
-            }
-        }
-
-        info.dtable = setting;
-        info.layout = 'list';
-        info.sidebar = $('#sidebar').length ? {type: 'moduleTree'} : undefined;
-
-        if($('#tableCustomBtn').length) info.tableCustomCols = true;
-    }
-
-    return info;
+        featureBar: getFeatureBarInfo($),
+        toolbar: getToolbarInfo($),
+        mainHeader: getMainHeaderInfo($),
+    }, getTableInfo($), getFormInfo($));
 }
 
 /**
@@ -344,6 +534,7 @@ function genValueStatement(value, indent = 0, join = '\n')
     {
         return genArrayStatement(value, null, indent, '', '', join);
     }
+    if(typeof value === 'string' && value.startsWith('RAW_PHP<')) return indentLines(value.substring(8, value.length - 8), indent);
     return indentLines(JSON.stringify(value), indent);
 }
 
@@ -401,6 +592,62 @@ function genVarStatement(name, value, indent = 0, join = '')
     return indentLines(`$${name} = ${genValueStatement(value, indent, join)};`, indent);
 }
 
+function genInputGroupItemStatement(item, indent = 0)
+{
+    if(item.type === 'addon') return indentLines(JSON.stringify(item.text), indent);
+    if(item.type === 'btn') return indentLines(genArrayStatement(item, null, 0, 'btn(set(', '))'), indent);
+    item = $.extend({}, item);
+    if(typeof item.type === 'object') item = $.extend(item, item.type);
+    if(item.items) item.items = `RAW_PHP<$${item.name.replace('[]', '')}Options>RAW_PHP`;
+    return indentLines(genArrayStatement(item, null, 0, 'control(set(', '))'), indent);
+}
+
+function getInputGroupStatement(items, indent = 0)
+{
+    return indentLines(
+    [
+        'inputGroup',
+        '(',
+            items.map(item => genInputGroupItemStatement(item, 1)).join(',\n'),
+        ')'
+    ], indent).join('\n');
+}
+ 
+function getFormGroupStatement(formGroup, indent = 0)
+{
+    return indentLines(
+    [
+        'formGroup',
+        '(',
+            indentLines(
+            [
+                formGroup.width    ? `set::width(${JSON.stringify(formGroup.width)})` : null,
+                `set::name(${JSON.stringify(formGroup.name)})`,
+                formGroup.label    ? `set::label(${JSON.stringify(formGroup.label)})` : null,
+                formGroup.disabled ? 'set::disabled(true)' : null,
+                formGroup.required ? 'set::required(true)' : null,
+                formGroup.value    ? `set::value(${JSON.stringify(formGroup.value)})` : null,
+                formGroup.type && formGroup.type !== 'inputGroup' ? `set::control(${JSON.stringify(formGroup.type)})` : null,
+                formGroup.id && formGroup.id !== formGroup.name ? `set::id(${JSON.stringify(formGroup.id)})` : null,
+                formGroup.items && formGroup.type !== 'inputGroup' ? `set::items($${formGroup.name.replace('[]', '')}Options)` : null,
+                formGroup.type === 'inputGroup' ? getInputGroupStatement(formGroup.items) : null,
+            ].filter(x => typeof x === 'string'), 1).join(',\n'),
+        ')'
+    ].filter(x => typeof x === 'string'), indent).join('\n');
+}
+
+function getFormRowStatement(formRow, indent = 0)
+{
+    return indentLines(
+    [
+        'formRow',
+        '(',
+            formRow.hidden ? '    set::hidden(true),' : null,
+            formRow.items.map(item => getFormGroupStatement(item, 1)).join(',\n'),
+        ')'
+    ].filter(Boolean), indent).join('\n');
+}
+
 /**
  * Get page template
  * @param {ZinPageInfo} info
@@ -411,7 +658,7 @@ function getPageTemplate(info)
     /** @type {string[]} */
     const lines = [];
 
-    const {featureBar = {}, toolbar, dtable} = info;
+    const {featureBar = {}, toolbar, dtable, form, mainHeader = {}} = info;
     const variables = [];
     const widgets   = [];
     if(featureBar && featureBar.current)
@@ -436,6 +683,14 @@ function getPageTemplate(info)
             variables.push('dtableToolbar');
             lines.push(genVarStatement('dtableToolbar', dtable.footToolbar));
         }
+    }
+
+    if(form && form.vars.length)
+    {
+        lines.push('/* zin: Set variables to define picker options for form */');
+        if(mainHeader.title !== info.title) lines.push(genVarStatement('formTitle', mainHeader.title));
+        form.vars.forEach(item => lines.push(genVarStatement(item.name, item.value)));
+        variables.push(...form.vars.map(item => item.name));
     }
 
     lines.push('\n\n/* ====== Define the page structure with zin widgets ====== */\n');
@@ -505,6 +760,30 @@ function getPageTemplate(info)
                     dtable.footToolbar ? 'set::toolbar($dtableToolbar)' : null,
                     dtable.footPager ? 'set::footPager(usePager())' : null,
                     dtable.footer ? `set::footer(array(${dtable.footer.map(x => JSON.stringify(x)).join(', ')}))` : null,
+                ].filter(x => typeof x === 'string'), 1).join(',\n'),
+            ');',
+            ''
+        );
+    }
+    else if(form)
+    {
+        const mainHeader = info.mainHeader || {};
+        lines.push
+        (
+            '/* zin: Define the form in main content */',
+            'formPanel',
+            '(',
+                indentLines
+                ([
+                    mainHeader.title !== info.title ? "set::title($formTitle), // The form title is diffrent from the page title" : null,
+                    form.items.map((formRow) =>
+                    {
+                        if(!formRow.hidden && formRow.items.length === 1)
+                        {
+                           return getFormGroupStatement(formRow.items[0]); 
+                        }
+                        return getFormRowStatement(formRow);
+                    }).join(',\n'),
                 ].filter(x => typeof x === 'string'), 1).join(',\n'),
             ');',
             ''
