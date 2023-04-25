@@ -1873,6 +1873,8 @@ class executionModel extends model
     {
         if(defined('TUTORIAL')) return $this->loadModel('tutorial')->getExecutionStats($browseType);
 
+        $productID = (int)$productID;
+
         /* Construct the query SQL at search executions. */
         $executionQuery = '';
         if($browseType == 'bySearch')
@@ -1915,7 +1917,7 @@ class executionModel extends model
             ->andWhere('t1.multiple')->eq('1')
             ->beginIF(!$this->app->user->admin)->andWhere('t1.id')->in($this->app->user->view->sprints)->fi()
             ->beginIF(!empty($executionQuery))->andWhere($executionQuery)->fi()
-            ->beginIF($productID)->andWhere('t3.product')->eq($productID)->fi()
+            ->beginIF($productID)->andWhere('t3.product')->eq((int)$productID)->fi()
             ->beginIF($projectID)->andWhere('t1.project')->eq($projectID)->fi()
             ->beginIF(!in_array($browseType, array('all', 'undone', 'involved', 'review', 'bySearch')))->andWhere('t1.status')->eq($browseType)->fi()
             ->beginIF($browseType == 'undone')->andWhere('t1.status')->notIN('done,closed')->fi()
