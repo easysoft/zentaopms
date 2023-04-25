@@ -128,7 +128,7 @@ class convertModel extends model
         {
             $dataList = $this->dao->dbh($this->sourceDBH)->select('t1.`ID`, t1.`lower_user_name` as account, t1.`lower_display_name` as realname, t1.`lower_email_address` as email, t1.created_date as `join`, t2.user_key as userCode')->from(JIRA_USERINFO)->alias('t1')
                 ->leftJoin(JIRA_USER)->alias('t2')->on('t1.`lower_user_name` = t2.`lower_user_name`')
-                ->where(1)
+                ->where('1 = 1')
                 ->beginIF($lastID)->andWhere('t1.ID')->gt($lastID)->fi()
                 ->orderBy('t1.ID asc')->limit($limit)
                 ->fetchAll('ID');
@@ -136,7 +136,7 @@ class convertModel extends model
         elseif($module == 'project')
         {
             $dataList = $this->dao->dbh($this->sourceDBH)->select('*')->from(JIRA_PROJECT)
-                ->where(1)
+                ->where('1 = 1')
                 ->beginIF($lastID)->andWhere('ID')->gt($lastID)->fi()
                 ->orderBy('ID asc')->limit($limit)
                 ->fetchAll('ID');
@@ -144,7 +144,7 @@ class convertModel extends model
         elseif($module == 'issue')
         {
             $dataList = $this->dao->dbh($this->sourceDBH)->select('*')->from(JIRA_ISSUE)
-                ->where(1)
+                ->where('1 = 1')
                 ->beginIF($lastID)->andWhere('ID')->gt($lastID)->fi()
                 ->orderBy('ID asc')->limit($limit)
                 ->fetchAll('ID');
@@ -152,7 +152,7 @@ class convertModel extends model
         elseif($module == 'build')
         {
             $dataList = $this->dao->dbh($this->sourceDBH)->select('*')->from(JIRA_BUILD)
-                ->where(1)
+                ->where('1 = 1')
                 ->beginIF($lastID)->andWhere('ID')->gt($lastID)->fi()
                 ->orderBy('ID asc')->limit($limit)
                 ->fetchAll('ID');
@@ -160,7 +160,7 @@ class convertModel extends model
         elseif($module == 'issuelink')
         {
             $dataList = $this->dao->dbh($this->sourceDBH)->select('*')->from(JIRA_ISSUELINK)
-                ->where(1)
+                ->where('1 = 1')
                 ->beginIF($lastID)->andWhere('ID')->gt($lastID)->fi()
                 ->orderBy('ID asc')->limit($limit)
                 ->fetchAll('ID');
@@ -168,7 +168,7 @@ class convertModel extends model
         elseif($module == 'action')
         {
             $dataList = $this->dao->dbh($this->sourceDBH)->select('*')->from(JIRA_ACTION)
-                ->where(1)
+                ->where('1 = 1')
                 ->beginIF($lastID)->andWhere('ID')->gt($lastID)->fi()
                 ->orderBy('ID asc')->limit($limit)
                 ->fetchAll('ID');
@@ -176,7 +176,7 @@ class convertModel extends model
         elseif($module == 'file')
         {
             $dataList = $this->dao->dbh($this->sourceDBH)->select('*')->from(JIRA_FILE)
-                ->where(1)
+                ->where('1 = 1')
                 ->beginIF($lastID)->andWhere('ID')->gt($lastID)->fi()
                 ->orderBy('ID asc')->limit($limit)
                 ->fetchAll('ID');

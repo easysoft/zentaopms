@@ -1206,7 +1206,7 @@ class docModel extends model
         if($libID == 0 and $browseType != 'collectedbyme') return array();
 
         $modules = $this->dao->select('*')->from(TABLE_MODULE)
-            ->where(1)
+            ->where('1 = 1')
             ->beginIF($browseType != "collectedbyme")->andWhere('root')->eq($libID)->fi()
             ->beginIF($browseType == "collectedbyme")->andWhere('collector')->like("%,{$this->app->user->account},%")->fi()
             ->andWhere('type')->eq('doc')

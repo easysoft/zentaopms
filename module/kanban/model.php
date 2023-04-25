@@ -3705,7 +3705,7 @@ class kanbanModel extends model
     public function getColumnsByObject($objectType = '', $objectID = 0, $archived = 0, $deleted = '0')
     {
         return $this->dao->select('*')->from(TABLE_KANBANCOLUMN)
-            ->where(true)
+            ->where('1 = 1')
             ->beginIF($objectType)->andWhere($objectType)->eq($objectID)->fi()
             ->beginIF($archived != '')->andWhere('archived')->eq($archived)->fi()
             ->beginIF($deleted != '')->andWhere('deleted')->eq($deleted)->fi()
@@ -3817,7 +3817,7 @@ class kanbanModel extends model
     public function getCardsByObject($objectType = '', $objectID = 0, $archived = '0', $deleted = '0')
     {
         return $this->dao->select('*')->from(TABLE_KANBANCARD)
-            ->where(true)
+            ->where('1 = 1')
             ->beginIF($objectType)->andWhere($objectType)->eq($objectID)->fi()
             ->beginIF($archived != '')->andWhere('archived')->eq($archived)->fi()
             ->beginIF($deleted != '')->andWhere('deleted')->eq($deleted)->fi()

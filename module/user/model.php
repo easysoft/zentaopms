@@ -41,7 +41,7 @@ class userModel extends model
     public function getList($params = 'nodeleted')
     {
         return $this->dao->select('*')->from(TABLE_USER)
-            ->where(true)
+            ->where('1 = 1')
             ->beginIF(strpos($params, 'all') === false)->andWhere('type')->eq('inside')->fi()
             ->beginIF(strpos($params, 'nodeleted') !== false)->andWhere('deleted')->eq(0)->fi()
             ->orderBy('account')
