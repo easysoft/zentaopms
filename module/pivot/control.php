@@ -69,8 +69,6 @@ class pivot extends control
         {
             list($sql, $filterFormat) = $this->pivot->getFilterFormat($pivot->sql, $pivot->filters);
 
-            $pivot->sql = $sql;
-
             $processSqlData = $this->loadModel('chart')->getTables($sql);
             $sql = $processSqlData['sql'];
 
