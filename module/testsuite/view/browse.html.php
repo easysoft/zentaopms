@@ -73,7 +73,7 @@
         <div title='<?php echo $desc;?>'><?php echo nl2br($desc);?></div>
       </td>
       <td><?php echo zget($users, $suite->addedBy);?></td>
-      <td><?php echo $suite->addedDate;?></td>
+      <td><?php echo $suite->addedDate ? substr($suite->addedDate, 0, 10) : '';?></td>
       <?php foreach($extendFields as $extendField) echo "<td>" . $this->loadModel('flow')->getFieldValue($extendField, $suite) . "</td>";?>
       <td class='c-actions'>
         <?php echo $this->testsuite->buildOperateMenu($suite, 'browse');?>
