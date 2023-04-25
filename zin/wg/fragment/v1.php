@@ -6,8 +6,9 @@ class fragment extends wg
     protected function build()
     {
         $context = context::current();
-        $css     = $context->getCssList();
-        $js      = $context->getJsList();
+        $css     = array_merge([data('pageCSS') ?? ''], $context->getCssList());
+        $js      = array_merge($context->getJsList(), [data('pageJS') ?? '']);
+
         $imports = $context->getImportList();
 
         return array
