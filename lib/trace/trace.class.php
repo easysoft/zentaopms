@@ -2,15 +2,14 @@
 
 class trace
 {
-    protected $config = array(
-        'tabs' => array(
-            'request'    => '请求',
-            'file'       => '文件',
-            'sqlQuery'   => 'SQL 查询',
-            'sqlExplain' => 'SQL Explain',
-        ),
-        'trace' => array()
+    protected $types = array(
+        'request'    => '请求',
+        'file'       => '文件',
+        'sqlQuery'   => 'SQL 查询',
+        'sqlExplain' => 'SQL Explain',
     );
+
+    public $trace = array();
 
     protected $app;
 
@@ -25,8 +24,8 @@ class trace
 
     public function getRequestInfo()
     {
-        $this->config['trace']['request'] = array(
-            'start'    => date('Y-m-d H:i:s', $this->app->startTime),
+        $this->trace['request'] = array(
+            'start'    => date('Y-m-d H:i:s', (int)$this->app->startTime),
             'url'      => $this->app->getURI(true),
             'protocol' => $this->app->server->server_protocol,
             'method'   => $this->app->server->request_method,
@@ -41,7 +40,7 @@ class trace
 
     public function getRequestFiles()
     {
-        $this->config['trace']['file'] = get_included_files();
+        $this->trace['file'] = get_included_files();
     }
 
     public function getRequestSqls()
@@ -51,8 +50,8 @@ class trace
         {
             $explain[] = $this->dao->explain($query, false);
         }
-        $this->config['trace']['sqlQuery']   = dao::$querys;
-        $this->config['trace']['sqlExplain'] = $explain;
+        $this->trace['sqlQuery']   = dao::$querys;
+        $this->trace['sqlExplain'] = $explain;
     }
 
     public function getTrace()
@@ -60,14 +59,14 @@ class trace
         $this->getRequestInfo();
         $this->getRequestFiles();
         $this->getRequestSqls();
-        return $this->config;
+        return $this->trace;
     }
 
     public function output()
     {
         $this->getTrace();
         $lines = '';
-        foreach($this->config['trace'] as $type => $content)
+        foreach($this->trace as $type => $content)
         {
             if($type == 'sqlExplain') continue;
             $lines .= $this->console($type, empty($content) ? array() : $content);
@@ -84,7 +83,7 @@ JS;
     protected function console(string $type, $content)
     {
         $type       = strtolower($type);
-        $traceTabs  = array_keys($this->config['tabs']);
+        $traceTabs  = array_keys($this->types);
         $line       = array();
         $line[]     = $type == $traceTabs[0] ? "console.group('{$type}');" : "console.groupCollapsed('{$type}');";
 
@@ -97,7 +96,7 @@ JS;
                     $line[] = "console.log(\"%c{$msg}\", \"{$style}\");";
 
                     $explain = array();
-                    foreach($this->config['trace']['sqlExplain'][$key] as $explainKey => $explainItem)
+                    foreach($this->trace['sqlExplain'][$key] as $explainKey => $explainItem)
                     {
                         $explain[] = $explainKey . ': ' . $explainItem;
                     }
