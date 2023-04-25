@@ -22,10 +22,11 @@ class blockModel extends model
      */
     public function getByID(int $blockID): object|bool
     {
-        $block = $this->blockTao->fetch($blockID);
+        $block = $this->dao->select('*')->from(TABLE_BLOCK)->where('id')->eq($blockID)->fetch();
         if(empty($block)) return false;
 
         $block->params = json_decode($block->params);
+        if(empty($block->params)) $block->params = new stdclass();
         if($block->block == 'html') $block->params->html = $this->loadModel('file')->setImgSize($block->params->html);
         return $block;
     }
@@ -44,18 +45,18 @@ class blockModel extends model
     }
 
     /**
-     * Get block list for account.
+     * Get block list of current user.
      * 获取区块列表.
      *
      * @param  string $module
      * @param  string $type
      * @param  int    $hidden
      * @access public
-     * @return array|bool
+     * @return int[]|bool
      */
-    public function getList(string $module, string $type = '', int $hidden = 0): array|bool
+    public function getMyDashboard(string $module, string $type = '', int $hidden = 0): array|false
     {
-        return $this->blockTao->fetchList($module, $type, $hidden);
+        return $this->blockTao->fetchMyBlocks($module, $type, $hidden);
     }
 
     /**
@@ -64,11 +65,11 @@ class blockModel extends model
      *
      * @param  string $module
      * @access public
-     * @return array|bool
+     * @return int[]|false
      */
-    public function getHiddenBlocks(string $module): array|bool
+    public function getMyHiddenBlocks(string $module): array|false
     {
-        return $this->blockTao->fetchList($module, $type = '', $hidden = 1);
+        return $this->blockTao->fetchMyBlocks($module, $type = '', $hidden = 1);
     }
 
     /**
@@ -78,7 +79,7 @@ class blockModel extends model
      * @param  string $type
      * @param  string $module
      * @access public
-     * @return bool|int
+     * @return int|false
      */
     public function save(int $blockID, string $type, string $module = 'my'): bool|int
     {
@@ -111,7 +112,7 @@ class blockModel extends model
 
         $data->params = helper::jsonEncode($data->params);
 
-        $this->blockTao->replace($data);
+        $this->dao->replace(TABLE_BLOCK)->data($data)->exec();
         if(dao::isError()) return false;
 
         $this->loadModel('score')->create('block', 'set');

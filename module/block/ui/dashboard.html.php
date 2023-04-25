@@ -25,17 +25,14 @@ foreach($longBlocks as $index => $block)
                 set('class', 'panel-actions nav nav-default'),
                 dropdown
                 (
-                    icon
-                    (
-                        set('class', 'icon icon-ellipsis-v')
-                    ),
+                    icon(set('class', 'icon icon-ellipsis-v')),
                     set::items
                     ([
-                        ['text' => $lang->block->refresh, 'url' => '', 'class' => 'refresh-panel'],
-                        ['text' => $lang->edit, 'url' => $this->createLink("block", "admin", "id=$block->id&module=$module"), 'class' => 'refresh-panel'],
-                        ['text' => $lang->block->hidden, 'url' => '', 'class' => 'refresh-panel'],
+                        ['text' => $lang->block->refresh, 'url' => ''],
+                        ['text' => $lang->edit, 'url' => $this->createLink("block", "admin", "id=$block->id&module=$module"), 'data-toggle' => 'modal'],
+                        ['text' => $lang->block->hidden, 'url' => ''],
                         ['text' => $lang->block->createBlock, 'url' => $this->createLink("block", "admin", "id=0&module=$module"), 'data-toggle' => 'modal'],
-                        ['text' => $lang->block->reset, 'url' => '', 'class' => 'refresh-panel'],
+                        ['text' => $lang->block->reset, 'url' => ''],
                     ]), 
                 )
             )
@@ -77,11 +74,11 @@ foreach($shortBlocks as $index => $block)
                     ),
                     set::items
                     ([
-                        ['text' => $lang->block->refresh, 'url' => '', 'class' => 'refresh-panel'],
-                        ['text' => $lang->edit, 'url' => $this->createLink("block", "admin", "id=$block->id&module=$module"), 'class' => 'refresh-panel'],
-                        ['text' => $lang->block->hidden, 'url' => '', 'class' => 'refresh-panel'],
+                        ['text' => $lang->block->refresh, 'url' => ''],
+                        ['text' => $lang->edit, 'url' => $this->createLink("block", "admin", "id=$block->id&module=$module"), 'data-toggle' => 'modal'],
+                        ['text' => $lang->block->hidden, 'url' => ''],
                         ['text' => $lang->block->createBlock, 'url' => $this->createLink("block", "admin", "id=0&module=$module"), 'data-toggle' => 'modal'],
-                        ['text' => $lang->block->reset, 'url' => '', 'class' => 'refresh-panel'],
+                        ['text' => $lang->block->reset, 'url' => ''],
                     ]), 
                 )
             )

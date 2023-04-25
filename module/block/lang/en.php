@@ -111,6 +111,9 @@ $lang->block->spent           = 'Has Been Spent';
 $lang->block->budget          = 'Budget';
 $lang->block->left            = 'Remain';
 
+$lang->block->dashboard['default'] = 'Dashboard';
+$lang->block->dashboard['my']      = 'My';
+
 $lang->block->titleList['flowchart']      = 'Flow Chart';
 $lang->block->titleList['guide']          = 'Guides';
 $lang->block->titleList['statistic']      = 'Statistic';

@@ -111,6 +111,9 @@ $lang->block->spent           = '已花费';
 $lang->block->budget          = '预算';
 $lang->block->left            = '剩余';
 
+$lang->block->dashboard['default'] = '仪表盘';
+$lang->block->dashboard['my']      = '地盘';
+
 $lang->block->titleList['flowchart']      = '流程图';
 $lang->block->titleList['guide']          = '使用帮助';
 $lang->block->titleList['statistic']      = "{$lang->projectCommon}统计";

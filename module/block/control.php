@@ -72,7 +72,7 @@ class block extends control
             if(strpos(",$closedBlock,", ",|contribute,") === false and $this->config->vision == 'rnd') $modules['contribute'] = $this->lang->block->contribute;
             $modules = array('' => '') + $modules;
 
-            $hiddenBlocks = $this->block->getHiddenBlocks('my');
+            $hiddenBlocks = $this->block->getMyHiddenBlocks('my');
             foreach($hiddenBlocks as $block) $modules['hiddenBlock' . $block->id] = $block->title;
             $this->view->modules = $modules;
         }
@@ -187,7 +187,7 @@ class block extends control
     public function sort($orders, $module = 'my')
     {
         $orders    = explode(',', $orders);
-        $blockList = $this->block->getList($module);
+        $blockList = $this->block->getMyDashboard($module);
 
         foreach ($orders as $order => $blockID)
         {
@@ -242,7 +242,7 @@ class block extends control
     public function dashboard($module, $type = '', $projectID = 0)
     {
         if($this->loadModel('user')->isLogon()) $this->session->set('blockModule', $module);
-        $blocks = $this->block->getList($module, $type);
+        $blocks = $this->block->getMyDashboard($module, $type);
         $vision = $this->config->vision;
 
         $section = 'common';
@@ -341,6 +341,7 @@ class block extends control
             }
         }
 
+        $this->view->title       = zget($this->lang->block->dashboard, $module, $this->lang->block->dashboard['default']);
         $this->view->longBlocks  = $longBlocks;
         $this->view->shortBlocks = $shortBlocks;
         $this->view->module      = $module;

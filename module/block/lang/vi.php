@@ -101,6 +101,9 @@ $lang->block->spent           = 'Has Been Spent';
 $lang->block->budget          = 'Budget';
 $lang->block->left            = 'Remain';
 
+$lang->block->dashboard['default'] = 'Dashboard';
+$lang->block->dashboard['my']      = 'My';
+
 $lang->block->default['waterfall']['project']['3']['title']  = 'Plan Gantt Chart';
 $lang->block->default['waterfall']['project']['3']['block']  = 'waterfallgantt';
 $lang->block->default['waterfall']['project']['3']['source'] = 'project';
