@@ -357,6 +357,14 @@ class baseRouter
     public $siteCode;
 
     /**
+     * 请求开始时间。
+     * The start time of the request.
+     *
+     * @var float
+     */
+    public $startTime;
+
+    /**
      * 构造方法, 设置路径，类，超级变量等。注意：
      * 1.应该使用createApp()方法实例化router类；
      * 2.如果$appRoot为空，框架会根据$appName计算应用路径。
@@ -433,6 +441,19 @@ class baseRouter
     {
         if(empty($className)) $className = self::class;
         return new $className($appName, $appRoot);
+    }
+
+    /**
+     * 设置请求开始时间。
+     * The start time of the request.
+     *
+     * @param  float    $startTime
+     * @access public
+     * @return void
+     */
+    public function setStartTime(float $startTime)
+    {
+        $this->startTime = $startTime;
     }
 
     //-------------------- 路径相关方法(Path related methods)--------------------//

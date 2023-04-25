@@ -589,13 +589,16 @@ class baseDAO
      *
      * @param  string $sql
      * @access public
-     * @return void
+     * @return array|void
      */
-    public function explain($sql = '')
+    public function explain($sql = '', $exit = true)
     {
         $sql    = empty($sql) ? $this->processSQL() : $sql;
         $result = $this->dbh->rawQuery('explain ' . $sql)->fetch();
-        a($result);
+
+        if($exit) a($result);
+
+        return (array)$result;
     }
 
     /**

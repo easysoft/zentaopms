@@ -927,7 +927,13 @@ class baseControl
         }
 
         if(empty($this->output)) $this->parse($moduleName, $methodName);
-        echo $this->output;
+        $trace = '';
+        if($this->config->debug && $this->config->debug >= 2)
+        {
+            $trace = $this->app->loadClass('trace');
+            $trace = $trace->output();
+        }
+        echo $this->output . $trace;
     }
 
     /**
