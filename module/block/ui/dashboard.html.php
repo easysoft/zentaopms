@@ -1,13 +1,59 @@
 <?php
 namespace zin;
 
-$blocks = array();
+$mainBlocks = array();
 foreach($longBlocks as $index => $block)
 {
-    $blocks[] = 
-    panel
+    $mainBlocks[] = 
+    div
     (
-        set('class', "{$block->block}" . (isset($block->params->color) ? 'panel-' . $block->params->color : '')),
+        set('class', "panel rounded shadow ring-0 canvas {$block->block}" . (isset($block->params->color) ? 'panel-' . $block->params->color : '')),
+        set('data-id', $block->id),
+        set('data-name', $block->title),
+        set('data-order', $block->order),
+        set('data-url', $block->blockLink),
+        div
+        (
+            set('class', 'panel-heading'),
+            div
+            ( 
+                set('class', 'panel-title'),
+                $block->title
+            ),
+            nav
+            ( 
+                set('class', 'panel-actions nav nav-default'),
+                dropdown
+                (
+                    icon
+                    (
+                        set('class', 'icon icon-ellipsis-v')
+                    ),
+                    set::items
+                    ([
+                        ['text' => $lang->block->refresh, 'url' => '', 'class' => 'refresh-panel'],
+                        ['text' => $lang->edit, 'url' => $this->createLink("block", "admin", "id=$block->id&module=$module"), 'class' => 'refresh-panel'],
+                        ['text' => $lang->block->hidden, 'url' => '', 'class' => 'refresh-panel'],
+                        ['text' => $lang->block->createBlock, 'url' => $this->createLink("block", "admin", "id=0&module=$module"), 'data-toggle' => 'modal'],
+                        ['text' => $lang->block->reset, 'url' => '', 'class' => 'refresh-panel'],
+                    ]), 
+                )
+            )
+        ),
+        div
+        (
+            set('class', 'panel-body scrollbar-hover')
+        )
+    );
+}
+
+$sideBlocks = array();
+foreach($shortBlocks as $index => $block)
+{
+    $sideBlocks[] = 
+    div
+    (
+        set('class', "panel rounded shadow ring-0 canvas {$block->block}" . (isset($block->params->color) ? 'panel-' . $block->params->color : '')),
         set('data-id', $block->id),
         set('data-name', $block->title),
         set('data-order', $block->order),
@@ -57,7 +103,12 @@ div
         div
         (
             set('class', 'col-main'),
-            $blocks
+            $mainBlocks
+        ),
+        div
+        (
+            set('class', 'col-side'),
+            $sideBlocks
         )
     )
 );
