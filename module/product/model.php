@@ -443,6 +443,8 @@ class productModel extends model
             return $this->loadModel('tutorial')->getExecutionProducts();
         }
 
+        if(strpos($projectID, 'all') !== false) $projectID = str_replace('all', 0, $projectID);
+
         if(!empty($append) and is_array($append)) $append = implode(',', $append);
 
         $views           = empty($append) ? $this->app->user->view->products : $this->app->user->view->products . ",$append";
