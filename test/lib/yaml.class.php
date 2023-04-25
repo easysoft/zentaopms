@@ -262,7 +262,9 @@ class yaml
     {
         $runFileDir  = dirname(getcwd() . DS . $_SERVER['SCRIPT_FILENAME']);
         $runFileName = str_replace(strrchr($_SERVER['SCRIPT_FILENAME'], "."), "", $_SERVER['SCRIPT_FILENAME']);
-        $runFileName = mb_substr($runFileName, strripos($runFileName, DS) + 1);
+
+        $pos = strripos($runFileName, DS);
+        if($pos !== false) $runFileName = mb_substr($runFileName, $pos+1);
 
         if(!is_dir("$runFileDir/data")) mkdir("$runFileDir/data", 0777, true);
         $yamlFile = "{$runFileDir}/data/{$this->tableName}_{$runFileName}.yaml";
