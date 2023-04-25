@@ -2352,7 +2352,7 @@ class project extends control
         {
             $project    = $this->project->getById($projectID);
             $executions = array('' => '') + $this->loadModel('execution')->getPairs($projectID, $type, $mode);
-            if(!empty($project->multiple)) $disabled = 'disabled';
+            $disabled   = !empty($project->multiple) ? '' : 'disabled';
         }
 
         if($this->app->getViewType() == 'json') return print(json_encode($executionList));
