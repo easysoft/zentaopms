@@ -564,6 +564,14 @@ $lang->block->typeList->project['doing']    = '进行中';
 $lang->block->typeList->project['all']      = '全部';
 $lang->block->typeList->project['involved'] = '我参与的';
 
+$lang->block->typeList->projectAll['all']      = '全部';
+$lang->block->typeList->projectAll['undone']   = '未完成';
+$lang->block->typeList->projectAll['wait']     = '未开始';
+$lang->block->typeList->projectAll['doing']    = '进行中';
+$lang->block->typeList->projectAll['exceeded'] = '已逾期';
+$lang->block->typeList->projectAll['risky']    = '有风险';
+$lang->block->typeList->projectAll['more']     = '更多';
+
 $lang->block->typeList->execution['undone']   = '未完成';
 $lang->block->typeList->execution['doing']    = '进行中';
 $lang->block->typeList->execution['all']      = '所有';
@@ -579,6 +587,22 @@ $lang->block->typeList->testtask['doing']   = '测试中版本';
 $lang->block->typeList->testtask['blocked'] = '阻塞版本';
 $lang->block->typeList->testtask['done']    = '已测版本';
 $lang->block->typeList->testtask['all']     = '全部';
+
+$lang->block->typeList->risk['all']      = '全部';
+$lang->block->typeList->risk['active']   = '开放';
+$lang->block->typeList->risk['assignTo'] = '指派给我';
+$lang->block->typeList->risk['assignBy'] = '由我指派';
+$lang->block->typeList->risk['closed']   = '已关闭';
+$lang->block->typeList->risk['hangup']   = '已挂起';
+$lang->block->typeList->risk['canceled'] = '已取消';
+
+$lang->block->typeList->issue['all']      = '全部';
+$lang->block->typeList->issue['open']     = '开放';
+$lang->block->typeList->issue['assignto'] = '指派给我';
+$lang->block->typeList->issue['assignby'] = '由我指派';
+$lang->block->typeList->issue['closed']   = '已关闭';
+$lang->block->typeList->issue['resolved'] = '已解决';
+$lang->block->typeList->issue['canceled'] = '已取消';
 
 $lang->block->welcomeList['06:00'] = '%s，早上好！';
 $lang->block->welcomeList['11:30'] = '%s，中午好！';

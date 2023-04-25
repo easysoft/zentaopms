@@ -116,12 +116,11 @@ class block extends control
      * @access public
      * @return void
      */
-    public function set($id, $type, $source = '')
+    public function set($id, $type, $module = '')
     {
         if($_POST)
         {
-            $source = isset($this->lang->block->moduleList[$source]) ? $source : '';
-            $this->block->save($id, $source, $type, $this->session->blockModule);
+            $this->block->save($id, $type, $this->session->blockModule);
             if(dao::isError()) return print(js::error(dao::geterror()));
             return print(js::reload('parent'));
         }
@@ -134,19 +133,18 @@ class block extends control
             unset($block->params->num);
         }
 
-        if(isset($this->lang->block->moduleList[$source]))
+        if(isset($this->lang->block->moduleList[$module]))
         {
-            $func   = 'get' . ucfirst($type) . 'Params';
-            $params = $this->block->$func($source);
+            $params = $this->block->getParams($type, $module);
             $this->view->params = json_decode($params, true);
         }
         elseif($type == 'assigntome')
         {
-            $params = $this->block->getAssignToMeParams();
+            $params = $this->block->getParams('assignedToMe');
             $this->view->params = json_decode($params, true);
         }
 
-        $this->view->source = $source;
+        $this->view->source = $module;
         $this->view->type   = $type;
         $this->view->id     = $id;
         $this->view->block  = ($block) ? $block : array();
@@ -534,9 +532,7 @@ class block extends control
         }
         elseif($mode == 'getblockform')
         {
-            $code = strtolower($this->get->blockid);
-            $func = 'get' . ucfirst($code) . 'Params';
-            echo $this->block->$func($module);
+            echo $this->block->getParams($code, $module);
         }
         elseif($mode == 'getblockdata')
         {

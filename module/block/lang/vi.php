@@ -464,6 +464,14 @@ $lang->block->typeList->project['doing']    = 'Ongoing';
 $lang->block->typeList->project['all']      = 'All';
 $lang->block->typeList->project['involved'] = 'Involved';
 
+$lang->block->typeList->projectAll['all']      = 'All';
+$lang->block->typeList->projectAll['undone']   = 'Undone';
+$lang->block->typeList->projectAll['wait']     = 'Wait';
+$lang->block->typeList->projectAll['doing']    = 'Doing';
+$lang->block->typeList->projectAll['exceeded'] = 'Exceeded';
+$lang->block->typeList->projectAll['risky']    = 'Risk';
+$lang->block->typeList->projectAll['more']     = 'More';
+
 $lang->block->typeList->execution['undone']   = 'Chưa kết thúc';
 $lang->block->typeList->execution['doing']    = 'Đang làm';
 $lang->block->typeList->execution['all']      = 'Tất cả';
@@ -479,6 +487,22 @@ $lang->block->typeList->testtask['doing']   = 'Đang làm';
 $lang->block->typeList->testtask['blocked'] = 'Bị khóa';
 $lang->block->typeList->testtask['done']    = 'Hoàn thành';
 $lang->block->typeList->testtask['all']     = 'Tất cả';
+
+$lang->block->typeList->risk['all']      = 'All';
+$lang->block->typeList->risk['active']   = 'Active';
+$lang->block->typeList->risk['assignTo'] = 'Assign To';
+$lang->block->typeList->risk['assignBy'] = 'Assign By';
+$lang->block->typeList->risk['closed']   = 'Closed';
+$lang->block->typeList->risk['hangup']   = 'Hangup';
+$lang->block->typeList->risk['canceled'] = 'Canceled';
+
+$lang->block->typeList->issue['all']      = 'All';
+$lang->block->typeList->issue['open']     = 'Open';
+$lang->block->typeList->issue['assignto'] = 'Assign To';
+$lang->block->typeList->issue['assignby'] = 'Assign By';
+$lang->block->typeList->issue['closed']   = 'Closed';
+$lang->block->typeList->issue['resolved'] = 'Resolved';
+$lang->block->typeList->issue['canceled'] = 'Canceled';
 
 $lang->block->modules['project']->moreLinkList = new stdclass();
 $lang->block->modules['project']->moreLinkList->recentproject  = 'project|browse|';

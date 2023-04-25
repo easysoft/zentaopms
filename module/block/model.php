@@ -18,12 +18,12 @@ class blockModel extends model
      *
      * @param  int    $blockID
      * @access public
-     * @return object
+     * @return object|bool
      */
-    public function getByID(int $blockID) : object | bool
+    public function getByID(int $blockID): object|bool
     {
-        $block = $this->blockTao->getByID($blockID);
-        if(empty($block)) return new stdclass();
+        $block = $this->blockTao->fetch($blockID);
+        if(empty($block)) return false;
 
         $block->params = json_decode($block->params);
         if($block->block == 'html') $block->params->html = $this->loadModel('file')->setImgSize($block->params->html);
@@ -34,13 +34,13 @@ class blockModel extends model
      * Get max order number by block module. 
      * 获取对应模块下区块的最大排序号.
      *
-     * @param  string $appName
+     * @param  string $module
      * @access public
      * @return int
      */
-    public function getMaxOrderByModule(string $module) : int
+    public function getMaxOrderByModule(string $module): int
     {
-        return $this->blockTao->getMaxOrderByModule($module);
+        return $this->blockTao->fetchMaxOrderByModule($module);
     }
 
     /**
@@ -51,11 +51,11 @@ class blockModel extends model
      * @param  string $type
      * @param  int    $hidden
      * @access public
-     * @return array | bool
+     * @return array|bool
      */
-    public function getList(string $module, string $type = '', int $hidden = 0) : array | bool
+    public function getList(string $module, string $type = '', int $hidden = 0): array|bool
     {
-        return $this->blockTao->getList($module, $type, $hidden);
+        return $this->blockTao->fetchList($module, $type, $hidden);
     }
 
     /**
@@ -64,51 +64,40 @@ class blockModel extends model
      *
      * @param  string $module
      * @access public
-     * @return array | bool
+     * @return array|bool
      */
-    public function getHiddenBlocks(string $module) : array | bool
+    public function getHiddenBlocks(string $module): array|bool
     {
-        return $this->blockTao->getList($module, $type = '', $hidden = 1);
+        return $this->blockTao->fetchList($module, $type = '', $hidden = 1);
     }
 
     /**
      * Save a block.
      *
-     * @param  int    $id
-     * @param  string $source
+     * @param  int    $blockID
      * @param  string $type
      * @param  string $module
      * @access public
-     * @return void
+     * @return bool|int
      */
-    public function save($id, $source, $type, $module = 'my')
+    public function save(int $blockID, string $type, string $module = 'my'): bool|int
     {
-        $block = $id ? $this->getByID($id) : null;
+        $block = $blockID ? $this->getByID($blockID) : null;
         $data = fixer::input('post')
+            ->setIF($blockID, 'id', $blockID)
             ->add('account', $this->app->user->account)
-            ->stripTags('html', $this->config->allowedTags)
-            ->setIF($id, 'id', $id)
-            ->add('order', $block ? $block->order : ($this->getMaxOrderByModule($module) + 1))
             ->add('module', $module)
+            ->add('order', $block ? $block->order : ($this->getMaxOrderByModule($module) + 1))
             ->add('hidden', 0)
-            ->setDefault('grid', '4')
-            ->setDefault('source', $source)
-            ->setDefault('block', $type)
             ->setDefault('vision', $this->config->vision)
+            ->setDefault('grid', '4')
             ->setDefault('params', array())
+            ->stripTags('html', $this->config->allowedTags)
             ->remove('uid,actionLink,modules,moduleBlock')
             ->get();
 
-        if($this->post->moduleBlock)
-        {
-            $data->source = $this->post->modules;
-            $data->block  = $this->post->moduleBlock;
-        }
-        else
-        {
-            $data->source = '';
-            $data->block  = $this->post->modules;
-        }
+        $data->source = $this->post->moduleBlock ? $this->post->modules     : '';
+        $data->block  = $this->post->moduleBlock ? $this->post->moduleBlock : $this->post->modules;
 
         if($block) $data->height = $block->height;
         if($type == 'html')
@@ -121,8 +110,14 @@ class blockModel extends model
         }
 
         $data->params = helper::jsonEncode($data->params);
-        $this->dao->replace(TABLE_BLOCK)->data($data)->exec();
-        if(!dao::isError()) $this->loadModel('score')->create('block', 'set');
+
+        $this->blockTao->replace($data);
+        if(dao::isError()) return false;
+
+        $this->loadModel('score')->create('block', 'set');
+
+        $blockID = $blockID ? $blockID : $this->dao->lastInsertID(); 
+        return $blockID; 
     }
 
     /**
@@ -214,15 +209,16 @@ class blockModel extends model
 
     /**
      * Init block when account use first.
+     * 用户首次加载时初始化区块数据.
      *
-     * @param  string    $module project|product|execution|qa|my
-     * @param  string    $type   scrum|waterfall|kanban
+     * @param  string $module
+     * @param  string $type
      * @access public
      * @return bool
      */
-    public function initBlock($module, $type = '')
+    public function initBlock(string $module, string $type = ''): bool
     {
-        if(empty($module)) return;
+        if(!$module) return false;
 
         $flow    = isset($this->config->global->flow) ? $this->config->global->flow : 'full';
         $account = $this->app->user->account;
@@ -254,31 +250,37 @@ class blockModel extends model
             $block['vision']  = $this->config->vision;
             if(!isset($block['source'])) $block['source'] = $module;
 
-            $this->dao->replace(TABLE_BLOCK)->data($block)->exec();
+            $this->blockTao->replace($block);
         }
         return !dao::isError();
     }
 
     /**
-     * Get block list.
+     * Get block json that user can add.
+     * 获取允许用户添加的区块列表.
      *
      * @param  string $module
-     * @param  string $dashboard
-     * @param  object $model
-     *
+     * @param  string $dashboard ''|project
+     * @param  string $type      scrum|waterfall|kanban
      * @access public
      * @return string
      */
-    public function getAvailableBlocks($module = '', $dashboard = '', $model = '')
+    public function getAvailableBlocks(string $module = '', string $dashboard = '', string $type = ''): string
     {
-        $blocks = $this->lang->block->availableBlocks;
         if($dashboard == 'project')
         {
-            $blocks = $this->lang->block->modules[$model]['index']->availableBlocks;
+            $blocks = $this->lang->block->modules[$type]['index']->availableBlocks;
         }
         else
         {
-            if($module and isset($this->lang->block->modules[$module])) $blocks = $this->lang->block->modules[$module]->availableBlocks;
+            if($module and isset($this->lang->block->modules[$module]))
+            { 
+                $blocks = $this->lang->block->modules[$module]->availableBlocks;
+            }
+            else
+            {
+                $blocks = $this->lang->block->availableBlocks;
+            }
         }
 
         if(isset($this->config->block->closed))
@@ -288,567 +290,23 @@ class blockModel extends model
                 if(strpos(",{$this->config->block->closed},", ",{$module}|{$blockKey},") !== false) unset($blocks->$blockKey);
             }
         }
+
         return json_encode($blocks);
     }
 
     /**
-     * Get list params for product|project|todo
-     *
-     * @param  string $module
+     * Get block set form params.
+     * 获取不同区块所需的参数配置.
+     * 
+     * @param  string $type 
+     * @param  string $module 
      * @access public
      * @return string
      */
-    public function getListParams($module = '')
+    public function getParams(string $type, string $module): string
     {
-        if($module == 'product')   return $this->getProductParams();
-        if($module == 'project')   return $this->getProjectParams();
-        if($module == 'execution') return $this->getExecutionParams();
-
-        $params = new stdclass();
-        $params = $this->appendCountParams($params);
-        return json_encode($params);
-    }
-
-    /**
-     * Get todo params.
-     *
-     * @access public
-     * @return json
-     */
-    public function getTodoParams($module = '')
-    {
-        return $this->getListParams($module);
-    }
-
-    /**
-     * Get task params.
-     *
-     * @access public
-     * @return string
-     */
-    public function getTaskParams($module = '')
-    {
-        $params = $this->appendCountParams();
-        $params->type['name']    = $this->lang->block->type;
-        $params->type['options'] = $this->lang->block->typeList->task;
-        $params->type['control'] = 'select';
-
-        $params->orderBy['name']    = $this->lang->block->orderBy;
-        $params->orderBy['default'] = 'id_desc';
-        $params->orderBy['options'] = $this->lang->block->orderByList->task;
-        $params->orderBy['control'] = 'select';
-
-        return json_encode($params);
-    }
-
-    /**
-     * Get Bug Params.
-     *
-     * @access public
-     * @return json
-     */
-    public function getBugParams($module = '')
-    {
-        $params = $this->appendCountParams();
-        $params->type['name']    = $this->lang->block->type;
-        $params->type['options'] = $this->lang->block->typeList->bug;
-        $params->type['control'] = 'select';
-
-        $params->orderBy['name']    = $this->lang->block->orderBy;
-        $params->orderBy['default'] = 'id_desc';
-        $params->orderBy['options'] = $this->lang->block->orderByList->bug;
-        $params->orderBy['control'] = 'select';
-
-        return json_encode($params);
-    }
-
-    /**
-     * Get case params.
-     *
-     * @access public
-     * @return json
-     */
-    public function getCaseParams($module = '')
-    {
-        $params = $this->appendCountParams();
-        $params->type['name']    = $this->lang->block->type;
-        $params->type['options'] = $this->lang->block->typeList->case;
-        $params->type['control'] = 'select';
-
-        $params->orderBy['name']    = $this->lang->block->orderBy;
-        $params->orderBy['default'] = 'id_desc';
-        $params->orderBy['options'] = $this->lang->block->orderByList->case;
-        $params->orderBy['control'] = 'select';
-
-        return json_encode($params);
-    }
-
-    /**
-     * Get testtask params.
-     *
-     * @param  string $module
-     * @access public
-     * @return void
-     */
-    public function getTesttaskParams($module = '')
-    {
-        $params = $this->appendCountParams();
-        $params->type['name']    = $this->lang->block->type;
-        $params->type['options'] = $this->lang->block->typeList->testtask;
-        $params->type['control'] = 'select';
-
-        return json_encode($params);
-    }
-
-    /**
-     * Get story params.
-     *
-     * @access public
-     * @return json
-     */
-    public function getStoryParams($module = '')
-    {
-        $params = $this->appendCountParams();
-        $params->type['name']    = $this->lang->block->type;
-        $params->type['options'] = $this->lang->block->typeList->story;
-        $params->type['control'] = 'select';
-
-        $params->orderBy['name']    = $this->lang->block->orderBy;
-        $params->orderBy['default'] = 'id_desc';
-        $params->orderBy['options'] = $this->lang->block->orderByList->story;
-        $params->orderBy['control'] = 'select';
-
-        return json_encode($params);
-    }
-
-    /**
-     * Get plan params.
-     *
-     * @access public
-     * @return json
-     */
-    public function getPlanParams()
-    {
-        $params = $this->appendCountParams();
-        return json_encode($params);
-    }
-
-    /**
-     * Get Release params.
-     *
-     * @access public
-     * @return json
-     */
-    public function getReleaseParams()
-    {
-        $params = $this->appendCountParams();
-        return json_encode($params);
-    }
-
-    /**
-     * Get project params.
-     *
-     * @access public
-     * @return json
-     */
-    public function getProjectParams()
-    {
-        $this->app->loadLang('project');
-        $params = new stdclass();
-        $params->type['name']    = $this->lang->block->type;
-        $params->type['options'] = $this->lang->project->featureBar['browse'];
-        $params->type['control'] = 'select';
-
-        $params->orderBy['name']    = $this->lang->block->orderBy;
-        $params->orderBy['options'] = $this->lang->block->orderByList->product;
-        $params->orderBy['control'] = 'select';
-
-        return json_encode($this->appendCountParams($params));
-    }
-
-    /**
-     * Get project team params.
-     *
-     * @access public
-     * @return json
-     */
-    public function getProjectTeamParams()
-    {
-        $this->app->loadLang('project');
-        $params = new stdclass();
-        $params->type['name']    = $this->lang->block->type;
-        $params->type['options'] = $this->lang->project->featureBar['browse'];
-        $params->type['control'] = 'select';
-
-        $params->orderBy['name']    = $this->lang->block->orderBy;
-        $params->orderBy['options'] = $this->lang->block->orderByList->project;
-        $params->orderBy['control'] = 'select';
-
-        return json_encode($this->appendCountParams($params));
-    }
-    /**
-     * Get Build params.
-     *
-     * @access public
-     * @return json
-     */
-    public function getBuildParams()
-    {
-        $params = $this->appendCountParams();
-        return json_encode($params);
-    }
-
-    /**
-     * Get product params.
-     *
-     * @access public
-     * @return json
-     */
-    public function getProductParams()
-    {
-        $params = new stdclass();
-        $params->type['name']    = $this->lang->block->type;
-        $params->type['options'] = $this->lang->block->typeList->product;
-        $params->type['control'] = 'select';
-
-        return json_encode($this->appendCountParams($params));
-    }
-
-    /**
-     * Get statistic params.
-     *
-     * @param  string $module product|project|execution|qa
-     * @access public
-     * @return string
-     */
-    public function getStatisticParams($module = 'product')
-    {
-        if($module == 'product')   return $this->getProductStatisticParams();
-        if($module == 'project')   return $this->getProjectStatisticParams();
-        if($module == 'execution') return $this->getExecutionStatisticParams();
-        if($module == 'qa')        return $this->getQaStatisticParams();
-        if($module == 'doc')       return $this->getDocStatisticParams();
-
-        $params = new stdclass();
-        $params = $this->appendCountParams($params);
-        return json_encode($params);
-    }
-
-    /**
-     * Get product statistic params.
-     *
-     * @access public
-     * @return void
-     */
-    public function getProductStatisticParams()
-    {
-        $params = $this->appendCountParams();
-        $params->type['name']    = $this->lang->block->type;
-        $params->type['options'] = $this->lang->block->typeList->product;
-        $params->type['control'] = 'select';
-
-        return json_encode($params);
-    }
-
-    /**
-     * Get project statistic params.
-     *
-     * @access public
-     * @return void
-     */
-    public function getProjectStatisticParams()
-    {
-        $params = $this->appendCountParams();
-        $params->type['name']    = $this->lang->block->type;
-        $params->type['options'] = $this->lang->block->typeList->project;
-        $params->type['control'] = 'select';
-
-        return json_encode($params);
-    }
-
-    /**
-     * Get execution statistic params.
-     *
-     * @access public
-     * @return void
-     */
-    public function getExecutionStatisticParams()
-    {
-        $params = $this->appendCountParams();
-        $params->type['name']    = $this->lang->block->type;
-        $params->type['options'] = $this->lang->block->typeList->execution;
-        $params->type['control'] = 'select';
-
-        return json_encode($params);
-    }
-
-    /**
-     * Get qa statistic params.
-     *
-     * @access public
-     * @return void
-     */
-    public function getQaStatisticParams()
-    {
-        $params = $this->appendCountParams();
-        $params->type['name']    = $this->lang->block->type;
-        $params->type['options'] = $this->lang->block->typeList->product;
-        $params->type['control'] = 'select';
-
-        return json_encode($params);
-    }
-
-    /**
-     * Get document statistic params.
-     *
-     * @access public
-     * @return bool
-     */
-    public function getDocStatisticParams()
-    {
-        return false;
-    }
-
-    /**
-     * Get recent project pararms.
-     *
-     * @access public
-     * @return bool
-     */
-    public function getRecentProjectParams()
-    {
-        return false;
-    }
-
-    /**
-     * Get product overview pararms.
-     *
-     * @access public
-     * @return bool
-     */
-    public function getOverviewParams()
-    {
-        return false;
-    }
-
-    /**
-     * Get waterfall project report pararms.
-     *
-     * @access public
-     * @return bool
-     */
-    public function getWaterfallReportParams()
-    {
-        return false;
-    }
-
-    /**
-     * Get waterfall general report params.
-     *
-     * @access public
-     * @return bool
-     */
-    public function getWaterfallGeneralReportParams()
-    {
-        return false;
-    }
-
-    /**
-     * Get project estimate pararms.
-     *
-     * @access public
-     * @return bool
-     */
-    public function getWaterfallEstimateParams()
-    {
-        return false;
-    }
-
-    /**
-     * Get project gantt pararms.
-     *
-     * @access public
-     * @return string
-     */
-    public function getWaterfallGanttParams()
-    {
-        return false;
-    }
-
-    /**
-     * Get project progress pararms.
-     *
-     * @access public
-     * @return string
-     */
-    public function getWaterfallProgressParams()
-    {
-        return false;
-    }
-
-    /**
-     * Get waterfall issue params.
-     *
-     * @param  string $module
-     * @access public
-     * @return void
-     */
-    public function getWaterfallIssueParams($module = '')
-    {
-        $this->app->loadLang('issue');
-
-        $params = $this->appendCountParams();
-        $params->type['name']    = $this->lang->block->type;
-        $params->type['options'] = $this->lang->issue->featureBar['browse'];
-        $params->type['control'] = 'select';
-
-        $params->orderBy['name']    = $this->lang->block->orderBy;
-        $params->orderBy['options'] = $this->lang->block->orderByList->product;
-        $params->orderBy['control'] = 'select';
-
-        return json_encode($params);
-    }
-
-    /**
-     * Get waterfall risk params.
-     *
-     * @param  string $module▫
-     * @access public
-     * @return void
-     */
-    public function getWaterfallRiskParams($module = '')
-    {
-        $this->app->loadLang('risk');
-        $params = $this->appendCountParams();
-        $params->type['name']    = $this->lang->block->type;
-        $params->type['options'] = $this->lang->risk->featureBar['browse'];
-        $params->type['control'] = 'select';
-
-        $params->orderBy['name']    = $this->lang->block->orderBy;
-        $params->orderBy['options'] = $this->lang->block->orderByList->product;
-        $params->orderBy['control'] = 'select';
-
-        return json_encode($params);
-    }
-
-    /**
-     * Get scrum issue params.
-     *
-     * @param  string $module
-     * @access public
-     * @return void
-     */
-    public function getScrumIssueParams($module = '')
-    {
-        $this->app->loadLang('issue');
-
-        $params = $this->appendCountParams();
-        $params->type['name']    = $this->lang->block->type;
-        $params->type['options'] = $this->lang->issue->labelList;
-        $params->type['control'] = 'select';
-
-        $params->orderBy['name']    = $this->lang->block->orderBy;
-        $params->orderBy['options'] = $this->lang->block->orderByList->product;
-        $params->orderBy['control'] = 'select';
-
-        return json_encode($params);
-    }
-
-    /**
-     * Get scrum risk params.
-     *
-     * @param  string $module▫
-     * @access public
-     * @return void
-     */
-    public function getScrumRiskParams($module = '')
-    {
-        $this->app->loadLang('risk');
-        $params = $this->appendCountParams();
-        $params->type['name']    = $this->lang->block->type;
-        $params->type['options'] = $this->lang->risk->featureBar['browse'];
-        $params->type['control'] = 'select';
-
-        $params->orderBy['name']    = $this->lang->block->orderBy;
-        $params->orderBy['options'] = $this->lang->block->orderByList->product;
-        $params->orderBy['control'] = 'select';
-
-        return json_encode($params);
-    }
-
-    /**
-     * Get execution params.
-     *
-     * @access public
-     * @return json
-     */
-    public function getExecutionParams()
-    {
-        $params = new stdclass();
-        $params->type['name']    = $this->lang->block->type;
-        $params->type['options'] = $this->lang->block->typeList->execution;
-        $params->type['control'] = 'select';
-
-        return json_encode($this->appendCountParams($params));
-    }
-
-    /**
-     * Get assign to me params.
-     *
-     * @access public
-     * @return json
-     */
-    public function getAssignToMeParams()
-    {
-        $params = new stdclass();
-        $params->todoCount['name']    = $this->lang->block->todoCount;
-        $params->todoCount['default'] = 20;
-        $params->todoCount['control'] = 'input';
-
-        $params->taskCount['name']    = $this->lang->block->taskCount;
-        $params->taskCount['default'] = 20;
-        $params->taskCount['control'] = 'input';
-
-        $params->bugCount['name']    = $this->lang->block->bugCount;
-        $params->bugCount['default'] = 20;
-        $params->bugCount['control'] = 'input';
-
-        if($this->config->edition == 'max')
-        {
-            if(helper::hasFeature('risk'))
-            {
-                $params->riskCount['name']    = $this->lang->block->riskCount;
-                $params->riskCount['default'] = 20;
-                $params->riskCount['control'] = 'input';
-            }
-
-            if(helper::hasFeature('issue'))
-            {
-                $params->issueCount['name']    = $this->lang->block->issueCount;
-                $params->issueCount['default'] = 20;
-                $params->issueCount['control'] = 'input';
-            }
-
-            if(helper::hasFeature('meeting'))
-            {
-                $params->meetingCount['name']    = $this->lang->block->meetingCount;
-                $params->meetingCount['default'] = 20;
-                $params->meetingCount['control'] = 'input';
-            }
-
-            $params->feedbackCount['name']    = $this->lang->block->feedbackCount;
-            $params->feedbackCount['default'] = 20;
-            $params->feedbackCount['control'] = 'input';
-        }
-
-        $params->storyCount['name']    = $this->lang->block->storyCount;
-        $params->storyCount['default'] = 20;
-        $params->storyCount['control'] = 'input';
-
-        $params->reviewCount['name']    = $this->lang->block->reviewCount;
-        $params->reviewCount['default'] = 20;
-        $params->reviewCount['control'] = 'input';
-
+        $type = $type == 'todo' ? $module : $type;
+        $params = zget($this->config->block->params, $type, '');
         return json_encode($params);
     }
 
@@ -895,25 +353,6 @@ class blockModel extends model
     }
 
     /**
-     * Append count params.
-     *
-     * @param  object $params
-     * @access public
-     * @return object
-     */
-    public function appendCountParams($params = '')
-    {
-        if(empty($params)) $params = new stdclass();
-
-        $params->count = array();
-        $params->count['name']    = $this->lang->block->count;
-        $params->count['default'] = 20;
-        $params->count['control'] = 'input';
-
-        return $params;
-    }
-
-    /**
      * Check whether long block.
      *
      * @param  object    $block
@@ -944,181 +383,6 @@ class blockModel extends model
             ->fetch('value');
 
         return $key == $hash;
-    }
-
-    /**
-     * Get testtask params.
-     *
-     * @access public
-     * @return string
-     */
-    public function getScrumTestParams()
-    {
-        $params = $this->appendCountParams();
-        $params->type['name']    = $this->lang->block->type;
-        $params->type['options'] = $this->lang->block->typeList->testtask;
-        $params->type['control'] = 'select';
-
-        return json_encode($params);
-    }
-
-    /**
-     * Get scrum project list params.
-     *
-     * @param  string $module
-     * @access public
-     * @return string
-     */
-    public function getScrumListParams($module = '')
-    {
-        $params = $this->appendCountParams();
-        $params->type['name']    = $this->lang->block->type;
-        $params->type['options'] = $this->lang->block->typeList->scrum;
-        $params->type['control'] = 'select';
-
-        return json_encode($params);
-    }
-
-    /**
-     * Get scrum overall list params.
-     *
-     * @param  string $module
-     * @access public
-     * @return string
-     */
-    public function getScrumOverviewParams($module = '')
-    {
-        return false;
-    }
-
-    /**
-     * Get scrum roadmap list params.
-     *
-     * @access public
-     * @return bool
-     */
-    public function getScrumRoadMapParams()
-    {
-        return false;
-    }
-
-    /**
-     * Get scrum product list params.
-     *
-     * @param  string $module
-     * @access public
-     * @return string
-     */
-    public function getScrumProductParams($module = '')
-    {
-        $params = $this->appendCountParams();
-
-        return json_encode($params);
-    }
-
-
-    /**
-     * Get project dynamic params.
-     *
-     * @access public
-     * @return string
-     */
-    public function getProjectDynamicParams()
-    {
-        $params = $this->appendCountParams();
-
-        return json_encode($params);
-    }
-
-    /**
-     * Get scrum project list params.
-     *
-     * @param  string $module
-     * @access public
-     * @return string
-     */
-    public function getSprintParams($module = '')
-    {
-        return false;
-    }
-
-    /**
-     * Get document dynamic params.
-     *
-     * @access public
-     * @return bool
-     */
-    public function getDocDynamicParams()
-    {
-        return false;
-    }
-
-    /**
-     * Get my collection params.
-     *
-     * @access public
-     * @return bool
-     */
-    public function getDocMyCollectionParams()
-    {
-        return false;
-    }
-
-    /**
-     * Get recent update params.
-     *
-     * @access public
-     * @return bool
-     */
-    public function getDocRecentUpdateParams()
-    {
-        return false;
-    }
-
-    /**
-     * Get view list params.
-     *
-     * @access public
-     * @return bool
-     */
-    public function getDocViewlistParams()
-    {
-        return false;
-    }
-
-    /**
-     * Get product document params.
-     *
-     * @access public
-     * @return bool
-     */
-    public function getProductDocParams()
-    {
-        $params = $this->appendCountParams();
-        return json_encode($params);
-    }
-
-    /**
-     * Get collect list params.
-     *
-     * @access public
-     * @return bool
-     */
-    public function getDocCollectListParams()
-    {
-        return false;
-    }
-
-    /**
-     * Get project document params.
-     *
-     * @access public
-     * @return bool
-     */
-    public function getProjectDocParams()
-    {
-        $params = $this->appendCountParams();
-        return json_encode($params);
     }
 
     /**
