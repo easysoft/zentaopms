@@ -29,22 +29,36 @@ class form extends baseFixer
     public function config(array $config)
     {
         $this->rawconfig = $config;
+
+        foreach($this->rawconfig as $key => $value) $this->convertField($key, $value);
+
         return $this;
     }
 
-    public function getAll(): object
+    /**
+     * 获取$_POST的数据。
+     * Get the data of $_POST.
+     *
+     * @param bool $isRaw 是否获取原始数据。Whether to get the raw data.
+     * @return object
+     */
+    public function getAll(bool $isRaw = false): object
     {
-        return $this->data;
+        return $isRaw ? $this->rawdata : $this->data;
     }
 
-    public function create()
+    public function get($fields = '')
     {
-        foreach($this->rawconfig as $key => $value)
+        if(empty($fields)) return $this->data;
+        if(strpos($fields, ',') === false) return $this->data->$fields;
+
+        $fields = array_flip(explode(',', $fields));
+        foreach($this->data as $field => $value)
         {
-            $this->convertField($key, $value);
+            if(!isset($fields[$field])) unset($this->data->$field);
         }
 
-        return $this;
+        return $this->data;
     }
 
     public function convertField($field, $config)
