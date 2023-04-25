@@ -1509,7 +1509,7 @@ class groupModel extends model
         if(empty($lang)) $lang = $this->app->getClientLang();
         return $this->dao->select('t1.*,t2.key,t2.value,t2.desc')->from(TABLE_PRIV)->alias('t1')
             ->leftJoin(TABLE_PRIVLANG)->alias('t2')->on('t1.id=t2.objectID')
-            ->where('t1.id')->eq($privID)
+            ->where('t1.id')->eq((int)$privID)
             ->andWhere('t2.objectType')->eq('priv')
             ->andWhere('t2.lang')->eq($lang)
             ->fetch();
