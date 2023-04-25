@@ -71,7 +71,7 @@ class dom
         foreach($children as $child)
         {
             if(is_array($child)) $this->add($child);
-            elseif(!empty($child)) $this->children[] = $child;
+            else $this->children[] = $child;
         }
     }
 
