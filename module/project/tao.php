@@ -16,7 +16,7 @@ class projectTao extends projectModel
      * @access protected
      * @return void
      */
-    protected function doStart(int $projectID, object $project):void
+    protected function doStart(int $projectID, object $project) :void
     {
         $this->dao->update(TABLE_PROJECT)->data($project)
             ->autoCheck()
@@ -26,14 +26,15 @@ class projectTao extends projectModel
             ->where('id')->eq((int)$projectID)
             ->exec();
     }
+
     /**
      * Update project.
      *
-     * @param  object    $project
+     * @param  object $project
      * @access protected
      * @return void
      */
-    protected function updateProject($project) :void
+    protected function updateProject(object $project) :void
     {
         $this->dao->update(TABLE_PROJECT)->data($project)
             ->autoCheck()
@@ -45,11 +46,11 @@ class projectTao extends projectModel
     /**
      * Fetch undone tasks.
      *
-     * @param  int       $projectID
+     * @param  int $projectID
      * @access protected
      * @return array
      */
-    protected function fetchUndoneTasks($projectID) :array
+    protected function fetchUndoneTasks(int $projectID) :array
     {
         return $this->dao->select('id,estStarted,deadline,status')->from(TABLE_TASK)
             ->where('deadline')->notZeroDate()
@@ -61,11 +62,11 @@ class projectTao extends projectModel
     /**
      * Update start and end date of tasks.
      *
-     * @param  array     $tasks
+     * @param  array $tasks
      * @access protected
      * @return void
      */
-    protected function updateTasksStartAndEndDate($tasks) :void
+    protected function updateTasksStartAndEndDate(array $tasks) :void
     {
         foreach($tasks as $task)
         {
