@@ -4,6 +4,7 @@ UPDATE `zt_block` SET `module` = 'waterfallProject' WHERE `module` = 'project' a
 DROP INDEX account_vision_module_type_order ON `zt_block`;
 CREATE UNIQUE INDEX `account_vision_module_order` ON `zt_block`(`account`,`vision`,`module`,`order`);
 
+ALTER TABLE `zt_block` ADD `dashboard` varchar(20) NOT NULL DEFAULT '' AFTER `account`;
 ALTER TABLE `zt_block` CHANGE `module` `dashboard` varchar(20) NOT NULL DEFAULT '' AFTER `account`;
 ALTER TABLE `zt_block` DROP `type`;
 ALTER TABLE `zt_block` DROP `source`;

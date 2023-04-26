@@ -3,17 +3,17 @@ declare(strict_types=1);
 class blockTao extends blockModel
 {
     /**
-     * Get max order number by block module.
-     * 获取对应模块下区块的最大排序号.
+     * Get max order number by block dashboard.
+     * 获取对应仪表盘下区块的最大排序号.
      *
      * @param  string $module 
      * @access protected
      * @return int
      */
-    protected function fetchMaxOrderByModule(string $module): int
+    protected function fetchMaxOrderByDashboard(string $dashboard): int
     {
-        $order = $this->dao->select('MAX(`order`) as order')->from(TABLE_BLOCK)
-            ->where('module')->eq($module)
+        $order = $this->dao->select('MAX(`order`) as `order`')->from(TABLE_BLOCK)
+            ->where('dashboard')->eq($dashboard)
             ->andWhere('account')->eq($this->app->user->account)
             ->fetch('order');
 
