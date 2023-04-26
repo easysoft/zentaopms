@@ -1786,7 +1786,7 @@ class project extends control
             if(dao::isError()) return print(js::error(dao::getError()));
 
             $comment = strip_tags($this->post->comment, $this->config->allowedTags);
-            return $this->projectZen->responseAfterStart($project, $changes, $postData, $comment);
+            return $this->projectZen->responseAfterStart($project, $changes, $comment);
         }
 
         $this->projectZen->buildStartForm($project);

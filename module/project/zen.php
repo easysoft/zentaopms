@@ -148,12 +148,11 @@ class projectZen extends project
      * After starting the project, do other operations.
      * @param  object $project
      * @param  array  $changes
-     * @param  object $postData
      * @param  string $comment
      * @access protected 
      * @return int|object 
      */
-    protected function responseAfterStart(object $project, array $changes, object $postData, string $comment) :int|object
+    protected function responseAfterStart(object $project, array $changes, string $comment) :int|object
     {
         if($comment != '' or !empty($changes))
         {
