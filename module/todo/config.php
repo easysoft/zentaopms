@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 $config->todo = new stdclass();
 $config->todo->batchCreate = 8;
 
@@ -40,3 +42,5 @@ $config->todo->objectList['bug']      = 'bugs';
 $config->todo->objectList['task']     = 'tasks';
 $config->todo->objectList['story']    = 'stories';
 $config->todo->objectList['testtask'] = 'testtasks';
+
+include 'config/form.php';
