@@ -81,7 +81,8 @@
         const $perf = options.id === 'page' ? $('#pagePerf') : $('#partPerf');
         if(stage === 'requestBegin')
         {
-            $perf.html(`<div class="opacity-50 pl-2">${options.id === 'page' ? 'PAGE' : 'PARTIAL'}</div>`).append($('<div class="px-2 zin-perf-load">loading...</div>')).attr('title', `Loading from ${options.url}`);
+            $perf.html(`<div class="opacity-50 pl-2">${options.id === 'page' ? 'PAGE' : (options.id === '#dtable' ? 'TABLE' : 'PART')}</div>`).append($('<div class="px-2 zin-perf-load">loading...</div>')).attr('title', `Loading from ${options.url}`);
+            if(options.id === 'page') $('#partPerf').empty();
         }
         else if(stage === 'requestEnd')
         {
@@ -91,7 +92,7 @@
         }
         else if(stage === 'renderBegin')
         {
-            $perf.append($('<div class="px-2 zin-perf-render">rendering...</div>')).attr('title', `Renderring ${options.id}`);
+            $perf.append($('<div class="px-2 zin-perf-render">rendering...</div>').attr('title', `Renderring ${options.id}`));
         }
         else if(stage === 'renderEnd')
         {
