@@ -5,10 +5,10 @@
 
 ## 1. 统一使用PHP8.1进行开发，强类型声明
 # 为了让PHP强制使用严格类型，需要在每个编写的文件头部填写 declare(strict_types=1);
+<?php
 declare(strict_types=1);
-
-# 2. 文件注释
-# 版权信息修改： example 为当前模块，author修改成自己的账号，package写当前模块名；
+?>
+# 2. 文件注释 版权信息修改： example 为当前模块，author修改成自己的账号，package写当前模块名；
 <?php
 /**
  * The control file of example module of ZenTaoPMS.
@@ -66,9 +66,9 @@ declare(strict_types=1);
 <?php
 $config->example->form = new stdclass;
 $config->example->form->create = array();
-$config->example->form->create['name']                = array('type' => 'string', 'r e q u i r ed' => true, 'filter' => 'trim');
-$config->example->form->create['PO']                    = array('type' => 'account', 'r e q u i r ed' => false, 'default' => '');
-$config->example->form->create['createdDate']     = array('type' => 'date', 'r e q u i r ed' => false, 'default' => helper::now());
+$config->example->form->create['name']           = array('type' => 'string', 'r e q u i r ed' => true, 'filter' => 'trim');
+$config->example->form->create['PO']             = array('type' => 'account', 'r e q u i r ed' => false, 'default' => '');
+$config->example->form->create['createdDate']    = array('type' => 'date', 'r e q u i r ed' => false, 'default' => helper::now());
 $config->example->form->create['createdVersion'] = array('type' => 'string', 'r e q u i r ed' => false, 'default' => $this->config->version);
 ?>
 ## 2)调用form进行处理
