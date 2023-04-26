@@ -171,7 +171,7 @@ class bug extends control
         $productIDList = $productID ? $productID : array_keys($this->products);
 
         /* Get bugs. */
-        $bugs = $this->bug->getBugs($productIDList, $executions, $branch, $browseType, $moduleID, $queryID, $sort, $pager, $this->projectID);
+        $bugs = $this->bug->getList($browseType, $productIDList, $this->projectID, array_keys($executions), $branch, $moduleID, $queryID, $sort, $pager);
 
         /* Process the sql, get the conditon partion, save it to session. */
         $this->loadModel('common')->saveQueryCondition($this->bug->dao->get(), 'bug', $browseType == 'needconfirm' ? false : true);
