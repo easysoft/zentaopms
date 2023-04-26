@@ -467,6 +467,7 @@ class groupModel extends model
                     $privs[]      = $data;
                 }
             }
+            $this->insertPrivs($privs);
             $depentedPrivs = $this->getPrivByIdList($depentedPrivs);
             foreach($depentedPrivs as $privID => $priv)
             {
@@ -495,7 +496,6 @@ class groupModel extends model
                 $data->method = $priv->method;
                 $this->dao->replace(TABLE_GROUPPRIV)->data($data)->exec();
             }
-            $this->insertPrivs($privs);
         }
         return !empty($depentedPrivs) ? true : false;
     }
