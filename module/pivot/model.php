@@ -1917,16 +1917,18 @@ class pivotModel extends model
                 if($field)
                 {
                     $path = $this->app->getModuleRoot() . 'dataview' . DS . 'table' . DS . "$object.php";
-                    include $path;
-
-                    $options = $schema->fields[$field]['options'];
+                    if(is_file($path))
+                    {
+                        include $path;
+                        $options = $schema->fields[$field]['options'];
+                    }
                 }
                 break;
             case 'object':
                 if($field)
                 {
-                    $table   = zget($this->config->objectTables, $object);
-                    $options = $this->dao->select("id, {$field}")->from($table)->fetchPairs();
+                    $table = zget($this->config->objectTables, $object);
+                    if($table) $options = $this->dao->select("id, {$field}")->from($table)->fetchPairs();
                 }
                 break;
             case 'string':
