@@ -631,7 +631,7 @@ class api extends control
 
             $this->action->create('api', $api->id, 'Created');
 
-            if(isonlybody()) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => 'true', 'callback' => "parentLocate({$api->id})"));
+            if(isonlybody()) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => 'true', 'callback' => "parentLocate({$api->id}, {$api->lib}, {$api->module})"));
             return $this->sendSuccess(array('locate' => helper::createLink('api', 'index', "libID={$api->lib}&moduleID={$api->module}&apiID={$api->id}")));
         }
 
