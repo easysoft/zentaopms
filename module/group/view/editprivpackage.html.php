@@ -20,11 +20,11 @@
       <tbody>
         <tr>
           <th class='c-name'><?php echo $lang->privpackage->name;?></th>
-          <td class='required'><?php echo html::input('name', $privPackage->name, "class='form-control'");?></td>
+          <td class='required'><?php echo html::input('value', $privPackage->name, "class='form-control'");?></td>
         </tr>
         <tr>
           <th><?php echo $lang->privpackage->module;?></th>
-          <td class='required'><?php echo html::select('module', $modules, $privPackage->module, "class='form-control picker-select'");?></td>
+          <td class='required'><?php echo html::select('parent', $modules, $privPackage->parent, "class='form-control picker-select'");?></td>
         </tr>
         <tr>
           <th><?php echo $lang->privpackage->desc;?></th>

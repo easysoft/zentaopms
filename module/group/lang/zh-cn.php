@@ -118,6 +118,13 @@ $lang->privpackage->module = '所属模块';
 $lang->privpackage->desc   = '权限包说明';
 $lang->privpackage->belong = '所属权限包';
 
+if(!isset($lang->privlang)) $lang->privlang = new stdclass();
+$lang->privlang->value  = '权限名称';
+$lang->privlang->desc   = '描述';
+$lang->privlang->module = '模块名';
+$lang->privlang->method = '方法名';
+$lang->privlang->parent = '所属模块/权限包';
+
 $lang->group->copyOptions['copyPriv'] = '复制权限';
 $lang->group->copyOptions['copyUser'] = '复制用户';
 
