@@ -14,13 +14,14 @@ su('admin');
 
 /**
 
-title=测试taskModel->getTeamByIdList();
+title=taskModel->getTeamByIdList();
+timeout=0
 cid=1
-pid=1
 
-测试传入空的taskIdList >> 0
-测试查询给定taskIdList的任务数量 >> 2
-测试查询任务id为1的团队信息 >> admin
+- 执行$emptyData @0
+- 执行count($taskTeamGroup) @2
+- 执行$firstTaskTeam- ,属性0 @1
+ @admin
 
 */
 
@@ -31,6 +32,6 @@ $taskIdList    = array(1, 2);
 $emptyData     = $tester->task->getTeamByIdList(array());
 $taskTeamGroup = $tester->task->getTeamByIdList($taskIdList);
 $firstTaskTeam = current($taskTeamGroup);
-r($emptyData)            && p()               && e('0');    // 测试传入空的taskIdList
-r(count($taskTeamGroup)) && p()               && e('2');    // 测试查询给定taskIdList的任务数量
-r($firstTaskTeam)        && p('0:account') && e('1,admin'); // 测试查询任务id为1团队中第一个人的用户名
+r($emptyData)            && p()               && e('0');  // 测试传入空的taskIdList
+r(count($taskTeamGroup)) && p()               && e('2');  // 测试查询给定taskIdList的任务数量
+r($firstTaskTeam)        && p('0:account') && e('admin'); // 测试查询任务id为1团队中第一个人的用户名
