@@ -18,29 +18,6 @@ class projectModel extends model
     }
 
     /**
-     * Get Multiple linked products for project.
-     *
-     * @param  int    $projectID
-     * @access public
-     * @return array
-     */
-    public function getMultiLinkedProducts($projectID)
-    {
-        $linkedProducts      = $this->dao->select('product')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($projectID)->fetchPairs();
-        $multiLinkedProducts = $this->dao->select('t3.id,t3.name')->from(TABLE_PROJECTPRODUCT)->alias('t1')
-            ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
-            ->leftJoin(TABLE_PRODUCT)->alias('t3')->on('t1.product = t3.id')
-            ->where('t1.product')->in($linkedProducts)
-            ->andWhere('t1.project')->ne($projectID)
-            ->andWhere('t2.type')->eq('project')
-            ->andWhere('t2.deleted')->eq('0')
-            ->andWhere('t3.deleted')->eq('0')
-            ->fetchPairs('id', 'name');
-
-        return $multiLinkedProducts;
-    }
-
-    /**
      * Show accessDenied response.
      *
      * @access private
@@ -83,24 +60,6 @@ class projectModel extends model
     }
 
     /**
-     * Get budget unit list.
-     *
-     * @access public
-     * @return array
-     */
-
-    public function getBudgetUnitList()
-    {
-        $budgetUnitList = array();
-        if($this->config->vision != 'lite')
-        {
-            foreach(explode(',', $this->config->project->unitList) as $unit) $budgetUnitList[$unit] = zget($this->lang->project->unitList, $unit, '');
-        }
-
-        return $budgetUnitList;
-    }
-
-    /**
      * Save project state.
      *
      * @param  int    $projectID
@@ -140,6 +99,47 @@ class projectModel extends model
         }
 
         return $this->session->project;
+    }
+
+    /**
+     * Get budget unit list.
+     *
+     * @access public
+     * @return array
+     */
+
+    public function getBudgetUnitList()
+    {
+        $budgetUnitList = array();
+        if($this->config->vision != 'lite')
+        {
+            foreach(explode(',', $this->config->project->unitList) as $unit) $budgetUnitList[$unit] = zget($this->lang->project->unitList, $unit, '');
+        }
+
+        return $budgetUnitList;
+    }
+
+    /**
+     * Get Multiple linked products for project.
+     *
+     * @param  int    $projectID
+     * @access public
+     * @return array
+     */
+    public function getMultiLinkedProducts($projectID)
+    {
+        $linkedProducts      = $this->dao->select('product')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($projectID)->fetchPairs();
+        $multiLinkedProducts = $this->dao->select('t3.id,t3.name')->from(TABLE_PROJECTPRODUCT)->alias('t1')
+            ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
+            ->leftJoin(TABLE_PRODUCT)->alias('t3')->on('t1.product = t3.id')
+            ->where('t1.product')->in($linkedProducts)
+            ->andWhere('t1.project')->ne($projectID)
+            ->andWhere('t2.type')->eq('project')
+            ->andWhere('t2.deleted')->eq('0')
+            ->andWhere('t3.deleted')->eq('0')
+            ->fetchPairs('id', 'name');
+
+        return $multiLinkedProducts;
     }
 
     /*
@@ -1846,13 +1846,7 @@ class projectModel extends model
 
         $project = $this->loadModel('file')->processImgURL($project, $this->config->project->editor->start, $this->post->uid);
 
-        $this->dao->update(TABLE_PROJECT)->data($project)
-            ->autoCheck()
-            ->check($this->config->project->start->requiredFields, 'notempty')
-            ->checkIF($project->realBegan != '', 'realBegan', 'le', helper::today())
-            ->checkFlow()
-            ->where('id')->eq((int)$projectID)
-            ->exec();
+        $this->projectTao->doStart($projectID, $project);
 
         /* When it has multiple errors, only the first one is prompted */
         if(dao::isError() and count(dao::$errors['realBegan']) > 1) dao::$errors['realBegan'] = dao::$errors['realBegan'][0];
@@ -1934,83 +1928,30 @@ class projectModel extends model
     /**
      * Activate project.
      *
-     * @param  int    $projectID
-     * @param  string $type
+     * @param  object $project
      * @access public
-     * @return void
+     * @return array  $changes|false
      */
-    public function activate($projectID, $type = 'project')
+    public function activate(object $project) :array|false
     {
-        $oldProject = $this->getById($projectID, $type);
         $now        = helper::now();
+        $projectID  = $project->id;
+        $oldProject = $this->getById($projectID);
 
-        $editorIdList = $this->config->project->editor->activate['id'];
-        if($this->app->rawModule == 'program') $editorIdList = $this->config->program->editor->activate['id'];
-
-        $project = fixer::input('post')
-            ->add('id', $projectID)
-            ->setDefault('realEnd','')
-            ->setDefault('status', 'doing')
-            ->setDefault('lastEditedBy', $this->app->user->account)
-            ->setDefault('lastEditedDate', $now)
-            ->setIF(!helper::isZeroDate($oldProject->realBegan), 'realBegan', helper::today())
-            ->stripTags($editorIdList, $this->config->allowedTags)
-            ->remove('comment,readjustTime,readjustTask')
-            ->get();
-
-        if(!$this->post->readjustTime)
-        {
-            unset($project->begin);
-            unset($project->end);
-        }
-
-        $project = $this->loadModel('file')->processImgURL($project, $editorIdList, $this->post->uid);
-        $this->dao->update(TABLE_PROJECT)->data($project)
-            ->autoCheck()
-            ->checkFlow()
-            ->where('id')->eq((int)$projectID)
-            ->exec();
+        $this->projectTao->updateProject($project);
 
         if(dao::isError()) return false;
 
         if(empty($oldProject->multiple) and $oldProject->model != 'waterfall') $this->loadModel('execution')->syncNoMultipleSprint($projectID);
 
-        /* Readjust task. */
-        if($this->post->readjustTime and $this->post->readjustTask)
+        /* Update start and end date of tasks in this project. */
+        if($project->readjustTime and $project->readjustTask)
         {
             $beginTimeStamp = strtotime($project->begin);
-            $tasks = $this->dao->select('id,estStarted,deadline,status')->from(TABLE_TASK)
-                ->where('deadline')->notZeroDate()
-                ->andWhere('status')->in('wait,doing')
-                ->andWhere('project')->eq($projectID)
-                ->fetchAll();
-            foreach($tasks as $task)
-            {
-                if($task->status == 'wait' and !helper::isZeroDate($task->estStarted))
-                {
-                    $taskDays   = helper::diffDate($task->deadline, $task->estStarted);
-                    $taskOffset = helper::diffDate($task->estStarted, $oldProject->begin);
-
-                    $estStartedTimeStamp = $beginTimeStamp + $taskOffset * 24 * 3600;
-                    $estStarted = date('Y-m-d', $estStartedTimeStamp);
-                    $deadline   = date('Y-m-d', $estStartedTimeStamp + $taskDays * 24 * 3600);
-
-                    if($estStarted > $project->end) $estStarted = $project->end;
-                    if($deadline > $project->end)   $deadline   = $project->end;
-                    $this->dao->update(TABLE_TASK)->set('estStarted')->eq($estStarted)->set('deadline')->eq($deadline)->where('id')->eq($task->id)->exec();
-                }
-                else
-                {
-                    $taskOffset = helper::diffDate($task->deadline, $oldProject->begin);
-                    $deadline   = date('Y-m-d', $beginTimeStamp + $taskOffset * 24 * 3600);
-
-                    if($deadline > $project->end) $deadline = $project->end;
-                    $this->dao->update(TABLE_TASK)->set('deadline')->eq($deadline)->where('id')->eq($task->id)->exec();
-                }
-            }
+            $tasks          = $this->projectTao->fetchUndoneTasks((int)$projectID);
+            $this->projectTao->updateTasksStartAndEndDate($tasks);
         }
-
-        /* Activate the shadow product of the project. */
+        /* Activate the shadow product of the project. (only change product status) */
         if(!$oldProject->hasProduct)
         {
             $productID = $this->loadModel('product')->getProductIDByProject($projectID);

@@ -98,14 +98,13 @@ class blockModel extends model
      * 获取区块列表.
      *
      * @param  string $module
-     * @param  string $type
      * @param  int    $hidden
      * @access public
      * @return int[]|false
      */
-    public function getMyDashboard(string $module, string $type = '', int $hidden = 0): array|false
+    public function getMyDashboard(string $dashboard, int $hidden = 0): array|false
     {
-        return $this->blockTao->fetchMyBlocks($module, $type, $hidden);
+        return $this->blockTao->fetchMyBlocks($dashboard, $hidden);
     }
 
     /**
@@ -116,9 +115,9 @@ class blockModel extends model
      * @access public
      * @return int[]|false
      */
-    public function getMyHiddenBlocks(string $module): array|false
+    public function getMyHiddenBlocks(string $dashboard): array|false
     {
-        return $this->blockTao->fetchMyBlocks($module, $type = '', $hidden = 1);
+        return $this->blockTao->fetchMyBlocks($dashboard, $hidden = 1);
     }
 
     /**
@@ -167,16 +166,16 @@ class blockModel extends model
     }
 
     /**
-     * Get max order number by block module. 
-     * 获取对应模块下区块的最大排序号.
+     * Get max order number by block dashboard. 
+     * 获取对应仪表盘下区块的最大排序号.
      *
-     * @param  string $module
+     * @param  string $dashboard
      * @access public
      * @return int
      */
-    public function getMaxOrderByModule(string $module): int
+    public function getMaxOrderByDashboard(string $dashboard): int
     {
-        return $this->blockTao->fetchMaxOrderByModule($module);
+        return $this->blockTao->fetchMaxOrderByDashboard($dashboard);
     }
 
     /**
@@ -312,7 +311,14 @@ class blockModel extends model
             ->fetchPairs('type');
     }
 
-    public function create(object $formData): bool
+    /**
+     * Create a block.
+     *
+     * @param  object $formData 
+     * @access public
+     * @return void
+     */
+    public function create(object $formData): int|false
     {
         $this->blockTao->insert($formData);
         if(dao::isError()) return false;
@@ -320,9 +326,16 @@ class blockModel extends model
         $blockID = $this->dao->lastInsertID();
         $this->loadModel('score')->create('block', 'set');
 
-        return $blockID;
+        return (int)$blockID;
     }
 
+    /**
+     * Update a block.
+     *
+     * @param  object $formData 
+     * @access public
+     * @return void
+     */
     public function update(object $formData): int|false
     {
         $this->dao->update(TABLE_BLOCK)->data($formData)->exec();

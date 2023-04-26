@@ -293,4 +293,4 @@ $config->project->browseTable->cols['actions']['actionsMap'] = array(
     'whitelist' => array('icon'=> 'icon-shield-check', 'text'=> $lang->project->whitelist,      'name'  => 'whitelist')
 );
 
-include './config/form.php';
+include 'config/form.php';

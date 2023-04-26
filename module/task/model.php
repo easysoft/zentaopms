@@ -2502,78 +2502,32 @@ class taskModel extends model
     }
 
     /**
-     * Get tasks of a execution.
+     * Get the task list under a execution.
+     * 获取执行下的任务列表信息。
      *
-     * @param int    $executionID
-     * @param int    $productID
-     * @param string $type
-     * @param string $modules
-     * @param string $orderBy
-     * @param null   $pager
-     *
+     * @param  int          $executionID
+     * @param  int          $productID
+     * @param  string|array $type        all|assignedbyme|myinvolved|undone|needconfirm|assignedtome|finishedbyme|delayed|review|wait|doing|done|pause|cancel|closed|array('wait','doing','done','pause','cancel','closed')
+     * @param  array        $modules
+     * @param  string       $orderBy
+     * @param  object       $pager
      * @access public
-     * @return array|void
+     * @return array
      */
-    public function getExecutionTasks($executionID, $productID = 0, $type = 'all', $modules = 0, $orderBy = 'status_asc, id_desc', $pager = null)
+    public function getExecutionTasks(int $executionID, int $productID = 0, string|array $type = 'all', array $modules = array(), string $orderBy = 'status_asc, id_desc', object $pager = null): array
     {
-        if(is_string($type)) $type = strtolower($type);
-        $orderBy = str_replace('pri_', 'priOrder_', $orderBy);
-        $fields  = "DISTINCT t1.*, t2.id AS storyID, t2.title AS storyTitle, t2.product, t2.branch, t2.version AS latestStoryVersion, t2.status AS storyStatus, t3.realname AS assignedToRealName, IF(t1.`pri` = 0, {$this->config->maxPriValue}, t1.`pri`) as priOrder";
-        $this->config->edition == 'max' && $fields .= ', t6.name as designName, t6.version as latestDesignVersion';
-
-        $actionIDList = array();
-        if($type == 'assignedbyme') $actionIDList = $this->dao->select('objectID')->from(TABLE_ACTION)->where('objectType')->eq('task')->andWhere('action')->eq('assigned')->andWhere('actor')->eq($this->app->user->account)->fetchPairs('objectID', 'objectID');
-
-        $tasks  = $this->dao->select($fields)
-            ->from(TABLE_TASK)->alias('t1')
-            ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story = t2.id')
-            ->leftJoin(TABLE_USER)->alias('t3')->on('t1.assignedTo = t3.account')
-            ->leftJoin(TABLE_TASKTEAM)->alias('t4')->on('t4.task = t1.id')
-            ->leftJoin(TABLE_MODULE)->alias('t5')->on('t1.module = t5.id')
-            ->beginIF($this->config->edition == 'max')->leftJoin(TABLE_DESIGN)->alias('t6')->on('t1.design= t6.id')->fi()
-            ->where('t1.execution')->eq((int)$executionID)
-            ->beginIF($type == 'myinvolved')
-            ->andWhere("((t4.`account` = '{$this->app->user->account}') OR t1.`assignedTo` = '{$this->app->user->account}' OR t1.`finishedby` = '{$this->app->user->account}')")
-            ->fi()
-            ->beginIF($productID)->andWhere("((t5.root=" . (int)$productID . " and t5.type='story') OR t2.product=" . (int)$productID . ")")->fi()
-            ->beginIF($type == 'undone')->andWhere('t1.status')->notIN('done,closed')->fi()
-            ->beginIF($type == 'needconfirm')->andWhere('t2.version > t1.storyVersion')->andWhere("t2.status = 'active'")->fi()
-            ->beginIF($type == 'assignedtome')->andWhere("(t1.assignedTo = '{$this->app->user->account}' or (t1.mode = 'multi' and t4.`account` = '{$this->app->user->account}' and t1.status != 'closed' and t4.status != 'done') )")->fi()
-            ->beginIF($type == 'finishedbyme')
-            ->andWhere('t1.finishedby', 1)->eq($this->app->user->account)
-            ->orWhere('t4.status')->eq("done")
-            ->markRight(1)
-            ->fi()
-            ->beginIF($type == 'delayed')->andWhere('t1.deadline')->gt('1970-1-1')->andWhere('t1.deadline')->lt(date(DT_DATE1))->andWhere('t1.status')->in('wait,doing')->fi()
-            ->beginIF(is_array($type) or strpos(',all,undone,needconfirm,assignedtome,delayed,finishedbyme,myinvolved,assignedbyme,review,', ",$type,") === false)->andWhere('t1.status')->in($type)->fi()
-            ->beginIF($modules)->andWhere('t1.module')->in($modules)->fi()
-            ->beginIF($type == 'assignedbyme')->andWhere('t1.id')->in($actionIDList)->andWhere('t1.status')->ne('closed')->fi()
-            ->beginIF($type == 'review')
-            ->andWhere("FIND_IN_SET('{$this->app->user->account}', t1.reviewers)")
-            ->andWhere('t1.reviewStatus')->eq('doing')
-            ->fi()
-            ->andWhere('t1.deleted')->eq(0)
-            ->orderBy($orderBy)
-            ->page($pager, 't1.id')
-            ->fetchAll('id');
-
-        $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'task', ($productID or in_array($type, array('myinvolved', 'needconfirm', 'assignedtome'))) ? false : true);
+        $tasks = $this->taskTao->fetchExecutionTasks($executionID, $productID, $type, $modules, $orderBy, $pager);
 
         if(empty($tasks)) return array();
 
-        $taskList = array_keys($tasks);
-        $taskTeam = $this->dao->select('*')->from(TABLE_TASKTEAM)->where('task')->in($taskList)->fetchGroup('task');
-        if(!empty($taskTeam))
-        {
-            foreach($taskTeam as $taskID => $team) $tasks[$taskID]->team = $team;
-        }
-
-        $parents = array();
+        $parents  = array();
+        $taskTeam = $this->taskTao->getTeamByIdList(array_keys($tasks));
         foreach($tasks as $task)
         {
+            if(isset($taskTeam[$task->id])) $tasks[$task->id]->team = $taskTeam[$task->id];
             if($task->parent > 0) $parents[$task->parent] = $task->parent;
         }
-        $parents = $this->dao->select('*')->from(TABLE_TASK)->where('id')->in($parents)->fetchAll('id');
+        $parents = $this->getByList($parents);
 
         if($this->config->vision == 'lite') $tasks = $this->appendLane($tasks);
         foreach($tasks as $task)
@@ -2760,15 +2714,15 @@ class taskModel extends model
     }
 
     /**
-     * Get task pairs of a story.
+     * Get task list of a story.
      *
-     * @param  int    $storyID
-     * @param  int    $executionID
-     * @param  int    $projectID
+     * @param  int   $storyID
+     * @param  int   $executionID
+     * @param  int   $projectID
      * @access public
-     * @return array
+     * @return object[]
      */
-    public function getStoryTasks($storyID, $executionID = 0, $projectID = 0)
+    public function getStoryTasks(int $storyID, int $executionID = 0, int $projectID = 0): array
     {
         $tasks = $this->dao->select('id, parent, name, assignedTo, pri, status, estimate, consumed, closedReason, `left`')
             ->from(TABLE_TASK)
@@ -2783,7 +2737,7 @@ class taskModel extends model
         {
             if($task->parent > 0) $parents[$task->parent] = $task->parent;
         }
-        $parents = $this->dao->select('*')->from(TABLE_TASK)->where('id')->in($parents)->fetchAll('id');
+        $parents = $this->getByList($parents);
 
         foreach($tasks as $task)
         {
@@ -2802,43 +2756,7 @@ class taskModel extends model
             }
         }
 
-        foreach($tasks as $task)
-        {
-            /* Compute task progress. */
-            if($task->consumed == 0 and $task->left == 0)
-            {
-                $task->progress = 0;
-            }
-            elseif($task->consumed != 0 and $task->left == 0)
-            {
-                $task->progress = 100;
-            }
-            else
-            {
-                $task->progress = round($task->consumed / ($task->consumed + $task->left), 2) * 100;
-            }
-
-             if(!empty($task->children))
-            {
-                foreach($task->children as $child)
-                {
-                    /* Compute child progress. */
-                    if($child->consumed == 0 and $child->left == 0)
-                    {
-                        $child->progress = 0;
-                    }
-                    elseif($child->consumed != 0 and $child->left == 0)
-                    {
-                        $child->progress = 100;
-                    }
-                    else
-                    {
-                        $child->progress = round($child->consumed / ($child->consumed + $child->left), 2) * 100;
-                    }
-                }
-            }
-        }
-        return $tasks;
+        return $this->taskTao->computeTasksProgress($tasks);
     }
 
     /**
@@ -3275,19 +3193,7 @@ class taskModel extends model
         /* Set closed realname. */
         if($task->assignedTo == 'closed') $task->assignedToRealName = 'Closed';
 
-        /* Compute task progress. */
-        if($task->consumed == 0 and $task->left == 0)
-        {
-            $task->progress = 0;
-        }
-        elseif($task->consumed != 0 and $task->left == 0)
-        {
-            $task->progress = 100;
-        }
-        else
-        {
-            $task->progress = round($task->consumed / ($task->consumed + $task->left), 2) * 100;
-        }
+        $task->progress = $this->taskTao->computeTaskProgress();
 
         if($task->mode == 'multi')
         {
