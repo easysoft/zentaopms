@@ -1932,7 +1932,7 @@ class projectModel extends model
      * @access public
      * @return array  $changes|false
      */
-    public function activate($project) :array|false
+    public function activate(object $project) :array|false
     {
         $now        = helper::now();
         $projectID  = $project->id;
@@ -1948,7 +1948,7 @@ class projectModel extends model
         if($project->readjustTime and $project->readjustTask)
         {
             $beginTimeStamp = strtotime($project->begin);
-            $tasks          = $this->projectTao->fetchUndoneTasks($projectID);
+            $tasks          = $this->projectTao->fetchUndoneTasks((int)$projectID);
             $this->projectTao->updateTasksStartAndEndDate($tasks);
         }
         /* Activate the shadow product of the project. (only change product status) */
