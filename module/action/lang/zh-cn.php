@@ -162,6 +162,7 @@ $lang->action->objectTypes['repo']             = '代码库';
 $lang->action->objectTypes['dataview']         = '中间表';
 $lang->action->objectTypes['privlang']         = '权限';
 $lang->action->objectTypes['scene']            = '场景';
+$lang->action->objectTypes['privpackage']      = '权限包';
 
 /* 用来描述操作历史记录。*/
 $lang->action->desc = new stdclass();
