@@ -75,7 +75,7 @@ if(!empty($config->test->account) and !empty($config->test->password) and !empty
 }
 
 global $isExtractAction;
-$isExtractAction = $argv[1] == '-extract';
+$isExtractAction = $argc > 1 && $argv[1] == '-extract';
 
 /**
  * Save variable to $_result.
