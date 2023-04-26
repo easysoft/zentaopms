@@ -2178,7 +2178,7 @@ class docModel extends model
     {
         $today     = date('Y-m-d');
         $statistic = new stdclass();
-        $statistic->totalDocs       = $this->dao->select('count(*) as count')->from(TABLE_DOC)->where('deleted')->eq('0')->andWhere('vision')->eq($this->config->vision)->fetch('count');
+        $statistic->totalDocs       = $this->dao->select('count(*) as count')->from(TABLE_DOC)->where('deleted')->eq('0')->andWhere('type')->in('text,word,ppt,excel,url,article')->andWhere('vision')->eq($this->config->vision)->fetch('count');
         $statistic->todayEditedDocs = $this->dao->select('count(DISTINCT objectID) as count')->from(TABLE_ACTION)->alias('t1')
             ->leftJoin(TABLE_DOC)->alias('t2')->on("t1.objectID=t2.id and t1.objectType='doc'")
             ->where('t1.objectType')->eq('doc')
