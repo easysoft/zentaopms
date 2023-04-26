@@ -673,14 +673,11 @@ class transferModel extends model
                 elseif(strpos($this->config->transfer->userFields, $field) !== false)
                 {
                     /* if user deleted when export set userFields is itself. */
-                    $rows[$id]->$field = zget($exportDatas['user'], $value, $value);
+                    $rows[$id]->$field = zget($exportDatas['user'], $value);
                 }
 
                 /* if value = 0 or value = 0000:00:00 set value = ''. */
-                if(helper::isZeroDate($rows[$id]->$field))
-                {
-                    $rows[$id]->$field = '';
-                }
+                if($value == 0 or substr($value, 0, 4) == '0000') $rows[$id]->$field = '';
             }
         }
 
