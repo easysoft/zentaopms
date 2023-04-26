@@ -12,7 +12,7 @@
 ?>
 <div class='form-group'>
   <label for='title' class='col-sm-3'><?php echo $lang->block->name?></label>
-  <div class='col-sm-7'><?php echo html::input('title', $block ? $block->title : '', "class='form-control'")?></div>
+  <div class='col-sm-7'><?php echo html::input('title', !empty($block) ? $block->title : '', "class='form-control'")?></div>
 </div>
 <div class='form-group'>
   <label for='grid' class='col-sm-3'><?php echo $lang->block->grid;?></label>
@@ -20,18 +20,18 @@
     <?php
     $grid = 8;
     $gridOptions = $lang->block->gridOptions;
-    if($block)
+    if(!empty($block))
     {
+        $module = $block->module;
         $type   = $block->block;
-        $source = $block->source;
         $grid   = $block->grid;
     }
-    if(isset($config->block->longBlock[$source][$type]))
+    if(isset($config->block->longBlock[$dashboard][$module]))
     {
         $grid = 8;
         unset($gridOptions[4]);
     }
-    elseif(isset($config->block->shortBlock[$source][$type]))
+    elseif(isset($config->block->shortBlock[$dashboard][$module]))
     {
         $grid = 4;
         unset($gridOptions[8]);

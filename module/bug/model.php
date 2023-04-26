@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * The model file of bug module of ZenTaoPMS.
  *
@@ -423,48 +424,7 @@ class bugModel extends model
         elseif($browseType == 'assignedbyme')  $bugs = $this->getByAssignedbyme($productIDList, $branch, $modules, $executions, $sort, $pager, $projectID);
         elseif($browseType == 'review')        $bugs = $this->getReviewBugs($productIDList, $branch, $modules, $executions, $sort, $pager, $projectID);
 
-        return $this->checkDelayedBugs($bugs);
-    }
-
-    /**
-     * Check delay bugs.
-     *
-     * @param  array  $bugs
-     * @access public
-     * @return array
-     */
-    public function checkDelayedBugs($bugs)
-    {
-        foreach ($bugs as $bug) $bug = $this->checkDelayBug($bug);
-
-        return $bugs;
-    }
-
-    /**
-     * Check delay bug.
-     *
-     * @param  array  $bug
-     * @access public
-     * @return array
-     */
-    public function checkDelayBug($bug)
-    {
-        /* Delayed or not? */
-        if(!helper::isZeroDate($bug->deadline))
-        {
-            if($bug->resolvedDate and !helper::isZeroDate($bug->resolvedDate))
-            {
-                $delay = helper::diffDate(substr($bug->resolvedDate, 0, 10), $bug->deadline);
-            }
-            elseif($bug->status == 'active')
-            {
-                $delay = helper::diffDate(helper::today(), $bug->deadline);
-            }
-
-            if(isset($delay) and $delay > 0) $bug->delay = $delay;
-        }
-
-        return $bug;
+        return $this->bugTao->checkDelayedBugs($bugs);
     }
 
     /**
@@ -546,51 +506,43 @@ class bugModel extends model
      * @access public
      * @return object
      */
-    public function getById($bugID, $setImgSize = false)
+    public function getById(int $bugID, bool $setImgSize = false): object|false
     {
-        $bug = $this->dao->select('t1.*, t2.name AS executionName, t3.title AS storyTitle, t3.status AS storyStatus, t3.version AS latestStoryVersion, t4.name AS taskName, t5.title AS planName')
-            ->from(TABLE_BUG)->alias('t1')
-            ->leftJoin(TABLE_EXECUTION)->alias('t2')->on('t1.execution = t2.id')
-            ->leftJoin(TABLE_STORY)->alias('t3')->on('t1.story = t3.id')
-            ->leftJoin(TABLE_TASK)->alias('t4')->on('t1.task = t4.id')
-            ->leftJoin(TABLE_PRODUCTPLAN)->alias('t5')->on('t1.plan = t5.id')
-            ->where('t1.id')->eq((int)$bugID)->fetch();
+        $bug = $this->bugTao->fetchBugInfo($bugID);
         if(!$bug) return false;
 
-        if(!empty($bug->project)) $bug->projectName = $this->dao->select('name')->from(TABLE_PROJECT)->where('id')->eq($bug->project)->fetch('name');
+        $this->loadModel('file');
+        $this->loadModel('mr');
 
-        $bug = $this->loadModel('file')->replaceImgURL($bug, 'steps');
+        $bug = $this->file->replaceImgURL($bug, 'steps');
         if($setImgSize) $bug->steps = $this->file->setImgSize($bug->steps);
-        foreach($bug as $key => $value) if(strpos($key, 'Date') !== false and !(int)substr($value, 0, 4)) $bug->$key = '';
 
-        if($bug->duplicateBug) $bug->duplicateBugTitle = $this->dao->findById($bug->duplicateBug)->from(TABLE_BUG)->fields('title')->fetch('title');
-        if($bug->case)         $bug->caseTitle         = $this->dao->findById($bug->case)->from(TABLE_CASE)->fields('title')->fetch('title');
-        if($bug->linkBug)      $bug->linkBugTitles     = $this->dao->select('id,title')->from(TABLE_BUG)->where('id')->in($bug->linkBug)->fetchPairs();
-        if($bug->toStory > 0)  $bug->toStoryTitle      = $this->dao->findById($bug->toStory)->from(TABLE_STORY)->fields('title')->fetch('title');
-        if($bug->toTask > 0)   $bug->toTaskTitle       = $this->dao->findById($bug->toTask)->from(TABLE_TASK)->fields('name')->fetch('name');
-        $bug->linkMRTitles = $this->loadModel('mr')->getLinkedMRPairs($bugID, 'bug');
+        if($bug->project)      $bug->projectName       = $this->bugTao->getNameFromTable($bug->project, TABLE_PROJECT, 'name');
+        if($bug->duplicateBug) $bug->duplicateBugTitle = $this->bugTao->getNameFromTable($bug->duplicateBug, TABLE_BUG, 'title');
+        if($bug->case)         $bug->caseTitle         = $this->bugTao->getNameFromTable($bug->case, TABLE_CASE, 'title');
+        if($bug->linkBug)      $bug->linkBugTitles     = $this->bugTao->getBugPairsByList($bug->linkBug);
+        if($bug->toStory)      $bug->toStoryTitle      = $this->bugTao->getNameFormTable($bug->toStory, TABLE_STORY, 'title');
+        if($bug->toTask)       $bug->toTaskTitle       = $this->bugTao->getNameFormTable($bug->toTask, TABLE_TASK, 'name');
 
-        $bug->toCases = array();
-        $toCases      = $this->dao->select('id, title')->from(TABLE_CASE)->where('`fromBug`')->eq($bugID)->fetchAll();
-        foreach($toCases as $toCase) $bug->toCases[$toCase->id] = $toCase->title;
-
-        $bug->files = $this->loadModel('file')->getByObject('bug', $bugID);
-
-        return $this->checkDelayBug($bug);
+        $bug->linkMRTitles = $this->mr->getLinkedMRPairs($bugID, 'bug');
+        $bug->toCases      = $this->bugTao->getCasesFromBug($bugID);
+        $bug->files        = $this->file->getByObject('bug', $bugID);
+        return $this->bugTao->checkDelayBug($bug);
     }
 
     /**
-     * Get bug list.
+     * Get bugs by ID list.
+     * 获取指定字段的bug列表。
      *
-     * @param  int|array|string    $bugIDList
-     * @param  string              $fields
+     * @param  int|array|string $bugIDList
+     * @param  string           $fields
      * @access public
      * @return array
      */
-    public function getByList($bugIDList = 0, $fields = '*')
+    public function getByList(int|array|string $bugIDList = 0, string $fields = '*'): array
     {
         return $this->dao->select($fields)->from(TABLE_BUG)
-            ->where('deleted')->eq(0)
+            ->where('deleted')->eq('0')
             ->beginIF($bugIDList)->andWhere('id')->in($bugIDList)->fi()
             ->fetchAll('id');
     }

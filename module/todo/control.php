@@ -1,12 +1,12 @@
 <?php
+declare(strict_types=1);
 /**
  * The control file of todo module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
- * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
- * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
+ * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @license     ZPL(https://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
+ * @author      lanzongjun@easycorp.ltd;
  * @package     todo
- * @version     $Id: control.php 4976 2013-07-02 08:15:31Z wyd621@gmail.com $
  * @link        http://www.zentao.net
  */
 class todo extends control
@@ -27,44 +27,39 @@ class todo extends control
     }
 
     /**
+     * 创建待办
      * Create a todo.
      *
-     * @param  string|date $date
-     * @param  int         $userID
-     * @param  string      $from todo|feedback
+     * @param  string  $date
+     * @param  string  $from todo|feedback|block
      * @access public
      * @return void
      */
-    public function create($date = 'today', $userID = '', $from = 'todo')
+    public function create(string $date = 'today', string $from = 'todo')
     {
-        if($date == 'today') $date   = date::today();
-        if($userID == '')    $userID = $this->app->user->id;
-
-        $user    = $this->loadModel('user')->getById($userID, 'id');
-        $account = $user->account;
+        if($date == 'today') $date = date::today();
 
         if(!empty($_POST))
         {
-            $todoID = $this->todo->create($date, $account);
-            if(dao::isError()) return print(js::error(dao::getError()));
-            $this->loadModel('action')->create('todo', $todoID, 'opened');
+            $formData = form::use($this->config->todo->createform);
 
-            $date = str_replace('-', '', $this->post->date);
-            if($date == '')
-            {
-                $date = 'future';
-            }
-            elseif($date == date('Ymd'))
-            {
-                $date = 'today';
-            }
+            $todo = $this->todoZen->beforeCreate($formData);
+
+            $todoID = $this->todoZen->doCreate($todo);
+            if($todoID === false) return print(js::error(dao::getError()));
+
+            $todo->id = $todoID;
+            $this->todoZen->afterCreate($todo);
 
             if(!empty($_POST['idvalue'])) return $this->send(array('result' => 'success'));
+
             if($from == 'block')
             {
-                $todo = $this->todo->getById($todoID);
                 $this->app->loadClass('date');
+
+                $todo = $this->todo->getById($todoID);
                 $todo->begin = date::formatTime($todo->begin);
+
                 return $this->send(array('result' => 'success', 'id' => $todoID, 'name' => $todo->name, 'pri' => $todo->pri, 'priName' => $this->lang->todo->priList[$todo->pri], 'time' => date(DT_DATE4, strtotime($todo->date)) . ' ' . $todo->begin));
             }
 
@@ -76,14 +71,11 @@ class todo extends control
 
         unset($this->lang->todo->typeList['cycle']);
 
-        $this->view->title      = $this->lang->todo->common . $this->lang->colon . $this->lang->todo->create;
-        $this->view->position[] = $this->lang->todo->common;
-        $this->view->position[] = $this->lang->todo->create;
-        $this->view->date       = date("Y-m-d", strtotime($date));
-        $this->view->times      = date::buildTimeList($this->config->todo->times->begin, $this->config->todo->times->end, $this->config->todo->times->delta);
-        $this->view->time       = date::now();
-        $this->view->users      = $this->loadModel('user')->getPairs('noclosed|nodeleted|noempty');
-
+        $this->view->title = $this->lang->todo->common . $this->lang->colon . $this->lang->todo->create;
+        $this->view->date  = date('Y-m-d', strtotime($date));
+        $this->view->times = date::buildTimeList($this->config->todo->times->begin, $this->config->todo->times->end, $this->config->todo->times->delta);
+        $this->view->time  = date::now();
+        $this->view->users = $this->loadModel('user')->getPairs('noclosed|nodeleted|noempty');
         $this->display();
     }
 

@@ -19,9 +19,9 @@ $config->block->moduleIndex['program'] = 'project';
 $config->block->moduleIndex['project'] = 'execution';
 
 $config->block->longBlock = array();
-$config->block->longBlock['']['guide']                  = 'guide';
-$config->block->longBlock['']['welcome']                = 'welcome';
-$config->block->longBlock['']['assigntome']             = 'assigntome';
+$config->block->longBlock['my']['guide']                = 'guide';
+$config->block->longBlock['my']['welcome']              = 'welcome';
+$config->block->longBlock['my']['assigntome']           = 'assigntome';
 $config->block->longBlock['product']['statistic']       = 'statistic';
 $config->block->longBlock['execution']['statistic']     = 'statistic';
 $config->block->longBlock['qa']['statistic']            = 'statistic';
@@ -279,3 +279,11 @@ $config->block->modules['doc']->moreLinkList = new stdclass();
 $config->block->modules['doc']->moreLinkList->docmycollection = 'doc|myspace|type=collect&libID=0&moduleID=0&browseType=all&param=0&orderBy=editedDate_desc';
 $config->block->modules['doc']->moreLinkList->productdoc      = 'doc|productspace|';
 $config->block->modules['doc']->moreLinkList->projectdoc      = 'doc|projectspace|';
+
+$config->block->form = new stdclass();
+$config->block->form->create = array();
+$config->block->form->create['module'] = array('type' => 'string', 'required' => false, 'default' => '');
+$config->block->form->create['code']   = array('type' => 'string', 'required' => false, 'default' => '');
+$config->block->form->create['grid']   = array('type' => 'int',    'required' => false, 'default' => '4');
+$config->block->form->create['hidden'] = array('type' => 'int',    'required' => false, 'default' => '0');
+$config->block->form->create['params'] = array('type' => 'int',    'required' => false, 'default' => array());

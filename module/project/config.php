@@ -292,3 +292,5 @@ $config->project->browseTable->cols['actions']['actionsMap'] = array(
     'more'      => array('icon'=> 'icon-ellipsis-v',   'hint'=> $lang->more,                    'type'  => 'dropdown', 'caret' => false),
     'whitelist' => array('icon'=> 'icon-shield-check', 'text'=> $lang->project->whitelist,      'name'  => 'whitelist')
 );
+
+include './config/form.php';

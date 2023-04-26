@@ -1,59 +1,43 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . "/test/lib/init.php";
-include dirname(__FILE__, 2) . '/bug.class.php';
 su('admin');
+
+function initData()
+{
+    $project = zdTable('bug');
+    $project->id->range('2-5');
+    $project->project->range('2-5');
+    $project->title->prefix("bug")->range('2-5');
+    $project->type->range("codeerror");
+    $project->severity->range("3");
+    $project->pri->range("1");
+    $project->status->range("active");
+    $project->openedBuild->range("trunk");
+
+    $project->gen(4);
+}
 
 /**
 
-title=bugModel->getById();
+title=测试 bugModel::getByID;
+timeout=0
 cid=1
-pid=1
 
-查询id为1的bug的title >> BUG1
-查询id为1的bug的status >> active
-查询id为1的bug的plan >> 1
-查询id为1的bug的module >> 1821
-查询id为1的bug的story >> 2
-查询id为4的bug的title >> BUG4
-查询id为4的bug的status >> active
-查询id为4的bug的plan >> 4
-查询id为4的bug的module >> 1825
-查询id为4的bug的story >> 14
-查询id为7的bug的title >> 缺陷!@()(){}|+=%^&*$#测试bug名称到底可以有多长！@#￥%&*":.<>。?/（）;7
-查询id为7的bug的status >> active
-查询id为7的bug的plan >> 7
-查询id为7的bug的module >> 1831
-查询id为7的bug的story >> 26
-查询id为不存在的1000001的bug的title >> 0
-查询id为不存在的1000001的bug的status >> 0
-查询id为不存在的1000001的bug的plan >> 0
-查询id为不存在的1000001的bug的module >> 0
-查询id为不存在的1000001的bug的story >> 0
+- 执行bug模块的getByID方法，参数是2
+ - 属性pri @1
+ - 属性type @codeerror
+
+- 执行bug模块的getByID方法，参数是1,属性title @0
+
 
 */
 
-$bugIDList = array('1', '4', '7', '1000001');
+global $tester;
+$tester->loadModel('bug');
 
-$bug=new bugTest();
+initData();
 
-r($bug->getByIdTest($bugIDList[0])) && p('title')  && e('BUG1'); // 查询id为1的bug的title
-r($bug->getByIdTest($bugIDList[0])) && p('status') && e('active'); // 查询id为1的bug的status
-r($bug->getByIdTest($bugIDList[0])) && p('plan')   && e('1'); // 查询id为1的bug的plan
-r($bug->getByIdTest($bugIDList[0])) && p('module') && e('1821'); // 查询id为1的bug的module
-r($bug->getByIdTest($bugIDList[0])) && p('story')  && e('2'); // 查询id为1的bug的story
-r($bug->getByIdTest($bugIDList[1])) && p('title')  && e('BUG4'); // 查询id为4的bug的title
-r($bug->getByIdTest($bugIDList[1])) && p('status') && e('active'); // 查询id为4的bug的status
-r($bug->getByIdTest($bugIDList[1])) && p('plan')   && e('4'); // 查询id为4的bug的plan
-r($bug->getByIdTest($bugIDList[1])) && p('module') && e('1825'); // 查询id为4的bug的module
-r($bug->getByIdTest($bugIDList[1])) && p('story')  && e('14'); // 查询id为4的bug的story
-r($bug->getByIdTest($bugIDList[2])) && p('title')  && e('缺陷!@()(){}|+=%^&*$#测试bug名称到底可以有多长！@#￥%&*":.<>。?/（）;7'); // 查询id为7的bug的title
-r($bug->getByIdTest($bugIDList[2])) && p('status') && e('active'); // 查询id为7的bug的status
-r($bug->getByIdTest($bugIDList[2])) && p('plan')   && e('7'); // 查询id为7的bug的plan
-r($bug->getByIdTest($bugIDList[2])) && p('module') && e('1831'); // 查询id为7的bug的module
-r($bug->getByIdTest($bugIDList[2])) && p('story')  && e('26'); // 查询id为7的bug的story
-r($bug->getByIdTest($bugIDList[3])) && p('title')  && e('0'); // 查询id为不存在的1000001的bug的title
-r($bug->getByIdTest($bugIDList[3])) && p('status') && e('0'); // 查询id为不存在的1000001的bug的status
-r($bug->getByIdTest($bugIDList[3])) && p('plan')   && e('0'); // 查询id为不存在的1000001的bug的plan
-r($bug->getByIdTest($bugIDList[3])) && p('module') && e('0'); // 查询id为不存在的1000001的bug的module
-r($bug->getByIdTest($bugIDList[3])) && p('story')  && e('0'); // 查询id为不存在的1000001的bug的story
+r($tester->bug->getByID(2)) && p('pri,type') && e('1,codeerror'); //获取ID等于2的bug
+r($tester->bug->getByID(1)) && p('title') && e('0');              //获取不存在的bug
+

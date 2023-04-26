@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * The control file of project module of ZenTaoPMS.
  *
@@ -1851,62 +1852,32 @@ class project extends control
     }
 
     /**
-     * Start project.
+     * 手动开始一个项目.
      *
-     * @param  int    $projectID
+     * @param  string $projectID
      * @access public
-     * @return void
+     * @return void 
      */
-    public function start($projectID)
+    public function start(string $projectID)
     {
         $this->loadModel('action');
         $project = $this->project->getByID($projectID);
 
         if(!empty($_POST))
         {
-            $changes = $this->project->start($projectID);
+            $postData = form::data($this->config->project->form->start)->get();
+
+            $postData = $this->projectZen->prepareStartExtras($postData);
+
+            $changes  = $this->project->start((int)$projectID, $postData);
+
             if(dao::isError()) return print(js::error(dao::getError()));
 
-            if($this->post->comment != '' or !empty($changes))
-            {
-                $actionID = $this->action->create('project', $projectID, 'Started', $this->post->comment);
-                $this->action->logHistory($actionID, $changes);
-            }
-
-            /* Start all superior projects. */
-            if($project->parent)
-            {
-                $path = explode(',', $project->path);
-                $path = array_filter($path);
-                foreach($path as $projectID)
-                {
-                    if($projectID == $projectID) continue;
-                    $project = $this->project->getPGMByID($projectID);
-                    if($project->status == 'wait' || $project->status == 'suspended')
-                    {
-                        $changes = $this->project->start($projectID);
-                        if(dao::isError()) return print(js::error(dao::getError()));
-
-                        if($this->post->comment != '' or !empty($changes))
-                        {
-                            $actionID = $this->action->create('project', $projectID, 'Started', $this->post->comment);
-                            $this->action->logHistory($actionID, $changes);
-                        }
-                    }
-                }
-            }
-            $this->loadModel('common')->syncPPEStatus($projectID);
-
-            $this->executeHooks($projectID);
-            return print(js::reload('parent.parent'));
+            $comment = strip_tags($this->post->comment, $this->config->allowedTags);
+            return $this->projectZen->responseAfterStart($project, $changes, $postData, $comment);
         }
 
-        $this->view->title      = $this->lang->project->start;
-        $this->view->position[] = $this->lang->project->start;
-        $this->view->project    = $project;
-        $this->view->users      = $this->loadModel('user')->getPairs('noletter');
-        $this->view->actions    = $this->action->getList('project', $projectID);
-        $this->display();
+        $this->projectZen->buildStartForm($project);
     }
 
     /**
