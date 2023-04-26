@@ -133,13 +133,14 @@ private function createBranch()
 $lang->bug->storyAB   = '需求';
 $lang->bug->projectAB = '项目';
 #现在改为：
-$lang->bug->abbr  = new stdclass();
+$lang->bug->abbr = new stdclass();
 $lang->bug->abbr->story   = '需求';
 $lang->bug->abbr->project = '项目';
 ?>
 ## 10. 方法要细分，每个函数的代码行数不超过50行
 #
-## 11. MySQL的sql_mode使用strict模式
+## 11. MySQL的sql_mode使用strict模式:
+# sql_mod = ONLY_FULL_GROUP_BY, STRICT_TRANS_TABLES, NO_ZERO_IN_DATE, NO_ZERO_DATE, ERROR_FOR_DIVISION_BY_ZERO, NO_AUTO_CREATE_USER, and NO_ENGINE_SUBSTITUTION.
 ##    1) 对于GROUP BY聚合操作,如果在SELECT中的列,没有在GROUP BY中出现,那么这个SQL是不合法的,因为列不在GROUP BY从句中
 ##    2) 不允许日期和月份为零，必须使用NULL
 ##    3) TEXT类型不能有默认值，建议设为NULL
