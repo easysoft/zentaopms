@@ -1,29 +1,3 @@
-.table-row {width: 100%}
-.col-left {width: 25%;}
-.col-left > h4 {margin: 5px 0; line-height: 30px;}
-.col-left .timeline {margin: 10px 0 0; font-size: 12px;}
-.col-center > h4 small {display: inline-block;margin-right: 8px; font-size: 14px;}
-.col-center .tiles {padding: 10px 0 0 16px;}
-.col-center .tile {width: 33%;}
-.col-right > h4 small {display: inline-block;margin-right: 8px; font-size: 14px;}
-.col-right .tiles {padding: 10px 0 0 16px;}
-.col-right .tile {width: 33%;}
-.panel-body {padding-top: 15px;}
-.table-row {display:table}
-.col {display: table-cell; float: none; vertical-align: top;}
-.user-notification-icon {position: relative; display: inline-block; margin-left: 5px;}
-.user-notification-icon .label-badge {position: absolute;top: 1px; right: -8px; min-width: 16px; padding: 2px; font-size: 12px; font-weight: normal;}
-.block-sm .col-right {padding: 0;}
-.block-sm .col-right .tiles {border-left: none; padding-left: 0}
-.block-sm .tile-title {font-size: 12px; margin: 0 -10px;}
-.progress-group{margin-top: 25px;}
-.progress{margin-top: 10px; width: 85%;}
-.user-welcome{margin-top: 10px !important;}
-.col-right{border-left: 1px solid #e5e8ec;}
-.col-center{border-left: 1px solid #e5e8ec;}
-.block-sm .col-right {border: none;}
-.left-today{margin-left: 36px;}
-.done-progress{display: inline-block; color: #5B606E; font-weight: 500;}
-.welcome-label{background: #ffebee; border: none;}
-.block-sm .left-today {margin-left: 0px;}
-.progress-num{display: flex; justify-content: space-between; width: 85%;}
+.welcome-block {background-image: linear-gradient( 90deg, #EDF7FE 0%, #FFF 20%);}
+.border-right {position: relative;}
+.border-right::after {content: ''; position: absolute; right: 0px; width: 1px; height: 40px; background: #EEE; top: 50%; margin-top: -20px;}

@@ -9,9 +9,9 @@ class blockZen extends block
      * @access protected
      * @return void
      */
-    protected function buildCreateForm(string $dashboard)
+    protected function buildCreateForm(string $dashboard, string $module, string $block)
     {
-        $this->buildCreateAndEditForm($dashboard);
+        $this->buildCreateAndEditForm($dashboard, $module, $block);
         $this->view->title = $this->lang->block->createBlock;
     }
 
@@ -22,11 +22,11 @@ class blockZen extends block
         $this->view->block = $this->block->getByID($blockID);
     }
 
-    private function buildCreateAndEditForm($dashboard)
+    private function buildCreateAndEditForm($dashboard, $module, $block)
     {
         if($dashboard == 'my')
         {
-            return $this->buildCreateAndEditFormByTerritory($dashboard);
+            return $this->buildCreateAndEditFormByTerritory($dashboard, $module, $block);
         }
         else
         {
@@ -34,7 +34,7 @@ class blockZen extends block
         }
     }
 
-    private function buildCreateAndEditFormByTerritory($dashboard)
+    private function buildCreateAndEditFormByTerritory($dashboard, $module, $block)
     {
         $modules = $this->lang->block->moduleList;
         unset($modules['doc']);
@@ -71,6 +71,7 @@ class blockZen extends block
         foreach($hiddenBlocks as $block) $modules['hiddenBlock' . $block->id] = $block->title;
         $this->view->modules   = $modules;
         $this->view->blocks    = $this->getAvailableBlocks($dashboard);
+        $this->view->params    = $this->getAvailableParams($dashboard, $module, $block);
         $this->view->dashboard = $dashboard;
         $this->view->module    = '';
     }
@@ -90,6 +91,7 @@ class blockZen extends block
                 if(!helper::hasFeature("waterfall_risk"))  unset($this->lang->block->modules['waterfall']['index']->availableBlocks->waterfallrisk);
             }
         }
+
         $this->view->blocks    = $this->getAvailableBlocks($dashboard);
         $this->view->dashboard = $dashboard;
         $this->view->module    = $dashboard;
@@ -99,21 +101,23 @@ class blockZen extends block
     {
         $module = $this->get->module;
         $blocks = $this->block->getAvailableBlocks($dashboard, $module);
+
         if(!$this->selfCall)
         {
             echo json_encode($blocks);
             return true;
         }
 
-        if(empty($blocks)) $blocks = array();
-        $blocks = array('' => '') + $blocks;
+        return !empty($blocks) ? $blocks : array();
+    }
 
-        return $blocks;
+    private function getAvailableParams(string $dashboard, string $module = '', string $block = '') : array
+    {
+        if(!isset($this->lang->block->moduleList[$module])) return array();
 
-        echo '<div class="form-group">';
-        echo '<label for="moduleBlock" class="col-sm-3">' . $this->lang->block->lblBlock . '</label>';
-        echo '<div class="col-sm-7">';
-        echo html::select('moduleBlock', $blockPairs, ($block and $block->source != '') ? $block->block : '', "class='form-control chosen'");
-        echo '</div></div>';
+        if(!$block) return array();
+
+        $params = $this->block->getParams($module, $module);
+        return !empty($params) ? json_decode($params, true) : array();
     }
 }
