@@ -251,13 +251,19 @@ class group extends control
             $privs = $this->group->transformPrivLang($privs);
             $privs = $this->group->getCustomPrivs($menu, $privs);
 
+
             $privList           = $modules;
             $privMethods        = array();
             $selectPrivs        = array();
             $selectedPrivIdList = array();
+            $groupPrivsIdList   = $this->group->getPrivsIdListByGroup($groupID);
             foreach($privs as $priv)
             {
-                if(!empty($version) and strpos($changelogs, ",{$priv->module}-{$priv->method},") === false) continue;
+                if(!empty($version) and strpos($changelogs, ",{$priv->module}-{$priv->method},") === false)
+                {
+                    unset($groupPrivsIdList[$priv->id]);
+                    continue;
+                }
 
                 if(!isset($privList[$priv->parentCode])) $privList[$priv->parentCode] = array();
                 if(!is_array($privList[$priv->parentCode])) $privList[$priv->parentCode] = array();
@@ -305,7 +311,6 @@ class group extends control
                 }
             }
 
-            $groupPrivsIdList   = $this->group->getPrivsIdListByGroup($groupID);
             $excludePrivsIdList = array_diff(array_keys($groupPrivsIdList), $selectedPrivIdList);
             $relatedPrivData    = $this->group->getRelatedPrivs($selectedPrivIdList, '', $excludePrivsIdList);
 

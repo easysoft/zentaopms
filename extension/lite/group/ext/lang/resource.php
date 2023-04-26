@@ -921,6 +921,48 @@ $lang->cron->methodOrder[25] = 'toggle';
 $lang->cron->methodOrder[30] = 'delete';
 $lang->cron->methodOrder[35] = 'openProcess';
 
+$lang->resource->contact            = new stdclass();
+$lang->resource->programstakeholder = new stdclass();
+$lang->resource->researchplan       = new stdclass();
+$lang->resource->workestimation     = new stdclass();
+$lang->resource->gapanalysis        = new stdclass();
+$lang->resource->executionview      = new stdclass();
+$lang->resource->managespace        = new stdclass();
+$lang->resource->systemteam         = new stdclass();
+$lang->resource->systemschedule     = new stdclass();
+$lang->resource->systemeffort       = new stdclass();
+$lang->resource->systemdynamic      = new stdclass();
+$lang->resource->systemcompany      = new stdclass();
+$lang->resource->pipeline           = new stdclass();
+$lang->resource->devopssetting      = new stdclass();
+$lang->resource->featureswitch      = new stdclass();
+$lang->resource->importdata         = new stdclass();
+$lang->resource->systemsetting      = new stdclass();
+$lang->resource->staffmanage        = new stdclass();
+$lang->resource->modelconfig        = new stdclass();
+$lang->resource->featureconfig      = new stdclass();
+$lang->resource->doctemplate        = new stdclass();
+$lang->resource->notifysetting      = new stdclass();
+$lang->resource->bidesign           = new stdclass();
+$lang->resource->personalsettings   = new stdclass();
+$lang->resource->projectsettings    = new stdclass();
+$lang->resource->dataaccess         = new stdclass();
+$lang->resource->executiongantt     = new stdclass();
+$lang->resource->executionkanban    = new stdclass();
+$lang->resource->executionburn      = new stdclass();
+$lang->resource->executioncfd       = new stdclass();
+$lang->resource->executionstory     = new stdclass();
+$lang->resource->executionqa        = new stdclass();
+$lang->resource->executionsettings  = new stdclass();
+$lang->resource->generalcomment     = new stdclass();
+$lang->resource->generalping        = new stdclass();
+$lang->resource->generaltemplate    = new stdclass();
+$lang->resource->generaleffort      = new stdclass();
+$lang->resource->productsettings    = new stdclass();
+$lang->resource->projectreview      = new stdclass();
+$lang->resource->projecttrack       = new stdclass();
+$lang->resource->projectqa          = new stdclass();
+
 if($config->edition == 'biz' or $config->edition == 'max')
 {
     /* My module. */

@@ -698,7 +698,6 @@ class docModel extends model
                 ->beginIF(!common::hasPriv('doc', 'teamSpace'))->andWhere('t2.type')->ne('custom')->fi()
                 ->beginIF($browseType == 'draft')->andWhere('t1.status')->eq('draft')->andWhere('t1.addedBy')->eq($this->app->user->account)->fi()
                 ->beginIF($browseType == 'bysearch')->andWhere($query)->fi()
-                ->beginIF(!empty($hasPrivDocIdList))->andWhere('t1.id')->in($hasPrivDocIdList)->fi()
                 ->orderBy($orderBy)
                 ->page($pager)
                 ->fetchAll('id');
@@ -2178,7 +2177,7 @@ class docModel extends model
     {
         $today     = date('Y-m-d');
         $statistic = new stdclass();
-        $statistic->totalDocs       = $this->dao->select('count(*) as count')->from(TABLE_DOC)->where('deleted')->eq('0')->andWhere('vision')->eq($this->config->vision)->fetch('count');
+        $statistic->totalDocs       = $this->dao->select('count(*) as count')->from(TABLE_DOC)->where('deleted')->eq('0')->andWhere('type')->in('text,word,ppt,excel,url,article')->andWhere('vision')->eq($this->config->vision)->fetch('count');
         $statistic->todayEditedDocs = $this->dao->select('count(DISTINCT objectID) as count')->from(TABLE_ACTION)->alias('t1')
             ->leftJoin(TABLE_DOC)->alias('t2')->on("t1.objectID=t2.id and t1.objectType='doc'")
             ->where('t1.objectType')->eq('doc')
@@ -2188,12 +2187,13 @@ class docModel extends model
             ->andWhere('LEFT(t1.date, 10)')->eq($today)
             ->andWhere('t2.deleted')->eq(0)
             ->fetch('count');
-        $statistic->myEditedDocs = $this->dao->select('count(DISTINCT objectID) as count')->from(TABLE_ACTION)->alias('t1')
+        $statistic->myEditedDocs = $this->dao->select('count(DISTINCT t1.objectID) as count')->from(TABLE_ACTION)->alias('t1')
             ->leftJoin(TABLE_DOC)->alias('t2')->on("t1.objectID=t2.id and t1.objectType='doc'")
             ->where('t1.objectType')->eq('doc')
             ->andWhere('t1.action')->eq('edited')
             ->andWhere('t1.actor')->eq($this->app->user->account)
             ->andWhere('t1.vision')->eq($this->config->vision)
+            ->andWhere('t2.lib')->ne('')
             ->andWhere('t2.deleted')->eq(0)
             ->fetch('count');
 
@@ -2843,7 +2843,9 @@ class docModel extends model
         }
 
         $tab  = strpos(',doc,product,project,execution,', ",{$this->app->tab},") !== false ? $this->app->tab : 'doc';
-        $type = $type == 'mine' ? 'my' : $type;
+        if($type == 'mine')   $type = 'my';
+        if($type == 'custom') $type = 'team';
+        if($tab == 'doc' and !common::hasPriv('doc', $type . 'Space')) return print(js::locate(helper::createLink('user', 'deny', "module=doc&method={$type}Space")));
         if($tab != 'doc' and method_exists($type . 'Model', 'setMenu'))
         {
             $this->loadModel($type)->setMenu($objectID);

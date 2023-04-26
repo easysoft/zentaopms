@@ -467,10 +467,11 @@ class groupModel extends model
                     $privs[]      = $data;
                 }
             }
+            $this->insertPrivs($privs);
             $depentedPrivs = $this->getPrivByIdList($depentedPrivs);
             foreach($depentedPrivs as $privID => $priv)
             {
-                if(empty($_POST['actions'][$priv->module]) or in_array($priv->method, $_POST['actions'][$priv->module]))
+                if(!empty($_POST['actions'][$priv->module]) and in_array($priv->method, $_POST['actions'][$priv->module]))
                 {
                     unset($depentedPrivs[$privID]);
                     continue;
@@ -495,7 +496,6 @@ class groupModel extends model
                 $data->method = $priv->method;
                 $this->dao->replace(TABLE_GROUPPRIV)->data($data)->exec();
             }
-            $this->insertPrivs($privs);
         }
         return !empty($depentedPrivs) ? true : false;
     }
@@ -2121,8 +2121,8 @@ class groupModel extends model
             else
             {
                 list($moduleName, $methodLang) = explode('-', $priv->key);
-                if($moduleName == 'requirement') $moduleName = 'story';
-                $this->app->loadLang($moduleName);
+                $actualModule = $moduleName == 'requirement' ? 'story' : $moduleName;
+                $this->app->loadLang($actualModule);
 
                 $hasLang = (!empty($moduleName) and !empty($methodLang) and isset($this->lang->resource->{$priv->module}) and isset($this->lang->resource->{$priv->module}->{$priv->method}));
                 if(!$hasLang)

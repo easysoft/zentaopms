@@ -6240,12 +6240,13 @@ class storyModel extends model
         }
 
         /* Get stories. */
-        $stories = array();
+        $stories        = array();
+        $selectedIDList = $this->cookie->checkedItem ? $this->cookie->checkedItem : '0';
         if($this->session->storyOnlyCondition)
         {
             if($this->post->exportType == 'selected')
             {
-                $stories = $this->dao->select('id,title,linkStories,childStories,parent,mailto,reviewedBy')->from(TABLE_STORY)->where('id')->in($this->cookie->checkedItem)->orderBy($orderBy)->fetchAll('id');
+                $stories = $this->dao->select('id,title,linkStories,childStories,parent,mailto,reviewedBy')->from(TABLE_STORY)->where('id')->in($selectedIDList)->orderBy($orderBy)->fetchAll('id');
             }
             else
             {
@@ -6257,7 +6258,7 @@ class storyModel extends model
             $field = $executionID ? 't2.id' : 't1.id';
             if($this->post->exportType == 'selected')
             {
-                $stmt  = $this->dbh->query("SELECT * FROM " . TABLE_STORY . "WHERE `id` IN({$this->cookie->checkedItem})" . " ORDER BY " . strtr($orderBy, '_', ' '));
+                $stmt  = $this->dbh->query("SELECT * FROM " . TABLE_STORY . "WHERE `id` IN({$selectedIDList})" . " ORDER BY " . strtr($orderBy, '_', ' '));
             }
             else
             {
@@ -6265,37 +6266,36 @@ class storyModel extends model
             }
             while($row = $stmt->fetch()) $stories[$row->id] = $row;
         }
-        $storyIdList = array_keys($stories);
 
-        if($stories)
+        if(empty($stories)) return $stories;
+
+        $storyIdList = array_keys($stories);
+        $children    = array();
+        foreach($stories as $story)
         {
-            $children = array();
+            if($story->parent > 0 and isset($stories[$story->parent]))
+            {
+                $children[$story->parent][$story->id] = $story;
+                unset($stories[$story->id]);
+            }
+        }
+
+        if(!empty($children))
+        {
+            $reorderStories = array();
             foreach($stories as $story)
             {
-                if($story->parent > 0 and isset($stories[$story->parent]))
+                $reorderStories[$story->id] = $story;
+                if(isset($children[$story->id]))
                 {
-                    $children[$story->parent][$story->id] = $story;
-                    unset($stories[$story->id]);
-                }
-            }
-
-            if(!empty($children))
-            {
-                $reorderStories = array();
-                foreach($stories as $story)
-                {
-                    $reorderStories[$story->id] = $story;
-                    if(isset($children[$story->id]))
+                    foreach($children[$story->id] as $childrenID => $childrenStory)
                     {
-                        foreach($children[$story->id] as $childrenID => $childrenStory)
-                        {
-                            $reorderStories[$childrenID] = $childrenStory;
-                        }
+                        $reorderStories[$childrenID] = $childrenStory;
                     }
-                    unset($stories[$story->id]);
                 }
-                $stories = $reorderStories;
+                unset($stories[$story->id]);
             }
+            $stories = $reorderStories;
         }
 
         /* Get users, products and relations. */

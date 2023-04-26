@@ -8168,11 +8168,10 @@ class upgradeModel extends model
     /**
      * Process report modules.
      *
-     * @param  $runMode  install|upgrade
      * @access public
      * @return bool
      */
-    public function createDefaultDimension($runMode = 'upgrade')
+    public function createDefaultDimension()
     {
         /* Create default dimension. */
         $this->loadModel('dimension');
