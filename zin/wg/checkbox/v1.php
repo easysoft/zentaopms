@@ -41,6 +41,7 @@ class checkbox extends wg
                 set::type($type),
                 set::id($id),
                 set::name($name),
+                set::checked($checked),
                 set($this->props->skip('text,primary,typeClass,rootClass,id')),
             ),
             h::label
