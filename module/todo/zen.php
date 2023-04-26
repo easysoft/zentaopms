@@ -27,7 +27,7 @@ class todoZen extends todo
 
         if(!isset($formData->pri) and in_array($formData->type, $this->config->todo->moduleList) and $formData->type !== 'review' and $formData->type !== 'feedback')
         {
-            // TODO 存入dao层
+            // TODO
             $formData->pri = $this->dao->select('pri')->from($this->config->objectTables[$formData->type])->where('id')->eq($formData->idvalue)->fetch('pri');
 
             if($formData->pri == 'high')   $formData->pri = 1;
@@ -82,20 +82,14 @@ class todoZen extends todo
 
         $this->loadModel('score')->create('todo', 'create', $todo->id);
 
-        // TODO createByCycle
+        // TODO
         if(!empty($todo->cycle)) $this->todo->createByCycle(array($todo->id => $todo));
 
         $this->loadModel('action')->create('todo', $todo->id, 'opened');
 
         $date = str_replace('-', '', $todo->date);
-        if($date == '')
-        {
-            $date = 'future';
-        }
-        elseif($date == date('Ymd'))
-        {
-            $date = 'today';
-        }
+        if($date == '')          $date = 'future';
+        if($date == date('Ymd')) $date = 'today';
 
         return $todo;
     }
@@ -114,8 +108,7 @@ class todoZen extends todo
         $formData->config['begin'] = $formData->date;
         if($formData->config['type'] == 'day')
         {
-            unset($formData->config['week']);
-            unset($formData->config['month']);
+            unset($formData->config['week'], $formData->config['month']);
             if(!$formData->config['day'])
             {
                 dao::$errors[] = sprintf($this->lang->error->notempty, $this->lang->todo->cycleDaysLabel);
@@ -129,14 +122,12 @@ class todoZen extends todo
         }
         if($formData->config['type'] == 'week')
         {
-            unset($formData->config['day']);
-            unset($formData->config['month']);
+            unset($formData->config['day'], $formData->config['month']);
             $formData->config['week'] = join(',', $formData->config['week']);
         }
         if($formData->config['type'] == 'month')
         {
-            unset($formData->config['day']);
-            unset($formData->config['week']);
+            unset($formData->config['day'], $formData->config['week']);
             $formData->config['month'] = join(',', $formData->config['month']);
         }
 

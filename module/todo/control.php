@@ -41,10 +41,9 @@ class todo extends control
 
         if(!empty($_POST))
         {
-            $formData = form::use($this->config->todo->createform);
+            $formData = form::data($this->config->todo->createform);
 
-            $todo = $this->todoZen->beforeCreate($formData);
-
+            $todo   = $this->todoZen->beforeCreate($formData);
             $todoID = $this->todoZen->doCreate($todo);
             if($todoID === false) return print(js::error(dao::getError()));
 
@@ -55,11 +54,9 @@ class todo extends control
 
             if($from == 'block')
             {
-                $this->app->loadClass('date');
-
+                // TODO
                 $todo = $this->todo->getById($todoID);
                 $todo->begin = date::formatTime($todo->begin);
-
                 return $this->send(array('result' => 'success', 'id' => $todoID, 'name' => $todo->name, 'pri' => $todo->pri, 'priName' => $this->lang->todo->priList[$todo->pri], 'time' => date(DT_DATE4, strtotime($todo->date)) . ' ' . $todo->begin));
             }
 

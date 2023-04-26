@@ -12,6 +12,22 @@
 class todoModel extends model
 {
     /**
+     * 创建待办
+     * Create todo data.
+     *
+     * @param  object $todo
+     * @return int|false
+     */
+    public function create(object $todo): int|bool
+    {
+        $todoID = $this->todoTao->insert($todo);
+
+        if(dao::isError()) return false;
+
+        return $todoID;
+    }
+
+    /**
      * Create batch todo
      *
      * @access public

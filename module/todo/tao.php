@@ -3,7 +3,14 @@ declare(strict_types=1);
 
 class todoTao extends todoModel
 {
-    protected function create(object $todo): int
+    /**
+     * 插入待办数据
+     * Insert todo data.
+     *
+     * @param  object $todo
+     * @return int
+     */
+    protected function insert(object $todo): int
     {
         $this->dao->insert(TABLE_TODO)->data($todo)
             ->autoCheck()
