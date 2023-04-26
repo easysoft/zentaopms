@@ -345,7 +345,7 @@ class misc extends control
      * @access public
      * @return void
      */
-    public function appQrCode()
+    public function appQrcode()
     {
         if(!extension_loaded('gd'))
         {

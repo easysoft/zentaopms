@@ -1483,7 +1483,7 @@ class commonModel extends model
         global $config, $lang;
         if(isset($config->xxserver->installed) and $config->xuanxuan->turnon)
         {
-            $appQrcode = helper::createLink('misc', 'appQrCode');
+            $appQrcode = helper::createLink('misc', 'appQrcode');
             echo "<li class='dropdown-submenu'>";
             echo "<a href='javascript:;'>" . "<i class='icon icon-download'></i> " . $lang->clientName . "</a><ul class='dropdown-menu pull-left'>";
             echo '<li>' . html::a(helper::createLink('misc', 'downloadClient', '', '', true), $lang->downloadClient, '', "title='$lang->downloadClient' class='iframe text-ellipsis' data-width='600'") . '</li>';
