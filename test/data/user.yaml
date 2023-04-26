@@ -56,13 +56,7 @@ fields:
       range: [],1-99,1-100,1-100,1-100,1-100,1-100,1-100,1-100,1-100,1-100,1-100,[]{4}
   - field: avatar
     note: ""
-    fields:
-    - field: avatar1
-      range: /home/z/tmp/,/home/z/user/
-    - field: avatar2
-      range: 1-10,10-20
-    prefix: ""
-    postfix: ".png"
+    range: []
     format: ""
   - field: birthday
     note: "生日"
