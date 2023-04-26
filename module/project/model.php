@@ -18,29 +18,6 @@ class projectModel extends model
     }
 
     /**
-     * Get Multiple linked products for project.
-     *
-     * @param  int    $projectID
-     * @access public
-     * @return array
-     */
-    public function getMultiLinkedProducts($projectID)
-    {
-        $linkedProducts      = $this->dao->select('product')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($projectID)->fetchPairs();
-        $multiLinkedProducts = $this->dao->select('t3.id,t3.name')->from(TABLE_PROJECTPRODUCT)->alias('t1')
-            ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
-            ->leftJoin(TABLE_PRODUCT)->alias('t3')->on('t1.product = t3.id')
-            ->where('t1.product')->in($linkedProducts)
-            ->andWhere('t1.project')->ne($projectID)
-            ->andWhere('t2.type')->eq('project')
-            ->andWhere('t2.deleted')->eq('0')
-            ->andWhere('t3.deleted')->eq('0')
-            ->fetchPairs('id', 'name');
-
-        return $multiLinkedProducts;
-    }
-
-    /**
      * Show accessDenied response.
      *
      * @access private
@@ -83,24 +60,6 @@ class projectModel extends model
     }
 
     /**
-     * Get budget unit list.
-     *
-     * @access public
-     * @return array
-     */
-
-    public function getBudgetUnitList()
-    {
-        $budgetUnitList = array();
-        if($this->config->vision != 'lite')
-        {
-            foreach(explode(',', $this->config->project->unitList) as $unit) $budgetUnitList[$unit] = zget($this->lang->project->unitList, $unit, '');
-        }
-
-        return $budgetUnitList;
-    }
-
-    /**
      * Save project state.
      *
      * @param  int    $projectID
@@ -140,6 +99,47 @@ class projectModel extends model
         }
 
         return $this->session->project;
+    }
+
+    /**
+     * Get budget unit list.
+     *
+     * @access public
+     * @return array
+     */
+
+    public function getBudgetUnitList()
+    {
+        $budgetUnitList = array();
+        if($this->config->vision != 'lite')
+        {
+            foreach(explode(',', $this->config->project->unitList) as $unit) $budgetUnitList[$unit] = zget($this->lang->project->unitList, $unit, '');
+        }
+
+        return $budgetUnitList;
+    }
+
+    /**
+     * Get Multiple linked products for project.
+     *
+     * @param  int    $projectID
+     * @access public
+     * @return array
+     */
+    public function getMultiLinkedProducts($projectID)
+    {
+        $linkedProducts      = $this->dao->select('product')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($projectID)->fetchPairs();
+        $multiLinkedProducts = $this->dao->select('t3.id,t3.name')->from(TABLE_PROJECTPRODUCT)->alias('t1')
+            ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
+            ->leftJoin(TABLE_PRODUCT)->alias('t3')->on('t1.product = t3.id')
+            ->where('t1.product')->in($linkedProducts)
+            ->andWhere('t1.project')->ne($projectID)
+            ->andWhere('t2.type')->eq('project')
+            ->andWhere('t2.deleted')->eq('0')
+            ->andWhere('t3.deleted')->eq('0')
+            ->fetchPairs('id', 'name');
+
+        return $multiLinkedProducts;
     }
 
     /*
@@ -1846,13 +1846,7 @@ class projectModel extends model
 
         $project = $this->loadModel('file')->processImgURL($project, $this->config->project->editor->start, $this->post->uid);
 
-        $this->dao->update(TABLE_PROJECT)->data($project)
-            ->autoCheck()
-            ->check($this->config->project->start->requiredFields, 'notempty')
-            ->checkIF($project->realBegan != '', 'realBegan', 'le', helper::today())
-            ->checkFlow()
-            ->where('id')->eq((int)$projectID)
-            ->exec();
+        $this->projectTao->doStart($projectID, $project);
 
         /* When it has multiple errors, only the first one is prompted */
         if(dao::isError() and count(dao::$errors['realBegan']) > 1) dao::$errors['realBegan'] = dao::$errors['realBegan'][0];
