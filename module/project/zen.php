@@ -166,12 +166,18 @@ class projectZen extends project
         return print(js::reload('parent.parent'));
     }
 
-    protected function buildSuspendForm(object $project)
+    /**
+     * Send variables to view page.
+     * @param  int $projectID
+     * @access protected
+     * @return int|object
+     */
+    protected function buildSuspendForm($projectID)
     {
         $this->view->title      = $this->lang->project->suspend;
         $this->view->position[] = $this->lang->project->suspend;
         $this->view->users      = $this->loadModel('user')->getPairs('noletter');
-        $this->view->actions    = $this->action->getList('project', $projectID);
+        $this->view->actions    = $this->loadModel('action')->getList('project', $projectID);
         $this->view->project    = $this->project->getByID($projectID);
         $this->display();
     }

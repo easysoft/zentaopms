@@ -1777,8 +1777,6 @@ class project extends control
 
         if(!empty($_POST))
         {
-            $postData = form::data($this->config->project->form->start)->get();
-
             $postData = $this->projectZen->prepareStartExtras($postData);
 
             $changes  = $this->project->start((int)$projectID, $postData);
@@ -1786,7 +1784,7 @@ class project extends control
             if(dao::isError()) return print(js::error(dao::getError()));
 
             $comment = strip_tags($this->post->comment, $this->config->allowedTags);
-            return $this->projectZen->responseAfterStart($project, $changes, $postData, $comment);
+            return $this->projectZen->responseAfterStart($project, $changes, $comment);
         }
 
         $this->projectZen->buildStartForm($project);
@@ -1795,30 +1793,25 @@ class project extends control
     /**
      * Suspend a project.
      *
-     * @param  int     $projectID
+     * @param  string $projectID
      * @access public
      * @return void
      */
-    public function suspend($projectID)
+    public function suspend(string $projectID)
     {
         $this->loadModel('action');
 
         if(!empty($_POST))
         {
-            $postData = form::data($this->config->project->form->suspend)->get();
-
             $changes = $this->project->suspend($projectID);
 
             if(dao::isError()) return print(js::error(dao::getError()));
 
-            if($this->post->comment != '' or !empty($changes))
-            {
-                $actionID = $this->action->create('project', $projectID, 'Suspended', $this->post->comment);
-                $this->action->logHistory($actionID, $changes);
-            }
-            $this->executeHooks($projectID);
-            return print(js::reload('parent.parent'));
+            $comment = strip_tags($this->post->comment, $this->config->allowedTags);
+            return $this->projectZen->responseAfterStart($project, $changes, $comment);
         }
+
+        $this->projectZen->buildSuspendForm((int)$projectID);
     }
 
     /**
