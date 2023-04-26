@@ -354,7 +354,7 @@ UPDATE `zt_doc` SET `type` = 'text' WHERE `type` = 'url';
 UPDATE `zt_doc` SET `acl` = 'private' WHERE `acl` = 'custom';
 UPDATE `zt_doc` SET `status` = 'normal' WHERE `status` = '';
 
-UPDATE `zt_doclib` SET `acl` = 'private' WHERE `type` IN ('custom', 'book', 'product', 'project, ''execution') AND `acl` = 'custom';
+UPDATE `zt_doclib` SET `acl` = 'private' WHERE `type` IN ('custom', 'book', 'product', 'project', 'execution') AND `acl` = 'custom';
 UPDATE `zt_doclib` SET `acl` = 'default' WHERE `type` = 'project' AND `acl` IN ('open', 'private');
 UPDATE `zt_doclib` SET `acl` = 'private' WHERE `type` = 'api' and `acl` = 'custom';
 UPDATE `zt_doclib` SET `acl` = 'default' WHERE `main` = '1';
