@@ -1,0 +1,17 @@
+配置用于单元测试的数据库配置，类似my.php
+例子：
+<?php
+$config->installed       = true;
+$config->debug           = 2;
+$config->requestType     = 'GET';
+$config->timezone        = 'Asia/Shanghai';
+$config->db->driver      = 'mysql';
+$config->db->host        = '127.0.0.1';
+$config->db->port        = '3306';
+$config->db->name        = 'zentao_unit';
+$config->db->user        = 'root';
+$config->db->encoding    = 'UTF8';
+$config->db->password    = '123456';
+$config->db->prefix      = 'zt_';
+$config->webRoot         = getWebRoot();
+$config->default->lang   = 'zh-cn';
