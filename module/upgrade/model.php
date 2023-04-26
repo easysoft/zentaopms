@@ -760,6 +760,7 @@ class upgradeModel extends model
                 $this->processChart();
                 $this->processReport();
                 $this->processDashboard();
+                $this->updatePivotGroup();
         }
     }
 
@@ -8191,7 +8192,6 @@ class upgradeModel extends model
             $this->addSecondModule4BI($dimensionID, $dimensionName, 'chart', $chartModules);
 
             $pivotModules = $this->addDefaultModules4BI('pivot', $dimensionID);
-            if($runMode == 'install' and $dimensionID == 1) $this->updatePivotGroup($pivotModules);
             $this->addSecondModule4BI($dimensionID, $dimensionName, 'pivot', $pivotModules);
 
         }
@@ -8204,8 +8204,9 @@ class upgradeModel extends model
      * @access public
      * @return bool
      */
-    public function updatePivotGroup($pivotModules)
+    public function updatePivotGroup()
     {
+        $pivotModules = $this->dao->select('collector, id')->from(TABLE_MODULE)->where('type')->eq('pivot')->andWhere('root')->eq(1)->andWhere('collector')->ne('')->fetchPairs();
         $pivots = $this->dao->select('*')->from(TABLE_PIVOT)->where('id')->notin('1000,1001,1002')->fetchAll('id');
         foreach($pivots as $pivotID => $pivot)
         {
