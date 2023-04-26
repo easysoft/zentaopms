@@ -25,11 +25,24 @@ class block extends control
         if($this->methodName != 'admin' and $this->methodName != 'dashboard' and !$this->selfCall and !$this->loadModel('sso')->checkKey()) helper::end('');
     }
 
+    /**
+     * Create a block.
+     * 
+     * @param  string $dashboard 
+     * @access public
+     * @return void
+     */
     public function create(string $dashboard)
     {
         if($_POST)
         {
-            $formData = form::use($this->config->block->form->create)->get();
+            $formData = form::data($this->config->block->form->create)->get();
+            $formData->dashboard = $dashboard;
+            $formData->account   = $this->app->user->account;
+            $formData->vision    = $this->config->vision;
+            $formData->order     = $this->block->getMaxOrderByDashboard($dashboard) + 1;
+            $formData->params    = helper::jsonEncode($formData->params);
+
             $this->block->create($formData);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'reload'));
@@ -38,6 +51,14 @@ class block extends control
         $this->display();
     }
 
+    /**
+     * Update a block. 
+     * 
+     * @param  string $dashboard 
+     * @param  int    $blockID 
+     * @access public
+     * @return void
+     */
     public function edit(string $dashboard, int $blockID)
     {
         if($_POST)

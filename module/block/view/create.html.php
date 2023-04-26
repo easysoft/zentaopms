@@ -28,7 +28,7 @@ include '../../common/view/chosen.html.php';
     <div class="form-group">
       <label for="moduleBlock" class="col-sm-3"><?php echo $this->lang->block->lblBlock;?></label>
       <div class="col-sm-7">
-        <?php html::select('code', $blocks, '', "class='form-control chosen'");?>
+        <?php html::select('block', $blocks, '', "class='form-control chosen'");?>
       </div>
     </div>
   </div>

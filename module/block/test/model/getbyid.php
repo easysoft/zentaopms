@@ -1,6 +1,22 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . "/test/lib/init.php";
+su('admin');
+
+function initData()
+{
+    $block = zdTable('block');
+    $block->id->range('2-5');
+    $block->account->range('admin,test1,test2');
+    $block->vision->range('rnd,lite');
+    $block->module->range('my,qa,project');
+    $block->title->prefix('区块')->range("2-5");
+    $block->source->range('my,qa,project');
+    $block->block->range('bug,case,story');
+    $block->order->range('5-2');
+
+    $block->gen(4);
+}
 
 /**
 
@@ -8,10 +24,16 @@ title=测试 blockModel->getByID();
 timeout=0
 cid=1
 
-- 执行$data,属性module @qa
-- 执行$data,属性title @测试统计
-- 执行$data,属性source @qa
-- 执行$data,属性block @statistic
+- 执行block模块的getByID方法，参数是2
+ - 属性account @admin
+ - 属性vision @rnd
+ - 属性module @my
+ - 属性title @区块2
+ - 属性source @my
+ - 属性block @bug
+ - 属性order @5
+
+- 执行block模块的getByID方法，参数是6 @0
 
 
 */
@@ -19,9 +41,7 @@ cid=1
 global $tester;
 $tester->loadModel('block');
 
-$data = $tester->block->getByID(15);
+initData();
 
-r($data) && p('module') && e('qa');        // 测试获取block的所属模块
-r($data) && p('title')  && e('测试统计');  // 测试获取block的名称
-r($data) && p('source') && e('qa');        // 测试获取block的来源
-r($data) && p('block')  && e('statistic'); // 测试获取block的区块
+r($tester->block->getByID(2)) && p('account,vision,module,title,source,block,order') && e('admin,rnd,my,区块2,my,bug,5');        // 测试获取正常的block的内容
+r($tester->block->getByID(6)) && p('') && e('0');        // 测试获取不存在的block的内容
