@@ -28,11 +28,15 @@ function initData()
 /**
 
 title=测试 projectModel::getByID;
+timeout=0
 cid=1
-pid=1
 
-获取ID等于2的项目 >> project2,project
-获取不存在的项目 >> 0
+- 执行project模块的getByID方法，参数是2, 'project
+ - 属性code @project2
+ - 属性type @project
+
+- 执行project模块的getByID方法，参数是1, 'project,属性code @0
+
 
 */
 
@@ -42,4 +46,4 @@ $tester->loadModel('project');
 initData();
 
 r($tester->project->getByID(2, 'project')) && p('code,type') && e('project2,project'); //获取ID等于11的项目
-r($tester->project->getByID(1, 'project'))  && p('code,type') && e('0');                //获取不存在的项目
+r($tester->project->getByID(1, 'project'))  && p('code') && e('0');                //获取不存在的项目

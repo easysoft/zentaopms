@@ -14,6 +14,7 @@
  */
 /* Set the error reporting. */
 error_reporting(E_ALL);
+define('RUN_MODE', 'test');
 
 $testPath      = dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'test' . DIRECTORY_SEPARATOR;
 $frameworkRoot = dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'framework' . DIRECTORY_SEPARATOR;
@@ -58,14 +59,8 @@ $config->ztfPath     = dirname(dirname(__FILE__)) . '/tools/ztf';
 $config->zdPath      = dirname(dirname(__FILE__)) . '/tools/zd';
 
 /* init testDB. */
-include $testPath . 'config/config.php';
-include $testPath . 'lib/db.class.php';
 include $testPath . 'lib/yaml.class.php';
 include $testPath . 'lib/rest.php';
-
-if(getenv('DB_ZENTAOPMS_UNIT')) $config->db->name = getenv('DB_ZENTAOPMS_UNIT');
-
-$db = new db();
 
 if(!empty($config->test->account) and !empty($config->test->password) and !empty($config->test->base))
 {
@@ -149,9 +144,9 @@ function parseScript($expect)
         $delimiter = $_delimiter;
         $file      = $debugInfo[count($debugInfo)-1]['file'];
         $contents  = file_get_contents($file);
-        
+
         list($moduleName, $methodName, $methodParam) = genParamsByRPE($contents);
-        
+
         $isGrup   = false;
         $stepDesc = '';
         $expects  = empty($expect) ? array() : explode($delimiter, $expect);
