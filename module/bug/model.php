@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * The model file of bug module of ZenTaoPMS.
  *
@@ -580,17 +581,18 @@ class bugModel extends model
     }
 
     /**
-     * Get bug list.
+     * Get bugs by ID list.
+     * 获取指定字段的bug列表。
      *
-     * @param  int|array|string    $bugIDList
-     * @param  string              $fields
+     * @param  int|array|string $bugIDList
+     * @param  string           $fields
      * @access public
      * @return array
      */
-    public function getByList($bugIDList = 0, $fields = '*')
+    public function getByList(int|array|string $bugIDList = 0, string $fields = '*'): array
     {
         return $this->dao->select($fields)->from(TABLE_BUG)
-            ->where('deleted')->eq(0)
+            ->where('deleted')->eq('0')
             ->beginIF($bugIDList)->andWhere('id')->in($bugIDList)->fi()
             ->fetchAll('id');
     }
