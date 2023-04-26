@@ -13,14 +13,34 @@ declare(strict_types=1);
 class blockModel extends model
 {
     /**
+     * Check API for ranzhi
+     *
+     * @param  string $hash
+     * @access public
+     * @return bool
+     */
+    public function checkAPI(string $hash): bool
+    {
+        if(empty($hash)) return false;
+
+        $key = $this->dao->select('value')->from(TABLE_CONFIG)
+            ->where('owner')->eq('system')
+            ->andWhere('module')->eq('sso')
+            ->andWhere('`key`')->eq('key')
+            ->fetch('value');
+
+        return $key == $hash;
+    }
+
+    /**
      * Get a block by blockID. 
      * 根据区块ID获取区块信息.
      *
      * @param  int    $blockID
      * @access public
-     * @return object|bool
+     * @return object|false
      */
-    public function getByID(int $blockID): object|bool
+    public function getByID(int $blockID): object|false
     {
         $block = $this->dao->select('*')->from(TABLE_BLOCK)->where('id')->eq($blockID)->fetch();
         if(empty($block)) return false;
@@ -32,16 +52,45 @@ class blockModel extends model
     }
 
     /**
-     * Get max order number by block module. 
-     * 获取对应模块下区块的最大排序号.
+     * Get closed block pairs.
      *
-     * @param  string $module
+     * @param  string $closedBlock
      * @access public
-     * @return int
+     * @return array
      */
-    public function getMaxOrderByModule(string $module): int
+    public function getClosedBlockPairs(string $closedBlock): array
     {
-        return $this->blockTao->fetchMaxOrderByModule($module);
+        $blockPairs = array();
+        if(empty($closedBlock)) return $blockPairs;
+
+        foreach(explode(',', $closedBlock) as $block)
+        {
+            $block = trim($block);
+            if(empty($block)) continue;
+
+            list($moduleName, $blockKey) = explode('|', $block);
+            if(empty($moduleName))
+            {
+                if(isset($this->lang->block->$blockKey)) $blockPairs[$block] = $this->lang->block->$blockKey;
+                if($blockKey == 'html')    $blockPairs[$block] = 'HTML';
+                if($blockKey == 'guide')   $blockPairs[$block] = $this->lang->block->guide;
+                if($blockKey == 'dynamic') $blockPairs[$block] = $this->lang->block->dynamic;
+                if($blockKey == 'welcome') $blockPairs[$block] = $this->lang->block->welcome;
+            }
+            else
+            {
+                $blockName = $blockKey;
+                if(isset($this->lang->block->modules[$moduleName]->availableBlocks->$blockKey)) $blockName = $this->lang->block->modules[$moduleName]->availableBlocks->$blockKey;
+                if(isset($this->lang->block->availableBlocks->$blockKey)) $blockName = $this->lang->block->availableBlocks->$blockKey;
+                if(isset($this->lang->block->modules['scrum']['index']->availableBlocks->$blockKey)) $blockName = $this->lang->block->modules['scrum']['index']->availableBlocks->$blockKey;
+                if(isset($this->lang->block->modules['waterfall']['index']->availableBlocks->$blockKey)) $blockName = $this->lang->block->modules['waterfall']['index']->availableBlocks->$blockKey;
+
+                $blockPairs[$block]  = isset($this->lang->block->moduleList[$moduleName]) ? "{$this->lang->block->moduleList[$moduleName]}|" : '';
+                $blockPairs[$block] .= $blockName;
+            }
+        }
+
+        return $blockPairs;
     }
 
     /**
@@ -52,7 +101,7 @@ class blockModel extends model
      * @param  string $type
      * @param  int    $hidden
      * @access public
-     * @return int[]|bool
+     * @return int[]|false
      */
     public function getMyDashboard(string $module, string $type = '', int $hidden = 0): array|false
     {
@@ -73,52 +122,77 @@ class blockModel extends model
     }
 
     /**
-     * Save a block.
+     * Get block json that user can add.
+     * 获取允许用户添加的区块列表.
      *
-     * @param  int    $blockID
-     * @param  string $type
+     * @param  string $dashboard
      * @param  string $module
      * @access public
-     * @return int|false
+     * @return string[]
      */
-    public function save(int $blockID, string $type, string $module = 'my'): bool|int
+    public function getAvailableBlocks(string $dashboard, string $module = ''): array
     {
-        $block = $blockID ? $this->getByID($blockID) : null;
-        $data = fixer::input('post')
-            ->setIF($blockID, 'id', $blockID)
-            ->add('account', $this->app->user->account)
-            ->add('module', $module)
-            ->add('order', $block ? $block->order : ($this->getMaxOrderByModule($module) + 1))
-            ->add('hidden', 0)
-            ->setDefault('vision', $this->config->vision)
-            ->setDefault('grid', '4')
-            ->setDefault('params', array())
-            ->stripTags('html', $this->config->allowedTags)
-            ->remove('uid,actionLink,modules,moduleBlock')
-            ->get();
-
-        $data->source = $this->post->moduleBlock ? $this->post->modules     : '';
-        $data->block  = $this->post->moduleBlock ? $this->post->moduleBlock : $this->post->modules;
-
-        if($block) $data->height = $block->height;
-        if($type == 'html')
+        if($dashboard == 'my')
         {
-            $uid  = $this->post->uid;
-            $data = $this->loadModel('file')->processImgURL($data, 'html', $uid);
-            $data->params['html'] = $data->html;
-            unset($data->html);
-            unset($_SESSION['album'][$uid]);
+            if($module and isset($this->lang->block->modules[$module]))
+            {
+                $blocks = $this->lang->block->modules[$module]->availableBlocks;
+            }
+            else
+            {
+                $blocks = array();
+            }
+        }
+        else
+        {
+            if($dashboard and isset($this->lang->block->modules[$dashboard]))
+            {
+                $blocks = $this->lang->block->modules[$dashboard]->availableBlocks;
+            }
+            else
+            {
+                $blocks = $this->lang->block->availableBlocks;
+            }
         }
 
-        $data->params = helper::jsonEncode($data->params);
+        if(isset($this->config->block->closed))
+        {
+            foreach($blocks as $blockKey => $blockName)
+            {
+                if(strpos(",{$this->config->block->closed},", ",{$module}|{$blockKey},") !== false) unset($blocks[$blockKey]);
+            }
+        }
 
-        $this->dao->replace(TABLE_BLOCK)->data($data)->exec();
-        if(dao::isError()) return false;
+        return $blocks;
+    }
 
-        $this->loadModel('score')->create('block', 'set');
+    /**
+     * Get max order number by block module. 
+     * 获取对应模块下区块的最大排序号.
+     *
+     * @param  string $module
+     * @access public
+     * @return int
+     */
+    public function getMaxOrderByModule(string $module): int
+    {
+        return $this->blockTao->fetchMaxOrderByModule($module);
+    }
 
-        $blockID = $blockID ? $blockID : $this->dao->lastInsertID(); 
-        return $blockID; 
+    /**
+     * Get block set form params.
+     * 获取不同区块所需的参数配置.
+     * 
+     * @param  string $type 
+     * @param  string $module 
+     * @access public
+     * @return string
+     */
+    public function getParams(string $type, string $module): string
+    {
+        $type = $type == 'todo' ? $module : $type;
+        $params = zget($this->config->block->params, $type, '');
+        return json_encode($params);
     }
 
     /**
@@ -209,6 +283,100 @@ class blockModel extends model
     }
 
     /**
+     * Get the total estimated man hours required.
+     *
+     * @param  array $storyID
+     * @access public
+     * @return string
+     */
+    public function getStorysEstimateHours($storyID)
+    {
+        return $this->dao->select('count(estimate) as estimate')->from(TABLE_STORY)->where('id')->in($storyID)->fetch('estimate');
+    }
+
+    /**
+     * Get zentao.net data.
+     *
+     * @param  string $minTime
+     * @access public
+     * @return array
+     */
+    public function getZentaoData($minTime = '')
+    {
+        return $this->dao->select('type,params')->from(TABLE_BLOCK)
+            ->where('account')->eq('system')
+            ->andWhere('vision')->eq('rnd')
+            ->andWhere('module')->eq('zentao')
+            ->beginIF($minTime)->andWhere('source')->ge($minTime)->fi()
+            ->andWhere('type')->in('plugin,patch,publicclass,news')
+            ->fetchPairs('type');
+    }
+
+    public function create(object $formData): bool
+    {
+        $this->blockTao->insert($formData);
+        if(dao::isError()) return false;
+
+        $blockID = $this->dao->lastInsertID();
+        $this->loadModel('score')->create('block', 'set');
+
+        return $blockID;
+    }
+
+    public function update(object $formData): int|false
+    {
+        $this->dao->update(TABLE_BLOCK)->data($formData)->exec();
+        if(dao::isError()) return false;
+
+        $this->loadModel('score')->create('block', 'set');
+
+        return $formData->id; 
+    }
+
+    /**
+     * Save a block.
+     *
+     * @param  int    $blockID
+     * @param  string $type
+     * @param  string $module
+     * @access public
+     * @return int|false
+     */
+    public function save(int $blockID, string $type, string $module = 'my'): bool|int
+    {
+        $block = $blockID ? $this->getByID($blockID) : null;
+        $data = fixer::input('post')
+            ->setIF($blockID, 'id', $blockID)
+            ->add('account', $this->app->user->account)
+            ->add('module', $module)
+            ->add('order', $block ? $block->order : ($this->getMaxOrderByModule($module) + 1))
+            ->add('hidden', 0)
+            ->setDefault('vision', $this->config->vision)
+            ->setDefault('grid', '4')
+            ->setDefault('params', array())
+            ->stripTags('html', $this->config->allowedTags)
+            ->remove('uid,actionLink,modules,moduleBlock')
+            ->get();
+
+        $data->source = $this->post->moduleBlock ? $this->post->modules     : '';
+        $data->block  = $this->post->moduleBlock ? $this->post->moduleBlock : $this->post->modules;
+
+        if($block) $data->height = $block->height;
+        if($type == 'html')
+        {
+            $uid  = $this->post->uid;
+            $data = $this->loadModel('file')->processImgURL($data, 'html', $uid);
+            $data->params['html'] = $data->html;
+            unset($data->html);
+            unset($_SESSION['album'][$uid]);
+        }
+
+        $data->params = helper::jsonEncode($data->params);
+
+        $this->dao->replace(TABLE_BLOCK)->data($data)->exec();
+    }
+
+    /**
      * Init block when account use first.
      * 用户首次加载时初始化区块数据.
      *
@@ -251,106 +419,9 @@ class blockModel extends model
             $block['vision']  = $this->config->vision;
             if(!isset($block['source'])) $block['source'] = $module;
 
-            $this->blockTao->replace($block);
+            $this->blockTao->insert($block);
         }
         return !dao::isError();
-    }
-
-    /**
-     * Get block json that user can add.
-     * 获取允许用户添加的区块列表.
-     *
-     * @param  string $module
-     * @param  string $dashboard ''|project
-     * @param  string $type      scrum|waterfall|kanban
-     * @access public
-     * @return string
-     */
-    public function getAvailableBlocks(string $module = '', string $dashboard = '', string $type = ''): string
-    {
-        if($dashboard == 'project')
-        {
-            $blocks = $this->lang->block->modules[$type]['index']->availableBlocks;
-        }
-        else
-        {
-            if($module and isset($this->lang->block->modules[$module]))
-            { 
-                $blocks = $this->lang->block->modules[$module]->availableBlocks;
-            }
-            else
-            {
-                $blocks = $this->lang->block->availableBlocks;
-            }
-        }
-
-        if(isset($this->config->block->closed))
-        {
-            foreach($blocks as $blockKey => $blockName)
-            {
-                if(strpos(",{$this->config->block->closed},", ",{$module}|{$blockKey},") !== false) unset($blocks->$blockKey);
-            }
-        }
-
-        return json_encode($blocks);
-    }
-
-    /**
-     * Get block set form params.
-     * 获取不同区块所需的参数配置.
-     * 
-     * @param  string $type 
-     * @param  string $module 
-     * @access public
-     * @return string
-     */
-    public function getParams(string $type, string $module): string
-    {
-        $type = $type == 'todo' ? $module : $type;
-        $params = zget($this->config->block->params, $type, '');
-        return json_encode($params);
-    }
-
-    /**
-     * Get closed block pairs.
-     *
-     * @param  string $closedBlock
-     * @access public
-     * @return array
-     */
-    public function getClosedBlockPairs($closedBlock)
-    {
-        $blockPairs = array();
-        if(empty($closedBlock)) return $blockPairs;
-
-        foreach(explode(',', $closedBlock) as $block)
-        {
-            $block = trim($block);
-            if(empty($block)) continue;
-
-            list($moduleName, $blockKey) = explode('|', $block);
-            if(empty($moduleName))
-            {
-                if(isset($this->lang->block->$blockKey)) $blockPairs[$block] = $this->lang->block->$blockKey;
-                if($blockKey == 'html')    $blockPairs[$block] = 'HTML';
-                if($blockKey == 'guide')   $blockPairs[$block] = $this->lang->block->guide;
-                if($blockKey == 'dynamic') $blockPairs[$block] = $this->lang->block->dynamic;
-                if($blockKey == 'welcome') $blockPairs[$block] = $this->lang->block->welcome;
-            }
-            else
-            {
-                $blockName = $blockKey;
-                if(isset($this->lang->block->modules[$moduleName]->availableBlocks->$blockKey)) $blockName = $this->lang->block->modules[$moduleName]->availableBlocks->$blockKey;
-                if(isset($this->lang->block->availableBlocks->$blockKey)) $blockName = $this->lang->block->availableBlocks->$blockKey;
-                if(isset($this->lang->block->modules['scrum']['index']->availableBlocks->$blockKey)) $blockName = $this->lang->block->modules['scrum']['index']->availableBlocks->$blockKey;
-                if(isset($this->lang->block->modules['waterfall']['index']->availableBlocks->$blockKey)) $blockName = $this->lang->block->modules['waterfall']['index']->availableBlocks->$blockKey;
-
-                $blockPairs[$block]  = isset($this->lang->block->moduleList[$moduleName]) ? "{$this->lang->block->moduleList[$moduleName]}|" : '';
-                $blockPairs[$block] .= $blockName;
-            }
-        }
-
-        return $blockPairs;
     }
 
     /**
@@ -364,56 +435,6 @@ class blockModel extends model
     {
         if(empty($block)) return true;
         return $block->grid >= 6;
-    }
-
-    /**
-     * Check API for ranzhi
-     *
-     * @param  string    $hash
-     * @access public
-     * @return bool
-     */
-    public function checkAPI($hash)
-    {
-        if(empty($hash)) return false;
-
-        $key = $this->dao->select('value')->from(TABLE_CONFIG)
-            ->where('owner')->eq('system')
-            ->andWhere('module')->eq('sso')
-            ->andWhere('`key`')->eq('key')
-            ->fetch('value');
-
-        return $key == $hash;
-    }
-
-    /**
-     * Get the total estimated man hours required.
-     *
-     * @param  array $storyID
-     * @access public
-     * @return string
-     */
-    public function getStorysEstimateHours($storyID)
-    {
-        return $this->dao->select('count(estimate) as estimate')->from(TABLE_STORY)->where('id')->in($storyID)->fetch('estimate');
-    }
-
-    /**
-     * Get zentao.net data.
-     *
-     * @param  string $minTime
-     * @access public
-     * @return array
-     */
-    public function getZentaoData($minTime = '')
-    {
-        return $this->dao->select('type,params')->from(TABLE_BLOCK)
-            ->where('account')->eq('system')
-            ->andWhere('vision')->eq('rnd')
-            ->andWhere('module')->eq('zentao')
-            ->beginIF($minTime)->andWhere('source')->ge($minTime)->fi()
-            ->andWhere('type')->in('plugin,patch,publicclass,news')
-            ->fetchPairs('type');
     }
 
     /**

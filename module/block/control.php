@@ -1,12 +1,12 @@
 <?php
+declare(strict_types=1);
  /**
  * The control file of block of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
- * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
+ * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @license     ZPL(https://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Yidong Wang <yidong@cnezsoft.com>
  * @package     block
- * @version     $Id$
  * @link        http://www.zentao.net
  */
 class block extends control
@@ -25,106 +25,34 @@ class block extends control
         if($this->methodName != 'admin' and $this->methodName != 'dashboard' and !$this->selfCall and !$this->loadModel('sso')->checkKey()) helper::end('');
     }
 
-    /**
-     * Block admin.
-     *
-     * @param  int    $id
-     * @param  string $module
-     * @access public
-     * @return void
-     */
-    public function admin($id = 0, $module = 'my')
-    {
-        $this->session->set('blockModule', $module);
-
-        $title = $id == 0 ? $this->lang->block->createBlock : $this->lang->block->editBlock;
-
-        if($module == 'my')
-        {
-            $modules = $this->lang->block->moduleList;
-            unset($modules['doc']);
-
-            list($programModule, $programMethod)     = explode('-', $this->config->programLink);
-            list($productModule, $productMethod)     = explode('-', $this->config->productLink);
-            list($projectModule, $projectMethod)     = explode('-', $this->config->projectLink);
-            list($executionModule, $executionMethod) = explode('-', $this->config->executionLink);
-
-            foreach($modules as $moduleKey => $moduleName)
-            {
-                if($moduleKey == 'todo') continue;
-                if(in_array($moduleKey, $this->app->user->rights['acls'])) unset($modules[$moduleKey]);
-
-                $method = 'index';
-                if($moduleKey == 'program')   $method = $programMethod;
-                if($moduleKey == 'product')   $method = $productMethod;
-                if($moduleKey == 'project')   $method = $projectMethod;
-                if($moduleKey == 'execution') $method = $executionMethod;
-
-                if(!common::hasPriv($moduleKey, $method)) unset($modules[$moduleKey]);
-            }
-
-            $closedBlock = isset($this->config->block->closed) ? $this->config->block->closed : '';
-            if(strpos(",$closedBlock,", ",|assigntome,") === false) $modules['assigntome'] = $this->lang->block->assignToMe;
-            if(strpos(",$closedBlock,", ",|dynamic,") === false) $modules['dynamic'] = $this->lang->block->dynamic;
-            if(strpos(",$closedBlock,", ",|guide,") === false and $this->config->global->flow == 'full') $modules['guide'] = $this->lang->block->guide;
-            if(strpos(",$closedBlock,", ",|welcome,") === false and $this->config->global->flow == 'full') $modules['welcome'] = $this->lang->block->welcome;
-            if(strpos(",$closedBlock,", ",|html,") === false) $modules['html'] = 'HTML';
-            if(strpos(",$closedBlock,", ",|contribute,") === false and $this->config->vision == 'rnd') $modules['contribute'] = $this->lang->block->contribute;
-            $modules = array('' => '') + $modules;
-
-            $hiddenBlocks = $this->block->getMyHiddenBlocks('my');
-            foreach($hiddenBlocks as $block) $modules['hiddenBlock' . $block->id] = $block->title;
-            $this->view->modules = $modules;
-        }
-        elseif(isset($this->lang->block->moduleList[$module]))
-        {
-            $this->get->set('mode', 'getblocklist');
-            if($module == 'project')
-            {
-                $this->get->set('dashboard', 'project');
-
-                if($this->config->edition == 'max' and $this->app->tab == 'project')
-                {
-                    $project = $this->loadModel('project')->getByID($this->session->project);
-                    if(isset($project->model) and !helper::hasFeature("{$project->model}_issue"))
-                    {
-                        unset($this->lang->block->modules['scrum']['index']->availableBlocks->scrumissue);
-                        unset($this->lang->block->modules['waterfall']['index']->availableBlocks->waterfallissue);
-                    }
-                    if(isset($project->model) and !helper::hasFeature("{$project->model}_risk"))
-                    {
-                        unset($this->lang->block->modules['scrum']['index']->availableBlocks->scrumrisk);
-                        unset($this->lang->block->modules['waterfall']['index']->availableBlocks->waterfallrisk);
-                    }
-                }
-            }
-            $this->view->blocks = $this->fetch('block', 'main', "module=$module&id=$id");
-            $this->view->module = $module;
-        }
-
-        $this->view->title   = $title;
-        $this->view->block   = $this->block->getByID($id);
-        $this->view->blockID = $id;
-        $this->display();
-    }
-
-    /**
-     * Set params when type is rss or html.
-     *
-     * @param  int    $id
-     * @param  string $type
-     * @access public
-     * @return void
-     */
-    public function set($id, $type, $module = '')
+    public function create(string $dashboard)
     {
         if($_POST)
         {
-            $this->block->save($id, $type, $this->session->blockModule);
-            if(dao::isError()) return print(js::error(dao::geterror()));
-            return print(js::reload('parent'));
+            $formData = form::use($this->config->block->form->create)->get();
+            $this->block->create($formData);
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'reload'));
         }
+        $this->blockZen->buildCreateForm($dashboard); 
+        $this->display();
+    }
 
+    public function edit(string $dashboard, int $blockID)
+    {
+        if($_POST)
+        {
+            $formData = form::use($this->config->example->edit)->get();
+            $this->block->update($formData);
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'reload'));
+        }
+        $this->blockZen->buildCreateForm($dashboard); 
+        $this->display();
+    }
+
+    public function set($id, $type, $module = '')
+    {
         $block = $this->block->getByID($id);
         if($block and empty($type)) $type = $block->block;
         if(isset($block->params->num) and !isset($block->params->count))
@@ -495,41 +423,7 @@ class block extends control
 
         if($mode == 'getblocklist')
         {
-            $model     = '';
-            $block     = $this->block->getByID($id);
-            $dashboard = $this->get->dashboard;
 
-            /* Create a project block. */
-            if($dashboard == 'project')
-            {
-                $project = $this->loadModel('project')->getByID($this->session->project);
-                $model   = $project->model;
-            }
-
-            /* Edit a project block. */
-            if($id and $block->module == 'project')
-            {
-                $model     = $block->type;
-                $dashboard = 'project';
-            }
-
-            $blocks = $this->block->getAvailableBlocks($module, $dashboard, $model);
-            if(!$this->selfCall)
-            {
-                echo $blocks;
-                return true;
-            }
-
-            $blocks = json_decode($blocks, true);
-            if(empty($blocks)) $blocks = array();
-            $blockPairs = array('' => '') + $blocks;
-
-            echo '<div class="form-group">';
-            echo '<label for="moduleBlock" class="col-sm-3">' . $this->lang->block->lblBlock . '</label>';
-            echo '<div class="col-sm-7">';
-            if($model) echo html::hidden('type', $model);
-            echo html::select('moduleBlock', $blockPairs, ($block and $block->source != '') ? $block->block : '', "class='form-control chosen'");
-            echo '</div></div>';
         }
         elseif($mode == 'getblockform')
         {

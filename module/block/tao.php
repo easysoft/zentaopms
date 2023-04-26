@@ -7,7 +7,7 @@ class blockTao extends blockModel
      * 获取对应模块下区块的最大排序号.
      *
      * @param  string $module 
-     * @access public
+     * @access protected
      * @return int
      */
     protected function fetchMaxOrderByModule(string $module): int
@@ -27,7 +27,7 @@ class blockTao extends blockModel
      * @param  string $module project|scrum|agileplus|waterfall|waterfallplus|product|execution|qa|todo|doc
      * @param  string $type   scrum|waterfall|kanban
      * @param  int    $hidden 0|1
-     * @access public
+     * @access protected
      * @return int[]|false
      */
     protected function fetchMyBlocks(string $module, string $type = '', int $hidden = 0): array|false
@@ -40,5 +40,18 @@ class blockTao extends blockModel
             ->andWhere('vision')->eq($this->config->vision)
             ->orderBy('`order`')
             ->fetchAll('id');
+    }
+
+    /**
+     * Insert a block data.
+     *
+     * @param  object $formData 
+     * @access protected
+     * @return bool
+     */
+    protected function insert($formData): bool
+    {
+        $this->dao->insert(TABLE_BLOCK)->data($formData)->exec();
+        return true;
     }
 }
