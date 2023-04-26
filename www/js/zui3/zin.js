@@ -58,7 +58,7 @@
 
         $bar = $(
         [
-            '<div id="zinbar" class="shadow-xl h-5 bg-inverse text-canvas fixed row items-center text-base" style="right:0;bottom:0;z-index: 99999">',
+            '<div id="zinbar" class="shadow-xl h-5 bg-inverse text-canvas fixed row items-center text-base" style="right:0;bottom:0;z-index: 99999;cursor: pointer">',
                 '<div id="zinErrors" class="mono row items-center"></div>',
                 '<div id="pagePerf" class="row items-center"></div>',
                 '<div id="partPerf" class="row items-center"></div>',
@@ -66,16 +66,17 @@
             '</div>'
         ].join('')).insertAfter('body');
 
-        $('#zinErrorList').on('click', '.zin-error-item', function()
+        $('#zinErrorList').on('click', '.zin-error-item', function(event)
         {
             const error = $(this).data('error');
             navigator.clipboard.writeText(`vim +${error.line} ${error.file}`).then(() => {zui.Messager.show({content: 'Copied vim command to clipboard.', type: 'success'});});
+            event.stopPropagation();
         });
+        $('#zinbar').on('click', () => $('#zinErrorList').toggleClass('in'));
     }
 
     function updatePerfInfo(options, stage, error)
     {
-        console.log('updatePerfInfo', options, stage, error);
         options[stage] = performance.now();
         const $perf = options.id === 'page' ? $('#pagePerf') : $('#partPerf');
         if(stage === 'requestBegin')
