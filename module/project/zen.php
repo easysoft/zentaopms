@@ -134,7 +134,7 @@ class projectZen extends project
      * @access protected
      * @return int|object
      */
-    protected function buildStartForm(object $project)
+    protected function buildStartForm(object $project):int|object
     {
         $this->view->title      = $this->lang->project->start;
         $this->view->position[] = $this->lang->project->start;
@@ -152,7 +152,7 @@ class projectZen extends project
      * @access protected
      * @return int|object
      */
-    protected function responseAfterStart(object $project, array $changes, string $comment) :int|object
+    protected function responseAfterStart(object $project, array $changes, string $comment):int|object
     {
         if($comment != '' or !empty($changes))
         {
@@ -172,7 +172,7 @@ class projectZen extends project
      * @access protected
      * @return int|object
      */
-    protected function buildSuspendForm($projectID)
+    protected function buildSuspendForm(int $projectID):int|object
     {
         $this->view->title      = $this->lang->project->suspend;
         $this->view->position[] = $this->lang->project->suspend;
