@@ -1,25 +1,34 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . "/test/lib/init.php";
-include dirname(__FILE__, 2) . '/project.class.php';
 su('admin');
+
+$project = zdTable('project');
+$project->gen(5);
 
 /**
 
 title=测试 projectModel->start();
+timeout=0
 cid=1
 pid=1
 
-开始id为81状态是suspended的项目 >> 项目71,doing
-开始id为82状态是closed的项目 >> 0
-开始id为83状态是wait的项目 >> 项目73,doing
-开始id为85状态是doing的项目 >> 0
+- 执行project模块的start方法，参数是11, $data- ,属性0 @status >> status
+ @status >> doing
+- 执行project模块的start方法，参数是12, $data- ,属性0 @doing >> 0
+ @doing >> 0
+- 执行project模块的start方法，参数是13, $data >> 0
 
 */
+global $tester;
+$tester->loadModel('project');
 
-$project = new Project();
+$data = new stdclass();
+$data->status    = 'doing';
+$data->realBegan = '2022-10-10';
 
-r($project->start(81)) && p('name,status') && e('项目71,doing'); // 开始id为81状态是suspended的项目
-r($project->start(82)) && p()              && e('0');            // 开始id为82状态是closed的项目
-r($project->start(83)) && p('name,status') && e('项目73,doing'); // 开始id为83状态是wait的项目
-r($project->start(85)) && p()              && e('0');            // 开始id为85状态是doing的项目
+r($tester->project->start(11, $data)) && p('0:field')     && e('status');
+r($tester->project->start(12, $data)) && p('0:new')       && e('doing');
+r($tester->project->start(13, $data)) && p('name,status') && e('0');
+r($tester->project->start(14, $data)) && p()              && e('0');
+r($tester->project->start(15, $data)) && p()              && e('0');
