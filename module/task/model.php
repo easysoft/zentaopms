@@ -2760,15 +2760,15 @@ class taskModel extends model
     }
 
     /**
-     * Get task pairs of a story.
+     * Get task list of a story.
      *
-     * @param  int    $storyID
-     * @param  int    $executionID
-     * @param  int    $projectID
+     * @param  int   $storyID
+     * @param  int   $executionID
+     * @param  int   $projectID
      * @access public
-     * @return array
+     * @return object[]
      */
-    public function getStoryTasks($storyID, $executionID = 0, $projectID = 0)
+    public function getStoryTasks(int $storyID, int $executionID = 0, int $projectID = 0): array
     {
         $tasks = $this->dao->select('id, parent, name, assignedTo, pri, status, estimate, consumed, closedReason, `left`')
             ->from(TABLE_TASK)
@@ -2783,7 +2783,7 @@ class taskModel extends model
         {
             if($task->parent > 0) $parents[$task->parent] = $task->parent;
         }
-        $parents = $this->dao->select('*')->from(TABLE_TASK)->where('id')->in($parents)->fetchAll('id');
+        $parents = $this->getByList($parents);
 
         foreach($tasks as $task)
         {
@@ -2802,43 +2802,7 @@ class taskModel extends model
             }
         }
 
-        foreach($tasks as $task)
-        {
-            /* Compute task progress. */
-            if($task->consumed == 0 and $task->left == 0)
-            {
-                $task->progress = 0;
-            }
-            elseif($task->consumed != 0 and $task->left == 0)
-            {
-                $task->progress = 100;
-            }
-            else
-            {
-                $task->progress = round($task->consumed / ($task->consumed + $task->left), 2) * 100;
-            }
-
-             if(!empty($task->children))
-            {
-                foreach($task->children as $child)
-                {
-                    /* Compute child progress. */
-                    if($child->consumed == 0 and $child->left == 0)
-                    {
-                        $child->progress = 0;
-                    }
-                    elseif($child->consumed != 0 and $child->left == 0)
-                    {
-                        $child->progress = 100;
-                    }
-                    else
-                    {
-                        $child->progress = round($child->consumed / ($child->consumed + $child->left), 2) * 100;
-                    }
-                }
-            }
-        }
-        return $tasks;
+        return $this->taskTao->computeTasksProgress($tasks);
     }
 
     /**
@@ -3275,19 +3239,7 @@ class taskModel extends model
         /* Set closed realname. */
         if($task->assignedTo == 'closed') $task->assignedToRealName = 'Closed';
 
-        /* Compute task progress. */
-        if($task->consumed == 0 and $task->left == 0)
-        {
-            $task->progress = 0;
-        }
-        elseif($task->consumed != 0 and $task->left == 0)
-        {
-            $task->progress = 100;
-        }
-        else
-        {
-            $task->progress = round($task->consumed / ($task->consumed + $task->left), 2) * 100;
-        }
+        $task->progress = $this->taskTao->computeTaskProgress();
 
         if($task->mode == 'multi')
         {
