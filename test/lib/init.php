@@ -244,6 +244,7 @@ function genParamsByRPE($rpe)
         $method      = $rParamsStructureList[1];
         $methodName  = substr(explode('(', $method)[0], 0, -4);
         $methodParam = substr(explode('(', $method)[1], 0, -1);
+        $methodParam = trim($methodParam, "'");
     }
     elseif($objArrowCount == 2)
     {
@@ -259,6 +260,8 @@ function genParamsByRPE($rpe)
         $methodName  = 0;
         $methodParam = 0;
     }
+
+    $methodParam = preg_replace("/,\s*'/", ', ', $methodParam);
 
     return array($moduleName, $methodName, $methodParam);
 }
