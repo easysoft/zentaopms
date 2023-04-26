@@ -272,7 +272,7 @@ class install extends control
             if(strpos($this->app->getClientLang(), 'zh') === 0) $this->loadModel('api')->createDemoData($this->lang->api->zentaoAPI, "{$httpType}://{$_SERVER['HTTP_HOST']}" . $this->app->config->webRoot . 'api.php/v1', '16.0');
 
             $this->loadModel('upgrade')->createDefaultDimension('install');
-            if($this->config->edition == 'biz' or $this->config->edition == 'max') $this->updatePivotGroup();
+            if($this->config->edition == 'biz' or $this->config->edition == 'max') $this->upgrade->updatePivotGroup();
 
             return print(js::locate(inlink('step6'), 'parent'));
         }

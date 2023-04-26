@@ -920,6 +920,7 @@ class baseDAO
         {
             $rows   = $stmt->fetchAll();
             $result = array();
+            if(!$rows) $rows = array();
             dao::$cache[$table][$key] = $rows;
             foreach($rows as $i => $row) $result[$i] = $this->getRow($row);
             return $result;
