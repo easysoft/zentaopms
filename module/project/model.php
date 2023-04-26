@@ -1928,83 +1928,30 @@ class projectModel extends model
     /**
      * Activate project.
      *
-     * @param  int    $projectID
-     * @param  string $type
+     * @param  object $project
      * @access public
-     * @return void
+     * @return array  $changes|false
      */
-    public function activate($projectID, $type = 'project')
+    public function activate($project) :array|false
     {
-        $oldProject = $this->getById($projectID, $type);
         $now        = helper::now();
+        $projectID  = $project->id;
+        $oldProject = $this->getById($projectID);
 
-        $editorIdList = $this->config->project->editor->activate['id'];
-        if($this->app->rawModule == 'program') $editorIdList = $this->config->program->editor->activate['id'];
-
-        $project = fixer::input('post')
-            ->add('id', $projectID)
-            ->setDefault('realEnd','')
-            ->setDefault('status', 'doing')
-            ->setDefault('lastEditedBy', $this->app->user->account)
-            ->setDefault('lastEditedDate', $now)
-            ->setIF(!helper::isZeroDate($oldProject->realBegan), 'realBegan', helper::today())
-            ->stripTags($editorIdList, $this->config->allowedTags)
-            ->remove('comment,readjustTime,readjustTask')
-            ->get();
-
-        if(!$this->post->readjustTime)
-        {
-            unset($project->begin);
-            unset($project->end);
-        }
-
-        $project = $this->loadModel('file')->processImgURL($project, $editorIdList, $this->post->uid);
-        $this->dao->update(TABLE_PROJECT)->data($project)
-            ->autoCheck()
-            ->checkFlow()
-            ->where('id')->eq((int)$projectID)
-            ->exec();
+        $this->projectTao->updateProject($project);
 
         if(dao::isError()) return false;
 
         if(empty($oldProject->multiple) and $oldProject->model != 'waterfall') $this->loadModel('execution')->syncNoMultipleSprint($projectID);
 
-        /* Readjust task. */
-        if($this->post->readjustTime and $this->post->readjustTask)
+        /* Update start and end date of tasks in this project. */
+        if($project->readjustTime and $project->readjustTask)
         {
             $beginTimeStamp = strtotime($project->begin);
-            $tasks = $this->dao->select('id,estStarted,deadline,status')->from(TABLE_TASK)
-                ->where('deadline')->notZeroDate()
-                ->andWhere('status')->in('wait,doing')
-                ->andWhere('project')->eq($projectID)
-                ->fetchAll();
-            foreach($tasks as $task)
-            {
-                if($task->status == 'wait' and !helper::isZeroDate($task->estStarted))
-                {
-                    $taskDays   = helper::diffDate($task->deadline, $task->estStarted);
-                    $taskOffset = helper::diffDate($task->estStarted, $oldProject->begin);
-
-                    $estStartedTimeStamp = $beginTimeStamp + $taskOffset * 24 * 3600;
-                    $estStarted = date('Y-m-d', $estStartedTimeStamp);
-                    $deadline   = date('Y-m-d', $estStartedTimeStamp + $taskDays * 24 * 3600);
-
-                    if($estStarted > $project->end) $estStarted = $project->end;
-                    if($deadline > $project->end)   $deadline   = $project->end;
-                    $this->dao->update(TABLE_TASK)->set('estStarted')->eq($estStarted)->set('deadline')->eq($deadline)->where('id')->eq($task->id)->exec();
-                }
-                else
-                {
-                    $taskOffset = helper::diffDate($task->deadline, $oldProject->begin);
-                    $deadline   = date('Y-m-d', $beginTimeStamp + $taskOffset * 24 * 3600);
-
-                    if($deadline > $project->end) $deadline = $project->end;
-                    $this->dao->update(TABLE_TASK)->set('deadline')->eq($deadline)->where('id')->eq($task->id)->exec();
-                }
-            }
+            $tasks          = $this->projectTao->fetchUndoneTasks($projectID);
+            $this->projectTao->updateTasksStartAndEndDate($tasks);
         }
-
-        /* Activate the shadow product of the project. */
+        /* Activate the shadow product of the project. (only change product status) */
         if(!$oldProject->hasProduct)
         {
             $productID = $this->loadModel('product')->getProductIDByProject($projectID);
