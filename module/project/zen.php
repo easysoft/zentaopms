@@ -15,8 +15,8 @@ class projectZen extends project
      * @param  int    $programID
      * @param  int    $copyProjectID
      * @param  string $extra
-     * @access protected 
-     * @return void 
+     * @access protected
+     * @return void
      */
     protected function buildCreateForm(string $model, int $programID, int $copyProjectID, string $extra):void
     {
@@ -116,8 +116,8 @@ class projectZen extends project
     /**
      * Append extras data to post data.
      * @param  object $postData
-     * @access protected 
-     * @return int|object 
+     * @access protected
+     * @return int|object
      */
     protected function prepareStartExtras(object $postData):object
     {
@@ -131,8 +131,8 @@ class projectZen extends project
     /**
      * Send variables to view page.
      * @param  object $project
-     * @access protected 
-     * @return int|object 
+     * @access protected
+     * @return int|object
      */
     protected function buildStartForm(object $project)
     {
@@ -149,8 +149,8 @@ class projectZen extends project
      * @param  object $project
      * @param  array  $changes
      * @param  string $comment
-     * @access protected 
-     * @return int|object 
+     * @access protected
+     * @return int|object
      */
     protected function responseAfterStart(object $project, array $changes, string $comment) :int|object
     {
@@ -164,5 +164,15 @@ class projectZen extends project
 
         $this->executeHooks($project->id);
         return print(js::reload('parent.parent'));
+    }
+
+    protected function buildSuspendForm(object $project)
+    {
+        $this->view->title      = $this->lang->project->suspend;
+        $this->view->position[] = $this->lang->project->suspend;
+        $this->view->users      = $this->loadModel('user')->getPairs('noletter');
+        $this->view->actions    = $this->action->getList('project', $projectID);
+        $this->view->project    = $this->project->getByID($projectID);
+        $this->display();
     }
 }

@@ -1768,7 +1768,7 @@ class project extends control
      *
      * @param  string $projectID
      * @access public
-     * @return void 
+     * @return void
      */
     public function start(string $projectID)
     {
@@ -1786,7 +1786,7 @@ class project extends control
             if(dao::isError()) return print(js::error(dao::getError()));
 
             $comment = strip_tags($this->post->comment, $this->config->allowedTags);
-            return $this->projectZen->responseAfterStart($project, $changes, $comment);
+            return $this->projectZen->responseAfterStart($project, $changes, $postData, $comment);
         }
 
         $this->projectZen->buildStartForm($project);
@@ -1805,7 +1805,10 @@ class project extends control
 
         if(!empty($_POST))
         {
+            $postData = form::data($this->config->project->form->suspend)->get();
+
             $changes = $this->project->suspend($projectID);
+
             if(dao::isError()) return print(js::error(dao::getError()));
 
             if($this->post->comment != '' or !empty($changes))
@@ -1816,14 +1819,6 @@ class project extends control
             $this->executeHooks($projectID);
             return print(js::reload('parent.parent'));
         }
-
-        $this->view->title      = $this->lang->project->suspend;
-        $this->view->position[] = $this->lang->project->suspend;
-        $this->view->users      = $this->loadModel('user')->getPairs('noletter');
-        $this->view->actions    = $this->action->getList('project', $projectID);
-        $this->view->project    = $this->project->getByID($projectID);
-
-        $this->display();
     }
 
     /**
