@@ -2843,7 +2843,9 @@ class docModel extends model
         }
 
         $tab  = strpos(',doc,product,project,execution,', ",{$this->app->tab},") !== false ? $this->app->tab : 'doc';
-        $type = $type == 'mine' ? 'my' : $type;
+        if($type == 'mine')   $type = 'my';
+        if($type == 'custom') $type = 'team';
+        if($tab == 'doc' and !common::hasPriv('doc', $type . 'Space')) return print(js::locate(helper::createLink('user', 'deny', "module=doc&method={$type}Space")));
         if($tab != 'doc' and method_exists($type . 'Model', 'setMenu'))
         {
             $this->loadModel($type)->setMenu($objectID);
