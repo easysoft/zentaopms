@@ -80,7 +80,7 @@ function getIconName(iconClass)
     return '';
 }
 
-function convertClassName(className, exclude = 'dropdown-toggle')
+function convertClassName(className, exclude = 'dropdown-toggle input-group-btn')
 {
     const excludeSet = new Set(exclude.split(' '));
     return className.split(' ').reduce((list, name) =>
@@ -354,23 +354,24 @@ function getFormGroupProps($control)
     if($control.hasClass('checkbox-primary'))
     {
         const $checkboxes = $control.find('input[type="checkbox"]');
-        const info = {type: 'check-list', name: $control.attr('name') || $checkboxes.attr('name'), items: [], inline: true};
+        const info = {type: 'checkList', name: $control.attr('name') || $checkboxes.attr('name'), items: [], inline: true};
         $checkboxes.each(function()
         {
             const $checkbox = $(this);
-            info.items.push({checked: $checkbox.prop('checked'), value: $checkbox.val(), disabled: $checkbox.prop('disabled')});
+            info.items.push({checked: $checkbox.prop('checked'), value: $checkbox.val(), disabled: $checkbox.prop('disabled'), text: $checkbox.parent().find('label').text().trim()});
             if(info.items.length > 5) return;
         });
+        if($checkboxes.closest('td').prev('td').length) info.class = 'ml-4';
         return info;
     }
     if($control.hasClass('radio') || $control.hasClass('radio-inline'))
     {
         const $radioes = $control.closest('td').find('input[type="radio"]');
-        const info = {type: 'radio-list', inline: $control.hasClass('radio-inline'), name: $radioes.attr('name'), items: []};
+        const info = {type: 'radioList', inline: $control.hasClass('radio-inline'), name: $radioes.attr('name'), items: []};
         $radioes.each(function()
         {
             const $radio = $(this);
-            info.items.push({checked: $radio.prop('checked'), value: $radio.val(), disabled: $radio.prop('disabled')});
+            info.items.push({checked: $radio.prop('checked'), value: $radio.val(), disabled: $radio.prop('disabled'), text: $radio.parent().text().trim()});
             if(info.items.length > 5) return;
         });
         return info;
@@ -602,7 +603,7 @@ function genInputGroupItemStatement(item, indent = 0)
     return indentLines(genArrayStatement(item, null, 0, 'control(set(', '))'), indent);
 }
 
-function getInputGroupStatement(items, indent = 0)
+function genInputGroupStatement(items, indent = 0)
 {
     return indentLines(
     [
@@ -613,7 +614,7 @@ function getInputGroupStatement(items, indent = 0)
     ], indent).join('\n');
 }
  
-function getFormGroupStatement(formGroup, indent = 0)
+function genFormGroupStatement(formGroup, indent = 0)
 {
     return indentLines(
     [
@@ -622,15 +623,16 @@ function getFormGroupStatement(formGroup, indent = 0)
             indentLines(
             [
                 formGroup.width    ? `set::width(${JSON.stringify(formGroup.width)})` : null,
-                `set::name(${JSON.stringify(formGroup.name)})`,
+                formGroup.name     ? `set::name(${JSON.stringify(formGroup.name)})` : null,
                 formGroup.label    ? `set::label(${JSON.stringify(formGroup.label)})` : null,
+                formGroup.class    ? `set::class(${JSON.stringify(formGroup.class)})` : null,
                 formGroup.disabled ? 'set::disabled(true)' : null,
                 formGroup.required ? 'set::required(true)' : null,
                 formGroup.value    ? `set::value(${JSON.stringify(formGroup.value)})` : null,
                 formGroup.type && formGroup.type !== 'inputGroup' ? `set::control(${JSON.stringify(formGroup.type)})` : null,
                 formGroup.id && formGroup.id !== formGroup.name ? `set::id(${JSON.stringify(formGroup.id)})` : null,
                 formGroup.items && formGroup.type !== 'inputGroup' ? `set::items($${formGroup.name.replace('[]', '')}Options)` : null,
-                formGroup.type === 'inputGroup' ? getInputGroupStatement(formGroup.items) : null,
+                formGroup.type === 'inputGroup' ? genInputGroupStatement(formGroup.items) : null,
             ].filter(x => typeof x === 'string'), 1).join(',\n'),
         ')'
     ].filter(x => typeof x === 'string'), indent).join('\n');
@@ -643,7 +645,7 @@ function getFormRowStatement(formRow, indent = 0)
         'formRow',
         '(',
             formRow.hidden ? '    set::hidden(true),' : null,
-            formRow.items.map(item => getFormGroupStatement(item, 1)).join(',\n'),
+            formRow.items.map(item => genFormGroupStatement(item, 1)).join(',\n'),
         ')'
     ].filter(Boolean), indent).join('\n');
 }
@@ -780,7 +782,7 @@ function getPageTemplate(info)
                     {
                         if(!formRow.hidden && formRow.items.length === 1)
                         {
-                           return getFormGroupStatement(formRow.items[0]); 
+                           return genFormGroupStatement(formRow.items[0]); 
                         }
                         return getFormRowStatement(formRow);
                     }).join(',\n'),
