@@ -1,5 +1,5 @@
 config/db.php
-config/my.php
+my.php
 www/data/
 www/install.php
 www/upgrade.php
