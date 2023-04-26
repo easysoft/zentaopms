@@ -10,7 +10,7 @@ class bugTao extends bugModel
      * @access public
      * @return object|false
      */
-    public function fetchBugInfo(int $bugID): object|false
+    protected function fetchBugInfo(int $bugID): object|false
     {
         return $this->dao->select('t1.*, t2.name AS executionName, t3.title AS storyTitle, t3.status AS storyStatus, t3.version AS latestStoryVersion, t4.name AS taskName, t5.title AS planName')
             ->from(TABLE_BUG)->alias('t1')
@@ -29,7 +29,7 @@ class bugTao extends bugModel
      * @access public
      * @return array
      */
-    public function getCasesFromBug(int $bugID): array
+    protected function getCasesFromBug(int $bugID): array
     {
         return $this->dao->select('id, title')->from(TABLE_CASE)->where('`fromBug`')->eq($bugID)->fetchPairs();
     }
@@ -42,7 +42,7 @@ class bugTao extends bugModel
      * @access public
      * @return array
      */
-    public function getBugPairsByList(string|array $bugList): array
+    protected function getBugPairsByList(string|array $bugList): array
     {
         return $this->dao->select('id,title')->from(TABLE_BUG)->where('id')->in($bugList)->fetchPairs();
     }
@@ -57,7 +57,7 @@ class bugTao extends bugModel
      * @access public
      * @return string
      */
-    public function getNameFromTable(int $objectID, string $table, string $field): string
+    protected function getNameFromTable(int $objectID, string $table, string $field): string
     {
         return $this->dao->findById($objectID)->from($table)->fields($field)->fetch($field);
     }
@@ -68,9 +68,9 @@ class bugTao extends bugModel
      *
      * @param  array  $bugs
      * @access public
-     * @return object
+     * @return array
      */
-    public function checkDelayedBugs(array $bugs): array
+    protected function checkDelayedBugs(array $bugs): array
     {
         foreach ($bugs as $bug) $bug = $this->checkDelayBug($bug);
 
@@ -85,7 +85,7 @@ class bugTao extends bugModel
      * @access public
      * @return object
      */
-    public function checkDelayBug(object $bug): object
+    protected function checkDelayBug(object $bug): object
     {
         /* Delayed or not? */
         if(!helper::isZeroDate($bug->deadline))
