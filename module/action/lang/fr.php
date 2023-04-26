@@ -162,6 +162,7 @@ $lang->action->objectTypes['repo']             = 'Repo';
 $lang->action->objectTypes['dataview']         = 'Data View';
 $lang->action->objectTypes['privlang']         = 'Priv';
 $lang->action->objectTypes['scene']            = 'Scene';
+$lang->action->objectTypes['privpackage']      = 'Priv Package';
 
 /* Used to describe operation history. */
 $lang->action->desc = new stdclass();

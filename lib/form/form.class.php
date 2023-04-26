@@ -47,20 +47,6 @@ class form extends baseFixer
         return $isRaw ? $this->rawdata : $this->data;
     }
 
-    public function get($fields = '')
-    {
-        if(empty($fields)) return $this->data;
-        if(strpos($fields, ',') === false) return $this->data->$fields;
-
-        $fields = array_flip(explode(',', $fields));
-        foreach($this->data as $field => $value)
-        {
-            if(!isset($fields[$field])) unset($this->data->$field);
-        }
-
-        return $this->data;
-    }
-
     public function convertField($field, $config)
     {
         if(isset($config['required']) && $config['required'] && !isset($this->rawdata->$field))

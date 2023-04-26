@@ -13,7 +13,7 @@ function initRecomendTree(data)
         initialState: 'active',
         itemCreator: function($li, item)
         {
-            $li.append('<a class="priv-item" data-has-children="' + (item.children ? !!item.children.length : false) + '" href="#" title="' + item.title + '">' + item.title + (item.children ? '' : '<i class="icon icon-close hidden" data-type="depend" data-privid=' + item.privID + ' data-relationpriv=' + item.relationPriv + '></i>') +  '</a>');
+            $li.append('<a class="priv-item" data-has-children="' + (item.children ? !!item.children.length : false) + '" href="#" title="' + item.title + '">' + item.title + (item.children ? '' : '<i class="icon icon-close hidden" data-type="recommend" data-privid=' + item.privID + ' data-relationpriv=' + item.relationPriv + '></i>') +  '</a>');
             if(item.active) $li.addClass('active open in');
         }
     });
@@ -34,7 +34,7 @@ function initDependTree(data)
         initialState: 'active',
         itemCreator: function($li, item)
         {
-            $li.append('<a class="priv-item" data-has-children="' + (item.children ? !!item.children.length : false) + '" href="#" title="' + item.title + '">' + item.title + (item.children ? '' : '<i class="icon icon-close hidden" data-type="recommend" data-privid=' + item.privID + ' data-relationpriv=' + item.relationPriv + '></i>') + '</a>');
+            $li.append('<a class="priv-item" data-has-children="' + (item.children ? !!item.children.length : false) + '" href="#" title="' + item.title + '">' + item.title + (item.children ? '' : '<i class="icon icon-close hidden" data-type="depend" data-privid=' + item.privID + ' data-relationpriv=' + item.relationPriv + '></i>') + '</a>');
             if(item.active) $li.addClass('active open in');
         }
     });
