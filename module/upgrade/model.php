@@ -8207,9 +8207,11 @@ class upgradeModel extends model
     public function updatePivotGroup()
     {
         $pivotModules = $this->dao->select('collector, id')->from(TABLE_MODULE)->where('type')->eq('pivot')->andWhere('root')->eq(1)->andWhere('collector')->ne('')->fetchPairs();
-        $pivots = $this->dao->select('*')->from(TABLE_PIVOT)->where('id')->notin('1000,1001,1002')->fetchAll('id');
+        $pivots = $this->dao->select('*')->from(TABLE_PIVOT)->fetchAll('id');
         foreach($pivots as $pivotID => $pivot)
         {
+            if(is_numeric($pivot->group)) continue;
+
             $insertGroup = array();
             $modules = explode(',', $pivot->group);
             foreach($modules as $module) $insertGroup[] = $pivotModules[$module];
