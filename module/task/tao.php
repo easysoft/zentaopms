@@ -14,6 +14,7 @@ class taskTao extends taskModel
 {
     /**
      * Compute progress of a task.
+     * 获取任务的进度。
      *
      * @param  object   $task
      * @access private
@@ -39,6 +40,7 @@ class taskTao extends taskModel
 
     /**
      * Compute progress of task list, include its' children.
+     * 计算任务列表中每个任务的进度，包括子任务。
      *
      * @param  array     $tasks
      * @access private
@@ -48,12 +50,12 @@ class taskTao extends taskModel
     {
         foreach($tasks as $task)
         {
-            $task->progress = $this->getTaskProgress($task);
+            $task->progress = $this->computeTaskProgress($task);
 
             if(empty($task->children)) continue;
             foreach($task->children as $child)
             {
-                $child->progress = $this->getTaskProgress($child);
+                $child->progress = $this->computeTaskProgress($child);
             }
         }
 
