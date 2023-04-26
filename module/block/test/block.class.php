@@ -7,6 +7,23 @@ class blockTest
          $this->objectModel = $tester->loadModel('block');
     }
 
+     /**
+      * Test create a block.
+      *
+      * @param  object $block
+      * @access public
+      * @return int|false
+      */
+     public function createTest($block)
+     {
+        $blockID = $this->objectModel->create($block);
+
+        if(dao::isError()) a(dao::getError());
+        if(dao::isError()) return dao::getError();
+
+        return $blockID;
+     }
+
     /**
      * Test save params.
      *
