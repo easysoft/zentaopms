@@ -376,6 +376,9 @@ class router extends baseRouter
         /* 先获得模块的主配置文件。Get the main config file for current module first. */
         $mainConfigFile = $this->getModulePath($appName, $moduleName) . 'config.php';
 
+        /* 获取 config 目录的配置文件。Get config files from config directory. */
+        $configDirFiles = helper::ls($this->getModulePath($appName, $moduleName) . DS . 'config', '.php');
+
         /* 查找扩展配置文件。Get extension config files. */
         if($config->framework->extensionLevel > 0) $extConfigPath = $this->getModuleExtPath($appName, $moduleName, 'config');
         if($config->framework->extensionLevel >= 1)
@@ -390,7 +393,7 @@ class router extends baseRouter
         $extConfigFiles = array_merge($commonExtConfigFiles, $siteExtConfigFiles);
 
         /* 将主配置文件和扩展配置文件合并在一起。Put the main config file and extension config files together. */
-        $configFiles = array_merge(array($mainConfigFile), $extConfigFiles);
+        $configFiles = array_merge(array($mainConfigFile), $configDirFiles, $extConfigFiles);
 
         /* 加载每一个配置文件。Load every config file. */
         static $loadedConfigs = array();

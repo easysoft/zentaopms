@@ -48,7 +48,7 @@ class tabs extends wg
             $content[] = h::div
             (
                 setClass('tab-pane'),
-                setId($id),
+                setID($id),
                 $active === true ? setClass('active') : null,
                 isset($item['data']) ? $item['data'] : null
             );

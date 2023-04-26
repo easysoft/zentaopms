@@ -40,7 +40,7 @@ class mainMenu extends wg
 
         return div
         (
-            setId('mainMenu'),
+            setID('mainMenu'),
             setClass('flex justify-between'),
             set($this->props->skip(array_keys(static::getDefinedProps()))),
             div
@@ -54,7 +54,7 @@ class mainMenu extends wg
             ),
             div
             (
-                setId('featureBarBtns'),
+                setID('featureBarBtns'),
                 toolbar
                 (
                     setClass('toolbar-btn-group'),

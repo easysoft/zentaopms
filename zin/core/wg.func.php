@@ -48,7 +48,7 @@ function setCssVar($name, $value = NULL)
     return directive('cssVar', is_array($name) ? $name : array($name => $value));
 }
 
-function setId($id)
+function setID($id)
 {
     return prop('id', $id);
 }

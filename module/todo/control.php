@@ -41,7 +41,7 @@ class todo extends control
 
         if(!empty($_POST))
         {
-            $formData = form::data($this->config->todo->createform);
+            $formData = form::data($this->config->todo->create->form);
 
             $todo   = $this->todoZen->beforeCreate($formData);
             $todoID = $this->todoZen->doCreate($todo);
