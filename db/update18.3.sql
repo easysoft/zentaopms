@@ -595,7 +595,8 @@ ALTER TABLE `zt_deploystep`
 CHANGE `assignedTo` `assignedTo` char(30) NOT NULL DEFAULT '',
 CHANGE `assignedDate` `assignedDate` datetime NULL,
 CHANGE `finishedBy` `finishedBy` char(30) NOT NULL DEFAULT '',
-CHANGE `finishedDate` `finishedDate` datetime NULL;
+CHANGE `finishedDate` `finishedDate` datetime NULL,
+CHANGE `deleted` `deleted` enum('0','1') NOT NULL DEFAULT '0';
 
 ALTER TABLE `zt_design`
 CHANGE `commit` `commit` text NULL,

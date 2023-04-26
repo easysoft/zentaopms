@@ -2907,7 +2907,7 @@ CREATE TABLE IF NOT EXISTS `zt_deploy` (
   `createdBy` char(30) NOT NULL DEFAULT '',
   `createdDate` datetime NULL,
   `result` varchar(20) NOT NULL DEFAULT '',
-  `deleted` enum('0','1') NOT NULL,
+  `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_deployproduct`;
