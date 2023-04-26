@@ -1,26 +1,27 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . "/test/lib/init.php";
-include dirname(__FILE__, 2) . '/block.class.php';
-su('admin');
 
 /**
 
 title=测试 blockModel->getByID();
+timeout=0
 cid=1
-pid=1
 
-测试获取block的所属模块 >> my
-测试获取block的名称 >> 项目统计
-测试获取block的来源 >> project
-测试获取block的区块 >> statistic
+- 执行$data,属性module @qa
+- 执行$data,属性title @测试统计
+- 执行$data,属性source @qa
+- 执行$data,属性block @statistic
+
 
 */
 
-$block = new blockTest();
-$data = $block->getByIDTest(99);
+global $tester;
+$tester->loadModel('block');
 
-r($data) && p('module') && e('my');        // 测试获取block的所属模块
-r($data) && p('title')  && e('项目统计');  // 测试获取block的名称
-r($data) && p('source') && e('project');   // 测试获取block的来源
+$data = $tester->block->getByID(15);
+
+r($data) && p('module') && e('qa');        // 测试获取block的所属模块
+r($data) && p('title')  && e('测试统计');  // 测试获取block的名称
+r($data) && p('source') && e('qa');        // 测试获取block的来源
 r($data) && p('block')  && e('statistic'); // 测试获取block的区块
