@@ -42,5 +42,3 @@ $config->todo->objectList['bug']      = 'bugs';
 $config->todo->objectList['task']     = 'tasks';
 $config->todo->objectList['story']    = 'stories';
 $config->todo->objectList['testtask'] = 'testtasks';
-
-include 'config/form.php';
