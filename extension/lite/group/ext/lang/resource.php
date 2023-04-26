@@ -921,6 +921,14 @@ $lang->cron->methodOrder[25] = 'toggle';
 $lang->cron->methodOrder[30] = 'delete';
 $lang->cron->methodOrder[35] = 'openProcess';
 
+$lang->resource->systemteam         = new stdclass();
+$lang->resource->systemschedule     = new stdclass();
+$lang->resource->systemeffort       = new stdclass();
+$lang->resource->systemdynamic      = new stdclass();
+$lang->resource->systemcompany      = new stdclass();
+$lang->resource->systemsetting      = new stdclass();
+$lang->resource->dataaccess         = new stdclass();
+
 if($config->edition == 'biz' or $config->edition == 'max')
 {
     /* My module. */
