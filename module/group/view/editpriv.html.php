@@ -27,23 +27,23 @@
         <?php $isSystem = !empty($priv->system);?>
         <tr>
           <th><?php echo $lang->group->privModuleName;?></th>
-          <td class='<?php echo !$isSystem ? 'required' : '';?>'><?php echo !$isSystem ? html::input('moduleName', $priv->moduleName, "class='form-control'") : $priv->moduleName;?></td>
+          <td class='<?php echo !$isSystem ? 'required' : '';?>'><?php echo !$isSystem ? html::input('moduleName', $priv->module, "class='form-control'") : $priv->module;?></td>
         </tr>
         <tr>
           <th><?php echo $lang->group->privMethodName;?></th>
-          <td class='<?php echo !$isSystem ? 'required' : '';?>'><?php echo !$isSystem ? html::input('methodName', $priv->methodName, "class='form-control'") : $priv->methodName;?></td>
+          <td class='<?php echo !$isSystem ? 'required' : '';?>'><?php echo !$isSystem ? html::input('methodName', $priv->method, "class='form-control'") : $priv->method;?></td>
         </tr>
         <tr>
           <th><?php echo $lang->group->privView;?></th>
-          <td class='required'><?php echo html::select('view', $views, $priv->view, "class='form-control chosen' onchange='loadModuleAndPackage(this.value)' data-drop_direction='down'");?></td>
+          <td class='required'><?php echo html::select('view', $views, $priv->privView, "class='form-control chosen' onchange='loadModuleAndPackage(this.value)' data-drop_direction='down'");?></td>
         </tr>
         <tr>
           <th><?php echo $lang->group->privModule;?></th>
-          <td class='required'><?php echo html::select('module', $modules, $priv->module, "class='form-control picker-select' onchange='loadPackages(this.value, \"module\")'");?></td>
+          <td class='required'><?php echo html::select('module', $modules, $priv->privModule, "class='form-control picker-select' onchange='loadPackages(this.value, \"module\")'");?></td>
         </tr>
         <tr>
           <th><?php echo $lang->privpackage->belong;?></th>
-          <td class='required'><?php echo html::select('package', $packages, $priv->package, "class='form-control picker-select'");?></td>
+          <td><?php echo html::select('package', $packages, $priv->package, "class='form-control picker-select'");?></td>
         </tr>
         <tr>
           <th><?php echo $lang->group->privDesc;?></th>

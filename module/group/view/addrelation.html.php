@@ -28,7 +28,7 @@
         foreach($privs as $priv)
         {
             $privName[] = $priv->name;
-            $privModules[$priv->module][] = $priv->id;
+            $privModules[$priv->moduleCode][] = $priv->id;
         }
         $privName = implode('、', $privName);
         printf($lang->group->selectedPrivs, $privName);

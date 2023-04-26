@@ -39,7 +39,7 @@
         <?php $view = isset($this->lang->navGroup->{$priv->module}) ? $this->lang->navGroup->{$priv->module} : $priv->module;?>
         <td title='<?php echo isset($lang->{$view}->common) ? $lang->{$view}->common : $view;?>'><?php echo isset($lang->{$view}->common) ? $lang->{$view}->common : $view;?></td>
         <td title='<?php echo isset($moduleLang[$priv->module]) ? $moduleLang[$priv->module] : $priv->module;?>'><?php echo isset($moduleLang[$priv->module]) ? $moduleLang[$priv->module] : $priv->module;?></td>
-        <td title='<?php echo zget($packages, $priv->package, '');?>'><?php echo zget($packages, $priv->package, '');?></td>
+        <td title='<?php echo zget($packages, $priv->parent, '');?>'><?php echo zget($packages, $priv->parent, '');?></td>
         <td title='<?php echo zget($privRelations['depend'], $priv->id, '');?>'><?php echo zget($privRelations['depend'], $priv->id, '');?></td>
         <td title='<?php echo zget($privRelations['recommend'], $priv->id, '');?>'><?php echo zget($privRelations['recommend'], $priv->id, '');?></td>
         <td title='<?php echo $priv->desc;?>'><?php echo $priv->desc;?></td>

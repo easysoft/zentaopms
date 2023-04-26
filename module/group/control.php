@@ -509,25 +509,24 @@ class group extends control
         if($browseType == 'bycard')
         {
             $privs        = $this->group->getPrivsListByView($view);
-            $privPackages = $this->group->getPrivPackagePairs();
-            $privLang     = $this->group->getPrivLangPairs();
+            $privs        = $this->group->transformPrivLang($privs);
+            $privPackages = $this->group->getPrivManagerPairs('package');
 
             $privList = array();
             foreach($privs as $privID => $priv)
             {
-                if(!isset($privList[$priv->module])) $privList[$priv->module] = array();
-                if(!isset($privList[$priv->module][$priv->package])) $privList[$priv->module][$priv->package] = array();
-                $privList[$priv->module][$priv->package][$priv->id] = $priv;
+                if(!isset($privList[$priv->parentCode])) $privList[$priv->parentCode] = array();
+                if(!is_array($privList[$priv->parentCode])) $privList[$priv->parentCode] = array();
+                if(!isset($privList[$priv->parentCode][$priv->parent])) $privList[$priv->parentCode][$priv->parent] = array();
+                $privList[$priv->parentCode][$priv->parent][$priv->key] = $priv;
             }
 
-            $this->view->privLang     = $privLang;
             $this->view->privPackages = $privPackages;
         }
         else
         {
             $privList = $browseType != 'bysearch' ? $this->group->getPrivsListByView($view) : $this->group->getPrivsListBySearch($paramID);
-
-            foreach($privList as $privID => $priv) if(!$this->group->checkMenuModule($view, $priv->module)) unset($privList[$privID]);
+            $privs    = $this->group->transformPrivLang($privList);
 
             /* Pager. */
             $this->app->loadClass('pager', $static = true);
@@ -552,7 +551,7 @@ class group extends control
         $this->view->title          = $this->lang->group->editManagePriv;
         $this->view->browseType     = $browseType;
         $this->view->privList       = $privList;
-        $this->view->packages       = $this->group->getPrivPackagePairs($view);
+        $this->view->packages       = $this->group->getPrivManagerPairs('package');
         $this->view->moduleLang     = $moduleLang;
         $this->view->modulePackages = $this->group->getModuleAndPackageTree();
         $this->view->view           = $view;
@@ -613,7 +612,7 @@ class group extends control
         }
 
         $this->view->title   = $this->lang->group->createPrivPackage;
-        $this->view->modules = $this->group->getPrivModules();
+        $this->view->modules = $this->group->getPrivManagerPairs('module', '', 'name', true);
         $this->display();
     }
 
@@ -639,7 +638,7 @@ class group extends control
 
         $this->view->title       = $this->lang->group->editPrivPackage;
         $this->view->privPackage = $this->group->getPrivPackageByID($privPackageID);
-        $this->view->modules     = $this->group->getPrivModules();
+        $this->view->modules     = $this->group->getPrivManagerPairs('module', '', 'name', true);
         $this->view->actions     = $this->loadModel('action')->getList('privpackage', $privPackageID);
         $this->view->users       = $this->loadModel('user')->getPairs();
         $this->display();
@@ -657,25 +656,12 @@ class group extends control
     {
         $orders = $_POST['orders'];
         if(empty($orders)) return false;
-        if($type == 'view')
+
+        $orders = explode(',', $orders);
+
+        foreach($orders as $index => $id)
         {
-            $orders = str_replace('View,', ',', $orders);
-            $orders = trim($orders, ',');
-            $this->loadModel('setting')->setItem("system.priv.views", $orders);
-        }
-        if($type == 'module')
-        {
-            $orders   = trim($orders, ',');
-            $parentID = rtrim($parentID, 'View');
-            $this->loadModel('setting')->setItem("system.priv.{$parentID}Modules", $orders);
-        }
-        if($type == 'package')
-        {
-            $orders = explode(',', $orders);
-            foreach($orders as $index => $id)
-            {
-                if(!empty($id)) $this->dao->update(TABLE_PRIVPACKAGE)->set('order')->eq(($index + 1) * 5)->where('id')->eq($id)->exec();
-            }
+            if(!empty($id)) $this->dao->update(TABLE_PRIVMANAGER)->set('order')->eq(($index + 1) * 5)->where('id')->eq($id)->exec();
         }
     }
 
@@ -695,7 +681,7 @@ class group extends control
         else
         {
             $privPackage = $this->group->getPrivPackageByID($privPackageID);
-            $this->group->deletePrivPackage($privPackageID);
+            $this->group->deletePrivPackage($privPackageID, $privPackage->parent);
             if(!dao::isError()) $this->loadModel('action')->create('privpackage', $privPackageID, 'deleted', '', zget($privPackage, 'name'));
 
             return print(js::reload('parent'));
@@ -724,16 +710,20 @@ class group extends control
         }
 
         $privs   = $this->group->getPrivByIdList($privIdList);
+        $privs   = $this->group->transformPrivLang($privs);
         $modules = array();
         foreach($privs as $priv) $modules[$priv->module] = $priv->module;
 
         $modulePrivs   = $this->group->getPrivByModule($modules);
         $packageIdList = array();
-        foreach($modulePrivs as $packagePrivs) $packageIdList = array_unique(array_merge($packageIdList, array_keys($packagePrivs)));
+        foreach($modulePrivs as $packagePrivs)
+        {
+            $packageIdList = array_unique(array_merge($packageIdList, array_keys($packagePrivs)));
+        }
 
         $this->view->privs       = $privs;
         $this->view->modules     = array('' => $this->lang->group->selectModule) + $this->group->getMenuModules(null, true);
-        $this->view->packages    = $this->dao->select('*')->from(TABLE_PRIVPACKAGE)->where('id')->in($packageIdList)->orderBy('`order`')->fetchPairs('id', 'name');
+        $this->view->packages    = $this->group->getPrivManagerPairs('package', current($modules));
         $this->view->modulePrivs = $modulePrivs;
         $this->view->type        = $type;
         $this->display();
@@ -787,7 +777,7 @@ class group extends control
 
         $this->view->privs       = $privs;
         $this->view->modules     = array('' => $this->lang->group->selectModule) + $this->group->getMenuModules(null, true);
-        $this->view->packages    = $this->dao->select('*')->from(TABLE_PRIVPACKAGE)->where('id')->in($packageIdList)->orderBy('`order`')->fetchPairs('id', 'name');
+        $this->view->packages    = $this->group->getPrivManagerPairs('package', current($modules));
         $this->view->modulePrivs = $modulePrivs;
         $this->view->type        = $type;
         $this->display('group', 'addrelation');
@@ -806,12 +796,9 @@ class group extends control
     {
         if(is_string($privIdList)) $privIdList = explode(',', $privIdList);
 
-        $modulePrivs   = $this->group->getPrivByModule($module);
-        $packageIdList = array();
-        foreach($modulePrivs as $packagePrivs) $packageIdList = array_unique(array_merge($packageIdList, array_keys($packagePrivs)));
-
-        $modules  = $this->group->getMenuModules(null, true);
-        $packages = $this->dao->select('*')->from(TABLE_PRIVPACKAGE)->where('id')->in($packageIdList)->orderBy('`order`')->fetchPairs('id', 'name');
+        $modulePrivs = $this->group->getPrivByModule($module);
+        $modules     = $this->group->getMenuModules(null, true);
+        $packages    = $this->group->getPrivManagerPairs('package', $module);
 
         $tree  = "<ul class='tree' data-ride='tree'><li>";
         $tree .= html::a('#', $modules[$module]);
@@ -866,21 +853,13 @@ class group extends control
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
         }
-        $views      = $this->loadModel('setting')->getItem("owner=system&module=priv&key=views");
-        $views      = explode(',', $views);
-        $moduleLang = $this->group->getMenuModules('', true);
-        foreach($views as $index => $view)
-        {
-            $views[$view] = isset($this->lang->{$view}->common) ? $this->lang->{$view}->common : zget($moduleLang, $view);
-            unset($views[$index]);
-        }
 
         $this->view->title              = $this->lang->group->createPriv;
-        $this->view->views              = array('' => '') + $views;
-        $this->view->modules            = array('' => '') + $this->group->getPrivModules('', 'noViewName');
+        $this->view->views              = array('' => '') + $this->group->getPrivManagerPairs('view');
+        $this->view->modules            = array('' => '') + $this->group->getPrivManagerPairs('module');
         $this->view->packages           = array('' => '') + $this->group->getPrivPackagePairs();
         $this->view->moduleViewPairs    = $this->group->getPrivModuleViewPairs();
-        $this->view->packageModulePairs = $this->group->getPrivPackagePairs('', '', 'module');
+        $this->view->packageModulePairs = $this->group->getPrivPackagePairs('', '', 't3.code');
         $this->display();
     }
 
@@ -916,23 +895,18 @@ class group extends control
             $this->send(array('result' => $responseResult, 'message' => $responseMessage, 'locate' => $locate));
         }
 
-        $views      = $this->loadModel('setting')->getItem("owner=system&module=priv&key=views");
-        $views      = explode(',', $views);
-        $moduleLang = $this->group->getMenuModules('', true);
-        foreach($views as $index => $view)
-        {
-            $views[$view] = isset($this->lang->{$view}->common) ? $this->lang->{$view}->common : zget($moduleLang, $view);
-            unset($views[$index]);
-        }
-        $moduleViewPairs = $this->group->getPrivModuleViewPairs();
-        $priv->view      = zget($moduleViewPairs, $priv->module, '');
+        $moduleViewPairs    = $this->group->getPrivModuleViewPairs();
+        $packageModulePairs = $this->group->getPrivPackagePairs('', '', 't3.code');
+        $priv->privModule    = zget($packageModulePairs, $priv->parent);
+        $priv->privView      = zget($moduleViewPairs, $priv->module);
+        $priv->package       = isset($packageModulePairs[$priv->parent]) ? $priv->parent : 0;
 
         $this->view->title              = $this->lang->group->editPriv;
-        $this->view->views              = array('' => '') + $views;
-        $this->view->modules            = array('' => '') + $this->group->getPrivModules($priv->view, 'noViewName');
-        $this->view->packages           = array('' => '') + $this->group->getPrivPackagePairs($priv->view, $priv->module);
+        $this->view->views              = array('' => '') + $this->group->getPrivManagerPairs('view');
+        $this->view->modules            = array('' => '') + $this->group->getPrivManagerPairs('module');
+        $this->view->packages           = array('' => '') + $this->group->getPrivPackagePairs();
         $this->view->moduleViewPairs    = $moduleViewPairs;
-        $this->view->packageModulePairs = $this->group->getPrivPackagePairs('', '', 'module');
+        $this->view->packageModulePairs = $packageModulePairs;
         $this->view->priv               = $priv;
         $this->view->actions            = $this->loadModel('action')->getList('privlang', $privID);
         $this->view->users              = $this->loadModel('user')->getPairs();
@@ -1009,7 +983,7 @@ class group extends control
         {
             foreach($relations as $relatedPriv)
             {
-                $module = $relatedPriv->module;
+                $module = $relatedPriv->moduleCode;
                 if(!isset($privList[$type][$module])) $privList[$type][$module] = array();
                 $privList[$type][$module]['title']      = zget($moduleLang, $module, $module);
                 $privList[$type][$module]['module']     = $relatedPriv->module;
