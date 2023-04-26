@@ -20,7 +20,7 @@ class taskTao extends taskModel
      * @access private
      * @return int
      */
-    protected function computeTaskProgress(object $task): float
+    protected function computeTaskProgress(object $task): int
     {
         if($task->consumed == 0 and $task->left == 0)
         {
