@@ -158,3 +158,11 @@ update($projectID, $formData)
 # 6) 其他操作
 start($projectID)
 finish($projectID)
+
+
+# api/v1 -> module/api/v1
+# sdk -> lib/sdk
+# zin -> lib/zin  zin.php -> zin.class.php
+# roadrunner 转移走
+# xuanxuan -> extension
+
