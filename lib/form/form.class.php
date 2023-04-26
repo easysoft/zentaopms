@@ -13,19 +13,38 @@ helper::import(dirname(dirname(__FILE__)) . '/base/filter/filter.class.php');
 
 class form extends baseFixer
 {
+    /**
+     * @var object 原始 $_POST 数据。The raw $_POST data.
+     */
+    public $rawdata;
+
     public function __construct()
     {
         $this->rawdata = (object)$_POST;
         $this->data    = (object)array();
     }
 
-    public static function use(array $configObject = null): form
+    /**
+     * 获取表单数据。
+     * Get the form data.
+     *
+     * @param array|null $configObject
+     * @return form
+     */
+    public static function data(array $configObject = null): form
     {
         global $app, $config;
         if($configObject === null) $configObject = $config->{$app->moduleName}->form->{$app->methodName};
         return (new form)->config($configObject);
     }
 
+    /**
+     * 表单配置项。
+     * Form configuration.
+     *
+     * @param array $config
+     * @return $this
+     */
     public function config(array $config)
     {
         $this->rawconfig = $config;
@@ -47,7 +66,15 @@ class form extends baseFixer
         return $isRaw ? $this->rawdata : $this->data;
     }
 
-    public function convertField($field, $config)
+    /**
+     * 转换字段类型。
+     * Convert the field type.
+     *
+     * @param string $field
+     * @param array $config
+     * @return void
+     */
+    public function convertField(string $field, array $config)
     {
         if(isset($config['required']) && $config['required'] && !isset($this->rawdata->$field))
         {
@@ -84,11 +111,25 @@ class form extends baseFixer
         $this->data->$field = $data;
     }
 
+    /**
+     * 打印表单数据。
+     * Print the form data.
+     *
+     * @return void
+     */
     public function a()
     {
         a($this->data);
     }
 
+    /**
+     * 过滤表单字段数据。
+     * Filter the form field data.
+     *
+     * @param mixed $value
+     * @param mixed $filter
+     * @return string
+     */
     protected function filter($value, $filter)
     {
         switch($filter)
@@ -102,6 +143,14 @@ class form extends baseFixer
         }
     }
 
+    /**
+     * 转换类型。
+     * Convert the type.
+     *
+     * @param mixed  $value
+     * @param string $type
+     * @return array|bool|float|int|object|string
+     */
     protected function convertType($value, $type)
     {
         switch($type)
