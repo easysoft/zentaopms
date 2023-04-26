@@ -1833,30 +1833,19 @@ class projectModel extends model
     }
 
     /**
-     * Start project.
+     * 开始项目并更改其状态.
      *
      * @param  int    $projectID
-     * @param  string $type
+     * @param  object $project
      * @access public
-     * @return array
+     * @return array|bool
      */
-    public function start($projectID, $type = 'project')
+    public function start(int $projectID, object $project):array|bool
     {
-        $oldProject = $this->getById($projectID, $type);
-        $now        = helper::now();
+        $oldProject = $this->getById($projectID);
 
-        $editorIdList = $this->config->project->editor->start['id'];
-        if($this->app->rawModule == 'program') $editorIdList = $this->config->program->editor->start['id'];
+        $project = $this->loadModel('file')->processImgURL($project, $this->config->project->editor->start, $this->post->uid);
 
-        $project = fixer::input('post')
-            ->add('id', $projectID)
-            ->setDefault('status', 'doing')
-            ->setDefault('lastEditedBy', $this->app->user->account)
-            ->setDefault('lastEditedDate', $now)
-            ->stripTags($editorIdList, $this->config->allowedTags)
-            ->remove('id,comment')->get();
-
-        $project = $this->loadModel('file')->processImgURL($project, $editorIdList, $this->post->uid);
         $this->dao->update(TABLE_PROJECT)->data($project)
             ->autoCheck()
             ->check($this->config->project->start->requiredFields, 'notempty')
@@ -1873,6 +1862,8 @@ class projectModel extends model
             if(!$oldProject->multiple) $this->changeExecutionStatus($projectID, 'start');
             return common::createChanges($oldProject, $project);
         }
+
+        return false;
     }
 
     /**
