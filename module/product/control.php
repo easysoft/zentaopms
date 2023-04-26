@@ -1276,45 +1276,44 @@ class product extends control
      *
      * @param  string $browseType
      * @param  string $orderBy
+     * @param  int    $param
+     * @param  int    $recTotal
+     * @param  int    $recPerPage
+     * @param  int    $pageID
+     * @param  int    $programID
      * @access public
      * @return void
      */
-    public function all($browseType = 'noclosed', $orderBy = 'program_asc', $param = 0, $recTotal = 0, $recPerPage = 20, $pageID = 1, $programID = 0)
+    public function all(string $browseType = 'noclosed', string $orderBy = 'program_asc', string $param = '0', string $recTotal = '0', string $recPerPage = '20', string $pageID = '1', string $programID = '0')
     {
-        /* Load module and set session. */
-        $this->loadModel('program');
-        $this->session->set('productList', $this->app->getURI(true), 'product');
+        /* Convert string to int. */
+        $param      = (int)$param;
+        $recTotal   = (int)$recTotal;
+        $recPerPage = (int)$recPerPage;
+        $pageID     = (int)$pageID;
+        $programID  = (int)$programID;
 
-        $queryID  = ($browseType == 'bySearch' or !empty($param)) ? (int)$param : 0;
+        /* Set env data. */
+        $this->productZen->setEnvAll();
 
-        if($this->app->viewType == 'mhtml')
-        {
-            $productID = $this->product->saveState(0, $this->products);
-            $this->product->setMenu($productID);
-        }
-
-        $this->app->loadClass('pager', $static = true);
-        $pager = new pager($recTotal, $recPerPage, $pageID);
-
-        /* Process product structure. */
+        /* Generate statistics of products and program. */
+        $this->app->loadClass('pager', true);
+        $pager    = new pager($recTotal, $recPerPage, $pageID);
+        $queryID  = ($browseType == 'bySearch' or !empty($param)) ? $param : 0;
         if($this->config->systemMode == 'light' and $orderBy == 'program_asc') $orderBy = 'order_asc';
-        $productStats     = $this->product->getStats($orderBy, $pager, $browseType, '', 'story', '', $queryID);
+
+        $productStats     = $this->product->getStats($orderBy, $pager, $browseType, 0, 'story', 0, $queryID);
         $productStructure = $this->product->statisticProgram($productStats);
-        $productLines     = $this->dao->select('*')->from(TABLE_MODULE)->where('type')->eq('line')->andWhere('deleted')->eq(0)->orderBy('`order` asc')->fetchAll();
-        $programLines     = array();
 
-        foreach($productLines as $index => $productLine)
-        {
-            if(!isset($programLines[$productLine->root])) $programLines[$productLine->root] = array();
-            $programLines[$productLine->root][$productLine->id] = $productLine->name;
-        }
-
+        /* Save search form. */
         $actionURL = $this->createLink('product', 'all', "browseType=bySearch&orderBy=order_asc&queryID=myQueryID");
         $this->product->buildProductSearchForm($param, $actionURL);
 
-        $this->view->title        = $this->lang->productCommon;
-        $this->view->position[]   = $this->lang->productCommon;
+        /* Get product lines. */
+        list($productLines, $programLines) = $this->getProductLines();
 
+        $this->view->title            = $this->lang->productCommon;
+        $this->view->position[]       = $this->lang->productCommon;
         $this->view->recTotal         = $pager->recTotal;
         $this->view->productStats     = $productStats;
         $this->view->productStructure = $productStructure;
@@ -1332,8 +1331,7 @@ class product extends control
         $this->view->pageID           = $pageID;
         $this->view->programID        = $programID;
 
-        //$this->display();
-        $this->render();
+        $this->display();
     }
 
     /**
