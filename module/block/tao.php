@@ -6,7 +6,7 @@ class blockTao extends blockModel
      * Get max order number by block dashboard.
      * 获取对应仪表盘下区块的最大排序号.
      *
-     * @param  string $module 
+     * @param  string $module
      * @access protected
      * @return int
      */
@@ -17,26 +17,24 @@ class blockTao extends blockModel
             ->andWhere('account')->eq($this->app->user->account)
             ->fetch('order');
 
-        return $order;
+        return (int)$order;
     }
 
     /**
      * Get block list of current user.
      * 获取当前用户的区块列表.
      *
-     * @param  string $module project|scrum|agileplus|waterfall|waterfallplus|product|execution|qa|todo|doc
-     * @param  string $type   scrum|waterfall|kanban
+     * @param  string $module 
      * @param  int    $hidden 0|1
      * @access protected
      * @return int[]|false
      */
-    protected function fetchMyBlocks(string $module, string $type = '', int $hidden = 0): array|false
+    protected function fetchMyBlocks(string $dashboard, int $hidden = 0): array|false
     {
         return $this->dao->select('*')->from(TABLE_BLOCK)
             ->where('account')->eq($this->app->user->account)
-            ->andWhere('module')->eq($module)
+            ->andWhere('dashboard')->eq($dashboard)
             ->andWhere('hidden')->eq($hidden)
-            ->beginIF($type)->andWhere('type')->eq($type)->fi()
             ->andWhere('vision')->eq($this->config->vision)
             ->orderBy('`order`')
             ->fetchAll('id');

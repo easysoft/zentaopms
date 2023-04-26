@@ -123,6 +123,8 @@ class dom
      */
     public function build()
     {
+        if(empty($this->selectors) && !empty($this->dataCommands)) return [];
+
         $list     = [];
         $children = $this->renderInner ? $this->wg->children() : $this->children;
 
@@ -149,9 +151,7 @@ class dom
 
     public function renderJson()
     {
-        $list = $this->build();
-        if(empty($list)) return '{}';
-
+        $list   = $this->build();
         $output = [];
         foreach($list as $name => $item)
         {
@@ -188,9 +188,7 @@ class dom
 
     public function renderList()
     {
-        $list = $this->build();
-        if(empty($list)) return '[]';
-
+        $list   = $this->build();
         $output = [];
         foreach($list as $name => $item)
         {

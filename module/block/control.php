@@ -29,10 +29,12 @@ class block extends control
      * Create a block.
      * 
      * @param  string $dashboard 
+     * @param  string $module
+     * @param  string $block 
      * @access public
      * @return void
      */
-    public function create(string $dashboard)
+    public function create(string $dashboard, string $module = '', string $block = '')
     {
         if($_POST)
         {
@@ -45,9 +47,12 @@ class block extends control
 
             $this->block->create($formData);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'reload'));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => 1));
         }
-        $this->blockZen->buildCreateForm($dashboard); 
+
+        $this->view->title = $this->lang->block->createBlock;
+        $this->view->block = $block;
+        $this->blockZen->buildCreateForm($dashboard, $module, $block); 
         $this->display();
     }
 
@@ -188,10 +193,10 @@ class block extends control
      * @access public
      * @return void
      */
-    public function dashboard($module, $type = '', $projectID = 0)
+    public function dashboard($module, $projectID = 0)
     {
         if($this->loadModel('user')->isLogon()) $this->session->set('blockModule', $module);
-        $blocks = $this->block->getMyDashboard($module, $type);
+        $blocks = $this->block->getMyDashboard($module);
         $vision = $this->config->vision;
 
         $section = 'common';
@@ -293,7 +298,7 @@ class block extends control
         $this->view->title       = zget($this->lang->block->dashboard, $module, $this->lang->block->dashboard['default']);
         $this->view->longBlocks  = $longBlocks;
         $this->view->shortBlocks = $shortBlocks;
-        $this->view->module      = $module;
+        $this->view->dashboard   = $module;
 
         if($this->app->getViewType() == 'json') return print(json_encode($blocks));
 
@@ -412,13 +417,12 @@ class block extends control
         }
         elseif($block->block == 'welcome')
         {
-            $html = $this->fetch('block', 'welcome');
+            $html = $this->fetch('block', 'welcome', "blockID=$block->id");
         }
         elseif($block->block == 'contribute')
         {
             $html = $this->fetch('block', 'contribute');
         }
-
         echo $html;
     }
 

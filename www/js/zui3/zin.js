@@ -1,8 +1,10 @@
-(function(){
+(function()
+{
     let DEBUG         = true;
     const currentCode = window.name.substring(4);
     const isInAppTab  = parent.window !== window;
     const fetchTasks  = new Map();
+    const phpErrTypes = {'1': 'error', '2': 'warning', '4': 'parse', '8': 'notice', '16': 'core-error', '32': 'core-warning', '64': 'compile-error', '128': 'compile-warning', '256': 'user-error', '512': 'user-warning', '1024': 'user-notice', '2048': 'strict', '4096': 'recoverable-error', '8192': 'deprecated', '16384': 'user-deprecated', '32767': 'all'};
     let currentAppUrl = '';
 
     $.apps = $.extend(
@@ -23,7 +25,7 @@
         reloadApp: function(code, url)
         {
             loadPage(url);
-        }
+        },
     }, parent.window.$.apps);
 
     const renderMap =
@@ -39,12 +41,88 @@
         activeFeature: (data) => activeNav(data, '#featureBar'),
         activeMenu:    activeNav,
         table:         updateTable,
-        zinErrors:     showZinErrors
+        fatal:         showFatalError,
+        zinErrors:     (data, info, options) => showErrors(data, options.id === 'page'),
     };
 
-    function showZinErrors(data)
+    function showFatalError(data, info, options)
     {
-        if(DEBUG && Array.isArray(data) && data.length) console.log('[ZIN]  errors:', data);
+        $('body').empty().append($(`<div class="panel danger shadow-xl mx-auto my-4 rounded-lg" style="max-width: 1000px"><div class="panel-heading"><div class="panel-title font-bold text-lg">Fatal error: ${options.url}</div></div></div>`).append($('<div class="panel-body mono"></div>').append(data)));
+    }
+
+    function initZinbar()
+    {
+        if(!DEBUG) return;
+        let $bar = $('#zinbar');
+        if($bar.length) return;
+
+        $bar = $(
+        [
+            '<div id="zinbar" class="shadow-xl h-5 bg-inverse text-canvas fixed row items-center text-base" style="right:0;bottom:0;z-index: 99999;cursor: pointer">',
+                '<div id="zinErrors" class="mono row items-center"></div>',
+                '<div id="pagePerf" class="row items-center"></div>',
+                '<div id="partPerf" class="row items-center"></div>',
+                '<div id="zinErrorList" class="mono absolute shadow-xl ring rounded fade-from-right" style="bottom:100%;right:0;margin-bottom:1px"></div>',
+            '</div>'
+        ].join('')).insertAfter('body');
+
+        $('#zinErrorList').on('click', '.zin-error-item', function(event)
+        {
+            const error = $(this).data('error');
+            navigator.clipboard.writeText(`vim +${error.line} ${error.file}`).then(() => {zui.Messager.show({content: 'Copied vim command to clipboard.', type: 'success'});});
+            event.stopPropagation();
+        });
+        $('#zinbar').on('click', () => $('#zinErrorList').toggleClass('in'));
+    }
+
+    function updatePerfInfo(options, stage, error)
+    {
+        options[stage] = performance.now();
+        const $perf = options.id === 'page' ? $('#pagePerf') : $('#partPerf');
+        if(stage === 'requestBegin')
+        {
+            $perf.html(`<div class="opacity-50 pl-2">${options.id === 'page' ? 'PAGE' : (options.id === '#dtable' ? 'TABLE' : 'PART')}</div>`).append($('<div class="px-2 zin-perf-load">loading...</div>')).attr('title', `Loading from ${options.url}`);
+            if(options.id === 'page') $('#partPerf').empty();
+        }
+        else if(stage === 'requestEnd')
+        {
+            const loadTime = options.requestEnd - options.requestBegin;
+            $perf.find('.zin-perf-load').addClass('font-bold').html(`<i class="icon icon-arrow-down"></i>${loadTime.toFixed(2)}ms`).addClass(loadTime > 400 ? 'text-danger' : (loadTime > 100 ? 'text-warning' : 'text-success')).attr('title', `Load time for ${options.url}`);
+            if(error) showErrors([{message: error.message}]);
+        }
+        else if(stage === 'renderBegin')
+        {
+            $perf.append($('<div class="px-2 zin-perf-render">rendering...</div>').attr('title', `Renderring ${options.id}`));
+        }
+        else if(stage === 'renderEnd')
+        {
+            const renderTime = options.renderEnd - options.renderBegin;
+            $perf.find('.zin-perf-render').addClass('font-bold').html(`<i class="icon icon-${renderTime > 200 ? 'frown' : (renderTime > 50 ? 'meh' : 'smile')}"></i> ${renderTime.toFixed(2)}ms`).addClass(renderTime > 200 ? 'text-danger' : (renderTime > 50 ? 'text-warning' : 'text-success')).attr('title', `Render time for ${options.id}`);
+        }
+    }
+
+    function showErrors(data, clear)
+    {
+        if(!DEBUG) return;
+
+        const $count = $('#zinErrors').empty();
+        const $list  = $('#zinErrorList');
+        if(clear) $list.empty();
+        data.forEach((error) => 
+        {
+            const phpErrType = phpErrTypes[error.level] || 'info';
+            const errType = phpErrType.includes('error') ? 'error' : (phpErrType.includes('warning') ? 'warning' : 'info');
+            $(`<div class="zin-error-item ${errType}-pale text-fore px-2 py-1 ring ring-darker" style=""><div class="zin-error-msg font-bold"><strong class="text-${errType}" style="text-transform: uppercase;">${phpErrType}</strong> ${error.message}</div><div class="zin-error-info ellipsis text-sm opacity-60"><strong>vim +${error.line}</strong> ${error.file}</div></div>`).data('error', error).appendTo($list);
+        });
+
+        const warnings = $list.find('.zin-error-item.warning-pale').length;
+        const errors   = $list.find('.zin-error-item.error-pale').length;
+        const infos    = $list.find('.zin-error-item.info-pale').length;
+        if(errors) $count.append(`<span class="error font-bold px-2">ERRO ${errors}</span>`);
+        if(warnings) $count.append(`<span class="warning font-bold px-2">WARN ${warnings}</span>`);
+        if(infos) $count.append(`<span class="info font-bold px-2">INFO ${infos}</span>`);
+        
+        if(clear && (warnings || errors || infos)) $list.addClass('in');
     }
 
     function updatePageWithHtml(data)
@@ -90,12 +168,12 @@
         dtable.render(props);
     }
 
-    function renderPartial(info)
+    function renderPartial(info, options)
     {
         if(window.config.onRenderPage && window.config.onRenderPage(info)) return;
 
         const render = renderMap[info.name];
-        if(render) return render(info.data);
+        if(render) return render(info.data, info, options);
 
         /* Common render */
         const selector = parseSelector(info.selector);
@@ -132,10 +210,10 @@
         else $target.replaceWith(info.data);
     }
 
-    function renderPage(list)
+    function renderPage(list, options)
     {
         if(DEBUG) console.log('[APP] ', 'render:', list);
-        list.forEach(renderPartial);
+        list.forEach(item => renderPartial(item, options));
         $.apps.updateApp(currentCode, currentAppUrl, document.title);
     }
 
@@ -172,23 +250,37 @@
         const target    = options.target || '#main';
         const selectors = Array.isArray(options.selectors) ? options.selectors : options.selectors.split(',');
         const url       = options.url;
+        
+        if(DEBUG) console.log('[APP]', 'request', options);
+        if(DEBUG && !selectors.includes('zinErrors()')) selectors.push('zinErrors()');
+        const isDebugRequest = DEBUG && selectors.length !== 1 || selectors[0] !== 'zinErrors()';
         return $.ajax(
         {
             url:      url,
             headers:  {'X-ZIN-Options': JSON.stringify($.extend({selector: selectors, type: 'list'}, options.zinOptions)), 'X-ZIN-App': currentCode},
-            beforeSend: () => toggleLoading(target, true),
+            beforeSend: () => 
+            {
+                updatePerfInfo(options, 'requestBegin');
+                if(!isDebugRequest) return;
+                toggleLoading();
+            },
             success: (data) =>
             {
-                try{data = JSON.parse(data);}catch(e){data = [{name: 'html', data: data}];}
+                updatePerfInfo(options, 'requestEnd');
+                options.result = 'success';
+                try{data = JSON.parse(data);}catch(e){data = [{name: data.includes('Fatal error') ? 'fatal' : 'html', data: data}];}
                 if(options.updateUrl !== false) currentAppUrl = url;
                 data.forEach((item, idx) => item.selector = selectors[idx]);
-                renderPage(data);
+                updatePerfInfo(options, 'renderBegin');
+                renderPage(data, options);
+                updatePerfInfo(options, 'renderEnd');
                 $(document).trigger('pagerender.app');
                 if(options.success) options.success(data);
                 if(onFinish) onFinish(null, data);
             },
             error: (xhr, type, error) =>
             {
+                updatePerfInfo(options, 'requestEnd', error);
                 if(type === 'abort') return console.log('[ZIN] ', 'Abord fetch data from ' + url, {xhr, type, error});;
                 if(DEBUG) console.error('[ZIN] ', 'Fetch data failed from ' + url, {xhr, type, error});
                 zui.Messager.show('ZIN: Fetch data failed from ' + url);
@@ -262,7 +354,6 @@
         if(!selector)
         {
             selector = ($('#main').length ? '#main>*,#pageCSS>*,#pageJS,#configJS>*,title>*,activeMenu()' : 'body>*,title>*');
-            if(DEBUG) selector += ',zinErrors()';
         }
         fetchContent(url, selector, id);
     }
@@ -426,7 +517,10 @@
 
     $(() =>
     {
+        initZinbar();
+
         if(window.defaultAppUrl) loadPage(window.defaultAppUrl);
+        else if(DEBUG) loadCurrentPage('zinErrors()');
 
         DEBUG = window.config.debug;
 
