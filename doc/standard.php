@@ -56,7 +56,7 @@ declare(strict_types=1);
 #   1）ui: 新版Zin代码
 #   2）control/zen:
 #   public方法放在control，protected放在zen；
-#   control层只负责获取web请求的数据和变量，比如从$\_GET、 $\_POST、 $\_COOKIE、 $\_SESSION获取数据，其他层(zen、model、tao)禁止获取这些全局变量，只能传参使用；
+#   control层只负责获取web请求的数据和变量，比如从$_GET、 $_POST、 $_COOKIE、 $_SESSION获取数据，其他层(zen、model、tao)禁止获取这些全局变量，只能传参使用；
 #   zen层对这些数据进行加工，业务逻辑处理，调用model、tao方法（zen、tao里的方法均为protected）
 #   注意：页面跳转，js输出等需要放到control层
 #   3）model/tao: public方法放在model，protected放在tao；
@@ -73,7 +73,7 @@ $config->example->form->create['createdVersion'] = array('type' => 'string', 'r 
 ?>
 ## 2)调用form进行处理
 <?php
-$data = form::use($this->config->example->create)->create();
+$data = form::data($this->config->example->create)->get();
 ?>
 # -  注意代码编写时位置关系：select、insert
 # 7. Control层作为入口，处理请求参数
@@ -83,7 +83,7 @@ public function edit($projectID)
     if(!empty($_POST))
     {
         $data = form::use($this->config->example->create)->get();
-      $data = $this->projectZen->prepareEditExtras($data);
+        $data = $this->projectZen->prepareEditExtras($data);
         if(!$data) return $this->projectZen->errorBeforeEdit();
 
         $result = $this->project->edit($projectID, $data);
