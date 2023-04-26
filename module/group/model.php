@@ -2121,8 +2121,8 @@ class groupModel extends model
             else
             {
                 list($moduleName, $methodLang) = explode('-', $priv->key);
-                if($moduleName == 'requirement') $moduleName = 'story';
-                $this->app->loadLang($moduleName);
+                $actualModule = $moduleName == 'requirement' ? 'story' : $moduleName;
+                $this->app->loadLang($actualModule);
 
                 $hasLang = (!empty($moduleName) and !empty($methodLang) and isset($this->lang->resource->{$priv->module}) and isset($this->lang->resource->{$priv->module}->{$priv->method}));
                 if(!$hasLang)
