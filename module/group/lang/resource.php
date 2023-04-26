@@ -2111,6 +2111,7 @@ if(!$inUpgrade)
     {
         unset($lang->resource->program);
         unset($lang->resource->project->programTitle);
+        unset($lang->resource->product->manageLine);
     }
     if(!helper::hasFeature('waterfall') and !helper::hasFeature('waterfallplus'))
     {
