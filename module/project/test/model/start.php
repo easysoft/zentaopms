@@ -12,10 +12,10 @@ title=测试 projectModel->start();
 timeout=0
 cid=1
 
-- 执行project模块的start方法，参数是11, $data- ,属性0 @status
- @status
-- 执行project模块的start方法，参数是12, $data- ,属性0 @doing
- @doing
+- 执行project模块的start方法，参数是11, $data,属性0 @status
+
+- 执行project模块的start方法，参数是12, $data,属性0 @doing
+
 - 执行project模块的start方法，参数是13, $data
  - 属性name @0
  - 属性status @0

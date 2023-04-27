@@ -277,7 +277,7 @@ class project extends control
 
             if($objectType == 'program')
             {
-                $minChildBegin = $this->dao->select('`begin` as minBegin')->from(TABLE_PROGRAM)->where('id')->ne($objectID)->andWhere('deleted')->eq(0)->andWhere('path')->like("%,{$objectID},%")->orderBy('begin_asc')->fetch('tminBegin');
+                $minChildBegin = $this->dao->select('`begin` as minBegin')->from(TABLE_PROGRAM)->where('id')->ne($objectID)->andWhere('deleted')->eq(0)->andWhere('path')->like("%,{$objectID},%")->orderBy('begin_asc')->fetch('minBegin');
                 $maxChildEnd   = $this->dao->select('`end` as maxEnd')->from(TABLE_PROGRAM)->where('id')->ne($objectID)->andWhere('deleted')->eq(0)->andWhere('path')->like("%,{$objectID},%")->andWhere('end')->ne('0000-00-00')->orderBy('end_desc')->fetch('maxEnd');
             }
         }
@@ -487,48 +487,25 @@ class project extends control
         $this->loadModel('execution');
         $this->loadModel('product');
 
+        $this->session->set('projectModel', $model);
+
         if($model == 'kanban') unset($this->lang->project->authList['reset']);
 
         if($_POST)
         {
-            $projectID = $this->project->create();
+            $postData  = form::data($this->config->project->form->create);
+
+            $project   = $this->projectZen->prepareCreateExtras($postData);
+
+            $projectID = $this->project->create($project, $postData);
+            $projectID = (int)$projectID;
+
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $this->loadModel('action')->create('project', $projectID, 'opened');
 
             /* Link the plan stories. */
-            if(!empty($_POST['hasProduct']) && !empty($_POST['plans']))
-            {
-                $planIdList = array();
-                foreach($_POST['plans'] as $plans)
-                {
-                    foreach($plans as $planID)
-                    {
-                        $planIdList[$planID] = $planID;
-                    }
-                }
-
-                $planStoryGroup = $this->loadModel('story')->getStoriesByPlanIdList($planIdList);
-                foreach($planIdList as $planID)
-                {
-                    $planStories = $planProducts = array();
-                    $planStory   = isset($planStoryGroup[$planID]) ? $planStoryGroup[$planID] : array();
-                    if(!empty($planStory))
-                    {
-                        foreach($planStory as $id => $story)
-                        {
-                            if($story->status == 'draft' or $story->status == 'reviewing')
-                            {
-                                unset($planStory[$id]);
-                                continue;
-                            }
-                            $planProducts[$story->id] = $story->product;
-                        }
-                        $planStories = array_keys($planStory);
-                        $this->execution->linkStory($projectID, $planStories, $planProducts);
-                    }
-                }
-            }
+            if(!empty($_POST['hasProduct']) && !empty($_POST['plans'])) $this->projectZen->linkPlanStories($postData);
 
             $message = $this->executeHooks($projectID);
             if($message) $this->lang->saveSuccess = $message;
@@ -551,7 +528,7 @@ class project extends control
                 $parent = isset($_POST['parent']) ? $_POST['parent'] : 0;
                 $systemMode = $this->loadModel('setting')->getItem('owner=system&module=common&section=global&key=mode');
                 if(!empty($systemMode) and $systemMode == 'light') $parent = 0;
-                return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink('project', 'browse', "programID=$parent&browseType=all", '', '', $projectID)));
+                return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink('project', 'browse', "programID=$parent&browseType=all", '', false, $projectID)));
             }
         }
 

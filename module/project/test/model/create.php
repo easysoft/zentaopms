@@ -4,55 +4,77 @@ include dirname(__FILE__, 5) . "/test/lib/init.php";
 include dirname(__FILE__, 2) . '/project.class.php';
 su('admin');
 
+$program = zdTable('project');
+$program->id->range('1');
+$program->name->range('项目集一');
+$program->model->range('program');
+$program->code->range('项目集代号');
+$program->desc->range('测试项目集');
+$program->gen(1);
+
 /**
 
 title=测试 projectModel->create();
+timeout=0
 cid=1
-pid=1
 
-创建新项目 >> 测试新增项目一
-项目名称为空时 >> 『项目名称』不能为空。
-项目的完成时间为空 >> 『计划完成』不能为空。
-项目的计划完成时间大于计划开始时间 >> 『计划完成』应当大于『2022-02-07』。
-项目的开始时间为空 >> 『计划开始』不能为空。
+- 执行projectClass模块的cr方法，参数是$normalProject, $postData,属性name @测试新增项目一
+- 执行projectClass模块的cr方法，参数是$emptyNameProject, $postData,属性name @『项目名称』不能为空。
+
+- 执行projectClass模块的cr方法，参数是$emptyEndProject, $postData,属性end @『计划完成』不能为空。
+
+- 执行projectClass模块的cr方法，参数是$beginGtEndProject, $postData,属性end @『计划完成』应当大于『2022-02-07』。
+
+- 执行projectClass模块的cr方法，参数是$emptyBeginProject, $postData,属性begin @『计划开始』不能为空。
+
+
 
 */
 
 global $tester;
-$tester->app->loadConfig('execution');
-$project = new Project();
+$projectClass = new project();
 
-$data = array(
-    'parent'     => 1,
-    'name'       => '测试新增项目一',
-    'budget'     => '',
-    'budgetUnit' => 'CNY',
-    'begin'      => '2022-02-07',
-    'end'        => '2022-03-01',
-    'desc'       => '测试项目描述',
-    'acl'        => 'private',
-    'whitelist'  => '',
-    'PM'         => '',
-    'products'   => array(1)
-);
+$project = new stdclass();
+$project->parent     = 0;
+$project->name       = '测试新增项目一';
+$project->budget     = '';
+$project->budgetUnit = 'CNY';
+$project->begin      = '2022-02-07';
+$project->end        = '2023-01-01';
+$project->desc       = '测试项目描述';
+$project->acl        = 'private';
+$project->whitelist  = 'user1,user2,user3';
+$project->PM         = 'admin';
+$project->type       = 'project';
+$project->model      = 'scrum';
+$project->multiple   = 1;
+$project->hasProduct = 1;
 
-$normalProject = $data;
+$postData = new stdclass();
+$postData->rowdata = clone $project;
+$postData->rowdata->uid      = '64dda2xc';
+$postData->rowdata->delta    = 0;
+$postData->rowdata->products = array(1);
 
-$emptyNameProject = $data;
-$emptyNameProject['name'] = '';
+$normalProject = clone $project;
 
-$emptyBeginProject = $data;
-$emptyBeginProject['begin'] = '';
+$emptyNameProject = clone $project;
+$emptyNameProject->name = '';
 
-$emptyEndProject = $data;
-$emptyEndProject['end'] = '';
+$emptyBeginProject = clone $project;
+$emptyBeginProject->name  = '测试新增项目二';
+$emptyBeginProject->begin = '';
 
-$beginGtEndProject = $data;
-$beginGtEndProject['end'] = '2022-01-10';
+$emptyEndProject = clone $project;
+$emptyEndProject->end  = '';
+$emptyEndProject->name = '测试新增项目三';
 
-r($project->create($normalProject))     && p('name')                      && e('测试新增项目一');                       // 创建新项目
-r($project->create($emptyNameProject))  && p('message[name]:0')           && e('『项目名称』不能为空。');               // 项目名称为空时
-r($project->create($emptyEndProject))   && p('message[end]:0')            && e('『计划完成』不能为空。');               // 项目的完成时间为空
-r($project->create($beginGtEndProject)) && p('message[end]:0')            && e('『计划完成』应当大于『2022-02-07』。'); // 项目的计划完成时间大于计划开始时间
-r($project->create($emptyBeginProject)) && p('message[begin]:0')          && e('『计划开始』不能为空。');               // 项目的开始时间为空
+$beginGtEndProject = clone $project;
+$beginGtEndProject->end  = '2021-01-10';
+$beginGtEndProject->name = '测试新增项目四';
 
+r($projectClass->create($normalProject, $postData))     && p('name')             && e('测试新增项目一');                       
+r($projectClass->create($emptyNameProject, $postData))  && p('message[name]:0')  && e('『项目名称』不能为空。');               
+r($projectClass->create($emptyEndProject, $postData))   && p('message[end]:0')   && e('『计划完成』不能为空。');               
+r($projectClass->create($beginGtEndProject, $postData)) && p('message[end]:0')   && e('『计划完成』应当大于『2022-02-07』。');
+r($projectClass->create($emptyBeginProject, $postData)) && p('message[begin]:0') && e('『计划开始』不能为空。');
