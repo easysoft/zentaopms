@@ -1785,7 +1785,7 @@ class project extends control
 
             if(dao::isError()) return print(js::error(dao::getError()));
 
-            $this->projectZen->responseAfterStart($project, $changes, $postData, $this->post->comment);
+            $this->projectZen->responseAfterStart($project, $changes, $this->post->comment);
             return print(js::reload('parent.parent'));
         }
 

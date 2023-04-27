@@ -96,7 +96,7 @@ class projectZen extends project
     {
         return $postData->add('status', 'doing')
             ->add('lastEditedBy', $this->app->user->account)
-            ->add('lastEditedDate', hleper::now())
+            ->add('lastEditedDate', helper::now())
             ->get();
     }
 
@@ -105,9 +105,9 @@ class projectZen extends project
      *
      * @param  object $project
      * @access protected
-     * @return int|object
+     * @return void
      */
-    protected function buildStartForm(object $project):int|object
+    protected function buildStartForm(object $project): void
     {
         $this->view->title   = $this->lang->project->start;
         $this->view->project = $project;
@@ -123,9 +123,9 @@ class projectZen extends project
      * @param  array  $changes
      * @param  string $comment
      * @access protected
-     * @return int
+     * @return void 
      */
-    protected function responseAfterStart(object $project, array $changes, string $comment): int
+    protected function responseAfterStart(object $project, array $changes, string $comment): void
     {
         if($comment != '' or !empty($changes))
         {
