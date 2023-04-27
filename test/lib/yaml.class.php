@@ -258,7 +258,7 @@ class yaml
      * @access public
      * @return void
      */
-    public function gen($rows, $dataDirYaml = '', $isClear = false)
+    public function gen($rows, $dataDirYaml = '', $isClear = true)
     {
         $runFileDir  = dirname(getcwd() . DS . $_SERVER['SCRIPT_FILENAME']);
         $runFileName = str_replace(strrchr($_SERVER['SCRIPT_FILENAME'], "."), "", $_SERVER['SCRIPT_FILENAME']);
