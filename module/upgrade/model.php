@@ -8209,10 +8209,17 @@ class upgradeModel extends model
         $pivots = $this->dao->select('*')->from(TABLE_PIVOT)->fetchAll('id');
         foreach($pivots as $pivotID => $pivot)
         {
-            if(is_numeric($pivot->group)) continue;
+            $modules = explode(',', $pivot->group);
+
+            /* Upgrade group only pivot written by sql, group is string (possibly use , separated). */
+            $continue = false;
+            foreach($modules as $module)
+            {
+                if(is_numeric($module)) $continue = true;
+            }
+            if($continue) continue;
 
             $insertGroup = array();
-            $modules = explode(',', $pivot->group);
             foreach($modules as $module)
             {
                 if($module) $insertGroup[] = $pivotModules[$module];
