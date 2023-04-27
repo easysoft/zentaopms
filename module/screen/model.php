@@ -159,7 +159,7 @@ class screenModel extends model
             }
         }
 
-        foreach($scheme->componentList as $component)
+        foreach($scheme->componentList as $index => $component)
         {
             if(!empty($component->isGroup))
             {
@@ -168,9 +168,13 @@ class screenModel extends model
                     $groupComponent = $this->getLatestChart($groupComponent);
                 }
             }
-            else
+            else if($component)
             {
                 $component = $this->getLatestChart($component);
+            }
+            else
+            {
+                unset($scheme->componentList[$index]);
             }
         }
 
