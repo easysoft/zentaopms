@@ -20,7 +20,7 @@ class taskTao extends taskModel
      * @access private
      * @return int
      */
-    protected function computeTaskProgress(object $task): int
+    protected function computeTaskProgress(object $task): float
     {
         if($task->consumed == 0 and $task->left == 0)
         {
@@ -134,5 +134,22 @@ class taskTao extends taskModel
     protected function getTeamByIdList(array $taskIdList): array
     {
         return $this->dao->select('*')->from(TABLE_TASKTEAM)->where('task')->in($taskIdList)->fetchGroup('task');
+    }
+
+    /**
+     * Get task list by report.
+     * 根据报表条件查询任务.
+     *
+     * @param  string $field
+     * @param  string $condition
+     * @access public
+     * @return ojbect[]
+     */
+    protected function getListByReportCondition(string $field, string $condition): array
+    {
+        $tasks = $this->dao->select("id,{$field}")->from(TABLE_TASK)
+                ->where($condition)
+                ->fetchAll('id');
+        return $tasks;
     }
 }
