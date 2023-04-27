@@ -52,9 +52,9 @@ class bugModel extends model
      *
      * @param  object $bug
      * @access public
-     * @return array|bool
+     * @return array|false
      */
-    public function create($bug)
+    public function create(object $bug): array|false
     {
         $this->dao->insert(TABLE_BUG)->data($bug)
             ->autoCheck()

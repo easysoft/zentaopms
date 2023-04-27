@@ -1,5 +1,6 @@
 <?php
 declare(strict_types=1);
+global $lang;
 
 $config->bug->createform = array();
 $config->bug->createform['title']       = array('required' => true, 'type' => 'string', 'filter' => 'trim');
@@ -21,7 +22,7 @@ $config->bug->createform['browser']  = array('required' => false, 'type' => 'arr
 $config->bug->createform['color']    = array('required' => false, 'type' => 'string', 'default' => '');
 $config->bug->createform['severity'] = array('required' => false, 'type' => 'int', 'default' => 3);
 $config->bug->createform['pri']      = array('required' => false, 'type' => 'int', 'default' => 3);
-$config->bug->createform['steps']    = array('required' => false, 'type' => 'string', 'default' => '<p>[步骤]</p><br/><p>[结果]</p><br/><p>[期望]</p><br/>');
+$config->bug->createform['steps']    = array('required' => false, 'type' => 'string', 'default' => $lang->bug->tplStep . $lang->bug->tplResult . $lang->bug->tplExpect);
 
 $config->bug->createform['story']       = array('required' => false, 'type' => 'int', 'default' => 0);
 $config->bug->createform['task']        = array('required' => false, 'type' => 'int', 'default' => 0);
