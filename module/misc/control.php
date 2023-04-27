@@ -338,25 +338,4 @@ class misc extends control
         if(strpos(",$accounts,", $this->app->user->account) === false) $accounts .= ',' . $this->app->user->account;
         $this->loadModel('setting')->setItem('system.common.global.skip' . ucfirst($feature), $accounts);
     }
-
-    /**
-     * Create qrcode for app download.
-     *
-     * @access public
-     * @return void
-     */
-    public function appQrcode()
-    {
-        if(extension_loaded('gd'))
-        {
-            $this->app->loadClass('qrcode');
-            $downloadUrl = 'https://www.zentao.net/page/zentaoapp.html?zentao=' . $this->config->version;
-            QRcode::png($downloadUrl, false, 2, 4, 2);
-        }
-        else
-        {
-            $this->view->noGDLib = sprintf($this->lang->misc->noGDLib, '');
-            return print($this->display('misc', 'qrCode'));
-        }
-    }
 }
