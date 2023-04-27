@@ -8732,7 +8732,7 @@ class upgradeModel extends model
 
                 $settings = json_decode($chart->settings);
 
-                if($settings)
+                if($settings && (!empty($settings->group) || !empty($settings->xaxis)))
                 {
                     $settings->type = $data->type;
 
@@ -8750,12 +8750,10 @@ class upgradeModel extends model
                         $xaxisFields = $settings->xaxis;
                         foreach($xaxisFields as $xaxisIndex => $xaxisField)
                         {
-                            if($isQuoteDataview && strpos($xaxisField->field, '.') !== false)
-                            {
-                                $xaxisField->field = str_replace('.', '_', $xaxisField->field);
+                            if(isset($xaxisField->dateGroup))                                 $xaxisField->group = $xaxisField->dateGroup;
+                            if($isQuoteDataview && strpos($xaxisField->field, '.') !== false) $xaxisField->field = str_replace('.', '_', $xaxisField->field);
 
-                                $xaxisFields[$xaxisIndex] = $xaxisField;
-                            }
+                            $xaxisFields[$xaxisIndex] = $xaxisField;
                         }
                         $settings->xaxis = $xaxisFields;
                     }
@@ -8912,15 +8910,13 @@ class upgradeModel extends model
         $pivotSettings = new stdclass();
         $tableSettings = json_decode($table->settings);
         $filters       = array();
-        if($tableSettings)
+        if($tableSettings && !empty($tableSettings->column))
         {
             $isQuoteDataview = isset($dataviewList[$table->dataset]);
 
             $index = 1;
-            foreach($tableSettings->group as $index => $group)
+            foreach($tableSettings->group as $group)
             {
-                if($index > 3) continue;
-
                 $groupKey = "group{$index}";
                 $pivotSettings->$groupKey = ($isQuoteDataview && strpos($group->field, '.') !== false) ? str_replace('.', '_', $group->field) : $group->field;
 
@@ -8928,16 +8924,23 @@ class upgradeModel extends model
             }
 
             $columns = array();
-            foreach($tableSettings->column as $index => $tableColumn)
+            foreach($tableSettings->column as $tableColumn)
             {
                 $column = new stdclass();
                 $column->field = ($isQuoteDataview && strpos($tableColumn->field, '.') !== false) ? str_replace('.', '_', $tableColumn->field) : $tableColumn->field;
                 $column->stat  = $tableColumn->valOrAgg;
 
-                if($column->stat == 'value')          $column->stat = 'sum';
-                if($column->stat == 'count_distinct') $column->stat = 'distinct';
-                if($column->stat == 'value_all')      $column->stat = 'count';
-                if($column->stat == 'value_distinct') $column->stat = 'distinct';
+                if($column->stat == 'value')
+                {
+                    $column->stat = 'sum';
+
+                    /* 将按值统计的列升级到透视表的分组。*/
+                    $groupKey = "group{$index}";
+                    $pivotSettings->$groupKey = $column->field;
+                }
+
+                if($column->stat == 'value_all') $column->stat = 'count';
+                if($column->stat == 'count_distinct' || $column->stat == 'value_distinct') $column->stat = 'distinct';
 
                 $columns[] = $column;
             }
