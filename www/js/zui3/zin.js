@@ -77,25 +77,37 @@
         $('#zinbar').on('click', () => $('#zinErrorList').toggleClass('in'));
     }
 
-    function updatePerfInfo(options, stage, error)
+    function updatePerfInfo(options, stage, info)
     {
         if(!DEBUG || isIndexPage) return;
         options[stage] = performance.now();
         const $perf = options.id === 'page' ? $('#pagePerf') : $('#partPerf');
         if(stage === 'requestBegin')
         {
-            $perf.html(`<div class="opacity-50 pl-2">${options.id === 'page' ? 'PAGE' : (options.id === '#dtable' ? 'TABLE' : 'PART')}</div>`).append($('<div class="px-2 zin-perf-load">loading...</div>')).attr('title', `Loading from ${options.url}`);
+            $perf.html(`<div class="opacity-50 pl-2">${options.id === 'page' ? 'PAGE' : (options.id === '#dtable' ? 'TABLE' : 'PART')}</div>`)
+                .append($('<div class="px-2 zin-perf-load">loading...</div>'))
+                .attr('title', `Loading from ${options.url}`);
             if(options.id === 'page') $('#partPerf').empty();
         }
         else if(stage === 'requestEnd')
         {
             const loadTime = options.requestEnd - options.requestBegin;
-            $perf.find('.zin-perf-load').addClass('font-bold').html(`<i class="icon icon-arrow-down"></i>${loadTime.toFixed(2)}ms`).addClass(loadTime > 400 ? 'text-danger' : (loadTime > 100 ? 'text-warning' : 'text-success')).attr('title', `Load time for ${options.url}`);
-            if(error) showErrors([{message: error.message}]);
+            $perf.find('.zin-perf-load')
+                .addClass('font-bold')
+                .html(`<i class="icon icon-arrow-down"></i>${loadTime.toFixed(2)}ms`)
+                .addClass(loadTime > 400 ? 'text-danger' : (loadTime > 100 ? 'text-warning' : 'text-success'))
+                .attr('title', `Load time for ${options.url}`);
+            if(info && info.dataLength)
+            {
+                $perf.append(`<div title="Load size"><i class="icon icon-cube"></i> ${zui.formatBytes(info.dataLength)}</div>`)
+                    .append(`<div title="load speed" class="ml-1"><i class="icon icon-run"></i> ${zui.formatBytes(info.dataLength / (loadTime / 1000))}/s</div>`);
+            }
+            if(info && info.error) showErrors([{message: info.error.message}]);
         }
         else if(stage === 'renderBegin')
         {
-            $perf.append($('<div class="px-2 zin-perf-render">rendering...</div>').attr('title', `Renderring ${options.id}`));
+            $perf.append($('<div class="px-2 zin-perf-render">rendering...</div>')
+                .attr('title', `Renderring ${options.id}`));
         }
         else if(stage === 'renderEnd')
         {
@@ -269,7 +281,7 @@
             },
             success: (data) =>
             {
-                updatePerfInfo(options, 'requestEnd');
+                updatePerfInfo(options, 'requestEnd', {dataLength: data.length});
                 options.result = 'success';
                 try{data = JSON.parse(data);}catch(e){data = [{name: data.includes('Fatal error') ? 'fatal' : 'html', data: data}];}
                 if(options.updateUrl !== false) currentAppUrl = url;
@@ -283,7 +295,7 @@
             },
             error: (xhr, type, error) =>
             {
-                updatePerfInfo(options, 'requestEnd', error);
+                updatePerfInfo(options, 'requestEnd', {error: error});
                 if(type === 'abort') return console.log('[ZIN] ', 'Abord fetch data from ' + url, {xhr, type, error});;
                 if(DEBUG) console.error('[ZIN] ', 'Fetch data failed from ' + url, {xhr, type, error});
                 zui.Messager.show('ZIN: Fetch data failed from ' + url);
