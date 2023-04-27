@@ -139,6 +139,7 @@ class taskTao extends taskModel
         $tasks = $this->dao->select("id,{$field}")->from(TABLE_TASK)
                 ->where($condition)
                 ->fetchAll('id');
+        return $tasks;
     }
 
     /**
