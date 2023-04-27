@@ -3500,30 +3500,39 @@ class testcaseModel extends model
             foreach(explode(',', trim($path, ',')) as $pathID) $objectIdList[$pathID] = $pathID;
         }
 
-        /* Get paginated data with all IDs list. */
-        $queryFunction = function($modules, $type, $objectIdList, $branch)
-        {
-            $this->dao->reset();
-            $rawMethod = $this->app->rawMethod;
-            $rawModule = $this->app->rawModule;
-            return $this->dao->select('*')->from(VIEW_SCENECASE)
-                ->where('deleted')->eq(0)
-                ->beginIF($this->cookie->onlyScene)->andWhere('isCase')->eq(2)->fi()
-                ->beginIF($modules)->andWhere('module')->in($modules)->fi()
-                ->beginIF($rawMethod == 'browse' and $type === 'top')->andWhere('parent')->eq(0)->andWhere('id')->in($objectIdList)->fi()
-                ->beginIF($rawMethod == 'browse' and $type === 'child')->andWhere('id')->in($objectIdList)->fi()
-                ->beginIF($rawModule == 'project' and $rawMethod == 'testcase' and intval($branch) > 0)->andWhere('branch')->eq($branch)->fi()
-                ->beginIF($rawModule == 'project' and $rawMethod == 'testcase' and $type === 'top')->andWhere('parent')->eq(0)->andWhere('id')->in($objectIdList)->fi()
-                ->beginIF($rawModule == 'project' and $rawMethod == 'testcase' and $type === 'child')->andWhere('id')->in($objectIdList)->fi();
-        };
-
         /* Sort by product ID for project list. */
         $orderBy = 'product_desc,sort_asc';
 
         /* Get sql for batch execution. */
-        if($executionSql !== NULL) $executionSql = $queryFunction($modules, $type, $objectIdList, $branch)->andWhere('isCase')->eq(1)->orderBy($orderBy)->get();
+        if($executionSql !== NULL) $executionSql = $this->buildQuery($modules, $type, $objectIdList, $branch)->andWhere('isCase')->eq(1)->orderBy($orderBy)->get();
 
-        return $queryFunction($modules, $type, $objectIdList, $branch)->orderBy($orderBy)->page($pager)->fetchAll('id');
+        return $this->buildQuery($modules, $type, $objectIdList, $branch)->orderBy($orderBy)->page($pager)->fetchAll('id');
+    }
+
+    /**
+     * Get paginated data with all IDs list.
+     *
+     * @param  string $modules
+     * @param  string $type
+     * @param  string $objectIdList
+     * @param  string $branch
+     * @access public
+     * @return object
+     */
+    private function buildQuery($modules, $type, $objectIdList, $branch)
+    {
+        $this->dao->reset();
+        $rawMethod = $this->app->rawMethod;
+        $rawModule = $this->app->rawModule;
+        return $this->dao->select('*')->from(VIEW_SCENECASE)
+            ->where('deleted')->eq(0)
+            ->beginIF($this->cookie->onlyScene)->andWhere('isCase')->eq(2)->fi()
+            ->beginIF($modules)->andWhere('module')->in($modules)->fi()
+            ->beginIF($rawMethod == 'browse' and $type === 'top')->andWhere('parent')->eq(0)->andWhere('id')->in($objectIdList)->fi()
+            ->beginIF($rawMethod == 'browse' and $type === 'child')->andWhere('id')->in($objectIdList)->fi()
+            ->beginIF($rawModule == 'project' and $rawMethod == 'testcase' and intval($branch) > 0)->andWhere('branch')->eq($branch)->fi()
+            ->beginIF($rawModule == 'project' and $rawMethod == 'testcase' and $type === 'top')->andWhere('parent')->eq(0)->andWhere('id')->in($objectIdList)->fi()
+            ->beginIF($rawModule == 'project' and $rawMethod == 'testcase' and $type === 'child')->andWhere('id')->in($objectIdList)->fi();
     }
 
     /**
@@ -3607,7 +3616,7 @@ class testcaseModel extends model
 
             foreach($scenes as $scene)
             {
-                $branchName = (isset($product) and $product->type != 'normal' and $scene->branch === BRANCH_MAIN) ? $this->lang->branch->main : $branch;
+                $branchName = (!empty($product) and $product->type != 'normal' and $scene->branch === BRANCH_MAIN) ? $this->lang->branch->main : $branch;
 
                 $this->buildTreeArray($treeMenu, $scenes, $scene, (empty($branchName)) ? '/' : "/$branchName/");
             }
@@ -4577,7 +4586,7 @@ class testcaseModel extends model
                 else
                 {
                     // Key exists so convert to integer indexed array with previous value in position 0
-                    $tagsArray[$childTagName] = [$tagsArray[$childTagName], $childProperties];
+                    $tagsArray[$childTagName] = array($tagsArray[$childTagName], $childProperties);
                 }
             }
         }

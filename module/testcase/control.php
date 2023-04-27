@@ -176,7 +176,7 @@ class testcase extends control
         }
 
         /* save session .*/
-        $this->loadModel('common')->saveQueryCondition($this->testcase->dao->get(), 'testcase', false);
+        $this->loadModel('common')->saveQueryCondition($queryCondition, 'testcase', false);
 
         /* Get summary. */
         $indCount   = 0;
