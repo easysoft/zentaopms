@@ -830,7 +830,7 @@ class taskModel extends model
         {
             $now         = helper::now();
             $oldTeam     = zget($oldTask, 'team', array());
-            $members     = array_map(function($member){ return $member->account; }, $team);
+            $members     = array_map(function($member){return $member->account;}, $team);
             $currentTask = !empty($task) ? $task : new stdclass();
             if(!isset($currentTask->status)) $currentTask->status = $oldTask->status;
             $oldTask->team = $team;
@@ -2521,32 +2521,15 @@ class taskModel extends model
         if(empty($tasks)) return array();
 
         $parents  = array();
-        $taskTeam = $this->taskTao->getTeamByIdList(array_keys($tasks));
+        $taskTeam = $this->taskTao->getTeamMembersByIdList(array_keys($tasks));
         foreach($tasks as $task)
         {
             if(isset($taskTeam[$task->id])) $tasks[$task->id]->team = $taskTeam[$task->id];
-            if($task->parent > 0) $parents[$task->parent] = $task->parent;
         }
-        $parents = $this->getByList($parents);
 
         if($this->config->vision == 'lite') $tasks = $this->appendLane($tasks);
-        foreach($tasks as $task)
-        {
-            if($task->parent > 0)
-            {
-                if(isset($tasks[$task->parent]))
-                {
-                    $tasks[$task->parent]->children[$task->id] = $task;
-                    unset($tasks[$task->id]);
-                }
-                else
-                {
-                    $parent = $parents[$task->parent];
-                    $task->parentName = $parent->name;
-                }
-            }
-        }
 
+        $tasks = $this->taskTao->restructureHierarchy($tasks);
         return $this->processTasks($tasks);
     }
 
@@ -2732,29 +2715,7 @@ class taskModel extends model
             ->beginIF($projectID)->andWhere('project')->eq($projectID)->fi()
             ->fetchAll('id');
 
-        $parents = array();
-        foreach($tasks as $task)
-        {
-            if($task->parent > 0) $parents[$task->parent] = $task->parent;
-        }
-        $parents = $this->getByList($parents);
-
-        foreach($tasks as $task)
-        {
-            if($task->parent > 0)
-            {
-                if(isset($tasks[$task->parent]))
-                {
-                    $tasks[$task->parent]->children[$task->id] = $task;
-                    unset($tasks[$task->id]);
-                }
-                else
-                {
-                    $parent = $parents[$task->parent];
-                    $task->parentName = $parent->name;
-                }
-            }
-        }
+        $tasks = $this->taskTao->restructureHierarchy($tasks);
 
         return $this->taskTao->computeTasksProgress($tasks);
     }
@@ -3947,38 +3908,6 @@ class taskModel extends model
         }
 
         return array($toList, $ccList);
-    }
-
-    /**
-     * Get next user.
-     *
-     * @param  string $users
-     * @param  object $task
-     * @param  string $type   current|next
-     *
-     * @access public
-     * @return string
-     */
-    public function getAssignedTo4Multi($users, $task, $type = 'current')
-    {
-        if(empty($task->team) or $task->mode != 'linear') return $task->assignedTo;
-
-        $teamHours = array_values($task->team);
-
-        /* Process user */
-        if(!is_array($users)) $users = explode(',', trim($users, ','));
-        $users = array_values($users);
-        if(is_object($users[0])) $users = array_map(function($member){ return $member->account; }, $users);
-
-        foreach($users as $i => $account)
-        {
-            if(isset($teamHours[$i]) and $teamHours[$i]->status == 'done') continue;
-            if($type == 'current') return $account;
-            break;
-        }
-        if($type == 'next' and isset($users[$i + 1])) return $users[$i + 1];
-
-        return $task->openedBy;
     }
 
     /**

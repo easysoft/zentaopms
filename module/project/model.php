@@ -1916,6 +1916,7 @@ class projectModel extends model
     /**
      * Activate project.
      *
+     * @param  int    $projectID
      * @param  object $project
      * @access public
      * @return array  $changes|false
@@ -1944,6 +1945,7 @@ class projectModel extends model
             $this->product->activate($productID);
         }
 
+        $changes = common::createChanges($oldProject, $project);
         return common::createChanges($oldProject, $project);
     }
 

@@ -62,7 +62,7 @@ class taskTao extends taskModel
      * @param  string       $orderBy
      * @param  object       $pager
      * @access protected
-     * @return array
+     * @return object[]
      */
     protected function fetchExecutionTasks(int $executionID, int $productID = 0, string|array $type = 'all', array $modules = array(), string $orderBy = 'status_asc, id_desc', object $pager = null): array
     {
@@ -113,14 +113,14 @@ class taskTao extends taskModel
     }
 
     /**
-     * Get task team by id list.
-     * 通过任务ID列表查询任务团队信息。
+     * Get task team members by id list.
+     * 通过任务ID列表查询任务团队成员信息。
      *
      * @param  array      $taskIdList
      * @access protected
-     * @return array
+     * @return object[]
      */
-    protected function getTeamByIdList(array $taskIdList): array
+    protected function getTeamMembersByIdList(array $taskIdList): array
     {
         return $this->dao->select('*')->from(TABLE_TASKTEAM)->where('task')->in($taskIdList)->fetchGroup('task');
     }
@@ -139,6 +139,74 @@ class taskTao extends taskModel
         $tasks = $this->dao->select("id,{$field}")->from(TABLE_TASK)
                 ->where($condition)
                 ->fetchAll('id');
+    }
+
+    /**
+     * Get the assignedTo for the multiply linear task.
+     * 获取多人串行任务的指派人。
+     *
+     * @param  string|array $members
+     * @param  object       $task
+     * @param  string       $type current|next
+     * @access protected
+     * @return string
+     */
+    protected function getAssignedTo4Multi(string|array $members, object $task, string $type = 'current'): string
+    {
+        if(empty($task->team) or $task->mode != 'linear') return $task->assignedTo;
+
+        /* Format task team members. */
+        if(!is_array($members)) $members = explode(',', trim($members, ','));
+        $members = array_values($members);
+        if(is_object($members[0])) $members = array_map(function($member){return $member->account;}, $members);
+
+        /* Get the member of the first unfinished task. */
+        $teamHours = array_values($task->team);
+        foreach($members as $i => $account)
+        {
+            if(isset($teamHours[$i]) and $teamHours[$i]->status == 'done') continue;
+            if($type == 'current') return $account;
+            break;
+        }
+
+        /* Get the member of the second unfinished task. */
+        if($type == 'next' and isset($members[$i + 1])) return $members[$i + 1];
+
+        return $task->openedBy;
+    }
+
+    /**
+     * Change the hierarchy of tasks to a parent-child structure.
+     * 将任务的层级改为父子结构。
+     *
+     * @param  array     $tasks
+     * @access protected
+     * @return object[]
+     */
+    protected function restructureHierarchy(array $tasks): array
+    {
+        $parentIdList = array();
+        foreach($tasks as $task)
+        {
+            if($task->parent <= 0 or isset($tasks[$task->parent]) or isset($parentIdList[$task->parent])) continue;
+            $parentIdList[$task->parent] = $task->parent;
+        }
+
+        $parents = $this->getByList($parentIdList);
+        foreach($tasks as $task)
+        {
+            if($task->parent <= 0) continue;
+            if(isset($tasks[$task->parent]))
+            {
+                $tasks[$task->parent]->children[$task->id] = $task;
+                unset($tasks[$task->id]);
+            }
+            else
+            {
+                $parent = $parents[$task->parent];
+                $task->parentName = $parent->name;
+            }
+        }
         return $tasks;
     }
 }
