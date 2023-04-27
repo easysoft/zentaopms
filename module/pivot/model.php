@@ -1783,7 +1783,7 @@ class pivotModel extends model
             {
                 if(in_array($field, $groups))
                 {
-                    $colTotalRow->$field = 0;
+                    $colTotalRow->$field = '$togalGroup$';
                 }
                 else
                 {
