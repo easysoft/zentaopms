@@ -159,6 +159,11 @@ class report extends control
             $user = $this->user->getByID($account);
             $dept = $user->dept;
         }
+        else
+        {
+            $dept = $this->app->user->dept;
+        }
+
         $userPairs = $this->dept->getDeptUserPairs($dept);
         $accounts  = !empty($user) ? array($user->account) : array_keys($userPairs);
         $users     = array('' => $this->lang->report->annualData->allUser) + $userPairs;
