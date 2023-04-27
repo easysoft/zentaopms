@@ -1483,12 +1483,11 @@ class commonModel extends model
         global $config, $lang;
         if(isset($config->xxserver->installed) and $config->xuanxuan->turnon)
         {
-            $appQrcode = extension_loaded('gd') ? helper::createLink('misc', 'appQrcode') : "{$config->webRoot}theme/default/images/main/mobile_qrcode.png";
             echo "<li class='dropdown-submenu'>";
             echo "<a href='javascript:;'>" . "<i class='icon icon-download'></i> " . $lang->clientName . "</a><ul class='dropdown-menu pull-left'>";
             echo '<li>' . html::a(helper::createLink('misc', 'downloadClient', '', '', true), $lang->downloadClient, '', "title='$lang->downloadClient' class='iframe text-ellipsis' data-width='600'") . '</li>';
             echo "<li class='dropdown-submenu' id='downloadMobile'><a href='javascript:;'>" . $lang->downloadMobile . "</a><ul class='dropdown-menu pull-left''>";
-            echo "<li><div class='mobile-qrcode local-img'><img src='$appQrcode' /></li>";
+            echo "<li><div class='mobile-qrcode local-img'><img src='{$config->webRoot}static/images/app-qrcode.png' /></li>";
             echo "</ul></li>";
             echo '<li>' . html::a($lang->clientHelpLink, $lang->clientHelp, '', "title='$lang->clientHelp' target='_blank'") . '</li>';
             echo '</ul></li>';
