@@ -59,5 +59,243 @@ class todoTao extends todoModel
             ->where('id')->eq($todoID)
             ->exec();
         return !dao::isError();
+
+    }
+
+    /*
+     * 处理要创建的todo的数据
+     * Processing todo data.
+     *
+     * @param  object $todoData
+     * @return object|false
+     */
+    protected function beforeCreate(object $todoData): object|false
+    {
+        $objectID  = 0;
+        $hasObject = in_array($todoData->type, $this->config->todo->moduleList);
+        if($hasObject && $todoData->type) $objectID = $todoData->uid ? $todoData->type : $todoData->objectID;
+
+        $todoData->account    = $this->app->user->account;
+        $todoData->assignedTo = zget($todoData, 'assignedTo', $this->app->user->account);
+        $todoData->assignedBy = zget($todoData, 'assignedBy', $this->app->user->account);
+
+        if($hasObject && $todoData->type) $todoData->objectID     = $objectID;
+        if($todoData->status == 'done')   $todoData->finishedBy   = $this->app->user->account;
+        if($todoData->status == 'done')   $todoData->finishedDate = helper::now();
+
+        if(!isset($todoData->pri) and in_array($todoData->type, $this->config->todo->moduleList) and !in_array($todoData->type, array('review', 'feedback')))
+        {
+            $todoData->pri = $this->dao->select('pri')->from($this->config->objectTables[$todoData->type])->where('id')->eq($todoData->objectID)->fetch('pri');
+
+            if($todoData->pri == 'high')   $todoData->pri = 1;
+            if($todoData->pri == 'middle') $todoData->pri = 2;
+            if($todoData->pri == 'low')    $todoData->pri = 3;
+        }
+
+        if($todoData->type != 'custom' and $todoData->objectID)
+        {
+            $type   = $todoData->type;
+            $object = $this->loadModel($type)->getByID($todoData->{$type});
+            if(isset($object->name))  $todoData->name = $object->name;
+            if(isset($object->title)) $todoData->name = $object->title;
+        }
+
+        if($todoData->end < $todoData->begin)
+        {
+            dao::$errors[] = sprintf($this->lang->error->gt, $this->lang->todo->end, $this->lang->todo->begin);
+            return false;
+        }
+
+        if(!empty($todoData->cycle))
+        {
+            /* TODO confirmation. */
+            $todoData = $this->setCycle($todoData);
+            if(!$todoData) return false;
+        }
+        if(empty($todoData->cycle)) unset($todoData->config);
+
+        $todoData = $this->loadModel('file')->processImgURL($todoData, $this->config->todo->editor->create['id'], $this->post->uid);
+        return $todoData;
+    }
+
+    /**
+     *  获取周期待办列表
+     *  Get cycle list.
+     * @param  array  $todoList
+     * @param  string $orderBy
+     * @return array
+     */
+    protected function getCycleList(array $todoList, string $orderBy = 'date_asc'): array
+    {
+        return $this->dao->select('*')
+            ->from(TABLE_TODO)->where('type')->eq('cycle')
+            ->andWhere('deleted')->eq('0')
+            ->andWhere('objectID')->in(array_keys($todoList))
+            ->orderBy($orderBy)
+            ->fetchAll('objectID');
+    }
+
+
+    /**
+     * 通过待办构建周期待办数据
+     * Build cycle todo.
+     * @param  object $todo
+     * @return stdclass
+     */
+    protected function buildCycleTodo(object $todo): object
+    {
+        $newTodo = new stdclass();
+        $newTodo->account    = $todo->account;
+        $newTodo->begin      = $todo->begin;
+        $newTodo->end        = $todo->end;
+        $newTodo->type       = 'cycle';
+        $newTodo->objectID   = $todo->id;
+        $newTodo->pri        = $todo->pri;
+        $newTodo->name       = $todo->name;
+        $newTodo->desc       = $todo->desc;
+        $newTodo->status     = 'wait';
+        $newTodo->private    = $todo->private;
+        $newTodo->assignedTo = $todo->assignedTo;
+        $newTodo->assignedBy = $todo->assignedBy ;
+
+        return $newTodo;
+    }
+
+    /**
+     * 通过周期待办，获取要生成待办的日期
+     * Gets the date by the cycle todo.
+     * @param  object $todo
+     * @param  object $lastCycle
+     * @param  string $today
+     * @return false|string
+     */
+    protected function getCycleTodoDate(object $todo, object $lastCycle, string $today): false|string
+    {
+        $date = '';
+        if($todo->config->type == 'day')
+        {
+            return $this->getCycleDailyTodoDate($todo, $lastCycle, $today);
+        }
+        elseif($todo->config->type == 'week')
+        {
+            $week = date('w', strtotime($today));
+            if(strpos(",{$todo->config->week},", ",{$week},") !== false)
+            {
+                if(empty($lastCycle)) $date = $today;
+                if($lastCycle and $lastCycle->date < $today) $date = $today;
+            }
+        }
+        elseif($todo->config->type == 'month')
+        {
+            $day = date('j', strtotime($today));
+            if(strpos(",{$todo->config->month},", ",{$day},") !== false)
+            {
+                if(empty($lastCycle))         $date = $today;
+                if($lastCycle and $lastCycle->date < $today) $date = $today;
+            }
+        }
+
+        return $date;
+    }
+
+    /**
+     * 通过周期待办，获取要生成每日待办的日期
+     * Gets the daily todo date by the cycle todo.
+     * @param  object $todo
+     * @param  object $lastCycle
+     * @param  string $today
+     * @return false|string
+     */
+    private function getCycleDailyTodoDate(object $todo, object $lastCycle, string $today): false|string
+    {
+        $date = '';
+        if(isset($todo->config->day))
+        {
+            $day = (int)$todo->config->day;
+            if($day <= 0) return false;
+
+            /* If no data, judge the interval from the beginning time. */
+            if(empty($lastCycle))
+            {
+                $todayTime = new DateTime($today);
+                $beginTime = new DateTime($todo->config->begin);
+                $interval  = $todayTime->diff($beginTime)->days;
+
+                if($interval != $day) return false;
+                $date = $today;
+            }
+
+            /* If data is available, determine the interval of time since the previous cycle. */
+            if(!empty($lastCycle->date))
+            {
+                $todayTime     = new DateTime($today);
+                $lastCycleTime = new DateTime($lastCycle->date);
+                $interval      = $todayTime->diff($lastCycleTime)->days;
+
+                if($interval != $day) return false;
+                $date = date('Y-m-d', strtotime("{$lastCycle->date} +{$day} days"));
+            }
+        }
+        if(isset($todo->config->specifiedDate))
+        {
+            $date          = $today;
+            $specifiedDate = $todo->config->specify->month + 1 . '-' . $todo->config->specify->day;
+
+            /* If not set cycle every year and have data, continue. */
+            if(!empty($lastCycle) and !isset($todo->config->cycleYear)) return false;
+            /* If set specified date, only judge month and day. */
+            if(date('m-d', strtotime($date)) != $specifiedDate) return false;
+        }
+
+        return $date;
+    }
+
+    /**
+     * 设置周期待办数据
+     * Set cycle todo data.
+     *
+     * @param  object $todoData
+     * @return false|object
+     */
+    private function setCycle(object $todoData): false|object
+    {
+        $todoData->date = helper::today();
+        $todoData->config['begin'] = $todoData->date;
+
+        if($todoData->config['type'] == 'day')
+        {
+            unset($todoData->config['week'], $todoData->config['month']);
+            if(!$todoData->config['day'])
+            {
+                dao::$errors[] = sprintf($this->lang->error->notempty, $this->lang->todo->cycleDaysLabel);
+                return false;
+            }
+            if(!validater::checkInt($todoData->config['day']))
+            {
+                dao::$errors[] = sprintf($this->lang->error->int[0], $this->lang->todo->cycleDaysLabel);
+                return false;
+            }
+        }
+        if($todoData->config['type'] == 'week')
+        {
+            unset($todoData->config['day'], $todoData->config['month']);
+            $todoData->config['week'] = join(',', $todoData->config['week']);
+        }
+        if($todoData->config['type'] == 'month')
+        {
+            unset($todoData->config['day'], $todoData->config['week']);
+            $todoData->config['month'] = join(',', $todoData->config['month']);
+        }
+
+        if($todoData->config['beforeDays'] and !validater::checkInt($todoData->config['beforeDays']))
+        {
+            dao::$errors[] = sprintf($this->lang->error->int[0], $this->lang->todo->beforeDaysLabel);
+            return false;
+        }
+        $todoData->config['beforeDays'] = (int)$todoData->config['beforeDays'];
+        $todoData->config = json_encode($todoData->config);
+        $todoData->type   = 'cycle';
+
+        return $todoData;
     }
 }
