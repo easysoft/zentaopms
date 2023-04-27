@@ -658,6 +658,7 @@ class docModel extends model
                 ->leftJoin(TABLE_DOCLIB)->alias('t3')->on("t1.lib=t3.id")
                 ->where('t1.deleted')->eq(0)
                 ->andWhere('t1.lib')->ne('')
+                ->andWhere('t1.type')->in('text,word,ppt,excel,url,article')
                 ->andWhere('t1.vision')->eq($this->config->vision)
                 ->andWhere('t2.action')->eq($type)
                 ->andWhere('t2.actor')->eq($this->app->user->account)
@@ -691,6 +692,7 @@ class docModel extends model
                 ->where('t1.deleted')->eq(0)
                 ->andWhere('t1.lib')->ne('')
                 ->andWhere('t1.vision')->eq($this->config->vision)
+                ->andWhere('t1.type')->in('text,word,ppt,excel,url,article')
                 ->beginIF($type == 'createdby')->andWhere('t1.addedBy')->eq($this->app->user->account)->fi()
                 ->beginIF($type == 'editedby')->andWhere('t1.id')->in($docIdList)->fi()
                 ->beginIF(!common::hasPriv('doc', 'productSpace'))->andWhere('t2.type')->ne('product')->fi()
@@ -2197,7 +2199,7 @@ class docModel extends model
             ->andWhere('t2.deleted')->eq(0)
             ->fetch('count');
 
-        $my = $this->dao->select("count(*) as myDocs, SUM(views) as docViews, SUM(collects) as docCollects")->from(TABLE_DOC)->where('addedBy')->eq($this->app->user->account)->andWhere('deleted')->eq(0)->andWhere('vision')->eq($this->config->vision)->andWhere('lib')->ne('')->fetch();
+        $my = $this->dao->select("count(*) as myDocs, SUM(views) as docViews, SUM(collects) as docCollects")->from(TABLE_DOC)->where('addedBy')->eq($this->app->user->account)->andWhere('type')->in('text,word,ppt,excel,url,article')->andWhere('deleted')->eq(0)->andWhere('vision')->eq($this->config->vision)->andWhere('lib')->ne('')->fetch();
         $statistic->myDocs = $my->myDocs;
         $statistic->myDoc  = new stdclass();
         $statistic->myDoc->docViews    = $my->docViews;
