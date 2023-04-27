@@ -388,3 +388,5 @@ $config->bug->colorList->severity[4] = '#cddc39';
 $config->bug->colorList->severity[5] = '#8bc34a';
 $config->bug->colorList->severity[6] = '#B6B4B4';
 $config->bug->colorList->severity[7] = '#BDBEBD';
+
+include 'config/form.php';

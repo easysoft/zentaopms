@@ -100,4 +100,30 @@ class Project
         if(dao::isError()) return array('message' => dao::getError());
         return $projectIds;
     }
+
+    /**
+     * Activate a project.
+     *
+     * @param int    $projectID
+     * @param object $project
+     * @access public
+     * @return array $changes
+     */
+    public function activate($projectID, $project)
+    {
+        return $this->project->activate($projectID, $project);
+    }
+
+    /**
+     * doActivate a project.
+     *
+     * @param int    $projectID
+     * @param object $project
+     * @access public
+     * @return bool
+     */
+    public function doActivate($projectID, $project)
+    {
+        return $this->project->doActivate($projectID, $project);
+    }
 }

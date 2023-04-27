@@ -127,27 +127,35 @@ class todo extends control
     }
 
     /**
+     * 编辑待办数据
      * Edit a todo.
      *
-     * @param  int    $todoID
+     * @param  string $todoID
      * @access public
      * @return void
      */
-    public function edit($todoID)
+    public function edit(string $todoID)
     {
         if(!empty($_POST))
         {
-            $changes = $this->todo->update($todoID);
+            $formData = form::data($this->config->todo->edit->form);
+            $todoID   = (int)$todoID;
+
+            $todo = $this->todoZen->beforeEdit($todoID, $formData);
             if(dao::isError())
             {
                 if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'fail', 'message' => dao::getError()));
                 return print(js::error(dao::getError()));
             }
-            if($changes)
+
+            $changes = $this->todo->update($todoID, $todo);
+            if(dao::isError())
             {
-                $actionID = $this->loadModel('action')->create('todo', $todoID, 'edited');
-                $this->action->logHistory($actionID, $changes);
+                if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'fail', 'message' => dao::getError()));
+                return print(js::error(dao::getError()));
             }
+
+            $this->todoZen->afterEdit($todoID, $changes);
 
             if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'success'));
             return print(js::locate($this->session->todoList, 'parent.parent'));
@@ -161,8 +169,6 @@ class todo extends control
 
         $todo->date = date("Y-m-d", strtotime($todo->date));
         $this->view->title      = $this->lang->todo->common . $this->lang->colon . $this->lang->todo->edit;
-        $this->view->position[] = $this->lang->todo->common;
-        $this->view->position[] = $this->lang->todo->edit;
         $this->view->times      = date::buildTimeList($this->config->todo->times->begin, $this->config->todo->times->end, $this->config->todo->times->delta);
         $this->view->todo       = $todo;
         $this->view->users      = $this->loadModel('user')->getPairs('noclosed|nodeleted|noempty');
@@ -279,45 +285,42 @@ class todo extends control
     }
 
     /**
+     * 开启一个待办事项
      * Start a todo.
      *
-     * @param  int    $todoID
+     * @param  string $todoID
      * @access public
      * @return void
      */
-    public function start($todoID)
+    public function start(string $todoID)
     {
-        $todo = $this->todo->getById($todoID);
-        if($todo->status == 'wait') $this->todo->start($todoID);
-        if(in_array($todo->type, array('bug', 'task', 'story')))
-        {
-            $confirmNote = 'confirm' . ucfirst($todo->type);
-            $confirmURL  = $this->createLink($todo->type, 'view', "id=$todo->idvalue");
-            $okTarget    = isonlybody() ? 'parent' : 'window.parent.$.apps.open';
-            if($todo->type == 'bug')   $app = 'qa';
-            if($todo->type == 'task')  $app = 'execution';
-            if($todo->type == 'story') $app = 'product';
-            $cancelURL   = $this->server->HTTP_REFERER;
-            return print(js::confirm(sprintf($this->lang->todo->$confirmNote, $todo->idvalue), $confirmURL, $cancelURL, $okTarget, 'parent', $app));
-        }
+        $todoID = (int)$todoID;
+        $todo   = $this->todo->getById($todoID);
 
-        if(isonlybody())return print(js::reload('parent.parent'));
+        if($todo->status == 'wait') $this->todo->start($todoID);
+        if(in_array($todo->type, array('bug', 'task', 'story'))) return $this->todoZen->printConfirm($todo);
+        if(isonlybody()) return print(js::reload('parent.parent'));
+
         echo js::reload('parent');
     }
 
     /**
+     * 激活待办事项
      * Activated todo.
      *
-     * @param  $todoID
+     * @param  string $todoID
      * @access public
      * @return void
      */
-    public function activate($todoID)
+    public function activate(string $todoID)
     {
-        $todo = $this->todo->getById($todoID);
+        $todoID = (int)$todoID;
+        $todo   = $this->todo->getById($todoID);
+
         if($todo->status == 'done' or $todo->status == 'closed') $this->todo->activate($todoID);
         if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'success'));
         if(isonlybody()) return print(js::reload('parent.parent'));
+
         echo js::reload('parent');
     }
 

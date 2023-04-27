@@ -124,88 +124,24 @@ class todoModel extends model
     }
 
     /**
+     * 更新待办数据
      * update a todo.
      *
      * @param  int    $todoID
+     * @param  object $todo
      * @access public
-     * @return void
+     * @return array|false
      */
-    public function update($todoID)
+    public function update(int $todoID, object $todo): array|false
     {
-        $oldTodo = $this->dao->findById((int)$todoID)->from(TABLE_TODO)->fetch();
+        $oldTodo = $this->dao->findById($todoID)->from(TABLE_TODO)->fetch();
 
-        $idvalue    = 0;
-        $objectType = $this->post->type;
-        $hasObject  = in_array($objectType, $this->config->todo->moduleList);
-        if($hasObject && $objectType) $idvalue = $this->post->uid ? $this->post->$objectType : $this->post->idvalue;
-        $todo = fixer::input('post')
-            ->cleanInt('pri, begin, end, private')
-            ->add('account', $oldTodo->account)
-            ->setIF(in_array($this->post->type, array('bug', 'task', 'story')), 'name', '')
-            ->setIF($hasObject && $objectType,  'idvalue', $idvalue)
-            ->setIF($this->post->date  == false, 'date', '2030-01-01')
-            ->setIF($this->post->begin == false, 'begin', '2400')
-            ->setIF($this->post->end   == false, 'end', '2400')
-            ->setIF($this->post->type  == false, 'type', $oldTodo->type)
-            ->setDefault('private', 0)
-            ->stripTags($this->config->todo->editor->edit['id'], $this->config->allowedTags)
-            ->remove(implode(',', $this->config->todo->moduleList) . ',uid')
-            ->get();
+        if(!$this->todoTao->updateRow($todoID, $todo)) return false;
 
-        if(in_array($todo->type, $this->config->todo->moduleList))
-        {
-            $type   = $todo->type;
-            $object = $this->loadModel($type)->getByID($objectType);
-            if(isset($object->name))  $todo->name = $object->name;
-            if(isset($object->title)) $todo->name = $object->title;
-        }
-
-        if($todo->end < $todo->begin)
-        {
-            dao::$errors[] = sprintf($this->lang->error->gt, $this->lang->todo->end, $this->lang->todo->begin);
-            return false;
-        }
-
-        if(!empty($oldTodo->cycle))
-        {
-            $todo->date = date('Y-m-d');
-
-            $todo->config['begin'] = $todo->date;
-            if($todo->config['type'] == 'day')
-            {
-                unset($todo->config['week']);
-                unset($todo->config['month']);
-            }
-            if($todo->config['type'] == 'week')
-            {
-                unset($todo->config['day']);
-                unset($todo->config['month']);
-                $todo->config['week'] = join(',', $todo->config['week']);
-            }
-            if($todo->config['type'] == 'month')
-            {
-                unset($todo->config['day']);
-                unset($todo->config['week']);
-                $todo->config['month'] = join(',', $todo->config['month']);
-            }
-            $todo->config['beforeDays'] = (int)$todo->config['beforeDays'];
-            $todo->config = json_encode($todo->config);
-        }
-
-        $todo = $this->loadModel('file')->processImgURL($todo, $this->config->todo->editor->edit['id'], $this->post->uid);
-        $this->dao->update(TABLE_TODO)->data($todo)
-            ->autoCheck()
-            ->checkIF(in_array($todo->type, array('custom', 'feedback')), $this->config->todo->edit->requiredFields, 'notempty')
-            ->checkIF($hasObject && $todo->idvalue == 0, 'idvalue', 'notempty')
-            ->where('id')->eq($todoID)
-            ->exec();
-        if(!dao::isError())
-        {
-            $this->file->updateObjectID($this->post->uid, $todoID, 'todo');
-            if(!empty($oldTodo->cycle)) $this->createByCycle(array($todoID => $todo));
-            if(($this->config->edition == 'biz' || $this->config->edition == 'max') && $todo->type == 'feedback' && $todo->idvalue) $this->loadModel('feedback')->updateStatus('todo', $todo->idvalue, $todo->status);
-            return common::createChanges($oldTodo, $todo);
-        }
+        $this->loadModel('file')->updateObjectID($todo->uid, $todoID, 'todo');
+        if(!empty($oldTodo->cycle)) $this->createByCycle(array($todoID => $todo));
+        if(($this->config->edition == 'biz' || $this->config->edition == 'max') && $todo->type == 'feedback' && $todo->idvalue) $this->loadModel('feedback')->updateStatus('todo', $todo->idvalue, $todo->status);
+        return common::createChanges($oldTodo, (array)$todo);
     }
 
     /**
@@ -290,16 +226,19 @@ class todoModel extends model
     }
 
     /**
+     * 开启一个待办事项
      * Start one todo.
      *
-     * @param  string $todoID
+     * @param  int   $todoID
      * @access public
-     * @return void
+     * @return bool
      */
-    public function start($todoID)
+    public function start(int $todoID): bool
     {
-        $this->dao->update(TABLE_TODO)->set('status')->eq('doing')->where('id')->eq((int)$todoID)->exec();
+        $this->dao->update(TABLE_TODO)->set('status')->eq('doing')->where('id')->eq($todoID)->exec();
         $this->loadModel('action')->create('todo', $todoID, 'started');
+
+        return !dao::isError();
     }
 
 
@@ -654,41 +593,33 @@ class todoModel extends model
     }
 
     /**
+     * 激活待办事项
      * Activate todo.
      *
-     * @param $todoID
-     *
+     * @param  int $todoID
      * @access public
      * @return bool
      */
-    public function activate($todoID)
+    public function activate(int $todoID): bool
     {
-        $this->dao->update(TABLE_TODO)->set('status')->eq('wait')->where('id')->eq((int)$todoID)->exec();
+        $this->dao->update(TABLE_TODO)->set('status')->eq('wait')->where('id')->eq($todoID)->exec();
         $this->loadModel('action')->create('todo', $todoID, 'activated', '', 'wait');
         return !dao::isError();
     }
 
     /**
-     * Closed todo.
+     * Close todo. Update related feedback if edition is biz or max.
      *
-     * @param $todoID
+     * @param int $todoID
      *
      * @access public
      * @return bool
      */
-    public function close($todoID)
+    public function close(int $todoID): bool
     {
-        $now = helper::now();
-        $this->dao->update(TABLE_TODO)
-            ->set('status')->eq('closed')
-            ->set('closedBy')->eq($this->app->user->account)
-            ->set('closedDate')->eq($now)
-            ->set('assignedTo')->eq('closed')
-            ->set('assignedDate')->eq($now)
-            ->where('id')->eq((int)$todoID)
-            ->exec();
+        $isClosed = $this->todoTao->closeTodo($todoID);
 
-        if(!dao::isError())
+        if($isClosed)
         {
             $this->loadModel('action')->create('todo', $todoID, 'closed', '', 'closed');
 

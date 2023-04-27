@@ -1516,8 +1516,9 @@ class project extends control
      * @access public
      * @return void
      */
-    public function team($projectID = 0)
+    public function team(string $projectID = '0')
     {
+        $projectID = (int)$projectID;
         $this->session->set('teamList', $this->app->getURI(true), 'project');
 
         $this->app->loadLang('execution');
@@ -1778,19 +1779,24 @@ class project extends control
      */
     public function suspend(string $projectID)
     {
-        $this->loadModel('action');
+        $projectID = (int)$projectID;
 
         if(!empty($_POST))
         {
-            $changes = $this->project->suspend($projectID);
+            $postData = form::data($this->config->project->form->suspend);
+
+            $postData = $this->projectZen->prepareSuspendExtras($projectID, $postData);
+
+            $changes = $this->project->suspend($projectID, $postData);
 
             if(dao::isError()) return print(js::error(dao::getError()));
 
             $comment = strip_tags($this->post->comment, $this->config->allowedTags);
-            return $this->projectZen->responseAfterStart($project, $changes, $comment);
+            $this->projectZen->responseAfterSuspend($projectID, $changes, $comment);
+            return print(js::reload('parent.parent'));
         }
 
-        $this->projectZen->buildSuspendForm((int)$projectID);
+        $this->projectZen->buildSuspendForm($projectID);
     }
 
     /**
@@ -2017,8 +2023,10 @@ class project extends control
      * @access public
      * @return void
      */
-    public function manageProducts($projectID, $from = 'project')
+    public function manageProducts(string $projectID, $from = 'project')
     {
+        $projectID = (int)$projectID;
+
         $this->loadModel('product');
         $this->loadModel('program');
         $this->loadModel('execution');

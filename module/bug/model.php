@@ -47,47 +47,15 @@ class bugModel extends model
     }
 
     /**
-     * Create a bug.
+     * Insert bug into zt_bug.
+     * bug的入库操作
      *
-     * @param  string $from   object that is transfered to bug.
-     * @param  string $extras.
+     * @param  object $bug
      * @access public
-     * @return array|bool
+     * @return array|false
      */
-    public function create($from = '', $extras = '')
+    public function create(object $bug): array|false
     {
-        $extras = str_replace(array(',', ' '), array('&', ''), $extras);
-        parse_str($extras, $output);
-
-        $now = helper::now();
-        $bug = fixer::input('post')
-            ->setDefault('openedBy', $this->app->user->account)
-            ->setDefault('openedDate', $now)
-            ->setDefault('project,execution,story,task,duplicateBug,linkBug', 0)
-            ->setDefault('openedBuild', '')
-            ->setDefault('notifyEmail', '')
-            ->setDefault('deadline', '0000-00-00')
-            ->setIF($this->lang->navGroup->bug != 'qa', 'project', $this->session->project)
-            ->setIF(strpos($this->config->bug->create->requiredFields, 'deadline') !== false, 'deadline', $this->post->deadline)
-            ->setIF($this->post->assignedTo != '', 'assignedDate', $now)
-            ->setIF($this->post->story != false, 'storyVersion', $this->loadModel('story')->getVersion($this->post->story))
-            ->setIF(strpos($this->config->bug->create->requiredFields, 'execution') !== false, 'execution', $this->post->execution)
-            ->stripTags($this->config->bug->editor->create['id'], $this->config->allowedTags)
-            ->cleanInt('product,execution,module,severity')
-            ->trim('title')
-            ->join('openedBuild', ',')
-            ->join('mailto', ',')
-            ->join('os', ',')
-            ->join('browser', ',')
-            ->remove('files,labels,uid,oldTaskID,contactListMenu,region,lane,ticket,deleteFiles,resultFiles')
-            ->get();
-
-        /* Check repeat bug. */
-        $result = $this->loadModel('common')->removeDuplicate('bug', $bug, "product={$bug->product}");
-        if($result and $result['stop']) return array('status' => 'exists', 'id' => $result['duplicate']);
-
-        $bug = $this->loadModel('file')->processImgURL($bug, $this->config->bug->editor->create['id'], $this->post->uid);
-
         $this->dao->insert(TABLE_BUG)->data($bug)
             ->autoCheck()
             ->checkIF($bug->notifyEmail, 'notifyEmail', 'email')
@@ -98,45 +66,6 @@ class bugModel extends model
         if(!dao::isError())
         {
             $bugID = $this->dao->lastInsertID();
-
-            if(isset($_POST['resultFiles']))
-            {
-                $resultFiles = $_POST['resultFiles'];
-                if(isset($_POST['deleteFiles']))
-                {
-                    foreach($_POST['deleteFiles'] as $deletedCaseFileID) $resultFiles = trim(str_replace(",$deletedCaseFileID,", ',', ",$resultFiles,"), ',');
-                }
-                $files = $this->dao->select('*')->from(TABLE_FILE)->where('id')->in($resultFiles)->fetchAll('id');
-                foreach($files as $file)
-                {
-                    unset($file->id);
-                    $file->objectType = 'bug';
-                    $file->objectID   = $bugID;
-                    $this->dao->insert(TABLE_FILE)->data($file)->exec();
-                }
-            }
-
-            $this->file->updateObjectID($this->post->uid, $bugID, 'bug');
-            $this->file->saveUpload('bug', $bugID);
-            empty($bug->case) ? $this->loadModel('score')->create('bug', 'create', $bugID) : $this->loadModel('score')->create('bug', 'createFormCase', $bug->case);
-
-            if($bug->execution)
-            {
-                $this->loadModel('kanban');
-
-                $laneID = isset($output['laneID']) ? $output['laneID'] : 0;
-                if(!empty($_POST['lane'])) $laneID = $_POST['lane'];
-
-                $columnID = $this->kanban->getColumnIDByLaneID($laneID, 'unconfirmed');
-                if(empty($columnID)) $columnID = isset($output['columnID']) ? $output['columnID'] : 0;
-
-                if(!empty($laneID) and !empty($columnID)) $this->kanban->addKanbanCell($bug->execution, $laneID, $columnID, 'bug', $bugID);
-                if(empty($laneID) or empty($columnID)) $this->kanban->updateLane($bug->execution, 'bug');
-            }
-
-            /* Callback the callable method to process the related data for object that is transfered to bug. */
-            if($from && is_callable(array($this, $this->config->bug->fromObjects[$from]['callback']))) call_user_func(array($this, $this->config->bug->fromObjects[$from]['callback']), $bugID);
-
             return array('status' => 'created', 'id' => $bugID);
         }
         return false;
@@ -380,51 +309,49 @@ class bugModel extends model
     }
 
     /**
-     * Get bugs.
+     * Get bug list by browse type.
+     * 根据浏览类型获取bug列表。
      *
-     * @param  array       $productIDList
-     * @param  array       $executions
-     * @param  int|string  $branch
      * @param  string      $browseType
+     * @param  int|array   $productIdList
+     * @param  int         $projectID
+     * @param  int[]       $executionIdList
+     * @param  int|string  $branch
      * @param  int         $moduleID
      * @param  int         $queryID
-     * @param  string      $sort
+     * @param  string      $orderBy
      * @param  object      $pager
-     * @param  int         $projectID
      * @access public
      * @return array
      */
-    public function getBugs($productIDList, $executions, $branch, $browseType, $moduleID, $queryID, $sort, $pager, $projectID)
+    public function getList(string $browseType, int|array $productIdList, int $projectID, array $executionIdList, int|string $branch = 'all', int $moduleID = 0, int $queryID = 0, string $orderBy = 'id_desc', object $pager = null): array
     {
         /* Set modules and browse type. */
-        $modules    = $moduleID ? $this->loadModel('tree')->getAllChildId($moduleID) : '0';
+        $modules    = $moduleID ? $this->loadModel('tree')->getAllChildId($moduleID) : 0;
         $browseType = ($browseType == 'bymodule' and $this->session->bugBrowseType and $this->session->bugBrowseType != 'bysearch') ? $this->session->bugBrowseType : $browseType;
         $browseType = $browseType == 'bybranch' ? 'bymodule' : $browseType;
 
-        if(strpos($sort, 'pri_') !== false) $sort = str_replace('pri_', 'priOrder_', $sort);
-        if(strpos($sort, 'severity_') !== false) $sort = str_replace('severity_', 'severityOrder_', $sort);
+        /* Set orderBy. */
+        if(strpos($orderBy, 'pri_') !== false) $orderBy = str_replace('pri_', 'priOrder_', $orderBy);
+        if(strpos($orderBy, 'severity_') !== false) $orderBy = str_replace('severity_', 'severityOrder_', $orderBy);
 
         /* Get bugs by browse type. */
-        $bugs = array();
-        if($browseType == 'all')               $bugs = $this->getAllBugs($productIDList, $branch, $modules, $executions, $sort, $pager, $projectID);
-        elseif($browseType == 'bymodule')      $bugs = $this->getModuleBugs($productIDList, $branch, $modules, $executions, $sort, $pager, $projectID);
-        elseif($browseType == 'assigntome')    $bugs = $this->getByAssigntome($productIDList, $branch, $modules, $executions, $sort, $pager, $projectID);
-        elseif($browseType == 'openedbyme')    $bugs = $this->getByOpenedbyme($productIDList, $branch, $modules, $executions, $sort, $pager, $projectID);
-        elseif($browseType == 'resolvedbyme')  $bugs = $this->getByResolvedbyme($productIDList, $branch, $modules, $executions, $sort, $pager, $projectID);
-        elseif($browseType == 'assigntonull')  $bugs = $this->getByAssigntonull($productIDList, $branch, $modules, $executions, $sort, $pager, $projectID);
-        elseif($browseType == 'unconfirmed')   $bugs = $this->getUnconfirmed($productIDList, $branch, $modules, $executions, $sort, $pager, $projectID);
-        elseif($browseType == 'unresolved')    $bugs = $this->getByStatus($productIDList, $branch, $modules, $executions, 'unresolved', $sort, $pager, $projectID);
-        elseif($browseType == 'unclosed')      $bugs = $this->getByStatus($productIDList, $branch, $modules, $executions, 'unclosed', $sort, $pager, $projectID);
-        elseif($browseType == 'toclosed')      $bugs = $this->getByStatus($productIDList, $branch, $modules, $executions, 'toclosed', $sort, $pager, $projectID);
-        elseif($browseType == 'longlifebugs')  $bugs = $this->getByLonglifebugs($productIDList, $branch, $modules, $executions, $sort, $pager, $projectID);
-        elseif($browseType == 'postponedbugs') $bugs = $this->getByPostponedbugs($productIDList, $branch, $modules, $executions, $sort, $pager, $projectID);
-        elseif($browseType == 'needconfirm')   $bugs = $this->getByNeedconfirm($productIDList, $branch, $modules, $executions, $sort, $pager, $projectID);
-        elseif($browseType == 'bysearch')      $bugs = $this->getBySearch($productIDList, $branch, $queryID, $sort, '', $pager, $projectID);
-        elseif($browseType == 'overduebugs')   $bugs = $this->getOverdueBugs($productIDList, $branch, $modules, $executions, $sort, $pager, $projectID);
-        elseif($browseType == 'assignedbyme')  $bugs = $this->getByAssignedbyme($productIDList, $branch, $modules, $executions, $sort, $pager, $projectID);
-        elseif($browseType == 'review')        $bugs = $this->getReviewBugs($productIDList, $branch, $modules, $executions, $sort, $pager, $projectID);
+        $bugList = array();
+        if($browseType == 'all')
+        {
+            $bugList = $this->bugTao->getAllBugs($productIdList, $projectID, $executionIdList, $branch, $modules, $orderBy, $pager);
+            $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'bug');
+        }
+        elseif($browseType == 'review')
+        {
+            $bugList = $this->bugTao->getListByReviewToMe($productIdList, $projectID, $executionIdList, $branch, $modules, $orderBy, $pager);
+            $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'bug');
+        }
+        elseif($browseType == 'needconfirm') $bugList = $this->bugTao->getListByNeedconfirm($productIdList, $projectID, $executionIdList, $branch, $modules, $orderBy, $pager);
+        elseif($browseType == 'bysearch')    $bugList = $this->getBySearch($productIdList, $branch, $queryID, $orderBy, '', $pager, $projectID);
+        elseif(strpos(',bymodule,assigntome,openedbyme,resolvedbyme,assigntonull,unconfirmed,unresolved,unclosed,toclosed,longlifebugs,postponedbugs,overduebugs,assignedbyme,', ",$browseType,") !== false) $bugList = $this->bugTao->getListByBrowseType($browseType, $productIdList, $projectID, $executionIdList, $branch, $modules, $orderBy, $pager);
 
-        return $this->bugTao->checkDelayedBugs($bugs);
+        return $this->bugTao->batchAppendDelayedDays($bugList);
     }
 
     /**
@@ -445,32 +372,6 @@ class bugModel extends model
 
             return print(js::locate('back'));
         }
-    }
-
-    /**
-     * Get bugs of a module.
-     *
-     * @param  int|array       $productIDList
-     * @param  int|string      $branch
-     * @param  string|array    $moduleIdList
-     * @param  array           $executions
-     * @param  string          $orderBy
-     * @param  object          $pager
-     * @param  int             $projectID
-     * @access public
-     * @return array
-     */
-    public function getModuleBugs($productIDList, $branch = 0, $moduleIdList = 0, $executions = array(), $orderBy = 'id_desc', $pager = null, $projectID = 0)
-    {
-        return $this->dao->select("*, IF(`pri` = 0, {$this->config->maxPriValue}, `pri`) as priOrder, IF(`severity` = 0, {$this->config->maxPriValue}, `severity`) as severityOrder")->from(TABLE_BUG)
-            ->where('product')->in($productIDList)
-            ->beginIF($branch !== 'all')->andWhere('branch')->eq($branch)->fi()
-            ->beginIF(!empty($moduleIdList))->andWhere('module')->in($moduleIdList)->fi()
-            ->beginIF($projectID)->andWhere('project')->eq($projectID)->fi()
-            ->beginIF($this->app->tab !== 'qa')->andWhere('execution')->in(array_keys($executions))->fi()
-            ->andWhere('deleted')->eq(0)
-            ->beginIF(!$this->app->user->admin)->andWhere('project')->in('0,' . $this->app->user->view->projects)->fi()
-            ->orderBy($orderBy)->page($pager)->fetchAll();
     }
 
     /**
@@ -504,9 +405,9 @@ class bugModel extends model
      * @param  int    $bugID
      * @param  bool   $setImgSize
      * @access public
-     * @return object
+     * @return object|false
      */
-    public function getById(int $bugID, bool $setImgSize = false): object|false
+    public function getByID(int $bugID, bool $setImgSize = false): object|false
     {
         $bug = $this->bugTao->fetchBugInfo($bugID);
         if(!$bug) return false;
@@ -527,7 +428,7 @@ class bugModel extends model
         $bug->linkMRTitles = $this->mr->getLinkedMRPairs($bugID, 'bug');
         $bug->toCases      = $this->bugTao->getCasesFromBug($bugID);
         $bug->files        = $this->file->getByObject('bug', $bugID);
-        return $this->bugTao->checkDelayBug($bug);
+        return $this->bugTao->appendDelayedDays($bug);
     }
 
     /**
@@ -2591,352 +2492,6 @@ class bugModel extends model
     }
 
     /**
-     * Get all bugs.
-     *
-     * @param  array       $productIDList
-     * @param  int|string  $branch
-     * @param  array       $modules
-     * @param  array       $executions
-     * @param  string      $orderBy
-     * @param  object      $pager
-     * @param  int         $projectID
-     * @access public
-     * @return array
-     */
-    public function getAllBugs($productIDList, $branch, $modules, $executions, $orderBy, $pager = null, $projectID = 0)
-    {
-        $bugs = $this->dao->select("t1.*, t2.title as planTitle, IF(t1.`pri` = 0, {$this->config->maxPriValue}, t1.`pri`) as priOrder, IF(t1.`severity` = 0, {$this->config->maxPriValue}, t1.`severity`) as severityOrder")->from(TABLE_BUG)->alias('t1')
-            ->leftJoin(TABLE_PRODUCTPLAN)->alias('t2')->on('t1.plan = t2.id')
-            ->where('t1.product')->in($productIDList)
-            ->beginIF($this->app->tab !== 'qa')->andWhere('t1.execution')->in(array_keys($executions))->fi()
-            ->beginIF($branch !== 'all')->andWhere('t1.branch')->eq($branch)->fi()
-            ->beginIF($modules)->andWhere('t1.module')->in($modules)->fi()
-            ->beginIF($projectID)->andWhere('t1.project')->eq($projectID)->fi()
-            ->andWhere('t1.deleted')->eq(0)
-            ->beginIF(!$this->app->user->admin)->andWhere('t1.project')->in('0,' . $this->app->user->view->projects)->fi()
-            ->orderBy($orderBy)->page($pager)->fetchAll();
-
-        $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'bug');
-
-        return $bugs;
-    }
-
-    /**
-     * Get bugs of assign to me.
-     *
-     * @param  array       $productIDList
-     * @param  int|string  $branch
-     * @param  array       $modules
-     * @param  array       $executions
-     * @param  string      $orderBy
-     * @param  object      $pager
-     * @param  int         $projectID
-     * @access public
-     * @return array
-     */
-    public function getByAssigntome($productIDList, $branch, $modules, $executions, $orderBy, $pager, $projectID)
-    {
-        return $this->dao->select("*, IF(`pri` = 0, {$this->config->maxPriValue}, `pri`) as priOrder, IF(`severity` = 0, {$this->config->maxPriValue}, `severity`) as severityOrder")->from(TABLE_BUG)
-            ->where('assignedTo')->eq($this->app->user->account)
-            ->andWhere('product')->in($productIDList)
-            ->beginIF($branch !== 'all')->andWhere('branch')->in($branch)->fi()
-            ->beginIF($modules)->andWhere('module')->in($modules)->fi()
-            ->beginIF($projectID)->andWhere('project')->eq($projectID)->fi()
-            ->beginIF($this->app->tab !== 'qa')->andWhere('execution')->in(array_keys($executions))->fi()
-            ->andWhere('deleted')->eq(0)
-            ->beginIF(!$this->app->user->admin)->andWhere('project')->in('0,' . $this->app->user->view->projects)->fi()
-            ->orderBy($orderBy)->page($pager)->fetchAll();
-    }
-
-    /**
-     * Get bugs of opened by me.
-     *
-     * @param  array      $productIDList
-     * @param  int|string $branch
-     * @param  array      $modules
-     * @param  array      $executions
-     * @param  string     $orderBy
-     * @param  object     $pager
-     * @param  int        $projectID
-     * @access public
-     * @return array
-     */
-    public function getByOpenedbyme($productIDList, $branch, $modules, $executions, $orderBy, $pager, $projectID)
-    {
-        return $this->dao->select("*,IF(`pri` = 0, {$this->config->maxPriValue}, `pri`) as priOrder, IF(`severity` = 0, {$this->config->maxPriValue}, `severity`) as severityOrder")->from(TABLE_BUG)
-            ->where('openedBy')->eq($this->app->user->account)
-            ->andWhere('product')->in($productIDList)
-            ->beginIF($branch !== 'all')->andWhere('branch')->in($branch)->fi()
-            ->beginIF($modules)->andWhere('module')->in($modules)->fi()
-            ->beginIF($projectID)->andWhere('project')->eq($projectID)->fi()
-            ->beginIF($this->app->tab !== 'qa')->andWhere('execution')->in(array_keys($executions))->fi()
-            ->andWhere('deleted')->eq(0)
-            ->beginIF(!$this->app->user->admin)->andWhere('project')->in('0,' . $this->app->user->view->projects)->fi()
-            ->orderBy($orderBy)->page($pager)->fetchAll();
-    }
-
-    /**
-     * Get bugs of resolved by me.
-     *
-     * @param  array       $productIDList
-     * @param  int|string  $branch
-     * @param  array       $modules
-     * @param  array       $executions
-     * @param  string      $orderBy
-     * @param  object      $pager
-     * @param  int         $projectID
-     * @access public
-     * @return array
-     */
-    public function getByResolvedbyme($productIDList, $branch, $modules, $executions, $orderBy, $pager, $projectID)
-    {
-        return $this->dao->select("*,IF(`pri` = 0, {$this->config->maxPriValue}, `pri`) as priOrder, IF(`severity` = 0, {$this->config->maxPriValue}, `severity`) as severityOrder")->from(TABLE_BUG)
-            ->where('resolvedBy')->eq($this->app->user->account)
-            ->andWhere('product')->in($productIDList)
-            ->beginIF($branch !== 'all')->andWhere('branch')->in($branch)->fi()
-            ->beginIF($modules)->andWhere('module')->in($modules)->fi()
-            ->beginIF($projectID)->andWhere('project')->eq($projectID)->fi()
-            ->beginIF($this->app->tab !== 'qa')->andWhere('execution')->in(array_keys($executions))->fi()
-            ->andWhere('deleted')->eq(0)
-            ->beginIF(!$this->app->user->admin)->andWhere('project')->in('0,' . $this->app->user->view->projects)->fi()
-            ->orderBy($orderBy)->page($pager)->fetchAll();
-    }
-
-    /**
-     * Get bugs of nobody to do.
-     *
-     * @param  array       $productIDList
-     * @param  int|string  $branch
-     * @param  array       $modules
-     * @param  array       $executions
-     * @param  string      $orderBy
-     * @param  object      $pager
-     * @param  int         $projectID
-     * @access public
-     * @return array
-     */
-    public function getByAssigntonull($productIDList, $branch, $modules, $executions, $orderBy, $pager, $projectID)
-    {
-
-        return $this->dao->select("*, IF(`pri` = 0, {$this->config->maxPriValue}, `pri`) as priOrder, IF(`severity` = 0, {$this->config->maxPriValue}, `severity`) as severityOrder")->from(TABLE_BUG)
-            ->where('assignedTo')->eq('')
-            ->andWhere('product')->in($productIDList)
-            ->beginIF($branch !== 'all')->andWhere('branch')->in($branch)->fi()
-            ->beginIF($modules)->andWhere('module')->in($modules)->fi()
-            ->beginIF($projectID)->andWhere('project')->eq($projectID)->fi()
-            ->beginIF($this->app->tab !== 'qa')->andWhere('execution')->in(array_keys($executions))->fi()
-            ->andWhere('deleted')->eq(0)
-            ->beginIF(!$this->app->user->admin)->andWhere('project')->in('0,' . $this->app->user->view->projects)->fi()
-            ->orderBy($orderBy)->page($pager)->fetchAll();
-    }
-
-    /**
-     * Get unconfirmed bugs.
-     *
-     * @param  array       $productIDList
-     * @param  int|string  $branch
-     * @param  array       $modules
-     * @param  array       $executions
-     * @param  string      $orderBy
-     * @param  object      $pager
-     * @param  int         $projectID
-     * @access public
-     * @return void
-     */
-    public function getUnconfirmed($productIDList, $branch, $modules, $executions, $orderBy, $pager, $projectID)
-    {
-        return $this->dao->select("*, IF(`pri` = 0, {$this->config->maxPriValue}, `pri`) as priOrder, IF(`severity` = 0, {$this->config->maxPriValue}, `severity`) as severityOrder")->from(TABLE_BUG)
-            ->where('product')->in($productIDList)
-            ->beginIF($this->app->tab !== 'qa')->andWhere('execution')->in(array_keys($executions))->fi()
-            ->andWhere('deleted')->eq(0)
-            ->andWhere('confirmed')->eq(0)
-            ->beginIF($branch !== 'all')->andWhere('branch')->in($branch)->fi()
-            ->beginIF($modules)->andWhere('module')->in($modules)->fi()
-            ->beginIF($projectID)->andWhere('project')->eq($projectID)->fi()
-            ->beginIF(!$this->app->user->admin)->andWhere('project')->in('0,' . $this->app->user->view->projects)->fi()
-            ->orderBy($orderBy)->page($pager)->fetchAll();
-    }
-
-    /**
-     * Get bugs the overdueBugs is active or unclosed.
-     *
-     * @param  array       $productIDList
-     * @param  int|string  $branch
-     * @param  array       $modules
-     * @param  array       $executions
-     * @param  string      $status
-     * @param  string      $orderBy
-     * @param  object      $pager
-     * @param  int         $projectID
-     * @access public
-     * @return array
-     */
-    public function getOverdueBugs($productIDList, $branch, $modules, $executions, $orderBy, $pager, $projectID)
-    {
-        return $this->dao->select("*, IF(`pri` = 0, {$this->config->maxPriValue}, `pri`) as priOrder, IF(`severity` = 0, {$this->config->maxPriValue}, `severity`) as severityOrder")->from(TABLE_BUG)
-            ->where('product')->in($productIDList)
-            ->beginIF($this->app->tab !== 'qa')->andWhere('execution')->in(array_keys($executions))->fi()
-            ->beginIF($branch !== 'all')->andWhere('branch')->in($branch)->fi()
-            ->beginIF($modules)->andWhere('module')->in($modules)->fi()
-            ->beginIF($projectID)->andWhere('project')->eq($projectID)->fi()
-            ->andWhere('status')->eq('active')
-            ->andWhere('deleted')->eq(0)
-            ->andWhere('deadline')->ne('0000-00-00')
-            ->andWhere('deadline')->lt(helper::today())
-            ->beginIF(!$this->app->user->admin)->andWhere('project')->in('0,' . $this->app->user->view->projects)->fi()
-            ->orderBy($orderBy)->page($pager)->fetchAll();
-    }
-
-    /**
-     * Get bugs the status is active or unclosed.
-     *
-     * @param  array       $productIDList
-     * @param  int|string  $branch
-     * @param  array       $modules
-     * @param  array       $executions
-     * @param  string      $status
-     * @param  string      $orderBy
-     * @param  object      $pager
-     * @param  int         $projectID
-     * @access public
-     * @return array
-     */
-    public function getByStatus($productIDList, $branch, $modules, $executions, $status, $orderBy, $pager, $projectID)
-    {
-        return $this->dao->select("*, IF(`pri` = 0, {$this->config->maxPriValue}, `pri`) as priOrder, IF(`severity` = 0, {$this->config->maxPriValue}, `severity`) as severityOrder")->from(TABLE_BUG)
-            ->where('product')->in($productIDList)
-            ->beginIF($this->app->tab !== 'qa')->andWhere('execution')->in(array_keys($executions))->fi()
-            ->beginIF($branch !== 'all')->andWhere('branch')->in($branch)->fi()
-            ->beginIF($modules)->andWhere('module')->in($modules)->fi()
-            ->beginIF($status == 'unclosed')->andWhere('status')->ne('closed')->fi()
-            ->beginIF($status == 'unresolved')->andWhere('status')->eq('active')->fi()
-            ->beginIF($status == 'toclosed')->andWhere('status')->eq('resolved')->fi()
-            ->beginIF($projectID)->andWhere('project')->eq($projectID)->fi()
-            ->andWhere('deleted')->eq(0)
-            ->beginIF(!$this->app->user->admin)->andWhere('project')->in('0,' . $this->app->user->view->projects)->fi()
-            ->orderBy($orderBy)->page($pager)
-            ->fetchAll();
-    }
-
-    /**
-     * Get unclosed bugs for long time.
-     *
-     * @param  array       $productIDList
-     * @param  int|string  $branch
-     * @param  array       $modules
-     * @param  array       $executions
-     * @param  string      $orderBy
-     * @param  object      $pager
-     * @param  int         $projectID
-     * @access public
-     * @return array
-     */
-    public function getByLonglifebugs($productIDList, $branch, $modules, $executions, $orderBy, $pager, $projectID)
-    {
-        $lastEditedDate = date(DT_DATE1, time() - $this->config->bug->longlife * 24 * 3600);
-        return $this->dao->select("*, IF(`pri` = 0, {$this->config->maxPriValue}, `pri`) as priOrder, IF(`severity` = 0, {$this->config->maxPriValue}, `severity`) as severityOrder")->from(TABLE_BUG)
-            ->where('lastEditedDate')->lt($lastEditedDate)
-            ->andWhere('product')->in($productIDList)
-            ->beginIF($this->app->tab !== 'qa')->andWhere('execution')->in(array_keys($executions))->fi()
-            ->beginIF($branch !== 'all')->andWhere('branch')->in($branch)->fi()
-            ->beginIF($modules)->andWhere('module')->in($modules)->fi()
-            ->beginIF($projectID)->andWhere('project')->eq($projectID)->fi()
-            ->andWhere('openedDate')->lt($lastEditedDate)
-            ->andWhere('deleted')->eq(0)
-            ->beginIF(!$this->app->user->admin)->andWhere('project')->in('0,' . $this->app->user->view->projects)->fi()
-            ->andWhere('status')->ne('closed')->orderBy($orderBy)->page($pager)->fetchAll();
-    }
-
-    /**
-     * Get postponed bugs.
-     *
-     * @param  array      $productIDList
-     * @param  int|sting  $branch
-     * @param  array      $modules
-     * @param  array      $executions
-     * @param  string     $orderBy
-     * @param  object     $pager
-     * @param  int        $projectID
-     * @access public
-     * @return array
-     */
-    public function getByPostponedbugs($productIDList, $branch, $modules, $executions, $orderBy, $pager, $projectID)
-    {
-        return $this->dao->select("*, IF(`pri` = 0, {$this->config->maxPriValue}, `pri`) as priOrder, IF(`severity` = 0, {$this->config->maxPriValue}, `severity`) as severityOrder")->from(TABLE_BUG)
-            ->where('resolution')->eq('postponed')
-            ->andWhere('product')->in($productIDList)
-            ->beginIF($branch !== 'all')->andWhere('branch')->in($branch)->fi()
-            ->beginIF($modules)->andWhere('module')->in($modules)->fi()
-            ->beginIF($projectID)->andWhere('project')->eq($projectID)->fi()
-            ->beginIF($this->app->tab !== 'qa')->andWhere('execution')->in(array_keys($executions))->fi()
-            ->andWhere('deleted')->eq(0)
-            ->beginIF(!$this->app->user->admin)->andWhere('project')->in('0,' . $this->app->user->view->projects)->fi()
-            ->orderBy($orderBy)->page($pager)->fetchAll();
-    }
-
-    /**
-     * Get bugs need confirm.
-     *
-     * @param  array      $productIDList
-     * @param  int|string $branch
-     * @param  array      $modules
-     * @param  array      $executions
-     * @param  string     $orderBy
-     * @param  object     $pager
-     * @param  int        $projectID
-     * @access public
-     * @return array
-     */
-    public function getByNeedconfirm($productIDList, $branch, $modules, $executions, $orderBy, $pager, $projectID)
-    {
-        return $this->dao->select("t1.*, t2.title AS storyTitle, IF(t1.`pri` = 0, {$this->config->maxPriValue}, t1.`pri`) as priOrder, IF(t1.`severity` = 0, {$this->config->maxPriValue}, t1.`severity`) as severityOrder")->from(TABLE_BUG)->alias('t1')
-            ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story = t2.id')
-            ->where("t2.status = 'active'")
-            ->andWhere('t1.product')->in($productIDList)
-            ->beginIF($branch !== 'all')->andWhere('t1.branch')->in($branch)->fi()
-            ->beginIF($modules)->andWhere('t1.module')->in($modules)->fi()
-            ->beginIF($projectID)->andWhere('t1.project')->eq($projectID)->fi()
-            ->beginIF($this->app->tab !== 'qa')->andWhere('t1.execution')->in(array_keys($executions))->fi()
-            ->andWhere('t2.version > t1.storyVersion')
-            ->andWhere('t1.deleted')->eq(0)
-            ->beginIF(!$this->app->user->admin)->andWhere('t1.project')->in('0,' . $this->app->user->view->projects)->fi()
-            ->orderBy($orderBy)
-            ->page($pager)
-            ->fetchAll();
-    }
-
-    /**
-     * Get by assigned by me.
-     * @param  array      $productIDList
-     * @param  int|string $branch
-     * @param  array      $modules
-     * @param  array      $executions
-     * @param  string     $sort
-     * @param  object     $pager
-     * @param  int        $projectID
-     *
-     * @access public
-     * @return array
-     */
-    public function getByAssignedbyme($productIDList, $branch, $modules, $executions, $sort, $pager, $projectID)
-    {
-        $actionIDList = $this->dao->select('objectID')->from(TABLE_ACTION)->where('objectType')->eq('bug')->andWhere('action')->eq('assigned')->andWhere('actor')->eq($this->app->user->account)->fetchPairs('objectID', 'objectID');
-        return $this->dao->select("*, IF(`pri` = 0, {$this->config->maxPriValue}, `pri`) as priOrder, IF(`severity` = 0, {$this->config->maxPriValue}, `severity`) as severityOrder")->from(TABLE_BUG)
-            ->where('product')->in($productIDList)
-            ->beginIF($branch !== 'all')->andWhere('branch')->in($branch)->fi()
-            ->beginIF($modules)->andWhere('module')->in($modules)->fi()
-            ->beginIF($projectID)->andWhere('project')->eq($projectID)->fi()
-            ->beginIF($this->app->tab !== 'qa')->andWhere('execution')->in(array_keys($executions))->fi()
-            ->andWhere('deleted')->eq(0)
-            ->andWhere('status')->ne('closed')
-            ->andWhere('id')->in($actionIDList)
-            ->beginIF(!$this->app->user->admin)->andWhere('project')->in('0,' . $this->app->user->view->projects)->fi()
-            ->orderBy($sort)
-            ->page($pager)
-            ->fetchAll();
-    }
-
-    /**
      * Get by Sonarqube id.
      *
      * @param  int    $sonarqubeID
@@ -3554,7 +3109,7 @@ class bugModel extends model
     public function getToAndCcList($bug)
     {
         /* Set toList and ccList. */
-        $toList = $bug->assignedTo;
+        $toList = $bug->assignedTo ? $bug->assignedTo : '';
         $ccList = trim($bug->mailto, ',');
         if(empty($toList))
         {

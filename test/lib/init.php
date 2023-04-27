@@ -16,6 +16,12 @@
 error_reporting(E_ALL);
 define('RUN_MODE', 'test');
 
+if($argc > 1 && $argv[1] == '-extract')
+{
+    parseScript();
+    exit;
+}
+
 $testPath      = dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'test' . DIRECTORY_SEPARATOR;
 $frameworkRoot = dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'framework' . DIRECTORY_SEPARATOR;
 
@@ -69,8 +75,6 @@ if(!empty($config->test->account) and !empty($config->test->password) and !empty
     $token = $token->body;
 }
 
-global $isExtractAction;
-$isExtractAction = $argc > 1 && $argv[1] == '-extract';
 
 /**
  * Save variable to $_result.
@@ -97,14 +101,9 @@ function r($result)
 function p($keys = '', $delimiter = ',')
 {
     global $_result;
-    global $_keys;
-    global $_delimiter;
-    global $isExtractAction;
 
     $_keys      = $keys;
     $_delimiter = $delimiter;
-
-    if($isExtractAction) return true;
 
     if(empty($_result)) return print(implode("\n", array_fill(0, substr_count($keys, $delimiter) + 1, 0)) . "\n");
 
@@ -131,86 +130,154 @@ function p($keys = '', $delimiter = ',')
  * @access public
  * @return void
  */
-function parseScript($expect)
+function parseScript()
 {
     $debugInfo = debug_backtrace();
     if(!empty($debugInfo))
     {
-        global $_keys;
-        global $_delimiter;
-        global $_current;
-
-        $keys      = $_keys;
-        $delimiter = $_delimiter;
         $file      = $debugInfo[count($debugInfo)-1]['file'];
         $contents  = file_get_contents($file);
+        $rpeList   = genParamsByRPE($contents);
 
-        list($moduleName, $methodName, $methodParam) = genParamsByRPE($contents);
-
-        $isGrup   = false;
-        $stepDesc = '';
-        $expects  = empty($expect) ? array() : explode($delimiter, $expect);
-
-        $object    = '';
-        $rowIndex  = -1;
-        $pos       = strpos($keys, ':');
-        if($pos)
+        foreach($rpeList as $rpe)
         {
-            $arrKey = substr($keys, 0, $pos);
-            $keys   = substr($keys, $pos + 1);
-            $pos    = strpos($arrKey, '[');
+            list($moduleName, $methodName, $methodParam) = $rpe[0];
+            $expectStr = trim($rpe[1], '"\'');
+            $pParam    = $rpe[2];
+            $keys      = $pParam[0];
+            $delimiter = $pParam[1] ? $pParam[1] : ',';
+            $isGrup    = false;
+            $stepDesc  = '';
+            $expects   = '' === $expectStr ? array() : explode($delimiter, $expectStr);
+
+            $rowIndex  = -1;
+            $pos       = strpos($keys, ':');
             if($pos)
             {
-                $object   = substr($arrKey, 0, $pos);
-                $rowIndex = trim(substr($arrKey, $pos + 1), ']');
+                $arrKey   = substr($keys, 0, $pos);
+                $keys     = substr($keys, $pos + 1);
+                $pos      = strpos($arrKey, '[');
+                $rowIndex = $pos ? trim(substr($arrKey, $pos + 1), ']') : $arrKey;
+            }
+            $keys = explode($delimiter, $keys);
+
+            if(count($keys) > 1) $isGrup = true;
+
+            if ($methodName === 0 && $methodParam === 0)
+            {
+                $stepDesc = "- 执行{$moduleName}" . ($isGrup ? "\n" : '');
             }
             else
             {
-                $rowIndex = $arrKey;
+                $stepDesc = "- 执行{$moduleName}模块的{$methodName}方法，参数是{$methodParam}" . ($isGrup ? "\n" : '');
             }
-        }
-        $keys = explode($delimiter, $keys);
 
-        if(count($keys) > 1) $isGrup = true;
+            if(empty($keys)) $stepDesc .= " @{$expects[0]}\n";
 
-        if ($methodName === 0 && $methodParam === 0)
-        {
-            $stepDesc = "- 执行{$moduleName}" . ($isGrup ? "\n" : '');
-        }
-        else
-        {
-            $stepDesc = "- 执行{$moduleName}模块的{$methodName}方法，参数是{$methodParam}" . ($isGrup ? "\n" : '');
-        }
-
-        if(empty($keys)) $stepDesc .= " @{$expects[0]}\n";
-
-        foreach($keys as $index => $row)
-        {
-            if(count($keys) < 2)
+            foreach($keys as $index => $row)
             {
+                $stepExpect = isset($expects[$index]) ? $expects[$index] : '';
+                if(count($expects) == 1) $stepExpect = $expects[0];
                 if($rowIndex == -1)
                 {
-                    $stepDesc .= $row ? ",属性{$row}" : '';
-                    $stepDesc .= " @$expect";
+                    $stepDesc .= ($isGrup ? ' - ' : '') . "属性{$row} @{$stepExpect}\n";
                 }
                 else
                 {
-                    $stepDesc .= ($rowIndex == -1 ? '' : ($isGrup ? ' - ' : '') . ",属性{$rowIndex} @{$expects[0]}\n");
+                    $stepDesc .= ($isGrup ? ' - ' : '') . "第{$rowIndex}条的{$row}属性 @{$stepExpect}\n";
                 }
             }
-            else
+            echo $stepDesc . ($isGrup ? "\n" : "\n");
+        }
+    }
+}
+
+/**
+ * Split function params.
+ * 从p()函数提取传入参数
+ *
+ * @param  array $params
+ * @return array
+ */
+function splitParam($params)
+{
+    $newParams = array();
+    foreach($params as $param)
+    {
+        $param          = trim($param);
+        $firstSymbol    = substr($param, 0, 1);
+        $paramArray     = str_split($param);
+        $delimiterIndex = -1;
+
+        foreach($paramArray as $i => $p)
+        {
+            if($i == 0) continue;
+            if($p === $firstSymbol && (!isset($paramArray[$i-1]) || '\\' != $paramArray[$i-1]))
             {
-                if($rowIndex == -1)
-                {
-                    $stepDesc .= ($isGrup ? ' - ' : '- ') . "属性{$row} @{$expects[$index]}\n";
-                }
-                else {
-                    $stepDesc .= ($isGrup ? ' - ' : '- ') . "第{$rowIndex}条的{$row}属性 @{$expects[$index]}\n";
-                }
+                $delimiterIndex = $i + 1;
+                break;
             }
         }
-        echo $stepDesc . ($isGrup ? "\n" : "\n");
+
+        if($delimiterIndex === -1)
+        {
+            $newParams[] = array($param, '');
+            continue;
+        }
+
+        $firstParam  = substr($param, 0, $delimiterIndex);
+        $firstParam  = trim(trim($firstParam), '\'"');
+        $lastParam   = substr($param, $delimiterIndex + 1);
+        $lastParam   = trim(trim($lastParam), '\'"');
+        $newParams[] = array($firstParam, $lastParam);
     }
+
+    return $newParams;
+}
+
+/**
+ * Generate module,method,param from r function.
+ * 从r()函数提取调用的moduleName,methodName,methodParam
+ *
+ * @param  array $rParams
+ * @return array
+ */
+function genModuleAndMethod($rParams)
+{
+    $newParams = array();
+    foreach($rParams as $index => $param)
+    {
+        $param                = trim($param, "'");
+        $objArrowCount        = substr_count($param, '->');
+        $rParamsStructureList = explode('->', $param);
+
+        if($objArrowCount == 1)
+        {
+            $moduleName  = substr($rParamsStructureList[0], 1);
+            $method      = $rParamsStructureList[1];
+            $methodName  = substr(explode('(', $method)[0], 0, -4);
+            $methodParam = substr(explode('(', $method)[1], 0, -1);
+            $methodParam = trim($methodParam, "'");
+        }
+        elseif($objArrowCount == 2)
+        {
+            $moduleName  = $rParamsStructureList[1];
+            $method      = $rParamsStructureList[2];
+            $methodName  = explode('(', $method)[0];
+            $methodParam = trim(substr(explode('(', $method)[1], 0, -1), ")");
+            $methodParam = trim($methodParam, "'");
+        }
+        else
+        {
+            $newParams[] = array($param, 0, 0);
+            continue;
+        }
+
+        $methodParam = preg_replace("/,\s*'/", ', ', $methodParam);
+        $newParams[] = array($moduleName, $methodName, $methodParam);
+    }
+
+    return $newParams;
 }
 
 /**
@@ -222,7 +289,6 @@ function parseScript($expect)
  */
 function genParamsByRPE($rpe)
 {
-    global $_current;
     preg_match_all("/r\((.*?)\)\s*&&\s*p\((.*?)\)\s*&&\s*e\((.*?)\);/", $rpe, $matches);
     $rParams = !empty($matches[1]) ? $matches[1] : array();
     $pParams = !empty($matches[2]) ? $matches[2] : array();
@@ -231,39 +297,13 @@ function genParamsByRPE($rpe)
     $pParams = is_array($pParams) ? $pParams : array($pParams);
     $eParams = is_array($eParams) ? $eParams : array($eParams);
 
-    $_current = intval($_current);
-    $param    = $rParams[$_current];
-    $_current++;
-    $param                = trim($param, "'");
-    $objArrowCount        = substr_count($param, '->');
-    $rParamsStructureList = explode('->', $param);
+    $pParamsArray = splitParam($pParams);
+    $rpeList      = array();
+    $rParamArray  = genModuleAndMethod($rParams);
 
-    if($objArrowCount == 1)
-    {
-        $moduleName  = substr($rParamsStructureList[0], 1);
-        $method      = $rParamsStructureList[1];
-        $methodName  = substr(explode('(', $method)[0], 0, -4);
-        $methodParam = substr(explode('(', $method)[1], 0, -1);
-        $methodParam = trim($methodParam, "'");
-    }
-    elseif($objArrowCount == 2)
-    {
-        $moduleName  = $rParamsStructureList[1];
-        $method      = $rParamsStructureList[2];
-        $methodName  = explode('(', $method)[0];
-        $methodParam = trim(substr(explode('(', $method)[1], 0, -1), ")");
-        $methodParam = trim($methodParam, "'");
-    }
-    else
-    {
-        $moduleName  = $param;
-        $methodName  = 0;
-        $methodParam = 0;
-    }
+    foreach($rParamArray as $index => $param) $rpeList[] = array($param, $eParams[$index], $pParamsArray[$index]);
 
-    $methodParam = preg_replace("/,\s*'/", ', ', $methodParam);
-
-    return array($moduleName, $methodName, $methodParam);
+    return $rpeList;
 }
 
 /**
@@ -347,13 +387,6 @@ function getValues($value, $keys, $delimiter)
  */
 function e($expect)
 {
-    global $isExtractAction;
-    if($isExtractAction)
-    {
-        parseScript($expect);
-        return;
-    }
-
 }
 
 /**

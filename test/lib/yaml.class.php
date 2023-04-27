@@ -254,19 +254,20 @@ class yaml
      *
      * @param  int     $rows
      * @param  string  $dataDirYaml The yaml file names in the data directory
-     * @param  string  $version
+     * @param  bool  $isClear Truncate table if set isClear to true.
      * @access public
      * @return void
      */
-    public function gen($rows, $dataDirYaml = '')
+    public function gen($rows, $dataDirYaml = '', $isClear = true)
     {
-        $runFileDir  = dirname(getcwd() . DS . $_SERVER['SCRIPT_FILENAME']);
         $runFileName = str_replace(strrchr($_SERVER['SCRIPT_FILENAME'], "."), "", $_SERVER['SCRIPT_FILENAME']);
 
         $pos = strripos($runFileName, DS);
         if($pos !== false) $runFileName = mb_substr($runFileName, $pos+1);
 
-        if(!is_dir("$runFileDir/data")) mkdir("$runFileDir/data", 0777, true);
+        $runFileDir  = dirname($runFileName);
+
+        if(!is_dir("{$runFileDir}/data")) mkdir("{$runFileDir}/data", 0777);
         $yamlFile = "{$runFileDir}/data/{$this->tableName}_{$runFileName}.yaml";
 
         $yamlDataArr = array();
@@ -287,7 +288,7 @@ class yaml
             yaml_emit_file($yamlFile, $yamlDataArr, YAML_UTF8_ENCODING);
         }
 
-        $this->insertDB($yamlFile, $this->tableName, $rows);
+        $this->insertDB($yamlFile, $this->tableName, $rows, $isClear);
     }
 
     /**
@@ -296,7 +297,7 @@ class yaml
      * @param  string    $yamlFile
      * @param  string    $tableName
      * @param  int       $rows
-     * @param  bool      $isClear
+     * @param  bool      $isClear Truncate table if set isClear to true.
      * @access public
      * @return string
      */
@@ -318,13 +319,15 @@ class yaml
         $dbUser    = $this->config->db->user;
         $dbPWD     = $this->config->db->password;
 
-        $setModeSql = "mysql -u%s -p%s -h%s -P%s %s -e \"SET global sql_mode = ''; \" 2>/dev/null";
-        $command    = "$zdPath -c %s -d %s -n %d -t %s -dns mysql://%s:%s@%s:%s/%s#utf8";
-        if($isClear === true) $command .= ' --clear';
-        $execYaml    = sprintf($command, $configYaml, $yamlFile, $rows, $tableName, $dbUser, $dbPWD, $dbHost, $dbPort, $dbName);
-        $execDump    = sprintf($dumpCommand, $dbUser, $dbPWD, $dbHost, $dbPort, $dbName, $tableName);
-        $execSetMode = sprintf($setModeSql, $dbUser, $dbPWD, $dbHost, $dbPort, $dbName);
-        system($execSetMode);
+        $command = "$zdPath -c %s -d %s -n %d -t %s -dns mysql://%s:%s@%s:%s/%s#utf8";
+        if($isClear === true)
+        {
+            /* Truncate table to reset auto increment number. */
+            system(sprintf("mysql -u%s -p%s -h%s -P%s %s -e 'truncate %s' 2>/dev/null", $dbUser, $dbPWD, $dbHost, $dbPort, $dbName, $tableName));
+            $command .= ' --clear';
+        }
+        $execYaml = sprintf($command, $configYaml, $yamlFile, $rows, $tableName, $dbUser, $dbPWD, $dbHost, $dbPort, $dbName);
+        $execDump = sprintf($dumpCommand, $dbUser, $dbPWD, $dbHost, $dbPort, $dbName, $tableName);
         system($execDump);
         system($execYaml);
     }

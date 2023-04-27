@@ -1,12 +1,20 @@
 <?php
 declare(strict_types=1);
+/**
+ * The ui file of block module of ZenTaoPMS.
+ *
+ * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @license     ZPL(https://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
+ * @author      liuruogu<liuruogu@easycorp.ltd>
+ * @package     block
+ * @link        http://www.zentao.net
+ */
 namespace zin;
 
 set::title($title);
 jsVar('dashboard', $dashboard);
 
 $paramsRows = array();
-$param      = $params['type'];
 
 foreach($params as $code => $row)
 {
@@ -21,28 +29,6 @@ foreach($params as $code => $row)
             'items' => isset($row['options']) ? $row['options'] : null
         ))  
     );
-    if($code == 'type')
-    {
-        $paramsRows[] = formGroup
-        (
-            set::label($lang->block->name),
-            set::name('title'),
-            set::class('form-row'),
-            set::control('input')  
-        );
-
-        $paramsRows[] = formGroup
-        (
-            set::label($lang->block->grid),
-            set::name("grid"),
-            set::class('form-row'),
-            set::control(array
-            (
-                'type'  => 'select',
-                'items' => $lang->block->gridOptions
-            ))  
-        );
-    }
 }
 
 form
@@ -80,7 +66,27 @@ form
     (
         set::id('paramsRow'),
         set::class('form-grid'),
-        $paramsRows
+        $paramsRows,
+        $block
+        ? formGroup
+        (
+            set::label($lang->block->name),
+            set::name('title'),
+            set::class('form-row'),
+            set::control('input')  
+        ) : null,
+        $block
+        ? formGroup
+        (
+            set::label($lang->block->grid),
+            set::name("grid"),
+            set::class('form-row'),
+            set::control(array
+            (
+                'type'  => 'select',
+                'items' => $lang->block->gridOptions
+            ))  
+        ) : null,
     )
 );
 

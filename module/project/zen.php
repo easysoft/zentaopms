@@ -290,6 +290,29 @@ class projectZen extends project
     }
 
     /**
+     * Append extras data to post data.
+     *
+     * @param  int    $iprojectID
+     * @param  object $postData
+     *
+     * @access protected
+     * @return object
+     */
+    protected function prepareSuspendExtras(int $projectID, object $postData): object
+    {
+        $editorIdList = $this->config->project->editor->suspend['id'];
+        if($this->app->rawModule == 'program') $editorIdList = $this->config->program->editor->suspend['id'];
+
+        return $postData->add('id', $projectID)
+            ->setDefault('status', 'suspended')
+            ->setDefault('lastEditedBy', $this->app->user->account)
+            ->setDefault('lastEditedDate', helper::now())
+            ->setDefault('suspendedDate', helper::today())
+            ->stripTags($editorIdList, $this->config->allowedTags)
+            ->remove('comment')->get();
+    }
+
+    /**
      * Send variables to view page.
      *
      * @param  object $project
@@ -312,7 +335,7 @@ class projectZen extends project
      * @param  array  $changes
      * @param  string $comment
      * @access protected
-     * @return void 
+     * @return void
      */
     protected function responseAfterStart(object $project, array $changes, string $comment): void
     {
@@ -328,18 +351,41 @@ class projectZen extends project
     }
 
     /**
+     * After suspending the project, do other operations.
+     *
+     * @param  int    $projectID
+     * @param  array  $changes
+     * @param  string $comment
+     *
+     * @access protected
+     * @return void
+     */
+    protected function responseAfterSuspend(int $projectID, array $changes, string $comment): void
+    {
+        if($comment != '' or !empty($changes))
+        {
+            $actionID = $this->loadModel('action')->create('project', $projectID, 'Suspended', $comment);
+            $this->action->logHistory($actionID, $changes);
+        }
+
+        $this->loadModel('common')->syncPPEStatus($projectID);
+
+        $this->executeHooks($projectID);
+    }
+
+    /**
      * Send variables to suspend page.
      *
-     * @param  object $project
+     * @param  int $projectID
      * @access protected
      * @return int
      */
-    protected function buildSuspendForm(object $project): void
+    protected function buildSuspendForm(int $projectID): void
     {
         $this->view->title   = $this->lang->project->suspend;
         $this->view->users   = $this->loadModel('user')->getPairs('noletter');
-        $this->view->actions = $this->action->getList('project', $project->id);
-        $this->view->project = $this->project->getByID($project->id);
+        $this->view->actions = $this->loadModel('action')->getList('project', $projectID);
+        $this->view->project = $this->project->getByID($projectID);
         $this->display();
     }
 }

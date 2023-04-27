@@ -13,6 +13,15 @@
 <?php
 class productModel extends model
 {
+    /* Constant status of product. */
+    const ST_NOCLOSED = 'noclosed';
+    const ST_BYSEARCH = 'bysearch';
+    const ST_ALL      = 'all';
+
+    /* OrderBy constant variables. */
+    const OB_PROGRAM = 'program_asc';
+    const OB_ORDER   = 'order_asc';
+
     /**
      * Get product module menu.
      *
@@ -263,49 +272,6 @@ class productModel extends model
         return $this->dao->select('*')->from(TABLE_PRODUCT)->where('id')->in($productIDList)->fetchAll('id');
     }
 
-    /**
-     * Get products.
-     *
-     * @param  int        $programID
-     * @param  string     $status
-     * @param  int        $limit
-     * @param  int        $line
-     * @param  string|int $shadow       all | 0 | 1
-     * @access public
-     * @return array
-     */
-    public function getList($programID = 0, $status = 'all', $limit = 0, $line = 0, $shadow = 0)
-    {
-        $products = $this->dao->select('DISTINCT t1.*,t2.order')->from(TABLE_PRODUCT)->alias('t1')
-            ->leftJoin(TABLE_PROGRAM)->alias('t2')->on('t1.program = t2.id')
-            ->leftJoin(TABLE_PROJECTPRODUCT)->alias('t3')->on('t3.product = t1.id')
-            ->leftJoin(TABLE_TEAM)->alias('t4')->on("t4.root = t3.project and t4.type='project'")
-            ->where('t1.deleted')->eq(0)
-            ->beginIF($shadow !== 'all')->andWhere('t1.shadow')->eq((int)$shadow)->fi()
-            ->beginIF($programID)->andWhere('t1.program')->eq($programID)->fi()
-            ->beginIF($line > 0)->andWhere('t1.line')->eq($line)->fi()
-            ->beginIF(!$this->app->user->admin)->andWhere('t1.id')->in($this->app->user->view->products)->fi()
-            ->andWhere('t1.vision')->eq($this->config->vision)->fi()
-            ->beginIF($status == 'noclosed')->andWhere('t1.status')->ne('closed')->fi()
-            ->beginIF(!in_array($status, array('all', 'noclosed', 'involved', 'review'), true))->andWhere('t1.status')->in($status)->fi()
-            ->beginIF($status == 'involved')
-            ->andWhere('t1.PO', true)->eq($this->app->user->account)
-            ->orWhere('t1.QD')->eq($this->app->user->account)
-            ->orWhere('t1.RD')->eq($this->app->user->account)
-            ->orWhere('t1.createdBy')->eq($this->app->user->account)
-            ->orWhere('t4.account')->eq($this->app->user->account)
-            ->markRight(1)
-            ->fi()
-            ->beginIF($status == 'review')
-            ->andWhere("FIND_IN_SET('{$this->app->user->account}', t1.reviewers)")
-            ->andWhere('t1.reviewStatus')->eq('doing')
-            ->fi()
-            ->orderBy('t2.order_asc, t1.line_desc, t1.order_asc')
-            ->beginIF($limit > 0)->limit($limit)->fi()
-            ->fetchAll('id');
-
-        return $products;
-    }
 
     /**
      * Get list by search.
@@ -1130,41 +1096,6 @@ class productModel extends model
     }
 
     /**
-     * Build form fields.
-     *
-     * @param  array $fields
-     * @param  object $project
-     * @access public
-     * @return void
-     */
-    public function buildFormFields($fields, $product = null)
-    {
-        $this->loadModel('user');
-        $poUsers = $this->user->getPairs('nodeleted|pofirst|noclosed',  '', $this->config->maxCount);
-        $qdUsers = $this->user->getPairs('nodeleted|qdfirst|noclosed',  '', $this->config->maxCount);
-        $rdUsers = $this->user->getPairs('nodeleted|devfirst|noclosed', '', $this->config->maxCount);
-        $users   = $this->user->getPairs('nodeleted|noclosed');
-
-        foreach($fields as $field => $attr)
-        {
-            if(isset($attr['options']) and $attr['options'] == 'users') $fields[$field]['options'] = $users;
-            $fields[$field]['name']  = $field;
-            $fields[$field]['title'] = $this->lang->product->$field;
-            if($product and isset($product->$field)) $fields[$field]['default'] = $product->$field;
-        }
-
-        $fields['program']['options'] = array('') + $this->loadModel('program')->getTopPairs('', 'noclosed');
-        $fields['PO']['options']      = $poUsers;
-        $fields['QD']['options']      = $qdUsers;
-        $fields['RD']['options']      = $rdUsers;
-
-        if($product and $product->program)$fields['line']['options'] = array('') + $this->getLinePairs($product->program);
-        if(empty($product->program) or $this->config->systemMode != 'ALM') unset($fields['line']);
-
-        return $fields;
-    }
-
-    /**
      * Build search form.
      *
      * @param  int    $productID
@@ -1841,61 +1772,31 @@ class productModel extends model
     /**
      * Get product stats.
      *
-     * @param  string $orderBy
+     * @param  string $orderBy order_asc|program_asc
      * @param  object $pager
      * @param  string $status
      * @param  int    $line
      * @param  string $storyType requirement|story
      * @param  int    $programID
+     * @param  int    $param
      * @access public
      * @return array
      */
-    public function getStats($orderBy = 'order_asc', $pager = null, $status = 'noclosed', $line = 0, $storyType = 'story', $programID = 0, $param = 0)
+    public function getStats(string $orderBy = 'order_asc', object $pager = null, string $status = 'noclosed', int $line = 0, string $storyType = 'story', int $programID = 0, int $param = 0): array
     {
-        $this->loadModel('report');
-        $this->loadModel('story');
-        $this->loadModel('bug');
-
-        $products = $status == 'bySearch' ? $this->getListBySearch($param) : $this->getList($programID, $status, $limit = 0, $line);
+        /* Fetch products list. */
+        $products = strtolower($status) == static::ST_BYSEARCH ? $this->getListBySearch($param) : $this->productTao->getList($programID, $status, 0, $line);
         if(empty($products)) return array();
 
         $productKeys = array_keys($products);
-        if($orderBy == 'program_asc')
-        {
-            $products = $this->dao->select('t1.id as id, t1.*')->from(TABLE_PRODUCT)->alias('t1')
-                ->leftJoin(TABLE_PROGRAM)->alias('t2')->on('t1.program = t2.id')
-                ->where('t1.id')->in($productKeys)
-                ->orderBy('t2.order_asc, t1.line_desc, t1.order_asc')
-                ->page($pager)
-                ->fetchAll('id');
-        }
-        else
-        {
-            $products = $this->dao->select('*')->from(TABLE_PRODUCT)
-                ->where('id')->in($productKeys)
-                ->orderBy($orderBy)
-                ->page($pager)
-                ->fetchAll('id');
-        }
+        if($orderBy == static::OB_PROGRAM) $products = $this->productTao->getPagerProductsWithProgramIn($productKeys, $pager);
+        else $products = $this->productTao->getPagerProductsIn($productKeys, $pager, $orderBy);
 
         $linePairs = $this->getLinePairs();
         foreach($products as $product) $product->lineName = zget($linePairs, $product->line, '');
 
-        $stories = $this->dao->select('product, status, count(status) AS count')
-            ->from(TABLE_STORY)
-            ->where('deleted')->eq(0)
-            ->andWhere('type')->eq('story')
-            ->andWhere('product')->in($productKeys)
-            ->groupBy('product, status')
-            ->fetchGroup('product', 'status');
-
-        $requirements = $this->dao->select('product, status, count(status) AS count')
-            ->from(TABLE_STORY)
-            ->where('deleted')->eq(0)
-            ->andWhere('type')->eq('requirement')
-            ->andWhere('product')->in($productKeys)
-            ->groupBy('product, status')
-            ->fetchGroup('product', 'status');
+        $stories      = $this->productTao->getStoriesTODO($productKeys);
+        $requirements = $this->productTao->getRequirementsTODO($productKeys);
 
         /* Padding the stories to sure all products have records. */
         $emptyStory = array_keys($this->lang->story->statusList);
@@ -1925,68 +1826,19 @@ class productModel extends model
 
         if($storyType == 'requirement') $stories = $requirements;
 
-        $finishClosedStory = $this->dao->select('product, count(1) as finish')->from(TABLE_STORY)
-            ->where('deleted')->eq(0)
-            ->andWhere('status')->eq('closed')
-            ->andWhere('type')->eq('story')
-            ->andWhere('closedReason')->eq('done')
-            ->groupBy('product')
-            ->fetchPairs();
+        $finishClosedStory = $this->productTao->getFinishClosedStoryTODO();
+        $unclosedStory     = $this->productTao->getUnClosedStoryTODO();
+        $plans             = $this->productTao->getPlansTODO($productKeys);
+        $releases          = $this->productTao->getReleasesTODO($productKeys);
+        $bugs              = $this->productTao->getBugsTODO($productKeys);
+        $unResolved        = $this->productTao->getUnResolvedTODO($productKeys);
+        $fixedBugs         = $this->productTao->getFixedBugsTODO($productKeys);
+        $closedBugs        = $this->productTao->getClosedBugsTODO($productKeys);
 
-        $unclosedStory = $this->dao->select('product, count(1) as unclosed')->from(TABLE_STORY)
-            ->where('deleted')->eq(0)
-            ->andWhere('type')->eq('story')
-            ->andWhere('status')->ne('closed')
-            ->groupBy('product')
-            ->fetchPairs();
+        $this->loadModel('report');
+        $this->loadModel('story');
+        $this->loadModel('bug');
 
-        $plans = $this->dao->select('product, count(*) AS count')
-            ->from(TABLE_PRODUCTPLAN)
-            ->where('deleted')->eq(0)
-            ->andWhere('product')->in($productKeys)
-            ->andWhere('end')->gt(helper::now())
-            ->groupBy('product')
-            ->fetchPairs();
-
-        $releases = $this->dao->select('product, count(*) AS count')
-            ->from(TABLE_RELEASE)
-            ->where('deleted')->eq(0)
-            ->andWhere('product')->in($productKeys)
-            ->groupBy('product')
-            ->fetchPairs();
-
-        $bugs = $this->dao->select('product,count(*) AS conut')
-            ->from(TABLE_BUG)
-            ->where('product')->in($productKeys)
-            ->andWhere('deleted')->eq(0)
-            ->groupBy('product')
-            ->fetchPairs();
-
-        $unResolved = $this->dao->select('product,count(*) AS count')
-            ->from(TABLE_BUG)
-            ->where('status')->eq('active')
-            ->orWhere('resolution')->eq('postponed')
-            ->andWhere('product')->in($productKeys)
-            ->andWhere('deleted')->eq(0)
-            ->groupBy('product')
-            ->fetchPairs();
-
-        $fixedBugs = $this->dao->select('product,count(*) AS count')
-            ->from(TABLE_BUG)
-            ->where('status')->eq('closed')
-            ->andWhere('product')->in($productKeys)
-            ->andWhere('deleted')->eq(0)
-            ->andWhere('resolution')->eq('fixed')
-            ->groupBy('product')
-            ->fetchPairs();
-
-        $closedBugs = $this->dao->select('product,count(*) AS count')
-            ->from(TABLE_BUG)
-            ->where('status')->eq('closed')
-            ->andWhere('product')->in($productKeys)
-            ->andWhere('deleted')->eq(0)
-            ->groupBy('product')
-            ->fetchPairs();
 
         $this->app->loadClass('date', true);
         $weekDate     = date::getThisWeek();
@@ -2148,15 +2000,16 @@ class productModel extends model
      *
      * @param  int    $programID
      * @access public
-     * @return array
+     * @return int[]
      */
-    public function getLinePairs($programID = 0)
+    public function getLinePairs(int $programID = 0): array
     {
+        if($programID <= 0) return array();
         return $this->dao->select('id,name')->from(TABLE_MODULE)
             ->where('type')->eq('line')
-            ->beginIF($programID)->andWhere('root')->eq($programID)->fi()
+            ->andWhere('root')->eq($programID)
             ->andWhere('deleted')->eq(0)
-            ->fetchPairs();
+            ->fetchPairs('id', 'name');
     }
 
     /*
@@ -2231,13 +2084,13 @@ class productModel extends model
     }
 
     /**
-     * Statistics program data.
+     * Statistics program data from statistics data of product.
      *
-     * @param  object $productStats
+     * @param  array $productStats
      * @access public
      * @return array
      */
-    public function statisticProgram($productStats)
+    public function statisticProgram(array $productStats): array
     {
         if(defined('TUTORIAL')) return $this->loadModel('tutorial')->getProductStats();
 
@@ -2263,6 +2116,7 @@ class productModel extends model
                 $productStructure[$product->program] = $this->statisticData('program', $productStructure, $product);
             }
         }
+
         return $productStructure;
     }
 
@@ -2629,7 +2483,7 @@ class productModel extends model
      * @access public
      * @return void
      */
-    public function setMenu($productID, $branch = '', $module = 0, $moduleType = '', $extra = '')
+    public function setMenu($productID = 0, $branch = '', $module = 0, $moduleType = '', $extra = '')
     {
         if(!$this->app->user->admin and strpos(",{$this->app->user->view->products},", ",$productID,") === false and $productID != 0 and !defined('TUTORIAL')) return $this->accessDenied($this->lang->product->accessDenied);
 

@@ -32,18 +32,39 @@ class projectTao extends projectModel
     }
 
     /**
-     * Update project.
+     * Update project table when suspend a project.
      *
+     * @param  int    $projectID
      * @param  object $project
+     *
      * @access protected
-     * @return bool 
+     * @return bool
      */
-    protected function updateProject(object $project): bool
+    protected function doSuspend(int $projectID, object $project): bool
     {
         $this->dao->update(TABLE_PROJECT)->data($project)
             ->autoCheck()
             ->checkFlow()
-            ->where('id')->eq((int)$project->id)
+            ->where('id')->eq($projectID)
+            ->exec();
+
+        return !dao::isError();
+    }
+
+    /**
+     * Update project.
+     *
+     * @param  int    $projectID
+     * @param  object $project
+     * @access protected
+     * @return bool
+     */
+    protected function doActivate(int $projectID ,object $project): bool
+    {
+        $this->dao->update(TABLE_PROJECT)->data($project , 'readjustTime, readjustTask, comment')
+            ->autoCheck()
+            ->checkFlow()
+            ->where('id')->eq((int)$projectID)
             ->exec();
 
         return !dao::isError();
@@ -54,9 +75,9 @@ class projectTao extends projectModel
      *
      * @param  int $projectID
      * @access protected
-     * @return array
+     * @return array|false
      */
-    protected function fetchUndoneTasks(int $projectID): array
+    protected function fetchUndoneTasks(int $projectID): array|false
     {
         return $this->dao->select('id,estStarted,deadline,status')->from(TABLE_TASK)
             ->where('deadline')->notZeroDate()
@@ -70,9 +91,9 @@ class projectTao extends projectModel
      *
      * @param  array $tasks
      * @access protected
-     * @return void
+     * @return bool
      */
-    protected function updateTasksStartAndEndDate(array $tasks) :void
+    protected function updateTasksStartAndEndDate(array $tasks): bool
     {
         foreach($tasks as $task)
         {
@@ -93,6 +114,8 @@ class projectTao extends projectModel
                     ->set('deadline')->eq($deadline)
                     ->where('id')->eq($task->id)
                     ->exec();
+
+                if(dao::isError()) return false;
             }
             else
             {
@@ -101,7 +124,28 @@ class projectTao extends projectModel
 
                 if($deadline > $project->end) $deadline = $project->end;
                 $this->dao->update(TABLE_TASK)->set('deadline')->eq($deadline)->where('id')->eq($task->id)->exec();
+
+                if(dao::isError()) return false;
             }
         }
+
+        return true;
+    }
+
+    /**
+     * Get project details, including all contents of the TABLE_PROJECT.
+     * 获取项目的详情，包含project表的所有内容。
+     *
+     * @param  int       $projectID
+     * @access protected
+     * @return object|false
+     */
+    protected function fetchProjectInfo(int $projectID): object|false
+    {
+        $project = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($projectID)->fetch();
+
+        /* Filter the date is empty or 1970. */
+        if($project and helper::isZeroDate($project->end)) $project->end = '';
+        return $project;
     }
 }

@@ -830,12 +830,11 @@ class taskModel extends model
         {
             $now         = helper::now();
             $oldTeam     = zget($oldTask, 'team', array());
-            $members     = array_map(function($member){ return $member->account; }, $team);
+            $members     = array_map(function($member){return $member->account;}, $team);
             $currentTask = !empty($task) ? $task : new stdclass();
             if(!isset($currentTask->status)) $currentTask->status = $oldTask->status;
             $oldTask->team = $team;
 
-            $currentTask->assignedTo = $oldTask->assignedTo;
             if(!empty($_POST['assignedTo']) and is_string($_POST['assignedTo']))
             {
                 $currentTask->assignedTo = $this->post->assignedTo;
@@ -844,6 +843,8 @@ class taskModel extends model
             {
                 $currentTask->assignedTo = $this->getAssignedTo4Multi($members, $oldTask);
                 if($oldTask->assignedTo != $currentTask->assignedTo) $currentTask->assignedDate = $now;
+
+                $oldTask->team = $oldTeam;
             }
 
             $currentTask->estimate = 0;
@@ -858,50 +859,7 @@ class taskModel extends model
             $currentTask->consumed = 0;
             foreach($efforts as $effort) $currentTask->consumed += (float)$effort->consumed;
 
-            $oldTask->team = $oldTeam;
-
-            if(!empty($task))
-            {
-                if(!$autoStatus) return $currentTask;
-
-                if($currentTask->consumed == 0 and empty($efforts))
-                {
-                    if(!isset($task->status)) $currentTask->status = 'wait';
-                    $currentTask->finishedBy   = '';
-                    $currentTask->finishedDate = '';
-                }
-
-                if($currentTask->consumed > 0 && $currentTask->left > 0)
-                {
-                    $currentTask->status       = 'doing';
-                    $currentTask->finishedBy   = '';
-                    $currentTask->finishedDate = '';
-                }
-
-                if($currentTask->consumed > 0 and $currentTask->left == 0)
-                {
-                    $finisedUsers = $this->getFinishedUsers($oldTask->id, $members);
-                    if(count($finisedUsers) != count($team))
-                    {
-                        if(strpos('cancel,pause', $oldTask->status) === false or ($oldTask->status == 'closed' and $oldTask->reason == 'done'))
-                        {
-                            $currentTask->status       = 'doing';
-                            $currentTask->finishedBy   = '';
-                            $currentTask->finishedDate = '';
-                        }
-                    }
-                    elseif(strpos('wait,doing,pause', $oldTask->status) !== false)
-                    {
-                        $currentTask->status       = 'done';
-                        $currentTask->assignedTo   = $oldTask->openedBy;
-                        $currentTask->assignedDate = $now;
-                        $currentTask->finishedBy   = $this->app->user->account;
-                        $currentTask->finishedDate = $task->finishedDate;
-                    }
-                }
-
-                return $currentTask;
-            }
+            if(!empty($task)) return $this->taskTao->computeCurrentTaskStatus($currentTask, $oldTask, $task, $autoStatus, empty($efforts), $members);
             $this->dao->update(TABLE_TASK)->data($currentTask)->autoCheck()->where('id')->eq($oldTask->id)->exec();
         }
     }
@@ -1637,24 +1595,16 @@ class taskModel extends model
     /**
      * Assign a task to a user again.
      *
+     * @param  object $task
      * @param  int    $taskID
      * @access public
-     * @return void
+     * @return array
      */
-    public function assign($taskID)
+    public function assign($task, $taskID): array|false
     {
+        $task->id = $taskID;
         $oldTask = $this->getById($taskID);
 
-        $now  = helper::now();
-        $task = fixer::input('post')
-            ->add('id', $taskID)
-            ->cleanFloat('left')
-            ->setDefault('lastEditedBy', $this->app->user->account)
-            ->setDefault('lastEditedDate', $now)
-            ->setDefault('assignedDate', $now)
-            ->stripTags($this->config->task->editor->assignto['id'], $this->config->allowedTags)
-            ->remove('comment,showModule')
-            ->get();
         if($oldTask->status != 'done' and $oldTask->status != 'closed' and isset($task->left) and $task->left == 0)
         {
             dao::$errors[] = sprintf($this->lang->error->notempty, $this->lang->task->left);
@@ -2405,12 +2355,12 @@ class taskModel extends model
             ->andWhere('t1.vision')->eq($this->config->vision)
             ->fetch();
         if(!$task) return false;
-        $task->openedDate     = substr($task->openedDate, 0, 19);
-        $task->finishedDate   = substr($task->finishedDate, 0, 19);
-        $task->canceledDate   = substr($task->canceledDate, 0, 19);
-        $task->closedDate     = substr($task->closedDate, 0, 19);
-        $task->lastEditedDate = substr($task->lastEditedDate, 0, 19);
-        $task->realStarted    = substr($task->realStarted, 0, 19);
+        $task->openedDate     = !empty($task->openedDate)     ? substr($task->openedDate, 0, 19) : null;
+        $task->finishedDate   = !empty($task->finishedDate)   ? substr($task->finishedDate, 0, 19) : null;
+        $task->canceledDate   = !empty($task->canceledDate)   ? substr($task->canceledDate, 0, 19) : null;
+        $task->closedDate     = !empty($task->closedDate)     ? substr($task->closedDate, 0, 19) : null;
+        $task->lastEditedDate = !empty($task->lastEditedDate) ? substr($task->lastEditedDate, 0, 19) : null;
+        $task->realStarted    = !empty($task->realStarted)    ? substr($task->realStarted, 0, 19) : null;
 
         $children = $this->dao->select('*')->from(TABLE_TASK)->where('parent')->eq($taskID)->andWhere('deleted')->eq(0)->fetchAll('id');
         $task->children = $children;
@@ -2432,10 +2382,6 @@ class taskModel extends model
         if($setImgSize) $task->desc = $this->file->setImgSize($task->desc);
 
         if($task->assignedTo == 'closed') $task->assignedToRealName = 'Closed';
-        foreach($task as $key => $value)
-        {
-            if((strpos($key, 'Date') !== false or strpos('estStarted|deadline', $key) !== false) and !(int)substr($value, 0, 4)) $task->$key = '';
-        }
         $task->files = $this->loadModel('file')->getByObject('task', $taskID);
 
         /* Get related test cases. */
@@ -2521,32 +2467,15 @@ class taskModel extends model
         if(empty($tasks)) return array();
 
         $parents  = array();
-        $taskTeam = $this->taskTao->getTeamByIdList(array_keys($tasks));
+        $taskTeam = $this->taskTao->getTeamMembersByIdList(array_keys($tasks));
         foreach($tasks as $task)
         {
             if(isset($taskTeam[$task->id])) $tasks[$task->id]->team = $taskTeam[$task->id];
-            if($task->parent > 0) $parents[$task->parent] = $task->parent;
         }
-        $parents = $this->getByList($parents);
 
         if($this->config->vision == 'lite') $tasks = $this->appendLane($tasks);
-        foreach($tasks as $task)
-        {
-            if($task->parent > 0)
-            {
-                if(isset($tasks[$task->parent]))
-                {
-                    $tasks[$task->parent]->children[$task->id] = $task;
-                    unset($tasks[$task->id]);
-                }
-                else
-                {
-                    $parent = $parents[$task->parent];
-                    $task->parentName = $parent->name;
-                }
-            }
-        }
 
+        $tasks = $this->taskTao->restructureHierarchy($tasks);
         return $this->processTasks($tasks);
     }
 
@@ -2615,42 +2544,17 @@ class taskModel extends model
     public function getUserTasks($account, $type = 'assignedTo', $limit = 0, $pager = null, $orderBy = "id_desc", $projectID = 0)
     {
         if(!$this->loadModel('common')->checkField(TABLE_TASK, $type)) return array();
-        $orderBy = str_replace('pri_', 'priOrder_', $orderBy);
-        $orderBy = str_replace('project_', 't1.project_', $orderBy);
-        $tasks   = $this->dao->select("t1.*, t4.id as project, t2.id as executionID, t2.name as executionName, t4.name as projectName, t2.multiple as executionMultiple, t2.type as executionType, t3.id as storyID, t3.title as storyTitle, t3.status AS storyStatus, t3.version AS latestStoryVersion, IF(t1.`pri` = 0, {$this->config->maxPriValue}, t1.`pri`) as priOrder")
-            ->from(TABLE_TASK)->alias('t1')
-            ->leftJoin(TABLE_EXECUTION)->alias('t2')->on("t1.execution = t2.id")
-            ->leftJoin(TABLE_STORY)->alias('t3')->on('t1.story = t3.id')
-            ->leftJoin(TABLE_PROJECT)->alias('t4')->on("t2.project = t4.id")
-            ->leftJoin(TABLE_TASKTEAM)->alias('t5')->on("t5.task = t1.id and t5.account = '{$account}'")
-            ->where('t1.deleted')->eq(0)
-            ->andWhere('t2.deleted')->eq(0)
-            ->beginIF($this->config->vision)->andWhere('t1.vision')->eq($this->config->vision)->fi()
-            ->beginIF($this->config->vision)->andWhere('t2.vision')->eq($this->config->vision)->fi()
-            ->beginIF($type != 'closedBy' and $this->app->moduleName == 'block')->andWhere('t1.status')->ne('closed')->fi()
-            ->beginIF($projectID)->andWhere('t1.project')->eq($projectID)->fi()
-            ->beginIF(!$this->app->user->admin)->andWhere('t1.execution')->in($this->app->user->view->sprints)->fi()
-            ->beginIF($type == 'finishedBy')
-            ->andWhere('t1.finishedby', 1)->eq($account)
-            ->orWhere('t5.status')->eq("done")
-            ->markRight(1)
-            ->fi()
-            ->beginIF($type == 'assignedTo' and ($this->app->rawModule == 'my' or $this->app->rawModule == 'block'))->andWhere('t2.status', true)->ne('suspended')->orWhere('t4.status')->ne('suspended')->markRight(1)->fi()
-            ->beginIF($type != 'all' and $type != 'finishedBy' and $type != 'assignedTo')->andWhere("t1.`$type`")->eq($account)->fi()
-            ->beginIF($type == 'assignedTo')->andWhere("(t1.assignedTo = '{$account}' or (t1.mode = 'multi' and t5.`account` = '{$account}' and t1.status != 'closed' and t5.status != 'done') )")->fi()
-            ->beginIF($type == 'assignedTo' and $this->app->rawModule == 'my' and $this->app->rawMethod == 'work')->andWhere('t1.status')->notin('closed,cancel')->fi()
-            ->orderBy($orderBy)
-            ->beginIF($limit > 0)->limit($limit)->fi()
-            ->page($pager, 't1.id')
-            ->fetchAll('id');
+
+        $tasks = $this->taskTao->fetchUserTasksByType($account, $type, $orderBy, $projectID, $limit, $pager);
+
+        if(!$tasks) return array();
 
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'task', false);
 
-        $taskTeam = $this->dao->select('*')->from(TABLE_TASKTEAM)->where('task')->in(array_keys($tasks))->fetchGroup('task');
+        $taskTeam = $this->taskTao->getTeamMembersByIdList(array_keys($tasks));
         foreach($taskTeam as $taskID => $team) $tasks[$taskID]->team = $team;
 
-        if($tasks) return $this->processTasks($tasks);
-        return array();
+        return $this->processTasks($tasks);
     }
 
     /**
@@ -2732,29 +2636,7 @@ class taskModel extends model
             ->beginIF($projectID)->andWhere('project')->eq($projectID)->fi()
             ->fetchAll('id');
 
-        $parents = array();
-        foreach($tasks as $task)
-        {
-            if($task->parent > 0) $parents[$task->parent] = $task->parent;
-        }
-        $parents = $this->getByList($parents);
-
-        foreach($tasks as $task)
-        {
-            if($task->parent > 0)
-            {
-                if(isset($tasks[$task->parent]))
-                {
-                    $tasks[$task->parent]->children[$task->id] = $task;
-                    unset($tasks[$task->id]);
-                }
-                else
-                {
-                    $parent = $parents[$task->parent];
-                    $task->parentName = $parent->name;
-                }
-            }
-        }
+        $tasks = $this->taskTao->restructureHierarchy($tasks);
 
         return $this->taskTao->computeTasksProgress($tasks);
     }
@@ -3947,38 +3829,6 @@ class taskModel extends model
         }
 
         return array($toList, $ccList);
-    }
-
-    /**
-     * Get next user.
-     *
-     * @param  string $users
-     * @param  object $task
-     * @param  string $type   current|next
-     *
-     * @access public
-     * @return string
-     */
-    public function getAssignedTo4Multi($users, $task, $type = 'current')
-    {
-        if(empty($task->team) or $task->mode != 'linear') return $task->assignedTo;
-
-        $teamHours = array_values($task->team);
-
-        /* Process user */
-        if(!is_array($users)) $users = explode(',', trim($users, ','));
-        $users = array_values($users);
-        if(is_object($users[0])) $users = array_map(function($member){ return $member->account; }, $users);
-
-        foreach($users as $i => $account)
-        {
-            if(isset($teamHours[$i]) and $teamHours[$i]->status == 'done') continue;
-            if($type == 'current') return $account;
-            break;
-        }
-        if($type == 'next' and isset($users[$i + 1])) return $users[$i + 1];
-
-        return $task->openedBy;
     }
 
     /**

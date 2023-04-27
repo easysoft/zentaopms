@@ -318,3 +318,5 @@ $config->product->statisticFields['plans']        = array('plans');
 $config->product->statisticFields['releases']     = array('releases');
 
 $config->product->skipRedirectMethod = ',create,index,showerrornone,ajaxgetdropmenu,kanban,all,manageline,export,ajaxgetplans,';
+
+include dirname(__FILE__) . DS . 'config' . DS . 'form.php';

@@ -45,5 +45,5 @@ $tester->loadModel('project');
 
 initData();
 
-r($tester->project->getByID(2, 'project')) && p('code,type') && e('project2,project'); //获取ID等于11的项目
-r($tester->project->getByID(1, 'project'))  && p('code') && e('0');                //获取不存在的项目
+r($tester->project->getByID(2)) && p('code,type') && e('project2,project'); //获取ID等于11的项目
+r($tester->project->getByID(1))  && p('code') && e('0');                    //获取不存在的项目

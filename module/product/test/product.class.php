@@ -14,7 +14,7 @@ class productTest
         global $tester;
         su($user);
         $this->objectModel = $tester->loadModel('product');
-         $tester->app->loadClass('dao');
+        $tester->app->loadClass('dao');
     }
 
     /**
@@ -24,7 +24,7 @@ class productTest
      * @access public
      * @return object
      */
-    public function createObject($param = array())
+    public function createObject($param = array()): object
     {
         global $createFields;
         $whitelist = array();
@@ -1029,6 +1029,23 @@ class productTest
         {
             return $data;
         }
+    }
+
+    /**
+     * Test getPageProductsWithProgramIn function of tao file.
+     * 测试tao文件中的 getPagerProductsWithProgramIn 函数。
+     *
+     * @param  array       $productIDs
+     * @param  object|null $pager
+     * @access public
+     * @return array
+     */
+    public function getPagerProductsWithProgramInTest(array $productIDs, object|null $pager): array
+    {
+        $records = $this->objectModel->getPagerProductsWithProgramIn($productIDs, $pager);
+        if(!ksort($records)) return [];
+
+        return $records;
     }
 
     /**

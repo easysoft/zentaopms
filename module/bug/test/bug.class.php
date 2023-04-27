@@ -134,42 +134,6 @@ class bugTest
     }
 
     /**
-     * Test get bugs.
-     *
-     * @access public
-     * @return string
-     */
-    public function getBugsTest($product, $branch, $browseType, $module)
-    {
-        global $tester;
-
-        /* Load pager. */
-        $tester->app->loadClass('pager', $static = true);
-        $pager = new pager(0, 20 ,1);
-
-        $projectID  = 0;
-        $sort       = 'id_desc';
-        $queryID    = 0;
-        $executions = $tester->loadModel('execution')->getPairs($projectID, 'all', 'empty|withdelete');
-
-        $bugs = $this->objectModel->getBugs($product, $executions, $branch, $browseType, $module, $queryID, $sort, $pager, $projectID);
-
-        $title = '';
-        foreach($bugs as $bug) $title .= ',' . $bug->title;
-        $title = trim($title, ',');
-        $title = str_replace("'", '', $title);
-
-        if(dao::isError())
-        {
-            return dao::getError();
-        }
-        else
-        {
-            return $title;
-        }
-    }
-
-    /**
      * Test check delay bug.
      *
      * @param  object $bug
