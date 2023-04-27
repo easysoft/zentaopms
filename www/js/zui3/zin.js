@@ -1,6 +1,8 @@
 (function()
 {
-    let DEBUG         = true;
+    const config      = window.config;
+    const DEBUG       = config.debug;
+    const isIndexPage = config.currentModule === 'index' && (config.currentMethod === 'index' || config.currentMethod === 'index2');
     const currentCode = window.name.substring(4);
     const isInAppTab  = parent.window !== window;
     const fetchTasks  = new Map();
@@ -52,13 +54,13 @@
 
     function initZinbar()
     {
-        if(!DEBUG) return;
+        if(!DEBUG || isIndexPage) return;
         let $bar = $('#zinbar');
         if($bar.length) return;
 
         $bar = $(
         [
-            '<div id="zinbar" class="shadow-xl h-5 bg-inverse text-canvas fixed row items-center text-base" style="right:0;bottom:0;z-index: 99999">',
+            '<div id="zinbar" class="shadow-xl h-5 bg-inverse text-canvas fixed row items-center text-base" style="right:0;bottom:0;z-index: 99999;cursor: pointer">',
                 '<div id="zinErrors" class="mono row items-center"></div>',
                 '<div id="pagePerf" class="row items-center"></div>',
                 '<div id="partPerf" class="row items-center"></div>',
@@ -66,21 +68,24 @@
             '</div>'
         ].join('')).insertAfter('body');
 
-        $('#zinErrorList').on('click', '.zin-error-item', function()
+        $('#zinErrorList').on('click', '.zin-error-item', function(event)
         {
             const error = $(this).data('error');
             navigator.clipboard.writeText(`vim +${error.line} ${error.file}`).then(() => {zui.Messager.show({content: 'Copied vim command to clipboard.', type: 'success'});});
+            event.stopPropagation();
         });
+        $('#zinbar').on('click', () => $('#zinErrorList').toggleClass('in'));
     }
 
     function updatePerfInfo(options, stage, error)
     {
-        console.log('updatePerfInfo', options, stage, error);
+        if(!DEBUG || isIndexPage) return;
         options[stage] = performance.now();
         const $perf = options.id === 'page' ? $('#pagePerf') : $('#partPerf');
         if(stage === 'requestBegin')
         {
-            $perf.html(`<div class="opacity-50 pl-2">${options.id === 'page' ? 'PAGE' : 'PARTIAL'}</div>`).append($('<div class="px-2 zin-perf-load">loading...</div>')).attr('title', `Loading from ${options.url}`);
+            $perf.html(`<div class="opacity-50 pl-2">${options.id === 'page' ? 'PAGE' : (options.id === '#dtable' ? 'TABLE' : 'PART')}</div>`).append($('<div class="px-2 zin-perf-load">loading...</div>')).attr('title', `Loading from ${options.url}`);
+            if(options.id === 'page') $('#partPerf').empty();
         }
         else if(stage === 'requestEnd')
         {
@@ -90,7 +95,7 @@
         }
         else if(stage === 'renderBegin')
         {
-            $perf.append($('<div class="px-2 zin-perf-render">rendering...</div>')).attr('title', `Renderring ${options.id}`);
+            $perf.append($('<div class="px-2 zin-perf-render">rendering...</div>').attr('title', `Renderring ${options.id}`));
         }
         else if(stage === 'renderEnd')
         {
@@ -519,8 +524,6 @@
 
         if(window.defaultAppUrl) loadPage(window.defaultAppUrl);
         else if(DEBUG) loadCurrentPage('zinErrors()');
-
-        DEBUG = window.config.debug;
 
         /* Compatible with old version */
         if(DEBUG && typeof window.zin !== 'object' && isInAppTab)

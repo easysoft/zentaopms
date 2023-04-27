@@ -458,9 +458,9 @@ class taskTest
      * @access public
      * @return array
      */
-    public function getExecutionTasksTest($executionID, $productID = 0, $type = 'all', $modules = 0, $orderBy = 'status_asc, id_desc', $count = '0')
+    public function getExecutionTasksTest($executionID, $productID = 0, $type = 'all', $modules = array(), $orderBy = 'status_asc, id_desc', $count = '0')
     {
-        $object = $this->objectModel->getExecutionTasks($executionID, $productID, $type, $modules, $orderBy);
+        $tasks = $this->objectModel->getExecutionTasks($executionID, $productID, $type, $modules, $orderBy);
         if(dao::isError())
         {
             $error = dao::getError();
@@ -468,11 +468,11 @@ class taskTest
         }
         elseif($count == "1")
         {
-            return count($object);
+            return count($tasks);
         }
         else
         {
-            return $object;
+            return $tasks;
         }
     }
 
@@ -1507,5 +1507,35 @@ class taskTest
         if(dao::isError()) return dao::getError();
 
         return $object;
+    }
+
+    /**
+     * Test fetch tasks of a execution.
+     *
+     * @param  int          $executionID
+     * @param  int          $productID
+     * @param  string|array $type
+     * @param  string       $modules
+     * @param  string       $orderBy
+     * @param  string       $count
+     * @access public
+     * @return array
+     */
+    public function fetchExecutionTasksTest($executionID, $productID = 0, $type = 'all', $modules = array(), $orderBy = 'status_asc, id_desc', $count = '0'): array|int
+    {
+        $tasks = $this->objectModel->fetchExecutionTasks($executionID, $productID, $type, $modules, $orderBy);
+        if(dao::isError())
+        {
+            $error = dao::getError();
+            return $error;
+        }
+        elseif($count == "1")
+        {
+            return count($tasks);
+        }
+        else
+        {
+            return $tasks;
+        }
     }
 }

@@ -107,7 +107,7 @@ class projectZen extends project
      * @access protected
      * @return int|object
      */
-    protected function buildStartForm(object $project)
+    protected function buildStartForm(object $project):int|object
     {
         $this->view->title   = $this->lang->project->start;
         $this->view->project = $project;

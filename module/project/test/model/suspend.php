@@ -18,13 +18,16 @@ function initData()
 
 /**
 
-title=测试 projectModel->suspend();
+title=测试 projectModel::getByID;
 timeout=0
 cid=1
 
-- 执行project模块的suspend方法，参数是2,属性new @suspended
-- 执行project模块的suspend方法，参数是5,属性field @suspendedDate
-- 执行project模块的suspend方法，参数是4,属性new @suspended
+- 执行project模块的suspend方法，参数是2- ,属性0 @suspended
+ @suspended
+- 执行project模块的suspend方法，参数是5- ,属性1 @suspendedDate
+ @suspendedDate
+- 执行project模块的suspend方法，参数是4- ,属性0 @suspended
+ @suspended
 
 
 */
@@ -34,6 +37,6 @@ $tester->loadModel('project');
 
 initData();
 
-r($tester->project->suspend(2)) && p('new')   && e('suspended');
-r($tester->project->suspend(5)) && p('field') && e('suspendedDate');
-r($tester->project->suspend(4)) && p('new')   && e('suspended');
+r($tester->project->suspend(2)) && p('0:new')   && e('suspended');
+r($tester->project->suspend(5)) && p('1:field') && e('suspendedDate');
+r($tester->project->suspend(4)) && p('0:new')   && e('suspended');

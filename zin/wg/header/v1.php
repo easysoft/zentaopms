@@ -59,7 +59,7 @@ class header extends wg
     {
         return h::header
         (
-            setId('header'),
+            setID('header'),
             h::div
             (
                 setClass('container'),

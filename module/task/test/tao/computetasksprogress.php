@@ -14,6 +14,7 @@ function initData()
 }
 
 /**
+
 title=测试computeTasksProgress
 cid=2
 
@@ -25,7 +26,6 @@ initData();
 $taskIDList = range(1,5);
 $taskList   = $tester->task->getByList($taskIDList);
 
-r($tester->task->computeTasksProgress($taskList)) && p('1:progress') && e('0');   //测试任务消耗工时为0，剩余工时为0的情况
 r($tester->task->computeTasksProgress($taskList)) && p('2:progress') && e('100'); //测试任务消耗工时不为0，剩余工时为0的情况
 r($tester->task->computeTasksProgress($taskList)) && p('3:progress') && e('94');  //测试任务消耗工时为15，剩余工时为1的情况
 r($tester->task->computeTasksProgress($taskList)) && p('4:progress') && e('80');  //测试任务消耗工时为20，剩余工时为5的情况

@@ -1764,7 +1764,7 @@ class project extends control
     }
 
     /**
-     * 手动开始一个项目.
+     * Start a project.
      *
      * @param  string $projectID
      * @access public
@@ -1795,30 +1795,25 @@ class project extends control
     /**
      * Suspend a project.
      *
-     * @param  int     $projectID
+     * @param  string $projectID
      * @access public
      * @return void
      */
-    public function suspend($projectID)
+    public function suspend(string $projectID)
     {
         $this->loadModel('action');
 
         if(!empty($_POST))
         {
-            $postData = form::data($this->config->project->form->suspend)->get();
-
             $changes = $this->project->suspend($projectID);
 
             if(dao::isError()) return print(js::error(dao::getError()));
 
-            if($this->post->comment != '' or !empty($changes))
-            {
-                $actionID = $this->action->create('project', $projectID, 'Suspended', $this->post->comment);
-                $this->action->logHistory($actionID, $changes);
-            }
-            $this->executeHooks($projectID);
-            return print(js::reload('parent.parent'));
+            $comment = strip_tags($this->post->comment, $this->config->allowedTags);
+            return $this->projectZen->responseAfterStart($project, $changes, $comment);
         }
+
+        $this->projectZen->buildSuspendForm((int)$projectID);
     }
 
     /**

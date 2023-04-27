@@ -5,10 +5,10 @@
 
 ## 1. 统一使用PHP8.1进行开发，强类型声明
 # 为了让PHP强制使用严格类型，需要在每个编写的文件头部填写 declare(strict_types=1);
+<?php
 declare(strict_types=1);
-
-# 2. 文件注释
-# 版权信息修改： example 为当前模块，author修改成自己的账号，package写当前模块名；
+?>
+# 2. 文件注释 版权信息修改： example 为当前模块，author修改成自己的账号，package写当前模块名；
 <?php
 /**
  * The control file of example module of ZenTaoPMS.
@@ -56,7 +56,7 @@ declare(strict_types=1);
 #   1）ui: 新版Zin代码
 #   2）control/zen:
 #   public方法放在control，protected放在zen；
-#   control层只负责获取web请求的数据和变量，比如从$\_GET、 $\_POST、 $\_COOKIE、 $\_SESSION获取数据，其他层(zen、model、tao)禁止获取这些全局变量，只能传参使用；
+#   control层只负责获取web请求的数据和变量，比如从$_GET、 $_POST、 $_COOKIE、 $_SESSION获取数据，其他层(zen、model、tao)禁止获取这些全局变量，只能传参使用；
 #   zen层对这些数据进行加工，业务逻辑处理，调用model、tao方法（zen、tao里的方法均为protected）
 #   注意：页面跳转，js输出等需要放到control层
 #   3）model/tao: public方法放在model，protected放在tao；
@@ -66,14 +66,14 @@ declare(strict_types=1);
 <?php
 $config->example->form = new stdclass;
 $config->example->form->create = array();
-$config->example->form->create['name']                = array('type' => 'string', 'r e q u i r ed' => true, 'filter' => 'trim');
-$config->example->form->create['PO']                    = array('type' => 'account', 'r e q u i r ed' => false, 'default' => '');
-$config->example->form->create['createdDate']     = array('type' => 'date', 'r e q u i r ed' => false, 'default' => helper::now());
+$config->example->form->create['name']           = array('type' => 'string', 'r e q u i r ed' => true, 'filter' => 'trim');
+$config->example->form->create['PO']             = array('type' => 'account', 'r e q u i r ed' => false, 'default' => '');
+$config->example->form->create['createdDate']    = array('type' => 'date', 'r e q u i r ed' => false, 'default' => helper::now());
 $config->example->form->create['createdVersion'] = array('type' => 'string', 'r e q u i r ed' => false, 'default' => $this->config->version);
 ?>
 ## 2)调用form进行处理
 <?php
-$data = form::use($this->config->example->create)->create();
+$data = form::data($this->config->example->create)->get();
 ?>
 # -  注意代码编写时位置关系：select、insert
 # 7. Control层作为入口，处理请求参数
@@ -83,7 +83,7 @@ public function edit($projectID)
     if(!empty($_POST))
     {
         $data = form::use($this->config->example->create)->get();
-      $data = $this->projectZen->prepareEditExtras($data);
+        $data = $this->projectZen->prepareEditExtras($data);
         if(!$data) return $this->projectZen->errorBeforeEdit();
 
         $result = $this->project->edit($projectID, $data);
@@ -133,13 +133,14 @@ private function createBranch()
 $lang->bug->storyAB   = '需求';
 $lang->bug->projectAB = '项目';
 #现在改为：
-$lang->bug->abbr  = new stdclass();
+$lang->bug->abbr = new stdclass();
 $lang->bug->abbr->story   = '需求';
 $lang->bug->abbr->project = '项目';
 ?>
 ## 10. 方法要细分，每个函数的代码行数不超过50行
 #
-## 11. MySQL的sql_mode使用strict模式
+## 11. MySQL的sql_mode使用strict模式:
+# sql_mod = ONLY_FULL_GROUP_BY, STRICT_TRANS_TABLES, NO_ZERO_IN_DATE, NO_ZERO_DATE, ERROR_FOR_DIVISION_BY_ZERO, NO_AUTO_CREATE_USER, and NO_ENGINE_SUBSTITUTION.
 ##    1) 对于GROUP BY聚合操作,如果在SELECT中的列,没有在GROUP BY中出现,那么这个SQL是不合法的,因为列不在GROUP BY从句中
 ##    2) 不允许日期和月份为零，必须使用NULL
 ##    3) TEXT类型不能有默认值，建议设为NULL

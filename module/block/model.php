@@ -33,7 +33,7 @@ class blockModel extends model
     }
 
     /**
-     * Get a block by blockID. 
+     * Get a block by blockID.
      * 根据区块ID获取区块信息.
      *
      * @param  int    $blockID
@@ -98,14 +98,13 @@ class blockModel extends model
      * 获取区块列表.
      *
      * @param  string $module
-     * @param  string $type
      * @param  int    $hidden
      * @access public
      * @return int[]|false
      */
-    public function getMyDashboard(string $module, string $type = '', int $hidden = 0): array|false
+    public function getMyDashboard(string $dashboard, int $hidden = 0): array|false
     {
-        return $this->blockTao->fetchMyBlocks($module, $type, $hidden);
+        return $this->blockTao->fetchMyBlocks($dashboard, $hidden);
     }
 
     /**
@@ -116,9 +115,9 @@ class blockModel extends model
      * @access public
      * @return int[]|false
      */
-    public function getMyHiddenBlocks(string $module): array|false
+    public function getMyHiddenBlocks(string $dashboard): array|false
     {
-        return $this->blockTao->fetchMyBlocks($module, $type = '', $hidden = 1);
+        return $this->blockTao->fetchMyBlocks($dashboard, $hidden = 1);
     }
 
     /**
@@ -167,7 +166,7 @@ class blockModel extends model
     }
 
     /**
-     * Get max order number by block dashboard. 
+     * Get max order number by block dashboard.
      * 获取对应仪表盘下区块的最大排序号.
      *
      * @param  string $dashboard
@@ -182,9 +181,9 @@ class blockModel extends model
     /**
      * Get block set form params.
      * 获取不同区块所需的参数配置.
-     * 
-     * @param  string $type 
-     * @param  string $module 
+     *
+     * @param  string $type
+     * @param  string $module
      * @access public
      * @return string
      */
@@ -315,7 +314,7 @@ class blockModel extends model
     /**
      * Create a block.
      *
-     * @param  object $formData 
+     * @param  object $formData
      * @access public
      * @return void
      */
@@ -333,7 +332,7 @@ class blockModel extends model
     /**
      * Update a block.
      *
-     * @param  object $formData 
+     * @param  object $formData
      * @access public
      * @return void
      */
@@ -344,7 +343,7 @@ class blockModel extends model
 
         $this->loadModel('score')->create('block', 'set');
 
-        return $formData->id; 
+        return $formData->id;
     }
 
     /**
