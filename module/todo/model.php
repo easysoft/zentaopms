@@ -1,13 +1,14 @@
 <?php
+declare(strict_types=1);
+
 /**
- * The model file of todo module of ZenTaoPMS.
+ * The model file of example module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
- * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
- * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
+ * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @license     ZPL(https://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
+ * @author      Lanzongjun <lanzongjun@easycorp.ltd>
  * @package     todo
- * @version     $Id: model.php 5035 2013-07-06 05:21:58Z wyd621@gmail.com $
- * @link        http://www.zentao.net
+ * @link        https://www.zentao.net
  */
 class todoModel extends model
 {
@@ -18,10 +19,13 @@ class todoModel extends model
      * @param  object $todo
      * @return int|false
      */
-    public function create(object $todo): int|bool
+    public function create(object $todo): int|false
     {
-        $todoID = $this->todoTao->insert($todo);
+        /* 处理 $todo 信息 */
+        $processedTodo = $this->todoTao->beforeCreate($todo);
+        if(!$processedTodo) return false;
 
+        $todoID = $this->todoTao->insert($processedTodo);
         if(dao::isError()) return false;
 
         return $todoID;
@@ -467,22 +471,23 @@ class todoModel extends model
     }
 
     /**
-     * CreateByCycle
+     * Create todo by cycle.
      *
-     * @param  int    $todoList
+     * @param  array   $todoList
      * @access public
      * @return void
      */
-    public function createByCycle($todoList)
+    public function createByCycle(array $todoList): void
     {
         $this->loadModel('action');
-        $today = helper::today();
-        $now   = helper::now();
-        $lastCycleList = $this->dao->select('*')->from(TABLE_TODO)->where('type')->eq('cycle')->andWhere('deleted')->eq('0')->andWhere('idvalue')->in(array_keys($todoList))->orderBy('date_asc')->fetchAll('idvalue');
-        $activedUsers  = $this->dao->select('account')->from(TABLE_USER)->where('deleted')->eq(0)->fetchPairs('account', 'account');
+        $today      = helper::today();
+        $now        = helper::now();
+        $cycleList  = $this->todoTao->getCycleList($todoList);
+        $validUsers = $this->dao->select('account')->from(TABLE_USER)->where('deleted')->eq(0)->fetchPairs('account', 'account');
+
         foreach($todoList as $todoID => $todo)
         {
-            if(!isset($activedUsers[$todo->account])) continue;
+            if(!isset($validUsers[$todo->account])) continue;
 
             $todo->config = json_decode($todo->config);
             $begin      = $todo->config->begin;
@@ -491,19 +496,7 @@ class todoModel extends model
             if(!empty($beforeDays) && $beforeDays > 0) $begin = date('Y-m-d', strtotime("$begin -{$beforeDays} days"));
             if($today < $begin or (!empty($end) && $today > $end)) continue;
 
-            $newTodo = new stdclass();
-            $newTodo->account    = $todo->account;
-            $newTodo->begin      = $todo->begin;
-            $newTodo->end        = $todo->end;
-            $newTodo->type       = 'cycle';
-            $newTodo->idvalue    = $todoID;
-            $newTodo->pri        = $todo->pri;
-            $newTodo->name       = $todo->name;
-            $newTodo->desc       = $todo->desc;
-            $newTodo->status     = 'wait';
-            $newTodo->private    = isset($todo->private) ? $todo->private : '';
-            $newTodo->assignedTo = isset($todo->assignedTo) ? $todo->assignedTo : '';
-            $newTodo->assignedBy = isset($todo->assignedBy) ? $todo->assignedBy : '';
+            $newTodo = $this->todoTao->buildCycleTodo($todo);
             if(isset($todo->assignedTo) and $todo->assignedTo) $newTodo->assignedDate = $now;
 
             $start  = strtotime($begin);
@@ -511,83 +504,22 @@ class todoModel extends model
             foreach(range($start, $finish, 86400) as $today)
             {
                 $today     = date('Y-m-d', $today);
-                $lastCycle = zget($lastCycleList, $todoID, '');
-                $date      = '';
+                $lastCycle = zget($cycleList, $todoID, '');
 
-                if($todo->config->type == 'day')
-                {
-                    if(isset($todo->config->day))
-                    {
-                        $day = (int)$todo->config->day;
-                        if($day <= 0) continue;
-
-                        /* If no data, judge the interval from the begin time. */
-                        if(empty($lastCycle))
-                        {
-                            $todayTime = new DateTime($today);
-                            $beginTime = new DateTime($todo->config->begin);
-                            $interval  = $todayTime->diff($beginTime)->days;
-
-                            if($interval != $day) continue;
-
-                            $date = $today;
-                        }
-
-                        /* If have data, judge the interval from the last cycle time. */
-                        if(!empty($lastCycle->date))
-                        {
-                            $todayTime     = new DateTime($today);
-                            $lastCycleTime = new DateTime($lastCycle->date);
-                            $interval      = $todayTime->diff($lastCycleTime)->days;
-
-                            if($interval != $day) continue;
-
-                            $date = date('Y-m-d', strtotime("{$lastCycle->date} +{$day} days"));
-                        }
-                    }
-                    if(isset($todo->config->specifiedDate))
-                    {
-                        $date          = $today;
-                        $specifiedDate = $todo->config->specify->month + 1 . '-' . $todo->config->specify->day;
-
-                        /* If not set cycle every year and have data, continue. */
-                        if(!empty($lastCycle) and !isset($todo->config->cycleYear)) continue;
-
-                        /* If set specified date, only judge month and day. */
-                        if(date('m-d', strtotime($date)) != $specifiedDate) continue;
-                    }
-                }
-                elseif($todo->config->type == 'week')
-                {
-                    $week = date('w', strtotime($today));
-                    if(strpos(",{$todo->config->week},", ",{$week},") !== false)
-                    {
-                        if(empty($lastCycle))         $date = $today;
-                        if($lastCycle and $lastCycle->date < $today) $date = $today;
-                    }
-                }
-                elseif($todo->config->type == 'month')
-                {
-                    $day = date('j', strtotime($today));
-                    if(strpos(",{$todo->config->month},", ",{$day},") !== false)
-                    {
-                        if(empty($lastCycle))         $date = $today;
-                        if($lastCycle and $lastCycle->date < $today) $date = $today;
-                    }
-                }
+                $date = $this->todoTao->getCycleTodoDate($todo, $lastCycle, $today);
+                if($date === false) continue;
 
                 if(!$date)                                     continue;
                 if($date < $todo->config->begin)               continue;
-                if($date < date('Y-m-d'))                      continue;
-                if($date > date('Y-m-d', $finish))             continue;
+                if($date < date('Y-m-d'))              continue;
+                if($date > date('Y-m-d', $finish))     continue;
                 if(!empty($end) && $date > $end)               continue;
                 if($lastCycle and ($date == $lastCycle->date)) continue;
 
                 $newTodo->date = $date;
-
-                $this->dao->insert(TABLE_TODO)->data($newTodo)->exec();
+                $this->todoTao->insert($newTodo);
                 $this->action->create('todo', $this->dao->lastInsertID(), 'opened', '', '', $newTodo->account);
-                $lastCycleList[$todoID] = $newTodo;
+                $cycleList[$todoID] = $newTodo;
             }
         }
     }
