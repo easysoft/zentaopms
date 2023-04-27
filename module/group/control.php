@@ -334,7 +334,11 @@ class group extends control
             $privs             = $this->group->getCustomPrivs('', $privs);
             $modules           = $this->dao->select('*')->from(TABLE_PRIVMANAGER)->where('type')->eq('module')->fetchAll('code');
             $modulePairs       = $this->group->getPrivManagerPairs('module');
-            $unassignedModules = array_diff(array_keys(array_filter(get_object_vars($this->lang->resource), function($modulePrivs){return !empty((array)$modulePrivs);})), array_keys($modulePairs));
+
+            $privArray         = get_object_vars($this->lang->resource);
+            $privArray         = array_filter($privArray, function($modulePrivs){$modulePrivs = (array)$modulePrivs; return !empty($modulePrivs);});
+            $unassignedModules = array_diff(array_keys($privArray), array_keys($modulePairs));
+
             foreach($unassignedModules as $unassignedModule)
             {
                 $this->app->loadLang($unassignedModule);
