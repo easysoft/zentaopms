@@ -24,7 +24,7 @@ class blockTao extends blockModel
      * Get block list of current user.
      * 获取当前用户的区块列表.
      *
-     * @param  string $module 
+     * @param  string $module
      * @param  int    $hidden 0|1
      * @access protected
      * @return int[]|false
@@ -43,13 +43,13 @@ class blockTao extends blockModel
     /**
      * Insert a block data.
      *
-     * @param  object $formData 
+     * @param  object $formData
      * @access protected
      * @return bool
      */
     protected function insert($formData): bool
     {
-        $this->dao->insert(TABLE_BLOCK)->data($formData)->exec();
+        $this->dao->insert(TABLE_BLOCK)->data($formData)->autoCheck()->exec();
         return true;
     }
 }
