@@ -1520,7 +1520,7 @@ class taskTest
      * @access public
      * @return array
      */
-    public function fetchExecutionTasksTest(int $executionID, int $productID = 0, string $type = 'all', array $modules = array(), string $orderBy = 'status_asc, id_desc', string $count = '0'): array|int
+    public function fetchExecutionTasksTest(int $executionID, int $productID = 0, string|array $type = 'all', array $modules = array(), string $orderBy = 'status_asc, id_desc', string $count = '0'): array|int
     {
         $tasks = $this->objectModel->fetchExecutionTasks($executionID, $productID, $type, $modules, $orderBy);
         if(dao::isError())
