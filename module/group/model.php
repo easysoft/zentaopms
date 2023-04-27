@@ -482,7 +482,7 @@ class groupModel extends model
                 $data->method = $priv->method;
                 $this->dao->replace(TABLE_GROUPPRIV)->data($data)->exec();
             }
-            $recommendPrivs = $this->getPrivByIdList(zget($_POST, 'recommendPrivs'));
+            $recommendPrivs = $this->getPrivByIdList(zget($_POST, 'recommendPrivs', '0'));
             foreach($recommendPrivs as $privID => $priv)
             {
                 if(in_array($priv->method, zget($_POST['actions'], $priv->module, array())))
