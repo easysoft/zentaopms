@@ -1595,24 +1595,16 @@ class taskModel extends model
     /**
      * Assign a task to a user again.
      *
+     * @param  object $task
      * @param  int    $taskID
      * @access public
-     * @return void
+     * @return array
      */
-    public function assign($taskID)
+    public function assign($task, $taskID): array|false
     {
+        $task->id = $taskID;
         $oldTask = $this->getById($taskID);
 
-        $now  = helper::now();
-        $task = fixer::input('post')
-            ->add('id', $taskID)
-            ->cleanFloat('left')
-            ->setDefault('lastEditedBy', $this->app->user->account)
-            ->setDefault('lastEditedDate', $now)
-            ->setDefault('assignedDate', $now)
-            ->stripTags($this->config->task->editor->assignto['id'], $this->config->allowedTags)
-            ->remove('comment,showModule')
-            ->get();
         if($oldTask->status != 'done' and $oldTask->status != 'closed' and isset($task->left) and $task->left == 0)
         {
             dao::$errors[] = sprintf($this->lang->error->notempty, $this->lang->task->left);
