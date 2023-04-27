@@ -1026,11 +1026,14 @@ class taskTest
     /**
      * Test get report data of tasks per execution.
      *
+     * @param  int $executionID
      * @access public
      * @return array
      */
-    public function getDataOfTasksPerExecutionTest()
+    public function getDataOfTasksPerExecutionTest($executionID)
     {
+        global $tester;
+        $tester->session->set('taskQueryCondition', "execution  = '{$executionID}' AND  status IN ('','wait','doing','done','pause','cancel') AND  deleted  = '0'");
         $object = $this->objectModel->getDataOfTasksPerExecution();
 
         if(dao::isError())

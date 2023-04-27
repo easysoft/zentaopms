@@ -3193,7 +3193,7 @@ class taskModel extends model
         /* Set closed realname. */
         if($task->assignedTo == 'closed') $task->assignedToRealName = 'Closed';
 
-        $task->progress = $this->taskTao->computeTaskProgress();
+        $task->progress = $this->taskTao->computeTaskProgress($task);
 
         if($task->mode == 'multi')
         {
@@ -3268,25 +3268,20 @@ class taskModel extends model
     }
 
     /**
-     * Get report data of tasks per execution
+     * Get report data of tasks per execution.
      *
      * @access public
-     * @return array
+     * @return object[]
      */
-    public function getDataOfTasksPerExecution()
+    public function getDataOfTasksPerExecution(): array
     {
-        $tasks = $this->dao->select('id,execution')->from(TABLE_TASK)->alias('t1')
-            ->where($this->reportCondition())
-            ->fetchAll('id');
+        $tasks = $this->taskTao->getListByReportCondition('execution', $this->reportCondition());
         if(!$tasks) return array();
 
         $datas = $this->processData4Report($tasks, '', 'execution');
 
         $executions = $this->loadModel('execution')->getPairs(0, 'all', 'all');
-        foreach($datas as $executionID => $data)
-        {
-            $data->name  = isset($executions[$executionID]) ? $executions[$executionID] : $this->lang->report->undefined;
-        }
+        foreach($datas as $executionID => $data) $data->name  = isset($executions[$executionID]) ? $executions[$executionID] : $this->lang->report->undefined;
         return $datas;
     }
 

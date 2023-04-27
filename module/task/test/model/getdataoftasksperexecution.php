@@ -4,27 +4,55 @@ include dirname(__FILE__, 5) . "/test/lib/init.php";
 include dirname(__FILE__, 2) . '/task.class.php';
 su('admin');
 
+function initData()
+{
+    $project = zdTable('project');
+    $project->id->range('2-5');
+    $project->project->range('6-9');
+    $project->name->prefix("迭代")->range('2-5');
+    $project->code->prefix("project")->range('2-5');
+    $project->auth->range("[]");
+    $project->path->range("`,6,2,`,`,7,3,`,`,8,4,`,`,9,5,`");
+    $project->type->range("sprint");
+    $project->grade->range("1");
+    $project->days->range("1");
+    $project->status->range("wait");
+    $project->desc->range("[]");
+    $project->budget->range("100000,200000");
+    $project->budgetUnit->range("CNY");
+    $project->percent->range("0-0");
+
+    $project->gen(4);
+
+    $task = zdTable('task');
+    $task->id->range('2-5');
+    $task->execution->range('2,3,3,4');
+    $task->name->prefix("任务")->range('1-5');
+    $task->status->range("wait");
+
+    $task->gen(4);
+}
+
 /**
 
 title=taskModel->getDataOfTasksPerExecution();
+timeout=0
 cid=1
-pid=1
 
-统计executionID为101的执行的任务数量 >> 迭代1,14
-统计executionID为102的执行的任务数量 >> 迭代2,4
-统计executionID为103的执行的任务数量 >> 迭代3,4
-统计executionID为104的执行的任务数量 >> 迭代4,4
-统计executionID为105的执行的任务数量 >> 迭代5,4
-统计executionID为106的执行的任务数量 >> 迭代6,4
-统计executionID为107的执行的任务数量 >> 迭代7,4
+- 执行task模块的getDataOfTasksPerExecution方法，参数是2
+ - 第2条的name属性 @/迭代2
+ - 第2条的value属性 @1
+
+- 执行task模块的getDataOfTasksPerExecution方法，参数是3
+ - 第3条的name属性 @/迭代3
+ - 第3条的value属性 @2
+
+
 
 */
 
+initData();
+$tester->session->set('taskOnlyCondition', true);
 $task = new taskTest();
-r($task->getDataOfTasksPerExecutionTest()) && p('101:name,value')       && e('迭代1,14'); //统计executionID为101的执行的任务数量
-r($task->getDataOfTasksPerExecutionTest()) && p('102:name,value')       && e('迭代2,4');  //统计executionID为102的执行的任务数量
-r($task->getDataOfTasksPerExecutionTest()) && p('103:name,value')       && e('迭代3,4');  //统计executionID为103的执行的任务数量
-r($task->getDataOfTasksPerExecutionTest()) && p('104:name,value')       && e('迭代4,4');  //统计executionID为104的执行的任务数量
-r($task->getDataOfTasksPerExecutionTest()) && p('105:name,value')       && e('迭代5,4');  //统计executionID为105的执行的任务数量
-r($task->getDataOfTasksPerExecutionTest()) && p('106:name,value')       && e('迭代6,4');  //统计executionID为106的执行的任务数量
-r($task->getDataOfTasksPerExecutionTest()) && p('107:name,value')       && e('迭代7,4');  //统计executionID为107的执行的任务数量
+r($task->getDataOfTasksPerExecutionTest(2)) && p('2:name,value')       && e('/迭代2,1'); //统计executionID为2的执行的任务数量
+r($task->getDataOfTasksPerExecutionTest(3)) && p('3:name,value')       && e('/迭代3,2'); //统计executionID为3的执行的任务数量
