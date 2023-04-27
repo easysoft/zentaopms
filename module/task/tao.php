@@ -18,24 +18,13 @@ class taskTao extends taskModel
      *
      * @param  object   $task
      * @access private
-     * @return int
+     * @return float
      */
     protected function computeTaskProgress(object $task): float
     {
-        if($task->consumed == 0 and $task->left == 0)
-        {
-            $progress = 0;
-        }
-        elseif($task->consumed != 0 and $task->left == 0)
-        {
-            $progress = 100;
-        }
-        else
-        {
-            $progress = round($task->consumed / ($task->consumed + $task->left), 2) * 100;
-        }
-
-        return $progress;
+        if($task->consumed == 0 and $task->left == 0) return 0;
+        if($task->consumed != 0 and $task->left == 0) return 100;
+        return round($task->consumed / ($task->consumed + $task->left), 2) * 100;
     }
 
     /**
