@@ -594,7 +594,7 @@ class screenModel extends model
                 {
                     for($k = 1; $k < $rowspan; $k ++)
                     {
-                        if(isset($dataset[$i + $k][$j])) unset($dataset[$i + $k][$j]);
+                        unset($dataset[$i + $k][$j]);
                     }
                 }
             }
