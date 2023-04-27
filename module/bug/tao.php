@@ -23,7 +23,7 @@ class bugTao extends bugModel
 
     /**
      * Get all bugs.
-     * 获取所有的bug.
+     * 获取所有的bug。
      *
      * @param  int|array   $productIdList
      * @param  int|string  $branch
@@ -53,7 +53,7 @@ class bugTao extends bugModel
 
     /**
      * Get bug list by browse type.
-     * 通过浏览类型获取bug列表.
+     * 通过浏览类型获取bug列表。
      *
      * @param  string       $browseType
      * @param  int|array    $productIdList
@@ -109,7 +109,6 @@ class bugTao extends bugModel
 
             ->beginIF($browseType == 'overduebugs')
             ->andWhere('status')->eq('active')
-            ->andWhere('deadline')->ne('0000-00-00')
             ->andWhere('deadline')->lt(helper::today())
             ->fi()
 
@@ -190,7 +189,7 @@ class bugTao extends bugModel
 
     /**
      * Get cases created by bug.
-     * 获取bug建的用例.
+     * 获取bug建的用例。
      *
      * @param  int    $bugID
      * @access public
@@ -203,7 +202,7 @@ class bugTao extends bugModel
 
     /**
      * Get an array of id and title pairs by buglist.
-     * 传入一个buglist，获得bug的id和title键值对数组.
+     * 传入一个buglist，获得bug的id和title键值对数组。
      *
      * @param  int    $bugList
      * @access public
@@ -216,7 +215,7 @@ class bugTao extends bugModel
 
     /**
      * Get object title/name base on the params.
-     * 根据传入的参数，获取对象名称.
+     * 根据传入的参数，获取对象名称。
      *
      * @param  int    $objectID
      * @param  string $table
