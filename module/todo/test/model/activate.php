@@ -7,8 +7,8 @@ su('admin');
 function initData()
 {
     $todo = zdTable('todo');
-    $todo->id->range('1-4');
-    $todo->account->prefix('admin')->range('1-4');
+    $todo->id->range('1-3');
+    $todo->account->prefix('admin')->range('1-3');
     $todo->begin->range('1710');
     $todo->end->range('1740');
     $todo->feedback->range('0');
@@ -16,18 +16,18 @@ function initData()
     $todo->cycle->range('0');
     $todo->idvalue->range('0');
     $todo->pri->range("3");
-    $todo->name->prefix('测试待办')->range('1-4');
+    $todo->name->prefix('测试待办')->range('1-3');
     $todo->desc->range('描述');
-    $todo->status->range('wait');
+    $todo->status->range('wait{1},doing{1},done{1}');
     $todo->private->range('0');
-    $todo->assignedTo->prefix('admin')->range('1-4');
-    $todo->assignedBy->prefix('admin')->range('1-4');
-    $todo->finishedBy->prefix('admin')->range('1-4');
-    $todo->closedBy->prefix('admin')->range('1-4');
+    $todo->assignedTo->prefix('admin')->range('1-3');
+    $todo->assignedBy->prefix('admin')->range('1-3');
+    $todo->finishedBy->prefix('admin')->range('1-3');
+    $todo->closedBy->prefix('admin')->range('1-3');
     $todo->deleted->range('0');
     $todo->vision->range('1.0');
 
-    $todo->gen(4);
+    $todo->gen(3);
 }
 
 /**
