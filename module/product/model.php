@@ -1825,7 +1825,7 @@ class productModel extends model
 
         $productKeys = array_keys($products);
         if($orderBy == static::OB_PROGRAM) $products = $this->productTao->getPagerProductsWithProgramIn($productKeys, $pager);
-        else $products = $this->productTao->getPagerProductsWithProgramIn($productKeys, $pager);
+        else $products = $this->productTao->getPagerProductsIn($productKeys, $pager, $orderBy);
 
         $linePairs = $this->getLinePairs();
         foreach($products as $product) $product->lineName = zget($linePairs, $product->line, '');

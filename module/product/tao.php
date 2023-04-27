@@ -20,9 +20,9 @@ class productTao extends productModel
      * @access protected
      * @return array
      */
-    protected function getPagerProductsWithProgramIn(array $productIDs, object $pager)
+    protected function getPagerProductsWithProgramIn(array $productIDs, object|null $pager) :array
     {
-        $products = $this->dao->select('t1.id as id, t1.*')->from(TABLE_PRODUCT)->alias('t1')
+        $products = $this->dao->select('t1.*')->from(TABLE_PRODUCT)->alias('t1')
             ->leftJoin(TABLE_PROGRAM)->alias('t2')->on('t1.program = t2.id')
             ->where('t1.id')->in($productIDs)
             ->orderBy('t2.order_asc, t1.line_desc, t1.order_asc')
@@ -41,7 +41,7 @@ class productTao extends productModel
      * @access protected
      * @return array
      */
-    protected function getPagerProductsIn(array $productIDs, object $pager, string $orderBy)
+    protected function getPagerProductsIn(array $productIDs, object|null $pager, string $orderBy)
     {
         /* TODO list all fields? */
         $products = $this->dao->select('*')->from(TABLE_PRODUCT)
@@ -172,7 +172,7 @@ class productTao extends productModel
         $releases = $this->dao->select('product, count(*) AS count')
             ->from(TABLE_RELEASE)
             ->where('deleted')->eq(0)
-            ->andWhere('product')->in($productKeys)
+            ->andWhere('product')->in($productIDs)
             ->groupBy('product')
             ->fetchPairs();
 
