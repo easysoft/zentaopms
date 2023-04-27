@@ -292,7 +292,7 @@ class todo extends control
      * @access public
      * @return void
      */
-    public function start(string $todoID): void
+    public function start(string $todoID)
     {
         $todoID = (int)$todoID;
         $todo   = $this->todo->getById($todoID);
