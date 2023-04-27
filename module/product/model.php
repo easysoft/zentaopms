@@ -1096,41 +1096,6 @@ class productModel extends model
     }
 
     /**
-     * Build form fields.
-     *
-     * @param  array $fields
-     * @param  object $project
-     * @access public
-     * @return void
-     */
-    public function buildFormFields($fields, $product = null)
-    {
-        $this->loadModel('user');
-        $poUsers = $this->user->getPairs('nodeleted|pofirst|noclosed',  '', $this->config->maxCount);
-        $qdUsers = $this->user->getPairs('nodeleted|qdfirst|noclosed',  '', $this->config->maxCount);
-        $rdUsers = $this->user->getPairs('nodeleted|devfirst|noclosed', '', $this->config->maxCount);
-        $users   = $this->user->getPairs('nodeleted|noclosed');
-
-        foreach($fields as $field => $attr)
-        {
-            if(isset($attr['options']) and $attr['options'] == 'users') $fields[$field]['options'] = $users;
-            $fields[$field]['name']  = $field;
-            $fields[$field]['title'] = $this->lang->product->$field;
-            if($product and isset($product->$field)) $fields[$field]['default'] = $product->$field;
-        }
-
-        $fields['program']['options'] = array('') + $this->loadModel('program')->getTopPairs('', 'noclosed');
-        $fields['PO']['options']      = $poUsers;
-        $fields['QD']['options']      = $qdUsers;
-        $fields['RD']['options']      = $rdUsers;
-
-        if($product and $product->program)$fields['line']['options'] = array('') + $this->getLinePairs($product->program);
-        if(empty($product->program) or $this->config->systemMode != 'ALM') unset($fields['line']);
-
-        return $fields;
-    }
-
-    /**
      * Build search form.
      *
      * @param  int    $productID
@@ -2035,15 +2000,16 @@ class productModel extends model
      *
      * @param  int    $programID
      * @access public
-     * @return array
+     * @return int[]
      */
-    public function getLinePairs($programID = 0)
+    public function getLinePairs(int $programID = 0): array
     {
+        if($programID <= 0) return array();
         return $this->dao->select('id,name')->from(TABLE_MODULE)
             ->where('type')->eq('line')
-            ->beginIF($programID)->andWhere('root')->eq($programID)->fi()
+            ->andWhere('root')->eq($programID)
             ->andWhere('deleted')->eq(0)
-            ->fetchPairs();
+            ->fetchPairs('id', 'name');
     }
 
     /*
@@ -2517,7 +2483,7 @@ class productModel extends model
      * @access public
      * @return void
      */
-    public function setMenu($productID, $branch = '', $module = 0, $moduleType = '', $extra = '')
+    public function setMenu($productID = 0, $branch = '', $module = 0, $moduleType = '', $extra = '')
     {
         if(!$this->app->user->admin and strpos(",{$this->app->user->view->products},", ",$productID,") === false and $productID != 0 and !defined('TUTORIAL')) return $this->accessDenied($this->lang->product->accessDenied);
 

@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * The control file of product module of ZenTaoPMS.
  *
@@ -393,6 +394,7 @@ class product extends control
     }
 
     /**
+     * 创建产品。可以是顶级产品，也可以是项目集下的产品。
      * Create a product.
      *
      * @param  int    $programID
@@ -400,10 +402,19 @@ class product extends control
      * @access public
      * @return void
      */
-    public function create($programID = 0, $extra = '')
+    public function create(string $programID = '0', string $extra = '')
     {
+        $programID = (int)$programID;
+
         if(!empty($_POST))
         {
+            $data = form::data($this->config->product->form->create);
+            $data = $this->productZen->prepareCreateExtras($data);
+            if(!$data) return $this->productZen->errorBeforeEdit();
+
+            $result = $this->product->create($data);
+            if(!$result) return $this->productZen->errorAfterEdit();
+            return $this->productZen->responseAfterEdit($result);
             $productID = $this->product->create();
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
             $this->loadModel('action')->create('product', $productID, 'opened');
@@ -421,57 +432,8 @@ class product extends control
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $locate));
         }
 
-        if($this->app->tab == 'program') $this->loadModel('program')->setMenu($programID);
-        if($this->app->getViewType() == 'mhtml')
-        {
-            if($this->app->rawModule == 'projectstory' and $this->app->rawMethod == 'story')
-            {
-                $this->loadModel('project')->setMenu();
-            }
-            else
-            {
-                $this->product->setMenu('');
-            }
-        }
-
-        $extra = str_replace(array(',', ' '), array('&', ''), $extra);
-        parse_str($extra, $output);
-
-        $this->loadModel('user');
-        $poUsers = $this->user->getPairs('nodeleted|pofirst|noclosed',  '', $this->config->maxCount);
-        if(!empty($this->config->user->moreLink)) $this->config->moreLinks["PO"] = $this->config->user->moreLink;
-
-        $qdUsers = $this->user->getPairs('nodeleted|qdfirst|noclosed',  '', $this->config->maxCount);
-        if(!empty($this->config->user->moreLink)) $this->config->moreLinks["QD"] = $this->config->user->moreLink;
-
-        $rdUsers = $this->user->getPairs('nodeleted|devfirst|noclosed', '', $this->config->maxCount);
-        if(!empty($this->config->user->moreLink)) $this->config->moreLinks["RD"] = $this->config->user->moreLink;
-
-        $lines = array();
-        if($programID and $this->config->systemMode == 'ALM') $lines = array('') + $this->product->getLinePairs($programID);
-
-        if($this->app->tab == 'doc') unset($this->lang->doc->menu->product['subMenu']);
-
-        $gobackLink = '';
-        if(isset($output['from']) and $output['from'] == 'qa') $gobackLink = $this->createLink('qa', 'index');
-        if(isset($output['from']) and $output['from'] == 'global') $gobackLink = $this->createLink('product', 'all');
-
-        $this->view->title      = $this->lang->product->create;
-        $this->view->position[] = $this->view->title;
-        $this->view->gobackLink = $gobackLink;
-        $this->view->groups     = $this->loadModel('group')->getPairs();
-        $this->view->programID  = $programID;
-        $this->view->poUsers    = $poUsers;
-        $this->view->qdUsers    = $qdUsers;
-        $this->view->rdUsers    = $rdUsers;
-        $this->view->fields     = $this->product->buildFormFields($this->config->product->create->fields);
-        $this->view->users      = $this->user->getPairs('nodeleted|noclosed');
-        $this->view->programs   = array('') + $this->loadModel('program')->getTopPairs('', 'noclosed');
-        $this->view->lines      = $lines;
-        $this->view->URSRPairs  = $this->loadModel('custom')->getURSRPairs();
-
-        unset($this->lang->product->typeList['']);
-        $this->display();
+        $this->productZen->setMenu4Create($programID);
+        $this->productZen->buildCreateForm($programID, $extra);
     }
 
     /**
