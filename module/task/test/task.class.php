@@ -1517,14 +1517,14 @@ class taskTest
      *
      * @param  int          $executionID
      * @param  int          $productID
-     * @param  string|array $type
+     * @param  string|array $type        all|assignedbyme|myinvolved|undone|needconfirm|assignedtome|finishedbyme|delayed|review|wait|doing|done|pause|cancel|closed|array('wait','doing','done','pause','cancel','closed')
      * @param  string       $modules
      * @param  string       $orderBy
      * @param  string       $count
      * @access public
      * @return array
      */
-    public function fetchExecutionTasksTest($executionID, $productID = 0, $type = 'all', $modules = array(), $orderBy = 'status_asc, id_desc', $count = '0'): array|int
+    public function fetchExecutionTasksTest(int $executionID, int $productID = 0, string $type = 'all', array $modules = array(), string $orderBy = 'status_asc, id_desc', string $count = '0'): array|int
     {
         $tasks = $this->objectModel->fetchExecutionTasks($executionID, $productID, $type, $modules, $orderBy);
         if(dao::isError())
@@ -1540,5 +1540,35 @@ class taskTest
         {
             return $tasks;
         }
+    }
+
+    /**
+     * Change the hierarchy of tasks to a parent-child structure.
+     *
+     * @param  array  $taskIdList
+     * @access public
+     * @return object[]
+     */
+    public function restructureHierarchyTest(array $taskIdList): array
+    {
+        $tasks = array();
+        if(!empty($taskIdList)) $tasks = $this->objectModel->getByList($taskIdList);
+        return $this->objectModel->restructureHierarchy($tasks);
+    }
+
+    /**
+     * Get the assignedTo for the multiply linear task.
+     * 
+     * @param  int    $taskID 
+     * @param  string $type current|next
+     * @access public
+     * @return string
+     */
+    public function getAssignedTo4MultiTest(int $taskID, string $type = 'current'): string
+    {
+        $task    = $this->objectModel->getByID($taskID);
+        $members = empty($task->team) ? array() : $task->team;
+
+        return $this->objectModel->getAssignedTo4Multi($members, $task, $type);
     }
 }
