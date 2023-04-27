@@ -260,13 +260,14 @@ class yaml
      */
     public function gen($rows, $dataDirYaml = '', $isClear = true)
     {
-        $runFileDir  = dirname(getcwd() . DS . $_SERVER['SCRIPT_FILENAME']);
         $runFileName = str_replace(strrchr($_SERVER['SCRIPT_FILENAME'], "."), "", $_SERVER['SCRIPT_FILENAME']);
 
         $pos = strripos($runFileName, DS);
         if($pos !== false) $runFileName = mb_substr($runFileName, $pos+1);
 
-        if(!is_dir("$runFileDir/data")) mkdir("$runFileDir/data", 0777, true);
+        $runFileDir  = dirname($runFileName);
+
+        if(!is_dir("{$runFileDir}/data")) mkdir("{$runFileDir}/data", 0777);
         $yamlFile = "{$runFileDir}/data/{$this->tableName}_{$runFileName}.yaml";
 
         $yamlDataArr = array();
@@ -318,15 +319,15 @@ class yaml
         $dbUser    = $this->config->db->user;
         $dbPWD     = $this->config->db->password;
 
-        $command    = "$zdPath -c %s -d %s -n %d -t %s -dns mysql://%s:%s@%s:%s/%s#utf8";
+        $command = "$zdPath -c %s -d %s -n %d -t %s -dns mysql://%s:%s@%s:%s/%s#utf8";
         if($isClear === true)
         {
             /* Truncate table to reset auto increment number. */
             system(sprintf("mysql -u%s -p%s -h%s -P%s %s -e 'truncate %s' 2>/dev/null", $dbUser, $dbPWD, $dbHost, $dbPort, $dbName, $tableName));
             $command .= ' --clear';
         }
-        $execYaml    = sprintf($command, $configYaml, $yamlFile, $rows, $tableName, $dbUser, $dbPWD, $dbHost, $dbPort, $dbName);
-        $execDump    = sprintf($dumpCommand, $dbUser, $dbPWD, $dbHost, $dbPort, $dbName, $tableName);
+        $execYaml = sprintf($command, $configYaml, $yamlFile, $rows, $tableName, $dbUser, $dbPWD, $dbHost, $dbPort, $dbName);
+        $execDump = sprintf($dumpCommand, $dbUser, $dbPWD, $dbHost, $dbPort, $dbName, $tableName);
         system($execDump);
         system($execYaml);
     }
