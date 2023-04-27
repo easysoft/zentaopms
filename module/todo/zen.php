@@ -239,4 +239,24 @@ class todoZen extends todo
 
         return $formData;
     }
+
+    /**
+     * 输出确认弹框
+     * Output confirm alert.
+     * 
+     * @param  object $todo
+     * @access protected
+     * @return int
+     */
+    protected function printConfirm(object $todo): int
+    {
+        $confirmNote = 'confirm' . ucfirst($todo->type);
+        $confirmURL  = $this->createLink($todo->type, 'view', "id=$todo->idvalue");
+        $okTarget    = isonlybody() ? 'parent' : 'window.parent.$.apps.open';
+        if($todo->type == 'bug')   $app = 'qa';
+        if($todo->type == 'task')  $app = 'execution';
+        if($todo->type == 'story') $app = 'product';
+        $cancelURL   = $this->server->HTTP_REFERER;
+        return print(js::confirm(sprintf($this->lang->todo->$confirmNote, $todo->idvalue), $confirmURL, $cancelURL, $okTarget, 'parent', $app));
+    }
 }

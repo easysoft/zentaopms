@@ -226,16 +226,19 @@ class todoModel extends model
     }
 
     /**
+     * 开启一个待办事项
      * Start one todo.
      *
-     * @param  string $todoID
+     * @param  int   $todoID
      * @access public
-     * @return void
+     * @return bool
      */
-    public function start($todoID)
+    public function start(int $todoID): bool
     {
-        $this->dao->update(TABLE_TODO)->set('status')->eq('doing')->where('id')->eq((int)$todoID)->exec();
+        $this->dao->update(TABLE_TODO)->set('status')->eq('doing')->where('id')->eq($todoID)->exec();
         $this->loadModel('action')->create('todo', $todoID, 'started');
+
+        return !dao::isError();
     }
 
 
