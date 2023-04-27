@@ -7,7 +7,7 @@ class bugTao extends bugModel
      * 获取bug的详情，包含bug表的所有内容、所属执行名称、关联需求名称、关联需求状态、关联需求版本、关联任务名称、关联计划名称
      *
      * @param  int   $bugID
-     * @access public
+     * @access protected
      * @return object|false
      */
     protected function fetchBugInfo(int $bugID): object|false
@@ -26,7 +26,7 @@ class bugTao extends bugModel
      * 获取bug建的用例.
      *
      * @param  int    $bugID
-     * @access public
+     * @access protected
      * @return array
      */
     protected function getCasesFromBug(int $bugID): array
@@ -38,8 +38,8 @@ class bugTao extends bugModel
      * Get an array of id and title pairs by buglist.
      * 传入一个buglist，获得bug的id和title键值对数组.
      *
-     * @param  int    $bugList
-     * @access public
+     * @param  string|array $bugList
+     * @access protected
      * @return array
      */
     protected function getBugPairsByList(string|array $bugList): array
@@ -54,7 +54,7 @@ class bugTao extends bugModel
      * @param  int    $objectID
      * @param  string $table
      * @param  string $field
-     * @access public
+     * @access protected
      * @return string
      */
     protected function getNameFromTable(int $objectID, string $table, string $field): string
@@ -67,40 +67,39 @@ class bugTao extends bugModel
      * 循环调用checkDelayBug，检查bug是否延期
      *
      * @param  array  $bugs
-     * @access public
-     * @return array
+     * @access protected
+     * @return object[]
      */
-    protected function checkDelayedBugs(array $bugs): array
+    protected function batchAppendDelayedDays(array $bugs): array
     {
-        foreach ($bugs as $bug) $bug = $this->checkDelayBug($bug);
+        foreach($bugs as $bug) $this->appendDelayedDays($bug);
 
         return $bugs;
     }
 
     /**
      * If the bug is delayed, add the bug->delay field to show the delay time (day).
-     * 如果bug延期，添加bug->delay字段，内容为延期的时长（天）
+     * 添加bug->delay字段，内容为延期的时长（天），不延期则为0
      *
      * @param  object $bug
-     * @access public
+     * @access protected
      * @return object
      */
-    protected function checkDelayBug(object $bug): object
+    protected function appendDelayedDays(object $bug): object
     {
-        /* Delayed or not? */
-        if(!helper::isZeroDate($bug->deadline))
-        {
-            if($bug->resolvedDate and !helper::isZeroDate($bug->resolvedDate))
-            {
-                $delay = helper::diffDate(substr($bug->resolvedDate, 0, 10), $bug->deadline);
-            }
-            elseif($bug->status == 'active')
-            {
-                $delay = helper::diffDate(helper::today(), $bug->deadline);
-            }
+        if(helper::isZeroDate($bug->deadline)) return $bug;
 
-            if(isset($delay) and $delay > 0) $bug->delay = $delay;
+        $delay = 0;
+        if($bug->resolvedDate and !helper::isZeroDate($bug->resolvedDate))
+        {
+            $delay = helper::diffDate(substr($bug->resolvedDate, 0, 10), $bug->deadline);
         }
+        elseif($bug->status == 'active')
+        {
+            $delay = helper::diffDate(helper::today(), $bug->deadline);
+        }
+
+        if($delay > 0) $bug->delay = $delay;
 
         return $bug;
     }
