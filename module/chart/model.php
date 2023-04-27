@@ -625,7 +625,7 @@ class chartModel extends model
             case 'object':
                 if($field)
                 {
-                    $table = zget($this->config->objectTables, $object);
+                    $table = zget($this->config->objectTables, $object, '');
                     if($table) $options = $this->dao->select("id, {$field}")->from($table)->fetchPairs();
                 }
                 break;
