@@ -3,7 +3,7 @@ declare(strict_types=1);
 /**
  * The tao file of task module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.com)
+ * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Shujie Tian <tianshujie@easysoft.ltd>
  * @package     task
@@ -18,24 +18,13 @@ class taskTao extends taskModel
      *
      * @param  object   $task
      * @access private
-     * @return int
+     * @return float
      */
-    protected function computeTaskProgress(object $task): int
+    protected function computeTaskProgress(object $task): float
     {
-        if($task->consumed == 0 and $task->left == 0)
-        {
-            $progress = 0;
-        }
-        elseif($task->consumed != 0 and $task->left == 0)
-        {
-            $progress = 100;
-        }
-        else
-        {
-            $progress = round($task->consumed / ($task->consumed + $task->left), 2) * 100;
-        }
-
-        return $progress;
+        if($task->consumed == 0 and $task->left == 0) return 0;
+        if($task->consumed != 0 and $task->left == 0) return 100;
+        return round($task->consumed / ($task->consumed + $task->left), 2) * 100;
     }
 
     /**
@@ -134,5 +123,22 @@ class taskTao extends taskModel
     protected function getTeamByIdList(array $taskIdList): array
     {
         return $this->dao->select('*')->from(TABLE_TASKTEAM)->where('task')->in($taskIdList)->fetchGroup('task');
+    }
+
+    /**
+     * Get task list by report.
+     * 根据报表条件查询任务.
+     *
+     * @param  string $field
+     * @param  string $condition
+     * @access public
+     * @return ojbect[]
+     */
+    protected function getListByReportCondition(string $field, string $condition): array
+    {
+        $tasks = $this->dao->select("id,{$field}")->from(TABLE_TASK)
+                ->where($condition)
+                ->fetchAll('id');
+        return $tasks;
     }
 }

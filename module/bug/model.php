@@ -47,47 +47,15 @@ class bugModel extends model
     }
 
     /**
-     * Create a bug.
+     * Insert bug into zt_bug.
+     * bug的入库操作
      *
-     * @param  string $from   object that is transfered to bug.
-     * @param  string $extras.
+     * @param  object $bug
      * @access public
-     * @return array|bool
+     * @return array|false
      */
-    public function create($from = '', $extras = '')
+    public function create(object $bug): array|false
     {
-        $extras = str_replace(array(',', ' '), array('&', ''), $extras);
-        parse_str($extras, $output);
-
-        $now = helper::now();
-        $bug = fixer::input('post')
-            ->setDefault('openedBy', $this->app->user->account)
-            ->setDefault('openedDate', $now)
-            ->setDefault('project,execution,story,task,duplicateBug,linkBug', 0)
-            ->setDefault('openedBuild', '')
-            ->setDefault('notifyEmail', '')
-            ->setDefault('deadline', '0000-00-00')
-            ->setIF($this->lang->navGroup->bug != 'qa', 'project', $this->session->project)
-            ->setIF(strpos($this->config->bug->create->requiredFields, 'deadline') !== false, 'deadline', $this->post->deadline)
-            ->setIF($this->post->assignedTo != '', 'assignedDate', $now)
-            ->setIF($this->post->story != false, 'storyVersion', $this->loadModel('story')->getVersion($this->post->story))
-            ->setIF(strpos($this->config->bug->create->requiredFields, 'execution') !== false, 'execution', $this->post->execution)
-            ->stripTags($this->config->bug->editor->create['id'], $this->config->allowedTags)
-            ->cleanInt('product,execution,module,severity')
-            ->trim('title')
-            ->join('openedBuild', ',')
-            ->join('mailto', ',')
-            ->join('os', ',')
-            ->join('browser', ',')
-            ->remove('files,labels,uid,oldTaskID,contactListMenu,region,lane,ticket,deleteFiles,resultFiles')
-            ->get();
-
-        /* Check repeat bug. */
-        $result = $this->loadModel('common')->removeDuplicate('bug', $bug, "product={$bug->product}");
-        if($result and $result['stop']) return array('status' => 'exists', 'id' => $result['duplicate']);
-
-        $bug = $this->loadModel('file')->processImgURL($bug, $this->config->bug->editor->create['id'], $this->post->uid);
-
         $this->dao->insert(TABLE_BUG)->data($bug)
             ->autoCheck()
             ->checkIF($bug->notifyEmail, 'notifyEmail', 'email')
@@ -98,45 +66,6 @@ class bugModel extends model
         if(!dao::isError())
         {
             $bugID = $this->dao->lastInsertID();
-
-            if(isset($_POST['resultFiles']))
-            {
-                $resultFiles = $_POST['resultFiles'];
-                if(isset($_POST['deleteFiles']))
-                {
-                    foreach($_POST['deleteFiles'] as $deletedCaseFileID) $resultFiles = trim(str_replace(",$deletedCaseFileID,", ',', ",$resultFiles,"), ',');
-                }
-                $files = $this->dao->select('*')->from(TABLE_FILE)->where('id')->in($resultFiles)->fetchAll('id');
-                foreach($files as $file)
-                {
-                    unset($file->id);
-                    $file->objectType = 'bug';
-                    $file->objectID   = $bugID;
-                    $this->dao->insert(TABLE_FILE)->data($file)->exec();
-                }
-            }
-
-            $this->file->updateObjectID($this->post->uid, $bugID, 'bug');
-            $this->file->saveUpload('bug', $bugID);
-            empty($bug->case) ? $this->loadModel('score')->create('bug', 'create', $bugID) : $this->loadModel('score')->create('bug', 'createFormCase', $bug->case);
-
-            if($bug->execution)
-            {
-                $this->loadModel('kanban');
-
-                $laneID = isset($output['laneID']) ? $output['laneID'] : 0;
-                if(!empty($_POST['lane'])) $laneID = $_POST['lane'];
-
-                $columnID = $this->kanban->getColumnIDByLaneID($laneID, 'unconfirmed');
-                if(empty($columnID)) $columnID = isset($output['columnID']) ? $output['columnID'] : 0;
-
-                if(!empty($laneID) and !empty($columnID)) $this->kanban->addKanbanCell($bug->execution, $laneID, $columnID, 'bug', $bugID);
-                if(empty($laneID) or empty($columnID)) $this->kanban->updateLane($bug->execution, 'bug');
-            }
-
-            /* Callback the callable method to process the related data for object that is transfered to bug. */
-            if($from && is_callable(array($this, $this->config->bug->fromObjects[$from]['callback']))) call_user_func(array($this, $this->config->bug->fromObjects[$from]['callback']), $bugID);
-
             return array('status' => 'created', 'id' => $bugID);
         }
         return false;
@@ -424,7 +353,7 @@ class bugModel extends model
         elseif($browseType == 'assignedbyme')  $bugs = $this->getByAssignedbyme($productIDList, $branch, $modules, $executions, $sort, $pager, $projectID);
         elseif($browseType == 'review')        $bugs = $this->getReviewBugs($productIDList, $branch, $modules, $executions, $sort, $pager, $projectID);
 
-        return $this->bugTao->checkDelayedBugs($bugs);
+        return $this->bugTao->batchAppendDelayedDays($bugs);
     }
 
     /**
@@ -504,9 +433,9 @@ class bugModel extends model
      * @param  int    $bugID
      * @param  bool   $setImgSize
      * @access public
-     * @return object
+     * @return object|false
      */
-    public function getById(int $bugID, bool $setImgSize = false): object|false
+    public function getByID(int $bugID, bool $setImgSize = false): object|false
     {
         $bug = $this->bugTao->fetchBugInfo($bugID);
         if(!$bug) return false;
@@ -527,7 +456,7 @@ class bugModel extends model
         $bug->linkMRTitles = $this->mr->getLinkedMRPairs($bugID, 'bug');
         $bug->toCases      = $this->bugTao->getCasesFromBug($bugID);
         $bug->files        = $this->file->getByObject('bug', $bugID);
-        return $this->bugTao->checkDelayBug($bug);
+        return $this->bugTao->appendDelayedDays($bug);
     }
 
     /**
@@ -3554,7 +3483,7 @@ class bugModel extends model
     public function getToAndCcList($bug)
     {
         /* Set toList and ccList. */
-        $toList = $bug->assignedTo;
+        $toList = $bug->assignedTo ? $bug->assignedTo : '';
         $ccList = trim($bug->mailto, ',');
         if(empty($toList))
         {

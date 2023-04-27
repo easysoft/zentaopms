@@ -1,4 +1,5 @@
-<?php declare(strict_types=1);
+<?php
+declare(strict_types=1);
 /**
  * The zen file of project module of ZenTaoPMS.
  *
@@ -30,38 +31,16 @@ class projectZen extends project
         if($this->app->tab == 'doc') unset($this->lang->doc->menu->project['subMenu']);
         $this->session->set('projectModel', $model);
 
-        $name          = '';
-        $code          = '';
-        $team          = '';
-        $whitelist     = '';
-        $acl           = 'private';
-        $auth          = 'extend';
-        $multiple      = 1;
-        $hasProduct    = 1;
-        $shadow        = 0;
-        $products      = array();
-        $productPlans  = array();
-        $parentProgram = $this->loadModel('program')->getByID($programID);
-
         if($copyProjectID)
         {
             $copyProject = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($copyProjectID)->fetch();
-            $name        = $copyProject->name;
-            $code        = $copyProject->code;
-            $team        = $copyProject->team;
-            $whitelist   = $copyProject->whitelist;
-            $acl         = $copyProject->acl;
-            $auth        = $copyProject->auth;
-            $multiple    = $copyProject->multiple;
-            $hasProduct  = $copyProject->hasProduct;
-            $programID   = $copyProject->parent;
             $products    = $this->product->getProducts($copyProjectID);
 
             if(!$copyProject->hasProduct) $shadow = 1;
             foreach($products as $product)
             {
                 $branches = implode(',', $product->branches);
-                $productPlans[$product->id] = $this->loadModel('productplan')->getPairs($product->id, $branches, 'noclosed', true);
+                $copyProject->productPlans[$product->id] = $this->loadModel('productplan')->getPairs($product->id, $branches, 'noclosed', true);
             }
         }
 
@@ -78,34 +57,27 @@ class projectZen extends project
         $this->config->executionCommonList[$this->app->getClientLang()][0] :
         $this->config->executionCommonList[$this->app->getClientLang()][1];
 
-        $withProgram = $this->config->systemMode == 'ALM' ? true : false;
-        $allProducts = array('0' => '') + $this->program->getProductPairs($programID, 'all', 'noclosed', '', $shadow, $withProgram);
+        $withProgram   = $this->config->systemMode == 'ALM' ? true : false;
+        $allProducts   = array('0' => '') + $this->program->getProductPairs($programID, 'all', 'noclosed', '', $shadow, $withProgram);
+        $parentProgram = $this->loadModel('program')->getByID($programID);
 
         $this->view->title               = $this->lang->project->create;
         $this->view->gobackLink          = (isset($output['from']) and $output['from'] == 'global') ? $this->createLink('project', 'browse') : '';
+        $this->view->model               = $model;
         $this->view->pmUsers             = $this->loadModel('user')->getPairs('noclosed|nodeleted|pmfirst');
         $this->view->users               = $this->user->getPairs('noclosed|nodeleted');
-        $this->view->copyProjects        = $this->project->getPairsByModel($model);
         $this->view->products            = $products;
-        $this->view->allProducts         = $allProducts;
-        $this->view->productPlans        = array('0' => '') + $productPlans;
-        $this->view->branchGroups        = $this->loadModel('branch')->getByProducts(array_keys($products), 'noclosed');
         $this->view->programID           = $programID;
         $this->view->productID           = isset($output['productID']) ? $output['productID'] : 0;
         $this->view->branchID            = isset($output['branchID']) ? $output['branchID'] : 0;
+        $this->view->allProducts         = $allProducts;
+        $this->view->productPlans        = array('0' => '') + $productPlans;
+        $this->view->branchGroups        = $this->loadModel('branch')->getByProducts(array_keys($products), 'noclosed');
         $this->view->multiBranchProducts = $this->product->getMultiBranchPairs($topProgramID);
-        $this->view->model               = $model;
-        $this->view->name                = $name;
-        $this->view->code                = $code;
-        $this->view->team                = $team;
-        $this->view->acl                 = $acl;
-        $this->view->auth                = $auth;
-        $this->view->whitelist           = $whitelist;
-        $this->view->multiple            = $multiple;
-        $this->view->hasProduct          = $hasProduct;
+        $this->view->copyProjects        = $this->project->getPairsByModel($model);
         $this->view->copyProjectID       = $copyProjectID;
-        $this->view->programList         = $this->program->getParentPairs();
         $this->view->parentProgram       = $parentProgram;
+        $this->view->programList         = $this->program->getParentPairs();
         $this->view->URSRPairs           = $this->loadModel('custom')->getURSRPairs();
         $this->view->availableBudget     = $this->program->getBudgetLeft($parentProgram);
         $this->view->budgetUnitList      = $this->project->getBudgetUnitList();
@@ -115,44 +87,45 @@ class projectZen extends project
 
     /**
      * Append extras data to post data.
+     *
      * @param  object $postData
      * @access protected
      * @return int|object
      */
-    protected function prepareStartExtras(object $postData):object
+    protected function prepareStartExtras(object $postData): object
     {
-        $postData->status         = 'doing';
-        $postData->lastEditedBy   = $this->app->user->account;
-        $postData->lastEditedDate = helper::now();
-
-        return $postData;
+        return $postData->add('status', 'doing')
+            ->add('lastEditedBy', $this->app->user->account)
+            ->add('lastEditedDate', helper::now())
+            ->get();
     }
 
     /**
      * Send variables to view page.
+     *
      * @param  object $project
      * @access protected
-     * @return int|object
+     * @return void
      */
-    protected function buildStartForm(object $project):int|object
+    protected function buildStartForm(object $project): void
     {
-        $this->view->title      = $this->lang->project->start;
-        $this->view->position[] = $this->lang->project->start;
-        $this->view->project    = $project;
-        $this->view->users      = $this->loadModel('user')->getPairs('noletter');
-        $this->view->actions    = $this->loadModel('action')->getList('project', $project->id);
+        $this->view->title   = $this->lang->project->start;
+        $this->view->project = $project;
+        $this->view->users   = $this->loadModel('user')->getPairs('noletter');
+        $this->view->actions = $this->loadModel('action')->getList('project', $project->id);
         $this->display();
     }
 
     /**
      * After starting the project, do other operations.
+     *
      * @param  object $project
      * @param  array  $changes
      * @param  string $comment
      * @access protected
-     * @return int|object
+     * @return void 
      */
-    protected function responseAfterStart(object $project, array $changes, string $comment):int|object
+    protected function responseAfterStart(object $project, array $changes, string $comment): void
     {
         if($comment != '' or !empty($changes))
         {
@@ -163,22 +136,21 @@ class projectZen extends project
         $this->loadModel('common')->syncPPEStatus($project->id);
 
         $this->executeHooks($project->id);
-        return print(js::reload('parent.parent'));
     }
 
     /**
-     * Send variables to view page.
-     * @param  int $projectID
+     * Send variables to suspend page.
+     *
+     * @param  object $project
      * @access protected
-     * @return int|object
+     * @return int
      */
-    protected function buildSuspendForm(int $projectID):int|object
+    protected function buildSuspendForm(object $project): void
     {
-        $this->view->title      = $this->lang->project->suspend;
-        $this->view->position[] = $this->lang->project->suspend;
-        $this->view->users      = $this->loadModel('user')->getPairs('noletter');
-        $this->view->actions    = $this->loadModel('action')->getList('project', $projectID);
-        $this->view->project    = $this->project->getByID($projectID);
+        $this->view->title   = $this->lang->project->suspend;
+        $this->view->users   = $this->loadModel('user')->getPairs('noletter');
+        $this->view->actions = $this->action->getList('project', $project->id);
+        $this->view->project = $this->project->getByID($project->id);
         $this->display();
     }
 }
