@@ -384,9 +384,9 @@ class bugModel extends model
      * 根据浏览类型获取bug列表。
      *
      * @param  string      $browseType
-     * @param  int[]       $productIDList
+     * @param  int|array   $productIdList
      * @param  int         $projectID
-     * @param  int[]       $executionIDList
+     * @param  int[]       $executionIdList
      * @param  int|string  $branch
      * @param  int         $moduleID
      * @param  int         $queryID
@@ -395,10 +395,10 @@ class bugModel extends model
      * @access public
      * @return array
      */
-    public function getList(string $browseType, array $productIDList, int $projectID, array $executionIDList, int|string $branch = 'all', int $moduleID = 0, int $queryID = 0, string $orderBy = 'id_desc', object $pager = null): array
+    public function getList(string $browseType, int|array $productIdList, int $projectID, array $executionIdList, int|string $branch = 'all', int $moduleID = 0, int $queryID = 0, string $orderBy = 'id_desc', object $pager = null): array
     {
         /* Set modules and browse type. */
-        $modules    = $moduleID ? $this->loadModel('tree')->getAllChildId($moduleID) : '0';
+        $modules    = $moduleID ? $this->loadModel('tree')->getAllChildId($moduleID) : 0;
         $browseType = ($browseType == 'bymodule' and $this->session->bugBrowseType and $this->session->bugBrowseType != 'bysearch') ? $this->session->bugBrowseType : $browseType;
         $browseType = $browseType == 'bybranch' ? 'bymodule' : $browseType;
 
@@ -407,19 +407,22 @@ class bugModel extends model
         if(strpos($orderBy, 'severity_') !== false) $orderBy = str_replace('severity_', 'severityOrder_', $orderBy);
 
         /* Get bugs by browse type. */
-        $bugs = array();
+        $bugList = array();
         if($browseType == 'all')
         {
-            $bugs = $this->bugTao->getAllBugs($productIDList, $projectID, $executionIDList, $branch, $modules, $orderBy, $pager);
+            $bugList = $this->bugTao->getAllBugs($productIdList, $projectID, $executionIdList, $branch, $modules, $orderBy, $pager);
             $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'bug');
         }
-        elseif($browseType == 'needconfirm') $bugs = $this->bugTao->getListByNeedconfirm($productIDList, $projectID, $executionIDList, $branch, $modules, $orderBy, $pager);
-        elseif($browseType == 'bysearch')    $bugs = $this->getBySearch($productIDList, $branch, $queryID, $orderBy, '', $pager, $projectID);
-        elseif($browseType == 'review')      $bugs = $this->getReviewBugs($productIDList, $branch, $modules, $executionIDList, $orderBy, $pager, $projectID);
-        elseif(strpos(',bymodule,assigntome,openedbyme,resolvedbyme,assigntonull,unconfirmed,unresolved,unclosed,toclosed,longlifebugs,postponedbugs,overduebugs,assignedbyme,', ",$browseType,") !== false) $bugs = $this->bugTao->getListByBrowseType($browseType, $productIDList, $projectID, $executionIDList, $branch, $modules, $orderBy, $pager)
+        elseif($browseType == 'review')
+        {
+            $bugList = $this->bugTao->getListByReviewToMe($productIdList, $projectID, $executionIdList, $branch, $modules, $orderBy, $pager);
+            $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'bug');
+        }
+        elseif($browseType == 'needconfirm') $bugList = $this->bugTao->getListByNeedconfirm($productIdList, $projectID, $executionIdList, $branch, $modules, $orderBy, $pager);
+        elseif($browseType == 'bysearch')    $bugList = $this->getBySearch($productIdList, $branch, $queryID, $orderBy, '', $pager, $projectID);
+        elseif(strpos(',bymodule,assigntome,openedbyme,resolvedbyme,assigntonull,unconfirmed,unresolved,unclosed,toclosed,longlifebugs,postponedbugs,overduebugs,assignedbyme,', ",$browseType,") !== false) $bugList = $this->bugTao->getListByBrowseType($browseType, $productIdList, $projectID, $executionIdList, $branch, $modules, $orderBy, $pager);
 
-
-        return $this->bugTao->checkDelayedBugs($bugs);
+        return $this->bugTao->checkDelayedBugs($bugList);
     }
 
     /**
