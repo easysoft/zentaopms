@@ -216,7 +216,7 @@ $(document).ready(function()
     $('.menus .icon-plus').click(function()
     {
         $(this).toggleClass('icon-minus', 'icon-plus');
-        $('.menus input[name^=actions]:not(input[value=browse])').parent('.checkbox-primary').toggle();
+        $(this).closest('.menus').find('input[name^=actions]:not(input[value=browse])').parent('.checkbox-primary').toggle();
     })
 
     /**
