@@ -46,16 +46,19 @@ $tester->loadModel('block');
 
 initData();
 
-$block = new stdclass();
-$block->account = 'admin';
-$block->vision  = 'rnd';
-$block->module  = 'my';
-$block->title   = '区块123';
-$block->source  = 'my';
-$block->block   = 'bug';
-$block->order   = '5';
+$newBlock = new stdclass();
+$newBlock->id      = '2';
+$newBlock->account = 'newadmin';
+$newBlock->vision  = 'lite';
+$newBlock->module  = 'newmy';
+$newBlock->title   = 'new区块';
+$newBlock->source  = 'newmy';
+$newBlock->params  = '';
+$newBlock->block   = 'newbug';
+$newBlock->order   = '5';
 
 $accoutTooLangBlock = new stdclass();
+$accoutTooLangBlock->id      = '2';
 $accoutTooLangBlock->account = 'adminadminadminadminadminadminadminadmin1';
 $accoutTooLangBlock->vision  = 'rnd';
 $accoutTooLangBlock->module  = 'my';
@@ -65,7 +68,7 @@ $accoutTooLangBlock->block   = 'bug';
 $accoutTooLangBlock->order   = '5';
 
 $blockTest = new blockTest();
-$newBlockID = $blockTest->createTest($block);
+$newBlockID = $blockTest->updateTest($newBlock);
 
-r($tester->block->getByID($newBlockID)) && p('account,vision,module,title,source,block,order') && e('admin,rnd,my,区块123,my,bug,5'); // 测试获取正常的block的内容
-r($blockTest->createTest($accoutTooLangBlock)) && p('account:0') && e('『所属用户』长度应当不超过『30』，且大于『0』。'); // 测试account 字段字符超出长度
+r($tester->block->getByID($newBlockID)) && p('account,vision,module,title,source,block,order') && e("{$newBlock->account},{$newBlock->vision},{$newBlock->module},{$newBlock->title},{$newBlock->source},{$newBlock->block},{$newBlock->order}"); // 测试获取正常的block的内容
+r($blockTest->updateTest($accoutTooLangBlock)) && p('account:0') && e('『所属用户』长度应当不超过『30』，且大于『0』。'); // 测试account 字段字符超出长度
