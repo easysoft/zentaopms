@@ -2995,8 +2995,8 @@ class baseRouter
             {
                 if(isset($this->config->zin) || isset($_SERVER['HTTP_X_ZIN_OPTIONS']))
                 {
-                    if(!isset($this->zinErrors)) $this->zinErrors = [];
-                    $this->zinErrors[] = ['file' => $file, 'line' => $line, 'message' => $message];
+                    if(!isset($this->zinErrors)) $this->zinErrors = array();
+                    $this->zinErrors[] = array('type' => 'error', 'file' => $file, 'line' => $line, 'message' => $message);
                 }
                 else
                 {

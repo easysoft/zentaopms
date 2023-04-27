@@ -975,7 +975,7 @@ class baseControl
         $css = $this->getCSS($moduleName, $methodName, '.ui');
         $js  = $this->getJS($moduleName, $methodName, '.ui');
         if($css) $this->view->pageCSS = $css;
-        if($js) $this->view->pageJS = $js;
+        if($js)  $this->view->pageJS = $js;
 
         /**
          * 切换到视图文件所在的目录，以保证视图文件里面的include语句能够正常运行。
@@ -988,6 +988,13 @@ class baseControl
          * Set zin context data
          */
         \zin\zin::$data = (array)$this->view;
+
+        \zin\zin::$data['zinDebug'] = array();
+
+        if($this->config->debug && $this->config->debug >= 2)
+        {
+            \zin\zin::$data['zinDebug']['trace'] = $this->app->loadClass('trace')->getTrace();
+        }
 
         /**
          * 使用extract安定ob方法渲染$viewFile里面的代码。
@@ -1003,11 +1010,6 @@ class baseControl
         $this->output .= ob_get_contents();
         ob_end_clean();
          */
-
-        if($this->config->debug && $this->config->debug >= 2)
-        {
-            $this->app->zinErrors[] = array('trace' => $this->app->loadClass('trace')->getTrace());
-        }
 
         /**
          * 渲染完毕后，再切换回之前的路径。
