@@ -487,7 +487,6 @@ class file extends control
      */
     public function read($fileID)
     {
-        if(!$this->loadModel('user')->isLogon()) return print(js::locate($this->createLink('user', 'login')));
         $file = $this->file->getById($fileID);
         if(empty($file) or !$this->file->fileExists($file)) return false;
 
