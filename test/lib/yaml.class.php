@@ -318,7 +318,6 @@ class yaml
         $dbUser    = $this->config->db->user;
         $dbPWD     = $this->config->db->password;
 
-        $setModeSql = "mysql -u%s -p%s -h%s -P%s %s -e \"SET global sql_mode = ''; \" 2>/dev/null";
         $command    = "$zdPath -c %s -d %s -n %d -t %s -dns mysql://%s:%s@%s:%s/%s#utf8";
         if($isClear === true)
         {
@@ -328,8 +327,6 @@ class yaml
         }
         $execYaml    = sprintf($command, $configYaml, $yamlFile, $rows, $tableName, $dbUser, $dbPWD, $dbHost, $dbPort, $dbName);
         $execDump    = sprintf($dumpCommand, $dbUser, $dbPWD, $dbHost, $dbPort, $dbName, $tableName);
-        $execSetMode = sprintf($setModeSql, $dbUser, $dbPWD, $dbHost, $dbPort, $dbName);
-        system($execSetMode);
         system($execDump);
         system($execYaml);
     }
