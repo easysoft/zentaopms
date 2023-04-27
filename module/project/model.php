@@ -1888,40 +1888,29 @@ class projectModel extends model
     }
 
     /**
-     * Suspend project.
+     * Suspend project and update status.
+     * 暂停项目并更改其状态
      *
      * @param  int    $projectID
+     * @param  object $project
      * @param  string $type
+     *
      * @access public
-     * @return void
+     * @return array|flase
      */
-    public function suspend($projectID, $type = 'project')
+    public function suspend(int $projectID, object $project, string $type = 'project'): array|false
     {
         $editorIdList = $this->config->project->editor->suspend['id'];
         if($this->app->rawModule == 'program') $editorIdList = $this->config->program->editor->suspend['id'];
 
         $oldProject = $this->getById($projectID, $type);
-        $project    = fixer::input('post')
-            ->add('id', $projectID)
-            ->setDefault('status', 'suspended')
-            ->setDefault('lastEditedBy', $this->app->user->account)
-            ->setDefault('lastEditedDate', helper::now())
-            ->setDefault('suspendedDate', helper::today())
-            ->stripTags($editorIdList, $this->config->allowedTags)
-            ->remove('comment')->get();
 
         $project = $this->loadModel('file')->processImgURL($project, $editorIdList, $this->post->uid);
-        $this->dao->update(TABLE_PROJECT)->data($project)
-            ->autoCheck()
-            ->checkFlow()
-            ->where('id')->eq((int)$projectID)
-            ->exec();
 
-        if(!dao::isError())
-        {
-            if(!$oldProject->multiple) $this->changeExecutionStatus($projectID, 'suspend');
-            return common::createChanges($oldProject, $project);
-        }
+        $this->projectTao->doSuspend($projectID, $project);
+
+        if(!$oldProject->multiple) $this->changeExecutionStatus($projectID, 'suspend');
+        return common::createChanges($oldProject, $project);
     }
 
     /**

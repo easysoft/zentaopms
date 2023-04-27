@@ -18,7 +18,6 @@ class blockTest
      {
         $blockID = $this->objectModel->create($block);
 
-        if(dao::isError()) a(dao::getError());
         if(dao::isError()) return dao::getError();
 
         return $blockID;

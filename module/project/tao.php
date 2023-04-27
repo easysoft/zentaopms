@@ -32,7 +32,27 @@ class projectTao extends projectModel
     }
 
     /**
-     * Update project table when activate a project.
+     * Update project table when suspend a project.
+     *
+     * @param  int    $projectID
+     * @param  object $project
+     *
+     * @access protected
+     * @return bool
+     */
+    protected function doSuspend(int $projectID, object $project): bool
+    {
+        $this->dao->update(TABLE_PROJECT)->data($project)
+            ->autoCheck()
+            ->checkFlow()
+            ->where('id')->eq($projectID)
+            ->exec();
+
+        return !dao::isError();
+    }
+
+    /**
+     * Update project.
      *
      * @param  int    $projectID
      * @param  object $project

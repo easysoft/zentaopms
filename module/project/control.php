@@ -1801,19 +1801,25 @@ class project extends control
      */
     public function suspend(string $projectID)
     {
-        $this->loadModel('action');
+        $projectID = (int)$projectID;
 
         if(!empty($_POST))
         {
-            $changes = $this->project->suspend($projectID);
+            $postData = form::data($this->config->project->form->suspend);
+
+            $postData = $this->projectZen->prepareSuspendExtras($projectID, $postData);
+
+            print_r($postData);die;
+            $changes = $this->project->suspend($projectID, $postData);
 
             if(dao::isError()) return print(js::error(dao::getError()));
 
             $comment = strip_tags($this->post->comment, $this->config->allowedTags);
-            return $this->projectZen->responseAfterStart($project, $changes, $comment);
+            $this->projectZen->responseAfterSuspend($projectID, $changes, $comment);
+            return print(js::reload('parent.parent'));
         }
 
-        $this->projectZen->buildSuspendForm((int)$projectID);
+        $this->projectZen->buildSuspendForm($projectID);
     }
 
     /**

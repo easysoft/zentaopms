@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * The control file of product module of ZenTaoPMS.
  *
@@ -393,6 +394,7 @@ class product extends control
     }
 
     /**
+     * 创建产品。可以是顶级产品，也可以是项目集下的产品。
      * Create a product.
      *
      * @param  int    $programID
@@ -400,10 +402,19 @@ class product extends control
      * @access public
      * @return void
      */
-    public function create($programID = 0, $extra = '')
+    public function create(string $programID = '0', string $extra = '')
     {
+        $programID = (int)$programID;
+
         if(!empty($_POST))
         {
+            $data = form::data($this->config->product->form->create);
+            $data = $this->productZen->prepareCreateExtras($data);
+            if(!$data) return $this->productZen->errorBeforeEdit();
+
+            $result = $this->product->create($data);
+            if(!$result) return $this->productZen->errorAfterEdit();
+            return $this->productZen->responseAfterEdit($result);
             $productID = $this->product->create();
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
             $this->loadModel('action')->create('product', $productID, 'opened');
@@ -421,57 +432,8 @@ class product extends control
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $locate));
         }
 
-        if($this->app->tab == 'program') $this->loadModel('program')->setMenu($programID);
-        if($this->app->getViewType() == 'mhtml')
-        {
-            if($this->app->rawModule == 'projectstory' and $this->app->rawMethod == 'story')
-            {
-                $this->loadModel('project')->setMenu();
-            }
-            else
-            {
-                $this->product->setMenu('');
-            }
-        }
-
-        $extra = str_replace(array(',', ' '), array('&', ''), $extra);
-        parse_str($extra, $output);
-
-        $this->loadModel('user');
-        $poUsers = $this->user->getPairs('nodeleted|pofirst|noclosed',  '', $this->config->maxCount);
-        if(!empty($this->config->user->moreLink)) $this->config->moreLinks["PO"] = $this->config->user->moreLink;
-
-        $qdUsers = $this->user->getPairs('nodeleted|qdfirst|noclosed',  '', $this->config->maxCount);
-        if(!empty($this->config->user->moreLink)) $this->config->moreLinks["QD"] = $this->config->user->moreLink;
-
-        $rdUsers = $this->user->getPairs('nodeleted|devfirst|noclosed', '', $this->config->maxCount);
-        if(!empty($this->config->user->moreLink)) $this->config->moreLinks["RD"] = $this->config->user->moreLink;
-
-        $lines = array();
-        if($programID and $this->config->systemMode == 'ALM') $lines = array('') + $this->product->getLinePairs($programID);
-
-        if($this->app->tab == 'doc') unset($this->lang->doc->menu->product['subMenu']);
-
-        $gobackLink = '';
-        if(isset($output['from']) and $output['from'] == 'qa') $gobackLink = $this->createLink('qa', 'index');
-        if(isset($output['from']) and $output['from'] == 'global') $gobackLink = $this->createLink('product', 'all');
-
-        $this->view->title      = $this->lang->product->create;
-        $this->view->position[] = $this->view->title;
-        $this->view->gobackLink = $gobackLink;
-        $this->view->groups     = $this->loadModel('group')->getPairs();
-        $this->view->programID  = $programID;
-        $this->view->poUsers    = $poUsers;
-        $this->view->qdUsers    = $qdUsers;
-        $this->view->rdUsers    = $rdUsers;
-        $this->view->fields     = $this->product->buildFormFields($this->config->product->create->fields);
-        $this->view->users      = $this->user->getPairs('nodeleted|noclosed');
-        $this->view->programs   = array('') + $this->loadModel('program')->getTopPairs('', 'noclosed');
-        $this->view->lines      = $lines;
-        $this->view->URSRPairs  = $this->loadModel('custom')->getURSRPairs();
-
-        unset($this->lang->product->typeList['']);
-        $this->display();
+        $this->productZen->setMenu4Create($programID);
+        $this->productZen->buildCreateForm($programID, $extra);
     }
 
     /**
@@ -1276,45 +1238,44 @@ class product extends control
      *
      * @param  string $browseType
      * @param  string $orderBy
+     * @param  int    $param
+     * @param  int    $recTotal
+     * @param  int    $recPerPage
+     * @param  int    $pageID
+     * @param  int    $programID
      * @access public
      * @return void
      */
-    public function all($browseType = 'noclosed', $orderBy = 'program_asc', $param = 0, $recTotal = 0, $recPerPage = 20, $pageID = 1, $programID = 0)
+    public function all(string $browseType = 'noclosed', string $orderBy = 'program_asc', string $param = '0', string $recTotal = '0', string $recPerPage = '20', string $pageID = '1', string $programID = '0')
     {
-        /* Load module and set session. */
-        $this->loadModel('program');
-        $this->session->set('productList', $this->app->getURI(true), 'product');
+        /* Convert string to int. */
+        $param      = (int)$param;
+        $recTotal   = (int)$recTotal;
+        $recPerPage = (int)$recPerPage;
+        $pageID     = (int)$pageID;
+        $programID  = (int)$programID;
 
-        $queryID  = ($browseType == 'bySearch' or !empty($param)) ? (int)$param : 0;
+        /* Set env data. */
+        $this->productZen->setEnvAll();
 
-        if($this->app->viewType == 'mhtml')
-        {
-            $productID = $this->product->saveState(0, $this->products);
-            $this->product->setMenu($productID);
-        }
-
-        $this->app->loadClass('pager', $static = true);
-        $pager = new pager($recTotal, $recPerPage, $pageID);
-
-        /* Process product structure. */
+        /* Generate statistics of products and program. */
+        $this->app->loadClass('pager', true);
+        $pager    = new pager($recTotal, $recPerPage, $pageID);
+        $queryID  = ($browseType == 'bySearch' or !empty($param)) ? $param : 0;
         if($this->config->systemMode == 'light' and $orderBy == 'program_asc') $orderBy = 'order_asc';
-        $productStats     = $this->product->getStats($orderBy, $pager, $browseType, '', 'story', '', $queryID);
+
+        $productStats     = $this->product->getStats($orderBy, $pager, $browseType, 0, 'story', 0, $queryID);
         $productStructure = $this->product->statisticProgram($productStats);
-        $productLines     = $this->dao->select('*')->from(TABLE_MODULE)->where('type')->eq('line')->andWhere('deleted')->eq(0)->orderBy('`order` asc')->fetchAll();
-        $programLines     = array();
 
-        foreach($productLines as $index => $productLine)
-        {
-            if(!isset($programLines[$productLine->root])) $programLines[$productLine->root] = array();
-            $programLines[$productLine->root][$productLine->id] = $productLine->name;
-        }
-
+        /* Save search form. */
         $actionURL = $this->createLink('product', 'all', "browseType=bySearch&orderBy=order_asc&queryID=myQueryID");
         $this->product->buildProductSearchForm($param, $actionURL);
 
-        $this->view->title        = $this->lang->productCommon;
-        $this->view->position[]   = $this->lang->productCommon;
+        /* Get product lines. */
+        list($productLines, $programLines) = $this->getProductLines();
 
+        $this->view->title            = $this->lang->productCommon;
+        $this->view->position[]       = $this->lang->productCommon;
         $this->view->recTotal         = $pager->recTotal;
         $this->view->productStats     = $productStats;
         $this->view->productStructure = $productStructure;
@@ -1332,8 +1293,7 @@ class product extends control
         $this->view->pageID           = $pageID;
         $this->view->programID        = $programID;
 
-        //$this->display();
-        $this->render();
+        $this->display();
     }
 
     /**
