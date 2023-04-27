@@ -118,8 +118,11 @@ class pivotModel extends model
             $pager->setPageTotal();
             if($pager->pageID > $pager->pageTotal) $pager->setPageID($pager->pageTotal);
 
-            $pivots = array_chunk($pivots, $pager->recPerPage);
-            $pivots = $pivots[$pager->pageID - 1];
+            if($pivots)
+            {
+                $pivots = array_chunk($pivots, $pager->recPerPage);
+                $pivots = $pivots[$pager->pageID - 1];
+            }
 
         }
 
