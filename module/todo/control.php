@@ -285,29 +285,22 @@ class todo extends control
     }
 
     /**
+     * 开启一个待办事项
      * Start a todo.
      *
-     * @param  int    $todoID
+     * @param  string $todoID
      * @access public
      * @return void
      */
-    public function start($todoID)
+    public function start(string $todoID): void
     {
-        $todo = $this->todo->getById($todoID);
-        if($todo->status == 'wait') $this->todo->start($todoID);
-        if(in_array($todo->type, array('bug', 'task', 'story')))
-        {
-            $confirmNote = 'confirm' . ucfirst($todo->type);
-            $confirmURL  = $this->createLink($todo->type, 'view', "id=$todo->idvalue");
-            $okTarget    = isonlybody() ? 'parent' : 'window.parent.$.apps.open';
-            if($todo->type == 'bug')   $app = 'qa';
-            if($todo->type == 'task')  $app = 'execution';
-            if($todo->type == 'story') $app = 'product';
-            $cancelURL   = $this->server->HTTP_REFERER;
-            return print(js::confirm(sprintf($this->lang->todo->$confirmNote, $todo->idvalue), $confirmURL, $cancelURL, $okTarget, 'parent', $app));
-        }
+        $todoID = (int)$todoID;
+        $todo   = $this->todo->getById($todoID);
 
-        if(isonlybody())return print(js::reload('parent.parent'));
+        if($todo->status == 'wait') $this->todo->start($todoID);
+        if(in_array($todo->type, array('bug', 'task', 'story'))) return $this->todoZen->printConfirm($todo);
+        if(isonlybody()) return print(js::reload('parent.parent'));
+
         echo js::reload('parent');
     }
 

@@ -835,7 +835,6 @@ class taskModel extends model
             if(!isset($currentTask->status)) $currentTask->status = $oldTask->status;
             $oldTask->team = $team;
 
-            $currentTask->assignedTo = $oldTask->assignedTo;
             if(!empty($_POST['assignedTo']) and is_string($_POST['assignedTo']))
             {
                 $currentTask->assignedTo = $this->post->assignedTo;
@@ -844,6 +843,8 @@ class taskModel extends model
             {
                 $currentTask->assignedTo = $this->getAssignedTo4Multi($members, $oldTask);
                 if($oldTask->assignedTo != $currentTask->assignedTo) $currentTask->assignedDate = $now;
+
+                $oldTask->team = $oldTeam;
             }
 
             $currentTask->estimate = 0;
@@ -858,50 +859,7 @@ class taskModel extends model
             $currentTask->consumed = 0;
             foreach($efforts as $effort) $currentTask->consumed += (float)$effort->consumed;
 
-            $oldTask->team = $oldTeam;
-
-            if(!empty($task))
-            {
-                if(!$autoStatus) return $currentTask;
-
-                if($currentTask->consumed == 0 and empty($efforts))
-                {
-                    if(!isset($task->status)) $currentTask->status = 'wait';
-                    $currentTask->finishedBy   = '';
-                    $currentTask->finishedDate = '';
-                }
-
-                if($currentTask->consumed > 0 && $currentTask->left > 0)
-                {
-                    $currentTask->status       = 'doing';
-                    $currentTask->finishedBy   = '';
-                    $currentTask->finishedDate = '';
-                }
-
-                if($currentTask->consumed > 0 and $currentTask->left == 0)
-                {
-                    $finisedUsers = $this->getFinishedUsers($oldTask->id, $members);
-                    if(count($finisedUsers) != count($team))
-                    {
-                        if(strpos('cancel,pause', $oldTask->status) === false or ($oldTask->status == 'closed' and $oldTask->reason == 'done'))
-                        {
-                            $currentTask->status       = 'doing';
-                            $currentTask->finishedBy   = '';
-                            $currentTask->finishedDate = '';
-                        }
-                    }
-                    elseif(strpos('wait,doing,pause', $oldTask->status) !== false)
-                    {
-                        $currentTask->status       = 'done';
-                        $currentTask->assignedTo   = $oldTask->openedBy;
-                        $currentTask->assignedDate = $now;
-                        $currentTask->finishedBy   = $this->app->user->account;
-                        $currentTask->finishedDate = $task->finishedDate;
-                    }
-                }
-
-                return $currentTask;
-            }
+            if(!empty($task)) return $this->taskTao->computeCurrentTaskStatus($currentTask, $oldTask, $task, $autoStatus, empty($efforts), $members);
             $this->dao->update(TABLE_TASK)->data($currentTask)->autoCheck()->where('id')->eq($oldTask->id)->exec();
         }
     }
@@ -2405,12 +2363,12 @@ class taskModel extends model
             ->andWhere('t1.vision')->eq($this->config->vision)
             ->fetch();
         if(!$task) return false;
-        $task->openedDate     = substr($task->openedDate, 0, 19);
-        $task->finishedDate   = substr($task->finishedDate, 0, 19);
-        $task->canceledDate   = substr($task->canceledDate, 0, 19);
-        $task->closedDate     = substr($task->closedDate, 0, 19);
-        $task->lastEditedDate = substr($task->lastEditedDate, 0, 19);
-        $task->realStarted    = substr($task->realStarted, 0, 19);
+        $task->openedDate     = !empty($task->openedDate)     ? substr($task->openedDate, 0, 19) : null;
+        $task->finishedDate   = !empty($task->finishedDate)   ? substr($task->finishedDate, 0, 19) : null;
+        $task->canceledDate   = !empty($task->canceledDate)   ? substr($task->canceledDate, 0, 19) : null;
+        $task->closedDate     = !empty($task->closedDate)     ? substr($task->closedDate, 0, 19) : null;
+        $task->lastEditedDate = !empty($task->lastEditedDate) ? substr($task->lastEditedDate, 0, 19) : null;
+        $task->realStarted    = !empty($task->realStarted)    ? substr($task->realStarted, 0, 19) : null;
 
         $children = $this->dao->select('*')->from(TABLE_TASK)->where('parent')->eq($taskID)->andWhere('deleted')->eq(0)->fetchAll('id');
         $task->children = $children;
@@ -2432,10 +2390,6 @@ class taskModel extends model
         if($setImgSize) $task->desc = $this->file->setImgSize($task->desc);
 
         if($task->assignedTo == 'closed') $task->assignedToRealName = 'Closed';
-        foreach($task as $key => $value)
-        {
-            if((strpos($key, 'Date') !== false or strpos('estStarted|deadline', $key) !== false) and !(int)substr($value, 0, 4)) $task->$key = '';
-        }
         $task->files = $this->loadModel('file')->getByObject('task', $taskID);
 
         /* Get related test cases. */

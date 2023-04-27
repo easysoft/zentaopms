@@ -210,4 +210,60 @@ class taskTao extends taskModel
         }
         return $tasks;
     }
+
+    /**
+     *  Compute the status of the current task.
+     *  计算当前任务的状态。
+     *
+     * @param  object $currentTask
+     * @param  object $oldTask
+     * @param  object $task
+     * @param  bool   $condition  true|false
+     * @param  bool   $hasEfforts true|false
+     * @param  int    $teamCount
+     * @access protected
+     * @return object
+     */
+    protected function computeCurrentTaskStatus(object $currentTask, object $oldTask, object $task, bool $autoStatus, bool $hasEfforts, array $members): object
+    {
+        if(!$autoStatus) return $currentTask;
+
+        if($currentTask->consumed == 0 and $hasEfforts)
+        {
+            if(!isset($task->status)) $currentTask->status = 'wait';
+            $currentTask->finishedBy   = null;
+            $currentTask->finishedDate = null;
+        }
+
+        if($currentTask->consumed > 0 && $currentTask->left > 0)
+        {
+            $currentTask->status       = 'doing';
+            $currentTask->finishedBy   = null;
+            $currentTask->finishedDate = null;
+        }
+
+        if($currentTask->consumed > 0 and $currentTask->left == 0)
+        {
+            $finisedUsers = $this->getFinishedUsers($oldTask->id, $members);
+            if(count($finisedUsers) != count($members))
+            {
+                if(strpos('cancel,pause', $oldTask->status) === false or ($oldTask->status == 'closed' and $oldTask->reason == 'done'))
+                {
+                    $currentTask->status       = 'doing';
+                    $currentTask->finishedBy   = null;
+                    $currentTask->finishedDate = null;
+                }
+            }
+            elseif(strpos('wait,doing,pause', $oldTask->status) !== false)
+            {
+                $currentTask->status       = 'done';
+                $currentTask->assignedTo   = $oldTask->openedBy;
+                $currentTask->assignedDate = helper::now();
+                $currentTask->finishedBy   = $this->app->user->account;
+                $currentTask->finishedDate = $task->finishedDate;
+            }
+        }
+
+        return $currentTask;
+    }
 }

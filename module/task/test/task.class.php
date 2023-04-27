@@ -1558,8 +1558,8 @@ class taskTest
 
     /**
      * Get the assignedTo for the multiply linear task.
-     * 
-     * @param  int    $taskID 
+     *
+     * @param  int    $taskID
      * @param  string $type current|next
      * @access public
      * @return string
@@ -1570,5 +1570,30 @@ class taskTest
         $members = empty($task->team) ? array() : $task->team;
 
         return $this->objectModel->getAssignedTo4Multi($members, $task, $type);
+    }
+
+    /**
+     * Test fetch tasks of a execution.
+     *
+     * @param  object $currentTask
+     * @param  object $oldTask
+     * @param  object $task
+     * @param  bool   $condition  true|false
+     * @param  bool   $hasEfforts true|false
+     * @param  int    $teamCount
+     * @access public
+     * @return object
+     */
+    public function computeCurrentTaskStatusTest(object $currentTask, object $oldTask, object $task, bool $autoStatus, bool $hasEfforts, array $members): object
+    {
+        $task = $this->objectModel->computeCurrentTaskStatus($currentTask, $oldTask, $task, $autoStatus, $hasEfforts, $members);
+        if(dao::isError())
+        {
+            return dao::getError();
+        }
+        else
+        {
+            return $task;
+        }
     }
 }
