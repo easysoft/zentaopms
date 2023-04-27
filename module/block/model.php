@@ -187,10 +187,10 @@ class blockModel extends model
      * @access public
      * @return string
      */
-    public function getParams(string $type, string $module): string
+    public function getParams(string $block, string $module): string
     {
-        $type = $type == 'todo' ? $module : $type;
-        $params = zget($this->config->block->params, $type, '');
+        $block = $block == 'todo' ? $module : $block;
+        $params = zget($this->config->block->params, $block, '');
         return json_encode($params);
     }
 
@@ -338,12 +338,12 @@ class blockModel extends model
      */
     public function update(object $formData): int|false
     {
-        $this->dao->update(TABLE_BLOCK)->data($formData)->exec();
+        $this->dao->update(TABLE_BLOCK)->data($formData)->autoCheck()->exec();
         if(dao::isError()) return false;
 
         $this->loadModel('score')->create('block', 'set');
 
-        return $formData->id;
+        return (int)$formData->id;
     }
 
     /**

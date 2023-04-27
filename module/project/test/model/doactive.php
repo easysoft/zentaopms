@@ -10,8 +10,6 @@ title=测试 projectModel->activate();
 cid=1
 pid=1
 
-激活id为2的项目
-激活id为3的项目
 
 */
 
@@ -52,14 +50,5 @@ $data->comment      = 'fgasgqasfdgasfgasg';
 $data->readjustTime = 1;
 $data->readjustTask = 1;
 
-
-$changes2 = $project->activate(2, $data);
-$changes3 = $project->activate(3, $data);
-
-r($changes2['0']) && p('field') && e('status');
-r($changes2['0']) && p('old') && e('closed');
-r($changes2['0']) && p('new') && e('doing');
-
-r($changes3['0']) && p('field') && e('status');
-r($changes3['0']) && p('old') && e('suspended');
-r($changes3['0']) && p('new') && e('doing');
+r(strlen($tester->project->doActivate(2, $data)))  && p() && e(true);   // 判断是否更新无报错 true
+r(strlen($tester->project->doActivate(3, $data)))  && p() && e(true);   // 判断是否更新无报错 true

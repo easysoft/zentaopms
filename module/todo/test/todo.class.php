@@ -79,24 +79,25 @@ class todoTest
      * @access public
      * @return array
      */
-    public function updateTest($todoID, $param)
+    public function updateTest(int $todoID, array $param)
     {
         global $tester;
         $object = $tester->dbh->query("SELECT * FROM " . TABLE_TODO ." WHERE id = $todoID")->fetch();
 
+        $todo = new stdClass();
         foreach($object as $field => $value)
         {
             if(in_array($field, array_keys($param)))
             {
-                $_POST[$field] = $param[$field];
+                $todo->$field = $param[$field];
             }
             else
             {
-                $_POST[$field] = $value;
+                $todo->$field = $value;
             }
         }
 
-        $change = $this->objectModel->update($todoID);
+        $change = $this->objectModel->update($todoID, $todo);
         if($change == array()) $change = '没有数据更新';
 
         unset($_POST);
@@ -269,7 +270,7 @@ class todoTest
         $todo->begin        = '0830';
         $todo->end          = '0900';
         $todo->account      = 'admin';
-        $todo->idvalue      = '0';
+        $todo->objectID     = '0';
         $todo->vision       = 'rnd';
         $todo->assignedTo   = 'admin';
         $todo->assignedBy   = 'admin';
@@ -284,7 +285,7 @@ class todoTest
 
         $this->objectModel->createByCycle(array($todoID => $todo));
 
-        $objects = $tester->dao->select('id')->from(TABLE_TODO)->where('idvalue')->eq($todoID)->andWhere('deleted')->eq('0')->fetchAll();
+        $objects = $tester->dao->select('id')->from(TABLE_TODO)->where('objectID')->eq($todoID)->andWhere('deleted')->eq('0')->fetchAll();
 
         if(dao::isError()) return dao::getError();
 

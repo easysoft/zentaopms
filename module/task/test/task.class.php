@@ -290,7 +290,10 @@ class taskTest
         $createFields = array('assignedTo' => '', 'status' => '', 'comment' => '');
         foreach($createFields as $field => $defaultValue) $_POST[$field] = $defaultValue;
         foreach($param as $key => $value) $_POST[$key] = $value;
-        $object = $this->objectModel->assign($taskID);
+
+        $task = $_POST;
+        unset($task['comment']);
+        $object = $this->objectModel->assign((object)$task, $taskID);
         unset($_POST);
         if(dao::isError())
         {
@@ -511,13 +514,9 @@ class taskTest
      * @access public
      * @return array
      */
-    public function getUserTasksTest($taskID, $assignedTo)
+    public function getUserTasksTest($account, $type = 'assignedTo', $limit = 0, $pager = null, $orderBy = 'id_desc', $projectID = 0)
     {
-        $createFields = array('assignedTo' => $assignedTo, 'status' => 'doing', 'comment' => '');
-        foreach($createFields as $field => $defaultValue) $_POST[$field] = $defaultValue;
-        $this->objectModel->assign($taskID);
-        $object = $this->objectModel->getUserTasks($assignedTo);
-        unset($_POST);
+        $object = $this->objectModel->getUserTasks($account, $type, $limit, $pager, $orderBy, $projectID);
         if(dao::isError())
         {
             return dao::getError();
@@ -1524,7 +1523,7 @@ class taskTest
      * @access public
      * @return array
      */
-    public function fetchExecutionTasksTest(int $executionID, int $productID = 0, string $type = 'all', array $modules = array(), string $orderBy = 'status_asc, id_desc', string $count = '0'): array|int
+    public function fetchExecutionTasksTest(int $executionID, int $productID = 0, string|array $type = 'all', array $modules = array(), string $orderBy = 'status_asc, id_desc', string $count = '0'): array|int
     {
         $tasks = $this->objectModel->fetchExecutionTasks($executionID, $productID, $type, $modules, $orderBy);
         if(dao::isError())
@@ -1558,8 +1557,8 @@ class taskTest
 
     /**
      * Get the assignedTo for the multiply linear task.
-     * 
-     * @param  int    $taskID 
+     *
+     * @param  int    $taskID
      * @param  string $type current|next
      * @access public
      * @return string
@@ -1570,5 +1569,30 @@ class taskTest
         $members = empty($task->team) ? array() : $task->team;
 
         return $this->objectModel->getAssignedTo4Multi($members, $task, $type);
+    }
+
+    /**
+     * Test fetch tasks of a execution.
+     *
+     * @param  object $currentTask
+     * @param  object $oldTask
+     * @param  object $task
+     * @param  bool   $condition  true|false
+     * @param  bool   $hasEfforts true|false
+     * @param  int    $teamCount
+     * @access public
+     * @return object
+     */
+    public function computeCurrentTaskStatusTest(object $currentTask, object $oldTask, object $task, bool $autoStatus, bool $hasEfforts, array $members): object
+    {
+        $task = $this->objectModel->computeCurrentTaskStatus($currentTask, $oldTask, $task, $autoStatus, $hasEfforts, $members);
+        if(dao::isError())
+        {
+            return dao::getError();
+        }
+        else
+        {
+            return $task;
+        }
     }
 }

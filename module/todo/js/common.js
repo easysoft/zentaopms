@@ -14,11 +14,11 @@ function switchDateTodo(switcher)
  * @param  type        $type        Type of selected todo.
  * @param  id          $id          ID of selected todo.
  * @param  defaultType $defaultType Default type of selected todo.
- * @param  idvalue     $idvalue     ID of the closed todo type.
+ * @param  objectID    $objectID    ID of the closed todo type.
  * @access public
  * @return void
  */
-function loadList(type, id, defaultType, idvalue)
+function loadList(type, id, defaultType, objectID)
 {
     if(id)
     {
@@ -34,7 +34,7 @@ function loadList(type, id, defaultType, idvalue)
     id = id ? id : '';
     var param = 'userID=' + userID + '&id=' + id;
     if(type == "task") param += '&status=wait,doing';
-    if(type == defaultType && idvalue != 0) param += '&idvalue=' + idvalue;
+    if(type == defaultType && objectID != 0) param += '&objectID=' + objectID;
 
     if(moduleList.indexOf(type) !== -1)
     {
@@ -45,7 +45,7 @@ function loadList(type, id, defaultType, idvalue)
             if(data.length != 0)
             {
                 $(divClass).html(data).find('select').chosen();
-                if(config.currentMethod == 'edit' || type == 'feedback') $(divClass).find('select').val(idvalue).trigger('chosen:updated');
+                if(config.currentMethod == 'edit' || type == 'feedback') $(divClass).find('select').val(objectID).trigger('chosen:updated');
                 if($(divClass + " select").val() == null) $(divClass + " select").attr("data-placeholder", noOptions.replace("%s", chosenType[type])).trigger('chosen:updated');
             }
             else
@@ -68,7 +68,7 @@ function loadList(type, id, defaultType, idvalue)
         }
         else
         {
-            $('#nameBoxLabel').text(nameBoxLabel.idvalue);
+            $('#nameBoxLabel').text(nameBoxLabel.objectID);
         }
     }
 }

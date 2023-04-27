@@ -26,7 +26,7 @@ class block extends control
     }
 
     /**
-     * Create a block.
+     * Create a block under a dashboard.
      * 
      * @param  string $dashboard 
      * @param  string $module
@@ -47,12 +47,16 @@ class block extends control
 
             $this->block->create($formData);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => 1));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true, 'closeModal' => true, 'callback' => 'loadCurrentPage()'));
         }
 
-        $this->view->title = $this->lang->block->createBlock;
-        $this->view->block = $block;
-        $this->blockZen->buildCreateForm($dashboard, $module, $block); 
+        $this->view->title     = $this->lang->block->createBlock;
+        $this->view->dashboard = $dashboard;
+        $this->view->module    = $module;
+        $this->view->block     = $block;
+        $this->view->modules   = $this->blockZen->getAvailableModules($dashboard);
+        $this->view->blocks    = $this->blockZen->getAvailableBlocks($dashboard, $module);
+        $this->view->params    = $this->blockZen->getAvailableParams($dashboard, $module, $block);
         $this->display();
     }
 
@@ -60,20 +64,34 @@ class block extends control
      * Update a block. 
      * 
      * @param  string $dashboard 
-     * @param  int    $blockID 
+     * @param  string $module 
+     * @param  string $block 
      * @access public
      * @return void
      */
-    public function edit(string $dashboard, int $blockID)
+    public function edit(string $blockID, string $module = '', string $block = '')
     {
+        $blockID = (int)$blockID;
         if($_POST)
         {
-            $formData = form::use($this->config->example->edit)->get();
+            $formData = form::data($this->config->block->form->edit)->get();
+            $formData->id     = $blockID;
+            $formData->params = helper::jsonEncode($formData->params);
+
             $this->block->update($formData);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'reload'));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true, 'closeModal' => true, 'callback' => 'loadCurrentPage()'));
         }
-        $this->blockZen->buildCreateForm($dashboard); 
+
+        $blockData = $this->block->getByID($blockID);
+
+        $this->view->title     = $this->lang->block->editBlock;
+        $this->view->blockData = $blockData;
+        $this->view->block     = $block  ? $block  : $blockData->block;
+        $this->view->module    = $module ? $module : $blockData->module;
+        $this->view->modules   = $this->blockZen->getAvailableModules($blockData->dashboard);
+        $this->view->blocks    = $this->blockZen->getAvailableBlocks($blockData->dashboard, $this->view->module);
+        $this->view->params    = $this->blockZen->getAvailableParams($blockData->dashboard, $this->view->module, $this->view->block);
         $this->display();
     }
 
@@ -376,7 +394,7 @@ class block extends control
      */
     public function printBlock($id, $module = 'my')
     {
-        $block = $this->block->getByID($id);
+        $block = $this->block->getByID((int)$id);
 
         if(empty($block)) return false;
 

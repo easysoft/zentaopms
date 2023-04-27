@@ -1,6 +1,6 @@
 $(function()
 {
-    loadList($('#type').val(), '', defaultType, idvalue);
+    loadList($('#type').val(), '', defaultType, objectID);
 
     $('#pri').on('change', function()
     {   
