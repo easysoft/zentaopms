@@ -1809,7 +1809,6 @@ class project extends control
 
             $postData = $this->projectZen->prepareSuspendExtras($projectID, $postData);
 
-            print_r($postData);die;
             $changes = $this->project->suspend($projectID, $postData);
 
             if(dao::isError()) return print(js::error(dao::getError()));
