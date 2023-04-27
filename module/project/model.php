@@ -1838,9 +1838,9 @@ class projectModel extends model
      * @param  int    $projectID
      * @param  object $project
      * @access public
-     * @return array|false
+     * @return array|bool
      */
-    public function start(int $projectID, object $project): array|false
+    public function start(int $projectID, object $project):array|bool
     {
         $oldProject = $this->getById($projectID);
 
@@ -1849,14 +1849,15 @@ class projectModel extends model
         $this->projectTao->doStart($projectID, $project);
 
         /* When it has multiple errors, only the first one is prompted */
-        if(dao::isError())
+        if(dao::isError() and count(dao::$errors['realBegan']) > 1) dao::$errors['realBegan'] = dao::$errors['realBegan'][0];
+
+        if(!dao::isError())
         {
-            if(count(dao::$errors['realBegan']) > 1) dao::$errors['realBegan'] = dao::$errors['realBegan'][0];
-            return false;
+            if(!$oldProject->multiple) $this->changeExecutionStatus($projectID, 'start');
+            return common::createChanges($oldProject, $project);
         }
 
-        if(!$oldProject->multiple) $this->changeExecutionStatus($projectID, 'start');
-        return common::createChanges($oldProject, $project);
+        return false;
     }
 
     /**
@@ -1931,15 +1932,13 @@ class projectModel extends model
      * @access public
      * @return array  $changes|false
      */
-    public function activate(object $project) :array|false
+    public function activate(int $projectID, object $project) :array|false
     {
         $now        = helper::now();
-        $projectID  = $project->id;
-        $oldProject = $this->getById($projectID);
+        $oldProject = $this->getByID($projectID);
 
-        $this->projectTao->updateProject($project);
-
-        if(dao::isError()) return false;
+        $daoSuccess = $this->projectTao->doActivate($projectID, $project);
+        if(!$daoSuccess) return false;
 
         if(empty($oldProject->multiple) and $oldProject->model != 'waterfall') $this->loadModel('execution')->syncNoMultipleSprint($projectID);
 
