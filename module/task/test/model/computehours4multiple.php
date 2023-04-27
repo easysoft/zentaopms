@@ -61,8 +61,98 @@ $members = array(array($members1, $members2), array($members3));
 /**
 
 title=taskModel->computeHours4Multiple();
+timeout=0
 cid=1
-pid=1
+
+- 执行task模块的computeHours4Multiple方法，参数是$oldTasks[0]
+ - 属性id @1
+ - 属性assignedTo @admin
+ - 属性status @doing
+ - 属性estimate @5
+ - 属性consumed @0
+ - 属性left @4
+
+- 执行task模块的computeHours4Multiple方法，参数是$oldTasks[1]
+ - 属性id @2
+ - 属性assignedTo @user1
+ - 属性status @done
+ - 属性estimate @13
+ - 属性consumed @0
+ - 属性left @0
+
+- 执行task模块的computeHours4Multiple方法，参数是$oldTasks[2]
+ - 属性id @3
+ - 属性assignedTo @admin
+ - 属性status @done
+ - 属性estimate @15
+ - 属性consumed @0
+ - 属性left @4
+
+- 执行task模块的computeHours4Multiple方法，参数是$oldTasks[3]
+ - 属性id @4
+ - 属性assignedTo @user1
+ - 属性status @pause
+ - 属性estimate @17
+ - 属性consumed @0
+ - 属性left @2
+
+- 执行task模块的computeHours4Multiple方法，参数是$oldTasks[4]
+ - 属性id @5
+ - 属性assignedTo @admin
+ - 属性status @cancel
+ - 属性estimate @0
+ - 属性consumed @0
+ - 属性left @0
+
+- 执行task模块的computeHours4Multiple方法，参数是$oldTasks[0], $tasks[0]
+ - 属性id @1
+ - 属性assignedTo @admin
+ - 属性status @doing
+ - 属性estimate @5
+ - 属性consumed @0
+ - 属性left @4
+
+- 执行task模块的computeHours4Multiple方法，参数是$oldTasks[1], $tasks[1]
+ - 属性id @2
+ - 属性assignedTo @user1
+ - 属性status @done
+ - 属性estimate @13
+ - 属性consumed @0
+ - 属性left @0
+
+- 执行task模块的computehours4multiple方法，参数是$oldTasks[0], $tasks[0], $members[0]
+ - 属性id @1
+ - 属性assignedTo @admin
+ - 属性status @doing
+ - 属性estimate @3
+ - 属性consumed @0
+ - 属性left @3
+
+- 执行task模块的computehours4multiple方法，参数是$oldTasks[1], $tasks[1], $members[1]
+ - 属性id @2
+ - 属性assignedTo @user1
+ - 属性status @done
+ - 属性estimate @3
+ - 属性consumed @0
+ - 属性left @3
+
+- 执行task模块的computehours4multiple方法，参数是$oldTasks[0], $tasks[0], $members[0], false
+ - 属性id @1
+ - 属性assignedTo @admin
+ - 属性status @doing
+ - 属性estimate @3
+ - 属性consumed @0
+ - 属性left @3
+
+- 执行task模块的computehours4multiple方法，参数是$oldTasks[1], $tasks[1], $members[1], false
+ - 属性id @2
+ - 属性assignedTo @user1
+ - 属性status @done
+ - 属性estimate @3
+ - 属性consumed @0
+ - 属性left @3
+
+
 
 */
 

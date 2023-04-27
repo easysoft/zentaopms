@@ -608,26 +608,18 @@ class todoModel extends model
     }
 
     /**
-     * Closed todo.
+     * Close todo. Update related feedback if edition is biz or max.
      *
-     * @param $todoID
+     * @param int $todoID
      *
      * @access public
      * @return bool
      */
-    public function close($todoID)
+    public function close(int $todoID): bool
     {
-        $now = helper::now();
-        $this->dao->update(TABLE_TODO)
-            ->set('status')->eq('closed')
-            ->set('closedBy')->eq($this->app->user->account)
-            ->set('closedDate')->eq($now)
-            ->set('assignedTo')->eq('closed')
-            ->set('assignedDate')->eq($now)
-            ->where('id')->eq((int)$todoID)
-            ->exec();
+        $isClosed = $this->todoTao->closeTodo($todoID);
 
-        if(!dao::isError())
+        if($isClosed)
         {
             $this->loadModel('action')->create('todo', $todoID, 'closed', '', 'closed');
 

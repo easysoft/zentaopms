@@ -179,24 +179,19 @@ class projectModel extends model
 
     /**
      * Get a project by id.
+     * 根据项目ID获取项目信息。
      *
      * @param  int    $projectID
-     * @param  string $type  project|sprint,stage
      * @access public
-     * @return object
+     * @return object|false
      */
-    public function getByID($projectID, $type = 'project')
+    public function getByID(int $projectID): object|false
     {
         if(defined('TUTORIAL')) return $this->loadModel('tutorial')->getProject();
 
-        $project = $this->dao->select('*')->from(TABLE_PROJECT)
-            ->where('id')->eq($projectID)
-            ->andWhere('`type`')->in($type)
-            ->fetch();
-
+        $project = $this->projectTao->fetchProjectInfo($projectID);
         if(!$project) return false;
 
-        if(helper::isZeroDate($project->end)) $project->end = '';
         $project = $this->loadModel('file')->replaceImgURL($project, 'desc');
         return $project;
     }
@@ -1049,7 +1044,7 @@ class projectModel extends model
     public function buildMenuQuery($projectID = 0)
     {
         $path    = '';
-        $project = $this->getByID($projectID);
+        $project = $this->projectTao->fetchProjectInfo($projectID);
         if($project) $path = $project->path;
 
         return $this->dao->select('*')->from(TABLE_PROJECT)
@@ -1860,34 +1855,6 @@ class projectModel extends model
     }
 
     /**
-     * Put project off.
-     *
-     * @param  int    $projectID
-     * @access public
-     * @return void
-     */
-    public function putoff($projectID)
-    {
-        $oldProject = $this->getById($projectID);
-        $now        = helper::now();
-
-        $project = fixer::input('post')
-            ->add('id', $projectID)
-            ->setDefault('lastEditedBy', $this->app->user->account)
-            ->setDefault('lastEditedDate', $now)
-            ->remove('comment')
-            ->get();
-
-        $this->dao->update(TABLE_PROJECT)->data($project)
-            ->autoCheck()
-            ->checkFlow()
-            ->where('id')->eq((int)$projectID)
-            ->exec();
-
-        if(!dao::isError()) return common::createChanges($oldProject, $project);
-    }
-
-    /**
      * Suspend project and update status.
      * 暂停项目并更改其状态
      *
@@ -1924,7 +1891,7 @@ class projectModel extends model
     public function activate(int $projectID, object $project) :array|false
     {
         $now        = helper::now();
-        $oldProject = $this->getByID($projectID);
+        $oldProject = $this->projectTao->fetchProjectInfo($projectID);
 
         $daoSuccess = $this->projectTao->doActivate($projectID, $project);
         if(!$daoSuccess) return false;
@@ -2108,7 +2075,7 @@ class projectModel extends model
      */
     public function manageMembers($projectID)
     {
-        $project = $this->getByID($projectID);
+        $project = $this->projectTao->fetchProjectInfo($projectID);
         $data    = (array)fixer::input('post')->get();
 
         extract($data);
@@ -2587,7 +2554,7 @@ class projectModel extends model
                 $this->dao->update(TABLE_EXECUTION)->set('division')->eq('1')->where('project')->eq((int)$projectID)->exec();
             }
 
-            $project = $this->getByID($projectID);
+            $project = $this->projectTao->fetchProjectInfo($projectID);
             if(!empty($project) and ($project->model == 'waterfall' or $project->model == 'waterfallplus') and empty($project->division) and !empty($executions))
             {
                 $this->loadModel('execution');
@@ -2628,7 +2595,7 @@ class projectModel extends model
     {
         if(defined('TUTORIAL')) return $this->loadModel('tutorial')->getTeamMembers();
 
-        $project = $this->getByID($projectID);
+        $project = $this->projectTao->fetchProjectInfo($projectID);
         if(empty($project)) return array();
 
         return $this->dao->select("t1.*, t1.hours * t1.days AS totalHours, t2.id as userID, if(t2.deleted='0', t2.realname, t1.account) as realname")->from(TABLE_TEAM)->alias('t1')
@@ -2865,14 +2832,14 @@ class projectModel extends model
 
         $model    = 'scrum';
         $objectID = (empty($objectID) and $this->session->project) ? $this->session->project : $objectID;
-        $project  = $this->getByID($objectID);
+        $project  = $this->projectTao->fetchProjectInfo($objectID);
 
         if(!$project)
         {
             $execution = $this->loadModel('execution')->getByID($objectID);
             if($execution and $execution->project and !$execution->multiple)
             {
-                $project = $this->getByID($execution->project);
+                $project = $this->projectTao->fetchProjectInfo($execution->project);
                 $objectID = $execution->project;
             }
         }

@@ -516,6 +516,7 @@
     }).on('zui.locate', (e, data) =>
     {
         if(!data) return;
+        if(data === true) return loadCurrentPage();
         if(typeof data === 'string') data = {url: data};
         loadPage(data.url, data.selector);
     });
