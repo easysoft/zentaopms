@@ -103,4 +103,17 @@ class Project
         if(dao::isError()) return array('message' => dao::getError());
         return $projectIds;
     }
+
+    /**
+     *  Test get all the projects under the program set to which an project belongs
+     *
+     * @param int    $projectID
+     * @param object $project
+     * @access public
+     * @return array $changes
+     */
+    public function activate($projectID, $project)
+    {
+        return $this->project->activate($projectID, $project);
+    }
 }
