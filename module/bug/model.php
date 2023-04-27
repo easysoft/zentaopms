@@ -433,7 +433,7 @@ class bugModel extends model
      * @param  int    $bugID
      * @param  bool   $setImgSize
      * @access public
-     * @return object
+     * @return object|false
      */
     public function getByID(int $bugID, bool $setImgSize = false): object|false
     {
