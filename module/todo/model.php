@@ -593,16 +593,16 @@ class todoModel extends model
     }
 
     /**
+     * 激活待办事项
      * Activate todo.
      *
-     * @param $todoID
-     *
+     * @param  int $todoID
      * @access public
      * @return bool
      */
-    public function activate($todoID)
+    public function activate(int $todoID): bool
     {
-        $this->dao->update(TABLE_TODO)->set('status')->eq('wait')->where('id')->eq((int)$todoID)->exec();
+        $this->dao->update(TABLE_TODO)->set('status')->eq('wait')->where('id')->eq($todoID)->exec();
         $this->loadModel('action')->create('todo', $todoID, 'activated', '', 'wait');
         return !dao::isError();
     }

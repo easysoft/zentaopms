@@ -292,7 +292,7 @@ class todo extends control
      * @access public
      * @return void
      */
-    public function start(string $todoID): void
+    public function start(string $todoID)
     {
         $todoID = (int)$todoID;
         $todo   = $this->todo->getById($todoID);
@@ -305,18 +305,22 @@ class todo extends control
     }
 
     /**
+     * 激活待办事项
      * Activated todo.
      *
-     * @param  $todoID
+     * @param  string $todoID
      * @access public
      * @return void
      */
-    public function activate($todoID)
+    public function activate(string $todoID)
     {
-        $todo = $this->todo->getById($todoID);
+        $todoID = (int)$todoID;
+        $todo   = $this->todo->getById($todoID);
+
         if($todo->status == 'done' or $todo->status == 'closed') $this->todo->activate($todoID);
         if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'success'));
         if(isonlybody()) return print(js::reload('parent.parent'));
+
         echo js::reload('parent');
     }
 
