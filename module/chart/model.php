@@ -54,6 +54,12 @@ class chartModel extends model
             $chart->fieldSettings = array();
         }
 
+        if(!empty($chart->settings) and $chart->settings != 'null')
+        {
+            $settings = json_decode($chart->settings, true);
+            if(isset($settings[0]) and isset($settings[0]['type'])) $chart->type = $settings[0]['type'];
+        }
+
         if($chart->sql == null)     $chart->sql     = '';
         if(!empty($chart->filters)) $chart->filters = json_decode($chart->filters, true);
 
