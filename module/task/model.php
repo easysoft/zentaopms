@@ -2552,42 +2552,17 @@ class taskModel extends model
     public function getUserTasks($account, $type = 'assignedTo', $limit = 0, $pager = null, $orderBy = "id_desc", $projectID = 0)
     {
         if(!$this->loadModel('common')->checkField(TABLE_TASK, $type)) return array();
-        $orderBy = str_replace('pri_', 'priOrder_', $orderBy);
-        $orderBy = str_replace('project_', 't1.project_', $orderBy);
-        $tasks   = $this->dao->select("t1.*, t4.id as project, t2.id as executionID, t2.name as executionName, t4.name as projectName, t2.multiple as executionMultiple, t2.type as executionType, t3.id as storyID, t3.title as storyTitle, t3.status AS storyStatus, t3.version AS latestStoryVersion, IF(t1.`pri` = 0, {$this->config->maxPriValue}, t1.`pri`) as priOrder")
-            ->from(TABLE_TASK)->alias('t1')
-            ->leftJoin(TABLE_EXECUTION)->alias('t2')->on("t1.execution = t2.id")
-            ->leftJoin(TABLE_STORY)->alias('t3')->on('t1.story = t3.id')
-            ->leftJoin(TABLE_PROJECT)->alias('t4')->on("t2.project = t4.id")
-            ->leftJoin(TABLE_TASKTEAM)->alias('t5')->on("t5.task = t1.id and t5.account = '{$account}'")
-            ->where('t1.deleted')->eq(0)
-            ->andWhere('t2.deleted')->eq(0)
-            ->beginIF($this->config->vision)->andWhere('t1.vision')->eq($this->config->vision)->fi()
-            ->beginIF($this->config->vision)->andWhere('t2.vision')->eq($this->config->vision)->fi()
-            ->beginIF($type != 'closedBy' and $this->app->moduleName == 'block')->andWhere('t1.status')->ne('closed')->fi()
-            ->beginIF($projectID)->andWhere('t1.project')->eq($projectID)->fi()
-            ->beginIF(!$this->app->user->admin)->andWhere('t1.execution')->in($this->app->user->view->sprints)->fi()
-            ->beginIF($type == 'finishedBy')
-            ->andWhere('t1.finishedby', 1)->eq($account)
-            ->orWhere('t5.status')->eq("done")
-            ->markRight(1)
-            ->fi()
-            ->beginIF($type == 'assignedTo' and ($this->app->rawModule == 'my' or $this->app->rawModule == 'block'))->andWhere('t2.status', true)->ne('suspended')->orWhere('t4.status')->ne('suspended')->markRight(1)->fi()
-            ->beginIF($type != 'all' and $type != 'finishedBy' and $type != 'assignedTo')->andWhere("t1.`$type`")->eq($account)->fi()
-            ->beginIF($type == 'assignedTo')->andWhere("(t1.assignedTo = '{$account}' or (t1.mode = 'multi' and t5.`account` = '{$account}' and t1.status != 'closed' and t5.status != 'done') )")->fi()
-            ->beginIF($type == 'assignedTo' and $this->app->rawModule == 'my' and $this->app->rawMethod == 'work')->andWhere('t1.status')->notin('closed,cancel')->fi()
-            ->orderBy($orderBy)
-            ->beginIF($limit > 0)->limit($limit)->fi()
-            ->page($pager, 't1.id')
-            ->fetchAll('id');
+
+        $tasks = $this->taskTao->fetchUserTasksByType($account, $type, $orderBy, $projectID, $limit, $pager);
+
+        if(!$tasks) return array();
 
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'task', false);
 
-        $taskTeam = $this->dao->select('*')->from(TABLE_TASKTEAM)->where('task')->in(array_keys($tasks))->fetchGroup('task');
+        $taskTeam = $this->taskTao->getTeamMembersByIdList(array_keys($tasks));
         foreach($taskTeam as $taskID => $team) $tasks[$taskID]->team = $team;
 
-        if($tasks) return $this->processTasks($tasks);
-        return array();
+        return $this->processTasks($tasks);
     }
 
     /**
