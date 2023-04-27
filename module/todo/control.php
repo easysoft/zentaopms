@@ -522,17 +522,19 @@ class todo extends control
     }
 
     /**
-     * Batch close todos.
+     * Batch close todos. The status of todo which need to close should be done.
      *
      * @access public
      * @return void
      */
-    public function batchClose()
+    public function batchClose(): void
     {
         $waitIdList = array();
-        foreach($_POST['todoIDList'] as $todoID)
+        $todoIdlist = form::data($this->config->todo->batchClose->form)->get('todoIDList');
+        foreach($todoIdlist as $todoID)
         {
-            $todo = $this->todo->getById($todoID);
+            $todoID = (int) $todoID;
+            $todo   = $this->todo->getById($todoID);
             if($todo->status == 'done') $this->todo->close($todoID);
             if($todo->status != 'done' and $todo->status != 'closed') $waitIdList[] = $todoID;
         }
