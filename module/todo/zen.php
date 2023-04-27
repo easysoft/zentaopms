@@ -4,60 +4,6 @@ declare(strict_types=1);
 class todoZen extends todo
 {
     /**
-     * 处理请求数据
-     * Processing request data.
-     *
-     * @param  object $formData
-     * @return object|false
-     */
-    protected function beforeCreate(object $formData): object|bool
-    {
-        $formData = $formData->remove(implode(',', $this->config->todo->moduleList) . ',uid')->stripTags($this->config->todo->editor->create['id'], $this->config->allowedTags)->get();
-
-        $idvalue   = 0;
-        $hasObject = in_array($formData->type, $this->config->todo->moduleList);
-        if($hasObject && $formData->type) $idvalue = $formData->uid ? $formData->type : $formData->idvalue;
-
-        $formData->account    = $this->app->user->account;
-        $formData->assignedTo = zget($formData, 'assignedTo', $this->app->user->account);
-        $formData->assignedBy = zget($formData, 'assignedBy', $this->app->user->account);
-        if($hasObject && $formData->type) $formData->idvalue      = $idvalue;
-        if($formData->status == 'done')   $formData->finishedBy   = $this->app->user->account;
-        if($formData->status == 'done')   $formData->finishedDate = helper::now();
-
-        if(!isset($formData->pri) and in_array($formData->type, $this->config->todo->moduleList) and $formData->type !== 'review' and $formData->type !== 'feedback')
-        {
-            // TODO
-            $formData->pri = $this->dao->select('pri')->from($this->config->objectTables[$formData->type])->where('id')->eq($formData->idvalue)->fetch('pri');
-
-            if($formData->pri == 'high')   $formData->pri = 1;
-            if($formData->pri == 'middle') $formData->pri = 2;
-            if($formData->pri == 'low')    $formData->pri = 3;
-        }
-
-        if($formData->type != 'custom' and $formData->idvalue)
-        {
-            $type   = $formData->type;
-            $object = $this->loadModel($type)->getByID($formData->$type);
-            if(isset($object->name))  $formData->name = $object->name;
-            if(isset($object->title)) $formData->name = $object->title;
-        }
-
-        if($formData->end < $formData->begin)
-        {
-            dao::$errors[] = sprintf($this->lang->error->gt, $this->lang->todo->end, $this->lang->todo->begin);
-            return false;
-        }
-
-        if(!empty($formData->cycle)) $formData = $this->setCycle($formData);
-        else unset($formData->config);
-
-        $formData = $this->loadModel('file')->processImgURL($formData, $this->config->todo->editor->create['id'], $this->post->uid);
-
-        return $formData;
-    }
-
-    /**
      * 创建待办
      * Create a todo.
      *
@@ -82,7 +28,6 @@ class todoZen extends todo
 
         $this->loadModel('score')->create('todo', 'create', $todo->id);
 
-        // TODO
         if(!empty($todo->cycle)) $this->todo->createByCycle(array($todo->id => $todo));
 
         $this->loadModel('action')->create('todo', $todo->id, 'opened');
@@ -243,7 +188,7 @@ class todoZen extends todo
     /**
      * 输出确认弹框
      * Output confirm alert.
-     * 
+     *
      * @param  object $todo
      * @access protected
      * @return int
