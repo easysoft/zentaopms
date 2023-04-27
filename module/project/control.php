@@ -1539,8 +1539,9 @@ class project extends control
      * @access public
      * @return void
      */
-    public function team($projectID = 0)
+    public function team(string $projectID = '0')
     {
+        $projectID = (int)$projectID;
         $this->session->set('teamList', $this->app->getURI(true), 'project');
 
         $this->app->loadLang('execution');
@@ -2045,8 +2046,10 @@ class project extends control
      * @access public
      * @return void
      */
-    public function manageProducts($projectID, $from = 'project')
+    public function manageProducts(string $projectID, $from = 'project')
     {
+        $projectID = (int)$projectID;
+
         $this->loadModel('product');
         $this->loadModel('program');
         $this->loadModel('execution');
