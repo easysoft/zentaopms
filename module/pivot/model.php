@@ -1473,12 +1473,7 @@ class pivotModel extends model
             $options = $this->getSysOptions($fields[$group]['type'], $fields[$group]['object'], $fields[$group]['field'], $sql);
             foreach($groupsRow as $row)
             {
-                if(isset($row->$group))
-                {
-                    $value = $row->$group;
-                    $lang  = isset($options[$value]) ? $options[$value] : $value;
-                    $row->$group = $lang;
-                }
+                if(isset($row->$group)) $row->$group = zget($options, $row->$group);
             }
         }
 
