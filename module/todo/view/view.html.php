@@ -31,9 +31,9 @@
         <div class='detail-title'>
           <?php
           echo $lang->todo->desc;
-          if($todo->type == 'bug')   common::printLink('bug',   'view', "id={$todo->idvalue}", '  BUG#'   . $todo->idvalue);
-          if($todo->type == 'task')  common::printLink('task',  'view', "id={$todo->idvalue}", '  TASK#'  . $todo->idvalue);
-          if($todo->type == 'story') common::printLink('story', 'view', "id={$todo->idvalue}", '  STORY#' . $todo->idvalue);
+          if($todo->type == 'bug')   common::printLink('bug',   'view', "id={$todo->objectID}", '  BUG#'   . $todo->objectID);
+          if($todo->type == 'task')  common::printLink('task',  'view', "id={$todo->objectID}", '  TASK#'  . $todo->objectID);
+          if($todo->type == 'story') common::printLink('story', 'view', "id={$todo->objectID}", '  STORY#' . $todo->objectID);
           ?>
         </div>
         <div class='detail-content article-content'><?php echo $todo->desc;?></div>

@@ -46,7 +46,7 @@ $tester->loadModel('todo');
 initData();
 
 $t_upname = array('name' => 'john');
-$t_uptype = array('type' => 'bug', 'idvalue' => '1');
+$t_uptype = array('type' => 'bug', 'objectID' => '1');
 $t_unname = array('name' => 'john');
 
 $todo = new todoTest();
