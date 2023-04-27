@@ -67,7 +67,7 @@ form
         set::id('paramsRow'),
         set::class('form-grid'),
         $paramsRows,
-        ($module and $block) or ($module and !$blocks)
+        (($module and $block) or ($module and !$blocks))
         ? formGroup
         (
             set::label($lang->block->name),
@@ -75,7 +75,7 @@ form
             set::class('form-row'),
             set::control('input')  
         ) : null,
-        ($module and $block) or ($module and !$blocks)
+        (($module and $block) or ($module and !$blocks))
         ? formGroup
         (
             set::label($lang->block->grid),

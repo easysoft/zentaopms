@@ -52,6 +52,7 @@ class block extends control
 
         $this->view->title     = $this->lang->block->createBlock;
         $this->view->dashboard = $dashboard;
+        $this->view->module    = $module;
         $this->view->block     = $block;
         $this->view->modules   = $this->blockZen->getAvailableModules($dashboard);
         $this->view->blocks    = $this->blockZen->getAvailableBlocks($dashboard, $module);
