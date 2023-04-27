@@ -106,7 +106,7 @@ function p($keys = '', $delimiter = ',')
 
     if($isExtractAction) return true;
 
-    if(empty($_result)) return print("0\n");
+    if(empty($_result)) return print(implode("\n", array_fill(0, substr_count($keys, $delimiter) + 1, 0)) . "\n");
 
     if(is_array($_result) and isset($_result['code']) and $_result['code'] == 'fail') return print((string) $_result['message'] . "\n");
 
@@ -191,12 +191,12 @@ function parseScript($expect)
                 if($rowIndex == -1)
                 {
                     $stepDesc .= $row ? ",属性{$row}" : '';
+                    $stepDesc .= " @$expect";
                 }
                 else
                 {
-                    $stepDesc .= ($rowIndex == -1 ? '' : ($isGrup ? ' - ' : '- ') . ",属性{$rowIndex} @{$expects[0]}\n");
+                    $stepDesc .= ($rowIndex == -1 ? '' : ($isGrup ? ' - ' : '') . ",属性{$rowIndex} @{$expects[0]}\n");
                 }
-                $stepDesc .= " @$expect";
             }
             else
             {
