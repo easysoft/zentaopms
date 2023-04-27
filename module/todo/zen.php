@@ -14,28 +14,28 @@ class todoZen extends todo
     {
         $formData = $formData->remove(implode(',', $this->config->todo->moduleList) . ',uid')->stripTags($this->config->todo->editor->create['id'], $this->config->allowedTags)->get();
 
-        $idvalue   = 0;
+        $objectID   = 0;
         $hasObject = in_array($formData->type, $this->config->todo->moduleList);
-        if($hasObject && $formData->type) $idvalue = $formData->uid ? $formData->type : $formData->idvalue;
+        if($hasObject && $formData->type) $objectID = $formData->uid ? $formData->type : $formData->objectID;
 
         $formData->account    = $this->app->user->account;
         $formData->assignedTo = zget($formData, 'assignedTo', $this->app->user->account);
         $formData->assignedBy = zget($formData, 'assignedBy', $this->app->user->account);
-        if($hasObject && $formData->type) $formData->idvalue      = $idvalue;
+        if($hasObject && $formData->type) $formData->objectID      = $objectID;
         if($formData->status == 'done')   $formData->finishedBy   = $this->app->user->account;
         if($formData->status == 'done')   $formData->finishedDate = helper::now();
 
         if(!isset($formData->pri) and in_array($formData->type, $this->config->todo->moduleList) and $formData->type !== 'review' and $formData->type !== 'feedback')
         {
             // TODO
-            $formData->pri = $this->dao->select('pri')->from($this->config->objectTables[$formData->type])->where('id')->eq($formData->idvalue)->fetch('pri');
+            $formData->pri = $this->dao->select('pri')->from($this->config->objectTables[$formData->type])->where('id')->eq($formData->objectID)->fetch('pri');
 
             if($formData->pri == 'high')   $formData->pri = 1;
             if($formData->pri == 'middle') $formData->pri = 2;
             if($formData->pri == 'low')    $formData->pri = 3;
         }
 
-        if($formData->type != 'custom' and $formData->idvalue)
+        if($formData->type != 'custom' and $formData->objectID)
         {
             $type   = $formData->type;
             $object = $this->loadModel($type)->getByID($formData->$type);
@@ -78,11 +78,10 @@ class todoZen extends todo
      */
     protected function afterCreate(object $todo): object
     {
-        $this->file->updateObjectID($this->post->uid, $todo->id, 'todo');
+        $this->loadModel('file')->updateObjectID($this->post->uid, $todo->id, 'todo');
 
         $this->loadModel('score')->create('todo', 'create', $todo->id);
 
-        // TODO
         if(!empty($todo->cycle)) $this->todo->createByCycle(array($todo->id => $todo));
 
         $this->loadModel('action')->create('todo', $todo->id, 'opened');
@@ -102,20 +101,20 @@ class todoZen extends todo
      * @param  object $formData
      * @return object|false
      */
-    protected function beforeEdit(int $todoID, object $formData)
+    protected function beforeEdit(int $todoID, object $formData): object|false
     {
         $oldTodo = $this->dao->findById($todoID)->from(TABLE_TODO)->fetch();
 
-        $idvalue    = 0;
+        $objectID   = 0;
         $rowData    = $formData->rawdata;
         $objectType = $rowData->type;
         $hasObject  = in_array($objectType, $this->config->todo->moduleList);
-        if($hasObject && $objectType) $idvalue = $rowData->uid ? $rowData->$objectType : $rowData->idvalue;
+        if($hasObject && $objectType) $objectID = $rowData->uid ? $rowData->$objectType : $rowData->objectID;
 
         $todo = $formData->add('account', $oldTodo->account)
             ->cleanInt('pri, begin, end, private')
             ->setIF(in_array($rowData->type, array('bug', 'task', 'story')), 'name', '')
-            ->setIF($hasObject && $objectType,  'idvalue', $idvalue)
+            ->setIF($hasObject && $objectType,  'objectID', $objectID)
             ->setIF($rowData->date  == false, 'date', '2030-01-01')
             ->setIF($rowData->begin == false, 'begin', '2400')
             ->setIF($rowData->end   == false, 'end', '2400')
@@ -125,7 +124,7 @@ class todoZen extends todo
             ->remove(implode(',', $this->config->todo->moduleList) . ',uid')
             ->get();
 
-        $todo = (object) array_merge((array) $todo, (array) $rowData);
+        $todo = (object) array_merge((array) $rowData, (array) $todo);
 
         if(in_array($todo->type, $this->config->todo->moduleList))
         {
@@ -243,7 +242,7 @@ class todoZen extends todo
     /**
      * 输出确认弹框
      * Output confirm alert.
-     * 
+     *
      * @param  object $todo
      * @access protected
      * @return int
@@ -251,12 +250,12 @@ class todoZen extends todo
     protected function printConfirm(object $todo): int
     {
         $confirmNote = 'confirm' . ucfirst($todo->type);
-        $confirmURL  = $this->createLink($todo->type, 'view', "id=$todo->idvalue");
+        $confirmURL  = $this->createLink($todo->type, 'view', "id=$todo->objectID");
         $okTarget    = isonlybody() ? 'parent' : 'window.parent.$.apps.open';
         if($todo->type == 'bug')   $app = 'qa';
         if($todo->type == 'task')  $app = 'execution';
         if($todo->type == 'story') $app = 'product';
         $cancelURL   = $this->server->HTTP_REFERER;
-        return print(js::confirm(sprintf($this->lang->todo->$confirmNote, $todo->idvalue), $confirmURL, $cancelURL, $okTarget, 'parent', $app));
+        return print(js::confirm(sprintf($this->lang->todo->$confirmNote, $todo->objectID), $confirmURL, $cancelURL, $okTarget, 'parent', $app));
     }
 }
