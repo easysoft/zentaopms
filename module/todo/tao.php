@@ -40,4 +40,24 @@ class todoTao extends todoModel
 
         return !dao::isError();
     }
+
+    /**
+     * Close one todo.
+     *
+     * @param int $todoID
+     * @return bool
+     */
+    protected function closeTodo(int $todoID): bool
+    {
+        $now = helper::now();
+        $this->dao->update(TABLE_TODO)
+            ->set('status')->eq('closed')
+            ->set('closedBy')->eq($this->app->user->account)
+            ->set('closedDate')->eq($now)
+            ->set('assignedTo')->eq('closed')
+            ->set('assignedDate')->eq($now)
+            ->where('id')->eq($todoID)
+            ->exec();
+        return !dao::isError();
+    }
 }
