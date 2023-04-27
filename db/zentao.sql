@@ -1162,7 +1162,7 @@ CREATE TABLE IF NOT EXISTS `zt_notify` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
   `objectType` varchar(50) NOT NULL DEFAULT '',
   `objectID` mediumint(8) unsigned NOT NULL DEFAULT '0',
-  `action` mediumint(8) NOT NULL DEFAULT '0',
+  `action` mediumint(9) NOT NULL DEFAULT '0',
   `toList` varchar(255) NOT NULL DEFAULT '',
   `ccList` text NULL,
   `subject` varchar(255) NOT NULL DEFAULT '',
@@ -2561,7 +2561,7 @@ CREATE TABLE IF NOT EXISTS `zt_ticketsource` (
 CREATE TABLE IF NOT EXISTS `zt_ticketrelation` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
   `ticketId` mediumint(8) unsigned NOT NULL DEFAULT '0',
-  `objectId` mediumint(8) NOT NULL DEFAULT '0',
+  `objectId` mediumint(9) NOT NULL DEFAULT '0',
   `objectType` varchar(100) NOT NULL DEFAULT '',
   PRIMARY KEY (`id`),
   KEY `ticketId` (`ticketId`)
