@@ -1601,7 +1601,7 @@ CREATE TABLE IF NOT EXISTS `zt_stakeholder` (
 CREATE TABLE IF NOT EXISTS `zt_story` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
   `vision` varchar(10) NOT NULL DEFAULT 'rnd',
-  `parent` mediumint(8) NOT NULL DEFAULT '0',
+  `parent` mediumint(9) NOT NULL DEFAULT '0',
   `product` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `branch` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `module` mediumint(8) unsigned NOT NULL DEFAULT '0',
@@ -3007,9 +3007,9 @@ CREATE TABLE IF NOT EXISTS `zt_trainrecords` (
 
 -- DROP TABLE IF EXISTS `zt_faq`;
 CREATE TABLE IF NOT EXISTS `zt_faq` (
-`id` mediumint(8) NOT NULL AUTO_INCREMENT,
-`module` mediumint(8) NOT NULL DEFAULT '0',
-`product` mediumint(8) NOT NULL DEFAULT '0',
+`id` mediumint(9) NOT NULL AUTO_INCREMENT,
+`module` mediumint(9) NOT NULL DEFAULT '0',
+`product` mediumint(9) NOT NULL DEFAULT '0',
 `question` varchar(255) NOT NULL DEFAULT '',
 `answer` text NULL,
 `addedtime` datetime NULL,
