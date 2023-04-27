@@ -47,12 +47,16 @@ class block extends control
 
             $this->block->create($formData);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => 1));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true, 'closeModal' => true));
         }
 
-        $this->view->title = $this->lang->block->createBlock;
-        $this->view->block = $block;
-        $this->blockZen->buildCreateForm($dashboard, $module, $block); 
+
+        $this->view->title     = $this->lang->block->createBlock;
+        $this->view->dashboard = $dashboard;
+        $this->view->block     = $block;
+        $this->view->modules   = $this->blockZen->getAvailableModules($dashboard);
+        $this->view->blocks    = $this->blockZen->getAvailableBlocks($dashboard, $module);
+        $this->view->params    = $this->blockZen->getAvailableParams($dashboard, $module, $block);
         $this->display();
     }
 

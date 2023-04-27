@@ -2,40 +2,17 @@
 class blockZen extends block
 {
     /**
-     * Build a form for create block page.
-     * 构造新增区块页面的表单
+     * Get module options when adding or editing blocks.
+     * 添加或编辑区块时获取模块选项
      * 
-     * @param  string $module 
+     * @param  string $dashboard
      * @access protected
-     * @return void
+     * @return string[]
      */
-    protected function buildCreateForm(string $dashboard, string $module, string $block)
+    protected function getAvailableModules(string $dashboard): array
     {
-        $this->buildCreateAndEditForm($dashboard, $module, $block);
-        $this->view->title = $this->lang->block->createBlock;
-    }
+        if($dashboard != 'my') return array();        
 
-    protected function buildEditForm(int $blockID, string $dashboard)
-    {
-        $this->buildCreateAndEditForm($dashboard);
-        $this->view->title = $this->lang->block->editBlock;
-        $this->view->block = $this->block->getByID($blockID);
-    }
-
-    private function buildCreateAndEditForm($dashboard, $module, $block)
-    {
-        if($dashboard == 'my')
-        {
-            return $this->buildCreateAndEditFormByTerritory($dashboard, $module, $block);
-        }
-        else
-        {
-            return $this->buildCreateAndEditFormByModule($dashboard);
-        }
-    }
-
-    private function buildCreateAndEditFormByTerritory($dashboard, $module, $block)
-    {
         $modules = $this->lang->block->moduleList;
         unset($modules['doc']);
 
@@ -69,37 +46,21 @@ class blockZen extends block
 
         $hiddenBlocks = $this->block->getMyHiddenBlocks('my');
         foreach($hiddenBlocks as $block) $modules['hiddenBlock' . $block->id] = $block->title;
-        $this->view->modules   = $modules;
-        $this->view->blocks    = $this->getAvailableBlocks($dashboard);
-        $this->view->params    = $this->getAvailableParams($dashboard, $module, $block);
-        $this->view->dashboard = $dashboard;
-        $this->view->module    = '';
+
+        return $modules;
     }
 
-    private function buildCreateAndEditFormByModule($dashboard)
+    /**
+     * Get block options when adding or editing blocks.
+     * 添加或编辑区块时获取区块选项
+     *
+     * @param  string $dashboard
+     * @param  string $module
+     * @access protected
+     * @return string[]|true
+     */
+    protected function getAvailableBlocks($dashboard, $module): array|bool
     {
-        if($this->config->edition == 'max' and strpos($dashboard, 'Project') !== false)
-        {
-            if($dashboard == 'scrumProject')
-            {
-                if(!helper::hasFeature("scrum_issue")) unset($this->lang->block->modules['scrum']['index']->availableBlocks->scrumissue);
-                if(!helper::hasFeature("scrum_risk"))  unset($this->lang->block->modules['scrum']['index']->availableBlocks->scrumrisk);
-            }
-            if($dashboard == 'waterfallProject')
-            {
-                if(!helper::hasFeature("waterfall_issue")) unset($this->lang->block->modules['waterfall']['index']->availableBlocks->waterfallissue);
-                if(!helper::hasFeature("waterfall_risk"))  unset($this->lang->block->modules['waterfall']['index']->availableBlocks->waterfallrisk);
-            }
-        }
-
-        $this->view->blocks    = $this->getAvailableBlocks($dashboard);
-        $this->view->dashboard = $dashboard;
-        $this->view->module    = $dashboard;
-    }
-
-    private function getAvailableBlocks($dashboard)
-    {
-        $module = $this->get->module;
         $blocks = $this->block->getAvailableBlocks($dashboard, $module);
 
         if(!$this->selfCall)
@@ -111,13 +72,24 @@ class blockZen extends block
         return !empty($blocks) ? $blocks : array();
     }
 
-    private function getAvailableParams(string $dashboard, string $module = '', string $block = '') : array
+    /**
+     * Get other form items when adding or editing blocks
+     * 添加或编辑区块时获取其他表单项
+     *
+     * @param  string $dashboard
+     * @param  string $module
+     * @param  string $block
+     * @access protected
+     * @return array[]
+     */
+    protected function getAvailableParams(string $dashboard, string $module = '', string $block = ''): array
     {
         if(!isset($this->lang->block->moduleList[$module])) return array();
 
         if(!$block) return array();
 
-        $params = $this->block->getParams($module, $module);
-        return !empty($params) ? json_decode($params, true) : array();
+        $params = json_decode($this->block->getParams($block, $module), true);
+
+        return !empty($params) ? $params : array();
     }
 }
