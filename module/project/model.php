@@ -1838,9 +1838,9 @@ class projectModel extends model
      * @param  int    $projectID
      * @param  object $project
      * @access public
-     * @return array|bool
+     * @return array|false
      */
-    public function start(int $projectID, object $project):array|bool
+    public function start(int $projectID, object $project):array|false
     {
         $oldProject = $this->getById($projectID);
 
@@ -1849,15 +1849,14 @@ class projectModel extends model
         $this->projectTao->doStart($projectID, $project);
 
         /* When it has multiple errors, only the first one is prompted */
-        if(dao::isError() and count(dao::$errors['realBegan']) > 1) dao::$errors['realBegan'] = dao::$errors['realBegan'][0];
-
-        if(!dao::isError())
+        if(dao::isError())
         {
-            if(!$oldProject->multiple) $this->changeExecutionStatus($projectID, 'start');
-            return common::createChanges($oldProject, $project);
+            if(count(dao::$errors['realBegan']) > 1) dao::$errors['realBegan'] = dao::$errors['realBegan'][0];
+            return false;
         }
 
-        return false;
+        if(!$oldProject->multiple) $this->changeExecutionStatus($projectID, 'start');
+        return common::createChanges($oldProject, $project);
     }
 
     /**
