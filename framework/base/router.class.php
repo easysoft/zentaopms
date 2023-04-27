@@ -2025,8 +2025,11 @@ class baseRouter
     static public function removePHPTAG(string $fileName): string
     {
         $code = trim(file_get_contents($fileName));
-        if(str_starts_with($code, '<?php declare(strict_types=1);'))     $code = ltrim($code, '<?php declare(strict_types=1);');
-        if(str_starts_with($code, '<?php'))     $code = ltrim($code, '<?php');
+        if(str_starts_with($code, '<?php')) $code = ltrim($code, '<?php');
+
+        $code = ltrim($code);
+        if(str_starts_with($code, 'declare(strict_types=1);')) $code = ltrim($code, 'declare(strict_types=1);');
+
         if(strrpos($code, '?' . '>')   !== false) $code = rtrim($code, '?' . '>');
         return trim($code);
     }
