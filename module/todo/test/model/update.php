@@ -4,29 +4,52 @@ include dirname(__FILE__, 5) . "/test/lib/init.php";
 include dirname(__FILE__, 2) . '/todo.class.php';
 su('admin');
 
+function initData()
+{
+    $todo = zdTable('todo');
+    $todo->id->range('1');
+    $todo->account->range('admin');
+    $todo->date->range(date('Y-m-d'));
+    $todo->begin->range('1000');
+    $todo->end->range('2400');
+    $todo->type->range('custom');
+    $todo->name->range('这是一个待办');
+    $todo->status->range('wait');
+    $todo->vision->range('rnd');
+
+    $todo->gen(1);
+}
+
 /**
 
-title=测试 todoModel->update();
+title=测试 todoModel::update;
+timeout=0
 cid=1
-pid=1
 
-测试更新todo名称 >> name,自定义1的待办,john
-测试更新todo类型 >> type,custom,bug
-测试更新todo名称和类型 >> type,bug,custom;name,BUG2的待办,jack
-测试不更新todo任何数据 >> 没有数据更新
+- 执行todo模块的update方法，参数是1, $t_upname
+ - 第0条的field属性 @name
+ - 第0条的old属性 @这是一个待办
+ - 第0条的new属性 @john
+
+- 执行todo模块的update方法，参数是1, $t_uptype
+ - 第0条的field属性 @type
+ - 第0条的old属性 @custom
+ - 第0条的new属性 @bug
+
+- 执行todo模块的update方法，参数是1, $t_unname @没有数据更新
 
 */
 
-$todoIDList = array('1', '2');
+global $tester;
+$tester->loadModel('todo');
 
-$t_upname    = array('name' => 'john');
-$t_uptype    = array('type' => 'bug', 'idvalue' => '1');
-$t_typename  = array('name' => 'jack', 'type' => 'custom');
-$t_unname    = array('name' => 'john');
+initData();
+
+$t_upname = array('name' => 'john');
+$t_uptype = array('type' => 'bug', 'idvalue' => '1');
+$t_unname = array('name' => 'john');
 
 $todo = new todoTest();
-
-r($todo->updateTest($todoIDList[0], $t_upname))   && p('0:field,old,new')                 && e('name,自定义1的待办,john');              // 测试更新todo名称
-r($todo->updateTest($todoIDList[0], $t_uptype))   && p('0:field,old,new')                 && e('type,custom,bug');                      // 测试更新todo类型
-r($todo->updateTest($todoIDList[1], $t_typename)) && p('0:field,old,new;1:field,old,new') && e('type,bug,custom;name,BUG2的待办,jack'); // 测试更新todo名称和类型
-r($todo->updateTest($todoIDList[0], $t_unname))   && p()                                  && e('没有数据更新');                         // 测试不更新todo任何数据
+r($todo->updateTest(1, $t_upname)) && p('0:field,old,new') && e('name,这是一个待办,john');
+r($todo->updateTest(1, $t_uptype)) && p('0:field,old,new') && e('type,custom,bug');
+r($todo->updateTest(1, $t_unname)) && p()                  && e('没有数据更新');

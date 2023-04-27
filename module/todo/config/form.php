@@ -18,3 +18,6 @@ $config->todo->create->form['vision']       = array('required' => false, 'type' 
 $config->todo->create->form['objectID']     = array('required' => false, 'type' => 'int',     'default' => 0);
 $config->todo->create->form['desc']         = array('required' => false, 'type' => 'string',  'default' => '');
 $config->todo->create->form['uid']          = array('required' => false, 'type' => 'string',  'default' => '');
+
+$config->todo->edit->form = array();
+$config->todo->edit->form['name'] = array('required' => true, 'type' => 'string');
