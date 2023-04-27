@@ -1840,7 +1840,7 @@ class projectModel extends model
      * @access public
      * @return array|false
      */
-    public function start(int $projectID, object $project): array|false
+    public function start(int $projectID, object $project):array|false
     {
         $oldProject = $this->getById($projectID);
 
@@ -1931,15 +1931,13 @@ class projectModel extends model
      * @access public
      * @return array  $changes|false
      */
-    public function activate(object $project) :array|false
+    public function activate(int $projectID, object $project) :array|false
     {
         $now        = helper::now();
-        $projectID  = $project->id;
-        $oldProject = $this->getById($projectID);
+        $oldProject = $this->getByID($projectID);
 
-        $this->projectTao->updateProject($project);
-
-        if(dao::isError()) return false;
+        $daoSuccess = $this->projectTao->doActivate($projectID, $project);
+        if(!$daoSuccess) return false;
 
         if(empty($oldProject->multiple) and $oldProject->model != 'waterfall') $this->loadModel('execution')->syncNoMultipleSprint($projectID);
 

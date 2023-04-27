@@ -359,16 +359,18 @@ class bug extends control
         {
             $response['result'] = 'success';
 
+            $formData  = form::data($this->config->bug->createform);
+            $bug       = $this->bugZen->beforeCreate($formData);
+            $bugResult = $this->bugZen->doCreate($bug);
+
             /* Set from param if there is a object to transfer bug. */
             setcookie('lastBugModule', (int)$this->post->module, $this->config->cookieLife, $this->config->webRoot, '', $this->config->cookieSecure, false);
-            $bugResult = $this->bug->create('', $extras);
             if(!$bugResult or dao::isError())
             {
                 $response['result']  = 'fail';
                 $response['message'] = dao::getError();
                 return $this->send($response);
             }
-
             $bugID = $bugResult['id'];
             if($bugResult['status'] == 'exists')
             {
@@ -377,6 +379,9 @@ class bug extends control
                 $response['id']      = $bugResult['id'];
                 return $this->send($response);
             }
+
+            $bug->id = $bugID;
+            $this->bugZen->afterCreate($bug, $formData, $extras);
 
             /* Record related action, for example FromSonarqube. */
             $createAction = $from == 'sonarqube' ? 'fromSonarqube' : 'Opened';
