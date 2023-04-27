@@ -1860,34 +1860,6 @@ class projectModel extends model
     }
 
     /**
-     * Put project off.
-     *
-     * @param  int    $projectID
-     * @access public
-     * @return void
-     */
-    public function putoff($projectID)
-    {
-        $oldProject = $this->getById($projectID);
-        $now        = helper::now();
-
-        $project = fixer::input('post')
-            ->add('id', $projectID)
-            ->setDefault('lastEditedBy', $this->app->user->account)
-            ->setDefault('lastEditedDate', $now)
-            ->remove('comment')
-            ->get();
-
-        $this->dao->update(TABLE_PROJECT)->data($project)
-            ->autoCheck()
-            ->checkFlow()
-            ->where('id')->eq((int)$projectID)
-            ->exec();
-
-        if(!dao::isError()) return common::createChanges($oldProject, $project);
-    }
-
-    /**
      * Suspend project and update status.
      * 暂停项目并更改其状态
      *
