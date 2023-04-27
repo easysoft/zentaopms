@@ -338,12 +338,12 @@ class blockModel extends model
      */
     public function update(object $formData): int|false
     {
-        $this->dao->update(TABLE_BLOCK)->data($formData)->exec();
+        $this->dao->update(TABLE_BLOCK)->data($formData)->autoCheck()->exec();
         if(dao::isError()) return false;
 
         $this->loadModel('score')->create('block', 'set');
 
-        return $formData->id;
+        return (int)$formData->id;
     }
 
     /**

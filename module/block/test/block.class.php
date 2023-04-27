@@ -23,6 +23,22 @@ class blockTest
         return $blockID;
      }
 
+     /**
+      * Update a block.
+      *
+      * @param  object $block
+      * @access public
+      * @return int|false
+      */
+     public function updateTest($block)
+     {
+        $blockID = $this->objectModel->update($block);
+
+        if(dao::isError()) return dao::getError();
+
+        return $blockID;
+     }
+
     /**
      * Test save params.
      *
