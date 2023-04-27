@@ -22,12 +22,12 @@ title=测试 projectModel::getByID;
 timeout=0
 cid=1
 
-- 执行project模块的suspend方法，参数是2- ,属性0 @suspended
- @suspended
-- 执行project模块的suspend方法，参数是5- ,属性1 @suspendedDate
- @suspendedDate
-- 执行project模块的suspend方法，参数是4- ,属性0 @suspended
- @suspended
+- 执行project模块的suspend方法，参数是2, $project,属性0 @suspended
+
+- 执行project模块的suspend方法，参数是5, $project,属性1 @suspendedDate
+
+- 执行project模块的suspend方法，参数是4, $project,属性0 @suspended
+
 
 
 */
@@ -37,6 +37,12 @@ $tester->loadModel('project');
 
 initData();
 
-r($tester->project->suspend(2)) && p('0:new')   && e('suspended');
-r($tester->project->suspend(5)) && p('1:field') && e('suspendedDate');
-r($tester->project->suspend(4)) && p('0:new')   && e('suspended');
+$project =  new stdClass;
+$project->status = 'suspended';
+$project->lastEditedBy = 'admin';
+$project->lastEditedDate = '2023-04-27';
+$project->suspendedDate = '2023-05-03';
+
+r($tester->project->suspend(2, $project)) && p('0:new')   && e('suspended');
+r($tester->project->suspend(5, $project)) && p('1:field') && e('suspendedDate');
+r($tester->project->suspend(4, $project)) && p('0:new')   && e('suspended');
