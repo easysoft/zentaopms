@@ -10,3 +10,4 @@ ALTER TABLE `zt_block` DROP `type`;
 ALTER TABLE `zt_block` DROP `source`;
 ALTER TABLE `zt_block` CHANGE `block` `code` varchar(30) NOT NULL DEFAULT '' AFTER `dashboard`;
 ALTER TABLE `zt_block` MODIFY `vision` varchar(10) NOT NULL DEFAULT 'rnd' AFTER `hidden`;
+ALTER TABLE `zt_todo` MODIFY `idvalue` mediumint unsigned NOT NULL DEFAULT '0' AFTER `type`;
