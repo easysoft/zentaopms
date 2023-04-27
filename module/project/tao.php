@@ -1,4 +1,5 @@
-<?php declare(strict_types=1);
+<?php
+declare(strict_types=1);
 /**
  * The tao file of project module of ZenTaoPMS.
  *
@@ -11,20 +12,23 @@ class projectTao extends projectModel
 {
     /**
      * Update project table when start a project.
+     *
      * @param  int    $projectID
      * @param  object $project
      * @access protected
-     * @return void
+     * @return bool
      */
-    protected function doStart(int $projectID, object $project) :void
+    protected function doStart(int $projectID, object $project): bool
     {
         $this->dao->update(TABLE_PROJECT)->data($project)
             ->autoCheck()
             ->check($this->config->project->start->requiredFields, 'notempty')
             ->checkIF($project->realBegan != '', 'realBegan', 'le', helper::today())
             ->checkFlow()
-            ->where('id')->eq((int)$projectID)
+            ->where('id')->eq($projectID)
             ->exec();
+
+        return !dao::isError();
     }
 
     /**
@@ -32,15 +36,17 @@ class projectTao extends projectModel
      *
      * @param  object $project
      * @access protected
-     * @return void
+     * @return bool 
      */
-    protected function updateProject(object $project) :void
+    protected function updateProject(object $project): bool
     {
         $this->dao->update(TABLE_PROJECT)->data($project)
             ->autoCheck()
             ->checkFlow()
             ->where('id')->eq((int)$project->id)
             ->exec();
+
+        return !dao::isError();
     }
 
     /**
@@ -50,7 +56,7 @@ class projectTao extends projectModel
      * @access protected
      * @return array
      */
-    protected function fetchUndoneTasks(int $projectID) :array
+    protected function fetchUndoneTasks(int $projectID): array
     {
         return $this->dao->select('id,estStarted,deadline,status')->from(TABLE_TASK)
             ->where('deadline')->notZeroDate()
@@ -81,7 +87,12 @@ class projectTao extends projectModel
 
                 if($estStarted > $project->end) $estStarted = $project->end;
                 if($deadline > $project->end)   $deadline   = $project->end;
-                $this->dao->update(TABLE_TASK)->set('estStarted')->eq($estStarted)->set('deadline')->eq($deadline)->where('id')->eq($task->id)->exec();
+
+                $this->dao->update(TABLE_TASK)
+                    ->set('estStarted')->eq($estStarted)
+                    ->set('deadline')->eq($deadline)
+                    ->where('id')->eq($task->id)
+                    ->exec();
             }
             else
             {

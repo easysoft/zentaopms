@@ -1772,21 +1772,21 @@ class project extends control
      */
     public function start(string $projectID)
     {
-        $this->loadModel('action');
-        $project = $this->project->getByID($projectID);
+        $projectID = (int)$projectID;
+        $project   = $this->project->getByID($projectID);
 
         if(!empty($_POST))
         {
-            $postData = form::data($this->config->project->form->start)->get();
+            $postData = form::data($this->config->project->form->start);
 
             $postData = $this->projectZen->prepareStartExtras($postData);
 
-            $changes  = $this->project->start((int)$projectID, $postData);
+            $changes  = $this->project->start($projectID, $postData);
 
             if(dao::isError()) return print(js::error(dao::getError()));
 
-            $comment = strip_tags($this->post->comment, $this->config->allowedTags);
-            return $this->projectZen->responseAfterStart($project, $changes, $postData, $comment);
+            $this->projectZen->responseAfterStart($project, $changes, $postData, $this->post->comment);
+            return print(js::reload('parent.parent'));
         }
 
         $this->projectZen->buildStartForm($project);
