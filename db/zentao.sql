@@ -2397,7 +2397,7 @@ INSERT INTO `zt_cron` (`m`, `h`, `dom`, `mon`, `dow`, `command`, `remark`, `type
 
  -- DROP TABLE IF EXISTS `zt_relationoftasks`;
 CREATE TABLE IF NOT EXISTS `zt_relationoftasks` (
-  `id` MEDIUMINT(9) UNSIGNED NOT NULL AUTO_INCREMENT ,
+  `id` mediumint(9) UNSIGNED NOT NULL AUTO_INCREMENT ,
   `execution` mediumint(9) UNSIGNED NOT NULL ,
   `pretask` mediumint(9) UNSIGNED NOT NULL ,
   `condition` ENUM( 'begin', 'end' ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL ,
