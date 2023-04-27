@@ -459,7 +459,7 @@ CREATE TABLE IF NOT EXISTS `zt_chart` (
   `createdDate` datetime NULL,
   `editedBy` varchar(30) NOT NULL DEFAULT '',
   `editedDate` datetime NULL,
-  `deleted` tinyint(3) NOT NULL DEFAULT '0',
+  `deleted` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_screen`;
@@ -519,7 +519,7 @@ CREATE TABLE IF NOT EXISTS `zt_compile` (
   `atTime` varchar(10) NOT NULL DEFAULT '',
   `testtask` mediumint(9) unsigned NOT NULL DEFAULT '0',
   `tag` varchar(255) NOT NULL DEFAULT '',
-  `times` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  `times` tinyint(3) unsigned NOT NULL DEFAULT '0',
   `createdBy` varchar(30) NOT NULL DEFAULT '',
   `createdDate` datetime NULL,
   `updateDate` datetime NULL,
@@ -549,7 +549,7 @@ CREATE TABLE IF NOT EXISTS `zt_cron` (
   `command` text NULL,
   `remark` varchar(255) NOT NULL DEFAULT '',
   `type` varchar(20) NOT NULL DEFAULT '',
-  `buildin` tinyint(3) NOT NULL DEFAULT '0',
+  `buildin` tinyint(1) NOT NULL DEFAULT '0',
   `status` varchar(20) NOT NULL DEFAULT '',
   `lastTime` datetime NULL,
   PRIMARY KEY (`id`),
@@ -566,7 +566,7 @@ CREATE TABLE `zt_dashboard` (
   `filters` mediumtext NULL,
   `createdBy` varchar(30) NOT NULL DEFAULT '',
   `createdDate` datetime NULL,
-  `deleted` tinyint(3) NOT NULL DEFAULT '0',
+  `deleted` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_dataset`;
@@ -578,7 +578,7 @@ CREATE TABLE `zt_dataset` (
   `objects` mediumtext NULL,
   `createdBy` varchar(30) NOT NULL DEFAULT '',
   `createdDate` datetime NULL,
-  `deleted` tinyint(3) NOT NULL DEFAULT '0',
+  `deleted` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_dataview`;
@@ -596,7 +596,7 @@ CREATE TABLE IF NOT EXISTS `zt_dataview` (
   `createdDate` datetime NULL,
   `editedBy` varchar(30) NULL DEFAULT '',
   `editedDate` datetime NULL,
-  `deleted` tinyint(3) NOT NULL DEFAULT '0',
+  `deleted` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_dept`;
