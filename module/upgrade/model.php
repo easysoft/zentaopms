@@ -599,6 +599,9 @@ class upgradeModel extends model
                 $this->convertDocCollect();
                 $this->addBIUpdateMark();
                 break;
+            case '18_4_alpha1':
+                if($this->config->edition != 'open') $this->processDataset();
+                break;
         }
 
         $this->deletePatch();
@@ -760,6 +763,7 @@ class upgradeModel extends model
                 $this->processChart();
                 $this->processReport();
                 $this->processDashboard();
+                break;
         }
     }
 
@@ -8076,6 +8080,9 @@ class upgradeModel extends model
         /* Process built-in dataset. */
         foreach($this->lang->dataset->tables as $code => $dataset)
         {
+            $sameCodeList = $this->dao->select('*')->from(TABLE_DATAVIEW)->where('code')->eq($code)->fetchAll();
+            if(!empty($sameCodeList)) continue;
+
             $dataview->name = $dataset['name'];
             $dataview->code = $code;
             $dataview->view = 'ztv_' . $code;
@@ -8123,6 +8130,9 @@ class upgradeModel extends model
             if(!empty($dataview->view) and !empty($dataview->sql)) $this->dataview->createViewInDB($dataviewID, $dataview->view, $dataview->sql);
         }
 
+        $customDataset = $this->dao->select('*')->from(TABLE_DATASET)->fetchAll('id');
+        if(empty($customDataset)) return true;
+
         /* Create custom module. */
         $defaultModuleID = $this->dao->select('id')->from(TABLE_MODULE)->where('type')->eq('dataview')->andWhere('name')->eq($this->lang->dataview->default)->fetch('id');
         if(empty($defaultModuleID))
@@ -8144,7 +8154,6 @@ class upgradeModel extends model
         $dataview->group = $defaultModuleID;
 
         /* Process custom dataset. */
-        $customDataset = $this->dao->select('*')->from(TABLE_DATASET)->fetchAll('id');
         foreach($customDataset as $datasetID => $dataset)
         {
             $dataview->name        = $dataset->name;
