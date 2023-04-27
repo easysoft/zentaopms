@@ -153,15 +153,13 @@ class report extends control
             }
         }
 
+        if(!$dept && !$super) $dept = $this->app->user->dept;
+
         /* Get users and depts. */
         if($account)
         {
             $user = $this->user->getByID($account);
             $dept = $user->dept;
-        }
-        else
-        {
-            $dept = $this->app->user->dept;
         }
 
         $userPairs = $this->dept->getDeptUserPairs($dept);
