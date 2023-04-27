@@ -105,7 +105,7 @@ class Project
     }
 
     /**
-     *  Test get all the projects under the program set to which an project belongs
+     * Activate a project.
      *
      * @param int    $projectID
      * @param object $project
@@ -115,5 +115,18 @@ class Project
     public function activate($projectID, $project)
     {
         return $this->project->activate($projectID, $project);
+    }
+
+    /**
+     * doActivate a project.
+     *
+     * @param int    $projectID
+     * @param object $project
+     * @access public
+     * @return bool
+     */
+    public function doActivate($projectID, $project)
+    {
+        return $this->project->doActivate($projectID, $project);
     }
 }
