@@ -64,8 +64,6 @@ $lang->project->daysGreaterProject  = "可用工日不能大于{$lang->projectCo
 $lang->project->errorHours          = '可用工时/天不能大于『24』';
 $lang->project->workdaysExceed      = '可用工作日不能超过『%s』天';
 $lang->project->teamMembersCount    = '，团队成员共%s人。';
-$lang->project->budgetNumber        = '『预算』金额必须为数字。';
-$lang->project->budgetGe0           = '『预算』金额必须大于等于0。';
 $lang->project->allProjects         = "所有{$lang->projectCommon}";
 $lang->project->ignore              = '忽略';
 $lang->project->disableExecution    = "不启用{$lang->executionCommon}的{$lang->projectCommon}";
@@ -212,8 +210,6 @@ $lang->project->noProgram       = "无项目集归属{$lang->projectCommon}";
 
 $lang->project->laneColorList = array('#32C5FF', '#006AF1', '#9D28B2', '#FF8F26', '#FFC20E', '#00A78E', '#7FBB00', '#424BAC', '#C0E9FF', '#EC2761');
 
-$lang->project->productNotEmpty        = "请关联{$lang->productCommon}或创建{$lang->productCommon}。";
-$lang->project->existProductName       = "{$lang->productCommon}名称已存在。";
 $lang->project->changeProgram          = '%s > 修改项目集';
 $lang->project->changeProgramTip       = "修改项目集后，该{$lang->projectCommon}关联{$lang->productCommon}的项目集也会被修改，请确认是否修改。";
 $lang->project->linkedProjectsTip      = "关联的{$lang->projectCommon}如下";
@@ -233,6 +229,13 @@ $lang->project->summary                = "本页共 <strong>%s</strong> 个{$lan
 $lang->project->allSummary             = "本页共 <strong>%s</strong> 个{$lang->projectCommon}，未开始 <strong>%s</strong>，进行中 <strong>%s</strong>，已挂起 <strong>%s</strong>，已关闭 <strong>%s</strong> 。";
 $lang->project->checkedSummary         = "选中 <strong>%total%</strong> 个{$lang->projectCommon}。";
 $lang->project->checkedAllSummary      = "选中 <strong>%total%</strong> 个{$lang->projectCommon}，未开始 <strong>%wait%</strong>，进行中 <strong>%doing%</strong>，已挂起 <strong>%suspended%</strong>，已关闭 <strong>%closed%</strong> 。";
+
+$lang->project->error = new stdclass();
+$lang->project->error->existProductName = "{$lang->productCommon}名称已存在。";
+$lang->project->error->budgetGe0        = '『预算』金额必须大于等于0。';
+$lang->project->error->budgetNumber     = '『预算』金额必须为数字。';
+$lang->project->error->productNotEmpty  = "请关联{$lang->productCommon}或创建{$lang->productCommon}。";
+$lang->project->error->emptyBranch      = '分支不能为空！';
 
 $lang->project->tip = new stdclass();
 $lang->project->tip->closed     = '该项目已是关闭状态，无须关闭。';
@@ -386,7 +389,6 @@ $lang->project->agileplus              = '融合敏捷';
 $lang->project->waterfallplus          = '融合瀑布';
 $lang->project->cannotCreateChild      = "该{$lang->projectCommon}已经有实际的内容，无法直接添加子{$lang->projectCommon}。您可以为当前{$lang->projectCommon}创建一个父{$lang->projectCommon}，然后在新的父{$lang->projectCommon}下面添加子{$lang->projectCommon}。";
 $lang->project->emptyPM                = '暂无';
-$lang->project->emptyBranch            = '分支不能为空！';
 $lang->project->cannotChangeToCat      = "该{$lang->projectCommon}已经有实际的内容，无法修改为父{$lang->projectCommon}";
 $lang->project->cannotCancelCat        = "该{$lang->projectCommon}下已经有子{$lang->projectCommon}，无法取消父{$lang->projectCommon}标记";
 $lang->project->parentBeginEnd         = "父{$lang->projectCommon}起止时间：%s ~ %s";

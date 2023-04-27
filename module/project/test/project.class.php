@@ -40,12 +40,9 @@ class Project
      * @access public
      * @return void
      */
-    public function create($params)
+    public function create($project, $postData)
     {
-        $_POST = $params;
-
-        $projectID = $this->project->create();
-        unset($_POST);
+        $projectID = $this->project->create($project, $postData);
 
         if(dao::isError()) return array('message' => dao::getError());
 

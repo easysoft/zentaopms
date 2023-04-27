@@ -11,7 +11,147 @@ declare(strict_types=1);
 class projectZen extends project
 {
     /**
+     * Append extras data to post data.
+     *
+     * @param  object $postData
+     * @access protected
+     * @return int|object
+     */
+    protected function prepareCreateExtras(object $postData): object
+    {
+        $rawdata = $postData->rawdata;
+        $project = $postData->setDefault('status', 'wait')
+            ->setIF($rawdata->delta == 999, 'end', LONG_TIME)
+            ->setIF($rawdata->delta == 999, 'days', 0)
+            ->setIF($rawdata->acl   == 'open', 'whitelist', '')
+            ->setIF(!isset($rawdata->whitelist), 'whitelist', '')
+            ->setIF(!isset($rawdata->multiple), 'multiple', '1')
+            ->setDefault('openedBy', $this->app->user->account)
+            ->setDefault('openedDate', helper::now())
+            ->setDefault('team', $rawdata->name)
+            ->setDefault('lastEditedBy', $this->app->user->account)
+            ->setDefault('lastEditedDate', helper::now())
+            ->setDefault('days', '0')
+            ->add('type', 'project')
+            ->join('whitelist', ',')
+            ->join('auth', ',')
+            ->stripTags($this->config->project->editor->create['id'], $this->config->allowedTags)
+            ->get();
+
+        if(!isset($this->config->setCode) or $this->config->setCode == 0) unset($project->code);
+
+        /* Lean mode relation defaultProgram. */
+        if($this->config->systemMode == 'light') $project->parent = $this->config->global->defaultProgram;
+
+        if(!$this->checkProductAndBranch($rawdata, $project))  return false;
+        if(!$this->checkDaysAndBudget($rawdata, $project))     return false;
+        if(!$this->checkProductNameUnqiue($rawdata, $project)) return false;
+
+        return $project;
+    }
+
+    private function checkProductAndBranch(object $rawdata, object $project): bool 
+    {
+        $linkedProductsCount = 0;
+        if($project->hasProduct && isset($rawdata->products))
+        {
+            foreach($rawdata->products as $product)
+            {
+                if(!empty($product)) $linkedProductsCount++;
+            }
+        }
+
+        if($rawdata->products)
+        {
+            $topProgramID     = $this->loadModel('program')->getTopByID($project->parent);
+            $multipleProducts = $this->loadModel('product')->getMultiBranchPairs($topProgramID);
+            foreach($rawdata->products as $index => $productID)
+            {
+                if(isset($multipleProducts[$productID]) and empty($rawdata->branch[$index]))
+                {
+                    dao::$errors[] = $this->lang->project->error->emptyBranch;
+                    return false;
+                }
+            }
+        }
+
+        $program = new stdClass();
+        if($project->parent)
+        {
+            $program = $this->dao->select('*')->from(TABLE_PROGRAM)->where('id')->eq($project->parent)->fetch();
+
+            /* Judge products not empty. */
+            if($project->hasProduct && empty($linkedProductsCount) and !isset($rawdata->newProduct))
+            {
+                dao::$errors['products0'] = $this->lang->project->error->productNotEmpty;
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    private function checkDaysAndBudget(object $rawdata, object $project): bool 
+    {
+        /* Judge workdays is legitimate. */
+        $workdays = helper::diffDate($project->end, $project->begin) + 1;
+        if(isset($project->days) and $project->days > $workdays)
+        {
+            dao::$errors['days'] = sprintf($this->lang->project->workdaysExceed, $workdays);
+            return false;
+        }
+
+        if(!empty($project->budget))
+        {
+            if(!is_numeric($project->budget))
+            {
+                dao::$errors['budget'] = sprintf($this->lang->project->error->budgetNumber);
+                return false;
+            }
+            else if(is_numeric($project->budget) and ($project->budget < 0))
+            {
+                dao::$errors['budget'] = sprintf($this->lang->project->error->budgetGe0);
+                return false;
+            }
+            else
+            {
+                $project->budget = round((float)$rawdata->budget, 2);
+            }
+        }
+
+        return true;
+    }
+
+    private function checkProductNameUnqiue(object $rawdata, object $project): bool 
+    {
+        /* When select create new product, product name cannot be empty and duplicate. */
+        if($project->hasProduct && isset($rawdata->newProduct))
+        {
+            if(empty($rawdata->productName))
+            {
+                $this->app->loadLang('product');
+                dao::$errors['productName'] = sprintf($this->lang->error->notempty, $this->lang->product->name);
+                return false;
+            }
+            else
+            {
+                $programID        = isset($project->parent) ? $project->parent : 0;
+                $existProductName = $this->dao->select('name')->from(TABLE_PRODUCT)->where('name')->eq($rawdata->productName)->andWhere('program')->eq($programID)->fetch('name');
+                if(!empty($existProductName))
+                {
+                    dao::$errors['productName'] = $this->lang->project->error->existProductName;
+                    return false;
+                }
+            }
+        }
+
+        return true;
+    }
+
+
+    /**
      * Send variables to create page.
+     *
      * @param  string $model
      * @param  int    $programID
      * @param  int    $copyProjectID
@@ -19,9 +159,10 @@ class projectZen extends project
      * @access protected
      * @return void
      */
-    protected function buildCreateForm(string $model, int $programID, int $copyProjectID, string $extra):void
+    protected function buildCreateForm(string $model, int $programID, int $copyProjectID, string $extra): void
     {
         $this->loadModel('product');
+        $this->loadModel('program');
 
         $extra = str_replace(array(',', ' '), array('&', ''), $extra);
         parse_str($extra, $output);
@@ -29,20 +170,9 @@ class projectZen extends project
         if($this->app->tab == 'program' and $programID)                   $this->loadModel('program')->setMenu($programID);
         if($this->app->tab == 'product' and !empty($output['productID'])) $this->loadModel('product')->setMenu($output['productID']);
         if($this->app->tab == 'doc') unset($this->lang->doc->menu->project['subMenu']);
-        $this->session->set('projectModel', $model);
 
-        if($copyProjectID)
-        {
-            $copyProject = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($copyProjectID)->fetch();
-            $products    = $this->product->getProducts($copyProjectID);
-
-            if(!$copyProject->hasProduct) $shadow = 1;
-            foreach($products as $product)
-            {
-                $branches = implode(',', $product->branches);
-                $copyProject->productPlans[$product->id] = $this->loadModel('productplan')->getPairs($product->id, $branches, 'noclosed', true);
-            }
-        }
+        if($copyProjectID) $copyProject = $this->copyProject((int)$copyProjectID);
+        $shadow = empty($copyProject->hasProduct) ? 1 : 0;
 
         if($this->view->globalDisableProgram) $programID = $this->config->global->defaultProgram;
         $topProgramID = $this->program->getTopByID($programID);
@@ -53,10 +183,6 @@ class projectZen extends project
             $this->lang->project->subAclList = $this->lang->project->kanbanSubAclList;
         }
 
-        $sprintConcept = empty($this->config->custom->sprintConcept) ?
-        $this->config->executionCommonList[$this->app->getClientLang()][0] :
-        $this->config->executionCommonList[$this->app->getClientLang()][1];
-
         $withProgram   = $this->config->systemMode == 'ALM' ? true : false;
         $allProducts   = array('0' => '') + $this->program->getProductPairs($programID, 'all', 'noclosed', '', $shadow, $withProgram);
         $parentProgram = $this->loadModel('program')->getByID($programID);
@@ -66,13 +192,10 @@ class projectZen extends project
         $this->view->model               = $model;
         $this->view->pmUsers             = $this->loadModel('user')->getPairs('noclosed|nodeleted|pmfirst');
         $this->view->users               = $this->user->getPairs('noclosed|nodeleted');
-        $this->view->products            = $products;
         $this->view->programID           = $programID;
         $this->view->productID           = isset($output['productID']) ? $output['productID'] : 0;
         $this->view->branchID            = isset($output['branchID']) ? $output['branchID'] : 0;
         $this->view->allProducts         = $allProducts;
-        $this->view->productPlans        = array('0' => '') + $productPlans;
-        $this->view->branchGroups        = $this->loadModel('branch')->getByProducts(array_keys($products), 'noclosed');
         $this->view->multiBranchProducts = $this->product->getMultiBranchPairs($topProgramID);
         $this->view->copyProjects        = $this->project->getPairsByModel($model);
         $this->view->copyProjectID       = $copyProjectID;
@@ -83,6 +206,72 @@ class projectZen extends project
         $this->view->budgetUnitList      = $this->project->getBudgetUnitList();
 
         $this->display();
+    }
+
+    /**
+     * Get copy project and send variables to create page.
+     *
+     * @param  int $copyProjectID
+     * @access protected
+     * @return void
+     */
+    private function getCopyProject(int $copyProjectID): object
+    {
+        $copyProject = $this->project->getByID($copyProjectID);
+        $products    = $this->product->getProducts($copyProjectID);
+
+        foreach($products as $product)
+        {
+            $branches = implode(',', $product->branches);
+            $copyProject->productPlans[$product->id] = $this->loadModel('productplan')->getPairs($product->id, $branches, 'noclosed', true);
+        }
+
+        $this->view->branchGroups = $this->loadModel('branch')->getByProducts(array_keys($products), 'noclosed');
+        $this->view->products     = $products;
+        $this->view->copyProject  = $copyProject;
+
+        return $copyProject;
+    }
+
+    /**
+     * Link plan's stories after create a project.
+     *
+     * @param  object $postData
+     * @access protected
+     * @return void
+     */
+    protected function linkPlanStories(object $postData)
+    {
+        $planIdList = array();
+        foreach($postData->rawdata->plans as $plans)
+        {
+            foreach($plans as $planID)
+            {
+                $planIdList[$planID] = $planID;
+            }
+        }
+
+        $planStoryGroup = $this->loadModel('story')->getStoriesByPlanIdList($planIdList);
+        foreach($planIdList as $planID)
+        {
+            $planStories = $planProducts = array();
+            $planStory   = isset($planStoryGroup[$planID]) ? $planStoryGroup[$planID] : array();
+            if(!empty($planStory))
+            {
+                foreach($planStory as $id => $story)
+                {
+                    if($story->status == 'draft' or $story->status == 'reviewing')
+                    {
+                        unset($planStory[$id]);
+                        continue;
+                    }
+                    $planProducts[$story->id] = $story->product;
+                }
+
+                $planStories = array_keys($planStory);
+                $this->loadModel('execution')->linkStory($projectID, $planStories, $planProducts);
+            }
+        }
     }
 
     /**
