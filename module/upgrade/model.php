@@ -8209,11 +8209,21 @@ class upgradeModel extends model
         $pivots = $this->dao->select('*')->from(TABLE_PIVOT)->fetchAll('id');
         foreach($pivots as $pivotID => $pivot)
         {
-            if(is_numeric($pivot->group)) continue;
+            $modules = explode(',', $pivot->group);
+
+            /* Upgrade group only pivot written by sql, group is string (possibly use , separated). */
+            $continue = false;
+            foreach($modules as $module)
+            {
+                if(is_numeric($module)) $continue = true;
+            }
+            if($continue) continue;
 
             $insertGroup = array();
-            $modules = explode(',', $pivot->group);
-            foreach($modules as $module) $insertGroup[] = $pivotModules[$module];
+            foreach($modules as $module)
+            {
+                if($module) $insertGroup[] = $pivotModules[$module];
+            }
 
             $this->dao->update(TABLE_PIVOT)->set('`group`')->eq(implode(',', $insertGroup))->where('id')->eq($pivotID)->exec();
         }
@@ -8437,6 +8447,9 @@ class upgradeModel extends model
             $screen->createdDate = $dashboard->createdDate;
             $this->dao->insert(TABLE_SCREEN)->data($screen)->exec();
         }
+
+        $this->dao->exec("ALTER TABLE " . TABLE_CHART . " DROP `dataset`");
+        $this->dao->exec("ALTER TABLE " . TABLE_PIVOT . " DROP `dataset`");
     }
 
     /**
@@ -8861,8 +8874,6 @@ class upgradeModel extends model
 
         if(dao::isError()) return false;
 
-        $this->dao->exec("ALTER TABLE " . TABLE_CHART . " DROP `dataset`");
-
         return !dao::isError();
     }
 
@@ -8887,6 +8898,7 @@ class upgradeModel extends model
         $pivot->sql         = $table->sql;
         $pivot->createdBy   = $table->createdBy;
         $pivot->createdDate = $table->createdDate;
+        $pivot->dataset     = $table->dataset;
 
         $name = array();
         $name['zh-cn'] = $table->name;

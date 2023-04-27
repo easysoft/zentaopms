@@ -2159,6 +2159,7 @@ class groupModel extends model
                 {
                     $key  = "{$module}-{$method}";
                     $priv = new stdclass();
+                    $priv->id          = $key;
                     $priv->module      = $module;
                     $priv->method      = $method;
                     $priv->action      = $key;
@@ -2181,6 +2182,7 @@ class groupModel extends model
 
                 $key  = "{$module}-{$method}";
                 $priv = new stdclass();
+                $priv->id          = $key;
                 $priv->module      = $module;
                 $priv->method      = $method;
                 $priv->action      = $key;
