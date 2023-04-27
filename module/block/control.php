@@ -380,7 +380,7 @@ class block extends control
      */
     public function printBlock($id, $module = 'my')
     {
-        $block = $this->block->getByID($id);
+        $block = $this->block->getByID((int)$id);
 
         if(empty($block)) return false;
 
