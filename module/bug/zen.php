@@ -8,9 +8,9 @@ class bugZen extends bug
      *
      * @param  object $formData
      * @access protected
-     * @return object|false
+     * @return object
      */
-    protected function beforeCreate(object $formData): object|bool
+    protected function beforeCreate(object $formData): object
     {
         $now = helper::now();
         $bug = $formData->setDefault('openedBy', $this->app->user->account)
@@ -38,7 +38,7 @@ class bugZen extends bug
      * @access protected
      * @return array|false
      */
-    protected function doCreate(object $bug): array|bool
+    protected function doCreate(object $bug): array|false
     {
         /* Check repeat bug. */
         $result = $this->loadModel('common')->removeDuplicate('bug', $bug, "product={$bug->product}");
