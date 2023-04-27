@@ -417,6 +417,7 @@ class baseRouter
         if($this->config->framework->multiLanguage) $this->setClientLang();
 
         $this->setupProfiling();
+        $this->setupXhprof();
 
         $this->setEdition();
         $this->setVision();
@@ -730,7 +731,7 @@ class baseRouter
      * @access protected
      * @return void
      */
-    protected function setupProfiling()
+    protected function setupProfiling(): void
     {
         if(!empty($this->config->debug) && $this->config->debug >= 3) $this->dbh->exec('SET profiling = 1');
     }
@@ -742,7 +743,7 @@ class baseRouter
      * @access protected
      * @return void
      */
-    protected function outputProfiling()
+    protected function outputProfiling(): void
     {
         if(empty($this->config->debug) || $this->config->debug < 3) return;
 
@@ -754,6 +755,50 @@ class baseRouter
         }
 
         header('Server-Timing: app;desc="PHP: Total";dur=' . (getTime() - $this->startTime) * 1000, false);
+    }
+
+    /**
+     * 启用Xhprof。
+     * Setup xhprof.
+     *
+     * @return void
+     */
+    protected function setupXhprof(): void
+    {
+        if(!empty($this->config->debug) && $this->config->debug >= 4 && extension_loaded('xhprof')) xhprof_enable();
+    }
+
+    /**
+     * 输出Xhprof结果。
+     * Output xhprof.
+     *
+     * @return bool
+     */
+    protected function outputXhprof(): bool
+    {
+        if(empty($this->config->debug) || $this->config->debug < 4 || !extension_loaded('xhprof')) return false;
+
+        $log          = xhprof_disable();
+        $xhprofPath   = $this->getTmpRoot() . 'xhprof';
+        $libUtilsPath = $xhprofPath . DS . 'xhprof_lib' . DS . 'utils' . DS;
+        $outputDir    = ini_get('xhprof.output_dir');
+
+        if(!is_dir($xhprofPath)) return false;
+
+        include_once $libUtilsPath . 'xhprof_lib.php';
+        include_once $libUtilsPath . 'xhprof_runs.php';
+
+        if(!$outputDir)
+        {
+            $outputDir = $xhprofPath . DS . 'xhprof_runs';
+            if(!is_dir($outputDir)) mkdir($outputDir, 0777, true);
+        }
+
+        $xhprofRuns = new \XHProfRuns_Default($outputDir);
+        $runID      = $xhprofRuns->save_run($log, "{$this->moduleName}_{$this->methodName}");
+        header("Xhprof-RunID: {$runID}");
+
+        return true;
     }
 
     /**
@@ -1982,7 +2027,7 @@ class baseRouter
         /* 将扩展文件的代码合并到代码中。Cycle all the extension files and merge them into target lines. */
         $extTargets = array();
         foreach($extFiles  as $extFile)  $extTargets[basename((string) $extFile)] = $extFile;
-        foreach($extTargets as $extTarget) $targetLines .= self::removePHPTAG($extTarget);
+        foreach($extTargets as $extTarget) $targetLines .= static::removePHPTAG($extTarget);
 
         /* 做个标记，方便后面替换代码使用。Make a mark for replacing codes. */
         $replaceMark = '//**//';
@@ -2038,7 +2083,7 @@ class baseRouter
             /* 通过文件名获得其对应的方法名。Get methods according it's filename. */
             $fileName = baseName((string) $hookFile);
             [$method] = explode('.', $fileName);
-            $hookCodes[$method][] = self::removePHPTAG($hookFile);
+            $hookCodes[$method][] = static::removePHPTAG($hookFile);
         }
 
         /* 合并Hook文件。Cycle the hook methods and merge hook codes. */
@@ -2115,7 +2160,7 @@ class baseRouter
                 break;
             }
         }
-        if(empty($url)) return false;
+        if(empty($url)) return '';
         return $url;
     }
 
@@ -2271,6 +2316,7 @@ class baseRouter
             if(is_null($this->params) and !$this->setParams())
             {
                 $this->outputProfiling();
+                $this->outputXhprof();
                 return false;
             }
 
@@ -2280,6 +2326,7 @@ class baseRouter
             call_user_func_array(array($module, $this->methodName), $this->params);
             $this->checkAPIFile();
             $this->outputProfiling();
+            $this->outputXhprof();
             return $module;
         } catch (EndResponseException $endResponseException) {
             echo $endResponseException->getContent();
@@ -2775,6 +2822,7 @@ class baseRouter
      *
      * @param  object    $params    the database params.
      * @access public
+     * @return object|bool
      */
     public function connectByPDO(object $params): object|bool
     {
