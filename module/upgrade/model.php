@@ -760,7 +760,6 @@ class upgradeModel extends model
                 $this->processChart();
                 $this->processReport();
                 $this->processDashboard();
-                $this->updatePivotGroup();
         }
     }
 
@@ -8227,6 +8226,8 @@ class upgradeModel extends model
 
             $this->dao->update(TABLE_PIVOT)->set('`group`')->eq(implode(',', $insertGroup))->where('id')->eq($pivotID)->exec();
         }
+
+        return !dao::isError();
     }
 
     /**

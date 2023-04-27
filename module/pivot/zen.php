@@ -182,6 +182,8 @@ class pivotZen extends pivot
         $sidebar = '';
         foreach($groups as $group)
         {
+            if($this->config->edition == 'open' && $group->grade == 1) continue;
+
             $pivots = $this->dao->select('*')->from(TABLE_PIVOT)
                 ->where("FIND_IN_SET($group->id, `group`)")
                 ->andWhere('stage')->ne('draft')
