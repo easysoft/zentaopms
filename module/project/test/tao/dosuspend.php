@@ -20,7 +20,7 @@ $tester->loadModel('project');
 
 $project =  new stdClass;
 $project->id = 2;
-$project->status = 'suspened';
+$project->status = 'suspended';
 $project->lastEditedBy = 'admin';
 $project->lastEditedDate = '2023-04-27';
 $project->suspendedDate = '2023-04-27';
