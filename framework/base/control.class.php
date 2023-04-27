@@ -1011,11 +1011,6 @@ class baseControl
         ob_end_clean();
          */
 
-        if($this->config->debug && $this->config->debug >= 2)
-        {
-            $this->app->zinErrors[] = array('trace' => $this->app->loadClass('trace')->getTrace());
-        }
-
         /**
          * 渲染完毕后，再切换回之前的路径。
          * At the end, chang the dir to the previous.
