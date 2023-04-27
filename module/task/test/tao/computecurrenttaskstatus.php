@@ -65,6 +65,92 @@ title=taskModel->computeCurrentTaskStatus();
 timeout=0
 cid=1
 
+- 执行$task1
+ - 属性status @doing
+ - 属性assignedTo @user1
+ - 属性estimate @9
+ - 属性left @0
+ - 属性consumed @10
+
+- 执行$task2
+ - 属性status @doing
+ - 属性assignedTo @user1
+ - 属性estimate @9
+ - 属性left @0
+ - 属性consumed @10
+
+- 执行$task3
+ - 属性status @doing
+ - 属性assignedTo @user1
+ - 属性estimate @9
+ - 属性left @0
+ - 属性consumed @10
+
+- 执行$task4
+ - 属性status @doing
+ - 属性assignedTo @user1
+ - 属性estimate @9
+ - 属性left @0
+ - 属性consumed @10
+
+- 执行$task5
+ - 属性status @doing
+ - 属性assignedTo @user1
+ - 属性estimate @9
+ - 属性left @0
+ - 属性consumed @10
+
+- 执行$task6
+ - 属性status @doing
+ - 属性assignedTo @user1
+ - 属性estimate @9
+ - 属性left @0
+ - 属性consumed @10
+
+- 执行$task7
+ - 属性status @done
+ - 属性assignedTo @admin
+ - 属性estimate @8
+ - 属性left @8
+ - 属性consumed @0
+
+- 执行$task8
+ - 属性status @done
+ - 属性assignedTo @admin
+ - 属性estimate @8
+ - 属性left @8
+ - 属性consumed @0
+
+- 执行$task9
+ - 属性status @done
+ - 属性assignedTo @admin
+ - 属性estimate @8
+ - 属性left @8
+ - 属性consumed @0
+
+- 执行$task10
+ - 属性status @done
+ - 属性assignedTo @admin
+ - 属性estimate @8
+ - 属性left @8
+ - 属性consumed @0
+
+- 执行$task11
+ - 属性status @done
+ - 属性assignedTo @admin
+ - 属性estimate @8
+ - 属性left @8
+ - 属性consumed @0
+
+- 执行$task12
+ - 属性status @done
+ - 属性assignedTo @admin
+ - 属性estimate @8
+ - 属性left @8
+ - 属性consumed @0
+
+
+
 */
 
 $task   = new taskTest();

@@ -64,8 +64,6 @@ $lang->project->daysGreaterProject  = "Days cannot be greater than days of {$lan
 $lang->project->errorHours          = 'Hours/Day cannot be greater than『24』';
 $lang->project->workdaysExceed      = 'No more than『%s』working days';
 $lang->project->teamMembersCount    = ', there are %s team members.';
-$lang->project->budgetNumber        = '『Budget』must be numbers.';
-$lang->project->budgetGe0           = '『Budget』must be greater than or equal to 0.';
 $lang->project->allProjects         = "All {$lang->projectCommon}s";
 $lang->project->ignore              = 'Ignore';
 $lang->project->disableExecution    = "{$lang->projectCommon} of disable {$lang->executionCommon}";
@@ -212,8 +210,6 @@ $lang->project->noProgram       = "Independent {$lang->projectCommon}s";
 
 $lang->project->laneColorList = array('#32C5FF', '#006AF1', '#9D28B2', '#FF8F26', '#FFC20E', '#00A78E', '#7FBB00', '#424BAC', '#C0E9FF', '#EC2761');
 
-$lang->project->productNotEmpty        = "Please link {$lang->productCommon}s or create {$lang->productCommon}s.";
-$lang->project->existProductName       = "{$lang->productCommon} name already exists.";
 $lang->project->changeProgram          = "%s > Change {$lang->projectCommon}";
 $lang->project->changeProgramTip       = "Once the program is edited, the {$lang->productCommon} that is linked to this program will be changed. Do you want to edit it?";
 $lang->project->linkedProjectsTip      = "Linked {$lang->projectCommon}s are as follows";
@@ -242,6 +238,13 @@ $lang->project->tip->suspended  = 'The project has been suspended. Re-suspend is
 $lang->project->tip->actived    = 'The project has been activated. Re-activated is not available.';
 $lang->project->tip->group      = "It's a Kanban project. Editing privilege group is not available.";
 $lang->project->tip->whitelist  = "It's a public project with open permissions. No need to edit whitelists.";
+
+$lang->project->error = new stdclass();
+$lang->project->error->existProductName = "{$lang->productCommon} name already exists.";
+$lang->project->error->budgetGe0        = '『Budget』must be greater than or equal to 0.';
+$lang->project->error->budgetNumber     = '『Budget』must be numbers.';
+$lang->project->error->productNotEmpty  = "Please link {$lang->productCommon}s or create {$lang->productCommon}s.";
+$lang->project->error->emptyBranch      = 'Branch can not be empty!';
 
 $lang->project->hundredMillion = 'Hundred Million';
 
@@ -385,7 +388,6 @@ $lang->project->agileplus              = 'Agile +';
 $lang->project->waterfallplus          = 'Waterfall +';
 $lang->project->cannotCreateChild      = 'It is not empty, so you cannot add a child. You can add a parent for it, and then create a child.';
 $lang->project->emptyPM                = 'No manager';
-$lang->project->emptyBranch            = 'Branch can not be empty!';
 $lang->project->cannotChangeToCat      = "It is not empty, so you cannot change it to a parent.";
 $lang->project->cannotCancelCat        = "It has child {$lang->projectCommon}s, so you cannot unmark the parent.";
 $lang->project->parentBeginEnd         = "Parent begin&end date: %s ~ %s";

@@ -290,7 +290,10 @@ class taskTest
         $createFields = array('assignedTo' => '', 'status' => '', 'comment' => '');
         foreach($createFields as $field => $defaultValue) $_POST[$field] = $defaultValue;
         foreach($param as $key => $value) $_POST[$key] = $value;
-        $object = $this->objectModel->assign($taskID);
+
+        $task = $_POST;
+        unset($task['comment']);
+        $object = $this->objectModel->assign((object)$task, $taskID);
         unset($_POST);
         if(dao::isError())
         {
@@ -511,13 +514,9 @@ class taskTest
      * @access public
      * @return array
      */
-    public function getUserTasksTest($taskID, $assignedTo)
+    public function getUserTasksTest($account, $type = 'assignedTo', $limit = 0, $pager = null, $orderBy = 'id_desc', $projectID = 0)
     {
-        $createFields = array('assignedTo' => $assignedTo, 'status' => 'doing', 'comment' => '');
-        foreach($createFields as $field => $defaultValue) $_POST[$field] = $defaultValue;
-        $this->objectModel->assign($taskID);
-        $object = $this->objectModel->getUserTasks($assignedTo);
-        unset($_POST);
+        $object = $this->objectModel->getUserTasks($account, $type, $limit, $pager, $orderBy, $projectID);
         if(dao::isError())
         {
             return dao::getError();
@@ -1524,7 +1523,7 @@ class taskTest
      * @access public
      * @return array
      */
-    public function fetchExecutionTasksTest(int $executionID, int $productID = 0, string $type = 'all', array $modules = array(), string $orderBy = 'status_asc, id_desc', string $count = '0'): array|int
+    public function fetchExecutionTasksTest(int $executionID, int $productID = 0, string|array $type = 'all', array $modules = array(), string $orderBy = 'status_asc, id_desc', string $count = '0'): array|int
     {
         $tasks = $this->objectModel->fetchExecutionTasks($executionID, $productID, $type, $modules, $orderBy);
         if(dao::isError())

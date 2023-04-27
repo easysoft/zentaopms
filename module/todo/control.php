@@ -1,13 +1,14 @@
 <?php
 declare(strict_types=1);
+
 /**
- * The control file of todo module of ZenTaoPMS.
+ * The control file of example module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @license     ZPL(https://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
- * @author      lanzongjun@easycorp.ltd;
+ * @author      Lanzongjun <lanzongjun@easycorp.ltd>
  * @package     todo
- * @link        http://www.zentao.net
+ * @link        https://www.zentao.net
  */
 class todo extends control
 {
@@ -20,6 +21,7 @@ class todo extends control
     public function __construct()
     {
         parent::__construct();
+
         $this->app->loadClass('date');
         $this->loadModel('task');
         $this->loadModel('bug');
@@ -33,7 +35,7 @@ class todo extends control
      * @param  string  $date
      * @param  string  $from todo|feedback|block
      * @access public
-     * @return void
+     * @return int|void
      */
     public function create(string $date = 'today', string $from = 'todo')
     {
@@ -41,20 +43,21 @@ class todo extends control
 
         if(!empty($_POST))
         {
-            $formData = form::data($this->config->todo->create->form);
+            $todo = form::data($this->config->todo->create->form)
+                ->remove(implode(',', $this->config->todo->moduleList) . ',uid')
+                ->stripTags($this->config->todo->editor->create['id'], $this->config->allowedTags)
+                ->get();
 
-            $todo   = $this->todoZen->beforeCreate($formData);
-            $todoID = $this->todoZen->doCreate($todo);
+            $todoID = $this->todo->create($todo);
             if($todoID === false) return print(js::error(dao::getError()));
 
             $todo->id = $todoID;
             $this->todoZen->afterCreate($todo);
 
-            if(!empty($_POST['idvalue'])) return $this->send(array('result' => 'success'));
+            if(!empty($_POST['objectID'])) return $this->send(array('result' => 'success'));
 
             if($from == 'block')
             {
-                // TODO
                 $todo = $this->todo->getById($todoID);
                 $todo->begin = date::formatTime($todo->begin);
                 return $this->send(array('result' => 'success', 'id' => $todoID, 'name' => $todo->name, 'pri' => $todo->pri, 'priName' => $this->lang->todo->priList[$todo->pri], 'time' => date(DT_DATE4, strtotime($todo->date)) . ' ' . $todo->begin));
@@ -292,7 +295,7 @@ class todo extends control
      * @access public
      * @return void
      */
-    public function start(string $todoID): string|int
+    public function start(string $todoID)
     {
         $todoID = (int)$todoID;
         $todo   = $this->todo->getById($todoID);
@@ -305,18 +308,22 @@ class todo extends control
     }
 
     /**
+     * 激活待办事项
      * Activated todo.
      *
-     * @param  $todoID
+     * @param  string $todoID
      * @access public
      * @return void
      */
-    public function activate($todoID)
+    public function activate(string $todoID)
     {
-        $todo = $this->todo->getById($todoID);
+        $todoID = (int)$todoID;
+        $todo   = $this->todo->getById($todoID);
+
         if($todo->status == 'done' or $todo->status == 'closed') $this->todo->activate($todoID);
         if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'success'));
         if(isonlybody()) return print(js::reload('parent.parent'));
+
         echo js::reload('parent');
     }
 
