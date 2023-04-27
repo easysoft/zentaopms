@@ -2179,7 +2179,11 @@ class docModel extends model
     {
         $today     = date('Y-m-d');
         $statistic = new stdclass();
-        $statistic->totalDocs       = $this->dao->select('count(*) as count')->from(TABLE_DOC)->where('deleted')->eq('0')->andWhere('type')->in('text,word,ppt,excel,url,article')->andWhere('vision')->eq($this->config->vision)->fetch('count');
+        $statistic->totalDocs = $this->dao->select('count(*) as count')->from(TABLE_DOC)
+            ->where('deleted')->eq('0')
+            ->andWhere('type')->in('text,word,ppt,excel,url,article')
+            ->andWhere('vision')->eq($this->config->vision)
+            ->fetch('count');
         $statistic->todayEditedDocs = $this->dao->select('count(DISTINCT objectID) as count')->from(TABLE_ACTION)->alias('t1')
             ->leftJoin(TABLE_DOC)->alias('t2')->on("t1.objectID=t2.id and t1.objectType='doc'")
             ->where('t1.objectType')->eq('doc')
@@ -2188,6 +2192,7 @@ class docModel extends model
             ->andWhere('t1.vision')->eq($this->config->vision)
             ->andWhere('LEFT(t1.date, 10)')->eq($today)
             ->andWhere('t2.deleted')->eq(0)
+            ->andWhere('t2.type')->in('text,word,ppt,excel,url,article')
             ->fetch('count');
         $statistic->myEditedDocs = $this->dao->select('count(DISTINCT t1.objectID) as count')->from(TABLE_ACTION)->alias('t1')
             ->leftJoin(TABLE_DOC)->alias('t2')->on("t1.objectID=t2.id and t1.objectType='doc'")
@@ -2197,9 +2202,16 @@ class docModel extends model
             ->andWhere('t1.vision')->eq($this->config->vision)
             ->andWhere('t2.lib')->ne('')
             ->andWhere('t2.deleted')->eq(0)
+            ->andWhere('t2.type')->in('text,word,ppt,excel,url,article')
             ->fetch('count');
 
-        $my = $this->dao->select("count(*) as myDocs, SUM(views) as docViews, SUM(collects) as docCollects")->from(TABLE_DOC)->where('addedBy')->eq($this->app->user->account)->andWhere('type')->in('text,word,ppt,excel,url,article')->andWhere('deleted')->eq(0)->andWhere('vision')->eq($this->config->vision)->andWhere('lib')->ne('')->fetch();
+        $my = $this->dao->select("count(*) as myDocs, SUM(views) as docViews, SUM(collects) as docCollects")->from(TABLE_DOC)
+            ->where('addedBy')->eq($this->app->user->account)
+            ->andWhere('type')->in('text,word,ppt,excel,url,article')
+            ->andWhere('deleted')->eq(0)
+            ->andWhere('vision')->eq($this->config->vision)
+            ->andWhere('lib')->ne('')
+            ->fetch();
         $statistic->myDocs = $my->myDocs;
         $statistic->myDoc  = new stdclass();
         $statistic->myDoc->docViews    = $my->docViews;
