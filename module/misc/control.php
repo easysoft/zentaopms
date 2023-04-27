@@ -347,14 +347,16 @@ class misc extends control
      */
     public function appQrcode()
     {
-        if(!extension_loaded('gd'))
+        if(extension_loaded('gd'))
         {
-            $this->view->noGDLib = sprintf($this->lang->misc->noGDLib, $loginAPI);
-            return 'theme/default/images/main/mobile_qrcode.png';
+            $this->app->loadClass('qrcode');
+            $downloadUrl = 'https://www.zentao.net/page/zentaoapp.html?zentao=' . $this->config->version;
+            QRcode::png($downloadUrl, false, 2, 4, 2);
         }
-
-        $this->app->loadClass('qrcode');
-        $downloadUrl = 'https://www.zentao.net/page/zentaoapp.html?zentao=' . $this->config->version;
-        QRcode::png($downloadUrl, false, 2, 4, 2);
+        else
+        {
+            $this->view->noGDLib = sprintf($this->lang->misc->noGDLib, '');
+            return print($this->display('misc', 'qrCode'));
+        }
     }
 }
