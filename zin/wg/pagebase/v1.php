@@ -72,13 +72,13 @@ class pageBase extends wg
                 $this->block('headBefore'),
                 $zui ? h::importCss($config->zin->zuiPath . 'zui.zentao.css', set::id('zuiCSS')) : null,
                 $zui ? h::importJs($config->zin->zuiPath . 'zui.zentao.umd.cjs', set::id('zuiJS')) : null,
+                h::jsVar('window.config', $jsConfig, set::id('configJS')),
                 $zui ? h::importJs($app->getWebRoot() . 'js/zui3/zin.js', set::id('zinJS')) : null,
                 $head,
             ),
             h::body
             (
                 empty($imports) ? NULL : h::import($imports),
-                h::jsVar('window.config', $jsConfig, set::id('configJS')),
                 set($bodyProps),
                 set::class($bodyClass),
                 empty($css) ? NULL : h::css($css, set::id('pageCSS')),

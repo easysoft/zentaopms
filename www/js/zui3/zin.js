@@ -1,6 +1,8 @@
 (function()
 {
-    let DEBUG         = true;
+    const config      = window.config;
+    const DEBUG       = config.debug;
+    const isIndexPage = config.currentModule === 'index' && (config.currentMethod === 'index' || config.currentMethod === 'index2');
     const currentCode = window.name.substring(4);
     const isInAppTab  = parent.window !== window;
     const fetchTasks  = new Map();
@@ -52,7 +54,7 @@
 
     function initZinbar()
     {
-        if(!DEBUG) return;
+        if(!DEBUG || isIndexPage) return;
         let $bar = $('#zinbar');
         if($bar.length) return;
 
@@ -77,6 +79,7 @@
 
     function updatePerfInfo(options, stage, error)
     {
+        if(!DEBUG || isIndexPage) return;
         options[stage] = performance.now();
         const $perf = options.id === 'page' ? $('#pagePerf') : $('#partPerf');
         if(stage === 'requestBegin')
@@ -521,8 +524,6 @@
 
         if(window.defaultAppUrl) loadPage(window.defaultAppUrl);
         else if(DEBUG) loadCurrentPage('zinErrors()');
-
-        DEBUG = window.config.debug;
 
         /* Compatible with old version */
         if(DEBUG && typeof window.zin !== 'object' && isInAppTab)
