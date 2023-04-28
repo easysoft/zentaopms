@@ -56,9 +56,9 @@ class projectZen extends project
      * @param  object $project
      * @param  object $rawdata
      * @access protected
-     * @return bool 
+     * @return bool
      */
-    private function checkProductAndBranch(object $project, object $rawdata): bool 
+    private function checkProductAndBranch(object $project, object $rawdata): bool
     {
         $linkedProductsCount = $this->project->getLinkedProductsCount($project, $rawdata);
 
@@ -98,9 +98,9 @@ class projectZen extends project
      * @param  object $project
      * @param  object $rawdata
      * @access protected
-     * @return bool 
+     * @return bool
      */
-    private function checkDaysAndBudget(object $project, object $rawdata): bool 
+    private function checkDaysAndBudget(object $project, object $rawdata): bool
     {
         /* Judge workdays is legitimate. */
         $workdays = helper::diffDate($project->end, $project->begin) + 1;
@@ -137,9 +137,9 @@ class projectZen extends project
      * @param  object $project
      * @param  object $rawdata
      * @access protected
-     * @return bool 
+     * @return bool
      */
-    private function checkProductNameUnqiue(object $project, object $rawdata): bool 
+    private function checkProductNameUnqiue(object $project, object $rawdata): bool
     {
         /* When select create new product, product name cannot be empty and duplicate. */
         if($project->hasProduct && isset($rawdata->newProduct))
@@ -188,7 +188,7 @@ class projectZen extends project
         if($this->app->tab == 'product' and !empty($output['productID'])) $this->loadModel('product')->setMenu($output['productID']);
         if($this->app->tab == 'doc') unset($this->lang->doc->menu->project['subMenu']);
 
-        if($copyProjectID) $copyProject = $this->copyProject((int)$copyProjectID);
+        if($copyProjectID) $copyProject = $this->getCopyProject((int)$copyProjectID);
         $shadow = empty($copyProject->hasProduct) ? 1 : 0;
 
         if($this->view->globalDisableProgram) $programID = $this->config->global->defaultProgram;
@@ -318,7 +318,6 @@ class projectZen extends project
     protected function prepareSuspendExtras(int $projectID, object $postData): object
     {
         $editorIdList = $this->config->project->editor->suspend['id'];
-        if($this->app->rawModule == 'program') $editorIdList = $this->config->program->editor->suspend['id'];
 
         return $postData->add('id', $projectID)
             ->setDefault('status', 'suspended')
@@ -341,7 +340,6 @@ class projectZen extends project
     protected function prepareClosedExtras(int $projectID, object $postData): object
     {
         $editorIdList = $this->config->project->editor->suspend['id'];
-        if($this->app->rawModule == 'program') $editorIdList = $this->config->program->editor->suspend['id'];
 
         return  $postData->add('id', $projectID)
             ->setDefault('status', 'closed')
@@ -350,7 +348,6 @@ class projectZen extends project
             ->setDefault('lastEditedBy', $this->app->user->account)
             ->setDefault('lastEditedDate', helper::now())
             ->stripTags($editorIdList, $this->config->allowedTags)
-            ->remove('comment')
             ->get();
     }
 
@@ -568,17 +565,59 @@ class projectZen extends project
     {
         $oldProject = $this->project->getByID($projectID);
 
-        $editorIdList=$this->config->project->editor->activate['id'];
-        if($this->app->rawModule=='program')$editorIdList=$this->config->program->editor->activate['id'];
+        $editorIdList = $this->config->project->editor->activate['id'];
 
-        return $postData->add('id',$projectID)
-            ->setDefault('realEnd','')
-            ->setDefault('status','doing')
-            ->setDefault('lastEditedBy',$this->app->user->account)
-            ->setDefault('lastEditedDate',helper::now())
-            ->setIF(!helper::isZeroDate($oldProject->realBegan),'realBegan',helper::today())
-            ->stripTags($editorIdList,$this->config->allowedTags)
-            ->remove('comment,readjustTime,readjustTask')
+        return $postData->add('id', $projectID)
+            ->setDefault('realEnd', '')
+            ->setDefault('status', 'doing')
+            ->setDefault('lastEditedBy', $this->app->user->account)
+            ->setDefault('lastEditedDate', helper::now())
+            ->setIF(!helper::isZeroDate($oldProject->realBegan), 'realBegan', helper::today())
+            ->stripTags($editorIdList, $this->config->allowedTags)
             ->get();
+    }
+
+    /**
+     * 从项目中删除所有关联的执行。
+     * removes all associated executions from the be deleted project
+     *
+     * @param  int $projectID
+     *
+     * @access protected
+     * @return void
+     */
+    protected function removeAssociatedExecutions(int $projectID): void
+    {
+        /* Delete the execution under the project. */
+        $executionIdList = $this->loadModel('execution')->getPairs($projectID);
+        if(empty($executionIdList))
+        {
+            if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess));
+            if($from == 'view') return print(js::locate($this->createLink('project', 'browse'), 'parent'));
+            return print(js::reload('parent'));
+        }
+
+        $this->updateRelatedItemByDelete('zt_execution', array_keys($executionIdList));
+        foreach($executionIdList as $executionID => $execution) $this->action->create('execution', $executionID, 'deleted', '', ACTIONMODEL::CAN_UNDELETED);
+        $this->user->updateUserView($executionIdList, 'sprint');
+    }
+
+    /**
+     * 从项目中删除所有关联的产品。
+     * removes all associated products from the be deleted project
+     *
+     * @param  object $projectID
+     *
+     * @access protected
+     * @return void
+     */
+    protected function removeAssociatedProducts(object $project): void
+    {
+        /* Delete shadow product.*/
+        if(!$project->hasProduct)
+        {
+            $productID = $this->loadModel('product')->getProductIDByProject($project->id);
+            $this->updateRelatedItemByDelete('zt_product', $productID);
+        }
     }
 }

@@ -196,4 +196,19 @@ class Project
     {
         return $this->project->getBudgetWithUnit($budget);
     }
+
+    /**
+     * Add user to project admins.
+     *
+     * @param  int        $budget
+     * @access public
+     * @return int|string $projectBudget
+     */
+    public function addProjectAdminTest($projectID)
+    {
+        global $tester;
+        $tester->loadModel('project')->addProjectAdmin($projectID);
+
+        return $tester->dao->select('*')->from(TABLE_PROJECTADMIN)->fetch();
+    }
 }

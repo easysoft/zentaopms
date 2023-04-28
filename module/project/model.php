@@ -275,29 +275,9 @@ class projectModel extends model
             $project->executions = $this->loadModel('execution')->getStatData($projectID, 'undone', 0, 0, false, '', $orderBy, $pager);
             $project->teamCount  = isset($teams[$projectID]) ? $teams[$projectID]->count : 0;
             $project->estimate   = isset($estimates[$projectID]) ? round($estimates[$projectID]->estimate, 2) : 0;
-            $project->parentName = $this->getParentProgram($project);
+            $project->parentName = $project->parent ? $this->projectTao->getParentProgram($project->parent, $project->path, $project->grade) : '';
         }
         return $projects;
-    }
-
-    /**
-     * Get all parent program of a program.
-     *
-     * @param  int    $parentID
-     * @access public
-     * @return string
-     */
-    public function getParentProgram($project)
-    {
-        if($project->parent == 0) return '';
-
-        $parentName = $this->dao->select('id,name')->from(TABLE_PROGRAM)->where('id')->in(trim($project->path, ','))->andWhere('grade')->lt($project->grade)->orderBy('grade asc')->fetchPairs();
-
-        $parentProgram = '';
-        foreach($parentName as $name) $parentProgram .= $name . '/';
-        $parentProgram = rtrim($parentProgram, '/');
-
-        return $parentProgram;
     }
 
     /**
@@ -1659,7 +1639,6 @@ class projectModel extends model
     public function suspend(int $projectID, object $project, string $type = 'project'): array|false
     {
         $editorIdList = $this->config->project->editor->suspend['id'];
-        if($this->app->rawModule == 'program') $editorIdList = $this->config->program->editor->suspend['id'];
 
         $oldProject = $this->getById($projectID, $type);
 
@@ -1722,9 +1701,6 @@ class projectModel extends model
         $oldProject = $this->getByID($projectID);
 
         $editorIdList = $this->config->project->editor->close['id'];
-        if($this->app->rawModule == 'program') $editorIdList = $this->config->program->editor->close['id'];
-
-        $this->lang->error->ge = $this->lang->project->ge;
 
         $project = $this->loadModel('file')->processImgURL($project, $editorIdList, $this->post->uid);
 
@@ -1742,7 +1718,6 @@ class projectModel extends model
         if(!$oldProject->hasProduct)
         {
             $productID = $this->loadModel('product')->getProductIDByProject($projectID);
-            unset($_POST);
             $this->product->close($productID);
         }
 
@@ -1783,11 +1758,27 @@ class projectModel extends model
     }
 
     /**
+     * 删除项目并同步执行与产品等状态为删除
+     * Deletes a project and updates related items: product|execution
+     *
+     * @param  string    $table  product|execution
+     * @param  int|array $idList
+     *
+     * @access public
+     * @return void
+     */
+    public function deleteProductAndExcution(string $table, int|array $idList):void
+    {
+        $this->dao->update($table)->set('deleted')->eq(1)->where('id')->in($idList)->exec();
+    }
+
+    /**
      * Update the program of the product.
      *
      * @param  int    $oldProgram
      * @param  int    $newProgram
      * @param  array  $products
+     *
      * @access public
      * @return void
      */

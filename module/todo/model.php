@@ -191,7 +191,7 @@ class todoModel extends model
             foreach($todos as $todoID => $todo)
             {
                 $oldTodo = $oldTodos[$todoID];
-                if(in_array($todo->type, $this->config->todo->moduList)) $oldTodo->name = '';
+                if(in_array($todo->type, $this->config->todo->moduleList)) $oldTodo->name = '';
                 $this->dao->update(TABLE_TODO)->data($todo)
                     ->autoCheck()
                     ->checkIF(!in_array($todo->type, $this->config->todo->moduleList), $this->config->todo->edit->requiredFields, 'notempty')
@@ -674,10 +674,10 @@ class todoModel extends model
      * @param  array  $todoIDList
      * @param  string $date
      * @access public
-     * @return int
+     * @return bool
      */
-    public function editDate(array $todoIDList, string $date): int
+    public function editDate(array $todoIDList, string $date): bool
     {
-        return $this->todoTao->updateDate((array)$todoIDList, (string)$date);
+        return $this->todoTao->updateDate($todoIDList, $date);
     }
 }
