@@ -383,4 +383,74 @@ class projectTao extends projectModel
 
         return !dao::isError();
     }
+
+    /**
+     * 生成project模块的项目下拉框跳转链接.
+     * Build project link in project page.
+     *
+     * @param  string $method
+     * @access protected
+     * @return string
+     */
+    protected function buildLinkForProject(string $method) :string
+    {
+        if($method == 'execution')
+            return helper::createLink($module, $method, "status=all&projectID=%s");
+
+        if($method == 'managePriv')
+            return helper::createLink($module, 'group', "projectID=%s");
+
+        if($method == 'showerrornone')
+            return helper::createLink('projectstory', 'story', "projectID=%s");
+
+        $methods = ',bug,testcase,testtask,testreport,build,dynamic,view,manageproducts,team,managemembers,whitelist,addwhitelist,group,';
+        if(strpos($methods, ',' . $method . ',') !== false)
+            return helper::createLink($module, $method, "projectID=%s");
+    }
+
+    /**
+     * 生成bug模块的项目下拉框跳转链接.
+     * Build project link in bug page.
+     *
+     * @param  string $method
+     * @access protected
+     * @return string
+     */
+    protected function buildLinkForBug(string $method) :string
+    { 
+        if($method == 'create')
+            return helper::createLink($module, $method, "productID=0&branch=0&extras=projectID=%s");
+
+        if($method == 'edit')
+            return helper::createLink('project', 'bug', "projectID=%s");
+    }
+
+    /**
+     * 生成story模块的项目下拉框跳转链接.
+     * Build project link in story page.
+     *
+     * @param  string $method
+     * @access protected
+     * @return string
+     */
+    protected function buildLinkForStory(string $method) :string
+    { 
+        if($method == 'change' or $method == 'create')
+            return helper::createLink('projectstory', 'story', "projectID=%s");
+        if($method == 'zerocase')
+            return helper::createLink('project', 'testcase', "projectID=%s");
+    }
+
+    protected  function buildLinkForTask if($module == 'testtask')
+            {
+                if($method == 'browseunits')
+                {
+                    $link = helper::createLink('project', 'testcase', "projectID=%s");
+                }
+                else
+                {
+                    $link = helper::createLink('project', 'testtask', "projectID=%s");
+                }
+            }
+
 }

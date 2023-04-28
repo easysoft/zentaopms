@@ -3,6 +3,25 @@ declare(strict_types=1);
 class projectModel extends model
 {
     /**
+     * 获取当前登录用户有权限查看的项目列表.
+     * Get project list by current user.
+     *
+     * @param  string    $fields
+     * @access public
+     * @return array
+     */
+    public function getListByCurrentUser(string $fields = '*') :array
+    {
+        return $this->dao->select($fields)->from(TABLE_PROJECT)
+            ->where('type')->eq('project')
+            ->beginIF($this->config->vision)->andWhere('vision')->eq($this->config->vision)->fi()
+            ->andWhere('deleted')->eq(0)
+            ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->projects)->fi()
+            ->orderBy('order_asc,id_desc')
+            ->fetchAll('id');
+    }
+
+    /**
      * Check the privilege.
      *
      * @param  int    $projectID
@@ -594,21 +613,17 @@ class projectModel extends model
         $project = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($projectID)->fetch();
 
         if(empty($project->multiple)) return $link;
+
+        if(in_array($module, array('testreport', 'testcase'))) 
+            return helper::createLink('project', $module, "projectID=%s");
+
+        if($module == 'projectstory' && in_array($method, array('story', 'linkstory', 'track')))
+            return helper::createLink($module, $method, "projectID=%s");
+
+        if($module == 'project') $this->buildLinkForProject($module, $method);
         if(strpos(',project,product,projectstory,story,bug,doc,testcase,testtask,testreport,repo,build,projectrelease,stakeholder,issue,risk,meeting,report,measrecord,', ',' . $module . ',') !== false)
         {
-            if($module == 'project' and $method == 'execution')
-            {
-                $link = helper::createLink($module, $method, "status=all&projectID=%s");
-            }
-            elseif($module == 'project' and strpos(',bug,testcase,testtask,testreport,build,dynamic,view,manageproducts,team,managemembers,whitelist,addwhitelist,group,', ',' . $method . ',') !== false)
-            {
-                $link = helper::createLink($module, $method, "projectID=%s");
-            }
-            elseif($module == 'project' and $method == 'managePriv')
-            {
-                $link = helper::createLink($module, 'group', "projectID=%s");
-            }
-            elseif($module == 'product' and $method == 'showerrornone')
+            if($module == 'product' and $method == 'showerrornone')
             {
                 $link = helper::createLink('projectstory', 'story', "projectID=%s");
             }
