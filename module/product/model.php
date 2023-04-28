@@ -1464,7 +1464,7 @@ class productModel extends model
             ->where('t1.product')->eq($productID)
             ->andWhere('t2.type')->in('sprint,kanban,stage')
             ->beginIF($projectID)->andWhere('t2.project')->in($projectID)->fi()
-            ->beginIF($branch !== '' and $branch !== 'all')->andWhere('t1.branch')->in($branch)->fi()
+            ->beginIF($branch !== '' and strpos($branch, 'all') === false)->andWhere('t1.branch')->in($branch)->fi()
             ->beginIF(!$this->app->user->admin)->andWhere('t2.id')->in($this->app->user->view->sprints)->fi()
             ->beginIF(strpos($mode, 'noclosed') !== false)->andWhere('t2.status')->ne('closed')->fi()
             ->beginIF(strpos($mode, 'multiple') !== false)->andWhere('t2.multiple')->eq('1')->fi()
