@@ -84,13 +84,15 @@ class block extends control
         }
 
         $block = $this->block->getByID($blockID);
+        $code  = $code ? $code : $block->code;
 
         $this->view->title     = $this->lang->block->editBlock;
         $this->view->block     = $block;
+        $this->view->dashboard = $block->dashboard;
         $this->view->module    = $module ? $module : $block->module;
-        $this->view->code      = $code   ? $code   : $block->code;
         $this->view->modules   = $this->blockZen->getAvailableModules($block->dashboard);
         $this->view->codes     = $this->blockZen->getAvailableBlocks($block->dashboard, $this->view->module);
+        $this->view->code      = $this->view->codes ? (in_array($code, array_keys($this->view->codes)) ? $code : '') : $code;
         $this->view->params    = $this->blockZen->getAvailableParams($block->dashboard, $this->view->module, $this->view->code);
         $this->display();
     }
