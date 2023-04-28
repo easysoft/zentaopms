@@ -8,19 +8,82 @@ zdTable('product')->gen(50);
 /**
 
 title=测试productModel->getPairs();
+timeout=0
 cid=1
-pid=1
+
+- 执行product模块的getProductPairs方法 @40
+
+- 执行product模块的getProductPairs方法，参数是all @45
+
+- 执行product模块的getProductPairs方法，参数是noclosed @22
+
+- 执行product模块的getProductPairs方法，参数是all', 1 @5
+
+- 执行product模块的getProductPairs方法，参数是all', -1 @0
+
+- 执行product模块的getProductPairs方法，参数是all', 10001, 1 @1
+
+- 执行product模块的getProductPairs方法，参数是, 1, 23,24 @5
+
+- 执行product模块的getProductPairs方法，参数是noclosed', 1, 23,24 @4
+
+- 执行product模块的getProductPairs方法，参数是noclosed', 1, 23,24', all @4
+
+- 执行product模块的getProductPairs方法，参数是noclosed', 1, 23,24', 1 @0
+
+- 执行product模块的getProductPairs方法，参数是noclosed', 1, 23,24', 2 @0
+
+- 执行product模块的getProductPairs方法 @9
+
+- 执行product模块的getProductPairs方法，参数是all @12
+
+- 执行product模块的getProductPairs方法，参数是noclosed @9
+
+- 执行product模块的getProductPairs方法，参数是all', 1 @1
+
+- 执行product模块的getProductPairs方法，参数是all', -1 @0
+
+- 执行product模块的getProductPairs方法，参数是all', 10001, 1 @1
+
+- 执行product模块的getProductPairs方法，参数是, 1, 23,24 @3
+
+- 执行product模块的getProductPairs方法，参数是noclosed', 1, 23,24 @3
+
+- 执行product模块的getProductPairs方法，参数是noclosed', 1, 23,24', all @3
+
+- 执行product模块的getProductPairs方法，参数是noclosed', 1, 23,24', 1 @0
+
+- 执行product模块的getProductPairs方法，参数是noclosed', 1, 23,24', 2 @0
+
+
 
 */
 
 $product = new productTest('admin');
+$product->objectModel->app->user->admin = true;
 
-r($product->getProductPairs())       && p('11') && e('正常产品11');   // 测试项目集10下的11号产品
-r($product->getProductPairs('all'))       && p('55') && e('多分支产品55'); // 测试项目集10下的55号产品
-r($product->getProductPairs('noclosed'))       && p('99') && e('多平台产品99'); // 测试项目集10下的99号产品
-r($product->getProductPairs('all', 1))       && p()     && e('没有数据');     // 测试不存在的项目集
-r($product->getProductPairs('all', -1))       && p()     && e('没有数据');     // 测试不存在的项目集
-r($product->getProductPairs('all', 10001, '1'))       && p()     && e('没有数据');     // 测试不存在的项目集
-r($product->getProductPairs('noclosed', 1, '22,23'))       && p()     && e('没有数据');     // 测试不存在的项目集
-r($product->getProductPairs('noclosed', 1, '22,23', 'all'))       && p()     && e('没有数据');     // 测试不存在的项目集
-r($product->getProductPairs('noclosed', 1, '22,23', '1'))       && p()     && e('没有数据');     // 测试不存在的项目集
+r(count($product->getProductPairs()))                             && p() && e('40');
+r(count($product->getProductPairs('all')))                        && p() && e('45');
+r(count($product->getProductPairs('noclosed')))                   && p() && e('22');
+r(count($product->getProductPairs('all', 1)))                     && p() && e('5');
+r(count($product->getProductPairs('all', -1)))                    && p() && e('0');
+r(count($product->getProductPairs('all', 10001, '1')))            && p() && e('1');
+r(count($product->getProductPairs('', 1, '23,24')))               && p() && e('5');
+r(count($product->getProductPairs('noclosed', 1, '23,24')))       && p() && e('4');
+r(count($product->getProductPairs('noclosed', 1, '23,24', 'all')))&& p() && e('4');
+r(count($product->getProductPairs('noclosed', 1, '23,24', '1')))  && p() && e('0');
+r(count($product->getProductPairs('noclosed', 1, '23,24', '2')))  && p() && e('0');
+
+$product->objectModel->app->user->admin = false;
+$product->objectModel->app->user->view->products = '1,2,3,4,5,6,7,8,9,20,21,48,49,50';
+r(count($product->getProductPairs()))                             && p() && e('9');
+r(count($product->getProductPairs('all')))                        && p() && e('12');
+r(count($product->getProductPairs('noclosed')))                   && p() && e('9');
+r(count($product->getProductPairs('all', 1)))                     && p() && e('1');
+r(count($product->getProductPairs('all', -1)))                    && p() && e('0');
+r(count($product->getProductPairs('all', 10001, '1')))            && p() && e('1');
+r(count($product->getProductPairs('', 1, '23,24')))               && p() && e('3');
+r(count($product->getProductPairs('noclosed', 1, '23,24')))       && p() && e('3');
+r(count($product->getProductPairs('noclosed', 1, '23,24', 'all')))&& p() && e('3');
+r(count($product->getProductPairs('noclosed', 1, '23,24', '1')))  && p() && e('0');
+r(count($product->getProductPairs('noclosed', 1, '23,24', '2')))  && p() && e('0');

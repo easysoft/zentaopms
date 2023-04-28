@@ -314,11 +314,11 @@ class todoTao extends todoModel
      * 修改待办事项的时间。
      * Update the date of todo.
      *
-     * @param  array  $idList
+     * @param  array  $todoIdList
      * @param  string $date
      * @return bool
      */
-    protected function updateDate(array $todoIdList, string $date): bool
+    public function updateDate(array $todoIdList, string $date): bool
     {
         $this->dao->update(TABLE_TODO)->set('date')->eq($date)->where('id')->in($todoIdList)->exec();
         return !dao::isError();

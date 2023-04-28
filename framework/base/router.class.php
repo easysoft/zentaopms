@@ -416,7 +416,6 @@ class baseRouter
         if($this->config->framework->autoConnectDB) $this->connectDB();
         if($this->config->framework->multiLanguage) $this->setClientLang();
 
-        $this->setupProfiling();
         $this->setupXhprof();
 
         $this->setEdition();
@@ -725,39 +724,6 @@ class baseRouter
     }
 
     /**
-     * 配置数据库性能采样。
-     * Setup database profiling.
-     *
-     * @access protected
-     * @return void
-     */
-    protected function setupProfiling(): void
-    {
-        if(!empty($this->config->debug) && $this->config->debug >= 3) $this->dbh->exec('SET profiling = 1');
-    }
-
-    /**
-     * 输出数据库性能采样结果(Server-Timing)。
-     * Output database profiling(Server-Timing).
-     *
-     * @access protected
-     * @return void
-     */
-    protected function outputProfiling(): void
-    {
-        if(empty($this->config->debug) || $this->config->debug < 3) return;
-
-        /* MySQL profiling. */
-        $profiling = $this->dbh->query('SHOW PROFILES')->fetchAll(PDO::FETCH_ASSOC);
-        foreach($profiling as $prof)
-        {
-            header('Server-Timing: db;desc="SQL: ' . $prof['Query'] . '";dur=' . $prof['Duration'] * 1000, false);
-        }
-
-        header('Server-Timing: app;desc="PHP: Total";dur=' . (getTime() - $this->startTime) * 1000, false);
-    }
-
-    /**
      * 启用Xhprof。
      * Setup xhprof.
      *
@@ -798,12 +764,6 @@ class baseRouter
         $type       = "{$this->moduleName}_{$this->methodName}";
         $runID      = $xhprofRuns->save_run($log, $type);
         header("Xhprof-RunID: {$runID}");
-
-        if(class_exists(\zin\zin::class) && isset(\zin\zin::$data['zinDebug']))
-        {
-            $xhprofURL = getWebRoot(true) . "xhprof/xhprof_html/index.php?run={$runID}&source={$type}";
-            \zin\zin::$data['zinDebug']['xhprof'] = $xhprofURL;
-        }
 
         return true;
     }
@@ -2322,7 +2282,6 @@ class baseRouter
         try {
             if(is_null($this->params) and !$this->setParams())
             {
-                $this->outputProfiling();
                 $this->outputXhprof();
                 return false;
             }
@@ -2332,7 +2291,6 @@ class baseRouter
 
             call_user_func_array(array($module, $this->methodName), $this->params);
             $this->checkAPIFile();
-            $this->outputProfiling();
             $this->outputXhprof();
             return $module;
         } catch (EndResponseException $endResponseException) {

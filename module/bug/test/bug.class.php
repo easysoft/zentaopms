@@ -29,6 +29,7 @@ class bugTest
         $bug->openedBy    = 'admin';
         $bug->openedDate  = '2023-04-20';
         $bug->notifyEmail = '';
+        $bug->steps       = '';
 
         foreach($param as $key => $value) $bug->$key = $value;
 
