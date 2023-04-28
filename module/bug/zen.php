@@ -3,8 +3,8 @@ declare(strict_types=1);
 class bugZen extends bug
 {
     /**
+     * 处理请求数据。
      * Processing request data.
-     * 处理请求数据
      *
      * @param  object $formData
      * @access protected
@@ -48,8 +48,8 @@ class bugZen extends bug
     }
 
     /**
+     * 创建bug后数据处理。
      * Do thing after create a bug.
-     * 创建bug后数据处理
      *
      * @param  object $bug
      * @param  object $formData
@@ -103,8 +103,8 @@ class bugZen extends bug
     }
 
     /**
+     * 为创建bug设置导航数据。
      * Set menu for create bug page.
-     * 为创建bug设置导航数据
      *
      * @param  int    $productID
      * @param  string $branch
