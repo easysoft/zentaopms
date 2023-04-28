@@ -1836,46 +1836,34 @@ class project extends control
     }
 
     /**
+     * 激活项目并更新其状态
      * Activate a project.
      *
-     * @param  int     $projectID
+     * @param  string $projectID
      * @access public
+     *
      * @return void
      */
-    public function activate($projectID)
+    public function activate(string $projectID)
     {
-        $this->loadModel('action');
-        $this->app->loadLang('execution');
         $projectID = (int)$projectID;
         $project   = $this->project->getByID($projectID);
 
         if(!empty($_POST))
         {
-            $changes = $this->project->activate($projectID);
+            $postData = form::data($this->config->project->form->activate);
+
+            $postData = $this->projectZen->prepareActivateExtras($projectID, $postData);
+
+            $changes = $this->project->activate($projectID, $postData);
             if(dao::isError()) return print(js::error(dao::getError()));
 
-            if($this->post->comment != '' or !empty($changes))
-            {
-                $actionID = $this->action->create('project', $projectID, 'Activated', $this->post->comment);
-                $this->action->logHistory($actionID, $changes);
-            }
-            $this->executeHooks($projectID);
+            $comment = strip_tags($this->post->comment, $this->config->allowedTags);
+            $this->projectZen->responseAfterActivate($projectID, $changes, $comment);
             return print(js::reload('parent.parent'));
         }
 
-        $newBegin = date('Y-m-d');
-        $dateDiff = helper::diffDate($newBegin, $project->begin);
-        $newEnd   = date('Y-m-d', strtotime($project->end) + $dateDiff * 24 * 3600);
-
-        $this->view->title      = $this->lang->project->activate;
-        $this->view->position[] = $this->lang->project->activate;
-        $this->view->users      = $this->loadModel('user')->getPairs('noletter');
-        $this->view->actions    = $this->action->getList('project', $projectID);
-        $this->view->newBegin   = $newBegin;
-        $this->view->newEnd     = $newEnd;
-        $this->view->project    = $project;
-
-        $this->display();
+        $this->projectZen->buildActivateForm($project);
     }
 
     /**
