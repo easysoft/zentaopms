@@ -799,12 +799,6 @@ class baseRouter
         $runID      = $xhprofRuns->save_run($log, $type);
         header("Xhprof-RunID: {$runID}");
 
-        if(class_exists(\zin\zin::class) && isset(\zin\zin::$data['zinDebug']))
-        {
-            $xhprofURL = getWebRoot(true) . "xhprof/xhprof_html/index.php?run={$runID}&source={$type}";
-            \zin\zin::$data['zinDebug']['xhprof'] = $xhprofURL;
-        }
-
         return true;
     }
 
