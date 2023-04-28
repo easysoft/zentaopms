@@ -225,7 +225,7 @@ class todo extends control
         if($todo->status == 'done' || $todo->status == 'closed')
         {
             $isActivate = $this->todo->activate($todoID);
-            if($isActivate === false) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            if($isActivate === false) return print(js::error(dao::getError()));
         }
         if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'success'));
         if(isonlybody()) return print(js::reload('parent.parent'));
@@ -285,7 +285,7 @@ class todo extends control
 
     /**
      * 获取待办的信息。
-     * Get info of todo.
+     * Get info of todo .
      *
      * @param string $todoID
      * @param string $from   my|company
@@ -325,14 +325,7 @@ class todo extends control
         $projects = $this->todoZen->getProjectPairsByModel((string)$todo->type);
         if(!isset($this->session->project)) $this->session->set('project', (int)key($projects));
 
-        $this->view->title           = $account == $todo->account ? "{$this->lang->todo->common} #$todo->id $todo->name" : $this->lang->todo->common;
-        $this->view->todo            = $todo;
-        $this->view->times           = date::buildTimeList((int)$this->config->todo->times->begin, (int)$this->config->todo->times->end, 5);
-        $this->view->from            = $from;
-        $this->view->projects        = $projects;
-
-        $this->todoZen->buildAssignToTodo((object)$todo, (int)$this->session->project);
-        $this->display();
+        $this->todoZen->buildAssignToTodoView((object)$todo, (int)$this->session->project, (array)$projects, (string)$account, $from);
     }
 
     /**
@@ -467,11 +460,11 @@ class todo extends control
     public function import2Today(string $todoID = '')
     {
         $todoIDList = $_POST ? $this->post->todoIDList : array($todoID);
-        $date   = !empty($_POST['date']) ? $_POST['date'] : date::today();
+        $date       = !empty($_POST['date']) ? $_POST['date'] : date::today();
         if(!$date || !$todoIDList) return $this->locate((string)$this->session->todoList);
 
         $this->todo->editDate((array)$todoIDList, (string)$date);
-        return this->locate((string)$this->session->todoList);
+        return $this->locate((string)$this->session->todoList);
     }
 
     /**
@@ -482,26 +475,16 @@ class todo extends control
      * @access public
      * @return void
      */
-    public function export($userID, $orderBy)
+    public function export(string $userID, string $orderBy)
     {
         if($_POST)
         {
-            $user    = $this->loadModel('user')->getByID($userID, 'id');
-            $account = $user->account;
-
-            $todoLang   = $this->lang->todo;
-            $todoConfig = $this->config->todo;
+            $user     = $this->loadModel('user')->getById($userID, 'id');
+            $account  = $user->account;
+            $todoLang = $this->lang->todo;
 
             /* Create field lists. */
-            $fields = explode(',', $todoConfig->list->exportFields);
-            foreach($fields as $key => $fieldName)
-            {
-                $fieldName = trim($fieldName);
-                $fields[$fieldName] = isset($todoLang->$fieldName) ? $todoLang->$fieldName : $fieldName;
-                unset($fields[$key]);
-            }
-            unset($fields['objectID']);
-            unset($fields['private']);
+            $fields = $this->todoZen->exportFields(explode(',', $this->config->todo->list->exportFields), (object)$todoLang);
 
             /* Get bugs. */
             $todos = $this->dao->select('*')->from(TABLE_TODO)->where($this->session->todoReportCondition)
@@ -509,18 +492,11 @@ class todo extends control
                 ->orderBy($orderBy)->fetchAll('id');
 
             /* Get users, bugs, tasks and times. */
-            $users     = $this->loadModel('user')->getPairs('noletter');
-            $bugs      = $this->loadModel('bug')->getUserBugPairs($account);
-            $stories   = $this->loadModel('story')->getUserStoryPairs($account, 100, 'story');
-            $tasks     = $this->loadModel('task')->getUserTaskPairs($account);
-            if($this->config->edition == 'max')
-            {
-                $issues        = $this->loadModel('issue')->getUserIssuePairs($account);
-                $risks         = $this->loadModel('risk')->getUserRiskPairs($account);
-                $opportunities = $this->loadModel('opportunity')->getUserOpportunityPairs($account);
-            }
-            $testTasks = $this->loadModel('testtask')->getUserTesttaskPairs($account);
-            if(isset($this->config->qcVersion)) $reviews = $this->loadModel('review')->getUserReviewPairs($account, 0, 'wait');
+            list($users, $bugs, $stories, $tasks, $testTasks) = $this->todoZen->exportInfo('default', $account);
+
+            if($this->config->edition == 'max') list($issues, $risks, $opportunities) = $this->todoZen->exportInfo($this->config->edition, $account);
+
+            if(isset($this->config->qcVersion)) $reviews = $this->todoZen->exportInfo('qcVersion', $account);
             $times = date::buildTimeList($this->config->todo->times->begin, $this->config->todo->times->end, $this->config->todo->times->delta);
 
             foreach($todos as $todo)

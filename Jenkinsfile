@@ -94,7 +94,7 @@ pipeline {
 
               steps {
                   container('zentao') {
-                      sh 'initdb.php ; /apps/zentao/test/ztest init'
+                      sh 'cat /usr/bin/initdb.php; initdb.php ; /apps/zentao/test/ztest init'
                   }
               }
               post {
