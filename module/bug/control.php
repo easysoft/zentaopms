@@ -304,7 +304,7 @@ class bug extends control
     }
 
     /**
-     * 创建一个bug
+     * 创建一个bug。
      * Create a bug.
      *
      * @param  string $productID
@@ -313,7 +313,7 @@ class bug extends control
      * @access public
      * @return void
      */
-    public function create(string $productID, string $branch = '', string $extras = '')
+    public function create(string $productID, string $branch = '', string $extras = ''): void
     {
         $productID = (int)$productID;
 
