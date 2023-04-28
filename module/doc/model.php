@@ -1307,14 +1307,7 @@ class docModel extends model
 
         if($object->project and !$object->execution and $object->acl == 'default')
         {
-            $stakeHolders = array();
-            $project      = $this->loadModel('project')->getById($object->project);
-            $projectTeams = $this->loadModel('user')->getTeamMemberPairs($object->project);
-            $stakeHolders = $this->loadModel('stakeholder')->getStakeHolderPairs($object->project);
-
-            $authorizedUsers = $this->user->getProjectAuthedUsers($project, $stakeHolders, $projectTeams, array_flip(explode(",", $project->whitelist)));
-
-            if(array_key_exists($this->app->user->account, array_filter($authorizedUsers))) return true;
+            if($this->loadModel('project')->checkPriv($object->project)) return true;
         }
 
         if(strpos($extra, 'notdoc') !== false)
