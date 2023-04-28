@@ -174,6 +174,7 @@ class productZen extends product
             ->join('reviewer', ',')
             ->remove('uid,newLine,lineName,contactListMenu')
             ->get();
+
         $product = $this->loadModel('file')->processImgURL($product, $this->config->product->editor->create['id'], $this->post->uid);
 
         return $product;
@@ -211,7 +212,12 @@ class productZen extends product
         $message = $this->executeHooks($productID);
         if($message) $this->lang->saveSuccess = $message;
 
-        if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $productID));
+        if($this->viewType == 'json')
+        {
+            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $productID));
+            return;
+        }
+
         $this->sendCreateLocate($productID, (int)$product->program);
     }
 
@@ -233,7 +239,7 @@ class productZen extends product
         $locate     = isonlybody() ? 'true' : $this->createLink($moduleName, $methodName, $param);
         if($tab == 'doc') $locate = $this->createLink('doc', 'productSpace', "objectID=$productID");
 
-        return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $locate));
+        $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $locate));
     }
 
     /**
@@ -245,6 +251,6 @@ class productZen extends product
      */
     protected function sendError4Create(): void
     {
-        if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+        if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
     }
 }
