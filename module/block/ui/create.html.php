@@ -49,7 +49,6 @@ form
     div
     (
         set::id('codeRow'),
-        set::class('form-row'),
         $codes
         ? formGroup
         (
