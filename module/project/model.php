@@ -1768,11 +1768,27 @@ class projectModel extends model
     }
 
     /**
+     * 删除项目并同步执行与产品等状态为删除
+     * Deletes a project and updates related items: product|execution
+     *
+     * @param  string    $table  product|execution
+     * @param  int|array $idList
+     *
+     * @access public
+     * @return void
+     */
+    public function deleteProductAndExcution(string $table, int|array $idList):void
+    {
+        $this->dao->update($table)->set('deleted')->eq(1)->where('id')->in($idList)->exec();
+    }
+
+    /**
      * Update the program of the product.
      *
      * @param  int    $oldProgram
      * @param  int    $newProgram
      * @param  array  $products
+     *
      * @access public
      * @return void
      */

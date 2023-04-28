@@ -1867,61 +1867,43 @@ class project extends control
     }
 
     /**
-     * Delete a project.
+     * 删除一个项目，并弹窗确认
+     * Delete a project and confirm.
      *
-     * @param  int     $projectID
+     * @param  string  $projectID
      * @param  string  $confirm
      * @param  string  $from browse|view
+     *
      * @access public
      * @return void
      */
-    public function delete($projectID, $confirm = 'no', $from = 'browse')
+    public function delete(string $projectID, string $confirm = 'no', string $from = 'browse'): void
     {
         $projectID = (int)$projectID;
+        $project   = $this->getByID($projectID);
+
         if($confirm == 'no')
         {
-            $project = $this->project->getByID($projectID);
             return print(js::confirm(sprintf($this->lang->project->confirmDelete, $project->name), $this->createLink('project', 'delete', "projectID=$projectID&confirm=yes&from=$from")));
         }
         else
         {
-            $this->loadModel('user');
-            $this->loadModel('action');
-
             $this->project->delete(TABLE_PROJECT, $projectID);
             $this->dao->update(TABLE_DOCLIB)->set('deleted')->eq(1)->where('execution')->eq($projectID)->exec();
-            $this->user->updateUserView($projectID, 'project');
-
-            /* Delete the execution under the project. */
-            $executionIdList = $this->loadModel('execution')->getPairs($projectID);
-
-            /* Delete shadow product.*/
-            $project = $this->project->getByID($projectID);
-            if(!$project->hasProduct)
-            {
-                $productID = $this->loadModel('product')->getProductIDByProject($projectID);
-                $this->dao->update(TABLE_PRODUCT)->set('deleted')->eq(1)->where('id')->eq($productID)->exec();
-            }
+            $this->loadModel('user')->updateUserView($projectID, 'project');
 
             $message = $this->executeHooks($projectID);
             if($message) $this->lang->saveSuccess = $message;
 
-            if(empty($executionIdList))
-            {
-                if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess));
-                if($from == 'view') return print(js::locate($this->createLink('project', 'browse'), 'parent'));
-                return print(js::reload('parent'));
-            }
-
-            $this->dao->update(TABLE_EXECUTION)->set('deleted')->eq(1)->where('id')->in(array_keys($executionIdList))->exec();
-            foreach($executionIdList as $executionID => $execution) $this->action->create('execution', $executionID, 'deleted', '', ACTIONMODEL::CAN_UNDELETED);
-            $this->user->updateUserView($executionIdList, 'sprint');
+            $this->projectZen->removeAssociatedProducts($project);
+            $this->projectZen->removeAssociatedExecutions($projectID);
 
             if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess));
 
             $this->session->set('project', '');
             if($from == 'view') return print(js::locate($this->createLink('project', 'browse'), 'parent'));
             return print(js::reload('parent'));
+
         }
     }
 
