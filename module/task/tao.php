@@ -309,4 +309,37 @@ class taskTao extends taskModel
 
         return $currentTask;
     }
+
+    /**
+     * 通过拖动甘特图修改任务的预计开始日期和截止日期。
+     * Update task estimate date and deadline through gantt.
+     *
+     * @param  int     $taskID
+     * @param  object  $postData
+     * @access protected
+     * @return void
+     */
+    protected function updateTaskEsDateByGantt(int $taskID, object $postData)
+    {
+        $task = $this->dao->select('*')->from(TABLE_TASK)->where('id')->eq($taskID)->fetch();
+        $isChildTask = $task->parent > 0 ? true : false;
+
+        if($isChildTask) $parentTask = $this->dao->select('*')->from(TABLE_TASK)->where('id')->eq($task->parent)->fetch();
+
+        $stage  = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($task->execution)->andWhere('project')->eq($task->project)->fetch();
+
+        $start = $isChildTask ? $parentTask->estStarted   : $stage->begin;
+        $end   = $isChildTask ? $parentTask->deadline     : $stage->end;
+        $arg   = $isChildTask ? $this->lang->task->parent : $this->lang->project->stage;
+
+        if(helper::diffDate($start, $postData->startDate) > 0) dao::$errors = sprintf($this->lang->task->overEsStartDate, $arg, $arg);
+        if(helper::diffDate($end, $postData->endDate) < 0)     dao::$errors = sprintf($this->lang->task->overEsEndDate, $arg, $arg);
+
+        $this->dao->update(TABLE_TASK)
+            ->set('estStarted')->eq($postData->startDate)
+            ->set('deadline')->eq($postData->endDate)
+            ->set('lastEditedBy')->eq($this->app->user->account)
+            ->where('id')->eq($taskID)
+            ->exec();
+    }
 }

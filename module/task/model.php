@@ -4059,11 +4059,11 @@ class taskModel extends model
         $oldObject   = $this->dao->select('*')->from($changeTable)->where('id')->eq($objectID)->fetch();
         if($objectType == 'task')
         {
-            $this->updateTaskEsDateByGantt($objectID, $objectType, $post);
+            $this->taskTao->updateTaskEsDateByGantt($objectID, $post);
         }
         elseif($objectType == 'plan')
         {
-            $this->updateExecutionEsDateByGantt($objectID, $objectType, $post);
+            $this->updateExecutionEsDateByGantt($objectID, $post);
         }
 
         if(dao::isError()) return false;
@@ -4077,60 +4077,6 @@ class taskModel extends model
     }
 
     /**
-     * Update Task estimate date by gantt.
-     *
-     * @param  int     $objectID
-     * @param  string  $objectType
-     * @param  object  $postData
-     * @access private
-     * @return bool
-     */
-    private function updateTaskEsDateByGantt($objectID, $objectType, $postData)
-    {
-        $objectData = $this->dao->select('*')->from(TABLE_TASK)->where('id')->eq($objectID)->fetch();
-        $parent     = $objectData->parent;
-        $project    = $objectData->project;
-        $execution  = $objectData->execution;
-        $stage      = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($execution)->andWhere('project')->eq($project)->fetch();
-
-        if($parent <= 0)
-        {
-            $parentData = $stage;
-
-            $start = $parentData->begin;
-            $end   = $parentData->end;
-        }
-        else
-        {
-            $parentData = $this->dao->select('*')->from(TABLE_TASK)->where('id')->eq($parent)->fetch();
-
-            $start = helper::isZeroDate($parentData->estStarted)  ? '' : $parentData->estStarted;
-            $end   = helper::isZeroDate($parentData->deadline)    ? '' : $parentData->deadline;
-        }
-
-        if(helper::diffDate($start, $postData->startDate) > 0)
-        {
-            $arg = !empty($parent) ? $this->lang->task->parent : $this->lang->project->stage;
-            return dao::$errors = sprintf($this->lang->task->overEsStartDate, $arg, $arg);
-        }
-
-        if(helper::diffDate($end, $postData->endDate) < 0)
-        {
-            $arg = !empty($parent) ? $this->lang->task->parent : $this->lang->project->stage;
-            return dao::$errors = sprintf($this->lang->task->overEsEndDate, $arg, $arg);
-        }
-
-        $this->dao->update(TABLE_TASK)
-            ->set('estStarted')->eq($postData->startDate)
-            ->set('deadline')->eq($postData->endDate)
-            ->set('lastEditedBy')->eq($this->app->user->account)
-            ->where('id')->eq($objectID)
-            ->exec();
-
-        return true;
-    }
-
-    /**
      * Update Execution estimate date by gantt.
      *
      * @param  int     $objectID
@@ -4139,7 +4085,7 @@ class taskModel extends model
      * @access private
      * @return bool
      */
-    private function updateExecutionEsDateByGantt($objectID, $objectType, $postData)
+    private function updateExecutionEsDateByGantt($objectID, $postData)
     {
         $objectData = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($objectID)->fetch();
         $project    = $objectData->project;
@@ -4161,7 +4107,7 @@ class taskModel extends model
         if(helper::diffDate($start, $postData->startDate) > 0)
         {
             $arg = !empty($parent) ? $this->lang->programplan->parent : $this->lang->project->common;
-            return dao::$errors = sprintf($this->lang->task->overEsStartDate, $arg, $arg);
+            dao::$errors = sprintf($this->lang->task->overEsStartDate, $arg, $arg);
         }
 
         if(helper::diffDate($end, $postData->endDate) < 0)
@@ -4176,8 +4122,6 @@ class taskModel extends model
             ->set('lastEditedBy')->eq($this->app->user->account)
             ->where('id')->eq($objectID)
             ->exec();
-
-        return true;
     }
 
     /**
