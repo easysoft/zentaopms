@@ -56,9 +56,9 @@ class projectZen extends project
      * @param  object $project
      * @param  object $rawdata
      * @access protected
-     * @return bool 
+     * @return bool
      */
-    private function checkProductAndBranch(object $project, object $rawdata): bool 
+    private function checkProductAndBranch(object $project, object $rawdata): bool
     {
         $linkedProductsCount = $this->project->getLinkedProductsCount($project, $rawdata);
 
@@ -98,9 +98,9 @@ class projectZen extends project
      * @param  object $project
      * @param  object $rawdata
      * @access protected
-     * @return bool 
+     * @return bool
      */
-    private function checkDaysAndBudget(object $project, object $rawdata): bool 
+    private function checkDaysAndBudget(object $project, object $rawdata): bool
     {
         /* Judge workdays is legitimate. */
         $workdays = helper::diffDate($project->end, $project->begin) + 1;
@@ -137,9 +137,9 @@ class projectZen extends project
      * @param  object $project
      * @param  object $rawdata
      * @access protected
-     * @return bool 
+     * @return bool
      */
-    private function checkProductNameUnqiue(object $project, object $rawdata): bool 
+    private function checkProductNameUnqiue(object $project, object $rawdata): bool
     {
         /* When select create new product, product name cannot be empty and duplicate. */
         if($project->hasProduct && isset($rawdata->newProduct))
@@ -541,5 +541,49 @@ class projectZen extends project
             ->stripTags($editorIdList,$this->config->allowedTags)
             ->remove('comment,readjustTime,readjustTask')
             ->get();
+    }
+
+    /**
+     * 从项目中删除所有关联的执行。
+     * removes all associated executions from the be deleted project
+     *
+     * @param  int $projectID
+     *
+     * @access protected
+     * @return void
+     */
+    protected function removeAssociatedExecutions(int $projectID): void
+    {
+        /* Delete the execution under the project. */
+        $executionIdList = $this->loadModel('execution')->getPairs($projectID);
+        if(empty($executionIdList))
+        {
+            if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess));
+            if($from == 'view') return print(js::locate($this->createLink('project', 'browse'), 'parent'));
+            return print(js::reload('parent'));
+        }
+
+        $this->updateRelatedItemByDelete('zt_execution', array_keys($executionIdList));
+        foreach($executionIdList as $executionID => $execution) $this->action->create('execution', $executionID, 'deleted', '', ACTIONMODEL::CAN_UNDELETED);
+        $this->user->updateUserView($executionIdList, 'sprint');
+    }
+
+    /**
+     * 从项目中删除所有关联的产品。
+     * removes all associated products from the be deleted project
+     *
+     * @param  object $projectID
+     *
+     * @access protected
+     * @return void
+     */
+    protected function removeAssociatedProducts(object $project): void
+    {
+        /* Delete shadow product.*/
+        if(!$project->hasProduct)
+        {
+            $productID = $this->loadModel('product')->getProductIDByProject($project->id);
+            $this->updateRelatedItemByDelete('zt_product', $productID);
+        }
     }
 }

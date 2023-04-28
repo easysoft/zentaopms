@@ -75,11 +75,10 @@ class todoTao extends todoModel
             ->where('id')->eq($todoID)
             ->exec();
         return !dao::isError();
-
     }
 
-    /*
-     * 处理要创建的todo的数据
+    /**
+     * 处理要创建的todo的数据。
      * Process the data for the todo to be created.
      *
      * @param  object $todoData
@@ -118,13 +117,13 @@ class todoTao extends todoModel
         }
         if(empty($todoData->cycle)) unset($todoData->config);
 
-        $todoData = $this->loadModel('file')->processImgURL($todoData, $this->config->todo->editor->create['id'], $this->post->uid);
-        return $todoData;
+        return $this->loadModel('file')->processImgURL($todoData, $this->config->todo->editor->create['id'], $this->post->uid);
     }
 
     /**
-     *  获取周期待办列表
-     *  Get cycle list.
+     * 获取周期待办列表。
+     * Get cycle list.
+     *
      * @param  array  $todoList
      * @param  string $orderBy
      * @access protected
@@ -132,18 +131,18 @@ class todoTao extends todoModel
      */
     protected function getCycleList(array $todoList, string $orderBy = 'date_asc'): array
     {
-        return $this->dao->select('*')
-            ->from(TABLE_TODO)->where('type')->eq('cycle')
+        return $this->dao->select('*')->from(TABLE_TODO)
+            ->where('type')->eq('cycle')
             ->andWhere('deleted')->eq('0')
             ->andWhere('objectID')->in(array_keys($todoList))
             ->orderBy($orderBy)
             ->fetchAll('objectID');
     }
 
-
     /**
      * 通过待办构建周期待办数据
      * Build cycle todo.
+     *
      * @param  object $todo
      * @access protected
      * @return stdclass
@@ -168,9 +167,9 @@ class todoTao extends todoModel
     }
 
     /**
-     * 通过周期待办，获取要生成待办的日期
-     *
+     * 通过周期待办，获取要生成待办的日期。
      * Gets the date by the cycle todo.
+     *
      * @param  object        $todo
      * @param  object|string $lastCycle
      * @param  string        $today
@@ -207,8 +206,7 @@ class todoTao extends todoModel
     }
 
     /**
-     * 通过周期待办，获取要生成每日待办的日期
-     *
+     * 通过周期待办，获取要生成每日待办的日期。
      * Gets the daily todo date by the cycle todo.
      *
      * @param  object $todo
@@ -305,6 +303,7 @@ class todoTao extends todoModel
             return false;
         }
         $todoData->config['beforeDays'] = (int)$todoData->config['beforeDays'];
+
         $todoData->config = json_encode($todoData->config);
         $todoData->type   = 'cycle';
 
@@ -317,11 +316,11 @@ class todoTao extends todoModel
      *
      * @param  array  $idList
      * @param  string $date
-     * @return int
+     * @return bool
      */
-    protected function updateDate(array $todoIdList, string $date): int
+    protected function updateDate(array $todoIdList, string $date): bool
     {
         $this->dao->update(TABLE_TODO)->set('date')->eq($date)->where('id')->in($todoIdList)->exec();
-        return dao::isError() ? 0 : 1;
+        return !dao::isError();
     }
 }
