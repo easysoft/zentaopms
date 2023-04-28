@@ -118,8 +118,6 @@ class bugZen extends bug
         /* Unset discarded types. */
         foreach($this->config->bug->discardedTypes as $type) unset($this->lang->bug->typeList[$type]);
 
-        $from = isset($output['from']) ? $output['from'] : '';
-
         if($this->app->tab == 'execution')
         {
             if(isset($output['executionID'])) $this->loadModel('execution')->setMenu($output['executionID']);

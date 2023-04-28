@@ -317,6 +317,13 @@ class bug extends control
     {
         $productID = (int)$productID;
 
+        $extras = str_replace(array(',', ' '), array('&', ''), $extras);
+        parse_str($extras, $output);
+        extract($output);
+        $this->bugZen->setMenu4Create($productID, $branch, $output);
+
+        $from = isset($output['from']) ? $output['from'] : '';
+
         if(!empty($_POST))
         {
             $response['result'] = 'success';
@@ -434,13 +441,6 @@ class bug extends control
             $response['locate']  = $location;
             return $this->send($response);
         }
-
-        /* Parse the extras. extract fix php7.2. */
-        $extras = str_replace(array(',', ' '), array('&', ''), $extras);
-        parse_str($extras, $output);
-        extract($output);
-
-        $this->bugZen->setMenu4Create($productID, $branch, $output);
 
         /* Get product, then set menu. */
         $productID      = $this->product->saveState($productID, $this->products);
