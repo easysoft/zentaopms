@@ -333,4 +333,46 @@ class productTao extends productModel
 
         return implode(',', $append);
     }
+
+    /**
+     * 获取用于数据统计的研发需求和用户需求列表。
+     * Get dev stories and user requirements for statistics.
+     *
+     * @param  array     $productIDs
+     * @param  string    $storyType
+     * @access protected
+     * @return [array, array]
+     */
+    protected function getStatsStoriesAndRequirements(array $productIDs, string $storyType): array
+    {
+        $stories      = $this->getStoriesTODO($productIDs);
+        $requirements = $this->getRequirementsTODO($productIDs);
+
+        /* Padding the stories to sure all products have records. */
+        $emptyStory = array_keys($this->lang->story->statusList);
+        foreach($productIDs as $productID)
+        {
+            if(!isset($stories[$productID]))      $stories[$productID]      = $emptyStory;
+            if(!isset($requirements[$productID])) $requirements[$productID] = $emptyStory;
+        }
+
+        /* Collect count for each status of stories. */
+        foreach($stories as $key => $story)
+        {
+            foreach(array_keys($this->lang->story->statusList) as $status) $story[$status] = isset($story[$status]) ? $story[$status]->count : 0;
+            $stories[$key] = $story;
+        }
+
+        /* Collect count for each status of requirements. */
+        foreach($requirements as $key => $requirement)
+        {
+            foreach(array_keys($this->lang->story->statusList) as $status) $requirement[$status] = isset($requirement[$status]) ? $requirement[$status]->count : 0;
+            $requirements[$key] = $requirement;
+        }
+
+        /* Story type is 'requirement'. */
+        if($storyType == static::STORY_TYPE_REQ) $stories = $requirements;
+
+        return [$stories, $requirements];
+    }
 }

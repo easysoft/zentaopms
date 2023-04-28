@@ -206,42 +206,34 @@ class block extends control
      * 展示应用的仪表盘
      * Display dashboard for app.
      *
-     * @param  string  $module
-     * @param  int     $projectID
+     * @param  string  $dashboard
+     * @param  string  $projectID
      * @access public
      * @return void
      */
-    public function dashboard(string $module, int $projectID = 0)
+    public function dashboard(string $dashboard, string $projectID = '0')
     {
-        if($this->loadModel('user')->isLogon()) $this->session->set('blockModule', $module);
-        $blocks = $this->block->getMyDashboard($module);
-        $vision = $this->config->vision;
+        $blocks    = $this->block->getMyDashboard($dashboard);
+        $projectID = (int)$projectID;
 
-        $section = 'common';
-        if($module == 'project' and $projectID)
-        {
-            $project = $this->loadModel('project')->getByID($projectID);
-            $section = $project->model . 'common';
-        }
-
-        $isInitiated = $this->block->fetchBlockInitStatus($module, $vision, $section);
+        $isInitiated = $this->block->fetchBlockInitStatus($dashboard);
 
         /* Init block when vist index first. */
-        if(empty($blocks) and !$isInitiated and !defined('TUTORIAL') and $this->block->initBlock($module))
+        if(empty($blocks) and !$isInitiated and !defined('TUTORIAL') and $this->block->initBlock($dashboard))
         {
             return print(js::reload());
         }
 
-        $blocks = $this->blockZen->processBlockForRender($blocks, isset($project) ? $project : null);
+        $blocks = $this->blockZen->processBlockForRender($blocks, $projectID);
 
         if($this->app->getViewType() == 'json') return print(json_encode($blocks));
 
         list($shortBlocks, $longBlocks) = $this->blockZen->splitBlocksByLen($blocks);
 
-        $this->view->title       = zget($this->lang->block->dashboard, $module, $this->lang->block->dashboard['default']);
+        $this->view->title       = zget($this->lang->block->dashboard, $dashboard, $this->lang->block->dashboard['default']);
         $this->view->longBlocks  = $longBlocks;
         $this->view->shortBlocks = $shortBlocks;
-        $this->view->dashboard   = $module;
+        $this->view->dashboard   = $dashboard;
         $this->render();
     }
 

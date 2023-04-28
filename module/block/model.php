@@ -195,7 +195,7 @@ class blockModel extends model
         }
         elseif($code == 'statistic')
         {
-            $code = $module . 'Statistic';
+            $code = $module . $code;
         }
 
         $params = zget($this->config->block->params, $code, '');
@@ -401,48 +401,37 @@ class blockModel extends model
      * Init block when account use first.
      * 用户首次加载时初始化区块数据.
      *
-     * @param  string $module
-     * @param  string $type
+     * @param  string $dashboard
      * @access public
      * @return bool
      */
-    public function initBlock(string $module, string $type = ''): bool
+    public function initBlock(string $dashboard): bool
     {
-        if(!$module) return false;
+        if(!$dashboard) return false;
 
         $flow    = isset($this->config->global->flow) ? $this->config->global->flow : 'full';
         $account = $this->app->user->account;
         $vision  = $this->config->vision;
 
-        if($module == 'project')
-        {
-            $blocks = $this->lang->block->default[$type]['project'];
+        $blocks = $dashboard == 'my' ? $this->lang->block->default[$flow][$dashboard] : $this->lang->block->default[$dashboard];
 
-            /* Mark project block has init. */
-            $this->loadModel('setting')->setItem("$account.$module.{$type}common.blockInited@$vision", '1');
-        }
-        else
-        {
-            $blocks = $module == 'my' ? $this->lang->block->default[$flow][$module] : $this->lang->block->default[$module];
-
-            /* Mark this app has init. */
-            $this->loadModel('setting')->setItem("$account.$module.common.blockInited@$vision", '1');
-        }
-
-        $this->loadModel('setting')->setItem("$account.$module.block.initVersion", $this->config->block->version);
         foreach($blocks as $index => $block)
         {
-            $block['order']   = $index;
-            $block['module']  = $module;
-            $block['type']    = $type;
-            $block['account'] = $account;
-            $block['params']  = isset($block['params']) ? helper::jsonEncode($block['params']) : '';
-            $block['vision']  = $this->config->vision;
-            if(!isset($block['source'])) $block['source'] = $module;
+            $block['account']   = $account;
+            $block['dashboard'] = $dashboard;
+            $block['order']     = $index;
+            $block['params']    = isset($block['params']) ? helper::jsonEncode($block['params']) : '';
+            $block['vision']    = $this->config->vision;
 
             $this->blockTao->insert($block);
         }
-        return !dao::isError();
+        if(dao::isError()) return false;
+
+        /* Mark this app has init. */
+        $this->loadModel('setting')->setItem("$account.$dashboard.common.blockInited@$vision", '1');
+        $this->loadModel('setting')->setItem("$account.$dashboard.block.initVersion", $this->config->block->version);
+
+        return true;
     }
 
     /**
@@ -483,19 +472,17 @@ class blockModel extends model
      * 获取区块是否已经初始化.
      * Fetch block is initiated or not.
      *
-     * @param  string $module
-     * @param  string $vision
-     * @param  string $section
+     * @param  string $dashboard
      * @return string
      */
-    public function fetchBlockInitStatus(string $module, string $vision, string $section): string
+    public function fetchBlockInitStatus(string $dashboard): string
     {
         return $this->dao->select('*')->from(TABLE_CONFIG)
-                         ->where('module')->eq($module)
-                         ->andWhere('owner')->eq($this->app->user->account)
-                         ->andWhere('`section`')->eq($section)->fi()
-                         ->andWhere('`key`')->eq('blockInited')
-                         ->andWhere('vision')->eq($vision)
-                         ->fetch('value');
+            ->where('module')->eq($dashboard)
+            ->andWhere('owner')->eq($this->app->user->account)
+            ->andWhere('`section`')->eq('common')
+            ->andWhere('`key`')->eq('blockInited')
+            ->andWhere('vision')->eq($this->config->vision)
+            ->fetch('value');
     }
 }

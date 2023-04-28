@@ -30,6 +30,6 @@ class qa extends control
         $this->view->title      = $this->lang->qa->index;
         $this->view->position[] = $this->lang->qa->index;
         $this->view->products   = $products;
-        $this->display();
+        echo $this->fetch('block', 'dashboard', 'dashboard=qa');
     }
 }
