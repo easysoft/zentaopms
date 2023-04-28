@@ -4,8 +4,8 @@ declare(strict_types=1);
 class todoTao extends todoModel
 {
     /**
-     * Insert todo data.
      * 插入待办数据
+     * Insert todo data.
      *
      * @param  object $todo
      * @access protected
@@ -66,8 +66,8 @@ class todoTao extends todoModel
     }
 
     /*
-     * Process the data for the todo to be created.
      * 处理要创建的todo的数据
+     * Process the data for the todo to be created.
      *
      * @param  object $todoData
      * @access protected
