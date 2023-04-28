@@ -238,7 +238,6 @@ class productTao extends productModel
 
         return $closedBugs;
     }
-
     /* TODO move to bug module. */
     protected function getThisWeekBugsTODO(array $productIDs): array
     {
@@ -312,5 +311,26 @@ class productTao extends productModel
         }
 
         return $products;
+    }
+
+    /**
+     * 格式化append参数，保证输出用逗号间隔的id列表。
+     * Format append param.
+     *
+     * @param string|array append
+     * @access protected
+     * @return string
+     */
+    protected function formatAppendParam(string|array $append = ''): string
+    {
+        if(empty($append)) return '';
+
+        if(is_string($append)) $append = explode(',', $append);
+
+        $append = array_map(function($item){return (int)$item;}, $append);
+        $append = array_unique(array_filter($append));
+        sort($append);
+
+        return implode(',', $append);
     }
 }

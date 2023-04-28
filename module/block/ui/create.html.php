@@ -72,6 +72,7 @@ form
         (
             set::label($lang->block->name),
             set::name('title'),
+            set::value(zget($modules, $module, '') . zget($codes, $code, '')),
             set::class('form-row'),
             set::control('input')  
         ) : null,
