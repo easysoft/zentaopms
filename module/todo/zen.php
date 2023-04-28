@@ -345,14 +345,14 @@ class todoZen extends todo
     }
 
     /**
-     * 输出确认弹框。
-     * Output confirm alert.
+     * 输出开启待办事项的确认弹框。
+     * Output start todo confirm alert.
      *
      * @param  object $todo
      * @access protected
      * @return int
      */
-    protected function printConfirm(object $todo): int
+    protected function printStartConfirm(object $todo): int
     {
         $confirmNote = 'confirm' . ucfirst($todo->type);
         $confirmURL  = $this->createLink($todo->type, 'view', "id=$todo->objectID");
@@ -379,24 +379,36 @@ class todoZen extends todo
     }
 
     /**
-     * Build assign to todo.
+     * 生成待办视图详情数据。
+     * Build assign to todo view
      *
-     * @param  object $todo
-     * @param  int $projectID
-     * @access public
+     * @param  object    $todo
+     * @param  int       $projectID
+     * @param  array     $project
+     * @param  string    $account
+     * @param  int       $from
+     * @access protected
      * @return mixed
      */
-    protected function buildAssignToTodo(object $todo, int $projectID)
+    protected function buildAssignToTodoView(object $todo, int $projectID, array $projects, string $account, string $from)
     {
         $this->loadModel('user');
         $this->loadModel('product');
 
+        $this->view->title           = $account == $todo->account ? "{$this->lang->todo->common} #$todo->id $todo->name" : $this->lang->todo->common;
         $this->view->user            = $this->user->getByID((string)$todo->account);
         $this->view->users           = $this->user->getPairs('noletter');
         $this->view->actions         = $this->loadModel('action')->getList('todo', (int)$todo->id);
+        $this->view->position[]      = $this->lang->todo->view;
+        $this->view->todo            = $todo;
+        $this->view->times           = date::buildTimeList((int)$this->config->todo->times->begin, (int)$this->config->todo->times->end, 5);
+        $this->view->from            = $from;
+        $this->view->projects        = $projects;
         $this->view->executions      = $this->loadModel('execution')->getPairs();
         $this->view->products        = $todo->type == 'opportunity' ? $this->product->getPairsByProjectModel('waterfall') : $this->product->getPairs();
-        $this->view->projectProducts = $this->product->getProductPairsByProject((int)$projectID);
+        $this->view->projectProducts = $this->product->getProductPairsByProject($projectID);
+
+        $this->display();
     }
 
     /**
@@ -432,5 +444,51 @@ class todoZen extends todo
     protected function doAssignTo(object $todo): bool
     {
         return $this->todo->assignTo($todo);
+    }
+
+    /**
+     * 获取导出待办的字段。
+     *
+     * @param  array  $fields
+     * @param  array  $todoLang
+     * @access protected
+     * @return array
+     */
+    protected function exportFields(array $fields, object $todoLang): array
+    {
+        foreach($fields as $key => $fieldName)
+        {
+            $fieldName = trim($fieldName);
+            $fields[$fieldName] = isset($todoLang->$fieldName) ? $todoLang->$fieldName : $fieldName;
+            unset($fields[$key]);
+        }
+        unset($fields['objectID'], $fields['private']);
+        return $fields;
+    }
+
+    public function exportInfo($type, $account)
+    {
+        if($type == 'max')
+        {
+            return array(
+                $this->loadModel('issue')->getUserIssuePairs($account),
+                $this->loadModel('risk')->getUserRiskPairs($account),
+                $this->loadModel('opportunity')->getUserOpportunityPairs($account),
+            );
+        }
+        else if($type == 'qcVersion')
+        {
+            return $this->loadModel('review')->getUserReviewPairs($account, 0, 'wait');
+        }
+        else
+        {
+            return array(
+                $this->loadModel('user')->getPairs('noletter'),
+                $this->loadModel('bug')->getUserBugPairs($account),
+                $this->loadModel('story')->getUserStoryPairs($account, 100, 'story'),
+                $this->loadModel('task')->getUserTaskPairs($account),
+                $this->loadModel('testtask')->getUserTesttaskPairs($account),
+            );
+        }
     }
 }

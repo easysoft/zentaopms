@@ -19,10 +19,10 @@ global $tester;
 $tester->loadModel('project');
 
 $project =  new stdClass;
-$project->id = 2;
-$project->status = 'suspended';
-$project->lastEditedBy = 'admin';
+$project->id             = 2;
+$project->status         = 'suspended';
+$project->lastEditedBy   = 'admin';
 $project->lastEditedDate = '2023-04-27';
-$project->suspendedDate = '2023-04-27';
+$project->suspendedDate  = '2023-04-27';
 
 r($tester->project->doSuspend(2, $project)) && p() && e(1);

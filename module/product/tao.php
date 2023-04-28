@@ -16,23 +16,28 @@ class productTao extends productModel
      * 从数据表获取符合条件的id=>name的键值对。
      * Fetch pairs like id=>name.
      *
-     * @param int        $programID
-     * @param string     $mode     all|noclosed
-     * @param string     $views
-     * @param string|int $shadow    all|0|1
+     * @param string       $mode     all|noclosed
+     * @param int          $programID
+     * @param string|array $append
+     * @param string|int   $shadow    all|0|1
      * @access protected
      * @return int[]
      */
-    protected function fetchPairs(int $programID, string $mode, string $views, string|int $shadow): array
+    protected function fetchPairs(string $mode = '', int $programID = 0, string|array $append = '', string|int $shadow = 0): array
     {
-        return $this->dao->select("t1.*,  IF(INSTR(' closed', t1.status) < 2, 0, 1) AS isClosed")->from(TABLE_PRODUCT)->alias('t1')
+        $append = $this->formatAppendParam($append);
+        return $this->dao->select("t1.*, IF(INSTR(' closed', t1.status) < 2, 0, 1) AS isClosed")->from(TABLE_PRODUCT)->alias('t1')
             ->leftJoin(TABLE_PROGRAM)->alias('t2')->on('t1.program = t2.id')
             ->where('t1.vision')->eq($this->config->vision)
+            ->beginIF($shadow !== 'all')->andWhere('t1.shadow')->eq((int)$shadow)->fi()
+            ->andWhere('((1=1')
             ->beginIF(strpos($mode, 'all') === false)->andWhere('t1.deleted')->eq(0)->fi()
             ->beginIF($programID)->andWhere('t1.program')->eq($programID)->fi()
             ->beginIF(strpos($mode, 'noclosed') !== false)->andWhere('t1.status')->ne('closed')->fi()
-            ->beginIF(!$this->app->user->admin and $this->config->vision == 'rnd')->andWhere('t1.id')->in($views)->fi()
-            ->beginIF($shadow !== 'all')->andWhere('t1.shadow')->eq((int)$shadow)->fi()
+            ->beginIF(!$this->app->user->admin and $this->config->vision == 'rnd')->andWhere('t1.id')->in($this->app->user->view->products)->fi()
+            ->markRight(1)
+            ->beginIF($append)->orWhere('(t1.id')->in($append)->markRight(1)->fi()
+            ->markRight(1)
             ->orderBy("isClosed,t2.order_asc,t1.line_desc,t1.order_asc")
             ->fetchPairs('id', 'name');
     }

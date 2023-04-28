@@ -416,7 +416,6 @@ class baseRouter
         if($this->config->framework->autoConnectDB) $this->connectDB();
         if($this->config->framework->multiLanguage) $this->setClientLang();
 
-        $this->setupProfiling();
         $this->setupXhprof();
 
         $this->setEdition();
@@ -722,39 +721,6 @@ class baseRouter
     public function setDebug()
     {
         if(!empty($this->config->debug)) error_reporting(E_ALL & ~ E_STRICT);
-    }
-
-    /**
-     * 配置数据库性能采样。
-     * Setup database profiling.
-     *
-     * @access protected
-     * @return void
-     */
-    protected function setupProfiling(): void
-    {
-        if(!empty($this->config->debug) && $this->config->debug >= 3) $this->dbh->exec('SET profiling = 1');
-    }
-
-    /**
-     * 输出数据库性能采样结果(Server-Timing)。
-     * Output database profiling(Server-Timing).
-     *
-     * @access protected
-     * @return void
-     */
-    protected function outputProfiling(): void
-    {
-        if(empty($this->config->debug) || $this->config->debug < 3) return;
-
-        /* MySQL profiling. */
-        $profiling = $this->dbh->query('SHOW PROFILES')->fetchAll(PDO::FETCH_ASSOC);
-        foreach($profiling as $prof)
-        {
-            header('Server-Timing: db;desc="SQL: ' . $prof['Query'] . '";dur=' . $prof['Duration'] * 1000, false);
-        }
-
-        header('Server-Timing: app;desc="PHP: Total";dur=' . (getTime() - $this->startTime) * 1000, false);
     }
 
     /**
@@ -2316,7 +2282,6 @@ class baseRouter
         try {
             if(is_null($this->params) and !$this->setParams())
             {
-                $this->outputProfiling();
                 $this->outputXhprof();
                 return false;
             }
@@ -2326,7 +2291,6 @@ class baseRouter
 
             call_user_func_array(array($module, $this->methodName), $this->params);
             $this->checkAPIFile();
-            $this->outputProfiling();
             $this->outputXhprof();
             return $module;
         } catch (EndResponseException $endResponseException) {

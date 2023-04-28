@@ -120,40 +120,8 @@ class project extends control
      */
     public function ajaxGetDropMenu($projectID, $module, $method)
     {
-        /* Load module. */
-        $this->loadModel('program');
-
         /* Set cookie for show all project. */
         $_COOKIE['showClosed'] = 1;
-
-        /* Sort project. */
-        $programs        = array();
-        $orderedProjects = array();
-
-        $projects = $this->dao->select('*')->from(TABLE_PROJECT)
-            ->where('type')->eq('project')
-            ->beginIF($this->config->vision)->andWhere('vision')->eq($this->config->vision)->fi()
-            ->andWhere('deleted')->eq(0)
-            ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->projects)->fi()
-            ->orderBy('order_asc,id_desc')
-            ->fetchAll('id');
-
-        $programs = $this->program->getPairs(true);
-
-        foreach($projects as $project)
-        {
-            $project->parent = $this->program->getTopByID($project->parent);
-            $project->parent = isset($programs[$project->parent]) ? $project->parent : $project->id;
-            $orderedProjects[$project->parent][] = $project;
-            unset($projects[$project->id]);
-        }
-
-        $this->view->link      = $this->project->getProjectLink($module, $method, $projectID);
-        $this->view->projectID = $projectID;
-        $this->view->projects  = $orderedProjects;
-        $this->view->module    = $module;
-        $this->view->method    = $method;
-        $this->view->programs  = $programs;
 
         $this->display();
     }
@@ -343,7 +311,7 @@ class project extends control
         if(empty($project) || $project->type != 'project') return print(js::error($this->lang->notFound) . js::locate('back'));
 
         if(!$projectID) $this->locate($this->createLink('project', 'browse'));
-        setCookie("lastProject", $projectID, $this->config->cookieLife, $this->config->webRoot, '', false, true);
+        setCookie("lastProject", strVal($projectID), $this->config->cookieLife, $this->config->webRoot, '', false, true);
 
         if($project->model == 'kanban' and $this->config->vision != 'lite')
         {
@@ -487,7 +455,6 @@ class project extends control
      */
     public function create($model = 'scrum', $programID = 0, $copyProjectID = 0, $extra = '')
     {
-        $this->loadModel('execution');
         $this->session->set('projectModel', $model);
 
         if($model == 'kanban') unset($this->lang->project->authList['reset']);
@@ -522,8 +489,8 @@ class project extends control
                 if($model == 'waterfall' or $model == 'waterfallplus')
                 {
                     $productID = $this->loadModel('product')->getProductIDByProject($projectID, true);
-                    $this->session->set('projectPlanList', $this->createLink('programplan', 'browse', "projectID=$projectID&productID=$productID&type=lists", '', false, $projectID), 'project');
-                    return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink('programplan', 'create', "projectID=$projectID", '', false, $projectID)));
+                    $this->session->set('projectPlanList', $this->createLink('programplan', 'browse', "projectID=$projectID&productID=$productID&type=lists", '', '', $projectID), 'project');
+                    return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink('programplan', 'create', "projectID=$projectID", '', '', $projectID)));
                 }
 
                 $parent = isset($_POST['parent']) ? $_POST['parent'] : 0;
@@ -1790,7 +1757,7 @@ class project extends control
 
         if(!empty($_POST))
         {
-            $postData = form::data($this->config->project->form->suspend);
+            $postData = form::data();
 
             $postData = $this->projectZen->prepareSuspendExtras($projectID, $postData);
 
@@ -1880,7 +1847,7 @@ class project extends control
     public function delete(string $projectID, string $confirm = 'no', string $from = 'browse'): void
     {
         $projectID = (int)$projectID;
-        $project   = $this->getByID($projectID);
+        $project   = $this->project->getByID($projectID);
 
         if($confirm == 'no')
         {
@@ -1896,7 +1863,7 @@ class project extends control
             if($message) $this->lang->saveSuccess = $message;
 
             $this->projectZen->removeAssociatedProducts($project);
-            $this->projectZen->removeAssociatedExecutions($projectID);
+            $this->projectZen->removeAssociatedExecutions($projectID, $from);
 
             if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess));
 

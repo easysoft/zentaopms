@@ -331,12 +331,7 @@ class productModel extends model
     public function getPairs(string $mode = '', int $programID = 0, string|array $append = '', string|int $shadow = 0): array
     {
         if(defined('TUTORIAL')) return $this->loadModel('tutorial')->getProductPairs();
-
-        /* Add other products in has priv product id list. */
-        $append = $this->productTao->formatAppendParam($append);
-        $views  = $this->app->user->view->products . (empty($append) ? '' : ",{$append}");
-
-        return $this->productTao->fetchPairs($programID, $mode, $views, $shadow);
+        return $this->productTao->fetchPairs($mode, $programID, $append, $shadow);
     }
 
     /**

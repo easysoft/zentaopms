@@ -674,10 +674,10 @@ class todoModel extends model
      * @param  array  $todoIDList
      * @param  string $date
      * @access public
-     * @return int
+     * @return bool
      */
-    public function editDate(array $todoIDList, string $date): int
+    public function editDate(array $todoIDList, string $date): bool
     {
-        return $this->todoTao->updateDate((array)$todoIDList, (string)$date);
+        return $this->todoTao->updateDate($todoIDList, $date);
     }
 }

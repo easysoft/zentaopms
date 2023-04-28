@@ -76,7 +76,6 @@ class projectZen extends project
             }
         }
 
-        $program = new stdClass();
         if($project->parent)
         {
             $program = $this->project->getByID((int)$project->parent);
@@ -117,7 +116,7 @@ class projectZen extends project
                 dao::$errors['budget'] = sprintf($this->lang->project->error->budgetNumber);
                 return false;
             }
-            else if(is_numeric($project->budget) and ($project->budget < 0))
+            elseif(is_numeric($project->budget) and ($project->budget < 0))
             {
                 dao::$errors['budget'] = sprintf($this->lang->project->error->budgetGe0);
                 return false;
@@ -188,7 +187,7 @@ class projectZen extends project
         if($this->app->tab == 'product' and !empty($output['productID'])) $this->loadModel('product')->setMenu($output['productID']);
         if($this->app->tab == 'doc') unset($this->lang->doc->menu->project['subMenu']);
 
-        if($copyProjectID) $copyProject = $this->copyProject((int)$copyProjectID);
+        if($copyProjectID) $copyProject = $this->getCopyProject((int)$copyProjectID);
         $shadow = empty($copyProject->hasProduct) ? 1 : 0;
 
         if($this->view->globalDisableProgram) $programID = $this->config->global->defaultProgram;
@@ -318,7 +317,6 @@ class projectZen extends project
     protected function prepareSuspendExtras(int $projectID, object $postData): object
     {
         $editorIdList = $this->config->project->editor->suspend['id'];
-        if($this->app->rawModule == 'program') $editorIdList = $this->config->program->editor->suspend['id'];
 
         return $postData->add('id', $projectID)
             ->setDefault('status', 'suspended')
@@ -341,7 +339,6 @@ class projectZen extends project
     protected function prepareClosedExtras(int $projectID, object $postData): object
     {
         $editorIdList = $this->config->project->editor->suspend['id'];
-        if($this->app->rawModule == 'program') $editorIdList = $this->config->program->editor->suspend['id'];
 
         return  $postData->add('id', $projectID)
             ->setDefault('status', 'closed')
@@ -350,7 +347,6 @@ class projectZen extends project
             ->setDefault('lastEditedBy', $this->app->user->account)
             ->setDefault('lastEditedDate', helper::now())
             ->stripTags($editorIdList, $this->config->allowedTags)
-            ->remove('comment')
             ->get();
     }
 
@@ -473,6 +469,45 @@ class projectZen extends project
     }
 
     /**
+     * 获取项目下拉选择框
+     * Get project drop menu.
+     *
+     * @param  int $projectID
+     * @param  int $module
+     * @param  int $method
+     * @access protected
+     * @return void
+     */
+    protected function getDropMenu(int $projectID, string $module, string $method) :void
+    {
+        $this->loadModel('program');
+
+        $programs        = array();
+        $orderedProjects = array();
+
+        $projects = $this->project->getListByCurrentUser();
+        $programs = $this->program->getPairs(true);
+        $link     = $this->project->getProjectLink($module, $method, $projectID);
+
+        foreach($projects as $project)
+        {
+            $project->parent = $this->program->getTopByID($project->parent);
+            $project->parent = isset($programs[$project->parent]) ? $project->parent : $project->id;
+            $orderedProjects[$project->parent][] = $project;
+            unset($projects[$project->id]);
+        }
+
+        $this->view->link      = $link;
+        $this->view->projectID = $projectID;
+        $this->view->projects  = $orderedProjects;
+        $this->view->module    = $module;
+        $this->view->method    = $method;
+        $this->view->programs  = $programs;
+
+        $this->display();
+    }
+
+    /**
      * Send variables to activate page.
      *
      * @param  object $project
@@ -529,17 +564,15 @@ class projectZen extends project
     {
         $oldProject = $this->project->getByID($projectID);
 
-        $editorIdList=$this->config->project->editor->activate['id'];
-        if($this->app->rawModule=='program')$editorIdList=$this->config->program->editor->activate['id'];
+        $editorIdList = $this->config->project->editor->activate['id'];
 
-        return $postData->add('id',$projectID)
-            ->setDefault('realEnd','')
-            ->setDefault('status','doing')
-            ->setDefault('lastEditedBy',$this->app->user->account)
-            ->setDefault('lastEditedDate',helper::now())
-            ->setIF(!helper::isZeroDate($oldProject->realBegan),'realBegan',helper::today())
-            ->stripTags($editorIdList,$this->config->allowedTags)
-            ->remove('comment,readjustTime,readjustTask')
+        return $postData->add('id', $projectID)
+            ->setDefault('realEnd', '')
+            ->setDefault('status', 'doing')
+            ->setDefault('lastEditedBy', $this->app->user->account)
+            ->setDefault('lastEditedDate', helper::now())
+            ->setIF(!helper::isZeroDate($oldProject->realBegan), 'realBegan', helper::today())
+            ->stripTags($editorIdList, $this->config->allowedTags)
             ->get();
     }
 
@@ -547,12 +580,13 @@ class projectZen extends project
      * 从项目中删除所有关联的执行。
      * removes all associated executions from the be deleted project
      *
-     * @param  int $projectID
+     * @param  int    $projectID
+     * @param  string $from
      *
      * @access protected
      * @return void
      */
-    protected function removeAssociatedExecutions(int $projectID): void
+    protected function removeAssociatedExecutions(int $projectID, string $from): void
     {
         /* Delete the execution under the project. */
         $executionIdList = $this->loadModel('execution')->getPairs($projectID);

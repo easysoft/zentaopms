@@ -3,6 +3,25 @@ declare(strict_types=1);
 class projectModel extends model
 {
     /**
+     * 获取当前登录用户有权限查看的项目列表.
+     * Get project list by current user.
+     *
+     * @param  string    $fields
+     * @access public
+     * @return array
+     */
+    public function getListByCurrentUser(string $fields = '*') :array
+    {
+        return $this->dao->select($fields)->from(TABLE_PROJECT)
+            ->where('type')->eq('project')
+            ->beginIF($this->config->vision)->andWhere('vision')->eq($this->config->vision)->fi()
+            ->andWhere('deleted')->eq(0)
+            ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->projects)->fi()
+            ->orderBy('order_asc,id_desc')
+            ->fetchAll('id');
+    }
+
+    /**
      * Check the privilege.
      *
      * @param  int    $projectID
@@ -256,29 +275,9 @@ class projectModel extends model
             $project->executions = $this->loadModel('execution')->getStatData($projectID, 'undone', 0, 0, false, '', $orderBy, $pager);
             $project->teamCount  = isset($teams[$projectID]) ? $teams[$projectID]->count : 0;
             $project->estimate   = isset($estimates[$projectID]) ? round($estimates[$projectID]->estimate, 2) : 0;
-            $project->parentName = $this->getParentProgram($project);
+            $project->parentName = $project->parent ? $this->projectTao->getParentProgram($project->parent, $project->path, $project->grade) : '';
         }
         return $projects;
-    }
-
-    /**
-     * Get all parent program of a program.
-     *
-     * @param  int    $parentID
-     * @access public
-     * @return string
-     */
-    public function getParentProgram($project)
-    {
-        if($project->parent == 0) return '';
-
-        $parentName = $this->dao->select('id,name')->from(TABLE_PROGRAM)->where('id')->in(trim($project->path, ','))->andWhere('grade')->lt($project->grade)->orderBy('grade asc')->fetchPairs();
-
-        $parentProgram = '';
-        foreach($parentName as $name) $parentProgram .= $name . '/';
-        $parentProgram = rtrim($parentProgram, '/');
-
-        return $parentProgram;
     }
 
     /**
@@ -595,21 +594,17 @@ class projectModel extends model
         $project = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($projectID)->fetch();
 
         if(empty($project->multiple)) return $link;
+
+        if(in_array($module, array('testreport', 'testcase')))
+            return helper::createLink('project', $module, "projectID=%s");
+
+        if($module == 'projectstory' && in_array($method, array('story', 'linkstory', 'track')))
+            return helper::createLink($module, $method, "projectID=%s");
+
+        if($module == 'project') $this->buildLinkForProject($module, $method);
         if(strpos(',project,product,projectstory,story,bug,doc,testcase,testtask,testreport,repo,build,projectrelease,stakeholder,issue,risk,meeting,report,measrecord,', ',' . $module . ',') !== false)
         {
-            if($module == 'project' and $method == 'execution')
-            {
-                $link = helper::createLink($module, $method, "status=all&projectID=%s");
-            }
-            elseif($module == 'project' and strpos(',bug,testcase,testtask,testreport,build,dynamic,view,manageproducts,team,managemembers,whitelist,addwhitelist,group,', ',' . $method . ',') !== false)
-            {
-                $link = helper::createLink($module, $method, "projectID=%s");
-            }
-            elseif($module == 'project' and $method == 'managePriv')
-            {
-                $link = helper::createLink($module, 'group', "projectID=%s");
-            }
-            elseif($module == 'product' and $method == 'showerrornone')
+            if($module == 'product' and $method == 'showerrornone')
             {
                 $link = helper::createLink('projectstory', 'story', "projectID=%s");
             }
@@ -1322,7 +1317,7 @@ class projectModel extends model
      * @access public
      * @return array
      */
-    public function update($projectID = 0)
+    public function update($projectID = 0, $project)
     {
         $oldProject        = $this->dao->findById($projectID)->from(TABLE_PROJECT)->fetch();
         $linkedProducts    = $this->dao->select('product')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($projectID)->fetchPairs();
@@ -1644,7 +1639,6 @@ class projectModel extends model
     public function suspend(int $projectID, object $project, string $type = 'project'): array|false
     {
         $editorIdList = $this->config->project->editor->suspend['id'];
-        if($this->app->rawModule == 'program') $editorIdList = $this->config->program->editor->suspend['id'];
 
         $oldProject = $this->getById($projectID, $type);
 
@@ -1666,7 +1660,6 @@ class projectModel extends model
      */
     public function activate(int $projectID, object $project) :array|false
     {
-        $now        = helper::now();
         $oldProject = $this->projectTao->fetchProjectInfo($projectID);
 
         $daoSuccess = $this->projectTao->doActivate($projectID, $project);
@@ -1677,9 +1670,8 @@ class projectModel extends model
         /* Update start and end date of tasks in this project. */
         if($project->readjustTime and $project->readjustTask)
         {
-            $beginTimeStamp = strtotime($project->begin);
             $tasks          = $this->projectTao->fetchUndoneTasks((int)$projectID);
-            $this->projectTao->updateTasksStartAndEndDate($tasks);
+            $this->projectTao->updateTasksStartAndEndDate($tasks, $oldProject, $project);
         }
         /* Activate the shadow product of the project. (only change product status) */
         if(!$oldProject->hasProduct)
@@ -1688,7 +1680,6 @@ class projectModel extends model
             $this->product->activate($productID);
         }
 
-        $changes = common::createChanges($oldProject, $project);
         return common::createChanges($oldProject, $project);
     }
 
@@ -1707,9 +1698,6 @@ class projectModel extends model
         $oldProject = $this->getByID($projectID);
 
         $editorIdList = $this->config->project->editor->close['id'];
-        if($this->app->rawModule == 'program') $editorIdList = $this->config->program->editor->close['id'];
-
-        $this->lang->error->ge = $this->lang->project->ge;
 
         $project = $this->loadModel('file')->processImgURL($project, $editorIdList, $this->post->uid);
 
@@ -1727,7 +1715,6 @@ class projectModel extends model
         if(!$oldProject->hasProduct)
         {
             $productID = $this->loadModel('product')->getProductIDByProject($projectID);
-            unset($_POST);
             $this->product->close($productID);
         }
 
