@@ -43,23 +43,24 @@ class projectZen extends project
         /* Lean mode relation defaultProgram. */
         if($this->config->systemMode == 'light') $project->parent = $this->config->global->defaultProgram;
 
-        if(!$this->checkProductAndBranch($rawdata, $project))  return false;
-        if(!$this->checkDaysAndBudget($rawdata, $project))     return false;
-        if(!$this->checkProductNameUnqiue($rawdata, $project)) return false;
+        if(!$this->checkProductAndBranch($project, $rawdata))  return false;
+        if(!$this->checkDaysAndBudget($project, $rawdata))     return false;
+        if(!$this->checkProductNameUnqiue($project, $rawdata)) return false;
 
         return $project;
     }
 
-    private function checkProductAndBranch(object $rawdata, object $project): bool
+    /**
+     * Check product and branch not empty.
+     *
+     * @param  object $project
+     * @param  object $rawdata
+     * @access protected
+     * @return bool 
+     */
+    private function checkProductAndBranch(object $project, object $rawdata): bool 
     {
-        $linkedProductsCount = 0;
-        if($project->hasProduct && isset($rawdata->products))
-        {
-            foreach($rawdata->products as $product)
-            {
-                if(!empty($product)) $linkedProductsCount++;
-            }
-        }
+        $linkedProductsCount = $this->project->getLinkedProductsCount($project, $rawdata);
 
         if($rawdata->products)
         {
@@ -78,7 +79,7 @@ class projectZen extends project
         $program = new stdClass();
         if($project->parent)
         {
-            $program = $this->dao->select('*')->from(TABLE_PROGRAM)->where('id')->eq($project->parent)->fetch();
+            $program = $this->project->getByID((int)$project->parent);
 
             /* Judge products not empty. */
             if($project->hasProduct && empty($linkedProductsCount) and !isset($rawdata->newProduct))
@@ -91,7 +92,15 @@ class projectZen extends project
         return true;
     }
 
-    private function checkDaysAndBudget(object $rawdata, object $project): bool
+    /**
+     * Check days and budget by rules.
+     *
+     * @param  object $project
+     * @param  object $rawdata
+     * @access protected
+     * @return bool 
+     */
+    private function checkDaysAndBudget(object $project, object $rawdata): bool 
     {
         /* Judge workdays is legitimate. */
         $workdays = helper::diffDate($project->end, $project->begin) + 1;
@@ -122,7 +131,15 @@ class projectZen extends project
         return true;
     }
 
-    private function checkProductNameUnqiue(object $rawdata, object $project): bool
+    /**
+     * Check product name unique and not empty.
+     *
+     * @param  object $project
+     * @param  object $rawdata
+     * @access protected
+     * @return bool 
+     */
+    private function checkProductNameUnqiue(object $project, object $rawdata): bool 
     {
         /* When select create new product, product name cannot be empty and duplicate. */
         if($project->hasProduct && isset($rawdata->newProduct))
@@ -453,5 +470,76 @@ class projectZen extends project
         $this->view->project = $this->project->getByID($projectID);
         $this->view->actions = $this->loadModel('action')->getList('project', $projectID);
         $this->display();
+    }
+
+    /**
+     * Send variables to activate page.
+     *
+     * @param  object $project
+     * @access protected
+     *
+     * @return void
+     */
+    protected function buildActivateForm(object $project): void
+    {
+        $newBegin = date('Y-m-d');
+        $dateDiff = helper::diffDate($newBegin, $project->begin);
+        $newEnd   = date('Y-m-d', strtotime($project->end) + $dateDiff * 24 * 3600);
+
+        $this->view->title      = $this->lang->project->activate;
+        $this->view->users      = $this->loadModel('user')->getPairs('noletter');
+        $this->view->actions    = $this->loadModel('action')->getList('project', $project->id);
+        $this->view->newBegin   = $newBegin;
+        $this->view->newEnd     = $newEnd;
+        $this->view->project    = $project;
+        $this->display();
+    }
+
+    /**
+     * After activateing the project, do other operations.
+     *
+     * @param  int    $projectID
+     * @param  array  $changes
+     * @param  string $comment
+     *
+     * @access protected
+     * @return void
+     */
+    protected function responseAfterActivate(int $projectID, array $changes, string $comment): void
+    {
+        if($this->post->comment != '' or !empty($changes))
+        {
+            $actionID = $this->action->create('project', $projectID, 'Activated', $this->post->comment);
+            $this->action->logHistory($actionID, $changes);
+        }
+
+        $this->executeHooks($projectID);
+    }
+
+    /**
+     * Append extras data to post data.
+     *
+     * @param  int    $iprojectID
+     * @param  object $postData
+     *
+     * @access protected
+     * @return object
+     */
+    protected function prepareActivateExtras(int $projectID, object $postData): object
+    {
+        $oldProject = $this->project->getByID($projectID);
+
+        $editorIdList=$this->config->project->editor->activate['id'];
+        if($this->app->rawModule=='program')$editorIdList=$this->config->program->editor->activate['id'];
+
+        return $postData->add('id',$projectID)
+            ->setDefault('realEnd','')
+            ->setDefault('status','doing')
+            ->setDefault('lastEditedBy',$this->app->user->account)
+            ->setDefault('lastEditedDate',helper::now())
+            ->setIF(!helper::isZeroDate($oldProject->realBegan),'realBegan',helper::today())
+            ->stripTags($editorIdList,$this->config->allowedTags)
+            ->remove('comment,readjustTime,readjustTask')
+            ->get();
     }
 }

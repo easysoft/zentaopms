@@ -223,29 +223,18 @@ class productTest
     /**
      * Test get product pairs.
      *
-     * @param  int    $programID
+     * @param  string        $mode
+     * @param  int           $programID
+     * @param  string|array  $append
+     * @param  string|int    $shadow
      * @access public
      * @return array
      */
-    public function getProductPairs($programID)
+    public function getProductPairs(string $mode = '', int $programID = 0, string|array $append = '', string|int $shadow = 0): array|string
     {
-        $pairs = $this->objectModel->getPairs('', $programID);
+        $pairs = $this->objectModel->getPairs($mode, $programID, $append, $shadow);
         if($pairs == array()) return '没有数据';
         return $pairs;
-    }
-
-    /**
-     * Test get product pairs count.
-     *
-     * @param  int    $programID
-     * @access public
-     * @return int
-     */
-    public function getProductPairsCount($programID)
-    {
-        $pairsCount = count($this->getProductPairs($programID));
-        if($pairsCount == '没有数据') return '0';
-        return $pairsCount;
     }
 
     /**

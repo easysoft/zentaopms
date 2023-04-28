@@ -15,6 +15,7 @@ set::title($title);
 jsVar('blockID', $block->id);
 
 $paramsRows = array();
+$isMyDashboard = $dashboard == 'my';
 
 foreach($params as $key => $row)
 {
@@ -40,7 +41,8 @@ form
     (
         set::label($lang->block->lblModule),
         set::name('module'),
-        set::value($block->module),
+        set::class($isMyDashboard ? '' : 'hidden'),
+        set::value($isMyDashboard ? $block->module : $dashboard),
         set::control(array
         (
             'type'  => 'select',

@@ -15,6 +15,7 @@ set::title($title);
 jsVar('dashboard', $dashboard);
 
 $paramsRows = array();
+$isMyDashboard = $dashboard == 'my';
 
 foreach($params as $key => $row)
 {
@@ -38,6 +39,8 @@ form
     on::change('#code', 'getForm'),
     formGroup
     (
+        set::class($isMyDashboard ? '' : 'hidden'),
+        set::value($isMyDashboard ? '' : $dashboard),
         set::label($lang->block->lblModule),
         set::name('module'),
         set::control(array
@@ -72,6 +75,7 @@ form
         (
             set::label($lang->block->name),
             set::name('title'),
+            set::value(zget($modules, $module, '') . zget($codes, $code, '')),
             set::class('form-row'),
             set::control('input')  
         ) : null,
