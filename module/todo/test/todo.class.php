@@ -167,20 +167,59 @@ class todoTest
     }
 
     /**
+     * 测试删除待办.
+     * Test delete a todo.
+     *
+     * @param  int     $todoID
+     * @param  string  $confirm yes|no
+     * @access public
+     * @return object|false
+     */
+    public function deleteTest(int $todoID, string $confirm = 'no'): object|false
+    {
+        if($confirm == 'no')
+        {
+        	return $this->objectModel->getById($todoID);
+        }
+        else
+        {
+            $this->objectModel->delete(TABLE_TODO, $todoID);
+			if(dao::isError()) return false;
+
+        	return $this->objectModel->getById($todoID);
+        }
+    }
+
+    /**
+     * 测试完成待办.
      * Test finish a todo.
      *
-     * @param  int    $todoID
+     * @param  int     $todoID
      * @access public
-     * @return object
+     * @return object|false
      */
-    public function finishTest($todoID)
+    public function finishTest(int $todoID): object|false
     {
         $this->objectModel->finish($todoID);
         $object = $this->objectModel->getByID($todoID);
 
-        if(dao::isError()) return dao::getError();
+        if(dao::isError()) return false;
 
         return $object;
+    }
+
+
+    /**
+     * 测试批量完成待办.
+     * Batch finish todos.
+     *
+     * @param  array   $todoIDList
+     * @access public
+     * @return bool
+     */
+    public function batchFinishTest(array $todoIDList): bool
+    {
+		return $this->objectModel->batchFinish($todoIDList);
     }
 
     /**
@@ -327,24 +366,40 @@ class todoTest
     }
 
     /**
+     * 测试指派待办.
      * Test assign todo.
      *
-     * @param  int    $todoID
-     * @param  array  $param
+     * @param  int     $todoID
+     * @param  object  $param
      * @access public
      * @return object
      */
-    public function assignToTest($todoID, $param = array())
+    public function assignToTest(int $todoID, object $param = new stdclass()): object
     {
-        foreach($param as $key => $value) $_POST[$key] = $value;
+		$todo = new stdClass();
+		$todo->assignedDate = helper::now();
+		$todo->date         = '';
+		$todo->begin        = 0;
+		$todo->end          = 0;
 
-        if(!isset($_POST['future']) and !isset($_POST['date'])) $_POST['date'] = date('Y-m-d', time());
+        foreach($param as $key => $value)
+		{
+			$todo->{$key} = $value;
+			if($key == 'future' && $value == 'on')
+			{
+				$todo->date = '2030-01-01';
+				unset($todo->{$key});
+			}
+			if($key == 'lblDisableDate' && $value == 'on')
+			{
+				$todo->begin = '2400';
+				$todo->end   = '2400';
+				unset($todo->{$key});
+			}
+		}
 
-        $this->objectModel->assignTo($todoID);
-
-        unset($_POST);
-
-        if(dao::isError()) return dao::getError();
+		$todo->id = $todoID;
+        $this->objectModel->assignTo($todo);
 
         $object = $this->objectModel->getById($todoID);
         return $object;

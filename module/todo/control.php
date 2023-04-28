@@ -341,20 +341,23 @@ class todo extends control
     }
 
     /**
-     * Assign.
+     * 指派待办
+     * Assign todo.
      *
-     * @param $todoID
-     *
+     * @param  string $todoID
      * @access public
      * @return void
      */
-    public function assignTo($todoID)
+    public function assignTo(string $todoID): void
     {
         if(!empty($_POST))
         {
-            if(empty($_POST['assignedTo'])) return print(js::error($this->lang->todo->noAssignedTo));
-            $this->todo->assignTo($todoID);
-            if(dao::isError()) return print(js::error(dao::getError()));
+            $formData = form::data($this->config->todo->assignTo->form);
+            $todo     = $this->todoZen->beforeAssignTo($formData);
+
+            $res      = $this->todoZen->doAssignTo($todo);
+            if(!$res) return print(js::error(dao::getError()));
+
             return print(js::reload('parent.parent'));
         }
 

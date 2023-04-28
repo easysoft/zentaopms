@@ -636,23 +636,14 @@ class todoModel extends model
     /**
      * Assign todo.
      *
-     * @param  int    $todoID
+     * @param  object  $todo
      * @access public
      * @return bool
      */
-    public function assignTo($todoID)
+    public function assignTo(object $todo): bool
     {
-        $todo = fixer::input('post')
-            ->add('assignedBy', $this->app->user->account)
-            ->add('assignedDate', helper::now())
-            ->setIF(isset($_POST['future']),  'date', '2030-01-01')
-            ->setIF(isset($_POST['lblDisableDate']), 'begin', '2400')
-            ->setIF(isset($_POST['lblDisableDate']), 'end',   '2400')
-            ->remove('future,lblDisableDate')
-            ->get();
-
-        $this->dao->update(TABLE_TODO)->data($todo)->where('id')->eq((int)$todoID)->exec();
-        $this->loadModel('action')->create('todo', $todoID, 'assigned', '', $todo->assignedTo);
+        $this->todoTao->updateRow($todo->id, $todo);
+        $this->loadModel('action')->create('todo', (int)$todo->id, 'assigned', '', $todo->assignedTo);
         return !dao::isError();
     }
 
