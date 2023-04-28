@@ -2167,9 +2167,9 @@ class projectModel extends model
     /**
      * Convert budget unit.
      *
-     * @param  int    $budget
+     * @param  int        $budget
      * @access public
-     * @return void
+     * @return int|string $projectBudget
      */
     public function getBudgetWithUnit($budget)
     {

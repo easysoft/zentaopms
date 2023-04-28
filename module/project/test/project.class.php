@@ -161,7 +161,7 @@ class Project
     }
 
     /**
-     * doActivate a project.
+     * Do activate a project.
      *
      * @param int    $projectID
      * @param object $project
@@ -171,5 +171,17 @@ class Project
     public function doActivate($projectID, $project)
     {
         return $this->project->doActivate($projectID, $project);
+    }
+
+    /**
+     * Get budget with unit.
+     *
+     * @param  int        $budget
+     * @access public
+     * @return int|string $projectBudget
+     */
+    public function getBudgetWithUnit($budget)
+    {
+        return $this->project->getBudgetWithUnit($budget);
     }
 }
