@@ -50,6 +50,14 @@ class projectZen extends project
         return $project;
     }
 
+    /**
+     * Check product and branch not empty.
+     *
+     * @param  object $project
+     * @param  object $rawdata
+     * @access protected
+     * @return bool 
+     */
     private function checkProductAndBranch(object $project, object $rawdata): bool 
     {
         $linkedProductsCount = $this->project->getLinkedProductsCount($project, $rawdata);
@@ -84,6 +92,14 @@ class projectZen extends project
         return true;
     }
 
+    /**
+     * Check days and budget by rules.
+     *
+     * @param  object $project
+     * @param  object $rawdata
+     * @access protected
+     * @return bool 
+     */
     private function checkDaysAndBudget(object $project, object $rawdata): bool 
     {
         /* Judge workdays is legitimate. */
@@ -115,6 +131,14 @@ class projectZen extends project
         return true;
     }
 
+    /**
+     * Check product name unique and not empty.
+     *
+     * @param  object $project
+     * @param  object $rawdata
+     * @access protected
+     * @return bool 
+     */
     private function checkProductNameUnqiue(object $project, object $rawdata): bool 
     {
         /* When select create new product, product name cannot be empty and duplicate. */
