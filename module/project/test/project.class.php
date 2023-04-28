@@ -62,6 +62,18 @@ class Project
     }
 
     /**
+     * Test getByShadowProduct function.
+     *
+     * @param  int    $productID
+     * @access public
+     * @return string|bool|object
+     */
+    public function testGetByShadowProduct($productID)
+    {
+        return $this->triggerMethod('getByShadowProduct', array('productID' => $productID));
+    }
+
+    /**
      * Test start a project.
      *
      * @param  int    $projectID

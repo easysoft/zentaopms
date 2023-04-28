@@ -260,7 +260,10 @@ class yaml
         $pos = strripos($runFileName, DS);
         if($pos !== false) $runFileName = mb_substr($runFileName, $pos+1);
 
-        $this->configFiles[] = $_SERVER['PWD'] . "/yaml/$runFileName/{$fileName}.yaml";
+        $backtrace = debug_backtrace();
+        $runPath   = $backtrace[count($backtrace)-1]['file'];
+
+        $this->configFiles[] = dirname($runPath) . "/yaml/$runFileName/{$fileName}.yaml";
 
         return $this;
     }
