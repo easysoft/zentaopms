@@ -8,6 +8,7 @@ class todoTao extends todoModel
      * Insert todo data.
      *
      * @param  object $todo
+     * @access protected
      * @return int
      */
     protected function insert(object $todo): int
@@ -27,6 +28,7 @@ class todoTao extends todoModel
      *
      * @param  int    $todoID
      * @param  object $todo
+     * @access protected
      * @return bool
      */
     protected function updateRow(int $todoID, object $todo): bool
@@ -45,6 +47,7 @@ class todoTao extends todoModel
      * Close one todo.
      *
      * @param int $todoID
+     * @access protected
      * @return bool
      */
     protected function closeTodo(int $todoID): bool
@@ -67,6 +70,7 @@ class todoTao extends todoModel
      * Processing todo data.
      *
      * @param  object $todoData
+     * @access protected
      * @return object|false
      */
     protected function beforeCreate(object $todoData): object|false
@@ -123,6 +127,7 @@ class todoTao extends todoModel
      *  Get cycle list.
      * @param  array  $todoList
      * @param  string $orderBy
+     * @access protected
      * @return array
      */
     protected function getCycleList(array $todoList, string $orderBy = 'date_asc'): array
@@ -140,6 +145,7 @@ class todoTao extends todoModel
      * 通过待办构建周期待办数据
      * Build cycle todo.
      * @param  object $todo
+     * @access protected
      * @return stdclass
      */
     protected function buildCycleTodo(object $todo): object
@@ -163,10 +169,12 @@ class todoTao extends todoModel
 
     /**
      * 通过周期待办，获取要生成待办的日期
+     *
      * Gets the date by the cycle todo.
      * @param  object $todo
      * @param  object $lastCycle
      * @param  string $today
+     * @access protected
      * @return false|string
      */
     protected function getCycleTodoDate(object $todo, object $lastCycle, string $today): false|string
@@ -200,10 +208,12 @@ class todoTao extends todoModel
 
     /**
      * 通过周期待办，获取要生成每日待办的日期
+     *
      * Gets the daily todo date by the cycle todo.
      * @param  object $todo
      * @param  object $lastCycle
      * @param  string $today
+     * @access protected
      * @return false|string
      */
     private function getCycleDailyTodoDate(object $todo, object $lastCycle, string $today): false|string
@@ -255,6 +265,7 @@ class todoTao extends todoModel
      * Set cycle todo data.
      *
      * @param  object $todoData
+     * @access protected
      * @return false|object
      */
     private function setCycle(object $todoData): false|object

@@ -17,6 +17,7 @@ class todoModel extends model
      * Create todo data.
      *
      * @param  object $todo
+     * @access public
      * @return int|false
      */
     public function create(object $todo): int|false

@@ -8,6 +8,7 @@ class todoZen extends todo
      * Processing request data.
      *
      * @param  object $formData
+     * @access protected
      * @return object|false
      */
     protected function beforeCreate(object $formData): object|bool
@@ -62,6 +63,7 @@ class todoZen extends todo
      * Create a todo.
      *
      * @param  object $todo
+     * @access protected
      * @return int|false
      */
     protected function doCreate(object $todo): int|bool
@@ -74,6 +76,7 @@ class todoZen extends todo
      * Create a todo after data processing
      *
      * @param  object $todo
+     * @access protected
      * @return object
      */
     protected function afterCreate(object $todo): object
@@ -99,6 +102,7 @@ class todoZen extends todo
      *
      * @param  int    $todoID
      * @param  object $formData
+     * @access protected
      * @return object|false
      */
     protected function beforeEdit(int $todoID, object $formData): object|false
@@ -152,6 +156,7 @@ class todoZen extends todo
      * Handle data after edit todo.
      *
      * @param  object $todo
+     * @access protected
      * @return void
      */
     protected function afterEdit(int $todoID, array $changes): void
@@ -167,6 +172,7 @@ class todoZen extends todo
      * Handle cycle config.
      *
      * @param  object $todo
+     * @access private
      * @return void
      */
     private function handleCycleConfig(object &$todo): void
@@ -195,6 +201,7 @@ class todoZen extends todo
      * Set cycle todo.
      *
      * @param  object $formData
+     * @access private
      * @return object
      */
     private function setCycle(object $formData): object
