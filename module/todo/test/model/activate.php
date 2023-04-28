@@ -9,6 +9,7 @@ function initData()
     $todo = zdTable('todo');
     $todo->id->range('1-3');
     $todo->account->prefix('admin')->range('1-3');
+    $todo->date->range('20230102 000000:0')->type('timestamp')->format('YY/MM/DD');
     $todo->begin->range('1710');
     $todo->end->range('1740');
     $todo->feedback->range('0');

@@ -286,7 +286,7 @@ class todo extends control
     }
 
     /**
-     * 开启一个待办事项
+     * 开启待办事项
      * Start a todo.
      *
      * @param  string $todoID
@@ -296,7 +296,7 @@ class todo extends control
     public function start(string $todoID)
     {
         $todoID = (int)$todoID;
-        $todo   = $this->todo->getById($todoID);
+        $todo   = $this->todo->getByID($todoID);
 
         if($todo->status == 'wait') $this->todo->start($todoID);
         if(in_array($todo->type, array('bug', 'task', 'story'))) return $this->todoZen->printConfirm($todo);
@@ -307,7 +307,7 @@ class todo extends control
 
     /**
      * 激活待办事项
-     * Activated todo.
+     * Activated a todo.
      *
      * @param  string $todoID
      * @access public
@@ -316,7 +316,7 @@ class todo extends control
     public function activate(string $todoID)
     {
         $todoID = (int)$todoID;
-        $todo   = $this->todo->getById($todoID);
+        $todo   = $this->todo->getByID($todoID);
 
         if($todo->status == 'done' or $todo->status == 'closed') $this->todo->activate($todoID);
         if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'success'));

@@ -230,8 +230,8 @@ class todoModel extends model
     }
 
     /**
-     * 开启一个待办事项
-     * Start one todo.
+     * 开启待办事项
+     * Start a todo.
      *
      * @param  int   $todoID
      * @access public
@@ -277,6 +277,7 @@ class todoModel extends model
     }
 
     /**
+     * 获取待办事项详情数据
      * Get info of a todo.
      *
      * @param  int    $todoID
@@ -284,9 +285,13 @@ class todoModel extends model
      * @access public
      * @return object|false
      */
+<<<<<<< Updated upstream
     public function getByID(int $todoID, $setImgSize = false): object|false
+=======
+    public function getByID(int $todoID, bool $setImgSize = false): object|bool
+>>>>>>> Stashed changes
     {
-        $todo = $this->dao->findById((int)$todoID)->from(TABLE_TODO)->fetch();
+        $todo = $this->dao->findById($todoID)->from(TABLE_TODO)->fetch();
         if(!$todo) return false;
 
         $todo = $this->loadModel('file')->replaceImgURL((object)$todo, 'desc');
@@ -301,6 +306,7 @@ class todoModel extends model
         if($todo->type == 'testtask') $todo->name = $this->dao->findById($todo->objectID)->from(TABLE_TESTTASK)->fetch('name');
         if($todo->type == 'feedback') $todo->name = $this->dao->findById($todo->objectID)->from(TABLE_FEEDBACK)->fetch('title');
         $todo->date = str_replace('-', '', $todo->date);
+        
         return $todo;
     }
 
@@ -527,7 +533,7 @@ class todoModel extends model
 
     /**
      * 激活待办事项
-     * Activate todo.
+     * Activated a todo.
      *
      * @param  int $todoID
      * @access public
@@ -537,6 +543,7 @@ class todoModel extends model
     {
         $this->dao->update(TABLE_TODO)->set('status')->eq('wait')->where('id')->eq($todoID)->exec();
         $this->loadModel('action')->create('todo', $todoID, 'activated', '', 'wait');
+        
         return !dao::isError();
     }
 
