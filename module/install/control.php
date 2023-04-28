@@ -270,7 +270,9 @@ class install extends control
             if(isset($_SERVER['HTTP_X_FORWARDED_PROTO']) and strtolower($_SERVER['HTTP_X_FORWARDED_PROTO']) == 'https') $httpType = 'https';
             if(isset($_SERVER['REQUEST_SCHEME']) and strtolower($_SERVER['REQUEST_SCHEME']) == 'https') $httpType = 'https';
             if(strpos($this->app->getClientLang(), 'zh') === 0) $this->loadModel('api')->createDemoData($this->lang->api->zentaoAPI, "{$httpType}://{$_SERVER['HTTP_HOST']}" . $this->app->config->webRoot . 'api.php/v1', '16.0');
-            $this->loadModel('upgrade')->createDefaultDimension();
+
+            if($this->config->edition != 'open') $this->loadModel('upgrade')->processDataset();
+
             return print(js::locate(inlink('step6'), 'parent'));
         }
 
@@ -299,9 +301,9 @@ class install extends control
         $canDelFile  = is_writable($this->app->getAppRoot() . 'www');
         $installFile = $this->app->getAppRoot() . 'www/install.php';
         $upgradeFile = $this->app->getAppRoot() . 'www/upgrade.php';
-        $installFileDeleted = $canDelFile && is_writable($installFile) ? unlink($installFile) : false;
+        $installFileDeleted = ($canDelFile and file_exists($installFile)) ? unlink($installFile) : false;
 
-        if($canDelFile and is_writable($upgradeFile)) unlink($upgradeFile);
+        if($canDelFile and file_exists($upgradeFile)) unlink($upgradeFile);
         unset($_SESSION['installing']);
         session_destroy();
 

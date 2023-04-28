@@ -114,11 +114,7 @@ body.xxc-embed.m-productplan-view,body.xxc-embed.m-bug-browse,body.xxc-embed.m-p
 .xxc-embed .modal-body {min-height: 500px!important;}
 
 #downloadMobile .dropdown-menu {top: -31px !important; min-width: 130px; padding: 0;}
-#downloadMobile .dropdown-menu .mobile-qrcode {padding: 15px 0px 0 10px;}
-#downloadMobile .dropdown-menu .mobile-qrcode.local-img {padding: 15px 5px 0 5px;}
-#downloadMobile .dropdown-menu .mobile-qrcode iframe {width: 110px; height: 120px; text-align: center;}
-#downloadMobile .dropdown-menu .mobile-version {text-align: center;}
-#downloadMobile .dropdown-menu .mobile-version span {color: #0c64eb; font-size: 12px; font-weight: 700;}
+#downloadMobile .dropdown-menu .mobile-qrcode {padding: 10px 0px;}
 
 .radio-text-divider {width: 1px; height: 13px; display: inline-block; margin: -2px 9px 0; background: #D9D9D9; vertical-align: middle;}
 .input-divider {margin: 0 4px;}

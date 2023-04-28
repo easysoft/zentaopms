@@ -1161,9 +1161,7 @@ class actionModel extends model
             ->beginIF($account != 'all')->andWhere('actor')->eq($account)->fi()
             ->beginIF($beginDate)->andWhere('date')->ge($beginDate)->fi()
             ->beginIF(is_numeric($productID))->andWhere('product')->like("%,$productID,%")->fi()
-            ->andWhere()
-            ->markLeft(1)
-            ->where('1=1')
+            ->andWhere('1=1', true)
             ->beginIF(is_numeric($projectID))->andWhere('project')->eq($projectID)->fi()
             ->beginIF(!empty($executions))->andWhere('execution')->in(array_keys($executions))->fi()
             ->beginIF(is_numeric($executionID))->andWhere('execution')->eq($executionID)->fi()
@@ -1975,10 +1973,7 @@ class actionModel extends model
             if($case->scene)
             {
                 $scene = $this->dao->select('*')->from(VIEW_SCENECASE)->where('id')->eq($case->scene)->fetch();
-                if($scene->deleted)
-                {
-                    return print(js::error($this->lang->action->refusecase));
-                }
+                if($scene->deleted) return print(js::error($this->lang->action->refusecase));
             }
         }
 
@@ -1990,6 +1985,12 @@ class actionModel extends model
                 $scenerow = $this->dao->select('*')->from(VIEW_SCENECASE)->where('id')->eq($scene->parent)->fetch();
                 if($scenerow->deleted) return print(js::error($this->lang->action->refusescene));
             }
+        }
+
+        if($action->objectType == 'doc')
+        {
+            $docContent = $this->dao->select('*')->from(TABLE_DOCCONTENT)->where('doc')->eq($action->objectID)->orderBy('version desc')->limit(1)->fetch();
+            if($docContent->files) $this->dao->update(TABLE_FILE)->set('deleted')->eq('0')->where('id')->in($docContent->files)->exec();
         }
 
         /* Update deleted field in object table. */

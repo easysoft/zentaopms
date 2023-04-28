@@ -54,7 +54,7 @@
           <?php echo "<button class='btn disabled'><i class='icon icon-copy disabled' title='{$lang->group->copy}'></i></button>";?>
           <?php else:?>
           <?php common::printIcon('group', 'manageView', "groupID=$group->id", $group, 'list', 'eye');?>
-          <?php common::printIcon('group', 'managepriv', "type=byGroup&param=$group->id", $group, 'list', 'lock');?>
+          <?php common::printIcon('group', 'managepriv', "type=byPackage&param=$group->id", $group, 'list', 'lock');?>
           <?php common::printIcon('group', 'manageMember', "groupID=$group->id", $group, 'list', 'persons', '', "iframe", true, "data-width='90%'");?>
           <?php common::printIcon('group', 'edit', "groupID=$group->id", $group, 'list', '', '', "iframe", true, "data-width='550'");?>
           <?php common::printIcon('group', 'copy', "groupID=$group->id", $group, 'list', '', '', "iframe", true, "data-width='550'");?>

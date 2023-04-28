@@ -24,6 +24,17 @@ class dimensionModel extends model
     }
 
     /**
+     * Get first dimension.
+     *
+     * @access public
+     * @return object
+     */
+    public function getFirst()
+    {
+        return $this->dao->select('*')->from(TABLE_DIMENSION)->where('deleted')->eq('0')->orderBy('id')->limit(1)->fetch();
+    }
+
+    /**
      * Get dimension list.
      *
      * @access public

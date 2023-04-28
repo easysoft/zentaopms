@@ -74,7 +74,7 @@
         <div class='detail-content article-content'>
           <?php echo (!empty($task->storySpec) || !empty($task->storyFiles)) ? $task->storySpec : "<div class='text-center text-muted'>" . $lang->noData . '</div>';?>
         </div>
-        <?php echo $this->fetch('file', 'printFiles', array('files' => $task->storyFiles, 'fieldset' => 'false'));?>
+        <?php echo $this->fetch('file', 'printFiles', array('files' => $task->storyFiles, 'fieldset' => 'false', 'object' => $task, 'method' => 'view', 'showDelete' => false));?>
       </div>
       <div class='detail'>
         <div class='detail-title'><?php echo $lang->task->storyVerify;?></div>
@@ -274,7 +274,7 @@
                 <?php endif;?>
                 <tr>
                   <th><?php echo $lang->task->type;?></th>
-                  <td><?php echo $lang->task->typeList[$task->type];?></td>
+                  <td><?php echo zget($this->lang->task->typeList, $task->type, $task->type);?></td>
                 </tr>
                 <tr>
                   <th><?php echo $lang->task->status;?></th>

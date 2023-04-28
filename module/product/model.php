@@ -241,6 +241,7 @@ class productModel extends model
      */
     public function getById($productID)
     {
+        $productID = (int)$productID;
         if(defined('TUTORIAL')) return $this->loadModel('tutorial')->getProduct();
         $product = $this->dao->findById($productID)->from(TABLE_PRODUCT)->fetch();
         if(!$product) return false;
@@ -367,7 +368,7 @@ class productModel extends model
         /* Order by program. */
         return $this->dao->select("t1.*,  IF(INSTR(' closed', t1.status) < 2, 0, 1) AS isClosed")->from(TABLE_PRODUCT)->alias('t1')
             ->leftJoin(TABLE_PROGRAM)->alias('t2')->on('t1.program = t2.id')
-            ->where(1)
+            ->where('1=1')
             ->beginIF(strpos($mode, 'all') === false)->andWhere('t1.deleted')->eq(0)->fi()
             ->beginIF($programID)->andWhere('t1.program')->eq($programID)->fi()
             ->beginIF(strpos($mode, 'noclosed') !== false)->andWhere('t1.status')->ne('closed')->fi()
@@ -438,6 +439,8 @@ class productModel extends model
             if(!$withBranch) return $this->loadModel('tutorial')->getProductPairs();
             return $this->loadModel('tutorial')->getExecutionProducts();
         }
+
+        if(strpos($projectID, 'all') !== false) $projectID = str_replace('all', 0, $projectID);
 
         if(!empty($append) and is_array($append)) $append = implode(',', $append);
 
@@ -1300,7 +1303,7 @@ class productModel extends model
             ->beginIF(strpos($param, 'multiple') !== false)->andWhere('t2.multiple')->ne('0')->fi()
             ->andWhere('t2.type')->eq('project')
             ->beginIF(!$this->app->user->admin)->andWhere('t2.id')->in($this->app->user->view->projects)->fi()
-            ->beginIF($product->type != 'normal' and $branch !== '')->andWhere('t1.branch')->in($branch)->fi()
+            ->beginIF($product->type != 'normal' and $branch !== '' and $branch != 'all')->andWhere('t1.branch')->in($branch)->fi()
             ->andWhere('t2.deleted')->eq('0')
             ->beginIF($appendProject)->orWhere('t2.id')->in($appendProject)->fi()
             ->orderBy('order_asc')
@@ -1472,7 +1475,7 @@ class productModel extends model
             ->where('t1.product')->eq($productID)
             ->andWhere('t2.type')->in('sprint,kanban,stage')
             ->beginIF($projectID)->andWhere('t2.project')->in($projectID)->fi()
-            ->beginIF($branch !== '')->andWhere('t1.branch')->in($branch)->fi()
+            ->beginIF($branch !== '' and $branch !== 'all')->andWhere('t1.branch')->in($branch)->fi()
             ->beginIF(!$this->app->user->admin)->andWhere('t2.id')->in($this->app->user->view->sprints)->fi()
             ->beginIF(strpos($mode, 'noclosed') !== false)->andWhere('t2.status')->ne('closed')->fi()
             ->beginIF(strpos($mode, 'multiple') !== false)->andWhere('t2.multiple')->eq('1')->fi()
@@ -1532,7 +1535,7 @@ class productModel extends model
             ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
             ->where('t1.product')->eq($productID)
             ->andWhere('t2.type')->in('stage,sprint,kanban')
-            ->beginIF($branch)->andWhere('t1.branch')->in($branch)->fi()
+            ->beginIF($branch and $branch != 'all')->andWhere('t1.branch')->in($branch)->fi()
             ->beginIF($projectID)->andWhere('t2.project')->eq($projectID)->fi()
             ->beginIF(!$this->app->user->admin)->andWhere('t2.id')->in($this->app->user->view->sprints)->fi()
             ->andWhere('t2.deleted')->eq('0')

@@ -126,7 +126,7 @@ body {margin-bottom: 25px;}
             $spaceMethod  = zget($config->doc->spaceMethod, $doc->objectType);
             $spaceParams  = "libID={$doc->lib}&moduleID={$doc->module}";
             if(in_array($doc->objectType, array('product', 'project', 'execution', 'custom'))) $spaceParams = "objectID={$doc->objectID}&$spaceParams";
-            if(in_array($doc->objectType, array('mine', 'custom'))) $spaceParams = "type={$doc->objectType}&$spaceParams";
+            if($doc->objectType == 'mine') $spaceParams = "type={$doc->objectType}&$spaceParams";
 
             if(common::hasPriv('doc', $spaceMethod))
             {

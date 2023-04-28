@@ -104,7 +104,4 @@ $lang->pivot->deviationDesc = '按照已關閉執行統計偏差率（偏差率 
 $lang->pivot->workloadDesc  = '工作負載=用戶所有任務剩餘工時之和/選擇的時間天數*每天的工時。例如：起止時間設為1月1日~1月7日、工作日天數5天、每天工時8h，統計的是所有指派給該人員的未完成的任務，在5天內，每天8h的情況下的工作負載。';
 
 $lang->pivot->featureBar = array();
-$lang->pivot->featureBar['preview']['product'] = $lang->product->common;
-$lang->pivot->featureBar['preview']['project'] = $lang->project->common;
-$lang->pivot->featureBar['preview']['test']    = $lang->qa->common;
-$lang->pivot->featureBar['preview']['staff']   = $lang->system->common;
+$lang->pivot->featureBar['preview'] = array();

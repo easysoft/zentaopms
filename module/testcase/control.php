@@ -176,7 +176,7 @@ class testcase extends control
         }
 
         /* save session .*/
-        $this->loadModel('common')->saveQueryCondition($this->testcase->dao->get(), 'testcase', false);
+        $this->loadModel('common')->saveQueryCondition($queryCondition, 'testcase', false);
 
         /* Get summary. */
         $indCount   = 0;
@@ -3081,7 +3081,6 @@ class testcase extends control
         $idList  = explode(',', trim($this->post->scenes, ','));
         $orderBy = $this->post->orderBy;
         if(strpos($orderBy, 'sort') === false) return false;
-
         /* Get list of original scenes and cases, and sort with orderBy param. */
         $scenesMap = $this->dao->select('id,sort,isCase')->from(VIEW_SCENECASE)->where('id')->in($idList)->orderBy($orderBy)->fetchAll('id');
 
@@ -3236,7 +3235,7 @@ class testcase extends control
      * @access public
      * @return void
      */
-    public function importXMind($productID, $branch)
+    public function importXmind($productID, $branch)
     {
         if($_FILES)
         {
@@ -3426,7 +3425,7 @@ class testcase extends control
      * @access public
      * @return void
      */
-    public function showXMindImport($productID,$branch)
+    public function showXmindImport($productID,$branch)
     {
         if(!commonModel::hasPriv("testcase", "importXmind")) $this->loadModel('common')->deny('testcase', 'importXmind');
         $product  = $this->product->getById($productID);

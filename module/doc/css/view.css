@@ -1,15 +1,20 @@
 .h-full-adjust {overflow-y: auto; height: calc(100vh - 125px);}
 .main-col .block-files .panel-heading {padding-right: 20px;}
 .main-col .block-files .panel-heading .panel-title {height: 35px; line-height: 30px;}
-.main-col .doc-title {display: flex; font-size: 16px; margin-bottom: 10px; justify-content: space-between;}
+
+/* css for page-title .*/
+.main-col .doc-title {display: flex; font-size: 16px; margin-bottom: 10px; justify-content: space-between; width: 100%;}
+.main-col .doc-title .info {flex: 0 0 60px;}
+.main-col .doc-title #editorBox {flex: 0 0 190px;}
 .main-col .doc-title .title {margin-right: 10px; line-height: 32px; font-size: 20px;}
-.main-col .doc-title .info {flex: 1 1 0;}
 .main-col .doc-title .version a {font-size: 13px; color: #8c8c8c;}
 .main-col .doc-title .version .dropdown-menu a:hover {color: #ffffff;}
-.main-col .doc-title .actions a + a {margin-left: 0px;}
+.main-col .doc-title .actions {flex: 0 0 180px; display: flex;}
+.main-col .doc-title .actions a + a {margin-left: 0px; flex: 0 0 32px;}
 .main-col .doc-title .actions i {font-size: 15px; color: #8c8c8c;}
-#content .title {max-width: 40%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;}
 .main-col .doc-title .actions a > span {color: #9EA3B0;}
+
+#content .title {overflow: hidden; text-overflow: ellipsis; white-space: nowrap;}
 #mainContent .scrollbar-hover {max-height: 2000px; overflow: scroll;}
 #content .editor-preview {background: #fff}
 #content .CodeMirror{border: none}
@@ -24,10 +29,11 @@
 .article-content .info {margin-bottom: 15px; width:100%; overflow:hidden;}
 .article-content .info .user-time{margin-right: 4px}
 .article-content .info .keywords .label {padding: 2px 8px; color:#18A6FD; border-color:rgba(24, 166, 253, 0.25); height: 18px; line-height:14px; margin-right:4px;}
-
 .article-content {width: 100%; display: inline-block;}
 .article-content img {margin: 0;}
 .article-content.comment .comment-content {width: 94%;}
+
+/* css for outlineMenu .*/
 #outlineMenu {max-width: 200px; overflow-x: auto;}
 #outlineMenu .tree li > a {text-overflow: clip;}
 .outline-toggle i.icon-angle-right:before {content: "\e314"; cursor: pointer;}
@@ -71,12 +77,15 @@
 #autoBox > .ellipsis {position: absolute; top: 3px; right: 0; width: 10px; background: #F4F5F7; height: 100%;}
 .detail+.detail {padding-top: 0;}
 .comment-edit-form .form-actions {display: flex;}
-
+.drop-body::-webkit-scrollbar,
+#diffContain > .main-content::-webkit-scrollbar,
 #content .detail-content.article-content::-webkit-scrollbar,
 #outlineMenu::-webkit-scrollbar,
 #history::-webkit-scrollbar {height: 0px; width: 0px; background: transparent;}
+#diffContain > .main-content::-moz-scrollbar,
 #content .detail-content.article-content::-moz-scrollbar,
 #outlineMenu::-moz-scrollbar,
+.drop-body::-moz-scrollbar,
 #hostory::-moz-scrollbar {height: 0px; width: 0px; background: transparent;}
 .main-col iframe {min-height: unset;}
 
@@ -109,3 +118,5 @@
 .exchangeDiffGroup.show-diff .right-dom {display: unset;}
 .btn-limit {padding-left: 10px; padding-right: 20px;}
 .tree li>.list-toggle {top: 5px; left: -4px;}
+.flex-left {display: inline-flex; flex: auto}
+

@@ -10,12 +10,12 @@
               <div class="version">
                 <div class='btn-group'>
                   <a href='javascript:;' class='btn btn-link btn-limit text-ellipsis' data-toggle='dropdown' style="max-width: 120px;">
-                    #<?php echo $version ? $version : $api->version;?>
+                    V<?php echo $version ? $version : $api->version;?>
                     <span class="caret"></span>
                   </a>
-                  <ul class='dropdown-menu api-version-menu' style='max-height:240px; max-width: 300px; overflow-y:auto'>
-                    <?php for($version = $api->version; $version > 0; $version--):?>
-                    <li><a href='javascript:void(0)' data-url='<?php echo $this->createLink('api', 'index', "libID={$api->lib}&moduleID=0&apiID=$apiID&version=$version&release=$release");?>'>#<?php echo $version;?></a></li>
+                  <ul class='dropdown-menu api-version-menu menu-active-primary menu-hover-primary' style='max-height:240px; max-width: 300px; overflow-y:auto'>
+                    <?php for($itemVersion = $api->version; $itemVersion > 0; $itemVersion--):?>
+                    <li <?php if($version == $itemVersion) echo 'class=active';?> ><a href='javascript:void(0)' data-url='<?php echo $this->createLink('api', 'index', "libID={$api->lib}&moduleID=0&apiID=$apiID&version=$itemVersion&release=$release");?>'>V<?php echo $itemVersion;?></a></li>
                     <?php endfor;?>
                   </ul>
                 </div>

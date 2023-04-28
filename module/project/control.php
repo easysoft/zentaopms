@@ -904,7 +904,7 @@ class project extends control
 
         /* Check exist extend fields. */
         $isExtended = false;
-        if(!empty($this->config->bizVersion))
+        if($this->config->edition != 'open')
         {
             $extend = $this->loadModel('workflowaction')->getByModuleAndAction('project', 'view');
             if(!empty($extend) and $extend->extensionType == 'extend') $isExtended = true;
@@ -2345,12 +2345,17 @@ class project extends control
      */
     public function ajaxGetExecutions($projectID, $executionID = 0, $mode = '', $type = 'all')
     {
-        $project    = $this->project->getById($projectID);
-        $executions = array('' => '') + $this->loadModel('execution')->getPairs($projectID, $type, $mode);
+        $disabled   = '';
+        $executions = array('' => '');
+
+        if($projectID)
+        {
+            $project    = $this->project->getById($projectID);
+            $executions = array('' => '') + $this->loadModel('execution')->getPairs($projectID, $type, $mode);
+            $disabled   = !empty($project->multiple) ? '' : 'disabled';
+        }
 
         if($this->app->getViewType() == 'json') return print(json_encode($executionList));
-
-        $disabled = $project->multiple ? '' : 'disabled';
         return print(html::select('execution', $executions, $executionID, "class='form-control $disabled' $disabled"));
     }
 

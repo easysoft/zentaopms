@@ -197,7 +197,7 @@ class group extends control
      * @access public
      * @return void
      */
-    public function managePriv($type = 'byGroup', $param = 0, $menu = '', $version = '')
+    public function managePriv($type = 'byPackage', $param = 0, $menu = '', $version = '')
     {
         if($type == 'byGroup' or $type == 'byPackage') $groupID = $param;
 
@@ -251,13 +251,19 @@ class group extends control
             $privs = $this->group->transformPrivLang($privs);
             $privs = $this->group->getCustomPrivs($menu, $privs);
 
+
             $privList           = $modules;
             $privMethods        = array();
             $selectPrivs        = array();
             $selectedPrivIdList = array();
+            $groupPrivsIdList   = $this->group->getPrivsIdListByGroup($groupID);
             foreach($privs as $priv)
             {
-                if(!empty($version) and strpos($changelogs, ",{$priv->module}-{$priv->method},") === false) continue;
+                if(!empty($version) and strpos($changelogs, ",{$priv->module}-{$priv->method},") === false)
+                {
+                    unset($groupPrivsIdList[$priv->id]);
+                    continue;
+                }
 
                 if(!isset($privList[$priv->parentCode])) $privList[$priv->parentCode] = array();
                 if(!is_array($privList[$priv->parentCode])) $privList[$priv->parentCode] = array();
@@ -305,7 +311,6 @@ class group extends control
                 }
             }
 
-            $groupPrivsIdList   = $this->group->getPrivsIdListByGroup($groupID);
             $excludePrivsIdList = array_diff(array_keys($groupPrivsIdList), $selectedPrivIdList);
             $relatedPrivData    = $this->group->getRelatedPrivs($selectedPrivIdList, '', $excludePrivsIdList);
 
@@ -329,7 +334,11 @@ class group extends control
             $privs             = $this->group->getCustomPrivs('', $privs);
             $modules           = $this->dao->select('*')->from(TABLE_PRIVMANAGER)->where('type')->eq('module')->fetchAll('code');
             $modulePairs       = $this->group->getPrivManagerPairs('module');
-            $unassignedModules = array_diff(array_keys(array_filter(get_object_vars($this->lang->resource), function($modulePrivs){return !empty((array)$modulePrivs);})), array_keys($modulePairs));
+
+            $privArray         = get_object_vars($this->lang->resource);
+            $privArray         = array_filter($privArray, function($modulePrivs){$modulePrivs = (array)$modulePrivs; return !empty($modulePrivs);});
+            $unassignedModules = array_diff(array_keys($privArray), array_keys($modulePairs));
+
             foreach($unassignedModules as $unassignedModule)
             {
                 $this->app->loadLang($unassignedModule);

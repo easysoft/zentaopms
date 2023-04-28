@@ -1,3 +1,14 @@
+.drop-body::-webkit-scrollbar,
+#diffContain > .main-content::-webkit-scrollbar,
+#content .detail-content.article-content::-webkit-scrollbar,
+#outlineMenu::-webkit-scrollbar,
+#history::-webkit-scrollbar {height: 0px; width: 0px; background: transparent;}
+#diffContain > .main-content::-moz-scrollbar,
+#content .detail-content.article-content::-moz-scrollbar,
+#outlineMenu::-moz-scrollbar,
+.drop-body::-moz-scrollbar,
+#hostory::-moz-scrollbar {height: 0px; width: 0px; background: transparent;}
+
 .split-row > .side-col,
 .split-row > .main-col {padding: 0;}
 .col-spliter {width: 20px; position: relative; z-index: 10; cursor: ew-resize;}

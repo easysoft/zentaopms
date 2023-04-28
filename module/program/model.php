@@ -596,7 +596,7 @@ class programModel extends model
         }
 
         $query       = str_replace('`id`','t1.id', $this->session->projectQuery);
-        $projectList = $this->dao->select('t1.*')->from(TABLE_PROJECT)->alias('t1')
+        $projectList = $this->dao->select('DISTINCT t1.*')->from(TABLE_PROJECT)->alias('t1')
             ->leftJoin(TABLE_TEAM)->alias('t2')->on('t1.id=t2.root')
             ->leftJoin(TABLE_STAKEHOLDER)->alias('t3')->on('t1.id=t3.objectID')
             ->where('t1.deleted')->eq('0')

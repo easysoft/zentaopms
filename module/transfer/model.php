@@ -673,14 +673,11 @@ class transferModel extends model
                 elseif(strpos($this->config->transfer->userFields, $field) !== false)
                 {
                     /* if user deleted when export set userFields is itself. */
-                    $rows[$id]->$field = zget($exportDatas['user'], $value, $value);
+                    $rows[$id]->$field = zget($exportDatas['user'], $value);
                 }
 
                 /* if value = 0 or value = 0000:00:00 set value = ''. */
-                if(helper::isZeroDate($rows[$id]->$field))
-                {
-                    $rows[$id]->$field = '';
-                }
+                if($value == '0' or substr($value, 0, 4) == '0000') $rows[$id]->$field = '';
             }
         }
 
@@ -911,10 +908,10 @@ class transferModel extends model
         {
             $selectKey = 'id';
             if($model == 'testcase') $model = 'case';
-            if(strpos($queryCondition, "`{$this->config->db->prefix}$model` AS t1") !== false) $selectKey = 't1.id';
-            if(strpos($queryCondition, "`{$this->config->db->prefix}$model` AS t2") !== false) $selectKey = 't2.id';
+            preg_match_all('/[`"]' . $this->config->db->prefix . $model .'[`"] AS ([\w]+) /', $queryCondition, $matches);
+            if(isset($matches[1][0])) $selectKey = "{$matches[1][0]}.id";
 
-            $stmt = $this->dbh->query($queryCondition . ($this->post->exportType == 'selected' ? " AND $selectKey IN({$this->cookie->checkedItem})" : ''));
+            $stmt = $this->dbh->query($queryCondition . ($this->post->exportType == 'selected' ? " AND $selectKey IN(" . ($this->cookie->checkedItem ? $this->cookie->checkedItem : '0') . ")" : ''));
             while($row = $stmt->fetch())
             {
                 if($selectKey !== 't1.id' and isset($row->$model) and isset($row->id)) $row->id = $row->$model;

@@ -159,7 +159,7 @@ class screenModel extends model
             }
         }
 
-        foreach($scheme->componentList as $component)
+        foreach($scheme->componentList as $index => $component)
         {
             if(!empty($component->isGroup))
             {
@@ -168,9 +168,13 @@ class screenModel extends model
                     $groupComponent = $this->getLatestChart($groupComponent);
                 }
             }
-            else
+            else if($component)
             {
                 $component = $this->getLatestChart($component);
+            }
+            else
+            {
+                unset($scheme->componentList[$index]);
             }
         }
 
@@ -590,7 +594,7 @@ class screenModel extends model
                 {
                     for($k = 1; $k < $rowspan; $k ++)
                     {
-                        if(isset($dataset[$i + $k][$j])) unset($dataset[$i + $k][$j]);
+                        unset($dataset[$i + $k][$j]);
                     }
                 }
             }
@@ -745,17 +749,19 @@ class screenModel extends model
             case 'option':
                 if($field)
                 {
-                    $path = $this->app->getExtensionRoot() . 'biz' . DS . 'dataview' . DS . 'table' . DS . "$object.php";
-                    include $path;
-
-                    $options = $schema->fields[$field]['options'];
+                    $path = $this->app->getModuleRoot() . 'dataview' . DS . 'table' . DS . "$object.php";
+                    if(is_file($path))
+                    {
+                        include $path;
+                        $options = $schema->fields[$field]['options'];
+                    }
                 }
                 break;
             case 'object':
                 if($field)
                 {
-                    $table   = zget($this->config->objectTables, $object);
-                    $options = $this->dao->select("id, {$field}")->from($table)->fetchPairs();
+                    $table = zget($this->config->objectTables, $object, '');
+                    if($table) $options = $this->dao->select("id, {$field}")->from($table)->fetchPairs();
                 }
                 break;
             case 'string':
