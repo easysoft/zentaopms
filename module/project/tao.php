@@ -63,6 +63,7 @@ class projectTao extends projectModel
      */
     protected function doClosed(int $projectID, object $project, object $oldProject): bool
     {
+        $this->lang->error->ge = $this->lang->project->ge;
         $this->dao->update(TABLE_PROJECT)->data($project)
             ->autoCheck()
             ->check($this->config->project->close->requiredFields, 'notempty')

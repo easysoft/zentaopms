@@ -1790,7 +1790,7 @@ class project extends control
 
         if(!empty($_POST))
         {
-            $postData = form::data($this->config->project->form->suspend);
+            $postData = form::data();
 
             $postData = $this->projectZen->prepareSuspendExtras($projectID, $postData);
 

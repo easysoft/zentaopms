@@ -318,7 +318,6 @@ class projectZen extends project
     protected function prepareSuspendExtras(int $projectID, object $postData): object
     {
         $editorIdList = $this->config->project->editor->suspend['id'];
-        if($this->app->rawModule == 'program') $editorIdList = $this->config->program->editor->suspend['id'];
 
         return $postData->add('id', $projectID)
             ->setDefault('status', 'suspended')
@@ -341,7 +340,6 @@ class projectZen extends project
     protected function prepareClosedExtras(int $projectID, object $postData): object
     {
         $editorIdList = $this->config->project->editor->suspend['id'];
-        if($this->app->rawModule == 'program') $editorIdList = $this->config->program->editor->suspend['id'];
 
         return  $postData->add('id', $projectID)
             ->setDefault('status', 'closed')
@@ -350,7 +348,6 @@ class projectZen extends project
             ->setDefault('lastEditedBy', $this->app->user->account)
             ->setDefault('lastEditedDate', helper::now())
             ->stripTags($editorIdList, $this->config->allowedTags)
-            ->remove('comment')
             ->get();
     }
 
@@ -529,17 +526,15 @@ class projectZen extends project
     {
         $oldProject = $this->project->getByID($projectID);
 
-        $editorIdList=$this->config->project->editor->activate['id'];
-        if($this->app->rawModule=='program')$editorIdList=$this->config->program->editor->activate['id'];
+        $editorIdList = $this->config->project->editor->activate['id'];
 
-        return $postData->add('id',$projectID)
-            ->setDefault('realEnd','')
-            ->setDefault('status','doing')
-            ->setDefault('lastEditedBy',$this->app->user->account)
-            ->setDefault('lastEditedDate',helper::now())
-            ->setIF(!helper::isZeroDate($oldProject->realBegan),'realBegan',helper::today())
-            ->stripTags($editorIdList,$this->config->allowedTags)
-            ->remove('comment,readjustTime,readjustTask')
+        return $postData->add('id', $projectID)
+            ->setDefault('realEnd', '')
+            ->setDefault('status', 'doing')
+            ->setDefault('lastEditedBy', $this->app->user->account)
+            ->setDefault('lastEditedDate', helper::now())
+            ->setIF(!helper::isZeroDate($oldProject->realBegan), 'realBegan', helper::today())
+            ->stripTags($editorIdList, $this->config->allowedTags)
             ->get();
     }
 

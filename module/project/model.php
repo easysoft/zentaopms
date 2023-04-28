@@ -1644,7 +1644,6 @@ class projectModel extends model
     public function suspend(int $projectID, object $project, string $type = 'project'): array|false
     {
         $editorIdList = $this->config->project->editor->suspend['id'];
-        if($this->app->rawModule == 'program') $editorIdList = $this->config->program->editor->suspend['id'];
 
         $oldProject = $this->getById($projectID, $type);
 
@@ -1707,9 +1706,6 @@ class projectModel extends model
         $oldProject = $this->getByID($projectID);
 
         $editorIdList = $this->config->project->editor->close['id'];
-        if($this->app->rawModule == 'program') $editorIdList = $this->config->program->editor->close['id'];
-
-        $this->lang->error->ge = $this->lang->project->ge;
 
         $project = $this->loadModel('file')->processImgURL($project, $editorIdList, $this->post->uid);
 
@@ -1727,7 +1723,6 @@ class projectModel extends model
         if(!$oldProject->hasProduct)
         {
             $productID = $this->loadModel('product')->getProductIDByProject($projectID);
-            unset($_POST);
             $this->product->close($productID);
         }
 
