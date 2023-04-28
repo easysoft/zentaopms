@@ -403,4 +403,29 @@ class projectTao extends projectModel
             ->exec();
         return !dao::isError();
     }
+
+    /**
+     * 根据项目集ID查询所有项目集的层级。
+     * Get all program level of a program.
+     *
+     * @param  int    $program
+     * @param  string $path
+     * @param  int    $grade
+     * @access public
+     * @return string
+     */
+    public function getParentProgram(int $program, string $path, int $grade): string
+    {
+        $parentName = $this->dao->select('id,name')->from(TABLE_PROGRAM)
+            ->where('id')->in(trim($path, ','))
+            ->andWhere('grade')->lt($grade)
+            ->orderBy('grade asc')
+            ->fetchPairs();
+
+        $parentProgram = '';
+        foreach($parentName as $name) $parentProgram .= $name . '/';
+        $parentProgram = rtrim($parentProgram, '/');
+
+        return $parentProgram;
+    }
 }
