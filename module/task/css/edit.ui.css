@@ -1,0 +1,9 @@
+.pl-10px {padding-left: 10px;}
+#showAllModuleBox{width:60px;}
+#showAllModuleBox .no-margin {padding-left:22px;}
+#taskTeamEditor .sortable .input-group .input-group-addon.required:after {top: 10px; right: 2px; z-index: 3;}
+#storyIdBox .chosen-container .chosen-drop.chosen-no-wrap>.chosen-results>li {text-overflow: unset;}
+
+#modalTeam .modal-content {padding: 20px 13px 0; height: 340px;max-height: 296px!important; overflow-y: scroll!important;}
+#taskTeamEditor tr .input-control {display: inline-block; width: 130px;}
+#taskTeamEditor h2 {margin-top:0;}

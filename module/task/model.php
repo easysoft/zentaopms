@@ -1600,10 +1600,9 @@ class taskModel extends model
      * @access public
      * @return array
      */
-    public function assign($task, $taskID): array|false
+    public function assign(object $task): array|false
     {
-        $task->id = $taskID;
-        $oldTask = $this->getById($taskID);
+        $oldTask = $this->getById($task->id);
 
         if($oldTask->status != 'done' and $oldTask->status != 'closed' and isset($task->left) and $task->left == 0)
         {
@@ -1611,7 +1610,7 @@ class taskModel extends model
             return false;
         }
 
-        if($oldTask->parent > 0) $this->updateParentStatus($taskID);
+        if($oldTask->parent > 0) $this->updateParentStatus($task->id);
 
         $task = $this->loadModel('file')->processImgURL($task, $this->config->task->editor->assignto['id'], $this->post->uid);
         $this->dao->update(TABLE_TASK)
@@ -1619,7 +1618,7 @@ class taskModel extends model
             ->autoCheck()
             ->check('left', 'float')
             ->checkFlow()
-            ->where('id')->eq($taskID)
+            ->where('id')->eq($task->id)
             ->exec();
 
         if(!dao::isError()) return common::createChanges($oldTask, $task);
