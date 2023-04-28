@@ -69,7 +69,7 @@ class todo extends control
 
         unset($this->lang->todo->typeList['cycle']);
 
-        $this->buildCreateForm($date);
+        $this->buildCreateView($date);
     }
 
     /**
@@ -128,9 +128,9 @@ class todo extends control
      *
      * @param  string $todoID
      * @access public
-     * @return int
+     * @return void
      */
-    public function edit(string $todoID): int
+    public function edit(string $todoID)
     {
         $todoID = (int)$todoID;
         if(!empty($_POST))
@@ -163,7 +163,9 @@ class todo extends control
 
         unset($this->lang->todo->typeList['cycle']);
 
-        $this->renderEditData($todoID);
+        $this->todoZen->buildEditView($todo);
+
+        return;
     }
 
     /**
