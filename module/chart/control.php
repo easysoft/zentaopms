@@ -182,6 +182,7 @@ class chart extends control
         $sql    = str_replace(';', '', "$post->sql");
         $fields = $post->fieldSettings;
         $langs  = !empty($post->langs) ? $post->langs : array();
+        if(is_string($langs)) $langs = json_decode($langs, true);
 
         switch($type)
         {
