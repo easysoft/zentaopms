@@ -92,10 +92,13 @@ class pivotZen extends pivot
 
         foreach($groups as $group)
         {
+            if($this->config->edition == 'open' && $group->grade == 1) continue;
+
             $pivots = $this->dao->select('*')->from(TABLE_PIVOT)
                 ->where("FIND_IN_SET($group->id, `group`)")
                 ->andWhere('stage')->ne('draft')
-                ->orderBy('id_desc')->fetchAll();
+                ->orderBy('id_desc')
+                ->fetchAll();
             if($pivots)
             {
                 foreach($pivots as $pivot) return array('pivot', 'show', "dimensionID=$dimension&groupID={$group->id}&pivotID={$pivot->id}");
