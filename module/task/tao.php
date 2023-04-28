@@ -17,42 +17,39 @@ class taskTao extends taskModel
      * 获取任务的进度。
      *
      * @param  object   $task
-     * @access private
+     * @access protected
      * @return float
      */
     protected function computeTaskProgress(object $task): float
     {
-        if($task->consumed == 0 and $task->left == 0) return 0;
-        if($task->consumed != 0 and $task->left == 0) return 100;
-        return round($task->consumed / ($task->consumed + $task->left), 2) * 100;
+        if($task->left != 0) return round($task->consumed / ($task->consumed + $task->left), 2) * 100;
+        if($task->consumed == 0) return 0;
+        return 100;
     }
 
     /**
      * Compute progress of task list, include its' children.
      * 计算任务列表中每个任务的进度，包括子任务。
      *
-     * @param  array     $tasks
-     * @access private
+     * @param  object[] $tasks
+     * @access protected
      * @return object[]
      */
-    protected function computeTasksProgress(array $tasks): array
+    protected function batchComputeProgress(array $tasks): array
     {
         foreach($tasks as $task)
         {
             $task->progress = $this->computeTaskProgress($task);
-
             if(empty($task->children)) continue;
-            foreach($task->children as $child)
-            {
-                $child->progress = $this->computeTaskProgress($child);
-            }
+
+            $task->children = $this->batchComputeProgress($task->children);
         }
 
         return $tasks;
     }
 
     /**
-     * Fetch tasks under execution by executionID,
+     * Fetch tasks under execution by executionID(Todo).
      * 获取执行下的任务。
      *
      * @param  int          $executionID
@@ -175,14 +172,13 @@ class taskTao extends taskModel
      * @param  string $field
      * @param  string $condition
      * @access public
-     * @return ojbect[]
+     * @return object[]
      */
     protected function getListByReportCondition(string $field, string $condition): array
     {
-        $tasks = $this->dao->select("id,{$field}")->from(TABLE_TASK)
+        return $this->dao->select("id,{$field}")->from(TABLE_TASK)
                 ->where($condition)
                 ->fetchAll('id');
-        return $tasks;
     }
 
     /**
@@ -223,31 +219,25 @@ class taskTao extends taskModel
      * Change the hierarchy of tasks to a parent-child structure.
      * 将任务的层级改为父子结构。
      *
-     * @param  array     $tasks
+     * @param  object[]  $tasks
+     * @param  object[]  $parentTasks
      * @access protected
      * @return object[]
      */
-    protected function restructureHierarchy(array $tasks): array
+    protected function buildTaskTree(array $tasks, array $parentTasks): array
     {
-        $parentIdList = array();
-        foreach($tasks as $task)
-        {
-            if($task->parent <= 0 or isset($tasks[$task->parent]) or isset($parentIdList[$task->parent])) continue;
-            $parentIdList[$task->parent] = $task->parent;
-        }
-
-        $parents = $this->getByList($parentIdList);
         foreach($tasks as $task)
         {
             if($task->parent <= 0) continue;
             if(isset($tasks[$task->parent]))
             {
+                if(!isset($tasks[$task->parent]->children)) $tasks[$task->parent]->children = array();
                 $tasks[$task->parent]->children[$task->id] = $task;
                 unset($tasks[$task->id]);
             }
             else
             {
-                $parent = $parents[$task->parent];
+                $parent = $parentTasks[$task->parent];
                 $task->parentName = $parent->name;
             }
         }
@@ -308,5 +298,38 @@ class taskTao extends taskModel
         }
 
         return $currentTask;
+    }
+
+    /**
+     * 通过拖动甘特图修改任务的预计开始日期和截止日期。
+     * Update task estimate date and deadline through gantt.
+     *
+     * @param  int     $taskID
+     * @param  object  $postData
+     * @access protected
+     * @return void
+     */
+    protected function updateTaskEsDateByGantt(int $taskID, object $postData)
+    {
+        $task = $this->dao->select('*')->from(TABLE_TASK)->where('id')->eq($taskID)->fetch();
+        $isChildTask = $task->parent > 0 ? true : false;
+
+        if($isChildTask) $parentTask = $this->dao->select('*')->from(TABLE_TASK)->where('id')->eq($task->parent)->fetch();
+
+        $stage  = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($task->execution)->andWhere('project')->eq($task->project)->fetch();
+
+        $start = $isChildTask ? $parentTask->estStarted   : $stage->begin;
+        $end   = $isChildTask ? $parentTask->deadline     : $stage->end;
+        $arg   = $isChildTask ? $this->lang->task->parent : $this->lang->project->stage;
+
+        if(helper::diffDate($start, $postData->startDate) > 0) dao::$errors = sprintf($this->lang->task->overEsStartDate, $arg, $arg);
+        if(helper::diffDate($end, $postData->endDate) < 0)     dao::$errors = sprintf($this->lang->task->overEsEndDate, $arg, $arg);
+
+        $this->dao->update(TABLE_TASK)
+            ->set('estStarted')->eq($postData->startDate)
+            ->set('deadline')->eq($postData->endDate)
+            ->set('lastEditedBy')->eq($this->app->user->account)
+            ->where('id')->eq($taskID)
+            ->exec();
     }
 }

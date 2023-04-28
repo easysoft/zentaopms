@@ -13,6 +13,7 @@ declare(strict_types=1);
 class productTao extends productModel
 {
     /**
+     * 获取产品ID数组中带有项目集信息的产品分页列表。
      * Get products with program data that in the ID list.
      *
      * @param  array     $productIDs
@@ -33,6 +34,7 @@ class productTao extends productModel
     }
 
     /**
+     * 获取产品ID数组中的产品排序分页列表。
      * Get products in the ID list.
      *
      * @param  array     $productIDs
@@ -54,6 +56,7 @@ class productTao extends productModel
     }
 
     /**
+     * 获取产品列表。
      * Get products list.
      *
      * @param  int        $programID
@@ -98,7 +101,7 @@ class productTao extends productModel
     }
 
     /* TODO move to story module. */
-    protected function getStoriesTODO( array $productIDs): array
+    protected function getStoriesTODO(array $productIDs): array
     {
         $stories = $this->dao->select('product, status, count(status) AS count')
             ->from(TABLE_STORY)
@@ -112,7 +115,7 @@ class productTao extends productModel
     }
 
     /* TODO move to story module. */
-    protected function getRequirementsTODO( array $productIDs): array
+    protected function getRequirementsTODO(array $productIDs): array
     {
         $requirements = $this->dao->select('product, status, count(status) AS count')
             ->from(TABLE_STORY)
@@ -153,7 +156,7 @@ class productTao extends productModel
     }
 
     /* TODO move to productplan module. */
-    protected function getPlansTODO( array $productIDs): array
+    protected function getPlansTODO(array $productIDs): array
     {
         $plans = $this->dao->select('product, count(*) AS count')
             ->from(TABLE_PRODUCTPLAN)
@@ -167,7 +170,7 @@ class productTao extends productModel
     }
 
     /* TODO move to release module. */
-    protected function getReleasesTODO( array $productIDs): array
+    protected function getReleasesTODO(array $productIDs): array
     {
         $releases = $this->dao->select('product, count(*) AS count')
             ->from(TABLE_RELEASE)
@@ -180,7 +183,7 @@ class productTao extends productModel
     }
 
     /* TODO move to bug module. */
-    protected function getBugsTODO( array $productIDs): array
+    protected function getBugsTODO(array $productIDs): array
     {
         $bugs = $this->dao->select('product,count(*) AS conut')
             ->from(TABLE_BUG)
@@ -193,7 +196,7 @@ class productTao extends productModel
     }
 
     /* TODO move to bug module. */
-    protected function getUnResolvedTODO( array $productIDs): array
+    protected function getUnResolvedTODO(array $productIDs): array
     {
         $unResolved = $this->dao->select('product,count(*) AS count')
             ->from(TABLE_BUG)
@@ -208,7 +211,7 @@ class productTao extends productModel
     }
 
     /* TODO move to bug module. */
-    protected function getFixedBugsTODO( array $productIDs): array
+    protected function getFixedBugsTODO(array $productIDs): array
     {
         $fixedBugs = $this->dao->select('product,count(*) AS count')
             ->from(TABLE_BUG)
@@ -223,7 +226,7 @@ class productTao extends productModel
     }
 
     /* TODO move to bug module. */
-    protected function getClosedBugsTODO( array $productIDs): array
+    protected function getClosedBugsTODO(array $productIDs): array
     {
         $closedBugs = $this->dao->select('product,count(*) AS count')
             ->from(TABLE_BUG)
@@ -235,5 +238,99 @@ class productTao extends productModel
 
         return $closedBugs;
     }
+    /* TODO move to bug module. */
+    protected function getThisWeekBugsTODO(array $productIDs): array
+    {
+        $this->app->loadClass('date', true);
+        $weekDate     = date::getThisWeek();
+        $thisWeekBugs = $this->dao->select('product,count(*) AS count')
+            ->from(TABLE_BUG)
+            ->where('openedDate')->between($weekDate['begin'], $weekDate['end'])
+            ->andWhere('product')->in($productIDs)
+            ->andWhere('deleted')->eq(0)
+            ->groupBy('product')
+            ->fetchPairs();
 
+        return $thisWeekBugs;
+    }
+
+    /* TODO move to bug module. */
+    protected function getAssignToNullTODO(array $productIDs): array
+    {
+        $assignToNull = $this->dao->select('product,count(*) AS count')
+            ->from(TABLE_BUG)
+            ->where('assignedTo')->eq('')
+            ->andWhere('product')->in($productIDs)
+            ->andWhere('deleted')->eq(0)
+            ->groupBy('product')
+            ->fetchPairs();
+
+        return $assignToNull;
+    }
+
+    /* TODO move to program module. */
+    protected function getProgramsInTODO(array $programIDs): array
+    {
+        $programs = $this->dao->select('id,name,PM')->from(TABLE_PROGRAM)
+            ->where('id')->in($programIDs)
+            ->fetchAll('id');
+
+        return $programs;
+    }
+
+    /**
+     * 获取用于统计的产品列表。
+     * Get products list for statistic.
+     *
+     * @param  int[]     $roductIDs
+     * @param  int       $programID
+     * @param  string    $orderBy
+     * @param  object    $pager
+     * @access protected
+     * @return array
+     */
+    protected function getStatsProducts(array $productIDs, int $programID, string $orderBy, object $pager): array
+    {
+        if($orderBy == static::OB_PROGRAM) $products = $this->getPagerProductsWithProgramIn($productIDs, $pager);
+        else $products = $this->getPagerProductsIn($productIDs, $pager, $orderBy);
+
+        /* Fetch product lines. */
+        $linePairs = $this->getLinePairs();
+        foreach($products as $product) $product->lineName = zget($linePairs, $product->line, '');
+
+        if(!empty($programID)) return $products;
+
+        $programKeys = array(0 => 0);
+        foreach($products as $product) $programKeys[] = $product->program;
+        $programs = $this->getProgramsInTODO(array_unique($programKeys));
+
+        foreach($products as $product)
+        {
+            $product->programName = isset($programs[$product->program]) ? $programs[$product->program]->name : '';
+            $product->programPM   = isset($programs[$product->program]) ? $programs[$product->program]->PM : '';
+        }
+
+        return $products;
+    }
+
+    /**
+     * 格式化append参数，保证输出用逗号间隔的id列表。
+     * Format append param.
+     *
+     * @param string|array append
+     * @access protected
+     * @return string
+     */
+    protected function formatAppendParam(string|array $append = ''): string
+    {
+        if(empty($append)) return '';
+
+        if(is_string($append)) $append = explode(',', $append);
+
+        $append = array_map(function($item){return (int)$item;}, $append);
+        $append = array_unique(array_filter($append));
+        sort($append);
+
+        return implode(',', $append);
+    }
 }

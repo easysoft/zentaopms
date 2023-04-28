@@ -319,31 +319,29 @@ class productModel extends model
     /**
      * Get product pairs.
      *
-     * @param  string       $mode
-     * @param  string       $programID
+     * @param  string       $mode          all|noclosed
+     * @param  int          $programID
      * @param  string|array $append
      * @param  string|int   $shadow         all | 0 | 1
      * @return array
      */
-    public function getPairs($mode = '', $programID = 0, $append = '', $shadow = 0)
+    public function getPairs(string $mode = '', int $programID = 0, string|array $append = '', string|int $shadow = 0): array
     {
         if(defined('TUTORIAL')) return $this->loadModel('tutorial')->getProductPairs();
 
-        if(!empty($append) and is_array($append)) $append = implode(',', $append);
+        /* Add other products in has priv product id list. */
+        $append = $this->productTao->formatAppendParam($append);
+        $views  = $this->app->user->view->products . (empty($append) ? '' : ",{$append}");
 
-        $views   = empty($append) ? $this->app->user->view->products : $this->app->user->view->products . ",$append";
-        $orderBy = !empty($this->config->product->orderBy) ? $this->config->product->orderBy : 'isClosed';
-        /* Order by program. */
         return $this->dao->select("t1.*,  IF(INSTR(' closed', t1.status) < 2, 0, 1) AS isClosed")->from(TABLE_PRODUCT)->alias('t1')
             ->leftJoin(TABLE_PROGRAM)->alias('t2')->on('t1.program = t2.id')
-            ->where('1 = 1')
+            ->where('t1.vision')->eq($this->config->vision)
             ->beginIF(strpos($mode, 'all') === false)->andWhere('t1.deleted')->eq(0)->fi()
             ->beginIF($programID)->andWhere('t1.program')->eq($programID)->fi()
             ->beginIF(strpos($mode, 'noclosed') !== false)->andWhere('t1.status')->ne('closed')->fi()
             ->beginIF(!$this->app->user->admin and $this->config->vision == 'rnd')->andWhere('t1.id')->in($views)->fi()
             ->beginIF($shadow !== 'all')->andWhere('t1.shadow')->eq((int)$shadow)->fi()
-            ->andWhere('t1.vision')->eq($this->config->vision)
-            ->orderBy("$orderBy, t2.order_asc, t1.line_desc, t1.order_asc")
+            ->orderBy("isClosed,t1.program_asc,t2.order_asc,t1.line_desc,t1.order_asc")
             ->fetchPairs('id', 'name');
     }
 
@@ -678,103 +676,22 @@ class productModel extends model
 
     /**
      * Create a product.
+     * 直接用对象数据创建产品
      *
+     * @param  object  $product
      * @access public
-     * @return int
+     * @return int|false
      */
-    public function create()
+    public function create(object $product): int|false
     {
-        $product = fixer::input('post')
-            ->callFunc('name', 'trim')
-            ->setDefault('status', 'normal')
-            ->setDefault('line', 0)
-            ->setDefault('createdBy', $this->app->user->account)
-            ->setDefault('createdDate', helper::now())
-            ->setDefault('createdVersion', $this->config->version)
-            ->setIF($this->post->acl == 'open', 'whitelist', '')
-            ->setIF(!isset($_POST['whitelist']), 'whitelist', '')
-            ->stripTags($this->config->product->editor->create['id'], $this->config->allowedTags)
-            ->join('whitelist', ',')
-            ->join('reviewer', ',')
-            ->remove('uid,newLine,lineName,contactListMenu')
-            ->get();
-
         $this->lang->error->unique = $this->lang->error->repeat;
-        $product = $this->loadModel('file')->processImgURL($product, $this->config->product->editor->create['id'], $this->post->uid);
-
-        /* Lean mode relation defaultProgram. */
-        $programID = isset($product->program) ? $product->program : 0;
-        if($this->config->systemMode == 'light')
-        {
-            $programID = $this->config->global->defaultProgram;
-            $product->program = $this->config->global->defaultProgram;
-        }
-
         $this->dao->insert(TABLE_PRODUCT)->data($product)->autoCheck()
-            ->batchCheck($this->config->product->create->requiredFields, 'notempty')
-            ->checkIF(!empty($product->name), 'name', 'unique', "`program` = $programID and `deleted` = '0'")
+            ->checkIF(!empty($product->name), 'name', 'unique', "`program` = {$product->program} and `deleted` = '0'")
             ->checkIF(!empty($product->code), 'code', 'unique', "`deleted` = '0'")
             ->checkFlow()
             ->exec();
-
-        if(!dao::isError())
-        {
-            $productID = $this->dao->lastInsertID();
-
-            if(!empty($_POST['lineName']))
-            {
-                /* Create product line. */
-                $maxOrder = $this->dao->select("max(`order`) as maxOrder")->from(TABLE_MODULE)->where('type')->eq('line')->fetch('maxOrder');
-                $maxOrder = $maxOrder ? $maxOrder + 10 : 0;
-
-                $line = new stdClass();
-                $line->type   = 'line';
-                $line->parent = 0;
-                $line->grade  = 1;
-                $line->name   = $this->post->lineName;
-                $line->root   = $this->config->systemMode == 'ALM' ? $product->program : 0;
-                $line->order  = $maxOrder;
-
-                $lines = $this->dao->select('name')->from(TABLE_MODULE)->where('type')->eq('line')->andWhere('root')->eq($line->root)->andWhere('name')->eq($line->name)->fetch();
-                if(!empty($lines))
-                {
-                    dao::$errors['lineName'] = sprintf($this->lang->product->nameIsDuplicated, $line->name);
-                    return false;
-                }
-                $this->dao->insert(TABLE_MODULE)->data($line)->exec();
-
-                if(!dao::isError())
-                {
-                    $lineID = $this->dao->lastInsertID();
-                    $path   = ",$lineID,";
-
-                    $this->dao->update(TABLE_MODULE)->set('path')->eq($path)->where('id')->eq($lineID)->exec();
-
-                    $this->dao->update(TABLE_PRODUCT)->set('line')->eq($lineID)->where('id')->eq($productID)->exec();
-                }
-            }
-
-            $this->file->updateObjectID($this->post->uid, $productID, 'product');
-            $this->dao->update(TABLE_PRODUCT)->set('`order`')->eq($productID * 5)->where('id')->eq($productID)->exec();
-
-            $whitelist = explode(',', $product->whitelist);
-            $this->loadModel('personnel')->updateWhitelist($whitelist, 'product', $productID);
-            if($product->acl != 'open') $this->loadModel('user')->updateUserView($productID, 'product');
-
-            /* Create doc lib. */
-            $this->app->loadLang('doc');
-            $lib = new stdclass();
-            $lib->product   = $productID;
-            $lib->name      = $this->lang->doclib->main['product'];
-            $lib->type      = 'product';
-            $lib->main      = '1';
-            $lib->acl       = 'default';
-            $lib->addedBy   = $this->app->user->account;
-            $lib->addedDate = helper::now();
-            $this->dao->insert(TABLE_DOCLIB)->data($lib)->exec();
-
-            return $productID;
-        }
+        if(dao::isError()) return false;
+        return $this->dao->lastInsertID();
     }
 
     /**
@@ -1023,6 +940,72 @@ class productModel extends model
                 $this->dao->update(TABLE_MODULE)->data($line)->where('id')->eq($lineID)->exec();
             }
         }
+    }
+
+    /**
+     * Create product line.
+     * 创建产品线。
+     *
+     * @param int programID
+     * @access public
+     * @return int|false
+     */
+    public function createLine(int $programID): int|false
+    {
+        if($programID <= 0) return false;
+        if(empty($_POST['lineName'])) return false;
+
+        $line = new stdClass();
+        $line->type   = 'line';
+        $line->parent = 0;
+        $line->grade  = 1;
+        $line->name   = htmlSpecialString($this->post->lineName);
+        $line->root   = $programID;
+
+        $existedLineID = $this->dao->select('id')->from(TABLE_MODULE)->where('type')->eq('line')->andWhere('root')->eq($line->root)->andWhere('name')->eq($line->name)->fetch('id');
+        if($existedLineID) return $existedLineID;
+
+        $this->dao->insert(TABLE_MODULE)->data($line)->exec();
+        if(dao::isError()) return false;
+
+        $lineID = $this->dao->lastInsertID();
+        $path   = ",$lineID,";
+        $this->dao->update(TABLE_MODULE)->set('path')->eq($path)->set('`order`')->eq($lineID)->where('id')->eq($lineID)->exec();
+
+        return $lineID;
+    }
+
+    /**
+     * Create main lib for product
+     * 关联创建产品主库
+     *
+     * @param int productID
+     * @access public
+     * @return int|false
+     */
+    public function createMainLib(int $productID): int|false
+    {
+        if($productID <= 0) return false;
+
+        $existedLibID = $this->dao->select('id')->from(TABLE_DOCLIB)->where('product')->eq($productID)
+            ->andWhere('type')->eq('product')
+            ->andWhere('main')->eq('1')
+            ->fetch('id');
+        if($existedLibID) return $existedLibID;
+
+        $this->app->loadLang('doc');
+        $lib = new stdclass();
+        $lib->product   = $productID;
+        $lib->name      = $this->lang->doclib->main['product'];
+        $lib->type      = 'product';
+        $lib->main      = '1';
+        $lib->acl       = 'default';
+        $lib->addedBy   = $this->app->user->account;
+        $lib->addedDate = helper::now();
+        $this->dao->insert(TABLE_DOCLIB)->data($lib)->exec();
+
+        if(dao::isError())return false;
+        return $this->dao->lastInsertID();
     }
 
     /**
@@ -1788,13 +1771,8 @@ class productModel extends model
         $products = strtolower($status) == static::ST_BYSEARCH ? $this->getListBySearch($param) : $this->productTao->getList($programID, $status, 0, $line);
         if(empty($products)) return array();
 
-        $productKeys = array_keys($products);
-        if($orderBy == static::OB_PROGRAM) $products = $this->productTao->getPagerProductsWithProgramIn($productKeys, $pager);
-        else $products = $this->productTao->getPagerProductsIn($productKeys, $pager, $orderBy);
-
-        $linePairs = $this->getLinePairs();
-        foreach($products as $product) $product->lineName = zget($linePairs, $product->line, '');
-
+        $productKeys  = array_keys($products);
+        $products     = $this->productTao->getStatsProducts($productKeys,$programID, $orderBy, $pager);
         $stories      = $this->productTao->getStoriesTODO($productKeys);
         $requirements = $this->productTao->getRequirementsTODO($productKeys);
 
@@ -1809,18 +1787,12 @@ class productModel extends model
         /* Padding the stories to sure all status have records. */
         foreach($stories as $key => $story)
         {
-            foreach(array_keys($this->lang->story->statusList) as $status)
-            {
-                $story[$status] = isset($story[$status]) ? $story[$status]->count : 0;
-            }
+            foreach(array_keys($this->lang->story->statusList) as $status) $story[$status] = isset($story[$status]) ? $story[$status]->count : 0;
             $stories[$key] = $story;
         }
         foreach($requirements as $key => $requirement)
         {
-            foreach(array_keys($this->lang->story->statusList) as $status)
-            {
-                $requirement[$status] = isset($requirement[$status]) ? $requirement[$status]->count : 0;
-            }
+            foreach(array_keys($this->lang->story->statusList) as $status) $requirement[$status] = isset($requirement[$status]) ? $requirement[$status]->count : 0;
             $requirements[$key] = $requirement;
         }
 
@@ -1834,45 +1806,11 @@ class productModel extends model
         $unResolved        = $this->productTao->getUnResolvedTODO($productKeys);
         $fixedBugs         = $this->productTao->getFixedBugsTODO($productKeys);
         $closedBugs        = $this->productTao->getClosedBugsTODO($productKeys);
-
-        $this->loadModel('report');
-        $this->loadModel('story');
-        $this->loadModel('bug');
+        $thisWeekBugs      = $this->productTao->getThisWeekBugsTODO($productKeys);
+        $assignToNull      = $this->productTao->getAssignToNullTODO($productKeys);
 
 
-        $this->app->loadClass('date', true);
-        $weekDate     = date::getThisWeek();
-        $thisWeekBugs = $this->dao->select('product,count(*) AS count')
-            ->from(TABLE_BUG)
-            ->where('openedDate')->between($weekDate['begin'], $weekDate['end'])
-            ->andWhere('product')->in($productKeys)
-            ->andWhere('deleted')->eq(0)
-            ->groupBy('product')
-            ->fetchPairs();
-
-        $assignToNull = $this->dao->select('product,count(*) AS count')
-            ->from(TABLE_BUG)
-            ->where('assignedTo')->eq('')
-            ->andWhere('product')->in($productKeys)
-            ->andWhere('deleted')->eq(0)
-            ->groupBy('product')
-            ->fetchPairs();
-
-        if(empty($programID))
-        {
-            $programKeys = array(0 => 0);
-            foreach($products as $product) $programKeys[] = $product->program;
-            $programs = $this->dao->select('id,name,PM')->from(TABLE_PROGRAM)
-                ->where('id')->in(array_unique($programKeys))
-                ->fetchAll('id');
-
-            foreach($products as $product)
-            {
-                $product->programName = isset($programs[$product->program]) ? $programs[$product->program]->name : '';
-                $product->programPM   = isset($programs[$product->program]) ? $programs[$product->program]->PM : '';
-            }
-        }
-
+        /* Generate statistic array. */
         $stats = array();
         foreach($products as $key => $product)
         {
@@ -2004,10 +1942,9 @@ class productModel extends model
      */
     public function getLinePairs(int $programID = 0): array
     {
-        if($programID <= 0) return array();
         return $this->dao->select('id,name')->from(TABLE_MODULE)
             ->where('type')->eq('line')
-            ->andWhere('root')->eq($programID)
+            ->beginIF($programID)->andWhere('root')->eq($programID)->fi()
             ->andWhere('deleted')->eq(0)
             ->fetchPairs('id', 'name');
     }

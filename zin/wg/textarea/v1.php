@@ -3,8 +3,7 @@ namespace zin;
 
 class textarea extends wg
 {
-    static $defineProps =
-    [
+    static $defineProps = array(
         'name: string',
         'id?: string',
         'class?: string',
@@ -13,13 +12,12 @@ class textarea extends wg
         'placeholder?: string',
         'rows?: number',
         'cols?: number',
-    ];
+    );
 
-    static $defaultProps =
-    [
+    static $defaultProps = array(
         'class' => 'form-control',
         'rows' => 10
-    ];
+    );
 
     protected function build()
     {

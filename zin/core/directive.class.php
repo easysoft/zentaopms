@@ -41,12 +41,11 @@ class directive
 
     public function __debugInfo()
     {
-        return
-        [
+        return array(
             'type'    => $this->type,
             'data'    => $this->data,
             'options' => $this->options
-        ];
+        );
     }
 
     public static function is($item, $type = NULL)

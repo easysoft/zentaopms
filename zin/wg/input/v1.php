@@ -3,8 +3,7 @@ namespace zin;
 
 class input extends wg
 {
-    static $defineProps =
-    [
+    static $defineProps = array(
         'type: string',
         'name: string',
         'id?: string',
@@ -15,13 +14,12 @@ class input extends wg
         'autofocus?: bool',
         'autocomplete?: bool=false',
         'disabled?: bool',
-    ];
+    );
 
-    static $defaultProps =
-    [
+    static $defaultProps = array(
         'type' => 'text',
         'class' => 'form-control',
-    ];
+    );
 
     protected function build()
     {

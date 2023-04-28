@@ -10,7 +10,7 @@ function initData()
     $module->root->range('1-5');  //产品线所属项目集
     $module->name->prefix("产品线")->range('1-1000');
     $module->type->range("line");
-    $module->parent->range("0");
+    $module->parent->range('`0`');
 
     $module->gen(10);
 }

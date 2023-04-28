@@ -5,19 +5,17 @@ require_once dirname(__DIR__) . DS . 'control' . DS . 'v1.php';
 
 class inputControl extends wg
 {
-    protected static $defineProps =
-    [
+    protected static $defineProps = array(
         'prefix?: mixed',
         'suffix?: mixed',
         'prefixWidth?: string|number',
         'suffixWidth?: string|number',
-    ];
+    );
 
-    public static $defineBlocks =
-    [
+    public static $defineBlocks = array(
         'prefix' => [],
         'suffix' => [],
-    ];
+    );
 
     protected function build()
     {

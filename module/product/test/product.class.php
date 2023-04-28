@@ -22,19 +22,28 @@ class productTest
      *
      * @param  array  $param
      * @access public
-     * @return object
+     * @return object|array
      */
-    public function createObject($param = array()): object
+    public function createObject(array $param = array()): object|array
     {
-        global $createFields;
-        $whitelist = array();
-        $createFields = array('program' => 1, 'line' => 0, 'lineName' => '', 'newLine' => 0, 'name' => '', 'code' => '', 'PO' => 'admin', 'QD' => '', 'RD' => '',
-            'reviewer' => '', 'type' => 'normal', 'status' => 'normal', 'desc' => '', 'acl' => 'open', 'uid' => '');
-        foreach($createFields as $field => $defaultValue) $_POST[$field] = $defaultValue;
-        foreach($param as $key => $value) $_POST[$key] = $value;
+        $createFields = array();
+        $createFields['program']  = 1;
+        $createFields['line']     = 0;
+        $createFields['name']     = '';
+        $createFields['code']     = '';
+        $createFields['PO']       = 'admin';
+        $createFields['QD']       = '';
+        $createFields['RD']       = '';
+        $createFields['reviewer'] = '';
+        $createFields['type']     = 'normal';
+        $createFields['status']   = 'normal';
+        $createFields['desc']     = '';
+        $createFields['acl']      = 'open';
 
-        $objectID = $this->objectModel->create();
-        unset($_POST);
+        $data = new stdclass();
+        foreach($createFields as $field => $defaultValue) $data->$field = zget($param, $field, $defaultValue);
+
+        $objectID = $this->objectModel->create($data);
 
         if(dao::isError())
         {
@@ -214,13 +223,16 @@ class productTest
     /**
      * Test get product pairs.
      *
-     * @param  int    $programID
+     * @param  string        $mode
+     * @param  int           $programID
+     * @param  string|array  $append
+     * @param  string|int    $shadow
      * @access public
      * @return array
      */
-    public function getProductPairs($programID)
+    public function getProductPairs(string $mode = '', int $programID = 0, string|array $append = '', string|int $shadow = 0): array|string
     {
-        $pairs = $this->objectModel->getPairs('', $programID);
+        $pairs = $this->objectModel->getPairs($mode, $programID, $append, $shadow);
         if($pairs == array()) return '没有数据';
         return $pairs;
     }
@@ -1110,6 +1122,56 @@ class productTest
         }
         else
         {
+            return $object;
+        }
+    }
+
+    /**
+     * 测试创建产品线
+     * Test for create line.
+     *
+     * @param  int programID
+     * @param  string lineName
+     * @access public
+     * @return object|array
+     */
+    public function createLineTest(int $programID, string $lineName): object|array
+    {
+        $_POST['lineName'] = $lineName;
+        $lineID = $this->objectModel->createLine($programID);
+
+        if(dao::isError())
+        {
+            return dao::getError();
+        }
+        else
+        {
+            if(!$lineID) return array();
+            $object = $this->objectModel->dao->select('*')->from(TABLE_MODULE)->where('id')->eq($lineID)->fetch();
+            return $object;
+        }
+    }
+
+    /**
+     * 测试创建产品主库
+     * Test for create main lib.
+     *
+     * @param  int productID
+     * @access public
+     * @return object|array
+     */
+    public function createMainLibTest(int $productID): object|array
+    {
+        $libID = $this->objectModel->createMainLib($productID);
+
+        if(dao::isError())
+        {
+            return dao::getError();
+        }
+        else
+        {
+            if(!$libID) return array();
+            $object = $this->objectModel->dao->select('*')->from(TABLE_DOCLIB)->where('id')->eq($libID)->fetch();
             return $object;
         }
     }

@@ -47,7 +47,7 @@ class blockModel extends model
 
         $block->params = json_decode($block->params);
         if(empty($block->params)) $block->params = new stdclass();
-        if($block->block == 'html') $block->params->html = $this->loadModel('file')->setImgSize($block->params->html);
+        if($block->code == 'html') $block->params->html = $this->loadModel('file')->setImgSize($block->params->html);
         return $block;
     }
 
@@ -187,10 +187,18 @@ class blockModel extends model
      * @access public
      * @return string
      */
-    public function getParams(string $block, string $module): string
+    public function getParams(string $code, string $module): string
     {
-        $block = $block == 'todo' ? $module : $block;
-        $params = zget($this->config->block->params, $block, '');
+        if($code == 'todo' || $code == 'list')
+        {
+            $code = $module;
+        }
+        elseif($code == 'statistic')
+        {
+            $code = $module . 'Statistic';
+        }
+
+        $params = zget($this->config->block->params, $code, '');
         return json_encode($params);
     }
 
@@ -469,5 +477,25 @@ class blockModel extends model
         $data->params  = json_encode($params);
 
         $this->dao->replace(TABLE_BLOCK)->data($data)->exec();
+    }
+
+    /**
+     * 获取区块是否已经初始化.
+     * Fetch block is initiated or not.
+     *
+     * @param  string $module
+     * @param  string $vision
+     * @param  string $section
+     * @return string
+     */
+    public function fetchBlockInitStatus(string $module, string $vision, string $section): string
+    {
+        return $this->dao->select('*')->from(TABLE_CONFIG)
+                         ->where('module')->eq($module)
+                         ->andWhere('owner')->eq($this->app->user->account)
+                         ->andWhere('`section`')->eq($section)->fi()
+                         ->andWhere('`key`')->eq('blockInited')
+                         ->andWhere('vision')->eq($vision)
+                         ->fetch('value');
     }
 }
