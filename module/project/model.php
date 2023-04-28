@@ -198,8 +198,8 @@ class projectModel extends model
     }
 
     /**
-     * Get a project by id.
      * 根据项目ID获取项目信息。
+     * Get a project by id.
      *
      * @param  int    $projectID
      * @access public
@@ -217,17 +217,18 @@ class projectModel extends model
     }
 
     /**
+     * 通过影子产品ID获取一条项目记录。
      * Get a project by its shadow product.
      *
-     * @param  int    $product
+     * @param  int    $productID
      * @access public
-     * @return object
+     * @return object|false
      */
-    public function getByShadowProduct($product)
+    public function getByShadowProduct(int $productID): object|false
     {
         return $this->dao->select('t2.*')->from(TABLE_PROJECTPRODUCT)->alias('t1')
             ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project=t2.id')
-            ->where('t1.product')->eq($product)
+            ->where('t1.product')->eq($productID)
             ->andWhere('t2.type')->eq('project')
             ->limit(1)
             ->fetch();
@@ -1820,16 +1821,16 @@ class projectModel extends model
      * @access public
      * @return void
      */
-    public function unlinkMember($projectID, $account, $removeExecution = 'no')
+    public function unlinkMember(int $projectID, string $account, string $removeExecution = 'no'): void
     {
-        $this->dao->delete()->from(TABLE_TEAM)->where('root')->eq((int)$projectID)->andWhere('type')->eq('project')->andWhere('account')->eq($account)->exec();
+        $this->projectTao->unlinkTeamMember($projectID, 'project', $account);
 
         $this->loadModel('user')->updateUserView($projectID, 'project', array($account));
 
         if($removeExecution == 'yes')
         {
             $executions = $this->loadModel('execution')->getByProject($projectID, 'undone', 0, true);
-            $this->dao->delete()->from(TABLE_TEAM)->where('root')->in(array_keys($executions))->andWhere('type')->eq('execution')->andWhere('account')->eq($account)->exec();
+            $this->projectTao->unlinkTeamMember(array_keys($executions), 'execution', $account);
             $this->user->updateUserView(array_keys($executions), 'sprint', array($account));
         }
 

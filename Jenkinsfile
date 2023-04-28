@@ -1,7 +1,7 @@
 pipeline {
   agent {
     kubernetes {
-      inheritFrom "build-docker code-scan xuanim mysql-server"
+      inheritFrom "build-docker code-scan xuanim"
     }
   }
 
@@ -10,10 +10,7 @@ pipeline {
                             returnStdout: true,
                             script: 'cat VERSION'
     ).trim()}"""
-    MYSQL_SERVER_HOST = """${sh(
-                            returnStdout: true,
-                            script: 'hostname -I'
-    ).trim()}"""
+    MYSQL_SERVER_HOST   = 'ci-mysql-0'
     MYSQL_ROOT_PASSWORD = 'pass4ci'
 
     MIDDLE_IMAGE_REPO = "hub.qc.oop.cc/zentao-ztf"

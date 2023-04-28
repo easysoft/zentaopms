@@ -3,7 +3,11 @@
 include dirname(__FILE__, 5) . "/test/lib/init.php";
 include dirname(__FILE__, 2) . '/block.class.php';
 
-su('admin');
+#su('admin');
+
+$userModel = new userModel();
+$user = $userModel->identify('admin', 'Asd123456');
+$userModel->login($user);
 
 function initData()
 {

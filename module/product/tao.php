@@ -13,6 +13,31 @@ declare(strict_types=1);
 class productTao extends productModel
 {
     /**
+     * 从数据表获取符合条件的id=>name的键值对。
+     * Fetch pairs like id=>name.
+     *
+     * @param int        $programID
+     * @param string     $mode     all|noclosed
+     * @param string     $views
+     * @param string|int $shadow    all|0|1
+     * @access protected
+     * @return int[]
+     */
+    protected function fetchPairs(int $programID, string $mode, string $views, string|int $shadow): array
+    {
+        return $this->dao->select("t1.*,  IF(INSTR(' closed', t1.status) < 2, 0, 1) AS isClosed")->from(TABLE_PRODUCT)->alias('t1')
+            ->leftJoin(TABLE_PROGRAM)->alias('t2')->on('t1.program = t2.id')
+            ->where('t1.vision')->eq($this->config->vision)
+            ->beginIF(strpos($mode, 'all') === false)->andWhere('t1.deleted')->eq(0)->fi()
+            ->beginIF($programID)->andWhere('t1.program')->eq($programID)->fi()
+            ->beginIF(strpos($mode, 'noclosed') !== false)->andWhere('t1.status')->ne('closed')->fi()
+            ->beginIF(!$this->app->user->admin and $this->config->vision == 'rnd')->andWhere('t1.id')->in($views)->fi()
+            ->beginIF($shadow !== 'all')->andWhere('t1.shadow')->eq((int)$shadow)->fi()
+            ->orderBy("isClosed,t2.order_asc,t1.line_desc,t1.order_asc")
+            ->fetchPairs('id', 'name');
+    }
+
+    /**
      * 获取产品ID数组中带有项目集信息的产品分页列表。
      * Get products with program data that in the ID list.
      *
@@ -332,5 +357,47 @@ class productTao extends productModel
         sort($append);
 
         return implode(',', $append);
+    }
+
+    /**
+     * 获取用于数据统计的研发需求和用户需求列表。
+     * Get dev stories and user requirements for statistics.
+     *
+     * @param  array     $productIDs
+     * @param  string    $storyType
+     * @access protected
+     * @return [array, array]
+     */
+    protected function getStatsStoriesAndRequirements(array $productIDs, string $storyType): array
+    {
+        $stories      = $this->getStoriesTODO($productIDs);
+        $requirements = $this->getRequirementsTODO($productIDs);
+
+        /* Padding the stories to sure all products have records. */
+        $emptyStory = array_keys($this->lang->story->statusList);
+        foreach($productIDs as $productID)
+        {
+            if(!isset($stories[$productID]))      $stories[$productID]      = $emptyStory;
+            if(!isset($requirements[$productID])) $requirements[$productID] = $emptyStory;
+        }
+
+        /* Collect count for each status of stories. */
+        foreach($stories as $key => $story)
+        {
+            foreach(array_keys($this->lang->story->statusList) as $status) $story[$status] = isset($story[$status]) ? $story[$status]->count : 0;
+            $stories[$key] = $story;
+        }
+
+        /* Collect count for each status of requirements. */
+        foreach($requirements as $key => $requirement)
+        {
+            foreach(array_keys($this->lang->story->statusList) as $status) $requirement[$status] = isset($requirement[$status]) ? $requirement[$status]->count : 0;
+            $requirements[$key] = $requirement;
+        }
+
+        /* Story type is 'requirement'. */
+        if($storyType == static::STORY_TYPE_REQ) $stories = $requirements;
+
+        return [$stories, $requirements];
     }
 }
