@@ -5,11 +5,11 @@ class moduleMenu extends wg
 {
     private $modules = [];
 
-    protected static $defineProps = [
+    protected static $defineProps = array(
         'productID:number',
         'activeKey:number',
         'closeLink:string'
-    ];
+    );
 
     public static function getPageCSS()
     {

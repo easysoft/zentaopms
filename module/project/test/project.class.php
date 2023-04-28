@@ -16,18 +16,6 @@ class Project
     }
 
     /**
-     * Handle code error message to custom error.
-     *
-     * @param  object $error
-     * @access public
-     * @return void
-     */
-    public function processCodeError($error)
-    {
-        throw Exception($error->getMessage());
-    }
-
-    /**
      * Call project model function and handle the exception.
      *
      * @param  string $method
@@ -39,7 +27,6 @@ class Project
     {
         try
         {
-            set_exception_handler(array($this, 'processCodeError'));
             return call_user_func_array(array($this->project, $method), $params);
         }
         catch(Throwable $error)
