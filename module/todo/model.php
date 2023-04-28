@@ -191,7 +191,7 @@ class todoModel extends model
             foreach($todos as $todoID => $todo)
             {
                 $oldTodo = $oldTodos[$todoID];
-                if(in_array($todo->type, $this->config->todo->moduList)) $oldTodo->name = '';
+                if(in_array($todo->type, $this->config->todo->moduleList)) $oldTodo->name = '';
                 $this->dao->update(TABLE_TODO)->data($todo)
                     ->autoCheck()
                     ->checkIF(!in_array($todo->type, $this->config->todo->moduleList), $this->config->todo->edit->requiredFields, 'notempty')
