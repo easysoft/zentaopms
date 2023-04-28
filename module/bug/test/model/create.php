@@ -7,48 +7,55 @@ su('admin');
 /**
 
 title=bugModel->create();
+timeout=0
 cid=1
-pid=1
 
-测试正常的创建代码错误bug >> 代码错误bug一
-测试正常的创建配置相关bug >> 1
-测试正常的创建安装部署bug >> 101
-测试正常的创建安全相关bug >> security
-测试正常的创建性能问题bug >> 3
-测试正常的创建标准规范bug >> active
-测试正常的创建测试脚本bug >> admin
-测试正常的创建设计缺陷bug >> 3
-测试正常的创建其他bug >> 2021-03-19
-测试不输入名称创建bug >> 『Bug标题』不能为空。
-测试不输入影响版本创建bug >> 『影响版本』不能为空。
-测试指派人bug >> user92
+- 执行bug模块的createOb方法，参数是$bug_codeerror属性title @bug_codeerror
+
+- 执行bug模块的createOb方法，参数是$bug_project属性project @1
+
+- 执行bug模块的createOb方法，参数是$bug_execution属性execution @2
+
+- 执行bug模块的createOb方法，参数是$bug_priseverity
+ - 属性pri @2
+ - 属性severity @2
+
+- 执行bug模块的createOb方法，参数是$bug_steps属性steps @i wish
+
+- 执行bug模块的createOb方法，参数是$bug_deadline属性deadline @2023-04-23
+
+- 执行bug模块的createOb方法，参数是$bug_assign属性assignedTo @admin
+
+- 执行bug模块的createOb方法，参数是$bug_notitle第title条的0属性 @『Bug标题』不能为空。
+
+- 执行bug模块的createOb方法，参数是$bug_nobuild第openedBuild条的0属性 @『影响版本』不能为空。
+
+- 执行bug模块的createOb方法，参数是$bug_erremail第notifyEmail条的0属性 @『通知邮箱』应当为合法的EMAIL。
+
+
 
 */
 
-$b_codeerror    = array('title' => '代码错误bug一', 'type' => 'codeerror');
-$b_config       = array('title' => '配置相关bug一', 'type' => 'config');
-$b_install      = array('title' => '安装部署bug一', 'type' => 'install');
-$b_security     = array('title' => '安全相关bug一', 'type' => 'security');
-$b_performance  = array('title' => '性能问题bug一', 'type' => 'performance');
-$b_standard     = array('title' => '标准规范bug一', 'type' => 'standard');
-$b_automation   = array('title' => '测试脚本bug一', 'type' => 'automation');
-$b_designdefect = array('title' => '设计缺陷bug一', 'type' => 'designdefect');
-$b_others       = array('title' => '其他bug一',     'type' => 'others');
-$b_notitle      = array('title' => '',              'type' => 'codeerror');
-$b_nobuild      = array('title' => '没有影响版本',  'type' => 'codeerror', 'openedBuild' => '');
-$b_assign       = array('title' => '指派人user92',  'type' => 'codeerror', 'assignedTo' => 'user92');
+$bug_codeerror    = array('title' => 'bug_codeerror', 'type' => 'codeerror');
+$bug_project      = array('title' => 'bug_project', 'project' => 1);
+$bug_execution    = array('title' => 'bug_execution', 'execution' => 2);
+$bug_priseverity  = array('title' => 'bug_pri', 'pri' => 2, 'severity' => 2);
+$bug_steps        = array('title' => 'bug_steps', 'steps' => 'i wish');
+$bug_deadline     = array('title' => 'bug_deadline', 'deadline' => '2023-04-23');
+$bug_assign       = array('title' => 'bug_assign', 'assignedTo' => 'admin');
+$bug_notitle      = array('title' => '');
+$bug_nobuild      = array('title' => 'bug_nobuild', 'openedBuild' => '');
+$bug_erremail     = array('title' => 'bug_erremail', 'notifyEmail' => '123456');
 
-$bug=new bugTest();
-r($bug->createObject($b_codeerror))    && p('title')         && e('代码错误bug一');          // 测试正常的创建代码错误bug
-r($bug->createObject($b_config))       && p('product')       && e('1');                      // 测试正常的创建配置相关bug
-r($bug->createObject($b_install))      && p('execution')     && e('101');                    // 测试正常的创建安装部署bug
-r($bug->createObject($b_security))     && p('type')          && e('security');               // 测试正常的创建安全相关bug
-r($bug->createObject($b_performance))  && p('pri')           && e('3');                      // 测试正常的创建性能问题bug
-r($bug->createObject($b_standard))     && p('status')        && e('active');                 // 测试正常的创建标准规范bug
-r($bug->createObject($b_automation))   && p('openedBy')      && e('admin');                  // 测试正常的创建测试脚本bug
-r($bug->createObject($b_designdefect)) && p('severity')      && e('3');                      // 测试正常的创建设计缺陷bug
-r($bug->createObject($b_others))       && p('deadline')      && e('2021-03-19');             // 测试正常的创建其他bug
-r($bug->createObject($b_notitle))      && p('title:0')       && e('『Bug标题』不能为空。');  // 测试不输入名称创建bug
-r($bug->createObject($b_nobuild))      && p('openedBuild:0') && e('『影响版本』不能为空。'); // 测试不输入影响版本创建bug
-r($bug->createObject($b_assign))       && p('assignedTo')    && e('user92');                 // 测试指派人bug
 
+$bug = new bugTest();
+r($bug->createObject($bug_codeerror))    && p('title')         && e('bug_codeerror');                   // 测试bug的标题
+r($bug->createObject($bug_project))      && p('project')       && e('1');                               // 测试bug的项目
+r($bug->createObject($bug_execution))    && p('execution')     && e('2');                               // 测试bug的执行
+r($bug->createObject($bug_priseverity))  && p('pri,severity')  && e('2,2');                             // 测试bug的优先级和严重程度
+r($bug->createObject($bug_steps))        && p('steps')         && e('i wish');                          // 测试bug的步骤
+r($bug->createObject($bug_deadline))     && p('deadline')      && e('2023-04-23');                      // 测试bug的截止日期
+r($bug->createObject($bug_assign))       && p('assignedTo')    && e('admin');                           // 测试bug的指派人
+r($bug->createObject($bug_notitle))      && p('title:0')       && e('『Bug标题』不能为空。');           // 测试bug标题为空
+r($bug->createObject($bug_nobuild))      && p('openedBuild:0') && e('『影响版本』不能为空。');          // 测试版本为空
+r($bug->createObject($bug_erremail))     && p('notifyEmail:0') && e('『通知邮箱』应当为合法的EMAIL。'); // 测试异常的email输入
