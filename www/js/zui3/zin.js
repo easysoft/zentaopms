@@ -86,7 +86,7 @@
     {
         if(!DEBUG) return;
 
-        updateZinbar({id: options.id, trace: data.trace}, data.errors);
+        updateZinbar({id: options.id, trace: data.trace, xhprof: data.xhprof}, data.errors);
     }
 
     function updatePageWithHtml(data)
