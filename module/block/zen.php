@@ -149,11 +149,11 @@ class blockZen extends block
      * 获取区块的更多链接。
      * Get the more link of the block.
      *
-     * @param  object $block
-     * @param  object $project
+     * @param  object      $block
+     * @param  object|null $project
      * @return void
      */
-    private function getBlockMoreLink(object $block, object $project): void
+    private function getBlockMoreLink(object $block, object|null $project): void
     {
         $code      = $block->code;
         $source    = empty($block->source) ? 'common' : $block->source;
