@@ -102,4 +102,118 @@ class blockZen extends block
 
         return !empty($params) ? $params : array();
     }
+
+    /**
+     * 处理每个区块以渲染 UI。
+     * Process each block for render UI.
+     *
+     * @param  object[]    $blocks
+     * @param  object|null $project
+     * @return object[]
+     */
+    protected function processBlockForRender(array $blocks, object $project = null): array
+    {
+        $acls = $this->app->user->rights['acls'];
+        foreach($blocks as $key => $block)
+        {
+            if(in_array($block->code, array('waterfallrisk', 'waterfallissue')))
+            {
+                $model = isset($project->model) ? $project->model : 'waterfall';
+                if($block->code == 'waterfallrisk' and !helper::hasFeature("{$model}_risk")) continue;
+                if($block->code == 'waterfallissue' and !helper::hasFeature("{$model}_issue")) continue;
+            }
+
+            if(in_array($block->code, array('scrumrisk', 'scrumissue')))
+            {
+                $model = isset($project->model) ? $project->model : 'scrum';
+                if($block->code == 'scrumrisk' and !helper::hasFeature("{$model}_risk")) continue;
+                if($block->code == 'scrumissue' and !helper::hasFeature("{$model}_issue")) continue;
+            }
+
+            if(!empty($block->source) and $block->source != 'todo' and !empty($acls['views']) and !isset($acls['views'][$block->source]))
+            {
+                unset($blocks[$key]);
+                continue;
+            }
+
+            $block->params = json_decode($block->params);
+            if(isset($block->params->num) and !isset($block->params->count)) $block->params->count = $block->params->num;
+
+            $this->getBlockMoreLink($block);
+        }
+
+        return $blocks;
+    }
+
+    /**
+     * 获取区块的更多链接。
+     * Get the more link of the block.
+     *
+     * @param  object $block
+     * @return void
+     */
+    private function getBlockMoreLink(object $block): void
+    {
+        $code   = $block->code;
+        $source = empty($block->source) ? 'common' : $block->source;
+
+        $block->blockLink = $this->createLink('block', 'printBlock', "id=$block->id&module=$block->module");
+        $block->moreLink  = '';
+        if(isset($this->config->block->modules[$source]->moreLinkList->{$code}))
+        {
+            list($moduleName, $method, $vars) = explode('|', sprintf($this->config->block->modules[$source]->moreLinkList->{$code}, isset($block->params->type) ? $block->params->type : ''));
+
+            /* The list assigned to me jumps to the work page when click more button. */
+            $block->moreLink = $this->createLink($moduleName, $method, $vars);
+            if($moduleName == 'my' and strpos($this->config->block->workMethods, $method) !== false)
+            {
+                $block->moreLink = $this->createLink($moduleName, 'work', 'mode=' . $method . '&' . $vars);
+            }
+            elseif($moduleName == 'project' and $method == 'dynamic')
+            {
+                $block->moreLink = $this->createLink('project', 'dynamic', "projectID=$projectID&type=all");
+            }
+            elseif($moduleName == 'project' and $method == 'execution')
+            {
+                $block->moreLink = $this->createLink('project', 'execution', "status=all&projectID=$projectID");
+            }
+            elseif($moduleName == 'project' and $method == 'testtask')
+            {
+                $block->moreLink = $this->createLink('project', 'testtask', "projectID=$projectID");
+            }
+            elseif($moduleName == 'testtask' and $method == 'browse')
+            {
+                $block->moreLink = $this->createLink('testtask', 'browse', "productID=0&branch=0&type=all,totalStatus");
+            }
+        }
+        elseif($block->code == 'dynamic')
+        {
+            $block->moreLink = $this->createLink('company', 'dynamic');
+        }
+    }
+
+    /**
+     * 将区块数组拆分为短区块数组和长区块数组。
+     * Split blocks array into short blocks and long blocks.
+     *
+     * @param  array   $blocks
+     * @return array[]
+     */
+    protected function splitBlocksByLen(array $blocks): array
+    {
+        $shortBlocks = $longBlocks = array();
+        foreach($blocks as $key => $block)
+        {
+            if($this->block->isLongBlock($block))
+            {
+                $longBlocks[$key] = $block;
+            }
+            else
+            {
+                $shortBlocks[$key] = $block;
+            }
+        }
+
+        return array($shortBlocks, $longBlocks);
+    }
 }

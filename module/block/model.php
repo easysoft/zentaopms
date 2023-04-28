@@ -470,4 +470,24 @@ class blockModel extends model
 
         $this->dao->replace(TABLE_BLOCK)->data($data)->exec();
     }
+
+    /**
+     * 获取区块是否已经初始化.
+     * Fetch block is initiated or not.
+     *
+     * @param  string $module
+     * @param  string $vision
+     * @param  string $section
+     * @return string
+     */
+    public function fetchBlockInitStatus(string $module, string $vision, string $section): string
+    {
+        return $this->dao->select('*')->from(TABLE_CONFIG)
+                         ->where('module')->eq($module)
+                         ->andWhere('owner')->eq($this->app->user->account)
+                         ->andWhere('`section`')->eq($section)->fi()
+                         ->andWhere('`key`')->eq('blockInited')
+                         ->andWhere('vision')->eq($vision)
+                         ->fetch('value');
+    }
 }
