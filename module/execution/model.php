@@ -290,51 +290,43 @@ class executionModel extends model
     }
 
     /**
-     * Save the execution id user last visited to session.
+     * 检查用户是否可以访问当前执行。
+     * Check whether access to the current execution is allowed or not.
      *
      * @param  int   $executionID
      * @param  array $executions
      * @access public
      * @return int
      */
-    public function saveState($executionID, $executions)
+    public function checkAccess(int $executionID, array $executions): int
     {
         if(defined('TUTORIAL')) return $executionID;
 
-        /* When the cookie and session do not exist, get it from the database. */
-        if(empty($executionID) and isset($this->config->execution->lastExecution) and isset($executions[$this->config->execution->lastExecution]))
+        /* When the cookie and session do not exist, get it from the config. */
+        if(!$executionID)
         {
-            $this->session->set('execution', $this->config->execution->lastExecution, $this->app->tab);
-            $this->setProjectSession($this->session->execution);
-            return $this->session->execution;
+            if(isset($this->cookie->lastExecution))            $executionID = (int)$this->cookie->lastExecution;
+            if(isset($this->session->execution))               $executionID = (int)$this->session->execution;
+            if(isset($this->config->execution->lastExecution)) $executionID = (int)$this->config->execution->lastExecution;
         }
 
-        if($executionID == 0 and $this->cookie->lastExecution)
+        /* If the execution doesn't exist in the list, use the first execution in the list. */
+        if(!isset($executions[$executionID])) $executionID = key($executions);
+
+        /* Check execution again. */
+        if($executionID)
         {
-            /* Execution link is execution-task. */
-            $executionID = (int)$this->cookie->lastExecution;
-            $executionID = in_array($executionID, array_keys($executions)) ? $executionID : key($executions);
+            $execution = $this->dao->findByID($executionID)->from(TABLE_EXECUTION)->fetch();
+            if(empty($execution)) return js::error($this->lang->notFound);
+            if(strpos(",{$this->app->user->view->sprints},", ",{$executionID},") === false) $this->accessDenied();
         }
 
-        if($executionID == 0 and $this->session->execution) $executionID = $this->session->execution;
-        if($executionID == 0) $executionID = key($executions);
+        /* Save session. */
+        $this->session->set('execution', $executionID, $this->app->tab);
+        $this->setProjectSession($executionID);
 
-        $this->session->set('execution', (int)$executionID, $this->app->tab);
-
-        if(!isset($executions[$executionID]))
-        {
-            $this->session->set('execution', key($executions), $this->app->tab);
-
-            if($executionID)
-            {
-                $execution = $this->dao->select('*')->from(TABLE_EXECUTION)->where('id')->eq($executionID)->andWhere('type')->in('sprint,stage,kanban')->fetch();
-                if(empty($execution)) return js::error($this->lang->notFound);
-                if(strpos(",{$this->app->user->view->sprints},", ",{$executionID},") === false) $this->accessDenied();
-            }
-        }
-
-        $this->setProjectSession($this->session->execution);
-        return $this->session->execution;
+        /* Return execution id. */
+        return $executionID;
     }
 
     /**

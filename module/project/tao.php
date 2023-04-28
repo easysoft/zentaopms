@@ -220,7 +220,7 @@ class projectTao extends projectModel
      * @param  object $postData
      * @param  object $program
      * @access protected
-     * @return bool 
+     * @return bool
      */
     protected function createDocLib(int $projectID, object $project, object $postData, object $program): bool
     {
@@ -269,7 +269,7 @@ class projectTao extends projectModel
      * @param  object $postData
      * @param  object $program
      * @access protected
-     * @return bool 
+     * @return bool
      */
     protected function createProduct(int $projectID, object $project, object $postData, object $program): bool
     {
@@ -333,7 +333,7 @@ class projectTao extends projectModel
      * @param  object $rawdata
      * @param  object $program
      * @access protected
-     * @return bool 
+     * @return bool
      */
     protected function getLinkedProductsCount(object $project, object $rawdata): int
     {
@@ -355,7 +355,7 @@ class projectTao extends projectModel
      *
      * @param  int $projectID
      * @access protected
-     * @return bool 
+     * @return bool
      */
     protected function addProjectAdmin(int $projectID): bool
     {
@@ -381,6 +381,26 @@ class projectTao extends projectModel
             $this->dao->replace(TABLE_USERGROUP)->data($groupPriv)->exec();
         }
 
+        return !dao::isError();
+    }
+
+    /**
+     * 删除项目团队成员。
+     * Delete project team member.
+     *
+     * @param  array|int $projectIdList
+     * @param  string    $type
+     * @param  string    $account
+     * @access protected
+     * @return bool
+     */
+    protected function unlinkTeamMember(int|array $projectIdList, string $type, string $account): bool
+    {
+        $this->dao->delete()->from(TABLE_TEAM)
+            ->where('root')->in($projectIdList)
+            ->andWhere('type')->eq($type)
+            ->andWhere('account')->eq($account)
+            ->exec();
         return !dao::isError();
     }
 }

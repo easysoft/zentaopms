@@ -2,7 +2,7 @@
 declare(strict_types=1);
 
 /**
- * The model file of example module of ZenTaoPMS.
+ * The model file of todo module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @license     ZPL(https://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
@@ -128,7 +128,7 @@ class todoModel extends model
     }
 
     /**
-     * 更新待办数据
+     * 更新待办数据。
      * update a todo.
      *
      * @param  int    $todoID
@@ -138,7 +138,7 @@ class todoModel extends model
      */
     public function update(int $todoID, object $todo): array|false
     {
-        $oldTodo = $this->dao->findById($todoID)->from(TABLE_TODO)->fetch();
+        $oldTodo = $this->dao->findByID($todoID)->from(TABLE_TODO)->fetch();
 
         if(!$this->todoTao->updateRow($todoID, $todo)) return false;
 
@@ -191,7 +191,7 @@ class todoModel extends model
             foreach($todos as $todoID => $todo)
             {
                 $oldTodo = $oldTodos[$todoID];
-                if(in_array($todo->type, $this->config->todo->moduList)) $oldTodo->name = '';
+                if(in_array($todo->type, $this->config->todo->moduleList)) $oldTodo->name = '';
                 $this->dao->update(TABLE_TODO)->data($todo)
                     ->autoCheck()
                     ->checkIF(!in_array($todo->type, $this->config->todo->moduleList), $this->config->todo->edit->requiredFields, 'notempty')
@@ -271,8 +271,8 @@ class todoModel extends model
     {
         foreach($todoIDList as $todoID)
         {
-            $res = $this->dealFinishData($todoID);
-            if(!$res) return $res;
+            $finishResult = $this->dealFinishData($todoID);
+            if(!$finishResult) return $finishResult;
         }
         return true;
     }
@@ -288,20 +288,20 @@ class todoModel extends model
      */
     public function getByID(int $todoID, $setImgSize = false): object|false
     {
-        $todo = $this->dao->findById($todoID)->from(TABLE_TODO)->fetch();
+        $todo = $this->dao->findByID($todoID)->from(TABLE_TODO)->fetch();
         if(!$todo) return false;
 
         $todo = $this->loadModel('file')->replaceImgURL((object)$todo, 'desc');
         if($setImgSize) $todo->desc = $this->file->setImgSize($todo->desc);
-        if($todo->type == 'story')    $todo->name = $this->dao->findById($todo->objectID)->from(TABLE_STORY)->fetch('title');
-        if($todo->type == 'task')     $todo->name = $this->dao->findById($todo->objectID)->from(TABLE_TASK)->fetch('name');
-        if($todo->type == 'bug')      $todo->name = $this->dao->findById($todo->objectID)->from(TABLE_BUG)->fetch('title');
-        if($todo->type == 'issue'  and $this->config->edition == 'max') $todo->name = $this->dao->findById($todo->objectID)->from(TABLE_ISSUE)->fetch('title');
-        if($todo->type == 'risk'   and $this->config->edition == 'max') $todo->name = $this->dao->findById($todo->objectID)->from(TABLE_RISK)->fetch('name');
-        if($todo->type == 'opportunity' and $this->config->edition == 'max') $todo->name = $this->dao->findById($todo->objectID)->from(TABLE_OPPORTUNITY)->fetch('name');
-        if($todo->type == 'review' and $this->config->edition == 'max') $todo->name = $this->dao->findById($todo->objectID)->from(TABLE_REVIEW)->fetch('title');
-        if($todo->type == 'testtask') $todo->name = $this->dao->findById($todo->objectID)->from(TABLE_TESTTASK)->fetch('name');
-        if($todo->type == 'feedback') $todo->name = $this->dao->findById($todo->objectID)->from(TABLE_FEEDBACK)->fetch('title');
+        if($todo->type == 'story')    $todo->name = $this->dao->findByID($todo->objectID)->from(TABLE_STORY)->fetch('title');
+        if($todo->type == 'task')     $todo->name = $this->dao->findByID($todo->objectID)->from(TABLE_TASK)->fetch('name');
+        if($todo->type == 'bug')      $todo->name = $this->dao->findByID($todo->objectID)->from(TABLE_BUG)->fetch('title');
+        if($todo->type == 'issue'  and $this->config->edition == 'max') $todo->name = $this->dao->findByID($todo->objectID)->from(TABLE_ISSUE)->fetch('title');
+        if($todo->type == 'risk'   and $this->config->edition == 'max') $todo->name = $this->dao->findByID($todo->objectID)->from(TABLE_RISK)->fetch('name');
+        if($todo->type == 'opportunity' and $this->config->edition == 'max') $todo->name = $this->dao->findByID($todo->objectID)->from(TABLE_OPPORTUNITY)->fetch('name');
+        if($todo->type == 'review' and $this->config->edition == 'max') $todo->name = $this->dao->findByID($todo->objectID)->from(TABLE_REVIEW)->fetch('title');
+        if($todo->type == 'testtask') $todo->name = $this->dao->findByID($todo->objectID)->from(TABLE_TESTTASK)->fetch('name');
+        if($todo->type == 'feedback') $todo->name = $this->dao->findByID($todo->objectID)->from(TABLE_FEEDBACK)->fetch('title');
         $todo->date = str_replace('-', '', $todo->date);
 
         return $todo;
@@ -412,15 +412,15 @@ class todoModel extends model
 
         while($todo = $stmt->fetch())
         {
-            if($todo->type == 'story')    $todo->name = $this->dao->findById($todo->objectID)->from(TABLE_STORY)->fetch('title');
-            if($todo->type == 'task')     $todo->name = $this->dao->findById($todo->objectID)->from(TABLE_TASK)->fetch('name');
-            if($todo->type == 'bug')      $todo->name = $this->dao->findById($todo->objectID)->from(TABLE_BUG)->fetch('title');
-            if($todo->type == 'testtask') $todo->name = $this->dao->findById($todo->objectID)->from(TABLE_TESTTASK)->fetch('name');
-            if($todo->type == 'issue'  && $this->config->edition == 'max') $todo->name = $this->dao->findById($todo->objectID)->from(TABLE_ISSUE)->fetch('title');
-            if($todo->type == 'risk'   && $this->config->edition == 'max') $todo->name = $this->dao->findById($todo->objectID)->from(TABLE_RISK)->fetch('name');
-            if($todo->type == 'opportunity' && $this->config->edition == 'max') $todo->name = $this->dao->findById($todo->objectID)->from(TABLE_OPPORTUNITY)->fetch('name');
-            if($todo->type == 'review' && $this->config->edition == 'max') $todo->name = $this->dao->findById($todo->objectID)->from(TABLE_REVIEW)->fetch('title');
-            if($todo->type == 'feedback' and $this->config->edition != 'open') $todo->name = $this->dao->findById($todo->objectID)->from(TABLE_FEEDBACK)->fetch('title');
+            if($todo->type == 'story')    $todo->name = $this->dao->findByID($todo->objectID)->from(TABLE_STORY)->fetch('title');
+            if($todo->type == 'task')     $todo->name = $this->dao->findByID($todo->objectID)->from(TABLE_TASK)->fetch('name');
+            if($todo->type == 'bug')      $todo->name = $this->dao->findByID($todo->objectID)->from(TABLE_BUG)->fetch('title');
+            if($todo->type == 'testtask') $todo->name = $this->dao->findByID($todo->objectID)->from(TABLE_TESTTASK)->fetch('name');
+            if($todo->type == 'issue'  && $this->config->edition == 'max') $todo->name = $this->dao->findByID($todo->objectID)->from(TABLE_ISSUE)->fetch('title');
+            if($todo->type == 'risk'   && $this->config->edition == 'max') $todo->name = $this->dao->findByID($todo->objectID)->from(TABLE_RISK)->fetch('name');
+            if($todo->type == 'opportunity' && $this->config->edition == 'max') $todo->name = $this->dao->findByID($todo->objectID)->from(TABLE_OPPORTUNITY)->fetch('name');
+            if($todo->type == 'review' && $this->config->edition == 'max') $todo->name = $this->dao->findByID($todo->objectID)->from(TABLE_REVIEW)->fetch('title');
+            if($todo->type == 'feedback' and $this->config->edition != 'open') $todo->name = $this->dao->findByID($todo->objectID)->from(TABLE_FEEDBACK)->fetch('title');
             $todo->begin = date::formatTime($todo->begin);
             $todo->end   = date::formatTime($todo->end);
 
@@ -556,18 +556,16 @@ class todoModel extends model
     {
         $isClosed = $this->todoTao->closeTodo($todoID);
 
-        if($isClosed)
-        {
-            $this->loadModel('action')->create('todo', $todoID, 'closed', '', 'closed');
+        if(!$isClosed) return false;
 
-            if($this->config->edition == 'biz' || $this->config->edition == 'max')
-            {
-                $feedbackID = $this->dao->select('objectID')->from(TABLE_TODO)->where('id')->eq($todoID)->andWhere('type')->eq('feedback')->fetch('objectID');
-                if($feedbackID) $this->loadModel('feedback')->updateStatus('todo', $feedbackID, 'closed');
-            }
-            return true;
+        $this->loadModel('action')->create('todo', $todoID, 'closed', '', 'closed');
+
+        if($this->config->edition == 'biz' || $this->config->edition == 'max')
+        {
+            $feedbackID = $this->dao->select('objectID')->from(TABLE_TODO)->where('id')->eq($todoID)->andWhere('type')->eq('feedback')->fetch('objectID');
+            if($feedbackID) $this->loadModel('feedback')->updateStatus('todo', $feedbackID, 'closed');
         }
-        return false;
+        return true;
     }
 
     /**
@@ -656,25 +654,24 @@ class todoModel extends model
         $todo->finishedBy = $this->app->user->account;
         $this->todoTao->updateRow($todoID, $todo);
 
-        if(!dao::isError())
-        {
-            $this->loadModel('action')->create('todo', $todoID, 'finished', '', 'done');
+        if(dao::isError()) return false;
 
-            if(($this->config->edition == 'biz' || $this->config->edition == 'max'))
-            {
-                $todo       = $this->todoTao->fetch($todoID);
-                $feedbackID = $todo->idvalue ?? '' ;
-                if($feedbackID) $this->loadModel('feedback')->updateStatus('todo', $feedbackID, 'done');
-            }
-            return true;
+        $this->loadModel('action')->create('todo', $todoID, 'finished', '', 'done');
+
+        if(($this->config->edition == 'biz' || $this->config->edition == 'max'))
+        {
+            $todo       = $this->todoTao->fetch($todoID);
+            $feedbackID = $todo->idvalue ?? '' ;
+            if($feedbackID) $this->loadModel('feedback')->updateStatus('todo', $feedbackID, 'done');
         }
-        return false;
+        return true;
     }
 
-    /** 修改待办事项的时间。
+    /**
+     * 修改待办事项的时间。
      * Edit the date of todo.
      *
-     * @param  array  $idList
+     * @param  array  $todoIDList
      * @param  string $date
      * @access public
      * @return int

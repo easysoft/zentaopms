@@ -12,12 +12,6 @@ declare(strict_types=1);
 
 class trace
 {
-    protected $types = array(
-        'Request'     => '请求',
-        'Files'       => '文件',
-        'SQL Query'   => 'SQL 查询',
-    );
-
     /**
      * @var array
      */
@@ -34,6 +28,12 @@ class trace
         $this->dao = $dao;
     }
 
+    /**
+     * 获取请求信息。
+     * Get request info.
+     *
+     * @return void
+     */
     public function getRequestInfo()
     {
         $this->trace['request'] = array(
@@ -69,7 +69,7 @@ class trace
      */
     public function getRequestSqls()
     {
-        $this->trace['sqlQuery']   = dao::$querys;
+        $this->trace['sqlQuery'] = dao::$querys;
     }
 
     /**
@@ -98,78 +98,6 @@ class trace
         $this->getRequestSqls();
         $this->getSQLProfiles();
         return $this->trace;
-    }
-
-    public function output()
-    {
-        $this->getTrace();
-        $lines = '';
-        foreach($this->trace as $type => $content)
-        {
-            $lines .= $this->console($type, empty($content) ? array() : $content);
-        }
-
-        $lines .= $this->printSQLProfile();
-
-        $js = <<<JS
-
-<script type='text/javascript'>
-{$lines}
-</script>
-JS;
-        return $js;
-    }
-
-    /**
-     * 拼接需要输出到 console 的内容。
-     * Concat the content to output to console.
-     *
-     * @param string $type
-     * @param array  $content
-     * @return string
-     */
-    protected function console(string $type, $content)
-    {
-        $traceTabs = array_keys($this->types);
-        $line      = array();
-        $line[]    = $type == $traceTabs[0] ? "console.group('{$type}');" : "console.groupCollapsed('{$type}');";
-
-        foreach((array) $content as $key => $item)
-        {
-            switch ($type) {
-                case 'SQL Query':
-                    $msg    = str_replace("\n", '\n', addslashes($item));
-                    $style  = "color:#009bb4;";
-                    $line[] = "console.log(\"%c{$msg}\", \"{$style}\");";
-                    break;
-                default:
-                    $item   = is_string($key) ? $key . ' ' . $item : $key + 1 . ' ' . $item;
-                    $msg    = json_encode($item);
-                    $line[] = "console.log({$msg});";
-                    break;
-            }
-        }
-        $line[] = "console.groupEnd();";
-        return implode(PHP_EOL, $line);
-    }
-
-    /**
-     * 拼接 SQL Profile。
-     *
-     * @return string
-     */
-    protected function printSQLProfile()
-    {
-        $lines = array();
-
-        $profiling = $this->dao->dbh->query('SHOW PROFILES')->fetchAll(PDO::FETCH_ASSOC);
-        if(empty($profiling)) return '';
-
-        $lines[] = 'console.groupCollapsed("SQL Profile")';
-        $lines[] = 'console.table(' . json_encode($profiling) . ')';
-        $lines[] = 'console.groupEnd()';
-
-        return implode(PHP_EOL, $lines);
     }
 
     public function __toString(): string
