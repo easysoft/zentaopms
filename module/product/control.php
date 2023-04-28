@@ -21,7 +21,7 @@ class product extends control
      * @access public
      * @return void
      */
-    public function __construct(string $moduleName = '', string $methodName = ''): void
+    public function __construct(string $moduleName = '', string $methodName = '')
     {
         parent::__construct($moduleName, $methodName);
 
