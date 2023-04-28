@@ -39,7 +39,7 @@ class taskTao extends taskModel
     {
         foreach($tasks as $task)
         {
-            $task->progress = $this->computeProgress($task);
+            $task->progress = $this->computeTaskProgress($task);
             if(empty($task->children)) continue;
 
             $task->children = $this->batchComputeProgress($task->children);
