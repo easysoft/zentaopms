@@ -1,5 +1,4 @@
 <?php
-declare(strict_types=1);
 /**
  * The control file of product module of ZenTaoPMS.
  *
@@ -17,10 +16,12 @@ class product extends control
     /**
      * Construct function.
      *
+     * @param moduleName
+     * @param methodName
      * @access public
      * @return void
      */
-    public function __construct($moduleName = '', $methodName = '')
+    public function __construct(string $moduleName = '', string $methodName = ''): void
     {
         parent::__construct($moduleName, $methodName);
 

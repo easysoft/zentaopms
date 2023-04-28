@@ -319,13 +319,13 @@ class productModel extends model
     /**
      * Get product pairs.
      *
-     * @param  string       $mode
+     * @param  string       $mode          nocode
      * @param  string       $programID
      * @param  string|array $append
      * @param  string|int   $shadow         all | 0 | 1
      * @return array
      */
-    public function getPairs($mode = '', $programID = 0, $append = '', $shadow = 0)
+    public function getPairs(string $mode = '', int $programID = 0, string|array $append = '', string|int $shadow = 0): array
     {
         if(defined('TUTORIAL')) return $this->loadModel('tutorial')->getProductPairs();
 
