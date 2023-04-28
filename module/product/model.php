@@ -319,8 +319,8 @@ class productModel extends model
     /**
      * Get product pairs.
      *
-     * @param  string       $mode          nocode
-     * @param  string       $programID
+     * @param  string       $mode          all|noclosed
+     * @param  int          $programID
      * @param  string|array $append
      * @param  string|int   $shadow         all | 0 | 1
      * @return array
@@ -329,21 +329,19 @@ class productModel extends model
     {
         if(defined('TUTORIAL')) return $this->loadModel('tutorial')->getProductPairs();
 
-        if(!empty($append) and is_array($append)) $append = implode(',', $append);
+        /* Add other products in has priv product id list. */
+        $append = $this->productTao->formatAppendParam($append);
+        $views  = $this->app->user->view->products . (empty($append) ? '' : ",{$append}");
 
-        $views   = empty($append) ? $this->app->user->view->products : $this->app->user->view->products . ",$append";
-        $orderBy = !empty($this->config->product->orderBy) ? $this->config->product->orderBy : 'isClosed';
-        /* Order by program. */
         return $this->dao->select("t1.*,  IF(INSTR(' closed', t1.status) < 2, 0, 1) AS isClosed")->from(TABLE_PRODUCT)->alias('t1')
             ->leftJoin(TABLE_PROGRAM)->alias('t2')->on('t1.program = t2.id')
-            ->where('1 = 1')
+            ->where('t1.vision')->eq($this->config->vision)
             ->beginIF(strpos($mode, 'all') === false)->andWhere('t1.deleted')->eq(0)->fi()
             ->beginIF($programID)->andWhere('t1.program')->eq($programID)->fi()
             ->beginIF(strpos($mode, 'noclosed') !== false)->andWhere('t1.status')->ne('closed')->fi()
             ->beginIF(!$this->app->user->admin and $this->config->vision == 'rnd')->andWhere('t1.id')->in($views)->fi()
             ->beginIF($shadow !== 'all')->andWhere('t1.shadow')->eq((int)$shadow)->fi()
-            ->andWhere('t1.vision')->eq($this->config->vision)
-            ->orderBy("$orderBy, t2.order_asc, t1.line_desc, t1.order_asc")
+            ->orderBy("isClosed,t1.program_asc,t2.order_asc,t1.line_desc,t1.order_asc")
             ->fetchPairs('id', 'name');
     }
 
