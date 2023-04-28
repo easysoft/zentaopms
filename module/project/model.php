@@ -1806,16 +1806,16 @@ class projectModel extends model
      * @access public
      * @return void
      */
-    public function unlinkMember($projectID, $account, $removeExecution = 'no')
+    public function unlinkMember(int $projectID, string $account, string $removeExecution = 'no'): void
     {
-        $this->dao->delete()->from(TABLE_TEAM)->where('root')->eq((int)$projectID)->andWhere('type')->eq('project')->andWhere('account')->eq($account)->exec();
+        $this->projectTao->unlinkTeamMember($projectID, 'project', $account);
 
         $this->loadModel('user')->updateUserView($projectID, 'project', array($account));
 
         if($removeExecution == 'yes')
         {
             $executions = $this->loadModel('execution')->getByProject($projectID, 'undone', 0, true);
-            $this->dao->delete()->from(TABLE_TEAM)->where('root')->in(array_keys($executions))->andWhere('type')->eq('execution')->andWhere('account')->eq($account)->exec();
+            $this->projectTao->unlinkTeamMember(array_keys($executions), 'execution', $account);
             $this->user->updateUserView(array_keys($executions), 'sprint', array($account));
         }
 
