@@ -238,20 +238,6 @@ class productTest
     }
 
     /**
-     * Test get product pairs count.
-     *
-     * @param  int    $programID
-     * @access public
-     * @return int
-     */
-    public function getProductPairsCount($programID)
-    {
-        $pairsCount = count($this->getProductPairs($programID));
-        if($pairsCount == '没有数据') return '0';
-        return $pairsCount;
-    }
-
-    /**
      * Test get all product pairs.
      *
      * @param  int    $programID
