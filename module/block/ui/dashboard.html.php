@@ -7,7 +7,7 @@ foreach($longBlocks as $index => $block)
     $mainBlocks[] = 
     div
     (
-        set('class', "panel rounded shadow ring-0 canvas block-item {$block->block}" . (isset($block->params->color) ? 'panel-' . $block->params->color : '')),
+        set('class', "panel rounded shadow ring-0 canvas block-item {$block->code}" . (isset($block->params->color) ? 'panel-' . $block->params->color : '')),
         set('data-id', $block->id),
         set('data-name', $block->title),
         set('data-order', $block->order),
@@ -52,7 +52,7 @@ foreach($shortBlocks as $index => $block)
     div
     (
         set('id', 'block' . $block->id),
-        set('class', "panel rounded shadow ring-0 canvas {$block->block}" . (isset($block->params->color) ? 'panel-' . $block->params->color : '')),
+        set('class', "panel rounded shadow ring-0 canvas {$block->code}" . (isset($block->params->color) ? 'panel-' . $block->params->color : '')),
         set('data-id', $block->id),
         set('data-name', $block->title),
         set('data-order', $block->order),
