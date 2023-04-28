@@ -4,6 +4,19 @@ declare(strict_types=1);
 class todoTao extends todoModel
 {
     /**
+     * Get a todo.
+     * 获取单条待办.
+     *
+     * @param  int     $todoID
+     * @param  object  $todo
+     * @return object
+     */
+    protected function fetch(int $todoID): object
+    {
+        return $this->dao->select('*')->from(TABLE_TODO)->where('id')->eq($todoID)->fetch();
+    }
+
+    /**
      * 插入待办数据
      * Insert todo data.
      *
