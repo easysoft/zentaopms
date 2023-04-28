@@ -2,7 +2,7 @@ function getForm(event)
 {
     const field  = $(event.target).attr('id');
     const module = $('#module').val();
-    const block  = field == 'module' ? '' : $('#block').val();
-    const url    = $.createLink('block', 'edit', 'blockID=' + blockID + '&module=' + module + '&block=' + (block ? block : ''));
-    loadPage(url, '#blockRow, #paramsRow');
+    const code   = field == 'module' ? '' : $('#code').val();
+    const url    = $.createLink('block', 'edit', 'blockID=' + blockID + '&module=' + module + '&code=' + (code ? code : ''));
+    loadPage(url, '#codeRow, #paramsRow');
 }

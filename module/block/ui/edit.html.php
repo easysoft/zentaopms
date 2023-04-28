@@ -12,18 +12,18 @@ declare(strict_types=1);
 namespace zin;
 
 set::title($title);
-jsVar('blockID', $blockData->id);
+jsVar('blockID', $block->id);
 
 $paramsRows = array();
 
-foreach($params as $code => $row)
+foreach($params as $key => $row)
 {
     $paramsRows[] = formGroup
     (
         set::label($row['name']),
         set::name('params'),
         set::class('form-row'),
-        set::value($blockData->params->{$code}),
+        set::value($block->params->{$key}),
         set::control(array
         (
             'type'  => $row['control'],
@@ -35,12 +35,12 @@ foreach($params as $code => $row)
 form
 (
     on::change('#module', 'getForm'),
-    on::change('#block', 'getForm'),
+    on::change('#code', 'getForm'),
     formGroup
     (
         set::label($lang->block->lblModule),
         set::name('module'),
-        set::value($blockData->module),
+        set::value($block->module),
         set::control(array
         (
             'type'  => 'select',
@@ -49,18 +49,18 @@ form
     ),
     div
     (
-        set::id('blockRow'),
+        set::id('codeRow'),
         set::class('form-row'),
-        $blocks
+        $codes
         ? formGroup
         (
             set::label($lang->block->lblBlock),
-            set::name('block'),
-            set::value($block),
+            set::name('code'),
+            set::value($code),
             set::control(array
             (
                 'type'  => 'select',
-                'items' => array('') + $blocks
+                'items' => array('') + $codes
             ))  
         ) : null
     ),
@@ -69,22 +69,22 @@ form
         set::id('paramsRow'),
         set::class('form-grid'),
         $paramsRows,
-        (($module and $block) or ($module and !$blocks))
+        (($module and $code) or ($module and !$codes))
         ? formGroup
         (
             set::label($lang->block->name),
             set::name('title'),
             set::class('form-row'),
-            set::value($blockData->title),
+            set::value($block->title),
             set::control('input')  
         ) : null,
-        (($module and $block) or ($module and !$blocks))
+        (($module and $code) or ($module and !$codes))
         ? formGroup
         (
             set::label($lang->block->grid),
             set::name("grid"),
             set::class('form-row'),
-            set::value($blockData->grid),
+            set::value($block->grid),
             set::control(array
             (
                 'type'  => 'select',
