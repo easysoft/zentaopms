@@ -394,8 +394,8 @@ class product extends control
     }
 
     /**
-     * 创建产品。可以是顶级产品，也可以是项目集下的产品。
      * Create a product.
+     * 创建产品。可以是顶级产品，也可以是项目集下的产品。
      *
      * @param  int    $programID
      * @param  string $extra
@@ -410,26 +410,11 @@ class product extends control
         {
             $data = form::data($this->config->product->form->create);
             $data = $this->productZen->prepareCreateExtras($data);
-            if(!$data) return $this->productZen->errorBeforeEdit();
+            if(!$data) return $this->productZen->sendError4Create();
 
-            $result = $this->product->create($data);
-            if(!$result) return $this->productZen->errorAfterEdit();
-            return $this->productZen->responseAfterEdit($result);
-            $productID = $this->product->create();
-            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-            $this->loadModel('action')->create('product', $productID, 'opened');
-
-            $message = $this->executeHooks($productID);
-            if($message) $this->lang->saveSuccess = $message;
-            if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $productID));
-
-            $tab = $this->app->tab;
-            $moduleName = $tab == 'program'? 'program' : $this->moduleName;
-            $methodName = $tab == 'program'? 'product' : 'browse';
-            $param      = $tab == 'program' ? "programID=$programID" : "productID=$productID";
-            $locate     = isonlybody() ? 'parent' : $this->createLink($moduleName, $methodName, $param);
-            if($tab == 'doc') $locate = $this->createLink('doc', 'productSpace', "objectID=$productID");
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $locate));
+            $productID = $this->product->create($data);
+            if(!$productID) return $this->productZen->sendError4Create();
+            return $this->productZen->responseAfterCreate($productID, $data);
         }
 
         $this->productZen->setMenu4Create($programID);
