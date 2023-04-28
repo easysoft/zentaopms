@@ -131,7 +131,7 @@ class report extends control
         $this->loadModel('dept');
         $this->loadModel('user');
 
-        $super = common::hasPriv('report', 'allAnnualData');
+        $super = common::hasPriv('screen', 'allAnnualData');
 
         $firstAction = $this->dao->select('*')->from(TABLE_ACTION)->orderBy('id')->limit(1)->fetch();
         $currentYear = date('Y');
