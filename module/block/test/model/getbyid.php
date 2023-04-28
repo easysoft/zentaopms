@@ -12,7 +12,6 @@ function initData()
     $block->module->range('my,qa,project');
     $block->title->prefix('区块')->range('2-5');
     $block->source->range('my,qa,project');
-    $block->block->range('bug,case,story');
     $block->order->range('5-2');
 
     $block->gen(4);
@@ -44,6 +43,6 @@ $tester->loadModel('block');
 
 initData();
 
-r($tester->block->getByID(2)) && p('account,vision,module,title,source,block,order') && e('admin,rnd,my,区块2,my,bug,5');        // 测试获取正常的block的内容
+r($tester->block->getByID(2)) && p('account,vision,module,title,source,order') && e('admin,rnd,my,区块2,my,5');        // 测试获取正常的block的内容
 r($tester->block->getByID(4)) && p('order') && e('3');        // 测试获取正常的block的内容
 r($tester->block->getByID(6)) && p('') && e('0');        // 测试获取不存在的block的内容

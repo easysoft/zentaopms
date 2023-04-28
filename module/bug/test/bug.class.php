@@ -16,31 +16,30 @@ class bugTest
      */
     public function createObject($param = array())
     {
-        $createFields['title']       = '测试创建bug';
-        $createFields['type']        = 'codeerror';
-        $createFields['product']     = 1;
-        $createFields['execution']   = 101;
-        $createFields['openedBuild'] = 'trunk';
-        $createFields['pri']         = 3;
-        $createFields['severity']    = 3;
-        $createFields['status']      = 'active';
-        $createFields['deadline']    = '2021-03-19';
-        $createFields['openedBy']    = 'admin';
-        $createFields['openedDate']  = '2021-03-19';
+        $bug              = new stdclass();
+        $bug->title       = 'add bug';
+        $bug->type        = 'codeerror';
+        $bug->product     = 1;
+        $bug->execution   = 101;
+        $bug->openedBuild = 'trunk';
+        $bug->pri         = 3;
+        $bug->severity    = 3;
+        $bug->status      = 'active';
+        $bug->deadline    = '2023-03-20';
+        $bug->openedBy    = 'admin';
+        $bug->openedDate  = '2023-04-20';
+        $bug->notifyEmail = '';
 
-        foreach($createFields as $field => $defaultValue) $_POST[$field] = $defaultValue;
+        foreach($param as $key => $value) $bug->$key = $value;
 
-        foreach($param as $key => $value) $_POST[$key] = $value;
-
-        $object   = $this->objectModel->create();
-        $objectID = $object['id'];
-        unset($_POST);
+        $object   = $this->objectModel->create($bug);
         if(dao::isError())
         {
             return dao::getError();
         }
         else
         {
+            $objectID = $object['id'];
             $object = $this->objectModel->getByID($objectID);
             return $object;
         }
