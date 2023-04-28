@@ -151,8 +151,8 @@ class bugZen extends bug
     }
 
     /**
-     * 为查看bug设置导航数据。
-     * Set menu for view bug page.
+     * 如果不是弹窗，调用该方法为查看bug设置导航。
+     * If it's not a iframe, call this method to set menu for view bug page.
      *
      * @param  object $bug
      * @return void
@@ -178,7 +178,7 @@ class bugZen extends bug
     }
 
     /**
-     * 为查看bug设置View数据。
+     * 为查看bug页面设置View数据。
      * Set $this->view for view bug page.
      *
      * @param  object $bug
