@@ -302,7 +302,7 @@ class todoModel extends model
         if($todo->type == 'testtask') $todo->name = $this->dao->findById($todo->objectID)->from(TABLE_TESTTASK)->fetch('name');
         if($todo->type == 'feedback') $todo->name = $this->dao->findById($todo->objectID)->from(TABLE_FEEDBACK)->fetch('title');
         $todo->date = str_replace('-', '', $todo->date);
-        
+
         return $todo;
     }
 
@@ -539,7 +539,7 @@ class todoModel extends model
     {
         $this->dao->update(TABLE_TODO)->set('status')->eq('wait')->where('id')->eq($todoID)->exec();
         $this->loadModel('action')->create('todo', $todoID, 'activated', '', 'wait');
-        
+
         return !dao::isError();
     }
 
@@ -559,7 +559,7 @@ class todoModel extends model
         {
             $this->loadModel('action')->create('todo', $todoID, 'closed', '', 'closed');
 
-            if(($this->config->edition == 'biz' || $this->config->edition == 'max'))
+            if($this->config->edition == 'biz' || $this->config->edition == 'max')
             {
                 $feedbackID = $this->dao->select('objectID')->from(TABLE_TODO)->where('id')->eq($todoID)->andWhere('type')->eq('feedback')->fetch('objectID');
                 if($feedbackID) $this->loadModel('feedback')->updateStatus('todo', $feedbackID, 'closed');
