@@ -3,11 +3,11 @@ namespace zin;
 
 class history extends wg
 {
-    protected static $defineProps = [
+    protected static $defineProps = array(
         'actions?:array',
         'users?:array',
         'methodName?:string'
-    ];
+    );
 
     public static function getPageCSS()
     {

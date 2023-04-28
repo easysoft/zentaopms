@@ -3,7 +3,7 @@ namespace zin;
 
 class modalTrigger extends wg
 {
-    static $defineProps = [
+    static $defineProps = array(
         'target?:string',
         'position?:string|number|object|function',
         'size?:string|number|object',
@@ -24,12 +24,12 @@ class modalTrigger extends wg
         'url?:string',
         'request?:object',
         'dataType?:string',
-    ];
+    );
 
-    static $defineBlocks = [
+    static $defineBlocks = array(
         'trigger' => array('map' => 'btn,a'),
         'modal' => array('map' => 'modal')
-    ];
+    );
 
     protected function build()
     {
@@ -58,7 +58,7 @@ class modalTrigger extends wg
         {
             $triggerBlock->setProp($this->props->skip(array_keys(static::getDefinedProps())));
 
-            $triggerProps = [
+            $triggerProps = array(
                 'data-toggle'         => 'modal',
                 'data-target'         => $triggerBlock->hasProp('target', 'href') ? NULL : $target,
                 'data-type'           => $type,
@@ -80,7 +80,7 @@ class modalTrigger extends wg
                 'data-custom'         => $this->prop('custom'),
                 'data-request'        => $this->prop('request'),
                 'data-data-type'      => $this->prop('dataType')
-            ];
+            );
             $triggerBlock->setProp($triggerProps);
         }
 

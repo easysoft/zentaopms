@@ -8,8 +8,7 @@ require_once dirname(__DIR__) . DS . 'form' . DS . 'v1.php';
 
 class formPanel extends panel
 {
-    protected static $defineProps =
-    [
+    protected static $defineProps = array(
         'method?: string',
         'url?: string',
         'actions?: array',
@@ -17,13 +16,12 @@ class formPanel extends panel
         'items?: array',
         'grid?: bool',
         'labelWidth?: number',
-    ];
+    );
 
-    protected static $defaultProps =
-    [
+    protected static $defaultProps = array(
         'class'         => 'panel-form rounded-md shadow ring-0 canvas px-4 pb-4 mb-4 mx-auto',
         'size'          => 'lg'
-    ];
+    );
 
     protected function created()
     {
