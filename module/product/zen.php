@@ -157,25 +157,26 @@ class productZen extends product
      * 追加创建信息，处理白名单、评审者、项目集字段，还有富文本内容处理。
      * Prepare data for create.
      *
-     * @param  int    $programID
-     * @param  string $extra
+     * @param  object $data
+     * @param  string $acl
+     * @param  string $uid
      * @access protected
      * @return object
      */
-    protected function prepareCreateExtras(object $data): object
+    protected function prepareCreateExtras(object $data, string $acl, string $uid): object
     {
         $product = $data->setDefault('createdBy', $this->app->user->account)
             ->setDefault('createdDate', helper::now())
             ->setDefault('createdVersion', $this->config->version)
             ->setIF($this->config->systemMode == 'light', 'program', (int)zget($this->config->global, 'defaultProgram', 0))
-            ->setIF($this->post->acl == 'open', 'whitelist', '')
+            ->setIF($acl == 'open', 'whitelist', '')
             ->stripTags($this->config->product->editor->create['id'], $this->config->allowedTags)
             ->join('whitelist', ',')
             ->join('reviewer', ',')
             ->remove('uid,newLine,lineName,contactListMenu')
             ->get();
 
-        $product = $this->loadModel('file')->processImgURL($product, $this->config->product->editor->create['id'], $this->post->uid);
+        $product = $this->loadModel('file')->processImgURL($product, $this->config->product->editor->create['id'], $uid);
 
         return $product;
     }
@@ -186,23 +187,25 @@ class productZen extends product
      *
      * @param  int    $productID
      * @param  object $product
+     * @param  string $uid
+     * @param  string $lineName
      * @access protected
      * @return void
      */
-    protected function responseAfterCreate(int $productID, object $product): void
+    protected function responseAfterCreate(int $productID, object $product, string $uid, string $lineName = ''): void
     {
         $fixData = new stdclass();
         $fixData->order = $productID * 5;
-        if(!empty($_POST['lineName']))
+        if(!empty($lineName))
         {
-            $lineID = $this->product->createLine((int)$product->program);
+            $lineID = $this->product->createLine((int)$product->program, $lineName);
             if($lineID) $fixData->line = $lineID;
         }
 
         $this->dao->update(TABLE_PRODUCT)->data($fixData)->where('id')->eq($productID)->exec();
-        $this->file->updateObjectID($this->post->uid, $productID, 'product');
+        $this->file->updateObjectID($uid, $productID, 'product');
 
-        $this->loadModel('personnel')->updateWhitelist(explode(',', $product->whitelist), 'product', $productID);
+        if($product->whitelist)     $this->loadModel('personnel')->updateWhitelist(explode(',', $product->whitelist), 'product', $productID);
         if($product->acl != 'open') $this->loadModel('user')->updateUserView($productID, 'product');
 
         $this->product->createMainLib($productID);
@@ -233,8 +236,8 @@ class productZen extends product
     private function sendCreateLocate(int $productID, int $programID): void
     {
         $tab = $this->app->tab;
-        $moduleName = $tab == 'program'? 'program' : $this->moduleName;
-        $methodName = $tab == 'program'? 'product' : 'browse';
+        $moduleName = $tab == 'program' ? 'program' : $this->moduleName;
+        $methodName = $tab == 'program' ? 'product' : 'browse';
         $param      = $tab == 'program' ? "programID=$programID" : "productID=$productID";
         $locate     = isonlybody() ? 'true' : $this->createLink($moduleName, $methodName, $param);
         if($tab == 'doc') $locate = $this->createLink('doc', 'productSpace', "objectID=$productID");

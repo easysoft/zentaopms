@@ -35,8 +35,11 @@ class product extends control
 
         /* Get all products, if no, goto the create page. */
         $this->products = $this->product->getPairs('nocode', 0, '', 'all');
-        $isAPI = ($this->app->viewType == 'json' or (defined('RUN_MODE') and RUN_MODE == 'api'));
-        if(empty($this->products) and strpos($this->config->product->skipRedirectMethod, ",$this->methodName,") === false and $this->app->getViewType() != 'mhtml' and !$isAPI) $this->locate($this->createLink('product', 'create'));
+        $isAPI          = ($this->app->viewType == 'json' or (defined('RUN_MODE') and RUN_MODE == 'api'));
+        $skipRedirectMethod = $this->config->product->skipRedirectMethod;
+        $vieType = $this->config->product->skipRedirectMethod;
+        if(empty($this->products) and strpos($skipRedirectMethod, ",$this->methodName,") === false and $this->app->getViewType() != 'mhtml' and !$isAPI) $this->locate($this->createLink('product', 'create'));
+
         $this->view->products = $this->products;
     }
 
@@ -407,12 +410,13 @@ class product extends control
         if(!empty($_POST))
         {
             $data = form::data($this->config->product->form->create);
-            $data = $this->productZen->prepareCreateExtras($data);
+            $data = $this->productZen->prepareCreateExtras($data, $this->post->acl, $this->post->uid);
             if(!$data) return $this->productZen->sendError4Create();
 
             $productID = $this->product->create($data);
             if(!$productID) return $this->productZen->sendError4Create();
-            return $this->productZen->responseAfterCreate($productID, $data);
+
+            return $this->productZen->responseAfterCreate($productID, $data, $this->post->uid, zget($_POST, 'lineName', ''));
         }
 
         $this->productZen->setMenu4Create($programID);

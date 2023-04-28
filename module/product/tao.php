@@ -405,4 +405,71 @@ class productTao extends productModel
 
         return [$stories, $requirements];
     }
+
+    /**
+     * 创建产品线。
+     * Create product line.
+     *
+     * @param int    programID
+     * @param string lineName
+     * @access public
+     * @return int|false
+     */
+    public function createLine(int $programID, string $lineName): int|false
+    {
+        if($programID <= 0) return false;
+        if(empty($lineName)) return false;
+
+        $line = new stdClass();
+        $line->type   = 'line';
+        $line->parent = 0;
+        $line->grade  = 1;
+        $line->name   = htmlSpecialString($lineName);
+        $line->root   = $programID;
+
+        $existedLineID = $this->dao->select('id')->from(TABLE_MODULE)->where('type')->eq('line')->andWhere('root')->eq($line->root)->andWhere('name')->eq($line->name)->fetch('id');
+        if($existedLineID) return $existedLineID;
+
+        $this->dao->insert(TABLE_MODULE)->data($line)->exec();
+        if(dao::isError()) return false;
+
+        $lineID = $this->dao->lastInsertID();
+        $path   = ",$lineID,";
+        $this->dao->update(TABLE_MODULE)->set('path')->eq($path)->set('`order`')->eq($lineID)->where('id')->eq($lineID)->exec();
+
+        return $lineID;
+    }
+
+    /**
+     * 关联创建产品主库
+     * Create main lib for product
+     *
+     * @param int productID
+     * @access public
+     * @return int|false
+     */
+    public function createMainLib(int $productID): int|false
+    {
+        if($productID <= 0) return false;
+
+        $existedLibID = $this->dao->select('id')->from(TABLE_DOCLIB)->where('product')->eq($productID)
+            ->andWhere('type')->eq('product')
+            ->andWhere('main')->eq('1')
+            ->fetch('id');
+        if($existedLibID) return $existedLibID;
+
+        $this->app->loadLang('doc');
+        $lib = new stdclass();
+        $lib->product   = $productID;
+        $lib->name      = $this->lang->doclib->main['product'];
+        $lib->type      = 'product';
+        $lib->main      = '1';
+        $lib->acl       = 'default';
+        $lib->addedBy   = $this->app->user->account;
+        $lib->addedDate = helper::now();
+        $this->dao->insert(TABLE_DOCLIB)->data($lib)->exec();
+
+        if(dao::isError())return false;
+        return $this->dao->lastInsertID();
+    }
 }
