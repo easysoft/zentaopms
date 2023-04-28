@@ -158,13 +158,13 @@ class todoTao extends todoModel
      * 通过周期待办，获取要生成待办的日期
      *
      * Gets the date by the cycle todo.
-     * @param  object $todo
-     * @param  object $lastCycle
-     * @param  string $today
+     * @param  object        $todo
+     * @param  object|string $lastCycle
+     * @param  string        $today
      * @access protected
      * @return false|string
      */
-    protected function getCycleTodoDate(object $todo, object $lastCycle, string $today): false|string
+    protected function getCycleTodoDate(object $todo, object|string $lastCycle, string $today): false|string
     {
         $date = '';
         if($todo->config->type == 'day')
