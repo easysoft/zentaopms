@@ -779,7 +779,7 @@ class baseRouter
         if(empty($this->config->debug) || $this->config->debug < 4 || !extension_loaded('xhprof')) return false;
 
         $log          = xhprof_disable();
-        $xhprofPath   = $this->getTmpRoot() . 'xhprof';
+        $xhprofPath   = $this->getWwwRoot() . 'xhprof';
         $libUtilsPath = $xhprofPath . DS . 'xhprof_lib' . DS . 'utils' . DS;
         $outputDir    = ini_get('xhprof.output_dir');
 
@@ -795,8 +795,15 @@ class baseRouter
         }
 
         $xhprofRuns = new \XHProfRuns_Default($outputDir);
-        $runID      = $xhprofRuns->save_run($log, "{$this->moduleName}_{$this->methodName}");
+        $type       = "{$this->moduleName}_{$this->methodName}";
+        $runID      = $xhprofRuns->save_run($log, $type);
         header("Xhprof-RunID: {$runID}");
+
+        if(class_exists(\zin\zin::class) && isset(\zin\zin::$data['zinDebug']))
+        {
+            $xhprofURL = getWebRoot(true) . "xhprof/xhprof_html/index.php?run={$runID}&source={$type}";
+            \zin\zin::$data['zinDebug']['xhprof'] = $xhprofURL;
+        }
 
         return true;
     }
