@@ -153,8 +153,6 @@ class report extends control
             }
         }
 
-        if(!$dept && !$super) $dept = $this->app->user->dept;
-
         /* Get users and depts. */
         if($account)
         {
