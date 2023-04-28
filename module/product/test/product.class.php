@@ -228,84 +228,32 @@ class productTest
      * @param  string|array  $append
      * @param  string|int    $shadow
      * @access public
-     * @return array
+     * @return int[]
      */
-    public function getProductPairs(string $mode = '', int $programID = 0, string|array $append = '', string|int $shadow = 0): array|string
+    public function getProductPairs(string $mode = '', int $programID = 0, string|array $append = '', string|int $shadow = 0): array
     {
+        $this->objectModel->dao->update(TABLE_PRODUCT)->set('deleted')->eq(1)->orderBy('id_desc')->limit(5)->exec();
+        $this->objectModel->dao->update(TABLE_PRODUCT)->set('shadow')->eq(1)->where('id')->ge(18)->andWhere('id')->lt(23)->exec();
         $pairs = $this->objectModel->getPairs($mode, $programID, $append, $shadow);
-        if($pairs == array()) return '没有数据';
         return $pairs;
     }
 
     /**
-     * Test get all product pairs.
+     * Test fetch product pairs.
      *
-     * @param  int    $programID
-     * @access public
-     * @return void
-     */
-    public function getAllPairs($programID)
-    {
-        $pairs = $this->objectModel->getPairs('all', $programID);
-        if($pairs == array()) return '没有数据';
-        return $pairs;
-    }
-
-    /**
-     * Test get all product count.
-     *
-     * @param  int    $programID
-     * @access public
-     * @return int
-     */
-    public function getAllPairsCount($programID)
-    {
-        $pairsCount = count($this->getAllPairs($programID));
-        if($pairsCount == '没有数据') return '0';
-        return $pairsCount;
-    }
-
-    /**
-     * Test get noclosed product pairs.
-     *
-     * @param  int    $programID
+     * @param  string        $mode
+     * @param  int           $programID
+     * @param  string|array  $append
+     * @param  string|int    $shadow
      * @access public
      * @return array
      */
-    public function getNoclosedPairs($programID)
+    public function fetchPairsTest(string $mode = '', int $programID = 0, string|array $append = '', string|int $shadow = 0): array|string
     {
-        $pairs = $this->objectModel->getPairs('noclosed', $programID);
-        if($pairs == array()) return '没有数据';
+        $this->objectModel->dao->update(TABLE_PRODUCT)->set('deleted')->eq(1)->orderBy('id_desc')->limit(5)->exec();
+        $this->objectModel->dao->update(TABLE_PRODUCT)->set('shadow')->eq(1)->where('id')->ge(18)->andWhere('id')->lt(23)->exec();
+        $pairs = $this->objectModel->fetchPairs($mode, $programID, $append, $shadow);
         return $pairs;
-    }
-    /**
-     * Test get noclosed pairs count.
-     *
-     * @param  int    $programID
-     * @access public
-     * @return int
-     */
-    public function getNoclosedPairsCount($programID)
-    {
-        $pairsCount = count($this->getNoclosedPairs($programID));
-        if($pairsCount == '没有数据') return '0';
-        return $pairsCount;
-    }
-
-    /**
-     * Test get product pairs by order.
-     *
-     * @param  int    $programID
-     * @param  string $orderBy
-     * @param  string $mode
-     * @access public
-     * @return array
-     */
-    public function getProductPairsByOrder($programID, $orderBy = 'id_desc', $mode = '')
-    {
-        $this->objectModel->orderBy = $orderBy;
-        $pairs = $this->objectModel->getPairs($mode, $programID);
-        return checkOrder($pairs, $orderBy);
     }
 
     /**
