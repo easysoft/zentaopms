@@ -11,17 +11,26 @@ class todoZen extends todo
      * @access protected
      * @return void
      */
-    protected function buildCreateForm(string $date): void
+    protected function buildCreateView(string $date): void
     {
         $this->view->title = $this->lang->todo->common . $this->lang->colon . $this->lang->todo->create;
         $this->view->date  = date('Y-m-d', strtotime($date));
         $this->view->times = date::buildTimeList($this->config->todo->times->begin, $this->config->todo->times->end, $this->config->todo->times->delta);
         $this->view->time  = date::now();
         $this->view->users = $this->loadModel('user')->getPairs('noclosed|nodeleted|noempty');
+
         $this->display();
     }
 
-    protected function renderEditData(int $todoID)
+    /**
+     * 生成编辑待办视图数据。
+     * Build create form data.
+     *
+     * @param  object    $todo
+     * @access protected
+     * @return void
+     */
+    protected function buildEditView(object $todo): void
     {
         $todo->date = date("Y-m-d", strtotime($todo->date));
         $this->view->title      = $this->lang->todo->common . $this->lang->colon . $this->lang->todo->edit;
