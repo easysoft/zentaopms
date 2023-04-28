@@ -14,8 +14,10 @@ namespace zin;
 set::title($title);
 jsVar('blockID', $block->id);
 
-$paramsRows = array();
-$isMyDashboard = $dashboard == 'my';
+$paramsRows  = array();
+$showModules = ($dashboard == 'my' and $modules);
+$showCodes   = ($module and $codes);
+$showParams  = ($code);
 
 foreach($params as $key => $row)
 {
@@ -41,57 +43,58 @@ form
     (
         set::label($lang->block->lblModule),
         set::name('module'),
-        set::class($isMyDashboard ? '' : 'hidden'),
-        set::value($isMyDashboard ? $block->module : $dashboard),
-        set::control(array
+        set::class($showModules ? '' : 'hidden'),
+        set::value($showModules ? $module : $dashboard),
+        set::control($showModules ? array
         (
             'type'  => 'select',
             'items' => $modules
-        ))  
+        ) : 'input')  
     ),
     div
     (
-        set::id('codeRow'),
-        $codes
-        ? formGroup
+        set::id('codesRow'),
+        formGroup
         (
             set::label($lang->block->lblBlock),
             set::name('code'),
-            set::value($code),
-            set::control(array
+            set::class($showCodes ? '' : 'hidden'),
+            set::value($showCodes ? $code : $module),
+            set::control($showCodes ? array
             (
                 'type'  => 'select',
                 'items' => array('') + $codes
-            ))  
-        ) : null
+            ) : 'input')  
+        )
     ),
     div
     (
         set::id('paramsRow'),
-        set::class('form-grid'),
-        $paramsRows,
-        (($module and $code) or ($module and !$codes))
-        ? formGroup
+        div
         (
-            set::label($lang->block->name),
-            set::name('title'),
-            set::class('form-row'),
-            set::value($block->title),
-            set::control('input')  
-        ) : null,
-        (($module and $code) or ($module and !$codes))
-        ? formGroup
-        (
-            set::label($lang->block->grid),
-            set::name("grid"),
-            set::class('form-row'),
-            set::value($block->grid),
-            set::control(array
+            set::class('form-grid' . ($showParams ? '' : ' hidden')),
+            $paramsRows,
+            formGroup
             (
-                'type'  => 'select',
-                'items' => $lang->block->gridOptions
-            ))  
-        ) : null,
+                set::label($lang->block->name),
+                set::name('title'),
+                set::class('form-row'),
+                set::value($block->title),
+                set::control('input')  
+            ),
+            formGroup
+            (
+                set::label($lang->block->grid),
+                set::name("grid"),
+                set::class('form-row'),
+                set::value($block->grid),
+                set::control(array
+                (
+                    'type'  => 'select',
+                    'items' => $lang->block->gridOptions
+                ))  
+            )
+        )
     )
 );
 
