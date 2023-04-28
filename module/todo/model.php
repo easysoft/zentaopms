@@ -285,11 +285,7 @@ class todoModel extends model
      * @access public
      * @return object|false
      */
-<<<<<<< Updated upstream
     public function getByID(int $todoID, $setImgSize = false): object|false
-=======
-    public function getByID(int $todoID, bool $setImgSize = false): object|bool
->>>>>>> Stashed changes
     {
         $todo = $this->dao->findById($todoID)->from(TABLE_TODO)->fetch();
         if(!$todo) return false;
