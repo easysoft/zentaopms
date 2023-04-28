@@ -187,13 +187,19 @@ class bugZen extends bug
      */
     protected function setView4View(object $bug, string $from): void
     {
-        /* Get product info. */
+        $this->loadModel('project');
+        $this->loadModel('product');
+        $this->loadModel('build');
+        $this->loadModel('common');
+        $this->loadModel('repo');
+        $this->loadModel('user');
+
         $bugID     = $bug->id;
         $productID = $bug->product;
-        $product   = $this->loadModel('product')->getByID($productID);
+        $product   = $this->product->getByID($productID);
         $branches  = $product->type == 'normal' ? array() : $this->loadModel('branch')->getPairs($bug->product);
 
-        $projects = $this->loadModel('product')->getProjectPairsByProduct($productID, $bug->branch);
+        $projects = $this->product->getProjectPairsByProduct($productID, $bug->branch);
         $this->session->set("project", key($projects), 'project');
 
         $this->executeHooks($bugID);
@@ -204,7 +210,7 @@ class bugZen extends bug
         $this->view->position[] = $this->lang->bug->view;
 
         /* Assign. */
-        $this->view->project     = $this->loadModel('project')->getByID($bug->project);
+        $this->view->project     = $this->project->getByID($bug->project);
         $this->view->productID   = $productID;
         $this->view->branches    = $branches;
         $this->view->modulePath  = $this->tree->getParents($bug->module);
@@ -214,10 +220,10 @@ class bugZen extends bug
         $this->view->branchName  = $product->type == 'normal' ? '' : zget($branches, $bug->branch, '');
         $this->view->users       = $this->user->getPairs('noletter');
         $this->view->actions     = $this->action->getList('bug', $bugID);
-        $this->view->builds      = $this->loadModel('build')->getBuildPairs($productID, 'all');
-        $this->view->preAndNext  = $this->loadModel('common')->getPreAndNextObject('bug', $bugID);
+        $this->view->builds      = $this->build->getBuildPairs($productID, 'all');
+        $this->view->preAndNext  = $this->common->getPreAndNextObject('bug', $bugID);
         $this->view->product     = $product;
-        $this->view->linkCommits = $this->loadModel('repo')->getCommitsByObject($bugID, 'bug');
+        $this->view->linkCommits = $this->repo->getCommitsByObject($bugID, 'bug');
 
         $this->view->projects = array('' => '') + $projects;
     }
