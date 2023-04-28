@@ -595,7 +595,7 @@ class projectModel extends model
 
         if(empty($project->multiple)) return $link;
 
-        if(in_array($module, array('testreport', 'testcase'))) 
+        if(in_array($module, array('testreport', 'testcase')))
             return helper::createLink('project', $module, "projectID=%s");
 
         if($module == 'projectstory' && in_array($method, array('story', 'linkstory', 'track')))
@@ -1317,7 +1317,7 @@ class projectModel extends model
      * @access public
      * @return array
      */
-    public function update($projectID = 0)
+    public function update($projectID = 0, $project)
     {
         $oldProject        = $this->dao->findById($projectID)->from(TABLE_PROJECT)->fetch();
         $linkedProducts    = $this->dao->select('product')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($projectID)->fetchPairs();
@@ -1660,7 +1660,6 @@ class projectModel extends model
      */
     public function activate(int $projectID, object $project) :array|false
     {
-        $now        = helper::now();
         $oldProject = $this->projectTao->fetchProjectInfo($projectID);
 
         $daoSuccess = $this->projectTao->doActivate($projectID, $project);
@@ -1671,9 +1670,8 @@ class projectModel extends model
         /* Update start and end date of tasks in this project. */
         if($project->readjustTime and $project->readjustTask)
         {
-            $beginTimeStamp = strtotime($project->begin);
             $tasks          = $this->projectTao->fetchUndoneTasks((int)$projectID);
-            $this->projectTao->updateTasksStartAndEndDate($tasks);
+            $this->projectTao->updateTasksStartAndEndDate($tasks, $oldProject, $project);
         }
         /* Activate the shadow product of the project. (only change product status) */
         if(!$oldProject->hasProduct)
@@ -1682,7 +1680,6 @@ class projectModel extends model
             $this->product->activate($productID);
         }
 
-        $changes = common::createChanges($oldProject, $project);
         return common::createChanges($oldProject, $project);
     }
 
