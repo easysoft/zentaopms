@@ -13,6 +13,15 @@ namespace zin;
 
 require_once 'zin.class.php';
 
+/**
+ * Render page content with a widget to HTML.
+ * 将视图页面声明的所有内容通过一个部件进行渲染，并输出 HTML。
+ *
+ * @access public
+ * @param string       $wgName
+ * @param string|array $options
+ * @return void
+ */
 function render(string $wgName = 'page', string|array $options = NULL)
 {
     $args = array();
@@ -38,7 +47,7 @@ function render(string $wgName = 'page', string|array $options = NULL)
     }
 
     global $app;
-    data('zinErrors', isset($app->zinErrors) ? $app->zinErrors : array());
+    data('zinDebug.errors', isset($app->zinErrors) ? $app->zinErrors : array());
 
     $wg = createWg($wgName, $args);
     if(!$isFullPage) $wg = fragment($wg);
