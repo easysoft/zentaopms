@@ -16,6 +16,52 @@ class Project
     }
 
     /**
+     * Call project model function and handle the exception.
+     *
+     * @param  string $method
+     * @param  array  $params
+     * @access public
+     * @return string
+     */
+    public function triggerMethod($method, $params = array())
+    {
+        try
+        {
+            return call_user_func_array(array($this->project, $method), $params);
+        }
+        catch(Throwable $error)
+        {
+            $errorInfo = $error->getMessage();
+            if(preg_match('/Argument #\d+ (\(\$\w+\) must be of type [a-z]+),/', $errorInfo, $matches)) return $matches[1];
+            return $errorInfo;
+        }
+    }
+
+    /**
+     * Test getByID function.
+     *
+     * @param  int    $projectID
+     * @access public
+     * @return string|bool|object
+     */
+    public function testGetByID($projectID)
+    {
+        return $this->triggerMethod('getByID', array('projectID' => $projectID));
+    }
+
+    /**
+     * Test fetchProjectInfo function.
+     *
+     * @param  int    $projectID
+     * @access public
+     * @return string|bool|object
+     */
+    public function testFetchProjectInfo($projectID)
+    {
+        return $this->triggerMethod('fetchProjectInfo', array('projectID' => $projectID));
+    }
+
+    /**
      * Test start a project.
      *
      * @param  int    $projectID
@@ -40,12 +86,9 @@ class Project
      * @access public
      * @return void
      */
-    public function create($params)
+    public function create($project, $postData)
     {
-        $_POST = $params;
-
-        $projectID = $this->project->create();
-        unset($_POST);
+        $projectID = $this->project->create($project, $postData);
 
         if(dao::isError()) return array('message' => dao::getError());
 

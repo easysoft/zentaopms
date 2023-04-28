@@ -7,7 +7,7 @@ foreach($longBlocks as $index => $block)
     $mainBlocks[] = 
     div
     (
-        set('class', "panel rounded shadow ring-0 canvas block-item {$block->block}" . (isset($block->params->color) ? 'panel-' . $block->params->color : '')),
+        set('class', "panel rounded shadow ring-0 canvas block-item {$block->code}" . (isset($block->params->color) ? 'panel-' . $block->params->color : '')),
         set('data-id', $block->id),
         set('data-name', $block->title),
         set('data-order', $block->order),
@@ -29,7 +29,7 @@ foreach($longBlocks as $index => $block)
                     set::items
                     ([
                         ['text' => $lang->block->refresh, 'url' => ''],
-                        ['text' => $lang->edit, 'url' => $this->createLink("block", "edit", "dashboard=$dashboard&blockID=$block->id"), 'data-toggle' => 'modal'],
+                        ['text' => $lang->edit, 'url' => $this->createLink("block", "edit", "blockID=$block->id"), 'data-toggle' => 'modal'],
                         ['text' => $lang->block->hidden, 'url' => ''],
                         ['text' => $lang->block->createBlock, 'url' => $this->createLink("block", "create", "dashboard=$dashboard"), 'data-toggle' => 'modal'],
                         ['text' => $lang->block->reset, 'url' => ''],
@@ -52,7 +52,7 @@ foreach($shortBlocks as $index => $block)
     div
     (
         set('id', 'block' . $block->id),
-        set('class', "panel rounded shadow ring-0 canvas {$block->block}" . (isset($block->params->color) ? 'panel-' . $block->params->color : '')),
+        set('class', "panel rounded shadow ring-0 canvas {$block->code}" . (isset($block->params->color) ? 'panel-' . $block->params->color : '')),
         set('data-id', $block->id),
         set('data-name', $block->title),
         set('data-order', $block->order),
@@ -77,7 +77,7 @@ foreach($shortBlocks as $index => $block)
                     set::items
                     ([
                         ['text' => $lang->block->refresh, 'url' => ''],
-                        ['text' => $lang->edit, 'url' => $this->createLink("block", "edit", "dashboard=$dashboard&blockID=$block->id"), 'data-toggle' => 'modal'],
+                        ['text' => $lang->edit, 'url' => $this->createLink("block", "edit", "blockID=$block->id"), 'data-toggle' => 'modal'],
                         ['text' => $lang->block->hidden, 'url' => ''],
                         ['text' => $lang->block->createBlock, 'url' => $this->createLink("block", "create", "dashboard=$dashboard"), 'data-toggle' => 'modal'],
                         ['text' => $lang->block->reset, 'url' => ''],

@@ -1,6 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . "/test/lib/init.php";
+include dirname(__FILE__, 2) . '/project.class.php';
 su('admin');
 
 function initData()
@@ -40,10 +41,9 @@ cid=1
 
 */
 
-global $tester;
-$tester->loadModel('project');
-
 initData();
 
-r($tester->project->getByID(2)) && p('code,type') && e('project2,project'); //获取ID等于11的项目
-r($tester->project->getByID(1))  && p('code') && e('0');                    //获取不存在的项目
+$projectTester = new Project();
+r($projectTester->testGetByID(2)) && p('code,type') && e('project2,project');                 //获取ID等于11的项目
+r($projectTester->testGetByID(1))  && p('code') && e('0');                                    //获取不存在的项目
+r($projectTester->testGetByID('aaa'))  && p('code') && e('($projectID) must be of type int'); //获取字符串ID的项目

@@ -62,7 +62,7 @@
           }
           else
           {
-              echo html::select("types[$todo->id]", $lang->todo->typeList, $todo->type, "onchange='loadList(this.value, {$todo->id}, \"{$todo->type}\", {$todo->idvalue})' class='form-control'");
+              echo html::select("types[$todo->id]", $lang->todo->typeList, $todo->type, "onchange='loadList(this.value, {$todo->id}, \"{$todo->type}\", {$todo->objectID})' class='form-control'");
           }
           ?>
         </td>
@@ -77,39 +77,39 @@
           }
           elseif($todo->type == 'task')
           {
-              echo html::select("tasks[$todo->id]", $tasks, $todo->idvalue, 'class="form-control chosen"');
+              echo html::select("tasks[$todo->id]", $tasks, $todo->objectID, 'class="form-control chosen"');
           }
           elseif($todo->type == 'bug')
           {
-              echo html::select("bugs[$todo->id]", $bugs, $todo->idvalue, 'class="form-control chosen"');
+              echo html::select("bugs[$todo->id]", $bugs, $todo->objectID, 'class="form-control chosen"');
           }
           elseif($todo->type == 'story')
           {
-              echo html::select("stories[$todo->id]", $storys, $todo->idvalue, 'class="form-control chosen"');
+              echo html::select("stories[$todo->id]", $storys, $todo->objectID, 'class="form-control chosen"');
           }
           elseif($todo->type == 'issue')
           {
-              echo html::select("issues[$todo->id]", $issues, $todo->idvalue, 'class="form-control chosen"');
+              echo html::select("issues[$todo->id]", $issues, $todo->objectID, 'class="form-control chosen"');
           }
           elseif($todo->type == 'risk')
           {
-              echo html::select("risks[$todo->id]", $risks, $todo->idvalue, 'class="form-control chosen"');
+              echo html::select("risks[$todo->id]", $risks, $todo->objectID, 'class="form-control chosen"');
           }
           elseif($todo->type == 'review')
           {
-              echo html::select("reviews[$todo->id]", $reviews, $todo->idvalue, 'class="form-control chosen"');
+              echo html::select("reviews[$todo->id]", $reviews, $todo->objectID, 'class="form-control chosen"');
           }
           elseif($todo->type == 'testtask')
           {
-              echo html::select("testtasks[$todo->id]", $testtasks, $todo->idvalue, 'class="form-control chosen"');
+              echo html::select("testtasks[$todo->id]", $testtasks, $todo->objectID, 'class="form-control chosen"');
           }
           elseif($todo->type == 'opportunity')
           {
-              echo html::select("opportunities[$todo->id]", $opportunities, $todo->idvalue, 'class="form-control chosen"');
+              echo html::select("opportunities[$todo->id]", $opportunities, $todo->objectID, 'class="form-control chosen"');
           }
           elseif($todo->type == 'feedback')
           {
-              echo html::select("feedbacks[$todo->id]", $feedbacks, $todo->idvalue, 'class="form-control chosen"');
+              echo html::select("feedbacks[$todo->id]", $feedbacks, $todo->objectID, 'class="form-control chosen"');
           }
           ?>
           </div>

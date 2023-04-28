@@ -235,5 +235,4 @@ class productTao extends productModel
 
         return $closedBugs;
     }
-
 }

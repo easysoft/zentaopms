@@ -57,7 +57,7 @@
         if($action->action == 'assigned' or $action->action == 'toaudit') $action->extra = zget($users, $action->extra);
         if(strpos($action->actor, ':') !== false) $action->actor = substr($action->actor, strpos($action->actor, ':') + 1);
         ?>
-        <?php $this->action->printAction($action);?>
+        <?php $this->loadModel('action')->printAction($action);?>
         <?php if(!empty($action->history)):?>
           <button type='button' class='btn btn-mini switch-btn btn-icon btn-expand' title='<?php echo $lang->switchDisplay;?>'><i class='change-show icon icon-plus icon-sm'></i></button>
           <div class='history-changes' id='changeBox<?php echo $i;?>'>

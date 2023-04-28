@@ -47,7 +47,7 @@ class blockModel extends model
 
         $block->params = json_decode($block->params);
         if(empty($block->params)) $block->params = new stdclass();
-        if($block->block == 'html') $block->params->html = $this->loadModel('file')->setImgSize($block->params->html);
+        if($block->code == 'html') $block->params->html = $this->loadModel('file')->setImgSize($block->params->html);
         return $block;
     }
 
@@ -187,10 +187,10 @@ class blockModel extends model
      * @access public
      * @return string
      */
-    public function getParams(string $type, string $module): string
+    public function getParams(string $block, string $module): string
     {
-        $type = $type == 'todo' ? $module : $type;
-        $params = zget($this->config->block->params, $type, '');
+        $block = $block == 'todo' ? $module : $block;
+        $params = zget($this->config->block->params, $block, '');
         return json_encode($params);
     }
 

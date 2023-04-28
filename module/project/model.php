@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 class projectModel extends model
 {
     /**
@@ -1261,120 +1262,13 @@ class projectModel extends model
      * @access public
      * @return int|bool
      */
-    public function create()
+    public function create(object $project, object $postData)
     {
-        $project = fixer::input('post')
-            ->callFunc('name', 'trim')
-            ->setDefault('status', 'wait')
-            ->setIF($this->post->delta == 999, 'end', LONG_TIME)
-            ->setIF($this->post->delta == 999, 'days', 0)
-            ->setIF($this->post->acl   == 'open', 'whitelist', '')
-            ->setIF(!isset($_POST['whitelist']), 'whitelist', '')
-            ->setIF(!isset($_POST['multiple']), 'multiple', '1')
-            ->setDefault('openedBy', $this->app->user->account)
-            ->setDefault('openedDate', helper::now())
-            ->setDefault('team', $this->post->name)
-            ->setDefault('lastEditedBy', $this->app->user->account)
-            ->setDefault('lastEditedDate', helper::now())
-            ->setDefault('days', '0')
-            ->add('type', 'project')
-            ->join('whitelist', ',')
-            ->stripTags($this->config->project->editor->create['id'], $this->config->allowedTags)
-            ->remove('uid,products,branch,plans,delta,newProduct,productName,future,contactListMenu,teamMembers')
-            ->get();
-        if(!isset($this->config->setCode) or $this->config->setCode == 0) unset($project->code);
-
-        /* Lean mode relation defaultProgram. */
-        if($this->config->systemMode == 'light') $project->parent = $this->config->global->defaultProgram;
-
-        $linkedProductsCount = 0;
-        if($project->hasProduct && isset($_POST['products']))
-        {
-            foreach($_POST['products'] as $product)
-            {
-                if(!empty($product)) $linkedProductsCount++;
-            }
-        }
-
-        if($_POST['products'])
-        {
-            $topProgramID     = $this->loadModel('program')->getTopByID($project->parent);
-            $multipleProducts = $this->loadModel('product')->getMultiBranchPairs($topProgramID);
-            foreach($_POST['products'] as $index => $productID)
-            {
-                if(isset($multipleProducts[$productID]) and empty($_POST['branch'][$index]))
-                {
-                    dao::$errors[] = $this->lang->project->emptyBranch;
-                    return false;
-                }
-            }
-        }
-
-        $program = new stdClass();
-        if($project->parent)
-        {
-            $program = $this->dao->select('*')->from(TABLE_PROGRAM)->where('id')->eq($project->parent)->fetch();
-
-            /* Judge products not empty. */
-            if($project->hasProduct && empty($linkedProductsCount) and !isset($_POST['newProduct']))
-            {
-                dao::$errors['products0'] = $this->lang->project->productNotEmpty;
-                return false;
-            }
-        }
-
-        /* Judge workdays is legitimate. */
-        $workdays = helper::diffDate($project->end, $project->begin) + 1;
-        if(isset($project->days) and $project->days > $workdays)
-        {
-            dao::$errors['days'] = sprintf($this->lang->project->workdaysExceed, $workdays);
-            return false;
-        }
-
-        if(!empty($project->budget))
-        {
-            if(!is_numeric($project->budget))
-            {
-                dao::$errors['budget'] = sprintf($this->lang->project->budgetNumber);
-                return false;
-            }
-            else if(is_numeric($project->budget) and ($project->budget < 0))
-            {
-                dao::$errors['budget'] = sprintf($this->lang->project->budgetGe0);
-                return false;
-            }
-            else
-            {
-                $project->budget = round((float)$this->post->budget, 2);
-            }
-        }
-
-        /* When select create new product, product name cannot be empty and duplicate. */
-        if($project->hasProduct && isset($_POST['newProduct']))
-        {
-            if(empty($_POST['productName']))
-            {
-                $this->app->loadLang('product');
-                dao::$errors['productName'] = sprintf($this->lang->error->notempty, $this->lang->product->name);
-                return false;
-            }
-            else
-            {
-                $programID        = isset($project->parent) ? $project->parent : 0;
-                $existProductName = $this->dao->select('name')->from(TABLE_PRODUCT)->where('name')->eq($_POST['productName'])->andWhere('program')->eq($programID)->fetch('name');
-                if(!empty($existProductName))
-                {
-                    dao::$errors['productName'] = $this->lang->project->existProductName;
-                    return false;
-                }
-            }
-        }
-
         $requiredFields = $this->config->project->create->requiredFields;
-        if($this->post->delta == 999) $requiredFields = trim(str_replace(',end,', ',', ",{$requiredFields},"), ',');
+        if($postData->rawdata->delta == 999) $requiredFields = trim(str_replace(',end,', ',', ",{$requiredFields},"), ',');
 
         $this->lang->error->unique = $this->lang->error->repeat;
-        $project = $this->loadModel('file')->processImgURL($project, $this->config->project->editor->create['id'], $this->post->uid);
+        $project = $this->loadModel('file')->processImgURL($project, $this->config->project->editor->create['id'], $postData->rawdata->uid);
         $this->dao->insert(TABLE_PROJECT)->data($project)
             ->autoCheck()
             ->batchcheck($requiredFields, 'notempty')
@@ -1455,9 +1349,9 @@ class projectModel extends model
             {
                 /* If parent not empty, link products or create products. */
                 $product = new stdclass();
-                $product->name           = $project->hasProduct && $this->post->productName ? $this->post->productName : $project->name;
+                $product->name           = $project->hasProduct && $postData->rawdata->productName ? $postData->rawdata->productName : $project->name;
                 $product->shadow         = zget($project, 'vision', 'rnd') == 'rnd' ? (int)empty($project->hasProduct) : 1;
-                $product->bind           = $this->post->parent ? 0 : 1;
+                $product->bind           = $postData->rawdata->parent ? 0 : 1;
                 $product->program        = $project->parent ? current(array_filter(explode(',', $program->path))) : 0;
                 $product->acl            = $project->acl == 'open' ? 'open' : 'private';
                 $product->PO             = $project->PM;
@@ -1505,7 +1399,7 @@ class projectModel extends model
 
             /* Save order. */
             $this->dao->update(TABLE_PROJECT)->set('`order`')->eq($projectID * 5)->where('id')->eq($projectID)->exec();
-            $this->file->updateObjectID($this->post->uid, $projectID, 'project');
+            $this->file->updateObjectID($postData->rawdata->uid, $projectID, 'project');
             $this->loadModel('program')->setTreePath($projectID);
 
             /* Add project admin. */

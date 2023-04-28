@@ -14,7 +14,6 @@ function initData()
     $block->module->range('test');
     $block->title->prefix('区块')->range('2');
     $block->source->range('my');
-    $block->block->range('bug');
     $block->order->range('5');
 
     $block->gen(1);
@@ -22,7 +21,7 @@ function initData()
 
 /**
 
-title=14:11:23 ERROR: SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry &
+title=测试 block 模块 model下的 create 方法
 timeout=0
 cid=39
 
@@ -52,7 +51,6 @@ $block->vision  = 'rnd';
 $block->module  = 'my';
 $block->title   = '区块123';
 $block->source  = 'my';
-$block->block   = 'bug';
 $block->order   = '5';
 
 $accoutTooLangBlock = new stdclass();
@@ -61,11 +59,10 @@ $accoutTooLangBlock->vision  = 'rnd';
 $accoutTooLangBlock->module  = 'my';
 $accoutTooLangBlock->title   = 'long account';
 $accoutTooLangBlock->source  = 'my';
-$accoutTooLangBlock->block   = 'bug';
 $accoutTooLangBlock->order   = '5';
 
 $blockTest = new blockTest();
 $newBlockID = $blockTest->createTest($block);
 
-r($tester->block->getByID($newBlockID)) && p('account,vision,module,title,source,block,order') && e('admin,rnd,my,区块123,my,bug,5'); // 测试获取正常的block的内容
+r($tester->block->getByID($newBlockID)) && p('account,vision,module,title,source,order') && e('admin,rnd,my,区块123,my,5'); // 测试获取正常的block的内容
 r($blockTest->createTest($accoutTooLangBlock)) && p('account:0') && e('『所属用户』长度应当不超过『30』，且大于『0』。'); // 测试account 字段字符超出长度

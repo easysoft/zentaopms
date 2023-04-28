@@ -70,13 +70,13 @@
         </tr>
         <tr>
           <th class='w-130px'><?php echo $lang->project->name;?></th>
-          <td class="col-main"><?php echo html::input('name', $name, "class='form-control' required");?></td>
+          <td class="col-main"><?php echo html::input('name', $copyProjectID ? $copyProject->name : '', "class='form-control' required");?></td>
           <td></td>
         </tr>
         <?php if(isset($config->setCode) and $config->setCode == 1):?>
         <tr>
           <th><?php echo $lang->project->code;?></th>
-          <td><?php echo html::input('code', $code, "class='form-control' required");?></td>
+          <td><?php echo html::input('code', $copyProjectID ? $copyProject->code : '', "class='form-control' required");?></td>
         </tr>
         <?php endif;?>
         <?php if($model == 'scrum' or $model == 'kanban'):?>
@@ -84,8 +84,8 @@
           <th><?php echo $lang->project->multiple;?></th>
           <td colspan='3'>
             <?php
-            echo nl2br(html::radio('multiple', $lang->project->multipleList, $multiple, $copyProjectID ? 'disabled' : ''));
-            if($copyProjectID) echo html::hidden('multiple', $multiple);
+            echo nl2br(html::radio('multiple', $lang->project->multipleList, '1', $copyProjectID ? 'disabled' : ''));
+            if($copyProjectID) echo html::hidden('multiple', $copyProject->multiple);
             ?>
           </td>
         </tr>
@@ -94,8 +94,8 @@
           <th id='projectType'><?php echo $lang->project->type;?></th>
           <td>
             <?php
-            echo html::radio('hasProduct', $lang->project->projectTypeList, $hasProduct, $copyProjectID ? 'disabled' : '');
-            if($copyProjectID) echo html::hidden('hasProduct', $hasProduct);
+            echo html::radio('hasProduct', $lang->project->projectTypeList, '1', $copyProjectID ? 'disabled' : '');
+            if($copyProjectID) echo html::hidden('hasProduct', $copyProject->hasProduct);
             ?>
           </td>
         </tr>
@@ -144,7 +144,7 @@
             </div>
           </td><td></td><td></td>
         </tr>
-        <?php if($products):?>
+        <?php if(!empty($products)):?>
         <?php $i = 0;?>
         <?php foreach($products as $product):?>
         <tr>
@@ -172,7 +172,7 @@
               <div class="col-sm-6">
                 <div class='input-group' <?php echo "id='plan$i'";?>>
                   <span class='input-group-addon'><?php echo $lang->product->plan;?></span>
-                  <?php echo html::select("plans[$product->id][]", isset($productPlans[$product->id]) ? $productPlans[$product->id] : array(), $product->plans, "class='form-control chosen' multiple");?>
+                  <?php echo html::select("plans[$product->id][]", isset($copyProject->productPlans[$product->id]) ? $copyProject->productPlans[$product->id] : array(), $product->plans, "class='form-control chosen' multiple");?>
                   <div class='input-group-btn'>
                     <a href='javascript:;' onclick='addNewLine(this)' class='btn btn-link addLine'><i class='icon-plus'></i></a>
                     <a href='javascript:;' onclick='removeLine(this)' class='btn btn-link removeLine' <?php if($i == 0) echo "style='visibility: hidden'";?>><i class='icon-close'></i></a>
@@ -253,7 +253,7 @@
         <?php $this->printExtendFields(isset($project) ? $project : '', 'table', 'columns=3');?>
         <tr>
           <th><?php echo $lang->project->acl;?></th>
-          <td colspan='3' class='aclBox'><?php echo nl2br(html::radio('acl', $lang->project->aclList, $acl, "onclick='setWhite(this.value);'", 'block'));?></td>
+          <td colspan='3' class='aclBox'><?php echo nl2br(html::radio('acl', $lang->project->aclList, $copyProjectID ? $copyProject->acl : 'private', "onclick='setWhite(this.value);'", 'block'));?></td>
         </tr>
         <tr class="hidden" id="whitelistBox">
           <th><?php echo $lang->whitelist;?></th>
@@ -266,7 +266,7 @@
         </tr>
         <tr>
           <th><?php echo $lang->project->auth;?></th>
-          <td colspan='3'><?php echo html::radio('auth', $lang->project->authList, $auth, '', 'block');?></td>
+          <td colspan='3'><?php echo html::radio('auth', $lang->project->authList, $copyProjectID ? $copyProject->auth : 'extend', '', 'block');?></td>
         </tr>
         <tr>
           <td colspan='4' class='text-center form-actions'>
@@ -309,9 +309,9 @@
   </div>
 </div>
 <div id='projectAcl' class='hidden'>
-  <?php echo nl2br(html::radio('acl', $lang->project->aclList, $acl, "onclick='setWhite(this.value);'", 'block'));?>
+  <?php echo nl2br(html::radio('acl', $lang->project->aclList, $copyProjectID ? $copyProject->acl : 'private', "onclick='setWhite(this.value);'", 'block'));?>
 </div>
 <div id='programAcl' class='hidden'>
-  <?php echo nl2br(html::radio('acl', $lang->project->subAclList, $acl, "onclick='setWhite(this.value);'", 'block'));?>
+  <?php echo nl2br(html::radio('acl', $lang->project->subAclList, $copyProjectID ? $copyProject->acl : 'private', "onclick='setWhite(this.value);'", 'block'));?>
 </div>
 <?php include '../../common/view/footer.html.php';?>
