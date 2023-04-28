@@ -3,8 +3,8 @@ declare(strict_types=1);
 class bugZen extends bug
 {
     /**
-     * 处理请求数据
      * Processing request data.
+     * 处理请求数据
      *
      * @param  object $formData
      * @access protected
@@ -16,10 +16,10 @@ class bugZen extends bug
         $bug = $formData->setDefault('openedBy', $this->app->user->account)
             ->setDefault('openedDate', $now)
             ->setIF($this->lang->navGroup->bug != 'qa', 'project', $this->session->project)
-            ->setIF($this->post->assignedTo != '', 'assignedDate', $now)
-            ->setIF($this->post->story != false, 'storyVersion', $this->loadModel('story')->getVersion($this->post->story))
-            ->setIF(strpos($this->config->bug->create->requiredFields, 'deadline') !== false, 'deadline', $this->post->deadline)
-            ->setIF(strpos($this->config->bug->create->requiredFields, 'execution') !== false, 'execution', $this->post->execution)
+            ->setIF($this->formData->data->assignedTo != '', 'assignedDate', $now)
+            ->setIF($this->formData->data->story != false, 'storyVersion', $this->loadModel('story')->getVersion($this->formData->data->story))
+            ->setIF(strpos($this->config->bug->create->requiredFields, 'deadline') !== false, 'deadline', $this->formData->data->deadline)
+            ->setIF(strpos($this->config->bug->create->requiredFields, 'execution') !== false, 'execution', $this->formData->data->execution)
             ->stripTags($this->config->bug->editor->create['id'], $this->config->allowedTags)
             ->cleanInt('product,execution,module,severity')
             ->remove('files,labels,uid,oldTaskID,contactListMenu,region,lane,ticket,deleteFiles,resultFiles')
@@ -48,8 +48,8 @@ class bugZen extends bug
     }
 
     /**
-     * 创建bug后数据处理
      * Do thing after create a bug.
+     * 创建bug后数据处理
      *
      * @param  object $bug
      * @param  object $formData
@@ -102,4 +102,53 @@ class bugZen extends bug
         if($from && is_callable(array($this, $this->config->bug->fromObjects[$from]['callback']))) call_user_func(array($this, $this->config->bug->fromObjects[$from]['callback']), $bugID);
     }
 
+    /**
+     * Set menu for create bug page.
+     * 为创建bug设置导航数据
+     *
+     * @param  int    $productID
+     * @param  string $branch
+     * @param  array  $output
+     * @return void
+     */
+    protected function setMenu4Create(int $productID, string $branch, array $output): void
+    {
+        if(empty($this->products)) $this->locate($this->createLink('product', 'create'));
+
+        /* Unset discarded types. */
+        foreach($this->config->bug->discardedTypes as $type) unset($this->lang->bug->typeList[$type]);
+
+        $from = isset($output['from']) ? $output['from'] : '';
+
+        if($this->app->tab == 'execution')
+        {
+            if(isset($output['executionID'])) $this->loadModel('execution')->setMenu($output['executionID']);
+            $execution = $this->dao->findById($this->session->execution)->from(TABLE_EXECUTION)->fetch();
+            if($execution->type == 'kanban')
+            {
+                $this->loadModel('kanban');
+                $regionPairs = $this->kanban->getRegionPairs($execution->id, 0, 'execution');
+                $regionID    = !empty($output['regionID']) ? $output['regionID'] : key($regionPairs);
+                $lanePairs   = $this->kanban->getLanePairsByRegion($regionID, 'bug');
+                $laneID      = isset($output['laneID']) ? $output['laneID'] : key($lanePairs);
+
+                $this->view->executionType = $execution->type;
+                $this->view->regionID      = $regionID;
+                $this->view->laneID        = $laneID;
+                $this->view->regionPairs   = $regionPairs;
+                $this->view->lanePairs     = $lanePairs;
+            }
+        }
+        else if($this->app->tab == 'project')
+        {
+            if(isset($output['projectID'])) $this->loadModel('project')->setMenu($output['projectID']);
+        }
+        else
+        {
+            $this->qa->setMenu($this->products, $productID, $branch);
+        }
+
+        $this->view->users = $this->user->getPairs('devfirst|noclosed|nodeleted');
+        $this->app->loadLang('release');
+    }
 }

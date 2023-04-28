@@ -304,56 +304,18 @@ class bug extends control
     }
 
     /**
+     * 创建一个bug
      * Create a bug.
      *
-     * @param  int    $productID
+     * @param  string $productID
      * @param  string $branch
      * @param  string $extras       others params, forexample, executionID=10,moduleID=10
      * @access public
      * @return void
      */
-    public function create($productID, $branch = '', $extras = '')
+    public function create(string $productID, string $branch = '', string $extras = '')
     {
-        if(empty($this->products)) $this->locate($this->createLink('product', 'create'));
-
-        /* Unset discarded types. */
-        foreach($this->config->bug->discardedTypes as $type) unset($this->lang->bug->typeList[$type]);
-
-        /* Whether there is a object to transfer bug, for example feedback. */
-        $extras = str_replace(array(',', ' '), array('&', ''), $extras);
-        parse_str($extras, $output);
-        $from = isset($output['from']) ? $output['from'] : '';
-
-        if($this->app->tab == 'execution')
-        {
-            if(isset($output['executionID'])) $this->loadModel('execution')->setMenu($output['executionID']);
-            $execution = $this->dao->findById($this->session->execution)->from(TABLE_EXECUTION)->fetch();
-            if($execution->type == 'kanban')
-            {
-                $this->loadModel('kanban');
-                $regionPairs = $this->kanban->getRegionPairs($execution->id, 0, 'execution');
-                $regionID    = !empty($output['regionID']) ? $output['regionID'] : key($regionPairs);
-                $lanePairs   = $this->kanban->getLanePairsByRegion($regionID, 'bug');
-                $laneID      = isset($output['laneID']) ? $output['laneID'] : key($lanePairs);
-
-                $this->view->executionType = $execution->type;
-                $this->view->regionID      = $regionID;
-                $this->view->laneID        = $laneID;
-                $this->view->regionPairs   = $regionPairs;
-                $this->view->lanePairs     = $lanePairs;
-            }
-        }
-        else if($this->app->tab == 'project')
-        {
-            if(isset($output['projectID'])) $this->loadModel('project')->setMenu($output['projectID']);
-        }
-        else
-        {
-            $this->qa->setMenu($this->products, $productID, $branch);
-        }
-
-        $this->view->users = $this->user->getPairs('devfirst|noclosed|nodeleted');
-        $this->app->loadLang('release');
+        $productID = (int)$productID;
 
         if(!empty($_POST))
         {
@@ -364,7 +326,7 @@ class bug extends control
             $bugResult = $this->bugZen->doCreate($bug);
 
             /* Set from param if there is a object to transfer bug. */
-            setcookie('lastBugModule', (int)$this->post->module, $this->config->cookieLife, $this->config->webRoot, '', $this->config->cookieSecure, false);
+            setcookie('lastBugModule', (int)$this->formData->data->module, $this->config->cookieLife, $this->config->webRoot, '', $this->config->cookieSecure, false);
             if(!$bugResult or dao::isError())
             {
                 $response['result']  = 'fail';
@@ -389,6 +351,7 @@ class bug extends control
 
             $extras = str_replace(array(',', ' '), array('&', ''), $extras);
             parse_str($extras, $output);
+            extract($output);
             if(isset($output['todoID']))
             {
                 $this->dao->update(TABLE_TODO)->set('status')->eq('done')->where('id')->eq($output['todoID'])->exec();
@@ -411,7 +374,7 @@ class bug extends control
             if(isonlybody())
             {
                 $executionID = isset($output['executionID']) ? $output['executionID'] : $this->session->execution;
-                $executionID = $this->post->execution ? $this->post->execution : $executionID;
+                $executionID = $this->formData->data->execution ? $this->formData->data->execution : $executionID;
                 $execution   = $this->loadModel('execution')->getByID($executionID);
                 if($this->app->tab == 'execution')
                 {
@@ -452,7 +415,7 @@ class bug extends control
                 }
                 else
                 {
-                    $executionID = $this->post->execution ? $this->post->execution : zget($output, 'executionID', $this->session->execution);
+                    $executionID = $this->formData->data->execution ? $this->formData->data->execution : zget($output, 'executionID', $this->session->execution);
                     $location    = $this->createLink('execution', 'bug', "executionID=$executionID");
                 }
 
@@ -464,7 +427,7 @@ class bug extends control
             else
             {
                 setcookie('bugModule', 0, 0, $this->config->webRoot, '', $this->config->cookieSecure, false);
-                $location = $this->createLink('bug', 'browse', "productID={$this->post->product}&branch=$branch&browseType=byModule&param={$this->post->module}&orderBy=id_desc");
+                $location = $this->createLink('bug', 'browse', "productID={$this->formData->data->product}&branch=$branch&browseType=byModule&param={$this->formData->data->module}&orderBy=id_desc");
             }
             if($this->app->getViewType() == 'xhtml') $location = $this->createLink('bug', 'view', "bugID=$bugID", 'html');
             $response['message'] = $this->lang->saveSuccess;
@@ -472,10 +435,16 @@ class bug extends control
             return $this->send($response);
         }
 
+        /* Parse the extras. extract fix php7.2. */
+        $extras = str_replace(array(',', ' '), array('&', ''), $extras);
+        parse_str($extras, $output);
+        extract($output);
+
+        $this->bugZen->setMenu4Create($productID, $branch, $output);
+
         /* Get product, then set menu. */
         $productID      = $this->product->saveState($productID, $this->products);
         $currentProduct = $this->product->getById($productID);
-
         if($branch === '') $branch = (int)$this->cookie->preBranch;
 
         /* Init vars. */
@@ -503,11 +472,6 @@ class bug extends control
         $color       = '';
         $feedbackBy  = '';
         $notifyEmail = '';
-
-        /* Parse the extras. extract fix php7.2. */
-        $extras = str_replace(array(',', ' '), array('&', ''), $extras);
-        parse_str($extras, $output);
-        extract($output);
 
         if($runID and $resultID) extract($this->bug->getBugInfoFromResult($resultID, 0, 0, isset($stepIdList) ? $stepIdList : ''));// If set runID and resultID, get the result info by resultID as template.
         if(!$runID and $caseID)  extract($this->bug->getBugInfoFromResult($resultID, $caseID, $version, isset($stepIdList) ? $stepIdList : ''));// If not set runID but set caseID, get the result info by resultID and case info.
