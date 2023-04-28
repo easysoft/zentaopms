@@ -137,10 +137,11 @@ class todo extends control
      */
     public function edit(string $todoID)
     {
+        $todoID   = (int)$todoID;
+
         if(!empty($_POST))
         {
             $formData = form::data($this->config->todo->edit->form);
-            $todoID   = (int)$todoID;
 
             $todo = $this->todoZen->beforeEdit($todoID, $formData);
             if(dao::isError())
