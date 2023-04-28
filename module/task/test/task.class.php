@@ -611,9 +611,9 @@ class taskTest
      * @access public
      * @return array
      */
-    public function getStoryTasksTest($storyID, $count)
+    public function getListByStoryTest($storyID, $count)
     {
-        $object = $this->objectModel->getStoryTasks($storyID);
+        $object = $this->objectModel->getListByStory($storyID);
         if(dao::isError())
         {
             $error = dao::getError();
@@ -1548,11 +1548,11 @@ class taskTest
      * @access public
      * @return object[]
      */
-    public function restructureHierarchyTest(array $taskIdList): array
+    public function buildTaskTreeTest(array $taskIdList): array
     {
         $tasks = array();
         if(!empty($taskIdList)) $tasks = $this->objectModel->getByList($taskIdList);
-        return $this->objectModel->restructureHierarchy($tasks);
+        return $this->objectModel->buildTaskTree($tasks);
     }
 
     /**

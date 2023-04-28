@@ -2463,10 +2463,8 @@ class taskModel extends model
     public function getExecutionTasks(int $executionID, int $productID = 0, string|array $type = 'all', array $modules = array(), string $orderBy = 'status_asc, id_desc', object $pager = null): array
     {
         $tasks = $this->taskTao->fetchExecutionTasks($executionID, $productID, $type, $modules, $orderBy, $pager);
-
         if(empty($tasks)) return array();
 
-        $parents  = array();
         $taskTeam = $this->taskTao->getTeamMembersByIdList(array_keys($tasks));
         foreach($tasks as $task)
         {
@@ -2475,7 +2473,15 @@ class taskModel extends model
 
         if($this->config->vision == 'lite') $tasks = $this->appendLane($tasks);
 
-        $tasks = $this->taskTao->restructureHierarchy($tasks);
+        $parentIdList = array();
+        foreach($tasks as $task)
+        {
+            if($task->parent <= 0 or isset($tasks[$task->parent]) or isset($parentIdList[$task->parent])) continue;
+            $parentIdList[$task->parent] = $task->parent;
+        }
+
+        $parentTasks = $this->getByList($parentIdList);
+        $tasks       = $this->taskTao->buildTaskTree($tasks, $parentTasks);
         return $this->processTasks($tasks);
     }
 
@@ -2626,19 +2632,26 @@ class taskModel extends model
      * @access public
      * @return object[]
      */
-    public function getStoryTasks(int $storyID, int $executionID = 0, int $projectID = 0): array
+    public function getListByStory(int $storyID, int $executionID = 0, int $projectID = 0): array
     {
         $tasks = $this->dao->select('id, parent, name, assignedTo, pri, status, estimate, consumed, closedReason, `left`')
             ->from(TABLE_TASK)
-            ->where('story')->eq((int)$storyID)
+            ->where('story')->eq($storyID)
             ->andWhere('deleted')->eq(0)
             ->beginIF($executionID)->andWhere('execution')->eq($executionID)->fi()
             ->beginIF($projectID)->andWhere('project')->eq($projectID)->fi()
             ->fetchAll('id');
 
-        $tasks = $this->taskTao->restructureHierarchy($tasks);
+        $parentIdList = array();
+        foreach($tasks as $task)
+        {
+            if($task->parent <= 0 or isset($tasks[$task->parent]) or isset($parentIdList[$task->parent])) continue;
+            $parentIdList[$task->parent] = $task->parent;
+        }
 
-        return $this->taskTao->computeTasksProgress($tasks);
+        $parentTasks = $this->getByList($parentIdList);
+        $tasks       = $this->taskTao->buildTaskTree($tasks, $parentTasks);
+        return $this->taskTao->batchComputeProgress($tasks);
     }
 
     /**
