@@ -1847,7 +1847,7 @@ class project extends control
     public function delete(string $projectID, string $confirm = 'no', string $from = 'browse'): void
     {
         $projectID = (int)$projectID;
-        $project   = $this->getByID($projectID);
+        $project   = $this->project->getByID($projectID);
 
         if($confirm == 'no')
         {
@@ -1863,7 +1863,7 @@ class project extends control
             if($message) $this->lang->saveSuccess = $message;
 
             $this->projectZen->removeAssociatedProducts($project);
-            $this->projectZen->removeAssociatedExecutions($projectID);
+            $this->projectZen->removeAssociatedExecutions($projectID, $from);
 
             if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess));
 
