@@ -1552,7 +1552,16 @@ class taskTest
     {
         $tasks = array();
         if(!empty($taskIdList)) $tasks = $this->objectModel->getByList($taskIdList);
-        return $this->objectModel->buildTaskTree($tasks);
+
+        $parentIdList = array();
+        foreach($tasks as $task)
+        {
+            if($task->parent <= 0 or isset($tasks[$task->parent]) or isset($parentIdList[$task->parent])) continue;
+            $parentIdList[$task->parent] = $task->parent;
+        }
+        $parentTasks = $this->objectModel->getByList($parentIdList);
+
+        return $this->objectModel->buildTaskTree($tasks, $parentTasks);
     }
 
     /**

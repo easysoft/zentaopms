@@ -247,33 +247,34 @@ class todoModel extends model
 
 
     /**
-     * Change the status of a todo.
+     * 完成待办
+     * Finish todo.
      *
-     * @param  string $todoID
-     * @param  string $status
+     * @param  int     $todoID
      * @access public
-     * @return void
+     * @return bool
      */
-    public function finish($todoID)
+    public function finish(int $todoID): bool
     {
-        $this->dao->update(TABLE_TODO)
-            ->set('status')->eq('done')
-            ->set('finishedBy')->eq($this->app->user->account)
-            ->set('finishedDate')->eq(helper::now())
-            ->where('id')->eq((int)$todoID)
-            ->exec();
-        if(!dao::isError())
-        {
-            $this->loadModel('action')->create('todo', $todoID, 'finished', '', 'done');
+        return $this->dealFinishData($todoID);
+    }
 
-            if(($this->config->edition == 'biz' || $this->config->edition == 'max'))
-            {
-                $feedbackID = $this->dao->select('objectID')->from(TABLE_TODO)->where('id')->eq($todoID)->andWhere('type')->eq('feedback')->fetch('objectID');
-                if($feedbackID) $this->loadModel('feedback')->updateStatus('todo', $feedbackID, 'done');
-            }
-            return true;
+    /**
+     * 批量完成待办.
+     * Batch finish todo.
+     *
+     * @param  int[]   $todoIDList
+     * @access public
+     * @return bool
+     */
+    public function batchFinish(array $todoIDList): bool
+    {
+        foreach($todoIDList as $todoID)
+        {
+            $res = $this->dealFinishData($todoID);
+            if(!$res) return $res;
         }
-        return false;
+        return true;
     }
 
     /**
@@ -570,25 +571,19 @@ class todoModel extends model
     }
 
     /**
+     * 指派待办.
      * Assign todo.
      *
-     * @param  int    $todoID
+     * @param  object  $todo
      * @access public
      * @return bool
      */
-    public function assignTo($todoID)
+    public function assignTo(object $todo): bool
     {
-        $todo = fixer::input('post')
-            ->add('assignedBy', $this->app->user->account)
-            ->add('assignedDate', helper::now())
-            ->setIF(isset($_POST['future']),  'date', '2030-01-01')
-            ->setIF(isset($_POST['lblDisableDate']), 'begin', '2400')
-            ->setIF(isset($_POST['lblDisableDate']), 'end',   '2400')
-            ->remove('future,lblDisableDate')
-            ->get();
+        $res = $this->todoTao->updateRow((int)$todo->id, $todo);
+        if(!$res) return false;
 
-        $this->dao->update(TABLE_TODO)->data($todo)->where('id')->eq((int)$todoID)->exec();
-        $this->loadModel('action')->create('todo', $todoID, 'assigned', '', $todo->assignedTo);
+        $this->loadModel('action')->create('todo', (int)$todo->id, 'assigned', '', $todo->assignedTo);
         return !dao::isError();
     }
 
@@ -646,7 +641,37 @@ class todoModel extends model
     }
 
     /**
-     * 修改待办事项的时间。
+     * 处理完成待办数据.
+     * Deal finish todo data.
+     *
+     * @param  int     $todoID
+     * @access public
+     * @return bool
+     */
+    private function dealFinishData(int $todoID): bool
+    {
+        $todo = new stdClass();
+        $todo->id         = $todoID;
+        $todo->status     = 'done';
+        $todo->finishedBy = $this->app->user->account;
+        $this->todoTao->updateRow($todoID, $todo);
+
+        if(!dao::isError())
+        {
+            $this->loadModel('action')->create('todo', $todoID, 'finished', '', 'done');
+
+            if(($this->config->edition == 'biz' || $this->config->edition == 'max'))
+            {
+                $todo       = $this->todoTao->fetch($todoID);
+                $feedbackID = $todo->idvalue ?? '' ;
+                if($feedbackID) $this->loadModel('feedback')->updateStatus('todo', $feedbackID, 'done');
+            }
+            return true;
+        }
+        return false;
+    }
+
+    /** 修改待办事项的时间。
      * Edit the date of todo.
      *
      * @param  array  $idList

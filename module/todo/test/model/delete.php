@@ -17,22 +17,22 @@ function initData()
     $project->pri->range("3");
     $project->name->prefix('我的待办')->range("1-5");
     $project->desc->prefix('这是我的描述')->range("1-5");
-    $project->status->range("wait,doing,done");
+    $project->status->range("wait");
 
     $project->gen(10);
 }
 
 /**
 
-title=测试完成待办 todoModel->finish();
+title=测试删除todo todoModel->delete();
 timeout=0
 cid=1
 
-- 执行todo模块的finish方法，参数是$todoIDList[0]属性status @done
+- 执行todo模块的delete方法，参数是8, no
+ - 属性id @8
+ - 属性deleted @0
 
-- 执行todo模块的finish方法，参数是$todoIDList[1]属性status @done
-
-- 执行todo模块的finish方法，参数是$todoIDList[2]属性status @done
+- 执行todo模块的getById方法，参数是8属性deleted @1
 
 
 
@@ -40,10 +40,7 @@ cid=1
 
 initData();
 
-$todoIDList = range(1,3);
-
 $todo = new todoTest();
-
-r($todo->finishTest($todoIDList[0])) && p('status') && e('done'); // 结束一个状态为wait的todo
-r($todo->finishTest($todoIDList[1])) && p('status') && e('done'); // 结束一个状态为doing的todo
-r($todo->finishTest($todoIDList[2])) && p('status') && e('done'); // 结束一个状态为done的todo
+r($todo->deleteTest(8, 'no')) && p('id,deleted') && e('8,0');      // 删除指定id的待办，取消确认
+$todo->deleteTest(8, 'yes');
+r($todo->getByIdTest(8))      && p('deleted') && e('1'); // 验证删除id不存在的todo信息

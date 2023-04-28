@@ -267,4 +267,39 @@ class todoZen extends todo
         $this->view->products        = $todo->type == 'opportunity' ? $this->product->getPairsByProjectModel('waterfall') : $this->product->getPairs();
         $this->view->projectProducts = $this->product->getProductPairsByProject((int)$projectID);
     }
+
+    /**
+     * 处理指派待办请求数据.
+     * Process assign todo request data.
+     *
+     * @param  object     $formData
+     * @access protected
+     * @return object
+     */
+    protected function beforeAssignTo(object $formData): object
+    {
+        $formData = $formData->get();
+        $formData->assignedBy   = $this->app->user->account;
+        $formData->assignedDate = helper::now();
+        if($this->post->future) $formData->date = '2030-01-01';
+        if($this->post->lblDisableDate)
+        {
+            $formData->begin = '2400';
+            $formData->end   = '2400';
+        }
+        return $formData;
+    }
+
+    /**
+     * 指派待办.
+     * Assign a todo.
+     *
+     * @param   object     $todo
+     * @access  protected
+     * @return  bool
+     */
+    protected function doAssignTo(object $todo): bool
+    {
+        return $this->todo->assignTo($todo);
+    }
 }
