@@ -854,6 +854,7 @@ CREATE TABLE IF NOT EXISTS `zt_grouppriv` (
   `module` char(30) NOT NULL default '',
   `method` char(30) NOT NULL default ''
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+CREATE UNIQUE INDEX `group` ON `zt_grouppriv`(`group`,`module`,`method`);
 -- DROP TABLE IF EXISTS `zt_holiday`;
 CREATE TABLE IF NOT EXISTS `zt_holiday` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
