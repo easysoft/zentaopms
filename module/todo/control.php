@@ -225,7 +225,7 @@ class todo extends control
         if($todo->status == 'done' || $todo->status == 'closed')
         {
             $isActivate = $this->todo->activate($todoID);
-            if($isActivate === false) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            if($isActivate === false) return print(js::error(dao::getError()));
         }
         if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'success'));
         if(isonlybody()) return print(js::reload('parent.parent'));
