@@ -22,6 +22,9 @@ class productModel extends model
     const OB_PROGRAM = 'program_asc';
     const OB_ORDER   = 'order_asc';
 
+    const STORY_TYPE_STORY = 'story';
+    const STORY_TYPE_REQ   = 'requirement';
+
     /**
      * Get product module menu.
      *
@@ -319,32 +322,21 @@ class productModel extends model
     /**
      * Get product pairs.
      *
-     * @param  string       $mode          nocode
-     * @param  string       $programID
+     * @param  string       $mode          all|noclosed
+     * @param  int          $programID
      * @param  string|array $append
      * @param  string|int   $shadow         all | 0 | 1
-     * @return array
+     * @return int[]
      */
     public function getPairs(string $mode = '', int $programID = 0, string|array $append = '', string|int $shadow = 0): array
     {
         if(defined('TUTORIAL')) return $this->loadModel('tutorial')->getProductPairs();
 
-        if(!empty($append) and is_array($append)) $append = implode(',', $append);
+        /* Add other products in has priv product id list. */
+        $append = $this->productTao->formatAppendParam($append);
+        $views  = $this->app->user->view->products . (empty($append) ? '' : ",{$append}");
 
-        $views   = empty($append) ? $this->app->user->view->products : $this->app->user->view->products . ",$append";
-        $orderBy = !empty($this->config->product->orderBy) ? $this->config->product->orderBy : 'isClosed';
-        /* Order by program. */
-        return $this->dao->select("t1.*,  IF(INSTR(' closed', t1.status) < 2, 0, 1) AS isClosed")->from(TABLE_PRODUCT)->alias('t1')
-            ->leftJoin(TABLE_PROGRAM)->alias('t2')->on('t1.program = t2.id')
-            ->where('1 = 1')
-            ->beginIF(strpos($mode, 'all') === false)->andWhere('t1.deleted')->eq(0)->fi()
-            ->beginIF($programID)->andWhere('t1.program')->eq($programID)->fi()
-            ->beginIF(strpos($mode, 'noclosed') !== false)->andWhere('t1.status')->ne('closed')->fi()
-            ->beginIF(!$this->app->user->admin and $this->config->vision == 'rnd')->andWhere('t1.id')->in($views)->fi()
-            ->beginIF($shadow !== 'all')->andWhere('t1.shadow')->eq((int)$shadow)->fi()
-            ->andWhere('t1.vision')->eq($this->config->vision)
-            ->orderBy("$orderBy, t2.order_asc, t1.line_desc, t1.order_asc")
-            ->fetchPairs('id', 'name');
+        return $this->productTao->fetchPairs($programID, $mode, $views, $shadow);
     }
 
     /**
@@ -1755,6 +1747,7 @@ class productModel extends model
     }
 
     /**
+     * 获取产品统计信息。
      * Get product stats.
      *
      * @param  string $orderBy order_asc|program_asc
@@ -1773,64 +1766,39 @@ class productModel extends model
         $products = strtolower($status) == static::ST_BYSEARCH ? $this->getListBySearch($param) : $this->productTao->getList($programID, $status, 0, $line);
         if(empty($products)) return array();
 
-        $productKeys  = array_keys($products);
-        $products     = $this->productTao->getStatsProducts($productKeys,$programID, $orderBy, $pager);
-        $stories      = $this->productTao->getStoriesTODO($productKeys);
-        $requirements = $this->productTao->getRequirementsTODO($productKeys);
+        /* Get stats data. */
+        $productKeys          = array_keys($products);
+        $products             = $this->productTao->getStatsProducts($productKeys,$programID, $orderBy, $pager);
+        $finishClosedStory    = $this->productTao->getFinishClosedStoryTODO();
+        $unclosedStory        = $this->productTao->getUnClosedStoryTODO();
+        $plans                = $this->productTao->getPlansTODO($productKeys);
+        $releases             = $this->productTao->getReleasesTODO($productKeys);
+        $bugs                 = $this->productTao->getBugsTODO($productKeys);
+        $unResolved           = $this->productTao->getUnResolvedTODO($productKeys);
+        $fixedBugs            = $this->productTao->getFixedBugsTODO($productKeys);
+        $closedBugs           = $this->productTao->getClosedBugsTODO($productKeys);
+        $thisWeekBugs         = $this->productTao->getThisWeekBugsTODO($productKeys);
+        $assignToNull         = $this->productTao->getAssignToNullTODO($productKeys);
+        list($stories, $reqs) = $this->productTao->getStatsStoriesAndRequirements($productKeys, $storyType);
 
-        /* Padding the stories to sure all products have records. */
-        $emptyStory = array_keys($this->lang->story->statusList);
-        foreach($productKeys as $productID)
-        {
-            if(!isset($stories[$productID]))      $stories[$productID]      = $emptyStory;
-            if(!isset($requirements[$productID])) $requirements[$productID] = $emptyStory;
-        }
-
-        /* Padding the stories to sure all status have records. */
-        foreach($stories as $key => $story)
-        {
-            foreach(array_keys($this->lang->story->statusList) as $status) $story[$status] = isset($story[$status]) ? $story[$status]->count : 0;
-            $stories[$key] = $story;
-        }
-        foreach($requirements as $key => $requirement)
-        {
-            foreach(array_keys($this->lang->story->statusList) as $status) $requirement[$status] = isset($requirement[$status]) ? $requirement[$status]->count : 0;
-            $requirements[$key] = $requirement;
-        }
-
-        if($storyType == 'requirement') $stories = $requirements;
-
-        $finishClosedStory = $this->productTao->getFinishClosedStoryTODO();
-        $unclosedStory     = $this->productTao->getUnClosedStoryTODO();
-        $plans             = $this->productTao->getPlansTODO($productKeys);
-        $releases          = $this->productTao->getReleasesTODO($productKeys);
-        $bugs              = $this->productTao->getBugsTODO($productKeys);
-        $unResolved        = $this->productTao->getUnResolvedTODO($productKeys);
-        $fixedBugs         = $this->productTao->getFixedBugsTODO($productKeys);
-        $closedBugs        = $this->productTao->getClosedBugsTODO($productKeys);
-        $thisWeekBugs      = $this->productTao->getThisWeekBugsTODO($productKeys);
-        $assignToNull      = $this->productTao->getAssignToNullTODO($productKeys);
-
-
-        /* Generate statistic array. */
+        /* Render statistic result to each product. */
         $stats = array();
         foreach($products as $key => $product)
         {
             $product->stories                 = $stories[$product->id];
             $product->stories['finishClosed'] = isset($finishClosedStory[$product->id]) ? $finishClosedStory[$product->id] : 0;
-            $product->stories['unclosed']     = isset($unclosedStory[$product->id]) ? $unclosedStory[$product->id] : 0;
+            $product->stories['unclosed']     = isset($unclosedStory[$product->id])     ? $unclosedStory[$product->id]     : 0;
+            $product->requirements            = $reqs[$product->id];
+            $product->plans                   = isset($plans[$product->id])        ? $plans[$product->id]        : 0;
+            $product->releases                = isset($releases[$product->id])     ? $releases[$product->id]     : 0;
+            $product->bugs                    = isset($bugs[$product->id])         ? $bugs[$product->id]         : 0;
+            $product->unResolved              = isset($unResolved[$product->id])   ? $unResolved[$product->id]   : 0;
+            $product->closedBugs              = isset($closedBugs[$product->id])   ? $closedBugs[$product->id]   : 0;
+            $product->fixedBugs               = isset($fixedBugs[$product->id])    ? $fixedBugs[$product->id]    : 0;
+            $product->thisWeekBugs            = isset($thisWeekBugs[$product->id]) ? $thisWeekBugs[$product->id] : 0;
+            $product->assignToNull            = isset($assignToNull[$product->id]) ? $assignToNull[$product->id] : 0;
 
-            $product->requirements = $requirements[$product->id];
-            $product->plans        = isset($plans[$product->id])    ? $plans[$product->id]    : 0;
-            $product->releases     = isset($releases[$product->id]) ? $releases[$product->id] : 0;
-
-            $product->bugs         = isset($bugs[$product->id]) ? $bugs[$product->id] : 0;
-            $product->unResolved   = isset($unResolved[$product->id]) ? $unResolved[$product->id] : 0;
-            $product->closedBugs   = isset($closedBugs[$product->id]) ? $closedBugs[$product->id] : 0;
-            $product->fixedBugs    = isset($fixedBugs[$product->id]) ? $fixedBugs[$product->id] : 0;
-            $product->thisWeekBugs = isset($thisWeekBugs[$product->id]) ? $thisWeekBugs[$product->id] : 0;
-            $product->assignToNull = isset($assignToNull[$product->id]) ? $assignToNull[$product->id] : 0;
-
+            /* Calculate product progress. */
             $closedTotal       = $product->stories['closed'] + $product->requirements['closed'];
             $allTotal          = array_sum($product->stories) + array_sum($product->requirements);
             $product->progress = empty($closedTotal) ? 0 : round($closedTotal / $allTotal * 100, 1);

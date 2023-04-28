@@ -107,28 +107,19 @@ class blockZen extends block
      * 处理每个区块以渲染 UI。
      * Process each block for render UI.
      *
-     * @param  object[]    $blocks
-     * @param  object|null $project
+     * @param  object[] $blocks
+     * @param  int      $projectID
      * @return object[]
      */
-    protected function processBlockForRender(array $blocks, object $project = null): array
+    protected function processBlockForRender(array $blocks, int $projectID): array
     {
         $acls = $this->app->user->rights['acls'];
         foreach($blocks as $key => $block)
         {
-            if(in_array($block->code, array('waterfallrisk', 'waterfallissue')))
-            {
-                $model = isset($project->model) ? $project->model : 'waterfall';
-                if($block->code == 'waterfallrisk' and !helper::hasFeature("{$model}_risk")) continue;
-                if($block->code == 'waterfallissue' and !helper::hasFeature("{$model}_issue")) continue;
-            }
-
-            if(in_array($block->code, array('scrumrisk', 'scrumissue')))
-            {
-                $model = isset($project->model) ? $project->model : 'scrum';
-                if($block->code == 'scrumrisk' and !helper::hasFeature("{$model}_risk")) continue;
-                if($block->code == 'scrumissue' and !helper::hasFeature("{$model}_issue")) continue;
-            }
+            if($block->code == 'waterfallrisk' and !helper::hasFeature("waterfall_risk"))   continue;
+            if($block->code == 'waterfallissue' and !helper::hasFeature("waterfall_issue")) continue;
+            if($block->code == 'scrumrisk' and !helper::hasFeature("scrum_risk"))           continue;
+            if($block->code == 'scrumissue' and !helper::hasFeature("scrum_issue"))         continue;
 
             if(!empty($block->source) and $block->source != 'todo' and !empty($acls['views']) and !isset($acls['views'][$block->source]))
             {
@@ -139,7 +130,7 @@ class blockZen extends block
             $block->params = json_decode($block->params);
             if(isset($block->params->num) and !isset($block->params->count)) $block->params->count = $block->params->num;
 
-            $this->getBlockMoreLink($block);
+            $this->getBlockMoreLink($block, $projectID);
         }
 
         return $blocks;
@@ -150,9 +141,10 @@ class blockZen extends block
      * Get the more link of the block.
      *
      * @param  object $block
+     * @param  int    $projectID
      * @return void
      */
-    private function getBlockMoreLink(object $block): void
+    private function getBlockMoreLink(object $block, int $project): void
     {
         $code   = $block->code;
         $source = empty($block->source) ? 'common' : $block->source;

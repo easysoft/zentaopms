@@ -223,6 +223,14 @@ class yaml
     public $tableName;
 
     /**
+     * The config files will be merged.
+     *
+     * @var string[]
+     * @access private
+     */
+    private $configFiles = array();
+
+    /**
      * __construct function load config and tableName.
      * @param  string $tableName
      * @access public
@@ -234,6 +242,30 @@ class yaml
         $this->config    = $config;
         $this->tableName = $tableName;
         $this->fields    = new fields();
+
+        $this->configFiles[] = dirname(dirname(__FILE__)) . "/data/{$this->tableName}.yaml";
+    }
+
+    /**
+     * Yaml configuration file for script。
+     *
+     * @param  string  $fileName
+     * @access public
+     * @return object
+     */
+    public function config($fileName)
+    {
+        $runFileName = str_replace(strrchr($_SERVER['SCRIPT_FILENAME'], "."), "", $_SERVER['SCRIPT_FILENAME']);
+
+        $pos = strripos($runFileName, DS);
+        if($pos !== false) $runFileName = mb_substr($runFileName, $pos+1);
+
+        $backtrace = debug_backtrace();
+        $runPath   = $backtrace[count($backtrace)-1]['file'];
+
+        $this->configFiles[] = dirname($runPath) . "/yaml/$runFileName/{$fileName}.yaml";
+
+        return $this;
     }
 
     /**
@@ -260,6 +292,21 @@ class yaml
      */
     public function gen($rows, $dataDirYaml = '', $isClear = true)
     {
+        $mergeData = array('fields' => array());
+        foreach($this->configFiles as $configFile)
+        {
+            $configData = yaml_parse_file($configFile);
+            $configData['title'] = $configData['title'];
+            $configData['author'] = $configData['author'];
+            $configData['version'] = $configData['version'];
+
+            foreach($configData['fields'] as $configItem)
+            {
+                $field = $configItem['field'];
+                $mergeData['fields'][$field] = $configItem;
+            }
+        }
+
         $runFileName = str_replace(strrchr($_SERVER['SCRIPT_FILENAME'], "."), "", $_SERVER['SCRIPT_FILENAME']);
 
         $pos = strripos($runFileName, DS);
@@ -270,23 +317,15 @@ class yaml
         if(!is_dir("{$runFileDir}/data")) mkdir("{$runFileDir}/data", 0777);
         $yamlFile = "{$runFileDir}/data/{$this->tableName}_{$runFileName}.yaml";
 
-        $yamlDataArr = array();
 
-        $yamlDataArr['title']   = "zt_{$this->tableName}";
-        $yamlDataArr['author']  = "auto_{$runFileName}";
-        $yamlDataArr['version'] = '1.0';
-
-        if(empty($this->fields->fieldArr))
+        if(!empty($this->fields->fieldArr))
         {
-            $yamlFile = dirname(dirname(__FILE__)) . "/data/{$this->tableName}.yaml";
-            if($dataDirYaml) $yamlFile = dirname(dirname(__FILE__)) . "/data/{$dataDirYaml}.yaml";
+            $fields = $this->fields->setFieldRule($this->fields->fieldArr);
+            foreach($fields as $field) $mergeData['fields'][$field['field']] = $field;
         }
-        else
-        {
-            $yamlDataArr['fields'] = $this->fields->setFieldRule($this->fields->fieldArr);
+        $mergeData['fields'] = array_values($mergeData['fields']);
 
-            yaml_emit_file($yamlFile, $yamlDataArr, YAML_UTF8_ENCODING);
-        }
+        yaml_emit_file($yamlFile, $mergeData, YAML_UTF8_ENCODING);
 
         $this->insertDB($yamlFile, $this->tableName, $rows, $isClear);
     }
@@ -320,16 +359,19 @@ class yaml
         $dbPWD     = $this->config->db->password;
 
         $command = "$zdPath -c %s -d %s -n %d -t %s -dns mysql://%s:%s@%s:%s/%s#utf8";
+        $genSQL  = "$zdPath -c %s -d %s -n %d -t %s -o %s";
         if($isClear === true)
         {
             /* Truncate table to reset auto increment number. */
             system(sprintf("mysql -u%s -p%s -h%s -P%s %s -e 'truncate %s' 2>/dev/null", $dbUser, $dbPWD, $dbHost, $dbPort, $dbName, $tableName));
             $command .= ' --clear';
         }
-        $execYaml = sprintf($command, $configYaml, $yamlFile, $rows, $tableName, $dbUser, $dbPWD, $dbHost, $dbPort, $dbName);
-        $execDump = sprintf($dumpCommand, $dbUser, $dbPWD, $dbHost, $dbPort, $dbName, $tableName);
+        $execYaml   = sprintf($command, $configYaml, $yamlFile, $rows, $tableName, $dbUser, $dbPWD, $dbHost, $dbPort, $dbName);
+        $execGenSQL = sprintf($genSQL, $configYaml, $yamlFile, $rows, $tableName, "{$tableSqlDir}/{$tableName}_zd.sql");
+        $execDump   = sprintf($dumpCommand, $dbUser, $dbPWD, $dbHost, $dbPort, $dbName, $tableName);
         system($execDump);
         system($execYaml);
+        system($execGenSQL);
     }
 
     /**

@@ -121,9 +121,6 @@ class product extends control
         $this->view->users        = $this->loadModel('user')->getPairs('noletter');
         $this->view->branchID     = $branch;
         $this->view->branchStatus = $this->loadModel('branch')->getByID($branch, 0, 'status');
-        $this->view->recTotal     = $recTotal;
-        $this->view->recPerPage   = $recPerPage;
-        $this->view->pageID       = $pageID;
         $this->view->pager        = $pager;
         $this->display();
     }

@@ -179,8 +179,8 @@ class projectModel extends model
     }
 
     /**
-     * Get a project by id.
      * 根据项目ID获取项目信息。
+     * Get a project by id.
      *
      * @param  int    $projectID
      * @access public
@@ -198,17 +198,18 @@ class projectModel extends model
     }
 
     /**
+     * 通过影子产品ID获取一条项目记录。
      * Get a project by its shadow product.
      *
-     * @param  int    $product
+     * @param  int    $productID
      * @access public
-     * @return object
+     * @return object|false
      */
-    public function getByShadowProduct($product)
+    public function getByShadowProduct(int $productID): object|false
     {
         return $this->dao->select('t2.*')->from(TABLE_PROJECTPRODUCT)->alias('t1')
             ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project=t2.id')
-            ->where('t1.product')->eq($product)
+            ->where('t1.product')->eq($productID)
             ->andWhere('t2.type')->eq('project')
             ->limit(1)
             ->fetch();
@@ -1262,7 +1263,7 @@ class projectModel extends model
      * @access public
      * @return int|bool
      */
-    public function create(object $project, object $postData)
+    public function create(object $project, object $postData): int|bool
     {
         $requiredFields = $this->config->project->create->requiredFields;
         if($postData->rawdata->delta == 999) $requiredFields = trim(str_replace(',end,', ',', ",{$requiredFields},"), ',');
@@ -1278,159 +1279,40 @@ class projectModel extends model
             ->checkFlow()
             ->exec();
 
-        /* Add the creater to the team. */
-        if(!dao::isError())
-        {
-            $projectID = $this->dao->lastInsertId();
+        if(dao::isError()) return false;
 
-            /* Set team of project. */
-            $members = isset($_POST['teamMembers']) ? $_POST['teamMembers'] : array();
-            array_push($members, $project->PM, $project->openedBy);
-            $members = array_unique($members);
-            $roles   = $this->loadModel('user')->getUserRoles(array_values($members));
+        $projectID = (int)$this->dao->lastInsertId();
 
-            $teamMembers = array();
-            foreach($members as $account)
-            {
-                if(empty($account)) continue;
+        /* Manage team members. */
+        $teamMembers = $this->projectTao->setProjectTeam($projectID, $project, $postData);
+        $this->loadModel('execution')->addProjectMembers($projectID, $teamMembers);
 
-                $member = new stdClass();
-                $member->root    = $projectID;
-                $member->type    = 'project';
-                $member->account = $account;
-                $member->role    = zget($roles, $account, '');
-                $member->join    = helper::now();
-                $member->days    = zget($project, 'days', 0);
-                $member->hours   = $this->config->execution->defaultWorkhours;
-                $this->dao->insert(TABLE_TEAM)->data($member)->exec();
-                $teamMembers[$account] = $member;
-            }
-            $this->loadModel('execution')->addProjectMembers($projectID, $teamMembers);
+        /* Add project whitelist. */
+        $whitelist = explode(',', $project->whitelist);
+        $this->loadModel('personnel')->updateWhitelist($whitelist, 'project', $projectID);
 
-            $whitelist = explode(',', $project->whitelist);
-            $this->loadModel('personnel')->updateWhitelist($whitelist, 'project', $projectID);
+        $program = $project->parent ? $this->getByID((int)$project->parent) : new stdclass();
+        $this->projectTao->createDocLib($projectID, $project, $postData, $program);
 
-            /* Create doc lib. */
-            $this->app->loadLang('doc');
-            $authorizedUsers = array();
+        if($project->hasProduct) $this->updateProducts($projectID);
 
-            if($project->parent and $project->acl == 'program')
-            {
-                $stakeHolders    = $this->loadModel('stakeholder')->getStakeHolderPairs($project->parent);
-                $authorizedUsers = array_keys($stakeHolders);
+        /* If $_POST has product name, create it. */
+        $linkedProductsCount = $this->projectTao->getLinkedProductsCount($project, $postData->rawdata);
+        if(!$project->hasProduct or isset($postData->rawdata->newProduct) or (!$project->parent and empty($linkedProductsCount))) $this->createProduct($projectID, $project, $postData, $program);
 
-                foreach(explode(',', $project->whitelist) as $user)
-                {
-                    if(empty($user)) continue;
-                    $authorizedUsers[$user] = $user;
-                }
+        /* Save order. */
+        $this->dao->update(TABLE_PROJECT)->set('`order`')->eq($projectID * 5)->where('id')->eq($projectID)->exec();
+        $this->file->updateObjectID($postData->rawdata->uid, $projectID, 'project');
+        $this->loadModel('program')->setTreePath($projectID);
 
-                $authorizedUsers[$project->PM]       = $project->PM;
-                $authorizedUsers[$project->openedBy] = $project->openedBy;
-                $authorizedUsers[$program->PM]       = $program->PM;
-                $authorizedUsers[$program->openedBy] = $program->openedBy;
-            }
+        /* Add project admin. */
+        $this->projectTao->addProjectAdmin($projectID);
 
-            $lib = new stdclass();
-            $lib->project   = $projectID;
-            $lib->name      = $this->lang->doclib->main['project'];
-            $lib->type      = 'project';
-            $lib->main      = '1';
-            $lib->acl       = 'default';
-            $lib->users     = ',' . implode(',', array_filter($authorizedUsers)) . ',';
-            $lib->vision    = zget($project, 'vision', 'rnd');
-            $lib->addedBy   = $this->app->user->account;
-            $lib->addedDate = helper::now();
-            $this->dao->insert(TABLE_DOCLIB)->data($lib)->exec();
+        if($project->acl != 'open') $this->loadModel('user')->updateUserView($projectID, 'project');
 
-            if($project->hasProduct) $this->updateProducts($projectID);
+        if(empty($project->multiple) and $project->model != 'waterfall' and $project->model != 'waterfallplus') $this->loadModel('execution')->createDefaultSprint($projectID);
 
-            if(!$project->hasProduct or isset($_POST['newProduct']) or (!$project->parent and empty($linkedProductsCount)))
-            {
-                /* If parent not empty, link products or create products. */
-                $product = new stdclass();
-                $product->name           = $project->hasProduct && $postData->rawdata->productName ? $postData->rawdata->productName : $project->name;
-                $product->shadow         = zget($project, 'vision', 'rnd') == 'rnd' ? (int)empty($project->hasProduct) : 1;
-                $product->bind           = $postData->rawdata->parent ? 0 : 1;
-                $product->program        = $project->parent ? current(array_filter(explode(',', $program->path))) : 0;
-                $product->acl            = $project->acl == 'open' ? 'open' : 'private';
-                $product->PO             = $project->PM;
-                $product->QD             = '';
-                $product->RD             = '';
-                $product->whitelist      = '';
-                $product->createdBy      = $this->app->user->account;
-                $product->createdDate    = helper::now();
-                $product->status         = 'normal';
-                $product->line           = 0;
-                $product->desc           = '';
-                $product->createdVersion = $this->config->version;
-                $product->vision         = zget($project, 'vision', 'rnd');
-
-                $this->dao->insert(TABLE_PRODUCT)->data($product)->exec();
-                $productID = $this->dao->lastInsertId();
-                if(!$project->hasProduct) $this->loadModel('personnel')->updateWhitelist($whitelist, 'product', $productID);
-                $this->loadModel('action')->create('product', $productID, 'opened');
-                $this->dao->update(TABLE_PRODUCT)->set('`order`')->eq($productID * 5)->where('id')->eq($productID)->exec();
-                if($product->acl != 'open') $this->loadModel('user')->updateUserView($productID, 'product');
-
-                $projectProduct = new stdclass();
-                $projectProduct->project = $projectID;
-                $projectProduct->product = $productID;
-                $projectProduct->branch  = 0;
-                $projectProduct->plan    = 0;
-
-                $this->dao->insert(TABLE_PROJECTPRODUCT)->data($projectProduct)->exec();
-
-                if($project->hasProduct)
-                {
-                    /* Create doc lib. */
-                    $this->app->loadLang('doc');
-                    $lib = new stdclass();
-                    $lib->product   = $productID;
-                    $lib->name      = $this->lang->doclib->main['product'];
-                    $lib->type      = 'product';
-                    $lib->main      = '1';
-                    $lib->acl       = 'default';
-                    $lib->addedBy   = $this->app->user->account;
-                    $lib->addedDate = helper::now();
-                    $this->dao->insert(TABLE_DOCLIB)->data($lib)->exec();
-                }
-            }
-
-            /* Save order. */
-            $this->dao->update(TABLE_PROJECT)->set('`order`')->eq($projectID * 5)->where('id')->eq($projectID)->exec();
-            $this->file->updateObjectID($postData->rawdata->uid, $projectID, 'project');
-            $this->loadModel('program')->setTreePath($projectID);
-
-            /* Add project admin. */
-            $groupPriv = $this->dao->select('t1.*')->from(TABLE_USERGROUP)->alias('t1')
-                ->leftJoin(TABLE_GROUP)->alias('t2')->on('t1.`group` = t2.id')
-                ->where('t1.account')->eq($this->app->user->account)
-                ->andWhere('t2.role')->eq('projectAdmin')
-                ->fetch();
-
-            if(!empty($groupPriv))
-            {
-                $newProject = $groupPriv->project . ",$projectID";
-                $this->dao->update(TABLE_USERGROUP)->set('project')->eq($newProject)->where('account')->eq($groupPriv->account)->andWhere('`group`')->eq($groupPriv->group)->exec();
-            }
-            else
-            {
-                $projectAdminID = $this->dao->select('id')->from(TABLE_GROUP)->where('role')->eq('projectAdmin')->fetch('id');
-
-                $groupPriv = new stdclass();
-                $groupPriv->account = $this->app->user->account;
-                $groupPriv->group   = $projectAdminID;
-                $groupPriv->project = $projectID;
-                $this->dao->replace(TABLE_USERGROUP)->data($groupPriv)->exec();
-            }
-
-            if($project->acl != 'open') $this->loadModel('user')->updateUserView($projectID, 'project');
-
-            if(empty($project->multiple) and $project->model != 'waterfall' and $project->model != 'waterfallplus') $this->loadModel('execution')->createDefaultSprint($projectID);
-
-            return $projectID;
-        }
+        return $projectID;
     }
 
     /**
@@ -2286,9 +2168,9 @@ class projectModel extends model
     /**
      * Convert budget unit.
      *
-     * @param  int    $budget
+     * @param  int        $budget
      * @access public
-     * @return void
+     * @return int|string $projectBudget
      */
     public function getBudgetWithUnit($budget)
     {
@@ -2408,7 +2290,7 @@ class projectModel extends model
                 $data->product = $productID;
                 $data->branch  = $branchID;
                 $data->plan    = isset($plans[$productID]) ? implode(',', $plans[$productID]) : $oldPlan;
-                $data->plan    = trim($data->plan, ',');
+                $data->plan    = trim((string)$data->plan, ',');
                 $data->plan    = empty($data->plan) ? 0 : ",$data->plan,";
 
                 $this->dao->insert(TABLE_PROJECTPRODUCT)->data($data)->exec();

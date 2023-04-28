@@ -6,8 +6,8 @@
     const currentCode = window.name.substring(4);
     const isInAppTab  = parent.window !== window;
     const fetchTasks  = new Map();
-    const phpErrTypes = {'1': 'error', '2': 'warning', '4': 'parse', '8': 'notice', '16': 'core-error', '32': 'core-warning', '64': 'compile-error', '128': 'compile-warning', '256': 'user-error', '512': 'user-warning', '1024': 'user-notice', '2048': 'strict', '4096': 'recoverable-error', '8192': 'deprecated', '16384': 'user-deprecated', '32767': 'all'};
-    let currentAppUrl = '';
+    let currentAppUrl = isInAppTab ? '' : location.href;
+    let zinbar        = null;
 
     $.apps = $.extend(
     {
@@ -17,7 +17,7 @@
             const state    = typeof code === 'object' ? code : {url: url, title: title};
             const oldState = window.history.state;
 
-            if(title) document.title   = title;
+            if(title) document.title = title;
 
             if(oldState && oldState.url === url) return;
 
@@ -44,6 +44,7 @@
         activeMenu:    activeNav,
         table:         updateTable,
         fatal:         showFatalError,
+        zinDebug:      (data, info, options) => showZinDebugInfo(data, options),
         zinErrors:     (data, info, options) => showErrors(data, options.id === 'page'),
     };
 
@@ -58,86 +59,34 @@
         let $bar = $('#zinbar');
         if($bar.length) return;
 
-        $bar = $(
-        [
-            '<div id="zinbar" class="shadow-xl h-5 bg-inverse text-canvas fixed row items-center text-base" style="right:0;bottom:0;z-index: 99999;cursor: pointer">',
-                '<div id="zinErrors" class="mono row items-center"></div>',
-                '<div id="pagePerf" class="row items-center"></div>',
-                '<div id="partPerf" class="row items-center"></div>',
-                '<div id="zinErrorList" class="mono absolute shadow-xl ring rounded fade-from-right" style="bottom:100%;right:0;margin-bottom:1px"></div>',
-            '</div>'
-        ].join('')).insertAfter('body');
+        $bar = $('<div id="zinbar"></div>').insertAfter('body');
+        zinbar = new zui.Zinbar($bar[0]);
+    }
 
-        $('#zinErrorList').on('click', '.zin-error-item', function(event)
-        {
-            const error = $(this).data('error');
-            navigator.clipboard.writeText(`vim +${error.line} ${error.file}`).then(() => {zui.Messager.show({content: 'Copied vim command to clipboard.', type: 'success'});});
-            event.stopPropagation();
-        });
-        $('#zinbar').on('click', () => $('#zinErrorList').toggleClass('in'));
+    function updateZinbar(perf, errors)
+    {
+        if(!DEBUG) return;
+
+        if(zinbar && zinbar.$) zinbar.$.update(perf, errors);
+        else requestAnimationFrame(() => zinbar.$.update(perf, errors));
     }
 
     function updatePerfInfo(options, stage, info)
     {
-        if(!DEBUG || isIndexPage) return;
-        options[stage] = performance.now();
-        const $perf = options.id === 'page' ? $('#pagePerf') : $('#partPerf');
-        if(stage === 'requestBegin')
-        {
-            $perf.html(`<div class="opacity-50 pl-2">${options.id === 'page' ? 'PAGE' : (options.id === '#dtable' ? 'TABLE' : 'PART')}</div>`)
-                .append($('<div class="px-2 zin-perf-load">loading...</div>'))
-                .attr('title', `Loading from ${options.url}`);
-            if(options.id === 'page') $('#partPerf').empty();
-        }
-        else if(stage === 'requestEnd')
-        {
-            const loadTime = options.requestEnd - options.requestBegin;
-            $perf.find('.zin-perf-load')
-                .addClass('font-bold')
-                .html(`<i class="icon icon-arrow-down"></i>${loadTime.toFixed(2)}ms`)
-                .addClass(loadTime > 400 ? 'text-danger' : (loadTime > 100 ? 'text-warning' : 'text-success'))
-                .attr('title', `Load time for ${options.url}`);
-            if(info && info.dataLength)
-            {
-                $perf.append(`<div title="Load size"><i class="icon icon-cube"></i> ${zui.formatBytes(info.dataLength)}</div>`)
-                    .append(`<div title="load speed" class="ml-1"><i class="icon icon-run"></i> ${zui.formatBytes(info.dataLength / (loadTime / 1000))}/s</div>`);
-            }
-            if(info && info.error) showErrors([{message: info.error.message}]);
-        }
-        else if(stage === 'renderBegin')
-        {
-            $perf.append($('<div class="px-2 zin-perf-render">rendering...</div>')
-                .attr('title', `Renderring ${options.id}`));
-        }
-        else if(stage === 'renderEnd')
-        {
-            const renderTime = options.renderEnd - options.renderBegin;
-            $perf.find('.zin-perf-render').addClass('font-bold').html(`<i class="icon icon-${renderTime > 200 ? 'frown' : (renderTime > 50 ? 'meh' : 'smile')}"></i> ${renderTime.toFixed(2)}ms`).addClass(renderTime > 200 ? 'text-danger' : (renderTime > 50 ? 'text-warning' : 'text-success')).attr('title', `Render time for ${options.id}`);
-        }
+        if(!DEBUG) return;
+            
+        const perf = {id: options.id, url: options.url || currentAppUrl};
+        perf[stage] = performance.now();
+        if(stage === 'requestBegin') $.extend(perf, {requestEnd: undefined, renderBegin: undefined, renderEnd: undefined});
+        if(info && info.dataSize) perf.dataSize = info.dataSize;
+        updateZinbar(perf);
     }
 
-    function showErrors(data, clear)
+    function showZinDebugInfo(data, options)
     {
         if(!DEBUG) return;
 
-        const $count = $('#zinErrors').empty();
-        const $list  = $('#zinErrorList');
-        if(clear) $list.empty();
-        data.forEach((error) => 
-        {
-            const phpErrType = phpErrTypes[error.level] || 'info';
-            const errType = phpErrType.includes('error') ? 'error' : (phpErrType.includes('warning') ? 'warning' : 'info');
-            $(`<div class="zin-error-item ${errType}-pale text-fore px-2 py-1 ring ring-darker" style=""><div class="zin-error-msg font-bold"><strong class="text-${errType}" style="text-transform: uppercase;">${phpErrType}</strong> ${error.message}</div><div class="zin-error-info ellipsis text-sm opacity-60"><strong>vim +${error.line}</strong> ${error.file}</div></div>`).data('error', error).appendTo($list);
-        });
-
-        const warnings = $list.find('.zin-error-item.warning-pale').length;
-        const errors   = $list.find('.zin-error-item.error-pale').length;
-        const infos    = $list.find('.zin-error-item.info-pale').length;
-        if(errors) $count.append(`<span class="error font-bold px-2">ERRO ${errors}</span>`);
-        if(warnings) $count.append(`<span class="warning font-bold px-2">WARN ${warnings}</span>`);
-        if(infos) $count.append(`<span class="info font-bold px-2">INFO ${infos}</span>`);
-        
-        if(clear && (warnings || errors || infos)) $list.addClass('in');
+        updateZinbar({id: options.id, trace: data.trace, xhprof: data.xhprof}, data.errors);
     }
 
     function updatePageWithHtml(data)
@@ -267,8 +216,8 @@
         const url       = options.url;
         
         if(DEBUG) console.log('[APP]', 'request', options);
-        if(DEBUG && !selectors.includes('zinErrors()')) selectors.push('zinErrors()');
-        const isDebugRequest = DEBUG && selectors.length !== 1 || selectors[0] !== 'zinErrors()';
+        if(DEBUG && !selectors.includes('zinDebug()')) selectors.push('zinDebug()');
+        const isDebugRequest = DEBUG && selectors.length === 1 || selectors[0] === 'zinDebug()';
         return $.ajax(
         {
             url:      url,
@@ -276,12 +225,12 @@
             beforeSend: () => 
             {
                 updatePerfInfo(options, 'requestBegin');
-                if(!isDebugRequest) return;
+                if(isDebugRequest) return;
                 toggleLoading();
             },
             success: (data) =>
             {
-                updatePerfInfo(options, 'requestEnd', {dataLength: data.length});
+                updatePerfInfo(options, 'requestEnd', {dataSize: data.length});
                 options.result = 'success';
                 try{data = JSON.parse(data);}catch(e){data = [{name: data.includes('Fatal error') ? 'fatal' : 'html', data: data}];}
                 if(options.updateUrl !== false) currentAppUrl = url;
@@ -536,7 +485,7 @@
         initZinbar();
 
         if(window.defaultAppUrl) loadPage(window.defaultAppUrl);
-        else if(DEBUG) loadCurrentPage('zinErrors()');
+        else if(DEBUG) loadCurrentPage();
 
         /* Compatible with old version */
         if(DEBUG && typeof window.zin !== 'object' && isInAppTab)
