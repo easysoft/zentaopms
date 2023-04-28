@@ -298,4 +298,18 @@ class todoTao extends todoModel
 
         return $todoData;
     }
+
+    /**
+     * 修改待办事项的时间。
+     * Update the date of todo.
+     *
+     * @param  array  $idList
+     * @param  string $date
+     * @return int
+     */
+    protected function updateDate(array $todoIdList, string $date): int
+    {
+        $this->dao->update(TABLE_TODO)->set('date')->eq($date)->where('id')->in($todoIdList)->exec();
+        return dao::isError() ? 0 : 1;
+    }
 }

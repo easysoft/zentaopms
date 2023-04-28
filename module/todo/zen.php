@@ -258,4 +258,38 @@ class todoZen extends todo
         $cancelURL   = $this->server->HTTP_REFERER;
         return print(js::confirm(sprintf($this->lang->todo->$confirmNote, $todo->objectID), $confirmURL, $cancelURL, $okTarget, 'parent', $app));
     }
+
+    /**
+     * Get product pairs id=>name by model.
+     * 根据模型获取项目， 以键值对格式返回。
+     *
+     * @param  string $model
+     * @return array
+     */
+    protected function getProjectPairsByModel(string $model): array
+    {
+        $model = $model == 'opportunity' ? 'waterfall' : 'all';
+        return $this->loadModel('project')->getPairsByModel((string)$model);
+    }
+
+    /**
+     * Build assign to todo.
+     *
+     * @param  object $todo
+     * @param  int $projectID
+     * @access public
+     * @return mixed
+     */
+    protected function buildAssignToTodo(object $todo, int $projectID)
+    {
+        $this->loadModel('user');
+        $this->loadModel('product');
+
+        $this->view->user            = $this->user->getByID((string)$todo->account);
+        $this->view->users           = $this->user->getPairs('noletter');
+        $this->view->actions         = $this->loadModel('action')->getList('todo', (int)$todo->id);
+        $this->view->executions      = $this->loadModel('execution')->getPairs();
+        $this->view->products        = $todo->type == 'opportunity' ? $this->product->getPairsByProjectModel('waterfall') : $this->product->getPairs();
+        $this->view->projectProducts = $this->product->getProductPairsByProject((int)$projectID);
+    }
 }

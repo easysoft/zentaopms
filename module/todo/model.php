@@ -280,15 +280,16 @@ class todoModel extends model
      * Get info of a todo.
      *
      * @param  int    $todoID
-     * @param  bool   $setImgSize
+     * @param  bool   $setImgSize true|false
      * @access public
-     * @return object|bool
+     * @return object|false
      */
-    public function getById($todoID, $setImgSize = false)
+    public function getByID(int $todoID, $setImgSize = false): object|false
     {
         $todo = $this->dao->findById((int)$todoID)->from(TABLE_TODO)->fetch();
         if(!$todo) return false;
-        $todo = $this->loadModel('file')->replaceImgURL($todo, 'desc');
+
+        $todo = $this->loadModel('file')->replaceImgURL((object)$todo, 'desc');
         if($setImgSize) $todo->desc = $this->file->setImgSize($todo->desc);
         if($todo->type == 'story')    $todo->name = $this->dao->findById($todo->objectID)->from(TABLE_STORY)->fetch('title');
         if($todo->type == 'task')     $todo->name = $this->dao->findById($todo->objectID)->from(TABLE_TASK)->fetch('name');
@@ -639,5 +640,19 @@ class todoModel extends model
         }
 
         return $projectIdList;
+    }
+
+    /**
+     * 修改待办事项的时间。
+     * Edit the date of todo.
+     *
+     * @param  array  $idList
+     * @param  string $date
+     * @access public
+     * @return int
+     */
+    public function editDate(array $todoIDList, string $date): int
+    {
+        return $this->todoTao->updateDate((array)$todoIDList, (string)$date);
     }
 }
