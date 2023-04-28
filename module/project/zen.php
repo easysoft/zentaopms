@@ -76,7 +76,6 @@ class projectZen extends project
             }
         }
 
-        $program = new stdClass();
         if($project->parent)
         {
             $program = $this->project->getByID((int)$project->parent);
@@ -117,7 +116,7 @@ class projectZen extends project
                 dao::$errors['budget'] = sprintf($this->lang->project->error->budgetNumber);
                 return false;
             }
-            else if(is_numeric($project->budget) and ($project->budget < 0))
+            elseif(is_numeric($project->budget) and ($project->budget < 0))
             {
                 dao::$errors['budget'] = sprintf($this->lang->project->error->budgetGe0);
                 return false;
@@ -581,12 +580,13 @@ class projectZen extends project
      * 从项目中删除所有关联的执行。
      * removes all associated executions from the be deleted project
      *
-     * @param  int $projectID
+     * @param  int    $projectID
+     * @param  string $from
      *
      * @access protected
      * @return void
      */
-    protected function removeAssociatedExecutions(int $projectID): void
+    protected function removeAssociatedExecutions(int $projectID, string $from): void
     {
         /* Delete the execution under the project. */
         $executionIdList = $this->loadModel('execution')->getPairs($projectID);

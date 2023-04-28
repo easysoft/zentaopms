@@ -118,8 +118,10 @@ class projectTao extends projectModel
      * @access protected
      * @return bool
      */
-    protected function updateTasksStartAndEndDate(array $tasks): bool
+    protected function updateTasksStartAndEndDate(array $tasks, object $oldProject, object $project): bool
     {
+        $beginTimeStamp = strtotime($project->begin);
+
         foreach($tasks as $task)
         {
             if($task->status == 'wait' and !helper::isZeroDate($task->estStarted))
@@ -418,7 +420,7 @@ class projectTao extends projectModel
      * @return string
      */
     protected function buildLinkForBug(string $method) :string
-    { 
+    {
         if($method == 'create')
             return helper::createLink($module, $method, "productID=0&branch=0&extras=projectID=%s");
 
@@ -435,7 +437,7 @@ class projectTao extends projectModel
      * @return string
      */
     protected function buildLinkForStory(string $method) :string
-    { 
+    {
         if($method == 'change' or $method == 'create')
             return helper::createLink('projectstory', 'story', "projectID=%s");
         if($method == 'zerocase')
