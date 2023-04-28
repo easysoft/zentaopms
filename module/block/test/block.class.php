@@ -205,9 +205,9 @@ class blockTest
      * @access public
      * @return string
      */
-    public function getAvailableBlocksTest($module = '', $dashboard = '', $model = '')
+    public function getAvailableBlocksTest($dashboard = '', $module = '')
     {
-        $objects = json_decode($this->objectModel->getAvailableBlocks($module, $dashboard, $model));
+        $objects = $this->objectModel->getAvailableBlocks($dashboard,$module);
 
         if(dao::isError()) return dao::getError();
 

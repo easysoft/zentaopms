@@ -2,7 +2,6 @@
 <?php
 include dirname(__FILE__, 5) . "/test/lib/init.php";
 include dirname(__FILE__, 2) . '/block.class.php';
-su('admin');
 
 /**
 
@@ -16,7 +15,7 @@ pid=1
 */
 
 $block = new blockTest();
-$data[0] = $block->getAvailableBlocksTest('project', 'project', 'waterfall');
+$data[0] = $block->getAvailableBlocksTest('waterfallProject');
 $data[1] = $block->getAvailableBlocksTest('qa');
 
 r($data[0]) && p('waterfallgantt,projectdynamic') && e('项目计划,最新动态');                // 通过获取项目的可用区块
