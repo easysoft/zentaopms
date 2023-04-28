@@ -22,7 +22,7 @@ function initData()
 
 /**
 
-title=14:11:23 ERROR: SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry &
+title=测试 block 模块 model下的 create 方法
 timeout=0
 cid=39
 

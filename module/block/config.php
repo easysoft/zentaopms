@@ -283,8 +283,16 @@ $config->block->modules['doc']->moreLinkList->projectdoc      = 'doc|projectspac
 $config->block->form = new stdclass();
 $config->block->form->create = array();
 $config->block->form->create['module'] = array('type' => 'string', 'required' => false, 'default' => '');
-$config->block->form->create['title']  = array('type' => 'string', 'required' => false, 'default' => '');
 $config->block->form->create['block']  = array('type' => 'string', 'required' => false, 'default' => '');
+$config->block->form->create['title']  = array('type' => 'string', 'required' => false, 'default' => '');
 $config->block->form->create['grid']   = array('type' => 'int',    'required' => false, 'default' => '4');
 $config->block->form->create['hidden'] = array('type' => 'int',    'required' => false, 'default' => '0');
+$config->block->form->create['params'] = array('type' => 'array',  'required' => false, 'default' => array());
+
+$config->block->form = new stdclass();
+$config->block->form->create = array();
+$config->block->form->create['module'] = array('type' => 'string', 'required' => false, 'default' => '');
+$config->block->form->create['block']  = array('type' => 'string', 'required' => false, 'default' => '');
+$config->block->form->create['title']  = array('type' => 'string', 'required' => false, 'default' => '');
+$config->block->form->create['grid']   = array('type' => 'int',    'required' => false, 'default' => '4');
 $config->block->form->create['params'] = array('type' => 'array',  'required' => false, 'default' => array());

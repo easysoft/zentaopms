@@ -21,3 +21,7 @@ $config->todo->create->form['uid']          = array('required' => false, 'type' 
 
 $config->todo->edit->form = array();
 $config->todo->edit->form['name'] = array('required' => true, 'type' => 'string');
+
+$config->todo->batchClose = new stdclass;
+$config->todo->batchClose->form = array();
+$config->todo->batchClose->form['todoIDList'] = array('required' => true, 'type' => 'array');

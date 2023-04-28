@@ -270,7 +270,7 @@ class todoTest
         $todo->begin        = '0830';
         $todo->end          = '0900';
         $todo->account      = 'admin';
-        $todo->idvalue      = '0';
+        $todo->objectID     = '0';
         $todo->vision       = 'rnd';
         $todo->assignedTo   = 'admin';
         $todo->assignedBy   = 'admin';
@@ -285,7 +285,7 @@ class todoTest
 
         $this->objectModel->createByCycle(array($todoID => $todo));
 
-        $objects = $tester->dao->select('id')->from(TABLE_TODO)->where('idvalue')->eq($todoID)->andWhere('deleted')->eq('0')->fetchAll();
+        $objects = $tester->dao->select('id')->from(TABLE_TODO)->where('objectID')->eq($todoID)->andWhere('deleted')->eq('0')->fetchAll();
 
         if(dao::isError()) return dao::getError();
 

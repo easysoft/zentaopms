@@ -3,7 +3,7 @@ class blockZen extends block
 {
     /**
      * Get module options when adding or editing blocks.
-     * 添加或编辑区块时获取模块选项
+     * 添加或编辑区块时获取可使用的模块选项
      * 
      * @param  string $dashboard
      * @access protected
@@ -52,7 +52,7 @@ class blockZen extends block
 
     /**
      * Get block options when adding or editing blocks.
-     * 添加或编辑区块时获取区块选项
+     * 添加或编辑区块时获取可使用的区块选项
      *
      * @param  string $dashboard
      * @param  string $module
@@ -61,6 +61,16 @@ class blockZen extends block
      */
     protected function getAvailableBlocks($dashboard, $module): array|bool
     {
+        if(!$this->selfCall)
+        {
+            $lang = str_replace('_', '-', $this->get->lang);
+            $this->app->setClientLang($lang);
+            $this->app->loadLang('common');
+            $this->app->loadLang('block');
+
+            if(!$this->block->checkAPI($this->get->hash)) return array();
+        }
+
         $blocks = $this->block->getAvailableBlocks($dashboard, $module);
 
         if(!$this->selfCall)
@@ -80,7 +90,7 @@ class blockZen extends block
      * @param  string $module
      * @param  string $block
      * @access protected
-     * @return array[]
+     * @return array
      */
     protected function getAvailableParams(string $dashboard, string $module = '', string $block = ''): array
     {

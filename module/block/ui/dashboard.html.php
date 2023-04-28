@@ -29,7 +29,7 @@ foreach($longBlocks as $index => $block)
                     set::items
                     ([
                         ['text' => $lang->block->refresh, 'url' => ''],
-                        ['text' => $lang->edit, 'url' => $this->createLink("block", "edit", "dashboard=$dashboard&blockID=$block->id"), 'data-toggle' => 'modal'],
+                        ['text' => $lang->edit, 'url' => $this->createLink("block", "edit", "blockID=$block->id"), 'data-toggle' => 'modal'],
                         ['text' => $lang->block->hidden, 'url' => ''],
                         ['text' => $lang->block->createBlock, 'url' => $this->createLink("block", "create", "dashboard=$dashboard"), 'data-toggle' => 'modal'],
                         ['text' => $lang->block->reset, 'url' => ''],
@@ -77,7 +77,7 @@ foreach($shortBlocks as $index => $block)
                     set::items
                     ([
                         ['text' => $lang->block->refresh, 'url' => ''],
-                        ['text' => $lang->edit, 'url' => $this->createLink("block", "edit", "dashboard=$dashboard&blockID=$block->id"), 'data-toggle' => 'modal'],
+                        ['text' => $lang->edit, 'url' => $this->createLink("block", "edit", "blockID=$block->id"), 'data-toggle' => 'modal'],
                         ['text' => $lang->block->hidden, 'url' => ''],
                         ['text' => $lang->block->createBlock, 'url' => $this->createLink("block", "create", "dashboard=$dashboard"), 'data-toggle' => 'modal'],
                         ['text' => $lang->block->reset, 'url' => ''],

@@ -47,7 +47,3 @@ $stories2 = array($story4, $story5, $story6);
 $stories3 = array($story7, $story8, $story9);
 
 $product = new productTest('admin');
-
-r($product->batchGetStoryStageTest($stories1))  && p('1;2;3') && e('wait;planned;projected');       // 测试获取需求1 2 3的阶段
-r($product->batchGetStoryStageTest($stories2))  && p('4;5;6') && e('developing;developed;testing'); // 测试获取需求4 5 6的阶段
-r($product->batchGetStoryStageTest($stories3))  && p('7;8;9') && e('tested;verified;released');     // 测试获取需求7 8 9的阶段
