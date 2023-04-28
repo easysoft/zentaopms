@@ -24,7 +24,7 @@ class trace
 
     public function getRequestInfo()
     {
-        $this->trace['Request'] = array(
+        $this->trace['request'] = array(
             'start'    => date('Y-m-d H:i:s', (int)$this->app->startTime),
             'url'      => $this->app->getURI(true),
             'protocol' => $this->app->server->server_protocol,
@@ -40,7 +40,7 @@ class trace
 
     public function getRequestFiles()
     {
-        $this->trace['Files'] = get_included_files();
+        $this->trace['files'] = get_included_files();
     }
 
     public function getRequestSqls()
@@ -52,8 +52,15 @@ class trace
             $explain[] = $this->dao->explain($query, false);
         }
         */
-        $this->trace['SQL Query']   = dao::$querys;
-        $this->trace['SQL Explain'] = $explain;
+        $this->trace['sqlQuery']   = dao::$querys;
+        $this->trace['sqlExplain'] = $explain;
+    }
+
+    public function getSQLProfile()
+    {
+        $profiling = $this->dao->dbh->query('SHOW PROFILES')->fetchAll(PDO::FETCH_ASSOC);
+        
+        $this->trace['profiles'] = $profiling;
     }
 
     public function getTrace()
@@ -61,6 +68,7 @@ class trace
         $this->getRequestInfo();
         $this->getRequestFiles();
         $this->getRequestSqls();
+        $this->getSQLProfile();
         return $this->trace;
     }
 
