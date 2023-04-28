@@ -487,6 +487,7 @@ class project extends control
      */
     public function create($model = 'scrum', $programID = 0, $copyProjectID = 0, $extra = '')
     {
+        $this->loadModel('execution');
         $this->session->set('projectModel', $model);
 
         if($model == 'kanban') unset($this->lang->project->authList['reset']);
@@ -521,8 +522,8 @@ class project extends control
                 if($model == 'waterfall' or $model == 'waterfallplus')
                 {
                     $productID = $this->loadModel('product')->getProductIDByProject($projectID, true);
-                    $this->session->set('projectPlanList', $this->createLink('programplan', 'browse', "projectID=$projectID&productID=$productID&type=lists", '', '', $projectID), 'project');
-                    return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink('programplan', 'create', "projectID=$projectID", '', '', $projectID)));
+                    $this->session->set('projectPlanList', $this->createLink('programplan', 'browse', "projectID=$projectID&productID=$productID&type=lists", '', false, $projectID), 'project');
+                    return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink('programplan', 'create', "projectID=$projectID", '', false, $projectID)));
                 }
 
                 $parent = isset($_POST['parent']) ? $_POST['parent'] : 0;
