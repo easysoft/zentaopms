@@ -10,24 +10,24 @@ class todoZen extends todo
      * @process protected
      * @param  object $formData
      * @access protected
-     * @return object|false
+     * @return object
      */
-    protected function beforeCreate(object $formData): object|bool
+    protected function beforeCreate(object $formData): object
     {
         $objectType = $this->post->type;
         $hasObject  = in_array($objectType, $this->config->todo->moduleList);
 
-        $idvalue = 0;
-        if($hasObject && $objectType) $idvalue = $this->post->uid ? $this->post->$objectType : $this->post->idvalue;
+        $objectID = 0;
+        if($hasObject && $objectType) $objectID = $this->post->uid ? $this->post->$objectType : $this->post->objectID;
 
         $data = $formData->add('account', $this->app->user->account)
-            ->setDefault('idvalue', 0)
+            ->setDefault('objectID', 0)
             ->setDefault('vision', $this->config->vision)
             ->setDefault('assignedTo', $this->app->user->account)
             ->setDefault('assignedBy', $this->app->user->account)
             ->setDefault('assignedDate', helper::now())
             ->cleanInt('pri, begin, end, private')
-            ->setIF($hasObject && $objectType,  'idvalue', $idvalue)
+            ->setIF($hasObject && $objectType,  'objectID', $objectID)
             ->setIF($this->post->date == false,  'date', '2030-01-01')
             ->setIF($this->post->begin == false, 'begin', '2400')
             ->setIF($this->post->begin == false or $this->post->end == false, 'end', '2400')
@@ -36,6 +36,7 @@ class todoZen extends todo
             ->stripTags($this->config->todo->editor->create['id'], $this->config->allowedTags)
             ->remove(implode(',', $this->config->todo->moduleList) . ',uid')
             ->get();
+        return $data;
     }
 
     /**
