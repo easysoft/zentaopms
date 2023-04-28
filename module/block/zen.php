@@ -139,7 +139,7 @@ class blockZen extends block
             $block->params = json_decode($block->params);
             if(isset($block->params->num) and !isset($block->params->count)) $block->params->count = $block->params->num;
 
-            $this->getBlockMoreLink($block);
+            $this->getBlockMoreLink($block, $project);
         }
 
         return $blocks;
@@ -150,12 +150,14 @@ class blockZen extends block
      * Get the more link of the block.
      *
      * @param  object $block
+     * @param  object $project
      * @return void
      */
-    private function getBlockMoreLink(object $block): void
+    private function getBlockMoreLink(object $block, object $project): void
     {
-        $code   = $block->code;
-        $source = empty($block->source) ? 'common' : $block->source;
+        $code      = $block->code;
+        $source    = empty($block->source) ? 'common' : $block->source;
+        $projectID = isset($project->id) ? $project->id : 0;
 
         $block->blockLink = $this->createLink('block', 'printBlock', "id=$block->id&module=$block->module");
         $block->moreLink  = '';
