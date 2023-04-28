@@ -193,13 +193,14 @@ class project extends control
     /**
      * Ajax get unlink tips when unlink team member.
      *
-     * @param  int    $projectID
-     * @param  int    $account
+     * @param  string $projectID
+     * @param  string $account
      * @access public
      * @return void
      */
-    public function ajaxGetUnlinkTips($projectID, $account)
+    public function ajaxGetUnlinkTips(string $projectID, string $account)
     {
+        $projectID = (int)$projectID;
         $project = $this->project->getByID($projectID);
         if(!$project->multiple) return;
 
@@ -271,6 +272,7 @@ class project extends control
 
         if(!empty($objectID))
         {
+            $objectID = (int)$objectID;
             $object = $objectType == 'project' ? $this->project->getByID($objectID) : $this->loadModel('program')->getByID($objectID);
 
             if(isset($availableBudget)) $availableBudget = $object->parent == $selectedProgramID ? $availableBudget + (int)$object->budget : $availableBudget;
@@ -325,6 +327,7 @@ class project extends control
 
         $this->project->setMenu($projectID);
 
+        $projectID = (int)$projectID;
         $project = $this->project->getByID($projectID);
 
         /* Locate to task when set no execution. */
@@ -484,9 +487,6 @@ class project extends control
      */
     public function create($model = 'scrum', $programID = 0, $copyProjectID = 0, $extra = '')
     {
-        $this->loadModel('execution');
-        $this->loadModel('product');
-
         $this->session->set('projectModel', $model);
 
         if($model == 'kanban') unset($this->lang->project->authList['reset']);
@@ -520,7 +520,7 @@ class project extends control
             {
                 if($model == 'waterfall' or $model == 'waterfallplus')
                 {
-                    $productID = $this->product->getProductIDByProject($projectID, true);
+                    $productID = $this->loadModel('product')->getProductIDByProject($projectID, true);
                     $this->session->set('projectPlanList', $this->createLink('programplan', 'browse', "projectID=$projectID&productID=$productID&type=lists", '', '', $projectID), 'project');
                     return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink('programplan', 'create', "projectID=$projectID", '', '', $projectID)));
                 }
@@ -552,6 +552,7 @@ class project extends control
         $this->loadModel('program');
         $this->loadModel('execution');
 
+        $projectID = (int)$projectID;
         $project   = $this->project->getByID($projectID);
         $programID = $project->parent;
         $this->project->setMenu($projectID);
@@ -892,6 +893,7 @@ class project extends control
      */
     public function dynamic($projectID = 0, $type = 'today', $param = '', $recTotal = 0, $date = '', $direction = 'next')
     {
+        $projectID = (int)$projectID;
         $this->loadModel('execution');
         $this->project->setMenu($projectID);
 
@@ -977,6 +979,7 @@ class project extends control
 
         if($this->cookie->showTask) $this->session->set('taskList', $this->app->getURI(true), 'project');
 
+        $projectID = (int)$projectID;
         $projects  = $this->project->getPairsByProgram();
         $projectID = $this->project->saveState($projectID, $projects);
         $project   = $this->project->getByID($projectID);
@@ -1060,11 +1063,12 @@ class project extends control
         $this->session->set('bugList', $this->app->getURI(true), 'project');
         $this->project->setMenu($projectID);
 
-        $product  = $this->product->getById($productID);
-        $project  = $this->project->getByID($projectID);
-        $type     = strtolower($type);
-        $queryID  = ($type == 'bysearch') ? (int)$param : 0;
-        $products = $this->product->getProducts($projectID);
+        $projectID = (int)$projectID;
+        $product   = $this->product->getById($productID);
+        $project   = $this->project->getByID($projectID);
+        $type      = strtolower($type);
+        $queryID   = ($type == 'bysearch') ? (int)$param : 0;
+        $products  = $this->product->getProducts($projectID);
 
         if(!$project->multiple) unset($this->config->bug->datatable->fieldList['execution']);
         if(!$project->hasProduct)
@@ -1261,6 +1265,7 @@ class project extends control
         $this->session->set('testtaskList', $this->app->getURI(true), 'qa');
         $this->session->set('buildList', $this->app->getURI(true), 'execution');
 
+        $projectID = (int)$projectID;
         $this->project->setMenu($projectID);
 
         /* Load pager. */
@@ -1304,6 +1309,7 @@ class project extends control
         /* Load module and get project. */
         $this->loadModel('build');
         $this->loadModel('product');
+        $projectID = (int)$projectID;
         $project = $this->project->getByID($projectID);
         $this->project->setMenu($projectID);
 
@@ -1462,7 +1468,7 @@ class project extends control
             $this->view->version    = $version;
 
             /* Unset not project privs. */
-            $project = $this->project->getByID($group->project);
+            $project = $this->project->getByID((int)$group->project);
             if($project->hasProduct)
             {
                 if($this->config->URAndSR) unset($this->lang->resource->requirement);
@@ -1653,7 +1659,7 @@ class project extends control
         }
 
         $group      = $this->group->getById($groupID);
-        $project    = $this->project->getByID($group->project);
+        $project    = $this->project->getByID((int)$group->project);
         $groupUsers = $this->group->getUserPairs($groupID);
         $allUsers   = $this->loadModel('dept')->getDeptUserPairs($deptID);
         $otherUsers = array_diff_assoc($allUsers, $groupUsers);
@@ -1809,6 +1815,7 @@ class project extends control
     public function close($projectID)
     {
         $this->loadModel('action');
+        $projectID = (int)$projectID;
 
         if(!empty($_POST))
         {
@@ -1844,7 +1851,8 @@ class project extends control
     {
         $this->loadModel('action');
         $this->app->loadLang('execution');
-        $project = $this->project->getByID($projectID);
+        $projectID = (int)$projectID;
+        $project   = $this->project->getByID($projectID);
 
         if(!empty($_POST))
         {
@@ -1886,6 +1894,7 @@ class project extends control
      */
     public function delete($projectID, $confirm = 'no', $from = 'browse')
     {
+        $projectID = (int)$projectID;
         if($confirm == 'no')
         {
             $project = $this->project->getByID($projectID);

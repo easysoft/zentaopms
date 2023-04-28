@@ -12,7 +12,7 @@ declare(strict_types=1);
 namespace zin;
 
 set::title($title);
-jsVar('dashboard', $dashboard);
+jsVar('blockID', $block->id);
 
 $paramsRows = array();
 
@@ -40,6 +40,7 @@ form
     (
         set::label($lang->block->lblModule),
         set::name('module'),
+        set::value($block->module),
         set::control(array
         (
             'type'  => 'select',
@@ -74,6 +75,7 @@ form
             set::label($lang->block->name),
             set::name('title'),
             set::class('form-row'),
+            set::value($block->title),
             set::control('input')  
         ) : null,
         (($module and $code) or ($module and !$codes))
@@ -82,6 +84,7 @@ form
             set::label($lang->block->grid),
             set::name("grid"),
             set::class('form-row'),
+            set::value($block->grid),
             set::control(array
             (
                 'type'  => 'select',
