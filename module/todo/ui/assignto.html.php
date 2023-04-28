@@ -2,14 +2,13 @@
 declare(strict_types=1);
 namespace zin;
 /**
- * The batch create view of todo module of ZenTaoPMS.
+ * AssignTo view of todo module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
- * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
+ * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @license     ZPL(https://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Yue Liu <liuyue@easycorp.ltd>
  * @package     todo
- * @version     $Id: create.html.php 2741 2012-04-07 07:24:21 $
- * @link        http://www.zentao.net
+ * @link        https://www.zentao.net
  */
 
 set::title($lang->todo->assignedTo);
