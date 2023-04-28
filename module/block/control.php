@@ -203,14 +203,15 @@ class block extends control
     }
 
     /**
+     * 展示应用的仪表盘
      * Display dashboard for app.
      *
-     * @param  string    $module
-     * @param  int       $projectID
+     * @param  string  $module
+     * @param  int     $projectID
      * @access public
      * @return void
      */
-    public function dashboard($module, $projectID = 0)
+    public function dashboard(string $module, int $projectID = 0)
     {
         if($this->loadModel('user')->isLogon()) $this->session->set('blockModule', $module);
         $blocks = $this->block->getMyDashboard($module);
@@ -223,103 +224,25 @@ class block extends control
             $section = $project->model . 'common';
         }
 
-        $inited = $this->dao->select('*')->from(TABLE_CONFIG)
-            ->where('module')->eq($module)
-            ->andWhere('owner')->eq($this->app->user->account)
-            ->andWhere('`section`')->eq($section)->fi()
-            ->andWhere('`key`')->eq('blockInited')
-            ->andWhere('vision')->eq($vision)
-            ->fetch('value');
+        $isInitiated = $this->block->fetchBlockInitStatus($module, $vision, $section);
 
         /* Init block when vist index first. */
-        if((empty($blocks) and !$inited and !defined('TUTORIAL')))
+        if(empty($blocks) and !$isInitiated and !defined('TUTORIAL') and $this->block->initBlock($module))
         {
-            if($this->block->initBlock($module)) return print(js::reload());
+            return print(js::reload());
         }
 
-        $acls = $this->app->user->rights['acls'];
-        $shortBlocks = $longBlocks = array();
-        foreach($blocks as $key => $block)
-        {
-            if(in_array($block->code, array('waterfallrisk', 'waterfallissue')))
-            {
-                $model = isset($project->model) ? $project->model : 'waterfall';
-                if($block->code == 'waterfallrisk' and !helper::hasFeature("{$model}_risk")) continue;
-                if($block->code == 'waterfallissue' and !helper::hasFeature("{$model}_issue")) continue;
-            }
+        $blocks = $this->blockZen->processBlockForRender($blocks, isset($project) ? $project : null);
 
-            if(in_array($block->code, array('scrumrisk', 'scrumissue')))
-            {
-                $model = isset($project->model) ? $project->model : 'scrum';
-                if($block->code == 'scrumrisk' and !helper::hasFeature("{$model}_risk")) continue;
-                if($block->code == 'scrumissue' and !helper::hasFeature("{$model}_issue")) continue;
-            }
+        if($this->app->getViewType() == 'json') return print(json_encode($blocks));
 
-            if(!empty($block->source) and $block->source != 'todo' and !empty($acls['views']) and !isset($acls['views'][$block->source]))
-            {
-                unset($blocks[$key]);
-                continue;
-            }
-
-            $block->params = json_decode($block->params);
-            if(isset($block->params->num) and !isset($block->params->count)) $block->params->count = $block->params->num;
-
-            $code   = $block->code;
-            $source = empty($block->source) ? 'common' : $block->source;
-
-            $block->blockLink = $this->createLink('block', 'printBlock', "id=$block->id&module=$block->module");
-            $block->moreLink  = '';
-            if(isset($this->config->block->modules[$source]->moreLinkList->{$code}))
-            {
-                list($moduleName, $method, $vars) = explode('|', sprintf($this->config->block->modules[$source]->moreLinkList->{$code}, isset($block->params->type) ? $block->params->type : ''));
-
-                /* The list assigned to me jumps to the work page when click more button. */
-                $block->moreLink = $this->createLink($moduleName, $method, $vars);
-                if($moduleName == 'my' and strpos($this->config->block->workMethods, $method) !== false)
-                {
-                    $block->moreLink = $this->createLink($moduleName, 'work', 'mode=' . $method . '&' . $vars);
-                }
-                elseif($moduleName == 'project' and $method == 'dynamic')
-                {
-                    $block->moreLink = $this->createLink('project', 'dynamic', "projectID=$projectID&type=all");
-                }
-                elseif($moduleName == 'project' and $method == 'execution')
-                {
-                    $block->moreLink = $this->createLink('project', 'execution', "status=all&projectID=$projectID");
-                }
-                elseif($moduleName == 'project' and $method == 'testtask')
-                {
-                    $block->moreLink = $this->createLink('project', 'testtask', "projectID=$projectID");
-                }
-                elseif($moduleName == 'testtask' and $method == 'browse')
-                {
-                    $block->moreLink = $this->createLink('testtask', 'browse', "productID=0&branch=0&type=all,totalStatus");
-                }
-
-            }
-            elseif($block->code == 'dynamic')
-            {
-                $block->moreLink = $this->createLink('company', 'dynamic');
-            }
-
-            if($this->block->isLongBlock($block))
-            {
-                $longBlocks[$key] = $block;
-            }
-            else
-            {
-                $shortBlocks[$key] = $block;
-            }
-        }
+        list($shortBlocks, $longBlocks) = $this->blockZen->splitBlocksByLen($blocks);
 
         $this->view->title       = zget($this->lang->block->dashboard, $module, $this->lang->block->dashboard['default']);
         $this->view->longBlocks  = $longBlocks;
         $this->view->shortBlocks = $shortBlocks;
         $this->view->dashboard   = $module;
-
-        if($this->app->getViewType() == 'json') return print(json_encode($blocks));
-
-        $this->display();
+        $this->render();
     }
 
     /**

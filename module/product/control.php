@@ -1246,8 +1246,8 @@ class product extends control
 
         /* Generate statistics of products and program. */
         $this->app->loadClass('pager', true);
-        $pager    = new pager($recTotal, $recPerPage, $pageID);
-        $queryID  = ($browseType == 'bySearch' or !empty($param)) ? $param : 0;
+        $pager   = new pager($recTotal, $recPerPage, $pageID);
+        $queryID = ($browseType == 'bySearch' or !empty($param)) ? $param : 0;
         if($this->config->systemMode == 'light' and $orderBy == 'program_asc') $orderBy = 'order_asc';
 
         $productStats     = $this->product->getStats($orderBy, $pager, $browseType, 0, 'story', 0, $queryID);

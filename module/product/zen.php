@@ -13,8 +13,8 @@ declare(strict_types=1);
 class productZen extends product
 {
     /**
-     * Set shared environment data for all function of control layer.
      * 为控制层的all函数设置共享环境数据。
+     * Set shared environment data for all function of control layer.
      *
      * @access protected
      * @return void
@@ -33,8 +33,8 @@ class productZen extends product
     }
 
     /**
-     * Set menu for create product page.
      * 为创建产品设置导航数据，主要是替换占位符。
+     * Set menu for create product page.
      *
      * @param int $programID
      * @access protected
@@ -55,8 +55,8 @@ class productZen extends product
     }
 
     /**
-     * Get goback link for create by extra.
      * 通过extra获取返回链接。
+     * Get goback link for create by extra.
      *
      * @param string $extra
      * @access private
@@ -75,8 +75,8 @@ class productZen extends product
     }
 
     /**
-     * Get form fields for create.
      * 获取创建产品页面的表单配置。
+     * Get form fields for create.
      *
      * @param  int $programID
      * @access private
@@ -134,8 +134,8 @@ class productZen extends product
     }
 
     /**
-     * Build form fields for create.
      * 构建创建产品页面数据。
+     * Build form fields for create.
      *
      * @param  int    $programID
      * @param  string $extra
@@ -154,8 +154,8 @@ class productZen extends product
     }
 
     /**
-     * Prepare data for create.
      * 追加创建信息，处理白名单、评审者、项目集字段，还有富文本内容处理。
+     * Prepare data for create.
      *
      * @param  int    $programID
      * @param  string $extra
@@ -181,8 +181,8 @@ class productZen extends product
     }
 
     /**
-     * Process after create product.
      * 成功插入产品数据后，其他的额外操作。
+     * Process after create product.
      *
      * @param  int    $productID
      * @param  object $product
@@ -222,8 +222,8 @@ class productZen extends product
     }
 
     /**
-     * Locate after create product.
      * 创建完成后，做页面跳转。
+     * Locate after create product.
      *
      * @param  int   $productID
      * @param  int   $programID
@@ -243,8 +243,8 @@ class productZen extends product
     }
 
     /**
-     * Send error for create.
      * 输出创建产品产生的错误。
+     * Send error for create.
      *
      * @access protected
      * @return void

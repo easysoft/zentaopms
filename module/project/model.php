@@ -1811,53 +1811,34 @@ class projectModel extends model
     }
 
     /**
-     * Close project.
+     * 关闭项目并更改其状态
+     * Close project and update status.
      *
      * @param  int    $projectID
-     * @param  string $type
+     * @param  object $project
+     *
      * @access public
-     * @return array
+     * @return array|false
      */
-    public function close($projectID, $type = 'project')
+    public function close(int $projectID, object $project): array|false
     {
-        $oldProject = $this->getById($projectID, $type);
-        $now        = helper::now();
+        $oldProject = $this->getByID($projectID);
 
         $editorIdList = $this->config->project->editor->close['id'];
         if($this->app->rawModule == 'program') $editorIdList = $this->config->program->editor->close['id'];
-
-        $project = fixer::input('post')
-            ->add('id', $projectID)
-            ->setDefault('status', 'closed')
-            ->setDefault('closedBy', $this->app->user->account)
-            ->setDefault('closedDate', $now)
-            ->setDefault('lastEditedBy', $this->app->user->account)
-            ->setDefault('lastEditedDate', $now)
-            ->stripTags($editorIdList, $this->config->allowedTags)
-            ->remove('comment')
-            ->get();
 
         $this->lang->error->ge = $this->lang->project->ge;
 
         $project = $this->loadModel('file')->processImgURL($project, $editorIdList, $this->post->uid);
 
-        $this->dao->update(TABLE_PROJECT)->data($project)
-            ->autoCheck()
-            ->check($this->config->project->close->requiredFields, 'notempty')
-            ->checkIF($project->realEnd != '', 'realEnd', 'le', helper::today())
-            ->checkIF($project->realEnd != '', 'realEnd', 'ge', $oldProject->realBegan)
-            ->checkFlow()
-            ->where('id')->eq((int)$projectID)
-            ->exec();
+        $this->projectTao->doClosed($projectID, $project, $oldProject);
 
         /* When it has multiple errors, only the first one is prompted */
         if(dao::isError())
         {
            if(count(dao::$errors['realEnd']) > 1) dao::$errors['realEnd'] = dao::$errors['realEnd'][0];
-
            return false;
         }
-
         if(!$oldProject->multiple) $this->changeExecutionStatus($projectID, 'close');
 
         /* Close the shadow product of the project. */

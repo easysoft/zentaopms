@@ -1808,36 +1808,30 @@ class project extends control
     /**
      * Close a project.
      *
-     * @param  int     $projectID
+     * @param  string $projectID
      * @access public
+     *
      * @return void
      */
-    public function close($projectID)
+    public function close(string $projectID)
     {
-        $this->loadModel('action');
         $projectID = (int)$projectID;
 
         if(!empty($_POST))
         {
-            $changes = $this->project->close($projectID);
+            $postData = form::data($this->config->project->form->close);
+
+            $postData = $this->projectZen->prepareClosedExtras($projectID, $postData);
+
+            $changes = $this->project->close($projectID, $postData);
             if(dao::isError()) return print(js::error(dao::getError()));
 
-            if($this->post->comment != '' or !empty($changes))
-            {
-                $actionID = $this->action->create('project', $projectID, 'Closed', $this->post->comment);
-                $this->action->logHistory($actionID, $changes);
-            }
-            $this->executeHooks($projectID);
+            $comment = strip_tags($this->post->comment, $this->config->allowedTags);
+            $this->projectZen->responseAfterClose($projectID, $changes, $comment);
             return print(js::reload('parent.parent'));
         }
 
-        $this->view->title      = $this->lang->project->close;
-        $this->view->position[] = $this->lang->project->close;
-        $this->view->project    = $this->project->getByID($projectID);
-        $this->view->users      = $this->loadModel('user')->getPairs('noletter');
-        $this->view->actions    = $this->action->getList('project', $projectID);
-
-        $this->display();
+        $this->projectZen->buildClosedForm($projectID);
     }
 
     /**

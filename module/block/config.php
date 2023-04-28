@@ -115,25 +115,25 @@ $config->block->params['product']->type['name']    = $lang->block->type;
 $config->block->params['product']->type['options'] = $lang->block->typeList->product;
 $config->block->params['product']->type['control'] = 'select';
 
-$config->block->params['productStatic'] = clone $config->block->params['default'];
-$config->block->params['productStatic']->type['name']    = $lang->block->type;
-$config->block->params['productStatic']->type['options'] = $lang->block->typeList->product;
-$config->block->params['productStatic']->type['control'] = 'select';
+$config->block->params['productStatistic'] = clone $config->block->params['default'];
+$config->block->params['productStatistic']->type['name']    = $lang->block->type;
+$config->block->params['productStatistic']->type['options'] = $lang->block->typeList->product;
+$config->block->params['productStatistic']->type['control'] = 'select';
 
-$config->block->params['projectStatic'] = clone $config->block->params['default'];
-$config->block->params['projectStatic']->type['name']    = $lang->block->type;
-$config->block->params['projectStatic']->type['options'] = $lang->block->typeList->project;
-$config->block->params['projectStatic']->type['control'] = 'select';
+$config->block->params['projectStatistic'] = clone $config->block->params['default'];
+$config->block->params['projectStatistic']->type['name']    = $lang->block->type;
+$config->block->params['projectStatistic']->type['options'] = $lang->block->typeList->project;
+$config->block->params['projectStatistic']->type['control'] = 'select';
 
-$config->block->params['executionStatic'] = clone $config->block->params['default'];
-$config->block->params['executionStatic']->type['name']    = $lang->block->type;
-$config->block->params['executionStatic']->type['options'] = $lang->block->typeList->execution;
-$config->block->params['executionStatic']->type['control'] = 'select';
+$config->block->params['executionStatistic'] = clone $config->block->params['default'];
+$config->block->params['executionStatistic']->type['name']    = $lang->block->type;
+$config->block->params['executionStatistic']->type['options'] = $lang->block->typeList->execution;
+$config->block->params['executionStatistic']->type['control'] = 'select';
 
-$config->block->params['qaStatic'] = clone $config->block->params['default'];
-$config->block->params['qaStatic']->type['name']    = $lang->block->type;
-$config->block->params['qaStatic']->type['options'] = $lang->block->typeList->product;
-$config->block->params['qaStatic']->type['control'] = 'select';
+$config->block->params['qaStatistic'] = clone $config->block->params['default'];
+$config->block->params['qaStatistic']->type['name']    = $lang->block->type;
+$config->block->params['qaStatistic']->type['options'] = $lang->block->typeList->product;
+$config->block->params['qaStatistic']->type['control'] = 'select';
 
 $config->block->params['waterfallIssue'] = clone $config->block->params['default'];
 $config->block->params['waterfallIssue']->type['name']       = $lang->block->type;
