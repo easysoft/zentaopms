@@ -202,8 +202,12 @@ class todo extends control
         $todoID = (int)$todoID;
         $todo   = $this->todo->getByID($todoID);
 
-        if($todo->status == 'wait') $this->todo->start($todoID);
-        if(in_array($todo->type, array('bug', 'task', 'story'))) return $this->todoZen->printConfirm($todo);
+        if($todo->status == 'wait')
+        {
+            this->todo->start($todoID);
+            if(dao::isError()) return print(js::error(dao::getError()));
+        }
+        if(in_array($todo->type, array('bug', 'task', 'story'))) return $this->todoZen->printStartConfirm($todo);
         if(isonlybody()) return print(js::reload('parent.parent'));
 
         return print(js::reload('parent'));
@@ -224,8 +228,8 @@ class todo extends control
 
         if($todo->status == 'done' || $todo->status == 'closed')
         {
-            $isActivate = $this->todo->activate($todoID);
-            if($isActivate === false) return print(js::error(dao::getError()));
+            $this->todo->activate($todoID);
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
         }
         if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'success'));
         if(isonlybody()) return print(js::reload('parent.parent'));

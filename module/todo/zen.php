@@ -345,14 +345,14 @@ class todoZen extends todo
     }
 
     /**
-     * 输出确认弹框。
-     * Output confirm alert.
+     * 输出开启待办事项的确认弹框。
+     * Output start todo confirm alert.
      *
      * @param  object $todo
      * @access protected
      * @return int
      */
-    protected function printConfirm(object $todo): int
+    protected function printStartConfirm(object $todo): int
     {
         $confirmNote = 'confirm' . ucfirst($todo->type);
         $confirmURL  = $this->createLink($todo->type, 'view', "id=$todo->objectID");
