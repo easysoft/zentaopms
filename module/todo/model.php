@@ -22,8 +22,7 @@ class todoModel extends model
      */
     public function create(object $todo): int|false
     {
-        /* 处理 $todo 信息 */
-        $processedTodo = $this->todoTao->beforeCreate($todo);
+        $processedTodo = $this->todoTao->processCreateData($todo);
         if(!$processedTodo) return false;
 
         $todoID = $this->todoTao->insert($processedTodo);
@@ -513,8 +512,8 @@ class todoModel extends model
 
                 if(!$date)                                     continue;
                 if($date < $todo->config->begin)               continue;
-                if($date < date('Y-m-d'))              continue;
-                if($date > date('Y-m-d', $finish))     continue;
+                if($date < date('Y-m-d'))                      continue;
+                if($date > date('Y-m-d', $finish))             continue;
                 if(!empty($end) && $date > $end)               continue;
                 if($lastCycle and ($date == $lastCycle->date)) continue;
 

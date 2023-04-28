@@ -7,73 +7,40 @@ class todoZen extends todo
      * 处理请求数据
      * Processing request data.
      *
+     * @process protected
      * @param  object $formData
      * @access protected
      * @return object|false
      */
     protected function beforeCreate(object $formData): object|bool
     {
-        $formData = $formData->remove(implode(',', $this->config->todo->moduleList) . ',uid')->stripTags($this->config->todo->editor->create['id'], $this->config->allowedTags)->get();
+        $objectType = $this->post->type;
+        $hasObject  = in_array($objectType, $this->config->todo->moduleList);
 
-        $objectID   = 0;
-        $hasObject = in_array($formData->type, $this->config->todo->moduleList);
-        if($hasObject && $formData->type) $objectID = $formData->uid ? $formData->type : $formData->objectID;
+        $idvalue = 0;
+        if($hasObject && $objectType) $idvalue = $this->post->uid ? $this->post->$objectType : $this->post->idvalue;
 
-        $formData->account    = $this->app->user->account;
-        $formData->assignedTo = zget($formData, 'assignedTo', $this->app->user->account);
-        $formData->assignedBy = zget($formData, 'assignedBy', $this->app->user->account);
-        if($hasObject && $formData->type) $formData->objectID      = $objectID;
-        if($formData->status == 'done')   $formData->finishedBy   = $this->app->user->account;
-        if($formData->status == 'done')   $formData->finishedDate = helper::now();
-
-        if(!isset($formData->pri) and in_array($formData->type, $this->config->todo->moduleList) and $formData->type !== 'review' and $formData->type !== 'feedback')
-        {
-            // TODO
-            $formData->pri = $this->dao->select('pri')->from($this->config->objectTables[$formData->type])->where('id')->eq($formData->objectID)->fetch('pri');
-
-            if($formData->pri == 'high')   $formData->pri = 1;
-            if($formData->pri == 'middle') $formData->pri = 2;
-            if($formData->pri == 'low')    $formData->pri = 3;
-        }
-
-        if($formData->type != 'custom' and $formData->objectID)
-        {
-            $type   = $formData->type;
-            $object = $this->loadModel($type)->getByID($formData->$type);
-            if(isset($object->name))  $formData->name = $object->name;
-            if(isset($object->title)) $formData->name = $object->title;
-        }
-
-        if($formData->end < $formData->begin)
-        {
-            dao::$errors[] = sprintf($this->lang->error->gt, $this->lang->todo->end, $this->lang->todo->begin);
-            return false;
-        }
-
-        if(!empty($formData->cycle)) $formData = $this->setCycle($formData);
-        else unset($formData->config);
-
-        $formData = $this->loadModel('file')->processImgURL($formData, $this->config->todo->editor->create['id'], $this->post->uid);
-
-        return $formData;
+        $data = $formData->add('account', $this->app->user->account)
+            ->setDefault('idvalue', 0)
+            ->setDefault('vision', $this->config->vision)
+            ->setDefault('assignedTo', $this->app->user->account)
+            ->setDefault('assignedBy', $this->app->user->account)
+            ->setDefault('assignedDate', helper::now())
+            ->cleanInt('pri, begin, end, private')
+            ->setIF($hasObject && $objectType,  'idvalue', $idvalue)
+            ->setIF($this->post->date == false,  'date', '2030-01-01')
+            ->setIF($this->post->begin == false, 'begin', '2400')
+            ->setIF($this->post->begin == false or $this->post->end == false, 'end', '2400')
+            ->setIF($this->post->status == 'done', 'finishedBy', $this->app->user->account)
+            ->setIF($this->post->status == 'done', 'finishedDate', helper::now())
+            ->stripTags($this->config->todo->editor->create['id'], $this->config->allowedTags)
+            ->remove(implode(',', $this->config->todo->moduleList) . ',uid')
+            ->get();
     }
 
     /**
-     * 创建待办
-     * Create a todo.
-     *
-     * @param  object $todo
-     * @access protected
-     * @return int|false
-     */
-    protected function doCreate(object $todo): int|bool
-    {
-        return $this->todo->create($todo);
-    }
-
-    /**
-     * 创建完成待办后数据处理
      * Create a todo after data processing
+     * 创建完成待办后数据处理
      *
      * @param  object $todo
      * @access protected

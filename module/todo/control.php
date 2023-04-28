@@ -43,10 +43,8 @@ class todo extends control
 
         if(!empty($_POST))
         {
-            $todo = form::data($this->config->todo->create->form)
-                ->remove(implode(',', $this->config->todo->moduleList) . ',uid')
-                ->stripTags($this->config->todo->editor->create['id'], $this->config->allowedTags)
-                ->get();
+            $formData = form::data($this->config->todo->create->form);
+            $todo     = $this->todoZen->beforeCreate($formData);
 
             $todoID = $this->todo->create($todo);
             if($todoID === false) return print(js::error(dao::getError()));
