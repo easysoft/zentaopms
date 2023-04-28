@@ -359,26 +359,26 @@ class projectTao extends projectModel
      */
     protected function addProjectAdmin(int $projectID): bool
     {
-        $groupPriv = $this->dao->select('t1.*')->from(TABLE_USERGROUP)->alias('t1')
+        $projectAdmin = $this->dao->select('t1.*')->from(TABLE_PROJECTADMIN)->alias('t1')
             ->leftJoin(TABLE_GROUP)->alias('t2')->on('t1.`group` = t2.id')
             ->where('t1.account')->eq($this->app->user->account)
             ->andWhere('t2.role')->eq('projectAdmin')
             ->fetch();
 
-        if(!empty($groupPriv))
+        if(!empty($projectAdmin))
         {
-            $newProject = $groupPriv->project . ",$projectID";
-            $this->dao->update(TABLE_USERGROUP)->set('project')->eq($newProject)->where('account')->eq($groupPriv->account)->andWhere('`group`')->eq($groupPriv->group)->exec();
+            $newProject = $projectAdmin->projects . ",$projectID";
+            $this->dao->update(TABLE_PROJECTADMIN)->set('projects')->eq($newProject)->where('account')->eq($projectAdmin->account)->andWhere('`group`')->eq($projectAdmin->group)->exec();
         }
         else
         {
             $projectAdminID = $this->dao->select('id')->from(TABLE_GROUP)->where('role')->eq('projectAdmin')->fetch('id');
 
-            $groupPriv = new stdclass();
-            $groupPriv->account = $this->app->user->account;
-            $groupPriv->group   = $projectAdminID;
-            $groupPriv->project = $projectID;
-            $this->dao->replace(TABLE_USERGROUP)->data($groupPriv)->exec();
+            $projectAdmin = new stdclass();
+            $projectAdmin->account  = $this->app->user->account;
+            $projectAdmin->group    = $projectAdminID;
+            $projectAdmin->projects = $projectID;
+            $this->dao->replace(TABLE_PROJECTADMIN)->data($projectAdmin)->exec();
         }
 
         return !dao::isError();
