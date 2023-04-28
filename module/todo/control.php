@@ -235,7 +235,7 @@ class todo extends control
 
     /**
      * 关闭待办。
-     * Closed todo.
+     * Close one todo.
      *
      * @param  string $todoID
      * @access public
@@ -245,7 +245,18 @@ class todo extends control
     {
         $todoID = (int)$todoID;
         $todo   = $this->todo->getByID($todoID);
-        if($todo->status == 'done') $this->todo->close($todoID);
+        if($todo->status == 'done')
+        {
+            $isClosed = $this->todo->close($todoID);
+            if(!$isClosed) return print(js::error(dao::getError()));
+        }
+
+        if(defined('RUN_MODE') && RUN_MODE == 'api')
+        {
+            $this->send(array('status' => 'success'));
+            return;
+        }
+
         if(isonlybody()) return print(js::reload('parent.parent'));
 
         return print(js::reload('parent'));
@@ -435,6 +446,7 @@ class todo extends control
     }
 
     /**
+     * 批量关闭待办。只有完成的待办才能关闭。
      * Batch close todos. The status of todo which need to close should be done.
      *
      * @access public

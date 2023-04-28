@@ -545,10 +545,10 @@ class todoModel extends model
     }
 
     /**
+     * 关闭待办。如果是企业版或旗舰版则更新关联的反馈。
      * Close todo. Update related feedback if edition is biz or max.
      *
-     * @param int $todoID
-     *
+     * @param  int    $todoID
      * @access public
      * @return bool
      */
