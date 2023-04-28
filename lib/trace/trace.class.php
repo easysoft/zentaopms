@@ -1,14 +1,29 @@
 <?php
+declare(strict_types=1);
+/**
+ * The trace class file of ZenTaoPMS.
+ *
+ * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @license     ZPL(https://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
+ * @author      Lu Fei <lufei@easycorp.ltd>
+ * @package     trace
+ * @link        https://www.zentao.net
+ */
 
 class trace
 {
+    /**
+     * @var string[]
+     */
     protected $types = array(
-        'Request'     => '请求',
-        'Files'       => '文件',
-        'SQL Query'   => 'SQL 查询',
-        'SQL Explain' => 'SQL Explain',
+        'Request'   => '请求',
+        'Files'     => '文件',
+        'SQL Query' => 'SQL 查询'
     );
 
+    /**
+     * @var array
+     */
     public $trace = array();
 
     protected $app;
@@ -22,7 +37,13 @@ class trace
         $this->dao = $dao;
     }
 
-    public function getRequestInfo()
+    /**
+     * 获取请求信息。
+     * Get request info.
+     *
+     * @return void
+     */
+    public function getRequestInfo(): void
     {
         $this->trace['Request'] = array(
             'start'    => date('Y-m-d H:i:s', (int)$this->app->startTime),
@@ -38,25 +59,35 @@ class trace
         );
     }
 
-    public function getRequestFiles()
+    /**
+     * 获取请求加载的文件。
+     * Get request files.
+     *
+     * @return void
+     */
+    public function getRequestFiles(): void
     {
         $this->trace['Files'] = get_included_files();
     }
 
-    public function getRequestSqls()
+    /**
+     * 获取请求的 SQL 语句。
+     * Get request SQLs.
+     *
+     * @return void
+     */
+    public function getRequestSqls(): void
     {
-        $explain = array();
-        /**
-        foreach(dao::$querys as $query)
-        {
-            $explain[] = $this->dao->explain($query, false);
-        }
-        */
-        $this->trace['SQL Query']   = dao::$querys;
-        $this->trace['SQL Explain'] = $explain;
+        $this->trace['SQL Query'] = dao::$querys;
     }
 
-    public function getTrace()
+    /**
+     * 生成请求 Trace。
+     * Generate request trace.
+     *
+     * @return array
+     */
+    public function getTrace(): array
     {
         $this->getRequestInfo();
         $this->getRequestFiles();
@@ -64,14 +95,20 @@ class trace
         return $this->trace;
     }
 
-    public function output()
+    /**
+     * 输出 Trace。
+     * Output trace.
+     *
+     * @return string
+     */
+    public function output(): string
     {
         $this->getTrace();
         $lines = '';
         foreach($this->trace as $type => $content)
         {
             if($type == 'SQL Explain') continue;
-            $lines .= $this->console($type, empty($content) ? array() : $content);
+            $lines .= $this->console($type, empty($content) ? array() : (array)$content);
         }
 
         $lines .= $this->printSQLProfile();
@@ -85,13 +122,21 @@ JS;
         return $js;
     }
 
-    protected function console(string $type, $content)
+    /**
+     * 拼接需要输出到 console 的内容。
+     * Concat the content to output to console.
+     *
+     * @param string $type
+     * @param array  $content
+     * @return string
+     */
+    protected function console(string $type, array $content): string
     {
         $traceTabs = array_keys($this->types);
         $line      = array();
         $line[]    = $type == $traceTabs[0] ? "console.group('{$type}');" : "console.groupCollapsed('{$type}');";
 
-        foreach((array) $content as $key => $item)
+        foreach($content as $key => $item)
         {
             switch ($type) {
                 case 'SQL Query':
@@ -123,7 +168,12 @@ JS;
         return implode(PHP_EOL, $line);
     }
 
-    protected function printSQLProfile()
+    /**
+     * 拼接 SQL Profile。
+     *
+     * @return string
+     */
+    protected function printSQLProfile(): string
     {
         $lines = array();
 
@@ -137,6 +187,9 @@ JS;
         return implode(PHP_EOL, $lines);
     }
 
+    /**
+     * @return string
+     */
     public function __toString(): string
     {
         return json_encode($this->getTrace());
