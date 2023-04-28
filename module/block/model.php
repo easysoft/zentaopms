@@ -187,10 +187,18 @@ class blockModel extends model
      * @access public
      * @return string
      */
-    public function getParams(string $block, string $module): string
+    public function getParams(string $code, string $module): string
     {
-        $block = $block == 'todo' ? $module : $block;
-        $params = zget($this->config->block->params, $block, '');
+        if($code == 'todo' || $code == 'list')
+        {
+            $code = $module;
+        }
+        elseif($code == 'statistic')
+        {
+            $code = $module . 'Statistic';
+        }
+
+        $params = zget($this->config->block->params, $code, '');
         return json_encode($params);
     }
 
