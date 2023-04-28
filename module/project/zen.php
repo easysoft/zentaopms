@@ -306,10 +306,36 @@ class projectZen extends project
     }
 
     /**
+     * Append extras data to post data.
+     *
+     * @param  int    $iprojectID
+     * @param  object $postData
+     *
+     * @access protected
+     * @return object
+     */
+    protected function prepareClosedExtras(int $projectID, object $postData): object
+    {
+        $editorIdList = $this->config->project->editor->suspend['id'];
+        if($this->app->rawModule == 'program') $editorIdList = $this->config->program->editor->suspend['id'];
+
+        return  $postData->add('id', $projectID)
+            ->setDefault('status', 'closed')
+            ->setDefault('closedBy', $this->app->user->account)
+            ->setDefault('closedDate', helper::now())
+            ->setDefault('lastEditedBy', $this->app->user->account)
+            ->setDefault('lastEditedDate', helper::now())
+            ->stripTags($editorIdList, $this->config->allowedTags)
+            ->remove('comment')
+            ->get();
+    }
+
+    /**
      * Send variables to view page.
      *
      * @param  object $project
      * @access protected
+     *
      * @return void
      */
     protected function buildStartForm(object $project): void
@@ -327,6 +353,7 @@ class projectZen extends project
      * @param  object $project
      * @param  array  $changes
      * @param  string $comment
+     *
      * @access protected
      * @return void
      */
@@ -371,7 +398,6 @@ class projectZen extends project
      *
      * @param  int $projectID
      * @access protected
-     * @return int
      */
     protected function buildSuspendForm(int $projectID): void
     {
@@ -379,6 +405,46 @@ class projectZen extends project
         $this->view->users   = $this->loadModel('user')->getPairs('noletter');
         $this->view->actions = $this->loadModel('action')->getList('project', $projectID);
         $this->view->project = $this->project->getByID($projectID);
+        $this->display();
+    }
+
+    /**
+     * After closing the project, do other operations.
+     *
+     * @param  int    $projectID
+     * @param  array  $changes
+     * @param  string $comment
+     *
+     * @access protected
+     * @return void
+     */
+    protected function responseAfterClose(int $projectID, array $changes, string $comment): void
+    {
+        if($comment != '' or !empty($changes))
+        {
+            $actionID = $this->loadModel('action')->create('project', $projectID, 'Closed', $comment);
+            $this->action->logHistory($actionID, $changes);
+        }
+
+        $this->loadModel('common')->syncPPEStatus($projectID);
+
+        $this->executeHooks($projectID);
+    }
+
+    /**
+     * Send variables to close page.
+     *
+     * @param  int $projectID
+     * @access protected
+     *
+     * @return void
+     */
+    protected function buildClosedForm(int $projectID): void
+    {
+        $this->view->title   = $this->lang->project->close;
+        $this->view->users   = $this->loadModel('user')->getPairs('noletter');
+        $this->view->project = $this->project->getByID($projectID);
+        $this->view->actions = $this->loadModel('action')->getList('project', $projectID);
         $this->display();
     }
 }

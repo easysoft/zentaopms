@@ -10,9 +10,8 @@ class pageForm extends page
 
     public function children()
     {
-        return
-        [
+        return array(
             formPanel(set($this->prop('formPanel')), parent::children())
-        ];
+        );
     }
 }

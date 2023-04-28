@@ -3,8 +3,7 @@ namespace zin;
 
 class checkbox extends wg
 {
-    protected static $defineProps =
-    [
+    protected static $defineProps = array(
         'text?: string',
         'checked?: bool',
         'name?: string',
@@ -15,7 +14,7 @@ class checkbox extends wg
         'value?: string',
         'typeClass?: string',
         'rootClass?: string'
-    ];
+    );
 
     public function onAddChild($child)
     {

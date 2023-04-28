@@ -14,7 +14,6 @@ function initData()
     $block->module->range('test');
     $block->title->prefix('区块')->range('2');
     $block->source->range('my');
-    $block->block->range('bug');
     $block->order->range('5');
 
     $block->gen(1);
@@ -54,7 +53,6 @@ $newBlock->module  = 'newmy';
 $newBlock->title   = 'new区块';
 $newBlock->source  = 'newmy';
 $newBlock->params  = '';
-$newBlock->block   = 'newbug';
 $newBlock->order   = '5';
 
 $accoutTooLangBlock = new stdclass();
@@ -64,11 +62,10 @@ $accoutTooLangBlock->vision  = 'rnd';
 $accoutTooLangBlock->module  = 'my';
 $accoutTooLangBlock->title   = 'long account';
 $accoutTooLangBlock->source  = 'my';
-$accoutTooLangBlock->block   = 'bug';
 $accoutTooLangBlock->order   = '5';
 
 $blockTest = new blockTest();
 $newBlockID = $blockTest->updateTest($newBlock);
 
-r($tester->block->getByID($newBlockID)) && p('account,vision,module,title,source,block,order') && e("{$newBlock->account},{$newBlock->vision},{$newBlock->module},{$newBlock->title},{$newBlock->source},{$newBlock->block},{$newBlock->order}"); // 测试获取正常的block的内容
+r($tester->block->getByID($newBlockID)) && p('account,vision,module,title,source,order') && e("newadmin,lite,newmy,new区块,newmy,5"); // 测试获取正常的block的内容
 r($blockTest->updateTest($accoutTooLangBlock)) && p('account:0') && e('『所属用户』长度应当不超过『30』，且大于『0』。'); // 测试account 字段字符超出长度

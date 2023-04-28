@@ -3,8 +3,7 @@ namespace zin;
 
 class select extends wg
 {
-    static $defineProps =
-    [
+    static $defineProps = array(
         'name: string',
         'id?: string',
         'class?: string="form-control"',
@@ -14,7 +13,7 @@ class select extends wg
         'multiple?: bool',
         'items?: array',
         'size?: number',
-    ];
+    );
 
     public function onBuildItem($item)
     {

@@ -52,6 +52,30 @@ class projectTao extends projectModel
     }
 
     /**
+     * Update project table when close a project.
+     *
+     * @param  int    $projectID
+     * @param  object $project
+     * @param  object $oldProject
+     *
+     * @access protected
+     * @return bool
+     */
+    protected function doClosed(int $projectID, object $project, object $oldProject): bool
+    {
+        $this->dao->update(TABLE_PROJECT)->data($project)
+            ->autoCheck()
+            ->check($this->config->project->close->requiredFields, 'notempty')
+            ->checkIF($project->realEnd != '', 'realEnd', 'le', helper::today())
+            ->checkIF($project->realEnd != '', 'realEnd', 'ge', $oldProject->realBegan)
+            ->checkFlow()
+            ->where('id')->eq($projectID)
+            ->exec();
+
+        return !dao::isError();
+    }
+
+    /**
      * Update project.
      *
      * @param  int    $projectID

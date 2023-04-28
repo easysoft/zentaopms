@@ -16,13 +16,14 @@ jsVar('dashboard', $dashboard);
 
 $paramsRows = array();
 
-foreach($params as $code => $row)
+foreach($params as $key => $row)
 {
     $paramsRows[] = formGroup
     (
         set::label($row['name']),
         set::name('params'),
         set::class('form-row'),
+        set::value($block->params->{$key}),
         set::control(array
         (
             'type'  => $row['control'],
@@ -34,7 +35,7 @@ foreach($params as $code => $row)
 form
 (
     on::change('#module', 'getForm'),
-    on::change('#block', 'getForm'),
+    on::change('#code', 'getForm'),
     formGroup
     (
         set::label($lang->block->lblModule),
@@ -47,18 +48,17 @@ form
     ),
     div
     (
-        set::id('blockRow'),
-        set::class('form-row'),
-        $blocks
+        set::id('codeRow'),
+        $codes
         ? formGroup
         (
             set::label($lang->block->lblBlock),
-            set::name('block'),
-            set::value($block),
+            set::name('code'),
+            set::value($code),
             set::control(array
             (
                 'type'  => 'select',
-                'items' => array('') + $blocks
+                'items' => array('') + $codes
             ))  
         ) : null
     ),
@@ -67,15 +67,16 @@ form
         set::id('paramsRow'),
         set::class('form-grid'),
         $paramsRows,
-        (($module and $block) or ($module and !$blocks))
+        (($module and $code) or ($module and !$codes))
         ? formGroup
         (
             set::label($lang->block->name),
             set::name('title'),
+            set::value(zget($modules, $module, '') . zget($codes, $code, '')),
             set::class('form-row'),
             set::control('input')  
         ) : null,
-        (($module and $block) or ($module and !$blocks))
+        (($module and $code) or ($module and !$codes))
         ? formGroup
         (
             set::label($lang->block->grid),

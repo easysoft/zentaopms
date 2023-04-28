@@ -4,10 +4,24 @@ declare(strict_types=1);
 class todoTao extends todoModel
 {
     /**
+     * Get a todo.
+     * 获取单条待办.
+     *
+     * @param  int     $todoID
+     * @param  object  $todo
+     * @return object
+     */
+    protected function fetch(int $todoID): object
+    {
+        return $this->dao->select('*')->from(TABLE_TODO)->where('id')->eq($todoID)->fetch();
+    }
+
+    /**
      * 插入待办数据
      * Insert todo data.
      *
      * @param  object $todo
+     * @access protected
      * @return int
      */
     protected function insert(object $todo): int
@@ -27,6 +41,7 @@ class todoTao extends todoModel
      *
      * @param  int    $todoID
      * @param  object $todo
+     * @access protected
      * @return bool
      */
     protected function updateRow(int $todoID, object $todo): bool
@@ -45,6 +60,7 @@ class todoTao extends todoModel
      * Close one todo.
      *
      * @param int $todoID
+     * @access protected
      * @return bool
      */
     protected function closeTodo(int $todoID): bool
@@ -64,25 +80,14 @@ class todoTao extends todoModel
 
     /*
      * 处理要创建的todo的数据
-     * Processing todo data.
+     * Process the data for the todo to be created.
      *
      * @param  object $todoData
+     * @access protected
      * @return object|false
      */
-    protected function beforeCreate(object $todoData): object|false
+    protected function processCreateData(object $todoData): object|false
     {
-        $objectID  = 0;
-        $hasObject = in_array($todoData->type, $this->config->todo->moduleList);
-        if($hasObject && $todoData->type) $objectID = $todoData->uid ? $todoData->type : $todoData->objectID;
-
-        $todoData->account    = $this->app->user->account;
-        $todoData->assignedTo = zget($todoData, 'assignedTo', $this->app->user->account);
-        $todoData->assignedBy = zget($todoData, 'assignedBy', $this->app->user->account);
-
-        if($hasObject && $todoData->type) $todoData->objectID     = $objectID;
-        if($todoData->status == 'done')   $todoData->finishedBy   = $this->app->user->account;
-        if($todoData->status == 'done')   $todoData->finishedDate = helper::now();
-
         if(!isset($todoData->pri) and in_array($todoData->type, $this->config->todo->moduleList) and !in_array($todoData->type, array('review', 'feedback')))
         {
             $todoData->pri = $this->dao->select('pri')->from($this->config->objectTables[$todoData->type])->where('id')->eq($todoData->objectID)->fetch('pri');
@@ -108,7 +113,6 @@ class todoTao extends todoModel
 
         if(!empty($todoData->cycle))
         {
-            /* TODO confirmation. */
             $todoData = $this->setCycle($todoData);
             if(!$todoData) return false;
         }
@@ -123,6 +127,7 @@ class todoTao extends todoModel
      *  Get cycle list.
      * @param  array  $todoList
      * @param  string $orderBy
+     * @access protected
      * @return array
      */
     protected function getCycleList(array $todoList, string $orderBy = 'date_asc'): array
@@ -140,6 +145,7 @@ class todoTao extends todoModel
      * 通过待办构建周期待办数据
      * Build cycle todo.
      * @param  object $todo
+     * @access protected
      * @return stdclass
      */
     protected function buildCycleTodo(object $todo): object
@@ -163,13 +169,15 @@ class todoTao extends todoModel
 
     /**
      * 通过周期待办，获取要生成待办的日期
+     *
      * Gets the date by the cycle todo.
-     * @param  object $todo
-     * @param  object $lastCycle
-     * @param  string $today
+     * @param  object        $todo
+     * @param  object|string $lastCycle
+     * @param  string        $today
+     * @access protected
      * @return false|string
      */
-    protected function getCycleTodoDate(object $todo, object $lastCycle, string $today): false|string
+    protected function getCycleTodoDate(object $todo, object|string $lastCycle, string $today): false|string
     {
         $date = '';
         if($todo->config->type == 'day')
@@ -200,13 +208,16 @@ class todoTao extends todoModel
 
     /**
      * 通过周期待办，获取要生成每日待办的日期
+     *
      * Gets the daily todo date by the cycle todo.
+     *
      * @param  object $todo
-     * @param  object $lastCycle
+     * @param  object|string $lastCycle
      * @param  string $today
+     * @access protected
      * @return false|string
      */
-    private function getCycleDailyTodoDate(object $todo, object $lastCycle, string $today): false|string
+    private function getCycleDailyTodoDate(object $todo, object|string $lastCycle, string $today): false|string
     {
         $date = '';
         if(isset($todo->config->day))
@@ -251,10 +262,11 @@ class todoTao extends todoModel
     }
 
     /**
-     * 设置周期待办数据
      * Set cycle todo data.
+     * 设置周期待办数据
      *
      * @param  object $todoData
+     * @access private
      * @return false|object
      */
     private function setCycle(object $todoData): false|object
@@ -297,5 +309,19 @@ class todoTao extends todoModel
         $todoData->type   = 'cycle';
 
         return $todoData;
+    }
+
+    /**
+     * 修改待办事项的时间。
+     * Update the date of todo.
+     *
+     * @param  array  $idList
+     * @param  string $date
+     * @return int
+     */
+    protected function updateDate(array $todoIdList, string $date): int
+    {
+        $this->dao->update(TABLE_TODO)->set('date')->eq($date)->where('id')->in($todoIdList)->exec();
+        return dao::isError() ? 0 : 1;
     }
 }

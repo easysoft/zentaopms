@@ -9,13 +9,12 @@ class page extends pageBase
 {
     static $defaultProps = array('zui' => true);
 
-    static $defineBlocks =
-    [
+    static $defineBlocks = array(
         'head' => array(),
         'header' => array('map' => 'header'),
         'main' => array('map' => 'main'),
         'footer' => array(),
-    ];
+    );
 
     protected function buildBody()
     {
