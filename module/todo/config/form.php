@@ -35,3 +35,8 @@ $config->todo->assignTo->form['assignedTo']   = array('required' => true,  'type
 $config->todo->batchClose = new stdclass;
 $config->todo->batchClose->form = array();
 $config->todo->batchClose->form['todoIDList'] = array('required' => true, 'type' => 'array');
+
+$config->todo->batchEdit = new stdClass;
+$config->todo->batchEdit->form = array();
+$config->todo->batchEdit->form['todoIDList'] = array('required' => true, 'type' => 'array');
+$config->todo->batchEdit->form['names']      = array('required' => true, 'type' => 'array');

@@ -1768,11 +1768,27 @@ class projectModel extends model
     }
 
     /**
+     * 删除项目并同步执行与产品等状态为删除
+     * Deletes a project and updates related items: product|execution
+     *
+     * @param  string    $table  product|execution
+     * @param  int|array $idList
+     *
+     * @access public
+     * @return void
+     */
+    public function deleteProductAndExcution(string $table, int|array $idList):void
+    {
+        $this->dao->update($table)->set('deleted')->eq(1)->where('id')->in($idList)->exec();
+    }
+
+    /**
      * Update the program of the product.
      *
      * @param  int    $oldProgram
      * @param  int    $newProgram
      * @param  array  $products
+     *
      * @access public
      * @return void
      */
@@ -1806,16 +1822,16 @@ class projectModel extends model
      * @access public
      * @return void
      */
-    public function unlinkMember($projectID, $account, $removeExecution = 'no')
+    public function unlinkMember(int $projectID, string $account, string $removeExecution = 'no'): void
     {
-        $this->dao->delete()->from(TABLE_TEAM)->where('root')->eq((int)$projectID)->andWhere('type')->eq('project')->andWhere('account')->eq($account)->exec();
+        $this->projectTao->unlinkTeamMember($projectID, 'project', $account);
 
         $this->loadModel('user')->updateUserView($projectID, 'project', array($account));
 
         if($removeExecution == 'yes')
         {
             $executions = $this->loadModel('execution')->getByProject($projectID, 'undone', 0, true);
-            $this->dao->delete()->from(TABLE_TEAM)->where('root')->in(array_keys($executions))->andWhere('type')->eq('execution')->andWhere('account')->eq($account)->exec();
+            $this->projectTao->unlinkTeamMember(array_keys($executions), 'execution', $account);
             $this->user->updateUserView(array_keys($executions), 'sprint', array($account));
         }
 

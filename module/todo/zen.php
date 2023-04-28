@@ -4,10 +4,47 @@ declare(strict_types=1);
 class todoZen extends todo
 {
     /**
+     * 生成创建待办视图数据。
+     * Build create form data.
+     *
+     * @param  string $date
+     * @access protected
+     * @return void
+     */
+    protected function buildCreateView(string $date): void
+    {
+        $this->view->title = $this->lang->todo->common . $this->lang->colon . $this->lang->todo->create;
+        $this->view->date  = date('Y-m-d', strtotime($date));
+        $this->view->times = date::buildTimeList($this->config->todo->times->begin, $this->config->todo->times->end, $this->config->todo->times->delta);
+        $this->view->time  = date::now();
+        $this->view->users = $this->loadModel('user')->getPairs('noclosed|nodeleted|noempty');
+
+        $this->display();
+    }
+
+    /**
+     * 生成编辑待办视图数据。
+     * Build create form data.
+     *
+     * @param  object    $todo
+     * @access protected
+     * @return void
+     */
+    protected function buildEditView(object $todo): void
+    {
+        $todo->date = date("Y-m-d", strtotime($todo->date));
+        $this->view->title      = $this->lang->todo->common . $this->lang->colon . $this->lang->todo->edit;
+        $this->view->times      = date::buildTimeList($this->config->todo->times->begin, $this->config->todo->times->end, $this->config->todo->times->delta);
+        $this->view->todo       = $todo;
+        $this->view->users      = $this->loadModel('user')->getPairs('noclosed|nodeleted|noempty');
+
+        $this->display();
+    }
+
+    /**
      * 处理请求数据
      * Processing request data.
      *
-     * @process protected
      * @param  object $formData
      * @access protected
      * @return object
@@ -36,12 +73,13 @@ class todoZen extends todo
             ->stripTags($this->config->todo->editor->create['id'], $this->config->allowedTags)
             ->remove(implode(',', $this->config->todo->moduleList) . ',uid')
             ->get();
+
         return $data;
     }
 
     /**
-     * Create a todo after data processing
-     * 创建完成待办后数据处理
+     * 创建完成待办后数据处理。
+     * Create a todo after data processing.
      *
      * @param  object $todo
      * @access protected
@@ -65,7 +103,7 @@ class todoZen extends todo
     }
 
     /**
-     * 处理编辑待办的请求数据
+     * 处理编辑待办的请求数据。
      * Processing edit request data.
      *
      * @param  int    $todoID
@@ -75,7 +113,7 @@ class todoZen extends todo
      */
     protected function beforeEdit(int $todoID, object $formData): object|false
     {
-        $oldTodo = $this->dao->findById($todoID)->from(TABLE_TODO)->fetch();
+        $oldTodo = $this->dao->findByID($todoID)->from(TABLE_TODO)->fetch();
 
         $objectID   = 0;
         $rowData    = $formData->rawdata;
@@ -96,7 +134,7 @@ class todoZen extends todo
             ->remove(implode(',', $this->config->todo->moduleList) . ',uid')
             ->get();
 
-        $todo = (object) array_merge((array) $rowData, (array) $todo);
+        $todo = (object)array_merge((array)$rowData, (array)$todo);
 
         if(in_array($todo->type, $this->config->todo->moduleList))
         {
@@ -114,9 +152,7 @@ class todoZen extends todo
 
         if(!empty($oldTodo->cycle)) $this->handleCycleConfig($todo);
 
-        $todo = $this->loadModel('file')->processImgURL($todo, $this->config->todo->editor->edit['id'], $rowData->uid);
-
-        return $todo;
+        return $this->loadModel('file')->processImgURL($todo, $this->config->todo->editor->edit['id'], $rowData->uid);
     }
 
     /**
@@ -135,15 +171,109 @@ class todoZen extends todo
         $this->action->logHistory($actionID, $changes);
     }
 
+    protected function batchEditFromMyTodo($type, $userID, $status)
+    {
+        /* Initialize vars. */
+        $editedTodos = array();
+        $todoIDList  = array();
+        $reviews     = array();
+        $columns     = 7;
+
+        if($userID == '') $userID = $this->app->user->id;
+        $user    = $this->loadModel('user')->getById($userID, 'id');
+        $account = $user->account;
+
+        if($this->config->edition == 'max') $reviews = $this->loadModel('review')->getUserReviewPairs($account);
+        $allTodos = $this->todo->getList($type, $account, $status);
+        if($this->post->todoIDList) $todoIDList = $this->post->todoIDList;
+
+        /* Initialize todos whose need to edited. */
+        foreach($allTodos as $todo)
+        {
+            if(in_array($todo->id, $todoIDList))
+            {
+                $editedTodos[$todo->id] = $todo;
+                if($todo->type != 'custom')
+                {
+                    if(!isset($objectIDList[$todo->type])) $objectIDList[$todo->type] = array();
+                    $objectIDList[$todo->type][$todo->objectID] = $todo->objectID;
+                }
+            }
+        }
+
+        $bugs   = $this->bug->getUserBugPairs($account, true, 0, '', '', isset($objectIDList['bug']) ? $objectIDList['bug'] : '');
+        $tasks  = $this->task->getUserTaskPairs($account, 'wait,doing', '', isset($objectIDList['task']) ? $objectIDList['task'] : '');
+        $storys = $this->loadModel('story')->getUserStoryPairs($account, 10, 'story', '', isset($objectIDList['story']) ? $objectIDList['story'] : '');
+        if($this->config->edition != 'open') $this->view->feedbacks = $this->loadModel('feedback')->getUserFeedbackPairs($account, '', isset($objectIDList['feedback']) ? $objectIDList['feedback'] : '');
+        if($this->config->edition == 'max')
+        {
+            $issues        = $this->loadModel('issue')->getUserIssuePairs($account);
+            $risks         = $this->loadmodel('risk')->getUserRiskPairs($account);
+            $opportunities = $this->loadmodel('opportunity')->getUserOpportunityPairs($account);
+        }
+        $testtasks = $this->loadModel('testtask')->getUserTestTaskPairs($account);
+
+        /* Judge whether the edited todos is too large. */
+        $countInputVars  = count($editedTodos) * $columns;
+        $showSuhosinInfo = common::judgeSuhosinSetting($countInputVars);
+
+        unset($this->lang->todo->typeList['cycle']);
+        /* Set Custom*/
+        foreach(explode(',', $this->config->todo->list->customBatchEditFields) as $field) $customFields[$field] = $this->lang->todo->$field;
+        $this->view->customFields = $customFields;
+        $this->view->showFields   = $this->config->todo->custom->batchEditFields;
+
+        /* Assign. */
+        $title      = $this->lang->todo->common . $this->lang->colon . $this->lang->todo->batchEdit;
+        $position[] = html::a($this->createLink('my', 'todo'), $this->lang->my->todo);
+        $position[] = $this->lang->todo->common;
+        $position[] = $this->lang->todo->batchEdit;
+
+        if($showSuhosinInfo) $this->view->suhosinInfo = extension_loaded('suhosin') ? sprintf($this->lang->suhosinInfo, $countInputVars) : sprintf($this->lang->maxVarsInfo, $countInputVars);
+        $this->view->bugs        = $bugs;
+        $this->view->tasks       = $tasks;
+        $this->view->storys      = $storys;
+        if($this->config->edition == 'max')
+        {
+            $this->view->issues        = $issues;
+            $this->view->risks         = $risks;
+            $this->view->opportunities = $opportunities;
+        }
+        $this->view->reviews     = $reviews;
+        $this->view->testtasks   = $testtasks;
+        $this->view->editedTodos = $editedTodos;
+        $this->view->times       = date::buildTimeList($this->config->todo->times->begin, $this->config->todo->times->end, $this->config->todo->times->delta);
+        $this->view->time        = date::now();
+        $this->view->title       = $title;
+        $this->view->position    = $position;
+        $this->view->users       = $this->loadModel('user')->getPairs('noclosed|nodeleted|noempty');
+
+        $this->display();
+    }
+
+    protected function batchEditFromTodoBatchEdit($formData)
+    {
+        $allChanges = $this->todo->batchUpdate();
+        foreach($allChanges as $todoID => $changes)
+        {
+            if(empty($changes)) continue;
+
+            $actionID = $this->loadModel('action')->create('todo', $todoID, 'edited');
+            $this->action->logHistory($actionID, $changes);
+        }
+
+        return print(js::locate($this->session->todoList, 'parent'));
+    }
+
     /**
-     * 处理循环待办的配置文件
+     * 处理周期待办的配置值。
      * Handle cycle config.
      *
      * @param  object $todo
      * @access private
      * @return void
      */
-    private function handleCycleConfig(object &$todo): void
+    private function handleCycleConfig(object $todo): void
     {
         $todo->date            = date('Y-m-d');
         $todo->config['begin'] = $todo->date;
@@ -215,7 +345,7 @@ class todoZen extends todo
     }
 
     /**
-     * 输出确认弹框
+     * 输出确认弹框。
      * Output confirm alert.
      *
      * @param  object $todo
@@ -230,7 +360,8 @@ class todoZen extends todo
         if($todo->type == 'bug')   $app = 'qa';
         if($todo->type == 'task')  $app = 'execution';
         if($todo->type == 'story') $app = 'product';
-        $cancelURL   = $this->server->HTTP_REFERER;
+        $cancelURL = $this->server->http_referer;
+
         return print(js::confirm(sprintf($this->lang->todo->$confirmNote, $todo->objectID), $confirmURL, $cancelURL, $okTarget, 'parent', $app));
     }
 
@@ -244,11 +375,12 @@ class todoZen extends todo
     protected function getProjectPairsByModel(string $model): array
     {
         $model = $model == 'opportunity' ? 'waterfall' : 'all';
-        return $this->loadModel('project')->getPairsByModel((string)$model);
+        return $this->loadModel('project')->getPairsByModel($model);
     }
 
     /**
-     * Build assign to form
+     * 生成待办视图详情数据。
+     * Build assign to todo view
      *
      * @param  object    $todo
      * @param  int       $projectID
@@ -258,7 +390,7 @@ class todoZen extends todo
      * @access protected
      * @return mixed
      */
-    protected function buildAssignToForm(object $todo, int $projectID, array $projects, string $account, $from)
+    protected function buildAssignToTodoView(object $todo, int $projectID, array $projects, string $account, string $from)
     {
         $this->loadModel('user');
         $this->loadModel('product');
@@ -267,14 +399,14 @@ class todoZen extends todo
         $this->view->user            = $this->user->getByID((string)$todo->account);
         $this->view->users           = $this->user->getPairs('noletter');
         $this->view->actions         = $this->loadModel('action')->getList('todo', (int)$todo->id);
-        $this->view->executions      = $this->loadModel('execution')->getPairs();
-        $this->view->products        = $todo->type == 'opportunity' ? $this->product->getPairsByProjectModel('waterfall') : $this->product->getPairs();
-        $this->view->projectProducts = $this->product->getProductPairsByProject((int)$projectID);
         $this->view->position[]      = $this->lang->todo->view;
         $this->view->todo            = $todo;
         $this->view->times           = date::buildTimeList((int)$this->config->todo->times->begin, (int)$this->config->todo->times->end, 5);
         $this->view->from            = $from;
         $this->view->projects        = $projects;
+        $this->view->executions      = $this->loadModel('execution')->getPairs();
+        $this->view->products        = $todo->type == 'opportunity' ? $this->product->getPairsByProjectModel('waterfall') : $this->product->getPairs();
+        $this->view->projectProducts = $this->product->getProductPairsByProject($projectID);
 
         $this->display();
     }
