@@ -12,7 +12,7 @@ fields:
     note: "产品名称"
     fields:
     - field: name1
-      range: []{20},已关闭的{20},[]{20},已关闭的{20},[]{20},已关闭的{20},[]{10},已关闭的{10},[]{10},已关闭的{10},[]{10},已关闭的{10},[]{20}
+      range: "[]{20},已关闭的{20},[]{20},已关闭的{20},[]{20},已关闭的{20},[]{10},已关闭的{10},[]{10},已关闭的{10},[]{10},已关闭的{10},[]{20}"
     - field: name2
       range: 正常产品{40},多分支产品{40},多平台产品{40},独立测试项目{7},独立产品{53},[@#$%%&&*测试名称长度能有多长并且包含特殊字符的一个长长的字符串（）！@#￥%……&*]{10},已删除产品{10}
     - field: name3
@@ -40,7 +40,7 @@ fields:
     note: "产品描述"
     fields:
     - field: desc1
-      range: []{30},产品描述{20}
+      range: "[]{30},产品描述{20}"
     - field: desc2
       range: <div>
                <p><h1>一、禅道项目管理软件是做什么的？</h1>
@@ -76,7 +76,7 @@ fields:
     range: open{10},private{10},open{10},private{10},open{10},private{10},open{10},private{10},open{10},private{10},open{10},private{10},open{5},private{5},open{5},private{5},open{5},private{5},open{5},private{5},open{5},private{5},open{5},private{5},open{20}
   - field: whitelist
     note: "分组白名单"
-    range: []{15},`,test1,dev1,pm1,td1,pd2,qd2,top1,others1`{5},[]{15},`,test1,dev1,pm1,td1,pd2,qd2,top1,others1`{5},[]{15},`,test1,dev1,pm1,td1,pd2,qd2,top1,others1`{5},[]{15},`,test1,dev1,pm1,td1,pd2,qd2,top1,others1`{5},[]{15},`,test1,dev1,pm1,td1,pd2,qd2,top1,others1`{5},[]{15},`,test1,dev1,pm1,td1,pd2,qd2,top1,others1`{5},[]{7},`,test1,dev1,pm1,td1,pd2,qd2,top1,others1`{3},[]{7},`,test1,dev1,pm1,td1,pd2,qd2,top1,others1`{3},[]{7},`,test1,dev1,pm1,td1,pd2,qd2,top1,others1`{3},[]{7},`,test1,dev1,pm1,td1,pd2,qd2,top1,others1`{3},[]{7},`,test1,dev1,pm1,td1,pd2,qd2,top1,others1`{3},[]{7},`,test1,dev1,pm1,td1,pd2,qd2,top1,others1`{3},[]{20}
+    range: "[]{15},`,test1,dev1,pm1,td1,pd2,qd2,top1,others1`{5},[]{15},`,test1,dev1,pm1,td1,pd2,qd2,top1,others1`{5},[]{15},`,test1,dev1,pm1,td1,pd2,qd2,top1,others1`{5},[]{15},`,test1,dev1,pm1,td1,pd2,qd2,top1,others1`{5},[]{15},`,test1,dev1,pm1,td1,pd2,qd2,top1,others1`{5},[]{15},`,test1,dev1,pm1,td1,pd2,qd2,top1,others1`{5},[]{7},`,test1,dev1,pm1,td1,pd2,qd2,top1,others1`{3},[]{7},`,test1,dev1,pm1,td1,pd2,qd2,top1,others1`{3},[]{7},`,test1,dev1,pm1,td1,pd2,qd2,top1,others1`{3},[]{7},`,test1,dev1,pm1,td1,pd2,qd2,top1,others1`{3},[]{7},`,test1,dev1,pm1,td1,pd2,qd2,top1,others1`{3},[]{7},`,test1,dev1,pm1,td1,pd2,qd2,top1,others1`{3},[]{20}"
   - field: createdBy
     note: "创建者"
     fields:
