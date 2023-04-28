@@ -6,8 +6,7 @@ require_once dirname(__DIR__) . DS . 'formrow' . DS . 'v1.php';
 
 class form extends wg
 {
-    protected static $defineProps =
-    [
+    protected static $defineProps = array(
         'method?: string',
         'url?: string',
         'actions?: array',
@@ -17,15 +16,14 @@ class form extends wg
         'labelWidth?: number',
         'submitBtnText?: string',
         'cancelBtnText?: string',
-    ];
+    );
 
-    protected static $defaultProps =
-    [
+    protected static $defaultProps = array(
         'grid'          => true,
         'method'        => 'post',
         'target'        => 'ajax',
         'actions'       => ['submit', 'cancel'],
-    ];
+    );
 
     public function onBuildItem($item)
     {

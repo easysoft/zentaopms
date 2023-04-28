@@ -52,15 +52,14 @@ class dom
 
     public function __debugInfo()
     {
-        return
-        [
+        return array(
             'gid'          => $this->wg->gid,
             'type'         => $this->wg->type(),
             'count'        => count($this->children),
             'renderInner'  => $this->renderInner,
             'renderType'   => $this->renderType,
             'selectors'    => stringifyWgSelectors($this->selectors)
-        ];
+        );
     }
 
     public function add($children)

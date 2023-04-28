@@ -5,8 +5,7 @@ require_once dirname(__DIR__) . DS . 'input' . DS . 'v1.php';
 
 class datetimePicker extends input
 {
-    static $defaultProps =
-    [
+    static $defaultProps = array(
         'type' => 'datetime-local'
-    ];
+    );
 }

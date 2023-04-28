@@ -1,0 +1,42 @@
+#!/usr/bin/env php
+<?php
+include dirname(__FILE__, 5) . "/test/lib/init.php";
+include dirname(__FILE__, 2) . '/task.class.php';
+
+$task = zdTable('task');
+$task->id->range('1-9');
+$task->name->setFields(array(
+    array('field' => 'name1', 'range' => '父任务{3},子任务{3},普通任务{3}'),
+    array('field' => 'name2', 'range' => '1-9')
+));
+$task->parent->range('`-1`{3},,1{2},2,0{3}');
+$task->status->range('doing,closed,wait{2},doing{3},wait{2}');
+$task->closedBy->range('[],admin,[]{7}');
+
+$task->gen(9);
+su('admin');
+
+/**
+
+title=taskModel->buildTaskTree();
+timeout=0
+cid=1
+
+*/
+
+$taskTester = new taskTest();
+$allTaskIdList       = range(1, 9);
+$notParentTaskIdList = range(4, 9);
+
+$emptyData           = $taskTester->buildTaskTreeTest(array());
+$allTasks            = $taskTester->buildTaskTreeTest($allTaskIdList);
+$notParentTasks      = $taskTester->buildTaskTreeTest($notParentTaskIdList);
+$parentTask          = current($allTasks);
+$allTasksCount       = count($allTasks);
+$notParentTasksCount = count($notParentTasks);
+
+r($emptyData)             && p()               && e('0');       // 测试空数据的情况
+r($allTasksCount)         && p()               && e('6');       // 测试数据中有父任务时，重构结构后的任务数量
+r($parentTask->children)  && p('4:name')       && e('子任务4'); // 测试数据中有父任务时，重构结构后子任务的数据
+r($notParentTasksCount)   && p()               && e('6');       // 测试数据中没有父任务时，重构结构后的任务数量
+r($notParentTasks)        && p('4:parentName') && e('父任务1'); // 测试数据中没有父任务时，重构结构后的子任务中父任务的名称

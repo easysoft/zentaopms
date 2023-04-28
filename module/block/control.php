@@ -26,15 +26,15 @@ class block extends control
     }
 
     /**
-     * Create a block.
+     * Create a block under a dashboard.
      * 
      * @param  string $dashboard 
      * @param  string $module
-     * @param  string $block 
+     * @param  string $code 
      * @access public
      * @return void
      */
-    public function create(string $dashboard, string $module = '', string $block = '')
+    public function create(string $dashboard, string $module = '', string $code = '')
     {
         if($_POST)
         {
@@ -47,12 +47,16 @@ class block extends control
 
             $this->block->create($formData);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => 1));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true, 'closeModal' => true, 'callback' => 'loadCurrentPage()'));
         }
 
-        $this->view->title = $this->lang->block->createBlock;
-        $this->view->block = $block;
-        $this->blockZen->buildCreateForm($dashboard, $module, $block); 
+        $this->view->title     = $this->lang->block->createBlock;
+        $this->view->dashboard = $dashboard;
+        $this->view->module    = $module;
+        $this->view->code      = $code;
+        $this->view->modules   = $this->blockZen->getAvailableModules($dashboard);
+        $this->view->codes     = $this->blockZen->getAvailableBlocks($dashboard, $module);
+        $this->view->params    = $this->blockZen->getAvailableParams($dashboard, $module, $code);
         $this->display();
     }
 
@@ -60,27 +64,41 @@ class block extends control
      * Update a block. 
      * 
      * @param  string $dashboard 
-     * @param  int    $blockID 
+     * @param  string $module 
+     * @param  string $code 
      * @access public
      * @return void
      */
-    public function edit(string $dashboard, int $blockID)
+    public function edit(string $blockID, string $module = '', string $code = '')
     {
+        $blockID = (int)$blockID;
         if($_POST)
         {
-            $formData = form::use($this->config->example->edit)->get();
+            $formData = form::data($this->config->block->form->edit)->get();
+            $formData->id     = $blockID;
+            $formData->params = helper::jsonEncode($formData->params);
+
             $this->block->update($formData);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'reload'));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true, 'closeModal' => true, 'callback' => 'loadCurrentPage()'));
         }
-        $this->blockZen->buildCreateForm($dashboard); 
+
+        $block = $this->block->getByID($blockID);
+
+        $this->view->title     = $this->lang->block->editBlock;
+        $this->view->block     = $block;
+        $this->view->module    = $module ? $module : $block->module;
+        $this->view->code      = $code   ? $code   : $block->code;
+        $this->view->modules   = $this->blockZen->getAvailableModules($block->dashboard);
+        $this->view->codes     = $this->blockZen->getAvailableBlocks($block->dashboard, $this->view->module);
+        $this->view->params    = $this->blockZen->getAvailableParams($block->dashboard, $this->view->module, $this->view->code);
         $this->display();
     }
 
     public function set($id, $type, $module = '')
     {
         $block = $this->block->getByID($id);
-        if($block and empty($type)) $type = $block->block;
+        if($block and empty($type)) $type = $block->code;
         if(isset($block->params->num) and !isset($block->params->count))
         {
             $block->params->count = $block->params->num;
@@ -185,15 +203,15 @@ class block extends control
     }
 
     /**
+     * 展示应用的仪表盘
      * Display dashboard for app.
      *
-     * @param  string    $module
-     * @param  string    $type
-     * @param  int       $projectID
+     * @param  string  $module
+     * @param  int     $projectID
      * @access public
      * @return void
      */
-    public function dashboard($module, $projectID = 0)
+    public function dashboard(string $module, int $projectID = 0)
     {
         if($this->loadModel('user')->isLogon()) $this->session->set('blockModule', $module);
         $blocks = $this->block->getMyDashboard($module);
@@ -206,103 +224,25 @@ class block extends control
             $section = $project->model . 'common';
         }
 
-        $inited = $this->dao->select('*')->from(TABLE_CONFIG)
-            ->where('module')->eq($module)
-            ->andWhere('owner')->eq($this->app->user->account)
-            ->andWhere('`section`')->eq($section)->fi()
-            ->andWhere('`key`')->eq('blockInited')
-            ->andWhere('vision')->eq($vision)
-            ->fetch('value');
+        $isInitiated = $this->block->fetchBlockInitStatus($module, $vision, $section);
 
         /* Init block when vist index first. */
-        if((empty($blocks) and !$inited and !defined('TUTORIAL')))
+        if(empty($blocks) and !$isInitiated and !defined('TUTORIAL') and $this->block->initBlock($module))
         {
-            if($this->block->initBlock($module, $type)) return print(js::reload());
+            return print(js::reload());
         }
 
-        $acls = $this->app->user->rights['acls'];
-        $shortBlocks = $longBlocks = array();
-        foreach($blocks as $key => $block)
-        {
-            if(in_array($block->block, array('waterfallrisk', 'waterfallissue')))
-            {
-                $model = isset($project->model) ? $project->model : 'waterfall';
-                if($block->block == 'waterfallrisk' and !helper::hasFeature("{$model}_risk")) continue;
-                if($block->block == 'waterfallissue' and !helper::hasFeature("{$model}_issue")) continue;
-            }
+        $blocks = $this->blockZen->processBlockForRender($blocks, isset($project) ? $project : null);
 
-            if(in_array($block->block, array('scrumrisk', 'scrumissue')))
-            {
-                $model = isset($project->model) ? $project->model : 'scrum';
-                if($block->block == 'scrumrisk' and !helper::hasFeature("{$model}_risk")) continue;
-                if($block->block == 'scrumissue' and !helper::hasFeature("{$model}_issue")) continue;
-            }
+        if($this->app->getViewType() == 'json') return print(json_encode($blocks));
 
-            if(!empty($block->source) and $block->source != 'todo' and !empty($acls['views']) and !isset($acls['views'][$block->source]))
-            {
-                unset($blocks[$key]);
-                continue;
-            }
-
-            $block->params = json_decode($block->params);
-            if(isset($block->params->num) and !isset($block->params->count)) $block->params->count = $block->params->num;
-
-            $blockID = $block->block;
-            $source  = empty($block->source) ? 'common' : $block->source;
-
-            $block->blockLink = $this->createLink('block', 'printBlock', "id=$block->id&module=$block->module");
-            $block->moreLink  = '';
-            if(isset($this->config->block->modules[$source]->moreLinkList->{$blockID}))
-            {
-                list($moduleName, $method, $vars) = explode('|', sprintf($this->config->block->modules[$source]->moreLinkList->{$blockID}, isset($block->params->type) ? $block->params->type : ''));
-
-                /* The list assigned to me jumps to the work page when click more button. */
-                $block->moreLink = $this->createLink($moduleName, $method, $vars);
-                if($moduleName == 'my' and strpos($this->config->block->workMethods, $method) !== false)
-                {
-                    $block->moreLink = $this->createLink($moduleName, 'work', 'mode=' . $method . '&' . $vars);
-                }
-                elseif($moduleName == 'project' and $method == 'dynamic')
-                {
-                    $block->moreLink = $this->createLink('project', 'dynamic', "projectID=$projectID&type=all");
-                }
-                elseif($moduleName == 'project' and $method == 'execution')
-                {
-                    $block->moreLink = $this->createLink('project', 'execution', "status=all&projectID=$projectID");
-                }
-                elseif($moduleName == 'project' and $method == 'testtask')
-                {
-                    $block->moreLink = $this->createLink('project', 'testtask', "projectID=$projectID");
-                }
-                elseif($moduleName == 'testtask' and $method == 'browse')
-                {
-                    $block->moreLink = $this->createLink('testtask', 'browse', "productID=0&branch=0&type=all,totalStatus");
-                }
-
-            }
-            elseif($block->block == 'dynamic')
-            {
-                $block->moreLink = $this->createLink('company', 'dynamic');
-            }
-
-            if($this->block->isLongBlock($block))
-            {
-                $longBlocks[$key] = $block;
-            }
-            else
-            {
-                $shortBlocks[$key] = $block;
-            }
-        }
+        list($shortBlocks, $longBlocks) = $this->blockZen->splitBlocksByLen($blocks);
 
         $this->view->title       = zget($this->lang->block->dashboard, $module, $this->lang->block->dashboard['default']);
         $this->view->longBlocks  = $longBlocks;
         $this->view->shortBlocks = $shortBlocks;
         $this->view->dashboard   = $module;
-
-        if($this->app->getViewType() == 'json') return print(json_encode($blocks));
-
-        $this->display();
+        $this->render();
     }
 
     /**
@@ -376,12 +316,12 @@ class block extends control
      */
     public function printBlock($id, $module = 'my')
     {
-        $block = $this->block->getByID($id);
+        $block = $this->block->getByID((int)$id);
 
         if(empty($block)) return false;
 
         $html = '';
-        if($block->block == 'html')
+        if($block->code == 'html')
         {
             if (empty($block->params->html))
             {
@@ -398,28 +338,28 @@ class block extends control
             $this->get->set('blockTitle', $block->title);
             $this->get->set('module', $block->module);
             $this->get->set('source', $block->source);
-            $this->get->set('blockid', $block->block);
+            $this->get->set('blockid', $block->code);
             $this->get->set('param', base64_encode(json_encode($block->params)));
             $html = $this->fetch('block', 'main', "module={$block->source}&id=$id");
         }
-        elseif($block->block == 'dynamic')
+        elseif($block->code == 'dynamic')
         {
             $html = $this->fetch('block', 'dynamic');
         }
-        elseif($block->block == 'guide')
+        elseif($block->code == 'guide')
         {
             $html = $this->fetch('block', 'guide', "blockID=$block->id");
         }
-        elseif($block->block == 'assigntome')
+        elseif($block->code == 'assigntome')
         {
             $this->get->set('param', base64_encode(json_encode($block->params)));
             $html = $this->fetch('block', 'printAssignToMeBlock', 'longBlock=' . $this->block->isLongBlock($block));
         }
-        elseif($block->block == 'welcome')
+        elseif($block->code == 'welcome')
         {
             $html = $this->fetch('block', 'welcome', "blockID=$block->id");
         }
-        elseif($block->block == 'contribute')
+        elseif($block->code == 'contribute')
         {
             $html = $this->fetch('block', 'contribute');
         }
@@ -2215,8 +2155,8 @@ class block extends control
     {
         $block = $this->block->getByID($blockID);
         $closedBlock = isset($this->config->block->closed) ? $this->config->block->closed : '';
-        $this->dao->delete()->from(TABLE_BLOCK)->where('source')->eq($block->source)->andWhere('block')->eq($block->block)->exec();
-        $this->loadModel('setting')->setItem('system.block.closed', $closedBlock . ",{$block->source}|{$block->block}");
+        $this->dao->delete()->from(TABLE_BLOCK)->where('source')->eq($block->source)->andWhere('code')->eq($block->code)->exec();
+        $this->loadModel('setting')->setItem('system.block.closed', $closedBlock . ",{$block->source}|{$block->code}");
         return print(js::reload('parent'));
     }
 

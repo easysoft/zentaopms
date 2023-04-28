@@ -16,7 +16,7 @@
 <?php js::set('noTodo', $lang->todo->noTodo);?>
 <?php js::set('moduleList', $config->todo->moduleList)?>
 <?php js::set('objectsMethod', $config->todo->getUserObjectsMethod)?>
-<?php js::set('nameBoxLabel', array('custom' => $lang->todo->name, 'idvalue' => $lang->todo->idvalue));?>
+<?php js::set('nameBoxLabel', array('custom' => $lang->todo->name, 'objectID' => $lang->todo->objectID));?>
 <?php js::set('vision', $config->vision);?>
 <?php js::set('noOptions', $lang->todo->noOptions);?>
 <?php js::set('chosenType', $lang->todo->typeList);?>

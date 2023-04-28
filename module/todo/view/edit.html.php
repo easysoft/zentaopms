@@ -15,9 +15,9 @@
 <?php include '../../common/view/kindeditor.html.php';?>
 <?php js::set('moduleList', $config->todo->moduleList)?>
 <?php js::set('objectsMethod', $config->todo->getUserObjectsMethod)?>
-<?php js::set('idvalue', $todo->idvalue);?>
+<?php js::set('objectID', $todo->objectID);?>
 <?php js::set('defaultType', $todo->type);?>
-<?php js::set('nameBoxLabel', array('custom' => $lang->todo->name, 'idvalue' => $lang->todo->idvalue));?>
+<?php js::set('nameBoxLabel', array('custom' => $lang->todo->name, 'objectID' => $lang->todo->objectID));?>
 <?php js::set('vision', $config->vision);?>
 <?php js::set('noOptions', $lang->todo->noOptions);?>
 <?php js::set('chosenType', $lang->todo->typeList);?>
@@ -127,7 +127,7 @@
       <div class="row form-group">
         <label class="col-sm-1"><?php echo $lang->todo->type;?></label>
         <div class="col-sm-4 dateWidth">
-          <?php echo html::select('type', $lang->todo->typeList, $todo->type, "onchange='loadList(this.value, \"\", \"{$todo->type}\", {$todo->idvalue})' class='form-control'");?>
+          <?php echo html::select('type', $lang->todo->typeList, $todo->type, "onchange='loadList(this.value, \"\", \"{$todo->type}\", {$todo->objectID})' class='form-control'");?>
         </div>
       </div>
       <?php endif;?>
@@ -138,7 +138,7 @@
         </div>
       </div>
       <div class="row form-group">
-        <label id='nameBoxLabel' class="col-sm-1"><?php echo ($todo->type == 'custom' or $config->vision == 'rnd') ? $lang->todo->name : $lang->todo->idvalue;?></label>
+        <label id='nameBoxLabel' class="col-sm-1"><?php echo ($todo->type == 'custom' or $config->vision == 'rnd') ? $lang->todo->name : $lang->todo->objectID;?></label>
         <div class="col-sm-10">
           <div id='nameBox' class='hidden'><?php echo html::input('name', $todo->name, "class='form-control'");?></div>
             <div class='input-group title-group required'>

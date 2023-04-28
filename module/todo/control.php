@@ -1,13 +1,14 @@
 <?php
 declare(strict_types=1);
+
 /**
- * The control file of todo module of ZenTaoPMS.
+ * The control file of example module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @license     ZPL(https://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
- * @author      lanzongjun@easycorp.ltd;
+ * @author      Lanzongjun <lanzongjun@easycorp.ltd>
  * @package     todo
- * @link        http://www.zentao.net
+ * @link        https://www.zentao.net
  */
 class todo extends control
 {
@@ -20,6 +21,7 @@ class todo extends control
     public function __construct()
     {
         parent::__construct();
+
         $this->app->loadClass('date');
         $this->loadModel('task');
         $this->loadModel('bug');
@@ -33,7 +35,7 @@ class todo extends control
      * @param  string  $date
      * @param  string  $from todo|feedback|block
      * @access public
-     * @return void
+     * @return int|void
      */
     public function create(string $date = 'today', string $from = 'todo')
     {
@@ -42,19 +44,18 @@ class todo extends control
         if(!empty($_POST))
         {
             $formData = form::data($this->config->todo->create->form);
+            $todo     = $this->todoZen->beforeCreate($formData);
 
-            $todo   = $this->todoZen->beforeCreate($formData);
-            $todoID = $this->todoZen->doCreate($todo);
+            $todoID = $this->todo->create($todo);
             if($todoID === false) return print(js::error(dao::getError()));
 
             $todo->id = $todoID;
             $this->todoZen->afterCreate($todo);
 
-            if(!empty($_POST['idvalue'])) return $this->send(array('result' => 'success'));
+            if(!empty($_POST['objectID'])) return $this->send(array('result' => 'success'));
 
             if($from == 'block')
             {
-                // TODO
                 $todo = $this->todo->getById($todoID);
                 $todo->begin = date::formatTime($todo->begin);
                 return $this->send(array('result' => 'success', 'id' => $todoID, 'name' => $todo->name, 'pri' => $todo->pri, 'priName' => $this->lang->todo->priList[$todo->pri], 'time' => date(DT_DATE4, strtotime($todo->date)) . ' ' . $todo->begin));
@@ -127,27 +128,36 @@ class todo extends control
     }
 
     /**
+     * 编辑待办数据
      * Edit a todo.
      *
-     * @param  int    $todoID
+     * @param  string $todoID
      * @access public
      * @return void
      */
-    public function edit($todoID)
+    public function edit(string $todoID)
     {
+        $todoID   = (int)$todoID;
+
         if(!empty($_POST))
         {
-            $changes = $this->todo->update($todoID);
+            $formData = form::data($this->config->todo->edit->form);
+
+            $todo = $this->todoZen->beforeEdit($todoID, $formData);
             if(dao::isError())
             {
                 if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'fail', 'message' => dao::getError()));
                 return print(js::error(dao::getError()));
             }
-            if($changes)
+
+            $changes = $this->todo->update($todoID, $todo);
+            if(dao::isError())
             {
-                $actionID = $this->loadModel('action')->create('todo', $todoID, 'edited');
-                $this->action->logHistory($actionID, $changes);
+                if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'fail', 'message' => dao::getError()));
+                return print(js::error(dao::getError()));
             }
+
+            $this->todoZen->afterEdit($todoID, $changes);
 
             if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'success'));
             return print(js::locate($this->session->todoList, 'parent.parent'));
@@ -161,8 +171,6 @@ class todo extends control
 
         $todo->date = date("Y-m-d", strtotime($todo->date));
         $this->view->title      = $this->lang->todo->common . $this->lang->colon . $this->lang->todo->edit;
-        $this->view->position[] = $this->lang->todo->common;
-        $this->view->position[] = $this->lang->todo->edit;
         $this->view->times      = date::buildTimeList($this->config->todo->times->begin, $this->config->todo->times->end, $this->config->todo->times->delta);
         $this->view->todo       = $todo;
         $this->view->users      = $this->loadModel('user')->getPairs('noclosed|nodeleted|noempty');
@@ -208,7 +216,7 @@ class todo extends control
                     if($todo->type != 'custom')
                     {
                         if(!isset($objectIDList[$todo->type])) $objectIDList[$todo->type] = array();
-                        $objectIDList[$todo->type][$todo->idvalue] = $todo->idvalue;
+                        $objectIDList[$todo->type][$todo->objectID] = $todo->objectID;
                     }
                 }
             }
@@ -279,45 +287,42 @@ class todo extends control
     }
 
     /**
+     * 开启待办事项
      * Start a todo.
      *
-     * @param  int    $todoID
+     * @param  string $todoID
      * @access public
      * @return void
      */
-    public function start($todoID)
+    public function start(string $todoID)
     {
-        $todo = $this->todo->getById($todoID);
-        if($todo->status == 'wait') $this->todo->start($todoID);
-        if(in_array($todo->type, array('bug', 'task', 'story')))
-        {
-            $confirmNote = 'confirm' . ucfirst($todo->type);
-            $confirmURL  = $this->createLink($todo->type, 'view', "id=$todo->idvalue");
-            $okTarget    = isonlybody() ? 'parent' : 'window.parent.$.apps.open';
-            if($todo->type == 'bug')   $app = 'qa';
-            if($todo->type == 'task')  $app = 'execution';
-            if($todo->type == 'story') $app = 'product';
-            $cancelURL   = $this->server->HTTP_REFERER;
-            return print(js::confirm(sprintf($this->lang->todo->$confirmNote, $todo->idvalue), $confirmURL, $cancelURL, $okTarget, 'parent', $app));
-        }
+        $todoID = (int)$todoID;
+        $todo   = $this->todo->getByID($todoID);
 
-        if(isonlybody())return print(js::reload('parent.parent'));
+        if($todo->status == 'wait') $this->todo->start($todoID);
+        if(in_array($todo->type, array('bug', 'task', 'story'))) return $this->todoZen->printConfirm($todo);
+        if(isonlybody()) return print(js::reload('parent.parent'));
+
         echo js::reload('parent');
     }
 
     /**
-     * Activated todo.
+     * 激活待办事项
+     * Activated a todo.
      *
-     * @param  $todoID
+     * @param  string $todoID
      * @access public
      * @return void
      */
-    public function activate($todoID)
+    public function activate(string $todoID)
     {
-        $todo = $this->todo->getById($todoID);
+        $todoID = (int)$todoID;
+        $todo   = $this->todo->getByID($todoID);
+
         if($todo->status == 'done' or $todo->status == 'closed') $this->todo->activate($todoID);
         if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'success'));
         if(isonlybody()) return print(js::reload('parent.parent'));
+
         echo js::reload('parent');
     }
 
@@ -338,115 +343,112 @@ class todo extends control
     }
 
     /**
-     * Assign.
+     * 指派待办.
+     * Assign todo.
      *
-     * @param $todoID
-     *
+     * @param  string $todoID
      * @access public
      * @return void
      */
-    public function assignTo($todoID)
+    public function assignTo(string $todoID)
     {
         if(!empty($_POST))
         {
-            if(empty($_POST['assignedTo'])) return print(js::error($this->lang->todo->noAssignedTo));
-            $this->todo->assignTo($todoID);
-            if(dao::isError()) return print(js::error(dao::getError()));
+            $formData = form::data($this->config->todo->assignTo->form);
+            $todo     = $this->todoZen->beforeAssignTo($formData);
+
+            $todo->id = (int)$todoID;
+            $res      = $this->todoZen->doAssignTo($todo);
+            if(!$res) return print(js::error(dao::getError()));
+
             return print(js::reload('parent.parent'));
         }
 
-        $this->view->todo    = $this->todo->getById($todoID);
+        $this->view->todo    = $this->todo->getById((int)$todoID);
         $this->view->members = $this->loadModel('user')->getPairs('noclosed|noempty|nodeleted');
         $this->view->times   = date::buildTimeList($this->config->todo->times->begin, $this->config->todo->times->end, $this->config->todo->times->delta);
-        $this->view->actions = $this->loadModel('action')->getList('todo', $todoID);
+        $this->view->actions = $this->loadModel('action')->getList('todo', (int)$todoID);
         $this->view->users   = $this->user->getPairs('noletter');
         $this->view->time    = date::now();
         $this->display();
     }
 
     /**
-     * View a todo.
+     * 获取待办的信息.
+     * Get info of todo .
      *
-     * @param int    $todoID
-     * @param string $from     my|company
+     * @param string $todoID
+     * @param string $from   my|company
      *
      * @access public
      * @return void
      */
-    public function view($todoID, $from = 'company')
+    public function view(string $todoID,string $from = 'company')
     {
-        $todo = $this->todo->getById($todoID, true);
+        $todo = $this->todo->getById((int)$todoID, true);
+
         if(!$todo)
         {
             if((defined('RUN_MODE') && RUN_MODE == 'api') or $this->app->viewType == 'json') return $this->send(array('status' => 'fail', 'message' => '404 Not found'));
-            return print(js::error($this->lang->notFound) . js::locate('back'));
+            return print(js::error((string)$this->lang->notFound) . (string)js::locate('back'));
         }
 
-        if($todo->private and $todo->account != $this->app->user->account)
-        {
-            return print(js::error($this->lang->todo->thisIsPrivate) . js::locate('back'));
-        }
+        $account = $this->app->user->account;
+        if($todo->private and $todo->account != $account) return print(js::error((string)$this->lang->todo->thisIsPrivate) . (string)js::locate('back'));
 
         /* Save the session. */
         if(!isonlybody())
         {
-            $uri = $this->app->getURI(true);
-            $this->session->set('bugList',      $uri, 'qa');
-            $this->session->set('taskList',     $uri, 'execution');
-            $this->session->set('storyList',    $uri, 'product');
-            $this->session->set('testtaskList', $uri, 'qa');
+            $url = $this->app->getURI(true);
+            $this->session->set('bugList',      $url, 'qa');
+            $this->session->set('taskList',     $url, 'execution');
+            $this->session->set('storyList',    $url, 'product');
+            $this->session->set('testtaskList', $url, 'qa');
         }
 
         /* Fix bug #936. */
-        $account = $this->app->user->account;
         if($account != $todo->account and $account != $todo->assignedTo and !common::hasPriv('my', 'team'))
         {
             $this->locate($this->createLink('user', 'deny', "module=my&method=team"));
         }
 
-        $this->loadModel('user');
+        $projects = $this->todoZen->getProjectPairsByModel((string)$todo->type);
+        if(!isset($this->session->project)) $this->session->set('project', (int)key($projects));
 
-        $model    = $todo->type == 'opportunity' ? 'waterfall' : 'all';
-        $projects = $this->loadModel('project')->getPairsByModel($model);
-        if(!isset($this->session->project)) $this->session->set('project', key($projects));
-
-        $this->view->title           = $this->app->user->account == $todo->account ? "{$this->lang->todo->common} #$todo->id $todo->name" : $this->lang->todo->common ;
+        $this->view->title           = $account == $todo->account ? "{$this->lang->todo->common} #$todo->id $todo->name" : $this->lang->todo->common;
         $this->view->position[]      = $this->lang->todo->view;
         $this->view->todo            = $todo;
-        $this->view->times           = date::buildTimeList($this->config->todo->times->begin, $this->config->todo->times->end, 5);
-        $this->view->users           = $this->user->getPairs('noletter');
-        $this->view->user            = $this->user->getById($todo->account);
-        $this->view->actions         = $this->loadModel('action')->getList('todo', $todoID);
+        $this->view->times           = date::buildTimeList((int)$this->config->todo->times->begin, (int)$this->config->todo->times->end, 5);
         $this->view->from            = $from;
         $this->view->projects        = $projects;
-        $this->view->executions      = $this->loadModel('execution')->getPairs();
-        $this->view->products        = $todo->type == 'opportunity' ? $this->loadModel('product')->getPairsByProjectModel('waterfall') : $this->loadModel('product')->getPairs();
-        $this->view->projectProducts = $this->loadModel('product')->getProductPairsByProject($this->session->project);
 
+        $this->todoZen->buildAssignToTodo((object)$todo, (int)$this->session->project);
         $this->display();
     }
 
     /**
+     * 删除待办.
      * Delete a todo.
      *
-     * @param  int    $todoID
-     * @param  string $confirm yes|no
+     * @param  string  $todoID
+     * @param  string  $confirm yes|no
      * @access public
      * @return void
      */
-    public function delete($todoID, $confirm = 'no')
+    public function delete(string $todoID, string $confirm = 'no')
     {
         if($confirm == 'no')
         {
-            return print(js::confirm($this->lang->todo->confirmDelete, $this->createLink('todo', 'delete', "todoID=$todoID&confirm=yes")));
+            return print(js::confirm($this->lang->todo->confirmDelete, $this->createLink('todo', 'delete', "todoID=(int)$todoID&confirm=yes")));
         }
         else
         {
-            $this->todo->delete(TABLE_TODO, $todoID);
+            $this->todo->delete(TABLE_TODO, (int)$todoID);
 
             /* if ajax request, send result. */
             if($this->server->ajax)
             {
+                $response = array();
                 if(dao::isError())
                 {
                     $response['result']  = 'fail';
@@ -469,34 +471,38 @@ class todo extends control
     }
 
     /**
+     * 完成待办.
      * Finish a todo.
      *
-     * @param  int    $todoID
+     * @param  string  $todoID
      * @access public
      * @return void
      */
-    public function finish($todoID)
+    public function finish(string $todoID)
     {
-        $todo = $this->todo->getById($todoID);
-        if($todo->status != 'done' && $todo->status != 'closed') $this->todo->finish($todoID);
+        $todo = $this->todo->getById((int)$todoID);
+        if($todo->status != 'done' && $todo->status != 'closed') $this->todo->finish((int)$todoID);
+
         if(in_array($todo->type, array('bug', 'task', 'story')))
         {
             $confirmNote = 'confirm' . ucfirst($todo->type);
             $okTarget    = isonlybody() ? 'parent' : 'window.parent.$.apps.open';
-            $confirmURL  = $this->createLink($todo->type, 'view', "id=$todo->idvalue");
+            $confirmURL  = $this->createLink($todo->type, 'view', "id=$todo->objectID");
             if($todo->type == 'bug')   $app = 'qa';
             if($todo->type == 'task')  $app = 'execution';
             if($todo->type == 'story') $app = 'product';
             $cancelURL   = $this->server->HTTP_REFERER;
-            if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'success', 'message' => sprintf($this->lang->todo->$confirmNote, $todo->idvalue), 'locate' => $confirmURL));
-            return print(strpos($cancelURL, 'calendar') ? json_encode(array(sprintf($this->lang->todo->$confirmNote, $todo->idvalue), $confirmURL)) : js::confirm(sprintf($this->lang->todo->$confirmNote, $todo->idvalue), $confirmURL, $cancelURL, $okTarget, 'parent', $app));
+            if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'success', 'message' => sprintf($this->lang->todo->$confirmNote, $todo->objectID), 'locate' => $confirmURL));
+            return print(strpos($cancelURL, 'calendar') ? json_encode(array(sprintf($this->lang->todo->$confirmNote, $todo->objectID), $confirmURL)) : js::confirm(sprintf($this->lang->todo->$confirmNote, $todo->objectID), $confirmURL, $cancelURL, $okTarget, 'parent', $app));
         }
+
         if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'success'));
         if(isonlybody()) return print(js::reload('parent.parent'));
         echo js::reload('parent');
     }
 
     /**
+     * 批量完成待办.
      * Batch finish todos.
      *
      * @access public
@@ -504,29 +510,35 @@ class todo extends control
      */
     public function batchFinish()
     {
-        if(!empty($_POST['todoIDList']))
+        if($this->post->todoIDList)
         {
-            foreach($_POST['todoIDList'] as $todoID)
+            $todoList = $this->todo->getByList((array)$this->post->todoIDList);
+            foreach($todoList as $todoID => $todo)
             {
-                $todo = $this->todo->getById($todoID);
-                if($todo->status != 'done' && $todo->status != 'closed') $this->todo->finish($todoID);
+                if($todo->status == 'done' || $todo->status == 'closed') unset($todoList[$todoID]);
             }
+
+            $res = $this->todo->batchFinish((array)array_keys($todoList));
+            if(!$res) return false;
+
             return print(js::reload('parent'));
         }
     }
 
     /**
-     * Batch close todos.
+     * Batch close todos. The status of todo which need to close should be done.
      *
      * @access public
      * @return void
      */
-    public function batchClose()
+    public function batchClose(): void
     {
         $waitIdList = array();
-        foreach($_POST['todoIDList'] as $todoID)
+        $todoIdlist = form::data($this->config->todo->batchClose->form)->get('todoIDList');
+        foreach($todoIdlist as $todoID)
         {
-            $todo = $this->todo->getById($todoID);
+            $todoID = (int) $todoID;
+            $todo   = $this->todo->getById($todoID);
             if($todo->status == 'done') $this->todo->close($todoID);
             if($todo->status != 'done' and $todo->status != 'closed') $waitIdList[] = $todoID;
         }
@@ -536,17 +548,21 @@ class todo extends control
     }
 
     /**
+     * 修改选中待办的日期。
      * Import selected todoes to today.
      *
+     * @param  string $todoID
      * @access public
      * @return void
      */
-    public function import2Today($todoID = 0)
+    public function import2Today(string $todoID = '')
     {
         $todoIDList = $_POST ? $this->post->todoIDList : array($todoID);
-        $date       = !empty($_POST['date']) ? $_POST['date'] : date::today();
-        $this->dao->update(TABLE_TODO)->set('date')->eq($date)->where('id')->in($todoIDList)->exec();
-        $this->locate($this->session->todoList);
+        $date   = !empty($_POST['date']) ? $_POST['date'] : date::today();
+        if(!$date || !$todoIDList) $this->locate((string)$this->session->todoList);
+
+        $this->todo->editDate((array)$todoIDList, (string)$date);
+        $this->locate((string)$this->session->todoList);
     }
 
     /**
@@ -575,7 +591,7 @@ class todo extends control
                 $fields[$fieldName] = isset($todoLang->$fieldName) ? $todoLang->$fieldName : $fieldName;
                 unset($fields[$key]);
             }
-            unset($fields['idvalue']);
+            unset($fields['objectID']);
             unset($fields['private']);
 
             /* Get bugs. */
@@ -606,18 +622,18 @@ class todo extends control
 
                 $type = $todo->type;
                 if(isset($users[$todo->account])) $todo->account = $users[$todo->account];
-                if($type == 'bug')                $todo->name    = isset($bugs[$todo->idvalue])    ? $bugs[$todo->idvalue] . "(#$todo->idvalue)" : '';
-                if($type == 'story')              $todo->name    = isset($stories[$todo->idvalue]) ? $stories[$todo->idvalue] . "(#$todo->idvalue)" : '';
-                if($type == 'task')               $todo->name    = isset($tasks[$todo->idvalue])   ? $tasks[$todo->idvalue] . "(#$todo->idvalue)" : '';
+                if($type == 'bug')                $todo->name    = isset($bugs[$todo->objectID])    ? $bugs[$todo->objectID] . "(#$todo->objectID)" : '';
+                if($type == 'story')              $todo->name    = isset($stories[$todo->objectID]) ? $stories[$todo->objectID] . "(#$todo->objectID)" : '';
+                if($type == 'task')               $todo->name    = isset($tasks[$todo->objectID])   ? $tasks[$todo->objectID] . "(#$todo->objectID)" : '';
 
                 if($this->config->edition == 'max')
                 {
-                    if($type == 'issue') $todo->name = isset($issues[$todo->idvalue]) ? $issues[$todo->idvalue] . "(#$todo->idvalue)" : '';
-                    if($type == 'risk')  $todo->name = isset($risks[$todo->idvalue])  ? $risks[$todo->idvalue] . "(#$todo->idvalue)" : '';
-                    if($type == 'opportunity')  $todo->name = isset($opportunities[$todo->idvalue])  ? $opportunities[$todo->idvalue] . "(#$todo->idvalue)" : '';
+                    if($type == 'issue') $todo->name = isset($issues[$todo->objectID]) ? $issues[$todo->objectID] . "(#$todo->objectID)" : '';
+                    if($type == 'risk')  $todo->name = isset($risks[$todo->objectID])  ? $risks[$todo->objectID] . "(#$todo->objectID)" : '';
+                    if($type == 'opportunity')  $todo->name = isset($opportunities[$todo->objectID])  ? $opportunities[$todo->objectID] . "(#$todo->objectID)" : '';
                 }
-                if($type == 'testtask')           $todo->name    = isset($testTasks[$todo->idvalue]) ? $testTasks[$todo->idvalue] . "(#$todo->idvalue)" : '';
-                if($type == 'review' && isset($this->config->qcVersion)) $todo->name = isset($reviews[$todo->idvalue]) ? $reviews[$todo->idvalue] . "(#$todo->idvalue)" : '';
+                if($type == 'testtask')           $todo->name    = isset($testTasks[$todo->objectID]) ? $testTasks[$todo->objectID] . "(#$todo->objectID)" : '';
+                if($type == 'review' && isset($this->config->qcVersion)) $todo->name = isset($reviews[$todo->objectID]) ? $reviews[$todo->objectID] . "(#$todo->objectID)" : '';
 
                 if(isset($todoLang->typeList[$type]))           $todo->type    = $todoLang->typeList[$type];
                 if(isset($todoLang->priList[$todo->pri]))       $todo->pri     = $todoLang->priList[$todo->pri];
@@ -625,7 +641,7 @@ class todo extends control
                 if($todo->private == 1)                         $todo->desc    = $this->lang->todo->thisIsPrivate;
 
                 /* drop some field that is not needed. */
-                unset($todo->idvalue);
+                unset($todo->objectID);
                 unset($todo->private);
             }
             if($this->config->edition != 'open') list($fields, $todos) = $this->loadModel('workflowfield')->appendDataFromFlow($fields, $todos);

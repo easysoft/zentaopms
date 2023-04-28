@@ -357,6 +357,14 @@ class baseRouter
     public $siteCode;
 
     /**
+     * 请求开始时间。
+     * The start time of the request.
+     *
+     * @var float
+     */
+    public $startTime;
+
+    /**
      * 构造方法, 设置路径，类，超级变量等。注意：
      * 1.应该使用createApp()方法实例化router类；
      * 2.如果$appRoot为空，框架会根据$appName计算应用路径。
@@ -408,6 +416,9 @@ class baseRouter
         if($this->config->framework->autoConnectDB) $this->connectDB();
         if($this->config->framework->multiLanguage) $this->setClientLang();
 
+        $this->setupProfiling();
+        $this->setupXhprof();
+
         $this->setEdition();
         $this->setVision();
 
@@ -433,6 +444,19 @@ class baseRouter
     {
         if(empty($className)) $className = self::class;
         return new $className($appName, $appRoot);
+    }
+
+    /**
+     * 设置请求开始时间。
+     * The start time of the request.
+     *
+     * @param  float    $startTime
+     * @access public
+     * @return void
+     */
+    public function setStartTime(float $startTime)
+    {
+        $this->startTime = $startTime;
     }
 
     //-------------------- 路径相关方法(Path related methods)--------------------//
@@ -698,6 +722,83 @@ class baseRouter
     public function setDebug()
     {
         if(!empty($this->config->debug)) error_reporting(E_ALL & ~ E_STRICT);
+    }
+
+    /**
+     * 配置数据库性能采样。
+     * Setup database profiling.
+     *
+     * @access protected
+     * @return void
+     */
+    protected function setupProfiling(): void
+    {
+        if(!empty($this->config->debug) && $this->config->debug >= 3) $this->dbh->exec('SET profiling = 1');
+    }
+
+    /**
+     * 输出数据库性能采样结果(Server-Timing)。
+     * Output database profiling(Server-Timing).
+     *
+     * @access protected
+     * @return void
+     */
+    protected function outputProfiling(): void
+    {
+        if(empty($this->config->debug) || $this->config->debug < 3) return;
+
+        /* MySQL profiling. */
+        $profiling = $this->dbh->query('SHOW PROFILES')->fetchAll(PDO::FETCH_ASSOC);
+        foreach($profiling as $prof)
+        {
+            header('Server-Timing: db;desc="SQL: ' . $prof['Query'] . '";dur=' . $prof['Duration'] * 1000, false);
+        }
+
+        header('Server-Timing: app;desc="PHP: Total";dur=' . (getTime() - $this->startTime) * 1000, false);
+    }
+
+    /**
+     * 启用Xhprof。
+     * Setup xhprof.
+     *
+     * @return void
+     */
+    protected function setupXhprof(): void
+    {
+        if(!empty($this->config->debug) && $this->config->debug >= 4 && extension_loaded('xhprof')) xhprof_enable();
+    }
+
+    /**
+     * 输出Xhprof结果。
+     * Output xhprof.
+     *
+     * @return bool
+     */
+    protected function outputXhprof(): bool
+    {
+        if(empty($this->config->debug) || $this->config->debug < 4 || !extension_loaded('xhprof')) return false;
+
+        $log          = xhprof_disable();
+        $xhprofPath   = $this->getTmpRoot() . 'xhprof';
+        $libUtilsPath = $xhprofPath . DS . 'xhprof_lib' . DS . 'utils' . DS;
+        $outputDir    = ini_get('xhprof.output_dir');
+
+        if(!is_dir($xhprofPath)) return false;
+
+        include_once $libUtilsPath . 'xhprof_lib.php';
+        include_once $libUtilsPath . 'xhprof_runs.php';
+
+        if(!$outputDir)
+        {
+            $outputDir = $xhprofPath . DS . 'xhprof_runs';
+            if(!is_dir($outputDir)) mkdir($outputDir, 0777, true);
+        }
+
+        $xhprofRuns = new \XHProfRuns_Default($outputDir);
+        $runID      = $xhprofRuns->save_run($log, "{$this->moduleName}_{$this->methodName}");
+        header("Xhprof-RunID: {$runID}");
+
+        return true;
     }
 
     /**
@@ -1926,7 +2027,7 @@ class baseRouter
         /* 将扩展文件的代码合并到代码中。Cycle all the extension files and merge them into target lines. */
         $extTargets = array();
         foreach($extFiles  as $extFile)  $extTargets[basename((string) $extFile)] = $extFile;
-        foreach($extTargets as $extTarget) $targetLines .= self::removePHPTAG($extTarget);
+        foreach($extTargets as $extTarget) $targetLines .= static::removePHPTAG($extTarget);
 
         /* 做个标记，方便后面替换代码使用。Make a mark for replacing codes. */
         $replaceMark = '//**//';
@@ -1982,7 +2083,7 @@ class baseRouter
             /* 通过文件名获得其对应的方法名。Get methods according it's filename. */
             $fileName = baseName((string) $hookFile);
             [$method] = explode('.', $fileName);
-            $hookCodes[$method][] = self::removePHPTAG($hookFile);
+            $hookCodes[$method][] = static::removePHPTAG($hookFile);
         }
 
         /* 合并Hook文件。Cycle the hook methods and merge hook codes. */
@@ -2059,7 +2160,7 @@ class baseRouter
                 break;
             }
         }
-        if(empty($url)) return false;
+        if(empty($url)) return '';
         return $url;
     }
 
@@ -2212,13 +2313,20 @@ class baseRouter
     public function loadModule()
     {
         try {
-            if(is_null($this->params) and !$this->setParams()) return false;
+            if(is_null($this->params) and !$this->setParams())
+            {
+                $this->outputProfiling();
+                $this->outputXhprof();
+                return false;
+            }
 
             /* 调用该方法   Call the method. */
             $module = $this->control;
 
             call_user_func_array(array($module, $this->methodName), $this->params);
             $this->checkAPIFile();
+            $this->outputProfiling();
+            $this->outputXhprof();
             return $module;
         } catch (EndResponseException $endResponseException) {
             echo $endResponseException->getContent();
@@ -2714,6 +2822,7 @@ class baseRouter
      *
      * @param  object    $params    the database params.
      * @access public
+     * @return object|bool
      */
     public function connectByPDO(object $params): object|bool
     {

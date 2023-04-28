@@ -38,10 +38,10 @@ $tester->loadModel('project');
 initData();
 
 $project =  new stdClass;
-$project->status = 'suspended';
-$project->lastEditedBy = 'admin';
+$project->status         = 'suspended';
+$project->lastEditedBy   = 'admin';
 $project->lastEditedDate = '2023-04-27';
-$project->suspendedDate = '2023-05-03';
+$project->suspendedDate  = '2023-05-03';
 
 r($tester->project->suspend(2, $project)) && p('0:new')   && e('suspended');
 r($tester->project->suspend(5, $project)) && p('1:field') && e('suspendedDate');

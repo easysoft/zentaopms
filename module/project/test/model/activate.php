@@ -52,6 +52,14 @@ $data->comment      = 'fgasgqasfdgasfgasg';
 $data->readjustTime = 1;
 $data->readjustTask = 1;
 
-r($project->activate(2, $data)) && p('0:field,old,new') && e('status,closed,doing');
-r($project->activate(3, $data)) && p('0:field,old,new') && e('status,suspended,doing');
 
+$changes2 = $project->activate(2, $data);
+$changes3 = $project->activate(3, $data);
+
+r($changes2['0']) && p('field') && e('status');
+r($changes2['0']) && p('old') && e('closed');
+r($changes2['0']) && p('new') && e('doing');
+
+r($changes3['0']) && p('field') && e('status');
+r($changes3['0']) && p('old') && e('suspended');
+r($changes3['0']) && p('new') && e('doing');

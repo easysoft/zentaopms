@@ -2,102 +2,169 @@
 <?php
 include dirname(__FILE__, 5) . "/test/lib/init.php";
 include dirname(__FILE__, 2) . '/task.class.php';
-su('admin');
+
+$task = zdTable('task');
+$task->id->range('1-5');
+$task->name->range('1-5')->prefix('任务');
+$task->mode->range('multi');
+$task->status->range('wait,doing,done,pause,cancel,closed');
+$task->assignedTo->range('admin,user1');
+$task->openedBy->range('admin,user2,user1');
+$task->gen(5);
+
+$taskTeam = zdTable('taskteam');
+$taskTeam->id->range('1-20');
+$taskTeam->task->range('1{2},2{3},3{2},4{3}');
+$taskTeam->account->range('admin,user1,admin,user1,user2');
+$taskTeam->estimate->range('1{2},2{3},3,4{2},5');
+$taskTeam->left->range('1{2},0{3},1{3},0{2}');
+$taskTeam->consumed->range('0{11},1{4},0{2},1{3}');
+$taskTeam->status->range('wait{11},doing,done,done,done,wait,wait,doing,done,done');
+$taskTeam->gen(20);
+
+global $tester;
+$tester->loadModel('task');
+
+$taskIdList = array(1, 2, 3, 4, 5);
+$tasks        = array();
+$oldTasks     = array();
+foreach($taskIdList as $id)
+{
+    $task = $tester->task->getByID($id);
+    $oldTasks[]     = $task;
+    $tasks[]        = $task;
+}
+
+$tasks[0]->status       = 'doing';
+$tasks[0]->finishedDate = null;
+
+$tasks[1]->status       = 'done';
+$tasks[1]->finishedDate = '2023-04-27';
+
+$members1 = new stdclass();
+$members1->account  = 'admin';
+$members1->estimate = 1;
+$members1->left     = 1;
+
+$members2 = new stdclass();
+$members2->account  = 'user1';
+$members2->estimate = 2;
+$members2->left     = 2;
+
+$members3 = new stdclass();
+$members3->account  = 'user3';
+$members3->estimate = 3;
+$members3->left     = 3;
+
+$members = array(array($members1, $members2), array($members3));
 
 /**
 
 title=taskModel->computeHours4Multiple();
+timeout=0
 cid=1
-pid=1
 
-task状态为wait只有老task计算多人工时 >> 1,po82,wait,3,3,3
-task状态为wait有新老task计算多人工时 >> 1,po82,wait,3,3,3
-task状态为wait有新老task和团队计算多人工时 >> 1,po82,doing,3,3,3
-task状态为done只有老task计算多人工时 >> 903,po82,done,3,3,3
-task状态为done有新老task计算多人工时 >> 903,po82,done,3,3,3
-task状态为done有新老task和团队计算多人工时 >> 903,po82,doing,3,3,3
-task状态为pause只有老task计算多人工时 >> 910,,pause,9,12,9
-task状态为pause有新老task计算多人工时 >> 910,,pause,9,12,9
-task状态为pause只有老task计算多人工时 >> 910,po82,doing,3,3,3
-老task不存在的情况有新老task和团队计算多人工时 >> 0
-老task不存在的情况有新老task计算多人工时 >> 0
-新task不存在的情况有新老task和团队计算多人工时 >> 10001,po82,doing,3,3,3
+- 执行task模块的computeHours4Multiple方法，参数是$oldTasks[0]
+ - 属性id @1
+ - 属性assignedTo @admin
+ - 属性status @doing
+ - 属性estimate @5
+ - 属性consumed @0
+ - 属性left @4
+
+- 执行task模块的computeHours4Multiple方法，参数是$oldTasks[1]
+ - 属性id @2
+ - 属性assignedTo @user1
+ - 属性status @done
+ - 属性estimate @13
+ - 属性consumed @0
+ - 属性left @0
+
+- 执行task模块的computeHours4Multiple方法，参数是$oldTasks[2]
+ - 属性id @3
+ - 属性assignedTo @admin
+ - 属性status @done
+ - 属性estimate @15
+ - 属性consumed @0
+ - 属性left @4
+
+- 执行task模块的computeHours4Multiple方法，参数是$oldTasks[3]
+ - 属性id @4
+ - 属性assignedTo @user1
+ - 属性status @pause
+ - 属性estimate @17
+ - 属性consumed @0
+ - 属性left @2
+
+- 执行task模块的computeHours4Multiple方法，参数是$oldTasks[4]
+ - 属性id @5
+ - 属性assignedTo @admin
+ - 属性status @cancel
+ - 属性estimate @0
+ - 属性consumed @0
+ - 属性left @0
+
+- 执行task模块的computeHours4Multiple方法，参数是$oldTasks[0], $tasks[0]
+ - 属性id @1
+ - 属性assignedTo @admin
+ - 属性status @doing
+ - 属性estimate @5
+ - 属性consumed @0
+ - 属性left @4
+
+- 执行task模块的computeHours4Multiple方法，参数是$oldTasks[1], $tasks[1]
+ - 属性id @2
+ - 属性assignedTo @user1
+ - 属性status @done
+ - 属性estimate @13
+ - 属性consumed @0
+ - 属性left @0
+
+- 执行task模块的computehours4multiple方法，参数是$oldTasks[0], $tasks[0], $members[0]
+ - 属性id @1
+ - 属性assignedTo @admin
+ - 属性status @doing
+ - 属性estimate @3
+ - 属性consumed @0
+ - 属性left @3
+
+- 执行task模块的computehours4multiple方法，参数是$oldTasks[1], $tasks[1], $members[1]
+ - 属性id @2
+ - 属性assignedTo @user1
+ - 属性status @done
+ - 属性estimate @3
+ - 属性consumed @0
+ - 属性left @3
+
+- 执行task模块的computehours4multiple方法，参数是$oldTasks[0], $tasks[0], $members[0], false
+ - 属性id @1
+ - 属性assignedTo @admin
+ - 属性status @doing
+ - 属性estimate @3
+ - 属性consumed @0
+ - 属性left @3
+
+- 执行task模块的computehours4multiple方法，参数是$oldTasks[1], $tasks[1], $members[1], false
+ - 属性id @2
+ - 属性assignedTo @user1
+ - 属性status @done
+ - 属性estimate @3
+ - 属性consumed @0
+ - 属性left @3
+
+
 
 */
-$task1 = new stdclass();
-$task1->id         = 1;
-$task1->status     = 'wait';
-$task1->assignedTo = '';
-$task1->openedBy   = '';
-
-$task2 = new stdclass();
-$task2->id         = 1;
-$task2->status     = 'wait';
-$task2->assignedTo = 'user92';
-$task2->openedBy   = '';
-
-$task3 = new stdclass();
-$task3->id         = 903;
-$task3->status     = 'done';
-$task3->assignedTo = '';
-$task3->openedBy   = '';
-
-$task4 = new stdclass();
-$task4->id         = 903;
-$task4->status     = 'done';
-$task4->assignedTo = 'po82';
-$task4->openedBy   = '';
-
-$task5 = new stdclass();
-$task5->id         = 910;
-$task5->status     = 'pause';
-$task5->assignedTo = '';
-$task5->openedBy   = '';
-
-$task6 = new stdclass();
-$task6->id         = 910;
-$task6->status     = 'pause';
-$task6->assignedTo = '';
-$task6->openedBy   = '';
-
-$task7 = new stdclass();
-$task7->id         = 100001;
-$task7->status     = 'done';
-$task7->assignedTo = '';
-$task7->openedBy   = '';
-
-$task8 = new stdclass();
-$task8->id         = 10001;
-$task8->status     = 'wait';
-$task8->assignedTo = '';
-$task8->openedBy   = '';
-
-$user1 = new stdclass();
-$user1->account = 'po82';
-$user1->estimate = 1;
-$user1->consumed = 1;
-$user1->left     = 1;
-
-$user2 = new stdclass();
-$user2->account = 'user92';
-$user2->estimate = 2;
-$user2->consumed = 2;
-$user2->left     = 2;
-
-$team = array($user1, $user2);
-
-$autoStatusList = array(true, false);
 
 $task = new taskTest();
-r($task->computeHours4MultipleTest($task1))                         && p('id,assignedTo,status,estimate,consumed,left') && e('1,po82,wait,3,3,3'); // task状态为wait只有老task计算多人工时
-r($task->computeHours4MultipleTest($task1, $task2))                 && p('id,assignedTo,status,estimate,consumed,left') && e('1,po82,wait,3,3,3'); // task状态为wait有新老task计算多人工时
-r($task->computeHours4MultipleTest($task1, $task2, $team))          && p('id,assignedTo,status,estimate,consumed,left') && e('1,po82,doing,3,3,3'); // task状态为wait有新老task和团队计算多人工时
-r($task->computeHours4MultipleTest($task3))                         && p('id,assignedTo,status,estimate,consumed,left') && e('903,po82,done,3,3,3'); // task状态为done只有老task计算多人工时
-r($task->computeHours4MultipleTest($task3, $task4))                 && p('id,assignedTo,status,estimate,consumed,left') && e('903,po82,done,3,3,3'); // task状态为done有新老task计算多人工时
-r($task->computeHours4MultipleTest($task3, $task4, $team))          && p('id,assignedTo,status,estimate,consumed,left') && e('903,po82,doing,3,3,3'); // task状态为done有新老task和团队计算多人工时
-r($task->computeHours4MultipleTest($task5))                         && p('id,assignedTo,status,estimate,consumed,left') && e('910,,pause,9,12,9'); // task状态为pause只有老task计算多人工时
-r($task->computeHours4MultipleTest($task5, $task1, array(), false)) && p('id,assignedTo,status,estimate,consumed,left') && e('910,,pause,9,12,9'); // task状态为pause有新老task计算多人工时
-r($task->computeHours4MultipleTest($task5, $task6, $team))          && p('id,assignedTo,status,estimate,consumed,left') && e('910,po82,doing,3,3,3'); // task状态为pause只有老task计算多人工时
-r($task->computeHours4MultipleTest($task7))                         && p('id,assignedTo,status,estimate,consumed,left') && e('0'); // 老task不存在的情况有新老task和团队计算多人工时
-r($task->computeHours4MultipleTest($task7, $task8))                 && p('id,assignedTo,status,estimate,consumed,left') && e('0'); // 老task不存在的情况有新老task计算多人工时
-r($task->computeHours4MultipleTest($task1, $task8, $team)) && p('id,assignedTo,status,estimate,consumed,left') && e('10001,po82,doing,3,3,3'); // 新task不存在的情况有新老task和团队计算多人工时
+r($task->computeHours4MultipleTest($oldTasks[0]))                                && p('id,assignedTo,status,estimate,consumed,left') && e('1,admin,doing,5,0,4');  // taskID 1 只有老task计算多人工时
+r($task->computeHours4MultipleTest($oldTasks[1]))                                && p('id,assignedTo,status,estimate,consumed,left') && e('2,user1,done,13,0,0');  // taskID 2 只有老task计算多人工时
+r($task->computeHours4MultipleTest($oldTasks[2]))                                && p('id,assignedTo,status,estimate,consumed,left') && e('3,admin,done,15,0,4');  // taskID 3 只有老task计算多人工时
+r($task->computeHours4MultipleTest($oldTasks[3]))                                && p('id,assignedTo,status,estimate,consumed,left') && e('4,user1,pause,17,0,2'); // taskID 4 只有老task计算多人工时
+r($task->computeHours4MultipleTest($oldTasks[4]))                                && p('id,assignedTo,status,estimate,consumed,left') && e('5,admin,cancel,0,0,0'); // taskID 5 只有老task计算多人工时
+r($task->computeHours4MultipleTest($oldTasks[0], $tasks[0]))                     && p('id,assignedTo,status,estimate,consumed,left') && e('1,admin,doing,5,0,4');  // taskID 1 有传入task计算多人工时
+r($task->computeHours4MultipleTest($oldTasks[1], $tasks[1]))                     && p('id,assignedTo,status,estimate,consumed,left') && e('2,user1,done,13,0,0');  // taskID 2 有传入task计算多人工时
+r($task->computehours4multipletest($oldTasks[0], $tasks[0], $members[0]))        && p('id,assignedTo,status,estimate,consumed,left') && e('1,admin,doing,3,0,3');  // taskID 1 有传入task 传入members计算多人工时
+r($task->computehours4multipletest($oldTasks[1], $tasks[1], $members[1]))        && p('id,assignedTo,status,estimate,consumed,left') && e('2,user1,done,3,0,3');   // taskID 2 有传入task 传入members计算多人工时
+r($task->computehours4multipletest($oldTasks[0], $tasks[0], $members[0], false)) && p('id,assignedTo,status,estimate,consumed,left') && e('1,admin,doing,3,0,3');  // taskID 1 有传入task 传入members 不自动更新状态计算多人工时
+r($task->computehours4multipletest($oldTasks[1], $tasks[1], $members[1], false)) && p('id,assignedTo,status,estimate,consumed,left') && e('2,user1,done,3,0,3');   // taskID 2 有传入task 传入members 不自动更新状态计算多人工时

@@ -788,4 +788,21 @@ class blockTest
 
         return $object;
     }
+
+    /**
+     * Test fetch block is initiated or not.
+     *
+     * @param  string $module
+     * @param  string $vision
+     * @param  string $section
+     * @return string
+     */
+    public function fetchBlockInitStatusTest(string $module, string $vision, string $section): string
+    {
+        $isInitiated = $this->objectModel->fetchBlockInitStatus($module, $vision, $section);
+
+        if(dao::isError()) return dao::getError();
+
+        return $isInitiated;
+    }
 }

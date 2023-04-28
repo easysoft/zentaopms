@@ -79,24 +79,25 @@ class todoTest
      * @access public
      * @return array
      */
-    public function updateTest($todoID, $param)
+    public function updateTest(int $todoID, array $param)
     {
         global $tester;
         $object = $tester->dbh->query("SELECT * FROM " . TABLE_TODO ." WHERE id = $todoID")->fetch();
 
+        $todo = new stdClass();
         foreach($object as $field => $value)
         {
             if(in_array($field, array_keys($param)))
             {
-                $_POST[$field] = $param[$field];
+                $todo->$field = $param[$field];
             }
             else
             {
-                $_POST[$field] = $value;
+                $todo->$field = $value;
             }
         }
 
-        $change = $this->objectModel->update($todoID);
+        $change = $this->objectModel->update($todoID, $todo);
         if($change == array()) $change = '没有数据更新';
 
         unset($_POST);
@@ -166,20 +167,59 @@ class todoTest
     }
 
     /**
+     * 测试删除待办.
+     * Test delete a todo.
+     *
+     * @param  int     $todoID
+     * @param  string  $confirm yes|no
+     * @access public
+     * @return object|false
+     */
+    public function deleteTest(int $todoID, string $confirm = 'no'): object|false
+    {
+        if($confirm == 'no')
+        {
+        	return $this->objectModel->getById($todoID);
+        }
+        else
+        {
+            $this->objectModel->delete(TABLE_TODO, $todoID);
+			if(dao::isError()) return false;
+
+        	return $this->objectModel->getById($todoID);
+        }
+    }
+
+    /**
+     * 测试完成待办.
      * Test finish a todo.
      *
-     * @param  int    $todoID
+     * @param  int     $todoID
      * @access public
-     * @return object
+     * @return object|false
      */
-    public function finishTest($todoID)
+    public function finishTest(int $todoID): object|false
     {
         $this->objectModel->finish($todoID);
         $object = $this->objectModel->getByID($todoID);
 
-        if(dao::isError()) return dao::getError();
+        if(dao::isError()) return false;
 
         return $object;
+    }
+
+
+    /**
+     * 测试批量完成待办.
+     * Batch finish todos.
+     *
+     * @param  array   $todoIDList
+     * @access public
+     * @return bool
+     */
+    public function batchFinishTest(array $todoIDList): bool
+    {
+		return $this->objectModel->batchFinish($todoIDList);
     }
 
     /**
@@ -269,7 +309,7 @@ class todoTest
         $todo->begin        = '0830';
         $todo->end          = '0900';
         $todo->account      = 'admin';
-        $todo->idvalue      = '0';
+        $todo->objectID     = '0';
         $todo->vision       = 'rnd';
         $todo->assignedTo   = 'admin';
         $todo->assignedBy   = 'admin';
@@ -284,7 +324,7 @@ class todoTest
 
         $this->objectModel->createByCycle(array($todoID => $todo));
 
-        $objects = $tester->dao->select('id')->from(TABLE_TODO)->where('idvalue')->eq($todoID)->andWhere('deleted')->eq('0')->fetchAll();
+        $objects = $tester->dao->select('id')->from(TABLE_TODO)->where('objectID')->eq($todoID)->andWhere('deleted')->eq('0')->fetchAll();
 
         if(dao::isError()) return dao::getError();
 
@@ -326,24 +366,40 @@ class todoTest
     }
 
     /**
+     * 测试指派待办.
      * Test assign todo.
      *
-     * @param  int    $todoID
-     * @param  array  $param
+     * @param  int     $todoID
+     * @param  object  $param
      * @access public
      * @return object
      */
-    public function assignToTest($todoID, $param = array())
+    public function assignToTest(int $todoID, object $param = new stdclass()): object
     {
-        foreach($param as $key => $value) $_POST[$key] = $value;
+		$todo = new stdClass();
+		$todo->assignedDate = helper::now();
+		$todo->date         = '';
+		$todo->begin        = 0;
+		$todo->end          = 0;
 
-        if(!isset($_POST['future']) and !isset($_POST['date'])) $_POST['date'] = date('Y-m-d', time());
+        foreach($param as $key => $value)
+		{
+			$todo->{$key} = $value;
+			if($key == 'future' && $value == 'on')
+			{
+				$todo->date = '2030-01-01';
+				unset($todo->{$key});
+			}
+			if($key == 'lblDisableDate' && $value == 'on')
+			{
+				$todo->begin = '2400';
+				$todo->end   = '2400';
+				unset($todo->{$key});
+			}
+		}
 
-        $this->objectModel->assignTo($todoID);
-
-        unset($_POST);
-
-        if(dao::isError()) return dao::getError();
+		$todo->id = $todoID;
+        $this->objectModel->assignTo($todo);
 
         $object = $this->objectModel->getById($todoID);
         return $object;

@@ -52,6 +52,30 @@ class projectTao extends projectModel
     }
 
     /**
+     * Update project table when close a project.
+     *
+     * @param  int    $projectID
+     * @param  object $project
+     * @param  object $oldProject
+     *
+     * @access protected
+     * @return bool
+     */
+    protected function doClosed(int $projectID, object $project, object $oldProject): bool
+    {
+        $this->dao->update(TABLE_PROJECT)->data($project)
+            ->autoCheck()
+            ->check($this->config->project->close->requiredFields, 'notempty')
+            ->checkIF($project->realEnd != '', 'realEnd', 'le', helper::today())
+            ->checkIF($project->realEnd != '', 'realEnd', 'ge', $oldProject->realBegan)
+            ->checkFlow()
+            ->where('id')->eq($projectID)
+            ->exec();
+
+        return !dao::isError();
+    }
+
+    /**
      * Update project.
      *
      * @param  int    $projectID
@@ -130,5 +154,22 @@ class projectTao extends projectModel
         }
 
         return true;
+    }
+
+    /**
+     * Get project details, including all contents of the TABLE_PROJECT.
+     * 获取项目的详情，包含project表的所有内容。
+     *
+     * @param  int       $projectID
+     * @access protected
+     * @return object|false
+     */
+    protected function fetchProjectInfo(int $projectID): object|false
+    {
+        $project = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($projectID)->fetch();
+
+        /* Filter the date is empty or 1970. */
+        if($project and helper::isZeroDate($project->end)) $project->end = '';
+        return $project;
     }
 }

@@ -3,11 +3,11 @@ namespace zin;
 
 class btnGroup extends wg
 {
-    static $defineProps = [
+    static $defineProps = array(
         'items?:array',
         'disabled?:bool',
         'size?:string',
-    ];
+    );
 
     public function onBuildItem($item)
     {
