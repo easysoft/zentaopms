@@ -1755,18 +1755,27 @@ class projectModel extends model
     }
 
     /**
-     * 删除项目并同步执行与产品等状态为删除
-     * Deletes a project and updates related items: product|execution
+     * 删除项目下关联执行与产品与文档库
+     * Deletes related items under project.
      *
-     * @param  string    $table  product|execution
+     * @param  string    $table  product|execution|doclib
      * @param  int|array $idList
      *
      * @access public
-     * @return void
+     * @return bool
      */
-    public function deleteProductAndExcution(string $table, int|array $idList):void
+    public function deleteByTableName(string $table, int|array $idList): bool
     {
-        $this->dao->update($table)->set('deleted')->eq(1)->where('id')->in($idList)->exec();
+        if(strpos($table, 'doclib') !== false)
+        {
+            $this->dao->update($table)->set('deleted')->eq(1)->where('execution')->eq($idList)->exec();
+        }
+        else
+        {
+            $this->dao->update($table)->set('deleted')->eq(1)->where('id')->in($idList)->exec();
+        }
+
+        return !dao::isError();
     }
 
     /**

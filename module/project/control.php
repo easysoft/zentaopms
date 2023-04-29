@@ -1856,7 +1856,7 @@ class project extends control
         else
         {
             $this->project->delete(TABLE_PROJECT, $projectID);
-            $this->dao->update(TABLE_DOCLIB)->set('deleted')->eq(1)->where('execution')->eq($projectID)->exec();
+            $this->project->deleteByTableName('zt_doclib', $projectID);
             $this->loadModel('user')->updateUserView($projectID, 'project');
 
             $message = $this->executeHooks($projectID);

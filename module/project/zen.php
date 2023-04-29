@@ -597,9 +597,9 @@ class projectZen extends project
             return print(js::reload('parent'));
         }
 
-        $this->updateRelatedItemByDelete('zt_execution', array_keys($executionIdList));
+        $this->project->deleteByTableName('zt_execution', array_keys($executionIdList));
         foreach($executionIdList as $executionID => $execution) $this->action->create('execution', $executionID, 'deleted', '', ACTIONMODEL::CAN_UNDELETED);
-        $this->user->updateUserView($executionIdList, 'sprint');
+        $this->loadModel('user')->updateUserView($executionIdList, 'sprint');
     }
 
     /**
@@ -617,7 +617,7 @@ class projectZen extends project
         if(!$project->hasProduct)
         {
             $productID = $this->loadModel('product')->getProductIDByProject($project->id);
-            $this->updateRelatedItemByDelete('zt_product', $productID);
+            $this->project->deleteByTableName('zt_product', $productID);
         }
     }
 }
