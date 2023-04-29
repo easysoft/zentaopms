@@ -397,12 +397,11 @@ class yaml
         $execYaml   = sprintf($command, $configYaml, $yamlFile, $rows, $tableName, $dbUser, $dbPWD, $dbHost, $dbPort, $dbName);
         $execDump   = sprintf($dumpCommand, $dbUser, $dbPWD, $dbHost, $dbPort, $dbName, $tableName);
 
-        system($execDump);
+        $execGenSQL = sprintf($genSQL, $configYaml, $yamlFile, $rows, $tableName, $sqlPath);
         system($execGenSQL);
 
         if($debug)
         {
-            $execGenSQL = sprintf($genSQL, $configYaml, $yamlFile, $rows, $tableName, $sqlPath);
             echo "\n" . file_get_contents($sqlPath) . "\n";
 
             $tmpl = "mysql -u%s -p%s -h%s -P%s -D%s < %s";
@@ -410,6 +409,7 @@ class yaml
             return;
         }
 
+        system($execDump);
         system($execYaml);
     }
 
