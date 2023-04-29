@@ -324,7 +324,7 @@ class projectZen extends project
             ->setDefault('lastEditedDate', helper::now())
             ->setDefault('suspendedDate', helper::today())
             ->stripTags($editorIdList, $this->config->allowedTags)
-            ->remove('comment')->get();
+            ->get();
     }
 
     /**

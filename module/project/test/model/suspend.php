@@ -18,15 +18,15 @@ function initData()
 
 /**
 
-title=测试 projectModel::getByID;
+title=测试 projectModel::suspend;
 timeout=0
 cid=1
 
-- 执行project模块的suspend方法，参数是2, $project,属性0 @suspended
+- 执行project模块的suspend方法，参数是2, $project第0条的new属性 @suspended
 
-- 执行project模块的suspend方法，参数是5, $project,属性1 @suspendedDate
+- 执行project模块的suspend方法，参数是5, $project第1条的field属性 @suspendedDate
 
-- 执行project模块的suspend方法，参数是4, $project,属性0 @suspended
+- 执行project模块的suspend方法，参数是4, $project第0条的new属性 @suspended
 
 
 
