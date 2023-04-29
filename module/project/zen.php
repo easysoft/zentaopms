@@ -598,7 +598,7 @@ class projectZen extends project
         }
 
         $this->project->deleteByTableName('zt_execution', array_keys($executionIdList));
-        foreach($executionIdList as $executionID => $execution) $this->action->create('execution', $executionID, 'deleted', '', ACTIONMODEL::CAN_UNDELETED);
+        foreach($executionIdList as $executionID => $execution) $this->loadModel('action')->create('execution', $executionID, 'deleted', '', ACTIONMODEL::CAN_UNDELETED);
         $this->loadModel('user')->updateUserView($executionIdList, 'sprint');
     }
 
