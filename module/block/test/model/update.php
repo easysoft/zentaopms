@@ -13,7 +13,6 @@ function initData()
     $block->vision->range('rnd');
     $block->module->range('test');
     $block->title->prefix('区块')->range('2');
-    $block->source->range('my');
     $block->order->range('5');
 
     $block->gen(1);
@@ -21,7 +20,7 @@ function initData()
 
 /**
 
-title=14:11:23 ERROR: SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry &
+title=测试 block 模块的update 方法
 timeout=0
 cid=39
 
@@ -51,7 +50,6 @@ $newBlock->account = 'newadmin';
 $newBlock->vision  = 'lite';
 $newBlock->module  = 'newmy';
 $newBlock->title   = 'new区块';
-$newBlock->source  = 'newmy';
 $newBlock->params  = '';
 $newBlock->order   = '5';
 
@@ -61,11 +59,10 @@ $accoutTooLangBlock->account = 'adminadminadminadminadminadminadminadmin1';
 $accoutTooLangBlock->vision  = 'rnd';
 $accoutTooLangBlock->module  = 'my';
 $accoutTooLangBlock->title   = 'long account';
-$accoutTooLangBlock->source  = 'my';
 $accoutTooLangBlock->order   = '5';
 
 $blockTest = new blockTest();
 $newBlockID = $blockTest->updateTest($newBlock);
 
-r($tester->block->getByID($newBlockID)) && p('account,vision,module,title,source,order') && e("newadmin,lite,newmy,new区块,newmy,5"); // 测试获取正常的block的内容
+r($tester->block->getByID($newBlockID)) && p('account,vision,module,title,order') && e("newadmin,lite,newmy,new区块,5"); // 测试获取正常的block的内容
 r($blockTest->updateTest($accoutTooLangBlock)) && p('account:0') && e('『所属用户』长度应当不超过『30』，且大于『0』。'); // 测试account 字段字符超出长度

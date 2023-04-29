@@ -13,7 +13,6 @@ function initData()
     $block->vision->range('rnd');
     $block->module->range('test');
     $block->title->prefix('区块')->range('2');
-    $block->source->range('my');
     $block->order->range('5');
 
     $block->gen(1);
@@ -50,7 +49,6 @@ $block->account = 'admin';
 $block->vision  = 'rnd';
 $block->module  = 'my';
 $block->title   = '区块123';
-$block->source  = 'my';
 $block->order   = '5';
 
 $accoutTooLangBlock = new stdclass();
@@ -58,11 +56,10 @@ $accoutTooLangBlock->account = 'adminadminadminadminadminadminadminadmin1';
 $accoutTooLangBlock->vision  = 'rnd';
 $accoutTooLangBlock->module  = 'my';
 $accoutTooLangBlock->title   = 'long account';
-$accoutTooLangBlock->source  = 'my';
 $accoutTooLangBlock->order   = '5';
 
 $blockTest = new blockTest();
 $newBlockID = $blockTest->createTest($block);
 
-r($tester->block->getByID($newBlockID)) && p('account,vision,module,title,source,order') && e('admin,rnd,my,区块123,my,5'); // 测试获取正常的block的内容
+r($tester->block->getByID($newBlockID)) && p('account,vision,module,title,order') && e('admin,rnd,my,区块123,5'); // 测试获取正常的block的内容
 r($blockTest->createTest($accoutTooLangBlock)) && p('account:0') && e('『所属用户』长度应当不超过『30』，且大于『0』。'); // 测试account 字段字符超出长度

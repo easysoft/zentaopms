@@ -1,7 +1,10 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . "/test/lib/init.php";
-su('admin');
+
+$userModel = new userModel();
+$user = $userModel->identify('admin', 'Asd123456');
+$userModel->login($user);
 
 function initData()
 {
@@ -11,6 +14,7 @@ function initData()
     $block->vision->range('rnd,lite');
     $block->module->range('my,qa,project');
     $block->title->prefix('区块')->range('2-5');
+    $block->dashboard->range('my,qa');
     $block->order->range('5-2');
 
     $block->gen(4);
@@ -18,7 +22,7 @@ function initData()
 
 /**
 
-title=测试 blockModel->getByID();
+title=测试 blockModel->getMaxOrderByDashboard();
 timeout=0
 cid=1
 
@@ -31,9 +35,6 @@ cid=1
  - 属性block @bug
  - 属性order @5
 
-- 执行block模块的getByID方法，参数是4,属性order @3
-- 执行block模块的getByID方法，参数是6 @0
-
 
 */
 
@@ -42,6 +43,6 @@ $tester->loadModel('block');
 
 initData();
 
-r($tester->block->getByID(2)) && p('account,vision,module,title,order') && e('admin,rnd,my,区块2,5');        // 测试获取正常的block的内容
-r($tester->block->getByID(4)) && p('order') && e('3');        // 测试获取正常的block的内容
-r($tester->block->getByID(6)) && p('') && e('0');        // 测试获取不存在的block的内容
+r($tester->block->getMaxOrderByDashboard('my')) && p('') && e('5'); //  测试 my 模块下最大order 为 5
+r($tester->block->getMaxOrderByDashboard('my')) && p('') && e('5'); //  测试 my 模块下最大order 为 5
+r($tester->block->getMaxOrderByDashboard('bug')) && p('') && e('0'); // 测试数据库中不存在 模块的最大排序  为 0

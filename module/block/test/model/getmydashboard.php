@@ -36,5 +36,7 @@ $tester->loadModel('block');
 
 initData();
 
-r($tester->block->getMyDashboard('test')) && p('2:account,title') && e('admin,区块3');
-r($tester->block->getMyDashboard('my', 1)) && p('3:account,title') && e('admin,区块2');
+r($tester->block->getMyDashboard('test')) && p('2:account,title') && e('admin,区块3'); // 测试我的 test 模块的面板
+r($tester->block->getMyHiddenBlocks('my')) && p('3:account,title') && e('admin,区块2');// 测试我的 my 模块隐藏的面板
+r($tester->block->getMyDashboard('noneModule')) && p('') && e('0');// 测试我的 不存在的 模块的面板
+r($tester->block->getMyDashboard('')) && p('') && e('0');// 测试我的 空 模块的面板
