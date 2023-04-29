@@ -15,4 +15,4 @@ $config->product->form->create['type']      = array('type' => 'string',  'contro
 $config->product->form->create['status']    = array('type' => 'string',  'control' => 'hidden',       'required' => false, 'default' => 'normal');
 $config->product->form->create['desc']      = array('type' => 'string',  'control' => 'textarea',     'required' => false);
 $config->product->form->create['acl']       = array('type' => 'string',  'control' => 'acl',          'required' => false, 'default' => 'private', 'options' => $lang->product->aclList);
-$config->product->form->create['whitelist'] = array('type' => 'string',  'control' => 'multi-select', 'required' => false, 'options' => 'users');
+$config->product->form->create['whitelist'] = array('type' => 'string',  'control' => 'multi-select', 'required' => false, 'default' => '', 'options' => 'users');

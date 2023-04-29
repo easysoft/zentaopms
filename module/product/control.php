@@ -35,10 +35,7 @@ class product extends control
 
         /* Get all products, if no, goto the create page. */
         $this->products = $this->product->getPairs('nocode', 0, '', 'all');
-        $isAPI          = ($this->app->viewType == 'json' or (defined('RUN_MODE') and RUN_MODE == 'api'));
-        $skipRedirectMethod = $this->config->product->skipRedirectMethod;
-        $vieType = $this->config->product->skipRedirectMethod;
-        if(empty($this->products) and strpos($skipRedirectMethod, ",$this->methodName,") === false and $this->app->getViewType() != 'mhtml' and !$isAPI) $this->locate($this->createLink('product', 'create'));
+        if($this->product->checkLocateCreate($this->products)) $this->locate($this->createLink('product', 'create'));
 
         $this->view->products = $this->products;
     }

@@ -13,6 +13,28 @@ declare(strict_types=1);
 class productTao extends productModel
 {
     /**
+     * 初始化类的时候，根据是否有产品，还有其他条件，判断是否需要跳转到创建产品页面
+     * Check locate create product page whether or not, by exist products and other.
+     *
+     * @param array $products
+     * @access protected
+     * @return bool
+     */
+    protected function checkLocateCreate(array $products): bool
+    {
+        if(!empty($products)) return false;
+
+        $methodName = $this->app->getMethodName();
+        if(strpos($this->config->product->skipRedirectMethod, ",{$methodName},") !== false) return false;
+
+        $viewType = $this->app->getViewType();
+        if($viewType == 'mhtml') return false;  //If client device is mobile, then not locate.
+        if($viewType == 'json' or (defined('RUN_MODE') and RUN_MODE == 'api')) return false; //If request type is api, then not locate.
+
+        return true;
+    }
+
+    /**
      * 从数据表获取符合条件的id=>name的键值对。
      * Fetch pairs like id=>name.
      *
@@ -427,13 +449,13 @@ class productTao extends productModel
         $line->name   = htmlSpecialString($lineName);
         $line->root   = $programID;
 
-        $existedLineID = $this->dao->select('id')->from(TABLE_MODULE)->where('type')->eq('line')->andWhere('root')->eq($line->root)->andWhere('name')->eq($line->name)->fetch('id');
+        $existedLineID = (int)$this->dao->select('id')->from(TABLE_MODULE)->where('type')->eq('line')->andWhere('root')->eq($line->root)->andWhere('name')->eq($line->name)->fetch('id');
         if($existedLineID) return $existedLineID;
 
         $this->dao->insert(TABLE_MODULE)->data($line)->exec();
         if(dao::isError()) return false;
 
-        $lineID = $this->dao->lastInsertID();
+        $lineID = (int)$this->dao->lastInsertID();
         $path   = ",$lineID,";
         $this->dao->update(TABLE_MODULE)->set('path')->eq($path)->set('`order`')->eq($lineID)->where('id')->eq($lineID)->exec();
 
@@ -452,7 +474,7 @@ class productTao extends productModel
     {
         if($productID <= 0) return false;
 
-        $existedLibID = $this->dao->select('id')->from(TABLE_DOCLIB)->where('product')->eq($productID)
+        $existedLibID = (int)$this->dao->select('id')->from(TABLE_DOCLIB)->where('product')->eq($productID)
             ->andWhere('type')->eq('product')
             ->andWhere('main')->eq('1')
             ->fetch('id');
@@ -470,6 +492,6 @@ class productTao extends productModel
         $this->dao->insert(TABLE_DOCLIB)->data($lib)->exec();
 
         if(dao::isError())return false;
-        return $this->dao->lastInsertID();
+        return (int)$this->dao->lastInsertID();
     }
 }
