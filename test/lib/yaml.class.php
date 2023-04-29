@@ -282,22 +282,20 @@ class yaml
     }
 
     /**
-     * Build yaml file and insert table.
+     * 合并原始yaml与用户自定义yaml文件
+     * Merege yaml file.
      *
-     * @param  int     $rows
-     * @param  string  $dataDirYaml The yaml file names in the data directory
-     * @param  bool  $isClear Truncate table if set isClear to true.
      * @access public
-     * @return void
+     * @return string
      */
-    public function gen($rows, $dataDirYaml = '', $isClear = true)
+    public function mergeYaml()
     {
         $mergeData = array('fields' => array());
         foreach($this->configFiles as $configFile)
         {
             $configData = yaml_parse_file($configFile);
-            $configData['title'] = $configData['title'];
-            $configData['author'] = $configData['author'];
+            $configData['title']   = $configData['title'];
+            $configData['author']  = $configData['author'];
             $configData['version'] = $configData['version'];
 
             foreach($configData['fields'] as $configItem)
@@ -317,7 +315,6 @@ class yaml
         if(!is_dir("{$runFileDir}/data")) mkdir("{$runFileDir}/data", 0777);
         $yamlFile = "{$runFileDir}/data/{$this->tableName}_{$runFileName}.yaml";
 
-
         if(!empty($this->fields->fieldArr))
         {
             $fields = $this->fields->setFieldRule($this->fields->fieldArr);
@@ -327,9 +324,38 @@ class yaml
 
         yaml_emit_file($yamlFile, $mergeData, YAML_UTF8_ENCODING);
 
+        return $yamlFile;
+    }
+
+    /**
+     * Build yaml file and insert table.
+     *
+     * @param  int     $rows
+     * @param  bool    $isClear Truncate table if set isClear to true.
+     * @access public
+     * @return void
+     */
+    public function gen($rows, $isClear = true)
+    {
+        $yamlFile = $this->mergeYaml();
         $this->insertDB($yamlFile, $this->tableName, $rows, $isClear);
     }
 
+    /**
+     * 打印zendata生成的sql和导入数据库产生的错误.
+     * Print sql and error.
+     *
+     * @param  int    $rows
+     * @param  bool   $isClear Truncate table if set isClear to true.
+     * @param  bool   $debug Print sql and error if set isClear to true.
+     * @access public
+     * @return void
+     */
+    public function debug($rows, $isClear = true)
+    {
+        $yamlFile = $this->mergeYaml();
+        $this->insertDB($yamlFile, $this->tableName, $rows, $isClear, true);
+    }
     /**
      * Insert the data into database.
      *
@@ -337,10 +363,11 @@ class yaml
      * @param  string    $tableName
      * @param  int       $rows
      * @param  bool      $isClear Truncate table if set isClear to true.
+     * @param  bool      $debug 
      * @access public
      * @return string
      */
-    function insertDB($yamlFile, $tableName, $rows, $isClear = true)
+    function insertDB($yamlFile, $tableName, $rows, $isClear = true, $debug = false)
     {
         $tableSqlDir = "{$_SERVER['PWD']}/data/sql";
 
@@ -366,12 +393,24 @@ class yaml
             system(sprintf("mysql -u%s -p%s -h%s -P%s %s -e 'truncate %s' 2>/dev/null", $dbUser, $dbPWD, $dbHost, $dbPort, $dbName, $tableName));
             $command .= ' --clear';
         }
+        $sqlPath    = "{$tableSqlDir}/{$tableName}_zd.sql";
         $execYaml   = sprintf($command, $configYaml, $yamlFile, $rows, $tableName, $dbUser, $dbPWD, $dbHost, $dbPort, $dbName);
-        $execGenSQL = sprintf($genSQL, $configYaml, $yamlFile, $rows, $tableName, "{$tableSqlDir}/{$tableName}_zd.sql");
         $execDump   = sprintf($dumpCommand, $dbUser, $dbPWD, $dbHost, $dbPort, $dbName, $tableName);
+
         system($execDump);
-        system($execYaml);
         system($execGenSQL);
+
+        if($debug)
+        {
+            $execGenSQL = sprintf($genSQL, $configYaml, $yamlFile, $rows, $tableName, $sqlPath);
+            echo "\n" . file_get_contents($sqlPath) . "\n";
+
+            $tmpl = "mysql -u%s -p%s -h%s -P%s -D%s < %s";
+            system(sprintf($tmpl, $dbUser, $dbPWD, $dbHost, $dbPort, $dbName, $sqlPath));
+            return;
+        }
+
+        system($execYaml);
     }
 
     /**
