@@ -416,7 +416,7 @@ class product extends control
             return $this->productZen->responseAfterCreate($productID, $data, $this->post->uid, zget($_POST, 'lineName', ''));
         }
 
-        $this->productZen->setMenu4Create($programID);
+        $this->productZen->setCreateMenu($programID);
         $this->productZen->buildCreateForm($programID, $extra);
     }
 
@@ -1166,51 +1166,19 @@ class product extends control
     }
 
     /**
+     * 访问与测试相关模块或方法时，又没有相关产品，或者没有产品，会跳转到该方法。例如：qa。
      * Show error no product when visit qa.
      *
-     * @param  string $moduleName
+     * @param  string $moduleName   project|qa|execution
      * @param  string $activeMenu
-     * @param  int    $objectID
+     * @param  string $objectID     The format of this parameter should be integer.
      * @access public
      * @return void
      */
-    public function showErrorNone($moduleName = 'qa', $activeMenu = 'index', $objectID = 0)
+    public function showErrorNone(string $moduleName = 'qa', string $activeMenu = 'index', string $objectID = ''): void
     {
-        if($moduleName == 'project')
-        {
-            $this->loadModel('project')->setMenu($objectID);
-            $project = $this->project->getByID($objectID);
-            $this->lang->project->menu      = $this->lang->{$project->model}->menu;
-            $this->lang->project->menuOrder = $this->lang->{$project->model}->menuOrder;
-            $this->app->rawModule = $activeMenu;
-
-            if($activeMenu == 'bug')            $this->lang->{$project->model}->menu->qa['subMenu']->bug['subModule']        = 'product';
-            if($activeMenu == 'testcase')       $this->lang->{$project->model}->menu->qa['subMenu']->testcase['subModule']   = 'product';
-            if($activeMenu == 'testtask')       $this->lang->{$project->model}->menu->qa['subMenu']->testtask['subModule']   = 'product';
-            if($activeMenu == 'testreport')     $this->lang->{$project->model}->menu->qa['subMenu']->testreport['subModule'] = 'product';
-            if($activeMenu == 'projectrelease') $this->lang->{$project->model}->menu->release['subModule']                   = 'projectrelease';
-        }
-        elseif($moduleName == 'qa')
-        {
-            $this->loadModel('qa')->setMenu(array(), 0);
-            $this->app->rawModule   = $activeMenu;
-            $this->view->moduleName = $moduleName;
-
-            if($activeMenu == 'testcase')   unset($this->lang->qa->menu->testcase['subMenu']);
-            if($activeMenu == 'testsuite')  unset($this->lang->qa->menu->testcase['subMenu']);
-            if($activeMenu == 'testtask')   unset($this->lang->qa->menu->testtask['subMenu']);
-            if($activeMenu == 'testreport') unset($this->lang->qa->menu->testtask['subMenu']);
-        }
-        elseif($moduleName == 'execution')
-        {
-            $this->loadModel('execution')->setMenu($objectID);
-            $this->app->rawModule = $activeMenu;
-            if($activeMenu == 'bug')        $this->lang->execution->menu->qa['subMenu']->bug['subModule']        = 'product';
-            if($activeMenu == 'testcase')   $this->lang->execution->menu->qa['subMenu']->testcase['subModule']   = 'product';
-            if($activeMenu == 'testtask')   $this->lang->execution->menu->qa['subMenu']->testtask['subModule']   = 'product';
-            if($activeMenu == 'testreport') $this->lang->execution->menu->qa['subMenu']->testreport['subModule'] = 'product';
-        }
-        if($this->app->getViewType() == 'mhtml') $this->product->setMenu('');
+        $objectID = (int)$objectID;
+        $this->productZen->setShowErrorNoneMenu($moduleName, $activeMenu, $objectID);
 
         $this->view->title    = $this->lang->$moduleName->common;
         $this->view->objectID = $objectID;

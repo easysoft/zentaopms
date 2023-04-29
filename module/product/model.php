@@ -675,6 +675,7 @@ class productModel extends model
     {
         $this->lang->error->unique = $this->lang->error->repeat;
         $this->dao->insert(TABLE_PRODUCT)->data($product)->autoCheck()
+            ->batchCheck($this->config->product->create->requiredFields, 'notempty')
             ->checkIF(!empty($product->name), 'name', 'unique', "`program` = {$product->program} and `deleted` = '0'")
             ->checkIF(!empty($product->code), 'code', 'unique', "`deleted` = '0'")
             ->checkFlow()
