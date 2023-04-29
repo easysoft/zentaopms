@@ -511,7 +511,7 @@ class project extends control
      * @access public
      * @return void
      */
-    public function edit($projectID = 0, $from = '')
+    public function edit(string $projectID, string $from = ''): void
     {
         $this->loadModel('action');
         $this->loadModel('custom');
@@ -520,10 +520,12 @@ class project extends control
         $this->loadModel('program');
         $this->loadModel('execution');
 
-        $projectID = (int)$projectID;
-        $project   = $this->project->getByID($projectID);
-        $programID = $project->parent;
+
+        $projectID  = (int)$projectID;
+        $project    = $this->project->getByID($projectID);
+        $programID  = $project->parent;
         $this->project->setMenu($projectID);
+
         if($project->model == 'kanban')
         {
             unset($this->lang->project->authList['reset']);
@@ -531,59 +533,7 @@ class project extends control
             $this->lang->project->subAclList = $this->lang->project->kanbanSubAclList;
         }
 
-        if($_POST)
-        {
-            $oldPlanList = $this->dao->select('plan')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($projectID)->andWhere('plan')->ne(0)->fetchPairs('plan');
-            $oldPlans    = array();
-            foreach($oldPlanList as $oldPlanIDList)
-            {
-                if(is_numeric($oldPlanIDList)) $oldPlans[$oldPlanIDList] = $oldPlanIDList;
-                if(!is_numeric($oldPlanIDList))
-                {
-                    $oldPlanIDList = explode(',', $oldPlanIDList);
-                    foreach($oldPlanIDList as $oldPlanID) $oldPlans[$oldPlanID] = $oldPlanID;
-                }
-            }
-
-            $changes = $this->project->update($projectID);
-            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-
-            if($changes)
-            {
-                $actionID = $this->action->create('project', $projectID, 'edited');
-                $this->action->logHistory($actionID, $changes);
-            }
-
-            /* Link the plan stories. */
-            $newPlans = array();
-            if(isset($_POST['plans']))
-            {
-                foreach($_POST['plans'] as $plans)
-                {
-                    foreach($plans as $planIDList)
-                    {
-                        foreach($planIDList as $planID) $newPlans[$planID] = $planID;
-                    }
-                }
-            }
-
-            $diffResult = array_diff($oldPlans, $newPlans);
-            if(!empty($newPlans) and !empty($diffResult))
-            {
-                $this->loadModel('productplan')->linkProject($projectID, $newPlans);
-            }
-
-            $message = $this->executeHooks($projectID);
-            if($message) $this->lang->saveSuccess = $message;
-
-            if(isonlybody()) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
-
-            $locateLink = ($this->session->projectList and $from != 'view') ? $this->session->projectList : inLink('view', "projectID=$projectID");
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $locateLink));
-        }
-
         $withProgram = $this->config->systemMode == 'ALM' ? true : false;
-
         $linkedBranchList    = array();
         $productPlans        = array();
         $branches            = $this->project->getBranchesByProject($projectID);
@@ -594,6 +544,35 @@ class project extends control
         $plans               = $this->productplan->getGroupByProduct(array_keys($linkedProducts), 'skipParent|unexpired');
         $projectStories      = $this->project->getStoriesByProject($projectID);
         $projectBranches     = $this->project->getBranchGroupByProject($projectID, array_keys($linkedProducts));
+
+        if($_POST)
+        {
+            $postData = form::data($this->config->project->form->eidt);
+            $project  = $this->projectZen->prepareEditExtras($postData);
+
+            $project->id       = $projectID;
+            $project->products = isset($project->products) ? array_filter($project->products) : $linkedProducts;
+
+            $plans = $project->plans;
+            if(!empty($plans)) $this->project->updatePlanIdListByProject($projectID, $plans);
+
+            $changes = $this->project->update($projectID, $project);
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+            if($changes)
+            {
+                $actionID = $this->action->create('project', $projectID, 'edited');
+                $this->action->logHistory($actionID, $changes);
+            }
+
+            $message = $this->executeHooks($projectID);
+            if($message) $this->lang->saveSuccess = $message;
+
+            if(isonlybody()) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
+
+            $locateLink = ($this->session->projectList and $from != 'view') ? $this->session->projectList : inLink('view', "projectID=$projectID");
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $locateLink));
+        }
 
         /* If the story of the product which linked the project, you don't allow to remove the product. */
         $unmodifiableProducts     = array();
@@ -1842,9 +1821,9 @@ class project extends control
      * @param  string  $from browse|view
      *
      * @access public
-     * @return void
+     * @return int
      */
-    public function delete(string $projectID, string $confirm = 'no', string $from = 'browse'): void
+    public function delete(string $projectID, string $confirm = 'no', string $from = 'browse'): int
     {
         $projectID = (int)$projectID;
         $project   = $this->project->getByID($projectID);
@@ -1870,7 +1849,6 @@ class project extends control
             $this->session->set('project', '');
             if($from == 'view') return print(js::locate($this->createLink('project', 'browse'), 'parent'));
             return print(js::reload('parent'));
-
         }
     }
 

@@ -36,11 +36,11 @@ class productZen extends product
      * 为创建产品设置导航数据，主要是替换占位符。
      * Set menu for create product page.
      *
-     * @param int $programID
+     * @param  int $programID
      * @access protected
      * @return void
      */
-    protected function setMenu4Create(int $program): void
+    protected function setCreateMenu(int $program): void
     {
         if($this->app->tab == 'program') $this->loadModel('program')->setMenu($programID);
         if($this->app->tab == 'doc') unset($this->lang->doc->menu->product['subMenu']);
@@ -52,6 +52,95 @@ class productZen extends product
             return;
         }
         $this->product->setMenu();
+    }
+
+    /**
+     * 为showErrorNone方法，根据不同模块，设置不同的二级或三级导航配置。
+     * Set menu for showErrorNone page.
+     *
+     * @param  string $moduleName   project|qa|execution
+     * @param  string $activeMenu
+     * @param  int $objectID
+     * @access protected
+     * @return void
+     */
+    protected function setShowErrorNoneMenu(string $moduleName, string $activeMenu, int $objectID): void
+    {
+        if($this->app->getViewType() == 'mhtml')
+        {
+            $this->product->setMenu();
+            return;
+        }
+
+        if($moduleName == 'qa')        $this->setShowErrorNoneMenu4QA($activeMenu);
+        if($moduleName == 'project')   $this->setShowErrorNoneMenu4Project($activeMenu, $objectID);
+        if($moduleName == 'execution') $this->setShowErrorNoneMenu4Execution($activeMenu, $objectID);
+    }
+
+    /**
+     * 为showErrorNone方法，设置在测试视图中的二级导航配置。
+     * Set menu for showErrorNone page in qa.
+     *
+     * @param  string $activeMenu
+     * @access private
+     * @return void
+     */
+    private function setShowErrorNoneMenu4QA(string $activeMenu): void
+    {
+        $this->loadModel('qa')->setMenu(array(), 0);
+        $this->view->moduleName = 'qa';
+        $this->app->rawModule   = $activeMenu;
+
+        if($activeMenu == 'testcase')   unset($this->lang->qa->menu->testcase['subMenu']);
+        if($activeMenu == 'testsuite')  unset($this->lang->qa->menu->testcase['subMenu']);
+        if($activeMenu == 'testtask')   unset($this->lang->qa->menu->testtask['subMenu']);
+        if($activeMenu == 'testreport') unset($this->lang->qa->menu->testtask['subMenu']);
+    }
+
+    /**
+     * 为showErrorNone方法，设置在项目视图中的二级或三级导航配置。
+     * Set menu for showErrorNone page in project.
+     *
+     * @param  string $activeMenu
+     * @param  int    $projectID
+     * @access private
+     * @return void
+     */
+    private function setShowErrorNoneMenu4Project(string $activeMenu, int $projectID): void
+    {
+        $this->loadModel('project')->setMenu($projectID);
+        $this->app->rawModule  = $activeMenu;
+
+        $project = $this->project->getByID($projectID);
+        $model   = zget($project, 'model', 'scrum');
+        $this->lang->project->menu      = $this->lang->{$model}->menu;
+        $this->lang->project->menuOrder = $this->lang->{$model}->menuOrder;
+
+        if($activeMenu == 'bug')            $this->lang->{$model}->menu->qa['subMenu']->bug['subModule']        = 'product';
+        if($activeMenu == 'testcase')       $this->lang->{$model}->menu->qa['subMenu']->testcase['subModule']   = 'product';
+        if($activeMenu == 'testtask')       $this->lang->{$model}->menu->qa['subMenu']->testtask['subModule']   = 'product';
+        if($activeMenu == 'testreport')     $this->lang->{$model}->menu->qa['subMenu']->testreport['subModule'] = 'product';
+        if($activeMenu == 'projectrelease') $this->lang->{$model}->menu->release['subModule']                   = 'projectrelease';
+    }
+
+    /**
+     * 为showErrorNone方法，设置在执行视图中的三级导航配置。
+     * Set menu for showErrorNone page in execution.
+     *
+     * @param  string $activeMenu
+     * @param  int    $executionID
+     * @access private
+     * @return void
+     */
+    private function setShowErrorNoneMenu4Execution(string $activeMenu, int $executionID): void
+    {
+        $this->loadModel('execution')->setMenu($executionID);
+        $this->app->rawModule = $activeMenu;
+
+        if($activeMenu == 'bug')        $this->lang->execution->menu->qa['subMenu']->bug['subModule']        = 'product';
+        if($activeMenu == 'testcase')   $this->lang->execution->menu->qa['subMenu']->testcase['subModule']   = 'product';
+        if($activeMenu == 'testtask')   $this->lang->execution->menu->qa['subMenu']->testtask['subModule']   = 'product';
+        if($activeMenu == 'testreport') $this->lang->execution->menu->qa['subMenu']->testreport['subModule'] = 'product';
     }
 
     /**
@@ -171,10 +260,9 @@ class productZen extends product
             ->setIF($this->config->systemMode == 'light', 'program', (int)zget($this->config->global, 'defaultProgram', 0))
             ->setIF($acl == 'open', 'whitelist', '')
             ->stripTags($this->config->product->editor->create['id'], $this->config->allowedTags)
-            ->join('whitelist', ',')
-            ->join('reviewer', ',')
             ->remove('uid,newLine,lineName,contactListMenu')
             ->get();
+        if(empty($product)) return false;
 
         $product = $this->loadModel('file')->processImgURL($product, $this->config->product->editor->create['id'], $uid);
 

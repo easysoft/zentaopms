@@ -34,7 +34,7 @@ pipeline {
              container('sonar') {
                  withSonarQubeEnv('sonarqube') {
                      sh 'git config --global --add safe.directory $(pwd)'
-                     sh 'sonar-scanner -Dsonar.inclusions=$(git diff --name-only HEAD~1|tr "\\n" ",") -Dsonar.analysis.user=$(git show -s --format=%an)'
+                     sh 'sonar-scanner -Dsonar.analysis.user=$(git show -s --format=%an)'
                }
              }
            }

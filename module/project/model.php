@@ -1317,30 +1317,10 @@ class projectModel extends model
      * @access public
      * @return array
      */
-    public function update($projectID = 0, $project)
+    public function update($projectID, $project)
     {
         $oldProject        = $this->dao->findById($projectID)->from(TABLE_PROJECT)->fetch();
         $linkedProducts    = $this->dao->select('product')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($projectID)->fetchPairs();
-        $_POST['products'] = isset($_POST['products']) ? array_filter($_POST['products']) : $linkedProducts;
-
-        $project = fixer::input('post')
-            ->add('id', $projectID)
-            ->callFunc('name', 'trim')
-            ->setDefault('team', $this->post->name)
-            ->setDefault('lastEditedBy', $this->app->user->account)
-            ->setDefault('lastEditedDate', helper::now())
-            ->setDefault('days', '0')
-            ->setIF($this->post->delta == 999, 'end', LONG_TIME)
-            ->setIF($this->post->delta == 999, 'days', 0)
-            ->setIF($this->post->begin == '0000-00-00', 'begin', '')
-            ->setIF($this->post->end   == '0000-00-00', 'end', '')
-            ->setIF($this->post->future, 'budget', 0)
-            ->setIF($this->post->budget != 0, 'budget', round((float)$this->post->budget, 2))
-            ->setIF(!isset($_POST['whitelist']), 'whitelist', '')
-            ->join('whitelist', ',')
-            ->stripTags($this->config->project->editor->edit['id'], $this->config->allowedTags)
-            ->remove('products,branch,plans,delta,future,contactListMenu,teamMembers')
-            ->get();
 
         if(!isset($project->parent)) $project->parent = $oldProject->parent;
 
@@ -1938,7 +1918,7 @@ class projectModel extends model
         $canBatchEdit = common::hasPriv('project', 'batchEdit');
         $account      = $this->app->user->account;
         $id           = $col->id;
-        $projectLink  = helper::createLink('project', 'index', "projectID=$project->id", '', '', $project->id);
+        $projectLink  = helper::createLink('project', 'index', "projectID=$project->id", '', false, $project->id);
 
         if($col->show)
         {
@@ -3055,5 +3035,49 @@ class projectModel extends model
         }
 
         return $repoPairs;
+    }
+
+    /**
+     * Fetch planIdList by project
+     *
+     * @param  int   $projectID
+     * @param  array $plans
+     * @access public
+     * @return void
+     */
+    public function updatePlanIdListByProject(int $projectID, array $plans): void
+    {
+        /* Link the plan stories. */
+        $newPlans = array();
+        if(isset($plans))
+        {
+            foreach($plans as $planList)
+            {
+                foreach($planList as $planIDList)
+                {
+                    foreach($planIDList as $planID) $newPlans[$planID] = $planID;
+                }
+            }
+        }
+        if(empty($newPlans)) return;
+
+        /* Get old PlanIdList by project*/
+        $oldPlanList = $this->dao->select('plan')->from(TABLE_PROJECTPRODUCT)
+            ->where('project')->eq($projectID)
+            ->andWhere('plan')->ne(0)->fetchPairs('plan');
+
+        $oldPlans    = array();
+        foreach($oldPlanList as $oldPlanIDList)
+        {
+            if(is_numeric($oldPlanIDList)) $oldPlans[$oldPlanIDList] = $oldPlanIDList;
+            if(!is_numeric($oldPlanIDList))
+            {
+                $oldPlanIDList = explode(',', $oldPlanIDList);
+                foreach($oldPlanIDList as $oldPlanID) $oldPlans[$oldPlanID] = $oldPlanID;
+            }
+        }
+
+        $diffResult = array_diff($oldPlans, $newPlans);
+        if(!empty($diffResult)) $this->loadModel('productplan')->linkProject($projectID, $newPlans);
     }
 }

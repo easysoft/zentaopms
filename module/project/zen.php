@@ -51,6 +51,37 @@ class projectZen extends project
     }
 
     /**
+     * Append extras data to post data.
+     *
+     * @param  object $postData
+     * @access protected
+     * @return int|object
+     */
+    protected function prepareEditExtras(object $postData): object
+    {
+        $rawdata = $postData->rawdata;
+        $project = $postData ->setDefault('team', $this->post->name)
+            ->setDefault('lastEditedBy', $this->app->user->account)
+            ->setDefault('lastEditedDate', helper::now())
+            ->setDefault('days', '0')
+            ->setIF($this->post->delta == 999, 'end', LONG_TIME)
+            ->setIF($this->post->delta == 999, 'days', 0)
+            ->setIF($this->post->begin == '0000-00-00', 'begin', '')
+            ->setIF($this->post->end   == '0000-00-00', 'end', '')
+            ->setIF($this->post->future, 'budget', 0)
+            ->setIF($this->post->budget != 0, 'budget', round((float)$this->post->budget, 2))
+            ->stripTags($this->config->project->editor->edit['id'], $this->config->allowedTags)
+            ->get();
+
+        if(!isset($this->config->setCode) or $this->config->setCode == 0) unset($project->code);
+
+        /* Lean mode relation defaultProgram. */
+        if($this->config->systemMode == 'light') $project->parent = $this->config->global->defaultProgram;
+
+        return $project;
+    }
+
+    /**
      * Check product and branch not empty.
      *
      * @param  object $project
@@ -584,9 +615,9 @@ class projectZen extends project
      * @param  string $from
      *
      * @access protected
-     * @return void
+     * @return int 1
      */
-    protected function removeAssociatedExecutions(int $projectID, string $from): void
+    protected function removeAssociatedExecutions(int $projectID, string $from): int
     {
         /* Delete the execution under the project. */
         $executionIdList = $this->loadModel('execution')->getPairs($projectID);
