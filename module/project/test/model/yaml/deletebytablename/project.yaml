@@ -1,0 +1,18 @@
+title: zt_project
+author: liuhong
+version: "1.0"
+fields:
+    - field: id
+      range: 1-5
+    - field: project
+      range: 0, 1, 0, 3, 3
+    - field: model
+      range: 'scrum, ,waterfall, , ,'
+    - field: type
+      range: 'project,sprint,project,stage,stage'
+    - field: status
+      range: 'wait,doing,closed,suspended'
+    - field: parent
+      range: 0, 1, 0, 3, 3
+    - field: path
+      range: `,1,`, `,1,2,`, `,3,`, `,3,4,`, `,3,4,5,`
