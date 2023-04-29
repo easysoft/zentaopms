@@ -680,7 +680,7 @@ class productModel extends model
             ->checkFlow()
             ->exec();
         if(dao::isError()) return false;
-        return $this->dao->lastInsertID();
+        return (int)$this->dao->lastInsertID();
     }
 
     /**

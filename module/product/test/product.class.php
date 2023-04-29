@@ -27,18 +27,22 @@ class productTest
     public function createObject(array $param = array()): object|array
     {
         $createFields = array();
-        $createFields['program']  = 1;
-        $createFields['line']     = 0;
-        $createFields['name']     = '';
-        $createFields['code']     = '';
-        $createFields['PO']       = 'admin';
-        $createFields['QD']       = '';
-        $createFields['RD']       = '';
-        $createFields['reviewer'] = '';
-        $createFields['type']     = 'normal';
-        $createFields['status']   = 'normal';
-        $createFields['desc']     = '';
-        $createFields['acl']      = 'open';
+        $createFields['program']        = 1;
+        $createFields['line']           = 0;
+        $createFields['name']           = '';
+        $createFields['code']           = '';
+        $createFields['PO']             = 'admin';
+        $createFields['QD']             = '';
+        $createFields['RD']             = '';
+        $createFields['reviewer']       = '';
+        $createFields['type']           = 'normal';
+        $createFields['status']         = 'normal';
+        $createFields['desc']           = '';
+        $createFields['acl']            = 'open';
+        $createFields['whitelist']      = '';
+        $createFields['createdBy']      = $this->objectModel->app->user->account;
+        $createFields['createdDate']    = helper::now();
+        $createFields['createdVersion'] = $this->objectModel->config->version;
 
         $data = new stdclass();
         foreach($createFields as $field => $defaultValue) $data->$field = zget($param, $field, $defaultValue);
@@ -1071,8 +1075,7 @@ class productTest
      */
     public function createLineTest(int $programID, string $lineName): object|array
     {
-        $_POST['lineName'] = $lineName;
-        $lineID = $this->objectModel->createLine($programID);
+        $lineID = $this->objectModel->createLine($programID, $lineName);
 
         if(dao::isError())
         {
