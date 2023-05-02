@@ -1697,19 +1697,19 @@ class productModel extends model
         if(empty($products)) return array();
 
         /* Get stats data. */
-        $productKeys          = array_keys($products);
-        $products             = $this->productTao->getStatsProducts($productKeys,$programID, $orderBy, $pager);
+        $productIDs           = array_keys($products);
+        $products             = $this->productTao->getStatsProducts($productIDs,$programID, $orderBy, $pager);
         $finishClosedStory    = $this->productTao->getFinishClosedStoryTODO();
         $unclosedStory        = $this->productTao->getUnClosedStoryTODO();
-        $plans                = $this->productTao->getPlansTODO($productKeys);
-        $releases             = $this->productTao->getReleasesTODO($productKeys);
-        $bugs                 = $this->productTao->getBugsTODO($productKeys);
-        $unResolved           = $this->productTao->getUnResolvedTODO($productKeys);
-        $fixedBugs            = $this->productTao->getFixedBugsTODO($productKeys);
-        $closedBugs           = $this->productTao->getClosedBugsTODO($productKeys);
-        $thisWeekBugs         = $this->productTao->getThisWeekBugsTODO($productKeys);
-        $assignToNull         = $this->productTao->getAssignToNullTODO($productKeys);
-        list($stories, $reqs) = $this->productTao->getStatsStoriesAndRequirements($productKeys, $storyType);
+        $plans                = $this->productTao->getPlansTODO($productIDs);
+        $releases             = $this->productTao->getReleasesTODO($productIDs);
+        $bugs                 = $this->productTao->getBugsTODO($productIDs);
+        $unResolved           = $this->productTao->getUnResolvedTODO($productIDs);
+        $fixedBugs            = $this->productTao->getFixedBugsTODO($productIDs);
+        $closedBugs           = $this->productTao->getClosedBugsTODO($productIDs);
+        $thisWeekBugs         = $this->productTao->getThisWeekBugsTODO($productIDs);
+        $assignToNull         = $this->productTao->getAssignToNullTODO($productIDs);
+        list($stories, $reqs) = $this->productTao->getStatsStoriesAndRequirements($productIDs, $storyType);
 
         /* Render statistic result to each product. */
         $stats = array();
@@ -1918,103 +1918,6 @@ class productModel extends model
         if($storyType == 'story')       $storyCommon = $this->lang->SRCommon;
 
         return sprintf($this->lang->product->storySummary, $allCount,  $storyCommon, $totalEstimate, $rate * 100 . "%");
-    }
-
-    /**
-     * Statistics program data from statistics data of product.
-     *
-     * @param  array $productStats
-     * @access public
-     * @return array
-     */
-    public function statisticProgram(array $productStats): array
-    {
-        if(defined('TUTORIAL')) return $this->loadModel('tutorial')->getProductStats();
-
-        $productStructure = array();
-
-        foreach($productStats as $product)
-        {
-            $productStructure[$product->program][$product->line]['products'][$product->id] = $product;
-            if($product->line)
-            {
-                /* Line name. */
-                $productStructure[$product->program][$product->line]['lineName'] = $product->lineName;
-                $productStructure[$product->program][$product->line] = $this->statisticData('line', $productStructure, $product);
-            }
-
-            if($product->program)
-            {
-                /* Init vars. */
-                /* Program name. */
-                $productStructure[$product->program]['programName'] = $product->programName;
-                $productStructure[$product->program]['programPM']   = $product->programPM;
-                $productStructure[$product->program]['id']          = $product->program;
-                $productStructure[$product->program] = $this->statisticData('program', $productStructure, $product);
-            }
-        }
-
-        return $productStructure;
-    }
-
-    /**
-     * Statistic product data.
-     *
-     * @param  string $type
-     * @param  array  $productStructure
-     * @param  object $product
-     * @access public
-     * @return void
-     */
-    public function statisticData($type = 'program', $productStructure = array(), $product = null)
-    {
-        if(empty($productStructure)) return $productStructure;
-
-        /* Init vars. */
-        $data = $type == 'program' ? $productStructure[$product->program] : $productStructure[$product->program][$product->line];
-        foreach($this->config->product->statisticFields as $key => $fields)
-        {
-            /* Get the total number of requirements and stories. */
-            if(strpos('stories|requirements', $key) !== false)
-            {
-                $totalObjects = 0;
-                foreach($product->$key as $status => $number)
-                {
-                    if(isset($this->lang->story->statusList[$status])) $totalObjects += $number;
-                }
-
-                $fieldType = $key == 'stories' ? 'Stories' : 'Requirements';
-                if(!isset($data['total' . $fieldType])) $data['total' . $fieldType] = 0;
-                $data['total' . $fieldType] += $totalObjects;
-            }
-            elseif($key == 'bugs')
-            {
-                $fieldType = 'Bugs';
-            }
-
-            foreach($fields as $field)
-            {
-                if(!isset($data[$field])) $data[$field] = 0;
-
-                $status = $field;
-                if(strpos($field, 'Requirements') !== false or strpos($field, 'Stories') !== false or $field == 'unResolvedBugs')
-                {
-                    $length = strpos($field, $fieldType);
-                    $status = substr($field, 0, $length);
-                }
-
-                if(strpos('requirements|stories', $key) !== false)
-                {
-                    $objects = $product->$key;
-                    $data[$field] += $objects[$status];
-                }
-                else
-                {
-                    $data[$field] += $product->$status;
-                }
-            }
-        }
-        return $data;
     }
 
     /**

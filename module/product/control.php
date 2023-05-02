@@ -1217,7 +1217,7 @@ class product extends control
         if($this->config->systemMode == 'light' and $orderBy == 'program_asc') $orderBy = 'order_asc';
 
         $productStats     = $this->product->getStats($orderBy, $pager, $browseType, 0, 'story', 0, $queryID);
-        $productStructure = $this->product->statisticProgram($productStats);
+        $productStructure = $this->productZen->statisticProgram($productStats);
 
         /* Save search form. */
         $actionURL = $this->createLink('product', 'all', "browseType=bySearch&orderBy=order_asc&queryID=myQueryID");

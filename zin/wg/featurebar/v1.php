@@ -28,7 +28,7 @@ class featureBar extends wg
         $rawItems = \customModel::getFeatureMenu($app->rawModule, $app->rawMethod);
         if(!is_array($rawItems)) return NULL;
 
-        $current      = $this->prop('current', data('browseType', ''));
+        $current      = $this->prop('current', data('browseType'));
         $recTotal     = data('recTotal');
         $items        = array();
         $link         = $this->prop('link');
