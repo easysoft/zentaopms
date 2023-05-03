@@ -1,6 +1,8 @@
 <?php
 declare(strict_types=1);
 
+use function zin\createLink;
+
 /**
  * The control file of todo module of ZenTaoPMS.
  *
@@ -205,7 +207,7 @@ class todo extends control
 
         if($todo->status == 'wait')
         {
-            this->todo->start($todoID);
+            $this->todo->start($todoID);
             if(dao::isError()) return print(js::error(dao::getError()));
         }
         if(in_array($todo->type, array('bug', 'task', 'story'))) return $this->todoZen->printStartConfirm($todo);
@@ -321,7 +323,7 @@ class todo extends control
         /* Fix bug #936. */
         if($account != $todo->account and $account != $todo->assignedTo and !common::hasPriv('my', 'team'))
         {
-            return $this->locate($this->createLink('user', 'deny', "module=my&method=team"));
+            $this->locate($this->createLink('user', 'deny', "module=my&method=team"));
         }
 
         $projects = $this->todoZen->getProjectPairsByModel((string)$todo->type);
@@ -458,17 +460,19 @@ class todo extends control
      *
      * @param  string $todoID
      * @access public
-     * @return int
+     * @return void
      */
-    public function import2Today(string $todoID = ''): int
+    public function import2Today(string $todoID = ''): void
     {
+        if(!$_POST) $this->locate($this->createLink('my', 'todo'));
+
         $formData   = form::data($this->config->todo->editDate->form);
         $todoIDList = !empty($formData->rawdata->todoIDList) ? $formData->rawdata->todoIDList : array($todoID);
         $date       = !empty($formData->rawdata->date) ? $formData->rawdata->date : date::today();
-        if(!$todoIDList) return $this->locate((string)$this->session->todoList);
+        if(!$todoIDList) $this->locate((string)$this->session->todoList);
 
         $this->todo->editDate((array)$todoIDList, (string)$date);
-        return $this->locate((string)$this->session->todoList);
+        $this->locate((string)$this->session->todoList);
     }
 
     /**
@@ -559,6 +563,7 @@ class todo extends control
      */
     public function ajaxGetExecutionPairs($projectID)
     {
+        $projectID = (int)$projectID;
         $this->session->set('project', $projectID);
 
         $project    = $this->loadModel('project')->getByID($projectID);
