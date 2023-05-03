@@ -1674,12 +1674,14 @@ class project extends control
     /**
      * Project edit a group.
      *
-     * @param  int    $groupID
+     * @param  string $groupID
+     *
      * @access public
      * @return void
      */
-    public function editGroup($groupID)
+    public function editGroup($groupID): void
     {
+        $groupID = (int)$groupID;
         $this->loadModel('group');
         if(!empty($_POST))
         {
@@ -1687,10 +1689,8 @@ class project extends control
             return print(js::closeModal('parent.parent', 'this'));
         }
 
-        $this->view->title      = $this->lang->company->orgView . $this->lang->colon . $this->lang->group->edit;
-        $this->view->position[] = $this->lang->group->edit;
-        $this->view->group      = $this->group->getById($groupID);
-
+        $this->view->title = $this->lang->company->orgView . $this->lang->colon . $this->lang->group->edit;
+        $this->view->group = $this->group->getById($groupID);
         $this->display('group', 'edit');
     }
 
