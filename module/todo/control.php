@@ -321,7 +321,7 @@ class todo extends control
         /* Fix bug #936. */
         if($account != $todo->account and $account != $todo->assignedTo and !common::hasPriv('my', 'team'))
         {
-            return $this->locate($this->createLink('user', 'deny', "module=my&method=team"));
+            $this->locate($this->createLink('user', 'deny', "module=my&method=team"));
         }
 
         $projects = $this->todoZen->getProjectPairsByModel((string)$todo->type);
@@ -460,15 +460,15 @@ class todo extends control
      * @access public
      * @return int
      */
-    public function import2Today(string $todoID = ''): int
+    public function import2Today(string $todoID = ''): void
     {
         $formData   = form::data($this->config->todo->editDate->form);
         $todoIDList = !empty($formData->rawdata->todoIDList) ? $formData->rawdata->todoIDList : array($todoID);
         $date       = !empty($formData->rawdata->date) ? $formData->rawdata->date : date::today();
-        if(!$todoIDList) return $this->locate((string)$this->session->todoList);
+        if(!$todoIDList) $this->locate((string)$this->session->todoList);
 
         $this->todo->editDate((array)$todoIDList, (string)$date);
-        return $this->locate((string)$this->session->todoList);
+        $this->locate((string)$this->session->todoList);
     }
 
     /**
