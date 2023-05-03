@@ -2214,18 +2214,21 @@ class productModel extends model
      *
      * Set menu.
      *
-     * @param int         $productID
-     * @param int|string  $branch
-     * @param int         $module
-     * @param string      $moduleType
-     * @param string      $extra
-     *
+     * @param  int         $productID
+     * @param  int|string  $branch
+     * @param  int         $module
+     * @param  string      $moduleType
+     * @param  string      $extra
      * @access public
      * @return void
      */
-    public function setMenu($productID = 0, $branch = '', $module = 0, $moduleType = '', $extra = '')
+    public function setMenu($productID = 0, $branch = '', $module = 0, $moduleType = '', $extra = ''): void
     {
-        if(!$this->app->user->admin and strpos(",{$this->app->user->view->products},", ",$productID,") === false and $productID != 0 and !defined('TUTORIAL')) return $this->accessDenied($this->lang->product->accessDenied);
+        if(!$this->app->user->admin and strpos(",{$this->app->user->view->products},", ",$productID,") === false and $productID != 0 and !defined('TUTORIAL'))
+        {
+            $this->accessDenied($this->lang->product->accessDenied);
+            return;
+        }
 
         $product = $this->getByID($productID);
 

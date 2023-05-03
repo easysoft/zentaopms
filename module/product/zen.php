@@ -40,7 +40,7 @@ class productZen extends product
      * @access protected
      * @return void
      */
-    protected function setCreateMenu(int $program): void
+    protected function setCreateMenu(int $programID): void
     {
         if($this->app->tab == 'program') $this->loadModel('program')->setMenu($programID);
         if($this->app->tab == 'doc') unset($this->lang->doc->menu->product['subMenu']);
