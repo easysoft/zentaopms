@@ -471,26 +471,26 @@ class todoZen extends todo
      * 获取用户信息。
      * Get user info.
      *
-     * @param  int    $userID
-     * @access public
+     * @param  int       $userID
+     * @access protected
      * @return object|false
      */
-    public function getUserById(int $userID): object|false
+    protected function getUserById(int $userID): object|false
     {
         return $this->loadModel('user')->getById($userID, 'id');
     }
 
     /**
-     * 记录当前页面跳转连接。
+     * 记录当前页面uri参数链接。
      * Set uri to session.
      *
      * @param  string    $uri
-     * @access public
+     * @access protected
      * @return true
      */
-    public function setSessionUri($uri): bool
+    protected function setSessionUri($uri): bool
     {
-        foreach($this->config->todo->sessionLink as $key => $value) $this->sesstion->set($key, $uri, $value);
+        foreach($this->config->todo->sessionUri as $key => $value) $this->sesstion->set($key, $uri, $value);
         return true;
     }
 
@@ -525,10 +525,10 @@ class todoZen extends todo
      *
      * @param  string $type
      * @param  string $account
-     * @access public
+     * @access protected
      * @return array
      */
-    public function exportAssociated($type, $account): array
+    protected function exportAssociated(string $type, string $account): array
     {
         if($type == 'max')
         {
@@ -565,7 +565,7 @@ class todoZen extends todo
      * @access protected
      * @return array
      */
-    public function assembleExportData(array $todos, object $assemble, object $todoLang, array $times): array
+    protected function assembleExportData(array $todos, object $assemble, object $todoLang, array $times): array
     {
         foreach($todos as $todo)
         {
@@ -574,7 +574,7 @@ class todoZen extends todo
             $todo->end   = $todo->end   == '2400' ? '' : (isset($times[$todo->end])   ? $times[$todo->end] : $todo->end);
 
             $type = $todo->type;
-            if(isset($users[$todo->account])) $todo->account = $assemble->users[$todo->account];
+            if(isset($assemble->users[$todo->account])) $todo->account = $assemble->users[$todo->account];
 
             if($type == 'bug')      $todo->name = isset($assemble->bugs[$todo->objectID])      ? $assemble->bugs[$todo->objectID]      . "(#$todo->objectID)" : '';
             if($type == 'task')     $todo->name = isset($assemble->tasks[$todo->objectID])     ? $assemble->tasks[$todo->objectID]     . "(#$todo->objectID)" : '';
