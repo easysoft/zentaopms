@@ -1804,8 +1804,7 @@ class project extends control
             $changes = $this->project->activate($projectID, $postData);
             if(dao::isError()) return print(js::error(dao::getError()));
 
-            $comment = strip_tags($this->post->comment, $this->config->allowedTags);
-            $this->projectZen->responseAfterActivate($projectID, $changes, $comment);
+            $this->projectZen->responseAfterActivate($projectID, $changes);
             return print(js::reload('parent.parent'));
         }
 
@@ -1978,7 +1977,7 @@ class project extends control
             $this->project->setMenu($projectID);
         }
 
-        $this->projectZen->dealLinkProduct($projectID);
+        $this->projectZen->dealLinkProduct($projectID, $project);
         $this->projectZen->buildMangedProductForm($projectID, $project, $executions);
     }
 
