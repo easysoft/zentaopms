@@ -205,7 +205,7 @@ class todo extends control
 
         if($todo->status == 'wait')
         {
-            this->todo->start($todoID);
+            $this->todo->start($todoID);
             if(dao::isError()) return print(js::error(dao::getError()));
         }
         if(in_array($todo->type, array('bug', 'task', 'story'))) return $this->todoZen->printStartConfirm($todo);
@@ -559,6 +559,7 @@ class todo extends control
      */
     public function ajaxGetExecutionPairs($projectID)
     {
+        $projectID = (int)$projectID;
         $this->session->set('project', $projectID);
 
         $project    = $this->loadModel('project')->getByID($projectID);
