@@ -15,6 +15,12 @@
 /* Set the error reporting. */
 error_reporting(E_ALL);
 define('RUN_MODE', 'test');
+if(!defined('LIB_ROOT')) define('LIB_ROOT', dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'lib' . DIRECTORY_SEPARATOR);
+
+include_once LIB_ROOT . 'coverage.php';
+
+$codeCoverageConfig = dirname(LIB_ROOT) . DIRECTORY_SEPARATOR . 'config' . DIRECTORY_SEPARATOR . 'my.php';
+$codeCoverageConfig = exec("sed -n 's/^\\\$config->codeCoverage *= *\\(.*\\);/\\1/p' $codeCoverageConfig");
 
 if($argc > 1 && $argv[1] == '-extract')
 {
@@ -22,8 +28,15 @@ if($argc > 1 && $argv[1] == '-extract')
     exit;
 }
 
-$testPath      = dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'test' . DIRECTORY_SEPARATOR;
-$frameworkRoot = dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'framework' . DIRECTORY_SEPARATOR;
+$zentaoRoot    = dirname(__FILE__, 3) . DIRECTORY_SEPARATOR;
+$testPath      = $zentaoRoot . 'test' . DIRECTORY_SEPARATOR;
+$frameworkRoot = $zentaoRoot . 'framework' . DIRECTORY_SEPARATOR;
+
+if(isset($codeCoverageConfig) and $codeCoverageConfig == 'true')
+{
+    $coverage = new coverage();
+    $coverage->startCodeCoverage();
+}
 
 /**
  * Assert status code and set body as $_result.
@@ -273,7 +286,7 @@ function genModuleAndMethod($rParams)
     {
         $param = trim($param, "'");
         if($param[0] != '$') $param = trim(strchr($param, '$'), ')');
-        
+
         $objArrowCount        = substr_count($param, '->');
         $rParamsStructureList = explode('->', $param);
 
@@ -413,6 +426,9 @@ function getValues($value, $keys, $delimiter)
  */
 function e($expect)
 {
+    global $codeCoverageConfig;
+    global $coverage;
+    if(isset($codeCoverageConfig) and $codeCoverageConfig == 'true') $coverage->saveAndRestartCodeCoverage();
 }
 
 /**
