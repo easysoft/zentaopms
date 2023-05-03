@@ -258,7 +258,7 @@ class todo extends control
         if(defined('RUN_MODE') && RUN_MODE == 'api')
         {
             $this->send(array('status' => 'success'));
-            return;
+            return 1; /* A function with return type must return a value. */
         }
 
         if(isonlybody()) return print(js::reload('parent.parent'));
