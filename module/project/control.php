@@ -1982,23 +1982,25 @@ class project extends control
     }
 
    /**
+     * 获取项目页面中下拉执行列表
      * AJAX: get executions of a project in html select.
      *
-     * @param  int    $projectID
+     * @param  string $projectID
      * @param  int    $executionID
      * @param  string $mode
-     * @param  string $type       all|sprint|stage|kanban
+     * @param  string $type all|sprint|stage|kanban
+     *
      * @access public
      * @return void
      */
-    public function ajaxGetExecutions($projectID, $executionID = 0, $mode = '', $type = 'all')
+    public function ajaxGetExecutions(string $projectID, int $executionID = 0, string $mode = '', string $type = 'all'): void
     {
-        $project    = $this->project->getById($projectID);
+        $project    = $this->project->getByID($projectID);
+        $disabled   = $project->multiple ? '' : 'disabled';
         $executions = array('' => '') + $this->loadModel('execution')->getPairs($projectID, $type, $mode);
 
-        if($this->app->getViewType() == 'json') return print(json_encode($executionList));
+        if($this->app->getViewType() == 'json') return print(json_encode($executions));
 
-        $disabled = $project->multiple ? '' : 'disabled';
         return print(html::select('execution', $executions, $executionID, "class='form-control $disabled' $disabled"));
     }
 
