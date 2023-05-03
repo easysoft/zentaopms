@@ -578,8 +578,8 @@ class todoModel extends model
      */
     public function assignTo(object $todo): bool
     {
-        $res = $this->todoTao->updateRow((int)$todo->id, $todo);
-        if(!$res) return false;
+        $result = $this->todoTao->updateRow((int)$todo->id, $todo);
+        if(!$result) return false;
 
         $this->loadModel('action')->create('todo', (int)$todo->id, 'assigned', '', $todo->assignedTo);
         return !dao::isError();

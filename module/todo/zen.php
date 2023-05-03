@@ -42,6 +42,26 @@ class todoZen extends todo
     }
 
     /**
+     * 生成指派待办视图数据。
+     * Build assignTo form data.
+     *
+     * @param  int        $todoID
+     * @access protected
+     * @return void
+     */
+    protected function buildAssignToView(int $todoID): void
+    {
+        $this->view->todo    = $this->todo->getByID($todoID);
+        $this->view->members = $this->loadModel('user')->getPairs('noclosed|noempty|nodeleted');
+        $this->view->times   = date::buildTimeList($this->config->todo->times->begin, $this->config->todo->times->end, $this->config->todo->times->delta);
+        $this->view->actions = $this->loadModel('action')->getList('todo', $todoID);
+        $this->view->users   = $this->user->getPairs('noletter');
+        $this->view->time    = date::now();
+
+        $this->display();
+    }
+
+    /**
      * 处理请求数据
      * Processing request data.
      *
@@ -412,7 +432,7 @@ class todoZen extends todo
     }
 
     /**
-     * 处理指派待办请求数据.
+     * 处理指派待办请求数据。
      * Process assign todo request data.
      *
      * @param  object     $formData
@@ -434,7 +454,7 @@ class todoZen extends todo
     }
 
     /**
-     * 指派待办.
+     * 指派待办。
      * Assign a todo.
      *
      * @param   object     $todo

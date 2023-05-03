@@ -272,9 +272,9 @@ class todo extends control
      *
      * @param  string $todoID
      * @access public
-     * @return int
+     * @return void
      */
-    public function assignTo(string $todoID): int
+    public function assignTo(string $todoID)
     {
         $todoID = (int)$todoID;
         if(!empty($_POST))
@@ -289,13 +289,7 @@ class todo extends control
             return print(js::reload('parent.parent'));
         }
 
-        $this->view->todo    = $this->todo->getByID($todoID);
-        $this->view->members = $this->loadModel('user')->getPairs('noclosed|noempty|nodeleted');
-        $this->view->times   = date::buildTimeList($this->config->todo->times->begin, $this->config->todo->times->end, $this->config->todo->times->delta);
-        $this->view->actions = $this->loadModel('action')->getList('todo', $todoID);
-        $this->view->users   = $this->user->getPairs('noletter');
-        $this->view->time    = date::now();
-        $this->display();
+        $this->todoZen->buildAssignToView($todoID);
     }
 
     /**
@@ -350,36 +344,30 @@ class todo extends control
      * @param  string  $todoID
      * @param  string  $confirm yes|no
      * @access public
-     * @return void
+     * @return int
      */
-    public function delete(string $todoID, string $confirm = 'no')
+    public function delete(string $todoID, string $confirm = 'no'): int
     {
         $todoID = (int)$todoID;
-        if($confirm == 'no')
-        {
-            return print(js::confirm($this->lang->todo->confirmDelete, $this->createLink('todo', 'delete', "todoID={$todoID}&confirm=yes")));
-        }
-        else
-        {
-            $this->todo->delete(TABLE_TODO, $todoID);
+        if($confirm == 'no')  return print(js::confirm($this->lang->todo->confirmDelete, $this->createLink('todo', 'delete', "todoID={$todoID}&confirm=yes")));
+        $this->todo->delete(TABLE_TODO, $todoID);
 
-            if(helper::isAjaxRequest())
+        if(helper::isAjaxRequest())
+        {
+            $response = array('result' => 'success', 'message' => '');
+            if(dao::isError())
             {
-                $response = array('result' => 'success', 'message' => '');
-                if(dao::isError())
-                {
-                    $response['result']  = 'fail';
-                    $response['message'] = dao::getError();
-                }
-                return $this->send($response);
+                $response['result']  = 'fail';
+                $response['message'] = dao::getError();
             }
-
-            if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'success'));
-            if(isonlybody()) return print(js::reload('parent.parent'));
-
-            $browseLink = $this->session->todoList ? $this->session->todoList : $this->createLink('my', 'todo');
-            return print(js::locate($browseLink, 'parent'));
+            return $this->send($response);
         }
+
+        if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'success'));
+        if(isonlybody()) return print(js::reload('parent.parent'));
+
+        $browseLink = $this->session->todoList ? $this->session->todoList : $this->createLink('my', 'todo');
+        return print(js::locate($browseLink, 'parent'));
     }
 
     /**
@@ -388,14 +376,21 @@ class todo extends control
      *
      * @param  string  $todoID
      * @access public
-     * @return void
+     * @return int|false
      */
-    public function finish(string $todoID)
+    public function finish(string $todoID): int|false
     {
-        $todo = $this->todo->getByID((int)$todoID);
-        if($todo->status != 'done' && $todo->status != 'closed') $this->todo->finish((int)$todoID);
+        $todoID = (int)$todoID;
+        $todo   = $this->todo->getByID($todoID);
+        if($todo->status != 'done' && $todo->status != 'closed')
+        {
+            $result = $this->todo->finish($todoID);
+            if(!$result) return false;
+        }
 
-        if(in_array($todo->type, array('bug', 'task', 'story')))
+        $types = $this->config->todo->moduleList;
+        array_pop($types);
+        if(in_array($todo->type, $types))
         {
             $confirmNote = 'confirm' . ucfirst($todo->type);
             $okTarget    = isonlybody() ? 'parent' : 'window.parent.$.apps.open';
@@ -404,6 +399,7 @@ class todo extends control
             if($todo->type == 'bug')   $app = 'qa';
             if($todo->type == 'task')  $app = 'execution';
             if($todo->type == 'story') $app = 'product';
+
             $cancelURL   = $this->server->http_referer;
             if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'success', 'message' => sprintf($this->lang->todo->$confirmNote, $todo->objectID), 'locate' => $confirmURL));
             return print(strpos($cancelURL, 'calendar') ? json_encode(array(sprintf($this->lang->todo->$confirmNote, $todo->objectID), $confirmURL)) : js::confirm(sprintf($this->lang->todo->$confirmNote, $todo->objectID), $confirmURL, $cancelURL, $okTarget, 'parent', $app));
@@ -411,11 +407,10 @@ class todo extends control
 
         if(defined('RUN_MODE') && RUN_MODE == 'api')
         {
-            $this->send(array('status' => 'success'));
-            return;
+            return $this->send(array('status' => 'success'));
         }
         if(isonlybody()) return print(js::reload('parent.parent'));
-        echo js::reload('parent');
+        return print(js::reload('parent'));
     }
 
     /**
@@ -423,23 +418,21 @@ class todo extends control
      * Batch finish todos.
      *
      * @access public
-     * @return void
+     * @return int|false
      */
-    public function batchFinish()
+    public function batchFinish(): int|false
     {
-        if($this->post->todoIDList)
+        $todoIDList = form::data($this->config->todo->batchFinish->form)->get('todoIDList');
+        $todoList   = $this->todo->getByList($todoIDList);
+        foreach($todoList as $todoID => $todo)
         {
-            $todoList = $this->todo->getByList((array)$this->post->todoIDList);
-            foreach($todoList as $todoID => $todo)
-            {
-                if($todo->status == 'done' || $todo->status == 'closed') unset($todoList[$todoID]);
-            }
-
-            $isBatchFinished = $this->todo->batchFinish(array_keys($todoList));
-            if(!$isBatchFinished) return false;
-
-            return print(js::reload('parent'));
+            if($todo->status == 'done' || $todo->status == 'closed') unset($todoList[$todoID]);
         }
+
+        $isBatchFinished = $this->todo->batchFinish(array_keys($todoList));
+        if(!$isBatchFinished) return false;
+
+        return print(js::reload('parent'));
     }
 
     /**

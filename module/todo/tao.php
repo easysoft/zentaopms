@@ -4,8 +4,8 @@ declare(strict_types=1);
 class todoTao extends todoModel
 {
     /**
+     * 获取单条待办。
      * Get a todo.
-     * 获取单条待办.
      *
      * @param  int     $todoID
      * @param  object  $todo
@@ -48,8 +48,8 @@ class todoTao extends todoModel
     {
         $this->dao->update(TABLE_TODO)->data($todo)
             ->autoCheck()
-            ->checkIF(in_array($todo->type, array('custom', 'feedback')), $this->config->todo->edit->requiredFields, 'notempty')
-            ->checkIF(in_array($todo->type, $this->config->todo->moduleList) && $todo->objectID == 0, 'objectID', 'notempty')
+            ->checkIF(isset($todo->type) && in_array($todo->type, array('custom', 'feedback')), $this->config->todo->edit->requiredFields, 'notempty')
+            ->checkIF(isset($todo->type) && in_array($todo->type, $this->config->todo->moduleList) && $todo->objectID == 0, 'objectID', 'notempty')
             ->where('id')->eq($todoID)
             ->exec();
 
