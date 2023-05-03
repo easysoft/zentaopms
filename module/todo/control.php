@@ -69,7 +69,8 @@ class todo extends control
 
         unset($this->lang->todo->typeList['cycle']);
 
-        $this->buildCreateView($date);
+        $this->todoZen->buildCreateView($date);
+        return 1;
     }
 
     /**
