@@ -698,7 +698,7 @@ class projectZen extends project
         }
 
         //处理非瀑布及产品型项目
-        $this->dealExecutionProduct($projectID, $oldProductIDs, $newProductIDs, $executionIDs);
+        $this->dealExecutionProduct($projectID, $project, $oldProducts, $newProductIDs, $executionIDs);
     }
 
     /**
@@ -706,20 +706,21 @@ class projectZen extends project
      * deal execution product
      *
      * @param  int       $projectID
-     * @param  array     $oldProductIDs
+     * @param  object    $project
+     * @param  object    $oldProducts
      * @param  array     $newProductIDs
      * @param  int|array $executionIDs
      *
      * @access protected
      * @return void
      */
-    protected function dealExecutionProduct(int $projectID, array $oldProductIDs, array $newProductIDs, array $executionIDs): void
+    protected function dealExecutionProduct(int $projectID, object $project, object $oldProducts, array $newProductIDs, array $executionIDs): void
     {
         //处理非瀑布及产品型项目
         if($project->multiple and $project->model != 'waterfall' and $project->model != 'waterfallplus')
         {
-            $this->projectTao->replaceOldProduct($executionIDs);
-            $unlinkedProducts = array_diff($oldProductIDs, $newProductIDs);
+            $oldExecutionProducts = $this->projectTao->replaceOldProduct($executionIDs);
+            $unlinkedProducts     = array_diff(array_keys($oldProducts), $newProductIDs);
             if(!empty($unlinkedProducts))
             {
                 $unlinkedProductPairs = array();
@@ -780,7 +781,6 @@ class projectZen extends project
                 }
             }
         }
-        $branchGroups = $this->loadModel('branch')->getByProducts(array_keys($allProducts), 'ignoreNormal|noclosed', $linkedBranchIdList);
 
         $this->dealOtherLinkProduct($project);
 
@@ -789,8 +789,6 @@ class projectZen extends project
         $this->view->unmodifiableProducts     = $unmodifiableProducts;
         $this->view->unmodifiableBranches     = $unmodifiableBranches;
         $this->view->unmodifiableMainBranches = $unmodifiableMainBranches;
-        $this->view->branchGroups             = $branchGroups;
-        $this->view->linkedProducts           = $linkedProducts;
         $this->view->linkedBranches           = $linkedBranches;
     }
 
@@ -804,6 +802,9 @@ class projectZen extends project
      */
     protected function dealOtherLinkProduct(object $project)
     {
+        $linkedProducts = $this->product->getProducts($projectID, 'all', '', true, $linkedProductIdList);
+        $branchGroups   = $this->loadModel('branch')->getByProducts(array_keys($allProducts), 'ignoreNormal|noclosed', $linkedBranchIdList);
+
         if($this->config->systemMode == 'ALM')
         {
             $topProgramID           = $project->parent ? $this->program->getTopByPath($project->path) : 0;
@@ -841,6 +842,8 @@ class projectZen extends project
             $this->view->currentProducts = $currentProducts;
             $this->view->otherProducts   = $otherProducts;
         }
+        $this->view->branchGroups             = $branchGroups;
+        $this->view->linkedProducts           = $linkedProducts;
     }
 
     /**
