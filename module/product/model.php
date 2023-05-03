@@ -1031,40 +1031,37 @@ class productModel extends model
 
         /* Get modules. */
         $this->loadModel('tree');
-        if($this->app->tab == 'project')
+        if($this->app->tab == 'project' and $productID)
         {
-            if($productID)
+            $modules          = array();
+            $branchList       = $this->loadModel('branch')->getPairs($productID, '', $projectID);
+            $branchModuleList = $this->tree->getOptionMenu($productID, 'story', 0, array_keys($branchList));
+            foreach($branchModuleList as $branchID => $branchModules) $modules = array_merge($modules, $branchModules);
+        }
+        elseif($this->app->tab == 'project')
+        {
+            $moduleList  = array();
+            $modules     = array('/');
+            $branchGroup = $this->loadModel('execution')->getBranchByProduct(array_keys($products), $projectID, '');
+            foreach($products as $productID => $productName)
             {
-                $modules          = array();
-                $branchList       = $this->loadModel('branch')->getPairs($productID, '', $projectID);
-                $branchModuleList = $this->tree->getOptionMenu($productID, 'story', 0, array_keys($branchList));
-                foreach($branchModuleList as $branchID => $branchModules) $modules = array_merge($modules, $branchModules);
-            }
-            else
-            {
-                $moduleList  = array();
-                $modules     = array('/');
-                $branchGroup = $this->loadModel('execution')->getBranchByProduct(array_keys($products), $projectID, '');
-                foreach($products as $productID => $productName)
+                if(isset($branchGroup[$productID]))
                 {
-                    if(isset($branchGroup[$productID]))
+                    $branchModuleList = $this->tree->getOptionMenu($productID, 'story', 0, array_keys($branchGroup[$productID]));
+                    foreach($branchModuleList as $branchID => $branchModules)
                     {
-                        $branchModuleList = $this->tree->getOptionMenu($productID, 'story', 0, array_keys($branchGroup[$productID]));
-                        foreach($branchModuleList as $branchID => $branchModules)
-                        {
-                            if(is_array($branchModules)) $moduleList += $branchModules;
-                        }
+                        if(is_array($branchModules)) $moduleList += $branchModules;
                     }
-                    else
-                    {
-                        $moduleList = $this->tree->getOptionMenu($productID, 'story', 0, $branch);
-                    }
+                }
+                else
+                {
+                    $moduleList = $this->tree->getOptionMenu($productID, 'story', 0, $branch);
+                }
 
-                    foreach($moduleList as $moduleID => $moduleName)
-                    {
-                        if(empty($moduleID)) continue;
-                        $modules[$moduleID] = $productName . $moduleName;
-                    }
+                foreach($moduleList as $moduleID => $moduleName)
+                {
+                    if(empty($moduleID)) continue;
+                    $modules[$moduleID] = $productName . $moduleName;
                 }
             }
         }
@@ -1874,39 +1871,35 @@ class productModel extends model
 
         $rateCount = 0;
         $allCount  = 0;
-        foreach($stories as $key => $story)
+        foreach($stories as $story)
         {
             if(!empty($story->type) && $story->type != $storyType) continue;
 
             $totalEstimate += $story->estimate;
+            $allCount ++;
+
             /* When the status is not closed or closedReason is done or postponed then add cases rate..*/
-            if(
-                empty($story->children) and
-                ($story->status != 'closed' or
-                ($story->status == 'closed' and ($story->closedReason == 'done' or $story->closedReason == 'postponed')))
-            )
+            if(empty($story->children))
             {
-                $storyIdList[] = $story->id;
-                $rateCount ++;
+                if($story->status != 'closed' or ($story->status == 'closed' and in_array($story->closedReason, ['done', 'postponed'])))
+                {
+                    $storyIdList[] = $story->id;
+                    $rateCount ++;
+                }
+
+                continue;
             }
 
-            $allCount ++;
-            if(!empty($story->children))
+            foreach($story->children as $child)
             {
-                foreach($story->children as $child)
-                {
-                    if($child->type != $storyType) continue;
+                if($child->type != $storyType) continue;
 
-                    if(
-                        $child->status != 'closed' or
-                        ($child->status == 'closed' and ($child->closedReason == 'done' or $child->closedReason == 'postponed'))
-                    )
-                    {
-                        $storyIdList[] = $child->id;
-                        $rateCount ++;
-                    }
-                    $allCount ++;
+                if($story->status != 'closed' or ($story->status == 'closed' and in_array($story->closedReason, ['done', 'postponed'])))
+                {
+                    $storyIdList[] = $child->id;
+                    $rateCount ++;
                 }
+                $allCount ++;
             }
         }
 
