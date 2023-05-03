@@ -5,7 +5,10 @@ require_once dirname(__DIR__) . DS . 'toolbar' . DS . 'v1.php';
 
 class heading extends wg
 {
-    static $defineProps = 'items?:array, showAppName?:bool=true';
+    static $defineProps = array(
+        'items?:array',
+        'showAppName?:bool=true'
+    );
 
     protected function buildAppName()
     {

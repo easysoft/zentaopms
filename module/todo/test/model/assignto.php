@@ -6,20 +6,7 @@ su('admin');
 
 function initData()
 {
-    $project = zdTable('todo');
-    $project->id->range('1-5');
-    $project->account->range('admin');
-    $project->date->prefix('2023-04-2')->range('1-9');
-    $project->begin->range('1000-1100');
-    $project->end->range('1200-1300');
-    $project->type->range("custom");
-    $project->cycle->range("0");
-    $project->pri->range("3");
-    $project->name->prefix('我的待办')->range("1-5");
-    $project->desc->prefix('这是我的描述')->range("1-5");
-    $project->status->range("wait");
-
-    $project->gen(5);
+    zdTable('todo')->config('assignto')->gen(5);
 }
 
 /**
@@ -28,29 +15,29 @@ title=测试 todoModel->assignTo();
 timeout=0
 cid=1
 
-- 执行todo模块的assignTo方法，参数是$todoIDList[0], $todo1
+- 指派todo 1给test1 选择待定
  - 属性assignedTo @test1
  - 属性date @20300101
  - 属性begin @1000
  - 属性end @1400
 
-- 执行todo模块的assignTo方法，参数是$todoIDList[1], $todo2
+- 指派todo 2给test1 暂时不设定时间
  - 属性assignedTo @test1
  - 属性begin @2400
  - 属性end @2400
 
-- 执行todo模块的assignTo方法，参数是$todoIDList[2], $todo3
+- 指派todo 3给test1
  - 属性assignedTo @test1
  - 属性begin @1002
  - 属性end @1402
 
-- 执行todo模块的assignTo方法，参数是$todoIDList[3], $todo4
+- 指派todo 4给admin future=on 验证 date默认值
  - 属性assignedTo @admin
  - 属性date @20300101
  - 属性begin @1200
  - 属性end @1502
 
-- 执行todo模块的assignTo方法，参数是$todoIDList[4], $todo5
+- 指派todo 5给admin future=on lblDisableDate=on 验证date,begin,end默认值
  - 属性assignedTo @admin
  - 属性date @20300101
  - 属性begin @2400
@@ -62,7 +49,7 @@ cid=1
 
 initData();
 
-$todoIDList = array('1', '2', '3', '4', '5');
+$todoIDList = range(1,5);
 
 $todo1 = new stdclass();
 $todo1->assignedTo     = 'test1';

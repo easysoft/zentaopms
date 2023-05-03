@@ -12,7 +12,7 @@ class select extends wg
         'disabled?: bool',
         'multiple?: bool',
         'items?: array',
-        'size?: number',
+        'size?: int',
     );
 
     public function onBuildItem($item)

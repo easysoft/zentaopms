@@ -1155,11 +1155,11 @@ class baseControl
      *
      * @param  string $url the target url.
      * @access  public
-     * @return  void
+     * @return  int
      */
-    public function locate($url)
+    public function locate($url): int
     {
         header("location: $url");
-        exit;
+        return 1;
     }
 }

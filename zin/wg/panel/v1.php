@@ -3,8 +3,7 @@ namespace zin;
 
 class panel extends wg
 {
-    protected static $defineProps = array
-    (
+    protected static $defineProps = array(
         'class?: string="rounded shadow ring-0 canvas"',
         'size?: string',
         'title?: string',

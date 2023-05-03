@@ -5,20 +5,20 @@ class modalDialog extends wg
 {
     static $defineProps = array(
         'title?: string',
-        'itemID?: number',
+        'itemID?: int',
         'headerClass?: string',
         'headerProps?: array',
         'actions?: array',
-        'closeBtn?: boolean|array=true',
+        'closeBtn?: bool|array=true',
         'footerActions?: array',
         'footerClass?: string',
         'footerProps?: array',
     );
 
     static $defineBlocks = array(
-        'header' => [],
-        'actions' => [],
-        'footer' => ['map' => 'toolbar']
+        'header' => array(),
+        'actions' => array(),
+        'footer' => array('map' => 'toolbar')
     );
 
     protected function buildHeader()

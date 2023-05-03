@@ -40,3 +40,7 @@ $config->todo->batchEdit = new stdClass;
 $config->todo->batchEdit->form = array();
 $config->todo->batchEdit->form['todoIDList'] = array('required' => true, 'type' => 'array');
 $config->todo->batchEdit->form['names']      = array('required' => true, 'type' => 'array');
+
+$config->todo->batchFinish = new stdclass;
+$config->todo->batchFinish->form = array();
+$config->todo->batchFinish->form['todoIDList'] = array('required' => true, 'type' => 'array');
