@@ -5,7 +5,12 @@ require_once dirname(__DIR__) . DS . 'nav' . DS . 'v1.php';
 
 class featureBar extends wg
 {
-    static $defineProps = 'items?:array, current?:string, link?:string, linkParams?:string';
+    static $defineProps = array(
+        'items?:array',
+        'current?:string',
+        'link?:string',
+        'linkParams?:string'
+    );
 
     static $defineBlocks = array
     (

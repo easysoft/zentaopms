@@ -13,7 +13,7 @@ class form extends wg
         'target?: string',
         'items?: array',
         'grid?: bool',
-        'labelWidth?: number',
+        'labelWidth?: int',
         'submitBtnText?: string',
         'cancelBtnText?: string',
     );

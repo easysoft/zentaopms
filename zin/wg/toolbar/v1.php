@@ -5,7 +5,11 @@ require_once dirname(__DIR__) . DS . 'btn' . DS . 'v1.php';
 
 class toolbar extends wg
 {
-    protected static $defineProps = 'items?:array, btnClass?:string, btnProps?: array';
+    protected static $defineProps = array(
+        'items?:array',
+        'btnClass?:string',
+        'btnProps?: array'
+    );
 
     public function onBuildItem($item)
     {

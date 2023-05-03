@@ -6,8 +6,7 @@ require_once dirname(__DIR__) . DS . 'control' . DS . 'v1.php';
 
 class formGroup extends wg
 {
-    protected static $defineProps = array
-    (
+    protected static $defineProps = array(
         'name?: string',
         'label?:string|bool',
         'labelClass?: string',

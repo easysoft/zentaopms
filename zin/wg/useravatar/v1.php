@@ -5,21 +5,20 @@ require_once dirname(__DIR__) . DS . 'avatar' . DS . 'v1.php';
 
 class userAvatar extends wg
 {
-    protected static $defineProps = array
-    (
+    protected static $defineProps = array(
         'className?:string',
         'style?:array',
-        'size?:number=32',
+        'size?:int=32',
         'circle?:bool=true',
-        'rounded?:string|number',
+        'rounded?:string|int',
         'background?:string',
         'foreColor?:string',
         'text?:string',
         'code?:string',
-        'maxTextLength?:number=2',
-        'hueDistance?:number=43',
-        'saturation?:number=0.4',
-        'lightness?:number=0.6',
+        'maxTextLength?:int=2',
+        'hueDistance?:int=43',
+        'saturation?:int=0.4',
+        'lightness?:int=0.6',
         'src?:string',
         'avatar?:string',
         'account?:string',

@@ -15,7 +15,7 @@ class formPanel extends panel
         'target?: string',
         'items?: array',
         'grid?: bool',
-        'labelWidth?: number',
+        'labelWidth?: int',
     );
 
     protected static $defaultProps = array(

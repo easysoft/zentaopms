@@ -5,8 +5,7 @@ class programMenu extends wg
 {
     private $programs = array();
 
-    protected static $defineProps = array
-    (
+    protected static $defineProps = array(
         'programs?:array',
         'activeClass?:string',
         'activeIcon?:string',

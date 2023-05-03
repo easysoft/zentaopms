@@ -3,7 +3,10 @@ namespace zin;
 
 class icon extends wg
 {
-    protected static $defineProps = 'name:string, size?:string|number';
+    protected static $defineProps = array(
+        'name:string',
+        'size?:string|int'
+    );
 
     public function onAddChild($child)
     {
