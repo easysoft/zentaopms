@@ -1,6 +1,8 @@
 <?php
 declare(strict_types=1);
 
+use function zin\createLink;
+
 /**
  * The control file of todo module of ZenTaoPMS.
  *
@@ -458,10 +460,12 @@ class todo extends control
      *
      * @param  string $todoID
      * @access public
-     * @return int
+     * @return void
      */
     public function import2Today(string $todoID = ''): void
     {
+        if(!$_POST) $this->locate($this->createLink('my', 'todo'));
+
         $formData   = form::data($this->config->todo->editDate->form);
         $todoIDList = !empty($formData->rawdata->todoIDList) ? $formData->rawdata->todoIDList : array($todoID);
         $date       = !empty($formData->rawdata->date) ? $formData->rawdata->date : date::today();
