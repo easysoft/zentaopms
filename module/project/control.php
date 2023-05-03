@@ -2005,15 +2005,17 @@ class project extends control
     }
 
     /**
+     * 根据执行ID获取对应的项目下拉列表
      * AJAX: get a project by execution id.
      *
      * @param  string $executionID
+     *
      * @access public
      * @return string
      */
-    public function ajaxGetPairsByExecution($executionID)
+    public function ajaxGetPairsByExecution(string $executionID): string
     {
-        $execution    = $this->loadModel('execution')->getByID($executionID);
+        $execution    = $this->loadModel('execution')->getByID((int)$executionID);
         $projectPairs = $this->loadModel('project')->getPairsByIdList($execution->project);
 
         if($this->app->getViewType() == 'json')
