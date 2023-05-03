@@ -316,15 +316,7 @@ class todo extends control
         $account = $this->app->user->account;
         if($todo->private and $todo->account != $account) return print(js::error((string)$this->lang->todo->thisIsPrivate) . (string)js::locate('back'));
 
-        /* Save the session. */
-        if(!isonlybody())
-        {
-            $url = $this->app->getURI(true);
-            $this->session->set('bugList',      $url, 'qa');
-            $this->session->set('taskList',     $url, 'execution');
-            $this->session->set('storyList',    $url, 'product');
-            $this->session->set('testtaskList', $url, 'qa');
-        }
+        if(!isonlybody()) $this->todoZen->setSessionLink($this->app->getURI(true));
 
         /* Fix bug #936. */
         if($account != $todo->account and $account != $todo->assignedTo and !common::hasPriv('my', 'team'))
@@ -470,16 +462,17 @@ class todo extends control
      */
     public function import2Today(string $todoID = ''): int
     {
-        $todoIDList = $_POST ? $this->post->todoIDList : array($todoID);
-        $date       = !empty($_POST['date']) ? $_POST['date'] : date::today();
-        if(!$date || !$todoIDList) return $this->locate((string)$this->session->todoList);
+        $formData   = form::data($this->config->todo->editDate->form);
+        $todoIDList = !empty($formData->rawdata->todoIDList) ? $formData->rawdata->todoIDList : array($todoID);
+        $date       = !empty($formData->rawdata->date) ? $formData->rawdata->date : date::today();
+        if(!$todoIDList) return $this->locate((string)$this->session->todoList);
 
         $this->todo->editDate((array)$todoIDList, (string)$date);
         return $this->locate((string)$this->session->todoList);
     }
 
     /**
-     * Get data to export
+     * Get data to export.
      *
      * @param  int    $userID
      * @param  string $orderBy
@@ -490,57 +483,34 @@ class todo extends control
     {
         if($_POST)
         {
-            $user     = $this->loadModel('user')->getById($userID, 'id');
-            $account  = $user->account;
-            $todoLang = $this->lang->todo;
+            $user       = $this->todoZen->getUserById((int)$userID);
+            $account    = (string)$user->account;
+            $todoLang   = (object)$this->lang->todo;
+            $configTime = $this->config->todo->times;
 
-            /* Create field lists. */
-            $fields = $this->todoZen->exportFields(explode(',', $this->config->todo->list->exportFields), (object)$todoLang);
+            $formData = form::data($this->config->todo->export->form);
+            $todos    = $this->todo->getByExportList($orderBy, (object)$formData);
 
-            /* Get bugs. */
-            $todos = $this->dao->select('*')->from(TABLE_TODO)->where($this->session->todoReportCondition)
-                ->beginIF($this->post->exportType == 'selected')->andWhere('id')->in($this->cookie->checkedItem)->fi()
-                ->orderBy($orderBy)->fetchAll('id');
+            list($todos, $fields) = $this->todoZen->exportTodoInfo((array)$todos, (string)$this->config->todo->list->exportFields, $todoLang);
+            list($users, $bugs, $stories, $tasks, $testTasks) = $this->todoZen->exportAssociated('default', $account);
 
-            /* Get users, bugs, tasks and times. */
-            list($users, $bugs, $stories, $tasks, $testTasks) = $this->todoZen->exportInfo('default', $account);
+            $times = date::buildTimeList((string)$configTime->begin, (string)$configTime->end, (string)$configTime->delta);
 
-            if($this->config->edition == 'max') list($issues, $risks, $opportunities) = $this->todoZen->exportInfo($this->config->edition, $account);
+            $assemble = new stdClass();
+            $assemble->users     = $users;
+            $assemble->bugs      = $bugs;
+            $assemble->stories   = $stories;
+            $assemble->tasks     = $tasks;
+            $assemble->testTasks = $testTasks;
+            if($this->config->edition == 'max'){
+                $iroData = $this->todoZen->exportInfo((string)$this->config->edition, $account);
+                $assemble->issues        = $iroData[0];
+                $assemble->risks         = $iroData[1];
+                $assemble->opportunities = $iroData[2];
+            };
+            if(isset($this->config->qcVersion)) $assemble->reviews = $this->todoZen->exportInfo('qcVersion', $account);
 
-            if(isset($this->config->qcVersion)) $reviews = $this->todoZen->exportInfo('qcVersion', $account);
-            $times = date::buildTimeList($this->config->todo->times->begin, $this->config->todo->times->end, $this->config->todo->times->delta);
-
-            foreach($todos as $todo)
-            {
-                /* fill some field with useful value. */
-                $todo->begin = $todo->begin == '2400' ? '' : (isset($times[$todo->begin]) ? $times[$todo->begin] : $todo->begin);
-                $todo->end   = $todo->end   == '2400' ? '' : (isset($times[$todo->end])   ? $times[$todo->end] : $todo->end);
-
-                $type = $todo->type;
-                if(isset($users[$todo->account])) $todo->account = $users[$todo->account];
-                if($type == 'bug')                $todo->name    = isset($bugs[$todo->objectID])    ? $bugs[$todo->objectID] . "(#$todo->objectID)" : '';
-                if($type == 'story')              $todo->name    = isset($stories[$todo->objectID]) ? $stories[$todo->objectID] . "(#$todo->objectID)" : '';
-                if($type == 'task')               $todo->name    = isset($tasks[$todo->objectID])   ? $tasks[$todo->objectID] . "(#$todo->objectID)" : '';
-
-                if($this->config->edition == 'max')
-                {
-                    if($type == 'issue') $todo->name = isset($issues[$todo->objectID]) ? $issues[$todo->objectID] . "(#$todo->objectID)" : '';
-                    if($type == 'risk')  $todo->name = isset($risks[$todo->objectID])  ? $risks[$todo->objectID] . "(#$todo->objectID)" : '';
-                    if($type == 'opportunity')  $todo->name = isset($opportunities[$todo->objectID])  ? $opportunities[$todo->objectID] . "(#$todo->objectID)" : '';
-                }
-                if($type == 'testtask')           $todo->name    = isset($testTasks[$todo->objectID]) ? $testTasks[$todo->objectID] . "(#$todo->objectID)" : '';
-                if($type == 'review' && isset($this->config->qcVersion)) $todo->name = isset($reviews[$todo->objectID]) ? $reviews[$todo->objectID] . "(#$todo->objectID)" : '';
-
-                if(isset($todoLang->typeList[$type]))           $todo->type    = $todoLang->typeList[$type];
-                if(isset($todoLang->priList[$todo->pri]))       $todo->pri     = $todoLang->priList[$todo->pri];
-                if(isset($todoLang->statusList[$todo->status])) $todo->status  = $todoLang->statusList[$todo->status];
-                if($todo->private == 1)                         $todo->desc    = $this->lang->todo->thisIsPrivate;
-
-                /* drop some field that is not needed. */
-                unset($todo->objectID);
-                unset($todo->private);
-            }
-            if($this->config->edition != 'open') list($fields, $todos) = $this->loadModel('workflowfield')->appendDataFromFlow($fields, $todos);
+            $todos = $this->todoZen->assembleExportData((array)$todos, $assemble, $todoLang, (array)$times);
 
             $this->post->set('fields', $fields);
             $this->post->set('rows', $todos);

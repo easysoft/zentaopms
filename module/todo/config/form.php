@@ -44,3 +44,12 @@ $config->todo->batchEdit->form['names']      = array('required' => true, 'type' 
 $config->todo->batchFinish = new stdclass;
 $config->todo->batchFinish->form = array();
 $config->todo->batchFinish->form['todoIDList'] = array('required' => true, 'type' => 'array');
+
+$config->todo->editDate = new stdClass;
+$config->todo->editDate->form = array();
+$config->todo->editDate->form['date']       = array('required' => true, 'type' => 'string');
+$config->todo->editDate->form['todoIDList'] = array('required' => true, 'type' => 'array');
+
+$config->todo->export = new stdClass;
+$config->todo->export->form = array();
+$config->todo->export->form['exportType'] = array('required' => true, 'type' => 'string');

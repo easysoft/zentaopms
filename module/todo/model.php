@@ -680,4 +680,21 @@ class todoModel extends model
     {
         return $this->todoTao->updateDate($todoIDList, $date);
     }
+
+    /**
+     * 获取导出的待办数据。
+     * Get data for export todo.
+     *
+     * @param  string $orderBy
+     * @param  object $formData
+     * @access public
+     * @return array
+     */
+    public function getByExportList(string $orderBy, object $formData): array
+    {
+        return $this->dao->select('*')->from(TABLE_TODO)
+            ->where($this->session->todoReportCondition)
+            ->beginIF($formData->rawdata->exportType == 'selected')->andWhere('id')->in($this->cookie->checkedItem)->fi()
+            ->orderBy($orderBy)->fetchAll('id');
+    }
 }
