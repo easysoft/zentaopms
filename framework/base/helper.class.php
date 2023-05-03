@@ -420,12 +420,15 @@ class baseHelper
      * 去掉UTF-8 Bom头。
      * Remove UTF-8 Bom.
      *
-     * @param  string    $string
+     * @param  string|false    $string
      * @access public
      * @return string
      */
-    public static function removeUTF8Bom($string)
+    public static function removeUTF8Bom(string|false $string): string
     {
+        /* The ob_get_clean() will return false if output buffering isn't active. */
+        if(!is_string($string)) return '';
+
         if(substr($string, 0, 3) == pack('CCC', 239, 187, 191)) return substr($string, 3);
         return $string;
     }
