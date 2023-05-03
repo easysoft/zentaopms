@@ -44,8 +44,8 @@ $config->todo->objectList['task']     = 'tasks';
 $config->todo->objectList['story']    = 'stories';
 $config->todo->objectList['testtask'] = 'testtasks';
 
-$config->todo->sessionLink = array();
-$config->todo->sessionLink['bugList']      = 'qa';
-$config->todo->sessionLink['taskList']     = 'execution';
-$config->todo->sessionLink['storyList']    = 'product';
-$config->todo->sessionLink['testtaskList'] = 'qa';
+$config->todo->sessionUri = array();
+$config->todo->sessionUri['bugList']      = 'qa';
+$config->todo->sessionUri['taskList']     = 'execution';
+$config->todo->sessionUri['storyList']    = 'product';
+$config->todo->sessionUri['testtaskList'] = 'qa';
