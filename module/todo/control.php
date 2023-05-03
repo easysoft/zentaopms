@@ -301,9 +301,9 @@ class todo extends control
      * @param string $from   my|company
      *
      * @access public
-     * @return void
+     * @return int
      */
-    public function view(string $todoID, string $from = 'company')
+    public function view(string $todoID, string $from = 'company'): int
     {
         $todo = $this->todo->getByID((int)$todoID, true);
 
@@ -329,13 +329,14 @@ class todo extends control
         /* Fix bug #936. */
         if($account != $todo->account and $account != $todo->assignedTo and !common::hasPriv('my', 'team'))
         {
-            $this->locate($this->createLink('user', 'deny', "module=my&method=team"));
+            return $this->locate($this->createLink('user', 'deny', "module=my&method=team"));
         }
 
         $projects = $this->todoZen->getProjectPairsByModel((string)$todo->type);
         if(!isset($this->session->project)) $this->session->set('project', (int)key($projects));
 
         $this->todoZen->buildAssignToTodoView((object)$todo, (int)$this->session->project, (array)$projects, (string)$account, $from);
+        return 1;
     }
 
     /**
@@ -465,9 +466,9 @@ class todo extends control
      *
      * @param  string $todoID
      * @access public
-     * @return void
+     * @return int
      */
-    public function import2Today(string $todoID = '')
+    public function import2Today(string $todoID = ''): int
     {
         $todoIDList = $_POST ? $this->post->todoIDList : array($todoID);
         $date       = !empty($_POST['date']) ? $_POST['date'] : date::today();
