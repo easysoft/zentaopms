@@ -2,7 +2,7 @@
 $builder = new stdclass();
 
 $builder->company        = array('rows' => 2,    'extends' => array('company'));
-$builder->user           = array('rows' => 10, 'extends' => array('user'));
+$builder->user           = array('rows' => 10000, 'extends' => array('user'));
 $builder->dept           = array('rows' => 100,  'extends' => array('dept'));
 $builder->product        = array('rows' => 1000,  'extends' => array('product'));
 $builder->productplan    = array('rows' => 1000,  'extends' => array('productplan'));
