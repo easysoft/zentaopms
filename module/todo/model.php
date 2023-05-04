@@ -17,12 +17,13 @@ class todoModel extends model
      * Create todo data.
      *
      * @param  object $todo
+     * @param  object $formData
      * @access public
      * @return int|false
      */
-    public function create(object $todo): int|false
+    public function create(object $todo, object $formData): int|false
     {
-        $processedTodo = $this->todoTao->processCreateData($todo);
+        $processedTodo = $this->todoTao->processCreateData($todo, $formData);
         if(!$processedTodo) return false;
 
         $todoID = $this->todoTao->insert($processedTodo);
@@ -149,80 +150,43 @@ class todoModel extends model
     }
 
     /**
-     * Batch update todos.
+     * 更新批量编辑待办数据。
+     * Update batch edit todo data.
      *
-     * @access public
-     * @return array
+     * @param array $todos
+     * @param array $todoIdList
+     * @access protected
+     * @return array|int
      */
-    public function batchUpdate()
+    public function batchUpdate(array $todos, array $todoIdList): array|int
     {
-        $todos      = array();
+        if(empty($todos)) return $todos;
+
         $allChanges = array();
-        $data       = fixer::input('post')->get();
-        $todoIDList = $this->post->todoIDList ? $this->post->todoIDList : array();
 
-        if(!empty($todoIDList))
+        /* Initialize todos from the post data. */
+        $oldTodos = $this->getTodosByIdList($todoIdList);
+        foreach($todos as $todoID => $todo)
         {
-            /* Initialize todos from the post data. */
-            $oldTodos = $this->dao->select('*')->from(TABLE_TODO)->where('id')->in(array_keys($todos))->fetchAll('id');
-            foreach($todoIDList as $todoID)
+            $oldTodo = $oldTodos[$todoID];
+            if(in_array($todo->type, $this->config->todo->moduleList)) $oldTodo->name = '';
+            $this->updateTodoDataByID($todoID, $todo);
+
+            if($oldTodo->status != 'done' and $todo->status == 'done') $this->loadModel('action')->create('todo', $todoID, 'finished', '', 'done');
+
+            if(!dao::isError())
             {
-                $oldTodo = $oldTodos[$todoID];
-
-                $todo = new stdclass();
-                $todo->date       = $data->dates[$todoID];
-                $todo->type       = $data->types[$todoID];
-                $todo->pri        = $data->pris[$todoID];
-                $todo->status     = $data->status[$todoID];
-                $todo->name       = !in_array($todo->type, $this->config->todo->moduleList) ? $data->names[$todoID] : '';
-                $todo->begin      = isset($data->begins[$todoID]) ? $data->begins[$todoID] : 2400;
-                $todo->end        = isset($data->ends[$todoID]) ? $data->ends[$todoID] : 2400;
-                $todo->assignedTo = isset($data->assignedTos[$todoID]) ? $data->assignedTos[$todoID] : $oldTodo->assignedTo;
-
-                if(in_array($todo->type, $this->config->todo->moduleList))
+                if(($this->config->edition == 'biz' || $this->config->edition == 'max') && $todo->type == 'feedback' && $todo->objectID && !isset($feedbacks[$todo->objectID]))
                 {
-                    $todo->objectID = isset($data->{$this->config->todo->objectList[$todo->type]}[$todoID]) ? $data->{$this->config->todo->objectList[$todo->type]}[$todoID] : 0;
+                    $feedbacks[$todo->objectID] = $todo->objectID;
+                    $this->loadModel('feedback')->updateStatus('todo', $todo->objectID, $todo->status);
                 }
-                if($todo->end < $todo->begin) return print(js::alert(sprintf($this->lang->error->gt, $this->lang->todo->end, $this->lang->todo->begin)));
 
-                $todos[$todoID] = $todo;
+                $allChanges[$todoID] = common::createChanges($oldTodo, $todo);
             }
-
-            foreach($todos as $todoID => $todo)
+            else
             {
-                $oldTodo = $oldTodos[$todoID];
-                if(in_array($todo->type, $this->config->todo->moduleList)) $oldTodo->name = '';
-                $this->dao->update(TABLE_TODO)->data($todo)
-                    ->autoCheck()
-                    ->checkIF(!in_array($todo->type, $this->config->todo->moduleList), $this->config->todo->edit->requiredFields, 'notempty')
-                    ->checkIF($todo->type == 'bug'   and $todo->objectID == 0, 'objectID', 'notempty')
-                    ->checkIF($todo->type == 'task'  and $todo->objectID == 0, 'objectID', 'notempty')
-                    ->checkIF($todo->type == 'story' and $todo->objectID == 0, 'objectID', 'notempty')
-                    ->checkIF($todo->type == 'issue' and $todo->objectID == 0, 'objectID', 'notempty')
-                    ->checkIF($todo->type == 'risk' and $todo->objectID == 0, 'objectID', 'notempty')
-                    ->checkIF($todo->type == 'opportunity' and $todo->objectID == 0, 'objectID', 'notempty')
-                    ->checkIF($todo->type == 'review' and $todo->objectID == 0, 'objectID', 'notempty')
-                    ->checkIF($todo->type == 'testtask' and $todo->objectID == 0, 'objectID', 'notempty')
-                    ->checkIF($todo->type == 'feedback' and $todo->objectID == 0, 'objectID', 'notempty')
-                    ->where('id')->eq($todoID)
-                    ->exec();
-
-                if($oldTodo->status != 'done' and $todo->status == 'done') $this->loadModel('action')->create('todo', $todoID, 'finished', '', 'done');
-
-                if(!dao::isError())
-                {
-                    if(($this->config->edition == 'biz' || $this->config->edition == 'max') && $todo->type == 'feedback' && $todo->objectID && !isset($feedbacks[$todo->objectID]))
-                    {
-                        $feedbacks[$todo->objectID] = $todo->objectID;
-                        $this->loadModel('feedback')->updateStatus('todo', $todo->objectID, $todo->status);
-                    }
-
-                    $allChanges[$todoID] = common::createChanges($oldTodo, $todo);
-                }
-                else
-                {
-                    return print(js::error('todo#' . $todoID . dao::getError(true)));
-                }
+                return print(js::error('todo#' . $todoID . dao::getError(true)));
             }
         }
 
@@ -293,18 +257,9 @@ class todoModel extends model
 
         $todo = $this->loadModel('file')->replaceImgURL((object)$todo, 'desc');
         if($setImgSize) $todo->desc = $this->file->setImgSize($todo->desc);
-        if($todo->type == 'story')    $todo->name = $this->dao->findByID($todo->objectID)->from(TABLE_STORY)->fetch('title');
-        if($todo->type == 'task')     $todo->name = $this->dao->findByID($todo->objectID)->from(TABLE_TASK)->fetch('name');
-        if($todo->type == 'bug')      $todo->name = $this->dao->findByID($todo->objectID)->from(TABLE_BUG)->fetch('title');
-        if($todo->type == 'issue'  and $this->config->edition == 'max') $todo->name = $this->dao->findByID($todo->objectID)->from(TABLE_ISSUE)->fetch('title');
-        if($todo->type == 'risk'   and $this->config->edition == 'max') $todo->name = $this->dao->findByID($todo->objectID)->from(TABLE_RISK)->fetch('name');
-        if($todo->type == 'opportunity' and $this->config->edition == 'max') $todo->name = $this->dao->findByID($todo->objectID)->from(TABLE_OPPORTUNITY)->fetch('name');
-        if($todo->type == 'review' and $this->config->edition == 'max') $todo->name = $this->dao->findByID($todo->objectID)->from(TABLE_REVIEW)->fetch('title');
-        if($todo->type == 'testtask') $todo->name = $this->dao->findByID($todo->objectID)->from(TABLE_TESTTASK)->fetch('name');
-        if($todo->type == 'feedback') $todo->name = $this->dao->findByID($todo->objectID)->from(TABLE_FEEDBACK)->fetch('title');
         $todo->date = str_replace('-', '', $todo->date);
 
-        return $todo;
+        return $this->todoTao->setTodoNameByType($todo);
     }
 
     /**
@@ -317,93 +272,21 @@ class todoModel extends model
      * @param  object $pager
      * @param  string $orderBy
      * @access public
-     * @return void
+     * @return array
      */
-    public function getList($type = 'today', $account = '', $status = 'all', $limit = 0, $pager = null, $orderBy="date, status, begin")
+    public function getList(string $type = 'today', string $account = '', string|array $status = 'all', int $limit = 0, object $pager = null, string $orderBy="date, status, begin"): array
     {
         $this->app->loadClass('date');
         $todos = array();
         $type = strtolower($type);
 
-        if($type == 'all' or $type == 'assignedtoother')
-        {
-            $begin = '1970-01-01';
-            $end   = '2109-01-01';
-        }
-        elseif($type == 'today')
-        {
-            $begin = date::today();
-            $end   = $begin;
-        }
-        elseif($type == 'yesterday')
-        {
-            $begin = date::yesterday();
-            $end   = $begin;
-        }
-        elseif($type == 'thisweek')
-        {
-            extract(date::getThisWeek());
-        }
-        elseif($type == 'lastweek')
-        {
-            extract(date::getLastWeek());
-        }
-        elseif($type == 'thismonth')
-        {
-            extract(date::getThisMonth());
-        }
-        elseif($type == 'lastmonth')
-        {
-            extract(date::getLastMonth());
-        }
-        elseif($type == 'thisseason')
-        {
-            extract(date::getThisSeason());
-        }
-        elseif($type == 'thisyear')
-        {
-            extract(date::getThisYear());
-        }
-        elseif($type == 'future')
-        {
-            $begin = '2030-01-01';
-            $end   = $begin;
-        }
-        elseif($type == 'before')
-        {
-            $begin = '1970-01-01';
-            $end   = date::today();
-        }
-        elseif($type == 'cycle')
-        {
-            $begin = $end = '';
-        }
-        else
-        {
-            $begin = $end = $type;
-        }
+        $dateRange = $this->config->todo->dateRange[$type] ? $this->config->todo->dateRange[$type] : array('begin' => $type, 'end' => $type);
+        $begin = (string)$dateRange['begin'];
+        $end   = (string)$dateRange['end'];
 
         if(empty($account)) $account = $this->app->user->account;
 
-        $stmt = $this->dao->select('*')->from(TABLE_TODO)
-            ->where('deleted')->eq('0')
-            ->andWhere('vision')->eq($this->config->vision)
-            ->beginIF($type == 'assignedtoother')->andWhere('account', true)->eq($account)->fi()
-            ->beginIF($type != 'assignedtoother')->andWhere('assignedTo', true)->eq($account)->fi()
-            ->orWhere('finishedBy')->eq($account)
-            ->orWhere('closedBy')->eq($account)
-            ->markRight(1)
-            ->beginIF($begin)->andWhere('date')->ge($begin)->fi()
-            ->beginIF($end)->andWhere('date')->le($end)->fi()
-            ->beginIF($status != 'all' and $status != 'undone')->andWhere('status')->in($status)->fi()
-            ->beginIF($status == 'undone')->andWhere('status')->notin('done,closed')->fi()
-            ->beginIF($type == 'cycle')->andWhere('cycle')->eq('1')->fi()
-            ->beginIF($type != 'cycle')->andWhere('cycle')->eq('0')->fi()
-            ->beginIF($type == 'assignedtoother')->andWhere('assignedTo')->notin(array($account, ''))->fi()
-            ->orderBy($orderBy)
-            ->beginIF($limit > 0)->limit($limit)->fi()
-            ->page($pager)
-            ->query();
+        $stmt = $this->todoTao->getListQuery($type, $account, $status, $begin, $end, $pager, $limit, $orderBy);
 
         /* Set session. */
         $sql = explode('WHERE', $this->dao->get());
@@ -412,15 +295,7 @@ class todoModel extends model
 
         while($todo = $stmt->fetch())
         {
-            if($todo->type == 'story')    $todo->name = $this->dao->findByID($todo->objectID)->from(TABLE_STORY)->fetch('title');
-            if($todo->type == 'task')     $todo->name = $this->dao->findByID($todo->objectID)->from(TABLE_TASK)->fetch('name');
-            if($todo->type == 'bug')      $todo->name = $this->dao->findByID($todo->objectID)->from(TABLE_BUG)->fetch('title');
-            if($todo->type == 'testtask') $todo->name = $this->dao->findByID($todo->objectID)->from(TABLE_TESTTASK)->fetch('name');
-            if($todo->type == 'issue'  && $this->config->edition == 'max') $todo->name = $this->dao->findByID($todo->objectID)->from(TABLE_ISSUE)->fetch('title');
-            if($todo->type == 'risk'   && $this->config->edition == 'max') $todo->name = $this->dao->findByID($todo->objectID)->from(TABLE_RISK)->fetch('name');
-            if($todo->type == 'opportunity' && $this->config->edition == 'max') $todo->name = $this->dao->findByID($todo->objectID)->from(TABLE_OPPORTUNITY)->fetch('name');
-            if($todo->type == 'review' && $this->config->edition == 'max') $todo->name = $this->dao->findByID($todo->objectID)->from(TABLE_REVIEW)->fetch('title');
-            if($todo->type == 'feedback' and $this->config->edition != 'open') $todo->name = $this->dao->findByID($todo->objectID)->from(TABLE_FEEDBACK)->fetch('title');
+            $todo = $this->todoTao->setTodoNameByType($todo);
             $todo->begin = date::formatTime($todo->begin);
             $todo->end   = date::formatTime($todo->end);
 
@@ -434,11 +309,14 @@ class todoModel extends model
     }
 
     /**
-     * Get by id list.
+     * 通过包含一个或多个待办ID的列表获取待办列表，这个列表是以todoID为key、以todo对象为value的数组。
+     * 如果待办ID列表为空则返回所有待办。
+     * Get a array with todos which todoID as key, todo object as value by todo id list.
+     * Return all todos if the todo id list is empty.
      *
      * @param  array $todoIDList
      * @access public
-     * @return object
+     * @return array
      */
     public function getByList($todoIDList = 0)
     {
@@ -448,27 +326,22 @@ class todoModel extends model
     }
 
     /**
+     * 判断当前动作是否可以点击。
      * Judge an action is clickable or not.
      *
-     * @param  object    $todo
-     * @param  string    $action
+     * @param  object $todo
+     * @param  string $action
      * @access public
      * @return bool
      */
-    public static function isClickable($todo, $action)
+    public static function isClickable(object $todo, string $action): bool
     {
         $action = strtolower($action);
 
-        if($action == 'finish')
+        if($action == 'finish' || $action == 'start')
         {
             if(!empty($todo->cycle)) return false;
-            return $todo->status != 'done';
-        }
-
-        if($action == 'start')
-        {
-            if(!empty($todo->cycle)) return false;
-            return $todo->status == 'wait';
+            return $action == 'finish' ? ($todo->status != 'done') : ($todo->status == 'wait');
         }
 
         return true;
@@ -578,15 +451,16 @@ class todoModel extends model
      */
     public function assignTo(object $todo): bool
     {
-        $result = $this->todoTao->updateRow((int)$todo->id, $todo);
+        $todoID = (int)$todo->id;
+        $result = $this->todoTao->updateRow($todoID, $todo);
         if(!$result) return false;
 
-        $this->loadModel('action')->create('todo', (int)$todo->id, 'assigned', '', $todo->assignedTo);
+        $this->loadModel('action')->create('todo', $todoID, 'assigned', '', $todo->assignedTo);
         return !dao::isError();
     }
 
     /**
-     * 查询待办数量。
+     * 获取待办事项的数量。
      * Get todo count.
      *
      * @param  string $account
@@ -654,7 +528,7 @@ class todoModel extends model
         if(($this->config->edition == 'biz' || $this->config->edition == 'max'))
         {
             $todo       = $this->todoTao->fetch($todoID);
-            $feedbackID = $todo->idvalue ?? '' ;
+            $feedbackID = $todo->objectID ? $todo->objectID : '' ;
             if($feedbackID) $this->loadModel('feedback')->updateStatus('todo', $feedbackID, 'done');
         }
         return true;
@@ -689,5 +563,31 @@ class todoModel extends model
             ->where($this->session->todoReportCondition)
             ->beginIF($formData->rawdata->exportType == 'selected')->andWhere('id')->in($this->cookie->checkedItem)->fi()
             ->orderBy($orderBy)->fetchAll('id');
+    }
+
+    /**
+     * 根据待办ID获取多条待办。
+     * Get todo data by id list.
+     *
+     * @param  array $todoIdList
+     * @access public
+     * @return array
+     */
+    public function getTodosByIdList(array $todoIdList): array
+    {
+        return $this->todoTao->fetchRows($todoIdList);
+    }
+
+    /**
+     * 根据待办ID更新待办数据。
+     * Update todo data by id.
+     *
+     * @param  array $todoIdList
+     * @access public
+     * @return bool
+     */
+    public function updateTodoDataByID(int $todoID, object $todo): bool
+    {
+        return $this->todoTao->updateRow($todoID, $todo);
     }
 }

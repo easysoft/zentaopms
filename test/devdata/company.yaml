@@ -1,0 +1,31 @@
+title: table zt_company
+desc: "公司信息"
+author: sgm,har,zx
+version: "1.0"
+fields:
+  - field: id
+    note: "id"
+    range: 1-2
+  - field: name
+    note: "公司名"
+    range: 易软天创网络科技有限公司,外部公司
+  - field: admins
+    note: "管理员"
+    prefix: ","
+    range: admin
+    postfix: ","
+  - field: phone
+    note: "电话"
+    range: 15666933065
+  - field: zipcode
+    note: "邮编"
+    range: "100000"
+  - field: website
+    note: "网站"
+    range: www.zentao.net
+  - field: guest
+    note: "匿名登录"
+    range: 0
+  - field: deleted
+    note: "是否删除"
+    range: 0

@@ -1,0 +1,27 @@
+title: file
+desc: 文件上传相关
+author: ly
+version: 1.0
+
+instances:
+  - instance: pathname
+    note: 文件路径名称
+    fields:
+     - field: item1
+       range: "202001-202009"
+       postfix: "/"
+     - field: item2
+       range: "10001-20000"
+       prefix: "04142250066"
+     - field: item3
+       range: "txt,doc,docx,dot,wps,wri,pdf,ppt,pptx,xls,xlsx,ett,xlt,xlsm,csv,jpg,jpeg,png,psd,gif,ico,bmp,swf,avi,rmvb,rm,mp3,mp4,3gp,flv,mov,movie,rar,zip,bz,bz2,tar,gz,mpp,rp,pdm,vsdx,vsd,sql"
+       prefix: "."
+  - instance: title
+    note: 文件名称
+    fields:
+      - field: item1
+        range: "1-10000"
+        prefix: "这是一个文件名称"
+      - field: item2
+        range: "txt,doc,docx,dot,wps,wri,pdf,ppt,pptx,xls,xlsx,ett,xlt,xlsm,csv,jpg,jpeg,png,psd,gif,ico,bmp,swf,avi,rmvb,rm,mp3,mp4,3gp,flv,mov,movie,rar,zip,bz,bz2,tar,gz,mpp,rp,pdm,vsdx,vsd,sql"
+        prefix: "."

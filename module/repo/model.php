@@ -2806,7 +2806,7 @@ class repoModel extends model
             }
         }
         $stories = empty($storyIDs) ? array() : $this->loadModel('story')->getByList($storyIDs);
-        $bugs    = empty($bugIDs)   ? array() : $this->loadModel('bug')->getByList($bugIDs);
+        $bugs    = empty($bugIDs)   ? array() : $this->loadModel('bug')->getByIdList($bugIDs);
         $tasks   = empty($taskIDs)  ? array() : $this->loadModel('task')->getByList($taskIDs);
 
         $titleList = array();

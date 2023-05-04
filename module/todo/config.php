@@ -1,6 +1,7 @@
 <?php
 declare(strict_types=1);
 helper::import(dirname(__FILE__) . 'config/form.php');
+helper::import(dirname(dirname(dirname(__FILE__))) . '/lib/date/date.class.php');
 
 $config->todo = new stdclass();
 $config->todo->batchCreate = 8;
@@ -59,3 +60,17 @@ $config->todo->project['opportunity'] = TABLE_OPPORTUNITY;
 $config->todo->project['review']      = TABLE_REVIEW;
 $config->todo->project['testtask']    = TABLE_TESTTASK;
 
+$config->todo->dateRange = array();
+$config->todo->dateRange['all']             = array('begin' => '1970-01-01',  'end' => '2109-01-01');
+$config->todo->dateRange['assignedtoother'] = array('begin' => '1970-01-01',  'end' => '2109-01-01');
+$config->todo->dateRange['today']           = array('begin' => date::today(), 'end' => date::today());
+$config->todo->dateRange['future']          = array('begin' => '2030-01-01',  'end' => '2030-01-01');
+$config->todo->dateRange['before']          = array('begin' => '1970-01-01',  'end' => date::today());
+$config->todo->dateRange['cycle']           = array('begin' => '', 'end' => '');
+$config->todo->dateRange['yesterday']       = array('begin' => date::yesterday(), 'end' => date::yesterday());
+$config->todo->dateRange['thisweek']        = array('begin' => date::getThisWeek()['begin'],   'end' => date::getThisWeek()['end']);
+$config->todo->dateRange['lastweek']        = array('begin' => date::getLastWeek()['begin'],   'end' => date::getLastWeek()['end']);
+$config->todo->dateRange['thismonth']       = array('begin' => date::getThisMonth()['begin'],  'end' => date::getThisMonth()['end']);
+$config->todo->dateRange['lastmonth']       = array('begin' => date::getLastMonth()['begin'],  'end' => date::getLastMonth()['end']);
+$config->todo->dateRange['thisseason']      = array('begin' => date::getThisSeason()['begin'], 'end' => date::getThisSeason()['end']);
+$config->todo->dateRange['thisyear']        = array('begin' => date::getThisYear()['begin'],   'end' => date::getThisYear()['end']);

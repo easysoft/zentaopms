@@ -73,8 +73,7 @@ class project extends control
 
             if(isset($fields['hasProduct'])) $fields['hasProduct'] = $projectLang->type;
 
-            $involved = $this->cookie->involved ? $this->cookie->involved : 0;
-            $projects = $this->project->getInfoList($status, $orderBy, '', $involved);
+            $projects = $this->project->getList($status, $orderBy);
             $users    = $this->loadModel('user')->getPairs('noletter');
 
             $this->loadModel('product');
@@ -316,7 +315,7 @@ class project extends control
         if($project->model == 'kanban' and $this->config->vision != 'lite')
         {
             /* Load pager and get kanban list. */
-            $this->app->loadClass('pager', $static = true);
+            $this->app->loadClass('pager', true);
             $pager = new pager($recTotal, $recPerPage, $pageID);
 
             $kanbanList = $this->loadModel('execution')->getList($projectID, 'all', $browseType, 0, 0, 0, $pager);
@@ -370,7 +369,7 @@ class project extends control
         $browseType  = strtolower($browseType);
 
         /* Load pager. */
-        $this->app->loadClass('pager', $static = true);
+        $this->app->loadClass('pager', true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
         $queryID = ($browseType == 'bysearch') ? (int)$param : 0;
@@ -509,9 +508,8 @@ class project extends control
      * @param  int    $projectID
      * @param  string $from
      * @access public
-     * @return void
      */
-    public function edit(string $projectID, string $from = ''): void
+    public function edit(string $projectID, string $from = '')
     {
         $this->loadModel('action');
         $this->loadModel('custom');
@@ -520,10 +518,8 @@ class project extends control
         $this->loadModel('program');
         $this->loadModel('execution');
 
-
-        $projectID  = (int)$projectID;
-        $project    = $this->project->getByID($projectID);
-        $programID  = $project->parent;
+        $projectID = (int)$projectID;
+        $project   = $this->project->getByID($projectID);
         $this->project->setMenu($projectID);
 
         if($project->model == 'kanban')
@@ -547,7 +543,7 @@ class project extends control
 
         if($_POST)
         {
-            $postData = form::data($this->config->project->form->eidt);
+            $postData = form::data($this->config->project->form->edit);
             $project  = $this->projectZen->prepareEditExtras($postData);
 
             $project->id       = $projectID;
@@ -738,7 +734,7 @@ class project extends control
         }
 
         /* Load pager. */
-        $this->app->loadClass('pager', $static = true);
+        $this->app->loadClass('pager', true);
         $pager = new pager(0, 30, 1);
 
         /* Check exist extend fields. */
@@ -867,8 +863,8 @@ class project extends control
         $orderBy = $direction == 'next' ? 'date_desc' : 'date_asc';
 
         /* Set the pager. */
-        $this->app->loadClass('pager', $static = true);
-        $pager = new pager($recTotal, $recPerPage = 50, $pageID = 1);
+        $this->app->loadClass('pager', true);
+        $pager = new pager($recTotal, 50, 1);
 
         /* Set the user and type. */
         $account = 'all';
@@ -936,7 +932,7 @@ class project extends control
         if(!empty($project->model) and $project->model == 'kanban' and !(defined('RUN_MODE') and RUN_MODE == 'api')) return print(js::locate($this->createLink('project', 'index', "projectID=$projectID")));
 
         /* Load pager and get tasks. */
-        $this->app->loadClass('pager', $static = true);
+        $this->app->loadClass('pager', true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
         $allExecution = $this->execution->getStatData($projectID, 'all');
@@ -1679,7 +1675,7 @@ class project extends control
      * @access public
      * @return void
      */
-    public function editGroup($groupID): void
+    public function editGroup($groupID): mixed
     {
         $groupID = (int)$groupID;
         $this->loadModel('group');
@@ -1934,8 +1930,8 @@ class project extends control
     }
 
     /**
-     * 管理项目下的关联产品
-     * Manage products.
+     * 管理项目的关联产品
+     * Manage products under project.
      *
      * @param  string $projectID
      * @param  string $from  project|program|programproject
@@ -1943,8 +1939,9 @@ class project extends control
      * @access public
      * @return void
      */
-    public function manageProducts(string $projectID, $from = 'project'): void
+    public function manageProducts(string $projectID, $from = 'project'): mixed
     {
+        /* Access the nonProduct project alter tips. */
         $projectID = (int)$projectID;
         $project   = $this->project->getById($projectID);
         if(!$project->hasProduct) return print(js::error($this->lang->project->cannotManageProducts) . js::locate('back'));
@@ -1961,6 +1958,7 @@ class project extends control
                 return $this->send(array('result' => 'fail', 'message' => dao::getError()));
             }
 
+            /* Update linked products. */
             $this->projectZen->mergeProducts($projectID, $project, $executionIDs, $postData);
 
             $locateLink = inLink('manageProducts', "projectID=$projectID");
@@ -1968,9 +1966,10 @@ class project extends control
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $locateLink));
         }
 
+        /* Set menu. */
         if($this->app->tab == 'program')
         {
-            $this->program->setMenu($project->parent);
+            $this->loadModel('program')->setMenu($project->parent);
         }
         else if($this->app->tab == 'project')
         {
@@ -1978,7 +1977,12 @@ class project extends control
         }
 
         $this->projectZen->dealLinkProduct($projectID, $project);
-        $this->projectZen->buildMangedProductForm($projectID, $project, $executions);
+
+        $this->view->title      = $this->lang->project->manageProducts . $this->lang->colon . $project->name;
+        $this->view->project    = $project;
+        $this->view->executions = $executions;
+        $this->view->branches   = $this->project->getBranchesByProject($projectID);
+        $this->display();
     }
 
    /**
@@ -1993,7 +1997,7 @@ class project extends control
      * @access public
      * @return void
      */
-    public function ajaxGetExecutions(string $projectID, int $executionID = 0, string $mode = '', string $type = 'all'): void
+    public function ajaxGetExecutions(string $projectID, int $executionID = 0, string $mode = '', string $type = 'all'): mixed
     {
         $project    = $this->project->getByID($projectID);
         $disabled   = $project->multiple ? '' : 'disabled';

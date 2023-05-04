@@ -17,6 +17,18 @@ class todoTao extends todoModel
     }
 
     /**
+     * 获取多条待办。
+     * Get a todo.
+     *
+     * @param  array  $todoIdList
+     * @return array
+     */
+    protected function fetchRows(array $todoIdList): array
+    {
+        return $this->dao->select('*')->from(TABLE_TODO)->where('id')->in(array_keys($todoIdList))->fetchAll('id');
+    }
+
+    /**
      * 获取待办数量。
      * Get todo count.
      *
@@ -118,10 +130,11 @@ class todoTao extends todoModel
      * Process the data for the todo to be created.
      *
      * @param  object $todoData
+     * @param  object $formData
      * @access protected
      * @return object|false
      */
-    protected function processCreateData(object $todoData): object|false
+    protected function processCreateData(object $todoData, object $formData): object|false
     {
         if(!isset($todoData->pri) and in_array($todoData->type, $this->config->todo->moduleList) and !in_array($todoData->type, array('review', 'feedback')))
         {
@@ -153,7 +166,7 @@ class todoTao extends todoModel
         }
         if(empty($todoData->cycle)) unset($todoData->config);
 
-        return $this->loadModel('file')->processImgURL($todoData, $this->config->todo->editor->create['id'], $this->post->uid);
+        return $this->loadModel('file')->processImgURL($todoData, $this->config->todo->editor->create['id'], $formData->rawdata->uid);
     }
 
     /**
@@ -358,5 +371,95 @@ class todoTao extends todoModel
     {
         $this->dao->update(TABLE_TODO)->set('date')->eq($date)->where('id')->in($todoIdList)->exec();
         return !dao::isError();
+    }
+
+    /**
+     * 获取用户的待办事项数量。
+     * Get todo count on the account.
+     *
+     * @param  string $account
+     * @access protected
+     * @return int
+     */
+    protected function getTodoCountByAccount(string $account): int
+    {
+        return $this->dao->select('count(*) as count')->from(TABLE_TODO)
+            ->where('cycle')->eq('0')
+            ->andWhere('deleted')->eq('0')
+            ->andWhere('vision')->eq($this->config->vision)
+            ->andWhere('account', true)->eq($account)
+            ->orWhere('assignedTo')->eq($account)
+            ->orWhere('finishedBy')->eq($account)
+            ->markRight(1)
+            ->fetch('count');
+    }
+
+    /**
+     * 根据待办类型设置待办名称。
+     * Set todo name by its type.
+     *
+     * @param  object    $todo
+     * @access protected
+     * @return object
+     */
+    protected function setTodoNameByType(object $todo): object
+    {
+        if($todo->type == 'story')    $todo->name = $this->dao->findByID($todo->objectID)->from(TABLE_STORY)->fetch('title');
+        if($todo->type == 'task')     $todo->name = $this->dao->findByID($todo->objectID)->from(TABLE_TASK)->fetch('name');
+        if($todo->type == 'bug')      $todo->name = $this->dao->findByID($todo->objectID)->from(TABLE_BUG)->fetch('title');
+        if($todo->type == 'testtask') $todo->name = $this->dao->findByID($todo->objectID)->from(TABLE_TESTTASK)->fetch('name');
+
+        if($this->config->edition == 'max')
+        {
+            if($todo->type == 'risk' )       $todo->name = $this->dao->findByID($todo->objectID)->from(TABLE_RISK)->fetch('name');
+            if($todo->type == 'issue')       $todo->name = $this->dao->findByID($todo->objectID)->from(TABLE_ISSUE)->fetch('title');
+            if($todo->type == 'review')      $todo->name = $this->dao->findByID($todo->objectID)->from(TABLE_REVIEW)->fetch('title');
+            if($todo->type == 'opportunity') $todo->name = $this->dao->findByID($todo->objectID)->from(TABLE_OPPORTUNITY)->fetch('name');
+        }
+
+        if($this->config->edition == 'biz' || $this->config->edition == 'max')
+        {
+            if($todo->type == 'feedback') $todo->name = $this->dao->findByID($todo->objectID)->from(TABLE_FEEDBACK)->fetch('title');
+        }
+
+        return $todo;
+    }
+
+    /**
+     * 构造待办列表查询语句。
+     * Build query for todo list.
+     *
+     * @param string       $type
+     * @param string       $account
+     * @param string|array $status
+     * @param string       $begin
+     * @param string       $end
+     * @param object       $pager
+     * @param int          $limit
+     * @param string       $orderBy
+     * @access protected
+     * @return object
+     */
+    protected function getListQuery(string $type, string $account, array|string $status, string $begin, string $end, object $pager = null, int $limit, string $orderBy): object
+    {
+        return $this->dao->select('*')->from(TABLE_TODO)
+            ->where('deleted')->eq('0')
+            ->andWhere('vision')->eq($this->config->vision)
+            ->beginIF($type == 'assignedtoother')->andWhere('account', true)->eq($account)->fi()
+            ->beginIF($type != 'assignedtoother')->andWhere('assignedTo', true)->eq($account)->fi()
+            ->orWhere('finishedBy')->eq($account)
+            ->orWhere('closedBy')->eq($account)
+            ->markRight(1)
+            ->beginIF($begin)->andWhere('date')->ge($begin)->fi()
+            ->beginIF($end)->andWhere('date')->le($end)->fi()
+            ->beginIF($status != 'all' and $status != 'undone')->andWhere('status')->in($status)->fi()
+            ->beginIF($status == 'undone')->andWhere('status')->notin('done,closed')->fi()
+            ->beginIF($type == 'cycle')->andWhere('cycle')->eq('1')->fi()
+            ->beginIF($type != 'cycle')->andWhere('cycle')->eq('0')->fi()
+            ->beginIF($type == 'assignedtoother')->andWhere('assignedTo')->notin(array($account, ''))->fi()
+            ->orderBy($orderBy)
+            ->beginIF($limit > 0)->limit($limit)->fi()
+            ->page($pager)
+            ->query();
     }
 }

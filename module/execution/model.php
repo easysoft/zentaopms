@@ -322,8 +322,7 @@ class executionModel extends model
         }
 
         /* Save session. */
-        $this->session->set('execution', $executionID, $this->app->tab);
-        $this->setProjectSession($executionID);
+        $this->executionTao->saveSession($executionID);
 
         /* Return execution id. */
         return $executionID;
@@ -3033,7 +3032,7 @@ class executionModel extends model
         $requiredFields = trim($requiredFields, ',');
 
         $bugToTasks = fixer::input('post')->get();
-        $bugs       = $this->bug->getByList(array_keys($bugToTasks->import));
+        $bugs       = $this->bug->getByIdList(array_keys($bugToTasks->import));
         foreach($bugToTasks->import as $key => $value)
         {
             $bug = zget($bugs, $key, '');

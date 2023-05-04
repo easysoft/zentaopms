@@ -1,0 +1,77 @@
+title: table zt_kanbancard
+desc: ""
+author: automated export
+version: "1.0"
+fields:
+    - field: kanban
+      range: 1-100{8}
+    - field: region
+      range: 1-100{8}
+    - field: group
+      range: 1-100{8}
+    - field: fromID
+      range: 0{800},1-70,1-10,101-200,1-20
+    - field: fromType
+      range: []{800},productplan{70},release{10},execution{100},build{20}
+    - field: name
+      fields:
+        - field: name1
+          range: 卡片{800},[]{200}
+        - field: name2
+          range: 1-800,[]{200}
+    - field: status
+      range: doing,doing,done
+    - field: pri
+      range: 3{800},0{200}
+    - field: assignedTo
+      range: admin{800},[]{200}
+    - field: desc
+      range: ""
+    - field: begin
+      range: "(-2M)-(+M):1D"
+      type: timestamp
+      format: "YY/MM/DD"
+      postfix: "\t"
+    - field: end
+      range: "(+1w)-(+2M):1D"
+      type: timestamp
+      format: "YY/MM/DD"
+      postfix: "\t"
+    - field: estimate
+      range: "0"
+    - field: progress
+      range: 0,50,100
+    - field: color
+      range: "#fff"
+    - field: acl
+      range: "open"
+    - field: whitelist
+      range: ""
+    - field: order
+      range: 1-2
+    - field: archived
+      range: "0"
+    - field: createdBy
+      range: "admin"
+    - field: createdDate
+      range: "(-2M)-(+M):1D"
+      type: timestamp
+      format: "YY/MM/DD"
+      postfix: "\t"
+    - field: lastEditedBy
+      range: ""
+    - field: lastEditedDate
+      range: ""
+    - field: archivedBy
+      range: ""
+    - field: archivedDate
+      range: ""
+    - field: assignedBy
+      range: ""
+    - field: assignedDate
+      range: "(-2M)-(+M):1D"
+      type: timestamp
+      format: "YY/MM/DD"
+      postfix: "\t"
+    - field: deleted
+      range: "0"

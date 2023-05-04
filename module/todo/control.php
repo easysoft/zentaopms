@@ -1,8 +1,6 @@
 <?php
 declare(strict_types=1);
 
-use function zin\createLink;
-
 /**
  * The control file of todo module of ZenTaoPMS.
  *
@@ -37,9 +35,9 @@ class todo extends control
      * @param  string  $date
      * @param  string  $from todo|feedback|block
      * @access public
-     * @return int
+     * @return void
      */
-    public function create(string $date = 'today', string $from = 'todo'): int
+    public function create(string $date = 'today', string $from = 'todo')
     {
         if($date == 'today') $date = date::today();
 
@@ -48,11 +46,11 @@ class todo extends control
             $formData = form::data($this->config->todo->create->form);
             $todo     = $this->todoZen->beforeCreate($formData);
 
-            $todoID = $this->todo->create($todo);
+            $todoID = $this->todo->create($todo, $formData);
             if($todoID === false) return print(js::error(dao::getError()));
 
             $todo->id = $todoID;
-            $this->todoZen->afterCreate($todo);
+            $this->todoZen->afterCreate($todo, $formData);
 
             if(!empty($_POST['objectID'])) return $this->send(array('result' => 'success'));
 
@@ -66,25 +64,26 @@ class todo extends control
             if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $todoID));
             if($this->viewType == 'xhtml') return print(js::locate($this->createLink('todo', 'view', "todoID=$todoID", 'html'), 'parent'));
             if(isonlybody()) return print(js::closeModal('parent.parent'));
-            return print(js::locate($this->createLink('my', 'todo', "type=all&userID=&status=all&orderBy=id_desc"), 'parent'));
+            return print(js::locate($this->createLink('my', 'todo', 'type=all&userID=&status=all&orderBy=id_desc'), 'parent'));
         }
 
         unset($this->lang->todo->typeList['cycle']);
 
         $this->todoZen->buildCreateView($date);
-        return 1;
     }
 
     /**
-     * Batch create todo
+     * 批量创建待办。
+     * Batch create todo.
      *
      * @param  string $date
      * @access public
      * @return void
      */
-    public function batchCreate($date = 'today')
+    public function batchCreate(string $date = 'today')
     {
         if($date == 'today') $date = date(DT_DATE1, time());
+
         if(!empty($_POST))
         {
             $todoIDList = $this->todo->batchCreate();
@@ -92,37 +91,17 @@ class todo extends control
 
             /* Locate the browser. */
             $date = str_replace('-', '', $this->post->date);
-            if($date == '')
-            {
-                $date = 'future';
-            }
-            else if($date == date('Ymd'))
-            {
-                $date= 'today';
-            }
+            if($date == '') $date = 'future';
+            if($date == date('Ymd')) $date= 'today';
 
             if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'idList' => $todoIDList));
             if(isonlybody()) return print(js::reload('parent.parent'));
-            return print(js::locate($this->createLink('my', 'todo', "type=$date"), 'parent'));
+            return print(js::locate($this->createLink('my', 'todo', "type={$date}"), 'parent'));
         }
 
         unset($this->lang->todo->typeList['cycle']);
 
-        /* Set Custom*/
-        foreach(explode(',', $this->config->todo->list->customBatchCreateFields) as $field) $customFields[$field] = $this->lang->todo->$field;
-
-        $this->view->customFields = $customFields;
-        $this->view->showFields   = $this->config->todo->custom->batchCreateFields;
-
-        $this->view->title      = $this->lang->todo->common . $this->lang->colon . $this->lang->todo->batchCreate;
-        $this->view->position[] = $this->lang->todo->common;
-        $this->view->position[] = $this->lang->todo->batchCreate;
-        $this->view->date       = (int)$date == 0 ? $date : date('Y-m-d', strtotime($date));
-        $this->view->times      = date::buildTimeList($this->config->todo->times->begin, $this->config->todo->times->end, $this->config->todo->times->delta);
-        $this->view->time       = date::now();
-        $this->view->users      = $this->loadModel('user')->getPairs('noclosed|nodeleted|noempty');
-
-        $this->display();
+        $this->todoZen->buildBatchCreateView($date);
     }
 
     /**
@@ -176,19 +155,24 @@ class todo extends control
      *
      * @param  string $from example:myTodo, todoBatchEdit.
      * @param  string $type
-     * @param  int    $userID
+     * @param  string $userID
      * @param  string $status
      * @access public
-     * @return void
      */
     public function batchEdit(string $from = '', string $type = 'today', string $userID = '', string $status = 'all')
     {
+        $formData = form::data($this->config->todo->batchEdit->form);
+        $userID   = (int)$userID;
+
         /* Get form data for my-todo. */
-        if($from == 'myTodo') $this->todoZen->batchEditFromMyTodo($type, $userID, $status);
+        if($from == 'myTodo') $this->todoZen->batchEditFromMyTodo($formData, $type, $userID, $status);
         if($from == 'todoBatchEdit')
         {
-            $formData = form::data($this->config->todo->batchEdit->form);
-            $this->todoZen->batchEditFromTodoBatchEdit($formData);
+            $todos = $this->todoZen->beforeBatchEdit($formData);
+            $allChanges = $this->todo->batchUpdate($todos, $formData->data->todoIDList);
+            $this->todoZen->afterBatchEdit($allChanges);
+
+            return print(js::locate($this->session->todoList, 'parent'));
         }
     }
 
@@ -318,7 +302,7 @@ class todo extends control
         $account = $this->app->user->account;
         if($todo->private and $todo->account != $account) return print(js::error((string)$this->lang->todo->thisIsPrivate) . (string)js::locate('back'));
 
-        if(!isonlybody()) $this->todoZen->setSessionLink($this->app->getURI(true));
+        if(!isonlybody()) $this->todoZen->setSessionUri($this->app->getURI(true));
 
         /* Fix bug #936. */
         if($account != $todo->account and $account != $todo->assignedTo and !common::hasPriv('my', 'team'))
@@ -498,7 +482,7 @@ class todo extends control
             list($todos, $fields) = $this->todoZen->exportTodoInfo((array)$todos, (string)$this->config->todo->list->exportFields, $todoLang);
             list($users, $bugs, $stories, $tasks, $testTasks) = $this->todoZen->exportAssociated('default', $account);
 
-            $times = date::buildTimeList((string)$configTime->begin, (string)$configTime->end, (string)$configTime->delta);
+            $times = date::buildTimeList((int)$configTime->begin, (int)$configTime->end, (int)$configTime->delta);
 
             $assemble = new stdClass();
             $assemble->users     = $users;
@@ -506,12 +490,13 @@ class todo extends control
             $assemble->stories   = $stories;
             $assemble->tasks     = $tasks;
             $assemble->testTasks = $testTasks;
-            if($this->config->edition == 'max'){
+            if($this->config->edition == 'max')
+            {
                 $iroData = $this->todoZen->exportInfo((string)$this->config->edition, $account);
                 $assemble->issues        = $iroData[0];
                 $assemble->risks         = $iroData[1];
                 $assemble->opportunities = $iroData[2];
-            };
+            }
             if(isset($this->config->qcVersion)) $assemble->reviews = $this->todoZen->exportInfo('qcVersion', $account);
 
             $todos = $this->todoZen->assembleExportData((array)$todos, $assemble, $todoLang, (array)$times);

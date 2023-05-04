@@ -1,0 +1,149 @@
+title: table zt_todo
+desc: "待办"
+author: ly
+version: "1.0"
+fields:
+  - field: id
+    note: "ID"
+    range: 2001-10000
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: account
+    note: "用户名"
+    range: admin
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: date
+    note: "日期"
+    range: "(M)-(w)"
+    type: timestamp
+    prefix: ""
+    postfix: ""
+    format: "YY-MM-DD"
+  - field: begin
+    note: "开始"
+    range: "1000-1059:2"
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: end
+    note: "结束"
+    range: "1400-1459:2"
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: type
+    note: "类型"
+    range: cycle
+    prefix: ""
+    postfix: ""
+  - field: cycle
+    note: "周期"
+    range: 1
+    prefix: ""
+    postfix: ""
+  - field: idvalue
+    note: "关联编号"
+    range: 0
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: pri
+    note: "优先级"
+    range: 3
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: name
+    note: "待办名称"
+    range: 天周期{2},周周期{2},月周期
+    prefix: ""
+    postfix: "待办"
+    loop: 0
+    format: ""
+  - field: desc
+    note: "描述"
+    range: 1-10000
+    prefix: "这是一个待办的描述"
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: status
+    note: "状态"
+    range: wait
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: private
+    note: "私人事务"
+    range: 0
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: config
+    note: "配置"
+    range: ""
+    prefix: ""
+    postfix: ""
+    format: ""
+  - field: assignedTo
+    note: "指派给"
+    range: admin
+    prefix: ""
+    postfix: ""
+    format: ""
+  - field: assignedBy
+    note: "由谁指派"
+    range: admin
+    prefix: ""
+    postfix: ""
+    format: ""
+  - field: assignedDate
+    note: "指派日期"
+    range: "(M)-(w):60m"
+    type: timestamp
+    prefix: ""
+    postfix: ""
+    format: "YY/MM/DD hh:mm:ss"
+  - field: finishedBy
+    note: "由谁完成"
+    from: common.user.v1.yaml
+    use: user
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: finishedDate
+    note: "完成时间"
+    from: common.date.v1.yaml
+    use: dateA
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: closedBy
+    note: "由谁关闭"
+    from: common.user.v1.yaml
+    use: user
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: closedDate
+    note: "关闭时间"
+    from: common.date.v1.yaml
+    use: dateA
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""

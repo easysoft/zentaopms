@@ -13,20 +13,23 @@ namespace zin;
 
 set::title($title);
 jsVar('dashboard', $dashboard);
+jsVar('of', $lang->block->of);
 
-$paramsRows = array();
-$isMyDashboard = $dashboard == 'my';
+$paramsRows  = array();
+$showModules = ($dashboard == 'my' and $modules);
+$showCodes   = (($showModules and $module and $codes) or $dashboard != 'my');
 
 foreach($params as $key => $row)
 {
     $paramsRows[] = formGroup
     (
         set::label($row['name']),
-        set::name('params'),
+        set::name("params[$key]"),
         set::class('form-row'),
-        set::value($block->params->{$key}),
+        set::value(zget($row, 'default', '')),
         set::control(array
         (
+            'id'    => "params$key",
             'type'  => $row['control'],
             'items' => isset($row['options']) ? $row['options'] : null
         ))  
@@ -37,60 +40,62 @@ form
 (
     on::change('#module', 'getForm'),
     on::change('#code', 'getForm'),
+    on::change('#paramstype', 'onParamsTypeChange'),
     formGroup
     (
-        set::class($isMyDashboard ? '' : 'hidden'),
-        set::value($isMyDashboard ? '' : $dashboard),
+        set::class($showModules ? '' : 'hidden'),
+        set::value($showModules ? $code : $dashboard),
         set::label($lang->block->lblModule),
         set::name('module'),
-        set::control(array
+        set::control($showModules ? array
         (
             'type'  => 'select',
             'items' => $modules
-        ))  
+        ) : 'input')  
     ),
     div
     (
-        set::id('codeRow'),
-        $codes
-        ? formGroup
+        set::id('codesRow'),
+        formGroup
         (
             set::label($lang->block->lblBlock),
             set::name('code'),
-            set::value($code),
-            set::control(array
+            set::class($showCodes ? '' : 'hidden'),
+            set::value($showCodes ? $code : $module),
+            set::control($showCodes ? array
             (
                 'type'  => 'select',
                 'items' => array('') + $codes
-            ))  
-        ) : null
+            ) : 'input')
+        )
     ),
     div
     (
         set::id('paramsRow'),
-        set::class('form-grid'),
-        $paramsRows,
-        (($module and $code) or ($module and !$codes))
-        ? formGroup
+        div
         (
-            set::label($lang->block->name),
-            set::name('title'),
-            set::value(zget($modules, $module, '') . zget($codes, $code, '')),
-            set::class('form-row'),
-            set::control('input')  
-        ) : null,
-        (($module and $code) or ($module and !$codes))
-        ? formGroup
-        (
-            set::label($lang->block->grid),
-            set::name("grid"),
-            set::class('form-row'),
-            set::control(array
+            set::class('form-grid'),
+            formGroup
             (
-                'type'  => 'select',
-                'items' => $lang->block->gridOptions
-            ))  
-        ) : null,
+                set::label($lang->block->name),
+                set::name('title'),
+                set::value(zget($codes, $code)),
+                set::class('form-row'),
+                set::control('input')  
+            ),
+            $paramsRows,
+            formGroup
+            (
+                set::label($lang->block->grid),
+                set::name("grid"),
+                set::class('form-row'),
+                set::control(array
+                (
+                    'type'  => 'select',
+                    'items' => $lang->block->gridOptions
+                ))  
+            )
+        )
     )
 );
 

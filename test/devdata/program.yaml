@@ -1,0 +1,96 @@
+title: program
+author: Zhu Jinyong
+version: "1.0"
+fields:
+  - field: id
+    range: 1-1000
+  - field: project
+    range: 0
+  - field: model
+    range: []
+  - field: name
+    note: "名称"
+    fields:
+    - field: name1
+      range: "项目集"
+    - field: name2
+      range: 1-10000
+  - field: type
+    range: program
+  - field: budget
+    range: 1000000-1:100
+  - field: status
+    range: wait
+  - field: parent
+    range: 0
+  - field: path
+    fields:
+      - field: path1
+        prefix: ","
+        range: 1-1000
+      - field: path2
+        range: []
+        postfix: ","
+      - field: path3
+        range: []
+        postfix: ","
+  - field: grade
+    range: 1
+  - field: code
+    range: 1-10000
+    prefix: "program"
+  - field: begin
+    range: "(-5M)-(+M):1D"
+    type: timestamp
+    format: "YY/MM/DD"
+    postfix: "\t"
+  - field: end
+    range: "(+10w)-(+2M):1D"
+    type: timestamp
+    format: "YY/MM/DD"
+    postfix: "\t"
+  - field: realBegan
+    range: "(-5M)-(+M):1D"
+    type: timestamp
+    format: "YY/MM/DD"
+    postfix: "\t"
+  - field: realEnd
+    range: "(+10w)-(+2M):1D"
+    type: timestamp
+    format: "YY/MM/DD"
+    postfix: "\t"
+  - field: desc
+    range: 1-10000
+    prefix: "项目集描述"
+  - field: acl
+    range: open{4},private{4}
+  - field: PO
+    range: 1-10
+    prefix: "po"
+  - field: PM
+    range: 1-10
+    prefix: "pm"
+  - field: QD
+    range: 1-10
+    prefix: "test"
+  - field: RD
+    range: 1-10
+    prefix: "dev"
+  - field: openedVersion
+    range: "18.3"
+  - field: whitelist
+    froms:
+      - from: common.user.v1.yaml
+        use: empty{8}
+      - from: common.user.v1.yaml
+        use: empty{8}
+        prefix: ","
+      - from: common.user.v1.yaml
+        use: one{8}
+        prefix: ","
+      - from: common.user.v1.yaml
+        use: two{8}
+        prefix: ","
+      - from: common.user.v1.yaml
+        use: three{8}
+        prefix: ","

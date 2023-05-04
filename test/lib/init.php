@@ -102,9 +102,6 @@ function p($keys = '', $delimiter = ',')
 {
     global $_result;
 
-    $_keys      = $keys;
-    $_delimiter = $delimiter;
-
     if(empty($_result)) return print(implode("\n", array_fill(0, substr_count($keys, $delimiter) + 1, 0)) . "\n");
 
     if(is_array($_result) and isset($_result['code']) and $_result['code'] == 'fail') return print((string) $_result['message'] . "\n");
@@ -117,6 +114,8 @@ function p($keys = '', $delimiter = ',')
     foreach($parts as $part)
     {
         $values = getValues($_result, $part, $delimiter);
+        if(!is_array($values)) continue;
+
         foreach($values as $value) echo $value . "\n";
     }
 
@@ -273,7 +272,7 @@ function genModuleAndMethod($rParams)
     {
         $param = trim($param, "'");
         if($param[0] != '$') $param = trim(strchr($param, '$'), ')');
-        
+
         $objArrowCount        = substr_count($param, '->');
         $rParamsStructureList = explode('->', $param);
 
@@ -475,7 +474,9 @@ function zdImport($table, $yaml, $count = 10)
 function su($account)
 {
     $userModel = new userModel();
-    $user = $userModel->identify($account, '123Qwe!@#');
+    $user      = $userModel->getByID($account);
     if($user) return $userModel->login($user);
+
+    $user = $userModel->identify($account, $user->password);
     return false;
 }

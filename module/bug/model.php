@@ -309,8 +309,8 @@ class bugModel extends model
     }
 
     /**
-     * Get bug list by browse type.
      * 根据浏览类型获取bug列表。
+     * Get bug list by browse type.
      *
      * @param  string      $browseType
      * @param  int|array   $productIdList
@@ -337,19 +337,9 @@ class bugModel extends model
 
         /* Get bugs by browse type. */
         $bugList = array();
-        if($browseType == 'all')
-        {
-            $bugList = $this->bugTao->getAllBugs($productIdList, $projectID, $executionIdList, $branch, $modules, $orderBy, $pager);
-            $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'bug');
-        }
-        elseif($browseType == 'review')
-        {
-            $bugList = $this->bugTao->getListByReviewToMe($productIdList, $projectID, $executionIdList, $branch, $modules, $orderBy, $pager);
-            $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'bug');
-        }
+        if($browseType == 'bysearch') $bugList = $this->getBySearch($productIdList, $branch, $queryID, $orderBy, '', $pager, $projectID);
         elseif($browseType == 'needconfirm') $bugList = $this->bugTao->getListByNeedconfirm($productIdList, $projectID, $executionIdList, $branch, $modules, $orderBy, $pager);
-        elseif($browseType == 'bysearch')    $bugList = $this->getBySearch($productIdList, $branch, $queryID, $orderBy, '', $pager, $projectID);
-        elseif(strpos(',bymodule,assigntome,openedbyme,resolvedbyme,assigntonull,unconfirmed,unresolved,unclosed,toclosed,longlifebugs,postponedbugs,overduebugs,assignedbyme,', ",$browseType,") !== false) $bugList = $this->bugTao->getListByBrowseType($browseType, $productIdList, $projectID, $executionIdList, $branch, $modules, $orderBy, $pager);
+        elseif(strpos(',all,bymodule,assigntome,openedbyme,resolvedbyme,assigntonull,unconfirmed,unresolved,unclosed,toclosed,longlifebugs,postponedbugs,overduebugs,assignedbyme,review,', ",$browseType,") !== false) $bugList = $this->bugTao->getListByBrowseType($browseType, $productIdList, $projectID, $executionIdList, $branch, $modules, $orderBy, $pager);
 
         return $this->bugTao->batchAppendDelayedDays($bugList);
     }
@@ -432,15 +422,15 @@ class bugModel extends model
     }
 
     /**
-     * Get bugs by ID list.
      * 获取指定字段的bug列表。
+     * Get bugs by ID list.
      *
      * @param  int|array|string $bugIDList
      * @param  string           $fields
      * @access public
      * @return array
      */
-    public function getByList(int|array|string $bugIDList = 0, string $fields = '*'): array
+    public function getByIdList(int|array|string $bugIDList = 0, string $fields = '*'): array
     {
         return $this->dao->select($fields)->from(TABLE_BUG)
             ->where('deleted')->eq('0')

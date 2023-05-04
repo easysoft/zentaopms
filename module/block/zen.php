@@ -2,8 +2,8 @@
 class blockZen extends block
 {
     /**
-     * Get module options when adding or editing blocks.
      * 添加或编辑区块时获取可使用的模块选项
+     * Get module options when adding or editing blocks.
      * 
      * @param  string $dashboard
      * @access protected
@@ -51,8 +51,8 @@ class blockZen extends block
     }
 
     /**
-     * Get block options when adding or editing blocks.
      * 添加或编辑区块时获取可使用的区块选项
+     * Get block options when adding or editing blocks.
      *
      * @param  string $dashboard
      * @param  string $module
@@ -71,7 +71,36 @@ class blockZen extends block
             if(!$this->block->checkAPI($this->get->hash)) return array();
         }
 
-        $blocks = $this->block->getAvailableBlocks($dashboard, $module);
+        if($dashboard == 'my')
+        {
+            if($module and isset($this->lang->block->modules[$module]))
+            {
+                $blocks = $this->lang->block->modules[$module]->availableBlocks;
+            }
+            else
+            {
+                $blocks = array();
+            }
+        }
+        else
+        {
+            if($dashboard and isset($this->lang->block->modules[$dashboard]))
+            {
+                $blocks = $this->lang->block->modules[$dashboard]->availableBlocks;
+            }
+            else
+            {
+                $blocks = $this->lang->block->availableBlocks;
+            }
+        }
+
+        if(isset($this->config->block->closed))
+        {
+            foreach($blocks as $blockKey => $blockName)
+            {
+                if(strpos(",{$this->config->block->closed},", ",{$module}|{$blockKey},") !== false) unset($blocks[$blockKey]);
+            }
+        }
 
         if(!$this->selfCall)
         {
@@ -83,22 +112,28 @@ class blockZen extends block
     }
 
     /**
-     * Get other form items when adding or editing blocks
      * 添加或编辑区块时获取其他表单项
+     * Get other form items when adding or editing blocks
      *
      * @param  string $dashboard
      * @param  string $module
-     * @param  string $block
+     * @param  string $code
      * @access protected
      * @return array
      */
-    protected function getAvailableParams(string $dashboard, string $module = '', string $block = ''): array
+    protected function getAvailableParams(string $dashboard, string $module = '', string $code = ''): array
     {
-        if(!isset($this->lang->block->moduleList[$module])) return array();
+        if($code == 'todo' || $code == 'list' || $module == 'assigntome')
+        {
+            $code = $module;
+        }
+        elseif($code == 'statistic')
+        {
+            $code = $module . $code;
+        }
 
-        if(!$block) return array();
-
-        $params = json_decode($this->block->getParams($block, $module), true);
+        $params = zget($this->config->block->params, $code, '');
+        $params = json_decode(json_encode($params), true);
 
         return !empty($params) ? $params : array();
     }
@@ -144,7 +179,7 @@ class blockZen extends block
      * @param  int    $projectID
      * @return void
      */
-    private function getBlockMoreLink(object $block, int $project): void
+    private function getBlockMoreLink(object $block, int $projectID): void
     {
         $code   = $block->code;
         $source = empty($block->source) ? 'common' : $block->source;

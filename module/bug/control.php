@@ -1466,7 +1466,7 @@ class bug extends control
         {
             $bugIDList     = $this->post->bugIDList;
             $bugIDList     = array_unique($bugIDList);
-            $oldBugs       = $this->bug->getByList($bugIDList);
+            $oldBugs       = $this->bug->getByIdList($bugIDList);
             $skipBugIDList = '';
             unset($_POST['bugIDList']);
 
@@ -2035,7 +2035,7 @@ class bug extends control
             $_POST = array();
 
             $closedBugs = array();
-            $bugs = $this->bug->getByList($bugIDList);
+            $bugs = $this->bug->getByIdList($bugIDList);
             foreach($bugs as $bugID => $bug)
             {
                 if($bug->status != 'resolved')

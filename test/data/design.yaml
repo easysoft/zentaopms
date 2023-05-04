@@ -59,40 +59,35 @@ fields:
     format: "YYYY-MM-DD hh:mm:ss"
   - field: editedBy
     note: "由谁编辑"
-    from: common.user.v1.yaml
-    use: user
+    range: ""
     prefix: ""
     postfix: ""
     loop: 0
     format: ""
   - field: editedDate
     note: "编辑者"
-    from: common.user.v1.yaml
-    use: user
+    range: ""
     prefix: ""
     postfix: ""
     loop: 0
     format: ""
   - field: assignedTo
     note: "指派给"
-    from: common.user.v1.yaml
-    use: user
+    range: ""
     prefix: ""
     postfix: ""
     loop: 0
     format: ""
   - field: assignedBy
     note: "由谁指派"
-    from: common.user.v1.yaml
-    use: user
+    range: ""
     prefix: ""
     postfix: ""
     loop: 0
     format: ""
   - field: assignedDate
     note: "指派日期"
-    from: common.date.v1.yaml
-    use: dateA
+    range: ""
     prefix: ""
     postfix: ""
     loop: 0

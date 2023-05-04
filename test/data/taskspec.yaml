@@ -30,16 +30,14 @@ fields:
     format: ""
   - field: estStarted
     note: "预计开始"
-    from: common.date.v1.yaml
-    use: dateB
+    range: ""
     prefix: ""
     postfix: ""
     loop: 0
     format: ""
   - field: deadline
     note: "截止时间"
-    from: common.date.v1.yaml
-    use: dateB
+    range: ""
     prefix: ""
     postfix: ""
     loop: 0

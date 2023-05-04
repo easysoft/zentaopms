@@ -412,10 +412,9 @@ class product extends control
         {
             $data = form::data($this->config->product->form->create);
             $data = $this->productZen->prepareCreateExtras($data, $this->post->acl, $this->post->uid);
-            if(!$data) return $this->productZen->sendError4Create();
 
             $productID = $this->product->create($data);
-            if(!$productID) return $this->productZen->sendError4Create();
+            if(!$productID) return $this->productZen->sendDaoError();
 
             return $this->productZen->responseAfterCreate($productID, $data, $this->post->uid, zget($_POST, 'lineName', ''));
         }
@@ -434,88 +433,29 @@ class product extends control
      * @access public
      * @return void
      */
-    public function edit($productID, $action = 'edit', $extra = '', $programID = 0)
+    public function edit(string $productID, string $action = 'edit', string $extra = '', string $programID = '0')
     {
-        $this->app->loadLang('custom');
+        $productID = (int)$productID;
+        $programID = (int)$programID;
 
         if(!empty($_POST))
         {
-            $changes = $this->product->update($productID);
+            $data = form::data($this->config->product->form->edit);
+            $data = $this->productZen->prepareEditExtras($data, $this->post->acl, $this->post->uid);
 
-            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-            if($action == 'undelete')
-            {
-                $this->loadModel('action');
-                $this->dao->update(TABLE_PRODUCT)->set('deleted')->eq(0)->where('id')->eq($productID)->exec();
-                $this->dao->update(TABLE_ACTION)->set('extra')->eq(ACTIONMODEL::BE_UNDELETED)->where('id')->eq($extra)->exec();
-                $this->action->create('product', $productID, 'undeleted');
-            }
-            if($changes)
-            {
-                $actionID = $this->loadModel('action')->create('product', $productID, 'edited');
-                $this->action->logHistory($actionID, $changes);
-            }
+            $changes = $this->product->update($productID, $data, $this->post->uid);
+            if(dao::isError()) return $this->productZen->sendDaoError();
 
-            $message = $this->executeHooks($productID);
-            if($message) $this->lang->saveSuccess = $message;
-
-            $moduleName = $programID ? 'program'    : 'product';
-            $methodName = $programID ? 'product' : 'view';
-            $param      = $programID ? "programID=$programID" : "product=$productID";
-            $locate     = $this->createLink($moduleName, $methodName, $param);
-
-            if(!$programID) $this->session->set('productList', $this->createLink('product', 'browse', $param), 'product');
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $locate));
+            if($action == 'undelete') $this->loadModel('action')->undelete((int)$extra);
+            return $this->productZen->responseAfterEdit($productID, $programID, $changes);
         }
 
-        $product   = $this->product->getById($productID);
+        $this->productZen->setEditMenu($productID, $programID);
+
+        $product   = $this->product->getByID($productID);
         $productID = $this->product->saveState($productID, $this->products);
-        $this->product->setMenu($productID);
 
-        if($programID) $this->loadModel('program')->setMenu($programID);
-
-        /* Get the relevant person in charge. */
-        $this->loadModel('user');
-        $poUsers = $this->user->getPairs('nodeleted|pofirst|noclosed',  $product->PO, $this->config->maxCount);
-        if(!empty($this->config->user->moreLink)) $this->config->moreLinks["PO"] = $this->config->user->moreLink;
-
-        $qdUsers = $this->user->getPairs('nodeleted|qdfirst|noclosed',  $product->QD, $this->config->maxCount);
-        if(!empty($this->config->user->moreLink)) $this->config->moreLinks["QD"] = $this->config->user->moreLink;
-
-        $rdUsers = $this->user->getPairs('nodeleted|devfirst|noclosed', $product->RD, $this->config->maxCount);
-        if(!empty($this->config->user->moreLink)) $this->config->moreLinks["RD"] = $this->config->user->moreLink;
-
-        $lines = array();
-        if($product->program and $this->config->systemMode == 'ALM') $lines = array('') + $this->product->getLinePairs($product->program);
-
-        /* Get programs. */
-        $programs = $this->loadModel('program')->getTopPairs('', 'noclosed');
-        if(!isset($programs[$product->program]) and $product->program)
-        {
-            $program   = $this->program->getByID($product->program);
-            $programs += array($product->program => $program->name);
-        }
-
-        $this->view->title      = $this->lang->product->edit . $this->lang->colon . $product->name;
-        $this->view->position[] = html::a($this->createLink($this->moduleName, 'browse'), $product->name);
-        $this->view->position[] = $this->lang->product->edit;
-
-        $this->view->product              = $product;
-        $this->view->groups               = $this->loadModel('group')->getPairs();
-        $this->view->program              = $this->loadModel('program')->getParentPairs();
-        $this->view->poUsers              = $poUsers;
-        $this->view->poUsers              = $poUsers;
-        $this->view->qdUsers              = $qdUsers;
-        $this->view->rdUsers              = $rdUsers;
-        $this->view->fields               = $this->product->buildFormFields($this->config->product->edit->fields, $product);
-        $this->view->users                = $this->user->getPairs('nodeleted|noclosed');
-        $this->view->programs             = array('') + $programs;
-        $this->view->lines                = $lines;
-        $this->view->URSRPairs            = $this->loadModel('custom')->getURSRPairs();
-
-        unset($this->lang->product->typeList['']);
-        //$this->display();
-        $this->render();
+        $this->productZen->buildEditForm($product);
     }
 
     /**
@@ -861,281 +801,6 @@ class product extends control
     }
 
     /**
-     * Ajax get products.
-     *
-     * @param  int    $executionID
-     * @access public
-     * @return void
-     */
-    public function ajaxGetProducts($executionID)
-    {
-        $this->loadModel('build');
-        if(!$executionID) return print(html::select('product', array(), '', "class='form-control chosen' required"));
-        $status   = empty($this->config->CRProduct) ? 'noclosed' : '';
-        $products = $this->product->getProductPairsByProject($executionID, $status);
-        if(empty($products))
-        {
-            return printf($this->lang->build->noProduct, $this->createLink('execution', 'manageproducts', "executionID=$executionID&from=buildCreate", '', 'true'), 'project');
-        }
-        else
-        {
-            return print(html::select('product', $products, empty($product) ? '' : $product->id, "onchange='loadBranches(this.value);' class='form-control chosen' required data-toggle='modal' data-type='iframe'"));
-        }
-    }
-
-    /**
-     * Ajax get product by id.
-     *
-     * @param  int    $productID
-     * @access public
-     * @return void
-     */
-    public function ajaxGetProductById($productID)
-    {
-        $product = $this->product->getById($productID);
-
-        $product->branchSourceName = sprintf($this->lang->product->branch, $this->lang->product->branchName[$product->type]);
-        $product->branchName       = $this->lang->product->branchName[$product->type];
-        echo json_encode($product);
-    }
-
-    /**
-     * AJAX: get projects of a product in html select.
-     *
-     * @param  int    $productID
-     * @param  int    $branch
-     * @param  int    $projectID
-     * @access public
-     * @return void
-     */
-    public function ajaxGetProjects($productID, $branch = 0, $projectID = 0)
-    {
-        $projects  = array('' => '');
-        $projects += $this->product->getProjectPairsByProduct($productID, $branch);
-        if($this->app->getViewType() == 'json') return print(json_encode($projects));
-
-        return print(html::select('project', $projects, $projectID, "class='form-control' onchange='loadProductExecutions({$productID}, this.value)'"));
-    }
-
-     /**
-     * AJAX: get projects of a product in html select.
-     *
-     * @param  int    $productID
-     * @param  int    $branch
-     * @param  int    $number
-     * @access public
-     * @return void
-     */
-    public function ajaxGetProjectsByBranch($productID, $branch = 0, $number = 0)
-    {
-        $projects  = array('' => '');
-        $projects += $this->product->getProjectPairsByProduct($productID, $branch);
-
-        return print(html::select('projects' . "[$number]", array('' => '') + $projects, 0, "class='form-control' onchange='loadProductExecutionsByProject($productID, this.value, $number)'"));
-    }
-
-    /**
-     * AJAX: get executions of a product in html select.
-     *
-     * @param  int    $productID
-     * @param  int    $projectID
-     * @param  int    $branch
-     * @param  string $number
-     * @param  int    $executionID
-     * @param  string $from showImport
-     * @param  string mode
-     * @access public
-     * @return void
-     */
-    public function ajaxGetExecutions($productID, $projectID = 0, $branch = 0, $number = '', $executionID = 0, $from = '', $mode = '')
-    {
-        if($this->app->tab == 'execution' and $this->session->execution)
-        {
-            $execution = $this->loadModel('execution')->getByID($this->session->execution);
-            if($execution->type == 'kanban') $projectID = $execution->project;
-        }
-
-        if($projectID) $project = $this->loadModel('project')->getById($projectID);
-        $mode .= ($from == 'bugToTask' or empty($this->config->CRExecution)) ? 'noclosed' : '';
-        $mode .= !$projectID ? ',multiple' : '';
-        $executions = $from == 'showImport' ? $this->product->getAllExecutionPairsByProduct($productID, $branch, $projectID) : $this->product->getExecutionPairsByProduct($productID, $branch, 'id_desc', $projectID, $mode);
-        if($this->app->getViewType() == 'json') return print(json_encode($executions));
-
-        if($number === '')
-        {
-            $event = $from == 'bugToTask' ? '' : " onchange='loadExecutionRelated(this.value)'";
-            $datamultiple = !empty($project) ? "data-multiple={$project->multiple}" : '';
-            return print(html::select('execution', array('' => '') + $executions, $executionID, "class='form-control' $datamultiple $event"));
-        }
-        else
-        {
-            $executions     = empty($executions) ? array('' => '') : $executions;
-            $executionsName = $from == 'showImport' ? "execution[$number]" : "executions[$number]";
-            $misc           = $from == 'showImport' ? "class='form-control' onchange='loadImportExecutionRelated(this.value, $number)'" : "class='form-control' onchange='loadExecutionBuilds($productID, this.value, $number)'";
-            return print(html::select($executionsName, $executions, '', $misc));
-        }
-    }
-
-    /**
-     * AJAX: get executions of a product in html select.
-     *
-     * @param  int    $productID
-     * @param  int    $projectID
-     * @param  int    $branch
-     * @param  int    $number
-     * @access public
-     * @return void
-     */
-    public function ajaxGetExecutionsByProject($productID, $projectID = 0, $branch = 0, $number = 0)
-    {
-        $noMultipleExecutionID = $projectID ? $this->loadModel('execution')->getNoMultipleID($projectID) : '';
-        $executions            = $this->product->getExecutionPairsByProduct($productID, $branch, 'id_desc', $projectID, 'multiple,stagefilter');
-
-        $disabled = $noMultipleExecutionID ? "disabled='disabled'" : '';
-        $html = html::select("executions[{$number}]", array('' => '') + $executions, 0, "class='form-control' onchange='loadExecutionBuilds($productID, this.value, $number)' $disabled");
-
-        if($noMultipleExecutionID) $html .= html::hidden("executions[{$number}]", $noMultipleExecutionID, "id=executions{$number}");
-
-        return print($html);
-    }
-
-    /**
-     * AJAX: get plans of a product in html select.
-     *
-     * @param  int    $productID
-     * @param  int    $planID
-     * @param  bool   $needCreate
-     * @param  string $expired
-     * @param  string $param
-     * @access public
-     * @return void
-     */
-    public function ajaxGetPlans($productID, $branch = 0, $planID = 0, $fieldID = '', $needCreate = false, $expired = '', $param = '')
-    {
-        $param    = strtolower($param);
-        if(strpos($param, 'forstory') === false)
-        {
-            $plans = $this->loadModel('productplan')->getPairs($productID, empty($branch) ? 'all' : $branch, $expired, strpos($param, 'skipparent') !== false);
-        }
-        else
-        {
-            $plans = $this->loadModel('productplan')->getPairsForStory($productID, $branch == '0' ? 'all' : $branch, $param);
-        }
-        $field    = $fieldID !== '' ? "plans[$fieldID]" : 'plan';
-        $multiple = strpos($param, 'multiple') === false ? '' : 'multiple';
-        $output   = html::select($field, $plans, $planID, "class='form-control chosen' $multiple");
-
-        if($branch == 0 and strpos($param, 'edit') and (strpos($param, 'forstory') === false)) $output = html::select($field, $plans, $planID, "class='form-control chosen' multiple");
-
-        if(count($plans) == 1 and $needCreate and $needCreate !== 'false')
-        {
-            $output .= "<div class='input-group-btn'>";
-            $output .= html::a($this->createLink('productplan', 'create', "productID=$productID&branch=$branch", '', true), "<i class='icon icon-plus'></i>", '', "class='btn btn-icon' data-toggle='modal' data-type='iframe' data-width='95%' title='{$this->lang->productplan->create}'");
-            $output .= '</div>';
-            $output .= "<div class='input-group-btn'>";
-            $output .= html::a("javascript:void(0)", "<i class='icon icon-refresh'></i>", '', "class='btn btn-icon refresh' data-toggle='tooltip' title='{$this->lang->refresh}' onclick='loadProductPlans($productID)'");
-            $output .= '</div>';
-        }
-        echo $output;
-    }
-
-    /**
-     * Ajax get product lines.
-     *
-     * @param  int    $programID
-     * @param  int    $productID
-     * @access public
-     * @return void
-     */
-    public function ajaxGetLine($programID, $productID = 0)
-    {
-        $lines = array();
-        if(empty($productID) or $programID) $lines = $this->product->getLinePairs($programID);
-
-        if($productID)  return print(html::select("lines[$productID]", array('' => '') + $lines, '', "class='form-control picker-select'"));
-        if(!$productID) return print(html::select('line', array('' => '') + $lines, '', "class='form-control picker-select'"));
-    }
-
-    /**
-     * Ajax get reviewers.
-     *
-     * @param  int    $productID
-     * @param  int    $storyID
-     * @access public
-     * @return void
-     */
-    public function ajaxGetReviewers($productID, $storyID = 0)
-    {
-        /* Get product reviewers. */
-        $product          = $this->product->getByID($productID);
-        $productReviewers = $product->reviewer;
-        if(!$productReviewers and $product->acl != 'open') $productReviewers = $this->loadModel('user')->getProductViewListUsers($product, '', '', '', '');
-
-        $storyReviewers = '';
-        if($storyID)
-        {
-            $story          = $this->loadModel('story')->getByID($storyID);
-            $storyReviewers = $this->story->getReviewerPairs($story->id, $story->version);
-            $storyReviewers = implode(',', array_keys($storyReviewers));
-        }
-
-        $reviewers = $this->loadModel('user')->getPairs('noclosed|nodeleted', $storyReviewers, 0, $productReviewers);
-
-        echo html::select("reviewer[]", $reviewers, $storyReviewers, "class='form-control chosen' multiple");
-    }
-
-    /**
-     * Drop menu page.
-     *
-     * @param  int    $productID
-     * @param  string $module
-     * @param  string $method
-     * @param  string $extra
-     * @param  string $from
-     * @access public
-     * @return void
-     */
-    public function ajaxGetDropMenu($productID, $module, $method, $extra = '', $from = '')
-    {
-        $shadow = 0;
-        if($from == 'qa')
-        {
-            $shadow = 'all';
-            $this->app->loadConfig('qa');
-            foreach($this->config->qa->menuList as $menu) $this->lang->navGroup->$menu = 'qa';
-        }
-
-        $programProducts = array();
-
-        if($this->app->tab == 'project')
-        {
-            $products = $this->product->getProducts($this->session->project);
-        }
-        elseif($this->app->tab == 'feedback')
-        {
-            $products = $this->loadModel('feedback')->getGrantProducts(false);
-        }
-        else
-        {
-            $products = $this->product->getList(0, 'all', 0, 0, $shadow);
-        }
-
-        $programProducts = array();
-        foreach($products as $product) $programProducts[$product->program][] = $product;
-
-        $this->view->link      = $this->product->getProductLink($module, $method, $extra);
-        $this->view->productID = $productID;
-        $this->view->module    = $module;
-        $this->view->method    = $method;
-        $this->view->extra     = $extra;
-        $this->view->products  = $programProducts;
-        $this->view->projectID = $this->app->tab == 'project' ? $this->session->project : 0;
-        $this->view->programs  = $this->loadModel('program')->getPairs(true);
-        $this->view->lines     = $this->product->getLinePairs();
-        $this->display();
-    }
-
-    /**
      * Update order.
      *
      * @access public
@@ -1465,19 +1130,6 @@ class product extends control
     }
 
     /**
-     * Set product id to session in ajax
-     *
-     * @param  int    $productID
-     * @access public
-     * @return void
-     */
-    public function ajaxSetState($productID)
-    {
-        $this->session->set('product', (int)$productID, $this->app->tab);
-        $this->send(array('result' => 'success', 'productID' => $this->session->product));
-    }
-
-    /**
      * Story track.
      *
      * @param  int         $productID
@@ -1542,5 +1194,294 @@ class product extends control
     {
         $data = fixer::input('post')->get();
         $this->loadModel('setting')->updateItem("{$this->app->user->account}.product.showAllProjects", $data->showAllProjects);
+    }
+
+    /**
+     * Ajax get products.
+     *
+     * @param  int    $executionID
+     * @access public
+     * @return void
+     */
+    public function ajaxGetProducts($executionID)
+    {
+        $this->loadModel('build');
+        if(!$executionID) return print(html::select('product', array(), '', "class='form-control chosen' required"));
+        $status   = empty($this->config->CRProduct) ? 'noclosed' : '';
+        $products = $this->product->getProductPairsByProject($executionID, $status);
+        if(empty($products))
+        {
+            return printf($this->lang->build->noProduct, $this->createLink('execution', 'manageproducts', "executionID=$executionID&from=buildCreate", '', 'true'), 'project');
+        }
+        else
+        {
+            return print(html::select('product', $products, empty($product) ? '' : $product->id, "onchange='loadBranches(this.value);' class='form-control chosen' required data-toggle='modal' data-type='iframe'"));
+        }
+    }
+
+    /**
+     * Ajax get product by id.
+     *
+     * @param  int    $productID
+     * @access public
+     * @return void
+     */
+    public function ajaxGetProductById($productID)
+    {
+        $product = $this->product->getById($productID);
+
+        $product->branchSourceName = sprintf($this->lang->product->branch, $this->lang->product->branchName[$product->type]);
+        $product->branchName       = $this->lang->product->branchName[$product->type];
+        echo json_encode($product);
+    }
+
+    /**
+     * AJAX: get projects of a product in html select.
+     *
+     * @param  int    $productID
+     * @param  int    $branch
+     * @param  int    $projectID
+     * @access public
+     * @return void
+     */
+    public function ajaxGetProjects($productID, $branch = 0, $projectID = 0)
+    {
+        $projects  = array('' => '');
+        $projects += $this->product->getProjectPairsByProduct($productID, $branch);
+        if($this->app->getViewType() == 'json') return print(json_encode($projects));
+
+        return print(html::select('project', $projects, $projectID, "class='form-control' onchange='loadProductExecutions({$productID}, this.value)'"));
+    }
+
+     /**
+     * AJAX: get projects of a product in html select.
+     *
+     * @param  int    $productID
+     * @param  int    $branch
+     * @param  int    $number
+     * @access public
+     * @return void
+     */
+    public function ajaxGetProjectsByBranch($productID, $branch = 0, $number = 0)
+    {
+        $projects  = array('' => '');
+        $projects += $this->product->getProjectPairsByProduct($productID, $branch);
+
+        return print(html::select('projects' . "[$number]", array('' => '') + $projects, 0, "class='form-control' onchange='loadProductExecutionsByProject($productID, this.value, $number)'"));
+    }
+
+    /**
+     * AJAX: get executions of a product in html select.
+     *
+     * @param  int    $productID
+     * @param  int    $projectID
+     * @param  int    $branch
+     * @param  string $number
+     * @param  int    $executionID
+     * @param  string $from showImport
+     * @param  string mode
+     * @access public
+     * @return void
+     */
+    public function ajaxGetExecutions($productID, $projectID = 0, $branch = 0, $number = '', $executionID = 0, $from = '', $mode = '')
+    {
+        if($this->app->tab == 'execution' and $this->session->execution)
+        {
+            $execution = $this->loadModel('execution')->getByID($this->session->execution);
+            if($execution->type == 'kanban') $projectID = $execution->project;
+        }
+
+        if($projectID) $project = $this->loadModel('project')->getById($projectID);
+        $mode .= ($from == 'bugToTask' or empty($this->config->CRExecution)) ? 'noclosed' : '';
+        $mode .= !$projectID ? ',multiple' : '';
+        $executions = $from == 'showImport' ? $this->product->getAllExecutionPairsByProduct($productID, $branch, $projectID) : $this->product->getExecutionPairsByProduct($productID, $branch, 'id_desc', $projectID, $mode);
+        if($this->app->getViewType() == 'json') return print(json_encode($executions));
+
+        if($number === '')
+        {
+            $event = $from == 'bugToTask' ? '' : " onchange='loadExecutionRelated(this.value)'";
+            $datamultiple = !empty($project) ? "data-multiple={$project->multiple}" : '';
+            return print(html::select('execution', array('' => '') + $executions, $executionID, "class='form-control' $datamultiple $event"));
+        }
+        else
+        {
+            $executions     = empty($executions) ? array('' => '') : $executions;
+            $executionsName = $from == 'showImport' ? "execution[$number]" : "executions[$number]";
+            $misc           = $from == 'showImport' ? "class='form-control' onchange='loadImportExecutionRelated(this.value, $number)'" : "class='form-control' onchange='loadExecutionBuilds($productID, this.value, $number)'";
+            return print(html::select($executionsName, $executions, '', $misc));
+        }
+    }
+
+    /**
+     * AJAX: get executions of a product in html select.
+     *
+     * @param  int    $productID
+     * @param  int    $projectID
+     * @param  int    $branch
+     * @param  int    $number
+     * @access public
+     * @return void
+     */
+    public function ajaxGetExecutionsByProject($productID, $projectID = 0, $branch = 0, $number = 0)
+    {
+        $noMultipleExecutionID = $projectID ? $this->loadModel('execution')->getNoMultipleID($projectID) : '';
+        $executions            = $this->product->getExecutionPairsByProduct($productID, $branch, 'id_desc', $projectID, 'multiple,stagefilter');
+
+        $disabled = $noMultipleExecutionID ? "disabled='disabled'" : '';
+        $html = html::select("executions[{$number}]", array('' => '') + $executions, 0, "class='form-control' onchange='loadExecutionBuilds($productID, this.value, $number)' $disabled");
+
+        if($noMultipleExecutionID) $html .= html::hidden("executions[{$number}]", $noMultipleExecutionID, "id=executions{$number}");
+
+        return print($html);
+    }
+
+    /**
+     * AJAX: get plans of a product in html select.
+     *
+     * @param  int    $productID
+     * @param  int    $planID
+     * @param  bool   $needCreate
+     * @param  string $expired
+     * @param  string $param
+     * @access public
+     * @return void
+     */
+    public function ajaxGetPlans($productID, $branch = 0, $planID = 0, $fieldID = '', $needCreate = false, $expired = '', $param = '')
+    {
+        $param    = strtolower($param);
+        if(strpos($param, 'forstory') === false)
+        {
+            $plans = $this->loadModel('productplan')->getPairs($productID, empty($branch) ? 'all' : $branch, $expired, strpos($param, 'skipparent') !== false);
+        }
+        else
+        {
+            $plans = $this->loadModel('productplan')->getPairsForStory($productID, $branch == '0' ? 'all' : $branch, $param);
+        }
+        $field    = $fieldID !== '' ? "plans[$fieldID]" : 'plan';
+        $multiple = strpos($param, 'multiple') === false ? '' : 'multiple';
+        $output   = html::select($field, $plans, $planID, "class='form-control chosen' $multiple");
+
+        if($branch == 0 and strpos($param, 'edit') and (strpos($param, 'forstory') === false)) $output = html::select($field, $plans, $planID, "class='form-control chosen' multiple");
+
+        if(count($plans) == 1 and $needCreate and $needCreate !== 'false')
+        {
+            $output .= "<div class='input-group-btn'>";
+            $output .= html::a($this->createLink('productplan', 'create', "productID=$productID&branch=$branch", '', true), "<i class='icon icon-plus'></i>", '', "class='btn btn-icon' data-toggle='modal' data-type='iframe' data-width='95%' title='{$this->lang->productplan->create}'");
+            $output .= '</div>';
+            $output .= "<div class='input-group-btn'>";
+            $output .= html::a("javascript:void(0)", "<i class='icon icon-refresh'></i>", '', "class='btn btn-icon refresh' data-toggle='tooltip' title='{$this->lang->refresh}' onclick='loadProductPlans($productID)'");
+            $output .= '</div>';
+        }
+        echo $output;
+    }
+
+    /**
+     * Ajax get product lines.
+     *
+     * @param  int    $programID
+     * @param  int    $productID
+     * @access public
+     * @return void
+     */
+    public function ajaxGetLine($programID, $productID = 0)
+    {
+        $lines = array();
+        if(empty($productID) or $programID) $lines = $this->product->getLinePairs($programID);
+
+        if($productID)  return print(html::select("lines[$productID]", array('' => '') + $lines, '', "class='form-control picker-select'"));
+        if(!$productID) return print(html::select('line', array('' => '') + $lines, '', "class='form-control picker-select'"));
+    }
+
+    /**
+     * Ajax get reviewers.
+     *
+     * @param  int    $productID
+     * @param  int    $storyID
+     * @access public
+     * @return void
+     */
+    public function ajaxGetReviewers($productID, $storyID = 0)
+    {
+        /* Get product reviewers. */
+        $product          = $this->product->getByID($productID);
+        $productReviewers = $product->reviewer;
+        if(!$productReviewers and $product->acl != 'open') $productReviewers = $this->loadModel('user')->getProductViewListUsers($product, '', '', '', '');
+
+        $storyReviewers = '';
+        if($storyID)
+        {
+            $story          = $this->loadModel('story')->getByID($storyID);
+            $storyReviewers = $this->story->getReviewerPairs($story->id, $story->version);
+            $storyReviewers = implode(',', array_keys($storyReviewers));
+        }
+
+        $reviewers = $this->loadModel('user')->getPairs('noclosed|nodeleted', $storyReviewers, 0, $productReviewers);
+
+        echo html::select("reviewer[]", $reviewers, $storyReviewers, "class='form-control chosen' multiple");
+    }
+
+    /**
+     * Drop menu page.
+     *
+     * @param  int    $productID
+     * @param  string $module
+     * @param  string $method
+     * @param  string $extra
+     * @param  string $from
+     * @access public
+     * @return void
+     */
+    public function ajaxGetDropMenu(string $productID, string $module, string $method, string $extra = '', string $from = '')
+    {
+        $productID = (int)$productID;
+        $shadow    = 0;
+        if($from == 'qa')
+        {
+            $shadow = 'all';
+            $this->app->loadConfig('qa');
+            foreach($this->config->qa->menuList as $menu) $this->lang->navGroup->$menu = 'qa';
+        }
+
+        $programProducts = array();
+
+        if($this->app->tab == 'project')
+        {
+            $products = $this->product->getProducts($this->session->project);
+        }
+        elseif($this->app->tab == 'feedback')
+        {
+            $products = $this->loadModel('feedback')->getGrantProducts(false);
+        }
+        else
+        {
+            $products = $this->product->getList(0, 'all', 0, 0, $shadow);
+        }
+
+        $programProducts = array();
+        foreach($products as $product) $programProducts[$product->program][] = $product;
+
+        $this->view->link      = $this->product->getProductLink($module, $method, $extra);
+        $this->view->productID = $productID;
+        $this->view->module    = $module;
+        $this->view->method    = $method;
+        $this->view->extra     = $extra;
+        $this->view->products  = $programProducts;
+        $this->view->projectID = $this->app->tab == 'project' ? $this->session->project : 0;
+        $this->view->programs  = $this->loadModel('program')->getPairs(true);
+        $this->view->lines     = $this->product->getLinePairs();
+        $this->display();
+    }
+
+    /**
+     * Set product id to session in ajax
+     *
+     * @param  int    $productID
+     * @access public
+     * @return void
+     */
+    public function ajaxSetState(string $productID)
+    {
+        $this->session->set('product', (int)$productID, $this->app->tab);
+        $this->send(array('result' => 'success', 'productID' => $this->session->product));
     }
 }

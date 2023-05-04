@@ -26,7 +26,7 @@ fields:
     - field: account1
       range: admin,user{99},test{100},dev{100},pm{100},po{100},td{100},pd{100},qd{100},top{100},outside{100},others{100},a,bb,ccc,qwuiadsd?!2as@#%$aasd~aj1!@#1
     - field: account2
-      range: [],1-99,1-100,1-100,1-100,1-100,1-100,1-100,1-100,1-100,1-100,1-100,[]{4}
+      range: "[],1-99,1-100,1-100,1-100,1-100,1-100,1-100,1-100,1-100,1-100,1-100,[]{4}"
   - field: password
     note: "密码"
     range: 123Qwe!@#{346}
@@ -44,7 +44,7 @@ fields:
     - field: realname1
       range: admin,用户{99},测试{100},开发{100},项目经理{100},产品经理{100},研发主管{100},产品主管{100},测试主管{100},高层管理{100},外用户{100},其他{100},A,BB,CCC,非常长非常长的用户名怎么这么长?
     - field: realname2
-      range: [],1-99,1-100,1-100,1-100,1-100,1-100,1-100,1-100,1-100,1-100,1-100,[]{4}
+      range: "[],1-99,1-100,1-100,1-100,1-100,1-100,1-100,1-100,1-100,1-100,1-100,[]{4}"
   - field: nickname
     note: "昵称"
   - field: commiter
@@ -53,10 +53,10 @@ fields:
     - field: commiter1
       range: admin,user{99},test{100},dev{100},pm{100},po{100},td{100},pd{100},qd{100},top{100},outside{100},others{100},a,bb,ccc,qwuiadsd?!2as@#%$aasd~aj1!@#1
     - field: commiter2
-      range: [],1-99,1-100,1-100,1-100,1-100,1-100,1-100,1-100,1-100,1-100,1-100,[]{4}
+      range: "[],1-99,1-100,1-100,1-100,1-100,1-100,1-100,1-100,1-100,1-100,1-100,[]{4}"
   - field: avatar
     note: ""
-    range: []
+    range: ""
     format: ""
   - field: birthday
     note: "生日"
@@ -78,7 +78,7 @@ fields:
     - field: email2
       range: 1000-9999:2
     - field: email3
-      range: [@qq.com,@163.com,@gmail.com]
+      range: "[@qq.com,@163.com,@gmail.com]"
   - field: skype
     note: "Skype"
     range: Skype
@@ -123,12 +123,10 @@ fields:
     note: "邮编"
   - field: join
     note: "入职日期"
-    from: common.date.v1.yaml
-    use: dateB
-    prefix: ""
+    range: "(M)-(w)"
+    type: timestamp
     postfix: ""
-    loop: 0
-    format: ""
+    format: "YY/MM/DD hh:mm:ss"
   - field: visits
     note: "访问次数"
     range: 0-10000:R
@@ -155,7 +153,7 @@ fields:
     range: 1-10000
   - field: locked
     note: "锁定时间"
-    range: 0
+    range: "`2023-01-02 10:00:00`"
   - field: company
     note: "公司"
     range: 1
@@ -165,12 +163,13 @@ fields:
     - field: account1
       range: admin,user{99},test{100},dev{100},pm{100},po{100},td{100},pd{100},qd{100},top{100},outside{100},others{100},a,bb,ccc,qwuiadsd?!2as@#%$aasd~aj1!@#1
     - field: account2
-      range: [],1-99,1-100,1-100,1-100,1-100,1-100,1-100,1-100,1-100,1-100,1-100,[]{4}
+      range: "[],1-99,1-100,1-100,1-100,1-100,1-100,1-100,1-100,1-100,1-100,1-100,[]{4}"
   - field: score
     note: "积分"
     range: 1-10000:R
   - field: scoreLevel
     note: "积分等级"
+    range: 0
   - field: deleted
     note: "是否删除"
     range: 0

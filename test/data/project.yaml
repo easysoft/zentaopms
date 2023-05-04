@@ -81,5 +81,10 @@ fields:
     range: 5-10000:5
   - field: openedVersion
     range: "16.5"
+  - field: openedDate
+    range: "(-3M)-(+M):1D"
+    type: timestamp
+    format: "YY/MM/DD"
+    postfix: "\t"
   - field: deleted
     range: 0

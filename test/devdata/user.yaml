@@ -1,0 +1,172 @@
+title: table zt_user
+desc: "用户信息"
+author: sgm
+version: "1.0"
+fields:
+  - field: id
+    note: "ID"
+    range: 1-100000
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: type
+    note: "内外部人员"
+    range: inside{9999},outside
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: dept
+    note: "所属部门"
+    range: 1-100{10}
+  - field: account
+    note: "用户名"
+    fields:
+    - field: account1
+      range: admin,user{999},test{1000},dev{1000},pm{1000},po{1000},td{1000},pd{1000},qd{1000},top{1000},others{999},outside
+    - field: account2
+      range: [],1-999,1-1000,1-1000,1-1000,1-1000,1-1000,1-1000,1-1000,1-1000,1-999,[]
+  - field: password
+    note: "密码"
+    range: 123Qwe!@#
+    format: md5
+  - field: role
+    note: "职位"
+    range: [],dev{999},qa{1000},dev{1000},pm{1000},po{1000},td{1000},pd{1000},qd{1000},others{1999},outside
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: realname
+    note: "真实姓名"
+    fields:
+    - field: realname1
+      range: admin,用户{999},测试{1000},开发{1000},项目经理{1000},产品经理{1000},研发主管{1000},产品主管{1000},测试主管{1000},高层管理{1000},外用户{999},其他
+    - field: realname2
+      range: [],1-999,1-1000,1-1000,1-1000,1-1000,1-1000,1-1000,1-1000,1-1000,1-999,[]
+  - field: nickname
+    note: "昵称"
+  - field: commiter
+    note: "源代码帐号"
+    range: []
+  - field: avatar
+    note: ""
+    fields:
+    - field: avatar1
+      range: /home/z/tmp/,/home/z/user/
+    - field: avatar2
+      range: 1-10,10-20
+    prefix: ""
+    postfix: ".png"
+    format: ""
+  - field: birthday
+    note: "生日"
+    range: "(-30Y)-(-20Y):60D"
+    type: timestamp
+    format: "YYYY-MM-DD"
+  - field: gender
+    note: "性别"
+    range: f,m
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: email
+    note: "邮箱"
+    fields:
+    - field: email1
+      range: 1000-99999:2
+    - field: email2
+      range: 1000-99999:2
+    - field: email3
+      range: [@qq.com,@163.com,@gmail.com]
+  - field: skype
+    note: "Skype"
+    range: Skype
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: qq
+    note: "QQ"
+    range: QQ
+    fields:
+    - field: qq1
+      range: 100-999:R
+    - field: qq2
+      range: 100-999:R
+    - field: qq3
+      range: 100-999:R
+  - field: mobile
+    note: "手机"
+  - field: phone
+    note: "电话"
+    fields:
+    - field: phone1
+      range: 130-199:R
+    - field: phone2
+      range: 0000-9999:R
+    - field: phone3
+      range: 0000-9999:R
+  - field: weixin
+    note: "微信"
+  - field: dingding
+    note: "钉钉"
+  - field: slack
+    note: "Slack"
+    range: slack
+  - field: whatsapp
+    note: "WhatsApp"
+    range: whatsApp
+  - field: address
+    note: "通讯地址"
+  - field: zipcode
+    note: "邮编"
+  - field: join
+    note: "入职日期"
+    range: "(M)-(w)"
+    type: timestamp
+    postfix: ""
+    format: "YY/MM/DD"
+  - field: visits
+    note: "访问次数"
+    range: 0-10000:R
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: visions
+    note: "版本"
+    range: rnd
+    prefix: ""
+    postfix: ",lite"
+    loop: 0
+    format: ""
+  - field: ip
+    note: "最后IP"
+    format: ""
+  - field: last
+    note: "最后登录"
+    range: "(-1M)-(+1w):60m"
+    type: timestamp
+  - field: fails
+    note: "失败次数"
+    range: 1-10000
+  - field: locked
+    note: "锁定时间"
+    range: 0
+  - field: company
+    note: "公司"
+    range: 1
+  - field: ranzhi
+    note: "ZDOO账号"
+    range: []
+  - field: score
+    note: "积分"
+    range: 1-10000:R
+  - field: scoreLevel
+    note: "积分等级"
+  - field: deleted
+    note: "是否删除"
+    range: 0
