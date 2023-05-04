@@ -315,7 +315,7 @@ class todo extends control
         $account = $this->app->user->account;
         if($todo->private and $todo->account != $account) return print(js::error((string)$this->lang->todo->thisIsPrivate) . (string)js::locate('back'));
 
-        if(!isonlybody()) $this->todoZen->setSessionLink($this->app->getURI(true));
+        if(!isonlybody()) $this->todoZen->setSessionUri($this->app->getURI(true));
 
         /* Fix bug #936. */
         if($account != $todo->account and $account != $todo->assignedTo and !common::hasPriv('my', 'team'))
@@ -495,7 +495,7 @@ class todo extends control
             list($todos, $fields) = $this->todoZen->exportTodoInfo((array)$todos, (string)$this->config->todo->list->exportFields, $todoLang);
             list($users, $bugs, $stories, $tasks, $testTasks) = $this->todoZen->exportAssociated('default', $account);
 
-            $times = date::buildTimeList((string)$configTime->begin, (string)$configTime->end, (string)$configTime->delta);
+            $times = date::buildTimeList((int)$configTime->begin, (int)$configTime->end, (int)$configTime->delta);
 
             $assemble = new stdClass();
             $assemble->users     = $users;
