@@ -97,81 +97,39 @@ class block extends control
         $this->display();
     }
 
-    public function set($id, $type, $module = '')
-    {
-        $block = $this->block->getByID($id);
-        if($block and empty($type)) $type = $block->code;
-        if(isset($block->params->num) and !isset($block->params->count))
-        {
-            $block->params->count = $block->params->num;
-            unset($block->params->num);
-        }
-
-        if(isset($this->lang->block->moduleList[$module]))
-        {
-            $params = $this->block->getParams($type, $module);
-            $this->view->params = json_decode($params, true);
-        }
-        elseif($type == 'assigntome')
-        {
-            $params = $this->block->getParams('assignedToMe');
-            $this->view->params = json_decode($params, true);
-        }
-
-        $this->view->source = $module;
-        $this->view->type   = $type;
-        $this->view->id     = $id;
-        $this->view->block  = ($block) ? $block : array();
-        $this->display();
-    }
-
     /**
-     * Delete block
+     * Delete or hidd block by blockid.
      *
      * @param  int    $id
-     * @param  string $sys
      * @param  string $type
      * @access public
      * @return void
      */
-    public function delete($id, $module = 'my', $type = 'delete')
+    public function delete($blockID, $type = 'delete')
     {
-        if($type == 'hidden')
-        {
-            $this->dao->update(TABLE_BLOCK)->set('hidden')->eq(1)->where('`id`')->eq($id)->andWhere('account')->eq($this->app->user->account)->andWhere('module')->eq($module)->exec();
-        }
-        else
-        {
-            $this->dao->delete()->from(TABLE_BLOCK)->where('`id`')->eq($id)->andWhere('account')->eq($this->app->user->account)->andWhere('module')->eq($module)->exec();
-        }
+        $blockID = (int)$blockID;
+        if($type == 'delete') $this->block->deleteBlock($blockID);
+        if($type == 'hidden') $this->block->hidden($blockID);
         if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
         $this->loadModel('score')->create('block', 'set');
         return $this->send(array('result' => 'success'));
     }
 
     /**
-     * Sort block.
+     * Sort dashboard blocks.
      *
-     * @param  string    $oldOrder
-     * @param  string    $newOrder
-     * @param  string    $module
+     * @param  string  $orders
      * @access public
      * @return void
      */
-    public function sort($orders, $module = 'my')
+    public function sort($orders)
     {
-        $orders    = explode(',', $orders);
-        $blockList = $this->block->getMyDashboard($module);
-
-        foreach ($orders as $order => $blockID)
-        {
-            $block = $blockList[$blockID];
-            if(!isset($block)) continue;
-            $block->order = $order;
-            $this->dao->replace(TABLE_BLOCK)->data($block)->exec();
-        }
+        $orders = explode(',', $orders);
+        foreach($orders as $order => $blockID) $this->block->setOrder($blockID, $order);
 
         if(dao::isError()) return $this->send(array('result' => 'fail'));
+
         $this->loadModel('score')->create('block', 'set');
         return $this->send(array('result' => 'success'));
     }
@@ -182,26 +140,22 @@ class block extends control
      * @access public
      * @return void
      */
-    public function resize($id, $type, $data)
+    public function resize($blockID, $type, $data)
     {
-        $block = $this->block->getByID($id);
-        if($block)
-        {
-            $field = '';
-            if($type == 'vertical') $field = 'height';
-            if($type == 'horizontal') $field = 'grid';
-            if(empty($field)) return $this->send(array('result' => 'fail', 'code' => 400));
+        $block = $this->block->getByID($blockID);
+        if(!$block) return $this->send(array('result' => 'fail', 'code' => 404));
 
-            $block->$field = $data;
-            $block->params = helper::jsonEncode($block->params);
-            $this->dao->replace(TABLE_BLOCK)->data($block)->exec();
-            if(dao::isError()) return $this->send(array('result' => 'fail', 'code' => 500));
-            return $this->send(array('result' => 'success'));
-        }
-        else
-        {
-            return $this->send(array('result' => 'fail', 'code' => 404));
-        }
+        $field = '';
+        if($type == 'vertical')   $field = 'height';
+        if($type == 'horizontal') $field = 'grid';
+        if(empty($field)) return $this->send(array('result' => 'fail', 'code' => 400));
+
+        $block->$field = $data;
+        $block->params = helper::jsonEncode($block->params);
+        $this->block->update($block);
+
+        if(dao::isError()) return $this->send(array('result' => 'fail', 'code' => 500));
+        return $this->send(array('result' => 'success'));
     }
 
     /**
@@ -2155,30 +2109,18 @@ class block extends control
     }
 
     /**
-     * Ajax reset.
+     * Reset dashboard blocks.
      *
-     * @param  string $module
-     * @param  string $confirm
+     * @param  string $dashboard
      * @access public
      * @return void
      */
-    public function ajaxReset($module, $confirm = 'no')
+    public function reset($dashboard)
     {
-        if($confirm != 'yes') return print(js::confirm($this->lang->block->confirmReset, inlink('ajaxReset', "module=$module&confirm=yes")));
+        $this->block->reset($dashboard);
+        if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-        $this->dao->delete()->from(TABLE_BLOCK)
-            ->where('module')->eq($module)
-            ->andWhere('vision')->eq($this->config->vision)
-            ->andWhere('account')->eq($this->app->user->account)
-            ->exec();
-
-        $this->dao->delete()->from(TABLE_CONFIG)
-            ->where('module')->eq($module)
-            ->andWhere('vision')->eq($this->config->vision)
-            ->andWhere('owner')->eq($this->app->user->account)
-            ->andWhere('`key`')->eq('blockInited')
-            ->exec();
-        return print(js::reload('parent'));
+        return $this->send(array('result' => 'success'));
     }
 
     /**

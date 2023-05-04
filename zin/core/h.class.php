@@ -100,6 +100,13 @@ class h extends wg
         return new h(prop('tagName', $tagName), $args);
     }
 
+    public static function a()
+    {
+        $a = static::create('a', func_get_args());
+        if($a->prop('target') === '_blank' && !$a->hasProp('rel')) $a->prop('rel', 'noopener noreferrer');
+        return $a;
+    }
+
     public static function button()
     {
         return static::create('button', prop('type', 'button'), func_get_args());

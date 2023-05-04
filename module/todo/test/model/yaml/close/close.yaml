@@ -13,3 +13,7 @@ fields:
     range: wait
   - field: id
     range: 1
+  - field: finishedDate
+    range: '`2023-04-23`'
+  - field: closedDate
+    range: '`2023-04-23`'

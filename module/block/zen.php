@@ -2,8 +2,8 @@
 class blockZen extends block
 {
     /**
-     * Get module options when adding or editing blocks.
      * 添加或编辑区块时获取可使用的模块选项
+     * Get module options when adding or editing blocks.
      * 
      * @param  string $dashboard
      * @access protected
@@ -51,8 +51,8 @@ class blockZen extends block
     }
 
     /**
-     * Get block options when adding or editing blocks.
      * 添加或编辑区块时获取可使用的区块选项
+     * Get block options when adding or editing blocks.
      *
      * @param  string $dashboard
      * @param  string $module
@@ -112,12 +112,12 @@ class blockZen extends block
     }
 
     /**
-     * Get other form items when adding or editing blocks
      * 添加或编辑区块时获取其他表单项
+     * Get other form items when adding or editing blocks
      *
      * @param  string $dashboard
      * @param  string $module
-     * @param  string $block
+     * @param  string $code
      * @access protected
      * @return array
      */

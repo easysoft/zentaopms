@@ -1,5 +1,5 @@
-title: zt_getbyid
-author: jukui
+title: zt_batchupdate
+author: lanzongjun
 version: "1.0"
 fields:
     - field: id
@@ -21,17 +21,13 @@ fields:
       range: 3
     - field: name
       range: 1-5
-      prefix: '自定义的待办'
+      prefix: '我的待办'
     - field: desc
       range: 1-5
       prefix: '这是待办描述'
     - field: status
-      range: 'wait,doing,done,closed,closed'
-    - field: finishedDate
-      range: 1-9
-      prefix: '2023-04-2'
-    - field: closedDate
-      range: 1-9
-      prefix: '2023-04-2'
+      range: 'wait'
+
+
 
 

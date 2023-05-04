@@ -13,8 +13,9 @@ namespace zin;
 
 set::title($title);
 jsVar('dashboard', $dashboard);
+jsVar('of', $lang->block->of);
 
-$paramsRows = array();
+$paramsRows  = array();
 $showModules = ($dashboard == 'my' and $modules);
 $showCodes   = (($showModules and $module and $codes) or $dashboard != 'my');
 
@@ -28,6 +29,7 @@ foreach($params as $key => $row)
         set::value(zget($row, 'default', '')),
         set::control(array
         (
+            'id'    => "params$key",
             'type'  => $row['control'],
             'items' => isset($row['options']) ? $row['options'] : null
         ))  
@@ -38,10 +40,11 @@ form
 (
     on::change('#module', 'getForm'),
     on::change('#code', 'getForm'),
+    on::change('#paramstype', 'onParamsTypeChange'),
     formGroup
     (
         set::class($showModules ? '' : 'hidden'),
-        set::value($showModules ? $block : $dashboard),
+        set::value($showModules ? $code : $dashboard),
         set::label($lang->block->lblModule),
         set::name('module'),
         set::control($showModules ? array
@@ -76,8 +79,8 @@ form
             (
                 set::label($lang->block->name),
                 set::name('title'),
+                set::value(zget($codes, $code)),
                 set::class('form-row'),
-                set::value(zget($modules, $module, '') . zget($codes, $code, '')),
                 set::control('input')  
             ),
             $paramsRows,
