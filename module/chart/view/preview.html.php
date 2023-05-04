@@ -34,7 +34,7 @@
     }
     ?>
   </div>
-  <?php if($this->config->edition == 'biz' or $this->config->edition == 'max'):?>
+  <?php if($this->config->edition != 'open'):?>
   <div class='btn-toolbar pull-right child-position'>
     <?php common::printLink('chart', 'export', '', "<i class='icon icon-export muted'> </i> " . $lang->export, '', "class='btn btn-link btn-export' id='exportchart'");?>
     <?php common::printLink('chart', 'browse', '', $lang->chart->toDesign, '', "class='btn btn-primary '");?>
