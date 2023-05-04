@@ -467,7 +467,7 @@ class todoTao extends todoModel
             if($todo->type == 'opportunity') $todo->name = $this->dao->findByID($todo->objectID)->from(TABLE_OPPORTUNITY)->fetch('name');
         }
 
-        if($this->config->edition == 'biz' || $this->config->edition == 'max')
+        if($this->config->edition != 'open')
         {
             if($todo->type == 'feedback') $todo->name = $this->dao->findByID($todo->objectID)->from(TABLE_FEEDBACK)->fetch('title');
         }
