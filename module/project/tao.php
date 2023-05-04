@@ -537,12 +537,12 @@ class projectTao extends projectModel
      *
      * @param  string $status
      * @param  string $orderBy
-     * @param  int    $involved
+     * @param  bool   $involved
      * @param  object $pager
      * @access protected
      * @return array
      */
-    protected function fetchProjectList(string $status, string $orderBy, int $involved, object|null $pager): array
+    protected function fetchProjectList(string $status, string $orderBy, bool $involved, object|null $pager): array
     {
         return $this->dao->select('DISTINCT t1.*')->from(TABLE_PROJECT)->alias('t1')
             ->leftJoin(TABLE_TEAM)->alias('t2')->on('t1.id=t2.root')

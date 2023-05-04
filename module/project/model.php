@@ -236,12 +236,12 @@ class projectModel extends model
      *
      * @param  string    $status
      * @param  string    $orderBy
+     * @param  bool      $involved
      * @param  int       $pager
-     * @param  int       $involved
      * @access public
      * @return array
      */
-    public function getList($status = 'undone', $orderBy = 'order_desc', $pager = null, $involved = 0)
+    public function getList(string $status = 'undone', string $orderBy = 'order_desc', bool $involved = false, object|null $pager = null): array
     {
         /* Init vars. */
         $projects = $this->projectTao->fetchProjectList($status, $orderBy, $involved, $pager);
