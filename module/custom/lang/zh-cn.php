@@ -254,6 +254,7 @@ $lang->custom->selectProgramTips = "切换到轻量管理模式后，为确保�
 
 $lang->custom->modeList['light'] = '轻量级管理模式';
 $lang->custom->modeList['ALM']   = '全生命周期管理模式';
+$lang->custom->modeList['PLM']   = 'IPD集成产品开发模式';
 
 $lang->custom->modeIntroductionList['light'] = "提供了{$lang->projectCommon}管理的核心功能，适用于小型研发团队";
 $lang->custom->modeIntroductionList['ALM']   = '概念更加完整、严谨，功能更加丰富，适用于中大型研发团队';

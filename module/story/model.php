@@ -297,6 +297,9 @@ class storyModel extends model
 
             $requiredFields = trim($requiredFields, ',');
 
+            /* If in ipd mode, set requirement status = 'launched'. */
+            if($this->config->systemMode == 'PLM' and $story->type == 'requirement' and $story->status == 'active') $story->status = 'launched';
+
             $this->dao->insert(TABLE_STORY)->data($story, 'spec,verify')
                 ->autoCheck()
                 ->checkIF($story->notifyEmail, 'notifyEmail', 'email')
@@ -631,6 +634,9 @@ class storyModel extends model
         $link2Plans = array();
         foreach($data as $i => $story)
         {
+            /* If in ipd mode, set requirement status = 'launched'. */
+            if($this->config->systemMode == 'PLM' and $type == 'requirement' and $story->status == 'active') $story->status = 'launched';
+
             $this->dao->insert(TABLE_STORY)->data($story, 'spec,verify')->autoCheck()->checkFlow()->exec();
             if(!dao::isError())
             {
@@ -783,6 +789,9 @@ class storyModel extends model
             ->stripTags($this->config->story->editor->change['id'], $this->config->allowedTags)
             ->remove('files,labels,reviewer,comment,needNotReview,uid')
             ->get();
+
+        /* If in ipd mode, set requirement status = 'launched'. */
+        if($this->config->systemMode == 'PLM' and $oldStory->type == 'requirement' and $story->status == 'active') $story->status = 'launched';
 
         $story = $this->loadModel('file')->processImgURL($story, $this->config->story->editor->change['id'], $this->post->uid);
         $this->dao->update(TABLE_STORY)->data($story, 'spec,verify,deleteFiles,relievedTwins')
@@ -1268,7 +1277,7 @@ class storyModel extends model
             $story = new stdclass();
             $story->status = $status;
             $story->stage  = 'wait';
-            if(strpos('active,changing,draft', $status) !== false)
+            if(strpos('launched,active,changing,draft', $status) !== false)
             {
                 $story->assignedTo   = $oldParentStory->openedBy;
                 $story->assignedDate = $now;
@@ -1301,7 +1310,7 @@ class storyModel extends model
                 $changes   = common::createChanges($oldParentStory, $newParentStory);
                 $action    = '';
                 $preStatus = '';
-                if(strpos('active,draft,changing', $status) !== false) $action = 'Activated';
+                if(strpos('launched,active,draft,changing', $status) !== false) $action = 'Activated';
                 if($status == 'closed')
                 {
                     /* Record the status before closed. */
@@ -1827,6 +1836,10 @@ class storyModel extends model
         $story->version = $oldStory->version - 1;
         $story->title   = $this->dao->select('title')->from(TABLE_STORYSPEC)->where('story')->eq($storyID)->andWHere('version')->eq($story->version)->fetch('title');
         $story->status  = 'active';
+
+        /* If in ipd mode, set requirement status = 'launched'. */
+        if($this->config->systemMode == 'PLM' and $oldStory->type == 'requirement') $story->status = 'launched';
+
         $this->dao->update(TABLE_STORY)->set('title')->eq($story->title)->set('version')->eq($story->version)->set('status')->eq($story->status)->where('id')->eq($storyID)->exec();
 
         /* Delete versions that is after this version. */
@@ -1911,6 +1924,9 @@ class storyModel extends model
             }
             $story->status = 'reviewing';
         }
+
+        /* If in ipd mode, set requirement status = 'launched'. */
+        if($this->config->systemMode == 'PLM' and $oldStory->type == 'requirement' and $story->status == 'active') $story->status = 'launched';
 
         $this->dao->update(TABLE_STORY)->data($story, 'reviewer')->where('id')->eq($storyID)->exec();
 
@@ -2656,6 +2672,9 @@ class storyModel extends model
 
         /* Get status after activation. */
         $story->status = $this->getActivateStatus($storyID);
+
+        /* If in ipd mode, set requirement status = 'launched'. */
+        if($this->config->systemMode == 'PLM' and $oldStory->type == 'requirement' and $story->status == 'active') $story->status = 'launched';
 
         $story = $this->loadModel('file')->processImgURL($story, $this->config->story->editor->activate['id'], $this->post->uid);
         $this->dao->update(TABLE_STORY)->data($story)->autoCheck()->checkFlow()->where('id')->eq($storyID)->exec();
@@ -4508,7 +4527,7 @@ class storyModel extends model
 
         $isSuperReviewer = strpos(',' . trim(zget($config->story, 'superReviewers', ''), ',') . ',', ',' . $app->user->account . ',');
 
-        if($action == 'change')       return (($isSuperReviewer !== false or count($story->reviewer) == 0 or count($story->notReview) == 0) and $story->status == 'active');
+        if($action == 'change')       return (($isSuperReviewer !== false or count($story->reviewer) == 0 or count($story->notReview) == 0) and ($story->status == 'active' or $story->status == 'launched'));
         if($action == 'review')       return (($isSuperReviewer !== false or in_array($app->user->account, $story->notReview)) and $story->status == 'reviewing');
         if($action == 'recall')       return strpos('reviewing,changing', $story->status) !== false;
         if($action == 'close')        return $story->status != 'closed';
@@ -6103,6 +6122,10 @@ class storyModel extends model
         }
 
         $story->finalResult = $result;
+
+        /* If in ipd mode, set requirement status = 'launched'. */
+        if($this->config->systemMode == 'PLM' and $oldStory->type == 'requirement' and $story->status == 'active') $story->status = 'launched';
+
         return $story;
     }
 
