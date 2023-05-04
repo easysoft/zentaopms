@@ -73,8 +73,7 @@ class project extends control
 
             if(isset($fields['hasProduct'])) $fields['hasProduct'] = $projectLang->type;
 
-            $involved = $this->cookie->involved ? $this->cookie->involved : 0;
-            $projects = $this->project->getInfoList($status, $orderBy, '', $involved);
+            $projects = $this->project->getList($status, $orderBy, null);
             $users    = $this->loadModel('user')->getPairs('noletter');
 
             $this->loadModel('product');

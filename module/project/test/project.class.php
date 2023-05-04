@@ -162,10 +162,10 @@ class Project
     /**
      * Activate a project.
      *
-     * @param int    $projectID
-     * @param object $project
+     * @param  int    $projectID
+     * @param  object $project
      * @access public
-     * @return array $changes
+     * @return array
      */
     public function activate($projectID, $project)
     {
@@ -175,8 +175,8 @@ class Project
     /**
      * Do activate a project.
      *
-     * @param int    $projectID
-     * @param object $project
+     * @param  int    $projectID
+     * @param  object $project
      * @access public
      * @return bool
      */
@@ -190,7 +190,7 @@ class Project
      *
      * @param  int        $budget
      * @access public
-     * @return int|string $projectBudget
+     * @return int|string
      */
     public function getBudgetWithUnit($budget)
     {
@@ -202,13 +202,27 @@ class Project
      *
      * @param  int        $budget
      * @access public
-     * @return int|string $projectBudget
+     * @return int|string
      */
     public function addProjectAdminTest($projectID)
     {
-        global $tester;
-        $tester->loadModel('project')->addProjectAdmin($projectID);
+        $this->project->addProjectAdmin($projectID);
 
         return $tester->dao->select('*')->from(TABLE_PROJECTADMIN)->fetch();
+    }
+
+    /**
+     * Test fetchProjectList function.
+     *
+     * @param  int    $status
+     * @param  string $orderBy
+     * @param  int    $involved
+     * @access public
+     * @return array
+     */
+    public function testFetchProjectList($status, $involved = 0)
+    {
+        $projects = $this->project->fetchProjectList($status, 'id_desc', $involved, null);
+        return $projects;
     }
 }

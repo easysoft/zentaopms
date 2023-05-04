@@ -235,7 +235,8 @@ class projectModel extends model
     }
 
     /**
-     * Get project info.
+     * 根据状态和和我参与的查询项目列表。
+     * Get project list by status and with my participation.
      *
      * @param  string    $status
      * @param  string    $orderBy
@@ -244,19 +245,14 @@ class projectModel extends model
      * @access public
      * @return array
      */
-    public function getInfoList($status = 'undone', $orderBy = 'order_desc', $pager = null, $involved = 0)
+    public function getList($status = 'undone', $orderBy = 'order_desc', $pager = null, $involved = 0)
     {
         /* Init vars. */
-        $projects = $this->loadModel('program')->getProjectList(0, $status, 0, $orderBy, $pager, 0, $involved);
+        $projects = $this->projectTao->fetchProjectList($status, $orderBy, $involved, $pager);
         if(empty($projects)) return array();
 
         $projectIdList = array_keys($projects);
-        $teams = $this->dao->select('t1.root, count(t1.id) as count')->from(TABLE_TEAM)->alias('t1')
-            ->leftJoin(TABLE_USER)->alias('t2')->on('t1.account=t2.account')
-            ->where('t1.root')->in($projectIdList)
-            ->andWhere('t2.deleted')->eq(0)
-            ->groupBy('t1.root')
-            ->fetchAll('root');
+        $teams         = $this->projectTao->fetchTeamGroupByIdList($projectIdList);
 
         $estimates = $this->dao->select("t2.project as project, sum(estimate) as estimate")->from(TABLE_TASK)->alias('t1')
             ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.execution = t2.id')

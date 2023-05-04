@@ -27,10 +27,10 @@ class block extends control
 
     /**
      * Create a block under a dashboard.
-     * 
-     * @param  string $dashboard 
+     *
+     * @param  string $dashboard
      * @param  string $module
-     * @param  string $code 
+     * @param  string $code
      * @access public
      * @return void
      */
@@ -61,11 +61,11 @@ class block extends control
     }
 
     /**
-     * Update a block. 
-     * 
-     * @param  string $dashboard 
-     * @param  string $module 
-     * @param  string $code 
+     * Update a block.
+     *
+     * @param  string $dashboard
+     * @param  string $module
+     * @param  string $code
      * @access public
      * @return void
      */
@@ -1862,7 +1862,7 @@ class block extends control
         /* load pager. */
         $this->app->loadClass('pager', $static = true);
         $pager = new pager(0, 3, 1);
-        $this->view->projects = $this->loadModel('project')->getInfoList('all', 'id_desc', $pager, 1);
+        $this->view->projects = $this->loadModel('project')->getList('all', 'id_desc', 1, $pager);
     }
 
     /**
