@@ -249,15 +249,7 @@ class projectModel extends model
 
         $projectIdList = array_keys($projects);
         $teams         = $this->projectTao->fetchMemberCountByIdList($projectIdList);
-
-        $estimates = $this->dao->select("t2.project as project, sum(estimate) as estimate")->from(TABLE_TASK)->alias('t1')
-            ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.execution = t2.id')
-            ->where('t1.parent')->lt(1)
-            ->andWhere('t2.project')->in($projectIdList)
-            ->andWhere('t1.deleted')->eq(0)
-            ->andWhere('t2.deleted')->eq(0)
-            ->groupBy('t2.project')
-            ->fetchAll('project');
+        $estimates     = $this->projectTao->fetchTaskEstimateByIdList($projectIdList);
 
         $this->app->loadClass('pager', true);
         foreach($projects as $projectID => $project)

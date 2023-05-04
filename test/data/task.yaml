@@ -171,7 +171,6 @@ fields:
     note: "创建日期"
     range: "(M)-(w)"
     type: timestamp
-    prefix: "DateTime"
     format: "YY/MM/DD"
   - field: assignedTo
     note: "指派给"
@@ -184,7 +183,6 @@ fields:
     note: "指派日期"
     range: "(M)-(w)"
     type: timestamp
-    prefix: "DateTime"
     format: "YY/MM/DD"
   - field: estStarted
     note: "预计开始"
@@ -198,7 +196,6 @@ fields:
     note: "实际开始"
     range: "(M)-(w)"
     type: timestamp
-    prefix: "DateTime"
     format: "YY/MM/DD"
   - field: finishedBy
     note: "由谁完成"
@@ -207,17 +204,11 @@ fields:
     postfix: ""
     loop: 0
     format: ""
-  - field: finishedDate
-    note: "完成日期"
-    range: ""
   - field: finishedList
     note: "完成者列表"
     range: ""
   - field: canceledBy
     note: "由谁取消"
-    range: ""
-  - field: canceledDate
-    note: "取消日期"
     range: ""
   - field: closedBy
     note: "由谁关闭"
@@ -226,9 +217,6 @@ fields:
     postfix: ""
     loop: 0
     format: ""
-  - field: closedDate
-    note: "关闭日期"
-    range: ""
   - field: realDuration
     note: "实际持续时长"
     range: 1
@@ -256,12 +244,6 @@ fields:
     prefix: ""
     postfix: ""
     format: ""
-  - field: lastEditedDate
-    note: "最后修改时间"
-    range: ""
-  - field: activatedDate
-    note: "重新激活日期"
-    range: ""
   - field: deleted
     note: "是否删除"
     range: 0
