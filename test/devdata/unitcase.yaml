@@ -1,0 +1,141 @@
+title: table zt_case
+desc: "测试用例"
+author: automated export
+version: "1.0"
+fields:
+  - field: id
+    note: "ID"
+    range: 411-10000
+  - field: product
+    note: "产品ID"
+    range: 1-50{3}
+  - field: branch
+    note: "分支ID"
+    range: 0
+  - field: execution
+    note: "执行ID"
+    range: 0
+  - field: lib
+    note: "所属库"
+    range: 0
+  - field: module
+    note: "所属模块"
+    range: 0
+  - field: path
+    note: ""
+    range: "0"
+  - field: story
+    note: "相关需求"
+    range: "0"
+  - field: storyVersion
+    note: "需求版本"
+    range: "1"
+  - field: title
+    note: "用例标题"
+    range: 登录成功,密码错误,账号过期
+    prefix: "com.ngtesting.autotest.test.TestLogin"
+  - field: precondition
+    note: "前置条件"
+    range: []
+    prefix: ""
+  - field: keywords
+    note: "关键词"
+    range: []
+    prefix: ""
+  - field: pri
+    note: "优先级"
+    range: 1-4
+  - field: type
+    note: "用例类型"
+    range: unit
+  - field: auto
+    note: "是否是自动化测试用例"
+    range: "unit"
+  - field: frame
+    note: "自动化测试框架"
+    range: "junit"
+  - field: stage
+    note: "适用阶段"
+    range: unittest
+  - field: howRun
+    note: "测试方式"
+    range: ""
+  - field: scriptedBy
+    note: "脚本由谁创建"
+    range: ""
+  - field: scriptedDate
+    note: "脚本创建日期"
+    from: common.date.v1.yaml
+    use: dateB
+  - field: scriptStatus
+    note: "脚本状态"
+    range: ""
+  - field: scriptLocation
+    note: "脚本地址"
+    range: ""
+  - field: status
+    note: "用例状态"
+    range: normal
+  - field: subStatus
+    note: "子状态"
+    range: ""
+  - field: color
+    note: "标题颜色"
+    range: ""
+  - field: frequency
+    note: "使用频率"
+    range: 1
+  - field: order
+    note: "排序"
+    range: 0
+  - field: openedBy
+    note: "由谁创建"
+    range: admin
+    prefix: ""
+  - field: openedDate
+    note: "创建日期"
+    range: "-:600"
+    type: timestamp
+    format: "YYYY-MM-DD hh:mm:ss"
+  - field: reviewedBy
+    note: "由谁评审"
+    range: ""
+  - field: reviewedDate
+    note: "评审时间"
+    range: ""
+  - field: lastEditedBy
+    note: "最后修改者"
+    range: ""
+  - field: lastEditedDate
+    note: "修改日期"
+    range: ""
+  - field: version
+    note: "用例版本"
+    range: "1"
+  - field: linkCase
+    note: "相关用例"
+    range: ""
+  - field: fromBug
+    note: "来源Bug"
+    range: 0
+  - field: fromCaseID
+    note: ""
+    range: 0
+  - field: fromCaseVersion
+    note: ""
+    range: 1
+  - field: deleted
+    note: "是否删除"
+    range: 0
+  - field: lastRunner
+    note: "执行人"
+    range: admin
+    prefix: ""
+  - field: lastRunDate
+    note: "执行时间"
+    range: "-:500"
+    type: timestamp
+    format: "YYYY-MM-DD hh:mm:ss"
+  - field: lastRunResult
+    note: "结果"
+    range: pass,pass,fail

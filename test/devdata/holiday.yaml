@@ -1,0 +1,56 @@
+title: table zt_holiday
+desc: "节日假期"
+author: automated export
+version: "1.0"
+fields:
+  - field: id
+    note: "ID"
+    range: 1-10000
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: name
+    note: "名称"
+    range: 1-10000
+    prefix: "这是一个节假日"
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: type
+    note: "节假日类型"
+    range: holiday,working
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: desc
+    note: "描述"
+    range: 1-10000
+    prefix: "这个是节假日的描述"
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: year
+    note: "年份"
+    range: 2022
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: begin
+    note: "开始日期"
+    range: "(-1M)-(+1w):1D"
+    type: timestamp
+    format: "YYYY-MM-DD"
+    prefix: ""
+    postfix: ""
+    loop: 0
+  - field: end
+    note: "结束日期"
+    range: "(1M)-(1w):1D"
+    type: timestamp
+    format: "YYYY-MM-DD"
+    prefix: ""
+    postfix: ""
+    loop: 0

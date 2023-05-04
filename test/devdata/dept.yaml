@@ -1,0 +1,28 @@
+title: table zt_dept
+desc: "部门"
+author: Li yuchun
+version: "1.0"
+fields:
+  - field: id
+    range: 1-10000
+  - field: name
+    fields:
+      - field: name1
+        range: 产品部,开发部,测试部,运营部,开发部1,开发部2,测试名称长度能有多长并且包含特殊字符的一个长长的字符串！@#￥%……&×（）哈哈哈哈,[一级部门,二级部门,三级部门]{10},其他部门{10000}
+      - field: name2
+        range: []{7},1-10,1-10,1-10,1-10000
+  - field: order
+    note:  "排序"
+    range: 1-10000
+  - field: path
+    note:  "路径"
+    range: 1-10000
+    prefix: ","
+    postfix: ","
+  - field: grade
+    note:  "层级"
+    range: 1
+  - field: position
+    range: ""
+  - field: function
+    range: ""

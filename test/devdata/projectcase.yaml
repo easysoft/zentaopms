@@ -1,0 +1,17 @@
+title: table zt_projectcase
+desc: ""
+author: automated export
+version: "1.0"
+fields:
+    - field: project
+      range: 1001-19000{4}
+    - field: product
+      range: 1-1000{4}
+    - field: case
+      range: 1-4000
+    - field: count
+      range: 1
+    - field: version
+      range: 1
+    - field: order
+      range: 1

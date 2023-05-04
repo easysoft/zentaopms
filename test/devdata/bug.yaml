@@ -1,0 +1,89 @@
+title: zt_bug
+desc: Bug表
+version: 1.0
+fields:
+  - field: id
+    range: 1-500000
+  - field: project
+    range: 1001-20000{20},1001-13000{10}
+  - field: product
+    range: 1-1000{500}
+  - field: branch
+    range: 0
+  - field: module
+    range: 0
+  - field: execution
+    range: 20001-50000{10},20001-40000{10}
+  - field: plan
+    range: 1-1000{500}
+  - field: story
+    range: 1-50000{100}
+  - field: storyVersion
+    range: 1
+  - field: task
+    range: 0
+  - field: toTask
+    range: 0
+  - field: toStory
+    range: 0
+  - field: title
+    fields:
+      - field: title1
+        range: BUG
+      - field: title2
+        range: 1-1000000
+  - field: severity
+    range: 1-4
+  - field: pri
+    range: 1-4
+  - field: type
+    range: [codeerror,config,install,security,performance,standard,automation,designdefect,others]
+  - field: os
+    range: []{2},[win10,windows,android,ios]
+  - field: steps
+    range: steps
+  - field: status
+    range: active
+  - field: color
+    range: [#3da7f5,#75c941,#2dbdb2,#797ec9,#ffaf38,#ff4e3e]
+  - field: confirmed
+    range: 0,1
+  - field: activatedCount
+    range: 0
+  - field: mailto
+    range: admin{100},[]{200}
+  - field: openedBy
+    range: admin
+  - field: openedDate
+    range: "(-1M)-(+1w):-1D"
+    type: timestamp
+    format: "YYYY-MM-DD hh:mm:ss"
+  - field: openedBuild
+    range: 1,0,1,trunk{97}
+  - field: assignedTo
+    range: [admin,dev1,test1]{30},[]{20},[admin,dev1,test1]{20},[]{10},closed{20}
+  - field: assignedDate
+    range: "(-1M)-(+1w):-1D"
+    type: timestamp
+    format: "YYYY-MM-DD"
+  - field: deadline
+    range: "(-1M)-(+1w):-1D"
+    type: timestamp
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: "YYYY-MM-DD"
+  - field: duplicateBug
+    range: 0
+  - field: case
+    range: 0
+  - field: caseVersion
+    range: 0
+  - field: result
+    range: 0
+  - field: repo
+    range: 0
+  - field: testtask
+    range: 0
+  - field: deleted
+    range: 0

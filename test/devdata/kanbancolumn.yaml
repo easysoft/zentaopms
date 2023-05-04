@@ -1,0 +1,26 @@
+title: table zt_kanbancolumn
+desc: ""
+author: automated export
+version: "1.0"
+fields:
+    - field: parent
+      range: "0"
+    - field: type
+      range: 1-400
+      prefix: "column"
+    - field: region
+      range: 1-100{4}
+    - field: group
+      range: 1-100{4}
+    - field: name
+      range: 未开始,进行中,已完成,已关闭
+    - field: color
+      range: "#333"
+    - field: limit
+      range: ""
+    - field: order
+      range: 1-4
+    - field: archived
+      range: "0"
+    - field: deleted
+      range: "0"

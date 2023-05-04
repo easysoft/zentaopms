@@ -25,6 +25,9 @@ else
     case 'init':
         zdRun();
         break;
+    case 'devdata':
+        zdRun(true);
+        break;
     case 'copyDB':
         copyDB();
         break;

@@ -1,0 +1,45 @@
+title: groups
+desc: 权限白名单组合
+author: ly
+version: 1.0
+
+field: groups
+instances:
+  - instance: groups
+    note: 权限白名单组合
+    fields:
+     - field: item1
+       range: 1
+       postfix: ","
+     - field: item2
+       range: 2
+       postfix: ","
+     - field: item3
+       range: 3
+       postfix: ","
+     - field: item4
+       range: 4
+       postfix: ","
+     - field: item5
+       range: 5
+       postfix: ","
+     - field: item6
+       range: 6
+       postfix: ","
+     - field: item7
+       range: 7
+       postfix: ","
+     - field: item8
+       range: 8
+       postfix: ","
+     - field: item9
+       range: 9
+       postfix: ","
+     - field: item10
+       range: 10
+       postfix: ","
+     - field: item11
+       range: 11
+       postfix: ","
+     - field: item12
+       range: 12

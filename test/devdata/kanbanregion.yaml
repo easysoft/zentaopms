@@ -1,0 +1,25 @@
+title: table zt_kanbanregion
+desc: ""
+author: automated export
+version: "1.0"
+fields:
+    - field: space
+      range: 1-50{2}
+    - field: kanban
+      range: 1-100
+    - field: name
+      range: "默认区域"
+    - field: order
+      range: 5-10000:5
+    - field: createdDate
+      range: "(-1M)-(+M):1D"
+      type: timestamp
+      format: "YYYY-MM-DD"
+    - field: createdBy
+      range: "admin"
+    - field: lastEditedBy
+      range: ""
+    - field: lastEditedDate
+      range: ""
+    - field: deleted
+      range: "0"
