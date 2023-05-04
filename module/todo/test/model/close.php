@@ -21,3 +21,6 @@ zdTable('todo')->config('close')->gen(1);
 r($tester->todo->getByID(1)) && p('status') && e('wait');
 r($tester->todo->close(1))   && p()         && e(1);
 r($tester->todo->getByID(1)) && p('status') && e('closed');
+
+r($tester->todo->close(1))   && p()         && e(1);
+r($tester->todo->getByID(1)) && p('status') && e('closed');
