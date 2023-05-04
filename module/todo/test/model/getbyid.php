@@ -15,8 +15,7 @@ function initData ()
 
 title=测试 todoModel->getByID();
 cid=1
-pid=1
-
+pid=0
 */
 
 $todoIDList = array('1', '2', '3', '5', '100000');

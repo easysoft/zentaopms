@@ -13,11 +13,9 @@ pid=1
 
 */
 
-
-global $tester;
-$tester->loadModel('todo');
+$todo = new todoTest();
 
 zdTable('todo')->config('editdate')->gen(5);
 
-r($tester->todo->editDate(array(1),    '2023-06-07')) && p() && e(true);  // 修改id为1的待办的日期
-r($tester->todo->editDate(array(2, 3), '2023-04-27')) && p() && e(true);  // 修改id为2,3的待办的日期
+r($todo->editDateTest(array(1),    '2023-06-07')) && p() && e('1');  // 修改id为1的待办的日期
+r($todo->editDateTest(array(2, 3), '2023-04-27')) && p() && e('1');  // 修改id为2,3的待办的日期
