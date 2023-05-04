@@ -31,17 +31,17 @@ $fieldsList = array('*', 'id,title,status,plan,module,story', 'title,status', 't
 
 $bug = new bugTest();
 
-r($bug->getByListTest($bugIDList[0], $fieldsList[0])) && p('1:title')  && e('BUG1');     // 查询id为1的bug title
-r($bug->getByListTest($bugIDList[0], $fieldsList[1])) && p('2:status') && e('active');   // 查询id为2的bug status
-r($bug->getByListTest($bugIDList[0], $fieldsList[1])) && p('2:module') && e('1');        // 查询id为2的bug module
-r($bug->getByListTest($bugIDList[0], $fieldsList[1])) && p('3:plan')   && e('2');        // 查询id为2的bug plan
-r($bug->getByListTest($bugIDList[0], $fieldsList[1])) && p('3:story')  && e('2');        // 查询id为2的bug story
-r($bug->getByListTest($bugIDList[0], $fieldsList[2])) && p('3:title')  && e('BUG3');     // 查询id为3的bug title
-r($bug->getByListTest($bugIDList[0], $fieldsList[3])) && p('1:title')  && e('BUG1');     // 查询id为1的bug title
-r($bug->getByListTest($bugIDList[1], $fieldsList[0])) && p('4:title')  && e('BUG4');     // 查询id为4的bug title
-r($bug->getByListTest($bugIDList[1], $fieldsList[1])) && p('4:status') && e('resolved'); // 查询id为4的bug status
-r($bug->getByListTest($bugIDList[1], $fieldsList[3])) && p('1:title')  && e('BUG1');     // 查询id为1的bug title
-r($bug->getByListTest($bugIDList[2], $fieldsList[0])) && p('2:title')  && e('BUG2');     // 查询id为2的bug title
-r($bug->getByListTest($bugIDList[2], $fieldsList[1])) && p('2:status') && e('active');   // 查询id为2的bug status
-r($bug->getByListTest($bugIDList[2], $fieldsList[2])) && p('7:status') && e('resolved'); // 查询id为7的bug title
-r($bug->getByListTest($bugIDList[3], $fieldsList[0])) && p('')         && e('0');        // 查询不存在的ID
+r($bug->getByIdListTest($bugIDList[0], $fieldsList[0])) && p('1:title')  && e('BUG1');     // 查询id为1的bug title
+r($bug->getByIdListTest($bugIDList[0], $fieldsList[1])) && p('2:status') && e('active');   // 查询id为2的bug status
+r($bug->getByIdListTest($bugIDList[0], $fieldsList[1])) && p('2:module') && e('1');        // 查询id为2的bug module
+r($bug->getByIdListTest($bugIDList[0], $fieldsList[1])) && p('3:plan')   && e('2');        // 查询id为2的bug plan
+r($bug->getByIdListTest($bugIDList[0], $fieldsList[1])) && p('3:story')  && e('2');        // 查询id为2的bug story
+r($bug->getByIdListTest($bugIDList[0], $fieldsList[2])) && p('3:title')  && e('BUG3');     // 查询id为3的bug title
+r($bug->getByIdListTest($bugIDList[0], $fieldsList[3])) && p('1:title')  && e('BUG1');     // 查询id为1的bug title
+r($bug->getByIdListTest($bugIDList[1], $fieldsList[0])) && p('4:title')  && e('BUG4');     // 查询id为4的bug title
+r($bug->getByIdListTest($bugIDList[1], $fieldsList[1])) && p('4:status') && e('resolved'); // 查询id为4的bug status
+r($bug->getByIdListTest($bugIDList[1], $fieldsList[3])) && p('1:title')  && e('BUG1');     // 查询id为1的bug title
+r($bug->getByIdListTest($bugIDList[2], $fieldsList[0])) && p('2:title')  && e('BUG2');     // 查询id为2的bug title
+r($bug->getByIdListTest($bugIDList[2], $fieldsList[1])) && p('2:status') && e('active');   // 查询id为2的bug status
+r($bug->getByIdListTest($bugIDList[2], $fieldsList[2])) && p('7:status') && e('resolved'); // 查询id为7的bug title
+r($bug->getByIdListTest($bugIDList[3], $fieldsList[0])) && p('')         && e('0');        // 查询不存在的ID
