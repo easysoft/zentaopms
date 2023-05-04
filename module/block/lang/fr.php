@@ -23,10 +23,9 @@ $lang->block->estimate   = 'Estimate';
 $lang->block->last       = 'Last';
 
 $lang->block->account = 'Compte';
-$lang->block->module  = 'Module';
 $lang->block->title   = 'Titre';
-$lang->block->source  = 'Source Module';
-$lang->block->block   = 'Source Bloc';
+$lang->block->module  = 'Module';
+$lang->block->code    = 'Bloc';
 $lang->block->order   = 'Ordre';
 $lang->block->height  = 'Hauteur';
 $lang->block->role    = 'Rôle';

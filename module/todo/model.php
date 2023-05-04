@@ -542,32 +542,27 @@ class todoModel extends model
      */
     public function assignTo(object $todo): bool
     {
-        $result = $this->todoTao->updateRow((int)$todo->id, $todo);
+        $todoID = (int)$todo->id;
+        $result = $this->todoTao->updateRow($todoID, $todo);
         if(!$result) return false;
 
-        $this->loadModel('action')->create('todo', (int)$todo->id, 'assigned', '', $todo->assignedTo);
+        $this->loadModel('action')->create('todo', $todoID, 'assigned', '', $todo->assignedTo);
         return !dao::isError();
     }
 
     /**
+     * 获取待办事项的数量。
      * Get todo count.
      *
      * @param  string $account
      * @access public
      * @return int
      */
-    public function getCount($account = '')
+    public function getCount(string $account = ''): int
     {
         if(empty($account)) $account = $this->app->user->account;
-        return $this->dao->select('count(*) as count')->from(TABLE_TODO)
-            ->where('cycle')->eq('0')
-            ->andWhere('deleted')->eq('0')
-            ->andWhere('vision')->eq($this->config->vision)
-            ->andWhere('account', true)->eq($account)
-            ->orWhere('assignedTo')->eq($account)
-            ->orWhere('finishedBy')->eq($account)
-            ->markRight(1)
-            ->fetch('count');
+
+        return $this->todoTao->getTodoCountByAccount($account);
     }
 
     /**

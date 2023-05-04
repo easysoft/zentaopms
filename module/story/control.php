@@ -2399,7 +2399,7 @@ class story extends control
     public function tasks($storyID, $executionID = 0)
     {
         $this->loadModel('task');
-        $tasks = $this->task->getStoryTasks($storyID, $executionID);
+        $tasks = $this->task->getListByStory($storyID, $executionID);
         $this->view->tasks   = $tasks;
         $this->view->users   = $this->user->getPairs('noletter');
         $this->view->summary = $this->execution->summary($tasks);
