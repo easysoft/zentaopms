@@ -179,7 +179,7 @@ class blockZen extends block
      * @param  int    $projectID
      * @return void
      */
-    private function getBlockMoreLink(object $block, int $project): void
+    private function getBlockMoreLink(object $block, int $projectID): void
     {
         $code   = $block->code;
         $source = empty($block->source) ? 'common' : $block->source;
