@@ -287,10 +287,11 @@ class helper extends baseHelper
     }
 
     /**
-     * 代替 die、exit 函数终止并输出
+     * 代替 die、exit 函数终止并输出。
+     * Instead of die, exit function to terminate and output.
      *
      * @param string $content
-     * @return void
+     * @return never
      */
     public static function end(string $content = ''): never
     {

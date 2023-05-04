@@ -12,7 +12,7 @@ class select extends wg
         'disabled?: bool',
         'multiple?: bool',
         'items?: array',
-        'size?: number',
+        'size?: int',
     );
 
     public function onBuildItem($item)
@@ -35,13 +35,7 @@ class select extends wg
 
     public function isMultiple()
     {
-        $multiple = $this->prop('multiple');
-        if($multiple === NULL)
-        {
-            $name = $this->prop('name');
-            $multiple = str_contains($name, '[');
-        }
-        return $multiple;
+        return $this->prop('multiple');
     }
 
     public function getValueList()

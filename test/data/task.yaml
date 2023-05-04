@@ -120,7 +120,6 @@ fields:
     range: "(+1w)-(-1M):-1D"
     prefix: ""
     postfix: ""
-    loop: 0
     type: timestamp
     format: "YY/MM/DD"
   - field: status
@@ -139,20 +138,14 @@ fields:
     format: ""
   - field: color
     note: "标题颜色"
-    from: common.color.v1.yaml
-    use: color
+    range: ""
     prefix: ""
     postfix: ""
     loop: 0
     format: ""
   - field: mailto
     note: "抄送给"
-    from: common.user.v1.yaml
-    use: user
-    prefix: ""
-    postfix: ""
-    loop: 0
-    format: ""
+    range: ""
   - field: desc
     note: "任务描述"
     range: 1-10000
@@ -169,20 +162,17 @@ fields:
     format: ""
   - field: openedBy
     note: "由谁创建"
-    from: common.user.v1.yaml
-    use: user
+    range: admin
     prefix: ""
     postfix: ""
     loop: 0
     format: ""
   - field: openedDate
     note: "创建日期"
-    from: common.date.v1.yaml
-    use: dateA
-    prefix: ""
-    postfix: ""
-    loop: 0
-    format: ""
+    range: "(M)-(w)"
+    type: timestamp
+    prefix: "DateTime"
+    format: "YY/MM/DD"
   - field: assignedTo
     note: "指派给"
     range: ""
@@ -192,12 +182,10 @@ fields:
     format: ""
   - field: assignedDate
     note: "指派日期"
-    from: common.date.v1.yaml
-    use: dateA
-    prefix: ""
-    postfix: ""
-    loop: 0
-    format: ""
+    range: "(M)-(w)"
+    type: timestamp
+    prefix: "DateTime"
+    format: "YY/MM/DD"
   - field: estStarted
     note: "预计开始"
     range: "2022-01-27"
@@ -208,72 +196,39 @@ fields:
     format: "YY/MM/DD"
   - field: realStarted
     note: "实际开始"
-    from: common.date.v1.yaml
-    use: dateB
-    prefix: ""
-    postfix: ""
-    loop: 0
-    format: "YY/MM/DD"
+    range: "(M)-(w)"
     type: timestamp
+    prefix: "DateTime"
+    format: "YY/MM/DD"
   - field: finishedBy
     note: "由谁完成"
-    from: common.user.v1.yaml
-    use: user
+    range: ""
     prefix: ""
     postfix: ""
     loop: 0
     format: ""
   - field: finishedDate
     note: "完成日期"
-    from: common.date.v1.yaml
-    use: dateA
-    prefix: ""
-    postfix: ""
-    loop: 0
-    format: "YY/MM/DD"
-    type: timestamp
+    range: ""
   - field: finishedList
     note: "完成者列表"
-    from: common.user.v1.yaml
-    use: user
-    prefix: ""
-    postfix: ""
-    loop: 0
-    format: ""
+    range: ""
   - field: canceledBy
     note: "由谁取消"
-    from: common.user.v1.yaml
-    use: user
-    prefix: ""
-    postfix: ""
-    loop: 0
-    format: ""
+    range: ""
   - field: canceledDate
     note: "取消日期"
-    from: common.date.v1.yaml
-    use: dateA
-    prefix: ""
-    postfix: ""
-    loop: 0
-    format: "YY/MM/DD"
-    type: timestamp
+    range: ""
   - field: closedBy
     note: "由谁关闭"
-    from: common.user.v1.yaml
-    use: user
+    range: ""
     prefix: ""
     postfix: ""
     loop: 0
     format: ""
   - field: closedDate
     note: "关闭日期"
-    from: common.date.v1.yaml
-    use: dateA
-    prefix: ""
-    postfix: ""
-    loop: 0
-    format: "YY/MM/DD"
-    type: timestamp
+    range: ""
   - field: realDuration
     note: "实际持续时长"
     range: 1
@@ -297,30 +252,16 @@ fields:
     format: ""
   - field: lastEditedBy
     note: "最后修改者"
-    from: common.user.v1.yaml
-    use: user
+    range: ""
     prefix: ""
     postfix: ""
-    loop: 0
     format: ""
   - field: lastEditedDate
     note: "最后修改时间"
-    from: common.date.v1.yaml
-    use: dateA
-    prefix: ""
-    postfix: ""
-    loop: 0
-    format: "YY/MM/DD"
-    type: timestamp
+    range: ""
   - field: activatedDate
     note: "重新激活日期"
-    from: common.date.v1.yaml
-    use: dateB
-    prefix: ""
-    postfix: ""
-    loop: 0
-    format: "YY/MM/DD"
-    type: timestamp
+    range: ""
   - field: deleted
     note: "是否删除"
     range: 0

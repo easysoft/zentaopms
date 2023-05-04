@@ -247,8 +247,7 @@ class productZen extends product
     protected function getProductLines(): array
     {
         /* Get all product lines. */
-        /* TODO use model of module. */
-        $productLines = $this->dao->select('*')->from(TABLE_MODULE)->where('type')->eq('line')->andWhere('deleted')->eq(0)->orderBy('`order` asc')->fetchAll();
+        $productLines = $this->product->getProductLinesTODO();
 
         /* Collect product lines of program lines. */
         $programLines = array();
@@ -456,5 +455,102 @@ class productZen extends product
     protected function sendDaoError()
     {
         if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
+    }
+
+    /**
+     * 从产品统计数据中统计项目集。
+     * Statistics program data from statistics data of product.
+     *
+     * @param  array     $productStats
+     * @access protected
+     * @return array
+     */
+    protected function statisticProgram(array $productStats): array
+    {
+        if(defined('TUTORIAL')) return $this->loadModel('tutorial')->getProductStats();
+
+        $programStructure = array();
+
+        foreach($productStats as $product)
+        {
+            $programStructure[$product->program][$product->line]['products'][$product->id] = $product;
+
+            /* Generate line data. */
+            if($product->line)
+            {
+                $programStructure[$product->program][$product->line]['lineName'] = $product->lineName;
+                $programStructure[$product->program][$product->line] = $this->statisticProductData('line', $programStructure, $product);
+            }
+
+            /* Generate program data. */
+            if($product->program)
+            {
+                $programStructure[$product->program]['programName'] = $product->programName;
+                $programStructure[$product->program]['programPM']   = $product->programPM;
+                $programStructure[$product->program]['id']          = $product->program;
+                $programStructure[$product->program]                = $this->statisticProductData('program', $programStructure, $product);
+            }
+        }
+
+        return $programStructure;
+    }
+
+    /**
+     * 统计项目集内的产品数据
+     * Statistic product data.
+     *
+     * @param  string    $type line|program
+     * @param  array     $programStructure
+     * @param  object    $product
+     * @access protected
+     * @return array
+     */
+    protected function statisticProductData(string $type, array $programStructure, object|null $product): array
+    {
+        if(empty($programStructure)) return $programStructure;
+
+        /* Init vars. */
+        $data = $type == 'program' ? $programStructure[$product->program] : $programStructure[$product->program][$product->line];
+        foreach($this->config->product->statisticFields as $key => $fields)
+        {
+            /* Get the total number of requirements and stories. */
+            if(strpos('stories|requirements', $key) !== false)
+            {
+                $totalObjects = 0;
+                foreach($product->$key as $status => $number) if(isset($this->lang->story->statusList[$status])) $totalObjects += $number;
+
+                $fieldType = $key == 'stories' ? 'Stories' : 'Requirements';
+                if(!isset($data['total' . $fieldType])) $data['total' . $fieldType] = 0;
+                $data['total' . $fieldType] += $totalObjects;
+            }
+            elseif($key == 'bugs')
+            {
+                $fieldType = 'Bugs';
+            }
+
+            foreach($fields as $field)
+            {
+                if(!isset($data[$field])) $data[$field] = 0;
+
+                $status = $field;
+                if(strpos($field, 'Requirements') !== false or strpos($field, 'Stories') !== false or $field == 'unResolvedBugs')
+                {
+                    $length = strpos($field, $fieldType);
+                    $status = substr($field, 0, $length);
+                }
+
+                if(strpos('requirements|stories', $key) !== false)
+                {
+                    $objects = $product->$key;
+                    $data[$field] += $objects[$status];
+                }
+                else
+                {
+                    $data[$field] += $product->$status;
+                }
+            }
+        }
+
+        return $data;
     }
 }

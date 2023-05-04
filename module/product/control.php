@@ -201,8 +201,12 @@ class product extends control
         if($browseType == 'bybranch') setcookie('storyBranch', $branch, 0, $this->config->webRoot, '', $this->config->cookieSecure, false);
 
         $cookieModule = $this->app->tab == 'project' ? $this->cookie->storyModuleParam : $this->cookie->storyModule;
-        $moduleID = ($browseType == 'bymodule') ? (int)$param : (($browseType == 'bysearch' or $browseType == 'bybranch') ? 0 : ($cookieModule ? $cookieModule : 0));
-        $queryID  = ($browseType == 'bysearch') ? (int)$param : 0;
+
+        $moduleID = 0;
+        if($browseType == 'bymodule') $moduleID = (int)$param;
+        elseif($browseType != 'bysearch' and $browseType != 'bybranch' and $cookieModule) $moduleID = $cookieModule;
+
+        $queryID = ($browseType == 'bysearch') ? (int)$param : 0;
 
         /* Set moduleTree. */
         $createModuleLink = $storyType == 'story' ? 'createStoryLink' : 'createRequirementLink';
@@ -1157,7 +1161,7 @@ class product extends control
         if($this->config->systemMode == 'light' and $orderBy == 'program_asc') $orderBy = 'order_asc';
 
         $productStats     = $this->product->getStats($orderBy, $pager, $browseType, 0, 'story', 0, $queryID);
-        $productStructure = $this->product->statisticProgram($productStats);
+        $productStructure = $this->productZen->statisticProgram($productStats);
 
         /* Save search form. */
         $actionURL = $this->createLink('product', 'all', "browseType=bySearch&orderBy=order_asc&queryID=myQueryID");

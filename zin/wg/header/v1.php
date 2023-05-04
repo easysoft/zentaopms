@@ -8,8 +8,7 @@ require_once dirname(__DIR__) . DS . 'useravatar' . DS . 'v1.php';
 
 class header extends wg
 {
-    static $defineBlocks = array
-    (
+    static $defineBlocks = array(
         'heading' => array('map' => 'toolbar'),
         'navbar' => array('map' => 'nav'),
         'toolbar' => array('map' => 'btn')

@@ -4,7 +4,11 @@ namespace zin;
 
 class mainMenu extends wg
 {
-    static $defineProps = 'statuses?:array,btnGroup?:array,others?:array';
+    static $defineProps = array(
+        'statuses?:array',
+        'btnGroup?:array',
+        'others?:array'
+    );
 
     protected function buildOther($item)
     {

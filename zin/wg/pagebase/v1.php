@@ -5,10 +5,16 @@ class pageBase extends wg
 {
     static $tag = 'html';
 
-    static $defineProps = 'metas?: string|array, title?: string, bodyProps?: array, bodyClass?: array|string, zui?: bool, display?: bool';
+    static $defineProps = array(
+        'metas?: string|array',
+        'title?: string',
+        'bodyProps?: array',
+        'bodyClass?: array|string',
+        'zui?: bool',
+        'display?: bool'
+    );
 
-    static $defaultProps = array
-    (
+    static $defaultProps = array(
         'zui' => false,
         'display' => true,
         'metas' => array('<meta charset="utf-8">', '<meta http-equiv="X-UA-Compatible" content="IE=edge">', '<meta name="viewport" content="width=device-width, initial-scale=1">', '<meta name="renderer" content="webkit">')

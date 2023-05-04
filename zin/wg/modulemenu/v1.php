@@ -6,8 +6,8 @@ class moduleMenu extends wg
     private $modules = [];
 
     protected static $defineProps = array(
-        'productID:number',
-        'activeKey:number',
+        'productID:int',
+        'activeKey:int',
         'closeLink:string'
     );
 

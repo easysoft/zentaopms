@@ -3,8 +3,7 @@ namespace zin;
 
 class tabs extends wg
 {
-    protected static $defineProps = array
-    (
+    protected static $defineProps = array(
         /* Tabs direction: h - horizontal, v - vertical */
         'direction?:string="h"',
         'items:array',
@@ -71,7 +70,8 @@ class tabs extends wg
             set($this->props->skip(array_keys(static::getDefinedProps()))),
             $direction == 'v' ? setClass('flex') : null,
             /* Tabs. */
-            h::ul(
+            h::ul
+            (
                 setClass('nav nav-tabs'),
                 $direction == 'v' ? setClass('nav-stacked') : null,
                 $lables

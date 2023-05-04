@@ -6,20 +6,7 @@ su('admin');
 
 function initData()
 {
-    $project = zdTable('todo');
-    $project->id->range('1-100');
-    $project->account->range('admin');
-    $project->date->prefix('2023-04-2')->range('1-9');
-    $project->begin->range('1000-1100');
-    $project->end->range('1200-1300');
-    $project->type->range("custom");
-    $project->cycle->range("0");
-    $project->pri->range("3");
-    $project->name->prefix('我的待办')->range("1-5");
-    $project->desc->prefix('这是我的描述')->range("1-5");
-    $project->status->range("wait");
-
-    $project->gen(10);
+    zdTable('todo')->config('delete')->gen(10);
 }
 
 /**
@@ -28,11 +15,11 @@ title=测试删除todo todoModel->delete();
 timeout=0
 cid=1
 
-- 执行todo模块的delete方法，参数是8, no
+- 删除指定id的待办，取消确认
  - 属性id @8
  - 属性deleted @0
 
-- 执行todo模块的getById方法，参数是8属性deleted @1
+- 验证删除id不存在的todo信息属性deleted @1
 
 
 

@@ -5,7 +5,12 @@ require_once dirname(__DIR__) . DS . 'nav' . DS . 'v1.php';
 
 class featureBar extends wg
 {
-    static $defineProps = 'items?:array, current?:string, link?:string, linkParams?:string';
+    static $defineProps = array(
+        'items?:array',
+        'current?:string',
+        'link?:string',
+        'linkParams?:string'
+    );
 
     static $defineBlocks = array
     (
@@ -28,7 +33,7 @@ class featureBar extends wg
         $rawItems = \customModel::getFeatureMenu($app->rawModule, $app->rawMethod);
         if(!is_array($rawItems)) return NULL;
 
-        $current      = $this->prop('current', data('browseType', ''));
+        $current      = $this->prop('current', data('browseType'));
         $recTotal     = data('recTotal');
         $items        = array();
         $link         = $this->prop('link');

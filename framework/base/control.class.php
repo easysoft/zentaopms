@@ -221,11 +221,11 @@ class baseControl
             }
             elseif(helper::isAjaxRequest())
             {
-                die(json_encode(array('result' => false, 'message' => $this->lang->error->loginTimeout)));
+                helper::end(json_encode(array('result' => false, 'message' => $this->lang->error->loginTimeout)));
             }
 
             $referer = helper::safe64Encode($uri);
-            die(js::locate(helper::createLink('user', 'login', "referer=$referer")));
+            helper::end(js::locate(helper::createLink('user', 'login', "referer=$referer")));
         }
 
         /**
@@ -1018,13 +1018,14 @@ class baseControl
      * 直接输出data数据，通常用于ajax请求中。
      * Send data directly, for ajax requests.
      *
+     * @param  mixed  $data
      * @param  string $type
      * @access public
      * @return void
      */
     public function send($data, string $type = 'json')
     {
-        if($type != 'json') die();
+        if($type != 'json') return helper::end();
 
         $data = (array)$data;
 
@@ -1055,7 +1056,7 @@ class baseControl
             for($i = 0; $i < $obLevel; $i++) ob_end_clean();
 
             $response = helper::removeUTF8Bom(urldecode(json_encode($data)));
-            die($response);
+            return helper::end($response);
         }
 
         /**
@@ -1066,8 +1067,8 @@ class baseControl
         {
             if(!empty($data['message'])) echo js::alert($data['message']);
             $locate = $data['locate'] ?? $_SERVER['HTTP_REFERER'] ?? '';
-            if(!empty($locate)) die(js::locate($locate));
-            die($data['message'] ?? 'success');
+            if(!empty($locate)) return helper::end(js::locate($locate));
+            return helper::end($data['message'] ?? 'success');
         }
 
         if(isset($data['result']) and $data['result'] == 'fail')
@@ -1078,27 +1079,27 @@ class baseControl
                 {
                     echo js::alert($data['message']);
                     $locate = $data['locate'] ?? $_SERVER['HTTP_REFERER'] ?? '';
-                    if (!empty($locate)) die(js::locate($locate));
-                    die($data['message'] ?? 'fail');
+                    if (!empty($locate)) return helper::end(js::locate($locate));
+                    return helper::end($data['message'] ?? 'fail');
                 }
 
                 $message = json_decode(json_encode($data['message']), true);
                 foreach($message as $item => $errors) $message[$item] = implode(',', $errors);
-                die(js::alert(strip_tags(implode('\n', $message))));
+                return helper::end(js::alert(strip_tags(implode('\n', $message))));
             }
-            die('fail');
+            return helper::end('fail');
         }
     }
 
     /**
      * return error json
      *
+     * @param  mixed $error
      * @return void
-     * @author thanatos thanatos915@163.com
      */
     public function sendError($error)
     {
-        $this->send(array('result' => 'fail', 'message' => $error));
+        return $this->send(array('result' => 'fail', 'message' => $error));
     }
 
     /**
@@ -1106,13 +1107,12 @@ class baseControl
      *
      * @param  array $data
      * @return void
-     * @author thanatos thanatos915@163.com
      */
     public function sendSuccess(array $data)
     {
         $data['result'] = 'success';
         if(empty($data['message'])) $data['message'] = $this->lang->saveSuccess;
-        $this->send($data);
+        return $this->send($data);
     }
 
     /**
@@ -1157,9 +1157,9 @@ class baseControl
      * @access  public
      * @return  void
      */
-    public function locate($url)
+    public function locate(string $url)
     {
         header("location: $url");
-        exit;
+        helper::end();
     }
 }

@@ -566,12 +566,11 @@ class projectZen extends project
      *
      * @param  int    $projectID
      * @param  array  $changes
-     * @param  string $comment
      *
      * @access protected
      * @return void
      */
-    protected function responseAfterActivate(int $projectID, array $changes, string $comment): void
+    protected function responseAfterActivate(int $projectID, array $changes): void
     {
         if($this->post->comment != '' or !empty($changes))
         {
@@ -637,7 +636,7 @@ class projectZen extends project
      * 从项目中删除所有关联的产品。
      * removes all associated products from the be deleted project
      *
-     * @param  object $projectID
+     * @param  object $project
      *
      * @access protected
      * @return void
@@ -650,5 +649,219 @@ class projectZen extends project
             $productID = $this->loadModel('product')->getProductIDByProject($project->id);
             $this->project->deleteByTableName('zt_product', $productID);
         }
+    }
+
+    /**
+     * 处理并合并项目下的新旧产品
+     * mergeProducts
+     *
+     * @param  int       $projectID
+     * @param  object    $project
+     * @param  int|array $executionIDs
+     * @param  array     $postData
+     *
+     * @access protected
+     * @return void
+     */
+    protected function mergeProducts(int $projectID, object $project, int|array $executionIDs, array $postData): mixed
+    {
+        $this->loadModel('product');
+        $this->loadModel('execution');
+
+        $oldProducts = $this->product->getProducts($projectID);
+        $this->project->updateProducts($projectID);
+        if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+        //判断是否为项目型项目并更新关联产品
+        if(empty($project->multiple))
+        {
+            $executionID = $this->execution->getNoMultipleID($projectID);
+            if($executionID) $this->execution->updateProducts($executionID);
+        }
+
+        //将项目下关联的新旧产品合并
+        $newProducts   = $this->product->getProducts($projectID);
+        $oldProductIDs = array_keys($oldProducts);
+        $newProductIDs = array_keys($newProducts);
+        $diffProducts  = array_merge(array_diff($oldProductIDs, $newProductIDs), array_diff($newProductIDs, $oldProductIDs));
+        if($diffProducts) $this->loadModel('action')->create('project', $projectID, 'Managed', '', !empty($postData->rawdata->products) ? implode(',', $postData->rawdata->products) : '');
+
+        //判断是否为产品型项目并更新关联产品
+        if(empty($project->division))
+        {
+            foreach($executionIDs as $executionID)
+            {
+                $this->execution->updateProducts($executionID);
+                if($diffProducts) $this->loadModel('action')->create('execution', $executionID, 'Managed', '', implode(',', array_keys($newProducts)));
+            }
+        }
+
+        //处理非瀑布及产品型项目
+        $this->dealExecutionProduct($project, $oldProducts, $newProductIDs, $executionIDs);
+    }
+
+    /**
+     * 处理项目执行下关联产品
+     * deal execution product
+     *
+     * @param  object    $project
+     * @param  object    $oldProducts
+     * @param  array     $newProductIDs
+     * @param  int|array $executionIDs
+     *
+     * @access protected
+     * @return void
+     */
+    protected function dealExecutionProduct(object $project, object $oldProducts, array $newProductIDs, array $executionIDs): void
+    {
+        //处理非瀑布及产品型项目
+        if($project->multiple and $project->model != 'waterfall' and $project->model != 'waterfallplus')
+        {
+            $oldExecutionProducts = $this->projectTao->replaceOldProduct($executionIDs);
+            $unlinkedProducts     = array_diff(array_keys($oldProducts), $newProductIDs);
+            if(!empty($unlinkedProducts))
+            {
+                $unlinkedProductPairs = array();
+                foreach($unlinkedProducts as $unlinkedProduct) $unlinkedProductPairs[$unlinkedProduct] = $oldProducts[$unlinkedProduct]->name;
+
+                $unlinkExecutions = array();
+                foreach($oldExecutionProducts as $executionID => $executionProducts)
+                {
+                    $unlinkExecutionProducts = array_intersect_key($unlinkedProductPairs, $executionProducts);
+                    if($unlinkExecutionProducts) $unlinkExecutions[$executionID] = $unlinkExecutionProducts;
+                }
+
+                foreach($unlinkExecutions as $executionID => $unlinkExecutionProducts) $this->loadModel('action')->create('execution', $executionID, 'unlinkproduct', '', implode(',', $unlinkExecutionProducts));
+            }
+        }
+    }
+
+    /**
+     * 处理项目关联需求的产品
+     * dealLinkProduct
+     *
+     * @param  int    $projectID
+     * @param  object $project
+     *
+     * @access protected
+     * @return void
+     */
+    protected function dealLinkProduct(int $projectID, object $project): void
+    {
+        $this->loadModel('product');
+        $this->loadModel('program');
+
+        $linkedBranches      = array();
+        $linkedBranchIdList  = array();
+        $branches            = $this->project->getBranchesByProject($projectID);
+        $linkedProductIdList = empty($branches) ? '' : array_keys($branches);
+        $allProducts         = $this->program->getProductPairs($project->parent, 'all', 'noclosed', $linkedProductIdList);
+        $linkedProducts      = $this->product->getProducts($projectID, 'all', '', true, $linkedProductIdList);
+        $projectStories      = $this->project->getStoriesByProject($projectID);
+        $projectBranches     = $this->project->getBranchGroupByProject($projectID, array_keys($linkedProducts));
+        $branchGroups        = $this->loadModel('branch')->getByProducts(array_keys($allProducts), 'ignoreNormal|noclosed', $linkedBranchIdList);
+
+        /* If the story of the product which linked the project,don't allow to remove the product. */
+        $unmodifiableProducts     = array();
+        $unmodifiableBranches     = array();
+        $unmodifiableMainBranches = array();
+        foreach($linkedProducts as $productID => $linkedProduct)
+        {
+            $linkedBranches[$productID] = array();
+            foreach($branches[$productID] as $branchID => $branch)
+            {
+                $linkedBranches[$productID][$branchID] = $branchID;
+                $linkedBranchIdList[$branchID] = $branchID;
+
+                if(!empty($projectStories[$productID][$branchID]) or !empty($projectBranches[$productID][$branchID]))
+                {
+                    if($branchID == BRANCH_MAIN) $unmodifiableMainBranches[$productID] = $branchID;
+                    array_push($unmodifiableProducts, $productID);
+                    array_push($unmodifiableBranches, $branchID);
+                }
+            }
+        }
+
+        $this->dealOtherLinkProduct($project, $branchGroups, $linkedBranches);
+
+        $this->view->allBranches              = $this->loadModel('branch')->getByProducts(array_keys($allProducts), 'ignoreNormal');
+        $this->view->allProducts              = $allProducts;
+        $this->view->unmodifiableProducts     = $unmodifiableProducts;
+        $this->view->unmodifiableBranches     = $unmodifiableBranches;
+        $this->view->unmodifiableMainBranches = $unmodifiableMainBranches;
+        $this->view->linkedBranches           = $linkedBranches;
+        $this->view->branchGroups             = $branchGroups;
+    }
+
+    /**
+     * dealOtherLinkProduct
+     *
+     * @param  object $project
+     * @param  object $branchGroups
+     * @param  array  $linkedBranches
+     *
+     * @access protected
+     * @return void
+     */
+    protected function dealOtherLinkProduct(object $project, object $branchGroups, array $linkedBranches): void
+    {
+        $linkedProducts = $this->product->getProducts($projectID, 'all', '', true, $linkedProductIdList);
+
+        if($this->config->systemMode == 'ALM')
+        {
+            $topProgramID           = $project->parent ? $this->program->getTopByPath($project->path) : 0;
+            $productsGroupByProgram = $this->product->getProductsGroupByProgram();
+
+            $currentProducts = array();
+            $otherProducts   = array();
+            foreach($productsGroupByProgram as $programID => $programProducts)
+            {
+                if($programID != $topProgramID)
+                {
+                    foreach($programProducts as $productID => $productName)
+                    {
+                        if(!empty($branchGroups[$productID]))
+                        {
+                            foreach($branchGroups[$productID] as $branchID => $branchName)
+                            {
+                                if(isset($linkedProducts[$productID]) and isset($linkedBranches[$productID][$branchID])) continue;
+
+                                $otherProducts["{$productID}_{$branchID}"] = $productName . '_' . $branchName;
+                            }
+                        }
+                        else
+                        {
+                            if(isset($linkedProducts[$productID])) continue;
+                            $otherProducts[$productID] = $productName;
+                        }
+                    }
+                }
+                else
+                {
+                    $currentProducts += $programProducts;
+                }
+            }
+            $this->view->currentProducts = $currentProducts;
+            $this->view->otherProducts   = $otherProducts;
+        }
+        $this->view->linkedProducts           = $linkedProducts;
+    }
+
+    /**
+     * buildMangedProductForm
+     *
+     * @param  int    $projectID
+     * @param  object $project
+     *
+     * @access protected
+     * @return void
+     */
+    protected function buildMangedProductForm(int $projectID, $project, $executions): void
+    {
+        $this->view->title                    = $this->lang->project->manageProducts . $this->lang->colon . $project->name;
+        $this->view->project                  = $project;
+        $this->view->executions               = $executions;
+        $this->view->branches                 = $this->project->getBranchesByProject($projectID);
+        $this->display();
     }
 }

@@ -83,20 +83,14 @@ fields:
     format: ""
   - field: editedBy
     note: "编辑者"
-    from: common.user.v1.yaml
-    use: user
+    range: ""
     prefix: ""
     postfix: ""
     loop: 0
     format: ""
   - field: editedDate
     note: "编辑日期"
-    from: common.date.v1.yaml
-    use: dateA
-    prefix: ""
-    postfix: ""
-    loop: 0
-    format: ""
+    range: ""
   - field: deleted
     note: "是否删除"
     range: 0

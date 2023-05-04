@@ -3,8 +3,7 @@ namespace zin;
 
 class btn extends wg
 {
-    static $defineProps = array
-    (
+    static $defineProps = array(
         'icon?:string',
         'text?:string',
         'square?:bool',
@@ -12,7 +11,7 @@ class btn extends wg
         'active?:bool',
         'url?:string',
         'target?:string',
-        'size?:string|number',
+        'size?:string|int',
         'trailingIcon?:string',
         'caret?:string|bool',
         'hint?:string',
@@ -80,8 +79,7 @@ class btn extends wg
         $trailingIcon  = $this->prop('trailingIcon');
         $onlyCaret     = empty($text) && !empty($caret) && empty($icon) && empty($trailingIcon);
 
-        $classList = array
-        (
+        $classList = array(
             'btn'       => true,
             'disabled'  => $this->prop('disabled'),
             'active'    => $this->prop('active'),

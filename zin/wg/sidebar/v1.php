@@ -3,7 +3,10 @@ namespace zin;
 
 class sidebar extends wg
 {
-    protected static $defineProps = 'side?:string="left",showToggle?:bool=true';
+    protected static $defineProps = array(
+        'side?:string="left"',
+        'showToggle?:bool=true'
+    );
 
     public static function getPageCSS()
     {

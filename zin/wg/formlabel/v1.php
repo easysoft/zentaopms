@@ -3,7 +3,11 @@ namespace zin;
 
 class formLabel extends wg
 {
-    protected static $defineProps = 'text?:string, required?:bool, for?: string';
+    protected static $defineProps = array(
+        'text?:string',
+        'required?:bool',
+        'for?:string'
+    );
 
     public function onAddChild($child)
     {

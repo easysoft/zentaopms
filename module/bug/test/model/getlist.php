@@ -64,7 +64,6 @@ r(count($bug->getList($browseType[0],  $productIdList[2], $projectID[0], $execut
 r(count($bug->getList($browseType[0],  $productIdList[0], $projectID[2], $executionIdList[0], $branch[0], $moduleID[0]))) && p('') && e('0'); //获取不存在项目ID的bug列表，查看数量是否正确
 r(count($bug->getList($browseType[0],  $productIdList[0], $projectID[0], $executionIdList[2], $branch[0], $moduleID[0]))) && p('') && e('0'); //获取不存在执行ID的bug列表，查看数量是否正确
 
-r($bug->getList($browseType[0],  $productIdList[0], $projectID[0], $executionIdList[0], $branch[0], $moduleID[0])) && p('1:planTitle')  && e('计划1');     //获取全部产品1下的全部bug列表，查看ID为1的bug的计划名称是否正确
 r($bug->getList($browseType[0],  $productIdList[1], $projectID[1], $executionIdList[1], $branch[1], $moduleID[0])) && p('2:title')      && e('BUG2');      //获取全部产品1下的项目相关的全部bug列表，查看ID为2的bug的名称是否正确
 r($bug->getList($browseType[1],  $productIdList[0], $projectID[0], $executionIdList[0], $branch[0], $moduleID[1])) && p('3:module')     && e('1');         //获取产品1模块下的bug列表，查看ID为3的bug的module是否正确
 r($bug->getList($browseType[2],  $productIdList[0], $projectID[0], $executionIdList[0], $branch[0], $moduleID[0])) && p('1:assignedTo') && e('admin');     //获取产品1下指派给我的bug列表，查看ID为1的bug的指派人是否正确

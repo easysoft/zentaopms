@@ -1020,40 +1020,37 @@ class productModel extends model
 
         /* Get modules. */
         $this->loadModel('tree');
-        if($this->app->tab == 'project')
+        if($this->app->tab == 'project' and $productID)
         {
-            if($productID)
+            $modules          = array();
+            $branchList       = $this->loadModel('branch')->getPairs($productID, '', $projectID);
+            $branchModuleList = $this->tree->getOptionMenu($productID, 'story', 0, array_keys($branchList));
+            foreach($branchModuleList as $branchID => $branchModules) $modules = array_merge($modules, $branchModules);
+        }
+        elseif($this->app->tab == 'project')
+        {
+            $moduleList  = array();
+            $modules     = array('/');
+            $branchGroup = $this->loadModel('execution')->getBranchByProduct(array_keys($products), $projectID, '');
+            foreach($products as $productID => $productName)
             {
-                $modules          = array();
-                $branchList       = $this->loadModel('branch')->getPairs($productID, '', $projectID);
-                $branchModuleList = $this->tree->getOptionMenu($productID, 'story', 0, array_keys($branchList));
-                foreach($branchModuleList as $branchID => $branchModules) $modules = array_merge($modules, $branchModules);
-            }
-            else
-            {
-                $moduleList  = array();
-                $modules     = array('/');
-                $branchGroup = $this->loadModel('execution')->getBranchByProduct(array_keys($products), $projectID, '');
-                foreach($products as $productID => $productName)
+                if(isset($branchGroup[$productID]))
                 {
-                    if(isset($branchGroup[$productID]))
+                    $branchModuleList = $this->tree->getOptionMenu($productID, 'story', 0, array_keys($branchGroup[$productID]));
+                    foreach($branchModuleList as $branchID => $branchModules)
                     {
-                        $branchModuleList = $this->tree->getOptionMenu($productID, 'story', 0, array_keys($branchGroup[$productID]));
-                        foreach($branchModuleList as $branchID => $branchModules)
-                        {
-                            if(is_array($branchModules)) $moduleList += $branchModules;
-                        }
+                        if(is_array($branchModules)) $moduleList += $branchModules;
                     }
-                    else
-                    {
-                        $moduleList = $this->tree->getOptionMenu($productID, 'story', 0, $branch);
-                    }
+                }
+                else
+                {
+                    $moduleList = $this->tree->getOptionMenu($productID, 'story', 0, $branch);
+                }
 
-                    foreach($moduleList as $moduleID => $moduleName)
-                    {
-                        if(empty($moduleID)) continue;
-                        $modules[$moduleID] = $productName . $moduleName;
-                    }
+                foreach($moduleList as $moduleID => $moduleName)
+                {
+                    if(empty($moduleID)) continue;
+                    $modules[$moduleID] = $productName . $moduleName;
                 }
             }
         }
@@ -1686,19 +1683,19 @@ class productModel extends model
         if(empty($products)) return array();
 
         /* Get stats data. */
-        $productKeys          = array_keys($products);
-        $products             = $this->productTao->getStatsProducts($productKeys,$programID, $orderBy, $pager);
+        $productIDs           = array_keys($products);
+        $products             = $this->productTao->getStatsProducts($productIDs,$programID, $orderBy, $pager);
         $finishClosedStory    = $this->productTao->getFinishClosedStoryTODO();
         $unclosedStory        = $this->productTao->getUnClosedStoryTODO();
-        $plans                = $this->productTao->getPlansTODO($productKeys);
-        $releases             = $this->productTao->getReleasesTODO($productKeys);
-        $bugs                 = $this->productTao->getBugsTODO($productKeys);
-        $unResolved           = $this->productTao->getUnResolvedTODO($productKeys);
-        $fixedBugs            = $this->productTao->getFixedBugsTODO($productKeys);
-        $closedBugs           = $this->productTao->getClosedBugsTODO($productKeys);
-        $thisWeekBugs         = $this->productTao->getThisWeekBugsTODO($productKeys);
-        $assignToNull         = $this->productTao->getAssignToNullTODO($productKeys);
-        list($stories, $reqs) = $this->productTao->getStatsStoriesAndRequirements($productKeys, $storyType);
+        $plans                = $this->productTao->getPlansTODO($productIDs);
+        $releases             = $this->productTao->getReleasesTODO($productIDs);
+        $bugs                 = $this->productTao->getBugsTODO($productIDs);
+        $unResolved           = $this->productTao->getUnResolvedTODO($productIDs);
+        $fixedBugs            = $this->productTao->getFixedBugsTODO($productIDs);
+        $closedBugs           = $this->productTao->getClosedBugsTODO($productIDs);
+        $thisWeekBugs         = $this->productTao->getThisWeekBugsTODO($productIDs);
+        $assignToNull         = $this->productTao->getAssignToNullTODO($productIDs);
+        list($stories, $reqs) = $this->productTao->getStatsStoriesAndRequirements($productIDs, $storyType);
 
         /* Render statistic result to each product. */
         $stats = array();
@@ -1863,39 +1860,35 @@ class productModel extends model
 
         $rateCount = 0;
         $allCount  = 0;
-        foreach($stories as $key => $story)
+        foreach($stories as $story)
         {
             if(!empty($story->type) && $story->type != $storyType) continue;
 
             $totalEstimate += $story->estimate;
+            $allCount ++;
+
             /* When the status is not closed or closedReason is done or postponed then add cases rate..*/
-            if(
-                empty($story->children) and
-                ($story->status != 'closed' or
-                ($story->status == 'closed' and ($story->closedReason == 'done' or $story->closedReason == 'postponed')))
-            )
+            if(empty($story->children))
             {
-                $storyIdList[] = $story->id;
-                $rateCount ++;
+                if($story->status != 'closed' or ($story->status == 'closed' and in_array($story->closedReason, ['done', 'postponed'])))
+                {
+                    $storyIdList[] = $story->id;
+                    $rateCount ++;
+                }
+
+                continue;
             }
 
-            $allCount ++;
-            if(!empty($story->children))
+            foreach($story->children as $child)
             {
-                foreach($story->children as $child)
-                {
-                    if($child->type != $storyType) continue;
+                if($child->type != $storyType) continue;
 
-                    if(
-                        $child->status != 'closed' or
-                        ($child->status == 'closed' and ($child->closedReason == 'done' or $child->closedReason == 'postponed'))
-                    )
-                    {
-                        $storyIdList[] = $child->id;
-                        $rateCount ++;
-                    }
-                    $allCount ++;
+                if($story->status != 'closed' or ($story->status == 'closed' and in_array($story->closedReason, ['done', 'postponed'])))
+                {
+                    $storyIdList[] = $child->id;
+                    $rateCount ++;
                 }
+                $allCount ++;
             }
         }
 
@@ -1907,103 +1900,6 @@ class productModel extends model
         if($storyType == 'story')       $storyCommon = $this->lang->SRCommon;
 
         return sprintf($this->lang->product->storySummary, $allCount,  $storyCommon, $totalEstimate, $rate * 100 . "%");
-    }
-
-    /**
-     * Statistics program data from statistics data of product.
-     *
-     * @param  array $productStats
-     * @access public
-     * @return array
-     */
-    public function statisticProgram(array $productStats): array
-    {
-        if(defined('TUTORIAL')) return $this->loadModel('tutorial')->getProductStats();
-
-        $productStructure = array();
-
-        foreach($productStats as $product)
-        {
-            $productStructure[$product->program][$product->line]['products'][$product->id] = $product;
-            if($product->line)
-            {
-                /* Line name. */
-                $productStructure[$product->program][$product->line]['lineName'] = $product->lineName;
-                $productStructure[$product->program][$product->line] = $this->statisticData('line', $productStructure, $product);
-            }
-
-            if($product->program)
-            {
-                /* Init vars. */
-                /* Program name. */
-                $productStructure[$product->program]['programName'] = $product->programName;
-                $productStructure[$product->program]['programPM']   = $product->programPM;
-                $productStructure[$product->program]['id']          = $product->program;
-                $productStructure[$product->program] = $this->statisticData('program', $productStructure, $product);
-            }
-        }
-
-        return $productStructure;
-    }
-
-    /**
-     * Statistic product data.
-     *
-     * @param  string $type
-     * @param  array  $productStructure
-     * @param  object $product
-     * @access public
-     * @return void
-     */
-    public function statisticData($type = 'program', $productStructure = array(), $product = null)
-    {
-        if(empty($productStructure)) return $productStructure;
-
-        /* Init vars. */
-        $data = $type == 'program' ? $productStructure[$product->program] : $productStructure[$product->program][$product->line];
-        foreach($this->config->product->statisticFields as $key => $fields)
-        {
-            /* Get the total number of requirements and stories. */
-            if(strpos('stories|requirements', $key) !== false)
-            {
-                $totalObjects = 0;
-                foreach($product->$key as $status => $number)
-                {
-                    if(isset($this->lang->story->statusList[$status])) $totalObjects += $number;
-                }
-
-                $fieldType = $key == 'stories' ? 'Stories' : 'Requirements';
-                if(!isset($data['total' . $fieldType])) $data['total' . $fieldType] = 0;
-                $data['total' . $fieldType] += $totalObjects;
-            }
-            elseif($key == 'bugs')
-            {
-                $fieldType = 'Bugs';
-            }
-
-            foreach($fields as $field)
-            {
-                if(!isset($data[$field])) $data[$field] = 0;
-
-                $status = $field;
-                if(strpos($field, 'Requirements') !== false or strpos($field, 'Stories') !== false or $field == 'unResolvedBugs')
-                {
-                    $length = strpos($field, $fieldType);
-                    $status = substr($field, 0, $length);
-                }
-
-                if(strpos('requirements|stories', $key) !== false)
-                {
-                    $objects = $product->$key;
-                    $data[$field] += $objects[$status];
-                }
-                else
-                {
-                    $data[$field] += $product->$status;
-                }
-            }
-        }
-        return $data;
     }
 
     /**
@@ -2300,18 +2196,21 @@ class productModel extends model
      *
      * Set menu.
      *
-     * @param int         $productID
-     * @param int|string  $branch
-     * @param int         $module
-     * @param string      $moduleType
-     * @param string      $extra
-     *
+     * @param  int         $productID
+     * @param  int|string  $branch
+     * @param  int         $module
+     * @param  string      $moduleType
+     * @param  string      $extra
      * @access public
      * @return void
      */
-    public function setMenu($productID = 0, $branch = '', $module = 0, $moduleType = '', $extra = '')
+    public function setMenu($productID = 0, $branch = '', $module = 0, $moduleType = '', $extra = ''): void
     {
-        if(!$this->app->user->admin and strpos(",{$this->app->user->view->products},", ",$productID,") === false and $productID != 0 and !defined('TUTORIAL')) return $this->accessDenied($this->lang->product->accessDenied);
+        if(!$this->app->user->admin and strpos(",{$this->app->user->view->products},", ",$productID,") === false and $productID != 0 and !defined('TUTORIAL'))
+        {
+            $this->accessDenied($this->lang->product->accessDenied);
+            return;
+        }
 
         $product = $this->getByID($productID);
 
