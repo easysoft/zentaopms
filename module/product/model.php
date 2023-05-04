@@ -283,7 +283,7 @@ class productModel extends model
             ->beginIF($programID)->andWhere('t1.program')->eq($programID)->fi()
             ->beginIF($line > 0)->andWhere('t1.line')->eq($line)->fi()
             ->beginIF(!$this->app->user->admin)->andWhere('t1.id')->in($this->app->user->view->products)->fi()
-            ->andWhere('t1.vision')->eq($this->config->vision)->fi()
+            ->andWhere("FIND_IN_SET('{$this->config->vision}', t1.vision)")
             ->beginIF($status == 'noclosed')->andWhere('t1.status')->ne('closed')->fi()
             ->beginIF(!in_array($status, array('all', 'noclosed', 'involved', 'review'), true))->andWhere('t1.status')->in($status)->fi()
             ->beginIF($status == 'involved')
@@ -341,7 +341,7 @@ class productModel extends model
             ->andWhere('t1.deleted')->eq(0)
             ->andWhere('t1.shadow')->eq(0)
             ->beginIF(!$this->app->user->admin)->andWhere('t1.id')->in($this->app->user->view->products)->fi()
-            ->andWhere('t1.vision')->eq($this->config->vision)->fi()
+            ->andWhere("FIND_IN_SET('{$this->config->vision}', t1.vision)")
             ->orderBy('t1.order_asc')
             ->fetchAll('id');
 
@@ -372,9 +372,9 @@ class productModel extends model
             ->beginIF(strpos($mode, 'all') === false)->andWhere('t1.deleted')->eq(0)->fi()
             ->beginIF($programID)->andWhere('t1.program')->eq($programID)->fi()
             ->beginIF(strpos($mode, 'noclosed') !== false)->andWhere('t1.status')->ne('closed')->fi()
-            ->beginIF(!$this->app->user->admin and $this->config->vision == 'rnd')->andWhere('t1.id')->in($views)->fi()
+            ->beginIF(!$this->app->user->admin and $this->config->vision != 'lite')->andWhere('t1.id')->in($views)->fi()
             ->beginIF($shadow !== 'all')->andWhere('t1.shadow')->eq((int)$shadow)->fi()
-            ->andWhere('t1.vision')->eq($this->config->vision)
+            ->andWhere("FIND_IN_SET('{$this->config->vision}', t1.vision)")
             ->orderBy("$orderBy, t2.order_asc, t1.line_desc, t1.order_asc")
             ->fetchPairs('id', 'name');
     }
@@ -415,7 +415,7 @@ class productModel extends model
             ->leftJoin(TABLE_PRODUCT)->alias('t3')->on('t1.product=t3.id')
             ->where('t3.deleted')->eq(0)
             ->beginIF(!$this->app->user->admin)->andWhere('t3.id')->in($this->app->user->view->products)->fi()
-            ->andWhere('t3.vision')->eq($this->config->vision)->fi()
+            ->andWhere("FIND_IN_SET('{$this->config->vision}', t3.vision)")
             ->beginIF($model != 'all')->andWhere('t2.model')->eq($model)
             ->fetchPairs('id', 'name');
     }
@@ -451,8 +451,8 @@ class productModel extends model
             ->where('1=1')
             ->beginIF($noDeleted)->andWhere('t2.deleted')->eq(0)->fi()
             ->beginIF(!empty($projectID))->andWhere('t1.project')->in($projectID)->fi()
-            ->beginIF(!$this->app->user->admin and $this->config->vision == 'rnd')->andWhere('t2.id')->in($views)->fi()
-            ->andWhere('t2.vision')->eq($this->config->vision)
+            ->beginIF(!$this->app->user->admin and $this->config->vision != 'lite')->andWhere('t2.id')->in($views)->fi()
+            ->andWhere("FIND_IN_SET('{$this->config->vision}', t2.vision)")
             ->beginIF(strpos($status, 'noclosed') !== false)->andWhere('t2.status')->ne('closed')->fi()
             ->orderBy($orderBy . 't2.order asc')
             ->fetchAll();
@@ -625,7 +625,7 @@ class productModel extends model
         $products = $this->dao->select("t1.id, t1.name, t1.program, t2.name AS programName")->from(TABLE_PRODUCT)->alias('t1')
             ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.program = t2.id')
             ->where('t1.deleted')->eq('0')
-            ->andWhere('t1.vision')->eq($this->config->vision)
+            ->andWhere("FIND_IN_SET('{$this->config->vision}', t1.vision)")
             ->andWhere('t1.shadow')->eq((int)0)
             ->andWhere('t1.status')->ne('closed')
             ->beginIF(!$this->app->user->admin)->andWhere('t1.id')->in($views)->fi()
@@ -2499,14 +2499,12 @@ class productModel extends model
         }
         elseif($module == 'feedback')
         {
-            if($this->config->vision == 'rnd')
-            {
-                return helper::createLink('feedback', 'admin', "browseType=byProduct&productID=%s");
-            }
-            elseif($this->config->vision == 'lite')
+            if($this->config->vision == 'lite')
             {
                 return helper::createLink('feedback', 'browse', "browseType=byProduct&productID=%s");
             }
+
+            return helper::createLink('feedback', 'admin', "browseType=byProduct&productID=%s");
         }
         elseif($module == 'ticket')
         {
