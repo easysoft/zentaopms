@@ -1,0 +1,44 @@
+title: date
+desc: 系统可用日期类型
+author: ly
+version: 1.0
+
+field: date
+instances:
+  - instance: datetime
+    fields:
+     - field: year
+       range: 2019-2022
+       postfix: "-"
+     - field: month
+       range: 1-12
+       format: "%02d"
+       postfix: "-"
+     - field: day
+       range: 1-27
+       format: "%02d"
+       postfix: " "
+     - field: hour
+       range: 0-23
+       format: "%02d"
+       postfix: ":"
+     - field: minute
+       range: 0-59
+       format: "%02d"
+       postfix: ":"
+     - field: second
+       range: 0-59
+       format: "%02d"
+
+  - instance: date
+    fields:
+     - field: year
+       range: 2019-2022
+       postfix: "-"
+     - field: month
+       range: 1-12
+       format: "%02d"
+       postfix: "-"
+     - field: day
+       range: 1-27
+       format: "%02d"

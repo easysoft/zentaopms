@@ -1,0 +1,36 @@
+title: table zt_userview
+desc: "可访问权限"
+author: automated export
+version: "1.0"
+fields:
+  - field: account
+    note: "用户名"
+    fields:
+      - field: account1
+        range: test{1000},dev{1000},td{1000},top{1000}
+      - field: account2
+        range: 1-1000,1-1000,1-1000,1-1000
+  - field: programs
+    note: "项目集"
+    range: 1-1000
+    prefix: ","
+    postfix: ""
+    format: ""
+  - field: products
+    note: "产品"
+    range: 1-1000
+    prefix: ","
+    postfix: ""
+    format: ""
+  - field: projects
+    note: "项目"
+    range: 1001-20000
+    prefix: ","
+    postfix: ""
+    format: ""
+  - field: sprints
+    note: "迭代"
+    range: 20001-50000
+    prefix: ","
+    postfix: ""
+    format: ""

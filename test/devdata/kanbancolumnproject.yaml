@@ -1,0 +1,27 @@
+title: table zt_kanbancolumn
+desc: ""
+author: automated export
+version: "1.0"
+fields:
+    - field: id
+      range: 401-100000
+    - field: parent
+      range: "0"
+    - field: type
+      range: [backlog,ready,develop,developing,developed,test,testing,tested,verified,released,closed,unconfirmed,confirmed,resolving,fixing,fixed,test,testing,tested,closed,wait,develop,developing,developed,pause,canceled,closed]
+    - field: region
+      range: 101-280{27}
+    - field: group
+      range: "0"
+    - field: name
+      range: Backlog,准备好,开发,进行中,完成,测试,进行中,完成,已验收,已发布,已关闭,待确认,已确认,解决中,进行中,完成,测试,测试中,测试完毕,已关闭,未开始,开发,研发中,研发完毕,已暂停,已取消,已关闭
+    - field: color
+      range: "#333"
+    - field: limit
+      range: ""
+    - field: order
+      range: "0"
+    - field: archived
+      range: "0"
+    - field: deleted
+      range: "0"

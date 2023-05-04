@@ -1,0 +1,51 @@
+title: user
+desc: 创建一些默认用户
+author: ly
+version: 1.0
+
+field: user
+instances:
+  - instance: empty
+    fields:
+     - field: user
+       range:
+  - instance: one
+    fields:
+     - field: user
+       range: admin,dev1,dev2,dev3,test1,test2,test3
+
+  - instance: two
+    fields:
+     - field: user1
+       range: admin
+       postfix: ","
+     - field: user2
+       range: dev1
+       postfix: ","
+
+  - instance: three
+    fields:
+     - field: user1
+       range: admin
+       postfix: ","
+     - field: user2
+       range: dev1
+       postfix: ","
+     - field: user3
+       range: dev2
+       postfix: ","
+
+  - instance: four
+    fields:
+     - field: user1
+       range: admin
+       postfix: ","
+     - field: user2
+       range: dev1
+       postfix: ","
+     - field: user3
+       range: dev2
+       postfix: ","
+     - field: user4
+       range: dev3
+       postfix: ","

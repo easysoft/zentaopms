@@ -1,0 +1,33 @@
+title: ip
+desc: IP地址
+author: 
+version: 1.0
+
+field: ip
+instances:
+  - instance: ipA
+    note: A类IP地址
+    prefix: 192.168.
+    postfix: ""
+    loop: 0
+    fields:
+     - field: part3
+       range: 0-254
+       postfix: .
+     - field: part4
+       range: 1-254
+
+  - instance: ipB
+    note: B类IP地址
+    prefix: 172.
+    postfix: ""
+    loop: 0
+    fields:
+      - field: part2
+        range: 16-31
+        postfix: .
+      - field: part3
+        range: 0-255
+        postfix: .
+      - field: part4
+        range: 0-255

@@ -1,0 +1,12 @@
+title: blockDefault
+author: Tian shujie 
+version: "1.0"
+fields:
+  - field: id
+    range: 1-10000
+  - field: account
+    fields:
+      - field: account1
+        range: admin{30},test{30},pm{30},pd{30},qd{30}
+      - field: account2
+        range: []{30},1{120}
