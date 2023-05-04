@@ -9,8 +9,14 @@ function initData()
     $project = zdTable('project');
     $project->id->range('11-19,101-109');
     $project->project->range('11-19');
-    $project->name->prefix("项目{9},迭代{9}")->range('11-19,101-109');
-    $project->code->prefix("project{9},execution{9}")->range('11-19,101-109');
+    $project->name->setFields(array(
+        array('field' => 'name1', 'range' => '项目{9},迭代{9}'),
+        array('field' => 'name2', 'range' => '11-19,101-109')
+    ));
+    $project->code->setFields(array(
+        array('field' => 'name1', 'range' => 'project{9},execution{9}'),
+        array('field' => 'name2', 'range' => '11-19,101-109')
+    ));
     $project->model->range("scrum{9},[]{9}");
     $project->auth->range("[]");
     $project->path->range("[]");
