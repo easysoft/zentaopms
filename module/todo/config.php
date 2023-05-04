@@ -4,7 +4,7 @@ helper::import(dirname(__FILE__) . 'config/form.php');
 helper::import(dirname(dirname(dirname(__FILE__))) . '/lib/date/date.class.php');
 
 $config->todo = new stdclass();
-$config->todo->batchCreate = 8;
+$config->todo->maxBatchCreate = 8;
 
 $config->todo->create = new stdclass();
 $config->todo->edit   = new stdclass();

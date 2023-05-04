@@ -38,33 +38,36 @@ class todoModel extends model
      * @param  object $todos
      * @param  object $formData
      * @access public
-     * @return array
+     * @return array|false
      */
-    public function batchCreate(object $todos, object $formData): array
+    public function batchCreate(object $todos, object $formData): array|false
     {
         $validTodos = array();
         $assignedTo = $this->app->user->account;
 
-        for($i = 0; $i < $this->config->todo->batchCreate; $i++)
+        for($loop = 0; $loop < $this->config->todo->maxBatchCreate; $loop++)
         {
             $isExist    = false;
-            $assignedTo = $todos->assignedTos[$i] == 'ditto' ? $assignedTo : $todos->assignedTos[$i];
+            $assignedTo = $todos->assignedTos[$loop] == 'ditto' ? $assignedTo : $todos->assignedTos[$loop];
             foreach($this->config->todo->objectList as $objects)
             {
-                if(isset($todos->{$objects}[$i + 1]))
+                if(isset($todos->{$objects}[$loop + 1]))
                 {
                     $isExist = true;
                     break;
                 }
             }
 
-            if($todos->names[$i] != '' || $isExist)
+            if($todos->names[$loop] != '' || $isExist)
             {
-                $validTodos[] = $this->todoTao->getValidsOfBatchCreate($todos, $formData, $i, $assignedTo);
+                $todo = $this->todoTao->getValidsOfBatchCreate($todos, $formData, $loop, $assignedTo);
+                if(dao::isError()) return false;
+
+                $validTodos[] = $todo;
             }
             else
             {
-                unset($todos->types[$i] ,$todos->pris[$i] ,$todos->names[$i] ,$todos->descs[$i] ,$todos->begins[$i], $todos->ends[$i]);
+                unset($todos->types[$loop], $todos->pris[$loop], $todos->names[$loop], $todos->descs[$loop], $todos->begins[$loop], $todos->ends[$loop]);
             }
         }
 
@@ -72,11 +75,7 @@ class todoModel extends model
         foreach($validTodos as $todo)
         {
             $todoID = $this->todoTao->insert($todo);
-            if(!$todoID)
-            {
-                echo js::error(dao::getError());
-                return print(js::reload('parent'));
-            }
+            if(!$todoID) return false;
 
             $todoIDList[] = $todoID;
             $this->loadModel('score')->create('todo', 'create', $todoID);
