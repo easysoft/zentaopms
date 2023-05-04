@@ -5503,7 +5503,7 @@ class storyModel extends model
                     $stories[$id]->cases  = $this->loadModel('testcase')->getStoryCases($id);
                     $stories[$id]->bugs   = $this->loadModel('bug')->getStoryBugs($id);
                     $stories[$id]->tasks  = $this->loadModel('task')->getStoryTasks($id);
-                    if($this->config->edition == 'max')
+                    if($this->config->edition== 'max' or $this->config->edition == 'ipd')
                     {
                         $stories[$id]->designs   = $this->dao->select('id, name')->from(TABLE_DESIGN)
                             ->where('story')->eq($id)
@@ -5577,7 +5577,7 @@ class storyModel extends model
                 $stories[$id]->cases  = $this->loadModel('testcase')->getStoryCases($id);
                 $stories[$id]->bugs   = $this->loadModel('bug')->getStoryBugs($id);
                 $stories[$id]->tasks  = $this->loadModel('task')->getStoryTasks($id, 0, $projectID);
-                if($this->config->edition == 'max')
+                if($this->config->edition== 'max' or $this->config->edition == 'ipd')
                 {
                     $stories[$id]->designs   = $this->dao->select('id, name')->from(TABLE_DESIGN)
                         ->where('story')->eq($id)
@@ -5621,7 +5621,7 @@ class storyModel extends model
             $track[$id]->bug   = $this->loadModel('bug')->getStoryBugs($id);
             $track[$id]->story = $this->getByID($id);
             $track[$id]->task  = $this->loadModel('task')->getStoryTasks($id);
-            if($this->config->edition == 'max')
+            if($this->config->edition== 'max' or $this->config->edition == 'ipd')
             {
                 $track[$id]->design   = $this->dao->select('id, name')->from(TABLE_DESIGN)
                     ->where('story')->eq($id)

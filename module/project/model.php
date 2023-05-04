@@ -3017,7 +3017,7 @@ class projectModel extends model
     public function checkCanChangeModel($projectID, $model)
     {
         $checkList = $this->config->project->checkList->$model;
-        if($this->config->edition == 'max') $checkList = $this->config->project->maxCheckList->$model;
+        if($this->config->edition== 'max' or $this->config->edition == 'ipd') $checkList = $this->config->project->maxCheckList->$model;
         foreach($checkList as $module)
         {
             if($module == '') continue;

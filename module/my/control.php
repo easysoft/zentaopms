@@ -980,7 +980,7 @@ EOF;
         }
 
         $this->view->flows = array();
-        if($this->config->edition == 'max')
+        if($this->config->edition== 'max' or $this->config->edition == 'ipd')
         {
             $this->app->loadLang('approval');
             $this->view->flows = $this->dao->select('module,name')->from(TABLE_WORKFLOW)->where('buildin')->eq(0)->fetchPairs('module', 'name');
