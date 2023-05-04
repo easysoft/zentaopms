@@ -1,0 +1,89 @@
+title: table zt_weeklyreport
+desc: ""
+author: automated export
+version: "1.0"
+fields:
+  - field: id
+    range: 1-10000
+    note: ""
+    prefix: ""
+    postfix: ""
+    loop: 0
+    loopfix: ""
+    format: ""
+  - field: project
+    range: 41-50
+    note: ""
+    prefix: ""
+    postfix: ""
+    loop: 0
+    loopfix: ""
+    format: ""
+  - field: weekStart
+    note: ""
+    range: ""
+    prefix: "2022-05-02"
+    postfix: ""
+  - field: pv
+    range: 1-10
+    note: ""
+    prefix: ""
+    postfix: ""
+    loop: 0
+    loopfix: ""
+    format: ""
+  - field: ev
+    note: ""
+    range: 1-10
+    prefix: ""
+    postfix: ""
+    loop: 0
+    loopfix: ""
+    format: ""
+  - field: ac
+    note: ""
+    range: 2-10
+    prefix: ""
+    postfix: ""
+    loop: 0
+    loopfix: ""
+    format: ""
+  - field: sv
+    note: ""
+    range: 3-10
+    prefix: ""
+    postfix: ""
+    loop: 0
+    loopfix: ""
+    format: ""
+  - field: cv
+    note: ""
+    range: 4-10
+    prefix: ""
+    postfix: ""
+    loop: 0
+    loopfix: ""
+    format: ""
+  - field: staff
+    note: ""
+    range: ""
+    prefix: ""
+    postfix: ""
+    loop: 0
+    loopfix: ""
+    format: ""
+  - field: progress
+    note: ""
+    range: 1-10
+    prefix: "测试"
+    postfix: ""
+    loop: 0
+    loopfix: ""
+    format: ""
+  - field: workload
+    note: ""
+    prefix: ""
+    postfix: ""
+    loop: 0
+    loopfix: ""
+    format: ""

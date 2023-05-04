@@ -1,0 +1,87 @@
+title: table zt_project
+author: Zhu Jinyong
+version: "1.0"
+fields:
+  - field: id
+    range: 731-750
+  - field: project
+    range: 0
+  - field: model
+    range: scrum
+  - field: name
+    note: "名称"
+    fields:
+    - field: name1
+      range: '独立项目'
+    - field: name2
+      range: 1-10000
+  - field: type
+    range: project
+  - field: status
+    range: wait
+  - field: lifetime
+    range:
+  - field: budget
+    range: 0
+  - field: budgetUnit
+    range: CNY,USD
+  - field: attribute
+    note: "Only stage has attribute"
+    range:
+  - field: percent
+    range: 1-100
+  - field: milestone
+    note: "Is it milestone"
+    range: 0
+  - field: output
+    note: "Output document"
+    range:
+  - field: auth
+    note: "Only project has auth"
+    range: "extend"
+  - field: parent
+    range: 0
+  - field: path
+    fields:
+      - field: path1
+        prefix: ","
+        range: 731-750
+      - field: path2
+        range: []
+        postfix: ","
+      - field: path3
+        range: []
+        postfix: ","
+  - field: grade
+    range: "1"
+  - field: code
+    range: 101-1000
+    prefix: "project"
+  - field: begin
+    range: "(-2M)-(+M):1D"
+    type: timestamp
+    format: "YY/MM/DD"
+    postfix: "\t"
+  - field: end
+    range: "(+1w)-(+2M):1D"
+    type: timestamp
+    format: "YY/MM/DD"
+    postfix: "\t"
+  - field: PO
+    range:
+  - field: PM
+    range:
+  - field: QD
+    range:
+  - field: RD
+    range:
+  - field: team
+    range:
+  - field: acl
+    range: open,private,program
+  - field: order
+    range: 5-10000:5
+  - field: openedVersion
+    range: "16.5"
+  - field: deleted
+    range: 0

@@ -1,6 +1,5 @@
 <?php
 declare(strict_types=1);
-
 class todoZen extends todo
 {
     /**
@@ -33,6 +32,7 @@ class todoZen extends todo
     protected function buildBatchCreateView(string $date)
     {
         /* Set Custom. */
+        $customFields = array();
         foreach(explode(',', $this->config->todo->list->customBatchCreateFields) as $field) $customFields[$field] = $this->lang->todo->$field;
 
         $this->view->customFields = $customFields;
@@ -89,8 +89,8 @@ class todoZen extends todo
     }
 
     /**
-     * 处理请求数据
-     * Processing request data.
+     * 处理创建待办的请求数据
+     * Processing request data of create.
      *
      * @param  object $formData
      * @access protected
@@ -105,7 +105,7 @@ class todoZen extends todo
         $objectID = 0;
         if($hasObject && $objectType) $objectID = $rowData->uid ? $rowData->$objectType : $rowData->objectID;
 
-        $data = $formData->add('account', $this->app->user->account)
+        return $formData->add('account', $this->app->user->account)
             ->setDefault('objectID', 0)
             ->setDefault('vision', $this->config->vision)
             ->setDefault('assignedTo', $this->app->user->account)
@@ -121,8 +121,6 @@ class todoZen extends todo
             ->stripTags($this->config->todo->editor->create['id'], $this->config->allowedTags)
             ->remove(implode(',', $this->config->todo->moduleList) . ',uid')
             ->get();
-
-        return $data;
     }
 
     /**
@@ -149,6 +147,19 @@ class todoZen extends todo
         if($date == date('Ymd')) $date = 'today';
 
         return $todo;
+    }
+
+    /**
+     * 处理批量创建待办的请求数据。
+     * Processing request data of batch create todo.
+     *
+     * @param  object $formData
+     * @access protected
+     * @return object
+     */
+    protected function beforeBatchCreate(object $formData): object
+    {
+        return $formData->get();
     }
 
     /**
@@ -244,8 +255,8 @@ class todoZen extends todo
 
         list($editedTodos, $objectIdList) = $this->getBatchEditInitTodos($formData, $type, $account, $status);
 
-        $bugs      = $this->bug->getUserBugPairs($account, true, 0, '', '', isset($objectIdList['bug']) ? $objectIdList['bug'] : '');
-        $tasks     = $this->task->getUserTaskPairs($account, 'wait,doing', '', isset($objectIdList['task']) ? $objectIdList['task'] : '');
+        $bugs      = $this->loadModel('bug')->getUserBugPairs($account, true, 0, '', '', isset($objectIdList['bug']) ? $objectIdList['bug'] : '');
+        $tasks     = $this->loadModel('task')->getUserTaskPairs($account, 'wait,doing', '', isset($objectIdList['task']) ? $objectIdList['task'] : '');
         $storys    = $this->loadModel('story')->getUserStoryPairs($account, 10, 'story', '', isset($objectIdList['story']) ? $objectIdList['story'] : '');
         $users     = $this->loadModel('user')->getPairs('noclosed|nodeleted|noempty');
         $testtasks = $this->loadModel('testtask')->getUserTestTaskPairs($account);

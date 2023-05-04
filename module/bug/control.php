@@ -328,7 +328,7 @@ class bug extends control
         {
             $response['result'] = 'success';
 
-            $formData  = form::data($this->config->bug->createform);
+            $formData  = form::data($this->config->bug->form->create);
             $bug       = $this->bugZen->beforeCreate($formData);
             $bugResult = $this->bugZen->doCreate($bug);
 
@@ -1875,26 +1875,27 @@ class bug extends control
     }
 
     /**
+     * 关闭一个bug。
      * Close a bug.
      *
-     * @param  int    $bugID
+     * @param  string $bugID
      * @param  string $extra
      * @param  string $from taskkanban
      * @access public
      * @return void
      */
-    public function close($bugID, $extra = '', $from = '')
+    public function close(string $bugID, string $extra = '', string $from = '')
     {
-        $bug = $this->bug->getById($bugID);
+        $oldBug = $this->bug->getByID((int)$bugID);
+
         if(!empty($_POST))
         {
-            $changes = $this->bug->close($bugID, $extra);
+            $data = form::data($this->config->bug->form->close);
+
+            $bug = $this->bugZen->prepareCloseExtras($data, $bugID);
+            $this->bug->close($bug, $extra);
             if(dao::isError()) return print(js::error(dao::getError()));
-
-            $actionID = $this->action->create('bug', $bugID, 'Closed', $this->post->comment);
-            $this->action->logHistory($actionID, $changes);
-
-            $this->dao->update(TABLE_BUG)->set('assignedTo')->eq('closed')->where('id')->eq((int)$bugID)->exec();
+            $this->bug->afterClose($bug, $oldBug);
 
             $this->executeHooks($bugID);
 
@@ -1902,21 +1903,21 @@ class bug extends control
             parse_str($extra, $output);
             if(isonlybody())
             {
-                $execution    = $this->loadModel('execution')->getByID($bug->execution);
-                $execLaneType = $this->session->execLaneType ? $this->session->execLaneType : 'all';
-                $execGroupBy  = $this->session->execGroupBy ? $this->session->execGroupBy : 'default';
+                $execution    = $this->loadModel('execution')->getByID($oldBug->execution);
+                $execLaneType = $this->session->execLaneType ?: 'all';
+                $execGroupBy  = $this->session->execGroupBy ?: 'default';
                 if($this->app->tab == 'execution' and isset($execution->type) and $execution->type == 'kanban')
                 {
-                    $rdSearchValue = $this->session->rdSearchValue ? $this->session->rdSearchValue : '';
+                    $rdSearchValue = $this->session->rdSearchValue ?: '';
                     $regionID      = !empty($output['regionID']) ? $output['regionID'] : 0;
-                    $kanbanData    = $this->loadModel('kanban')->getRDKanban($bug->execution, $execLaneType, 'id_desc', $regionID, $execGroupBy, $rdSearchValue);
+                    $kanbanData    = $this->loadModel('kanban')->getRDKanban($oldBug->execution, $execLaneType, 'id_desc', $regionID, $execGroupBy, $rdSearchValue);
                     $kanbanData    = json_encode($kanbanData);
                     return print(js::closeModal('parent.parent', '', "parent.parent.updateKanban($kanbanData, $regionID)"));
                 }
                 elseif($from == 'taskkanban')
                 {
                     $taskSearchValue = $this->session->taskSearchValue ? $this->session->taskSearchValue : '';
-                    $kanbanData      = $this->loadModel('kanban')->getExecutionKanban($bug->execution, $execLaneType, $execGroupBy, $taskSearchValue);
+                    $kanbanData      = $this->loadModel('kanban')->getExecutionKanban($oldBug->execution, $execLaneType, $execGroupBy, $taskSearchValue);
                     $kanbanType      = $execLaneType == 'all' ? 'bug' : key($kanbanData);
                     $kanbanData      = $kanbanData[$kanbanType];
                     $kanbanData      = json_encode($kanbanData);
@@ -1937,18 +1938,8 @@ class bug extends control
             }
         }
 
-        $productID = $bug->product;
-        $this->bug->checkBugExecutionPriv($bug);
-        $this->qa->setMenu($this->products, $productID, $bug->branch);
-
-        $this->view->title      = $this->products[$productID] . $this->lang->colon . $this->lang->bug->close;
-        $this->view->position[] = html::a($this->createLink('bug', 'browse', "productID=$productID"), $this->products[$productID]);
-        $this->view->position[] = $this->lang->bug->close;
-
-        $this->view->bug     = $bug;
-        $this->view->users   = $this->user->getPairs('noletter');
-        $this->view->actions = $this->action->getList('bug', $bugID);
-        $this->display();
+        $this->bug->checkBugExecutionPriv($oldBug);
+        $this->bugZen->buildCloseForm($oldBug);
     }
 
     /**

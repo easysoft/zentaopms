@@ -236,12 +236,12 @@ class projectModel extends model
      *
      * @param  string    $status
      * @param  string    $orderBy
+     * @param  bool      $involved
      * @param  int       $pager
-     * @param  int       $involved
      * @access public
      * @return array
      */
-    public function getList($status = 'undone', $orderBy = 'order_desc', $pager = null, $involved = 0)
+    public function getList(string $status = 'undone', string $orderBy = 'order_desc', bool $involved = false, object|null $pager = null): array
     {
         /* Init vars. */
         $projects = $this->projectTao->fetchProjectList($status, $orderBy, $involved, $pager);
@@ -249,15 +249,7 @@ class projectModel extends model
 
         $projectIdList = array_keys($projects);
         $teams         = $this->projectTao->fetchMemberCountByIdList($projectIdList);
-
-        $estimates = $this->dao->select("t2.project as project, sum(estimate) as estimate")->from(TABLE_TASK)->alias('t1')
-            ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.execution = t2.id')
-            ->where('t1.parent')->lt(1)
-            ->andWhere('t2.project')->in($projectIdList)
-            ->andWhere('t1.deleted')->eq(0)
-            ->andWhere('t2.deleted')->eq(0)
-            ->groupBy('t2.project')
-            ->fetchAll('project');
+        $estimates     = $this->projectTao->fetchTaskEstimateByIdList($projectIdList);
 
         $this->app->loadClass('pager', true);
         foreach($projects as $projectID => $project)
@@ -1390,6 +1382,7 @@ class projectModel extends model
 
         if(!empty($executionsCount) and $oldProject->multiple) $this->checkDatesValidByProject($projectID ,$project);
         $this->projectTao->doUpdate($projectID, $project, $oldProject);
+
         if(dao::isError()) return false;
 
         if(!$oldProject->hasProduct and ($oldProject->name != $project->name or $oldProject->parent != $project->parent or $oldProject->acl != $project->acl)) $this->updateShadowProduct($project);
@@ -1419,6 +1412,7 @@ class projectModel extends model
 
             $teamMembers[$account] = $member;
         }
+
         if($oldProject->model == 'kanban')
         {
             $this->dao->delete()->from(TABLE_TEAM)
@@ -3056,6 +3050,7 @@ class projectModel extends model
         {
             foreach($plans as $planList)
             {
+                if(is_array($planList))
                 foreach($planList as $planID) $newPlans[$planID] = $planID;
             }
         }

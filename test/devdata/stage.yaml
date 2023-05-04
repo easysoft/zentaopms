@@ -1,0 +1,26 @@
+title: table zt_stage
+desc: ""
+author: automated export
+version: "1.0"
+fields:
+    - field: id
+      range: 1-6
+    - field: name
+      range: 需求,设计,开发,测试,发布,总结评审
+    - field: percent
+      range: 10{2},50,15,10,5
+    - field: type
+      range: request,design,dev,qa,release,review
+    - field: createdBy
+      range: admin
+    - field: createdDate
+      range: ""
+      prefix: "2018-02-12 12:00:00"
+      postfix: ""
+    - field: editedBy
+      range: admin
+    - field: editedDate
+      range: ""
+      prefix: "2020-02-12 13:50:27"
+    - field: deleted
+      range: "0"

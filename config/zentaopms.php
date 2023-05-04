@@ -377,6 +377,12 @@ define('TABLE_PRIVLANG',     '`' . $config->db->prefix . 'privlang`');
 define('TABLE_PRIVMANAGER',  '`' . $config->db->prefix . 'privmanager`');
 define('TABLE_PRIVRELATION', '`' . $config->db->prefix . 'privrelation`');
 
+define('TABLE_ISSUE',       '`' . $config->db->prefix . 'issue`');
+define('TABLE_RISK',        '`' . $config->db->prefix . 'risk`');
+define('TABLE_OPPORTUNITY', '`' . $config->db->prefix . 'opportunity`');
+define('TABLE_REVIEW',      '`' . $config->db->prefix . 'review`');
+
+
 $config->objectTables['product']      = TABLE_PRODUCT;
 $config->objectTables['productplan']  = TABLE_PRODUCTPLAN;
 $config->objectTables['story']        = TABLE_STORY;

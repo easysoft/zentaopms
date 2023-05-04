@@ -7,7 +7,7 @@
  */
 function toggleDateTodo(switcher)
 {
-    $('#date').prop('disabled', switcher.checked);
+    $('.date').prop('disabled', switcher.checked);
 }
 
 /**
@@ -47,7 +47,7 @@ function loadList(type, id, objectID)
             }
             else
             {
-                $(divClass).html("<select id="+ type +" class='form-control'></select>").find('select').chosen();
+                $(divClass).find('#nameInputBox').html("<select id="+ type +" class='form-control'></select>").find('select').chosen();
             }
         });
     }

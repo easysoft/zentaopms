@@ -1,3 +1,5 @@
+selectNext();
+
 /**
  * 切换周期类型，用于展示周期类型的交互。
  * Toggle cycle, used to display the interaction of cycle.
@@ -9,7 +11,7 @@ function toggleCycle(switcher)
 {
     if(switcher.checked)
     {
-        $('#date').attr('disabled','disabled');
+        $('.date').attr('disabled','disabled');
         $('.cycle-config').removeClass('hidden');
         $('#switchDate').closest('.checkbox-primary').addClass('hidden');
         $('#type').closest('.form-row').addClass('hidden');
@@ -18,7 +20,7 @@ function toggleCycle(switcher)
     }
     else
     {
-        $('#date').removeAttr('disabled');
+        $('.date').removeAttr('disabled');
         $('.cycle-config').addClass('hidden');
         $('#switchDate').closest('.checkbox-primary').removeClass('hidden');
         $('#type').closest('.form-row').removeClass('hidden');
@@ -54,6 +56,13 @@ function toggleNavTabs(tab)
     if($(tab).data('type'))$('input[id*=type][id*=config]').val($(tab).data('type'));
 }
 
+/**
+ * 更改待办类型。
+ * Change todo type.
+ *
+ * @param  object typeSelect
+ * @return void
+ */
 function changeType(typeSelect)
 {
   loadList($(typeSelect).find('select').val(), '');

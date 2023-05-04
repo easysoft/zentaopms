@@ -517,18 +517,18 @@ class projectTao extends projectModel
     }
 
     /**
-     * 将旧的产品替换成新的
-     * replace oldProduct
+     * 查找项目执行下关联的产品
+     * Get linked products with execution under the project.
      *
      * @param  array $executionIDs
      *
      * @access protected
-     * @return bool
+     * @return array
      */
-    protected function replaceOldProduct(array $executionIDs): bool
+    protected function getExecutionProductGroup(array $executionIDs): array
     {
         $oldExecutionProducts = $this->dao->select('project,product')->from(TABLE_PROJECTPRODUCT)->where('project')->in($executionIDs)->fetchGroup('project', 'product');
-        return !dao::isError();
+        return $oldExecutionProducts;
     }
 
     /**
@@ -537,12 +537,12 @@ class projectTao extends projectModel
      *
      * @param  string $status
      * @param  string $orderBy
-     * @param  int    $involved
+     * @param  bool   $involved
      * @param  object $pager
      * @access protected
      * @return array
      */
-    protected function fetchProjectList(string $status, string $orderBy, int $involved, object|null $pager): array
+    protected function fetchProjectList(string $status, string $orderBy, bool $involved, object|null $pager): array
     {
         return $this->dao->select('DISTINCT t1.*')->from(TABLE_PROJECT)->alias('t1')
             ->leftJoin(TABLE_TEAM)->alias('t2')->on('t1.id=t2.root')
@@ -588,5 +588,25 @@ class projectTao extends projectModel
             ->andWhere('t2.deleted')->eq(0)
             ->groupBy('t1.root')
             ->fetchAll('root');
+    }
+
+    /**
+     * 根据项目ID列表查询任务的总预计工时。
+     * Get task all estimate by project id list.
+     *
+     * @param  array $projectIdList
+     * @access protected
+     * @return array
+     */
+    protected function fetchTaskEstimateByIdList(array $projectIdList): array
+    {
+        return $this->dao->select("t2.project as project, sum(estimate) as estimate")->from(TABLE_TASK)->alias('t1')
+            ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.execution = t2.id')
+            ->where('t1.parent')->lt(1)
+            ->andWhere('t2.project')->in($projectIdList)
+            ->andWhere('t1.deleted')->eq(0)
+            ->andWhere('t2.deleted')->eq(0)
+            ->groupBy('t2.project')
+            ->fetchAll('project');
     }
 }

@@ -4,19 +4,28 @@ author: xushenjie
 version: 1.0.0
 
 fields:
-  - field: id
-    range: 1
   - field: account
     range: 'admin'
   - field: name
-    range: '待办'
+    range: 1-5
+    prefix: '待办'
   - field: date
-    range: '`2023-04-23`'
+    range: 1-9
+    prefix: '2023-04-2'
   - field: type
     range: 'custom'
   - field: begin
-    range: '0800'
+    range: 1000-1100
   - field: end
-    range: '1700'
+    range: 1200-1300
   - field: assignedTo
+    range: 'admin'
+  - field: desc
+    range: 1-5
+    prefix: '待办描述'
+  - field: status
+    range: 'wait,doing,doing,doing,wait'
+  - field: objectID
+    range: 0
+  - field: assignedBy
     range: 'admin'

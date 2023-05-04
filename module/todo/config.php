@@ -51,6 +51,15 @@ $config->todo->sessionUri['taskList']     = 'execution';
 $config->todo->sessionUri['storyList']    = 'product';
 $config->todo->sessionUri['testtaskList'] = 'qa';
 
+$config->todo->project = array();
+$config->todo->project['task']        = TABLE_TASK;
+$config->todo->project['bug']         = TABLE_BUG;
+$config->todo->project['issue']       = TABLE_ISSUE;
+$config->todo->project['risk']        = TABLE_RISK;
+$config->todo->project['opportunity'] = TABLE_OPPORTUNITY;
+$config->todo->project['review']      = TABLE_REVIEW;
+$config->todo->project['testtask']    = TABLE_TESTTASK;
+
 $config->todo->dateRange = array();
 $config->todo->dateRange['all']             = array('begin' => '1970-01-01',  'end' => '2109-01-01');
 $config->todo->dateRange['assignedtoother'] = array('begin' => '1970-01-01',  'end' => '2109-01-01');

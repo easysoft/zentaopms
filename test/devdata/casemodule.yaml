@@ -1,0 +1,79 @@
+title: table zt_module
+desc: "模块"
+author: automated export
+version: "1.0"
+fields:
+  - field: id
+    note: "ID"
+    range: 3921-4020
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: root
+    note: "根目录"
+    range: 1-100
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: branch
+    note: "分支"
+    range: 0
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: name
+    note: "模块名称"
+    range: 1-10000
+    prefix: "用例模块"
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: parent
+    note: "父ID"
+    range: 0
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: path
+    note: "ID路径"
+    fields:
+      - field: path1
+        range: 3921-4020
+        prefix: ","
+        postfix: ","
+      - field: path2
+        range: []
+        postfix: ""
+    format: ""
+  - field: grade
+    note: "等级"
+    range: 1
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: order
+    note: "排序"
+    range: 10-100:10
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: type
+    note: "对象类型"
+    range: case
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: deleted
+    note: "是否删除"
+    range: 0
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""

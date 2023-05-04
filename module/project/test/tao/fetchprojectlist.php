@@ -55,5 +55,5 @@ $projectTester = new Project();
 r($projectTester->testFetchProjectList($statusList[0]))        && p()          && e('0');         // 查询状态为空的项目
 r(count($projectTester->testFetchProjectList($statusList[1]))) && p()          && e('9');         // 获取所有项目数量
 r($projectTester->testFetchProjectList($statusList[2]))        && p('11:code') && e('project11'); // 查询未完成的第一个项目的code
-r($projectTester->testFetchProjectList($statusList[3], 1))     && p('12:name') && e('项目12');    // 获取我参与的一个项目的项目名
+r($projectTester->testFetchProjectList($statusList[3], true))  && p('12:name') && e('项目12');    // 获取我参与的一个项目的项目名
 r($projectTester->testFetchProjectList($statusList[4]))        && p()          && e('0');         // 获取错误类型的项目

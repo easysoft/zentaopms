@@ -24,8 +24,7 @@ cid=1
 global $tester;
 $tester->loadModel('todo');
 
-zdTable('todo')->config('create')->gen(1);
-
+zdTable('todo')->config('create')->gen(5);
 $today = date('Y-m-d');
 
 $formData = new stdClass;
@@ -33,13 +32,15 @@ $formData->rawdata = new stdclass;
 $formData->rawdata->uid = '';
 
 $todo = new stdclass;
-$todo->name       = 'TODO Create Test';
-$todo->account    = 'admin';
-$todo->date       = date('Y-m-d');
-$todo->type       = 'custom';
-$todo->begin      = '0800';
-$todo->end        = '1700';
-$todo->assignedTo = 'admin';
+$todo->name         = 'TODO Create Test';
+$todo->account      = 'admin';
+$todo->date         = $today;
+$todo->type         = 'custom';
+$todo->begin        = '0800';
+$todo->end          = '1700';
+$todo->assignedTo   = 'admin';
+$todo->assignedBy   = 'admin';
+$todo->assignedDate = $today;
 
 $todoWithoutName = clone $todo;
 $todoWithoutName->name = '';
@@ -58,5 +59,5 @@ $todoWithCycle->objectID = 0;
 $todoTest = new todoTest();
 r($todoTest->createTest($todoWithoutName, $formData))    && p() && e('0');
 r($todoTest->createTest($todoInvalidEnd, $formData))     && p() && e('0');
-r($todoTest->createTest($todo, $formData))               && p() && e('2');
-r($todoTest->createTest($todoWithCycle, $formData))      && p() && e('3');
+r($todoTest->createTest($todo, $formData))               && p() && e('6');
+r($todoTest->createTest($todoWithCycle, $formData))      && p() && e('7');

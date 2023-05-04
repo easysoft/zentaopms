@@ -1,0 +1,32 @@
+title: zt_block
+author: Tian shujie
+version: "1.0"
+fields:
+  - field: id
+    range: 1-10000
+  - field: account
+    fields:
+      - field: account1
+        range:
+      - field: account2
+        range:
+  - field: module
+    range: my{16},product{5},project{5},qa{4}
+  - field: type
+    range: []{21},scrum{5},[]{4}
+  - field: title
+    range: [欢迎,最新动态,我的贡献,待处理,我的待办,项目统计,我近期参与的项目,项目人力投入,项目列表,版本列表,执行统计,执行总览,执行列表,任务列表,产品统计,测试统计,产品统计,未关闭的产品,指派给我的软件需求,发布列表,计划列表,项目概况,迭代列表,待测版本,迭代总览,最新动态,测试统计,由我创建的Bug,指派给我的用例,所有版本列表]
+  - field: source
+    range: []{4},todo,project{4},execution{5},product,qa,product{5},project{5},qa{4}
+  - field: block
+    range: [welcome,dynamic,contribute,assigntome,list,statistic,recentproject,projectteam,project,build,statistic,overview,list,task,statistic,statistic,statistic,list,story,release,plan,scrumoverview,scrumlist,scrumtest,sprint,projectdynamic,statistic,bug,case,testtask]
+  - field: params
+    range: []{3},`{"todoCount":"20","taskCount":"20","bugCount":"20","riskCount":"20","issueCount":"20","storyCount":"20","meetingCount":"20"}`,`{"count":"10"}`,`{"type":"undone","count":"15"}`, , ,`{"orderBy":"id_desc","count":"15"}`,`{"count":"20"}`,`{"type":"undone","count":"20"}`, ,`{"type":"doing","count":"20"}`,`{"type":"assignedTo","count":"20","orderBy":"id_desc"}`,`{"type":"all","count":"20"}`,`{"type":"all","count":"20"}`,`{"type":"closed","count":"20"}`,`{"count":"15","type":"noclosed"}`,`{"count":"15","orderBy":"id_desc","type":"assignedTo"}`,`{"count":"10"}`,`{"count":"10"}`,`{"count":"10"}`,`{"type":"involved","count":"10"}`,`{"type":"wait","count":"15"}`, , ,`{"type":"noclosed","count":"20"}`,`{"count":"15","orderBy":"id_asc","type":"openedBy"}`,`{"count":"15","orderBy":"pri_asc","type":"assigntome"}`,`{"count":"15","orderBy":"id_desc","type":"all"}`
+  - field: order
+    range: 1-16,1-5,1-5,1-4
+  - field: grid
+    range: 8{2},4,8,4{3},8{4},4,8{5},4{3},8,4{2},8{4},4{2},8
+  - field: height
+    range: 0 
+  - field: hidden
+    range: 0 

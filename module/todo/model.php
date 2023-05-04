@@ -1,6 +1,5 @@
 <?php
 declare(strict_types=1);
-
 /**
  * The model file of todo module of ZenTaoPMS.
  *
@@ -33,18 +32,19 @@ class todoModel extends model
     }
 
     /**
-     * Create batch todo
+     * 批量创建待办。
+     * Batch create toto.
      *
+     * @param  object $todos
+     * @param  object $formData
      * @access public
      * @return array
      */
-    public function batchCreate()
+    public function batchCreate(object $todos, object $formData): array
     {
-        $todos = fixer::input('post')->get();
-
         $validTodos = array();
-        $now        = helper::now();
         $assignedTo = $this->app->user->account;
+
         for($i = 0; $i < $this->config->todo->batchCreate; $i++)
         {
             $isExist    = false;
@@ -60,66 +60,24 @@ class todoModel extends model
 
             if($todos->names[$i] != '' || $isExist)
             {
-                $todo          = new stdclass();
-                $todo->account = $this->app->user->account;
-                if($this->post->switchDate == 'on' or $this->post->date == false)
-                {
-                    $todo->date = '2030-01-01';
-                }
-                else
-                {
-                    $todo->date = $this->post->date;
-                }
-
-                $todo->type         = $todos->types[$i];
-                $todo->pri          = $todos->pris[$i];
-                $todo->name         = isset($todos->names[$i]) ? $todos->names[$i] : '';
-                $todo->desc         = $todos->descs[$i];
-                $todo->begin        = isset($todos->begins[$i]) ? $todos->begins[$i] : 2400;
-                $todo->end          = isset($todos->ends[$i]) ? $todos->ends[$i] : 2400;
-                $todo->status       = "wait";
-                $todo->private      = 0;
-                $todo->objectID     = 0;
-                $todo->assignedTo   = $assignedTo;
-                $todo->assignedBy   = $this->app->user->account;
-                $todo->assignedDate = $now;
-                $todo->vision       = $this->config->vision;
-
-                if(in_array($todo->type, $this->config->todo->moduleList)) $todo->objectID = isset($todos->{$this->config->todo->objectList[$todo->type]}[$i + 1]) ? $todos->{$this->config->todo->objectList[$todo->type]}[$i + 1] : 0;
-
-                if($todo->type != 'custom' and $todo->objectID)
-                {
-                    $type   = $todo->type;
-                    $object = $this->loadModel($type)->getByID($todo->objectID);
-                    if(isset($object->name))  $todo->name = $object->name;
-                    if(isset($object->title)) $todo->name = $object->title;
-                }
-
-                if($todo->end < $todo->begin) return print(js::alert(sprintf($this->lang->error->gt, $this->lang->todo->end, $this->lang->todo->begin)));
-
-                $validTodos[] = $todo;
+                $validTodos[] = $this->todoTao->getValidsOfBatchCreate($todos, $formData, $i, $assignedTo);
             }
             else
             {
-                unset($todos->types[$i]);
-                unset($todos->pris[$i]);
-                unset($todos->names[$i]);
-                unset($todos->descs[$i]);
-                unset($todos->begins[$i]);
-                unset($todos->ends[$i]);
+                unset($todos->types[$i] ,$todos->pris[$i] ,$todos->names[$i] ,$todos->descs[$i] ,$todos->begins[$i], $todos->ends[$i]);
             }
         }
 
         $todoIDList = array();
         foreach($validTodos as $todo)
         {
-            $this->dao->insert(TABLE_TODO)->data($todo)->autoCheck()->exec();
-            if(dao::isError())
+            $todoID = $this->todoTao->insert($todo);
+            if(!$todoID)
             {
                 echo js::error(dao::getError());
                 return print(js::reload('parent'));
             }
-            $todoID       = $this->dao->lastInsertID();
+
             $todoIDList[] = $todoID;
             $this->loadModel('score')->create('todo', 'create', $todoID);
             $this->loadModel('action')->create('todo', $todoID, 'opened');
@@ -343,27 +301,22 @@ class todoModel extends model
     }
 
     /**
+     * 判断当前动作是否可以点击。
      * Judge an action is clickable or not.
      *
-     * @param  object    $todo
-     * @param  string    $action
+     * @param  object $todo
+     * @param  string $action
      * @access public
      * @return bool
      */
-    public static function isClickable($todo, $action)
+    public static function isClickable(object $todo, string $action): bool
     {
         $action = strtolower($action);
 
-        if($action == 'finish')
+        if($action == 'finish' || $action == 'start')
         {
             if(!empty($todo->cycle)) return false;
-            return $todo->status != 'done';
-        }
-
-        if($action == 'start')
-        {
-            if(!empty($todo->cycle)) return false;
-            return $todo->status == 'wait';
+            return $action == 'finish' ? ($todo->status != 'done') : ($todo->status == 'wait');
         }
 
         return true;
@@ -464,7 +417,7 @@ class todoModel extends model
     }
 
     /**
-     * 指派待办.
+     * 指派待办。
      * Assign todo.
      *
      * @param  object  $todo
@@ -492,37 +445,39 @@ class todoModel extends model
     public function getCount(string $account = ''): int
     {
         if(empty($account)) $account = $this->app->user->account;
-
-        return $this->todoTao->getTodoCountByAccount($account);
+        $count = $this->todoTao->getCountByAccount($account, $this->config->vision);
+        if(dao::isError()) return 0;
+        return $count;
     }
 
     /**
-     * 获取待办事项对象的项目ID。
+     * 根据类型获取各个模块的列表。
      * Gets the project ID of the to-do object.
      *
      * @param  array $todoList
      * @access public
      * @return array
      */
-    public function getTodoProjects(array $todoList = array()): array
+    public function getTodoProjects(array $todoList): array
     {
-        $projectIdList = array();
-
+        $projectIDList = array();
+        $projects      = $this->config->todo->project;
         foreach($todoList as $type => $todos)
         {
-            $todoIdList = array_keys($todos);
-            if(empty($todoIdList))
+            $todoIDList = array_keys($todos);
+            if(empty($todoIDList))
             {
-                $projectIdList[$type] = array();
+                $projectIDList[$type] = array();
                 continue;
             }
 
-            $todoIdList = array_unique($todoIdList);
-            $typeTable  = array('task' => TABLE_TASK,'bug' => TABLE_BUG,'issue' => TABLE_ISSUE,'risk' => TABLE_RISK,'opportunity' => TABLE_OPPORTUNITY,'review' => TABLE_REVIEW,'testtask' => TABLE_TESTTASK);
-            $projectIdList[$type] = $this->dao->select('id,project')->from($typeTable[$type])->where('id')->in($todoIdList)->fetchPairs('id', 'project');
+            $todoIDList = array_unique($todoIDList);
+
+            if(isset($projects[$type])) $projectIDList[$type] = $this->todoTao->getProjectList($projects[$type], $todoIDList);
+            if(dao::isError()) return array();
         }
 
-        return $projectIdList;
+        return $projectIDList;
     }
 
     /**

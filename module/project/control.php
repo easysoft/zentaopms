@@ -73,7 +73,7 @@ class project extends control
 
             if(isset($fields['hasProduct'])) $fields['hasProduct'] = $projectLang->type;
 
-            $projects = $this->project->getList($status, $orderBy, null);
+            $projects = $this->project->getList($status, $orderBy);
             $users    = $this->loadModel('user')->getPairs('noletter');
 
             $this->loadModel('product');
@@ -1930,8 +1930,8 @@ class project extends control
     }
 
     /**
-     * 管理项目下的关联产品
-     * Manage products.
+     * 管理项目的关联产品
+     * Manage products under project.
      *
      * @param  string $projectID
      * @param  string $from  project|program|programproject
@@ -1941,6 +1941,7 @@ class project extends control
      */
     public function manageProducts(string $projectID, $from = 'project'): mixed
     {
+        /* Access the nonProduct project alter tips. */
         $projectID = (int)$projectID;
         $project   = $this->project->getById($projectID);
         if(!$project->hasProduct) return print(js::error($this->lang->project->cannotManageProducts) . js::locate('back'));
@@ -1957,6 +1958,7 @@ class project extends control
                 return $this->send(array('result' => 'fail', 'message' => dao::getError()));
             }
 
+            /* Update linked products. */
             $this->projectZen->mergeProducts($projectID, $project, $executionIDs, $postData);
 
             $locateLink = inLink('manageProducts', "projectID=$projectID");
@@ -1964,9 +1966,10 @@ class project extends control
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $locateLink));
         }
 
+        /* Set menu. */
         if($this->app->tab == 'program')
         {
-            $this->program->setMenu($project->parent);
+            $this->loadModel('program')->setMenu($project->parent);
         }
         else if($this->app->tab == 'project')
         {
@@ -1974,7 +1977,12 @@ class project extends control
         }
 
         $this->projectZen->dealLinkProduct($projectID, $project);
-        $this->projectZen->buildMangedProductForm($projectID, $project, $executions);
+
+        $this->view->title      = $this->lang->project->manageProducts . $this->lang->colon . $project->name;
+        $this->view->project    = $project;
+        $this->view->executions = $executions;
+        $this->view->branches   = $this->project->getBranchesByProject($projectID);
+        $this->display();
     }
 
    /**

@@ -13,6 +13,7 @@ namespace zin;
 
 set::title($title);
 jsVar('blockID', $block->id);
+jsVar('of', $lang->block->of);
 
 $paramsRows  = array();
 $showModules = ($dashboard == 'my' and $modules);
@@ -28,6 +29,7 @@ foreach($params as $key => $row)
         set::value($block->params->{$key}),
         set::control(array
         (
+            'id'    => "params$key",
             'type'  => $row['control'],
             'items' => isset($row['options']) ? $row['options'] : null
         ))  
@@ -38,6 +40,7 @@ form
 (
     on::change('#module', 'getForm'),
     on::change('#code', 'getForm'),
+    on::change('#paramstype', 'onParamsTypeChange'),
     formGroup
     (
         set::class($showModules ? '' : 'hidden'),

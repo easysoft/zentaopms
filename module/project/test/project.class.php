@@ -215,12 +215,25 @@ class Project
      * Test fetchProjectList function.
      *
      * @param  int    $status
-     * @param  string $orderBy
-     * @param  int    $involved
+     * @param  bool   $involved
      * @access public
      * @return array
      */
-    public function testFetchProjectList($status, $involved = 0)
+    public function testFetchProjectList($status, $involved = false)
+    {
+        $projects = $this->project->fetchProjectList($status, 'id_desc', $involved, null);
+        return $projects;
+    }
+
+    /**
+     * Test getList function.
+     *
+     * @param  int    $status
+     * @param  bool   $involved
+     * @access public
+     * @return array
+     */
+    public function testGetList($status, $involved = false)
     {
         $projects = $this->project->fetchProjectList($status, 'id_desc', $involved, null);
         return $projects;

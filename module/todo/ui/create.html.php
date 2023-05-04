@@ -7,7 +7,7 @@ declare(strict_types=1);
  * @license     ZPL(https://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Zemei Wang<wangzemei@easycorp.ltd>
  * @package     todo
- * @link        http://www.zentao.net
+ * @link        https://www.zentao.net
  */
 namespace zin;
 
@@ -131,8 +131,7 @@ function buildDayPane(): mixed
 
 function buildMonthDays(): mixed
 {
-    $days = array();
-    for($i = 1; $i <= 31; $i ++) $days[$i] = $i;
+    $days = array_combine(range(1,31), range(1,31));
 
     return checkList
     (
@@ -274,6 +273,7 @@ formPanel
             (
                 input
                 (
+                    set::class('date'),
                     set::name('date'),
                     set::value(date('Y-m-d')),
                     set::type('date'),
