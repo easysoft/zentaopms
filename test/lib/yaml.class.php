@@ -409,15 +409,11 @@ class yaml
      */
     private function exec_with_stderr($cmd, &$stderr=null) 
     {
-        $proc = proc_open($cmd,array(
-            1 => array('pipe','w'),
-            2 => array('pipe','w'),
-        ),$pipes);
-        fclose($pipes[1]);
+        $proc   = proc_open($cmd, array(2 => array('pipe', 'w')), $pipes);
         $stderr = stream_get_contents($pipes[2]);
+        
         fclose($pipes[2]);
-    
-        return proc_close($proc);
+        proc_close($proc);
     }
 
     /**
