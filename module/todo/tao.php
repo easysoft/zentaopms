@@ -388,4 +388,42 @@ class todoTao extends todoModel
 
         return $todo;
     }
+
+    /**
+     * 构造待办列表查询语句。
+     * Build query for todo list.
+     *
+     * @param string       $type
+     * @param string       $account
+     * @param string|array $status
+     * @param string       $begin
+     * @param string       $end
+     * @param object       $pager
+     * @param int          $limit
+     * @param string       $orderBy
+     * @access protected
+     * @return object
+     */
+    protected function getListQuery(string $type, string $account, array|string $status, string $begin, string $end, object $pager, int $limit, string $orderBy): object
+    {
+        return $this->dao->select('*')->from(TABLE_TODO)
+            ->where('deleted')->eq('0')
+            ->andWhere('vision')->eq($this->config->vision)
+            ->beginIF($type == 'assignedtoother')->andWhere('account', true)->eq($account)->fi()
+            ->beginIF($type != 'assignedtoother')->andWhere('assignedTo', true)->eq($account)->fi()
+            ->orWhere('finishedBy')->eq($account)
+            ->orWhere('closedBy')->eq($account)
+            ->markRight(1)
+            ->beginIF($begin)->andWhere('date')->ge($begin)->fi()
+            ->beginIF($end)->andWhere('date')->le($end)->fi()
+            ->beginIF($status != 'all' and $status != 'undone')->andWhere('status')->in($status)->fi()
+            ->beginIF($status == 'undone')->andWhere('status')->notin('done,closed')->fi()
+            ->beginIF($type == 'cycle')->andWhere('cycle')->eq('1')->fi()
+            ->beginIF($type != 'cycle')->andWhere('cycle')->eq('0')->fi()
+            ->beginIF($type == 'assignedtoother')->andWhere('assignedTo')->notin(array($account, ''))->fi()
+            ->orderBy($orderBy)
+            ->beginIF($limit > 0)->limit($limit)->fi()
+            ->page($pager)
+            ->query();
+    }
 }

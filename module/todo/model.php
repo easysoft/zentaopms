@@ -272,93 +272,21 @@ class todoModel extends model
      * @param  object $pager
      * @param  string $orderBy
      * @access public
-     * @return void
+     * @return array
      */
-    public function getList($type = 'today', $account = '', $status = 'all', $limit = 0, $pager = null, $orderBy="date, status, begin")
+    public function getList(string $type = 'today', string $account = '', string|array $status = 'all', int $limit = 0, object $pager = null, string $orderBy="date, status, begin"): array
     {
         $this->app->loadClass('date');
         $todos = array();
         $type = strtolower($type);
 
-        if($type == 'all' or $type == 'assignedtoother')
-        {
-            $begin = '1970-01-01';
-            $end   = '2109-01-01';
-        }
-        elseif($type == 'today')
-        {
-            $begin = date::today();
-            $end   = $begin;
-        }
-        elseif($type == 'yesterday')
-        {
-            $begin = date::yesterday();
-            $end   = $begin;
-        }
-        elseif($type == 'thisweek')
-        {
-            extract(date::getThisWeek());
-        }
-        elseif($type == 'lastweek')
-        {
-            extract(date::getLastWeek());
-        }
-        elseif($type == 'thismonth')
-        {
-            extract(date::getThisMonth());
-        }
-        elseif($type == 'lastmonth')
-        {
-            extract(date::getLastMonth());
-        }
-        elseif($type == 'thisseason')
-        {
-            extract(date::getThisSeason());
-        }
-        elseif($type == 'thisyear')
-        {
-            extract(date::getThisYear());
-        }
-        elseif($type == 'future')
-        {
-            $begin = '2030-01-01';
-            $end   = $begin;
-        }
-        elseif($type == 'before')
-        {
-            $begin = '1970-01-01';
-            $end   = date::today();
-        }
-        elseif($type == 'cycle')
-        {
-            $begin = $end = '';
-        }
-        else
-        {
-            $begin = $end = $type;
-        }
+        $dateRange = $this->config->todo->dateRange[$type] ? $this->config->todo->dateRange[$type] : array('begin' => $type, 'end' => $type);
+        $begin = (string)$dateRange['begin'];
+        $end   = (string)$dateRange['end'];
 
         if(empty($account)) $account = $this->app->user->account;
 
-        $stmt = $this->dao->select('*')->from(TABLE_TODO)
-            ->where('deleted')->eq('0')
-            ->andWhere('vision')->eq($this->config->vision)
-            ->beginIF($type == 'assignedtoother')->andWhere('account', true)->eq($account)->fi()
-            ->beginIF($type != 'assignedtoother')->andWhere('assignedTo', true)->eq($account)->fi()
-            ->orWhere('finishedBy')->eq($account)
-            ->orWhere('closedBy')->eq($account)
-            ->markRight(1)
-            ->beginIF($begin)->andWhere('date')->ge($begin)->fi()
-            ->beginIF($end)->andWhere('date')->le($end)->fi()
-            ->beginIF($status != 'all' and $status != 'undone')->andWhere('status')->in($status)->fi()
-            ->beginIF($status == 'undone')->andWhere('status')->notin('done,closed')->fi()
-            ->beginIF($type == 'cycle')->andWhere('cycle')->eq('1')->fi()
-            ->beginIF($type != 'cycle')->andWhere('cycle')->eq('0')->fi()
-            ->beginIF($type == 'assignedtoother')->andWhere('assignedTo')->notin(array($account, ''))->fi()
-            ->orderBy($orderBy)
-            ->beginIF($limit > 0)->limit($limit)->fi()
-            ->page($pager)
-            ->query();
+        $stmt = $this->todoTao->getListQuery($type, $account, $status, $begin, $end, $pager, $limit, $orderBy);
 
         /* Set session. */
         $sql = explode('WHERE', $this->dao->get());
@@ -398,27 +326,22 @@ class todoModel extends model
     }
 
     /**
+     * 判断当前动作是否可以点击。
      * Judge an action is clickable or not.
      *
-     * @param  object    $todo
-     * @param  string    $action
+     * @param  object $todo
+     * @param  string $action
      * @access public
      * @return bool
      */
-    public static function isClickable($todo, $action)
+    public static function isClickable(object $todo, string $action): bool
     {
         $action = strtolower($action);
 
-        if($action == 'finish')
+        if($action == 'finish' || $action == 'start')
         {
             if(!empty($todo->cycle)) return false;
-            return $todo->status != 'done';
-        }
-
-        if($action == 'start')
-        {
-            if(!empty($todo->cycle)) return false;
-            return $todo->status == 'wait';
+            return $action == 'finish' ? ($todo->status != 'done') : ($todo->status == 'wait');
         }
 
         return true;
