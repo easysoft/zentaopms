@@ -723,7 +723,7 @@ class build extends control
         $build        = $this->build->getByID($buildID);
         $oldBranch    = $build->branch;
         $buildStories = $build->allStories ? $this->loadModel('story')->getByList($build->allStories) : array();
-        $buildBugs    = $build->allBugs ? $this->loadModel('bug')->getByList($build->allBugs) : array();
+        $buildBugs    = $build->allBugs ? $this->loadModel('bug')->getByIdList($build->allBugs) : array();
         $branchPairs  = $this->loadModel('branch')->getPairs($build->product);
         $typeName     = $this->lang->product->branchName[$build->productType];
 
@@ -798,7 +798,7 @@ class build extends control
             }
             $build       = $this->build->getByID($buildID);
             $planStories = $build->allStories ? $this->loadModel('story')->getByList($build->allStories) : '';
-            $planBugs    = $build->allBugs ? $this->loadModel('bug')->getByList($build->allBugs) : '';
+            $planBugs    = $build->allBugs ? $this->loadModel('bug')->getByIdList($build->allBugs) : '';
             if($oldBranch)
             {
                 foreach($planStories as $storyID => $story)

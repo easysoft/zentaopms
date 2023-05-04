@@ -77,7 +77,7 @@ class projectTao extends projectModel
     }
 
     /**
-     * Update project.
+     * Update project table when activate a project.
      *
      * @param  int    $projectID
      * @param  object $project
@@ -90,6 +90,33 @@ class projectTao extends projectModel
             ->autoCheck()
             ->checkFlow()
             ->where('id')->eq((int)$projectID)
+            ->exec();
+
+        return !dao::isError();
+    }
+
+
+    /**
+     * Update project table when edit a project.
+     *
+     * @param  int    $projectID
+     * @param  object $project
+     * @param  object $oldProject
+     * @access protected
+     * @return bool
+     */
+    protected function doUpdate(int $projectID ,object $project, object $oldProject): bool
+    {
+        $this->dao->update(TABLE_PROJECT)->data($project)
+            ->autoCheck($skipFields = 'begin,end')
+            ->batchcheck($requiredFields, 'notempty')
+            ->checkIF($project->begin != '', 'begin', 'date')
+            ->checkIF($project->end != '', 'end', 'date')
+            ->checkIF($project->end != '', 'end', 'gt', $project->begin)
+            ->checkIF(!empty($project->name), 'name', 'unique', "id != $projectID and `type` = 'project' and `parent` = '$oldProject->parent' and `model` = '{$project->model}' and `deleted` = '0'")
+            ->checkIF(!empty($project->code), 'code', 'unique', "id != $projectID and `type` = 'project' and `model` = '{$project->model}' and `deleted` = '0'")
+            ->checkFlow()
+            ->where('id')->eq($projectID)
             ->exec();
 
         return !dao::isError();
@@ -502,5 +529,64 @@ class projectTao extends projectModel
     {
         $oldExecutionProducts = $this->dao->select('project,product')->from(TABLE_PROJECTPRODUCT)->where('project')->in($executionIDs)->fetchGroup('project', 'product');
         return !dao::isError();
+    }
+
+    /**
+     * 根据状态和和我参与的查询项目列表。
+     * Get project list by status and with my participation.
+     *
+     * @param  string $status
+     * @param  string $orderBy
+     * @param  int    $involved
+     * @param  object $pager
+     * @access protected
+     * @return array
+     */
+    protected function fetchProjectList(string $status, string $orderBy, int $involved, object|null $pager): array
+    {
+        return $this->dao->select('DISTINCT t1.*')->from(TABLE_PROJECT)->alias('t1')
+            ->leftJoin(TABLE_TEAM)->alias('t2')->on('t1.id=t2.root')
+            ->leftJoin(TABLE_STAKEHOLDER)->alias('t3')->on('t1.id=t3.objectID')
+            ->where('t1.deleted')->eq('0')
+            ->andWhere('t1.vision')->eq($this->config->vision)
+            ->andWhere('t1.type')->eq('project')
+            ->beginIF(!in_array($status, array('all', 'undone', 'review', 'unclosed'), true))->andWhere('t1.status')->eq($status)->fi()
+            ->beginIF($status == 'undone' or $status == 'unclosed')->andWhere('t1.status')->in('wait,doing')->fi()
+            ->beginIF($status == 'review')
+            ->andWhere("FIND_IN_SET('{$this->app->user->account}', t1.reviewers)")
+            ->andWhere('t1.reviewStatus')->eq('doing')
+            ->fi()
+            ->beginIF($this->cookie->involved or $involved)
+            ->andWhere('t2.type')->eq('project')
+            ->andWhere('t1.openedBy', true)->eq($this->app->user->account)
+            ->orWhere('t1.PM')->eq($this->app->user->account)
+            ->orWhere('t2.account')->eq($this->app->user->account)
+            ->orWhere('(t3.user')->eq($this->app->user->account)
+            ->andWhere('t3.deleted')->eq(0)
+            ->markRight(1)
+            ->orWhere("CONCAT(',', t1.whitelist, ',')")->like("%,{$this->app->user->account},%")
+            ->markRight(1)
+            ->fi()
+            ->orderBy($orderBy)
+            ->page($pager, 't1.id')
+            ->fetchAll('id');
+    }
+
+    /**
+     * 根据项目ID列表查询团队成员分组。
+     * Get project team members by project id list.
+     *
+     * @param  array $projectIdList
+     * @access protected
+     * @return array
+     */
+    protected function fetchTeamGroupByIdList(array $projectIdList): array
+    {
+        return $this->dao->select('t1.root, count(t1.id) as count')->from(TABLE_TEAM)->alias('t1')
+            ->leftJoin(TABLE_USER)->alias('t2')->on('t1.account=t2.account')
+            ->where('t1.root')->in($projectIdList)
+            ->andWhere('t2.deleted')->eq(0)
+            ->groupBy('t1.root')
+            ->fetchAll('root');
     }
 }

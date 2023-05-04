@@ -50,7 +50,7 @@ fields:
     postfix: ""
     loop: 0
     format: ""
-  - field: idvalue
+  - field: objectID
     note: "关联编号"
     range: 0,1-20,1-20,1-20,1-20
     prefix: ""

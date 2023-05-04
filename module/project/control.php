@@ -73,8 +73,7 @@ class project extends control
 
             if(isset($fields['hasProduct'])) $fields['hasProduct'] = $projectLang->type;
 
-            $involved = $this->cookie->involved ? $this->cookie->involved : 0;
-            $projects = $this->project->getInfoList($status, $orderBy, '', $involved);
+            $projects = $this->project->getList($status, $orderBy, null);
             $users    = $this->loadModel('user')->getPairs('noletter');
 
             $this->loadModel('product');
@@ -509,9 +508,8 @@ class project extends control
      * @param  int    $projectID
      * @param  string $from
      * @access public
-     * @return void
      */
-    public function edit(string $projectID, string $from = ''): mixed
+    public function edit(string $projectID, string $from = '')
     {
         $this->loadModel('action');
         $this->loadModel('custom');
@@ -519,7 +517,6 @@ class project extends control
         $this->loadModel('user');
         $this->loadModel('program');
         $this->loadModel('execution');
-
 
         $projectID  = (int)$projectID;
         $project    = $this->project->getByID($projectID);
@@ -547,7 +544,7 @@ class project extends control
 
         if($_POST)
         {
-            $postData = form::data($this->config->project->form->eidt);
+            $postData = form::data($this->config->project->form->edit);
             $project  = $this->projectZen->prepareEditExtras($postData);
 
             $project->id       = $projectID;

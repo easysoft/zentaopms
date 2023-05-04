@@ -17,12 +17,13 @@ class todoModel extends model
      * Create todo data.
      *
      * @param  object $todo
+     * @param  object $formData
      * @access public
      * @return int|false
      */
-    public function create(object $todo): int|false
+    public function create(object $todo, object $formData): int|false
     {
-        $processedTodo = $this->todoTao->processCreateData($todo);
+        $processedTodo = $this->todoTao->processCreateData($todo, $formData);
         if(!$processedTodo) return false;
 
         $todoID = $this->todoTao->insert($processedTodo);
@@ -599,7 +600,7 @@ class todoModel extends model
         if(($this->config->edition == 'biz' || $this->config->edition == 'max'))
         {
             $todo       = $this->todoTao->fetch($todoID);
-            $feedbackID = $todo->idvalue ?? '' ;
+            $feedbackID = $todo->objectID ? $todo->objectID : '' ;
             if($feedbackID) $this->loadModel('feedback')->updateStatus('todo', $feedbackID, 'done');
         }
         return true;
