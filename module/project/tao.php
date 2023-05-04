@@ -573,14 +573,14 @@ class projectTao extends projectModel
     }
 
     /**
-     * 根据项目ID列表查询团队成员分组。
-     * Get project team members by project id list.
+     * 根据项目ID列表查询团队成员数量。
+     * Get project team member count by project id list.
      *
      * @param  array $projectIdList
      * @access protected
      * @return array
      */
-    protected function fetchTeamGroupByIdList(array $projectIdList): array
+    protected function fetchMemberCountByIdList(array $projectIdList): array
     {
         return $this->dao->select('t1.root, count(t1.id) as count')->from(TABLE_TEAM)->alias('t1')
             ->leftJoin(TABLE_USER)->alias('t2')->on('t1.account=t2.account')

@@ -248,7 +248,7 @@ class projectModel extends model
         if(empty($projects)) return array();
 
         $projectIdList = array_keys($projects);
-        $teams         = $this->projectTao->fetchTeamGroupByIdList($projectIdList);
+        $teams         = $this->projectTao->fetchMemberCountByIdList($projectIdList);
 
         $estimates = $this->dao->select("t2.project as project, sum(estimate) as estimate")->from(TABLE_TASK)->alias('t1')
             ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.execution = t2.id')
