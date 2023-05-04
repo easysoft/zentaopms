@@ -37,8 +37,9 @@ $config->project->form->edit['acl']        = array('type' => 'string', 'required
 $config->project->form->edit['whitelist']  = array('type' => 'array',  'required' => false, 'default' => '', 'filter' => 'join');
 $config->project->form->edit['auth']       = array('type' => 'array',  'required' => false, 'default' => '');
 $config->project->form->edit['model']      = array('type' => 'string', 'required' => false, 'default' => '');
-$config->project->form->edit['plans']      = array('type' => 'array', 'required' => false, 'default' => '');
-$config->project->form->edit['products']   = array('type' => 'array', 'required' => false, 'default' => '');
+$config->project->form->edit['plans']      = array('type' => 'array',  'required' => false, 'default' => '');
+$config->project->form->edit['products']   = array('type' => 'array',  'required' => false, 'default' => '');
+$config->project->form->edit['product']    = array('type' => 'array',  'required' => false, 'default' => '');
 
 $config->project->form->start['realBegan'] = array('type' => 'date', 'required' => true, 'filter' => 'trim');
 

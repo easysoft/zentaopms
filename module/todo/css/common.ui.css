@@ -1,0 +1,10 @@
+.private-row .checkbox-primary {margin-top: 5px;}
+.every-checkbox .checkbox-primary {width: 50px;}
+.cycle-config .tab-content>.tab-pane {padding-left: 0; padding-right: 0;}
+.cycle-config .tab-content>.tab-pane:first-child,
+.cycle-config .tab-content>.input-group {width: 44.5%;}
+.switch-time {min-height: 32px;}
+.form-row .form-group.align-center {align-items: center;}
+#nameInputBox {width: 80%;}
+#nameInputBox .form-control {width: 99.8%;}
+

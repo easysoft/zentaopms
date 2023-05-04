@@ -23,6 +23,33 @@ class todoZen extends todo
     }
 
     /**
+     * 生成批量创建待办视图数据。
+     * Build batch create form data.
+     *
+     * @param  string $date
+     * @access protected
+     * @return void
+     */
+    protected function buildBatchCreateView(string $date)
+    {
+        /* Set Custom. */
+        foreach(explode(',', $this->config->todo->list->customBatchCreateFields) as $field) $customFields[$field] = $this->lang->todo->$field;
+
+        $this->view->customFields = $customFields;
+        $this->view->showFields   = $this->config->todo->custom->batchCreateFields;
+
+        $this->view->title      = $this->lang->todo->common . $this->lang->colon . $this->lang->todo->batchCreate;
+        $this->view->position[] = $this->lang->todo->common;
+        $this->view->position[] = $this->lang->todo->batchCreate;
+        $this->view->date       = (int)$date == 0 ? $date : date('Y-m-d', strtotime($date));
+        $this->view->times      = date::buildTimeList($this->config->todo->times->begin, $this->config->todo->times->end, $this->config->todo->times->delta);
+        $this->view->time       = date::now();
+        $this->view->users      = $this->loadModel('user')->getPairs('noclosed|nodeleted|noempty');
+
+        $this->display();
+    }
+
+    /**
      * 生成编辑待办视图数据。
      * Build create form data.
      *

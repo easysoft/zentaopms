@@ -1,0 +1,22 @@
+title: Create todos for todoModel::create UTC.
+desc: Create todos for todoModel::create UTC.
+author: xushenjie
+version: 1.0.0
+
+fields:
+  - field: id
+    range: 1
+  - field: account
+    range: 'admin'
+  - field: name
+    range: '待办'
+  - field: date
+    range: '`2023-04-23`'
+  - field: type
+    range: 'custom'
+  - field: begin
+    range: '0800'
+  - field: end
+    range: '1700'
+  - field: assignedTo
+    range: 'admin'

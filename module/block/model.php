@@ -296,6 +296,81 @@ class blockModel extends model
     }
 
     /**
+     * Reset dashboard blocks.
+     *
+     * @param  string  $dashboard 
+     * @access public
+     * @return bool
+     */
+    public function reset(string $dashboard): bool
+    {
+        $this->dao->delete()->from(TABLE_BLOCK)
+            ->where('dashboard')->eq($dashboard)
+            ->andWhere('vision')->eq($this->config->vision)
+            ->andWhere('account')->eq($this->app->user->account)
+            ->exec();
+
+        $this->dao->delete()->from(TABLE_CONFIG)
+            ->where('module')->eq($dashboard)
+            ->andWhere('vision')->eq($this->config->vision)
+            ->andWhere('owner')->eq($this->app->user->account)
+            ->andWhere('`key`')->eq('blockInited')
+            ->exec();
+
+        return true;
+    }
+
+    /**
+     * Hidden a block.
+     *
+     * @param  int $blockID 
+     * @access public
+     * @return bool
+     */
+    public function hidden(int $blockID): bool
+    {
+        $this->dao->update(TABLE_BLOCK)->set('hidden')->eq(1)
+            ->where('id')->eq($blockID)
+            ->andWhere('account')->eq($this->app->user->account)
+            ->andWhere('vision')->eq($this->config->vision)
+            ->exec();
+
+        return true;
+    }
+
+    /**
+     * Delete a block.
+     *
+     * @param  int    $blockID 
+     * @access public
+     * @return bool
+     */
+    public function deleteBlock(int $blockID = 0): bool
+    {
+        $this->dao->delete()->from(TABLE_BLOCK)
+            ->where('id')->eq($blockID)
+            ->andWhere('account')->eq($this->app->user->account)
+            ->andWhere('vision')->eq($this->config->vision)
+            ->exec();
+
+        return true;
+    }
+
+    /**
+     * Set block order.
+     * 
+     * @param  int    $blockID 
+     * @param  int    $order 
+     * @access public
+     * @return bool
+     */
+    public function setOrder(int $blockID, int $order): bool
+    {
+        $this->dao->update(TABLE_BLOCK)->set('order')->eq($order)->where('id')->eq($blockID)->exec();
+        return true;
+    }
+
+    /**
      * Save a block.
      *
      * @param  int    $blockID

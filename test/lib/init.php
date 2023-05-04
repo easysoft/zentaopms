@@ -115,7 +115,7 @@ function p($keys = '', $delimiter = ',')
     {
         $values = getValues($_result, $part, $delimiter);
         if(!is_array($values)) continue;
-        
+
         foreach($values as $value) echo $value . "\n";
     }
 
@@ -272,7 +272,7 @@ function genModuleAndMethod($rParams)
     {
         $param = trim($param, "'");
         if($param[0] != '$') $param = trim(strchr($param, '$'), ')');
-        
+
         $objArrowCount        = substr_count($param, '->');
         $rParamsStructureList = explode('->', $param);
 
@@ -474,7 +474,9 @@ function zdImport($table, $yaml, $count = 10)
 function su($account)
 {
     $userModel = new userModel();
-    $user = $userModel->identify($account, '123Qwe!@#');
+    $user      = $userModel->getByID($account);
     if($user) return $userModel->login($user);
+
+    $user = $userModel->identify($account, $user->password);
     return false;
 }

@@ -47,10 +47,8 @@ class projectModel extends model
     {
         if(defined('TUTORIAL')) return true;
 
-        echo(js::alert($this->lang->project->accessDenied));
         $this->session->set('project', '');
-
-        return print(js::locate(helper::createLink('project', 'index')));
+        return print(js::alert($this->lang->project->accessDenied) . js::locate(helper::createLink('project', 'index')));
     }
 
     /**
@@ -148,8 +146,8 @@ class projectModel extends model
      */
     public function getMultiLinkedProducts($projectID)
     {
-        $linkedProducts      = $this->dao->select('product')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($projectID)->fetchPairs();
-        $multiLinkedProducts = $this->dao->select('t3.id,t3.name')->from(TABLE_PROJECTPRODUCT)->alias('t1')
+        $linkedProducts = $this->dao->select('product')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($projectID)->fetchPairs();
+        return $this->dao->select('t3.id,t3.name')->from(TABLE_PROJECTPRODUCT)->alias('t1')
             ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
             ->leftJoin(TABLE_PRODUCT)->alias('t3')->on('t1.product = t3.id')
             ->where('t1.product')->in($linkedProducts)
@@ -158,8 +156,6 @@ class projectModel extends model
             ->andWhere('t2.deleted')->eq('0')
             ->andWhere('t3.deleted')->eq('0')
             ->fetchPairs('id', 'name');
-
-        return $multiLinkedProducts;
     }
 
     /*
@@ -235,7 +231,8 @@ class projectModel extends model
     }
 
     /**
-     * Get project info.
+     * 根据状态和和我参与的查询项目列表。
+     * Get project list by status and with my participation.
      *
      * @param  string    $status
      * @param  string    $orderBy
@@ -244,19 +241,14 @@ class projectModel extends model
      * @access public
      * @return array
      */
-    public function getInfoList($status = 'undone', $orderBy = 'order_desc', $pager = null, $involved = 0)
+    public function getList($status = 'undone', $orderBy = 'order_desc', $pager = null, $involved = 0)
     {
         /* Init vars. */
-        $projects = $this->loadModel('program')->getProjectList(0, $status, 0, $orderBy, $pager, 0, $involved);
+        $projects = $this->projectTao->fetchProjectList($status, $orderBy, $involved, $pager);
         if(empty($projects)) return array();
 
         $projectIdList = array_keys($projects);
-        $teams = $this->dao->select('t1.root, count(t1.id) as count')->from(TABLE_TEAM)->alias('t1')
-            ->leftJoin(TABLE_USER)->alias('t2')->on('t1.account=t2.account')
-            ->where('t1.root')->in($projectIdList)
-            ->andWhere('t2.deleted')->eq(0)
-            ->groupBy('t1.root')
-            ->fetchAll('root');
+        $teams         = $this->projectTao->fetchMemberCountByIdList($projectIdList);
 
         $estimates = $this->dao->select("t2.project as project, sum(estimate) as estimate")->from(TABLE_TASK)->alias('t1')
             ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.execution = t2.id')
@@ -267,7 +259,7 @@ class projectModel extends model
             ->groupBy('t2.project')
             ->fetchAll('project');
 
-        $this->app->loadClass('pager', $static = true);
+        $this->app->loadClass('pager', true);
         foreach($projects as $projectID => $project)
         {
             $orderBy = $project->model == 'waterfall' ? 'id_asc' : 'id_desc';
@@ -868,12 +860,11 @@ class projectModel extends model
             ->orderBy('grade desc')
             ->fetch();
 
-        $projects = $this->dao->select('id')->from(TABLE_PROJECT)
+        return $this->dao->select('id')->from(TABLE_PROJECT)
             ->where('type')->eq('project')
             ->andWhere('deleted')->eq(0)
             ->andWhere('path')->like("{$parentProgram->path}%")
             ->fetchPairs('id');
-        return $projects;
     }
 
     /**
@@ -1398,7 +1389,7 @@ class projectModel extends model
         $this->lang->error->unique = $this->lang->error->repeat;
 
         if(!empty($executionsCount) and $oldProject->multiple) $this->checkDatesValidByProject($projectID ,$project);
-        $this->projectTao->doUpdate($projectID, $project);
+        $this->projectTao->doUpdate($projectID, $project, $oldProject);
         if(dao::isError()) return false;
 
         if(!$oldProject->hasProduct and ($oldProject->name != $project->name or $oldProject->parent != $project->parent or $oldProject->acl != $project->acl)) $this->updateShadowProduct($project);
@@ -1548,7 +1539,7 @@ class projectModel extends model
             $parentID   = !isset($project->parent) ? $oldProject->parent : $project->parent;
 
             $this->dao->update(TABLE_PROJECT)->data($project)
-                ->autoCheck($skipFields = 'begin,end')
+                ->autoCheck('begin,end')
                 ->batchCheck($this->config->project->edit->requiredFields, 'notempty')
                 ->checkIF($project->begin != '', 'begin', 'date')
                 ->checkIF($project->end != '', 'end', 'date')
@@ -3065,10 +3056,7 @@ class projectModel extends model
         {
             foreach($plans as $planList)
             {
-                foreach($planList as $planIDList)
-                {
-                    foreach($planIDList as $planID) $newPlans[$planID] = $planID;
-                }
+                foreach($planList as $planID) $newPlans[$planID] = $planID;
             }
         }
         if(empty($newPlans)) return;

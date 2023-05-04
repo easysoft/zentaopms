@@ -73,15 +73,17 @@ class todo extends control
     }
 
     /**
-     * Batch create todo
+     * 批量创建待办。
+     * Batch create todo.
      *
      * @param  string $date
      * @access public
      * @return void
      */
-    public function batchCreate($date = 'today')
+    public function batchCreate(string $date = 'today')
     {
         if($date == 'today') $date = date(DT_DATE1, time());
+
         if(!empty($_POST))
         {
             $todoIDList = $this->todo->batchCreate();
@@ -89,37 +91,17 @@ class todo extends control
 
             /* Locate the browser. */
             $date = str_replace('-', '', $this->post->date);
-            if($date == '')
-            {
-                $date = 'future';
-            }
-            else if($date == date('Ymd'))
-            {
-                $date= 'today';
-            }
+            if($date == '') $date = 'future';
+            if($date == date('Ymd')) $date= 'today';
 
             if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'idList' => $todoIDList));
             if(isonlybody()) return print(js::reload('parent.parent'));
-            return print(js::locate($this->createLink('my', 'todo', "type=$date"), 'parent'));
+            return print(js::locate($this->createLink('my', 'todo', "type={$date}"), 'parent'));
         }
 
         unset($this->lang->todo->typeList['cycle']);
 
-        /* Set Custom*/
-        foreach(explode(',', $this->config->todo->list->customBatchCreateFields) as $field) $customFields[$field] = $this->lang->todo->$field;
-
-        $this->view->customFields = $customFields;
-        $this->view->showFields   = $this->config->todo->custom->batchCreateFields;
-
-        $this->view->title      = $this->lang->todo->common . $this->lang->colon . $this->lang->todo->batchCreate;
-        $this->view->position[] = $this->lang->todo->common;
-        $this->view->position[] = $this->lang->todo->batchCreate;
-        $this->view->date       = (int)$date == 0 ? $date : date('Y-m-d', strtotime($date));
-        $this->view->times      = date::buildTimeList($this->config->todo->times->begin, $this->config->todo->times->end, $this->config->todo->times->delta);
-        $this->view->time       = date::now();
-        $this->view->users      = $this->loadModel('user')->getPairs('noclosed|nodeleted|noempty');
-
-        $this->display();
+        $this->todoZen->buildBatchCreateView($date);
     }
 
     /**
