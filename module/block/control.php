@@ -280,16 +280,6 @@ class block extends control
                 $html = "<div class='panel-body'><div class='article-content'>" . $block->params->html . '</div></div>';
             }
         }
-        elseif($block->source != '')
-        {
-            $this->get->set('mode', 'getblockdata');
-            $this->get->set('blockTitle', $block->title);
-            $this->get->set('module', $block->module);
-            $this->get->set('source', $block->source);
-            $this->get->set('blockid', $block->code);
-            $this->get->set('param', base64_encode(json_encode($block->params)));
-            $html = $this->fetch('block', 'main', "module={$block->source}&id=$id");
-        }
         elseif($block->code == 'dynamic')
         {
             $html = $this->fetch('block', 'dynamic');
@@ -311,6 +301,16 @@ class block extends control
         {
             $html = $this->fetch('block', 'contribute');
         }
+        else
+        {
+            $this->get->set('mode', 'getblockdata');
+            $this->get->set('blockTitle', $block->title);
+            $this->get->set('module', $block->module);
+            $this->get->set('source', $block->source);
+            $this->get->set('blockid', $block->code);
+            $this->get->set('param', base64_encode(json_encode($block->params)));
+            $html = $this->fetch('block', 'main', "module={$block->source}&id=$id");
+        }
         echo $html;
     }
 
@@ -320,8 +320,9 @@ class block extends control
      * @access public
      * @return void
      */
-    public function main($module = '', $id = 0)
+    public function main($module = '', $blockID = 0)
     {
+        $blockID = (int)$blockID;
         if(!$this->selfCall)
         {
             $lang = str_replace('_', '-', $this->get->lang);
@@ -367,10 +368,10 @@ class block extends control
                 $this->view->sign = strpos($sso, '?') === false ? '?' : '&';
             }
 
-            if($id) $block = $this->block->getByID($id);
-            $this->view->longBlock = $this->block->isLongBlock($id ? $block : $params);
+            if($blockID) $block = $this->block->getByID($blockID);
+            $this->view->longBlock = $this->block->isLongBlock($blockID ? $block : $params);
             $this->view->selfCall  = $this->selfCall;
-            $this->view->block     = $id ? $block : '';
+            $this->view->block     = $blockID ? $block : '';
 
             $this->viewType    = (isset($params->viewType) and $params->viewType == 'json') ? 'json' : 'html';
             $this->params      = $params;
@@ -409,7 +410,7 @@ class block extends control
                 return print(json_encode($output));
             }
 
-            $this->display();
+            $this->display('block', $code . 'block');
         }
     }
 
