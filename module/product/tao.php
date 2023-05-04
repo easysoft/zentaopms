@@ -493,4 +493,17 @@ class productTao extends productModel
         if(dao::isError())return false;
         return (int)$this->dao->lastInsertID();
     }
+
+    /**
+     * 从module表中查询所有产品线。
+     * Get all product lines from module table.
+     * TODO move to the MODULE module.
+     *
+     * @access protected
+     * @return array
+     */
+    protected function getProductLinesTODO(): array
+    {
+        return $this->dao->select('*')->from(TABLE_MODULE)->where('type')->eq('line')->andWhere('deleted')->eq(0)->orderBy('`order` asc')->fetchAll();
+    }
 }
