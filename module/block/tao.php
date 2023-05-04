@@ -21,4 +21,21 @@ class blockTao extends blockModel
             ->orderBy('`order`')
             ->fetchAll('id');
     }
+
+    /**
+     * Insert a block data.
+     *
+     * @param  object $formData
+     * @access protected
+     * @return bool
+     */
+    protected function insert($formData): bool
+    {
+        $this->dao->insert(TABLE_BLOCK)->data($formData)
+            ->autoCheck()
+            ->batchCheck($this->config->block->create->requiredFields, 'notempty')
+            ->exec();
+
+        return true;
+    }
 }

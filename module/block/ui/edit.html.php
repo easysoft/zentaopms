@@ -16,7 +16,7 @@ jsVar('blockID', $block->id);
 
 $paramsRows  = array();
 $showModules = ($dashboard == 'my' and $modules);
-$showCodes   = ($module and $codes);
+$showCodes   = (($showModules and $module and $codes) or $dashboard != 'my');
 
 foreach($params as $key => $row)
 {

@@ -490,7 +490,7 @@ class todoZen extends todo
      * @access protected
      * @return true
      */
-    protected function setSessionUri($uri): bool
+    protected function setSessionUri(string $uri): bool
     {
         foreach($this->config->todo->sessionUri as $key => $value) $this->session->set($key, $uri, $value);
         return true;
@@ -540,7 +540,7 @@ class todoZen extends todo
                 $this->loadModel('opportunity')->getUserOpportunityPairs($account),
             );
         }
-        else if($type == 'qcVersion')
+        elseif($type == 'qcVersion')
         {
             return $this->loadModel('review')->getUserReviewPairs($account, 0, 'wait');
         }
