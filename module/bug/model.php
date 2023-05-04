@@ -337,19 +337,9 @@ class bugModel extends model
 
         /* Get bugs by browse type. */
         $bugList = array();
-        if($browseType == 'all')
-        {
-            $bugList = $this->bugTao->getAllBugs($productIdList, $projectID, $executionIdList, $branch, $modules, $orderBy, $pager);
-            $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'bug');
-        }
-        elseif($browseType == 'review')
-        {
-            $bugList = $this->bugTao->getListByReviewToMe($productIdList, $projectID, $executionIdList, $branch, $modules, $orderBy, $pager);
-            $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'bug');
-        }
+        if($browseType == 'bysearch') $bugList = $this->getBySearch($productIdList, $branch, $queryID, $orderBy, '', $pager, $projectID);
         elseif($browseType == 'needconfirm') $bugList = $this->bugTao->getListByNeedconfirm($productIdList, $projectID, $executionIdList, $branch, $modules, $orderBy, $pager);
-        elseif($browseType == 'bysearch')    $bugList = $this->getBySearch($productIdList, $branch, $queryID, $orderBy, '', $pager, $projectID);
-        elseif(strpos(',bymodule,assigntome,openedbyme,resolvedbyme,assigntonull,unconfirmed,unresolved,unclosed,toclosed,longlifebugs,postponedbugs,overduebugs,assignedbyme,', ",$browseType,") !== false) $bugList = $this->bugTao->getListByBrowseType($browseType, $productIdList, $projectID, $executionIdList, $branch, $modules, $orderBy, $pager);
+        elseif(strpos(',all,bymodule,assigntome,openedbyme,resolvedbyme,assigntonull,unconfirmed,unresolved,unclosed,toclosed,longlifebugs,postponedbugs,overduebugs,assignedbyme,review,', ",$browseType,") !== false) $bugList = $this->bugTao->getListByBrowseType($browseType, $productIdList, $projectID, $executionIdList, $branch, $modules, $orderBy, $pager);
 
         return $this->bugTao->batchAppendDelayedDays($bugList);
     }
