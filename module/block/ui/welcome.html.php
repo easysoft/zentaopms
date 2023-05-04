@@ -53,48 +53,36 @@ panel
             ),
             div
             (
-                setClass('flex items-center justify-around pt-6'),
-                center
+                setClass('flex justify-around pt-6'),
+                col
                 (
-                    col
+                    set('class', 'text-center'),
+                    span
                     (
-                        set('justify', 'center'),
-                        set('class', 'text-center'),
-                        span
-                        (
-                            set('class', 'tile-amount text-primary'),
-                            81
-                        ),
-                        span('研发需求数')
-                    )
+                        set('class', 'tile-amount text-primary'),
+                        81
+                    ),
+                    span('研发需求数')
                 ),
-                center
+                col
                 (
-                    col
+                    set('class', 'text-center'),
+                    span
                     (
-                        set('justify', 'center'),
-                        set('class', 'text-center'),
-                        span
-                        (
-                            set('class', 'tile-amount text-primary'),
-                            81
-                        ),
-                        span('研发需求数')
-                    )
+                        set('class', 'tile-amount text-primary'),
+                        81
+                    ),
+                    span('研发需求数')
                 ),
-                center
+                col
                 (
-                    col
+                    set('class', 'text-center'),
+                    span
                     (
-                        set('justify', 'center'),
-                        set('class', 'text-center'),
-                        span
-                        (
-                            set('class', 'tile-amount text-primary'),
-                            81
-                        ),
-                        span('研发需求数')
-                    )
+                        set('class', 'tile-amount text-primary'),
+                        81
+                    ),
+                    span('研发需求数')
                 )
             )
         ),
@@ -109,34 +97,32 @@ panel
             ),
             div
             (
-                setClass('flex items-center justify-around pt-6'),
-                center
+                setClass('flex justify-around pt-6'),
+                col
                 (
-                    col
+                    set('class', 'text-center items-center'),
+                    span
                     (
-                        set('justify', 'center'),
-                        set('class', 'text-center'),
-                        span
-                        (
-                            set('class', 'tile-amount text-primary'),
-                            81
-                        ),
-                        span('研发需求数')
+                        set('class', 'tile-amount text-primary'),
+                        81
+                    ),
+                    span('任务数'),
+                    div
+                    (
+                        set('class', 'rounded-full welcome-label-delay px-1 text-sm'),
+                        '延期 3'
                     )
                 ),
-                center
+                col
                 (
-                    col
+                    set('justify', 'center'),
+                    set('class', 'text-center'),
+                    span
                     (
-                        set('justify', 'center'),
-                        set('class', 'text-center'),
-                        span
-                        (
-                            set('class', 'tile-amount text-primary'),
-                            81
-                        ),
-                        span('研发需求数')
-                    )
+                        set('class', 'tile-amount text-primary'),
+                        81
+                    ),
+                    span('研发需求数'),
                 )
             )
         )

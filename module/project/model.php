@@ -1382,6 +1382,7 @@ class projectModel extends model
 
         if(!empty($executionsCount) and $oldProject->multiple) $this->checkDatesValidByProject($projectID ,$project);
         $this->projectTao->doUpdate($projectID, $project, $oldProject);
+
         if(dao::isError()) return false;
 
         if(!$oldProject->hasProduct and ($oldProject->name != $project->name or $oldProject->parent != $project->parent or $oldProject->acl != $project->acl)) $this->updateShadowProduct($project);
@@ -1411,6 +1412,7 @@ class projectModel extends model
 
             $teamMembers[$account] = $member;
         }
+
         if($oldProject->model == 'kanban')
         {
             $this->dao->delete()->from(TABLE_TEAM)
@@ -3048,6 +3050,7 @@ class projectModel extends model
         {
             foreach($plans as $planList)
             {
+                if(is_array($planList))
                 foreach($planList as $planID) $newPlans[$planID] = $planID;
             }
         }

@@ -18,15 +18,17 @@ function onParamsTypeChange(event)
     }
     else
     {
+        const $paramstype = document.querySelector('#paramstype');
+
         if(lang.indexOf('zh') >= 0)
         {
-            const $paramstype = document.querySelector('#paramstype');
             const blockTitle  = $paramstype.options[$paramstype.selectedIndex].text + of + $code.options[$code.selectedIndex].text;
-            $('#title').val(blockTitle);
         }
         else
         {
-            /* TODO */
+            const blockTitle  = $code.options[$code.selectedIndex].text + of + $paramstype.options[$paramstype.selectedIndex].text;
         }
+
+        $('#title').val(blockTitle);
     }
 }

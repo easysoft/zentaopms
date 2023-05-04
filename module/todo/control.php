@@ -1,6 +1,5 @@
 <?php
 declare(strict_types=1);
-
 /**
  * The control file of todo module of ZenTaoPMS.
  *
@@ -22,9 +21,6 @@ class todo extends control
     {
         parent::__construct();
 
-        $this->app->loadClass('date');
-        $this->loadModel('task');
-        $this->loadModel('bug');
         $this->app->loadLang('my');
     }
 
