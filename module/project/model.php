@@ -1311,6 +1311,47 @@ class projectModel extends model
     }
 
     /**
+     * Check branch and product valid by project.
+     *
+     * @param  int    $projectID
+     * @param  object $project
+     * @access public
+     * @return bool
+     */
+    public function checkBranchAndProductValid(int $projectID, object $project): bool
+    {
+        $topProgramID     = $this->loadModel('program')->getTopByID($project->parent);
+        $multipleProducts = $this->loadModel('product')->getMultiBranchPairs($topProgramID);
+        foreach($project->products as $index => $productID)
+        {
+            if(isset($multipleProducts[$productID]) and empty($project->branch[$index]))
+            {
+                dao::$errors[] = $this->lang->project->emptyBranch;
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * Check dates valid by project.
+     *
+     * @param  int    $projectID
+     * @param  object $project
+     * @access public
+     * @return bool
+     */
+    public function checkDatesValidByProject($projectID, $project): bool
+    {
+        $minExecutionBegin = $this->dao->select('`begin` as minBegin')->from(TABLE_PROJECT)->where('project')->eq($projectID)->andWhere('deleted')->eq('0')->orderBy('begin_asc')->fetch();
+        $maxExecutionEnd   = $this->dao->select('`end` as maxEnd')->from(TABLE_PROJECT)->where('project')->eq($projectID)->andWhere('deleted')->eq('0')->orderBy('end_desc')->fetch();
+        if($minExecutionBegin and $project->begin > $minExecutionBegin->minBegin) dao::$errors['begin'] = sprintf($this->lang->project->begigLetterExecution, $minExecutionBegin->minBegin);
+        if($maxExecutionEnd and $project->end < $maxExecutionEnd->maxEnd) dao::$errors['end'] = sprintf($this->lang->project->endGreateExecution, $maxExecutionEnd->maxEnd);
+        if(dao::isError()) return false;
+        return true;
+    }
+
+    /**
      * Update project.
      *
      * @param  int    $projectID
@@ -1326,28 +1367,7 @@ class projectModel extends model
 
         $executionsCount = $this->dao->select('COUNT(*) as count')->from(TABLE_PROJECT)->where('project')->eq($project->id)->andWhere('deleted')->eq('0')->fetch('count');
 
-        if(!empty($executionsCount) and $oldProject->multiple)
-        {
-            $minExecutionBegin = $this->dao->select('`begin` as minBegin')->from(TABLE_PROJECT)->where('project')->eq($project->id)->andWhere('deleted')->eq('0')->orderBy('begin_asc')->fetch();
-            $maxExecutionEnd   = $this->dao->select('`end` as maxEnd')->from(TABLE_PROJECT)->where('project')->eq($project->id)->andWhere('deleted')->eq('0')->orderBy('end_desc')->fetch();
-            if($minExecutionBegin and $project->begin > $minExecutionBegin->minBegin) dao::$errors['begin'] = sprintf($this->lang->project->begigLetterExecution, $minExecutionBegin->minBegin);
-            if($maxExecutionEnd and $project->end < $maxExecutionEnd->maxEnd) dao::$errors['end'] = sprintf($this->lang->project->endGreateExecution, $maxExecutionEnd->maxEnd);
-            if(dao::isError()) return false;
-        }
-
-        if($_POST['products'])
-        {
-            $topProgramID     = $this->loadModel('program')->getTopByID($project->parent);
-            $multipleProducts = $this->loadModel('product')->getMultiBranchPairs($topProgramID);
-            foreach($_POST['products'] as $index => $productID)
-            {
-                if(isset($multipleProducts[$productID]) and empty($_POST['branch'][$index]))
-                {
-                    dao::$errors[] = $this->lang->project->emptyBranch;
-                    return false;
-                }
-            }
-        }
+        if($project->product && !$this->checkBranchAndProductValid($projectID, $project)) return false;
 
         /* Judge products not empty. */
         $linkedProductsCount = 0;
@@ -1376,17 +1396,9 @@ class projectModel extends model
         if($this->post->delta == 999) $requiredFields = trim(str_replace(',end,', ',', ",{$requiredFields},"), ',');
 
         $this->lang->error->unique = $this->lang->error->repeat;
-        $this->dao->update(TABLE_PROJECT)->data($project)
-            ->autoCheck($skipFields = 'begin,end')
-            ->batchcheck($requiredFields, 'notempty')
-            ->checkIF($project->begin != '', 'begin', 'date')
-            ->checkIF($project->end != '', 'end', 'date')
-            ->checkIF($project->end != '', 'end', 'gt', $project->begin)
-            ->checkIF(!empty($project->name), 'name', 'unique', "id != $projectID and `type` = 'project' and `parent` = '$oldProject->parent' and `model` = '{$project->model}' and `deleted` = '0'")
-            ->checkIF(!empty($project->code), 'code', 'unique', "id != $projectID and `type` = 'project' and `model` = '{$project->model}' and `deleted` = '0'")
-            ->checkFlow()
-            ->where('id')->eq($projectID)
-            ->exec();
+
+        if(!empty($executionsCount) and $oldProject->multiple) $this->checkDatesValidByProject($projectID ,$project);
+        $this->projectTao->doUpdate($projectID, $project);
         if(dao::isError()) return false;
 
         if(!$oldProject->hasProduct and ($oldProject->name != $project->name or $oldProject->parent != $project->parent or $oldProject->acl != $project->acl)) $this->updateShadowProduct($project);
@@ -3047,7 +3059,7 @@ class projectModel extends model
      */
     public function updatePlanIdListByProject(int $projectID, array $plans): void
     {
-        /* Link the plan stories. */
+        /* Link the plan stories and transform $plans to $newPlans. */
         $newPlans = array();
         if(isset($plans))
         {

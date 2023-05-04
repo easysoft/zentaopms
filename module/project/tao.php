@@ -77,7 +77,7 @@ class projectTao extends projectModel
     }
 
     /**
-     * Update project.
+     * Update project table when activate a project.
      *
      * @param  int    $projectID
      * @param  object $project
@@ -90,6 +90,32 @@ class projectTao extends projectModel
             ->autoCheck()
             ->checkFlow()
             ->where('id')->eq((int)$projectID)
+            ->exec();
+
+        return !dao::isError();
+    }
+
+
+    /**
+     * Update project table when edit a project.
+     *
+     * @param  int    $projectID
+     * @param  object $project
+     * @access protected
+     * @return bool
+     */
+    protected function doUpdate(int $projectID ,object $project): bool
+    {
+        $this->dao->update(TABLE_PROJECT)->data($project)
+            ->autoCheck($skipFields = 'begin,end')
+            ->batchcheck($requiredFields, 'notempty')
+            ->checkIF($project->begin != '', 'begin', 'date')
+            ->checkIF($project->end != '', 'end', 'date')
+            ->checkIF($project->end != '', 'end', 'gt', $project->begin)
+            ->checkIF(!empty($project->name), 'name', 'unique', "id != $projectID and `type` = 'project' and `parent` = '$oldProject->parent' and `model` = '{$project->model}' and `deleted` = '0'")
+            ->checkIF(!empty($project->code), 'code', 'unique', "id != $projectID and `type` = 'project' and `model` = '{$project->model}' and `deleted` = '0'")
+            ->checkFlow()
+            ->where('id')->eq($projectID)
             ->exec();
 
         return !dao::isError();
