@@ -8,8 +8,7 @@ require_once dirname(__DIR__) . DS . 'btngroup' . DS . 'v1.php';
 
 class actionItem extends wg
 {
-    static $defineProps = array
-    (
+    static $defineProps = array(
         'name:string="action"',
         'type:string="item"',
         'outerTag:string="li"',

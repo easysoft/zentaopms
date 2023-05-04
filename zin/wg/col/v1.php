@@ -4,7 +4,10 @@ namespace zin;
 
 class col extends wg
 {
-    static $defineProps = 'justify?:string,align?:string';
+    static $defineProps = array(
+        'justify?:string',
+        'align?:string'
+    );
 
     protected function build()
     {

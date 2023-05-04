@@ -10,8 +10,8 @@ class textarea extends wg
         'value?: string',
         'required?: bool',
         'placeholder?: string',
-        'rows?: number',
-        'cols?: number',
+        'rows?: int',
+        'cols?: int',
     );
 
     static $defaultProps = array(

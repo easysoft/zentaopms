@@ -97,7 +97,6 @@ class productTao extends productModel
      */
     protected function getPagerProductsIn(array $productIDs, object|null $pager, string $orderBy)
     {
-        /* TODO list all fields? */
         $products = $this->dao->select('*')->from(TABLE_PRODUCT)
             ->where('id')->in($productIDs)
             ->orderBy($orderBy)

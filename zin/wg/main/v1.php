@@ -6,8 +6,7 @@ require_once dirname(__DIR__) . DS . 'featurebar' . DS . 'v1.php';
 
 class main extends wg
 {
-    static $defineBlocks = array
-    (
+    static $defineBlocks = array(
         'menu' => array('map' => 'featureBar,nav,toolbar'),
         'sidebar' => array('map' => 'sidebar')
     );

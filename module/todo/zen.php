@@ -42,6 +42,26 @@ class todoZen extends todo
     }
 
     /**
+     * 生成指派待办视图数据。
+     * Build assignTo form data.
+     *
+     * @param  int        $todoID
+     * @access protected
+     * @return void
+     */
+    protected function buildAssignToView(int $todoID): void
+    {
+        $this->view->todo    = $this->todo->getByID($todoID);
+        $this->view->members = $this->loadModel('user')->getPairs('noclosed|noempty|nodeleted');
+        $this->view->times   = date::buildTimeList($this->config->todo->times->begin, $this->config->todo->times->end, $this->config->todo->times->delta);
+        $this->view->actions = $this->loadModel('action')->getList('todo', $todoID);
+        $this->view->users   = $this->user->getPairs('noletter');
+        $this->view->time    = date::now();
+
+        $this->display();
+    }
+
+    /**
      * 处理请求数据
      * Processing request data.
      *
@@ -412,7 +432,7 @@ class todoZen extends todo
     }
 
     /**
-     * 处理指派待办请求数据.
+     * 处理指派待办请求数据。
      * Process assign todo request data.
      *
      * @param  object     $formData
@@ -434,7 +454,7 @@ class todoZen extends todo
     }
 
     /**
-     * 指派待办.
+     * 指派待办。
      * Assign a todo.
      *
      * @param   object     $todo
@@ -446,16 +466,47 @@ class todoZen extends todo
         return $this->todo->assignTo($todo);
     }
 
+
     /**
-     * 获取导出待办的字段。
+     * 获取用户信息。
+     * Get user info.
      *
-     * @param  array  $fields
-     * @param  array  $todoLang
+     * @param  int       $userID
+     * @access protected
+     * @return object|false
+     */
+    protected function getUserById(int $userID): object|false
+    {
+        return $this->loadModel('user')->getById($userID, 'id');
+    }
+
+    /**
+     * 记录当前页面uri参数链接。
+     * Set uri to session.
+     *
+     * @param  string    $uri
+     * @access protected
+     * @return true
+     */
+    protected function setSessionUri($uri): bool
+    {
+        foreach($this->config->todo->sessionUri as $key => $value) $this->sesstion->set($key, $uri, $value);
+        return true;
+    }
+
+    /**
+     * 获取导出待办的字段和字段。
+     * Get fields and info for export todo.
+     *
+     * @param  array     $todos
+     * @param  string    $fields
+     * @param  array     $todoLang
      * @access protected
      * @return array
      */
-    protected function exportFields(array $fields, object $todoLang): array
+    protected function exportTodoInfo(array $todos, string $fields, object $todoLang): array
     {
+        $fields = explode(',', $fields);
         foreach($fields as $key => $fieldName)
         {
             $fieldName = trim($fieldName);
@@ -463,10 +514,21 @@ class todoZen extends todo
             unset($fields[$key]);
         }
         unset($fields['objectID'], $fields['private']);
-        return $fields;
+
+        if($this->config->edition != 'open') list($fields, $todos) = $this->loadModel('workflowfield')->appendDataFromFlow($fields, $todos);
+        return array($todos, $fields);
     }
 
-    public function exportInfo($type, $account)
+    /**
+     * 获取待办关联的信息。
+     * Get associated info for export todo.
+     *
+     * @param  string $type
+     * @param  string $account
+     * @access protected
+     * @return array
+     */
+    protected function exportAssociated(string $type, string $account): array
     {
         if($type == 'max')
         {
@@ -490,5 +552,51 @@ class todoZen extends todo
                 $this->loadModel('testtask')->getUserTesttaskPairs($account),
             );
         }
+    }
+
+    /**
+     * 处理导出数据。
+     * Deal with export data.
+     *
+     * @param array      $todos
+     * @param object     $assemble
+     * @param object     $todoLang
+     * @param array      $times
+     * @access protected
+     * @return array
+     */
+    protected function assembleExportData(array $todos, object $assemble, object $todoLang, array $times): array
+    {
+        foreach($todos as $todo)
+        {
+            /* fill some field with useful value. */
+            $todo->begin = $todo->begin == '2400' ? '' : (isset($times[$todo->begin]) ? $times[$todo->begin] : $todo->begin);
+            $todo->end   = $todo->end   == '2400' ? '' : (isset($times[$todo->end])   ? $times[$todo->end] : $todo->end);
+
+            $type = $todo->type;
+            if(isset($assemble->users[$todo->account])) $todo->account = $assemble->users[$todo->account];
+
+            if($type == 'bug')      $todo->name = isset($assemble->bugs[$todo->objectID])      ? $assemble->bugs[$todo->objectID]      . "(#$todo->objectID)" : '';
+            if($type == 'task')     $todo->name = isset($assemble->tasks[$todo->objectID])     ? $assemble->tasks[$todo->objectID]     . "(#$todo->objectID)" : '';
+            if($type == 'story')    $todo->name = isset($assemble->stories[$todo->objectID])   ? $assemble->stories[$todo->objectID]   . "(#$todo->objectID)" : '';
+            if($type == 'testtask') $todo->name = isset($assemble->testTasks[$todo->objectID]) ? $assemble->testTasks[$todo->objectID] . "(#$todo->objectID)" : '';
+
+            if($this->config->edition == 'max')
+            {
+                if($type == 'issue')       $todo->name = isset($assemble->issues[$todo->objectID]) ? $assemble->issues[$todo->objectID] . "(#$todo->objectID)" : '';
+                if($type == 'risk')        $todo->name = isset($assemble->risks[$todo->objectID])  ? $assemble->risks[$todo->objectID]  . "(#$todo->objectID)" : '';
+                if($type == 'opportunity') $todo->name = isset($assemble->opportunities[$todo->objectID]) ? $assemble->opportunities[$todo->objectID] . "(#$todo->objectID)" : '';
+            }
+            if($type == 'review' && isset($this->config->qcVersion)) $todo->name = isset($assemble->reviews[$todo->objectID]) ? $assemble->reviews[$todo->objectID] . "(#$todo->objectID)" : '';
+
+            if(isset($todoLang->typeList[$type]))           $todo->type   = $todoLang->typeList[$type];
+            if(isset($todoLang->priList[$todo->pri]))       $todo->pri    = $todoLang->priList[$todo->pri];
+            if(isset($todoLang->statusList[$todo->status])) $todo->status = $todoLang->statusList[$todo->status];
+            if($todo->private == 1)                         $todo->desc   = $this->lang->todo->thisIsPrivate;
+
+            /* drop some field that is not needed. */
+            unset($todo->objectID, $todo->private);
+        }
+        return $todos;
     }
 }

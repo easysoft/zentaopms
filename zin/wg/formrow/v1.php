@@ -5,7 +5,11 @@ require_once dirname(__DIR__) . DS . 'formgroup' . DS . 'v1.php';
 
 class formRow extends wg
 {
-    static $defineProps = 'width?: string, items?: array, hidden?: boolean';
+    static $defineProps = array(
+        'width?: string',
+        'items?: array',
+        'hidden?: boolean'
+    );
 
     public function onBuildItem($item)
     {

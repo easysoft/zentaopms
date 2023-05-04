@@ -6,7 +6,22 @@ require_once dirname(__DIR__) . DS . 'btn' . DS . 'v1.php';
 
 class dropdown extends wg
 {
-    static $defineProps = 'items?:array, placement?:string, strategy?:string, offset?: number, flip?: bool, subMenuTrigger?: string, arrow?: string, trigger?: string, menuProps?: array, target?: string, id?: string, menuClass?: string, hasIcons?: bool, staticMenu?: bool';
+    static $defineProps = array(
+        'items?:array',
+        'placement?:string',
+        'strategy?:string',
+        'offset?: int',
+        'flip?: bool',
+        'subMenuTrigger?: string',
+        'arrow?: string',
+        'trigger?: string',
+        'menuProps?: array',
+        'target?: string',
+        'id?: string',
+        'menuClass?: string',
+        'hasIcons?: bool',
+        'staticMenu?: bool'
+    );
 
     static $defineBlocks = array
     (

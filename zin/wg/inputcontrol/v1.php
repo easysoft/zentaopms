@@ -8,8 +8,8 @@ class inputControl extends wg
     protected static $defineProps = array(
         'prefix?: mixed',
         'suffix?: mixed',
-        'prefixWidth?: string|number',
-        'suffixWidth?: string|number',
+        'prefixWidth?: string|int',
+        'suffixWidth?: string|int',
     );
 
     public static $defineBlocks = array(
