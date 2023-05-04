@@ -17,13 +17,12 @@ class todoModel extends model
      * Create todo data.
      *
      * @param  object $todo
-     * @param  object $formData
      * @access public
      * @return int|false
      */
-    public function create(object $todo, object $formData): int|false
+    public function create(object $todo): int|false
     {
-        $processedTodo = $this->todoTao->processCreateData($todo, $formData);
+        $processedTodo = $this->todoTao->processCreateData($todo);
         if(!$processedTodo) return false;
 
         $todoID = $this->todoTao->insert($processedTodo);
@@ -603,15 +602,17 @@ class todoModel extends model
     }
 
     /**
+     * 获取待办事项对象的项目ID。
      * Gets the project ID of the to-do object.
      *
      * @param  array $todoList
      * @access public
      * @return array
      */
-    public function getTodoProjects($todoList = array())
+    public function getTodoProjects(array $todoList = array()): array
     {
         $projectIdList = array();
+
         foreach($todoList as $type => $todos)
         {
             $todoIdList = array_keys($todos);
@@ -622,13 +623,8 @@ class todoModel extends model
             }
 
             $todoIdList = array_unique($todoIdList);
-            if($type == 'task')     $projectIdList[$type] = $this->dao->select('id,project')->from(TABLE_TASK)->where('id')->in($todoIdList)->fetchPairs('id', 'project');
-            if($type == 'bug')      $projectIdList[$type] = $this->dao->select('id,project')->from(TABLE_BUG)->where('id')->in($todoIdList)->fetchPairs('id', 'project');
-            if($type == 'issue')    $projectIdList[$type] = $this->dao->select('id,project')->from(TABLE_ISSUE)->where('id')->in($todoIdList)->fetchPairs('id', 'project');
-            if($type == 'risk')     $projectIdList[$type] = $this->dao->select('id,project')->from(TABLE_RISK)->where('id')->in($todoIdList)->fetchPairs('id', 'project');
-            if($type == 'opportunity') $projectIdList[$type] = $this->dao->select('id,project')->from(TABLE_OPPORTUNITY)->where('id')->in($todoIdList)->fetchPairs('id', 'project');
-            if($type == 'review')   $projectIdList[$type] = $this->dao->select('id,project')->from(TABLE_REVIEW)->where('id')->in($todoIdList)->fetchPairs('id', 'project');
-            if($type == 'testtask') $projectIdList[$type] = $this->dao->select('id,project')->from(TABLE_TESTTASK)->where('id')->in($todoIdList)->fetchPairs('id', 'project');
+            $typeTable  = array('task' => TABLE_TASK,'bug' => TABLE_BUG,'issue' => TABLE_ISSUE,'risk' => TABLE_RISK,'opportunity' => TABLE_OPPORTUNITY,'review' => TABLE_REVIEW,'testtask' => TABLE_TESTTASK);
+            $projectIdList[$type] = $this->dao->select('id,project')->from($typeTable[$type])->where('id')->in($todoIdList)->fetchPairs('id', 'project');
         }
 
         return $projectIdList;
