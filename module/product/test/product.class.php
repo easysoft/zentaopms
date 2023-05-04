@@ -1,6 +1,11 @@
 <?php
 class productTest
 {
+    /**
+     * @var productModel
+     * @access private
+     */
+    private productModel $objectModel;
 
     /**
      * __construct
