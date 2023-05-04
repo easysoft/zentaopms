@@ -34,7 +34,7 @@ class todo extends control
      * @return void
      */
     public function create(string $date = 'today', string $from = 'todo')
-    {a($date = date::today());exit;
+    {
         if($date == 'today') $date = date::today();
 
         if(!empty($_POST))
