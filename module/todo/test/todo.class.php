@@ -12,37 +12,16 @@ class todoTest
     /**
      * Test create a todo.
      *
-     * @param  string $account
-     * @param  array $param
+     * @param  object $todoData
+     * @param  object $formData
      * @access public
-     * @return object
+     * @return int
      */
-    public function createTest($account, $param = array())
+    public function createTest($todoData, $formData)
     {
-        $config = array('day' => '', 'specify' => array('month' => 0, 'day' => 1), 'type' => 'day', 'beforeDays' => 0, 'end' => '');
-        if(isset($param->date)) $param->date = $param->date == 'today' ? date('Y-m-d',time()) : date('Y-m-d',strtotime('+3 days'));
+        $objectID = $this->objectModel->create($todoData, $formData);
 
-        $createFields['config'] = $config;
-        $createFields['type']   = 'custom';
-        $createFields['name']   = '';
-        $createFields['pri']    = 3;
-        $createFields['desc']   = '';
-        $createFields['status'] = 'wait';
-        $createFields['begin']  = '0830';
-        $createFields['end']    = '0900';
-
-        foreach($createFields as $field => $defaultValue) $_POST[$field] = $defaultValue;
-
-        foreach($param as $key => $value) $_POST[$key] = $value;
-
-        $objectID = $this->objectModel->create(date('Y').date('m'), $account);
-
-        unset($_POST);
-
-        if(dao::isError()) return array_values(dao::getError())[0][0];
-
-        $object = $objectID ? $this->objectModel->getByID($objectID) : 0;
-        return $object;
+        return $objectID ?: 0;
     }
 
     /**
