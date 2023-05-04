@@ -3032,7 +3032,7 @@ class executionModel extends model
         $requiredFields = trim($requiredFields, ',');
 
         $bugToTasks = fixer::input('post')->get();
-        $bugs       = $this->bug->getByList(array_keys($bugToTasks->import));
+        $bugs       = $this->bug->getByIdList(array_keys($bugToTasks->import));
         foreach($bugToTasks->import as $key => $value)
         {
             $bug = zget($bugs, $key, '');

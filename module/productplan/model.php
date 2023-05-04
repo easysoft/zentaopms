@@ -1058,7 +1058,7 @@ class productplanModel extends model
         $this->loadModel('story');
         $this->loadModel('action');
 
-        $bugs = $this->loadModel('bug')->getByList($this->post->bugs);
+        $bugs = $this->loadModel('bug')->getByIdList($this->post->bugs);
         foreach($this->post->bugs as $bugID)
         {
             if(!isset($bugs[$bugID])) continue;
