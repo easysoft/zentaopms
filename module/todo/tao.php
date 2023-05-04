@@ -82,10 +82,11 @@ class todoTao extends todoModel
      * Process the data for the todo to be created.
      *
      * @param  object $todoData
+     * @param  object $formData
      * @access protected
      * @return object|false
      */
-    protected function processCreateData(object $todoData): object|false
+    protected function processCreateData(object $todoData, object $formData): object|false
     {
         if(!isset($todoData->pri) and in_array($todoData->type, $this->config->todo->moduleList) and !in_array($todoData->type, array('review', 'feedback')))
         {
@@ -117,7 +118,7 @@ class todoTao extends todoModel
         }
         if(empty($todoData->cycle)) unset($todoData->config);
 
-        return $this->loadModel('file')->processImgURL($todoData, $this->config->todo->editor->create['id'], $this->post->uid);
+        return $this->loadModel('file')->processImgURL($todoData, $this->config->todo->editor->create['id'], $formData->rawdata->uid);
     }
 
     /**
