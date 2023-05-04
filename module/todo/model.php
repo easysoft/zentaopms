@@ -569,7 +569,7 @@ class todoModel extends model
     }
 
     /**
-     * 指派待办.
+     * 指派待办。
      * Assign todo.
      *
      * @param  object  $todo
@@ -586,56 +586,49 @@ class todoModel extends model
     }
 
     /**
+     * 查询待办数量。
      * Get todo count.
      *
      * @param  string $account
      * @access public
      * @return int
      */
-    public function getCount($account = '')
+    public function getCount(string $account = ''): int
     {
         if(empty($account)) $account = $this->app->user->account;
-        return $this->dao->select('count(*) as count')->from(TABLE_TODO)
-            ->where('cycle')->eq('0')
-            ->andWhere('deleted')->eq('0')
-            ->andWhere('vision')->eq($this->config->vision)
-            ->andWhere('account', true)->eq($account)
-            ->orWhere('assignedTo')->eq($account)
-            ->orWhere('finishedBy')->eq($account)
-            ->markRight(1)
-            ->fetch('count');
+        $count = $this->todoTao->getCountByAccount($account, $this->config->vision);
+        if(dao::isError()) return 0;
+        return $count;
     }
 
     /**
+     * 根据类型获取各个模块的列表。
      * Gets the project ID of the to-do object.
      *
      * @param  array $todoList
      * @access public
      * @return array
      */
-    public function getTodoProjects($todoList = array())
+    public function getTodoProjects(array $todoList): array
     {
-        $projectIdList = array();
+        $projectIDList = array();
+        $projects      = $this->config->todo->project;
         foreach($todoList as $type => $todos)
         {
-            $todoIdList = array_keys($todos);
-            if(empty($todoIdList))
+            $todoIDList = array_keys($todos);
+            if(empty($todoIDList))
             {
-                $projectIdList[$type] = array();
+                $projectIDList[$type] = array();
                 continue;
             }
 
-            $todoIdList = array_unique($todoIdList);
-            if($type == 'task')     $projectIdList[$type] = $this->dao->select('id,project')->from(TABLE_TASK)->where('id')->in($todoIdList)->fetchPairs('id', 'project');
-            if($type == 'bug')      $projectIdList[$type] = $this->dao->select('id,project')->from(TABLE_BUG)->where('id')->in($todoIdList)->fetchPairs('id', 'project');
-            if($type == 'issue')    $projectIdList[$type] = $this->dao->select('id,project')->from(TABLE_ISSUE)->where('id')->in($todoIdList)->fetchPairs('id', 'project');
-            if($type == 'risk')     $projectIdList[$type] = $this->dao->select('id,project')->from(TABLE_RISK)->where('id')->in($todoIdList)->fetchPairs('id', 'project');
-            if($type == 'opportunity') $projectIdList[$type] = $this->dao->select('id,project')->from(TABLE_OPPORTUNITY)->where('id')->in($todoIdList)->fetchPairs('id', 'project');
-            if($type == 'review')   $projectIdList[$type] = $this->dao->select('id,project')->from(TABLE_REVIEW)->where('id')->in($todoIdList)->fetchPairs('id', 'project');
-            if($type == 'testtask') $projectIdList[$type] = $this->dao->select('id,project')->from(TABLE_TESTTASK)->where('id')->in($todoIdList)->fetchPairs('id', 'project');
+            $todoIDList = array_unique($todoIDList);
+
+            if(isset($projects[$type])) $projectIDList[$type] = $this->todoTao->getProjectList($projects[$type], $todoIDList);
+            if(dao::isError()) return array();
         }
 
-        return $projectIdList;
+        return $projectIDList;
     }
 
     /**

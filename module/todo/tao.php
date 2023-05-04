@@ -17,6 +17,42 @@ class todoTao extends todoModel
     }
 
     /**
+     * 获取待办数量。
+     * Get todo count.
+     *
+     * @param  string    $account
+     * @param  string    $vision
+     * @access protected
+     * @return int
+     */
+    protected function getCountByAccount(string $account, string $vision = 'rnd'): int
+    {
+        return $this->dao->select('count(*) as count')->from(TABLE_TODO)
+            ->where('cycle')->eq('0')
+            ->andWhere('deleted')->eq('0')
+            ->andWhere('vision')->eq($vision)
+            ->andWhere('account', true)->eq($account)
+            ->orWhere('assignedTo')->eq($account)
+            ->orWhere('finishedBy')->eq($account)
+            ->markRight(1)
+            ->fetch('count');
+    }
+
+    /**
+     * 获取各模块列表。
+     * Get project list.
+     *
+     * @param  string $table
+     * @param  array $idList
+     * @access protected
+     * @return array
+     */
+    protected function getProjectList(string $table, array $idList): array
+    {
+        return $this->dao->select('id,project')->from($table)->where('id')->in($idList)->fetchPairs('id', 'project');
+    }
+
+    /**
      * 插入待办数据
      * Insert todo data.
      *

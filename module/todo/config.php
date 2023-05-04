@@ -49,3 +49,13 @@ $config->todo->sessionUri['bugList']      = 'qa';
 $config->todo->sessionUri['taskList']     = 'execution';
 $config->todo->sessionUri['storyList']    = 'product';
 $config->todo->sessionUri['testtaskList'] = 'qa';
+
+$config->todo->project = array();
+$config->todo->project['task']        = TABLE_TASK;
+$config->todo->project['bug']         = TABLE_BUG;
+$config->todo->project['issue']       = TABLE_ISSUE;
+$config->todo->project['risk']        = TABLE_RISK;
+$config->todo->project['opportunity'] = TABLE_OPPORTUNITY;
+$config->todo->project['review']      = TABLE_REVIEW;
+$config->todo->project['testtask']    = TABLE_TESTTASK;
+

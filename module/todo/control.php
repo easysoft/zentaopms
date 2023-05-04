@@ -340,9 +340,9 @@ class todo extends control
      * @param  string  $todoID
      * @param  string  $confirm yes|no
      * @access public
-     * @return int
+     * @return void
      */
-    public function delete(string $todoID, string $confirm = 'no'): int
+    public function delete(string $todoID, string $confirm = 'no')
     {
         $todoID = (int)$todoID;
         if($confirm == 'no')  return print(js::confirm($this->lang->todo->confirmDelete, $this->createLink('todo', 'delete', "todoID={$todoID}&confirm=yes")));
@@ -372,9 +372,9 @@ class todo extends control
      *
      * @param  string  $todoID
      * @access public
-     * @return int|false
+     * @return void
      */
-    public function finish(string $todoID): int|false
+    public function finish(string $todoID)
     {
         $todoID = (int)$todoID;
         $todo   = $this->todo->getByID($todoID);
@@ -414,9 +414,9 @@ class todo extends control
      * Batch finish todos.
      *
      * @access public
-     * @return int|false
+     * @return void
      */
-    public function batchFinish(): int|false
+    public function batchFinish()
     {
         $todoIDList = form::data($this->config->todo->batchFinish->form)->get('todoIDList');
         $todoList   = $this->todo->getByList($todoIDList);
