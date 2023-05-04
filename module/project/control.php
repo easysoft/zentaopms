@@ -529,7 +529,7 @@ class project extends control
             $this->lang->project->subAclList = $this->lang->project->kanbanSubAclList;
         }
 
-        $withProgram = $this->config->systemMode == 'ALM' ? true : false;
+        $withProgram = $this->config->systemMode == 'ALM';
         $linkedBranchList    = array();
         $productPlans        = array();
         $branches            = $this->project->getBranchesByProject($projectID);
@@ -574,6 +574,7 @@ class project extends control
         $unmodifiableProducts     = array();
         $unmodifiableBranches     = array();
         $unmodifiableMainBranches = array();
+
         foreach($linkedProducts as $productID => $linkedProduct)
         {
             if(!isset($allProducts[$productID])) $allProducts[$productID] = $linkedProduct->name;

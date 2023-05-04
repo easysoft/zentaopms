@@ -1673,6 +1673,7 @@ class bug extends control
             $bug = $this->bugZen->prepareCloseExtras($data, $bugID);
             $this->bug->close($bug, $extra);
             if(dao::isError()) return print(js::error(dao::getError()));
+            $this->bug->afterClose($bug, $oldBug);
 
             $this->executeHooks($bugID);
 
@@ -1681,11 +1682,11 @@ class bug extends control
             if(isonlybody())
             {
                 $execution    = $this->loadModel('execution')->getByID($oldBug->execution);
-                $execLaneType = $this->session->execLaneType ? $this->session->execLaneType : 'all';
-                $execGroupBy  = $this->session->execGroupBy ? $this->session->execGroupBy : 'default';
+                $execLaneType = $this->session->execLaneType ?: 'all';
+                $execGroupBy  = $this->session->execGroupBy ?: 'default';
                 if($this->app->tab == 'execution' and isset($execution->type) and $execution->type == 'kanban')
                 {
-                    $rdSearchValue = $this->session->rdSearchValue ? $this->session->rdSearchValue : '';
+                    $rdSearchValue = $this->session->rdSearchValue ?: '';
                     $regionID      = !empty($output['regionID']) ? $output['regionID'] : 0;
                     $kanbanData    = $this->loadModel('kanban')->getRDKanban($oldBug->execution, $execLaneType, 'id_desc', $regionID, $execGroupBy, $rdSearchValue);
                     $kanbanData    = json_encode($kanbanData);

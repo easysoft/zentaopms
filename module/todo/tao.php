@@ -259,17 +259,18 @@ class todoTao extends todoModel
      *
      * @param  object $todos
      * @param  object $formData
-     * @param  int $loop
+     * @param  int    $loop
+     * @param  string $assignedTo
      * @access protected
      * @return object
      */
-    protected function getValidsOfBatchCreate(object $todos, object $formData, int $loop , string $assignedTo)
+    protected function getValidsOfBatchCreate(object $todos, object $formData, int $loop , string $assignedTo): object
     {
         $todo = new stdclass();
         $todo->account = $this->app->user->account;
 
         $todo->date = $formData->rawdata->date;
-        if($formData->rawdata->switchDate == 'on' || $formDatat->rawdata->date == false) $todo->date = '2030-01-01';
+        if($formData->rawdata->switchDate == 'on' || $formData->rawdata->date == false) $todo->date = '2030-01-01';
 
         $todo->type         = $todos->types[$loop];
         $todo->pri          = $todos->pris[$loop];
@@ -298,7 +299,7 @@ class todoTao extends todoModel
             if(isset($object->title)) $todo->name = $object->title;
         }
 
-        if($todo->end < $todo->begin) return print(js::alert(sprintf($this->lang->error->gt, $this->lang->todo->end, $this->lang->todo->begin)));
+        if($todo->end < $todo->begin) dao::$errors['message'][] = sprintf($this->lang->error->gt, $this->lang->todo->end, $this->lang->todo->begin);
 
         return $todo;
     }

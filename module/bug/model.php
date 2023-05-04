@@ -1349,24 +1349,37 @@ class bugModel extends model
     public function close(object $bug, string $extra = '')
     {
         $this->dao->update(TABLE_BUG)->data($bug, 'comment')->autoCheck()->checkFlow()->where('id')->eq((int)$bug->id)->exec();
+    }
 
-        $oldBug = $this->getByID((int)$bug->id);
-        $extra  = str_replace(array(',', ' '), array('&', ''), $extra);
-        parse_str($extra, $output);
-        if($oldBug->execution)
-        {
-            $this->loadModel('kanban');
-            if(!isset($output['toColID'])) $this->kanban->updateLane($oldBug->execution, 'bug', $bug->id);
-            if(isset($output['toColID'])) $this->kanban->moveCard($bug->id, $output['fromColID'], $output['toColID'], $output['fromLaneID'], $output['toLaneID']);
-        }
+    /**
+     * 关闭bug后的其他处理。
+     * Handle after bug closed.
+     *
+     * @param  object $bug
+     * @param  object $oldBug
+     * @access public
+     * @return array
+     */
+    public function afterClose(object $bug, object $oldBug):array
+    {
+        if($oldBug->execution) list($bug, $oldBug) = $this->bugTao->updateKanbanAfterClose($bug, $oldBug);
+        list($bug, $oldBug) = $this->bugTao->updateActionAfterClose($bug, $oldBug);
+        $this->updateBugAssignedTo((int)$bug->id);
 
-        if(($this->config->edition == 'biz' || $this->config->edition == 'max') && $oldBug->feedback) $this->loadModel('feedback')->updateStatus('bug', $oldBug->feedback, $bug->status, $oldBug->status);
+        return array($bug, $oldBug);
+    }
 
-        $this->loadModel('action');
-        $changes  = common::createChanges($oldBug, $bug);
-        $actionID = $this->action->create('bug', $bug->id, 'Closed', $bug->comment);
-        $this->action->logHistory($actionID, $changes);
-        $this->dao->update(TABLE_BUG)->set('assignedTo')->eq('closed')->where('id')->eq((int)$bug->id)->exec();
+    /**
+     * 更新bug的抄送给状态为已关闭。
+     * Update bug assigned to value to closed.
+     *
+     * @param  int $bugID
+     * @access public
+     * @return viod
+     */
+    public function updateBugAssignedTo(int $bugID)
+    {
+        $this->dao->update(TABLE_BUG)->set('assignedTo')->eq('closed')->where('id')->eq($bugID)->exec();
     }
 
     /**
