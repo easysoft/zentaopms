@@ -549,7 +549,7 @@ class testreport extends control
         $this->view->report    = $report;
         $this->view->execution = $execution;
         $this->view->stories   = $stories;
-        $this->view->bugs      = $report->bugs ? $this->bug->getByList($report->bugs) : array();
+        $this->view->bugs      = $report->bugs ? $this->bug->getByIdList($report->bugs) : array();
         $this->view->builds    = $builds;
         $this->view->cases     = $this->testreport->getTaskCases($tasks, $report->begin, $report->end, $report->cases, $pager);
         $this->view->users     = $this->user->getPairs('noletter|noclosed|nodeleted');

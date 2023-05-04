@@ -1523,7 +1523,7 @@ class taskTest
      * @access public
      * @return array
      */
-    public function fetchExecutionTasksTest(int $executionID, int $productID = 0, string|array $type = 'all', array $modules = array(), string $orderBy = 'status_asc, id_desc', string $count = '0'): array|int
+    public function fetchExecutionTasksTest($executionID, $productID = 0, $type = 'all', $modules = array(), $orderBy = 'status_asc, id_desc', $count = '0'): array|int
     {
         $tasks = $this->objectModel->fetchExecutionTasks($executionID, $productID, $type, $modules, $orderBy);
         if(dao::isError())
@@ -1548,7 +1548,7 @@ class taskTest
      * @access public
      * @return object[]
      */
-    public function buildTaskTreeTest(array $taskIdList): array
+    public function buildTaskTreeTest($taskIdList): array
     {
         $tasks = array();
         if(!empty($taskIdList)) $tasks = $this->objectModel->getByList($taskIdList);
@@ -1572,7 +1572,7 @@ class taskTest
      * @access public
      * @return string
      */
-    public function getAssignedTo4MultiTest(int $taskID, string $type = 'current'): string
+    public function getAssignedTo4MultiTest($taskID, $type = 'current'): string
     {
         $task    = $this->objectModel->getByID($taskID);
         $members = empty($task->team) ? array() : $task->team;
@@ -1592,7 +1592,7 @@ class taskTest
      * @access public
      * @return object
      */
-    public function computeCurrentTaskStatusTest(object $currentTask, object $oldTask, object $task, bool $autoStatus, bool $hasEfforts, array $members): object
+    public function computeCurrentTaskStatusTest($currentTask, $oldTask, $task, $autoStatus, $hasEfforts, $members): object
     {
         $task = $this->objectModel->computeCurrentTaskStatus($currentTask, $oldTask, $task, $autoStatus, $hasEfforts, $members);
         if(dao::isError())

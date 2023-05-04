@@ -670,9 +670,9 @@ class bugTest
      * @access public
      * @return array
      */
-    public function getByListTest($bugIDList)
+    public function getByIdListTest($bugIDList)
     {
-        $bugs = $this->objectModel->getByList($bugIDList);
+        $bugs = $this->objectModel->getByIdList($bugIDList);
 
         foreach($bugs as $bug)
         {
@@ -972,7 +972,7 @@ class bugTest
     {
         $this->objectModel->batchConfirm($bugIDList);
 
-        $bugs = $this->objectModel->getByList($bugIDList);
+        $bugs = $this->objectModel->getByIdList($bugIDList);
 
         $confirm = '';
         foreach($bugs as $bug) $confirm .= ',' . $bug->confirmed;
@@ -1035,7 +1035,7 @@ class bugTest
      */
     public function batchChangeBranchTest($bugIDList, $branchID, $bugID)
     {
-        $bugs = $this->objectModel->getByList($bugIDList);
+        $bugs = $this->objectModel->getByIdList($bugIDList);
 
         $object = $this->objectModel->batchChangeBranch($bugIDList, $branchID, $bugs);
 
@@ -1060,7 +1060,7 @@ class bugTest
      */
     public function batchChangeModuleTest($bugIDList, $moduleID, $bugID)
     {
-        $bugs = $this->objectModel->getByList($bugIDList);
+        $bugs = $this->objectModel->getByIdList($bugIDList);
 
         $object = $this->objectModel->batchChangeModule($bugIDList, $moduleID, $bugs);
 
@@ -1178,7 +1178,7 @@ class bugTest
      */
     public function processBuildForBugsTest($bugIDList)
     {
-        $bugs  = $this->objectModel->getByList($bugIDList);
+        $bugs  = $this->objectModel->getByIdList($bugIDList);
         $array = $this->objectModel->processBuildForBugs($bugs);
 
         if(dao::isError())
@@ -1200,7 +1200,7 @@ class bugTest
      */
     public function extractAccountsFromListTest($bugIDList)
     {
-        $bugs  = $this->objectModel->getByList($bugIDList);
+        $bugs  = $this->objectModel->getByIdList($bugIDList);
         $array = $this->objectModel->extractAccountsFromList($bugs);
 
         if(dao::isError())
@@ -1861,7 +1861,7 @@ class bugTest
      */
     public function formCustomedBugsTest($bugIDList)
     {
-        $bugs  = $this->objectModel->getByList($bugIDList);
+        $bugs  = $this->objectModel->getByIdList($bugIDList);
         $array = $this->objectModel->formCustomedBugs($bugs);
 
         if(dao::isError())
