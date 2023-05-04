@@ -3040,9 +3040,9 @@ class projectModel extends model
      * @param  int   $projectID
      * @param  array $plans
      * @access public
-     * @return void
+     * @return bool
      */
-    public function updatePlanIdListByProject(int $projectID, array $plans): void
+    public function updatePlanIdListByProject(int $projectID, array $plans): bool
     {
         /* Link the plan stories and transform $plans to $newPlans. */
         $newPlans = array();
@@ -3054,7 +3054,7 @@ class projectModel extends model
                 foreach($planList as $planID) $newPlans[$planID] = $planID;
             }
         }
-        if(empty($newPlans)) return;
+        if(empty($newPlans)) return false;
 
         /* Get old PlanIdList by project*/
         $oldPlanList = $this->dao->select('plan')->from(TABLE_PROJECTPRODUCT)
@@ -3074,5 +3074,6 @@ class projectModel extends model
 
         $diffResult = array_diff($oldPlans, $newPlans);
         if(!empty($diffResult)) $this->loadModel('productplan')->linkProject($projectID, $newPlans);
+        return !dao::isError();
     }
 }
