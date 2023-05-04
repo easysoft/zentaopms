@@ -1338,45 +1338,35 @@ class bugModel extends model
     }
 
     /**
+     * 关闭一个bug。
      * Close a bug.
      *
-     * @param  int    $bugID
+     * @param  object $bug
      * @param  string $extra
      * @access public
      * @return void
      */
-    public function close($bugID, $extra = '')
+    public function close(object $bug, string $extra = '')
     {
-        $extra = str_replace(array(',', ' '), array('&', ''), $extra);
+        $this->dao->update(TABLE_BUG)->data($bug, 'comment')->autoCheck()->checkFlow()->where('id')->eq((int)$bug->id)->exec();
+
+        $oldBug = $this->getByID((int)$bug->id);
+        $extra  = str_replace(array(',', ' '), array('&', ''), $extra);
         parse_str($extra, $output);
-
-        $now    = helper::now();
-        $oldBug = $this->getById($bugID);
-        $bug    = fixer::input('post')
-            ->add('id', $bugID)
-            ->add('status',     'closed')
-            ->add('confirmed',  1)
-            ->setDefault('assignedDate',   $now)
-            ->setDefault('lastEditedBy',   $this->app->user->account)
-            ->setDefault('lastEditedDate', $now)
-            ->setDefault('closedBy',       $this->app->user->account)
-            ->setDefault('closedDate',     $now)
-            ->stripTags($this->config->bug->editor->close['id'], $this->config->allowedTags)
-            ->remove('comment')
-            ->get();
-
-        $bug = $this->loadModel('file')->processImgURL($bug, $this->config->bug->editor->close['id'], $this->post->uid);
-        $this->dao->update(TABLE_BUG)->data($bug)->autoCheck()->checkFlow()->where('id')->eq((int)$bugID)->exec();
         if($oldBug->execution)
         {
             $this->loadModel('kanban');
-            if(!isset($output['toColID'])) $this->kanban->updateLane($oldBug->execution, 'bug', $bugID);
-            if(isset($output['toColID'])) $this->kanban->moveCard($bugID, $output['fromColID'], $output['toColID'], $output['fromLaneID'], $output['toLaneID']);
+            if(!isset($output['toColID'])) $this->kanban->updateLane($oldBug->execution, 'bug', $bug->id);
+            if(isset($output['toColID'])) $this->kanban->moveCard($bug->id, $output['fromColID'], $output['toColID'], $output['fromLaneID'], $output['toLaneID']);
         }
 
         if(($this->config->edition == 'biz' || $this->config->edition == 'max') && $oldBug->feedback) $this->loadModel('feedback')->updateStatus('bug', $oldBug->feedback, $bug->status, $oldBug->status);
 
-        return common::createChanges($oldBug, $bug);
+        $this->loadModel('action');
+        $changes  = common::createChanges($oldBug, $bug);
+        $actionID = $this->action->create('bug', $bug->id, 'Closed', $bug->comment);
+        $this->action->logHistory($actionID, $changes);
+        $this->dao->update(TABLE_BUG)->set('assignedTo')->eq('closed')->where('id')->eq((int)$bug->id)->exec();
     }
 
     /**
@@ -3100,7 +3090,7 @@ class bugModel extends model
     {
         /* Set toList and ccList. */
         $toList = $bug->assignedTo ? $bug->assignedTo : '';
-        $ccList = trim($bug->mailto, ',');
+        $ccList = trim((string)$bug->mailto, ',');
         if(empty($toList))
         {
             if(empty($ccList)) return false;
