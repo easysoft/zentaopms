@@ -517,18 +517,18 @@ class projectTao extends projectModel
     }
 
     /**
-     * 将旧的产品替换成新的
-     * replace oldProduct
+     * 查找项目执行下关联的产品
+     * Get linked products with execution under the project.
      *
      * @param  array $executionIDs
      *
      * @access protected
-     * @return bool
+     * @return array
      */
-    protected function replaceOldProduct(array $executionIDs): bool
+    protected function getExecutionProductGroup(array $executionIDs): array
     {
         $oldExecutionProducts = $this->dao->select('project,product')->from(TABLE_PROJECTPRODUCT)->where('project')->in($executionIDs)->fetchGroup('project', 'product');
-        return !dao::isError();
+        return $oldExecutionProducts;
     }
 
     /**
