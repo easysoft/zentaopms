@@ -47,10 +47,8 @@ class projectModel extends model
     {
         if(defined('TUTORIAL')) return true;
 
-        echo(js::alert($this->lang->project->accessDenied));
         $this->session->set('project', '');
-
-        return print(js::locate(helper::createLink('project', 'index')));
+        return print(js::alert($this->lang->project->accessDenied) . js::locate(helper::createLink('project', 'index')));
     }
 
     /**
@@ -148,8 +146,8 @@ class projectModel extends model
      */
     public function getMultiLinkedProducts($projectID)
     {
-        $linkedProducts      = $this->dao->select('product')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($projectID)->fetchPairs();
-        $multiLinkedProducts = $this->dao->select('t3.id,t3.name')->from(TABLE_PROJECTPRODUCT)->alias('t1')
+        $linkedProducts = $this->dao->select('product')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($projectID)->fetchPairs();
+        return $this->dao->select('t3.id,t3.name')->from(TABLE_PROJECTPRODUCT)->alias('t1')
             ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
             ->leftJoin(TABLE_PRODUCT)->alias('t3')->on('t1.product = t3.id')
             ->where('t1.product')->in($linkedProducts)
@@ -158,8 +156,6 @@ class projectModel extends model
             ->andWhere('t2.deleted')->eq('0')
             ->andWhere('t3.deleted')->eq('0')
             ->fetchPairs('id', 'name');
-
-        return $multiLinkedProducts;
     }
 
     /*
@@ -263,7 +259,7 @@ class projectModel extends model
             ->groupBy('t2.project')
             ->fetchAll('project');
 
-        $this->app->loadClass('pager', $static = true);
+        $this->app->loadClass('pager', true);
         foreach($projects as $projectID => $project)
         {
             $orderBy = $project->model == 'waterfall' ? 'id_asc' : 'id_desc';
@@ -864,12 +860,11 @@ class projectModel extends model
             ->orderBy('grade desc')
             ->fetch();
 
-        $projects = $this->dao->select('id')->from(TABLE_PROJECT)
+        return $this->dao->select('id')->from(TABLE_PROJECT)
             ->where('type')->eq('project')
             ->andWhere('deleted')->eq(0)
             ->andWhere('path')->like("{$parentProgram->path}%")
             ->fetchPairs('id');
-        return $projects;
     }
 
     /**
@@ -1544,7 +1539,7 @@ class projectModel extends model
             $parentID   = !isset($project->parent) ? $oldProject->parent : $project->parent;
 
             $this->dao->update(TABLE_PROJECT)->data($project)
-                ->autoCheck($skipFields = 'begin,end')
+                ->autoCheck('begin,end')
                 ->batchCheck($this->config->project->edit->requiredFields, 'notempty')
                 ->checkIF($project->begin != '', 'begin', 'date')
                 ->checkIF($project->end != '', 'end', 'date')
@@ -3061,10 +3056,7 @@ class projectModel extends model
         {
             foreach($plans as $planList)
             {
-                foreach($planList as $planIDList)
-                {
-                    foreach($planIDList as $planID) $newPlans[$planID] = $planID;
-                }
+                foreach($planList as $planID) $newPlans[$planID] = $planID;
             }
         }
         if(empty($newPlans)) return;

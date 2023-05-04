@@ -315,7 +315,7 @@ class project extends control
         if($project->model == 'kanban' and $this->config->vision != 'lite')
         {
             /* Load pager and get kanban list. */
-            $this->app->loadClass('pager', $static = true);
+            $this->app->loadClass('pager', true);
             $pager = new pager($recTotal, $recPerPage, $pageID);
 
             $kanbanList = $this->loadModel('execution')->getList($projectID, 'all', $browseType, 0, 0, 0, $pager);
@@ -369,7 +369,7 @@ class project extends control
         $browseType  = strtolower($browseType);
 
         /* Load pager. */
-        $this->app->loadClass('pager', $static = true);
+        $this->app->loadClass('pager', true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
         $queryID = ($browseType == 'bysearch') ? (int)$param : 0;
@@ -518,9 +518,8 @@ class project extends control
         $this->loadModel('program');
         $this->loadModel('execution');
 
-        $projectID  = (int)$projectID;
-        $project    = $this->project->getByID($projectID);
-        $programID  = $project->parent;
+        $projectID = (int)$projectID;
+        $project   = $this->project->getByID($projectID);
         $this->project->setMenu($projectID);
 
         if($project->model == 'kanban')
@@ -735,7 +734,7 @@ class project extends control
         }
 
         /* Load pager. */
-        $this->app->loadClass('pager', $static = true);
+        $this->app->loadClass('pager', true);
         $pager = new pager(0, 30, 1);
 
         /* Check exist extend fields. */
@@ -864,8 +863,8 @@ class project extends control
         $orderBy = $direction == 'next' ? 'date_desc' : 'date_asc';
 
         /* Set the pager. */
-        $this->app->loadClass('pager', $static = true);
-        $pager = new pager($recTotal, $recPerPage = 50, $pageID = 1);
+        $this->app->loadClass('pager', true);
+        $pager = new pager($recTotal, 50, 1);
 
         /* Set the user and type. */
         $account = 'all';
@@ -933,7 +932,7 @@ class project extends control
         if(!empty($project->model) and $project->model == 'kanban' and !(defined('RUN_MODE') and RUN_MODE == 'api')) return print(js::locate($this->createLink('project', 'index', "projectID=$projectID")));
 
         /* Load pager and get tasks. */
-        $this->app->loadClass('pager', $static = true);
+        $this->app->loadClass('pager', true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
         $allExecution = $this->execution->getStatData($projectID, 'all');
