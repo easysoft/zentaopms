@@ -2,38 +2,51 @@
 declare(strict_types=1);
 global $lang;
 
-$config->bug->createform = array();
-$config->bug->createform['title']       = array('required' => true, 'type' => 'string', 'filter' => 'trim');
-$config->bug->createform['openedBuild'] = array('required' => true, 'type' => 'array', 'filter' => 'join');
+$config->bug->form = new stdclass();
 
-$config->bug->createform['product']     = array('required' => false, 'type' => 'int', 'default' => 0);
-$config->bug->createform['branch']      = array('required' => false, 'type' => 'int', 'default' => 0);
-$config->bug->createform['module']      = array('required' => false, 'type' => 'int', 'default' => 0);
-$config->bug->createform['project']     = array('required' => false, 'type' => 'int', 'default' => 0);
-$config->bug->createform['execution']   = array('required' => false, 'type' => 'int', 'default' => 0);
-$config->bug->createform['assignedTo']  = array('required' => false, 'type' => 'string', 'default' => '');
-$config->bug->createform['deadline']    = array('required' => false, 'type' => 'date', 'default' => '');
-$config->bug->createform['feedbackBy']  = array('required' => false, 'type' => 'string', 'default' => '');
-$config->bug->createform['notifyEmail'] = array('required' => false, 'type' => 'string', 'default' => '');
-$config->bug->createform['type']        = array('required' => false, 'type' => 'string', 'default' => '');
+$config->bug->form->create = array();
+$config->bug->form->create['title']       = array('required' => true, 'type' => 'string', 'filter' => 'trim');
+$config->bug->form->create['openedBuild'] = array('required' => true, 'type' => 'array',  'filter' => 'join');
 
-$config->bug->createform['os']       = array('required' => false, 'type' => 'array', 'default' => array(''), 'filter' => 'join');
-$config->bug->createform['browser']  = array('required' => false, 'type' => 'array', 'default' => array(''), 'filter' => 'join');
-$config->bug->createform['color']    = array('required' => false, 'type' => 'string', 'default' => '');
-$config->bug->createform['severity'] = array('required' => false, 'type' => 'int', 'default' => 3);
-$config->bug->createform['pri']      = array('required' => false, 'type' => 'int', 'default' => 3);
-$config->bug->createform['steps']    = array('required' => false, 'type' => 'string', 'default' => $lang->bug->tplStep . $lang->bug->tplResult . $lang->bug->tplExpect);
+$config->bug->form->create['product']     = array('required' => false, 'type' => 'int',    'default' => 0);
+$config->bug->form->create['branch']      = array('required' => false, 'type' => 'int',    'default' => 0);
+$config->bug->form->create['module']      = array('required' => false, 'type' => 'int',    'default' => 0);
+$config->bug->form->create['project']     = array('required' => false, 'type' => 'int',    'default' => 0);
+$config->bug->form->create['execution']   = array('required' => false, 'type' => 'int',    'default' => 0);
+$config->bug->form->create['assignedTo']  = array('required' => false, 'type' => 'string', 'default' => '');
+$config->bug->form->create['deadline']    = array('required' => false, 'type' => 'date',   'default' => '');
+$config->bug->form->create['feedbackBy']  = array('required' => false, 'type' => 'string', 'default' => '');
+$config->bug->form->create['notifyEmail'] = array('required' => false, 'type' => 'string', 'default' => '');
+$config->bug->form->create['type']        = array('required' => false, 'type' => 'string', 'default' => '');
 
-$config->bug->createform['story']       = array('required' => false, 'type' => 'int', 'default' => 0);
-$config->bug->createform['task']        = array('required' => false, 'type' => 'int', 'default' => 0);
-$config->bug->createform['oldTaskID']   = array('required' => false, 'type' => 'int', 'default' => 0);
-$config->bug->createform['case']        = array('required' => false, 'type' => 'int', 'default' => 0);
-$config->bug->createform['caseVersion'] = array('required' => false, 'type' => 'int', 'default' => 0);
-$config->bug->createform['result']      = array('required' => false, 'type' => 'int', 'default' => 0);
-$config->bug->createform['testtask']    = array('required' => false, 'type' => 'int', 'default' => 0);
+$config->bug->form->create['os']       = array('required' => false, 'type' => 'array',  'default' => array(''), 'filter' => 'join');
+$config->bug->form->create['browser']  = array('required' => false, 'type' => 'array',  'default' => array(''), 'filter' => 'join');
+$config->bug->form->create['color']    = array('required' => false, 'type' => 'string', 'default' => '');
+$config->bug->form->create['severity'] = array('required' => false, 'type' => 'int',    'default' => 3);
+$config->bug->form->create['pri']      = array('required' => false, 'type' => 'int',    'default' => 3);
+$config->bug->form->create['steps']    = array('required' => false, 'type' => 'string', 'default' => $lang->bug->tplStep . $lang->bug->tplResult . $lang->bug->tplExpect);
 
-$config->bug->createform['mailto']    = array('required' => false, 'type' => 'array', 'default' => array(''), 'filter' => 'join');
-$config->bug->createform['keywords']  = array('required' => false, 'type' => 'string', 'default' => '');
-$config->bug->createform['status']    = array('required' => false, 'type' => 'string', 'default' => 'active');
-$config->bug->createform['issueKey']  = array('required' => false, 'type' => 'string', 'default' => '');
-$config->bug->createform['uid']       = array('required' => false, 'type' => 'string',  'default' => '');
+$config->bug->form->create['story']       = array('required' => false, 'type' => 'int', 'default' => 0);
+$config->bug->form->create['task']        = array('required' => false, 'type' => 'int', 'default' => 0);
+$config->bug->form->create['oldTaskID']   = array('required' => false, 'type' => 'int', 'default' => 0);
+$config->bug->form->create['case']        = array('required' => false, 'type' => 'int', 'default' => 0);
+$config->bug->form->create['caseVersion'] = array('required' => false, 'type' => 'int', 'default' => 0);
+$config->bug->form->create['result']      = array('required' => false, 'type' => 'int', 'default' => 0);
+$config->bug->form->create['testtask']    = array('required' => false, 'type' => 'int', 'default' => 0);
+
+$config->bug->form->create['mailto']   = array('required' => false, 'type' => 'array',  'default' => array(''), 'filter' => 'join');
+$config->bug->form->create['keywords'] = array('required' => false, 'type' => 'string', 'default' => '');
+$config->bug->form->create['status']   = array('required' => false, 'type' => 'string', 'default' => 'active');
+$config->bug->form->create['issueKey'] = array('required' => false, 'type' => 'string', 'default' => '');
+$config->bug->form->create['uid']      = array('required' => false, 'type' => 'string', 'default' => '');
+
+global $app;
+$config->bug->form->close = array();
+$config->bug->form->close['status']         = array('required' => false, 'type' => 'string', 'default' => 'closed');
+$config->bug->form->close['confirmed']      = array('required' => false, 'type' => 'int',    'default' => 1);
+$config->bug->form->close['assignedDate']   = array('required' => false, 'type' => 'string', 'default' => helper::now());
+$config->bug->form->close['lastEditedBy']   = array('required' => false, 'type' => 'string', 'default' => $app->user->account);
+$config->bug->form->close['lastEditedDate'] = array('required' => false, 'type' => 'string', 'default' => helper::now());
+$config->bug->form->close['closedBy']       = array('required' => false, 'type' => 'string', 'default' => $app->user->account);
+$config->bug->form->close['closedDate']     = array('required' => false, 'type' => 'string', 'default' => helper::now());
+$config->bug->form->close['comment']        = array('required' => false, 'type' => 'string', 'default' => '');;
