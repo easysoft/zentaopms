@@ -309,8 +309,8 @@ class bugModel extends model
     }
 
     /**
-     * Get bug list by browse type.
      * 根据浏览类型获取bug列表。
+     * Get bug list by browse type.
      *
      * @param  string      $browseType
      * @param  int|array   $productIdList
@@ -422,15 +422,15 @@ class bugModel extends model
     }
 
     /**
-     * Get bugs by ID list.
      * 获取指定字段的bug列表。
+     * Get bugs by ID list.
      *
      * @param  int|array|string $bugIDList
      * @param  string           $fields
      * @access public
      * @return array
      */
-    public function getByList(int|array|string $bugIDList = 0, string $fields = '*'): array
+    public function getByIdList(int|array|string $bugIDList = 0, string $fields = '*'): array
     {
         return $this->dao->select($fields)->from(TABLE_BUG)
             ->where('deleted')->eq('0')

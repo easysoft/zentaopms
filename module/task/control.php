@@ -2148,7 +2148,7 @@ class task extends control
                 }
             }
 
-            $bugs = $this->loadModel('bug')->getByList($relatedBugIdList);
+            $bugs = $this->loadModel('bug')->getByIdList($relatedBugIdList);
             foreach($tasks as $task)
             {
                 if($this->post->fileType == 'csv')
