@@ -208,8 +208,7 @@ class productZen extends product
     protected function getProductLines(): array
     {
         /* Get all product lines. */
-        /* TODO use model of module. */
-        $productLines = $this->dao->select('*')->from(TABLE_MODULE)->where('type')->eq('line')->andWhere('deleted')->eq(0)->orderBy('`order` asc')->fetchAll();
+        $productLines = $this->product->getProductLinesTODO();
 
         /* Collect product lines of program lines. */
         $programLines = array();

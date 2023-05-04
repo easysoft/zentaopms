@@ -12,16 +12,12 @@ fields:
     format: ""
   - field: pathname
     note: "路径名称"
-    from: common.file.v1.yaml
-    use: pathname
-    loop: 0
-    format: ""
+    range: ""
   - field: title
     note: "文件标题"
-    from: common.file.v1.yaml
-    use: title
+    range: 1-1000000
+    prefix: "文件标题"
     postfix: ""
-    loop: 0
     format: ""
   - field: extension
     note: "文件后缀"
@@ -60,12 +56,11 @@ fields:
     format: ""
   - field: addedDate
     note: "添加时间"
-    from: common.date.v1.yaml
-    use: dateA
-    prefix: ""
+    range: "(M)-(w)"
+    type: timestamp
+    prefix: "DateTime"
     postfix: ""
-    loop: 0
-    format: ""
+    format: "YY/MM/DD"
   - field: downloads
     note: "下载次数"
     range: "0-100"

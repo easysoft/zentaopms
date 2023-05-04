@@ -121,51 +121,6 @@ class blockModel extends model
     }
 
     /**
-     * Get block json that user can add.
-     * 获取允许用户添加的区块列表.
-     *
-     * @param  string $dashboard
-     * @param  string $module
-     * @access public
-     * @return string[]
-     */
-    public function getAvailableBlocks(string $dashboard, string $module = ''): array
-    {
-        if($dashboard == 'my')
-        {
-            if($module and isset($this->lang->block->modules[$module]))
-            {
-                $blocks = $this->lang->block->modules[$module]->availableBlocks;
-            }
-            else
-            {
-                $blocks = array();
-            }
-        }
-        else
-        {
-            if($dashboard and isset($this->lang->block->modules[$dashboard]))
-            {
-                $blocks = $this->lang->block->modules[$dashboard]->availableBlocks;
-            }
-            else
-            {
-                $blocks = $this->lang->block->availableBlocks;
-            }
-        }
-
-        if(isset($this->config->block->closed))
-        {
-            foreach($blocks as $blockKey => $blockName)
-            {
-                if(strpos(",{$this->config->block->closed},", ",{$module}|{$blockKey},") !== false) unset($blocks[$blockKey]);
-            }
-        }
-
-        return $blocks;
-    }
-
-    /**
      * Get max order number by block dashboard.
      * 获取对应仪表盘下区块的最大排序号.
      *
@@ -175,31 +130,12 @@ class blockModel extends model
      */
     public function getMaxOrderByDashboard(string $dashboard): int
     {
-        return $this->blockTao->fetchMaxOrderByDashboard($dashboard);
-    }
+        $order = $this->dao->select('MAX(`order`) as `order`')->from(TABLE_BLOCK)
+            ->where('dashboard')->eq($dashboard)
+            ->andWhere('account')->eq($this->app->user->account)
+            ->fetch('order');
 
-    /**
-     * Get block set form params.
-     * 获取不同区块所需的参数配置.
-     *
-     * @param  string $type
-     * @param  string $module
-     * @access public
-     * @return string
-     */
-    public function getParams(string $code, string $module): string
-    {
-        if($code == 'todo' || $code == 'list')
-        {
-            $code = $module;
-        }
-        elseif($code == 'statistic')
-        {
-            $code = $module . $code;
-        }
-
-        $params = zget($this->config->block->params, $code, '');
-        return json_encode($params);
+        return (int)$order;
     }
 
     /**
@@ -346,7 +282,12 @@ class blockModel extends model
      */
     public function update(object $formData): int|false
     {
-        $this->dao->update(TABLE_BLOCK)->data($formData)->where('id')->eq($formData->id)->autoCheck()->exec();
+        $this->dao->update(TABLE_BLOCK)->data($formData)
+            ->where('id')->eq($formData->id)
+            ->autoCheck()
+            ->batchCheck($this->config->block->edit->requiredFields, 'notempty')
+            ->exec();
+
         if(dao::isError()) return false;
 
         $this->loadModel('score')->create('block', 'set');

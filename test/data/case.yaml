@@ -65,8 +65,11 @@ fields:
     range: ""
   - field: scriptedDate
     note: "脚本创建日期"
-    from: common.date.v1.yaml
-    use: dateB
+    range: "(M)-(w)"
+    type: timestamp
+    prefix: "DateTime"
+    postfix: ""
+    format: "YY/MM/DD"
   - field: scriptStatus
     note: "脚本状态"
     range: ""
@@ -81,8 +84,6 @@ fields:
     range: ""
   - field: color
     note: "标题颜色"
-    from: common.color.v1.yaml
-    use: color
   - field: frequency
     note: "使用频率"
     range: 1-3

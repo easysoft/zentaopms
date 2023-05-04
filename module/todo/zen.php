@@ -11,7 +11,7 @@ class todoZen extends todo
      * @access protected
      * @return void
      */
-    protected function buildCreateView(string $date): void
+    protected function buildCreateView(string $date)
     {
         $this->view->title = $this->lang->todo->common . $this->lang->colon . $this->lang->todo->create;
         $this->view->date  = date('Y-m-d', strtotime($date));
@@ -71,11 +71,12 @@ class todoZen extends todo
      */
     protected function beforeCreate(object $formData): object
     {
-        $objectType = $this->post->type;
+        $rowData    = $formData->rawdata;
+        $objectType = $rowData->type;
         $hasObject  = in_array($objectType, $this->config->todo->moduleList);
 
         $objectID = 0;
-        if($hasObject && $objectType) $objectID = $this->post->uid ? $this->post->$objectType : $this->post->objectID;
+        if($hasObject && $objectType) $objectID = $rowData->uid ? $rowData->$objectType : $rowData->objectID;
 
         $data = $formData->add('account', $this->app->user->account)
             ->setDefault('objectID', 0)
@@ -85,11 +86,11 @@ class todoZen extends todo
             ->setDefault('assignedDate', helper::now())
             ->cleanInt('pri, begin, end, private')
             ->setIF($hasObject && $objectType,  'objectID', $objectID)
-            ->setIF($this->post->date == false,  'date', '2030-01-01')
-            ->setIF($this->post->begin == false, 'begin', '2400')
-            ->setIF($this->post->begin == false or $this->post->end == false, 'end', '2400')
-            ->setIF($this->post->status == 'done', 'finishedBy', $this->app->user->account)
-            ->setIF($this->post->status == 'done', 'finishedDate', helper::now())
+            ->setIF($rowData->date == false,  'date', '2030-01-01')
+            ->setIF($rowData->begin == false, 'begin', '2400')
+            ->setIF($rowData->begin == false or $rowData->end == false, 'end', '2400')
+            ->setIF($rowData->status == 'done', 'finishedBy', $this->app->user->account)
+            ->setIF($rowData->status == 'done', 'finishedDate', helper::now())
             ->stripTags($this->config->todo->editor->create['id'], $this->config->allowedTags)
             ->remove(implode(',', $this->config->todo->moduleList) . ',uid')
             ->get();
@@ -102,12 +103,13 @@ class todoZen extends todo
      * Create a todo after data processing.
      *
      * @param  object $todo
+     * @param  object $formData
      * @access protected
      * @return object
      */
-    protected function afterCreate(object $todo): object
+    protected function afterCreate(object $todo, object $formData): object
     {
-        $this->loadModel('file')->updateObjectID($this->post->uid, $todo->id, 'todo');
+        $this->loadModel('file')->updateObjectID($formData->rawdata->uid, $todo->id, 'todo');
 
         $this->loadModel('score')->create('todo', 'create', $todo->id);
 
@@ -488,9 +490,9 @@ class todoZen extends todo
      * @access protected
      * @return true
      */
-    protected function setSessionUri($uri): bool
+    protected function setSessionUri(string $uri): bool
     {
-        foreach($this->config->todo->sessionUri as $key => $value) $this->sesstion->set($key, $uri, $value);
+        foreach($this->config->todo->sessionUri as $key => $value) $this->session->set($key, $uri, $value);
         return true;
     }
 

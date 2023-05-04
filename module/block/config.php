@@ -47,7 +47,7 @@ $config->block->params['default']->count['name']    = $lang->block->count;
 $config->block->params['default']->count['default'] = 20;
 $config->block->params['default']->count['control'] = 'input';
 
-$config->block->params['task'] = clone $config->block->params['default'];
+$config->block->params['task'] = new stdclass();
 $config->block->params['task']->type['name']       = $lang->block->type;
 $config->block->params['task']->type['options']    = $lang->block->typeList->task;
 $config->block->params['task']->type['control']    = 'select';
@@ -55,8 +55,9 @@ $config->block->params['task']->orderBy['name']    = $lang->block->orderBy;
 $config->block->params['task']->orderBy['default'] = 'id_desc';
 $config->block->params['task']->orderBy['options'] = $lang->block->orderByList->task;
 $config->block->params['task']->orderBy['control'] = 'select';
+$config->block->params['task']->count = $config->block->params['default']->count;
 
-$config->block->params['bug'] = clone $config->block->params['default'];
+$config->block->params['bug'] = new stdclass();
 $config->block->params['bug']->type['name']       = $lang->block->type;
 $config->block->params['bug']->type['options']    = $lang->block->typeList->bug;
 $config->block->params['bug']->type['control']    = 'select';
@@ -64,8 +65,9 @@ $config->block->params['bug']->orderBy['name']    = $lang->block->orderBy;
 $config->block->params['bug']->orderBy['default'] = 'id_desc';
 $config->block->params['bug']->orderBy['options'] = $lang->block->orderByList->bug;
 $config->block->params['bug']->orderBy['control'] = 'select';
+$config->block->params['bug']->count = $config->block->params['default']->count;
 
-$config->block->params['case'] = clone $config->block->params['default'];
+$config->block->params['case'] = new stdclass();
 $config->block->params['case']->type['name']       = $lang->block->type;
 $config->block->params['case']->type['options']    = $lang->block->typeList->case;
 $config->block->params['case']->type['control']    = 'select';
@@ -73,13 +75,15 @@ $config->block->params['case']->orderBy['name']    = $lang->block->orderBy;
 $config->block->params['case']->orderBy['default'] = 'id_desc';
 $config->block->params['case']->orderBy['options'] = $lang->block->orderByList->case;
 $config->block->params['case']->orderBy['control'] = 'select';
+$config->block->params['case']->count = $config->block->params['default']->count;
 
-$config->block->params['testtask'] = clone $config->block->params['default'];
-$config->block->params['testtask']->type['name']       = $lang->block->type;
-$config->block->params['testtask']->type['options']    = $lang->block->typeList->testtask;
-$config->block->params['testtask']->type['control']    = 'select';
+$config->block->params['testtask'] = new stdclass();
+$config->block->params['testtask']->type['name']    = $lang->block->type;
+$config->block->params['testtask']->type['options'] = $lang->block->typeList->testtask;
+$config->block->params['testtask']->type['control'] = 'select';
+$config->block->params['testtask']->count = $config->block->params['default']->count;
 
-$config->block->params['story'] = clone $config->block->params['default'];
+$config->block->params['story'] = new stdclass();;
 $config->block->params['story']->type['name']       = $lang->block->type;
 $config->block->params['story']->type['options']    = $lang->block->typeList->story;
 $config->block->params['story']->type['control']    = 'select';
@@ -87,153 +91,169 @@ $config->block->params['story']->orderBy['name']    = $lang->block->orderBy;
 $config->block->params['story']->orderBy['default'] = 'id_desc';
 $config->block->params['story']->orderBy['options'] = $lang->block->orderByList->story;
 $config->block->params['story']->orderBy['control'] = 'select';
+$config->block->params['story']->count = $config->block->params['default']->count;
 
-$config->block->params['plan'] = clone $config->block->params['default'];
+$config->block->params['plan'] = $config->block->params['default'];
 
-$config->block->params['release'] = clone $config->block->params['default'];
+$config->block->params['release'] = $config->block->params['default'];
 
-$config->block->params['project'] = clone $config->block->params['default'];
+$config->block->params['project'] = new stdclass();
 $config->block->params['project']->type['name']       = $lang->block->type;
 $config->block->params['project']->type['options']    = $lang->block->typeList->projectAll;
 $config->block->params['project']->type['control']    = 'select';
 $config->block->params['project']->orderBy['name']    = $lang->block->orderBy;
 $config->block->params['project']->orderBy['options'] = $lang->block->orderByList->product;
 $config->block->params['project']->orderBy['control'] = 'select';
+$config->block->params['project']->count = $config->block->params['default']->count;
 
-$config->block->params['projectteam'] = clone $config->block->params['default'];
+$config->block->params['projectteam'] = new stdclass();
 $config->block->params['projectteam']->type['name']       = $lang->block->type;
 $config->block->params['projectteam']->type['options']    = $lang->block->typeList->projectAll;
 $config->block->params['projectteam']->type['control']    = 'select';
 $config->block->params['projectteam']->orderBy['name']    = $lang->block->orderBy;
 $config->block->params['projectteam']->orderBy['options'] = $lang->block->orderByList->project;
 $config->block->params['projectteam']->orderBy['control'] = 'select';
+$config->block->params['projectteam']->count = $config->block->params['default']->count;
 
-$config->block->params['build'] = clone $config->block->params['default'];
+$config->block->params['build'] = $config->block->params['default'];
 
-$config->block->params['product'] = clone $config->block->params['default'];
+$config->block->params['product'] = new stdclass();
 $config->block->params['product']->type['name']    = $lang->block->type;
 $config->block->params['product']->type['options'] = $lang->block->typeList->product;
 $config->block->params['product']->type['control'] = 'select';
+$config->block->params['product']->count = $config->block->params['default']->count;
 
-$config->block->params['productstatistic'] = clone $config->block->params['default'];
+$config->block->params['productstatistic'] = new stdclass();
 $config->block->params['productstatistic']->type['name']    = $lang->block->type;
 $config->block->params['productstatistic']->type['options'] = $lang->block->typeList->product;
 $config->block->params['productstatistic']->type['control'] = 'select';
+$config->block->params['productstatistic']->count = $config->block->params['default']->count;
 
-$config->block->params['projectstatistic'] = clone $config->block->params['default'];
+$config->block->params['projectstatistic'] = new stdclass();
 $config->block->params['projectstatistic']->type['name']    = $lang->block->type;
 $config->block->params['projectstatistic']->type['options'] = $lang->block->typeList->project;
 $config->block->params['projectstatistic']->type['control'] = 'select';
+$config->block->params['projectstatistic']->count = $config->block->params['default']->count;
 
-$config->block->params['executionstatistic'] = clone $config->block->params['default'];
+$config->block->params['executionstatistic'] = new stdclass();
 $config->block->params['executionstatistic']->type['name']    = $lang->block->type;
 $config->block->params['executionstatistic']->type['options'] = $lang->block->typeList->execution;
 $config->block->params['executionstatistic']->type['control'] = 'select';
+$config->block->params['executionstatistic']->count = $config->block->params['default']->count;
 
-$config->block->params['qaStatistic'] = clone $config->block->params['default'];
-$config->block->params['qaStatistic']->type['name']    = $lang->block->type;
-$config->block->params['qaStatistic']->type['options'] = $lang->block->typeList->product;
-$config->block->params['qaStatistic']->type['control'] = 'select';
+$config->block->params['qastatistic'] = new stdclass();
+$config->block->params['qastatistic']->type['name']    = $lang->block->type;
+$config->block->params['qastatistic']->type['options'] = $lang->block->typeList->product;
+$config->block->params['qastatistic']->type['control'] = 'select';
+$config->block->params['qastatistic']->count = $config->block->params['default']->count;
 
-$config->block->params['waterfallissue'] = clone $config->block->params['default'];
+$config->block->params['waterfallissue'] = new stdclass();
 $config->block->params['waterfallissue']->type['name']       = $lang->block->type;
 $config->block->params['waterfallissue']->type['options']    = $lang->block->typeList->issue;
 $config->block->params['waterfallissue']->type['control']    = 'select';
 $config->block->params['waterfallissue']->orderBy['name']    = $lang->block->orderBy;
 $config->block->params['waterfallissue']->orderBy['options'] = $lang->block->orderByList->product;
 $config->block->params['waterfallissue']->orderBy['control'] = 'select';
+$config->block->params['waterfallissue']->count = $config->block->params['default']->count;
 
-$config->block->params['waterfallRisk'] = clone $config->block->params['default'];
-$config->block->params['waterfallRisk']->type['name']       = $lang->block->type;
-$config->block->params['waterfallRisk']->type['options']    = $lang->block->typeList->risk;
-$config->block->params['waterfallRisk']->type['control']    = 'select';
-$config->block->params['waterfallRisk']->orderBy['name']    = $lang->block->orderBy;
-$config->block->params['waterfallRisk']->orderBy['options'] = $lang->block->orderByList->product;
-$config->block->params['waterfallRisk']->orderBy['control'] = 'select';
+$config->block->params['waterfallrisk'] = new stdclass();
+$config->block->params['waterfallrisk']->type['name']       = $lang->block->type;
+$config->block->params['waterfallrisk']->type['options']    = $lang->block->typeList->risk;
+$config->block->params['waterfallrisk']->type['control']    = 'select';
+$config->block->params['waterfallrisk']->orderBy['name']    = $lang->block->orderBy;
+$config->block->params['waterfallrisk']->orderBy['options'] = $lang->block->orderByList->product;
+$config->block->params['waterfallrisk']->orderBy['control'] = 'select';
+$config->block->params['waterfallrisk']->count = $config->block->params['default']->count;
 
-$config->block->params['scrumIssue'] = clone $config->block->params['default'];
-$config->block->params['scrumIssue']->type['name']       = $lang->block->type;
-$config->block->params['scrumIssue']->type['options']    = $lang->block->typeList->issue;
-$config->block->params['scrumIssue']->type['control']    = 'select';
-$config->block->params['scrumIssue']->orderBy['name']    = $lang->block->orderBy;
-$config->block->params['scrumIssue']->orderBy['options'] = $lang->block->orderByList->product;
-$config->block->params['scrumIssue']->orderBy['control'] = 'select';
+$config->block->params['scrumissue'] = new stdclass();
+$config->block->params['scrumissue']->type['name']       = $lang->block->type;
+$config->block->params['scrumissue']->type['options']    = $lang->block->typeList->issue;
+$config->block->params['scrumissue']->type['control']    = 'select';
+$config->block->params['scrumissue']->orderBy['name']    = $lang->block->orderBy;
+$config->block->params['scrumissue']->orderBy['options'] = $lang->block->orderByList->product;
+$config->block->params['scrumissue']->orderBy['control'] = 'select';
+$config->block->params['scrumissue']->count = $config->block->params['default']->count;
 
-$config->block->params['scrumRisk'] = clone $config->block->params['default'];
-$config->block->params['scrumRisk']->type['name']       = $lang->block->type;
-$config->block->params['scrumRisk']->type['options']    = $lang->block->typeList->risk;
-$config->block->params['scrumRisk']->type['control']    = 'select';
-$config->block->params['scrumRisk']->orderBy['name']    = $lang->block->orderBy;
-$config->block->params['scrumRisk']->orderBy['options'] = $lang->block->orderByList->product;
-$config->block->params['scrumRisk']->orderBy['control'] = 'select';
+$config->block->params['scrumrisk'] = new stdclass();
+$config->block->params['scrumrisk']->type['name']       = $lang->block->type;
+$config->block->params['scrumrisk']->type['options']    = $lang->block->typeList->risk;
+$config->block->params['scrumrisk']->type['control']    = 'select';
+$config->block->params['scrumrisk']->orderBy['name']    = $lang->block->orderBy;
+$config->block->params['scrumrisk']->orderBy['options'] = $lang->block->orderByList->product;
+$config->block->params['scrumrisk']->orderBy['control'] = 'select';
+$config->block->params['scrumrisk']->count = $config->block->params['default']->count;
 
-$config->block->params['execution'] = clone $config->block->params['default'];
-$config->block->params['execution']->type['name']       = $lang->block->type;
-$config->block->params['execution']->type['options']    = $lang->block->typeList->execution;
-$config->block->params['execution']->type['control']    = 'select';
+$config->block->params['execution'] = new stdclass();
+$config->block->params['execution']->type['name']    = $lang->block->type;
+$config->block->params['execution']->type['options'] = $lang->block->typeList->execution;
+$config->block->params['execution']->type['control'] = 'select';
+$config->block->params['execution']->count = $config->block->params['default']->count;
 
-$config->block->params['assignToMe'] = new stdclass();
-$config->block->params['assignToMe']->todoCount['name']    = $this->lang->block->todoCount;
-$config->block->params['assignToMe']->todoCount['default'] = 20;
-$config->block->params['assignToMe']->todoCount['control'] = 'input';
-$config->block->params['assignToMe']->taskCount['name']    = $this->lang->block->taskCount;
-$config->block->params['assignToMe']->taskCount['default'] = 20;
-$config->block->params['assignToMe']->taskCount['control'] = 'input';
-$config->block->params['assignToMe']->bugCount['name']     = $this->lang->block->bugCount;
-$config->block->params['assignToMe']->bugCount['default']  = 20;
-$config->block->params['assignToMe']->bugCount['control']  = 'input';
+$config->block->params['assigntome'] = new stdclass();
+$config->block->params['assigntome']->todoCount['name']    = $this->lang->block->todoCount;
+$config->block->params['assigntome']->todoCount['default'] = 20;
+$config->block->params['assigntome']->todoCount['control'] = 'input';
+$config->block->params['assigntome']->taskCount['name']    = $this->lang->block->taskCount;
+$config->block->params['assigntome']->taskCount['default'] = 20;
+$config->block->params['assigntome']->taskCount['control'] = 'input';
+$config->block->params['assigntome']->bugCount['name']     = $this->lang->block->bugCount;
+$config->block->params['assigntome']->bugCount['default']  = 20;
+$config->block->params['assigntome']->bugCount['control']  = 'input';
 if($config->edition == 'max')
 {
     if(helper::hasFeature('risk'))
     {
-        $config->block->params['assignToMe']->riskCount['name']    = $this->lang->block->riskCount;
-        $config->block->params['assignToMe']->riskCount['default'] = 20;
-        $config->block->params['assignToMe']->riskCount['control'] = 'input';
+        $config->block->params['assigntome']->riskCount['name']    = $this->lang->block->riskCount;
+        $config->block->params['assigntome']->riskCount['default'] = 20;
+        $config->block->params['assigntome']->riskCount['control'] = 'input';
     }
 
     if(helper::hasFeature('issue'))
     {
-        $config->block->params['assignToMe']->issueCount['name']    = $this->lang->block->issueCount;
-        $config->block->params['assignToMe']->issueCount['default'] = 20;
-        $config->block->params['assignToMe']->issueCount['control'] = 'input';
+        $config->block->params['assigntome']->issueCount['name']    = $this->lang->block->issueCount;
+        $config->block->params['assigntome']->issueCount['default'] = 20;
+        $config->block->params['assigntome']->issueCount['control'] = 'input';
     }
 
     if(helper::hasFeature('meeting'))
     {
-        $config->block->params['assignToMe']->meetingCount['name']    = $this->lang->block->meetingCount;
-        $config->block->params['assignToMe']->meetingCount['default'] = 20;
-        $config->block->params['assignToMe']->meetingCount['control'] = 'input';
+        $config->block->params['assigntome']->meetingCount['name']    = $this->lang->block->meetingCount;
+        $config->block->params['assigntome']->meetingCount['default'] = 20;
+        $config->block->params['assigntome']->meetingCount['control'] = 'input';
     }
 
-    $config->block->params['assignToMe']->feedbackCount['name']    = $this->lang->block->feedbackCount;
-    $config->block->params['assignToMe']->feedbackCount['default'] = 20;
-    $config->block->params['assignToMe']->feedbackCount['control'] = 'input';
+    $config->block->params['assigntome']->feedbackCount['name']    = $this->lang->block->feedbackCount;
+    $config->block->params['assigntome']->feedbackCount['default'] = 20;
+    $config->block->params['assigntome']->feedbackCount['control'] = 'input';
 }
 
-$config->block->params['assignToMe']->storyCount['name']     = $this->lang->block->storyCount;
-$config->block->params['assignToMe']->storyCount['default']  = 20;
-$config->block->params['assignToMe']->storyCount['control']  = 'input';
-$config->block->params['assignToMe']->reviewCount['name']    = $this->lang->block->reviewCount;
-$config->block->params['assignToMe']->reviewCount['default'] = 20;
-$config->block->params['assignToMe']->reviewCount['control'] = 'input';
+$config->block->params['assigntome']->storyCount['name']     = $this->lang->block->storyCount;
+$config->block->params['assigntome']->storyCount['default']  = 20;
+$config->block->params['assigntome']->storyCount['control']  = 'input';
+$config->block->params['assigntome']->reviewCount['name']    = $this->lang->block->reviewCount;
+$config->block->params['assigntome']->reviewCount['default'] = 20;
+$config->block->params['assigntome']->reviewCount['control'] = 'input';
+$config->block->params['assigntome']->count = $config->block->params['default']->count;
 
-$config->block->params['scrumTest'] = clone $config->block->params['default'];
-$config->block->params['scrumTest']->type['name']    = $lang->block->type;
-$config->block->params['scrumTest']->type['options'] = $lang->block->typeList->testtask;
-$config->block->params['scrumTest']->type['control'] = 'select';
+$config->block->params['scrumtest'] = new stdclass();
+$config->block->params['scrumtest']->type['name']    = $lang->block->type;
+$config->block->params['scrumtest']->type['options'] = $lang->block->typeList->testtask;
+$config->block->params['scrumtest']->type['control'] = 'select';
+$config->block->params['scrumtest']->count = $config->block->params['default']->count;
 
-$config->block->params['scrumList'] = clone $config->block->params['default'];
-$config->block->params['scrumList']->type['name']    = $lang->block->type;
-$config->block->params['scrumList']->type['options'] = $lang->block->typeList->scrum;
-$config->block->params['scrumList']->type['control'] = 'select';
+$config->block->params['scrumlist'] = new stdclass();
+$config->block->params['scrumlist']->type['name']    = $lang->block->type;
+$config->block->params['scrumlist']->type['options'] = $lang->block->typeList->scrum;
+$config->block->params['scrumlist']->type['control'] = 'select';
+$config->block->params['scrumlist']->count = $config->block->params['default']->count;
 
-$config->block->params['scrumProduct'] = clone $config->block->params['default'];
+$config->block->params['scrumProduct'] = $config->block->params['default']->count;
 
-$config->block->params['projectDynamic'] = clone $config->block->params['default'];
+$config->block->params['projectDynamic'] = $config->block->params['default']->count;
 
-$config->block->params['productDoc'] = clone $config->block->params['default'];
+$config->block->params['productDoc'] = $config->block->params['default']->count;
 
-$config->block->params['projectDoc'] = clone $config->block->params['default'];
+$config->block->params['projectDoc'] = $config->block->params['default']->count;
 
 $config->block->modules['project'] = new stdclass();
 $config->block->modules['project']->moreLinkList = new stdclass();
@@ -279,19 +299,3 @@ $config->block->modules['doc']->moreLinkList = new stdclass();
 $config->block->modules['doc']->moreLinkList->docmycollection = 'doc|myspace|type=collect&libID=0&moduleID=0&browseType=all&param=0&orderBy=editedDate_desc';
 $config->block->modules['doc']->moreLinkList->productdoc      = 'doc|productspace|';
 $config->block->modules['doc']->moreLinkList->projectdoc      = 'doc|projectspace|';
-
-$config->block->form = new stdclass();
-$config->block->form->create = array();
-$config->block->form->create['module'] = array('type' => 'string', 'required' => false, 'default' => '');
-$config->block->form->create['code']   = array('type' => 'string', 'required' => false, 'default' => '');
-$config->block->form->create['title']  = array('type' => 'string', 'required' => false, 'default' => '');
-$config->block->form->create['grid']   = array('type' => 'int',    'required' => false, 'default' => '4');
-$config->block->form->create['hidden'] = array('type' => 'int',    'required' => false, 'default' => '0');
-$config->block->form->create['params'] = array('type' => 'array',  'required' => false, 'default' => array());
-
-$config->block->form->edit = array();
-$config->block->form->edit['module'] = array('type' => 'string', 'required' => false, 'default' => '');
-$config->block->form->edit['code']   = array('type' => 'string', 'required' => false, 'default' => '');
-$config->block->form->edit['title']  = array('type' => 'string', 'required' => false, 'default' => '');
-$config->block->form->edit['grid']   = array('type' => 'int',    'required' => false, 'default' => '4');
-$config->block->form->edit['params'] = array('type' => 'array',  'required' => false, 'default' => array());

@@ -82,10 +82,11 @@ class todoTao extends todoModel
      * Process the data for the todo to be created.
      *
      * @param  object $todoData
+     * @param  object $formData
      * @access protected
      * @return object|false
      */
-    protected function processCreateData(object $todoData): object|false
+    protected function processCreateData(object $todoData, object $formData): object|false
     {
         if(!isset($todoData->pri) and in_array($todoData->type, $this->config->todo->moduleList) and !in_array($todoData->type, array('review', 'feedback')))
         {
@@ -117,7 +118,7 @@ class todoTao extends todoModel
         }
         if(empty($todoData->cycle)) unset($todoData->config);
 
-        return $this->loadModel('file')->processImgURL($todoData, $this->config->todo->editor->create['id'], $this->post->uid);
+        return $this->loadModel('file')->processImgURL($todoData, $this->config->todo->editor->create['id'], $formData->rawdata->uid);
     }
 
     /**
@@ -322,5 +323,26 @@ class todoTao extends todoModel
     {
         $this->dao->update(TABLE_TODO)->set('date')->eq($date)->where('id')->in($todoIdList)->exec();
         return !dao::isError();
+    }
+
+    /**
+     * 获取用户的待办事项数量。
+     * Get todo count on the account.
+     * 
+     * @param  string $account
+     * @access protected
+     * @return int
+     */
+    protected function getTodoCountByAccount(string $account): int
+    {
+        return $this->dao->select('count(*) as count')->from(TABLE_TODO)
+            ->where('cycle')->eq('0')
+            ->andWhere('deleted')->eq('0')
+            ->andWhere('vision')->eq($this->config->vision)
+            ->andWhere('account', true)->eq($account)
+            ->orWhere('assignedTo')->eq($account)
+            ->orWhere('finishedBy')->eq($account)
+            ->markRight(1)
+            ->fetch('count');
     }
 }

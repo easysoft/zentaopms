@@ -147,12 +147,11 @@ fields:
     format: ""
   - field: editedDate
     note: "编辑日期"
-    from: common.date.v1.yaml
-    use: dateA
+    range: Y-m-d
     prefix: ""
+    type: timestamp
     postfix: ""
-    loop: 0
-    format: ""
+    format: "YYYY-MM-DD"
   - field: acl
     note: "权限"
     range: open,custom,private
