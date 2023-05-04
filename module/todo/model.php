@@ -211,8 +211,8 @@ class todoModel extends model
 
 
     /**
-     * 完成待办
-     * Finish todo.
+     * 完成一个待办。
+     * Finish one todo.
      *
      * @param  int     $todoID
      * @access public
@@ -220,12 +220,29 @@ class todoModel extends model
      */
     public function finish(int $todoID): bool
     {
-        return $this->dealFinishData($todoID);
+        $todo = new stdClass();
+        $todo->id           = $todoID;
+        $todo->status       = 'done';
+        $todo->finishedBy   = $this->app->user->account;
+        $todo->finishedDate = helper::now();
+        $this->todoTao->updateRow($todoID, $todo);
+
+        if(dao::isError()) return false;
+
+        $this->loadModel('action')->create('todo', $todoID, 'finished', '', 'done');
+
+        if(($this->config->edition == 'biz' || $this->config->edition == 'max'))
+        {
+            $todo       = $this->todoTao->fetch($todoID);
+            $feedbackID = $todo->objectID ? $todo->objectID : '' ;
+            if($feedbackID) $this->loadModel('feedback')->updateStatus('todo', $feedbackID, 'done');
+        }
+        return true;
     }
 
     /**
-     * 批量完成待办.
-     * Batch finish todo.
+     * 批量完成待办。
+     * Batch finish todos.
      *
      * @param  int[]   $todoIDList
      * @access public
@@ -235,8 +252,8 @@ class todoModel extends model
     {
         foreach($todoIDList as $todoID)
         {
-            $finishResult = $this->dealFinishData($todoID);
-            if(!$finishResult) return $finishResult;
+            $isFinished = $this->finish($todoID);
+            if(!$isFinished) return $isFinished;
         }
         return true;
     }
@@ -506,35 +523,6 @@ class todoModel extends model
         }
 
         return $projectIdList;
-    }
-
-    /**
-     * 处理完成待办数据.
-     * Deal finish todo data.
-     *
-     * @param  int     $todoID
-     * @access public
-     * @return bool
-     */
-    private function dealFinishData(int $todoID): bool
-    {
-        $todo = new stdClass();
-        $todo->id         = $todoID;
-        $todo->status     = 'done';
-        $todo->finishedBy = $this->app->user->account;
-        $this->todoTao->updateRow($todoID, $todo);
-
-        if(dao::isError()) return false;
-
-        $this->loadModel('action')->create('todo', $todoID, 'finished', '', 'done');
-
-        if(($this->config->edition == 'biz' || $this->config->edition == 'max'))
-        {
-            $todo       = $this->todoTao->fetch($todoID);
-            $feedbackID = $todo->objectID ? $todo->objectID : '' ;
-            if($feedbackID) $this->loadModel('feedback')->updateStatus('todo', $feedbackID, 'done');
-        }
-        return true;
     }
 
     /**
