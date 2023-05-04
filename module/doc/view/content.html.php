@@ -216,7 +216,7 @@
   </div>
 </div>
 
-<?php if($this->config->edition == 'max'):?>
+<?php if($this->config->edition== 'max' or $this->config->edition == 'ipd'):?>
 <div class="modal fade" id="importToPracticeLib">
   <div class="modal-dialog mw-500px">
     <div class="modal-content">

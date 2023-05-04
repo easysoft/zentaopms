@@ -1912,7 +1912,7 @@ class docModel extends model
         }
         elseif($type == 'project')
         {
-            if($this->config->edition == 'max')
+            if($this->config->edition== 'max' or $this->config->edition == 'ipd')
             {
                 $issueIdList   = $this->dao->select('id')->from(TABLE_ISSUE)->where('project')->eq($objectID)->andWhere('deleted')->eq('0')->andWhere('project')->in($this->app->user->view->projects)->get();
                 $meetingIdList = $this->dao->select('id')->from(TABLE_MEETING)->where('project')->eq($objectID)->andWhere('deleted')->eq('0')->andWhere('project')->in($this->app->user->view->projects)->get();

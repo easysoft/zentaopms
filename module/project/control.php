@@ -1017,7 +1017,7 @@ class project extends control
         $this->session->set('testtaskList',    $uri, 'qa');
         $this->session->set('reportList',      $uri, 'qa');
 
-        if($this->config->edition == 'max')
+        if($this->config->edition== 'max' or $this->config->edition == 'ipd')
         {
             $this->session->set('riskList', $uri, 'project');
             $this->session->set('issueList', $uri, 'project');
