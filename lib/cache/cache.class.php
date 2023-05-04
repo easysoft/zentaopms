@@ -2,11 +2,11 @@
 /**
  * The cache library of zentaopms.
  *
- * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
- * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
+ * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @license     ZPL(https://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Lu Fei <lufei@easycorp.ltd>
  * @package     cache
- * @link        http://www.zentao.net
+ * @link        https://www.zentao.net
  */
 
 helper::import(dirname(__FILE__) . DS . 'simple-cache' . DS . 'CacheInterface.php');
@@ -14,6 +14,8 @@ helper::import(dirname(__FILE__) . DS . 'simple-cache' . DS . 'CacheException.ph
 helper::import(dirname(__FILE__) . DS . 'simple-cache' . DS . 'InvalidArgumentException.php');
 helper::import(dirname(__FILE__) . DS . 'driver' . DS . 'ApcuDriver.php');
 helper::import(dirname(__FILE__) . DS . 'driver' . DS . 'YacDriver.php');
+helper::import(dirname(__FILE__) . DS . 'driver' . DS . 'FileDriver.php');
+helper::import(dirname(__FILE__, 2) . DS . 'filesystem' . DS . 'filesystem.class.php');
 
 use ZenTao\Cache\SimpleCache\InvalidArgumentException;
 
@@ -24,7 +26,7 @@ class cache
      */
     protected $client;
 
-    public function __construct($driver = 'Apcu', $namespace = '', $defaultLifetime = 0)
+    public function __construct($driver = 'File', $namespace = '', $defaultLifetime = 0)
     {
         $driver = ucfirst(strtolower($driver));
         switch($driver)
@@ -35,13 +37,17 @@ class cache
             case 'Yac':
                 $className = 'ZenTao\Cache\Driver\YacDriver';
                 break;
+            case 'File':
+                $className = 'ZenTao\Cache\Driver\FileDriver';
+                break;
             default:
                 throw new InvalidArgumentException("Driver {$driver} is not supported.");
         }
 
-        if(!extension_loaded($driver)) throw new InvalidArgumentException("Driver ext-{$driver} is not loaded.");
+        if($driver != 'File' && !extension_loaded($driver)) throw new InvalidArgumentException("Driver ext-{$driver} is not loaded.");
 
-        $this->client = new $className($namespace, $defaultLifetime);
+        global $app;
+        $this->client = new $className($namespace, $defaultLifetime, $app->getCacheRoot());
     }
 
     public function __call($name, $arguments)
