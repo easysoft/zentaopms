@@ -7827,7 +7827,7 @@ class upgradeModel extends model
             /* User requriement */
             $requirementStory = $this->dao->select('count(1) as total')->from(TABLE_STORY)->where('type')->eq('requirement')->andWhere('deleted')->eq('0')->fetch('total');
             if($requirementStory > 0) $returnData['ur'] = true;
-            if($this->config->edition== 'max' or $this->config->edition == 'ipd')
+            if($this->config->edition == 'max' or $this->config->edition == 'ipd')
             {
                 /* issue,risk,opportunity,process,QA,meeting */
                 $issue = $this->dao->select('count(1) as total')->from(TABLE_ISSUE)->alias('t1')
@@ -7901,7 +7901,7 @@ class upgradeModel extends model
                 ->fetch('total');
             if($waterfull > 0) $returnData['waterfall'] = true;
 
-            if($this->config->edition== 'max' or $this->config->edition == 'ipd')
+            if($this->config->edition == 'max' or $this->config->edition == 'ipd')
             {
                 /* assetlib */
                 $assetlib = $this->dao->select('count(1) as total')->from(TABLE_ASSETLIB)

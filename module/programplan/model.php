@@ -868,7 +868,7 @@ class programplanModel extends model
         foreach($datas as $data)
         {
             /* Set planDuration and realDuration. */
-            if($this->config->edition== 'max' or $this->config->edition == 'ipd')
+            if($this->config->edition == 'max' or $this->config->edition == 'ipd')
             {
                 $data->planDuration = $this->getDuration($data->begin, $data->end);
                 $data->realDuration = $this->getDuration($data->realBegan, $data->realEnd);
@@ -1148,7 +1148,7 @@ class programplanModel extends model
         }
 
         /* Set planDuration and realDuration. */
-        if($this->config->edition== 'max' or $this->config->edition == 'ipd')
+        if($this->config->edition == 'max' or $this->config->edition == 'ipd')
         {
             $plan->planDuration = $this->getDuration($plan->begin, $plan->end);
             $plan->realDuration = $this->getDuration($plan->realBegan, $plan->realEnd);

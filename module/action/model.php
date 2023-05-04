@@ -563,7 +563,7 @@ class actionModel extends model
                 $name = $this->dao->select('name')->from(TABLE_TESTSUITE)->where('id')->eq($action->extra)->fetch('name');
                 if($name) $action->extra = common::hasPriv('caselib', 'browse') ? html::a(helper::createLink('caselib', 'browse', "libID=$action->extra"), $name) : $name;
             }
-            elseif(strpos(',importfromstorylib,importfromrisklib,importfromissuelib,importfromopportunitylib,', ",{$actionName},") !== false and $this->config->edition == 'max')
+            elseif(strpos(',importfromstorylib,importfromrisklib,importfromissuelib,importfromopportunitylib,', ",{$actionName},") !== false and ($this->config->edition == 'max' or $this->config->edition == 'ipd'))
             {
                 $name = $this->dao->select('name')->from(TABLE_ASSETLIB)->where('id')->eq($action->extra)->fetch('name');
                 if($name) $action->extra = common::hasPriv('assetlib', $action->objectType) ? html::a(helper::createLink('assetlib', $action->objectType, "libID=$action->extra"), $name) : $name;
@@ -939,7 +939,7 @@ class actionModel extends model
                 $this->app->loadLang('mr');
                 $desc = sprintf($this->lang->mr->$mrAction, $mrDate, $mrActor, $mrLink);
             }
-            elseif($this->config->edition == 'max' and strpos($this->config->action->assetType, ",{$action->objectType},") !== false and $action->action == 'approved')
+            elseif(($this->config->edition == 'max' or $this->config->edition == 'ipd') and strpos($this->config->action->assetType, ",{$action->objectType},") !== false and $action->action == 'approved')
             {
                 $desc = empty($this->lang->action->approve->{$action->extra}) ? '' : $this->lang->action->approve->{$action->extra};
             }
@@ -1574,7 +1574,7 @@ class actionModel extends model
             }
         }
 
-        if($this->config->edition == 'max' and $objectType == 'assetlib')
+        if(($this->config->edition == 'max' or $this->config->edition == 'ipd') and $objectType == 'assetlib')
         {
             $libType = $this->dao->select('type')->from(TABLE_ASSETLIB)->where('id')->eq($objectID)->fetch('type');
             if(strpos('story,issue,risk,opportunity,practice,component', $libType) !== false) $actionObjectLabel = $this->lang->action->label->{$libType . 'assetlib'};
@@ -1618,7 +1618,7 @@ class actionModel extends model
                 if($objectDeleted) return $action;
             }
 
-            if($this->config->edition == 'max'
+            if(($this->config->edition == 'max' or $this->config->edition == 'ipd')
                and strpos($this->config->action->assetType, ",{$action->objectType},") !== false
                and empty($action->project) and empty($action->product) and empty($action->execution))
             {

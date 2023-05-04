@@ -406,7 +406,7 @@ class storyModel extends model
 
                 if($bugID > 0)
                 {
-                    if(($this->config->edition == 'biz' || $this->config->edition == 'max')) $oldBug = $this->dao->select('feedback, status')->from(TABLE_BUG)->where('id')->eq($bugID)->fetch();
+                    if($this->config->edition != 'open') $oldBug = $this->dao->select('feedback, status')->from(TABLE_BUG)->where('id')->eq($bugID)->fetch();
 
                     $bug = new stdclass();
                     $bug->toStory      = $storyID;
@@ -423,7 +423,7 @@ class storyModel extends model
                     $this->loadModel('action')->create('bug', $bugID, 'ToStory', '', $storyID);
                     $this->action->create('bug', $bugID, 'Closed');
 
-                    if(($this->config->edition == 'biz' || $this->config->edition == 'max') && !dao::isError() && $oldBug->feedback) $this->loadModel('feedback')->updateStatus('bug', $oldBug->feedback, 'closed', $oldBug->status);
+                    if($this->config->edition != 'open' && !dao::isError() && $oldBug->feedback) $this->loadModel('feedback')->updateStatus('bug', $oldBug->feedback, 'closed', $oldBug->status);
 
                     /* add files to story from bug. */
                     $files = $this->dao->select('*')->from(TABLE_FILE)
@@ -1177,7 +1177,7 @@ class storyModel extends model
 
             unset($oldStory->parent);
             unset($story->parent);
-            if(($this->config->edition == 'biz' || $this->config->edition == 'max') && $oldStory->feedback) $this->loadModel('feedback')->updateStatus('story', $oldStory->feedback, $story->status, $oldStory->status);
+            if($this->config->edition != 'open' && $oldStory->feedback) $this->loadModel('feedback')->updateStatus('story', $oldStory->feedback, $story->status, $oldStory->status);
 
             $linkStoryField = $oldStory->type == 'story' ? 'linkStories' : 'linkRequirements';
             $linkStories    = explode(',', $story->{$linkStoryField});
@@ -1325,7 +1325,7 @@ class storyModel extends model
                     $this->action->logHistory($actionID, $changes);
                 }
 
-                if(($this->config->edition == 'biz' || $this->config->edition == 'max') && $oldParentStory->feedback) $this->loadModel('feedback')->updateStatus('story', $oldParentStory->feedback, $newParentStory->status, $oldParentStory->status);
+                if($this->config->edition != 'open' && $oldParentStory->feedback) $this->loadModel('feedback')->updateStatus('story', $oldParentStory->feedback, $newParentStory->status, $oldParentStory->status);
             }
         }
         else
@@ -1561,7 +1561,7 @@ class storyModel extends model
                     if($story->closedReason == 'done') $this->loadModel('score')->create('story', 'close');
                     $allChanges[$storyID] = common::createChanges($oldStory, $story);
 
-                    if(($this->config->edition == 'biz' || $this->config->edition == 'max') && $oldStory->feedback && !isset($feedbacks[$oldStory->feedback]))
+                    if($this->config->edition != 'open' && $oldStory->feedback && !isset($feedbacks[$oldStory->feedback]))
                     {
                         $feedbacks[$oldStory->feedback] = $oldStory->feedback;
                         $this->loadModel('feedback')->updateStatus('story', $oldStory->feedback, $story->status, $oldStory->status);
@@ -2064,7 +2064,7 @@ class storyModel extends model
             $this->setStage($storyID);
             $this->loadModel('score')->create('story', 'close', $storyID);
 
-            if(($this->config->edition == 'biz' || $this->config->edition == 'max') && $oldStory->feedback) $this->loadModel('feedback')->updateStatus('story', $oldStory->feedback, $story->status, $oldStory->status);
+            if($this->config->edition != 'open' && $oldStory->feedback) $this->loadModel('feedback')->updateStatus('story', $oldStory->feedback, $story->status, $oldStory->status);
         }
 
         $changes = common::createChanges($oldStory, $story);
@@ -2142,7 +2142,7 @@ class storyModel extends model
                 $this->setStage($storyID);
                 $allChanges[$storyID] = common::createChanges($oldStory, $story);
 
-                if(($this->config->edition == 'biz' || $this->config->edition == 'max') && $oldStory->feedback && !isset($feedbacks[$oldStory->feedback]))
+                if($this->config->edition != 'open' && $oldStory->feedback && !isset($feedbacks[$oldStory->feedback]))
                 {
                     $feedbacks[$oldStory->feedback] = $oldStory->feedback;
                     $this->loadModel('feedback')->updateStatus('story', $oldStory->feedback, $story->status, $oldStory->status);
@@ -3854,7 +3854,7 @@ class storyModel extends model
             ->beginIF($type == 'reviewedBy')->andWhere("CONCAT(',', t1.reviewedBy, ',')")->like("%,$account,%")->fi()
             ->beginIF($type == 'closedBy')->andWhere('t1.closedBy')->eq($account)->fi()
             ->fi()
-            ->beginIF($includeLibStories == false and $this->config->edition == 'max')->andWhere('t1.lib')->eq('0')->fi()
+            ->beginIF($includeLibStories == false and ($this->config->edition == 'max' or $this->config->edition == 'ipd'))->andWhere('t1.lib')->eq('0')->fi()
             ->beginIF($shadow !== 'all')->andWhere('t2.shadow')->eq((int)$shadow)->fi()
             ->orderBy($orderBy)
             ->page($pager)
@@ -4707,7 +4707,7 @@ class storyModel extends model
             $menu .= $this->buildMenu('story', 'activate', $params . "&storyType=$story->type", $story, $type, '', '', 'iframe showinonlybody', true);
 
             $disabledFeatures = ",{$this->config->disabledFeatures},";
-            if($this->config->edition == 'max' and $this->app->tab == 'project' and common::hasPriv('story', 'importToLib') and strpos($disabledFeatures, ',assetlibStorylib,') === false and strpos($disabledFeatures, ',assetlib,') === false)
+            if(($this->config->edition == 'max' or $this->config->edition == 'ipd') and $this->app->tab == 'project' and common::hasPriv('story', 'importToLib') and strpos($disabledFeatures, ',assetlibStorylib,') === false and strpos($disabledFeatures, ',assetlib,') === false)
             {
                 $menu .= html::a('#importToLib', "<i class='icon icon-assets'></i> " . $this->lang->story->importToLib, '', 'class="btn" data-toggle="modal"');
             }
@@ -5503,7 +5503,7 @@ class storyModel extends model
                     $stories[$id]->cases  = $this->loadModel('testcase')->getStoryCases($id);
                     $stories[$id]->bugs   = $this->loadModel('bug')->getStoryBugs($id);
                     $stories[$id]->tasks  = $this->loadModel('task')->getStoryTasks($id);
-                    if($this->config->edition== 'max' or $this->config->edition == 'ipd')
+                    if($this->config->edition == 'max' or $this->config->edition == 'ipd')
                     {
                         $stories[$id]->designs   = $this->dao->select('id, name')->from(TABLE_DESIGN)
                             ->where('story')->eq($id)
@@ -5577,7 +5577,7 @@ class storyModel extends model
                 $stories[$id]->cases  = $this->loadModel('testcase')->getStoryCases($id);
                 $stories[$id]->bugs   = $this->loadModel('bug')->getStoryBugs($id);
                 $stories[$id]->tasks  = $this->loadModel('task')->getStoryTasks($id, 0, $projectID);
-                if($this->config->edition== 'max' or $this->config->edition == 'ipd')
+                if($this->config->edition == 'max' or $this->config->edition == 'ipd')
                 {
                     $stories[$id]->designs   = $this->dao->select('id, name')->from(TABLE_DESIGN)
                         ->where('story')->eq($id)
@@ -5621,7 +5621,7 @@ class storyModel extends model
             $track[$id]->bug   = $this->loadModel('bug')->getStoryBugs($id);
             $track[$id]->story = $this->getByID($id);
             $track[$id]->task  = $this->loadModel('task')->getStoryTasks($id);
-            if($this->config->edition== 'max' or $this->config->edition == 'ipd')
+            if($this->config->edition == 'max' or $this->config->edition == 'ipd')
             {
                 $track[$id]->design   = $this->dao->select('id, name')->from(TABLE_DESIGN)
                     ->where('story')->eq($id)
