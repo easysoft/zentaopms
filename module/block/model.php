@@ -264,11 +264,7 @@ class blockModel extends model
      */
     public function create(object $formData): int|false
     {
-        $this->dao->insert(TABLE_BLOCK)->data($formData)
-            ->autoCheck()
-            ->batchCheck($this->config->block->create->requiredFields, 'notempty')
-            ->exec();
-
+        $this->blockTao->insert($formData);
         if(dao::isError()) return false;
 
         $blockID = $this->dao->lastInsertID();
