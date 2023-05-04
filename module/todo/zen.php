@@ -540,7 +540,7 @@ class todoZen extends todo
                 $this->loadModel('opportunity')->getUserOpportunityPairs($account),
             );
         }
-        else if($type == 'qcVersion')
+        elseif($type == 'qcVersion')
         {
             return $this->loadModel('review')->getUserReviewPairs($account, 0, 'wait');
         }
