@@ -492,7 +492,7 @@ class todoZen extends todo
      */
     protected function setSessionUri($uri): bool
     {
-        foreach($this->config->todo->sessionUri as $key => $value) $this->sesstion->set($key, $uri, $value);
+        foreach($this->config->todo->sessionUri as $key => $value) $this->session->set($key, $uri, $value);
         return true;
     }
 
