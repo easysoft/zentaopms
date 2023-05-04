@@ -340,7 +340,7 @@ class todoTao extends todoModel
     /**
      * 获取用户的待办事项数量。
      * Get todo count on the account.
-     * 
+     *
      * @param  string $account
      * @access protected
      * @return int
