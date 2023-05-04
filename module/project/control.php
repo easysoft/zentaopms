@@ -511,7 +511,7 @@ class project extends control
      * @access public
      * @return void
      */
-    public function edit(string $projectID, string $from = ''): void
+    public function edit(string $projectID, string $from = ''): mixed
     {
         $this->loadModel('action');
         $this->loadModel('custom');
@@ -1679,7 +1679,7 @@ class project extends control
      * @access public
      * @return void
      */
-    public function editGroup($groupID): void
+    public function editGroup($groupID): mixed
     {
         $groupID = (int)$groupID;
         $this->loadModel('group');
@@ -1943,7 +1943,7 @@ class project extends control
      * @access public
      * @return void
      */
-    public function manageProducts(string $projectID, $from = 'project'): void
+    public function manageProducts(string $projectID, $from = 'project'): mixed
     {
         $projectID = (int)$projectID;
         $project   = $this->project->getById($projectID);
@@ -1993,7 +1993,7 @@ class project extends control
      * @access public
      * @return void
      */
-    public function ajaxGetExecutions(string $projectID, int $executionID = 0, string $mode = '', string $type = 'all'): void
+    public function ajaxGetExecutions(string $projectID, int $executionID = 0, string $mode = '', string $type = 'all'): mixed
     {
         $project    = $this->project->getByID($projectID);
         $disabled   = $project->multiple ? '' : 'disabled';

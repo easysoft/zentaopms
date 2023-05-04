@@ -17,12 +17,13 @@ class todoModel extends model
      * Create todo data.
      *
      * @param  object $todo
+     * @param  object $formData
      * @access public
      * @return int|false
      */
-    public function create(object $todo): int|false
+    public function create(object $todo, object $formData): int|false
     {
-        $processedTodo = $this->todoTao->processCreateData($todo);
+        $processedTodo = $this->todoTao->processCreateData($todo, $formData);
         if(!$processedTodo) return false;
 
         $todoID = $this->todoTao->insert($processedTodo);

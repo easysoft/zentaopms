@@ -404,7 +404,7 @@ class product extends control
      * @access public
      * @return void
      */
-    public function create(string $programID = '0', string $extra = '')
+    public function create(string $programID = '0', string $extra = ''): void
     {
         $programID = (int)$programID;
 
@@ -412,12 +412,21 @@ class product extends control
         {
             $data = form::data($this->config->product->form->create);
             $data = $this->productZen->prepareCreateExtras($data, $this->post->acl, $this->post->uid);
-            if(!$data) return $this->productZen->sendError4Create();
+            if(!$data)
+            {
+                $this->productZen->sendError4Create();
+                return;
+            }
 
             $productID = $this->product->create($data);
-            if(!$productID) return $this->productZen->sendError4Create();
+            if(!$productID)
+            {
+                $this->productZen->sendError4Create();
+                return;
+            }
 
-            return $this->productZen->responseAfterCreate($productID, $data, $this->post->uid, zget($_POST, 'lineName', ''));
+            $this->productZen->responseAfterCreate($productID, $data, $this->post->uid, zget($_POST, 'lineName', ''));
+            return;
         }
 
         $this->productZen->setCreateMenu($programID);
