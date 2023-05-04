@@ -82,7 +82,9 @@ class todo extends control
 
         if(!empty($_POST))
         {
-            $todoIDList = $this->todo->batchCreate();
+            $formData   = form::data($this->config->todo->batchCreate->form);
+            $todosData  = $this->todoZen->beforeBatchCreate($formData);
+            $todoIDList = $this->todo->batchCreate($todosData, $formData);
             if(dao::isError()) return print(js::error(dao::getError()));
 
             /* Locate the browser. */
