@@ -173,19 +173,24 @@ class todo extends control
      *
      * @param  string $from example:myTodo, todoBatchEdit.
      * @param  string $type
-     * @param  int    $userID
+     * @param  string $userID
      * @param  string $status
      * @access public
-     * @return void
      */
     public function batchEdit(string $from = '', string $type = 'today', string $userID = '', string $status = 'all')
     {
+        $formData = form::data($this->config->todo->batchEdit->form);
+        $userID   = (int)$userID;
+
         /* Get form data for my-todo. */
-        if($from == 'myTodo') $this->todoZen->batchEditFromMyTodo($type, $userID, $status);
+        if($from == 'myTodo') $this->todoZen->batchEditFromMyTodo($formData, $type, $userID, $status);
         if($from == 'todoBatchEdit')
         {
-            $formData = form::data($this->config->todo->batchEdit->form);
-            $this->todoZen->batchEditFromTodoBatchEdit($formData);
+            $todos = $this->todoZen->beforeBatchEdit($formData);
+            $allChanges = $this->todo->batchUpdate($todos, $formData->data->todoIDList);
+            $this->todoZen->afterBatchEdit($allChanges);
+
+            return print(js::locate($this->session->todoList, 'parent'));
         }
     }
 

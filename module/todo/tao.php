@@ -17,6 +17,18 @@ class todoTao extends todoModel
     }
 
     /**
+     * 获取多条待办。
+     * Get a todo.
+     *
+     * @param  array  $todoIdList
+     * @return array
+     */
+    protected function fetchRows(array $todoIdList): array
+    {
+        return $this->dao->select('*')->from(TABLE_TODO)->where('id')->in(array_keys($todoIdList))->fetchAll('id');
+    }
+
+    /**
      * 插入待办数据
      * Insert todo data.
      *

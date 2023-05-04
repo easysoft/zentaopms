@@ -252,9 +252,9 @@ class productModel extends model
      *
      * @param  int    $productID
      * @access public
-     * @return object
+     * @return object|false
      */
-    public function getById($productID)
+    public function getByID(int $productID): object|false
     {
         if(defined('TUTORIAL')) return $this->loadModel('tutorial')->getProduct();
         $product = $this->dao->findById($productID)->from(TABLE_PRODUCT)->fetch();
@@ -688,48 +688,37 @@ class productModel extends model
      * Update a product.
      *
      * @param  int    $productID
+     * @param  object $product
+     * @param  string $uid
      * @access public
-     * @return array
+     * @return array|false
      */
-    public function update($productID)
+    public function update(int $productID, object $product, string $uid = ''): array|false
     {
-        $productID  = (int)$productID;
         $oldProduct = $this->dao->findById($productID)->from(TABLE_PRODUCT)->fetch();
 
-        $product = fixer::input('post')
-            ->add('id', $productID)
-            ->callFunc('name', 'trim')
-            ->setDefault('line', 0)
-            ->setDefault('whitelist', '')
-            ->setDefault('reviewer', '')
-            ->join('whitelist', ',')
-            ->join('reviewer', ',')
-            ->stripTags($this->config->product->editor->edit['id'], $this->config->allowedTags)
-            ->remove('uid,changeProjects,contactListMenu')
-            ->get();
-
         $this->lang->error->unique = $this->lang->error->repeat;
-        $product   = $this->loadModel('file')->processImgURL($product, $this->config->product->editor->edit['id'], $this->post->uid);
-        $programID = isset($product->program) ? $product->program : $oldProduct->program;
-        $this->dao->update(TABLE_PRODUCT)->data($product)->autoCheck()
+        $this->dao->update(TABLE_PRODUCT)->data($product, 'uid,changeProjects,contactListMenu')->autoCheck()
             ->batchCheck($this->config->product->edit->requiredFields, 'notempty')
-            ->checkIF(!empty($product->name), 'name', 'unique', "id != $productID and `program` = $programID and `deleted` = '0'")
-            ->checkIF(!empty($product->code), 'code', 'unique', "id != $productID and `deleted` = '0'")
+            ->checkIF(!empty($product->name), 'name', 'unique', "id != {$productID} and `program` = {$product->program} and `deleted` = '0'")
+            ->checkIF(!empty($product->code), 'code', 'unique', "id != {$productID} and `deleted` = '0'")
             ->checkFlow()
             ->where('id')->eq($productID)
             ->exec();
 
-        if(!dao::isError())
-        {
-            $this->file->updateObjectID($this->post->uid, $productID, 'product');
-            $whitelist = explode(',', $product->whitelist);
-            $this->loadModel('personnel')->updateWhitelist($whitelist, 'product', $productID);
-            if($product->acl != 'open') $this->loadModel('user')->updateUserView($productID, 'product');
-            if($product->type == 'normal' and $oldProduct->type != 'normal') $this->loadModel('branch')->unlinkBranch4Project($productID);
-            if($product->type != 'normal' and $oldProduct->type == 'normal') $this->loadModel('branch')->linkBranch4Project($productID);
+        if(dao::isError()) return false;
 
-            return common::createChanges($oldProduct, $product);
-        }
+        /* Update objectID field of file recode, that upload by editor. */
+        $this->loadModel('file')->updateObjectID($uid, $productID, 'product');
+
+        $whitelist = explode(',', $product->whitelist);
+        $this->loadModel('personnel')->updateWhitelist($whitelist, 'product', $productID);
+        if($oldProduct->acl != $product->acl and $product->acl != 'open') $this->loadModel('user')->updateUserView($productID, 'product');
+
+        if($product->type == 'normal' and $oldProduct->type != 'normal') $this->loadModel('branch')->unlinkBranch4Project($productID);
+        if($product->type != 'normal' and $oldProduct->type == 'normal') $this->loadModel('branch')->linkBranch4Project($productID);
+
+        return common::createChanges($oldProduct, $product);
     }
 
     /**
