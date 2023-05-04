@@ -101,10 +101,11 @@ class projectTao extends projectModel
      *
      * @param  int    $projectID
      * @param  object $project
+     * @param  object $oldProject
      * @access protected
      * @return bool
      */
-    protected function doUpdate(int $projectID ,object $project): bool
+    protected function doUpdate(int $projectID ,object $project, object $oldProject): bool
     {
         $this->dao->update(TABLE_PROJECT)->data($project)
             ->autoCheck($skipFields = 'begin,end')

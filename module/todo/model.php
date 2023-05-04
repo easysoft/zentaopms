@@ -17,12 +17,13 @@ class todoModel extends model
      * Create todo data.
      *
      * @param  object $todo
+     * @param  object $formData
      * @access public
      * @return int|false
      */
-    public function create(object $todo): int|false
+    public function create(object $todo, object $formData): int|false
     {
-        $processedTodo = $this->todoTao->processCreateData($todo);
+        $processedTodo = $this->todoTao->processCreateData($todo, $formData);
         if(!$processedTodo) return false;
 
         $todoID = $this->todoTao->insert($processedTodo);
@@ -256,18 +257,9 @@ class todoModel extends model
 
         $todo = $this->loadModel('file')->replaceImgURL((object)$todo, 'desc');
         if($setImgSize) $todo->desc = $this->file->setImgSize($todo->desc);
-        if($todo->type == 'story')    $todo->name = $this->dao->findByID($todo->objectID)->from(TABLE_STORY)->fetch('title');
-        if($todo->type == 'task')     $todo->name = $this->dao->findByID($todo->objectID)->from(TABLE_TASK)->fetch('name');
-        if($todo->type == 'bug')      $todo->name = $this->dao->findByID($todo->objectID)->from(TABLE_BUG)->fetch('title');
-        if($todo->type == 'issue'  and $this->config->edition == 'max') $todo->name = $this->dao->findByID($todo->objectID)->from(TABLE_ISSUE)->fetch('title');
-        if($todo->type == 'risk'   and $this->config->edition == 'max') $todo->name = $this->dao->findByID($todo->objectID)->from(TABLE_RISK)->fetch('name');
-        if($todo->type == 'opportunity' and $this->config->edition == 'max') $todo->name = $this->dao->findByID($todo->objectID)->from(TABLE_OPPORTUNITY)->fetch('name');
-        if($todo->type == 'review' and $this->config->edition == 'max') $todo->name = $this->dao->findByID($todo->objectID)->from(TABLE_REVIEW)->fetch('title');
-        if($todo->type == 'testtask') $todo->name = $this->dao->findByID($todo->objectID)->from(TABLE_TESTTASK)->fetch('name');
-        if($todo->type == 'feedback') $todo->name = $this->dao->findByID($todo->objectID)->from(TABLE_FEEDBACK)->fetch('title');
         $todo->date = str_replace('-', '', $todo->date);
 
-        return $todo;
+        return $this->todoTao->setTodoNameByType($todo);
     }
 
     /**
@@ -375,15 +367,7 @@ class todoModel extends model
 
         while($todo = $stmt->fetch())
         {
-            if($todo->type == 'story')    $todo->name = $this->dao->findByID($todo->objectID)->from(TABLE_STORY)->fetch('title');
-            if($todo->type == 'task')     $todo->name = $this->dao->findByID($todo->objectID)->from(TABLE_TASK)->fetch('name');
-            if($todo->type == 'bug')      $todo->name = $this->dao->findByID($todo->objectID)->from(TABLE_BUG)->fetch('title');
-            if($todo->type == 'testtask') $todo->name = $this->dao->findByID($todo->objectID)->from(TABLE_TESTTASK)->fetch('name');
-            if($todo->type == 'issue'  && $this->config->edition == 'max') $todo->name = $this->dao->findByID($todo->objectID)->from(TABLE_ISSUE)->fetch('title');
-            if($todo->type == 'risk'   && $this->config->edition == 'max') $todo->name = $this->dao->findByID($todo->objectID)->from(TABLE_RISK)->fetch('name');
-            if($todo->type == 'opportunity' && $this->config->edition == 'max') $todo->name = $this->dao->findByID($todo->objectID)->from(TABLE_OPPORTUNITY)->fetch('name');
-            if($todo->type == 'review' && $this->config->edition == 'max') $todo->name = $this->dao->findByID($todo->objectID)->from(TABLE_REVIEW)->fetch('title');
-            if($todo->type == 'feedback' and $this->config->edition != 'open') $todo->name = $this->dao->findByID($todo->objectID)->from(TABLE_FEEDBACK)->fetch('title');
+            $todo = $this->todoTao->setTodoNameByType($todo);
             $todo->begin = date::formatTime($todo->begin);
             $todo->end   = date::formatTime($todo->end);
 

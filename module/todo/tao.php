@@ -340,7 +340,7 @@ class todoTao extends todoModel
     /**
      * 获取用户的待办事项数量。
      * Get todo count on the account.
-     * 
+     *
      * @param  string $account
      * @access protected
      * @return int
@@ -356,5 +356,36 @@ class todoTao extends todoModel
             ->orWhere('finishedBy')->eq($account)
             ->markRight(1)
             ->fetch('count');
+    }
+
+    /**
+     * 根据待办类型设置待办名称。
+     * Set todo name by its type.
+     *
+     * @param  object    $todo
+     * @access protected
+     * @return object
+     */
+    protected function setTodoNameByType(object $todo): object
+    {
+        if($todo->type == 'story')    $todo->name = $this->dao->findByID($todo->objectID)->from(TABLE_STORY)->fetch('title');
+        if($todo->type == 'task')     $todo->name = $this->dao->findByID($todo->objectID)->from(TABLE_TASK)->fetch('name');
+        if($todo->type == 'bug')      $todo->name = $this->dao->findByID($todo->objectID)->from(TABLE_BUG)->fetch('title');
+        if($todo->type == 'testtask') $todo->name = $this->dao->findByID($todo->objectID)->from(TABLE_TESTTASK)->fetch('name');
+
+        if($this->config->edition == 'max')
+        {
+            if($todo->type == 'risk' )       $todo->name = $this->dao->findByID($todo->objectID)->from(TABLE_RISK)->fetch('name');
+            if($todo->type == 'issue')       $todo->name = $this->dao->findByID($todo->objectID)->from(TABLE_ISSUE)->fetch('title');
+            if($todo->type == 'review')      $todo->name = $this->dao->findByID($todo->objectID)->from(TABLE_REVIEW)->fetch('title');
+            if($todo->type == 'opportunity') $todo->name = $this->dao->findByID($todo->objectID)->from(TABLE_OPPORTUNITY)->fetch('name');
+        }
+
+        if($this->config->edition == 'biz' || $this->config->edition == 'max')
+        {
+            if($todo->type == 'feedback') $todo->name = $this->dao->findByID($todo->objectID)->from(TABLE_FEEDBACK)->fetch('title');
+        }
+
+        return $todo;
     }
 }

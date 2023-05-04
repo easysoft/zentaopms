@@ -1389,7 +1389,7 @@ class projectModel extends model
         $this->lang->error->unique = $this->lang->error->repeat;
 
         if(!empty($executionsCount) and $oldProject->multiple) $this->checkDatesValidByProject($projectID ,$project);
-        $this->projectTao->doUpdate($projectID, $project);
+        $this->projectTao->doUpdate($projectID, $project, $oldProject);
         if(dao::isError()) return false;
 
         if(!$oldProject->hasProduct and ($oldProject->name != $project->name or $oldProject->parent != $project->parent or $oldProject->acl != $project->acl)) $this->updateShadowProduct($project);
