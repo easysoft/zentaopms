@@ -698,7 +698,7 @@ class projectZen extends project
         /* Record multiple and waterfall project unlinked products. */
         if($project->multiple and $project->model != 'waterfall' and $project->model != 'waterfallplus')
         {
-            $this->dealUnlinkedProduct($project, $oldProductIDs, $newProductIDs, $executionIDs);
+            $this->dealUnlinkedProduct($project, $oldProducts, $newProductIDs, $executionIDs);
         }
     }
 
@@ -707,17 +707,17 @@ class projectZen extends project
      * Record multiple and waterfall project unlinked products
      *
      * @param  object    $project
-     * @param  array     $oldProductIDs
+     * @param  array     $oldProducts
      * @param  array     $newProductIDs
      * @param  int|array $executionIDs
      *
      * @access protected
      * @return void
      */
-    protected function dealUnlinkedProduct(object $project, array $oldProductIDs, array $newProductIDs, array $executionIDs): void
+    protected function dealUnlinkedProduct(object $project, array $oldProducts, array $newProductIDs, array $executionIDs): void
     {
         $oldExecutionProducts = $this->projectTao->getExecutionProductGroup($executionIDs);
-        $unlinkedProducts     = array_diff($oldProductIDs, $newProductIDs);
+        $unlinkedProducts     = array_diff(array_keys($oldProducts), $newProductIDs);
         if(!empty($unlinkedProducts))
         {
             $unlinkedProductPairs = array();
@@ -811,7 +811,7 @@ class projectZen extends project
         {
             if($programID != $topProgramID)
             {
-                $this->InitBranchProduct($programProducts, $branchGroups, $linkedBranches, $linkedProducts);
+                $otherProducts = $this->InitBranchProduct($programProducts, $branchGroups, $linkedBranches, $linkedProducts);
             }
             else
             {
