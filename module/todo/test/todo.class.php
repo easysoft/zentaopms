@@ -114,35 +114,10 @@ class todoTest
      * @access public
      * @return array
      */
-    public function batchUpdateTest($param, $todoID)
+    public function batchUpdateTest(array $todos, int $todoID)
     {
-        $todoIDList = array('1' => '1', '2' => '2', '3' => '3');
-        $dates      = array('1' => date('Y-m-d',strtotime('+1 month')), '2' => date('Y-m-d',strtotime('-1 month +1 day')), '3' => date('Y-m-d',strtotime('-1 month +2 day')));
-        $types      = array('1' => 'custom', '2' => 'bug', '3' => 'task');
-        $pris       = array('1' => '1', '2' => '2', '3' => '3');
-        $names      = array('1' => '自定义1的待办', '2' => 'BUG2的待办', '3' => '任务3的待办');
-        $descs      = array('1' => '这是一个待办的描述1', '2' => '这是一个待办的描述2', '3' => '这是一个待办的描述3');
-        $begins     = array('1' => '1000', '2' => '1002', '3' => '1004');
-        $ends       = array('1' => '1400', '2' => '1402', '3' => '1404');
-        $status     = array('1' => 'wait', '2' => 'doing', '3' => 'done');
-
-        $batchUpdateFields['todoIDList'] = $todoIDList;
-        $batchUpdateFields['dates']      = $dates;
-        $batchUpdateFields['types']      = $types;
-        $batchUpdateFields['pris']       = $pris;
-        $batchUpdateFields['names']      = $names;
-        $batchUpdateFields['descs']      = $descs;
-        $batchUpdateFields['begins']     = $begins;
-        $batchUpdateFields['ends']       = $ends;
-        $batchUpdateFields['status']     = $status;
-
-        foreach($batchUpdateFields as $field => $value) $_POST[$field] = $value;
-
-        foreach($param as $key => $value) $_POST[$key] = $value;
-
-        $changes = $this->objectModel->batchUpdate();
-
-        unset($_POST);
+        $todoIDList = array($todoID => $todoID);
+        $changes = $this->objectModel->batchUpdate($todos, $todoIDList);
 
         if(dao::isError()) return dao::getError();
 
