@@ -248,7 +248,7 @@ class todoZen extends todo
         $storys    = $this->loadModel('story')->getUserStoryPairs($account, 10, 'story', '', isset($objectIdList['story']) ? $objectIdList['story'] : '');
         $users     = $this->loadModel('user')->getPairs('noclosed|nodeleted|noempty');
         $testtasks = $this->loadModel('testtask')->getUserTestTaskPairs($account);
-        if($this->config->edition == 'biz' || $this->config->edition == 'max') $feedbacks = $this->loadModel('feedback')->getUserFeedbackPairs($account, '', isset($objectIdList['feedback']) ? $objectIdList['feedback'] : '');
+        if($this->config->edition != 'open') $feedbacks = $this->loadModel('feedback')->getUserFeedbackPairs($account, '', isset($objectIdList['feedback']) ? $objectIdList['feedback'] : '');
         if($this->config->edition == 'max')
         {
             $issues        = $this->loadModel('issue')->getUserIssuePairs($account);
@@ -269,7 +269,7 @@ class todoZen extends todo
         $this->view->testtasks   = $testtasks;
         $this->view->editedTodos = $editedTodos;
         $this->view->users       = $users;
-        if($this->config->edition == 'biz' || $this->config->edition == 'max') $this->view->feedback = $feedbacks;
+        if($this->config->edition != 'open') $this->view->feedback = $feedbacks;
         if($this->config->edition == 'max')
         {
             $this->view->issues        = $issues;
