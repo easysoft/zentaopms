@@ -1539,7 +1539,7 @@ class projectModel extends model
             $parentID   = !isset($project->parent) ? $oldProject->parent : $project->parent;
 
             $this->dao->update(TABLE_PROJECT)->data($project)
-                ->autoCheck($skipFields = 'begin,end')
+                ->autoCheck('begin,end')
                 ->batchCheck($this->config->project->edit->requiredFields, 'notempty')
                 ->checkIF($project->begin != '', 'begin', 'date')
                 ->checkIF($project->end != '', 'end', 'date')
@@ -3056,10 +3056,7 @@ class projectModel extends model
         {
             foreach($plans as $planList)
             {
-                foreach($planList as $planIDList)
-                {
-                    foreach($planIDList as $planID) $newPlans[$planID] = $planID;
-                }
+                foreach($planList as $planID) $newPlans[$planID] = $planID;
             }
         }
         if(empty($newPlans)) return;

@@ -108,7 +108,7 @@ class projectTao extends projectModel
     protected function doUpdate(int $projectID ,object $project, object $oldProject): bool
     {
         $this->dao->update(TABLE_PROJECT)->data($project)
-            ->autoCheck($skipFields = 'begin,end')
+            ->autoCheck('begin,end')
             ->batchcheck($requiredFields, 'notempty')
             ->checkIF($project->begin != '', 'begin', 'date')
             ->checkIF($project->end != '', 'end', 'date')
