@@ -30,9 +30,9 @@ foreach($longBlocks as $index => $block)
                     ([
                         ['text' => $lang->block->refresh, 'url' => ''],
                         ['text' => $lang->edit, 'url' => $this->createLink("block", "edit", "blockID=$block->id"), 'data-toggle' => 'modal'],
-                        ['text' => $lang->block->hidden, 'url' => ''],
+                        ['text' => $lang->block->hidden, 'url' => $this->createLink("block", "delete", "blockID=$block->id&type=hidden")],
                         ['text' => $lang->block->createBlock, 'url' => $this->createLink("block", "create", "dashboard=$dashboard"), 'data-toggle' => 'modal'],
-                        ['text' => $lang->block->reset, 'url' => ''],
+                        ['text' => $lang->block->reset, 'url' => $this->createLink("block", "reset", "dashboard=$dashboard")],
                     ]), 
                 )
             )
@@ -78,9 +78,9 @@ foreach($shortBlocks as $index => $block)
                     ([
                         ['text' => $lang->block->refresh, 'url' => ''],
                         ['text' => $lang->edit, 'url' => $this->createLink("block", "edit", "blockID=$block->id"), 'data-toggle' => 'modal'],
-                        ['text' => $lang->block->hidden, 'url' => ''],
+                        ['text' => $lang->block->hidden, 'url' => $this->createLink("block", "delete", "blockID=$block->id&type=hidden")],
                         ['text' => $lang->block->createBlock, 'url' => $this->createLink("block", "create", "dashboard=$dashboard"), 'data-toggle' => 'modal'],
-                        ['text' => $lang->block->reset, 'url' => ''],
+                        ['text' => $lang->block->reset, 'url' => $this->createLink("block", "reset", "dashboard=$dashboard")],
                     ]), 
                 )
             )
