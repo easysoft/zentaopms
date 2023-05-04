@@ -192,9 +192,11 @@ if($config->edition != 'open')
 {
     $config->version = $config->edition . $config->{$config->edition . 'Version'};
     if($config->edition != 'max') unset($config->maxVersion);
+    if($config->edition != 'ipd') unset($config->ipdVersion);
 }
 else
 {
     unset($config->bizVersion);
     unset($config->maxVersion);
+    unset($config->ipdVersion);
 }
