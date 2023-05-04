@@ -40,18 +40,29 @@ class productZen extends product
      * @access protected
      * @return void
      */
-    protected function setCreateMenu(int $program): void
+    protected function setCreateMenu(int $programID)
     {
         if($this->app->tab == 'program') $this->loadModel('program')->setMenu($programID);
         if($this->app->tab == 'doc') unset($this->lang->doc->menu->product['subMenu']);
         if($this->app->getViewType() != 'mhtml') return;
 
-        if($this->app->rawModule == 'projectstory' and $this->app->rawMethod == 'story')
-        {
-            $this->loadModel('project')->setMenu();
-            return;
-        }
+        if($this->app->rawModule == 'projectstory' and $this->app->rawMethod == 'story') return $this->loadModel('project')->setMenu();
         $this->product->setMenu();
+    }
+
+    /**
+     * 为编辑产品设置导航数据，主要是替换占位符。
+     * Set menu for edit product page.
+     *
+     * @param  int $productID
+     * @param  int $programID
+     * @access protected
+     * @return void
+     */
+    protected function setEditMenu(int $productID, int $programID)
+    {
+        if($programID) return $this->loadModel('program')->setMenu($programID);
+        $this->product->setMenu($productID);
     }
 
     /**
@@ -64,17 +75,13 @@ class productZen extends product
      * @access protected
      * @return void
      */
-    protected function setShowErrorNoneMenu(string $moduleName, string $activeMenu, int $objectID): void
+    protected function setShowErrorNoneMenu(string $moduleName, string $activeMenu, int $objectID)
     {
-        if($this->app->getViewType() == 'mhtml')
-        {
-            $this->product->setMenu();
-            return;
-        }
+        if($this->app->getViewType() == 'mhtml') return $this->product->setMenu();
 
-        if($moduleName == 'qa')        $this->setShowErrorNoneMenu4QA($activeMenu);
-        if($moduleName == 'project')   $this->setShowErrorNoneMenu4Project($activeMenu, $objectID);
-        if($moduleName == 'execution') $this->setShowErrorNoneMenu4Execution($activeMenu, $objectID);
+        if($moduleName == 'qa')        return $this->setShowErrorNoneMenu4QA($activeMenu);
+        if($moduleName == 'project')   return $this->setShowErrorNoneMenu4Project($activeMenu, $objectID);
+        if($moduleName == 'execution') return $this->setShowErrorNoneMenu4Execution($activeMenu, $objectID);
     }
 
     /**
@@ -85,7 +92,7 @@ class productZen extends product
      * @access private
      * @return void
      */
-    private function setShowErrorNoneMenu4QA(string $activeMenu): void
+    private function setShowErrorNoneMenu4QA(string $activeMenu)
     {
         $this->loadModel('qa')->setMenu(array(), 0);
         $this->view->moduleName = 'qa';
@@ -106,7 +113,7 @@ class productZen extends product
      * @access private
      * @return void
      */
-    private function setShowErrorNoneMenu4Project(string $activeMenu, int $projectID): void
+    private function setShowErrorNoneMenu4Project(string $activeMenu, int $projectID)
     {
         $this->loadModel('project')->setMenu($projectID);
         $this->app->rawModule  = $activeMenu;
@@ -132,7 +139,7 @@ class productZen extends product
      * @access private
      * @return void
      */
-    private function setShowErrorNoneMenu4Execution(string $activeMenu, int $executionID): void
+    private function setShowErrorNoneMenu4Execution(string $activeMenu, int $executionID)
     {
         $this->loadModel('execution')->setMenu($executionID);
         $this->app->rawModule = $activeMenu;
@@ -167,13 +174,14 @@ class productZen extends product
      * 获取创建产品页面的表单配置。
      * Get form fields for create.
      *
-     * @param  int $programID
+     * @param  int   $programID
+     * @param  array $fields
      * @access private
      * @return array
      */
-    private function getFormFields4Create(int $programID = 0): array
+    private function getFormFields4Create(int $programID = 0, array $fields = array()): array
     {
-        $fields = $this->config->product->form->create;
+        if(empty($fields)) $fields = $this->config->product->form->create;
 
         $this->loadModel('user');
         $poUsers = $this->user->getPairs('nodeleted|pofirst|noclosed');
@@ -185,7 +193,7 @@ class productZen extends product
         {
             if(isset($attr['options']) and $attr['options'] == 'users') $fields[$field]['options'] = $users;
             $fields[$field]['name']  = $field;
-            $fields[$field]['title'] = $this->lang->product->$field;
+            $fields[$field]['title'] = zget($this->lang->product, $field);
         }
 
         $fields['program']['options'] = array('') + $this->loadModel('program')->getTopPairs('', 'noclosed');
@@ -195,6 +203,37 @@ class productZen extends product
 
         if($programID) $fields['line']['options'] = array('') + $this->product->getLinePairs($programID);
         if(empty($programID) or $this->config->systemMode != 'ALM') unset($fields['line']);
+
+        return $fields;
+    }
+
+    /**
+     * 获取编辑产品页面的表单配置。
+     * Get form fields for create.
+     *
+     * @param  object $product
+     * @access private
+     * @return array
+     */
+    private function getFormFields4Edit(object $product): array
+    {
+        $programID = (int)$product->program;
+        $fields    = $this->getFormFields4Create($programID, $this->config->product->form->edit);
+
+        /* Check program priv, and append to program list that is not exist product's program. */
+        $hasPrivPrograms = $this->app->user->view->programs;
+        if($programID and strpos(",{$hasPrivPrograms},", ",{$programID},") === false) $fields['program']['control'] = 'hidden';
+        if(!isset($fields['program']['options'][$programID]) and $programID)
+        {
+            $program = $this->program->getByID($programID);
+            $fields['program']['options'] += array($programID => $program->name);
+        }
+
+        /* Set default value by product. */
+        foreach($fields as $field => $attr)
+        {
+            if(isset($product->{$field})) $fields[$field]['default'] = $product->{$field};
+        }
 
         return $fields;
     }
@@ -231,19 +270,37 @@ class productZen extends product
      * @access protected
      * @return void
      */
-    protected function buildCreateForm(int $programID = 0, string $extra = ''): void
+    protected function buildCreateForm(int $programID = 0, string $extra = '')
     {
         $this->view->title      = $this->lang->product->create;
         $this->view->gobackLink = $this->getBackLink4Create($extra);
         $this->view->programID  = $programID;
         $this->view->fields     = $this->getFormFields4Create($programID);
-        unset($this->lang->product->typeList['']);
 
+        unset($this->lang->product->typeList['']);
         $this->display();
     }
 
     /**
-     * 追加创建信息，处理白名单、评审者、项目集字段，还有富文本内容处理。
+     * 构建编辑产品页面数据。
+     * Build form fields for edit.
+     *
+     * @param  object $product
+     * @access protected
+     * @return void
+     */
+    protected function buildEditForm(object $product)
+    {
+        $this->view->title   = $this->lang->product->edit . $this->lang->colon . $product->name;
+        $this->view->product = $product;
+        $this->view->fields  = $this->getFormFields4Edit($product);
+
+        unset($this->lang->product->typeList['']);
+        $this->display();
+    }
+
+    /**
+     * 追加创建信息，处理白名单、项目集字段，还有富文本内容处理。
      * Prepare data for create.
      *
      * @param  object $data
@@ -262,11 +319,28 @@ class productZen extends product
             ->stripTags($this->config->product->editor->create['id'], $this->config->allowedTags)
             ->remove('uid,newLine,lineName,contactListMenu')
             ->get();
-        if(empty($product)) return false;
 
-        $product = $this->loadModel('file')->processImgURL($product, $this->config->product->editor->create['id'], $uid);
+        return $this->loadModel('file')->processImgURL($product, $this->config->product->editor->create['id'], $uid);
+    }
 
-        return $product;
+    /**
+     * 处理白名单和富文本内容。
+     * Prepare data for edit.
+     *
+     * @param  object $data
+     * @param  string $acl
+     * @param  string $uid
+     * @access protected
+     * @return object
+     */
+    protected function prepareEditExtras(object $data, string $acl, string $uid): object
+    {
+        $product = fixer::input('post')->setIF($acl == 'open', 'whitelist', '')
+            ->stripTags($this->config->product->editor->edit['id'], $this->config->allowedTags)
+            ->remove('uid,changeProjects,contactListMenu')
+            ->get();
+
+        return $this->loadModel('file')->processImgURL($product, $this->config->product->editor->edit['id'], $uid);
     }
 
     /**
@@ -280,8 +354,9 @@ class productZen extends product
      * @access protected
      * @return void
      */
-    protected function responseAfterCreate(int $productID, object $product, string $uid, string $lineName = ''): void
+    protected function responseAfterCreate(int $productID, object $product, string $uid, string $lineName = '')
     {
+        /* Fix order and line fields for product. */
         $fixData = new stdclass();
         $fixData->order = $productID * 5;
         if(!empty($lineName))
@@ -289,27 +364,45 @@ class productZen extends product
             $lineID = $this->product->createLine((int)$product->program, $lineName);
             if($lineID) $fixData->line = $lineID;
         }
-
         $this->dao->update(TABLE_PRODUCT)->data($fixData)->where('id')->eq($productID)->exec();
-        $this->file->updateObjectID($uid, $productID, 'product');
 
+        /* Update and create linked data. */
+        $this->loadModel('file')->updateObjectID($uid, $productID, 'product');
+        $this->product->createMainLib($productID);
         if($product->whitelist)     $this->loadModel('personnel')->updateWhitelist(explode(',', $product->whitelist), 'product', $productID);
         if($product->acl != 'open') $this->loadModel('user')->updateUserView($productID, 'product');
-
-        $this->product->createMainLib($productID);
 
         $this->loadModel('action')->create('product', $productID, 'opened');
 
         $message = $this->executeHooks($productID);
         if($message) $this->lang->saveSuccess = $message;
 
-        if($this->viewType == 'json')
+        if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $productID));
+        $this->sendCreateLocate($productID, (int)$product->program);
+    }
+
+    /**
+     * 成功更新产品数据后，其他的额外操作。
+     * Process after edit product.
+     *
+     * @param  int    $productID
+     * @param  int    $programID
+     * @param  array  $changes
+     * @access protected
+     * @return void
+     */
+    protected function responseAfterEdit(int $productID, int $programID, array $changes)
+    {
+        if($changes)
         {
-            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $productID));
-            return;
+            $actionID = $this->loadModel('action')->create('product', $productID, 'edited');
+            $this->action->logHistory($actionID, $changes);
         }
 
-        $this->sendCreateLocate($productID, (int)$product->program);
+        $message = $this->executeHooks($productID);
+        if($message) $this->lang->saveSuccess = $message;
+
+        return $this->sendCreateLocate($productID, $programID);
     }
 
     /**
@@ -321,7 +414,7 @@ class productZen extends product
      * @access private
      * @return void
      */
-    private function sendCreateLocate(int $productID, int $programID): void
+    private function sendCreateLocate(int $productID, int $programID)
     {
         $tab = $this->app->tab;
         $moduleName = $tab == 'program' ? 'program' : $this->moduleName;
@@ -334,13 +427,33 @@ class productZen extends product
     }
 
     /**
-     * 输出创建产品产生的错误。
-     * Send error for create.
+     * 编辑完成后，做页面跳转。
+     * Locate after edit product.
+     *
+     * @param  int   $productID
+     * @param  int   $programID
+     * @access private
+     * @return void
+     */
+    private function sendEditLocate(int $productID, int $programID)
+    {
+        $moduleName = $programID ? 'program' : 'product';
+        $methodName = $programID ? 'product' : 'view';
+        $param      = $programID ? "programID=$programID" : "product=$productID";
+        $locate     = $this->createLink($moduleName, $methodName, $param);
+
+        if(!$programID) $this->session->set('productList', $this->createLink('product', 'browse', $param), 'product');
+        return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $locate));
+    }
+
+    /**
+     * 输出数据库操作产生的错误。
+     * Send error for dao.
      *
      * @access protected
      * @return void
      */
-    protected function sendError4Create(): void
+    protected function sendDaoError()
     {
         if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
     }
