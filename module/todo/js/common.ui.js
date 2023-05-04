@@ -7,11 +7,13 @@
  */
 function toggleDateTodo(switcher)
 {
-    $('#date').prop('disabled', switcher.checked);
+    $('.date').prop('disabled', switcher.checked);
 }
 
 /**
- * Load data.
+ * 加载不同类型数据列表，从而更改待办名称控件。
+ * Load different types of list to change the name control.
+ *
  * @param  type        $type        Type of selected todo.
  * @param  id          $id          ID of selected todo.
  * @param  objectID    $objectID    ID of the closed todo type.
@@ -36,7 +38,7 @@ function loadList(type, id, objectID)
 
     if(moduleList.indexOf(type) !== -1)
     {
-        link = '/index.php?m=' + type + '&f=' + objectsMethod[type] + '&' + param + '&t=html';
+        link = $.createLink(type, objectsMethod[type], param);
         $.get(link, function(data, status)
         {
             if(data.length != 0)
@@ -47,7 +49,7 @@ function loadList(type, id, objectID)
             }
             else
             {
-                $(divClass).html("<select id="+ type +" class='form-control'></select>").find('select').chosen();
+                $(divClass).find('#nameInputBox').html("<select id="+ type +" class='form-control'></select>").find('select').chosen();
             }
         });
     }
@@ -69,6 +71,7 @@ function loadList(type, id, objectID)
  */
 function selectNext()
 {
+    if(!$("#begin ")[0] || !$("#end ")[0]) return;
     $("#end ")[0].selectedIndex = $("#begin ")[0].selectedIndex + 3;
     $('#end').trigger('chosen:updated');
 }
@@ -116,6 +119,13 @@ function switchTimeList(number)
     }
 }
 
+/**
+ * 切换起止时间的禁用状态。
+ * Switch the disabled state of start and end time.
+ *
+ * @param  object switcher
+ * @return void
+ */
 function switchDateFeature(switcher)
 {
     if(switcher.checked)

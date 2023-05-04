@@ -87,5 +87,18 @@ if($extHookFiles) foreach($extHookFiles as $extHookFile) include $extHookFile;
 <code class="bg-green">sid=<?php echo session_id();?></code>
 </div>
 <?php endif; ?>
+<?php
+/* Export page vars for zin tool */
+if(isset($config->zinTool))
+{
+    $pageVars   = get_defined_vars();
+    $exportVars = array('lang' => $lang);
+    foreach($pageVars as $varName => $varValue)
+    {
+        if(is_string($varValue) || is_bool($varValue) || is_numeric($varValue)) $exportVars[$varName] = $varValue;
+    }
+    js::set('pageVars', $exportVars);
+}
+?>
 </body>
 </html>

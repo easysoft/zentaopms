@@ -28,6 +28,42 @@ class todoTao extends todoModel
     }
 
     /**
+     * 获取待办数量。
+     * Get todo count.
+     *
+     * @param  string    $account
+     * @param  string    $vision
+     * @access protected
+     * @return int
+     */
+    protected function getCountByAccount(string $account, string $vision = 'rnd'): int
+    {
+        return $this->dao->select('count(*) as count')->from(TABLE_TODO)
+            ->where('cycle')->eq('0')
+            ->andWhere('deleted')->eq('0')
+            ->andWhere('vision')->eq($vision)
+            ->andWhere('account', true)->eq($account)
+            ->orWhere('assignedTo')->eq($account)
+            ->orWhere('finishedBy')->eq($account)
+            ->markRight(1)
+            ->fetch('count');
+    }
+
+    /**
+     * 获取各模块列表。
+     * Get project list.
+     *
+     * @param  string $table
+     * @param  array $idList
+     * @access protected
+     * @return array
+     */
+    protected function getProjectList(string $table, array $idList): array
+    {
+        return $this->dao->select('id,project')->from($table)->where('id')->in($idList)->fetchPairs('id', 'project');
+    }
+
+    /**
      * 插入待办数据
      * Insert todo data.
      *
@@ -218,6 +254,57 @@ class todoTao extends todoModel
     }
 
     /**
+     * 获取批量创建待办的有效数据。
+     * Get valid todos of batch create.
+     *
+     * @param  object $todos
+     * @param  object $formData
+     * @param  int    $loop
+     * @param  string $assignedTo
+     * @access protected
+     * @return object
+     */
+    protected function getValidsOfBatchCreate(object $todos, object $formData, int $loop , string $assignedTo): object
+    {
+        $todo = new stdclass();
+        $todo->account = $this->app->user->account;
+
+        $todo->date = $formData->rawdata->date;
+        if($formData->rawdata->switchDate == 'on' || $formData->rawdata->date == false) $todo->date = '2030-01-01';
+
+        $todo->type         = $todos->types[$loop];
+        $todo->pri          = $todos->pris[$loop];
+        $todo->name         = isset($todos->names[$loop]) ? $todos->names[$loop] : '';
+        $todo->desc         = $todos->descs[$loop];
+        $todo->begin        = isset($todos->begins[$loop]) ? $todos->begins[$loop] : 2400;
+        $todo->end          = isset($todos->ends[$loop]) ? $todos->ends[$loop] : 2400;
+        $todo->status       = 'wait';
+        $todo->private      = 0;
+        $todo->objectID     = 0;
+        $todo->assignedTo   = $assignedTo;
+        $todo->assignedBy   = $this->app->user->account;
+        $todo->assignedDate = helper::now();
+        $todo->vision       = $this->config->vision;
+
+        if(in_array($todo->type, $this->config->todo->moduleList))
+        {
+            $todo->objectID = isset($todos->{$this->config->todo->objectList[$todo->type]}[$loop + 1]) ? $todos->{$this->config->todo->objectList[$todo->type]}[$loop + 1] : 0;
+        }
+
+        if($todo->type != 'custom' && $todo->objectID)
+        {
+            $type   = $todo->type;
+            $object = $this->loadModel($type)->getByID($todo->objectID);
+            if(isset($object->name))  $todo->name = $object->name;
+            if(isset($object->title)) $todo->name = $object->title;
+        }
+
+        if($todo->end < $todo->begin) dao::$errors['message'][] = sprintf($this->lang->error->gt, $this->lang->todo->end, $this->lang->todo->begin);
+
+        return $todo;
+    }
+
+    /**
      * 通过周期待办，获取要生成每日待办的日期。
      * Gets the daily todo date by the cycle todo.
      *
@@ -380,7 +467,7 @@ class todoTao extends todoModel
             if($todo->type == 'opportunity') $todo->name = $this->dao->findByID($todo->objectID)->from(TABLE_OPPORTUNITY)->fetch('name');
         }
 
-        if($this->config->edition == 'biz' || $this->config->edition == 'max')
+        if($this->config->edition != 'open')
         {
             if($todo->type == 'feedback') $todo->name = $this->dao->findByID($todo->objectID)->from(TABLE_FEEDBACK)->fetch('title');
         }

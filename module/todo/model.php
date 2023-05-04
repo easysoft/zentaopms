@@ -32,93 +32,51 @@ class todoModel extends model
     }
 
     /**
-     * Create batch todo
+     * 批量创建待办。
+     * Batch create toto.
      *
+     * @param  object $todos
+     * @param  object $formData
      * @access public
-     * @return array
+     * @return array|false
      */
-    public function batchCreate()
+    public function batchCreate(object $todos, object $formData): array|false
     {
-        $todos = fixer::input('post')->get();
-
         $validTodos = array();
-        $now        = helper::now();
         $assignedTo = $this->app->user->account;
-        for($i = 0; $i < $this->config->todo->batchCreate; $i++)
+
+        for($loop = 0; $loop < $this->config->todo->maxBatchCreate; $loop++)
         {
             $isExist    = false;
-            $assignedTo = $todos->assignedTos[$i] == 'ditto' ? $assignedTo : $todos->assignedTos[$i];
+            $assignedTo = $todos->assignedTos[$loop] == 'ditto' ? $assignedTo : $todos->assignedTos[$loop];
             foreach($this->config->todo->objectList as $objects)
             {
-                if(isset($todos->{$objects}[$i + 1]))
+                if(isset($todos->{$objects}[$loop + 1]))
                 {
                     $isExist = true;
                     break;
                 }
             }
 
-            if($todos->names[$i] != '' || $isExist)
+            if($todos->names[$loop] != '' || $isExist)
             {
-                $todo          = new stdclass();
-                $todo->account = $this->app->user->account;
-                if($this->post->switchDate == 'on' or $this->post->date == false)
-                {
-                    $todo->date = '2030-01-01';
-                }
-                else
-                {
-                    $todo->date = $this->post->date;
-                }
-
-                $todo->type         = $todos->types[$i];
-                $todo->pri          = $todos->pris[$i];
-                $todo->name         = isset($todos->names[$i]) ? $todos->names[$i] : '';
-                $todo->desc         = $todos->descs[$i];
-                $todo->begin        = isset($todos->begins[$i]) ? $todos->begins[$i] : 2400;
-                $todo->end          = isset($todos->ends[$i]) ? $todos->ends[$i] : 2400;
-                $todo->status       = "wait";
-                $todo->private      = 0;
-                $todo->objectID     = 0;
-                $todo->assignedTo   = $assignedTo;
-                $todo->assignedBy   = $this->app->user->account;
-                $todo->assignedDate = $now;
-                $todo->vision       = $this->config->vision;
-
-                if(in_array($todo->type, $this->config->todo->moduleList)) $todo->objectID = isset($todos->{$this->config->todo->objectList[$todo->type]}[$i + 1]) ? $todos->{$this->config->todo->objectList[$todo->type]}[$i + 1] : 0;
-
-                if($todo->type != 'custom' and $todo->objectID)
-                {
-                    $type   = $todo->type;
-                    $object = $this->loadModel($type)->getByID($todo->objectID);
-                    if(isset($object->name))  $todo->name = $object->name;
-                    if(isset($object->title)) $todo->name = $object->title;
-                }
-
-                if($todo->end < $todo->begin) return print(js::alert(sprintf($this->lang->error->gt, $this->lang->todo->end, $this->lang->todo->begin)));
+                $todo = $this->todoTao->getValidsOfBatchCreate($todos, $formData, $loop, $assignedTo);
+                if(dao::isError()) return false;
 
                 $validTodos[] = $todo;
             }
             else
             {
-                unset($todos->types[$i]);
-                unset($todos->pris[$i]);
-                unset($todos->names[$i]);
-                unset($todos->descs[$i]);
-                unset($todos->begins[$i]);
-                unset($todos->ends[$i]);
+                unset($todos->types[$loop], $todos->pris[$loop], $todos->names[$loop], $todos->descs[$loop], $todos->begins[$loop], $todos->ends[$loop]);
             }
         }
 
         $todoIDList = array();
         foreach($validTodos as $todo)
         {
-            $this->dao->insert(TABLE_TODO)->data($todo)->autoCheck()->exec();
-            if(dao::isError())
-            {
-                echo js::error(dao::getError());
-                return print(js::reload('parent'));
-            }
-            $todoID       = $this->dao->lastInsertID();
+            $todoID = $this->todoTao->insert($todo);
+            if(!$todoID) return false;
+
             $todoIDList[] = $todoID;
             $this->loadModel('score')->create('todo', 'create', $todoID);
             $this->loadModel('action')->create('todo', $todoID, 'opened');
@@ -210,8 +168,8 @@ class todoModel extends model
 
 
     /**
-     * 完成待办
-     * Finish todo.
+     * 完成一个待办。
+     * Finish one todo.
      *
      * @param  int     $todoID
      * @access public
@@ -219,12 +177,29 @@ class todoModel extends model
      */
     public function finish(int $todoID): bool
     {
-        return $this->dealFinishData($todoID);
+        $todo = new stdClass();
+        $todo->id           = $todoID;
+        $todo->status       = 'done';
+        $todo->finishedBy   = $this->app->user->account;
+        $todo->finishedDate = helper::now();
+        $this->todoTao->updateRow($todoID, $todo);
+
+        if(dao::isError()) return false;
+
+        $this->loadModel('action')->create('todo', $todoID, 'finished', '', 'done');
+
+        if($this->config->edition != 'open')
+        {
+            $todo       = $this->todoTao->fetch($todoID);
+            $feedbackID = $todo->objectID ? $todo->objectID : '' ;
+            if($feedbackID) $this->loadModel('feedback')->updateStatus('todo', $feedbackID, 'done');
+        }
+        return true;
     }
 
     /**
-     * 批量完成待办.
-     * Batch finish todo.
+     * 批量完成待办。
+     * Batch finish todos.
      *
      * @param  int[]   $todoIDList
      * @access public
@@ -234,8 +209,8 @@ class todoModel extends model
     {
         foreach($todoIDList as $todoID)
         {
-            $finishResult = $this->dealFinishData($todoID);
-            if(!$finishResult) return $finishResult;
+            $isFinished = $this->finish($todoID);
+            if(!$isFinished) return $isFinished;
         }
         return true;
     }
@@ -441,7 +416,7 @@ class todoModel extends model
     }
 
     /**
-     * 指派待办.
+     * 指派待办。
      * Assign todo.
      *
      * @param  object  $todo
@@ -469,66 +444,39 @@ class todoModel extends model
     public function getCount(string $account = ''): int
     {
         if(empty($account)) $account = $this->app->user->account;
-
-        return $this->todoTao->getTodoCountByAccount($account);
+        $count = $this->todoTao->getCountByAccount($account, $this->config->vision);
+        if(dao::isError()) return 0;
+        return $count;
     }
 
     /**
-     * 获取待办事项对象的项目ID。
+     * 根据类型获取各个模块的列表。
      * Gets the project ID of the to-do object.
      *
      * @param  array $todoList
      * @access public
      * @return array
      */
-    public function getTodoProjects(array $todoList = array()): array
+    public function getTodoProjects(array $todoList): array
     {
-        $projectIdList = array();
-
+        $projectIDList = array();
+        $projects      = $this->config->todo->project;
         foreach($todoList as $type => $todos)
         {
-            $todoIdList = array_keys($todos);
-            if(empty($todoIdList))
+            $todoIDList = array_keys($todos);
+            if(empty($todoIDList))
             {
-                $projectIdList[$type] = array();
+                $projectIDList[$type] = array();
                 continue;
             }
 
-            $todoIdList = array_unique($todoIdList);
-            $typeTable  = array('task' => TABLE_TASK,'bug' => TABLE_BUG,'issue' => TABLE_ISSUE,'risk' => TABLE_RISK,'opportunity' => TABLE_OPPORTUNITY,'review' => TABLE_REVIEW,'testtask' => TABLE_TESTTASK);
-            $projectIdList[$type] = $this->dao->select('id,project')->from($typeTable[$type])->where('id')->in($todoIdList)->fetchPairs('id', 'project');
+            $todoIDList = array_unique($todoIDList);
+
+            if(isset($projects[$type])) $projectIDList[$type] = $this->todoTao->getProjectList($projects[$type], $todoIDList);
+            if(dao::isError()) return array();
         }
 
-        return $projectIdList;
-    }
-
-    /**
-     * 处理完成待办数据.
-     * Deal finish todo data.
-     *
-     * @param  int     $todoID
-     * @access public
-     * @return bool
-     */
-    private function dealFinishData(int $todoID): bool
-    {
-        $todo = new stdClass();
-        $todo->id         = $todoID;
-        $todo->status     = 'done';
-        $todo->finishedBy = $this->app->user->account;
-        $this->todoTao->updateRow($todoID, $todo);
-
-        if(dao::isError()) return false;
-
-        $this->loadModel('action')->create('todo', $todoID, 'finished', '', 'done');
-
-        if($this->config->edition != 'open')
-        {
-            $todo       = $this->todoTao->fetch($todoID);
-            $feedbackID = $todo->objectID ? $todo->objectID : '' ;
-            if($feedbackID) $this->loadModel('feedback')->updateStatus('todo', $feedbackID, 'done');
-        }
-        return true;
+        return $projectIDList;
     }
 
     /**

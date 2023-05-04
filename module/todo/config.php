@@ -4,7 +4,7 @@ helper::import(dirname(__FILE__) . 'config/form.php');
 helper::import(dirname(dirname(dirname(__FILE__))) . '/lib/date/date.class.php');
 
 $config->todo = new stdclass();
-$config->todo->batchCreate = 8;
+$config->todo->maxBatchCreate = 8;
 
 $config->todo->create = new stdclass();
 $config->todo->edit   = new stdclass();
@@ -50,6 +50,15 @@ $config->todo->sessionUri['bugList']      = 'qa';
 $config->todo->sessionUri['taskList']     = 'execution';
 $config->todo->sessionUri['storyList']    = 'product';
 $config->todo->sessionUri['testtaskList'] = 'qa';
+
+$config->todo->project = array();
+$config->todo->project['task']        = TABLE_TASK;
+$config->todo->project['bug']         = TABLE_BUG;
+$config->todo->project['issue']       = TABLE_ISSUE;
+$config->todo->project['risk']        = TABLE_RISK;
+$config->todo->project['opportunity'] = TABLE_OPPORTUNITY;
+$config->todo->project['review']      = TABLE_REVIEW;
+$config->todo->project['testtask']    = TABLE_TESTTASK;
 
 $config->todo->dateRange = array();
 $config->todo->dateRange['all']             = array('begin' => '1970-01-01',  'end' => '2109-01-01');

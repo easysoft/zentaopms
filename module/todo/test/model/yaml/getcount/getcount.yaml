@@ -1,11 +1,11 @@
-title: zt_finish
+title: zt_getcount
 author: liuchenglong
 version: "1.0"
 fields:
     - field: id
       range: 1-100
     - field: account
-      range: 'admin'
+      range: 'admin,user1,user2'
     - field: date
       range: 1-9
       prefix: '2023-04-2'
@@ -27,9 +27,8 @@ fields:
       prefix: '这是待办描述'
     - field: status
       range: 'wait,doing,done'
-    - field: finishedDate
-      range: 1-9
-      prefix: '2023-04-2'
-    - field: closedDate
-      range: 1-9
-      prefix: '2023-04-2'
+    - field: vision
+      range: 'rnd,litle'
+
+
+
