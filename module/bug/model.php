@@ -1338,45 +1338,48 @@ class bugModel extends model
     }
 
     /**
+     * 关闭一个bug。
      * Close a bug.
      *
-     * @param  int    $bugID
+     * @param  object $bug
      * @param  string $extra
      * @access public
      * @return void
      */
-    public function close($bugID, $extra = '')
+    public function close(object $bug, string $extra = '')
     {
-        $extra = str_replace(array(',', ' '), array('&', ''), $extra);
-        parse_str($extra, $output);
+        $this->dao->update(TABLE_BUG)->data($bug, 'comment')->autoCheck()->checkFlow()->where('id')->eq((int)$bug->id)->exec();
+    }
 
-        $now    = helper::now();
-        $oldBug = $this->getById($bugID);
-        $bug    = fixer::input('post')
-            ->add('id', $bugID)
-            ->add('status',     'closed')
-            ->add('confirmed',  1)
-            ->setDefault('assignedDate',   $now)
-            ->setDefault('lastEditedBy',   $this->app->user->account)
-            ->setDefault('lastEditedDate', $now)
-            ->setDefault('closedBy',       $this->app->user->account)
-            ->setDefault('closedDate',     $now)
-            ->stripTags($this->config->bug->editor->close['id'], $this->config->allowedTags)
-            ->remove('comment')
-            ->get();
+    /**
+     * 关闭bug后的其他处理。
+     * Handle after bug closed.
+     *
+     * @param  object $bug
+     * @param  object $oldBug
+     * @access public
+     * @return array
+     */
+    public function afterClose(object $bug, object $oldBug):array
+    {
+        if($oldBug->execution) list($bug, $oldBug) = $this->bugTao->updateKanbanAfterClose($bug, $oldBug);
+        list($bug, $oldBug) = $this->bugTao->updateActionAfterClose($bug, $oldBug);
+        $this->updateBugAssignedTo((int)$bug->id);
 
-        $bug = $this->loadModel('file')->processImgURL($bug, $this->config->bug->editor->close['id'], $this->post->uid);
-        $this->dao->update(TABLE_BUG)->data($bug)->autoCheck()->checkFlow()->where('id')->eq((int)$bugID)->exec();
-        if($oldBug->execution)
-        {
-            $this->loadModel('kanban');
-            if(!isset($output['toColID'])) $this->kanban->updateLane($oldBug->execution, 'bug', $bugID);
-            if(isset($output['toColID'])) $this->kanban->moveCard($bugID, $output['fromColID'], $output['toColID'], $output['fromLaneID'], $output['toLaneID']);
-        }
+        return array($bug, $oldBug);
+    }
 
-        if(($this->config->edition == 'biz' || $this->config->edition == 'max') && $oldBug->feedback) $this->loadModel('feedback')->updateStatus('bug', $oldBug->feedback, $bug->status, $oldBug->status);
-
-        return common::createChanges($oldBug, $bug);
+    /**
+     * 更新bug的抄送给状态为已关闭。
+     * Update bug assigned to value to closed.
+     *
+     * @param  int $bugID
+     * @access public
+     * @return viod
+     */
+    public function updateBugAssignedTo(int $bugID)
+    {
+        $this->dao->update(TABLE_BUG)->set('assignedTo')->eq('closed')->where('id')->eq($bugID)->exec();
     }
 
     /**
@@ -3100,7 +3103,7 @@ class bugModel extends model
     {
         /* Set toList and ccList. */
         $toList = $bug->assignedTo ? $bug->assignedTo : '';
-        $ccList = trim($bug->mailto, ',');
+        $ccList = trim((string)$bug->mailto, ',');
         if(empty($toList))
         {
             if(empty($ccList)) return false;
