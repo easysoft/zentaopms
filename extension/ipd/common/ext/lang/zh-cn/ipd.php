@@ -81,4 +81,4 @@ $lang->charter->menu->all      = array('link' => "全部|charter|browse|browseTy
 $lang->charter->menu->wait     = array('link' => "待立项|charter|browse|browseType=wait");
 $lang->charter->menu->launched = array('link' => "已立项|charter|browse|browseType=launched");
 $lang->charter->menu->failed   = array('link' => "未通过|charter|browse|browseType=failed");
-$lang->charter->menu->settings = array('link' => "{$lang->settings}|charter|view|charterID=%s", 'subModule' => 'tree,branch', 'alias' => 'edit,whitelist,addwhitelist');
+//$lang->charter->menu->settings = array('link' => "{$lang->settings}|charter|view|charterID=%s", 'subModule' => 'tree,branch', 'alias' => 'edit,whitelist,addwhitelist');
