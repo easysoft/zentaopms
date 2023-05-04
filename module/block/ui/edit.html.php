@@ -16,15 +16,14 @@ jsVar('blockID', $block->id);
 
 $paramsRows  = array();
 $showModules = ($dashboard == 'my' and $modules);
-$showCodes   = ($module and $codes);
-$showParams  = ($code);
+$showCodes   = (($showModules and $module and $codes) or $dashboard != 'my');
 
 foreach($params as $key => $row)
 {
     $paramsRows[] = formGroup
     (
         set::label($row['name']),
-        set::name('params'),
+        set::name("params[$key]"),
         set::class('form-row'),
         set::value($block->params->{$key}),
         set::control(array
@@ -41,10 +40,10 @@ form
     on::change('#code', 'getForm'),
     formGroup
     (
+        set::class($showModules ? '' : 'hidden'),
+        set::value($showModules ? $block->module : $dashboard),
         set::label($lang->block->lblModule),
         set::name('module'),
-        set::class($showModules ? '' : 'hidden'),
-        set::value($showModules ? $module : $dashboard),
         set::control($showModules ? array
         (
             'type'  => 'select',
@@ -72,8 +71,7 @@ form
         set::id('paramsRow'),
         div
         (
-            set::class('form-grid' . ($showParams ? '' : ' hidden')),
-            $paramsRows,
+            set::class('form-grid'),
             formGroup
             (
                 set::label($lang->block->name),
@@ -82,6 +80,7 @@ form
                 set::value($block->title),
                 set::control('input')  
             ),
+            $paramsRows,
             formGroup
             (
                 set::label($lang->block->grid),

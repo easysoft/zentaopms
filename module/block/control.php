@@ -47,7 +47,7 @@ class block extends control
 
             $this->block->create($formData);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true, 'closeModal' => true, 'callback' => 'loadCurrentPage()'));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true, 'closeModal' => true));
         }
 
         $this->view->title     = $this->lang->block->createBlock;
@@ -80,7 +80,7 @@ class block extends control
 
             $this->block->update($formData);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true, 'closeModal' => true, 'callback' => 'loadCurrentPage()'));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true, 'closeModal' => true));
         }
 
         $block = $this->block->getByID($blockID);

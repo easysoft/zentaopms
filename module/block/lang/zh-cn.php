@@ -23,10 +23,9 @@ $lang->block->estimate   = '预计工时';
 $lang->block->last       = '近期';
 
 $lang->block->account = '所属用户';
-$lang->block->module  = '所属模块';
 $lang->block->title   = '区块名称';
-$lang->block->source  = '来源模块';
-$lang->block->block   = '来源区块';
+$lang->block->module  = '所属模块';
+$lang->block->code    = '区块';
 $lang->block->order   = '排序';
 $lang->block->height  = '高度';
 $lang->block->role    = '角色';
