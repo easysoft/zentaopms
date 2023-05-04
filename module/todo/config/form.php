@@ -1,6 +1,7 @@
 <?php
 declare(strict_types=1);
 
+$config->todo->create = new stdClass;
 $config->todo->create->form = array();
 $config->todo->create->form['type']       = array('required' => true, 'type' => 'string');
 $config->todo->create->form['name']       = array('required' => true, 'type' => 'string');
@@ -18,6 +19,19 @@ $config->todo->create->form['vision']       = array('required' => false, 'type' 
 $config->todo->create->form['objectID']     = array('required' => false, 'type' => 'int',     'default' => 0);
 $config->todo->create->form['desc']         = array('required' => false, 'type' => 'string',  'default' => '');
 $config->todo->create->form['uid']          = array('required' => false, 'type' => 'string',  'default' => '');
+
+$config->todo->batchCreate = new stdClass;
+$config->todo->batchCreate->form = array();
+$config->todo->batchCreate->form['types']       = array('required' => false, 'type' => 'array');
+$config->todo->batchCreate->form['pris']        = array('required' => false, 'type' => 'array');
+$config->todo->batchCreate->form['names']       = array('required' => false, 'type' => 'array');
+$config->todo->batchCreate->form['descs']       = array('required' => false, 'type' => 'array');
+$config->todo->batchCreate->form['assignedTos'] = array('required' => false, 'type' => 'array');
+$config->todo->batchCreate->form['begins']      = array('required' => false, 'type' => 'array');
+$config->todo->batchCreate->form['ends']        = array('required' => false, 'type' => 'array');
+$config->todo->batchCreate->form['switchTime']  = array('required' => false, 'type' => 'array');
+$config->todo->batchCreate->form['date']        = array('required' => false, 'type' => 'array');
+$config->todo->batchCreate->form['switchDate']  = array('required' => false, 'type' => 'array');
 
 $config->todo->edit->form = array();
 $config->todo->edit->form['name'] = array('required' => true, 'type' => 'string');
