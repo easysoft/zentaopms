@@ -320,129 +320,46 @@ class bug extends control
         $extras = str_replace(array(',', ' '), array('&', ''), $extras);
         parse_str($extras, $output);
         extract($output);
-        $this->bugZen->setMenu4Create($productID, $branch, $output);
 
         $from = isset($output['from']) ? $output['from'] : '';
 
         if(!empty($_POST))
         {
-            $response['result'] = 'success';
-
             $formData  = form::data($this->config->bug->createform);
             $bug       = $this->bugZen->beforeCreate($formData);
             $bugResult = $this->bugZen->doCreate($bug);
 
+            list($hasError, $response) = $this->getErrorRes4Create($bugResult);
+            if($hasError) return $this->send($response);
+
             /* Set from param if there is a object to transfer bug. */
-            setcookie('lastBugModule', (int)$this->formData->data->module, $this->config->cookieLife, $this->config->webRoot, '', $this->config->cookieSecure, false);
-            if(!$bugResult or dao::isError())
-            {
-                $response['result']  = 'fail';
-                $response['message'] = dao::getError();
-                return $this->send($response);
-            }
+            setcookie('lastBugModule', (int)$formData->data->module, $this->config->cookieLife, $this->config->webRoot, '', $this->config->cookieSecure, false);
+
             $bugID = $bugResult['id'];
-            if($bugResult['status'] == 'exists')
-            {
-                $response['message'] = sprintf($this->lang->duplicate, $this->lang->bug->common);
-                $response['locate']  = $this->createLink('bug', 'view', "bugID=$bugID");
-                $response['id']      = $bugResult['id'];
-                return $this->send($response);
-            }
+            $bug   = $this->bug->getByID($bugID);
+            $this->bugZen->afterCreate($bug, $formData, $from, $output);
 
-            $bug->id = $bugID;
-            $this->bugZen->afterCreate($bug, $formData, $extras);
-
-            /* Record related action, for example FromSonarqube. */
-            $createAction = $from == 'sonarqube' ? 'fromSonarqube' : 'Opened';
-            $actionID     = $this->action->create('bug', $bugID, $createAction);
-
-            $extras = str_replace(array(',', ' '), array('&', ''), $extras);
-            parse_str($extras, $output);
-            extract($output);
-            if(isset($output['todoID']))
-            {
-                $this->dao->update(TABLE_TODO)->set('status')->eq('done')->where('id')->eq($output['todoID'])->exec();
-                $this->action->create('todo', $output['todoID'], 'finished', '', "BUG:$bugID");
-
-                if($this->config->edition == 'biz' || $this->config->edition == 'max')
-                {
-                    $todo = $this->dao->select('type, idvalue')->from(TABLE_TODO)->where('id')->eq($output['todoID'])->fetch();
-                    if($todo->type == 'feedback' && $todo->idvalue) $this->loadModel('feedback')->updateStatus('todo', $todo->idvalue, 'done');
-                }
-            }
-
+            $this->bugZen->addAction4Create($bugID, $from, $output);
             $message = $this->executeHooks($bugID);
             if($message) $this->lang->saveSuccess = $message;
 
             /* Return bug id when call the API. */
             if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $bugID));
+            if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'success', 'data' => $bugID));
 
             /* If link from no head then reload. */
             if(isonlybody())
             {
-                $executionID = isset($output['executionID']) ? $output['executionID'] : $this->session->execution;
-                $executionID = $this->formData->data->execution ? $this->formData->data->execution : $executionID;
-                $execution   = $this->loadModel('execution')->getByID($executionID);
-                if($this->app->tab == 'execution')
-                {
-                    $execLaneType = $this->session->execLaneType ? $this->session->execLaneType : 'all';
-                    $execGroupBy  = $this->session->execGroupBy ? $this->session->execGroupBy : 'default';
-
-                    if($execution->type == 'kanban')
-                    {
-                        $rdSearchValue = $this->session->rdSearchValue ? $this->session->rdSearchValue : '';
-                        $kanbanData    = $this->loadModel('kanban')->getRDKanban($executionID, $execLaneType, 'id_desc', 0, $execGroupBy, $rdSearchValue);
-                        $kanbanData    = json_encode($kanbanData);
-                        return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => "parent.updateKanban($kanbanData, 0)"));
-                    }
-                    else
-                    {
-                        $taskSearchValue = $this->session->taskSearchValue ? $this->session->taskSearchValue : '';
-                        $kanbanData      = $this->loadModel('kanban')->getExecutionKanban($executionID, $execLaneType, $execGroupBy, $taskSearchValue);
-                        $kanbanType      = $execLaneType == 'all' ? 'bug' : key($kanbanData);
-                        $kanbanData      = $kanbanData[$kanbanType];
-                        $kanbanData      = json_encode($kanbanData);
-                        return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => "parent.updateKanban(\"bug\", $kanbanData)"));
-                    }
-                }
-                else
-                {
-                    return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'locate' => 'parent'));
-                }
+                $response = $this->getOnlyBodyRes4Create($formData, $output);
+                return $this->send($response);
             }
 
-            if(isonlybody()) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
-            if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'success', 'data' => $bugID));
-
-            if($this->app->tab == 'execution')
-            {
-                if(!preg_match("/(m=|\/)execution(&f=|-)bug(&|-|\.)?/", $this->session->bugList))
-                {
-                    $location = $this->session->bugList;
-                }
-                else
-                {
-                    $executionID = $this->formData->data->execution ? $this->formData->data->execution : zget($output, 'executionID', $this->session->execution);
-                    $location    = $this->createLink('execution', 'bug', "executionID=$executionID");
-                }
-
-            }
-            elseif($this->app->tab == 'project')
-            {
-                $location = $this->createLink('project', 'bug', "projectID=" . zget($output, 'projectID', $this->session->project));
-            }
-            else
-            {
-                setcookie('bugModule', 0, 0, $this->config->webRoot, '', $this->config->cookieSecure, false);
-                $location = $this->createLink('bug', 'browse', "productID={$this->formData->data->product}&branch=$branch&browseType=byModule&param={$this->formData->data->module}&orderBy=id_desc");
-            }
-            if($this->app->getViewType() == 'xhtml') $location = $this->createLink('bug', 'view', "bugID=$bugID", 'html');
-            $response['message'] = $this->lang->saveSuccess;
-            $response['locate']  = $location;
+            $location = $this->bugZen->getLocation4Create($formData, $output, $bugID, $branch);
+            $response = array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $location);
             return $this->send($response);
         }
 
-        $this->loadModel('project');
+        $this->bugZen->setMenu4Create($productID, $branch, $output);
 
         $productID      = $this->product->saveState($productID, $this->products);
         $currentProduct = $this->product->getById($productID);
@@ -468,10 +385,10 @@ class bug extends control
         {
             $bug = $this->bug->getById($bugID);
 
-            $tplFields = array('executionID' => $bug->execution, 'moduleID' => $bug->module, 'taskID' => $bug->task, 'storyID' => $bug->story, 'buildID' => $bug->openedBuild,
-                'severity' => $bug->severity, 'type' => $bug->type, 'assignedTo' => $bug->assignedTo, 'deadline' => (helper::isZeroDate($bug->deadline) ? '' : $bug->deadline),
-                'color' => $bug->color, 'testtask' => $bug->testtask, 'feedbackBy' => $bug->feedbackBy, 'notifyEmail' => $bug->notifyEmail);
-            if($bugTpl->pri == 0) $tplFields['pri'] = '3';
+            $tplFields = array('projectID' => $bug->project, 'moduleID' => $bug->module, 'executionID' => $bug->execution, 'productID' => $bug->product, 'taskID' => $bug->task, 'storyID' => $bug->story, 'buildID' => $bug->openedBuild,
+                'caseID' => $bug->case, 'title' => $bug->title, 'steps' => $bug->steps, 'severity' => $bug->severity, 'type' => $bug->type, 'assignedTo' => $bug->assignedTo, 'deadline' => (helper::isZeroDate($bug->deadline) ? '' : $bug->deadline),
+                'os' => $bug->os, 'browser' => $bug->browser, 'mailto' => $bug->mailto, 'keywords' => $bug->keywords, 'color' => $bug->color, 'testtask' => $bug->testtask, 'feedbackBy' => $bug->feedbackBy, 'notifyEmail' => $bug->notifyEmail,
+                'pri' => ($bug->pri == 0 ? 3 : $bug->pri));
 
             $bugTpl = $this->bugZen->updateBugTemplete($bugTpl, $tplFields);
         }
@@ -490,7 +407,7 @@ class bug extends control
         $bugTpl = $this->bugZen->getBuildsAndStories4Create($bugTpl);
 
         /* Get all project team members linked with this product. */
-        $productMembers   = $this->bugZen->getBuildsAndStories4Create($bugTpl);
+        $productMembers   = $this->bugZen->getProductMembers4Create($bugTpl);
         $moduleOptionMenu = $this->tree->getOptionMenu($bugTpl->productID, 'bug', 0, ($bugTpl->branch === 'all' or !isset($bugTpl->branches[$bugTpl->branch])) ? 0 : $bugTpl->branch);
         if(empty($moduleOptionMenu)) return print(js::locate(helper::createLink('tree', 'browse', "productID={$bugTpl->productID}&view=story")));
 
@@ -506,7 +423,7 @@ class bug extends control
         $bugTpl = $this->bugZen->getExecutions4Create($bugTpl);
 
         $this->bugZen->extractBugTemplete($bugTpl);
-        $this->view->title        = isset($this->products[$productID]) ? $this->products[$productID] . $this->lang->colon . $this->lang->bug->create : $this->lang->bug->create;
+        $this->view->title        = isset($this->products[$bugTpl->productID]) ? $this->products[$bugTpl->productID] . $this->lang->colon . $this->lang->bug->create : $this->lang->bug->create;
         $this->view->customFields = $this->bugZen->getCustomFields4Create();
         $this->view->showFields   = $this->config->bug->custom->createFields;
 
@@ -514,33 +431,12 @@ class bug extends control
         $this->view->productName           = isset($this->products[$bugTpl->productID]) ? $this->products[$bugTpl->productID] : '';
         $this->view->moduleOptionMenu      = $moduleOptionMenu;
         $this->view->projectExecutionPairs = $this->loadModel('project')->getProjectExecutionPairs();
-        $this->view->releasedBuilds        = $this->loadModel('release')->getReleasedBuilds($productID, $branch);
-
+        $this->view->releasedBuilds        = $this->loadModel('release')->getReleasedBuilds($bugTpl->productID, $bugTpl->branch);
         $this->view->resultFiles           = (!empty($resultID) and !empty($stepIdList)) ? $this->loadModel('file')->getByObject('stepResult', $resultID, str_replace('_', ',', $stepIdList)) : array();
-        $this->view->version               = $version;
-        $this->view->testtask              = $testtask;
-        $this->view->bugTitle              = $title;
-        $this->view->pri                   = $pri;
-        $this->view->steps                 = htmlSpecialString($steps);
-        $this->view->os                    = $os;
-        $this->view->browser               = $browser;
         $this->view->productMembers        = $productMembers;
-        $this->view->assignedTo            = $assignedTo;
-        $this->view->deadline              = $deadline;
-        $this->view->mailto                = $mailto;
-        $this->view->keywords              = $keywords;
-        $this->view->severity              = $severity;
-        $this->view->type                  = $type;
         $this->view->product               = $currentProduct;
-        $this->view->branch                = $branch;
-        $this->view->branches              = $branches;
         $this->view->blockID               = $this->bugZen->getBlockID4Create();
-        $this->view->color                 = $color;
-        $this->view->stepsRequired         = strpos($this->config->bug->create->requiredFields, 'steps');
-        $this->view->isStepsTemplate       = $steps == $this->lang->bug->tplStep . $this->lang->bug->tplResult . $this->lang->bug->tplExpect ? true : false;
         $this->view->issueKey              = $from == 'sonarqube' ? $output['sonarqubeID'] . ':' . $output['issueKey'] : '';
-        $this->view->feedbackBy            = $feedbackBy;
-        $this->view->notifyEmail           = $notifyEmail;
 
         $this->display();
     }

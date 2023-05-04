@@ -16,10 +16,10 @@ class bugZen extends bug
         $bug = $formData->setDefault('openedBy', $this->app->user->account)
             ->setDefault('openedDate', $now)
             ->setIF($this->lang->navGroup->bug != 'qa', 'project', $this->session->project)
-            ->setIF($this->formData->data->assignedTo != '', 'assignedDate', $now)
-            ->setIF($this->formData->data->story != false, 'storyVersion', $this->loadModel('story')->getVersion($this->formData->data->story))
-            ->setIF(strpos($this->config->bug->create->requiredFields, 'deadline') !== false, 'deadline', $this->formData->data->deadline)
-            ->setIF(strpos($this->config->bug->create->requiredFields, 'execution') !== false, 'execution', $this->formData->data->execution)
+            ->setIF($formData->data->assignedTo != '', 'assignedDate', $now)
+            ->setIF($formData->data->story != false, 'storyVersion', $this->loadModel('story')->getVersion($formData->data->story))
+            ->setIF(strpos($this->config->bug->create->requiredFields, 'deadline') !== false, 'deadline', $formData->data->deadline)
+            ->setIF(strpos($this->config->bug->create->requiredFields, 'execution') !== false, 'execution', $formData->data->execution)
             ->stripTags($this->config->bug->editor->create['id'], $this->config->allowedTags)
             ->cleanInt('product,execution,module,severity')
             ->remove('files,labels,uid,oldTaskID,contactListMenu,region,lane,ticket,deleteFiles,resultFiles')
@@ -53,15 +53,13 @@ class bugZen extends bug
      *
      * @param  object $bug
      * @param  object $formData
-     * @param  string $extra
+     * @param  string $from
+     * @param  array  $output
      * @return void
      */
-    protected function afterCreate(object $bug, object $formData, string $extras): void
+    protected function afterCreate(object $bug, object $formData, string $from, array $output): void
     {
         $bugID = $bug->id;
-        $extras = str_replace(array(',', ' '), array('&', ''), $extras);
-        parse_str($extras, $output);
-        $from = isset($output['from']) ? $output['from'] : '';
 
         if(isset($formData->rawdata->resultFiles))
         {
@@ -100,6 +98,145 @@ class bugZen extends bug
 
         /* Callback the callable method to process the related data for object that is transfered to bug. */
         if($from && is_callable(array($this, $this->config->bug->fromObjects[$from]['callback']))) call_user_func(array($this, $this->config->bug->fromObjects[$from]['callback']), $bugID);
+    }
+
+    /**
+     * 为create方法添加动态。
+     * Add action for create function.
+     *
+     * @param  int    $bugID
+     * @param  string $from
+     * @param  array  $output
+     * @return void
+     */
+    protected function addAction4Create(int $bugID, string $from, array $output): void
+    {
+        $createAction = $from == 'sonarqube' ? 'fromSonarqube' : 'Opened';
+        $actionID     = $this->action->create('bug', $bugID, $createAction);
+
+        if(isset($output['todoID']))
+        {
+            $this->dao->update(TABLE_TODO)->set('status')->eq('done')->where('id')->eq($output['todoID'])->exec();
+            $this->action->create('todo', $output['todoID'], 'finished', '', "BUG:$bugID");
+
+            if($this->config->edition == 'biz' || $this->config->edition == 'max')
+            {
+                $todo = $this->dao->select('type, idvalue')->from(TABLE_TODO)->where('id')->eq($output['todoID'])->fetch();
+                if($todo->type == 'feedback' && $todo->idvalue) $this->loadModel('feedback')->updateStatus('todo', $todo->idvalue, 'done');
+            }
+        }
+    }
+
+    /**
+     * 获得create方法的发生错误时的返回。
+     * Get response for create function when error happened.
+     *
+     * @param  array $bugResult
+     * @param  array $response
+     * @return array
+     */
+    protected function getErrorRes4Create(array $bugResult): array
+    {
+        $hasError = false;
+        $response = array();
+
+        if(!$bugResult or dao::isError())
+        {
+            $hasError = true;
+            $response['result']  = 'fail';
+            $response['message'] = dao::getError();
+        }
+
+        if($bugResult['status'] == 'exists')
+        {
+            $hasError = true;
+            $bugID = $bugResult['id'];
+            $response['message'] = sprintf($this->lang->duplicate, $this->lang->bug->common);
+            $response['locate']  = $this->createLink('bug', 'view', "bugID=$bugID");
+            $response['id']      = $bugID;
+        }
+
+        return array($hasError, $response);
+    }
+
+    /**
+     * 获得create方法的onlybody返回。
+     * Get onlybody response for create.
+     *
+     * @param  array $bugResult
+     * @param  array $response
+     * @return array
+     */
+    protected function getOnlyBodyRes4Create(object $formData, array $output): array
+    {
+        $executionID = isset($output['executionID']) ? $output['executionID'] : $this->session->execution;
+        $executionID = $formData->data->execution ? $formData->data->execution : $executionID;
+        $execution   = $this->loadModel('execution')->getByID($executionID);
+        if($this->app->tab == 'execution')
+        {
+            $execLaneType = $this->session->execLaneType ? $this->session->execLaneType : 'all';
+            $execGroupBy  = $this->session->execGroupBy ? $this->session->execGroupBy : 'default';
+
+            if($execution->type == 'kanban')
+            {
+                $rdSearchValue = $this->session->rdSearchValue ? $this->session->rdSearchValue : '';
+                $kanbanData    = $this->loadModel('kanban')->getRDKanban($executionID, $execLaneType, 'id_desc', 0, $execGroupBy, $rdSearchValue);
+                $kanbanData    = json_encode($kanbanData);
+                return array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => "parent.updateKanban($kanbanData, 0)");
+            }
+            else
+            {
+                $taskSearchValue = $this->session->taskSearchValue ? $this->session->taskSearchValue : '';
+                $kanbanData      = $this->loadModel('kanban')->getExecutionKanban($executionID, $execLaneType, $execGroupBy, $taskSearchValue);
+                $kanbanType      = $execLaneType == 'all' ? 'bug' : key($kanbanData);
+                $kanbanData      = $kanbanData[$kanbanType];
+                $kanbanData      = json_encode($kanbanData);
+                return array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => "parent.updateKanban(\"bug\", $kanbanData)");
+            }
+        }
+        else
+        {
+            return array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'locate' => 'parent');
+        }
+    }
+
+    /**
+     * 获得create方法的返回url。
+     * Get response url for create.
+     *
+     * @param  object $formData
+     * @param  array  $output
+     * @param  int    $bugID
+     * @param  string $branch
+     * @return string
+     */
+    protected function getLocation4Create(object $formData, array $output, int $bugID, string $branch): string
+    {
+        if($this->app->tab == 'execution')
+        {
+            if(!preg_match("/(m=|\/)execution(&f=|-)bug(&|-|\.)?/", $this->session->bugList))
+            {
+                $location = $this->session->bugList;
+            }
+            else
+            {
+                $executionID = $formData->data->execution ? $formData->data->execution : zget($output, 'executionID', $this->session->execution);
+                $location    = $this->createLink('execution', 'bug', "executionID=$executionID");
+            }
+
+        }
+        elseif($this->app->tab == 'project')
+        {
+            $location = $this->createLink('project', 'bug', "projectID=" . zget($output, 'projectID', $this->session->project));
+        }
+        else
+        {
+            setcookie('bugModule', '0', 0, $this->config->webRoot, '', $this->config->cookieSecure, false);
+            $location = $this->createLink('bug', 'browse', "productID={$formData->data->product}&branch=$branch&browseType=byModule&param={$formData->data->module}&orderBy=id_desc");
+        }
+        if($this->app->getViewType() == 'xhtml') $location = $this->createLink('bug', 'view', "bugID=$bugID", 'html');
+
+        return $location;
     }
 
     /**
@@ -175,26 +312,42 @@ class bugZen extends bug
      */
     protected function extractBugTemplete(object $bugTpl): void
     {
-        $this->view->projectID  = $bugTpl->projectID;
-        $this->view->moduleID   = $bugTpl->moduleID;
-        $this->view->productID  = $bugTpl->productID;
-        $this->view->products   = $bugTpl->products;
-        $this->view->stories    = $bugTpl->stories;
-        $this->view->projects   = defined('TUTORIAL') ? $this->loadModel('tutorial')->getProjectPairs()   : $bugTpl->projects;
-        $this->view->executions = defined('TUTORIAL') ? $this->loadModel('tutorial')->getExecutionPairs() : $bugTpl->executions;
-        $this->view->builds     = $bugTpl->builds;
-        $this->view->execution  = $bugTpl->execution;
-        $this->view->taskID     = $bugTpl->taskID;
-        $this->view->storyID    = $bugTpl->storyID;
-        $this->view->buildID    = $bugTpl->buildID;
-        $this->view->caseID     = $bugTpl->caseID;
+        $this->view->projectID   = $bugTpl->projectID;
+        $this->view->moduleID    = $bugTpl->moduleID;
+        $this->view->productID   = $bugTpl->productID;
+        $this->view->products    = $bugTpl->products;
+        $this->view->stories     = $bugTpl->stories;
+        $this->view->projects    = defined('TUTORIAL') ? $this->loadModel('tutorial')->getProjectPairs()   : $bugTpl->projects;
+        $this->view->executions  = defined('TUTORIAL') ? $this->loadModel('tutorial')->getExecutionPairs() : $bugTpl->executions;
+        $this->view->builds      = $bugTpl->builds;
+        $this->view->execution   = $bugTpl->execution;
+        $this->view->taskID      = $bugTpl->taskID;
+        $this->view->storyID     = $bugTpl->storyID;
+        $this->view->buildID     = $bugTpl->buildID;
+        $this->view->caseID      = $bugTpl->caseID;
+        $this->view->runID       = $bugTpl->runID;
+        $this->view->version     = $bugTpl->version;
+        $this->view->testtask    = $bugTpl->testtask;
+        $this->view->bugTitle    = $bugTpl->title;
+        $this->view->pri         = $bugTpl->pri;
+        $this->view->steps       = htmlSpecialString($bugTpl->steps);
+        $this->view->os          = $bugTpl->os;
+        $this->view->browser     = $bugTpl->browser;
+        $this->view->assignedTo  = $bugTpl->assignedTo;
+        $this->view->deadline    = $bugTpl->deadline;
+        $this->view->mailto      = $bugTpl->mailto;
+        $this->view->keywords    = $bugTpl->keywords;
+        $this->view->severity    = $bugTpl->severity;
+        $this->view->type        = $bugTpl->type;
+        $this->view->branch      = $bugTpl->branch;
+        $this->view->branches    = $bugTpl->branches;
+        $this->view->color       = $bugTpl->color;
+        $this->view->feedbackBy  = $bugTpl->feedbackBy;
+        $this->view->notifyEmail = $bugTpl->notifyEmail;
 
-        $this->view->runID      = $runID;
-        $this->view->version    = $version;
-        $this->view->runID      = $runID;
-        $this->view->runID      = $runID;
-
-        $this->view->projectModel = $bugTpl->projectModel;
+        $this->view->projectModel    = $bugTpl->projectModel;
+        $this->view->stepsRequired   = strpos($this->config->bug->create->requiredFields, 'steps');
+        $this->view->isStepsTemplate = $bugTpl->steps == $this->lang->bug->tplStep . $this->lang->bug->tplResult . $this->lang->bug->tplExpect ? true : false;
     }
 
     /**
