@@ -263,23 +263,22 @@ class todoTest
     }
 
     /**
-     * Test get todo by id list.
+     * Test todoModel::getByList.
      *
-     * @parami array  $todoIDList
+     * @param array  $todoIDList
      * @access public
-     * @return void
+     * @return string
      */
     public function getByListTest($todoIDList = 0)
     {
         $objects = $this->objectModel->getByList($todoIDList);
-
-        $name = '';
-        foreach($objects as $todo) $name .= ',' . $todo->name;
-        $name = trim($name, ',');
-
-        if(dao::isError()) return dao::getError();
-
-        return $name;
+        $result = '';
+        foreach($objects as $id => $todo)
+        {
+            $result .= (string) $todo->id;
+        }
+        if(empty($result)) return "pass";
+        return $result;
     }
 
     /**

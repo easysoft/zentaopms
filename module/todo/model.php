@@ -381,11 +381,14 @@ class todoModel extends model
     }
 
     /**
-     * Get by id list.
+     * 通过包含一个或多个待办ID的列表获取待办列表，这个列表是以todoID为key、以todo对象为value的数组。
+     * 如果待办ID列表为空则返回所有待办。
+     * Get a array with todos which todoID as key, todo object as value by todo id list.
+     * Return all todos if the todo id list is empty.
      *
      * @param  array $todoIDList
      * @access public
-     * @return object
+     * @return array
      */
     public function getByList($todoIDList = 0)
     {
