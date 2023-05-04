@@ -663,7 +663,7 @@ class projectZen extends project
      * @access protected
      * @return void
      */
-    protected function mergeProducts(int $projectID, object $project, int|array $executionIDs, array $postData): void
+    protected function mergeProducts(int $projectID, object $project, int|array $executionIDs, array $postData): mixed
     {
         $this->loadModel('product');
         $this->loadModel('execution');
