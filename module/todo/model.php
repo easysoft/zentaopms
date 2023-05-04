@@ -326,27 +326,22 @@ class todoModel extends model
     }
 
     /**
+     * 判断当前动作是否可以点击。
      * Judge an action is clickable or not.
      *
-     * @param  object    $todo
-     * @param  string    $action
+     * @param  object $todo
+     * @param  string $action
      * @access public
      * @return bool
      */
-    public static function isClickable($todo, $action)
+    public static function isClickable(object $todo, string $action): bool
     {
         $action = strtolower($action);
 
-        if($action == 'finish')
+        if($action == 'finish' || $action == 'start')
         {
             if(!empty($todo->cycle)) return false;
-            return $todo->status != 'done';
-        }
-
-        if($action == 'start')
-        {
-            if(!empty($todo->cycle)) return false;
-            return $todo->status == 'wait';
+            return $action == 'finish' ? ($todo->status != 'done') : ($todo->status == 'wait');
         }
 
         return true;
