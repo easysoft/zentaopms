@@ -616,7 +616,7 @@ class todoModel extends model
         if(($this->config->edition == 'biz' || $this->config->edition == 'max'))
         {
             $todo       = $this->todoTao->fetch($todoID);
-            $feedbackID = $todo->idvalue ?? '' ;
+            $feedbackID = $todo->objectID ? $todo->objectID : '' ;
             if($feedbackID) $this->loadModel('feedback')->updateStatus('todo', $feedbackID, 'done');
         }
         return true;
