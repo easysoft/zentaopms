@@ -270,7 +270,7 @@ class todoTao extends todoModel
         $todo->account = $this->app->user->account;
 
         $todo->date = $formData->rawdata->date;
-        if($formData->rawdata->switchDate == 'on' || $formDatat->rawdata->date == false) $todo->date = '2030-01-01';
+        if($formData->rawdata->switchDate == 'on' || $formData->rawdata->date == false) $todo->date = '2030-01-01';
 
         $todo->type         = $todos->types[$loop];
         $todo->pri          = $todos->pris[$loop];
