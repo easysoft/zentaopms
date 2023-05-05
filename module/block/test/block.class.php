@@ -214,9 +214,16 @@ class blockTest
         return $objects;
     }
 
-    public function getListParamsTest($module = '')
+    /**
+     * Get params by module.
+     *
+     * @param  string $module
+     * @access public
+     * @return mixed
+     */
+    public function getParamsTest($code, $module = '')
     {
-        $objects = json_decode($this->objectModel->getListParams($module));
+        $objects = json_decode($this->objectModel->getParams($code, $module));
 
         if(dao::isError()) return dao::getError();
 

@@ -2062,7 +2062,6 @@ $lang->resource->workestimation     = new stdclass();
 $lang->resource->gapanalysis        = new stdclass();
 $lang->resource->executionview      = new stdclass();
 $lang->resource->managespace        = new stdclass();
-$lang->resource->managespace        = new stdclass();
 $lang->resource->systemteam         = new stdclass();
 $lang->resource->systemschedule     = new stdclass();
 $lang->resource->systemeffort       = new stdclass();
@@ -2112,6 +2111,7 @@ if(!$inUpgrade)
     {
         unset($lang->resource->program);
         unset($lang->resource->project->programTitle);
+        unset($lang->resource->product->manageLine);
     }
     if(!helper::hasFeature('waterfall') and !helper::hasFeature('waterfallplus'))
     {

@@ -254,7 +254,7 @@ class buildModel extends model
             $buildIdList = str_replace('trunk', '0', $buildIdList);
             $selectedBuilds = $this->dao->select('id, name')->from(TABLE_BUILD)
                 ->where('id')->in($buildIdList)
-                ->beginIF($products)->andWhere('product')->in($productIdList)->fi()
+                ->beginIF($products and $products != 'all')->andWhere('product')->in($productIdList)->fi()
                 ->beginIF($objectType === 'execution' and $objectID)->andWhere('execution')->eq($objectID)->fi()
                 ->beginIF($objectType === 'project' and $objectID)->andWhere('project')->eq($objectID)->fi()
                 ->beginIF(strpos($params, 'hasdeleted') === false)->andWhere('deleted')->eq(0)->fi()
@@ -274,7 +274,7 @@ class buildModel extends model
             ->beginIF(strpos($params, 'hasdeleted') === false)->andWhere('t1.deleted')->eq(0)->fi()
             ->beginIF(strpos($params, 'hasproject') !== false)->andWhere('t1.project')->ne(0)->fi()
             ->beginIF(strpos($params, 'singled') !== false)->andWhere('t1.execution')->ne(0)->fi()
-            ->beginIF($products)->andWhere('t1.product')->in($productIdList)->fi()
+            ->beginIF($products and $products != 'all')->andWhere('t1.product')->in($productIdList)->fi()
             ->beginIF($objectType === 'execution' and $objectID)->andWhere('t1.execution')->eq($objectID)->fi()
             ->beginIF($objectType === 'project' and $objectID)->andWhere('t1.project')->eq($objectID)->fi()
             ->orderBy('t1.date desc, t1.id desc')->fetchAll('id');

@@ -1864,6 +1864,8 @@ class executionModel extends model
     {
         if(defined('TUTORIAL')) return $this->loadModel('tutorial')->getExecutionStats($browseType);
 
+        $productID = (int)$productID;
+
         /* Construct the query SQL at search executions. */
         $executionQuery = '';
         if($browseType == 'bySearch')
@@ -1906,7 +1908,7 @@ class executionModel extends model
             ->andWhere('t1.multiple')->eq('1')
             ->beginIF(!$this->app->user->admin)->andWhere('t1.id')->in($this->app->user->view->sprints)->fi()
             ->beginIF(!empty($executionQuery))->andWhere($executionQuery)->fi()
-            ->beginIF($productID)->andWhere('t3.product')->eq($productID)->fi()
+            ->beginIF($productID)->andWhere('t3.product')->eq((int)$productID)->fi()
             ->beginIF($projectID)->andWhere('t1.project')->eq($projectID)->fi()
             ->beginIF(!in_array($browseType, array('all', 'undone', 'involved', 'review', 'bySearch')))->andWhere('t1.status')->eq($browseType)->fi()
             ->beginIF($browseType == 'undone')->andWhere('t1.status')->notIN('done,closed')->fi()
@@ -3310,7 +3312,7 @@ class executionModel extends model
             $data->branch  = $storyList[$storyID]->branch;
             $data->story   = $storyID;
             $data->version = $versions[$storyID];
-            $data->order   = ++$lastOrder;
+            $data->order   = (int)++$lastOrder;
             $this->dao->replace(TABLE_PROJECTSTORY)->data($data)->exec();
 
             $this->story->setStage($storyID);
@@ -4250,7 +4252,7 @@ class executionModel extends model
             ->page($pager, 't1.id')
             ->fetchAll('id');
 
-        $orderBy = str_replace('pri_', 'priOrder_', $orderBy);
+        $orderBy = str_replace(array('t1.pri_', 't1.`pri'), array('priOrder_', '`priOrder_'), $orderBy);
         $tasks   = $this->dao->select('t1.*, t2.id AS storyID, t2.title AS storyTitle, t2.product, t2.branch, t2.version AS latestStoryVersion, t2.status AS storyStatus, t3.realname AS assignedToRealName, IF(t1.`pri` = 0, 999, t1.`pri`) as priOrder')
              ->from(TABLE_TASK)->alias('t1')
              ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story = t2.id')

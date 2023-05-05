@@ -781,8 +781,6 @@ class apiModel extends model
         $lib->baseUrl   = $baseUrl;
         $lib->acl       = 'open';
         $lib->users     = ',' . $currentAccount . ',';
-        $lib->addedBy   = $currentAccount;
-        $lib->addedDate = helper::now();
         $this->dao->insert(TABLE_DOCLIB)->data($lib)->autoCheck()
             ->batchCheck($this->config->api->createlib->requiredFields, 'notempty')
             ->check('name', 'unique', "`type` = 'api'")

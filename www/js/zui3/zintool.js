@@ -801,6 +801,7 @@ function getPageTemplate(info)
     }
     else if(form)
     {
+        widgets.push('formPanel', 'formRow', 'inputGroup', 'input', 'control');
         const mainHeader = info.mainHeader || {};
         lines.push
         (

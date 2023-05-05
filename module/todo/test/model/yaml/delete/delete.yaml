@@ -27,6 +27,12 @@ fields:
       prefix: '这是待办描述'
     - field: status
       range: 'wait,doing,done'
+    - field: finishedDate
+      range: 1-9
+      prefix: '2023-04-2'
+    - field: closedDate
+      range: 1-9
+      prefix: '2023-04-2'
 
 
 

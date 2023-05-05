@@ -116,6 +116,8 @@ class projectModel extends model
             }
         }
 
+        setcookie('lastProject', (int)$this->session->project, $this->config->cookieLife, $this->config->webRoot, '', $this->config->cookieSecure, true);
+
         return $this->session->project;
     }
 

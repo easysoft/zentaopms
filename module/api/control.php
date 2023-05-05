@@ -52,6 +52,15 @@ class api extends control
         $objectType  = $this->objectType;
         $objectID    = $this->objectID;
         $isFirstLoad = $libID ? false : true;
+        if($libID)
+        {
+            $lib = $this->doc->getLibById($libID);
+            if($objectType == 'nolink' and !$objectID and ($lib->product or $lib->project))
+            {
+                $objectType = $lib->product ? 'product' : 'project';
+                $objectID   = $lib->product ? $lib->product : $lib->project;
+            }
+        }
 
         if($release)
         {
@@ -158,7 +167,7 @@ class api extends control
         if(!strpos($this->server->http_referer, 'space') and !strpos($this->server->http_referer, 'api')) setCookie("docSpaceParam", '', $this->config->cookieLife, $this->config->webRoot, '', false, true);
 
         /* Get all api doc libraries. */
-        $libs = $this->doc->getApiLibs($libID);
+        $libs = $this->doc->getApiLibs($libID, $this->objectType, $this->objectID);
         $api  = $this->api->getLibById($apiID, $version, $release);
         if($api)
         {
@@ -174,7 +183,7 @@ class api extends control
         }
 
         /* Crumbs links array. */
-        $lib = zget($libs, $libID);
+        $lib  = zget($libs, $libID);
         $type = $lib->product ? 'product' : ($lib->project ? 'project' : 'unlink');
 
         $methodName = $type != 'unlink' ? $type . 'Space' : 'index';
@@ -609,10 +618,11 @@ class api extends control
      *
      * @param  int $libID
      * @param  int $moduleID
+     * @param  string $space     api|project|product
      * @access public
      * @return void
      */
-    public function create($libID, $moduleID = 0)
+    public function create($libID, $moduleID = 0, $space = '')
     {
         if(!empty($_POST))
         {
@@ -621,14 +631,14 @@ class api extends control
 
             $this->action->create('api', $api->id, 'Created');
 
-            if(isonlybody()) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => 'true', 'callback' => "parentLocate({$api->id})"));
+            if(isonlybody()) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => 'true', 'callback' => "parentLocate({$api->id}, {$api->lib}, {$api->module})"));
             return $this->sendSuccess(array('locate' => helper::createLink('api', 'index', "libID={$api->lib}&moduleID={$api->module}&apiID={$api->id}")));
         }
 
         $libs = $this->doc->getLibs('api', '', $libID);
         if(!$libID and !empty($libs)) $libID = key($libs);
 
-        $this->setMenu($libID);
+        $this->setMenu($libID, $space);
 
         $lib     = $this->doc->getLibByID($libID);
         $libName = isset($lib->name) ? $lib->name . $this->lang->colon : '';
@@ -748,12 +758,14 @@ class api extends control
     /**
      * Set api menu by method name.
      *
-     * @param  int    $libID
+     * @param  int     $libID
+     * @param  string  $space |null|api|project|product
      * @access public
      * @return void
      */
-    private function setMenu($libID = 0)
+    private function setMenu($libID = 0, $space = '')
     {
+        if($space and strpos('|api|project|product|', "|{$space}|") === false) $space = '';
         common::setMenuVars('doc', '');
 
         $lib = $this->loadModel('doc')->getLibByID($libID);
@@ -766,14 +778,22 @@ class api extends control
             $this->loadModel('project')->setMenu($lib->project);
         }
 
-        if(in_array($this->session->spaceType, array('product', 'project')))
+        $spaceType = $this->session->spaceType;
+        if(empty($spaceType)) $spaceType = 'api';
+        if($space)
         {
-            $this->lang->doc->menu->api['exclude'] = 'api-' . $this->app->rawMethod;
-            $this->lang->doc->menu->{$this->session->spaceType}['subModule'] = 'api';
+            $spaceType = $space;
+            $this->session->set('spaceType', $space, 'doc');
+        }
+
+        if(in_array($spaceType, array('product', 'project')))
+        {
+            $this->lang->doc->menu->api['exclude'] = 'api-' . $this->app->rawMethod . ',' . $this->app->rawMethod;
+            $this->lang->doc->menu->{$spaceType}['subModule'] = 'api';
         }
         else
         {
-            $this->lang->doc->menu->{$this->session->spaceType}['alias'] .= ',' . $this->app->rawMethod;
+            $this->lang->doc->menu->{$spaceType}['alias'] .= ',' . $this->app->rawMethod;
         }
     }
 

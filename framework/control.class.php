@@ -35,7 +35,7 @@ class control extends baseControl
 
         $this->app->setOpenApp();
 
-        if(!isset($this->config->bizVersion)) return false;
+        if($this->config->edition == 'open') return false;
 
         /* Code for task #9224. Set requiredFields for workflow. */
         if($this->dbh and (defined('IN_USE') or (defined('RUN_MODE') and RUN_MODE == 'api')))
@@ -425,7 +425,7 @@ class control extends baseControl
      */
     public function buildOperateMenu(object $object, string $type = 'view')
     {
-        if(!isset($this->config->bizVersion)) return false;
+        if($this->config->edition == 'open') return false;
 
         $moduleName = $this->moduleName;
         return $this->$moduleName->buildOperateMenu($object, $type);
@@ -440,7 +440,7 @@ class control extends baseControl
      */
     public function executeHooks(int $objectID)
     {
-        if(!isset($this->config->bizVersion)) return false;
+        if($this->config->edition == 'open') return false;
 
         $moduleName = $this->moduleName;
         return $this->$moduleName->executeHooks($objectID);
@@ -454,7 +454,7 @@ class control extends baseControl
      */
     public function getFlowExportFields()
     {
-        if(!isset($this->config->bizVersion)) return array();
+        if($this->config->edition == 'open') return array();
 
         $moduleName = $this->moduleName;
         return $this->$moduleName->getFlowExportFields();
@@ -478,7 +478,7 @@ class control extends baseControl
      */
     public function printExtendFields(object|string $object, string $type, string $extras = '', bool $print = true, string $moduleName = '', string $methodName = '')
     {
-        if(!isset($this->config->bizVersion)) return false;
+        if($this->config->edition == 'open') return false;
 
         $moduleName = $moduleName ?: $this->app->getModuleName();
         $methodName = $methodName ?: $this->app->getMethodName();

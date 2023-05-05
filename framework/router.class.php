@@ -482,7 +482,7 @@ class router extends baseRouter
         if(empty($this->rawMethod)) $this->rawMethod = $this->methodName;
 
         /* If is not a biz version or is in install mode or in in upgrade mode, call parent method. */
-        if(!isset($this->config->bizVersion) or defined('IN_INSTALL') or defined('IN_UPGRADE')) return parent::setControlFile($exitIfNone);
+        if($this->config->edition == 'open' or defined('IN_INSTALL') or defined('IN_UPGRADE')) return parent::setControlFile($exitIfNone);
 
         /* Check if the requested module is defined in workflow. */
         $flow = $this->dbh->query("SELECT * FROM " . TABLE_WORKFLOW . " WHERE `module` = '$this->moduleName'")->fetch();

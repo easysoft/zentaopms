@@ -1,7 +1,6 @@
 <style>
 <?php helper::import('../css/workload.css');?>
 <?php if($this->config->edition != 'open'):?>
-#mainContent > .side-col.col-lg{width: 210px}
 .hide-sidebar #sidebar{width: 0 !important}
 <?php endif;?>
 </style>

@@ -1487,31 +1487,7 @@ class commonModel extends model
             echo "<a href='javascript:;'>" . "<i class='icon icon-download'></i> " . $lang->clientName . "</a><ul class='dropdown-menu pull-left'>";
             echo '<li>' . html::a(helper::createLink('misc', 'downloadClient', '', '', true), $lang->downloadClient, '', "title='$lang->downloadClient' class='iframe text-ellipsis' data-width='600'") . '</li>';
             echo "<li class='dropdown-submenu' id='downloadMobile'><a href='javascript:;'>" . $lang->downloadMobile . "</a><ul class='dropdown-menu pull-left''>";
-
-            /* Intranet users use local pictures. */
-            $connected = false;
-            if(extension_loaded('curl'))
-            {
-                $curl = curl_init();
-                curl_setopt($curl, CURLOPT_URL, 'https://www.zentao.net/page/appqrcode.json');
-                curl_setopt($curl, CURLOPT_TIMEOUT_MS, 200);
-                curl_setopt($curl, CURLOPT_CONNECTTIMEOUT_MS, 200);
-                curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-                curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
-                curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false);
-                $connected = curl_exec($curl);
-                curl_close($curl);
-            }
-
-            if($connected)
-            {
-                echo "<li><div class='mobile-qrcode'><iframe src='https://www.zentao.net/page/appqrcode.html?v={$config->version}' frameborder='0' scrolling='no' seamless></iframe></div></li>";
-            }
-            else
-            {
-                echo "<li><div class='mobile-qrcode local-img'><img src='{$config->webRoot}theme/default/images/main/mobile_qrcode.png' /><div class='mobile-version'><span>v1.2</span></div></li>";
-            }
-
+            echo "<li><div class='mobile-qrcode local-img'><img src='{$config->webRoot}static/images/app-qrcode.png' /></li>";
             echo "</ul></li>";
             echo '<li>' . html::a($lang->clientHelpLink, $lang->clientHelp, '', "title='$lang->clientHelp' target='_blank'") . '</li>';
             echo '</ul></li>';
@@ -2078,6 +2054,7 @@ EOF;
             if(strtolower($key) == 'assigneddate')    continue;
             if(strtolower($key) == 'editedby')        continue;
             if(strtolower($key) == 'editeddate')      continue;
+            if(strtolower($key) == 'editingdate')     continue;
             if(strtolower($key) == 'uid')             continue;
             if(strtolower($key) == 'finisheddate'     and $value == '') continue;
             if(strtolower($key) == 'canceleddate'     and $value == '') continue;

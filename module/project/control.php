@@ -740,7 +740,7 @@ class project extends control
 
         /* Check exist extend fields. */
         $isExtended = false;
-        if(!empty($this->config->bizVersion))
+        if($this->config->edition != 'open')
         {
             $extend = $this->loadModel('workflowaction')->getByModuleAndAction('project', 'view');
             if(!empty($extend) and $extend->extensionType == 'extend') $isExtended = true;

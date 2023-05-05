@@ -17,7 +17,7 @@ body {height: 100vh; padding: 0;}
 #toolbar #year {width: 70px; display: inline-block; margin-right: 5px; padding-top: 5px; border-color: #1a77a5; background-color: transparent; color: #fff;}
 #toolbar #year option {background: #141414;}
 #toolbar #dept, #dept_chosen, #dept_chosen > .chosen-single {width: 100px !important; display: inline-block; margin-right: 5px; padding-top: 0px; border-color: #1a77a5; background-color: transparent; color: #fff;}
-#toolbar #userID, #userID_chosen, #userID_chosen > .chosen-single, #toolbar .picker-single {width: 100px !important; display: inline-block; margin-right: 5px; padding-top: 0px; border-color: #1a77a5; background-color: transparent; color: #fff;}
+#toolbar #account, #account_chosen, #account_chosen > .chosen-single, #toolbar .picker-single {width: 100px !important; display: inline-block; margin-right: 5px; padding-top: 0px; border-color: #1a77a5; background-color: transparent; color: #fff;}
 
 .chosen-container > .chosen-single > span {padding-top: 5px; height: 28px;}
 .chosen-container .chosen-drop {background: #141414; text-align: left;}
