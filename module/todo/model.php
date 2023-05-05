@@ -238,12 +238,12 @@ class todoModel extends model
     /**
      * Get todo list of a user.
      *
-     * @param  string $type
-     * @param  string $account
-     * @param  string $status   all|today|thisweek|lastweek|before, or a date.
-     * @param  int    $limit
-     * @param  object $pager
-     * @param  string $orderBy
+     * @param  string  $type
+     * @param  string  $account
+     * @param  string|array $status   all|today|thisweek|lastweek|before, or a date.
+     * @param  int     $limit
+     * @param  ?object $pager
+     * @param  string  $orderBy
      * @access public
      * @return array
      */
