@@ -3013,4 +3013,36 @@ class projectModel extends model
         if(!empty($diffResult)) $this->loadModel('productplan')->linkProject($projectID, $newPlans);
         return !dao::isError();
     }
+
+    /**
+     * 更新项目排序
+     * update project order
+     *
+     * @param  array  $idList
+     * @param  string $orderBy
+     *
+     * @access public
+     * @return bool
+     */
+    public function updateOrder(array $idList, string $orderBy): bool
+    {
+        $projects = $this->dao->select('id,`order`')->from(TABLE_PROJECT)
+            ->where('id')->in($idList)
+            ->orderBy($orderBy)
+            ->fetchPairs('order', 'id');
+
+        foreach($projects as $order => $id)
+        {
+            $newID = array_shift($idList);
+            if($id == $newID) continue;
+            $this->dao->update(TABLE_PROJECT)
+                ->set('`order`')->eq($order)
+                ->set('lastEditedBy')->eq($this->app->user->account)
+                ->set('lastEditedDate')->eq(helper::now())
+                ->where('id')->eq($newID)
+                ->exec();
+        }
+
+        return !dao::isError();
+    }
 }
