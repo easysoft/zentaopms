@@ -544,7 +544,8 @@ class projectZen extends project
     {
         $newBegin = date('Y-m-d');
         $dateDiff = helper::diffDate($newBegin, $project->begin);
-        $newEnd   = date('Y-m-d', strtotime($project->end) + $dateDiff * 24 * 3600);
+        $dateTime = (int)(strtotime($project->end) + $dateDiff * 24 * 3600);
+        $newEnd   = date('Y-m-d', $dateTime);
 
         $this->view->title      = $this->lang->project->activate;
         $this->view->users      = $this->loadModel('user')->getPairs('noletter');
@@ -586,12 +587,11 @@ class projectZen extends project
      */
     protected function prepareActivateExtras(int $projectID, object $postData): object
     {
-        $oldProject = $this->project->getByID($projectID);
-
+        $oldProject   = $this->project->getByID($projectID);
         $editorIdList = $this->config->project->editor->activate['id'];
 
         return $postData->add('id', $projectID)
-            ->setDefault('realEnd', '')
+            ->setDefault('realEnd', $oldProject->realEnd)
             ->setDefault('status', 'doing')
             ->setDefault('lastEditedBy', $this->app->user->account)
             ->setDefault('lastEditedDate', helper::now())
