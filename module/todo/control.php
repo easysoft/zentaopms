@@ -21,6 +21,7 @@ class todo extends control
     {
         parent::__construct();
 
+        $this->app->loadClass('date');
         $this->app->loadLang('my');
     }
 
