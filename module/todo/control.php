@@ -11,10 +11,7 @@ declare(strict_types=1);
  */
 class todo extends control
 {
-    sdasdasdasdasdas
     /**
-     * sadasdasd
-     *
      * Construct function, load model of task, bug, my.
      *
      * @access public
@@ -24,6 +21,7 @@ class todo extends control
     {
         parent::__construct();
 
+        $this->app->loadClass('date');
         $this->app->loadLang('my');
     }
 
