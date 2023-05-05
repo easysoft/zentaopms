@@ -1776,7 +1776,7 @@ class programModel extends model
                 $actionsMap[] = $item;
             }
 
-            if($canSuspendProgram or ($canClose && $program->status != 'doing') or ($canActivateProgram and $program->status != 'closed'))
+            if($canSuspendProgram or ($canCloseProgram and $program->status != 'doing') or ($canActivateProgram and $program->status != 'closed'))
             {
                 $other = new stdclass();
                 $other->name  = 'other';
