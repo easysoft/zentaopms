@@ -21,6 +21,12 @@ use ZenTao\Cache\SimpleCache\InvalidArgumentException;
 
 class cache
 {
+    const DRIVER_APCU = 'Apcu';
+
+    const DRIVER_FILE = 'File';
+
+    const DRIVER_YAC = 'Yac';
+
     /**
      * @var ZenTao\Cache\SimpleCache\CacheInterface
      */
@@ -48,6 +54,20 @@ class cache
 
         global $app;
         $this->client = new $className($namespace, $defaultLifetime, $app->getCacheRoot());
+    }
+
+    /**
+     * Create a cache instance.
+     *
+     * @param  string $driver
+     * @param  string $namespace
+     * @param  int    $defaultLifetime
+     * @access public
+     * @return object
+     */
+    public static function create($driver = 'File', $namespace = '', $defaultLifetime = 0)
+    {
+        return new self($driver, $namespace, $defaultLifetime);
     }
 
     public function __call($name, $arguments)
