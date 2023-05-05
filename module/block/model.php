@@ -455,12 +455,11 @@ class blockModel extends model
      *
      * @param  object    $block
      * @access public
-     * @return book
+     * @return bool
      */
-    public function isLongBlock($block)
+    public function isLongBlock(object $block): bool
     {
-        if(empty($block)) return true;
-        return $block->grid >= 6;
+        return (!empty($block) and $block->grid >= 6) ? true : false;
     }
 
     /**

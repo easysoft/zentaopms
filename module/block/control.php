@@ -201,7 +201,7 @@ class block extends control
      * @access public
      * @return void
      */
-    public function dynamic()
+    public function printDynamicBlock()
     {
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
@@ -209,8 +209,6 @@ class block extends control
 
         $this->view->actions = $this->loadModel('action')->getDynamic('all', 'today', 'date_desc', $pager);
         $this->view->users   = $this->loadModel('user')->getPairs('nodeleted|noletter|all');
-
-        $this->display();
     }
 
     /**
@@ -219,7 +217,7 @@ class block extends control
      * @access public
      * @return void
      */
-    public function welcome()
+    public function printWelcomeBlock()
     {
         $this->view->tutorialed = $this->loadModel('tutorial')->getTutorialed();
 
@@ -241,7 +239,6 @@ class block extends control
             if($time >= $type) $welcomeType = $type;
         }
         $this->view->welcomeType = $welcomeType;
-        $this->display();
     }
 
     /**
@@ -263,57 +260,29 @@ class block extends control
      *
      * @param  int     $blockID
      * @access public
-     * @return void|false
+     * @return string
      */
     public function printBlock($blockID)
     {
+        $html    = '';
         $blockID = (int)$blockID;
         $block   = $this->block->getByID($blockID);
 
-        if(empty($block)) return false;
+        if(empty($block)) return $html;
 
-        switch($block->code)
-        {
-            case 'html':
-                $html = $this->blockZen->generateHtmlBlock($block);
-            break;
+        $code = $block->code;
+        if($code == 'statistic' or $code == 'list' or $code == 'overview') $code = $block->module . ucfirst($code);
 
-            case 'dynamic':
-                $html = $this->fetch('block', 'dynamic');
-            break;
+        $function = 'print' . ucfirst($code) . 'Block';
+        if(method_exists('block', $function)) $html = $this->$function($blockID);
 
-            case 'guide':
-                $html = $this->fetch('block', 'guide', "blockID=$blockID");
-            break;
-
-            case 'assigntome':
-                $html = $this->blockZen->generateAssignToMeBlock($block);
-            break;
-
-            case 'welcome':
-                $html = $this->fetch('block', 'welcome', "blockID=$blockID");
-            break;
-
-            case 'contribute':
-                $html = $this->fetch('block', 'contribute');
-            break;
-
-            default:
-                $html = $this->blockZen->generateDefaultBlockBySource($block);
-            break;
-        }
-        echo $html;
+        $this->display('block', strtolower($code) . 'block');
     }
 
-    /**
-     * Main function.
-     *
-     * @access public
-     * @return void
-     */
-    public function main($module = '', $blockID = 0)
+    public function printBlockData($module = '', $blockID = 0)
     {
         $blockID = (int)$blockID;
+
         if(!$this->selfCall)
         {
             $lang = str_replace('_', '-', $this->get->lang);
@@ -324,85 +293,72 @@ class block extends control
             if(!$this->block->checkAPI($this->get->hash)) return;
         }
 
-        $mode = strtolower($this->get->mode);
+        $code = strtolower($this->get->blockid);
 
-        if($mode == 'getblocklist')
+        $params = $this->get->param;
+        $params = json_decode(base64_decode($params));
+        if(isset($params->num) and !isset($params->count)) $params->count = $params->num;
+        if(!$this->selfCall)
         {
+            $this->app->user = $this->dao->select('*')->from(TABLE_USER)->where('ranzhi')->eq($params->account)->fetch();
+            if(empty($this->app->user))
+            {
+                $this->app->user = new stdclass();
+                $this->app->user->account = 'guest';
+            }
+            $this->app->user->admin  = strpos($this->app->company->admins, ",{$this->app->user->account},") !== false;
+            $this->app->user->rights = $this->loadModel('user')->authorize($this->app->user->account);
+            $this->app->user->groups = $this->user->getGroups($this->app->user->account);
+            $this->app->user->view   = $this->user->grantUserView($this->app->user->account, $this->app->user->rights['acls']);
 
+            $sso = base64_decode($this->get->sso);
+            $this->view->sso  = $sso;
+            $this->view->sign = strpos($sso, '?') === false ? '?' : '&';
         }
-        elseif($mode == 'getblockform')
+
+        if($blockID) $block = $this->block->getByID($blockID);
+        $this->view->longBlock = $this->block->isLongBlock($blockID ? $block : $params);
+        $this->view->selfCall  = $this->selfCall;
+        $this->view->block     = $blockID ? $block : '';
+
+        $this->viewType    = (isset($params->viewType) and $params->viewType == 'json') ? 'json' : 'html';
+        $this->params      = $params;
+        $this->view->code  = $this->get->blockid;
+        $this->view->title = $this->get->blockTitle;
+
+        $func = 'print' . ucfirst($code) . 'Block';
+        if(method_exists('block', $func))
         {
-            echo $this->block->getParams($code, $module);
+            $this->$func($module);
         }
-        elseif($mode == 'getblockdata')
+        else
         {
-            $code = strtolower($this->get->blockid);
-
-            $params = $this->get->param;
-            $params = json_decode(base64_decode($params));
-            if(isset($params->num) and !isset($params->count)) $params->count = $params->num;
-            if(!$this->selfCall)
-            {
-                $this->app->user = $this->dao->select('*')->from(TABLE_USER)->where('ranzhi')->eq($params->account)->fetch();
-                if(empty($this->app->user))
-                {
-                    $this->app->user = new stdclass();
-                    $this->app->user->account = 'guest';
-                }
-                $this->app->user->admin  = strpos($this->app->company->admins, ",{$this->app->user->account},") !== false;
-                $this->app->user->rights = $this->loadModel('user')->authorize($this->app->user->account);
-                $this->app->user->groups = $this->user->getGroups($this->app->user->account);
-                $this->app->user->view   = $this->user->grantUserView($this->app->user->account, $this->app->user->rights['acls']);
-
-                $sso = base64_decode($this->get->sso);
-                $this->view->sso  = $sso;
-                $this->view->sign = strpos($sso, '?') === false ? '?' : '&';
-            }
-
-            if($blockID) $block = $this->block->getByID($blockID);
-            $this->view->longBlock = $this->block->isLongBlock($blockID ? $block : $params);
-            $this->view->selfCall  = $this->selfCall;
-            $this->view->block     = $blockID ? $block : '';
-
-            $this->viewType    = (isset($params->viewType) and $params->viewType == 'json') ? 'json' : 'html';
-            $this->params      = $params;
-            $this->view->code  = $this->get->blockid;
-            $this->view->title = $this->get->blockTitle;
-
-            $func = 'print' . ucfirst($code) . 'Block';
-            if(method_exists('block', $func))
-            {
-                $this->$func($module);
-            }
-            else
-            {
-                $this->view->data = $this->block->$func($module, $params);
-            }
-
-            $this->view->moreLink = '';
-            if(isset($this->config->block->modules[$module]->moreLinkList->{$code}))
-            {
-                list($moduleName, $method, $vars) = explode('|', sprintf($this->config->block->modules[$module]->moreLinkList->{$code}, isset($params->type) ? $params->type : ''));
-                $this->view->moreLink = $this->createLink($moduleName, $method, $vars);
-            }
-
-            if($this->viewType == 'json')
-            {
-                unset($this->view->app);
-                unset($this->view->config);
-                unset($this->view->lang);
-                unset($this->view->header);
-                unset($this->view->position);
-                unset($this->view->moduleTree);
-
-                $output['status'] = is_object($this->view) ? 'success' : 'fail';
-                $output['data']   = json_encode($this->view);
-                $output['md5']    = md5(json_encode($this->view));
-                return print(json_encode($output));
-            }
-
-            $this->display('block', $code . 'block');
+            $this->view->data = $this->block->$func($module, $params);
         }
+
+        $this->view->moreLink = '';
+        if(isset($this->config->block->modules[$module]->moreLinkList->{$code}))
+        {
+            list($moduleName, $method, $vars) = explode('|', sprintf($this->config->block->modules[$module]->moreLinkList->{$code}, isset($params->type) ? $params->type : ''));
+            $this->view->moreLink = $this->createLink($moduleName, $method, $vars);
+        }
+
+        if($this->viewType == 'json')
+        {
+            unset($this->view->app);
+            unset($this->view->config);
+            unset($this->view->lang);
+            unset($this->view->header);
+            unset($this->view->position);
+            unset($this->view->moduleTree);
+
+            $output['status'] = is_object($this->view) ? 'success' : 'fail';
+            $output['data']   = json_encode($this->view);
+            $output['md5']    = md5(json_encode($this->view));
+            return print(json_encode($output));
+        }
+
+        $this->display('block', $code . 'block');
     }
 
     /**
