@@ -19,9 +19,9 @@ panel
         setClass('flex'),
         col
         (
-            setStyle(['width' => '20%', 'height' => '176px']),
-            set('class', 'border-right p-3'),
+            setStyle(['width' => '20%']),
             set('align', 'center'),
+            set('class', 'border-right p-3'),
             center
             (
                 set('class', 'font-bold'),
@@ -60,7 +60,7 @@ panel
                     span
                     (
                         set('class', 'tile-amount text-primary'),
-                        81
+                        58
                     ),
                     span('研发需求数')
                 ),
@@ -70,9 +70,9 @@ panel
                     span
                     (
                         set('class', 'tile-amount text-primary'),
-                        81
+                        39
                     ),
-                    span('研发需求数')
+                    span('反馈数')
                 ),
                 col
                 (
@@ -80,7 +80,7 @@ panel
                     span
                     (
                         set('class', 'tile-amount text-primary'),
-                        81
+                        17
                     ),
                     span('研发需求数')
                 )
@@ -88,8 +88,8 @@ panel
         ),
         cell
         (
-            set::width('35%'),
-            set('class', 'p-3'),
+            set('width', '35%'),
+            set('class', 'border-right p-3'),
             div
             (
                 set('class', 'font-bold'),
@@ -100,14 +100,14 @@ panel
                 setClass('flex justify-around pt-6'),
                 col
                 (
-                    set('class', 'text-center items-center'),
+                    set('class', 'text-center'),
                     span
                     (
                         set('class', 'tile-amount text-primary'),
-                        81
+                        16
                     ),
                     span('任务数'),
-                    div
+                    span
                     (
                         set('class', 'rounded-full welcome-label-delay px-1 text-sm'),
                         '延期 3'
@@ -115,14 +115,13 @@ panel
                 ),
                 col
                 (
-                    set('justify', 'center'),
                     set('class', 'text-center'),
                     span
                     (
                         set('class', 'tile-amount text-primary'),
-                        81
+                        30
                     ),
-                    span('研发需求数'),
+                    span('BUG数')
                 )
             )
         )
