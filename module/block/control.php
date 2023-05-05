@@ -26,6 +26,7 @@ class block extends control
     }
 
     /**
+     * 创建区块
      * Create a block under a dashboard.
      *
      * @param  string $dashboard
@@ -43,7 +44,7 @@ class block extends control
             $formData->account   = $this->app->user->account;
             $formData->vision    = $this->config->vision;
             $formData->order     = $this->block->getMaxOrderByDashboard($dashboard) + 1;
-            $formData->params    = helper::jsonEncode($formData->params);
+            $formData->params    = json_encode($formData->params);
 
             $this->block->create($formData);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
@@ -55,12 +56,13 @@ class block extends control
         $this->view->module    = $module;
         $this->view->code      = $code;
         $this->view->modules   = $this->blockZen->getAvailableModules($dashboard);
-        $this->view->codes     = $this->blockZen->getAvailableBlocks($dashboard, $module);
+        $this->view->codes     = $this->blockZen->getAvailableCodes($dashboard, $module);
         $this->view->params    = $this->blockZen->getAvailableParams($dashboard, $module, $code);
         $this->display();
     }
 
     /**
+     * 编辑区块
      * Update a block.
      *
      * @param  string $dashboard
@@ -257,59 +259,48 @@ class block extends control
 
     /**
      * Print block.
+     * 输出区块
      *
-     * @param  int    $id
+     * @param  int     $blockID
      * @access public
-     * @return void
+     * @return void|false
      */
-    public function printBlock($id, $module = 'my')
+    public function printBlock($blockID)
     {
-        $block = $this->block->getByID((int)$id);
+        $blockID = (int)$blockID;
+        $block   = $this->block->getByID($blockID);
 
         if(empty($block)) return false;
 
-        $html = '';
-        if($block->code == 'html')
+        switch($block->code)
         {
-            if (empty($block->params->html))
-            {
-                $html = "<div class='empty-tip'>" . $this->lang->block->emptyTip . "</div>";
-            }
-            else
-            {
-                $html = "<div class='panel-body'><div class='article-content'>" . $block->params->html . '</div></div>';
-            }
-        }
-        elseif($block->code == 'dynamic')
-        {
-            $html = $this->fetch('block', 'dynamic');
-        }
-        elseif($block->code == 'guide')
-        {
-            $html = $this->fetch('block', 'guide', "blockID=$block->id");
-        }
-        elseif($block->code == 'assigntome')
-        {
-            $this->get->set('param', base64_encode(json_encode($block->params)));
-            $html = $this->fetch('block', 'printAssignToMeBlock', 'longBlock=' . $this->block->isLongBlock($block));
-        }
-        elseif($block->code == 'welcome')
-        {
-            $html = $this->fetch('block', 'welcome', "blockID=$block->id");
-        }
-        elseif($block->code == 'contribute')
-        {
-            $html = $this->fetch('block', 'contribute');
-        }
-        else
-        {
-            $this->get->set('mode', 'getblockdata');
-            $this->get->set('blockTitle', $block->title);
-            $this->get->set('module', $block->module);
-            $this->get->set('source', $block->source);
-            $this->get->set('blockid', $block->code);
-            $this->get->set('param', base64_encode(json_encode($block->params)));
-            $html = $this->fetch('block', 'main', "module={$block->source}&id=$id");
+            case 'html':
+                $html = $this->blockZen->generateHtmlBlock($block);
+            break;
+
+            case 'dynamic':
+                $html = $this->fetch('block', 'dynamic');
+            break;
+
+            case 'guide':
+                $html = $this->fetch('block', 'guide', "blockID=$blockID");
+            break;
+
+            case 'assigntome':
+                $html = $this->blockZen->generateAssignToMeBlock($block);
+            break;
+
+            case 'welcome':
+                $html = $this->fetch('block', 'welcome', "blockID=$blockID");
+            break;
+
+            case 'contribute':
+                $html = $this->fetch('block', 'contribute');
+            break;
+
+            default:
+                $html = $this->blockZen->generateDefaultBlockBySource($block);
+            break;
         }
         echo $html;
     }
@@ -437,7 +428,7 @@ class block extends control
     public function printTodoBlock()
     {
         $limit = ($this->viewType == 'json' or !isset($this->params->count)) ? 0 : (int)$this->params->count;
-        $todos = $this->loadModel('todo')->getList('all', $this->app->user->account, 'wait, doing', $limit, $pager = null, $orderBy = 'date, begin');
+        $todos = $this->loadModel('todo')->getList('all', $this->app->user->account, 'wait, doing', $limit, null, 'date, begin');
         $uri   = $this->createLink('my', 'index');
 
         $this->session->set('todoList',     $uri, 'my');
@@ -446,16 +437,7 @@ class block extends control
         $this->session->set('storyList',    $uri, 'product');
         $this->session->set('testtaskList', $uri, 'qa');
 
-        $tasks = $this->loadModel('task')->getUserSuspendedTasks($this->app->user->account);
-        foreach($todos as $key => $todo)
-        {
-            if($todo->date == '2030-01-01')
-            {
-                unset($todos[$key]);
-                continue;
-            }
-            if($todo->type == 'task' and isset($tasks[$todo->idvalue])) unset($todos[$key]);
-        }
+        $todos = $this->blockZen->unsetTodos($todos);
 
         $this->view->todos = $todos;
     }
@@ -580,7 +562,7 @@ class block extends control
         $this->session->set('storyList', $this->createLink('my', 'index'), 'product');
         if(preg_match('/[^a-zA-Z0-9_]/', $this->params->type)) return;
 
-        $this->app->loadClass('pager', $static = true);
+        $this->app->loadClass('pager', true);
         $count   = isset($this->params->count) ? (int)$this->params->count : 0;
         $pager   = pager::init(0, $count , 1);
         $type    = isset($this->params->type) ? $this->params->type : 'assignedTo';
@@ -686,7 +668,7 @@ class block extends control
      */
     public function printProductBlock()
     {
-        $this->app->loadClass('pager', $static = true);
+        $this->app->loadClass('pager', true);
         if(!empty($this->params->type) and preg_match('/[^a-zA-Z0-9_]/', $this->params->type)) return;
         $count = isset($this->params->count) ? (int)$this->params->count : 0;
         $type  = isset($this->params->type) ? $this->params->type : '';
@@ -786,7 +768,7 @@ class block extends control
         {
             if(in_array($project->model, array('scrum', 'kanban', 'agileplus')))
             {
-                $this->app->loadClass('pager', $static = true);
+                $this->app->loadClass('pager', true);
                 $pager = pager::init(0, 3, 1);
                 $project->progress   = $project->allStories == 0 ? 0 : round($project->doneStories / $project->allStories, 3) * 100;
                 $project->executions = $this->execution->getStatData($projectID, 'all', 0, 0, false, '', 'id_desc', $pager);
@@ -1235,7 +1217,7 @@ class block extends control
         $count = isset($this->params->count) ? (int)$this->params->count : 15;
         $type  = isset($this->params->type) ? $this->params->type : 'undone';
 
-        $this->app->loadClass('pager', $static = true);
+        $this->app->loadClass('pager', true);
         $pager = pager::init(0, $count, 1);
         $this->loadModel('execution');
         $this->view->executionStats = !defined('TUTORIAL') ? $this->execution->getStatData($this->session->project, $type, 0, 0, false, '', 'id_desc', $pager) : array($this->loadModel('tutorial')->getExecution());
@@ -1859,7 +1841,7 @@ class block extends control
     public function printDocDynamicBlock()
     {
         /* Load pager. */
-        $this->app->loadClass('pager', $static = true);
+        $this->app->loadClass('pager', true);
         $pager = new pager(0, 30, 1);
 
         $this->view->actions = $this->loadModel('doc')->getDynamic($pager);
@@ -1925,7 +1907,7 @@ class block extends control
     public function printDocViewListBlock()
     {
         /* Load pager. */
-        $this->app->loadClass('pager', $static = true);
+        $this->app->loadClass('pager', true);
         $pager = new pager(0, 6, 1);
 
         $this->view->docList = $this->loadModel('doc')->getDocsByBrowseType('all', 0, 0,'views_desc', $pager);
@@ -1940,7 +1922,7 @@ class block extends control
     public function printDocCollectListBlock()
     {
         /* Load pager. */
-        $this->app->loadClass('pager', $static = true);
+        $this->app->loadClass('pager', true);
         $pager = new pager(0, 6, 1);
 
         $this->view->docList = $this->loadModel('doc')->getDocsByBrowseType('all', 0, 0, 'collects_desc', $pager);

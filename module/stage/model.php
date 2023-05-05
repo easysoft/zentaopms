@@ -136,7 +136,7 @@ class stageModel extends model
     {
         if($projectID)
         {
-            return $this->dao->select('id,name,type,percent,openedBy as createdBy,begin as createdDate,lastEditedBy as editedBy,end as editedDate,deleted')
+            return $this->dao->select('`id`,name,type,percent,openedBy as createdBy,`begin` as createdDate,lastEditedBy as editedBy,`end` as editedDate,deleted')
                 ->from(TABLE_EXECUTION)
                 ->where('type')->in('sprint,stage,kanban')
                 ->andWhere('deleted')->eq('0')

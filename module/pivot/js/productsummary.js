@@ -8,6 +8,6 @@ $('#conditions input:checkbox').change(function()
     conditions = conditions.substring(0, conditions.length - 1);
 
     var params = window.btoa('conditions=' + conditions);
-    var link = createLink('pivot', 'preview', 'dimension=' + dimension + '&group=' + group + '&module=pivot&method=productSummary&params=' + params);
+    var link = createLink('pivot', 'preview', 'dimension=' + dimension + '&group=' + groupID + '&module=pivot&method=productSummary&params=' + params);
     location.href = link;
 })

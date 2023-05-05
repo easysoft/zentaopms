@@ -587,26 +587,82 @@ class projectTao extends projectModel
             ->where('t1.root')->in($projectIdList)
             ->andWhere('t2.deleted')->eq(0)
             ->groupBy('t1.root')
-            ->fetchAll('root');
+            ->fetchPairs();
     }
 
     /**
      * 根据项目ID列表查询任务的总预计工时。
      * Get task all estimate by project id list.
      *
-     * @param  array $projectIdList
+     * @param  array  $projectIdList
+     * @param  string $fields
      * @access protected
      * @return array
      */
-    protected function fetchTaskEstimateByIdList(array $projectIdList): array
+    protected function fetchTaskEstimateByIdList(array $projectIdList, string $fields = 't2.project as project, sum(estimate) as estimate'): array
     {
-        return $this->dao->select("t2.project as project, sum(estimate) as estimate")->from(TABLE_TASK)->alias('t1')
+        return $this->dao->select($fields)->from(TABLE_TASK)->alias('t1')
             ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.execution = t2.id')
             ->where('t1.parent')->lt(1)
             ->andWhere('t2.project')->in($projectIdList)
             ->andWhere('t1.deleted')->eq(0)
             ->andWhere('t2.deleted')->eq(0)
             ->groupBy('t2.project')
+            ->fetchAll('project');
+    }
+
+    /**
+     * 通过项目ID列表查询需求的数量。
+     * Get the number of stories associated with the project.
+     *
+     * @param  array   $projectIdList
+     * @access public
+     * @return array
+     */
+    public function getTotalStoriesByProject(array $projectIdList): array
+    {
+        return $this->dao->select("t1.project, count(t2.id) as allStories, count(if(t2.status = 'active' or t2.status = 'changing', 1, null)) as leftStories, count(if(t2.status = 'closed' and t2.closedReason = 'done', 1, null)) as doneStories")->from(TABLE_PROJECTSTORY)->alias('t1')
+            ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story=t2.id')
+            ->where('t1.project')->in($projectIdList)
+            ->andWhere('t2.type')->eq('story')
+            ->andWhere('deleted')->eq('0')
+            ->groupBy('project')
+            ->fetchAll('project');
+    }
+
+    /**
+     * 通过项目ID获取任务数量统计。
+     * Get the number of tasks associated with the project.
+     *
+     * @param  array  $projectIdList
+     * @access public
+     * @return array
+     */
+    public function getTotalTaskByProject(array $projectIdList): array
+    {
+        return $this->dao->select("t1.project, count(t1.id) as allTasks, count(if(t1.status = 'wait', 1, null)) as waitTasks, count(if(t1.status = 'doing', 1, null)) as doingTasks, count(if(t1.status = 'done', 1, null)) as doneTasks, count(if(t1.status = 'wait' or t1.status = 'pause' or t1.status = 'cancel', 1, null)) as leftTasks, count(if(t1.status = 'done' or t1.status = 'closed', 1, null)) as litedoneTasks")->from(TABLE_TASK)->alias('t1')
+            ->leftJoin(TABLE_EXECUTION)->alias('t2')->on('t1.execution=t2.id')
+            ->where('t1.project')->in($projectIdList)
+            ->andWhere('t1.deleted')->eq(0)
+            ->andWhere('t2.deleted')->eq(0)
+            ->groupBy('t1.project')
+            ->fetchAll('project');
+    }
+
+    /**
+     * 通过项目ID获取Bug数量统计。
+     * Get the number of bugs associated with the project.
+     *
+     * @param  array  $projectIdList
+     * @access public
+     * @return array
+     */
+    public function getTotalBugByProject(array $projectIdList): array
+    {
+        return $this->dao->select("project, count(id) as allBugs, count(if(status = 'active', 1, null)) as leftBugs, count(if(status = 'resolved', 1, null)) as doneBugs")->from(TABLE_BUG)
+            ->where('project')->in($projectIdList)
+            ->andWhere('deleted')->eq(0)
+            ->groupBy('project')
             ->fetchAll('project');
     }
 }

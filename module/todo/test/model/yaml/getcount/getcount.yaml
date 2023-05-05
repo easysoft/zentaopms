@@ -29,6 +29,12 @@ fields:
       range: 'wait,doing,done'
     - field: vision
       range: 'rnd,litle'
+    - field: finishedDate
+      range: 1-9
+      prefix: '2023-04-2'
+    - field: closedDate
+      range: 1-9
+      prefix: '2023-04-2'
 
 
 

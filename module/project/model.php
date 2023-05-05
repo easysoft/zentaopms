@@ -116,6 +116,8 @@ class projectModel extends model
             }
         }
 
+        setcookie('lastProject', (int)$this->session->project, $this->config->cookieLife, $this->config->webRoot, '', $this->config->cookieSecure, true);
+
         return $this->session->project;
     }
 
@@ -257,7 +259,7 @@ class projectModel extends model
             $orderBy = $project->model == 'waterfall' ? 'id_asc' : 'id_desc';
             $pager   = $project->model == 'waterfall' ? null : new pager(0, 1, 1);
             $project->executions = $this->loadModel('execution')->getStatData($projectID, 'undone', 0, 0, false, '', $orderBy, $pager);
-            $project->teamCount  = isset($teams[$projectID]) ? $teams[$projectID]->count : 0;
+            $project->teamCount  = isset($teams[$projectID]) ? $teams[$projectID] : 0;
             $project->estimate   = isset($estimates[$projectID]) ? round($estimates[$projectID]->estimate, 2) : 0;
             $project->parentName = $project->parent ? $this->projectTao->getParentProgram($project->parent, $project->path, $project->grade) : '';
         }
@@ -277,6 +279,7 @@ class projectModel extends model
      */
     public function getOverviewList($queryType = 'byStatus', $param = 'all', $orderBy = 'id_desc', $limit = 15, $excludedModel = '')
     {
+        /*  */
         $queryType = strtolower($queryType);
         $projects = $this->dao->select('*')->from(TABLE_PROJECT)
             ->where('type')->eq('project')
@@ -292,32 +295,21 @@ class projectModel extends model
             ->fetchAll('id');
 
         if(empty($projects)) return array();
+
         $projectIdList = array_keys($projects);
+        $teams         = $this->projectTao->fetchMemberCountByIdList($projectIdList);
 
-        $teams = $this->dao->select('t1.root, count(t1.id) as teams')->from(TABLE_TEAM)->alias('t1')
-            ->leftJoin(TABLE_USER)->alias('t2')->on('t1.account=t2.account')
-            ->where('t1.root')->in($projectIdList)
-            ->andWhere('t1.type')->eq('project')
-            ->andWhere('t2.deleted')->eq(0)
-            ->groupBy('root')->fetchPairs();
+        $fields = 't2.project, ROUND(SUM(t1.consumed), 1) AS consumed, ROUND(SUM(t1.estimate), 1) AS estimate';
+        $hours  = $this->projectTao->fetchTaskEstimateByIdList($projectIdList, $fields);
 
-        $hours = $this->dao->select('t2.project, ROUND(SUM(t1.consumed), 1) AS consumed, ROUND(SUM(t1.estimate), 1) AS estimate')->from(TABLE_TASK)->alias('t1')
-            ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.execution = t2.id')
-            ->where('t2.project')->in($projectIdList)
-            ->andWhere('t2.deleted')->eq(0)
-            ->andWhere('t1.deleted')->eq(0)
-            ->andWhere('t1.parent')->lt(1)
-            ->groupBy('t2.project')
-            ->fetchAll('project');
-
-        $storySummary = $this->getTotalStoriesByProject($projectIdList);
-        $taskSummary  = $this->getTotalTaskByProject($projectIdList);
-        $bugSummary   = $this->getTotalBugByProject($projectIdList);
+        $storySummary = $this->projectTao->getTotalStoriesByProject($projectIdList);
+        $taskSummary  = $this->projectTao->getTotalTaskByProject($projectIdList);
+        $bugSummary   = $this->projectTao->getTotalBugByProject($projectIdList);
 
         foreach($projects as $projectID => $project)
         {
-            $project->consumed      = isset($hours[$projectID]) ? (float)$hours[$projectID]->consumed : 0;
-            $project->estimate      = isset($hours[$projectID]) ? (float)$hours[$projectID]->estimate : 0;
+            $project->consumed      = isset($hours[$projectID]) ? round((float)$hours[$projectID]->consumed, 1) : 0;
+            $project->estimate      = isset($hours[$projectID]) ? round((float)$hours[$projectID]->estimate, 1) : 0;
             $project->teamCount     = isset($teams[$projectID]) ? $teams[$projectID] : 0;
             $project->leftBugs      = isset($bugSummary[$projectID])   ? $bugSummary[$projectID]->leftBugs : 0;
             $project->allBugs       = isset($bugSummary[$projectID])   ? $bugSummary[$projectID]->allBugs : 0;
@@ -331,64 +323,9 @@ class projectModel extends model
             $project->doingTasks    = isset($taskSummary[$projectID])  ? $taskSummary[$projectID]->doingTasks : 0;
             $project->rndDoneTasks  = isset($taskSummary[$projectID])  ? $taskSummary[$projectID]->doneTasks : 0;
             $project->liteDoneTasks = isset($taskSummary[$projectID])  ? $taskSummary[$projectID]->litedoneTasks : 0;
-
-            if(is_float($project->consumed)) $project->consumed = round($project->consumed, 1);
-            if(is_float($project->estimate)) $project->estimate = round($project->estimate, 1);
         }
 
         return $projects;
-    }
-
-    /**
-     * Get the number of stories associated with the project.
-     *
-     * @param  array   $projectIdList
-     * @access public
-     * @return int
-     */
-    public function getTotalStoriesByProject($projectIdList = 0)
-    {
-        return $this->dao->select("t1.project, count(t2.id) as allStories, count(if(t2.status = 'active' or t2.status = 'changing', 1, null)) as leftStories, count(if(t2.status = 'closed' and t2.closedReason = 'done', 1, null)) as doneStories")->from(TABLE_PROJECTSTORY)->alias('t1')
-            ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story=t2.id')
-            ->where('t1.project')->in($projectIdList)
-            ->andWhere('t2.type')->eq('story')
-            ->andWhere('deleted')->eq('0')
-            ->groupBy('project')
-            ->fetchAll('project');
-    }
-
-    /**
-     * Get associated bugs by project.
-     *
-     * @param  array  $projectIdList
-     * @access public
-     * @return array
-     */
-    public function getTotalBugByProject($projectIdList)
-    {
-        return $this->dao->select("project, count(id) as allBugs, count(if(status = 'active', 1, null)) as leftBugs, count(if(status = 'resolved', 1, null)) as doneBugs")->from(TABLE_BUG)
-            ->where('project')->in($projectIdList)
-            ->andWhere('deleted')->eq(0)
-            ->groupBy('project')
-            ->fetchAll('project');
-    }
-
-    /**
-     * Get associated tasks by project.
-     *
-     * @param  array  $projectIdList
-     * @access public
-     * @return array
-     */
-    public function getTotalTaskByProject($projectIdList)
-    {
-        return $this->dao->select("t1.project, count(t1.id) as allTasks, count(if(t1.status = 'wait', 1, null)) as waitTasks, count(if(t1.status = 'doing', 1, null)) as doingTasks, count(if(t1.status = 'done', 1, null)) as doneTasks, count(if(t1.status = 'wait' or t1.status = 'pause' or t1.status = 'cancel', 1, null)) as leftTasks, count(if(t1.status = 'done' or t1.status = 'closed', 1, null)) as litedoneTasks")->from(TABLE_TASK)->alias('t1')
-            ->leftJoin(TABLE_EXECUTION)->alias('t2')->on('t1.execution=t2.id')
-            ->where('t1.project')->in($projectIdList)
-            ->andWhere('t1.deleted')->eq(0)
-            ->andWhere('t2.deleted')->eq(0)
-            ->groupBy('t1.project')
-            ->fetchAll('project');
     }
 
     /**

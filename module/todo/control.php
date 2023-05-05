@@ -21,6 +21,7 @@ class todo extends control
     {
         parent::__construct();
 
+        $this->app->loadClass('date');
         $this->app->loadLang('my');
     }
 
@@ -243,7 +244,6 @@ class todo extends control
         if(defined('RUN_MODE') && RUN_MODE == 'api')
         {
             $this->send(array('status' => 'success'));
-            return 1; /* A function with return type must return a value. */
         }
 
         if(isonlybody()) return print(js::reload('parent.parent'));

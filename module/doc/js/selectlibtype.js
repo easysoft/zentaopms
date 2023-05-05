@@ -14,7 +14,7 @@ function redirectParentWindow(objectType, libID, moduleID, docType)
     var link = '';
     if(docType == 'api')
     {
-        link = createLink('api', 'create', 'libID=' + libID + '&moduleID=' + moduleID);
+        link = createLink('api', 'create', 'libID=' + libID + '&moduleID=' + moduleID + '&space=' + objectType);
     }
     else
     {

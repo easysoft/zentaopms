@@ -1980,10 +1980,7 @@ class actionModel extends model
             if($case->scene)
             {
                 $scene = $this->dao->select('*')->from(VIEW_SCENECASE)->where('id')->eq($case->scene)->fetch();
-                if($scene->deleted)
-                {
-                    return print(js::error($this->lang->action->refusecase));
-                }
+                if($scene->deleted) return print(js::error($this->lang->action->refusecase));
             }
         }
 
@@ -1995,6 +1992,12 @@ class actionModel extends model
                 $scenerow = $this->dao->select('*')->from(VIEW_SCENECASE)->where('id')->eq($scene->parent)->fetch();
                 if($scenerow->deleted) return print(js::error($this->lang->action->refusescene));
             }
+        }
+
+        if($action->objectType == 'doc')
+        {
+            $docContent = $this->dao->select('*')->from(TABLE_DOCCONTENT)->where('doc')->eq($action->objectID)->orderBy('version desc')->limit(1)->fetch();
+            if($docContent->files) $this->dao->update(TABLE_FILE)->set('deleted')->eq('0')->where('id')->in($docContent->files)->exec();
         }
 
         /* Update deleted field in object table. */

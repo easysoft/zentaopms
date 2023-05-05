@@ -599,6 +599,9 @@ class upgradeModel extends model
                 $this->convertDocCollect();
                 $this->addBIUpdateMark();
                 break;
+            case '18_4_alpha1':
+                if($this->config->edition != 'open') $this->processDataset();
+                break;
         }
 
         $this->deletePatch();
@@ -760,6 +763,7 @@ class upgradeModel extends model
                 $this->processChart();
                 $this->processReport();
                 $this->processDashboard();
+                break;
         }
     }
 
@@ -5040,7 +5044,7 @@ class upgradeModel extends model
         $this->dao->update(TABLE_TASK)->set('project')->eq($projectID)->where('execution')->in($sprintIdList)->andWhere('project')->eq(0)->exec();
         $this->dao->update(TABLE_BUILD)->set('project')->eq($projectID)->where('execution')->in($sprintIdList)->andWhere('project')->eq(0)->exec();
         $this->dao->update(TABLE_BUG)->set('project')->eq($projectID)->where('execution')->in($sprintIdList)->exec();
-        $this->dao->update(TABLE_DOC)->set('project')->eq($projectID)->set('type')->eq('execution')->where("lib IN(SELECT id from " . TABLE_DOCLIB . " WHERE type = 'project' and execution " . helper::dbIN($sprintIdList) . ')')->andWhere('project')->eq(0)->exec();
+        $this->dao->update(TABLE_DOC)->set('project')->eq($projectID)->where("lib IN(SELECT id from " . TABLE_DOCLIB . " WHERE type = 'execution' and execution " . helper::dbIN($sprintIdList) . ')')->andWhere('project')->eq(0)->exec();
         $this->dao->update(TABLE_DOCLIB)->set('project')->eq($projectID)->where('type')->eq('execution')->andWhere('execution')->in($sprintIdList)->andWhere('project')->eq(0)->exec();
         $this->dao->update(TABLE_TESTTASK)->set('project')->eq($projectID)->where('execution')->in($sprintIdList)->andWhere('project')->eq(0)->exec();
 
@@ -8076,6 +8080,9 @@ class upgradeModel extends model
         /* Process built-in dataset. */
         foreach($this->lang->dataset->tables as $code => $dataset)
         {
+            $sameCodeList = $this->dao->select('*')->from(TABLE_DATAVIEW)->where('code')->eq($code)->fetchAll();
+            if(!empty($sameCodeList)) continue;
+
             $dataview->name = $dataset['name'];
             $dataview->code = $code;
             $dataview->view = 'ztv_' . $code;
@@ -8123,6 +8130,9 @@ class upgradeModel extends model
             if(!empty($dataview->view) and !empty($dataview->sql)) $this->dataview->createViewInDB($dataviewID, $dataview->view, $dataview->sql);
         }
 
+        $customDataset = $this->dao->select('*')->from(TABLE_DATASET)->fetchAll('id');
+        if(empty($customDataset)) return true;
+
         /* Create custom module. */
         $defaultModuleID = $this->dao->select('id')->from(TABLE_MODULE)->where('type')->eq('dataview')->andWhere('name')->eq($this->lang->dataview->default)->fetch('id');
         if(empty($defaultModuleID))
@@ -8144,7 +8154,6 @@ class upgradeModel extends model
         $dataview->group = $defaultModuleID;
 
         /* Process custom dataset. */
-        $customDataset = $this->dao->select('*')->from(TABLE_DATASET)->fetchAll('id');
         foreach($customDataset as $datasetID => $dataset)
         {
             $dataview->name        = $dataset->name;
@@ -8193,6 +8202,40 @@ class upgradeModel extends model
             $this->addSecondModule4BI($dimensionID, $dimensionName, 'pivot', $pivotModules);
 
         }
+        return !dao::isError();
+    }
+
+    /**
+     * Update zentao.sql or update18.3.sql file insert pivot data's group.
+     *
+     * @access public
+     * @return bool
+     */
+    public function updatePivotGroup()
+    {
+        $pivotModules = $this->dao->select('collector, id')->from(TABLE_MODULE)->where('type')->eq('pivot')->andWhere('root')->eq(1)->andWhere('collector')->ne('')->fetchPairs();
+        $pivots = $this->dao->select('*')->from(TABLE_PIVOT)->fetchAll('id');
+        foreach($pivots as $pivotID => $pivot)
+        {
+            $modules = explode(',', $pivot->group);
+
+            /* Upgrade group only pivot written by sql, group is string (possibly use , separated). */
+            $continue = false;
+            foreach($modules as $module)
+            {
+                if(is_numeric($module)) $continue = true;
+            }
+            if($continue) continue;
+
+            $insertGroup = array();
+            foreach($modules as $module)
+            {
+                if($module) $insertGroup[] = $pivotModules[$module];
+            }
+
+            $this->dao->update(TABLE_PIVOT)->set('`group`')->eq(implode(',', $insertGroup))->where('id')->eq($pivotID)->exec();
+        }
+
         return !dao::isError();
     }
 
@@ -8414,6 +8457,9 @@ class upgradeModel extends model
             $screen->createdDate = $dashboard->createdDate;
             $this->dao->insert(TABLE_SCREEN)->data($screen)->exec();
         }
+
+        $this->dao->exec("ALTER TABLE " . TABLE_CHART . " DROP `dataset`");
+        $this->dao->exec("ALTER TABLE " . TABLE_PIVOT . " DROP `dataset`");
     }
 
     /**
@@ -8604,6 +8650,9 @@ class upgradeModel extends model
         }
 
         $this->dao->update(TABLE_DOC)->set('`type`')->eq('text')->where('`type`')->eq('book')->exec();
+
+        $this->dbh->exec("UPDATE " . TABLE_DOC . " AS t1 LEFT JOIN " . TABLE_EXECUTION . " AS t2 ON t1.`execution` = t2.`id` SET t1.`project` = t2.`project` WHERE t1.`execution` != 0 AND t1.`project` = 0 AND t2.`project` != 0");
+
         return true;
     }
 
@@ -8692,7 +8741,7 @@ class upgradeModel extends model
 
                 $settings = json_decode($chart->settings);
 
-                if($settings)
+                if($settings && (!empty($settings->group) || !empty($settings->xaxis)))
                 {
                     $settings->type = $data->type;
 
@@ -8710,12 +8759,10 @@ class upgradeModel extends model
                         $xaxisFields = $settings->xaxis;
                         foreach($xaxisFields as $xaxisIndex => $xaxisField)
                         {
-                            if($isQuoteDataview && strpos($xaxisField->field, '.') !== false)
-                            {
-                                $xaxisField->field = str_replace('.', '_', $xaxisField->field);
+                            if(isset($xaxisField->dateGroup))                                 $xaxisField->group = $xaxisField->dateGroup;
+                            if($isQuoteDataview && strpos($xaxisField->field, '.') !== false) $xaxisField->field = str_replace('.', '_', $xaxisField->field);
 
-                                $xaxisFields[$xaxisIndex] = $xaxisField;
-                            }
+                            $xaxisFields[$xaxisIndex] = $xaxisField;
                         }
                         $settings->xaxis = $xaxisFields;
                     }
@@ -8835,8 +8882,6 @@ class upgradeModel extends model
 
         if(dao::isError()) return false;
 
-        $this->dao->exec("ALTER TABLE " . TABLE_CHART . " DROP `dataset`");
-
         return !dao::isError();
     }
 
@@ -8861,6 +8906,7 @@ class upgradeModel extends model
         $pivot->sql         = $table->sql;
         $pivot->createdBy   = $table->createdBy;
         $pivot->createdDate = $table->createdDate;
+        $pivot->dataset     = $table->dataset;
 
         $name = array();
         $name['zh-cn'] = $table->name;
@@ -8873,15 +8919,13 @@ class upgradeModel extends model
         $pivotSettings = new stdclass();
         $tableSettings = json_decode($table->settings);
         $filters       = array();
-        if($tableSettings)
+        if($tableSettings && !empty($tableSettings->column))
         {
             $isQuoteDataview = isset($dataviewList[$table->dataset]);
 
             $index = 1;
-            foreach($tableSettings->group as $index => $group)
+            foreach($tableSettings->group as $group)
             {
-                if($index > 3) continue;
-
                 $groupKey = "group{$index}";
                 $pivotSettings->$groupKey = ($isQuoteDataview && strpos($group->field, '.') !== false) ? str_replace('.', '_', $group->field) : $group->field;
 
@@ -8889,16 +8933,23 @@ class upgradeModel extends model
             }
 
             $columns = array();
-            foreach($tableSettings->column as $index => $tableColumn)
+            foreach($tableSettings->column as $tableColumn)
             {
                 $column = new stdclass();
                 $column->field = ($isQuoteDataview && strpos($tableColumn->field, '.') !== false) ? str_replace('.', '_', $tableColumn->field) : $tableColumn->field;
                 $column->stat  = $tableColumn->valOrAgg;
 
-                if($column->stat == 'value')          $column->stat = 'sum';
-                if($column->stat == 'count_distinct') $column->stat = 'distinct';
-                if($column->stat == 'value_all')      $column->stat = 'count';
-                if($column->stat == 'value_distinct') $column->stat = 'distinct';
+                if($column->stat == 'value')
+                {
+                    $column->stat = 'sum';
+
+                    /* 将按值统计的列升级到透视表的分组。*/
+                    $groupKey = "group{$index}";
+                    $pivotSettings->$groupKey = $column->field;
+                }
+
+                if($column->stat == 'value_all') $column->stat = 'count';
+                if($column->stat == 'count_distinct' || $column->stat == 'value_distinct') $column->stat = 'distinct';
 
                 $columns[] = $column;
             }
@@ -9051,7 +9102,7 @@ class upgradeModel extends model
 
             /* Process settings. */
             $settings = new stdclass();
-            $settings->columns = array();
+            $columns  = array();
             if($report->params)
             {
                 $params = json_decode($report->params);
@@ -9060,7 +9111,6 @@ class upgradeModel extends model
                 $settings->group2      = $params->group2;
                 $settings->columnTotal = 'sum';
 
-                $columns = array();
                 foreach($params->reportField as $index => $field)
                 {
                     $column = new stdclass();
@@ -9081,19 +9131,36 @@ class upgradeModel extends model
 
                     $columns[] = $column;
                 }
-                $settings->columns = $columns;
             }
             else
             {
+                $column = new stdclass();
+                $column->field     = '';
+                $column->stat      = '';
+                $column->slice     = 'noSlice';
+                $column->showMode  = 'default';
+                $column->showTotal = 'noShow';
+
+                $columns[] = $column;
+
                 $data->stage = 'draft';
                 $data->step  = 1;
             }
+
+            $settings->columns = $columns;
 
             /* Process fieldSettings. */
             $sql = $data->sql;
             if(!empty($filters))
             {
-                foreach($filters as $filter) $sql = str_replace('$' . $filter->field, "'{$filter->default}'", $sql);
+                foreach($filters as $filter)
+                {
+                    $filterDefault = isset($filter->default) ?  $filter->default : '';
+                    if($filter->type == 'date') $filterDefault = $this->pivot->processDateVar($filterDefault);
+                    $filterDefault = $filterDefault === NULL ? "NULL" : "'{$filterDefault}'";
+
+                    $sql = str_replace('$' . $filter->field, $filterDefault, $sql);
+                }
             }
             $fieldSettings = $this->getFieldSettings($sql);
 
@@ -9118,12 +9185,13 @@ class upgradeModel extends model
         if(!$sql) return array();
 
         $this->loadModel('dataview');
+        $this->loadModel('chart');
 
         $columns      = $this->dataview->getColumns($sql);
         $columnFields = array();
         foreach($columns as $column => $type) $columnFields[$column] = $column;
 
-        $tableAndFields = $this->dataview->getTables($sql);
+        $tableAndFields = $this->chart->getTables($sql);
         $tables         = $tableAndFields['tables'];
         $fields         = $tableAndFields['fields'];
 
