@@ -59,7 +59,7 @@ class blockZen extends block
      * @access protected
      * @return string[]|true
      */
-    protected function getAvailableBlocks($dashboard, $module): array|bool
+    protected function getAvailableCodes($dashboard, $module): array|bool
     {
         if(!$this->selfCall)
         {

@@ -26,6 +26,7 @@ class block extends control
     }
 
     /**
+     * 创建区块
      * Create a block under a dashboard.
      *
      * @param  string $dashboard
@@ -43,7 +44,7 @@ class block extends control
             $formData->account   = $this->app->user->account;
             $formData->vision    = $this->config->vision;
             $formData->order     = $this->block->getMaxOrderByDashboard($dashboard) + 1;
-            $formData->params    = helper::jsonEncode($formData->params);
+            $formData->params    = json_encode($formData->params);
 
             $this->block->create($formData);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
@@ -55,12 +56,13 @@ class block extends control
         $this->view->module    = $module;
         $this->view->code      = $code;
         $this->view->modules   = $this->blockZen->getAvailableModules($dashboard);
-        $this->view->codes     = $this->blockZen->getAvailableBlocks($dashboard, $module);
+        $this->view->codes     = $this->blockZen->getAvailableCodes($dashboard, $module);
         $this->view->params    = $this->blockZen->getAvailableParams($dashboard, $module, $code);
         $this->display();
     }
 
     /**
+     * 编辑区块
      * Update a block.
      *
      * @param  string $dashboard
