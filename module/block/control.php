@@ -26,6 +26,7 @@ class block extends control
     }
 
     /**
+     * 创建区块
      * Create a block under a dashboard.
      *
      * @param  string $dashboard
@@ -43,7 +44,7 @@ class block extends control
             $formData->account   = $this->app->user->account;
             $formData->vision    = $this->config->vision;
             $formData->order     = $this->block->getMaxOrderByDashboard($dashboard) + 1;
-            $formData->params    = helper::jsonEncode($formData->params);
+            $formData->params    = json_encode($formData->params);
 
             $this->block->create($formData);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
@@ -55,12 +56,13 @@ class block extends control
         $this->view->module    = $module;
         $this->view->code      = $code;
         $this->view->modules   = $this->blockZen->getAvailableModules($dashboard);
-        $this->view->codes     = $this->blockZen->getAvailableBlocks($dashboard, $module);
+        $this->view->codes     = $this->blockZen->getAvailableCodes($dashboard, $module);
         $this->view->params    = $this->blockZen->getAvailableParams($dashboard, $module, $code);
         $this->display();
     }
 
     /**
+     * 编辑区块
      * Update a block.
      *
      * @param  string $dashboard
@@ -259,13 +261,14 @@ class block extends control
      * Print block.
      * 输出区块
      *
-     * @param  int        $id
+     * @param  int     $blockID
      * @access public
      * @return void|false
      */
-    public function printBlock($id)
+    public function printBlock($blockID)
     {
-        $block = $this->block->getByID((int)$id);
+        $blockID = (int)$blockID;
+        $block   = $this->block->getByID($blockID);
 
         if(empty($block)) return false;
 
@@ -280,7 +283,7 @@ class block extends control
             break;
 
             case 'guide':
-                $html = $this->fetch('block', 'guide', "blockID=$block->id");
+                $html = $this->fetch('block', 'guide', "blockID=$blockID");
             break;
 
             case 'assigntome':
@@ -288,7 +291,7 @@ class block extends control
             break;
 
             case 'welcome':
-                $html = $this->fetch('block', 'welcome', "blockID=$block->id");
+                $html = $this->fetch('block', 'welcome', "blockID=$blockID");
             break;
 
             case 'contribute':
@@ -296,7 +299,7 @@ class block extends control
             break;
 
             default:
-                $html = $this->blockZen->generateDefaultBlockBySource($id, $block);
+                $html = $this->blockZen->generateDefaultBlockBySource($block);
             break;
         }
         echo $html;

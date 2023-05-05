@@ -4,14 +4,14 @@ class blockZen extends block
     /**
      * 添加或编辑区块时获取可使用的模块选项
      * Get module options when adding or editing blocks.
-     * 
+     *
      * @param  string $dashboard
      * @access protected
      * @return string[]
      */
     protected function getAvailableModules(string $dashboard): array
     {
-        if($dashboard != 'my') return array();        
+        if($dashboard != 'my') return array();
 
         $modules = $this->lang->block->moduleList;
         unset($modules['doc']);
@@ -59,7 +59,7 @@ class blockZen extends block
      * @access protected
      * @return string[]|true
      */
-    protected function getAvailableBlocks($dashboard, $module): array|bool
+    protected function getAvailableCodes($dashboard, $module): array|bool
     {
         if(!$this->selfCall)
         {
@@ -265,20 +265,18 @@ class blockZen extends block
      * 根据来源生成默认区块
      * Generate default block by source.
      *
-     * @param  int    $id
      * @param  object $block
      * @return string
      */
-    protected function generateDefaultBlockBySource(int $id, object $block): string
+    protected function generateDefaultBlockBySource(object $block): string
     {
         $this->get->set('mode', 'getblockdata');
         $this->get->set('blockTitle', $block->title);
         $this->get->set('module', $block->module);
-        $this->get->set('source', $block->source);
         $this->get->set('blockid', $block->code);
         $this->get->set('param', base64_encode(json_encode($block->params)));
 
-        return $this->fetch('block', 'main', "module={$block->source}&id=$id");
+        return $this->fetch('block', 'main', "module={$block->module}&id={$block->id}");
     }
 
     /**

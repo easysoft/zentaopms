@@ -249,30 +249,26 @@ class todoModel extends model
      */
     public function getList(string $type = 'today', string $account = '', string|array $status = 'all', int $limit = 0, object $pager = null, string $orderBy="date, status, begin"): array
     {
-        $todos = array();
         $type  = strtolower($type);
 
         $dateRange = $this->dateRange($type);
 
         if(empty($account)) $account = $this->app->user->account;
 
-        $stmt = $this->todoTao->getListQuery($type, $account, $status, (string)$dateRange['begin'], (string)$dateRange['end'], $limit, $orderBy, $pager);
+        $todos = $this->todoTao->getListBy($type, $account, $status, (string)$dateRange['begin'], (string)$dateRange['end'], $limit, $orderBy, $pager);
 
         /* Set session. */
         $sql = explode('WHERE', $this->dao->get());
         $sql = explode('ORDER', $sql[1]);
         $this->session->set('todoReportCondition', $sql[0]);
 
-        while($todo = $stmt->fetch())
+        foreach($todos as $todo)
         {
             $todo = $this->todoTao->setTodoNameByType($todo);
             $todo->begin = date::formatTime($todo->begin);
             $todo->end   = date::formatTime($todo->end);
 
-            /* If is private, change the title to private. */
             if($todo->private and $this->app->user->account != $todo->account) $todo->name = $this->lang->todo->thisIsPrivate;
-
-            $todos[] = $todo;
         }
 
         return $todos;
@@ -303,7 +299,7 @@ class todoModel extends model
         $dateRange['thisseason']      = array('begin' => date::getThisSeason()['begin'], 'end' => date::getThisSeason()['end']);
         $dateRange['thisyear']        = array('begin' => date::getThisYear()['begin'],   'end' => date::getThisYear()['end']);
 
-        return isset($dateRange[$type]) ? $dateRange[$type] : array('begin' => $type, 'end' => $type);;
+        return isset($dateRange[$type]) ? $dateRange[$type] : array('begin' => $type, 'end' => $type);
     }
 
     /**

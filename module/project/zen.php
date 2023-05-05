@@ -59,8 +59,7 @@ class projectZen extends project
      */
     protected function prepareEditExtras(object $postData): object
     {
-        $rawdata = $postData->rawdata;
-        $project = $postData ->setDefault('team', $this->post->name)
+        $project = $postData->setDefault('team', $this->post->name)
             ->setDefault('lastEditedBy', $this->app->user->account)
             ->setDefault('lastEditedDate', helper::now())
             ->setDefault('days', '0')
@@ -107,16 +106,11 @@ class projectZen extends project
             }
         }
 
-        if($project->parent)
+        /* Judge products not empty. */
+        if($project->parent and $project->hasProduct && empty($linkedProductsCount) and !isset($rawdata->newProduct))
         {
-            $program = $this->project->getByID((int)$project->parent);
-
-            /* Judge products not empty. */
-            if($project->hasProduct && empty($linkedProductsCount) and !isset($rawdata->newProduct))
-            {
-                dao::$errors['products0'] = $this->lang->project->error->productNotEmpty;
-                return false;
-            }
+            dao::$errors['products0'] = $this->lang->project->error->productNotEmpty;
+            return false;
         }
 
         return true;
@@ -698,7 +692,7 @@ class projectZen extends project
         /* Record multiple and waterfall project unlinked products. */
         if($project->multiple and $project->model != 'waterfall' and $project->model != 'waterfallplus')
         {
-            $this->dealUnlinkedProduct($project, $oldProducts, $newProductIDs, $executionIDs);
+            $this->dealUnlinkedProduct($oldProducts, $newProductIDs, $executionIDs);
         }
     }
 
@@ -706,7 +700,6 @@ class projectZen extends project
      * 记录多迭代及瀑布类项目移除的产品
      * Record multiple and waterfall project unlinked products
      *
-     * @param  object    $project
      * @param  array     $oldProducts
      * @param  array     $newProductIDs
      * @param  int|array $executionIDs
@@ -714,7 +707,7 @@ class projectZen extends project
      * @access protected
      * @return void
      */
-    protected function dealUnlinkedProduct(object $project, array $oldProducts, array $newProductIDs, array $executionIDs): void
+    protected function dealUnlinkedProduct(array $oldProducts, array $newProductIDs, array $executionIDs): void
     {
         $oldExecutionProducts = $this->projectTao->getExecutionProductGroup($executionIDs);
         $unlinkedProducts     = array_diff(array_keys($oldProducts), $newProductIDs);
@@ -780,7 +773,7 @@ class projectZen extends project
         }
 
         /* Initializes the product from other linked products. */
-        if($this->config->systemMode == 'ALM') $this->InitOtherLinkProduct($project, $allProducts, $linkedBranchIdList, $linkedBranches, $linkedProducts);
+        if($this->config->systemMode == 'ALM') $this->initOtherLinkProduct($project, $allProducts, $linkedBranchIdList, $linkedBranches, $linkedProducts);
 
         $this->view->unmodifiableProducts     = $unmodifiableProducts;
         $this->view->unmodifiableBranches     = $unmodifiableBranches;
@@ -800,7 +793,7 @@ class projectZen extends project
      * @access protected
      * @return void
      */
-    protected function InitOtherLinkProduct(object $project, array $allProducts, array $linkedBranchIdList, array $linkedBranches, array $linkedProducts): void
+    protected function initOtherLinkProduct(object $project, array $allProducts, array $linkedBranchIdList, array $linkedBranches, array $linkedProducts): void
     {
         $branchGroups           = $this->loadModel('branch')->getByProducts(array_keys($allProducts), 'ignoreNormal|noclosed', $linkedBranchIdList);
         $topProgramID           = $project->parent ? $this->program->getTopByPath($project->path) : 0;
@@ -811,7 +804,7 @@ class projectZen extends project
         {
             if($programID != $topProgramID)
             {
-                $otherProducts = $this->InitBranchProduct($programProducts, $branchGroups, $linkedBranches, $linkedProducts);
+                $otherProducts = $this->initBranchProduct($programProducts, $branchGroups, $linkedBranches, $linkedProducts);
             }
             else
             {
@@ -840,7 +833,7 @@ class projectZen extends project
      * @access protected
      * @return array
      */
-    protected function InitBranchProduct(object $programProducts, array $branchGroups, array $linkedBranches, array $linkedProducts): array
+    protected function initBranchProduct(object $programProducts, array $branchGroups, array $linkedBranches, array $linkedProducts): array
     {
         $otherProducts = array();
         foreach($programProducts as $productID => $productName)
