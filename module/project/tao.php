@@ -494,6 +494,7 @@ class projectTao extends projectModel
      * 根据项目集ID查询所有项目集的层级。
      * Get all program level of a program.
      *
+     * @param  int    $program
      * @param  string $path
      * @param  int    $grade
      * @access public
