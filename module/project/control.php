@@ -1986,21 +1986,27 @@ class project extends control
      * AJAX: get executions of a project in html select.
      *
      * @param  string $projectID
-     * @param  int    $executionID
+     * @param  string $executionID
      * @param  string $mode
      * @param  string $type all|sprint|stage|kanban
      *
      * @access public
-     * @return void
+     * @return int
      */
-    public function ajaxGetExecutions(string $projectID, int $executionID = 0, string $mode = '', string $type = 'all'): mixed
+    public function ajaxGetExecutions(string $projectID, string $executionID = '0', string $mode = '', string $type = 'all'): int
     {
-        $project    = $this->project->getByID($projectID);
-        $disabled   = $project->multiple ? '' : 'disabled';
-        $executions = array('' => '') + $this->loadModel('execution')->getPairs($projectID, $type, $mode);
+        $disabled   = '';
+        $executions = array('' => '');
 
-        if($this->app->getViewType() == 'json') return print(json_encode($executions));
+        $projectID = (int)$projectID;
+        if($projectID)
+        {
+            $project     = $this->project->getById($projectID);
+            $executions += (array)$this->loadModel('execution')->getPairs($projectID, $type, $mode);
+            if(!empty($project->multiple)) $disabled = 'disabled';
+        }
 
+        if($this->app->getViewType() == 'json') return print(json_encode($executionList));
         return print(html::select('execution', $executions, $executionID, "class='form-control $disabled' $disabled"));
     }
 
