@@ -44,7 +44,7 @@
     <?php if(common::hasPriv('execution', 'task')) echo html::checkbox('showTask', array('1' => $lang->programplan->stageCustom->task), '', $this->cookie->showTask ? 'checked=checked' : '');?>
   </div>
   <div class='btn-toolbar pull-right'>
-    <?php if(($project->model == 'waterfall' or $project->model == 'waterfallplus') and $this->config->edition == 'max'):?>
+    <?php if(in_array($project->model, array('waterfall', 'waterfallplus', 'ipd')) and ($this->config->edition == 'max' or $this->config->edition == 'ipd')):?>
     <div class="btn-group">
       <?php echo html::a($this->createLink('programplan', 'browse', "projectID=$projectID&productID=$productID&type=gantt"), "<i class='icon-gantt-alt'></i> &nbsp;", '', "class='btn btn-icon switchBtn' title='{$lang->programplan->gantt}'");?>
       <?php echo html::a('', "<i class='icon-list'></i> &nbsp;", '', "class='btn btn-icon text-primary switchBtn' title='{$lang->project->bylist}'");?>
