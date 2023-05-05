@@ -6,6 +6,8 @@ $config->project->form->edit   =  array();
 $config->project->form->close  =  array();
 $config->project->form->start  =  array();
 
+$config->project->form->suspend =  array();
+
 $config->project->form->create['parent']     = array('type' => 'int',    'required' => false, 'default' => '');
 $config->project->form->create['name']       = array('type' => 'string', 'required' => true, 'filter' => 'trim');
 $config->project->form->create['code']       = array('type' => 'string', 'required' => true, 'filter' => 'trim');

@@ -1733,7 +1733,7 @@ class project extends control
 
         if(!empty($_POST))
         {
-            $postData = form::data();
+            $postData = form::data($this->config->project->form->suspend);
 
             $postData = $this->projectZen->prepareSuspendExtras($projectID, $postData);
 
