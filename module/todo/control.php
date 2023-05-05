@@ -145,8 +145,6 @@ class todo extends control
         unset($this->lang->todo->typeList['cycle']);
 
         $this->todoZen->buildEditView($todo);
-
-        return;
     }
 
     /**
