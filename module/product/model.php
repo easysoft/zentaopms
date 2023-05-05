@@ -1315,7 +1315,7 @@ class productModel extends model
         {
             if(in_array($project->model, array('waterfall', 'waterfallplus'))) $hasWaterfall = true;
         }
-        $orderBy = $hasWaterfall ? 't2.begin_asc,t2.id_asc' : 't2.begin_desc,t2.id_desc';
+        $waterFallOrderBy = $hasWaterfall ? 't2.begin_asc,t2.id_asc' : 't2.begin_desc,t2.id_desc';
 
         $executions = $this->dao->select('t2.id,t2.name,t2.project,t2.grade,t2.path,t2.parent,t2.attribute,t2.multiple,t3.name as projectName')->from(TABLE_PROJECTPRODUCT)->alias('t1')
             ->leftJoin(TABLE_EXECUTION)->alias('t2')->on('t1.project = t2.id')
@@ -1328,7 +1328,7 @@ class productModel extends model
             ->beginIF(strpos($mode, 'noclosed') !== false)->andWhere('t2.status')->ne('closed')->fi()
             ->beginIF(strpos($mode, 'multiple') !== false)->andWhere('t2.multiple')->eq('1')->fi()
             ->andWhere('t2.deleted')->eq('0')
-            ->orderBy($orderBy)
+            ->orderBy($waterFallOrderBy)
             ->fetchAll('id');
 
         /* Only show leaf executions. */
