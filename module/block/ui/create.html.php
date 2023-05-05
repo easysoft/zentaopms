@@ -19,6 +19,16 @@ $paramsRows  = array();
 $showModules = ($dashboard == 'my' and $modules);
 $showCodes   = (($showModules and $module and $codes) or $dashboard != 'my');
 
+if($module == 'scrumtest' && $code != 'all')
+{
+    $blockTitle = zget($codes, $code);
+}
+else
+{
+    $typeOptions = isset($params['type']['options']) ? $params['type']['options'] : array();
+    $blockTitle  = (count($typeOptions) ? $typeOptions[array_keys($typeOptions)[0]] . $lang->block->of : '') . zget($codes, $code);
+}
+
 foreach($params as $key => $row)
 {
     $paramsRows[] = formGroup
@@ -32,7 +42,7 @@ foreach($params as $key => $row)
             'id'    => "params$key",
             'type'  => $row['control'],
             'items' => isset($row['options']) ? $row['options'] : null
-        ))  
+        ))
     );
 }
 
@@ -51,7 +61,7 @@ form
         (
             'type'  => 'select',
             'items' => $modules
-        ) : 'input')  
+        ) : 'input')
     ),
     div
     (
@@ -79,9 +89,9 @@ form
             (
                 set::label($lang->block->name),
                 set::name('title'),
-                set::value(zget($codes, $code)),
+                set::value($blockTitle),
                 set::class('form-row'),
-                set::control('input')  
+                set::control('input')
             ),
             $paramsRows,
             formGroup
@@ -93,7 +103,7 @@ form
                 (
                     'type'  => 'select',
                     'items' => $lang->block->gridOptions
-                ))  
+                ))
             )
         )
     )
