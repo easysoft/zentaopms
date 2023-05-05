@@ -1678,13 +1678,14 @@ class programplanModel extends model
     }
 
     /**
+     * 获取阶段同一层级信息。
      * Get plan's siblings.
      *
-     * @param  string|int|array    $planIdList
+     * @param  string|int|array $planIdList
      * @access public
      * @return array
      */
-    public function getSiblings($planIdList)
+    public function getSiblings(array|string|int $planIdList): array
     {
         if(is_numeric($planIdList)) $planIdList = (array)$planIdList;
 
