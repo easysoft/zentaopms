@@ -447,7 +447,7 @@ class product extends control
         if(!empty($this->config->user->moreLink)) $this->config->moreLinks["RD"] = $this->config->user->moreLink;
 
         $lines = array();
-        if($programID and $this->config->systemMode == 'ALM') $lines = array('') + $this->product->getLinePairs($programID);
+        if($programID and in_array($this->config->systemMode, array('ALM', 'PLM'))) $lines = array('') + $this->product->getLinePairs($programID);
 
         if($this->app->tab == 'doc') unset($this->lang->doc->menu->product['subMenu']);
 
@@ -534,7 +534,7 @@ class product extends control
         if(!empty($this->config->user->moreLink)) $this->config->moreLinks["RD"] = $this->config->user->moreLink;
 
         $lines = array();
-        if($product->program and $this->config->systemMode == 'ALM') $lines = array('') + $this->product->getLinePairs($product->program);
+        if($product->program and in_array($this->config->systemMode, array('ALM', 'PLM'))) $lines = array('') + $this->product->getLinePairs($product->program);
 
         /* Get programs. */
         $programs = $this->loadModel('program')->getTopPairs('', 'noclosed');
@@ -623,7 +623,7 @@ class product extends control
 
         $programs             = array();
         $unauthorizedPrograms = array();
-        if($this->config->systemMode == 'ALM')
+        if(in_array($this->config->systemMode, array('ALM', 'PLM')))
         {
             $programs = $this->loadModel('program')->getTopPairs();
 

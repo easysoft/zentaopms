@@ -52,11 +52,11 @@
                 $full  = '';
             }
             ?>
-            <?php if($this->config->systemMode == 'ALM'):?>
+            <?php if(in_array($config->systemMode, array('ALM', 'PLM'))):?>
             <th class='c-program<?php echo zget($visibleFields, 'program', ' hidden') . zget($requiredFields, 'program', '', ' required');?>'><?php echo $lang->product->program;?></th>
             <?php endif;?>
             <th class='required <?php echo $width;?>' style="<?php echo $full;?>"><?php echo $lang->product->name;?></th>
-            <?php if($this->config->systemMode == 'ALM'):?>
+            <?php if(in_array($config->systemMode, array('ALM', 'PLM'))):?>
             <th class='c-line<?php echo zget($visibleFields, 'line',     ' hidden') . zget($requiredFields, 'line',   '', ' required');?>'><?php echo $lang->product->line;?></th>
             <?php endif;?>
             <th class='c-user-box<?php echo zget($visibleFields, 'PO',   ' hidden') . zget($requiredFields, 'PO',     '', ' required');?>'><?php echo $lang->product->PO;?></th>
@@ -81,7 +81,7 @@
           ?>
           <tr>
             <td><?php echo sprintf('%03d', $productID) . html::hidden("productIDList[$productID]", $productID);?></td>
-            <?php if($this->config->systemMode == 'ALM'):?>
+            <?php if(in_array($config->systemMode, array('ALM', 'PLM'))):?>
             <?php if(isset($unauthorizedPrograms[$products[$productID]->program])):?>
             <td class='text-left<?php echo zget($visibleFields, 'program', ' hidden')?>' style='overflow:visible'><?php echo html::select("programs[$productID]",  $unauthorizedPrograms, $products[$productID]->program, "class='form-control' disabled");?></td>
             <?php else:?>
@@ -89,9 +89,9 @@
             <?php endif;?>
             <?php endif;?>
             <td title='<?php echo $products[$productID]->name?>'><?php echo html::input("names[$productID]", $products[$productID]->name, "class='form-control'");?></td>
-            <?php if($this->config->systemMode == 'ALM'):?>
+            <?php if(in_array($config->systemMode, array('ALM', 'PLM'))):?>
             <?php $productLines = isset($lines[$products[$productID]->program]) ? $lines[$products[$productID]->program] : '';?>
-            <td class='text-left<?php echo zget($visibleFields, 'line', ' hidden')?>' style='overflow:visible' id="line_<?php echo $productID;?>"><?php echo html::select("lines[$productID]", $this->config->systemMode == 'ALM' ? $productLines : $lines, $products[$productID]->line, "class='form-control picker-select'");?></td>
+            <td class='text-left<?php echo zget($visibleFields, 'line', ' hidden')?>' style='overflow:visible' id="line_<?php echo $productID;?>"><?php echo html::select("lines[$productID]", in_array($config->systemMode, array('ALM', 'PLM')) ? $productLines : $lines, $products[$productID]->line, "class='form-control picker-select'");?></td>
             <?php endif;?>
             <td class='text-left<?php echo zget($visibleFields, 'PO', ' hidden')?>' style='overflow:visible'><?php echo html::select("POs[$productID]",  $poUsers, $products[$productID]->PO, "class='form-control picker-select'");?></td>
             <td class='text-left<?php echo zget($visibleFields, 'QD', ' hidden')?>' style='overflow:visible'><?php echo html::select("QDs[$productID]",  $qdUsers, $products[$productID]->QD, "class='form-control picker-select'");?></td>

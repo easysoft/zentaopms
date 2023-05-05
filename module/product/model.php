@@ -563,7 +563,7 @@ class productModel extends model
             {
                 if($product->line == $id)
                 {
-                    if($this->config->systemMode == 'ALM') $product->name = $name . '/' . $product->name;
+                    if(in_array($this->config->systemMode, array('ALM', 'PLM'))) $product->name = $name . '/' . $product->name;
                     $productList[] = $product;
                     unset($products[$key]);
                 }
@@ -768,7 +768,7 @@ class productModel extends model
                 $line->parent = 0;
                 $line->grade  = 1;
                 $line->name   = $this->post->lineName;
-                $line->root   = $this->config->systemMode == 'ALM' ? $product->program : 0;
+                $line->root   = in_array($this->config->systemMode, array('ALM', 'PLM')) ? $product->program : 0;
                 $line->order  = $maxOrder;
 
                 $lines = $this->dao->select('name')->from(TABLE_MODULE)->where('type')->eq('line')->andWhere('root')->eq($line->root)->andWhere('name')->eq($line->name)->fetch();
@@ -891,8 +891,8 @@ class productModel extends model
 
             $productID = (int)$productID;
             $products[$productID] = new stdClass();
-            if($this->config->systemMode == 'ALM' and isset($data->programs[$productID])) $products[$productID]->program = (int)$data->programs[$productID];
-            if($this->config->systemMode == 'ALM' and isset($data->lines[$productID]))    $products[$productID]->line    = (int)$data->lines[$productID];
+            if(in_array($this->config->systemMode, array('ALM', 'PLM')) and isset($data->programs[$productID])) $products[$productID]->program = (int)$data->programs[$productID];
+            if(in_array($this->config->systemMode, array('ALM', 'PLM')) and isset($data->lines[$productID]))    $products[$productID]->line    = (int)$data->lines[$productID];
             $products[$productID]->name    = $productName;
             $products[$productID]->PO      = $data->POs[$productID];
             $products[$productID]->QD      = $data->QDs[$productID];
@@ -919,13 +919,13 @@ class productModel extends model
         foreach($products as $productID => $product)
         {
             $oldProduct = $oldProducts[$productID];
-            if($this->config->systemMode == 'ALM') $programID  = !isset($product->program) ? $oldProduct->program : (empty($product->program) ? 0 : $product->program);
+            if(in_array($this->config->systemMode, array('ALM', 'PLM'))) $programID  = !isset($product->program) ? $oldProduct->program : (empty($product->program) ? 0 : $product->program);
 
             $this->dao->update(TABLE_PRODUCT)
                 ->data($product)
                 ->autoCheck()
                 ->batchCheck($this->config->product->edit->requiredFields , 'notempty')
-                ->checkIF((!empty($product->name) and $this->config->systemMode == 'ALM'), 'name', 'unique', "id != $productID and `program` = $programID and `deleted` = '0'")
+                ->checkIF((!empty($product->name) and in_array($this->config->systemMode, array('ALM', 'PLM'))), 'name', 'unique', "id != $productID and `program` = $programID and `deleted` = '0'")
                 ->checkFlow()
                 ->where('id')->eq($productID)
                 ->exec();
@@ -1004,7 +1004,7 @@ class productModel extends model
         $data     = fixer::input('post')->get();
 
         /* When there are products under the line, the program cannot be modified  */
-        if($this->config->systemMode == 'ALM')
+        if(in_array($this->config->systemMode, array('ALM', 'PLM')))
         {
             foreach($oldLines as $oldLine)
             {
@@ -1029,7 +1029,7 @@ class productModel extends model
         foreach($data->modules as $id => $name)
         {
             if(empty($name)) continue;
-            if($this->config->systemMode == 'ALM' and empty($data->programs[$id]))
+            if(in_array($this->config->systemMode, array('ALM', 'PLM')) and empty($data->programs[$id]))
             {
                 dao::$errors[] = $this->lang->product->programEmpty;
                 return false;
@@ -1246,7 +1246,7 @@ class productModel extends model
         $this->config->product->all->search['queryID']   = $queryID;
         $this->config->product->all->search['actionURL'] = $actionURL;
 
-        if($this->config->systemMode == 'ALM')
+        if(in_array($this->config->systemMode, array('ALM', 'PLM')))
         {
             $programPairs = $this->loadModel('program')->getTopPairs('', 'noclosed');
             $this->config->product->all->search['params']['program']['values'] = array('' => '') + $programPairs;
@@ -2052,7 +2052,7 @@ class productModel extends model
             ->andWhere('t2.deleted')->eq('0')
             ->fetchGroup('product', 'project');
 
-        if($this->config->systemMode == 'ALM' and !$this->config->product->showAllProjects)
+        if(in_array($this->config->systemMode, array('ALM', 'PLM')) and !$this->config->product->showAllProjects)
         {
             foreach($projectProduct as $productID => $projects)
             {

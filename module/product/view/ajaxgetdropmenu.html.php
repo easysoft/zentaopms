@@ -57,14 +57,14 @@ foreach($products as $programID => $programProducts)
 }
 $productsPinYin = common::convert2Pinyin($productNames);
 
-$myProductsHtml     = $config->systemMode == 'ALM' ? '<ul class="tree tree-angles" data-ride="tree">' : '<ul class="tree noProgram">';
-$normalProductsHtml = $config->systemMode == 'ALM' ? '<ul class="tree tree-angles" data-ride="tree">' : '<ul class="tree noProgram">';
-$closedProductsHtml = $config->systemMode == 'ALM' ? '<ul class="tree tree-angles" data-ride="tree">' : '<ul class="tree noProgram">';
+$myProductsHtml     = in_array($config->systemMode, array('ALM', 'PLM')) ? '<ul class="tree tree-angles" data-ride="tree">' : '<ul class="tree noProgram">';
+$normalProductsHtml = in_array($config->systemMode, array('ALM', 'PLM')) ? '<ul class="tree tree-angles" data-ride="tree">' : '<ul class="tree noProgram">';
+$closedProductsHtml = in_array($config->systemMode, array('ALM', 'PLM')) ? '<ul class="tree tree-angles" data-ride="tree">' : '<ul class="tree noProgram">';
 
 foreach($products as $programID => $programProducts)
 {
     /* Add the program name before project. */
-    if($programID and $config->systemMode == 'ALM')
+    if($programID and in_array($config->systemMode, array('ALM', 'PLM')))
     {
         $programName = zget($programs, $programID);
 
@@ -77,7 +77,7 @@ foreach($products as $programID => $programProducts)
     {
         if($product->id == $productID) $currentProduct = $product;
         $selected    = $product->id == $productID ? 'selected' : '';
-        $productName = ($config->systemMode == 'ALM' and $product->line) ? zget($lines, $product->line, '') . ' / ' . $product->name : $product->name;
+        $productName = (in_array($config->systemMode, array('ALM', 'PLM')) and $product->line) ? zget($lines, $product->line, '') . ' / ' . $product->name : $product->name;
         $linkHtml    = $this->product->setParamsForLink($module, $link, $projectID, $product->id);
         $locateTab   = ($module == 'testtask' and $method == 'browseUnits' and $app->tab == 'project') ? '' : "data-app='$app->tab'";
 
