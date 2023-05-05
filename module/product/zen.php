@@ -428,20 +428,17 @@ class productZen extends product
      * 处理白名单和富文本内容。
      * Prepare data for edit.
      *
-     * @param  object $data
-     * @param  string $acl
-     * @param  string $uid
+     * @param  form $data
      * @access protected
      * @return object
      */
-    protected function prepareEditExtras(object $data, string $acl, string $uid): object
+    protected function prepareEditExtras(form $data): object
     {
-        $product = fixer::input('post')->setIF($acl == 'open', 'whitelist', '')
+        $product = fixer::input('post')->setIF($data->rawdata->acl == 'open', 'whitelist', '')
             ->stripTags($this->config->product->editor->edit['id'], $this->config->allowedTags)
-            ->remove('uid,changeProjects,contactListMenu')
             ->get();
 
-        return $this->loadModel('file')->processImgURL($product, $this->config->product->editor->edit['id'], $uid);
+        return $this->loadModel('file')->processImgURL($product, $this->config->product->editor->edit['id'], zget($data->rawdata, 'uid', ''));
     }
 
     /**

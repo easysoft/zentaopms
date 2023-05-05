@@ -413,11 +413,11 @@ class product extends control
 
         if(!empty($_POST))
         {
-            $data = form::data($this->config->product->form->edit);
-            $data = $this->productZen->prepareEditExtras($data, $this->post->acl, $this->post->uid);
+            $data    = form::data($this->config->product->form->edit);
+            $product = $this->productZen->prepareEditExtras($data);
 
-            $changes = $this->product->update($productID, $data, $this->post->uid);
-            if(dao::isError()) return $this->productZen->sendDaoError();
+            $changes = $this->product->update($productID, $product, $this->post->uid);
+            if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             if($action == 'undelete') $this->loadModel('action')->undelete((int)$extra);
             $response = $this->productZen->responseAfterEdit($productID, $programID, $changes);
