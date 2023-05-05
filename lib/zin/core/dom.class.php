@@ -12,7 +12,7 @@
 namespace zin;
 
 require_once dirname(__DIR__) . DS . 'utils' . DS . 'deep.func.php';
-require_once 'selector.func.php';
+require_once __DIR__ . DS . 'selector.func.php';
 
 class dom
 {

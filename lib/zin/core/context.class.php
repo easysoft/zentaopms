@@ -13,7 +13,7 @@ namespace zin;
 
 require_once dirname(__DIR__) . DS . 'utils' . DS . 'dataset.class.php';
 require_once dirname(__DIR__) . DS . 'utils' . DS . 'flat.func.php';
-require_once 'portal.class.php';
+require_once __DIR__ . DS . 'portal.class.php';
 
 class context extends \zin\utils\dataset
 {

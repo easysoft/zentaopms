@@ -11,13 +11,12 @@
 
 namespace zin;
 
-require_once 'wg.func.php';
+require_once __DIR__ . DS . 'directive.class.php';
 
-class on
+class to
 {
     public static function __callStatic($name, $args)
     {
-        list($callback, $options) = array_merge($args, array(NULL));
-        return on($name, $callback, $options);
+        return directive('block', array($name => $args));
     }
 }

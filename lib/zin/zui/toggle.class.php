@@ -1,6 +1,6 @@
 <?php
 /**
- * The block setter class file of zin lib.
+ * The zui toggle class file of zin lib.
  *
  * @copyright   Copyright 2023 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
  * @author      Hao Sun <sunhao@easycorp.ltd>
@@ -11,12 +11,12 @@
 
 namespace zin;
 
-require_once 'directive.class.php';
+require_once __DIR__ . DS . 'toggle.func.php';
 
-class to
+class toggle
 {
     public static function __callStatic($name, $args)
     {
-        return directive('block', array($name => $args));
+        return toggle($name, empty($args) ? NULL : $args[0]);
     }
 }

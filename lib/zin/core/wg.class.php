@@ -11,12 +11,12 @@
 
 namespace zin;
 
-require_once 'props.class.php';
-require_once 'directive.class.php';
-require_once 'zin.class.php';
-require_once 'context.class.php';
-require_once 'selector.func.php';
-require_once 'dom.class.php';
+require_once __DIR__ . DS . 'props.class.php';
+require_once __DIR__ . DS . 'directive.class.php';
+require_once __DIR__ . DS . 'zin.class.php';
+require_once __DIR__ . DS . 'context.class.php';
+require_once __DIR__ . DS . 'selector.func.php';
+require_once __DIR__ . DS . 'dom.class.php';
 
 class wg
 {

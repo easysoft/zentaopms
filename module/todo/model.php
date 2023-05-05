@@ -390,9 +390,8 @@ class todoModel extends model
 
                 $newTodo->date = $date;
 
-                $this->todoTao->insert($newTodo);
-                $this->action->create('todo', $this->dao->lastInsertID(), 'opened', '', '', $newTodo->account);
-                $cycleList[$todoID] = $newTodo;
+                $todoID = $this->todoTao->insert($newTodo);
+                if($todoID) $this->action->create('todo', $todoID, 'opened', '', '', $newTodo->account);
             }
         }
     }
