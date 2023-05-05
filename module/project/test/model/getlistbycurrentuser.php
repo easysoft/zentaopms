@@ -27,9 +27,11 @@ cid=1
 global $tester;
 $projectModel = $tester->loadModel('project');
 
-$tester->app->user->admin = true;
+$tester->app->user->admin    = true;
 $tester->app->config->vision = 'lite';
+
 r(count($projectModel->getListByCurrentUser())) && p() && e('0');
+
 $tester->app->config->vision = 'rnd';
-r(count($projectModel->getListByCurrentUser())) && p() && e('1');
-r($projectModel->getListByCurrentUser()) && p('11:id,name') && e('11,项目1');
+r(count($projectModel->getListByCurrentUser())) && p()             && e('1');
+r($projectModel->getListByCurrentUser())        && p('11:id,name') && e('11,项目1');
