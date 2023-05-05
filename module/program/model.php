@@ -526,6 +526,8 @@ class programModel extends model
      */
     public function computeProjectHours(array $tasks): array
     {
+        if(empty($tasks)) return array();
+
         $hours = array();
         foreach($tasks as $projectID => $projectTasks)
         {
@@ -540,7 +542,7 @@ class programModel extends model
             {
                 $hour->totalConsumed += $task->consumed;
                 $hour->totalEstimate += $task->estimate;
-                if($task->status != 'cancel' and $task->status != 'closed') $hour->totalLeft += $task->left;
+                if(strpos('|cancel|closed|done|', "|{$task->status}|") === false) $hour->totalLeft += $task->left;
             }
             $hours[$projectID] = $hour;
         }
@@ -571,6 +573,9 @@ class programModel extends model
      */
     public function appendStatToProjects(array $projects, string $appendFields = '', array $data = array()): array
     {
+        if(empty($projects)) return array();
+        if(empty($appendFields) or empty($data)) return $projects;
+
         $appendFields = explode(',', $appendFields);
         $emptyHour    = json_decode(json_encode(array('totalEstimate' => 0, 'totalConsumed' => 0, 'totalLeft' => 0, 'progress' => 0)));
         /* Process projects. */

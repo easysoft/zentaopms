@@ -1115,6 +1115,7 @@ class productModel extends model
     }
 
     /**
+     * 获取与该产品关联的项目列表。
      * Get project list by product.
      *
      * @param  int         $productID
@@ -1143,6 +1144,7 @@ class productModel extends model
     }
 
     /**
+     * 根据产品，获取与该产品关联的项目的统计信息。
      * Get project stats by product.
      *
      * @param  int       $productID
