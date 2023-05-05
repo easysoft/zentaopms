@@ -950,7 +950,8 @@ class baseControl
         if(empty($moduleName)) $moduleName = $this->moduleName;
         if(empty($methodName)) $methodName = $this->methodName;
 
-        include $this->app->getBasePath() . 'zin' . DS . 'zin.php';
+        /* Load zin lib */
+        $this->app->loadClass('zin', true);
 
         /**
          * 设置视图文件。(PHP7有一个bug，不能直接$viewFile = $this->setViewFile())。
