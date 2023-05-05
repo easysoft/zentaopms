@@ -243,4 +243,76 @@ class blockZen extends block
 
         return array($shortBlocks, $longBlocks);
     }
+
+    /**
+     * 生成 HTML 区块。
+     * Generate HTML block.
+     *
+     * @param  object $block
+     * @return string
+     */
+    protected function generateHtmlBlock(object $block): string
+    {
+        if(empty($block->params->html))
+        {
+            return "<div class='empty-tip'>" . $this->lang->block->emptyTip . "</div>";
+        }
+
+        return "<div class='panel-body'><div class='article-content'>" . $block->params->html . '</div></div>';
+    }
+
+    /**
+     * 根据来源生成默认区块
+     * Generate default block by source.
+     *
+     * @param  int    $id
+     * @param  object $block
+     * @return string
+     */
+    protected function generateDefaultBlockBySource(int $id, object $block): string
+    {
+        $this->get->set('mode', 'getblockdata');
+        $this->get->set('blockTitle', $block->title);
+        $this->get->set('module', $block->module);
+        $this->get->set('source', $block->source);
+        $this->get->set('blockid', $block->code);
+        $this->get->set('param', base64_encode(json_encode($block->params)));
+
+        return $this->fetch('block', 'main', "module={$block->source}&id=$id");
+    }
+
+    /**
+     * 生成指派给我的区块。
+     * Generate assign to me block.
+     *
+     * @param  object $block
+     * @return string
+     */
+    protected function generateAssignToMeBlock(object $block): string
+    {
+        $this->get->set('param', base64_encode(json_encode($block->params)));
+
+        return $this->fetch('block', 'printAssignToMeBlock', 'longBlock=' . $this->block->isLongBlock($block));
+    }
+
+    /**
+     * 去掉待定和已暂停的任务。
+     * Remove undetermined and suspended tasks.
+     *
+     * @param array $todos
+     * @return array
+     */
+    protected function unsetTodos(array $todos): array
+    {
+        $suspendedTasks = $this->loadModel('task')->getUserSuspendedTasks($this->app->user->account);
+        foreach($todos as $key => $todo)
+        {
+            /* '2030-01-01' means undetermined */
+            if($todo->date == '2030-01-01' || ($todo->type == 'task' && isset($suspendedTasks[$todo->idvalue])))
+            {
+                unset($todos[$key]);
+            }
+        }
+        return $todos;
+    }
 }
