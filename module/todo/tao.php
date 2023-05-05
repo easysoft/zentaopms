@@ -486,13 +486,13 @@ class todoTao extends todoModel
      * @param string|array $status
      * @param string       $begin
      * @param string       $end
-     * @param object       $pager
      * @param int          $limit
      * @param string       $orderBy
+     * @param object       $pager
      * @access protected
      * @return object
      */
-    protected function getListQuery(string $type, string $account, array|string $status, string $begin, string $end, object $pager = null, int $limit, string $orderBy): object
+    protected function getListQuery(string $type, string $account, array|string $status, string $begin, string $end, int $limit, string $orderBy, object $pager = null): object
     {
         return $this->dao->select('*')->from(TABLE_TODO)
             ->where('deleted')->eq('0')

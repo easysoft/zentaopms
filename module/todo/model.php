@@ -249,17 +249,14 @@ class todoModel extends model
      */
     public function getList(string $type = 'today', string $account = '', string|array $status = 'all', int $limit = 0, object $pager = null, string $orderBy="date, status, begin"): array
     {
-        $this->app->loadClass('date');
         $todos = array();
-        $type = strtolower($type);
+        $type  = strtolower($type);
 
-        $dateRange = $this->config->todo->dateRange[$type] ? $this->config->todo->dateRange[$type] : array('begin' => $type, 'end' => $type);
-        $begin = (string)$dateRange['begin'];
-        $end   = (string)$dateRange['end'];
+        $dateRange = $this->dateRange($type);
 
         if(empty($account)) $account = $this->app->user->account;
 
-        $stmt = $this->todoTao->getListQuery($type, $account, $status, $begin, $end, $pager, $limit, $orderBy);
+        $stmt = $this->todoTao->getListQuery($type, $account, $status, (string)$dateRange['begin'], (string)$dateRange['end'], $limit, $orderBy, $pager);
 
         /* Set session. */
         $sql = explode('WHERE', $this->dao->get());
@@ -279,6 +276,34 @@ class todoModel extends model
         }
 
         return $todos;
+    }
+
+    /**
+     * 根据类型获取时间范围。
+     * Date range.
+     *
+     * @param  string    $type
+     * @access protected
+     * @return array
+     */
+    protected function dateRange($type): array
+    {
+        $this->app->loadClass('date');
+        $dateRange['all']             = array('begin' => '1970-01-01',  'end' => '2109-01-01');
+        $dateRange['assignedtoother'] = array('begin' => '1970-01-01',  'end' => '2109-01-01');
+        $dateRange['today']           = array('begin' => date::today(), 'end' => date::today());
+        $dateRange['future']          = array('begin' => '2030-01-01',  'end' => '2030-01-01');
+        $dateRange['before']          = array('begin' => '1970-01-01',  'end' => date::today());
+        $dateRange['cycle']           = array('begin' => '', 'end' => '');
+        $dateRange['yesterday']       = array('begin' => date::yesterday(), 'end' => date::yesterday());
+        $dateRange['thisweek']        = array('begin' => date::getThisWeek()['begin'],   'end' => date::getThisWeek()['end']);
+        $dateRange['lastweek']        = array('begin' => date::getLastWeek()['begin'],   'end' => date::getLastWeek()['end']);
+        $dateRange['thismonth']       = array('begin' => date::getThisMonth()['begin'],  'end' => date::getThisMonth()['end']);
+        $dateRange['lastmonth']       = array('begin' => date::getLastMonth()['begin'],  'end' => date::getLastMonth()['end']);
+        $dateRange['thisseason']      = array('begin' => date::getThisSeason()['begin'], 'end' => date::getThisSeason()['end']);
+        $dateRange['thisyear']        = array('begin' => date::getThisYear()['begin'],   'end' => date::getThisYear()['end']);
+
+        return isset($dateRange[$type]) ? $dateRange[$type] : array('begin' => $type, 'end' => $type);;
     }
 
     /**
