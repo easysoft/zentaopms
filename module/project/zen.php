@@ -862,7 +862,7 @@ class projectZen extends project
         {
             $this->loadModel('program')->setMenu($project->parent);
         }
-        else if($this->app->tab == 'project')
+        elseif($this->app->tab == 'project')
         {
             $this->project->setMenu($projectID);
         }
