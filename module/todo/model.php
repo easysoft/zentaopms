@@ -560,7 +560,8 @@ class todoModel extends model
      * 根据待办ID更新待办数据。
      * Update todo data by id.
      *
-     * @param  array $todoIdList
+     * @param  int    $todoID
+     * @param  object $todo
      * @access public
      * @return bool
      */
