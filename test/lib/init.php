@@ -57,6 +57,22 @@ include $frameworkRoot . 'model.class.php';
 include $frameworkRoot . 'helper.class.php';
 
 $app    = router::createApp('pms', dirname(dirname(__FILE__)), 'router');
+$poolID = getenv('poolID');
+$testDB = empty($config->testDB) ? array() : $config->testDB;
+
+/* 根据ztf设置的poolID环境变量设置连接的数据库 */
+if(!empty($testDB) && !empty($poolID)) 
+{
+    $selectDB = $testDB[$poolID%count($testDB)];
+
+    !empty($selectDB['host'])     && $config->db->host     = $selectDB['host'];
+    !empty($selectDB['port'])     && $config->db->port     = $selectDB['port'];
+    !empty($selectDB['name'])     && $config->db->name     = $selectDB['name'];
+    !empty($selectDB['user'])     && $config->db->user     = $selectDB['user'];
+    !empty($selectDB['password']) && $config->db->password = $selectDB['password'];
+
+    $app->connectDB();
+}
 $tester = $app->loadCommon();
 
 /* Set configs. */
@@ -79,7 +95,7 @@ if(!empty($config->test->account) and !empty($config->test->password) and !empty
 /**
  * Save variable to $_result.
  *
- * @param  mix    $result
+ * @param  mixed    $result
  * @access public
  * @return bool true
  */
@@ -107,7 +123,7 @@ function p($keys = '', $delimiter = ',')
     if(is_array($_result) and isset($_result['code']) and $_result['code'] == 'fail') return print((string) $_result['message'] . "\n");
 
     /* Print $_result. */
-    if(!$keys and is_array($_result)) return print(json_encode($_result['']) . "\n");
+    if(!$keys and is_array($_result)) return print_r($_result) . "\n";
     if(!$keys or !is_array($_result) and !is_object($_result)) return print((string) $_result . "\n");
 
     $parts  = explode(';', $keys);
@@ -170,6 +186,7 @@ function printSteps()
     $file     = $debugInfo[count($debugInfo)-1]['file'];
     $contents = file_get_contents($file);
     $rpeList  = genParamsByRPE($contents);
+    $desc     = '';
 
     foreach($rpeList as $rpe)
     {
@@ -211,8 +228,10 @@ function printSteps()
             }
         }
 
-        echo $stepDesc . ($isGrup ? "\n" : "\n");
+        $desc .= $stepDesc . "\n";
     }
+
+    echo trim($desc);
 }
 
 /**

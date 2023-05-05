@@ -11,13 +11,13 @@
 
 namespace zin;
 
-require_once 'h.class.php';
-require_once 'item.class.php';
-require_once 'wg.func.php';
-require_once 'set.class.php';
-require_once 'to.class.php';
-require_once 'data.func.php';
-require_once 'on.class.php';
+require_once __DIR__ . DS . 'h.class.php';
+require_once __DIR__ . DS . 'item.class.php';
+require_once __DIR__ . DS . 'wg.func.php';
+require_once __DIR__ . DS . 'set.class.php';
+require_once __DIR__ . DS . 'to.class.php';
+require_once __DIR__ . DS . 'data.func.php';
+require_once __DIR__ . DS . 'on.class.php';
 
 function h()          {return call_user_func_array('\zin\h::create', func_get_args());}
 

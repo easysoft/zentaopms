@@ -11,7 +11,7 @@
 
 namespace zin\utils;
 
-require_once 'dataset.class.php';
+require_once __DIR__ . DS . 'dataset.class.php';
 
 /**
  * Manage style for html element and widgets

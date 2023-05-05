@@ -11,7 +11,7 @@
 
 namespace zin;
 
-require_once 'config.php';
+require_once __DIR__ . DS . 'config.php';
 
 function setWgVer($ver, $names = NULL)
 {
@@ -44,7 +44,7 @@ function createWg($name, $args)
     $name  = strtolower($name);
     $wgVer = getWgVer($name);
 
-    include_once $app->getBasePath() . 'zin' . DS . 'wg' . DS . $name . DS . "v$wgVer.php";
+    include_once __DIR__ . DS . 'wg' . DS . $name . DS . "v$wgVer.php";
 
     $wgName = "\\zin\\$name";
 

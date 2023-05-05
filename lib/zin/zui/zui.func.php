@@ -1,7 +1,7 @@
 <?php
 namespace zin;
 
-require_once 'zui.class.php';
+require_once __DIR__ . DS . 'zui.class.php';
 
 function rounded($value = true)     {return zui::rounded($value);}
 function shadow($value = true)      {return zui::shadow($value);}
