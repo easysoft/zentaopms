@@ -359,8 +359,9 @@ class todoModel extends model
 
         foreach($todoList as $todoID => $todo)
         {
-            $todo->config = json_decode($todo->config);
             if(!isset($validUsers[$todo->account])) continue;
+
+            $todo->config = json_decode($todo->config);
 
             $begin      = $todo->config->begin;
             $end        = $todo->config->end;
