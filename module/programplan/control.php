@@ -339,34 +339,35 @@ class programplan extends control
      */
     public function ajaxResponseGanttDragEvent()
     {
-        if(empty($_POST['id'])) return $this->send(array('result' => 'fail', 'message' => ''));
+        if(empty($_POST['id']) || empty($_POST['type'])) return $this->send(array('result' => 'fail', 'message' => ''));
 
-        $objectID = $_POST['id'];
-        $this->loadModel('task')->updateEsDateByGantt($objectID, $_POST['type']);
+        $objectID   = $_POST['id'];
+        $objectType = $_POST['type'];
+        $this->loadModel('task')->updateEsDateByGantt($objectID, $objectType);
         if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
         return $this->send(array('result' => 'success'));
     }
 
     /**
+     * 处理甘特图移动事件数据。
      * Response gantt move event.
      *
      * @access public
-     * @access public
-     * @return void
      */
     public function ajaxResponseGanttMoveEvent()
     {
-        if(!empty($_POST))
-        {
-            $idList = explode('-', $_POST['id']);
-            $taskID = $idList[1];
+        if(empty($_POST['id'])) return $this->send(array('result' => 'fail', 'message' => ''));
 
-            $this->loadModel('task')->updateOrderByGantt();
-            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-            $this->loadModel('action')->create('task', $taskID, 'ganttMove');
-            return $this->send(array('result' => 'success'));
-        }
+        $idList = explode('-', $_POST['id']);
+        $taskID = !empty($idList[1]) ? $idList[1] : 0;
+        if(empty($taskID)) return $this->send(array('result' => 'fail', 'message' => ''));
+
+        $this->loadModel('task')->updateOrderByGantt();
+        if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+        $this->loadModel('action')->create('task', $taskID, 'ganttMove');
+        return $this->send(array('result' => 'success'));
     }
 
     /**
