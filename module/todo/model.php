@@ -359,14 +359,14 @@ class todoModel extends model
 
         foreach($todoList as $todoID => $todo)
         {
+            $todo->config = json_decode($todo->config);
             if(!isset($validUsers[$todo->account])) continue;
 
-            $todo->config = json_decode($todo->config);
             $begin      = $todo->config->begin;
             $end        = $todo->config->end;
             $beforeDays = (int)$todo->config->beforeDays;
             if(!empty($beforeDays) && $beforeDays > 0) $begin = date('Y-m-d', strtotime("$begin -{$beforeDays} days"));
-            if($today < $begin or (!empty($end) && $today > $end)) continue;
+            if($today < $begin || (!empty($end) && $today > $end)) continue;
 
             $newTodo = $this->todoTao->buildCycleTodo($todo);
             if(isset($todo->assignedTo) && $todo->assignedTo) $newTodo->assignedDate = $now;
