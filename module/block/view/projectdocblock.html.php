@@ -60,8 +60,10 @@ html[lang="de"] .block-projectdoc .c-user{width: 105px;}
 .block-projectdoc .table .c-title[data-status=draft] > .doc-title {max-width: calc(100% - 35px);}
 .block-projectdoc .table .c-title > .draft {background-color:rgba(129, 102, 238, 0.12); color:#8166EE;}
 </style>
+<?php $blockNavId = 'nav-' . uniqid();?>
+<?php js::set('emptyProjects', empty($projects));?>
+<?php js::set('emptyInvolveds', empty($involveds));?>
 <script>
-<?php $blockNavId = 'nav-' . uniqid(); ?>
 $(function()
 {
     if($('.block-projectdoc<?php echo "#block{$block->id}";?> #projectType').length > 1);
@@ -90,6 +92,18 @@ function switch<?php echo "block{$block->id}";?>Project(obj)
 
 function change<?php echo "block{$block->id}";?>ProjectType(type)
 {
+    var hiddenData = type == 'all' ? emptyProjects : emptyInvolveds;
+    if(hiddenData)
+    {
+        $('.block-projectdoc<?php echo "#block{$block->id}";?> .dataBlock').addClass('hidden');
+        $('.block-projectdoc<?php echo "#block{$block->id}";?> .block-statistic > .table-empty-tip').removeClass('hidden');
+    }
+    else
+    {
+        $('.block-projectdoc<?php echo "#block{$block->id}";?> .dataBlock').removeClass('hidden');
+        $('.block-projectdoc<?php echo "#block{$block->id}";?> .block-statistic > .table-empty-tip').addClass('hidden');
+    }
+
     $('.block-projectdoc<?php echo "#block{$block->id}";?> .nav.projects').toggleClass('hidden', type != 'all');
     $('.block-projectdoc<?php echo "#block{$block->id}";?> .nav.involveds').toggleClass('hidden', type != 'involved');
     $('.block-projectdoc<?php echo "#block{$block->id}";?> #projectType .btn').html($('.block-projectdoc<?php echo "#block{$block->id}";?> #projectType [data-type=' + type + ']').html() + " <span class='caret'></span>");
@@ -112,14 +126,14 @@ function change<?php echo "block{$block->id}";?>ProjectType(type)
     <li><a href="javascript:change<?php echo "block{$block->id}";?>ProjectType('all')" data-type='all'><?php echo $lang->project->all;?></a></li>
   </ul>
 </div>
+<?php $hiddenBlock = empty($involveds) ? 'hidden' : '';?>
+<?php $hiddenEmpty = empty($involveds) ? '' : 'hidden';?>
 <div class="panel-body">
   <div class="table-row block-statistic">
-    <?php if(empty($projects) and empty($involveds)):?>
-    <div class="table-empty-tip">
+    <div class="table-empty-tip  <?php echo $hiddenEmpty;?>">
       <p><span class="text-muted"><?php echo $lang->block->emptyTip;?></span></p>
     </div>
-    <?php else:?>
-    <div class="col col-nav">
+    <div class="col col-nav dataBlock <?php echo $hiddenBlock;?>">
       <ul class="nav nav-stacked nav-secondary scrollbar-hover involveds">
         <li class='switch-icon prev'><a href='###' onclick='switch<?php echo "block{$block->id}";?>Project(this)'><i class='icon icon-arrow-left'></i></a></li>
         <?php $selected = key($involveds);?>
@@ -142,7 +156,7 @@ function change<?php echo "block{$block->id}";?>ProjectType(type)
         <li class='switch-icon next'><a href='###' onclick='switch<?php echo "block{$block->id}";?>Project(this)'><i class='icon icon-arrow-right'></i></a></li>
       </ul>
     </div>
-    <div class="col tab-content">
+    <div class="col tab-content dataBlock <?php echo $hiddenBlock;?>">
       <?php foreach($projects as $project):?>
       <div class="tab-pane fade<?php if($project->id == $selected) echo ' active in';?>" id='<?php echo "tab3{$blockNavId}Content{$project->id}";?>'>
         <?php if(isset($docGroup[$project->id])):?>
@@ -190,6 +204,5 @@ function change<?php echo "block{$block->id}";?>ProjectType(type)
       </div>
       <?php endforeach;?>
     </div>
-    <?php endif;?>
   </div>
 </div>

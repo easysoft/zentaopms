@@ -478,7 +478,7 @@ class admin extends control
         $response['thisTable'] = '';
         $response['nextTable'] = '';
 
-        $tableEngines = $this->loadModel('misc')->getTableEngines();
+        $tableEngines = $this->dao->getTableEngines();
 
         $thisTable = '';
         $nextTable = '';

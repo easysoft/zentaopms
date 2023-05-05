@@ -1,0 +1,44 @@
+title: zt_start
+author: shenshulong
+version: '1.0'
+fields:
+  - field: id
+    range: '1-3'
+  - field: account
+    range: '1-3'
+    prefix: 'admin'
+  - field: begin
+    range: '1710'
+  - field: end
+    range: '1740'
+  - field: feedback
+  - field: type
+    range: 'custom'
+  - field: cycle
+  - field: objectID
+  - field: pri
+    range: '3'
+  - field: name
+    range: '1-3'
+    prefix: '测试待办'
+  - field: desc
+    range: '描述'
+  - field: status
+    range: 'wait,doing,done'
+  - field: private
+  - field: assignedTo
+    range: '1-3'
+    prefix: 'admin'
+  - field: assignedBy
+    range: '1-3'
+    prefix: 'admin'
+  - field: finishedBy
+    range: '1-3'
+    prefix: 'admin'
+  - field: closedBy
+    range: '1-3'
+    prefix: 'admin'
+  - field: deleted
+  - field: vision
+    range: "1.0"
+

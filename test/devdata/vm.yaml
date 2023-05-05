@@ -1,0 +1,36 @@
+title: zt_vm
+author: Zeng gang
+version: "1.0"
+fields:
+  - field: id
+    range: 1
+  - field: hostID
+    range: 1
+  - field: name
+    range: vm1
+  - field: osCategory
+    range: windows
+  - field: osType
+    range: winServer
+  - field: osLang
+    range: zh_cn
+  - field: osCpu
+    range: 1
+  - field: osMemory
+    range: 512
+  - field: osDisk
+    range: 10240
+  - field: status
+    range: running
+  - field: macAddress
+    range: [1C:1C:1C:56:34:84]
+  - field: templateID
+    range: 1
+  - field: vncPort
+    range: 5910
+  - field: createdBy
+    range: admin
+  - field: createdDate
+    range: [2022-03-09 09:29:53]
+  - field: deleted
+    range: 0

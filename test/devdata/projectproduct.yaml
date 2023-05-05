@@ -1,0 +1,12 @@
+title: zt_projectproduct
+desc: 项目关联产品表
+version: 1.0
+fields:
+  - field: project
+    range: 1001-20000
+  - field: product
+    range: 1-1000{19}
+  - field: branch
+    range: 0
+  - field: plan
+    range: 1-1000{19}

@@ -1,8 +1,0 @@
-title: zt_projectproduct
-author: auto_suspend
-version: "1.0"
-fields:
-    - fiel d: project
-      range: 1-3
-    - field: product
-      range: [`abc`]

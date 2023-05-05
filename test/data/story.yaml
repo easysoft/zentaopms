@@ -63,7 +63,7 @@ fields:
     note: "需求名称"
     fields:
       - field: field1
-        range: [用户需求,软件需求]
+        range: "[用户需求,软件需求]"
       - field: field2
         range: 1-10000
     prefix: ""
@@ -114,31 +114,28 @@ fields:
     format: ""
   - field: color
     note: "标题颜色"
-    from: common.color.v1.yaml
-    use: color
+    range: ""
     prefix: ""
     postfix: ""
     loop: 0
     format: ""
   - field: stage
     note: "所处阶段"
-    range: [],wait,[],planned,[],projected,[],developing,[],developed,[],testing,[],tested,[],verified,[],released,[],closed
+    range: "[],wait,[],planned,[],projected,[],developing,[],developed,[],testing,[],tested,[],verified,[],released,[],closed"
     prefix: ""
     postfix: ""
     loop: 0
     format: ""
   - field: stagedBy
     note: "设置阶段者"
-    from: common.user.v1.yaml
-    use: user
+    range: ""
     prefix: ""
     postfix: ""
     loop: 0
     format: ""
   - field: mailto
     note: "抄送给"
-    from: common.user.v1.yaml
-    use: user
+    range: ""
     prefix: ""
     postfix: ""
     loop: 0
@@ -149,54 +146,44 @@ fields:
       - field: openedBy1
         range: admin,user,test,dev
       - field: openedBy2
-        range: [],2-4
+        range: "[],2-4"
     prefix: ""
     postfix: ""
     loop: 0
     format: ""
   - field: openedDate
     note: "创建日期"
-    from: common.date.v1.yaml
-    use: dateA
-    prefix: ""
+    range: "(M)-(w)"
+    type: timestamp
     postfix: ""
-    loop: 0
-    format: ""
+    format: "YY/MM/DD"
   - field: assignedTo
     note: "指派给"
     fields:
       - field: openedBy1
         range: admin,user,test,dev
       - field: openedBy2
-        range: [],2-4
+        range: "[],2-4"
     prefix: ""
     postfix: ""
     loop: 0
     format: ""
   - field: assignedDate
     note: "指派日期"
-    from: common.date.v1.yaml
-    use: dateA
-    prefix: ""
+    range: "(M)-(w)"
+    type: timestamp
     postfix: ""
-    loop: 0
-    format: ""
+    format: "YY/MM/DD"
   - field: lastEditedBy
     note: "最后修改者"
-    from: common.user.v1.yaml
-    use: user
+    range: ""
     prefix: ""
     postfix: ""
     loop: 0
     format: ""
   - field: lastEditedDate
     note: "最后修改日期"
-    from: common.date.v1.yaml
-    use: dateA
-    prefix: ""
-    postfix: ""
-    loop: 0
-    format: ""
+    range: ""
   - field: reviewedBy
     note: "评审者"
     fields:
@@ -209,12 +196,7 @@ fields:
     format: ""
   - field: reviewedDate
     note: "评审日期"
-    from: common.date.v1.yaml
-    use: dateA
-    prefix: ""
-    postfix: ""
-    loop: 0
-    format: ""
+    range: ""
   - field: closedBy
     note: "关闭者"
     fields:
@@ -228,12 +210,7 @@ fields:
     format: ""
   - field: closedDate
     note: "关闭日期"
-    from: common.date.v1.yaml
-    use: dateA
-    prefix: ""
-    postfix: ""
-    loop: 0
-    format: ""
+    range: ""
   - field: closedReason
     note: "关闭原因"
     range: done,subdivided,duplicate,postponed,willnotdo,cancel,bydesign

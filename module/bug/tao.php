@@ -22,36 +22,6 @@ class bugTao extends bugModel
     }
 
     /**
-     * Get all bugs.
-     * 获取所有的bug。
-     *
-     * @param  int|array   $productIdList
-     * @param  int|string  $branch
-     * @param  int|array   $moduleIdList
-     * @param  int[]       $executionIdList
-     * @param  string      $orderBy
-     * @param  object      $pager
-     * @param  int         $projectID
-     * @access protected
-     * @return array
-     */
-    protected function getAllBugs(int|array $productIdList, int $projectID, array $executionIdList, int|string $branch, int|array $moduleIdList, string $orderBy, object $pager = null): array
-    {
-        return $this->dao->select("t1.*, t2.title as planTitle, IF(t1.`pri` = 0, {$this->config->maxPriValue}, t1.`pri`) as priOrder, IF(t1.`severity` = 0, {$this->config->maxPriValue}, t1.`severity`) as severityOrder")->from(TABLE_BUG)->alias('t1')
-            ->leftJoin(TABLE_PRODUCTPLAN)->alias('t2')->on('t1.plan = t2.id')
-            ->where('t1.deleted')->eq('0')
-            ->andWhere('t1.product')->in($productIdList)
-            ->beginIF($projectID)->andWhere('t1.project')->eq($projectID)->fi()
-            ->beginIF($this->app->tab !== 'qa')->andWhere('t1.execution')->in($executionIdList)->fi()
-            ->beginIF($branch !== 'all')->andWhere('t1.branch')->eq($branch)->fi()
-            ->beginIF($moduleIdList)->andWhere('t1.module')->in($moduleIdList)->fi()
-            ->beginIF(!$this->app->user->admin)->andWhere('t1.project')->in('0,' . $this->app->user->view->projects)->fi()
-            ->orderBy($orderBy)
-            ->page($pager)
-            ->fetchAll('id');
-    }
-
-    /**
      * Get bug list by browse type.
      * 通过浏览类型获取bug列表。
      *
@@ -100,6 +70,7 @@ class bugTao extends bugModel
             ->beginIF($browseType == 'unresolved')->andWhere('status')->eq('active')->fi()
             ->beginIF($browseType == 'toclosed')->andWhere('status')->eq('resolved')->fi()
             ->beginIF($browseType == 'postponedbugs')->andWhere('resolution')->eq('postponed')->fi()
+            ->beginIF($browseType == 'review')->andWhere("FIND_IN_SET('{$this->app->user->account}', reviewers)")->fi()
 
             ->beginIF($browseType == 'longlifebugs')
             ->andWhere('lastEditedDate')->lt($lastEditedDate)
@@ -121,6 +92,7 @@ class bugTao extends bugModel
             ->page($pager)
             ->fetchAll('id');
 
+        $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'bug');
         return $bugList;
     }
 
@@ -150,37 +122,6 @@ class bugTao extends bugModel
             ->beginIF($this->app->tab !== 'qa')->andWhere('t1.execution')->in($executionIdList)->fi()
             ->beginIF($branch !== 'all')->andWhere('t1.branch')->in($branch)->fi()
             ->beginIF($moduleIdList)->andWhere('t1.module')->in($moduleIdList)->fi()
-            ->beginIF(!$this->app->user->admin)->andWhere('t1.project')->in('0,' . $this->app->user->view->projects)->fi()
-            ->orderBy($orderBy)
-            ->page($pager)
-            ->fetchAll('id');
-    }
-
-    /**
-     * Get bug list to review.
-     * 获取待我审批的bug列表。
-     *
-     * @param  int|array   $productIdList
-     * @param  int         $projectID
-     * @param  int[]       $executionIdList
-     * @param  int|string  $branch
-     * @param  int|array   $moduleIdList
-     * @param  string      $orderBy
-     * @param  object      $pager
-     * @access public
-     * @return array
-     */
-    protected function getListByReviewToMe(int|array $productIdList, int $projectID, array $executionIdList, int|string $branch, int|array $moduleIdList, string $orderBy, object $pager = null): array
-    {
-        return $this->dao->select("t1.*, t2.title as planTitle, IF(`pri` = 0, {$this->config->maxPriValue}, `pri`) as priOrder, IF(`severity` = 0, {$this->config->maxPriValue}, `severity`) as severityOrder")->from(TABLE_BUG)->alias('t1')
-            ->leftJoin(TABLE_PRODUCTPLAN)->alias('t2')->on('t1.plan = t2.id')
-            ->where('t1.deleted')->eq(0)
-            ->andWhere('t1.product')->in($productIdList)
-            ->beginIF($projectID)->andWhere('t1.project')->eq($projectID)->fi()
-            ->beginIF($this->app->tab !== 'qa')->andWhere('t1.execution')->in($executionIdList)->fi()
-            ->beginIF($branch !== 'all')->andWhere('t1.branch')->eq($branch)->fi()
-            ->beginIF($moduleIdList)->andWhere('t1.module')->in($moduleIdList)->fi()
-            ->andWhere("FIND_IN_SET('{$this->app->user->account}', t1.reviewers)")
             ->beginIF(!$this->app->user->admin)->andWhere('t1.project')->in('0,' . $this->app->user->view->projects)->fi()
             ->orderBy($orderBy)
             ->page($pager)
@@ -268,5 +209,49 @@ class bugTao extends bugModel
         if($delay > 0) $bug->delay = $delay;
 
         return $bug;
+    }
+
+    /**
+     * 关闭bug后，更新看板的状态。
+     * Update kanban status after close bug.
+     *
+     * @param  object $bug
+     * @param  object $oldBug
+     * @access protected
+     * @return array
+     */
+    protected function updateKanbanAfterClose(object $bug, object $oldBug):array
+    {
+        $extra  = str_replace(array(',', ' '), array('&', ''), $extra);
+        parse_str($extra, $output);
+        if($oldBug->execution)
+        {
+            $this->loadModel('kanban');
+            if(!isset($output['toColID'])) $this->kanban->updateLane($oldBug->execution, 'bug', $bug->id);
+            if(isset($output['toColID'])) $this->kanban->moveCard($bug->id, $output['fromColID'], $output['toColID'], $output['fromLaneID'], $output['toLaneID']);
+        }
+
+        return array($bug, $oldBug);
+    }
+
+    /**
+     * 关闭bug后，更新动态
+     * Update action after close bug.
+     *
+     * @param  object $bug
+     * @param  object $oldBug
+     * @access protected
+     * @return array
+     */
+    protected function updateActionAfterClose(object $bug, object $oldBug):array
+    {
+        if(($this->config->edition == 'biz' || $this->config->edition == 'max') && $oldBug->feedback) $this->loadModel('feedback')->updateStatus('bug', $oldBug->feedback, $bug->status, $oldBug->status);
+
+        $this->loadModel('action');
+        $changes  = common::createChanges($oldBug, $bug);
+        $actionID = $this->action->create('bug', $bug->id, 'Closed', $bug->comment);
+        $this->action->logHistory($actionID, $changes);
+
+        return array($bug, $oldBug);
     }
 }

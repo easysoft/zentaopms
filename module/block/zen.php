@@ -2,16 +2,16 @@
 class blockZen extends block
 {
     /**
-     * Get module options when adding or editing blocks.
      * 添加或编辑区块时获取可使用的模块选项
-     * 
+     * Get module options when adding or editing blocks.
+     *
      * @param  string $dashboard
      * @access protected
      * @return string[]
      */
     protected function getAvailableModules(string $dashboard): array
     {
-        if($dashboard != 'my') return array();        
+        if($dashboard != 'my') return array();
 
         $modules = $this->lang->block->moduleList;
         unset($modules['doc']);
@@ -51,15 +51,15 @@ class blockZen extends block
     }
 
     /**
-     * Get block options when adding or editing blocks.
      * 添加或编辑区块时获取可使用的区块选项
+     * Get block options when adding or editing blocks.
      *
      * @param  string $dashboard
      * @param  string $module
      * @access protected
      * @return string[]|true
      */
-    protected function getAvailableBlocks($dashboard, $module): array|bool
+    protected function getAvailableCodes($dashboard, $module): array|bool
     {
         if(!$this->selfCall)
         {
@@ -71,7 +71,36 @@ class blockZen extends block
             if(!$this->block->checkAPI($this->get->hash)) return array();
         }
 
-        $blocks = $this->block->getAvailableBlocks($dashboard, $module);
+        if($dashboard == 'my')
+        {
+            if($module and isset($this->lang->block->modules[$module]))
+            {
+                $blocks = $this->lang->block->modules[$module]->availableBlocks;
+            }
+            else
+            {
+                $blocks = array();
+            }
+        }
+        else
+        {
+            if($dashboard and isset($this->lang->block->modules[$dashboard]))
+            {
+                $blocks = $this->lang->block->modules[$dashboard]->availableBlocks;
+            }
+            else
+            {
+                $blocks = $this->lang->block->availableBlocks;
+            }
+        }
+
+        if(isset($this->config->block->closed))
+        {
+            foreach($blocks as $blockKey => $blockName)
+            {
+                if(strpos(",{$this->config->block->closed},", ",{$module}|{$blockKey},") !== false) unset($blocks[$blockKey]);
+            }
+        }
 
         if(!$this->selfCall)
         {
@@ -83,22 +112,28 @@ class blockZen extends block
     }
 
     /**
-     * Get other form items when adding or editing blocks
      * 添加或编辑区块时获取其他表单项
+     * Get other form items when adding or editing blocks
      *
      * @param  string $dashboard
      * @param  string $module
-     * @param  string $block
+     * @param  string $code
      * @access protected
      * @return array
      */
-    protected function getAvailableParams(string $dashboard, string $module = '', string $block = ''): array
+    protected function getAvailableParams(string $dashboard, string $module = '', string $code = ''): array
     {
-        if(!isset($this->lang->block->moduleList[$module])) return array();
+        if($code == 'todo' || $code == 'list' || $module == 'assigntome')
+        {
+            $code = $module;
+        }
+        elseif($code == 'statistic')
+        {
+            $code = $module . $code;
+        }
 
-        if(!$block) return array();
-
-        $params = json_decode($this->block->getParams($block, $module), true);
+        $params = zget($this->config->block->params, $code, '');
+        $params = json_decode(json_encode($params), true);
 
         return !empty($params) ? $params : array();
     }
@@ -144,7 +179,7 @@ class blockZen extends block
      * @param  int    $projectID
      * @return void
      */
-    private function getBlockMoreLink(object $block, int $project): void
+    private function getBlockMoreLink(object $block, int $projectID): void
     {
         $code   = $block->code;
         $source = empty($block->source) ? 'common' : $block->source;
@@ -207,5 +242,75 @@ class blockZen extends block
         }
 
         return array($shortBlocks, $longBlocks);
+    }
+
+    /**
+     * 生成 HTML 区块。
+     * Generate HTML block.
+     *
+     * @param  object $block
+     * @return string
+     */
+    protected function generateHtmlBlock(object $block): string
+    {
+        if(empty($block->params->html))
+        {
+            return "<div class='empty-tip'>" . $this->lang->block->emptyTip . "</div>";
+        }
+
+        return "<div class='panel-body'><div class='article-content'>" . $block->params->html . '</div></div>';
+    }
+
+    /**
+     * 根据来源生成默认区块
+     * Generate default block by source.
+     *
+     * @param  object $block
+     * @return string
+     */
+    protected function generateDefaultBlockBySource(object $block): string
+    {
+        $this->get->set('mode', 'getblockdata');
+        $this->get->set('blockTitle', $block->title);
+        $this->get->set('module', $block->module);
+        $this->get->set('blockid', $block->code);
+        $this->get->set('param', base64_encode(json_encode($block->params)));
+
+        return $this->fetch('block', 'main', "module={$block->module}&id={$block->id}");
+    }
+
+    /**
+     * 生成指派给我的区块。
+     * Generate assign to me block.
+     *
+     * @param  object $block
+     * @return string
+     */
+    protected function generateAssignToMeBlock(object $block): string
+    {
+        $this->get->set('param', base64_encode(json_encode($block->params)));
+
+        return $this->fetch('block', 'printAssignToMeBlock', 'longBlock=' . $this->block->isLongBlock($block));
+    }
+
+    /**
+     * 去掉待定和已暂停的任务。
+     * Remove undetermined and suspended tasks.
+     *
+     * @param array $todos
+     * @return array
+     */
+    protected function unsetTodos(array $todos): array
+    {
+        $suspendedTasks = $this->loadModel('task')->getUserSuspendedTasks($this->app->user->account);
+        foreach($todos as $key => $todo)
+        {
+            /* '2030-01-01' means undetermined */
+            if($todo->date == '2030-01-01' || ($todo->type == 'task' && isset($suspendedTasks[$todo->idvalue])))
+            {
+                unset($todos[$key]);
+            }
+        }
+        return $todos;
     }
 }

@@ -26,11 +26,12 @@ class block extends control
     }
 
     /**
+     * 创建区块
      * Create a block under a dashboard.
-     * 
-     * @param  string $dashboard 
+     *
+     * @param  string $dashboard
      * @param  string $module
-     * @param  string $code 
+     * @param  string $code
      * @access public
      * @return void
      */
@@ -43,11 +44,11 @@ class block extends control
             $formData->account   = $this->app->user->account;
             $formData->vision    = $this->config->vision;
             $formData->order     = $this->block->getMaxOrderByDashboard($dashboard) + 1;
-            $formData->params    = helper::jsonEncode($formData->params);
+            $formData->params    = json_encode($formData->params);
 
             $this->block->create($formData);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true, 'closeModal' => true, 'callback' => 'loadCurrentPage()'));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true, 'closeModal' => true));
         }
 
         $this->view->title     = $this->lang->block->createBlock;
@@ -55,17 +56,18 @@ class block extends control
         $this->view->module    = $module;
         $this->view->code      = $code;
         $this->view->modules   = $this->blockZen->getAvailableModules($dashboard);
-        $this->view->codes     = $this->blockZen->getAvailableBlocks($dashboard, $module);
+        $this->view->codes     = $this->blockZen->getAvailableCodes($dashboard, $module);
         $this->view->params    = $this->blockZen->getAvailableParams($dashboard, $module, $code);
         $this->display();
     }
 
     /**
-     * Update a block. 
-     * 
-     * @param  string $dashboard 
-     * @param  string $module 
-     * @param  string $code 
+     * 编辑区块
+     * Update a block.
+     *
+     * @param  string $dashboard
+     * @param  string $module
+     * @param  string $code
      * @access public
      * @return void
      */
@@ -80,7 +82,7 @@ class block extends control
 
             $this->block->update($formData);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true, 'closeModal' => true, 'callback' => 'loadCurrentPage()'));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true, 'closeModal' => true));
         }
 
         $block = $this->block->getByID($blockID);
@@ -97,81 +99,39 @@ class block extends control
         $this->display();
     }
 
-    public function set($id, $type, $module = '')
-    {
-        $block = $this->block->getByID($id);
-        if($block and empty($type)) $type = $block->code;
-        if(isset($block->params->num) and !isset($block->params->count))
-        {
-            $block->params->count = $block->params->num;
-            unset($block->params->num);
-        }
-
-        if(isset($this->lang->block->moduleList[$module]))
-        {
-            $params = $this->block->getParams($type, $module);
-            $this->view->params = json_decode($params, true);
-        }
-        elseif($type == 'assigntome')
-        {
-            $params = $this->block->getParams('assignedToMe');
-            $this->view->params = json_decode($params, true);
-        }
-
-        $this->view->source = $module;
-        $this->view->type   = $type;
-        $this->view->id     = $id;
-        $this->view->block  = ($block) ? $block : array();
-        $this->display();
-    }
-
     /**
-     * Delete block
+     * Delete or hidd block by blockid.
      *
      * @param  int    $id
-     * @param  string $sys
      * @param  string $type
      * @access public
      * @return void
      */
-    public function delete($id, $module = 'my', $type = 'delete')
+    public function delete($blockID, $type = 'delete')
     {
-        if($type == 'hidden')
-        {
-            $this->dao->update(TABLE_BLOCK)->set('hidden')->eq(1)->where('`id`')->eq($id)->andWhere('account')->eq($this->app->user->account)->andWhere('module')->eq($module)->exec();
-        }
-        else
-        {
-            $this->dao->delete()->from(TABLE_BLOCK)->where('`id`')->eq($id)->andWhere('account')->eq($this->app->user->account)->andWhere('module')->eq($module)->exec();
-        }
+        $blockID = (int)$blockID;
+        if($type == 'delete') $this->block->deleteBlock($blockID);
+        if($type == 'hidden') $this->block->hidden($blockID);
         if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
         $this->loadModel('score')->create('block', 'set');
         return $this->send(array('result' => 'success'));
     }
 
     /**
-     * Sort block.
+     * Sort dashboard blocks.
      *
-     * @param  string    $oldOrder
-     * @param  string    $newOrder
-     * @param  string    $module
+     * @param  string  $orders
      * @access public
      * @return void
      */
-    public function sort($orders, $module = 'my')
+    public function sort($orders)
     {
-        $orders    = explode(',', $orders);
-        $blockList = $this->block->getMyDashboard($module);
-
-        foreach ($orders as $order => $blockID)
-        {
-            $block = $blockList[$blockID];
-            if(!isset($block)) continue;
-            $block->order = $order;
-            $this->dao->replace(TABLE_BLOCK)->data($block)->exec();
-        }
+        $orders = explode(',', $orders);
+        foreach($orders as $order => $blockID) $this->block->setOrder($blockID, $order);
 
         if(dao::isError()) return $this->send(array('result' => 'fail'));
+
         $this->loadModel('score')->create('block', 'set');
         return $this->send(array('result' => 'success'));
     }
@@ -182,26 +142,22 @@ class block extends control
      * @access public
      * @return void
      */
-    public function resize($id, $type, $data)
+    public function resize($blockID, $type, $data)
     {
-        $block = $this->block->getByID($id);
-        if($block)
-        {
-            $field = '';
-            if($type == 'vertical') $field = 'height';
-            if($type == 'horizontal') $field = 'grid';
-            if(empty($field)) return $this->send(array('result' => 'fail', 'code' => 400));
+        $block = $this->block->getByID($blockID);
+        if(!$block) return $this->send(array('result' => 'fail', 'code' => 404));
 
-            $block->$field = $data;
-            $block->params = helper::jsonEncode($block->params);
-            $this->dao->replace(TABLE_BLOCK)->data($block)->exec();
-            if(dao::isError()) return $this->send(array('result' => 'fail', 'code' => 500));
-            return $this->send(array('result' => 'success'));
-        }
-        else
-        {
-            return $this->send(array('result' => 'fail', 'code' => 404));
-        }
+        $field = '';
+        if($type == 'vertical')   $field = 'height';
+        if($type == 'horizontal') $field = 'grid';
+        if(empty($field)) return $this->send(array('result' => 'fail', 'code' => 400));
+
+        $block->$field = $data;
+        $block->params = helper::jsonEncode($block->params);
+        $this->block->update($block);
+
+        if(dao::isError()) return $this->send(array('result' => 'fail', 'code' => 500));
+        return $this->send(array('result' => 'success'));
     }
 
     /**
@@ -245,7 +201,7 @@ class block extends control
      * @access public
      * @return void
      */
-    public function dynamic()
+    public function printDynamicBlock()
     {
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
@@ -253,8 +209,6 @@ class block extends control
 
         $this->view->actions = $this->loadModel('action')->getDynamic('all', 'today', 'date_desc', $pager);
         $this->view->users   = $this->loadModel('user')->getPairs('nodeleted|noletter|all');
-
-        $this->display();
     }
 
     /**
@@ -263,7 +217,7 @@ class block extends control
      * @access public
      * @return void
      */
-    public function welcome()
+    public function printWelcomeBlock()
     {
         $this->view->tutorialed = $this->loadModel('tutorial')->getTutorialed();
 
@@ -285,7 +239,6 @@ class block extends control
             if($time >= $type) $welcomeType = $type;
         }
         $this->view->welcomeType = $welcomeType;
-        $this->display();
     }
 
     /**
@@ -303,71 +256,33 @@ class block extends control
 
     /**
      * Print block.
+     * 输出区块
      *
-     * @param  int    $id
+     * @param  int     $blockID
      * @access public
-     * @return void
+     * @return string
      */
-    public function printBlock($id, $module = 'my')
+    public function printBlock($blockID)
     {
-        $block = $this->block->getByID((int)$id);
+        $html    = '';
+        $blockID = (int)$blockID;
+        $block   = $this->block->getByID($blockID);
 
-        if(empty($block)) return false;
+        if(empty($block)) return $html;
 
-        $html = '';
-        if($block->code == 'html')
-        {
-            if (empty($block->params->html))
-            {
-                $html = "<div class='empty-tip'>" . $this->lang->block->emptyTip . "</div>";
-            }
-            else
-            {
-                $html = "<div class='panel-body'><div class='article-content'>" . $block->params->html . '</div></div>';
-            }
-        }
-        elseif($block->source != '')
-        {
-            $this->get->set('mode', 'getblockdata');
-            $this->get->set('blockTitle', $block->title);
-            $this->get->set('module', $block->module);
-            $this->get->set('source', $block->source);
-            $this->get->set('blockid', $block->code);
-            $this->get->set('param', base64_encode(json_encode($block->params)));
-            $html = $this->fetch('block', 'main', "module={$block->source}&id=$id");
-        }
-        elseif($block->code == 'dynamic')
-        {
-            $html = $this->fetch('block', 'dynamic');
-        }
-        elseif($block->code == 'guide')
-        {
-            $html = $this->fetch('block', 'guide', "blockID=$block->id");
-        }
-        elseif($block->code == 'assigntome')
-        {
-            $this->get->set('param', base64_encode(json_encode($block->params)));
-            $html = $this->fetch('block', 'printAssignToMeBlock', 'longBlock=' . $this->block->isLongBlock($block));
-        }
-        elseif($block->code == 'welcome')
-        {
-            $html = $this->fetch('block', 'welcome', "blockID=$block->id");
-        }
-        elseif($block->code == 'contribute')
-        {
-            $html = $this->fetch('block', 'contribute');
-        }
-        echo $html;
+        $code = $block->code;
+        if($code == 'statistic' or $code == 'list' or $code == 'overview') $code = $block->module . ucfirst($code);
+
+        $function = 'print' . ucfirst($code) . 'Block';
+        if(method_exists('block', $function)) $html = $this->$function($blockID);
+
+        $this->display('block', strtolower($code) . 'block');
     }
 
-    /**
-     * Main function.
-     *
-     * @access public
-     * @return void
-     */
-    public function main($module = '', $id = 0)
+    public function printBlockData($module = '', $blockID = 0)
     {
+        $blockID = (int)$blockID;
+
         if(!$this->selfCall)
         {
             $lang = str_replace('_', '-', $this->get->lang);
@@ -378,85 +293,72 @@ class block extends control
             if(!$this->block->checkAPI($this->get->hash)) return;
         }
 
-        $mode = strtolower($this->get->mode);
+        $code = strtolower($this->get->blockid);
 
-        if($mode == 'getblocklist')
+        $params = $this->get->param;
+        $params = json_decode(base64_decode($params));
+        if(isset($params->num) and !isset($params->count)) $params->count = $params->num;
+        if(!$this->selfCall)
         {
+            $this->app->user = $this->dao->select('*')->from(TABLE_USER)->where('ranzhi')->eq($params->account)->fetch();
+            if(empty($this->app->user))
+            {
+                $this->app->user = new stdclass();
+                $this->app->user->account = 'guest';
+            }
+            $this->app->user->admin  = strpos($this->app->company->admins, ",{$this->app->user->account},") !== false;
+            $this->app->user->rights = $this->loadModel('user')->authorize($this->app->user->account);
+            $this->app->user->groups = $this->user->getGroups($this->app->user->account);
+            $this->app->user->view   = $this->user->grantUserView($this->app->user->account, $this->app->user->rights['acls']);
 
+            $sso = base64_decode($this->get->sso);
+            $this->view->sso  = $sso;
+            $this->view->sign = strpos($sso, '?') === false ? '?' : '&';
         }
-        elseif($mode == 'getblockform')
+
+        if($blockID) $block = $this->block->getByID($blockID);
+        $this->view->longBlock = $this->block->isLongBlock($blockID ? $block : $params);
+        $this->view->selfCall  = $this->selfCall;
+        $this->view->block     = $blockID ? $block : '';
+
+        $this->viewType    = (isset($params->viewType) and $params->viewType == 'json') ? 'json' : 'html';
+        $this->params      = $params;
+        $this->view->code  = $this->get->blockid;
+        $this->view->title = $this->get->blockTitle;
+
+        $func = 'print' . ucfirst($code) . 'Block';
+        if(method_exists('block', $func))
         {
-            echo $this->block->getParams($code, $module);
+            $this->$func($module);
         }
-        elseif($mode == 'getblockdata')
+        else
         {
-            $code = strtolower($this->get->blockid);
-
-            $params = $this->get->param;
-            $params = json_decode(base64_decode($params));
-            if(isset($params->num) and !isset($params->count)) $params->count = $params->num;
-            if(!$this->selfCall)
-            {
-                $this->app->user = $this->dao->select('*')->from(TABLE_USER)->where('ranzhi')->eq($params->account)->fetch();
-                if(empty($this->app->user))
-                {
-                    $this->app->user = new stdclass();
-                    $this->app->user->account = 'guest';
-                }
-                $this->app->user->admin  = strpos($this->app->company->admins, ",{$this->app->user->account},") !== false;
-                $this->app->user->rights = $this->loadModel('user')->authorize($this->app->user->account);
-                $this->app->user->groups = $this->user->getGroups($this->app->user->account);
-                $this->app->user->view   = $this->user->grantUserView($this->app->user->account, $this->app->user->rights['acls']);
-
-                $sso = base64_decode($this->get->sso);
-                $this->view->sso  = $sso;
-                $this->view->sign = strpos($sso, '?') === false ? '?' : '&';
-            }
-
-            if($id) $block = $this->block->getByID($id);
-            $this->view->longBlock = $this->block->isLongBlock($id ? $block : $params);
-            $this->view->selfCall  = $this->selfCall;
-            $this->view->block     = $id ? $block : '';
-
-            $this->viewType    = (isset($params->viewType) and $params->viewType == 'json') ? 'json' : 'html';
-            $this->params      = $params;
-            $this->view->code  = $this->get->blockid;
-            $this->view->title = $this->get->blockTitle;
-
-            $func = 'print' . ucfirst($code) . 'Block';
-            if(method_exists('block', $func))
-            {
-                $this->$func($module);
-            }
-            else
-            {
-                $this->view->data = $this->block->$func($module, $params);
-            }
-
-            $this->view->moreLink = '';
-            if(isset($this->config->block->modules[$module]->moreLinkList->{$code}))
-            {
-                list($moduleName, $method, $vars) = explode('|', sprintf($this->config->block->modules[$module]->moreLinkList->{$code}, isset($params->type) ? $params->type : ''));
-                $this->view->moreLink = $this->createLink($moduleName, $method, $vars);
-            }
-
-            if($this->viewType == 'json')
-            {
-                unset($this->view->app);
-                unset($this->view->config);
-                unset($this->view->lang);
-                unset($this->view->header);
-                unset($this->view->position);
-                unset($this->view->moduleTree);
-
-                $output['status'] = is_object($this->view) ? 'success' : 'fail';
-                $output['data']   = json_encode($this->view);
-                $output['md5']    = md5(json_encode($this->view));
-                return print(json_encode($output));
-            }
-
-            $this->display();
+            $this->view->data = $this->block->$func($module, $params);
         }
+
+        $this->view->moreLink = '';
+        if(isset($this->config->block->modules[$module]->moreLinkList->{$code}))
+        {
+            list($moduleName, $method, $vars) = explode('|', sprintf($this->config->block->modules[$module]->moreLinkList->{$code}, isset($params->type) ? $params->type : ''));
+            $this->view->moreLink = $this->createLink($moduleName, $method, $vars);
+        }
+
+        if($this->viewType == 'json')
+        {
+            unset($this->view->app);
+            unset($this->view->config);
+            unset($this->view->lang);
+            unset($this->view->header);
+            unset($this->view->position);
+            unset($this->view->moduleTree);
+
+            $output['status'] = is_object($this->view) ? 'success' : 'fail';
+            $output['data']   = json_encode($this->view);
+            $output['md5']    = md5(json_encode($this->view));
+            return print(json_encode($output));
+        }
+
+        $this->display('block', $code . 'block');
     }
 
     /**
@@ -482,7 +384,7 @@ class block extends control
     public function printTodoBlock()
     {
         $limit = ($this->viewType == 'json' or !isset($this->params->count)) ? 0 : (int)$this->params->count;
-        $todos = $this->loadModel('todo')->getList('all', $this->app->user->account, 'wait, doing', $limit, $pager = null, $orderBy = 'date, begin');
+        $todos = $this->loadModel('todo')->getList('all', $this->app->user->account, 'wait, doing', $limit, null, 'date, begin');
         $uri   = $this->createLink('my', 'index');
 
         $this->session->set('todoList',     $uri, 'my');
@@ -491,16 +393,7 @@ class block extends control
         $this->session->set('storyList',    $uri, 'product');
         $this->session->set('testtaskList', $uri, 'qa');
 
-        $tasks = $this->loadModel('task')->getUserSuspendedTasks($this->app->user->account);
-        foreach($todos as $key => $todo)
-        {
-            if($todo->date == '2030-01-01')
-            {
-                unset($todos[$key]);
-                continue;
-            }
-            if($todo->type == 'task' and isset($tasks[$todo->idvalue])) unset($todos[$key]);
-        }
+        $todos = $this->blockZen->unsetTodos($todos);
 
         $this->view->todos = $todos;
     }
@@ -625,7 +518,7 @@ class block extends control
         $this->session->set('storyList', $this->createLink('my', 'index'), 'product');
         if(preg_match('/[^a-zA-Z0-9_]/', $this->params->type)) return;
 
-        $this->app->loadClass('pager', $static = true);
+        $this->app->loadClass('pager', true);
         $count   = isset($this->params->count) ? (int)$this->params->count : 0;
         $pager   = pager::init(0, $count , 1);
         $type    = isset($this->params->type) ? $this->params->type : 'assignedTo';
@@ -731,7 +624,7 @@ class block extends control
      */
     public function printProductBlock()
     {
-        $this->app->loadClass('pager', $static = true);
+        $this->app->loadClass('pager', true);
         if(!empty($this->params->type) and preg_match('/[^a-zA-Z0-9_]/', $this->params->type)) return;
         $count = isset($this->params->count) ? (int)$this->params->count : 0;
         $type  = isset($this->params->type) ? $this->params->type : '';
@@ -831,7 +724,7 @@ class block extends control
         {
             if(in_array($project->model, array('scrum', 'kanban', 'agileplus')))
             {
-                $this->app->loadClass('pager', $static = true);
+                $this->app->loadClass('pager', true);
                 $pager = pager::init(0, 3, 1);
                 $project->progress   = $project->allStories == 0 ? 0 : round($project->doneStories / $project->allStories, 3) * 100;
                 $project->executions = $this->execution->getStatData($projectID, 'all', 0, 0, false, '', 'id_desc', $pager);
@@ -1280,7 +1173,7 @@ class block extends control
         $count = isset($this->params->count) ? (int)$this->params->count : 15;
         $type  = isset($this->params->type) ? $this->params->type : 'undone';
 
-        $this->app->loadClass('pager', $static = true);
+        $this->app->loadClass('pager', true);
         $pager = pager::init(0, $count, 1);
         $this->loadModel('execution');
         $this->view->executionStats = !defined('TUTORIAL') ? $this->execution->getStatData($this->session->project, $type, 0, 0, false, '', 'id_desc', $pager) : array($this->loadModel('tutorial')->getExecution());
@@ -1862,7 +1755,7 @@ class block extends control
         /* load pager. */
         $this->app->loadClass('pager', $static = true);
         $pager = new pager(0, 3, 1);
-        $this->view->projects = $this->loadModel('project')->getInfoList('all', 'id_desc', $pager, 1);
+        $this->view->projects = $this->loadModel('project')->getList('all', 'id_desc', true, $pager);
     }
 
     /**
@@ -1904,7 +1797,7 @@ class block extends control
     public function printDocDynamicBlock()
     {
         /* Load pager. */
-        $this->app->loadClass('pager', $static = true);
+        $this->app->loadClass('pager', true);
         $pager = new pager(0, 30, 1);
 
         $this->view->actions = $this->loadModel('doc')->getDynamic($pager);
@@ -1970,7 +1863,7 @@ class block extends control
     public function printDocViewListBlock()
     {
         /* Load pager. */
-        $this->app->loadClass('pager', $static = true);
+        $this->app->loadClass('pager', true);
         $pager = new pager(0, 6, 1);
 
         $this->view->docList = $this->loadModel('doc')->getDocsByBrowseType('all', 0, 0,'views_desc', $pager);
@@ -1985,7 +1878,7 @@ class block extends control
     public function printDocCollectListBlock()
     {
         /* Load pager. */
-        $this->app->loadClass('pager', $static = true);
+        $this->app->loadClass('pager', true);
         $pager = new pager(0, 6, 1);
 
         $this->view->docList = $this->loadModel('doc')->getDocsByBrowseType('all', 0, 0, 'collects_desc', $pager);
@@ -2155,30 +2048,18 @@ class block extends control
     }
 
     /**
-     * Ajax reset.
+     * Reset dashboard blocks.
      *
-     * @param  string $module
-     * @param  string $confirm
+     * @param  string $dashboard
      * @access public
      * @return void
      */
-    public function ajaxReset($module, $confirm = 'no')
+    public function reset($dashboard)
     {
-        if($confirm != 'yes') return print(js::confirm($this->lang->block->confirmReset, inlink('ajaxReset', "module=$module&confirm=yes")));
+        $this->block->reset($dashboard);
+        if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-        $this->dao->delete()->from(TABLE_BLOCK)
-            ->where('module')->eq($module)
-            ->andWhere('vision')->eq($this->config->vision)
-            ->andWhere('account')->eq($this->app->user->account)
-            ->exec();
-
-        $this->dao->delete()->from(TABLE_CONFIG)
-            ->where('module')->eq($module)
-            ->andWhere('vision')->eq($this->config->vision)
-            ->andWhere('owner')->eq($this->app->user->account)
-            ->andWhere('`key`')->eq('blockInited')
-            ->exec();
-        return print(js::reload('parent'));
+        return $this->send(array('result' => 'success'));
     }
 
     /**

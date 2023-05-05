@@ -65,6 +65,73 @@ class productTao extends productModel
     }
 
     /**
+     * 获取该产品下，所有符合参数条件的关联项目。
+     * Fetch all projects link this product.
+     *
+     * @param  int $productID
+     * @param  string $browseType    all|undone|wait|doing|done
+     * @param  string $branch
+     * @param  string $orderBy
+     * @param  object|null $pager
+     * @access protected
+     * @return array
+     */
+    protected function fetchAllProductProjects(int $productID, string $browseType = 'all', string $branch = '0', string $orderBy = 'order_desc', object|null $pager = null): array
+    {
+        return $this->dao->select('t2.*')->from(TABLE_PROJECTPRODUCT)->alias('t1')
+            ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
+            ->where('t1.product')->eq($productID)
+            ->andWhere('t2.type')->eq('project')
+            ->beginIF($browseType == 'undone')->andWhere('t2.status')->in('wait,doing')->fi()
+            ->beginIF(strpos(",all,undone,", ",$browseType,") === false)->andWhere('t2.status')->eq($browseType)->fi()
+            ->beginIF(!$this->app->user->admin)->andWhere('t2.id')->in($this->app->user->view->projects)->fi()
+            ->beginIF($branch !== '' and $branch !== 'all')->andWhere('t1.branch')->in($branch)->fi()
+            ->andWhere('t2.deleted')->eq('0')
+            ->orderBy($orderBy)
+            ->page($pager, 't2.id')
+            ->fetchAll('id');
+    }
+
+    /**
+     * 只获取该产品下，我参与的，符合参数条件的关联项目。
+     * Fetch involved projects link product.
+     *
+     * @param  int $productID
+     * @param  string $browseType    all|undone|wait|doing|done
+     * @param  string $branch
+     * @param  string $orderBy
+     * @param  object|null $pager
+     * @access protected
+     * @return array
+     */
+    protected function fetchInvolvedProductProjects(int $productID, string $browseType = 'all', string $branch = '0', string $orderBy = 'order_desc', object|null $pager = null): array
+    {
+        return $this->dao->select('t2.*')->from(TABLE_PROJECTPRODUCT)->alias('t1')
+            ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
+            ->leftJoin(TABLE_TEAM)->alias('t3')->on('t2.id=t3.root')
+            ->leftJoin(TABLE_STAKEHOLDER)->alias('t4')->on('t2.id=t4.objectID')
+            ->where('t1.product')->eq($productID)
+            ->andWhere('t2.type')->eq('project')
+            ->andWhere('t3.type')->eq('project')
+            ->beginIF($browseType == 'undone')->andWhere('t2.status')->in('wait,doing')->fi()
+            ->beginIF(strpos(",all,undone,", ",$browseType,") === false)->andWhere('t2.status')->eq($browseType)->fi()
+            ->beginIF(!$this->app->user->admin)->andWhere('t2.id')->in($this->app->user->view->projects)->fi()
+            ->andWhere('t2.openedBy', true)->eq($this->app->user->account)
+            ->orWhere('t2.PM')->eq($this->app->user->account)
+            ->orWhere('t3.account')->eq($this->app->user->account)
+            ->orWhere('(t4.user')->eq($this->app->user->account)
+            ->andWhere('t4.deleted')->eq(0)
+            ->markRight(1)
+            ->orWhere("CONCAT(',', t2.whitelist, ',')")->like("%,{$this->app->user->account},%")
+            ->markRight(1)
+            ->beginIF($branch !== '' and $branch !== 'all')->andWhere('t1.branch')->in($branch)->fi()
+            ->andWhere('t2.deleted')->eq('0')
+            ->orderBy($orderBy)
+            ->page($pager, 't2.id')
+            ->fetchAll('id');
+    }
+
+    /**
      * 获取产品ID数组中带有项目集信息的产品分页列表。
      * Get products with program data that in the ID list.
      *
@@ -97,7 +164,6 @@ class productTao extends productModel
      */
     protected function getPagerProductsIn(array $productIDs, object|null $pager, string $orderBy)
     {
-        /* TODO list all fields? */
         $products = $this->dao->select('*')->from(TABLE_PRODUCT)
             ->where('id')->in($productIDs)
             ->orderBy($orderBy)
@@ -493,5 +559,18 @@ class productTao extends productModel
 
         if(dao::isError())return false;
         return (int)$this->dao->lastInsertID();
+    }
+
+    /**
+     * 从module表中查询所有产品线。
+     * Get all product lines from module table.
+     * TODO move to the MODULE module.
+     *
+     * @access protected
+     * @return array
+     */
+    protected function getProductLinesTODO(): array
+    {
+        return $this->dao->select('*')->from(TABLE_MODULE)->where('type')->eq('line')->andWhere('deleted')->eq(0)->orderBy('`order` asc')->fetchAll();
     }
 }

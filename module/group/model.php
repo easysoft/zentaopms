@@ -467,10 +467,11 @@ class groupModel extends model
                     $privs[]      = $data;
                 }
             }
+            $this->insertPrivs($privs);
             $depentedPrivs = $this->getPrivByIdList($depentedPrivs);
             foreach($depentedPrivs as $privID => $priv)
             {
-                if(empty($_POST['actions'][$priv->module]) or in_array($priv->method, $_POST['actions'][$priv->module]))
+                if(!empty($_POST['actions'][$priv->module]) and in_array($priv->method, $_POST['actions'][$priv->module]))
                 {
                     unset($depentedPrivs[$privID]);
                     continue;
@@ -481,7 +482,7 @@ class groupModel extends model
                 $data->method = $priv->method;
                 $this->dao->replace(TABLE_GROUPPRIV)->data($data)->exec();
             }
-            $recommendPrivs = $this->getPrivByIdList(zget($_POST, 'recommendPrivs'));
+            $recommendPrivs = $this->getPrivByIdList(zget($_POST, 'recommendPrivs', '0'));
             foreach($recommendPrivs as $privID => $priv)
             {
                 if(in_array($priv->method, zget($_POST['actions'], $priv->module, array())))
@@ -495,7 +496,6 @@ class groupModel extends model
                 $data->method = $priv->method;
                 $this->dao->replace(TABLE_GROUPPRIV)->data($data)->exec();
             }
-            $this->insertPrivs($privs);
         }
         return !empty($depentedPrivs) ? true : false;
     }
@@ -1540,7 +1540,7 @@ class groupModel extends model
         if(empty($lang)) $lang = $this->app->getClientLang();
         $priv = $this->dao->select('t1.*,t2.`key`,t2.value,t2.desc')->from(TABLE_PRIV)->alias('t1')
             ->leftJoin(TABLE_PRIVLANG)->alias('t2')->on('t1.id=t2.objectID')
-            ->where('t1.id')->eq($privID)
+            ->where('t1.id')->eq((int)$privID)
             ->andWhere('t2.objectType')->eq('priv')
             ->andWhere('t2.lang')->eq($lang)
             ->fetch();
@@ -1681,6 +1681,7 @@ class groupModel extends model
         {
             $privList = array_merge($privList, zget($privs, $module, array()));
         }
+
         return $privList;
     }
 
@@ -2237,8 +2238,8 @@ class groupModel extends model
             else
             {
                 list($moduleName, $methodLang) = explode('-', $priv->key);
-                if($moduleName == 'requirement') $moduleName = 'story';
-                $this->app->loadLang($moduleName);
+                $actualModule = $moduleName == 'requirement' ? 'story' : $moduleName;
+                $this->app->loadLang($actualModule);
 
                 $hasLang = (!empty($moduleName) and !empty($methodLang) and isset($this->lang->resource->{$priv->module}) and isset($this->lang->resource->{$priv->module}->{$priv->method}));
                 if(!$hasLang)
@@ -2275,6 +2276,7 @@ class groupModel extends model
                 {
                     $key  = "{$module}-{$method}";
                     $priv = new stdclass();
+                    $priv->id          = $key;
                     $priv->module      = $module;
                     $priv->method      = $method;
                     $priv->action      = $key;
@@ -2297,6 +2299,7 @@ class groupModel extends model
 
                 $key  = "{$module}-{$method}";
                 $priv = new stdclass();
+                $priv->id          = $key;
                 $priv->module      = $module;
                 $priv->method      = $method;
                 $priv->action      = $key;
@@ -2356,11 +2359,9 @@ class groupModel extends model
             ->markRight(2)
             ->orderBy('t2.`order`_asc, t1.`type` desc')
             ->fetchGroup('parentCode', 'relationPriv');
+
         $relatedPrivs = array();
-        foreach($modules as $module)
-        {
-            $relatedPrivs = array_merge($relatedPrivs, zget($privs, $module, array()));
-        }
+        foreach($modules as $module) $relatedPrivs = array_merge($relatedPrivs, zget($privs, $module, array()));
 
         $privList = empty($type) ? array('depend' => array(), 'recommend' => array()) : array($type => array());
         if(empty($relatedPrivs)) return $privList;
@@ -2368,13 +2369,13 @@ class groupModel extends model
         $managerList  = $this->dao->select('*')->from(TABLE_PRIVMANAGER)->fetchAll('id');
         $relatedPrivs = $this->transformPrivLang($relatedPrivs);
 
-        foreach($relatedPrivs as $privID => $relatedPriv)
+        foreach($relatedPrivs as $relatedPriv)
         {
             $module = $managerList[$relatedPriv->parent]->type == 'package' ? $managerList[$managerList[$relatedPriv->parent]->parent]->code : $managerList[$relatedPriv->parent]->code;
             if(!isset($privList[$relatedPriv->type][$module])) $privList[$relatedPriv->type][$module] = array();
             $privList[$relatedPriv->type][$module]['title']      = $modulePairs[$module];
             $privList[$relatedPriv->type][$module]['id']         = $relatedPriv->parent;
-            $privList[$relatedPriv->type][$module]['children'][] = array('title' => $relatedPriv->name, 'relationPriv' => $privID, 'parent' => $relatedPriv->parent, 'module' => $relatedPriv->module, 'method' => $relatedPriv->method);
+            $privList[$relatedPriv->type][$module]['children'][] = array('title' => $relatedPriv->name, 'relationPriv' => $relatedPriv->relationPriv, 'parent' => $relatedPriv->parent, 'module' => $relatedPriv->module, 'method' => $relatedPriv->method);
         }
 
         if(empty($type) or $type == 'depend')    $privList['depend']    = array_values($privList['depend']);

@@ -47,10 +47,8 @@ class projectModel extends model
     {
         if(defined('TUTORIAL')) return true;
 
-        echo(js::alert($this->lang->project->accessDenied));
         $this->session->set('project', '');
-
-        return print(js::locate(helper::createLink('project', 'index')));
+        return print(js::alert($this->lang->project->accessDenied) . js::locate(helper::createLink('project', 'index')));
     }
 
     /**
@@ -118,6 +116,8 @@ class projectModel extends model
             }
         }
 
+        setcookie('lastProject', (int)$this->session->project, $this->config->cookieLife, $this->config->webRoot, '', $this->config->cookieSecure, true);
+
         return $this->session->project;
     }
 
@@ -148,8 +148,8 @@ class projectModel extends model
      */
     public function getMultiLinkedProducts($projectID)
     {
-        $linkedProducts      = $this->dao->select('product')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($projectID)->fetchPairs();
-        $multiLinkedProducts = $this->dao->select('t3.id,t3.name')->from(TABLE_PROJECTPRODUCT)->alias('t1')
+        $linkedProducts = $this->dao->select('product')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($projectID)->fetchPairs();
+        return $this->dao->select('t3.id,t3.name')->from(TABLE_PROJECTPRODUCT)->alias('t1')
             ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
             ->leftJoin(TABLE_PRODUCT)->alias('t3')->on('t1.product = t3.id')
             ->where('t1.product')->in($linkedProducts)
@@ -158,8 +158,6 @@ class projectModel extends model
             ->andWhere('t2.deleted')->eq('0')
             ->andWhere('t3.deleted')->eq('0')
             ->fetchPairs('id', 'name');
-
-        return $multiLinkedProducts;
     }
 
     /*
@@ -235,47 +233,35 @@ class projectModel extends model
     }
 
     /**
-     * Get project info.
+     * 根据状态和和我参与的查询项目列表。
+     * Get project list by status and with my participation.
      *
      * @param  string    $status
      * @param  string    $orderBy
+     * @param  bool      $involved
      * @param  int       $pager
-     * @param  int       $involved
      * @access public
      * @return array
      */
-    public function getInfoList($status = 'undone', $orderBy = 'order_desc', $pager = null, $involved = 0)
+    public function getList(string $status = 'undone', string $orderBy = 'order_desc', bool $involved = false, object|null $pager = null): array
     {
         /* Init vars. */
-        $projects = $this->loadModel('program')->getProjectList(0, $status, 0, $orderBy, $pager, 0, $involved);
+        $projects = $this->projectTao->fetchProjectList($status, $orderBy, $involved, $pager);
         if(empty($projects)) return array();
 
         $projectIdList = array_keys($projects);
-        $teams = $this->dao->select('t1.root, count(t1.id) as count')->from(TABLE_TEAM)->alias('t1')
-            ->leftJoin(TABLE_USER)->alias('t2')->on('t1.account=t2.account')
-            ->where('t1.root')->in($projectIdList)
-            ->andWhere('t2.deleted')->eq(0)
-            ->groupBy('t1.root')
-            ->fetchAll('root');
+        $teams         = $this->projectTao->fetchMemberCountByIdList($projectIdList);
+        $estimates     = $this->projectTao->fetchTaskEstimateByIdList($projectIdList);
 
-        $estimates = $this->dao->select("t2.project as project, sum(estimate) as estimate")->from(TABLE_TASK)->alias('t1')
-            ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.execution = t2.id')
-            ->where('t1.parent')->lt(1)
-            ->andWhere('t2.project')->in($projectIdList)
-            ->andWhere('t1.deleted')->eq(0)
-            ->andWhere('t2.deleted')->eq(0)
-            ->groupBy('t2.project')
-            ->fetchAll('project');
-
-        $this->app->loadClass('pager', $static = true);
+        $this->app->loadClass('pager', true);
         foreach($projects as $projectID => $project)
         {
             $orderBy = $project->model == 'waterfall' ? 'id_asc' : 'id_desc';
             $pager   = $project->model == 'waterfall' ? null : new pager(0, 1, 1);
             $project->executions = $this->loadModel('execution')->getStatData($projectID, 'undone', 0, 0, false, '', $orderBy, $pager);
-            $project->teamCount  = isset($teams[$projectID]) ? $teams[$projectID]->count : 0;
+            $project->teamCount  = isset($teams[$projectID]) ? $teams[$projectID] : 0;
             $project->estimate   = isset($estimates[$projectID]) ? round($estimates[$projectID]->estimate, 2) : 0;
-            $project->parentName = $project->parent ? $this->projectTao->getParentProgram($project->parent, $project->path, $project->grade) : '';
+            $project->parentName = $project->parent ? $this->projectTao->getParentProgram($project->path, $project->grade) : '';
         }
         return $projects;
     }
@@ -293,6 +279,7 @@ class projectModel extends model
      */
     public function getOverviewList($queryType = 'byStatus', $param = 'all', $orderBy = 'id_desc', $limit = 15, $excludedModel = '')
     {
+        /*  */
         $queryType = strtolower($queryType);
         $projects = $this->dao->select('*')->from(TABLE_PROJECT)
             ->where('type')->eq('project')
@@ -308,32 +295,21 @@ class projectModel extends model
             ->fetchAll('id');
 
         if(empty($projects)) return array();
+
         $projectIdList = array_keys($projects);
+        $teams         = $this->projectTao->fetchMemberCountByIdList($projectIdList);
 
-        $teams = $this->dao->select('t1.root, count(t1.id) as teams')->from(TABLE_TEAM)->alias('t1')
-            ->leftJoin(TABLE_USER)->alias('t2')->on('t1.account=t2.account')
-            ->where('t1.root')->in($projectIdList)
-            ->andWhere('t1.type')->eq('project')
-            ->andWhere('t2.deleted')->eq(0)
-            ->groupBy('root')->fetchPairs();
+        $fields = 't2.project, ROUND(SUM(t1.consumed), 1) AS consumed, ROUND(SUM(t1.estimate), 1) AS estimate';
+        $hours  = $this->projectTao->fetchTaskEstimateByIdList($projectIdList, $fields);
 
-        $hours = $this->dao->select('t2.project, ROUND(SUM(t1.consumed), 1) AS consumed, ROUND(SUM(t1.estimate), 1) AS estimate')->from(TABLE_TASK)->alias('t1')
-            ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.execution = t2.id')
-            ->where('t2.project')->in($projectIdList)
-            ->andWhere('t2.deleted')->eq(0)
-            ->andWhere('t1.deleted')->eq(0)
-            ->andWhere('t1.parent')->lt(1)
-            ->groupBy('t2.project')
-            ->fetchAll('project');
-
-        $storySummary = $this->getTotalStoriesByProject($projectIdList);
-        $taskSummary  = $this->getTotalTaskByProject($projectIdList);
-        $bugSummary   = $this->getTotalBugByProject($projectIdList);
+        $storySummary = $this->projectTao->getTotalStoriesByProject($projectIdList);
+        $taskSummary  = $this->projectTao->getTotalTaskByProject($projectIdList);
+        $bugSummary   = $this->projectTao->getTotalBugByProject($projectIdList);
 
         foreach($projects as $projectID => $project)
         {
-            $project->consumed      = isset($hours[$projectID]) ? (float)$hours[$projectID]->consumed : 0;
-            $project->estimate      = isset($hours[$projectID]) ? (float)$hours[$projectID]->estimate : 0;
+            $project->consumed      = isset($hours[$projectID]) ? round((float)$hours[$projectID]->consumed, 1) : 0;
+            $project->estimate      = isset($hours[$projectID]) ? round((float)$hours[$projectID]->estimate, 1) : 0;
             $project->teamCount     = isset($teams[$projectID]) ? $teams[$projectID] : 0;
             $project->leftBugs      = isset($bugSummary[$projectID])   ? $bugSummary[$projectID]->leftBugs : 0;
             $project->allBugs       = isset($bugSummary[$projectID])   ? $bugSummary[$projectID]->allBugs : 0;
@@ -347,64 +323,9 @@ class projectModel extends model
             $project->doingTasks    = isset($taskSummary[$projectID])  ? $taskSummary[$projectID]->doingTasks : 0;
             $project->rndDoneTasks  = isset($taskSummary[$projectID])  ? $taskSummary[$projectID]->doneTasks : 0;
             $project->liteDoneTasks = isset($taskSummary[$projectID])  ? $taskSummary[$projectID]->litedoneTasks : 0;
-
-            if(is_float($project->consumed)) $project->consumed = round($project->consumed, 1);
-            if(is_float($project->estimate)) $project->estimate = round($project->estimate, 1);
         }
 
         return $projects;
-    }
-
-    /**
-     * Get the number of stories associated with the project.
-     *
-     * @param  array   $projectIdList
-     * @access public
-     * @return int
-     */
-    public function getTotalStoriesByProject($projectIdList = 0)
-    {
-        return $this->dao->select("t1.project, count(t2.id) as allStories, count(if(t2.status = 'active' or t2.status = 'changing', 1, null)) as leftStories, count(if(t2.status = 'closed' and t2.closedReason = 'done', 1, null)) as doneStories")->from(TABLE_PROJECTSTORY)->alias('t1')
-            ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story=t2.id')
-            ->where('t1.project')->in($projectIdList)
-            ->andWhere('t2.type')->eq('story')
-            ->andWhere('deleted')->eq('0')
-            ->groupBy('project')
-            ->fetchAll('project');
-    }
-
-    /**
-     * Get associated bugs by project.
-     *
-     * @param  array  $projectIdList
-     * @access public
-     * @return array
-     */
-    public function getTotalBugByProject($projectIdList)
-    {
-        return $this->dao->select("project, count(id) as allBugs, count(if(status = 'active', 1, null)) as leftBugs, count(if(status = 'resolved', 1, null)) as doneBugs")->from(TABLE_BUG)
-            ->where('project')->in($projectIdList)
-            ->andWhere('deleted')->eq(0)
-            ->groupBy('project')
-            ->fetchAll('project');
-    }
-
-    /**
-     * Get associated tasks by project.
-     *
-     * @param  array  $projectIdList
-     * @access public
-     * @return array
-     */
-    public function getTotalTaskByProject($projectIdList)
-    {
-        return $this->dao->select("t1.project, count(t1.id) as allTasks, count(if(t1.status = 'wait', 1, null)) as waitTasks, count(if(t1.status = 'doing', 1, null)) as doingTasks, count(if(t1.status = 'done', 1, null)) as doneTasks, count(if(t1.status = 'wait' or t1.status = 'pause' or t1.status = 'cancel', 1, null)) as leftTasks, count(if(t1.status = 'done' or t1.status = 'closed', 1, null)) as litedoneTasks")->from(TABLE_TASK)->alias('t1')
-            ->leftJoin(TABLE_EXECUTION)->alias('t2')->on('t1.execution=t2.id')
-            ->where('t1.project')->in($projectIdList)
-            ->andWhere('t1.deleted')->eq(0)
-            ->andWhere('t2.deleted')->eq(0)
-            ->groupBy('t1.project')
-            ->fetchAll('project');
     }
 
     /**
@@ -868,12 +789,11 @@ class projectModel extends model
             ->orderBy('grade desc')
             ->fetch();
 
-        $projects = $this->dao->select('id')->from(TABLE_PROJECT)
+        return $this->dao->select('id')->from(TABLE_PROJECT)
             ->where('type')->eq('project')
             ->andWhere('deleted')->eq(0)
             ->andWhere('path')->like("{$parentProgram->path}%")
             ->fetchPairs('id');
-        return $projects;
     }
 
     /**
@@ -1287,7 +1207,7 @@ class projectModel extends model
         $this->loadModel('personnel')->updateWhitelist($whitelist, 'project', $projectID);
 
         $program = $project->parent ? $this->getByID((int)$project->parent) : new stdclass();
-        $this->projectTao->createDocLib($projectID, $project, $postData, $program);
+        $this->projectTao->createDocLib($projectID, $project, $program);
 
         if($project->hasProduct) $this->updateProducts($projectID);
 
@@ -1311,6 +1231,47 @@ class projectModel extends model
     }
 
     /**
+     * Check branch and product valid by project.
+     *
+     * @param  int    $projectID
+     * @param  object $project
+     * @access public
+     * @return bool
+     */
+    public function checkBranchAndProductValid(int $projectID, object $project): bool
+    {
+        $topProgramID     = $this->loadModel('program')->getTopByID($project->parent);
+        $multipleProducts = $this->loadModel('product')->getMultiBranchPairs($topProgramID);
+        foreach($project->products as $index => $productID)
+        {
+            if(isset($multipleProducts[$productID]) and empty($project->branch[$index]))
+            {
+                dao::$errors[] = $this->lang->project->emptyBranch;
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * Check dates valid by project.
+     *
+     * @param  int    $projectID
+     * @param  object $project
+     * @access public
+     * @return bool
+     */
+    public function checkDatesValidByProject($projectID, $project): bool
+    {
+        $minExecutionBegin = $this->dao->select('`begin` as minBegin')->from(TABLE_PROJECT)->where('project')->eq($projectID)->andWhere('deleted')->eq('0')->orderBy('begin_asc')->fetch();
+        $maxExecutionEnd   = $this->dao->select('`end` as maxEnd')->from(TABLE_PROJECT)->where('project')->eq($projectID)->andWhere('deleted')->eq('0')->orderBy('end_desc')->fetch();
+        if($minExecutionBegin and $project->begin > $minExecutionBegin->minBegin) dao::$errors['begin'] = sprintf($this->lang->project->begigLetterExecution, $minExecutionBegin->minBegin);
+        if($maxExecutionEnd and $project->end < $maxExecutionEnd->maxEnd) dao::$errors['end'] = sprintf($this->lang->project->endGreateExecution, $maxExecutionEnd->maxEnd);
+        if(dao::isError()) return false;
+        return true;
+    }
+
+    /**
      * Update project.
      *
      * @param  int    $projectID
@@ -1326,28 +1287,7 @@ class projectModel extends model
 
         $executionsCount = $this->dao->select('COUNT(*) as count')->from(TABLE_PROJECT)->where('project')->eq($project->id)->andWhere('deleted')->eq('0')->fetch('count');
 
-        if(!empty($executionsCount) and $oldProject->multiple)
-        {
-            $minExecutionBegin = $this->dao->select('`begin` as minBegin')->from(TABLE_PROJECT)->where('project')->eq($project->id)->andWhere('deleted')->eq('0')->orderBy('begin_asc')->fetch();
-            $maxExecutionEnd   = $this->dao->select('`end` as maxEnd')->from(TABLE_PROJECT)->where('project')->eq($project->id)->andWhere('deleted')->eq('0')->orderBy('end_desc')->fetch();
-            if($minExecutionBegin and $project->begin > $minExecutionBegin->minBegin) dao::$errors['begin'] = sprintf($this->lang->project->begigLetterExecution, $minExecutionBegin->minBegin);
-            if($maxExecutionEnd and $project->end < $maxExecutionEnd->maxEnd) dao::$errors['end'] = sprintf($this->lang->project->endGreateExecution, $maxExecutionEnd->maxEnd);
-            if(dao::isError()) return false;
-        }
-
-        if($_POST['products'])
-        {
-            $topProgramID     = $this->loadModel('program')->getTopByID($project->parent);
-            $multipleProducts = $this->loadModel('product')->getMultiBranchPairs($topProgramID);
-            foreach($_POST['products'] as $index => $productID)
-            {
-                if(isset($multipleProducts[$productID]) and empty($_POST['branch'][$index]))
-                {
-                    dao::$errors[] = $this->lang->project->emptyBranch;
-                    return false;
-                }
-            }
-        }
+        if($project->product && !$this->checkBranchAndProductValid($projectID, $project)) return false;
 
         /* Judge products not empty. */
         $linkedProductsCount = 0;
@@ -1376,17 +1316,10 @@ class projectModel extends model
         if($this->post->delta == 999) $requiredFields = trim(str_replace(',end,', ',', ",{$requiredFields},"), ',');
 
         $this->lang->error->unique = $this->lang->error->repeat;
-        $this->dao->update(TABLE_PROJECT)->data($project)
-            ->autoCheck($skipFields = 'begin,end')
-            ->batchcheck($requiredFields, 'notempty')
-            ->checkIF($project->begin != '', 'begin', 'date')
-            ->checkIF($project->end != '', 'end', 'date')
-            ->checkIF($project->end != '', 'end', 'gt', $project->begin)
-            ->checkIF(!empty($project->name), 'name', 'unique', "id != $projectID and `type` = 'project' and `parent` = '$oldProject->parent' and `model` = '{$project->model}' and `deleted` = '0'")
-            ->checkIF(!empty($project->code), 'code', 'unique', "id != $projectID and `type` = 'project' and `model` = '{$project->model}' and `deleted` = '0'")
-            ->checkFlow()
-            ->where('id')->eq($projectID)
-            ->exec();
+
+        if(!empty($executionsCount) and $oldProject->multiple) $this->checkDatesValidByProject($projectID ,$project);
+        $this->projectTao->doUpdate($projectID, $project, $oldProject);
+
         if(dao::isError()) return false;
 
         if(!$oldProject->hasProduct and ($oldProject->name != $project->name or $oldProject->parent != $project->parent or $oldProject->acl != $project->acl)) $this->updateShadowProduct($project);
@@ -1416,6 +1349,7 @@ class projectModel extends model
 
             $teamMembers[$account] = $member;
         }
+
         if($oldProject->model == 'kanban')
         {
             $this->dao->delete()->from(TABLE_TEAM)
@@ -1536,7 +1470,7 @@ class projectModel extends model
             $parentID   = !isset($project->parent) ? $oldProject->parent : $project->parent;
 
             $this->dao->update(TABLE_PROJECT)->data($project)
-                ->autoCheck($skipFields = 'begin,end')
+                ->autoCheck('begin,end')
                 ->batchCheck($this->config->project->edit->requiredFields, 'notempty')
                 ->checkIF($project->begin != '', 'begin', 'date')
                 ->checkIF($project->end != '', 'end', 'date')
@@ -3043,23 +2977,21 @@ class projectModel extends model
      * @param  int   $projectID
      * @param  array $plans
      * @access public
-     * @return void
+     * @return bool
      */
-    public function updatePlanIdListByProject(int $projectID, array $plans): void
+    public function updatePlanIdListByProject(int $projectID, array $plans): bool
     {
-        /* Link the plan stories. */
+        /* Link the plan stories and transform $plans to $newPlans. */
         $newPlans = array();
         if(isset($plans))
         {
             foreach($plans as $planList)
             {
-                foreach($planList as $planIDList)
-                {
-                    foreach($planIDList as $planID) $newPlans[$planID] = $planID;
-                }
+                if(is_array($planList))
+                foreach($planList as $planID) $newPlans[$planID] = $planID;
             }
         }
-        if(empty($newPlans)) return;
+        if(empty($newPlans)) return false;
 
         /* Get old PlanIdList by project*/
         $oldPlanList = $this->dao->select('plan')->from(TABLE_PROJECTPRODUCT)
@@ -3079,5 +3011,6 @@ class projectModel extends model
 
         $diffResult = array_diff($oldPlans, $newPlans);
         if(!empty($diffResult)) $this->loadModel('productplan')->linkProject($projectID, $newPlans);
+        return !dao::isError();
     }
 }

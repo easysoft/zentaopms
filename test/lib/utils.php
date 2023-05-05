@@ -115,22 +115,20 @@ function getCaseModelDir()
  * @access public
  * @return void
  */
-function zdRun($dataVersion = '', $dbFile = '')
+function zdRun($isDev = false)
 {
-    global $config, $dao, $db;
+    global $config, $dao;
 
     $frameworkRoot = dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'framework' . DIRECTORY_SEPARATOR;
     include LIB_ROOT . 'spyc.php';
 
-    if($dataVersion && $dbFile)
+    $zdRoot = dirname(dirname(__FILE__)) . '/data/';
+    if($isDev === true)
     {
-        $db->replaceDBConfig($dbFile);
-        $zdRoot = dirname(dirname(__FILE__)) . "/data/{$dataVersion}/";
+        if(isset($config->db->devDbName)) $dao->exec("set global sql_mode = ''; set global max_allowed_packet = 1000000000; set global net_buffer_length = 10000000;  use {$config->db->devDbName};");
+        $zdRoot = dirname(dirname(__FILE__)) . "/devdata/";
     }
-    else
-    {
-        $zdRoot = dirname(dirname(__FILE__)) . '/data/';
-    }
+
     $zdPath = RUNTIME_ROOT . 'zd';
 
     set_time_limit(0);

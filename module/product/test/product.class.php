@@ -1,6 +1,11 @@
 <?php
 class productTest
 {
+    /**
+     * @var productModel
+     * @access private
+     */
+    private productModel $objectModel;
 
     /**
      * __construct
@@ -20,11 +25,12 @@ class productTest
     /**
      * Test create a product.
      *
-     * @param  array  $param
+     * @param  array   $param
+     * @param  string  $lineName
      * @access public
      * @return object|array
      */
-    public function createObject(array $param = array()): object|array
+    public function createObject(array $param = array(), string $lineName = ''): object|array
     {
         $createFields = array();
         $createFields['program']        = 1;
@@ -47,7 +53,7 @@ class productTest
         $data = new stdclass();
         foreach($createFields as $field => $defaultValue) $data->$field = zget($param, $field, $defaultValue);
 
-        $objectID = $this->objectModel->create($data);
+        $objectID = $this->objectModel->create($data, '', $lineName);
 
         if(dao::isError())
         {
@@ -335,33 +341,21 @@ class productTest
     /**
      * Test update a product.
      *
-     * @param  string $module
      * @param  int    $objectID
-     * @param  array  $param
+     * @param  array  $data
      * @access public
-     * @return array
+     * @return array|string
      */
-    public function updateObject($module, $objectID, $param = array())
+    public function updateObject(int $objectID, array $data = array()): array|string
     {
         global $tester;
-        $objectModel = $tester->loadModel($module);
+        $objectModel = $tester->loadModel('product');
 
-        $object = $objectModel->getById($objectID);
-        foreach($object as $field => $value)
-        {
-            if(in_array($field, array_keys($param)))
-            {
-                $_POST[$field] = $param[$field];
-            }
-            else
-            {
-                $_POST[$field] = $value;
-            }
-        }
+        $oldProduct = $objectModel->dao->select('*')->from(TABLE_PRODUCT)->where('id')->eq($objectID)->fetch();
 
-        $change = $objectModel->update($objectID);
-        if($change == array()) $change = '没有数据更新';
-        unset($_POST);
+        $newProduct = clone $oldProduct;
+        foreach($data as $field => $value) $newProduct->$field = $value;
+        $change = $objectModel->update($objectID, $newProduct);
 
         if(dao::isError())
         {
@@ -399,9 +393,9 @@ class productTest
      *
      * @param  int    $productID
      * @access public
-     * @return object
+     * @return object|array
      */
-    public function getByIdTest($productID)
+    public function getByIdTest(int $productID): object|array|false
     {
         $object = $this->objectModel->getById($productID);
 

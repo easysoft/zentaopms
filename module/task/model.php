@@ -3652,7 +3652,7 @@ class taskModel extends model
                 if($task->fromBug) echo html::a(helper::createLink('bug', 'view', "id=$task->fromBug"), "[BUG#$task->fromBug]", '', "class='bug'");
                 break;
             case 'type':
-                echo $this->lang->task->typeList[$task->type];
+                echo zget($this->lang->task->typeList, $task->type, $task->type);
                 break;
             case 'status':
                 $storyChanged ? print("<span class='status-story status-changed' title='{$this->lang->story->changed}'>{$this->lang->story->changed}</span>") : print("<span class='status-task status-{$task->status}' title='{$this->processStatus('task', $task)}'> " . $this->processStatus('task', $task) . "</span>");

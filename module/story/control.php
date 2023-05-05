@@ -511,7 +511,11 @@ class story extends control
         $this->view->hiddenProduct = false;
         $this->view->hiddenPlan    = false;
         /* Set menu. */
-        if($executionID)
+        if($this->app->tab == 'project' and $this->config->vision == 'lite')
+        {
+            $this->project->setMenu($this->session->project);
+        }
+        elseif($executionID)
         {
             $execution = $this->dao->findById((int)$executionID)->from(TABLE_EXECUTION)->fetch();
             if($execution->type == 'project')
@@ -2399,7 +2403,7 @@ class story extends control
     public function tasks($storyID, $executionID = 0)
     {
         $this->loadModel('task');
-        $tasks = $this->task->getStoryTasks($storyID, $executionID);
+        $tasks = $this->task->getListByStory($storyID, $executionID);
         $this->view->tasks   = $tasks;
         $this->view->users   = $this->user->getPairs('noletter');
         $this->view->summary = $this->execution->summary($tasks);

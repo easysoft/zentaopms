@@ -1,0 +1,19 @@
+title: Create todos for todoModel::close UTC.
+desc: Create todos for todoModel::close UTC.
+version: 1.0.0
+
+fields:
+  - field: id
+    range: 1
+  - field: date
+    range: '`2023-04-23`'
+  - field: type
+    range: custom
+  - field: status
+    range: wait
+  - field: id
+    range: 1
+  - field: finishedDate
+    range: '`2023-04-23`'
+  - field: closedDate
+    range: '`2023-04-23`'

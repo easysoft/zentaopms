@@ -654,26 +654,6 @@ CREATE TABLE `zt_chart` (
   `deleted` tinyint(4) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-CREATE TABLE `zt_chart_back` (
-  `id` mediumint(8) unsigned NOT NULL DEFAULT '0',
-  `name` varchar(255) CHARACTER SET utf8 NOT NULL,
-  `dimension` mediumint(8) unsigned NOT NULL DEFAULT '0',
-  `type` varchar(30) CHARACTER SET utf8 NOT NULL,
-  `group` mediumint(8) unsigned NOT NULL DEFAULT '0',
-  `dataset` varchar(30) CHARACTER SET utf8 NOT NULL,
-  `desc` text CHARACTER SET utf8 NOT NULL,
-  `settings` mediumtext CHARACTER SET utf8 NOT NULL,
-  `filters` mediumtext CHARACTER SET utf8 NOT NULL,
-  `fields` mediumtext CHARACTER SET utf8,
-  `sql` mediumtext CHARACTER SET utf8,
-  `builtin` tinyint(1) unsigned NOT NULL,
-  `objects` mediumtext CHARACTER SET utf8 NOT NULL,
-  `createdBy` char(30) CHARACTER SET utf8 NOT NULL,
-  `createdDate` datetime NOT NULL,
-  `editedBy` varchar(30) CHARACTER SET utf8 NOT NULL,
-  `editedDate` datetime NOT NULL,
-  `deleted` tinyint(4) NOT NULL DEFAULT '0'
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 CREATE TABLE `zt_cmcl` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
   `type` char(30) NOT NULL,

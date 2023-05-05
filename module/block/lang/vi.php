@@ -21,10 +21,9 @@ $lang->block->estimate   = 'Estimate';
 $lang->block->last       = 'Last';
 
 $lang->block->account = 'Tài khoản';
-$lang->block->module  = 'Module';
 $lang->block->title   = 'Tiêu đề';
-$lang->block->source  = 'Nguồn Module';
-$lang->block->block   = 'Nguồn Block';
+$lang->block->module  = 'Module';
+$lang->block->code    = 'Block';
 $lang->block->order   = 'Sắp xếp';
 $lang->block->height  = 'Chiều cao';
 $lang->block->role    = 'Vai trò';

@@ -61,6 +61,8 @@ html[lang="de"] .block-productdoc .c-user{width: 105px;}
 .block-productdoc .table .c-title > .draft {background-color:rgba(129, 102, 238, 0.12); color:#8166EE;}
 </style>
 <?php $blockNavId = 'nav-' . uniqid(); ?>
+<?php js::set('emptyProducts', empty($products));?>
+<?php js::set('emptyInvolveds', empty($involveds));?>
 <script>
 $(function()
 {
@@ -90,6 +92,18 @@ function switch<?php echo "block{$block->id}";?>Product(obj)
 
 function change<?php echo "block{$block->id}";?>ProductType(type)
 {
+    var hiddenData = type == 'all' ? emptyProducts : emptyInvolveds;
+    if(hiddenData)
+    {
+        $('.block-productdoc<?php echo "#block{$block->id}";?> .dataBlock').addClass('hidden');
+        $('.block-productdoc<?php echo "#block{$block->id}";?> .block-statistic > .table-empty-tip').removeClass('hidden');
+    }
+    else
+    {
+        $('.block-productdoc<?php echo "#block{$block->id}";?> .dataBlock').removeClass('hidden');
+        $('.block-productdoc<?php echo "#block{$block->id}";?> .block-statistic > .table-empty-tip').addClass('hidden');
+    }
+
     $('.block-productdoc<?php echo "#block{$block->id}";?> .nav.products').toggleClass('hidden', type != 'all');
     $('.block-productdoc<?php echo "#block{$block->id}";?> .nav.involveds').toggleClass('hidden', type != 'involved');
     $('.block-productdoc<?php echo "#block{$block->id}";?> #productType .btn').html($('.block-productdoc<?php echo "#block{$block->id}";?> #productType [data-type=' + type + ']').html() + " <span class='caret'></span>");
@@ -112,14 +126,14 @@ function change<?php echo "block{$block->id}";?>ProductType(type)
     <li><a href="javascript:change<?php echo "block{$block->id}";?>ProductType('all')" data-type='all'><?php echo $lang->product->all;?></a></li>
   </ul>
 </div>
+<?php $hiddenBlock = empty($involveds) ? 'hidden' : '';?>
+<?php $hiddenEmpty = empty($involveds) ? '' : 'hidden';?>
 <div class="panel-body">
   <div class="table-row block-statistic">
-    <?php if(empty($products) and empty($involveds)):?>
-    <div class="table-empty-tip">
+    <div class="table-empty-tip  <?php echo $hiddenEmpty;?>">
       <p><span class="text-muted"><?php echo $lang->block->emptyTip;?></span></p>
     </div>
-    <?php else:?>
-    <div class="col col-nav">
+    <div class="col col-nav dataBlock <?php echo $hiddenBlock;?>">
       <ul class="nav nav-stacked nav-secondary scrollbar-hover involveds">
         <li class='switch-icon prev'><a href='###' onclick='switch<?php echo "block{$block->id}";?>Product(this)'><i class='icon icon-arrow-left'></i></a></li>
         <?php $selected = key($involveds);?>
@@ -142,7 +156,7 @@ function change<?php echo "block{$block->id}";?>ProductType(type)
         <li class='switch-icon next'><a href='###' onclick='switch<?php echo "block{$block->id}";?>Product(this)'><i class='icon icon-arrow-right'></i></a></li>
       </ul>
     </div>
-    <div class="col tab-content">
+    <div class="col tab-content dataBlock <?php echo $hiddenBlock;?>">
       <?php foreach($products as $product):?>
       <div class="tab-pane fade<?php if($product->id == $selected) echo ' active in';?>" id='<?php echo "tab3{$blockNavId}Content{$product->id}";?>'>
         <?php if(isset($docGroup[$product->id])):?>
@@ -190,6 +204,5 @@ function change<?php echo "block{$block->id}";?>ProductType(type)
       </div>
       <?php endforeach;?>
     </div>
-    <?php endif;?>
   </div>
 </div>

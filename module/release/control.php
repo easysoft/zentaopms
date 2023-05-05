@@ -674,7 +674,7 @@ class release extends control
         }
 
         $this->view->allBugs     = $allBugs;
-        $this->view->releaseBugs = empty($releaseBugs) ? array() : $this->bug->getByList($releaseBugs);
+        $this->view->releaseBugs = empty($releaseBugs) ? array() : $this->bug->getByIdList($releaseBugs);
         $this->view->release     = $release;
         $this->view->users       = $this->loadModel('user')->getPairs('noletter');
         $this->view->browseType  = $browseType;

@@ -77,7 +77,7 @@ class projectTao extends projectModel
     }
 
     /**
-     * Update project.
+     * Update project table when activate a project.
      *
      * @param  int    $projectID
      * @param  object $project
@@ -90,6 +90,33 @@ class projectTao extends projectModel
             ->autoCheck()
             ->checkFlow()
             ->where('id')->eq((int)$projectID)
+            ->exec();
+
+        return !dao::isError();
+    }
+
+
+    /**
+     * Update project table when edit a project.
+     *
+     * @param  int    $projectID
+     * @param  object $project
+     * @param  object $oldProject
+     * @access protected
+     * @return bool
+     */
+    protected function doUpdate(int $projectID ,object $project, object $oldProject): bool
+    {
+        $this->dao->update(TABLE_PROJECT)->data($project)
+            ->autoCheck('begin,end')
+            ->batchcheck($requiredFields, 'notempty')
+            ->checkIF($project->begin != '', 'begin', 'date')
+            ->checkIF($project->end != '', 'end', 'date')
+            ->checkIF($project->end != '', 'end', 'gt', $project->begin)
+            ->checkIF(!empty($project->name), 'name', 'unique', "id != $projectID and `type` = 'project' and `parent` = '$oldProject->parent' and `model` = '{$project->model}' and `deleted` = '0'")
+            ->checkIF(!empty($project->code), 'code', 'unique', "id != $projectID and `type` = 'project' and `model` = '{$project->model}' and `deleted` = '0'")
+            ->checkFlow()
+            ->where('id')->eq($projectID)
             ->exec();
 
         return !dao::isError();
@@ -220,12 +247,11 @@ class projectTao extends projectModel
      *
      * @param  int    $projectID
      * @param  object $project
-     * @param  object $postData
      * @param  object $program
      * @access protected
      * @return bool
      */
-    protected function createDocLib(int $projectID, object $project, object $postData, object $program): bool
+    protected function createDocLib(int $projectID, object $project, object $program): bool
     {
         /* Create doc lib. */
         $this->app->loadLang('doc');
@@ -474,18 +500,168 @@ class projectTao extends projectModel
      * @access public
      * @return string
      */
-    public function getParentProgram(int $program, string $path, int $grade): string
+    public function getParentProgram(string $path, int $grade): string
     {
-        $parentName = $this->dao->select('id,name')->from(TABLE_PROGRAM)
+        $programList = $this->dao->select('id,name')->from(TABLE_PROGRAM)
             ->where('id')->in(trim($path, ','))
             ->andWhere('grade')->lt($grade)
             ->orderBy('grade asc')
             ->fetchPairs();
 
-        $parentProgram = '';
-        foreach($parentName as $name) $parentProgram .= $name . '/';
-        $parentProgram = rtrim($parentProgram, '/');
+        $programName = '';
+        foreach($programList as $program) $programName .= $program . '/';
 
-        return $parentProgram;
+        return rtrim($programName, '/');
+    }
+
+    /**
+     * 查找项目执行下关联的产品
+     * Get linked products with execution under the project.
+     *
+     * @param  array $executionIDs
+     *
+     * @access protected
+     * @return array
+     */
+    protected function getExecutionProductGroup(array $executionIDs): array
+    {
+        return $this->dao->select('project,product')->from(TABLE_PROJECTPRODUCT)
+            ->where('project')->in($executionIDs)
+            ->fetchGroup('project', 'product');
+    }
+
+    /**
+     * 根据状态和和我参与的查询项目列表。
+     * Get project list by status and with my participation.
+     *
+     * @param  string $status
+     * @param  string $orderBy
+     * @param  bool   $involved
+     * @param  object $pager
+     * @access protected
+     * @return array
+     */
+    protected function fetchProjectList(string $status, string $orderBy, bool $involved, object|null $pager): array
+    {
+        return $this->dao->select('DISTINCT t1.*')->from(TABLE_PROJECT)->alias('t1')
+            ->leftJoin(TABLE_TEAM)->alias('t2')->on('t1.id=t2.root')
+            ->leftJoin(TABLE_STAKEHOLDER)->alias('t3')->on('t1.id=t3.objectID')
+            ->where('t1.deleted')->eq('0')
+            ->andWhere('t1.vision')->eq($this->config->vision)
+            ->andWhere('t1.type')->eq('project')
+            ->beginIF(!in_array($status, array('all', 'undone', 'review', 'unclosed'), true))->andWhere('t1.status')->eq($status)->fi()
+            ->beginIF($status == 'undone' or $status == 'unclosed')->andWhere('t1.status')->in('wait,doing')->fi()
+            ->beginIF($status == 'review')
+            ->andWhere("FIND_IN_SET('{$this->app->user->account}', t1.reviewers)")
+            ->andWhere('t1.reviewStatus')->eq('doing')
+            ->fi()
+            ->beginIF($this->cookie->involved or $involved)
+            ->andWhere('t2.type')->eq('project')
+            ->andWhere('t1.openedBy', true)->eq($this->app->user->account)
+            ->orWhere('t1.PM')->eq($this->app->user->account)
+            ->orWhere('t2.account')->eq($this->app->user->account)
+            ->orWhere('(t3.user')->eq($this->app->user->account)
+            ->andWhere('t3.deleted')->eq(0)
+            ->markRight(1)
+            ->orWhere("CONCAT(',', t1.whitelist, ',')")->like("%,{$this->app->user->account},%")
+            ->markRight(1)
+            ->fi()
+            ->orderBy($orderBy)
+            ->page($pager, 't1.id')
+            ->fetchAll('id');
+    }
+
+    /**
+     * 根据项目ID列表查询团队成员数量。
+     * Get project team member count by project id list.
+     *
+     * @param  array $projectIdList
+     * @access protected
+     * @return array
+     */
+    protected function fetchMemberCountByIdList(array $projectIdList): array
+    {
+        return $this->dao->select('t1.root, count(t1.id) as count')->from(TABLE_TEAM)->alias('t1')
+            ->leftJoin(TABLE_USER)->alias('t2')->on('t1.account=t2.account')
+            ->where('t1.root')->in($projectIdList)
+            ->andWhere('t2.deleted')->eq(0)
+            ->groupBy('t1.root')
+            ->fetchPairs();
+    }
+
+    /**
+     * 根据项目ID列表查询任务的总预计工时。
+     * Get task all estimate by project id list.
+     *
+     * @param  array  $projectIdList
+     * @param  string $fields
+     * @access protected
+     * @return array
+     */
+    protected function fetchTaskEstimateByIdList(array $projectIdList, string $fields = 't2.project as project, sum(estimate) as estimate'): array
+    {
+        return $this->dao->select($fields)->from(TABLE_TASK)->alias('t1')
+            ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.execution = t2.id')
+            ->where('t1.parent')->lt(1)
+            ->andWhere('t2.project')->in($projectIdList)
+            ->andWhere('t1.deleted')->eq(0)
+            ->andWhere('t2.deleted')->eq(0)
+            ->groupBy('t2.project')
+            ->fetchAll('project');
+    }
+
+    /**
+     * 通过项目ID列表查询需求的数量。
+     * Get the number of stories associated with the project.
+     *
+     * @param  array   $projectIdList
+     * @access public
+     * @return array
+     */
+    public function getTotalStoriesByProject(array $projectIdList): array
+    {
+        return $this->dao->select("t1.project, count(t2.id) as allStories, count(if(t2.status = 'active' or t2.status = 'changing', 1, null)) as leftStories, count(if(t2.status = 'closed' and t2.closedReason = 'done', 1, null)) as doneStories")->from(TABLE_PROJECTSTORY)->alias('t1')
+            ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story=t2.id')
+            ->where('t1.project')->in($projectIdList)
+            ->andWhere('t2.type')->eq('story')
+            ->andWhere('deleted')->eq('0')
+            ->groupBy('project')
+            ->fetchAll('project');
+    }
+
+    /**
+     * 通过项目ID获取任务数量统计。
+     * Get the number of tasks associated with the project.
+     *
+     * @param  array  $projectIdList
+     * @access public
+     * @return array
+     */
+    public function getTotalTaskByProject(array $projectIdList): array
+    {
+        return $this->dao->select("t1.project, count(t1.id) as allTasks, count(if(t1.status = 'wait', 1, null)) as waitTasks, count(if(t1.status = 'doing', 1, null)) as doingTasks, count(if(t1.status = 'done', 1, null)) as doneTasks, count(if(t1.status = 'wait' or t1.status = 'pause' or t1.status = 'cancel', 1, null)) as leftTasks, count(if(t1.status = 'done' or t1.status = 'closed', 1, null)) as litedoneTasks")->from(TABLE_TASK)->alias('t1')
+            ->leftJoin(TABLE_EXECUTION)->alias('t2')->on('t1.execution=t2.id')
+            ->where('t1.project')->in($projectIdList)
+            ->andWhere('t1.deleted')->eq(0)
+            ->andWhere('t2.deleted')->eq(0)
+            ->groupBy('t1.project')
+            ->fetchAll('project');
+    }
+
+    /**
+     * 通过项目ID获取Bug数量统计。
+     * Get the number of bugs associated with the project.
+     *
+     * @param  array  $projectIdList
+     * @access public
+     * @return array
+     */
+    public function getTotalBugByProject(array $projectIdList): array
+    {
+        return $this->dao->select("project, count(id) as allBugs, count(if(status = 'active', 1, null)) as leftBugs, count(if(status = 'resolved', 1, null)) as doneBugs")->from(TABLE_BUG)
+            ->where('project')->in($projectIdList)
+            ->andWhere('deleted')->eq(0)
+            ->groupBy('project')
+            ->fetchAll('project');
     }
 }

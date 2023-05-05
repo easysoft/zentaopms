@@ -1,6 +1,13 @@
 <?php
 declare(strict_types=1);
-
+/**
+ * The zen file of todo module of ZenTaoPMS.
+ *
+ * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @license     ZPL(https://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
+ * @author      lanzongjun <lanzongjun@easycorp.ltd>
+ * @link        https://www.zentao.net
+ */
 class todoZen extends todo
 {
     /**
@@ -11,13 +18,41 @@ class todoZen extends todo
      * @access protected
      * @return void
      */
-    protected function buildCreateView(string $date): void
+    protected function buildCreateView(string $date)
     {
         $this->view->title = $this->lang->todo->common . $this->lang->colon . $this->lang->todo->create;
         $this->view->date  = date('Y-m-d', strtotime($date));
         $this->view->times = date::buildTimeList($this->config->todo->times->begin, $this->config->todo->times->end, $this->config->todo->times->delta);
         $this->view->time  = date::now();
         $this->view->users = $this->loadModel('user')->getPairs('noclosed|nodeleted|noempty');
+
+        $this->display();
+    }
+
+    /**
+     * 生成批量创建待办视图数据。
+     * Build batch create form data.
+     *
+     * @param  string $date
+     * @access protected
+     * @return void
+     */
+    protected function buildBatchCreateView(string $date)
+    {
+        /* Set Custom. */
+        $customFields = array();
+        foreach(explode(',', $this->config->todo->list->customBatchCreateFields) as $field) $customFields[$field] = $this->lang->todo->$field;
+
+        $this->view->customFields = $customFields;
+        $this->view->showFields   = $this->config->todo->custom->batchCreateFields;
+
+        $this->view->title      = $this->lang->todo->common . $this->lang->colon . $this->lang->todo->batchCreate;
+        $this->view->position[] = $this->lang->todo->common;
+        $this->view->position[] = $this->lang->todo->batchCreate;
+        $this->view->date       = (int)$date == 0 ? $date : date('Y-m-d', strtotime($date));
+        $this->view->times      = date::buildTimeList($this->config->todo->times->begin, $this->config->todo->times->end, $this->config->todo->times->delta);
+        $this->view->time       = date::now();
+        $this->view->users      = $this->loadModel('user')->getPairs('noclosed|nodeleted|noempty');
 
         $this->display();
     }
@@ -42,8 +77,28 @@ class todoZen extends todo
     }
 
     /**
-     * 处理请求数据
-     * Processing request data.
+     * 生成指派待办视图数据。
+     * Build assignTo form data.
+     *
+     * @param  int        $todoID
+     * @access protected
+     * @return void
+     */
+    protected function buildAssignToView(int $todoID): void
+    {
+        $this->view->todo    = $this->todo->getByID($todoID);
+        $this->view->members = $this->loadModel('user')->getPairs('noclosed|noempty|nodeleted');
+        $this->view->times   = date::buildTimeList($this->config->todo->times->begin, $this->config->todo->times->end, $this->config->todo->times->delta);
+        $this->view->actions = $this->loadModel('action')->getList('todo', $todoID);
+        $this->view->users   = $this->user->getPairs('noletter');
+        $this->view->time    = date::now();
+
+        $this->display();
+    }
+
+    /**
+     * 处理创建待办的请求数据
+     * Processing request data of create.
      *
      * @param  object $formData
      * @access protected
@@ -51,13 +106,14 @@ class todoZen extends todo
      */
     protected function beforeCreate(object $formData): object
     {
-        $objectType = $this->post->type;
+        $rowData    = $formData->rawdata;
+        $objectType = $rowData->type;
         $hasObject  = in_array($objectType, $this->config->todo->moduleList);
 
         $objectID = 0;
-        if($hasObject && $objectType) $objectID = $this->post->uid ? $this->post->$objectType : $this->post->objectID;
+        if($hasObject && $objectType) $objectID = $rowData->uid ? $rowData->$objectType : $rowData->objectID;
 
-        $data = $formData->add('account', $this->app->user->account)
+        return $formData->add('account', $this->app->user->account)
             ->setDefault('objectID', 0)
             ->setDefault('vision', $this->config->vision)
             ->setDefault('assignedTo', $this->app->user->account)
@@ -65,16 +121,14 @@ class todoZen extends todo
             ->setDefault('assignedDate', helper::now())
             ->cleanInt('pri, begin, end, private')
             ->setIF($hasObject && $objectType,  'objectID', $objectID)
-            ->setIF($this->post->date == false,  'date', '2030-01-01')
-            ->setIF($this->post->begin == false, 'begin', '2400')
-            ->setIF($this->post->begin == false or $this->post->end == false, 'end', '2400')
-            ->setIF($this->post->status == 'done', 'finishedBy', $this->app->user->account)
-            ->setIF($this->post->status == 'done', 'finishedDate', helper::now())
+            ->setIF($rowData->date == false,  'date', '2030-01-01')
+            ->setIF($rowData->begin == false, 'begin', '2400')
+            ->setIF($rowData->begin == false or $rowData->end == false, 'end', '2400')
+            ->setIF($rowData->status == 'done', 'finishedBy', $this->app->user->account)
+            ->setIF($rowData->status == 'done', 'finishedDate', helper::now())
             ->stripTags($this->config->todo->editor->create['id'], $this->config->allowedTags)
             ->remove(implode(',', $this->config->todo->moduleList) . ',uid')
             ->get();
-
-        return $data;
     }
 
     /**
@@ -82,12 +136,13 @@ class todoZen extends todo
      * Create a todo after data processing.
      *
      * @param  object $todo
+     * @param  object $formData
      * @access protected
      * @return object
      */
-    protected function afterCreate(object $todo): object
+    protected function afterCreate(object $todo, object $formData): object
     {
-        $this->loadModel('file')->updateObjectID($this->post->uid, $todo->id, 'todo');
+        if(isset($formData->rawdata->uid)) $this->loadModel('file')->updateObjectID($formData->rawdata->uid, $todo->id, 'todo');
 
         $this->loadModel('score')->create('todo', 'create', $todo->id);
 
@@ -100,6 +155,19 @@ class todoZen extends todo
         if($date == date('Ymd')) $date = 'today';
 
         return $todo;
+    }
+
+    /**
+     * 处理批量创建待办的请求数据。
+     * Processing request data of batch create todo.
+     *
+     * @param  object $formData
+     * @access protected
+     * @return object
+     */
+    protected function beforeBatchCreate(object $formData): object
+    {
+        return $formData->get();
     }
 
     /**
@@ -156,7 +224,7 @@ class todoZen extends todo
     }
 
     /**
-     * 编辑完成待办后数据处理
+     * 编辑完成待办后数据处理。
      * Handle data after edit todo.
      *
      * @param  object $todo
@@ -171,89 +239,180 @@ class todoZen extends todo
         $this->action->logHistory($actionID, $changes);
     }
 
-    protected function batchEditFromMyTodo($type, $userID, $status)
+    /**
+     * 批量编辑页面渲染。
+     * Batch edit view display.
+     *
+     * @param object $formData
+     * @param string $type
+     * @param int    $userID
+     * @param string $status
+     * @access protected
+     * @return void
+     */
+    protected function batchEditFromMyTodo(object $formData, string $type, int $userID, string $status): void
     {
         /* Initialize vars. */
-        $editedTodos = array();
-        $todoIDList  = array();
-        $reviews     = array();
-        $columns     = 7;
+        $editedTodos = $objectIdList = $reviews = array();
+        $columns      = 7;
+        unset($this->lang->todo->typeList['cycle']);
 
-        if($userID == '') $userID = $this->app->user->id;
+        if(empty($userID)) $userID = $this->app->user->id;
         $user    = $this->loadModel('user')->getById($userID, 'id');
         $account = $user->account;
 
-        if($this->config->edition == 'max') $reviews = $this->loadModel('review')->getUserReviewPairs($account);
-        $allTodos = $this->todo->getList($type, $account, $status);
-        if($this->post->todoIDList) $todoIDList = $this->post->todoIDList;
+        list($editedTodos, $objectIdList) = $this->getBatchEditInitTodos($formData, $type, $account, $status);
 
-        /* Initialize todos whose need to edited. */
-        foreach($allTodos as $todo)
-        {
-            if(in_array($todo->id, $todoIDList))
-            {
-                $editedTodos[$todo->id] = $todo;
-                if($todo->type != 'custom')
-                {
-                    if(!isset($objectIDList[$todo->type])) $objectIDList[$todo->type] = array();
-                    $objectIDList[$todo->type][$todo->objectID] = $todo->objectID;
-                }
-            }
-        }
-
-        $bugs   = $this->bug->getUserBugPairs($account, true, 0, '', '', isset($objectIDList['bug']) ? $objectIDList['bug'] : '');
-        $tasks  = $this->task->getUserTaskPairs($account, 'wait,doing', '', isset($objectIDList['task']) ? $objectIDList['task'] : '');
-        $storys = $this->loadModel('story')->getUserStoryPairs($account, 10, 'story', '', isset($objectIDList['story']) ? $objectIDList['story'] : '');
-        if($this->config->edition != 'open') $this->view->feedbacks = $this->loadModel('feedback')->getUserFeedbackPairs($account, '', isset($objectIDList['feedback']) ? $objectIDList['feedback'] : '');
+        $bugs      = $this->loadModel('bug')->getUserBugPairs($account, true, 0, '', '', isset($objectIdList['bug']) ? $objectIdList['bug'] : '');
+        $tasks     = $this->loadModel('task')->getUserTaskPairs($account, 'wait,doing', '', isset($objectIdList['task']) ? $objectIdList['task'] : '');
+        $storys    = $this->loadModel('story')->getUserStoryPairs($account, 10, 'story', '', isset($objectIdList['story']) ? $objectIdList['story'] : '');
+        $users     = $this->loadModel('user')->getPairs('noclosed|nodeleted|noempty');
+        $testtasks = $this->loadModel('testtask')->getUserTestTaskPairs($account);
+        if($this->config->edition != 'open') $feedbacks = $this->loadModel('feedback')->getUserFeedbackPairs($account, '', isset($objectIdList['feedback']) ? $objectIdList['feedback'] : '');
         if($this->config->edition == 'max')
         {
             $issues        = $this->loadModel('issue')->getUserIssuePairs($account);
             $risks         = $this->loadmodel('risk')->getUserRiskPairs($account);
             $opportunities = $this->loadmodel('opportunity')->getUserOpportunityPairs($account);
+            $reviews       = $this->loadModel('review')->getUserReviewPairs($account);
         }
-        $testtasks = $this->loadModel('testtask')->getUserTestTaskPairs($account);
 
         /* Judge whether the edited todos is too large. */
         $countInputVars  = count($editedTodos) * $columns;
         $showSuhosinInfo = common::judgeSuhosinSetting($countInputVars);
 
-        unset($this->lang->todo->typeList['cycle']);
-        /* Set Custom*/
-        foreach(explode(',', $this->config->todo->list->customBatchEditFields) as $field) $customFields[$field] = $this->lang->todo->$field;
-        $this->view->customFields = $customFields;
-        $this->view->showFields   = $this->config->todo->custom->batchEditFields;
-
-        /* Assign. */
-        $title      = $this->lang->todo->common . $this->lang->colon . $this->lang->todo->batchEdit;
-        $position[] = html::a($this->createLink('my', 'todo'), $this->lang->my->todo);
-        $position[] = $this->lang->todo->common;
-        $position[] = $this->lang->todo->batchEdit;
-
         if($showSuhosinInfo) $this->view->suhosinInfo = extension_loaded('suhosin') ? sprintf($this->lang->suhosinInfo, $countInputVars) : sprintf($this->lang->maxVarsInfo, $countInputVars);
-        $this->view->bugs        = $bugs;
-        $this->view->tasks       = $tasks;
-        $this->view->storys      = $storys;
+        $this->view->bugs   = $bugs;
+        $this->view->tasks  = $tasks;
+        $this->view->storys = $storys;
+        $this->view->reviews     = $reviews;
+        $this->view->testtasks   = $testtasks;
+        $this->view->editedTodos = $editedTodos;
+        $this->view->users       = $users;
+        if($this->config->edition != 'open') $this->view->feedback = $feedbacks;
         if($this->config->edition == 'max')
         {
             $this->view->issues        = $issues;
             $this->view->risks         = $risks;
             $this->view->opportunities = $opportunities;
         }
-        $this->view->reviews     = $reviews;
-        $this->view->testtasks   = $testtasks;
-        $this->view->editedTodos = $editedTodos;
-        $this->view->times       = date::buildTimeList($this->config->todo->times->begin, $this->config->todo->times->end, $this->config->todo->times->delta);
-        $this->view->time        = date::now();
-        $this->view->title       = $title;
-        $this->view->position    = $position;
-        $this->view->users       = $this->loadModel('user')->getPairs('noclosed|nodeleted|noempty');
+
+        $this->buildBatchEditView();
+        return;
+    }
+
+    /**
+     * 获取批量编辑页面初始化待办数据。
+     * Get batch edit page initialization todo data.
+     *
+     * @param object $formData
+     * @param string $type
+     * @param string $account
+     * @param string $status
+     * @access protected
+     * @return array
+     */
+    private function getBatchEditInitTodos(object $formData, string $type, string $account, string $status): array
+    {
+        $editedTodos  = array();
+        $objectIdList = array();
+        $todoIdList   = array();
+
+        $allTodos = $this->todo->getList($type, $account, $status);
+        if($formData->data->todoIDList) $todoIdList = $formData->data->todoIDList;
+
+        /* Initialize todos whose need to edited. */
+        foreach($allTodos as $todo)
+        {
+            if(in_array($todo->id, $todoIdList))
+            {
+                $editedTodos[$todo->id] = $todo;
+                if($todo->type != 'custom')
+                {
+                    if(!isset($objectIdList[$todo->type])) $objectIdList[$todo->type] = array();
+                    $objectIdList[$todo->type][$todo->objectID] = $todo->objectID;
+                }
+            }
+        }
+
+        return array($editedTodos, $objectIdList);
+    }
+
+    /**
+     * 生成批量创建待办视图数据。
+     * Build batch edit view.
+     *
+     * @access private
+     * @return void
+     */
+    private function buildBatchEditView(): void
+    {
+        /* Set Custom*/
+        foreach(explode(',', $this->config->todo->list->customBatchEditFields) as $field) $customFields[$field] = $this->lang->todo->$field;
+        $this->view->customFields = $customFields;
+        $this->view->showFields   = $this->config->todo->custom->batchEditFields;
+        $this->view->times        = date::buildTimeList($this->config->todo->times->begin, $this->config->todo->times->end, $this->config->todo->times->delta);
+        $this->view->time         = date::now();
+        $this->view->title        = $this->lang->todo->common . $this->lang->colon . $this->lang->todo->batchEdit;
 
         $this->display();
     }
 
-    protected function batchEditFromTodoBatchEdit($formData)
+    /**
+     * 处理批量编辑待办数据。
+     * Build batch edit view.
+     *
+     * @param  object $formData
+     * @access protected
+     * @return array
+     */
+    protected function beforeBatchEdit(object $formData): array
     {
-        $allChanges = $this->todo->batchUpdate();
+        $todos      = array();
+        $data       = $formData->rawdata;
+        $todoIdList = $formData->data->todoIDList ? $formData->data->todoIDList : array();
+
+        if(!empty($todoIdList))
+        {
+            /* Initialize todos from the post data. */
+            $oldTodos = $this->todo->getTodosByIdList($todoIdList);
+            foreach($todoIdList as $todoID)
+            {
+                $oldTodo = $oldTodos[$todoID];
+
+                $todo = new stdclass();
+                $todo->date       = $data->dates[$todoID];
+                $todo->type       = $data->types[$todoID];
+                $todo->pri        = $data->pris[$todoID];
+                $todo->status     = $data->status[$todoID];
+                $todo->name       = !in_array($todo->type, $this->config->todo->moduleList) ? $data->names[$todoID] : '';
+                $todo->begin      = isset($data->begins[$todoID]) ? $data->begins[$todoID] : 2400;
+                $todo->end        = isset($data->ends[$todoID]) ? $data->ends[$todoID] : 2400;
+                $todo->assignedTo = isset($data->assignedTos[$todoID]) ? $data->assignedTos[$todoID] : $oldTodo->assignedTo;
+
+                if(in_array($todo->type, $this->config->todo->moduleList))
+                {
+                    $todo->objectID = isset($data->{$this->config->todo->objectList[$todo->type]}[$todoID]) ? $data->{$this->config->todo->objectList[$todo->type]}[$todoID] : 0;
+                }
+                if($todo->end < $todo->begin) return print(js::alert(sprintf($this->lang->error->gt, $this->lang->todo->end, $this->lang->todo->begin)));
+
+                $todos[$todoID] = $todo;
+            }
+        }
+
+        return $todos;
+    }
+
+    /**
+     * 批量编辑完成待办后数据处理。
+     * After Batch edit todo data.
+     *
+     * @param array $allChanges
+     * @access protected
+     * @return void
+     */
+    protected function afterBatchEdit(array $allChanges): void
+    {
         foreach($allChanges as $todoID => $changes)
         {
             if(empty($changes)) continue;
@@ -261,8 +420,6 @@ class todoZen extends todo
             $actionID = $this->loadModel('action')->create('todo', $todoID, 'edited');
             $this->action->logHistory($actionID, $changes);
         }
-
-        return print(js::locate($this->session->todoList, 'parent'));
     }
 
     /**
@@ -412,7 +569,7 @@ class todoZen extends todo
     }
 
     /**
-     * 处理指派待办请求数据.
+     * 处理指派待办请求数据。
      * Process assign todo request data.
      *
      * @param  object     $formData
@@ -434,7 +591,7 @@ class todoZen extends todo
     }
 
     /**
-     * 指派待办.
+     * 指派待办。
      * Assign a todo.
      *
      * @param   object     $todo
@@ -446,16 +603,47 @@ class todoZen extends todo
         return $this->todo->assignTo($todo);
     }
 
+
     /**
-     * 获取导出待办的字段。
+     * 获取用户信息。
+     * Get user info.
      *
-     * @param  array  $fields
-     * @param  array  $todoLang
+     * @param  int       $userID
+     * @access protected
+     * @return object|false
+     */
+    protected function getUserById(int $userID): object|false
+    {
+        return $this->loadModel('user')->getById($userID, 'id');
+    }
+
+    /**
+     * 记录当前页面uri参数链接。
+     * Set uri to session.
+     *
+     * @param  string    $uri
+     * @access protected
+     * @return true
+     */
+    protected function setSessionUri(string $uri): bool
+    {
+        foreach($this->config->todo->sessionUri as $key => $value) $this->session->set($key, $uri, $value);
+        return true;
+    }
+
+    /**
+     * 获取导出待办的字段和字段。
+     * Get fields and info for export todo.
+     *
+     * @param  array     $todos
+     * @param  string    $fields
+     * @param  array     $todoLang
      * @access protected
      * @return array
      */
-    protected function exportFields(array $fields, object $todoLang): array
+    protected function exportTodoInfo(array $todos, string $fields, object $todoLang): array
     {
+        $fields = explode(',', $fields);
         foreach($fields as $key => $fieldName)
         {
             $fieldName = trim($fieldName);
@@ -463,10 +651,21 @@ class todoZen extends todo
             unset($fields[$key]);
         }
         unset($fields['objectID'], $fields['private']);
-        return $fields;
+
+        if($this->config->edition != 'open') list($fields, $todos) = $this->loadModel('workflowfield')->appendDataFromFlow($fields, $todos);
+        return array($todos, $fields);
     }
 
-    public function exportInfo($type, $account)
+    /**
+     * 获取待办关联的信息。
+     * Get associated info for export todo.
+     *
+     * @param  string $type
+     * @param  string $account
+     * @access protected
+     * @return array
+     */
+    protected function exportAssociated(string $type, string $account): array
     {
         if($type == 'max')
         {
@@ -476,7 +675,7 @@ class todoZen extends todo
                 $this->loadModel('opportunity')->getUserOpportunityPairs($account),
             );
         }
-        else if($type == 'qcVersion')
+        elseif($type == 'qcVersion')
         {
             return $this->loadModel('review')->getUserReviewPairs($account, 0, 'wait');
         }
@@ -490,5 +689,51 @@ class todoZen extends todo
                 $this->loadModel('testtask')->getUserTesttaskPairs($account),
             );
         }
+    }
+
+    /**
+     * 处理导出数据。
+     * Deal with export data.
+     *
+     * @param array      $todos
+     * @param object     $assemble
+     * @param object     $todoLang
+     * @param array      $times
+     * @access protected
+     * @return array
+     */
+    protected function assembleExportData(array $todos, object $assemble, object $todoLang, array $times): array
+    {
+        foreach($todos as $todo)
+        {
+            /* fill some field with useful value. */
+            $todo->begin = $todo->begin == '2400' ? '' : (isset($times[$todo->begin]) ? $times[$todo->begin] : $todo->begin);
+            $todo->end   = $todo->end   == '2400' ? '' : (isset($times[$todo->end])   ? $times[$todo->end] : $todo->end);
+
+            $type = $todo->type;
+            if(isset($assemble->users[$todo->account])) $todo->account = $assemble->users[$todo->account];
+
+            if($type == 'bug')      $todo->name = isset($assemble->bugs[$todo->objectID])      ? $assemble->bugs[$todo->objectID]      . "(#$todo->objectID)" : '';
+            if($type == 'task')     $todo->name = isset($assemble->tasks[$todo->objectID])     ? $assemble->tasks[$todo->objectID]     . "(#$todo->objectID)" : '';
+            if($type == 'story')    $todo->name = isset($assemble->stories[$todo->objectID])   ? $assemble->stories[$todo->objectID]   . "(#$todo->objectID)" : '';
+            if($type == 'testtask') $todo->name = isset($assemble->testTasks[$todo->objectID]) ? $assemble->testTasks[$todo->objectID] . "(#$todo->objectID)" : '';
+
+            if($this->config->edition == 'max')
+            {
+                if($type == 'issue')       $todo->name = isset($assemble->issues[$todo->objectID]) ? $assemble->issues[$todo->objectID] . "(#$todo->objectID)" : '';
+                if($type == 'risk')        $todo->name = isset($assemble->risks[$todo->objectID])  ? $assemble->risks[$todo->objectID]  . "(#$todo->objectID)" : '';
+                if($type == 'opportunity') $todo->name = isset($assemble->opportunities[$todo->objectID]) ? $assemble->opportunities[$todo->objectID] . "(#$todo->objectID)" : '';
+            }
+            if($type == 'review' && isset($this->config->qcVersion)) $todo->name = isset($assemble->reviews[$todo->objectID]) ? $assemble->reviews[$todo->objectID] . "(#$todo->objectID)" : '';
+
+            if(isset($todoLang->typeList[$type]))           $todo->type   = $todoLang->typeList[$type];
+            if(isset($todoLang->priList[$todo->pri]))       $todo->pri    = $todoLang->priList[$todo->pri];
+            if(isset($todoLang->statusList[$todo->status])) $todo->status = $todoLang->statusList[$todo->status];
+            if($todo->private == 1)                         $todo->desc   = $this->lang->todo->thisIsPrivate;
+
+            /* drop some field that is not needed. */
+            unset($todo->objectID, $todo->private);
+        }
+        return $todos;
     }
 }

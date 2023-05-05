@@ -77,7 +77,7 @@ class execution extends control
         $this->loadModel('product');
 
         /* Get executions and products info. */
-        $executionID     = $this->execution->saveState($executionID, $this->executions);
+        $executionID     = $this->execution->checkAccess($executionID, $this->executions);
         $execution       = $this->execution->getById($executionID);
         $products        = $this->product->getProducts($executionID);
         $childExecutions = $this->execution->getChildExecutions($executionID);

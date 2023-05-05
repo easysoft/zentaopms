@@ -15,14 +15,32 @@ helper::import(dirname(dirname(__FILE__)) . '/base/filter/filter.class.php');
 class form extends baseFixer
 {
     /**
-     * @var object 原始 $_POST 数据。The raw $_POST data.
+     * 原始 $_POST 数据。
+     * The raw $_POST data.
+     *
+     * @var object
      */
     public $rawdata;
 
+    /**
+     * 错误信息列表。
+     * Error list.
+     *
+     * @var object
+     */
+    public $errors;
+
+    /**
+     * 构造方法。
+     * The construct function.
+     *
+     * @return void
+     */
     public function __construct()
     {
         $this->rawdata = (object)$_POST;
         $this->data    = (object)array();
+        $this->errors  = array();
     }
 
     /**
@@ -51,6 +69,11 @@ class form extends baseFixer
         $this->rawconfig = $config;
 
         foreach($this->rawconfig as $key => $value) $this->convertField($key, $value);
+        if(!empty($this->errors))
+        {
+            $response = array('result' => 'fail', 'message' => $this->errors);
+            helper::end(json_encode($response));
+        }
 
         return $this;
     }
@@ -77,19 +100,22 @@ class form extends baseFixer
      */
     public function convertField(string $field, array $config)
     {
-        if(isset($config['required']) && $config['required'] && !isset($this->rawdata->$field))
-        {
-            throw new InvalidArgumentException("Field $field is required");
-        }
-
-        if(isset($config['required']) && !$config['required'] && !isset($config['default']))
-        {
-            throw new InvalidArgumentException("Field $field is not required, but need default value");
-        }
+        global $app;
 
         if(!isset($config['type']))
         {
-            throw new InvalidArgumentException("Field $field need defined type");
+            if(!isset($this->errors[$field])) $this->errors[$field] = array();
+            $this->errors[$field][] = "Field '$field' need defined type";
+        }
+
+        if(isset($config['required']) && $config['required'])
+        {
+            if(!isset($config['default']) && (!isset($this->rawdata->$field) || $this->rawdata->$field === ''))
+            {
+                if(!isset($this->errors[$field])) $this->errors[$field] = array();
+                $fieldName = isset($app->lang->{$app->rawModule}->$field) ? $app->lang->{$app->rawModule}->$field : $field;
+                $this->errors[$field][] = sprintf($app->lang->error->notempty, $fieldName);
+            }
         }
 
         if(isset($this->rawdata->$field))

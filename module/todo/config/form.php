@@ -1,6 +1,7 @@
 <?php
 declare(strict_types=1);
 
+if(!isset($config->todo->create)) $config->todo->create = new stdclass();
 $config->todo->create->form = array();
 $config->todo->create->form['type']       = array('required' => true, 'type' => 'string');
 $config->todo->create->form['name']       = array('required' => true, 'type' => 'string');
@@ -18,6 +19,19 @@ $config->todo->create->form['vision']       = array('required' => false, 'type' 
 $config->todo->create->form['objectID']     = array('required' => false, 'type' => 'int',     'default' => 0);
 $config->todo->create->form['desc']         = array('required' => false, 'type' => 'string',  'default' => '');
 $config->todo->create->form['uid']          = array('required' => false, 'type' => 'string',  'default' => '');
+
+$config->todo->batchCreate = new stdClass;
+$config->todo->batchCreate->form = array();
+$config->todo->batchCreate->form['types']       = array('required' => false, 'type' => 'array');
+$config->todo->batchCreate->form['pris']        = array('required' => false, 'type' => 'array');
+$config->todo->batchCreate->form['names']       = array('required' => false, 'type' => 'array');
+$config->todo->batchCreate->form['descs']       = array('required' => false, 'type' => 'array');
+$config->todo->batchCreate->form['assignedTos'] = array('required' => false, 'type' => 'array');
+$config->todo->batchCreate->form['begins']      = array('required' => false, 'type' => 'array');
+$config->todo->batchCreate->form['ends']        = array('required' => false, 'type' => 'array');
+$config->todo->batchCreate->form['switchTime']  = array('required' => false, 'type' => 'array');
+$config->todo->batchCreate->form['date']        = array('required' => false, 'type' => 'array');
+$config->todo->batchCreate->form['switchDate']  = array('required' => false, 'type' => 'array');
 
 $config->todo->edit->form = array();
 $config->todo->edit->form['name'] = array('required' => true, 'type' => 'string');
@@ -39,4 +53,16 @@ $config->todo->batchClose->form['todoIDList'] = array('required' => true, 'type'
 $config->todo->batchEdit = new stdClass;
 $config->todo->batchEdit->form = array();
 $config->todo->batchEdit->form['todoIDList'] = array('required' => true, 'type' => 'array');
-$config->todo->batchEdit->form['names']      = array('required' => true, 'type' => 'array');
+
+$config->todo->batchFinish = new stdclass;
+$config->todo->batchFinish->form = array();
+$config->todo->batchFinish->form['todoIDList'] = array('required' => true, 'type' => 'array');
+
+$config->todo->editDate = new stdClass;
+$config->todo->editDate->form = array();
+$config->todo->editDate->form['date']       = array('required' => true, 'type' => 'string');
+$config->todo->editDate->form['todoIDList'] = array('required' => true, 'type' => 'array');
+
+$config->todo->export = new stdClass;
+$config->todo->export->form = array();
+$config->todo->export->form['exportType'] = array('required' => true, 'type' => 'string');

@@ -243,7 +243,29 @@ class yaml
         $this->tableName = $tableName;
         $this->fields    = new fields();
 
-        $this->configFiles[] = dirname(dirname(__FILE__)) . "/data/{$this->tableName}.yaml";
+        $yamlPath = dirname(dirname(__FILE__)) . "/data/{$this->tableName}.yaml";
+        $this->configFiles[] = $yamlPath;
+
+        if(!file_exists($yamlPath)) $this->buildYamlFile($this->tableName);
+    }
+
+    /**
+     * Build the initial yaml file.
+     *
+     * @param  string $tableName
+     * @access public
+     * @return viod
+     */
+    public function buildYamlFile($tableName)
+    {
+        $yamlData['title']   = 'table zt_' . $tableName;
+        $yamlData['author']  = 'automated export';
+        $yamlData['version'] = '1.0';
+        $yamlData['fields'][0]['field'] = 'id';
+        $yamlData['fields'][0]['range'] = '1-1000';
+
+        $yamlFile = dirname(dirname(__FILE__)) . "/data/{$this->tableName}.yaml";
+        yaml_emit_file($yamlFile, $yamlData, YAML_UTF8_ENCODING);
     }
 
     /**
@@ -342,32 +364,16 @@ class yaml
     }
 
     /**
-     * 打印zendata生成的sql和导入数据库产生的错误.
-     * Print sql and error.
-     *
-     * @param  int    $rows
-     * @param  bool   $isClear Truncate table if set isClear to true.
-     * @param  bool   $debug Print sql and error if set isClear to true.
-     * @access public
-     * @return void
-     */
-    public function debug($rows, $isClear = true)
-    {
-        $yamlFile = $this->mergeYaml();
-        $this->insertDB($yamlFile, $this->tableName, $rows, $isClear, true);
-    }
-    /**
      * Insert the data into database.
      *
      * @param  string    $yamlFile
      * @param  string    $tableName
      * @param  int       $rows
      * @param  bool      $isClear Truncate table if set isClear to true.
-     * @param  bool      $debug 
      * @access public
      * @return string
      */
-    function insertDB($yamlFile, $tableName, $rows, $isClear = true, $debug = false)
+    function insertDB($yamlFile, $tableName, $rows, $isClear = true)
     {
         $tableSqlDir = "{$_SERVER['PWD']}/data/sql";
 
@@ -385,32 +391,51 @@ class yaml
         $dbUser    = $this->config->db->user;
         $dbPWD     = $this->config->db->password;
 
-        $command = "$zdPath -c %s -d %s -n %d -t %s -dns mysql://%s:%s@%s:%s/%s#utf8";
+        $command = "mysql -u%s -p%s -h%s -P%s -D%s < %s";
         $genSQL  = "$zdPath -c %s -d %s -n %d -t %s -o %s";
         if($isClear === true)
         {
             /* Truncate table to reset auto increment number. */
             system(sprintf("mysql -u%s -p%s -h%s -P%s %s -e 'truncate %s' 2>/dev/null", $dbUser, $dbPWD, $dbHost, $dbPort, $dbName, $tableName));
-            $command .= ' --clear';
         }
         $sqlPath    = "{$tableSqlDir}/{$tableName}_zd.sql";
-        $execYaml   = sprintf($command, $configYaml, $yamlFile, $rows, $tableName, $dbUser, $dbPWD, $dbHost, $dbPort, $dbName);
+        $execYaml   = sprintf($command, $dbUser, $dbPWD, $dbHost, $dbPort, $dbName, $sqlPath);
         $execDump   = sprintf($dumpCommand, $dbUser, $dbPWD, $dbHost, $dbPort, $dbName, $tableName);
 
         $execGenSQL = sprintf($genSQL, $configYaml, $yamlFile, $rows, $tableName, $sqlPath);
         system($execGenSQL);
 
-        if($debug)
-        {
-            echo "\n" . file_get_contents($sqlPath) . "\n";
-
-            $tmpl = "mysql -u%s -p%s -h%s -P%s -D%s < %s";
-            system(sprintf($tmpl, $dbUser, $dbPWD, $dbHost, $dbPort, $dbName, $sqlPath));
-            return;
-        }
-
         system($execDump);
-        system($execYaml);
+        $stderr = '';
+        $this->exec_with_stderr($execYaml, $stderr);
+
+        if(empty($stderr)) return;
+
+        $errors = explode(PHP_EOL, $stderr);
+        $errors = array_filter($errors, function($error)
+        {
+            return !empty($error) && !strpos($error, 'Using a password on the command line interface can be insecure');
+        });
+
+        if(!empty($errors)) echo implode(PHP_EOL, $errors) . PHP_EOL;
+    }
+
+    /**
+     * 执行系统命令，并捕捉stderror
+     * exec command and catch stderror.
+     *
+     * @param  string    $cmd
+     * @param  string    $stderr
+     * @access private
+     * @return string
+     */
+    private function exec_with_stderr($cmd, &$stderr=null)
+    {
+        $proc   = proc_open($cmd, array(2 => array('pipe', 'w')), $pipes);
+        $stderr = stream_get_contents($pipes[2]);
+
+        fclose($pipes[2]);
+        proc_close($proc);
     }
 
     /**

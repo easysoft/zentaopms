@@ -309,8 +309,8 @@ class bugModel extends model
     }
 
     /**
-     * Get bug list by browse type.
      * 根据浏览类型获取bug列表。
+     * Get bug list by browse type.
      *
      * @param  string      $browseType
      * @param  int|array   $productIdList
@@ -337,19 +337,9 @@ class bugModel extends model
 
         /* Get bugs by browse type. */
         $bugList = array();
-        if($browseType == 'all')
-        {
-            $bugList = $this->bugTao->getAllBugs($productIdList, $projectID, $executionIdList, $branch, $modules, $orderBy, $pager);
-            $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'bug');
-        }
-        elseif($browseType == 'review')
-        {
-            $bugList = $this->bugTao->getListByReviewToMe($productIdList, $projectID, $executionIdList, $branch, $modules, $orderBy, $pager);
-            $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'bug');
-        }
+        if($browseType == 'bysearch') $bugList = $this->getBySearch($productIdList, $branch, $queryID, $orderBy, '', $pager, $projectID);
         elseif($browseType == 'needconfirm') $bugList = $this->bugTao->getListByNeedconfirm($productIdList, $projectID, $executionIdList, $branch, $modules, $orderBy, $pager);
-        elseif($browseType == 'bysearch')    $bugList = $this->getBySearch($productIdList, $branch, $queryID, $orderBy, '', $pager, $projectID);
-        elseif(strpos(',bymodule,assigntome,openedbyme,resolvedbyme,assigntonull,unconfirmed,unresolved,unclosed,toclosed,longlifebugs,postponedbugs,overduebugs,assignedbyme,', ",$browseType,") !== false) $bugList = $this->bugTao->getListByBrowseType($browseType, $productIdList, $projectID, $executionIdList, $branch, $modules, $orderBy, $pager);
+        elseif(strpos(',all,bymodule,assigntome,openedbyme,resolvedbyme,assigntonull,unconfirmed,unresolved,unclosed,toclosed,longlifebugs,postponedbugs,overduebugs,assignedbyme,review,', ",$browseType,") !== false) $bugList = $this->bugTao->getListByBrowseType($browseType, $productIdList, $projectID, $executionIdList, $branch, $modules, $orderBy, $pager);
 
         return $this->bugTao->batchAppendDelayedDays($bugList);
     }
@@ -432,15 +422,15 @@ class bugModel extends model
     }
 
     /**
-     * Get bugs by ID list.
      * 获取指定字段的bug列表。
+     * Get bugs by ID list.
      *
      * @param  int|array|string $bugIDList
      * @param  string           $fields
      * @access public
      * @return array
      */
-    public function getByList(int|array|string $bugIDList = 0, string $fields = '*'): array
+    public function getByIdList(int|array|string $bugIDList = 0, string $fields = '*'): array
     {
         return $this->dao->select($fields)->from(TABLE_BUG)
             ->where('deleted')->eq('0')
@@ -1348,45 +1338,48 @@ class bugModel extends model
     }
 
     /**
+     * 关闭一个bug。
      * Close a bug.
      *
-     * @param  int    $bugID
+     * @param  object $bug
      * @param  string $extra
      * @access public
      * @return void
      */
-    public function close($bugID, $extra = '')
+    public function close(object $bug, string $extra = '')
     {
-        $extra = str_replace(array(',', ' '), array('&', ''), $extra);
-        parse_str($extra, $output);
+        $this->dao->update(TABLE_BUG)->data($bug, 'comment')->autoCheck()->checkFlow()->where('id')->eq((int)$bug->id)->exec();
+    }
 
-        $now    = helper::now();
-        $oldBug = $this->getById($bugID);
-        $bug    = fixer::input('post')
-            ->add('id', $bugID)
-            ->add('status',     'closed')
-            ->add('confirmed',  1)
-            ->setDefault('assignedDate',   $now)
-            ->setDefault('lastEditedBy',   $this->app->user->account)
-            ->setDefault('lastEditedDate', $now)
-            ->setDefault('closedBy',       $this->app->user->account)
-            ->setDefault('closedDate',     $now)
-            ->stripTags($this->config->bug->editor->close['id'], $this->config->allowedTags)
-            ->remove('comment')
-            ->get();
+    /**
+     * 关闭bug后的其他处理。
+     * Handle after bug closed.
+     *
+     * @param  object $bug
+     * @param  object $oldBug
+     * @access public
+     * @return array
+     */
+    public function afterClose(object $bug, object $oldBug):array
+    {
+        if($oldBug->execution) list($bug, $oldBug) = $this->bugTao->updateKanbanAfterClose($bug, $oldBug);
+        list($bug, $oldBug) = $this->bugTao->updateActionAfterClose($bug, $oldBug);
+        $this->updateBugAssignedTo((int)$bug->id);
 
-        $bug = $this->loadModel('file')->processImgURL($bug, $this->config->bug->editor->close['id'], $this->post->uid);
-        $this->dao->update(TABLE_BUG)->data($bug)->autoCheck()->checkFlow()->where('id')->eq((int)$bugID)->exec();
-        if($oldBug->execution)
-        {
-            $this->loadModel('kanban');
-            if(!isset($output['toColID'])) $this->kanban->updateLane($oldBug->execution, 'bug', $bugID);
-            if(isset($output['toColID'])) $this->kanban->moveCard($bugID, $output['fromColID'], $output['toColID'], $output['fromLaneID'], $output['toLaneID']);
-        }
+        return array($bug, $oldBug);
+    }
 
-        if(($this->config->edition == 'biz' || $this->config->edition == 'max') && $oldBug->feedback) $this->loadModel('feedback')->updateStatus('bug', $oldBug->feedback, $bug->status, $oldBug->status);
-
-        return common::createChanges($oldBug, $bug);
+    /**
+     * 更新bug的抄送给状态为已关闭。
+     * Update bug assigned to value to closed.
+     *
+     * @param  int $bugID
+     * @access public
+     * @return viod
+     */
+    public function updateBugAssignedTo(int $bugID)
+    {
+        $this->dao->update(TABLE_BUG)->set('assignedTo')->eq('closed')->where('id')->eq($bugID)->exec();
     }
 
     /**
@@ -3110,7 +3103,7 @@ class bugModel extends model
     {
         /* Set toList and ccList. */
         $toList = $bug->assignedTo ? $bug->assignedTo : '';
-        $ccList = trim($bug->mailto, ',');
+        $ccList = trim((string)$bug->mailto, ',');
         if(empty($toList))
         {
             if(empty($ccList)) return false;

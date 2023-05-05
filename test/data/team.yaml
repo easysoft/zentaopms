@@ -32,7 +32,7 @@ fields:
       - field: account1
         range: admin,user{98},test{100},pm{100},po{100}
       - field: account2
-        range: [],3-100,1-100,1-100,1-100
+        range: "[],3-100,1-100,1-100,1-100"
     prefix: ""
     postfix: ""
     loop: 0

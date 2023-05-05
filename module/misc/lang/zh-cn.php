@@ -202,7 +202,7 @@ $lang->misc->releaseDate['7.1.stable']  = '2015-03-07';
 $lang->misc->releaseDate['6.3.stable']  = '2014-11-07';
 
 /* Release Detail. */
-$lang->misc->feature->all['18.4.alpha1'][] = array('title' => '', 'desc' => '');
+$lang->misc->feature->all['18.4.alpha1'][] = array('title' => '优化权限、文档交互体验，测试新增场景概念，用例支持xmind导入，并对BI模块中的大屏、透视表、图表、数据表进行了全面升级。', 'desc' => '');
 $lang->misc->feature->all['18.3'][]        = array('title' => '二次开发增加语言项自定义,支持对菜单和检索标签的语言项进行定义；二次开发增加编辑器功能，支持用户按需开启和关闭；表单意外退出支持表单暂存，下次进入自动代入填写的未保存信息。', 'desc' => '');
 $lang->misc->feature->all['18.2'][]        = array('title' => '新增融合敏捷、融合瀑布管理模型，瀑布项目阶段支持无限级拆分，后台进行全新UI改版。修复Bug。', 'desc' => '');
 $lang->misc->feature->all['18.1'][]        = array('title' => '自动化测试解决方案交互优化、新增快照管理功能。禅道客户端实现了 PPT文档在线协作。修复Bug。', 'desc' => '');

@@ -307,7 +307,7 @@ function getTableInfo($)
 
     info.dtable = setting;
     info.layout = 'list';
-    info.sidebar = $('#sidebar').length ? {type: 'moduleTree'} : undefined;
+    info.sidebar = $('#sidebar').length ? {type: 'moduleMenu'} : undefined;
 
     if($('#tableCustomBtn').length) info.tableCustomCols = true;
     return info;
@@ -477,7 +477,7 @@ function getFormInfo($)
  */
 function getPageInfo(win)
 {
-    const {document, config, $} = win;
+    const {document, config, $, pageVars} = win;
     return $.extend(
     {
         url: win.location.href,
@@ -487,6 +487,7 @@ function getPageInfo(win)
         featureBar: getFeatureBarInfo($),
         toolbar: getToolbarInfo($),
         mainHeader: getMainHeaderInfo($),
+        vars: pageVars,
     }, getTableInfo($), getFormInfo($));
 }
 
@@ -518,6 +519,32 @@ function genSetStatement(name, value, indent = 0)
 }
 
 /**
+ * Find dotted var name from an object
+ */
+function findVarName(val, vars, preName = '')
+{
+    if(vars === val) return preName;
+    if(!vars || typeof vars !== 'object') return '';
+    const props = Object.keys(vars);
+    for(const prop of props)
+    {
+        if(!Number.isNaN(+prop)) return (preName.length && val === vars[prop]) ? `${preName}[${prop}]` : '';
+        const name = findVarName(val, vars[prop], preName.length ? `${preName}->${prop}` : prop);
+        if(name.length) return name;
+    }
+    return '';
+}
+
+/**
+ * Get var name matchs the given value
+ */
+function getVarName(val)
+{
+    if(!pageInfo || !pageInfo.vars || typeof val === 'object') return;
+    return findVarName(val, pageInfo.vars);
+}
+
+/**
  * Gen value to php statement
  * @param {any} value
  * @param {number} indent
@@ -536,6 +563,11 @@ function genValueStatement(value, indent = 0, join = '\n')
         return genArrayStatement(value, null, indent, '', '', join);
     }
     if(typeof value === 'string' && value.startsWith('RAW_PHP<')) return indentLines(value.substring(8, value.length - 8), indent);
+    if(typeof value !== 'object' && value !== '')
+    {
+        const varName = getVarName(value);
+        if(varName.length) return `$${varName}`;
+    }
     return indentLines(JSON.stringify(value), indent);
 }
 
@@ -564,7 +596,7 @@ function genArrayStatement(array, props = null, indent = 0, prefix = '', suffix 
     [
         `${prefix}array`,
         '(',
-        indentLines(propLines.join(`,${join === '' ? ' ' : join}`), join === '' ? 0 : (1 + indent)),
+            indentLines(propLines.join(`,${join === '' ? ' ' : join}`), join === '' ? 0 : (1 + indent)),
         `)${suffix}`
     ], indent).join(join);
 }
@@ -595,7 +627,7 @@ function genVarStatement(name, value, indent = 0, join = '')
 
 function genInputGroupItemStatement(item, indent = 0)
 {
-    if(item.type === 'addon') return indentLines(JSON.stringify(item.text), indent);
+    if(item.type === 'addon') return indentLines(genValueStatement(item.text), indent);
     if(item.type === 'btn') return indentLines(genArrayStatement(item, null, 0, 'btn(set(', '))'), indent);
     item = $.extend({}, item);
     if(typeof item.type === 'object') item = $.extend(item, item.type);
@@ -624,7 +656,7 @@ function genFormGroupStatement(formGroup, indent = 0)
             [
                 formGroup.width    ? `set::width(${JSON.stringify(formGroup.width)})` : null,
                 formGroup.name     ? `set::name(${JSON.stringify(formGroup.name)})` : null,
-                formGroup.label    ? `set::label(${JSON.stringify(formGroup.label)})` : null,
+                formGroup.label    ? `set::label(${genValueStatement(formGroup.label)})` : null,
                 formGroup.class    ? `set::class(${JSON.stringify(formGroup.class)})` : null,
                 formGroup.disabled ? 'set::disabled(true)' : null,
                 formGroup.required ? 'set::required(true)' : null,
@@ -663,7 +695,7 @@ function getPageTemplate(info)
     const {featureBar = {}, toolbar, dtable, form, mainHeader = {}} = info;
     const variables = [];
     const widgets   = [];
-    if(featureBar && featureBar.current)
+    if(featureBar && featureBar.current && !info.vars.browseType)
     {
         lines.push
         (
@@ -737,7 +769,7 @@ function getPageTemplate(info)
             '/* zin: Define the sidebar in main content */',
             'sidebar',
             '(',
-            `    ${info.sidebar.type}`,
+            `    ${info.sidebar.type}()`,
             ');',
             ''
         );
@@ -769,6 +801,7 @@ function getPageTemplate(info)
     }
     else if(form)
     {
+        widgets.push('formPanel', 'formRow', 'inputGroup', 'input', 'control');
         const mainHeader = info.mainHeader || {};
         lines.push
         (
@@ -800,8 +833,15 @@ function getPageTemplate(info)
 
     lines.unshift(
         '<?php',
+        'declare(strict_types=1);',
         '/**',
-        ` * The ${info.methodName} view of ${info.moduleName} of ZenTaoPMS.`,
+        ` * The ${info.methodName} view file of ${info.moduleName} module of ZenTaoPMS.`,
+        ' *',
+        ' * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)',
+        ' * @license     ZPL(https://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)',
+        ' * @author      yourname<yourname@easycorp.ltd>',
+        ` * @package     ${info.moduleName}`,
+        ' * @link        http://www.zentao.net',
         ' */',
         '',
         '/*',
@@ -811,12 +851,12 @@ function getPageTemplate(info)
         '',
         `  + Familiar with the use of these widgets in zin: ${widgets.join(', ')}.`,
         variables.length ? `  + Check the following variables which used in widgets: ${variables.map(x => `$${x}`).join(', ')}.` : null,
-        featureBar.items && featureBar.items.length ? `  + Check the ${featureBar.items.length.length} items difinition in featureBar widget.` : null,
-        toolbar && toolbar.length ? `  + Check the ${toolbar.length} items difinition in toolbar widget.` : null,
+        featureBar.items && featureBar.items.length ? `  + Check the ${featureBar.items.length} items definition in featureBar widget.` : null,
+        toolbar && toolbar.length ? `  + Check the ${toolbar.length} items definition in toolbar widget.` : null,
         `  + Check the origin code in module/${info.moduleName}/view/${info.methodName}.html.php, and ensure that all features have been implemented.`,
         `  + Check the origin js code in module/${info.moduleName}/js/common.js and module/${info.moduleName}/js/${info.methodName}.js`,
         `  + Check the origin css code in module/${info.moduleName}/css/common.css and module/${info.moduleName}/css/${info.methodName}.css`,
-        '  + Remove the comments which starts with "zin:"',
+        '  + Remove the comments which start with "zin:"',
         '  + Test according to the new design draft and the original implementation',
         ' */',
         '',
@@ -839,9 +879,8 @@ function zin(win)
 
     if(!win.config) return $.zui.messager.danger('zin: Current page is not supported yet, may be it rendered by zin already!');
 
-    const pageInfo = getPageInfo(win);
+    const pageInfo = window.pageInfo = getPageInfo(win);
     if(!pageInfo) return $.zui.messager.danger('zin: Current page is not supported temporarily.');
-
     const template = getPageTemplate(pageInfo);
     console.log('> [ZIN-TOOL] pageInfo', pageInfo);
     console.log('> [ZIN-TOOL] template', template);

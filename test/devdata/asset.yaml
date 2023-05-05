@@ -1,0 +1,20 @@
+title: zt_asset
+author: Zeng gang
+version: "1.0"
+fields:
+  - field: id
+    range: 1
+  - field: name
+    range: host_test
+  - field: status
+    range: normal
+  - field: type
+    range: host
+  - field: createdBy
+    range: admin
+  - field: createdDate
+    range: [2022-03-07 10:44:23]
+  - field: registerDate
+    range: [2022-03-07 10:44:23]
+  - field: deleted
+    range: 0
