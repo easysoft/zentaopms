@@ -93,7 +93,7 @@ class block extends control
         $this->view->dashboard = $block->dashboard;
         $this->view->module    = $module ? $module : $block->module;
         $this->view->modules   = $this->blockZen->getAvailableModules($block->dashboard);
-        $this->view->codes     = $this->blockZen->getAvailableBlocks($block->dashboard, $this->view->module);
+        $this->view->codes     = $this->blockZen->getAvailableCodes($block->dashboard, $this->view->module);
         $this->view->code      = $this->view->codes ? (in_array($code, array_keys($this->view->codes)) ? $code : '') : $code;
         $this->view->params    = $this->blockZen->getAvailableParams($block->dashboard, $this->view->module, $this->view->code);
         $this->display();

@@ -417,38 +417,42 @@ class productZen extends product
      * 追加创建信息，处理白名单、项目集字段，还有富文本内容处理。
      * Prepare data for create.
      *
-     * @param  form $data
+     * @param  form   $data
+     * @param  string $acl
+     * @param  string $uid
      * @access protected
      * @return object
      */
-    protected function prepareCreateExtras(form $data): object
+    protected function prepareCreateExtras(form $data, string $acl, string $uid = ''): object
     {
         $product = $data->setDefault('createdBy', $this->app->user->account)
             ->setDefault('createdDate', helper::now())
             ->setDefault('createdVersion', $this->config->version)
             ->setIF($this->config->systemMode == 'light', 'program', (int)zget($this->config->global, 'defaultProgram', 0))
-            ->setIF($data->rawdata->acl == 'open', 'whitelist', '')
+            ->setIF($acl == 'open', 'whitelist', '')
             ->stripTags($this->config->product->editor->create['id'], $this->config->allowedTags)
             ->get();
 
-        return $this->loadModel('file')->processImgURL($product, $this->config->product->editor->create['id'], $data->rawdata->uid);
+        return $this->loadModel('file')->processImgURL($product, $this->config->product->editor->create['id'], $uid);
     }
 
     /**
      * 处理白名单和富文本内容。
      * Prepare data for edit.
      *
-     * @param  form $data
+     * @param  form   $data
+     * @param  string $acl
+     * @param  string $uid
      * @access protected
      * @return object
      */
-    protected function prepareEditExtras(form $data): object
+    protected function prepareEditExtras(form $data, string $acl, string $uid = ''): object
     {
-        $product = fixer::input('post')->setIF($data->rawdata->acl == 'open', 'whitelist', '')
+        $product = fixer::input('post')->setIF($acl == 'open', 'whitelist', '')
             ->stripTags($this->config->product->editor->edit['id'], $this->config->allowedTags)
             ->get();
 
-        return $this->loadModel('file')->processImgURL($product, $this->config->product->editor->edit['id'], zget($data->rawdata, 'uid', ''));
+        return $this->loadModel('file')->processImgURL($product, $this->config->product->editor->edit['id'], $uid);
     }
 
     /**
