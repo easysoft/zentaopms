@@ -307,7 +307,7 @@ function getTableInfo($)
 
     info.dtable = setting;
     info.layout = 'list';
-    info.sidebar = $('#sidebar').length ? {type: 'moduleTree'} : undefined;
+    info.sidebar = $('#sidebar').length ? {type: 'moduleMenu'} : undefined;
 
     if($('#tableCustomBtn').length) info.tableCustomCols = true;
     return info;
@@ -528,6 +528,7 @@ function findVarName(val, vars, preName = '')
     const props = Object.keys(vars);
     for(const prop of props)
     {
+        if(!Number.isNaN(+prop)) return (preName.length && val === vars[prop]) ? `${preName}[${prop}]` : '';
         const name = findVarName(val, vars[prop], preName.length ? `${preName}->${prop}` : prop);
         if(name.length) return name;
     }
@@ -768,7 +769,7 @@ function getPageTemplate(info)
             '/* zin: Define the sidebar in main content */',
             'sidebar',
             '(',
-            `    ${info.sidebar.type}`,
+            `    ${info.sidebar.type}()`,
             ');',
             ''
         );

@@ -373,4 +373,19 @@ class todoTest
 
         return $count;
     }
+
+    /**
+     * 修改待办事项时间。
+     * Edit todo date.
+     *
+     * @param  array  $todoIDList
+     * @param  string $date
+     * @access public
+     * @return string
+     */
+    public function editDateTest(array $todoIDList, string $date)
+    {
+	$result = $this->objectModel->editDate($todoIDList, $date);
+	return $result ? '1' : '0';
+    }
 }

@@ -102,7 +102,7 @@ class todoModel extends model
 
         $this->loadModel('file')->updateObjectID($todo->uid, $todoID, 'todo');
         if(!empty($oldTodo->cycle)) $this->createByCycle(array($todoID => $todo));
-        if(($this->config->edition == 'biz' || $this->config->edition == 'max') && $todo->type == 'feedback' && $todo->objectID) $this->loadModel('feedback')->updateStatus('todo', $todo->objectID, $todo->status);
+        if($this->config->edition != 'open' && $todo->type == 'feedback' && $todo->objectID) $this->loadModel('feedback')->updateStatus('todo', $todo->objectID, $todo->status);
         return common::createChanges($oldTodo, (array)$todo);
     }
 
@@ -133,7 +133,7 @@ class todoModel extends model
 
             if(!dao::isError())
             {
-                if(($this->config->edition == 'biz' || $this->config->edition == 'max') && $todo->type == 'feedback' && $todo->objectID && !isset($feedbacks[$todo->objectID]))
+                if($this->config->edition != 'open' && $todo->type == 'feedback' && $todo->objectID && !isset($feedbacks[$todo->objectID]))
                 {
                     $feedbacks[$todo->objectID] = $todo->objectID;
                     $this->loadModel('feedback')->updateStatus('todo', $todo->objectID, $todo->status);
@@ -187,7 +187,7 @@ class todoModel extends model
 
         $this->loadModel('action')->create('todo', $todoID, 'finished', '', 'done');
 
-        if(($this->config->edition == 'biz' || $this->config->edition == 'max'))
+        if($this->config->edition != 'open')
         {
             $todo       = $this->todoTao->fetch($todoID);
             $feedbackID = $todo->objectID ? $todo->objectID : '' ;
