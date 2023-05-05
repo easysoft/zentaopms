@@ -573,6 +573,7 @@ class todo extends control
     }
 
     /**
+     * 创建周期待办。
      * Create cycle.
      *
      * @access public
@@ -580,7 +581,7 @@ class todo extends control
      */
     public function createCycle()
     {
-        $todoList = $this->dao->select('*')->from(TABLE_TODO)->where('cycle')->eq(1)->andWhere('deleted')->eq(0)->fetchAll('id');
+        $todoList = $this->todo->getValidCycleList();
         $this->todo->createByCycle($todoList);
     }
 }
