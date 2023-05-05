@@ -6,7 +6,7 @@ helper::import(dirname(dirname(dirname(__FILE__))) . '/lib/date/date.class.php')
 $config->todo = new stdclass();
 $config->todo->maxBatchCreate = 8;
 
-$config->todo->create = new stdclass();
+if(!isset($config->todo->create)) $config->todo->create = new stdclass();
 $config->todo->edit   = new stdclass();
 $config->todo->dates  = new stdclass();
 $config->todo->times  = new stdclass();

@@ -166,7 +166,6 @@ class todoModel extends model
         return !dao::isError();
     }
 
-
     /**
      * 完成一个待办。
      * Finish one todo.
@@ -216,7 +215,7 @@ class todoModel extends model
     }
 
     /**
-     * 获取待办事项详情数据
+     * 获取待办事项详情数据。
      * Get info of a todo.
      *
      * @param  int    $todoID
@@ -407,7 +406,7 @@ class todoModel extends model
 
         $this->loadModel('action')->create('todo', $todoID, 'closed', '', 'closed');
 
-        if($this->config->edition == 'biz' || $this->config->edition == 'max')
+        if($this->config->edition != 'open')
         {
             $feedbackID = $this->dao->select('objectID')->from(TABLE_TODO)->where('id')->eq($todoID)->andWhere('type')->eq('feedback')->fetch('objectID');
             if($feedbackID) $this->loadModel('feedback')->updateStatus('todo', $feedbackID, 'closed');

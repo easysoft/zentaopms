@@ -134,7 +134,7 @@ class todoZen extends todo
      */
     protected function afterCreate(object $todo, object $formData): object
     {
-        $this->loadModel('file')->updateObjectID($formData->rawdata->uid, $todo->id, 'todo');
+        if(isset($formData->rawdata->uid)) $this->loadModel('file')->updateObjectID($formData->rawdata->uid, $todo->id, 'todo');
 
         $this->loadModel('score')->create('todo', 'create', $todo->id);
 
