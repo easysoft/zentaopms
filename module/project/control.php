@@ -1963,7 +1963,7 @@ class project extends control
 
             /* Update linked products. */
             $errorTips = $this->projectZen->mergeProducts($projectID, $project, $executionIDs, $postData);
-            if(!empty($errorTips) return $this->send($errorTips);
+            if(!empty($errorTips)) return $this->send($errorTips);
 
             $locateLink = inLink('manageProducts', "projectID=$projectID");
             if($from == 'program')  $locateLink = $this->session->projectList;
