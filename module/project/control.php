@@ -1453,7 +1453,7 @@ class project extends control
             }
 
             $this->view->project  = $project;
-            $this->lang->resource = $this->project->processProjectPrivs($project->multiple ? $project->model : 'noSprint');
+            $this->lang->resource = $this->project->getProjectPrivs($project->multiple ? $project->model : 'noSprint');
         }
 
         $this->display();
@@ -1858,6 +1858,7 @@ class project extends control
     }
 
     /**
+     * 更新项目排列序号
      * Update projects order.
      *
      * @access public
@@ -1865,22 +1866,14 @@ class project extends control
      */
     public function updateOrder()
     {
-        $idList  = explode(',', trim($this->post->projects, ','));
-        $orderBy = $this->post->orderBy;
+        $postData = form::data();
+        $rawdata  = $postData->rawdata;
+        $idList   = explode(',', trim($rawdata->projects, ','));
+        $orderBy  = $rawdata->orderBy;
+
         if(strpos($orderBy, 'order') === false) return false;
 
-        $projects = $this->dao->select('id,`order`')->from(TABLE_PROJECT)->where('id')->in($idList)->orderBy($orderBy)->fetchPairs('order', 'id');
-        foreach($projects as $order => $id)
-        {
-            $newID = array_shift($idList);
-            if($id == $newID) continue;
-            $this->dao->update(TABLE_PROJECT)
-                ->set('`order`')->eq($order)
-                ->set('lastEditedBy')->eq($this->app->user->account)
-                ->set('lastEditedDate')->eq(helper::now())
-                ->where('id')->eq($newID)
-                ->exec();
-        }
+        $this->project->updateOrder($idList, $orderBy);
     }
 
     /**
@@ -1970,7 +1963,7 @@ class project extends control
 
             /* Update linked products. */
             $errorTips = $this->projectZen->mergeProducts($projectID, $project, $executionIDs, $postData);
-            return $this->send($errorTips);
+            if(!empty($errorTips)) return $this->send($errorTips);
 
             $locateLink = inLink('manageProducts', "projectID=$projectID");
             if($from == 'program')  $locateLink = $this->session->projectList;

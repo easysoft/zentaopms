@@ -332,23 +332,20 @@ class programplan extends control
     }
 
     /**
+     * 处理甘特图拖拽事件数据。
      * Response gantt drag event.
      *
      * @access public
-     * @return void
      */
     public function ajaxResponseGanttDragEvent()
     {
-        if(!empty($_POST))
-        {
-            if(!isset($_POST['id']) or empty($_POST['id'])) return $this->send(array('result' => 'fail', 'message' => ''));
-            $objectID =  $_POST['id'];
+        if(empty($_POST['id'])) return $this->send(array('result' => 'fail', 'message' => ''));
 
-            $this->loadModel('task')->updateEsDateByGantt($objectID, $_POST['type']);
-            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+        $objectID = $_POST['id'];
+        $this->loadModel('task')->updateEsDateByGantt($objectID, $_POST['type']);
+        if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            return $this->send(array('result' => 'success'));
-        }
+        return $this->send(array('result' => 'success'));
     }
 
     /**

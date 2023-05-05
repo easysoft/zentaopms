@@ -171,46 +171,6 @@ class productModel extends model
     }
 
     /**
-     * Save the product id user last visited to session.
-     *
-     * @param  int   $productID
-     * @param  array $products
-     * @access public
-     * @return int
-     */
-    public function saveState($productID, $products)
-    {
-        if(defined('TUTORIAL')) return $productID;
-
-        if($productID == 0 and $this->cookie->preProductID and isset($products[$this->cookie->preProductID])) $productID = $this->cookie->preProductID;
-        if($productID == 0 and $this->session->product == '') $productID = (int)key($products);
-        $this->session->set('product', (int)$productID, $this->app->tab);
-
-        if(!isset($products[$this->session->product]))
-        {
-            $product = $this->getById($productID);
-
-            if(empty($product) or $product->deleted == 1) $productID = (int)key($products);
-            $this->session->set('product', (int)$productID, $this->app->tab);
-            if($productID && strpos(",{$this->app->user->view->products},", ",{$productID},") === false)
-            {
-                $productID = (int)key($products);
-                $this->session->set('product', (int)$productID, $this->app->tab);
-                $this->accessDenied($this->lang->product->accessDenied);
-            }
-        }
-
-        setcookie('preProductID', (int)$productID, $this->config->cookieLife, $this->config->webRoot, '', $this->config->cookieSecure, true);
-
-        if($this->cookie->preProductID != $this->session->product)
-        {
-            $this->cookie->set('preBranch', 0);
-            setcookie('preBranch', 0, $this->config->cookieLife, $this->config->webRoot, '', $this->config->cookieSecure, true);
-        }
-        return $this->session->product;
-    }
-
-    /**
      * Check privilege.
      *
      * @param  int    $product
@@ -224,27 +184,6 @@ class productModel extends model
         /* Is admin? */
         if($this->app->user->admin) return true;
         return (strpos(",{$this->app->user->view->products},", ",{$productID},") !== false);
-    }
-
-    /**
-     * Show accessDenied response.
-     *
-     * @param  string  $tips
-     * @access private
-     * @return void
-     */
-    public function accessDenied($tips)
-    {
-        if(defined('TUTORIAL')) return true;
-
-        echo(js::alert($tips));
-
-        if(!$this->server->http_referer) return print(js::locate(helper::createLink('product', 'index')));
-
-        $loginLink = $this->config->requestType == 'GET' ? "?{$this->config->moduleVar}=user&{$this->config->methodVar}=login" : "user{$this->config->requestFix}login";
-        if(strpos($this->server->http_referer, $loginLink) !== false) return print(js::locate(helper::createLink('product', 'index')));
-
-        echo js::locate('back');
     }
 
     /**
@@ -275,7 +214,6 @@ class productModel extends model
     {
         return $this->dao->select('*')->from(TABLE_PRODUCT)->where('id')->in($productIDList)->fetchAll('id');
     }
-
 
     /**
      * Get list by search.
@@ -2144,48 +2082,6 @@ class productModel extends model
                 $this->loadModel('action')->create('project', $projectID, 'Managed', '', $productID);
             }
         }
-    }
-
-    /**
-     *
-     * Set menu.
-     *
-     * @param  int         $productID
-     * @param  int|string  $branch
-     * @param  int         $module
-     * @param  string      $moduleType
-     * @param  string      $extra
-     * @access public
-     * @return void
-     */
-    public function setMenu($productID = 0, $branch = '', $module = 0, $moduleType = '', $extra = ''): void
-    {
-        if(!$this->app->user->admin and strpos(",{$this->app->user->view->products},", ",$productID,") === false and $productID != 0 and !defined('TUTORIAL'))
-        {
-            $this->accessDenied($this->lang->product->accessDenied);
-            return;
-        }
-
-        $product = $this->getByID($productID);
-
-        $params = array('branch' => $branch);
-        common::setMenuVars('product', $productID, $params);
-        if(!$product) return;
-
-        $this->lang->switcherMenu = $this->getSwitcher($productID, $extra, $branch);
-
-        if($product->type == 'normal')
-        {
-            unset($this->lang->product->menu->settings['subMenu']->branch);
-        }
-        else
-        {
-            $branchLink = $this->lang->product->menu->settings['subMenu']->branch['link'];
-            $this->lang->product->menu->settings['subMenu']->branch['link'] = str_replace('@branch@', $this->lang->product->branchName[$product->type], $branchLink);
-            $this->lang->product->branch = sprintf($this->lang->product->branch, $this->lang->product->branchName[$product->type]);
-        }
-
-        if(strpos($extra, 'requirement') !== false) unset($this->lang->product->moreSelects['willclose']);
     }
 
     /**
