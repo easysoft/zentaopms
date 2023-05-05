@@ -243,36 +243,22 @@ class todoTest
         return $object ? 1 : 2;
     }
 
-    public function createByCycleTest($todo)
+    /**
+     * Create by cycle test.
+     *
+     * @access public
+     * @return int
+     */
+    public function createByCycleTest()
     {
-        $todo->cycle        = '1';
-        $todo->type         = 'cycle';
-        $todo->pri          = 3;
-        $todo->desc         = '';
-        $todo->status       = 'wait';
-        $todo->begin        = '0830';
-        $todo->end          = '0900';
-        $todo->account      = 'admin';
-        $todo->objectID     = '0';
-        $todo->vision       = 'rnd';
-        $todo->assignedTo   = 'admin';
-        $todo->assignedBy   = 'admin';
-        $todo->assignedDate = date('Y-m-d', time());
-        $todo->date         = date('Y-m-d', time());
-
-        $todo->config = str_replace('2022-03-23', date('Y-m-d', time()), $todo->config);
+        $todoList = $this->objectModel->getValidCycleList();
+        $this->objectModel->createByCycle($todoList);
 
         global $tester;
-        $tester->dao->insert(TABLE_TODO)->data($todo)->autoCheck()->exec();
-        $todoID = $tester->dao->lastInsertID();
+        $todoIDList = array_keys($todoList);
+        $count      = $tester->dao->select('count(`id`) as count')->from(TABLE_TODO)->where('objectID')->in($todoIDList)->andWhere('deleted')->eq('0')->fetch('count');
 
-        $this->objectModel->createByCycle(array($todoID => $todo));
-
-        $objects = $tester->dao->select('id')->from(TABLE_TODO)->where('objectID')->eq($todoID)->andWhere('deleted')->eq('0')->fetchAll();
-
-        if(dao::isError()) return dao::getError();
-
-        return count($objects);
+        return dao::isError() ? 0 :1;
     }
 
     /**

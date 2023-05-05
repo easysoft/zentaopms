@@ -1,0 +1,35 @@
+title: Create cycle todos for todoModel::createCycle UTC.
+desc: Create cycle todos for todoModel::createCycle UTC.
+author: xushenjie
+version: 1.0.0
+
+fields:
+  - field: account
+    range: 'admin'
+  - field: name
+    range: '`周期待办：提前1天，间隔一天生成`, `周期待办：每月的每天，提前1天生成`, `周期待办：每周的每天，提前1天生成`'
+  - field: date
+    range: 1-5
+    prefix: '2023-05-0'
+  - field: type
+    range: 'cycle'
+  - field: cycle
+    range: 1
+  - field: begin
+    range: 0800-1100
+  - field: end
+    range: 1800-2000
+  - field: assignedTo
+    range: 'admin'
+  - field: desc
+    range: '周期待办描述'
+  - field: status
+    range: 'doing'
+  - field: objectID
+    range: 0
+  - field: assignedBy
+    range: 'admin'
+  - field: pri
+    range: 1-4
+  - field: config
+    range: '`{"specify":{"month":"0","day":"1"},"day":"1","type":"day","beforeDays":1,"end":"2030-05-31","begin":"2023-05-01"}`, `{"specify":{"month":"0","day":"1"},"month":"1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31","type":"month","beforeDays":1,"end":"2030-05-31","begin":"2023-05-01"}`, `{"specify":{"month":"0","day":"1"},"week":"1,2,3,4,5,6,0","type":"week","beforeDays":1,"end":"2030-05-31","begin":"2023-05-01"}`'
