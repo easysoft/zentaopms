@@ -31,6 +31,51 @@ class bugZen extends bug
     }
 
     /**
+     * 处理更新请求数据。
+     * Processing request data. 
+     * 
+     * @param  form $formData
+     * @access protected
+     * @return object
+     */
+    protected function beforeUpdate(form $formData): object
+    {
+        $now = helper::now();
+        $bug = $formData->add('id', $bugID)
+            ->setDefault('product', $oldBug->product)
+            ->setDefault('deleteFiles', array()) //deleteFiles?
+            ->setDefault('lastEditedBy', $this->app->user->account)
+            ->add('lastEditedDate', $now)
+            ->join('openedBuild,mailto,linkBug,os,browser', ',')
+            ->setIF(strpos($this->config->bug->edit->requiredFields, 'deadline') !== false, 'deadline', $this->post->deadline)
+            ->setIF($this->post->assignedTo  != $oldBug->assignedTo, 'assignedDate', $now)
+            ->setIF($this->post->resolvedBy  != '' and $this->post->resolvedDate == '', 'resolvedDate', $now)
+            ->setIF($this->post->resolution  != '' and $this->post->resolvedDate == '', 'resolvedDate', $now)
+            ->setIF($this->post->resolution  != '' and $this->post->resolvedBy   == '', 'resolvedBy',   $this->app->user->account)
+            ->setIF($this->post->closedDate  != '' and $this->post->closedBy     == '', 'closedBy',     $this->app->user->account)
+            ->setIF($this->post->closedBy    != '' and $this->post->closedDate   == '', 'closedDate',   $now)
+            ->setIF($this->post->closedBy    != '' or  $this->post->closedDate   != '', 'assignedTo',   'closed')
+            ->setIF($this->post->closedBy    != '' or  $this->post->closedDate   != '', 'assignedDate', $now)
+            ->setIF($this->post->resolution  != '' or  $this->post->resolvedDate != '', 'status',       'resolved')
+            ->setIF($this->post->closedBy    != '' or  $this->post->closedDate   != '', 'status',       'closed')
+            ->setIF(($this->post->resolution != '' or  $this->post->resolvedDate != '') and $this->post->assignedTo == '', 'assignedTo', $oldBug->openedBy)
+            ->setIF(($this->post->resolution != '' or  $this->post->resolvedDate != '') and $this->post->assignedTo == '', 'assignedDate', $now)
+            ->setIF($this->post->assignedTo  == '' and $oldBug->status           == 'closed', 'assignedTo', 'closed')
+            ->setIF($this->post->resolution  == '' and $this->post->resolvedDate =='', 'status', 'active')
+            ->setIF($this->post->resolution  != '', 'confirmed', 1)
+            ->setIF($this->post->resolution  != '' and $this->post->resolution != 'duplicate', 'duplicateBug', 0)
+            ->setIF($this->post->story != false and $this->post->story != $oldBug->story, 'storyVersion', $this->loadModel('story')->getVersion($this->post->story))
+            ->setIF(!$this->post->linkBug, 'linkBug', '')
+            ->setIF($this->post->case === '', 'case', 0)
+            ->stripTags($this->config->bug->editor->edit['id'], $this->config->allowedTags)
+            ->get();
+
+        $bug = $this->loadModel('file')->processImgURL($bug, $this->config->bug->editor->create['id'], $formData->rawdata->uid);
+
+        return $bug;
+    }
+
+    /**
      * 创建bug。
      * Create a bug.
      *
@@ -98,6 +143,78 @@ class bugZen extends bug
 
         /* Callback the callable method to process the related data for object that is transfered to bug. */
         if($from && is_callable(array($this, $this->config->bug->fromObjects[$from]['callback']))) call_user_func(array($this, $this->config->bug->fromObjects[$from]['callback']), $bugID);
+    }
+
+    /**
+     * 更新完以后的相关处理。
+     * Process after updating bug.
+     *
+     * @param  string $bugID
+     * @param  array  $changes
+     * @access protected
+     * @return void
+     */
+    protected function afterUpdate(string $bugID, array $changes)
+    {
+        /* 记录历史记录。*/
+        /* Record history. */
+        if($this->post->comment != '' or !empty($changes))
+        {
+            $action   = !empty($changes) ? 'Edited' : 'Commented';
+            $actionID = $this->action->create('bug', $bugID, $action, $this->post->comment);
+            $this->action->logHistory($actionID, $changes);
+        }
+
+        if(defined('RUN_MODE') && RUN_MODE == 'api') return array('status' => 'success', 'data' => $bugID);
+
+        $this->executeHooks($bugID);
+
+        /* 如果bug转任务，如果bug的状态发生变化，提示是否更新任务状态。*/
+        /* This bug has been converted to a task, update the status of the relatedtask or not. */
+        $bug = $this->bug->getById($bugID);
+        if($bug->toTask and !empty($changes))
+        {
+            foreach($changes as $change)
+            {
+                if($change['field'] != 'status') continue;
+
+                $confirmURL = $this->createLink('task', 'view', "taskID=$bug->toTask");
+                $cancelURL  = $this->server->HTTP_REFERER;
+
+                return print(js::confirm(sprintf($this->lang->bug->remindTask, $bug->Task), $confirmURL, $cancelURL, 'parent', 'parent'));
+            }
+        }
+
+        if(isonlybody())
+        {
+            if($this->app->tab == 'execution')
+            {
+                $execution    = $this->loadModel('execution')->getByID($bug->execution);
+                $execLaneType = $this->session->execLaneType ? $this->session->execLaneType : 'all';
+                $execGroupBy  = $this->session->execGroupBy ? $this->session->execGroupBy : 'default';
+
+                if(isset($execution->type) and $execution->type == 'kanban')
+                {
+                    $rdSearchValue = $this->session->rdSearchValue ? $this->session->rdSearchValue : '';
+                    $kanbanData    = $this->loadModel('kanban')->getRDKanban($bug->execution, $execLaneType, 'id_desc', 0, $kanbanGroup, $rdSearchValue);
+                    $kanbanData    = json_encode($kanbanData);
+                    return print(js::closeModal('parent.parent', '', "parent.parent.updateKanban($kanbanData)"));
+                }
+                else
+                {
+                    $taskSearchValue = $this->session->taskSearchValue ? $this->session->taskSearchValue : '';
+                    $kanbanData      = $this->loadModel('kanban')->getExecutionKanban($bug->execution, $execLaneType, $execGroupBy, $taskSearchValue);
+                    $kanbanType      = $execLaneType == 'all' ? 'bug' : key($kanbanData);
+                    $kanbanData      = json_encode($kanbanData[$kanbanType]);
+                    return print(js::closeModal('parent.parent', '', "parent.parent.updateKanban(\"bug\", $kanbanData)"));
+                }
+            }
+            else
+            {
+                return print(js::closeModal('parent.parent'));
+            }
+        }
+        return print(js::locate($this->createLink('bug', 'view', "bugID=$bugID"), 'parent'));
     }
 
     /**
@@ -623,6 +740,171 @@ class bugZen extends bug
 
         $this->view->users = $this->user->getPairs('devfirst|noclosed|nodeleted');
         $this->app->loadLang('release');
+    }
+
+    /**
+     * 设置编辑页面的导航。
+     * Set edit menu.
+     *
+     * @param  object $bug
+     * @access protected
+     * @return void
+     */
+    protected function setEditMenu(object $bug)
+    {
+        if($this->app->tab == 'project')   $this->project->setMenu($bug->project);
+        if($this->app->tab == 'execution') $this->execution->setMenu($bug->execution);
+        if($this->app->tab == 'qa')        $this->qa->setMenu($this->products, $bug->product, $bug->branch);
+        if($this->app->tab == 'devops')
+        {
+            session_write_close();
+
+            $repoPairs = $this->loadModel('repo')->getRepoPairs('project', $bug->project);
+            $this->repo->setMenu($repoPairs);
+
+            $this->lang->navGroup->bug = 'devops';
+        }
+    }
+
+    /**
+     * 获取页面所需的变量, 并输出到前台。
+     * Get the data required by the view page and output.
+     *
+     * @param  object $bug
+     * @access protected
+     * @return void
+     */
+    protected function buildEditForm(object $bug)
+    {
+        /* 删掉当前bug类型不属于的并且已经弃用的类型。*/
+        /* Unset discarded types. */
+        foreach($this->config->bug->discardedTypes as $type)
+        {
+            if($bug->type != $type) unset($this->lang->bug->typeList[$type]);
+        }
+
+        $this->loadModel('project');
+        $this->loadModel('branch');
+        $this->loadModel('execution');
+        $this->loadModel('build');
+
+        $product    = $this->product->getByID($bug->product);
+        $execution  = $this->execution->getByID($bug->execution);
+
+        /* 获取影响版本列表和解决版本列表。*/
+        /* Get the openedBuilds and resolvedBuilds. */
+        $objectID       = $bug->execution ? $bug->execution : $bug->project;
+        $objectType     = $bug->project   ? 'project'       : '';
+        $objectType     = $bug->execution ? 'execution'     : $objectType;
+        $allBuilds      = $this->loadModel('build')->getBuildPairs($bug->product, 'all', 'noempty');
+        $openedBuilds   = $this->build->getBuildPairs($bug->product, $bug->branch, $params = 'noempty,noterminate,nodone,withbranch,noreleased', $objectID, $objectType, $bug->openedBuild);
+        $resolvedBuilds = $openedBuilds;
+        if(($bug->resolvedBuild) and isset($allBuilds[$bug->resolvedBuild])) $resolvedBuilds[$bug->resolvedBuild] = $allBuilds[$bug->resolvedBuild];
+
+        /* 获取分支列表。*/
+        /* Get the branch options. */
+        if($this->app->tab == 'execution' or $this->app->tab == 'project') $objectID = $this->app->tab == 'project' ? $bug->project : $bug->execution;
+
+        $branches        = $this->branch->getList($bug->product, isset($objectID) ? $objectID : 0, 'all');
+        $branchTagOption = array();
+        foreach($branches as $branchInfo) $branchTagOption[$branchInfo->id] = $branchInfo->name . ($branchInfo->status == 'closed' ? ' (' . $this->lang->branch->statusList['closed'] . ')' : '');
+
+        if(!isset($branchTagOption[$bug->branch]))
+        {
+            $bugBranch = $this->branch->getById($bug->branch, $bug->product, '');
+            if($bug->branch == BRANCH_MAIN)
+            {
+                $branchTagName = $bugBranch;
+            }
+            else
+            {
+                $branchTagName = $bugBranch->name;
+                if($bugBranch->status == 'closed') $branchTagName .= " ({$this->lang->branch->statusList['closed']})";
+            }
+            $branchTagOption[$bug->branch] = $branchTagName;
+        }
+
+        /* 获取moduleOptionMenu。*/
+        /* Get moduleOptionMenu. */
+        $moduleOptionMenu = $this->tree->getOptionMenu($bug->product, $viewType = 'bug', $startModuleID = 0, $bug->branch);
+        if(!isset($moduleOptionMenu[$bug->module])) $moduleOptionMenu += $this->tree->getModulesName($bug->module);
+
+        /* 获取指派给用户列表。*/
+        /* Get assigned to member. */
+        if($bug->execution)
+        {
+            $assignedToList = $this->user->getTeamMemberPairs($bug->execution, 'execution');
+        }
+        elseif($bug->project)
+        {
+            $assignedToList = $this->project->getTeamMemberPairs($bug->project);
+        }
+        else
+        {
+            $assignedToList = $this->bug->getProductMemberPairs($bug->product, $bug->branch);
+            $assignedToList = array_filter($assignedToList);
+            if(empty($assignedToList)) $assignedToList = $this->user->getPairs('devfirst|noclosed');
+        }
+
+        if($bug->assignedTo and !isset($assignedToList[$bug->assignedTo]) and $bug->assignedTo != 'closed')
+        {
+            $assignedTo = $this->user->getById($bug->assignedTo);
+            $assignedToList[$bug->assignedTo] = $assignedTo->realname;
+        }
+        if($bug->status == 'closed') $assignedToList['closed'] = 'Closed';
+
+        /* 获取该bug关联产品和分支下的bug列表。*/
+        /* Get bugs of current product. */
+        $branch = '';
+        if($product->type == 'branch') $branch = $bug->branch > 0 ? "{$bug->branch},0" : '0';
+        $productBugs = $this->bug->getProductBugPairs($bug->product, $branch);
+        unset($productBugs[$bug->id]);
+
+        /* 获取执行列表。*/
+        /* Get execution pairs. */
+        $executions = array('') + $this->product->getExecutionPairsByProduct($bug->product, $bug->branch, 'id_desc', $bug->project);
+        if(!empty($bug->execution) and empty($executions[$bug->execution])) $executions[$execution->id] = $execution->name . "({$this->lang->bug->deleted})";
+
+        /* 获取项目列表。*/
+        /* Get project pairs. */
+        $projects = array('') + $this->product->getProjectPairsByProduct($bug->product, $bug->branch);
+        if(!empty($bug->project) and empty($projects[$bug->project]))
+        {
+            $project = $this->project->getByID($bug->project);
+            $projects[$project->id] = $project->name . "({$this->lang->bug->deleted})";
+        }
+
+        /* 如果产品列表没有bug相关的产品，把该产品加入产品列表。*/
+        /* Add product related by the bug when it is not in the products. */
+        if(!isset($this->products[$bug->product]))
+        {
+            $this->products[$bug->product] = $product->name;
+            $this->view->products = $this->products;
+        }
+
+        if($product->shadow) $this->view->project = $this->project->getByShadowProduct($bug->product);
+
+        $this->view->title                 = $this->lang->bug->edit . "BUG #$bug->id $bug->title - " . $this->products[$bug->product];
+        $this->view->bug                   = $bug;
+        $this->view->product               = $product;
+        $this->view->execution             = $execution;
+        $this->view->branchTagOption       = $branchTagOption;
+        $this->view->moduleOptionMenu      = $moduleOptionMenu;
+        $this->view->plans                 = $this->loadModel('productplan')->getPairs($bug->product, $bug->branch, '', true);
+        $this->view->projects              = $projects;
+        $this->view->executions            = $executions;
+        $this->view->projectExecutionPairs = $this->project->getProjectExecutionPairs();
+        $this->view->stories               = $bug->execution ? $this->story->getExecutionStoryPairs($bug->execution) : $this->story->getProductStoryPairs($bug->product, $bug->branch, 0, 'all', 'id_desc', 0, 'full', 'story', false);
+        $this->view->tasks                 = $this->task->getExecutionTaskPairs($bug->execution);
+        $this->view->testtasks             = $this->loadModel('testtask')->getPairs($bug->product, $bug->execution, $bug->testtask);
+        $this->view->cases                 = array('') + $this->loadModel('testcase')->getPairsByProduct($bug->product, array(0, $bug->branch));
+        $this->view->productBugs           = $productBugs;
+        $this->view->openedBuilds          = $openedBuilds;
+        $this->view->resolvedBuilds        = array('') + $resolvedBuilds;
+        $this->view->users                 = $this->user->getPairs('', "$bug->assignedTo,$bug->resolvedBy,$bug->closedBy,$bug->openedBy");
+        $this->view->assignedToList        = $assignedToList;
+        $this->view->actions               = $this->action->getList('bug', $bug->id);
+        $this->display();
     }
 
     /**

@@ -112,7 +112,7 @@ if($this->app->tab == 'project')   js::set('objectID', $bug->project);
                   <td>
                     <div class='input-group' id='moduleIdBox'>
                     <?php
-                    echo html::select('module', $moduleOptionMenu, $currentModuleID, "onchange='loadModuleRelated()' class='form-control chosen'");
+                    echo html::select('module', $moduleOptionMenu, $bug->module, "onchange='loadModuleRelated()' class='form-control chosen'");
                     if(count($moduleOptionMenu) == 1)
                     {
                         echo "<span class='input-group-addon'>";
