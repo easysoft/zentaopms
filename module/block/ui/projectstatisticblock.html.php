@@ -11,9 +11,10 @@ declare(strict_types=1);
 
 namespace zin;
 
-$blockNavID = 'nav-' . uniqid();
-$selected   = key($projects);
-$navTabs    = array();
+$isChineseLang = in_array($this->app->getClientLang(), array('zh-cn','zh-tw'));
+$blockNavID    = 'nav-' . uniqid();
+$selected      = key($projects);
+$navTabs       = array();
 foreach($projects as $project)
 {
     $navTabs[] = li
@@ -304,6 +305,64 @@ foreach($projects as $project)
                     $lang->project->budget . ' : ' . ($project->budget != 0 ? $project->budget : $this->lang->project->future)
                 ),
                 div(set('class', 'flex-1'))
+            ),
+            div
+            (
+                set('class', 'flex'),
+                div
+                (
+                    set('class', 'flex-1'),
+                    $isChineseLang ? $lang->project->pv . '(' . $lang->project->pvTitle . ')' : $lang->project->pv
+                ),
+                div
+                (
+                    set('class', 'flex-1'),
+                    $isChineseLang ? $lang->project->ev . '(' . $lang->project->evTitle . ')' : $lang->project->ev
+                ),
+                div
+                (
+                    set('class', 'flex-1'),
+                    $isChineseLang ? $lang->project->ac . '(' . $lang->project->acTitle . ')' : $lang->project->ac
+                ),
+                div
+                (
+                    set('class', 'flex-1'),
+                    $isChineseLang ? $lang->project->sv . '(' . $lang->project->svTitle . ')' : $lang->project->sv
+                ),
+                div
+                (
+                    set('class', 'flex-1'),
+                    $isChineseLang ? $lang->project->cv . '(' . $lang->project->cvTitle . ')' : $lang->project->cv
+                )
+            ),
+            div
+            (
+                set('class', 'flex'),
+                div
+                (
+                    set('class', 'flex-1'),
+                    $project->pv
+                ),
+                div
+                (
+                    set('class', 'flex-1'),
+                    $project->ev
+                ),
+                div
+                (
+                    set('class', 'flex-1'),
+                    $project->ac
+                ),
+                div
+                (
+                    set('class', 'flex-1'),
+                    $project->sv
+                ),
+                div
+                (
+                    set('class', 'flex-1'),
+                    $project->cv
+                )
             )
         )
     );
