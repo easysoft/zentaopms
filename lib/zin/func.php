@@ -844,6 +844,15 @@ function tabs()
 }
 
 /**
+ * tab pane widget.
+ * bool isActive?
+ */
+function tabPane()
+{
+    return createWg('tabPane', func_get_args());
+}
+
+/**
  * panel widget.
  *
  * string class='rounded shadow ring-0 canvas'
