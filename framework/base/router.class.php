@@ -1381,8 +1381,8 @@ class baseRouter
         }
         else
         {
-            $value = @getenv('PATH_INFO');
-            if(empty($value)) $value = @getenv('ORIG_PATH_INFO');
+            $value = getenv('PATH_INFO');
+            if(empty($value)) $value = getenv('ORIG_PATH_INFO');
         }
 
         if(str_contains((string) $value, (string) $_SERVER['SCRIPT_NAME'])) $value = str_replace($_SERVER['SCRIPT_NAME'], '', (string) $value);
@@ -2002,7 +2002,7 @@ class baseRouter
 
         /* 生成一个临时的target扩展文件，并加载，用于后续的hook文件加载使用。Create a tmp merged target file and import it for merge hook codes using. */
         $tmpTargetFile = $mergedTargetDir . "tmp$moduleName.php";
-        if(@file_put_contents($tmpTargetFile, $targetLines))
+        if(file_put_contents($tmpTargetFile, $targetLines))
         {
             if(!class_exists($tmpTargetClass)) include $tmpTargetFile;
             return $targetLines;
