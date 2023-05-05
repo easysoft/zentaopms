@@ -11,7 +11,7 @@
 
 namespace zin;
 
-require_once 'config.php';
+require_once __DIR__ . DS . 'config.php';
 
 function setWgVer($ver, $names = NULL)
 {

@@ -11,7 +11,7 @@
 
 namespace zin;
 
-require_once 'wg.func.php';
+require_once __DIR__ . DS . 'wg.func.php';
 
 class on
 {

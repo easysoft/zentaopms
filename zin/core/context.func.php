@@ -11,7 +11,7 @@
 
 namespace zin;
 
-require_once 'context.class.php';
+require_once __DIR__ . DS . 'context.class.php';
 
 function portal(/* string $name, mixed ...$children */)
 {

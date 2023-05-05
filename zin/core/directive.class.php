@@ -11,7 +11,7 @@
 
 namespace zin;
 
-require_once 'zin.class.php';
+require_once __DIR__ . DS . 'zin.class.php';
 
 class directive
 {

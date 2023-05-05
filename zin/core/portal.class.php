@@ -11,7 +11,7 @@
 
 namespace zin;
 
-require_once 'wg.class.php';
+require_once __DIR__ . DS . 'wg.class.php';
 
 class portal extends wg
 {

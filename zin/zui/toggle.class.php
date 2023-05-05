@@ -11,7 +11,7 @@
 
 namespace zin;
 
-require_once 'toggle.func.php';
+require_once __DIR__ . DS . 'toggle.func.php';
 
 class toggle
 {

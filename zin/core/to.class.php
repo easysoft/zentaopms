@@ -11,7 +11,7 @@
 
 namespace zin;
 
-require_once 'directive.class.php';
+require_once __DIR__ . DS . 'directive.class.php';
 
 class to
 {

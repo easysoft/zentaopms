@@ -11,7 +11,7 @@
 
 namespace zin;
 
-require_once 'pager.func.php';
+require_once __DIR__ . DS . 'pager.func.php';
 
 class helper extends \helper
 {
