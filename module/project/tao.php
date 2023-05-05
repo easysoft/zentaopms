@@ -502,17 +502,16 @@ class projectTao extends projectModel
      */
     public function getParentProgram(string $path, int $grade): string
     {
-        $parentName = $this->dao->select('id,name')->from(TABLE_PROGRAM)
+        $programList = $this->dao->select('id,name')->from(TABLE_PROGRAM)
             ->where('id')->in(trim($path, ','))
             ->andWhere('grade')->lt($grade)
             ->orderBy('grade asc')
             ->fetchPairs();
 
-        $parentProgram = '';
-        foreach($parentName as $name) $parentProgram .= $name . '/';
-        $parentProgram = rtrim($parentProgram, '/');
+        $programName = '';
+        foreach($programList as $program) $programName .= $program . '/';
 
-        return $parentProgram;
+        return rtrim($programName, '/');
     }
 
     /**
