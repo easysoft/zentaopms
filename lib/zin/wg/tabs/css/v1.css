@@ -1,0 +1,2 @@
+.nav-tabs>.nav-item.active>a {color: var(--color-primary-500);}
+.nav-tabs>.nav-item.active>a:after {border-bottom-color: var(--color-primary-500) !important; border-bottom-width: 2px;}

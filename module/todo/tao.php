@@ -279,7 +279,7 @@ class todoTao extends todoModel
         $todo->account = $this->app->user->account;
 
         $todo->date = $formData->rawdata->date;
-        if($formData->rawdata->switchDate == 'on' || $formData->rawdata->date == false) $todo->date = '2030-01-01';
+        if($formData->rawdata->switchDate == 'on' || !$formData->rawdata->date) $todo->date = '2030-01-01';
 
         $todo->type         = $todos->types[$loop];
         $todo->pri          = $todos->pris[$loop];
@@ -368,8 +368,8 @@ class todoTao extends todoModel
     }
 
     /**
+     * 设置周期待办数据。
      * Set cycle todo data.
-     * 设置周期待办数据
      *
      * @param  object $todoData
      * @access private
@@ -397,12 +397,12 @@ class todoTao extends todoModel
         if($todoData->config['type'] == 'week')
         {
             unset($todoData->config['day'], $todoData->config['month']);
-            $todoData->config['week'] = join(',', $todoData->config['week']);
+            $todoData->config['week'] = implode(',', $todoData->config['week']);
         }
         if($todoData->config['type'] == 'month')
         {
             unset($todoData->config['day'], $todoData->config['week']);
-            $todoData->config['month'] = join(',', $todoData->config['month']);
+            $todoData->config['month'] = implode(',', $todoData->config['month']);
         }
 
         if($todoData->config['beforeDays'] and !validater::checkInt($todoData->config['beforeDays']))
@@ -476,10 +476,7 @@ class todoTao extends todoModel
             if($todo->type == 'opportunity') $todo->name = $this->dao->findByID($todo->objectID)->from(TABLE_OPPORTUNITY)->fetch('name');
         }
 
-        if($this->config->edition != 'open')
-        {
-            if($todo->type == 'feedback') $todo->name = $this->dao->findByID($todo->objectID)->from(TABLE_FEEDBACK)->fetch('title');
-        }
+        if($this->config->edition != 'open' && $todo->type == 'feedback') $todo->name = $this->dao->findByID($todo->objectID)->from(TABLE_FEEDBACK)->fetch('title');
 
         return $todo;
     }

@@ -238,12 +238,12 @@ class todoModel extends model
     /**
      * Get todo list of a user.
      *
-     * @param  string $type
-     * @param  string $account
-     * @param  string $status   all|today|thisweek|lastweek|before, or a date.
-     * @param  int    $limit
-     * @param  object $pager
-     * @param  string $orderBy
+     * @param  string  $type
+     * @param  string  $account
+     * @param  string|array $status   all|today|thisweek|lastweek|before, or a date.
+     * @param  int     $limit
+     * @param  ?object $pager
+     * @param  string  $orderBy
      * @access public
      * @return array
      */
@@ -362,11 +362,12 @@ class todoModel extends model
             if(!isset($validUsers[$todo->account])) continue;
 
             $todo->config = json_decode($todo->config);
+
             $begin      = $todo->config->begin;
             $end        = $todo->config->end;
             $beforeDays = (int)$todo->config->beforeDays;
             if(!empty($beforeDays) && $beforeDays > 0) $begin = date('Y-m-d', strtotime("$begin -{$beforeDays} days"));
-            if($today < $begin or (!empty($end) && $today > $end)) continue;
+            if($today < $begin || (!empty($end) && $today > $end)) continue;
 
             $newTodo = $this->todoTao->buildCycleTodo($todo);
             if(isset($todo->assignedTo) && $todo->assignedTo) $newTodo->assignedDate = $now;
@@ -560,7 +561,8 @@ class todoModel extends model
      * 根据待办ID更新待办数据。
      * Update todo data by id.
      *
-     * @param  array $todoIdList
+     * @param  int    $todoID
+     * @param  object $todo
      * @access public
      * @return bool
      */
