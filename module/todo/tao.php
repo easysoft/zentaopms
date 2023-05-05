@@ -478,8 +478,8 @@ class todoTao extends todoModel
     }
 
     /**
-     * 构造待办列表查询语句。
-     * Build query for todo list.
+     * 获取待办列表数据。
+     * Get the todo list data.
      *
      * @param string       $type
      * @param string       $account
@@ -490,9 +490,9 @@ class todoTao extends todoModel
      * @param string       $orderBy
      * @param object       $pager
      * @access protected
-     * @return object
+     * @return array
      */
-    protected function getListQuery(string $type, string $account, array|string $status, string $begin, string $end, int $limit, string $orderBy, object $pager = null): object
+    protected function getListBy(string $type, string $account, array|string $status, string $begin, string $end, int $limit, string $orderBy, object $pager = null): array
     {
         return $this->dao->select('*')->from(TABLE_TODO)
             ->where('deleted')->eq('0')
@@ -512,6 +512,6 @@ class todoTao extends todoModel
             ->orderBy($orderBy)
             ->beginIF($limit > 0)->limit($limit)->fi()
             ->page($pager)
-            ->query();
+            ->fetchAll();
     }
 }
