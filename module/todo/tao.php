@@ -128,44 +128,46 @@ class todoTao extends todoModel
      * 处理要创建的todo的数据。
      * Process the data for the todo to be created.
      *
-     * @param  object $todoData
+     * @param  object $todo
      * @param  object $formData
      * @access protected
      * @return object|false
      */
-    protected function processCreateData(object $todoData, object $formData): object|false
+    protected function processCreateData(object $todo, object $formData): object|false
     {
-        if(!isset($todoData->pri) and in_array($todoData->type, $this->config->todo->moduleList) and !in_array($todoData->type, array('review', 'feedback')))
+        if(!isset($todo->pri) and in_array($todo->type, $this->config->todo->moduleList) and !in_array($todo->type, array('review', 'feedback')))
         {
-            $todoData->pri = $this->dao->select('pri')->from($this->config->objectTables[$todoData->type])->where('id')->eq($todoData->objectID)->fetch('pri');
+            $todo->pri = $this->dao->select('pri')->from($this->config->objectTables[$todo->type])->where('id')->eq($todo->objectID)->fetch('pri');
 
-            if($todoData->pri == 'high')   $todoData->pri = 1;
-            if($todoData->pri == 'middle') $todoData->pri = 2;
-            if($todoData->pri == 'low')    $todoData->pri = 3;
+            if($todo->pri == 'high')   $todo->pri = 1;
+            if($todo->pri == 'middle') $todo->pri = 2;
+            if($todo->pri == 'low')    $todo->pri = 3;
         }
 
-        if($todoData->type != 'custom' and $todoData->objectID)
+        if($todo->type != 'custom' and $todo->objectID)
         {
-            $type   = $todoData->type;
-            $object = $this->loadModel($type)->getByID($todoData->{$type});
-            if(isset($object->name))  $todoData->name = $object->name;
-            if(isset($object->title)) $todoData->name = $object->title;
+            $type   = $todo->type;
+            $object = $this->loadModel($type)->getByID($todo->{$type});
+            if(isset($object->name))  $todo->name = $object->name;
+            if(isset($object->title)) $todo->name = $object->title;
         }
 
-        if($todoData->end < $todoData->begin)
+        if($todo->end < $todo->begin)
         {
             dao::$errors[] = sprintf($this->lang->error->gt, $this->lang->todo->end, $this->lang->todo->begin);
             return false;
         }
 
-        if(!empty($todoData->cycle))
+        if(!empty($todo->cycle))
         {
-            $todoData = $this->setCycle($todoData);
-            if(!$todoData) return false;
+            $todo = $this->setCycle($todo);
+            if(!$todo) return false;
         }
-        if(empty($todoData->cycle)) unset($todoData->config);
+        if(empty($todo->cycle)) unset($todo->config);
 
-        return $this->loadModel('file')->processImgURL($todoData, $this->config->todo->editor->create['id'], $formData->rawdata->uid);
+        if(isset($formData->rawdata->uid)) $this->loadModel('file')->processImgURL($todo, $this->config->todo->editor->create['id'], $formData->rawdata->uid);
+
+        return $todo;
     }
 
     /**
@@ -484,13 +486,13 @@ class todoTao extends todoModel
      * @param string|array $status
      * @param string       $begin
      * @param string       $end
-     * @param object       $pager
      * @param int          $limit
      * @param string       $orderBy
+     * @param object       $pager
      * @access protected
      * @return object
      */
-    protected function getListQuery(string $type, string $account, array|string $status, string $begin, string $end, object $pager = null, int $limit, string $orderBy): object
+    protected function getListQuery(string $type, string $account, array|string $status, string $begin, string $end, int $limit, string $orderBy, object $pager = null): object
     {
         return $this->dao->select('*')->from(TABLE_TODO)
             ->where('deleted')->eq('0')
