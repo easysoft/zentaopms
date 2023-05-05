@@ -39,13 +39,17 @@ title=taskModel->getDataOfTasksPerExecution();
 timeout=0
 cid=1
 
-- 执行task模块的getDataOfTasksPerExecution方法，参数是2
+- 统计executionID为2的执行的任务数量
  - 第2条的name属性 @/迭代2
  - 第2条的value属性 @1
 
-- 执行task模块的getDataOfTasksPerExecution方法，参数是3
+- 统计executionID为3的执行的任务数量
  - 第3条的name属性 @/迭代3
  - 第3条的value属性 @2
+
+- 统计executionID为5的执行的任务数量
+ - 第5条的name属性 @0
+ - 第5条的value属性 @0
 
 
 
@@ -56,3 +60,4 @@ $tester->session->set('taskOnlyCondition', true);
 $task = new taskTest();
 r($task->getDataOfTasksPerExecutionTest(2)) && p('2:name,value')       && e('/迭代2,1'); //统计executionID为2的执行的任务数量
 r($task->getDataOfTasksPerExecutionTest(3)) && p('3:name,value')       && e('/迭代3,2'); //统计executionID为3的执行的任务数量
+r($task->getDataOfTasksPerExecutionTest(5)) && p('5:name,value')       && e('0,0');      //统计executionID为5的执行的任务数量

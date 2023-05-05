@@ -8,19 +8,17 @@ $config->task->form->assign['left']           = array('type' => 'float', 'requir
 $config->task->form->assign['lastEditedBy']   = array('type' => 'string', 'required' => false, 'default' => $app->user->account);
 $config->task->form->assign['lastEditedDate'] = array('type' => 'string', 'required' => false, 'default' => helper::now());
 $config->task->form->assign['assignedDate']   = array('type' => 'string', 'required' => false, 'default' => helper::now());
-$config->task->form->assign['comment']        = array('type' => 'text', 'required' => false, 'default' => '');
 
 $config->task->form->edit = array();
 $config->task->form->edit['name']         = array('type' => 'string', 'required' => true);
 $config->task->form->edit['color']        = array('type' => 'string', 'required' => false, 'default' => '');
 $config->task->form->edit['desc']         = array('type' => 'string', 'required' => false, 'default' => '');
-$config->task->form->edit['comment']      = array('type' => 'string', 'required' => false, 'default' => '');
 $config->task->form->edit['lastEditedBy'] = array('type' => 'string', 'required' => false, 'default' => $app->user->account);
 $config->task->form->edit['execution']    = array('type' => 'int', 'required' => true);
 $config->task->form->edit['story']        = array('type' => 'int', 'required' => false, 'default' => 0);
 $config->task->form->edit['module']       = array('type' => 'int', 'required' => false, 'default' => 0);
 $config->task->form->edit['parent']       = array('type' => 'int', 'required' => false, 'default' => 0);
-$config->task->form->edit['mailto']       = array('type' => 'string', 'required' => false, 'default' => '');
+$config->task->form->edit['mailto']       = array('type' => 'array', 'required' => false, 'default' => array());
 $config->task->form->edit['mode']         = array('type' => 'string', 'required' => false, 'default' => '');
 $config->task->form->edit['assignedTo']   = array('type' => 'string', 'required' => false, 'default' => '');
 $config->task->form->edit['type']         = array('type' => 'string', 'required' => true);
@@ -39,9 +37,3 @@ $config->task->form->edit['canceledDate'] = array('type' => 'string', 'required'
 $config->task->form->edit['closedBy']     = array('type' => 'string', 'required' => false, 'default' => '');
 $config->task->form->edit['closedReason'] = array('type' => 'string', 'required' => false, 'default' => '');
 $config->task->form->edit['closedDate']   = array('type' => 'string', 'required' => false, 'default' => '');
-$config->task->form->edit['team']         = array('type' => 'array', 'required' => false, 'default' => array());
-$config->task->form->edit['teamSource']   = array('type' => 'array', 'required' => false, 'default' => array());
-$config->task->form->edit['teamEstimate'] = array('type' => 'array', 'required' => false, 'default' => array());
-$config->task->form->edit['teamConsumed'] = array('type' => 'array', 'required' => false, 'default' => array());
-$config->task->form->edit['teamLeft']     = array('type' => 'array', 'required' => false, 'default' => array());
-$config->task->form->edit['deleteFiles']  = array('type' => 'array', 'required' => false, 'default' => array());

@@ -1838,7 +1838,16 @@ class project extends control
             if($message) $this->lang->saveSuccess = $message;
 
             $this->projectZen->removeAssociatedProducts($project);
-            $this->projectZen->removeAssociatedExecutions($projectID, $from);
+
+            /* Delete the execution under the project. */
+            $executionIdList = $this->loadModel('execution')->getPairs($projectID);
+            if(empty($executionIdList))
+            {
+                if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess));
+                if($from == 'view') return print(js::locate($this->createLink('project', 'browse'), 'parent'));
+                return print(js::reload('parent'));
+            }
+            $this->projectZen->removeAssociatedExecutions($executionIdList);
 
             if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess));
 
@@ -1960,7 +1969,8 @@ class project extends control
             }
 
             /* Update linked products. */
-            $this->projectZen->mergeProducts($projectID, $project, $executionIDs, $postData);
+            $errorTips = $this->projectZen->mergeProducts($projectID, $project, $executionIDs, $postData);
+            return $this->send($errorTips);
 
             $locateLink = inLink('manageProducts', "projectID=$projectID");
             if($from == 'program')  $locateLink = $this->session->projectList;
@@ -1968,15 +1978,7 @@ class project extends control
         }
 
         /* Set menu. */
-        if($this->app->tab == 'program')
-        {
-            $this->loadModel('program')->setMenu($project->parent);
-        }
-        else if($this->app->tab == 'project')
-        {
-            $this->project->setMenu($projectID);
-        }
-
+        $this->setProjectMenu($projectID, $project);
         $this->projectZen->dealLinkProduct($projectID, $project);
 
         $this->view->title      = $this->lang->project->manageProducts . $this->lang->colon . $project->name;

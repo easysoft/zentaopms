@@ -546,12 +546,11 @@ class task extends control
      *
      * @param  int    $taskID
      * @param  string $comment
-     * @param  string $kanbanGroup
      * @param  string $from
      * @access public
      * @return void
      */
-    public function edit($taskID, $comment = 'false', $kanbanGroup = 'default', $from = '')
+    public function edit(string $taskID, string $comment = 'false', string $from = '')
     {
         $this->commonAction($taskID);
 
@@ -561,27 +560,28 @@ class task extends control
             $changes = array();
 
             $postDataFixer = form::data($this->config->task->form->edit);
-            $postData     = $postDataFixer->rawdata;
+            $rawData      = $postDataFixer->rawdata;
 
             if(!$comment or $comment == 'false')
             {
-                $task    = $this->taskZen->prepareCreateExtras($postDataFixer, $taskID);
-                $changes = $this->task->update($task, $postData);
+                $task    = $this->taskZen->prepareEdit($postDataFixer, $taskID);
+                $changes = $this->task->update($task, $rawData);
                 if(dao::isError()) return print(js::error(dao::getError()));
             }
 
-            if($postData->comment != '' or !empty($changes))
+            if($rawData->comment != '' or !empty($changes))
             {
                 $action   = !empty($changes) ? 'Edited' : 'Commented';
-                $actionID = $this->action->create('task', $taskID, $action, $postData->comment);
+                $actionID = $this->action->create('task', $taskID, $action, $rawData->comment);
                 if(!empty($changes)) $this->action->logHistory($actionID, $changes);
             }
 
             $this->executeHooks($taskID);
 
-            if($postData->status == 'doing') $this->loadModel('common')->syncPPEStatus($taskID);
+            if($rawData->status == 'doing') $this->loadModel('common')->syncPPEStatus($taskID);
 
-            return $this->taskZen->reponseAfterEdit($taskID, $from);
+            $reponse = $this->taskZen->reponseAfterEdit($taskID, $from, $changes);
+            return is_array($reponse) ? $this->send($reponse) : $reponse;
         }
 
         $this->taskZen->buildEditForm($taskID);
@@ -736,7 +736,7 @@ class task extends control
      * @access public
      * @return void
      */
-    public function assignTo($executionID, $taskID, $kanbanGroup = 'default', $from = '')
+    public function assignTo(int $executionID, int $taskID, string $kanbanGroup = 'default', string $from = '')
     {
         $this->commonAction($taskID);
         $task = $this->task->getByID($taskID);
@@ -749,18 +749,22 @@ class task extends control
         if(!empty($_POST))
         {
             $postDataFixer = form::data($this->config->task->form->assign);
-            $postData     = $postDataFixer->rawdata;
+            $rawData       = $postDataFixer->rawdata;
 
-            $task    = $this->taskZen->prepareAssignToExtras($postDataFixer, $taskID);
+            $task    = $this->taskZen->prepareAssignTo($postDataFixer, $taskID);
             $changes = $this->task->assign($task);
-            if(dao::isError()) return $this->taskZen->errorAfterAssignTo();
+            if(dao::isError())
+            {
+                if($this->viewType == 'json' or (defined('RUN_MODE') && RUN_MODE == 'api')) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+                return print(js::error(dao::getError()));
+            }
 
-            $actionID = $this->loadModel('action')->create('task', $taskID, 'Assigned', $postData->comment, $task->assignedTo);
+            $actionID = $this->loadModel('action')->create('task', $taskID, 'Assigned', $rawData->comment, $task->assignedTo);
             $this->action->logHistory($actionID, $changes);
 
             $this->executeHooks($taskID);
 
-            return $this->taskZen->reponseAfterAssignTo($taskID);
+            return $this->taskZen->reponseAfterAssignTo($taskID, $from);
         }
 
         $this->taskZen->buildAssignToForm($executionID, $task);

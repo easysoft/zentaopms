@@ -604,23 +604,13 @@ class projectZen extends project
      * 从项目中删除所有关联的执行。
      * removes all associated executions from the be deleted project
      *
-     * @param  int    $projectID
-     * @param  string $from
+     * @param  array $executionIdList
      *
      * @access protected
-     * @return int 1
+     * @return void
      */
-    protected function removeAssociatedExecutions(int $projectID, string $from): int
+    protected function removeAssociatedExecutions(array $executionIdList): void
     {
-        /* Delete the execution under the project. */
-        $executionIdList = $this->loadModel('execution')->getPairs($projectID);
-        if(empty($executionIdList))
-        {
-            if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess));
-            if($from == 'view') return print(js::locate($this->createLink('project', 'browse'), 'parent'));
-            return print(js::reload('parent'));
-        }
-
         $this->project->deleteByTableName('zt_execution', array_keys($executionIdList));
         foreach($executionIdList as $executionID => $execution) $this->loadModel('action')->create('execution', $executionID, 'deleted', '', ACTIONMODEL::CAN_UNDELETED);
         $this->loadModel('user')->updateUserView($executionIdList, 'sprint');
@@ -655,16 +645,16 @@ class projectZen extends project
      * @param  array     $postData
      *
      * @access protected
-     * @return void
+     * @return array
      */
-    protected function mergeProducts(int $projectID, object $project, int|array $executionIDs, array $postData): mixed
+    protected function mergeProducts(int $projectID, object $project, int|array $executionIDs, array $postData): array
     {
         $this->loadModel('product');
         $this->loadModel('execution');
 
         $oldProducts = $this->product->getProducts($projectID);
         $this->project->updateProducts($projectID);
-        if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+        if(dao::isError()) return array('result' => 'fail', 'message' => dao::getError());
 
         /* Merge old and new linked products under the project. */
         $newProducts   = $this->product->getProducts($projectID);
@@ -694,6 +684,8 @@ class projectZen extends project
         {
             $this->dealUnlinkedProduct($oldProducts, $newProductIDs, $executionIDs);
         }
+
+        return array();
     }
 
     /**
@@ -854,5 +846,25 @@ class projectZen extends project
         }
 
         return $otherProducts;
+    }
+
+    /**
+     * setProjectMenu
+     *
+     * @param  int    $projectID
+     * @param  object $project
+     * @access protected
+     * @return void
+     */
+    protected function setProjectMenu(int $projectID, object $project): void
+    {
+        if($this->app->tab == 'program')
+        {
+            $this->loadModel('program')->setMenu($project->parent);
+        }
+        else if($this->app->tab == 'project')
+        {
+            $this->project->setMenu($projectID);
+        }
     }
 }
