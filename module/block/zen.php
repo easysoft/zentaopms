@@ -368,6 +368,7 @@ class blockZen extends block
      */
     public function printContributeBlock()
     {
+        /* TODO:zu1*/
         $this->view->data = $this->loadModel('user')->getPersonalData();
     }
 
