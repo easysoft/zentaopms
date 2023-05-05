@@ -116,7 +116,7 @@ class projectModel extends model
             }
         }
 
-        setcookie('lastProject', (int)$this->session->project, $this->config->cookieLife, $this->config->webRoot, '', $this->config->cookieSecure, true);
+        setcookie('lastProject', (string)$this->session->project, $this->config->cookieLife, $this->config->webRoot, '', $this->config->cookieSecure, true);
 
         return $this->session->project;
     }
@@ -893,23 +893,25 @@ class projectModel extends model
     }
 
     /**
-     * Process the project privs according to the project model.
+     * 根据项目类型生成权限数据。
+     * Get project priv data according to the project type.
      *
-     * @param  string $model    sprint | waterfall | noSprint
+     * @param  string $model  scrum|waterfall|noSprint|agileplus|waterfallplus
      * @access public
-     * @return object
+     * @return object|false
      */
-    public function processProjectPrivs($model = 'waterfall')
+    public function getProjectPrivs(string $model = 'waterfall'): object|false
     {
+        if(!in_array($model, array_keys((array)$this->config->programPriv))) return false;
+
         if($model == 'noSprint') $this->config->project->includedPriv = $this->config->project->noSprintPriv;
 
         $this->app->loadLang('group');
-
-        $privs    = new stdclass();
-        $resource = $this->lang->resource;
-        foreach($resource as $module => $methods)
+        $privs = new stdclass();
+        foreach($this->lang->resource as $module => $methods)
         {
-            if(!$methods) continue;
+            if(empty($methods)) continue;
+
             if(!in_array($module, $this->config->programPriv->$model)) continue;
 
             foreach($methods as $method => $label)
