@@ -106,14 +106,11 @@ class projectZen extends project
             }
         }
 
-        if($project->parent)
+        /* Judge products not empty. */
+        if($project->parent and $project->hasProduct && empty($linkedProductsCount) and !isset($rawdata->newProduct))
         {
-            /* Judge products not empty. */
-            if($project->hasProduct && empty($linkedProductsCount) and !isset($rawdata->newProduct))
-            {
-                dao::$errors['products0'] = $this->lang->project->error->productNotEmpty;
-                return false;
-            }
+            dao::$errors['products0'] = $this->lang->project->error->productNotEmpty;
+            return false;
         }
 
         return true;
@@ -807,7 +804,7 @@ class projectZen extends project
         {
             if($programID != $topProgramID)
             {
-                $otherProducts = $this->InitBranchProduct($programProducts, $branchGroups, $linkedBranches, $linkedProducts);
+                $otherProducts = $this->initBranchProduct($programProducts, $branchGroups, $linkedBranches, $linkedProducts);
             }
             else
             {
@@ -836,7 +833,7 @@ class projectZen extends project
      * @access protected
      * @return array
      */
-    protected function InitBranchProduct(object $programProducts, array $branchGroups, array $linkedBranches, array $linkedProducts): array
+    protected function initBranchProduct(object $programProducts, array $branchGroups, array $linkedBranches, array $linkedProducts): array
     {
         $otherProducts = array();
         foreach($programProducts as $productID => $productName)
