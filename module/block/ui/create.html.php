@@ -42,7 +42,7 @@ foreach($params as $key => $row)
             'id'    => "params$key",
             'type'  => $row['control'],
             'items' => isset($row['options']) ? $row['options'] : null
-        ))  
+        ))
     );
 }
 
@@ -61,7 +61,7 @@ form
         (
             'type'  => 'select',
             'items' => $modules
-        ) : 'input')  
+        ) : 'input')
     ),
     div
     (
@@ -91,7 +91,7 @@ form
                 set::name('title'),
                 set::value($blockTitle),
                 set::class('form-row'),
-                set::control('input')  
+                set::control('input')
             ),
             $paramsRows,
             formGroup
@@ -103,7 +103,7 @@ form
                 (
                     'type'  => 'select',
                     'items' => $lang->block->gridOptions
-                ))  
+                ))
             )
         )
     )

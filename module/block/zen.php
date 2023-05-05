@@ -4,14 +4,14 @@ class blockZen extends block
     /**
      * 添加或编辑区块时获取可使用的模块选项
      * Get module options when adding or editing blocks.
-     * 
+     *
      * @param  string $dashboard
      * @access protected
      * @return string[]
      */
     protected function getAvailableModules(string $dashboard): array
     {
-        if($dashboard != 'my') return array();        
+        if($dashboard != 'my') return array();
 
         $modules = $this->lang->block->moduleList;
         unset($modules['doc']);

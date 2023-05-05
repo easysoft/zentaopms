@@ -2,5 +2,5 @@ projectKey=zentaopms
 serverUrl=http://10.0.1.249:6230
 serverVersion=9.9.0.65466
 dashboardUrl=http://10.0.1.249:6230/dashboard?id=zentaopms
-ceTaskId=AYfmgmd5aBmpAvupYydG
-ceTaskUrl=http://10.0.1.249:6230/api/ce/task?id=AYfmgmd5aBmpAvupYydG
+ceTaskId=AYfppPP3aBmpAvupYyeE
+ceTaskUrl=http://10.0.1.249:6230/api/ce/task?id=AYfppPP3aBmpAvupYyeE
