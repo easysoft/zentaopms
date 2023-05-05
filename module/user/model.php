@@ -1161,7 +1161,7 @@ class userModel extends model
     {
         if(!$user) return false;
 
-//        $this->cleanLocked($user->account);
+        $this->cleanLocked($user->account);
 
         /* Authorize him and save to session. */
         $user->rights = $this->authorize($user->account);
