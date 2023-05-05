@@ -25,11 +25,12 @@ class productTest
     /**
      * Test create a product.
      *
-     * @param  array  $param
+     * @param  array   $param
+     * @param  string  $lineName
      * @access public
      * @return object|array
      */
-    public function createObject(array $param = array()): object|array
+    public function createObject(array $param = array(), string $lineName = ''): object|array
     {
         $createFields = array();
         $createFields['program']        = 1;
@@ -52,7 +53,7 @@ class productTest
         $data = new stdclass();
         foreach($createFields as $field => $defaultValue) $data->$field = zget($param, $field, $defaultValue);
 
-        $objectID = $this->objectModel->create($data);
+        $objectID = $this->objectModel->create($data, '', $lineName);
 
         if(dao::isError())
         {

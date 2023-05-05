@@ -247,12 +247,11 @@ class projectTao extends projectModel
      *
      * @param  int    $projectID
      * @param  object $project
-     * @param  object $postData
      * @param  object $program
      * @access protected
      * @return bool
      */
-    protected function createDocLib(int $projectID, object $project, object $postData, object $program): bool
+    protected function createDocLib(int $projectID, object $project, object $program): bool
     {
         /* Create doc lib. */
         $this->app->loadLang('doc');
@@ -501,19 +500,18 @@ class projectTao extends projectModel
      * @access public
      * @return string
      */
-    public function getParentProgram(int $program, string $path, int $grade): string
+    public function getParentProgram(string $path, int $grade): string
     {
-        $parentName = $this->dao->select('id,name')->from(TABLE_PROGRAM)
+        $programList = $this->dao->select('id,name')->from(TABLE_PROGRAM)
             ->where('id')->in(trim($path, ','))
             ->andWhere('grade')->lt($grade)
             ->orderBy('grade asc')
             ->fetchPairs();
 
-        $parentProgram = '';
-        foreach($parentName as $name) $parentProgram .= $name . '/';
-        $parentProgram = rtrim($parentProgram, '/');
+        $programName = '';
+        foreach($programList as $program) $programName .= $program . '/';
 
-        return $parentProgram;
+        return rtrim($programName, '/');
     }
 
     /**
@@ -527,8 +525,9 @@ class projectTao extends projectModel
      */
     protected function getExecutionProductGroup(array $executionIDs): array
     {
-        $oldExecutionProducts = $this->dao->select('project,product')->from(TABLE_PROJECTPRODUCT)->where('project')->in($executionIDs)->fetchGroup('project', 'product');
-        return $oldExecutionProducts;
+        return $this->dao->select('project,product')->from(TABLE_PROJECTPRODUCT)
+            ->where('project')->in($executionIDs)
+            ->fetchGroup('project', 'product');
     }
 
     /**

@@ -342,6 +342,7 @@ class todoModel extends model
     }
 
     /**
+     * 根据周期待办创建待办。
      * Create todo by cycle.
      *
      * @param  array   $todoList
@@ -368,7 +369,7 @@ class todoModel extends model
             if($today < $begin or (!empty($end) && $today > $end)) continue;
 
             $newTodo = $this->todoTao->buildCycleTodo($todo);
-            if(isset($todo->assignedTo) and $todo->assignedTo) $newTodo->assignedDate = $now;
+            if(isset($todo->assignedTo) && $todo->assignedTo) $newTodo->assignedDate = $now;
 
             $start  = strtotime($begin);
             $finish = strtotime("$today +{$beforeDays} days");
@@ -388,6 +389,7 @@ class todoModel extends model
                 if($lastCycle and ($date == $lastCycle->date)) continue;
 
                 $newTodo->date = $date;
+
                 $this->todoTao->insert($newTodo);
                 $this->action->create('todo', $this->dao->lastInsertID(), 'opened', '', '', $newTodo->account);
                 $cycleList[$todoID] = $newTodo;
@@ -541,6 +543,18 @@ class todoModel extends model
     public function getTodosByIdList(array $todoIdList): array
     {
         return $this->todoTao->fetchRows($todoIdList);
+    }
+
+    /**
+     * 获取所有有效的周期待办列表。
+     * Get valid cycle todo listi.
+     *
+     * @access public
+     * @return array
+     */
+    public function getValidCycleList(): array
+    {
+        return $this->dao->select('*')->from(TABLE_TODO)->where('cycle')->eq(1)->andWhere('deleted')->eq(0)->fetchAll('id');
     }
 
     /**

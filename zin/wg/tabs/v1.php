@@ -7,80 +7,82 @@ class tabs extends wg
         /* Tabs direction: h - horizontal, v - vertical */
         'direction?:string="h"',
         'items:array',
-        'activeId?string'
+        'activeID?string'
     );
+
+    protected function getItemID(array $item): string
+    {
+        return isset($item['id']) ? $item['id'] : $this->gid;
+    }
+
+    protected function buildLabelView(string $id, array $item)
+    {
+        $isActive = $this->prop('activeID') == $id;
+        return li
+        (
+            setClass('nav-item'),
+            $isActive ? setClass('active') : null,
+            a
+            (
+                set('data-toggle', 'tab'),
+                set::href("#$id"),
+                $item['label']
+            )
+        );
+    }
+
+    protected function buildContentView(string $id, array $item)
+    {
+        $isActive = $this->prop('activeID') == $id;
+        return div
+        (
+            setClass('tab-pane'),
+            setID($id),
+            $isActive ? setClass('active') : null,
+            isset($item['data']) ? $item['data'] : null
+        );
+    }
 
     protected function build()
     {
         $items     = $this->prop('items');
         $direction = $this->prop('direction');
-        $activeId  = $this->prop('activeId');
+        $activeID  = $this->prop('activeID');
 
         if(empty($items)) return null;
 
-        $lables  = array();
-        $content = array();
-        $actived = false;
+        $labelViews  = array();
+        $contentViews = array();
         foreach($items as $item)
         {
-            /* Get ID. */
-            $id = isset($item['id']) ? $item['id'] : '';
-            if(empty($id)) $id = isset($item['label']) ? $item['label'] : '';
-            if(empty($id)) $id = $this->gid;
-
-            $active = isset($item['active']) ? !empty($item['active']) : null;
-            if($active === null and !empty($activeId) and $activeId == $id) $active = true;
-            if($active === true) $actived = true;
-
-            $lables[] = h::li
-            (
-                setClass('nav-item'),
-                $active === true ? setClass('active') : null,
-                h::a
-                (
-                    set('data-toggle', 'tab'),
-                    set('href', '#' . $id),
-                    isset($item['label']) ? $item['label'] : null
-                )
-            );
-
-            $content[] = h::div
-            (
-                setClass('tab-pane'),
-                setID($id),
-                $active === true ? setClass('active') : null,
-                isset($item['data']) ? $item['data'] : null
-            );
+            $id = $this->getItemID($item);
+            $labelViews[] = $this->buildLabelView($id, $item);
+            $contentViews[] = $this->buildContentView($id, $item);
         }
 
         /* There is no active item, then set index 0 to be actived. */
-        if(!$actived)
+        if(empty($activeID))
         {
-            $l = $lables[0];
-            $l->setProp('class', 'active');
-            $lables[0] = $l;
-
-            $c = $content[0];
-            $c->setProp('class', 'active');
-            $content[0] = $c;
+            $labelViews[0]->setProp('class', 'active');
+            $contentViews[0]->setProp('class', 'active');
         }
 
-        return h::div
+        return div
         (
             set($this->props->skip(array_keys(static::getDefinedProps()))),
             $direction == 'v' ? setClass('flex') : null,
             /* Tabs. */
-            h::ul
+            ul
             (
                 setClass('nav nav-tabs'),
                 $direction == 'v' ? setClass('nav-stacked') : null,
-                $lables
+                $labelViews
             ),
             /* Content. */
-            h::div
+            div
             (
                 setClass('tab-content'),
-                $content
+                $contentViews
             )
         );
     }

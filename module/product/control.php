@@ -73,56 +73,28 @@ class product extends control
      * The projects which linked the product.
      *
      * @param  string $status
-     * @param  int    $productID
-     * @param  int    $branch
-     * @param  int    $involved
+     * @param  string $productID
+     * @param  string $branch
+     * @param  string $involved
      * @param  string $orderBy
-     * @param  int    $recTotal
-     * @param  int    $recPerPage
-     * @param  int    $pageID
+     * @param  string $recTotal
+     * @param  string $recPerPage
+     * @param  string $pageID
      * @access public
      * @return void
      */
-    public function project($status = 'all', $productID = 0, $branch = '', $involved = 0, $orderBy = 'order_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function project(string $status = 'all', string $productID = '0', string $branch = '', string $involved = '0', string $orderBy = 'order_desc', string $recTotal = '0', string $recPerPage = '20', string $pageID = '1')
     {
-        $this->app->loadLang('execution');
-        $this->loadModel('project');
-
-        $branch = ($this->cookie->preBranch !== '' and $branch === '') ? $this->cookie->preBranch : $branch;
-        setcookie('preBranch', $branch, $this->config->cookieLife, $this->config->webRoot, '', $this->config->cookieSecure, true);
-        $this->session->set('createProjectLocate', $this->app->getURI(true), 'product');
-
-        $this->product->setMenu($productID, $branch);
+        $productID = (int)$productID;
+        $involved  = ($this->cookie->involved or $involved);
+        $this->productZen->setProjectMenu($productID, $branch, $this->cookie->preBranch);
 
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
-        $pager = new pager($recTotal, $recPerPage, $pageID);
+        $pager = new pager((int)$recTotal, (int)$recPerPage, (int)$pageID);
 
-        /* Get PM id list. */
-        $accounts     = array();
-        $projectStats = $this->product->getProjectStatsByProduct($productID, $status, $branch, $involved, $orderBy, $pager);
-        $product      = $this->product->getByID($productID);
-        $projects     = $this->project->getPairsByProgram($product->program, 'all', false, 'order_asc', '', '', 'product');
-
-        foreach($projectStats as $project)
-        {
-            if(!empty($project->PM) and !in_array($project->PM, $accounts)) $accounts[] = $project->PM;
-            unset($projects[$project->id]);
-        }
-        $PMList = $this->user->getListByAccounts($accounts, 'account');
-
-        $this->view->title        = $this->products[$productID] . $this->lang->colon . $this->lang->product->project;
-        $this->view->projectStats = $projectStats;
-        $this->view->PMList       = $PMList;
-        $this->view->productID    = $productID;
-        $this->view->product      = $product;
-        $this->view->projects     = $projects;
-        $this->view->status       = $status;
-        $this->view->users        = $this->loadModel('user')->getPairs('noletter');
-        $this->view->branchID     = $branch;
-        $this->view->branchStatus = $this->loadModel('branch')->getByID($branch, 0, 'status');
-        $this->view->pager        = $pager;
-        $this->display();
+        /* Set view variables and display. */
+        $this->productZen->displayProjectPage($productID, $branch, $status, $involved, $orderBy, $pager);
     }
 
     /**
@@ -399,7 +371,7 @@ class product extends control
      * Create a product.
      * 创建产品。可以是顶级产品，也可以是项目集下的产品。
      *
-     * @param  int    $programID
+     * @param  string $programID
      * @param  string $extra
      * @access public
      * @return void
@@ -410,13 +382,14 @@ class product extends control
 
         if(!empty($_POST))
         {
-            $data = form::data($this->config->product->form->create);
-            $data = $this->productZen->prepareCreateExtras($data, $this->post->acl, $this->post->uid);
+            $data    = form::data($this->config->product->form->create);
+            $product = $this->productZen->prepareCreateExtras($data);
 
-            $productID = $this->product->create($data);
-            if(!$productID) return $this->productZen->sendDaoError();
+            $productID = $this->product->create($product, $this->post->uid, zget($_POST, 'lineName', ''));
+            if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            return $this->productZen->responseAfterCreate($productID, $data, $this->post->uid, zget($_POST, 'lineName', ''));
+            $response = $this->productZen->responseAfterCreate($productID, (int)$product->program);
+            $this->send($response);
         }
 
         $this->productZen->setCreateMenu($programID);
@@ -440,14 +413,15 @@ class product extends control
 
         if(!empty($_POST))
         {
-            $data = form::data($this->config->product->form->edit);
-            $data = $this->productZen->prepareEditExtras($data, $this->post->acl, $this->post->uid);
+            $data    = form::data($this->config->product->form->edit);
+            $product = $this->productZen->prepareEditExtras($data);
 
-            $changes = $this->product->update($productID, $data, $this->post->uid);
-            if(dao::isError()) return $this->productZen->sendDaoError();
+            $changes = $this->product->update($productID, $product, $this->post->uid);
+            if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             if($action == 'undelete') $this->loadModel('action')->undelete((int)$extra);
-            return $this->productZen->responseAfterEdit($productID, $programID, $changes);
+            $response = $this->productZen->responseAfterEdit($productID, $programID, $changes);
+            $this->send($response);
         }
 
         $this->productZen->setEditMenu($productID, $programID);

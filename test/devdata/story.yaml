@@ -156,12 +156,10 @@ fields:
     format: ""
   - field: openedDate
     note: "创建日期"
-    from: common.date.v1.yaml
-    use: dateA
-    prefix: ""
+    range: "(M)-(w)"
+    type: timestamp
     postfix: ""
-    loop: 0
-    format: ""
+    format: "YY/MM/DD"
   - field: assignedTo
     note: "指派给"
     fields:
@@ -175,24 +173,14 @@ fields:
     format: ""
   - field: assignedDate
     note: "指派日期"
-    from: common.date.v1.yaml
-    use: dateA
-    prefix: ""
+    range: "(M)-(w)"
+    type: timestamp
     postfix: ""
-    loop: 0
-    format: ""
+    format: "YY/MM/DD"
   - field: lastEditedBy
     note: "最后修改者"
     from: common.user.v1.yaml
     use: user
-    prefix: ""
-    postfix: ""
-    loop: 0
-    format: ""
-  - field: lastEditedDate
-    note: "最后修改日期"
-    from: common.date.v1.yaml
-    use: dateA
     prefix: ""
     postfix: ""
     loop: 0
@@ -207,14 +195,6 @@ fields:
     prefix: ""
     postfix: ""
     format: ""
-  - field: reviewedDate
-    note: "评审日期"
-    from: common.date.v1.yaml
-    use: dateA
-    prefix: ""
-    postfix: ""
-    loop: 0
-    format: ""
   - field: closedBy
     note: "关闭者"
     fields:
@@ -222,14 +202,6 @@ fields:
         range: test,dev
       - field: closedBy2
         range: 1-10,1-10
-    prefix: ""
-    postfix: ""
-    loop: 0
-    format: ""
-  - field: closedDate
-    note: "关闭日期"
-    from: common.date.v1.yaml
-    use: dateA
     prefix: ""
     postfix: ""
     loop: 0
