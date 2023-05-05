@@ -54,6 +54,12 @@ class chartModel extends model
             $chart->fieldSettings = array();
         }
 
+        if(!empty($chart->settings) and $chart->settings != 'null')
+        {
+            $settings = json_decode($chart->settings, true);
+            if(isset($settings[0]) and isset($settings[0]['type'])) $chart->type = $settings[0]['type'];
+        }
+
         if($chart->sql == null)     $chart->sql     = '';
         if(!empty($chart->filters)) $chart->filters = json_decode($chart->filters, true);
 
@@ -72,7 +78,7 @@ class chartModel extends model
         if(!empty($chart->sql))      $chart->sql      = trim(str_replace(';', '', $chart->sql));
         if(!empty($chart->settings)) $chart->settings = json_decode($chart->settings, true);
 
-        if(!empty($chart->settings) and is_array($chart->settings))
+        if(empty($chart->type) and !empty($chart->settings) and is_array($chart->settings))
         {
             $firstSetting = current($chart->settings);
             if(isset($firstSetting['type'])) $chart->type = $firstSetting['type'];
@@ -396,7 +402,7 @@ class chartModel extends model
         $optionList = $this->getSysOptions($fields[$group]['type'], $fields[$group]['object'], $fields[$group]['field']);
         foreach($xLabels as $index => $xLabel) $xLabels[$index] = isset($optionList[$xLabel]) ? $optionList[$xLabel] : $xLabel;
 
-        $xaxis      = array('type' => 'category', 'data' => $xLabels, 'boundaryGap' => false);
+        $xaxis      = array('type' => 'category', 'data' => $xLabels, 'axisTick' => array('alignWithLabel' => true));
         $yaxis      = array('type' => 'value');
         $legend     = new stdclass();
         $series     = array();
@@ -456,7 +462,7 @@ class chartModel extends model
         $optionList = $this->getSysOptions($fields[$group]['type'], $fields[$group]['object'], $fields[$group]['field']);
         foreach($xLabels as $index => $xLabel) $xLabels[$index] = isset($optionList[$xLabel]) ? $optionList[$xLabel] : $xLabel;
 
-        $xaxis  = array('type' => 'category', 'data' => $xLabels, 'axisLabel' => array('interval' => 0), 'boundaryGap' => false);
+        $xaxis  = array('type' => 'category', 'data' => $xLabels, 'axisLabel' => array('interval' => 0), 'axisTick' => array('alignWithLabel' => true));
         $yaxis  = array('type' => 'value');
         $legend = new stdclass();
 
@@ -615,17 +621,18 @@ class chartModel extends model
                 if($field)
                 {
                     $path = $this->app->getModuleRoot() . 'dataview' . DS . 'table' . DS . "$object.php";
-                    if(!is_file($path)) return;
-
-                    include $path;
-                    $options = $schema->fields[$field]['options'];
+                    if(is_file($path))
+                    {
+                        include $path;
+                        $options = $schema->fields[$field]['options'];
+                    }
                 }
                 break;
             case 'object':
                 if($field)
                 {
-                    $table   = zget($this->config->objectTables, $object);
-                    $options = $this->dao->select("id, {$field}")->from($table)->fetchPairs();
+                    $table = zget($this->config->objectTables, $object, '');
+                    if($table) $options = $this->dao->select("id, {$field}")->from($table)->fetchPairs();
                 }
                 break;
             case 'string':
@@ -695,6 +702,111 @@ class chartModel extends model
         }
 
         return $filterFormat;
+    }
+
+    /**
+     * Get tables.
+     *
+     * @param  string $sql
+     * @access public
+     * @return array
+     */
+    public function getTables($sql)
+    {
+        $processedSql = trim($sql, ';');
+        $processedSql = str_replace(array("\r\n", "\n"), ' ', $processedSql);
+        $processedSql = str_replace('`', '', $processedSql);
+        preg_match_all('/^select (.+) from (.+)$/i', $processedSql, $selectAndFrom);
+        if(empty($selectAndFrom[2][0])) return false;
+
+        $selectSql = $selectAndFrom[1][0];
+        $tableSql  = $fromSql = $selectAndFrom[2][0];
+        if(stripos($fromSql, 'where') !== false)    $tableSql = trim(substr($fromSql, 0, stripos($fromSql, 'where')));
+        if(stripos($fromSql, 'limit') !== false)    $tableSql = trim(substr($fromSql, 0, stripos($fromSql, 'limit')));
+        if(stripos($fromSql, 'having') !== false)   $tableSql = trim(substr($fromSql, 0, stripos($fromSql, 'having')));
+        if(stripos($fromSql, 'group by') !== false) $tableSql = trim(substr($fromSql, 0, stripos($fromSql, 'group by')));
+
+        /* Remove such as "left join|right join|join", "on (t1.id=t2.id)", result like t1, t2 as t3. */
+        $tableSql .= ' ';
+        if(stripos($tableSql, 'join') !== false) $tableSql = preg_replace(array('/join\s+([A-Z]+_\w+ .*)on/Ui', '/,\s*on\s+[^,]+/i'), array(',$1,on', ''), $tableSql);
+
+        /* Match t2 as t3 */
+        preg_match_all('/(\w+) +as +(\w+)/i', $tableSql, $out);
+
+        $fields = explode(',', $selectSql);
+        foreach($fields as $i => $field)
+        {
+            if($field) $asField = '';
+            if(strrpos($field, ' as ') !== false) list($field, $asField) = explode(' as ', $field);
+            if(strrpos($field, ' AS ') !== false) list($field, $asField) = explode(' AS ', $field);
+
+            $field     = trim($field);
+            $asField   = trim($asField);
+            $fieldName = $field;
+            if(strrpos($field, '.') !== false)
+            {
+                $table     = substr($field, 0, strrpos($field, '.'));
+                $fieldName = substr($field, strrpos($field, '.') + 1);
+                if(!empty($out[0]) and in_array($table, $out[2]))
+                {
+                    $realTable = $out[1][array_search($table, $out[2])];
+                    $tableFieldName = str_replace($table . '.', $realTable . '.', $field);
+
+                    if(isset($fields[$fieldName]) && !$asField)
+                    {
+                        $fieldName = str_replace('.', '', $field);
+
+                        $sql = preg_replace(array("/$field/", "/`$field`/"), array("$field AS $fieldName", "`$field` AS $fieldName"), $sql, 1);
+
+                        $field = $tableFieldName;
+                    }
+                }
+
+                if($fieldName == '*') $fieldName = $field;
+            }
+
+            $fieldName = $asField ? $asField : $fieldName;
+
+            $fields[$fieldName] = $field;
+            unset($fields[$i]);
+        }
+
+        $tableSql = preg_replace('/as +\w+/i', ' ', $tableSql);
+        $tableSql = trim(str_replace(array('(', ')', ','), ' ', $tableSql));
+        $tableSql = preg_replace('/ +/', ' ', $tableSql);
+
+        $tables = explode(' ', $tableSql);
+
+        return array('sql' => $sql, 'tables' => $tables, 'fields' => $fields);
+    }
+
+    /**
+     * Parse variables to null string in sql.
+     *
+     * @param string $sql
+     * @access public
+     * @return string
+     */
+    public function parseSqlVars($sql, $filters)
+    {
+        if($filters)
+        {
+            foreach($filters as $filter)
+            {
+                if(!isset($filter['default'])) continue;
+                if(isset($filter['from']) and $filter['from'] == 'query')
+                {
+                    $default = "'{$filter['default']}'";
+                    $sql     = str_replace('$' . $filter['field'], $default, $sql);
+                }
+            }
+        }
+        if(preg_match_all("/[\$]+[a-zA-Z0-9]+/", $sql, $out))
+        {
+            foreach($out[0] as $match) $sql = str_replace($match, "''", $sql);
+        }
+
+        return $sql;
     }
 }
 

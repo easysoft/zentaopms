@@ -243,7 +243,29 @@ class yaml
         $this->tableName = $tableName;
         $this->fields    = new fields();
 
-        $this->configFiles[] = dirname(dirname(__FILE__)) . "/data/{$this->tableName}.yaml";
+        $yamlPath = dirname(dirname(__FILE__)) . "/data/{$this->tableName}.yaml";
+        $this->configFiles[] = $yamlPath;
+
+        if(!file_exists($yamlPath)) $this->buildYamlFile($this->tableName);
+    }
+
+    /**
+     * Build the initial yaml file.
+     *
+     * @param  string $tableName
+     * @access public
+     * @return viod
+     */
+    public function buildYamlFile($tableName)
+    {
+        $yamlData['title']   = 'table zt_' . $tableName;
+        $yamlData['author']  = 'automated export';
+        $yamlData['version'] = '1.0';
+        $yamlData['fields'][0]['field'] = 'id';
+        $yamlData['fields'][0]['range'] = '1-1000';
+
+        $yamlFile = dirname(dirname(__FILE__)) . "/data/{$this->tableName}.yaml";
+        yaml_emit_file($yamlFile, $yamlData, YAML_UTF8_ENCODING);
     }
 
     /**
@@ -386,7 +408,7 @@ class yaml
         system($execDump);
         $stderr = '';
         $this->exec_with_stderr($execYaml, $stderr);
-        
+
         if(empty($stderr)) return;
 
         $errors = explode(PHP_EOL, $stderr);
@@ -394,7 +416,7 @@ class yaml
         {
             return !empty($error) && !strpos($error, 'Using a password on the command line interface can be insecure');
         });
-        
+
         if(!empty($errors)) echo implode(PHP_EOL, $errors) . PHP_EOL;
     }
 
@@ -407,11 +429,11 @@ class yaml
      * @access private
      * @return string
      */
-    private function exec_with_stderr($cmd, &$stderr=null) 
+    private function exec_with_stderr($cmd, &$stderr=null)
     {
         $proc   = proc_open($cmd, array(2 => array('pipe', 'w')), $pipes);
         $stderr = stream_get_contents($pipes[2]);
-        
+
         fclose($pipes[2]);
         proc_close($proc);
     }

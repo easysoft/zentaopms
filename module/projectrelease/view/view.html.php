@@ -312,7 +312,7 @@
                     ?>
                     <td class='c-build' title='<?php echo $openedBuildName?>'><?php echo $openedBuildName;?></td>
                     <td class='c-user'><?php echo zget($users, $bug->openedBy);?></td>
-                    <td class='c-date'><?php echo $bug->openedDate?></td>
+                    <td class='c-date'><?php echo helper::isZeroDate($bug->openedDate) ? '' : substr($bug->openedDate, 5, 11);?></td>
                     <td class='c-actions'>
                       <?php
                       if(common::hasPriv('projectrelease', 'unlinkBug') and $canBeChanged)

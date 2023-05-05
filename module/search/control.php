@@ -14,19 +14,6 @@ class search extends control
     public $search;
 
     /**
-     * Determine whether to display the effort object.
-     *
-     * @access public
-     * @return void
-     */
-    public function __construct($module = '', $method = '')
-    {
-        parent::__construct($module, $method);
-        if($this->config->edition != 'max')      unset($this->lang->search->modules['effort']);
-        if($this->config->systemMode == 'light') unset($this->lang->search->modules['program']);
-    }
-
-    /**
      * Build search form.
      *
      * @param  string $module
@@ -209,7 +196,7 @@ class search extends control
             }
             else
             {
-                $type = zget($this->lang->search->modules, ($result['type'] == 'case' ? 'testcase' : $result['type']), $result['type']);
+                $type = zget($this->lang->search->modules, ($result['type'] == 'testcase' ? 'case' : $result['type']), $result['type']);
                 return $this->send(array('result' => 'unfinished', 'message' => sprintf($this->lang->search->buildResult, $type, $type, $result['count']), 'type' => $type, 'count' => $result['count'], 'next' => inlink('buildIndex', "type={$result['type']}&lastID={$result['lastID']}") ));
             }
         }

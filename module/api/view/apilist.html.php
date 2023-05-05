@@ -115,7 +115,7 @@
       <?php foreach($apiList as $api):?>
       <li class="list-group-item">
         <div class="heading <?php echo $api->method;?>">
-          <a href="<?php echo helper::createLink('api', 'index', "libID={$api->lib}&moduleID=0&apiID={$api->id}&version=0&release=$release");?>" data-app="<?php echo $app->tab;?>">
+          <a href="<?php echo helper::createLink('api', 'index', "libID={$api->lib}&moduleID=0&apiID={$api->id}&version=0");?>" data-app="<?php echo $app->tab;?>">
             <span class="label label-primary"><?php echo $api->method;?></span>
             <span class="path" title="<?php echo $api->path;?>"><?php echo $api->path;?></span>
             <span class="desc" title="<?php echo $api->title;?>"><?php echo $api->title;?></span>

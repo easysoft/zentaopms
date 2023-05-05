@@ -28,10 +28,7 @@ dtable
     set::width('100%'),
     set::height('auto'),
     set::cols(array_values($config->block->dtable->project->fieldList)),
-    set::data(array_values($projects)),
-    set::footPager(usePager()),
-    set::footer(array('flex', 'pager'))
+    set::data(array_values($projects))
 );
-
 
 render();

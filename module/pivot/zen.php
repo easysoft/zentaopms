@@ -5,27 +5,28 @@ class pivotZen extends pivot
      * Prepare for preview a pivot.
      *
      * @param  int    $dimension
-     * @param  string $group
+     * @param  string $groupID
      * @param  string $module
      * @param  string $method
      * @param  string $params
      * @access public
      * @return void
      */
-    public function prepare4Preview($dimension, $group, $module, $method, $params)
+    public function prepare4Preview($dimension, $groupID, $module, $method, $params)
     {
         $params = helper::safe64Decode($params);
 
-        if(!$group) $group = $this->getDefaultGroup($dimension);
-        if(!$module || !$method) list($module, $method, $params) = $this->getDefaultPivotParams($dimension, $group);
+        if(!$groupID) $groupID = $this->getDefaultGroup($dimension);
+        if(!$module || !$method) list($module, $method, $params) = $this->getDefaultPivotParams($dimension, $groupID);
 
         if(!empty($module) && !empty($method) && $method != 'show' && !common::hasPriv($module, $method)) $this->loadModel('common')->deny('pivot', $method);
 
         $this->setFeatureBar($dimension);
 
-        $this->view->sidebar   = $this->getSidebar($dimension, $group, $module, $method, $params);
+        $this->view->sidebar   = $this->getSidebar($dimension, $groupID, $module, $method, $params);
         $this->view->dimension = $dimension;
-        $this->view->group     = $group;
+        $this->view->groupID   = $groupID;
+        $this->view->group     = $this->loadModel('tree')->getByID($groupID);
         $this->view->module    = $module;
         $this->view->method    = $method;
         $this->view->params    = $params;
@@ -91,10 +92,13 @@ class pivotZen extends pivot
 
         foreach($groups as $group)
         {
+            if($this->config->edition == 'open' && $group->grade == 1) continue;
+
             $pivots = $this->dao->select('*')->from(TABLE_PIVOT)
                 ->where("FIND_IN_SET($group->id, `group`)")
                 ->andWhere('stage')->ne('draft')
-                ->orderBy('id_desc')->fetchAll();
+                ->orderBy('id_desc')
+                ->fetchAll();
             if($pivots)
             {
                 foreach($pivots as $pivot) return array('pivot', 'show', "dimensionID=$dimension&groupID={$group->id}&pivotID={$pivot->id}");
@@ -181,6 +185,8 @@ class pivotZen extends pivot
         $sidebar = '';
         foreach($groups as $group)
         {
+            if($this->config->edition == 'open' && $group->grade == 1) continue;
+
             $pivots = $this->dao->select('*')->from(TABLE_PIVOT)
                 ->where("FIND_IN_SET($group->id, `group`)")
                 ->andWhere('stage')->ne('draft')
@@ -199,19 +205,19 @@ class pivotZen extends pivot
 
             foreach($pivots as $pivot)
             {
-                $class     = '';
+                $class     = "pivot-{$pivot->id}";
                 $pivotName = $pivot->name;
                 $params    = helper::safe64Encode("dimensionID=$pivot->dimension&groupID=$pivot->group&pivotID=$pivot->id");
 
                 if($module == 'pivot' && $method == 'show' && $pivotID == $pivot->id)
                 {
-                    $class = "class='active'";
+                    $class .= ' active';
 
                     $this->view->title = $pivotName;
                 }
 
                 $pivotLink = helper::createLink('pivot', 'preview', "dimension=$dimension&group=$currentGroup->id&module=pivot&method=show&params=$params");
-                $sidebar  .= "<li $class>" . html::a($pivotLink, $pivotName, '', "title='$pivotName'") . '</li>';
+                $sidebar  .= "<li class='$class'>" . html::a($pivotLink, $pivotName, '', "title='$pivotName'") . '</li>';
             }
 
             if($group->grade == 2) $sidebar .= '</ul></li>';

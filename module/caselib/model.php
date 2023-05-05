@@ -183,7 +183,7 @@ class caselibModel extends model
         $lib = fixer::input('post')
             ->stripTags($this->config->caselib->editor->create['id'], $this->config->allowedTags)
             ->setForce('type', 'library')
-            ->setIF($this->lang->navGroup->caselib != 'qa', 'project', $this->session->project)
+            ->setIF($this->lang->navGroup->caselib != 'qa', 'project', (int)$this->session->project)
             ->add('addedBy', $this->app->user->account)
             ->add('addedDate', helper::now())
             ->remove('uid')

@@ -99,7 +99,7 @@ class model extends baseModel
         if(empty($method)) $method = $methodName;
 
         static $actions = array();
-        if(isset($this->config->bizVersion))
+        if($this->config->edition != 'open')
         {
             if(empty($actions[$moduleName]))
             {
@@ -155,7 +155,7 @@ class model extends baseModel
      */
     public function buildFlowMenu($module, $data, $type = 'browse', $show = '')
     {
-        if(!isset($this->config->bizVersion)) return '';
+        if($this->config->edition == 'open') return '';
 
         $moduleName = $module;
         if(str_contains($module, '.')) [$appName, $moduleName] = explode('.', $module);
@@ -233,7 +233,7 @@ class model extends baseModel
      */
     public function processStatus($module, $record)
     {
-        if(!isset($this->config->bizVersion) or empty($record->subStatus)) return zget($this->lang->$module->statusList, $record->status);
+        if($this->config->edition == 'open' or empty($record->subStatus)) return zget($this->lang->$module->statusList, $record->status);
 
         return $this->loadModel('workflowfield')->processSubStatus($module, $record);
     }
@@ -247,7 +247,7 @@ class model extends baseModel
      */
     public function processExportData($data)
     {
-        if(!isset($this->config->bizVersion)) return $data;
+        if($this->config->edition == 'open') return $data;
 
         return $this->loadModel('workflowfield')->processExportData($data);
     }
@@ -261,7 +261,7 @@ class model extends baseModel
      */
     public function processExportOptions($data)
     {
-        if(!isset($this->config->bizVersion)) return $data;
+        if($this->config->edition == 'open') return $data;
 
         return $this->loadModel('workflowfield')->processExportOptions($data);
     }
@@ -275,7 +275,7 @@ class model extends baseModel
      */
     public function processImportData($data)
     {
-        if(!isset($this->config->bizVersion)) return $data;
+        if($this->config->edition == 'open') return $data;
 
         return $this->loadModel('workflowfield')->processImportData($data);
     }
@@ -288,7 +288,7 @@ class model extends baseModel
      */
     public function getFlowExtendFields()
     {
-        if(!isset($this->config->bizVersion)) return array();
+        if($this->config->edition == 'open') return array();
 
         return $this->loadModel('flow')->getExtendFields($this->app->getModuleName(), $this->app->getMethodName());
     }
@@ -301,7 +301,7 @@ class model extends baseModel
      */
     public function getFlowExportFields()
     {
-        if(!isset($this->config->bizVersion)) return array();
+        if($this->config->edition == 'open') return array();
 
         return $this->loadModel('workflowfield')->getExportFields($this->app->getModuleName());
     }
@@ -315,7 +315,7 @@ class model extends baseModel
      */
     public function executeHooks(int $objectID)
     {
-        if(!isset($this->config->bizVersion)) return false;
+        if($this->config->edition == 'open') return false;
 
         $moduleName = $this->app->getModuleName();
         $methodName = $this->app->getMethodName();

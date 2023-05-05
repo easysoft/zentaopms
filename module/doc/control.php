@@ -603,7 +603,7 @@ class doc extends control
         }
         elseif($objectType == 'mine')
         {
-            $this->lang->doc->aclList = $this->lang->doclib->mySpaceAclList['private'];
+            $this->lang->doc->aclList = $this->lang->doclib->mySpaceAclList;
         }
         $moduleOptionMenu = $this->doc->getLibsOptionMenu($libs);
 
@@ -650,16 +650,7 @@ class doc extends control
             $this->doc->delete(TABLE_DOC, $docID);
 
             /* Delete doc files. */
-            $this->loadModel('file');
-            foreach($doc->files as $fileID => $file)
-            {
-                $file = $this->file->getById($fileID);
-                $this->dao->delete()->from(TABLE_FILE)->where('id')->eq($fileID)->exec();
-                $this->loadModel('action')->create($file->objectType, $file->objectID, 'deletedFile', '', $extra=$file->title);
-
-                $fileRecord = $this->dao->select('id')->from(TABLE_FILE)->where('pathname')->eq($file->pathname)->fetch();
-                if(empty($fileRecord)) $this->file->unlinkFile($file);
-            }
+            if($doc->files) $this->dao->update(TABLE_FILE)->set('deleted')->eq('1')->where('id')->in(array_keys($doc->files))->exec();
 
             /* if ajax request, send result. */
             if($this->server->ajax)
@@ -1318,7 +1309,7 @@ class doc extends control
             $this->view->libs    = $libs;
             $this->view->apiID   = 0;
             $this->view->release = 0;
-            $this->view->apiList = $browseType == 'bySearch' ? $this->api->getApiListBySearch($libID, $queryID, $type, array_keys($libs)) : $this->api->getListByModuleId($libID, $moduleID, 0, $pager);
+            $this->view->apiList = $browseType == 'bySearch' ? $this->api->getApiListBySearch($libID, $queryID, $type, array_keys($libs)) : $this->api->getListByModuleId($libID, $moduleID, $param, $pager);
         }
         else
         {
@@ -1374,7 +1365,7 @@ class doc extends control
      */
     public function productSpace($objectID = 0, $libID = 0, $moduleID = 0, $browseType = 'all', $orderBy = 'status,id_desc', $param = 0, $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
-        $products = $this->product->getPairs('nocode', 0, '', 'all');
+        $products = $this->product->getPairs('nocode');
         $objectID = $this->product->saveState($objectID, $products);
 
         echo $this->fetch('doc', 'tableContents', "type=product&objectID=$objectID&libID=$libID&moduleID=$moduleID&browseType=$browseType&orderBy=$orderBy&param=$param&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID");
@@ -1458,6 +1449,7 @@ class doc extends control
         if(!common::hasPriv('doc', 'teamSpace'))    unset($spaceList['custom']);
         if(!common::hasPriv('api', 'index'))        unset($spaceList['api']);
         if(!common::hasPriv('api', 'create'))       unset($spaceList['api'], $typeList['api']);
+        if($this->config->vision == 'lite')         unset($spaceList['api'], $spaceList['product'], $typeList['api']);
 
         $products = $this->loadModel('product')->getPairs();
         $projects = $this->project->getPairsByProgram('', 'all', false, 'order_asc', 'kanban');

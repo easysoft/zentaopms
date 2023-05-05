@@ -1969,7 +1969,7 @@ class testcaseModel extends model
                         if($step->version != $case->version) continue;
                         $oldStepID     = $step->id;
                         $step->case    = $libCaseID;
-                        $step->version = $libCase->version;
+                        $step->version = zget($libCase, 'version', '0');
                         unset($step->id);
 
                         $this->dao->insert(TABLE_CASESTEP)->data($step)->exec();
@@ -3500,30 +3500,39 @@ class testcaseModel extends model
             foreach(explode(',', trim($path, ',')) as $pathID) $objectIdList[$pathID] = $pathID;
         }
 
-        /* Get paginated data with all IDs list. */
-        $queryFunction = function($modules, $type, $objectIdList, $branch)
-        {
-            $this->dao->reset();
-            $rawMethod = $this->app->rawMethod;
-            $rawModule = $this->app->rawModule;
-            return $this->dao->select('*')->from(VIEW_SCENECASE)
-                ->where('deleted')->eq(0)
-                ->beginIF($this->cookie->onlyScene)->andWhere('isCase')->eq(2)->fi()
-                ->beginIF($modules)->andWhere('module')->in($modules)->fi()
-                ->beginIF($rawMethod == 'browse' and $type === 'top')->andWhere('parent')->eq(0)->andWhere('id')->in($objectIdList)->fi()
-                ->beginIF($rawMethod == 'browse' and $type === 'child')->andWhere('id')->in($objectIdList)->fi()
-                ->beginIF($rawModule == 'project' and $rawMethod == 'testcase' and intval($branch) > 0)->andWhere('branch')->eq($branch)->fi()
-                ->beginIF($rawModule == 'project' and $rawMethod == 'testcase' and $type === 'top')->andWhere('parent')->eq(0)->andWhere('id')->in($objectIdList)->fi()
-                ->beginIF($rawModule == 'project' and $rawMethod == 'testcase' and $type === 'child')->andWhere('id')->in($objectIdList)->fi();
-        };
-
         /* Sort by product ID for project list. */
         $orderBy = 'product_desc,sort_asc';
 
         /* Get sql for batch execution. */
-        if($executionSql !== NULL) $executionSql = $queryFunction($modules, $type, $objectIdList, $branch)->andWhere('isCase')->eq(1)->orderBy($orderBy)->get();
+        if($executionSql !== NULL) $executionSql = $this->buildQuery($modules, $type, $objectIdList, $branch)->andWhere('isCase')->eq(1)->orderBy($orderBy)->get();
 
-        return $queryFunction($modules, $type, $objectIdList, $branch)->orderBy($orderBy)->page($pager)->fetchAll('id');
+        return $this->buildQuery($modules, $type, $objectIdList, $branch)->orderBy($orderBy)->page($pager)->fetchAll('id');
+    }
+
+    /**
+     * Get paginated data with all IDs list.
+     *
+     * @param  string $modules
+     * @param  string $type
+     * @param  string $objectIdList
+     * @param  string $branch
+     * @access public
+     * @return object
+     */
+    private function buildQuery($modules, $type, $objectIdList, $branch)
+    {
+        $this->dao->reset();
+        $rawMethod = $this->app->rawMethod;
+        $rawModule = $this->app->rawModule;
+        return $this->dao->select('*')->from(VIEW_SCENECASE)
+            ->where('deleted')->eq(0)
+            ->beginIF($this->cookie->onlyScene)->andWhere('isCase')->eq(2)->fi()
+            ->beginIF($modules)->andWhere('module')->in($modules)->fi()
+            ->beginIF($rawMethod == 'browse' and $type === 'top')->andWhere('parent')->eq(0)->andWhere('id')->in($objectIdList)->fi()
+            ->beginIF($rawMethod == 'browse' and $type === 'child')->andWhere('id')->in($objectIdList)->fi()
+            ->beginIF($rawModule == 'project' and $rawMethod == 'testcase' and intval($branch) > 0)->andWhere('branch')->eq($branch)->fi()
+            ->beginIF($rawModule == 'project' and $rawMethod == 'testcase' and $type === 'top')->andWhere('parent')->eq(0)->andWhere('id')->in($objectIdList)->fi()
+            ->beginIF($rawModule == 'project' and $rawMethod == 'testcase' and $type === 'child')->andWhere('id')->in($objectIdList)->fi();
     }
 
     /**
@@ -3607,7 +3616,7 @@ class testcaseModel extends model
 
             foreach($scenes as $scene)
             {
-                $branchName = (isset($product) and $product->type != 'normal' and $scene->branch === BRANCH_MAIN) ? $this->lang->branch->main : $branch;
+                $branchName = (!empty($product) and $product->type != 'normal' and $scene->branch === BRANCH_MAIN) ? $this->lang->branch->main : $branch;
 
                 $this->buildTreeArray($treeMenu, $scenes, $scene, (empty($branchName)) ? '/' : "/$branchName/");
             }
@@ -4341,7 +4350,7 @@ class testcaseModel extends model
             ->leftJoin(TABLE_CASESTEP)->alias('t2')->on('t1.id = t2.`case` and t1.version = t2.version')
             ->where('t1.deleted')->eq(0)
             ->andWhere('t1.product')->eq($productID)
-            ->andWhere('t2.id')->ne('null')
+            ->andWhere('t2.id')->gt('0')
             ->beginIF($moduleID > 0)->andWhere('t1.module')->eq($moduleID)->fi()
             ->fetchAll();
 
@@ -4516,7 +4525,7 @@ class testcaseModel extends model
             'removeNamespace'    => true, // Remove namespace from resulting keys
             'namespaceSeparator' => ':', // Change separator to something other than a colon
             'attributePrefix'    => '', // Distinguish between attributes and nodes with the same name
-            'alwaysArray'        => [], // Array of XML tag names which should always become arrays
+            'alwaysArray'        => array(), // Array of XML tag names which should always become arrays
             'autoArray'          => true, // Create arrays for tags which appear more than once
             'textContent'        => 'text', // Key used for the text content of elements
             'autoText'           => true, // Skip textContent key if node has no attributes or child nodes
@@ -4529,7 +4538,7 @@ class testcaseModel extends model
         $namespaces[''] = null; // Add empty base namespace
 
         /* Get attributes from all namespaces. */
-        $attributesArray = [];
+        $attributesArray = array();
         foreach($namespaces as $prefix => $namespace)
         {
             if($options['removeNamespace']) $prefix = '';
@@ -4545,7 +4554,7 @@ class testcaseModel extends model
         }
 
         // Get child nodes from all namespaces
-        $tagsArray = [];
+        $tagsArray = array();
         foreach($namespaces as $prefix => $namespace)
         {
             if($options['removeNamespace']) $prefix = '';
@@ -4567,7 +4576,7 @@ class testcaseModel extends model
                 {
                     // Only entry with this key
                     // Test if tags of this type should always be arrays, no matter the element count
-                    $tagsArray[$childTagName] = in_array($childTagName, $options['alwaysArray'], true) || !$options['autoArray'] ? [$childProperties] : $childProperties;
+                    $tagsArray[$childTagName] = in_array($childTagName, $options['alwaysArray'], true) || !$options['autoArray'] ? array($childProperties) : $childProperties;
                 }
                 elseif(is_array($tagsArray[$childTagName]) && array_keys($tagsArray[$childTagName]) === range(0, count($tagsArray[$childTagName]) - 1))
                 {
@@ -4577,7 +4586,7 @@ class testcaseModel extends model
                 else
                 {
                     // Key exists so convert to integer indexed array with previous value in position 0
-                    $tagsArray[$childTagName] = [$tagsArray[$childTagName], $childProperties];
+                    $tagsArray[$childTagName] = array($tagsArray[$childTagName], $childProperties);
                 }
             }
         }

@@ -463,12 +463,10 @@ class searchModel extends model
     {
         $queries = $this->dao->select('id, title')
             ->from(TABLE_USERQUERY)
-            ->where()
-            ->markLeft(1)
-            ->where('account')->eq($this->app->user->account)
+            ->where('module')->eq($module)
+            ->andWhere('account', true)->eq($this->app->user->account)
             ->orWhere('common')->eq(1)
             ->markRight(1)
-            ->andWhere('module')->eq($module)
             ->orderBy('id_desc')
             ->fetchPairs();
         if(!$queries) return array('' => $this->lang->search->myQuery);
@@ -487,12 +485,10 @@ class searchModel extends model
     {
         $queries = $this->dao->select('id, account, title')
             ->from(TABLE_USERQUERY)
-            ->where()
-            ->markLeft(1)
-            ->where('account')->eq($this->app->user->account)
+            ->where('module')->eq($module)
+            ->andWhere('account', true)->eq($this->app->user->account)
             ->orWhere('common')->eq(1)
             ->markRight(1)
-            ->andWhere('module')->eq($module)
             ->orderBy('id_desc')
             ->fetchAll();
         if(!$queries) return array('' => $this->lang->search->myQuery);

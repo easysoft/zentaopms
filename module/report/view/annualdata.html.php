@@ -17,7 +17,7 @@
         <span><?php echo $annualDataLang->scope;?></span>
         <?php echo html::select('year', $years, $year, "class='form-control'");?>
         <?php echo html::select('dept', $depts, $dept, "class='form-control chosen'");?>
-        <?php echo html::select('userID', $users, $userID, "class='form-control chosen'");?>
+        <?php echo html::select('account', $users, $account, "class='form-control chosen'");?>
       </div>
       <div class='pull-right'>
         <button type='button' class='btn btn-primary' id='exportBtn' title='<?php echo $lang->export;?>'><i class='icon icon-export'></i></button>
@@ -29,8 +29,8 @@
       <div>
         <ul id='infoList'>
           <li>
-            <?php echo $userID ? $annualDataLang->logins : ($dept !== '' ? $annualDataLang->deptUsers : $annualDataLang->companyUsers);?>
-            <strong><?php echo $userID ? $data['logins'] : $data['users'];?></strong>
+            <?php echo $account ? $annualDataLang->logins : ($dept !== '' ? $annualDataLang->deptUsers : $annualDataLang->companyUsers);?>
+            <strong><?php echo $account ? $data['logins'] : $data['users'];?></strong>
           </li>
           <li>
             <?php echo $annualDataLang->actions;?>
@@ -50,7 +50,7 @@
               <li><span class='todoStatus'><?php echo $annualDataLang->todoStatus['done'];?></span><span><?php echo (int)$data['todos']->done;?></span></li>
             </ul>
           </li>
-          <?php if($dept !== '' or !empty($userID)):?>
+          <?php if($dept !== '' or !empty($account)):?>
           <li>
             <?php echo $annualDataLang->contributions;?>
             <strong><?php echo $contributions;?></strong>
@@ -60,7 +60,7 @@
       </div>
     </section>
     <section id='actionData'>
-      <header><h2 class='text-holder'><?php echo (($dept === '' and empty($userID)) ? $annualDataLang->actionData :$annualDataLang->contributionData) . $soFar;?></h2></header>
+      <header><h2 class='text-holder'><?php echo (($dept === '' and empty($account)) ? $annualDataLang->actionData :$annualDataLang->contributionData) . $soFar;?></h2></header>
       <div>
         <ul>
           <?php foreach($annualDataLang->objectTypeList as $objectType => $objectName):?>
@@ -192,7 +192,7 @@
       </div>
       <div class='table-header-fixed'>
     </section>
-    <?php if($dept === '' and empty($userID)):?>
+    <?php if($dept === '' and empty($account)):?>
     <section id='allTimeStatusStat'>
       <header><h2 class='text-holder'><?php echo $annualDataLang->statusStat;?></h2></header>
       <div>
@@ -360,7 +360,7 @@ $(function()
     <?php unset($lang->story->statusList['']);?>
     <?php unset($lang->bug->statusList['']);?>
     <?php unset($lang->task->statusList['']);?>
-    <?php if($dept === ''  and empty($userID)):?>
+    <?php if($dept === ''  and empty($account)):?>
     <?php foreach($data['statusStat'] as $objectType => $objectStatusStat):?>
     <?php
     $statusStat = array();

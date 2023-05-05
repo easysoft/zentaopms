@@ -7,3 +7,6 @@ ALTER TABLE `zt_todo`  CHANGE `idvalue` `objectID` mediumint(8) unsigned default
 UPDATE `zt_block` SET `dashboard` = `module`;
 UPDATE `zt_block` SET `module` = IF(`source` != '', `source`, `code`);
 DROP INDEX account_vision_module_type_order ON `zt_block`;
+
+ALTER TABLE `zt_block` DROP COLUMN `source`;
+ALTER TABLE `zt_block` DROP COLUMN `type`;
