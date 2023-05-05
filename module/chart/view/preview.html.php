@@ -44,31 +44,33 @@
 
 <div id="mainContent" class='main-row'>
   <div class='side-col col-lg'>
-    <div class='panel'>
-      <div class='panel-heading'>
-        <div class='panel-title'><?php echo isset($group->name) ? $group->name : '';?></div>
-      </div>
-      <div class='panel-body'>
-        <?php if(!$chartTree):?>
-        <hr class="space">
-        <div class="text-center text-muted">
-          <?php echo $lang->chart->noChart;?>
+    <div class="cell">
+      <div class='panel'>
+        <div class='panel-heading text-ellipsis'>
+          <div class='panel-title'><?php echo isset($group->name) ? $group->name : '';?></div>
         </div>
-        <hr class="space">
-        <?php elseif($chartTree):?>
-        <form method='post'>
-          <?php echo $chartTree;?>
-          <div class='btn-toolbar'>
-            <?php echo html::selectAll();?>
-            <?php echo html::submitButton($lang->chart->preview, '', 'btn btn-primary');?>
+        <div class='panel-body'>
+          <?php if(!$chartTree):?>
+          <hr class="space">
+          <div class="text-center text-muted">
+            <?php echo $lang->chart->noChart;?>
           </div>
-        </form>
-        <?php endif;?>
-        <?php if($this->config->edition == 'open'):?>
-        <div class='text biz-version'>
-          <span class='text-important'><?php echo (!empty($config->isINT)) ? $lang->bizVersionINT : $lang->bizVersion;?></span>
+          <hr class="space">
+          <?php elseif($chartTree):?>
+          <form method='post'>
+            <?php echo $chartTree;?>
+            <div class='btn-toolbar'>
+              <?php echo html::selectAll();?>
+              <?php echo html::submitButton($lang->chart->preview, '', 'btn btn-primary');?>
+            </div>
+          </form>
+          <?php endif;?>
+          <?php if($this->config->edition == 'open'):?>
+          <div class='text biz-version'>
+            <span class='text-important'><?php echo (!empty($config->isINT)) ? $lang->bizVersionINT : $lang->bizVersion;?></span>
+          </div>
+          <?php endif;?>
         </div>
-        <?php endif;?>
       </div>
     </div>
   </div>

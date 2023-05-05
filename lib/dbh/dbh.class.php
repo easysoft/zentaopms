@@ -45,7 +45,7 @@ class dbh
      */
     public function __construct($config, $setSchema = true)
     {
-        $dsn = "{$config->driver}:host={$config->host}:{$config->port}";
+        $dsn = "{$config->driver}:host={$config->host};port={$config->port}";
         if($setSchema) $dsn .= ";dbname={$config->name}";
 
         $pdo = new PDO($dsn, $config->user, $config->password);

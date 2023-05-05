@@ -8,7 +8,7 @@ $(function()
 
     $('#saveDraft').click(function()
     {
-        if($('#editorTitle').val() == '')
+        if($.trim($('#editorTitle').val()) == '')
         {
             bootbox.alert(titleNotEmpty);
             return false;

@@ -801,7 +801,6 @@ class baseControl
         $moduleControlFile = $modulePath . 'control.php';
         $actionExtPath     = $this->app->getModuleExtPath($appName, $moduleName, 'control');
         $file2Included     = $moduleControlFile;
-        $classNameToFetch  = $moduleName;
 
         if(!empty($actionExtPath))
         {
@@ -857,11 +856,9 @@ class baseControl
          * Load the control file.
          */
         if(!is_file($file2Included)) $this->app->triggerError("The control file $file2Included not found", __FILE__, __LINE__, $exit = true);
-        if(!class_exists($classNameToFetch))
-        {
-            chdir(dirname($file2Included));
-            helper::import($file2Included);
-        }
+
+        chdir(dirname($file2Included));
+        helper::import($file2Included);
 
         /**
          * 设置调用的类名。
