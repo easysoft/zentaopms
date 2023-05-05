@@ -261,7 +261,7 @@ class projectModel extends model
             $project->executions = $this->loadModel('execution')->getStatData($projectID, 'undone', 0, 0, false, '', $orderBy, $pager);
             $project->teamCount  = isset($teams[$projectID]) ? $teams[$projectID] : 0;
             $project->estimate   = isset($estimates[$projectID]) ? round($estimates[$projectID]->estimate, 2) : 0;
-            $project->parentName = $project->parent ? $this->projectTao->getParentProgram($project->parent, $project->path, $project->grade) : '';
+            $project->parentName = $project->parent ? $this->projectTao->getParentProgram($project->path, $project->grade) : '';
         }
         return $projects;
     }
@@ -1207,7 +1207,7 @@ class projectModel extends model
         $this->loadModel('personnel')->updateWhitelist($whitelist, 'project', $projectID);
 
         $program = $project->parent ? $this->getByID((int)$project->parent) : new stdclass();
-        $this->projectTao->createDocLib($projectID, $project, $postData, $program);
+        $this->projectTao->createDocLib($projectID, $project, $program);
 
         if($project->hasProduct) $this->updateProducts($projectID);
 
