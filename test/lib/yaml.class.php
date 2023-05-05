@@ -386,7 +386,7 @@ class yaml
         system($execDump);
         $stderr = '';
         $this->exec_with_stderr($execYaml, $stderr);
-        
+
         if(empty($stderr)) return;
 
         $errors = explode(PHP_EOL, $stderr);
@@ -394,7 +394,7 @@ class yaml
         {
             return !empty($error) && !strpos($error, 'Using a password on the command line interface can be insecure');
         });
-        
+
         if(!empty($errors)) echo implode(PHP_EOL, $errors) . PHP_EOL;
     }
 
@@ -407,11 +407,11 @@ class yaml
      * @access private
      * @return string
      */
-    private function exec_with_stderr($cmd, &$stderr=null) 
+    private function exec_with_stderr($cmd, &$stderr=null)
     {
         $proc   = proc_open($cmd, array(2 => array('pipe', 'w')), $pipes);
         $stderr = stream_get_contents($pipes[2]);
-        
+
         fclose($pipes[2]);
         proc_close($proc);
     }

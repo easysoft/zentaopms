@@ -668,20 +668,39 @@ class productModel extends model
      * 直接用对象数据创建产品
      *
      * @param  object  $product
+     * @param  string  $uid
+     * @param  string  $lineName
      * @access public
      * @return int|false
      */
-    public function create(object $product): int|false
+    public function create(object $product, string $uid = '', string $lineName = ''): int|false
     {
         $this->lang->error->unique = $this->lang->error->repeat;
         $this->dao->insert(TABLE_PRODUCT)->data($product)->autoCheck()
-            ->batchCheck($this->config->product->create->requiredFields, 'notempty')
             ->checkIF(!empty($product->name), 'name', 'unique', "`program` = {$product->program} and `deleted` = '0'")
             ->checkIF(!empty($product->code), 'code', 'unique', "`deleted` = '0'")
             ->checkFlow()
             ->exec();
         if(dao::isError()) return false;
-        return (int)$this->dao->lastInsertID();
+        $productID = (int)$this->dao->lastInsertID();
+
+        /* Fix order and line fields for product. */
+        $fixData = new stdclass();
+        $fixData->order = $productID * 5;
+        if(!empty($lineName))
+        {
+            $lineID = $this->productTao->createLine((int)$product->program, $lineName);
+            if($lineID) $fixData->line = $lineID;
+        }
+        $this->dao->update(TABLE_PRODUCT)->data($fixData)->where('id')->eq($productID)->exec();
+
+        /* Update and create linked data. */
+        $this->loadModel('file')->updateObjectID($uid, $productID, 'product');
+        $this->productTao->createMainLib($productID);
+        if($product->whitelist)     $this->loadModel('personnel')->updateWhitelist(explode(',', $product->whitelist), 'product', $productID);
+        if($product->acl != 'open') $this->loadModel('user')->updateUserView($productID, 'product');
+
+        return $productID;
     }
 
     /**
@@ -699,7 +718,6 @@ class productModel extends model
 
         $this->lang->error->unique = $this->lang->error->repeat;
         $this->dao->update(TABLE_PRODUCT)->data($product, 'uid,changeProjects,contactListMenu')->autoCheck()
-            ->batchCheck($this->config->product->edit->requiredFields, 'notempty')
             ->checkIF(!empty($product->name), 'name', 'unique', "id != {$productID} and `program` = {$product->program} and `deleted` = '0'")
             ->checkIF(!empty($product->code), 'code', 'unique', "id != {$productID} and `deleted` = '0'")
             ->checkFlow()
@@ -1158,49 +1176,26 @@ class productModel extends model
     /**
      * Get project list by product.
      *
-     * @param  int    $productID
-     * @param  string $browseType
-     * @param  int    $branch
-     * @param  int    $involved
-     * @param  string $orderBy
-     * @param  object $pager
+     * @param  int         $productID
+     * @param  string      $browseType    all|undone|wait|doing|done
+     * @param  string      $branch
+     * @param  bool        $involved     $this->cookie->involved or $involved
+     * @param  string      $orderBy
+     * @param  object|null $pager
      * @access public
      * @return array
      */
-    public function getProjectListByProduct($productID, $browseType = 'all', $branch = 0, $involved = 0, $orderBy = 'order_desc', $pager = null)
+    public function getProjectListByProduct(int $productID, string $browseType = 'all', string $branch = '0', bool $involved = false, string $orderBy = 'order_desc', object|null $pager = null): array
     {
-        $projectList = $this->dao->select('t2.*')->from(TABLE_PROJECTPRODUCT)->alias('t1')
-            ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
-            ->leftJoin(TABLE_TEAM)->alias('t3')->on('t2.id=t3.root')
-            ->leftJoin(TABLE_STAKEHOLDER)->alias('t4')->on('t2.id=t4.objectID')
-            ->where('t1.product')->eq($productID)
-            ->andWhere('t2.type')->eq('project')
-            ->beginIF($this->cookie->involved or $involved)->andWhere('t3.type')->eq('project')->fi()
-            ->beginIF($browseType == 'undone')->andWhere('t2.status')->in('wait,doing')->fi()
-            ->beginIF(strpos(",all,undone,", ",$browseType,") === false)->andWhere('t2.status')->eq($browseType)->fi()
-            ->beginIF(!$this->app->user->admin)->andWhere('t2.id')->in($this->app->user->view->projects)->fi()
-            ->beginIF($this->cookie->involved or $involved)
-            ->andWhere('t2.openedBy', true)->eq($this->app->user->account)
-            ->orWhere('t2.PM')->eq($this->app->user->account)
-            ->orWhere('t3.account')->eq($this->app->user->account)
-            ->orWhere('(t4.user')->eq($this->app->user->account)
-            ->andWhere('t4.deleted')->eq(0)
-            ->markRight(1)
-            ->orWhere("CONCAT(',', t2.whitelist, ',')")->like("%,{$this->app->user->account},%")
-            ->markRight(1)
-            ->fi()
-            ->beginIF($branch !== '' and $branch !== 'all')->andWhere('t1.branch')->in($branch)->fi()
-            ->andWhere('t2.deleted')->eq('0')
-            ->orderBy($orderBy)
-            ->page($pager, 't2.id')
-            ->fetchAll('id');
+        if(!$involved) $projectList = $this->productTao->fetchAllProductProjects($productID, $browseType, $branch, $orderBy, $pager);
+        if($involved)  $projectList = $this->productTao->fetchInvolvedProductProjects($productID, $browseType, $branch, $orderBy, $pager);
 
         /* Determine how to display the name of the program. */
         $programList = $this->loadModel('program')->getParentPairs('', 'all');
         foreach($projectList as $id => $project)
         {
-            $projectList[$id]->programName = $project->parent ? zget($programList, $project->parent, '') : '';
-            $projectList[$id]->programName = preg_replace('/\//', '', $projectList[$id]->programName, 1);
+            $programName = $project->parent ? zget($programList, $project->parent, '') : '';
+            $projectList[$id]->programName = preg_replace('/\//', '', $programName, 1);
         }
 
         return $projectList;
@@ -1212,13 +1207,13 @@ class productModel extends model
      * @param  int       $productID
      * @param  string    $browseType
      * @param  int       $branch
-     * @param  int       $involved
+     * @param  bool      $involved     $this->cookie->involved or $involved
      * @param  string    $orderBy
      * @param  object    $pager
      * @access public
      * @return array
      */
-    public function getProjectStatsByProduct($productID, $browseType = 'all', $branch = 0, $involved = 0, $orderBy = 'order_desc', $pager = null)
+    public function getProjectStatsByProduct(int $productID, string $browseType = 'all', string $branch = '0', bool $involved = false, string $orderBy = 'order_desc', object|null $pager = null): array
     {
         $projects = $this->getProjectListByProduct($productID, $browseType, $branch, $involved, $orderBy, $pager);
         if(empty($projects)) return array();

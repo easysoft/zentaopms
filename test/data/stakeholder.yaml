@@ -1,12 +1,23 @@
 title: zt_stakeholder
 desc: 干系人表
+author: automated export
 version: 1.0
 fields:
   - field: objectID
     range: 11-100
   - field: objectType
     range: project
+  - field: type
+    range: inside
+  - field: from
   - field: key
     range: 1
   - field: user
     range: admin
+  - field: createdBy
+    range: admin
+  - field: createdDate
+    range: "(M)-(w)"
+    type: timestamp
+    postfix: ""
+    format: "YYYY/MM/DD"
