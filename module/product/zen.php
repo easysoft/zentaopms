@@ -79,9 +79,9 @@ class productZen extends product
     {
         if($this->app->getViewType() == 'mhtml') return $this->product->setMenu();
 
-        if($moduleName == 'qa')        return $this->setShowErrorNoneMenu4QA($activeMenu);
-        if($moduleName == 'project')   return $this->setShowErrorNoneMenu4Project($activeMenu, $objectID);
-        if($moduleName == 'execution') return $this->setShowErrorNoneMenu4Execution($activeMenu, $objectID);
+        if($moduleName == 'qa')        $this->setShowErrorNoneMenu4QA($activeMenu);
+        if($moduleName == 'project')   $this->setShowErrorNoneMenu4Project($activeMenu, $objectID);
+        if($moduleName == 'execution') $this->setShowErrorNoneMenu4Execution($activeMenu, $objectID);
     }
 
     /**
@@ -401,7 +401,7 @@ class productZen extends product
         $message = $this->executeHooks($productID);
         if($message) $this->lang->saveSuccess = $message;
 
-        return $this->sendCreateLocate($productID, $programID);
+        $this->sendCreateLocate($productID, $programID);
     }
 
     /**
