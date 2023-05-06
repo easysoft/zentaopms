@@ -99,8 +99,6 @@ fields:
     format: "YYYY-MM-DD"
   - field: closedBy
     range: "[]{50},admin{30}"
-  - field: closedDate
-    range:
   - field: duplicateBug
     range: 0{55},1-5,0{40},10-15
   - field: linkBug
@@ -126,8 +124,6 @@ fields:
   - field: testtask
     range: 0
   - field: lastEditedBy
-    range:
-  - field: lastEditedDate
     range:
   - field: deleted
     range: 0{40},1{10},0{50}

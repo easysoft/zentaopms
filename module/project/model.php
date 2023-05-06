@@ -22,19 +22,34 @@ class projectModel extends model
     }
 
     /**
+     * 查找项目执行下关联的产品
+     * Get linked products with execution under the project.
+     *
+     * @param  array $executionIDs
+     *
+     * @access protected
+     * @return array
+     */
+    public function getExecutionProductGroup(array $executionIDs): array
+    {
+        return $this->dao->select('project,product')->from(TABLE_PROJECTPRODUCT)
+            ->where('project')->in($executionIDs)
+            ->fetchGroup('project', 'product');
+    }
+
+    /**
+     * 检查用户是否有查看项目的权限。
      * Check the privilege.
      *
      * @param  int    $projectID
      * @access public
      * @return bool
      */
-    public function checkPriv($projectID)
+    public function checkPriv(int $projectID): bool
     {
         if(empty($projectID)) return false;
 
-        /* If is admin, return true. */
-        if($this->app->user->admin) return true;
-        return (strpos(",{$this->app->user->view->projects},", ",{$projectID},") !== false);
+        return $this->app->user->admin || str_contains(",{$this->app->user->view->projects},", ",{$projectID},");
     }
 
     /**
@@ -205,11 +220,14 @@ class projectModel extends model
      */
     public function getByID(int $projectID): object|false
     {
+        /* Using demo data during tutorials. */
         if(defined('TUTORIAL')) return $this->loadModel('tutorial')->getProject();
 
+        /* Get project info. */
         $project = $this->projectTao->fetchProjectInfo($projectID);
         if(!$project) return false;
 
+        /* Replace image url. */
         $project = $this->loadModel('file')->replaceImgURL($project, 'desc');
         return $project;
     }
@@ -245,21 +263,23 @@ class projectModel extends model
      */
     public function getList(string $status = 'undone', string $orderBy = 'order_desc', bool $involved = false, object|null $pager = null): array
     {
-        /* Init vars. */
+        /* Get projec list by status. */
         $projects = $this->projectTao->fetchProjectList($status, $orderBy, $involved, $pager);
         if(empty($projects)) return array();
 
+        /* Get team members and estimates under the project. */
         $projectIdList = array_keys($projects);
-        $teams         = $this->projectTao->fetchMemberCountByIdList($projectIdList);
+        $teamCount     = $this->projectTao->fetchMemberCountByIdList($projectIdList);
         $estimates     = $this->projectTao->fetchTaskEstimateByIdList($projectIdList);
 
+        /* Set project attribute. */
         $this->app->loadClass('pager', true);
         foreach($projects as $projectID => $project)
         {
             $orderBy = $project->model == 'waterfall' ? 'id_asc' : 'id_desc';
             $pager   = $project->model == 'waterfall' ? null : new pager(0, 1, 1);
             $project->executions = $this->loadModel('execution')->getStatData($projectID, 'undone', 0, 0, false, '', $orderBy, $pager);
-            $project->teamCount  = isset($teams[$projectID]) ? $teams[$projectID] : 0;
+            $project->teamCount  = isset($teamCount[$projectID]) ? $teamCount[$projectID] : 0;
             $project->estimate   = isset($estimates[$projectID]) ? round($estimates[$projectID]->estimate, 2) : 0;
             $project->parentName = $project->parent ? $this->projectTao->getParentProgram($project->path, $project->grade) : '';
         }
@@ -277,52 +297,43 @@ class projectModel extends model
      * @access public
      * @return array
      */
-    public function getOverviewList($queryType = 'byStatus', $param = 'all', $orderBy = 'id_desc', $limit = 15, $excludedModel = '')
+    public function getOverviewList(string $queryType = 'byStatus', string|int $param = 'all', string $orderBy = 'id_desc', int $limit = 15, string $excludedModel = ''): array
     {
-        /*  */
-        $queryType = strtolower($queryType);
-        $projects = $this->dao->select('*')->from(TABLE_PROJECT)
-            ->where('type')->eq('project')
-            ->andWhere('vision')->eq($this->config->vision)
-            ->andWhere('deleted')->eq(0)
-            ->beginIF($excludedModel)->andWhere('model')->ne($excludedModel)->fi()
-            ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->projects)->fi()
-            ->beginIF($queryType == 'bystatus' and $param == 'undone')->andWhere('status')->notIN('done,closed')->fi()
-            ->beginIF($queryType == 'bystatus' and $param != 'all' and $param != 'undone')->andWhere('status')->eq($param)->fi()
-            ->beginIF($queryType == 'byid')->andWhere('id')->eq($param)->fi()
-            ->orderBy($orderBy)
-            ->beginIF($limit)->limit($limit)->fi()
-            ->fetchAll('id');
-
+        /* Get project list by query. */
+        $projects = $this->projectTao->fetchProjectListByQuery($queryType, $param, $orderBy, $limit, $excludedModel);
         if(empty($projects)) return array();
 
+        /* Get team members under the project. */
         $projectIdList = array_keys($projects);
-        $teams         = $this->projectTao->fetchMemberCountByIdList($projectIdList);
+        $teamCount     = $this->projectTao->fetchMemberCountByIdList($projectIdList);
 
+        /* Get all consumed and all estimate under the project. */
         $fields = 't2.project, ROUND(SUM(t1.consumed), 1) AS consumed, ROUND(SUM(t1.estimate), 1) AS estimate';
         $hours  = $this->projectTao->fetchTaskEstimateByIdList($projectIdList, $fields);
 
-        $storySummary = $this->projectTao->getTotalStoriesByProject($projectIdList);
-        $taskSummary  = $this->projectTao->getTotalTaskByProject($projectIdList);
+        /* Get bug, task and story summary under the project. */
         $bugSummary   = $this->projectTao->getTotalBugByProject($projectIdList);
+        $taskSummary  = $this->projectTao->getTotalTaskByProject($projectIdList);
+        $storySummary = $this->projectTao->getTotalStoriesByProject($projectIdList);
 
+        /* Set project attribute. */
         foreach($projects as $projectID => $project)
         {
-            $project->consumed      = isset($hours[$projectID]) ? round((float)$hours[$projectID]->consumed, 1) : 0;
-            $project->estimate      = isset($hours[$projectID]) ? round((float)$hours[$projectID]->estimate, 1) : 0;
-            $project->teamCount     = isset($teams[$projectID]) ? $teams[$projectID] : 0;
-            $project->leftBugs      = isset($bugSummary[$projectID])   ? $bugSummary[$projectID]->leftBugs : 0;
-            $project->allBugs       = isset($bugSummary[$projectID])   ? $bugSummary[$projectID]->allBugs : 0;
-            $project->doneBugs      = isset($bugSummary[$projectID])   ? $bugSummary[$projectID]->doneBugs : 0;
-            $project->allStories    = isset($storySummary[$projectID]) ? $storySummary[$projectID]->allStories: 0;
-            $project->doneStories   = isset($storySummary[$projectID]) ? $storySummary[$projectID]->doneStories: 0;
-            $project->leftStories   = isset($storySummary[$projectID]) ? $storySummary[$projectID]->leftStories: 0;
-            $project->leftTasks     = isset($taskSummary[$projectID])  ? $taskSummary[$projectID]->leftTasks : 0;
-            $project->allTasks      = isset($taskSummary[$projectID])  ? $taskSummary[$projectID]->allTasks : 0;
-            $project->waitTasks     = isset($taskSummary[$projectID])  ? $taskSummary[$projectID]->waitTasks : 0;
-            $project->doingTasks    = isset($taskSummary[$projectID])  ? $taskSummary[$projectID]->doingTasks : 0;
-            $project->rndDoneTasks  = isset($taskSummary[$projectID])  ? $taskSummary[$projectID]->doneTasks : 0;
-            $project->liteDoneTasks = isset($taskSummary[$projectID])  ? $taskSummary[$projectID]->litedoneTasks : 0;
+            $project->teamCount     = zget($teamCount, $projectID, 0);
+            $project->consumed      = isset($hours[$projectID])        ? round((float)$hours[$projectID]->consumed, 1) : 0;
+            $project->estimate      = isset($hours[$projectID])        ? round((float)$hours[$projectID]->estimate, 1) : 0;
+            $project->leftBugs      = isset($bugSummary[$projectID])   ? $bugSummary[$projectID]->leftBugs             : 0;
+            $project->allBugs       = isset($bugSummary[$projectID])   ? $bugSummary[$projectID]->allBugs              : 0;
+            $project->doneBugs      = isset($bugSummary[$projectID])   ? $bugSummary[$projectID]->doneBugs             : 0;
+            $project->allStories    = isset($storySummary[$projectID]) ? $storySummary[$projectID]->allStories         : 0;
+            $project->doneStories   = isset($storySummary[$projectID]) ? $storySummary[$projectID]->doneStories        : 0;
+            $project->leftStories   = isset($storySummary[$projectID]) ? $storySummary[$projectID]->leftStories        : 0;
+            $project->leftTasks     = isset($taskSummary[$projectID])  ? $taskSummary[$projectID]->leftTasks           : 0;
+            $project->allTasks      = isset($taskSummary[$projectID])  ? $taskSummary[$projectID]->allTasks            : 0;
+            $project->waitTasks     = isset($taskSummary[$projectID])  ? $taskSummary[$projectID]->waitTasks           : 0;
+            $project->doingTasks    = isset($taskSummary[$projectID])  ? $taskSummary[$projectID]->doingTasks          : 0;
+            $project->rndDoneTasks  = isset($taskSummary[$projectID])  ? $taskSummary[$projectID]->doneTasks           : 0;
+            $project->liteDoneTasks = isset($taskSummary[$projectID])  ? $taskSummary[$projectID]->litedoneTasks       : 0;
         }
 
         return $projects;
@@ -2366,72 +2377,10 @@ class projectModel extends model
      */
     public function getStats4Kanban()
     {
-        $this->loadModel('program');
+        $latestExecutions = $this->projectTao->getLatestExecutions();
+        $projectsStats    = $this->projectTao->getProjectsStats();
 
-        $projects   = $this->program->getProjectStats(0, 'all', 0, 'order_asc');
-        $executions = $this->loadModel('execution')->getStatData(0, 'doing', 0, 0, false, 'hasParentName|skipParent');
-
-        $doingExecutions  = array();
-        $latestExecutions = array();
-        foreach($executions as $execution) $doingExecutions[$execution->project][$execution->id] = $execution;
-        foreach($doingExecutions as $projectID => $executions)
-        {
-            krsort($doingExecutions[$projectID]);
-            $latestExecutions[$projectID] = current($doingExecutions[$projectID]);
-        }
-
-        $myProjects    = array();
-        $otherProjects = array();
-        $closedGroup   = array();
-        foreach($projects as $project)
-        {
-            if(strpos('wait,doing,closed', $project->status) === false) continue;
-
-            $projectPath = explode(',', trim($project->path, ','));
-            $topProgram  = !empty($project->parent) ? $projectPath[0] : $project->parent;
-
-            if($project->PM == $this->app->user->account)
-            {
-                if($project->status != 'closed')
-                {
-                    $myProjects[$topProgram][$project->status][] = $project;
-                }
-                else
-                {
-                    $closedGroup['my'][$topProgram][$project->closedDate] = $project;
-                }
-            }
-            else
-            {
-                if($project->status != 'closed')
-                {
-                    $otherProjects[$topProgram][$project->status][] = $project;
-                }
-                else
-                {
-                    $closedGroup['other'][$topProgram][$project->closedDate] = $project;
-                }
-            }
-        }
-
-        /* Only display recent two closed projects. */
-        foreach($closedGroup as $group => $closedProjects)
-        {
-            foreach($closedProjects as $topProgram => $projects)
-            {
-                krsort($projects);
-                if($group == 'my')
-                {
-                    $myProjects[$topProgram]['closed'] = array_slice($projects, 0, 2);
-                }
-                else
-                {
-                    $otherProjects[$topProgram]['closed'] = array_slice($projects, 0, 2);
-                }
-            }
-        }
-
-        return array('kanbanGroup' => array('my' => $myProjects, 'other' => $otherProjects), 'latestExecutions' => $latestExecutions);
+        return array('kanbanGroup' => $projectsStats, 'latestExecutions' => $latestExecutions);
     }
 
     /**

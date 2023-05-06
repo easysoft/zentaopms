@@ -13,13 +13,12 @@ class todoTest
      * Test create a todo.
      *
      * @param  object $todoData
-     * @param  object $formData
      * @access public
      * @return int
      */
-    public function createTest($todoData, $formData)
+    public function createTest($todoData)
     {
-        $objectID = $this->objectModel->create($todoData, $formData);
+        $objectID = $this->objectModel->create($todoData);
 
         return $objectID ?: 0;
     }
@@ -28,14 +27,13 @@ class todoTest
      * Test batch create todos.
      *
      * @param  array  $todos
-     * @param  object $formData
      * @access public
      * @return array|int
      */
-    public function batchCreateTest($todos, $formData)
+    public function batchCreateTest($todos)
     {
         $todos      = json_decode(json_encode($todos));
-        $todoIDList = $this->objectModel->batchCreate($todos, $formData);
+        $todoIDList = $this->objectModel->batchCreate($todos);
 
         if(dao::isError()) return 0;
         return $todoIDList;
@@ -86,7 +84,7 @@ class todoTest
      */
     public function batchUpdateTest(array $todos, int $todoID)
     {
-        $todoIDList = array($todoID => $todoID);
+        $todoIDList = array($todoID);
         $changes = $this->objectModel->batchUpdate($todos, $todoIDList);
 
         if(dao::isError()) return dao::getError();
@@ -124,14 +122,14 @@ class todoTest
     {
         if($confirm == 'no')
         {
-        	return $this->objectModel->getById($todoID);
+            return $this->objectModel->getById($todoID);
         }
         else
         {
             $this->objectModel->delete(TABLE_TODO, $todoID);
-			if(dao::isError()) return false;
+            if(dao::isError()) return false;
 
-        	return $this->objectModel->getById($todoID);
+            return $this->objectModel->getById($todoID);
         }
     }
 
@@ -164,7 +162,7 @@ class todoTest
      */
     public function batchFinishTest(array $todoIDList): bool
     {
-		return $this->objectModel->batchFinish($todoIDList);
+        return $this->objectModel->batchFinish($todoIDList);
     }
 
     /**
@@ -306,29 +304,29 @@ class todoTest
      */
     public function assignToTest(int $todoID, object $param = new stdclass()): object
     {
-		$todo = new stdClass();
-		$todo->assignedDate = helper::now();
-		$todo->date         = '';
-		$todo->begin        = 0;
-		$todo->end          = 0;
+        $todo = new stdClass();
+        $todo->assignedDate = helper::now();
+        $todo->date         = '';
+        $todo->begin        = 0;
+        $todo->end          = 0;
 
         foreach($param as $key => $value)
-		{
-			$todo->{$key} = $value;
-			if($key == 'future' && $value == 'on')
-			{
-				$todo->date = '2030-01-01';
-				unset($todo->{$key});
-			}
-			if($key == 'lblDisableDate' && $value == 'on')
-			{
-				$todo->begin = '2400';
-				$todo->end   = '2400';
-				unset($todo->{$key});
-			}
-		}
+        {
+            $todo->{$key} = $value;
+            if($key == 'future' && $value == 'on')
+            {
+                $todo->date = '2030-01-01';
+                unset($todo->{$key});
+            }
+            if($key == 'lblDisableDate' && $value == 'on')
+            {
+                $todo->begin = '2400';
+                $todo->end   = '2400';
+                unset($todo->{$key});
+            }
+        }
 
-		$todo->id = $todoID;
+        $todo->id = $todoID;
         $this->objectModel->assignTo($todo);
 
         $object = $this->objectModel->getById($todoID);
@@ -360,9 +358,42 @@ class todoTest
      * @access public
      * @return string
      */
-    public function editDateTest(array $todoIDList, string $date)
+    public function editDateTest(array $todoIDList, string $date): string
     {
-	$result = $this->objectModel->editDate($todoIDList, $date);
-	return $result ? '1' : '0';
+        $result = $this->objectModel->editDate($todoIDList, $date);
+        return $result ? '1' : '0';
+    }
+
+    /**
+     * 获取导出的待办数据。
+     * Get data for export todo.
+     *
+     * @param  string $orderBy
+     * @param  string $queryCondition
+     * @param  string $checkedItem
+     * @access public
+     * @return array
+     */
+    public function getByExportListTest(string $orderBy, string $queryCondition , string $checkedItem): array
+    {
+        return $this->objectModel->getByExportList($orderBy, $queryCondition, $checkedItem);
+    }
+
+    /**
+     * 根据待办类型，对象ID获取优先级。
+     * Get pri by todo type and object id.
+     *
+     * @param  string $todoType
+     * @param  int    $objectID
+     * @access public
+     * @return string
+     */
+    public function getPriByTodoTypeTest(string $todoType, int $objectID): int
+    {
+        $pri = $this->objectModel->getPriByTodoType($todoType, $objectID);
+
+        if(dao::isError()) return 0;
+
+        return $pri ? 1 : 0;
     }
 }

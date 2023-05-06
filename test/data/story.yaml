@@ -100,7 +100,7 @@ fields:
     format: ""
   - field: status
     note: "当前状态"
-    range: draft,active,closed,changed
+    range: draft,active,closed,changing
     prefix: ""
     postfix: ""
     loop: 0
@@ -181,9 +181,6 @@ fields:
     postfix: ""
     loop: 0
     format: ""
-  - field: lastEditedDate
-    note: "最后修改日期"
-    range: ""
   - field: reviewedBy
     note: "评审者"
     fields:
@@ -194,9 +191,6 @@ fields:
     prefix: ""
     postfix: ""
     format: ""
-  - field: reviewedDate
-    note: "评审日期"
-    range: ""
   - field: closedBy
     note: "关闭者"
     fields:
@@ -208,9 +202,6 @@ fields:
     postfix: ""
     loop: 0
     format: ""
-  - field: closedDate
-    note: "关闭日期"
-    range: ""
   - field: closedReason
     note: "关闭原因"
     range: done,subdivided,duplicate,postponed,willnotdo,cancel,bydesign

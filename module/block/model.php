@@ -298,7 +298,7 @@ class blockModel extends model
     /**
      * Reset dashboard blocks.
      *
-     * @param  string  $dashboard 
+     * @param  string  $dashboard
      * @access public
      * @return bool
      */
@@ -323,7 +323,7 @@ class blockModel extends model
     /**
      * Hidden a block.
      *
-     * @param  int $blockID 
+     * @param  int $blockID
      * @access public
      * @return bool
      */
@@ -341,7 +341,7 @@ class blockModel extends model
     /**
      * Delete a block.
      *
-     * @param  int    $blockID 
+     * @param  int    $blockID
      * @access public
      * @return bool
      */
@@ -358,9 +358,9 @@ class blockModel extends model
 
     /**
      * Set block order.
-     * 
-     * @param  int    $blockID 
-     * @param  int    $order 
+     *
+     * @param  int    $blockID
+     * @param  int    $order
      * @access public
      * @return bool
      */

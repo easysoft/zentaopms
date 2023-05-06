@@ -71,7 +71,7 @@ class todoTao extends todoModel
     }
 
     /**
-     * 插入待办数据
+     * 插入待办数据。
      * Insert todo data.
      *
      * @param  object $todo
@@ -82,15 +82,15 @@ class todoTao extends todoModel
     {
         $this->dao->insert(TABLE_TODO)->data($todo)
             ->autoCheck()
-            ->checkIF(!in_array($todo->type, $this->config->todo->moduleList), $this->config->todo->create->requiredFields, 'notempty')
-            ->checkIF(in_array($todo->type, $this->config->todo->moduleList) && $todo->objectID == 0, 'objectID', 'notempty')
+            ->check($this->config->todo->create->requiredFields, 'notempty')
+            ->checkIF(isset($todo->type) && in_array($todo->type, $this->config->todo->moduleList), 'objectID', 'notempty')
             ->exec();
 
         return (int)$this->dao->lastInsertID();
     }
 
     /**
-     * 更新待办数据
+     * 更新待办数据。
      * Update todo data.
      *
      * @param  int    $todoID
@@ -102,8 +102,8 @@ class todoTao extends todoModel
     {
         $this->dao->update(TABLE_TODO)->data($todo)
             ->autoCheck()
-            ->checkIF(isset($todo->type) && in_array($todo->type, array('custom', 'feedback')), $this->config->todo->edit->requiredFields, 'notempty')
-            ->checkIF(isset($todo->type) && in_array($todo->type, $this->config->todo->moduleList) && $todo->objectID == 0, 'objectID', 'notempty')
+            ->check($this->config->todo->edit->requiredFields, 'notempty')
+            ->checkIF(isset($todo->type) && in_array($todo->type, $this->config->todo->moduleList), 'objectID', 'notempty')
             ->where('id')->eq($todoID)
             ->exec();
 
@@ -111,6 +111,7 @@ class todoTao extends todoModel
     }
 
     /**
+     * 关闭一个待办。
      * Close one todo.
      *
      * @param int $todoID
@@ -151,7 +152,7 @@ class todoTao extends todoModel
     }
 
     /**
-     * 通过待办构建周期待办数据
+     * 通过待办构建周期待办数据。
      * Build cycle todo.
      *
      * @param  object $todo
@@ -221,19 +222,18 @@ class todoTao extends todoModel
      * Get valid todos of batch create.
      *
      * @param  object $todos
-     * @param  object $formData
      * @param  int    $loop
      * @param  string $assignedTo
      * @access protected
      * @return object
      */
-    protected function getValidsOfBatchCreate(object $todos, object $formData, int $loop , string $assignedTo): object
+    protected function getValidsOfBatchCreate(object $todos, int $loop , string $assignedTo): object
     {
         $todo = new stdclass();
         $todo->account = $this->app->user->account;
 
-        $todo->date = $formData->rawdata->date;
-        if($formData->rawdata->switchDate == 'on' || !$formData->rawdata->date) $todo->date = '2030-01-01';
+        $todo->date = $todos->date;
+        if($todos->switchDate == 'on' || !$todos->date) $todo->date = '2030-01-01';
 
         $todo->type         = $todos->types[$loop];
         $todo->pri          = $todos->pris[$loop];

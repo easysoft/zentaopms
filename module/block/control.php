@@ -85,6 +85,8 @@ class block extends control
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true, 'closeModal' => true));
         }
 
+        /* 如果没传code说明是首次进入页面，直接使用待编辑block的code。*/
+        /* If no code is passed, it indicates that you are entering the page for the first time, and you can directly use the code of the block to be edited.*/
         $block = $this->block->getByID($blockID);
         $code  = $code ? $code : $block->code;
 
@@ -94,6 +96,8 @@ class block extends control
         $this->view->module    = $module ? $module : $block->module;
         $this->view->modules   = $this->blockZen->getAvailableModules($block->dashboard);
         $this->view->codes     = $this->blockZen->getAvailableCodes($block->dashboard, $this->view->module);
+        /* codes有值且包含code时，页面才选中对应的code，否则为空。*/
+        /* Only when codes have a value and contain codes, the corresponding code is selected on the page, otherwise it is blank.*/
         $this->view->code      = $this->view->codes ? (in_array($code, array_keys($this->view->codes)) ? $code : '') : $code;
         $this->view->params    = $this->blockZen->getAvailableParams($block->dashboard, $this->view->module, $this->view->code);
         $this->display();
@@ -224,16 +228,20 @@ class block extends control
      */
     public function dashboard(string $dashboard, string $projectID = '0')
     {
-        $projectID   = (int)$projectID;
+        $projectID = (int)$projectID; // 强制转换为 int 类型，防止调用 model、tao 方法时报错
+
+        /* 获取传入应用对应的区块列表 以及 获取当前应用下区块启用状态 */
         $blocks      = $this->block->getMyDashboard($dashboard);
         $isInitiated = $this->block->fetchBlockInitStatus($dashboard);
 
-        /* Init block when vist index first. */
-        if(empty($blocks) and !$isInitiated and !defined('TUTORIAL') and $this->block->initBlock($dashboard))
+        /* 判断用户是否为首次登录 ，判断条件 当前用户没有该 app 下的区块数据 且 没有设置过该 app 下的区块启用状态 且不是演示模式  */
+        if(empty($blocks) and !$isInitiated and !defined('TUTORIAL'))
         {
-            return print(js::reload());
+            $this->block->initBlock($dashboard); // 初始化该 app 下区块数据
+            $blocks = $this->block->getMyDashboard($dashboard); // 获取初始化后的区块列表
         }
 
+        /*  */
         $blocks = $this->blockZen->processBlockForRender($blocks, $projectID);
 
         if($this->app->getViewType() == 'json') return print(json_encode($blocks));

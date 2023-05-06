@@ -15,9 +15,9 @@ class projectZen extends project
      *
      * @param  object $postData
      * @access protected
-     * @return int|object
+     * @return object|false
      */
-    protected function prepareCreateExtras(object $postData): object
+    protected function prepareCreateExtras(object $postData): object|false
     {
         $rawdata = $postData->rawdata;
         $project = $postData->setDefault('status', 'wait')
@@ -569,7 +569,7 @@ class projectZen extends project
     {
         if($this->post->comment != '' or !empty($changes))
         {
-            $actionID = $this->action->create('project', $projectID, 'Activated', $this->post->comment);
+            $actionID = $this->loadModel('action')->create('project', $projectID, 'Activated', $this->post->comment);
             $this->action->logHistory($actionID, $changes);
         }
 
@@ -587,6 +587,7 @@ class projectZen extends project
      */
     protected function prepareActivateExtras(int $projectID, object $postData): object
     {
+        $rawdata      = $postData->rawdata;
         $oldProject   = $this->project->getByID($projectID);
         $editorIdList = $this->config->project->editor->activate['id'];
 
@@ -595,6 +596,8 @@ class projectZen extends project
             ->setDefault('status', 'doing')
             ->setDefault('lastEditedBy', $this->app->user->account)
             ->setDefault('lastEditedDate', helper::now())
+            ->setIF($rawdata->begin == '0000-00-00', 'begin', '')
+            ->setIF($rawdata->end   == '0000-00-00', 'end', '')
             ->setIF(!helper::isZeroDate($oldProject->realBegan), 'realBegan', helper::today())
             ->stripTags($editorIdList, $this->config->allowedTags)
             ->get();
@@ -642,13 +645,14 @@ class projectZen extends project
      * @param  int       $projectID
      * @param  object    $project
      * @param  array     $idList
-     * @param  array     $postData
+     * @param  object    $postData
      *
      * @access protected
      * @return bool
      */
-    protected function mergeProducts(int $projectID, object $project, array $idList, array $postData): bool
+    protected function mergeProducts(int $projectID, object $project, array $idList, object $postData): bool
     {
+        /* Get old product data and update it. */
         $oldProducts = $this->loadModel('product')->getProducts($projectID);
         $this->project->updateProducts($projectID);
         if(dao::isError()) return false;
@@ -660,13 +664,7 @@ class projectZen extends project
         $diffProducts  = array_merge(array_diff($oldProductIDs, $newProductIDs), array_diff($newProductIDs, $oldProductIDs));
         if($diffProducts) $this->loadModel('action')->create('project', $projectID, 'Managed', '', !empty($postData->rawdata->products) ? implode(',', $postData->rawdata->products) : '');
 
-        /* Multiple and Division project update linked products. */
-        if(empty($project->multiple))
-        {
-            $executionID = $this->loadModel('execution')->getNoMultipleID($projectID);
-            if($executionID) $this->execution->updateProducts($executionID);
-        }
-
+        /* Division project update linked products. */
         if(empty($project->division))
         {
             foreach($idList as $executionID)
@@ -676,11 +674,8 @@ class projectZen extends project
             }
         }
 
-        /* Record multiple and waterfall project unlinked products. */
-        if($project->multiple and $project->model != 'waterfall' and $project->model != 'waterfallplus')
-        {
-            $this->dealUnlinkedProduct($oldProducts, $newProductIDs, $idList);
-        }
+        /* Deal multiple project*/
+        $this->dealMultipleProduct($oldProducts, $newProductIDs, $idList);
 
         return true;
     }
@@ -689,30 +684,42 @@ class projectZen extends project
      * 记录多迭代及瀑布类项目移除的产品
      * Record multiple and waterfall project unlinked products
      *
-     * @param  array $oldProducts
-     * @param  array $newProductIDs
-     * @param  array $idList
+     * @param  object $project
+     * @param  array  $oldProducts
+     * @param  array  $newProductIDs
+     * @param  array  $idList
      *
      * @access protected
      * @return void
      */
-    protected function dealUnlinkedProduct(array $oldProducts, array $newProductIDs, array $idList): void
+    protected function dealMultipleProduct(object $project, array $oldProducts, array $newProductIDs, array $idList): void
     {
-        $oldExecutionProducts = $this->projectTao->getExecutionProductGroup($idList);
-        $unlinkedProducts     = array_diff(array_keys($oldProducts), $newProductIDs);
-        if(!empty($unlinkedProducts))
+        /* Update multiple project linked products. */
+        if(empty($project->multiple))
         {
-            $unlinkedProductPairs = array();
-            foreach($unlinkedProducts as $unlinkedProduct) $unlinkedProductPairs[$unlinkedProduct] = $oldProducts[$unlinkedProduct]->name;
+            $executionID = $this->loadModel('execution')->getNoMultipleID($projectID);
+            if($executionID) $this->execution->updateProducts($executionID);
+        }
 
-            $unlinkExecutions = array();
-            foreach($oldExecutionProducts as $executionID => $executionProducts)
+        /* multiple and waterfall project unlinked products create action. */
+        if($project->multiple and $project->model != 'waterfall' and $project->model != 'waterfallplus')
+        {
+            $oldExecutionProducts = $this->project->getExecutionProductGroup($idList);
+            $unlinkedProducts     = array_diff(array_keys($oldProducts), $newProductIDs);
+            if(!empty($unlinkedProducts))
             {
-                $unlinkExecutionProducts = array_intersect_key($unlinkedProductPairs, $executionProducts);
-                if($unlinkExecutionProducts) $unlinkExecutions[$executionID] = $unlinkExecutionProducts;
-            }
+                $unlinkedProductPairs = array();
+                foreach($unlinkedProducts as $unlinkedProduct) $unlinkedProductPairs[$unlinkedProduct] = $oldProducts[$unlinkedProduct]->name;
 
-            foreach($unlinkExecutions as $executionID => $unlinkExecutionProducts) $this->loadModel('action')->create('execution', $executionID, 'unlinkproduct', '', implode(',', $unlinkExecutionProducts));
+                $unlinkExecutions = array();
+                foreach($oldExecutionProducts as $executionID => $executionProducts)
+                {
+                    $unlinkExecutionProducts = array_intersect_key($unlinkedProductPairs, $executionProducts);
+                    if($unlinkExecutionProducts) $unlinkExecutions[$executionID] = $unlinkExecutionProducts;
+                }
+
+                foreach($unlinkExecutions as $executionID => $unlinkExecutionProducts) $this->loadModel('action')->create('execution', $executionID, 'unlinkproduct', '', implode(',', $unlinkExecutionProducts));
+            }
         }
     }
 
@@ -786,6 +793,7 @@ class projectZen extends project
         $productsGroupByProgram = $this->loadModel('product')->getProductsGroupByProgram();
 
         $currentProducts = array();
+        $otherProducts   = array();
         foreach($productsGroupByProgram as $programID => $programProducts)
         {
             if($programID != $topProgramID)
@@ -821,7 +829,6 @@ class projectZen extends project
      */
     protected function getOtherProducts(object $programProducts, array $branchGroups, array $linkedBranches, array $linkedProducts): array
     {
-        $otherProducts = array();
         foreach($programProducts as $productID => $productName)
         {
             if(!empty($branchGroups[$productID]))
@@ -852,11 +859,11 @@ class projectZen extends project
      * @access protected
      * @return void
      */
-    protected function setProjectMenu(int $projectID, object $project): void
+    protected function setProjectMenu(int $projectID, object $projectParent): void
     {
         if($this->app->tab == 'program')
         {
-            $this->loadModel('program')->setMenu($project->parent);
+            $this->loadModel('program')->setMenu($projectParent);
         }
         elseif($this->app->tab == 'project')
         {

@@ -10,6 +10,9 @@ $task->mode->range('multi');
 $task->status->range('wait,doing,done,pause,cancel,closed');
 $task->assignedTo->range('admin,user1');
 $task->openedBy->range('admin,user2,user1');
+$task->estimate->range('0');
+$task->consumed->range('0');
+$task->left->range('0');
 $task->gen(5);
 
 $taskTeam = zdTable('taskteam');
@@ -151,8 +154,6 @@ cid=1
  - 属性estimate @3
  - 属性consumed @0
  - 属性left @3
-
-
 
 */
 

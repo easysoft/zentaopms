@@ -136,13 +136,13 @@ fields:
     postfix: ""
     loop: 0
     format: ""
-  - field: finishedDate
-    note: "完成时间"
-    range: ""
-    prefix: ""
-    postfix: ""
-    loop: 0
-    format: ""
+  #- field: finishedDate
+  #  note: "完成时间"
+  #  range: ""
+  #  prefix: ""
+  #  postfix: ""
+  #  loop: 0
+  #  format: ""
   - field: closedBy
     note: "由谁关闭"
     range: ""
@@ -150,6 +150,6 @@ fields:
     postfix: ""
     loop: 0
     format: ""
-  - field: closedDate
-    note: "关闭时间"
-    range: ""
+  #- field: closedDate
+  #  note: "关闭时间"
+  #  range: ""

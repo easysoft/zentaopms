@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 /**
  * The control file of programplan currentModule of ZenTaoPMS.
  *
@@ -12,19 +14,6 @@
 class programplan extends control
 {
     /**
-     * __construct
-     *
-     * @param  string $moduleName
-     * @param  string $methodName
-     * @access public
-     * @return void
-     */
-    public function __construct($moduleName = '', $methodName = '')
-    {
-        parent::__construct($moduleName, $methodName);
-    }
-
-    /**
      * Common action.
      *
      * @param  int     $projectID
@@ -36,11 +25,10 @@ class programplan extends control
     public function commonAction($projectID, $productID = 0, $extra = '')
     {
         $products  = $this->loadModel('product')->getProductPairsByProject($projectID);
-        $productID = $this->product->saveState($productID, $products);
+        $productID = $this->product->saveVisitState($productID, $products);
         $project   = $this->loadModel('project')->getByID($projectID);
 
         $this->session->set('hasProduct', $project->hasProduct);
-        $this->productID = $productID;
         $this->project->setMenu($projectID);
     }
 
@@ -133,83 +121,65 @@ class programplan extends control
     }
 
     /**
-     * Create a project plan.
+     * 创建一个项目阶段。
+     * Create a project plan/phase.
      *
-     * @param  int    $projectID
-     * @param  int    $productID
-     * @param  int    $planID
-     * @param  string $executionType
+     * @param  string  $projectID
+     * @param  string  $productID
+     * @param  string  $planID
+     * @param  string  $executionType
      * @access public
      * @return void
      */
-    public function create($projectID = 0, $productID = 0, $planID = 0, $executionType = 'stage')
+    public function create(string $projectID = '0', string $productID = '0', string $planID = '0', string $executionType = 'stage'): void
     {
+        $projectID = (int) $projectID;
+        $productID = (int) $productID;
+        $planID    = (int) $planID;
+
         $this->commonAction($projectID, $productID);
-        $this->app->loadLang('project');
+
         if($_POST)
         {
             $formData = form::data($this->config->programplan->create->form);
-            $this->programplan->create($formData, $projectID, $this->productID, $planID);
+            $this->programplan->create($formData, $projectID, $productID, $planID);
             if(dao::isError())
             {
                 $errors = dao::getError();
-                if(isset($errors['message']))  return $this->send(array('result' => 'fail', 'message' => $errors));
-                if(!isset($errors['message'])) return $this->send(array('result' => 'fail', 'callback' => array('name' => 'addRowErrors', 'params' => array($errors))));
+                if(isset($errors['message']))  $this->send(array('result' => 'fail', 'message' => $errors));
+                if(!isset($errors['message'])) $this->send(array('result' => 'fail', 'callback' => array('name' => 'addRowErrors', 'params' => array($errors))));
             }
 
             $locate = $this->createLink('project', 'execution', "status=all&projectID=$projectID&orderBy=order_asc&productID=$productID");
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $locate));
+            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $locate));
         }
 
+        $project     = $this->project->getById($projectID);
         $programPlan = $this->project->getById($planID, 'stage');
+        $productList = $this->session->hasProduct ? $this->product->getProductPairsByProject($projectID) : array();
+        $executions  = !empty($planID) ? $this->loadModel('execution')->getChildExecutions($planID, 'order_asc') : array();
 
-        $productList = array();
-        $this->app->loadLang('stage');
-        $project = $this->loadModel('project')->getById($projectID);
-        if($this->session->hasProduct) $productList = $this->loadModel('product')->getProductPairsByProject($projectID);
-
-        $this->view->title      = $this->lang->programplan->create . $this->lang->colon . $project->name;
-        $this->view->position[] = html::a($this->createLink('programplan', 'browse', "projectID=$projectID"), $project->name);
-        $this->view->position[] = $this->lang->programplan->create;
-
-        $executions = !empty($planID) ? $this->loadModel('execution')->getChildExecutions($planID, 'order_asc') : array();
-        $plans      = $this->programplan->getStage($planID ? $planID : $projectID, $this->productID, 'parent', 'order_asc');
+        /* Set programplan typeList. */
+        if($executionType != 'stage') unset($this->lang->execution->typeList[''], $this->lang->execution->typeList['stage']);
+        $plans = $this->programplan->getStage($planID ? $planID : $projectID, $productID, 'parent', 'order_asc');
         if(!empty($planID) and !empty($plans) and $project->model == 'waterfallplus')
         {
             $executionType = 'stage';
             unset($this->lang->programplan->typeList['agileplus']);
-        }
 
-        if(!empty($planID) and !empty($executions) and empty($plans) and $project->model == 'waterfallplus')
-        {
-            $executionType = 'agileplus';
-            unset($this->lang->programplan->typeList['stage']);
-        }
-
-
-        $visibleFields      = array();
-        $requiredFields     = array();
-        $custom             = $executionType == 'stage' ? 'custom' : 'customAgilePlus';
-        $customCreateFields = $executionType == 'stage' ? 'customCreateFields' : 'customAgilePlusCreateFields';
-        foreach(explode(',', $this->config->programplan->$customCreateFields) as $field) $customFields[$field] = $this->lang->programplan->$field;
-        $showFields = $this->config->programplan->$custom->createFields;
-        foreach(explode(',', $showFields) as $field)
-        {
-            if($field) $visibleFields[$field] = '';
-        }
-
-        foreach(explode(',', $this->config->programplan->create->requiredFields) as $field)
-        {
-            if($field)
+            if(!empty($executions))
             {
-                $requiredFields[$field] = '';
-                if(strpos(",{$this->config->programplan->$customCreateFields},", ",{$field},") !== false) $visibleFields[$field] = '';
+                $executionType = 'agileplus';
+                unset($this->lang->programplan->typeList['stage']);
             }
         }
-        if(empty($this->config->setPercent)) unset($visibleFields['percent'], $requiredFields['percent']);
 
-        if($executionType != 'stage') unset($this->lang->execution->typeList[''], $this->lang->execution->typeList['stage']);
+        /* Compute fields for create view. */
+        list($visibleFields, $requiredFields, $customFields, $showFields) = $this->programplanZen->computeFieldsCreateView($executionType);
 
+        $this->view->title              = $this->lang->programplan->create . $this->lang->colon . $project->name;
+        $this->view->position[]         = html::a($this->createLink('programplan', 'browse', "projectID=$projectID"), $project->name);
+        $this->view->position[]         = $this->lang->programplan->create;
         $this->view->productList        = $productList;
         $this->view->project            = $project;
         $this->view->productID          = $productID ? $productID : key($productList);
@@ -220,7 +190,7 @@ class programplan extends control
         $this->view->type               = 'lists';
         $this->view->executionType      = $executionType;
         $this->view->PMUsers            = $this->loadModel('user')->getPairs('noclosed|nodeleted|pmfirst',  $project->PM);
-        $this->view->custom             = $custom;
+        $this->view->custom             = $executionType == 'stage' ? 'custom' : 'customAgilePlus';
         $this->view->customFields       = $customFields;
         $this->view->showFields         = $showFields;
         $this->view->visibleFields      = $visibleFields;
@@ -232,63 +202,41 @@ class programplan extends control
     }
 
     /**
+     * 编辑阶段内容。
      * Edit a project plan.
      *
-     * @param  int    $planID
-     * @param  int    $projectID
+     * @param  string    $planID
+     * @param  string    $projectID
      * @access public
      * @return void
      */
-    public function edit($planID = 0, $projectID = 0)
+    public function edit(string $planID = '0', string $projectID = '0')
     {
-        $this->loadModel('project');
-        $this->app->loadLang('execution');
-        $this->app->loadLang('stage');
-
-        $plan = $this->programplan->getByID($planID);
-
-        global $lang;
-        $lang->executionCommon = $lang->execution->stage;
-        include $this->app->getModulePath('', 'execution') . 'lang/' . $this->app->getClientLang() . '.php';
+        $planID    = (int)$planID;
+        $projectID = (int)$projectID;
+        $plan      = $this->programplan->getByID($planID);
 
         if($_POST)
         {
-            $changes = $this->programplan->update($planID, $projectID);
+            $formData     = form::data($this->config->programplan->edit->form);
+            $postData     = $this->programplanZen->beforeEdit($formData);
+            $postData->id = $planID;
+
+            $changes = $this->programplan->update($planID, $projectID, $postData);
 
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-            if($changes)
-            {
-                $actionID = $this->loadModel('action')->create('execution', $planID, 'edited');
-                $this->action->logHistory($actionID, $changes);
 
-                $newPlan = $this->programplan->getByID($planID);
+            if($changes) $this->programplanZen->afterEdit($plan, $changes);
 
-                if($plan->parent != $newPlan->parent)
-                {
-                    $this->programplan->computeProgress($planID, 'edit');
-                    $this->programplan->computeProgress($plan->parent, 'edit', true);
-                }
-            }
             $locate = isonlybody() ? 'parent' : inlink('browse', "program=$plan->program&type=lists");
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $locate));
         }
 
-        $parentStage = $this->project->getByID($plan->parent, 'stage');
-
-        $this->view->title              = $this->lang->programplan->edit;
-        $this->view->position[]         = $this->lang->programplan->edit;
-        $this->view->isCreateTask       = $this->programplan->isCreateTask($planID);
-        $this->view->plan               = $plan;
-        $this->view->parentStageList    = $this->programplan->getParentStageList($this->session->project, $planID, $plan->product);
-        $this->view->enableOptionalAttr = (empty($parentStage) or (!empty($parentStage) and $parentStage->attribute == 'mix'));
-        $this->view->isTopStage         = $this->programplan->checkTopStage($planID);
-        $this->view->isLeafStage        = $this->programplan->checkLeafStage($planID);
-        $this->view->PMUsers            = $this->loadModel('user')->getPairs('noclosed|nodeleted|pmfirst',  $plan->PM);
-
-        $this->display();
+        $this->programplanZen->buildEditView($plan);
     }
 
     /**
+     * 通过ajax请求保存自定义设置。
      * Save custom settings via ajax.
      *
      * @access public
@@ -302,20 +250,10 @@ class programplan extends control
         $this->loadModel('datatable');
         $this->loadModel('setting');
 
-        $stageCustom = $this->setting->getItem("owner=$owner&module=$module&section=browse&key=stageCustom");
-        $ganttFields = $this->setting->getItem("owner=$owner&module=$module&section=ganttCustom&key=ganttFields");
-        $zooming     = $this->setting->getItem("owner=$owner&module=$module&section=ganttCustom&key=zooming");
-
         if($_POST)
         {
-            $data        = fixer::input('post')->get();
-            $zooming     = empty($data->zooming) ? '' : $data->zooming;
-            $stageCustom = empty($data->stageCustom) ? '' : implode(',', $data->stageCustom);
-            $ganttFields = empty($data->ganttFields) ? '' : implode(',', $data->ganttFields);
-
-            $this->setting->setItem("$owner.$module.browse.stageCustom", $stageCustom);
-            $this->setting->setItem("$owner.$module.ganttCustom.ganttFields", $ganttFields);
-            $this->setting->setItem("$owner.$module.ganttCustom.zooming", $zooming);
+            $formData = form::data($this->config->product->form->create);
+            $this->programplanZen->beforeAjaxCustom($formData, $owner, $module);
 
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
         }
@@ -323,13 +261,7 @@ class programplan extends control
         /* Set Custom. */
         foreach(explode(',', $this->config->programplan->custom->customGanttFields) as $field) $customFields[$field] = $this->lang->programplan->ganttCustom[$field];
 
-        $this->view->zooming      = $zooming;
-        $this->view->customFields = $customFields;
-        $this->view->showFields   = $this->config->programplan->ganttCustom->ganttFields;
-        $this->view->ganttFields  = $ganttFields;
-        $this->view->stageCustom  = $stageCustom;
-
-        $this->display();
+        $this->programplanZen->buildAjaxCustomView($owner, $module, $customFields);
     }
 
     /**
@@ -372,26 +304,26 @@ class programplan extends control
     }
 
     /**
-     * AJAX: Get attributes.
+     * ajax请求：获取阶段ID的属性。
+     * AJAX: Get stageID attributes.
      *
      * @param  int    $stageID
      * @param  string $attribute
      * @access public
      * @return int
      */
-    public function ajaxGetAttribute($stageID, $attribute)
+    public function ajaxGetAttribute(int $stageID, string $attribute): int
     {
         $this->app->loadLang('stage');
 
-        $parentAttribute = $this->dao->select('attribute')->from(TABLE_EXECUTION)->where('id')->eq($stageID)->fetch('attribute');
-        if(empty($parentAttribute) or $parentAttribute == 'mix')
+        $stageAttribute = $this->programplan->getStageAttribute($stageID);
+
+        if(empty($stageAttribute) || $stageAttribute == 'mix')
         {
             return print(html::select('attribute', $this->lang->stage->typeList, $attribute, "class='form-control chosen'"));
         }
-        else
-        {
-            return print(zget($this->lang->stage->typeList, $parentAttribute));
-        }
+
+        return print(zget($this->lang->stage->typeList, $stageAttribute));
     }
 
     /**
