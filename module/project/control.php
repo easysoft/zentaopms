@@ -2006,11 +2006,11 @@ class project extends control
     {
         $disabled   = '';
         $executions = array('' => '');
+        $projectID  = (int)$projectID;
 
-        $projectID = (int)$projectID;
         if($projectID)
         {
-            $project     = $this->project->getById($projectID);
+            $project     = $this->project->getByID($projectID);
             $executions += (array)$this->loadModel('execution')->getPairs($projectID, $type, $mode);
             if(!empty($project->multiple)) $disabled = 'disabled';
         }
