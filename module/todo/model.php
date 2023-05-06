@@ -123,7 +123,7 @@ class todoModel extends model
         {
             $oldTodo = $oldTodos[$todoID];
             if(in_array($todo->type, $this->config->todo->moduleList)) $oldTodo->name = '';
-            $this->updateTodoDataByID($todoID, $todo);
+            $this->todoTao->updateRow($todoID, $todo);
 
             if($oldTodo->status != 'done' and $todo->status == 'done') $this->loadModel('action')->create('todo', $todoID, 'finished', '', 'done');
 
@@ -538,7 +538,7 @@ class todoModel extends model
      */
     public function getTodosByIdList(array $todoIdList): array
     {
-        return $this->todoTao->fetchRows($todoIdList);
+        return $this->dao->select('*')->from(TABLE_TODO)->where('id')->in(array_values($todoIdList))->fetchAll('id');
     }
 
     /**
@@ -551,20 +551,6 @@ class todoModel extends model
     public function getValidCycleList(): array
     {
         return $this->dao->select('*')->from(TABLE_TODO)->where('cycle')->eq(1)->andWhere('deleted')->eq(0)->fetchAll('id');
-    }
-
-    /**
-     * 根据待办ID更新待办数据。
-     * Update todo data by id.
-     *
-     * @param  int    $todoID
-     * @param  object $todo
-     * @access public
-     * @return bool
-     */
-    public function updateTodoDataByID(int $todoID, object $todo): bool
-    {
-        return $this->todoTao->updateRow($todoID, $todo);
     }
 
     /**
