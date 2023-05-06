@@ -121,9 +121,9 @@ class todoZen extends todo
             ->setDefault('assignedDate', helper::now())
             ->cleanInt('pri, begin, end, private')
             ->setIF($hasObject && $objectType,  'objectID', $objectID)
-            ->setIF($rowData->date == false,  'date', '2030-01-01')
-            ->setIF($rowData->begin == false, 'begin', '2400')
-            ->setIF($rowData->begin == false or $rowData->end == false, 'end', '2400')
+            ->setIF(!$rowData->date,  'date', '2030-01-01')
+            ->setIF(!$rowData->begin, 'begin', '2400')
+            ->setIF(!$rowData->begin || !$rowData->end, 'end', '2400')
             ->setIF($rowData->status == 'done', 'finishedBy', $this->app->user->account)
             ->setIF($rowData->status == 'done', 'finishedDate', helper::now())
             ->stripTags($this->config->todo->editor->create['id'], $this->config->allowedTags)
@@ -196,10 +196,6 @@ class todoZen extends todo
 
         $this->loadModel('action')->create('todo', $todo->id, 'opened');
 
-        $date = str_replace('-', '', $todo->date);
-        if($date == '')          $date = 'future';
-        if($date == date('Ymd')) $date = 'today';
-
         return $todo;
     }
 
@@ -239,10 +235,10 @@ class todoZen extends todo
             ->cleanInt('pri, begin, end, private')
             ->setIF(in_array($rowData->type, array('bug', 'task', 'story')), 'name', '')
             ->setIF($hasObject && $objectType,  'objectID', $objectID)
-            ->setIF($rowData->date  == false, 'date', '2030-01-01')
-            ->setIF($rowData->begin == false, 'begin', '2400')
-            ->setIF($rowData->end   == false, 'end', '2400')
-            ->setIF($rowData->type  == false, 'type', $oldTodo->type)
+            ->setIF(!$rowData->date, 'date', '2030-01-01')
+            ->setIF(!$rowData->begin, 'begin', '2400')
+            ->setIF(!$rowData->end, 'end', '2400')
+            ->setIF(!$rowData->type, 'type', $oldTodo->type)
             ->setDefault('private', 0)
             ->stripTags($this->config->todo->editor->edit['id'], $this->config->allowedTags)
             ->remove(implode(',', $this->config->todo->moduleList) . ',uid')
@@ -344,7 +340,6 @@ class todoZen extends todo
         }
 
         $this->buildBatchEditView();
-        return;
     }
 
     /**
@@ -485,12 +480,12 @@ class todoZen extends todo
         if($todo->config['type'] == 'week')
         {
             unset($todo->config['day'], $todo->config['month']);
-            $todo->config['week'] = join(',', $todo->config['week']);
+            $todo->config['week'] = implode(',', $todo->config['week']);
         }
         if($todo->config['type'] == 'month')
         {
             unset($todo->config['day'], $todo->config['week']);
-            $todo->config['month'] = join(',', $todo->config['month']);
+            $todo->config['month'] = implode(',', $todo->config['month']);
         }
 
         $todo->config['beforeDays'] = (int)$todo->config['beforeDays'];
@@ -753,9 +748,12 @@ class todoZen extends todo
     {
         foreach($todos as $todo)
         {
+            $begin = (isset($times[$todo->begin]) ? $times[$todo->begin] : $todo->begin);
+            $end   = (isset($times[$todo->end])   ? $times[$todo->end] : $todo->end);
+
             /* fill some field with useful value. */
-            $todo->begin = $todo->begin == '2400' ? '' : (isset($times[$todo->begin]) ? $times[$todo->begin] : $todo->begin);
-            $todo->end   = $todo->end   == '2400' ? '' : (isset($times[$todo->end])   ? $times[$todo->end] : $todo->end);
+            $todo->begin = $todo->begin == '2400' ? '' $begin;
+            $todo->end   = $todo->end   == '2400' ? '' $end;
 
             $type = $todo->type;
             if(isset($assemble->users[$todo->account])) $todo->account = $assemble->users[$todo->account];
