@@ -278,6 +278,7 @@ class programplan extends control
         $this->view->position[]         = $this->lang->programplan->edit;
         $this->view->isCreateTask       = $this->programplan->isCreateTask($planID);
         $this->view->plan               = $plan;
+        $this->view->project            = $this->project->getByID($plan->project);
         $this->view->parentStageList    = $this->programplan->getParentStageList($this->session->project, $planID, $plan->product);
         $this->view->enableOptionalAttr = (empty($parentStage) or (!empty($parentStage) and $parentStage->attribute == 'mix'));
         $this->view->isTopStage         = $this->programplan->checkTopStage($planID);

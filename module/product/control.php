@@ -211,7 +211,7 @@ class product extends control
         {
             setcookie('treeBranch', $branch, 0, $this->config->webRoot, '', $this->config->cookieSecure, false);
             $browseType = 'unclosed';
-            if($this->config->vision == 'ipd') $browseType = 'assignedtome';
+            if($this->config->vision == 'or') $browseType = 'assignedtome';
         }
         else
         {

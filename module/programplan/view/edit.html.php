@@ -60,10 +60,12 @@
           <tr id="attributeType">
             <th><?php echo $lang->programplan->attribute;?></th>
             <td colspan='2'>
-              <?php echo $enableOptionalAttr ? html::select('attribute', $lang->stage->typeList, $plan->attribute, "class='form-control'") : zget($lang->stage->typeList, $plan->attribute);?>
+              <?php echo $enableOptionalAttr ? html::select('attribute', $project->model == 'ipd' ? $lang->stage->ipdTypeList : $lang->stage->typeList, $plan->attribute, "class='form-control'") : zget($lang->stage->typeList, $plan->attribute);?>
             </td>
             <td>
+              <?php if($project->model != 'ipd'):?>
               <icon class='icon icon-help' data-toggle='popover' data-trigger='focus hover' data-placement='right' data-tip-class='text-muted popover-sm' data-content="<?php echo $lang->execution->typeTip;?>"></icon>
+              <?php endif;?>
             </td>
           </tr>
           <?php if($plan->setMilestone):?>

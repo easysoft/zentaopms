@@ -2099,7 +2099,7 @@ class execution extends control
         $project = $this->project->getById($execution->project);
         if(!$project->hasProduct) $this->lang->execution->PO = $this->lang->common->story . $this->lang->execution->owner;
 
-        if($project->model == 'waterfall' or $project->model == 'waterfallplus')
+        if(in_array($project->model, array('waterfall', 'waterfallplus', 'ipd')))
         {
             $parentStage = $this->project->getByID($execution->parent, 'stage');
 
