@@ -364,19 +364,19 @@ class todoTest
         return $result ? '1' : '0';
     }
 
-	/**
-	 * 获取导出的待办数据。
-	 * Get data for export todo.
-	 *
-	 * @param  string $orderBy
-	 * @param  object $formData
-	 * @param  string $queryCondition
-	 * @param  string $checkedItem
-	 * @access public
-	 * @return array
-	 */
-	public function getByExportListTest(string $orderBy, object $formData, string $queryCondition , string $checkedItem): array
-	{
-		return $this->objectModel->getByExportList($orderBy, $formData, $queryCondition, $checkedItem);
-	}
+    /**
+     * 获取导出的待办数据。
+     * Get data for export todo.
+     *
+     * @param  string $orderBy
+     * @param  object $formData
+     * @param  string $queryCondition
+     * @param  string $checkedItem
+     * @access public
+     * @return array
+     */
+    public function getByExportListTest(string $orderBy, object $formData, string $queryCondition , string $checkedItem): array
+    {
+        return $this->objectModel->getByExportList($orderBy, $formData, $queryCondition, $checkedItem);
+    }
 }
