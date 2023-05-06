@@ -1724,4 +1724,22 @@ class programplanModel extends model
 
         return true;
     }
+
+    /**
+     * 获取阶段ID的属性。
+     * Get stageID attribute.
+     *
+     * @param  int   $stageID
+     * @access public
+     * @return false|string
+     */
+    public function getStageAttribute(int $stageID): false|string
+    {
+        $stageAttribute = $this->dao->select('attribute')->from(TABLE_EXECUTION)->where('id')->eq($stageID)->fetch('attribute');
+
+        if(dao::isError()) return false;
+
+        return $stageAttribute;
+    }
+
 }
