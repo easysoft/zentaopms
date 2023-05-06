@@ -652,7 +652,7 @@ class taskTest
     }
 
     /**
-     * Test get task estimate.
+     * Test get task efforts.
      *
      * @param  int    $taskID
      * @param  string $account
@@ -660,9 +660,9 @@ class taskTest
      * @access public
      * @return object
      */
-    public function getTaskEstimateTest($taskID, $account = '', $append = '')
+    public function getTaskEffortsTest($taskID, $account = '', $append = '')
     {
-        $object = $this->objectModel->getTaskEstimate($taskID, $account, $append);
+        $object = $this->objectModel->getTaskEfforts($taskID, $account, $append);
         if(dao::isError())
         {
             $error = dao::getError();

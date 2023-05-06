@@ -187,7 +187,7 @@ class projectTao extends projectModel
     }
 
     /**
-     * Get project details, including all contents of the TABLE_PROJECT.
+     * Get project details, including all contents of the project.
      * 获取项目的详情，包含project表的所有内容。
      *
      * @param  int       $projectID
@@ -515,22 +515,6 @@ class projectTao extends projectModel
     }
 
     /**
-     * 查找项目执行下关联的产品
-     * Get linked products with execution under the project.
-     *
-     * @param  array $executionIDs
-     *
-     * @access protected
-     * @return array
-     */
-    protected function getExecutionProductGroup(array $executionIDs): array
-    {
-        return $this->dao->select('project,product')->from(TABLE_PROJECTPRODUCT)
-            ->where('project')->in($executionIDs)
-            ->fetchGroup('project', 'product');
-    }
-
-    /**
      * 根据状态和和我参与的查询项目列表。
      * Get project list by status and with my participation.
      *
@@ -568,6 +552,35 @@ class projectTao extends projectModel
             ->fi()
             ->orderBy($orderBy)
             ->page($pager, 't1.id')
+            ->fetchAll('id');
+    }
+
+    /**
+     * 通过条件查询和数量限制查询项目列表。
+     * Get project list by query and with limit.
+     *
+     * @param  string     $queryType
+     * @param  string|int $param
+     * @param  string     $orderBy
+     * @param  int        $limit
+     * @param  string     $excludedModel
+     * @access protected
+     * @return array
+     */
+    protected function fetchProjectListByQuery(string $queryType, string|int $param, string $orderBy, int $limit, string $excludedModel): array
+    {
+        $queryType = strtolower($queryType);
+        return $this->dao->select('*')->from(TABLE_PROJECT)
+            ->where('type')->eq('project')
+            ->andWhere('vision')->eq($this->config->vision)
+            ->andWhere('deleted')->eq(0)
+            ->beginIF($excludedModel)->andWhere('model')->ne($excludedModel)->fi()
+            ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->projects)->fi()
+            ->beginIF($queryType == 'bystatus' and $param == 'undone')->andWhere('status')->notIN('done,closed')->fi()
+            ->beginIF($queryType == 'bystatus' and $param != 'all' and $param != 'undone')->andWhere('status')->eq($param)->fi()
+            ->beginIF($queryType == 'byid')->andWhere('id')->eq($param)->fi()
+            ->orderBy($orderBy)
+            ->beginIF($limit)->limit($limit)->fi()
             ->fetchAll('id');
     }
 

@@ -1952,25 +1952,30 @@ class project extends control
         $executions = $this->loadModel('execution')->getPairs($projectID);
         $idList     = array_keys($executions);
 
+        /* Sets the associated products of the project. */
         if(!empty($_POST))
         {
-            $postData = form::data();
-            if(!isset($this->post->products) and !isset($this->post->otherProducts))
+            /* No associated product is displayed. */
+            $postData         = form::data($this->config->project->form->manageProducts);
+            $postProducts     = $this->post->products;
+            $postOtherProduct = $this->post->otherProducts;
+            if(!isset($postProducts) and !isset($postOtherProduct))
             {
                 return $this->send(array('result' => 'fail', 'message' => $this->lang->project->errorNoProducts));
             }
 
-            /* Merge and build linked products. */
+            /* Merge and build associated products. */
             $this->projectZen->mergeProducts($projectID, $project, $idList, $postData);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
+            /* After the product is linked successfully, the page is displayed. */
             $locateLink = inLink('manageProducts', "projectID=$projectID");
             if($from == 'program')  $locateLink = $this->session->projectList;
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $locateLink));
         }
 
         /* Set menu. */
-        $this->setProjectMenu($projectID, $project);
+        $this->setProjectMenu($projectID, $project->parent);
 
         /* Extract cannot be removed product and branch. */
         $this->projectZen->extractUnModifyForm($projectID, $project);
