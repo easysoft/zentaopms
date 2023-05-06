@@ -514,7 +514,7 @@ class projectModel extends model
      */
     public function getWorkhour($projectID)
     {
-        $total = $this->dao->select('ROUND(SUM(estimate), 1) AS totalEstimate, ROUND(SUM(`left`), 2) AS totalLeft')->from(TABLE_TASK)->alias('t1')
+        $total = $this->dao->select('ROUND(SUM(t1.estimate), 1) AS totalEstimate, ROUND(SUM(t1.`left`), 2) AS totalLeft')->from(TABLE_TASK)->alias('t1')
             ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.execution = t2.id')
             ->where('t2.project')->in($projectID)
             ->andWhere('t2.deleted')->eq(0)
@@ -522,7 +522,7 @@ class projectModel extends model
             ->andWhere('t1.parent')->lt(1)
             ->fetch();
 
-        $totalConsumed = $this->dao->select('ROUND(SUM(consumed), 1) AS totalConsumed')->from(TABLE_TASK)->alias('t1')
+        $totalConsumed = $this->dao->select('ROUND(SUM(t1.consumed), 1) AS totalConsumed')->from(TABLE_TASK)->alias('t1')
             ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.execution = t2.id')
             ->where('t2.project')->in($projectID)
             ->andWhere('t2.deleted')->eq(0)
@@ -530,7 +530,7 @@ class projectModel extends model
             ->andWhere('t1.parent')->lt(1)
             ->fetch('totalConsumed');
 
-        $closedTotalLeft = $this->dao->select('ROUND(SUM(`left`), 2) AS totalLeft')->from(TABLE_TASK)->alias('t1')
+        $closedTotalLeft = $this->dao->select('ROUND(SUM(t1.`left`), 2) AS totalLeft')->from(TABLE_TASK)->alias('t1')
             ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.execution = t2.id')
             ->where('t2.project')->in($projectID)
             ->andWhere('t2.deleted')->eq(0)
@@ -2297,9 +2297,9 @@ class projectModel extends model
                 $title = "title='$budgetTitle'";
             }
 
-            if($id == 'estimate') $title = "title='{$project->hours->totalEstimate} {$this->lang->execution->workHour}'";
-            if($id == 'consume')  $title = "title='{$project->hours->totalConsumed} {$this->lang->execution->workHour}'";
-            if($id == 'surplus')  $title = "title='{$project->hours->totalLeft} {$this->lang->execution->workHour}'";
+            if($id == 'estimate') $title = "title='{$project->estimate} {$this->lang->execution->workHour}'";
+            if($id == 'consume')  $title = "title='{$project->consumed} {$this->lang->execution->workHour}'";
+            if($id == 'surplus')  $title = "title='{$project->left} {$this->lang->execution->workHour}'";
 
             echo "<td class='$class' $title>";
             if($this->config->edition != 'open') $this->loadModel('flow')->printFlowCell('project', $project, $id);
@@ -2359,16 +2359,16 @@ class projectModel extends model
                     echo $project->teamCount;
                     break;
                 case 'estimate':
-                    echo $project->hours->totalEstimate . $this->lang->execution->workHourUnit;
+                    echo $project->estimate . $this->lang->execution->workHourUnit;
                     break;
                 case 'consume':
-                    echo $project->hours->totalConsumed . $this->lang->execution->workHourUnit;
+                    echo $project->consumed . $this->lang->execution->workHourUnit;
                     break;
                 case 'surplus':
-                    echo $project->hours->totalLeft     . $this->lang->execution->workHourUnit;
+                    echo $project->left . $this->lang->execution->workHourUnit;
                     break;
                 case 'progress':
-                    echo html::ring($project->hours->progress);
+                    echo html::ring($project->progress);
                     break;
                 case 'actions':
                     $project->programID = $programID;
