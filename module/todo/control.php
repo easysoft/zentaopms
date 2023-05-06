@@ -461,9 +461,10 @@ class todo extends control
     }
 
     /**
+     * 获取导出待办数据。
      * Get data to export.
      *
-     * @param  int    $userID
+     * @param  string $userID
      * @param  string $orderBy
      * @access public
      * @return void
@@ -478,7 +479,7 @@ class todo extends control
             $configTime = $this->config->todo->times;
 
             $formData = form::data($this->config->todo->export->form);
-            $todos    = $this->todo->getByExportList($orderBy, (object)$formData);
+            $todos    = $this->todo->getByExportList($orderBy, (object)$formData, (string) $this->session->todoReportCondition, (string) $this->cookie->checkedItem);
 
             list($todos, $fields) = $this->todoZen->exportTodoInfo((array)$todos, (string)$this->config->todo->list->exportFields, $todoLang);
             list($users, $bugs, $stories, $tasks, $testTasks) = $this->todoZen->exportAssociated('default', $account);

@@ -310,7 +310,7 @@ class project extends control
         if(empty($project) || $project->type != 'project') return print(js::error($this->lang->notFound) . js::locate('back'));
 
         if(!$projectID) $this->locate($this->createLink('project', 'browse'));
-        setCookie("lastProject", strVal($projectID), $this->config->cookieLife, $this->config->webRoot, '', false, true);
+        setCookie("lastProject", strVal($projectID), $this->config->cookieLife, $this->config->webRoot, '', $this->config->cookieSecure, true);
 
         if($project->model == 'kanban' and $this->config->vision != 'lite')
         {
@@ -1887,7 +1887,7 @@ class project extends control
      * @access public
      * @return void
      */
-    public function whitelist(string $projectID = '0', string $from = 'project',int $recTotal = '0', int $recPerPage = '20', int $pageID = '1')
+    public function whitelist(string $projectID = '0', string $from = 'project', string $recTotal = '0', string $recPerPage = '20', string $pageID = '1')
     {
         $projectID = (int)$projectID;
         $projectID = $this->project->setMenu($projectID);
@@ -2006,11 +2006,11 @@ class project extends control
     {
         $disabled   = '';
         $executions = array('' => '');
+        $projectID  = (int)$projectID;
 
-        $projectID = (int)$projectID;
         if($projectID)
         {
-            $project     = $this->project->getById($projectID);
+            $project     = $this->project->getByID($projectID);
             $executions += (array)$this->loadModel('execution')->getPairs($projectID, $type, $mode);
             if(!empty($project->multiple)) $disabled = 'disabled';
         }
