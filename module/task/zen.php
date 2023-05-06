@@ -294,53 +294,20 @@ class taskZen extends task
     }
 
     /**
-     * 初始化任务信息。
-     * Initialize task information.
+     * 通过传入的对象ID设置任务信息。
+     * Set task information through the incoming object ID.
      *
-     * @param  int $storyID
-     * @param  int $moduleID
-     * @param  int $taskID
-     * @param  int $todoID
-     * @param  int $bugID
-     * @access protected
-     * @return object
-     */
-    protected function initTaskData(int $storyID, int $moduleID, int $taskID, int $todoID, int $bugID): object
-    {
-        /* Init task data. */
-        $task = new stdClass();
-        $task->module     = 0;
-        $task->mode       = '';
-        $task->assignedTo = '';
-        $task->name       = '';
-        $task->story      = 0;
-        $task->type       = '';
-        $task->pri        = 3;
-        $task->estimate   = '';
-        $task->desc       = '';
-        $task->estStarted = null;
-        $task->deadline   = null;
-        $task->mailto     = '';
-        $task->color      = '';
-
-        return $this->setTaskInfoByObjectID($task, $storyID, $moduleID, $taskID, $todoID, $bugID);
-    }
-
-    /**
-     * 通过传入的对象ID初始化任务信息。
-     * Set task information by incoming object id.
-     *
-     * @param  object    $task
      * @param  int       $storyID
      * @param  int       $moduleID
      * @param  int       $taskID
      * @param  int       $todoID
      * @param  int       $bugID
-     * @access protected
+     * @access private
      * @return object
      */
-    protected function setTaskInfoByObjectID(object $task, int $storyID, int $moduleID, int $taskID, int $todoID, int $bugID): object
+    private function setTaskInfoByObjectID(int $storyID, int $moduleID, int $taskID, int $todoID, int $bugID): object
     {
+        $task = $config->task->create->template;
         $task->module = $moduleID;
 
         /* If exist task, copy task information by task id. */
@@ -392,17 +359,18 @@ class taskZen extends task
      * 展示看板相关变量。
      * Show related variable about the Kanban.
      * 
-     * @param  array     $output
-     * @access protected
+     * @param  int     $executionID
+     * @param  array   $output
+     * @access private
      * @return void
      */
-    protected function showKanbanRelatedVars(array $output): void
+    private function showKanbanRelatedVars(int $executionID, array $output): void
     {
         $this->loadModel('kanban');
 
         $regionID    = isset($output['regionID']) ? (int)$output['regionID'] : 0;
         $laneID      = isset($output['laneID'])   ? (int)$output['laneID']   : 0;
-        $regionPairs = $this->kanban->getRegionPairs($execution->id, 0, 'execution');
+        $regionPairs = $this->kanban->getRegionPairs($executionID, 0, 'execution');
         $regionID    = $regionID ? $regionID : key($regionPairs);
         $lanePairs   = $this->kanban->getLanePairsByRegion($regionID, 'task');
         $laneID      = $laneID ? $laneID : key($lanePairs);
@@ -414,13 +382,13 @@ class taskZen extends task
     }
 
     /**
-     * 设置地盘待处理区块的ID。
-     * Set the ID of the block to be processed on the my.
+     * 展示地盘待处理区块的ID。
+     * Show the ID of the block to be processed on the my.
      *
-     * @access protected
+     * @access private
      * @return void
      */
-    protected function setAssignedToMeBlockID(): void
+    private function showAssignedToMeBlockID(): void
     {
         /* Get block id of assinge to me. */
         $blockID = 0;
@@ -438,14 +406,14 @@ class taskZen extends task
     }
 
     /**
-     * 设置执行相关数据。
-     * Set execution related data.
+     * 展示执行相关数据。
+     * Show execution related data.
      *
      * @param  object    $execution
-     * @access protected
+     * @access private
      * @return void
      */
-    protected function setExecutionData(object $execution): void
+    private function showExecutionData(object $execution): void
     {
         $projectID     = $execution ? $execution->project : 0;
         $lifetimeList  = array();
@@ -795,26 +763,26 @@ class taskZen extends task
      * @param  int       $taskID
      * @param  int       $todoID
      * @param  int       $bugID
-     * @param  string    $extra
+     * @param  array     $output
      * @access protected
      * @return void
      */
-    protected function showCreateVars(object $execution, int $storyID, int $moduleID, int $taskID, int $todoID, int $bugID, string $extra)
+    protected function showCreateVars(object $execution, int $storyID, int $moduleID, int $taskID, int $todoID, int $bugID, array $output): void
     {
-        $extra = str_replace(array(',', ' '), array('&', ''), $extra);
-        parse_str($extra, $output);
-
+        /* Get information about the task. */
         $executionID = $execution->id;
-        $task        = $this->initTaskData($storyID, $moduleID, $taskID, $todoID, $bugID);
+        $task        = $this->setTaskInfoByObjectID($storyID, $moduleID, $taskID, $todoID, $bugID);
 
+        /* Get module information. */
         $showAllModule    = isset($this->config->execution->task->allModule) ? $this->config->execution->task->allModule : '';
         $moduleOptionMenu = $this->tree->getTaskOptionMenu($executionID, 0, 0, $showAllModule ? 'allModule' : '');
         if(!$storyID and !isset($moduleOptionMenu[$task->module])) $task->module = 0;
 
-        $this->setAssignedToMeBlockID();
-        $this->setExecutionData($execution);
+        /* Display relevant variables. */
+        $this->showAssignedToMeBlockID();
+        $this->showExecutionData($execution);
         $this->showStoryVars($executionID);
-        if($execution->type == 'kanban') $this->taskZen->showKanbanRelatedVars($output);
+        if($execution->type == 'kanban') $this->showKanbanRelatedVars($executionID, $output);
 
         /* Set Custom fields. */
         foreach(explode(',', $this->config->task->customCreateFields) as $field) $customFields[$field] = $this->lang->task->$field;
@@ -828,6 +796,8 @@ class taskZen extends task
         $this->view->execution        = $execution;
         $this->view->task             = $task;
         $this->view->storyID          = $storyID;
+
+        $this->display();
     }
 
     /**
@@ -929,7 +899,7 @@ class taskZen extends task
     protected function buildBatchCreateForm(object $execution, int $storyID, int $moduleID, int $taskID, array $output): void
     {
         /* 获取区域和泳道下拉数据，并设置区域和泳道的默认值。*/
-        if($execution->type == 'kanban') $this->taskZen->showKanbanRelatedVars($output);
+        if($execution->type == 'kanban') $this->taskZen->showKanbanRelatedVars($execution->id, $output);
 
         /* 任务拆解。 */
         if($taskID)
