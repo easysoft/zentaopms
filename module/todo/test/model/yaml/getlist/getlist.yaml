@@ -8,7 +8,7 @@ fields:
       range: 'admin'
     - field: date
       range: 1-9
-      prefix: '2023-04-0'
+      prefix: '2023-03-0'
     - field: begin
       range: 1000-1100
     - field: end
