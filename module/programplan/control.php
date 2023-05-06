@@ -149,7 +149,7 @@ class programplan extends control
         if($_POST)
         {
             $formData = form::data($this->config->programplan->create->form);
-            $this->programplan->create($formData, $projectID, $this->productID, $planID);
+            $this->programplan->create($formData, $projectID, $productID, $planID);
             if(dao::isError())
             {
                 $errors = dao::getError();
@@ -173,7 +173,7 @@ class programplan extends control
         $this->view->position[] = $this->lang->programplan->create;
 
         $executions = !empty($planID) ? $this->loadModel('execution')->getChildExecutions($planID, 'order_asc') : array();
-        $plans      = $this->programplan->getStage($planID ? $planID : $projectID, $this->productID, 'parent', 'order_asc');
+        $plans      = $this->programplan->getStage($planID ? $planID : $projectID, $productID, 'parent', 'order_asc');
         if(!empty($planID) and !empty($plans) and $project->model == 'waterfallplus')
         {
             $executionType = 'stage';
