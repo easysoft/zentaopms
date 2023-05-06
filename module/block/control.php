@@ -85,6 +85,8 @@ class block extends control
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true, 'closeModal' => true));
         }
 
+        /* 如果没传code说明是首次进入页面，直接使用待编辑block的code。*/
+        /* If no code is passed, it indicates that you are entering the page for the first time, and you can directly use the code of the block to be edited.*/
         $block = $this->block->getByID($blockID);
         $code  = $code ? $code : $block->code;
 
@@ -94,6 +96,8 @@ class block extends control
         $this->view->module    = $module ? $module : $block->module;
         $this->view->modules   = $this->blockZen->getAvailableModules($block->dashboard);
         $this->view->codes     = $this->blockZen->getAvailableCodes($block->dashboard, $this->view->module);
+        /* codes有值且包含code时，页面才选中对应的code，否则为空。*/
+        /* Only when codes have a value and contain codes, the corresponding code is selected on the page, otherwise it is blank.*/
         $this->view->code      = $this->view->codes ? (in_array($code, array_keys($this->view->codes)) ? $code : '') : $code;
         $this->view->params    = $this->blockZen->getAvailableParams($block->dashboard, $this->view->module, $this->view->code);
         $this->display();
