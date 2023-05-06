@@ -10,17 +10,17 @@ function initData ()
 
 /**
 
-title=测试 todoTao::insert();
+title=测试 todoTao::updateRow();
 timeout=0
 cid=1
 
-- 正常插入待办数据 @2
+- 正常更新待办数据 @1
 
-- 正常插入task类型待办数据 @3
+- 正常更新task类型待办数据 @1
 
-- 插入没有名称的待办数据 @0
+- 更新没有名称的待办数据 @0
 
-- 插入bug类型待办，没有bugID的情况 @0
+- 更新bug类型待办，没有bugID的情况 @0
 
 */
 
@@ -52,7 +52,7 @@ $todoTask->type     = 'task';
 $todoTask->name     = 'TASK待办';
 $todoTask->objectID = 1;
 
-r($tester->todo->insert($todo)) && p() && e(2);         // 正常插入待办数据
-r($tester->todo->insert($todoTask)) && p() && e(3);     // 正常插入task类型待办数据
-r($tester->todo->insert($todoNoName)) && p() && e(0);   // 插入没有名称的待办数据
-r($tester->todo->insert($todoBug)) && p() && e(0);      // 插入bug类型待办，没有bugID的情况
+r($tester->todo->updateRow(1, $todo)) && p() && e('1');         // 正常更新待办数据
+r($tester->todo->updateRow(2, $todoTask)) && p() && e('1');     // 正常更新task类型待办数据
+r($tester->todo->updateRow(3, $todoNoName)) && p() && e('0');   // 更新没有名称的待办数据
+r($tester->todo->updateRow(4, $todoBug)) && p() && e('0');      // 更新bug类型待办，没有bugID的情况
