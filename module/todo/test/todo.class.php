@@ -369,15 +369,14 @@ class todoTest
      * Get data for export todo.
      *
      * @param  string $orderBy
-     * @param  object $formData
      * @param  string $queryCondition
      * @param  string $checkedItem
      * @access public
      * @return array
      */
-    public function getByExportListTest(string $orderBy, object $formData, string $queryCondition , string $checkedItem): array
+    public function getByExportListTest(string $orderBy, string $queryCondition , string $checkedItem): array
     {
-        return $this->objectModel->getByExportList($orderBy, $formData, $queryCondition, $checkedItem);
+        return $this->objectModel->getByExportList($orderBy, $queryCondition, $checkedItem);
     }
 
     /**

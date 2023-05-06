@@ -474,15 +474,16 @@ class todo extends control
         if($_POST)
         {
             $user       = $this->todoZen->getUserById((int)$userID);
-            $account    = (string)$user->account;
             $todoLang   = (object)$this->lang->todo;
             $configTime = $this->config->todo->times;
 
-            $formData = form::data($this->config->todo->export->form);
-            $todos    = $this->todo->getByExportList($orderBy, (object)$formData, (string) $this->session->todoReportCondition, (string) $this->cookie->checkedItem);
+            $formData    = form::data($this->config->todo->export->form);
+            $checkedItem = $formData->rawdata->exportType == 'selected' ? $this->cookie->checkedItem : '';
+
+            $todos = $this->todo->getByExportList($orderBy, (string) $this->session->todoReportCondition, (string)$checkedItem);
 
             list($todos, $fields) = $this->todoZen->exportTodoInfo((array)$todos, (string)$this->config->todo->list->exportFields, $todoLang);
-            list($users, $bugs, $stories, $tasks, $testTasks) = $this->todoZen->exportAssociated('default', $account);
+            list($users, $bugs, $stories, $tasks, $testTasks) = $this->todoZen->exportAssociated('default', (string)$user->account);
 
             $times = date::buildTimeList((int)$configTime->begin, (int)$configTime->end, (int)$configTime->delta);
 
@@ -494,12 +495,12 @@ class todo extends control
             $assemble->testTasks = $testTasks;
             if($this->config->edition == 'max')
             {
-                $iroData = $this->todoZen->exportInfo((string)$this->config->edition, $account);
+                $iroData = $this->todoZen->exportInfo((string)$this->config->edition, (string)$user->account);
                 $assemble->issues        = $iroData[0];
                 $assemble->risks         = $iroData[1];
                 $assemble->opportunities = $iroData[2];
             }
-            if(isset($this->config->qcVersion)) $assemble->reviews = $this->todoZen->exportInfo('qcVersion', $account);
+            if(isset($this->config->qcVersion)) $assemble->reviews = $this->todoZen->exportInfo('qcVersion', (string)$user->account);
 
             $todos = $this->todoZen->assembleExportData((array)$todos, $assemble, $todoLang, (array)$times);
 
