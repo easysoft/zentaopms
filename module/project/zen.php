@@ -15,9 +15,9 @@ class projectZen extends project
      *
      * @param  object $postData
      * @access protected
-     * @return int|object
+     * @return object|false
      */
-    protected function prepareCreateExtras(object $postData): object
+    protected function prepareCreateExtras(object $postData): object|false
     {
         $rawdata = $postData->rawdata;
         $project = $postData->setDefault('status', 'wait')
