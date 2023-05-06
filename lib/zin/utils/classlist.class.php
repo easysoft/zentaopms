@@ -258,7 +258,7 @@ class classlist
      * @access public
      * @return string
      */
-    public function toStr()
+    public function toStr(): string
     {
         $names = array();
         foreach($this->list as $name => $toggle)
@@ -268,7 +268,7 @@ class classlist
             $name = trim($name);
             if(!strlen($name)) continue;
 
-            $names[] = str_replace('.', '.\\', $name);
+            $names[] = $name;
         }
         return implode(' ', $names);
     }

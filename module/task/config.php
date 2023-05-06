@@ -1,4 +1,7 @@
 <?php
+declare(strict_types=1);
+helper::import(dirname(__FILE__) . 'config/form.php');
+
 $config->task = new stdclass();
 $config->task->batchCreate = 10;
 
@@ -227,3 +230,18 @@ $config->task->datatable->fieldList['actions']['title']    = 'actions';
 $config->task->datatable->fieldList['actions']['fixed']    = 'right';
 $config->task->datatable->fieldList['actions']['width']    = '180';
 $config->task->datatable->fieldList['actions']['required'] = 'yes';
+
+$config->task->create->template = new stdclass();
+$config->task->create->template->module     = 0;
+$config->task->create->template->mode       = '';
+$config->task->create->template->assignedTo = '';
+$config->task->create->template->name       = '';
+$config->task->create->template->story      = 0;
+$config->task->create->template->type       = '';
+$config->task->create->template->pri        = 3;
+$config->task->create->template->estimate   = '';
+$config->task->create->template->desc       = '';
+$config->task->create->template->estStarted = null;
+$config->task->create->template->deadline   = null;
+$config->task->create->template->mailto     = '';
+$config->task->create->template->color      = '';

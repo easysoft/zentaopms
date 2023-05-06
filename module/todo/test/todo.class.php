@@ -27,14 +27,13 @@ class todoTest
      * Test batch create todos.
      *
      * @param  array  $todos
-     * @param  object $formData
      * @access public
      * @return array|int
      */
-    public function batchCreateTest($todos, $formData)
+    public function batchCreateTest($todos)
     {
         $todos      = json_decode(json_encode($todos));
-        $todoIDList = $this->objectModel->batchCreate($todos, $formData);
+        $todoIDList = $this->objectModel->batchCreate($todos);
 
         if(dao::isError()) return 0;
         return $todoIDList;
