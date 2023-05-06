@@ -543,7 +543,7 @@ class todoModel extends model
 
     /**
      * 获取所有有效的周期待办列表。
-     * Get valid cycle todo listi.
+     * Get valid cycle todo list.
      *
      * @access public
      * @return array
