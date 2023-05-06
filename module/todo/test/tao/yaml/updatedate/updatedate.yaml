@@ -1,5 +1,5 @@
-title: zt_getprojectlist
-author: liuchenglong
+title: zt_updatedate
+author: shenshulong
 version: "1.0"
 fields:
     - field: id
