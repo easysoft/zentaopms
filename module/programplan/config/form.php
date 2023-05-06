@@ -16,9 +16,7 @@ $config->programplan->edit->form['output']    = array('required' => false, 'type
 
 $config->programplan->ajaxCustom = new stdClass();
 $config->programplan->ajaxCustom->form = array();
-$config->programplan->ajaxCustom->form['type']   = array('required' => true, 'type' => 'string');
-$config->programplan->ajaxCustom->form['name']   = array('required' => true, 'type' => 'string');
-$config->programplan->ajaxCustom->form['status'] = array('required' => true, 'type' => 'string');
-$config->programplan->ajaxCustom->form['pri']    = array('required' => true, 'type' => 'int');
-$config->programplan->ajaxCustom->form['date']   = array('required' => false, 'type' => 'string', 'default' => helper::today());
+$config->programplan->ajaxCustom->form['zooming']     = array('required' => false, 'type' => 'string');
+$config->programplan->ajaxCustom->form['stageCustom'] = array('required' => false, 'type' => 'array');
+$config->programplan->ajaxCustom->form['ganttFields'] = array('required' => false, 'type' => 'array');
 

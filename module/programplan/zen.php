@@ -106,6 +106,7 @@ class programplanZen extends programplan
      *
      * @param  string $owner
      * @param  string $module
+     * @param  array  $customFields
      * @access protected
      * @return void
      */
