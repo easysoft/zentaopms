@@ -1,0 +1,39 @@
+title: zt_getbyexportlist
+author: jukui
+version: "1.0"
+fields:
+    - field: id
+      range: 1-9
+    - field: account
+      range: 'admin'
+    - field: date
+      range: 1-9
+      prefix: '2023-03-0'
+    - field: begin
+      range: 1000-1100
+    - field: end
+      range: 1200-1300
+    - field: type
+      range: 'custom'
+    - field: cycle
+      range: 0
+    - field: pri
+      range: 3
+    - field: name
+      range: 1-9
+      prefix: '待办'
+    - field: desc
+      range: 1-9
+      prefix: '这是待办描述'
+    - field: status
+      range: 'wait,doing,done,closed,closed'
+    - field: finishedDate
+      range: 1-9
+      prefix: '2023-05-2'
+    - field: closedDate
+      range: 1-9
+      prefix: '2023-05-2'
+    - field: assignedTo
+      range: 'admin'
+    - field: assignedBy
+      range: ''

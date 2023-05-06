@@ -4002,6 +4002,8 @@ class taskModel extends model
      */
     public function setTaskFiles(array $taskFiles, int $taskID): array
     {
+        if(!empty($taskFiles) and !$taskID) return array();
+
         /* If taskFiles is not empty, create task files. */
         if(!empty($taskFiles))
         {
@@ -4015,7 +4017,7 @@ class taskModel extends model
         else
         {
             $taskFileTitle = $this->loadModel('file')->saveUpload('task', $taskID);
-            $taskFiles     = $this->dao->select('*')->from(TABLE_FILE)->where('id')->in(array_keys($taskFileTitle))->fetchAll('id');
+            $taskFiles     = $taskFileTitle ? $this->dao->select('*')->from(TABLE_FILE)->where('id')->in(array_keys($taskFileTitle))->fetchAll('id') : array();
             foreach($taskFiles as $fileID => $taskFile) unset($taskFiles[$fileID]->id);
         }
 
