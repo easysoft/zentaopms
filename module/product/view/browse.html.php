@@ -26,6 +26,7 @@ $unfoldStories     = zget($unfoldStories, $productID, array());
 $isProjectStory    = $this->app->rawModule == 'projectstory';
 $projectHasProduct = $isProjectStory && !empty($project->hasProduct);
 $projectIDParam    = $isProjectStory ? "projectID=$projectID&" : '';
+$projectModel      = isset($project->model) ? $project->model : '';
 js::set('browseType', $browseType);
 js::set('account', $this->app->user->account);
 js::set('reviewStory', $lang->product->reviewStory);
@@ -35,6 +36,7 @@ js::set('branch', $branch);
 js::set('rawModule', $this->app->rawModule);
 js::set('productType', $this->app->tab == 'product' ? $product->type : '');
 js::set('projectHasProduct', $projectHasProduct);
+js::set('projectModel', $projectModel);
 js::set('URAndSR', $this->config->URAndSR);
 js::set('unfoldStories', $unfoldStories);
 js::set('unfoldAll',     $lang->execution->treeLevel['all']);
@@ -226,7 +228,9 @@ js::set('vision',        $this->config->vision);
         }
         if(common::hasPriv('projectstory', 'linkStory'))
         {
-            $buttonLink  = $this->createLink('projectstory', 'linkStory', "project=$projectID");
+            if($storyType == 'requirement') $lang->execution->linkStory = str_replace($lang->SRCommon, $lang->URCommon, $lang->execution->linkStory);
+
+            $buttonLink  = $this->createLink('projectstory', 'linkStory', "project=$projectID&browseType=&param=0&recTotal=0&recPerPage=50&pageID=1&storyType=$storyType");
             $buttonTitle = $lang->execution->linkStory;
             $dataToggle  = '';
         }
@@ -234,7 +238,7 @@ js::set('vision',        $this->config->vision);
         $hidden = empty($buttonLink) ? 'hidden' : '';
         echo html::a($buttonLink, "<i class='icon-link'></i> $buttonTitle", '', "class='btn btn-primary $hidden' $dataToggle");
 
-        if(!empty($productID) and common::hasPriv('projectstory', 'linkStory') and common::hasPriv('projectstory', 'importPlanStories'))
+        if(!empty($productID) and common::hasPriv('projectstory', 'linkStory') and common::hasPriv('projectstory', 'importPlanStories') and $projectModel != 'ipd')
         {
             echo "<button type='button' class='btn btn-primary dropdown-toggle' data-toggle='dropdown'><span class='caret'></span></button>";
             echo "<ul class='dropdown-menu pull-right'>";

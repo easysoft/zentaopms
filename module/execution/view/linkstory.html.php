@@ -15,6 +15,7 @@
 <style>
 .search-form .form-actions {padding-bottom: 10px!important;}
 </style>
+<?php js::set('storyType', $storyType);?>
 <div id="mainMenu" class="clearfix">
   <div class="btn-toolbar pull-left">
     <span class='btn btn-link btn-active-text'><span class='text'><?php echo $lang->execution->linkStory;?></span></span>

@@ -3399,10 +3399,11 @@ class execution extends control
      * @param  int    $recPerPage
      * @param  int    $pageID
      * @param  string $extra
+     * @param  string $storyType
      * @access public
      * @return void
      */
-    public function linkStory($objectID = 0, $browseType = '', $param = 0, $recTotal = 0, $recPerPage = 50, $pageID = 1, $extra = '')
+    public function linkStory($objectID = 0, $browseType = '', $param = 0, $recTotal = 0, $recPerPage = 50, $pageID = 1, $extra = '', $storyType = 'story')
     {
         $this->loadModel('story');
         $this->loadModel('product');
@@ -3563,6 +3564,7 @@ class execution extends control
         $this->view->branchGroups = $branchGroups;
         $this->view->browseLink   = $browseLink;
         $this->view->project      = $project;
+        $this->view->storyType    = $storyType;
 
         $this->display();
     }
