@@ -46,3 +46,8 @@ $config->project->form->edit['product']    = array('type' => 'array',  'required
 $config->project->form->start['realBegan'] = array('type' => 'date', 'required' => true, 'filter' => 'trim');
 
 $config->project->form->close['realEnd'] = array('type' => 'date', 'required' => true, 'filter' => 'trim');
+
+$config->project->form->activate['begin']        = array('type' => 'date',   'required' => true);
+$config->project->form->activate['end']          = array('type' => 'date',   'required' => true);
+$config->project->form->activate['readjustTime'] = array('type' => 'int',    'required' => false, 'default' => '');
+$config->project->form->activate['readjustTask'] = array('type' => 'array',    'required' => false, 'default' => '');
