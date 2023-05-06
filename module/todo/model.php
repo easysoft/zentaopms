@@ -565,6 +565,9 @@ class todoModel extends model
      */
     public function getPriByTodoType(string $todoType, int $todoObjectID): int
     {
-        return $this->dao->select('pri')->from($this->config->objectTables[$todoType])->where('id')->eq($todoObjectID)->fetch('pri');
+        if(!isset($this->config->objectTables[$todoType])) return $this->config->todo->defaultPri;
+
+        $pri = $this->dao->select('pri')->from($this->config->objectTables[$todoType])->where('id')->eq($todoObjectID)->fetch('pri');
+        return $pri ?: $this->config->todo->defaultPri;
     }
 }
