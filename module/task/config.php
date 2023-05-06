@@ -1,4 +1,7 @@
 <?php
+declare(strict_types=1);
+helper::import(dirname(__FILE__) . 'config/form.php');
+
 $config->task = new stdclass();
 $config->task->batchCreate = 10;
 
