@@ -10,6 +10,11 @@ class tabs extends wg
         'activeID?string'
     );
 
+    public static function getPageCSS()
+    {
+        return file_get_contents(__DIR__ . DS . 'css' . DS . 'v1.css');
+    }
+
     protected function getItemID(array $item): string
     {
         return isset($item['id']) ? $item['id'] : $this->gid;
@@ -17,7 +22,8 @@ class tabs extends wg
 
     protected function buildLabelView(string $id, array $item)
     {
-        $isActive = $this->prop('activeID') == $id;
+        if(!isset($item['label'])) return null;
+        $isActive = $this->prop('activeID') == $id || (isset($item['active']) && $item['active']);
         return li
         (
             setClass('nav-item'),
@@ -25,6 +31,7 @@ class tabs extends wg
             a
             (
                 set('data-toggle', 'tab'),
+                setClass('font-medium'),
                 set::href("#$id"),
                 $item['label']
             )
@@ -33,57 +40,86 @@ class tabs extends wg
 
     protected function buildContentView(string $id, array $item)
     {
-        $isActive = $this->prop('activeID') == $id;
+        if(!isset($item['data'])) return null;
+        $isActive = $this->prop('activeID') == $id || (isset($item['active']) && $item['active']);
         return div
         (
             setClass('tab-pane'),
             setID($id),
             $isActive ? setClass('active') : null,
-            isset($item['data']) ? $item['data'] : null
+            $item['data']
+        );
+    }
+
+    protected function buildTabHeader($labelViews)
+    {
+        if(empty($labelViews)) return null;
+
+        $isVertical = $this->prop('direction') === 'v';
+        return ul
+        (
+            setClass('nav nav-tabs'),
+            $isVertical ? setClass('nav-stacked') : null,
+            $labelViews
+        );
+    }
+
+    protected function buildTabBody($contentViews)
+    {
+        if(empty($contentViews)) return null;
+
+        return div
+        (
+            setClass('tab-content'),
+            $contentViews
         );
     }
 
     protected function build()
     {
-        $items     = $this->prop('items');
-        $direction = $this->prop('direction');
-        $activeID  = $this->prop('activeID');
+        $items = $this->prop('items');
+        // $activeID  = $this->prop('activeID');
+        $isVertical = $this->prop('direction') === 'v';
 
-        if(empty($items)) return null;
+        if(empty($items))
+        {
+            return div
+            (
+                set($this->props->skip(array_keys(static::getDefinedProps()))),
+                $isVertical ? setClass('flex') : null,
+
+                $this->children()
+            );
+        }
 
         $labelViews  = array();
         $contentViews = array();
         foreach($items as $item)
         {
             $id = $this->getItemID($item);
-            $labelViews[] = $this->buildLabelView($id, $item);
-            $contentViews[] = $this->buildContentView($id, $item);
+
+            $labelView   = $this->buildLabelView($id, $item);
+            $contentView = $this->buildContentView($id, $item);
+            if(!empty($labelView))   $labelViews[]   = $labelView;
+            if(!empty($contentView)) $contentViews[] = $contentView;
+
         }
 
         /* There is no active item, then set index 0 to be actived. */
-        if(empty($activeID))
-        {
-            $labelViews[0]->setProp('class', 'active');
-            $contentViews[0]->setProp('class', 'active');
-        }
+        // if(empty($activeID))
+        // {
+        //     $labelViews[0]->setProp('class', 'active');
+        //     $contentViews[0]->setProp('class', 'active');
+        // }
 
         return div
         (
             set($this->props->skip(array_keys(static::getDefinedProps()))),
-            $direction == 'v' ? setClass('flex') : null,
-            /* Tabs. */
-            ul
-            (
-                setClass('nav nav-tabs'),
-                $direction == 'v' ? setClass('nav-stacked') : null,
-                $labelViews
-            ),
-            /* Content. */
-            div
-            (
-                setClass('tab-content'),
-                $contentViews
-            )
+            $isVertical ? setClass('flex') : null,
+
+            $this->buildTabHeader($labelViews),
+            $this->buildTabBody($contentViews),
+            $this->children()
         );
     }
 }

@@ -57,7 +57,7 @@ include $frameworkRoot . 'model.class.php';
 include $frameworkRoot . 'helper.class.php';
 
 $app    = router::createApp('pms', dirname(dirname(__FILE__)), 'router');
-$poolID = getenv('poolID');
+$poolID = getenv('ZTF_POOL_ID');
 $testDB = empty($config->testDB) ? array() : $config->testDB;
 
 /* 根据ztf设置的poolID环境变量设置连接的数据库 */
@@ -73,6 +73,7 @@ if(!empty($testDB) && !empty($poolID))
 
     $app->connectDB();
 }
+
 $tester = $app->loadCommon();
 
 /* Set configs. */

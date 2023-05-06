@@ -449,7 +449,7 @@ class yaml
         $dbUser    = $this->config->db->user;
         $dbPWD     = $this->config->db->password;
 
-        $command    = "mysql -u%s -p%s -h%s -P%s -D%s < %s";
+        $command    = "mysql -u%s -p%s -h%s -P%s --default-character-set=utf8 -D%s < %s";
         $execInsert = sprintf($command, $dbUser, $dbPWD, $dbHost, $dbPort, $dbName, $sqlPath);
         $execDump   = sprintf($dumpCommand, $dbUser, $dbPWD, $dbHost, $dbPort, $dbName, $tableName);
         

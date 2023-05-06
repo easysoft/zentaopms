@@ -137,6 +137,7 @@ class programplanModel extends model
     }
 
     /**
+     * 获取甘特图页面数据。
      * Get gantt data.
      *
      * @param  int     $executionID
@@ -147,27 +148,14 @@ class programplanModel extends model
      * @access public
      * @return string
      */
-    public function getDataForGantt($executionID, $productID, $baselineID = 0, $selectCustom = '', $returnJson = true)
+    public function getDataForGantt(int $executionID, int $productID, int $baselineID = 0, string $selectCustom = '', bool $returnJson = true): string
     {
         $this->loadModel('stage');
         $this->loadModel('execution');
 
         $plans = $this->getStage($executionID, $productID, 'all', 'order');
-        if($baselineID)
-        {
-            $baseline = $this->loadModel('cm')->getByID($baselineID);
-            $oldData  = json_decode($baseline->data);
-            $oldPlans = $oldData->stage;
-            foreach($oldPlans as $id => $oldPlan)
-            {
-                if(!isset($plans[$id])) continue;
-                $plans[$id]->version   = $oldPlan->version;
-                $plans[$id]->name      = $oldPlan->name;
-                $plans[$id]->milestone = $oldPlan->milestone;
-                $plans[$id]->begin     = $oldPlan->begin;
-                $plans[$id]->end       = $oldPlan->end;
-            }
-        }
+
+        if($baselineID) $plans = $this->getBaselineData($baselineID, $plans);
 
         $today       = helper::today();
         $datas       = array();
@@ -365,6 +353,33 @@ class programplanModel extends model
 
         $datas['data'] = isset($datas['data']) ? array_values($datas['data']) : array();
         return $returnJson ? json_encode($datas) : $datas;
+    }
+
+    /**
+     * 获取基线数据。
+     * Get baseline data.
+     *
+     * @param  int     $baselineID
+     * @param  array   $plans
+     * @access private
+     * @return array
+     */
+    private function getBaselineData(int $baselineID, array $plans): array
+    {
+        $baseline = $this->loadModel('cm')->getByID($baselineID);
+        $oldData  = json_decode($baseline->data);
+        $oldPlans = $oldData->stage;
+        foreach($oldPlans as $id => $oldPlan)
+        {
+            if(!isset($plans[$id])) continue;
+            $plans[$id]->version   = $oldPlan->version;
+            $plans[$id]->name      = $oldPlan->name;
+            $plans[$id]->milestone = $oldPlan->milestone;
+            $plans[$id]->begin     = $oldPlan->begin;
+            $plans[$id]->end       = $oldPlan->end;
+        }
+
+        return $plans;
     }
 
     /**
@@ -604,11 +619,11 @@ class programplanModel extends model
     /**
      * Process plans.
      *
-     * @param  int    $plans
+     * @param  array  $plans
      * @access public
      * @return object
      */
-    public function processPlans($plans)
+    private function processPlans(array $plans)
     {
         foreach($plans as $planID => $plan) $plans[$planID] = $this->processPlan($plan);
         return $plans;
@@ -1666,13 +1681,14 @@ class programplanModel extends model
     }
 
     /**
+     * 获取阶段同一层级信息。
      * Get plan's siblings.
      *
-     * @param  string|int|array    $planIdList
+     * @param  string|int|array $planIdList
      * @access public
      * @return array
      */
-    public function getSiblings($planIdList)
+    public function getSiblings(array|string|int $planIdList): array
     {
         if(is_numeric($planIdList)) $planIdList = (array)$planIdList;
 

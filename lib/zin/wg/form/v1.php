@@ -3,29 +3,28 @@ namespace zin;
 
 require_once dirname(__DIR__) . DS . 'formgroup' . DS . 'v1.php';
 require_once dirname(__DIR__) . DS . 'formrow' . DS . 'v1.php';
+require_once dirname(__DIR__) . DS . 'formbase' . DS . 'v1.php';
 
-class form extends wg
+/**
+ * 通用表单（form）部件类，支持 Ajax 提交
+ * The common form widget class
+ */
+class form extends formBase
 {
-    protected static $defineProps = array(
-        'method?: string',
-        'url?: string',
-        'actions?: array',
-        'target?: string',
+    protected static $defineProps = array
+    (
         'items?: array',
         'grid?: bool',
-        'labelWidth?: int',
-        'submitBtnText?: string',
-        'cancelBtnText?: string',
+        'labelWidth?: int'
     );
 
-    protected static $defaultProps = array(
+    protected static $defaultProps = array
+    (
         'grid'          => true,
-        'method'        => 'post',
-        'target'        => 'ajax',
-        'actions'       => ['submit', 'cancel'],
+        'actionsClass'  => 'form-group gap-4 no-label'
     );
 
-    public function onBuildItem($item)
+    public function onBuildItem(item|array $item): wg
     {
         if(!($item instanceof item))
         {
@@ -38,32 +37,26 @@ class form extends wg
         return new formGroup(inherit($item));
     }
 
-    protected function buildFormActions()
+    protected function buildActions(): wg
     {
-        $actions = $this->prop('actions');
-        if(empty($actions)) return NULL;
+        $actions = parent::buildActions();
+        if($this->prop('grid') && !empty($actions)) $actions = div(setClass('form-row'), $actions);
+        return $actions;
+    }
+    
+    protected function buildProps(): array
+    {
+        list($grid, $labelWidth) = $this->prop(array('grid', 'labelWidth'));
+        $props = parent::buildProps();
+        if($grid)               $props[] = set::class('form-grid');
+        if(!empty($labelWidth)) $props[] = setCssVar('form-label-width', $labelWidth);
 
-        global $lang;
-        foreach($actions as $key => $action)
-        {
-            if($action === 'submit')     $actions[$key] = ['text' => $this->prop('submitBtnText') ?? $lang->save, 'btnType' => 'submit', 'type' => 'primary'];
-            elseif($action === 'cancel') $actions[$key] = ['text' => $this->prop('cancelBtnText') ?? $lang->goback, 'url' => html::getGobackLink()];
-            elseif(is_string($action))   $actions[$key] = ['text' => $action];
-        }
-
-        return toolbar
-        (
-            set::class('form-actions form-group gap-4 no-label'),
-            set::items($actions)
-        );
+        return $props;
     }
 
-    protected function build()
+    protected function buildContent(): array
     {
-        list($items, $grid, $labelWidth, $url, $target, $method, $id) = $this->prop(['items', 'grid', 'labelWidth', 'url', 'target', 'method', 'id']);
-
-        $actions = $this->buildFormActions();
-        if($grid && !empty($actions)) $actions = div(setClass('form-row'), $actions);
+        list($items, $grid) = $this->prop(['items', 'grid']);
 
         $list     = is_array($items) ? array_map(array($this, 'onBuildItem'), $items) : [];
         $children = $this->children();
@@ -76,23 +69,7 @@ class form extends wg
                 if($item instanceof formGroup) $list[$key] = new formRow($item);
             }
         }
-        $isAjax = $target === 'ajax';
-        if($isAjax)
-        {
-            $target = NULL;
-            if(empty($id)) $id = $this->gid;
-        }
-        if(empty($url)) $url = $_SERVER['REQUEST_URI'];
 
-        return h::form
-        (
-            set::class('form load-indicator', $grid ? 'form-grid' : NULL, $isAjax ? 'form-ajax' : ''),
-            set(['id' => $id, 'action' => $url, 'target' => $target, 'method' => $method]),
-            set($this->getRestProps()),
-            empty($labelWidth) ? NULL : setCssVar('form-label-width', $labelWidth),
-            $list,
-            $actions,
-            $isAjax ? zui::ajaxForm(set::_to("#$id")) : NULL
-        );
+        return $list;
     }
 }

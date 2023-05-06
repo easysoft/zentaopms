@@ -391,7 +391,7 @@ class product extends control
         if(!empty($_POST))
         {
             $data    = form::data($this->config->product->form->create);
-            $product = $this->productZen->prepareCreateExtras($data);
+            $product = $this->productZen->prepareCreateExtras($data, $this->post->acl, $this->post->uid);
 
             $productID = $this->product->create($product, $this->post->uid, zget($_POST, 'lineName', ''));
             if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
@@ -422,7 +422,7 @@ class product extends control
         if(!empty($_POST))
         {
             $data    = form::data($this->config->product->form->edit);
-            $product = $this->productZen->prepareEditExtras($data);
+            $product = $this->productZen->prepareEditExtras($data, $this->post->acl, $this->post->uid);
 
             $changes = $this->product->update($productID, $product, $this->post->uid);
             if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));

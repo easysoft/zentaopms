@@ -88,7 +88,6 @@ html[lang="en"] .product-info .type-info {color: #A6AAB8; text-align: center; po
 .forty-percent {width: 40%;}
 </style>
 <script>
-<?php $blockNavId = 'nav-' . uniqid(); ?>
 $(function()
 {
     var $nav = $('#<?php echo $blockNavId;?>');

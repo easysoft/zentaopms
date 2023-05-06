@@ -1586,7 +1586,7 @@ class projectModel extends model
         /* Update start and end date of tasks in this project. */
         if($project->readjustTime and $project->readjustTask)
         {
-            $tasks          = $this->projectTao->fetchUndoneTasks((int)$projectID);
+            $tasks = $this->projectTao->fetchUndoneTasks((int)$projectID);
             $this->projectTao->updateTasksStartAndEndDate($tasks, $oldProject, $project);
         }
         /* Activate the shadow product of the project. (only change product status) */

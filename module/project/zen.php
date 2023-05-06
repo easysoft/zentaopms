@@ -544,7 +544,8 @@ class projectZen extends project
     {
         $newBegin = date('Y-m-d');
         $dateDiff = helper::diffDate($newBegin, $project->begin);
-        $newEnd   = date('Y-m-d', strtotime($project->end) + $dateDiff * 24 * 3600);
+        $dateTime = (int)(strtotime($project->end) + $dateDiff * 24 * 3600);
+        $newEnd   = date('Y-m-d', $dateTime);
 
         $this->view->title      = $this->lang->project->activate;
         $this->view->users      = $this->loadModel('user')->getPairs('noletter');
@@ -586,12 +587,11 @@ class projectZen extends project
      */
     protected function prepareActivateExtras(int $projectID, object $postData): object
     {
-        $oldProject = $this->project->getByID($projectID);
-
+        $oldProject   = $this->project->getByID($projectID);
         $editorIdList = $this->config->project->editor->activate['id'];
 
         return $postData->add('id', $projectID)
-            ->setDefault('realEnd', '')
+            ->setDefault('realEnd', $oldProject->realEnd)
             ->setDefault('status', 'doing')
             ->setDefault('lastEditedBy', $this->app->user->account)
             ->setDefault('lastEditedDate', helper::now())
@@ -641,20 +641,17 @@ class projectZen extends project
      *
      * @param  int       $projectID
      * @param  object    $project
-     * @param  int|array $executionIDs
+     * @param  array     $idList
      * @param  array     $postData
      *
      * @access protected
-     * @return array
+     * @return bool
      */
-    protected function mergeProducts(int $projectID, object $project, int|array $executionIDs, array $postData): array
+    protected function mergeProducts(int $projectID, object $project, array $idList, array $postData): bool
     {
-        $this->loadModel('product');
-        $this->loadModel('execution');
-
-        $oldProducts = $this->product->getProducts($projectID);
+        $oldProducts = $this->loadModel('product')->getProducts($projectID);
         $this->project->updateProducts($projectID);
-        if(dao::isError()) return array('result' => 'fail', 'message' => dao::getError());
+        if(dao::isError()) return false;
 
         /* Merge old and new linked products under the project. */
         $newProducts   = $this->product->getProducts($projectID);
@@ -666,13 +663,13 @@ class projectZen extends project
         /* Multiple and Division project update linked products. */
         if(empty($project->multiple))
         {
-            $executionID = $this->execution->getNoMultipleID($projectID);
+            $executionID = $this->loadModel('execution')->getNoMultipleID($projectID);
             if($executionID) $this->execution->updateProducts($executionID);
         }
 
         if(empty($project->division))
         {
-            foreach($executionIDs as $executionID)
+            foreach($idList as $executionID)
             {
                 $this->execution->updateProducts($executionID);
                 if($diffProducts) $this->loadModel('action')->create('execution', $executionID, 'Managed', '', implode(',', array_keys($newProducts)));
@@ -682,26 +679,26 @@ class projectZen extends project
         /* Record multiple and waterfall project unlinked products. */
         if($project->multiple and $project->model != 'waterfall' and $project->model != 'waterfallplus')
         {
-            $this->dealUnlinkedProduct($oldProducts, $newProductIDs, $executionIDs);
+            $this->dealUnlinkedProduct($oldProducts, $newProductIDs, $idList);
         }
 
-        return array();
+        return true;
     }
 
     /**
      * 记录多迭代及瀑布类项目移除的产品
      * Record multiple and waterfall project unlinked products
      *
-     * @param  array     $oldProducts
-     * @param  array     $newProductIDs
-     * @param  int|array $executionIDs
+     * @param  array $oldProducts
+     * @param  array $newProductIDs
+     * @param  array $idList
      *
      * @access protected
      * @return void
      */
-    protected function dealUnlinkedProduct(array $oldProducts, array $newProductIDs, array $executionIDs): void
+    protected function dealUnlinkedProduct(array $oldProducts, array $newProductIDs, array $idList): void
     {
-        $oldExecutionProducts = $this->projectTao->getExecutionProductGroup($executionIDs);
+        $oldExecutionProducts = $this->projectTao->getExecutionProductGroup($idList);
         $unlinkedProducts     = array_diff(array_keys($oldProducts), $newProductIDs);
         if(!empty($unlinkedProducts))
         {
@@ -720,8 +717,8 @@ class projectZen extends project
     }
 
     /**
-     * 项目关联用户故事则无法移除产品
-     * dealLinkProduct
+     * 提取关联用户故事无法移除的项目产品
+     * Extract related stories cannot be removed product.
      *
      * @param  int    $projectID
      * @param  object $project
@@ -729,17 +726,14 @@ class projectZen extends project
      * @access protected
      * @return void
      */
-    protected function dealLinkProduct(int $projectID, object $project): void
+    protected function extractUnModifyForm(int $projectID, object $project): void
     {
-        $this->loadModel('product');
-        $this->loadModel('program');
-
         $linkedBranches      = array();
         $linkedBranchIdList  = array();
         $branches            = $this->project->getBranchesByProject($projectID);
         $linkedProductIdList = empty($branches) ? '' : array_keys($branches);
-        $allProducts         = $this->program->getProductPairs($project->parent, 'all', 'noclosed', $linkedProductIdList);
-        $linkedProducts      = $this->product->getProducts($projectID, 'all', '', true, $linkedProductIdList);
+        $allProducts         = $this->loadModel('program')->getProductPairs($project->parent, 'all', 'noclosed', $linkedProductIdList);
+        $linkedProducts      = $this->loadModel('product')->getProducts($projectID, 'all', '', true, $linkedProductIdList);
         $projectStories      = $this->project->getStoriesByProject($projectID);
         $projectBranches     = $this->project->getBranchGroupByProject($projectID, array_keys($linkedProducts));
 
@@ -764,8 +758,8 @@ class projectZen extends project
             }
         }
 
-        /* Initializes the product from other linked products. */
-        if($this->config->systemMode == 'ALM') $this->initOtherLinkProduct($project, $allProducts, $linkedBranchIdList, $linkedBranches, $linkedProducts);
+        /* Build the product from other linked products. */
+        if($this->config->systemMode == 'ALM') $this->buildProductForm($project, $allProducts, $linkedBranchIdList, $linkedBranches, $linkedProducts);
 
         $this->view->unmodifiableProducts     = $unmodifiableProducts;
         $this->view->unmodifiableBranches     = $unmodifiableBranches;
@@ -774,7 +768,7 @@ class projectZen extends project
 
     /**
      * 初始化项目集下其他关联产品中当前产品
-     * Initializes the current product under the projectprogram.
+     * Build the current product under the projectprogram.
      *
      * @param  object $project
      * @param  array  $allProducts
@@ -785,7 +779,7 @@ class projectZen extends project
      * @access protected
      * @return void
      */
-    protected function initOtherLinkProduct(object $project, array $allProducts, array $linkedBranchIdList, array $linkedBranches, array $linkedProducts): void
+    protected function buildProductForm(object $project, array $allProducts, array $linkedBranchIdList, array $linkedBranches, array $linkedProducts): void
     {
         $branchGroups           = $this->loadModel('branch')->getByProducts(array_keys($allProducts), 'ignoreNormal|noclosed', $linkedBranchIdList);
         $topProgramID           = $project->parent ? $this->program->getTopByPath($project->path) : 0;
@@ -796,16 +790,16 @@ class projectZen extends project
         {
             if($programID != $topProgramID)
             {
-                $otherProducts = $this->initBranchProduct($programProducts, $branchGroups, $linkedBranches, $linkedProducts);
+                $otherProducts = $this->getOtherProducts($programProducts, $branchGroups, $linkedBranches, $linkedProducts);
             }
             else
             {
                 $currentProducts += $programProducts;
             }
         }
+
         $this->view->currentProducts = $currentProducts;
         $this->view->otherProducts   = $otherProducts;
-
         $this->view->branchGroups    = $branchGroups;
         $this->view->linkedBranches  = $linkedBranches;
         $this->view->linkedProducts  = $linkedProducts;
@@ -814,8 +808,8 @@ class projectZen extends project
     }
 
     /**
-     * 初始化项目集下其他关联产品中多分支产品
-     * Initializes the multi-branch product under the projectprogram.
+     * 获取其他的关联产品
+     * Get other products under the projectprogram.
      *
      * @param  object $programProducts
      * @param  array  $branchGroups
@@ -825,7 +819,7 @@ class projectZen extends project
      * @access protected
      * @return array
      */
-    protected function initBranchProduct(object $programProducts, array $branchGroups, array $linkedBranches, array $linkedProducts): array
+    protected function getOtherProducts(object $programProducts, array $branchGroups, array $linkedBranches, array $linkedProducts): array
     {
         $otherProducts = array();
         foreach($programProducts as $productID => $productName)
@@ -849,10 +843,12 @@ class projectZen extends project
     }
 
     /**
-     * setProjectMenu
+     * 根据当前所在模块更新二级菜单
+     * set project menu
      *
      * @param  int    $projectID
      * @param  object $project
+     *
      * @access protected
      * @return void
      */

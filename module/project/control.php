@@ -1676,7 +1676,7 @@ class project extends control
      * @access public
      * @return void
      */
-    public function editGroup($groupID): mixed
+    public function editGroup($groupID)
     {
         $groupID = (int)$groupID;
         $this->loadModel('group');
@@ -1933,7 +1933,7 @@ class project extends control
     }
 
     /**
-     * 管理项目的关联产品
+     * 管理项目的关联产品。
      * Manage products under project.
      *
      * @param  string $projectID
@@ -1942,28 +1942,27 @@ class project extends control
      * @access public
      * @return void
      */
-    public function manageProducts(string $projectID, $from = 'project'): mixed
+    public function manageProducts(string $projectID, string $from = 'project')
     {
         /* Access the nonProduct project alter tips. */
         $projectID = (int)$projectID;
         $project   = $this->project->getById($projectID);
         if(!$project->hasProduct) return print(js::error($this->lang->project->cannotManageProducts) . js::locate('back'));
 
-        $executions   = $this->loadModel('execution')->getPairs($projectID);
-        $executionIDs = array_keys($executions);
+        $executions = $this->loadModel('execution')->getPairs($projectID);
+        $idList     = array_keys($executions);
 
         if(!empty($_POST))
         {
             $postData = form::data();
-            if(!isset($postData->rawdata->products) and !isset($postData->rawdata->otherProducts))
+            if(!isset($this->post->products) and !isset($this->post->otherProducts))
             {
-                dao::$errors['message'][] = $this->lang->project->errorNoProducts;
-                return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+                return $this->send(array('result' => 'fail', 'message' => $this->lang->project->errorNoProducts));
             }
 
-            /* Update linked products. */
-            $errorTips = $this->projectZen->mergeProducts($projectID, $project, $executionIDs, $postData);
-            if(!empty($errorTips)) return $this->send($errorTips);
+            /* Merge and build linked products. */
+            $this->projectZen->mergeProducts($projectID, $project, $idList, $postData);
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $locateLink = inLink('manageProducts', "projectID=$projectID");
             if($from == 'program')  $locateLink = $this->session->projectList;
@@ -1972,7 +1971,9 @@ class project extends control
 
         /* Set menu. */
         $this->setProjectMenu($projectID, $project);
-        $this->projectZen->dealLinkProduct($projectID, $project);
+
+        /* Extract cannot be removed product and branch. */
+        $this->projectZen->extractUnModifyForm($projectID, $project);
 
         $this->view->title      = $this->lang->project->manageProducts . $this->lang->colon . $project->name;
         $this->view->project    = $project;
@@ -1993,7 +1994,7 @@ class project extends control
      * @access public
      * @return int
      */
-    public function ajaxGetExecutions(string $projectID, string $executionID = '0', string $mode = '', string $type = 'all'): int
+    public function ajaxGetExecutions(string $projectID, string $executionID = '0', string $mode = '', string $type = 'all')
     {
         $disabled   = '';
         $executions = array('' => '');
