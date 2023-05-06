@@ -86,7 +86,7 @@ class todoTest
      */
     public function batchUpdateTest(array $todos, int $todoID)
     {
-        $todoIDList = array($todoID => $todoID);
+        $todoIDList = array($todoID);
         $changes = $this->objectModel->batchUpdate($todos, $todoIDList);
 
         if(dao::isError()) return dao::getError();
