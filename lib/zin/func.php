@@ -963,3 +963,14 @@ function floatToolbar()
 {
     return createWg('floatToolbar', func_get_args());
 }
+
+/**
+ * zentao data group.
+ *
+ * string label,
+ * string labelClass?
+ */
+function dataGroup()
+{
+    return createWg('dataGroup', func_get_args());
+}
