@@ -695,25 +695,25 @@ class programplanModel extends model
      * @access public
      * @return bool
      */
-    public function create(array $formData, int $projectID = 0, int $productID = 0, int $parentID = 0): bool
+    public function create(form $formData, int $projectID = 0, int $productID = 0, int $parentID = 0): bool
     {
         /* Get every value from formData without use extract(). */
-        $planIDList     = $formData['planIDList'];
-        $names          = $formData['names'];
-        $PM             = $formData['PM'];
-        $percents       = $formData['percents'];
-        $attributes     = $formData['attributes'];
-        $acl            = $formData['acl'];
-        $milestone      = $formData['milestone'];
-        $begin          = $formData['begin'];
-        $end            = $formData['end'];
-        $realBegan      = $formData['realBegan'];
-        $realEnd        = $formData['realEnd'];
-        $desc           = $formData['desc'];
-        $orders         = $formData['orders'];
-        $type           = $formData['type'];
-        $codes          = $formData['codes'];
-        $output         = $formData['output'];
+        $planIDList     = $formData->get('planIDList');
+        $names          = $formData->get('names');
+        $PM             = $formData->get('PM');
+        $percents       = $formData->get('percents');
+        $attributes     = $formData->get('attributes');
+        $acl            = $formData->get('acl');
+        $milestone      = $formData->get('milestone');
+        $begin          = $formData->get('begin');
+        $end            = $formData->get('end');
+        $realBegan      = $formData->get('realBegan');
+        $realEnd        = $formData->get('realEnd');
+        $desc           = $formData->get('desc');
+        $orders         = $formData->get('orders');
+        $type           = $formData->get('type');
+        $codes          = $formData->get('codes');
+        $output         = $formData->get('output');
 
         /* Determine if a task has been created under the parent phase. */
         if(!$this->isCreateTask($parentID)) return dao::$errors['message'][] = $this->lang->programplan->error->createdTask;
