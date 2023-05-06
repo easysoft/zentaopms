@@ -16,8 +16,8 @@ class product extends control
     /**
      * Construct function.
      *
-     * @param moduleName
-     * @param methodName
+     * @param  string moduleName
+     * @param  string methodName
      * @access public
      * @return void
      */
@@ -390,8 +390,9 @@ class product extends control
 
         if(!empty($_POST))
         {
-            $data    = form::data($this->config->product->form->create);
-            $product = $this->productZen->prepareCreateExtras($data, $this->post->acl, $this->post->uid);
+            $formConfig = $this->productZen->appendFlowFields($this->config->product->form->create);
+            $data       = form::data($formConfig);
+            $product    = $this->productZen->prepareCreateExtras($data, $this->post->acl, $this->post->uid);
 
             $productID = $this->product->create($product, $this->post->uid, zget($_POST, 'lineName', ''));
             if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
@@ -421,8 +422,9 @@ class product extends control
 
         if(!empty($_POST))
         {
-            $data    = form::data($this->config->product->form->edit);
-            $product = $this->productZen->prepareEditExtras($data, $this->post->acl, $this->post->uid);
+            $formConfig = $this->productZen->appendFlowFields($this->config->product->form->edit);
+            $data       = form::data($formConfig);
+            $product    = $this->productZen->prepareEditExtras($data, $this->post->acl, $this->post->uid);
 
             $changes = $this->product->update($productID, $product, $this->post->uid);
             if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
@@ -441,17 +443,37 @@ class product extends control
     }
 
     /**
+     * 根据POST过来的ID列表，批量编辑相应产品。
      * Batch edit products.
      *
-     * @param  int    $programID
+     * @param  string    $programID
      * @access public
      * @return void
      */
-    public function batchEdit($programID = 0)
+    public function batchEdit(string $programID = '0')
     {
-        if($this->post->names)
+        $programID = (int)$programID;
+
+        $_POST['productIdList'][1] = 1;
+        $_POST['name'][1]   = '公司企业网站建设';
+        $_POST['PO'][1]     = 'productManager';
+        $_POST['QD'][1]     = 'testManager';
+        $_POST['RD'][1]     = 'productManager';
+        $_POST['type'][1]   =  'normal';
+        $_POST['status'][1] =  'normal';
+        $_POST['desc'][1]   = '建立公司企业网站，可以更好对外展示。<br />';
+        $_POST['acl'][1]    = 'open';
+
+        if($this->post->name)
         {
-            $allChanges = $this->product->batchUpdate();
+            $formConfig = $this->productZen->appendFlowFields($this->config->product->form->batchEdit, 'batch');
+            $data       = form::data($formConfig);
+            $products   = $this->productZen->prepareBatchEditExtras($data);
+            if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+            $allChanges = $this->product->batchUpdate($products);
+
+
             if(!empty($allChanges))
             {
                 foreach($allChanges as $productID => $changes)
@@ -467,76 +489,16 @@ class product extends control
             return print(js::locate($locate, 'parent'));
         }
 
-        $productIDList = $this->post->productIDList;
-        if(empty($productIDList)) return print(js::locate($this->session->productList, 'parent'));
+        /* 获取要修改的产品ID列表。*/
+        $productIdList = $this->post->productIDList;
+        $productIdList = '79,40,68';
+        if(empty($productIdList)) return print(js::locate($this->session->productList, 'parent'));
 
         /* Set menu when page come from program. */
         if($this->app->tab == 'program') $this->loadModel('program')->setMenu(0);
 
-        /* Set custom. */
-        foreach(explode(',', $this->config->product->customBatchEditFields) as $field) $customFields[$field] = $this->lang->product->$field;
-        $this->view->customFields = $customFields;
-        $this->view->showFields   = $this->config->product->custom->batchEditFields;
-
-        $products      = $this->dao->select('*')->from(TABLE_PRODUCT)->where('id')->in($productIDList)->fetchAll('id');
-        $appendPoUsers = $appendQdUsers = $appendRdUsers = array();
-        foreach($products as $product)
-        {
-            $appendPoUsers[$product->PO] = $product->PO;
-            $appendQdUsers[$product->QD] = $product->QD;
-            $appendRdUsers[$product->RD] = $product->RD;
-        }
-
-        $this->loadModel('user');
-        $poUsers = $this->user->getPairs('nodeleted|noclosed|pofirst', $appendPoUsers);
-        if(!empty($this->config->user->moreLink)) $this->config->moreLinks["PO"] = $this->config->user->moreLink;
-
-        $qdUsers = $this->user->getPairs('nodeleted|noclosed|qdfirst', $appendQdUsers);
-        if(!empty($this->config->user->moreLink)) $this->config->moreLinks["QD"] = $this->config->user->moreLink;
-
-        $rdUsers = $this->user->getPairs('nodeleted|noclosed|devfirst', $appendRdUsers);
-        if(!empty($this->config->user->moreLink)) $this->config->moreLinks["RD"] = $this->config->user->moreLink;
-
-        $programs             = array();
-        $unauthorizedPrograms = array();
-        if($this->config->systemMode == 'ALM')
-        {
-            $programs = $this->loadModel('program')->getTopPairs();
-
-            /* Get unauthorized programs. */
-            $programIDList = array();
-            foreach($products as $product)
-            {
-                if($product->program and !isset($programs[$product->program]) and !in_array($product->program, $programIDList)) $programIDList[] = $product->program;
-            }
-            $unauthorizedPrograms = $this->program->getPairsByList($programIDList);
-
-            /* Get product lines by programs.*/
-            $lines = array(0 => '');
-            foreach($programs + $unauthorizedPrograms as $id => $program)
-            {
-                $lines[$id] = array('') + $this->product->getLinePairs($id);
-            }
-        }
-        else
-        {
-            $lines = array('') + $this->product->getLinePairs();
-        }
-
-        $this->view->title                = $this->lang->product->batchEdit;
-        $this->view->position[]           = $this->lang->product->batchEdit;
-        $this->view->lines                = $lines;
-        $this->view->productIDList        = $productIDList;
-        $this->view->products             = $products;
-        $this->view->poUsers              = $poUsers;
-        $this->view->qdUsers              = $qdUsers;
-        $this->view->rdUsers              = $rdUsers;
-        $this->view->programID            = $programID;
-        $this->view->programs             = array('' => '') + $programs;
-        $this->view->unauthorizedPrograms = $unauthorizedPrograms;
-
-        unset($this->lang->product->typeList['']);
-        $this->display();
+        /* 构造批量编辑页面表单配置数据。*/
+        $this->productZen->buildBatchEditForm($programID, explode(',', $productIdList));
     }
 
     /**
@@ -875,7 +837,7 @@ class product extends control
         $this->product->buildProductSearchForm($param, $actionURL);
 
         /* Get product lines. */
-        list($productLines, $programLines) = $this->getProductLines();
+        list($productLines, $programLines) = $this->productZen->getProductLines();
 
         $this->view->title            = $this->lang->productCommon;
         $this->view->position[]       = $this->lang->productCommon;

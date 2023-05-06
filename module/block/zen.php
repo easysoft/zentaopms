@@ -153,47 +153,50 @@ class blockZen extends block
      */
     protected function processBlockForRender(array $blocks, int $projectID): array
     {
+        /* 根据用户的权限，和当前系统开启的权限 处理区块列表 */
         $acls = $this->app->user->rights['acls'];
         foreach($blocks as $key => $block)
         {
+            /* 将没有开启功能区块过虑 */
             if($block->code == 'waterfallrisk' and !helper::hasFeature("waterfall_risk"))   continue;
             if($block->code == 'waterfallissue' and !helper::hasFeature("waterfall_issue")) continue;
             if($block->code == 'scrumrisk' and !helper::hasFeature("scrum_risk"))           continue;
             if($block->code == 'scrumissue' and !helper::hasFeature("scrum_issue"))         continue;
 
-            if(!empty($block->source) and $block->source != 'todo' and !empty($acls['views']) and !isset($acls['views'][$block->source]))
+            /* 将没有视图权限的区块过滤 */
+            if(!empty($block->module) and $block->module != 'todo' and !empty($acls['views']) and !isset($acls['views'][$block->module]))
             {
                 unset($blocks[$key]);
                 continue;
             }
 
+            /* 处理 params 信息中  count 的值，当没有  count 字段时 ，将 num 字段赋值给 count */
             $block->params = json_decode($block->params);
             if(isset($block->params->num) and !isset($block->params->count)) $block->params->count = $block->params->num;
 
-            $this->getBlockMoreLink($block, $projectID);
+            /* 补全加载链接 */
+            $this->computeMoreLink($block, $projectID);
         }
-
         return $blocks;
     }
 
     /**
-     * 获取区块的更多链接。
+     * 补全区块的加载链接。
      * Get the more link of the block.
      *
      * @param  object $block
      * @param  int    $projectID
      * @return void
      */
-    private function getBlockMoreLink(object $block, int $projectID): void
+    private function computeMoreLink(object $block, int $projectID): void
     {
-        $code   = $block->code;
-        $source = empty($block->source) ? 'common' : $block->source;
+        $module = empty($block->module) ? 'common' : $block->module;
 
         $block->blockLink = $this->createLink('block', 'printBlock', "id=$block->id&module=$block->module");
         $block->moreLink  = '';
-        if(isset($this->config->block->modules[$source]->moreLinkList->{$code}))
+        if(isset($this->config->block->modules[$module]->moreLinkList->{$block->code}))
         {
-            list($moduleName, $method, $vars) = explode('|', sprintf($this->config->block->modules[$source]->moreLinkList->{$code}, isset($block->params->type) ? $block->params->type : ''));
+            list($moduleName, $method, $vars) = explode('|', sprintf($this->config->block->modules[$module]->moreLinkList->{$block->code}, isset($block->params->type) ? $block->params->type : ''));
 
             /* The list assigned to me jumps to the work page when click more button. */
             $block->moreLink = $this->createLink($moduleName, $method, $vars);

@@ -3,10 +3,10 @@ declare(strict_types=1);
 class blockTao extends blockModel
 {
     /**
-     * Get block list of current user.
      * 获取当前用户的区块列表.
+     * Get block list of current user.
      *
-     * @param  string $module
+     * @param  string $dashboard
      * @param  int    $hidden 0|1
      * @access protected
      * @return int[]|false

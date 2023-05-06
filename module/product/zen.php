@@ -201,28 +201,29 @@ class productZen extends product
      */
     private function getFormFields4Create(int $programID = 0, array $fields = array()): array
     {
-        if(empty($fields)) $fields = $this->config->product->form->create;
+        if(empty($fields)) $fields = $this->appendFlowFields($this->config->product->form->create);
 
+        /* 准备数据。*/
         $this->loadModel('user');
         $poUsers = $this->user->getPairs('nodeleted|pofirst|noclosed');
         $qdUsers = $this->user->getPairs('nodeleted|qdfirst|noclosed');
         $rdUsers = $this->user->getPairs('nodeleted|devfirst|noclosed');
         $users   = $this->user->getPairs('nodeleted|noclosed');
 
+        /* 追加字段的name、title属性，展开user数据。 */
         foreach($fields as $field => $attr)
         {
             if(isset($attr['options']) and $attr['options'] == 'users') $fields[$field]['options'] = $users;
-            $fields[$field]['name']  = $field;
-            $fields[$field]['title'] = zget($this->lang->product, $field);
+            if(!isset($fields[$field]['name']))  $fields[$field]['name']  = $field;
+            if(!isset($fields[$field]['title'])) $fields[$field]['title'] = zget($this->lang->product, $field);
         }
 
-        $fields['program']['options'] = array('') + $this->loadModel('program')->getTopPairs('', 'noclosed');
-        $fields['PO']['options']      = $poUsers;
-        $fields['QD']['options']      = $qdUsers;
-        $fields['RD']['options']      = $rdUsers;
-
-        if($programID) $fields['line']['options'] = array('') + $this->product->getLinePairs($programID);
-        if(empty($programID) or $this->config->systemMode != 'ALM') unset($fields['line'], $fields['lineName']);
+        /* 设置下拉菜单内容。 */
+        $fields['PO']['options'] = $poUsers;
+        $fields['QD']['options'] = $qdUsers;
+        $fields['RD']['options'] = $rdUsers;
+        if(isset($fields['program'])) $fields['program']['options'] = array('') + $this->loadModel('program')->getTopPairs('', 'noclosed');
+        if($programID and isset($fields['line'])) $fields['line']['options'] = array('') + $this->product->getLinePairs($programID);
 
         return $fields;
     }
@@ -239,12 +240,13 @@ class productZen extends product
     {
         /* Init fields. */
         $programID = (int)$product->program;
-        $fields    = $this->getFormFields4Create($programID, $this->config->product->form->edit);
+        $fields    = $this->getFormFields4Create($programID, $this->appendFlowFields($this->config->product->form->edit));
+        $fields['changeProjects'] = array('type' => 'string', 'control' => 'hidden', 'required' => false, 'default' => '');
 
         /* Check program priv, and append to program list that is not exist product's program. */
         $hasPrivPrograms = $this->app->user->view->programs;
         if($programID and strpos(",{$hasPrivPrograms},", ",{$programID},") === false) $fields['program']['control'] = 'hidden';
-        if(!isset($fields['program']['options'][$programID]) and $programID)
+        if(isset($fields['program']) and !isset($fields['program']['options'][$programID]) and $programID)
         {
             $program = $this->program->getByID($programID);
             $fields['program']['options'] += array($programID => $program->name);
@@ -255,7 +257,28 @@ class productZen extends product
         {
             if(isset($product->{$field})) $fields[$field]['default'] = $product->{$field};
         }
-        $fields['changeProjects'] = array('type' => 'string', 'control' => 'hidden', 'required' => false, 'default' => '');
+
+        return $fields;
+    }
+
+    /**
+     * 获取批量编辑产品页面的表单配置。
+     * Get form fields config for batch edit page.
+     *
+     * @access private
+     * @return array
+     */
+    private function getFormFields4BatchEdit(): array
+    {
+        /* Init fields. */
+        $fields = $this->getFormFields4Create(0, $this->appendFlowFields($this->config->product->form->batchEdit, 'batch'));
+
+        /* Remove not show fields. */
+        $showFields = explode(',', $this->config->product->custom->batchEditFields);
+        foreach($fields as $field => $attr)
+        {
+            if(!in_array($field, $showFields) and !$attr['required']) unset($fields[$field]);
+        }
 
         return $fields;
     }
@@ -263,23 +286,45 @@ class productZen extends product
     /**
      * Get product lines and product lines of program.
      *
+     * @param  array  $programIdList
+     * @param  string $params         hasempty
      * @access protected
      * @return array
      */
-    protected function getProductLines(): array
+    protected function getProductLines(array $programIdList = array(), string $params = ''): array
     {
         /* Get all product lines. */
-        $productLines = $this->product->getProductLinesTODO();
+        $productLines = $this->product->getLines($programIdList);
 
         /* Collect product lines of program lines. */
-        $programLines = array();
-        foreach($productLines as $productLine)
-        {
-            if(!isset($programLines[$productLine->root])) $programLines[$productLine->root] = array();
-            $programLines[$productLine->root][$productLine->id] = $productLine->name;
-        }
+        $initArray = strpos($params, 'hasempty') !== false ? array('') : array();
+        $linePairs = $initArray;
+        foreach($programIdList as $programID) $linePairs[$programID] = $initArray;
+        foreach($productLines as $line) $linePairs[$programID][$line->id] = $line->name;
 
-        return array($productLines, $programLines);
+        return array($productLines, $linePairs);
+    }
+
+    /**
+     * 根据产品和已授权项目集，获取关联产品的未授权项目集。
+     * Get unauthorized programs by products and authorized programs.
+     *
+     * @param  array $products
+     * @param  array $authPrograms
+     * @access private
+     * @return array
+     */
+    private function getUnauthProductPrograms(array $products, array $authPrograms): array
+    {
+        $unauthPrograms = array();
+        $programIdList  = array();
+        foreach($products as $product)
+        {
+            if($product->program and !isset($authPrograms[$product->program])) $programIdList[$product->program] = $product->program;
+        }
+        if($programIdList) $unauthPrograms = $this->program->getPairsByList($programIdList);
+
+        return $unauthPrograms;
     }
 
     /**
@@ -379,6 +424,45 @@ class productZen extends product
     }
 
     /**
+     * 构建批量编辑产品页面数据。
+     * Build form for batch edit page
+     *
+     * @param  int   $programID
+     * @param  array $productIdList
+     * @access protected
+     * @return void
+     */
+    protected function buildBatchEditForm(int $programID, array $productIdList)
+    {
+        $products = $this->product->getByIdList($productIdList);
+
+        /* 获取项目集和产品线，并将项目集分成授权和非授权。以便view的下拉菜单使用对应的数据。 */
+        $authPrograms   = array();
+        $unauthPrograms = array();
+        $lines          = array();
+        if($this->config->systemMode == 'ALM')
+        {
+            $authPrograms   = $this->loadModel('program')->getTopPairs();
+            $unauthPrograms = $this->getUnauthProductPrograms($products, $authPrograms);
+
+            /* Get product lines by programs.*/
+            $programIdList = array_merge(array_keys($authPrograms), array_keys($unauthPrograms));
+            list(, $lines) = $this->getProductLines($programIdList);
+        }
+
+        /* 给view层赋值。 */
+        $this->view->title          = $this->lang->product->batchEdit;
+        $this->view->lines          = $lines;
+        $this->view->products       = $products;
+        $this->view->programID      = $programID;
+        $this->view->authPrograms   = array('' => '') + $authPrograms;
+        $this->view->unauthPrograms = $unauthPrograms;
+
+        unset($this->lang->product->typeList['']);
+        $this->display();
+    }
+
+    /**
      * 为view层设置要用数据。
      * Set view variables and display for project page.
      *
@@ -448,11 +532,54 @@ class productZen extends product
      */
     protected function prepareEditExtras(form $data, string $acl, string $uid = ''): object
     {
-        $product = fixer::input('post')->setIF($acl == 'open', 'whitelist', '')
+        $product = $data->setIF($acl == 'open', 'whitelist', '')
             ->stripTags($this->config->product->editor->edit['id'], $this->config->allowedTags)
             ->get();
 
         return $this->loadModel('file')->processImgURL($product, $this->config->product->editor->edit['id'], $uid);
+    }
+
+    /**
+     * 预处理批量编辑产品数据，将按字段为分组数据重组为产品分组的数据。
+     * Prepare batch edit extras.
+     *
+     * @param  form $data
+     * @access protected
+     * @return array
+     */
+    protected function prepareBatchEditExtras(form $data): array
+    {
+        $formConfig = $data->rawconfig;
+        $editForm   = $this->config->product->form->edit;
+        $data       = $data->get();
+        $products   = array();
+
+        /* 将按字段为分组数据重组为产品分组的数据。*/
+        foreach($data->name as $productID => $productName)
+        {
+            $productID = (int)$productID;
+
+            /* 根据表单配置构造产品数据。*/
+            $product     = new stdClass();
+            $product->id = $productID;
+            foreach($formConfig as $field => $attr)
+            {
+                /* 获取对应的字段数据。*/
+                $product->{$field} = zget($data->{$field}, $productID, $attr['default']);
+
+                /* 根据配置规则，格式化字段数据。 */
+                if(isset($editForm[$field]) and $editForm[$field]['type'] == 'int') $product->{$field} = (int)$product->{$field};
+                if(!empty($attr['filter']) and $attr['filter'] == 'trim') $product->{$field} = trim($product->{$field});
+                if(is_array($product->$field)) $product->{$field} = implode(',', $product->{$field});
+
+                /* 检查必填项。 */
+                if(!empty($attr['required']) and validater::checkEmpty($product->{$field})) dao::$errors[] = 'product #' . $productID . sprintf($this->lang->error->notempty, zget($attr, 'title', zget($this->lang->product, $field)));
+            }
+
+            $products[$productID] = $product;
+        }
+
+        return $products;
     }
 
     /**
@@ -595,5 +722,38 @@ class productZen extends product
         }
 
         return $data;
+    }
+
+    /**
+     * 追加工作流配置字段。
+     * Append flow fields.
+     *
+     * @param  array  $fields
+     * @param  string $type     single|batch
+     * @access protected
+     * @return array
+     */
+    protected function appendFlowFields(array $fields, string $type = 'single'): array
+    {
+        $extendFields = $this->product->getFlowExtendFields();
+        if(empty($extendFields)) return $fields;
+
+        /* 构造表单属性，并追加到表单配置中。 */
+        foreach($extendFields as $extendField)
+        {
+            $control = $extendField->control;
+            if($control == 'richtext') $control = 'editor';
+            if($control == 'input')    $control = 'text';
+
+            $field = $extendField;
+            $fields[$field] = array();
+            $fields[$field]['type']    = $type == 'single' ? 'string' : 'array';
+            $fields[$field]['control'] = $control;
+            $fields[$field]['title']   = $extendField->name;
+            $fields[$field]['default'] = $extendField->default;
+            $fields[$field]['options'] = $extendField->options;
+        }
+
+        return $fields;
     }
 }
