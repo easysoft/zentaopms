@@ -13,13 +13,12 @@ class todoTest
      * Test create a todo.
      *
      * @param  object $todoData
-     * @param  object $formData
      * @access public
      * @return int
      */
-    public function createTest($todoData, $formData)
+    public function createTest($todoData)
     {
-        $objectID = $this->objectModel->create($todoData, $formData);
+        $objectID = $this->objectModel->create($todoData);
 
         return $objectID ?: 0;
     }
