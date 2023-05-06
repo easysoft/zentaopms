@@ -569,7 +569,7 @@ class projectZen extends project
     {
         if($this->post->comment != '' or !empty($changes))
         {
-            $actionID = $this->action->create('project', $projectID, 'Activated', $this->post->comment);
+            $actionID = $this->loadModel('action')->create('project', $projectID, 'Activated', $this->post->comment);
             $this->action->logHistory($actionID, $changes);
         }
 
@@ -587,6 +587,7 @@ class projectZen extends project
      */
     protected function prepareActivateExtras(int $projectID, object $postData): object
     {
+        $rawdata      = $postData->rawdata;
         $oldProject   = $this->project->getByID($projectID);
         $editorIdList = $this->config->project->editor->activate['id'];
 
@@ -595,6 +596,8 @@ class projectZen extends project
             ->setDefault('status', 'doing')
             ->setDefault('lastEditedBy', $this->app->user->account)
             ->setDefault('lastEditedDate', helper::now())
+            ->setIF($rawdata->begin == '0000-00-00', 'begin', '')
+            ->setIF($rawdata->end   == '0000-00-00', 'end', '')
             ->setIF(!helper::isZeroDate($oldProject->realBegan), 'realBegan', helper::today())
             ->stripTags($editorIdList, $this->config->allowedTags)
             ->get();

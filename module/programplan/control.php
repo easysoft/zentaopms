@@ -148,7 +148,8 @@ class programplan extends control
         $this->app->loadLang('project');
         if($_POST)
         {
-            $this->programplan->create($projectID, $this->productID, $planID);
+            $formData = form::data($this->config->programplan->create->form);
+            $this->programplan->create($formData, $projectID, $this->productID, $planID);
             if(dao::isError())
             {
                 $errors = dao::getError();

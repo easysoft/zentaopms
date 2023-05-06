@@ -16,16 +16,12 @@ class todoModel extends model
      * Create todo data.
      *
      * @param  object $todo
-     * @param  object $formData
      * @access public
      * @return int|false
      */
-    public function create(object $todo, object $formData): int|false
+    public function create(object $todo): int|false
     {
-        $processedTodo = $this->todoTao->processCreateData($todo, $formData);
-        if(!$processedTodo) return false;
-
-        $todoID = $this->todoTao->insert($processedTodo);
+        $todoID = $this->todoTao->insert($todo);
         if(dao::isError()) return false;
 
         return $todoID;
@@ -547,7 +543,7 @@ class todoModel extends model
 
     /**
      * 获取所有有效的周期待办列表。
-     * Get valid cycle todo listi.
+     * Get valid cycle todo list.
      *
      * @access public
      * @return array
@@ -555,5 +551,19 @@ class todoModel extends model
     public function getValidCycleList(): array
     {
         return $this->dao->select('*')->from(TABLE_TODO)->where('cycle')->eq(1)->andWhere('deleted')->eq(0)->fetchAll('id');
+    }
+
+    /**
+     * 根据待办类型获取优先级。
+     * Get pri by todo type.
+     *
+     * @param  string $todoType
+     * @param  int    $todoObjectID
+     * @access public
+     * @return int
+     */
+    public function getPriByTodoType(string $todoType, int $todoObjectID): int
+    {
+        return $this->dao->select('pri')->from($this->config->objectTables[$todoType])->where('id')->eq($todoObjectID)->fetch('pri');
     }
 }
