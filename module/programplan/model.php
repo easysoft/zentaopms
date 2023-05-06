@@ -713,6 +713,7 @@ class programplanModel extends model
         $orders         = $formData['orders'];
         $type           = $formData['type'];
         $codes          = $formData['codes'];
+        $output         = $formData['output'];
 
         /* Determine if a task has been created under the parent phase. */
         if(!$this->isCreateTask($parentID)) return dao::$errors['message'][] = $this->lang->programplan->error->createdTask;
@@ -856,7 +857,7 @@ class programplanModel extends model
 
         if(!isset($orders)) $orders = array();
         asort($orders);
-        if(count($orders) < count($datas))
+        if(count($orders) < count($plans))
         {
             $orderIndex = empty($orders) ? 0 : count($orders);
             $lastID     = $this->dao->select('id')->from(TABLE_EXECUTION)->orderBy('id_desc')->fetch('id');
