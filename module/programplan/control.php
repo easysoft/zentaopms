@@ -25,7 +25,7 @@ class programplan extends control
     public function commonAction($projectID, $productID = 0, $extra = '')
     {
         $products  = $this->loadModel('product')->getProductPairsByProject($projectID);
-        $productID = $this->product->saveState($productID, $products);
+        $productID = $this->product->saveVisitState($productID, $products);
         $project   = $this->loadModel('project')->getByID($projectID);
 
         $this->session->set('hasProduct', $project->hasProduct);
@@ -131,7 +131,7 @@ class programplan extends control
      * @access public
      * @return void
      */
-    public function create(string $projectID = 0, string $productID = 0, string $planID = 0,string $executionType = 'stage'): void
+    public function create(string $projectID = '0', string $productID = '0', string $planID = '0', string $executionType = 'stage'): void
     {
         $projectID = (int) $projectID;
         $productID = (int) $productID;
@@ -146,12 +146,12 @@ class programplan extends control
             if(dao::isError())
             {
                 $errors = dao::getError();
-                if(isset($errors['message']))  return $this->send(array('result' => 'fail', 'message' => $errors));
-                if(!isset($errors['message'])) return $this->send(array('result' => 'fail', 'callback' => array('name' => 'addRowErrors', 'params' => array($errors))));
+                if(isset($errors['message']))  $this->send(array('result' => 'fail', 'message' => $errors));
+                if(!isset($errors['message'])) $this->send(array('result' => 'fail', 'callback' => array('name' => 'addRowErrors', 'params' => array($errors))));
             }
 
             $locate = $this->createLink('project', 'execution', "status=all&projectID=$projectID&orderBy=order_asc&productID=$productID");
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $locate));
+            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $locate));
         }
 
         $project     = $this->project->getById($projectID);

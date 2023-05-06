@@ -2234,12 +2234,12 @@ class productModel extends model
      * 把访问的产品ID等状态信息保存到session和cookie中。
      * Save the product id user last visited to session and cookie.
      *
-     * @param  int       $productID
-     * @param  array     $products
-     * @access protected
+     * @param  int    $productID
+     * @param  array  $products
+     * @access public
      * @return int
      */
-    protected function saveVisitState(int $productID, array $products): int
+    public function saveVisitState(int $productID, array $products): int
     {
         if(defined('TUTORIAL')) return $productID;
 
