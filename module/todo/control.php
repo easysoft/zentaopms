@@ -84,13 +84,13 @@ class todo extends control
      */
     public function batchCreate(string $date = 'today')
     {
-        if($date == 'today') $date = date(DT_DATE1, time());
+        if($date == 'today') $date = helper::today();
 
         if(!empty($_POST))
         {
             $formData   = form::data($this->config->todo->batchCreate->form);
             $todosData  = $this->todoZen->beforeBatchCreate($formData);
-            $todoIDList = $this->todo->batchCreate($todosData, $formData);
+            $todoIDList = $this->todo->batchCreate($todosData);
             if(dao::isError()) return print(js::error(dao::getError()));
 
             /* Locate the browser. */

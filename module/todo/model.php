@@ -32,11 +32,10 @@ class todoModel extends model
      * Batch create toto.
      *
      * @param  object $todos
-     * @param  object $formData
      * @access public
      * @return array|false
      */
-    public function batchCreate(object $todos, object $formData): array|false
+    public function batchCreate(object $todos): array|false
     {
         $validTodos = array();
         $assignedTo = $this->app->user->account;
@@ -56,7 +55,7 @@ class todoModel extends model
 
             if($todos->names[$loop] != '' || $isExist)
             {
-                $todo = $this->todoTao->getValidsOfBatchCreate($todos, $formData, $loop, $assignedTo);
+                $todo = $this->todoTao->getValidsOfBatchCreate($todos, $loop, $assignedTo);
                 if(dao::isError()) return false;
 
                 $validTodos[] = $todo;
