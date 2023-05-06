@@ -14,19 +14,6 @@
 class programplanModel extends model
 {
     /**
-     * Set menu.
-     *
-     * @param  int  $projectID
-     * @param  int  $productID
-     * @access public
-     * @return bool
-     */
-    public function setMenu($projectID, $productID)
-    {
-        return true;
-    }
-
-    /**
      * Get plan by id.
      *
      * @param  int    $planID
@@ -683,42 +670,59 @@ class programplanModel extends model
     }
 
     /**
-     * Create a plan.
+     * 创建/设置一个项目阶段。
+     * Create/Set a project plan/phase.
      *
-     * @param  int  $projectID
-     * @param  int  $productID
-     * @param  int  $parentID
+     * @param  array  $formData
+     * @param  int    $projectID
+     * @param  int    $productID
+     * @param  int    $parentID
      * @access public
      * @return bool
      */
-    public function create($projectID = 0, $productID = 0, $parentID = 0)
+    public function create(array $formData, int $projectID = 0, int $productID = 0, int $parentID = 0): bool
     {
-        $data = (array)fixer::input('post')->get();
-        extract($data);
+        /* Get every value from formData without use extract(). */
+        $planIDList     = $formData['planIDList'];
+        $names          = $formData['names'];
+        $PM             = $formData['PM'];
+        $percents       = $formData['percents'];
+        $attributes     = $formData['attributes'];
+        $acl            = $formData['acl'];
+        $milestone      = $formData['milestone'];
+        $begin          = $formData['begin'];
+        $end            = $formData['end'];
+        $realBegan      = $formData['realBegan'];
+        $realEnd        = $formData['realEnd'];
+        $desc           = $formData['desc'];
+        $orders         = $formData['orders'];
+        $type           = $formData['type'];
+        $codes          = $formData['codes'];
 
         /* Determine if a task has been created under the parent phase. */
         if(!$this->isCreateTask($parentID)) return dao::$errors['message'][] = $this->lang->programplan->error->createdTask;
 
         /* The child phase type setting is the same as the parent phase. */
         $parentAttribute = '';
-        $parentPercent   = 0;
         if($parentID)
         {
             $parentStage     = $this->getByID($parentID);
             $parentAttribute = $parentStage->attribute;
-            $parentPercent   = $parentStage->percent;
             $parentACL       = $parentStage->acl;
         }
 
+        /* Remove empty items and get same items in array. */
         $names     = array_filter($names);
         $sameNames = array_diff_assoc($names, array_unique($names));
 
-        $project   = $this->loadModel('project')->getByID($projectID);
+        /* Check weather need to set code and compute same code. */
         $setCode   = (isset($this->config->setCode) and $this->config->setCode == 1) ? true : false;
         $sameCodes = $setCode ? $this->checkCodeUnique($codes, isset($planIDList) ? $planIDList : '') : false;
 
+        /* Prepare the plans user inputted. Process the plan which names not empty only. */
+        $project    = $this->loadModel('project')->getByID($projectID);
         $setPercent = (isset($this->config->setPercent) and $this->config->setPercent == 1) ? true : false;
-        $datas = array();
+        $plans      = array();
         foreach($names as $key => $name)
         {
             if(empty($name)) continue;
@@ -729,8 +733,6 @@ class programplanModel extends model
             $plan->project    = $projectID;
             $plan->parent     = $parentID ? $parentID : $projectID;
             $plan->name       = $names[$key];
-            if($setCode)    $plan->code    = $codes[$key];
-            if($setPercent) $plan->percent = $percents[$key];
             $plan->attribute  = (empty($parentID) or $parentAttribute == 'mix') ? $attributes[$key] : $parentAttribute;
             $plan->milestone  = $milestone[$key];
             $plan->output     = empty($output[$key]) ? '' : implode(',', $output[$key]);
@@ -738,25 +740,26 @@ class programplanModel extends model
             $plan->PM         = empty($PM[$key]) ? '' : $PM[$key];
             $plan->desc       = empty($desc[$key]) ? '' : $desc[$key];
             $plan->hasProduct = $project->hasProduct;
+            if($setCode)    $plan->code    = $codes[$key];
+            if($setPercent) $plan->percent = $percents[$key];
 
             if(!empty($begin[$key]))     $plan->begin     = $begin[$key];
             if(!empty($end[$key]))       $plan->end       = $end[$key];
             if(!empty($realBegan[$key])) $plan->realBegan = $realBegan[$key];
             if(!empty($realEnd[$key]))   $plan->realEnd   = $realEnd[$key];
 
-            $datas[] = $plan;
+            $plans[] = $plan;
         }
 
-        if(empty($datas))
+        if(empty($plans))
         {
             dao::$errors['message'][] = sprintf($this->lang->error->notempty, $this->lang->programplan->name);
             return false;
         }
 
         $totalPercent = 0;
-        $totalDevType = 0;
         $milestone    = 0;
-        foreach($datas as $index => $plan)
+        foreach($plans as $index => $plan)
         {
             if(!empty($sameNames) and in_array($plan->name, $sameNames)) dao::$errors[$index]['name'] = empty($type) ? $this->lang->programplan->error->sameName : str_replace($this->lang->execution->stage, '', $this->lang->programplan->error->sameName);
             if($setCode and $sameCodes !== true and !empty($sameCodes) and in_array($plan->code, $sameCodes)) dao::$errors[$index]['code'] = sprintf($this->lang->error->repeat, $plan->type == 'stage' ? $this->lang->execution->code : $this->lang->code, $plan->code);
