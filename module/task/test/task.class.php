@@ -1606,6 +1606,7 @@ class taskTest
         }
     }
 
+
     /**
      * Test remove required fields for creating tasks based on conditions.
      *
@@ -1627,5 +1628,72 @@ class taskTest
         {
             return $tester->config->task->create->requiredFields;
         }
+    }
+
+    /**
+     * Test create a task.
+     *
+     * @param  array  $param
+     * @param  int    $executionID
+     * @access public
+     * @return object
+     */
+    public function doCreateObject($param = array())
+    {
+        $assignedTo   = array('');
+        $createFields = array('module' => 0, 'story' => 0, 'name' => '', 'type' => '', 'assignedTo' => 'admin',
+            'pri' => 3, 'estimate' => '', 'estStarted' => '2021-01-10', 'deadline' => '2021-03-19', 'desc' => '', 'version' => '1');
+
+        $task = new stdclass();
+        foreach($createFields as $field => $defaultValue) $task->$field = $defaultValue;
+
+        foreach($param as $key => $value) $task->$key = $value;
+
+        $objectID = $this->objectModel->doCreate($task);
+
+        unset($_POST);
+
+        if(dao::isError())
+        {
+            return dao::getError();
+        }
+        else
+        {
+            $object = $this->objectModel->getByID($objectID);
+            return $object;
+        }
+    }
+
+    /**
+     * Set attachments for tasks.
+     *
+     * @param  array  $taskFiles
+     * @param  int    $taskID
+     * @access public
+     * @return array
+     */
+    public function setTaskFilesTest(array $taskIdList, int $taskID)
+    {
+        global $tester;
+
+        $taskFiles = array();
+        if($taskIdList)
+        {
+            $taskFiles = $tester->dao->select('*')->from(TABLE_FILE)->where('objectID')->in($taskIdList)->andWhere('objectType')->eq('task')->fetchAll('id');
+            foreach($taskFiles as $fileID => $taskFile) unset($taskFiles[$fileID]->id);
+        }
+        if(empty($taskFiles) and $taskID)
+        {
+            $files = $tester->dao->select('*')->from(TABLE_FILE)->where('objectID')->eq($taskID)->andWhere('objectType')->eq('task')->fetchAll('id');
+            foreach($files as $file)
+            {
+                $_FILES['files']['name'][]     = $file->title;
+                $_FILES['files']['size'][]     = $file->size;
+                $_FILES['files']['tmp_name'][] = $file->extension;
+            }
+            $_FILES['files']['error'] = 0;
+        }
+
+        return $this->objectModel->setTaskFiles($taskFiles, $taskID);
     }
 }
