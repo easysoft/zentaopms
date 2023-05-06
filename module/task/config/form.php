@@ -2,6 +2,26 @@
 $config->task->form = new stdclass();
 
 global $app;
+$config->task->form->create = array();
+$config->task->form->create['execution']    = array('type' => 'int', 'required' => true);
+$config->task->form->create['type']         = array('type' => 'string', 'required' => true, 'default' => '');
+$config->task->form->create['module']       = array('type' => 'int', 'required' => false);
+$config->task->form->create['story']        = array('type' => 'int', 'required' => false);
+$config->task->form->create['mode']         = array('type' => 'string', 'required' => false, 'default' => '');
+$config->task->form->create['color']        = array('type' => 'string', 'required' => false, 'default' => '');
+$config->task->form->create['name']         = array('type' => 'string', 'required' => true, 'default' => '');
+$config->task->form->create['pri']          = array('type' => 'int', 'required' => false, 'default' => 3);
+$config->task->form->create['estimate']     = array('type' => 'float', 'required' => false, 'default' => 0);
+$config->task->form->create['desc']         = array('type' => 'string', 'required' => false);
+$config->task->form->create['estStarted']   = array('type' => 'string', 'required' => false, 'default' => '');
+$config->task->form->create['deadline']     = array('type' => 'string', 'required' => false, 'default' => '');
+$config->task->form->create['vision']       = array('type' => 'string', 'required' => false, 'default' => $config->vision);
+$config->task->form->create['status']       = array('type' => 'string', 'required' => false, 'default' => 'wait');
+$config->task->form->create['openedBy']     = array('type' => 'string', 'required' => false, 'default' => $app->user->account);
+$config->task->form->create['openedDate']   = array('type' => 'string', 'required' => false, 'default' => helper::now());
+$config->task->form->create['mailto']       = array('type' => 'array', 'required' => false, 'default' => array());
+$config->task->form->create['version']      = array('type' => 'int', 'required' => false, 'default' => 1);
+
 $config->task->form->assign = array();
 $config->task->form->assign['assignedTo']     = array('type' => 'string', 'required' => false, 'default' => '');
 $config->task->form->assign['left']           = array('type' => 'float', 'required' => true);
