@@ -381,22 +381,6 @@ class todoTest
     }
 
     /**
-     * 获取导出的待办数据。
-     * Get data for export todo.
-     *
-     * @param  string $orderBy
-     * @param  object $formData
-     * @param  string $queryCondition
-     * @param  string $checkedItem
-     * @access public
-     * @return array
-     */
-    public function getByExportListTest(string $orderBy, object $formData, string $queryCondition , string $checkedItem): array
-    {
-        return $this->objectModel->getByExportList($orderBy, $formData, $queryCondition, $checkedItem);
-    }
-
-    /**
      * 根据待办类型，对象ID获取优先级。
      * Get pri by todo type and object id.
      *
