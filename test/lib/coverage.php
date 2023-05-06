@@ -62,12 +62,15 @@ class coverage
     /**
      * Load saved traces from file.
      *
+     * @param  string  $key
      * @access public
-     * @return array
+     * @return array|string
      */
-    private function loadTraceFromFile(): array
+    private function loadTraceFromFile(string $key = ''): array|string
     {
-        return json_decode(file_get_contents($this->traceFile), true);
+        $report = json_decode(file_get_contents($this->traceFile), true);
+        if($key == '') return $report;
+        return isset($report[$key]) ? $report[$key] : array();
     }
 
     /**
@@ -75,7 +78,6 @@ class coverage
      *
      * @access public
      * @return string
-     */
     public function getTraceFile(): string
     {
         return $this->traceFile;
@@ -90,7 +92,7 @@ class coverage
      */
     private function mergeTraces(array $traces): array
     {
-        $savedTraces = $this->loadTraceFromFile();
+        $savedTraces = $this->loadTraceFromFile('traces');
 
         if(!is_array($savedTraces)) return $traces;
 
@@ -132,7 +134,12 @@ class coverage
         $traces = $this->groupTraceByModule($traces);
         $traces = $this->mergeTraces($traces);
 
-        return file_put_contents($this->traceFile, json_encode($traces));
+        $log = new stdclass;
+        $log->time    = date('Y-m-d H:i:s');
+        $log->ztfPath = getenv('ZTF_REPORT_DIR');
+        $log->traces  = $traces;
+
+        return file_put_contents($this->traceFile, json_encode($log));
     }
 
     /**
@@ -332,72 +339,10 @@ EOT;
     public function genSummaryReport(string $module='', string $file=''): string
     {
         /* Get trace from file. */
-        $traces = $this->loadTraceFromFile();
+        $traces = $this->loadTraceFromFile('traces');
 
         /* Generate report. */
-        $reportHtml  = '<html>';
-        $reportHtml .= '<head><meta charset="UTF-8"><title>单元测试行覆盖率报告</title></head>';
-        $reportHtml .= <<<STYLE
-<style>
-  body {
-    font-family: Arial, sans-serif;
-    font-size: 16px;
-    line-height: 1.5;
-    margin: 0;
-    padding: 0;
-  }
-
-  table {
-    border-collapse: collapse;
-    max-width: 100%;
-    width: 100%;
-    margin: 20px 0;
-  }
-
-  th {
-    border: 1px solid #ccc;
-    padding: 8px;
-    text-align: center;
-    background-color: #eee;
-    white-space: nowrap;
-  }
-
-  caption {
-    font-weight: bold;
-    margin: 10px 0;
-    font-size: 18px;
-  }
-
-  h2 {
-    margin-top: 20px;
-    font-size: 24px;
-  }
-
-  .red {
-    color: red;
-  }
-
-  .green {
-    color: green;
-  }
-
-  /* table hover effect */
-  tbody tr:hover {
-    background-color: #f5f5f5;
-  }
-
-  /* table striped rows */
-  tbody tr:nth-child(even) {
-    background-color: #f9f9f9;
-  }
-
-  h1 {
-    text-align: center;
-  }
-STYLE;
-        $reportHtml .= empty($file) ? 'td { border: 1px solid #ccc;  padding: 8px;  text-align: center;}' . PHP_EOL: 'td { border: 1px solid #ccc;  padding: 8px;}' . PHP_EOL;
-        $reportHtml .= '</style>';
-        $reportHtml .= '<body><h1>单元测试行覆盖率报告</h1>';
+        $reportHtml = empty($file) ? '<style>td { border: 1px solid #ccc;  padding: 8px;  text-align: center;}</style>' . PHP_EOL: '<style>td { border: 1px solid #ccc;  padding: 8px;}</style>' . PHP_EOL;
         if(empty($file))
         {
             $reportHtml .= $this->genModuleStatsReport($traces);
@@ -410,6 +355,58 @@ STYLE;
         $reportHtml .= '</body></html>';
 
         return $reportHtml;
+    }
+
+    /**
+     * Get ztf report.
+     *
+     * @access public
+     * @return object
+     */
+    public function getZtfReport(): object|false
+    {
+        $reportFile = $this->getZtfReportFile();
+        if(!$reportFile) return false;
+
+        $content = file_get_contents($reportFile);
+        $report  = json_decode($content);
+        if(!is_object($report) || !isset($report->funcResult)) return false;
+
+        $report->funcResult     = '';
+        $report->log            = '';
+
+        $report->time        = date('Y-m-d H:i:s', $report->endTime);
+        $report->passPercent = round($report->pass / $report->total * 100, 2);
+        $report->failPercent = round($report->fail / $report->total * 100, 2);
+        $report->skipPercent = round($report->skip / $report->total * 100, 2);
+        return $report;
+    }
+
+    /**
+     * Get ztf report.
+     *
+     * @access public
+     * @return string|false
+     */
+    public function getZtfReportFile(): string|false
+    {
+        $latestTime = 0;
+        $latestFile = '';
+        $reportPath = $this->loadTraceFromFile('ztfPath');
+
+        exec("find $reportPath -type f -name result.json", $files, $returnCode);
+        if($returnCode !== 0 || empty($files)) return false;
+
+        foreach($files as $file)
+        {
+            if(is_file($file) && filemtime($file) > $latestTime)
+            {
+                $latestFile = $file;
+                $latestTime = filemtime($file);
+            }
+        }
+
+        return $latestFile;
     }
 
     /**
