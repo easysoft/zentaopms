@@ -5828,7 +5828,7 @@ class executionModel extends model
         $project = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($projectID)->fetch();
         if(empty($project)) return 0;
 
-        $post    = $_POST;
+        $post  = $_POST;
 
         $_POST = array();
 
@@ -5851,7 +5851,7 @@ class executionModel extends model
         $extendFields = $this->loadModel('project')->getFlowExtendFields();
         foreach($extendFields as $field)
         {
-            $_POST[$field->field] = $product->field;
+            $_POST[$field->field] = $project->field;
         }
 
         if(isset($this->config->setCode) and $this->config->setCode == 1) $_POST['code'] = $project->code;
