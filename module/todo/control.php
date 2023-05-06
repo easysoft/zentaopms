@@ -41,7 +41,11 @@ class todo extends control
         if(!empty($_POST))
         {
             $formData = form::data($this->config->todo->create->form);
-            $todo     = $this->todoZen->beforeCreate($formData);
+            $todoData = $this->todoZen->beforeCreate($formData);
+
+            $uid  = isset($formData->rawdata->uid) ? $formData->rawdata->uid : '';
+            $todo = $this->todoZen->prepareCreateData($todoData, $uid);
+            if(!$todo) return print(js::error(dao::getError()));
 
             $todoID = $this->todo->create($todo, $formData);
             if($todoID === false) return print(js::error(dao::getError()));

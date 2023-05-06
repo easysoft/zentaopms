@@ -132,6 +132,52 @@ class todoZen extends todo
     }
 
     /**
+     * 准备要创建的todo的数据。
+     * Prepare the creation data.
+     *
+     * @param  object $todo
+     * @param  string $uid
+     * @access protected
+     * @return object|false
+     */
+    protected function prepareCreateData(object $todo, string $uid = ''): object|false
+    {
+        if(!isset($todo->pri) && in_array($todo->type, $this->config->todo->moduleList) && !in_array($todo->type, array('review', 'feedback')))
+        {
+            $todo->pri = $this->todo->getPriByTodoType($this->config->objectTables[$todo->type], $todo->objectID);
+
+            if($todo->pri == 'high')   $todo->pri = 1;
+            if($todo->pri == 'middle') $todo->pri = 2;
+            if($todo->pri == 'low')    $todo->pri = 3;
+        }
+
+        if($todo->type != 'custom' && $todo->objectID)
+        {
+            $type   = $todo->type;
+            $object = $this->loadModel($type)->getByID($todo->{$type});
+            if(isset($object->name))  $todo->name = $object->name;
+            if(isset($object->title)) $todo->name = $object->title;
+        }
+
+        if($todo->end < $todo->begin)
+        {
+            dao::$errors[] = sprintf($this->lang->error->gt, $this->lang->todo->end, $this->lang->todo->begin);
+            return false;
+        }
+
+        if(!empty($todo->cycle))
+        {
+            $todo = $this->setCycle($todo);
+            if(!$todo) return false;
+        }
+        if(empty($todo->cycle)) unset($todo->config);
+
+        if($uid) $this->loadModel('file')->processImgURL($todo, $this->config->todo->editor->create['id'], $uid);
+
+        return $todo;
+    }
+
+    /**
      * 创建完成待办后数据处理。
      * Create a todo after data processing.
      *
@@ -452,53 +498,54 @@ class todoZen extends todo
     }
 
     /**
-     * 设置周期待办
-     * Set cycle todo.
+     * 设置周期待办数据。
+     * Set cycle todo data.
      *
-     * @param  object $formData
+     * @param  object $todoData
      * @access private
-     * @return object
+     * @return false|object
      */
-    private function setCycle(object $formData): object
+    private function setCycle(object $todoData): false|object
     {
-        $formData->date = date('Y-m-d');
+        $todoData->date = helper::today();
+        $todoData->config['begin'] = $todoData->date;
 
-        $formData->config['begin'] = $formData->date;
-        if($formData->config['type'] == 'day')
+        if($todoData->config['type'] == 'day')
         {
-            unset($formData->config['week'], $formData->config['month']);
-            if(!$formData->config['day'])
+            unset($todoData->config['week'], $todoData->config['month']);
+            if(!$todoData->config['day'])
             {
                 dao::$errors[] = sprintf($this->lang->error->notempty, $this->lang->todo->cycleDaysLabel);
                 return false;
             }
-            if(!validater::checkInt($formData->config['day']))
+            if(!validater::checkInt($todoData->config['day']))
             {
                 dao::$errors[] = sprintf($this->lang->error->int[0], $this->lang->todo->cycleDaysLabel);
                 return false;
             }
         }
-        if($formData->config['type'] == 'week')
+        if($todoData->config['type'] == 'week')
         {
-            unset($formData->config['day'], $formData->config['month']);
-            $formData->config['week'] = join(',', $formData->config['week']);
+            unset($todoData->config['day'], $todoData->config['month']);
+            $todoData->config['week'] = implode(',', $todoData->config['week']);
         }
-        if($formData->config['type'] == 'month')
+        if($todoData->config['type'] == 'month')
         {
-            unset($formData->config['day'], $formData->config['week']);
-            $formData->config['month'] = join(',', $formData->config['month']);
+            unset($todoData->config['day'], $todoData->config['week']);
+            $todoData->config['month'] = implode(',', $todoData->config['month']);
         }
 
-        if($formData->config['beforeDays'] and !validater::checkInt($formData->config['beforeDays']))
+        if($todoData->config['beforeDays'] and !validater::checkInt($todoData->config['beforeDays']))
         {
             dao::$errors[] = sprintf($this->lang->error->int[0], $this->lang->todo->beforeDaysLabel);
             return false;
         }
-        $formData->config['beforeDays'] = (int)$formData->config['beforeDays'];
-        $formData->config = json_encode($formData->config);
-        $formData->type   = 'cycle';
+        $todoData->config['beforeDays'] = (int)$todoData->config['beforeDays'];
 
-        return $formData;
+        $todoData->config = json_encode($todoData->config);
+        $todoData->type   = 'cycle';
+
+        return $todoData;
     }
 
     /**
