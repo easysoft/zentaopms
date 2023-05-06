@@ -515,22 +515,6 @@ class projectTao extends projectModel
     }
 
     /**
-     * 查找项目执行下关联的产品
-     * Get linked products with execution under the project.
-     *
-     * @param  array $executionIDs
-     *
-     * @access protected
-     * @return array
-     */
-    protected function getExecutionProductGroup(array $executionIDs): array
-    {
-        return $this->dao->select('project,product')->from(TABLE_PROJECTPRODUCT)
-            ->where('project')->in($executionIDs)
-            ->fetchGroup('project', 'product');
-    }
-
-    /**
      * 根据状态和和我参与的查询项目列表。
      * Get project list by status and with my participation.
      *

@@ -22,6 +22,22 @@ class projectModel extends model
     }
 
     /**
+     * 查找项目执行下关联的产品
+     * Get linked products with execution under the project.
+     *
+     * @param  array $executionIDs
+     *
+     * @access protected
+     * @return array
+     */
+    public function getExecutionProductGroup(array $executionIDs): array
+    {
+        return $this->dao->select('project,product')->from(TABLE_PROJECTPRODUCT)
+            ->where('project')->in($executionIDs)
+            ->fetchGroup('project', 'product');
+    }
+
+    /**
      * Check the privilege.
      *
      * @param  int    $projectID
