@@ -147,9 +147,7 @@ class taskModel extends model
         $this->loadModel('score');
         $this->loadModel('action');
         $this->loadModel('kanban');
-        $now      = helper::now();
-        $mails    = array();
-        $preStory = 0;
+        $mails = array();
 
         /* 运营管理界面移除泳道和泳道列。 */
         if($this->config->vision == 'lite')
@@ -562,7 +560,7 @@ class taskModel extends model
         {
             $efforts    = $this->getTaskEfforts($taskID);
             $doingUsers = array();
-            foreach($efforts as $i => $effort)
+            foreach($efforts as $effort)
             {
                 if($effort->left != 0) $doingUsers[$effort->account] = $effort->account;
                 if($effort->left == 0) unset($doingUsers[$effort->account]);
@@ -816,7 +814,7 @@ class taskModel extends model
         if($this->post->team and count(array_filter($this->post->team)) > 1)
         {
             $teams = $this->manageTaskTeam($oldTask->mode, $taskID, $task->status);
-            if(!empty($teams)) $task = $this->computeHours4Multiple($oldTask, $task, array(), $autoStatus = false);
+            if(!empty($teams)) $task = $this->computeHours4Multiple($oldTask, $task, array(), false);
         }
         if(empty($teams)) $task->mode = '';
 
@@ -1059,7 +1057,7 @@ class taskModel extends model
             foreach($extendFields as $extendField)
             {
                 $task->{$extendField->field} = $this->post->{$extendField->field}[$taskID];
-                if(is_array($task->{$extendField->field})) $task->{$extendField->field} = join(',', $task->{$extendField->field});
+                if(is_array($task->{$extendField->field})) $task->{$extendField->field} = implode(',', $task->{$extendField->field});
 
                 $task->{$extendField->field} = htmlSpecialString($task->{$extendField->field});
             }
@@ -1447,7 +1445,7 @@ class taskModel extends model
             {
                 $task->status       = 'done';
                 $task->finishedBy   = $this->app->user->account;
-                $task->finishedDate = $task->finishedDate;
+                $task->finishedDate = $now;
             }
         }
 
@@ -1503,7 +1501,7 @@ class taskModel extends model
         foreach($record->dates as $id => $item) if($item > $today) dao::$errors[] = 'ID #' . $id . ' ' . $this->lang->task->error->date;
         if(dao::isError()) return false;
 
-        $task       = $this->dao->select('*')->from(TABLE_TASK)->where('id')->eq($taskID)->fetch();;
+        $task       = $this->dao->select('*')->from(TABLE_TASK)->where('id')->eq($taskID)->fetch();
         $task->team = $this->dao->select('*')->from(TABLE_TASKTEAM)->where('task')->eq($taskID)->orderBy('order')->fetchAll('id');
 
         /* Check if the current user is in the team. */
@@ -1548,8 +1546,7 @@ class taskModel extends model
 
         $this->loadModel('action');
 
-        $allChanges = array();;
-        $left       = $task->left;
+        $allChanges = array();
         $now        = helper::now();
         $oldStatus  = $task->status;
         $lastDate   = $this->dao->select('*')->from(TABLE_EFFORT)->where('objectID')->eq($taskID)->andWhere('objectType')->eq('task')->orderBy('date_desc,id_desc')->limit(1)->fetch('date');
@@ -1580,7 +1577,7 @@ class taskModel extends model
                 $currentTeam = $this->getTeamByAccount($task->team, $this->app->user->account, $extra);
             }
 
-            if($newTask->left == 0 and ((empty($currentTeam) and strpos('done,cancel,closed', $task->status) === false) or (!empty($currentTeam) and $currentTeam->status != 'done')))
+            if(!$newTask->left and ((empty($currentTeam) and in_array($task->status, array('done', 'cancel', 'closed'))) or (!empty($currentTeam) and $currentTeam->status != 'done')))
             {
                 $newTask->status         = 'done';
                 $newTask->assignedTo     = $task->openedBy;
@@ -1686,7 +1683,6 @@ class taskModel extends model
 
         $oldTask = $this->getById($taskID);
         $now     = helper::now();
-        $today   = helper::today();
 
         if($extra != 'DEVOPS' and strpos($this->config->task->finish->requiredFields, 'comment') !== false and !$this->post->comment)
         {

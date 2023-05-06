@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 /**
  * The control file of programplan currentModule of ZenTaoPMS.
  *
@@ -11,19 +13,6 @@
  */
 class programplan extends control
 {
-    /**
-     * __construct
-     *
-     * @param  string $moduleName
-     * @param  string $methodName
-     * @access public
-     * @return void
-     */
-    public function __construct($moduleName = '', $methodName = '')
-    {
-        parent::__construct($moduleName, $methodName);
-    }
-
     /**
      * Common action.
      *
@@ -40,7 +29,6 @@ class programplan extends control
         $project   = $this->loadModel('project')->getByID($projectID);
 
         $this->session->set('hasProduct', $project->hasProduct);
-        $this->productID = $productID;
         $this->project->setMenu($projectID);
     }
 
@@ -133,19 +121,24 @@ class programplan extends control
     }
 
     /**
-     * Create a project plan.
+     * 创建一个项目阶段。
+     * Create a project plan/phase.
      *
-     * @param  int    $projectID
-     * @param  int    $productID
-     * @param  int    $planID
-     * @param  string $executionType
+     * @param  string  $projectID
+     * @param  string  $productID
+     * @param  string  $planID
+     * @param  string  $executionType
      * @access public
      * @return void
      */
-    public function create($projectID = 0, $productID = 0, $planID = 0, $executionType = 'stage')
+    public function create(string $projectID = 0, string $productID = 0, string $planID = 0,string $executionType = 'stage'): void
     {
+        $projectID = (int) $projectID;
+        $productID = (int) $productID;
+        $planID    = (int) $planID;
+
         $this->commonAction($projectID, $productID);
-        $this->app->loadLang('project');
+
         if($_POST)
         {
             $formData = form::data($this->config->programplan->create->form);
@@ -161,16 +154,13 @@ class programplan extends control
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $locate));
         }
 
+        $this->app->loadLang('stage');
+
+        $project = $this->project->getById($projectID);
         $programPlan = $this->project->getById($planID, 'stage');
 
         $productList = array();
-        $this->app->loadLang('stage');
-        $project = $this->loadModel('project')->getById($projectID);
-        if($this->session->hasProduct) $productList = $this->loadModel('product')->getProductPairsByProject($projectID);
-
-        $this->view->title      = $this->lang->programplan->create . $this->lang->colon . $project->name;
-        $this->view->position[] = html::a($this->createLink('programplan', 'browse', "projectID=$projectID"), $project->name);
-        $this->view->position[] = $this->lang->programplan->create;
+        if($this->session->hasProduct) $productList = $this->product->getProductPairsByProject($projectID);
 
         $executions = !empty($planID) ? $this->loadModel('execution')->getChildExecutions($planID, 'order_asc') : array();
         $plans      = $this->programplan->getStage($planID ? $planID : $projectID, $productID, 'parent', 'order_asc');
@@ -185,7 +175,6 @@ class programplan extends control
             $executionType = 'agileplus';
             unset($this->lang->programplan->typeList['stage']);
         }
-
 
         $visibleFields      = array();
         $requiredFields     = array();
@@ -210,6 +199,9 @@ class programplan extends control
 
         if($executionType != 'stage') unset($this->lang->execution->typeList[''], $this->lang->execution->typeList['stage']);
 
+        $this->view->title              = $this->lang->programplan->create . $this->lang->colon . $project->name;
+        $this->view->position[]         = html::a($this->createLink('programplan', 'browse', "projectID=$projectID"), $project->name);
+        $this->view->position[]         = $this->lang->programplan->create;
         $this->view->productList        = $productList;
         $this->view->project            = $project;
         $this->view->productID          = $productID ? $productID : key($productList);
@@ -240,7 +232,7 @@ class programplan extends control
      * @access public
      * @return void
      */
-    public function edit(string $planID = 0, string $projectID = 0)
+    public function edit(string $planID = '0', string $projectID = '0')
     {
         $planID    = (int)$planID;
         $projectID = (int)$projectID;
@@ -290,7 +282,7 @@ class programplan extends control
 
         /* Set Custom. */
         foreach(explode(',', $this->config->programplan->custom->customGanttFields) as $field) $customFields[$field] = $this->lang->programplan->ganttCustom[$field];
-        
+
         $this->programplanZen->buildAjaxCustomView($owner, $module, $customFields);
     }
 
