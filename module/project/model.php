@@ -2815,7 +2815,11 @@ class projectModel extends model
             }
         }
 
-        if($project and in_array($project->model, array('waterfall', 'waterfallplus', 'ipd'))) $model = 'waterfall';
+        if($project)
+        {
+            if(in_array($project->model, array('waterfall', 'waterfallplus'))) $model = 'waterfall';
+            if($project->model == 'ipd') $model = 'ipd';
+        }
         if($project and $project->model == 'kanban')
         {
             $model = $project->model . 'Project';
@@ -2830,7 +2834,7 @@ class projectModel extends model
             $lang->project->dividerMenu = $lang->{$model}->dividerMenu;
         }
 
-        if(empty($project->hasProduct) or $project->model == 'ipd')
+        if(empty($project->hasProduct) or $model == 'ipd')
         {
             unset($lang->project->menu->settings['subMenu']->products);
             $projectProduct = $this->dao->select('product')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($objectID)->fetch('product');
@@ -2867,6 +2871,7 @@ class projectModel extends model
         }
 
         if(isset($lang->project->menu->storyGroup)) unset($lang->project->menu->storyGroup);
+        if($model == 'ipd' and $project->hasProduct) unset($lang->project->menu->settings['subMenu']->module);
 
         /* Reset project priv. */
         $moduleName = $this->app->rawModule;
