@@ -19,7 +19,7 @@ foreach($projects as $project)
 {
     $navTabs[] = li
     (
-        set('class', 'nav-item' . ($project->id == $selected ? ' active' : '')),
+        set('class', 'nav-item ellipsis' . ($project->id == $selected ? ' active' : '')),
         a
         (
             set('data-toggle', 'tab'),
