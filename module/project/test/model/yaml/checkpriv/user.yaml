@@ -1,0 +1,6 @@
+title: checkpriv-user
+author: chaideqing
+version: "1.0"
+fields:
+    - field: account
+      range: 'admin,user1'
