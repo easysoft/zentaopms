@@ -30,8 +30,8 @@ $config->todo->batchCreate->form['assignedTos'] = array('required' => false, 'ty
 $config->todo->batchCreate->form['begins']      = array('required' => false, 'type' => 'array');
 $config->todo->batchCreate->form['ends']        = array('required' => false, 'type' => 'array');
 $config->todo->batchCreate->form['switchTime']  = array('required' => false, 'type' => 'array');
-$config->todo->batchCreate->form['date']        = array('required' => false, 'type' => 'array');
-$config->todo->batchCreate->form['switchDate']  = array('required' => false, 'type' => 'array');
+$config->todo->batchCreate->form['date']        = array('required' => false, 'type' => 'string', 'default' => '');
+$config->todo->batchCreate->form['switchDate']  = array('required' => false, 'type' => 'string', 'default' => '');
 
 $config->todo->edit->form = array();
 $config->todo->edit->form['name'] = array('required' => true, 'type' => 'string');
