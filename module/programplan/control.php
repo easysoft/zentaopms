@@ -154,50 +154,28 @@ class programplan extends control
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $locate));
         }
 
-        $this->app->loadLang('stage');
-
-        $project = $this->project->getById($projectID);
+        $project     = $this->project->getById($projectID);
         $programPlan = $this->project->getById($planID, 'stage');
+        $productList = $this->session->hasProduct ? $this->product->getProductPairsByProject($projectID) : array();
+        $executions  = !empty($planID) ? $this->loadModel('execution')->getChildExecutions($planID, 'order_asc') : array();
 
-        $productList = array();
-        if($this->session->hasProduct) $productList = $this->product->getProductPairsByProject($projectID);
-
-        $executions = !empty($planID) ? $this->loadModel('execution')->getChildExecutions($planID, 'order_asc') : array();
-        $plans      = $this->programplan->getStage($planID ? $planID : $projectID, $productID, 'parent', 'order_asc');
+        /* Set programplan typeList. */
+        if($executionType != 'stage') unset($this->lang->execution->typeList[''], $this->lang->execution->typeList['stage']);
+        $plans = $this->programplan->getStage($planID ? $planID : $projectID, $productID, 'parent', 'order_asc');
         if(!empty($planID) and !empty($plans) and $project->model == 'waterfallplus')
         {
             $executionType = 'stage';
             unset($this->lang->programplan->typeList['agileplus']);
-        }
 
-        if(!empty($planID) and !empty($executions) and empty($plans) and $project->model == 'waterfallplus')
-        {
-            $executionType = 'agileplus';
-            unset($this->lang->programplan->typeList['stage']);
-        }
-
-        $visibleFields      = array();
-        $requiredFields     = array();
-        $custom             = $executionType == 'stage' ? 'custom' : 'customAgilePlus';
-        $customCreateFields = $executionType == 'stage' ? 'customCreateFields' : 'customAgilePlusCreateFields';
-        foreach(explode(',', $this->config->programplan->$customCreateFields) as $field) $customFields[$field] = $this->lang->programplan->$field;
-        $showFields = $this->config->programplan->$custom->createFields;
-        foreach(explode(',', $showFields) as $field)
-        {
-            if($field) $visibleFields[$field] = '';
-        }
-
-        foreach(explode(',', $this->config->programplan->create->requiredFields) as $field)
-        {
-            if($field)
+            if(!empty($executions))
             {
-                $requiredFields[$field] = '';
-                if(strpos(",{$this->config->programplan->$customCreateFields},", ",{$field},") !== false) $visibleFields[$field] = '';
+                $executionType = 'agileplus';
+                unset($this->lang->programplan->typeList['stage']);
             }
         }
-        if(empty($this->config->setPercent)) unset($visibleFields['percent'], $requiredFields['percent']);
 
-        if($executionType != 'stage') unset($this->lang->execution->typeList[''], $this->lang->execution->typeList['stage']);
+        /* Compute fields for create view. */
+        list($visibleFields, $requiredFields, $customFields, $showFields) = $this->programplanZen->computeFieldsCreateView($executionType);
 
         $this->view->title              = $this->lang->programplan->create . $this->lang->colon . $project->name;
         $this->view->position[]         = html::a($this->createLink('programplan', 'browse', "projectID=$projectID"), $project->name);
@@ -212,7 +190,7 @@ class programplan extends control
         $this->view->type               = 'lists';
         $this->view->executionType      = $executionType;
         $this->view->PMUsers            = $this->loadModel('user')->getPairs('noclosed|nodeleted|pmfirst',  $project->PM);
-        $this->view->custom             = $custom;
+        $this->view->custom             = $executionType == 'stage' ? 'custom' : 'customAgilePlus';
         $this->view->customFields       = $customFields;
         $this->view->showFields         = $showFields;
         $this->view->visibleFields      = $visibleFields;

@@ -124,4 +124,41 @@ class programplanZen extends programplan
 
         $this->display();
     }
+
+    /**
+     * Compute visibleFields and requiredFields for create view.
+     *
+     * @param  string $executionType
+     * @access protected
+     * @return array
+     */
+    protected function computeFieldsCreateView(string $executionType): array
+    {
+        $visibleFields      = array();
+        $requiredFields     = array();
+        $customFields       = array();
+        $showFields         = array();
+
+        $custom             = $executionType == 'stage' ? 'custom' : 'customAgilePlus';
+        $customCreateFields = $executionType == 'stage' ? 'customCreateFields' : 'customAgilePlusCreateFields';
+        foreach(explode(',', $this->config->programplan->$customCreateFields) as $field) $customFields[$field] = $this->lang->programplan->$field;
+        $showFields = $this->config->programplan->$custom->createFields;
+        foreach(explode(',', $showFields) as $field)
+        {
+            if($field) $visibleFields[$field] = '';
+        }
+
+        foreach(explode(',', $this->config->programplan->create->requiredFields) as $field)
+        {
+            if($field)
+            {
+                $requiredFields[$field] = '';
+                if(strpos(",{$this->config->programplan->$customCreateFields},", ",{$field},") !== false) $visibleFields[$field] = '';
+            }
+        }
+
+        if(empty($this->config->setPercent)) unset($visibleFields['percent'], $requiredFields['percent']);
+
+        return array($visibleFields, $requiredFields, $customFields, $showFields);
+    }
 }
