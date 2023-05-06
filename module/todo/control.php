@@ -48,7 +48,7 @@ class todo extends control
             $todo = $this->todoZen->prepareCreateData($todoData, $uid);
             if(!$todo) return print(js::error(dao::getError()));
 
-            $todoID = $this->todo->create($todo, $formData);
+            $todoID = $this->todo->create($todo);
             if($todoID === false) return print(js::error(dao::getError()));
 
             $todo->id = $todoID;
