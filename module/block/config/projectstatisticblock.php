@@ -5,7 +5,7 @@ $config->block->projectstatistic->dtable['story'][] = array('field' => 'storyPoi
 $config->block->projectstatistic->dtable['story'][] = array('field' => 'done'       , 'unit' => 'unit');
 $config->block->projectstatistic->dtable['story'][] = array('field' => 'undone'     , 'unit' => 'unit');
 
-$config->block->projectstatistic->dtable['cost'][]  = array('field' => 'personDay'  , 'unit' => 'personDay');
+$config->block->projectstatistic->dtable['cost'][]  = array('field' => 'costs'      , 'unit' => 'personDay');
 $config->block->projectstatistic->dtable['cost'][]  = array('field' => 'consumed'   , 'unit' => 'hour');
 $config->block->projectstatistic->dtable['cost'][]  = array('field' => 'remainder'  , 'unit' => 'hour');
 

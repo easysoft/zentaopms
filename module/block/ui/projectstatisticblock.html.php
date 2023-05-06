@@ -51,18 +51,20 @@ foreach($projects as $project)
         foreach($items as $item)
         {
             $field = $item['field'];
-            $unit  = $item['field'];
+            $unit  = $item['unit'];
             $cellItems[] = div
             (
                 set('class', 'flex py-4'),
                 cell
                 (
-                    set('class', 'flex-1 text-right text-gray'),
-                    span($lang->block->projectstatistic->{$field})
+                    set('width', '50%'),
+                    set('class', 'text-right text-gray'),
+                    span($lang->block->projectstatistic->{$field} . ' ：')
                 ),
                 cell
                 (
-                    set('class', 'flex-1 text-left ml-1'),
+                    set('width', '50%'),
+                    set('class', 'text-left'),
                     span
                     (
                         set('class', 'font-bold text-black'),
