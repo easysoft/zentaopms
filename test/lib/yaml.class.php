@@ -485,7 +485,7 @@ class yaml
         $errors = explode(PHP_EOL, $stderr);
         $errors = array_filter($errors, function($error)
         {
-            return !empty($error) && strpos($error, 'Using a password on the command line interface can be insecure') !== false;
+            return !empty($error) && !strpos($error, 'Using a password on the command line interface can be insecure');
         });
 
         if(!empty($errors)) echo implode(PHP_EOL, $errors) . PHP_EOL;
