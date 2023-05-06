@@ -1882,18 +1882,21 @@ class project extends control
      *
      * @param  string $projectID
      * @param  string $from project|program|programProject
+     * @param  string $recTotal
+     * @param  string $recPerPage
+     * @param  string $pageID
      *
      * @access public
      * @return void
      */
-    public function whitelist(string $projectID = '0', string $from = 'project')
+    public function whitelist(string $projectID = '0', string $from = 'project',int $recTotal = '0', int $recPerPage = '20', int $pageID = '1')
     {
         $projectID = (int)$projectID;
         $projectID = $this->project->setMenu($projectID);
-        $project   = $this->project->getById($projectID);
+        $project   = $this->project->getByID($projectID);
         if(isset($project->acl) and $project->acl == 'open') $this->locate($this->createLink('project', 'index', "projectID=$projectID"));
 
-        echo $this->fetch('personnel', 'whitelist', "objectID=$projectID&module=project&browseType=project&orderBy=id_desc&recTotal=0&recPerPage=20&pageID=1&projectID=$projectID&from=$from");
+        echo $this->fetch('personnel', 'whitelist', "objectID=$projectID&module=project&browseType=project&orderBy=id_desc&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID&projectID=$projectID&from=$from");
     }
 
     /**
