@@ -1,6 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . "/test/lib/init.php";
+include dirname(__FILE__, 2) . "/project.class.php";
 
 function initData()
 {
@@ -41,22 +42,21 @@ su('admin');
 
 /**
 
-title=测试 projectModel::getOverviewList;
+title=测试 projectModel::fetchProjectListByQuery();
 cid=1
 
 */
 
-global $tester;
-$tester->loadModel('project');
+$projectTester = new Project();
 
-$byStatus1 = $tester->project->getOverviewList('byStatus', 'wait');
-$byStatus2 = $tester->project->getOverviewList('byStatus', 'undone');
+$byStatus1 = $projectTester->testFetchProjectListByQuery('byStatus', 'wait');
+$byStatus2 = $projectTester->testFetchProjectListByQuery('byStatus', 'undone');
 
-$byId1 = $tester->project->getOverviewList('byid', '11');
-$byId2 = $tester->project->getOverviewList('byid', '10000');
+$byId1 = $projectTester->testFetchProjectListByQuery('byid', '11');
+$byId2 = $projectTester->testFetchProjectListByQuery('byid', '10000');
 
-$byOrder1 = $tester->project->getOverviewList('byStatus', 'all', 'id_asc');
-$byOrder2 = $tester->project->getOverviewList('byStatus', 'all', 'name_desc');
+$byOrder1 = $projectTester->testFetchProjectListByQuery('byStatus', 'all', 'id_asc');
+$byOrder2 = $projectTester->testFetchProjectListByQuery('byStatus', 'all', 'name_desc');
 
 r(count($byStatus1))  && p()          && e('2');         // 获取未开始的项目数量
 r(count($byStatus2))  && p()          && e('6');         // 获取状态不为done和closed的项目数量
