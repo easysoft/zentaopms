@@ -1,7 +1,6 @@
 <?php
 declare(strict_types=1);
 
-if(!isset($config->todo->create)) $config->todo->create = new stdclass();
 $config->todo->create->form = array();
 $config->todo->create->form['type']       = array('required' => true, 'type' => 'string');
 $config->todo->create->form['name']       = array('required' => true, 'type' => 'string');
