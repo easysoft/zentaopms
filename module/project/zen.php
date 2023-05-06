@@ -684,14 +684,15 @@ class projectZen extends project
      * 记录多迭代及瀑布类项目移除的产品
      * Record multiple and waterfall project unlinked products
      *
-     * @param  array $oldProducts
-     * @param  array $newProductIDs
-     * @param  array $idList
+     * @param  object $project
+     * @param  array  $oldProducts
+     * @param  array  $newProductIDs
+     * @param  array  $idList
      *
      * @access protected
      * @return void
      */
-    protected function dealMultipleProduct(array $oldProducts, array $newProductIDs, array $idList): void
+    protected function dealMultipleProduct(object $project, array $oldProducts, array $newProductIDs, array $idList): void
     {
         /* Update multiple project linked products. */
         if(empty($project->multiple))

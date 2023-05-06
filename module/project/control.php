@@ -1866,10 +1866,8 @@ class project extends control
      */
     public function updateOrder()
     {
-        $postData = form::data();
-        $rawdata  = $postData->rawdata;
-        $idList   = explode(',', trim($rawdata->projects, ','));
-        $orderBy  = $rawdata->orderBy;
+        $idList   = explode(',', trim($this->post->projects, ','));
+        $orderBy  = $this->post->orderBy;
 
         if(strpos($orderBy, 'order') === false) return false;
 
@@ -1877,57 +1875,62 @@ class project extends control
     }
 
     /**
+     * 获取项目白名单列表
      * Get white list personnel.
      *
-     * @param  int    $projectID
-     * @param  string $module
-     * @param  string $from  project|program|programProject
-     * @param  string $objectType
-     * @param  string $orderby
-     * @param  int    $recTotal
-     * @param  int    $recPerPage
-     * @param  int    $pageID
+     * @param  string $projectID
+     * @param  string $from project|program|programProject
+     * @param  string $recTotal
+     * @param  string $recPerPage
+     * @param  string $pageID
+     *
      * @access public
      * @return void
      */
-    public function whitelist($projectID = 0, $module = 'project', $from = 'project', $objectType = 'project', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function whitelist(string $projectID = '0', string $from = 'project',int $recTotal = '0', int $recPerPage = '20', int $pageID = '1')
     {
+        $projectID = (int)$projectID;
         $projectID = $this->project->setMenu($projectID);
-        $project   = $this->project->getById($projectID);
+        $project   = $this->project->getByID($projectID);
         if(isset($project->acl) and $project->acl == 'open') $this->locate($this->createLink('project', 'index', "projectID=$projectID"));
 
-        echo $this->fetch('personnel', 'whitelist', "objectID=$projectID&module=$module&browseType=$objectType&orderBy=$orderBy&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID&projectID=$projectID&from=$from");
+        echo $this->fetch('personnel', 'whitelist', "objectID=$projectID&module=project&browseType=project&orderBy=id_desc&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID&projectID=$projectID&from=$from");
     }
 
     /**
+     * 添加用户到项目白名单中
      * Adding users to the white list.
      *
-     * @param  int     $projectID
-     * @param  int     $deptID
-     * @param  int     $copyID
-     * @param  int     $programID
-     * @param  int     $from
+     * @param  string $projectID
+     * @param  int    $deptID
+     * @param  int    $copyID
+     * @param  int    $programID
+     * @param  string $from
+     *
      * @access public
      * @return void
      */
-    public function addWhitelist($projectID = 0, $deptID = 0, $copyID = 0, $programID = 0, $from = 'project')
+    public function addWhitelist(string $projectID = '0', int $deptID = 0, int $copyID = 0, int $programID = 0, string $from = 'project')
     {
+        $projectID = (int)$projectID;
         $projectID = $this->project->setMenu($projectID);
-        $project   = $this->project->getById($projectID);
+        $project   = $this->project->getByID($projectID);
         if(isset($project->acl) and $project->acl == 'open') $this->locate($this->createLink('project', 'index', "projectID=$projectID"));
 
         echo $this->fetch('personnel', 'addWhitelist', "objectID=$projectID&dept=$deptID&copyID=$copyID&objectType=project&module=project&programID=$programID&from=$from");
     }
 
     /*
+     * 移除项目白名单人员
      * Removing users from the white list.
      *
-     * @param  int     $id
+     * @param  string  $id
      * @param  string  $confirm
+     *
      * @access public
      * @return void
      */
-    public function unbindWhitelist($id = 0, $confirm = 'no')
+    public function unbindWhitelist(string $id = '0', $confirm = 'no')
     {
         echo $this->fetch('personnel', 'unbindWhitelist', "id=$id&confirm=$confirm");
     }

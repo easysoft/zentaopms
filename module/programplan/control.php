@@ -232,7 +232,7 @@ class programplan extends control
      * @access public
      * @return void
      */
-    public function edit(string $planID = 0, string $projectID = 0)
+    public function edit(string $planID = '0', string $projectID = '0')
     {
         $planID    = (int)$planID;
         $projectID = (int)$projectID;
