@@ -15,19 +15,26 @@ class btnGroup extends wg
         return btn(inherit($item));
     }
 
-    protected function build()
+    private function getClassName(): string
     {
-        $items    = $this->prop('items');
         $disabled = $this->prop('disabled');
         $size     = $this->prop('size');
 
-        $classList = 'btn-group';
-        if(!empty($disabled)) $classList .= ' disabled';
-        if(!empty($size))     $classList .= " size-$size";
+        $className = 'btn-group';
+        if(!empty($disabled)) $className .= ' disabled';
+        if(!empty($size))     $className .= " size-$size";
+
+        return $className;
+    }
+
+    protected function build()
+    {
+        $items     = $this->prop('items');
+        $className = $this->getclassName();
 
         return div
         (
-            setClass($classList),
+            setClass($className),
             set($this->props->skip(array_keys(static::getDefinedProps()))),
             is_array($items) ? array_map(array($this, 'onBuildItem'), $items) : NULL,
             $this->children()
