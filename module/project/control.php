@@ -310,7 +310,7 @@ class project extends control
         if(empty($project) || $project->type != 'project') return print(js::error($this->lang->notFound) . js::locate('back'));
 
         if(!$projectID) $this->locate($this->createLink('project', 'browse'));
-        setCookie("lastProject", strVal($projectID), $this->config->cookieLife, $this->config->webRoot, '', false, true);
+        setCookie("lastProject", strVal($projectID), $this->config->cookieLife, $this->config->webRoot, '', $this->config->cookieSecure, true);
 
         if($project->model == 'kanban' and $this->config->vision != 'lite')
         {

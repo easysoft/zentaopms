@@ -208,7 +208,7 @@ class Project
     {
         $this->project->addProjectAdmin($projectID);
 
-        return $tester->dao->select('*')->from(TABLE_PROJECTADMIN)->fetch();
+        return $this->project->dao->select('*')->from(TABLE_PROJECTADMIN)->fetch();
     }
 
     /**
