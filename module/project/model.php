@@ -2378,72 +2378,10 @@ class projectModel extends model
      */
     public function getStats4Kanban()
     {
-        $this->loadModel('program');
+        $latestExecutions = $this->projectTao->getLatestExecutions();
+        $projectsStats    = $this->projectTao->getProjectsStats();
 
-        $projects   = $this->program->getProjectStats(0, 'all', 0, 'order_asc');
-        $executions = $this->loadModel('execution')->getStatData(0, 'doing', 0, 0, false, 'hasParentName|skipParent');
-
-        $doingExecutions  = array();
-        $latestExecutions = array();
-        foreach($executions as $execution) $doingExecutions[$execution->project][$execution->id] = $execution;
-        foreach($doingExecutions as $projectID => $executions)
-        {
-            krsort($doingExecutions[$projectID]);
-            $latestExecutions[$projectID] = current($doingExecutions[$projectID]);
-        }
-
-        $myProjects    = array();
-        $otherProjects = array();
-        $closedGroup   = array();
-        foreach($projects as $project)
-        {
-            if(strpos('wait,doing,closed', $project->status) === false) continue;
-
-            $projectPath = explode(',', trim($project->path, ','));
-            $topProgram  = !empty($project->parent) ? $projectPath[0] : $project->parent;
-
-            if($project->PM == $this->app->user->account)
-            {
-                if($project->status != 'closed')
-                {
-                    $myProjects[$topProgram][$project->status][] = $project;
-                }
-                else
-                {
-                    $closedGroup['my'][$topProgram][$project->closedDate] = $project;
-                }
-            }
-            else
-            {
-                if($project->status != 'closed')
-                {
-                    $otherProjects[$topProgram][$project->status][] = $project;
-                }
-                else
-                {
-                    $closedGroup['other'][$topProgram][$project->closedDate] = $project;
-                }
-            }
-        }
-
-        /* Only display recent two closed projects. */
-        foreach($closedGroup as $group => $closedProjects)
-        {
-            foreach($closedProjects as $topProgram => $projects)
-            {
-                krsort($projects);
-                if($group == 'my')
-                {
-                    $myProjects[$topProgram]['closed'] = array_slice($projects, 0, 2);
-                }
-                else
-                {
-                    $otherProjects[$topProgram]['closed'] = array_slice($projects, 0, 2);
-                }
-            }
-        }
-
-        return array('kanbanGroup' => array('my' => $myProjects, 'other' => $otherProjects), 'latestExecutions' => $latestExecutions);
+        return array('kanbanGroup' => $projectsStats, 'latestExecutions' => $latestExecutions);
     }
 
     /**
