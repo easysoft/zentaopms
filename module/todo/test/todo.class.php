@@ -379,4 +379,38 @@ class todoTest
     {
         return $this->objectModel->getByExportList($orderBy, $formData, $queryCondition, $checkedItem);
     }
+
+    /**
+     * 获取导出的待办数据。
+     * Get data for export todo.
+     *
+     * @param  string $orderBy
+     * @param  object $formData
+     * @param  string $queryCondition
+     * @param  string $checkedItem
+     * @access public
+     * @return array
+     */
+    public function getByExportListTest(string $orderBy, object $formData, string $queryCondition , string $checkedItem): array
+    {
+        return $this->objectModel->getByExportList($orderBy, $formData, $queryCondition, $checkedItem);
+    }
+
+    /**
+     * 根据待办类型，对象ID获取优先级。
+     * Get pri by todo type and object id.
+     *
+     * @param  string $todoType
+     * @param  int    $objectID
+     * @access public
+     * @return string
+     */
+    public function getPriByTodoTypeTest(string $todoType, int $objectID): int
+    {
+        $pri = $this->objectModel->getPriByTodoType($todoType, $objectID);
+
+        if(dao::isError()) return 0;
+
+        return $pri ? 1 : 0;
+    }
 }
