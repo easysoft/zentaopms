@@ -81,8 +81,8 @@ class taskModel extends model
     {
         if(!$oldTask) return false;
 
-        /* If the team is empty, get the team from the task team table. */
-        if(empty($team)) $team = $this->dao->select('*')->from(TABLE_TASKTEAM)->where('task')->eq($oldTask->id)->orderBy('order')->fetchAll();
+        if(empty($team)) $team = $this->dao->select('*')->from(TABLE_TASKTEAM)->where('task')->eq($oldTask->id)->orderBy('order')->fetchAll(); // If the team is empty, get the team from the task team table.
+
         /* If the team is not empty, compute the team hours. */
         if(!empty($team))
         {
@@ -103,7 +103,6 @@ class taskModel extends model
             {
                 $currentTask->assignedTo = $this->getAssignedTo4Multi($members, $oldTask);
                 if($oldTask->assignedTo != $currentTask->assignedTo) $currentTask->assignedDate = helper::now();
-
                 $oldTask->team = $oldTeam;
             }
 
@@ -123,6 +122,7 @@ class taskModel extends model
 
             /* If task is not empty, the task status is computed and the task is returned. */
             if(!empty($task)) return $this->taskTao->computeCurrentTaskStatus($currentTask, $oldTask, $task, $autoStatus, empty($efforts), $members);
+
             /* If task is empty, update the current task. */
             $this->dao->update(TABLE_TASK)->data($currentTask)->autoCheck()->where('id')->eq($oldTask->id)->exec();
         }
