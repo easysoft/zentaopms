@@ -130,25 +130,28 @@ class taskModel extends model
     }
 
     /**
-     * Create a batch task.
+     * Batch create tasks.
      *
      * @param  int    $executionID
-     * @param  string $extra
+     * @param  object $postData
+     * @param  array  $output
      * @access public
      * @return void
      */
-    public function batchCreate($executionID, $extra = '')
+    public function batchCreate(int $executionID, object $postData, array $output)
     {
+        $tasks = $postData->rawdata;
+
         /* Load module and init vars. */
+        $this->loadModel('common');
+        $this->loadModel('score');
         $this->loadModel('action');
         $this->loadModel('kanban');
-        $now       = helper::now();
-        $mails     = array();
-        $storyIDs  = array();
-        $taskNames = array();
-        $preStory  = 0;
-        $tasks     = fixer::input('post')->get();
+        $now      = helper::now();
+        $mails    = array();
+        $preStory = 0;
 
+        /* 运营管理界面移除泳道和泳道列。 */
         if($this->config->vision == 'lite')
         {
             $lanes   = $tasks->lane;
@@ -156,43 +159,16 @@ class taskModel extends model
             unset($tasks->lane);
             unset($tasks->column);
         }
-        $extra = str_replace(array(',', ' '), array('&', ''), $extra);
-        parse_str($extra, $output);
 
         /* Judge whether the current task is a parent. */
-        $parentID = !empty($this->post->parent[1]) ? $this->post->parent[1] : 0;
+        $parentID      = !empty($tasks->parent[1]) ? $tasks->parent[1] : 0;
+        $oldParentTask = $this->dao->findById((int)$parentID)->from(TABLE_TASK)->fetch();
 
-        foreach($tasks->story as $key => $storyID)
-        {
-            if(empty($tasks->name[$key])) continue;
-            if($tasks->type[$key] == 'affair') continue;
-            if($tasks->type[$key] == 'ditto' && isset($tasks->type[$key - 1]) && $tasks->type[$key - 1] == 'affair') continue;
+        /* 去除重复数据。 */
+        $tasks = $this->taskTao->removeDuplicate4BatchCreate($executionID, $tasks);
+        if(!$tasks) return false;
 
-            if($storyID == 'ditto') $storyID = $preStory;
-            $preStory = $storyID;
-
-            if(!isset($tasks->story[$key - 1]) and $key > 1 and !empty($tasks->name[$key - 1]))
-            {
-                $storyIDs[]  = 0;
-                $taskNames[] = $tasks->name[$key - 1];
-            }
-
-            $inNames = in_array($tasks->name[$key], $taskNames);
-            if(!$inNames || ($inNames && !in_array($storyID, $storyIDs)))
-            {
-                $storyIDs[]  = $storyID;
-                $taskNames[] = $tasks->name[$key];
-            }
-            else
-            {
-                dao::$errors['message'][] = sprintf($this->lang->duplicate, $this->lang->task->common) . ' ' . $tasks->name[$key];
-                return false;
-            }
-        }
-
-        $result = $this->loadModel('common')->removeDuplicate('task', $tasks, "execution=$executionID and story " . helper::dbIN($storyIDs));
-        $tasks  = $result['data'];
-
+        /* Init vars. */
         $story      = 0;
         $module     = 0;
         $type       = '';
@@ -202,10 +178,11 @@ class taskModel extends model
 
         /* Get task data. */
         $extendFields = $this->getFlowExtendFields();
-        $projectID    = $this->getProjectID($executionID);
+        $execution    = $this->dao->findById($executionID)->from(TABLE_EXECUTION)->fetch();
         $data         = array();
         foreach($tasks->name as $i => $name)
         {
+            /* 给同上的变量赋值。 */
             $story      = (!isset($tasks->story[$i]) or $tasks->story[$i] == 'ditto')            ? $story      : $tasks->story[$i];
             $module     = (!isset($tasks->module[$i]) or $tasks->module[$i] == 'ditto')          ? $module     : $tasks->module[$i];
             $type       = (!isset($tasks->type[$i]) or $tasks->type[$i] == 'ditto')              ? $type       : $tasks->type[$i];
@@ -213,6 +190,7 @@ class taskModel extends model
             $estStarted = (!isset($tasks->estStarted[$i]) or isset($tasks->estStartedDitto[$i])) ? $estStarted : $tasks->estStarted[$i];
             $deadline   = (!isset($tasks->deadline[$i]) or isset($tasks->deadlineDitto[$i]))     ? $deadline   : $tasks->deadline[$i];
 
+            /* 检查任务名称为空的数据。 */
             if(empty($tasks->name[$i]))
             {
                 if($this->common->checkValidRow('task', $tasks, $i))
@@ -223,87 +201,19 @@ class taskModel extends model
                 continue;
             }
 
-            $data[$i]             = new stdclass();
-            $data[$i]->story      = (int)$story;
-            $data[$i]->type       = $type;
-            $data[$i]->module     = (int)$module;
-            $data[$i]->assignedTo = $assignedTo;
-            $data[$i]->color      = $tasks->color[$i];
-            $data[$i]->name       = $tasks->name[$i];
-            $data[$i]->desc       = nl2br($tasks->desc[$i]);
-            $data[$i]->pri        = $tasks->pri[$i];
-            $data[$i]->estimate   = $tasks->estimate[$i] ? $tasks->estimate[$i] : 0;
-            $data[$i]->left       = $tasks->estimate[$i] ? $tasks->estimate[$i] : 0;
-            $data[$i]->project    = $projectID;
-            $data[$i]->execution  = $executionID;
-            $data[$i]->estStarted = $estStarted;
-            $data[$i]->deadline   = $deadline;
-            $data[$i]->status     = 'wait';
-            $data[$i]->openedBy   = $this->app->user->account;
-            $data[$i]->openedDate = $now;
-            $data[$i]->parent     = $tasks->parent[$i];
-            $data[$i]->vision     = isset($tasks->vision[$i]) ? $tasks->vision[$i] : 'rnd';
-            if($story) $data[$i]->storyVersion = $this->loadModel('story')->getVersion($data[$i]->story);
-            if($assignedTo) $data[$i]->assignedDate = $now;
-            if(strpos($this->config->task->create->requiredFields, 'estStarted') !== false and empty($estStarted)) $data[$i]->estStarted = '';
-            if(strpos($this->config->task->create->requiredFields, 'deadline') !== false and empty($deadline))     $data[$i]->deadline   = '';
-            if(isset($tasks->lanes[$i])) $data[$i]->laneID = $tasks->lanes[$i];
-
-            foreach($extendFields as $extendField)
-            {
-                $data[$i]->{$extendField->field} = $this->post->{$extendField->field}[$i];
-                if(is_array($data[$i]->{$extendField->field})) $data[$i]->{$extendField->field} = join(',', $data[$i]->{$extendField->field});
-
-                $data[$i]->{$extendField->field} = htmlSpecialString($data[$i]->{$extendField->field});
-            }
+            /* 构建任务数据。 */
+            $dittoFields = array('story' => $story, 'module' => $module, 'type' => $type, 'assignedTo' => $assignedTo, 'estStarted' => $estStarted, 'deadline' => $deadline);
+            $data = $this->taskTao->constructData4BatchCreate($execution, $tasks, $i, $dittoFields, $extendFields);
         }
 
-        /* Fix bug #1525*/
-        $execution = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($executionID)->fetch();
-        $requiredFields = ',' . $this->config->task->create->requiredFields . ',';
-        if($execution->lifetime == 'ops' or $execution->attribute == 'request' or $execution->attribute == 'review') $requiredFields = str_replace(',story,', ',', $requiredFields);
-        $requiredFields = trim($requiredFields, ',');
+        /* 检查必填项。 */
+        $data = $this->taskTao->checkRequired4BatchCreate($execution, $data);
+        if(!$data) return false;
 
-        /* check data. */
+        $childTasks = '';
         foreach($data as $i => $task)
         {
-            if(!empty($this->config->limitTaskDate))
-            {
-                $this->checkEstStartedAndDeadline($executionID, $task->estStarted, $task->deadline);
-                if(dao::isError()) return false;
-            }
-
-            if(!helper::isZeroDate($task->deadline) and $task->deadline < $task->estStarted)
-            {
-                dao::$errors['message'][] = $this->lang->task->error->deadlineSmall;
-                return false;
-            }
-
-            if($task->estimate and !preg_match("/^[0-9]+(.[0-9]{1,3})?$/", $task->estimate))
-            {
-                dao::$errors['message'][] = $this->lang->task->error->estimateNumber;
-                return false;
-            }
-
-            foreach(explode(',', $requiredFields) as $field)
-            {
-                $field = trim($field);
-                if(empty($field)) continue;
-
-                if(!isset($task->$field)) continue;
-                if(!empty($task->$field)) continue;
-                if($field == 'estimate' and strlen(trim($task->estimate)) != 0) continue;
-
-                dao::$errors['message'][] = sprintf($this->lang->error->notempty, $this->lang->task->$field);
-                return false;
-            }
-            if($task->estimate) $task->estimate = (float)$task->estimate;
-        }
-
-        $childTasks = null;
-
-        foreach($data as $i => $task)
-        {
+            /* 获取当前任务所属泳道并移除laneID属性。 */
             $laneID = isset($output['laneID']) ? $output['laneID'] : 0;
             if(isset($task->laneID))
             {
@@ -311,32 +221,20 @@ class taskModel extends model
                 unset($task->laneID);
             }
 
+            /* 将数据插入到任务表中。 */
             $task->version = 1;
-            $this->dao->insert(TABLE_TASK)->data($task)
-                ->autoCheck()
-                ->checkIF($task->estimate != '', 'estimate', 'float')
-                ->checkFlow()
-                ->exec();
+            $taskID = $this->taskTao->doCreate($task);
+            if(!$taskID) return false;
 
-            if(dao::isError()) return false;
-
-            $taskID   = $this->dao->lastInsertID();
-
-            $taskSpec = new stdClass();
-            $taskSpec->task       = $taskID;
-            $taskSpec->version    = $task->version;
-            $taskSpec->name       = $task->name;
-            if($task->estStarted) $taskSpec->estStarted = $task->estStarted;
-            if($task->deadline)   $taskSpec->deadline   = $task->deadline;
-
-            $this->dao->insert(TABLE_TASKSPEC)->data($taskSpec)->autoCheck()->exec();
-            if(dao::isError()) return false;
-
+            /* 获取子任务ID。*/
             $childTasks .= $taskID . ',';
+
+            /* 设置相关需求阶段。 */
             if($task->story) $this->story->setStage($task->story);
 
             $this->executeHooks($taskID);
 
+            /* 更新看板数据。 */
             if($this->config->vision == 'lite')
             {
                 $this->kanban->addKanbanCell($executionID, $lanes[$i], $columns[$i], 'task', $taskID);
@@ -349,51 +247,41 @@ class taskModel extends model
                 if(!empty($laneID) and !empty($columnID)) $this->kanban->addKanbanCell($executionID, $laneID, $columnID, 'task', $taskID);
             }
 
+            /* 记录日志并计算积分。 */
             $actionID = $this->action->create('task', $taskID, 'Opened', '');
-            if(!dao::isError()) $this->loadModel('score')->create('task', 'create', $taskID);
+            if(!dao::isError()) $this->score->create('task', 'create', $taskID);
 
+            /* 将taskID和actionID存入数组中。 */
             $mails[$i] = new stdclass();
             $mails[$i]->taskID   = $taskID;
             $mails[$i]->actionID = $actionID;
         }
 
-        if(!dao::isError()) $this->loadModel('score')->create('ajax', 'batchCreate');
+        if(!dao::isError()) $this->score->create('ajax', 'batchCreate');
 
-        if($parentID > 0 && !empty($taskID))
+        /* 处理任务拆分的情况。 */
+        if($oldParentTask and !empty($taskID))
         {
-            $oldParentTask = $this->dao->select('*')->from(TABLE_TASK)->where('id')->eq((int)$parentID)->fetch();
-
+            /* 当一个普通任务有消耗时，拆分子任务。 */
             /* When common task are child tasks and the common task has consumption, create a child task. */
             if($oldParentTask->parent == 0 and $oldParentTask->consumed > 0)
             {
-                $clonedTask = clone $oldParentTask;
-                $clonedTask->parent = $parentID;
-                unset($clonedTask->id);
-                $this->dao->insert(TABLE_TASK)->data($clonedTask)->autoCheck()->exec();
-
-                $clonedTaskID = $this->dao->lastInsertID();
-
-                $this->dao->update(TABLE_EFFORT)->set('objectID')->eq($clonedTaskID)
-                    ->where('objectID')->eq($oldParentTask->id)
-                    ->andWhere('objectType')->eq('task')
-                    ->exec();
+                $splitResult = $this->taskTao->splitConsumedTask($oldParentTask);
+                if(!$splitResult) return false;
             }
 
             $this->updateParentStatus($taskID);
             $this->computeBeginAndEnd($parentID);
+            $this->taskTao->updateParentAfterSplit($parentID);
 
-            $task = new stdclass();
-            $task->parent         = '-1';
-            $task->lastEditedBy   = $this->app->user->account;
-            $task->lastEditedDate = $now;
-            $this->dao->update(TABLE_TASK)->data($task)->where('id')->eq($parentID)->exec();
-
-            $newParentTask = $this->dao->select('*')->from(TABLE_TASK)->where('id')->eq((int)$parentID)->fetch();
+            /* 记录父任务日志。 */
+            $newParentTask = $this->dao->findById((int)$parentID)->from(TABLE_TASK)->fetch();
             $changes       = common::createChanges($oldParentTask, $newParentTask);
             $actionID      = $this->action->create('task', $parentID, 'createChildren', '', trim($childTasks, ','));
             if(!empty($changes)) $this->action->logHistory($actionID, $changes);
         }
 
+        /* 更新当前执行下的任务泳道。 */
         if(!isset($output['laneID']) or !isset($output['columnID']) or !isset($lanes)) $this->kanban->updateLane($executionID, 'task');
         return $mails;
     }

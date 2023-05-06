@@ -406,4 +406,206 @@ class taskTao extends taskModel
 
         $this->config->task->create->requiredFields = trim($requiredFields, ',');
     }
+
+    /**
+     * 在批量创建之前移除post数据中重复的数据。
+     * Remove the duplicate data before batch create tasks.
+     *
+     * @param  int         $executionID
+     * @param  object      $tasks
+     * @access protected
+     * @return object|false
+     */
+    protected function removeDuplicate4BatchCreate(int $executionID, object $tasks): object|false
+    {
+        $storyIDs  = array();
+        $taskNames = array();
+
+        foreach($tasks->story as $key => $storyID)
+        {
+            /* 过滤事务型和任务名称为空的数据。 */
+            if(empty($tasks->name[$key])) continue;
+            if($tasks->type[$key] == 'affair') continue;
+            if($tasks->type[$key] == 'ditto' and isset($tasks->type[$key - 1]) and $tasks->type[$key - 1] == 'affair') continue;
+
+            if($storyID == 'ditto') $storyID = $preStory;
+            $preStory = $storyID;
+
+            if(!isset($tasks->story[$key - 1]) and $key > 1 and !empty($tasks->name[$key - 1]))
+            {
+                $storyIDs[]  = 0;
+                $taskNames[] = $tasks->name[$key - 1];
+            }
+
+            /* 判断Post传过来的任务有没有重复数据。 */
+            $hasExistsName = in_array($tasks->name[$key], $taskNames);
+            if($hasExistsName and in_array($storyID, $storyIDs))
+            {
+                dao::$errors['message'][] = sprintf($this->lang->duplicate, $this->lang->task->common) . ' ' . $tasks->name[$key];
+                return false;
+            }
+
+            $storyIDs[]  = $storyID;
+            $taskNames[] = $tasks->name[$key];
+        }
+
+        /* 去重并赋值。 */
+        $result = $this->loadModel('common')->removeDuplicate('task', $tasks, "execution=$executionID and story " . helper::dbIN($storyIDs));
+        return $result['data'];
+    }
+
+    /**
+     * 批量创建任务之前构造数据。
+     * Construct data before batch create tasks.
+     *
+     * @param  object     $execution
+     * @param  object     $tasks
+     * @param  int        $index
+     * @param  array      $dittoFields
+     * @param  array      $extendFields
+     * @access protected
+     * @return array
+     */
+    protected function constructData4BatchCreate(object $execution, object $tasks, int $index, array $dittoFields, array $extendFields): array
+    {
+        extract($dittoFields);
+        $now = helper::now();
+
+        $data[$index]             = new stdclass();
+        $data[$index]->story      = (int)$story;
+        $data[$index]->type       = $type;
+        $data[$index]->module     = (int)$module;
+        $data[$index]->assignedTo = $assignedTo;
+        $data[$index]->color      = $tasks->color[$index];
+        $data[$index]->name       = $tasks->name[$index];
+        $data[$index]->desc       = nl2br($tasks->desc[$index]);
+        $data[$index]->pri        = $tasks->pri[$index];
+        $data[$index]->estimate   = $tasks->estimate[$index] ? $tasks->estimate[$index] : 0;
+        $data[$index]->left       = $tasks->estimate[$index] ? $tasks->estimate[$index] : 0;
+        $data[$index]->project    = $execution->project;
+        $data[$index]->execution  = $execution->id;
+        $data[$index]->estStarted = $estStarted;
+        $data[$index]->deadline   = $deadline;
+        $data[$index]->status     = 'wait';
+        $data[$index]->openedBy   = $this->app->user->account;
+        $data[$index]->openedDate = $now;
+        $data[$index]->parent     = $tasks->parent[$index];
+        $data[$index]->vision     = isset($tasks->vision[$index]) ? $tasks->vision[$index] : 'rnd';
+        if($story) $data[$index]->storyVersion = (int)$this->dao->findById($data[$index]->story)->from(TABLE_STORY)->fetch('version');
+        if($assignedTo) $data[$index]->assignedDate = $now;
+        if(strpos($this->config->task->create->requiredFields, 'estStarted') !== false and empty($estStarted)) $data[$index]->estStarted = '';
+        if(strpos($this->config->task->create->requiredFields, 'deadline') !== false and empty($deadline))     $data[$index]->deadline   = '';
+        if(isset($tasks->lanes[$index])) $data[$index]->laneID = $tasks->lanes[$index];
+
+        /* 附加工作流字段。 */
+        foreach($extendFields as $extendField)
+        {
+            $data[$index]->{$extendField->field} = $tasks->{$extendField->field}[$index];
+            if(is_array($data[$index]->{$extendField->field})) $data[$index]->{$extendField->field} = join(',', $data[$index]->{$extendField->field});
+
+            $data[$index]->{$extendField->field} = htmlSpecialString($data[$index]->{$extendField->field});
+        }
+
+        return $data;
+    }
+
+    /**
+     * 批量创建前检查必填项
+     * Check required fields before batch create tasks.
+     * 
+     * @param  object    $execution
+     * @param  object[]  $data
+     * @access protected
+     * @return object[]|false
+     */
+    protected function checkRequired4BatchCreate(object $execution, array $data): array|false
+    {
+        /* 设置必填项。 */
+        $requiredFields = ',' . $this->config->task->create->requiredFields . ',';
+        if($execution->lifetime == 'ops' or $execution->attribute == 'request' or $execution->attribute == 'review') $requiredFields = str_replace(',story,', ',', $requiredFields);
+        $requiredFields = trim($requiredFields, ',');
+
+        /* check data. */
+        foreach($data as $i => $task)
+        {
+            /* 检查任务是否开启了起止日期必填的配置(limitTaskDate)。 */
+            if(!empty($this->config->limitTaskDate))
+            {
+                $this->checkEstStartedAndDeadline($execution->id, $task->estStarted, $task->deadline);
+                if(dao::isError()) return false;
+            }
+
+            /* 检查任务截止日期是否为空以及是否小于预计开始日期。 */
+            if(!helper::isZeroDate($task->deadline) and $task->deadline < $task->estStarted)
+            {
+                dao::$errors['message'][] = $this->lang->task->error->deadlineSmall;
+                return false;
+            }
+
+            /* 检查任务预计是否为数字类型。 */
+            if($task->estimate and !preg_match("/^[0-9]+(.[0-9]{1,3})?$/", $task->estimate))
+            {
+                dao::$errors['message'][] = $this->lang->task->error->estimateNumber;
+                return false;
+            }
+
+            /* 验证必填字段。 */
+            $requiredFields = array_filter(explode(',', $requiredFields));
+            foreach($requiredFields as $field)
+            {
+                if(empty($task->$field))
+                {
+                    dao::$errors['message'][] = sprintf($this->lang->error->notempty, $this->lang->task->$field);
+                    return false;
+                }
+            }
+            if($task->estimate) $task->estimate = (float)$task->estimate;
+        }
+
+        return $data;
+    }
+
+    /**
+     * 拆分已消耗的任务。
+     * Split the consumed task.
+     *
+     * @param  object    $parentTask
+     * @access protected
+     * @return bool
+     */
+    protected function splitConsumedTask(object $parentTask): bool
+    {
+        $clonedTask = clone $parentTask;
+        $clonedTask->parent = $parentTask->id;
+        unset($clonedTask->id);
+        $this->dao->insert(TABLE_TASK)->data($clonedTask)->autoCheck()->exec();
+        if(dao::isError()) return false;
+
+        $clonedTaskID = $this->dao->lastInsertID();
+
+        $this->dao->update(TABLE_EFFORT)->set('objectID')->eq($clonedTaskID)
+            ->where('objectID')->eq($parentTask->id)
+            ->andWhere('objectType')->eq('task')
+            ->exec();
+        if(dao::isError()) return false;
+
+        return true;
+    }
+
+    /**
+     * 拆分之后更新父任务的parent、lastEditedBy、lastEditedDate字段。
+     * Update the parent's parent, lastEditedBy, and lastEditedDate fields after split.
+     *
+     * @param  int        $parentID
+     * @access protected
+     * @return void
+     */
+    protected function updateParentAfterSplit(int $parentID): void
+    {
+        $task = new stdclass();
+        $task->parent         = '-1';
+        $task->lastEditedBy   = $this->app->user->account;
+        $task->lastEditedDate = helper::now();
+        $this->dao->update(TABLE_TASK)->data($task)->where('id')->eq($parentID)->exec();
+    }
 }

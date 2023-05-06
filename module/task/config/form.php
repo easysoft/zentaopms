@@ -57,3 +57,27 @@ $config->task->form->edit['canceledDate'] = array('type' => 'string', 'required'
 $config->task->form->edit['closedBy']     = array('type' => 'string', 'required' => false, 'default' => '');
 $config->task->form->edit['closedReason'] = array('type' => 'string', 'required' => false, 'default' => '');
 $config->task->form->edit['closedDate']   = array('type' => 'string', 'required' => false, 'default' => '');
+
+$config->task->form->edit['team']         = array('type' => 'array', 'required' => false, 'default' => array());
+$config->task->form->edit['teamSource']   = array('type' => 'array', 'required' => false, 'default' => array());
+$config->task->form->edit['teamEstimate'] = array('type' => 'array', 'required' => false, 'default' => array());
+$config->task->form->edit['teamConsumed'] = array('type' => 'array', 'required' => false, 'default' => array());
+$config->task->form->edit['teamLeft']     = array('type' => 'array', 'required' => false, 'default' => array());
+$config->task->form->edit['deleteFiles']  = array('type' => 'array', 'required' => false, 'default' => array());
+
+$config->task->form->batchCreate = array();
+$config->task->form->batchCreate['module']        = array('type' => 'array', 'required' => false, 'default' => array());
+$config->task->form->batchCreate['parent']        = array('type' => 'array', 'required' => false, 'default' => array());
+$config->task->form->batchCreate['story']         = array('type' => 'array', 'required' => true,  'default' => array());
+$config->task->form->batchCreate['storyEstimate'] = array('type' => 'array', 'required' => true,  'default' => array());
+$config->task->form->batchCreate['storyDesc']     = array('type' => 'array', 'required' => false, 'default' => array());
+$config->task->form->batchCreate['storyPri']      = array('type' => 'array', 'required' => false, 'default' => array());
+$config->task->form->batchCreate['name']          = array('type' => 'array', 'required' => false, 'default' => array());
+$config->task->form->batchCreate['color']         = array('type' => 'array', 'required' => false, 'default' => array());
+$config->task->form->batchCreate['type']          = array('type' => 'array', 'required' => false, 'default' => array());
+$config->task->form->batchCreate['assignedTo']    = array('type' => 'array', 'required' => false, 'default' => array());
+$config->task->form->batchCreate['estimated']     = array('type' => 'array', 'required' => false, 'default' => array());
+$config->task->form->batchCreate['estStarted']    = array('type' => 'array', 'required' => false, 'default' => array());
+$config->task->form->batchCreate['deadline']      = array('type' => 'array', 'required' => false, 'default' => array());
+$config->task->form->batchCreate['desc']          = array('type' => 'array', 'required' => false, 'default' => array());
+$config->task->form->batchCreate['pri']           = array('type' => 'array', 'required' => false, 'default' => array());

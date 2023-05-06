@@ -866,4 +866,166 @@ class taskZen extends task
 
         return array($task, $testTasks, $existTaskID);
     }
+
+    /**
+     * 根据一级菜单设置任务模块的导航。
+     * According to the main menu, set the navbar of the task module.
+     *
+     * @param  int       $executionID
+     * @param  int       $projectID
+     * @access protected
+     * @return void
+     */
+    protected function setMenuByTab(int $executionID, int $projectID = 0): void
+    {
+        $this->execution->setMenu($executionID);
+
+        if($this->app->tab == 'project') $this->loadModel('project')->setMenu($projectID);
+    }
+
+    /**
+     * 为表单获取自定义字段。
+     * Get task's custom fields for form.
+     *
+     * @param  object    $execution
+     * @param  string    $action
+     * @access protected
+     * return  array
+     */
+    protected function getCustomFields(object $execution, string $action): array
+    {
+        /* 设置自定义字段列表。 */
+        $customFormField = 'custom' . ucfirst($action). 'Fields';
+        foreach(explode(',', $this->config->task->{$customFormField}) as $field)
+        {
+            if($execution->type == 'stage' and strpos('estStarted,deadline', $field) !== false) continue;
+            $customFields[$field] = $this->lang->task->$field;
+        }
+
+        /* 设置已勾选的自定义字段。 */
+        $showFields = $this->config->task->custom->{$action . 'Fields'};
+        if($execution->lifetime == 'ops' or $execution->attribute == 'request' or $execution->attribute == 'review')
+        {
+            unset($customFields['story']);
+            $showFields = str_replace(',story,', ',', ",$showFields,");
+            $showFields = trim($showFields, ',');
+        }
+
+        return array($customFields, $showFields);
+    }
+
+    /**
+     * 构建批量创建任务的表单数据。
+     * Build batch create form.
+     *
+     * @param  object    $execution
+     * @param  int       $storyID
+     * @param  int       $moduleID
+     * @param  int       $taskID
+     * @param  array     $output
+     * @access protected
+     * @return void
+     */
+    protected function buildBatchCreateForm(object $execution, int $storyID, int $moduleID, int $taskID, array $output): void
+    {
+        /* 获取区域和泳道下拉数据，并设置区域和泳道的默认值。*/
+        if($execution->type == 'kanban') $this->taskZen->showKanbanRelatedVars($output);
+
+        /* 任务拆解。 */
+        if($taskID)
+        {
+            $task = $this->dao->findById($taskID)->from(TABLE_TASK)->fetch();
+            $this->view->parentTitle  = $task->name;
+            $this->view->parentPri    = $task->pri;
+        }
+
+        /* 需求批量分解任务。 */
+        $story       = $this->story->getByID($storyID);
+        $moduleID    = $story ? $story->module : $moduleID;
+        $moduleParam = $story ? $moduleID : 0;
+
+        /* 获取模块下拉数据。 */
+        $showAllModule = isset($this->config->execution->task->allModule) ? $this->config->execution->task->allModule : '';
+        $modules       = $this->loadModel('tree')->getTaskOptionMenu($execution->id, 0, 0, $showAllModule ? 'allModule' : '');
+        $stories       = $this->story->getExecutionStoryPairs($execution->id, 0, 'all', $moduleParam, 'short', 'active');
+
+        /* Set Custom. */
+        list($customFields, $showFields) = $this->getCustomFields($execution, 'batchCreate');
+
+        $this->view->title        = $execution->name . $this->lang->colon . $this->lang->task->batchCreate;
+        $this->view->execution    = $execution;
+        $this->view->modules      = $modules;
+        $this->view->parent       = $taskID;
+        $this->view->storyID      = $storyID;
+        $this->view->story        = $story;
+        $this->view->moduleID     = $moduleID;
+        $this->view->stories      = $stories;
+        $this->view->storyTasks   = $this->task->getStoryTaskCounts(array_keys($stories), $execution->id);
+        $this->view->members      = $this->loadModel('user')->getTeamMemberPairs($execution->id, 'execution', 'nodeleted');
+        $this->view->taskConsumed = isset($task) ? $task->consumed : 0;
+        $this->view->customFields = $customFields;
+        $this->view->showFields   = $showFields;
+
+        $this->display();
+    }
+
+    /**
+     * 获取重定向链接。
+     * Get redirected link.
+     *
+     * @param  object    $execution
+     * @access protected
+     * @return string
+     */
+    protected function getRedirectedLink(object $execution): string
+    {
+        if($this->app->tab == 'my')
+        {
+            $link = $this->createLink('my', 'work', 'mode=task');
+        }
+        elseif($this->app->tab == 'project' and $execution->multiple)
+        {
+            $link = $this->createLink('project', 'execution', "browseType=all&projectID={$execution->project}");
+        }
+        else
+        {
+            $link = $this->createLink('execution', 'browse', "executionID=$execution->id");
+        }
+
+        return $link;
+    }
+
+    /**
+     * 任务的数据更新之后，获取对应看板的数据。
+     * Get R&D kanban's or task kanban's data after task's data is updated.
+     *
+     * @param  object     $execution
+     * @access protected
+     * @return string
+     */
+    protected function getKanbanData(object $execution): string
+    {
+        $this->loadModel('kanban');
+
+        $execLaneType    = $this->session->execLaneType ? $this->session->execLaneType : 'all';
+        $execGroupBy     = $this->session->execGroupBy ? $this->session->execGroupBy : 'default';
+        $rdSearchValue   = $this->session->rdSearchValue ? $this->session->rdSearchValue : '';
+        $taskSearchValue = $this->session->taskSearchValue ? $this->session->taskSearchValue : '';
+
+        /* 处理专业研发看板。 */
+        if($execution->type == 'kanban')
+        {
+            $kanbanData    = $this->kanban->getRDKanban($execution->id, $execLaneType, 'id_desc', 0, $execGroupBy, $rdSearchValue);
+            $kanbanData    = json_encode($kanbanData);
+
+            return $kanbanData;
+        }
+
+        /* 处理任务看板。 */
+        $kanbanData = $this->kanban->getExecutionKanban($execution->id, $execLaneType, $execGroupBy, $taskSearchValue);
+        $kanbanType = $execLaneType == 'all' ? 'task' : key($kanbanData);
+        $kanbanData = json_encode($kanbanData[$kanbanType]);
+
+        return $kanbanData;
+    }
 }
