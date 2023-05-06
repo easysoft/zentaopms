@@ -58,12 +58,12 @@ include $frameworkRoot . 'helper.class.php';
 
 $app    = router::createApp('pms', dirname(dirname(__FILE__)), 'router');
 $poolID = getenv('ZTF_POOL_ID');
-$testDB = empty($config->testDB) ? array() : $config->testDB;
+$dbPool = empty($config->dbPool) ? array() : $config->dbPool;
 
 /* 根据ztf设置的poolID环境变量设置连接的数据库 */
-if(!empty($testDB) && !empty($poolID)) 
+if(!empty($dbPool) && !empty($poolID)) 
 {
-    $selectDB = $testDB[$poolID%count($testDB)];
+    $selectDB = $dbPool[$poolID%count($dbPool)];
 
     !empty($selectDB['host'])     && $config->db->host     = $selectDB['host'];
     !empty($selectDB['port'])     && $config->db->port     = $selectDB['port'];
