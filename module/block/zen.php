@@ -11,11 +11,16 @@ class blockZen extends block
      */
     protected function getAvailableModules(string $dashboard): array
     {
+        /* 只有在我的地盘仪表盘中添加区块才会选择对应模块，否则直接使用对应仪表盘所在的模块。*/
+        /* Only when adding blocks to my dashboard can I select the corresponding module, otherwise I will directly use the module where the corresponding dashboard is located.*/
         if($dashboard != 'my') return array();
 
         $modules = $this->lang->block->moduleList;
+        /* Unable to display the doc module on my dashboard. */
         unset($modules['doc']);
 
+        /* 从配置项中取出不同模块的首页对应的控制器方法。*/
+        /* Retrieve the controller method corresponding to the homepage of different modules from the configuration item.*/
         list($programModule, $programMethod)     = explode('-', $this->config->programLink);
         list($productModule, $productMethod)     = explode('-', $this->config->productLink);
         list($projectModule, $projectMethod)     = explode('-', $this->config->projectLink);
@@ -24,6 +29,7 @@ class blockZen extends block
         foreach($modules as $moduleKey => $moduleName)
         {
             if($moduleKey == 'todo') continue;
+            /* Determine if the user has permission for the current module. */
             if(in_array($moduleKey, $this->app->user->rights['acls'])) unset($modules[$moduleKey]);
 
             $method = 'index';
@@ -32,9 +38,12 @@ class blockZen extends block
             if($moduleKey == 'project')   $method = $projectMethod;
             if($moduleKey == 'execution') $method = $executionMethod;
 
+            /* After obtaining module permissions, it is necessary to verify whether there is permission for the module homepage. */
             if(!common::hasPriv($moduleKey, $method)) unset($modules[$moduleKey]);
         }
 
+        /* 判断区块是否被永久关闭，如果未被永久关闭则添加相应选项。*/
+        /* Determine whether the block has been permanently closed, and add corresponding options if it has not been permanently closed.*/
         $closedBlock = isset($this->config->block->closed) ? $this->config->block->closed : '';
         if(strpos(",$closedBlock,", ",|assigntome,") === false) $modules['assigntome'] = $this->lang->block->assignToMe;
         if(strpos(",$closedBlock,", ",|dynamic,") === false) $modules['dynamic'] = $this->lang->block->dynamic;
@@ -42,12 +51,8 @@ class blockZen extends block
         if(strpos(",$closedBlock,", ",|welcome,") === false and $this->config->global->flow == 'full') $modules['welcome'] = $this->lang->block->welcome;
         if(strpos(",$closedBlock,", ",|html,") === false) $modules['html'] = 'HTML';
         if(strpos(",$closedBlock,", ",|contribute,") === false and $this->config->vision == 'rnd') $modules['contribute'] = $this->lang->block->contribute;
-        $modules = array('' => '') + $modules;
 
-        $hiddenBlocks = $this->block->getMyHiddenBlocks('my');
-        foreach($hiddenBlocks as $block) $modules['hiddenBlock' . $block->id] = $block->title;
-
-        return $modules;
+        return array('' => '') + $modules;
     }
 
     /**
