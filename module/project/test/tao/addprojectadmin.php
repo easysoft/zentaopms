@@ -4,8 +4,8 @@ include dirname(__FILE__, 5) . "/test/lib/init.php";
 include dirname(__FILE__, 2) . '/project.class.php';
 su('admin');
 
-zdTable('project')->gen(5);
 zdTable('projectadmin')->gen(0);
+zdTable('project')->gen(5);
 
 /**
 

@@ -860,7 +860,7 @@ CREATE TABLE IF NOT EXISTS `zt_holiday` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(30) NOT NULL DEFAULT '',
   `type` enum('holiday', 'working') NOT NULL DEFAULT 'holiday',
-  `desc` mediumtext NULL,
+  `desc` text NULL,
   `year` char(4) NOT NULL DEFAULT '',
   `begin` date NULL,
   `end` date NULL,
@@ -2806,19 +2806,6 @@ CREATE TABLE IF NOT EXISTS `zt_overtime` (
   KEY `type` (`type`),
   KEY `status` (`status`),
   KEY `createdBy` (`createdBy`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
--- DROP TABLE IF EXISTS `zt_holiday`;
-CREATE TABLE IF NOT EXISTS `zt_holiday` (
-  `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
-  `name` varchar(30) NOT NULL DEFAULT '',
-  `type` enum('holiday', 'working') NOT NULL DEFAULT 'holiday',
-  `desc` text NULL,
-  `year` char(4) NOT NULL DEFAULT '',
-  `begin` date NULL,
-  `end` date NULL,
-  PRIMARY KEY (`id`),
-  KEY `year` (`year`),
-  KEY `name` (`name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_leave`;
 CREATE TABLE IF NOT EXISTS `zt_leave` (

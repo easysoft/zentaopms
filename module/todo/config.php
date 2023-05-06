@@ -1,11 +1,11 @@
 <?php
 declare(strict_types=1);
-helper::import(dirname(__FILE__) . 'config/form.php');
 
 $config->todo = new stdclass();
 $config->todo->maxBatchCreate = 8;
+$config->todo->defaultPri     = 3;
 
-if(!isset($config->todo->create)) $config->todo->create = new stdclass();
+$config->todo->create = new stdclass();
 $config->todo->edit   = new stdclass();
 $config->todo->dates  = new stdclass();
 $config->todo->times  = new stdclass();
@@ -61,3 +61,4 @@ if($this->config->edition == 'max')
     $config->todo->project['opportunity'] = TABLE_OPPORTUNITY;
     $config->todo->project['review']      = TABLE_REVIEW;
 }
+helper::import(dirname(__FILE__) . 'config/form.php');

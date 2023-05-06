@@ -748,12 +748,12 @@ class todoZen extends todo
     {
         foreach($todos as $todo)
         {
-            $begin = (isset($times[$todo->begin]) ? $times[$todo->begin] : $todo->begin);
-            $end   = (isset($times[$todo->end])   ? $times[$todo->end] : $todo->end);
+            $begin = isset($times[$todo->begin]) ? $times[$todo->begin] : $todo->begin;
+            $end   = isset($times[$todo->end])   ? $times[$todo->end] : $todo->end;
 
             /* fill some field with useful value. */
-            $todo->begin = $todo->begin == '2400' ? '' $begin;
-            $todo->end   = $todo->end   == '2400' ? '' $end;
+            $todo->begin = $todo->begin == '2400' ? '' : $begin;
+            $todo->end   = $todo->end   == '2400' ? '' : $end;
 
             $type = $todo->type;
             if(isset($assemble->users[$todo->account])) $todo->account = $assemble->users[$todo->account];

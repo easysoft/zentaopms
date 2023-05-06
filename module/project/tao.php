@@ -187,7 +187,7 @@ class projectTao extends projectModel
     }
 
     /**
-     * Get project details, including all contents of the TABLE_PROJECT.
+     * Get project details, including all contents of the project.
      * 获取项目的详情，包含project表的所有内容。
      *
      * @param  int       $projectID
@@ -491,6 +491,132 @@ class projectTao extends projectModel
     }
 
     /**
+     * 获取最近进行中的执行列表。
+     * Get latest executions.
+     *
+     * @access protected
+     * @return array
+     */
+    protected function getLatestExecutions(): array
+    {
+        /* 获取进行中的执行。 */
+        $executions = $this->loadModel('execution')->getStatData(0, 'doing', 0, 0, false, 'hasParentName|skipParent');
+        $doingExecutions = array();
+        foreach($executions as $execution) $doingExecutions[$execution->project][$execution->id] = $execution;
+
+        /* 将执行按照执行ID进行逆序排序。*/
+        $latestExecutions = array();
+        foreach($doingExecutions as $projectID => $executions)
+        {
+            krsort($doingExecutions[$projectID]);
+            $latestExecutions[$projectID] = current($doingExecutions[$projectID]);
+        }
+        return $latestExecutions;
+    }
+
+    /**
+     * 获取所有项目的统计信息。
+     * Get projects stats.
+     *
+     * @access protected
+     * @return array
+     */
+    protected function getProjectsStats(): array
+    {
+        $this->loadModel('program');
+        $projectsStats = $this->program->getProjectStats(0, 'all', 0, 'order_asc');
+        $projectsStats = $this->classfyProjects($projectsStats);
+
+        /* 只保留最近关闭的两个项目。*/
+        /* Only display recent two closed projects. */
+        $projectsStats = $this->sortAndReduceClosedGroup($projectsStats, 2);
+        return $projectsStats;
+    }
+
+    /**
+     * 对项目按照我的、其它的和关闭的进行分类。
+     * Classfy projects by my, other and closed.
+     *
+     * @param  int       $projects
+     * @access protected
+     * @return array
+     */
+    protected function classfyProjects($projects): array
+    {
+        $myProjects    = array();
+        $otherProjects = array();
+        $closedGroup   = array();
+        foreach($projects as $project)
+        {
+            if(!str_contains('wait,doing,closed', $project->status)) continue;
+
+            $projectPath = explode(',', trim($project->path, ','));
+            $topProgram  = !empty($project->parent) ? $projectPath[0] : $project->parent;
+
+            if($project->PM == $this->app->user->account)
+            {
+                if($project->status != 'closed')
+                {
+                    $myProjects[$topProgram][$project->status][] = $project;
+                }
+                else
+                {
+                    $closedGroup['my'][$topProgram][$project->closedDate] = $project;
+                }
+            }
+            else
+            {
+                if($project->status != 'closed')
+                {
+                    $otherProjects[$topProgram][$project->status][] = $project;
+                }
+                else
+                {
+                    $closedGroup['other'][$topProgram][$project->closedDate] = $project;
+                }
+            }
+        }
+
+        return array('myProjects' => $myProjects, 'otherProjects' => $otherProjects, 'closedGroup' => $closedGroup);
+    }
+
+    /**
+     * 对groups列表进行排序和缩减。
+     * Sort and reduce groups.
+     *
+     * @param  array     $projectsStats
+     * @param  int       $retainNum
+     * @access protected
+     * @return array
+     */
+    protected function sortAndReduceClosedGroup(array $projectsStats, int $retainNum = 2): array
+    {
+        $myProjects    = $projectsStats['myProjects'];
+        $otherProjects = $projectsStats['otherProjects'];
+        $closedGroup   = $projectsStats['closedGroup'];
+        foreach($closedGroup as $group => $closedProjects)
+        {
+            foreach($closedProjects as $topProgram => $projects)
+            {
+                krsort($projects);
+                if($retainNum > 0)
+                {
+                    if($group == 'my')
+                    {
+                        $myProjects[$topProgram]['closed'] = array_slice($projects, 0, $retainNum);
+                    }
+                    else
+                    {
+                        $otherProjects[$topProgram]['closed'] = array_slice($projects, 0, $retainNum);
+                    }
+                }
+            }
+        }
+
+        return array('my' => $myProjects, 'other' => $otherProjects);
+    }
+
+    /**
      * 根据项目集ID查询所有项目集的层级。
      * Get all program level of a program.
      *
@@ -512,22 +638,6 @@ class projectTao extends projectModel
         foreach($programList as $program) $programName .= $program . '/';
 
         return rtrim($programName, '/');
-    }
-
-    /**
-     * 查找项目执行下关联的产品
-     * Get linked products with execution under the project.
-     *
-     * @param  array $executionIDs
-     *
-     * @access protected
-     * @return array
-     */
-    protected function getExecutionProductGroup(array $executionIDs): array
-    {
-        return $this->dao->select('project,product')->from(TABLE_PROJECTPRODUCT)
-            ->where('project')->in($executionIDs)
-            ->fetchGroup('project', 'product');
     }
 
     /**
@@ -568,6 +678,35 @@ class projectTao extends projectModel
             ->fi()
             ->orderBy($orderBy)
             ->page($pager, 't1.id')
+            ->fetchAll('id');
+    }
+
+    /**
+     * 通过条件查询和数量限制查询项目列表。
+     * Get project list by query and with limit.
+     *
+     * @param  string     $queryType
+     * @param  string|int $param
+     * @param  string     $orderBy
+     * @param  int        $limit
+     * @param  string     $excludedModel
+     * @access protected
+     * @return array
+     */
+    protected function fetchProjectListByQuery(string $queryType, string|int $param, string $orderBy, int $limit, string $excludedModel): array
+    {
+        $queryType = strtolower($queryType);
+        return $this->dao->select('*')->from(TABLE_PROJECT)
+            ->where('type')->eq('project')
+            ->andWhere('vision')->eq($this->config->vision)
+            ->andWhere('deleted')->eq(0)
+            ->beginIF($excludedModel)->andWhere('model')->ne($excludedModel)->fi()
+            ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->projects)->fi()
+            ->beginIF($queryType == 'bystatus' and $param == 'undone')->andWhere('status')->notIN('done,closed')->fi()
+            ->beginIF($queryType == 'bystatus' and $param != 'all' and $param != 'undone')->andWhere('status')->eq($param)->fi()
+            ->beginIF($queryType == 'byid')->andWhere('id')->eq($param)->fi()
+            ->orderBy($orderBy)
+            ->beginIF($limit)->limit($limit)->fi()
             ->fetchAll('id');
     }
 

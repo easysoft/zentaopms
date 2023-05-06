@@ -15,3 +15,4 @@ $config->db->password    = '123456';
 $config->db->prefix      = 'zt_';
 $config->webRoot         = getWebRoot();
 $config->default->lang   = 'zh-cn';
+$config->codeCoverage    = false;

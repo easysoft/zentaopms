@@ -767,12 +767,14 @@ class programplanModel extends model
             $plans[] = $plan;
         }
 
+        /* Set dao error and return false if the programplan has no name. */
         if(empty($plans))
         {
             dao::$errors['message'][] = sprintf($this->lang->error->notempty, $this->lang->programplan->name);
             return false;
         }
 
+        /* Check every plan is valid. */
         $totalPercent = 0;
         $milestone    = 0;
         foreach($plans as $index => $plan)
@@ -861,7 +863,7 @@ class programplanModel extends model
         {
             $orderIndex = empty($orders) ? 0 : count($orders);
             $lastID     = $this->dao->select('id')->from(TABLE_EXECUTION)->orderBy('id_desc')->fetch('id');
-            for($i = $orderIndex; $i < count($datas); $i ++)
+            for($i = $orderIndex; $i < count($plans); $i ++)
             {
                 $lastID ++;
                 $orders[$i] = $lastID * 5;
@@ -881,33 +883,29 @@ class programplanModel extends model
             $linkProducts = array_keys($productList);
             foreach($linkProducts as $index => $productID) $linkBranches[$index] = $productList[$productID]->branches;
         }
-        $this->post->set('products', $linkProducts);
-        $this->post->set('branch', $linkBranches);
 
-        foreach($datas as $data)
+        foreach($plans as $plan)
         {
             /* Set planDuration and realDuration. */
             if($this->config->edition == 'max')
             {
-                $data->planDuration = $this->getDuration($data->begin, $data->end);
-                $data->realDuration = $this->getDuration($data->realBegan, $data->realEnd);
+                $plan->planDuration = $this->getDuration($plan->begin, $plan->end);
+                $plan->realDuration = $this->getDuration($plan->realBegan, $plan->realEnd);
             }
 
-            $projectChanged = false;
-            $data->days     = helper::diffDate($data->end, $data->begin) + 1;
-            $data->order    = current($orders);
+            $plan->days     = helper::diffDate($plan->end, $plan->begin) + 1;
+            $plan->order    = current($orders);
 
-
-            if($data->id)
+            if($plan->id)
             {
-                $stageID = $data->id;
-                unset($data->id, $data->type);
+                $stageID = $plan->id;
+                unset($plan->id, $plan->type);
 
                 $oldStage    = $this->getByID($stageID);
-                $planChanged = ($oldStage->name != $data->name || $oldStage->milestone != $data->milestone || $oldStage->begin != $data->begin || $oldStage->end != $data->end);
+                $planChanged = ($oldStage->name != $plan->name || $oldStage->milestone != $plan->milestone || $oldStage->begin != $plan->begin || $oldStage->end != $plan->end);
 
-                if($planChanged) $data->version = $oldStage->version + 1;
-                $this->dao->update(TABLE_PROJECT)->data($data)
+                if($planChanged) $plan->version = $oldStage->version + 1;
+                $this->dao->update(TABLE_PROJECT)->data($plan)
                     ->autoCheck()
                     ->batchCheck($this->config->programplan->edit->requiredFields, 'notempty')
                     ->checkIF($plan->percent != '' and $setPercent, 'percent', 'float')
@@ -915,56 +913,56 @@ class programplanModel extends model
                     ->exec();
 
                 /* Add PM to stage teams and project teams. */
-                if(!empty($data->PM))
+                if(!empty($plan->PM))
                 {
                     $team = $this->user->getTeamMemberPairs($stageID, 'execution');
-                    if(isset($team[$data->PM])) continue;
+                    if(isset($team[$plan->PM])) continue;
 
-                    $roles  = $this->user->getUserRoles($data->PM);
+                    $roles  = $this->user->getUserRoles($plan->PM);
                     $member = new stdclass();
                     $member->root    = $stageID;
-                    $member->account = $data->PM;
-                    $member->role    = zget($roles, $data->PM, '');
+                    $member->account = $plan->PM;
+                    $member->role    = zget($roles, $plan->PM, '');
                     $member->join    = $now;
                     $member->type    = 'execution';
-                    $member->days    = $data->days;
+                    $member->days    = $plan->days;
                     $member->hours   = $this->config->execution->defaultWorkhours;
                     $this->dao->insert(TABLE_TEAM)->data($member)->exec();
-                    $this->execution->addProjectMembers($data->project, array($data->PM => $member));
+                    $this->execution->addProjectMembers($plan->project, array($plan->PM => $member));
                 }
 
-                if($data->acl != 'open') $this->user->updateUserView($stageID, 'sprint');
+                if($plan->acl != 'open') $this->user->updateUserView($stageID, 'sprint');
 
                 /* Record version change information. */
                 if($planChanged)
                 {
                     $spec = new stdclass();
                     $spec->project   = $stageID;
-                    $spec->version   = $data->version;
-                    $spec->name      = $data->name;
-                    $spec->milestone = $data->milestone;
-                    $spec->begin     = $data->begin;
-                    $spec->end       = $data->end;
+                    $spec->version   = $plan->version;
+                    $spec->name      = $plan->name;
+                    $spec->milestone = $plan->milestone;
+                    $spec->begin     = $plan->begin;
+                    $spec->end       = $plan->end;
                     $this->dao->insert(TABLE_PROJECTSPEC)->data($spec)->exec();
                 }
 
-                $changes  = common::createChanges($oldStage, $data);
+                $changes  = common::createChanges($oldStage, $plan);
                 $actionID = $this->action->create('execution', $stageID, 'edited');
                 $this->action->logHistory($actionID, $changes);
             }
             else
             {
-                unset($data->id);
-                $data->status        = 'wait';
-                $data->division      = $project->division;
-                $data->version       = 1;
-                $data->parentVersion = $data->parent == 0 ? 0 : $this->dao->findByID($data->parent)->from(TABLE_PROJECT)->fetch('version');
-                $data->team          = substr($data->name,0, 30);
-                $data->openedBy      = $account;
-                $data->openedDate    = $now;
-                $data->openedVersion = $this->config->version;
-                if(!isset($data->acl)) $data->acl = $this->dao->findByID($data->parent)->from(TABLE_PROJECT)->fetch('acl');
-                $this->dao->insert(TABLE_PROJECT)->data($data)
+                unset($plan->id);
+                $plan->status        = 'wait';
+                $plan->division      = $project->division;
+                $plan->version       = 1;
+                $plan->parentVersion = $plan->parent == 0 ? 0 : $this->dao->findByID($plan->parent)->from(TABLE_PROJECT)->fetch('version');
+                $plan->team          = substr($plan->name,0, 30);
+                $plan->openedBy      = $account;
+                $plan->openedDate    = $now;
+                $plan->openedVersion = $this->config->version;
+                if(!isset($plan->acl)) $plan->acl = $this->dao->findByID($plan->parent)->from(TABLE_PROJECT)->fetch('acl');
+                $this->dao->insert(TABLE_PROJECT)->data($plan)
                     ->autoCheck()
                     ->batchCheck($this->config->programplan->create->requiredFields, 'notempty')
                     ->checkIF($plan->percent != '' and $setPercent, 'percent', 'float')
@@ -973,13 +971,13 @@ class programplanModel extends model
                 if(!dao::isError())
                 {
                     $stageID = $this->dao->lastInsertID();
-                    if($data->type == 'kanban')
+                    if($plan->type == 'kanban')
                     {
                         $execution = $this->execution->getByID($stageID);
                         $this->loadModel('kanban')->createRDKanban($execution);
                     }
 
-                    if($data->acl != 'open') $this->user->updateUserView($stageID, 'sprint');
+                    if($plan->acl != 'open') $this->user->updateUserView($stageID, 'sprint');
 
                     /* Create doc lib. */
                     $lib = new stdclass();
@@ -995,7 +993,7 @@ class programplanModel extends model
 
                     /* Add creators and PM to stage teams and project teams. */
                     $teamMembers = array();
-                    $members     = array($this->app->user->account, $data->PM);
+                    $members     = array($this->app->user->account, $plan->PM);
                     $roles       = $this->user->getUserRoles(array_values($members));
                     $team        = $this->user->getTeamMemberPairs($stageID, 'execution');
                     foreach($members as $teamMember)
@@ -1008,29 +1006,29 @@ class programplanModel extends model
                         $member->role    = zget($roles, $teamMember, '');
                         $member->join    = $now;
                         $member->type    = 'execution';
-                        $member->days    = $data->days;
+                        $member->days    = $plan->days;
                         $member->hours   = $this->config->execution->defaultWorkhours;
                         $this->dao->insert(TABLE_TEAM)->data($member)->exec();
                         $teamMembers[$teamMember] = $member;
                     }
-                    $this->execution->addProjectMembers($data->project, $teamMembers);
+                    $this->execution->addProjectMembers($plan->project, $teamMembers);
 
                     $this->setTreePath($stageID);
-                    if($data->acl != 'open') $this->user->updateUserView($stageID, 'sprint');
+                    if($plan->acl != 'open') $this->user->updateUserView($stageID, 'sprint');
 
                     /* Record version change information. */
                     $spec = new stdclass();
                     $spec->project   = $stageID;
-                    $spec->version   = $data->version;
-                    $spec->name      = $data->name;
-                    $spec->milestone = $data->milestone;
-                    $spec->begin     = $data->begin;
-                    $spec->end       = $data->end;
+                    $spec->version   = $plan->version;
+                    $spec->name      = $plan->name;
+                    $spec->milestone = $plan->milestone;
+                    $spec->begin     = $plan->begin;
+                    $spec->end       = $plan->end;
                     $this->dao->insert(TABLE_PROJECTSPEC)->data($spec)->exec();
 
-                    if($project->hasProduct)
+                    if($project->hasProduct and !empty($linkProducts))
                     {
-                        $this->action->create('execution', $stageID, 'opened', '', join(',', $_POST['products']));
+                        $this->action->create('execution', $stageID, 'opened', '', implode(',', $linkProducts));
                     }
                     else
                     {
@@ -1086,85 +1084,24 @@ class programplanModel extends model
     }
 
     /**
+     * 更新阶段。
      * Update a plan.
      *
-     * @param  int    $planID
-     * @param  int    $projectID
+     * @param  int       $planID
+     * @param  int       $projectID
+     * @param  object    $plan
      * @access public
      * @return bool|array
      */
-    public function update($planID = 0, $projectID = 0)
+    public function update(int $planID = 0, int $projectID = 0, object $plan): bool|array
     {
-        /* Get oldPlan and the data from the post. */
         $oldPlan = $this->getByID($planID);
-        $plan    = fixer::input('post')
-            ->setDefault('begin', '0000-00-00')
-            ->setDefault('end', '0000-00-00')
-            ->setDefault('realBegan', '0000-00-00')
-            ->setDefault('realEnd', '0000-00-00')
-            ->join('output', ',')
-            ->get();
 
         /* Judgment of required items. */
-        if($plan->begin == '0000-00-00') dao::$errors['begin'][] = sprintf($this->lang->error->notempty, $this->lang->programplan->begin);
-        if($plan->end   == '0000-00-00') dao::$errors['end'][]   = sprintf($this->lang->error->notempty, $this->lang->programplan->end);
-        if(dao::isError()) return false;
+        if(!$this->checkRequiredItems($oldPlan, $plan, $projectID)) return false;
 
-        if($plan->parent) $parentStage = $this->getByID($plan->parent);
-        if(isset($parentStage) and $plan->begin < $parentStage->begin)
-        {
-            dao::$errors['begin'] = sprintf($this->lang->programplan->error->letterParent, $parentStage->begin);
-            return false;
-        }
-        if(isset($parentStage) and $plan->end > $parentStage->end)
-        {
-            dao::$errors['end']   = sprintf($this->lang->programplan->error->greaterParent, $parentStage->end);
-            return false;
-        }
-
-        if($projectID) $this->loadModel('execution')->checkBeginAndEndDate($projectID, $plan->begin, $plan->end);
-        if(dao::isError()) return false;
-
-        $setCode = (isset($this->config->setCode) and $this->config->setCode == 1) ? true : false;
-        if($setCode and empty($plan->code))
-        {
-            dao::$errors['code'][] = sprintf($this->lang->error->notempty, $this->lang->execution->code);
-            return false;
-        }
-
+        $setCode     = (isset($this->config->setCode) and $this->config->setCode == 1) ? true : false;
         $planChanged = ($oldPlan->name != $plan->name || $oldPlan->milestone != $plan->milestone || $oldPlan->begin != $plan->begin || $oldPlan->end != $plan->end);
-
-        $setPercent = isset($this->config->setPercent) and $this->config->setPercent == 1 ? true : false;
-        if($plan->parent > 0)
-        {
-            $plan->attribute = $parentStage->attribute == 'mix' ? $plan->attribute : $parentStage->attribute;
-            $plan->acl       = $parentStage->acl;
-            if($setPercent)
-            {
-                $parentPercent        = $parentStage->percent;
-                $childrenTotalPercent = $this->getTotalPercent($parentStage, true);
-                $childrenTotalPercent = $plan->parent == $oldPlan->parent ? ($childrenTotalPercent - $oldPlan->percent + $plan->percent) : ($childrenTotalPercent + $plan->percent);
-                if($childrenTotalPercent > 100) return dao::$errors['percent'][] = $this->lang->programplan->error->percentOver;
-            }
-
-            /* If child plan has milestone, update parent plan set milestone eq 0 . */
-            if($plan->milestone and $parentStage->milestone) $this->dao->update(TABLE_PROJECT)->set('milestone')->eq(0)->where('id')->eq($oldPlan->parent)->exec();
-        }
-        else
-        {
-            /* Synchronously update sub-phase permissions. */
-            $childrenIDList = $this->dao->select('id')->from(TABLE_PROJECT)->where('parent')->eq($oldPlan->id)->fetchAll('id');
-            if(!empty($childrenIDList)) $this->dao->update(TABLE_PROJECT)->set('acl')->eq($plan->acl)->where('id')->in(array_keys($childrenIDList))->exec();
-
-            /* The workload of the parent plan cannot exceed 100%. */
-            $oldPlan->parent = $plan->parent;
-            if($setPercent)
-            {
-                $totalPercent    = $this->getTotalPercent($oldPlan);
-                $totalPercent    = $totalPercent + $plan->percent;
-                if($totalPercent > 100) return dao::$errors['percent'][] = $this->lang->programplan->error->percentOver;
-            }
-        }
 
         /* Set planDuration and realDuration. */
         if($this->config->edition == 'max')
@@ -1175,7 +1112,6 @@ class programplanModel extends model
 
         if($planChanged)  $plan->version = $oldPlan->version + 1;
         if(empty($plan->parent)) $plan->parent = $projectID;
-
         $parentStage = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($plan->parent)->andWhere('type')->eq('stage')->fetch();
 
         /* Fix bug #22030. Reset field name for show dao error. */
@@ -1185,19 +1121,20 @@ class programplanModel extends model
         $relatedExecutionsID = $this->loadModel('execution')->getRelatedExecutions($planID);
         $relatedExecutionsID = !empty($relatedExecutionsID) ? implode(',', array_keys($relatedExecutionsID)) : '0';
 
-        $this->dao->update(TABLE_PROJECT)->data($plan)
-            ->autoCheck()
-            ->batchCheck($this->config->programplan->edit->requiredFields, 'notempty')
-            ->checkIF($plan->end != '0000-00-00', 'end', 'ge', $plan->begin)
-            ->checkIF(!empty($plan->percent), 'percent', 'float')
-            ->checkIF(!empty($plan->name), 'name', 'unique', "id in ({$relatedExecutionsID}) and type in ('sprint','stage') and `project` = {$oldPlan->project} and `deleted` = '0'" . ($parentStage ? " and `parent` = {$oldPlan->parent}" : ''))
-            ->checkIF(!empty($plan->code) and $setCode, 'code', 'unique', "id != $planID and type in ('sprint','stage','kanban') and `deleted` = '0'")
-            ->where('id')->eq($planID)
-            ->exec();
+        $conditions = array();
+        $conditions['requiredFields']      = $this->config->programplan->edit->requiredFields;
+        $conditions['relatedExecutionsID'] = $relatedExecutionsID;
+        $conditions['oldProject']          = $oldPlan->project;
+        $conditions['oldParent']           = $oldPlan->parent;
+        $conditions['parentStage']         = $parentStage;
+        $conditions['setCode']             = $setCode;
 
-        if(dao::isError()) return false;
+        $result = $this->programplanTao->update($plan, $conditions);
+        if(!$result) return false;
+
         $this->setTreePath($planID);
         $this->updateSubStageAttr($planID, $plan->attribute);
+
         if($plan->acl != 'open')
         {
             $planIdList = $this->dao->select('id')->from(TABLE_EXECUTION)->where('path')->like("%,$planID,%")->andWhere('type')->ne('project')->fetchAll('id');
@@ -1652,13 +1589,14 @@ class programplanModel extends model
     }
 
     /**
+     * 获取阶段当前和子集信息。
      * Get plan and its children.
      *
-     * @param  string|int|array    $planIdList
+     * @param  string|int|array $planIdList
      * @access public
      * @return array
      */
-    public function getSelfAndChildrenList($planIdList)
+    public function getSelfAndChildrenList(string|int|array $planIdList)
     {
         if(is_numeric($planIdList)) $planIdList = (array)$planIdList;
 
@@ -1711,4 +1649,97 @@ class programplanModel extends model
 
         return $siblingStages;
     }
+
+    /**
+     * 校验提交数据是否必须。
+     * Check required items.
+     *
+     * @param  object $oldPlan
+     * @param  object $plan
+     * @param  int $projectID
+     * @access private
+     * @return bool
+     */
+    private function checkRequiredItems(object $oldPlan, object $plan, int $projectID): bool
+    {
+        if($plan->begin == '0000-00-00') dao::$errors['begin'][] = sprintf($this->lang->error->notempty, $this->lang->programplan->begin);
+        if($plan->end   == '0000-00-00') dao::$errors['end'][]   = sprintf($this->lang->error->notempty, $this->lang->programplan->end);
+        if(dao::isError()) return false;
+
+        if($plan->parent) $parentStage = $this->getByID($plan->parent);
+        if(isset($parentStage) and $plan->begin < $parentStage->begin)
+        {
+            dao::$errors['begin'] = sprintf($this->lang->programplan->error->letterParent, $parentStage->begin);
+            return false;
+        }
+        if(isset($parentStage) and $plan->end > $parentStage->end)
+        {
+            dao::$errors['end']   = sprintf($this->lang->programplan->error->greaterParent, $parentStage->end);
+            return false;
+        }
+
+        if($projectID) $this->loadModel('execution')->checkBeginAndEndDate($projectID, $plan->begin, $plan->end);
+        if(dao::isError()) return false;
+
+
+        $setCode = (isset($this->config->setCode) and $this->config->setCode == 1) ? true : false;
+        if($setCode and empty($plan->code))
+        {
+            dao::$errors['code'][] = sprintf($this->lang->error->notempty, $this->lang->execution->code);
+            return false;
+        }
+
+
+        $setPercent = isset($this->config->setPercent) and $this->config->setPercent == 1 ? true : false;
+        if($plan->parent > 0)
+        {
+            $plan->attribute = $parentStage->attribute == 'mix' ? $plan->attribute : $parentStage->attribute;
+            $plan->acl       = $parentStage->acl;
+            if($setPercent)
+            {
+                $parentPercent        = $parentStage->percent;
+                $childrenTotalPercent = $this->getTotalPercent($parentStage, true);
+                $childrenTotalPercent = $plan->parent == $oldPlan->parent ? ($childrenTotalPercent - $oldPlan->percent + $plan->percent) : ($childrenTotalPercent + $plan->percent);
+                if($childrenTotalPercent > 100) return dao::$errors['percent'][] = $this->lang->programplan->error->percentOver;
+            }
+
+            /* If child plan has milestone, update parent plan set milestone eq 0 . */
+            if($plan->milestone and $parentStage->milestone) $this->dao->update(TABLE_PROJECT)->set('milestone')->eq(0)->where('id')->eq($oldPlan->parent)->exec();
+        }
+        else
+        {
+            /* Synchronously update sub-phase permissions. */
+            $childrenIDList = $this->dao->select('id')->from(TABLE_PROJECT)->where('parent')->eq($oldPlan->id)->fetchAll('id');
+            if(!empty($childrenIDList)) $this->dao->update(TABLE_PROJECT)->set('acl')->eq($plan->acl)->where('id')->in(array_keys($childrenIDList))->exec();
+
+            /* The workload of the parent plan cannot exceed 100%. */
+            $oldPlan->parent = $plan->parent;
+            if($setPercent)
+            {
+                $totalPercent    = $this->getTotalPercent($oldPlan);
+                $totalPercent    = $totalPercent + $plan->percent;
+                if($totalPercent > 100) return dao::$errors['percent'][] = $this->lang->programplan->error->percentOver;
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * 获取阶段ID的属性。
+     * Get stageID attribute.
+     *
+     * @param  int   $stageID
+     * @access public
+     * @return false|string
+     */
+    public function getStageAttribute(int $stageID): false|string
+    {
+        $stageAttribute = $this->dao->select('attribute')->from(TABLE_EXECUTION)->where('id')->eq($stageID)->fetch('attribute');
+
+        if(dao::isError()) return false;
+
+        return $stageAttribute;
+    }
+
 }
