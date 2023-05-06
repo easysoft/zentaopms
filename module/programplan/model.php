@@ -1652,13 +1652,14 @@ class programplanModel extends model
     }
 
     /**
+     * 获取阶段当前和子集信息。
      * Get plan and its children.
      *
-     * @param  string|int|array    $planIdList
+     * @param  string|int|array $planIdList
      * @access public
      * @return array
      */
-    public function getSelfAndChildrenList($planIdList)
+    public function getSelfAndChildrenList(string|int|array $planIdList)
     {
         if(is_numeric($planIdList)) $planIdList = (array)$planIdList;
 
