@@ -37,6 +37,7 @@ function initData()
     $stakeholder->gen(9);
 }
 
+initData();
 su('admin');
 
 /**
