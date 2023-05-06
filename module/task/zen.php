@@ -307,7 +307,7 @@ class taskZen extends task
      */
     private function setTaskInfoByObjectID(int $storyID, int $moduleID, int $taskID, int $todoID, int $bugID): object
     {
-        $task = $config->task->create->template;
+        $task = $this->config->task->create->template;
         $task->module = $moduleID;
 
         /* If exist task, copy task information by task id. */
