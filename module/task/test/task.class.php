@@ -1605,4 +1605,27 @@ class taskTest
             return $task;
         }
     }
+
+    /**
+     * Test remove required fields for creating tasks based on conditions.
+     *
+     * @param  object $task
+     * @param  bool   $selectTestStory
+     * @access public
+     * @return string
+     */
+    public function removeCreateRequiredFieldsTest(object $task, bool $selectTestStory): string
+    {
+        global $tester;
+        $tester->config->task->create->requiredFields = 'name,type,execution,story,estimate,estStarted,deadline,module';
+        $this->objectModel->removeCreateRequiredFields($task, $selectTestStory);
+        if(dao::isError())
+        {
+            return dao::getError();
+        }
+        else
+        {
+            return $tester->config->task->create->requiredFields;
+        }
+    }
 }
