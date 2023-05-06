@@ -35,6 +35,7 @@ class todo extends control
      */
     public function create(string $date = 'today', string $from = 'todo')
     {
+        $this->app->loadClass('date');
         if($date == 'today') $date = date::today();
 
         if(!empty($_POST))

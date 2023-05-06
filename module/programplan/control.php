@@ -231,60 +231,37 @@ class programplan extends control
     }
 
     /**
+     * 编辑阶段内容。
      * Edit a project plan.
      *
-     * @param  int    $planID
-     * @param  int    $projectID
+     * @param  string    $planID
+     * @param  string    $projectID
      * @access public
      * @return void
      */
-    public function edit($planID = 0, $projectID = 0)
+    public function edit(string $planID = 0, string $projectID = 0)
     {
-        $this->loadModel('project');
-        $this->app->loadLang('execution');
-        $this->app->loadLang('stage');
-
-        $plan = $this->programplan->getByID($planID);
-
-        global $lang;
-        $lang->executionCommon = $lang->execution->stage;
-        include $this->app->getModulePath('', 'execution') . 'lang/' . $this->app->getClientLang() . '.php';
+        $planID    = (int)$planID;
+        $projectID = (int)$projectID;
+        $plan      = $this->programplan->getByID($planID);
 
         if($_POST)
         {
-            $changes = $this->programplan->update($planID, $projectID);
+            $formData     = form::data($this->config->programplan->edit->form);
+            $postData     = $this->programplanZen->beforeEdit($formData);
+            $postData->id = $planID;
+
+            $changes = $this->programplan->update($planID, $projectID, $postData);
 
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-            if($changes)
-            {
-                $actionID = $this->loadModel('action')->create('execution', $planID, 'edited');
-                $this->action->logHistory($actionID, $changes);
 
-                $newPlan = $this->programplan->getByID($planID);
+            if($changes) $this->programplanZen->afterEdit($plan, $changes);
 
-                if($plan->parent != $newPlan->parent)
-                {
-                    $this->programplan->computeProgress($planID, 'edit');
-                    $this->programplan->computeProgress($plan->parent, 'edit', true);
-                }
-            }
             $locate = isonlybody() ? 'parent' : inlink('browse', "program=$plan->program&type=lists");
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $locate));
         }
 
-        $parentStage = $this->project->getByID($plan->parent, 'stage');
-
-        $this->view->title              = $this->lang->programplan->edit;
-        $this->view->position[]         = $this->lang->programplan->edit;
-        $this->view->isCreateTask       = $this->programplan->isCreateTask($planID);
-        $this->view->plan               = $plan;
-        $this->view->parentStageList    = $this->programplan->getParentStageList($this->session->project, $planID, $plan->product);
-        $this->view->enableOptionalAttr = (empty($parentStage) or (!empty($parentStage) and $parentStage->attribute == 'mix'));
-        $this->view->isTopStage         = $this->programplan->checkTopStage($planID);
-        $this->view->isLeafStage        = $this->programplan->checkLeafStage($planID);
-        $this->view->PMUsers            = $this->loadModel('user')->getPairs('noclosed|nodeleted|pmfirst',  $plan->PM);
-
-        $this->display();
+        $this->programplanZen->buildEditView($plan);
     }
 
     /**
