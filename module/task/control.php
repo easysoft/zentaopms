@@ -66,7 +66,7 @@ class task extends control
         if(!empty($_POST))
         {
             /* Prepare the data information before creating the task. */
-            $result = $this->prepareCreate($executionID, (float)$this->post->estimate, $this->post->estStarted, $this->post->deadline, (bool)$this->post->selectTestStory);
+            $result = $this->taskZen->prepareCreate($executionID, (float)$this->post->estimate, $this->post->estStarted, $this->post->deadline, (bool)$this->post->selectTestStory);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             list($task, $testTasks, $existTaskID) = $result;
@@ -493,7 +493,7 @@ class task extends control
         $execution = $this->execution->getById($task->execution);
         if(!isonlybody() and $execution->type == 'kanban')
         {
-            setcookie('taskToOpen', $taskID, 0, $this->config->webRoot, '', false, true);
+            setcookie('taskToOpen', $taskID, 0, $this->config->webRoot, '', $this->config->cookieSecure, true);
             return print(js::locate($this->createLink('execution', 'kanban', "executionID=$execution->id")));
         }
 

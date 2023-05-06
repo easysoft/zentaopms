@@ -515,17 +515,16 @@ class todoModel extends model
      * Get data for export todo.
      *
      * @param  string $orderBy
-     * @param  object $formData
      * @param  string $queryCondition
      * @param  string $checkedItem
      * @access public
      * @return array
      */
-    public function getByExportList(string $orderBy, object $formData, string $queryCondition, string $checkedItem): array
+    public function getByExportList(string $orderBy, string $queryCondition, string $checkedItem): array
     {
         return $this->dao->select('*')->from(TABLE_TODO)
             ->where($queryCondition)
-            ->beginIF($formData->rawdata->exportType == 'selected')->andWhere('id')->in($checkedItem)->fi()
+            ->beginIF($checkedItem)->andWhere('id')->in($checkedItem)->fi()
             ->orderBy($orderBy)->fetchAll('id');
     }
 

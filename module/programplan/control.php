@@ -304,26 +304,26 @@ class programplan extends control
     }
 
     /**
-     * AJAX: Get attributes.
+     * ajax请求：获取阶段ID的属性。
+     * AJAX: Get stageID attributes.
      *
      * @param  int    $stageID
      * @param  string $attribute
      * @access public
      * @return int
      */
-    public function ajaxGetAttribute($stageID, $attribute)
+    public function ajaxGetAttribute(int $stageID, string $attribute): int
     {
         $this->app->loadLang('stage');
 
-        $parentAttribute = $this->dao->select('attribute')->from(TABLE_EXECUTION)->where('id')->eq($stageID)->fetch('attribute');
-        if(empty($parentAttribute) or $parentAttribute == 'mix')
+        $stageAttribute = $this->programplan->getStageAttribute($stageID);
+
+        if(empty($stageAttribute) || $stageAttribute == 'mix')
         {
             return print(html::select('attribute', $this->lang->stage->typeList, $attribute, "class='form-control chosen'"));
         }
-        else
-        {
-            return print(zget($this->lang->stage->typeList, $parentAttribute));
-        }
+
+        return print(zget($this->lang->stage->typeList, $stageAttribute));
     }
 
     /**
