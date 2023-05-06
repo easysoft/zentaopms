@@ -82,8 +82,8 @@ class todoTao extends todoModel
     {
         $this->dao->insert(TABLE_TODO)->data($todo)
             ->autoCheck()
-            ->checkIF(!in_array($todo->type, $this->config->todo->moduleList), $this->config->todo->create->requiredFields, 'notempty')
-            ->checkIF(in_array($todo->type, $this->config->todo->moduleList) && $todo->objectID == 0, 'objectID', 'notempty')
+            ->check($this->config->todo->create->requiredFields, 'notempty')
+            ->checkIF(in_array($todo->type, $this->config->todo->moduleList), 'objectID', 'notempty')
             ->exec();
 
         return (int)$this->dao->lastInsertID();
