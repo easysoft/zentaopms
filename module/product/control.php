@@ -454,16 +454,6 @@ class product extends control
     {
         $programID = (int)$programID;
 
-        $_POST['productIdList'][1] = 1;
-        $_POST['name'][1]   = '公司企业网站建设';
-        $_POST['PO'][1]     = 'productManager';
-        $_POST['QD'][1]     = 'testManager';
-        $_POST['RD'][1]     = 'productManager';
-        $_POST['type'][1]   =  'normal';
-        $_POST['status'][1] =  'normal';
-        $_POST['desc'][1]   = '建立公司企业网站，可以更好对外展示。<br />';
-        $_POST['acl'][1]    = 'open';
-
         if($this->post->name)
         {
             $formConfig = $this->productZen->appendFlowFields($this->config->product->form->batchEdit, 'batch');
@@ -471,27 +461,15 @@ class product extends control
             $products   = $this->productZen->prepareBatchEditExtras($data);
             if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            $allChanges = $this->product->batchUpdate($products);
+            $result = $this->product->batchUpdate($products);
+            if(dao::isError()) $this->send($result);
 
-
-            if(!empty($allChanges))
-            {
-                foreach($allChanges as $productID => $changes)
-                {
-                    if(empty($changes)) continue;
-
-                    $actionID = $this->loadModel('action')->create('product', $productID, 'Edited');
-                    $this->action->logHistory($actionID, $changes);
-                }
-            }
-
-            $locate = $this->app->tab == 'product' ? $this->createLink('product', 'all') : $this->createLink('program', 'product', "programID=$programID");
-            return print(js::locate($locate, 'parent'));
+            $response = $this->productZen->responseAfterBatchEdit($result, $programID);
+            return $this->send($response);
         }
 
         /* 获取要修改的产品ID列表。*/
         $productIdList = $this->post->productIDList;
-        $productIdList = '79,40,68';
         if(empty($productIdList)) return print(js::locate($this->session->productList, 'parent'));
 
         /* Set menu when page come from program. */

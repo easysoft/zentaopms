@@ -628,6 +628,36 @@ class productZen extends product
     }
 
     /**
+     * 成功批量更新产品数据后，其他的额外操作。
+     * Response after batch edit products.
+     *
+     * @param  array $allChanges
+     * @param  int   $programID
+     * @access protected
+     * @return array
+     */
+    protected function responseAfterBatchEdit(array $allChanges, int $programID): array
+    {
+        /* Get locate. */
+        $locate = $this->createLink('program', 'product', "programID=$programID");
+        if($this->app->tab == 'product') $locate = $this->createLink('product', 'all');
+        $response = array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $locate);
+
+        if(empty($allChanges)) return $response;
+
+        /* Save actions. */
+        $this->loadModel('action');
+        foreach($allChanges as $productID => $changes)
+        {
+            if(empty($changes)) continue;
+
+            $actionID = $this->action->create('product', $productID, 'Edited');
+            $this->action->logHistory($actionID, $changes);
+        }
+        return $response;
+    }
+
+    /**
      * 从产品统计数据中统计项目集。
      * Statistics program data from statistics data of product.
      *
