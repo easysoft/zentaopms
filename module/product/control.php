@@ -57,10 +57,10 @@ class product extends control
         if($locate == 'yes') $this->locate($this->createLink($this->moduleName, 'browse'));
 
         if($this->app->getViewType() != 'mhtml') unset($this->lang->product->menu->index);
-        $productID = $this->product->saveState($productID, $this->products);
+        $productID = $this->productZen->saveVisitState($productID, $this->products);
         $branch    = (int)$this->cookie->preBranch;
 
-        if($this->app->viewType == 'mhtml') $this->product->setMenu($productID, $branch);
+        if($this->app->viewType == 'mhtml') $this->productZen->setMenu($productID, $branch);
 
         if(common::hasPriv('product', 'create')) $this->lang->TRActions = html::a($this->createLink('product', 'create'), "<i class='icon icon-sm icon-plus'></i> " . $this->lang->product->create, '', "class='btn btn-primary'");
 
@@ -73,60 +73,33 @@ class product extends control
      * The projects which linked the product.
      *
      * @param  string $status
-     * @param  int    $productID
-     * @param  int    $branch
-     * @param  int    $involved
+     * @param  string $productID
+     * @param  string $branch
+     * @param  string $involved
      * @param  string $orderBy
-     * @param  int    $recTotal
-     * @param  int    $recPerPage
-     * @param  int    $pageID
+     * @param  string $recTotal
+     * @param  string $recPerPage
+     * @param  string $pageID
      * @access public
      * @return void
      */
-    public function project($status = 'all', $productID = 0, $branch = '', $involved = 0, $orderBy = 'order_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function project(string $status = 'all', string $productID = '0', string $branch = '', string $involved = '0', string $orderBy = 'order_desc', string $recTotal = '0', string $recPerPage = '20', string $pageID = '1')
     {
-        $this->app->loadLang('execution');
-        $this->loadModel('project');
-
-        $branch = ($this->cookie->preBranch !== '' and $branch === '') ? $this->cookie->preBranch : $branch;
-        setcookie('preBranch', $branch, $this->config->cookieLife, $this->config->webRoot, '', $this->config->cookieSecure, true);
-        $this->session->set('createProjectLocate', $this->app->getURI(true), 'product');
-
-        $this->product->setMenu($productID, $branch);
+        $productID = (int)$productID;
+        $involved  = ($this->cookie->involved or $involved);
+        $this->productZen->setProjectMenu($productID, $branch, $this->cookie->preBranch);
 
         /* Load pager. */
-        $this->app->loadClass('pager', $static = true);
-        $pager = new pager($recTotal, $recPerPage, $pageID);
+        $this->app->loadClass('pager', true);
+        $pager = new pager((int)$recTotal, (int)$recPerPage, (int)$pageID);
 
-        /* Get PM id list. */
-        $accounts     = array();
-        $projectStats = $this->product->getProjectStatsByProduct($productID, $status, $branch, $involved, $orderBy, $pager);
-        $product      = $this->product->getByID($productID);
-        $projects     = $this->project->getPairsByProgram($product->program, 'all', false, 'order_asc', '', '', 'product');
-
-        foreach($projectStats as $project)
-        {
-            if(!empty($project->PM) and !in_array($project->PM, $accounts)) $accounts[] = $project->PM;
-            unset($projects[$project->id]);
-        }
-        $PMList = $this->user->getListByAccounts($accounts, 'account');
-
-        $this->view->title        = $this->products[$productID] . $this->lang->colon . $this->lang->product->project;
-        $this->view->projectStats = $projectStats;
-        $this->view->PMList       = $PMList;
-        $this->view->productID    = $productID;
-        $this->view->product      = $product;
-        $this->view->projects     = $projects;
-        $this->view->status       = $status;
-        $this->view->users        = $this->loadModel('user')->getPairs('noletter');
-        $this->view->branchID     = $branch;
-        $this->view->branchStatus = $this->loadModel('branch')->getByID($branch, 0, 'status');
-        $this->view->pager        = $pager;
-        $this->display();
+        /* Set view variables and display. */
+        $this->productZen->displayProjectPage($productID, $branch, $status, $involved, $orderBy, $pager);
     }
 
     /**
-     * Browse a product.
+     * 产品研发需求列表。
+     * Browse requirements list of product.
      *
      * @param  int         $productID
      * @param  int|stirng  $branch
@@ -141,9 +114,16 @@ class product extends control
      * @access public
      * @return void
      */
-    public function browse($productID = 0, $branch = '', $browseType = '', $param = 0, $storyType = 'story', $orderBy = '', $recTotal = 0, $recPerPage = 20, $pageID = 1, $projectID = 0)
+    public function browse(string $productID = '0', string $branch = '', string $browseType = '', string $param = '0', string $storyType = 'story', string $orderBy = '', string $recTotal = '0', string $recPerPage = '20', $pageID = '1', $projectID = '0')
     {
-        $productID = $this->app->tab != 'project' ? $this->product->saveState($productID, $this->products) : $productID;
+        $productID  = (int)$productID;
+        $param      = (int)$param;
+        $recTotal   = (int)$recTotal;
+        $recPerPage = (int)$recPerPage;
+        $pageID     = (int)$pageID;
+        $projectID  = (int)$projectID;
+
+        $productID = $this->app->tab != 'project' ? $this->saveVisitState($productID, $this->products) : $productID;
         $product   = $this->product->getById($productID);
 
         if($product && !isset($this->products[$product->id])) $this->products[$product->id] = $product->name;
@@ -170,7 +150,7 @@ class product extends control
             $this->session->set('storyList',   $this->app->getURI(true), 'product');
             $this->session->set('productList', $this->app->getURI(true), 'product');
 
-            $this->product->setMenu($productID, $branch, 0, '', "storyType=$storyType");
+            $this->productZen->setMenu($productID, $branch, 0, '', "storyType=$storyType");
         }
 
         /* Lower browse type. */
@@ -399,7 +379,7 @@ class product extends control
      * Create a product.
      * 创建产品。可以是顶级产品，也可以是项目集下的产品。
      *
-     * @param  int    $programID
+     * @param  string $programID
      * @param  string $extra
      * @access public
      * @return void
@@ -410,13 +390,14 @@ class product extends control
 
         if(!empty($_POST))
         {
-            $data = form::data($this->config->product->form->create);
-            $data = $this->productZen->prepareCreateExtras($data, $this->post->acl, $this->post->uid);
+            $data    = form::data($this->config->product->form->create);
+            $product = $this->productZen->prepareCreateExtras($data, $this->post->acl, $this->post->uid);
 
-            $productID = $this->product->create($data);
-            if(!$productID) return $this->productZen->sendDaoError();
+            $productID = $this->product->create($product, $this->post->uid, zget($_POST, 'lineName', ''));
+            if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            return $this->productZen->responseAfterCreate($productID, $data, $this->post->uid, zget($_POST, 'lineName', ''));
+            $response = $this->productZen->responseAfterCreate($productID, (int)$product->program);
+            $this->send($response);
         }
 
         $this->productZen->setCreateMenu($programID);
@@ -440,20 +421,21 @@ class product extends control
 
         if(!empty($_POST))
         {
-            $data = form::data($this->config->product->form->edit);
-            $data = $this->productZen->prepareEditExtras($data, $this->post->acl, $this->post->uid);
+            $data    = form::data($this->config->product->form->edit);
+            $product = $this->productZen->prepareEditExtras($data, $this->post->acl, $this->post->uid);
 
-            $changes = $this->product->update($productID, $data, $this->post->uid);
-            if(dao::isError()) return $this->productZen->sendDaoError();
+            $changes = $this->product->update($productID, $product, $this->post->uid);
+            if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             if($action == 'undelete') $this->loadModel('action')->undelete((int)$extra);
-            return $this->productZen->responseAfterEdit($productID, $programID, $changes);
+            $response = $this->productZen->responseAfterEdit($productID, $programID, $changes);
+            $this->send($response);
         }
 
         $this->productZen->setEditMenu($productID, $programID);
 
         $product   = $this->product->getByID($productID);
-        $productID = $this->product->saveState($productID, $this->products);
+        $productID = $this->productZen->saveVisitState($productID, $this->products);
 
         $this->productZen->buildEditForm($product);
     }
@@ -585,7 +567,7 @@ class product extends control
             return print(js::reload('parent.parent'));
         }
 
-        $this->product->setMenu($productID);
+        $this->productZen->setMenu($productID);
 
         $this->view->product    = $product;
         $this->view->title      = $this->view->product->name . $this->lang->colon .$this->lang->close;
@@ -614,7 +596,7 @@ class product extends control
         }
 
         $product->desc = $this->loadModel('file')->setImgSize($product->desc);
-        $this->product->setMenu($productID);
+        $this->productZen->setMenu($productID);
 
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
@@ -673,7 +655,7 @@ class product extends control
      */
     public function roadmap($productID, $branch = 'all')
     {
-        $this->product->setMenu($productID, $branch);
+        $this->productZen->setMenu($productID, $branch);
 
         $this->session->set('releaseList',     $this->app->getURI(true), 'product');
         $this->session->set('productPlanList', $this->app->getURI(true), 'product');
@@ -719,7 +701,7 @@ class product extends control
         $this->session->set('caseList',        $uri, 'qa');
         $this->session->set('testtaskList',    $uri, 'qa');
 
-        $this->product->setMenu($productID, 0, 0, '', $type);
+        $this->productZen->setMenu($productID, 0, 0, '', $type);
 
         /* Append id for secend sort. */
         $orderBy = $direction == 'next' ? 'date_desc' : 'date_asc';
@@ -775,12 +757,12 @@ class product extends control
         $this->session->set('productPlanList', $uri, 'product');
         $this->session->set('releaseList',     $uri, 'product');
 
-        $productID = $this->product->saveState($productID, $this->products);
+        $productID = $this->productZen->saveVisitState($productID, $this->products);
         $product   = $this->product->getStatByID($productID);
         if(!$product) return print(js::locate('product', 'all'));
 
         $product->desc = $this->loadModel('file')->setImgSize($product->desc);
-        $this->product->setMenu($productID);
+        $this->productZen->setMenu($productID);
 
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
@@ -1007,7 +989,7 @@ class product extends control
      */
     public function whitelist($productID = 0, $module = 'product', $objectType = 'product', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
-        $this->product->setMenu($productID, 0);
+        $this->productZen->setMenu($productID, 0);
         $this->lang->modulePageNav = '';
 
         echo $this->fetch('personnel', 'whitelist', "objectID=$productID&module=product&browseType=$objectType&orderBy=$orderBy&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID");
@@ -1025,7 +1007,7 @@ class product extends control
      */
     public function addWhitelist($productID = 0, $deptID = 0, $copyID = 0)
     {
-        $this->product->setMenu($productID);
+        $this->productZen->setMenu($productID);
         $this->lang->modulePageNav = '';
 
         echo $this->fetch('personnel', 'addWhitelist', "objectID=$productID&dept=$deptID&copyID=$copyID&objectType=product&module=product");
@@ -1150,9 +1132,9 @@ class product extends control
         if(!$projectID)
         {
             $products  = $this->product->getPairs();
-            $productID = $this->product->saveState($productID, $products);
-            $this->product->products = $this->product->saveState($productID, $products);
-            $this->product->setMenu($productID, $branch);
+            $productID = $this->productZen->saveVisitState($productID, $products);
+            $this->product->products = $this->productZen->saveVisitState($productID, $products);
+            $this->productZen->setMenu($productID, $branch);
         }
 
         /* Save session. */
@@ -1213,10 +1195,8 @@ class product extends control
         {
             return printf($this->lang->build->noProduct, $this->createLink('execution', 'manageproducts', "executionID=$executionID&from=buildCreate", '', 'true'), 'project');
         }
-        else
-        {
-            return print(html::select('product', $products, empty($product) ? '' : $product->id, "onchange='loadBranches(this.value);' class='form-control chosen' required data-toggle='modal' data-type='iframe'"));
-        }
+
+        return print(html::select('product', $products, '', "onchange='loadBranches(this.value);' class='form-control chosen' required data-toggle='modal' data-type='iframe'"));
     }
 
     /**

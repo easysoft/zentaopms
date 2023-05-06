@@ -63,7 +63,7 @@ fields:
     note: "需求名称"
     fields:
       - field: field1
-        range: [用户需求,软件需求]
+        range: "[用户需求,软件需求]"
       - field: field2
         range: 1-10000
     prefix: ""
@@ -146,7 +146,7 @@ fields:
       - field: openedBy1
         range: admin,user,test,dev
       - field: openedBy2
-        range: [],2-4
+        range: "[],2-4"
     prefix: ""
     postfix: ""
     loop: 0
@@ -155,7 +155,6 @@ fields:
     note: "创建日期"
     range: "(M)-(w)"
     type: timestamp
-    prefix: "DateTime"
     postfix: ""
     format: "YY/MM/DD"
   - field: assignedTo
@@ -164,7 +163,7 @@ fields:
       - field: openedBy1
         range: admin,user,test,dev
       - field: openedBy2
-        range: [],2-4
+        range: "[],2-4"
     prefix: ""
     postfix: ""
     loop: 0
@@ -173,7 +172,6 @@ fields:
     note: "指派日期"
     range: "(M)-(w)"
     type: timestamp
-    prefix: "DateTime"
     postfix: ""
     format: "YY/MM/DD"
   - field: lastEditedBy

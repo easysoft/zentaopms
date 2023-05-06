@@ -148,7 +148,8 @@ class programplan extends control
         $this->app->loadLang('project');
         if($_POST)
         {
-            $this->programplan->create($projectID, $this->productID, $planID);
+            $formData = form::data($this->config->programplan->create->form);
+            $this->programplan->create($formData, $projectID, $this->productID, $planID);
             if(dao::isError())
             {
                 $errors = dao::getError();
@@ -309,44 +310,42 @@ class programplan extends control
     }
 
     /**
+     * 处理甘特图拖拽事件数据。
      * Response gantt drag event.
      *
      * @access public
-     * @return void
      */
     public function ajaxResponseGanttDragEvent()
     {
-        if(!empty($_POST))
-        {
-            if(!isset($_POST['id']) or empty($_POST['id'])) return $this->send(array('result' => 'fail', 'message' => ''));
-            $objectID =  $_POST['id'];
+        if(empty($_POST['id']) || empty($_POST['type'])) return $this->send(array('result' => 'fail', 'message' => ''));
 
-            $this->loadModel('task')->updateEsDateByGantt($objectID, $_POST['type']);
-            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+        $objectID   = $_POST['id'];
+        $objectType = $_POST['type'];
+        $this->loadModel('task')->updateEsDateByGantt($objectID, $objectType);
+        if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            return $this->send(array('result' => 'success'));
-        }
+        return $this->send(array('result' => 'success'));
     }
 
     /**
+     * 处理甘特图移动事件数据。
      * Response gantt move event.
      *
      * @access public
-     * @access public
-     * @return void
      */
     public function ajaxResponseGanttMoveEvent()
     {
-        if(!empty($_POST))
-        {
-            $idList = explode('-', $_POST['id']);
-            $taskID = $idList[1];
+        if(empty($_POST['id'])) return $this->send(array('result' => 'fail', 'message' => ''));
 
-            $this->loadModel('task')->updateOrderByGantt();
-            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-            $this->loadModel('action')->create('task', $taskID, 'ganttMove');
-            return $this->send(array('result' => 'success'));
-        }
+        $idList = explode('-', $_POST['id']);
+        $taskID = !empty($idList[1]) ? $idList[1] : 0;
+        if(empty($taskID)) return $this->send(array('result' => 'fail', 'message' => ''));
+
+        $this->loadModel('task')->updateOrderByGantt();
+        if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+        $this->loadModel('action')->create('task', $taskID, 'ganttMove');
+        return $this->send(array('result' => 'success'));
     }
 
     /**

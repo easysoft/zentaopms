@@ -25,11 +25,12 @@ class productTest
     /**
      * Test create a product.
      *
-     * @param  array  $param
+     * @param  array   $param
+     * @param  string  $lineName
      * @access public
      * @return object|array
      */
-    public function createObject(array $param = array()): object|array
+    public function createObject(array $param = array(), string $lineName = ''): object|array
     {
         $createFields = array();
         $createFields['program']        = 1;
@@ -52,7 +53,7 @@ class productTest
         $data = new stdclass();
         foreach($createFields as $field => $defaultValue) $data->$field = zget($param, $field, $defaultValue);
 
-        $objectID = $this->objectModel->create($data);
+        $objectID = $this->objectModel->create($data, '', $lineName);
 
         if(dao::isError())
         {
@@ -698,28 +699,37 @@ class productTest
     }
 
     /**
-     * Test get project stats by product.
+     * 测试 getProjectStatsByProduct 方法。
+     * Test getProjectStatsByProduct method.
      *
-     * @param  int    $productID
-     * @param  string $browseType
+     * @param  int         $productID
+     * @param  string      $browseType
+     * @param  string      $branch
+     * @param  bool        $involved
+     * @param  string      $order
+     * @param  object|null $pager
      * @access public
      * @return array
      */
-    public function getProjectStatsByProductTest($productID, $browseType = 'all')
+    public function getProjectStatsByProductTest(int $productID, string $browseType = 'all', string $branch = '', bool $involved = false, string $orderBy = 'order_desc', object|null $pager = null): array
     {
-        $objects = $this->objectModel->getProjectStatsByProduct($productID, $browseType);
+        $objects = $this->objectModel->getProjectStatsByProduct($productID, $browseType, $branch, $involved, $orderBy, $pager);
 
-        foreach($objects as $object) $projects[$object->id] = $object->name;
-
-
-        if(dao::isError())
+        $projects = array();
+        foreach($objects as $object)
         {
-            return dao::getError();
+            $project = new stdclass();
+            $project->id            = $object->id;
+            $project->totalConsumed = $object->hours->totalConsumed;
+            $project->totalEstimate = $object->hours->totalEstimate;
+            $project->totalLeft     = $object->hours->totalLeft;
+            $project->progress      = $object->hours->progress;
+            $project->teamCount     = $object->teamCount;
+            $projects[$project->id] = $project;
         }
-        else
-        {
-            return isset($projects) ? $projects : array();
-        }
+
+        if(dao::isError()) return dao::getError();
+        return $projects;
     }
 
     /**

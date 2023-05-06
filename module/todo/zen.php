@@ -1,5 +1,13 @@
 <?php
 declare(strict_types=1);
+/**
+ * The zen file of todo module of ZenTaoPMS.
+ *
+ * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @license     ZPL(https://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
+ * @author      lanzongjun <lanzongjun@easycorp.ltd>
+ * @link        https://www.zentao.net
+ */
 class todoZen extends todo
 {
     /**
@@ -113,14 +121,60 @@ class todoZen extends todo
             ->setDefault('assignedDate', helper::now())
             ->cleanInt('pri, begin, end, private')
             ->setIF($hasObject && $objectType,  'objectID', $objectID)
-            ->setIF($rowData->date == false,  'date', '2030-01-01')
-            ->setIF($rowData->begin == false, 'begin', '2400')
-            ->setIF($rowData->begin == false or $rowData->end == false, 'end', '2400')
+            ->setIF(!$rowData->date,  'date', '2030-01-01')
+            ->setIF(!$rowData->begin, 'begin', '2400')
+            ->setIF(!$rowData->begin || !$rowData->end, 'end', '2400')
             ->setIF($rowData->status == 'done', 'finishedBy', $this->app->user->account)
             ->setIF($rowData->status == 'done', 'finishedDate', helper::now())
             ->stripTags($this->config->todo->editor->create['id'], $this->config->allowedTags)
             ->remove(implode(',', $this->config->todo->moduleList) . ',uid')
             ->get();
+    }
+
+    /**
+     * 准备要创建的todo的数据。
+     * Prepare the creation data.
+     *
+     * @param  object $todo
+     * @param  string $uid
+     * @access protected
+     * @return object|false
+     */
+    protected function prepareCreateData(object $todo, string $uid = ''): object|false
+    {
+        if(!isset($todo->pri) && in_array($todo->type, $this->config->todo->moduleList) && !in_array($todo->type, array('review', 'feedback')))
+        {
+            $todo->pri = $this->todo->getPriByTodoType($this->config->objectTables[$todo->type], $todo->objectID);
+
+            if($todo->pri == 'high')   $todo->pri = 1;
+            if($todo->pri == 'middle') $todo->pri = 2;
+            if($todo->pri == 'low')    $todo->pri = 3;
+        }
+
+        if($todo->type != 'custom' && $todo->objectID)
+        {
+            $type   = $todo->type;
+            $object = $this->loadModel($type)->getByID($todo->{$type});
+            if(isset($object->name))  $todo->name = $object->name;
+            if(isset($object->title)) $todo->name = $object->title;
+        }
+
+        if($todo->end < $todo->begin)
+        {
+            dao::$errors[] = sprintf($this->lang->error->gt, $this->lang->todo->end, $this->lang->todo->begin);
+            return false;
+        }
+
+        if(!empty($todo->cycle))
+        {
+            $todo = $this->setCycle($todo);
+            if(!$todo) return false;
+        }
+        if(empty($todo->cycle)) unset($todo->config);
+
+        if($uid) $this->loadModel('file')->processImgURL($todo, $this->config->todo->editor->create['id'], $uid);
+
+        return $todo;
     }
 
     /**
@@ -141,10 +195,6 @@ class todoZen extends todo
         if(!empty($todo->cycle)) $this->todo->createByCycle(array($todo->id => $todo));
 
         $this->loadModel('action')->create('todo', $todo->id, 'opened');
-
-        $date = str_replace('-', '', $todo->date);
-        if($date == '')          $date = 'future';
-        if($date == date('Ymd')) $date = 'today';
 
         return $todo;
     }
@@ -185,10 +235,10 @@ class todoZen extends todo
             ->cleanInt('pri, begin, end, private')
             ->setIF(in_array($rowData->type, array('bug', 'task', 'story')), 'name', '')
             ->setIF($hasObject && $objectType,  'objectID', $objectID)
-            ->setIF($rowData->date  == false, 'date', '2030-01-01')
-            ->setIF($rowData->begin == false, 'begin', '2400')
-            ->setIF($rowData->end   == false, 'end', '2400')
-            ->setIF($rowData->type  == false, 'type', $oldTodo->type)
+            ->setIF(!$rowData->date, 'date', '2030-01-01')
+            ->setIF(!$rowData->begin, 'begin', '2400')
+            ->setIF(!$rowData->end, 'end', '2400')
+            ->setIF(!$rowData->type, 'type', $oldTodo->type)
             ->setDefault('private', 0)
             ->stripTags($this->config->todo->editor->edit['id'], $this->config->allowedTags)
             ->remove(implode(',', $this->config->todo->moduleList) . ',uid')
@@ -290,7 +340,6 @@ class todoZen extends todo
         }
 
         $this->buildBatchEditView();
-        return;
     }
 
     /**
@@ -431,12 +480,12 @@ class todoZen extends todo
         if($todo->config['type'] == 'week')
         {
             unset($todo->config['day'], $todo->config['month']);
-            $todo->config['week'] = join(',', $todo->config['week']);
+            $todo->config['week'] = implode(',', $todo->config['week']);
         }
         if($todo->config['type'] == 'month')
         {
             unset($todo->config['day'], $todo->config['week']);
-            $todo->config['month'] = join(',', $todo->config['month']);
+            $todo->config['month'] = implode(',', $todo->config['month']);
         }
 
         $todo->config['beforeDays'] = (int)$todo->config['beforeDays'];
@@ -444,53 +493,54 @@ class todoZen extends todo
     }
 
     /**
-     * 设置周期待办
-     * Set cycle todo.
+     * 设置周期待办数据。
+     * Set cycle todo data.
      *
-     * @param  object $formData
+     * @param  object $todoData
      * @access private
-     * @return object
+     * @return false|object
      */
-    private function setCycle(object $formData): object
+    private function setCycle(object $todoData): false|object
     {
-        $formData->date = date('Y-m-d');
+        $todoData->date = helper::today();
+        $todoData->config['begin'] = $todoData->date;
 
-        $formData->config['begin'] = $formData->date;
-        if($formData->config['type'] == 'day')
+        if($todoData->config['type'] == 'day')
         {
-            unset($formData->config['week'], $formData->config['month']);
-            if(!$formData->config['day'])
+            unset($todoData->config['week'], $todoData->config['month']);
+            if(!$todoData->config['day'])
             {
                 dao::$errors[] = sprintf($this->lang->error->notempty, $this->lang->todo->cycleDaysLabel);
                 return false;
             }
-            if(!validater::checkInt($formData->config['day']))
+            if(!validater::checkInt($todoData->config['day']))
             {
                 dao::$errors[] = sprintf($this->lang->error->int[0], $this->lang->todo->cycleDaysLabel);
                 return false;
             }
         }
-        if($formData->config['type'] == 'week')
+        if($todoData->config['type'] == 'week')
         {
-            unset($formData->config['day'], $formData->config['month']);
-            $formData->config['week'] = join(',', $formData->config['week']);
+            unset($todoData->config['day'], $todoData->config['month']);
+            $todoData->config['week'] = implode(',', $todoData->config['week']);
         }
-        if($formData->config['type'] == 'month')
+        if($todoData->config['type'] == 'month')
         {
-            unset($formData->config['day'], $formData->config['week']);
-            $formData->config['month'] = join(',', $formData->config['month']);
+            unset($todoData->config['day'], $todoData->config['week']);
+            $todoData->config['month'] = implode(',', $todoData->config['month']);
         }
 
-        if($formData->config['beforeDays'] and !validater::checkInt($formData->config['beforeDays']))
+        if($todoData->config['beforeDays'] and !validater::checkInt($todoData->config['beforeDays']))
         {
             dao::$errors[] = sprintf($this->lang->error->int[0], $this->lang->todo->beforeDaysLabel);
             return false;
         }
-        $formData->config['beforeDays'] = (int)$formData->config['beforeDays'];
-        $formData->config = json_encode($formData->config);
-        $formData->type   = 'cycle';
+        $todoData->config['beforeDays'] = (int)$todoData->config['beforeDays'];
 
-        return $formData;
+        $todoData->config = json_encode($todoData->config);
+        $todoData->type   = 'cycle';
+
+        return $todoData;
     }
 
     /**
@@ -698,9 +748,12 @@ class todoZen extends todo
     {
         foreach($todos as $todo)
         {
+            $begin = (isset($times[$todo->begin]) ? $times[$todo->begin] : $todo->begin);
+            $end   = (isset($times[$todo->end])   ? $times[$todo->end] : $todo->end);
+
             /* fill some field with useful value. */
-            $todo->begin = $todo->begin == '2400' ? '' : (isset($times[$todo->begin]) ? $times[$todo->begin] : $todo->begin);
-            $todo->end   = $todo->end   == '2400' ? '' : (isset($times[$todo->end])   ? $times[$todo->end] : $todo->end);
+            $todo->begin = $todo->begin == '2400' ? '' $begin;
+            $todo->end   = $todo->end   == '2400' ? '' $end;
 
             $type = $todo->type;
             if(isset($assemble->users[$todo->account])) $todo->account = $assemble->users[$todo->account];

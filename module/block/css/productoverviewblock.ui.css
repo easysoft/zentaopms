@@ -1,0 +1,3 @@
+.border-right {position: relative;}
+.border-right::after {content: ''; position: absolute; right: 0px; width: 1px; height: 40px; background: #EEE; top: 50%; margin-top: -20px;}
+.tile-amount {font-size: 32px; font-weight: 700; line-height: 56px;}

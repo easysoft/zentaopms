@@ -1,5 +1,13 @@
 <?php
 declare(strict_types=1);
+/**
+ * The tao file of todo module of ZenTaoPMS.
+ *
+ * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @license     ZPL(https://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
+ * @author      lanzongjun <lanzongjun@easycorp.ltd>
+ * @link        https://www.zentao.net
+ */
 class todoTao extends todoModel
 {
     /**
@@ -7,7 +15,6 @@ class todoTao extends todoModel
      * Get a todo.
      *
      * @param  int     $todoID
-     * @param  object  $todo
      * @return object
      */
     protected function fetch(int $todoID): object
@@ -64,7 +71,7 @@ class todoTao extends todoModel
     }
 
     /**
-     * 插入待办数据
+     * 插入待办数据。
      * Insert todo data.
      *
      * @param  object $todo
@@ -83,7 +90,7 @@ class todoTao extends todoModel
     }
 
     /**
-     * 更新待办数据
+     * 更新待办数据。
      * Update todo data.
      *
      * @param  int    $todoID
@@ -104,6 +111,7 @@ class todoTao extends todoModel
     }
 
     /**
+     * 关闭一个待办。
      * Close one todo.
      *
      * @param int $todoID
@@ -122,52 +130,6 @@ class todoTao extends todoModel
             ->where('id')->eq($todoID)
             ->exec();
         return !dao::isError();
-    }
-
-    /**
-     * 处理要创建的todo的数据。
-     * Process the data for the todo to be created.
-     *
-     * @param  object $todo
-     * @param  object $formData
-     * @access protected
-     * @return object|false
-     */
-    protected function processCreateData(object $todo, object $formData): object|false
-    {
-        if(!isset($todo->pri) and in_array($todo->type, $this->config->todo->moduleList) and !in_array($todo->type, array('review', 'feedback')))
-        {
-            $todo->pri = $this->dao->select('pri')->from($this->config->objectTables[$todo->type])->where('id')->eq($todo->objectID)->fetch('pri');
-
-            if($todo->pri == 'high')   $todo->pri = 1;
-            if($todo->pri == 'middle') $todo->pri = 2;
-            if($todo->pri == 'low')    $todo->pri = 3;
-        }
-
-        if($todo->type != 'custom' and $todo->objectID)
-        {
-            $type   = $todo->type;
-            $object = $this->loadModel($type)->getByID($todo->{$type});
-            if(isset($object->name))  $todo->name = $object->name;
-            if(isset($object->title)) $todo->name = $object->title;
-        }
-
-        if($todo->end < $todo->begin)
-        {
-            dao::$errors[] = sprintf($this->lang->error->gt, $this->lang->todo->end, $this->lang->todo->begin);
-            return false;
-        }
-
-        if(!empty($todo->cycle))
-        {
-            $todo = $this->setCycle($todo);
-            if(!$todo) return false;
-        }
-        if(empty($todo->cycle)) unset($todo->config);
-
-        if(isset($formData->rawdata->uid)) $this->loadModel('file')->processImgURL($todo, $this->config->todo->editor->create['id'], $formData->rawdata->uid);
-
-        return $todo;
     }
 
     /**
@@ -190,7 +152,7 @@ class todoTao extends todoModel
     }
 
     /**
-     * 通过待办构建周期待办数据
+     * 通过待办构建周期待办数据。
      * Build cycle todo.
      *
      * @param  object $todo
@@ -272,7 +234,7 @@ class todoTao extends todoModel
         $todo->account = $this->app->user->account;
 
         $todo->date = $formData->rawdata->date;
-        if($formData->rawdata->switchDate == 'on' || $formData->rawdata->date == false) $todo->date = '2030-01-01';
+        if($formData->rawdata->switchDate == 'on' || !$formData->rawdata->date) $todo->date = '2030-01-01';
 
         $todo->type         = $todos->types[$loop];
         $todo->pri          = $todos->pris[$loop];
@@ -361,57 +323,6 @@ class todoTao extends todoModel
     }
 
     /**
-     * Set cycle todo data.
-     * 设置周期待办数据
-     *
-     * @param  object $todoData
-     * @access private
-     * @return false|object
-     */
-    private function setCycle(object $todoData): false|object
-    {
-        $todoData->date = helper::today();
-        $todoData->config['begin'] = $todoData->date;
-
-        if($todoData->config['type'] == 'day')
-        {
-            unset($todoData->config['week'], $todoData->config['month']);
-            if(!$todoData->config['day'])
-            {
-                dao::$errors[] = sprintf($this->lang->error->notempty, $this->lang->todo->cycleDaysLabel);
-                return false;
-            }
-            if(!validater::checkInt($todoData->config['day']))
-            {
-                dao::$errors[] = sprintf($this->lang->error->int[0], $this->lang->todo->cycleDaysLabel);
-                return false;
-            }
-        }
-        if($todoData->config['type'] == 'week')
-        {
-            unset($todoData->config['day'], $todoData->config['month']);
-            $todoData->config['week'] = join(',', $todoData->config['week']);
-        }
-        if($todoData->config['type'] == 'month')
-        {
-            unset($todoData->config['day'], $todoData->config['week']);
-            $todoData->config['month'] = join(',', $todoData->config['month']);
-        }
-
-        if($todoData->config['beforeDays'] and !validater::checkInt($todoData->config['beforeDays']))
-        {
-            dao::$errors[] = sprintf($this->lang->error->int[0], $this->lang->todo->beforeDaysLabel);
-            return false;
-        }
-        $todoData->config['beforeDays'] = (int)$todoData->config['beforeDays'];
-
-        $todoData->config = json_encode($todoData->config);
-        $todoData->type   = 'cycle';
-
-        return $todoData;
-    }
-
-    /**
      * 修改待办事项的时间。
      * Update the date of todo.
      *
@@ -469,17 +380,14 @@ class todoTao extends todoModel
             if($todo->type == 'opportunity') $todo->name = $this->dao->findByID($todo->objectID)->from(TABLE_OPPORTUNITY)->fetch('name');
         }
 
-        if($this->config->edition != 'open')
-        {
-            if($todo->type == 'feedback') $todo->name = $this->dao->findByID($todo->objectID)->from(TABLE_FEEDBACK)->fetch('title');
-        }
+        if($this->config->edition != 'open' && $todo->type == 'feedback') $todo->name = $this->dao->findByID($todo->objectID)->from(TABLE_FEEDBACK)->fetch('title');
 
         return $todo;
     }
 
     /**
-     * 构造待办列表查询语句。
-     * Build query for todo list.
+     * 获取待办列表数据。
+     * Get the todo list data.
      *
      * @param string       $type
      * @param string       $account
@@ -490,9 +398,9 @@ class todoTao extends todoModel
      * @param string       $orderBy
      * @param object       $pager
      * @access protected
-     * @return object
+     * @return array
      */
-    protected function getListQuery(string $type, string $account, array|string $status, string $begin, string $end, int $limit, string $orderBy, object $pager = null): object
+    protected function getListBy(string $type, string $account, array|string $status, string $begin, string $end, int $limit, string $orderBy, object $pager = null): array
     {
         return $this->dao->select('*')->from(TABLE_TODO)
             ->where('deleted')->eq('0')
@@ -512,6 +420,6 @@ class todoTao extends todoModel
             ->orderBy($orderBy)
             ->beginIF($limit > 0)->limit($limit)->fi()
             ->page($pager)
-            ->query();
+            ->fetchAll();
     }
 }

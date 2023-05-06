@@ -1453,7 +1453,7 @@ class project extends control
             }
 
             $this->view->project  = $project;
-            $this->lang->resource = $this->project->processProjectPrivs($project->multiple ? $project->model : 'noSprint');
+            $this->lang->resource = $this->project->getProjectPrivs($project->multiple ? $project->model : 'noSprint');
         }
 
         $this->display();
@@ -1676,7 +1676,7 @@ class project extends control
      * @access public
      * @return void
      */
-    public function editGroup($groupID): mixed
+    public function editGroup($groupID)
     {
         $groupID = (int)$groupID;
         $this->loadModel('group');
@@ -1733,7 +1733,7 @@ class project extends control
 
         if(!empty($_POST))
         {
-            $postData = form::data();
+            $postData = form::data($this->config->project->form->suspend);
 
             $postData = $this->projectZen->prepareSuspendExtras($projectID, $postData);
 
@@ -1838,7 +1838,16 @@ class project extends control
             if($message) $this->lang->saveSuccess = $message;
 
             $this->projectZen->removeAssociatedProducts($project);
-            $this->projectZen->removeAssociatedExecutions($projectID, $from);
+
+            /* Delete the execution under the project. */
+            $executionIdList = $this->loadModel('execution')->getPairs($projectID);
+            if(empty($executionIdList))
+            {
+                if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess));
+                if($from == 'view') return print(js::locate($this->createLink('project', 'browse'), 'parent'));
+                return print(js::reload('parent'));
+            }
+            $this->projectZen->removeAssociatedExecutions($executionIdList);
 
             if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess));
 
@@ -1849,6 +1858,7 @@ class project extends control
     }
 
     /**
+     * 更新项目排列序号
      * Update projects order.
      *
      * @access public
@@ -1856,22 +1866,14 @@ class project extends control
      */
     public function updateOrder()
     {
-        $idList  = explode(',', trim($this->post->projects, ','));
-        $orderBy = $this->post->orderBy;
+        $postData = form::data();
+        $rawdata  = $postData->rawdata;
+        $idList   = explode(',', trim($rawdata->projects, ','));
+        $orderBy  = $rawdata->orderBy;
+
         if(strpos($orderBy, 'order') === false) return false;
 
-        $projects = $this->dao->select('id,`order`')->from(TABLE_PROJECT)->where('id')->in($idList)->orderBy($orderBy)->fetchPairs('order', 'id');
-        foreach($projects as $order => $id)
-        {
-            $newID = array_shift($idList);
-            if($id == $newID) continue;
-            $this->dao->update(TABLE_PROJECT)
-                ->set('`order`')->eq($order)
-                ->set('lastEditedBy')->eq($this->app->user->account)
-                ->set('lastEditedDate')->eq(helper::now())
-                ->where('id')->eq($newID)
-                ->exec();
-        }
+        $this->project->updateOrder($idList, $orderBy);
     }
 
     /**
@@ -1931,7 +1933,7 @@ class project extends control
     }
 
     /**
-     * 管理项目的关联产品
+     * 管理项目的关联产品。
      * Manage products under project.
      *
      * @param  string $projectID
@@ -1940,27 +1942,27 @@ class project extends control
      * @access public
      * @return void
      */
-    public function manageProducts(string $projectID, $from = 'project'): mixed
+    public function manageProducts(string $projectID, string $from = 'project')
     {
         /* Access the nonProduct project alter tips. */
         $projectID = (int)$projectID;
         $project   = $this->project->getById($projectID);
         if(!$project->hasProduct) return print(js::error($this->lang->project->cannotManageProducts) . js::locate('back'));
 
-        $executions   = $this->loadModel('execution')->getPairs($projectID);
-        $executionIDs = array_keys($executions);
+        $executions = $this->loadModel('execution')->getPairs($projectID);
+        $idList     = array_keys($executions);
 
         if(!empty($_POST))
         {
             $postData = form::data();
-            if(!isset($postData->rawdata->products) and !isset($postData->rawdata->otherProducts))
+            if(!isset($this->post->products) and !isset($this->post->otherProducts))
             {
-                dao::$errors['message'][] = $this->lang->project->errorNoProducts;
-                return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+                return $this->send(array('result' => 'fail', 'message' => $this->lang->project->errorNoProducts));
             }
 
-            /* Update linked products. */
-            $this->projectZen->mergeProducts($projectID, $project, $executionIDs, $postData);
+            /* Merge and build linked products. */
+            $this->projectZen->mergeProducts($projectID, $project, $idList, $postData);
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $locateLink = inLink('manageProducts', "projectID=$projectID");
             if($from == 'program')  $locateLink = $this->session->projectList;
@@ -1968,16 +1970,10 @@ class project extends control
         }
 
         /* Set menu. */
-        if($this->app->tab == 'program')
-        {
-            $this->loadModel('program')->setMenu($project->parent);
-        }
-        else if($this->app->tab == 'project')
-        {
-            $this->project->setMenu($projectID);
-        }
+        $this->setProjectMenu($projectID, $project);
 
-        $this->projectZen->dealLinkProduct($projectID, $project);
+        /* Extract cannot be removed product and branch. */
+        $this->projectZen->extractUnModifyForm($projectID, $project);
 
         $this->view->title      = $this->lang->project->manageProducts . $this->lang->colon . $project->name;
         $this->view->project    = $project;
@@ -1991,21 +1987,27 @@ class project extends control
      * AJAX: get executions of a project in html select.
      *
      * @param  string $projectID
-     * @param  int    $executionID
+     * @param  string $executionID
      * @param  string $mode
      * @param  string $type all|sprint|stage|kanban
      *
      * @access public
-     * @return void
+     * @return int
      */
-    public function ajaxGetExecutions(string $projectID, int $executionID = 0, string $mode = '', string $type = 'all'): mixed
+    public function ajaxGetExecutions(string $projectID, string $executionID = '0', string $mode = '', string $type = 'all')
     {
-        $project    = $this->project->getByID($projectID);
-        $disabled   = $project->multiple ? '' : 'disabled';
-        $executions = array('' => '') + $this->loadModel('execution')->getPairs($projectID, $type, $mode);
+        $disabled   = '';
+        $executions = array('' => '');
 
-        if($this->app->getViewType() == 'json') return print(json_encode($executions));
+        $projectID = (int)$projectID;
+        if($projectID)
+        {
+            $project     = $this->project->getById($projectID);
+            $executions += (array)$this->loadModel('execution')->getPairs($projectID, $type, $mode);
+            if(!empty($project->multiple)) $disabled = 'disabled';
+        }
 
+        if($this->app->getViewType() == 'json') return print(json_encode($executionList));
         return print(html::select('execution', $executions, $executionID, "class='form-control $disabled' $disabled"));
     }
 

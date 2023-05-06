@@ -27,9 +27,28 @@ class productZen extends product
         /* Set activated menu for mobile view. */
         if($this->app->viewType == 'mhtml')
         {
-            $productID = $this->product->saveState(0, $this->products);
-            $this->product->setMenu($productID);
+            $productID = $this->saveVisitState(0, $this->products);
+            $this->setMenu($productID);
         }
+    }
+
+    /**
+     * 设置项目页面导航菜单。
+     * Set navigation menus for project page.
+     *
+     * @param  int       $productID
+     * @param  string    $branch
+     * @param  string    $preBranch
+     * @access protected
+     * @return void
+     */
+    protected function setProjectMenu(int $productID, string $branch, string $preBranch)
+    {
+        $branch = ($preBranch !== '' and $branch === '') ? $preBranch : $branch;
+        setcookie('preBranch', $branch, $this->config->cookieLife, $this->config->webRoot, '', $this->config->cookieSecure, true);
+        $this->session->set('createProjectLocate', $this->app->getURI(true), 'product');
+
+        $this->setMenu($productID, $branch);
     }
 
     /**
@@ -43,11 +62,12 @@ class productZen extends product
     protected function setCreateMenu(int $programID)
     {
         if($this->app->tab == 'program') $this->loadModel('program')->setMenu($programID);
-        if($this->app->tab == 'doc') unset($this->lang->doc->menu->product['subMenu']);
+        if($this->app->tab == 'doc')     unset($this->lang->doc->menu->product['subMenu']);
+
         if($this->app->getViewType() != 'mhtml') return;
 
         if($this->app->rawModule == 'projectstory' and $this->app->rawMethod == 'story') return $this->loadModel('project')->setMenu();
-        $this->product->setMenu();
+        $this->setMenu();
     }
 
     /**
@@ -62,7 +82,7 @@ class productZen extends product
     protected function setEditMenu(int $productID, int $programID)
     {
         if($programID) return $this->loadModel('program')->setMenu($programID);
-        $this->product->setMenu($productID);
+        $this->setMenu($productID);
     }
 
     /**
@@ -77,11 +97,11 @@ class productZen extends product
      */
     protected function setShowErrorNoneMenu(string $moduleName, string $activeMenu, int $objectID)
     {
-        if($this->app->getViewType() == 'mhtml') return $this->product->setMenu();
+        if($this->app->getViewType() == 'mhtml') return $this->setMenu();
 
-        if($moduleName == 'qa')        return $this->setShowErrorNoneMenu4QA($activeMenu);
-        if($moduleName == 'project')   return $this->setShowErrorNoneMenu4Project($activeMenu, $objectID);
-        if($moduleName == 'execution') return $this->setShowErrorNoneMenu4Execution($activeMenu, $objectID);
+        if($moduleName == 'qa')        $this->setShowErrorNoneMenu4QA($activeMenu);
+        if($moduleName == 'project')   $this->setShowErrorNoneMenu4Project($activeMenu, $objectID);
+        if($moduleName == 'execution') $this->setShowErrorNoneMenu4Execution($activeMenu, $objectID);
     }
 
     /**
@@ -202,7 +222,7 @@ class productZen extends product
         $fields['RD']['options']      = $rdUsers;
 
         if($programID) $fields['line']['options'] = array('') + $this->product->getLinePairs($programID);
-        if(empty($programID) or $this->config->systemMode != 'ALM') unset($fields['line']);
+        if(empty($programID) or $this->config->systemMode != 'ALM') unset($fields['line'], $fields['lineName']);
 
         return $fields;
     }
@@ -217,6 +237,7 @@ class productZen extends product
      */
     private function getFormFields4Edit(object $product): array
     {
+        /* Init fields. */
         $programID = (int)$product->program;
         $fields    = $this->getFormFields4Create($programID, $this->config->product->form->edit);
 
@@ -234,6 +255,7 @@ class productZen extends product
         {
             if(isset($product->{$field})) $fields[$field]['default'] = $product->{$field};
         }
+        $fields['changeProjects'] = array('type' => 'string', 'control' => 'hidden', 'required' => false, 'default' => '');
 
         return $fields;
     }
@@ -258,6 +280,64 @@ class productZen extends product
         }
 
         return array($productLines, $programLines);
+    }
+
+    /**
+     * Get project PM List
+     *
+     * @param  array $projectStats
+     * @access private
+     * @return string[]
+     */
+    private function getPMList(array $projectStats): array
+    {
+        $accounts = array();
+        foreach($projectStats as $project) $accounts[] = $project->PM;
+        $accounts = array_filter(array_unique($accounts));
+
+        if(empty($accounts)) return array();
+        return $this->user->getListByAccounts($accounts, 'account');
+    }
+
+    /**
+     * 创建完成后，做页面跳转。
+     * Locate after create product.
+     *
+     * @param  int   $productID
+     * @param  int   $programID
+     * @access private
+     * @return array
+     */
+    private function getCreatedLocate(int $productID, int $programID): array
+    {
+        $tab = $this->app->tab;
+        $moduleName = $tab == 'program' ? 'program' : $this->moduleName;
+        $methodName = $tab == 'program' ? 'product' : 'browse';
+        $param      = $tab == 'program' ? "programID=$programID" : "productID=$productID";
+        $locate     = isonlybody() ? 'true' : $this->createLink($moduleName, $methodName, $param);
+        if($tab == 'doc') $locate = $this->createLink('doc', 'productSpace', "objectID=$productID");
+
+        return array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $locate);
+    }
+
+    /**
+     * 编辑完成后，做页面跳转。
+     * Locate after edit product.
+     *
+     * @param  int   $productID
+     * @param  int   $programID
+     * @access private
+     * @return array
+     */
+    private function getEditedLocate(int $productID, int $programID): array
+    {
+        $moduleName = $programID ? 'program' : 'product';
+        $methodName = $programID ? 'product' : 'view';
+        $param      = $programID ? "programID=$programID" : "product=$productID";
+        $locate     = $this->createLink($moduleName, $methodName, $param);
+
+        if(!$programID) $this->session->set('productList', $this->createLink('product', 'browse', $param), 'product');
+        return array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $locate);
     }
 
     /**
@@ -299,16 +379,51 @@ class productZen extends product
     }
 
     /**
+     * 为view层设置要用数据。
+     * Set view variables and display for project page.
+     *
+     * @param  int    $productID
+     * @param  string $branch
+     * @param  string $status
+     * @param  bool   $involved   $this->cookie->involved or $involved
+     * @param  string $orderBy
+     * @param  object $pager
+     * @access protected
+     * @return void
+     */
+    protected function displayProjectPage(int $productID, string $branch, string $status, bool $involved, string $orderBy, object $pager)
+    {
+        $this->app->loadLang('execution');
+        $projectStats = $this->product->getProjectStatsByProduct($productID, $status, $branch, $involved, $orderBy, $pager);
+
+        $product  = $this->product->getByID($productID);
+        $projects = $this->loadModel('project')->getPairsByProgram($product->program, 'all', false, 'order_asc', '', '', 'product');
+        foreach($projectStats as $project) unset($projects[$project->id]);
+
+        $this->view->title        = $this->products[$productID] . $this->lang->colon . $this->lang->product->project;
+        $this->view->projectStats = $projectStats;
+        $this->view->PMList       = $this->getPMList($projectStats);
+        $this->view->product      = $product;
+        $this->view->projects     = $projects;
+        $this->view->status       = $status;
+        $this->view->users        = $this->loadModel('user')->getPairs('noletter');
+        $this->view->branchID     = $branch;
+        $this->view->branchStatus = $this->loadModel('branch')->getByID($branch, 0, 'status');
+        $this->view->pager        = $pager;
+        $this->display();
+    }
+
+    /**
      * 追加创建信息，处理白名单、项目集字段，还有富文本内容处理。
      * Prepare data for create.
      *
-     * @param  object $data
+     * @param  form   $data
      * @param  string $acl
      * @param  string $uid
      * @access protected
      * @return object
      */
-    protected function prepareCreateExtras(object $data, string $acl, string $uid): object
+    protected function prepareCreateExtras(form $data, string $acl, string $uid = ''): object
     {
         $product = $data->setDefault('createdBy', $this->app->user->account)
             ->setDefault('createdDate', helper::now())
@@ -316,7 +431,6 @@ class productZen extends product
             ->setIF($this->config->systemMode == 'light', 'program', (int)zget($this->config->global, 'defaultProgram', 0))
             ->setIF($acl == 'open', 'whitelist', '')
             ->stripTags($this->config->product->editor->create['id'], $this->config->allowedTags)
-            ->remove('uid,newLine,lineName,contactListMenu')
             ->get();
 
         return $this->loadModel('file')->processImgURL($product, $this->config->product->editor->create['id'], $uid);
@@ -326,17 +440,16 @@ class productZen extends product
      * 处理白名单和富文本内容。
      * Prepare data for edit.
      *
-     * @param  object $data
+     * @param  form   $data
      * @param  string $acl
      * @param  string $uid
      * @access protected
      * @return object
      */
-    protected function prepareEditExtras(object $data, string $acl, string $uid): object
+    protected function prepareEditExtras(form $data, string $acl, string $uid = ''): object
     {
         $product = fixer::input('post')->setIF($acl == 'open', 'whitelist', '')
             ->stripTags($this->config->product->editor->edit['id'], $this->config->allowedTags)
-            ->remove('uid,changeProjects,contactListMenu')
             ->get();
 
         return $this->loadModel('file')->processImgURL($product, $this->config->product->editor->edit['id'], $uid);
@@ -347,37 +460,20 @@ class productZen extends product
      * Process after create product.
      *
      * @param  int    $productID
-     * @param  object $product
-     * @param  string $uid
-     * @param  string $lineName
+     * @param  int    $programID
      * @access protected
-     * @return void
+     * @return array
      */
-    protected function responseAfterCreate(int $productID, object $product, string $uid, string $lineName = '')
+    protected function responseAfterCreate(int $productID, int $programID): array
     {
-        /* Fix order and line fields for product. */
-        $fixData = new stdclass();
-        $fixData->order = $productID * 5;
-        if(!empty($lineName))
-        {
-            $lineID = $this->product->createLine((int)$product->program, $lineName);
-            if($lineID) $fixData->line = $lineID;
-        }
-        $this->dao->update(TABLE_PRODUCT)->data($fixData)->where('id')->eq($productID)->exec();
-
-        /* Update and create linked data. */
-        $this->loadModel('file')->updateObjectID($uid, $productID, 'product');
-        $this->product->createMainLib($productID);
-        if($product->whitelist)     $this->loadModel('personnel')->updateWhitelist(explode(',', $product->whitelist), 'product', $productID);
-        if($product->acl != 'open') $this->loadModel('user')->updateUserView($productID, 'product');
-
         $this->loadModel('action')->create('product', $productID, 'opened');
 
         $message = $this->executeHooks($productID);
         if($message) $this->lang->saveSuccess = $message;
 
-        if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $productID));
-        $this->sendCreateLocate($productID, (int)$product->program);
+        /* 移动到control。*/
+        if($this->viewType == 'json') return array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $productID);
+        return $this->getCreatedLocate($productID, $programID);
     }
 
     /**
@@ -388,9 +484,9 @@ class productZen extends product
      * @param  int    $programID
      * @param  array  $changes
      * @access protected
-     * @return void
+     * @return array
      */
-    protected function responseAfterEdit(int $productID, int $programID, array $changes)
+    protected function responseAfterEdit(int $productID, int $programID, array $changes): array
     {
         if($changes)
         {
@@ -401,60 +497,7 @@ class productZen extends product
         $message = $this->executeHooks($productID);
         if($message) $this->lang->saveSuccess = $message;
 
-        return $this->sendCreateLocate($productID, $programID);
-    }
-
-    /**
-     * 创建完成后，做页面跳转。
-     * Locate after create product.
-     *
-     * @param  int   $productID
-     * @param  int   $programID
-     * @access private
-     * @return void
-     */
-    private function sendCreateLocate(int $productID, int $programID)
-    {
-        $tab = $this->app->tab;
-        $moduleName = $tab == 'program' ? 'program' : $this->moduleName;
-        $methodName = $tab == 'program' ? 'product' : 'browse';
-        $param      = $tab == 'program' ? "programID=$programID" : "productID=$productID";
-        $locate     = isonlybody() ? 'true' : $this->createLink($moduleName, $methodName, $param);
-        if($tab == 'doc') $locate = $this->createLink('doc', 'productSpace', "objectID=$productID");
-
-        $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $locate));
-    }
-
-    /**
-     * 编辑完成后，做页面跳转。
-     * Locate after edit product.
-     *
-     * @param  int   $productID
-     * @param  int   $programID
-     * @access private
-     * @return void
-     */
-    private function sendEditLocate(int $productID, int $programID)
-    {
-        $moduleName = $programID ? 'program' : 'product';
-        $methodName = $programID ? 'product' : 'view';
-        $param      = $programID ? "programID=$programID" : "product=$productID";
-        $locate     = $this->createLink($moduleName, $methodName, $param);
-
-        if(!$programID) $this->session->set('productList', $this->createLink('product', 'browse', $param), 'product');
-        return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $locate));
-    }
-
-    /**
-     * 输出数据库操作产生的错误。
-     * Send error for dao.
-     *
-     * @access protected
-     * @return void
-     */
-    protected function sendDaoError()
-    {
-        if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
+        return $this->getEditedLocate($productID, $programID);
     }
 
     /**
@@ -552,5 +595,133 @@ class productZen extends product
         }
 
         return $data;
+    }
+
+    /**
+     * 把访问的产品ID等状态信息保存到session和cookie中。
+     * Save the product id user last visited to session and cookie.
+     *
+     * @param  int       $productID
+     * @param  array     $products
+     * @access protected
+     * @return int
+     */
+    protected function saveVisitState(int $productID, array $products): int
+    {
+        if(defined('TUTORIAL')) return $productID;
+
+        $productID = $this->getAccessableProductID($productID, $products);
+
+        $this->session->set('product', $productID, $this->app->tab);
+
+        setcookie('preProductID', (string)$productID, $this->config->cookieLife, $this->config->webRoot, '', $this->config->cookieSecure, true);
+
+        /* If preProductID changed, then reset preBranch. */
+        if($this->cookie->preProductID != $this->session->product)
+        {
+            $this->cookie->set('preBranch', 0);
+            setcookie('preBranch', '0', $this->config->cookieLife, $this->config->webRoot, '', $this->config->cookieSecure, true);
+        }
+
+        return $productID;
+    }
+
+    /**
+     * 获取可访问的产品ID。
+     * Get accessable product ID.
+     *
+     * @param  int       $productID
+     * @param  array     $products
+     * @access protected
+     * @return int
+     */
+    protected function getAccessableProductID(int $productID, array $products): int
+    {
+        if(empty($productID))
+        {
+            if($this->cookie->preProductID and isset($products[$this->cookie->preProductID])) $productID = $this->cookie->preProductID;
+            if(empty($this->session->product)) $productID = (int)key($products);
+        }
+
+        /* 产品ID已经被删除，不存在于产品列表中。*/
+        /* Product ID does not exsit in products list, it may be deleted. */
+        if(!isset($products[$productID]))
+        {
+            /* Confirm if product exist. */
+            $product = $this->product->getById($productID);
+            if(empty($product) or $product->deleted == 1) $productID = (int)key($products);
+            /* If product is invisable for curren user, then response access denied message. */
+            if($productID && strpos(",{$this->app->user->view->products},", ",{$productID},") === false)
+            {
+                $productID = (int)key($products);
+                $this->accessDenied($this->lang->product->accessDenied);
+            }
+        }
+
+        return $productID;
+    }
+
+    /**
+     * 输出访问被拒绝提示信息。
+     * Show accessDenied response.
+     *
+     * @param  string  $tips
+     * @access private
+     * @return void
+     */
+    public function accessDenied($tips)
+    {
+        if(defined('TUTORIAL')) return true;
+
+        echo(js::alert($tips));
+
+        if(!$this->server->http_referer) return print(js::locate(helper::createLink('product', 'index')));
+
+        $loginLink = $this->config->requestType == 'GET' ? "?{$this->config->moduleVar}=user&{$this->config->methodVar}=login" : "user{$this->config->requestFix}login";
+        if(strpos($this->server->http_referer, $loginLink) !== false) return print(js::locate(helper::createLink('product', 'index')));
+
+        echo js::locate('back');
+    }
+
+    /**
+     * 设置导航菜单。
+     * Set menu.
+     *
+     * @param  int         $productID
+     * @param  int|string  $branch
+     * @param  int         $module
+     * @param  string      $moduleType
+     * @param  string      $extra
+     * @access public
+     * @return void
+     */
+    public function setMenu($productID = 0, $branch = '', $module = 0, $moduleType = '', $extra = ''): void
+    {
+        if(!$this->app->user->admin and strpos(",{$this->app->user->view->products},", ",$productID,") === false and $productID != 0 and !defined('TUTORIAL'))
+        {
+            $this->accessDenied($this->lang->product->accessDenied);
+            return;
+        }
+
+        $product = $this->product->getByID($productID);
+
+        $params = array('branch' => $branch);
+        common::setMenuVars('product', $productID, $params);
+        if(!$product) return;
+
+        $this->lang->switcherMenu = $this->product->getSwitcher($productID, $extra, $branch);
+
+        if($product->type == 'normal')
+        {
+            unset($this->lang->product->menu->settings['subMenu']->branch);
+        }
+        else
+        {
+            $branchLink = $this->lang->product->menu->settings['subMenu']->branch['link'];
+            $this->lang->product->menu->settings['subMenu']->branch['link'] = str_replace('@branch@', $this->lang->product->branchName[$product->type], $branchLink);
+            $this->lang->product->branch = sprintf($this->lang->product->branch, $this->lang->product->branchName[$product->type]);
+        }
+
+        if(strpos($extra, 'requirement') !== false) unset($this->lang->product->moreSelects['willclose']);
     }
 }

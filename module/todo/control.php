@@ -21,6 +21,7 @@ class todo extends control
     {
         parent::__construct();
 
+        $this->app->loadClass('date');
         $this->app->loadLang('my');
     }
 
@@ -41,7 +42,11 @@ class todo extends control
         if(!empty($_POST))
         {
             $formData = form::data($this->config->todo->create->form);
-            $todo     = $this->todoZen->beforeCreate($formData);
+            $todoData = $this->todoZen->beforeCreate($formData);
+
+            $uid  = isset($formData->rawdata->uid) ? $formData->rawdata->uid : '';
+            $todo = $this->todoZen->prepareCreateData($todoData, $uid);
+            if(!$todo) return print(js::error(dao::getError()));
 
             $todoID = $this->todo->create($todo, $formData);
             if($todoID === false) return print(js::error(dao::getError()));
@@ -145,8 +150,6 @@ class todo extends control
         unset($this->lang->todo->typeList['cycle']);
 
         $this->todoZen->buildEditView($todo);
-
-        return;
     }
 
     /**
@@ -573,6 +576,7 @@ class todo extends control
     }
 
     /**
+     * 创建周期待办。
      * Create cycle.
      *
      * @access public
@@ -580,7 +584,7 @@ class todo extends control
      */
     public function createCycle()
     {
-        $todoList = $this->dao->select('*')->from(TABLE_TODO)->where('cycle')->eq(1)->andWhere('deleted')->eq(0)->fetchAll('id');
+        $todoList = $this->todo->getValidCycleList();
         $this->todo->createByCycle($todoList);
     }
 }

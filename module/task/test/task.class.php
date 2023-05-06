@@ -292,6 +292,7 @@ class taskTest
         foreach($param as $key => $value) $_POST[$key] = $value;
 
         $task = $_POST;
+        $task['id'] = $taskID;
         unset($task['comment']);
         $object = $this->objectModel->assign((object)$task, $taskID);
         unset($_POST);

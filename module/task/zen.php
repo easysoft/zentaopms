@@ -12,31 +12,23 @@ declare(strict_types=1);
 class taskZen extends task
 {
     /**
-     * prepareCreateExtras
+     * 准备创建数据。
+     * Prepare edit data.
      *
-     * @param object $postData
-     * @param int $taskID
+     * @param  form $postDataFixer
+     * @param  int    $taskID
      * @access protected
-     * @return void
+     * @return object
      */
-    protected function prepareCreateExtras(object $postDataFixer, int $taskID)
+    protected function prepareEdit(form $postDataFixer, int $taskID): object
     {
         $oldTask  = $this->task->getByID($taskID);
         $now      = helper::now();
         $postData = $postDataFixer->get();
         $task     = $postDataFixer->add('id', $taskID)
-            ->setIF(!$postData->assignedTo and !empty($oldTask->team) and !empty($postData->team), 'assignedTo', $this->task->getAssignedTo4Multi($postData->team, $oldTask))
-            ->setIF(!$oldTask->mode and !$postData->assignedTo and !empty($postData->team), 'assignedTo', $postData->team[0])
-            ->setIF(is_numeric($postData->estimate), 'estimate', (float)$postData->estimate)
-            ->setIF(is_numeric($postData->consumed), 'consumed', (float)$postData->consumed)
-            ->setIF(is_numeric($postData->left),     'left',     (float)$postData->left)
+            ->setIF(!$postData->assignedTo and !empty($oldTask->team) and !empty($postDataFixer->rawdata->team), 'assignedTo', $this->task->getAssignedTo4Multi($postDataFixer->rawdata->team, $oldTask))
+            ->setIF(!$oldTask->mode and !$postData->assignedTo and !empty($postDataFixer->rawdata->team), 'assignedTo', $postDataFixer->rawdata->team[0])
             ->setIF($oldTask->parent == 0 && $postData->parent == '', 'parent', 0)
-            ->setIF(strpos($this->config->task->edit->requiredFields, 'estStarted') !== false, 'estStarted', $postData->estStarted)
-            ->setIF(strpos($this->config->task->edit->requiredFields, 'deadline') !== false, 'deadline', $postData->deadline)
-            ->setIF(strpos($this->config->task->edit->requiredFields, 'estimate') !== false, 'estimate', $postData->estimate)
-            ->setIF(strpos($this->config->task->edit->requiredFields, 'left') !== false,     'left',     $postData->left)
-            ->setIF(strpos($this->config->task->edit->requiredFields, 'consumed') !== false, 'consumed', $postData->consumed)
-            ->setIF(strpos($this->config->task->edit->requiredFields, 'story') !== false,    'story',    $postData->story)
             ->setIF($postData->story != false and $postData->story != $oldTask->story, 'storyVersion', $this->loadModel('story')->getVersion($postData->story))
 
             ->setIF($postData->mode   == 'single', 'mode', '')
@@ -65,7 +57,6 @@ class taskZen extends task
             ->add('lastEditedDate', $now)
             ->stripTags($this->config->task->editor->edit['id'], $this->config->allowedTags)
             ->join('mailto', ',')
-            ->remove('comment,files,labels,uid,multiple,team,teamEstimate,teamConsumed,teamLeft,teamSource,contactListMenu')
             ->get();
 
         return $task;
@@ -75,11 +66,13 @@ class taskZen extends task
      * 编辑任务后返回响应.
      * Reponse after edit.
      *
-     * @param  object $task
+     * @param  int     $taskID
+     * @param  string  $from
+     * @param  array[] $changes
      * @access protected
      * @return int
      */
-    protected function reponseAfterEdit(int $taskID, string $from): int
+    protected function reponseAfterEdit(int $taskID, string $from, array $changes)
     {
         $task = $this->task->getById($taskID);
         if($task->fromBug != 0)
@@ -121,7 +114,7 @@ class taskZen extends task
             return print(js::reload('parent.parent'));
         }
 
-        if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'success', 'data' => $taskID));
+        if(defined('RUN_MODE') && RUN_MODE == 'api') return array('status' => 'success', 'data' => $taskID);
         return print(js::locate($this->createLink('task', 'view', "taskID=$taskID"), 'parent'));
     }
 
@@ -135,24 +128,23 @@ class taskZen extends task
      */
     protected function buildEditForm(int $taskID): void
     {
-        $task = $this->task->getById($taskID);
-
-        $tasks = $this->task->getParentTaskPairs($this->view->execution->id, $this->view->task->parent);
+        $task  = $this->view->task;
+        $tasks = $this->task->getParentTaskPairs($this->view->execution->id, $task->parent);
         if(isset($tasks[$taskID])) unset($tasks[$taskID]);
 
-        if(!isset($this->view->members[$this->view->task->assignedTo])) $this->view->members[$this->view->task->assignedTo] = $this->view->task->assignedTo;
-        if(isset($this->view->members['closed']) or $this->view->task->status == 'closed') $this->view->members['closed']  = 'Closed';
+        if(!isset($this->view->members[$task->assignedTo])) $this->view->members[$task->assignedTo] = $task->assignedTo;
+        if(isset($this->view->members['closed']) or $task->status == 'closed') $this->view->members['closed']  = 'Closed';
 
-        $executions = array();
-        if(!empty($task->project)) $executions = $this->execution->getByProject($task->project, 'all', 0, true);
+        $executions = !empty($task->project) ? $this->execution->getByProject($task->project, 'all', 0, true) : array();
 
+        /* Get task members. */
         $taskMembers = array();
         if(!empty($task->team))
         {
             $teamAccounts = $task->members;
             foreach($teamAccounts as $teamAccount)
             {
-                if(!isset($members[$teamAccount])) continue;
+                if(!isset($this->view->members[$teamAccount])) continue;
                 $taskMembers[$teamAccount] = $this->view->members[$teamAccount];
             }
         }
@@ -167,39 +159,40 @@ class taskZen extends task
         $this->view->stories       = $this->story->getExecutionStoryPairs($this->view->execution->id, 0, 'all', '', 'full', 'active');
         $this->view->tasks         = $tasks;
         $this->view->taskMembers   = $taskMembers;
-        $this->view->users         = $this->loadModel('user')->getPairs('nodeleted|noclosed', "{$this->view->task->openedBy},{$this->view->task->canceledBy},{$this->view->task->closedBy}");
+        $this->view->users         = $this->loadModel('user')->getPairs('nodeleted|noclosed', "{$task->openedBy},{$task->canceledBy},{$task->closedBy}");
         $this->view->showAllModule = isset($this->config->execution->task->allModule) ? $this->config->execution->task->allModule : '';
-        $this->view->modules       = $this->tree->getTaskOptionMenu($this->view->task->execution, 0, 0, $this->view->showAllModule ? 'allModule' : '');
+        $this->view->modules       = $this->tree->getTaskOptionMenu($task->execution, 0, 0, $this->view->showAllModule ? 'allModule' : '');
         $this->view->executions    = $executions;
         $this->view->contactLists  = $this->loadModel('user')->getContactLists($this->app->user->account, 'withnote');
         $this->display();
     }
 
     /**
-     * prepareAssignToExtras
+     * 准备指派给的数据.
+     * Prepare assignto data.
      *
-     * @param object $postDataFixer
-     * @param int $taskID
+     * @param  form $postDataFixer
+     * @param  int    $taskID
      * @access protected
-     * @return void
+     * @return object
      */
-    protected function prepareAssignToExtras(object $postDataFixer, int $taskID)
+    protected function prepareAssignTo(form $postDataFixer, int $taskID): object
     {
         $task = $postDataFixer->add('id', $taskID)
             ->stripTags($this->config->task->editor->assignto['id'], $this->config->allowedTags)
-            ->remove('comment,showModule')
             ->get();
         return $task;
     }
 
     /**
+     * 指派后返回响应.
      * Reponse after assignto.
      *
      * @param  int    $taskID
      * @access protected
-     * @return void
+     * @return int
      */
-    protected function reponseAfterAssignTo(int $taskID): int
+    protected function reponseAfterAssignTo(int $taskID, string $from)
     {
         if($this->viewType == 'json' or (defined('RUN_MODE') && RUN_MODE == 'api')) return $this->send(array('result' => 'success'));
         if(isonlybody())
@@ -232,18 +225,7 @@ class taskZen extends task
     }
 
     /**
-     * Return the error after assignto.
-     *
-     * @access protected
-     * @return void
-     */
-    protected function errorAfterAssignTo(): int
-    {
-        if($this->viewType == 'json' or (defined('RUN_MODE') && RUN_MODE == 'api')) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-        return print(js::error(dao::getError()));
-    }
-
-    /**
+     * 构建指派给表格。
      * Build AssignTo Form.
      *
      * @param  int    $executionID

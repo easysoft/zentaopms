@@ -243,7 +243,29 @@ class yaml
         $this->tableName = $tableName;
         $this->fields    = new fields();
 
-        $this->configFiles[] = dirname(dirname(__FILE__)) . "/data/{$this->tableName}.yaml";
+        $yamlPath = dirname(dirname(__FILE__)) . "/data/{$this->tableName}.yaml";
+        $this->configFiles[] = $yamlPath;
+
+        if(!file_exists($yamlPath)) $this->buildYamlFile($this->tableName);
+    }
+
+    /**
+     * Build the initial yaml file.
+     *
+     * @param  string $tableName
+     * @access public
+     * @return viod
+     */
+    public function buildYamlFile($tableName)
+    {
+        $yamlData['title']   = 'table zt_' . $tableName;
+        $yamlData['author']  = 'automated export';
+        $yamlData['version'] = '1.0';
+        $yamlData['fields'][0]['field'] = 'id';
+        $yamlData['fields'][0]['range'] = '1-1000';
+
+        $yamlFile = dirname(dirname(__FILE__)) . "/data/{$this->tableName}.yaml";
+        yaml_emit_file($yamlFile, $yamlData, YAML_UTF8_ENCODING);
     }
 
     /**
@@ -285,10 +307,12 @@ class yaml
      * 合并原始yaml与用户自定义yaml文件
      * Merege yaml file.
      *
-     * @access public
+     * @param string $runFileDir
+     * @param string $runFileName
+     * @access private
      * @return string
      */
-    public function mergeYaml()
+    private function mergeYaml($runFileDir, $runFileName)
     {
         $mergeData = array('fields' => array());
         foreach($this->configFiles as $configFile)
@@ -304,13 +328,6 @@ class yaml
                 $mergeData['fields'][$field] = $configItem;
             }
         }
-
-        $runFileName = str_replace(strrchr($_SERVER['SCRIPT_FILENAME'], "."), "", $_SERVER['SCRIPT_FILENAME']);
-
-        $pos = strripos($runFileName, DS);
-        if($pos !== false) $runFileName = mb_substr($runFileName, $pos+1);
-
-        $runFileDir  = dirname($runFileName);
 
         if(!is_dir("{$runFileDir}/data")) mkdir("{$runFileDir}/data", 0777);
         $yamlFile = "{$runFileDir}/data/{$this->tableName}_{$runFileName}.yaml";
@@ -328,6 +345,25 @@ class yaml
     }
 
     /**
+     * 查找当前执行脚本的相对路径与文件名
+     * Find script path and name.
+     *
+     * @access private
+     * @return array
+     */
+    private function getScriptPathAndName()
+    {
+        $runFileName = str_replace(strrchr($_SERVER['SCRIPT_FILENAME'], "."), "", $_SERVER['SCRIPT_FILENAME']);
+
+        $pos = strripos($runFileName, DS);
+        if($pos !== false) $runFileName = mb_substr($runFileName, $pos+1);
+
+        $runFileDir = dirname($_SERVER['SCRIPT_FILENAME']);
+        
+        return array($runFileDir, $runFileName);
+    }
+
+    /**
      * Build yaml file and insert table.
      *
      * @param  int     $rows
@@ -337,30 +373,74 @@ class yaml
      */
     public function gen($rows, $isClear = true)
     {
-        $yamlFile = $this->mergeYaml();
-        $this->insertDB($yamlFile, $this->tableName, $rows, $isClear);
+        list($runFileDir, $runFileName) = $this->getScriptPathAndName();
+
+        $sqlPath    = sprintf("%s%sdata%ssql%s%s_%s_zd.sql", $runFileDir, DS, DS, DS, $this->tableName, $runFileName);
+        $scriptPath = sprintf("%s%s%s.php", $runFileDir, DS, $runFileName);
+        $yamlPath   = sprintf("%s%sdata%s%s_%s.yaml", $runFileDir, DS, DS, $this->tableName, $runFileName);
+
+        if($this->checkNeedReGenerateSql($sqlPath, $scriptPath, $yamlPath))
+        {
+            $runtimeRoot = dirname(dirname(__FILE__)) . '/runtime/';
+            $zdPath      = $runtimeRoot . 'zd';
+            $configYaml  = $runtimeRoot . 'tmp/config.yaml';
+            $tableName   = $this->config->db->prefix . $this->tableName;
+
+            $yamlFile = $this->mergeYaml($runFileDir, $runFileName);
+
+            $genSQL     = "$zdPath -c %s -d %s -n %d -t %s -o %s";
+            $execGenSQL = sprintf($genSQL, $configYaml, $yamlFile, $rows, $tableName, $sqlPath);
+
+            system($execGenSQL);
+        }
+
+        $this->insertDB($sqlPath, $this->tableName, $isClear);
+    }
+
+    /**
+     * 根据脚本以及yaml文件修改时间判断是否需要重新生成sql文件.
+     * Check if it is necessary to regenerate the SQL file.
+     *
+     * @param  string  $sqlPath
+     * @param  string  $scriptPath
+     * @param  string  $yamlPath
+     * @access private
+     * @return bool
+     */
+    private function checkNeedReGenerateSql($sqlPath, $scriptPath, $yamlPath)
+    {
+        $sqlFileUpdateTime = file_exists($sqlPath) ? filemtime($sqlPath) : 0;
+        $scriptUpdateTime  = filemtime($scriptPath);
+
+        if($sqlFileUpdateTime < $scriptUpdateTime) return true;
+
+        foreach($this->configFiles as $configFile)
+        {
+            if($sqlFileUpdateTime < filemtime($configFile)) return true;
+        }
+
+        /* Check if the range function is used in the YAML file */
+        $content = file_get_contents($yamlPath);
+        if(preg_match('/range:.*?:R\s*(,|$|\n)/', $content)) return true;
+
+        return false;
     }
 
     /**
      * Insert the data into database.
      *
-     * @param  string    $yamlFile
+     * @param  string    $sqlPath
      * @param  string    $tableName
-     * @param  int       $rows
      * @param  bool      $isClear Truncate table if set isClear to true.
      * @access public
      * @return string
      */
-    function insertDB($yamlFile, $tableName, $rows, $isClear = true)
+    function insertDB($sqlPath, $tableName, $isClear = true)
     {
-        $tableSqlDir = "{$_SERVER['PWD']}/data/sql";
+        $tableSqlDir = dirname($sqlPath);
 
         if(!is_dir($tableSqlDir)) mkdir($tableSqlDir, 0777, true);
         $dumpCommand = "mysqldump -u%s -p%s -h%s -P%s %s %s > {$tableSqlDir}/{$tableName}.sql 2>/dev/null";
-
-        $runtimeRoot = dirname(dirname(__FILE__)) . '/runtime/';
-        $zdPath      = $runtimeRoot . 'zd';
-        $configYaml  = $runtimeRoot . 'tmp/config.yaml';
 
         $tableName = $this->config->db->prefix . $tableName;
         $dbName    = $this->config->db->name;
@@ -369,23 +449,20 @@ class yaml
         $dbUser    = $this->config->db->user;
         $dbPWD     = $this->config->db->password;
 
-        $command = "mysql -u%s -p%s -h%s -P%s -D%s < %s";
-        $genSQL  = "$zdPath -c %s -d %s -n %d -t %s -o %s";
+        $command    = "mysql -u%s -p%s -h%s -P%s --default-character-set=utf8 -D%s < %s";
+        $execInsert = sprintf($command, $dbUser, $dbPWD, $dbHost, $dbPort, $dbName, $sqlPath);
+        $execDump   = sprintf($dumpCommand, $dbUser, $dbPWD, $dbHost, $dbPort, $dbName, $tableName);
+        
+        system($execDump);
+
         if($isClear === true)
         {
             /* Truncate table to reset auto increment number. */
             system(sprintf("mysql -u%s -p%s -h%s -P%s %s -e 'truncate %s' 2>/dev/null", $dbUser, $dbPWD, $dbHost, $dbPort, $dbName, $tableName));
         }
-        $sqlPath    = "{$tableSqlDir}/{$tableName}_zd.sql";
-        $execYaml   = sprintf($command, $dbUser, $dbPWD, $dbHost, $dbPort, $dbName, $sqlPath);
-        $execDump   = sprintf($dumpCommand, $dbUser, $dbPWD, $dbHost, $dbPort, $dbName, $tableName);
 
-        $execGenSQL = sprintf($genSQL, $configYaml, $yamlFile, $rows, $tableName, $sqlPath);
-        system($execGenSQL);
-
-        system($execDump);
         $stderr = '';
-        $this->exec_with_stderr($execYaml, $stderr);
+        $this->execWithStderr($execInsert, $stderr);
         
         if(empty($stderr)) return;
 
@@ -394,7 +471,7 @@ class yaml
         {
             return !empty($error) && !strpos($error, 'Using a password on the command line interface can be insecure');
         });
-        
+
         if(!empty($errors)) echo implode(PHP_EOL, $errors) . PHP_EOL;
     }
 
@@ -407,11 +484,11 @@ class yaml
      * @access private
      * @return string
      */
-    private function exec_with_stderr($cmd, &$stderr=null) 
+    private function execWithStderr($cmd, &$stderr=null) 
     {
         $proc   = proc_open($cmd, array(2 => array('pipe', 'w')), $pipes);
         $stderr = stream_get_contents($pipes[2]);
-        
+
         fclose($pipes[2]);
         proc_close($proc);
     }

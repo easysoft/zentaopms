@@ -19,6 +19,8 @@ class programplanTest
     {
         $object = $this->objectModel->getByID($planID);
 
+        if(!$object->setMilestone) $object->setMilestone = 0;
+
         if(dao::isError()) return dao::getError();
 
         return $object;

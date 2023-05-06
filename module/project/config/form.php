@@ -1,10 +1,12 @@
 <?php
 $config->project->form = new stdclass();
 
-$config->project->form->create =  array();
-$config->project->form->edit   =  array();
-$config->project->form->close  =  array();
-$config->project->form->start  =  array();
+$config->project->form->create   =  array();
+$config->project->form->edit     =  array();
+$config->project->form->close    =  array();
+$config->project->form->start    =  array();
+$config->project->form->suspend  =  array();
+$config->project->form->activate =  array();
 
 $config->project->form->create['parent']     = array('type' => 'int',    'required' => false, 'default' => '');
 $config->project->form->create['name']       = array('type' => 'string', 'required' => true, 'filter' => 'trim');
@@ -44,3 +46,8 @@ $config->project->form->edit['product']    = array('type' => 'array',  'required
 $config->project->form->start['realBegan'] = array('type' => 'date', 'required' => true, 'filter' => 'trim');
 
 $config->project->form->close['realEnd'] = array('type' => 'date', 'required' => true, 'filter' => 'trim');
+
+$config->project->form->activate['begin']        = array('type' => 'date',   'required' => true);
+$config->project->form->activate['end']          = array('type' => 'date',   'required' => true);
+$config->project->form->activate['readjustTime'] = array('type' => 'int',    'required' => false, 'default' => '');
+$config->project->form->activate['readjustTask'] = array('type' => 'array',    'required' => false, 'default' => '');

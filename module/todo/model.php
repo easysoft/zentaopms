@@ -16,16 +16,12 @@ class todoModel extends model
      * Create todo data.
      *
      * @param  object $todo
-     * @param  object $formData
      * @access public
      * @return int|false
      */
-    public function create(object $todo, object $formData): int|false
+    public function create(object $todo): int|false
     {
-        $processedTodo = $this->todoTao->processCreateData($todo, $formData);
-        if(!$processedTodo) return false;
-
-        $todoID = $this->todoTao->insert($processedTodo);
+        $todoID = $this->todoTao->insert($todo);
         if(dao::isError()) return false;
 
         return $todoID;
@@ -238,41 +234,37 @@ class todoModel extends model
     /**
      * Get todo list of a user.
      *
-     * @param  string $type
-     * @param  string $account
-     * @param  string $status   all|today|thisweek|lastweek|before, or a date.
-     * @param  int    $limit
-     * @param  object $pager
-     * @param  string $orderBy
+     * @param  string  $type
+     * @param  string  $account
+     * @param  string|array $status   all|today|thisweek|lastweek|before, or a date.
+     * @param  int     $limit
+     * @param  ?object $pager
+     * @param  string  $orderBy
      * @access public
      * @return array
      */
     public function getList(string $type = 'today', string $account = '', string|array $status = 'all', int $limit = 0, object $pager = null, string $orderBy="date, status, begin"): array
     {
-        $todos = array();
         $type  = strtolower($type);
 
         $dateRange = $this->dateRange($type);
 
         if(empty($account)) $account = $this->app->user->account;
 
-        $stmt = $this->todoTao->getListQuery($type, $account, $status, (string)$dateRange['begin'], (string)$dateRange['end'], $limit, $orderBy, $pager);
+        $todos = $this->todoTao->getListBy($type, $account, $status, (string)$dateRange['begin'], (string)$dateRange['end'], $limit, $orderBy, $pager);
 
         /* Set session. */
         $sql = explode('WHERE', $this->dao->get());
         $sql = explode('ORDER', $sql[1]);
         $this->session->set('todoReportCondition', $sql[0]);
 
-        while($todo = $stmt->fetch())
+        foreach($todos as $todo)
         {
             $todo = $this->todoTao->setTodoNameByType($todo);
             $todo->begin = date::formatTime($todo->begin);
             $todo->end   = date::formatTime($todo->end);
 
-            /* If is private, change the title to private. */
             if($todo->private and $this->app->user->account != $todo->account) $todo->name = $this->lang->todo->thisIsPrivate;
-
-            $todos[] = $todo;
         }
 
         return $todos;
@@ -303,7 +295,7 @@ class todoModel extends model
         $dateRange['thisseason']      = array('begin' => date::getThisSeason()['begin'], 'end' => date::getThisSeason()['end']);
         $dateRange['thisyear']        = array('begin' => date::getThisYear()['begin'],   'end' => date::getThisYear()['end']);
 
-        return isset($dateRange[$type]) ? $dateRange[$type] : array('begin' => $type, 'end' => $type);;
+        return isset($dateRange[$type]) ? $dateRange[$type] : array('begin' => $type, 'end' => $type);
     }
 
     /**
@@ -346,6 +338,7 @@ class todoModel extends model
     }
 
     /**
+     * 根据周期待办创建待办。
      * Create todo by cycle.
      *
      * @param  array   $todoList
@@ -365,14 +358,15 @@ class todoModel extends model
             if(!isset($validUsers[$todo->account])) continue;
 
             $todo->config = json_decode($todo->config);
+
             $begin      = $todo->config->begin;
             $end        = $todo->config->end;
             $beforeDays = (int)$todo->config->beforeDays;
             if(!empty($beforeDays) && $beforeDays > 0) $begin = date('Y-m-d', strtotime("$begin -{$beforeDays} days"));
-            if($today < $begin or (!empty($end) && $today > $end)) continue;
+            if($today < $begin || (!empty($end) && $today > $end)) continue;
 
             $newTodo = $this->todoTao->buildCycleTodo($todo);
-            if(isset($todo->assignedTo) and $todo->assignedTo) $newTodo->assignedDate = $now;
+            if(isset($todo->assignedTo) && $todo->assignedTo) $newTodo->assignedDate = $now;
 
             $start  = strtotime($begin);
             $finish = strtotime("$today +{$beforeDays} days");
@@ -392,9 +386,9 @@ class todoModel extends model
                 if($lastCycle and ($date == $lastCycle->date)) continue;
 
                 $newTodo->date = $date;
-                $this->todoTao->insert($newTodo);
-                $this->action->create('todo', $this->dao->lastInsertID(), 'opened', '', '', $newTodo->account);
-                $cycleList[$todoID] = $newTodo;
+
+                $todoID = $this->todoTao->insert($newTodo);
+                if($todoID) $this->action->create('todo', $todoID, 'opened', '', '', $newTodo->account);
             }
         }
     }
@@ -548,15 +542,42 @@ class todoModel extends model
     }
 
     /**
+     * 获取所有有效的周期待办列表。
+     * Get valid cycle todo list.
+     *
+     * @access public
+     * @return array
+     */
+    public function getValidCycleList(): array
+    {
+        return $this->dao->select('*')->from(TABLE_TODO)->where('cycle')->eq(1)->andWhere('deleted')->eq(0)->fetchAll('id');
+    }
+
+    /**
      * 根据待办ID更新待办数据。
      * Update todo data by id.
      *
-     * @param  array $todoIdList
+     * @param  int    $todoID
+     * @param  object $todo
      * @access public
      * @return bool
      */
     public function updateTodoDataByID(int $todoID, object $todo): bool
     {
         return $this->todoTao->updateRow($todoID, $todo);
+    }
+
+    /**
+     * 根据待办类型获取优先级。
+     * Get pri by todo type.
+     *
+     * @param  string $todoType
+     * @param  int    $todoObjectID
+     * @access public
+     * @return int
+     */
+    public function getPriByTodoType(string $todoType, int $todoObjectID): int
+    {
+        return $this->dao->select('pri')->from($this->config->objectTables[$todoType])->where('id')->eq($todoObjectID)->fetch('pri');
     }
 }

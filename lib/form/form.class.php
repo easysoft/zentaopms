@@ -26,7 +26,7 @@ class form extends baseFixer
      * 错误信息列表。
      * Error list.
      *
-     * @var object
+     * @var array
      */
     public $errors;
 
@@ -114,7 +114,7 @@ class form extends baseFixer
             {
                 if(!isset($this->errors[$field])) $this->errors[$field] = array();
                 $fieldName = isset($app->lang->{$app->rawModule}->$field) ? $app->lang->{$app->rawModule}->$field : $field;
-                $this->errors[$field][] = sprintf($lang->error->notempty, $fieldName);
+                $this->errors[$field][] = sprintf($app->lang->error->notempty, $fieldName);
             }
         }
 
@@ -136,17 +136,6 @@ class form extends baseFixer
         }
 
         $this->data->$field = $data;
-    }
-
-    /**
-     * 打印表单数据。
-     * Print the form data.
-     *
-     * @return void
-     */
-    public function a()
-    {
-        a($this->data);
     }
 
     /**

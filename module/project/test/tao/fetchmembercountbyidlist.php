@@ -45,6 +45,6 @@ $realIDList  = array('11', '12');
 
 global $tester;
 $projectTester = $tester->loadModel('project');
-r($projectTester->fetchMemberCountByIdList($noneIDList))  && p()           && e('0'); // 查询没有项目ID的情况
-r($projectTester->fetchMemberCountByIdList($wrongIDList)) && p()           && e('0'); // 查询错误ID的情况
-r($projectTester->fetchMemberCountByIdList($realIDList))  && p('11:count') && e('1'); // 查询正常ID的情况
+r($projectTester->fetchMemberCountByIdList($noneIDList))  && p()     && e('0'); // 查询没有项目ID的情况
+r($projectTester->fetchMemberCountByIdList($wrongIDList)) && p()     && e('0'); // 查询错误ID的情况
+r($projectTester->fetchMemberCountByIdList($realIDList))  && p('11') && e('1'); // 查询正常ID的情况
