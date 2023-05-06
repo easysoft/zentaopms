@@ -702,3 +702,27 @@ $lang->block->customModeTip = new stdClass();
 $lang->block->customModeTip->common = '禅道运行模式分为【轻量级管理模式】和【全生命周期管理模式】。';
 $lang->block->customModeTip->ALM    = '适用于中大型团队的管理模式，概念更加完整、严谨，功能更丰富。';
 $lang->block->customModeTip->light  = "适用于小型研发团队的管理模式，提供{$lang->projectCommon}管理的核心功能。";
+
+$lang->block->projectstatistic = new stdclass();
+$lang->block->projectstatistic->story = '需求';
+$lang->block->projectstatistic->cost  = '投入';
+$lang->block->projectstatistic->task  = '任务';
+$lang->block->projectstatistic->bug   = 'Bug';
+
+$lang->block->projectstatistic->storyPoints = '总规模';
+$lang->block->projectstatistic->done        = '已完成';
+$lang->block->projectstatistic->undone      = '剩余';
+$lang->block->projectstatistic->personDay   = '总投入';
+$lang->block->projectstatistic->consumed    = '消耗工时';
+$lang->block->projectstatistic->remainder   = '预计剩余';
+$lang->block->projectstatistic->number      = '总数量';
+$lang->block->projectstatistic->wait        = '未开始';
+$lang->block->projectstatistic->doing       = '进行中';
+$lang->block->projectstatistic->resolved    = '已解决';
+$lang->block->projectstatistic->activated   = '激活';
+
+$lang->block->projectstatistic->unit        = '个';
+$lang->block->projectstatistic->SP          = 'SP';
+$lang->block->projectstatistic->personDay   = '人天';
+$lang->block->projectstatistic->day         = '天';
+$lang->block->projectstatistic->hour        = 'h';
