@@ -240,7 +240,7 @@ class programplan extends control
      * @access public
      * @return void
      */
-    public function edit(string $planID = 0, string $projectID = 0)
+    public function edit(string $planID = '0', string $projectID = '0')
     {
         $planID    = (int)$planID;
         $projectID = (int)$projectID;
@@ -290,7 +290,7 @@ class programplan extends control
 
         /* Set Custom. */
         foreach(explode(',', $this->config->programplan->custom->customGanttFields) as $field) $customFields[$field] = $this->lang->programplan->ganttCustom[$field];
-        
+
         $this->programplanZen->buildAjaxCustomView($owner, $module, $customFields);
     }
 

@@ -1,0 +1,38 @@
+title: zt_getcountbyaccount
+author: liuchenglong
+version: "1.0"
+fields:
+    - field: id
+      range: 1-100
+    - field: account
+      range: 'admin,user1,user2'
+    - field: date
+      range: 1-9
+      prefix: '2023-04-2'
+    - field: begin
+      range: 1000-1100
+    - field: end
+      range: 1200-1300
+    - field: type
+      range: 'custom'
+    - field: cycle
+      range: 0
+    - field: pri
+      range: 3
+    - field: name
+      range: 1-5
+      prefix: '我的待办'
+    - field: desc
+      range: 1-5
+      prefix: '这是待办描述'
+    - field: status
+      range: 'wait,doing,done'
+    - field: vision
+      range: 'rnd,litle'
+    - field: finishedDate
+      range: 1-9
+      prefix: '2023-04-2'
+    - field: closedDate
+      range: 1-9
+      prefix: '2023-04-2'
+

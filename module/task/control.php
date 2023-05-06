@@ -42,6 +42,10 @@ class task extends control
      */
     public function create(string $executionID = '0', string $storyID = '0', string $moduleID = '0', string $taskID = '0', string $todoID = '0', string $extra = '', string $bugID = '0')
     {
+        /* Analytic parameter. */
+        $extra = str_replace(array(',', ' '), array('&', ''), $extra);
+        parse_str($extra, $output);
+
         /* If you do not have permission to access any execution, go to the create execution page. */
         if(empty($this->app->user->view->sprints) and !$executionID) $this->locate($this->createLink('execution', 'create'));
 
@@ -85,9 +89,7 @@ class task extends control
         }
 
         /* Shows the variables needed to create the task page. */
-        $this->taskZen->showCreateVars($execution, $storyID, $moduleID, $taskID, $todoID, $bugID, $extra);
-
-        $this->display();
+        $this->taskZen->showCreateVars($execution, $storyID, $moduleID, $taskID, $todoID, $bugID, $output);
     }
 
     /**
@@ -1706,7 +1708,7 @@ class task extends control
 
             /* Get related objects title or names. */
             $relatedStories = $this->dao->select('id,title')->from(TABLE_STORY)->where('id')->in($relatedStoryIdList)->fetchPairs();
-            $relatedFiles   = $this->dao->select('id, objectID, pathname, title')->from(TABLE_FILE)->where('objectType')->eq('task')->andWhere('objectID')->in(@array_keys($tasks))->andWhere('extra')->ne('editor')->fetchGroup('objectID');
+            $relatedFiles   = $this->dao->select('id, objectID, pathname, title')->from(TABLE_FILE)->where('objectType')->eq('task')->andWhere('objectID')->in(array_keys($tasks))->andWhere('extra')->ne('editor')->fetchGroup('objectID');
             $relatedModules = $this->loadModel('tree')->getAllModulePairs('task');
 
             if($tasks)
