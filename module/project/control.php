@@ -1887,7 +1887,7 @@ class project extends control
      * @access public
      * @return void
      */
-    public function whitelist(string $projectID = '0', string $from = 'project',int $recTotal = '0', int $recPerPage = '20', int $pageID = '1')
+    public function whitelist(string $projectID = '0', string $from = 'project',string $recTotal = '0', string $recPerPage = '20', string $pageID = '1')
     {
         $projectID = (int)$projectID;
         $projectID = $this->project->setMenu($projectID);
