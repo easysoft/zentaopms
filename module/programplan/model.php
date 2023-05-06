@@ -767,12 +767,14 @@ class programplanModel extends model
             $plans[] = $plan;
         }
 
+        /* Set dao error and return false if the programplan has no name. */
         if(empty($plans))
         {
             dao::$errors['message'][] = sprintf($this->lang->error->notempty, $this->lang->programplan->name);
             return false;
         }
 
+        /* Check every plan is valid. */
         $totalPercent = 0;
         $milestone    = 0;
         foreach($plans as $index => $plan)
@@ -861,7 +863,7 @@ class programplanModel extends model
         {
             $orderIndex = empty($orders) ? 0 : count($orders);
             $lastID     = $this->dao->select('id')->from(TABLE_EXECUTION)->orderBy('id_desc')->fetch('id');
-            for($i = $orderIndex; $i < count($datas); $i ++)
+            for($i = $orderIndex; $i < count($plans); $i ++)
             {
                 $lastID ++;
                 $orders[$i] = $lastID * 5;
@@ -881,33 +883,29 @@ class programplanModel extends model
             $linkProducts = array_keys($productList);
             foreach($linkProducts as $index => $productID) $linkBranches[$index] = $productList[$productID]->branches;
         }
-        $this->post->set('products', $linkProducts);
-        $this->post->set('branch', $linkBranches);
 
-        foreach($datas as $data)
+        foreach($plans as $plan)
         {
             /* Set planDuration and realDuration. */
             if($this->config->edition == 'max')
             {
-                $data->planDuration = $this->getDuration($data->begin, $data->end);
-                $data->realDuration = $this->getDuration($data->realBegan, $data->realEnd);
+                $plan->planDuration = $this->getDuration($plan->begin, $plan->end);
+                $plan->realDuration = $this->getDuration($plan->realBegan, $plan->realEnd);
             }
 
-            $projectChanged = false;
-            $data->days     = helper::diffDate($data->end, $data->begin) + 1;
-            $data->order    = current($orders);
+            $plan->days     = helper::diffDate($plan->end, $plan->begin) + 1;
+            $plan->order    = current($orders);
 
-
-            if($data->id)
+            if($plan->id)
             {
-                $stageID = $data->id;
-                unset($data->id, $data->type);
+                $stageID = $plan->id;
+                unset($plan->id, $plan->type);
 
                 $oldStage    = $this->getByID($stageID);
-                $planChanged = ($oldStage->name != $data->name || $oldStage->milestone != $data->milestone || $oldStage->begin != $data->begin || $oldStage->end != $data->end);
+                $planChanged = ($oldStage->name != $plan->name || $oldStage->milestone != $plan->milestone || $oldStage->begin != $plan->begin || $oldStage->end != $plan->end);
 
-                if($planChanged) $data->version = $oldStage->version + 1;
-                $this->dao->update(TABLE_PROJECT)->data($data)
+                if($planChanged) $plan->version = $oldStage->version + 1;
+                $this->dao->update(TABLE_PROJECT)->data($plan)
                     ->autoCheck()
                     ->batchCheck($this->config->programplan->edit->requiredFields, 'notempty')
                     ->checkIF($plan->percent != '' and $setPercent, 'percent', 'float')
@@ -915,56 +913,56 @@ class programplanModel extends model
                     ->exec();
 
                 /* Add PM to stage teams and project teams. */
-                if(!empty($data->PM))
+                if(!empty($plan->PM))
                 {
                     $team = $this->user->getTeamMemberPairs($stageID, 'execution');
-                    if(isset($team[$data->PM])) continue;
+                    if(isset($team[$plan->PM])) continue;
 
-                    $roles  = $this->user->getUserRoles($data->PM);
+                    $roles  = $this->user->getUserRoles($plan->PM);
                     $member = new stdclass();
                     $member->root    = $stageID;
-                    $member->account = $data->PM;
-                    $member->role    = zget($roles, $data->PM, '');
+                    $member->account = $plan->PM;
+                    $member->role    = zget($roles, $plan->PM, '');
                     $member->join    = $now;
                     $member->type    = 'execution';
-                    $member->days    = $data->days;
+                    $member->days    = $plan->days;
                     $member->hours   = $this->config->execution->defaultWorkhours;
                     $this->dao->insert(TABLE_TEAM)->data($member)->exec();
-                    $this->execution->addProjectMembers($data->project, array($data->PM => $member));
+                    $this->execution->addProjectMembers($plan->project, array($plan->PM => $member));
                 }
 
-                if($data->acl != 'open') $this->user->updateUserView($stageID, 'sprint');
+                if($plan->acl != 'open') $this->user->updateUserView($stageID, 'sprint');
 
                 /* Record version change information. */
                 if($planChanged)
                 {
                     $spec = new stdclass();
                     $spec->project   = $stageID;
-                    $spec->version   = $data->version;
-                    $spec->name      = $data->name;
-                    $spec->milestone = $data->milestone;
-                    $spec->begin     = $data->begin;
-                    $spec->end       = $data->end;
+                    $spec->version   = $plan->version;
+                    $spec->name      = $plan->name;
+                    $spec->milestone = $plan->milestone;
+                    $spec->begin     = $plan->begin;
+                    $spec->end       = $plan->end;
                     $this->dao->insert(TABLE_PROJECTSPEC)->data($spec)->exec();
                 }
 
-                $changes  = common::createChanges($oldStage, $data);
+                $changes  = common::createChanges($oldStage, $plan);
                 $actionID = $this->action->create('execution', $stageID, 'edited');
                 $this->action->logHistory($actionID, $changes);
             }
             else
             {
-                unset($data->id);
-                $data->status        = 'wait';
-                $data->division      = $project->division;
-                $data->version       = 1;
-                $data->parentVersion = $data->parent == 0 ? 0 : $this->dao->findByID($data->parent)->from(TABLE_PROJECT)->fetch('version');
-                $data->team          = substr($data->name,0, 30);
-                $data->openedBy      = $account;
-                $data->openedDate    = $now;
-                $data->openedVersion = $this->config->version;
-                if(!isset($data->acl)) $data->acl = $this->dao->findByID($data->parent)->from(TABLE_PROJECT)->fetch('acl');
-                $this->dao->insert(TABLE_PROJECT)->data($data)
+                unset($plan->id);
+                $plan->status        = 'wait';
+                $plan->division      = $project->division;
+                $plan->version       = 1;
+                $plan->parentVersion = $plan->parent == 0 ? 0 : $this->dao->findByID($plan->parent)->from(TABLE_PROJECT)->fetch('version');
+                $plan->team          = substr($plan->name,0, 30);
+                $plan->openedBy      = $account;
+                $plan->openedDate    = $now;
+                $plan->openedVersion = $this->config->version;
+                if(!isset($plan->acl)) $plan->acl = $this->dao->findByID($plan->parent)->from(TABLE_PROJECT)->fetch('acl');
+                $this->dao->insert(TABLE_PROJECT)->data($plan)
                     ->autoCheck()
                     ->batchCheck($this->config->programplan->create->requiredFields, 'notempty')
                     ->checkIF($plan->percent != '' and $setPercent, 'percent', 'float')
@@ -973,13 +971,13 @@ class programplanModel extends model
                 if(!dao::isError())
                 {
                     $stageID = $this->dao->lastInsertID();
-                    if($data->type == 'kanban')
+                    if($plan->type == 'kanban')
                     {
                         $execution = $this->execution->getByID($stageID);
                         $this->loadModel('kanban')->createRDKanban($execution);
                     }
 
-                    if($data->acl != 'open') $this->user->updateUserView($stageID, 'sprint');
+                    if($plan->acl != 'open') $this->user->updateUserView($stageID, 'sprint');
 
                     /* Create doc lib. */
                     $lib = new stdclass();
@@ -995,7 +993,7 @@ class programplanModel extends model
 
                     /* Add creators and PM to stage teams and project teams. */
                     $teamMembers = array();
-                    $members     = array($this->app->user->account, $data->PM);
+                    $members     = array($this->app->user->account, $plan->PM);
                     $roles       = $this->user->getUserRoles(array_values($members));
                     $team        = $this->user->getTeamMemberPairs($stageID, 'execution');
                     foreach($members as $teamMember)
@@ -1008,29 +1006,29 @@ class programplanModel extends model
                         $member->role    = zget($roles, $teamMember, '');
                         $member->join    = $now;
                         $member->type    = 'execution';
-                        $member->days    = $data->days;
+                        $member->days    = $plan->days;
                         $member->hours   = $this->config->execution->defaultWorkhours;
                         $this->dao->insert(TABLE_TEAM)->data($member)->exec();
                         $teamMembers[$teamMember] = $member;
                     }
-                    $this->execution->addProjectMembers($data->project, $teamMembers);
+                    $this->execution->addProjectMembers($plan->project, $teamMembers);
 
                     $this->setTreePath($stageID);
-                    if($data->acl != 'open') $this->user->updateUserView($stageID, 'sprint');
+                    if($plan->acl != 'open') $this->user->updateUserView($stageID, 'sprint');
 
                     /* Record version change information. */
                     $spec = new stdclass();
                     $spec->project   = $stageID;
-                    $spec->version   = $data->version;
-                    $spec->name      = $data->name;
-                    $spec->milestone = $data->milestone;
-                    $spec->begin     = $data->begin;
-                    $spec->end       = $data->end;
+                    $spec->version   = $plan->version;
+                    $spec->name      = $plan->name;
+                    $spec->milestone = $plan->milestone;
+                    $spec->begin     = $plan->begin;
+                    $spec->end       = $plan->end;
                     $this->dao->insert(TABLE_PROJECTSPEC)->data($spec)->exec();
 
-                    if($project->hasProduct)
+                    if($project->hasProduct and !empty($linkProducts))
                     {
-                        $this->action->create('execution', $stageID, 'opened', '', join(',', $_POST['products']));
+                        $this->action->create('execution', $stageID, 'opened', '', implode(',', $linkProducts));
                     }
                     else
                     {

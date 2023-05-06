@@ -13,13 +13,12 @@ class todoTest
      * Test create a todo.
      *
      * @param  object $todoData
-     * @param  object $formData
      * @access public
      * @return int
      */
-    public function createTest($todoData, $formData)
+    public function createTest($todoData)
     {
-        $objectID = $this->objectModel->create($todoData, $formData);
+        $objectID = $this->objectModel->create($todoData);
 
         return $objectID ?: 0;
     }
@@ -86,7 +85,7 @@ class todoTest
      */
     public function batchUpdateTest(array $todos, int $todoID)
     {
-        $todoIDList = array($todoID => $todoID);
+        $todoIDList = array($todoID);
         $changes = $this->objectModel->batchUpdate($todos, $todoIDList);
 
         if(dao::isError()) return dao::getError();

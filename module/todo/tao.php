@@ -71,7 +71,7 @@ class todoTao extends todoModel
     }
 
     /**
-     * 插入待办数据
+     * 插入待办数据。
      * Insert todo data.
      *
      * @param  object $todo
@@ -90,7 +90,7 @@ class todoTao extends todoModel
     }
 
     /**
-     * 更新待办数据
+     * 更新待办数据。
      * Update todo data.
      *
      * @param  int    $todoID
@@ -111,6 +111,7 @@ class todoTao extends todoModel
     }
 
     /**
+     * 关闭一个待办。
      * Close one todo.
      *
      * @param int $todoID
@@ -151,7 +152,7 @@ class todoTao extends todoModel
     }
 
     /**
-     * 通过待办构建周期待办数据
+     * 通过待办构建周期待办数据。
      * Build cycle todo.
      *
      * @param  object $todo

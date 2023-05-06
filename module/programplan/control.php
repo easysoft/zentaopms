@@ -149,7 +149,7 @@ class programplan extends control
         if($_POST)
         {
             $formData = form::data($this->config->programplan->create->form);
-            $this->programplan->create($formData, $projectID, $this->productID, $planID);
+            $this->programplan->create($formData, $projectID, $productID, $planID);
             if(dao::isError())
             {
                 $errors = dao::getError();
@@ -173,7 +173,7 @@ class programplan extends control
         $this->view->position[] = $this->lang->programplan->create;
 
         $executions = !empty($planID) ? $this->loadModel('execution')->getChildExecutions($planID, 'order_asc') : array();
-        $plans      = $this->programplan->getStage($planID ? $planID : $projectID, $this->productID, 'parent', 'order_asc');
+        $plans      = $this->programplan->getStage($planID ? $planID : $projectID, $productID, 'parent', 'order_asc');
         if(!empty($planID) and !empty($plans) and $project->model == 'waterfallplus')
         {
             $executionType = 'stage';
@@ -289,6 +289,7 @@ class programplan extends control
     }
 
     /**
+     * 通过ajax请求保存自定义设置。
      * Save custom settings via ajax.
      *
      * @access public
@@ -302,34 +303,18 @@ class programplan extends control
         $this->loadModel('datatable');
         $this->loadModel('setting');
 
-        $stageCustom = $this->setting->getItem("owner=$owner&module=$module&section=browse&key=stageCustom");
-        $ganttFields = $this->setting->getItem("owner=$owner&module=$module&section=ganttCustom&key=ganttFields");
-        $zooming     = $this->setting->getItem("owner=$owner&module=$module&section=ganttCustom&key=zooming");
-
         if($_POST)
         {
-            $data        = fixer::input('post')->get();
-            $zooming     = empty($data->zooming) ? '' : $data->zooming;
-            $stageCustom = empty($data->stageCustom) ? '' : implode(',', $data->stageCustom);
-            $ganttFields = empty($data->ganttFields) ? '' : implode(',', $data->ganttFields);
-
-            $this->setting->setItem("$owner.$module.browse.stageCustom", $stageCustom);
-            $this->setting->setItem("$owner.$module.ganttCustom.ganttFields", $ganttFields);
-            $this->setting->setItem("$owner.$module.ganttCustom.zooming", $zooming);
+            $formData = form::data($this->config->product->form->create);
+            $this->programplanZen->beforeAjaxCustom($formData, $owner, $module);
 
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
         }
 
         /* Set Custom. */
         foreach(explode(',', $this->config->programplan->custom->customGanttFields) as $field) $customFields[$field] = $this->lang->programplan->ganttCustom[$field];
-
-        $this->view->zooming      = $zooming;
-        $this->view->customFields = $customFields;
-        $this->view->showFields   = $this->config->programplan->ganttCustom->ganttFields;
-        $this->view->ganttFields  = $ganttFields;
-        $this->view->stageCustom  = $stageCustom;
-
-        $this->display();
+        
+        $this->programplanZen->buildAjaxCustomView($owner, $module, $customFields);
     }
 
     /**
