@@ -409,6 +409,7 @@ class branchModel extends model
         if(is_array($productID))
         {
             foreach($productID as $id) $this->linkBranch4Project($id);
+            return;
         }
 
         $linkedBranchProject = array();

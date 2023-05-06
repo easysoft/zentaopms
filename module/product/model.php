@@ -206,13 +206,13 @@ class productModel extends model
     /**
      * Get by idList.
      *
-     * @param  array    $productIDList
+     * @param  array    $productIdList
      * @access public
      * @return array
      */
-    public function getByIdList($productIDList)
+    public function getByIdList(array $productIdList): array
     {
-        return $this->dao->select('*')->from(TABLE_PRODUCT)->where('id')->in($productIDList)->fetchAll('id');
+        return $this->dao->select('*')->from(TABLE_PRODUCT)->where('id')->in($productIdList)->fetchAll('id');
     }
 
     /**
@@ -658,14 +658,8 @@ class productModel extends model
         $oldProduct = $this->dao->findById($productID)->from(TABLE_PRODUCT)->fetch();
 
         $this->lang->error->unique = $this->lang->error->repeat;
-        $this->dao->update(TABLE_PRODUCT)->data($product, 'uid,changeProjects,contactListMenu')->autoCheck()
-            ->checkIF(!empty($product->name), 'name', 'unique', "id != {$productID} and `program` = {$product->program} and `deleted` = '0'")
-            ->checkIF(!empty($product->code), 'code', 'unique', "id != {$productID} and `deleted` = '0'")
-            ->checkFlow()
-            ->where('id')->eq($productID)
-            ->exec();
-
-        if(dao::isError()) return false;
+        $result = $this->productTao->doUpdate($product, $productID, (int)$product->program);
+        if(!$result) return false;
 
         /* Update objectID field of file recode, that upload by editor. */
         $this->loadModel('file')->updateObjectID($uid, $productID, 'product');
@@ -681,77 +675,50 @@ class productModel extends model
     }
 
     /**
+     * 批量更新产品信息。
      * Batch update products.
      *
+     * @param  array $products
      * @access public
      * @return array
      */
-    public function batchUpdate()
+    public function batchUpdate(array $products): array
     {
-        $products    = array();
-        $allChanges  = array();
-        $data        = fixer::input('post')->get();
-        $oldProducts = $this->getByIdList($this->post->productIDList);
-        $nameList    = array();
+        if(empty($products)) return array();
 
-        $extendFields = $this->getFlowExtendFields();
-        foreach($data->productIDList as $productID)
-        {
-            $productName = $data->names[$productID];
+        /* 初始化变量。*/
+        $oldProducts        = $this->getByIdList(array_keys($products));
+        $allChanges         = array();
+        $updateViewProducts = array();
+        $unlinkProducts     = array();
+        $linkProducts       = array();
 
-            $productID = (int)$productID;
-            $products[$productID] = new stdClass();
-            if($this->config->systemMode == 'ALM' and isset($data->programs[$productID])) $products[$productID]->program = (int)$data->programs[$productID];
-            if($this->config->systemMode == 'ALM' and isset($data->lines[$productID]))    $products[$productID]->line    = (int)$data->lines[$productID];
-            $products[$productID]->name    = $productName;
-            $products[$productID]->PO      = $data->POs[$productID];
-            $products[$productID]->QD      = $data->QDs[$productID];
-            $products[$productID]->RD      = $data->RDs[$productID];
-            $products[$productID]->type    = $data->types[$productID];
-            $products[$productID]->status  = $data->statuses[$productID];
-            $products[$productID]->desc    = strip_tags($this->post->descs[$productID], $this->config->allowedTags);
-            $products[$productID]->acl     = $data->acls[$productID];
-            $products[$productID]->id      = $productID;
-
-            foreach($extendFields as $extendField)
-            {
-                $products[$productID]->{$extendField->field} = $this->post->{$extendField->field}[$productID];
-                if(is_array($products[$productID]->{$extendField->field})) $products[$productID]->{$extendField->field} = join(',', $products[$productID]->{$extendField->field});
-
-                $products[$productID]->{$extendField->field} = htmlSpecialString($products[$productID]->{$extendField->field});
-            }
-        }
-        if(dao::isError()) return print(js::error(dao::getError()));
-
-        $unlinkProducts = array();
-        $linkProducts   = array();
+        /* 根据产品ID，循环更新的产品信息. */
+        $this->loadModel('personnel');
         $this->lang->error->unique = $this->lang->error->repeat;
         foreach($products as $productID => $product)
         {
             $oldProduct = $oldProducts[$productID];
-            if($this->config->systemMode == 'ALM') $programID  = !isset($product->program) ? $oldProduct->program : (empty($product->program) ? 0 : $product->program);
+            if($this->config->systemMode == 'ALM') $programID = (int)zget($product, 'program', $oldProduct->program);
 
-            $this->dao->update(TABLE_PRODUCT)
-                ->data($product)
-                ->autoCheck()
-                ->batchCheck($this->config->product->edit->requiredFields , 'notempty')
-                ->checkIF((!empty($product->name) and $this->config->systemMode == 'ALM'), 'name', 'unique', "id != $productID and `program` = $programID and `deleted` = '0'")
-                ->checkFlow()
-                ->where('id')->eq($productID)
-                ->exec();
-            if(dao::isError()) return print(js::error('product#' . $productID . dao::getError(true)));
+            $result = $this->productTao->doUpdate($product, $productID, $programID);
+            if(!$result) return array('result' => 'fail', 'message' => 'product#' . $productID . dao::getError(true));
 
-            /* When acl is open, white list set empty. When acl is private,update user view. */
-            if($product->acl == 'open') $this->loadModel('personnel')->updateWhitelist(array(), 'product', $productID);
-            if($product->acl != 'open') $this->loadModel('user')->updateUserView($productID, 'product');
-            if($product->type == 'normal' and $oldProduct->type != 'normal') $unlinkProducts[] = $productID;
-            if($product->type != 'normal' and $oldProduct->type == 'normal') $linkProducts[] = $productID;
+            /* When acl is open, white list set empty. */
+            if($product->acl == 'open') $this->personnel->updateWhitelist(array(), 'product', $productID);
+
+            /* 如果产品类型或权限有修改，则标记该产品，用做后面处理。*/
+            if($oldProduct->acl != $product->acl and $product->acl != 'open') $updateViewProducts[] = $productID;
+            if($product->type == 'normal' and $oldProduct->type != 'normal')  $unlinkProducts[]     = $productID;
+            if($product->type != 'normal' and $oldProduct->type == 'normal')  $linkProducts[]       = $productID;
 
             $allChanges[$productID] = common::createChanges($oldProduct, $product);
         }
 
-        if(!empty($unlinkProducts)) $this->loadModel('branch')->unlinkBranch4Project($unlinkProducts);
-        if(!empty($linkProducts)) $this->loadModel('branch')->linkBranch4Project($linkProducts);
+        /* 对标记的产品，批量做对应的后续处理。*/
+        if(!empty($updateViewProducts)) $this->loadModel('user')->updateUserView($updateViewProducts, 'product');
+        if(!empty($unlinkProducts))     $this->loadModel('branch')->unlinkBranch4Project($unlinkProducts);
+        if(!empty($linkProducts))       $this->loadModel('branch')->linkBranch4Project($linkProducts);
 
         return $allChanges;
     }
@@ -1731,12 +1698,19 @@ class productModel extends model
 
     /*
      * Get all lines.
+     *
+     * @param  array $programIdList
      * @access public
      * @return array
      */
-    public function getLines()
+    public function getLines(array $programIdList = array()): array
     {
-        return $this->dao->select('*')->from(TABLE_MODULE)->where('type')->eq('line')->andWhere('deleted')->eq(0)->orderBy('`order`')->fetchAll();
+        return $this->dao->select('*')->from(TABLE_MODULE)
+            ->where('type')->eq('line')
+            ->beginIF($programIdList)->andWhere('root')->in($programIdList)->fi()
+            ->andWhere('deleted')->eq(0)
+            ->orderBy('`order`')
+            ->fetchAll();
     }
 
     /**

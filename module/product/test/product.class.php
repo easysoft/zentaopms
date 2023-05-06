@@ -564,40 +564,31 @@ class productTest
     /**
      * Test batch update products.
      *
-     * @param  array  $param
-     * @param  int    $productID
+     * @param  array  $products
      * @access public
-     * @return void
+     * @return array
      */
-    public function batchUpdateTest($param, $productID)
+    public function batchUpdateTest(array $products): array
     {
-        $batchUpdateFields['productIDList'] = array('1' => '1', '2' => '2', '3' => '3');
-        $batchUpdateFields['programs']      = array('1' => '', '2' => '1', '3' => '2');
-        $batchUpdateFields['names']         = array('1' => '正常产品1', '2' => '正常产品2', '3' => '正常产品3');
-        $batchUpdateFields['lines']         = array('1' => '0', '2' => '1', '3' => '2');
-        $batchUpdateFields['POs']           = array('1' => 'po1', '2' => 'po2', '3' => 'po3');
-        $batchUpdateFields['QDs']           = array('1' => 'test1', '2' => 'test2', '3' => 'test3');
-        $batchUpdateFields['RDs']           = array('1' => 'dev1', '2' => 'dev2', '3' => 'dev3');
-        $batchUpdateFields['types']         = array('1' => 'normal', '2' => 'normal', '3' => 'normal');
-        $batchUpdateFields['statuses']      = array('1' => 'normal', '2' => 'normal', '3' => 'normal');
-        $batchUpdateFields['descs']         = array('1' => '&lt;div&gt; &lt;p&gt;&lt;h1&gt;一、禅道项目管理软件是做什么的？&lt;/h1&gt; 禅道由 青岛易软天创网络科技有限公司开发，国产开源项目管理软件。它集产品管理、项目管理、质量管理、文档管理、组织管理和事务管理于一体，是一款专业的研发项目管理软件，完整覆盖了研发项目管理的核心流程。禅道管理思想注重实效，功能完备丰富，操作简洁高效，界面美观大方，搜索功能强大，统计报表丰富多样，软件架构合理，扩展灵活，有完善的API可以调用。禅道，专注研发项目管理 &lt;/p&gt; &lt;p&gt;我是数字符号23@#$%#^$ &lt;/p&gt; &lt;p&gt;我是英文dashcuscbrewg &lt;/p&gt; &lt;/div&gt;', '2' => '&lt;div&gt; &lt;p&gt;&lt;h1&gt;一、禅道项目管理软件是做什么的？&lt;/h1&gt; 禅道由 青岛易软天创网络科技有限公司开发，国产开源项目管理软件。它集产品管理、项目管理、质量管理、文档管理、组织管理和事务管理于一体，是一款专业的研发项目管理软件，完整覆盖了研发项目管理的核心流程。禅道管理思想注重实效，功能完备丰富，操作简洁高效，界面美观大方，搜索功能强大，统计报表丰富多样，软件架构合理，扩展灵活，有完善的API可以调用。禅道，专注研发项目管理 &lt;/p&gt; &lt;p&gt;我是数字符号23@#$%#^$ &lt;/p&gt; &lt;p&gt;我是英文dashcuscbrewg &lt;/p&gt; &lt;/div&gt;', '3' => 'i&lt;div&gt; &lt;p&gt;&lt;h1&gt;一、禅道项目管理软件是做什么的？&lt;/h1&gt; 禅道由 青岛易软天创网络科技有限公司开发，国产开源项目管理软件。它集产品管理、项目管理、质量管理、文档管理、组织管理和事务管理于一体，是一款专业的研发项目管理软件，完整覆盖了研发项目管理的核心流程。禅道管理思想注重实效，功能完备丰富，操作简洁高效，界面美观大方，搜索功能强大，统计报表丰富多样，软件架构合理，扩展灵活，有完善的API可以调用。禅道，专注研发项目管理 &lt;/p&gt; &lt;p&gt;我是数字符号23@#$%#^$ &lt;/p&gt; &lt;p&gt;我是英文dashcuscbrewg &lt;/p&gt; &lt;/div&gt;');
-        $batchUpdateFields['acls']          = array('1' => 'open', '2' => 'open', '3' => 'open');
+        return $this->objectModel->batchUpdate($products);
+    }
 
-        foreach($batchUpdateFields as $field => $defaultValue) $_POST[$field] = $defaultValue;
+    /**
+     * 测试doUpdate方法
+     * Test doUpdate method
+     *
+     * @param object $product
+     * @param int    $productID
+     * @param int    $programID
+     * @access public
+     * @return object|array|null
+     */
+    public function doUpdateTest(object $product, int $productID, int $programID): object|array|false
+    {
+        $this->objectModel->doUpdate($product, $productID, $programID);
 
-        foreach($param as $key => $value) $_POST[$key] = $value;
-
-        $changes = $this->objectModel->batchUpdate();
-        unset($_POST);
-
-        if(dao::isError())
-        {
-            return dao::getError();
-        }
-        else
-        {
-            return $changes[$productID];
-        }
+        if(dao::isError()) return dao::getError();
+        return $this->objectModel->getById($productID);
     }
 
     /**

@@ -562,15 +562,27 @@ class productTao extends productModel
     }
 
     /**
-     * 从module表中查询所有产品线。
-     * Get all product lines from module table.
-     * TODO move to the MODULE module.
+     * 执行SQL，更新到对应的产品信息。
+     * Do update this product.
      *
+     * @param  object $product
+     * @param  int    $productID
+     * @param  int    $programID
      * @access protected
-     * @return array
+     * @return bool
      */
-    protected function getProductLinesTODO(): array
+    protected function doUpdate(object $product, int $productID, int $programID): bool
     {
-        return $this->dao->select('*')->from(TABLE_MODULE)->where('type')->eq('line')->andWhere('deleted')->eq(0)->orderBy('`order` asc')->fetchAll();
+        if(empty($productID)) return false;
+        if(count(get_object_vars($product)) == 0) return false;
+
+        $this->dao->update(TABLE_PRODUCT)->data($product)->autoCheck()
+            ->checkIF(!empty($product->name), 'name', 'unique', "id != {$productID} and `program` = {$programID} and `deleted` = '0'")
+            ->checkIF(!empty($product->code), 'code', 'unique', "id != {$productID} and `deleted` = '0'")
+            ->checkFlow()
+            ->where('id')->eq($productID)
+            ->exec();
+
+        return !dao::isError();
     }
 }

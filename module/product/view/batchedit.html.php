@@ -73,19 +73,19 @@
           </tr>
         </thead>
         <tbody>
-          <?php foreach($productIDList as $productID):?>
+          <?php foreach(array_keys($products) as $productID):?>
           <?php
           if(!empty($this->config->moreLinks["PO"])) $this->config->moreLinks["POs[$productID]"] = $this->config->moreLinks["PO"];
           if(!empty($this->config->moreLinks["QD"])) $this->config->moreLinks["QDs[$productID]"] = $this->config->moreLinks["QD"];
           if(!empty($this->config->moreLinks["RD"])) $this->config->moreLinks["RDs[$productID]"] = $this->config->moreLinks["RD"];
           ?>
           <tr>
-            <td><?php echo sprintf('%03d', $productID) . html::hidden("productIDList[$productID]", $productID);?></td>
+            <td><?php echo sprintf('%03d', $productID) . html::hidden("productIdList[$productID]", $productID);?></td>
             <?php if($this->config->systemMode == 'ALM'):?>
-            <?php if(isset($unauthorizedPrograms[$products[$productID]->program])):?>
-            <td class='text-left<?php echo zget($visibleFields, 'program', ' hidden')?>' style='overflow:visible'><?php echo html::select("programs[$productID]",  $unauthorizedPrograms, $products[$productID]->program, "class='form-control' disabled");?></td>
+            <?php if(isset($unauthPrograms[$products[$productID]->program])):?>
+            <td class='text-left<?php echo zget($visibleFields, 'program', ' hidden')?>' style='overflow:visible'><?php echo html::select("programs[$productID]",  $unauthPrograms, $products[$productID]->program, "class='form-control' disabled");?></td>
             <?php else:?>
-            <td class='text-left<?php echo zget($visibleFields, 'program', ' hidden')?>' style='overflow:visible'><?php echo html::select("programs[$productID]",  $programs, $products[$productID]->program, "class='form-control picker-select' onchange='loadProductLines(this.value, $productID)'");?></td>
+            <td class='text-left<?php echo zget($visibleFields, 'program', ' hidden')?>' style='overflow:visible'><?php echo html::select("programs[$productID]",  $authPrograms, $products[$productID]->program, "class='form-control picker-select' onchange='loadProductLines(this.value, $productID)'");?></td>
             <?php endif;?>
             <?php endif;?>
             <td title='<?php echo $products[$productID]->name?>'><?php echo html::input("names[$productID]", $products[$productID]->name, "class='form-control'");?></td>
