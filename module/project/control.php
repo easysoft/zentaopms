@@ -1866,10 +1866,8 @@ class project extends control
      */
     public function updateOrder()
     {
-        $postData = form::data();
-        $rawdata  = $postData->rawdata;
-        $idList   = explode(',', trim($rawdata->projects, ','));
-        $orderBy  = $rawdata->orderBy;
+        $idList   = explode(',', trim($this->post->projects, ','));
+        $orderBy  = $this->post->orderBy;
 
         if(strpos($orderBy, 'order') === false) return false;
 
