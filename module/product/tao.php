@@ -585,4 +585,48 @@ class productTao extends productModel
 
         return !dao::isError();
     }
+
+    /**
+     * 获取需求列表关联的用例总数。
+     * Get cases count of stories.
+     *
+     * @param  array     $storyIdList
+     * @access protected
+     * @return int
+     */
+    protected function getStoriesInCasesCount(array $storyIdList): int
+    {
+        if(empty($storyIdList)) return 0;
+
+        $cases = $this->dao->select('story')->from(TABLE_CASE)->where('story')->in($storyIdList)->andWhere('deleted')->eq(0)->fetchAll('story');
+
+        return count($cases);
+    }
+
+    /**
+     * 获取项目关联的产品。
+     * Get products by project ID.
+     *
+     * @param  int       $projectID
+     * @param  array     $views
+     * @param  string    $status
+     * @param  string    $orderBy
+     * @param  bool      $noDeleted
+     * @access protected
+     * @return int
+     */
+    protected function getProductsByProjectID(int $projectID, array $views, string $status, string $orderBy, bool $noDeleted): array
+    {
+        return $this->dao->select("t1.branch, t1.plan, t2.*")
+            ->from(TABLE_PROJECTPRODUCT)->alias('t1')
+            ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product = t2.id')
+            ->where('1=1')
+            ->beginIF($noDeleted)->andWhere('t2.deleted')->eq(0)->fi()
+            ->beginIF(!empty($projectID))->andWhere('t1.project')->in($projectID)->fi()
+            ->beginIF(!$this->app->user->admin and $this->config->vision == 'rnd')->andWhere('t2.id')->in($views)->fi()
+            ->andWhere('t2.vision')->eq($this->config->vision)
+            ->beginIF(strpos($status, 'noclosed') !== false)->andWhere('t2.status')->ne('closed')->fi()
+            ->orderBy($orderBy . 't2.order asc')
+            ->fetchAll();
+    }
 }
