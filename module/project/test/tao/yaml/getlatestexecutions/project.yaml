@@ -1,0 +1,6 @@
+title: getlatestexecutions-project
+author: chaideqing
+version: "1.0"
+fields:
+    - field: type
+      range: 'sprint'

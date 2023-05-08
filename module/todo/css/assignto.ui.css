@@ -1,2 +1,3 @@
 .form-row .items-center {align-items: center;}
-.form-row .form-group.pl-3 {padding-left: 0.75rem;}
+.form-row .form-group.pl-2 {padding-left: 0.5rem;}
+.form-row .form-actions a.toolbar-item {display: none;}

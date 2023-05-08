@@ -221,52 +221,44 @@ class project extends control
     }
 
     /**
+     * 获取项目选中项目或项目集对象的信息
      * Ajax: Get selected object's information.
      *
-     * @param  str    $objectType
-     * @param  int    $objectID
-     * @param  int    $selectedProgramID
+     * @param  string $objectType
+     * @param  string $objectID
+     * @param  string $selectedProgramID
+     *
      * @access public
      * @return void
      */
-    public function ajaxGetObjectInfo($objectType, $objectID, $selectedProgramID)
+    public function ajaxGetObjectInfo(string $objectType, string $objectID, string $selectedProgramID)
     {
+        /* Get the available budget for the program. */
         if($selectedProgramID)
         {
-            $selectedProgram = $this->loadModel('program')->getByID($selectedProgramID);
+            $selectedProgramID = (int)$selectedProgramID;
+            $selectedProgram   = $this->loadModel('program')->getByID($selectedProgramID);
             if($selectedProgram->budget) $availableBudget = $this->program->getBudgetLeft($selectedProgram);
         }
 
+        /* Get the available budget and program time range. */
         if(!empty($objectID))
         {
             $objectID = (int)$objectID;
-            $object = $objectType == 'project' ? $this->project->getByID($objectID) : $this->loadModel('program')->getByID($objectID);
+            $object   = $objectType == 'project' ? $this->project->getByID($objectID) : $this->loadModel('program')->getByID($objectID);
 
             if(isset($availableBudget)) $availableBudget = $object->parent == $selectedProgramID ? $availableBudget + (int)$object->budget : $availableBudget;
 
             if($objectType == 'program')
             {
-                $minChildBegin = $this->dao->select('`begin` as minBegin')->from(TABLE_PROGRAM)->where('id')->ne($objectID)->andWhere('deleted')->eq(0)->andWhere('path')->like("%,{$objectID},%")->orderBy('begin_asc')->fetch('minBegin');
-                $maxChildEnd   = $this->dao->select('`end` as maxEnd')->from(TABLE_PROGRAM)->where('id')->ne($objectID)->andWhere('deleted')->eq(0)->andWhere('path')->like("%,{$objectID},%")->andWhere('end')->ne('0000-00-00')->orderBy('end_desc')->fetch('maxEnd');
+                $minChildBegin = $this->project->getProgramMinBegin($objectID);
+                $maxChildEnd   = $this->project->getProgramMaxEnd($objectID);
             }
         }
 
+        /* Build the selected drop-down data. */
         $data = array();
-        if(isset($selectedProgram))
-        {
-            $data['selectedProgramBegin'] = $selectedProgram->begin;
-            $data['selectedProgramEnd']   = $selectedProgram->end;
-            $data['budgetUnit']           = $selectedProgram->budgetUnit;
-            $data['selectedProgramPath']  = explode(',', $selectedProgram->path);
-        }
-
-        if($objectType == 'program')
-        {
-            $withProgram = $this->config->systemMode == 'ALM' ? true : false;
-            $allProducts = array(0 => '') + $this->program->getProductPairs($selectedProgramID, 'all', 'noclosed', '', 0, $withProgram);
-            $data['allProducts'] = html::select("products[]", $allProducts, '', "class='form-control chosen' onchange='loadBranches(this)'");
-            $data['plans']       = html::select('plans[][][]', '', '', 'class=\'form-control chosen\' multiple');
-        }
+        $data = $this->projectZen->buildSelectForm($selectedProgramID, $selectedProgram, $objectType);
 
         /* Finish task #64882.Get the path of the last selected program. */
         if(!empty($objectID))       $data['objectPath']      = explode(',', $object->path);
@@ -529,15 +521,15 @@ class project extends control
             $this->lang->project->subAclList = $this->lang->project->kanbanSubAclList;
         }
 
-        $withProgram = $this->config->systemMode == 'ALM';
         $linkedBranchList    = array();
         $productPlans        = array();
+        $withProgram         = $this->config->systemMode == 'ALM';
         $branches            = $this->project->getBranchesByProject($projectID);
-        $linkedProductIdList = empty($branches) ? '' : array_keys($branches);
+        $linkedProductIdList = empty($branches) ? array() : array_keys($branches);
         $allProducts         = $this->program->getProductPairs($project->parent, 'all', 'noclosed', '', 0, $withProgram);
-        $linkedProducts      = $this->loadModel('product')->getProducts($projectID, 'all', '', true, $linkedProductIdList);
-        $parentProject       = $this->program->getByID($project->parent);
+        $linkedProducts      = $this->loadModel('product')->getProducts($projectID, 'all', '', true);
         $plans               = $this->productplan->getGroupByProduct(array_keys($linkedProducts), 'skipParent|unexpired');
+        $parentProject       = $this->program->getByID($project->parent);
         $projectStories      = $this->project->getStoriesByProject($projectID);
         $projectBranches     = $this->project->getBranchGroupByProject($projectID, array_keys($linkedProducts));
 
@@ -546,13 +538,9 @@ class project extends control
             $postData = form::data($this->config->project->form->edit);
             $project  = $this->projectZen->prepareEditExtras($projectID, $postData);
 
-            $project->id       = $projectID;
             $project->products = isset($project->products) ? array_filter($project->products) : $linkedProducts;
 
-            $plans = $project->plans;
-            if(!empty($plans)) $this->project->updatePlanIdListByProject($projectID, $plans);
-
-            $changes = $this->project->update($projectID, $project);
+            $changes = $this->project->update($projectID, $project, $postData);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             if($changes)

@@ -146,9 +146,9 @@ class programplanModel extends model
      * @param  string  $selectCustom
      * @param  bool    $returnJson
      * @access public
-     * @return string
+     * @return string|array
      */
-    public function getDataForGantt(int $executionID, int $productID, int $baselineID = 0, string $selectCustom = '', bool $returnJson = true): string
+    public function getDataForGantt(int $executionID, int $productID, int $baselineID = 0, string $selectCustom = '', bool $returnJson = true): string|array
     {
         $this->loadModel('stage');
         $this->loadModel('execution');
