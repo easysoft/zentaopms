@@ -106,6 +106,8 @@ class projectTao extends projectModel
      */
     protected function doUpdate(int $projectID ,object $project, object $oldProject): bool
     {
+        $project = $project -> remove('auth,product,products,branch,plans,delta,future,contactListMenu,teamMembers');
+
         $this->dao->update(TABLE_PROJECT)->data($project)
             ->autoCheck('begin,end')
             ->batchcheck($requiredFields, 'notempty')
@@ -116,7 +118,6 @@ class projectTao extends projectModel
             ->checkIF(!empty($project->code), 'code', 'unique', "id != $projectID and `type` = 'project' and `model` = '{$project->model}' and `deleted` = '0'")
             ->checkFlow()
             ->where('id')->eq($projectID)
-            ->remove('products,branch,plans,delta,future,contactListMenu,teamMembers')
             ->exec();
 
         return !dao::isError();
