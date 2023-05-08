@@ -22,19 +22,13 @@ title=blockTao->fetchMyBlocks();
 timeout=0
 cid=2
 
-- 查询admin用户在我的地盘仪表盘的区块列表数量 @1
-- 查询admin用户在我的地盘仪表盘的区块标题 @区块2
-- 查询admin用户在我的地盘仪表盘的隐藏区块列表数量 @0
-- 查询admin用户在不存在仪表盘的区块列表数量 @0
-- 查询admin用户在我的地盘仪表盘区块的vision @rnd
-
 */
 $tester->loadModel('block');
 
 initData();
 
 r(count($tester->block->fetchMyBlocks('my')))     && p('')         && e('1');       // 查询admin用户在我的地盘仪表盘的区块列表数量
-r($tester->block->fetchMyBlocks('my'))            && p('2:title')  && e('区块2');   // 查询admin用户在我的地盘仪表盘的区块标题
+r($tester->block->fetchMyBlocks('my'))            && p('2:title')  && e('区块2');   // 查询admin用户在我的地盘仪表盘的区块标题第2条的title属性
 r(count($tester->block->fetchMyBlocks('my', 1)))  && p('')         && e('0');       // 查询admin用户在我的地盘仪表盘的隐藏区块列表数量
 r(count($tester->block->fetchMyBlocks('asdas?'))) && p('')         && e('0');       // 查询admin用户在不存在仪表盘的区块列表数量
-r($tester->block->fetchMyBlocks('my'))            && p('2:vision') && e('rnd');     // 查询admin用户在我的地盘仪表盘区块的vision
+r($tester->block->fetchMyBlocks('my'))            && p('2:vision') && e('rnd');     // 查询admin用户在我的地盘仪表盘区块的vision第2条的vision属性
