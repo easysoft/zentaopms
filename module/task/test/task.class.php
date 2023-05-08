@@ -305,6 +305,38 @@ class taskTest
     }
 
     /**
+     * Test assign a task to a team again.
+     *
+     * @param  int      $taskID
+     * @param  string   $status
+     * @param  array    $team
+     * @param  array    $teamSource
+     * @param  array    $teamConsumed
+     * @param  araay    $teamLeft
+     * @access public
+     * @return object
+     */
+    public function updateTeamTest($taskID, $status, $team, $teamSource, $teamEstimate, $teamConsumed, $teamLeft)
+    {
+        global $tester;
+
+        $task = new stdclass();
+        $task->id           = $taskID;
+        $task->status       = $status;
+        $task->lastEditedBy = $tester->app->user->account;
+        $object = $this->objectModel->updateTeam($task, $team, $teamSource, $teamEstimate, $teamConsumed, $teamLeft);
+        if(dao::isError())
+        {
+            $errors = dao::getError();
+            return array_shift($errors);
+        }
+        else
+        {
+            return $object;
+        }
+    }
+
+    /**
      * Test cancel a task.
      *
      * @param  int    $taskID

@@ -1140,14 +1140,15 @@ class taskModel extends model
     }
 
     /**
+     * 任务指派用户。
      * Assign a task to a user again.
      *
      * @param  object $task
      * @param  int    $taskID
      * @access public
-     * @return array
+     * @return array|false
      */
-    public function assign(object $task): array|false
+    public function assign(object $task, string $uid): array|false
     {
         $oldTask = $this->getById($task->id);
 
@@ -1159,11 +1160,10 @@ class taskModel extends model
 
         if($oldTask->parent > 0) $this->updateParentStatus($task->id);
 
-        $task = $this->loadModel('file')->processImgURL($task, $this->config->task->editor->assignto['id'], $this->post->uid);
+        $task = $this->loadModel('file')->processImgURL($task, $this->config->task->editor->assignto['id'], $uid);
         $this->dao->update(TABLE_TASK)
             ->data($task)
             ->autoCheck()
-            ->check('left', 'float')
             ->checkFlow()
             ->where('id')->eq($task->id)
             ->exec();
@@ -1172,56 +1172,46 @@ class taskModel extends model
     }
 
     /**
-     * Update a task team.
+     * 更新团队信息。
+     * Update team.
      *
-     * @param int $taskID
+     * @param  object $task
+     * @param  array  $team
+     * @param  array  $teamConsumed
+     * @param  array  $teamLeft
      * @access public
-     * @return void
+     * @return array|false
      */
-    public function updateTeam($taskID)
+    public function updateTeam(object $task, array $team, array $teamSource, array $teamEstimate, array $teamConsumed, array $teamLeft): array|false
     {
+        $taskID  = $task->id;
         $oldTask = $this->getById($taskID);
-        foreach($this->post->team as $i => $account)
+
+        /* Check team data. */
+        foreach($team as $i => $account)
         {
             if(!$account) continue;
 
-            if($this->post->teamConsumed[$i] == 0 and $this->post->teamLeft[$i] == 0)
+            if($teamConsumed[$i] == 0 and $teamLeft[$i] == 0)
             {
                 dao::$errors[] = $this->lang->task->noticeTaskStart;
                 return false;
             }
         }
 
-        $now  = helper::now();
-        $task = fixer::input('post')
-            ->add('id', $taskID)
-            ->setDefault('estimate, left, consumed', 0)
-            ->setIF(is_numeric($this->post->estimate), 'estimate', (float)$this->post->estimate)
-            ->setIF(is_numeric($this->post->consumed), 'consumed', (float)$this->post->consumed)
-            ->setIF(is_numeric($this->post->left),     'left',     (float)$this->post->left)
-            ->setDefault('lastEditedBy', $this->app->user->account)
-            ->setDefault('lastEditedDate', $now)
-            ->setDefault('assignedDate', $now)
-            ->stripTags($this->config->task->editor->assignto['id'], $this->config->allowedTags)
-            ->remove('comment,showModule,team,teamEstimate,teamConsumed,teamLeft,teamSource')
-            ->get();
-
-        if(count(array_filter($this->post->team)) > 1)
+        /* Manage the team and calculate task work information. */
+        if(count(array_filter($team)) > 1)
         {
-            $teams = $this->manageTaskTeam($oldTask->mode, $taskID, $task->status);
+            $teams = $this->manageTaskTeam($oldTask->mode, $task, $team, $teamSource, $teamEstimate, $teamConsumed, $teamLeft);
             if(!empty($teams)) $task = $this->computeHours4Multiple($oldTask, $task);
         }
         if(empty($teams)) $task->mode = '';
 
         if($oldTask->parent > 0) $this->updateParentStatus($taskID);
 
-        $task = $this->loadModel('file')->processImgURL($task, $this->config->task->editor->assignto['id'], $this->post->uid);
         $this->dao->update(TABLE_TASK)
             ->data($task)
             ->autoCheck()
-            ->checkIF($task->estimate != false, 'estimate', 'float')
-            ->checkIF($task->left     != false, 'left',     'float')
-            ->checkIF($task->consumed != false, 'consumed', 'float')
             ->checkFlow()
             ->where('id')->eq($taskID)
             ->exec();
@@ -1955,6 +1945,7 @@ class taskModel extends model
      */
     public function getByList($taskIDList = 0)
     {
+        if(empty($taskIDList)) return array();
         return $this->dao->select('*')->from(TABLE_TASK)
             ->where('deleted')->eq(0)
             ->beginIF($taskIDList)->andWhere('id')->in($taskIDList)->fi()
@@ -3339,7 +3330,14 @@ class taskModel extends model
 
         $btnClass    .= $task->assignedTo == 'closed' ? ' disabled' : '';
         $btnClass    .= ' iframe btn btn-icon-left btn-sm';
-        $assignToLink = $task->assignedTo == 'closed' ? '#' : helper::createLink('task', 'assignTo', "executionID=$task->execution&taskID=$task->id", '', true);
+        if(!empty($task->team) and $task->mode == 'multi' and strpos('done,cencel,closed', $task->status) === false)
+        {
+            $assignToLink = $task->assignedTo == 'closed' ? '#' : helper::createLink('task', 'manageTeam', "executionID=$task->execution&taskID=$task->id", '', true);
+        }
+        else
+        {
+            $assignToLink = $task->assignedTo == 'closed' ? '#' : helper::createLink('task', 'assignTo', "executionID=$task->execution&taskID=$task->id", '', true);
+        }
         $assignToHtml = html::a($assignToLink, "<i class='icon icon-hand-right'></i> <span title='" . $assignedToTitle . "'>{$assignedToText}</span>", '', "class='$btnClass'");
 
         echo !common::hasPriv('task', 'assignTo', $task) ? "<span style='padding-left: 21px' class='{$btnTextClass}'>{$assignedToText}</span>" : $assignToHtml;

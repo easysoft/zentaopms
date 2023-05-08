@@ -25,15 +25,21 @@ $config->task->form->create['version']      = array('type' => 'int', 'required' 
 $config->task->form->assign = array();
 $config->task->form->assign['assignedTo']     = array('type' => 'string', 'required' => false, 'default' => '');
 $config->task->form->assign['left']           = array('type' => 'float', 'required' => true);
-$config->task->form->assign['lastEditedBy']   = array('type' => 'string', 'required' => false, 'default' => $app->user->account);
 $config->task->form->assign['lastEditedDate'] = array('type' => 'string', 'required' => false, 'default' => helper::now());
 $config->task->form->assign['assignedDate']   = array('type' => 'string', 'required' => false, 'default' => helper::now());
+
+$config->task->form->manageTeam = array();
+$config->task->form->manageTeam['status']         = array('type' => 'string', 'required' => false, 'default' => '');
+$config->task->form->manageTeam['estimate']       = array('type' => 'float', 'required' => false, 'default' => 0);
+$config->task->form->manageTeam['left']           = array('type' => 'float', 'required' => false, 'default' => 0);
+$config->task->form->manageTeam['consumed']       = array('type' => 'float', 'required' => false, 'default' => 0);
+$config->task->form->manageTeam['lastEditedDate'] = array('type' => 'string', 'required' => false, 'default' => helper::now());
+$config->task->form->manageTeam['assignedDate']   = array('type' => 'string', 'required' => false, 'default' => helper::now());
 
 $config->task->form->edit = array();
 $config->task->form->edit['name']         = array('type' => 'string', 'required' => true);
 $config->task->form->edit['color']        = array('type' => 'string', 'required' => false, 'default' => '');
 $config->task->form->edit['desc']         = array('type' => 'string', 'required' => false, 'default' => '');
-$config->task->form->edit['lastEditedBy'] = array('type' => 'string', 'required' => false, 'default' => $app->user->account);
 $config->task->form->edit['execution']    = array('type' => 'int', 'required' => true);
 $config->task->form->edit['story']        = array('type' => 'int', 'required' => false, 'default' => 0);
 $config->task->form->edit['module']       = array('type' => 'int', 'required' => false, 'default' => 0);

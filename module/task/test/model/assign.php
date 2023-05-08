@@ -10,42 +10,40 @@ title=taskModel->assign();
 timeout=0
 cid=1
 
-- 执行task模块的assign方法，参数是$taskIDlist[0],$waitTask
+- wait状态任务指派
  - 第0条的field属性 @assignedTo
  - 第0条的old属性 @old1
  - 第0条的new属性 @user92
 
-- 执行task模块的assign方法，参数是$taskIDlist[0],$waitTaskLeft
+- wait状态任务指派修改预计剩余
  - 第1条的field属性 @left
  - 第1条的old属性 @0
  - 第1条的new属性 @1
 
-- 执行task模块的assign方法，参数是$taskIDlist[1],$doingTask
+- doing状态任务指派
  - 第0条的field属性 @assignedTo
  - 第0条的old属性 @old2
  - 第0条的new属性 @user93
 
-- 执行task模块的assign方法，参数是$taskIDlist[2],$doneTask
+- done状态任务指派
  - 第0条的field属性 @assignedTo
  - 第0条的old属性 @old3
  - 第0条的new属性 @user94
 
-- 执行task模块的assign方法，参数是$taskIDlist[3],$pauseTask
+- pause状态任务指派
  - 第0条的field属性 @assignedTo
  - 第0条的old属性 @old4
  - 第0条的new属性 @user95
 
-- 执行task模块的assign方法，参数是$taskIDlist[4],$cancelTask
+- cancel状态任务指派
  - 第0条的field属性 @assignedTo
  - 第0条的old属性 @old5
  - 第0条的new属性 @user96
 
-- 执行task模块的assign方法，参数是$taskIDlist[5],$closedTask
+- closed状态任务指派
  - 第0条的field属性 @assignedTo
  - 第0条的old属性 @old6
  - 第0条的new属性 @user97
-
-
 
 */
 

@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * The assignto view of task of ZenTaoPMS.
  */
@@ -22,7 +23,7 @@ namespace zin;
 /* ====== Preparing and processing page data ====== */
 
 /* zin: Set variables to define picker options for form */
-$formTitle = $task->name;
+$formTitle         = $task->name;
 $assignedToOptions = $members;
 
 
