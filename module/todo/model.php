@@ -107,7 +107,7 @@ class todoModel extends model
      *
      * @param array $todos
      * @param array $todoIdList
-     * @access protected
+     * @access public
      * @return array|int
      */
     public function batchUpdate(array $todos, array $todoIdList): array|int
