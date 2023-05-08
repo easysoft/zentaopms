@@ -3439,8 +3439,8 @@ class execution extends control
 
         if(!empty($_POST))
         {
-            if($object->type != 'project' and $object->project != 0) $this->execution->linkStory($object->project);
-            $this->execution->linkStory($objectID, array(), array(), $extra);
+            if($object->type != 'project' and $object->project != 0) $this->execution->linkStory($object->project, array(), array(), '', array(), $storyType);
+            $this->execution->linkStory($objectID, array(), array(), $extra, array(), $storyType);
 
             if(isonlybody())
             {
@@ -3572,6 +3572,7 @@ class execution extends control
         $this->view->browseLink   = $browseLink;
         $this->view->project      = $project;
         $this->view->storyType    = $storyType;
+        if($this->config->edition == 'ipd') $this->view->roadmaps = $this->loadModel('roadmap')->getPairs(array_keys($products));
 
         $this->display();
     }
