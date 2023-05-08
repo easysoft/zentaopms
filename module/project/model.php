@@ -2561,6 +2561,7 @@ class projectModel extends model
     {
         global $lang;
 
+        $objectID = (int)$objectID;
         $model    = 'scrum';
         $objectID = (empty($objectID) and $this->session->project) ? $this->session->project : $objectID;
         $project  = $this->projectTao->fetchProjectInfo($objectID);
