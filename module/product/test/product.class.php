@@ -1139,4 +1139,34 @@ class productTest
 
         return array('hasProduct' => $hasProduct, 'hasBranch' => $hasBranch);
     }
+
+    /**
+     * 测试 buildSelect4Mobile 方法。
+     * Test buildSelect4Mobile
+     *
+     * @param  array      $products
+     * @param  int        $productID
+     * @param  string     $currentModule
+     * @param  string     $currentMethod
+     * @param  string     $extra
+     * @param  string|int $branch
+     * @param  bool       $withBranch
+     * @access public
+     * @return array
+     */
+    public function buildSelect4MobileTest(array $products, int $productID, string $currentModule, string $currentMethod, string $extra = '', string|int $branch = '', bool $withBranch = true): array
+    {
+        $this->objectModel->lang->product->menu->settings['subMenu']->branch = array('link' => "@branch@|branch|manage|product=%s", 'subModule' => 'branch');
+
+        $select = $this->objectModel->buildSelect4Mobile($products, $productID, $currentModule, $currentMethod, $extra, $branch, $withBranch);
+
+        $productName = zget($products, $productID, reset($products));
+        $branchName  = '所有';
+        if(is_numeric($branch)) $branchName = $this->objectModel->dao->select('*')->from(TABLE_BRANCH)->where('id')->eq($branch)->fetch('name');
+
+        $hasProduct = (int)(strpos($select, 'currentItem')   !== false and strpos($select, $productName) !== false);
+        $hasBranch  = (int)(strpos($select, 'currentBranch') !== false and strpos($select, $branchName)  !== false);
+
+        return array('hasProduct' => $hasProduct, 'hasBranch' => $hasBranch);
+    }
 }

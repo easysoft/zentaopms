@@ -16,6 +16,8 @@ fields:
       range: 分支
     - field: name2
       range: 1-10000
+  - field: desc
+    range: ""
   - field: status
     range: active,closed
   - field: order
@@ -25,6 +27,10 @@ fields:
     postfix: ""
     loop: 0
     format: ""
+  - field: createdDate
+    range: "(-3M)-(+M):1D"
+    type: timestamp
+    format: "YY/MM/DD"
   - field: deleted
     note: "是否删除"
     range: 0
