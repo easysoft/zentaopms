@@ -1721,4 +1721,43 @@ class taskTest
 
         return $cards;
     }
+
+    /**
+     * Other data processing after task creation.
+     *
+     * @param  int   $taskID
+     * @param  int   $taskIdList
+     * @param  int   $bugID
+     * @param  int   $todoID
+     * @param  array $testTasks
+     * @access public
+     * @return object
+     */
+    public function afterCreateTest($taskID, $taskIdList, $bugID = 0, $todoID = 0, $testTasks = array())
+    {
+        global $tester;
+        $_SERVER['HTTP_HOST'] = $tester->config->db->host;
+
+        $task = $this->objectModel->getByID($taskID);
+        $this->objectModel->afterCreate($task, $taskIdList, $bugID, $todoID, $testTasks);
+
+        if($bugID)
+        {
+            $object = $tester->dao->findById($bugID)->from(TABLE_BUG)->fetch();
+        }
+        elseif($todoID)
+        {
+            $object = $tester->dao->findById($todoID)->from(TABLE_TODO)->fetch();
+        }
+        elseif($task->story)
+        {
+            $object = $tester->dao->findById($task->story)->from(TABLE_STORY)->fetch();
+        }
+        else
+        {
+            $object = $tester->dao->findById($taskID)->from(TABLE_TASK)->fetch();
+        }
+
+        return $object;
+    }
 }
