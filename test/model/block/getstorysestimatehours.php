@@ -10,12 +10,6 @@ title=测试 blockModel->getStorysEstimateHours();
 cid=1
 pid=1
 
-获取需求 1 的预计工时 >> 1
-获取需求 2 的预计工时 >> 1
-获取需求 3 的预计工时 >> 1
-获取需求 4 的预计工时 >> 1
-获取需求 5 的预计工时 >> 1
-
 */
 
 $storyID = array(1, 2, 3, 4, 5);

@@ -14,9 +14,9 @@ namespace zin;
 /**
  * 获取区块左侧的项目列表.
  * Get project tabs on the left side.
- * 
- * @param  array    $projects 
- * @param  string   $blockNavCode 
+ *
+ * @param  array    $projects
+ * @param  string   $blockNavCode
  * @access public
  * @return array
  */
@@ -54,10 +54,10 @@ function getProjectTabs($projects, $blockNavCode): array
 
 /**
  * 获取区块右侧显示的项目信息.
- * Get project statistical information. 
- * 
- * @param  object   $projects 
- * @param  string   $blockNavID 
+ * Get project statistical information.
+ *
+ * @param  object   $projects
+ * @param  string   $blockNavID
  * @access public
  * @return array
  */
@@ -80,8 +80,8 @@ function getProjectInfo($projects, $blockNavID): array
 /**
  * 获取敏捷类项目的统计信息.
  * Get scrum project info.
- * 
- * @param  object    $project 
+ *
+ * @param  object    $project
  * @access public
  * @return void
  */
@@ -89,7 +89,7 @@ function getScrumProjectInfo($project)
 {
     global $lang;
 
-    $scrumProjectInfo = div
+    return div
     (
         /* 区块右侧顶部的项目概况。 */
         div
@@ -158,14 +158,13 @@ function getScrumProjectInfo($project)
             getProjectStatisticItems($project)
         )
     );
-    return $scrumProjectInfo;
 }
 
 /**
  * 获取项目的统计项.
  * get project statistic items. 
- * 
- * @param  object    $project 
+ *
+ * @param  object    $project
  * @access public
  * @return array
  */
@@ -233,7 +232,7 @@ function getWaterfallProjectInfo($project)
 {
     global $app, $lang;
     $isChineseLang = in_array($app->getClientLang(), array('zh-cn','zh-tw'));
-    $waterfallProjectInfo = div 
+    return div
     (
         /* 瀑布项目展示概况。 */
         set('class', 'weekly-row'),
@@ -343,7 +342,6 @@ function getWaterfallProjectInfo($project)
             )
         )
     );
-    return $waterfallProjectInfo;
 }
 
 $blockNavCode = 'nav-' . uniqid();

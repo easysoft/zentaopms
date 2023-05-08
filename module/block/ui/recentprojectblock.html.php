@@ -18,7 +18,7 @@ foreach($projects as $projectID => $project)
     $cards[] = cell
     (
         set('width', '33%'),
-        set('class', 'border m-2 p-4'), 
+        set('class', 'border m-2 p-4'),
         div
         (
             set('class', 'pb-2'),
