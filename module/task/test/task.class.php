@@ -878,13 +878,7 @@ class taskTest
             $object = $this->objectModel->getById($taskID);
 
             if(empty($object)) return 0;
-
-            if($object->parent > 0) $object = $this->objectModel->getById($object->parent);
-
-
-            $estStartedDiff = date_diff(date_create($object->estStarted), date_create(helper::now()));
-            $deadlineDiff   = date_diff(date_create($object->deadline), date_create(helper::now()));
-            return array('estStartedDiff' => $estStartedDiff->d, 'deadlineDiff' => $deadlineDiff->d);
+            return $object;
         }
     }
 
