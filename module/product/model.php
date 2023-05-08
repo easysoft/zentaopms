@@ -195,7 +195,6 @@ class productModel extends model
      */
     public function getByID(int $productID): object|false
     {
-        $productID = (int)$productID;
         if(defined('TUTORIAL')) return $this->loadModel('tutorial')->getProduct();
         $product = $this->dao->findById($productID)->from(TABLE_PRODUCT)->fetch();
         if(!$product) return false;
@@ -1272,15 +1271,16 @@ class productModel extends model
     }
 
     /**
+     * 获取产品路线图数据。
      * Get roadmap of a proejct.
      *
      * @param  int    $productID
-     * @param  int    $branch
+     * @param  string $branch    all|0|1
      * @param  int    $count
      * @access public
      * @return array
      */
-    public function getRoadmap($productID, $branch = 0, $count = 0)
+    public function getRoadmap(int $productID, string $branch = '0', int $count = 0): array
     {
         $plans    = $this->loadModel('productplan')->getList($productID, $branch);
         $releases = $this->loadModel('release')->getList($productID, $branch);
