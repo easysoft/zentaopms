@@ -1241,7 +1241,7 @@ class projectModel extends model
      * @access public
      * @return bool
      */
-    public function checkBranchAndProductValid(int $projectID, object $project, object $postData): bool
+    public function checkBranchAndProductValid(object $project, object $postData): bool
     {
         $topProgramID     = $this->loadModel('program')->getTopByID($project->parent);
         $multipleProducts = $this->loadModel('product')->getMultiBranchPairs($topProgramID);

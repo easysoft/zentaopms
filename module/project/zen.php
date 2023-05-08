@@ -114,7 +114,7 @@ class projectZen extends project
             ->get();
 
         /* Check if products and branch valid by project. */
-        if($postExtras->products && !$this->project->checkBranchAndProductValid($projectID, $project, $postExtras)) return false;
+        if($postExtras->products && !$this->project->checkBranchAndProductValid($project, $postExtras)) return false;
 
         /* Check if products not empty. */
         if(!$this->checkProductsNotEmpty($postExtras->products)) return false;
