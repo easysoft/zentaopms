@@ -478,6 +478,8 @@ class taskZen extends task
             ->stripTags($this->config->task->editor->create['id'], $this->config->allowedTags)
             ->join('mailto', ',')
             ->get();
+        if(empty($formData->estStarted)) unset($task->estStarted);
+        if(empty($formData->deadline)) unset($task->deadline);
 
         /* Processing image link. */
         return $this->loadModel('file')->processImgURL($task, $this->config->task->editor->create['id'], $rawData->uid);
