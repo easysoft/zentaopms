@@ -163,10 +163,10 @@ class fields
                 if(!empty($rule['range']) or $rule['range'] === '0') $ruleArr[$index]['range'] = $rule['range'];
             }
 
-            if(!empty($rule['prefix']) or $rule['range'] === '0')  $ruleArr[$index]['prefix']  = $rule['prefix'];
-            if(!empty($rule['postfix']) or $rule['range'] === '0') $ruleArr[$index]['postfix'] = $rule['postfix'];
-            if(!empty($rule['type']) or $rule['range'] === '0')    $ruleArr[$index]['type']    = $rule['type'];
-            if(!empty($rule['format']) or $rule['range'] === '0')  $ruleArr[$index]['format']  = $rule['format'];
+            if(!empty($rule['prefix']) or $rule['prefix'] === '0')  $ruleArr[$index]['prefix']  = $rule['prefix'];
+            if(!empty($rule['postfix']) or $rule['postfix'] === '0') $ruleArr[$index]['postfix'] = $rule['postfix'];
+            if(!empty($rule['type']) or $rule['type'] === '0')    $ruleArr[$index]['type']    = $rule['type'];
+            if(!empty($rule['format']) or $rule['format'] === '0')  $ruleArr[$index]['format']  = $rule['format'];
 
             $index ++;
         }

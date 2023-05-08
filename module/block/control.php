@@ -283,17 +283,17 @@ class block extends control
 
         if(empty($block)) return $html;
 
+        if(isset($block->params->num) and !isset($block->params->count)) $block->params->count = $block->params->num;
+
         $code = $block->code;
         if($code == 'statistic' or $code == 'list' or $code == 'overview') $code = $block->module . ucfirst($code);
 
         $function = 'print' . ucfirst($code) . 'Block';
-        if(method_exists('blockZen', $function)) $this->blockZen->$function($blockID);
+        if(method_exists('blockZen', $function)) $this->blockZen->$function($block);
 
-        $params = $block->params;
-        if(isset($params->num) and !isset($params->count)) $params->count = $params->num;
         if(!$this->selfCall)
         {
-            $this->app->user = $this->dao->select('*')->from(TABLE_USER)->where('ranzhi')->eq($params->account)->fetch();
+            $this->app->user = $this->dao->select('*')->from(TABLE_USER)->where('ranzhi')->eq($block->params->account)->fetch();
             if(empty($this->app->user))
             {
                 $this->app->user = new stdclass();
@@ -318,12 +318,12 @@ class block extends control
         $moreLink = '';
         if(isset($this->config->block->modules[$module]->moreLinkList->{$code}))
         {
-            list($moduleName, $method, $vars) = explode('|', sprintf($this->config->block->modules[$module]->moreLinkList->{$code}, isset($params->type) ? $params->type : ''));
+            list($moduleName, $method, $vars) = explode('|', sprintf($this->config->block->modules[$module]->moreLinkList->{$code}, isset($block->params->type) ? $block->params->type : ''));
             $this->view->moreLink = $this->createLink($moduleName, $method, $vars);
         }
         $this->view->moreLink = $moreLink;
 
-        $viewType = (isset($params->viewType) and $params->viewType == 'json') ? 'json' : 'html';
+        $viewType = (isset($block->params->viewType) and $block->params->viewType == 'json') ? 'json' : 'html';
         if($viewType == 'json')
         {
             unset($this->view->app);
