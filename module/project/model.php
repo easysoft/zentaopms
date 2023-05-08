@@ -53,20 +53,6 @@ class projectModel extends model
     }
 
     /**
-     * Show accessDenied response.
-     *
-     * @access private
-     * @return void
-     */
-    public function accessDenied()
-    {
-        if(defined('TUTORIAL')) return true;
-
-        $this->session->set('project', '');
-        return print(js::alert($this->lang->project->accessDenied) . js::locate(helper::createLink('project', 'index')));
-    }
-
-    /**
      * Judge an action is clickable or not.
      *
      * @param  object    $project
@@ -123,7 +109,7 @@ class projectModel extends model
                 }
 
                 $this->session->set('project', (int)key($projects), $this->app->tab);
-                $this->accessDenied();
+                print($this->projectTao->accessDenied());
             }
             else
             {
@@ -1367,7 +1353,7 @@ class projectModel extends model
      * @access public
      * @return bool
      */
-    public function updateWhitelistByProject(int $projectID, object $project, object $oldProject): bool
+    public function updateWhitelistByProject(int $projectID, object $project, object $oldProject, array $linkedProducts): bool
     {
         /* Check if whitelist shoud update .*/
         $whitelist    = array_filter(explode(',', $project->whitelist));
@@ -1422,8 +1408,8 @@ class projectModel extends model
     {
         /* Activate or close the shadow product of the project. */
         $productID = $this->loadModel('product')->getProductIDByProject($projectID);
-        if($project->status == 'doing') $this->product->activate($productID);
-        if($project->status == 'closed') $this->product->close($productID);
+        if($status == 'doing') $this->product->activate($productID);
+        if($status == 'closed') $this->product->close($productID);
 
         return !dao::isError();
     }
@@ -1480,7 +1466,7 @@ class projectModel extends model
      * @access public
      * @return array|false
      */
-    public function update(int $projectID, object $project): array|false
+    public function update(int $projectID, object $project , object $postData): array|false
     {
         /* 通过id查老项目信息, 处理parent和图片字段。*/
         /* Fetch oldProject's info and get parent and file info.*/
@@ -1514,8 +1500,9 @@ class projectModel extends model
         $this->updateProducts($projectID, $project->product); // 更新关联的项目列表。
         $this->unLinkProductsByProject($projectID, $project, $oldProject); // 解除关联部分关联的产品信息。
         $this->updateUserViewByProject($projectID, $project->acl); // 更新用户视图。
-        $this->updateWhitelistByProject($projectID, $project, $oldProject); // 更新关联的白名单列表。
+        $this->updateWhitelistByProject($projectID, $project, $oldProject, $linkedProducts); // 更新关联的白名单列表。
         $this->updateTeamMembersByProject($projectID, $project, $oldProject); // 更新关联的成员列表。
+        $this->updatePlanIdListByProject($projectID, $project->plans); // 更新关联的计划列表。
 
         $this->file->updateObjectID($this->post->uid, $projectID, 'project'); // 通过uid更新文件id。
 
@@ -2561,6 +2548,7 @@ class projectModel extends model
     {
         global $lang;
 
+        $objectID = (int)$objectID;
         $model    = 'scrum';
         $objectID = (empty($objectID) and $this->session->project) ? $this->session->project : $objectID;
         $project  = $this->projectTao->fetchProjectInfo($objectID);
@@ -3020,7 +3008,7 @@ class projectModel extends model
     }
 
     /**
-     * Fetch planIdList by project
+     * Update planIdList by project
      *
      * @param  int   $projectID
      * @param  array $plans
@@ -3092,5 +3080,46 @@ class projectModel extends model
         }
 
         return !dao::isError();
+    }
+
+    /**
+     * 获取项目集的最小开始时间
+     * Get program min begin
+     *
+     * @param  int $objectID
+     *
+     * @access public
+     * @return object
+     */
+    public function getProgramMinBegin(int $objectID): object
+    {
+        $a = $this->dao->select('`begin` as minBegin')->from(TABLE_PROGRAM)
+            ->where('id')->ne($objectID)
+            ->andWhere('deleted')->eq(0)
+            ->andWhere('path')->like("%,{$objectID},%")
+            ->orderBy('begin_asc')
+            ->fetch('minBegin');
+        return $a;
+
+    }
+
+    /**
+     * 获取项目集的最大结束时间
+     * get program max end
+     *
+     * @param  int $objectID
+     *
+     * @access public
+     * @return object
+     */
+    public function getProgramMaxEnd(int $objectID): object
+    {
+        return $this->dao->select('`end` as maxEnd')->from(TABLE_PROGRAM)
+            ->where('id')->ne($objectID)
+            ->andWhere('deleted')->eq(0)
+            ->andWhere('path')->like("%,{$objectID},%")
+            ->andWhere('end')->ne('0000-00-00')
+            ->orderBy('end_desc')
+            ->fetch('maxEnd');
     }
 }

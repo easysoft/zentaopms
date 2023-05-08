@@ -67,7 +67,6 @@ fields:
     note: "脚本创建日期"
     range: "(M)-(w)"
     type: timestamp
-    prefix: "DateTime"
     postfix: ""
     format: "YY/MM/DD"
   - field: scriptStatus

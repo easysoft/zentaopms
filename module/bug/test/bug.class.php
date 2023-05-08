@@ -795,10 +795,11 @@ class bugTest
                 $_POST[$field] = $value;
             }
         }
-        $_POST['closedDate'] = '';
+        $_POST['deleteFiles'] = array();
 
+        $object->files = array();
 
-        $change = $this->objectModel->update($bugID);
+        $change = $this->objectModel->update((object)$_POST, $object);
         if($change == array()) $change = '没有数据更新';
         unset($_POST);
 

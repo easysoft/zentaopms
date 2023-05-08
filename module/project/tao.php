@@ -116,7 +116,6 @@ class projectTao extends projectModel
             ->checkIF(!empty($project->code), 'code', 'unique', "id != $projectID and `type` = 'project' and `model` = '{$project->model}' and `deleted` = '0'")
             ->checkFlow()
             ->where('id')->eq($projectID)
-            ->remove('products,branch,plans,delta,future,contactListMenu,teamMembers')
             ->exec();
 
         return !dao::isError();
@@ -136,7 +135,6 @@ class projectTao extends projectModel
             ->andWhere('status')->in('wait,doing')
             ->andWhere('project')->eq($projectID)
             ->fetchAll();
-
     }
 
     /**
@@ -794,6 +792,19 @@ class projectTao extends projectModel
             ->andWhere('t2.deleted')->eq(0)
             ->groupBy('t1.project')
             ->fetchAll('project');
+    }
+
+    /**
+     * 返回请求被拒绝的跳转信息。
+     * return accessDenied response.
+     *
+     * @access protected
+     * @return string
+     */
+    protected function accessDenied(): string
+    {
+        $this->session->set('project', '');
+        return js::alert($this->lang->project->accessDenied) . js::locate(helper::createLink('project', 'index'));
     }
 
     /**

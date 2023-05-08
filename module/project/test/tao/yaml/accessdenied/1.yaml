@@ -1,0 +1,8 @@
+title: accessdenied-1
+author: chaideqing
+version: "1.0"
+fields:
+    - field: id
+      range: ',user1'
+    - field: type
+      range: 'project'

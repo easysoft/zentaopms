@@ -31,13 +31,17 @@ $tester->loadModel('todo');
 
 $todo = new stdClass();
 $todo->account = 'admin';
-$todo->date   = date('Y-m-d');
-$todo->begin  = '1000';
-$todo->end    = '1400';
-$todo->type   = 'custom';
-$todo->name   = '我的待办名字';
-$todo->desc   = '我的待办描述';
-$todo->status = 'wait';
+$todo->date         = date('Y-m-d');
+$todo->begin        = '1000';
+$todo->end          = '1400';
+$todo->type         = 'custom';
+$todo->name         = '我的待办名字';
+$todo->desc         = '我的待办描述';
+$todo->status       = 'wait';
+$todo->feedback     = '0';
+$todo->finishedDate = date('Y-m-d H:i:s');
+$todo->assignedDate = date('Y-m-d H:i:s');
+$todo->closedDate   = date('Y-m-d H:i:s');
 
 $todoNoName = clone $todo;
 $todoNoName->name = '';
