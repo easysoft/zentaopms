@@ -18,14 +18,13 @@ class programplan extends control
      *
      * @param  int     $projectID
      * @param  int     $productID
-     * @param  string  $extra
      * @access public
      * @return void
      */
-    public function commonAction($projectID, $productID = 0, $extra = '')
+    public function commonAction(int $projectID, int $productID = 0)
     {
         $products  = $this->loadModel('product')->getProductPairsByProject($projectID);
-        $productID = $this->product->saveVisitState($productID, $products);
+        $productID = $this->loadModel('product')->saveVisitState($productID, $products);
         $project   = $this->loadModel('project')->getByID($projectID);
 
         $this->session->set('hasProduct', $project->hasProduct);
@@ -33,91 +32,34 @@ class programplan extends control
     }
 
     /**
+     * 渲染阶段数据页面。
      * Browse program plans.
      *
-     * @param  int     $projectID
-     * @param  int     $productID
+     * @param  string  $projectID
+     * @param  string  $productID
      * @param  string  $type
      * @param  string  $orderBy
-     * @param  int     $baselineID
+     * @param  string  $baselineID
      * @access public
      * @return void
      */
-    public function browse($projectID = 0, $productID = 0, $type = 'gantt', $orderBy = 'id_asc', $baselineID = 0)
+    public function browse(string $projectID = '0', string $productID = '0', string $type = 'gantt', string $orderBy = 'id_asc', string $baselineID = '0')
     {
+        $productID  = (int)$productID;
+        $projectID  = (int)$projectID;
+        $baselineID = (int)$baselineID;
         $this->app->loadLang('stage');
-        $this->commonAction($projectID, $productID, $type);
         $this->session->set('projectPlanList', $this->app->getURI(true), 'project');
+        $this->commonAction($projectID, $productID);
 
-        if(!defined('RUN_MODE') || RUN_MODE != 'api') $projectID = $this->project->saveState((int)$projectID, $this->project->getPairsByProgram());
+        if(!defined('RUN_MODE') || RUN_MODE != 'api') $projectID = $this->project->saveState($projectID, $this->project->getPairsByProgram());
 
         $products = $this->loadModel('product')->getProducts($projectID);
         if($this->session->hasProduct) $this->lang->modulePageNav = $this->product->select($products, $productID, 'programplan', 'browse', $type, 0, 0, '', false);
 
-        $selectCustom = 0; // Display date and task settings.
-        $dateDetails  = 1; // Gantt chart detail date display.
-        if($type == 'gantt')
-        {
-            $this->loadModel('setting');
-            $owner        = $this->app->user->account;
-            $module       = 'programplan';
-            $section      = 'browse';
-            $object       = 'stageCustom';
-            if(!isset($this->config->programplan->browse->stageCustom)) $this->setting->setItem("$owner.$module.browse.stageCustom", 'date,task');
+        $stages = $this->programplanZen->buildBrowseStages($projectID, $productID, $baselineID, $type, $orderBy);
 
-            $selectCustom = $this->setting->getItem("owner={$owner}&module={$module}&section={$section}&key={$object}");
-
-            if(strpos($selectCustom, 'date') !== false) $dateDetails = 0;
-
-            $plans = $this->programplan->getDataForGantt($projectID, $productID, $baselineID, $selectCustom, false);
-
-            /* Set Custom. */
-            foreach(explode(',', $this->config->programplan->custom->customGanttFields) as $field) $customFields[$field] = $this->lang->programplan->ganttCustom[$field];
-            $this->view->customFields = $customFields;
-            $this->view->showFields   = $this->config->programplan->ganttCustom->ganttFields;
-        }
-
-        if($type == 'assignedTo')
-        {
-            $owner        = $this->app->user->account;
-            $module       = 'programplan';
-            $section      = 'browse';
-            $object       = 'stageCustom';
-            $selectCustom = $this->loadModel('setting')->getItem("owner={$owner}&module={$module}&section={$section}&key={$object}");
-            if(strpos($selectCustom, 'date') !== false) $dateDetails = 0;
-
-            $plans = $this->programplan->getDataForGanttGroupByAssignedTo($projectID, $productID, $baselineID, $selectCustom, false);
-
-            /* Set Custom. */
-            foreach(explode(',', $this->config->programplan->custom->customGanttFields) as $field) $customFields[$field] = $this->lang->programplan->ganttCustom[$field];
-            $this->view->customFields = $customFields;
-            $this->view->showFields   = $this->config->programplan->ganttCustom->ganttFields;
-        }
-
-        if($type == 'lists')
-        {
-            $sort  = common::appendOrder($orderBy);
-            $this->loadModel('datatable');
-            $plans = $this->programplan->getPlans($projectID, $productID, $sort);
-        }
-
-        $zooming = !empty($this->config->programplan->ganttCustom->zooming) ? $this->config->programplan->ganttCustom->zooming : 'day';
-        $this->view->title        = $this->lang->programplan->browse;
-        $this->view->position[]   = $this->lang->programplan->browse;
-        $this->view->projectID    = $projectID;
-        $this->view->project      = $this->project->getByID($projectID);
-        $this->view->productID    = $productID;
-        $this->view->product      = $this->product->getByID($productID);
-        $this->view->productList  = $this->product->getProductPairsByProject($projectID, 'all', '', false);
-        $this->view->type         = $type;
-        $this->view->plans        = $plans;
-        $this->view->orderBy      = $orderBy;
-        $this->view->selectCustom = $selectCustom;
-        $this->view->dateDetails  = $dateDetails;
-        $this->view->users        = $this->loadModel('user')->getPairs('noletter');
-        $this->view->zooming      = $zooming;
-        $this->view->ganttType    = $type;
-        $this->display();
+        $this->programplanZen->buildBrowseView($projectID, $productID, $stages, $type, $orderBy);
     }
 
     /**

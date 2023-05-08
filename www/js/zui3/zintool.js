@@ -62,8 +62,8 @@
  * @property {ZinDtableProps} dtable
  * @property {boolean} tableCustomCols
  * @property {{type: string}} sidebar
- * @property {{title: string, toolbar: ZinItemProps[]}} mainHeader 
- * @property {{submitBtnText?: string, rows: ZinFormRow[]}} form 
+ * @property {{title: string, toolbar: ZinItemProps[]}} mainHeader
+ * @property {{submitBtnText?: string, rows: ZinFormRow[]}} form
  */
 
 function getIconName(iconClass)
@@ -194,7 +194,7 @@ function getTableInfo($)
     if(!$table.length) return;
     if($('#mainContent .datatable').length)
     {
-        return alert('zin: Please switch the table to simple table mode');
+        return alert('zin: Please switch the table to simple table mode.');
     }
     const colTypesMap =
     {
@@ -317,7 +317,7 @@ function getMainHeaderInfo($)
 {
     const $mainHeader = $('#mainContent .main-header');
     if(!$mainHeader.length) return;
-   
+
     const mainHeader = {title: $mainHeader.find('h2').text().trim()};
     const $toolbar = $mainHeader.find('.btn-toolbar');
     if($toolbar.length)
@@ -335,7 +335,7 @@ function getMainHeaderInfo($)
 function getFormGroupProps($control)
 {
     if($control.hasClass('input-group'))
-    { 
+    {
         const info = {type: 'inputGroup', items: []};
         $control.children('.form-control,.input-group-addon,.input-group-btn').each(function()
         {
@@ -450,7 +450,7 @@ function getFormInfo($)
                     {
                         formGroup.items.forEach(item =>
                         {
-                            if(item.items && item.name) form.vars.push({name: `${item.name.replace('[]', '')}Options`, value: item.items.slice(0, Math.min(item.items.length, 5))}); 
+                            if(item.items && item.name) form.vars.push({name: `${item.name.replace('[]', '')}Options`, value: item.items.slice(0, Math.min(item.items.length, 5))});
                         });
                     }
                 }
@@ -645,7 +645,7 @@ function genInputGroupStatement(items, indent = 0)
         ')'
     ], indent).join('\n');
 }
- 
+
 function genFormGroupStatement(formGroup, indent = 0)
 {
     return indentLines(
@@ -699,15 +699,15 @@ function getPageTemplate(info)
     {
         lines.push
         (
-            '/* zin: Set variable $browseType to store the current active item in feature bar */',
-            `${genVarStatement('browseType', featureBar.current)} // the variable may already defined in control method`,
+            '/* zin: Set variable $browseType to store the current active item in feature bar. */',
+            `${genVarStatement('browseType', featureBar.current)} // the variable may already defined in control method.`,
             ''
         );
     }
 
     if(dtable)
     {
-        lines.push('/* zin: Set variables to define columns and rows data for dtable */');
+        lines.push('/* zin: Set variables to define columns and rows data for dtable. */');
         lines.push(genVarStatement('dtableCols', dtable.cols));
         lines.push(genVarStatement('dtableRows', dtable.data));
         variables.push('dtableCols', 'dtableRows');
@@ -721,7 +721,7 @@ function getPageTemplate(info)
 
     if(form && form.vars.length)
     {
-        lines.push('/* zin: Set variables to define picker options for form */');
+        lines.push('/* zin: Set variables to define picker options for form. */');
         if(mainHeader.title !== info.title) lines.push(genVarStatement('formTitle', mainHeader.title));
         form.vars.forEach(item => lines.push(genVarStatement(item.name, item.value)));
         variables.push(...form.vars.map(item => item.name));
@@ -734,7 +734,7 @@ function getPageTemplate(info)
         widgets.push('featureBar');
         lines.push
         (
-            '/* zin: Define the feature bar on main menu */',
+            '/* zin: Define the feature bar on main menu. */',
             'featureBar',
             '(',
                 indentLines(
@@ -752,7 +752,7 @@ function getPageTemplate(info)
     {
         lines.push
         (
-            '/* zin: Define the toolbar on main menu */',
+            '/* zin: Define the toolbar on main menu. */',
             'toolbar',
             '(',
                 indentLines(toolbar.map(item => genItemStatement(item)).filter(x => typeof x === 'string'), 1).join(',\n'),
@@ -766,7 +766,7 @@ function getPageTemplate(info)
         widgets.push('sidebar');
         lines.push
         (
-            '/* zin: Define the sidebar in main content */',
+            '/* zin: Define the sidebar in main content. */',
             'sidebar',
             '(',
             `    ${info.sidebar.type}()`,
@@ -780,7 +780,7 @@ function getPageTemplate(info)
         widgets.push('dtable');
         lines.push
         (
-            '/* zin: Define the dtable in main content */',
+            '/* zin: Define the dtable in main content. */',
             'dtable',
             '(',
                 indentLines(
@@ -805,7 +805,7 @@ function getPageTemplate(info)
         const mainHeader = info.mainHeader || {};
         lines.push
         (
-            '/* zin: Define the form in main content */',
+            '/* zin: Define the form in main content. */',
             'formPanel',
             '(',
                 indentLines
@@ -815,7 +815,7 @@ function getPageTemplate(info)
                     {
                         if(!formRow.hidden && formRow.items.length === 1)
                         {
-                           return genFormGroupStatement(formRow.items[0]); 
+                           return genFormGroupStatement(formRow.items[0]);
                         }
                         return getFormRowStatement(formRow);
                     }).join(',\n'),
@@ -854,10 +854,10 @@ function getPageTemplate(info)
         featureBar.items && featureBar.items.length ? `  + Check the ${featureBar.items.length} items definition in featureBar widget.` : null,
         toolbar && toolbar.length ? `  + Check the ${toolbar.length} items definition in toolbar widget.` : null,
         `  + Check the origin code in module/${info.moduleName}/view/${info.methodName}.html.php, and ensure that all features have been implemented.`,
-        `  + Check the origin js code in module/${info.moduleName}/js/common.js and module/${info.moduleName}/js/${info.methodName}.js`,
-        `  + Check the origin css code in module/${info.moduleName}/css/common.css and module/${info.moduleName}/css/${info.methodName}.css`,
-        '  + Remove the comments which start with "zin:"',
-        '  + Test according to the new design draft and the original implementation',
+        `  + Check the origin js code in module/${info.moduleName}/js/common.js and module/${info.moduleName}/js/${info.methodName}.js.`,
+        `  + Check the origin css code in module/${info.moduleName}/css/common.css and module/${info.moduleName}/css/${info.methodName}.css.`,
+        '  + Remove the comments which start with "zin:".',
+        '  + Test according to the new design draft and the original implementation.',
         ' */',
         '',
         'namespace zin;',
@@ -899,7 +899,7 @@ function zin(win)
                 callback: () =>
                 {
                     navigator.clipboard.writeText(template);
-                    $.zui.messager.success(`zin view file copied to clipboard, you can create file module/${pageInfo.moduleName}/ui/${pageInfo.methodName}.html.php and paste to it`);
+                    $.zui.messager.success(`zin view file copied to clipboard, you can create file module/${pageInfo.moduleName}/ui/${pageInfo.methodName}.html.php and paste to it.`);
                 }
             },
             close:

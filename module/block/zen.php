@@ -386,7 +386,7 @@ class blockZen extends block
      * @access public
      * @return void
      */
-    public function printTodoBlock()
+    public function printTodoListBlock()
     {
         $limit = ($this->viewType == 'json' or !isset($this->params->count)) ? 0 : (int)$this->params->count;
         $todos = $this->loadModel('todo')->getList('all', $this->app->user->account, 'wait, doing', $limit, null, 'date, begin');
@@ -398,7 +398,7 @@ class blockZen extends block
         $this->session->set('storyList',    $uri, 'product');
         $this->session->set('testtaskList', $uri, 'qa');
 
-        $todos = $this->blockZen->unsetTodos($todos);
+        $todos = $this->unsetTodos($todos);
 
         $this->view->todos = $todos;
     }
@@ -627,45 +627,53 @@ class blockZen extends block
      * @access public
      * @return void
      */
-    public function printProductBlock()
+    public function printProductListBlock()
     {
-        $this->app->loadClass('pager', true);
-        if(!empty($this->params->type) and preg_match('/[^a-zA-Z0-9_]/', $this->params->type)) return;
-        $count = isset($this->params->count) ? (int)$this->params->count : 0;
-        $type  = isset($this->params->type) ? $this->params->type : '';
-        $pager = pager::init(0, $count , 1);
+        /* TODO:zu1 */
+        //$this->app->loadClass('pager', true);
+        //if(!empty($this->params->type) and preg_match('/[^a-zA-Z0-9_]/', $this->params->type)) return;
+        //$count = isset($this->params->count) ? (int)$this->params->count : 0;
+        //$type  = isset($this->params->type) ? $this->params->type : '';
+        //$pager = pager::init(0, $count , 1);
 
-        $productStats  = $this->loadModel('product')->getStats('order_desc', $this->viewType != 'json' ? $pager : '', $type);
-        $productIdList = array();
-        foreach($productStats as $product) $productIdList[] = $product->id;
+        //$productStats  = $this->loadModel('product')->getStats('order_desc', $this->viewType != 'json' ? $pager : '', $type);
+        //$productIdList = array();
+        //foreach($productStats as $product) $productIdList[] = $product->id;
 
-        $this->app->loadLang('project');
-        $executions = $this->dao->select('t1.product,t2.id,t2.project,t2.name,t2.multiple')->from(TABLE_PROJECTPRODUCT)->alias('t1')
-            ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project=t2.id')
-            ->where('t1.product')->in($productIdList)
-            ->andWhere('t2.type')->in('stage,sprint')
-            ->andWhere('t2.deleted')->eq(0)
-            ->orderBy('t1.project')
-            ->fetchAll('product');
+        //$this->app->loadLang('project');
 
-        $executionPairs = array();
-        $noMultiples    = array();
-        foreach($executions as $execution)
-        {
-            if(empty($execution->multiple)) $noMultiples[$execution->product] = $execution->project;
-            $executionPairs[$execution->product] = $execution->name;
-        }
-        if($noMultiples)
-        {
-            $noMultipleProjects = $this->dao->select('id,name')->from(TABLE_PROJECT)->where('id')->in($noMultiples)->fetchPairs('id', 'name');
-            foreach($noMultiples as $productID => $projectID)
-            {
-                if(isset($noMultipleProjects[$projectID])) $executionPairs[$productID] = $noMultipleProjects[$projectID] . "({$this->lang->project->disableExecution})";
-            }
-        }
+        //$executions = $this->dao->select('t1.product,t2.id,t2.project,t2.name,t2.multiple')->from(TABLE_PROJECTPRODUCT)->alias('t1')
+        //    ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project=t2.id')
+        //    ->where('t1.product')->in($productIdList)
+        //    ->andWhere('t2.type')->in('stage,sprint')
+        //    ->andWhere('t2.deleted')->eq(0)
+        //    ->orderBy('t1.project')
+        //    ->fetchAll('product');
 
-        $this->view->executions   = $executionPairs;
+        //$executionPairs = array();
+        //$noMultiples    = array();
+        //foreach($executions as $execution)
+        //{
+        //    if(empty($execution->multiple)) $noMultiples[$execution->product] = $execution->project;
+        //    $executionPairs[$execution->product] = $execution->name;
+        //}
+        //if($noMultiples)
+        //{
+        //    $noMultipleProjects = $this->dao->select('id,name')->from(TABLE_PROJECT)->where('id')->in($noMultiples)->fetchPairs('id', 'name');
+        //    foreach($noMultiples as $productID => $projectID)
+        //    {
+        //        if(isset($noMultipleProjects[$projectID])) $executionPairs[$productID] = $noMultipleProjects[$projectID] . "({$this->lang->project->disableExecution})";
+        //    }
+        //}
+
+        //$this->view->executions   = $executionPairs;
+
+        $productStats = $this->dao->select('*')->from(TABLE_PRODUCT)->fetchAll();
+
         $this->view->productStats = $productStats;
+        $this->view->users        = $this->loadModel('user')->getPairs('noletter');
+        $this->view->userIdPairs  = $this->user->getPairs('noletter|showid');
+        $this->view->usersAvatar  = $this->user->getAvatarPairs('');
     }
 
     /**
@@ -748,18 +756,16 @@ class blockZen extends block
     /**
      * Print product statistic block.
      *
+     * @param  object $block
      * @access public
-     * @param  string $storyType requirement|story
      * @return void
      */
-    public function printProductStatisticBlock($storyType = 'story')
+    public function printProductStatisticBlock($block)
     {
-        if(!empty($this->params->type) and preg_match('/[^a-zA-Z0-9_]/', $this->params->type)) return;
+        $status = isset($block->params->type)  ? $block->params->type  : '';
+        $count  = isset($block->params->count) ? $block->params->count : '';
 
-        $status = isset($this->params->type) ? $this->params->type : '';
-        $count  = isset($this->params->count) ? $this->params->count : '';
-
-        $products      = $this->loadModel('product')->getOrderedProducts($status, $count);
+        $products      = $this->loadModel('product')->getOrderedProducts($status, (int)$count);
         $productIdList = array_keys($products);
 
         if(empty($products))
@@ -772,7 +778,7 @@ class blockZen extends block
         $stories = $this->dao->select('product, stage, COUNT(status) AS count')->from(TABLE_STORY)
             ->where('deleted')->eq(0)
             ->andWhere('product')->in($productIdList)
-            ->beginIF($storyType)->andWhere('type')->eq($storyType)->fi()
+            ->andWhere('type')->eq('story')
             ->groupBy('product, stage')
             ->fetchGroup('product', 'stage');
 

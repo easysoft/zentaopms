@@ -53,20 +53,6 @@ class projectModel extends model
     }
 
     /**
-     * Show accessDenied response.
-     *
-     * @access private
-     * @return void
-     */
-    public function accessDenied()
-    {
-        if(defined('TUTORIAL')) return true;
-
-        $this->session->set('project', '');
-        return print(js::alert($this->lang->project->accessDenied) . js::locate(helper::createLink('project', 'index')));
-    }
-
-    /**
      * Judge an action is clickable or not.
      *
      * @param  object    $project
@@ -123,7 +109,7 @@ class projectModel extends model
                 }
 
                 $this->session->set('project', (int)key($projects), $this->app->tab);
-                $this->accessDenied();
+                print($this->projectTao->accessDenied());
             }
             else
             {
@@ -2561,6 +2547,7 @@ class projectModel extends model
     {
         global $lang;
 
+        $objectID = (int)$objectID;
         $model    = 'scrum';
         $objectID = (empty($objectID) and $this->session->project) ? $this->session->project : $objectID;
         $project  = $this->projectTao->fetchProjectInfo($objectID);
