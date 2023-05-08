@@ -14,9 +14,9 @@ namespace zin;
 /**
  * 获取区块左侧的产品列表.
  * Get product tabs on the left side.
- * 
- * @param  array    $products 
- * @param  string   $blockNavCode 
+ *
+ * @param  array    $products
+ * @param  string   $blockNavCode
  * @access public
  * @return array
  */
@@ -54,10 +54,10 @@ function getProductTabs($products, $blockNavCode): array
 
 /**
  * 获取区块右侧显示的项目信息.
- * Get product statistical information. 
- * 
- * @param  object   $products 
- * @param  string   $blockNavID 
+ * Get product statistical information.
+ *
+ * @param  object   $products
+ * @param  string   $blockNavID
  * @access public
  * @return array
  */

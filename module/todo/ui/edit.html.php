@@ -77,7 +77,7 @@ function buildDateControl(object $todo)
                     'type'  => 'date',
                     'width' => '1/4'
                 )),
-                on::change('changeCreateDate(this)')
+                on::change('changeDate(this)')
             ),
         ),
         formGroup

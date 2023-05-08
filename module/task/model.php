@@ -3916,6 +3916,7 @@ class taskModel extends model
 
         /* If both of lane id and column id are not empty, add task to the kanban cell. */
         if($laneID and $columnID) $this->kanban->addKanbanCell($kanbanID, $laneID, $columnID, 'task', $task->id);
+
         /* If lane id or column id is empty, update the task type lane of the kanban. */
         if(!$laneID or !$columnID) $this->kanban->updateLane($kanbanID, 'task');
     }

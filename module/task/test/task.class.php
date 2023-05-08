@@ -1763,15 +1763,18 @@ class taskTest
      * @param  int   $todoID
      * @param  array $testTasks
      * @access public
-     * @return object
+     * @return object|bool
      */
-    public function afterCreateTest($taskID, $taskIdList, $bugID = 0, $todoID = 0, $testTasks = array())
+    public function afterCreateTest($taskID = 0, $taskIdList = array(), $bugID = 0, $todoID = 0, $testTasks = array())
     {
         global $tester;
         $_SERVER['HTTP_HOST'] = $tester->config->db->host;
 
         $task = $this->objectModel->getByID($taskID);
-        $this->objectModel->afterCreate($task, $taskIdList, $bugID, $todoID, $testTasks);
+        if(!$task) return false;
+
+        $result = $this->objectModel->afterCreate($task, $taskIdList, $bugID, $todoID, $testTasks);
+        if(!$result) return false;
 
         if($bugID)
         {

@@ -524,8 +524,10 @@ class productTao extends productModel
      * @access private
      * @return string
      */
-    private function getBranchSelect4Mobile(object $product, string|int $branch, string $currentModule, string $currentMethod, string $extra = ''): string
+    protected function getBranchSelect4Mobile(object $product, string|int $branch, string $currentModule, string $currentMethod, string $extra = ''): string
     {
+        if(!isset($product->type) or $product->type == 'normal') return '';
+
         /* 修正分支显示语言项。 */
         $this->lang->product->branch = sprintf($this->lang->product->branch, $this->lang->product->branchName[$product->type]);
         $this->lang->product->menu->settings['subMenu']->branch['link'] = str_replace('@branch@', $this->lang->product->branch, $this->lang->product->menu->settings['subMenu']->branch['link']);
@@ -533,7 +535,7 @@ class productTao extends productModel
         /* 生成分支HTML代码。*/
         $output     = '';
         $branches   = $this->loadModel('branch')->getPairs($product->id, 'all');
-        $branchName = zget($branches, $branch, '');
+        $branchName = zget($branches, $branch, reset($branches));
         if($branchName) $output .= "<a id='currentBranch' href=\"javascript:showSearchMenu('branch', '{$product->id}', '$currentModule', '$currentMethod', '$extra')\">{$branchName} <span class='icon-caret-down'></span></a><div id='currentBranchDropMenu' class='hidden affix enter-from-bottom layer'></div>";
 
         return $output;
@@ -743,8 +745,8 @@ class productTao extends productModel
         if(!isset($products[$productID])) $productID = (int)key($products);
 
         /* 检测当前页面是否在项目或执行的测试二级导航中。*/
-        $isQaModule = (strpos(',project,execution,', ",{$this->app->tab},") !== false and strpos(',bug,testcase,testtask,ajaxselectstory,', ",{$this->app->rawMethod},") !== false) ? true : false;
-        if($this->app->tab == 'project' and strpos(',zeroCase,browseUnits,groupCase,', ",$currentMethod,") !== false) $isQaModule = true;
+        $isQaModule = (strpos(',project,execution,', ",{$this->app->tab},") !== false and stripos(',bug,testcase,testtask,ajaxselectstory,', ",{$this->app->rawMethod},") !== false) ? true : false;
+        if($this->app->tab == 'project' and stripos(',zeroCase,browseUnits,groupCase,', ",$currentMethod,") !== false) $isQaModule = true;
         if($isQaModule)
         {
             if($this->app->tab == 'project')   $extra = strpos(',testcase,groupCase,zeroCase,', ",$currentMethod,") !== false ? $extra : $this->session->project;
@@ -753,7 +755,6 @@ class productTao extends productModel
 
         /* 查询产品数据。*/
         $currentProduct = $this->getById($productID);
-        if(empty($currentProduct)) return '';
         $this->session->set('currentProductType', $currentProduct->type);
 
         /* 生成异步获取下拉菜单的链接。*/
