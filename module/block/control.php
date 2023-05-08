@@ -115,7 +115,6 @@ class block extends control
     {
         $blockID = (int)$blockID;
         if($type == 'delete') $this->block->deleteBlock($blockID);
-        if($type == 'hidden') $this->block->hidden($blockID);
         if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
         $this->loadModel('score')->create('block', 'set');
