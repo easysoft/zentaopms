@@ -5219,14 +5219,15 @@ class executionModel extends model
     /**
      * Print execution nested list.
      *
-     * @param  object $execution
-     * @param  bool   $isChild
-     * @param  array  $users
+     * @param  int    $execution
+     * @param  int    $isChild
+     * @param  int    $users
      * @param  int    $productID
+     * @param  string $project
      * @access public
      * @return void
      */
-    public function printNestedList($execution, $isChild, $users, $productID)
+    public function printNestedList($execution, $isChild, $users, $productID, $project = '')
     {
         $this->loadModel('task');
         $this->loadModel('execution');
@@ -5292,11 +5293,21 @@ class executionModel extends model
         echo '<td>' . html::ring($execution->hours->progress) . '</td>';
         echo "<td id='spark-{$execution->id}' class='sparkline text-left no-padding' values='$burns'></td>";
         echo '<td class="c-actions text-center">';
-        common::printIcon('execution', 'start', "executionID={$execution->id}", $execution, 'list', '', '', 'iframe', true);
+
+        $title = '';
+        $disabled = '';
+        if($project->model == 'ipd')
+        {
+            $this->app->loadLang('stage');
+            $title    = $execution->ipdStage['canStart'] ? '' : sprintf($this->lang->execution->disabledTip->startTip, $this->lang->stage->ipdTypeList[$execution->ipdStage['preAttribute']], $this->lang->stage->ipdTypeList[$execution->attribute]);
+            $disabled = $execution->ipdStage['canStart'] ? '' : 'disabled';
+        }
+        common::printIcon('execution', 'start', "executionID={$execution->id}", $execution, 'list', '', '', 'iframe', true, $disabled, $title);
+
         $class = !empty($execution->children) ? 'disabled' : '';
         common::printIcon('task', 'create', "executionID={$execution->id}", '', 'list', '', '', $class, false, "data-app='execution'");
 
-        $project = $this->loadModel('project')->getByID($execution->project);
+        if(empty($project)) $project = $this->loadModel('project')->getByID($execution->project);
         if($execution->type == 'stage' or ($this->app->tab == 'project' and !empty($project->model) and $project->model == 'waterfallplus'))
         {
             $isCreateTask = $this->loadModel('programplan')->isCreateTask($execution->id);
