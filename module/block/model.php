@@ -371,49 +371,6 @@ class blockModel extends model
     }
 
     /**
-     * Save a block.
-     *
-     * @param  int    $blockID
-     * @param  string $type
-     * @param  string $module
-     * @access public
-     * @return int|false
-     */
-    public function save(int $blockID, string $type, string $module = 'my'): bool|int
-    {
-        $block = $blockID ? $this->getByID($blockID) : null;
-        $data = fixer::input('post')
-            ->setIF($blockID, 'id', $blockID)
-            ->add('account', $this->app->user->account)
-            ->add('module', $module)
-            ->add('order', $block ? $block->order : ($this->getMaxOrderByModule($module) + 1))
-            ->add('hidden', 0)
-            ->setDefault('vision', $this->config->vision)
-            ->setDefault('grid', '4')
-            ->setDefault('params', array())
-            ->stripTags('html', $this->config->allowedTags)
-            ->remove('uid,actionLink,modules,moduleBlock')
-            ->get();
-
-        $data->source = $this->post->moduleBlock ? $this->post->modules     : '';
-        $data->block  = $this->post->moduleBlock ? $this->post->moduleBlock : $this->post->modules;
-
-        if($block) $data->height = $block->height;
-        if($type == 'html')
-        {
-            $uid  = $this->post->uid;
-            $data = $this->loadModel('file')->processImgURL($data, 'html', $uid);
-            $data->params['html'] = $data->html;
-            unset($data->html);
-            unset($_SESSION['album'][$uid]);
-        }
-
-        $data->params = helper::jsonEncode($data->params);
-
-        $this->dao->replace(TABLE_BLOCK)->data($data)->exec();
-    }
-
-    /**
      * Init block when account use first.
      * 用户首次加载时初始化区块数据.
      *
