@@ -255,7 +255,7 @@ class baseRouter
      * @var string
      * @access public
      */
-    public $viewType;
+    public $viewType = 'html';
 
     /**
      * 全局$config对象。
@@ -750,15 +750,11 @@ class baseRouter
         $outputDir    = ini_get('xhprof.output_dir');
 
         if(!is_dir($xhprofPath)) return false;
+        if(!$outputDir) $outputDir = $xhprofPath . DS . 'xhprof_runs';
+        if(!is_dir($outputDir)) mkdir($outputDir, 0777, true);
 
         include_once $libUtilsPath . 'xhprof_lib.php';
         include_once $libUtilsPath . 'xhprof_runs.php';
-
-        if(!$outputDir)
-        {
-            $outputDir = $xhprofPath . DS . 'xhprof_runs';
-            if(!is_dir($outputDir)) mkdir($outputDir, 0777, true);
-        }
 
         $xhprofRuns = new \XHProfRuns_Default($outputDir);
         $type       = "{$this->moduleName}_{$this->methodName}";

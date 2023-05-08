@@ -543,81 +543,44 @@ class taskModel extends model
     /**
      * Manage multi task team members.
      *
-     * @param  string  $mode
-     * @param  int     $taskID
-     * @param  string  $taskStatus
+     * @param  string     $mode
+     * @param  object     $taskID
+     * @param  array      $teamList
+     * @param  array      $teamSourceList
+     * @param  array      $teamEstimateList
+     * @param  array|bool $teamConsumedList
+     * @param  array|bool $teamLeftList
      * @access public
      * @return array
      */
-    public function manageTaskTeam($mode, $taskID, $taskStatus)
+    public function manageTaskTeam(string $mode, object $task, array $teamList, array $teamSourceList, array $teamEstimateList, array|bool $teamConsumedList, array|bool $teamLeftList): array
     {
-        $oldTeams   = $this->dao->select('*')->from(TABLE_TASKTEAM)->where('task')->eq($taskID)->fetchAll();
+        /* Get old team member, and delete old task team. */
+        $oldTeams   = $this->dao->select('*')->from(TABLE_TASKTEAM)->where('task')->eq($task->id)->fetchAll();
         $oldMembers = array_map(function($team){return $team->account;}, $oldTeams);
+        $this->dao->delete()->from(TABLE_TASKTEAM)->where('task')->eq($task->id)->exec();
 
-        $this->dao->delete()->from(TABLE_TASKTEAM)->where('task')->eq($taskID)->exec();
-
-        if($taskStatus == 'doing')
+        /* If status of the task is doing, get the person who did not complete the task. */
+        if($task->status == 'doing')
         {
-            $efforts    = $this->getTaskEfforts($taskID);
-            $doingUsers = array();
+            $efforts     = $this->getTaskEfforts($task->id);
+            $undoneUsers = array();
             foreach($efforts as $effort)
             {
-                if($effort->left != 0) $doingUsers[$effort->account] = $effort->account;
-                if($effort->left == 0) unset($doingUsers[$effort->account]);
+                if($effort->left != 0) $undoneUsers[$effort->account] = $effort->account;
+                if($effort->left == 0) unset($undoneUsers[$effort->account]);
             }
         }
 
         $teams       = array();
         $minStatus   = 'done';
         $changeUsers = array();
-        foreach($this->post->team as $row => $account)
+        foreach($teamList as $row => $account)
         {
             if(empty($account)) continue;
 
-            $teamSource = $this->post->teamSource[$row];
-            $member = new stdClass();
-            $member->task     = $taskID;
-            $member->order    = $row;
-            $member->account  = $account;
-            $member->estimate = zget($this->post->teamEstimate, $row, 0);
-            $member->consumed = $this->post->teamConsumed ? zget($this->post->teamConsumed, $row, 0) : 0;
-            $member->left     = $this->post->teamLeft ? zget($this->post->teamLeft, $row, 0) : 0;
-            $member->status   = 'wait';
-            if($taskStatus == 'wait' and $member->estimate > 0 and $member->left == 0) $member->left = $member->estimate;
-            if($taskStatus == 'done') $member->left = 0;
-
-            if($member->left == 0 and $member->consumed > 0)
-            {
-                $member->status = 'done';
-            }
-            elseif($taskStatus == 'doing')
-            {
-                if(!empty($teamSource) and $teamSource != $account and isset($doingUsers[$teamSource])) $member->transfer = $teamSource;
-                if(isset($doingUsers[$account]) and ($mode == 'multi' or ($mode == 'linear' and $minStatus != 'wait'))) $member->status = 'doing';
-            }
-            if($minStatus != 'wait' and $member->status == 'doing') $minStatus = 'doing';
-            if($member->status == 'wait') $minStatus = 'wait';
-
-            /* Doing status is only one in linear task. */
-            if($mode == 'linear' and $member->status == 'doing') $minStatus = 'wait';
-            if($member->status == 'wait') $minStatus = 'wait';
-            if($minStatus != 'wait' and $member->status == 'doing') $minStatus = 'doing';
-
-            /* Insert or update team. */
-            if($mode == 'multi' and isset($teams[$account]))
-            {
-                $this->dao->update(TABLE_TASKTEAM)
-                    ->beginIF($member->estimate)->set("estimate= estimate + {$member->estimate}")->fi()
-                    ->beginIF($member->left)->set("`left` = `left` + {$member->left}")->fi()
-                    ->beginIF($member->consumed)->set("`consumed` = `consumed` + {$member->consumed}")->fi()
-                    ->where('task')->eq($member->task)
-                    ->andWhere('account')->eq($member->account)
-                    ->exec();
-            }
-            else
-            {
-                $this->dao->insert(TABLE_TASKTEAM)->data($member)->autoCheck()->exec();
-            }
+            /* Manage task team member. */
+            $minStatus = $this->taskTao->manageTaskTeamMember($mode, $task, $row, $account, $minStatus, $undoneUsers, $teamSourceList, $teamEstimateList, $teamConsumedList, $teamLeftList, isset($teams[$account]));
 
             /* Set effort left = 0 when linear task members be changed. */
             if($mode == 'linear' and isset($oldTeams[$row]) and $oldTeams[$row]->account != $account) $changeUsers[] = $oldTeams[$row]->account;
@@ -631,7 +594,7 @@ class taskModel extends model
             $removedMembers = array_diff($oldMembers, $teams);
             $changeUsers    = array_merge($changeUsers, $removedMembers);
         }
-        if($changeUsers) $this->resetEffortLeft($taskID, $changeUsers);
+        if($changeUsers) $this->resetEffortLeft($task->id, $changeUsers);
 
         return $teams;
     }
@@ -3902,13 +3865,13 @@ class taskModel extends model
     }
 
     /**
-     * 创建任务后的其他数据处理。 
+     * 创建任务后的其他数据处理。
      * Other data processing after task creation.
-     * 
-     * @param  object $task 
-     * @param  array  $taskIdList 
-     * @param  int    $bugID 
-     * @param  object $rawData 
+     *
+     * @param  object $task
+     * @param  array  $taskIdList
+     * @param  int    $bugID
+     * @param  object $rawData
      * @access public
      * @return bool
      */
@@ -3950,7 +3913,7 @@ class taskModel extends model
             /* If the current task has test subtasks, create test subtasks and update the task information. */
             if(!empty($testTasks))
             {
-                $this->taskTao->createTestChildTasks($taskID, $testTasks);
+                $this->createTestChildTasks($taskID, $testTasks);
                 $this->computeWorkingHours($taskID);
                 $this->computeBeginAndEnd($taskID);
                 $this->dao->update(TABLE_TASK)->set('`parent`')->eq(-1)->where('id')->eq($taskID)->exec();
@@ -3961,7 +3924,6 @@ class taskModel extends model
             $this->file->updateObjectID($this->post->uid, $taskID, 'task');
             $this->score->create('task', 'create', $taskID);
         }
-
         return true;
     }
 

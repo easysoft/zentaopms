@@ -1767,7 +1767,6 @@ class executionModel extends model
                 ->andWhere('vision')->eq($this->config->vision)
                 ->beginIF($type == 'all')->andWhere('type')->in('sprint,stage,kanban')->fi()
                 ->beginIF($type != 'all')->andWhere('type')->eq($type)->fi()
-                ->beginIF($projectID)->andWhere('project')->eq($projectID)->fi()
                 ->beginIF($status == 'undone')->andWhere('status')->notIN('done,closed')->fi()
                 ->beginIF($status != 'all' and $status != 'undone')->andWhere('status')->in($status)->fi()
                 ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->sprints)->fi()
@@ -1820,7 +1819,6 @@ class executionModel extends model
                 ->orWhere('t2.account')->eq($this->app->user->account)
                 ->markRight(1)
                 ->andWhere('t1.type')->in('sprint,stage,kanban')
-                ->beginIF($projectID)->andWhere('t1.project')->eq($projectID)->fi()
                 ->orderBy('t1.order_desc')
                 ->beginIF($limit)->limit($limit)->fi()
                 ->fetchAll('id');

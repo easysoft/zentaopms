@@ -252,4 +252,22 @@ class Project
         $projects = $this->project->fetchProjectListByQuery($queryType, $param, $orderBy, 15, '');
         return $projects;
     }
+
+    /**
+     * testCreateProduct
+     *
+     * @param  int    $projectID
+     * @param  object $project
+     * @param  object $postData
+     * @param  object $program
+     * @access public
+     * @return string|array
+     */
+    public function testCreateProduct($projectID, $project, $postData, $program)
+    {
+        $result = $this->project->createProduct($projectID, $project, $postData, $program);
+        if(!$result) return dao::getError();
+
+        return '1';
+    }
 }

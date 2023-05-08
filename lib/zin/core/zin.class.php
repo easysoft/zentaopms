@@ -25,28 +25,28 @@ class zin
 
     public static function getData($namePath, $defaultValue = NULL)
     {
-        return \zin\utils\deepGet(self::$data, $namePath, $defaultValue);
+        return \zin\utils\deepGet(static::$data, $namePath, $defaultValue);
     }
 
     public static function setData($namePath, $value)
     {
-        \zin\utils\deepSet(self::$data, $namePath, $value);
+        \zin\utils\deepSet(static::$data, $namePath, $value);
     }
 
     public static function enableGlobalRender()
     {
-        self::$enabledGlobalRender = true;
+        static::$enabledGlobalRender = true;
     }
 
     public static function disableGlobalRender()
     {
-        self::$enabledGlobalRender = false;
+        static::$enabledGlobalRender = false;
     }
 
     public static function renderInGlobal()
     {
-        if(!self::$enabledGlobalRender) return false;
+        if(!static::$enabledGlobalRender) return false;
 
-        self::$globalRenderList = array_merge(self::$globalRenderList, func_get_args());
+        static::$globalRenderList = array_merge(static::$globalRenderList, func_get_args());
     }
 }

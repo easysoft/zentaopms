@@ -99,7 +99,6 @@ class context extends \zin\utils\dataset
         {
             if(!method_exists($wg, 'buildEvents'))
             {
-                \a(['> getEventsBindings', 'no buildEvents', $wg]);
                 continue;
             }
             $code = $wg->buildEvents();

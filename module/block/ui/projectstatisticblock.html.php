@@ -15,6 +15,8 @@ $isChineseLang = in_array($this->app->getClientLang(), array('zh-cn','zh-tw'));
 $blockNavID    = 'nav-' . uniqid();
 $selected      = key($projects);
 $navTabs       = array();
+
+/* 展示左侧的项目列表。 */
 foreach($projects as $project)
 {
     $navTabs[] = li
@@ -44,57 +46,64 @@ foreach($projects as $project)
 $tabItems = array();
 foreach($projects as $project)
 {
-    $cells = array();
-    foreach($config->block->projectstatistic->dtable as $module => $items)
+    if(in_array($project->model, array('scrum', 'kanban', 'agileplus')))
     {
-        $cellItems = array();
-        foreach($items as $item)
+        /* 展示右侧的项目统计项。 */
+        $cells = array();
+        foreach($config->block->projectstatistic->dtable as $module => $items)
         {
-            $field = $item['field'];
-            $unit  = $item['unit'];
-            $cellItems[] = div
+            $cellItems = array();
+            foreach($items as $item)
+            {
+                $field = $item['field'];
+                $unit  = $item['unit'];
+                $cellItems[] = div
+                (
+                    set('class', 'flex py-4'),
+                    cell
+                    (
+                        set('width', '50%'),
+                        set('class', 'text-right text-gray'),
+                        span($lang->block->projectstatistic->{$field} . ' ：')
+                    ),
+                    cell
+                    (
+                        set('width', '50%'),
+                        set('class', 'text-left'),
+                        span
+                        (
+                            set('class', 'font-bold text-black'),
+                            zget($project, $field, 0)
+                        ),
+                        span($lang->block->projectstatistic->{$unit})
+                    )
+                );
+            }
+            $cells[] = cell
             (
-                set('class', 'flex py-4'),
-                cell
+                set('class', 'flex-1 px-2 py-4'),
+                div
                 (
-                    set('width', '50%'),
-                    set('class', 'text-right text-gray'),
-                    span($lang->block->projectstatistic->{$field} . ' ：')
-                ),
-                cell
-                (
-                    set('width', '50%'),
-                    set('class', 'text-left'),
+                    set('class', 'px-2'),
                     span
                     (
-                        set('class', 'font-bold text-black'),
-                        zget($project, $field, 0)
+                        set('class', 'font-bold'),
+                        $lang->block->projectstatistic->{$module}
                     ),
-                    span($lang->block->projectstatistic->{$unit})
-                )
+                ),
+                $cellItems
             );
         }
-        $cells[] = cell
-        (
-            set('class', 'flex-1 px-2 py-4'),
-            div
-            (
-                set('class', 'px-2'),
-                span
-                (
-                    set('class', 'font-bold'),
-                    $lang->block->projectstatistic->{$module}
-                ),
-            ),
-            $cellItems
-        );
     }
+    /* 展示右侧顶部的项目状况。 */
     $tabItems[] = div
     (
         set('class', 'tab-pane' . ($project->id == $selected ? ' active' : '')),
         set('id', "tab3{$blockNavID}Content{$project->id}"),
+
         in_array($project->model, array('scrum', 'kanban', 'agileplus')) ? div
         (
+            /* 敏捷、看板等项目展示概况。 */
             div
             (
                 set('class', 'flex bg-white h-10 leading-9 px-4 shadow-sm'),
@@ -158,8 +167,9 @@ foreach($projects as $project)
                 set('class', 'flex'),
                 $cells
             )
-        ) : div
+        ) : div 
         (
+            /* 瀑布项目展示概况。 */
             set('class', 'weekly-row'),
             div
             (
