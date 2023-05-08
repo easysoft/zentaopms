@@ -60,8 +60,15 @@ $testTasks[3]->type   = 'test';
 $testTasks[3]->mailto = '';
 
 $taskTester = new taskTest();
-r($taskTester->afterCreateTest(1, $taskIdList['test'], 1))                && p('toTask')        && e('1');       // 测试Bug转任务后，更新Bug的信息
-r($taskTester->afterCreateTest(2, $taskIdList['todo'], 0, 1))             && p('status')        && e('done');    // 测试待办转任务后，更新待办的信息
-r($taskTester->afterCreateTest(3, $taskIdList['design']))                 && p('designVersion') && e('1');       // 测试任务关联设计后，更新任务中的designVersion字段
-r($taskTester->afterCreateTest(4, $taskIdList['story']))                  && p('stage')         && e('planned'); // 测试任务关联需求后，更新需求的阶段
-r($taskTester->afterCreateTest(1, $taskIdList['test'], 0, 0, $testTasks)) && p('parent')        && e('-1');      // 测试任务创建子任务后，父任务的parent字段的值
+r($taskTester->afterCreateTest())                                         && p()                && e('0');         // 测试空数据
+r($taskTester->afterCreateTest(0, $taskIdList['test']))                   && p()                && e('0');         // 测试taskID为空的情况
+r($taskTester->afterCreateTest(5, $taskIdList['test']))                   && p()                && e('0');         // 测试taskID不存在的情况
+r($taskTester->afterCreateTest(1))                                        && p('name')          && e('测试任务1'); // 测试taskIdList为空的情况
+r($taskTester->afterCreateTest(1, array(), 1))                            && p('title')         && e('Bug1');      // 测试taskIdList为空，但是有BugID的情况
+r($taskTester->afterCreateTest(1, array(), 0, 1))                         && p('name')          && e('待办1');     // 测试taskIdList为空，但是有todoID的情况
+r($taskTester->afterCreateTest(1, array(), 0, 0, $testTasks))             && p('name')          && e('测试任务1'); // 测试taskIdList为空，但是有testTasks的情况
+r($taskTester->afterCreateTest(1, $taskIdList['test'], 1))                && p('toTask')        && e('1');         // 测试Bug转任务后，更新Bug的信息
+r($taskTester->afterCreateTest(2, $taskIdList['todo'], 0, 1))             && p('status')        && e('done');      // 测试待办转任务后，更新待办的信息
+r($taskTester->afterCreateTest(3, $taskIdList['design']))                 && p('designVersion') && e('1');         // 测试任务关联设计后，更新任务中的designVersion字段
+r($taskTester->afterCreateTest(4, $taskIdList['story']))                  && p('stage')         && e('planned');   // 测试任务关联需求后，更新需求的阶段
+r($taskTester->afterCreateTest(1, $taskIdList['test'], 0, 0, $testTasks)) && p('parent')        && e('-1');        // 测试任务创建子任务后，父任务的parent字段的值
