@@ -257,6 +257,30 @@ class blockModel extends model
     }
 
     /**
+     * 根据区块索引获取排序靠后的一个区块ID。
+     * Get my block id by block code,
+     * 
+     * @param  string    $dashboard
+     * @param  string    $module
+     * @param  string    $code
+     * @access public
+     * @return int|false
+     */
+    public function getSpecifiedBlockID($dashboard, $module, $code): int|false
+    {
+        $blockID = $this->dao->select('id')->from(TABLE_BLOCK)
+            ->where('account')->eq($this->app->user->account)
+            ->andWhere('dashboard')->eq($dashboard)
+            ->andWhere('module')->eq($module)
+            ->andWhere('code')->eq($code)
+            ->orderBy('order_desc')
+            ->limit(1)
+            ->fetch('id');
+
+        return $blockID ? $blockID : false;
+    }
+
+    /**
      * Create a block.
      *
      * @param  object $formData
