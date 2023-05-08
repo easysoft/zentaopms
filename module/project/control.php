@@ -544,7 +544,7 @@ class project extends control
         if($_POST)
         {
             $postData = form::data($this->config->project->form->edit);
-            $project  = $this->projectZen->prepareEditExtras($postData);
+            $project  = $this->projectZen->prepareEditExtras($projectID, $postData);
 
             $project->id       = $projectID;
             $project->products = isset($project->products) ? array_filter($project->products) : $linkedProducts;

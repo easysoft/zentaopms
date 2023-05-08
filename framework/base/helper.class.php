@@ -841,17 +841,23 @@ function getTime()
 }
 
 /**
- * 打印变量的信息
- * dump a var.
+ * 打印变量的信息，支持传入多个变量信息。
+ * dump a var, support multi vars.
  *
  * @access public
- * @return void
+ * @param mixed  ...$vars   the vars to be dumped.
+ * @return int return the count of vars.
  */
-function a($var)
+function a(): int
 {
-    echo "<xmp class='a-left'>";
-    print_r($var);
-    echo "</xmp>";
+    $vars = func_get_args();
+    foreach($vars as $var)
+    {
+        echo "<pre></code>";
+        print_r($var);
+        echo "</code></pre>";
+    }
+    return count($vars);
 }
 
 /**

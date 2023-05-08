@@ -358,7 +358,7 @@ class taskZen extends task
     /**
      * 展示看板相关变量。
      * Show related variable about the Kanban.
-     * 
+     *
      * @param  int     $executionID
      * @param  array   $output
      * @access private
@@ -459,8 +459,8 @@ class taskZen extends task
      * 处理创建任务的请求数据。
      * Process the request data for the creation task.
      *
-     * @param  int     $executionID 
-     * @param  object  $formData 
+     * @param  int     $executionID
+     * @param  object  $formData
      * @access private
      * @return object
      */
@@ -478,6 +478,8 @@ class taskZen extends task
             ->stripTags($this->config->task->editor->create['id'], $this->config->allowedTags)
             ->join('mailto', ',')
             ->get();
+        if(empty($formData->estStarted)) unset($task->estStarted);
+        if(empty($formData->deadline)) unset($task->deadline);
 
         /* Processing image link. */
         return $this->loadModel('file')->processImgURL($task, $this->config->task->editor->create['id'], $rawData->uid);
@@ -521,10 +523,10 @@ class taskZen extends task
     }
 
     /**
-     * 检查规定时间内是否创建了同名任务。 
+     * 检查规定时间内是否创建了同名任务。
      * Check whether a task with the same name is created within the specified time.
-     * 
-     * @param  object    $task 
+     *
+     * @param  object    $task
      * @access private
      * @return int
      */
@@ -542,9 +544,9 @@ class taskZen extends task
     /**
      * 处理关联需求的测试子任务的请求数据。
      * Process request data for test subtasks related to stories.
-     * 
-     * @param  int       $executionID 
-     * @param  object    $formData 
+     *
+     * @param  int       $executionID
+     * @param  object    $formData
      * @access private
      * @return array|bool
      */
@@ -579,10 +581,10 @@ class taskZen extends task
     }
 
     /**
-     * 检查关联需求的测试类型任务数据格式是否符合要求。 
+     * 检查关联需求的测试类型任务数据格式是否符合要求。
      * Check if the test type task data format of the linked stories meets the requirements.
-     * 
-     * @param  object[] $tasks 
+     *
+     * @param  object[] $tasks
      * @access private
      * @return bool
      */
@@ -713,7 +715,7 @@ class taskZen extends task
         /* Set the response to return task list. */
         elseif($afterChoice == 'toTaskList')
         {
-            setcookie('moduleBrowseParam',  0, 0, $this->config->webRoot, '', $this->config->cookieSecure, false);
+            setcookie('moduleBrowseParam',  0, 0, $this->config->webRoot, '', $this->config->cookieSecure, true);
             $response['locate'] = $this->createLink('execution', 'task', "executionID=$executionID&status=unclosed&param=0&orderBy=id_desc");
         }
         /* Set the response to return story list. */

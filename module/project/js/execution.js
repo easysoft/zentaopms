@@ -117,7 +117,7 @@ $(function()
         }
     })
 
-    if(project.division && project.hasProduct && $('#executionList thead th.table-nest-title').width() < 240)
+    if((project.stageBy == 'product') && project.hasProduct && $('#executionList thead th.table-nest-title').width() < 240)
     {
         $('#executionList thead th.table-nest-title').width(240)
     }

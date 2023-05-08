@@ -9,7 +9,7 @@ foreach($lang->project->modelList as $key => $text)
     $projectModelItems[] = array
     (
         'active'    => ($key == $model),
-        'url'       => '',
+        'url'       => $this->createLink("project", "create", "model=$key&programID=$programID&copyProjectID=0&extra=productID=$productID,branchID=$branchID"),
         'text'      => $text,
         'data-type' => 'ajax'
     );
@@ -110,12 +110,16 @@ formPanel
             set::seg(true),
             btn
             (
-                setClass('primary-pale'),
+                setClass('primary-pale project-type-1'),
+                on::click('changeType(1)'),
                 $lang->project->projectTypeList[1]
             ),
-            btn($lang->project->projectTypeList[0])
+            btn(
+                setClass('project-type-0'),
+                on::click('changeType(0)'),
+                $lang->project->projectTypeList[0]
+            )
         ),
-        /* TODO change value with button click event */
         formHidden('hasProduct', 1)
     ),
     formGroup
@@ -215,6 +219,7 @@ formPanel
         formGroup
         (
             set::width('1/2'),
+            set('id', 'linkProduct'),
             set::label($lang->project->manageProducts),
             inputGroup
             (

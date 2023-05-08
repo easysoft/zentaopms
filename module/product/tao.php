@@ -562,15 +562,71 @@ class productTao extends productModel
     }
 
     /**
-     * 从module表中查询所有产品线。
-     * Get all product lines from module table.
-     * TODO move to the MODULE module.
+     * 执行SQL，更新到对应的产品信息。
+     * Do update this product.
      *
+     * @param  object $product
+     * @param  int    $productID
+     * @param  int    $programID
      * @access protected
-     * @return array
+     * @return bool
      */
-    protected function getProductLinesTODO(): array
+    protected function doUpdate(object $product, int $productID, int $programID): bool
     {
-        return $this->dao->select('*')->from(TABLE_MODULE)->where('type')->eq('line')->andWhere('deleted')->eq(0)->orderBy('`order` asc')->fetchAll();
+        if(empty($productID)) return false;
+        if(count(get_object_vars($product)) == 0) return false;
+
+        $this->dao->update(TABLE_PRODUCT)->data($product)->autoCheck()
+            ->checkIF(!empty($product->name), 'name', 'unique', "id != {$productID} and `program` = {$programID} and `deleted` = '0'")
+            ->checkIF(!empty($product->code), 'code', 'unique', "id != {$productID} and `deleted` = '0'")
+            ->checkFlow()
+            ->where('id')->eq($productID)
+            ->exec();
+
+        return !dao::isError();
+    }
+
+    /**
+     * 获取需求列表关联的用例总数。
+     * Get cases count of stories.
+     *
+     * @param  array     $storyIdList
+     * @access protected
+     * @return int
+     */
+    protected function getStoriesInCasesCount(array $storyIdList): int
+    {
+        if(empty($storyIdList)) return 0;
+
+        $cases = $this->dao->select('story')->from(TABLE_CASE)->where('story')->in($storyIdList)->andWhere('deleted')->eq(0)->fetchAll('story');
+
+        return count($cases);
+    }
+
+    /**
+     * 获取项目关联的产品。
+     * Get products by project ID.
+     *
+     * @param  int       $projectID
+     * @param  string    $productIdListStr '1,2,3'
+     * @param  string    $status
+     * @param  string    $orderBy
+     * @param  bool      $noDeleted
+     * @access protected
+     * @return int
+     */
+    protected function getProductsByProjectID(int $projectID, string $productIdListStr, string $status, string $orderBy, bool $noDeleted): array
+    {
+        return $this->dao->select("t1.branch, t1.plan, t2.*")
+            ->from(TABLE_PROJECTPRODUCT)->alias('t1')
+            ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product = t2.id')
+            ->where('1=1')
+            ->beginIF($noDeleted)->andWhere('t2.deleted')->eq(0)->fi()
+            ->beginIF(!empty($projectID))->andWhere('t1.project')->in($projectID)->fi()
+            ->beginIF(!$this->app->user->admin and $this->config->vision == 'rnd')->andWhere('t2.id')->in($productIdListStr)->fi()
+            ->andWhere('t2.vision')->eq($this->config->vision)
+            ->beginIF(strpos($status, 'noclosed') !== false)->andWhere('t2.status')->ne('closed')->fi()
+            ->orderBy($orderBy . 't2.order asc')
+            ->fetchAll();
     }
 }

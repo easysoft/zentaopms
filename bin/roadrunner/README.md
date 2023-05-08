@@ -4,10 +4,18 @@
 
 安装 RoadRunner: <https://roadrunner.dev/docs/intro-install>
 
-Composer: `composer update`
+Composer: `composer install`
+
+## 获取执行文件
+
+```shell
+composer get-rr
+```
 
 ## 启动服务
 
 ```shell
-rr serve
+composer serve
+# or
+./rr serve
 ```

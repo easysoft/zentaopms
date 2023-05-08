@@ -70,10 +70,10 @@ class task extends control
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             list($task, $testTasks, $existTaskID) = $result;
-            if($existTaskID) return $this->send(array('result' => 'success', 'message' => sprintf($this->lang->duplicate, $this->lang->task->common), 'locate' => $this->createLink('task', 'view', "taskID={$existTaskID}"))); 
+            if($existTaskID) return $this->send(array('result' => 'success', 'message' => sprintf($this->lang->duplicate, $this->lang->task->common), 'locate' => $this->createLink('task', 'view', "taskID={$existTaskID}")));
 
             /* Create task. */
-            $taskIdList = $this->task->create($task, $this->post->assignedTo, (int)$this->post->multiple, $this->post->team, (bool)$this->post->selectTestStory);
+            $taskIdList = $this->task->create($task, $this->post->assignedTo, (int)$this->post->multiple, $this->post->team, (bool)$this->post->selectTestStory, $this->post->teamSource, $this->post->teamEstimate, $this->post->teamConsumed, $this->post->teamLeft);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             /* Update other data related to the task after it is created. */
@@ -81,7 +81,7 @@ class task extends control
             $columnID = isset($output['columnID']) ? (int)$output['columnID'] : 0;
             $this->task->afterCreate($task, $taskIdList, $bugID, $todoID, $testTasks);
             $this->task->updateKanbanData($execution, $task, (int)$_POST['lane'], $columnID);
-            setcookie('lastTaskModule', (int)$_POST['module'], $this->config->cookieLife, $this->config->webRoot, '', $this->config->cookieSecure, false);
+            setcookie('lastTaskModule', (int)$_POST['module'], $this->config->cookieLife, $this->config->webRoot, '', $this->config->cookieSecure, true);
 
             /* Get the information returned after a task is created. */
             $response = $this->taskZen->responseAfterCreate($task, $execution, $_POST['after']);
@@ -704,7 +704,7 @@ class task extends control
                     $kanbanData    = $this->loadModel('kanban')->getRDKanban($task->execution, $execLaneType, 'id_desc', 0, $execGroupBy, $rdSearchValue);
                     $kanbanData    = json_encode($kanbanData);
 
-                    return print(js::reload('parent') . js::execute("parent.parent.updateKanban($kanbanData)"));
+                    return print(js::reload('parent'));
                 }
                 if($from == 'taskkanban')
                 {
@@ -714,9 +714,9 @@ class task extends control
                     $kanbanData      = $kanbanData[$kanbanType];
                     $kanbanData      = json_encode($kanbanData);
 
-                    return print(js::reload('parent') . js::execute("parent.parent.updateKanban(\"task\", $kanbanData)"));
+                    return print(js::reload('parent'));
                 }
-                return print(js::reload('parent') . js::execute("if(typeof(parent.parent.ajaxRefresh) == 'function') parent.parent.ajaxRefresh()"));
+                return print(js::reload('parent'));
             }
             return print(js::locate($this->createLink('task', 'view', "taskID=$taskID"), 'parent'));
         }
@@ -1521,7 +1521,7 @@ class task extends control
             ->limit(50)
             ->fetchAll('id');
 
-        if(empty($tasks)) die('');
+        if(empty($tasks)) return print('');
 
         $parentGroup = $this->dao->select('*')->from(TABLE_TASK)
             ->where('parent')->in(array_keys($tasks))
@@ -1550,7 +1550,7 @@ class task extends control
             $list    .= $this->task->buildNestedList($execution, $task, false, $showmore, $users);
         }
 
-        die($list);
+        return print($list);
     }
 
     /**

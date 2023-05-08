@@ -20,9 +20,8 @@ class programplanZen extends programplan
      */
     protected function beforeEdit(object $formData): object
     {
-        $rowData = $formData->rowdata;
-        $plan    = $formData->join($rowData->output, ',')->get();
-        return $plan;
+        $rowData = $formData->rawdata;
+        return isset($rowData->output) ? $formData->join($rowData->output, ',')->get() : $rowData;
     }
 
     /**
@@ -73,6 +72,7 @@ class programplanZen extends programplan
         $this->view->isTopStage         = $this->programplan->checkTopStage($plan->id);
         $this->view->isLeafStage        = $this->programplan->checkLeafStage($plan->id);
         $this->view->PMUsers            = $this->loadModel('user')->getPairs('noclosed|nodeleted|pmfirst',  $plan->PM);
+        $this->display();
     }
 
     /**

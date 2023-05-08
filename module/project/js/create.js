@@ -6,7 +6,7 @@ $(function()
 
         $('#productTitle, #linkPlan').closest('tr').toggle(hasProduct == 1);
 
-        if(hasProduct == 0) $('.division').addClass('hide');
+        if(hasProduct == 0) $('.stageBy').addClass('hide');
 
         if(hasProduct == 1)
         {
@@ -15,7 +15,7 @@ $(function()
             {
                 if($(this).val() > 0) chosenProducts ++;
             });
-            if(chosenProducts > 1) $('.division').removeClass('hide');
+            if(chosenProducts > 1) $('.stageBy').removeClass('hide');
         }
     });
 
@@ -221,7 +221,7 @@ function addNewProduct(obj)
         $('.newLine').addClass('hidden');
         $('.productsBox .row').addClass('hidden');
         $('.productsBox .row .input-group').find('select').attr('disabled', true).trigger("chosen:updated");
-        $('.division').addClass('hide');
+        $('.stageBy').addClass('hide');
 
         /* Displays the input box for creating a product. */
         $(obj).closest('td').attr('colspan', 1);
@@ -236,7 +236,7 @@ function addNewProduct(obj)
         $('.newLine').removeClass('hidden');
         $('.productsBox .row').removeClass('hidden');
         $('.productsBox .row .input-group').find('select').removeAttr('disabled').trigger("chosen:updated");
-        if($('.productsBox').find("select[name^=products]").length > 1) $('.division').removeClass('hide');
+        if($('.productsBox').find("select[name^=products]").length > 1) $('.stageBy').removeClass('hide');
 
         /* Hide the input box for creating a product. */
         $(obj).closest('td').attr('colspan', 3);
@@ -297,7 +297,7 @@ function loadBranches(product)
         }
     });
 
-    (chosenProducts.length > 1 && (model == 'waterfall' || model == 'waterfallplus')) ? $('.division').removeClass('hide') : $('.division').addClass('hide');
+    (chosenProducts.length > 1 && (model == 'waterfall' || model == 'waterfallplus')) ? $('.stageBy').removeClass('hide') : $('.stageBy').addClass('hide');
 
     var $tableRow = $(product).closest('.table-row');
     var index     = $tableRow.find('select:first').attr('id').replace('products' , '');
@@ -403,7 +403,7 @@ function removeLine(obj)
 {
     $(obj).closest('tr').remove();
     disableSelectedProduct();
-    if($("select[name^='products']").length < 2) $('.division').addClass('hide');
+    if($("select[name^='products']").length < 2) $('.stageBy').addClass('hide');
 }
 
 /**

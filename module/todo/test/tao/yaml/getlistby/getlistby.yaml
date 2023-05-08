@@ -1,0 +1,24 @@
+title: zt_getlistby
+author: jukui
+version: '1.0'
+fields:
+    - field: id
+      range: 1-5
+    - field: name
+      range: 1-5
+      prefix: '待办'
+    - field: account
+      range: 'admin'
+    - field: date
+      range: 1-9
+      prefix: '2023-03-0'
+    - field: desc
+      range: 1-5
+      prefix: '待办描述'
+    - field: finishedDate
+      range: 1-9
+      prefix: '2023-05-0'
+    - field: status
+      range: 'wait,doing,closed,wait,doing'
+    - field: assignedTo
+      range: 'admin'
