@@ -266,7 +266,7 @@ class blockModel extends model
      * @access public
      * @return int|false
      */
-    public function getSpecifiedBlockID($dashboard, $module, $code): int|false
+    public function getSpecifiedBlockID(string $dashboard, string $module, string $code): int|false
     {
         $blockID = $this->dao->select('id')->from(TABLE_BLOCK)
             ->where('account')->eq($this->app->user->account)
