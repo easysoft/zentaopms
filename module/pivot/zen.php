@@ -9,10 +9,10 @@ class pivotZen extends pivot
      * @param  string $module
      * @param  string $method
      * @param  string $params
-     * @access public
+     * @access protected
      * @return void
      */
-    public function prepare4Preview($dimension, $groupID, $module, $method, $params)
+    protected function prepare4Preview($dimension, $groupID, $module, $method, $params)
     {
         $params = helper::safe64Decode($params);
 
@@ -38,10 +38,10 @@ class pivotZen extends pivot
      * Get default group of a dimension.
      *
      * @param  int    $dimension
-     * @access public
+     * @access protected
      * @return string
      */
-    public function getDefaultGroup($dimension)
+    protected function getDefaultGroup($dimension)
     {
         $group = $this->getFirstGroup($dimension);
         if(!$group) return 0;
@@ -53,10 +53,10 @@ class pivotZen extends pivot
      * Get first group of a dimension.
      *
      * @param  int    $dimension
-     * @access public
+     * @access protected
      * @return int
      */
-    public function getFirstGroup($dimension)
+    protected function getFirstGroup($dimension)
     {
         if(empty($dimension)) return 0;
 
@@ -74,10 +74,10 @@ class pivotZen extends pivot
      *
      * @param  int    $dimension
      * @param  int    $group
-     * @access public
+     * @access protected
      * @return array
      */
-    public function getDefaultPivotParams($dimension, $group)
+    protected function getDefaultPivotParams($dimension, $group)
     {
         $currentGroup = $this->loadModel('tree')->getByID($group);
         if(empty($currentGroup) || $currentGroup->grade != 1) return array('', '', '');
@@ -127,10 +127,10 @@ class pivotZen extends pivot
      * Set pivot Menu of a dimension.
      *
      * @param  int    $dimension
-     * @access public
+     * @access protected
      * @return void
      */
-    public function setFeatureBar($dimension)
+    protected function setFeatureBar($dimension)
     {
         if(!$dimension) return false;
 
@@ -153,10 +153,10 @@ class pivotZen extends pivot
      * @param  string $module
      * @param  string $method
      * @param  string $params
-     * @access public
+     * @access protected
      * @return string
      */
-    public function getSidebar($dimension, $group, $module, $method, $params)
+    protected function getSidebar($dimension, $group, $module, $method, $params)
     {
         if(!$group) return '';
 
@@ -239,10 +239,10 @@ class pivotZen extends pivot
      * @param  object $group
      * @param  string $module
      * @param  string $method
-     * @access public
+     * @access protected
      * @return string
      */
-    public function getBuiltinSidebar($dimension, $group, $module, $method)
+    protected function getBuiltinSidebar($dimension, $group, $module, $method)
     {
         $firstDimension = $this->loadModel('dimension')->getFirst();
         if($dimension != $firstDimension->id) return '';

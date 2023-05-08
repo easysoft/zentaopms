@@ -325,10 +325,10 @@ class blockZen extends block
     /**
      * latest dynamic.
      *
-     * @access public
+     * @access protected
      * @return void
      */
-    public function printDynamicBlock()
+    protected function printDynamicBlock()
     {
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
@@ -341,10 +341,10 @@ class blockZen extends block
     /**
      * Welcome block.
      *
-     * @access public
+     * @access protected
      * @return void
      */
-    public function printWelcomeBlock()
+    protected function printWelcomeBlock()
     {
         $this->view->tutorialed = $this->loadModel('tutorial')->getTutorialed();
 
@@ -371,10 +371,10 @@ class blockZen extends block
     /**
      * Print contribute block.
      *
-     * @access public
+     * @access protected
      * @return void
      */
-    public function printContributeBlock()
+    protected function printContributeBlock()
     {
         /* TODO:zu1*/
         $this->view->data = $this->loadModel('user')->getPersonalData();
@@ -383,10 +383,10 @@ class blockZen extends block
     /**
      * Print todo block.
      *
-     * @access public
+     * @access protected
      * @return void
      */
-    public function printTodoListBlock()
+    protected function printTodoListBlock()
     {
         $limit = ($this->viewType == 'json' or !isset($this->params->count)) ? 0 : (int)$this->params->count;
         $todos = $this->loadModel('todo')->getList('all', $this->app->user->account, 'wait, doing', $limit, null, 'date, begin');
@@ -406,10 +406,10 @@ class blockZen extends block
     /**
      * Print task block.
      *
-     * @access public
+     * @access protected
      * @return void
      */
-    public function printTaskBlock()
+    protected function printTaskBlock()
     {
         $this->session->set('taskList',  $this->createLink('my', 'index'), 'execution');
         if(preg_match('/[^a-zA-Z0-9_]/', $this->params->type)) return;
@@ -424,10 +424,10 @@ class blockZen extends block
     /**
      * Print bug block.
      *
-     * @access public
+     * @access protected
      * @return void
      */
-    public function printBugBlock()
+    protected function printBugBlock()
     {
         $this->session->set('bugList', $this->createLink('my', 'index'), 'qa');
         if(preg_match('/[^a-zA-Z0-9_]/', $this->params->type)) return;
@@ -440,10 +440,10 @@ class blockZen extends block
     /**
      * Print case block.
      *
-     * @access public
+     * @access protected
      * @return void
      */
-    public function printCaseBlock()
+    protected function printCaseBlock()
     {
         $this->session->set('caseList', $this->createLink('my', 'index'), 'qa');
         $this->app->loadLang('testcase');
@@ -483,10 +483,10 @@ class blockZen extends block
     /**
      * Print testtask block.
      *
-     * @access public
+     * @access protected
      * @return void
      */
-    public function printTesttaskBlock()
+    protected function printTesttaskBlock()
     {
         $this->app->loadLang('testtask');
 
@@ -515,10 +515,10 @@ class blockZen extends block
     /**
      * Print story block.
      *
-     * @access public
+     * @access protected
      * @return void
      */
-    public function printStoryBlock()
+    protected function printStoryBlock()
     {
         $this->session->set('storyList', $this->createLink('my', 'index'), 'product');
         if(preg_match('/[^a-zA-Z0-9_]/', $this->params->type)) return;
@@ -535,10 +535,10 @@ class blockZen extends block
     /**
      * Print plan block.
      *
-     * @access public
+     * @access protected
      * @return void
      */
-    public function printPlanBlock()
+    protected function printPlanBlock()
     {
         $uri = $this->createLink('my', 'index');
         $this->session->set('productList', $uri, 'product');
@@ -558,10 +558,10 @@ class blockZen extends block
     /**
      * Print releases block.
      *
-     * @access public
+     * @access protected
      * @return void
      */
-    public function printReleaseBlock()
+    protected function printReleaseBlock()
     {
         $uri = $this->createLink('my', 'index');
         $this->session->set('releaseList', $uri, 'product');
@@ -583,10 +583,10 @@ class blockZen extends block
     /**
      * Print Build block.
      *
-     * @access public
+     * @access protected
      * @return void
      */
-    public function printBuildBlock()
+    protected function printBuildBlock()
     {
         $this->session->set('buildList', $this->createLink('my', 'index'), 'execution');
         $this->app->loadLang('build');
@@ -606,10 +606,10 @@ class blockZen extends block
     /**
      * Print project block.
      *
-     * @access public
+     * @access protected
      * @return void
      */
-    public function printProjectBlock()
+    protected function printProjectBlock()
     {
         $this->app->loadLang('execution');
         $this->app->loadLang('task');
@@ -624,10 +624,10 @@ class blockZen extends block
     /**
      * Print product block.
      *
-     * @access public
+     * @access protected
      * @return void
      */
-    public function printProductListBlock()
+    protected function printProductListBlock()
     {
         /* TODO:zu1 */
         //$this->app->loadClass('pager', true);
@@ -679,10 +679,10 @@ class blockZen extends block
     /**
      * Print project statistic block.
      *
-     * @access public
+     * @access protected
      * @return void
      */
-    public function printProjectStatisticBlock()
+    protected function printProjectStatisticBlock()
     {
         if(!empty($this->params->type) and preg_match('/[^a-zA-Z0-9_]/', $this->params->type)) return;
 
@@ -757,10 +757,10 @@ class blockZen extends block
      * Print product statistic block.
      *
      * @param  object $block
-     * @access public
+     * @access protected
      * @return void
      */
-    public function printProductStatisticBlock($block)
+    protected function printProductStatisticBlock($block)
     {
         $status = isset($block->params->type)  ? $block->params->type  : '';
         $count  = isset($block->params->count) ? $block->params->count : '';
@@ -854,10 +854,10 @@ class blockZen extends block
     /**
      * Print execution statistic block.
      *
-     * @access public
+     * @access protected
      * @return void
      */
-    public function printExecutionStatisticBlock()
+    protected function printExecutionStatisticBlock()
     {
         if(!empty($this->params->type) and preg_match('/[^a-zA-Z0-9_]/', $this->params->type)) return;
 
@@ -984,10 +984,10 @@ class blockZen extends block
     /**
      * Print waterfall report block.
      *
-     * @access public
+     * @access protected
      * @return void
      */
-    public function printWaterfallReportBlock()
+    protected function printWaterfallReportBlock()
     {
         $this->app->loadLang('programplan');
         $project = $this->loadModel('project')->getByID($this->session->project);
@@ -1015,10 +1015,10 @@ class blockZen extends block
     /**
      * Print waterfall general report block.
      *
-     * @access public
+     * @access protected
      * @return void
      */
-    public function printWaterfallGeneralReportBlock()
+    protected function printWaterfallGeneralReportBlock()
     {
         $this->app->loadLang('programplan');
         $this->loadModel('project');
@@ -1039,10 +1039,10 @@ class blockZen extends block
     /**
      * Print waterfall gantt block.
      *
-     * @access public
+     * @access protected
      * @return void
      */
-    public function printWaterfallGanttBlock()
+    protected function printWaterfallGanttBlock()
     {
         $products  = $this->loadModel('product')->getProductPairsByProject($this->session->project);
         $productID = $this->session->product ? $this->session->product : 0;
@@ -1056,10 +1056,10 @@ class blockZen extends block
     /**
      * Print waterfall issue block.
      *
-     * @access public
+     * @access protected
      * @return void
      */
-    public function printWaterfallIssueBlock()
+    protected function printWaterfallIssueBlock()
     {
         $uri = $this->app->tab == 'my' ? $this->createLink('my', 'index') : $this->server->http_referer;
         $this->session->set('issueList', $uri, 'project');
@@ -1071,10 +1071,10 @@ class blockZen extends block
     /**
      * Print waterfall risk block.
      *
-     * @access public
+     * @access protected
      * @return void
      */
-    public function printWaterfallRiskBlock()
+    protected function printWaterfallRiskBlock()
     {
         $uri = $this->app->tab == 'my' ? $this->createLink('my', 'index') : $this->server->http_referer;
         $this->session->set('riskList', $uri, 'project');
@@ -1085,10 +1085,10 @@ class blockZen extends block
     /**
      * Print waterfall estimate block.
      *
-     * @access public
+     * @access protected
      * @return void
      */
-    public function printWaterfallEstimateBlock()
+    protected function printWaterfallEstimateBlock()
     {
         $this->app->loadLang('durationestimation');
         $this->loadModel('project');
@@ -1109,10 +1109,10 @@ class blockZen extends block
     /**
      * Print waterfall progress block.
      *
-     * @access public
+     * @access protected
      * @return void
      */
-    public function printWaterfallProgressBlock()
+    protected function printWaterfallProgressBlock()
     {
         $this->loadModel('milestone');
         $this->loadModel('weekly');
@@ -1142,10 +1142,10 @@ class blockZen extends block
     /**
      * Print srcum project block.
      *
-     * @access public
+     * @access protected
      * @return void
      */
-    public function printScrumOverviewBlock()
+    protected function printScrumOverviewBlock()
     {
         $projectID = $this->session->project;
         $this->app->loadLang('execution');
@@ -1159,10 +1159,10 @@ class blockZen extends block
     /**
      * Print srcum project list block.
      *
-     * @access public
+     * @access protected
      * @return void
      */
-    public function printScrumListBlock()
+    protected function printScrumListBlock()
     {
         if(!empty($this->params->type) and preg_match('/[^a-zA-Z0-9_]/', $this->params->type)) return;
         $count = isset($this->params->count) ? (int)$this->params->count : 15;
@@ -1177,10 +1177,10 @@ class blockZen extends block
     /**
      * Print srcum product block.
      *
-     * @access public
+     * @access protected
      * @return void
      */
-    public function printScrumProductBlock()
+    protected function printScrumProductBlock()
     {
         $stories  = array();
         $bugs     = array();
@@ -1206,10 +1206,10 @@ class blockZen extends block
     /**
      * Print scrum issue block.
      *
-     * @access public
+     * @access protected
      * @return void
      */
-    public function printScrumIssueBlock()
+    protected function printScrumIssueBlock()
     {
         $uri = $this->app->tab == 'my' ? $this->createLink('my', 'index') : $this->server->http_referer;
         $this->session->set('issueList', $uri, 'project');
@@ -1221,10 +1221,10 @@ class blockZen extends block
     /**
      * Print scrum risk block.
      *
-     * @access public
+     * @access protected
      * @return void
      */
-    public function printScrumRiskBlock()
+    protected function printScrumRiskBlock()
     {
         $uri = $this->app->tab == 'my' ? $this->createLink('my', 'index') : $this->server->http_referer;
         $this->session->set('riskList', $uri, 'project');
@@ -1235,10 +1235,10 @@ class blockZen extends block
     /**
      * Print sprint block.
      *
-     * @access public
+     * @access protected
      * @return void
      */
-    public function printSprintBlock()
+    protected function printSprintBlock()
     {
         $sprints = $this->dao->select('status, count(*) as sprints')->from(TABLE_EXECUTION)
             ->where('deleted')->eq(0)
@@ -1265,10 +1265,10 @@ class blockZen extends block
     /**
      * Print project dynamic block.
      *
-     * @access public
+     * @access protected
      * @return void
      */
-    public function printProjectDynamicBlock()
+    protected function printProjectDynamicBlock()
     {
         $projectID = $this->session->project;
 
@@ -1289,10 +1289,10 @@ class blockZen extends block
      *
      * @param  int    $productID
      * @param  int    $roadMapID
-     * @access public
+     * @access protected
      * @return void
      */
-    public function printScrumRoadMapBlock($productID = 0, $roadMapID = 0)
+    protected function printScrumRoadMapBlock($productID = 0, $roadMapID = 0)
     {
         $uri = $this->app->tab == 'my' ? $this->createLink('my', 'index') : $this->server->http_referer;
         $this->session->set('releaseList',     $uri, 'product');
@@ -1317,10 +1317,10 @@ class blockZen extends block
     /**
      * Print srcum test block.
      *
-     * @access public
+     * @access protected
      * @return void
      */
-    public function printScrumTestBlock()
+    protected function printScrumTestBlock()
     {
         $uri = $this->app->tab == 'my' ? $this->createLink('my', 'index') : $this->server->http_referer;
         $this->session->set('testtaskList', $uri, 'qa');
@@ -1351,10 +1351,10 @@ class blockZen extends block
     /**
      * Print qa statistic block.
      *
-     * @access public
+     * @access protected
      * @return void
      */
-    public function printQaStatisticBlock()
+    protected function printQaStatisticBlock()
     {
         if(!empty($this->params->type) and preg_match('/[^a-zA-Z0-9_]/', $this->params->type)) return;
 
@@ -1427,10 +1427,10 @@ class blockZen extends block
     /**
      * Print product overview block.
      *
-     * @access public
+     * @access protected
      * @return void
      */
-    public function printProductOverviewBlock()
+    protected function printProductOverviewBlock()
     {
         $normal = 0;
         $closed = 0;
@@ -1455,10 +1455,10 @@ class blockZen extends block
     /**
      * Print execution overview block.
      *
-     * @access public
+     * @access protected
      * @return void
      */
-    public function printExecutionOverviewBlock()
+    protected function printExecutionOverviewBlock()
     {
         $projectID  = $this->view->block->module == 'my' ? 0 : (int)$this->session->project;
         $executions = $this->loadModel('execution')->getList($projectID);
@@ -1488,10 +1488,10 @@ class blockZen extends block
     /**
      * Print qa overview block.
      *
-     * @access public
+     * @access protected
      * @return void
      */
-    public function printQaOverviewBlock()
+    protected function printQaOverviewBlock()
     {
         $casePairs = $this->dao->select('lastRunResult, COUNT(*) AS count')->from(TABLE_CASE)
             ->where('1=1')
@@ -1521,10 +1521,10 @@ class blockZen extends block
     /**
      * Print execution block.
      *
-     * @access public
+     * @access protected
      * @return void
      */
-    public function printExecutionBlock()
+    protected function printExecutionBlock()
     {
         if(!empty($this->params->type) and preg_match('/[^a-zA-Z0-9_]/', $this->params->type)) return;
 
@@ -1544,10 +1544,10 @@ class blockZen extends block
     /**
      * Print assign to me block.
      *
-     * @access public
+     * @access protected
      * @return void
      */
-    public function printAssignToMeBlock($longBlock = true)
+    protected function printAssignToMeBlock($longBlock = true)
     {
         $hasIssue   = helper::hasFeature('issue');
         $hasRisk    = helper::hasFeature('risk');
@@ -1728,10 +1728,10 @@ class blockZen extends block
     /**
      * Print recent project block.
      *
-     * @access public
+     * @access protected
      * @return void
      */
-    public function printRecentProjectBlock()
+    protected function printRecentProjectBlock()
     {
         /* load pager. */
         $this->app->loadClass('pager', $static = true);
@@ -1742,10 +1742,10 @@ class blockZen extends block
     /**
      * Print project team block.
      *
-     * @access public
+     * @access protected
      * @return void
      */
-    public function printProjectTeamBlock()
+    protected function printProjectTeamBlock()
     {
         $count   = isset($this->params->count)   ? $this->params->count   : 15;
         $status  = isset($this->params->type)    ? $this->params->type    : 'all';
@@ -1761,10 +1761,10 @@ class blockZen extends block
     /**
      * Print document statistic block.
      *
-     * @access public
+     * @access protected
      * @return void
      */
-    public function printDocStatisticBlock()
+    protected function printDocStatisticBlock()
     {
         $this->view->statistic = $this->loadModel('doc')->getStatisticInfo();
     }
@@ -1772,10 +1772,10 @@ class blockZen extends block
     /**
      * Print document dynamic block.
      *
-     * @access public
+     * @access protected
      * @return void
      */
-    public function printDocDynamicBlock()
+    protected function printDocDynamicBlock()
     {
         /* Load pager. */
         $this->app->loadClass('pager', true);
@@ -1788,10 +1788,10 @@ class blockZen extends block
     /**
      * Print my collection of documents block.
      *
-     * @access public
+     * @access protected
      * @return void
      */
-    public function printDocMyCollectionBlock()
+    protected function printDocMyCollectionBlock()
     {
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
@@ -1813,10 +1813,10 @@ class blockZen extends block
     /**
      * Print recent update block.
      *
-     * @access public
+     * @access protected
      * @return void
      */
-    public function printDocRecentUpdateBlock()
+    protected function printDocRecentUpdateBlock()
     {
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
@@ -1838,10 +1838,10 @@ class blockZen extends block
     /**
      * Print view list block.
      *
-     * @access public
+     * @access protected
      * @return void
      */
-    public function printDocViewListBlock()
+    protected function printDocViewListBlock()
     {
         /* Load pager. */
         $this->app->loadClass('pager', true);
@@ -1853,10 +1853,10 @@ class blockZen extends block
     /**
      * Print collect list block.
      *
-     * @access public
+     * @access protected
      * @return void
      */
-    public function printDocCollectListBlock()
+    protected function printDocCollectListBlock()
     {
         /* Load pager. */
         $this->app->loadClass('pager', true);
@@ -1868,10 +1868,10 @@ class blockZen extends block
     /**
      * Print product's document block.
      *
-     * @access public
+     * @access protected
      * @return void
      */
-    public function printProductDocBlock()
+    protected function printProductDocBlock()
     {
         $this->loadModel('doc');
         $this->session->set('docList', $this->createLink('doc', 'index'), 'doc');
@@ -1914,10 +1914,10 @@ class blockZen extends block
     /**
      * Print project's document block.
      *
-     * @access public
+     * @access protected
      * @return void
      */
-    public function printProjectDocBlock()
+    protected function printProjectDocBlock()
     {
         $this->loadModel('doc');
         $this->app->loadLang('project');
@@ -1990,10 +1990,10 @@ class blockZen extends block
      * Print guide block
      *
      * @param  int    $blockID
-     * @access public
+     * @access protected
      * @return void
      */
-    public function printGuideBlock($blockID = 0)
+    protected function printGuideBlock($blockID = 0)
     {
         $this->app->loadLang('custom');
         $this->app->loadLang('my');

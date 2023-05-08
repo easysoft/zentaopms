@@ -329,7 +329,7 @@ class todoTao extends todoModel
      * @param  string $date
      * @return bool
      */
-    public function updateDate(array $todoIdList, string $date): bool
+    protected function updateDate(array $todoIdList, string $date): bool
     {
         $this->dao->update(TABLE_TODO)->set('date')->eq($date)->where('id')->in($todoIdList)->exec();
         return !dao::isError();

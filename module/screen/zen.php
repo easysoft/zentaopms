@@ -6,10 +6,10 @@ class screenZen extends screen
      *
      * @param  int    $dimensionID
      * @param  bool   $setMenu
-     * @access public
+     * @access protected
      * @return void
      */
-    public function commonAction($dimensionID, $setMenu = true)
+    protected function commonAction($dimensionID, $setMenu = true)
     {
         return 1;
     }
