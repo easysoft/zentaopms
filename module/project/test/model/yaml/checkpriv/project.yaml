@@ -1,0 +1,8 @@
+title: checkpriv-1
+author: chaideqing
+version: "1.0"
+fields:
+    - field: PM
+      range: 'admin'
+    - field: id
+      range: '1-8'

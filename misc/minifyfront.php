@@ -6,10 +6,10 @@
 $baseDir = dirname(dirname(__FILE__));
 include $baseDir . '/framework/helper.class.php';
 
-//$miniCSSTool = getenv('MINIFY_CSS_PATH');
-//$miniJSTool  = getenv('MINIFY_JS_PATH');
-$miniCSSTool = '/home/z/ci/minify/minifyCSS.php';
-$miniJSTool  = '/home/z/ci/minify/minifyJS.php';
+$miniCSSTool = getenv('MINIFY_CSS_PATH');
+$miniJSTool  = getenv('MINIFY_JS_PATH');
+//$miniCSSTool = '/home/z/ci/minify/minifyCSS.php';
+//$miniJSTool  = '/home/z/ci/minify/minifyJS.php';
 
 //--------------------------------- PROCESS JS FILES ------------------------------ //
 

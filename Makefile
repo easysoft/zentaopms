@@ -1,6 +1,6 @@
 VERSION     = $(shell head -n 1 VERSION)
-XUANVERSION = $(shell head -n 1 xuanxuan/XUANVERSION)
-XVERSION    = $(shell head -n 1 xuanxuan/XVERSION)
+XUANVERSION = $(shell head -n 1 extension/xuanxuan/XUANVERSION)
+XVERSION    = $(shell head -n 1 extension/xuanxuan/XVERSION)
 
 XUANPATH      := $(XUANXUAN_SRC_PATH)
 BUILD_PATH    := $(if $(ZENTAO_BUILD_PATH),$(ZENTAO_BUILD_PATH),$(shell pwd))
@@ -26,7 +26,6 @@ clean:
 	rm -f *.deb *.rpm
 common:
 	mkdir zentaopms
-	cp -fr api zentaopms/
 	cp -fr bin zentaopms/
 	cp -fr config zentaopms/ && rm -fr zentaopms/config/my.php
 	cp -fr db zentaopms/
@@ -49,8 +48,8 @@ common:
 	for path in `find zentaopms/ -type d`; do touch "$$path/index.html"; done
 	rm zentaopms/www/index.html
 	# combine js and css files.
-	cp -fr tools zentaopms/tools && cd zentaopms/tools/ && php ./minifyfront.php
-	rm -fr zentaopms/tools
+	cp -fr misc zentaopms/misc && cd zentaopms/misc/ && php ./minifyfront.php
+	rm -fr zentaopms/misc
 	# create the restart file for svn.
 	# touch zentaopms/module/svn/restart
 	# delete the unused files.
@@ -67,9 +66,9 @@ zentaoxx:
 	mkdir -p zentaoxx/db
 	mkdir -p zentaoxx/www
 	mkdir -p zentaoxx/extension/xuan/common/ext/model/
-	cd $(XUANPATH); git pull; git archive --format=zip --prefix=xuan/ $(XUANVERSION) > xuan.zip
+	cd $(XUANPATH); git archive --format=zip --prefix=xuan/ $(XUANVERSION) > xuan.zip
 	mv $(XUANPATH)/xuan.zip .
-	unzip xuan.zip
+	unzip -q xuan.zip
 	cp xuan/xxb/config/ext/_0_xuanxuan.php zentaoxx/config/ext/
 	cp -r xuan/xxb/lib/phpaes zentaoxx/lib/
 	cp -r xuan/xxb/framework/xuanxuan.class.php zentaoxx/framework/
@@ -91,9 +90,9 @@ zentaoxx:
 	mkdir zentaoxx/extension/xuan/action
 	cp -r xuan/xxb/module/action/ext zentaoxx/extension/xuan/action
 	cp -r xuan/xxb/config/ext/_1_maps.php zentaoxx/config/ext/
-	cp -r xuanxuan/config/* zentaoxx/config/
-	cp -r xuanxuan/extension/xuan/* zentaoxx/extension/xuan/
-	cp -r xuanxuan/www/* zentaoxx/www/
+	cp -r extension/xuanxuan/config/* zentaoxx/config/
+	cp -r extension/xuanxuan/extension/xuan/* zentaoxx/extension/xuan/
+	cp -r extension/xuanxuan/www/* zentaoxx/www/
 	cp -r $(XUAN_WEB_PATH) zentaoxx/www/data/xuanxuan/
 	mv zentaoxx/db/ zentaoxx/db_bak
 	mkdir zentaoxx/db/
@@ -154,9 +153,9 @@ zentaoxx:
 	sed -i "s/lang->user->status/lang->user->clientStatus/" zentaoxx/extension/xuan/im/ext/bot/default.bot.php
 	sed -i "s/.*->getRoleList();/\$$depts = \$$this->im->loadModel('dept')->getDeptPairs();\n\$$deptList = array_map(function(\$$k, \$$v) {return (object)array('id' => \$$k, 'name' => \$$v);}, array_keys(\$$depts), \$$depts);\n\$$roleList = \$$this->im->lang->user->roleList;/" zentaoxx/extension/xuan/im/ext/bot/default.bot.php
 	echo "ALTER TABLE \`zt_user\` ADD \`pinyin\` varchar(255) NOT NULL DEFAULT '' AFTER \`realname\`;" >> zentaoxx/db/xuanxuan.sql
-	mkdir zentaoxx/tools; cp tools/cn2tw.php zentaoxx/tools; cd zentaoxx/tools; php cn2tw.php
-	cp tools/en2other.php zentaoxx/tools; cd zentaoxx/tools; php en2other.php ../
-	rm -rf zentaoxx/tools
+	mkdir zentaoxx/misc; cp misc/cn2tw.php zentaoxx/misc; cd zentaoxx/misc; php cn2tw.php
+	cp misc/en2other.php zentaoxx/misc; cd zentaoxx/misc; php en2other.php ../
+	rm -rf zentaoxx/misc
 	#zip -rqm -9 zentaoxx.$(VERSION).zip zentaoxx/*
 	#rm -rf xuan.zip xuan zentaoxx
 	rm -rf xuan.zip xuan
@@ -171,9 +170,9 @@ package:
 	chmod a+rx zentaopms/bin/*
 	if [ ! -d "zentaopms/config/ext" ]; then mkdir zentaopms/config/ext; fi
 	find zentaopms/ -name ext |xargs chmod -R 777
-	mkdir zentaopms/tools; cp tools/cn2tw.php zentaopms/tools; cd zentaopms/tools; php cn2tw.php
+	mkdir zentaopms/misc; cp misc/cn2tw.php zentaopms/misc; cd zentaopms/misc; php cn2tw.php
 	#rm -r zentaopms/module/misc/ext
-	rm -rf zentaopms/tools
+	rm -rf zentaopms/misc
 pms:
 	make common
 	make zentaoxx
@@ -219,7 +218,7 @@ en:
 	cp zentaoxx/* zentaopms/ -r
 	make package
 	mv zentaopms zentaoalm
-	zip -r -9 ZenTaoALM.$(VERSION).int.zip zentaoalm
+	zip -rq -9 ZenTaoALM.$(VERSION).int.zip zentaoalm
 	rm -fr zentaoalm
 	#echo $(VERSION).int > VERSION
 	#make endeb
@@ -255,7 +254,6 @@ enrpm:
 	rm -rf ~/rpmbuild
 ciCommon:
 	make clean
-	git pull
 	make common
 
         ifneq ($(XUANPATH), )
@@ -271,7 +269,7 @@ ciCommon:
 	cd zentaopms/; grep -rl 'http://www.zentao.pm'|xargs sed -i 's/http:\/\/www.zentao.pm/https:\/\/www.zentao.pm/g';
 	cd zentaopms/config/; echo >> config.php; echo '$$config->isINT = true;' >> config.php
 	mv zentaopms zentaoalm
-	zip -r -9 ZenTaoALM.$(VERSION).int.zip zentaoalm
+	zip -rq -9 ZenTaoALM.$(VERSION).int.zip zentaoalm
 	rm -fr zentaoalm
 	# move pms zip to build and release path.
 	rm -f $(BUILD_PATH)/ZenTao*.zip $(RELEASE_PATH)/ZenTaoPMS.$(VERSION).zip $(RELEASE_PATH)/ZenTaoALM.$(VERSION).int.zip
@@ -300,21 +298,21 @@ cizip:
 	cp ZenTaoPMS.$(VERSION).zip $(BUILD_PATH)
 	cp ZenTaoPMS.$(VERSION).zip ZenTaoALM.$(VERSION).int.zip $(RELEASE_PATH)
 	# make zip packages.
-	php tools/packZip.php $(VERSION)
+	php misc/packZip.php $(VERSION)
 	sh zip.sh
 	rm -rf tmp/ *.sh zentaobiz* zentaomax* $(RELEASE_PATH)/ZenTaoALM.$(VERSION)*.zip $(RELEASE_PATH)/ZenTaoPMS.$(VERSION)*.zip  $(RELEASE_PATH)/pmsPack/*.zip
 	mv ZenTaoPMS.$(VERSION).zip ZenTaoALM.$(VERSION).int.zip $(RELEASE_PATH)
 	mv ZenTaoALM.$(VERSION).int.php*.zip ZenTaoPMS.$(VERSION).php*.zip $(RELEASE_PATH)/pmsPack
 syspack:
-	php tools/packDeb.php $(VERSION)
+	php misc/packDeb.php $(VERSION)
 	sh deb.sh
 	rm -rf tmp/ deb.sh
-	php tools/packRpm.php $(VERSION)
+	php misc/packRpm.php $(VERSION)
 	sh rpm.sh
 	rm -rf tmp/ rpm.sh
 commitBuild:
 	make ciCommon
-	php tools/packZip.php $(VERSION)
+	php misc/packZip.php $(VERSION)
 	sh zip.sh
 	rm -rf tmp/ zip.sh
 commitClear:

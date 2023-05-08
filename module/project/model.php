@@ -38,19 +38,18 @@ class projectModel extends model
     }
 
     /**
+     * 检查用户是否有查看项目的权限。
      * Check the privilege.
      *
      * @param  int    $projectID
      * @access public
      * @return bool
      */
-    public function checkPriv($projectID)
+    public function checkPriv(int $projectID): bool
     {
         if(empty($projectID)) return false;
 
-        /* If is admin, return true. */
-        if($this->app->user->admin) return true;
-        return (strpos(",{$this->app->user->view->projects},", ",{$projectID},") !== false);
+        return $this->app->user->admin || str_contains(",{$this->app->user->view->projects},", ",{$projectID},");
     }
 
     /**

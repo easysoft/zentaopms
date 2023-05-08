@@ -228,16 +228,20 @@ class block extends control
      */
     public function dashboard(string $dashboard, string $projectID = '0')
     {
-        $projectID   = (int)$projectID;
+        $projectID = (int)$projectID; // 强制转换为 int 类型，防止调用 model、tao 方法时报错
+
+        /* 获取传入应用对应的区块列表 以及 获取当前应用下区块启用状态 */
         $blocks      = $this->block->getMyDashboard($dashboard);
         $isInitiated = $this->block->fetchBlockInitStatus($dashboard);
 
-        /* Init block when vist index first. */
-        if(empty($blocks) and !$isInitiated and !defined('TUTORIAL') and $this->block->initBlock($dashboard))
+        /* 判断用户是否为首次登录 ，判断条件 当前用户没有该 app 下的区块数据 且 没有设置过该 app 下的区块启用状态 且不是演示模式  */
+        if(empty($blocks) and !$isInitiated and !defined('TUTORIAL'))
         {
-            return print(js::reload());
+            $this->block->initBlock($dashboard); // 初始化该 app 下区块数据
+            $blocks = $this->block->getMyDashboard($dashboard); // 获取初始化后的区块列表
         }
 
+        /*  */
         $blocks = $this->blockZen->processBlockForRender($blocks, $projectID);
 
         if($this->app->getViewType() == 'json') return print(json_encode($blocks));
