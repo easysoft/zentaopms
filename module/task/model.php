@@ -227,24 +227,27 @@ class taskModel extends model
     }
 
     /**
+     * 根据父任务ID计算父任务的预计、消耗和剩余工时。
      * Compute parent task working hours.
      *
-     * @param $taskID
-     *
+     * @param  int|bool $taskID
      * @access public
      * @return bool
      */
-    public function computeWorkingHours($taskID)
+    public function computeWorkingHours(int|bool $taskID): bool
     {
         if(!$taskID) return true;
 
+        /* Get sub-tasks. */
         $tasks = $this->dao->select('`id`,`estimate`,`consumed`,`left`, status')->from(TABLE_TASK)->where('parent')->eq($taskID)->andWhere('status')->ne('cancel')->andWhere('deleted')->eq(0)->fetchAll('id');
+        /* If task doesn't have sub-tasks, clear out the consumed hours. */
         if(empty($tasks))
         {
             $this->dao->update(TABLE_TASK)->set('consumed')->eq(0)->where('id')->eq($taskID)->exec();
             return true;
         }
 
+        /* Compute task estimate, consumed and left through sub-tasks. */
         $estimate = 0;
         $consumed = 0;
         $left     = 0;
@@ -255,6 +258,7 @@ class taskModel extends model
             if($task->status != 'closed') $left += $task->left;
         }
 
+        /* Init update task data. */
         $newTask = new stdClass();
         $newTask->estimate       = $estimate;
         $newTask->consumed       = $consumed;
@@ -262,6 +266,7 @@ class taskModel extends model
         $newTask->lastEditedBy   = $this->app->user->account;
         $newTask->lastEditedDate = helper::now();
 
+        /* Update task data. */
         $this->dao->update(TABLE_TASK)->data($newTask)->autoCheck()->where('id')->eq($taskID)->exec();
         return !dao::isError();
     }

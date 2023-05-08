@@ -854,8 +854,7 @@ class taskTest
         else
         {
             $object = $this->objectModel->getById($taskID);
-            if(!empty($object) and $object->parent > 0) $parentObject = $this->objectModel->getById($object->parent);
-            return isset($parentObject) ? $parentObject : $object;
+            return $object;
         }
     }
 

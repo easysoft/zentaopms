@@ -535,12 +535,13 @@ class project extends control
 
         if($_POST)
         {
-            $postData = form::data($this->config->project->form->edit);
-            $project  = $this->projectZen->prepareEditExtras($projectID, $postData);
+            $postData   = form::data($this->config->project->form->edit);
+            $postExtras = $this->projectZen->prepareEditExtras($postData);
+            $project    = $this->projectZen->prepareProject($projectID, $postData, $postExtras);
 
             $project->products = isset($project->products) ? array_filter($project->products) : $linkedProducts;
 
-            $changes = $this->project->update($projectID, $project, $postData);
+            $changes = $this->project->update($projectID, $project, $postExtras);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             if($changes)
