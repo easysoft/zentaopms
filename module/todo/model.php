@@ -16,16 +16,12 @@ class todoModel extends model
      * Create todo data.
      *
      * @param  object $todo
-     * @param  object $formData
      * @access public
      * @return int|false
      */
-    public function create(object $todo, object $formData): int|false
+    public function create(object $todo): int|false
     {
-        $processedTodo = $this->todoTao->processCreateData($todo, $formData);
-        if(!$processedTodo) return false;
-
-        $todoID = $this->todoTao->insert($processedTodo);
+        $todoID = $this->todoTao->insert($todo);
         if(dao::isError()) return false;
 
         return $todoID;
@@ -36,11 +32,10 @@ class todoModel extends model
      * Batch create toto.
      *
      * @param  object $todos
-     * @param  object $formData
      * @access public
      * @return array|false
      */
-    public function batchCreate(object $todos, object $formData): array|false
+    public function batchCreate(object $todos): array|false
     {
         $validTodos = array();
         $assignedTo = $this->app->user->account;
@@ -60,7 +55,7 @@ class todoModel extends model
 
             if($todos->names[$loop] != '' || $isExist)
             {
-                $todo = $this->todoTao->getValidsOfBatchCreate($todos, $formData, $loop, $assignedTo);
+                $todo = $this->todoTao->getValidsOfBatchCreate($todos, $loop, $assignedTo);
                 if(dao::isError()) return false;
 
                 $validTodos[] = $todo;
@@ -127,7 +122,7 @@ class todoModel extends model
         {
             $oldTodo = $oldTodos[$todoID];
             if(in_array($todo->type, $this->config->todo->moduleList)) $oldTodo->name = '';
-            $this->updateTodoDataByID($todoID, $todo);
+            $this->todoTao->updateRow($todoID, $todo);
 
             if($oldTodo->status != 'done' and $todo->status == 'done') $this->loadModel('action')->create('todo', $todoID, 'finished', '', 'done');
 
@@ -520,15 +515,16 @@ class todoModel extends model
      * Get data for export todo.
      *
      * @param  string $orderBy
-     * @param  object $formData
+     * @param  string $queryCondition
+     * @param  string $checkedItem
      * @access public
      * @return array
      */
-    public function getByExportList(string $orderBy, object $formData): array
+    public function getByExportList(string $orderBy, string $queryCondition, string $checkedItem): array
     {
         return $this->dao->select('*')->from(TABLE_TODO)
-            ->where($this->session->todoReportCondition)
-            ->beginIF($formData->rawdata->exportType == 'selected')->andWhere('id')->in($this->cookie->checkedItem)->fi()
+            ->where($queryCondition)
+            ->beginIF($checkedItem)->andWhere('id')->in($checkedItem)->fi()
             ->orderBy($orderBy)->fetchAll('id');
     }
 
@@ -542,12 +538,12 @@ class todoModel extends model
      */
     public function getTodosByIdList(array $todoIdList): array
     {
-        return $this->todoTao->fetchRows($todoIdList);
+        return $this->dao->select('*')->from(TABLE_TODO)->where('id')->in(array_values($todoIdList))->fetchAll('id');
     }
 
     /**
      * 获取所有有效的周期待办列表。
-     * Get valid cycle todo listi.
+     * Get valid cycle todo list.
      *
      * @access public
      * @return array
@@ -558,16 +554,19 @@ class todoModel extends model
     }
 
     /**
-     * 根据待办ID更新待办数据。
-     * Update todo data by id.
+     * 根据待办类型获取优先级。
+     * Get pri by todo type.
      *
-     * @param  int    $todoID
-     * @param  object $todo
+     * @param  string $todoType
+     * @param  int    $todoObjectID
      * @access public
-     * @return bool
+     * @return int
      */
-    public function updateTodoDataByID(int $todoID, object $todo): bool
+    public function getPriByTodoType(string $todoType, int $todoObjectID): int
     {
-        return $this->todoTao->updateRow($todoID, $todo);
+        if(!isset($this->config->objectTables[$todoType])) return $this->config->todo->defaultPri;
+
+        $pri = $this->dao->select('pri')->from($this->config->objectTables[$todoType])->where('id')->eq($todoObjectID)->fetch('pri');
+        return $pri ?: $this->config->todo->defaultPri;
     }
 }

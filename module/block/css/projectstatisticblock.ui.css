@@ -1,1 +1,7 @@
-.projectstatistic-block .tab-content {width: 100%}
+.projectstatistic-block {background: #FCFDFE;}
+.projectstatistic-block .tab-content {width: 100%;}
+.projectstatistic-block .bg-secondary-pale {background: #F3F6FA;}
+.projectstatistic-block .nav-tabs .nav-item:hover {border-left: 2px solid #2E7FFF; background-color: #FCFDFE;}
+.projectstatistic-block .nav-tabs .nav-item.active {border-left: 2px solid #2E7FFF; background-color: #FCFDFE;}
+.projectstatistic-block .nav-tabs .nav-item:hover > a.link {display: flex!important;}
+.projectstatistic-block .nav-tabs .nav-item > a:before {background: transparent;}

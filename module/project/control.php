@@ -310,7 +310,7 @@ class project extends control
         if(empty($project) || $project->type != 'project') return print(js::error($this->lang->notFound) . js::locate('back'));
 
         if(!$projectID) $this->locate($this->createLink('project', 'browse'));
-        setCookie("lastProject", strVal($projectID), $this->config->cookieLife, $this->config->webRoot, '', false, true);
+        setCookie("lastProject", strVal($projectID), $this->config->cookieLife, $this->config->webRoot, '', $this->config->cookieSecure, true);
 
         if($project->model == 'kanban' and $this->config->vision != 'lite')
         {
@@ -1866,10 +1866,8 @@ class project extends control
      */
     public function updateOrder()
     {
-        $postData = form::data();
-        $rawdata  = $postData->rawdata;
-        $idList   = explode(',', trim($rawdata->projects, ','));
-        $orderBy  = $rawdata->orderBy;
+        $idList   = explode(',', trim($this->post->projects, ','));
+        $orderBy  = $this->post->orderBy;
 
         if(strpos($orderBy, 'order') === false) return false;
 
@@ -1877,57 +1875,62 @@ class project extends control
     }
 
     /**
+     * 获取项目白名单列表
      * Get white list personnel.
      *
-     * @param  int    $projectID
-     * @param  string $module
-     * @param  string $from  project|program|programProject
-     * @param  string $objectType
-     * @param  string $orderby
-     * @param  int    $recTotal
-     * @param  int    $recPerPage
-     * @param  int    $pageID
+     * @param  string $projectID
+     * @param  string $from project|program|programProject
+     * @param  string $recTotal
+     * @param  string $recPerPage
+     * @param  string $pageID
+     *
      * @access public
      * @return void
      */
-    public function whitelist($projectID = 0, $module = 'project', $from = 'project', $objectType = 'project', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function whitelist(string $projectID = '0', string $from = 'project', string $recTotal = '0', string $recPerPage = '20', string $pageID = '1')
     {
+        $projectID = (int)$projectID;
         $projectID = $this->project->setMenu($projectID);
-        $project   = $this->project->getById($projectID);
+        $project   = $this->project->getByID($projectID);
         if(isset($project->acl) and $project->acl == 'open') $this->locate($this->createLink('project', 'index', "projectID=$projectID"));
 
-        echo $this->fetch('personnel', 'whitelist', "objectID=$projectID&module=$module&browseType=$objectType&orderBy=$orderBy&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID&projectID=$projectID&from=$from");
+        echo $this->fetch('personnel', 'whitelist', "objectID=$projectID&module=project&browseType=project&orderBy=id_desc&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID&projectID=$projectID&from=$from");
     }
 
     /**
+     * 添加用户到项目白名单中
      * Adding users to the white list.
      *
-     * @param  int     $projectID
-     * @param  int     $deptID
-     * @param  int     $copyID
-     * @param  int     $programID
-     * @param  int     $from
+     * @param  string $projectID
+     * @param  int    $deptID
+     * @param  int    $copyID
+     * @param  int    $programID
+     * @param  string $from
+     *
      * @access public
      * @return void
      */
-    public function addWhitelist($projectID = 0, $deptID = 0, $copyID = 0, $programID = 0, $from = 'project')
+    public function addWhitelist(string $projectID = '0', int $deptID = 0, int $copyID = 0, int $programID = 0, string $from = 'project')
     {
+        $projectID = (int)$projectID;
         $projectID = $this->project->setMenu($projectID);
-        $project   = $this->project->getById($projectID);
+        $project   = $this->project->getByID($projectID);
         if(isset($project->acl) and $project->acl == 'open') $this->locate($this->createLink('project', 'index', "projectID=$projectID"));
 
         echo $this->fetch('personnel', 'addWhitelist', "objectID=$projectID&dept=$deptID&copyID=$copyID&objectType=project&module=project&programID=$programID&from=$from");
     }
 
     /*
+     * 移除项目白名单人员
      * Removing users from the white list.
      *
-     * @param  int     $id
+     * @param  string  $id
      * @param  string  $confirm
+     *
      * @access public
      * @return void
      */
-    public function unbindWhitelist($id = 0, $confirm = 'no')
+    public function unbindWhitelist(string $id = '0', $confirm = 'no')
     {
         echo $this->fetch('personnel', 'unbindWhitelist', "id=$id&confirm=$confirm");
     }
@@ -1952,25 +1955,30 @@ class project extends control
         $executions = $this->loadModel('execution')->getPairs($projectID);
         $idList     = array_keys($executions);
 
+        /* Sets the associated products of the project. */
         if(!empty($_POST))
         {
-            $postData = form::data();
-            if(!isset($this->post->products) and !isset($this->post->otherProducts))
+            /* No associated product is displayed. */
+            $postData         = form::data($this->config->project->form->manageProducts);
+            $postProducts     = $this->post->products;
+            $postOtherProduct = $this->post->otherProducts;
+            if(!isset($postProducts) and !isset($postOtherProduct))
             {
                 return $this->send(array('result' => 'fail', 'message' => $this->lang->project->errorNoProducts));
             }
 
-            /* Merge and build linked products. */
+            /* Merge and build associated products. */
             $this->projectZen->mergeProducts($projectID, $project, $idList, $postData);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
+            /* After the product is linked successfully, the page is displayed. */
             $locateLink = inLink('manageProducts', "projectID=$projectID");
             if($from == 'program')  $locateLink = $this->session->projectList;
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $locateLink));
         }
 
         /* Set menu. */
-        $this->setProjectMenu($projectID, $project);
+        $this->setProjectMenu($projectID, $project->parent);
 
         /* Extract cannot be removed product and branch. */
         $this->projectZen->extractUnModifyForm($projectID, $project);
@@ -1998,11 +2006,11 @@ class project extends control
     {
         $disabled   = '';
         $executions = array('' => '');
+        $projectID  = (int)$projectID;
 
-        $projectID = (int)$projectID;
         if($projectID)
         {
-            $project     = $this->project->getById($projectID);
+            $project     = $this->project->getByID($projectID);
             $executions += (array)$this->loadModel('execution')->getPairs($projectID, $type, $mode);
             if(!empty($project->multiple)) $disabled = 'disabled';
         }

@@ -201,28 +201,29 @@ class productZen extends product
      */
     private function getFormFields4Create(int $programID = 0, array $fields = array()): array
     {
-        if(empty($fields)) $fields = $this->config->product->form->create;
+        if(empty($fields)) $fields = $this->appendFlowFields($this->config->product->form->create);
 
+        /* 准备数据。*/
         $this->loadModel('user');
         $poUsers = $this->user->getPairs('nodeleted|pofirst|noclosed');
         $qdUsers = $this->user->getPairs('nodeleted|qdfirst|noclosed');
         $rdUsers = $this->user->getPairs('nodeleted|devfirst|noclosed');
         $users   = $this->user->getPairs('nodeleted|noclosed');
 
+        /* 追加字段的name、title属性，展开user数据。 */
         foreach($fields as $field => $attr)
         {
             if(isset($attr['options']) and $attr['options'] == 'users') $fields[$field]['options'] = $users;
-            $fields[$field]['name']  = $field;
-            $fields[$field]['title'] = zget($this->lang->product, $field);
+            if(!isset($fields[$field]['name']))  $fields[$field]['name']  = $field;
+            if(!isset($fields[$field]['title'])) $fields[$field]['title'] = zget($this->lang->product, $field);
         }
 
-        $fields['program']['options'] = array('') + $this->loadModel('program')->getTopPairs('', 'noclosed');
-        $fields['PO']['options']      = $poUsers;
-        $fields['QD']['options']      = $qdUsers;
-        $fields['RD']['options']      = $rdUsers;
-
-        if($programID) $fields['line']['options'] = array('') + $this->product->getLinePairs($programID);
-        if(empty($programID) or $this->config->systemMode != 'ALM') unset($fields['line'], $fields['lineName']);
+        /* 设置下拉菜单内容。 */
+        $fields['PO']['options'] = $poUsers;
+        $fields['QD']['options'] = $qdUsers;
+        $fields['RD']['options'] = $rdUsers;
+        if(isset($fields['program'])) $fields['program']['options'] = array('') + $this->loadModel('program')->getTopPairs('', 'noclosed');
+        if($programID and isset($fields['line'])) $fields['line']['options'] = array('') + $this->product->getLinePairs($programID);
 
         return $fields;
     }
@@ -239,12 +240,13 @@ class productZen extends product
     {
         /* Init fields. */
         $programID = (int)$product->program;
-        $fields    = $this->getFormFields4Create($programID, $this->config->product->form->edit);
+        $fields    = $this->getFormFields4Create($programID, $this->appendFlowFields($this->config->product->form->edit));
+        $fields['changeProjects'] = array('type' => 'string', 'control' => 'hidden', 'required' => false, 'default' => '');
 
         /* Check program priv, and append to program list that is not exist product's program. */
         $hasPrivPrograms = $this->app->user->view->programs;
         if($programID and strpos(",{$hasPrivPrograms},", ",{$programID},") === false) $fields['program']['control'] = 'hidden';
-        if(!isset($fields['program']['options'][$programID]) and $programID)
+        if(isset($fields['program']) and !isset($fields['program']['options'][$programID]) and $programID)
         {
             $program = $this->program->getByID($programID);
             $fields['program']['options'] += array($programID => $program->name);
@@ -255,7 +257,28 @@ class productZen extends product
         {
             if(isset($product->{$field})) $fields[$field]['default'] = $product->{$field};
         }
-        $fields['changeProjects'] = array('type' => 'string', 'control' => 'hidden', 'required' => false, 'default' => '');
+
+        return $fields;
+    }
+
+    /**
+     * 获取批量编辑产品页面的表单配置。
+     * Get form fields config for batch edit page.
+     *
+     * @access private
+     * @return array
+     */
+    private function getFormFields4BatchEdit(): array
+    {
+        /* Init fields. */
+        $fields = $this->getFormFields4Create(0, $this->appendFlowFields($this->config->product->form->batchEdit, 'batch'));
+
+        /* Remove not show fields. */
+        $showFields = explode(',', $this->config->product->custom->batchEditFields);
+        foreach($fields as $field => $attr)
+        {
+            if(!in_array($field, $showFields) and !$attr['required']) unset($fields[$field]);
+        }
 
         return $fields;
     }
@@ -263,23 +286,45 @@ class productZen extends product
     /**
      * Get product lines and product lines of program.
      *
+     * @param  array  $programIdList
+     * @param  string $params         hasempty
      * @access protected
      * @return array
      */
-    protected function getProductLines(): array
+    protected function getProductLines(array $programIdList = array(), string $params = ''): array
     {
         /* Get all product lines. */
-        $productLines = $this->product->getProductLinesTODO();
+        $productLines = $this->product->getLines($programIdList);
 
         /* Collect product lines of program lines. */
-        $programLines = array();
-        foreach($productLines as $productLine)
-        {
-            if(!isset($programLines[$productLine->root])) $programLines[$productLine->root] = array();
-            $programLines[$productLine->root][$productLine->id] = $productLine->name;
-        }
+        $initArray = strpos($params, 'hasempty') !== false ? array('') : array();
+        $linePairs = $initArray;
+        foreach($programIdList as $programID) $linePairs[$programID] = $initArray;
+        foreach($productLines as $programID => $line) $linePairs[$programID][$line->id] = $line->name;
 
-        return array($productLines, $programLines);
+        return array($productLines, $linePairs);
+    }
+
+    /**
+     * 根据产品和已授权项目集，获取关联产品的未授权项目集。
+     * Get unauthorized programs by products and authorized programs.
+     *
+     * @param  array $products
+     * @param  array $authPrograms
+     * @access private
+     * @return array
+     */
+    private function getUnauthProductPrograms(array $products, array $authPrograms): array
+    {
+        $unauthPrograms = array();
+        $programIdList  = array();
+        foreach($products as $product)
+        {
+            if($product->program and !isset($authPrograms[$product->program])) $programIdList[$product->program] = $product->program;
+        }
+        if($programIdList) $unauthPrograms = $this->program->getPairsByList($programIdList);
+
+        return $unauthPrograms;
     }
 
     /**
@@ -379,6 +424,45 @@ class productZen extends product
     }
 
     /**
+     * 构建批量编辑产品页面数据。
+     * Build form for batch edit page
+     *
+     * @param  int   $programID
+     * @param  array $productIdList
+     * @access protected
+     * @return void
+     */
+    protected function buildBatchEditForm(int $programID, array $productIdList)
+    {
+        $products = $this->product->getByIdList($productIdList);
+
+        /* 获取项目集和产品线，并将项目集分成授权和非授权。以便view的下拉菜单使用对应的数据。 */
+        $authPrograms   = array();
+        $unauthPrograms = array();
+        $lines          = array();
+        if($this->config->systemMode == 'ALM')
+        {
+            $authPrograms   = $this->loadModel('program')->getTopPairs();
+            $unauthPrograms = $this->getUnauthProductPrograms($products, $authPrograms);
+
+            /* Get product lines by programs.*/
+            $programIdList = array_merge(array_keys($authPrograms), array_keys($unauthPrograms));
+            list(, $lines) = $this->getProductLines($programIdList);
+        }
+
+        /* 给view层赋值。 */
+        $this->view->title          = $this->lang->product->batchEdit;
+        $this->view->lines          = $lines;
+        $this->view->products       = $products;
+        $this->view->programID      = $programID;
+        $this->view->authPrograms   = array('' => '') + $authPrograms;
+        $this->view->unauthPrograms = $unauthPrograms;
+
+        unset($this->lang->product->typeList['']);
+        $this->display();
+    }
+
+    /**
      * 为view层设置要用数据。
      * Set view variables and display for project page.
      *
@@ -448,11 +532,54 @@ class productZen extends product
      */
     protected function prepareEditExtras(form $data, string $acl, string $uid = ''): object
     {
-        $product = fixer::input('post')->setIF($acl == 'open', 'whitelist', '')
+        $product = $data->setIF($acl == 'open', 'whitelist', '')
             ->stripTags($this->config->product->editor->edit['id'], $this->config->allowedTags)
             ->get();
 
         return $this->loadModel('file')->processImgURL($product, $this->config->product->editor->edit['id'], $uid);
+    }
+
+    /**
+     * 预处理批量编辑产品数据，将按字段为分组数据重组为产品分组的数据。
+     * Prepare batch edit extras.
+     *
+     * @param  form $data
+     * @access protected
+     * @return array
+     */
+    protected function prepareBatchEditExtras(form $data): array
+    {
+        $formConfig = $data->rawconfig;
+        $editForm   = $this->config->product->form->edit;
+        $data       = $data->get();
+        $products   = array();
+
+        /* 将按字段为分组数据重组为产品分组的数据。*/
+        foreach($data->name as $productID => $productName)
+        {
+            $productID = (int)$productID;
+
+            /* 根据表单配置构造产品数据。*/
+            $product     = new stdClass();
+            $product->id = $productID;
+            foreach($formConfig as $field => $attr)
+            {
+                /* 获取对应的字段数据。*/
+                $product->{$field} = zget($data->{$field}, $productID, $attr['default']);
+
+                /* 根据配置规则，格式化字段数据。 */
+                if(isset($editForm[$field]) and $editForm[$field]['type'] == 'int') $product->{$field} = (int)$product->{$field};
+                if(!empty($attr['filter']) and $attr['filter'] == 'trim') $product->{$field} = trim($product->{$field});
+                if(is_array($product->$field)) $product->{$field} = implode(',', $product->{$field});
+
+                /* 检查必填项。 */
+                if(!empty($attr['required']) and validater::checkEmpty($product->{$field})) dao::$errors[] = 'product #' . $productID . sprintf($this->lang->error->notempty, zget($attr, 'title', zget($this->lang->product, $field)));
+            }
+
+            $products[$productID] = $product;
+        }
+
+        return $products;
     }
 
     /**
@@ -498,6 +625,36 @@ class productZen extends product
         if($message) $this->lang->saveSuccess = $message;
 
         return $this->getEditedLocate($productID, $programID);
+    }
+
+    /**
+     * 成功批量更新产品数据后，其他的额外操作。
+     * Response after batch edit products.
+     *
+     * @param  array $allChanges
+     * @param  int   $programID
+     * @access protected
+     * @return array
+     */
+    protected function responseAfterBatchEdit(array $allChanges, int $programID): array
+    {
+        /* Get locate. */
+        $locate = $this->createLink('program', 'product', "programID=$programID");
+        if($this->app->tab == 'product') $locate = $this->createLink('product', 'all');
+        $response = array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $locate);
+
+        if(empty($allChanges)) return $response;
+
+        /* Save actions. */
+        $this->loadModel('action');
+        foreach($allChanges as $productID => $changes)
+        {
+            if(empty($changes)) continue;
+
+            $actionID = $this->action->create('product', $productID, 'Edited');
+            $this->action->logHistory($actionID, $changes);
+        }
+        return $response;
     }
 
     /**
@@ -598,130 +755,438 @@ class productZen extends product
     }
 
     /**
-     * 把访问的产品ID等状态信息保存到session和cookie中。
-     * Save the product id user last visited to session and cookie.
+     * 追加工作流配置字段。
+     * Append flow fields.
      *
-     * @param  int       $productID
-     * @param  array     $products
+     * @param  array  $fields
+     * @param  string $type     single|batch
      * @access protected
-     * @return int
+     * @return array
      */
-    protected function saveVisitState(int $productID, array $products): int
+    protected function appendFlowFields(array $fields, string $type = 'single'): array
     {
-        if(defined('TUTORIAL')) return $productID;
+        $extendFields = $this->product->getFlowExtendFields();
+        if(empty($extendFields)) return $fields;
 
-        $productID = $this->getAccessableProductID($productID, $products);
-
-        $this->session->set('product', $productID, $this->app->tab);
-
-        setcookie('preProductID', (string)$productID, $this->config->cookieLife, $this->config->webRoot, '', $this->config->cookieSecure, true);
-
-        /* If preProductID changed, then reset preBranch. */
-        if($this->cookie->preProductID != $this->session->product)
+        /* 构造表单属性，并追加到表单配置中。 */
+        foreach($extendFields as $extendField)
         {
-            $this->cookie->set('preBranch', 0);
-            setcookie('preBranch', '0', $this->config->cookieLife, $this->config->webRoot, '', $this->config->cookieSecure, true);
+            $control = $extendField->control;
+            if($control == 'richtext') $control = 'editor';
+            if($control == 'input')    $control = 'text';
+
+            $field = $extendField;
+            $fields[$field] = array();
+            $fields[$field]['type']    = $type == 'single' ? 'string' : 'array';
+            $fields[$field]['control'] = $control;
+            $fields[$field]['title']   = $extendField->name;
+            $fields[$field]['default'] = $extendField->default;
+            $fields[$field]['options'] = $extendField->options;
         }
 
-        return $productID;
+        return $fields;
     }
 
     /**
-     * 获取可访问的产品ID。
-     * Get accessable product ID.
+     * 获取研发需求列表页面关联的产品信息。
+     * Get the product of the browse page.
      *
      * @param  int       $productID
-     * @param  array     $products
      * @access protected
-     * @return int
+     * @return object|false
      */
-    protected function getAccessableProductID(int $productID, array $products): int
+    protected function getBrowseProduct(int $productID): object|false
     {
-        if(empty($productID))
-        {
-            if($this->cookie->preProductID and isset($products[$this->cookie->preProductID])) $productID = $this->cookie->preProductID;
-            if(empty($this->session->product)) $productID = (int)key($products);
-        }
+        $product = $this->product->getById($productID);
 
-        /* 产品ID已经被删除，不存在于产品列表中。*/
-        /* Product ID does not exsit in products list, it may be deleted. */
-        if(!isset($products[$productID]))
-        {
-            /* Confirm if product exist. */
-            $product = $this->product->getById($productID);
-            if(empty($product) or $product->deleted == 1) $productID = (int)key($products);
-            /* If product is invisable for curren user, then response access denied message. */
-            if($productID && strpos(",{$this->app->user->view->products},", ",{$productID},") === false)
-            {
-                $productID = (int)key($products);
-                $this->accessDenied($this->lang->product->accessDenied);
-            }
-        }
+        /* If product does not exist in $this->products list, then attach it to the list. */
+        if($product && !isset($this->products[$product->id])) $this->products[$product->id] = $product->name;
 
-        return $productID;
+        return $product ?? false;
     }
 
     /**
-     * 输出访问被拒绝提示信息。
-     * Show accessDenied response.
+     * 获取产品的分支和分支ID。
+     * Get branch and branchID.
      *
-     * @param  string  $tips
-     * @access private
-     * @return void
+     * @param  object    $product
+     * @param  string    $branch
+     * @access protected
+     * @return object
      */
-    public function accessDenied($tips)
+    protected function getBranchAndBranchID(object|bool $product, string $branch): array
     {
-        if(defined('TUTORIAL')) return true;
+        if(empty($product) || $product->type == 'normal') return ['all', 'all'];
 
-        echo(js::alert($tips));
+        /* 获取分支和分支ID。*/
+        $branchPairs = $this->loadModel('branch')->getPairs($product->id, 'all');
+        $branch      = ($this->cookie->preBranch !== '' and $branch === '' and isset($branchPairs[$this->cookie->preBranch])) ? $this->cookie->preBranch : $branch;
+        $branchID    = $branch;
 
-        if(!$this->server->http_referer) return print(js::locate(helper::createLink('product', 'index')));
-
-        $loginLink = $this->config->requestType == 'GET' ? "?{$this->config->moduleVar}=user&{$this->config->methodVar}=login" : "user{$this->config->requestFix}login";
-        if(strpos($this->server->http_referer, $loginLink) !== false) return print(js::locate(helper::createLink('product', 'index')));
-
-        echo js::locate('back');
+        return [$branch, $branchID];
     }
 
     /**
      * 设置导航菜单。
-     * Set menu.
+     * Set navigation menu.
      *
-     * @param  int         $productID
-     * @param  int|string  $branch
-     * @param  int         $module
-     * @param  string      $moduleType
-     * @param  string      $extra
-     * @access public
+     * @param  int       $projectID
+     * @param  int       $productID
+     * @param  string    $branch
+     * @param  string    $storyType
+     * @access protected
      * @return void
      */
-    public function setMenu($productID = 0, $branch = '', $module = 0, $moduleType = '', $extra = ''): void
+    protected function setMenu4Browse(int $projectID, int $productID, string $branch, string $storyType): void
     {
-        if(!$this->app->user->admin and strpos(",{$this->app->user->view->products},", ",$productID,") === false and $productID != 0 and !defined('TUTORIAL'))
+        if($this->app->tab == 'project')
         {
-            $this->accessDenied($this->lang->product->accessDenied);
+            $this->session->set('storyList', $this->app->getURI(true), 'project');
+            $this->loadModel('project')->setMenu($projectID);
             return;
         }
 
-        $product = $this->product->getByID($productID);
+        $this->session->set('storyList',   $this->app->getURI(true), 'product');
+        $this->session->set('productList', $this->app->getURI(true), 'product');
 
-        $params = array('branch' => $branch);
-        common::setMenuVars('product', $productID, $params);
-        if(!$product) return;
+        $this->product->setMenu($productID, $branch, 0, '', "storyType=$storyType");
+    }
 
-        $this->lang->switcherMenu = $this->product->getSwitcher($productID, $extra, $branch);
+    /**
+     * browse方法保存并修改cookie数据。
+     * Save and modify cookies for browse function.
+     *
+     * @param  int       $productID
+     * @param  string    $branch
+     * @param  int       $param
+     * @param  string    $storyType
+     * @param  string    $orderBy
+     * @access protected
+     * @return void
+     */
+    protected function saveAndModifyCookie4Browse(int $productID, string $branch, int $param, string $browseType, string $orderBy): void
+    {
+        /* Set product ID and branch of the pre visited product. */
+        setcookie('preProductID', (string)$productID, $this->config->cookieLife, $this->config->webRoot, '', $this->config->cookieSecure, true);
+        setcookie('preBranch', $branch, $this->config->cookieLife, $this->config->webRoot, '', $this->config->cookieSecure, true);
 
-        if($product->type == 'normal')
+        /* Set module ID of story. */
+        if($this->cookie->preProductID != $productID or $this->cookie->preBranch != $branch or $browseType == 'bybranch')
         {
-            unset($this->lang->product->menu->settings['subMenu']->branch);
+            $_COOKIE['storyModule'] = 0;
+            setcookie('storyModule', '0', 0, $this->config->webRoot, '', $this->config->cookieSecure, false);
+        }
+
+        if($browseType == 'bymodule' or $browseType == '')
+        {
+            setcookie('storyModule', (string)$param, 0, $this->config->webRoot, '', $this->config->cookieSecure, false);
+
+            /* The module ID from project app. */
+            if($this->app->tab == 'project') setcookie('storyModuleParam', (string)$param, 0, $this->config->webRoot, '', $this->config->cookieSecure, false);
+
+            /* Re-init the story branch. */
+            $_COOKIE['storyBranch'] = 'all';
+            setcookie('storyBranch', 'all', 0, $this->config->webRoot, '', $this->config->cookieSecure, false);
+
+            /* For rendering module tree. */
+            if($browseType == '') setcookie('treeBranch', $branch, 0, $this->config->webRoot, '', $this->config->cookieSecure, false);
+        }
+
+        if($browseType == 'bybranch') setcookie('storyBranch', $branch, 0, $this->config->webRoot, '', $this->config->cookieSecure, false);
+
+        /* Save sort order of product stories list. */
+        setcookie('productStoryOrder', $orderBy, 0, $this->config->webRoot, '', $this->config->cookieSecure, true);
+    }
+
+    /**
+     * 获取模块ID。
+     * Get module ID.
+     *
+     * @param  int       $param
+     * @param  string    $browseType
+     * @access protected
+     * @return int
+     */
+    protected function getModuleId4Browse(int $param, string $browseType): int
+    {
+        $cookieModule = $this->app->tab == 'project' ? $this->cookie->storyModuleParam : $this->cookie->storyModule;
+
+        $moduleID = 0;
+        if($browseType == 'bymodule') $moduleID = $param;
+        elseif($browseType != 'bysearch' and $browseType != 'bybranch' and $cookieModule) $moduleID = $cookieModule;
+
+        return $moduleID;
+    }
+
+    /**
+     * 获取模块的树形数据结构。
+     * Get the tree structure of modules.
+     * TODO return pure HTML string, we need array.
+     *
+     * @param  int       $projectID
+     * @param  int       $productID
+     * @param  string    $branch
+     * @param  int       $param
+     * @param  string    $storyType
+     * @param  string    $browseType
+     * @access protected
+     * @return string
+     */
+    protected function getModuleTree4BrowseTODO(int $projectID, int $productID, string &$branch, int $param, string $storyType, string $browseType): string
+    {
+        /* Set moduleTree. */
+        $createModuleLink = $storyType == 'story' ? 'createStoryLink' : 'createRequirementLink';
+        if($browseType == '') $browseType = 'unclosed';
+        else $branch = $this->cookie->treeBranch;
+
+        /* If in project story and not chose product, get project story mdoules. */
+        if(empty($productID) && $this->app->rawModule == 'projectstory')
+        {
+            return $this->tree->getProjectStoryTreeMenu($projectID, 0, array('treeModel', $createModuleLink));
+        }
+
+        return $this->tree->getTreeMenu(
+            $productID,
+            'story',
+            0,
+            array('treeModel', $createModuleLink),
+            array('projectID' => $projectID, 'productID' => $productID),
+            $branch,
+            "&param=$param&storyType=$storyType"
+        );
+    }
+
+    /**
+     * 获取是否展示分支。
+     * Get the tree structure of modules.
+     *
+     * @param  int       $projectID
+     * @param  int       $productID
+     * @param  string    $storyType
+     * @param  bool      $isProjectStory
+     * @access protected
+     * @return bool
+     */
+    protected function getShowBranch4Browse(int $projectID, int $productID, string $storyType, bool $isProjectStory): bool
+    {
+        if($isProjectStory and $storyType == 'story') return $this->loadModel('branch')->showBranch($productID, 0, $projectID);
+
+        return $this->loadModel('branch')->showBranch($productID);
+    }
+
+    /**
+     * 获取项目下的产品列表。
+     * Get products of the project.
+     *
+     * @param  int       $projectID
+     * @param  string    $storyType
+     * @param  bool      $isProjectStory
+     * @access protected
+     * @return array
+     */
+    protected function getProjectProducts4Browse(int $projectID, string $storyType, bool $isProjectStory): array
+    {
+        $projectProducts = array();
+        if($isProjectStory && $storyType == 'story') $projectProducts = $this->product->getProducts($projectID);
+
+        return $projectProducts;
+    }
+
+    /**
+     * 获取产品计划。
+     * Get product plans of the project.
+     *
+     * @param  array     $projectProducts
+     * @param  int       $projectID
+     * @param  string    $storyType
+     * @param  bool      $isProjectStory
+     * @access protected
+     * @return array
+     */
+    protected function getProductPlans4Browse(array $projectProducts, int $projectID, string $storyType, bool $isProjectStory): array
+    {
+        $this->loadModel('execution');
+
+        $plans = array();
+        if($isProjectStory && $storyType == 'story') $plans = $this->execution->getPlans($projectProducts, 'skipParent,unexpired,noclosed', $projectID);
+
+        return $plans;
+    }
+
+    /**
+     * 获取需求列表及分页对象。
+     * Get stories and the pager object.
+     *
+     * @param  int       $projectID
+     * @param  int       $productID
+     * @param  string    $branchID
+     * @param  string    $moduleID
+     * @param  int       $param
+     * @param  string    $storyType
+     * @param  string    $browseType
+     * @param  string    $orderBy
+     * @param  int       $recTotal
+     * @param  int       $recPerPage
+     * @param  int       $pageID
+     * @access protected
+     * @return array
+     */
+    protected function getStoriesAndPager4Browse(int $projectID, int $productID, string $branchID, int $moduleID, int $param, string $storyType, string $browseType, string $orderBy, int $recTotal, int $recPerPage, int $pageID): array
+    {
+        /* Append id for secend sort. */
+        $sort = common::appendOrder($orderBy);
+        if(strpos($sort, 'pri_') !== false) $sort = str_replace('pri_', 'priOrder_', $sort);
+
+        /* Load pager. */
+        $this->app->loadClass('pager', true);
+        if($this->app->getViewType() == 'xhtml') $recPerPage = 10;
+        $pager = new pager($recTotal, $recPerPage, $pageID);
+
+        $isProjectStory = $this->app->rawModule == 'projectstory';
+
+        /* Get stories. */
+        if($isProjectStory and $storyType == 'story')
+        {
+            if(!empty($product)) $this->session->set('currentProductType', $product->type);
+
+            $this->products  = $this->product->getProducts($projectID, 'all', '', false);
+
+            if($browseType == 'bybranch') $param = $branchID;
+            $stories = $this->story->getExecutionStories($projectID, $productID, $branchID, $sort, $browseType, $param, $storyType, '', $pager);
         }
         else
         {
-            $branchLink = $this->lang->product->menu->settings['subMenu']->branch['link'];
-            $this->lang->product->menu->settings['subMenu']->branch['link'] = str_replace('@branch@', $this->lang->product->branchName[$product->type], $branchLink);
-            $this->lang->product->branch = sprintf($this->lang->product->branch, $this->lang->product->branchName[$product->type]);
+            $queryID = ($browseType == 'bysearch') ? $param : 0;
+            $stories = $this->product->getStories($productID, $branchID, $browseType, $queryID, $moduleID, $storyType, $sort, $pager);
         }
 
-        if(strpos($extra, 'requirement') !== false) unset($this->lang->product->moreSelects['willclose']);
+        if(!empty($stories)) $stories = $this->story->mergeReviewer($stories);
+
+        return [$stories, $pager];
+    }
+
+    /**
+     * 获取分支的配置数据。
+     * Get branch options.
+     *
+     * @param  array     $projectProducts
+     * @param  int       $projectID
+     * @access protected
+     * @return array
+     */
+    protected function getBranchOptions4Browse(array $projectProducts, int $projectID): array
+    {
+        $branchOptions = array();
+
+        foreach($projectProducts as $product)
+        {
+            if($product and $product->type != 'normal')
+            {
+                $branches = $this->loadModel('branch')->getList($product->id, $projectID, 'all');
+                foreach($branches as $branchInfo) $branchOptions[$product->id][$branchInfo->id] = $branchInfo->name;
+            }
+        }
+
+        return $branchOptions;
+    }
+
+    /**
+     * 获取分支和分支标签的显示项。
+     * Get options of branch and branch tag.
+     *
+     * @param  int           $productID
+     * @param  object|bool   $product
+     * @param  bool          $isProjectStory
+     * @access protected
+     * @return [array, array]
+     */
+    protected function getBranchAndTagOption4Browse(int $projectID, object|bool $product, bool $isProjectStory): array
+    {
+        $branchOption    = array();
+        $branchTagOption = array();
+
+        if(empty($product) and $isProjectStory) return [$branchOption, $branchTagOption];
+
+        if($product and $product->type != 'normal')
+        {
+            $branches = $this->loadModel('branch')->getList($product->id, $projectID, 'all');
+            foreach($branches as $branchInfo)
+            {
+                $branchOption[$branchInfo->id]    = $branchInfo->name;
+                $branchTagOption[$branchInfo->id] = $branchInfo->name . ($branchInfo->status == 'closed' ? ' (' . $this->lang->branch->statusList['closed'] . ')' : '');
+            }
+        }
+
+        return [$branchOption, $branchTagOption];
+    }
+
+    /**
+     * 构建搜索表单。
+     * Build search form.
+     *
+     * @param  object|bool $project
+     * @param  int         $projectID
+     * @param  int         $productID
+     * @param  string      $branch
+     * @param  int         $param
+     * @param  string      $storyType
+     * @param  string      $browseType
+     * @param  bool        $isProjectStory
+     * @access protected
+     * @return void
+     */
+    protected function buildSearchForm4Browse(object|bool $project,int $projectID, int &$productID, string $branch, int $param, string $storyType, string $browseType, bool $isProjectStory): void
+    {
+        /* Save browse type into session. */
+        if($browseType != 'bymodule' and $browseType != 'bybranch') $this->session->set('storyBrowseType', $browseType);
+        if(($browseType == 'bymodule' or $browseType == 'bybranch') and $this->session->storyBrowseType == 'bysearch') $this->session->set('storyBrowseType', 'unclosed');
+
+        /* Change for requirement story title. */
+        if($storyType == 'requirement')
+        {
+            $this->lang->story->title  = str_replace($this->lang->SRCommon, $this->lang->URCommon, $this->lang->story->title);
+            $this->lang->story->create = str_replace($this->lang->SRCommon, $this->lang->URCommon, $this->lang->story->create);
+            $this->config->product->search['fields']['title'] = $this->lang->story->title;
+            unset($this->config->product->search['fields']['plan']);
+            unset($this->config->product->search['fields']['stage']);
+        }
+
+        if(isset($project->hasProduct) && empty($project->hasProduct))
+        {
+            if($isProjectStory && !$productID && !empty($this->products)) $productID = (int)key($this->products); // If toggle a project by the #swapper component on the story page of the projectstory module, the $productID may be empty. Make sure it has value.
+            unset($this->config->product->search['fields']['product']);                                           // The none-product project don't need display the product in the search form.
+            if($project->model != 'scrum') unset($this->config->product->search['fields']['plan']);               // The none-product and none-scrum project don't need display the plan in the search form.
+        }
+
+        /* Build search form. */
+        $params    = $isProjectStory ? "projectID=$projectID&" : '';
+        $actionURL = $this->createLink($this->app->rawModule, $this->app->rawMethod, $params . "productID=$productID&branch=$branch&browseType=bySearch&queryID=myQueryID&storyType=$storyType");
+
+        $this->config->product->search['onMenuBar'] = 'yes';
+        $queryID = ($browseType == 'bysearch') ? $param : 0;
+        $this->product->buildSearchForm($productID, $this->products, $queryID, $actionURL, $branch, $projectID);
+    }
+
+    /**
+     * 获取需求的ID列表。
+     * Get ID list of stories.
+     *
+     * @param  array     $stories
+     * @access protected
+     * @return array
+     */
+    protected function getStoryIdList(array $stories): array
+    {
+        $storyIdList = array();
+        foreach($stories as $story)
+        {
+            $storyIdList[$story->id] = $story->id;
+            if(!empty($story->children))
+            {
+                foreach($story->children as $child) $storyIdList[$child->id] = $child->id;
+            }
+        }
+
+        return $storyIdList;
     }
 }

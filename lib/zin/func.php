@@ -949,3 +949,28 @@ function history()
 {
     return createWg('history', func_get_args());
 }
+
+/**
+ * zentao float toolbar widget.
+ * array prefix?    btns props array.
+ * array main?      btns props array.
+ * array suffix?    btns props array.
+ * ====== blocks ======
+ * dropdowns = array()
+ * ====================
+ */
+function floatToolbar()
+{
+    return createWg('floatToolbar', func_get_args());
+}
+
+/**
+ * zentao data group.
+ *
+ * string label,
+ * string labelClass?
+ */
+function dataGroup()
+{
+    return createWg('dataGroup', func_get_args());
+}

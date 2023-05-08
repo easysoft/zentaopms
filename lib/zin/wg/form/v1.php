@@ -37,13 +37,13 @@ class form extends formBase
         return new formGroup(inherit($item));
     }
 
-    protected function buildActions(): wg
+    protected function buildActions(): wg|null
     {
         $actions = parent::buildActions();
         if($this->prop('grid') && !empty($actions)) $actions = div(setClass('form-row'), $actions);
         return $actions;
     }
-    
+
     protected function buildProps(): array
     {
         list($grid, $labelWidth) = $this->prop(array('grid', 'labelWidth'));

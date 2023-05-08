@@ -22,9 +22,21 @@ foreach($projects as $project)
         set('class', 'nav-item' . ($project->id == $selected ? ' active' : '')),
         a
         (
+            set('class', 'ellipsis'),
             set('data-toggle', 'tab'),
             set('href', "#tab3{$blockNavID}Content{$project->id}"),
             $project->name
+
+        ),
+        a
+        (
+            set('class', 'link flex-1 text-right hidden'),
+            set('href', helper::createLink('project', 'index', "projectID=$project->id")),
+            icon
+            (
+                set('class', 'rotate-90 text-primary'),
+                'export'
+            )
         )
     );
 }
@@ -32,6 +44,51 @@ foreach($projects as $project)
 $tabItems = array();
 foreach($projects as $project)
 {
+    $cells = array();
+    foreach($config->block->projectstatistic->dtable as $module => $items)
+    {
+        $cellItems = array();
+        foreach($items as $item)
+        {
+            $field = $item['field'];
+            $unit  = $item['unit'];
+            $cellItems[] = div
+            (
+                set('class', 'flex py-4'),
+                cell
+                (
+                    set('width', '50%'),
+                    set('class', 'text-right text-gray'),
+                    span($lang->block->projectstatistic->{$field} . ' ：')
+                ),
+                cell
+                (
+                    set('width', '50%'),
+                    set('class', 'text-left'),
+                    span
+                    (
+                        set('class', 'font-bold text-black'),
+                        zget($project, $field, 0)
+                    ),
+                    span($lang->block->projectstatistic->{$unit})
+                )
+            );
+        }
+        $cells[] = cell
+        (
+            set('class', 'flex-1 px-2 py-4'),
+            div
+            (
+                set('class', 'px-2'),
+                span
+                (
+                    set('class', 'font-bold'),
+                    $lang->block->projectstatistic->{$module}
+                ),
+            ),
+            $cellItems
+        );
+    }
     $tabItems[] = div
     (
         set('class', 'tab-pane' . ($project->id == $selected ? ' active' : '')),
@@ -40,222 +97,67 @@ foreach($projects as $project)
         (
             div
             (
-                set('class', 'flex justify-around'),
-                div
+                set('class', 'flex bg-white h-10 leading-9 px-4 shadow-sm'),
+                cell
                 (
-                    set('class', 'text-center'),
-                    h4($lang->block->storyCount),
-                    div
+                    set('class', 'text-left mr-6'),
+                    span
                     (
-                        div
-                        (
-                            set('class', 'statistic-title'),
-                            $lang->block->allStories . ":",
-                        ),
-                        div
-                        (
-                            set('class', 'statistic-data'),
-                            $project->allStories,
-                        )
-                    ),
-                    div
-                    (
-                        div
-                        (
-                            set('class', 'statistic-title'),
-                            $lang->block->finish . ":",
-                        ),
-                        div
-                        (
-                            set('class', 'statistic-data'),
-                            $project->doneStories,
-                        )
-                    ),
-                    div
-                    (
-                        div
-                        (
-                            set('class', 'statistic-title'),
-                            $lang->project->surplus . ":",
-                        ),
-                        div
-                        (
-                            set('class', 'statistic-data'),
-                            $project->leftStories,
-                        )
-                    )
-                ),
-                div
-                (
-                    set('class', 'text-center'),
-                    h4($lang->block->investment),
-                    div
-                    (
-                        div
-                        (
-                            set('class', 'statistic-title'),
-                            $lang->block->totalPeople . ":",
-                        ),
-                        div
-                        (
-                            set('class', 'statistic-data'),
-                            $project->teamCount,
-                        )
-                    ),
-                    div
-                    (
-                        div
-                        (
-                            set('class', 'statistic-title'),
-                            $lang->block->estimate . ":",
-                        ),
-                        div
-                        (
-                            set('class', 'statistic-data'),
-                            $project->estimate . $lang->execution->workHourUnit,
-                        )
-                    ),
-                    div
-                    (
-                        div
-                        (
-                            set('class', 'statistic-title'),
-                            $lang->block->consumedHours . ":",
-                        ),
-                        div
-                        (
-                            set('class', 'statistic-data'),
-                            $project->consumed . $lang->execution->workHourUnit,
-                        )
-                    )
-                ),
-                div
-                (
-                    set('class', 'text-center'),
-                    h4($lang->block->taskCount),
-                    div
-                    (
-                        div
-                        (
-                            set('class', 'statistic-title'),
-                            $lang->block->wait . ":",
-                        ),
-                        div
-                        (
-                            set('class', 'statistic-data'),
-                            $project->waitTasks,
-                        )
-                    ),
-                    div
-                    (
-                        div
-                        (
-                            set('class', 'statistic-title'),
-                            $lang->block->doing . ":",
-                        ),
-                        div
-                        (
-                            set('class', 'statistic-data'),
-                            $project->doingTasks,
-                        )
-                    ),
-                    div
-                    (
-                        div
-                        (
-                            set('class', 'statistic-title'),
-                            $lang->block->done . ":",
-                        ),
-                        div
-                        (
-                            set('class', 'statistic-data'),
-                            $project->rndDoneTasks,
-                        )
-                    )
-                ),
-                div
-                (
-                    set('class', 'text-center'),
-                    h4($lang->block->bugCount),
-                    div
-                    (
-                        div
-                        (
-                            set('class', 'col col-title'),
-                            $lang->block->totalBug . ":",
-                        ),
-                        div
-                        (
-                            set('class', 'col col-data'),
-                            $project->allBugs,
-                        )
-                    ),
-                    div
-                    (
-                        div
-                        (
-                            set('class', 'col col-title'),
-                            $lang->bug->statusList['resolved'] . ":",
-                        ),
-                        div
-                        (
-                            set('class', 'col col-data'),
-                            $project->doneBugs,
-                        )
-                    ),
-                    div
-                    (
-                        div
-                        (
-                            set('class', 'col col-title'),
-                            $lang->bug->unResolved . ":",
-                        ),
-                        div
-                        (
-                            set('class', 'col col-data'),
-                            $project->leftBugs,
-                        )
-                    )
-                )
-            ),
-            (!empty($project->executions) and $project->multiple) ? div
-            (
-                set('class', 'flex'),
-                div
-                (
-                    set('class', 'flex-1 text-right'), 
-                    h4($lang->block->last)
-                ),
-                div
-                (
-                    set('class', 'flex-1 text-center'),
-                    a
-                    (
-                        set('href', $this->createLink('execution', 'task', "executionID={$project->executions[0]->id}")),
-                        set('title', $project->executions[0]->name),
-                        $project->executions[0]->name,
-                    )
-                ),
-                div
-                (
-                    set('class', 'flex-1'),
-                    div
-                    (
-                        set('class', 'progress'),
+                        set('class', 'text-gray'),
+                        '距离项目结束还剩',
                         span
                         (
-                            set('class', 'mr-4'),
-                            $project->executions[0]->hours->progress . '%'
+                            set('class', 'font-bold text-black px-1'),
+                            zget($project, 'remainingDays' , 0)
                         ),
-                        div
+                        $lang->block->projectstatistic->day
+                    )
+                ),
+                cell
+                (
+                    set('class', 'flex-1 text-left'),
+                    span
+                    (
+                        set('class', 'text-gray mr-5'),
+                        '存在风险 : ',
+                        span
                         (
-                            set('class', 'progress-bar'),
-                            set('role', 'progressbar'),
-                            setStyle(['width' => $project->executions[0]->hours->progress . '%']),
+                            set('class', 'font-bold text-warning'),
+                            '3'
+                        )
+                    ),
+                    span
+                    (
+                        set('class', 'text-gray'),
+                        '存在问题 : ',
+                        span
+                        (
+                            set('class', 'font-bold text-warning'),
+                            '1'
                         )
                     )
-                )
-            ) : null
+                ),
+                (!empty($project->executions) and $project->multiple) ? cell
+                (
+                    set('class', 'flex-1 text-right'),
+                    span
+                    (
+                        set('class', 'text-gray'),
+                        '最近执行 ',
+                        a
+                        (
+                            set('href', $this->createLink('execution', 'task', "executionID={$project->executions[0]->id}")),
+                            set('title', $project->executions[0]->name),
+                            $project->executions[0]->name,
+                        )
+                    )
+                ) : null
+            ),
+            div
+            (
+                set('class', 'flex'),
+                $cells
+            )
         ) : div
         (
             set('class', 'weekly-row'),
@@ -368,20 +270,26 @@ foreach($projects as $project)
     );
 }
 
-panel
+div
 (
     set('class', 'projectstatistic-block'),
     div
     (
         set('class', 'flex'),
-        ul
+        cell
         (
-            set('class', 'nav nav-tabs nav-stacked'),
-            $navTabs
+            set('width', '25%'),
+            set('class', 'of-hidden bg-secondary-pale'),
+            ul
+            (
+                set('class', 'nav nav-tabs nav-stacked'),
+                $navTabs,
+            ),
         ),
-        div
+        cell
         (
             set('class', 'tab-content'),
+            set('width', '75%'),
             $tabItems
         )
     )

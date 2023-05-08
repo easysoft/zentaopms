@@ -206,13 +206,13 @@ class productModel extends model
     /**
      * Get by idList.
      *
-     * @param  array    $productIDList
+     * @param  array    $productIdList
      * @access public
      * @return array
      */
-    public function getByIdList($productIDList)
+    public function getByIdList(array $productIdList): array
     {
-        return $this->dao->select('*')->from(TABLE_PRODUCT)->where('id')->in($productIDList)->fetchAll('id');
+        return $this->dao->select('*')->from(TABLE_PRODUCT)->where('id')->in($productIdList)->fetchAll('id');
     }
 
     /**
@@ -326,7 +326,7 @@ class productModel extends model
      * @access public
      * @return array
      */
-    public function getProducts($projectID = 0, $status = 'all', $orderBy = '', $withBranch = true, $append = '', $noDeleted = true)
+    public function getProducts(int $projectID = 0, string $status = 'all', string $orderBy = '', bool $withBranch = true, string $append = '', bool $noDeleted = true): array
     {
         if(defined('TUTORIAL'))
         {
@@ -339,17 +339,7 @@ class productModel extends model
         if(!empty($append) and is_array($append)) $append = implode(',', $append);
 
         $views           = empty($append) ? $this->app->user->view->products : $this->app->user->view->products . ",$append";
-        $projectProducts = $this->dao->select("t1.branch, t1.plan, t2.*")
-            ->from(TABLE_PROJECTPRODUCT)->alias('t1')
-            ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product = t2.id')
-            ->where('1=1')
-            ->beginIF($noDeleted)->andWhere('t2.deleted')->eq(0)->fi()
-            ->beginIF(!empty($projectID))->andWhere('t1.project')->in($projectID)->fi()
-            ->beginIF(!$this->app->user->admin and $this->config->vision == 'rnd')->andWhere('t2.id')->in($views)->fi()
-            ->andWhere('t2.vision')->eq($this->config->vision)
-            ->beginIF(strpos($status, 'noclosed') !== false)->andWhere('t2.status')->ne('closed')->fi()
-            ->orderBy($orderBy . 't2.order asc')
-            ->fetchAll();
+        $projectProducts = $this->productTao->getProductsByProjectID($projectID, $views, $status, $orderBy, $noDeleted);
 
         $products = array();
         foreach($projectProducts as $product)
@@ -658,14 +648,8 @@ class productModel extends model
         $oldProduct = $this->dao->findById($productID)->from(TABLE_PRODUCT)->fetch();
 
         $this->lang->error->unique = $this->lang->error->repeat;
-        $this->dao->update(TABLE_PRODUCT)->data($product, 'uid,changeProjects,contactListMenu')->autoCheck()
-            ->checkIF(!empty($product->name), 'name', 'unique', "id != {$productID} and `program` = {$product->program} and `deleted` = '0'")
-            ->checkIF(!empty($product->code), 'code', 'unique', "id != {$productID} and `deleted` = '0'")
-            ->checkFlow()
-            ->where('id')->eq($productID)
-            ->exec();
-
-        if(dao::isError()) return false;
+        $result = $this->productTao->doUpdate($product, $productID, (int)$product->program);
+        if(!$result) return false;
 
         /* Update objectID field of file recode, that upload by editor. */
         $this->loadModel('file')->updateObjectID($uid, $productID, 'product');
@@ -681,77 +665,50 @@ class productModel extends model
     }
 
     /**
+     * 批量更新产品信息。
      * Batch update products.
      *
+     * @param  array $products
      * @access public
      * @return array
      */
-    public function batchUpdate()
+    public function batchUpdate(array $products): array
     {
-        $products    = array();
-        $allChanges  = array();
-        $data        = fixer::input('post')->get();
-        $oldProducts = $this->getByIdList($this->post->productIDList);
-        $nameList    = array();
+        if(empty($products)) return array();
 
-        $extendFields = $this->getFlowExtendFields();
-        foreach($data->productIDList as $productID)
-        {
-            $productName = $data->names[$productID];
+        /* 初始化变量。*/
+        $oldProducts        = $this->getByIdList(array_keys($products));
+        $allChanges         = array();
+        $updateViewProducts = array();
+        $unlinkProducts     = array();
+        $linkProducts       = array();
 
-            $productID = (int)$productID;
-            $products[$productID] = new stdClass();
-            if($this->config->systemMode == 'ALM' and isset($data->programs[$productID])) $products[$productID]->program = (int)$data->programs[$productID];
-            if($this->config->systemMode == 'ALM' and isset($data->lines[$productID]))    $products[$productID]->line    = (int)$data->lines[$productID];
-            $products[$productID]->name    = $productName;
-            $products[$productID]->PO      = $data->POs[$productID];
-            $products[$productID]->QD      = $data->QDs[$productID];
-            $products[$productID]->RD      = $data->RDs[$productID];
-            $products[$productID]->type    = $data->types[$productID];
-            $products[$productID]->status  = $data->statuses[$productID];
-            $products[$productID]->desc    = strip_tags($this->post->descs[$productID], $this->config->allowedTags);
-            $products[$productID]->acl     = $data->acls[$productID];
-            $products[$productID]->id      = $productID;
-
-            foreach($extendFields as $extendField)
-            {
-                $products[$productID]->{$extendField->field} = $this->post->{$extendField->field}[$productID];
-                if(is_array($products[$productID]->{$extendField->field})) $products[$productID]->{$extendField->field} = join(',', $products[$productID]->{$extendField->field});
-
-                $products[$productID]->{$extendField->field} = htmlSpecialString($products[$productID]->{$extendField->field});
-            }
-        }
-        if(dao::isError()) return print(js::error(dao::getError()));
-
-        $unlinkProducts = array();
-        $linkProducts   = array();
+        /* 根据产品ID，循环更新的产品信息. */
+        $this->loadModel('personnel');
         $this->lang->error->unique = $this->lang->error->repeat;
         foreach($products as $productID => $product)
         {
             $oldProduct = $oldProducts[$productID];
-            if($this->config->systemMode == 'ALM') $programID  = !isset($product->program) ? $oldProduct->program : (empty($product->program) ? 0 : $product->program);
+            if($this->config->systemMode == 'ALM') $programID = (int)zget($product, 'program', $oldProduct->program);
 
-            $this->dao->update(TABLE_PRODUCT)
-                ->data($product)
-                ->autoCheck()
-                ->batchCheck($this->config->product->edit->requiredFields , 'notempty')
-                ->checkIF((!empty($product->name) and $this->config->systemMode == 'ALM'), 'name', 'unique', "id != $productID and `program` = $programID and `deleted` = '0'")
-                ->checkFlow()
-                ->where('id')->eq($productID)
-                ->exec();
-            if(dao::isError()) return print(js::error('product#' . $productID . dao::getError(true)));
+            $result = $this->productTao->doUpdate($product, $productID, $programID);
+            if(!$result) return array('result' => 'fail', 'message' => 'product#' . $productID . dao::getError(true));
 
-            /* When acl is open, white list set empty. When acl is private,update user view. */
-            if($product->acl == 'open') $this->loadModel('personnel')->updateWhitelist(array(), 'product', $productID);
-            if($product->acl != 'open') $this->loadModel('user')->updateUserView($productID, 'product');
-            if($product->type == 'normal' and $oldProduct->type != 'normal') $unlinkProducts[] = $productID;
-            if($product->type != 'normal' and $oldProduct->type == 'normal') $linkProducts[] = $productID;
+            /* When acl is open, white list set empty. */
+            if($product->acl == 'open') $this->personnel->updateWhitelist(array(), 'product', $productID);
+
+            /* 如果产品类型或权限有修改，则标记该产品，用做后面处理。*/
+            if($oldProduct->acl != $product->acl and $product->acl != 'open') $updateViewProducts[] = $productID;
+            if($product->type == 'normal' and $oldProduct->type != 'normal')  $unlinkProducts[]     = $productID;
+            if($product->type != 'normal' and $oldProduct->type == 'normal')  $linkProducts[]       = $productID;
 
             $allChanges[$productID] = common::createChanges($oldProduct, $product);
         }
 
-        if(!empty($unlinkProducts)) $this->loadModel('branch')->unlinkBranch4Project($unlinkProducts);
-        if(!empty($linkProducts)) $this->loadModel('branch')->linkBranch4Project($linkProducts);
+        /* 对标记的产品，批量做对应的后续处理。*/
+        if(!empty($updateViewProducts)) $this->loadModel('user')->updateUserView($updateViewProducts, 'product');
+        if(!empty($unlinkProducts))     $this->loadModel('branch')->unlinkBranch4Project($unlinkProducts);
+        if(!empty($linkProducts))       $this->loadModel('branch')->linkBranch4Project($linkProducts);
 
         return $allChanges;
     }
@@ -914,34 +871,36 @@ class productModel extends model
             unset($unclosedStatus['closed']);
             $stories = $this->story->getProductStories($productID, $branch, $modules, array_keys($unclosedStatus), $type, $sort, true, '', $pager);
         }
-        if($browseType == 'unplan')       $stories = $this->story->getByPlan($productID, $queryID, $modules, '', $type, $sort, $pager);
-        if($browseType == 'allstory')     $stories = $this->story->getProductStories($productID, $branch, $modules, 'all', $type, $sort, true, '', $pager);
-        if($browseType == 'bymodule')     $stories = $this->story->getProductStories($productID, $branch, $modules, 'all', $type, $sort, true, '', $pager);
-        if($browseType == 'bysearch')     $stories = $this->story->getBySearch($productID, $branch, $queryID, $sort, '', $type, '', $pager);
-        if($browseType == 'assignedtome') $stories = $this->story->getByAssignedTo($productID, $branch, $modules, $this->app->user->account, $type, $sort, $pager);
-        if($browseType == 'openedbyme')   $stories = $this->story->getByOpenedBy($productID, $branch, $modules, $this->app->user->account, $type, $sort, $pager);
-        if($browseType == 'reviewedbyme') $stories = $this->story->getByReviewedBy($productID, $branch, $modules, $this->app->user->account, $type, $sort, $pager);
-        if($browseType == 'reviewbyme')   $stories = $this->story->getByReviewBy($productID, $branch, $modules, $this->app->user->account, $type, $sort, $pager);
-        if($browseType == 'closedbyme')   $stories = $this->story->getByClosedBy($productID, $branch, $modules, $this->app->user->account, $type, $sort, $pager);
-        if($browseType == 'draftstory')   $stories = $this->story->getByStatus($productID, $branch, $modules, 'draft', $type, $sort, $pager);
-        if($browseType == 'activestory')  $stories = $this->story->getByStatus($productID, $branch, $modules, 'active', $type, $sort, $pager);
-        if($browseType == 'changingstory') $stories = $this->story->getByStatus($productID, $branch, $modules, 'changing', $type, $sort, $pager);
+
+        if($browseType == 'unplan')         $stories = $this->story->getByPlan($productID, $queryID, $modules, '', $type, $sort, $pager);
+        if($browseType == 'allstory')       $stories = $this->story->getProductStories($productID, $branch, $modules, 'all', $type, $sort, true, '', $pager);
+        if($browseType == 'bymodule')       $stories = $this->story->getProductStories($productID, $branch, $modules, 'all', $type, $sort, true, '', $pager);
+        if($browseType == 'bysearch')       $stories = $this->story->getBySearch($productID, $branch, $queryID, $sort, '', $type, '', $pager);
+        if($browseType == 'assignedtome')   $stories = $this->story->getByAssignedTo($productID, $branch, $modules, $this->app->user->account, $type, $sort, $pager);
+        if($browseType == 'openedbyme')     $stories = $this->story->getByOpenedBy($productID, $branch, $modules, $this->app->user->account, $type, $sort, $pager);
+        if($browseType == 'reviewedbyme')   $stories = $this->story->getByReviewedBy($productID, $branch, $modules, $this->app->user->account, $type, $sort, $pager);
+        if($browseType == 'reviewbyme')     $stories = $this->story->getByReviewBy($productID, $branch, $modules, $this->app->user->account, $type, $sort, $pager);
+        if($browseType == 'closedbyme')     $stories = $this->story->getByClosedBy($productID, $branch, $modules, $this->app->user->account, $type, $sort, $pager);
+        if($browseType == 'draftstory')     $stories = $this->story->getByStatus($productID, $branch, $modules, 'draft', $type, $sort, $pager);
+        if($browseType == 'activestory')    $stories = $this->story->getByStatus($productID, $branch, $modules, 'active', $type, $sort, $pager);
+        if($browseType == 'changingstory')  $stories = $this->story->getByStatus($productID, $branch, $modules, 'changing', $type, $sort, $pager);
         if($browseType == 'reviewingstory') $stories = $this->story->getByStatus($productID, $branch, $modules, 'reviewing', $type, $sort, $pager);
-        if($browseType == 'willclose')    $stories = $this->story->get2BeClosed($productID, $branch, $modules, $type, $sort, $pager);
-        if($browseType == 'closedstory')  $stories = $this->story->getByStatus($productID, $branch, $modules, 'closed', $type, $sort, $pager);
-        if($browseType == 'assignedbyme') $stories = $this->story->getByAssignedBy($productID, $branch, $modules, $this->app->user->account, $type, $sort, $pager);
+        if($browseType == 'willclose')      $stories = $this->story->get2BeClosed($productID, $branch, $modules, $type, $sort, $pager);
+        if($browseType == 'closedstory')    $stories = $this->story->getByStatus($productID, $branch, $modules, 'closed', $type, $sort, $pager);
+        if($browseType == 'assignedbyme')   $stories = $this->story->getByAssignedBy($productID, $branch, $modules, $this->app->user->account, $type, $sort, $pager);
 
         return $stories;
     }
 
     /**
+     * 批量获取需求的阶段数据。
      * Batch get story stage.
      *
      * @param  array  $stories.
      * @access public
      * @return array
      */
-    public function batchGetStoryStage($stories)
+    public function batchGetStoryStage(array $stories): array
     {
         /* Set story id list. */
         $storyIdList = array();
@@ -1162,7 +1121,6 @@ class productModel extends model
         if(empty($projects)) return array();
 
         $projectKeys = array_keys($projects);
-        $stats       = array();
 
         /* Get all tasks and compute totalEstimate, totalConsumed, totalLeft, progress according to them. */
         $tasks = $this->dao->select('id, project, estimate, consumed, `left`, status, closedReason')
@@ -1181,8 +1139,7 @@ class productModel extends model
             ->andWhere('t2.deleted')->eq(0)
             ->fetchGroup('root', 'account');
 
-        $stats = $this->program->appendStatToProjects($projects, 'hours,teamCount', array('hours' => $hours, 'teams' => $teams));
-        return $stats;
+        return $this->program->appendStatToProjects($projects, 'hours,teamCount', array('hours' => $hours, 'teams' => $teams));
     }
 
     /**
@@ -1731,23 +1688,31 @@ class productModel extends model
 
     /*
      * Get all lines.
+     *
+     * @param  array $programIdList
      * @access public
      * @return array
      */
-    public function getLines()
+    public function getLines(array $programIdList = array()): array
     {
-        return $this->dao->select('*')->from(TABLE_MODULE)->where('type')->eq('line')->andWhere('deleted')->eq(0)->orderBy('`order`')->fetchAll();
+        return $this->dao->select('*')->from(TABLE_MODULE)
+            ->where('type')->eq('line')
+            ->beginIF($programIdList)->andWhere('root')->in($programIdList)->fi()
+            ->andWhere('deleted')->eq(0)
+            ->orderBy('`order`')
+            ->fetchAll();
     }
 
     /**
+     * 获取产品需求的照耀信息。
      * Get the summary of product's stories.
      *
-     * @param  array    $stories
-     * @param  string   $storyType  story|requirement
+     * @param  array  $stories
+     * @param  string $storyType  story|requirement
      * @access public
-     * @return string.
+     * @return string
      */
-    public function summary($stories, $storyType = 'story')
+    public function summary(array $stories, string $storyType = 'story'): string
     {
         $totalEstimate = 0.0;
         $storyIdList   = array();
@@ -1786,8 +1751,8 @@ class productModel extends model
             }
         }
 
-        $cases = $this->dao->select('story')->from(TABLE_CASE)->where('story')->in($storyIdList)->andWhere('deleted')->eq(0)->fetchAll('story');
-        $rate  = count($stories) == 0 || $rateCount == 0 ? 0 : round(count($cases) / $rateCount, 2);
+        $casesCount = $this->productTao->getStoriesInCasesCount($storyIdList);
+        $rate  = count($stories) == 0 || $rateCount == 0 ? 0 : round($casesCount / $rateCount, 2);
 
         $storyCommon = $this->lang->SRCommon;
         if($storyType == 'requirement') $storyCommon = $this->lang->URCommon;
@@ -2230,5 +2195,133 @@ class productModel extends model
         }
 
         return $row;
+    }
+
+    /**
+     * 把访问的产品ID等状态信息保存到session和cookie中。
+     * Save the product id user last visited to session and cookie.
+     *
+     * @param  int    $productID
+     * @param  array  $products
+     * @access public
+     * @return int
+     */
+    public function saveVisitState(int $productID, array $products): int
+    {
+        if(defined('TUTORIAL')) return $productID;
+
+        $productID = $this->getAccessableProductID($productID, $products);
+
+        $this->session->set('product', $productID, $this->app->tab);
+
+        setcookie('preProductID', (string)$productID, $this->config->cookieLife, $this->config->webRoot, '', $this->config->cookieSecure, true);
+
+        /* If preProductID changed, then reset preBranch. */
+        if($this->cookie->preProductID != $this->session->product)
+        {
+            $this->cookie->set('preBranch', 0);
+            setcookie('preBranch', '0', $this->config->cookieLife, $this->config->webRoot, '', $this->config->cookieSecure, true);
+        }
+
+        return $productID;
+    }
+
+    /**
+     * 获取可访问的产品ID。
+     * Get accessable product ID.
+     *
+     * @param  int       $productID
+     * @param  array     $products
+     * @access protected
+     * @return int
+     */
+    protected function getAccessableProductID(int $productID, array $products): int
+    {
+        if(empty($productID))
+        {
+            if($this->cookie->preProductID and isset($products[$this->cookie->preProductID])) $productID = $this->cookie->preProductID;
+            if(empty($this->session->product)) $productID = (int)key($products);
+        }
+
+        /* 产品ID已经被删除，不存在于产品列表中。*/
+        /* Product ID does not exsit in products list, it may be deleted. */
+        if(!isset($products[$productID]))
+        {
+            /* Confirm if product exist. */
+            $product = $this->product->getById($productID);
+            if(empty($product) or $product->deleted == 1) $productID = (int)key($products);
+            /* If product is invisable for curren user, then response access denied message. */
+            if($productID && strpos(",{$this->app->user->view->products},", ",{$productID},") === false)
+            {
+                $productID = (int)key($products);
+                $this->accessDenied($this->lang->product->accessDenied);
+            }
+        }
+
+        return $productID;
+    }
+
+    /**
+     * 输出访问被拒绝提示信息。
+     * Show accessDenied response.
+     *
+     * @param  string  $tips
+     * @access private
+     * @return void
+     */
+    public function accessDenied($tips)
+    {
+        if(defined('TUTORIAL')) return true;
+
+        echo js::alert($tips);
+
+        if(!$this->server->http_referer) return print(js::locate(helper::createLink('product', 'index')));
+
+        $loginLink = $this->config->requestType == 'GET' ? "?{$this->config->moduleVar}=user&{$this->config->methodVar}=login" : "user{$this->config->requestFix}login";
+        if(strpos($this->server->http_referer, $loginLink) !== false) return print(js::locate(helper::createLink('product', 'index')));
+
+        echo js::locate('back');
+    }
+
+    /**
+     * 设置导航菜单。
+     * Set menu.
+     *
+     * @param  int         $productID
+     * @param  int|string  $branch
+     * @param  int         $module
+     * @param  string      $moduleType
+     * @param  string      $extra
+     * @access public
+     * @return void
+     */
+    public function setMenu($productID = 0, $branch = '', $module = 0, $moduleType = '', $extra = ''): void
+    {
+        if(!$this->app->user->admin and strpos(",{$this->app->user->view->products},", ",$productID,") === false and $productID != 0 and !defined('TUTORIAL'))
+        {
+            $this->accessDenied($this->lang->product->accessDenied);
+            return;
+        }
+
+        $product = $this->getByID($productID);
+
+        $params = array('branch' => $branch);
+        common::setMenuVars('product', $productID, $params);
+        if(!$product) return;
+
+        $this->lang->switcherMenu = $this->getSwitcher($productID, $extra, $branch);
+
+        if($product->type == 'normal')
+        {
+            unset($this->lang->product->menu->settings['subMenu']->branch);
+        }
+        else
+        {
+            $branchLink = $this->lang->product->menu->settings['subMenu']->branch['link'];
+            $this->lang->product->menu->settings['subMenu']->branch['link'] = str_replace('@branch@', $this->lang->product->branchName[$product->type], $branchLink);
+            $this->lang->product->branch = sprintf($this->lang->product->branch, $this->lang->product->branchName[$product->type]);
+        }
+
+        if(strpos($extra, 'requirement') !== false) unset($this->lang->product->moreSelects['willclose']);
     }
 }

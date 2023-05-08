@@ -36,14 +36,19 @@ class todo extends control
      */
     public function create(string $date = 'today', string $from = 'todo')
     {
+        $this->app->loadClass('date');
         if($date == 'today') $date = date::today();
 
         if(!empty($_POST))
         {
             $formData = form::data($this->config->todo->create->form);
-            $todo     = $this->todoZen->beforeCreate($formData);
+            $todoData = $this->todoZen->beforeCreate($formData);
 
-            $todoID = $this->todo->create($todo, $formData);
+            $uid  = isset($formData->rawdata->uid) ? $formData->rawdata->uid : '';
+            $todo = $this->todoZen->prepareCreateData($todoData, $uid);
+            if(!$todo) return print(js::error(dao::getError()));
+
+            $todoID = $this->todo->create($todo);
             if($todoID === false) return print(js::error(dao::getError()));
 
             $todo->id = $todoID;
@@ -79,13 +84,13 @@ class todo extends control
      */
     public function batchCreate(string $date = 'today')
     {
-        if($date == 'today') $date = date(DT_DATE1, time());
+        if($date == 'today') $date = helper::today();
 
         if(!empty($_POST))
         {
             $formData   = form::data($this->config->todo->batchCreate->form);
             $todosData  = $this->todoZen->beforeBatchCreate($formData);
-            $todoIDList = $this->todo->batchCreate($todosData, $formData);
+            $todoIDList = $this->todo->batchCreate($todosData);
             if(dao::isError()) return print(js::error(dao::getError()));
 
             /* Locate the browser. */
@@ -456,9 +461,10 @@ class todo extends control
     }
 
     /**
+     * 获取导出待办数据。
      * Get data to export.
      *
-     * @param  int    $userID
+     * @param  string $userID
      * @param  string $orderBy
      * @access public
      * @return void
@@ -468,15 +474,16 @@ class todo extends control
         if($_POST)
         {
             $user       = $this->todoZen->getUserById((int)$userID);
-            $account    = (string)$user->account;
             $todoLang   = (object)$this->lang->todo;
             $configTime = $this->config->todo->times;
 
-            $formData = form::data($this->config->todo->export->form);
-            $todos    = $this->todo->getByExportList($orderBy, (object)$formData);
+            $formData    = form::data($this->config->todo->export->form);
+            $checkedItem = $formData->rawdata->exportType == 'selected' ? $this->cookie->checkedItem : '';
+
+            $todos = $this->todo->getByExportList($orderBy, (string) $this->session->todoReportCondition, (string)$checkedItem);
 
             list($todos, $fields) = $this->todoZen->exportTodoInfo((array)$todos, (string)$this->config->todo->list->exportFields, $todoLang);
-            list($users, $bugs, $stories, $tasks, $testTasks) = $this->todoZen->exportAssociated('default', $account);
+            list($users, $bugs, $stories, $tasks, $testTasks) = $this->todoZen->exportAssociated('default', (string)$user->account);
 
             $times = date::buildTimeList((int)$configTime->begin, (int)$configTime->end, (int)$configTime->delta);
 
@@ -488,12 +495,12 @@ class todo extends control
             $assemble->testTasks = $testTasks;
             if($this->config->edition == 'max')
             {
-                $iroData = $this->todoZen->exportInfo((string)$this->config->edition, $account);
+                $iroData = $this->todoZen->exportInfo((string)$this->config->edition, (string)$user->account);
                 $assemble->issues        = $iroData[0];
                 $assemble->risks         = $iroData[1];
                 $assemble->opportunities = $iroData[2];
             }
-            if(isset($this->config->qcVersion)) $assemble->reviews = $this->todoZen->exportInfo('qcVersion', $account);
+            if(isset($this->config->qcVersion)) $assemble->reviews = $this->todoZen->exportInfo('qcVersion', (string)$user->account);
 
             $todos = $this->todoZen->assembleExportData((array)$todos, $assemble, $todoLang, (array)$times);
 

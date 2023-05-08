@@ -359,7 +359,7 @@ class yaml
         if($pos !== false) $runFileName = mb_substr($runFileName, $pos+1);
 
         $runFileDir = dirname($_SERVER['SCRIPT_FILENAME']);
-        
+
         return array($runFileDir, $runFileName);
     }
 
@@ -379,7 +379,7 @@ class yaml
         $scriptPath = sprintf("%s%s%s.php", $runFileDir, DS, $runFileName);
         $yamlPath   = sprintf("%s%sdata%s%s_%s.yaml", $runFileDir, DS, DS, $this->tableName, $runFileName);
 
-        if($this->checkNeedReGenerateSql($sqlPath, $scriptPath, $yamlPath))
+        if($rows && $this->checkNeedReGenerateSql($sqlPath, $scriptPath, $yamlPath))
         {
             $runtimeRoot = dirname(dirname(__FILE__)) . '/runtime/';
             $zdPath      = $runtimeRoot . 'zd';
@@ -437,11 +437,6 @@ class yaml
      */
     function insertDB($sqlPath, $tableName, $isClear = true)
     {
-        $tableSqlDir = dirname($sqlPath);
-
-        if(!is_dir($tableSqlDir)) mkdir($tableSqlDir, 0777, true);
-        $dumpCommand = "mysqldump -u%s -p%s -h%s -P%s %s %s > {$tableSqlDir}/{$tableName}.sql 2>/dev/null";
-
         $tableName = $this->config->db->prefix . $tableName;
         $dbName    = $this->config->db->name;
         $dbHost    = $this->config->db->host;
@@ -449,10 +444,11 @@ class yaml
         $dbUser    = $this->config->db->user;
         $dbPWD     = $this->config->db->password;
 
-        $command    = "mysql -u%s -p%s -h%s -P%s --default-character-set=utf8 -D%s < %s";
-        $execInsert = sprintf($command, $dbUser, $dbPWD, $dbHost, $dbPort, $dbName, $sqlPath);
-        $execDump   = sprintf($dumpCommand, $dbUser, $dbPWD, $dbHost, $dbPort, $dbName, $tableName);
-        
+        $tableSqlDir = dirname($sqlPath);
+
+        if(!is_dir($tableSqlDir)) mkdir($tableSqlDir, 0777, true);
+        $dumpCommand = "mysqldump -u%s -p%s -h%s -P%s %s %s > {$tableSqlDir}/{$tableName}.sql 2>/dev/null";
+        $execDump    = sprintf($dumpCommand, $dbUser, $dbPWD, $dbHost, $dbPort, $dbName, $tableName);
         system($execDump);
 
         if($isClear === true)
@@ -461,9 +457,29 @@ class yaml
             system(sprintf("mysql -u%s -p%s -h%s -P%s %s -e 'truncate %s' 2>/dev/null", $dbUser, $dbPWD, $dbHost, $dbPort, $dbName, $tableName));
         }
 
-        $stderr = '';
-        $this->execWithStderr($execInsert, $stderr);
-        
+        if(!file_exists($sqlPath)) return;
+
+        $command    = "mysql -u%s -p%s -h%s -P%s --default-character-set=utf8 -D%s < %s";
+        $execInsert = sprintf($command, $dbUser, $dbPWD, $dbHost, $dbPort, $dbName, $sqlPath);
+        $this->execWithStderr($execInsert);
+    }
+
+    /**
+     * 执行系统命令，并捕捉错误。
+     * exec command and catch stderror.
+     *
+     * @param  string    $cmd
+     * @access private
+     * @return void
+     */
+    private function execWithStderr($cmd)
+    {
+        $proc   = proc_open($cmd, array(2 => array('pipe', 'w')), $pipes);
+        $stderr = stream_get_contents($pipes[2]);
+
+        fclose($pipes[2]);
+        proc_close($proc);
+
         if(empty($stderr)) return;
 
         $errors = explode(PHP_EOL, $stderr);
@@ -473,24 +489,6 @@ class yaml
         });
 
         if(!empty($errors)) echo implode(PHP_EOL, $errors) . PHP_EOL;
-    }
-
-    /**
-     * 执行系统命令，并捕捉stderror
-     * exec command and catch stderror.
-     *
-     * @param  string    $cmd
-     * @param  string    $stderr
-     * @access private
-     * @return string
-     */
-    private function execWithStderr($cmd, &$stderr=null) 
-    {
-        $proc   = proc_open($cmd, array(2 => array('pipe', 'w')), $pipes);
-        $stderr = stream_get_contents($pipes[2]);
-
-        fclose($pipes[2]);
-        proc_close($proc);
     }
 
     /**

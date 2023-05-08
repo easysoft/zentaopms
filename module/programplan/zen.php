@@ -10,5 +10,156 @@ declare(strict_types=1);
  */
 class programplanZen extends programplan
 {
+    /**
+     * 处理编辑阶段的请求数据。
+     * Processing edit request data.
+     *
+     * @param  object $formData
+     * @access protected
+     * @return object
+     */
+    protected function beforeEdit(object $formData): object
+    {
+        $rowData = $formData->rowdata;
+        $plan    = $formData->join($rowData->output, ',')->get();
+        return $plan;
+    }
 
+    /**
+     * 阶段编辑后数据处理。
+     * Handle data after edit.
+     *
+     * @param  object    $plan
+     * @param  array    $changes
+     * @access protected
+     * @return viod
+     */
+    protected function afterEdit(object $plan, array $changes)
+    {
+        $actionID = $this->loadModel('action')->create('execution', $plan->id, 'edited');
+        $this->action->logHistory($actionID, $changes);
+
+        $newPlan = $this->programplan->getByID($plan->id);
+
+        if($plan->parent != $newPlan->parent)
+        {
+            $this->programplan->computeProgress($plan->id, 'edit');
+            $this->programplan->computeProgress($plan->parent, 'edit', true);
+        }
+    }
+
+    /**
+     * 生成编辑阶段数据。
+     * Build edit view data.
+     *
+     * @param  object $plan
+     * @access protected
+     * @return viod
+     */
+    protected function buildEditView(object $plan)
+    {
+        $this->loadModel('project');
+        $this->app->loadLang('execution');
+        $this->app->loadLang('stage');
+
+        $parentStage = $this->project->getByID($plan->parent, 'stage');
+
+        $this->view->title              = $this->lang->programplan->edit;
+        $this->view->position[]         = $this->lang->programplan->edit;
+        $this->view->isCreateTask       = $this->programplan->isCreateTask($plan->id);
+        $this->view->plan               = $plan;
+        $this->view->parentStageList    = $this->programplan->getParentStageList($this->session->project, $plan->id, $plan->product);
+        $this->view->enableOptionalAttr = (empty($parentStage) or (!empty($parentStage) and $parentStage->attribute == 'mix'));
+        $this->view->isTopStage         = $this->programplan->checkTopStage($plan->id);
+        $this->view->isLeafStage        = $this->programplan->checkLeafStage($plan->id);
+        $this->view->PMUsers            = $this->loadModel('user')->getPairs('noclosed|nodeleted|pmfirst',  $plan->PM);
+        $this->display();
+    }
+
+    /**
+     * 处理请求数据
+     * Processing request data.
+     *
+     * @param  object $formData
+     * @param  string $owner
+     * @param  string $module
+     * @access protected
+     * @return object
+     */
+    protected function beforeAjaxCustom(object $formData, string $owner, string $module): object
+    {
+        $data = $formData->get();
+
+        $zooming     = empty($data->zooming)     ? '' : $data->zooming;
+        $stageCustom = empty($data->stageCustom) ? '' : implode(',', $data->stageCustom);
+        $ganttFields = empty($data->ganttFields) ? '' : implode(',', $data->ganttFields);
+
+        $this->setting->setItem("$owner.$module.browse.stageCustom", $stageCustom);
+        $this->setting->setItem("$owner.$module.ganttCustom.ganttFields", $ganttFields);
+        $this->setting->setItem("$owner.$module.ganttCustom.zooming", $zooming);
+
+        return $data;
+    }
+
+    /**
+     * 生成自定义设置视图。
+     * Build custom setting view form data.
+     *
+     * @param  string $owner
+     * @param  string $module
+     * @param  array  $customFields
+     * @access protected
+     * @return void
+     */
+    protected function buildAjaxCustomView(string $owner, string $module, array $customFields)
+    {
+        $stageCustom = $this->setting->getItem("owner=$owner&module=$module&section=browse&key=stageCustom");
+        $ganttFields = $this->setting->getItem("owner=$owner&module=$module&section=ganttCustom&key=ganttFields");
+        $zooming     = $this->setting->getItem("owner=$owner&module=$module&section=ganttCustom&key=zooming");
+
+        $this->view->zooming      = $zooming;
+        $this->view->customFields = $customFields;
+        $this->view->showFields   = $this->config->programplan->ganttCustom->ganttFields;
+        $this->view->ganttFields  = $ganttFields;
+        $this->view->stageCustom  = $stageCustom;
+
+        $this->display();
+    }
+
+    /**
+     * Compute visibleFields and requiredFields for create view.
+     *
+     * @param  string $executionType
+     * @access protected
+     * @return array
+     */
+    protected function computeFieldsCreateView(string $executionType): array
+    {
+        $visibleFields      = array();
+        $requiredFields     = array();
+        $customFields       = array();
+        $showFields         = array();
+
+        $custom             = $executionType == 'stage' ? 'custom' : 'customAgilePlus';
+        $customCreateFields = $executionType == 'stage' ? 'customCreateFields' : 'customAgilePlusCreateFields';
+        foreach(explode(',', $this->config->programplan->$customCreateFields) as $field) $customFields[$field] = $this->lang->programplan->$field;
+        $showFields = $this->config->programplan->$custom->createFields;
+        foreach(explode(',', $showFields) as $field)
+        {
+            if($field) $visibleFields[$field] = '';
+        }
+
+        foreach(explode(',', $this->config->programplan->create->requiredFields) as $field)
+        {
+            if($field)
+            {
+                $requiredFields[$field] = '';
+                if(strpos(",{$this->config->programplan->$customCreateFields},", ",{$field},") !== false) $visibleFields[$field] = '';
+            }
+        }
+
+        if(empty($this->config->setPercent)) unset($visibleFields['percent'], $requiredFields['percent']);
+
+        return array($visibleFields, $requiredFields, $customFields, $showFields);
+    }
 }

@@ -71,7 +71,7 @@ class todoTao extends todoModel
     }
 
     /**
-     * 插入待办数据
+     * 插入待办数据。
      * Insert todo data.
      *
      * @param  object $todo
@@ -82,15 +82,15 @@ class todoTao extends todoModel
     {
         $this->dao->insert(TABLE_TODO)->data($todo)
             ->autoCheck()
-            ->checkIF(!in_array($todo->type, $this->config->todo->moduleList), $this->config->todo->create->requiredFields, 'notempty')
-            ->checkIF(in_array($todo->type, $this->config->todo->moduleList) && $todo->objectID == 0, 'objectID', 'notempty')
+            ->check($this->config->todo->create->requiredFields, 'notempty')
+            ->checkIF(isset($todo->type) && in_array($todo->type, $this->config->todo->moduleList), 'objectID', 'notempty')
             ->exec();
 
         return (int)$this->dao->lastInsertID();
     }
 
     /**
-     * 更新待办数据
+     * 更新待办数据。
      * Update todo data.
      *
      * @param  int    $todoID
@@ -102,8 +102,8 @@ class todoTao extends todoModel
     {
         $this->dao->update(TABLE_TODO)->data($todo)
             ->autoCheck()
-            ->checkIF(isset($todo->type) && in_array($todo->type, array('custom', 'feedback')), $this->config->todo->edit->requiredFields, 'notempty')
-            ->checkIF(isset($todo->type) && in_array($todo->type, $this->config->todo->moduleList) && $todo->objectID == 0, 'objectID', 'notempty')
+            ->check($this->config->todo->edit->requiredFields, 'notempty')
+            ->checkIF(isset($todo->type) && in_array($todo->type, $this->config->todo->moduleList), 'objectID', 'notempty')
             ->where('id')->eq($todoID)
             ->exec();
 
@@ -111,6 +111,7 @@ class todoTao extends todoModel
     }
 
     /**
+     * 关闭一个待办。
      * Close one todo.
      *
      * @param int $todoID
@@ -129,52 +130,6 @@ class todoTao extends todoModel
             ->where('id')->eq($todoID)
             ->exec();
         return !dao::isError();
-    }
-
-    /**
-     * 处理要创建的todo的数据。
-     * Process the data for the todo to be created.
-     *
-     * @param  object $todo
-     * @param  object $formData
-     * @access protected
-     * @return object|false
-     */
-    protected function processCreateData(object $todo, object $formData): object|false
-    {
-        if(!isset($todo->pri) and in_array($todo->type, $this->config->todo->moduleList) and !in_array($todo->type, array('review', 'feedback')))
-        {
-            $todo->pri = $this->dao->select('pri')->from($this->config->objectTables[$todo->type])->where('id')->eq($todo->objectID)->fetch('pri');
-
-            if($todo->pri == 'high')   $todo->pri = 1;
-            if($todo->pri == 'middle') $todo->pri = 2;
-            if($todo->pri == 'low')    $todo->pri = 3;
-        }
-
-        if($todo->type != 'custom' and $todo->objectID)
-        {
-            $type   = $todo->type;
-            $object = $this->loadModel($type)->getByID($todo->{$type});
-            if(isset($object->name))  $todo->name = $object->name;
-            if(isset($object->title)) $todo->name = $object->title;
-        }
-
-        if($todo->end < $todo->begin)
-        {
-            dao::$errors[] = sprintf($this->lang->error->gt, $this->lang->todo->end, $this->lang->todo->begin);
-            return false;
-        }
-
-        if(!empty($todo->cycle))
-        {
-            $todo = $this->setCycle($todo);
-            if(!$todo) return false;
-        }
-        if(empty($todo->cycle)) unset($todo->config);
-
-        if(isset($formData->rawdata->uid)) $this->loadModel('file')->processImgURL($todo, $this->config->todo->editor->create['id'], $formData->rawdata->uid);
-
-        return $todo;
     }
 
     /**
@@ -197,7 +152,7 @@ class todoTao extends todoModel
     }
 
     /**
-     * 通过待办构建周期待办数据
+     * 通过待办构建周期待办数据。
      * Build cycle todo.
      *
      * @param  object $todo
@@ -267,19 +222,18 @@ class todoTao extends todoModel
      * Get valid todos of batch create.
      *
      * @param  object $todos
-     * @param  object $formData
      * @param  int    $loop
      * @param  string $assignedTo
      * @access protected
      * @return object
      */
-    protected function getValidsOfBatchCreate(object $todos, object $formData, int $loop , string $assignedTo): object
+    protected function getValidsOfBatchCreate(object $todos, int $loop , string $assignedTo): object
     {
         $todo = new stdclass();
         $todo->account = $this->app->user->account;
 
-        $todo->date = $formData->rawdata->date;
-        if($formData->rawdata->switchDate == 'on' || !$formData->rawdata->date) $todo->date = '2030-01-01';
+        $todo->date = $todos->date;
+        if($todos->switchDate == 'on' || !$todos->date) $todo->date = '2030-01-01';
 
         $todo->type         = $todos->types[$loop];
         $todo->pri          = $todos->pris[$loop];
@@ -365,57 +319,6 @@ class todoTao extends todoModel
         }
 
         return $date;
-    }
-
-    /**
-     * 设置周期待办数据。
-     * Set cycle todo data.
-     *
-     * @param  object $todoData
-     * @access private
-     * @return false|object
-     */
-    private function setCycle(object $todoData): false|object
-    {
-        $todoData->date = helper::today();
-        $todoData->config['begin'] = $todoData->date;
-
-        if($todoData->config['type'] == 'day')
-        {
-            unset($todoData->config['week'], $todoData->config['month']);
-            if(!$todoData->config['day'])
-            {
-                dao::$errors[] = sprintf($this->lang->error->notempty, $this->lang->todo->cycleDaysLabel);
-                return false;
-            }
-            if(!validater::checkInt($todoData->config['day']))
-            {
-                dao::$errors[] = sprintf($this->lang->error->int[0], $this->lang->todo->cycleDaysLabel);
-                return false;
-            }
-        }
-        if($todoData->config['type'] == 'week')
-        {
-            unset($todoData->config['day'], $todoData->config['month']);
-            $todoData->config['week'] = implode(',', $todoData->config['week']);
-        }
-        if($todoData->config['type'] == 'month')
-        {
-            unset($todoData->config['day'], $todoData->config['week']);
-            $todoData->config['month'] = implode(',', $todoData->config['month']);
-        }
-
-        if($todoData->config['beforeDays'] and !validater::checkInt($todoData->config['beforeDays']))
-        {
-            dao::$errors[] = sprintf($this->lang->error->int[0], $this->lang->todo->beforeDaysLabel);
-            return false;
-        }
-        $todoData->config['beforeDays'] = (int)$todoData->config['beforeDays'];
-
-        $todoData->config = json_encode($todoData->config);
-        $todoData->type   = 'cycle';
-
-        return $todoData;
     }
 
     /**

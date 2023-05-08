@@ -62,8 +62,8 @@ $postData->rawdata->products = array(1);
 
 $projectID = $projectClass->create($normalProject, $postData);
 
-r($projectClass->createProduct($projectID, $project, $postData, $program))  && p('name')  && e('测试新增项目一');                       
-//r($projectClass->createProduct($emptyNameProject, $postData))  && p('message[name]:0')  && e('『项目名称』不能为空。');               
-//r($projectClass->createProduct($emptyEndProject, $postData))   && p('message[end]:0')   && e('『计划完成』不能为空。');               
+r($projectClass->createProduct($projectID, $project, $postData, $program))  && p('name')  && e('测试新增项目一');
+//r($projectClass->createProduct($emptyNameProject, $postData))  && p('message[name]:0')  && e('『项目名称』不能为空。');
+//r($projectClass->createProduct($emptyEndProject, $postData))   && p('message[end]:0')   && e('『计划完成』不能为空。');
 //r($projectClass->createProduct($beginGtEndProject, $postData)) && p('message[end]:0')   && e('『计划完成』应当大于『2022-02-07』。');
 //r($projectClass->createProduct($emptyBeginProject, $postData)) && p('message[begin]:0') && e('『计划开始』不能为空。');
