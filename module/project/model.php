@@ -3081,4 +3081,45 @@ class projectModel extends model
 
         return !dao::isError();
     }
+
+    /**
+     * 获取项目集的最小开始时间
+     * Get program min begin
+     *
+     * @param  int $objectID
+     *
+     * @access public
+     * @return object
+     */
+    public function getProgramMinBegin(int $objectID): object
+    {
+        $a = $this->dao->select('`begin` as minBegin')->from(TABLE_PROGRAM)
+            ->where('id')->ne($objectID)
+            ->andWhere('deleted')->eq(0)
+            ->andWhere('path')->like("%,{$objectID},%")
+            ->orderBy('begin_asc')
+            ->fetch('minBegin');
+        return $a;
+
+    }
+
+    /**
+     * 获取项目集的最大结束时间
+     * get program max end
+     *
+     * @param  int $objectID
+     *
+     * @access public
+     * @return object
+     */
+    public function getProgramMaxEnd(int $objectID): object
+    {
+        return $this->dao->select('`end` as maxEnd')->from(TABLE_PROGRAM)
+            ->where('id')->ne($objectID)
+            ->andWhere('deleted')->eq(0)
+            ->andWhere('path')->like("%,{$objectID},%")
+            ->andWhere('end')->ne('0000-00-00')
+            ->orderBy('end_desc')
+            ->fetch('maxEnd');
+    }
 }

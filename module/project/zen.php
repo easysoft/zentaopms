@@ -917,4 +917,35 @@ class projectZen extends project
             $this->project->setMenu($projectID);
         }
     }
+
+    /**
+     * 构建项目集下拉列表数据
+     * build Select Form for program
+     *
+     * @param  int    $selectedProgramID
+     * @param  object $selectedProgram
+     *
+     * @access protected
+     * @return array
+     */
+    protected function buildSelectForm(int $selectedProgramID, object $selectedProgram): array
+    {
+        if(isset($selectedProgram))
+        {
+            $data['selectedProgramBegin'] = $selectedProgram->begin;
+            $data['selectedProgramEnd']   = $selectedProgram->end;
+            $data['budgetUnit']           = $selectedProgram->budgetUnit;
+            $data['selectedProgramPath']  = explode(',', $selectedProgram->path);
+        }
+
+        if($objectType == 'program')
+        {
+            $withProgram = $this->config->systemMode == 'ALM' ? true : false;
+            $allProducts = array(0 => '') + $this->program->getProductPairs($selectedProgramID, 'all', 'noclosed', '', 0, $withProgram);
+            $data['allProducts'] = html::select("products[]", $allProducts, '', "class='form-control chosen' onchange='loadBranches(this)'");
+            $data['plans']       = html::select('plans[][][]', '', '', 'class=\'form-control chosen\' multiple');
+        }
+
+        return $data;
+    }
 }
