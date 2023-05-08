@@ -2135,4 +2135,36 @@ class bugTest
             return $ids;
         }
     }
+
+    /**
+     * The test for updatelinkbug function. 
+     * 
+     * @param  string $bugID 
+     * @param  string $linkBug 
+     * @param  string $oldLinkBug 
+     * @access public
+     * @return array
+     */
+    public function updateLinkBugTest($bugID, $linkBug, $oldLinkBug)
+    {
+        $this->objectModel->updateLinkBug($bugID, $linkBug, $oldLinkBug);
+
+        $linkBugs           = explode(',', $linkBug);
+        $oldLinkBugs        = explode(',', $oldLinkBug);
+        $addedLinkBugs      = array_diff($linkBugs, $oldLinkBugs);
+        $removedLinkBugs    = array_diff($oldLinkBugs, $linkBugs);
+        $allRelatedLinkBugs = array_merge($addedLinkBugs, $removedLinkBugs, array($bugID));
+
+        global $tester;
+        $linkBugPairs = $tester->dao->select('id,linkBug')->from(TABLE_BUG)->where('id')->in(array_filter($allRelatedLinkBugs))->andWhere('deleted')->eq('0')->fetchPairs();
+
+        if(dao::isError())
+        {
+            return dao::getError();
+        }
+        else
+        {
+            return $linkBugPairs;
+        }
+    }
 }
