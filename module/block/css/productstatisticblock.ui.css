@@ -1,0 +1,7 @@
+.productstatistic-block {background: #FCFDFE;}
+.productstatistic-block .tab-content {width: 100%;}
+.productstatistic-block .bg-secondary-pale {background: #F3F6FA;}
+.productstatistic-block .nav-tabs .nav-item:hover {border-left: 2px solid #2E7FFF; background-color: #FCFDFE;}
+.productstatistic-block .nav-tabs .nav-item.active {border-left: 2px solid #2E7FFF; background-color: #FCFDFE;}
+.productstatistic-block .nav-tabs .nav-item:hover > a.link {display: flex!important;}
+.productstatistic-block .nav-tabs .nav-item > a:before {background: transparent;}
