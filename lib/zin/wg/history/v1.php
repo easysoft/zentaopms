@@ -18,7 +18,7 @@ class history extends wg
     {
         return span
         (
-            setClass('marker', 'label', 'rounded-full', 'aspect-square', 'inline-flex', 'justify-center', 'items-center', 'mr-2'),
+            setClass('marker', 'text-sm', 'rounded-full', 'aspect-square', 'inline-flex', 'justify-center', 'items-center', 'mr-2'),
             $num
         );
     }

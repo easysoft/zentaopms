@@ -105,6 +105,9 @@
     border-width: 1px;
     box-shadow: none;
     background: #FCFDFE;
+    height: 1.25rem;
+    width: 1.25rem;
+    white-space: nowrap;
 }
 
 .histories-list.sort-reverse {
