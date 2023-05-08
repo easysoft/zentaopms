@@ -258,7 +258,7 @@ class taskModel extends model
             if($task->status != 'closed') $left += $task->left;
         }
 
-        /* Init update task data. */
+        /* Initialize task data to update. */
         $newTask = new stdClass();
         $newTask->estimate       = $estimate;
         $newTask->consumed       = $consumed;
@@ -272,17 +272,20 @@ class taskModel extends model
     }
 
     /**
+     * 根据父任务ID计算父任务的预计开始 实际开始 截止日期。
      * Compute begin and end for parent task.
      *
      * @param  int    $taskID
      * @access public
      * @return bool
      */
-    public function computeBeginAndEnd($taskID)
+    public function computeBeginAndEnd(int $taskID): bool
     {
+        /* Get estStarted realStarted and deadline of the sub-tasks. */
         $tasks = $this->dao->select('estStarted, realStarted, deadline')->from(TABLE_TASK)->where('parent')->eq($taskID)->andWhere('status')->ne('cancel')->andWhere('deleted')->eq(0)->fetchAll();
         if(empty($tasks)) return true;
 
+        /* Compute the earliest estStarted, the earliest realStarted and the latest deadline. */
         $earliestEstStarted  = '';
         $earliestRealStarted = '';
         $latestDeadline      = '';
@@ -293,6 +296,7 @@ class taskModel extends model
             if(!helper::isZeroDate($task->deadline)    and (empty($latestDeadline)       or $latestDeadline      < $task->deadline))    $latestDeadline      = $task->deadline;
         }
 
+        /* Initialize task data and update it. */
         $newTask = new stdClass();
         $newTask->estStarted  = $earliestEstStarted;
         $newTask->realStarted = $earliestRealStarted;
