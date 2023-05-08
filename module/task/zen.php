@@ -32,12 +32,34 @@ class taskZen extends task
      */
     protected function prepareEdit(form $postDataFixer, int $taskID): object
     {
-        $oldTask  = $this->task->getByID($taskID);
         $now      = helper::now();
+        $oldTask  = $this->task->getByID($taskID);
         $postData = $postDataFixer->get();
-        $task     = $postDataFixer->add('id', $taskID)
+
+        if($postData->estimate < 0 or $postData->left < 0 or $postData->consumed < 0)
+        {
+            dao::$errors[] = $this->lang->task->error->recordMinus;
+            return false;
+        }
+
+        if(!empty($this->config->limitTaskDate))
+        {
+            $this->task->checkEstStartedAndDeadline($oldTask->execution, $postData->estStarted, $postData->deadline);
+            return !dao::isError();
+        }
+
+        if(!empty($postData->lastEditedDate) and $oldTask->lastEditedDate != $postData->lastEditedDate)
+        {
+            dao::$errors[] = $this->lang->error->editedByOther;
+            return false;
+        }
+
+        $task = $postDataFixer->add('id', $taskID)
             ->setIF(!$postData->assignedTo and !empty($oldTask->team) and !empty($postDataFixer->rawdata->team), 'assignedTo', $this->task->getAssignedTo4Multi($postDataFixer->rawdata->team, $oldTask))
             ->setIF(!$oldTask->mode and !$postData->assignedTo and !empty($postDataFixer->rawdata->team), 'assignedTo', $postDataFixer->rawdata->team[0])
+            ->setIF(is_numeric($postData->estimate), 'estimate', (float)$postData->estimate)
+            ->setIF(is_numeric($postData->consumed), 'consumed', (float)$postData->consumed)
+            ->setIF(is_numeric($postData->left),     'left',     (float)$postData->left)
             ->setIF($oldTask->parent == 0 && $postData->parent == '', 'parent', 0)
             ->setIF($postData->story != false and $postData->story != $oldTask->story, 'storyVersion', $this->loadModel('story')->getVersion($postData->story))
 

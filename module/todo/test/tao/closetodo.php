@@ -1,0 +1,17 @@
+#!/usr/bin/env php
+<?php
+include dirname(__FILE__, 5) . "/test/lib/init.php";
+include dirname(__FILE__, 2) . '/todo.class.php';
+su('admin');
+
+/**
+title=测试Tao层的关闭待办 todoTao::closeTodo()
+timeout=0
+cid=1
+*/
+
+zdTable('todo')->config('close')->gen(1);
+
+global $tester;
+$todo = new todoTest();
+r($todo->closeTodoTest(1)) && p('oldStatus,newStatus,isClosed') && e('wait,closed,1');

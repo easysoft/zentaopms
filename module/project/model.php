@@ -1241,7 +1241,7 @@ class projectModel extends model
      * @access public
      * @return bool
      */
-    public function checkBranchAndProductValid(int $projectID, object $project, object $postData): bool
+    public function checkBranchAndProductValid(object $project, object $postData): bool
     {
         $topProgramID     = $this->loadModel('program')->getTopByID($project->parent);
         $multipleProducts = $this->loadModel('product')->getMultiBranchPairs($topProgramID);
@@ -1302,7 +1302,7 @@ class projectModel extends model
     public function updateTeamMembersByProject(int $projectID, object $project, object $oldProject, object $postExtras): bool
     {
         if($postExtras->model == 'kanban') return true;
-        /* Get oldProject's team and roles.*/
+        /* Get oldProject's team and roles. */
         $this->loadModel('user');
         $team    = $this->user->getTeamMemberPairs($projectID, 'project');
         $members = $postExtras->teamMembers;
@@ -1310,7 +1310,7 @@ class projectModel extends model
         $members = array_unique($members);
         $roles   = $this->user->getUserRoles(array_values($members));
 
-        /* Init members for update members in TEABLE_TEAM */
+        /* Init members for update members in TEABLE_TEAM. */
         $member = new stdclass();
         $member->root  = $projectID;
         $member->join  = helper::today();
@@ -1318,7 +1318,7 @@ class projectModel extends model
         $member->type  = 'project';
         $member->hours = $this->config->execution->defaultWorkhours;
 
-        /* Prepare $teamMembers for addProjectMembers.*/
+        /* Prepare $teamMembers for addProjectMembers. */
         $teamMembers = array();
         foreach($members as $account)
         {
@@ -1330,14 +1330,14 @@ class projectModel extends model
             $teamMembers[$account] = $member;
         }
 
-        /* Delete members while update members in project, $team only exist while oldproject's model is kanban.*/
+        /* Delete members while update members in project, $team only exist while oldproject's model is kanban. */
         if($oldProject->model == 'kanban')
         {
             $deleteMembers = array_diff(array_keys($team), array_values($members));
             $this->projectTao->deleteExtraMembersByProject($projectID, $oldProject->openedBy, $deleteMembers);
         }
 
-        /* Add projectMembers by vars members.*/
+        /* Add projectMembers by vars members. */
         if(!empty($projectID) and !empty($teamMembers)) $this->loadModel('execution')->addProjectMembers($projectID, $teamMembers);
 
         return !dao::isError();
@@ -1473,36 +1473,35 @@ class projectModel extends model
     public function update(int $projectID, object $project, object $postExtras): array|false
     {
         /* 通过id查老项目信息, 处理parent和图片字段。*/
-        /* Fetch oldProject's info and get parent and file info.*/
+        /* Fetch oldProject's info and get parent and file info. */
         $oldProject = $this->projectTao->fetchProjectInfo($projectID);
         if(!isset($project->parent)) $project->parent = $oldProject->parent;
         $project = $this->loadModel('file')->processImgURL($project, $this->config->project->editor->edit['id'], $this->post->uid);
 
         /* 若此项目为多迭代项目， 检查起止日期不得小于迭代的起止日期。*/
-        /* If this project has multiStage, check if execution's start and end date below project's start and end date.*/
+        /* If this project has multiStage, check if execution's start and end date below project's start and end date. */
         if($oldProject->multiple and !$this->checkDatesValidByProject($projectID, $oldProject)) return false;
 
         /* 更新project表。*/
-        /* Update project table.*/
+        /* Update project table. */
         $success = $this->projectTao->doUpdate($projectID, $project, $oldProject);
         if(!$success) return false;
 
         /* 更新项目的关联信息。*/
-        /* Update relation info of this project.*/
-        $this->stageProduct($projectID, $oldProject->stageBy); // 更新关联的所有产品的阶段。
-        $this->updateProducts($projectID, $postExtras->products); // 更新关联的项目列表。
-        $this->updateShadowProduct($project, $oldProject); // 更新影子产品关联信息。
-        $this->unLinkProductsByProject($projectID, $project, $oldProject, $postExtras); // 解除关联部分关联的产品信息。
-        $this->updateUserViewByProject($projectID, $project->acl); // 更新用户视图。
-        $this->updateWhitelistByProject($projectID, $project, $oldProject); // 更新关联的白名单列表。
+        /* Update relation info of this project. */
+        $this->stageProduct($projectID, $oldProject->stageBy);                             // 更新关联的所有产品的阶段。
+        $this->updateProducts($projectID, $postExtras->products);                          // 更新关联的项目列表。
+        $this->updateShadowProduct($project, $oldProject);                                 // 更新影子产品关联信息。
+        $this->unLinkProductsByProject($projectID, $project, $oldProject, $postExtras);    // 解除关联部分关联的产品信息。
+        $this->updateUserViewByProject($projectID, $project->acl);                         // 更新用户视图。
+        $this->updateWhitelistByProject($projectID, $project, $oldProject);                // 更新关联的白名单列表。
         $this->updateTeamMembersByProject($projectID, $project, $oldProject, $postExtras); // 更新关联的成员列表。
-        $this->updatePlanIdListByProject($projectID, $postExtras->plans); // 更新关联的计划列表。
+        $this->updatePlanIdListByProject($projectID, $postExtras->plans);                  // 更新关联的计划列表。
 
-        $this->file->updateObjectID($this->post->uid, $projectID, 'project'); // 通过uid更新文件id。
-
+        $this->file->updateObjectID($this->post->uid, $projectID, 'project');              // 通过uid更新文件id。
 
         if($oldProject->parent != $project->parent) $this->loadModel('program')->fixPath($projectID, $project->parent, $oldProject->path, $oldProject->grade); //  更新项目从属路径。
-        if(empty($oldProject->multiple) and $oldProject->model != 'waterfall') $this->loadModel('execution')->syncNoMultipleSprint($projectID); // 无迭代的非瀑布项目需要更新。
+        if(empty($oldProject->multiple) and $oldProject->model != 'waterfall') $this->loadModel('execution')->syncNoMultipleSprint($projectID);                // 无迭代的非瀑布项目需要更新。
 
         if(dao::isError()) return false;
         return common::createChanges($oldProject, $project);
@@ -1754,10 +1753,10 @@ class projectModel extends model
      */
     public function updateShadowProduct(object $project, object $oldProject): bool
     {
-        /* If this is a project without product, update shadow product's info by project.*/
+        /* If this is a project without product, update shadow product's info by project. */
         if($oldProject->hasProduct) return true;
 
-        /* If oldProject has no product and name or parent or acl has changed, update shadow product.*/
+        /* If oldProject has no product and name or parent or acl has changed, update shadow product. */
         if($oldProject->name != $project->name || $oldProject->parent != $project->parent or $oldProject->acl != $project->acl)
         {
             $product    = $this->dao->select('product')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($project->id)->fetch('product');
@@ -1765,7 +1764,7 @@ class projectModel extends model
             $this->dao->update(TABLE_PRODUCT)->set('name')->eq($project->name)->set('program')->eq($topProgram)->set('acl')->eq($project->acl)->where('id')->eq($product)->exec();
         }
 
-        /* If oldProject has no product and status has changed to dong or closed updateShadowProductStatus.*/
+        /* If oldProject has no product and status has changed to dong or closed updateShadowProductStatus. */
         if($oldProject->status != $project->status && str_contains('doing,closed', $project->status)) $this->updateShadowProductStatus($projectID, $project->status);
 
         return !dao::isError();
@@ -3035,7 +3034,7 @@ class projectModel extends model
         }
         if(empty($newPlans)) return false;
 
-        /* Get old PlanIdList by project*/
+        /* Get old PlanIdList by project. */
         $oldPlanList = $this->dao->select('plan')->from(TABLE_PROJECTPRODUCT)
             ->where('project')->eq($projectID)
             ->andWhere('plan')->ne(0)->fetchPairs('plan');

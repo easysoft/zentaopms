@@ -345,6 +345,87 @@ class taskTao extends taskModel
     }
 
     /**
+     * 记录任务的版本。
+     * Record task version.
+     *
+     * @param  object $task
+     * @access protected
+     * @return void
+     */
+    protected function recordTaskVersion(object $task): void
+    {
+        $taskSpec = new stdClass();
+        $taskSpec->task       = $task->id;
+        $taskSpec->version    = $task->version;
+        $taskSpec->name       = $task->name;
+        $taskSpec->estStarted = $task->estStarted;
+        $taskSpec->deadline   = $task->deadline;
+        $this->dao->insert(TABLE_TASKSPEC)->data($taskSpec)->autoCheck()->exec();
+    }
+
+    /**
+     * 检查一个任务是否有子任务。
+     * Check if a task has children.
+     *
+     * @param  int    $taskID
+     * @access protected
+     * @return bool
+     */
+    protected function checkHasChildren(int $taskID): bool
+    {
+        $childrenCount = $this->dao->select('count(*) as count')->from(TABLE_TASK)->where('parent')->eq($taskID)->fetch('count');
+        if(!$childrenCount) return false;
+        return true;
+    }
+
+    /**
+     * 根据任务编号查询任务数据。
+     * Fetch a task by id.
+     *
+     * @param  int       $taskID
+     * @param  string    $field
+     * @access protected
+     * @return object
+     */
+    protected function fetchByID(int $taskID, string $field = ''): object|string
+    {
+        if(empty($field)) return $this->dao->select('*')->from(TABLE_TASK)->where('id')->eq($taskID)->fetch();
+
+        $taskObj = $this->dao->select(trim($field))->from(TABLE_TASK)->where('id')->eq($taskID)->fetch();
+        return (string)$taskObj->$field;
+    }
+
+    /**
+     * 获取edit方法的必填项。
+     * Get required fields for edit method.
+     *
+     * @param  object    $task
+     * @access protected
+     * @return string
+     */
+    protected function getRequiredFields4Edit(object $task): string
+    {
+        $execution = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($task->execution)->fetch();
+
+        $requiredFields = "," . $this->config->task->edit->requiredFields . ",";
+        if($execution->lifetime == 'ops' or $execution->attribute == 'request' or $execution->attribute == 'review') $requiredFields = str_replace(",story,", ',', "$requiredFields");
+
+        if($task->status != 'cancel' and strpos($requiredFields, ',estimate,') !== false)
+        {
+            if(strlen(trim($task->estimate)) == 0) dao::$errors['estimate'] = sprintf($this->lang->error->notempty, $this->lang->task->estimate);
+            $requiredFields = str_replace(',estimate,', ',', $requiredFields);
+        }
+
+        if(strpos(',doing,pause,', $task->status) && empty($task->left))
+        {
+            dao::$errors[] = sprintf($this->lang->task->error->leftEmptyAB, $this->lang->task->statusList[$task->status]);
+            return false;
+        }
+
+        return trim($requiredFields, ',');
+    }
+
+    /**
      * 通过拖动甘特图修改任务的预计开始日期和截止日期。
      * Update task estimate date and deadline through gantt.
      *

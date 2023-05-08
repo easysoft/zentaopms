@@ -233,7 +233,7 @@ class todo extends control
      *
      * @param  string $todoID
      * @access public
-     * @return int
+     * @return void
      */
     public function close(string $todoID)
     {
@@ -289,9 +289,9 @@ class todo extends control
      * @param string $from   my|company
      *
      * @access public
-     * @return int
+     * @return void
      */
-    public function view(string $todoID, string $from = 'company'): int
+    public function view(string $todoID, string $from = 'company')
     {
         $todo = $this->todo->getByID((int)$todoID, true);
 
@@ -316,7 +316,6 @@ class todo extends control
         if(!isset($this->session->project)) $this->session->set('project', (int)key($projects));
 
         $this->todoZen->buildAssignToTodoView((object)$todo, (int)$this->session->project, (array)$projects, (string)$account, $from);
-        return 1;
     }
 
     /**
