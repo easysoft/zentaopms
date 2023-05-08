@@ -172,7 +172,7 @@ class programplanZen extends programplan
      * @param  string   $projectID
      * @param  string   $projectID
      * @access protected
-     * @return void
+     * @return array
      */
     protected function buildBrowseStages($projectID, $productID, $baselineID, $type, $orderBy): array
     {

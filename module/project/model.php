@@ -1466,7 +1466,7 @@ class projectModel extends model
      * @access public
      * @return array|false
      */
-    public function update(int $projectID, object $project): array|false
+    public function update(int $projectID, object $project , object $postData): array|false
     {
         /* 通过id查老项目信息, 处理parent和图片字段。*/
         /* Fetch oldProject's info and get parent and file info.*/
@@ -1502,6 +1502,7 @@ class projectModel extends model
         $this->updateUserViewByProject($projectID, $project->acl); // 更新用户视图。
         $this->updateWhitelistByProject($projectID, $project, $oldProject, $linkedProducts); // 更新关联的白名单列表。
         $this->updateTeamMembersByProject($projectID, $project, $oldProject); // 更新关联的成员列表。
+        $this->updatePlanIdListByProject($projectID, $project->plans); // 更新关联的计划列表。
 
         $this->file->updateObjectID($this->post->uid, $projectID, 'project'); // 通过uid更新文件id。
 
@@ -3007,7 +3008,7 @@ class projectModel extends model
     }
 
     /**
-     * Fetch planIdList by project
+     * Update planIdList by project
      *
      * @param  int   $projectID
      * @param  array $plans
