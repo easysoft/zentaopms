@@ -73,6 +73,7 @@ class programplanZen extends programplan
         $this->view->isTopStage         = $this->programplan->checkTopStage($plan->id);
         $this->view->isLeafStage        = $this->programplan->checkLeafStage($plan->id);
         $this->view->PMUsers            = $this->loadModel('user')->getPairs('noclosed|nodeleted|pmfirst',  $plan->PM);
+        $this->display();
     }
 
     /**
