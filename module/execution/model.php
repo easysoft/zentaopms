@@ -4332,34 +4332,37 @@ class executionModel extends model
      */
     public function summary($tasks)
     {
-        $taskSum = $statusWait = $statusDone = $statusDoing = $statusClosed = $statusCancel = $statusPause = 0;
+        $taskSum = 0;
         $totalEstimate = $totalConsumed = $totalLeft = 0.0;
+
+        $summations = array();
+        $this->app->loadLang('task');
+        /* 当前只需要显示wait 和 doing 状态，但是从代码分析将来可能需要统计其他状态的，所以取全部状态。 */
+        foreach($this->lang->task->statusList as $statusCode => $statusName) $summations[$statusCode] = 0;
 
         foreach($tasks as $task)
         {
             if(!isset($tasks[$task->parent]) or $task->parent <= 0)
             {
-                $totalEstimate  += $task->estimate;
-                $totalConsumed  += $task->consumed;
+                $totalEstimate += $task->estimate;
+                $totalConsumed += $task->consumed;
 
                 if($task->status != 'cancel' and $task->status != 'closed') $totalLeft += $task->left;
             }
 
-            $statusVar = 'status' . ucfirst($task->status);
-            $$statusVar ++;
+            if(isset($summations[$task->status])) $summations[$task->status] ++;
             if(isset($task->children))
             {
-                foreach($task->children as $children)
+                foreach($task->children as $child)
                 {
-                    $statusVar = 'status' . ucfirst($children->status);
-                    $$statusVar ++;
+                    if(isset($summations[$child->status])) $summations[$child->status] ++;
                     $taskSum ++;
                 }
             }
             $taskSum ++;
         }
 
-        return sprintf($this->lang->execution->taskSummary, $taskSum, $statusWait, $statusDoing, round($totalEstimate, 1), round($totalConsumed, 1), round($totalLeft, 1));
+        return sprintf($this->lang->execution->taskSummary, $taskSum, $summations['wait'], $summations['doing'], round($totalEstimate, 1), round($totalConsumed, 1), round($totalLeft, 1));
     }
 
     /**
