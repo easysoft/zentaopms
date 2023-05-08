@@ -58,7 +58,6 @@ fields:
     note: "添加时间"
     range: "(M)-(w)"
     type: timestamp
-    prefix: "DateTime"
     postfix: ""
     format: "YY/MM/DD"
   - field: downloads

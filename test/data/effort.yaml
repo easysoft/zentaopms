@@ -57,7 +57,6 @@ fields:
     note: "创建日期"
     range: "(M)-(w)"
     type: timestamp
-    prefix: "DateTime"
     postfix: ""
     format: "YY/MM/DD"
   - field: left

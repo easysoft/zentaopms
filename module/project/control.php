@@ -529,15 +529,15 @@ class project extends control
             $this->lang->project->subAclList = $this->lang->project->kanbanSubAclList;
         }
 
-        $withProgram = $this->config->systemMode == 'ALM';
         $linkedBranchList    = array();
         $productPlans        = array();
+        $withProgram         = $this->config->systemMode == 'ALM';
         $branches            = $this->project->getBranchesByProject($projectID);
-        $linkedProductIdList = empty($branches) ? '' : array_keys($branches);
+        $linkedProductIdList = empty($branches) ? array() : array_keys($branches);
         $allProducts         = $this->program->getProductPairs($project->parent, 'all', 'noclosed', '', 0, $withProgram);
-        $linkedProducts      = $this->loadModel('product')->getProducts($projectID, 'all', '', true, $linkedProductIdList);
-        $parentProject       = $this->program->getByID($project->parent);
+        $linkedProducts      = $this->loadModel('product')->getProducts($projectID, 'all', '', true);
         $plans               = $this->productplan->getGroupByProduct(array_keys($linkedProducts), 'skipParent|unexpired');
+        $parentProject       = $this->program->getByID($project->parent);
         $projectStories      = $this->project->getStoriesByProject($projectID);
         $projectBranches     = $this->project->getBranchGroupByProject($projectID, array_keys($linkedProducts));
 
