@@ -194,7 +194,7 @@
           <th><?php echo $lang->project->stageBy;?></th>
           <td colspan='3'>
             <?php echo html::radio('stageBy', $lang->project->stageByList, $project->stageBy == 'project', $disabled);?>
-            <icon class='icon icon-help' data-toggle='popover' data-trigger='focus hover' data-placement='right' data-tip-class='text-muted popover-sm' data-content="<?php echo $lang->->stageByTips;?>"></icon>
+            <icon class='icon icon-help' data-toggle='popover' data-trigger='focus hover' data-placement='right' data-tip-class='text-muted popover-sm' data-content="<?php echo $lang->project->stageByTips;?>"></icon>
           </td>
         </tr>
         <?php endif;?>
