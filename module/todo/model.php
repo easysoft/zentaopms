@@ -66,18 +66,18 @@ class todoModel extends model
             }
         }
 
-        $todoIDList = array();
+        $todoIdList = array();
         foreach($validTodos as $todo)
         {
             $todoID = $this->todoTao->insert($todo);
             if(!$todoID) return false;
 
-            $todoIDList[] = $todoID;
+            $todoIdList[] = $todoID;
             $this->loadModel('score')->create('todo', 'create', $todoID);
             $this->loadModel('action')->create('todo', $todoID, 'opened');
         }
 
-        return $todoIDList;
+        return $todoIdList;
     }
 
     /**
@@ -195,13 +195,13 @@ class todoModel extends model
      * 批量完成待办。
      * Batch finish todos.
      *
-     * @param  int[]   $todoIDList
+     * @param  int[]   $todoIdList
      * @access public
      * @return bool
      */
-    public function batchFinish(array $todoIDList): bool
+    public function batchFinish(array $todoIdList): bool
     {
-        foreach($todoIDList as $todoID)
+        foreach($todoIdList as $todoID)
         {
             $isFinished = $this->finish($todoID);
             if(!$isFinished) return $isFinished;
@@ -303,14 +303,14 @@ class todoModel extends model
      * Get a array with todos which todoID as key, todo object as value by todo id list.
      * Return all todos if the todo id list is empty.
      *
-     * @param  array $todoIDList
+     * @param  array $todoIdList
      * @access public
      * @return array
      */
-    public function getByList($todoIDList = 0)
+    public function getByList($todoIdList = 0)
     {
         return $this->dao->select('*')->from(TABLE_TODO)
-            ->beginIF($todoIDList)->where('id')->in($todoIDList)->fi()
+            ->beginIF($todoIdList)->where('id')->in($todoIdList)->fi()
             ->fetchAll('id');
     }
 
@@ -480,16 +480,16 @@ class todoModel extends model
         $projects      = $this->config->todo->project;
         foreach($todoList as $type => $todos)
         {
-            $todoIDList = array_keys($todos);
-            if(empty($todoIDList))
+            $todoIdList = array_keys($todos);
+            if(empty($todoIdList))
             {
                 $projectIDList[$type] = array();
                 continue;
             }
 
-            $todoIDList = array_unique($todoIDList);
+            $todoIdList = array_unique($todoIdList);
 
-            if(isset($projects[$type])) $projectIDList[$type] = $this->todoTao->getProjectList($projects[$type], $todoIDList);
+            if(isset($projects[$type])) $projectIDList[$type] = $this->todoTao->getProjectList($projects[$type], $todoIdList);
             if(dao::isError()) return array();
         }
 
@@ -500,14 +500,14 @@ class todoModel extends model
      * 修改待办事项的时间。
      * Edit the date of todo.
      *
-     * @param  array  $todoIDList
+     * @param  array  $todoIdList
      * @param  string $date
      * @access public
      * @return bool
      */
-    public function editDate(array $todoIDList, string $date): bool
+    public function editDate(array $todoIdList, string $date): bool
     {
-        return $this->todoTao->updateDate($todoIDList, $date);
+        return $this->todoTao->updateDate($todoIdList, $date);
     }
 
     /**
