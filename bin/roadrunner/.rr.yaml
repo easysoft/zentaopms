@@ -1,7 +1,12 @@
+version: '3'
+
+metrics:
+    address: '127.0.0.1:2112'
+
 service:
-  cron:
-    command: php cron-worker.php
-    process_num: 4
-    exec_timeout: 0
-    remain_after_exit: true
-    restart_sec: 1
+    cron:
+        command: php cron-worker.php
+        process_num: 2
+        exec_timeout: 0
+        remain_after_exit: true
+        restart_sec: 1

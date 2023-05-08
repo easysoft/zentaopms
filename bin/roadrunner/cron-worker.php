@@ -12,19 +12,19 @@
  * @link        http://www.zentao.net
  */
 /* Set the error reporting. */
-error_reporting(0);
+//error_reporting(0);
 
 /* Load the framework. */
-include '../framework/router.class.php';
-include '../framework/control.class.php';
-include '../framework/model.class.php';
-include '../framework/helper.class.php';
+include '../../framework/router.class.php';
+include '../../framework/control.class.php';
+include '../../framework/model.class.php';
+include '../../framework/helper.class.php';
 
 /* Log the time and define the run mode. */
 $startTime = getTime();
 
 /* Instance the app. */
-$app = router::createApp('pms', dirname(__DIR__), 'router');
+$app = router::createApp('pms', dirname(__DIR__, 2), 'router');
 
 /* Run the app. */
 $common = $app->loadCommon();
