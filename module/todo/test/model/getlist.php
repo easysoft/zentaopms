@@ -2,7 +2,7 @@
 <?php
 declare(strict_types=1);
 
-include dirname(__FILE__, 5) . "/test/lib/init.php";
+include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/todo.class.php';
 su('admin');
 
@@ -21,11 +21,12 @@ zdTable('todo')->config('getlist')->gen(9);
 
 global $tester;
 $tester->loadModel('todo');
+
 $day         = date('Y-m-d'); //今天
-$lastday     = date("Y-m-d", strtotime("-1 day")); //昨天
+$lastday     = date('Y-m-d', strtotime('-1 day')); //昨天
 $week        = date('Y-m-d', (time() - ((date('w') == 0 ? 7 : date('w')) - 1) * 24 * 3600)); //本周一
 $month       = date('Y-m-01'); //本月1日
-$lastweekday = date("Y-m-d", strtotime("-7 day")); //上周的今天
+$lastweekday = date('Y-m-d', strtotime('-7 day')); //上周的今天
 
 $season = ceil((date('n')) / 3); //当月是第几季度
 $season = date('Y-m-d', mktime(0, 0, 0, (int)$season * 3 - 3 + 1, 1, (int)date('Y'))); //本季度第一天
@@ -36,14 +37,14 @@ $lastDayNum  = '2'; //修改天数为昨天的数量
 $last7DayNum = '1'; //修改天数为7天前的数量
 
 r($tester->todo->editDate(array(1),   date('Y-m-d'))) && p() && e('1');  // 修改id为1的待办的日期
-r($tester->todo->editDate(array(2, 3), date("Y-m-d", strtotime("-1 day")))) && p() && e('1');  // 修改id为2,3的待办的日期
+r($tester->todo->editDate(array(2, 3), date('Y-m-d', strtotime('-1 day')))) && p() && e('1');  // 修改id为2,3的待办的日期
 r($tester->todo->editDate(array(4),   $lastweekday)) && p() && e('1');  // 修改id为2,3的待办的日期
 
 /* 本周上周实际待办数量 */
 $thisWeekNum = $dayNum;
 $lastWeekNum = $lastDayNum;
 
-if(date("w") != 1){
+if(date('w') != 1){
     $thisWeekNum = $dayNum + $lastDayNum;
     $lastWeekNum = $defaultNum;
 }
@@ -53,7 +54,7 @@ if(strtotime($week)- 7*86400 <= strtotime($lastweekday)) $lastWeekNum += $last7D
 $thisMonthNum = $dayNum;
 $lastMonthNum = $lastweekday == $month ? $defaultNum : $last7DayNum;
 if(strtotime($month) <= strtotime($lastday)) $thisMonthNum += $lastDayNum;
-if(date("w") == 1) $thisMonthNum += $last7DayNum;
+if(date('w') == 1) $thisMonthNum += $last7DayNum;
 if($month == $day) $lastMonthNum += $lastDayNum;
 
 /* 本季度实际待办数量 */
@@ -65,7 +66,7 @@ $thisweek   = $todo->getListTest($typeList[2]) == $thisWeekNum   ? '1' : '0';
 $lastweek   = $todo->getListTest($typeList[3]) == $lastWeekNum   ? '1' : '0';
 $thismonth  = $todo->getListTest($typeList[4]) == $thisMonthNum  ? '1' : '0';
 $lastmonth  = $todo->getListTest($typeList[5]) == $lastMonthNum  ? '1' : '0';
-$thisSeason = $todo->getListTest($typeList[6]) == $thisSeasonNum ? '1' : '0';
+$thisseason = $todo->getListTest($typeList[6]) == $thisSeasonNum ? '1' : '0';
 
 r($thisweek)  && p() && e('1'); // 获取type为thisweek 当前用户的代办数量
 r($lastweek)  && p() && e('1'); // 获取type为lastweek 当前用户的代办数量
