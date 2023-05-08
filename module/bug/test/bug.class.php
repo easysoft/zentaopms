@@ -795,7 +795,6 @@ class bugTest
                 $_POST[$field] = $value;
             }
         }
-        //$_POST['closedDate']  = '';
         $_POST['deleteFiles'] = array();
 
         $object->files = array();
