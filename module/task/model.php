@@ -902,7 +902,7 @@ class taskModel extends model
             if($task->status == 'closed')          $task->assignedTo = 'closed';
             if(isset($task->assignedTo) and $oldTask->assignedTo != $task->assignedTo) $task->assignedDate = $now;
 
-            if(strpos(',doing,pause,', $task->status) and empty($teams) and empty($task->left) and $task->parent >= 0)
+            if(strpos(',doing,pause,', $task->status) and empty($oldTask->mode) and empty($task->left) and $task->parent >= 0)
             {
                 dao::$errors[] = sprintf($this->lang->task->error->leftEmptyAB, zget($this->lang->task->statusList, $task->status));
                 return false;
