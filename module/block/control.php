@@ -167,17 +167,22 @@ class block extends control
      * 永久关闭区块。
      * Close block forever.
      *
-     * @param  int    $blockID
+     * @param  string    $blockID
      * @access public
      * @return void
      */
-    public function close($blockID)
+    public function close(string $blockID)
     {
+        $blockID = (int)$blockID; // 强制转换为 int 类型，防止调用 model、tao 方法时报错。
+
+        /* 永久关闭区块。 */
         $block = $this->block->getByID($blockID);
+        $this->block->closeBlock($block);
+
+        /* 将关闭的区块保存到配置信息。 */
         $closedBlock = isset($this->config->block->closed) ? $this->config->block->closed : '';
-        $this->dao->delete()->from(TABLE_BLOCK)->where('source')->eq($block->source)->andWhere('code')->eq($block->code)->exec();
-        $this->loadModel('setting')->setItem('system.block.closed', $closedBlock . ",{$block->source}|{$block->code}");
-        return print(js::reload('parent'));
+        $this->loadModel('setting')->setItem('system.block.closed', $closedBlock . ",{$block->module}|{$block->code}");
+        return $this->send(array('result' => 'success'));
     }
 
     /**
