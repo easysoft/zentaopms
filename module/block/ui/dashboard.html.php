@@ -4,7 +4,7 @@ namespace zin;
 $mainBlocks = array();
 foreach($longBlocks as $index => $block)
 {
-    $mainBlocks[] = 
+    $mainBlocks[] =
     div
     (
         set('class', "panel rounded shadow ring-0 canvas block-item {$block->code}" . (isset($block->params->color) ? 'panel-' . $block->params->color : '')),
@@ -16,12 +16,12 @@ foreach($longBlocks as $index => $block)
         (
             set('class', 'panel-heading'),
             div
-            ( 
+            (
                 set('class', 'panel-title'),
                 $block->title
             ),
             nav
-            ( 
+            (
                 set('class', 'panel-actions nav nav-default'),
                 dropdown
                 (
@@ -31,9 +31,10 @@ foreach($longBlocks as $index => $block)
                         ['text' => $lang->block->refresh, 'url' => ''],
                         ['text' => $lang->edit, 'url' => $this->createLink("block", "edit", "blockID=$block->id"), 'data-toggle' => 'modal'],
                         ['text' => $lang->block->hidden, 'url' => $this->createLink("block", "delete", "blockID=$block->id")],
+                        ['text' => $lang->block->closeForever, 'url' => $this->createLink("block", "close", "blockID=$block->id")],
                         ['text' => $lang->block->createBlock, 'url' => $this->createLink("block", "create", "dashboard=$dashboard"), 'data-toggle' => 'modal'],
                         ['text' => $lang->block->reset, 'url' => $this->createLink("block", "reset", "dashboard=$dashboard")],
-                    ]), 
+                    ]),
                 )
             )
         ),
@@ -48,7 +49,7 @@ foreach($longBlocks as $index => $block)
 $sideBlocks = array();
 foreach($shortBlocks as $index => $block)
 {
-    $sideBlocks[] = 
+    $sideBlocks[] =
     div
     (
         set('id', 'block' . $block->id),
@@ -61,12 +62,12 @@ foreach($shortBlocks as $index => $block)
         (
             set('class', 'panel-heading'),
             div
-            ( 
+            (
                 set('class', 'panel-title'),
                 $block->title
             ),
             nav
-            ( 
+            (
                 set('class', 'panel-actions nav nav-default'),
                 dropdown
                 (
@@ -81,7 +82,7 @@ foreach($shortBlocks as $index => $block)
                         ['text' => $lang->block->hidden, 'url' => $this->createLink("block", "delete", "blockID=$block->id&type=hidden")],
                         ['text' => $lang->block->createBlock, 'url' => $this->createLink("block", "create", "dashboard=$dashboard"), 'data-toggle' => 'modal'],
                         ['text' => $lang->block->reset, 'url' => $this->createLink("block", "reset", "dashboard=$dashboard")],
-                    ]), 
+                    ]),
                 )
             )
         ),
