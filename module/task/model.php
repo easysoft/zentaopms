@@ -543,17 +543,17 @@ class taskModel extends model
     /**
      * Manage multi task team members.
      *
-     * @param  string $mode
-     * @param  object $taskID
-     * @param  array  $teamList
-     * @param  array  $teamSourceList
-     * @param  array  $teamEstimateList
-     * @param  array  $teamConsumedList
-     * @param  array  $teamLeftList
+     * @param  string     $mode
+     * @param  object     $taskID
+     * @param  array      $teamList
+     * @param  array      $teamSourceList
+     * @param  array      $teamEstimateList
+     * @param  array|bool $teamConsumedList
+     * @param  array|bool $teamLeftList
      * @access public
      * @return array
      */
-    public function manageTaskTeam(string $mode, object $task, array $teamList, array $teamSourceList, array $teamEstimateList, array $teamConsumedList, array $teamLeftList): array
+    public function manageTaskTeam(string $mode, object $task, array $teamList, array $teamSourceList, array $teamEstimateList, array|bool $teamConsumedList, array|bool $teamLeftList): array
     {
         /* Get old team member, and delete old task team. */
         $oldTeams   = $this->dao->select('*')->from(TABLE_TASKTEAM)->where('task')->eq($task->id)->fetchAll();
@@ -580,7 +580,7 @@ class taskModel extends model
             if(empty($account)) continue;
 
             /* Manage task team member. */
-            $minStatus = $this->taskTao->manageTaskTeamMember(string $mode, object $task, int $row, string $account, string $minStatus, array $undoneUsers, array $teamSourceList, array $teamEstimateList, array $teamConsumedList, array $teamLeftList, isset($teams[$account]));
+            $minStatus = $this->taskTao->manageTaskTeamMember($mode, $task, $row, $account, $minStatus, $undoneUsers, $teamSourceList, $teamEstimateList, $teamConsumedList, $teamLeftList, isset($teams[$account]));
 
             /* Set effort left = 0 when linear task members be changed. */
             if($mode == 'linear' and isset($oldTeams[$row]) and $oldTeams[$row]->account != $account) $changeUsers[] = $oldTeams[$row]->account;

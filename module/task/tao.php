@@ -612,21 +612,21 @@ class taskTao extends taskModel
     /**
      * Manage multi task team member.
      *
-     * @param  string    $mode
-     * @param  object    $task
-     * @param  int       $row
-     * @param  string    $account
-     * @param  string    $minStatus
-     * @param  array     $undoneUsers
-     * @param  array     $teamSourceList
-     * @param  array     $teamEstimateList
-     * @param  array     $teamConsumedList
-     * @param  array     $teamLeftList
-     * @param  bool      $inTeams
+     * @param  string     $mode
+     * @param  object     $task
+     * @param  int        $row
+     * @param  string     $account
+     * @param  string     $minStatus
+     * @param  array      $undoneUsers
+     * @param  array      $teamSourceList
+     * @param  array      $teamEstimateList
+     * @param  array|bool $teamConsumedList
+     * @param  array|bool $teamLeftList
+     * @param  bool       $inTeams
      * @access protected
      * @return string
      */
-    protected function manageTaskTeamMember(string $mode, object $task, int $row, string $account, string $minStatus, array $undoneUsers, array $teamSourceList, array $teamEstimateList, array $teamConsumedList, array $teamLeftList, bool $inTeams): string
+    protected function manageTaskTeamMember(string $mode, object $task, int $row, string $account, string $minStatus, array $undoneUsers, array $teamSourceList, array $teamEstimateList, array|bool $teamConsumedList, array|bool $teamLeftList, bool $inTeams): string
     {
         /* Set member information. */
         $member = new stdClass();
