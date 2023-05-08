@@ -436,6 +436,7 @@ class todoTest
         $testResut->isClosed  = $isClosed;
 
         return $testResut;
+    }
 
     /**
      * 获取批量创建待办的有效数据。
