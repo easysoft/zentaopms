@@ -873,7 +873,7 @@ class programplanModel extends model
         $linkProducts = array();
         $linkBranches = array();
         $productList  = $this->loadModel('product')->getProducts($projectID);
-        if($project->division)
+        if($project->stageBy == 'product')
         {
             $linkProducts = array(0 => $productID);
             $linkBranches = array(0 => $productList[$productID]->branches);
@@ -954,7 +954,7 @@ class programplanModel extends model
             {
                 unset($plan->id);
                 $plan->status        = 'wait';
-                $plan->division      = $project->division;
+                $plan->stageBy       = $project->stageBy;
                 $plan->version       = 1;
                 $plan->parentVersion = $plan->parent == 0 ? 0 : $this->dao->findByID($plan->parent)->from(TABLE_PROJECT)->fetch('version');
                 $plan->team          = substr($plan->name,0, 30);

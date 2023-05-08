@@ -35,7 +35,7 @@ class formBase extends wg
         'actions'       => ['submit', 'cancel'],
     );
 
-    protected function buildActions(): wg
+    protected function buildActions(): wg|null
     {
         $actions = $this->prop('actions');
         if(empty($actions)) return NULL;

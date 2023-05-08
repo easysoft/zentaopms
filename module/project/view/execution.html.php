@@ -16,7 +16,7 @@
 <?php js::set('changeStatusHtml', $changeStatusHtml);?>
 <div id='mainMenu' class='clearfix'>
   <div class='btn-toolbar pull-left'>
-    <?php if($project->division and $project->hasProduct):?>
+    <?php if($project->stageBy == 'project' and $project->hasProduct):?>
     <div class='btn-group'>
       <?php $viewName = $productID != 0 ? zget($productList, $productID) : $lang->product->allProduct;?>
       <a href='javascript:;' class='btn btn-link btn-limit text-ellipsis' data-toggle='dropdown' style="max-width: 120px;"><span class='text' title='<?php echo $viewName;?>'><?php echo $viewName;?></span> <span class='caret'></span></a>
@@ -98,7 +98,7 @@
               <?php endif;?>
             </div>
           </th>
-          <?php if($project->division and $project->hasProduct) echo "<th class='text-left w-100px'>{$lang->project->product}</th>";?>
+          <?php if($project->stageBy == 'project' and $project->hasProduct) echo "<th class='text-left w-100px'>{$lang->project->product}</th>";?>
           <th class='c-status text-center'><?php echo $lang->project->status;?></th>
           <th class='w-50px'><?php echo $lang->execution->owner;?></th>
           <th class='c-date'><?php echo $lang->programplan->begin;?></th>
@@ -113,7 +113,7 @@
       </thead>
       <tbody id="executionTableList">
         <?php foreach($executionStats as $execution):?>
-        <?php $execution->division = $project->division;?>
+        <?php $execution->stageBy = $project->stageBy;?>
         <?php $executionProductID = (empty($productID) and !empty($execution->product)) ? $execution->product : $productID;?>
         <?php $this->execution->printNestedList($execution, false, $users, $executionProductID);?>
         <?php endforeach;?>

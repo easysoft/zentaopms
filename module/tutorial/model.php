@@ -169,7 +169,7 @@ class tutorialModel extends model
         $project->deleted      = '0';
         $project->hasProduct   = '1';
         $project->multiple     = '';
-        $project->division     = 0;
+        $project->stageBy      = 'project';
 
         return $project;
     }

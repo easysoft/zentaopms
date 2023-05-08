@@ -14,9 +14,9 @@ class taskTao extends taskModel
 {
     /**
      * 创建一个任务。
-     * Create a task. 
-     * 
-     * @param  object    $task 
+     * Create a task.
+     *
+     * @param  object    $task
      * @access protected
      * @return int|bool
      */
@@ -512,7 +512,7 @@ class taskTao extends taskModel
     /**
      * 批量创建前检查必填项
      * Check required fields before batch create tasks.
-     * 
+     *
      * @param  object    $execution
      * @param  object[]  $data
      * @access protected
@@ -607,5 +607,72 @@ class taskTao extends taskModel
         $task->lastEditedBy   = $this->app->user->account;
         $task->lastEditedDate = helper::now();
         $this->dao->update(TABLE_TASK)->data($task)->where('id')->eq($parentID)->exec();
+    }
+
+    /**
+     * Manage multi task team member.
+     *
+     * @param  string     $mode
+     * @param  object     $task
+     * @param  int        $row
+     * @param  string     $account
+     * @param  string     $minStatus
+     * @param  array      $undoneUsers
+     * @param  array      $teamSourceList
+     * @param  array      $teamEstimateList
+     * @param  array|bool $teamConsumedList
+     * @param  array|bool $teamLeftList
+     * @param  bool       $inTeams
+     * @access protected
+     * @return string
+     */
+    protected function manageTaskTeamMember(string $mode, object $task, int $row, string $account, string $minStatus, array $undoneUsers, array $teamSourceList, array $teamEstimateList, array|bool $teamConsumedList, array|bool $teamLeftList, bool $inTeams): string
+    {
+        /* Set member information. */
+        $member = new stdClass();
+        $member->task     = $task->id;
+        $member->order    = $row;
+        $member->account  = $account;
+        $member->estimate = zget($teamEstimateList, $row, 0);
+        $member->consumed = $teamConsumedList ? zget($teamConsumedList, $row, 0) : 0;
+        $member->left     = $teamLeftList ? zget($teamLeftList, $row, 0) : 0;
+        $member->status   = 'wait';
+        if($task->status == 'wait' and $member->estimate > 0 and $member->left == 0) $member->left = $member->estimate;
+        if($task->status == 'done') $member->left = 0;
+
+        /* Compute task status of member. */
+        if($member->left == 0 and $member->consumed > 0)
+        {
+            $member->status = 'done';
+        }
+        elseif($task->status == 'doing')
+        {
+            $teamSource = $teamSourceList[$row];
+
+            if(!empty($teamSource) and $teamSource != $account and isset($undoneUsers[$teamSource])) $member->transfer = $teamSource;
+            if(isset($undoneUsers[$account]) and ($mode == 'multi' or ($mode == 'linear' and $minStatus != 'wait'))) $member->status = 'doing';
+        }
+
+        /* Compute multi-task status, and in a linear task, there is only one doing status. */
+        if(($mode == 'linear' and $member->status == 'doing') or $member->status == 'wait') $minStatus = 'wait';
+        if($minStatus != 'wait' and $member->status == 'doing') $minStatus = 'doing';
+
+        /* Insert or update team. */
+        if($mode == 'multi' and $inTeams)
+        {
+            $this->dao->update(TABLE_TASKTEAM)
+                ->beginIF($member->estimate)->set("estimate= estimate + {$member->estimate}")->fi()
+                ->beginIF($member->left)->set("`left` = `left` + {$member->left}")->fi()
+                ->beginIF($member->consumed)->set("`consumed` = `consumed` + {$member->consumed}")->fi()
+                ->where('task')->eq($member->task)
+                ->andWhere('account')->eq($member->account)
+                ->exec();
+        }
+        else
+        {
+            $this->dao->insert(TABLE_TASKTEAM)->data($member)->autoCheck()->exec();
+        }
+
+        return $minStatus;
     }
 }

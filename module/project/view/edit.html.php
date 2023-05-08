@@ -188,13 +188,13 @@
         <?php endforeach;?>
         <?php endif;?>
         <?php if($project->model == 'waterfall' or $project->model == 'waterfallplus'):?>
-        <?php $class    = (!$project->division and count($linkedProducts) < 2) ? 'hide' : '';?>
+        <?php $class    = ($project->stageBy == 'product' and count($linkedProducts) < 2) ? 'hide' : '';?>
         <?php $disabled = !empty($executions) ? "disabled='disabled'" : '';?>
-        <tr class='<?php echo $class;?> division'>
-          <th><?php echo $lang->project->division;?></th>
+        <tr class='<?php echo $class;?> stageBy'>
+          <th><?php echo $lang->project->stageBy;?></th>
           <td colspan='3'>
-            <?php echo html::radio('division', $lang->project->divisionList, $project->division, $disabled);?>
-            <icon class='icon icon-help' data-toggle='popover' data-trigger='focus hover' data-placement='right' data-tip-class='text-muted popover-sm' data-content="<?php echo $lang->project->divisionTips;?>"></icon>
+            <?php echo html::radio('stageBy', $lang->project->stageByList, $project->stageBy == 'project', $disabled);?>
+            <icon class='icon icon-help' data-toggle='popover' data-trigger='focus hover' data-placement='right' data-tip-class='text-muted popover-sm' data-content="<?php echo $lang->->stageByTips;?>"></icon>
           </td>
         </tr>
         <?php endif;?>
