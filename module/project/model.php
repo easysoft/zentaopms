@@ -1491,16 +1491,16 @@ class projectModel extends model
         /* Update relation info of this project. */
         $this->stageProduct($projectID, $oldProject->stageBy);                             // 更新关联的所有产品的阶段。
         $this->updateProducts($projectID, $postExtras->products);                          // 更新关联的项目列表。
-        $this->updateShadowProduct($project, $oldProject);                                 // 更新影子产品关联信息。
+        $this->updateShadowProduct($projectID, $project, $oldProject);                                 // 更新影子产品关联信息。
         $this->unLinkProductsByProject($projectID, $project, $oldProject, $postExtras);    // 解除关联部分关联的产品信息。
         $this->updateUserViewByProject($projectID, $project->acl);                         // 更新用户视图。
         $this->updateWhitelistByProject($projectID, $project, $oldProject);                // 更新关联的白名单列表。
-        $this->updateTeamMembersByProject($projectID, $project, $oldProject, $postExtras); // 更新关联的成员列表。
         $this->updatePlanIdListByProject($projectID, $postExtras->plans);                  // 更新关联的计划列表。
+        $this->updateTeamMembersByProject($projectID, $project, $oldProject, $postExtras); // 更新关联的成员列表。
 
         $this->file->updateObjectID($this->post->uid, $projectID, 'project');              // 通过uid更新文件id。
 
-        if($oldProject->parent != $project->parent) $this->loadModel('program')->fixPath($projectID, $project->parent, $oldProject->path, $oldProject->grade); //  更新项目从属路径。
+        if($oldProject->parent != $project->parent) $this->loadModel('program')->fixPath($projectID, $project->parent, $oldProject->path, $oldProject->grade); // 更新项目从属路径。
         if(empty($oldProject->multiple) and $oldProject->model != 'waterfall') $this->loadModel('execution')->syncNoMultipleSprint($projectID);                // 无迭代的非瀑布项目需要更新。
 
         if(dao::isError()) return false;
@@ -1751,7 +1751,7 @@ class projectModel extends model
      * @access public
      * @return bool
      */
-    public function updateShadowProduct(object $project, object $oldProject): bool
+    public function updateShadowProduct(int $projectID, object $project, object $oldProject): bool
     {
         /* If this is a project without product, update shadow product's info by project. */
         if($oldProject->hasProduct) return true;
@@ -1759,7 +1759,7 @@ class projectModel extends model
         /* If oldProject has no product and name or parent or acl has changed, update shadow product. */
         if($oldProject->name != $project->name || $oldProject->parent != $project->parent or $oldProject->acl != $project->acl)
         {
-            $product    = $this->dao->select('product')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($project->id)->fetch('product');
+            $product    = $this->dao->select('product')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($projectID)->fetch('product');
             $topProgram = !empty($project->parent) ? $this->loadModel('program')->getTopByID($project->parent) : 0;
             $this->dao->update(TABLE_PRODUCT)->set('name')->eq($project->name)->set('program')->eq($topProgram)->set('acl')->eq($project->acl)->where('id')->eq($product)->exec();
         }
