@@ -380,7 +380,7 @@ class doc extends control
             $libID    = $this->post->lib;
             $moduleID = $this->post->module;
             if(empty($libID) and strpos($this->post->module, '_') !== false) list($libID, $moduleID) = explode('_', $this->post->module);
-            setcookie('lastDocModule', $moduleID, $this->config->cookieLife, $this->config->webRoot, '', $this->config->cookieSecure, false);
+            setcookie('lastDocModule', $moduleID, $this->config->cookieLife, $this->config->webRoot, '', $this->config->cookieSecure, true);
 
             $docResult = $this->doc->create();
             if(!$docResult or dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
@@ -1043,7 +1043,7 @@ class doc extends control
     {
         $this->loadModel('file');
         if(empty($viewType)) $viewType = !empty($_COOKIE['docFilesViewType']) ? $this->cookie->docFilesViewType : 'list';
-        setcookie('docFilesViewType', $viewType, $this->config->cookieLife, $this->config->webRoot, '', false, true);
+        setcookie('docFilesViewType', $viewType, $this->config->cookieLife, $this->config->webRoot, '', $this->config->cookieSecure, true);
 
         $objects = $this->doc->getOrderedObjects($type, 'nomerge', $objectID);
         list($libs, $libID, $object, $objectID, $objectDropdown) = $this->doc->setMenuByType($type, $objectID, 0);
@@ -1271,7 +1271,7 @@ class doc extends control
         $docSpaceParam->moduleID   = $moduleID;
         $docSpaceParam->browseType = $browseType;
         $docSpaceParam->param      = $param;
-        setCookie("docSpaceParam", json_encode($docSpaceParam), $this->config->cookieLife, $this->config->webRoot, '', false, true);
+        setCookie("docSpaceParam", json_encode($docSpaceParam), $this->config->cookieLife, $this->config->webRoot, '', $this->config->cookieSecure, true);
 
         if($moduleID) $libID = $this->tree->getById($moduleID)->root;
         $isFirstLoad = $libID == 0 ? true : false;
