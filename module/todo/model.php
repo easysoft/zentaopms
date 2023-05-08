@@ -476,8 +476,8 @@ class todoModel extends model
      */
     public function getTodoProjects(array $todoList): array
     {
-        $projectIDList = array();
-        $projects      = $this->config->todo->project;
+        $projectIDList  = array();
+        $projectModules = $this->config->todo->project;
         foreach($todoList as $type => $todos)
         {
             $todoIdList = array_keys($todos);
@@ -489,7 +489,7 @@ class todoModel extends model
 
             $todoIdList = array_unique($todoIdList);
 
-            if(isset($projects[$type])) $projectIDList[$type] = $this->todoTao->getProjectList($projects[$type], $todoIdList);
+            if(isset($projectModules[$type])) $projectIDList[$type] = $this->todoTao->getProjectList($projectModules[$type], $todoIdList);
             if(dao::isError()) return array();
         }
 

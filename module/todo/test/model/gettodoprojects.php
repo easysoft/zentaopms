@@ -6,7 +6,7 @@ su('admin');
 
 function initData()
 {
-    zdTable('todo')->config('getprojectlist')->gen(10);
+    zdTable('todo')->config('gettodoprojects')->gen(10);
 }
 
 /**
@@ -24,16 +24,16 @@ initData();
 global $tester;
 $tester->loadModel('todo');
 
-$taskData1 = array('id' => 10, 'name' => '开发任务一', 'type' => 'devel');
-$taskData2 = array('id' => 11, 'name' => '开发任务二', 'type' => 'devel');
-$taskData3 = array('id' => 12, 'name' => '开发任务三', 'type' => 'devel');
-$taskData4 = array('id' => 13, 'name' => '开发任务四', 'type' => 'devel');
+$taskData1 = array('id' => 10, 'name' => '开发任务一', 'type' => 'devel', 'execution' => 101);
+$taskData2 = array('id' => 11, 'name' => '开发任务二', 'type' => 'devel', 'execution' => 102);
+$taskData3 = array('id' => 12, 'name' => '开发任务三', 'type' => 'devel', 'execution' => 103);
+$taskData4 = array('id' => 13, 'name' => '开发任务四', 'type' => 'devel', 'execution' => 104);
 
 $task = new taskTest();
-$task->createObject($taskData1,101);
-$task->createObject($taskData2,102);
-$task->createObject($taskData3,103);
-$task->createObject($taskData4,104);
+$task->doCreateObject($taskData1);
+$task->doCreateObject($taskData2);
+$task->doCreateObject($taskData3);
+$task->doCreateObject($taskData4);
 
 $ids  = range(1,10);
 $list = $tester->todo->getByList($ids);

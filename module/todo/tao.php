@@ -57,7 +57,7 @@ class todoTao extends todoModel
     }
 
     /**
-     * 获取各模块列表。
+     * 获取各模块project列表。
      * Get project list.
      *
      * @param  string $table
