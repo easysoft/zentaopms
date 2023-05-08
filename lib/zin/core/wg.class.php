@@ -64,7 +64,7 @@ class wg
     {
         $this->props = new props();
 
-        $this->gid = self::nextGid();
+        $this->gid = static::nextGid();
         $this->setDefaultProps(static::getDefaultProps());
         $this->add(func_get_args());
         $this->created();

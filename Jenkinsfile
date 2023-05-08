@@ -33,8 +33,10 @@ pipeline {
           steps {
             container('sonar') {
               withSonarQubeEnv('sonarqube') {
-                sh 'git config --global --add safe.directory $(pwd)'
-                sh 'sonar-scanner -Dsonar.analysis.user=$(git show -s --format=%an)'
+                catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
+                  sh 'git config --global --add safe.directory $(pwd)'
+                  sh 'sonar-scanner -Dsonar.analysis.user=$(git show -s --format=%an)'
+                }
               }
             }
           }
@@ -138,6 +140,7 @@ pipeline {
                   container('zentao') {
                     sh 'initdb.php config'
                     sh '/apps/zentao/test/ztest extract ; /apps/zentao/test/ztest ${SEQUENCE} | tee /apps/zentao/test/${SEQUENCE}.log'
+                    sh 'ls /apps/zentao/www ; cat /apps/zentao/www/coverage.php'
                     sh 'pipeline-unittest.sh /apps/zentao/test/${SEQUENCE}.log'
                   }
                 }

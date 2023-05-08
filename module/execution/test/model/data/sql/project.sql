@@ -73,7 +73,7 @@ CREATE TABLE `zt_project` (
   `whitelist` text NOT NULL,
   `order` mediumint(8) unsigned NOT NULL,
   `vision` varchar(10) NOT NULL DEFAULT 'rnd',
-  `division` enum('0','1') NOT NULL DEFAULT '1',
+  `stageBy` enum('product','project') NOT NULL DEFAULT 'product',
   `displayCards` smallint(6) NOT NULL DEFAULT 0,
   `fluidBoard` enum('0','1') NOT NULL DEFAULT '0',
   `multiple` enum('0','1') NOT NULL DEFAULT '1',

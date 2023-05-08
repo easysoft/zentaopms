@@ -74,7 +74,7 @@ $poolID = getenv('ZTF_POOL_ID');
 $dbPool = empty($config->dbPool) ? array() : $config->dbPool;
 
 /* 根据ztf设置的poolID环境变量设置连接的数据库 */
-if(!empty($dbPool) && !empty($poolID)) 
+if(!empty($dbPool) && !empty($poolID))
 {
     $selectDB = $dbPool[$poolID%count($dbPool)];
 

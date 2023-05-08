@@ -1,0 +1,26 @@
+title: table zt_kanbancolumn
+desc: "看板列"
+author: Hu Fangzhou
+version: "1.0"
+fields:
+    - field: parent
+      range: "0"
+    - field: name
+      range: 1-10
+      prefix: "column"
+    - field: region
+      range: 1-10
+    - field: group
+      range: 1-10
+    - field: type
+      range: wait{4},devlop{2},pause{2},closed{2}
+    - field: color
+      range: "#333"
+    - field: limit
+      range: ""
+    - field: order
+      range: 1-4
+    - field: archived
+      range: "0"
+    - field: deleted
+      range: "0"

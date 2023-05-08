@@ -53,20 +53,6 @@ class projectModel extends model
     }
 
     /**
-     * Show accessDenied response.
-     *
-     * @access private
-     * @return void
-     */
-    public function accessDenied()
-    {
-        if(defined('TUTORIAL')) return true;
-
-        $this->session->set('project', '');
-        return print(js::alert($this->lang->project->accessDenied) . js::locate(helper::createLink('project', 'index')));
-    }
-
-    /**
      * Judge an action is clickable or not.
      *
      * @param  object    $project
@@ -123,7 +109,7 @@ class projectModel extends model
                 }
 
                 $this->session->set('project', (int)key($projects), $this->app->tab);
-                $this->accessDenied();
+                print($this->projectTao->accessDenied());
             }
             else
             {
@@ -1226,7 +1212,10 @@ class projectModel extends model
 
         /* If $_POST has product name, create it. */
         $linkedProductsCount = $this->projectTao->getLinkedProductsCount($project, $postData->rawdata);
-        if(!$project->hasProduct or isset($postData->rawdata->newProduct) or (!$project->parent and empty($linkedProductsCount))) $this->createProduct($projectID, $project, $postData, $program);
+        if(!$project->hasProduct or isset($postData->rawdata->newProduct) or (!$project->parent and empty($linkedProductsCount)))
+        {
+            if(!$this->createProduct($projectID, $project, $postData, $program)) return false;
+        }
 
         /* Save order. */
         $this->dao->update(TABLE_PROJECT)->set('`order`')->eq($projectID * 5)->where('id')->eq($projectID)->exec();
@@ -1244,6 +1233,7 @@ class projectModel extends model
     }
 
     /**
+     * 检查输入的$project 变量的branch和product是否合法。
      * Check branch and product valid by project.
      *
      * @param  int    $projectID
@@ -1267,7 +1257,8 @@ class projectModel extends model
     }
 
     /**
-     * Check dates valid by project.
+     * 检查执行的起止日期是否小于项目的起止日期。
+     * Check if execution's start and end dates below project's start and end dates.
      *
      * @param  int    $projectID
      * @param  object $project
@@ -1276,157 +1267,250 @@ class projectModel extends model
      */
     public function checkDatesValidByProject($projectID, $project): bool
     {
-        $minExecutionBegin = $this->dao->select('`begin` as minBegin')->from(TABLE_PROJECT)->where('project')->eq($projectID)->andWhere('deleted')->eq('0')->orderBy('begin_asc')->fetch();
-        $maxExecutionEnd   = $this->dao->select('`end` as maxEnd')->from(TABLE_PROJECT)->where('project')->eq($projectID)->andWhere('deleted')->eq('0')->orderBy('end_desc')->fetch();
-        if($minExecutionBegin and $project->begin > $minExecutionBegin->minBegin) dao::$errors['begin'] = sprintf($this->lang->project->begigLetterExecution, $minExecutionBegin->minBegin);
-        if($maxExecutionEnd and $project->end < $maxExecutionEnd->maxEnd) dao::$errors['end'] = sprintf($this->lang->project->endGreateExecution, $maxExecutionEnd->maxEnd);
+        $executionsCount = $this->dao->select('COUNT(*) as count')->from(TABLE_PROJECT)
+            ->where('project') ->eq($projectID)
+            ->andWhere('deleted') ->eq('0')
+            ->fetch('count');
+        if(empty($executionsCount))return true;
+
+        $minExecutionBegin = $this->dao->select('`begin` as minBegin')->from(TABLE_PROJECT)
+        ->where('project')->eq($projectID)
+        ->andWhere('deleted')->eq('0')
+        ->orderBy('begin_asc')
+        ->fetch();
+
+        $maxExecutionEnd = $this->dao->select('`end` as maxEnd')->from(TABLE_PROJECT)
+        ->where('project')->eq($projectID)
+        ->andWhere('deleted')->eq('0')
+        ->orderBy('end_desc')
+        ->fetch();
+
+        if($minExecutionBegin && ($project->begin > $minExecutionBegin->minBegin)) dao::$errors['begin'] = sprintf($this->lang->project->begigLetterExecution, $minExecutionBegin->minBegin);
+        if($maxExecutionEnd && ($project->end < $maxExecutionEnd->maxEnd)) dao::$errors['end'] = sprintf($this->lang->project->endGreateExecution, $maxExecutionEnd->maxEnd);
         if(dao::isError()) return false;
         return true;
     }
 
     /**
-     * Update project.
+     * 更新项目关联的团队成员列表。
+     * update teammembers while update project.
      *
-     * @param  int    $projectID
-     * @access public
-     * @return array
+     * @param int    $projectid
+     * @param object $project
+     * @param object $oldproject
      */
-    public function update($projectID, $project)
+    public function updateTeamMembersByProject(int $projectID, object $project, object $oldProject): bool
     {
-        $oldProject        = $this->dao->findById($projectID)->from(TABLE_PROJECT)->fetch();
-        $linkedProducts    = $this->dao->select('product')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($projectID)->fetchPairs();
-
-        if(!isset($project->parent)) $project->parent = $oldProject->parent;
-
-        $executionsCount = $this->dao->select('COUNT(*) as count')->from(TABLE_PROJECT)->where('project')->eq($project->id)->andWhere('deleted')->eq('0')->fetch('count');
-
-        if($project->product && !$this->checkBranchAndProductValid($projectID, $project)) return false;
-
-        /* Judge products not empty. */
-        $linkedProductsCount = 0;
-        foreach($_POST['products'] as $product)
-        {
-            if(!empty($product)) $linkedProductsCount++;
-        }
-
-        if(empty($linkedProductsCount))
-        {
-            dao::$errors[] = $this->lang->project->errorNoProducts;
-            return false;
-        }
-
-        /* Judge workdays is legitimate. */
-        $workdays = helper::diffDate($project->end, $project->begin) + 1;
-        if(isset($project->days) and $project->days > $workdays)
-        {
-            dao::$errors['days'] = sprintf($this->lang->project->workdaysExceed, $workdays);
-            return false;
-        }
-
-        $project = $this->loadModel('file')->processImgURL($project, $this->config->project->editor->edit['id'], $this->post->uid);
-
-        $requiredFields = $this->config->project->edit->requiredFields;
-        if($this->post->delta == 999) $requiredFields = trim(str_replace(',end,', ',', ",{$requiredFields},"), ',');
-
-        $this->lang->error->unique = $this->lang->error->repeat;
-
-        if(!empty($executionsCount) and $oldProject->multiple) $this->checkDatesValidByProject($projectID ,$project);
-        $this->projectTao->doUpdate($projectID, $project, $oldProject);
-
-        if(dao::isError()) return false;
-
-        if(!$oldProject->hasProduct and ($oldProject->name != $project->name or $oldProject->parent != $project->parent or $oldProject->acl != $project->acl)) $this->updateShadowProduct($project);
-
-        /* Get team and language item. */
+        if($project->model != 'kanban') return true;
+        /* Get oldProject's team and roles.*/
         $this->loadModel('user');
         $team    = $this->user->getTeamMemberPairs($projectID, 'project');
-        $members = isset($_POST['teamMembers']) ? $_POST['teamMembers'] : array();
+        $members = $project->teamMembers;
         array_push($members, $project->PM);
         $members = array_unique($members);
         $roles   = $this->user->getUserRoles(array_values($members));
 
+        /* Init members for update members in TEABLE_TEAM */
+        $member = new stdclass();
+        $member->root  = $projectID;
+        $member->join  = helper::today();
+        $member->days  = zget($project, 'days', 0);
+        $member->type  = 'project';
+        $member->hours = $this->config->execution->defaultWorkhours;
+
+        /* Prepare $teamMembers for addProjectMembers.*/
         $teamMembers = array();
         foreach($members as $account)
         {
             if(empty($account) or isset($team[$account])) continue;
 
-            $member = new stdclass();
-            $member->root    = (int)$projectID;
             $member->account = $account;
-            $member->join    = helper::today();
             $member->role    = zget($roles, $account, '');
-            $member->days    = zget($project, 'days', 0);
-            $member->type    = 'project';
-            $member->hours   = $this->config->execution->defaultWorkhours;
-            $this->dao->replace(TABLE_TEAM)->data($member)->exec();
 
             $teamMembers[$account] = $member;
         }
 
+        /* Delete members while update members in project, $team only exist while oldproject's model is kanban.*/
         if($oldProject->model == 'kanban')
         {
-            $this->dao->delete()->from(TABLE_TEAM)
-                ->where('root')->eq((int)$projectID)
-                ->andWhere('type')->eq('project')
-                ->andWhere('account')->in(array_keys($team))
-                ->andWhere('account')->notin(array_values($members))
-                ->andWhere('account')->ne($oldProject->openedBy)
-                ->exec();
+            $deleteMembers = array_diff(array_keys($team), array_values($members));
+            $this->projectTao->deleteExtraMembersByProject($projectID, $oldProject->openedBy, $deleteMembers);
         }
+
+        /* Add projectMembers by vars members.*/
         if(!empty($projectID) and !empty($teamMembers)) $this->loadModel('execution')->addProjectMembers($projectID, $teamMembers);
 
-        if(!dao::isError())
+        return !dao::isError();
+    }
+
+    /**
+     * 更新此项目下的白名单列表。
+     * Update whitelist by project.
+     *
+     * @param  int    $projectID
+     * @param  object $project
+     * @param  object $oldProject
+     * @access public
+     * @return bool
+     */
+    public function updateWhitelistByProject(int $projectID, object $project, object $oldProject, array $linkedProducts): bool
+    {
+        /* Check if whitelist shoud update .*/
+        $whitelist    = array_filter(explode(',', $project->whitelist));
+        $oldWhitelist = explode(',', $oldProject->whitelist) and $oldWhitelist = array_filter($oldWhitelist);
+        if(count($oldWhitelist) == count($whitelist) and !empty(array_diff($oldWhitelist, $whitelist)))
         {
-            $this->updateProducts($projectID, $_POST['products']);
-            if(empty($oldProject->division))
-            {
-                $executions = $this->loadModel('execution')->getPairs($projectID);
-                foreach(array_keys($executions) as $executionID) $this->execution->updateProducts($executionID);
-            }
-
-            $this->file->updateObjectID($this->post->uid, $projectID, 'project');
-
-            $whitelist = explode(',', $project->whitelist);
             $this->loadModel('personnel')->updateWhitelist($whitelist, 'project', $projectID);
             if(!$oldProject->hasProduct) $this->loadModel('personnel')->updateWhitelist($whitelist, 'product', current($linkedProducts));
-            if($project->acl != 'open')
-            {
-                $this->loadModel('user')->updateUserView($projectID, 'project');
-
-                $executions = $this->dao->select('id')->from(TABLE_EXECUTION)->where('project')->eq($projectID)->fetchPairs('id', 'id');
-                if($executions) $this->user->updateUserView($executions, 'sprint');
-            }
-
-            if($oldProject->parent != $project->parent) $this->loadModel('program')->processNode($projectID, $project->parent, $oldProject->path, $oldProject->grade);
-
-            /* Fix whitelist changes. */
-            $oldWhitelist = explode(',', $oldProject->whitelist) and $oldWhitelist = array_filter($oldWhitelist);
-            $newWhitelist = explode(',', $project->whitelist) and $newWhitelist = array_filter($newWhitelist);
-            if(count($oldWhitelist) == count($newWhitelist) and count(array_diff($oldWhitelist, $newWhitelist)) == 0) unset($project->whitelist);
-
-            /* Add linkedproducts changes. */
-            $oldProject->linkedProducts = implode(',', $linkedProducts);
-            $project->linkedProducts    = implode(',', $_POST['products']);
-
-            $unlinkedProducts = array_diff($linkedProducts, $_POST['products']);
-            if(!empty($unlinkedProducts))
-            {
-                $products = $this->dao->select('name')->from(TABLE_PRODUCT)->where('id')->in($unlinkedProducts)->fetchPairs();
-                $this->loadModel('action')->create('project', $projectID, 'unlinkproduct', '', implode(',', $products));
-            }
-
-            /* Activate or close the shadow product of the project. */
-            if(!$oldProject->hasProduct && $oldProject->status != $project->status && strpos('doing,closed', $project->status) !== false)
-            {
-                $productID = $this->loadModel('product')->getProductIDByProject($projectID);
-                if($project->status == 'doing') $this->product->activate($productID);
-                if($project->status == 'closed') $this->product->close($productID);
-            }
-
-            if(empty($oldProject->multiple) and $oldProject->model != 'waterfall') $this->loadModel('execution')->syncNoMultipleSprint($projectID);
-
-            return common::createChanges($oldProject, $project);
         }
+
+        return !dao::isError();
+    }
+
+    /**
+     * 解除部分关联产品并且记录动作。
+     * Unlink products by project.
+     *
+     * @param  int    $projectID
+     * @param  object $project
+     * @param  object $oldProject
+     * @access public
+     * @return bool
+     */
+    public function unLinkProductsByProject(int $projectID, object $project, object $oldProject): bool
+    {
+        $linkedProducts = $this->dao->select('product')->from(TABLE_PROJECTPRODUCT)
+            ->where('project')->eq($projectID)
+            ->fetchPairs();
+        $oldProject->linkedProducts = implode(',', $linkedProducts);
+        $project->linkedProducts    = implode(',', $project->products);
+        $unlinkedProducts = array_diff($linkedProducts, $project->products);
+        if(empty($unlinkedProducts)) return true;
+
+        $products = $this->dao->select('name')->from(TABLE_PRODUCT)
+            ->where('id')->in($unlinkedProducts)
+            ->fetchPairs();
+        $this->loadModel('action')->create('project', $projectID, 'unlinkproduct', '', implode(',', $products));
+
+        return !dao::isError();
+    }
+
+    /**
+     * 更新项目的影子产品的状态。
+     * Update shadowProducts' status by Project.
+     *
+     * @param  int $projectID
+     * @param  string $status
+     * @access public
+     * @return bool
+     */
+    public function updateShadowProductStatus(int $projectID, string $status): bool
+    {
+        /* Activate or close the shadow product of the project. */
+        $productID = $this->loadModel('product')->getProductIDByProject($projectID);
+        if($status == 'doing') $this->product->activate($productID);
+        if($status == 'closed') $this->product->close($productID);
+
+        return !dao::isError();
+    }
+
+    /**
+     * 更新项目关联的用户视图。
+     * Update user view by project.
+     *
+     * @param  int    $projectID
+     * @param  string $acl
+     * @access public
+     * @return bool
+     */
+    public function updateUserViewByProject(int $projectID, string $acl): bool
+    {
+        if($acl == 'open') return true;
+
+        $this->loadModel('user')->updateUserView($projectID, 'project');
+        $executions = $this->dao->select('id')->from(TABLE_EXECUTION)
+            ->where('project')->eq($projectID)
+            ->fetchPairs();
+
+        if($executions) $this->user->updateUserView($executions, 'sprint');
+
+        return !dao::isError();
+    }
+
+    /**
+     * 更新项目下的所有产品的阶段。
+     * Update product stage by project.
+     *
+     * @param  int    $projectID
+     * @param  strubg $stageBy
+     * @access public
+     * @return bool
+     */
+    public function stageProduct(int $projectID, string $stageBy): bool
+    {
+        /* 如果项目的阶段为由按项目创建，则更新此项目下每个产品。*/
+        if($stageBy == 'product') return true;
+
+        $executions = $this->loadModel('execution')->getPairs($projectID);
+        foreach(array_keys($executions) as $executionID) $this->execution->updateProducts($executionID); // 更新项目下所有产品的阶段 this->project->stageProducts();
+
+        return dao::isError();
+    }
+
+    /**
+     * 更新项目。
+     * Update project.
+     *
+     * @param  int    $projectID
+     * @param  object $project
+     * @access public
+     * @return array|false
+     */
+    public function update(int $projectID, object $project , object $postData): array|false
+    {
+        /* 通过id查老项目信息, 处理parent和图片字段。*/
+        /* Fetch oldProject's info and get parent and file info.*/
+        $oldProject = $this->projectTao->fetchProjectInfo($projectID);
+        if(!isset($project->parent)) $project->parent = $oldProject->parent;
+        $project = $this->loadModel('file')->processImgURL($project, $this->config->project->editor->edit['id'], $this->post->uid);
+
+        /* 若此项目为多迭代项目， 检查起止日期不得小于迭代的起止日期。*/
+        /* If this project has multiStage, check if execution's start and end date below project's start and end date.*/
+        if($oldProject->multiple and !$this->checkDatesValidByProject($projectID, $oldProject)) return false;
+
+        /* 更新project表。*/
+        /* Update project table.*/
+        $result = $this->projectTao->doUpdate($projectID, $project, $oldProject);
+        if(!$result) return false;
+
+        /* 如果是无产品项目，更新影子产品信息。*/
+        /* If this is a project without product, update shadow product's info by project.*/
+        if(!$oldProject->hasProduct)
+        {
+            /* If oldProject has no product and name or parent or acl has changed, update shadow product.*/
+            if($oldProject->name != $project->name || $oldProject->parent != $project->parent or $oldProject->acl != $project->acl) $this->updateShadowProduct($project);
+
+            /* If oldProject has no product and status has changed to dong or closed updateShadowProductStatus.*/
+            if($oldProject->status != $project->status && str_contains('doing,closed', $project->status)) $this->updateShadowProductStatus($projectID, $project->status);
+        }
+
+        /* 更新项目的关联信息。*/
+        /* Update relation info of this project.*/
+        $this->stageProduct($projectID, $oldProject->stageBy); // 更新关联的所有产品的阶段。
+        $this->updateProducts($projectID, $project->product); // 更新关联的项目列表。
+        $this->unLinkProductsByProject($projectID, $project, $oldProject); // 解除关联部分关联的产品信息。
+        $this->updateUserViewByProject($projectID, $project->acl); // 更新用户视图。
+        $this->updateWhitelistByProject($projectID, $project, $oldProject, $linkedProducts); // 更新关联的白名单列表。
+        $this->updateTeamMembersByProject($projectID, $project, $oldProject); // 更新关联的成员列表。
+        $this->updatePlanIdListByProject($projectID, $project->plans); // 更新关联的计划列表。
+
+        $this->file->updateObjectID($this->post->uid, $projectID, 'project'); // 通过uid更新文件id。
+
+        if($oldProject->parent != $project->parent) $this->loadModel('program')->fixPath($projectID, $project->parent, $oldProject->path, $oldProject->grade); //  更新项目从属路径。
+        if(empty($oldProject->multiple) and $oldProject->model != 'waterfall') $this->loadModel('execution')->syncNoMultipleSprint($projectID); // 无迭代的非瀑布项目需要更新。
+
+        if(dao::isError()) return false;
+        return common::createChanges($oldProject, $project);
     }
 
     /**
@@ -2178,10 +2262,10 @@ class projectModel extends model
             }
 
             $this->user->updateUserView($products, 'product', $members);
-            if((int)$projectID > 0 and !empty($_POST['division']))
+            if((int)$projectID > 0 and !empty($_POST['stageBy']))
             {
-                $this->dao->update(TABLE_PROJECT)->set('division')->eq('1')->where('id')->eq((int)$projectID)->exec();
-                $this->dao->update(TABLE_EXECUTION)->set('division')->eq('1')->where('project')->eq((int)$projectID)->exec();
+                $this->dao->update(TABLE_PROJECT)->set('stageBy')->eq('product')->where('id')->eq((int)$projectID)->exec();
+                $this->dao->update(TABLE_EXECUTION)->set('stageBy')->eq('product')->where('project')->eq((int)$projectID)->exec();
             }
 
             return !dao::isError();
@@ -2244,14 +2328,14 @@ class projectModel extends model
             $executions = $this->dao->select('id')->from(TABLE_EXECUTION)->where('project')->eq($projectID)->fetchPairs('id');
             $this->dao->delete()->from(TABLE_PROJECTPRODUCT)->where('project')->in($executions)->andWhere('product')->notin($products)->exec();
 
-            if(!empty($_POST['division']))
+            if(!empty($_POST['stageBy']))
             {
-                $this->dao->update(TABLE_PROJECT)->set('division')->eq('1')->where('id')->eq((int)$projectID)->exec();
-                $this->dao->update(TABLE_EXECUTION)->set('division')->eq('1')->where('project')->eq((int)$projectID)->exec();
+                $this->dao->update(TABLE_PROJECT)->set('stageBy')->eq('product')->where('id')->eq((int)$projectID)->exec();
+                $this->dao->update(TABLE_EXECUTION)->set('stageBy')->eq('product')->where('project')->eq((int)$projectID)->exec();
             }
 
             $project = $this->projectTao->fetchProjectInfo($projectID);
-            if(!empty($project) and ($project->model == 'waterfall' or $project->model == 'waterfallplus') and empty($project->division) and !empty($executions))
+            if(!empty($project) and ($project->model == 'waterfall' or $project->model == 'waterfallplus') and ($project->stageBy == 'project') and !empty($executions))
             {
                 $this->loadModel('execution');
                 foreach($executions as $executionID) $this->execution->updateProducts($executionID);
@@ -2464,6 +2548,7 @@ class projectModel extends model
     {
         global $lang;
 
+        $objectID = (int)$objectID;
         $model    = 'scrum';
         $objectID = (empty($objectID) and $this->session->project) ? $this->session->project : $objectID;
         $project  = $this->projectTao->fetchProjectInfo($objectID);
@@ -2923,7 +3008,7 @@ class projectModel extends model
     }
 
     /**
-     * Fetch planIdList by project
+     * Update planIdList by project
      *
      * @param  int   $projectID
      * @param  array $plans
@@ -2995,5 +3080,46 @@ class projectModel extends model
         }
 
         return !dao::isError();
+    }
+
+    /**
+     * 获取项目集的最小开始时间
+     * Get program min begin
+     *
+     * @param  int $objectID
+     *
+     * @access public
+     * @return object
+     */
+    public function getProgramMinBegin(int $objectID): object
+    {
+        $a = $this->dao->select('`begin` as minBegin')->from(TABLE_PROGRAM)
+            ->where('id')->ne($objectID)
+            ->andWhere('deleted')->eq(0)
+            ->andWhere('path')->like("%,{$objectID},%")
+            ->orderBy('begin_asc')
+            ->fetch('minBegin');
+        return $a;
+
+    }
+
+    /**
+     * 获取项目集的最大结束时间
+     * get program max end
+     *
+     * @param  int $objectID
+     *
+     * @access public
+     * @return object
+     */
+    public function getProgramMaxEnd(int $objectID): object
+    {
+        return $this->dao->select('`end` as maxEnd')->from(TABLE_PROGRAM)
+            ->where('id')->ne($objectID)
+            ->andWhere('deleted')->eq(0)
+            ->andWhere('path')->like("%,{$objectID},%")
+            ->andWhere('end')->ne('0000-00-00')
+            ->orderBy('end_desc')
+            ->fetch('maxEnd');
     }
 }

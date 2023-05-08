@@ -374,7 +374,7 @@ class todoTest
      * @access public
      * @return array
      */
-    public function getByExportListTest(string $orderBy, string $queryCondition , string $checkedItem): array
+    public function getByExportListTest(string $orderBy, string $queryCondition, string $checkedItem): array
     {
         return $this->objectModel->getByExportList($orderBy, $queryCondition, $checkedItem);
     }
@@ -395,5 +395,24 @@ class todoTest
         if(dao::isError()) return 0;
 
         return $pri ? 1 : 0;
+    }
+
+    /**
+     * 根据周期待办，获取这些待办生成的待办数据。
+     * Get created cycle list by todo list.
+     *
+     * @param  int    $isInintCycle
+     * @access public
+     * @return int
+     */
+    public function getCycleListTest(bool $isInintCycle = true): int
+    {
+        $todoList = $this->objectModel->getValidCycleList();
+
+        if($isInintCycle) $this->objectModel->createBycycle($todoList);
+
+        $cycleList = $this->objectModel->getCycleList($todoList);
+
+        return count($cycleList) > 0 ? 1: 0;
     }
 }

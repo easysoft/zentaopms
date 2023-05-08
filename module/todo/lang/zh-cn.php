@@ -37,6 +37,7 @@ $lang->todo->product      = "所属{$lang->productCommon}";
 $lang->todo->execution    = "所属{$lang->execution->common}";
 $lang->todo->changeDate   = "修改日期";
 $lang->todo->future       = '待定';
+$lang->todo->to           = '至';
 
 $lang->todo->reasonList['story'] = "转{$lang->SRCommon}";
 $lang->todo->reasonList['task']  = "转任务";
@@ -62,6 +63,7 @@ $lang->todo->private      = '私人事务';
 $lang->todo->cycleDay     = '天';
 $lang->todo->cycleWeek    = '周';
 $lang->todo->cycleMonth   = '月';
+$lang->todo->cycleYear    = '年';
 $lang->todo->day          = '日';
 $lang->todo->assignedTo   = '指派给';
 $lang->todo->assignedBy   = '由谁指派';
@@ -72,6 +74,13 @@ $lang->todo->closedDate   = '关闭时间';
 $lang->todo->deadline     = '过期时间';
 $lang->todo->deleted      = '已删除';
 $lang->todo->ditto        = '同上';
+$lang->todo->from         = '从';
+$lang->todo->generate     = '生成待办';
+$lang->todo->advance      = '提前';
+$lang->todo->cycleType    = '周期类型';
+$lang->todo->monthly      = '每月';
+$lang->todo->weekly       = '每周';
+$lang->todo->to           = '至';
 
 $lang->todo->cycleDaysLabel  = '间隔天数';
 $lang->todo->beforeDaysLabel = '提前天数';
@@ -119,6 +128,7 @@ $lang->todo->noAssignedTo   = '被指派人不能为空';
 $lang->todo->unfinishedTodo = '待办ID %s 不是完成状态，不能关闭。';
 $lang->todo->today          = '今日待办';
 $lang->todo->selectProduct  = "请选择{$lang->productCommon}";
+$lang->todo->privateTip     = "指派给我的待办才能设为私人事务，设为私人事务后只有被指派人可以看到";
 
 $lang->todo->periods['all']             = '指派自己';
 $lang->todo->periods['before']          = '未完';

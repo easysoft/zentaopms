@@ -750,15 +750,11 @@ class baseRouter
         $outputDir    = ini_get('xhprof.output_dir');
 
         if(!is_dir($xhprofPath)) return false;
+        if(!$outputDir) $outputDir = $xhprofPath . DS . 'xhprof_runs';
+        if(!is_dir($outputDir)) mkdir($outputDir, 0777, true);
 
         include_once $libUtilsPath . 'xhprof_lib.php';
         include_once $libUtilsPath . 'xhprof_runs.php';
-
-        if(!$outputDir)
-        {
-            $outputDir = $xhprofPath . DS . 'xhprof_runs';
-            if(!is_dir($outputDir)) mkdir($outputDir, 0777, true);
-        }
 
         $xhprofRuns = new \XHProfRuns_Default($outputDir);
         $type       = "{$this->moduleName}_{$this->methodName}";
@@ -2042,7 +2038,7 @@ class baseRouter
             $fileName = baseName((string) $apiFile);
             [$method] = explode('.', $fileName);
 
-            $url = self::extractAPIURL($apiFile);
+            $url = static::extractAPIURL($apiFile);
             if($url) $hookCodes[$method][] = "return helper::requestAPI('$url');";
         }
         foreach($hookFiles as $hookFile)
@@ -2792,7 +2788,7 @@ class baseRouter
     public function connectByPDO(object $params): object|bool
     {
         $dsn = null;
-        if(!isset($params->driver)) self::triggerError('no pdo driver defined, it should be mysql or sqlite', __FILE__, __LINE__, $exit = true);
+        if(!isset($params->driver)) static::triggerError('no pdo driver defined, it should be mysql or sqlite', __FILE__, __LINE__, $exit = true);
         if(!isset($params->user)) return false;
         try
         {
@@ -2827,7 +2823,7 @@ class baseRouter
                 header("location: {$this->config->webRoot}checktable.php");
                 exit;
             }
-            self::triggerError($message, __FILE__, __LINE__, $exit = true);
+            static::triggerError($message, __FILE__, __LINE__, $exit = true);
         }
     }
 

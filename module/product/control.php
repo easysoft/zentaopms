@@ -163,6 +163,9 @@ class product extends control
         $storyBugs                      = $this->loadModel('bug')->getStoryBugCounts($storyIdList);
         $storyCases                     = $this->loadModel('testcase')->getStoryCaseCounts($storyIdList);
 
+        /* Save session. */
+        $this->productZen->saveSession4Browse($product, $storyType, $browseType, $isProjectStory);
+
         /* Build search form. */
         $this->productZen->buildSearchForm4Browse($project, $projectID, $productID, $branch, $param, $storyType, $browseType, $isProjectStory);
 
@@ -423,6 +426,7 @@ class product extends control
     }
 
     /**
+     * 产品路线图。
      * Road map of a product.
      *
      * @param  int        $productID
@@ -430,22 +434,28 @@ class product extends control
      * @access public
      * @return void
      */
-    public function roadmap($productID, $branch = 'all')
+    public function roadmap(string $productID,  string $branch = 'all'): void
     {
+        $productID = (int)$productID;
+
+        /* Set env viriables. */
         $this->product->setMenu($productID, $branch);
+        $this->productZen->saveSession4Roadmap();
 
-        $this->session->set('releaseList',     $this->app->getURI(true), 'product');
-        $this->session->set('productPlanList', $this->app->getURI(true), 'product');
-
-        $product = $this->dao->findById($productID)->from(TABLE_PRODUCT)->fetch();
+        /* Generate data. */
+        $product = $this->product->getByID($productID);
         if(empty($product)) $this->locate($this->createLink('product', 'showErrorNone', 'fromModule=product'));
 
+        $roadmaps = $this->product->getRoadmap($productID, $branch);
+        $branches = $product->type == 'normal' ? array(0 => '') : $this->loadModel('branch')->getPairs($productID);
+
+        /* Assign view data. */
         $this->view->title      = $product->name . $this->lang->colon . $this->lang->product->roadmap;
         $this->view->position[] = html::a($this->createLink($this->moduleName, 'browse'), $product->name);
         $this->view->position[] = $this->lang->product->roadmap;
         $this->view->product    = $product;
-        $this->view->roadmaps   = $this->product->getRoadmap($productID, $branch);
-        $this->view->branches   = $product->type == 'normal' ? array(0 => '') : $this->loadModel('branch')->getPairs($productID);
+        $this->view->roadmaps   = $roadmaps;
+        $this->view->branches   = $branches;
 
         $this->display();
     }

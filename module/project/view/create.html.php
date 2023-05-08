@@ -230,11 +230,11 @@
         </tr>
         <?php endif;?>
         <?php if($model == 'waterfall' or $model == 'waterfallplus'):?>
-        <tr class='hide division'>
-          <th><?php echo $lang->project->division;?></th>
+        <tr class='hide stageBy'>
+          <th><?php echo $lang->project->stageBy;?></th>
           <td>
-            <?php echo html::radio('division', $lang->project->divisionList, '0');?>
-            <icon class='icon icon-help' data-toggle='popover' data-trigger='focus hover' data-placement='right' data-tip-class='text-muted popover-sm' data-content="<?php echo $lang->project->divisionTips;?>"></icon>
+            <?php echo html::radio('stageBy', $lang->project->stageByList, '0');?>
+            <icon class='icon icon-help' data-toggle='popover' data-trigger='focus hover' data-placement='right' data-tip-class='text-muted popover-sm' data-content="<?php echo $lang->project->stageByTips;?>"></icon>
           </td>
         </tr>
         <?php endif;?>

@@ -67,8 +67,8 @@ $(function()
           {
             if($(this).val() > 0) chosenProducts ++;
           });
-        if(chosenProducts > 1)  $('.division').removeClass('hide');
-        if(chosenProducts <= 1) $('.division').addClass('hide');
+        if(chosenProducts > 1)  $('.stageBy').removeClass('hide');
+        if(chosenProducts <= 1) $('.stageBy').addClass('hide');
     });
 
     $(document).on('change', '[name*=branch]', function()
@@ -205,7 +205,7 @@ function loadBranches(product)
         }
     });
 
-    (chosenProducts.length > 1 && (model == 'waterfall' || model == 'waterfallplus')) ? $('.division').removeClass('hide') : $('.division').addClass('hide');
+    (chosenProducts.length > 1 && (model == 'waterfall' || model == 'waterfallplus')) ? $('.stageBy').removeClass('hide') : $('.stageBy').addClass('hide');
 
     var $tableRow = $(product).closest('.table-row');
     var index     = $tableRow.find('select:first').attr('id').replace('products' , '');
@@ -308,5 +308,5 @@ function removeLine(obj)
       if($(this).val() > 0) chosenProducts ++;
     });
 
-    (chosenProducts.length > 1 && (model == 'waterfall' || model == 'waterfallplus')) ? $('.division').removeClass('hide') : $('.division').addClass('hide');
+    (chosenProducts.length > 1 && (model == 'waterfall' || model == 'waterfallplus')) ? $('.stageBy').removeClass('hide') : $('.stageBy').addClass('hide');
 }

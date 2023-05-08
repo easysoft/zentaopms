@@ -140,9 +140,9 @@
   </div>
 </div>
 
-<?php $noticeSwitch = (!$project->division and count($linkedProducts) == 1 and empty($executions));?>
+<?php $noticeSwitch = ($project->stageBy == 'product' and count($linkedProducts) == 1 and empty($executions));?>
 <?php js::set('linkedProducts', array_keys($linkedProducts));?>
 <?php js::set('noticeSwitch', $noticeSwitch);?>
 <?php js::set('noticeDivsion', $lang->project->noticeDivsion);?>
-<?php js::set('divisionSwitchList', $lang->project->divisionSwitchList);?>
+<?php js::set('stageBySwitchList', $lang->project->stageBy == 'project'SwitchList);?>
 <?php include '../../common/view/footer.html.php';?>
