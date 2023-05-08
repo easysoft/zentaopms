@@ -1,10 +1,13 @@
-.private-row .checkbox-primary {margin-top: 5px;}
-.every-checkbox .checkbox-primary {width: 50px;}
-.cycle-config .tab-content>.tab-pane {padding-left: 0; padding-right: 0;}
-.cycle-config .tab-content>.tab-pane:first-child,
-.cycle-config .tab-content>.input-group {width: 44.5%;}
-.switch-time {min-height: 32px;}
-.form-row .form-group.align-center {align-items: center;}
+.form-row .form-group.items-center {align-items: center;}
 #nameInputBox {width: 80%;}
 #nameInputBox .form-control {width: 99.8%;}
-
+.have-fix .input-control-prefix {width: 42px; background: #f6f7f9; opacity: 1;}
+.have-fix .input-group-addon {width: 42px;}
+.highlight-suffix .input-control-suffix,
+.highlight-prefix .input-control-prefix {opacity: 1;}
+.config-day {width: 114px;}
+.form-row .tooltip-btn::before {background: #fff;}
+.form-row .tooltip-btn {box-shadow: none;}
+.form-row .tooltip-btn:hover:before {opacity: 0;}
+.input-control > .form-control.before-days {padding-left: 50px;}
+.form .label-id {height: 20px; border-color: #D8DBDE; border-radius: 10px;}
