@@ -432,7 +432,7 @@ class productModel extends model
         }
         else
         {
-            $products = $this->getList('', $status, $num, 0, $shadow);
+            $products = $this->getList(0, $status, $num, 0, $shadow);
         }
 
         if(empty($products)) return $products;

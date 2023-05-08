@@ -756,18 +756,16 @@ class blockZen extends block
     /**
      * Print product statistic block.
      *
+     * @param  object $block
      * @access public
-     * @param  string $storyType requirement|story
      * @return void
      */
-    public function printProductStatisticBlock($storyType = 'story')
+    public function printProductStatisticBlock($block)
     {
-        if(!empty($this->params->type) and preg_match('/[^a-zA-Z0-9_]/', $this->params->type)) return;
+        $status = isset($block->params->type)  ? $block->params->type  : '';
+        $count  = isset($block->params->count) ? $block->params->count : '';
 
-        $status = isset($this->params->type) ? $this->params->type : '';
-        $count  = isset($this->params->count) ? $this->params->count : '';
-
-        $products      = $this->loadModel('product')->getOrderedProducts($status, $count);
+        $products      = $this->loadModel('product')->getOrderedProducts($status, (int)$count);
         $productIdList = array_keys($products);
 
         if(empty($products))
@@ -780,7 +778,7 @@ class blockZen extends block
         $stories = $this->dao->select('product, stage, COUNT(status) AS count')->from(TABLE_STORY)
             ->where('deleted')->eq(0)
             ->andWhere('product')->in($productIdList)
-            ->beginIF($storyType)->andWhere('type')->eq($storyType)->fi()
+            ->andWhere('type')->eq('story')
             ->groupBy('product, stage')
             ->fetchGroup('product', 'stage');
 
