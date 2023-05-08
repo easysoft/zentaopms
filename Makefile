@@ -1,6 +1,7 @@
-VERSION     = $(shell head -n 1 VERSION)
-XUANVERSION = $(shell head -n 1 extension/xuanxuan/XUANVERSION)
-XVERSION    = $(shell head -n 1 extension/xuanxuan/XVERSION)
+VERSION        = $(shell head -n 1 VERSION)
+XUANVERSION    = $(shell head -n 1 extension/xuanxuan/XUANVERSION)
+XVERSION       = $(shell head -n 1 extension/xuanxuan/XVERSION)
+XHPROF_VERSION = 2.3.9
 
 XUANPATH      := $(XUANXUAN_SRC_PATH)
 BUILD_PATH    := $(if $(ZENTAO_BUILD_PATH),$(ZENTAO_BUILD_PATH),$(shell pwd))
@@ -345,3 +346,10 @@ ci:
 	mv ZenTaoALM.$(VERSION).int.php*.zip ZenTaoPMS.$(VERSION).php*.zip $(RELEASE_PATH)/pmsPack
 	mv *.deb $(RELEASE_PATH)/pmsPack/deb/
 	mv *.rpm $(RELEASE_PATH)/pmsPack/rpm/
+xhprof:
+	wget https://pecl.php.net/get/xhprof-$(XHPROF_VERSION).tgz
+	tar -zxvf xhprof-$(XHPROF_VERSION).tgz
+	rm -rf www/xhprof/xhprof_html www/xhprof/xhprof_lib
+	mkdir -p www/xhprof
+	mv xhprof-$(XHPROF_VERSION)/xhprof_html xhprof-$(XHPROF_VERSION)/xhprof_lib www/xhprof/
+	rm -rf xhprof-$(XHPROF_VERSION)* package.xml
