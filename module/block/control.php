@@ -186,6 +186,7 @@ class block extends control
     }
 
     /**
+     * 将一个区块恢复默认。
      * Reset dashboard blocks.
      *
      * @param  string $dashboard
@@ -198,28 +199,6 @@ class block extends control
         if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
         return $this->send(array('result' => 'success'));
-    }
-
-    /**
-     * Ajax for use new block.
-     *
-     * @param  string $module
-     * @param  string $confirm
-     * @access public
-     * @return void
-     */
-    public function ajaxUseNew($module, $confirm = 'no')
-    {
-        if($confirm == 'yes')
-        {
-            $this->dao->delete()->from(TABLE_BLOCK)->where('module')->eq($module)->andWhere('account')->eq($this->app->user->account)->exec();
-            $this->dao->delete()->from(TABLE_CONFIG)->where('module')->eq($module)->andWhere('owner')->eq($this->app->user->account)->andWhere('`key`')->eq('blockInited')->exec();
-            return print(js::reload('parent'));
-        }
-        elseif($confirm == 'no')
-        {
-            $this->loadModel('setting')->setItem("{$this->app->user->account}.$module.block.initVersion", $this->config->block->version);
-        }
     }
 
     /**
