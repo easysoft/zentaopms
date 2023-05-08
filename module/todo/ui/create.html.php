@@ -115,7 +115,7 @@ formPanel
             (
                 set(array
                 (
-                    'name'   => 'cycleType',
+                    'name'   => 'config[type]',
                     'id'     => 'cycleType',
                     'value'  => 'day',
                     'inline' => true,
@@ -198,7 +198,8 @@ formPanel
                 (
                     'id'    => 'config[week]',
                     'name'  => 'config[week]',
-                    'items' => $lang->todo->dayNames
+                    'items' => $lang->todo->dayNames,
+                    'value' => 1
                 )))
             )
         )
@@ -229,7 +230,8 @@ formPanel
                 (
                     'id'    => 'config[month]',
                     'name'  => 'config[month]',
-                    'items' => $days
+                    'items' => $days,
+                    'value' => 1
                 )))
             )
         )
@@ -344,12 +346,12 @@ formPanel
             select
             (
                 set(array
-            (
-                'items'  => $users,
-                'value'  => $app->user->account,
-                'id'     => 'assignedTo',
-                'name'   => 'assignedTo',
-            )),
+                (
+                    'items'  => $users,
+                    'value'  => $app->user->account,
+                    'id'     => 'assignedTo',
+                    'name'   => 'assignedTo',
+                )),
                 on::change('changeAssignedTo()')
             )
         ),
