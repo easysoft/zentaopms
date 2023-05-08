@@ -6,6 +6,12 @@
     font-size: 14px;
     font-weight: 700;
     line-height: 20px;
+    display: flex;
+    align-items: center;
+}
+
+.histories {
+    background: #FCFDFE;
 }
 
 .histories .btn-mini {
@@ -22,7 +28,8 @@
 
 .histories .btn {
     background-color: #fff;
-    display: inline-block;
+    display: inline-flex;
+    align-items: center;
     margin-bottom: 0;
     font-weight: 400;
     text-align: center;
@@ -69,6 +76,7 @@
     background: 0 0;
     box-shadow: none;
     border-color: transparent;
+    text-decoration: none;
 }
 
 .detail-content {
@@ -77,12 +85,26 @@
 }
 
 .histories-list {
-    padding-left: 15px;
     margin-bottom: 0;
     margin-top: 0;
     list-style: decimal;
     display: flex;
     flex-direction: column;
+}
+
+.histories-list .timeline {
+    top: 13px;
+    bottom: 13px;
+    left: 10px;
+    background: #EEE;
+}
+
+.histories-list .marker {
+    color: #5E626D;
+    border-color: #EEE;
+    border-width: 1px;
+    box-shadow: none;
+    background: #FCFDFE;
 }
 
 .histories-list.sort-reverse {
@@ -93,6 +115,7 @@
     word-break: break-word;
     word-wrap: break-word;
     position: relative;
+    list-style: none;
 }
 
 .histories-list > li strong {
