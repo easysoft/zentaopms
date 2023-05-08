@@ -2,7 +2,8 @@
 <?php
 include dirname(__FILE__, 5) . "/test/lib/init.php";
 include dirname(__FILE__, 2) . '/task.class.php';
-su('admin');
+
+zdTable('task')->config('task_computeworkinghours')->gen(15);
 
 /**
 
@@ -10,15 +11,14 @@ title=taskModel->computeWorkingHours();
 cid=1
 pid=1
 
-根据taskID计算没有子任务的计划工时 >> 1,0,3,0
-根据taskID计算有父任务的子任务工时 >> 601,18,30,18
-根据不存在的taskID计算工时 >> 0
-
 */
 
-$taskIDList = array('1', '601', '100001');
+$taskIDList = array(1, 2, 3, 4, 5, 1001);
 
 $task = new taskTest();
-r($task->computeWorkingHoursTest($taskIDList[0])) && p('id,estimate,consumed,left') && e('1,0,3,0');      //根据taskID计算没有子任务的计划工时
-r($task->computeWorkingHoursTest($taskIDList[1])) && p('id,estimate,consumed,left') && e('601,18,30,18'); //根据taskID计算有父任务的子任务工时
-r($task->computeWorkingHoursTest($taskIDList[2])) && p('id,estimate,consumed,left') && e('0');            //根据不存在的taskID计算工时
+r($task->computeWorkingHoursTest($taskIDList[0])) && p('id,estimate,consumed,left') && e('1,2,0,1');  //根据父taskID更新普通任务的任务工时
+r($task->computeWorkingHoursTest($taskIDList[1])) && p('id,estimate,consumed,left') && e('2,9,6,4');  //根据父taskID更新任务工时
+r($task->computeWorkingHoursTest($taskIDList[2])) && p('id,estimate,consumed,left') && e('3,9,10,6'); //根据父taskID更新父任务取消的任务工时
+r($task->computeWorkingHoursTest($taskIDList[3])) && p('id,estimate,consumed,left') && e('4,9,9,0');  //根据父taskID更新子任务全部关闭的父任务的工时
+r($task->computeWorkingHoursTest($taskIDList[4])) && p('id,estimate,consumed,left') && e('5,3,0,1');  //根据父taskID更新没有子任务的任务工时
+r($task->computeWorkingHoursTest($taskIDList[5])) && p('id,estimate,consumed,left') && e('0,0,0,0');  //根据不存在的taskID计算工时

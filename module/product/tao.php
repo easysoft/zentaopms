@@ -514,34 +514,6 @@ class productTao extends productModel
     }
 
     /**
-     * 获取客户端分支下拉的HTML
-     * Get branch select for mobile
-     *
-     * @param  object $product
-     * @param  string $currentModule
-     * @param  string $currentMethod
-     * @param  string $extra
-     * @access private
-     * @return string
-     */
-    protected function getBranchSelect4Mobile(object $product, string|int $branch, string $currentModule, string $currentMethod, string $extra = ''): string
-    {
-        if(!isset($product->type) or $product->type == 'normal') return '';
-
-        /* 修正分支显示语言项。 */
-        $this->lang->product->branch = sprintf($this->lang->product->branch, $this->lang->product->branchName[$product->type]);
-        $this->lang->product->menu->settings['subMenu']->branch['link'] = str_replace('@branch@', $this->lang->product->branch, $this->lang->product->menu->settings['subMenu']->branch['link']);
-
-        /* 生成分支HTML代码。*/
-        $output     = '';
-        $branches   = $this->loadModel('branch')->getPairs($product->id, 'all');
-        $branchName = zget($branches, $branch, reset($branches));
-        if($branchName) $output .= "<a id='currentBranch' href=\"javascript:showSearchMenu('branch', '{$product->id}', '$currentModule', '$currentMethod', '$extra')\">{$branchName} <span class='icon-caret-down'></span></a><div id='currentBranchDropMenu' class='hidden affix enter-from-bottom layer'></div>";
-
-        return $output;
-    }
-
-    /**
      * 计算在点击1.5级导航下拉选项后，跳转的模块名和方法名。
      * Compute locate for drop menu in PC.
      *
@@ -721,54 +693,6 @@ class productTao extends productModel
             ->beginIF(strpos($status, 'noclosed') !== false)->andWhere('t2.status')->ne('closed')->fi()
             ->orderBy($orderBy . 't2.order asc')
             ->fetchAll();
-    }
-
-    /**
-     * 构建移动端的下拉HTML。
-     * Create the select code of products.
-     *
-     * @param  array       $products
-     * @param  int         $productID
-     * @param  string      $currentModule
-     * @param  string      $currentMethod
-     * @param  string      $extra
-     * @param  int|string  $branch
-     * @param  bool        $withBranch      true|false
-     * @access protected
-     * @return string
-     */
-    protected function buildSelect4Mobile(array $products, int $productID, string $currentModule, string $currentMethod, string $extra = '', string|int $branch = '', bool $withBranch = true): string
-    {
-        /* 处理数据。*/
-        if(isset($products[0])) unset($products[0]);
-        if(empty($products)) return '';
-        if(!isset($products[$productID])) $productID = (int)key($products);
-
-        /* 检测当前页面是否在项目或执行的测试二级导航中。*/
-        $isQaModule = (strpos(',project,execution,', ",{$this->app->tab},") !== false and stripos(',bug,testcase,testtask,ajaxselectstory,', ",{$this->app->rawMethod},") !== false) ? true : false;
-        if($this->app->tab == 'project' and stripos(',zeroCase,browseUnits,groupCase,', ",$currentMethod,") !== false) $isQaModule = true;
-        if($isQaModule)
-        {
-            if($this->app->tab == 'project')   $extra = strpos(',testcase,groupCase,zeroCase,', ",$currentMethod,") !== false ? $extra : $this->session->project;
-            if($this->app->tab == 'execution') $extra = $this->session->execution;
-        }
-
-        /* 查询产品数据。*/
-        $currentProduct = $this->getById($productID);
-        $this->session->set('currentProductType', $currentProduct->type);
-
-        /* 生成异步获取下拉菜单的链接。*/
-        $moduleName = $isQaModule ? 'bug' : 'product';
-        if($this->app->tab == 'feedback') $moduleName = 'feedback';
-        $dropMenuLink = helper::createLink($moduleName, 'ajaxGetDropMenu', "objectID=$productID&module=$currentModule&method=$currentMethod&extra=$extra");
-
-        /* 构建产品1.5级导航代码。 */
-        $output = "<a id='currentItem' href=\"javascript:showSearchMenu('product', '$productID', '$currentModule', '$currentMethod', '$extra')\"><span class='text'>{$currentProduct->name}</span> <span class='icon-caret-down'></span></a><div id='currentItemDropMenu' class='hidden affix enter-from-bottom layer'></div>";
-
-        /* 处理分支。根据条件，判断是否追加分支1.5级导航代码。*/
-        if($currentProduct->type == 'normal' || !$withBranch) unset($this->lang->product->menu->settings['subMenu']->branch);
-        if($currentProduct->type != 'normal' && $withBranch && $currentModule != 'programplan') $output .= $this->getBranchSelect4Mobile($currentProduct, $branch, $currentModule, $currentMethod, $extra);
-        return $output;
     }
 
     /**

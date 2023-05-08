@@ -81,6 +81,7 @@ class blockModel extends model
             {
                 $blockName = $blockKey;
                 if(isset($this->lang->block->modules[$moduleName]->availableBlocks->$blockKey)) $blockName = $this->lang->block->modules[$moduleName]->availableBlocks->$blockKey;
+                if(isset($this->lang->block->modules[$moduleName]->availableBlocks[$blockKey])) $blockName = $this->lang->block->modules[$moduleName]->availableBlocks[$blockKey];
                 if(isset($this->lang->block->availableBlocks->$blockKey)) $blockName = $this->lang->block->availableBlocks->$blockKey;
                 if(isset($this->lang->block->modules['scrum']['index']->availableBlocks->$blockKey)) $blockName = $this->lang->block->modules['scrum']['index']->availableBlocks->$blockKey;
                 if(isset($this->lang->block->modules['waterfall']['index']->availableBlocks->$blockKey)) $blockName = $this->lang->block->modules['waterfall']['index']->availableBlocks->$blockKey;
@@ -335,6 +336,23 @@ class blockModel extends model
             ->andWhere('vision')->eq($this->config->vision)
             ->exec();
 
+        return true;
+    }
+
+    /**
+     * 关闭一个区块。
+     * Close a block.
+     *
+     * @param  object $block
+     * @access public
+     * @return bool
+     */
+    public function closeBlock(object $block): bool
+    {
+        $this->dao->delete()->from(TABLE_BLOCK)
+            ->where('module')->eq($block->module)
+            ->andWhere('code')->eq($block->code)
+            ->exec();
         return true;
     }
 

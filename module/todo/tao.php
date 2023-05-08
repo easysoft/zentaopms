@@ -15,6 +15,7 @@ class todoTao extends todoModel
      * Get a todo.
      *
      * @param  int     $todoID
+     * @access protected
      * @return object
      */
     protected function fetch(int $todoID): object
@@ -27,6 +28,7 @@ class todoTao extends todoModel
      * Get a todo.
      *
      * @param  array  $todoIdList
+     * @access protected
      * @return array
      */
     protected function fetchRows(array $todoIdList): array
@@ -157,7 +159,7 @@ class todoTao extends todoModel
      *
      * @param  object $todo
      * @access protected
-     * @return stdclass
+     * @return object
      */
     protected function buildCycleTodo(object $todo): object
     {

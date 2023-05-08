@@ -164,19 +164,25 @@ class block extends control
     }
 
     /**
+     * 永久关闭区块。
      * Close block forever.
      *
-     * @param  int    $blockID
+     * @param  string    $blockID
      * @access public
      * @return void
      */
-    public function close($blockID)
+    public function close(string $blockID)
     {
+        $blockID = (int)$blockID; // 强制转换为 int 类型，防止调用 model、tao 方法时报错。
+
+        /* 永久关闭区块。 */
         $block = $this->block->getByID($blockID);
+        $this->block->closeBlock($block);
+
+        /* 将关闭的区块保存到配置信息。 */
         $closedBlock = isset($this->config->block->closed) ? $this->config->block->closed : '';
-        $this->dao->delete()->from(TABLE_BLOCK)->where('source')->eq($block->source)->andWhere('code')->eq($block->code)->exec();
-        $this->loadModel('setting')->setItem('system.block.closed', $closedBlock . ",{$block->source}|{$block->code}");
-        return print(js::reload('parent'));
+        $this->loadModel('setting')->setItem('system.block.closed', $closedBlock . ",{$block->module}|{$block->code}");
+        return $this->send(array('result' => 'success'));
     }
 
     /**
@@ -217,7 +223,7 @@ class block extends control
     }
 
     /**
-     * 展示应用的仪表盘
+     * 展示应用的仪表盘。
      * Display dashboard for app.
      *
      * @param  string  $dashboard
@@ -227,35 +233,35 @@ class block extends control
      */
     public function dashboard(string $dashboard, string $projectID = '0')
     {
-        $projectID = (int)$projectID; // 强制转换为 int 类型，防止调用 model、tao 方法时报错
+        $projectID = (int)$projectID; // 强制转换为 int 类型，防止调用 model、tao 方法时报错。
 
-        /* 获取传入应用对应的区块列表 以及 获取当前应用下区块启用状态 */
+        /* 获取传入应用对应的区块列表 以及 获取当前应用下区块启用状态。 */
         $blocks      = $this->block->getMyDashboard($dashboard);
         $isInitiated = $this->block->fetchBlockInitStatus($dashboard);
 
-        /* 判断用户是否为首次登录 ，判断条件 当前用户没有该 app 下的区块数据 且 没有设置过该 app 下的区块启用状态 且不是演示模式  */
+        /* 判断用户是否为首次登录 ，判断条件 当前用户没有该 app 下的区块数据 且 没有设置过该 app 下的区块启用状态 且不是演示模式。 */
         if(empty($blocks) and !$isInitiated and !defined('TUTORIAL'))
         {
-            $this->block->initBlock($dashboard); // 初始化该 app 下区块数据
-            $blocks = $this->block->getMyDashboard($dashboard); // 获取初始化后的区块列表
+            $this->block->initBlock($dashboard); // 初始化该 app 下区块数据。
+            $blocks = $this->block->getMyDashboard($dashboard); // 获取初始化后的区块列表。
         }
 
-        /*  */
+        /* 处理页面需要的数据格式。  */
         $blocks = $this->blockZen->processBlockForRender($blocks, $projectID);
 
+        /* 如果页面渲染方式为 json 的话，直接返回 json 格式数据 ，主要是为了给 app 提供数据。 */
         if($this->app->getViewType() == 'json') return print(json_encode($blocks));
 
+        /* 将区块列表分为长区块和短区块。 */
         list($shortBlocks, $longBlocks) = $this->blockZen->splitBlocksByLen($blocks);
 
+        /* 组织渲染页面需要数据。 */
         $this->view->title       = zget($this->lang->block->dashboard, $dashboard, $this->lang->block->dashboard['default']);
         $this->view->longBlocks  = $longBlocks;
         $this->view->shortBlocks = $shortBlocks;
         $this->view->dashboard   = $dashboard;
         $this->render();
     }
-
-
-
 
     /**
      * Print block.

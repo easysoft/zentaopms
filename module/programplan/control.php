@@ -56,7 +56,7 @@ class programplan extends control
 
         /* 获取项目下产品并调整三级导航操作按钮。 */
         $products = $this->loadModel('product')->getProducts($projectID);
-        if($this->session->hasProduct) $this->lang->modulePageNav = $this->product->select($products, $productID, 'programplan', 'browse', $type, 0, 0, '', false);
+        if($this->session->hasProduct) $this->lang->modulePageNav = $this->product->select($products, $productID, 'programplan', 'browse', $type, 0, false);
 
         /* 生成阶段列表页阶段数据。 */
         $stages = $this->programplanZen->buildBrowseStages($projectID, $productID, $baselineID, $type, $orderBy);

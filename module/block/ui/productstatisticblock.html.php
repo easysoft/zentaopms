@@ -88,8 +88,7 @@ function getProductInfo($products, $blockNavID): array
                             set('class', 'px-3 py-2'),
                             div
                             (
-                                set('class', 'mx-6 my-4 bg-primary aspect-square text-center align-middle'),
-                                span('需求交付率')
+                                set('class', 'mx-6 my-4 bg-primary aspect-square')
                             ),
                             div
                             (
@@ -117,134 +116,21 @@ function getProductInfo($products, $blockNavID): array
                         cell
                         (
                             set('width', '55%'),
-                            set('class', 'py-2'),
+                            set('class', 'py-2 border-r'),
                             div
                             (
                                 set('class', 'py-2'),
-                                span('BUG统计')
+                                span('未完成的需求统计')
                             ),
                             div
                             (
-                                set('class', 'flex border-r py-1'),
-                                cell
-                                (
-                                    div(set('class', 'py-1'), span('昨日新增'), span(set('class', 'ml-1'), '12')),
-                                    div(set('class', 'py-1'), span('今日新增'), span(set('class', 'ml-1'), '6')),
-                                ),
-                                cell
-                                (
-                                    set('class', 'flex-1 px-3'),
-                                    div
-                                    (
-                                        set('class', 'py-1'),
-                                        div
-                                        (
-                                            set('class', 'progress'),
-                                            div
-                                            (
-                                                set('class', 'progress-bar'),
-                                                set('role', 'progressbar'),
-                                                setStyle(['width' => '36%']),
-                                            )
-                                        )
-                                    ),
-                                    div
-                                    (
-                                        set('class', 'py-1'),
-                                        div
-                                        (
-                                            set('class', 'progress'),
-                                            div
-                                            (
-                                                set('class', 'progress-bar'),
-                                                set('role', 'progressbar'),
-                                                setStyle(['width' => '18%']),
-                                            )
-                                        )
-                                    )
-                                )
+                                set('class', 'py-1'),
+                                span('本周完成 12 | '),
+                                span('本周新增 35')
                             ),
                             div
                             (
-                                set('class', 'flex border-r py-1'),
-                                cell
-                                (
-                                    div(set('class', 'py-1'), span('昨日解决'), span(set('class', 'ml-1'), '36')),
-                                    div(set('class', 'py-1'), span('今日解决'), span(set('class', 'ml-1'), '12')),
-                                ),
-                                cell
-                                (
-                                    set('class', 'flex-1 px-3'),
-                                    div
-                                    (
-                                        set('class', 'py-1'),
-                                        div
-                                        (
-                                            set('class', 'progress'),
-                                            div
-                                            (
-                                                set('class', 'progress-bar'),
-                                                set('role', 'progressbar'),
-                                                setStyle(['width' => '84%']),
-                                            )
-                                        )
-                                    ),
-                                    div
-                                    (
-                                        set('class', 'py-1'),
-                                        div
-                                        (
-                                            set('class', 'progress'),
-                                            div
-                                            (
-                                                set('class', 'progress-bar'),
-                                                set('role', 'progressbar'),
-                                                setStyle(['width' => '28%']),
-                                            )
-                                        )
-                                    )
-                                )
-                            ),
-                            div
-                            (
-                                set('class', 'flex border-r py-1'),
-                                cell
-                                (
-                                    div(set('class', 'py-1'), span('昨日关闭'), span(set('class', 'ml-1'), '24')),
-                                    div(set('class', 'py-1'), span('今日关闭'), span(set('class', 'ml-1'), '12')),
-                                ),
-                                cell
-                                (
-                                    set('class', 'flex-1 px-3'),
-                                    div
-                                    (
-                                        set('class', 'py-1'),
-                                        div
-                                        (
-                                            set('class', 'progress'),
-                                            div
-                                            (
-                                                set('class', 'progress-bar'),
-                                                set('role', 'progressbar'),
-                                                setStyle(['width' => '60%']),
-                                            )
-                                        )
-                                    ),
-                                    div
-                                    (
-                                        set('class', 'py-1'),
-                                        div
-                                        (
-                                            set('class', 'progress'),
-                                            div
-                                            (
-                                                set('class', 'progress-bar'),
-                                                set('role', 'progressbar'),
-                                                setStyle(['width' => '30%']),
-                                            )
-                                        )
-                                    )
-                                )
+                                set('class', 'mr-4 bg-primary aspect-video'),
                             )
                         )
                     )
@@ -252,7 +138,12 @@ function getProductInfo($products, $blockNavID): array
                 cell
                 (
                     set('width', '32%'),
-                    123
+                    set('class', 'py-2 px-6'),
+                    div
+                    (
+                        set('class', 'py-2'),
+                        span('产品最新推进')
+                    ),
                 )
             )
         );

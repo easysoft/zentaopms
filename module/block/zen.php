@@ -153,28 +153,28 @@ class blockZen extends block
      */
     protected function processBlockForRender(array $blocks, int $projectID): array
     {
-        /* 根据用户的权限，和当前系统开启的权限 处理区块列表 */
+        /* 根据用户的权限，和当前系统开启的权限 处理区块列表。*/
         $acls = $this->app->user->rights['acls'];
         foreach($blocks as $key => $block)
         {
-            /* 将没有开启功能区块过虑 */
+            /* 将没有开启功能区块过虑。 */
             if($block->code == 'waterfallrisk' and !helper::hasFeature("waterfall_risk"))   continue;
             if($block->code == 'waterfallissue' and !helper::hasFeature("waterfall_issue")) continue;
             if($block->code == 'scrumrisk' and !helper::hasFeature("scrum_risk"))           continue;
             if($block->code == 'scrumissue' and !helper::hasFeature("scrum_issue"))         continue;
 
-            /* 将没有视图权限的区块过滤 */
+            /* 将没有视图权限的区块过滤。 */
             if(!empty($block->module) and $block->module != 'todo' and !empty($acls['views']) and !isset($acls['views'][$block->module]))
             {
                 unset($blocks[$key]);
                 continue;
             }
 
-            /* 处理 params 信息中  count 的值，当没有  count 字段时 ，将 num 字段赋值给 count */
+            /* 处理 params 信息中  count 的值，当没有  count 字段时 ，将 num 字段赋值给 count。 */
             $block->params = json_decode($block->params);
             if(isset($block->params->num) and !isset($block->params->count)) $block->params->count = $block->params->num;
 
-            /* 补全加载链接 */
+            /* 补全加载链接。 */
             $this->computeMoreLink($block, $projectID);
         }
         return $blocks;
@@ -190,7 +190,7 @@ class blockZen extends block
      */
     private function computeMoreLink(object $block, int $projectID): void
     {
-        $module = empty($block->module) ? 'common' : $block->module;
+        $module = $block->module ? $block->module : 'common';
 
         $block->blockLink = $this->createLink('block', 'printBlock', "id=$block->id&module=$block->module");
         $block->moreLink  = '';
