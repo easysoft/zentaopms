@@ -386,7 +386,7 @@ class todoTest
      * @param  string $todoType
      * @param  int    $objectID
      * @access public
-     * @return string
+     * @return int
      */
     public function getPriByTodoTypeTest(string $todoType, int $objectID): int
     {
@@ -401,15 +401,15 @@ class todoTest
      * 根据周期待办，获取这些待办生成的待办数据。
      * Get created cycle list by todo list.
      *
-     * @param  int    $isInintCycle
+     * @param  bool    $isInitCycle
      * @access public
      * @return int
      */
-    public function getCycleListTest(bool $isInintCycle = true): int
+    public function getCycleListTest(bool $isInitCycle = true): int
     {
         $todoList = $this->objectModel->getValidCycleList();
 
-        if($isInintCycle) $this->objectModel->createBycycle($todoList);
+        if($isInitCycle) $this->objectModel->createBycycle($todoList);
 
         $cycleList = $this->objectModel->getCycleList($todoList);
 
@@ -436,5 +436,22 @@ class todoTest
         $testResut->isClosed  = $isClosed;
 
         return $testResut;
+
+    /**
+     * 获取批量创建待办的有效数据。
+     * Get valid todo list of batch create.
+     *
+     * @param  array   $todos
+     * @param  int     $loop
+     * @param  string  $assignedTo
+     * @access public
+     * @return int
+     */
+    public function getValidsOfBatchCreateTest(array $todos, int $loop, string $assignedTo): int
+    {
+        $todos = json_decode(json_encode($todos));
+        $this->objectModel->getValidsOfBatchCreate($todos, $loop, $assignedTo);
+
+        return dao::isError() ? 0 : 1;
     }
 }
