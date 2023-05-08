@@ -65,91 +65,90 @@ title=taskModel->computeCurrentTaskStatus();
 timeout=0
 cid=1
 
-- 执行$task1
+sed: can't read /home/tianshujie/repo/zentaopms/test/config/my.php: No such file or directory
+- 查询 task1  情况的task信息 currentTask[0] taskID 1 currentTasksestimate 状态自动变更 没有工时消耗 团队成员members[0]
  - 属性status @doing
  - 属性assignedTo @user1
  - 属性estimate @9
  - 属性left @0
  - 属性consumed @10
 
-- 执行$task2
+- 查询 task2  情况的task信息 currentTask[0] taskID 1 currentTasksestimate 状态自动变更 没有工时消耗 团队成员members[0]
  - 属性status @doing
  - 属性assignedTo @user1
  - 属性estimate @9
  - 属性left @0
  - 属性consumed @10
 
-- 执行$task3
+- 查询 task3  情况的task信息 currentTask[0] taskID 1 currentTasksestimate 状态自动变更 没有工时消耗 团队成员members[0]
  - 属性status @doing
  - 属性assignedTo @user1
  - 属性estimate @9
  - 属性left @0
  - 属性consumed @10
 
-- 执行$task4
+- 查询 task4  情况的task信息 currentTask[0] taskID 1 currentTasksestimate 状态非自动变更 没有工时消耗 团队成员members[0]
  - 属性status @doing
  - 属性assignedTo @user1
  - 属性estimate @9
  - 属性left @0
  - 属性consumed @10
 
-- 执行$task5
+- 查询 task5  情况的task信息 currentTask[0] taskID 1 currentTasksestimate 状态非自动变更 有工时消耗 团队成员members[0]
  - 属性status @doing
  - 属性assignedTo @user1
  - 属性estimate @9
  - 属性left @0
  - 属性consumed @10
 
-- 执行$task6
+- 查询 task6  情况的task信息 currentTask[0] taskID 1 currentTasksestimate 状态非自动变更 有工时消耗 团队成员members[1]
  - 属性status @doing
  - 属性assignedTo @user1
  - 属性estimate @9
  - 属性left @0
  - 属性consumed @10
 
-- 执行$task7
+- 查询 task7  情况的task信息 currentTask[1] taskID 2 currentTasksestimate 状态自动变更 有工时消耗 团队成员members[0]
  - 属性status @done
  - 属性assignedTo @admin
  - 属性estimate @8
  - 属性left @8
  - 属性consumed @0
 
-- 执行$task8
+- 查询 task8  情况的task信息 currentTask[1] taskID 2 currentTasksestimate 状态自动变更 有工时消耗 团队成员members[0]
  - 属性status @done
  - 属性assignedTo @admin
  - 属性estimate @8
  - 属性left @8
  - 属性consumed @0
 
-- 执行$task9
+- 查询 task9  情况的task信息 currentTask[1] taskID 2 currentTasksestimate 状态自动变更 有工时消耗 团队成员members[0]
  - 属性status @done
  - 属性assignedTo @admin
  - 属性estimate @8
  - 属性left @8
  - 属性consumed @0
 
-- 执行$task10
+- 查询 task10 情况的task信息 currentTask[1] taskID 2 currentTasksestimate 状态非自动变更 有工时消耗 团队成员members[0]
  - 属性status @done
  - 属性assignedTo @admin
  - 属性estimate @8
  - 属性left @8
  - 属性consumed @0
 
-- 执行$task11
+- 查询 task11 情况的task信息 currentTask[1] taskID 2 currentTasksestimate 状态非自动变更 没有工时消耗 团队成员members[0]
  - 属性status @done
  - 属性assignedTo @admin
  - 属性estimate @8
  - 属性left @8
  - 属性consumed @0
 
-- 执行$task12
+- 查询 task12 情况的task信息 currentTask[1] taskID 2 currentTasksestimate 状态非自动变更 没有工时消耗 团队成员members[1]
  - 属性status @done
  - 属性assignedTo @admin
  - 属性estimate @8
  - 属性left @8
  - 属性consumed @0
-
-
 
 */
 

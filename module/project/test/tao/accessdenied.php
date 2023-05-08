@@ -4,10 +4,7 @@ include dirname(__FILE__, 5) . "/test/lib/init.php";
 
 su('admin');
 
-$project = zdTable('project');
-$project->id->range('2-3');
-$project->type->range("project");
-$project->gen(2);
+zdTable('project')->config('project')->gen(2);
 
 /**
 

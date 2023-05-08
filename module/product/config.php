@@ -13,7 +13,7 @@ if($config->systemMode == 'ALM') $config->product->custom->batchEditFields .= ',
 $config->product->list = new stdclass();
 $config->product->list->exportFields = 'id,program,line,name,manager,draftStories,activeStories,changedStories,reviewingStories,closedStories,storyCompleteRate,bugs,unResolvedBugs,assignToNullBugs,bugFixedRate,plans,releases';
 
-$config->product->showBranchMethod = 'browse,project';
+$config->product->showBranchMethod = ',browse,project,track,';
 
 global $lang, $app;
 $app->loadLang('story');

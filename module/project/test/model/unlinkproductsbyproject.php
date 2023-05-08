@@ -19,5 +19,5 @@ $project    = new Project();
 $oldProject = new stdclass();
 $data       = new stdclass();
 
-r($project->stageProduct(1, $data, $oldProject)) && p('') && e(1);         // 解除关联部分关联的产品信息。
-r($project->stageProduct(2, $data, $oldProject)) && p('') && e(1);         // 解除关联部分关联的产品信息。
+r($project->stageProduct(1, $data, $oldProject)) && p('') && e(1); // 解除关联部分关联的产品信息。
+r($project->stageProduct(2, $data, $oldProject)) && p('') && e(1); // 解除关联部分关联的产品信息。

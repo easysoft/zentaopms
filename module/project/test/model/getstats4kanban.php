@@ -4,7 +4,7 @@ include dirname(__FILE__, 5) . "/test/lib/init.php";
 
 su('admin');
 
-$project = zdTable('project')->config('1')->gen(8);
+$project = zdTable('project')->config('project')->gen(8);
 
 /**
 
@@ -12,6 +12,18 @@ title=测试 projectTao::getstats4kanban
 timeout=0
 cid=1
 
+PHP Warning:  Undefined array key 1 in /opt/zentao/gitlab/zentaopms/test/lib/init.php on line 317
+PHP Deprecated:  substr(): Passing null to parameter #1 ($string) of type string is deprecated in /opt/zentao/gitlab/zentaopms/test/lib/init.php on line 317
+PHP Warning:  Undefined array key 1 in /opt/zentao/gitlab/zentaopms/test/lib/init.php on line 317
+PHP Deprecated:  substr(): Passing null to parameter #1 ($string) of type string is deprecated in /opt/zentao/gitlab/zentaopms/test/lib/init.php on line 317
+PHP Warning:  Undefined array key 1 in /opt/zentao/gitlab/zentaopms/test/lib/init.php on line 317
+PHP Deprecated:  substr(): Passing null to parameter #1 ($string) of type string is deprecated in /opt/zentao/gitlab/zentaopms/test/lib/init.php on line 317
+PHP Warning:  Undefined array key 1 in /opt/zentao/gitlab/zentaopms/test/lib/init.php on line 317
+PHP Deprecated:  substr(): Passing null to parameter #1 ($string) of type string is deprecated in /opt/zentao/gitlab/zentaopms/test/lib/init.php on line 317
+PHP Warning:  Undefined array key 1 in /opt/zentao/gitlab/zentaopms/test/lib/init.php on line 317
+PHP Deprecated:  substr(): Passing null to parameter #1 ($string) of type string is deprecated in /opt/zentao/gitlab/zentaopms/test/lib/init.php on line 317
+PHP Warning:  Undefined array key 1 in /opt/zentao/gitlab/zentaopms/test/lib/init.php on line 317
+PHP Deprecated:  substr(): Passing null to parameter #1 ($string) of type string is deprecated in /opt/zentao/gitlab/zentaopms/test/lib/init.php on line 317
 - 执行$kanbanGroup['kanbanGroup'] @2
 
 - 执行$kanbanGroup['kanbanGroup']['other'] @3

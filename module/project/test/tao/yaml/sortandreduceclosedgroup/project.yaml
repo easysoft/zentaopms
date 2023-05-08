@@ -1,0 +1,10 @@
+title: sortandreduceclosedgroup-project
+author: chaideqing
+version: "1.0"
+fields:
+    - field: PM
+      range: 'admin,user1'
+    - field: type
+      range: 'project{5}, sprint'
+    - field: status
+      range: 'doing{2}, closed{6}'

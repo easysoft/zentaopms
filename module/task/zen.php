@@ -22,11 +22,11 @@ class taskZen extends task
     private $executionPairs = array();
 
     /**
-     * 准备创建数据。
+     * 准备编辑数据。
      * Prepare edit data.
      *
      * @param  form $postDataFixer
-     * @param  int    $taskID
+     * @param  int  $taskID
      * @access protected
      * @return object
      */
@@ -63,6 +63,7 @@ class taskZen extends task
             ->setIF($oldTask->parent < 0, 'left', $oldTask->left)
 
             ->setIF($oldTask->name != $postData->name || $oldTask->estStarted != $postData->estStarted || $oldTask->deadline != $postData->deadline, 'version', $oldTask->version + 1)
+            ->add('lastEditedBy', $this->app->user->account)
             ->add('lastEditedDate', $now)
             ->stripTags($this->config->task->editor->edit['id'], $this->config->allowedTags)
             ->join('mailto', ',')
@@ -76,12 +77,12 @@ class taskZen extends task
      * Reponse after edit.
      *
      * @param  int     $taskID
-     * @param  string  $from
+     * @param  string  $from        ''|taskkanban
      * @param  array[] $changes
      * @access protected
-     * @return int
+     * @return array|int
      */
-    protected function reponseAfterEdit(int $taskID, string $from, array $changes)
+    protected function reponseAfterEdit(int $taskID, string $from, array $changes): array|int
     {
         $task = $this->task->getById($taskID);
         if($task->fromBug != 0)
@@ -97,31 +98,7 @@ class taskZen extends task
             }
         }
 
-        if(isonlybody())
-        {
-            $execution    = $this->execution->getByID($task->execution);
-            $execLaneType = $this->session->execLaneType ? $this->session->execLaneType : 'all';
-            $execGroupBy  = $this->session->execGroupBy ? $this->session->execGroupBy : 'default';
-            if(($this->app->tab == 'execution' or ($this->config->vision == 'lite' and $this->app->tab == 'project')) and $execution->type == 'kanban')
-            {
-                $rdSearchValue = $this->session->rdSearchValue ? $this->session->rdSearchValue : '';
-                $kanbanData    = $this->loadModel('kanban')->getRDKanban($task->execution, $execLaneType, 'id_desc', 0, $execGroupBy, $rdSearchValue);
-                $kanbanData    = json_encode($kanbanData);
-
-                return print(js::closeModal('parent.parent', '', "parent.parent.updateKanban($kanbanData)"));
-            }
-            if($from == 'taskkanban')
-            {
-                $taskSearchValue = $this->session->taskSearchValue ? $this->session->taskSearchValue : '';
-                $kanbanData      = $this->loadModel('kanban')->getExecutionKanban($task->execution, $execLaneType, $execGroupBy, $taskSearchValue);
-                $kanbanType      = $execLaneType == 'all' ? 'task' : key($kanbanData);
-                $kanbanData      = $kanbanData[$kanbanType];
-                $kanbanData      = json_encode($kanbanData);
-
-                return print(js::closeModal('parent.parent', '', "parent.parent.updateKanban(\"task\", $kanbanData)"));
-            }
-            return print(js::reload('parent.parent'));
-        }
+        if(isonlybody()) return $this->reponseKanban($task, $from);
 
         if(defined('RUN_MODE') && RUN_MODE == 'api') return array('status' => 'success', 'data' => $taskID);
         return print(js::locate($this->createLink('task', 'view', "taskID=$taskID"), 'parent'));
@@ -141,17 +118,18 @@ class taskZen extends task
         $tasks = $this->task->getParentTaskPairs($this->view->execution->id, $task->parent);
         if(isset($tasks[$taskID])) unset($tasks[$taskID]);
 
+        /* Prepare to assign to relevant parameters. */
         if(!isset($this->view->members[$task->assignedTo])) $this->view->members[$task->assignedTo] = $task->assignedTo;
         if(isset($this->view->members['closed']) or $task->status == 'closed') $this->view->members['closed']  = 'Closed';
 
+        /* Get the executions of the task. */
         $executions = !empty($task->project) ? $this->execution->getByProject($task->project, 'all', 0, true) : array();
 
         /* Get task members. */
         $taskMembers = array();
         if(!empty($task->team))
         {
-            $teamAccounts = $task->members;
-            foreach($teamAccounts as $teamAccount)
+            foreach($task->members as $teamAccount)
             {
                 if(!isset($this->view->members[$teamAccount])) continue;
                 $taskMembers[$teamAccount] = $this->view->members[$teamAccount];
@@ -177,17 +155,36 @@ class taskZen extends task
     }
 
     /**
+     * 准备管理团队的数据。
+     * Prepare manage team data.
+     *
+     * @param  form $postData
+     * @param  int  $taskID
+     * @access protected
+     * @return object
+     */
+    protected function prepareManageTeam(form $postData, int $taskID): object
+    {
+        $now  = helper::now();
+        $task = $postData->add('id', $taskID)
+            ->add('lastEditedBy', $this->app->user->account)
+            ->get();
+        return $task;
+    }
+
+    /**
      * 准备指派给的数据.
      * Prepare assignto data.
      *
      * @param  form $postDataFixer
-     * @param  int    $taskID
+     * @param  int  $taskID
      * @access protected
      * @return object
      */
     protected function prepareAssignTo(form $postDataFixer, int $taskID): object
     {
         $task = $postDataFixer->add('id', $taskID)
+            ->add('lastEditedBy', $this->app->user->account)
             ->stripTags($this->config->task->editor->assignto['id'], $this->config->allowedTags)
             ->get();
         return $task;
@@ -198,38 +195,17 @@ class taskZen extends task
      * Reponse after assignto.
      *
      * @param  int    $taskID
+     * @param  string $from        ''|taskkanban
      * @access protected
-     * @return int
+     * @return array|int
      */
-    protected function reponseAfterAssignTo(int $taskID, string $from)
+    protected function reponseAfterAssignTo(int $taskID, string $from): array|int
     {
-        if($this->viewType == 'json' or (defined('RUN_MODE') && RUN_MODE == 'api')) return $this->send(array('result' => 'success'));
-        if(isonlybody())
-        {
-            $task         = $this->task->getById($taskID);
-            $execution    = $this->execution->getByID($task->execution);
-            $execLaneType = $this->session->execLaneType ? $this->session->execLaneType : 'all';
-            $execGroupBy  = $this->session->execGroupBy ? $this->session->execGroupBy : 'default';
-            if(($this->app->tab == 'execution' or ($this->config->vision == 'lite' and $this->app->tab == 'project' and $this->session->kanbanview == 'kanban')) and $execution->type == 'kanban')
-            {
-                $rdSearchValue = $this->session->rdSearchValue ? $this->session->rdSearchValue : '';
-                $kanbanData    = $this->loadModel('kanban')->getRDKanban($task->execution, $execLaneType, 'id_desc', 0, $execGroupBy, $rdSearchValue);
-                $kanbanData    = json_encode($kanbanData);
+        if($this->viewType == 'json' or (defined('RUN_MODE') && RUN_MODE == 'api')) return array('result' => 'success');
 
-                return print(js::closeModal('parent.parent', '', "parent.parent.updateKanban($kanbanData)"));
-            }
-            if($from == 'taskkanban')
-            {
-                $taskSearchValue = $this->session->taskSearchValue ? $this->session->taskSearchValue : '';
-                $kanbanData      = $this->loadModel('kanban')->getExecutionKanban($task->execution, $execLaneType, $execGroupBy, $taskSearchValue);
-                $kanbanType      = $execLaneType == 'all' ? 'task' : key($kanbanData);
-                $kanbanData      = $kanbanData[$kanbanType];
-                $kanbanData      = json_encode($kanbanData);
+        $task = $this->task->getById($taskID);
+        if(isonlybody()) return $this->reponseKanban($task, $from);
 
-                return print(js::closeModal('parent.parent', '', "parent.parent.updateKanban(\"task\", $kanbanData)"));
-            }
-            return print(js::closeModal('parent.parent', 'this'));
-        }
         return print(js::locate($this->createLink('task', 'view', "taskID=$taskID"), 'parent'));
     }
 
@@ -237,16 +213,17 @@ class taskZen extends task
      * 构建指派给表格。
      * Build AssignTo Form.
      *
-     * @param  int    $executionID
-     * @param  object $task
+     * @param  int $executionID
+     * @param  int $taskID
      * @access protected
      * @return void
      */
-    protected function buildAssignToForm(int $executionID, object $task): void
+    protected function buildAssignToForm(int $executionID, int $taskID): void
     {
         $this->loadModel('action');
         $members = $this->loadModel('user')->getTeamMemberPairs($executionID, 'execution', 'nodeleted');
 
+        $task = $this->task->getByID($taskID);
         /* Compute next assignedTo. */
         if(!empty($task->team) and strpos('done,cencel,closed', $task->status) === false)
         {
@@ -263,6 +240,43 @@ class taskZen extends task
         $this->view->members    = $members;
         $this->view->users      = $this->loadModel('user')->getPairs();
         $this->display();
+    }
+
+    /**
+     * 返回看板下响应。
+     * Reposn from kanban.
+     *
+     * @param  object $task
+     * @param  string $from        ''|taskkanban
+     * @access private
+     * @return int
+     */
+    private function reponseKanban(object $task, string $from): int
+    {
+        $execution    = $this->execution->getByID($task->execution);
+        $execLaneType = $this->session->execLaneType ? $this->session->execLaneType : 'all';
+        $execGroupBy  = $this->session->execGroupBy ? $this->session->execGroupBy : 'default';
+
+        $inLiteKanban = $this->config->vision == 'lite' and $this->app->tab == 'project' and $this->session->kanbanview == 'kanban';
+        if(($this->app->tab == 'execution' or $inLiteKanban) and $execution->type == 'kanban')
+        {
+            $rdSearchValue = $this->session->rdSearchValue ? $this->session->rdSearchValue : '';
+            $kanbanData    = $this->loadModel('kanban')->getRDKanban($task->execution, $execLaneType, 'id_desc', 0, $execGroupBy, $rdSearchValue);
+            $kanbanData    = json_encode($kanbanData);
+
+            return print(js::closeModal('parent.parent', '', "parent.parent.updateKanban($kanbanData)"));
+        }
+        if($from == 'taskkanban')
+        {
+            $taskSearchValue = $this->session->taskSearchValue ? $this->session->taskSearchValue : '';
+            $kanbanData      = $this->loadModel('kanban')->getExecutionKanban($task->execution, $execLaneType, $execGroupBy, $taskSearchValue);
+            $kanbanType      = $execLaneType == 'all' ? 'task' : key($kanbanData);
+            $kanbanData      = $kanbanData[$kanbanType];
+            $kanbanData      = json_encode($kanbanData);
+
+            return print(js::closeModal('parent.parent', '', "parent.parent.updateKanban(\"task\", $kanbanData)"));
+        }
+        return print(js::closeModal('parent.parent', 'this'));
     }
 
     /**
@@ -483,6 +497,166 @@ class taskZen extends task
 
         /* Processing image link. */
         return $this->loadModel('file')->processImgURL($task, $this->config->task->editor->create['id'], $rawData->uid);
+    }
+
+    /**
+     * 处理批量创建任务的请求数据。
+     * Process the request data for batch create tasks.
+     *
+     * @param  object  $execution
+     * @param  object  $formData
+     * @access private
+     * @return object[]
+     */
+    protected function prepareTasks4BatchCreate(object $execution, object $formData): array
+    {
+        /* 去除重复数据。 */
+        $tasks = $this->removeDuplicate4BatchCreate($execution, $formData);
+        if(!$tasks) return false;
+
+        /* Init. */
+        $story      = 0;
+        $module     = 0;
+        $type       = '';
+        $assignedTo = '';
+        $estStarted = null;
+        $deadline   = null;
+
+        /* Get task data. */
+        $this->loadModel('common');
+        $extendFields = $this->task->getFlowExtendFields();
+        $data         = array();
+        foreach($formData->name as $i => $name)
+        {
+            /* 给同上的变量赋值。 */
+            $story      = (!isset($tasks->story[$i]) or $tasks->story[$i] == 'ditto')            ? $story      : $tasks->story[$i];
+            $module     = (!isset($tasks->module[$i]) or $tasks->module[$i] == 'ditto')          ? $module     : $tasks->module[$i];
+            $type       = (!isset($tasks->type[$i]) or $tasks->type[$i] == 'ditto')              ? $type       : $tasks->type[$i];
+            $assignedTo = (!isset($tasks->assignedTo[$i]) or $tasks->assignedTo[$i] == 'ditto')  ? $assignedTo : $tasks->assignedTo[$i];
+            $estStarted = (!isset($tasks->estStarted[$i]) or isset($tasks->estStartedDitto[$i])) ? $estStarted : $tasks->estStarted[$i];
+            $deadline   = (!isset($tasks->deadline[$i]) or isset($tasks->deadlineDitto[$i]))     ? $deadline   : $tasks->deadline[$i];
+
+            /* 检查任务名称为空的数据。 */
+            if(empty($tasks->name[$i]))
+            {
+                if($this->common->checkValidRow('task', $tasks, $i))
+                {
+                    dao::$errors['message'][] = sprintf($this->lang->error->notempty, $this->lang->task->name);
+                    return false;
+                }
+                continue;
+            }
+
+            /* 构建任务数据。 */
+            $dittoFields = array('story' => $story, 'module' => $module, 'type' => $type, 'assignedTo' => $assignedTo, 'estStarted' => $estStarted, 'deadline' => $deadline);
+            $data[$i]    = $this->constructData4BatchCreate($execution, $tasks, $i, $dittoFields, $extendFields);
+        }
+
+        return $data;
+    }
+
+    /**
+     * 在批量创建之前移除post数据中重复的数据。
+     * Remove the duplicate data before batch create tasks.
+     *
+     * @param  object      $execution
+     * @param  object      $tasks
+     * @access private
+     * @return object|false
+     */
+    private function removeDuplicate4BatchCreate(object $execution, object $tasks): object|false
+    {
+        $storyIDs  = array();
+        $taskNames = array();
+        $preStory  = 0;
+
+        foreach($tasks->story as $key => $storyID)
+        {
+            /* 过滤事务型和任务名称为空的数据。 */
+            if(empty($tasks->name[$key])) continue;
+            if($tasks->type[$key] == 'affair') continue;
+            if($tasks->type[$key] == 'ditto' and isset($tasks->type[$key - 1]) and $tasks->type[$key - 1] == 'affair') continue;
+
+            if($storyID == 'ditto') $storyID = $preStory;
+            $preStory = $storyID;
+
+            if(!isset($tasks->story[$key - 1]) and $key > 1 and !empty($tasks->name[$key - 1]))
+            {
+                $storyIDs[]  = 0;
+                $taskNames[] = $tasks->name[$key - 1];
+            }
+
+            /* 判断Post传过来的任务有没有重复数据。 */
+            $hasExistsName = in_array($tasks->name[$key], $taskNames);
+            if($hasExistsName and in_array($storyID, $storyIDs))
+            {
+                dao::$errors['message'][] = sprintf($this->lang->duplicate, $this->lang->task->common) . ' ' . $tasks->name[$key];
+                return false;
+            }
+
+            $storyIDs[]  = $storyID;
+            $taskNames[] = $tasks->name[$key];
+        }
+
+        /* 去重并赋值。 */
+        $result = $this->loadModel('common')->removeDuplicate('task', $tasks, "execution={$execution->id} and story " . helper::dbIN($storyIDs));
+        return $result['data'];
+    }
+
+    /**
+     * 批量创建任务之前构造数据。
+     * Construct data before batch create tasks.
+     *
+     * @param  object     $execution
+     * @param  object     $tasks
+     * @param  int        $index
+     * @param  array      $dittoFields
+     * @param  array      $extendFields
+     * @access private
+     * @return object
+     */
+    private function constructData4BatchCreate(object $execution, object $tasks, int $index, array $dittoFields, array $extendFields): object
+    {
+        extract($dittoFields);
+        $now = helper::now();
+
+        $task             = new stdclass();
+        $task->story      = (int)$story;
+        $task->type       = $type;
+        $task->module     = (int)$module;
+        $task->assignedTo = $assignedTo;
+        $task->color      = $tasks->color[$index];
+        $task->name       = $tasks->name[$index];
+        $task->desc       = nl2br($tasks->desc[$index]);
+        $task->pri        = $tasks->pri[$index];
+        $task->estimate   = $tasks->estimate[$index] ? $tasks->estimate[$index] : 0;
+        $task->left       = $tasks->estimate[$index] ? $tasks->estimate[$index] : 0;
+        $task->project    = $execution->project;
+        $task->execution  = $execution->id;
+        $task->estStarted = $estStarted;
+        $task->deadline   = $deadline;
+        $task->status     = 'wait';
+        $task->openedBy   = $this->app->user->account;
+        $task->openedDate = $now;
+        $task->parent     = $tasks->parent[$index];
+        $task->vision     = isset($tasks->vision[$index]) ? $tasks->vision[$index] : 'rnd';
+        $task->version    = 1;
+        if($story) $task->storyVersion = (int)$this->dao->findById($task->story)->from(TABLE_STORY)->fetch('version');
+        if($assignedTo) $task->assignedDate = $now;
+        if(strpos($this->config->task->create->requiredFields, 'estStarted') !== false and empty($estStarted)) $task->estStarted = '';
+        if(strpos($this->config->task->create->requiredFields, 'deadline') !== false and empty($deadline))     $task->deadline   = '';
+        if(isset($tasks->lanes[$index])) $task->laneID = $tasks->lanes[$index];
+
+        /* 附加工作流字段。 */
+        foreach($extendFields as $extendField)
+        {
+            $task->{$extendField->field} = $tasks->{$extendField->field}[$index];
+            if(is_array($task->{$extendField->field})) $task->{$extendField->field} = join(',', $task->{$extendField->field});
+
+            $task->{$extendField->field} = htmlSpecialString($task->{$extendField->field});
+        }
+
+        return $task;
     }
 
     /**
@@ -901,7 +1075,7 @@ class taskZen extends task
     protected function buildBatchCreateForm(object $execution, int $storyID, int $moduleID, int $taskID, array $output): void
     {
         /* 获取区域和泳道下拉数据，并设置区域和泳道的默认值。*/
-        if($execution->type == 'kanban') $this->taskZen->showKanbanRelatedVars($execution->id, $output);
+        if($execution->type == 'kanban') $this->showKanbanRelatedVars($execution->id, $output);
 
         /* 任务拆解。 */
         if($taskID)

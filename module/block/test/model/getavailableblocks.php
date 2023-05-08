@@ -9,9 +9,6 @@ title=测试 blockModel->getAvailableBlocks();
 cid=1
 pid=1
 
-通过获取项目的可用区块 >> 项目计划,最新动态
-通过获取测试的可用区块 >> 测试统计,Bug列表,用例列表,版本列表
-
 */
 
 $block = new blockTest();

@@ -10,7 +10,7 @@ class bugTao extends bugModel
      * @access protected
      * @return object|false
      */
-    protected function fetchBugInfo(int $bugID): object|false
+    protected function fetchBugInfo(string $bugID): object|false
     {
         return $this->dao->select('t1.*, t2.name AS executionName, t3.title AS storyTitle, t3.status AS storyStatus, t3.version AS latestStoryVersion, t4.name AS taskName, t5.title AS planName')
             ->from(TABLE_BUG)->alias('t1')
@@ -136,7 +136,7 @@ class bugTao extends bugModel
      * @access protected
      * @return array
      */
-    protected function getCasesFromBug(int $bugID): array
+    protected function getCasesFromBug(string $bugID): array
     {
         return $this->dao->select('id, title')->from(TABLE_CASE)->where('`fromBug`')->eq($bugID)->fetchPairs();
     }
@@ -167,6 +167,94 @@ class bugTao extends bugModel
     protected function getNameFromTable(int $objectID, string $table, string $field): string
     {
         return $this->dao->findById($objectID)->from($table)->fields($field)->fetch($field);
+    }
+
+    /**
+     * 更新完bug后的相关处理。
+     * Relevant processing after updating bug.
+     *
+     * @param  object $bug
+     * @param  object $oldBug
+     * @access protected
+     * @return void
+     */
+    protected function afterUpdate(object $bug, object $oldBug)
+    {
+        /* 解除旧的版本关联关系，关联新的版本。*/
+        /* Link bug to build and release. */
+        if($bug->resolution == 'fixed' && !empty($bug->resolvedBuild) && $bug->resolvedBuild != $oldBug->resolvedBuild)
+        {
+            if(!empty($oldBug->resolvedBuild)) $this->loadModel('build')->unlinkBug($oldBug->resolvedBuild, $bug->id);
+            $this->linkBugToBuild($bug->id, $bug->resolvedBuild);
+        }
+
+        /* 解除旧的计划关联关系，关联新的计划。*/
+        /* Link new plan, unlink old plan. */
+        if($bug->plan != $oldBug->plan)
+        {
+            $this->loadModel('action');
+            if(!empty($oldBug->plan)) $this->action->create('productplan', $oldBug->plan, 'unlinkbug', '', $bug->id);
+            if(!empty($bug->plan))    $this->action->create('productplan', $bug->plan, 'linkbug', '', $bug->id);
+        }
+
+        $this->updateLinkBug($bug->id, $bug->linkBug, $oldBug->linkBug);
+
+        /* 给bug解决者积分奖励。*/
+        /* Add score to resolvedby. */
+        if(!empty($bug->resolvedBy)) $this->loadModel('score')->create('bug', 'resolve', $bug->id);
+
+        /* 更新bug所属看板的泳道。*/
+        /* Update the lane of the bug kanban. */
+        if($bug->execution and $bug->status != $oldBug->status) $this->loadModel('kanban')->updateLane($bug->execution, 'bug');
+
+        /* 更新反馈的状态。*/
+        /* Update the status of feedback. */
+        if(($this->config->edition != 'open') && $oldBug->feedback) $this->loadModel('feedback')->updateStatus('bug', $oldBug->feedback, $bug->status, $oldBug->status);
+
+        /* 更新bug的附件。*/
+        /* Update the files of bug. */
+        $this->loadModel('file')->processFile4Object('bug', $oldBug, $bug);
+
+        return !dao::isError();
+    }
+
+    /**
+     * 更新相关bug。
+     * Update the linked bug.
+     *
+     * @param  int    $bugID
+     * @param  string $linkBug
+     * @param  string $oldLinkBug
+     * @access protected
+     * @return bool
+     */
+    protected function updateLinkBug(string $bugID, string $linkBug, string $oldLinkBug): bool
+    {
+        $linkBugs        = explode(',', $linkBug);
+        $oldLinkBugs     = explode(',', $oldLinkBug);
+        $addedLinkBugs   = array_diff($linkBugs, $oldLinkBugs);
+        $removedLinkBugs = array_diff($oldLinkBugs, $linkBugs);
+        $changedLinkBugs = array_merge($addedLinkBugs, $removedLinkBugs);
+        $changedLinkBugs = $this->dao->select('id, linkbug')->from(TABLE_BUG)->where('id')->in(array_filter($changedLinkBugs))->fetchPairs();
+
+        foreach($changedLinkBugs as $changedBugID => $linkBugs)
+        {
+            if(in_array($changedBugID, $addedLinkBugs))
+            {
+                $currentLinkBug = $bugID;
+                if(!empty($linkBugs)) $currentLinkBug = trim($linkBugs, ',') . ',' . $bugID;
+            }
+            else
+            {
+                $linkBugs = explode(',', $linkBugs);
+                unset($linkBugs[array_search($bugID, $linkBugs)]);
+                $currentLinkBug  = implode(',', $linkBugs);
+            }
+
+            $this->dao->update(TABLE_BUG)->set('linkBug')->eq($currentLinkBug)->where('id')->eq($changedBugID)->exec();
+        }
+
+        return !dao::isError();
     }
 
     /**

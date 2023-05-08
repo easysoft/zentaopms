@@ -96,7 +96,7 @@ pipeline {
 
               steps {
             container('zentao') {
-              sh 'cat /usr/bin/initdb.php; initdb.php ; /apps/zentao/test/ztest init'
+              sh '/etc/s6/s6-init/run ; php --ini ; cat /usr/bin/initdb.php; initdb.php ; /apps/zentao/test/ztest init'
             }
               }
               post {
@@ -138,8 +138,9 @@ pipeline {
               stage('Run') {
                 steps {
                   container('zentao') {
-                    sh 'initdb.php config'
+                    sh '/etc/s6/s6-init/run ; php --ini ; initdb.php config'
                     sh '/apps/zentao/test/ztest extract ; /apps/zentao/test/ztest ${SEQUENCE} | tee /apps/zentao/test/${SEQUENCE}.log'
+                    sh 'ls /apps/zentao/www ; cat /apps/zentao/www/coverage.php'
                     sh 'pipeline-unittest.sh /apps/zentao/test/${SEQUENCE}.log'
                   }
                 }

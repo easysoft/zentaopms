@@ -111,7 +111,7 @@ class task extends control
         $storyID     = (int)$storyID;
         $moduleID    = (int)$moduleID;
         $taskID      = (int)$taskID;
-        $extra = str_replace(array(',', ' '), array('&', ''), $extra);
+        $extra       = str_replace(array(',', ' '), array('&', ''), $extra);
         parse_str($extra, $output);
 
         /* 判断不能访问的执行。 TODO: 提示语应改为执行。 */
@@ -125,16 +125,14 @@ class task extends control
 
         if(!empty($_POST))
         {
-            /* Form data. */
-            $postData = form::data($this->config->task->form->batchCreate);
-
-            $mails = $this->task->batchCreate($executionID, $postData, $output);
+            /* 批量创建任务。 */
+            $postData   = form::data($this->config->task->form->batchCreate);
+            $tasks      = $this->taskZen->prepareTasks4BatchCreate($execution, $postData->rawdata);
+            $taskIdList = $this->task->batchCreate($execution, $tasks, $output);
             if(dao::isError()) return print(js::error(dao::getError()));
 
             /* Return task id list when call the API. */
-            $taskIDList = array();
-            foreach($mails as $mail) $taskIDList[] = $mail->taskID;
-            if($this->viewType == 'json' or (defined('RUN_MODE') and RUN_MODE == 'api')) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'idList' => $taskIDList));
+            if($this->viewType == 'json' or (defined('RUN_MODE') and RUN_MODE == 'api')) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'idList' => $taskIdList));
 
             /* 生成链接。 TODO: 写配置项。 */
             $redirectedLink = $this->taskZen->getRedirectedLink($execution);
@@ -176,16 +174,18 @@ class task extends control
     }
 
     /**
+     * 编辑任务。
      * Edit a task.
      *
-     * @param  int    $taskID
+     * @param  string $taskID
      * @param  string $comment
-     * @param  string $from
+     * @param  string $from        ''|taskkanban
      * @access public
      * @return void
      */
-    public function edit(string $taskID, string $comment = 'false', string $from = '')
+    public function edit(string $taskID, string $comment = '', string $from = '')
     {
+        $taskID = (int)$taskID;
         $this->commonAction($taskID);
 
         if(!empty($_POST))
@@ -194,15 +194,17 @@ class task extends control
             $changes = array();
 
             $postDataFixer = form::data($this->config->task->form->edit);
-            $rawData      = $postDataFixer->rawdata;
+            $rawData       = $postDataFixer->rawdata;
 
-            if(!$comment or $comment == 'false')
+            /* Update task. */
+            if(empty($comment))
             {
                 $task    = $this->taskZen->prepareEdit($postDataFixer, $taskID);
                 $changes = $this->task->update($task, $rawData);
                 if(dao::isError()) return print(js::error(dao::getError()));
             }
 
+            /* Record log. */
             if($rawData->comment != '' or !empty($changes))
             {
                 $action   = !empty($changes) ? 'Edited' : 'Commented';
@@ -210,9 +212,9 @@ class task extends control
                 if(!empty($changes)) $this->action->logHistory($actionID, $changes);
             }
 
+            /* Execute hooks and synchronize the status of related objects. */
             $this->executeHooks($taskID);
-
-            if($rawData->status == 'doing') $this->loadModel('common')->syncPPEStatus($taskID);
+            if($task->status == 'doing') $this->loadModel('common')->syncPPEStatus($taskID);
 
             $reponse = $this->taskZen->reponseAfterEdit($taskID, $from, $changes);
             return is_array($reponse) ? $this->send($reponse) : $reponse;
@@ -361,47 +363,45 @@ class task extends control
     }
 
     /**
+     * 指派任务。
      * Update assign of task
      *
-     * @param  int    $requestID
-     * @param  int    $taskID
-     * @param  string $kanbanGroup
-     * @param  string $from
+     * @param  stirng $executionID
+     * @param  string $taskID
+     * @param  string $from        ''|taskkanban
      * @access public
      * @return void
      */
-    public function assignTo(int $executionID, int $taskID, string $kanbanGroup = 'default', string $from = '')
+    public function assignTo(string $executionID, string $taskID, string $from = '')
     {
+        $executionID = (int)$executionID;
+        $taskID      = (int)$taskID;
         $this->commonAction($taskID);
-        $task = $this->task->getByID($taskID);
-
-        if(!empty($task->team) and $task->mode == 'multi' and strpos('done,cencel,closed', $task->status) === false)
-        {
-            return $this->editTeam($executionID, $taskID, $kanbanGroup, $from);
-        }
 
         if(!empty($_POST))
         {
             $postDataFixer = form::data($this->config->task->form->assign);
-            $rawData       = $postDataFixer->rawdata;
 
+            /* Assign task. */
             $task    = $this->taskZen->prepareAssignTo($postDataFixer, $taskID);
-            $changes = $this->task->assign($task);
+            $changes = $this->task->assign($task, $this->post->uid);
             if(dao::isError())
             {
                 if($this->viewType == 'json' or (defined('RUN_MODE') && RUN_MODE == 'api')) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
                 return print(js::error(dao::getError()));
             }
 
-            $actionID = $this->loadModel('action')->create('task', $taskID, 'Assigned', $rawData->comment, $task->assignedTo);
+            /* Record log. */
+            $actionID = $this->loadModel('action')->create('task', $taskID, 'Assigned', $this->post->comment, $task->assignedTo);
             $this->action->logHistory($actionID, $changes);
 
             $this->executeHooks($taskID);
 
-            return $this->taskZen->reponseAfterAssignTo($taskID, $from);
+            $reponse = $this->taskZen->reponseAfterAssignTo($taskID, $from);
+            return is_array($reponse) ? $this->send($reponse) : $reponse;
         }
 
-        $this->taskZen->buildAssignToForm($executionID, $task);
+        $this->taskZen->buildAssignToForm($executionID, $taskID);
     }
 
     /**
@@ -1904,24 +1904,29 @@ class task extends control
     }
 
     /**
+     * 管理多人任务的团队。
      * Update assign of multi task.
      *
-     * @param  int    $requestID
-     * @param  object $taskID
-     * @param  string $kanbanGroup
-     * @param  string $from
+     * @param  string $executionID
+     * @param  string $taskID
+     * @param  string $from        ''|taskkanban
      * @access public
      * @return void
      */
-    public function editTeam($executionID, $taskID, $kanbanGroup = 'default', $from = '')
+    public function manageTeam(string $executionID, string $taskID, string $from = '')
     {
-        $task = $this->task->getById($taskID);
+        $executionID = (int)$executionID;
+        $taskID      = (int)$taskID;
         $this->commonAction($taskID);
 
         if(!empty($_POST))
         {
             $this->loadModel('action');
-            $changes = $this->task->updateTeam($taskID);
+
+            /* Update assign of multi task. */
+            $postData = form::data($this->config->task->form->manageTeam);
+            $task     = $this->taskZen->prepareManageTeam($postData, $taskID);
+            $changes  = $this->task->updateTeam($task, $this->post->team, $this->post->teamSouce, $this->post->teamEstimate, $this->post->teamConsumed, $this->post->teamLeft);
 
             if(dao::isError())
             {
@@ -1929,43 +1934,19 @@ class task extends control
                 return print(js::error(dao::getError()));
             }
 
+            /* Record log. */
             $actionID = $this->action->create('task', $taskID, 'Edited');
             $this->action->logHistory($actionID, $changes);
 
             $this->executeHooks($taskID);
 
-            if($this->viewType == 'json' or (defined('RUN_MODE') && RUN_MODE == 'api')) return $this->send(array('result' => 'success'));
-            if(isonlybody())
-            {
-                $execution = $this->execution->getByID($task->execution);
-
-                if(($this->app->tab == 'execution' or ($this->config->vision == 'lite' and $this->app->tab == 'project' and $this->session->kanbanview == 'kanban')) and $execution->type == 'kanban')
-                {
-                    $rdSearchValue = $this->session->rdSearchValue ? $this->session->rdSearchValue : '';
-                    $kanbanData    = $this->loadModel('kanban')->getRDKanban($task->execution, $execLaneType, 'id_desc', 0, $execGroupBy, $rdSearchValue);
-                    $kanbanData    = json_encode($kanbanData);
-
-                    return print(js::closeModal('parent.parent', '', "parent.parent.updateKanban($kanbanData)"));
-                }
-
-                if($from == 'taskkanban')
-                {
-                    $rdSearchValue = $this->session->rdSearchValue ? $this->session->rdSearchValue : '';
-                    $kanbanData    = $this->loadModel('kanban')->getRDKanban($task->execution, $this->session->execLaneType ? $this->session->execLaneType : 'all', 'id_desc', 0, $kanbanGroup, $rdSearchValue);
-                    $kanbanData    = json_encode($kanbanData);
-
-                    return print(js::closeModal('parent.parent', '', "parent.parent.updateKanban($kanbanData)"));
-                }
-
-                return print(js::closeModal('parent.parent', 'this'));
-            }
-            return print(js::locate($this->createLink('task', 'view', "taskID=$taskID"), 'parent'));
+            $reponse = $this->taskZen->reponseAfterAssignTo($taskID, $from);
+            return is_array($reponse) ? $this->send($reponse) : $reponse;
         }
 
-        $this->view->task    = $task;
         $this->view->members = $this->loadModel('user')->getTeamMemberPairs($executionID, 'execution', 'nodeleted');
         $this->view->users   = $this->loadModel('user')->getPairs();
-        $this->display('', 'editTeam');
+        $this->display('', 'editteam');
     }
 
     /**

@@ -43,29 +43,28 @@ class product extends control
     /**
      * Index page, to browse.
      *
-     * @param  string $locate     locate to browse page or not. If not, display all products.
-     * @param  int    $productID
-     * @param  string $orderBy
-     * @param  int    $recTotal
-     * @param  int    $recPerPage
-     * @param  int    $pageID
+     * @param  string $locate      auto|yes    locate to browse page or not. If not, display all products.
+     * @param  string $productID
      * @access public
      * @return void
      */
-    public function index($locate = 'auto', $productID = 0, $status = 'noclosed', $orderBy = 'order_desc', $recTotal = 0, $recPerPage = 10, $pageID = 1)
+    public function index(string $locate = 'auto', string $productID = '0')
     {
         if($locate == 'yes') $this->locate($this->createLink($this->moduleName, 'browse'));
 
-        if($this->app->getViewType() != 'mhtml') unset($this->lang->product->menu->index);
+        /* Check product id and get product branch. */
+        $productID = (int)$productID;
         $productID = $this->product->saveVisitState($productID, $this->products);
         $branch    = (int)$this->cookie->preBranch;
 
+        /* Set Menu. */
+        if($this->app->getViewType() != 'mhtml') unset($this->lang->product->menu->index);
         if($this->app->viewType == 'mhtml') $this->product->setMenu($productID, $branch);
 
+        /* Add create product button for view. */
         if(common::hasPriv('product', 'create')) $this->lang->TRActions = html::a($this->createLink('product', 'create'), "<i class='icon icon-sm icon-plus'></i> " . $this->lang->product->create, '', "class='btn btn-primary'");
 
-        $this->view->title      = $this->lang->product->index;
-        $this->view->position[] = $this->lang->product->index;
+        $this->view->title = $this->lang->product->index;
         $this->display();
     }
 
@@ -296,6 +295,7 @@ class product extends control
 
         if($this->post->name)
         {
+            /* 从POST中获取数据，并预处理数据。 */
             $formConfig = $this->productZen->appendFlowFields($this->config->product->form->batchEdit, 'batch');
             $data       = form::data($formConfig);
             $products   = $this->productZen->prepareBatchEditExtras($data);
@@ -647,7 +647,7 @@ class product extends control
         $programID  = (int)$programID;
 
         /* Set env data. */
-        $this->productZen->setEnvAll();
+        $this->productZen->setMenu4All();
 
         /* Generate statistics of products and program. */
         $this->app->loadClass('pager', true);

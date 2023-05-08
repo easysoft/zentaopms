@@ -160,13 +160,13 @@ class fields
             }
             else
             {
-                if(!empty($rule['range']) or $rule['range'] === '0') $ruleArr[$index]['range'] = $rule['range'];
+                if(isset($rule['range'])) $ruleArr[$index]['range'] = $rule['range'];
             }
 
-            if(!empty($rule['prefix']) or $rule['prefix'] === '0')  $ruleArr[$index]['prefix']  = $rule['prefix'];
-            if(!empty($rule['postfix']) or $rule['postfix'] === '0') $ruleArr[$index]['postfix'] = $rule['postfix'];
-            if(!empty($rule['type']) or $rule['type'] === '0')    $ruleArr[$index]['type']    = $rule['type'];
-            if(!empty($rule['format']) or $rule['format'] === '0')  $ruleArr[$index]['format']  = $rule['format'];
+            if(isset($rule['prefix']))  $ruleArr[$index]['prefix']  = $rule['prefix'];
+            if(isset($rule['postfix'])) $ruleArr[$index]['postfix'] = $rule['postfix'];
+            if(isset($rule['type']))    $ruleArr[$index]['type']    = $rule['type'];
+            if(isset($rule['format']))  $ruleArr[$index]['format']  = $rule['format'];
 
             $index ++;
         }
