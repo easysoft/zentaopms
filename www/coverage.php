@@ -9,12 +9,14 @@ $report    = '';
 $ztfReport = $coverage->getZtfReport();
 if($ztfReport)
 {
-    $ztfHtml = "<p>%s 执行<strong>%s个</strong>用例，耗时<strong>%s秒</strong>。<strong>%s(%s%%) </strong>通过，<strong>%s(%s%%)</strong> 失败，<strong>%s(%s%%)</strong> 忽略。</p>";
+    $ztfHtml = "<div class='report'><strong>%s</strong> 执行 <strong>%s个</strong>用例，耗时 <strong>%s秒</strong>。<strong>%s (%s%%) </strong>通过，<strong>%s (%s%%)</strong> 失败，<strong>%s (%s%%)</strong> 忽略。</div>";
     $ztfHtml = sprintf($ztfHtml, $ztfReport->time, $ztfReport->total, $ztfReport->duration, $ztfReport->pass, $ztfReport->passPercent, $ztfReport->fail, $ztfReport->failPercent, $ztfReport->skip, $ztfReport->skipPercent);
+    //$ztfHtml .= "<p> Ztf log File: {$ztfReport->logFile}</p>";
 }
 else
 {
-    $ztfHtml = "<p>没有找到ZTF测试报告。</p>";
+    $ztfPath = $coverage->loadTraceFromFile('ztfPath');
+    $ztfHtml = "<p>在{$ztfPath}/ 没有找到ZTF测试报告。</p>";
 }
 
 
@@ -39,61 +41,16 @@ switch($type)
     <title>单元测试行覆盖率报告</title>
   </head>
 <style>
-  body {
-    font-family: Arial, sans-serif;
-    font-size: 16px;
-    line-height: 1.5;
-    margin: 0;
-    padding: 0;
-  }
-
-  table {
-    border-collapse: collapse;
-    max-width: 100%;
-    width: 100%;
-    margin: 20px 0;
-  }
-
-  th {
-    border: 1px solid #ccc;
-    padding: 8px;
-    text-align: center;
-    background-color: #eee;
-    white-space: nowrap;
-  }
-
-  caption {
-    font-weight: bold;
-    margin: 10px 0;
-    font-size: 18px;
-  }
-
-  h2 {
-    margin-top: 20px;
-    font-size: 24px;
-  }
-
-  .red {
-    color: red;
-  }
-
-  .green {
-    color: green;
-  }
-
-  /* table hover effect */
-  tbody tr:hover {
-    background-color: #f5f5f5;
-  }
-
-  /* table striped rows */
-  tbody tr:nth-child(even) {
-    background-color: #f9f9f9;
-  }
-
-  h1 {
-    text-align: center;
-  }
+body {font-family: Arial, sans-serif; font-size: 16px; line-height: 1.5; margin: 0; padding: 20px; }
+table {border-collapse: collapse; max-width: 100%; width: 100%; margin: 20px 0; }
+th {border: 1px solid #ccc; padding: 8px; text-align: center; background-color: #eee; white-space: nowrap; }
+caption{font-weight: bold; margin: 10px 0; font-size: 18px; }
+h2 {margin-top: 20px; font-size: 24px; }
+.red {color: red; }
+.green {color: green; }
+tbody tr:hover {background-color: #f5f5f5; }
+tbody tr:nth-child(even) {background-color: #f9f9f9; }
+h1 {text-align: center; }
 </style>
 <body>
 <h1>单元测试行覆盖率报告</h1>

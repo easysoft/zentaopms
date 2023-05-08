@@ -23,7 +23,7 @@ class coverage
      * @access private
      * @return bool
      */
-    private function initTraceFile(): bool
+    public function initTraceFile(): bool
     {
         $tracePath = $this->zentaoRoot . "/tmp/coverage/";
         $this->traceFile = $tracePath . "traces.json";
@@ -66,7 +66,7 @@ class coverage
      * @access public
      * @return array|string
      */
-    private function loadTraceFromFile(string $key = ''): array|string
+    public function loadTraceFromFile(string $key = ''): array|string
     {
         $report = json_decode(file_get_contents($this->traceFile), true);
         if($key == '') return $report;
@@ -78,9 +78,22 @@ class coverage
      *
      * @access public
      * @return string
+     */
     public function getTraceFile(): string
     {
         return $this->traceFile;
+    }
+
+    /**
+     * Reset traceFile.
+     *
+     * @access public
+     * @return bool
+     */
+    public function reset()
+    {
+        if(!is_file($this->traceFile)) return true;
+        return exec("rm $this->traceFile") !== false;
     }
 
     /**
@@ -372,8 +385,9 @@ EOT;
         $report  = json_decode($content);
         if(!is_object($report) || !isset($report->funcResult)) return false;
 
-        $report->funcResult     = '';
-        $report->log            = '';
+        $report->logFile    = $reportFile;
+        $report->funcResult = '';
+        $report->log        = '';
 
         $report->time        = date('Y-m-d H:i:s', $report->endTime);
         $report->passPercent = round($report->pass / $report->total * 100, 2);
