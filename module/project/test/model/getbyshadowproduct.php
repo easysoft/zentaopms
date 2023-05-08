@@ -17,7 +17,7 @@ function initData()
     $projectproduct = zdTable('projectproduct');
     $projectproduct->product->range('1-3');
     $projectproduct->project->range('2-4');
-    $projectproduct->branch->range("0");
+    $projectproduct->branch->range("0{5}");
     $projectproduct->gen(3);
 }
 

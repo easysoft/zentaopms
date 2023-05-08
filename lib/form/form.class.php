@@ -23,6 +23,14 @@ class form extends baseFixer
     public $rawdata;
 
     /**
+     * 原始配置。
+     * The raw cofig.
+     *
+     * @var array
+     */
+    public $rawconfig;
+
+    /**
      * 错误信息列表。
      * Error list.
      *

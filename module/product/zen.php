@@ -841,13 +841,9 @@ class productZen extends product
     {
         if($this->app->tab == 'project')
         {
-            $this->session->set('storyList', $this->app->getURI(true), 'project');
             $this->loadModel('project')->setMenu($projectID);
             return;
         }
-
-        $this->session->set('storyList',   $this->app->getURI(true), 'product');
-        $this->session->set('productList', $this->app->getURI(true), 'product');
 
         $this->product->setMenu($productID, $branch, 0, '', "storyType=$storyType");
     }
@@ -1047,8 +1043,6 @@ class productZen extends product
         /* Get stories. */
         if($isProjectStory and $storyType == 'story')
         {
-            if(!empty($product)) $this->session->set('currentProductType', $product->type);
-
             $this->products  = $this->product->getProducts($projectID, 'all', '', false);
 
             if($browseType == 'bybranch') $param = $branchID;
@@ -1062,7 +1056,7 @@ class productZen extends product
 
         if(!empty($stories)) $stories = $this->story->mergeReviewer($stories);
 
-        return [$stories, $pager];
+        return array($stories, $pager);
     }
 
     /**
@@ -1121,6 +1115,36 @@ class productZen extends product
     }
 
     /**
+     * 保存需求页面session变量。
+     * Save session variables for browse page.
+     *
+     * @param  object  $product
+     * @param  string  $storyType
+     * @param  string  $browseType
+     * @param  bool    $isProjectStory
+     * @access private
+     * @return void
+     */
+    protected function saveSession4Browse(object $product, string $storyType, string $browseType, bool $isProjectStory): void
+    {
+        $uri = $this->app->getURI(true);
+
+        /* For setMenu. */
+        if($this->app->tab == 'project') $this->session->set('storyList', $uri, 'project');
+        else {
+            $this->session->set('productList', $uri, 'product');
+            $this->session->set('storyList',   $uri, 'product');
+        }
+
+        /* For getStoriesAndPager. */
+        if($isProjectStory && $storyType == 'story' && !empty($product)) $this->session->set('currentProductType', $product->type);
+
+        /* Save browse type into session for buildSearchForm. */
+        if($browseType != 'bymodule' && $browseType != 'bybranch') $this->session->set('storyBrowseType', $browseType);
+        if(($browseType == 'bymodule' || $browseType == 'bybranch') && $this->session->storyBrowseType == 'bysearch') $this->session->set('storyBrowseType', 'unclosed');
+    }
+
+    /**
      * 构建搜索表单。
      * Build search form.
      *
@@ -1137,10 +1161,6 @@ class productZen extends product
      */
     protected function buildSearchForm4Browse(object|bool $project,int $projectID, int &$productID, string $branch, int $param, string $storyType, string $browseType, bool $isProjectStory): void
     {
-        /* Save browse type into session. */
-        if($browseType != 'bymodule' and $browseType != 'bybranch') $this->session->set('storyBrowseType', $browseType);
-        if(($browseType == 'bymodule' or $browseType == 'bybranch') and $this->session->storyBrowseType == 'bysearch') $this->session->set('storyBrowseType', 'unclosed');
-
         /* Change for requirement story title. */
         if($storyType == 'requirement')
         {
@@ -1188,5 +1208,18 @@ class productZen extends product
         }
 
         return $storyIdList;
+    }
+
+    /**
+     * 路线图页面保存session数据。
+     * Save session variables data.
+     *
+     * @access protected
+     * @return void
+     */
+    protected function saveSession4Roadmap(): void
+    {
+        $this->session->set('releaseList',     $this->app->getURI(true), 'product');
+        $this->session->set('productPlanList', $this->app->getURI(true), 'product');
     }
 }
