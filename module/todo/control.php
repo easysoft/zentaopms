@@ -12,7 +12,7 @@ declare(strict_types=1);
 class todo extends control
 {
     /**
-     * Construct function, load model of task, bug, my.
+     * Construct function
      *
      * @access public
      * @return void
@@ -153,6 +153,7 @@ class todo extends control
     }
 
     /**
+     * 批量编辑待办。
      * Batch edit todo.
      *
      * @param  string $from example:myTodo, todoBatchEdit.
@@ -186,7 +187,7 @@ class todo extends control
      * @access public
      * @return int
      */
-    public function start(string $todoID): int
+    public function start(string $todoID)
     {
         $todoID = (int)$todoID;
         $todo   = $this->todo->getByID($todoID);
@@ -210,7 +211,7 @@ class todo extends control
      * @access public
      * @return int
      */
-    public function activate(string $todoID): int
+    public function activate(string $todoID)
     {
         $todoID = (int)$todoID;
         $todo   = $this->todo->getByID($todoID);
@@ -234,7 +235,7 @@ class todo extends control
      * @access public
      * @return int
      */
-    public function close(string $todoID): int
+    public function close(string $todoID)
     {
         $todoID = (int)$todoID;
         $todo   = $this->todo->getByID($todoID);
@@ -423,7 +424,7 @@ class todo extends control
      * @access public
      * @return int
      */
-    public function batchClose(): int
+    public function batchClose()
     {
         $waitIdList = array();
         $todoIdlist = form::data($this->config->todo->batchClose->form)->get('todoIDList');
@@ -447,7 +448,7 @@ class todo extends control
      * @access public
      * @return void
      */
-    public function import2Today(string $todoID = ''): void
+    public function import2Today(string $todoID = '')
     {
         if(!$_POST) $this->locate($this->createLink('my', 'todo'));
 
