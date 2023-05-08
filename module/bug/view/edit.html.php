@@ -37,7 +37,7 @@ if($this->app->tab == 'project')   js::set('objectID', $bug->project);
 ?>
 
 <div class='main-content' id='mainContent'>
-  <form method='post' target='hiddenwin' enctype='multipart/form-data' id='dataform'>
+  <form method='post' target='hiddenwin' enctype='multipart/form-data' id='dataform ajaxForm' class='form-ajax'>
     <div class='main-header'>
       <h2>
         <span class='label label-id'><?php echo $bug->id;?></span>

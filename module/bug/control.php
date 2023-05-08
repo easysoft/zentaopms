@@ -660,7 +660,7 @@ class bug extends control
      * 更新bug信息。
      * Edit a bug.
      *
-     * @param  int    $bugID
+     * @param  string $bugID
      * @param  bool   $comment true|false
      * @param  string $kanbanGroup
      * @access public
@@ -670,28 +670,27 @@ class bug extends control
     {
         if(!empty($_POST))
         {
-            $formData = form::data($this->config->bug->editform);
-            $bug      = $this->bugZen->beforeUpdate($formData);
+            $oldBug = $this->bug->getByID($bugID);
+
+            $formData = form::data($this->config->bug->form->edit);
+            $bug      = $this->bugZen->prepareEditExtras($formData, $oldBug);
+            if(!$bug) return $this->send($this->bugZen->errorEdit());
 
             $changes = array();
             if(!$comment)
             {
-                $changes = $this->bug->update($bugID);
-
-                if(dao::isError())
-                {
-                    if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'error', 'message' => dao::getError()));
-
-                    return print(js::error(dao::getError()));
-                }
+                $changes = $this->bug->update($bug, $oldBug);
+                if(!$changes) return $this->send($this->bugZen->errorEdit());
             }
 
-            $result = $this->bugZen->afterUpdate($bugID, $changes);
+            $this->bugZen->processAfterEdit($bugID, $this->post->comment, $changes);
 
-            if(is_array($result)) return $result;
+            $this->executeHooks($bugID);
+
+            return $this->send($this->bugZen->responseAfterEdit($bugID, $changes, $kanbanGroup));
         }
 
-        $bug = $this->bug->getById($bugID);
+        $bug = $this->bug->getByID($bugID);
 
         $this->bug->checkBugExecutionPriv($bug);
 
