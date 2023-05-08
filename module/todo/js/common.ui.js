@@ -126,56 +126,13 @@ function loadList(type, id, objectID)
  * 选择开始时间后，自动给出默认终止时间。
  * After selecting the start time, the default end time is automatically given.
  *
- * @return viod
+ * @return void
  */
 function selectNext()
 {
     if(!$('#begin ')[0] || !$('#end ')[0]) return;
     $('#end ')[0].selectedIndex = $('#begin ')[0].selectedIndex + 3;
     $('#end').trigger('chosen:updated');
-}
-
-function setBeginsAndEnds(i, beginOrEnd)
-{
-    if(!i)
-    {
-        for(j = 0; j < batchCreateNum; j++)
-        {
-            if(j != 0) $('#begins' + j)[0].selectedIndex = $('#ends' + (j - 1))[0].selectedIndex;
-            $('#ends' + j)[0].selectedIndex = $('#begins' + j)[0].selectedIndex + 3;
-            $('#begins' + j, '#ends' + j).trigger('chosen:updated');
-        }
-    }
-    else
-    {
-        if(beginOrEnd == 'begin')
-        {
-            $('#ends' + i)[0].selectedIndex = $('#begins' + i)[0].selectedIndex + 3;
-            $('#ends' + i).trigger('chosen:updated');
-        }
-
-        if(batchCreateNum)
-        {
-            for(j = i+1; j < batchCreateNum; j++)
-            {
-                $('#begins' + j)[0].selectedIndex = $('#ends' + (j - 1))[0].selectedIndex;
-                $('#ends' + j)[0].selectedIndex = $('#begins' + j)[0].selectedIndex + 3;
-                $('#begins' + j, '#ends' + j).trigger('chosen:updated');
-            }
-        }
-    }
-}
-
-function switchTimeList(number)
-{
-    if($('#switchTime' + number).prop('checked'))
-    {
-        $('#begins' + number, '#ends' + number).attr('disabled', 'disabled').trigger('chosen:updated');
-    }
-    else
-    {
-        $('#begins' + number, '#ends' + number).removeAttr('disabled').trigger('chosen:updated');
-    }
 }
 
 /**
@@ -238,7 +195,7 @@ function showEvery(switcher)
  * 周期设置为天并为指定时，更改月份时获取天数。
  * When the cycle is set to days and specified, obtain the number of days when changing the month.
  *
- * @param  int $specifiedMonth
+ * @param  int specifiedMonth
  * @return void
  */
 function setDays(specifiedMonth)
@@ -258,4 +215,17 @@ function setDays(specifiedMonth)
 
         $('#specifiedDay').append(html);
     }
+}
+
+/**
+ * 更改日期。
+ * Change date.
+ *
+ * @param  object dateInput
+ * @return void
+ */
+function changeDate(dateInput)
+{
+    console.log(dateInput);
+    $('#switchDate').prop('checked', !$(dateInput).val());
 }
