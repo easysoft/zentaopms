@@ -1792,4 +1792,72 @@ class taskTest
 
         return $object;
     }
+
+    /**
+     * Test manage multi task team members.
+     *
+     * @param  int        $taskID
+     * @param  string     $taskStatus
+     * @param  string     $mode
+     * @param  array      $teamList
+     * @param  array      $teamSourceList
+     * @param  array      $teamEstimateList
+     * @param  array|bool $teamConsumedList
+     * @param  array|bool $teamLeftList
+
+     * @access public
+     * @return array
+     */
+    public function manageTaskTeamTest(int $taskID, string $taskStatus, string $mode, array $teamList, array $teamSourceList, array $teamEstimateList, array|bool $teamConsumedList, array|bool $teamLeftList): array
+    {
+        $task = new stdclass();
+        $task->id     = $taskID;
+        $task->status = $taskStatus;
+        $teams = $this->objectModel->manageTaskTeam($mode, $task, $teamList, $teamSourceList, $teamEstimateList, $teamConsumedList, $teamLeftList);
+        if(dao::isError())
+        {
+            return dao::getError();
+        }
+        else
+        {
+            return $teams;
+        }
+    }
+
+    /**
+     * Test manage multi task team member.
+     *
+     * @param  int        $taskID
+     * @param  string     $taskStatus
+     * @param  string     $mode
+     * @param  int        $row
+     * @param  string     $account
+     * @param  string     $minStatus
+     * @param  array      $undoneUsers
+     * @param  array      $teamSourceList
+     * @param  array      $teamEstimateList
+     * @param  array|bool $teamConsumedList
+     * @param  array|bool $teamLeftList
+     * @param  bool       $inTeams
+     * @access public
+     * @return string
+     */
+    public function manageTaskTeamMemberTest(int $taskID, string $taskStatus, string $mode, int $row, string $account, string $minStatus, array $undoneUsers, array $teamSourceList, array $teamEstimateList, array|bool $teamConsumedList, array|bool $teamLeftList, bool $inTeams): string
+    {
+        global $tester;
+        $tester->dao->delete()->from(TABLE_TASKTEAM)->where('task')->eq($taskID)->exec();
+
+        $task = new stdclass();
+        $task->id     = $taskID;
+        $task->status = $taskStatus;
+        $minStatus = $this->objectModel->manageTaskTeamMember($mode, $task, $row, $account, $minStatus, $undoneUsers, $teamSourceList, $teamEstimateList, $teamConsumedList, $teamLeftList, $inTeams);
+        if(dao::isError())
+        {
+            return dao::getError();
+        }
+        else
+        {
+            return $minStatus;
+        }
+    }
 }

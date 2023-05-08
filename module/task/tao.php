@@ -545,7 +545,7 @@ class taskTao extends taskModel
         }
         elseif($task->status == 'doing')
         {
-            $teamSource = $teamSourceList[$row];
+            $teamSource = zget($teamSourceList, $row);
 
             if(!empty($teamSource) and $teamSource != $account and isset($undoneUsers[$teamSource])) $member->transfer = $teamSource;
             if(isset($undoneUsers[$account]) and ($mode == 'multi' or ($mode == 'linear' and $minStatus != 'wait'))) $member->status = 'doing';

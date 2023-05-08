@@ -452,7 +452,7 @@ class taskModel extends model
      * Manage multi task team members.
      *
      * @param  string     $mode
-     * @param  object     $taskID
+     * @param  object     $task
      * @param  array      $teamList
      * @param  array      $teamSourceList
      * @param  array      $teamEstimateList
@@ -469,10 +469,10 @@ class taskModel extends model
         $this->dao->delete()->from(TABLE_TASKTEAM)->where('task')->eq($task->id)->exec();
 
         /* If status of the task is doing, get the person who did not complete the task. */
+        $undoneUsers = array();
         if($task->status == 'doing')
         {
-            $efforts     = $this->getTaskEfforts($task->id);
-            $undoneUsers = array();
+            $efforts = $this->getTaskEfforts($task->id);
             foreach($efforts as $effort)
             {
                 if($effort->left != 0) $undoneUsers[$effort->account] = $effort->account;
