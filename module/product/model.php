@@ -82,16 +82,16 @@ class productModel extends model
 
 
         /* 查询产品数据。*/
-        $currentProduct = $this->getById($productID);
-        $this->session->set('currentProductType', $currentProduct->type);
+        $product = $this->getById($productID);
+        $this->session->set('currentProductType', $product->type);
 
         /* 生成异步获取下拉菜单的链接。*/
         $moduleName = $isQaModule ? 'bug' : 'product';
         if($this->app->tab == 'feedback') $moduleName = 'feedback';
         $dropMenuLink = helper::createLink($moduleName, 'ajaxGetDropMenu', "objectID=$productID&module=$currentModule&method=$currentMethod&extra=$extra");
 
-        /* 处理分支语言项。 */
-        $showBranch = ($currentProduct->type != 'normal' && $withBranch && $currentModule != 'programplan');
+        /* 根据是否显示分支，处理分支语言项，获取分支数据。 */
+        $showBranch = ($product->type != 'normal' && $withBranch && $currentModule != 'programplan');
         if(!$showBranch) unset($this->lang->product->menu->settings['subMenu']->branch);
         if($showBranch)
         {
@@ -106,13 +106,13 @@ class productModel extends model
         /* 构建移动端产品1.5级导航代码。 */
         if($this->app->viewType == 'mhtml')
         {
-            $output = "<a id='currentItem' href=\"javascript:showSearchMenu('product', '$productID', '$currentModule', '$currentMethod', '$extra')\"><span class='text'>{$currentProduct->name}</span> <span class='icon-caret-down'></span></a><div id='currentItemDropMenu' class='hidden affix enter-from-bottom layer'></div>";
+            $output = "<a id='currentItem' href=\"javascript:showSearchMenu('product', '$productID', '$currentModule', '$currentMethod', '$extra')\"><span class='text'>{$product->name}</span> <span class='icon-caret-down'></span></a><div id='currentItemDropMenu' class='hidden affix enter-from-bottom layer'></div>";
             if($showBranch) $output .= "<a id='currentBranch' href=\"javascript:showSearchMenu('branch', '{$product->id}', '$currentModule', '$currentMethod', '$extra')\">{$branchName} <span class='icon-caret-down'></span></a><div id='currentBranchDropMenu' class='hidden affix enter-from-bottom layer'></div>";
             return $output;
         }
 
         /* 构建PC端产品1.5级导航代码。 */
-        $output  = "<div class='btn-group angle-btn'><div class='btn-group'><button data-toggle='dropdown' type='button' class='btn btn-limit' id='currentItem' title='{$currentProduct->name}' style='width: 90%'><span class='text'>{$currentProduct->name}</span> <span class='caret'></span></button><div id='dropMenu' class='dropdown-menu search-list' data-ride='searchList' data-url='$dropMenuLink'>";
+        $output  = "<div class='btn-group angle-btn'><div class='btn-group'><button data-toggle='dropdown' type='button' class='btn btn-limit' id='currentItem' title='{$product->name}' style='width: 90%'><span class='text'>{$product->name}</span> <span class='caret'></span></button><div id='dropMenu' class='dropdown-menu search-list' data-ride='searchList' data-url='$dropMenuLink'>";
         $output .= '<div class="input-control search-box has-icon-left has-icon-right search-example"><input type="search" class="form-control search-input" /><label class="input-control-icon-left search-icon"><i class="icon icon-search"></i></label><a class="input-control-icon-right search-clear-btn"><i class="icon icon-close icon-sm"></i></a></div>';
         $output .= "</div></div>";
         if($showBranch) $output .= "<a id='currentBranch' href=\"javascript:showSearchMenu('branch', '$productID', '$currentModule', '$currentMethod', '$extra')\">{$branchName} <span class='icon-caret-down'></span></a><div id='currentBranchDropMenu' class='hidden affix enter-from-bottom layer'></div>";
