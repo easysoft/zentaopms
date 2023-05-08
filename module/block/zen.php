@@ -1118,9 +1118,7 @@ class blockZen extends block
         $this->loadModel('weekly');
         $this->app->loadLang('execution');
 
-        $projectID = $this->session->project;
-        $project   = $this->loadModel('project')->getByID($projectID);
-
+        $projectID     = $this->session->project;
         $projectWeekly = $this->dao->select('*')->from(TABLE_WEEKLYREPORT)->where('project')->eq($projectID)->orderBy('weekStart_asc')->fetchAll('weekStart');
 
         $charts['PV'] = '[';
