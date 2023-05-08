@@ -13,11 +13,6 @@ namespace zin;
 
 require_once __DIR__ . DS . 'context.class.php';
 
-function portal(/* string $name, mixed ...$children */)
-{
-    call_user_func_array('\zin\context::portal', func_get_args());
-}
-
 function js()
 {
     call_user_func_array('\zin\context::js', func_get_args());

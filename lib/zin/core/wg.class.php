@@ -101,23 +101,6 @@ class wg
         return false;
     }
 
-    protected function checkPortals()
-    {
-        $this->matchedPortals = array();
-        $portals = context::current()->getPortals();
-        foreach($portals as $portal)
-        {
-            if($this->isMatch($portal->prop('target'))) $this->matchedPortals[] = $portal->children();
-        }
-    }
-
-    protected function getPortals()
-    {
-        $portals = $this->matchedPortals;
-        $this->matchedPortals = NULL;
-        return $portals;
-    }
-
     /**
      * Build dom object
      * @return dom
@@ -129,14 +112,13 @@ class wg
         $before    = $this->buildBefore();
         $children  = $this->build();
         $after     = $this->buildAfter();
-        $portals   = $this->getPortals();
         $options   = $this->renderOptions;
         $selectors = (!empty($options) && isset($options['selector'])) ? $options['selector'] : NULL;
 
         return new dom
         (
             $this,
-            [$before, $children, $portals, $after],
+            [$before, $children, $after],
             $selectors,
             (!empty($options) && isset($options['type'])) ? $options['type'] : 'html', // TODO: () may not work in lower php
             (!empty($options) && isset($options['data'])) ? $options['data'] : NULL,
@@ -293,7 +275,6 @@ class wg
         }
 
         if($child instanceof wg && empty($child->parent)) $child->parent = &$this;
-        if($child instanceof wg && $child->type() === 'zin\portal') return;
 
         if($name === 'children' && $child instanceof wg)
         {

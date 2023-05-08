@@ -13,36 +13,9 @@ namespace zin;
 
 require_once dirname(__DIR__) . DS . 'utils' . DS . 'dataset.class.php';
 require_once dirname(__DIR__) . DS . 'utils' . DS . 'flat.func.php';
-require_once __DIR__ . DS . 'portal.class.php';
 
 class context extends \zin\utils\dataset
 {
-    /**
-     * @var object
-     */
-    public $root;
-
-    public function __construct($root)
-    {
-        $this->root = $root;
-    }
-
-    public function isRoot($root)
-    {
-        if(is_string($root)) return $root === $this->root->gid;
-        return $root->gid === $this->root->gid;
-    }
-
-    public function getPortals()
-    {
-        return $this->getList('portals');
-    }
-
-    public function addPortal($portal)
-    {
-        return $this->addToList('portals', $portal);
-    }
-
     public function addImport()
     {
         return $this->addToList('import', func_get_args());
@@ -113,15 +86,6 @@ class context extends \zin\utils\dataset
     }
 
     public static $map = array();
-
-    public static function portal(/* string $name, mixed ...$children */)
-    {
-        $args    = func_get_args();
-        $name    = array_shift($args);
-        $context = static::current();
-        $portal  = new portal(set::target($name), $args);
-        $context->addPortal($portal);
-    }
 
     public static function js(/* string ...$code */)
     {
