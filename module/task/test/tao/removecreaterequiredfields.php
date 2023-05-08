@@ -21,8 +21,80 @@ title=taskModel->removeCreateRequiredFields();
 timeout=0
 cid=1
 
-*/
+sed: can't read /home/tianshujie/repo/zentaopms/test/config/my.php: No such file or directory
+- 测试任务执行为短期执行 阶段类型为mix 任务类型为dev 没有选择需求时候的必填项 @name,type,execution,story,estimate,estStarted,deadline,module
 
+- 测试任务执行为短期执行 阶段类型为mix 任务类型为dev 有选择需求时候的必填项 @name,type,execution,story,estimate,estStarted,deadline,module
+
+- 测试任务执行为短期执行 阶段类型为request 任务类型为dev 没有选择需求时候的必填项 @name,type,execution,estimate,estStarted,deadline,module
+
+- 测试任务执行为短期执行 阶段类型为request 任务类型为dev 有选择需求时候的必填项 @name,type,execution,estimate,estStarted,deadline,module
+
+- 测试任务执行为短期执行 阶段类型为review 任务类型为dev 没有选择需求时候的必填项 @name,type,execution,estimate,estStarted,deadline,module
+
+- 测试任务执行为短期执行 阶段类型为review 任务类型为dev 有选择需求时候的必填项 @name,type,execution,estimate,estStarted,deadline,module
+
+- 测试任务执行为长期执行 阶段类型为mix 任务类型为dev 没有选择需求时候的必填项 @name,type,execution,story,estimate,estStarted,deadline,module
+
+- 测试任务执行为长期执行 阶段类型为mix 任务类型为dev 有选择需求时候的必填项 @name,type,execution,story,estimate,estStarted,deadline,module
+
+- 测试任务执行为长期执行 阶段类型为request 任务类型为dev 没有选择需求时候的必填项 @name,type,execution,estimate,estStarted,deadline,module
+
+- 测试任务执行为长期执行 阶段类型为request 任务类型为dev 有选择需求时候的必填项 @name,type,execution,estimate,estStarted,deadline,module
+
+- 测试任务执行为长期执行 阶段类型为review 任务类型为dev 没有选择需求时候的必填项 @name,type,execution,estimate,estStarted,deadline,module
+
+- 测试任务执行为长期执行 阶段类型为review 任务类型为dev 有选择需求时候的必填项 @name,type,execution,estimate,estStarted,deadline,module
+
+- 测试任务执行为运维执行 阶段类型为mix 任务类型为dev 没有选择需求时候的必填项 @name,type,execution,estimate,estStarted,deadline,module
+
+- 测试任务执行为运维执行 阶段类型为mix 任务类型为dev 有选择需求时候的必填项 @name,type,execution,estimate,estStarted,deadline,module
+
+- 测试任务执行为运维执行 阶段类型为request 任务类型为dev 没有选择需求时候的必填项 @name,type,execution,estimate,estStarted,deadline,module
+
+- 测试任务执行为运维执行 阶段类型为request 任务类型为dev 有选择需求时候的必填项 @name,type,execution,estimate,estStarted,deadline,module
+
+- 测试任务执行为运维执行 阶段类型为review 任务类型为dev 没有选择需求时候的必填项 @name,type,execution,estimate,estStarted,deadline,module
+
+- 测试任务执行为运维执行 阶段类型为review 任务类型为dev 有选择需求时候的必填项 @name,type,execution,estimate,estStarted,deadline,module
+
+- 测试任务执行为短期执行 阶段类型为mix 任务类型为test 没有选择需求时候的必填项 @name,type,execution,story,estimate,estStarted,deadline,module
+
+- 测试任务执行为短期执行 阶段类型为mix 任务类型为test 有选择需求时候的必填项 @name,type,execution
+
+- 测试任务执行为短期执行 阶段类型为request 任务类型为test 没有选择需求时候的必填项 @name,type,execution,estimate,estStarted,deadline,module
+
+- 测试任务执行为短期执行 阶段类型为request 任务类型为test 有选择需求时候的必填项 @name,type,execution
+
+- 测试任务执行为短期执行 阶段类型为review 任务类型为test 没有选择需求时候的必填项 @name,type,execution,estimate,estStarted,deadline,module
+
+- 测试任务执行为短期执行 阶段类型为review 任务类型为test 有选择需求时候的必填项 @name,type,execution
+
+- 测试任务执行为长期执行 阶段类型为mix 任务类型为test 没有选择需求时候的必填项 @name,type,execution,story,estimate,estStarted,deadline,module
+
+- 测试任务执行为长期执行 阶段类型为mix 任务类型为test 有选择需求时候的必填项 @name,type,execution
+
+- 测试任务执行为长期执行 阶段类型为request 任务类型为test 没有选择需求时候的必填项 @name,type,execution,estimate,estStarted,deadline,module
+
+- 测试任务执行为长期执行 阶段类型为request 任务类型为test 有选择需求时候的必填项 @name,type,execution
+
+- 测试任务执行为长期执行 阶段类型为review 任务类型为test 没有选择需求时候的必填项 @name,type,execution,estimate,estStarted,deadline,module
+
+- 测试任务执行为长期执行 阶段类型为review 任务类型为test 有选择需求时候的必填项 @name,type,execution
+
+- 测试任务执行为运维执行 阶段类型为mix 任务类型为test 没有选择需求时候的必填项 @name,type,execution,estimate,estStarted,deadline,module
+
+- 测试任务执行为运维执行 阶段类型为mix 任务类型为test 有选择需求时候的必填项 @name,type,execution
+
+- 测试任务执行为运维执行 阶段类型为request 任务类型为test 没有选择需求时候的必填项 @name,type,execution,estimate,estStarted,deadline,module
+
+- 测试任务执行为运维执行 阶段类型为request 任务类型为test 有选择需求时候的必填项 @name,type,execution
+
+- 测试任务执行为运维执行 阶段类型为review 任务类型为test 没有选择需求时候的必填项 @name,type,execution,estimate,estStarted,deadline,module
+
+- 测试任务执行为运维执行 阶段类型为review 任务类型为test 有选择需求时候的必填项 @name,type,execution
+
+*/
 
 $selectTestStoryList = array(false, true);
 

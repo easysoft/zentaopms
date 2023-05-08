@@ -12,6 +12,95 @@ title=taskModel->doCreate();
 timeout=0
 cid=2
 
+sed: can't read /home/tianshujie/repo/zentaopms/test/config/my.php: No such file or directory
+- 测试正常的创建开发任务
+ - 属性name @开发任务一
+ - 属性execution @101
+ - 属性type @devel
+ - 属性estimate @1
+ - 属性version @1
+ - 属性estStarted @0000-00-00
+ - 属性deadline @0000-00-00
+
+- 测试正常的创建设计任务
+ - 属性name @设计任务一
+ - 属性execution @101
+ - 属性type @design
+ - 属性estimate @1
+ - 属性version @1
+ - 属性estStarted @2023-04-01
+ - 属性deadline @0000-00-00
+
+- 测试正常的创建需求任务
+ - 属性name @需求任务一
+ - 属性execution @101
+ - 属性type @request
+ - 属性estimate @1
+ - 属性version @1
+ - 属性estStarted @0000-00-00
+ - 属性deadline @2024-01-01
+
+- 测试正常的创建测试任务
+ - 属性name @测试任务一
+ - 属性execution @101
+ - 属性type @test
+ - 属性estimate @1
+ - 属性version @1
+ - 属性estStarted @0000-00-00
+ - 属性deadline @0000-00-00
+
+- 测试正常的创建研究任务
+ - 属性name @研究任务一
+ - 属性execution @101
+ - 属性type @study
+ - 属性estimate @1
+ - 属性version @1
+ - 属性estStarted @2023-04-01
+ - 属性deadline @2024-01-01
+
+- 测试正常的创建讨论任务
+ - 属性name @讨论任务一
+ - 属性execution @101
+ - 属性type @discuss
+ - 属性estimate @0
+ - 属性version @1
+ - 属性estStarted @2021-01-10
+ - 属性deadline @2021-03-19
+
+- 测试正常的创建界面任务
+ - 属性name @界面任务一
+ - 属性execution @101
+ - 属性type @ui
+ - 属性estimate @1
+ - 属性version @1
+ - 属性estStarted @2021-01-10
+ - 属性deadline @2021-03-19
+
+- 测试正常的创建事务任务
+ - 属性name @事务任务一
+ - 属性execution @101
+ - 属性type @affair
+ - 属性estimate @1
+ - 属性version @1
+ - 属性estStarted @2021-01-10
+ - 属性deadline @2021-03-19
+
+- 测试正常的创建其他任务
+ - 属性name @其他任务一
+ - 属性execution @101
+ - 属性type @misc
+ - 属性estimate @1
+ - 属性version @1
+ - 属性estStarted @2021-01-10
+ - 属性deadline @2021-03-19
+
+- 测试不输入执行创建任务 @『所属执行』不能为空。
+
+- 测试不输入名称创建任务 @『任务名称』不能为空。
+
+- 测试不输入类型创建任务 @『任务类型』不能为空。
+
+- 测试不输入类型创建任务 @『最初预计』应当是数字，可以是小数。
 
 */
 $devel         = array('execution' => 101, 'name' => '开发任务一', 'type' => 'devel', 'estimate' => 1, 'version' => 1,  'estStarted' => null, 'deadline' => null);
