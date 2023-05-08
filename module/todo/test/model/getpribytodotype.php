@@ -16,7 +16,7 @@ function initData()
 
 /**
 
-title=测试 todoModel->create();
+title=测试 todoModel->getPriByTodoType();
 timeout=0
 cid=1
 

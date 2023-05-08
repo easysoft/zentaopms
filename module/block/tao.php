@@ -29,7 +29,7 @@ class blockTao extends blockModel
      * @access protected
      * @return bool
      */
-    protected function insert($formData): bool
+    protected function insert(object $formData): bool
     {
         $this->dao->insert(TABLE_BLOCK)->data($formData)
             ->autoCheck()

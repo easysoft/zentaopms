@@ -1,0 +1,13 @@
+---
+title: zt_effort
+author: auto_managetaskteam
+version: "1.0"
+fields:
+- field: objectType
+  range: task
+- field: objectID
+  range: 1{4},2{6}
+- field: left
+  range: 0{4},0-7,0-7,0-7
+...
+

@@ -1843,9 +1843,9 @@ class taskTest
      * @param  array|bool $teamLeftList
      * @param  bool       $inTeams
      * @access public
-     * @return string
+     * @return array
      */
-    public function manageTaskTeamMemberTest(int $taskID, string $taskStatus, string $mode, int $row, string $account, string $minStatus, array $undoneUsers, array $teamSourceList, array $teamEstimateList, array|bool $teamConsumedList, array|bool $teamLeftList, bool $inTeams): string
+    public function manageTaskTeamMemberTest(int $taskID, string $taskStatus, string $mode, int $row, string $account, string $minStatus, array $undoneUsers, array $teamSourceList, array $teamEstimateList, array|bool $teamConsumedList, array|bool $teamLeftList, bool $inTeams): array
     {
         global $tester;
         $tester->dao->delete()->from(TABLE_TASKTEAM)->where('task')->eq($taskID)->exec();
@@ -1860,7 +1860,9 @@ class taskTest
         }
         else
         {
-            return $minStatus;
+            $taskTeamMember = $tester->dao->select('task,account,estimate,consumed,`left`,transfer,status')->from(TABLE_TASKTEAM)->where('task')->eq($taskID)->andWhere('account')->eq($account)->fetch();
+            $taskTeamMember = json_decode(json_encode($taskTeamMember), true);
+            return array('minStatus' => $minStatus, 'taskTeamMember' => !empty($taskTeamMember) ? implode('|', $taskTeamMember) : '0');
         }
     }
 }
