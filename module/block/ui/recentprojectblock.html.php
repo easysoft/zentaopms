@@ -15,13 +15,13 @@ $cards = array();
 foreach($projects as $projectID => $project)
 {
     $viewLink = $this->createLink('project', 'index', "projectID=$project->id");
-    $cards[] = div
+    $cards[] = cell
     (
-        set('class', 'card flex-1'), 
+        set('width', '33%'),
+        set('class', 'border m-2 p-4'), 
         div
         (
-            set('class', 'card-header'),
-            span($lang->project->{$project->model}),
+            set('class', 'pb-2'),
             a
             (
                 set('href', $viewLink),
@@ -33,9 +33,23 @@ foreach($projects as $projectID => $project)
             set('class', 'card-body'),
             div
             (
-                set('class', 'project-infos'),
-                span(sprintf($lang->project->membersUnit, $project->teamCount)),
-                span(sprintf($lang->project->hoursUnit, $project->estimate))
+                set('class', 'py-1.5'),
+                span('近期执行 : XXX'),
+                label
+                (
+                    set('class', 'warning-outline ml-4'),
+                    '进行中'
+                )
+            ),
+            div
+            (
+                set('class', 'py-1.5'),
+                span('项目成员 : 共 5 人')
+            ),
+            div
+            (
+                set('class', 'py-1.5'),
+                span('计划完成 : 2022-09-30')
             )
         )
     );
