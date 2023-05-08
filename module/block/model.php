@@ -416,7 +416,7 @@ class blockModel extends model
      */
     public function isLongBlock(object $block): bool
     {
-        return (!empty($block) and $block->grid >= 6) ? true : false;
+        return (!empty($block->grid) and $block->grid >= 6) ? true : false;
     }
 
     /**
