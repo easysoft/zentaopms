@@ -31,9 +31,11 @@ formPanel
             set::width('1/2'),
             input
             (
+                set::class('date'),
                 set::name('date'),
                 set::type('date'),
-                set::value(date('Y-m-d'))
+                set::value(date('Y-m-d')),
+                on::change('changeDate(this)')
             )
         ),
         formGroup
@@ -41,6 +43,7 @@ formPanel
             set::class(array('items-center', 'pl-2')),
             checkbox
             (
+                set::id('switchDate'),
                 set::name('future'),
                 set::text($lang->todo->periods['future']),
                 on::change('togglePending(this)')
