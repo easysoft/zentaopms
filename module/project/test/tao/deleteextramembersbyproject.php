@@ -15,8 +15,8 @@ cid=1
 global $tester;
 $tester->loadModel('project');
 
-$project =  new stdClass;
-$team    =  new stdClass;
-$members =  new stdClass;
+$project = new stdClass;
+$team    = array();
+$members = array();
 
 r($tester->project->deleteextramembersbyproject(2, $project, $team, $members)) && p() && e(1);
