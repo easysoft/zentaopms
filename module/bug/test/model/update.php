@@ -42,6 +42,18 @@ cid=1
 
 - 测试不更改bug类型 @没有数据更新
 
+- 测试不输入Bug标题 @『Bug标题』不能为空。
+
+- 测试通知邮件不合法 @『通知邮箱』应当为合法的EMAIL。
+
+- 测试解决者不为空时，不输入解决方案 @『解决方案』不能为空。
+
+- 测试由谁关闭不为空时，不输入解决方案 @『解决方案』不能为空。
+
+- 测试解决方案为重复Bug时，不输入重复Bug值 @『重复Bug』不能为空。
+
+- 测试解决方案为已修复时，不输入解决版本 @『解决版本』不能为空。
+
 
 
 */
@@ -50,13 +62,25 @@ initData();
 
 $bugIdList = array('1', '2');
 
-$t_uptitle   = array('title' => 'john');
-$t_uptype    = array('type'  => 'config');
-$t_untitle   = array('title' => 'john');
-$t_untype    = array('type'  => 'config');
+$t_uptitle         = array('title'       => 'john');
+$t_uptype          = array('type'        => 'config');
+$t_untitle         = array('title'       => 'john');
+$t_untype          = array('type'        => 'config');
+$t_titleRequire    = array('title'       => '');
+$t_unnotifyEmail   = array('notifyEmail' => '123');
+$t_resolution1     = array('resolvedBy'  => 'john',      'resolution'    => '');
+$t_resolution2     = array('closedBy'    => 'john',      'resolution'    => '');
+$t_unduplicateBug  = array('resolution'  => 'duplicate', 'duplicateBug'  => '');
+$t_unresolvedBuild = array('resolution'  => 'fixed',     'resolvedBuild' => '');
 
 $bug = new bugTest();
-r($bug->updateObject($bugIdList[0], $t_uptitle))   && p('0:field,old,new') && e('title,BUG1,john');       // 测试更新bug名称
-r($bug->updateObject($bugIdList[0], $t_uptype))    && p('0:field,old,new') && e('type,codeerror,config'); // 测试更新bug类型
-r($bug->updateObject($bugIdList[0], $t_untitle))   && p()                  && e('没有数据更新');          // 测试不更改bug名称
-r($bug->updateObject($bugIdList[0], $t_untype))    && p()                  && e('没有数据更新');          // 测试不更改bug类型
+r($bug->updateObject($bugIdList[0], $t_uptitle))         && p('0:field,old,new') && e('title,BUG1,john');                 // 测试更新bug名称
+r($bug->updateObject($bugIdList[0], $t_uptype))          && p('0:field,old,new') && e('type,codeerror,config');           // 测试更新bug类型
+r($bug->updateObject($bugIdList[0], $t_untitle))         && p()                  && e('没有数据更新');                    // 测试不更改bug名称
+r($bug->updateObject($bugIdList[0], $t_untype))          && p()                  && e('没有数据更新');                    // 测试不更改bug类型
+r($bug->updateObject($bugIdList[0], $t_titleRequire))    && p('title:0')         && e('『Bug标题』不能为空。');           // 测试不输入Bug标题
+r($bug->updateObject($bugIdList[0], $t_unnotifyEmail))   && p('notifyEmail:0')   && e('『通知邮箱』应当为合法的EMAIL。'); // 测试通知邮件不合法
+r($bug->updateObject($bugIdList[0], $t_resolution1))     && p('resolution:0')    && e('『解决方案』不能为空。');          // 测试解决者不为空时，不输入解决方案
+r($bug->updateObject($bugIdList[0], $t_resolution2))     && p('resolution:0')    && e('『解决方案』不能为空。');          // 测试由谁关闭不为空时，不输入解决方案
+r($bug->updateObject($bugIdList[0], $t_unduplicateBug))  && p('duplicateBug:0')  && e('『重复Bug』不能为空。');           // 测试解决方案为重复Bug时，不输入重复Bug值
+r($bug->updateObject($bugIdList[0], $t_unresolvedBuild)) && p('resolvedBuild:0') && e('『解决版本』不能为空。');          // 测试解决方案为已修复时，不输入解决版本
