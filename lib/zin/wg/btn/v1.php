@@ -5,6 +5,7 @@ class btn extends wg
 {
     static $defineProps = array(
         'icon?:string',
+        'iconClass?:string',
         'text?:string',
         'square?:bool',
         'disabled?:bool',
@@ -13,6 +14,7 @@ class btn extends wg
         'target?:string',
         'size?:string|int',
         'trailingIcon?:string',
+        'trailingIconClass?:string',
         'caret?:string|bool',
         'hint?:string',
         'type?:string',
@@ -54,16 +56,18 @@ class btn extends wg
 
     private function getChildren()
     {
-        $caret        = $this->prop('caret');
-        $text         = $this->prop('text');
-        $icon         = $this->prop('icon');
-        $trailingIcon = $this->prop('trailingIcon');
+        $caret             = $this->prop('caret');
+        $text              = $this->prop('text');
+        $icon              = $this->prop('icon');
+        $iconClass         = $this->prop('iconClass');
+        $trailingIcon      = $this->prop('trailingIcon');
+        $trailingIconClass = $this->prop('trailingIconClass');
 
         $children = array();
-        if(!empty($icon)) $children[] = icon($icon);
+        if(!empty($icon)) $children[] = icon($icon, setClass($iconClass));
         if(!empty($text)) $children[] = h::span($text, setClass('text'));
         $children[] = parent::build();
-        if(!empty($trailingIcon)) $children[] = icon($trailingIcon);
+        if(!empty($trailingIcon)) $children[] = icon($trailingIcon, setClass($trailingIconClass));
         if(!empty($caret))        $children[] = h::span(setClass(is_string($caret) ? "caret-$caret" : 'caret'));
 
         return $children;
