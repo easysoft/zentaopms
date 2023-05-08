@@ -11,7 +11,7 @@ function initData()
 
 /**
 
-title=测试 todoModel->getCount();
+title=测试 todoModel->getTodoProjects();
 timeout=0
 cid=1
 
