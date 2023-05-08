@@ -1,8 +1,8 @@
-title: accessdenied-1
+title: accessdenied-project
 author: chaideqing
 version: "1.0"
 fields:
     - field: id
-      range: ',user1'
+      range: '2,3'
     - field: type
       range: 'project'
