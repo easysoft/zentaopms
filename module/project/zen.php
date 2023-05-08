@@ -924,11 +924,12 @@ class projectZen extends project
      *
      * @param  int    $selectedProgramID
      * @param  object $selectedProgram
+     * @param  string $objectType
      *
      * @access protected
      * @return array
      */
-    protected function buildSelectForm(int $selectedProgramID, object $selectedProgram): array
+    protected function buildSelectForm(int $selectedProgramID, object $selectedProgram, string $objectType): array
     {
         if(isset($selectedProgram))
         {

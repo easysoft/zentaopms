@@ -258,7 +258,7 @@ class project extends control
 
         /* Build the selected drop-down data. */
         $data = array();
-        $data = $this->projectZen->buildSelectForm($selectedProgramID, $selectedProgram);
+        $data = $this->projectZen->buildSelectForm($selectedProgramID, $selectedProgram, $objectType);
 
         /* Finish task #64882.Get the path of the last selected program. */
         if(!empty($objectID))       $data['objectPath']      = explode(',', $object->path);
