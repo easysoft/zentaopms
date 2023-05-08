@@ -231,14 +231,15 @@ class todoModel extends model
     }
 
     /**
+     * 获取用户的待办事项列表。
      * Get todo list of a user.
      *
-     * @param  string  $type
-     * @param  string  $account
+     * @param  string       $type
+     * @param  string       $account
      * @param  string|array $status   all|today|thisweek|lastweek|before, or a date.
-     * @param  int     $limit
-     * @param  ?object $pager
-     * @param  string  $orderBy
+     * @param  int          $limit
+     * @param  ?object      $pager
+     * @param  string       $orderBy
      * @access public
      * @return array
      */
