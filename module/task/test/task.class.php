@@ -9,42 +9,40 @@ class taskTest
     }
 
     /**
-     * Test create a task.
+     * Create a task.
      *
-     * @param  array  $param
-     * @param  int    $executionID
+     * @param  array      $param
+     * @param  array      $assignedToList
+     * @param  int        $multiple
+     * @param  array      $team
+     * @param  bool       $selectTestStory
+     * @param  array      $teamSourceList
+     * @param  array      $teamEstimateList
+     * @param  array|bool $teamConsumedList
+     * @param  array|bool $teamLeftList
+     * @param  string     $requiredFields
      * @access public
      * @return object
      */
-    public function createObject($param = array(), $executionID = '', $bugID = '')
+    public function createTest($param, $assignedToList = array(), $multiple = 0, $team = array(), $selectTestStory = false, $teamSourceList = array(), $teamEstimateList = array(), $teamConsumedList = false, $teamLeftList = false, $requiredFields = '')
     {
-        $assignedTo   = array('');
-        $createFields = array('module' => '', 'story' => '', 'name' => '', 'type' => '', 'assignedTo' => $assignedTo,
-            'pri' => 3, 'estimate' => '', 'estStarted' => '2021-01-10', 'deadline' => '2021-03-19', 'desc' => '');
+        global $tester;
+        $_SERVER['HTTP_HOST'] = $tester->config->db->host;
 
-        foreach($createFields as $field => $defaultValue) $_POST[$field] = $defaultValue;
+        if($requiredFields) $tester->config->task->create->requiredFields = $tester->config->task->create->requiredFields . ',' . $requiredFields;
 
-        foreach($param as $key => $value) $_POST[$key] = $value;
+        $task         = new stdclass();
+        $createFields = array('mailto' => '');
+        foreach($createFields as $field => $defaultValue) $task->$field = $defaultValue;
+        foreach($param as $key => $value) $task->$key = $value;
+        $taskIdList = $this->objectModel->create($task, $assignedToList, $multiple, $team, $selectTestStory, $teamSourceList, $teamEstimateList, $teamConsumedList, $teamLeftList);
 
-        $object = $this->objectModel->create($executionID, $bugID);
-        if (in_array('user92', $_POST['assignedTo'], true))
-        {
-            $objectID = $object['user92']['id'];
-        }
-        else
-        {
-            $objectID = $object['']['id'];
-        }
         unset($_POST);
-        if(dao::isError())
-        {
-            return dao::getError();
-        }
-        else
-        {
-            $object = $this->objectModel->getByID($objectID);
-            return $object;
-        }
+        if(dao::isError()) return dao::getError();
+
+        if(!$taskIdList) return false;
+        $object = $this->objectModel->getByID(current($taskIdList));
+        return $object;
     }
 
     /**

@@ -393,7 +393,7 @@ class taskTao extends taskModel
         $execution      = $this->dao->findByID($task->execution)->from(TABLE_PROJECT)->fetch();
 
         /* If the lifetime if the execution is ops and the attribute of execution is request or review, remove story from required fields. */
-        if($execution->lifetime == 'ops' or in_array($execution->attribute, array('request', 'review')))
+        if($execution and ($execution->lifetime == 'ops' or in_array($execution->attribute, array('request', 'review'))))
         {
             $requiredFields = str_replace(",story,", ',', "$requiredFields");
         }

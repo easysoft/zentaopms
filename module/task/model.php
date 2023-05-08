@@ -17,17 +17,22 @@ class taskModel extends model
      * 创建一个任务。
      * Create a task.
      *
-     * @param  int    $executionID
-     * @param  int    $bugID
-     * @param  object $rawData
-     * @param  array  $data
-     * @param  bool   $selectTestStory
+     * @param  int        $executionID
+     * @param  int        $bugID
+     * @param  object     $rawData
+     * @param  array      $data
+     * @param  bool       $selectTestStory
+     * @param  array      $teamSourceList
+     * @param  array      $teamEstimateList
+     * @param  array|bool $teamConsumedList
+     * @param  array|bool $teamLeftList
      * @access public
      * @return bool|array
      */
-    public function create(object $task, array $assignedToList, int $multiple, array $team, bool $selectTestStory): bool|array
+    public function create(object $task, array $assignedToList, int $multiple, array $team, bool $selectTestStory, array $teamSourceList, array $teamEstimateList, array|bool $teamConsumedList, array|bool $teamLeftList): bool|array
     {
         $this->loadModel('action');
+
         /* Remove required fields for creating tasks based on conditions. */
         $this->taskTao->removeCreateRequiredFields($task, $selectTestStory);
 
@@ -54,13 +59,12 @@ class taskModel extends model
             if($multiple and count(array_filter($team)) > 1)
             {
                 $task->id = $taskID;
-                $teams    = $this->manageTaskTeam($task->mode, $taskID, 'wait');
+                $teams    = $this->manageTaskTeam($task->mode, $task, $team, $teamSourceList, $teamEstimateList, $teamConsumedList, $teamLeftList);
                 if($teams) $this->computeHours4Multiple($task);
                 unset($task->id);
             }
 
             $taskIdList[] = $taskID;
-
             $this->action->create('task', $taskID, 'Opened', '');
         }
         return $taskIdList;
