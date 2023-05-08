@@ -255,7 +255,7 @@ class baseRouter
      * @var string
      * @access public
      */
-    public $viewType;
+    public $viewType = 'html';
 
     /**
      * 全局$config对象。

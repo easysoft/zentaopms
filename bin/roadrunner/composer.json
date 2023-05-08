@@ -1,6 +1,11 @@
 {
     "require": {
-        "spiral/roadrunner": "^2.6",
-        "nyholm/psr7": "^1.4"
+        "spiral/roadrunner": "^2023.1",
+        "nyholm/psr7": "^1.4",
+        "spiral/roadrunner-cli": "^2.5"
+    },
+    "scripts": {
+        "get-rr": "./vendor/bin/rr get-binary",
+        "serve": "./rr serve -c .rr.yaml"
     }
 }
