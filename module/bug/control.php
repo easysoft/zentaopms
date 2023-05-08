@@ -102,7 +102,7 @@ class bug extends control
     {
         $this->loadModel('datatable');
 
-        $productID = $this->product->saveState($productID, $this->products);
+        $productID = $this->product->saveVisitState($productID, $this->products);
         $product   = $this->product->getById($productID);
         if($product->type != 'normal')
         {
@@ -375,7 +375,7 @@ class bug extends control
 
         $this->bugZen->setMenu4Create($productID, $branch, $output);
 
-        $productID      = $this->product->saveState($productID, $this->products);
+        $productID      = $this->product->saveVisitState($productID, $this->products);
         $currentProduct = $this->product->getById($productID);
         if($branch === '') $branch = (int)$this->cookie->preBranch;
 
@@ -521,7 +521,7 @@ class bug extends control
         }
 
         /* Get product, then set menu. */
-        $productID = $this->product->saveState($productID, $this->products);
+        $productID = $this->product->saveVisitState($productID, $this->products);
         if($branch === '') $branch = (int)$this->cookie->preBranch;
         $this->qa->setMenu($this->products, $productID, $branch);
 
