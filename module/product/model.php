@@ -80,7 +80,6 @@ class productModel extends model
             if($this->app->tab == 'execution') $extra = $this->session->execution;
         }
 
-
         /* 查询产品数据。*/
         $product = $this->getById($productID);
         $this->session->set('currentProductType', $product->type);
@@ -90,32 +89,18 @@ class productModel extends model
         if($this->app->tab == 'feedback') $moduleName = 'feedback';
         $dropMenuLink = helper::createLink($moduleName, 'ajaxGetDropMenu', "objectID=$productID&module=$currentModule&method=$currentMethod&extra=$extra");
 
-        /* 根据是否显示分支，处理分支语言项，获取分支数据。 */
-        $showBranch = ($product->type != 'normal' && $withBranch && $currentModule != 'programplan');
-        if(!$showBranch) unset($this->lang->product->menu->settings['subMenu']->branch);
-        if($showBranch)
-        {
-            /* 修正分支显示语言项。 */
-            $this->lang->product->branch = sprintf($this->lang->product->branch, $this->lang->product->branchName[$product->type]);
-            $this->lang->product->menu->settings['subMenu']->branch['link'] = str_replace('@branch@', $this->lang->product->branch, $this->lang->product->menu->settings['subMenu']->branch['link']);
-
-            $branches   = $this->loadModel('branch')->getPairs($product->id, 'all');
-            $branchName = zget($branches, $branch, reset($branches));
-        }
-
         /* 构建移动端产品1.5级导航代码。 */
         if($this->app->viewType == 'mhtml')
         {
-            $output = "<a id='currentItem' href=\"javascript:showSearchMenu('product', '$productID', '$currentModule', '$currentMethod', '$extra')\"><span class='text'>{$product->name}</span> <span class='icon-caret-down'></span></a><div id='currentItemDropMenu' class='hidden affix enter-from-bottom layer'></div>";
-            if($showBranch) $output .= "<a id='currentBranch' href=\"javascript:showSearchMenu('branch', '{$product->id}', '$currentModule', '$currentMethod', '$extra')\">{$branchName} <span class='icon-caret-down'></span></a><div id='currentBranchDropMenu' class='hidden affix enter-from-bottom layer'></div>";
+            $output  = "<a id='currentItem' href=\"javascript:showSearchMenu('product', '$productID', '$currentModule', '$currentMethod', '$extra')\"><span class='text'>{$product->name}</span> <span class='icon-caret-down'></span></a><div id='currentItemDropMenu' class='hidden affix enter-from-bottom layer'></div>";
+            $output .= $this->productTao->getBranchDropMenu4Select($product, $branch, $currentModule, $currentMethod, $extra, $withBranch);
             return $output;
         }
 
         /* 构建PC端产品1.5级导航代码。 */
         $output  = "<div class='btn-group angle-btn'><div class='btn-group'><button data-toggle='dropdown' type='button' class='btn btn-limit' id='currentItem' title='{$product->name}' style='width: 90%'><span class='text'>{$product->name}</span> <span class='caret'></span></button><div id='dropMenu' class='dropdown-menu search-list' data-ride='searchList' data-url='$dropMenuLink'>";
-        $output .= '<div class="input-control search-box has-icon-left has-icon-right search-example"><input type="search" class="form-control search-input" /><label class="input-control-icon-left search-icon"><i class="icon icon-search"></i></label><a class="input-control-icon-right search-clear-btn"><i class="icon icon-close icon-sm"></i></a></div>';
-        $output .= "</div></div>";
-        if($showBranch) $output .= "<a id='currentBranch' href=\"javascript:showSearchMenu('branch', '$productID', '$currentModule', '$currentMethod', '$extra')\">{$branchName} <span class='icon-caret-down'></span></a><div id='currentBranchDropMenu' class='hidden affix enter-from-bottom layer'></div>";
+        $output .= '<div class="input-control search-box has-icon-left has-icon-right search-example"><input type="search" class="form-control search-input" /><label class="input-control-icon-left search-icon"><i class="icon icon-search"></i></label><a class="input-control-icon-right search-clear-btn"><i class="icon icon-close icon-sm"></i></a></div></div></div>';
+        $output .= $this->productTao->getBranchDropMenu4Select($product, $branch, $currentModule, $currentMethod, $extra, $withBranch);
         $output .= '</div>';
 
         return $output;
@@ -513,7 +498,7 @@ class productModel extends model
         $output  = "<div class='btn-group header-btn' id='swapper'><button data-toggle='dropdown' type='button' class='btn' id='currentItem' title='{$currentProductName}'><span class='text'>{$currentProductName}</span> <span class='caret' style='margin-bottom: -1px'></span></button><div id='dropMenu' class='dropdown-menu search-list' data-ride='searchList' data-url='$dropMenuLink'>";
         $output .= '<div class="input-control search-box has-icon-left has-icon-right search-example"><input type="search" class="form-control search-input" /><label class="input-control-icon-left search-icon"><i class="icon icon-search"></i></label><a class="input-control-icon-right search-clear-btn"><i class="icon icon-close icon-sm"></i></a></div>';
         $output .= "</div></div>";
-        $output .= $this->productTao->getBranchSelect4PC($currentProduct, $branch, $locateModule, $locateMethod, $extra);
+        $output .= $this->productTao->getBranchDropMenu4Switch($currentProduct, $branch, $locateModule, $locateMethod, $extra);
 
         return $output;
     }

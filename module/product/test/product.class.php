@@ -1141,8 +1141,8 @@ class productTest
     }
 
     /**
-     * 测试 buildSelect4Mobile 方法。
-     * Test buildSelect4Mobile
+     * 测试 select 方法。
+     * Test select method.
      *
      * @param  array      $products
      * @param  int        $productID
@@ -1154,11 +1154,11 @@ class productTest
      * @access public
      * @return array
      */
-    public function buildSelect4MobileTest(array $products, int $productID, string $currentModule, string $currentMethod, string $extra = '', string|int $branch = '', bool $withBranch = true): array
+    public function selectTest(array $products, int $productID, string $currentModule, string $currentMethod, string $extra = '', string|int $branch = '', bool $withBranch = true): array
     {
         $this->objectModel->lang->product->menu->settings['subMenu']->branch = array('link' => "@branch@|branch|manage|product=%s", 'subModule' => 'branch');
 
-        $select = $this->objectModel->buildSelect4Mobile($products, $productID, $currentModule, $currentMethod, $extra, $branch, $withBranch);
+        $select = $this->objectModel->select($products, $productID, $currentModule, $currentMethod, $extra, $branch, $withBranch);
 
         $productName = zget($products, $productID, reset($products));
         $branchName  = '所有';

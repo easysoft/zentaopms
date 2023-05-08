@@ -474,18 +474,18 @@ class productTao extends productModel
     }
 
     /**
-     * 获取PC端分支下拉的HTML
-     * Get branch select for mobile
+     * 获取getSwitch方法中的分支下拉的HTML。
+     * Get branch drop menu for getSwitch method.
      *
      * @param  object     $product
      * @param  string|int $branch
      * @param  string     $currentModule
      * @param  string     $currentMethod
      * @param  string     $extra
-     * @access private
+     * @access protected
      * @return string
      */
-    protected function getBranchSelect4PC(object $product, string|int $branch, string $currentModule, string $currentMethod, string $extra = ''): string
+    protected function getBranchDropMenu4Switch(object $product, string|int $branch, string $currentModule, string $currentMethod, string $extra = ''): string
     {
         if(!isset($product->type) or $product->type == 'normal') return '';
 
@@ -507,9 +507,48 @@ class productTao extends productModel
 
         /* 生成分支HTML代码。*/
         $this->lang->product->branch = sprintf($this->lang->product->branch, $this->lang->product->branchName[$product->type]);
-        $output = "<div class='btn-group header-btn'><button id='currentBranch' data-toggle='dropdown' type='button' class='btn'><span class='text'>{$branchName}</span> <span class='caret' style='margin-bottom: -1px'></span></button><div id='dropMenu' class='dropdown-menu search-list' data-ride='searchList' data-url='$dropMenuLink'>";
+        $output  = "<div class='btn-group header-btn'><button id='currentBranch' data-toggle='dropdown' type='button' class='btn'><span class='text'>{$branchName}</span> <span class='caret' style='margin-bottom: -1px'></span></button><div id='dropMenu' class='dropdown-menu search-list' data-ride='searchList' data-url='$dropMenuLink'>";
         $output .= '<div class="input-control search-box has-icon-left has-icon-right search-example"><input type="search" class="form-control search-input" /><label class="input-control-icon-left search-icon"><i class="icon icon-search"></i></label><a class="input-control-icon-right search-clear-btn"><i class="icon icon-close icon-sm"></i></a></div>';
         $output .= "</div></div>";
+        return $output;
+    }
+
+    /**
+     * 获取select方法中的分支下拉的HTML
+     * Get branch drop menu for select method.
+     *
+     * @param  object     $product
+     * @param  string|int $branch
+     * @param  string     $currentModule
+     * @param  string     $currentMethod
+     * @param  string     $extra
+     * @param  bool       $withBranch
+     * @access protected
+     * @return string
+     */
+    protected function getBranchDropMenu4Select(object $product, string|int $branch, string $currentModule, string $currentMethod, string $extra = '', bool $withBranch = true): string
+    {
+        $showBranch = (isset($product->type) and $product->type != 'normal' && $withBranch && $currentModule != 'programplan');
+        if(!$showBranch)
+        {
+            unset($this->lang->product->menu->settings['subMenu']->branch);
+            return '';
+        }
+
+        /* 修正分支显示语言项。 */
+        $this->lang->product->branch = sprintf($this->lang->product->branch, $this->lang->product->branchName[$product->type]);
+        $this->lang->product->menu->settings['subMenu']->branch['link'] = str_replace('@branch@', $this->lang->product->branch, $this->lang->product->menu->settings['subMenu']->branch['link']);
+
+        $branches   = $this->loadModel('branch')->getPairs($product->id, 'all');
+        $branchName = zget($branches, $branch, reset($branches));
+
+        /* 获取移动端分支下拉HTML。*/
+        if($this->app->viewType == 'mhtml') return "<a id='currentBranch' href=\"javascript:showSearchMenu('branch', '{$product->id}', '$currentModule', '$currentMethod', '$extra')\">{$branchName} <span class='icon-caret-down'></span></a><div id='currentBranchDropMenu' class='hidden affix enter-from-bottom layer'></div>";
+
+        /* 获取PC端分支下拉HTML。*/
+        $dropMenuLink = helper::createLink('branch', 'ajaxGetDropMenu', "objectID={$product->id}&branch=$branch&module=$currentModule&method=$currentMethod&extra=$extra");
+        $output  = "<div class='btn-group'><button id='currentBranch' data-toggle='dropdown' type='button' class='btn btn-limit' title='{$branchName}' style='width: 90%'>{$branchName} <span class='caret'></span></button><div id='dropMenu' class='dropdown-menu search-list' data-ride='searchList' data-url='$dropMenuLink'>";
+        $output .= '<div class="input-control search-box has-icon-left has-icon-right search-example"><input type="search" class="form-control search-input" /><label class="input-control-icon-left search-icon"><i class="icon icon-search"></i></label><a class="input-control-icon-right search-clear-btn"><i class="icon icon-close icon-sm"></i></a></div></div></div>';
         return $output;
     }
 
