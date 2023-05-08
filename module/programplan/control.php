@@ -54,6 +54,7 @@ class programplan extends control
 
         if(!defined('RUN_MODE') || RUN_MODE != 'api') $projectID = $this->project->saveState($projectID, $this->project->getPairsByProgram());
 
+        /* 获取项目下产品并调整三级导航操作按钮。 */
         $products = $this->loadModel('product')->getProducts($projectID);
         if($this->session->hasProduct) $this->lang->modulePageNav = $this->product->select($products, $productID, 'programplan', 'browse', $type, 0, 0, '', false);
 
