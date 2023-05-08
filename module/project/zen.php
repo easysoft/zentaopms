@@ -91,14 +91,14 @@ class projectZen extends project
     }
 
     /**
-     * Append extras data to post data.
+     * Append $project to post data.
      *
      * @param  int    $projectID
      * @param  object $postData
      * @access protected
      * @return object|false
      */
-    protected function prepareEditExtras(int $projectID, object $postData): object|false
+    protected function prepareProject(int $projectID, object $postData, object $postExtras): object|false
     {
         $project = $postData->setDefault('team', $this->post->name)
             ->setDefault('lastEditedBy', $this->app->user->account)
@@ -108,14 +108,16 @@ class projectZen extends project
             ->setIF($this->post->delta == 999, 'days', 0)
             ->setIF($this->post->future, 'budget', 0)
             ->setIF($this->post->budget != 0, 'budget', round((float)$this->post->budget, 2))
+            ->join('whitelist', ',')
+            ->join('auth', ',')
             ->stripTags($this->config->project->editor->edit['id'], $this->config->allowedTags)
             ->get();
 
         /* Check if products and branch valid by project.*/
-        if($project->product && !$this->project->checkBranchAndProductValid($projectID, $project)) return false;
+        if($postExtras->products && !$this->project->checkBranchAndProductValid($projectID, $project, $postExtras)) return false;
 
         /* Check if products not empty.*/
-        if(!$this->checkProductsNotEmpty($project->products)) return false;
+        if(!$this->checkProductsNotEmpty($postExtras->products)) return false;
 
         /* Check if work days legtimate.*/
         if(!$this->checkWorkdaysLegtimate($project)) return false;
@@ -125,6 +127,25 @@ class projectZen extends project
         /* Lean mode relation defaultProgram.*/
         if($this->config->systemMode == 'light') $project->parent = $this->config->global->defaultProgram;
         return $project;
+    }
+
+    /**
+     * Append extra data to postData.
+     *
+     * @param  object $project
+     * @param  object $rawdata
+     * @access protected
+     * @return bool
+     */
+    protected function prepareEditExtras(object $postData): object
+    {
+        $postExtras = new stdclass();
+        $postExtras->plans       = $postData->rawdata->plans;
+        $postExtras->model       = $postData->rawdata->model;
+        $postExtras->products    = $postData->rawdata->products;
+        $postExtras->teamMembers = $postExtras->model == 'kanban' ? $postData->rawdata->teamMembers : array();
+
+        return $postExtras;
     }
 
     /**
