@@ -45,7 +45,7 @@ $tester->loadModel('bug');
 
 initData();
 
-r($tester->bug->getByID(2)) && p('pri,type') && e('1,codeerror');         //获取ID等于2的bug
-r($tester->bug->getByID(3)) && p('title,status') && e('bug3,active');     //获取ID等于3的bug
-r($tester->bug->getByID(4)) && p('severity,openedBuild') && e('3,trunk'); //获取ID等于4的bug
-r($tester->bug->getByID(1)) && p('title') && e('0');                      //获取不存在的bug
+r($tester->bug->getByID(2)) && p('pri,type')             && e('1,codeerror'); //获取ID等于2的bug
+r($tester->bug->getByID(3)) && p('title,status')         && e('bug3,active'); //获取ID等于3的bug
+r($tester->bug->getByID(4)) && p('severity,openedBuild') && e('3,trunk');     //获取ID等于4的bug
+r($tester->bug->getByID(1)) && p('title')                && e('0');           //获取不存在的bug
