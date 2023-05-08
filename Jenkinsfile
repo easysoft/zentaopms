@@ -140,6 +140,7 @@ pipeline {
                   container('zentao') {
                     sh 'initdb.php config'
                     sh '/apps/zentao/test/ztest extract ; /apps/zentao/test/ztest ${SEQUENCE} | tee /apps/zentao/test/${SEQUENCE}.log'
+                    sh 'ls /apps/zentao/www ; cat /apps/zentao/www/coverage.php'
                     sh 'pipeline-unittest.sh /apps/zentao/test/${SEQUENCE}.log'
                   }
                 }
