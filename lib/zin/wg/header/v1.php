@@ -246,14 +246,13 @@ class header extends wg
         (
             a
             (
-                setClass('circle'),
+                setClass('w-7 h-7'),
                 userAvatar
                 (
                     set::circle(true),
                     set::size(28),
                     set::user($user)
                 ),
-                set::square(true),
                 set::caret(false)
             ),
 
