@@ -113,18 +113,18 @@ class projectZen extends project
             ->stripTags($this->config->project->editor->edit['id'], $this->config->allowedTags)
             ->get();
 
-        /* Check if products and branch valid by project.*/
+        /* Check if products and branch valid by project. */
         if($postExtras->products && !$this->project->checkBranchAndProductValid($projectID, $project, $postExtras)) return false;
 
-        /* Check if products not empty.*/
+        /* Check if products not empty. */
         if(!$this->checkProductsNotEmpty($postExtras->products)) return false;
 
-        /* Check if work days legtimate.*/
+        /* Check if work days legtimate. */
         if(!$this->checkWorkdaysLegtimate($project)) return false;
 
         if(!isset($this->config->setCode) or $this->config->setCode == 0) unset($project->code);
 
-        /* Lean mode relation defaultProgram.*/
+        /* Lean mode relation defaultProgram. */
         if($this->config->systemMode == 'light') $project->parent = $this->config->global->defaultProgram;
         return $project;
     }
