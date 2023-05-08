@@ -300,7 +300,7 @@ class productZen extends product
         $initArray = strpos($params, 'hasempty') !== false ? array('') : array();
         $linePairs = $initArray;
         foreach($programIdList as $programID) $linePairs[$programID] = $initArray;
-        foreach($productLines as $line) $linePairs[$programID][$line->id] = $line->name;
+        foreach($productLines as $programID => $line) $linePairs[$programID][$line->id] = $line->name;
 
         return array($productLines, $linePairs);
     }
