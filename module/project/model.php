@@ -1466,7 +1466,7 @@ class projectModel extends model
      * @access public
      * @return array|false
      */
-    public function update(int $projectID, object $project): array|false
+    public function update(int $projectID, object $project , object $postData): array|false
     {
         /* 通过id查老项目信息, 处理parent和图片字段。*/
         /* Fetch oldProject's info and get parent and file info.*/
@@ -1502,6 +1502,7 @@ class projectModel extends model
         $this->updateUserViewByProject($projectID, $project->acl); // 更新用户视图。
         $this->updateWhitelistByProject($projectID, $project, $oldProject, $linkedProducts); // 更新关联的白名单列表。
         $this->updateTeamMembersByProject($projectID, $project, $oldProject); // 更新关联的成员列表。
+        $this->updatePlanIdListByProject($projectID, $project->plans); // 更新关联的计划列表。
 
         $this->file->updateObjectID($this->post->uid, $projectID, 'project'); // 通过uid更新文件id。
 
@@ -3007,7 +3008,7 @@ class projectModel extends model
     }
 
     /**
-     * Fetch planIdList by project
+     * Update planIdList by project
      *
      * @param  int   $projectID
      * @param  array $plans
@@ -3079,5 +3080,46 @@ class projectModel extends model
         }
 
         return !dao::isError();
+    }
+
+    /**
+     * 获取项目集的最小开始时间
+     * Get program min begin
+     *
+     * @param  int $objectID
+     *
+     * @access public
+     * @return object
+     */
+    public function getProgramMinBegin(int $objectID): object
+    {
+        $a = $this->dao->select('`begin` as minBegin')->from(TABLE_PROGRAM)
+            ->where('id')->ne($objectID)
+            ->andWhere('deleted')->eq(0)
+            ->andWhere('path')->like("%,{$objectID},%")
+            ->orderBy('begin_asc')
+            ->fetch('minBegin');
+        return $a;
+
+    }
+
+    /**
+     * 获取项目集的最大结束时间
+     * get program max end
+     *
+     * @param  int $objectID
+     *
+     * @access public
+     * @return object
+     */
+    public function getProgramMaxEnd(int $objectID): object
+    {
+        return $this->dao->select('`end` as maxEnd')->from(TABLE_PROGRAM)
+            ->where('id')->ne($objectID)
+            ->andWhere('deleted')->eq(0)
+            ->andWhere('path')->like("%,{$objectID},%")
+            ->andWhere('end')->ne('0000-00-00')
+            ->orderBy('end_desc')
+            ->fetch('maxEnd');
     }
 }

@@ -1,0 +1,28 @@
+title: zt_project
+author: liuhong
+version: "1.0"
+fields:
+    - field: id
+      range: 1-6
+    - field: project
+      range: 0
+    - field: model
+      range: ', , ,scrum, ,scrum,scrum'
+    - field: type
+      range: 'program,program,project,program,project,project'
+    - field: status
+      range: 'wait,doing,closed,suspended'
+    - field: parent
+      range: 0, 1, 2, 0, 3, 0
+    - field: grade
+      range: 1, 2, 3, 1, 2, 1
+    - field: path
+      range: '`,1,`, `,1,2,`, `,1,2,3,`, `,4,`, `,4,5,`, `,6,`'
+    - field: name
+      range: '项目集1, 项目集1-1, 项目1-1-2, 项目集3, 项目3-4, 无迭代无产品项目6'
+    - field: code
+      range: 'program1, program1-1, project1-1-2, program3, project3-4, project6'
+    - field: begin
+      range: "'2023-05-01', '2023-05-07', '2023-05-20', '2023-04-04', '2023-05-01', '2023-05-08'"
+    - field: end
+      range: "'2023-06-01', '2023-05-19', '2023-06-12', '2023-07-03', '2023-06-03', '2023-05-08'"

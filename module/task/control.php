@@ -111,7 +111,7 @@ class task extends control
         $storyID     = (int)$storyID;
         $moduleID    = (int)$moduleID;
         $taskID      = (int)$taskID;
-        $extra = str_replace(array(',', ' '), array('&', ''), $extra);
+        $extra       = str_replace(array(',', ' '), array('&', ''), $extra);
         parse_str($extra, $output);
 
         /* 判断不能访问的执行。 TODO: 提示语应改为执行。 */
@@ -125,16 +125,14 @@ class task extends control
 
         if(!empty($_POST))
         {
-            /* Form data. */
-            $postData = form::data($this->config->task->form->batchCreate);
-
-            $mails = $this->task->batchCreate($executionID, $postData, $output);
+            /* 批量创建任务。 */
+            $postData   = form::data($this->config->task->form->batchCreate);
+            $tasks      = $this->taskZen->prepareTasks4BatchCreate($execution, $postData->rawdata);
+            $taskIdList = $this->task->batchCreate($execution, $tasks, $output);
             if(dao::isError()) return print(js::error(dao::getError()));
 
             /* Return task id list when call the API. */
-            $taskIDList = array();
-            foreach($mails as $mail) $taskIDList[] = $mail->taskID;
-            if($this->viewType == 'json' or (defined('RUN_MODE') and RUN_MODE == 'api')) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'idList' => $taskIDList));
+            if($this->viewType == 'json' or (defined('RUN_MODE') and RUN_MODE == 'api')) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'idList' => $taskIdList));
 
             /* 生成链接。 TODO: 写配置项。 */
             $redirectedLink = $this->taskZen->getRedirectedLink($execution);
