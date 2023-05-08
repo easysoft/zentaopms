@@ -427,7 +427,7 @@ class js extends baseJS
         if($full)
         {
             $document = "<html><meta charset='utf-8'/><style>body{background:white}</style><script>";
-            if(strpos($_SERVER['HTTP_USER_AGENT'], 'xuanxuan') != false)
+            if(isset($_SERVER['HTTP_USER_AGENT']) && strpos($_SERVER['HTTP_USER_AGENT'], 'xuanxuan') != false)
             {
                 /* Inject handler for confirm, prompt and alert. */
                 $document .= <<<EOT

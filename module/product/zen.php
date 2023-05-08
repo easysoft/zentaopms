@@ -28,7 +28,7 @@ class productZen extends product
         if($this->app->viewType == 'mhtml')
         {
             $productID = $this->saveVisitState(0, $this->products);
-            $this->setMenu($productID);
+            $this->product->setMenu($productID);
         }
     }
 
@@ -48,7 +48,7 @@ class productZen extends product
         setcookie('preBranch', $branch, $this->config->cookieLife, $this->config->webRoot, '', $this->config->cookieSecure, true);
         $this->session->set('createProjectLocate', $this->app->getURI(true), 'product');
 
-        $this->setMenu($productID, $branch);
+        $this->product->setMenu($productID, $branch);
     }
 
     /**
@@ -67,7 +67,7 @@ class productZen extends product
         if($this->app->getViewType() != 'mhtml') return;
 
         if($this->app->rawModule == 'projectstory' and $this->app->rawMethod == 'story') return $this->loadModel('project')->setMenu();
-        $this->setMenu();
+        $this->product->setMenu();
     }
 
     /**
@@ -82,7 +82,7 @@ class productZen extends product
     protected function setEditMenu(int $productID, int $programID)
     {
         if($programID) return $this->loadModel('program')->setMenu($programID);
-        $this->setMenu($productID);
+        $this->product->setMenu($productID);
     }
 
     /**
@@ -97,7 +97,7 @@ class productZen extends product
      */
     protected function setShowErrorNoneMenu(string $moduleName, string $activeMenu, int $objectID)
     {
-        if($this->app->getViewType() == 'mhtml') return $this->setMenu();
+        if($this->app->getViewType() == 'mhtml') return $this->product->setMenu();
 
         if($moduleName == 'qa')        $this->setShowErrorNoneMenu4QA($activeMenu);
         if($moduleName == 'project')   $this->setShowErrorNoneMenu4Project($activeMenu, $objectID);

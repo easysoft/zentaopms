@@ -1471,31 +1471,33 @@ class programplanModel extends model
      * @access public
      * @return void
      */
-    public function computeProgress($stageID, $action = '', $isParent = false)
+    public function computeProgress(int $stageID, string $action = '', bool $isParent = false)
     {
-        $stage   = $this->loadModel('execution')->getByID($stageID);
-        $project = $this->loadModel('project')->getByID($stage->project);
-        if(empty($stage) or empty($stage->path) or ($project->model != 'waterfall' and $project->model != 'waterfallplus')) return false;
-
         $this->loadModel('execution');
+        $this->loadModel('project');
         $this->loadModel('action');
+
+        $stage   = $this->execution->getByID($stageID);
+        $project = $this->project->getByID($stage->project);
+        if(empty($stage) || empty($stage->path) || ($project->model != 'waterfall' && $project->model != 'waterfallplus')) return false;
+
         $action       = strtolower($action);
         $parentIdList = explode(',', trim($stage->path, ','));
         $parentIdList = array_reverse($parentIdList);
         foreach($parentIdList as $id)
         {
             $parent = $this->execution->getByID($id);
-            if(empty($this->lang->execution->typeList[$parent->type]) or (!$isParent and $id == $stageID)) continue;
+            if(empty($this->lang->execution->typeList[$parent->type]) || (!$isParent && $id == $stageID)) continue;
 
             $statusCount = array();
             $children    = $this->execution->getChildExecutions($parent->id);
             $allChildren = $this->dao->select('id')->from(TABLE_EXECUTION)->where('deleted')->eq(0)->andWhere('path')->like("{$parent->path}%")->andWhere('id')->ne($id)->fetchPairs();
             $startTasks  = $this->dao->select('count(1) as count')->from(TABLE_TASK)->where('deleted')->eq(0)->andWhere('execution')->in($allChildren)->andWhere('consumed')->ne(0)->fetch('count');
-            foreach($children as $childID => $childExecution) $statusCount[$childExecution->status] = empty($statusCount[$childExecution->status]) ? 1 : $statusCount[$childExecution->status] ++;
+            foreach($children as $childExecution) $statusCount[$childExecution->status] = empty($statusCount[$childExecution->status]) ? 1 : $statusCount[$childExecution->status] ++;
 
             if(empty($statusCount)) continue;
-
-            if(isset($statusCount['wait']) and count($statusCount) == 1 and helper::isZeroDate($parent->realBegan) and $startTasks == 0)
+            $count = count($statusCount);
+            if(isset($statusCount['wait']) && $count == 1 && helper::isZeroDate($parent->realBegan) && $startTasks == 0)
             {
                 if($parent->status != 'wait')
                 {
@@ -1503,7 +1505,7 @@ class programplanModel extends model
                     $parentAction = 'waitbychild';
                 }
             }
-            elseif(isset($statusCount['closed']) and count($statusCount) == 1)
+            elseif(isset($statusCount['closed']) && $count == 1)
             {
                 if($parent->status != 'closed')
                 {
@@ -1511,7 +1513,7 @@ class programplanModel extends model
                     $parentAction = 'closedbychild';
                 }
             }
-            elseif(isset($statusCount['suspended']) and (count($statusCount) == 1 or (isset($statusCount['closed']) and count($statusCount) == 2)))
+            elseif(isset($statusCount['suspended']) && ($count == 1 || (isset($statusCount['closed']) && $count == 2)))
             {
                 if($parent->status != 'suspended')
                 {
@@ -1538,13 +1540,14 @@ class programplanModel extends model
     }
 
     /**
+     * 检查阶段是否是叶子阶段。
      * Check if the stage is a leaf stage.
      *
      * @param  int    $planID
      * @access public
      * @return bool
      */
-    public function checkLeafStage($planID)
+    public function checkLeafStage(int $planID): bool
     {
         $subStageList = $this->dao->select('id')->from(TABLE_EXECUTION)->where('parent')->eq($planID)->andWhere('deleted')->eq(0)->fetchAll('id');
 

@@ -1,13 +1,70 @@
+var nameDefaultHtml = $('#nameInputBox').html();
+
 /**
- * 切换日期选择的禁用状态。
- * Toggle the disabled state of the date select.
+ * 切换周期类型。
+ * Toggle cycle type.
+ *
+ * @return void
+ */
+function changeCycleType()
+{
+    var cycleType = $('#cycleType input[type=radio]:checked').val();
+    toggleCycleConfig(cycleType);
+}
+
+/**
+ * 切换周期设置的展示。
+ * Toggle cycle setting display.
+ *
+ * @param  string cycleType  Type of cycle.
+ * @return void
+ */
+function toggleCycleConfig(cycleType)
+{
+
+    $('.cycle-type-detail:not(.type-' + cycleType + ')').addClass('hidden');
+    $('.cycle-type-detail.type-' + cycleType).removeClass('hidden');
+}
+
+/**
+ * 切换私人事务，用于切换指派给的禁用状态。
+ * Toggle private transactions for switching the disabled state assigned to.
  *
  * @param  object switcher
  * @return void
  */
-function toggleDateTodo(switcher)
+function togglePrivate(switcher)
 {
-    $('.date').prop('disabled', switcher.checked);
+    $('#assignedTo').prop('disabled', switcher.checked);
+}
+
+/**
+ * 更改指派给时。
+ * change assignedTo.
+ *
+ * @return void
+ */
+function changeAssignedTo()
+{
+    var assignedTo = $('#assignedTo').val();
+    $('#private').prop('disabled', assignedTo !== userAccount);
+}
+
+/**
+ * 切换日期待定复选框。
+ * Toggle date pending checkbox.
+ *
+ * @param  object switcher
+ * @return void
+ */
+function togglePending(switcher)
+{
+    if(switcher.checked)
+    {
+        $('.date').removeAttr('disabled');
+        $('.date').prop('value','');
+        if($('#cycle')) $('#cycle').prop('checked', false);
+    }
 }
 
 /**
@@ -31,9 +88,11 @@ function loadList(type, id, objectID)
         divClass = '.name-box';
         divID    = '#nameBox';
     }
+
     id = id ? id : '';
     var param = 'userID=' + userID + '&id=' + id;
-    if(type == "task") param += '&status=wait,doing';
+    if(type == 'task') param += '&status=wait,doing';
+
     if(defaultType && type == defaultType && objectID != 0) param += '&objectID=' + objectID;
 
     if(moduleList.indexOf(type) !== -1)
@@ -43,19 +102,19 @@ function loadList(type, id, objectID)
         {
             if(data.length != 0)
             {
-                $(divClass).find('#nameInputBox').html(data).find('select').chosen();
+                if($(divClass).find('#nameInputBox').html(data).find('select').chosen) $(divClass).find('#nameInputBox').html(data).find('select').chosen();
                 if(config.currentMethod == 'edit' || type == 'feedback') $(divClass).find('select').val(objectID).trigger('chosen:updated');
-                if($(divClass + " select").val() == null) $(divClass + " select").attr("data-placeholder", noOptions.replace("%s", chosenType[type])).trigger('chosen:updated');
+                if($(divClass + ' select').val() == null) $(divClass + ' select').attr('data-placeholder', noOptions.replace('%s', chosenType[type])).trigger('chosen:updated');
             }
             else
             {
-                $(divClass).find('#nameInputBox').html("<select id="+ type +" class='form-control'></select>").find('select').chosen();
+                if($(divClass).find('#nameInputBox').html("<select id="+ type +" class='form-control'></select>").find('select').chosen) $(divClass).find('#nameInputBox').html("<select id="+ type +" class='form-control'></select>").find('select').chosen();
             }
         });
     }
     else
     {
-        $(divClass).html($(divID).html());
+        $(divClass).find('#nameInputBox').html(nameDefaultHtml);
     }
 
     if(nameBoxLabel) return;
@@ -71,8 +130,8 @@ function loadList(type, id, objectID)
  */
 function selectNext()
 {
-    if(!$("#begin ")[0] || !$("#end ")[0]) return;
-    $("#end ")[0].selectedIndex = $("#begin ")[0].selectedIndex + 3;
+    if(!$('#begin ')[0] || !$('#end ')[0]) return;
+    $('#end ')[0].selectedIndex = $('#begin ')[0].selectedIndex + 3;
     $('#end').trigger('chosen:updated');
 }
 
@@ -82,26 +141,26 @@ function setBeginsAndEnds(i, beginOrEnd)
     {
         for(j = 0; j < batchCreateNum; j++)
         {
-            if(j != 0) $("#begins" + j)[0].selectedIndex = $("#ends" + (j - 1))[0].selectedIndex;
-            $("#ends" + j)[0].selectedIndex = $("#begins" + j)[0].selectedIndex + 3;
-            $("#begins" + j, "#ends" + j).trigger('chosen:updated');
+            if(j != 0) $('#begins' + j)[0].selectedIndex = $('#ends' + (j - 1))[0].selectedIndex;
+            $('#ends' + j)[0].selectedIndex = $('#begins' + j)[0].selectedIndex + 3;
+            $('#begins' + j, '#ends' + j).trigger('chosen:updated');
         }
     }
     else
     {
         if(beginOrEnd == 'begin')
         {
-            $("#ends" + i)[0].selectedIndex = $("#begins" + i)[0].selectedIndex + 3;
-            $("#ends" + i).trigger('chosen:updated');
+            $('#ends' + i)[0].selectedIndex = $('#begins' + i)[0].selectedIndex + 3;
+            $('#ends' + i).trigger('chosen:updated');
         }
 
         if(batchCreateNum)
         {
             for(j = i+1; j < batchCreateNum; j++)
             {
-                $("#begins" + j)[0].selectedIndex = $("#ends" + (j - 1))[0].selectedIndex;
-                $("#ends" + j)[0].selectedIndex = $("#begins" + j)[0].selectedIndex + 3;
-                $("#begins" + j, "#ends" + j).trigger('chosen:updated');
+                $('#begins' + j)[0].selectedIndex = $('#ends' + (j - 1))[0].selectedIndex;
+                $('#ends' + j)[0].selectedIndex = $('#begins' + j)[0].selectedIndex + 3;
+                $('#begins' + j, '#ends' + j).trigger('chosen:updated');
             }
         }
     }
