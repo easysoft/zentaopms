@@ -1210,8 +1210,6 @@ class product extends control
             foreach($this->config->qa->menuList as $menu) $this->lang->navGroup->$menu = 'qa';
         }
 
-        $programProducts = array();
-
         if($this->app->tab == 'project')
         {
             $products = $this->product->getProducts($this->session->project);
