@@ -209,7 +209,7 @@ class taskTao extends taskModel
      *
      * @param  string $field
      * @param  string $condition
-     * @access public
+     * @access protected
      * @return object[]
      */
     protected function getListByReportCondition(string $field, string $condition): array
