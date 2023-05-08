@@ -26,148 +26,26 @@ class productModel extends model
     const STORY_TYPE_REQ   = 'requirement';
 
     /**
-     * Get product module menu.
+     * 获取移动端1.5级导航。
+     * Get product drop menu in mobile.
      *
-     * @param  array  $products
-     * @param  int    $productID
-     * @param  string $extra
-     * @param  string $branch
-     * @param  string $module
-     * @param  string $moduleType
+     * @param  array      $products
+     * @param  int        $productID
+     * @param  string     $extra
+     * @param  string|int $branch
      *
      * @access public
      * @return string
      */
-    public function getModuleNav($products, $productID, $extra, $branch, $module = 0, $moduleType = '')
+    public function getMobileDropMenu(array $products, int $productID, string $extra = '', string|int $branch = ''): string
     {
-        $currentModule = $this->app->getModuleName();
-        $currentMethod = $this->app->getMethodName();
+        list($locateModule, $locateMethod) = $this->productTao->computeLocate4DropMenu();
 
-        /* init currentModule and currentMethod for report and story. */
-        if($currentModule == 'story')
-        {
-            $storyMethods = ",track,create,batchcreate,batchclose,";
-            if(strpos($storyMethods, "," . $currentMethod . ",") === false) $currentModule = 'product';
-            if($currentMethod == 'view' || $currentMethod == 'change' || $currentMethod == 'review') $currentMethod = 'browse';
-        }
-        if($currentMethod == 'report') $currentMethod = 'browse';
-
-        $selectHtml = $this->select($products, $productID, $currentModule, $currentMethod, $extra, $branch, $module, $moduleType);
-
-        $pageNav  = '';
-        $isMobile = $this->app->viewType == 'mhtml';
-        if($isMobile)
-        {
-            $pageNav  = html::a(helper::createLink('product', 'index'), $this->lang->product->index) . $this->lang->colon;
-            $pageNav .= $selectHtml;
-        }
-        else
-        {
-            $pageNav = $selectHtml;
-        }
+        $selectHtml = $this->productTao->buildSelect4Mobile($products, $productID, $locateModule, $locateMethod, $extra, $branch);
+        $pageNav    = html::a(helper::createLink('product', 'index'), $this->lang->product->index) . $this->lang->colon;
+        $pageNav   .= $selectHtml;
 
         return $pageNav;
-    }
-
-    /**
-     * Create the select code of products.
-     *
-     * @param  array       $products
-     * @param  int         $productID
-     * @param  string      $currentModule
-     * @param  string      $currentMethod
-     * @param  string      $extra
-     * @param  int|string  $branch
-     * @param  int         $module
-     * @param  string      $moduleType
-     * @param  bool        $withBranch      true|false
-     *
-     * @access public
-     * @return string
-     */
-    public function select($products, $productID, $currentModule, $currentMethod, $extra = '', $branch = '', $module = 0, $moduleType = '', $withBranch = true)
-    {
-        $isQaModule = (strpos(',project,execution,', ",{$this->app->tab},") !== false and strpos(',bug,testcase,testtask,ajaxselectstory,', ",{$this->app->rawMethod},") !== false and isset($products[0])) ? true : false;
-        $isFeedbackModel = strpos(',feedback,', ",{$this->app->tab},") !== false ? true : false;
-        if(count($products) <= 2 and isset($products[0]))
-        {
-            unset($products[0]);
-            $productID = key($products);
-        }
-
-        if(empty($products)) return;
-
-        if($this->app->tab == 'project' and strpos(',zeroCase,browseUnits,groupCase,', ",$currentMethod,") !== false) $isQaModule = true;
-
-        $this->app->loadLang('product');
-        if(!$isQaModule and !$productID and !$isFeedbackModel)
-        {
-            unset($this->lang->product->menu->settings['subMenu']->branch);
-            return;
-        }
-        $isMobile = $this->app->viewType == 'mhtml';
-
-        $productID = $productID == 'all' ? 0 : $productID;
-        setcookie("lastProduct", $productID, $this->config->cookieLife, $this->config->webRoot, '', $this->config->cookieSecure, true);
-        if($productID) $currentProduct = $this->getById($productID);
-
-        if($isQaModule and $this->app->tab == 'project')
-        {
-            if($this->app->tab == 'project')   $extra = strpos(',testcase,groupCase,zeroCase,', ",$currentMethod,") !== false ? $extra : $this->session->project;
-            if($this->app->tab == 'execution') $extra = $this->session->execution;
-        }
-
-        if($isQaModule and !$productID)
-        {
-            $currentProduct = new stdclass();
-            $currentProduct->name = $products[$productID];
-            $currentProduct->type = 'normal';
-        }
-        if($isFeedbackModel and !$productID)
-        {
-            $currentProduct = new stdclass();
-            $currentProduct->name = isset($products[$productID]) ? $products[$productID] : current($products);
-            $currentProduct->type = 'normal';
-        }
-        $this->session->set('currentProductType', $currentProduct->type);
-
-        $output = '';
-        if(!empty($products))
-        {
-            $moduleName = 'product';
-            if($isQaModule) $moduleName = 'bug';
-            if($isFeedbackModel) $moduleName = 'feedback';
-            $dropMenuLink = helper::createLink($moduleName, 'ajaxGetDropMenu', "objectID=$productID&module=$currentModule&method=$currentMethod&extra=$extra");
-            $output  = "<div class='btn-group angle-btn'><div class='btn-group'><button data-toggle='dropdown' type='button' class='btn btn-limit' id='currentItem' title='{$currentProduct->name}' style='width: 90%'><span class='text'>{$currentProduct->name}</span> <span class='caret'></span></button><div id='dropMenu' class='dropdown-menu search-list' data-ride='searchList' data-url='$dropMenuLink'>";
-            $output .= '<div class="input-control search-box has-icon-left has-icon-right search-example"><input type="search" class="form-control search-input" /><label class="input-control-icon-left search-icon"><i class="icon icon-search"></i></label><a class="input-control-icon-right search-clear-btn"><i class="icon icon-close icon-sm"></i></a></div>';
-            $output .= "</div></div>";
-            if($isMobile) $output = "<a id='currentItem' href=\"javascript:showSearchMenu('product', '$productID', '$currentModule', '$currentMethod', '$extra')\"><span class='text'>{$currentProduct->name}</span> <span class='icon-caret-down'></span></a><div id='currentItemDropMenu' class='hidden affix enter-from-bottom layer'></div>";
-
-            if($currentProduct->type == 'normal' || !$withBranch) unset($this->lang->product->menu->settings['subMenu']->branch);
-            if($currentProduct->type != 'normal' && $currentModule != 'programplan' && $withBranch)
-            {
-                $this->lang->product->branch = sprintf($this->lang->product->branch, $this->lang->product->branchName[$currentProduct->type]);
-                $this->lang->product->menu->settings['subMenu']->branch = str_replace('@branch@', $this->lang->product->branch, $this->lang->product->menu->settings['subMenu']->branch);
-
-                $branches   = $this->loadModel('branch')->getPairs($productID, 'all');
-                $branchName = $branches[$branch];
-                if(!$isMobile)
-                {
-                    $dropMenuLink = helper::createLink('branch', 'ajaxGetDropMenu', "objectID=$productID&branch=$branch&module=$currentModule&method=$currentMethod&extra=$extra");
-                    $output .= "<div class='btn-group'><button id='currentBranch' data-toggle='dropdown' type='button' class='btn btn-limit' title='{$branchName}' style='width: 90%'>{$branchName} <span class='caret'></span></button><div id='dropMenu' class='dropdown-menu search-list' data-ride='searchList' data-url='$dropMenuLink'>";
-                    $output .= '<div class="input-control search-box has-icon-left has-icon-right search-example"><input type="search" class="form-control search-input" /><label class="input-control-icon-left search-icon"><i class="icon icon-search"></i></label><a class="input-control-icon-right search-clear-btn"><i class="icon icon-close icon-sm"></i></a></div>';
-                    $output .= "</div></div>";
-                }
-                else
-                {
-                    $output .= "<a id='currentBranch' href=\"javascript:showSearchMenu('branch', '$productID', '$currentModule', '$currentMethod', '$extra')\">{$branchName} <span class='icon-caret-down'></span></a><div id='currentBranchDropMenu' class='hidden affix enter-from-bottom layer'></div>";
-                }
-            }
-
-            if(!$isMobile) $output .= '</div>';
-        }
-
-        return $output;
     }
 
     /**
@@ -177,7 +55,7 @@ class productModel extends model
      * @access public
      * @return bool
      */
-    public function checkPriv($productID)
+    public function checkPriv(int $productID): bool
     {
         if(empty($productID)) return false;
 
@@ -526,30 +404,19 @@ class productModel extends model
     }
 
     /*
+     * 获取1.5级导航数据。
      * Get product switcher.
      *
      * @param  int         $productID
      * @param  string      $extra
-     * @param  int|string  $branch
+     * @param  string|int  $branch
      * @access public
-     * @return void
+     * @return string
      */
-    public function getSwitcher($productID = 0, $extra = '', $branch = '')
+    public function getSwitcher(int $productID = 0, string $extra = '', string|int $branch = ''): string
     {
-        $currentModule = $this->app->moduleName;
-        $currentMethod = $this->app->methodName;
-
-        /* Init currentModule and currentMethod for report and story. */
-        if($currentModule == 'story')
-        {
-            $storyMethods = ",create,batchcreate,batchclose,";
-            if(strpos($storyMethods, "," . $currentMethod . ",") === false) $currentModule = 'product';
-            if($currentMethod == 'view' or $currentMethod == 'change' or $currentMethod == 'review') $currentMethod = 'browse';
-        }
-        if($currentModule == 'testcase' and strpos(',view,edit,', ",$currentMethod,") !== false) $currentMethod = 'browse';
-        if($currentModule == 'bug' and $currentMethod == 'edit') $currentMethod = 'browse';
-        if($currentMethod == 'report') $currentMethod = 'browse';
-
+        /* 获取产品名称，产品类型。 */
+        $currentProduct     = new stdclass();
         $currentProductName = $this->lang->productCommon;
         if($productID)
         {
@@ -558,38 +425,21 @@ class productModel extends model
             $this->session->set('currentProductType', $currentProduct->type);
         }
 
-        $fromModule   = $this->app->tab == 'qa' ? 'qa' : '';
-        $dropMenuLink = helper::createLink($this->app->tab == 'qa' ? 'product' : $this->app->tab, 'ajaxGetDropMenu', "objectID=$productID&module=$currentModule&method=$currentMethod&extra=$extra&from=$fromModule");
+        if($this->app->viewType == 'mhtml') return $this->getMobileDropMenu(array($productID => $currentProductName), $productID, $extra, $branch);
 
-        if($this->app->viewType == 'mhtml' and $productID) return $this->getModuleNav(array($productID => $currentProductName), $productID, $extra, $branch);
+        /* Init locateModule and locateMethod for report and story. */
+        list($locateModule, $locateMethod) = $this->productTao->computeLocate4DropMenu();
 
+        /* 生成异步获取产品下拉菜单的链接。*/
+        $fromModule     = $this->app->tab == 'qa' ? 'qa' : '';
+        $dropMenuModule = $this->app->tab == 'qa' ? 'product' : $this->app->tab;
+        $dropMenuLink   = helper::createLink($dropMenuModule, 'ajaxGetDropMenu', "objectID=$productID&module=$locateModule&method=$locateMethod&extra=$extra&from=$fromModule");
+
+        /* 构建产品1.5级导航数据。 */
         $output  = "<div class='btn-group header-btn' id='swapper'><button data-toggle='dropdown' type='button' class='btn' id='currentItem' title='{$currentProductName}'><span class='text'>{$currentProductName}</span> <span class='caret' style='margin-bottom: -1px'></span></button><div id='dropMenu' class='dropdown-menu search-list' data-ride='searchList' data-url='$dropMenuLink'>";
         $output .= '<div class="input-control search-box has-icon-left has-icon-right search-example"><input type="search" class="form-control search-input" /><label class="input-control-icon-left search-icon"><i class="icon icon-search"></i></label><a class="input-control-icon-right search-clear-btn"><i class="icon icon-close icon-sm"></i></a></div>';
         $output .= "</div></div>";
-
-        $notNormalProduct = (isset($currentProduct->type) and $currentProduct->type != 'normal');
-        if($notNormalProduct)
-        {
-            $isShowBranch = false;
-            if($currentModule == 'product' and $currentMethod == 'track') $isShowBranch = true;
-            if($currentModule == 'tree' and $currentMethod == 'browse') $isShowBranch = true;
-            if($currentModule == 'product' and strpos($this->config->product->showBranchMethod, $currentMethod) !== false) $isShowBranch = true;
-            if($this->app->tab == 'qa' and strpos(',testsuite,testreport,testtask,', ",$currentModule,") === false) $isShowBranch = true;
-            if($this->app->tab == 'qa' and $currentModule == 'testtask' and strpos(',create,edit,browseunits,importunitresult,unitcases,', ",$currentMethod,") === false) $isShowBranch = true;
-            if($currentModule == 'testcase' and $currentMethod == 'showimport') $isShowBranch = false;
-            if($currentModule == 'release' and strpos(',browse,create,', $currentMethod) !== false) $isShowBranch = true;
-            if($isShowBranch)
-            {
-                $this->lang->product->branch = sprintf($this->lang->product->branch, $this->lang->product->branchName[$currentProduct->type]);
-                $branches     = $this->loadModel('branch')->getPairs($productID, 'all');
-                $branchName   = isset($branches[$branch]) ? $branches[$branch] : $branches[0];
-                $dropMenuLink = helper::createLink('branch', 'ajaxGetDropMenu', "objectID=$productID&branch=$branch&module=$currentModule&method=$currentMethod&extra=$extra");
-
-                $output .= "<div class='btn-group header-btn'><button id='currentBranch' data-toggle='dropdown' type='button' class='btn'><span class='text'>{$branchName}</span> <span class='caret' style='margin-bottom: -1px'></span></button><div id='dropMenu' class='dropdown-menu search-list' data-ride='searchList' data-url='$dropMenuLink'>";
-                $output .= '<div class="input-control search-box has-icon-left has-icon-right search-example"><input type="search" class="form-control search-input" /><label class="input-control-icon-left search-icon"><i class="icon icon-search"></i></label><a class="input-control-icon-right search-clear-btn"><i class="icon icon-close icon-sm"></i></a></div>';
-                $output .= "</div></div>";
-            }
-        }
+        $output .= $this->productTao->getBranchSelect4PC($currentProduct, $branch, $locateModule, $locateMethod, $extra);
 
         return $output;
     }
@@ -2243,19 +2093,18 @@ class productModel extends model
             if(empty($this->session->product)) $productID = (int)key($products);
         }
 
+        if(isset($products[$productID])) return $productID;
+
         /* 产品ID已经被删除，不存在于产品列表中。*/
         /* Product ID does not exsit in products list, it may be deleted. */
-        if(!isset($products[$productID]))
+        /* Confirm if product exist. */
+        $product = $this->product->getById($productID);
+        if(empty($product) or $product->deleted == 1) $productID = (int)key($products);
+        /* If product is invisable for curren user, then response access denied message. */
+        if($productID && !$this->checkPriv($productID))
         {
-            /* Confirm if product exist. */
-            $product = $this->product->getById($productID);
-            if(empty($product) or $product->deleted == 1) $productID = (int)key($products);
-            /* If product is invisable for curren user, then response access denied message. */
-            if($productID && strpos(",{$this->app->user->view->products},", ",{$productID},") === false)
-            {
-                $productID = (int)key($products);
-                $this->accessDenied($this->lang->product->accessDenied);
-            }
+            $productID = (int)key($products);
+            $this->accessDenied($this->lang->product->accessDenied);
         }
 
         return $productID;
@@ -2269,7 +2118,7 @@ class productModel extends model
      * @access private
      * @return void
      */
-    public function accessDenied($tips)
+    public function accessDenied(string $tips)
     {
         if(defined('TUTORIAL')) return true;
 
@@ -2288,40 +2137,37 @@ class productModel extends model
      * Set menu.
      *
      * @param  int         $productID
-     * @param  int|string  $branch
-     * @param  int         $module
-     * @param  string      $moduleType
+     * @param  string|int  $branch      all|''|int
      * @param  string      $extra
      * @access public
      * @return void
      */
-    public function setMenu($productID = 0, $branch = '', $module = 0, $moduleType = '', $extra = ''): void
+    public function setMenu(int $productID = 0, string|int $branch = '', string $extra = '')
     {
-        if(!$this->app->user->admin and strpos(",{$this->app->user->view->products},", ",$productID,") === false and $productID != 0 and !defined('TUTORIAL'))
-        {
-            $this->accessDenied($this->lang->product->accessDenied);
-            return;
-        }
+        if(!defined('TUTORIAL') and $productID != 0 and !$this->checkPriv($productID)) return $this->accessDenied($this->lang->product->accessDenied);
 
-        $product = $this->getByID($productID);
-
+        /* 用真实数据替换导航配置的占位符，并删除无用配置项。 */
         $params = array('branch' => $branch);
         common::setMenuVars('product', $productID, $params);
+        if(strpos($extra, 'requirement') !== false) unset($this->lang->product->moreSelects['willclose']);
+
+        $product = $this->getByID($productID);
         if(!$product) return;
 
+        /* 设置1.5级导航数据。*/
         $this->lang->switcherMenu = $this->getSwitcher($productID, $extra, $branch);
 
+        /* 设置导航中分支的显示数据。*/
+        /* 如果产品类型是正常的，隐藏导航中分支的显示。*/
         if($product->type == 'normal')
         {
             unset($this->lang->product->menu->settings['subMenu']->branch);
-        }
-        else
-        {
-            $branchLink = $this->lang->product->menu->settings['subMenu']->branch['link'];
-            $this->lang->product->menu->settings['subMenu']->branch['link'] = str_replace('@branch@', $this->lang->product->branchName[$product->type], $branchLink);
-            $this->lang->product->branch = sprintf($this->lang->product->branch, $this->lang->product->branchName[$product->type]);
+            return;
         }
 
-        if(strpos($extra, 'requirement') !== false) unset($this->lang->product->moreSelects['willclose']);
+        /* 如果产品类型是多分支、多平台的，将真实数据替换@branch@匹配符。*/
+        $branchLink = $this->lang->product->menu->settings['subMenu']->branch['link'];
+        $this->lang->product->menu->settings['subMenu']->branch['link'] = str_replace('@branch@', $this->lang->product->branchName[$product->type], $branchLink);
+        $this->lang->product->branch = sprintf($this->lang->product->branch, $this->lang->product->branchName[$product->type]);
     }
 }
