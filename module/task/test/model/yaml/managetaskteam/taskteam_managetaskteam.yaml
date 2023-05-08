@@ -1,0 +1,24 @@
+---
+title: zt_taskteam
+author: auto_managetaskteam
+version: "1.0"
+fields:
+- field: task
+  range: 1-5
+- field: left
+  range: 0-4
+- field: estimate
+  range: 1-10{2}
+- field: consumed
+  range: 1,3,0,2
+- field: account
+  note: "用户账号"
+  fields:
+      - field: account1
+        range: admin,user{99}
+      - field: account2
+        range: "[],1-99"
+- field: status
+  range: "done,doing,wait,doing"
+...
+
