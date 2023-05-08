@@ -37,6 +37,7 @@ $lang->todo->product      = $lang->productCommon;
 $lang->todo->execution    = $lang->executionCommon;
 $lang->todo->changeDate   = "Change Date";
 $lang->todo->future       = 'TBD';
+$lang->todo->to           = 'to';
 
 $lang->todo->reasonList['story'] = "Convert to Story";
 $lang->todo->reasonList['task']  = "Convert to Task";
