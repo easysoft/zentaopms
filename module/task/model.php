@@ -4175,7 +4175,7 @@ class taskModel extends model
         $list .= '<td></td>';
         $list .= '<td></td>';
         $list .= '<td class="c-actions">';
-        $list .= $this->buildOperateMenu($task, 'browse');
+        $list .= $this->buildOperateBrowseMenu($task, $execution);
         $list .= '</td></tr>';
 
         if(!empty($task->children))
@@ -4252,7 +4252,7 @@ class taskModel extends model
      * @access public
      * @return string
      */
-    public function buildOperateBrowseMenu($task)
+    public function buildOperateBrowseMenu($task, $execution = '')
     {
         $menu   = '';
         $params = "taskID=$task->id";
