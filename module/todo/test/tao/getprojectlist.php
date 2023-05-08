@@ -39,7 +39,6 @@ $ids           = range(1,10);
 $list          = $tester->todo->getByList($ids);
 $projectIDList = array_column($list, 'objectID');
 
-$tester->loadModel('todo')->todoTao;
 $projectList = $tester->todo->getProjectList('zt_task', $projectIDList);
 
 r(count($projectList)) && p() && e('4'); //验证task获得的键值对的个数
