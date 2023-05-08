@@ -1041,7 +1041,7 @@ class taskModel extends model
         $isMax = $this->config->edition == 'max';
         foreach($tasks as $taskID => $task)
         {
-            if(strpos(',doing,pause,', $task->status) && empty($teams) && $task->parent >= 0 && empty($task->left))
+            if(strpos(',doing,pause,', $task->status) && empty($oldTask->mode) && $task->parent >= 0 && empty($task->left))
             {
                 dao::$errors[] = sprintf($this->lang->task->error->leftEmpty, $taskID, $this->lang->task->statusList[$task->status]);
                 return false;
