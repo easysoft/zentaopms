@@ -797,6 +797,19 @@ class projectTao extends projectModel
     }
 
     /**
+     * 返回请求被拒绝的跳转信息。
+     * return accessDenied response.
+     *
+     * @access protected
+     * @return string
+     */
+    protected function accessDenied(): string
+    {
+        $this->session->set('project', '');
+        return js::alert($this->lang->project->accessDenied) . js::locate(helper::createLink('project', 'index'));
+    }
+
+    /**
      * 通过项目ID获取Bug数量统计。
      * Get the number of bugs associated with the project.
      *
