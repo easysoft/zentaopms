@@ -307,7 +307,7 @@ class todoModel extends model
      * @access public
      * @return array
      */
-    public function getByList($todoIdList = 0)
+    public function getByList($todoIdList = 0): array
     {
         return $this->dao->select('*')->from(TABLE_TODO)
             ->beginIF($todoIdList)->where('id')->in($todoIdList)->fi()
@@ -393,7 +393,7 @@ class todoModel extends model
     }
 
     /**
-     * 激活待办事项
+     * 激活待办事项。
      * Activated a todo.
      *
      * @param  int $todoID
