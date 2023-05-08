@@ -2,35 +2,46 @@
 <?php
 include dirname(__FILE__, 5) . "/test/lib/init.php";
 include dirname(__FILE__, 2) . '/block.class.php';
+
 su('admin');
+
+function initData()
+{
+    $block = zdTable('block');
+    $block->id->range('2-5');
+    $block->account->range('admin');
+    $block->vision->range('rnd,lite');
+    $block->dashboard->range('my');
+    $block->module->range('project');
+    $block->code->range('list,statistic');
+    $block->title->prefix('区块名称')->range('2-5');
+    $block->grid->range('4,8');
+    $block->order->range('1-4');
+
+    $block->gen(4);
+}
 
 /**
 
 title=测试 blockModel->isLongBlock();
+timeout=0
 cid=1
-pid=1
 
-测试 空 对象 检查是否为长区块 >> 2
-测试 对象grid为 5 的时候 检查是否为长区块 >> 2
-测试 对象grid为 6 的时候 检查是否为长区块 >> 1
-测试 对象grid为 7 的时候 检查是否为长区块 >> 1
+- 测试 空 对象 检查是否为长区块 @0
+
+- 测试 空 对象 检查是否为长区块 @0
+
+- 测试 空 对象 检查是否为长区块 @1
 
 */
 
-$block1 = new stdclass();
+global $tester;
+$tester->loadModel('block');
 
-$block2 = new stdclass();
-$block2->grid = 5;
+initData();
 
-$block3 = new stdclass();
-$block3->grid = 6;
+$emptyObject = new stdclass();
 
-$block4 = new stdclass();
-$block4->grid = 7;
-
-$block = new blockTest();
-
-r($block->isLongBlockTest($block1)) && p() && e('2'); // 测试 空 对象 检查是否为长区块
-r($block->isLongBlockTest($block2)) && p() && e('2'); // 测试 对象grid为 5 的时候 检查是否为长区块
-r($block->isLongBlockTest($block3)) && p() && e('1'); // 测试 对象grid为 6 的时候 检查是否为长区块
-r($block->isLongBlockTest($block4)) && p() && e('1'); // 测试 对象grid为 7 的时候 检查是否为长区块
+r($tester->block->isLongBlock($emptyObject)) && p() && e('0'); // 测试 空 对象 检查是否为长区块
+r($tester->block->isLongBlock($tester->block->getByID(2))) && p() && e('0'); // 测试 空 对象 检查是否为长区块
+r($tester->block->isLongBlock($tester->block->getByID(3))) && p() && e('1'); // 测试 空 对象 检查是否为长区块

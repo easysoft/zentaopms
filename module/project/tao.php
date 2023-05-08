@@ -630,10 +630,10 @@ class projectTao extends projectModel
      * @param  int    $program
      * @param  string $path
      * @param  int    $grade
-     * @access public
+     * @access protected
      * @return string
      */
-    public function getParentProgram(string $path, int $grade): string
+    protected function getParentProgram(string $path, int $grade): string
     {
         $programList = $this->dao->select('id,name')->from(TABLE_PROGRAM)
             ->where('id')->in(trim($path, ','))
@@ -761,10 +761,10 @@ class projectTao extends projectModel
      * Get the number of stories associated with the project.
      *
      * @param  array   $projectIdList
-     * @access public
+     * @access protected
      * @return array
      */
-    public function getTotalStoriesByProject(array $projectIdList): array
+    protected function getTotalStoriesByProject(array $projectIdList): array
     {
         return $this->dao->select("t1.project, count(t2.id) as allStories, count(if(t2.status = 'active' or t2.status = 'changing', 1, null)) as leftStories, count(if(t2.status = 'closed' and t2.closedReason = 'done', 1, null)) as doneStories")->from(TABLE_PROJECTSTORY)->alias('t1')
             ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story=t2.id')
@@ -780,10 +780,10 @@ class projectTao extends projectModel
      * Get the number of tasks associated with the project.
      *
      * @param  array  $projectIdList
-     * @access public
+     * @access protected
      * @return array
      */
-    public function getTotalTaskByProject(array $projectIdList): array
+    protected function getTotalTaskByProject(array $projectIdList): array
     {
         return $this->dao->select("t1.project, count(t1.id) as allTasks, count(if(t1.status = 'wait', 1, null)) as waitTasks, count(if(t1.status = 'doing', 1, null)) as doingTasks, count(if(t1.status = 'done', 1, null)) as doneTasks, count(if(t1.status = 'wait' or t1.status = 'pause' or t1.status = 'cancel', 1, null)) as leftTasks, count(if(t1.status = 'done' or t1.status = 'closed', 1, null)) as litedoneTasks")->from(TABLE_TASK)->alias('t1')
             ->leftJoin(TABLE_EXECUTION)->alias('t2')->on('t1.execution=t2.id')
@@ -812,10 +812,10 @@ class projectTao extends projectModel
      * Get the number of bugs associated with the project.
      *
      * @param  array  $projectIdList
-     * @access public
+     * @access protected
      * @return array
      */
-    public function getTotalBugByProject(array $projectIdList): array
+    protected function getTotalBugByProject(array $projectIdList): array
     {
         return $this->dao->select("project, count(id) as allBugs, count(if(status = 'active', 1, null)) as leftBugs, count(if(status = 'resolved', 1, null)) as doneBugs")->from(TABLE_BUG)
             ->where('project')->in($projectIdList)

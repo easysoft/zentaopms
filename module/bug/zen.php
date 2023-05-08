@@ -829,9 +829,11 @@ class bugZen extends bug
 
         /* 获取影响版本列表和解决版本列表。*/
         /* Get the openedBuilds and resolvedBuilds. */
+        $objectType = '';
+        if($bug->project)   $objectType = 'project';
+        if($bug->execution) $objectType = 'execution';
+
         $objectID       = $bug->execution ? $bug->execution : $bug->project;
-        $objectType     = $bug->project   ? 'project'       : '';
-        $objectType     = $bug->execution ? 'execution'     : $objectType;
         $allBuilds      = $this->loadModel('build')->getBuildPairs($bug->product, 'all', 'noempty');
         $openedBuilds   = $this->build->getBuildPairs($bug->product, $bug->branch, $params = 'noempty,noterminate,nodone,withbranch,noreleased', $objectID, $objectType, $bug->openedBuild);
         $resolvedBuilds = $openedBuilds;

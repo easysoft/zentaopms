@@ -3,25 +3,19 @@
 include dirname(__FILE__, 5) . "/test/lib/init.php";
 include dirname(__FILE__, 2) . '/block.class.php';
 
-#su('admin');
-
-$userModel = new userModel();
-$user = $userModel->identify('admin', 'Asd123456');
-$userModel->login($user);
+su('admin');
 
 function initData()
 {
     $block = zdTable('block');
-    $block->id->range('2-3');
+    $block->id->range('2-5');
     $block->account->range('admin');
-    $block->vision->range('rnd');
-    $block->module->range('test,my');
-    $block->title->prefix('区块')->range('3,2');
-    $block->hidden->range('0-1');
-    $block->order->range('3-2');
-    $block->dashboard->range('test,my');
+    $block->vision->range('rnd,lite');
+    $block->dashboard->range('my,qa,project');
+    $block->title->prefix('区块')->range('2-5');
+    $block->order->range('5-2');
 
-    $block->gen(2);
+    $block->gen(4);
 }
 
 /**
@@ -36,7 +30,8 @@ $tester->loadModel('block');
 
 initData();
 
-r($tester->block->getMyDashboard('test')) && p('2:account,title') && e('admin,区块3'); // 测试我的 test 模块的面板
-r($tester->block->getMyHiddenBlocks('my')) && p('3:account,title') && e('admin,区块2');// 测试我的 my 模块隐藏的面板
-r($tester->block->getMyDashboard('noneModule')) && p('') && e('0');// 测试我的 不存在的 模块的面板
-r($tester->block->getMyDashboard('')) && p('') && e('0');// 测试我的 空 模块的面板
+r(count($tester->block->getMyDashboard('my')))     && p('')         && e('1');       // 查询admin用户在我的地盘仪表盘的区块列表数量
+r($tester->block->getMyDashboard('my'))            && p('2:title')  && e('区块2');   // 查询admin用户在我的地盘仪表盘的区块标题第2条的title属性
+r(count($tester->block->getMyDashboard('my', 1)))  && p('')         && e('0');       // 查询admin用户在我的地盘仪表盘的隐藏区块列表数量
+r(count($tester->block->getMyDashboard('asdas?'))) && p('')         && e('0');       // 查询admin用户在不存在仪表盘的区块列表数量
+r($tester->block->getMyDashboard('my'))            && p('2:vision') && e('rnd');     // 查询admin用户在我的地盘仪表盘区块的vision第2条的vision属性

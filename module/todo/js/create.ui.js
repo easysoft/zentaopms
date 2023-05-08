@@ -4,7 +4,7 @@ selectNext();
  * 切换周期类型，用于展示周期类型的交互。
  * Toggle cycle, used to display the interaction of cycle.
  *
- * @param  object tab
+ * @param  object switcher
  * @return void
  */
 function toggleCycle(switcher)
@@ -31,12 +31,12 @@ function toggleCycle(switcher)
  * 更改待办日期。
  * Change todo date.
  *
- * @param  object tab
+ * @param  object dateInput
  * @return void
  */
 function changeCreateDate(dateInput)
 {
-    $('#switchDate').prop('checked', !$(dateInput).val());
+    changeDate(dateInput);
     var selectTime = $(dateInput).val() != today ? start : nowTime;
     $('#begin').val(selectTime);
     $('#begin').trigger('chosen:updated');

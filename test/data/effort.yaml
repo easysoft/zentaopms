@@ -24,6 +24,8 @@ fields:
     postfix: ""
     loop: 0
     format: ""
+  - field: extra
+    range: "extra"
   - field: product
     note: "产品ID"
     range: "0"
@@ -44,7 +46,7 @@ fields:
       - field: account1
         range: admin,user{99}
       - field: account2
-        range: [],1-99
+        range: "[],1-99"
     format: ""
   - field: work
     note: "工作内容"

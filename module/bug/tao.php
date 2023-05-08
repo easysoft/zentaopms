@@ -225,14 +225,11 @@ class bugTao extends bugModel
      * @param  int    $bugID
      * @param  string $linkBug
      * @param  string $oldLinkBug
-     * @access private
+     * @access protected
      * @return bool
      */
-    private function updateLinkBug(int $bugID, string $linkBug, string $oldLinkBug): bool
+    protected function updateLinkBug(int $bugID, string $linkBug, string $oldLinkBug): bool
     {
-
-        return false;
-
         $linkBugs        = explode(',', $linkBug);
         $oldLinkBugs     = explode(',', $oldLinkBug);
         $addedLinkBugs   = array_diff($linkBugs, $oldLinkBugs);
@@ -242,19 +239,21 @@ class bugTao extends bugModel
 
         foreach($changedLinkBugs as $changedBugID => $linkBugs)
         {
-            if(in_array($changeBugID, $addedLinkBugs))
+            if(in_array($changedBugID, $addedLinkBugs))
             {
                 $currentLinkBug = $bugID;
-                if(!empty($linkBugs)) $currentLinkBug = trim($linkBugs, ',') . ',' . $bugID;
+                $linkBugs = explode(',', $linkBugs);
+                if(!empty($linkBugs) && !in_array($bugID, $linkBugs)) $linkBugs[] = $bugID;
             }
             else
             {
                 $linkBugs = explode(',', $linkBugs);
                 unset($linkBugs[array_search($bugID, $linkBugs)]);
-                $currentLinkBug  = implode(',', $linkBugs);
             }
 
-            $this->dao->update(TABLE_BUG)->set('linkBug')->eq($linkBug)->where('id')->eq($changeBugID)->exec();
+            $currentLinkBug = implode(',', array_filter($linkBugs));
+
+            $this->dao->update(TABLE_BUG)->set('linkBug')->eq($currentLinkBug)->where('id')->eq($changedBugID)->exec();
         }
 
         return !dao::isError();

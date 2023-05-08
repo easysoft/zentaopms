@@ -255,7 +255,7 @@ class docModel extends model
             ->remove('uid,contactListMenu,libType')
             ->get();
 
-        if(defined('IN_UPGRADE') and (($this->config->edition == 'open' and version_compare($this->config->version, '18.4.alpha1', '<')) or ($this->config->edition == 'biz' and version_compare($this->config->version, 'biz8.4.alpha1', '<')) or ($this->config->edition == 'max' and version_compare($this->config->version, 'max4.4.alpha1', '<')))) unset($lib->addedBy, $lib->addedDate);
+        if(defined('IN_UPGRADE') and (($this->config->edition == 'open' and version_compare($this->config->version, '18.4.alpha1', '<')) or ($this->config->edition == 'biz' and version_compare($this->config->version, 'biz8.4.alpha1', '<')) or ($this->config->edition == 'max' and version_compare($this->config->version, 'max4.4.alpha1', '<')))) unset($data->addedBy, $data->addedDate);
 
         $this->app->loadLang('api');
 

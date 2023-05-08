@@ -1,4 +1,4 @@
-FROM hub.qucheng.com/ci/zentao-ztf:php8-2023050806
+FROM hub.qucheng.com/ci/zentao-ztf:php8-2023050810
 
 # Install zentao
 ARG VERSION
@@ -13,3 +13,5 @@ ENV MYSQL_PASSWORD=${MYSQL_PASSWORD}
 SHELL ["/bin/bash", "-c"]
 # Copy ZenTao
 COPY --chown=33:33 . /apps/zentao/
+
+RUN INIT_PHPINI_ONLY=true /etc/s6/s6-init/run

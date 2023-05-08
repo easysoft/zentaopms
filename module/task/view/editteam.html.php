@@ -37,7 +37,7 @@
         <?php endif;?>
       </h2>
     </div>
-    <form method='post' target='hiddenwin' action='<?php echo inlink('editTeam', "executionID=$task->execution&taskID=$task->id")?>' id='teamForm'>
+    <form method='post' target='hiddenwin' action='<?php echo inlink('manageTeam', "executionID=$task->execution&taskID=$task->id")?>' id='teamForm'>
       <table class='table table-form'>
         <tbody class="sortable">
           <tr class='hidden'>

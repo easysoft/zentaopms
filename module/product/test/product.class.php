@@ -5,7 +5,7 @@ class productTest
      * @var productModel
      * @access private
      */
-    private productModel $objectModel;
+    public productModel $objectModel;
 
     /**
      * __construct
@@ -372,20 +372,11 @@ class productTest
      *
      * @param  int    $productID
      * @access public
-     * @return int
+     * @return bool
      */
-    public function checkPrivTest($productID)
+    public function checkPrivTest(int $productID): bool
     {
-        $object = $this->objectModel->checkPriv($productID);
-
-        if(dao::isError())
-        {
-            return dao::getError();
-        }
-        else
-        {
-            return $object ? 1 : 2;
-        }
+        return $this->objectModel->checkPriv($productID);
     }
 
     /**
@@ -777,14 +768,9 @@ class productTest
     {
         $objects = $this->objectModel->getRoadmap($productID);
 
-        if(dao::isError())
-        {
-            return dao::getError();
-        }
-        else
-        {
-            return $objects;
-        }
+        if(dao::isError()) return dao::getError();
+
+        return $objects;
     }
 
     /**
@@ -803,14 +789,9 @@ class productTest
 
         $objects = $this->objectModel->processRoadmap($roadmapGroups);
 
-        if(dao::isError())
-        {
-            return dao::getError();
-        }
-        else
-        {
-            return $objects;
-        }
+        if(dao::isError()) return dao::getError();
+
+        return $objects;
     }
 
     /**
@@ -1105,5 +1086,87 @@ class productTest
             $object = $this->objectModel->dao->select('*')->from(TABLE_DOCLIB)->where('id')->eq($libID)->fetch();
             return $object;
         }
+    }
+
+    /**
+     * 测试setMenu方法。
+     * Test setMenu
+     *
+     * @param  int        $productID
+     * @param  string|int $branch
+     * @param  string     $extra
+     * @access public
+     * @return array
+     */
+    public function setMenuTest(int $productID, string|int $branch = '', string $extra = ''): array
+    {
+        /* Reset data. */
+        unset($this->objectModel->lang->switcherMenu);
+        $this->objectModel->lang->product->moreSelects['willclose'] = 'willcose';
+        $this->objectModel->lang->product->menu->settings['link'] = "Settings|product|view|productID=%s";
+        $this->objectModel->lang->product->menu->settings['subMenu']->branch = array('link' => "@branch@|branch|manage|product=%s", 'subModule' => 'branch');
+
+        $this->objectModel->setMenu($productID, $branch, $extra);
+
+        $hasBranch      = (int) isset($this->objectModel->lang->product->menu->settings['subMenu']->branch);
+        $requirement    = (int)!isset($this->objectModel->lang->product->moreSelects['willclose']);
+        $hasSwitch      = (int)!empty($this->objectModel->lang->switcherMenu);
+        $idReplaced     = (int)(strpos($this->objectModel->lang->product->menu->settings['link'], '%s') === false);
+        $branchReplaced = (int)($hasBranch and strpos($this->objectModel->lang->product->menu->settings['subMenu']->branch['link'], '@branch@') === false);
+
+        return array('idReplaced' => $idReplaced, 'branchReplaced' => $branchReplaced, 'hasBranch' => $hasBranch, 'requirement' => $requirement, 'hasSwitch' => $hasSwitch);
+    }
+
+    /**
+     * 测试 getSwitcher 方法。
+     * Test getSwitcher.
+     *
+     * @param  int        $productID
+     * @param  string     $extra
+     * @param  string|int $branch
+     * @access public
+     * @return array
+     */
+    public function getSwitcherTest(int $productID, string $extra = '', string|int $branch = ''): array
+    {
+        $this->objectModel->lang->product->menu->settings['subMenu']->branch = array('link' => "@branch@|branch|manage|product=%s", 'subModule' => 'branch');
+
+        $switcher = $this->objectModel->getSwitcher($productID, $extra, $branch);
+
+        $product    = $this->objectModel->dao->select('*')->from(TABLE_PRODUCT)->where('id')->eq($productID)->fetch();
+        $hasProduct = $product ? (int)(strpos($switcher, $product->name) !== false) : (int)(strpos($switcher, '产品') !== false);
+        $hasBranch  = (int)(strpos($switcher, 'currentBranch') !== false);
+
+        return array('hasProduct' => $hasProduct, 'hasBranch' => $hasBranch);
+    }
+
+    /**
+     * 测试 buildSelect4Mobile 方法。
+     * Test buildSelect4Mobile
+     *
+     * @param  array      $products
+     * @param  int        $productID
+     * @param  string     $currentModule
+     * @param  string     $currentMethod
+     * @param  string     $extra
+     * @param  string|int $branch
+     * @param  bool       $withBranch
+     * @access public
+     * @return array
+     */
+    public function buildSelect4MobileTest(array $products, int $productID, string $currentModule, string $currentMethod, string $extra = '', string|int $branch = '', bool $withBranch = true): array
+    {
+        $this->objectModel->lang->product->menu->settings['subMenu']->branch = array('link' => "@branch@|branch|manage|product=%s", 'subModule' => 'branch');
+
+        $select = $this->objectModel->buildSelect4Mobile($products, $productID, $currentModule, $currentMethod, $extra, $branch, $withBranch);
+
+        $productName = zget($products, $productID, reset($products));
+        $branchName  = '所有';
+        if(is_numeric($branch)) $branchName = $this->objectModel->dao->select('*')->from(TABLE_BRANCH)->where('id')->eq($branch)->fetch('name');
+
+        $hasProduct = (int)(strpos($select, 'currentItem')   !== false and strpos($select, $productName) !== false);
+        $hasBranch  = (int)(strpos($select, 'currentBranch') !== false and strpos($select, $branchName)  !== false);
+
+        return array('hasProduct' => $hasProduct, 'hasBranch' => $hasBranch);
     }
 }

@@ -374,7 +374,7 @@ class todoTest
      * @access public
      * @return array
      */
-    public function getByExportListTest(string $orderBy, string $queryCondition , string $checkedItem): array
+    public function getByExportListTest(string $orderBy, string $queryCondition, string $checkedItem): array
     {
         return $this->objectModel->getByExportList($orderBy, $queryCondition, $checkedItem);
     }

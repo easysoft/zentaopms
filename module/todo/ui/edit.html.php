@@ -49,9 +49,8 @@ else
  * Build date control for off-cycle todo display.
  *
  * @param  object $todo
- * @return mixed Any type supported by zin widget function 任何 zin 部件函数参数支持的类型。
  */
-function buildDateControl(object $todo): mixed
+function buildDateControl(object $todo)
 {
     global $lang;
 
@@ -78,7 +77,7 @@ function buildDateControl(object $todo): mixed
                     'type'  => 'date',
                     'width' => '1/4'
                 )),
-                on::change('changeCreateDate(this)')
+                on::change('changeDate(this)')
             ),
         ),
         formGroup
@@ -102,17 +101,294 @@ function buildDateControl(object $todo): mixed
 }
 
 /**
- * 构建周期类型和设置。
- * Build cycle types and settings.
+ * 构建周期为天的设置。
+ * Build setting with cycle of day.
  *
  * @param  object $todo
- * @return mixed Any type supported by zin widget function 任何 zin 部件函数参数支持的类型。
  */
-function buildCycleConfig(object $todo): mixed
+function buildCycleOfDayConfig(object $todo)
+{
+    global $lang;
+    return formRow
+    (
+        set::class('cycle-config cycle-type-detail type-day hidden'),
+
+        formGroup
+        (
+            set(array
+            (
+                'label'    => $lang->todo->cycleConfig,
+                'required' => true,
+                'width'    => '1/3'
+            )),
+            inputGroup
+            (
+
+                set::class('have-fix'),
+                span
+                (
+                    set::class('input-group-addon justify-center'),
+                    $lang->todo->from
+                ),
+                input(set(array
+                (
+                    'id'    => 'date',
+                    'name'  => 'date',
+                    'type'  => 'date',
+                    'value' => $todo->date
+                ))),
+            )
+        ),
+        div
+        (
+            set::class('config-day flex items-center highlight-suffix'),
+            span
+            (
+                set::class('input-group-addon ring-0 bg-white'),
+                $lang->todo->every
+            ),
+
+            inputControl
+            (
+
+                set::suffix($lang->todo->cycleDay),
+                set::suffixWidth('30'),
+                input
+                (
+                    set::id('everyInput'),
+                    set::name('config[day]'),
+                    set::value(isset($todo->config->day) ? $todo->config->day : '')
+                )
+            )
+        )
+    );
+}
+
+/**
+ * 构建周期为周的设置。
+ * Build setting with cycle of week.
+ *
+ * @param  object $todo
+ */
+function buildCycleOfWeekConfig(object $todo)
 {
     global $lang;
 
-    if(!$todo->cycle) return null;
+    return formRow
+    (
+        set::class('cycle-config cycle-type-detail type-week hidden'),
+
+        formGroup
+        (
+            set(array
+            (
+                'label'    => $lang->todo->cycleConfig,
+                'required' => true,
+                'width'    => '1/2'
+            )),
+            inputGroup
+            (
+                set::class('have-fix'),
+                span
+                (
+                    set::class('input-group-addon'),
+                    $lang->todo->weekly
+                ),
+                select(set(array
+                (
+                    'id'    => 'config[week]',
+                    'name'  => 'config[week]',
+                    'items' => $lang->todo->dayNames,
+                    'value' => $todo->config->week
+                )))
+            )
+        )
+    );
+}
+
+/**
+ * 构建周期为月的设置。
+ * Build setting with cycle of month.
+ *
+ * @param  object $todo
+ */
+function buildCycleOfMonthConfig(object $todo)
+{
+    global $lang;
+
+    $days = array();
+    for($day = 1; $day <= 31; $day ++) $days[$day] = $day . $lang->todo->day;
+
+    return formRow
+    (
+        set::class('cycle-config cycle-type-detail type-month hidden'),
+
+        formGroup
+        (
+            set(array
+            (
+                'label'    => $lang->todo->cycleConfig,
+                'required' => true,
+                'class'    => 'have-fix',
+                'width'    => '1/2'
+            )),
+            inputGroup
+            (
+
+                span
+                (
+                    set::class('input-group-addon'),
+                    $lang->todo->monthly
+                ),
+                select(set(array
+                (
+                    'id'    => 'config[month]',
+                    'name'  => 'config[month]',
+                    'items' => $days,
+                    'value' => $todo->config->month
+                )))
+            )
+        )
+    );
+}
+
+/**
+ * 构建周期为年的设置。
+ * Build setting with cycle of year.
+ *
+ * @param  object $todo
+ */
+function buildCycleOfYearConfig(object $todo)
+{
+    global $lang;
+
+    $days = array();
+    for($day = 1; $day <= 31; $day ++) $days[$day] = $day . $lang->todo->day;
+
+    return formRow
+    (
+        set::class('cycle-config cycle-type-detail type-year hidden'),
+
+        formGroup
+        (
+            set(array
+            (
+                'label'    => $lang->todo->cycleConfig,
+                'required' => true,
+                'class'    => 'have-fix',
+                'width'    => '1/2'
+            )),
+            inputGroup
+            (
+                span
+                (
+                    set::class('input-group-addon'),
+                    $lang->todo->specify
+                ),
+                select
+                (
+                    set(array
+                    (
+                        'id'       => 'config[specify][month]',
+                        'name'     => 'config[specify][month]',
+                        'items'    => $lang->datepicker->monthNames,
+                        'multiple' => false,
+                        'value'    => isset($todo->config->specify->month) ? $todo->config->specify->month : 0
+                    )),
+                    on::change('setDays(this.value)')
+                ),
+                select(set(array
+                (
+                    'id'       => 'specifiedDay',
+                    'name'     => 'config[specify][day]',
+                    'items'    => $days,
+                    'multiple' => false,
+                    'value'    => isset($todo->config->specify->day) ? $todo->config->specify->day : 1
+                )))
+            )
+        )
+    );
+
+}
+
+/**
+ * 构建生成待办控件。
+ * Build generating todo control.
+ *
+ * @param  object $todo
+ */
+function buildBeforeDays($todo)
+{
+    global $lang;
+
+    return formRow
+    (
+        set::class('cycle-config'),
+        formGroup
+        (
+            set(array
+            (
+                'label'  => $lang->todo->generate,
+                'class'  => 'have-fix highlight-suffix',
+                'width'  => '1/3'
+            )),
+            inputControl
+            (
+                set::prefix($lang->todo->advance),
+                set::prefixWidth('42'),
+                input(set(array
+                (
+                    'class' => 'before-days',
+                    'name'  => 'config[beforeDays]',
+                    'value' => $todo->config->beforeDays
+                ))),
+                to::suffix($lang->todo->cycleDay),
+                set::suffixWidth('30')
+            )
+        )
+    );
+
+}
+
+/**
+ * 构建周期时间控件。
+ * Build deadline control.
+ *
+ * @param  object $todo
+ */
+function buildDeadline($todo)
+{
+    global $lang;
+    return formRow
+    (
+        set::class('cycle-config'),
+        formGroup
+        (
+            set(array
+            (
+                'label'  => $lang->todo->deadline,
+                'width'  => '1/3',
+            )),
+            input(set(array
+            (
+                'type'  => 'date',
+                'name'  => 'config[end]',
+                'value' => $todo->config->end
+            )))
+        )
+
+    );
+}
+
+/**
+ * 构建周期类型。
+ * Build cycle type.
+ *
+ * @param  object $todo
+ */
+function buildCycleType(object $todo)
+{
+    global $lang;
 
     $cycleTypeOptions = array
     (
@@ -121,242 +397,52 @@ function buildCycleConfig(object $todo): mixed
         array('text' => $lang->todo->cycleMonth, 'value' => 'month'),
         array('text' => $lang->todo->cycleYear,  'value' => 'year')
     );
+    return formRow
+    (
+        set::class('cycle-config'),
+        formGroup
+        (
+            set::label($lang->todo->cycleType),
+            set::required(true),
+            radioList
+            (
+                set(array
+                (
+                    'name'   => 'cycleType',
+                    'id'     => 'cycleType',
+                    'value'  => $todo->config->type,
+                    'inline' => true,
+                    'items'  => $cycleTypeOptions
+                )),
+                on::change('changeCycleType')
+            )
+        )
+    );
 
-    $days = array();
-    for($day = 1; $day <= 31; $day ++) $days[$day] = $day . $lang->todo->day;
+}
+
+/**
+ * 构建周期类型和设置。
+ * Build cycle types and settings.
+ *
+ * @param  object $todo
+ * @return mixed Any type supported by zin widget function 任何 zin 部件函数参数支持的类型。
+ */
+function buildCycleConfig(object $todo)
+{
+    global $lang;
+
+    if(!$todo->cycle) return null;
 
     return fragment
     (
-        formRow
-        (
-            set::class('cycle-config'),
-            formGroup
-            (
-                set::label($lang->todo->cycleType),
-                set::required(true),
-                radioList
-                (
-                    set(array
-                    (
-                        'name'   => 'cycleType',
-                        'id'     => 'cycleType',
-                        'value'  => $todo->config->type,
-                        'inline' => true,
-                        'items'  => $cycleTypeOptions
-                    )),
-                    on::change('changeCycleType')
-                )
-            )
-        ),
-
-        formRow
-        (
-            set::class('cycle-config cycle-type-detail type-day hidden'),
-
-            formGroup
-            (
-                set(array
-                (
-                    'label'    => $lang->todo->cycleConfig,
-                    'required' => true,
-                    'width'    => '1/3'
-                )),
-                inputGroup
-                (
-
-                    set::class('have-fix'),
-                    span
-                    (
-                        set::class('input-group-addon justify-center'),
-                        $lang->todo->from
-                    ),
-                    input(set(array
-                    (
-                        'id'    => 'date',
-                        'name'  => 'date',
-                        'type'  => 'date',
-                        'value' => $todo->date
-                    ))),
-                )
-            ),
-            div
-            (
-                set::class('config-day flex items-center highlight-suffix'),
-                span
-                (
-                    set::class('input-group-addon ring-0 bg-white'),
-                    $lang->todo->every
-                ),
-
-                inputControl
-                (
-
-                    set::suffix($lang->todo->cycleDay),
-                    set::suffixWidth('30'),
-                    input
-                    (
-                        set::id('everyInput'),
-                        set::name('config[day]'),
-                        set::value(isset($todo->config->day) ? $todo->config->day : '')
-                    )
-                )
-            )
-        ),
-
-        formRow
-        (
-            set::class('cycle-config cycle-type-detail type-week hidden'),
-
-            formGroup
-            (
-                set(array
-                (
-                    'label'    => $lang->todo->cycleConfig,
-                    'required' => true,
-                    'width'    => '1/2'
-                )),
-                inputGroup
-                (
-                    set::class('have-fix'),
-                    span
-                    (
-                        set::class('input-group-addon'),
-                        $lang->todo->weekly
-                    ),
-                    select(set(array
-                    (
-                        'id'    => 'config[week]',
-                        'name'  => 'config[week]',
-                        'items' => $lang->todo->dayNames,
-                        'value' => $todo->config->week
-                    )))
-                )
-            )
-        ),
-        formRow
-        (
-            set::class('cycle-config cycle-type-detail type-month hidden'),
-
-            formGroup
-            (
-                set(array
-                (
-                    'label'    => $lang->todo->cycleConfig,
-                    'required' => true,
-                    'class'    => 'have-fix',
-                    'width'    => '1/2'
-                )),
-                inputGroup
-                (
-
-                    span
-                    (
-                        set::class('input-group-addon'),
-                        $lang->todo->monthly
-                    ),
-                    select(set(array
-                    (
-                        'id'    => 'config[month]',
-                        'name'  => 'config[month]',
-                        'items' => $days,
-                        'value' => $todo->config->month
-                    )))
-                )
-            )
-        ),
-        formRow
-        (
-            set::class('cycle-config cycle-type-detail type-year hidden'),
-
-            formGroup
-            (
-                set(array
-                (
-                    'label'    => $lang->todo->cycleConfig,
-                    'required' => true,
-                    'class'    => 'have-fix',
-                    'width'    => '1/2'
-                )),
-                inputGroup
-                (
-                    span
-                    (
-                        set::class('input-group-addon'),
-                        $lang->todo->specify
-                    ),
-                    select
-                    (
-                        set(array
-                        (
-                            'id'       => 'config[specify][month]',
-                            'name'     => 'config[specify][month]',
-                            'items'    => $lang->datepicker->monthNames,
-                            'multiple' => false,
-                            'value'    => isset($todo->config->specify->month) ? $todo->config->specify->month : 0
-                        )),
-                        on::change('setDays(this.value)')
-                    ),
-                    select(set(array
-                    (
-                        'id'       => 'specifiedDay',
-                        'name'     => 'config[specify][day]',
-                        'items'    => $days,
-                        'multiple' => false,
-                        'value'    => isset($todo->config->specify->day) ? $todo->config->specify->day : 1
-                    )))
-                )
-            )
-        ),
-
-
-        formRow
-        (
-            set::class('cycle-config'),
-            formGroup
-            (
-                set(array
-                (
-                    'label'  => $lang->todo->generate,
-                    'class'  => 'have-fix highlight-suffix',
-                    'width'  => '1/3'
-                )),
-                inputControl
-                (
-                    set::prefix($lang->todo->advance),
-                    set::prefixWidth('42'),
-                    input(set(array
-                    (
-                        'class' => 'before-days',
-                        'name'  => 'config[beforeDays]',
-                        'value' => $todo->config->beforeDays
-                    ))),
-                    to::suffix($lang->todo->cycleDay),
-                    set::suffixWidth('30')
-                )
-            )
-        ),
-
-        formRow
-        (
-            set::class('cycle-config'),
-            formGroup
-            (
-                set(array
-                (
-                    'label'  => $lang->todo->deadline,
-                    'width'  => '1/3',
-                )),
-                input(set(array
-                (
-                    'type'  => 'date',
-                    'name'  => 'config[end]',
-                    'value' => $todo->config->end
-                )))
-            )
-        )
-
+        buildCycleType($todo),
+        buildCycleOfDayConfig($todo),
+        buildCycleOfWeekConfig($todo),
+        buildCycleOfMonthConfig($todo),
+        buildCycleOfYearConfig($todo),
+        buildDeadline($todo)
     );
-
 }
 
 /**

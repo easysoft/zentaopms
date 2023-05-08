@@ -432,27 +432,6 @@ class productTao extends productModel
     }
 
     /**
-     * 格式化append参数，保证输出用逗号间隔的id列表。
-     * Format append param.
-     *
-     * @param string|array append
-     * @access protected
-     * @return string
-     */
-    protected function formatAppendParam(string|array $append = ''): string
-    {
-        if(empty($append)) return '';
-
-        if(is_string($append)) $append = explode(',', $append);
-
-        $append = array_map(function($item){return (int)$item;}, $append);
-        $append = array_unique(array_filter($append));
-        sort($append);
-
-        return implode(',', $append);
-    }
-
-    /**
      * 获取用于数据统计的研发需求和用户需求列表。
      * Get dev stories and user requirements for statistics.
      *
@@ -491,7 +470,121 @@ class productTao extends productModel
         /* Story type is 'requirement'. */
         if($storyType == static::STORY_TYPE_REQ) $stories = $requirements;
 
-        return [$stories, $requirements];
+        return array($stories, $requirements);
+    }
+
+    /**
+     * 获取PC端分支下拉的HTML
+     * Get branch select for mobile
+     *
+     * @param  object     $product
+     * @param  string|int $branch
+     * @param  string     $currentModule
+     * @param  string     $currentMethod
+     * @param  string     $extra
+     * @access private
+     * @return string
+     */
+    protected function getBranchSelect4PC(object $product, string|int $branch, string $currentModule, string $currentMethod, string $extra = ''): string
+    {
+        if(!isset($product->type) or $product->type == 'normal') return '';
+
+        /* 检测是否要显示分支。 */
+        $showBranch = false;
+        if($currentModule == 'testcase' and $currentMethod == 'showimport') $showBranch = false;
+        if($currentModule == 'tree'     and $currentMethod == 'browse')     $showBranch = true;
+        if($currentModule == 'product'  and strpos($this->config->product->showBranchMethod, ",{$currentMethod},") !== false) $showBranch = true;
+        if($currentModule == 'release'  and strpos(',browse,create,', ",{$currentMethod},") !== false) $showBranch = true;
+        if($this->app->tab == 'qa'      and strpos(',testsuite,testreport,testtask,', ",$currentModule,") === false) $showBranch = true;
+        if($this->app->tab == 'qa'      and $currentModule == 'testtask' and strpos(',create,edit,browseunits,importunitresult,unitcases,', ",$currentMethod,") === false) $showBranch = true;
+
+        if(!$showBranch) return '';
+
+        /* 生成异步请求地址。 */
+        $branches     = $this->loadModel('branch')->getPairs($product->id, 'all');
+        $branchName   = zget($branches, $branch, reset($branches));
+        $dropMenuLink = helper::createLink('branch', 'ajaxGetDropMenu', "objectID={$product->id}&branch=$branch&module=$currentModule&method=$currentMethod&extra=$extra");
+
+        /* 生成分支HTML代码。*/
+        $this->lang->product->branch = sprintf($this->lang->product->branch, $this->lang->product->branchName[$product->type]);
+        $output = "<div class='btn-group header-btn'><button id='currentBranch' data-toggle='dropdown' type='button' class='btn'><span class='text'>{$branchName}</span> <span class='caret' style='margin-bottom: -1px'></span></button><div id='dropMenu' class='dropdown-menu search-list' data-ride='searchList' data-url='$dropMenuLink'>";
+        $output .= '<div class="input-control search-box has-icon-left has-icon-right search-example"><input type="search" class="form-control search-input" /><label class="input-control-icon-left search-icon"><i class="icon icon-search"></i></label><a class="input-control-icon-right search-clear-btn"><i class="icon icon-close icon-sm"></i></a></div>';
+        $output .= "</div></div>";
+        return $output;
+    }
+
+    /**
+     * 获取客户端分支下拉的HTML
+     * Get branch select for mobile
+     *
+     * @param  object $product
+     * @param  string $currentModule
+     * @param  string $currentMethod
+     * @param  string $extra
+     * @access private
+     * @return string
+     */
+    protected function getBranchSelect4Mobile(object $product, string|int $branch, string $currentModule, string $currentMethod, string $extra = ''): string
+    {
+        if(!isset($product->type) or $product->type == 'normal') return '';
+
+        /* 修正分支显示语言项。 */
+        $this->lang->product->branch = sprintf($this->lang->product->branch, $this->lang->product->branchName[$product->type]);
+        $this->lang->product->menu->settings['subMenu']->branch['link'] = str_replace('@branch@', $this->lang->product->branch, $this->lang->product->menu->settings['subMenu']->branch['link']);
+
+        /* 生成分支HTML代码。*/
+        $output     = '';
+        $branches   = $this->loadModel('branch')->getPairs($product->id, 'all');
+        $branchName = zget($branches, $branch, reset($branches));
+        if($branchName) $output .= "<a id='currentBranch' href=\"javascript:showSearchMenu('branch', '{$product->id}', '$currentModule', '$currentMethod', '$extra')\">{$branchName} <span class='icon-caret-down'></span></a><div id='currentBranchDropMenu' class='hidden affix enter-from-bottom layer'></div>";
+
+        return $output;
+    }
+
+    /**
+     * 计算在点击1.5级导航下拉选项后，跳转的模块名和方法名。
+     * Compute locate for drop menu in PC.
+     *
+     * @access protected
+     * @return array
+     */
+    protected function computeLocate4DropMenu(): array
+    {
+        $currentModule = (string)$this->app->moduleName;
+        $currentMethod = (string)$this->app->methodName;
+
+        /* Init currentModule and currentMethod for report and story. */
+        if($currentModule == 'story')
+        {
+            if(strpos(",track,create,batchcreate,batchclose,", ",{$currentMethod},") === false) $currentModule = 'product';
+            if($currentMethod == 'view' or $currentMethod == 'change' or $currentMethod == 'review') $currentMethod = 'browse';
+        }
+        if($currentModule == 'testcase' and strpos(',view,edit,', ",$currentMethod,") !== false) $currentMethod = 'browse';
+        if($currentModule == 'bug' and $currentMethod == 'edit') $currentMethod = 'browse';
+        if($currentMethod == 'report') $currentMethod = 'browse';
+
+        return array($currentModule, $currentMethod);
+    }
+
+    /**
+     * 格式化append参数，保证输出用逗号间隔的id列表。
+     * Format append param.
+     *
+     * @param string|array append
+     * @access protected
+     * @return string
+     */
+    protected function formatAppendParam(string|array $append = ''): string
+    {
+        if(empty($append)) return '';
+
+        if(is_string($append)) $append = explode(',', $append);
+
+        $append = array_map(function($item){return (int)$item;}, $append);
+        $append = array_unique(array_filter($append));
+        sort($append);
+
+        return implode(',', $append);
     }
 
     /**
@@ -628,5 +721,238 @@ class productTao extends productModel
             ->beginIF(strpos($status, 'noclosed') !== false)->andWhere('t2.status')->ne('closed')->fi()
             ->orderBy($orderBy . 't2.order asc')
             ->fetchAll();
+    }
+
+    /**
+     * 构建移动端的下拉HTML。
+     * Create the select code of products.
+     *
+     * @param  array       $products
+     * @param  int         $productID
+     * @param  string      $currentModule
+     * @param  string      $currentMethod
+     * @param  string      $extra
+     * @param  int|string  $branch
+     * @param  bool        $withBranch      true|false
+     * @access protected
+     * @return string
+     */
+    protected function buildSelect4Mobile(array $products, int $productID, string $currentModule, string $currentMethod, string $extra = '', string|int $branch = '', bool $withBranch = true): string
+    {
+        /* 处理数据。*/
+        if(isset($products[0])) unset($products[0]);
+        if(empty($products)) return '';
+        if(!isset($products[$productID])) $productID = (int)key($products);
+
+        /* 检测当前页面是否在项目或执行的测试二级导航中。*/
+        $isQaModule = (strpos(',project,execution,', ",{$this->app->tab},") !== false and stripos(',bug,testcase,testtask,ajaxselectstory,', ",{$this->app->rawMethod},") !== false) ? true : false;
+        if($this->app->tab == 'project' and stripos(',zeroCase,browseUnits,groupCase,', ",$currentMethod,") !== false) $isQaModule = true;
+        if($isQaModule)
+        {
+            if($this->app->tab == 'project')   $extra = strpos(',testcase,groupCase,zeroCase,', ",$currentMethod,") !== false ? $extra : $this->session->project;
+            if($this->app->tab == 'execution') $extra = $this->session->execution;
+        }
+
+        /* 查询产品数据。*/
+        $currentProduct = $this->getById($productID);
+        $this->session->set('currentProductType', $currentProduct->type);
+
+        /* 生成异步获取下拉菜单的链接。*/
+        $moduleName = $isQaModule ? 'bug' : 'product';
+        if($this->app->tab == 'feedback') $moduleName = 'feedback';
+        $dropMenuLink = helper::createLink($moduleName, 'ajaxGetDropMenu', "objectID=$productID&module=$currentModule&method=$currentMethod&extra=$extra");
+
+        /* 构建产品1.5级导航代码。 */
+        $output = "<a id='currentItem' href=\"javascript:showSearchMenu('product', '$productID', '$currentModule', '$currentMethod', '$extra')\"><span class='text'>{$currentProduct->name}</span> <span class='icon-caret-down'></span></a><div id='currentItemDropMenu' class='hidden affix enter-from-bottom layer'></div>";
+
+        /* 处理分支。根据条件，判断是否追加分支1.5级导航代码。*/
+        if($currentProduct->type == 'normal' || !$withBranch) unset($this->lang->product->menu->settings['subMenu']->branch);
+        if($currentProduct->type != 'normal' && $withBranch && $currentModule != 'programplan') $output .= $this->getBranchSelect4Mobile($currentProduct, $branch, $currentModule, $currentMethod, $extra);
+        return $output;
+    }
+
+    /**
+     * 获取产品路线图的分组数据。
+     * Get group roadmap data of product.
+     *
+     * @param  int    $productID
+     * @param  string $branch    all|0|1
+     * @param  int    $count
+     * @access public
+     * @return array
+     */
+    protected function getGroupRoadmapData(int $productID, string $branch, int $count): array
+    {
+        $roadmap      = array();
+        $total        = 0;
+
+        /* Get product plans. */
+        $plans = $this->loadModel('productplan')->getList($productID, $branch);
+
+        /* Get valid product plans and parent plans. */
+        list($orderedPlans, $parents) = $this->filterValidProductPlans($plans);
+
+        /* Get roadmaps of product plans. */
+        list($roadmap, $total, $return) = $this->getRoadmapsOfPlans($orderedPlans, $parents, $branch, $count);
+        if($return) return $roadmap;
+
+        /* Get roadmpas of product releases. */
+        $releases = $this->loadModel('release')->getList($productID, $branch);
+        list($roadmap, $subTotal, $return) = $this->getRoadmapsOfReleases($roadmap, $releases, $branch, $count);
+        if($return) return $roadmap;
+        $total += $subTotal;
+
+        $groupRoadmap = array();
+        foreach($roadmap as $year => $branchRoadmaps)
+        {
+            foreach($branchRoadmaps as $branch => $roadmaps)
+            {
+                $totalData = count($roadmaps);
+                $rows      = ceil($totalData / 8);
+                $maxPerRow = ceil($totalData / $rows);
+
+                $groupRoadmap[$year][$branch] = array_chunk($roadmaps, (int)$maxPerRow);
+                foreach($groupRoadmap[$year][$branch] as $row => $rowRoadmaps) krsort($groupRoadmap[$year][$branch][$row]);
+            }
+        }
+
+        return $groupRoadmap;
+    }
+
+    /**
+     * 过滤有效的产品计划, 并返回所有父级计划。
+     * Filter valid product plans.
+     *
+     * @param  array $plans
+     * @access private
+     * @return [array, array]
+     */
+    private function filterValidProductPlans(array $plans): array
+    {
+        $parents      = array();
+        $orderedPlans = array();
+
+        foreach($plans as $planID => $plan)
+        {
+            /* Remove parent plan. */
+            if($plan->parent == '-1')
+            {
+                $parents[$planID] = $plan->title;
+                unset($plans[$planID]);
+                continue;
+            }
+
+            /* Remove exceeded plan and long-time plan. */
+            if((!helper::isZeroDate($plan->end) and $plan->end < date('Y-m-d')) or $plan->end == '2030-01-01') continue;
+
+            $orderedPlans[$plan->end][] = $plan;
+        }
+
+        krsort($orderedPlans);
+
+        return array($orderedPlans, $parents);
+    }
+
+    /**
+     * 获取计划的路线图数据。
+     * Get roadmaps of plans.
+     *
+     * @param  array   $orderedPlans
+     * @param  array   $parents
+     * @param  string  $branch
+     * @param  int     $count
+     * @access private
+     * @return [array, int, bool]
+     */
+    private function getRoadmapsOfPlans(array $orderedPlans, array $parents, string $branch, int $count): array
+    {
+        $return  = false;
+        $total   = 0;
+        $roadmap = array();
+
+        foreach($orderedPlans as $plans)
+        {
+            krsort($plans);
+            foreach($plans as $plan)
+            {
+                /* Attach parent plan. */
+                if($plan->parent > 0 and isset($parents[$plan->parent])) $plan->title = $parents[$plan->parent] . ' / ' . $plan->title;
+
+                $year         = substr($plan->end, 0, 4);
+                $branchIdList = explode(',', trim($plan->branch, ','));
+                $branchIdList = array_unique($branchIdList);
+                foreach($branchIdList as $branchID)
+                {
+                    if($branchID === '') continue;
+                    $roadmap[$year][$branchID][] = $plan;
+                }
+                $total++;
+
+                /* Exceed requested count. */
+                if($count > 0 and $total >= $count)
+                {
+                    $roadmap = $this->processRoadmap($roadmap, $branch);
+                    $return  = true;
+                    break;
+                };
+            }
+        }
+
+        return array($roadmap, $total, $return);
+    }
+
+    /**
+     * 获取计划的路线图数据。
+     * Get roadmaps of plans.
+     *
+     * @param  array   $roadmaps
+     * @param  array   $parents
+     * @param  string  $branch
+     * @param  int     $count
+     * @access private
+     * @return [array, int, bool]
+     */
+    private function getRoadmapsOfReleases(array $roadmaps, array $releases, string $branch, int $count): array
+    {
+        $total           = 0;
+        $return          = false;
+        $orderedReleases = array();
+
+        /* Collect releases. */
+        foreach($releases as $release) $orderedReleases[$release->date][] = $release;
+
+        krsort($orderedReleases);
+        foreach($orderedReleases as $releases)
+        {
+            krsort($releases);
+            foreach($releases as $release)
+            {
+                $year = substr($release->date, 0, 4);
+                $branchIdList = explode(',', trim($release->branch, ','));
+                $branchIdList = array_unique($branchIdList);
+                foreach($branchIdList as $branchID)
+                {
+                    if($branchID === '') continue;
+                    $roadmaps[$year][$branchID][] = $release;
+                }
+                $total++;
+
+                /* Exceed required count .*/
+                if($count > 0 and $total >= $count)
+                {
+                    $roadmaps = $this->processRoadmap($roadmaps, $branch);
+                    $return  = true;
+                    return array($roadmaps, $total, $return);
+                }
+            }
+        }
+
+        if($count > 0)
+        {
+            $roadmaps = $this->processRoadmap($roadmaps, $branch);
+            $return = true;
+        }
+
+        return array($roadmaps, $total, $return);
     }
 }

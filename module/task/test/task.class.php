@@ -305,6 +305,38 @@ class taskTest
     }
 
     /**
+     * Test assign a task to a team again.
+     *
+     * @param  int      $taskID
+     * @param  string   $status
+     * @param  array    $team
+     * @param  array    $teamSource
+     * @param  array    $teamConsumed
+     * @param  araay    $teamLeft
+     * @access public
+     * @return object
+     */
+    public function updateTeamTest($taskID, $status, $team, $teamSource, $teamEstimate, $teamConsumed, $teamLeft)
+    {
+        global $tester;
+
+        $task = new stdclass();
+        $task->id           = $taskID;
+        $task->status       = $status;
+        $task->lastEditedBy = $tester->app->user->account;
+        $object = $this->objectModel->updateTeam($task, $team, $teamSource, $teamEstimate, $teamConsumed, $teamLeft);
+        if(dao::isError())
+        {
+            $errors = dao::getError();
+            return array_shift($errors);
+        }
+        else
+        {
+            return $object;
+        }
+    }
+
+    /**
      * Test cancel a task.
      *
      * @param  int    $taskID
@@ -1720,5 +1752,115 @@ class taskTest
             ->fetch('cards');
 
         return $cards;
+    }
+
+    /**
+     * Other data processing after task creation.
+     *
+     * @param  int   $taskID
+     * @param  int   $taskIdList
+     * @param  int   $bugID
+     * @param  int   $todoID
+     * @param  array $testTasks
+     * @access public
+     * @return object|bool
+     */
+    public function afterCreateTest($taskID = 0, $taskIdList = array(), $bugID = 0, $todoID = 0, $testTasks = array())
+    {
+        global $tester;
+        $_SERVER['HTTP_HOST'] = $tester->config->db->host;
+
+        $task = $this->objectModel->getByID($taskID);
+        if(!$task) return false;
+
+        $result = $this->objectModel->afterCreate($task, $taskIdList, $bugID, $todoID, $testTasks);
+        if(!$result) return false;
+
+        if($bugID)
+        {
+            $object = $tester->dao->findById($bugID)->from(TABLE_BUG)->fetch();
+        }
+        elseif($todoID)
+        {
+            $object = $tester->dao->findById($todoID)->from(TABLE_TODO)->fetch();
+        }
+        elseif($task->story)
+        {
+            $object = $tester->dao->findById($task->story)->from(TABLE_STORY)->fetch();
+        }
+        else
+        {
+            $object = $tester->dao->findById($taskID)->from(TABLE_TASK)->fetch();
+        }
+
+        return $object;
+    }
+
+    /**
+     * Test manage multi task team members.
+     *
+     * @param  int        $taskID
+     * @param  string     $taskStatus
+     * @param  string     $mode
+     * @param  array      $teamList
+     * @param  array      $teamSourceList
+     * @param  array      $teamEstimateList
+     * @param  array|bool $teamConsumedList
+     * @param  array|bool $teamLeftList
+
+     * @access public
+     * @return array
+     */
+    public function manageTaskTeamTest(int $taskID, string $taskStatus, string $mode, array $teamList, array $teamSourceList, array $teamEstimateList, array|bool $teamConsumedList, array|bool $teamLeftList): array
+    {
+        $task = new stdclass();
+        $task->id     = $taskID;
+        $task->status = $taskStatus;
+        $teams = $this->objectModel->manageTaskTeam($mode, $task, $teamList, $teamSourceList, $teamEstimateList, $teamConsumedList, $teamLeftList);
+        if(dao::isError())
+        {
+            return dao::getError();
+        }
+        else
+        {
+            return $teams;
+        }
+    }
+
+    /**
+     * Test manage multi task team member.
+     *
+     * @param  int        $taskID
+     * @param  string     $taskStatus
+     * @param  string     $mode
+     * @param  int        $row
+     * @param  string     $account
+     * @param  string     $minStatus
+     * @param  array      $undoneUsers
+     * @param  array      $teamSourceList
+     * @param  array      $teamEstimateList
+     * @param  array|bool $teamConsumedList
+     * @param  array|bool $teamLeftList
+     * @param  bool       $inTeams
+     * @access public
+     * @return string
+     */
+    public function manageTaskTeamMemberTest(int $taskID, string $taskStatus, string $mode, int $row, string $account, string $minStatus, array $undoneUsers, array $teamSourceList, array $teamEstimateList, array|bool $teamConsumedList, array|bool $teamLeftList, bool $inTeams): string
+    {
+        global $tester;
+        $tester->dao->delete()->from(TABLE_TASKTEAM)->where('task')->eq($taskID)->exec();
+
+        $task = new stdclass();
+        $task->id     = $taskID;
+        $task->status = $taskStatus;
+        $minStatus = $this->objectModel->manageTaskTeamMember($mode, $task, $row, $account, $minStatus, $undoneUsers, $teamSourceList, $teamEstimateList, $teamConsumedList, $teamLeftList, $inTeams);
+        if(dao::isError())
+        {
+            return dao::getError();
+        }
+        else
+        {
+            return $minStatus;
+        }
     }
 }

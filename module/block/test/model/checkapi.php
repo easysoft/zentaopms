@@ -19,14 +19,17 @@ function initData()
 /**
 
 title=测试 blockModel->checkAPI();
+timeout=0
 cid=1
-pid=1
 
-测试空哈希值 >> 0
-测试正确的哈希值 >> 1
-测试错误的哈希值 >> 0
+sed: can't read /home/liuruogu/git/zentaopms/test/config/my.php: No such file or directory
+- 测试空哈希值 @0
 
- */
+- 测试正确的哈希值 @1
+
+- 测试错误的哈希值 @0
+
+*/
 
 initData();
 

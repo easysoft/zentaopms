@@ -22,11 +22,11 @@ class taskZen extends task
     private $executionPairs = array();
 
     /**
-     * 准备创建数据。
+     * 准备编辑数据。
      * Prepare edit data.
      *
      * @param  form $postDataFixer
-     * @param  int    $taskID
+     * @param  int  $taskID
      * @access protected
      * @return object
      */
@@ -63,6 +63,7 @@ class taskZen extends task
             ->setIF($oldTask->parent < 0, 'left', $oldTask->left)
 
             ->setIF($oldTask->name != $postData->name || $oldTask->estStarted != $postData->estStarted || $oldTask->deadline != $postData->deadline, 'version', $oldTask->version + 1)
+            ->add('lastEditedBy', $this->app->user->account)
             ->add('lastEditedDate', $now)
             ->stripTags($this->config->task->editor->edit['id'], $this->config->allowedTags)
             ->join('mailto', ',')
@@ -76,12 +77,12 @@ class taskZen extends task
      * Reponse after edit.
      *
      * @param  int     $taskID
-     * @param  string  $from
+     * @param  string  $from        ''|taskkanban
      * @param  array[] $changes
      * @access protected
-     * @return int
+     * @return array|int
      */
-    protected function reponseAfterEdit(int $taskID, string $from, array $changes)
+    protected function reponseAfterEdit(int $taskID, string $from, array $changes): array|int
     {
         $task = $this->task->getById($taskID);
         if($task->fromBug != 0)
@@ -97,31 +98,7 @@ class taskZen extends task
             }
         }
 
-        if(isonlybody())
-        {
-            $execution    = $this->execution->getByID($task->execution);
-            $execLaneType = $this->session->execLaneType ? $this->session->execLaneType : 'all';
-            $execGroupBy  = $this->session->execGroupBy ? $this->session->execGroupBy : 'default';
-            if(($this->app->tab == 'execution' or ($this->config->vision == 'lite' and $this->app->tab == 'project')) and $execution->type == 'kanban')
-            {
-                $rdSearchValue = $this->session->rdSearchValue ? $this->session->rdSearchValue : '';
-                $kanbanData    = $this->loadModel('kanban')->getRDKanban($task->execution, $execLaneType, 'id_desc', 0, $execGroupBy, $rdSearchValue);
-                $kanbanData    = json_encode($kanbanData);
-
-                return print(js::closeModal('parent.parent', '', "parent.parent.updateKanban($kanbanData)"));
-            }
-            if($from == 'taskkanban')
-            {
-                $taskSearchValue = $this->session->taskSearchValue ? $this->session->taskSearchValue : '';
-                $kanbanData      = $this->loadModel('kanban')->getExecutionKanban($task->execution, $execLaneType, $execGroupBy, $taskSearchValue);
-                $kanbanType      = $execLaneType == 'all' ? 'task' : key($kanbanData);
-                $kanbanData      = $kanbanData[$kanbanType];
-                $kanbanData      = json_encode($kanbanData);
-
-                return print(js::closeModal('parent.parent', '', "parent.parent.updateKanban(\"task\", $kanbanData)"));
-            }
-            return print(js::reload('parent.parent'));
-        }
+        if(isonlybody()) return $this->reponseKanban($task, $from);
 
         if(defined('RUN_MODE') && RUN_MODE == 'api') return array('status' => 'success', 'data' => $taskID);
         return print(js::locate($this->createLink('task', 'view', "taskID=$taskID"), 'parent'));
@@ -141,17 +118,18 @@ class taskZen extends task
         $tasks = $this->task->getParentTaskPairs($this->view->execution->id, $task->parent);
         if(isset($tasks[$taskID])) unset($tasks[$taskID]);
 
+        /* Prepare to assign to relevant parameters. */
         if(!isset($this->view->members[$task->assignedTo])) $this->view->members[$task->assignedTo] = $task->assignedTo;
         if(isset($this->view->members['closed']) or $task->status == 'closed') $this->view->members['closed']  = 'Closed';
 
+        /* Get the executions of the task. */
         $executions = !empty($task->project) ? $this->execution->getByProject($task->project, 'all', 0, true) : array();
 
         /* Get task members. */
         $taskMembers = array();
         if(!empty($task->team))
         {
-            $teamAccounts = $task->members;
-            foreach($teamAccounts as $teamAccount)
+            foreach($task->members as $teamAccount)
             {
                 if(!isset($this->view->members[$teamAccount])) continue;
                 $taskMembers[$teamAccount] = $this->view->members[$teamAccount];
@@ -177,17 +155,36 @@ class taskZen extends task
     }
 
     /**
+     * 准备管理团队的数据。
+     * Prepare manage team data.
+     *
+     * @param  form $postData
+     * @param  int  $taskID
+     * @access protected
+     * @return object
+     */
+    protected function prepareManageTeam(form $postData, int $taskID): object
+    {
+        $now  = helper::now();
+        $task = $postData->add('id', $taskID)
+            ->add('lastEditedBy', $this->app->user->account)
+            ->get();
+        return $task;
+    }
+
+    /**
      * 准备指派给的数据.
      * Prepare assignto data.
      *
      * @param  form $postDataFixer
-     * @param  int    $taskID
+     * @param  int  $taskID
      * @access protected
      * @return object
      */
     protected function prepareAssignTo(form $postDataFixer, int $taskID): object
     {
         $task = $postDataFixer->add('id', $taskID)
+            ->add('lastEditedBy', $this->app->user->account)
             ->stripTags($this->config->task->editor->assignto['id'], $this->config->allowedTags)
             ->get();
         return $task;
@@ -198,38 +195,17 @@ class taskZen extends task
      * Reponse after assignto.
      *
      * @param  int    $taskID
+     * @param  string $from        ''|taskkanban
      * @access protected
-     * @return int
+     * @return array|int
      */
-    protected function reponseAfterAssignTo(int $taskID, string $from)
+    protected function reponseAfterAssignTo(int $taskID, string $from): array|int
     {
-        if($this->viewType == 'json' or (defined('RUN_MODE') && RUN_MODE == 'api')) return $this->send(array('result' => 'success'));
-        if(isonlybody())
-        {
-            $task         = $this->task->getById($taskID);
-            $execution    = $this->execution->getByID($task->execution);
-            $execLaneType = $this->session->execLaneType ? $this->session->execLaneType : 'all';
-            $execGroupBy  = $this->session->execGroupBy ? $this->session->execGroupBy : 'default';
-            if(($this->app->tab == 'execution' or ($this->config->vision == 'lite' and $this->app->tab == 'project' and $this->session->kanbanview == 'kanban')) and $execution->type == 'kanban')
-            {
-                $rdSearchValue = $this->session->rdSearchValue ? $this->session->rdSearchValue : '';
-                $kanbanData    = $this->loadModel('kanban')->getRDKanban($task->execution, $execLaneType, 'id_desc', 0, $execGroupBy, $rdSearchValue);
-                $kanbanData    = json_encode($kanbanData);
+        if($this->viewType == 'json' or (defined('RUN_MODE') && RUN_MODE == 'api')) return array('result' => 'success');
 
-                return print(js::closeModal('parent.parent', '', "parent.parent.updateKanban($kanbanData)"));
-            }
-            if($from == 'taskkanban')
-            {
-                $taskSearchValue = $this->session->taskSearchValue ? $this->session->taskSearchValue : '';
-                $kanbanData      = $this->loadModel('kanban')->getExecutionKanban($task->execution, $execLaneType, $execGroupBy, $taskSearchValue);
-                $kanbanType      = $execLaneType == 'all' ? 'task' : key($kanbanData);
-                $kanbanData      = $kanbanData[$kanbanType];
-                $kanbanData      = json_encode($kanbanData);
+        $task = $this->task->getById($taskID);
+        if(isonlybody()) return $this->reponseKanban($task, $from);
 
-                return print(js::closeModal('parent.parent', '', "parent.parent.updateKanban(\"task\", $kanbanData)"));
-            }
-            return print(js::closeModal('parent.parent', 'this'));
-        }
         return print(js::locate($this->createLink('task', 'view', "taskID=$taskID"), 'parent'));
     }
 
@@ -237,16 +213,17 @@ class taskZen extends task
      * 构建指派给表格。
      * Build AssignTo Form.
      *
-     * @param  int    $executionID
-     * @param  object $task
+     * @param  int $executionID
+     * @param  int $taskID
      * @access protected
      * @return void
      */
-    protected function buildAssignToForm(int $executionID, object $task): void
+    protected function buildAssignToForm(int $executionID, int $taskID): void
     {
         $this->loadModel('action');
         $members = $this->loadModel('user')->getTeamMemberPairs($executionID, 'execution', 'nodeleted');
 
+        $task = $this->task->getByID($taskID);
         /* Compute next assignedTo. */
         if(!empty($task->team) and strpos('done,cencel,closed', $task->status) === false)
         {
@@ -263,6 +240,43 @@ class taskZen extends task
         $this->view->members    = $members;
         $this->view->users      = $this->loadModel('user')->getPairs();
         $this->display();
+    }
+
+    /**
+     * 返回看板下响应。
+     * Reposn from kanban.
+     *
+     * @param  object $task
+     * @param  string $from        ''|taskkanban
+     * @access private
+     * @return int
+     */
+    private function reponseKanban(object $task, string $from): int
+    {
+        $execution    = $this->execution->getByID($task->execution);
+        $execLaneType = $this->session->execLaneType ? $this->session->execLaneType : 'all';
+        $execGroupBy  = $this->session->execGroupBy ? $this->session->execGroupBy : 'default';
+
+        $inLiteKanban = $this->config->vision == 'lite' and $this->app->tab == 'project' and $this->session->kanbanview == 'kanban';
+        if(($this->app->tab == 'execution' or $inLiteKanban) and $execution->type == 'kanban')
+        {
+            $rdSearchValue = $this->session->rdSearchValue ? $this->session->rdSearchValue : '';
+            $kanbanData    = $this->loadModel('kanban')->getRDKanban($task->execution, $execLaneType, 'id_desc', 0, $execGroupBy, $rdSearchValue);
+            $kanbanData    = json_encode($kanbanData);
+
+            return print(js::closeModal('parent.parent', '', "parent.parent.updateKanban($kanbanData)"));
+        }
+        if($from == 'taskkanban')
+        {
+            $taskSearchValue = $this->session->taskSearchValue ? $this->session->taskSearchValue : '';
+            $kanbanData      = $this->loadModel('kanban')->getExecutionKanban($task->execution, $execLaneType, $execGroupBy, $taskSearchValue);
+            $kanbanType      = $execLaneType == 'all' ? 'task' : key($kanbanData);
+            $kanbanData      = $kanbanData[$kanbanType];
+            $kanbanData      = json_encode($kanbanData);
+
+            return print(js::closeModal('parent.parent', '', "parent.parent.updateKanban(\"task\", $kanbanData)"));
+        }
+        return print(js::closeModal('parent.parent', 'this'));
     }
 
     /**
