@@ -1,7 +1,0 @@
-title: table zt_block
-desc: "区块"
-author: automated export
-version: "1.0"
-fields:
-  - field: id
-    range: 1-10000
