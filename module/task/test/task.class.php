@@ -1696,4 +1696,31 @@ class taskTest
 
         return $this->objectModel->setTaskFiles($taskFiles, $taskID);
     }
+
+    /**
+     * Kanban data processing after batch create tasks.
+     *
+     * @param  int    $taskID
+     * @param  int    $executionID
+     * @param  int    $laneID
+     * @param  int    $columnID
+     * @param  string $vision
+     * @access public
+     * @return void
+     */
+    public function updateKanban4BatchCreateTest($taskID, $executionID, $laneID, $columnID, $vision = 'rnd')
+    {
+        global $tester;
+
+        $tester->config->vision = $vision;
+
+        $this->objectModel->updateKanban4BatchCreate($taskID, $executionID, $laneID, $columnID);
+        $cards = $tester->dao->select('cards')->from(TABLE_KANBANCELL)
+            ->where('kanban')->eq($executionID)
+            ->andWhere('lane')->eq($laneID)
+            ->andWhere('column')->eq($columnID)
+            ->fetch('cards');
+
+        return $cards;
+    }
 }

@@ -486,6 +486,166 @@ class taskZen extends task
     }
 
     /**
+     * 处理批量创建任务的请求数据。
+     * Process the request data for batch create tasks.
+     *
+     * @param  object  $execution
+     * @param  object  $formData
+     * @access private
+     * @return object[]
+     */
+    protected function prepareTasks4BatchCreate(object $execution, object $formData): array
+    {
+        /* 去除重复数据。 */
+        $tasks = $this->removeDuplicate4BatchCreate($execution, $formData);
+        if(!$tasks) return false;
+
+        /* Init. */
+        $story      = 0;
+        $module     = 0;
+        $type       = '';
+        $assignedTo = '';
+        $estStarted = null;
+        $deadline   = null;
+
+        /* Get task data. */
+        $this->loadModel('common');
+        $extendFields = $this->task->getFlowExtendFields();
+        $data         = array();
+        foreach($formData->name as $i => $name)
+        {
+            /* 给同上的变量赋值。 */
+            $story      = (!isset($tasks->story[$i]) or $tasks->story[$i] == 'ditto')            ? $story      : $tasks->story[$i];
+            $module     = (!isset($tasks->module[$i]) or $tasks->module[$i] == 'ditto')          ? $module     : $tasks->module[$i];
+            $type       = (!isset($tasks->type[$i]) or $tasks->type[$i] == 'ditto')              ? $type       : $tasks->type[$i];
+            $assignedTo = (!isset($tasks->assignedTo[$i]) or $tasks->assignedTo[$i] == 'ditto')  ? $assignedTo : $tasks->assignedTo[$i];
+            $estStarted = (!isset($tasks->estStarted[$i]) or isset($tasks->estStartedDitto[$i])) ? $estStarted : $tasks->estStarted[$i];
+            $deadline   = (!isset($tasks->deadline[$i]) or isset($tasks->deadlineDitto[$i]))     ? $deadline   : $tasks->deadline[$i];
+
+            /* 检查任务名称为空的数据。 */
+            if(empty($tasks->name[$i]))
+            {
+                if($this->common->checkValidRow('task', $tasks, $i))
+                {
+                    dao::$errors['message'][] = sprintf($this->lang->error->notempty, $this->lang->task->name);
+                    return false;
+                }
+                continue;
+            }
+
+            /* 构建任务数据。 */
+            $dittoFields = array('story' => $story, 'module' => $module, 'type' => $type, 'assignedTo' => $assignedTo, 'estStarted' => $estStarted, 'deadline' => $deadline);
+            $data[$i]    = $this->constructData4BatchCreate($execution, $tasks, $i, $dittoFields, $extendFields);
+        }
+
+        return $data;
+    }
+
+    /**
+     * 在批量创建之前移除post数据中重复的数据。
+     * Remove the duplicate data before batch create tasks.
+     *
+     * @param  object      $execution
+     * @param  object      $tasks
+     * @access private
+     * @return object|false
+     */
+    private function removeDuplicate4BatchCreate(object $execution, object $tasks): object|false
+    {
+        $storyIDs  = array();
+        $taskNames = array();
+        $preStory  = 0;
+
+        foreach($tasks->story as $key => $storyID)
+        {
+            /* 过滤事务型和任务名称为空的数据。 */
+            if(empty($tasks->name[$key])) continue;
+            if($tasks->type[$key] == 'affair') continue;
+            if($tasks->type[$key] == 'ditto' and isset($tasks->type[$key - 1]) and $tasks->type[$key - 1] == 'affair') continue;
+
+            if($storyID == 'ditto') $storyID = $preStory;
+            $preStory = $storyID;
+
+            if(!isset($tasks->story[$key - 1]) and $key > 1 and !empty($tasks->name[$key - 1]))
+            {
+                $storyIDs[]  = 0;
+                $taskNames[] = $tasks->name[$key - 1];
+            }
+
+            /* 判断Post传过来的任务有没有重复数据。 */
+            $hasExistsName = in_array($tasks->name[$key], $taskNames);
+            if($hasExistsName and in_array($storyID, $storyIDs))
+            {
+                dao::$errors['message'][] = sprintf($this->lang->duplicate, $this->lang->task->common) . ' ' . $tasks->name[$key];
+                return false;
+            }
+
+            $storyIDs[]  = $storyID;
+            $taskNames[] = $tasks->name[$key];
+        }
+
+        /* 去重并赋值。 */
+        $result = $this->loadModel('common')->removeDuplicate('task', $tasks, "execution={$execution->id} and story " . helper::dbIN($storyIDs));
+        return $result['data'];
+    }
+
+    /**
+     * 批量创建任务之前构造数据。
+     * Construct data before batch create tasks.
+     *
+     * @param  object     $execution
+     * @param  object     $tasks
+     * @param  int        $index
+     * @param  array      $dittoFields
+     * @param  array      $extendFields
+     * @access private
+     * @return object
+     */
+    private function constructData4BatchCreate(object $execution, object $tasks, int $index, array $dittoFields, array $extendFields): object
+    {
+        extract($dittoFields);
+        $now = helper::now();
+
+        $task             = new stdclass();
+        $task->story      = (int)$story;
+        $task->type       = $type;
+        $task->module     = (int)$module;
+        $task->assignedTo = $assignedTo;
+        $task->color      = $tasks->color[$index];
+        $task->name       = $tasks->name[$index];
+        $task->desc       = nl2br($tasks->desc[$index]);
+        $task->pri        = $tasks->pri[$index];
+        $task->estimate   = $tasks->estimate[$index] ? $tasks->estimate[$index] : 0;
+        $task->left       = $tasks->estimate[$index] ? $tasks->estimate[$index] : 0;
+        $task->project    = $execution->project;
+        $task->execution  = $execution->id;
+        $task->estStarted = $estStarted;
+        $task->deadline   = $deadline;
+        $task->status     = 'wait';
+        $task->openedBy   = $this->app->user->account;
+        $task->openedDate = $now;
+        $task->parent     = $tasks->parent[$index];
+        $task->vision     = isset($tasks->vision[$index]) ? $tasks->vision[$index] : 'rnd';
+        $task->version    = 1;
+        if($story) $task->storyVersion = (int)$this->dao->findById($task->story)->from(TABLE_STORY)->fetch('version');
+        if($assignedTo) $task->assignedDate = $now;
+        if(strpos($this->config->task->create->requiredFields, 'estStarted') !== false and empty($estStarted)) $task->estStarted = '';
+        if(strpos($this->config->task->create->requiredFields, 'deadline') !== false and empty($deadline))     $task->deadline   = '';
+        if(isset($tasks->lanes[$index])) $task->laneID = $tasks->lanes[$index];
+
+        /* 附加工作流字段。 */
+        foreach($extendFields as $extendField)
+        {
+            $task->{$extendField->field} = $tasks->{$extendField->field}[$index];
+            if(is_array($task->{$extendField->field})) $task->{$extendField->field} = join(',', $task->{$extendField->field});
+
+            $task->{$extendField->field} = htmlSpecialString($task->{$extendField->field});
+        }
+
+        return $task;
+    }
+
+    /**
      * 检查传入的创建数据是否符合要求。
      * Check if the incoming creation data meets the requirements.
      *
@@ -901,7 +1061,7 @@ class taskZen extends task
     protected function buildBatchCreateForm(object $execution, int $storyID, int $moduleID, int $taskID, array $output): void
     {
         /* 获取区域和泳道下拉数据，并设置区域和泳道的默认值。*/
-        if($execution->type == 'kanban') $this->taskZen->showKanbanRelatedVars($execution->id, $output);
+        if($execution->type == 'kanban') $this->showKanbanRelatedVars($execution->id, $output);
 
         /* 任务拆解。 */
         if($taskID)
