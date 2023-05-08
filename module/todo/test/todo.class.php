@@ -4,7 +4,7 @@ class todoTest
     public function __construct()
     {
         global $tester;
-        $this->objectModel = $tester->loadModel('todo');
+        $this->objectModel    = $tester->loadModel('todo');
         $tester->app->loadClass('dao');
         $_SERVER['HTTP_HOST'] = 'test.zentao.net';
     }
@@ -414,5 +414,27 @@ class todoTest
         $cycleList = $this->objectModel->getCycleList($todoList);
 
         return count($cycleList) > 0 ? 1: 0;
+    }
+
+    /**
+     * 测试Tao层中的关闭待办函数。
+     * Test function to close one todo in Tao level.
+     *
+     * @param  int $todoID
+     * @access public
+     * @return object
+     */
+    public function closeTodoTest(int $todoID): object
+    {
+        $oldTodo  = $this->objectModel->getById($todoID);
+        $isClosed = $this->objectModel->closeTodo($todoID);
+        $newTodo  = $this->objectModel->getById($todoID);
+
+        $testResut = new stdclass;
+        $testResut->oldStatus = $oldTodo->status;
+        $testResut->newStatus = $newTodo->status;
+        $testResut->isClosed  = $isClosed;
+
+        return $testResut;
     }
 }
