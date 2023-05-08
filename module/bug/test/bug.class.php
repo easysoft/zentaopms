@@ -2158,13 +2158,7 @@ class bugTest
         global $tester;
         $linkBugPairs = $tester->dao->select('id,linkBug')->from(TABLE_BUG)->where('id')->in(array_filter($allRelatedLinkBugs))->andWhere('deleted')->eq('0')->fetchPairs();
 
-        if(dao::isError())
-        {
-            return dao::getError();
-        }
-        else
-        {
-            return $linkBugPairs;
-        }
+        if(dao::isError()) return dao::getError();
+        return $linkBugPairs;
     }
 }
