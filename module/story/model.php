@@ -299,6 +299,7 @@ class storyModel extends model
 
             /* If in ipd mode, set requirement status = 'launched'. */
             if($this->config->systemMode == 'PLM' and $story->type == 'requirement' and $story->status == 'active' and $this->config->vision == 'rnd') $story->status = 'launched';
+            if($story->status == 'launched' and $this->app->tab != 'product') $story->status = 'developing';
 
             $this->dao->insert(TABLE_STORY)->data($story, 'spec,verify')
                 ->autoCheck()
@@ -636,6 +637,7 @@ class storyModel extends model
         {
             /* If in ipd mode, set requirement status = 'launched'. */
             if($this->config->systemMode == 'PLM' and $type == 'requirement' and $story->status == 'active' and $this->config->vision == 'rnd') $story->status = 'launched';
+            if($story->status == 'launched' and $this->app->tab != 'product') $story->status = 'developing';
 
             $this->dao->insert(TABLE_STORY)->data($story, 'spec,verify')->autoCheck()->checkFlow()->exec();
             if(!dao::isError())
@@ -792,6 +794,7 @@ class storyModel extends model
 
         /* If in ipd mode, set requirement status = 'launched'. */
         if($this->config->systemMode == 'PLM' and $oldStory->type == 'requirement' and $story->status == 'active' and $this->config->vision == 'rnd') $story->status = 'launched';
+        if($story->status == 'launched' and $this->app->tab != 'product') $story->status = 'developing';
 
         $story = $this->loadModel('file')->processImgURL($story, $this->config->story->editor->change['id'], $this->post->uid);
         $this->dao->update(TABLE_STORY)->data($story, 'spec,verify,deleteFiles,relievedTwins')
@@ -1839,6 +1842,7 @@ class storyModel extends model
 
         /* If in ipd mode, set requirement status = 'launched'. */
         if($this->config->systemMode == 'PLM' and $oldStory->type == 'requirement' and $this->config->vision == 'rnd') $story->status = 'launched';
+        if($story->status == 'launched' and $this->app->tab != 'product') $story->status = 'developing';
 
         $this->dao->update(TABLE_STORY)->set('title')->eq($story->title)->set('version')->eq($story->version)->set('status')->eq($story->status)->where('id')->eq($storyID)->exec();
 
@@ -1927,6 +1931,7 @@ class storyModel extends model
 
         /* If in ipd mode, set requirement status = 'launched'. */
         if($this->config->systemMode == 'PLM' and $oldStory->type == 'requirement' and $story->status == 'active' and $this->config->vision == 'rnd') $story->status = 'launched';
+        if($story->status == 'launched' and $this->app->tab != 'product') $story->status = 'developing';
 
         $this->dao->update(TABLE_STORY)->data($story, 'reviewer')->where('id')->eq($storyID)->exec();
 
@@ -2675,6 +2680,7 @@ class storyModel extends model
 
         /* If in ipd mode, set requirement status = 'launched'. */
         if($this->config->systemMode == 'PLM' and $oldStory->type == 'requirement' and $story->status == 'active' and $this->config->vision == 'rnd') $story->status = 'launched';
+        if($story->status == 'launched' and $this->app->tab != 'product') $story->status = 'developing';
 
         $story = $this->loadModel('file')->processImgURL($story, $this->config->story->editor->activate['id'], $this->post->uid);
         $this->dao->update(TABLE_STORY)->data($story)->autoCheck()->checkFlow()->where('id')->eq($storyID)->exec();
@@ -6125,6 +6131,7 @@ class storyModel extends model
 
         /* If in ipd mode, set requirement status = 'launched'. */
         if($this->config->systemMode == 'PLM' and $oldStory->type == 'requirement' and $story->status == 'active' and $this->config->vision == 'rnd') $story->status = 'launched';
+        if($story->status == 'launched' and $this->app->tab != 'product') $story->status = 'developing';
 
         return $story;
     }
