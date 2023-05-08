@@ -21,7 +21,6 @@ class control extends wg
         'required?: bool',
         'placeholder?: string',
         'disabled?: bool',
-        'form?: string',
         'items?: array'
     );
 

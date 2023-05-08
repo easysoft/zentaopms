@@ -138,7 +138,7 @@ $lang->project->realBeganAB        = '实际开始';
 $lang->project->realEndAB          = '实际完成';
 $lang->project->realBegan          = '实际开始日期';
 $lang->project->realEnd            = '实际完成日期';
-$lang->project->division           = '阶段类型';
+$lang->project->stageBy            = '阶段类型';
 $lang->project->bygrid             = '看板';
 $lang->project->bylist             = '列表';
 $lang->project->bycard             = '卡片';
@@ -195,11 +195,11 @@ $lang->project->typeList = array();
 $lang->project->typeList['my']    = "我负责的{$lang->projectCommon}";
 $lang->project->typeList['other'] = "其他{$lang->projectCommon}";
 
-$lang->project->divisionList['0'] = "按{$lang->projectCommon}创建";
-$lang->project->divisionList['1'] = "按{$lang->productCommon}创建";
+$lang->project->stageByList['0'] = "按{$lang->projectCommon}创建";
+$lang->project->stageByList['1'] = "按{$lang->productCommon}创建";
 
-$lang->project->divisionSwitchList['0'] = '关闭';
-$lang->project->divisionSwitchList['1'] = "开启";
+$lang->project->stageBySwitchList['0'] = '关闭';
+$lang->project->stageBySwitchList['1'] = "开启";
 
 $lang->project->waitProjects    = "未开始的{$lang->projectCommon}";
 $lang->project->doingProjects   = "进行中的{$lang->projectCommon}";
@@ -419,7 +419,7 @@ $lang->project->begigLetterExecution = "{$lang->projectCommon}的开始日期应
 $lang->project->endGreateExecution   = "{$lang->projectCommon}的完成日期应大于等于执行的最大完成日期：%s";
 $lang->project->childLongTime        = "子{$lang->projectCommon}中有长期{$lang->projectCommon}，父{$lang->projectCommon}也应该是长期{$lang->projectCommon}";
 $lang->project->confirmUnlinkMember  = "您确定从该{$lang->projectCommon}中移除该用户吗？";
-$lang->project->divisionTips         = "按{$lang->projectCommon}创建为单套阶段，阶段关联所有{$lang->productCommon}；按{$lang->productCommon}创建为多套阶段，每套阶段关联一个{$lang->productCommon}。";
+$lang->project->stageByTips          = "按{$lang->projectCommon}创建为单套阶段，阶段关联所有{$lang->productCommon}；按{$lang->productCommon}创建为多套阶段，每套阶段关联一个{$lang->productCommon}。";
 
 $lang->project->action = new stdclass();
 $lang->project->action->managed = '$date, 由 <strong>$actor</strong> 维护。$extra' . "\n";

@@ -1767,7 +1767,6 @@ class executionModel extends model
                 ->andWhere('vision')->eq($this->config->vision)
                 ->beginIF($type == 'all')->andWhere('type')->in('sprint,stage,kanban')->fi()
                 ->beginIF($type != 'all')->andWhere('type')->eq($type)->fi()
-                ->beginIF($projectID)->andWhere('project')->eq($projectID)->fi()
                 ->beginIF($status == 'undone')->andWhere('status')->notIN('done,closed')->fi()
                 ->beginIF($status != 'all' and $status != 'undone')->andWhere('status')->in($status)->fi()
                 ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->sprints)->fi()
@@ -1820,7 +1819,6 @@ class executionModel extends model
                 ->orWhere('t2.account')->eq($this->app->user->account)
                 ->markRight(1)
                 ->andWhere('t1.type')->in('sprint,stage,kanban')
-                ->beginIF($projectID)->andWhere('t1.project')->eq($projectID)->fi()
                 ->orderBy('t1.order_desc')
                 ->beginIF($limit)->limit($limit)->fi()
                 ->fetchAll('id');
@@ -2054,7 +2052,7 @@ class executionModel extends model
         if(isset($project->model) and in_array($project->model, array('waterfall', 'waterfallplus')))
         {
             $executionProducts = array();
-            if($project->hasProduct and $project->division)
+            if($project->hasProduct and ($project->stageBy == 'product'))
             {
                 $executionList = array();
                 $executionProducts = $this->dao->select('t1.project, t2.name')->from(TABLE_PROJECTPRODUCT)->alias('t1')
@@ -4334,34 +4332,37 @@ class executionModel extends model
      */
     public function summary($tasks)
     {
-        $taskSum = $statusWait = $statusDone = $statusDoing = $statusClosed = $statusCancel = $statusPause = 0;
+        $taskSum = 0;
         $totalEstimate = $totalConsumed = $totalLeft = 0.0;
+
+        $summations = array();
+        $this->app->loadLang('task');
+        /* 当前只需要显示wait 和 doing 状态，但是从代码分析将来可能需要统计其他状态的，所以取全部状态。 */
+        foreach($this->lang->task->statusList as $statusCode => $statusName) $summations[$statusCode] = 0;
 
         foreach($tasks as $task)
         {
             if(!isset($tasks[$task->parent]) or $task->parent <= 0)
             {
-                $totalEstimate  += $task->estimate;
-                $totalConsumed  += $task->consumed;
+                $totalEstimate += $task->estimate;
+                $totalConsumed += $task->consumed;
 
                 if($task->status != 'cancel' and $task->status != 'closed') $totalLeft += $task->left;
             }
 
-            $statusVar = 'status' . ucfirst($task->status);
-            $$statusVar ++;
+            if(isset($summations[$task->status])) $summations[$task->status] ++;
             if(isset($task->children))
             {
-                foreach($task->children as $children)
+                foreach($task->children as $child)
                 {
-                    $statusVar = 'status' . ucfirst($children->status);
-                    $$statusVar ++;
+                    if(isset($summations[$child->status])) $summations[$child->status] ++;
                     $taskSum ++;
                 }
             }
             $taskSum ++;
         }
 
-        return sprintf($this->lang->execution->taskSummary, $taskSum, $statusWait, $statusDoing, round($totalEstimate, 1), round($totalConsumed, 1), round($totalLeft, 1));
+        return sprintf($this->lang->execution->taskSummary, $taskSum, $summations['wait'], $summations['doing'], round($totalEstimate, 1), round($totalConsumed, 1), round($totalLeft, 1));
     }
 
     /**
@@ -5266,7 +5267,7 @@ class executionModel extends model
                 }
             }
         }
-        if(!empty($execution->division) and $execution->hasProduct) echo "<td class='text-left' title='{$execution->productName}'>{$execution->productName}</td>";
+        if(($execution->stageBy == 'project') and $execution->hasProduct) echo "<td class='text-left' title='{$execution->productName}'>{$execution->productName}</td>";
         echo "<td class='status-{$execution->status} text-center'>" . zget($this->lang->project->statusList, $execution->status) . '</td>';
         echo '<td>' . zget($users, $execution->PM) . '</td>';
         echo helper::isZeroDate($execution->begin) ? '<td class="c-date"></td>' : '<td class="c-date">' . $execution->begin . '</td>';
@@ -5321,7 +5322,7 @@ class executionModel extends model
         {
             foreach($execution->children as $child)
             {
-                $child->division = $execution->division;
+                $child->stageBy = $execution->stageBy;
                 $this->printNestedList($child, true, $users, $productID);
             }
         }

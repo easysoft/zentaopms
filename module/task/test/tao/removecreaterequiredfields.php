@@ -14,7 +14,6 @@ for($i = 0; $i < 18; $i ++)
     if($i < 9) $tasks[$i]->type = 'dev';
     if($i >= 9)  $tasks[$i]->type = 'test';
 }
-global $tester;
 
 /**
 

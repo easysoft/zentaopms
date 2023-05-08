@@ -52,7 +52,7 @@ $(function()
                 if(response.result == 'success')
                 {
                     $('#productsBox #submit').popover('destroy');
-                    
+
                     $('.saveOtherProduct').popover(
                     {
                         trigger: 'manual',
@@ -118,17 +118,17 @@ function notice()
             'message' : noticeDivsion,
             'buttons':{
                 confirm:{
-                    label: divisionSwitchList['1'],
+                    label: stageBySwitchList['1'],
                     className: 'btn'
                 },
                 cancel:{
-                    label: divisionSwitchList['0'],
+                    label: stageBySwitchList['0'],
                     className: 'btn-primary'
                 },
             },
             callback: function(result)
             {
-                if(result) $('#submit').after("<input type='hidden' value='1' name='division'>");
+                if(result) $('#submit').after("<input type='hidden' value='1' name='stageBy'>");
                 $('form#productsBox').submit();
             }
         }

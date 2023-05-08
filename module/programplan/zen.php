@@ -20,9 +20,8 @@ class programplanZen extends programplan
      */
     protected function beforeEdit(object $formData): object
     {
-        $rowData = $formData->rowdata;
-        $plan    = $formData->join($rowData->output, ',')->get();
-        return $plan;
+        $rowData = $formData->rawdata;
+        return isset($rowData->output) ? $formData->join($rowData->output, ',')->get() : $rowData;
     }
 
     /**

@@ -255,7 +255,7 @@ class baseRouter
      * @var string
      * @access public
      */
-    public $viewType;
+    public $viewType = 'html';
 
     /**
      * 全局$config对象。
@@ -750,15 +750,11 @@ class baseRouter
         $outputDir    = ini_get('xhprof.output_dir');
 
         if(!is_dir($xhprofPath)) return false;
+        if(!$outputDir) $outputDir = $xhprofPath . DS . 'xhprof_runs';
+        if(!is_dir($outputDir)) mkdir($outputDir, 0777, true);
 
         include_once $libUtilsPath . 'xhprof_lib.php';
         include_once $libUtilsPath . 'xhprof_runs.php';
-
-        if(!$outputDir)
-        {
-            $outputDir = $xhprofPath . DS . 'xhprof_runs';
-            if(!is_dir($outputDir)) mkdir($outputDir, 0777, true);
-        }
 
         $xhprofRuns = new \XHProfRuns_Default($outputDir);
         $type       = "{$this->moduleName}_{$this->methodName}";
@@ -2042,7 +2038,7 @@ class baseRouter
             $fileName = baseName((string) $apiFile);
             [$method] = explode('.', $fileName);
 
-            $url = self::extractAPIURL($apiFile);
+            $url = static::extractAPIURL($apiFile);
             if($url) $hookCodes[$method][] = "return helper::requestAPI('$url');";
         }
         foreach($hookFiles as $hookFile)
@@ -2164,7 +2160,7 @@ class baseRouter
         if($extension == '302')
         {
             header("location: $url");
-            exit;
+            helper::end();
         }
 
         if($extension == 'api')
@@ -2186,7 +2182,7 @@ class baseRouter
             $output .= $response;
             if(isset($viewFiles['hookFiles'])) foreach($viewFiles['hookFiles'] as $hookFile) $output .= $this->control->printViewFile($hookFile);
             $output .= $this->control->printViewFile($footFile);
-            die($output);
+            helper::end($output);
         }
     }
 
@@ -2437,14 +2433,14 @@ class baseRouter
         $nameRule = $filter->{$this->moduleName}->{$this->methodName}->paramName ?? $filter->default->paramName;
         foreach($passedParams as $param => $value)
         {
-            if(!validater::checkByRule($param, $nameRule)) die('Bad Request!');
+            if(!validater::checkByRule($param, $nameRule)) helper::end('Bad Request!');
             $valueRule = $filter->default->paramValue;
             if(isset($filter->{$this->moduleName}->{$this->methodName}->paramValue[$param]))
             {
                 $valueRule = $filter->{$this->moduleName}->{$this->methodName}->paramValue[$param];
             }
 
-            if($value and !validater::checkByRule($value, $valueRule)) die('Bad Request!');
+            if($value and !validater::checkByRule($value, $valueRule)) helper::end('Bad Request!');
         }
 
         $passedParams = array_values($passedParams);
@@ -2792,7 +2788,7 @@ class baseRouter
     public function connectByPDO(object $params): object|bool
     {
         $dsn = null;
-        if(!isset($params->driver)) self::triggerError('no pdo driver defined, it should be mysql or sqlite', __FILE__, __LINE__, $exit = true);
+        if(!isset($params->driver)) static::triggerError('no pdo driver defined, it should be mysql or sqlite', __FILE__, __LINE__, $exit = true);
         if(!isset($params->user)) return false;
         try
         {
@@ -2827,7 +2823,7 @@ class baseRouter
                 header("location: {$this->config->webRoot}checktable.php");
                 exit;
             }
-            self::triggerError($message, __FILE__, __LINE__, $exit = true);
+            static::triggerError($message, __FILE__, __LINE__, $exit = true);
         }
     }
 
@@ -2873,7 +2869,7 @@ class baseRouter
         if(preg_match('/[^\x00-\x80]/', $message)) $message = helper::convertEncoding($message, 'gbk');
 
         /* Only show error when debug is open. */
-        if(!$this->config->debug) die();
+        if(!$this->config->debug) helper::end();
 
         $log = "ERROR: $message in $file on line $line";
         if(isset($_SERVER['SCRIPT_URI'])) $log .= ", request: $_SERVER[SCRIPT_URI]";;
@@ -2983,12 +2979,12 @@ class baseRouter
          * */
         if($level == E_ERROR or $level == E_PARSE or $level == E_CORE_ERROR or $level == E_COMPILE_ERROR or $level == E_USER_ERROR)
         {
-            if(empty($this->config->debug)) die();
-            if(PHP_SAPI == 'cli') die($errorLog);
+            if(empty($this->config->debug)) helper::end();
+            if(PHP_SAPI == 'cli') helper::end($errorLog);
 
             $htmlError  = "<html><head><meta http-equiv='Content-Type' content='text/html; charset=utf-8' /></head>";
             $htmlError .= "<body>" . nl2br($errorLog) . "</body></html>";
-            die($htmlError);
+            helper::end($htmlError);
         }
     }
 

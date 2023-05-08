@@ -608,14 +608,14 @@ class productTao extends productModel
      * Get products by project ID.
      *
      * @param  int       $projectID
-     * @param  array     $views
+     * @param  string    $productIdListStr '1,2,3'
      * @param  string    $status
      * @param  string    $orderBy
      * @param  bool      $noDeleted
      * @access protected
      * @return int
      */
-    protected function getProductsByProjectID(int $projectID, array $views, string $status, string $orderBy, bool $noDeleted): array
+    protected function getProductsByProjectID(int $projectID, string $productIdListStr, string $status, string $orderBy, bool $noDeleted): array
     {
         return $this->dao->select("t1.branch, t1.plan, t2.*")
             ->from(TABLE_PROJECTPRODUCT)->alias('t1')
@@ -623,7 +623,7 @@ class productTao extends productModel
             ->where('1=1')
             ->beginIF($noDeleted)->andWhere('t2.deleted')->eq(0)->fi()
             ->beginIF(!empty($projectID))->andWhere('t1.project')->in($projectID)->fi()
-            ->beginIF(!$this->app->user->admin and $this->config->vision == 'rnd')->andWhere('t2.id')->in($views)->fi()
+            ->beginIF(!$this->app->user->admin and $this->config->vision == 'rnd')->andWhere('t2.id')->in($productIdListStr)->fi()
             ->andWhere('t2.vision')->eq($this->config->vision)
             ->beginIF(strpos($status, 'noclosed') !== false)->andWhere('t2.status')->ne('closed')->fi()
             ->orderBy($orderBy . 't2.order asc')

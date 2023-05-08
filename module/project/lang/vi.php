@@ -134,7 +134,7 @@ $lang->project->realBeganAB        = 'Actual Begin';
 $lang->project->realEndAB          = 'Actual End';
 $lang->project->realBegan          = 'Actual Begin';
 $lang->project->realEnd            = 'Actual End';
-$lang->project->division           = 'Stage Type';
+$lang->project->stageBy            = 'Stage Type';
 $lang->project->bygrid             = 'Kanban';
 $lang->project->bylist             = 'List';
 $lang->project->bycard             = 'Card';
@@ -190,8 +190,8 @@ $lang->project->typeList = array();
 $lang->project->typeList['my']    = 'Projects Ownedbyme';
 $lang->project->typeList['other'] = 'Other Projects';
 
-$lang->project->divisionList['1'] = 'Create by project';
-$lang->project->divisionList['0'] = 'Create by product';
+$lang->project->stageByList['1'] = 'Create by project';
+$lang->project->stageByList['0'] = 'Create by product';
 
 $lang->project->waitProjects    = 'Waiting Projects';
 $lang->project->doingProjects   = 'Ongoing Projects';
@@ -366,7 +366,7 @@ $lang->project->begigLetterExecution = 'The start date of project should be ≤ 
 $lang->project->endGreateExecution   = 'The finish date of the project should be ≥ the maximum finish date of the execution: %s.';
 $lang->project->childLongTime        = "There are long-term projects in the child project, and the parent project should also be a long-term project.";
 $lang->project->confirmUnlinkMember  = "Do you want to remove this user from project?";
-$lang->project->divisionTips         = "Created by project as a single set of stages, and the stage is associated with all products; created by product as multiple sets of stages, each set of stages is associated with a product";
+$lang->project->stageByTips          = "Created by project as a single set of stages, and the stage is associated with all products; created by product as multiple sets of stages, each set of stages is associated with a product";
 
 $lang->project->action = new stdclass();
 $lang->project->action->managed = '$date, managed by <strong>$actor</strong>. $extra' . "\n";

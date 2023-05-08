@@ -1,5 +1,7 @@
 #!/usr/bin/env php
 <?php
+declare(strict_types=1);
+
 include dirname(__FILE__, 5) . "/test/lib/init.php";
 include dirname(__FILE__, 2) . '/todo.class.php';
 su('admin');
@@ -26,7 +28,7 @@ $month       = date('Y-m-01'); //本月1日
 $lastweekday = date("Y-m-d", strtotime("-7 day")); //上周的今天
 
 $season = ceil((date('n')) / 3); //当月是第几季度
-$season = date('Y-m-d', mktime(0, 0, 0, $season * 3 - 3 + 1, 1, date('Y'))); //本季度第一天
+$season = date('Y-m-d', mktime(0, 0, 0, (int)$season * 3 - 3 + 1, 1, (int)date('Y'))); //本季度第一天
 
 $defaultNum  = '0'; //默认天数
 $dayNum      = '1'; //修改天数为今日的数量
@@ -51,6 +53,7 @@ if(strtotime($week)- 7*86400 <= strtotime($lastweekday)) $lastWeekNum += $last7D
 $thisMonthNum = $dayNum;
 $lastMonthNum = $lastweekday == $month ? $defaultNum : $last7DayNum;
 if(strtotime($month) <= strtotime($lastday)) $thisMonthNum += $lastDayNum;
+if(date("w") == 1) $thisMonthNum += $last7DayNum;
 if($month == $day) $lastMonthNum += $lastDayNum;
 
 /* 本季度实际待办数量 */
@@ -58,10 +61,10 @@ $thisSeasonNum = $dayNum;
 if(strtotime($season) <= strtotime($lastday)) $thisSeasonNum += $lastDayNum;
 if(strtotime($season) <= strtotime($lastweekday)) $thisSeasonNum += $lastWeekNum;
 
-$thisweek  = $todo->getListTest($typeList[2]) == $thisWeekNum  ? '1' : '0';
-$lastweek  = $todo->getListTest($typeList[3]) == $lastWeekNum  ? '1' : '0';
-$thismonth = $todo->getListTest($typeList[4]) == $thisMonthNum ? '1' : '0';
-$lastmonth = $todo->getListTest($typeList[5]) == $lastMonthNum ? '1' : '0';
+$thisweek   = $todo->getListTest($typeList[2]) == $thisWeekNum   ? '1' : '0';
+$lastweek   = $todo->getListTest($typeList[3]) == $lastWeekNum   ? '1' : '0';
+$thismonth  = $todo->getListTest($typeList[4]) == $thisMonthNum  ? '1' : '0';
+$lastmonth  = $todo->getListTest($typeList[5]) == $lastMonthNum  ? '1' : '0';
 $thisSeason = $todo->getListTest($typeList[6]) == $thisSeasonNum ? '1' : '0';
 
 r($thisweek)  && p() && e('1'); // 获取type为thisweek 当前用户的代办数量
