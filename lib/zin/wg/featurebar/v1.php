@@ -77,7 +77,7 @@ class featureBar extends wg
                     'text'   => $item->text,
                     'active' => $isActive,
                     'url'    => str_replace('{key}', $item->name, $link),
-                    'badge'  => $isActive && !empty($recTotal) ? array('text' => $recTotal, 'class' => 'size-sm circle white') : NULL,
+                    'badge'  => $isActive && !empty($recTotal) ? array('text' => $recTotal, 'class' => 'size-sm rounded-full white') : NULL,
                     'type'   => 'dropdown',
                     'items'  => $subItems,
                     'props'  => ['data-id' => $item->name, 'data-load' => 'table']
@@ -92,7 +92,7 @@ class featureBar extends wg
                 'text'   => $item->text,
                 'active' => $isActive,
                 'url'    => str_replace('{key}', $item->name, $link),
-                'badge'  => $isActive && !empty($recTotal) ? array('text' => $recTotal, 'class' => 'size-sm circle white') : NULL,
+                'badge'  => $isActive && !empty($recTotal) ? array('text' => $recTotal, 'class' => 'size-sm rounded-full white') : NULL,
                 'props'  => ['data-id' => $item->name, 'data-load' => 'table']
             );
         }

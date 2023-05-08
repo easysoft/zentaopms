@@ -96,7 +96,7 @@ class avatar extends wg
         /* Set circle. */
         if($circle)
         {
-            $this->finalClass[] = 'circle';
+            $this->finalClass[] = 'rounded-full';
         }
         else if($rounded)
         {
