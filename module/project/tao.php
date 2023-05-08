@@ -215,6 +215,8 @@ class projectTao extends projectModel
      */
     protected function setProjectTeam(int $projectID, object $project, object $postData): array
     {
+        $this->loadModel('execution');
+
         /* Set team of project. */
         $members = isset($postData->rawdata->teamMembers) ? $postData->rawdata->teamMembers : array();
         array_push($members, $project->PM, $project->openedBy);
@@ -304,7 +306,7 @@ class projectTao extends projectModel
     {
         /* If parent not empty, link products or create products. */
         $product = new stdclass();
-        $product->name           = $project->hasProduct && $postData->rawdata->productName ? $postData->rawdata->productName : $project->name;
+        $product->name           = $project->hasProduct && !empty($postData->rawdata->productName) ? $postData->rawdata->productName : zget($project, 'name', '');
         $product->shadow         = zget($project, 'vision', 'rnd') == 'rnd' ? (int)empty($project->hasProduct) : 1;
         $product->bind           = $postData->rawdata->parent ? 0 : 1;
         $product->program        = $project->parent ? current(array_filter(explode(',', $program->path))) : 0;
@@ -321,7 +323,13 @@ class projectTao extends projectModel
         $product->createdVersion = $this->config->version;
         $product->vision         = zget($project, 'vision', 'rnd');
 
-        $this->dao->insert(TABLE_PRODUCT)->data($product)->exec();
+        $this->app->loadConfig('product');
+        $this->dao->insert(TABLE_PRODUCT)->data($product)
+            ->batchCheck($this->config->product->create->requiredFields, 'notempty')
+            ->checkIF(!empty($product->name), 'name', 'unique', "`program` = {$product->program} and `deleted` = '0'")
+            ->exec();
+        if(dao::isError()) return false;
+
         $productID = $this->dao->lastInsertId();
         if(!$project->hasProduct) $this->loadModel('personnel')->updateWhitelist($whitelist, 'product', $productID);
         $this->loadModel('action')->create('product', $productID, 'opened');
