@@ -29,7 +29,7 @@ class todoModel extends model
 
     /**
      * 批量创建待办。
-     * Batch create toto.
+     * Batch create todo.
      *
      * @param  object $todos
      * @access public
