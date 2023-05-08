@@ -594,12 +594,12 @@ class programplanModel extends model
     /**
      * Get total percent.
      *
-     * @param  object  $stage
-     * @param  object  $parent
+     * @param  object $stage
+     * @param  bool   $parent
      * @access public
      * @return int
      */
-    public function getTotalPercent($stage, $parent = false)
+    public function getTotalPercent(object $stage, bool $parent = false)
     {
         /* When parent is equal to true, query the total workload of the subphase. */
         $executionID = $parent ? $stage->id : $stage->project;
@@ -1164,14 +1164,14 @@ class programplanModel extends model
     /**
      * Print cell.
      *
-     * @param  int    $col
-     * @param  int    $plan
-     * @param  int    $users
+     * @param  object $col
+     * @param  object $plan
+     * @param  array  $users
      * @param  int    $projectID
      * @access public
      * @return string
      */
-    public function printCell($col, $plan, $users, $projectID)
+    public function printCell(object $col, object $plan, array $users, int $projectID)
     {
         $id = $col->id;
         if($col->show)
@@ -1212,34 +1212,20 @@ class programplanModel extends model
                 echo zget($this->lang->stage->typeList, $plan->attribute, '');
                 break;
             case 'begin':
-                echo $plan->begin;
-                break;
             case 'end':
-                echo $plan->end;
-                break;
             case 'realBegan':
-                echo $plan->realBegan;
-                break;
             case 'realEnd':
-                echo $plan->realEnd;
-                break;
             case 'output':
-                echo $plan->output;
-                break;
             case 'version':
-                echo $plan->version;
+                echo $plan->{$id};
                 break;
             case 'editedBy':
-                echo zget($users, $plan->editedBy);
+            case 'openedBy':
+                echo zget($users, $plan->{$id});
                 break;
             case 'editedDate':
-                echo substr($plan->editedDate, 5, 11);
-                break;
-            case 'openedBy':
-                echo zget($users, $plan->openedBy);
-                break;
             case 'openedDate':
-                echo substr($plan->openedDate, 5, 11);
+                echo substr($plan->{$id}, 5, 11);
                 break;
             case 'actions':
                 common::printIcon('execution', 'start', "executionID={$plan->id}", $plan, 'list', '', '', 'iframe', true);
