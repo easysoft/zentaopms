@@ -138,7 +138,7 @@ $lang->project->realBeganAB        = 'Actual Begin';
 $lang->project->realEndAB          = 'Actual End';
 $lang->project->realBegan          = 'Actual Begin';
 $lang->project->realEnd            = 'Actual End';
-$lang->project->division           = 'Stage Type';
+$lang->project->stageBy            = 'Stage Type';
 $lang->project->bygrid             = 'Kanban';
 $lang->project->bylist             = 'List';
 $lang->project->bycard             = 'Card';
@@ -194,11 +194,11 @@ $lang->project->typeList = array();
 $lang->project->typeList['my']    = "{$lang->projectCommon}s Ownedbyme";
 $lang->project->typeList['other'] = "Other {$lang->projectCommon}s";
 
-$lang->project->divisionList['0'] = "Create by {$lang->projectCommon}";
-$lang->project->divisionList['1'] = "Create by {$lang->productCommon}";
+$lang->project->stageByList['0'] = "Create by {$lang->projectCommon}";
+$lang->project->stageByList['1'] = "Create by {$lang->productCommon}";
 
-$lang->project->divisionSwitchList['0'] = 'Close';
-$lang->project->divisionSwitchList['1'] = "Open";
+$lang->project->stageBySwitchList['0'] = 'Close';
+$lang->project->stageBySwitchList['1'] = "Open";
 
 $lang->project->waitProjects    = "Waiting {$lang->projectCommon}s";
 $lang->project->doingProjects   = "Ongoing {$lang->projectCommon}s";
@@ -418,7 +418,7 @@ $lang->project->begigLetterExecution = "The start date of {$lang->projectCommon}
 $lang->project->endGreateExecution   = "The finish date of the {$lang->projectCommon} should be ≥ the maximum finish date of the execution: %s.";
 $lang->project->childLongTime        = "There are long-term {$lang->projectCommon}s in the child {$lang->projectCommon}, and the parent {$lang->projectCommon} should also be a long-term {$lang->projectCommon}.";
 $lang->project->confirmUnlinkMember  = "Do you want to remove this user from {$lang->projectCommon}?";
-$lang->project->divisionTips         = "Created by {$lang->projectCommon} as a single set of stages, and the stage is associated with all {$lang->productCommon}s; created by {$lang->productCommon} as multiple sets of stages, each set of stages is associated with a {$lang->productCommon}";
+$lang->project->stageByTips          = "Created by {$lang->projectCommon} as a single set of stages, and the stage is associated with all {$lang->productCommon}s; created by {$lang->productCommon} as multiple sets of stages, each set of stages is associated with a {$lang->productCommon}";
 
 $lang->project->action = new stdclass();
 $lang->project->action->managed = '$date, managed by <strong>$actor</strong>. $extra' . "\n";

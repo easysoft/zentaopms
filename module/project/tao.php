@@ -95,7 +95,6 @@ class projectTao extends projectModel
         return !dao::isError();
     }
 
-
     /**
      * Update project table when edit a project.
      *
@@ -117,6 +116,7 @@ class projectTao extends projectModel
             ->checkIF(!empty($project->code), 'code', 'unique', "id != $projectID and `type` = 'project' and `model` = '{$project->model}' and `deleted` = '0'")
             ->checkFlow()
             ->where('id')->eq($projectID)
+            ->remove('products,branch,plans,delta,future,contactListMenu,teamMembers')
             ->exec();
 
         return !dao::isError();
@@ -127,15 +127,16 @@ class projectTao extends projectModel
      *
      * @param  int $projectID
      * @access protected
-     * @return array|false
+     * @return array
      */
-    protected function fetchUndoneTasks(int $projectID): array|false
+    protected function fetchUndoneTasks(int $projectID): array
     {
         return $this->dao->select('id,estStarted,deadline,status')->from(TABLE_TASK)
             ->where('deadline')->notZeroDate()
             ->andWhere('status')->in('wait,doing')
             ->andWhere('project')->eq($projectID)
             ->fetchAll();
+
     }
 
     /**

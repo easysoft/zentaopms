@@ -2052,7 +2052,7 @@ class executionModel extends model
         if(isset($project->model) and in_array($project->model, array('waterfall', 'waterfallplus')))
         {
             $executionProducts = array();
-            if($project->hasProduct and $project->division)
+            if($project->hasProduct and ($project->stageBy == 'product'))
             {
                 $executionList = array();
                 $executionProducts = $this->dao->select('t1.project, t2.name')->from(TABLE_PROJECTPRODUCT)->alias('t1')
@@ -5267,7 +5267,7 @@ class executionModel extends model
                 }
             }
         }
-        if(!empty($execution->division) and $execution->hasProduct) echo "<td class='text-left' title='{$execution->productName}'>{$execution->productName}</td>";
+        if(($execution->stageBy == 'project') and $execution->hasProduct) echo "<td class='text-left' title='{$execution->productName}'>{$execution->productName}</td>";
         echo "<td class='status-{$execution->status} text-center'>" . zget($this->lang->project->statusList, $execution->status) . '</td>';
         echo '<td>' . zget($users, $execution->PM) . '</td>';
         echo helper::isZeroDate($execution->begin) ? '<td class="c-date"></td>' : '<td class="c-date">' . $execution->begin . '</td>';
@@ -5322,7 +5322,7 @@ class executionModel extends model
         {
             foreach($execution->children as $child)
             {
-                $child->division = $execution->division;
+                $child->stageBy = $execution->stageBy;
                 $this->printNestedList($child, true, $users, $productID);
             }
         }

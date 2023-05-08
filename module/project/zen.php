@@ -51,13 +51,54 @@ class projectZen extends project
     }
 
     /**
+     * Judge products not empty.
+     *
+     * @param  array   $products
+     * @access protected
+     * @return bool
+     */
+    protected function checkProductsNotEmpty($products): bool
+    {
+        $linkedProductsCount = 0;
+        foreach($products as $product)
+        {
+            if(!empty($product)) $linkedProductsCount++;
+        }
+        if(empty($linkedProductsCount))
+        {
+            dao::$errors[] = $this->lang->project->errorNoProducts;
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * Check work days legtimate.
+     *
+     * @param  object $project
+     * @access protected
+     * @return bool
+     */
+    protected function checkWorkdaysLegtimate($project): bool
+    {
+        $workdays = helper::diffDate($project->end, $project->begin) + 1;
+        if(isset($project->days) and $project->days > $workdays)
+        {
+            dao::$errors['days'] = sprintf($this->lang->project->workdaysExceed, $workdays);
+            return false;
+        }
+        return true;
+    }
+
+    /**
      * Append extras data to post data.
      *
+     * @param  int    $projectID
      * @param  object $postData
      * @access protected
-     * @return int|object
+     * @return object|false
      */
-    protected function prepareEditExtras(object $postData): object
+    protected function prepareEditExtras(int $projectID, object $postData): object|false
     {
         $project = $postData->setDefault('team', $this->post->name)
             ->setDefault('lastEditedBy', $this->app->user->account)
@@ -65,18 +106,24 @@ class projectZen extends project
             ->setDefault('days', '0')
             ->setIF($this->post->delta == 999, 'end', LONG_TIME)
             ->setIF($this->post->delta == 999, 'days', 0)
-            ->setIF($this->post->begin == '0000-00-00', 'begin', '')
-            ->setIF($this->post->end   == '0000-00-00', 'end', '')
             ->setIF($this->post->future, 'budget', 0)
             ->setIF($this->post->budget != 0, 'budget', round((float)$this->post->budget, 2))
             ->stripTags($this->config->project->editor->edit['id'], $this->config->allowedTags)
             ->get();
 
+        /* Check if products and branch valid by project.*/
+        if($project->product && !$this->project->checkBranchAndProductValid($projectID, $project)) return false;
+
+        /* Check if products not empty.*/
+        if(!$this->checkProductsNotEmpty($project->products)) return false;
+
+        /* Check if work days legtimate.*/
+        if(!$this->checkWorkdaysLegtimate($project)) return false;
+
         if(!isset($this->config->setCode) or $this->config->setCode == 0) unset($project->code);
 
-        /* Lean mode relation defaultProgram. */
+        /* Lean mode relation defaultProgram.*/
         if($this->config->systemMode == 'light') $project->parent = $this->config->global->defaultProgram;
-
         return $project;
     }
 
@@ -664,8 +711,8 @@ class projectZen extends project
         $diffProducts  = array_merge(array_diff($oldProductIDs, $newProductIDs), array_diff($newProductIDs, $oldProductIDs));
         if($diffProducts) $this->loadModel('action')->create('project', $projectID, 'Managed', '', !empty($postData->rawdata->products) ? implode(',', $postData->rawdata->products) : '');
 
-        /* Division project update linked products. */
-        if(empty($project->division))
+        /* Project stageBy project update linked products. */
+        if($project->stageBy == 'project')
         {
             foreach($idList as $executionID)
             {
