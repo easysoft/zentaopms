@@ -159,7 +159,7 @@ class todoTao extends todoModel
      *
      * @param  object $todo
      * @access protected
-     * @return stdclass
+     * @return object
      */
     protected function buildCycleTodo(object $todo): object
     {
