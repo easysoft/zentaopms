@@ -307,15 +307,16 @@ class programplan extends control
      * ajax请求：获取阶段ID的属性。
      * AJAX: Get stageID attributes.
      *
-     * @param  int    $stageID
+     * @param  string $stageID
      * @param  string $attribute
      * @access public
      * @return int
      */
-    public function ajaxGetAttribute(int $stageID, string $attribute): int
+    public function ajaxGetAttribute(string $stageID, string $attribute): int
     {
         $this->app->loadLang('stage');
 
+        $stageID        = (int)$stageID;
         $stageAttribute = $this->programplan->getStageAttribute($stageID);
 
         if(empty($stageAttribute) || $stageAttribute == 'mix')
@@ -327,15 +328,20 @@ class programplan extends control
     }
 
     /**
-     * AJAX: Get stage's attribute.
+     * ajax请求：获取阶段ID的属性。
+     * AJAX: Get stageID attribute.
      *
-     * @param  int    $stageID
+     * @param  string $stageID
      * @access public
      * @return int
      */
-    public function ajaxGetStageAttr($stageID)
+    public function ajaxGetStageAttr(string $stageID): int
     {
-        $stage = $this->dao->select('attribute')->from(TABLE_EXECUTION)->where('id')->eq($stageID)->fetch('attribute');
-        return print($stage);
+        $stageID        = (int)$stageID;
+        $stageAttribute = $this->programplan->getStageAttribute($stageID);
+
+        if(!$stageAttribute) return print(js::error(dao::getError()));
+
+        return print($stageAttribute);
     }
 }
