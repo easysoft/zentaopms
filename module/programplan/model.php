@@ -1540,13 +1540,14 @@ class programplanModel extends model
     }
 
     /**
+     * 检查阶段是否是叶子阶段。
      * Check if the stage is a leaf stage.
      *
      * @param  int    $planID
      * @access public
      * @return bool
      */
-    public function checkLeafStage($planID)
+    public function checkLeafStage(int $planID): bool
     {
         $subStageList = $this->dao->select('id')->from(TABLE_EXECUTION)->where('parent')->eq($planID)->andWhere('deleted')->eq(0)->fetchAll('id');
 
