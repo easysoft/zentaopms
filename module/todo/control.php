@@ -12,7 +12,7 @@ declare(strict_types=1);
 class todo extends control
 {
     /**
-     * Construct function
+     * Construct function, load class of date, lang of my.
      *
      * @access public
      * @return void

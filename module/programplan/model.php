@@ -155,7 +155,7 @@ class programplanModel extends model
 
         $plans = $this->getStage($executionID, $productID, 'all', 'order');
 
-        if($baselineID) $plans = $this->getBaselineData($baselineID, $plans);
+        if($baselineID) $plans = $this->setBaseline($baselineID, $plans);
 
         $today       = helper::today();
         $datas       = array();
@@ -364,7 +364,7 @@ class programplanModel extends model
      * @access private
      * @return array
      */
-    private function getBaselineData(int $baselineID, array $plans): array
+    private function setBaseline(int $baselineID, array $plans): array
     {
         $baseline = $this->loadModel('cm')->getByID($baselineID);
         $oldData  = json_decode($baseline->data);

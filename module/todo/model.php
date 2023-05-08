@@ -304,11 +304,11 @@ class todoModel extends model
      * Get a array with todos which todoID as key, todo object as value by todo id list.
      * Return all todos if the todo id list is empty.
      *
-     * @param  array $todoIdList
+     * @param  array|string $todoIdList
      * @access public
      * @return array
      */
-    public function getByList($todoIdList = 0): array
+    public function getByList(array|string $todoIdList = ''): array
     {
         return $this->dao->select('*')->from(TABLE_TODO)
             ->beginIF($todoIdList)->where('id')->in($todoIdList)->fi()
