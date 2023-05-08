@@ -1122,7 +1122,7 @@ class productModel extends model
 
     /**
      * 获取产品路线图数据。
-     * Get roadmap of a proejct.
+     * Get roadmap of product.
      *
      * @param  int    $productID
      * @param  string $branch    all|0|1
@@ -1132,85 +1132,8 @@ class productModel extends model
      */
     public function getRoadmap(int $productID, string $branch = '0', int $count = 0): array
     {
-        $plans    = $this->loadModel('productplan')->getList($productID, $branch);
-        $releases = $this->loadModel('release')->getList($productID, $branch);
-        $roadmap  = array();
-        $total    = 0;
-
-        $parents      = array();
-        $orderedPlans = array();
-        foreach($plans as $planID => $plan)
-        {
-            if($plan->parent == '-1')
-            {
-                $parents[$planID] = $plan->title;
-                unset($plans[$planID]);
-                continue;
-            }
-            if((!helper::isZeroDate($plan->end) and $plan->end < date('Y-m-d')) or $plan->end == '2030-01-01') continue;
-            $orderedPlans[$plan->end][] = $plan;
-        }
-
-        krsort($orderedPlans);
-        foreach($orderedPlans as $plans)
-        {
-            krsort($plans);
-            foreach($plans as $plan)
-            {
-                if($plan->parent > 0 and isset($parents[$plan->parent])) $plan->title = $parents[$plan->parent] . ' / ' . $plan->title;
-
-                $year = substr($plan->end, 0, 4);
-                $branchIdList = explode(',', trim($plan->branch, ','));
-                $branchIdList = array_unique($branchIdList);
-                foreach($branchIdList as $branchID)
-                {
-                    if($branchID === '') continue;
-                    $roadmap[$year][$branchID][] = $plan;
-                }
-                $total++;
-
-                if($count > 0 and $total >= $count) return $this->processRoadmap($roadmap, $branch);
-            }
-        }
-
-        $orderedReleases = array();
-        foreach($releases as $release) $orderedReleases[$release->date][] = $release;
-
-        krsort($orderedReleases);
-        foreach($orderedReleases as $releases)
-        {
-            krsort($releases);
-            foreach($releases as $release)
-            {
-                $year = substr($release->date, 0, 4);
-                $branchIdList = explode(',', trim($release->branch, ','));
-                $branchIdList = array_unique($branchIdList);
-                foreach($branchIdList as $branchID)
-                {
-                    if($branchID === '') continue;
-                    $roadmap[$year][$branchID][] = $release;
-                }
-                $total++;
-
-                if($count > 0 and $total >= $count) return $this->processRoadmap($roadmap, $branch);
-            }
-        }
-
-        if($count > 0) return $this->processRoadmap($roadmap, $branch);
-
-        $groupRoadmap = array();
-        foreach($roadmap as $year => $branchRoadmaps)
-        {
-            foreach($branchRoadmaps as $branch => $roadmaps)
-            {
-                $totalData = count($roadmaps);
-                $rows      = ceil($totalData / 8);
-                $maxPerRow = ceil($totalData / $rows);
-
-                $groupRoadmap[$year][$branch] = array_chunk($roadmaps, $maxPerRow);
-                foreach($groupRoadmap[$year][$branch] as $row => $rowRoadmaps) krsort($groupRoadmap[$year][$branch][$row]);
-            }
-        }
+        /* Get group roadmap data. */
+        $groupRoadmap = $this->productTao->getGroupRoadmapData($productID, $branch, $count);
 
         /* Get last 5 roadmap. */
         $lastKeys    = array_slice(array_keys($groupRoadmap), 0, 5);
@@ -1241,7 +1164,7 @@ class productModel extends model
      * @access public
      * @return array
      */
-    public function processRoadmap($roadmapGroups, $branch)
+    public function processRoadmap($roadmapGroups, $branch): array
     {
         $newRoadmap = array();
         foreach($roadmapGroups as $year => $branchRoadmaps)

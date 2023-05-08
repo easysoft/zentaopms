@@ -768,14 +768,9 @@ class productTest
     {
         $objects = $this->objectModel->getRoadmap($productID);
 
-        if(dao::isError())
-        {
-            return dao::getError();
-        }
-        else
-        {
-            return $objects;
-        }
+        if(dao::isError()) return dao::getError();
+
+        return $objects;
     }
 
     /**
@@ -794,14 +789,9 @@ class productTest
 
         $objects = $this->objectModel->processRoadmap($roadmapGroups);
 
-        if(dao::isError())
-        {
-            return dao::getError();
-        }
-        else
-        {
-            return $objects;
-        }
+        if(dao::isError()) return dao::getError();
+
+        return $objects;
     }
 
     /**

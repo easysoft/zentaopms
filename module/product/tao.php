@@ -769,4 +769,189 @@ class productTao extends productModel
         if($currentProduct->type != 'normal' && $withBranch && $currentModule != 'programplan') $output .= $this->getBranchSelect4Mobile($currentProduct, $branch, $currentModule, $currentMethod, $extra);
         return $output;
     }
+
+    /**
+     * 获取产品路线图的分组数据。
+     * Get group roadmap data of product.
+     *
+     * @param  int    $productID
+     * @param  string $branch    all|0|1
+     * @param  int    $count
+     * @access public
+     * @return array
+     */
+    protected function getGroupRoadmapData(int $productID, string $branch, int $count): array
+    {
+        $roadmap      = array();
+        $total        = 0;
+
+        /* Get product plans. */
+        $plans = $this->loadModel('productplan')->getList($productID, $branch);
+
+        /* Get valid product plans and parent plans. */
+        list($orderedPlans, $parents) = $this->filterValidProductPlans($plans);
+
+        /* Get roadmaps of product plans. */
+        list($roadmap, $total, $return) = $this->getRoadmapsOfPlans($orderedPlans, $parents, $branch, $count);
+        if($return) return $roadmap;
+
+        /* Get roadmpas of product releases. */
+        $releases = $this->loadModel('release')->getList($productID, $branch);
+        list($roadmap, $subTotal, $return) = $this->getRoadmapsOfReleases($roadmap, $releases, $branch, $count);
+        if($return) return $roadmap;
+        $total += $subTotal;
+
+        $groupRoadmap = array();
+        foreach($roadmap as $year => $branchRoadmaps)
+        {
+            foreach($branchRoadmaps as $branch => $roadmaps)
+            {
+                $totalData = count($roadmaps);
+                $rows      = ceil($totalData / 8);
+                $maxPerRow = ceil($totalData / $rows);
+
+                $groupRoadmap[$year][$branch] = array_chunk($roadmaps, (int)$maxPerRow);
+                foreach($groupRoadmap[$year][$branch] as $row => $rowRoadmaps) krsort($groupRoadmap[$year][$branch][$row]);
+            }
+        }
+
+        return $groupRoadmap;
+    }
+
+    /**
+     * 过滤有效的产品计划, 并返回所有父级计划。
+     * Filter valid product plans.
+     *
+     * @param  array $plans
+     * @access private
+     * @return [array, array]
+     */
+    private function filterValidProductPlans(array $plans): array
+    {
+        $parents      = array();
+        $orderedPlans = array();
+
+        foreach($plans as $planID => $plan)
+        {
+            /* Remove parent plan. */
+            if($plan->parent == '-1')
+            {
+                $parents[$planID] = $plan->title;
+                unset($plans[$planID]);
+                continue;
+            }
+
+            /* Remove exceeded plan and long-time plan. */
+            if((!helper::isZeroDate($plan->end) and $plan->end < date('Y-m-d')) or $plan->end == '2030-01-01') continue;
+
+            $orderedPlans[$plan->end][] = $plan;
+        }
+
+        krsort($orderedPlans);
+
+        return array($orderedPlans, $parents);
+    }
+
+    /**
+     * 获取计划的路线图数据。
+     * Get roadmaps of plans.
+     *
+     * @param  array   $orderedPlans
+     * @param  array   $parents
+     * @param  string  $branch
+     * @param  int     $count
+     * @access private
+     * @return [array, int, bool]
+     */
+    private function getRoadmapsOfPlans(array $orderedPlans, array $parents, string $branch, int $count): array
+    {
+        $return  = false;
+        $total   = 0;
+        $roadmap = array();
+
+        foreach($orderedPlans as $plans)
+        {
+            krsort($plans);
+            foreach($plans as $plan)
+            {
+                /* Attach parent plan. */
+                if($plan->parent > 0 and isset($parents[$plan->parent])) $plan->title = $parents[$plan->parent] . ' / ' . $plan->title;
+
+                $year         = substr($plan->end, 0, 4);
+                $branchIdList = explode(',', trim($plan->branch, ','));
+                $branchIdList = array_unique($branchIdList);
+                foreach($branchIdList as $branchID)
+                {
+                    if($branchID === '') continue;
+                    $roadmap[$year][$branchID][] = $plan;
+                }
+                $total++;
+
+                /* Exceed requested count. */
+                if($count > 0 and $total >= $count)
+                {
+                    $roadmap = $this->processRoadmap($roadmap, $branch);
+                    $return  = true;
+                    break;
+                };
+            }
+        }
+
+        return array($roadmap, $total, $return);
+    }
+
+    /**
+     * 获取计划的路线图数据。
+     * Get roadmaps of plans.
+     *
+     * @param  array   $roadmaps
+     * @param  array   $parents
+     * @param  string  $branch
+     * @param  int     $count
+     * @access private
+     * @return [array, int, bool]
+     */
+    private function getRoadmapsOfReleases(array $roadmaps, array $releases, string $branch, int $count): array
+    {
+        $total           = 0;
+        $return          = false;
+        $orderedReleases = array();
+
+        /* Collect releases. */
+        foreach($releases as $release) $orderedReleases[$release->date][] = $release;
+
+        krsort($orderedReleases);
+        foreach($orderedReleases as $releases)
+        {
+            krsort($releases);
+            foreach($releases as $release)
+            {
+                $year = substr($release->date, 0, 4);
+                $branchIdList = explode(',', trim($release->branch, ','));
+                $branchIdList = array_unique($branchIdList);
+                foreach($branchIdList as $branchID)
+                {
+                    if($branchID === '') continue;
+                    $roadmaps[$year][$branchID][] = $release;
+                }
+                $total++;
+
+                /* Exceed required count .*/
+                if($count > 0 and $total >= $count)
+                {
+                    $roadmaps = $this->processRoadmap($roadmaps, $branch);
+                    $return  = true;
+                    return array($roadmaps, $total, $return);
+                }
+            }
+        }
+
+        if($count > 0)
+        {
+            $roadmaps = $this->processRoadmap($roadmaps, $branch);
+            $return = true;
+        }
+
+        return array($roadmaps, $total, $return);
+    }
 }

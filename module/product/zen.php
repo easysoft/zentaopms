@@ -19,7 +19,7 @@ class productZen extends product
      * @access protected
      * @return void
      */
-    protected function setEnvAll()
+    protected function setMenu4All()
     {
         /* Set redirect URI. */
         $this->session->set('productList', $this->app->getURI(true), 'product');
@@ -845,7 +845,7 @@ class productZen extends product
             return;
         }
 
-        $this->product->setMenu($productID, $branch, 0, '', "storyType=$storyType");
+        $this->product->setMenu($productID, $branch, "storyType=$storyType");
     }
 
     /**

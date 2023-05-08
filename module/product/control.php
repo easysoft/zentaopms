@@ -647,7 +647,7 @@ class product extends control
         $programID  = (int)$programID;
 
         /* Set env data. */
-        $this->productZen->setEnvAll();
+        $this->productZen->setMenu4All();
 
         /* Generate statistics of products and program. */
         $this->app->loadClass('pager', true);
