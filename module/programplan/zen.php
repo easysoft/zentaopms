@@ -161,4 +161,80 @@ class programplanZen extends programplan
 
         return array($visibleFields, $requiredFields, $customFields, $showFields);
     }
+
+    /**
+     * 生成阶段列表页阶段数据。
+     * Build gantt browse stage view data.
+     *
+     * @param  int      $projectID
+     * @param  int      $productID
+     * @param  array    $plans
+     * @param  string   $projectID
+     * @param  string   $projectID
+     * @access protected
+     * @return array
+     */
+    protected function buildBrowseStages($projectID, $productID, $baselineID, $type, $orderBy): array
+    {
+        $stages = array();
+        $selectCustom = 0; // Display date and task settings.
+        $dateDetails  = 1; // Gantt chart detail date display.
+
+        if($type == 'lists')
+        {
+            $sort  = common::appendOrder($orderBy);
+            $this->loadModel('datatable');
+            $stages = $this->programplan->getPlans($projectID, $productID, $sort);
+            $this->view->dateDetails  = $dateDetails;
+
+            return $stages;
+        }
+
+        $owner = $this->app->user->account;
+        if(!isset($this->config->programplan->browse->stageCustom)) $this->loadModel('setting')->setItem("$owner.programplan.browse.stageCustom", 'date,task');
+        $selectCustom = $this->loadModel('setting')->getItem("owner={$owner}&module=programplan&section=browse&key=stageCustom");
+        $dateDetails = strpos($selectCustom, 'date') !== false ? 0 : 1; // Gantt chart detail date display.
+
+        /* Set Custom. */
+        foreach(explode(',', $this->config->programplan->custom->customGanttFields) as $field) $customFields[$field] = $this->lang->programplan->ganttCustom[$field];
+        $this->view->customFields = $customFields;
+        $this->view->showFields   = $this->config->programplan->ganttCustom->ganttFields;
+        $this->view->dateDetails  = $dateDetails;
+        $this->view->selectCustom = $selectCustom;
+
+        if($type == 'gantt' )     $stages = $this->programplan->getDataForGantt($projectID, $productID, $baselineID, $selectCustom, false);
+        if($type == 'assignedTo') $stages = $this->programplan->getDataForGanttGroupByAssignedTo($projectID, $productID, $baselineID, $selectCustom, false);
+
+        return $stages;
+    }
+
+    /**
+     * 生成gantt图视图数据。
+     * Build gantt browse view.
+     *
+     * @param  int    $projectID
+     * @param  int    $productID
+     * @param  array  $stages
+     * @param  string $projectID
+     * @param  string $projectID
+     * @access protected
+     * @return void
+     */
+    protected function buildBrowseView(int $projectID, int $productID, array $stages, string $type, string $orderBy): void
+    {
+        $this->view->title       = $this->lang->programplan->browse;
+        $this->view->projectID   = $projectID;
+        $this->view->productID   = $productID;
+        $this->view->type        = $type;
+        $this->view->ganttType   = $type;
+        $this->view->stages      = $stages;
+        $this->view->orderBy     = $orderBy;
+        $this->view->project     = $this->loadModel('project')->getByID($projectID);
+        $this->view->users       = $this->loadModel('user')->getPairs('noletter');
+        $this->view->product     = $this->loadModel('product')->getByID($productID);
+        $this->view->productList = $this->loadModel('product')->getProductPairsByProject($projectID, 'all', '', false);
+        $this->view->zooming     = !empty($this->config->programplan->ganttCustom->zooming) ? $this->config->programplan->ganttCustom->zooming : 'day';;
+
+        $this->display();
+    }
 }

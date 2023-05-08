@@ -15,6 +15,7 @@ set::title($lang->todo->assignedTo);
 
 formPanel
 (
+    set::class('bg-white', 'p-6'),
     formGroup
     (
         set::name('assignedTo'),
@@ -37,12 +38,12 @@ formPanel
         ),
         formGroup
         (
-            set::class(array('items-center', 'pl-3')),
+            set::class(array('items-center', 'pl-2')),
             checkbox
             (
                 set::name('future'),
                 set::text($lang->todo->periods['future']),
-                on::change('switchDateTodo(this)')
+                on::change('togglePending(this)')
             )
         )
     ),
@@ -62,6 +63,7 @@ formPanel
                     set::value(date('Y-m-d') != $todo->date ? key($times) : $time),
                     on::change('selectNext')
                 ),
+                span($lang->todo->to, set::class('input-group-addon')),
                 select
                 (
                     set::name('end'),
@@ -72,11 +74,11 @@ formPanel
         ),
         formGroup
         (
-            set::class(array('items-center', 'pl-3')),
+            set::class(array('items-center', 'pl-2')),
             checkbox
             (
                 set::name('lblDisableDate'),
-                set::text($lang->todo->lblDisableDate),
+                set::text($lang->todo->periods['future']),
                 on::change('switchDateFeature(this)')
             )
         )

@@ -2038,7 +2038,7 @@ class baseRouter
             $fileName = baseName((string) $apiFile);
             [$method] = explode('.', $fileName);
 
-            $url = self::extractAPIURL($apiFile);
+            $url = static::extractAPIURL($apiFile);
             if($url) $hookCodes[$method][] = "return helper::requestAPI('$url');";
         }
         foreach($hookFiles as $hookFile)
@@ -2788,7 +2788,7 @@ class baseRouter
     public function connectByPDO(object $params): object|bool
     {
         $dsn = null;
-        if(!isset($params->driver)) self::triggerError('no pdo driver defined, it should be mysql or sqlite', __FILE__, __LINE__, $exit = true);
+        if(!isset($params->driver)) static::triggerError('no pdo driver defined, it should be mysql or sqlite', __FILE__, __LINE__, $exit = true);
         if(!isset($params->user)) return false;
         try
         {
@@ -2823,7 +2823,7 @@ class baseRouter
                 header("location: {$this->config->webRoot}checktable.php");
                 exit;
             }
-            self::triggerError($message, __FILE__, __LINE__, $exit = true);
+            static::triggerError($message, __FILE__, __LINE__, $exit = true);
         }
     }
 
