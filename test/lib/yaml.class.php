@@ -11,17 +11,6 @@
  * @version     1.0
  * @link        http://www.zentao.net/
  */
-
-/**
- * Set fields for test data yaml file.
- *
- * @copyright Copyright 2009-2022 QingDao Nature Easy Soft Network Technology Co,LTD (www.cnezsoft.com)
- * @author    liyang <liyang@easycorp.ltd>
- * @package
- * @license   LGPL
- * @version   1.0
- * @Link      https://www.zentao.net
- */
 class fields
 {
     /**
@@ -171,14 +160,15 @@ class fields
             }
             else
             {
-                if(!empty($rule['range'])) $ruleArr[$index]['range'] = $rule['range'];
+                if(!empty($rule['range']) or $rule['range'] === '0') $ruleArr[$index]['range'] = $rule['range'];
             }
 
-            if(!empty($rule['prefix']))  $ruleArr[$index]['prefix']  = $rule['prefix'];
-            if(!empty($rule['postfix'])) $ruleArr[$index]['postfix'] = $rule['postfix'];
-            if(!empty($rule['type']))    $ruleArr[$index]['type']    = $rule['type'];
-            if(!empty($rule['format']))  $ruleArr[$index]['format']  = $rule['format'];
-            $index++;
+            if(!empty($rule['prefix']) or $rule['range'] === '0')  $ruleArr[$index]['prefix']  = $rule['prefix'];
+            if(!empty($rule['postfix']) or $rule['range'] === '0') $ruleArr[$index]['postfix'] = $rule['postfix'];
+            if(!empty($rule['type']) or $rule['range'] === '0')    $ruleArr[$index]['type']    = $rule['type'];
+            if(!empty($rule['format']) or $rule['range'] === '0')  $ruleArr[$index]['format']  = $rule['format'];
+
+            $index ++;
         }
 
         return $ruleArr;
