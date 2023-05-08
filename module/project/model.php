@@ -1367,7 +1367,7 @@ class projectModel extends model
      * @access public
      * @return bool
      */
-    public function updateWhitelistByProject(int $projectID, object $project, object $oldProject): bool
+    public function updateWhitelistByProject(int $projectID, object $project, object $oldProject, array $linkedProducts): bool
     {
         /* Check if whitelist shoud update .*/
         $whitelist    = array_filter(explode(',', $project->whitelist));
@@ -1422,8 +1422,8 @@ class projectModel extends model
     {
         /* Activate or close the shadow product of the project. */
         $productID = $this->loadModel('product')->getProductIDByProject($projectID);
-        if($project->status == 'doing') $this->product->activate($productID);
-        if($project->status == 'closed') $this->product->close($productID);
+        if($status == 'doing') $this->product->activate($productID);
+        if($status == 'closed') $this->product->close($productID);
 
         return !dao::isError();
     }
@@ -1514,7 +1514,7 @@ class projectModel extends model
         $this->updateProducts($projectID, $project->product); // 更新关联的项目列表。
         $this->unLinkProductsByProject($projectID, $project, $oldProject); // 解除关联部分关联的产品信息。
         $this->updateUserViewByProject($projectID, $project->acl); // 更新用户视图。
-        $this->updateWhitelistByProject($projectID, $project, $oldProject); // 更新关联的白名单列表。
+        $this->updateWhitelistByProject($projectID, $project, $oldProject, $linkedProducts); // 更新关联的白名单列表。
         $this->updateTeamMembersByProject($projectID, $project, $oldProject); // 更新关联的成员列表。
 
         $this->file->updateObjectID($this->post->uid, $projectID, 'project'); // 通过uid更新文件id。
