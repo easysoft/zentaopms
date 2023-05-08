@@ -182,7 +182,7 @@ class productTao extends productModel
      * @param  int        $limit
      * @param  int        $line
      * @param  string|int $shadow    all | 0 | 1
-     * @access public
+     * @access protected
      * @return array
      */
     protected function getList(int $programID = 0, string $status = 'all', int $limit = 0, int $line = 0, string|int $shadow = 0)
@@ -593,10 +593,10 @@ class productTao extends productModel
      *
      * @param int    programID
      * @param string lineName
-     * @access public
+     * @access protected
      * @return int|false
      */
-    public function createLine(int $programID, string $lineName): int|false
+    protected function createLine(int $programID, string $lineName): int|false
     {
         if($programID <= 0) return false;
         if(empty($lineName)) return false;
@@ -626,10 +626,10 @@ class productTao extends productModel
      * Create main lib for product
      *
      * @param int productID
-     * @access public
+     * @access protected
      * @return int|false
      */
-    public function createMainLib(int $productID): int|false
+    protected function createMainLib(int $productID): int|false
     {
         if($productID <= 0) return false;
 
@@ -778,7 +778,7 @@ class productTao extends productModel
      * @param  int    $productID
      * @param  string $branch    all|0|1
      * @param  int    $count
-     * @access public
+     * @access protected
      * @return array
      */
     protected function getGroupRoadmapData(int $productID, string $branch, int $count): array

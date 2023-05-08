@@ -1233,7 +1233,7 @@ class projectModel extends model
     }
 
     /**
-     * 检查输入的$project 变量的branch和product是否合法。
+     * 检查输入的$postData 变量的branch和product是否合法。
      * Check branch and product valid by project.
      *
      * @param  int    $projectID
@@ -1241,13 +1241,13 @@ class projectModel extends model
      * @access public
      * @return bool
      */
-    public function checkBranchAndProductValid(int $projectID, object $project): bool
+    public function checkBranchAndProductValid(int $projectID, object $project, object $postData): bool
     {
         $topProgramID     = $this->loadModel('program')->getTopByID($project->parent);
         $multipleProducts = $this->loadModel('product')->getMultiBranchPairs($topProgramID);
-        foreach($project->products as $index => $productID)
+        foreach($postData->products as $index => $productID)
         {
-            if(isset($multipleProducts[$productID]) and empty($project->branch[$index]))
+            if(isset($multipleProducts[$productID]) and empty($postData->branch[$index]))
             {
                 dao::$errors[] = $this->lang->project->emptyBranch;
                 return false;
@@ -1299,13 +1299,13 @@ class projectModel extends model
      * @param object $project
      * @param object $oldproject
      */
-    public function updateTeamMembersByProject(int $projectID, object $project, object $oldProject): bool
+    public function updateTeamMembersByProject(int $projectID, object $project, object $oldProject, object $postExtras): bool
     {
-        if($project->model != 'kanban') return true;
+        if($postExtras->model == 'kanban') return true;
         /* Get oldProject's team and roles.*/
         $this->loadModel('user');
         $team    = $this->user->getTeamMemberPairs($projectID, 'project');
-        $members = $project->teamMembers;
+        $members = $postExtras->teamMembers;
         array_push($members, $project->PM);
         $members = array_unique($members);
         $roles   = $this->user->getUserRoles(array_values($members));
@@ -1353,15 +1353,19 @@ class projectModel extends model
      * @access public
      * @return bool
      */
-    public function updateWhitelistByProject(int $projectID, object $project, object $oldProject, array $linkedProducts): bool
+    public function updateWhitelistByProject(int $projectID, object $project, object $oldProject): bool
     {
         /* Check if whitelist shoud update .*/
         $whitelist    = array_filter(explode(',', $project->whitelist));
-        $oldWhitelist = explode(',', $oldProject->whitelist) and $oldWhitelist = array_filter($oldWhitelist);
+        $oldWhitelist = array_filter(explode(',', $oldProject->whitelist));
         if(count($oldWhitelist) == count($whitelist) and !empty(array_diff($oldWhitelist, $whitelist)))
         {
             $this->loadModel('personnel')->updateWhitelist($whitelist, 'project', $projectID);
-            if(!$oldProject->hasProduct) $this->loadModel('personnel')->updateWhitelist($whitelist, 'product', current($linkedProducts));
+            if(!$oldProject->hasProduct)
+            {
+                $linkedProducts = $this->dao->select('product')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($projectID)->fetchPairs();
+                $this->loadModel('personnel')->updateWhitelist($whitelist, 'product', current($linkedProducts));
+            }
         }
 
         return !dao::isError();
@@ -1377,14 +1381,14 @@ class projectModel extends model
      * @access public
      * @return bool
      */
-    public function unLinkProductsByProject(int $projectID, object $project, object $oldProject): bool
+    public function unLinkProductsByProject(int $projectID, object $project, object $oldProject, object $postData): bool
     {
         $linkedProducts = $this->dao->select('product')->from(TABLE_PROJECTPRODUCT)
             ->where('project')->eq($projectID)
             ->fetchPairs();
         $oldProject->linkedProducts = implode(',', $linkedProducts);
-        $project->linkedProducts    = implode(',', $project->products);
-        $unlinkedProducts = array_diff($linkedProducts, $project->products);
+        $project->linkedProducts    = implode(',', $postData->products);
+        $unlinkedProducts = array_diff($linkedProducts, $postData->products);
         if(empty($unlinkedProducts)) return true;
 
         $products = $this->dao->select('name')->from(TABLE_PRODUCT)
@@ -1466,7 +1470,7 @@ class projectModel extends model
      * @access public
      * @return array|false
      */
-    public function update(int $projectID, object $project , object $postData): array|false
+    public function update(int $projectID, object $project, object $postExtras): array|false
     {
         /* 通过id查老项目信息, 处理parent和图片字段。*/
         /* Fetch oldProject's info and get parent and file info.*/
@@ -1480,31 +1484,22 @@ class projectModel extends model
 
         /* 更新project表。*/
         /* Update project table.*/
-        $result = $this->projectTao->doUpdate($projectID, $project, $oldProject);
-        if(!$result) return false;
-
-        /* 如果是无产品项目，更新影子产品信息。*/
-        /* If this is a project without product, update shadow product's info by project.*/
-        if(!$oldProject->hasProduct)
-        {
-            /* If oldProject has no product and name or parent or acl has changed, update shadow product.*/
-            if($oldProject->name != $project->name || $oldProject->parent != $project->parent or $oldProject->acl != $project->acl) $this->updateShadowProduct($project);
-
-            /* If oldProject has no product and status has changed to dong or closed updateShadowProductStatus.*/
-            if($oldProject->status != $project->status && str_contains('doing,closed', $project->status)) $this->updateShadowProductStatus($projectID, $project->status);
-        }
+        $success = $this->projectTao->doUpdate($projectID, $project, $oldProject);
+        if(!$success) return false;
 
         /* 更新项目的关联信息。*/
         /* Update relation info of this project.*/
         $this->stageProduct($projectID, $oldProject->stageBy); // 更新关联的所有产品的阶段。
-        $this->updateProducts($projectID, $project->product); // 更新关联的项目列表。
-        $this->unLinkProductsByProject($projectID, $project, $oldProject); // 解除关联部分关联的产品信息。
+        $this->updateProducts($projectID, $postExtras->products); // 更新关联的项目列表。
+        $this->updateShadowProduct($project, $oldProject); // 更新影子产品关联信息。
+        $this->unLinkProductsByProject($projectID, $project, $oldProject, $postExtras); // 解除关联部分关联的产品信息。
         $this->updateUserViewByProject($projectID, $project->acl); // 更新用户视图。
-        $this->updateWhitelistByProject($projectID, $project, $oldProject, $linkedProducts); // 更新关联的白名单列表。
-        $this->updateTeamMembersByProject($projectID, $project, $oldProject); // 更新关联的成员列表。
-        $this->updatePlanIdListByProject($projectID, $project->plans); // 更新关联的计划列表。
+        $this->updateWhitelistByProject($projectID, $project, $oldProject); // 更新关联的白名单列表。
+        $this->updateTeamMembersByProject($projectID, $project, $oldProject, $postExtras); // 更新关联的成员列表。
+        $this->updatePlanIdListByProject($projectID, $postExtras->plans); // 更新关联的计划列表。
 
         $this->file->updateObjectID($this->post->uid, $projectID, 'project'); // 通过uid更新文件id。
+
 
         if($oldProject->parent != $project->parent) $this->loadModel('program')->fixPath($projectID, $project->parent, $oldProject->path, $oldProject->grade); //  更新项目从属路径。
         if(empty($oldProject->multiple) and $oldProject->model != 'waterfall') $this->loadModel('execution')->syncNoMultipleSprint($projectID); // 无迭代的非瀑布项目需要更新。
@@ -1750,17 +1745,28 @@ class projectModel extends model
     }
 
     /**
+     * 如果是无产品项目，更新影子产品信息。
      * Update shadow product for its project.
      *
      * @param  object $project
      * @access public
      * @return bool
      */
-    public function updateShadowProduct($project)
+    public function updateShadowProduct(object $project, object $oldProject): bool
     {
-        $product    = $this->dao->select('product')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($project->id)->fetch('product');
-        $topProgram = !empty($project->parent) ? $this->loadModel('program')->getTopByID($project->parent) : 0;
-        $this->dao->update(TABLE_PRODUCT)->set('name')->eq($project->name)->set('program')->eq($topProgram)->set('acl')->eq($project->acl)->where('id')->eq($product)->exec();
+        /* If this is a project without product, update shadow product's info by project.*/
+        if($oldProject->hasProduct) return true;
+
+        /* If oldProject has no product and name or parent or acl has changed, update shadow product.*/
+        if($oldProject->name != $project->name || $oldProject->parent != $project->parent or $oldProject->acl != $project->acl)
+        {
+            $product    = $this->dao->select('product')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($project->id)->fetch('product');
+            $topProgram = !empty($project->parent) ? $this->loadModel('program')->getTopByID($project->parent) : 0;
+            $this->dao->update(TABLE_PRODUCT)->set('name')->eq($project->name)->set('program')->eq($topProgram)->set('acl')->eq($project->acl)->where('id')->eq($product)->exec();
+        }
+
+        /* If oldProject has no product and status has changed to dong or closed updateShadowProductStatus.*/
+        if($oldProject->status != $project->status && str_contains('doing,closed', $project->status)) $this->updateShadowProductStatus($projectID, $project->status);
 
         return !dao::isError();
     }

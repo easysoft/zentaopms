@@ -1865,4 +1865,24 @@ class taskTest
             return array('minStatus' => $minStatus, 'taskTeamMember' => !empty($taskTeamMember) ? implode('|', $taskTeamMember) : '0');
         }
     }
+
+    /**
+     * Create a subtask for the test type story with the story.
+     *
+     * @param  int   $taskID
+     * @param  array $testTasks
+     * @access public
+     * @return void
+     */
+    public function createTestChildTasksTest($taskID = 0, $testTasks = array())
+    {
+        global $tester;
+        $_SERVER['HTTP_HOST'] = $tester->config->db->host;
+
+        $this->objectModel->createTestChildTasks($taskID, $testTasks);
+        if(dao::isError()) return dao::getError();
+
+        $lastTaskID = $tester->dao->select('objectID')->from(TABLE_ACTION)->where('objectType')->eq('task')->andWhere('action')->eq('Opened')->orderBy('`date` desc')->fetch('objectID');
+        return $this->objectModel->getByID($lastTaskID);
+    }
 }
