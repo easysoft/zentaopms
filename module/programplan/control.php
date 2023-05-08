@@ -57,6 +57,7 @@ class programplan extends control
         $products = $this->loadModel('product')->getProducts($projectID);
         if($this->session->hasProduct) $this->lang->modulePageNav = $this->product->select($products, $productID, 'programplan', 'browse', $type, 0, 0, '', false);
 
+        /* 生成阶段列表页阶段数据。 */
         $stages = $this->programplanZen->buildBrowseStages($projectID, $productID, $baselineID, $type, $orderBy);
 
         $this->programplanZen->buildBrowseView($projectID, $productID, $stages, $type, $orderBy);
