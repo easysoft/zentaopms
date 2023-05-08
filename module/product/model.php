@@ -260,9 +260,9 @@ class productModel extends model
      * @param  string|array $append
      * @param  bool         $noDeleted
      * @access public
-     * @return array
+     * @return int[]
      */
-    public function getProducts(string|int $projectID = '0', string $status = 'all', string $orderBy = '', bool $withBranch = true, string $append = '', bool $noDeleted = true): array
+    public function getProducts(string|int $projectID = '0', string $status = 'all', string $orderBy = '', bool $withBranch = true, string|array $append = '', bool $noDeleted = true): array
     {
         /* 如果是新手教程模式，直接返回测试数据。*/
         if(defined('TUTORIAL'))
@@ -272,31 +272,33 @@ class productModel extends model
             return $this->tutorial->getExecutionProducts();
         }
 
-        if(is_string($projectID) and strpos($projectID, 'all') !== false) $projectID = str_replace('all', 0, $projectID);
-
         if(!empty($append) and is_array($append)) $append = implode(',', $append);
 
+        /* 初始化变量。 */
+        $projectID       = (int)$projectID;
         $views           = $this->app->user->view->products . (empty($append) ? '' : ",$append");
         $projectProducts = $this->productTao->getProductsByProjectID($projectID, $views, $status, $orderBy, $noDeleted);
+        $products        = array();
 
-        $products = array();
+        /* 如果不返回分支信息，则返回 id=>name 的键值对。 */
+        if(!$withBranch)
+        {
+            foreach($projectProducts as $product) $products[$product->id] = $product->name;
+            return $products;
+        }
+
+        /* 将分支ID、计划ID合并到产品数据中。*/
         foreach($projectProducts as $product)
         {
-            if(!$withBranch)
-            {
-                $products[$product->id] = $product->name;
-                continue;
-            }
-
             if(!isset($products[$product->id]))
             {
                 $products[$product->id] = $product;
                 $products[$product->id]->branches = array();
                 $products[$product->id]->plans    = array();
             }
+
             $products[$product->id]->branches[$product->branch] = $product->branch;
             if($product->plan) $products[$product->id]->plans[$product->plan] = $product->plan;
-
             unset($product->branch, $product->plan);
         }
 

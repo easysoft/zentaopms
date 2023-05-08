@@ -328,6 +328,21 @@ class productZen extends product
     }
 
     /**
+     * 获取在ajaxGetDropMenu方法中使用的产品。
+     * Get products for ajaxGetDropMenu method.
+     *
+     * @param  string $shadow  0|all
+     * @access protected
+     * @return array
+     */
+    protected function getProducts4DropMenu(string $shadow = '0'): array
+    {
+        if($this->app->tab == 'project')  return $this->product->getProducts($this->session->project);
+        if($this->app->tab == 'feedback') return $this->loadModel('feedback')->getGrantProducts(false);
+        return $this->product->getList(0, 'all', 0, 0, $shadow);
+    }
+
+    /**
      * Get project PM List
      *
      * @param  array $projectStats

@@ -1202,27 +1202,10 @@ class product extends control
     public function ajaxGetDropMenu(string $productID, string $module, string $method, string $extra = '', string $from = '')
     {
         $productID = (int)$productID;
-        $shadow    = 0;
-        if($from == 'qa')
-        {
-            $shadow = 'all';
-            $this->app->loadConfig('qa');
-            foreach($this->config->qa->menuList as $menu) $this->lang->navGroup->$menu = 'qa';
-        }
+        $shadow    = '0';
+        if($from == 'qa') $shadow = 'all';
 
-        if($this->app->tab == 'project')
-        {
-            $products = $this->product->getProducts($this->session->project);
-        }
-        elseif($this->app->tab == 'feedback')
-        {
-            $products = $this->loadModel('feedback')->getGrantProducts(false);
-        }
-        else
-        {
-            $products = $this->product->getList(0, 'all', 0, 0, $shadow);
-        }
-
+        $products        = $this->productZen->getProducts4DropMenu($shadow);
         $programProducts = array();
         foreach($products as $product) $programProducts[$product->program][] = $product;
 
