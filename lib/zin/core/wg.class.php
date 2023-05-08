@@ -215,7 +215,7 @@ class wg
                 if($stop)     $code[] = "e.stopPropagation();";
                 if($prevent)  $code[] = "e.preventDefault();";
 
-                if(preg_match('/^[$A-Z_][0-9A-Z_$\[\]."\']*$/i', $handler)) $code[] = "($handler)(e);";
+                if(preg_match('/^[$A-Z_][0-9A-Z_$\[\]."\']*$/i', $handler)) $code[] = "($handler).call(e.target,e);";
                 else $code[] = $handler;
 
                 $code[] = '}' . (empty($binding) ? '' : (', ' . json_encode($binding))) . ');';
