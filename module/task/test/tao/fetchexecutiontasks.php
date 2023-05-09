@@ -35,7 +35,6 @@ $task->gen(20);
 
 $story = zdTable('story');
 $story->id->range('1-20');
-$story->project->range('0');
 $story->title->range('1-20')->prefix('需求');
 $story->product->range('1-20');
 $story->branch->range('0');
@@ -55,7 +54,6 @@ $taskTeam->status->range('wait{2},doing{3}');
 $taskTeam->gen(5);
 
 $module = zdTable('module');
-$module->project->range('0');
 $module->root->range('1-5');
 $module->type->range('story');
 $module->gen(5);
