@@ -233,7 +233,7 @@ class programplanZen extends programplan
         $this->view->users       = $this->loadModel('user')->getPairs('noletter');
         $this->view->product     = $this->loadModel('product')->getByID($productID);
         $this->view->productList = $this->loadModel('product')->getProductPairsByProject($projectID, 'all', '', false);
-        $this->view->zooming     = !empty($this->config->programplan->ganttCustom->zooming) ? $this->config->programplan->ganttCustom->zooming : 'day';;
+        $this->view->zooming     = !empty($this->config->programplan->ganttCustom->zooming) ? $this->config->programplan->ganttCustom->zooming : 'day';
 
         $this->display();
     }

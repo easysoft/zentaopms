@@ -127,7 +127,7 @@ class programplanTao extends programplanModel
             $data->begin         = $start;
             $data->deadline      = $end;
             $data->realBegan     = $realBegan ? substr($realBegan, 0, 10) : '';
-            $data->realEnd       = $realEnd ? substr($realEnd, 0, 10) : '';;
+            $data->realEnd       = $realEnd ? substr($realEnd, 0, 10) : '';
             $data->parent        = $plan->grade == 1 ? 0 :$plan->parent;
             $data->open          = true;
             $data->start_date    = $realBegan ? $realBegan : $start;
@@ -235,7 +235,7 @@ class programplanTao extends programplanModel
                 $teams     = array_keys($taskTeams[$task->id]);
                 $assigneds = array();
                 foreach($teams as $assignedTo) $assigneds[] = zget($users, $assignedTo);
-                $data->owner_id = join(',', $assigneds);
+                $data->owner_id = implode(',', $assigneds);
             }
 
             if($data->endDate > $data->start_date) $data->duration = helper::diffDate(substr($data->endDate, 0, 10), substr($data->start_date, 0, 10)) + 1;
